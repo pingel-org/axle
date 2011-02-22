@@ -1,8 +1,8 @@
 This is my home for public code that runs on the jvm.
 
-I've got a lot of java code written during grad school in Java
-that I'd like to make available here.  I also have some newer
-code written in Scala that may end up here as well.
+These projects were written in java during grad school.
+I also have some newer code written in Scala that may
+end up here as well.
 
 Adam Pingel
 pingel@gmail.com
@@ -12,7 +12,7 @@ February 21, 2011
 At the moment the public projects are:
 
 *************************************
-# Linguitics
+# Linguistics
 *************************************
 
 Models the Gold Paradigm and Angluin's Language Learner, which
