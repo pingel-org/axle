@@ -1,18 +1,45 @@
-Hello!
-
 This is my home for public code that runs on the jvm.
 
 I've got a lot of java code written during grad school in Java
-that I'd like to make available here.  This includes basic 
-data structures, linguistics theory, and Bayesian networks
-code.  I'll try to separate into meaningful sub-units,
-all buildable with maven.
-
-I also have some newer code written in Scala that may end
-up here as well.
-
+that I'd like to make available here.  I also have some newer
+code written in Scala that may end up here as well.
 
 Adam Pingel
 pingel@gmail.com
 February 21, 2011
 
+
+At the moment the public projects are:
+
+*************************************
+# Linguitics
+*************************************
+
+Models the Gold Paradigm and Angluin's Language Learner, which
+I encountered in a couple of Ed Stabler's graduate courses
+on language evolution.
+
+*************************************
+AI
+*************************************
+
+Code for Bayesian Networks and Causality.  This codebase
+became way too ambitious and entangled with other ideas.
+It's currently not buildable.  I may revisit this code
+at some point and extract the Bayesian code from the rest
+of the "gestalt" stuff, which was where I started to stray
+into language design, got interested in bidirectional
+program transformations, and then got mired in the desert
+of Category Theory.
+
+*************************************
+* Util
+*************************************
+
+Mostly iterators like PowerSet and CrossProduct that were
+interesting to write while learning about Java 5's generics.
+The difficulty in expressing the difference between a
+DirectedGraph and an UndirectedGraph with Java 5 is one of
+the main reason I have gravitated recently to Scala -- its
+algebraic data types can properly model this kind of
+"family polymorphism".
