@@ -1,0 +1,141 @@
+<project>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>pingel utility classes</name> 
+
+  <groupId>org.pingel</groupId>
+  <artifactId>util</artifactId>
+  <version>1.1.0</version>
+  <inceptionYear>2005</inceptionYear>
+  <url>http://pingel.org</url>
+
+  <organization>
+    <name>Adam Pingel</name>
+  </organization>
+
+  <description>
+A few classes that I've found useful in numerous projects over the years, written to make use of Java 5's generics.
+  </description>
+
+  <scm>
+    <connection>scm:svn:http://svn.pingel.org/repos/public/org.pingel.util</connection>
+    <developerConnection>scm:svn:http://svn.pingel.org/repos/public/org.pingel.util</developerConnection>
+    <tag>HEAD</tag>
+    <url>http://svn.pingel.org/repos/public/org.pingel.util</url>
+  </scm> 
+
+  <licenses>
+    <license>
+      <url>http://pingel.org/license.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>pingel</id>
+      <name>Adam Pingel</name>
+      <email>pingel@gmail.com</email>
+      <url>http://linguisticparallax.com</url>
+      <timezone>-7</timezone>
+    </developer>
+  </developers>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+        <configuration>
+          <javadocDir>${project.build.directory}/site/apidocs/</javadocDir>
+          <bottom>Copyright (C) 2005-2011 Adam Pingel. All Rights Reserved.</bottom>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <destDir>${project.build.directory}/site/apidocs/</destDir>
+          <bottom>Copyright (C) 2005-2011 ${project.organization.name}. All Rights Reserved.</bottom>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>dependencies</report>
+              <report>project-team</report>
+              <!-- report>mailing-list</report -->
+              <!-- report>cim</report -->
+              <!-- report>issue-tracking</report -->
+              <!-- report>license</report -->
+              <report>scm</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <distributionManagement>
+
+    <site>
+      <id>pingel.org</id>
+      <url>scp://linguisticparallax.com/var/www/pingel.org/</url>
+    </site>
+
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>pingel.org</id>
+      <name>pingel.org repository</name>
+      <url>scp://www.pingel.org/var/www/pingel.org/maven2</url>
+      <layout>default</layout>
+    </repository>
+
+  </distributionManagement>
+
+  <dependencies>
+    
+    <dependency>
+      <groupId>jung</groupId>
+      <artifactId>jung</artifactId>
+      <version>1.6.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>att</groupId>
+      <artifactId>grappa</artifactId>
+      <version>1.2</version>
+    </dependency>
+    
+  </dependencies>
+
+   <repositories>
+     <repository>
+      <id>eulergui</id>
+      <url>http://eulergui.sourceforge.net/maven2</url>
+     </repository>
+   </repositories>
+
+</project>
