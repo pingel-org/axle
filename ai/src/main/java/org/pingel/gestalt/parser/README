@@ -1,0 +1,6 @@
+
+From this directory do:
+
+jtb -p org.pingel.gestalt.parser gestalt.jj
+javacc jtb.out.jj
+
