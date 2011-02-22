@@ -307,12 +307,12 @@ public class Figures {
 	}
 
 	BayesianNetwork figure7_4 = null;
-	EliminationTree tau = new EliminationTree();
-	EliminationTreeNode tau_n1 = null;
-	EliminationTreeNode tau_n2 = null;
-	EliminationTreeNode tau_n3 = null;
-	EliminationTreeNode tau_n4 = null;
-	EliminationTreeNode tau_n5 = null;
+	EliminationTree τ = new EliminationTree();
+	EliminationTreeNode τ_n1 = null;
+	EliminationTreeNode τ_n2 = null;
+	EliminationTreeNode τ_n3 = null;
+	EliminationTreeNode τ_n4 = null;
+	EliminationTreeNode τ_n5 = null;
 	
 	public void setFigure7_4()
 	{
@@ -321,38 +321,38 @@ public class Figures {
 		figure7_4 = new BayesianNetwork();
 		figure6_1.copyTo(figure7_4);
 		
-		tau = new EliminationTree();
+		τ = new EliminationTree();
 		
-		tau_n1 = new EliminationTreeNode("n1");
-		tau.addVertex(tau_n1);
-		tau.addFactor(tau_n1, figure7_4.getCPT(A));
+		τ_n1 = new EliminationTreeNode("n1");
+		τ.addVertex(τ_n1);
+		τ.addFactor(τ_n1, figure7_4.getCPT(A));
 
-		tau_n2 = new EliminationTreeNode("n2");
-		tau.addVertex(tau_n2);
-		tau.addFactor(tau_n2, figure7_4.getCPT(B));
+		τ_n2 = new EliminationTreeNode("n2");
+		τ.addVertex(τ_n2);
+		τ.addFactor(τ_n2, figure7_4.getCPT(B));
 
-		tau_n3 = new EliminationTreeNode("n3");
-		tau.addVertex(tau_n3);
-		tau.addFactor(tau_n3, figure7_4.getCPT(C));
+		τ_n3 = new EliminationTreeNode("n3");
+		τ.addVertex(τ_n3);
+		τ.addFactor(τ_n3, figure7_4.getCPT(C));
 
-		tau_n4 = new EliminationTreeNode("n4");
-		tau.addVertex(tau_n4);
-		tau.addFactor(tau_n4, figure7_4.getCPT(D));
+		τ_n4 = new EliminationTreeNode("n4");
+		τ.addVertex(τ_n4);
+		τ.addFactor(τ_n4, figure7_4.getCPT(D));
 
-		tau_n5 = new EliminationTreeNode("n5");
-		tau.addVertex(tau_n5);
-		tau.addFactor(tau_n5, figure7_4.getCPT(E));
+		τ_n5 = new EliminationTreeNode("n5");
+		τ.addVertex(τ_n5);
+		τ.addFactor(τ_n5, figure7_4.getCPT(E));
 
-		tau.addEdge(tau.constructEdge(tau_n1, tau_n2));
-		tau.addEdge(tau.constructEdge(tau_n1, tau_n4));
-		tau.addEdge(tau.constructEdge(tau_n4, tau_n3));
-		tau.addEdge(tau.constructEdge(tau_n3, tau_n5));
+		τ.addEdge(τ.constructEdge(τ_n1, τ_n2));
+		τ.addEdge(τ.constructEdge(τ_n1, τ_n4));
+		τ.addEdge(τ.constructEdge(τ_n4, τ_n3));
+		τ.addEdge(τ.constructEdge(τ_n3, τ_n5));
 
 		Set<RandomVariable> Q = new HashSet<RandomVariable>();
 		Q.add(C);
-		Factor result = figure7_4.factorElimination2(Q, tau, tau_n3);
+		Factor result = figure7_4.factorElimination2(Q, τ, τ_n3);
 
-		System.out.println("Doing factorElimination2 on figure6.1 with Q={C} and tau={...} and r=n3");
+		System.out.println("Doing factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3");
 		result.print();
 
 	}
@@ -369,9 +369,9 @@ public class Figures {
 
 		Set<RandomVariable> Q = new HashSet<RandomVariable>();
 		Q.add(C);
-		Factor result = figure7_5.factorElimination2(Q, tau, tau_n3);
+		Factor result = figure7_5.factorElimination2(Q, τ, τ_n3);
 
-		System.out.println("Doing factorElimination3 on figure6.1 with Q={C} and tau={...} and r=n3");
+		System.out.println("Doing factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3");
 		result.print();
 
 	}
