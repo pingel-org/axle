@@ -1,0 +1,14 @@
+Global setup:
+ Download and install Git
+  git config --global user.name "Adam Pingel"
+  git config --global user.email pingel@gmail.com
+        
+Next steps:
+  mkdir Pingel-Test
+  cd Pingel-Test
+  git init
+  touch README
+  git add README
+  git commit -m 'first commit'
+  git remote add origin git@github.com:adampingel/Pingel-Test.git
+  git push -u origin master
