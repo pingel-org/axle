@@ -1,0 +1,16 @@
+Text T = <"hi I'm your Mother", #, #, "shut up", #, "shut up", "shut up">
+Language L = {"hi I'm your Mother", "shut up"}
+
+T is for L
+
+phi.processNextExpression().L = {"hi I'm your Mother"}
+phi's guess was not correct
+
+phi.processNextExpression().L = {"hi I'm your Mother"}
+phi's guess was not correct
+
+phi.processNextExpression().L = {"hi I'm your Mother"}
+phi's guess was not correct
+
+phi.processNextExpression().L = {"hi I'm your Mother", "shut up"}
+phi identified the language using the text
