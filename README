@@ -1,14 +1,18 @@
-Global setup:
- Download and install Git
-  git config --global user.name "Adam Pingel"
-  git config --global user.email pingel@gmail.com
-        
-Next steps:
-  mkdir Pingel-Test
-  cd Pingel-Test
-  git init
-  touch README
-  git add README
-  git commit -m 'first commit'
-  git remote add origin git@github.com:adampingel/Pingel-Test.git
-  git push -u origin master
+Hello!
+
+This is my home for public code that runs on the jvm.
+
+I've got a lot of java code written during grad school in Java
+that I'd like to make available here.  This includes basic 
+data structures, linguistics theory, and Bayesian networks
+code.  I'll try to separate into meaningful sub-units,
+all buildable with maven.
+
+I also have some newer code written in Scala that may end
+up here as well.
+
+
+Adam Pingel
+pingel@gmail.com
+February 21, 2011
+
