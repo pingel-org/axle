@@ -15,11 +15,19 @@ example.py:
     x = 1 + 2
     print x
 
-Invoke the script like so:
+Invoke the script like so to turn example.py into json:
 
-    python2json.py -f example.py | python -mjson.tool
+    python2json.py -f example.py
 
-To get the following json document:
+You can also provide the input via stdin:
+
+    cat example.py | python2json.py
+
+I find it useful to chain this pretty-printer when debugging:
+
+    cat example.py | python2json.py | python -mjson.tool
+
+The pretty-printed result in this case is:
 
 {
     "_lineno": null, 
