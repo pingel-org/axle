@@ -1,18 +1,29 @@
-This is my home for public code that runs on the jvm.
 
-These projects were written in java during grad school.
-I also have some newer code written in Scala that may
-end up here as well.
+A wide range of code I've written over the years.
+
+Primarily for the JVM.
 
 Adam Pingel
 pingel@gmail.com
 February 21, 2011
 
+*************************************
+* python2json
+*************************************
 
-At the moment the public projects are:
+This is part of a larger project on source code
+search algorithms.
+
+This file will take any python 2.6 (or less) file
+and return a json document that represents the
+abstract syntax tree.  There are a couple of minor
+problems with it, but for the most part it works.
+
+Feel free to submit bug patches.
+
 
 *************************************
-# Linguistics
+* Linguistics
 *************************************
 
 Models the Gold Paradigm and Angluin's Language Learner, which
@@ -20,7 +31,7 @@ I encountered in a couple of Ed Stabler's graduate courses
 on language evolution.
 
 *************************************
-AI
+* AI
 *************************************
 
 Code for Bayesian Networks and Causality.  This codebase
