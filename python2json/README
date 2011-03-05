@@ -8,3 +8,62 @@ abstract syntax tree.  There are a couple of minor
 problems with it, but for the most part it works.
 
 Feel free to submit bug patches to <pingel@gmail.com>.
+
+As an example, let's say we have the following python in
+example.py:
+
+    x = 1 + 2
+    print x
+
+Invoke the script like so:
+
+    python2json.py -f example.py | python -mjson.tool
+
+To get the following json document:
+
+{
+    "_lineno": null, 
+    "node": {
+        "_lineno": null, 
+        "spread": [
+            {
+                "_lineno": 2, 
+                "expr": {
+                    "_lineno": 2, 
+                    "left": {
+                        "_lineno": 2, 
+                        "type": "Const", 
+                        "value": "1"
+                    }, 
+                    "right": {
+                        "_lineno": 2, 
+                        "type": "Const", 
+                        "value": "2"
+                    }, 
+                    "type": "Add"
+                }, 
+                "nodes": [
+                    {
+                        "_lineno": 2, 
+                        "name": "x", 
+                        "type": "AssName"
+                    }
+                ], 
+                "type": "Assign"
+            }, 
+            {
+                "_lineno": 3, 
+                "nodes": [
+                    {
+                        "_lineno": 3, 
+                        "name": "x", 
+                        "type": "Name"
+                    }
+                ], 
+                "type": "Printnl"
+            }
+        ], 
+        "type": "Stmt"
+    }, 
+    "type": "Module"
+}
