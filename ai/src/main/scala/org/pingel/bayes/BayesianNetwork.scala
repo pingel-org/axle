@@ -1,14 +1,5 @@
 package org.pingel.bayes;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 /**
 Notes on unimplemented aspects of Bayesian networks:
 
@@ -109,7 +100,7 @@ A polytree is:
 
  */
 
-public class BayesianNetwork extends Model
+class BayesianNetwork extends Model
 {
 	private Map<RandomVariable, Factor> var2cpt = new HashMap<RandomVariable, Factor>();
 	

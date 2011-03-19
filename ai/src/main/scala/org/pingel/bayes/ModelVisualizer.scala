@@ -1,6 +1,5 @@
 package org.pingel.bayes;
 
-
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Paint
@@ -45,19 +44,22 @@ class ModelVertexPaintFunction(m: Model) extends VertexPaintFunction {
   }
 }
 
+object Strokes {
+
+  val basic = new BasicStroke(1)
+  val dotted = PluggableRenderer.DOTTED
+
+}
 
 class ModelEdgeStrokeFunction(m: Model) extends EdgeStrokeFunction {
-
-  protected static final Stroke basic = new BasicStroke(1)
-  protected static final Stroke dotted = PluggableRenderer.DOTTED
 
   def getStroke(e: Edge): Stroke = {
     var me = e.asInstanceOf[VisModelEdge]
     if( me.source.variable.observable ) {
-      return basic
+      return Strokes.basic
     }
     else {
-      return dotted
+      return Strokes.dotted
     }
   }
     
@@ -65,7 +67,7 @@ class ModelEdgeStrokeFunction(m: Model) extends EdgeStrokeFunction {
 
 class ModelVertexStringer(m: Model) extends VertexStringer {
    
-  def getLabel(Vertex v): String = v.asInstanceOf[VisVariableVertex].variable.name
+  def getLabel(v: Vertex): String = v.asInstanceOf[VisVariableVertex].variable.name
 
 }
 
@@ -76,7 +78,7 @@ object ModelVisualizer {
     for( variable <- m.getGraph.getVertices ) {
       var vvv = new VisVariableVertex(variable)
       graph.addVertex(vvv)
-      var2vvv.put(var, vvv)
+      var2vvv.put(variable, vvv)
     }
     for( edge <- m.getGraph.getEdges ) {
       var sourceVar = edge.getSource()
@@ -102,11 +104,11 @@ object ModelVisualizer {
     
     var jf = new JFrame()
     var gd = new GraphDraw(graph)
-    gd.getVisualizationViewer().setGraphLayout(layout);
-    gd.getVisualizationViewer().setRenderer(pr);
-    jf.getContentPane().add(gd);
-    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    jf.pack();
-    jf.setVisible(true);
+    gd.getVisualizationViewer().setGraphLayout(layout)
+    gd.getVisualizationViewer().setRenderer(pr)
+    jf.getContentPane().add(gd)
+    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    jf.pack()
+    jf.setVisible(true)
   }
 }

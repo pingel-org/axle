@@ -258,7 +258,7 @@ class ScalaFigures {
     Console.println("Figure 6.1 pruned towards Q={D} and A=true,C=false")
     ModelVisualizer.draw(figure6_9)
 		
-    for(RandomVariable rv : figure6_9.getRandomVariables()) {
+    for( rv <- figure6_9.getRandomVariables()) {
       val f = figure6_9.getCPT(rv)
       Console.println("Factor for " + rv)
       f.print
