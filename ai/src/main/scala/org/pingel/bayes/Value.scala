@@ -1,24 +1,13 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
-public class Value
-implements Comparable<Value>
+class Value(v: String) extends Comparable[Value]
 {
 
-	private String v = null;
+  def compareTo(other: Value): Int =  v.compareTo(other.getV)
+
+  def getV(): String = v
 	
-	public Value(String v)
-	{
-		this.v = v;
-	}
-	
-	public int compareTo(Value other)
-	{
-		return v.compareTo(other.v);
-	}
-	
-	public String toString()
-	{
-		return v;
-	}
+  override def toString(): String = v
+
 }
 

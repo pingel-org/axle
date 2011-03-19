@@ -1,14 +1,9 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import org.pingel.util.UndirectedGraphEdge;
+import org.pingel.util.UndirectedGraphEdge
 
-public class JoinTreeEdge
-extends UndirectedGraphEdge<JoinTreeNode>
+class JoinTreeEdge(v1: JoinTreeNode, v2: JoinTreeNode)
+extends UndirectedGraphEdge[JoinTreeNode](v1, v2)
 {
-
-	public JoinTreeEdge(JoinTreeNode v1, JoinTreeNode v2)
-	{
-		super(v1, v2);
-	}
 	
 }

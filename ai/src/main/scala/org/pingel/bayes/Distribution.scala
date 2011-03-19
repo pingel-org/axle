@@ -1,28 +1,10 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
+import java.util.ArrayList
+import java.util.List
 
-import java.util.ArrayList;
-import java.util.List;
+abstract class Distribution(variables: List[RandomVariable]) {
 
-abstract public class Distribution
-{
-    protected List<RandomVariable> varList = new ArrayList<RandomVariable>();
-
-    public Distribution(RandomVariable... rvs)
-    {
-    		for(RandomVariable rv : rvs) {
-    			varList.add(rv);
-    		}
-    }
-    
-    public Distribution(List<RandomVariable> variables)
-    {
-    		varList.addAll(variables);
-    }
-    
-    public List<RandomVariable> getVariables()
-    {
-        return varList;
-    }
+  def getVariables(): List[RandomVariable] = variables
 
 }

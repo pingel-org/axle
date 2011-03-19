@@ -1,12 +1,7 @@
 
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-public class PartiallyDirectedGraph
+class PartiallyDirectedGraph
 {
 	private static final Boolean TRUE = new Boolean(true);
 	private static final Boolean FALSE = new Boolean(false);

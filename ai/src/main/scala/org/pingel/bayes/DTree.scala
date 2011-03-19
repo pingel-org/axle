@@ -1,50 +1,35 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+class DTree {
 
-public class DTree
-{
+  def cluster(n: DTreeNode): Set[RandomVariable] = null // TODO
+	
+  def context(n: DTreeNode): Set[RandomVariable] = null // TODO
+	
+  def isLeaf(n: DTreeNode): Boolean = false // TODO
+	
+  // returns an order pi with width(pi,G) no greater than the width
+  // of dtree rooted at t
+	
+  def toEliminationOrder(t: DTreeNode): List[RandomVariable] = {
 
-	public Set<RandomVariable> cluster(DTreeNode n)
-	{
-		return null; // TODO 
-	}
-	
-	public Set<RandomVariable> context(DTreeNode n)
-	{
-		return null; // TODO
-	}
-	
-	public boolean isLeaf(DTreeNode n)
-	{
-		return false; // TODO
-	}
-	
-	// returns an order pi with width(pi,G) no greater than the width
-	// of dtree rooted at t
-	
-	public List<RandomVariable> toEliminationOrder(DTreeNode t)
-	{
-		List<RandomVariable> result = new ArrayList<RandomVariable>();
+    var result = List[RandomVariable]()
 
-		if( isLeaf(t) ) {
-			Set<RandomVariable> context = context(t);
-			for(RandomVariable v : cluster(t)) {
-				if( ! context.contains(v) ) {
-					result.add(v);
-				}
-			}
-		}
-		else {
-			List<RandomVariable> leftPi = null; // TODO
-			List<RandomVariable> rightPi = null; // TODO
-			// TODO merge them
-			// TODO add cluster(t) - context(t) in any order to result
-		}
-		
-		return result;
+    if( isLeaf(t) ) {
+      var ct = context(t) // Set<RandomVariable>
+      for( v <- cluster(t)) {
+	if( ! ct.contains(v) ) {
+	  result.add(v)
 	}
+      }
+    }
+    else {
+      var leftPi: List[RandomVariable] = null // TODO
+      var rightPi: List[RandomVariable] = null // TODO
+      // TODO merge them
+      // TODO add cluster(t) - context(t) in any order to result
+    }
+    result
+  }
 	
 }

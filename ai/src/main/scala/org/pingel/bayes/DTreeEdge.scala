@@ -1,5 +1,5 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
-public class DTreeEdge {
+class DTreeEdge {
 
 }

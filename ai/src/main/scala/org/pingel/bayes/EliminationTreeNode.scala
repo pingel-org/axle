@@ -1,19 +1,10 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import org.pingel.util.UndirectedGraphVertex;
+import org.pingel.util.UndirectedGraphVertex
 
-public class EliminationTreeNode
-implements UndirectedGraphVertex<EliminationTreeEdge>
+class EliminationTreeNode(label: String)
+extends UndirectedGraphVertex[EliminationTreeEdge]
 {
-	private String label;
-	
-	public EliminationTreeNode(String label)
-	{
-		this.label = label;
-	}
-	
-	public String getLabel()
-	{
-		return label;
-	}
+  def getLabel(): String = label
+
 }

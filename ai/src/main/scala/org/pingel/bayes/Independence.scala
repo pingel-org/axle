@@ -1,38 +1,19 @@
 package org.pingel.bayes;
 
-import java.util.Set;
+// this is read "X is independent of Y given Z"
 
-public class Independence {
+class Independence(X: Set[RandomVariable], Z: Set[RandomVariable], Y: Set[RandomVariable]) {
 
-	public Set<RandomVariable> X;
-	public Set<RandomVariable> Y;
-	public Set<RandomVariable> Z;
-	
-	// this is read "X is independent of Y given Z"
-	public Independence(Set<RandomVariable> X, Set<RandomVariable> Z, Set<RandomVariable> Y)
-	{
-		this.X = X;
-		this.Z = Z;
-		this.Y = Y;
-	}
-
-	private String variablesToString(Set<RandomVariable> s)
-	{
-		String result = "{";
-		for( RandomVariable var : s ) {
-			result += var.name;
-		}
-		result += "}";
-		
-		return result;
-	}
-	
-	public String toString()
-	{
-		return "I(" +
-		variablesToString(X) + ", " +
-		variablesToString(Z) + ", " +
-		variablesToString(Y) + ")";
-	}
+  def variablesToString(s: Set[RandomVariable]): String =  "{" + ( for( v <- s ) yield v.getName() ).mkString("") + "}"
+  
+  override def toString(): String = {
+    "I(" +
+    variablesToString(X) +
+    ", " +
+    variablesToString(Z) +
+    ", " +
+    variablesToString(Y) +
+    ")"
+  }
 	
 }

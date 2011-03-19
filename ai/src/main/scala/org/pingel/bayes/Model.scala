@@ -1,52 +1,28 @@
 package org.pingel.bayes;
 
+import org.pingel.util.DirectedGraph
+import org.pingel.util.Lister
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-
-import org.pingel.util.DirectedGraph;
-import org.pingel.util.Lister;
-
-public class Model
-{
+class Model(name: String="no name") {
 	
-	private ModelGraph graph = new ModelGraph();
-	protected int newVarIndex = 0;
-	protected Map<String, RandomVariable> name2variable = new HashMap<String, RandomVariable>();
-	protected String name = "unknown";
+  var graph = new ModelGraph()
+  var newVarIndex = 0
+  var name2variable = Map[String, RandomVariable]()
 	
-	public Model()
-	{
-	}
+  def getName(): String = name
 	
-	public Model(String name)
-	{
-		this.name = name;
-	}
-	
-	public String getName()
-	{
-		return name;
-	}
-	
-	public void copyTo(Model other)
-	{
-		other.name = name;
+  def copyTo(other: Model): Unit = {
+    other.name = name
 		
-		for(RandomVariable var : variables ) {
-			other.addVariable(var);
-		}
-		
-		for(ModelEdge edge : graph.getEdges() ) {
-			other.connect(edge.getSource(), edge.getDest());
-		}
-		
-	}
+    for( variable <- variables ) {
+      other.addVariable(variable)
+    }
+    
+    for( edge <- graph.getEdges() ) {
+      other.connect(edge.getSource(), edge.getDest())
+    }
+    
+  }
 	
 	public DirectedGraph<RandomVariable, ModelEdge> getGraph()
 	{

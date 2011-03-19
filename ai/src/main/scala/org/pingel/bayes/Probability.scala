@@ -1,20 +1,12 @@
 package org.pingel.bayes;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.pingel.forms.Variable;
-import org.pingel.gestalt.core.Form;
+import org.pingel.forms.Variable
+import org.pingel.gestalt.core.Form
 
 
-public class Probability
-{
+class Probability(question: Set[Variable], given: Set[Variable]=Set(), actions: Set[Variable]=Set()) {
     // For now I'll just use sets of variables instead of assignments.
     // I'm confused about what the best representation for this stuff is.
-    
-	private Set<Variable> question;
-    private Set<Variable> given;
-    private Set<Variable> actions;
 
 //	public Name question = new Name("question");
 //	public Name given = new Name("given");
@@ -30,53 +22,13 @@ public class Probability
 //		archetype = new ComplexForm(new ComplexForm(new ComplexForm(new SimpleForm(new Name("probability")), new SimpleForm(question)), new SimpleForm(given)), new SimpleForm(actions), lambda);
 //    	
 //    }
-    
-    public Probability(Set<Variable> question)
-    {
-        this.question = question;
-        this.given = new HashSet<Variable>();
-        this.actions = new HashSet<Variable>();
-    }
+   
 
-    public Probability(Set<Variable> question, Set<Variable> given)
-    {
-        this.question = question;
-        this.given = given;
-        this.actions = new HashSet<Variable>();
-    }
+  def getQuestion() = question
+  def getGiven() = given
+  def getActions() = actions
 
-    public Probability(Set<Variable> question, Set<Variable> given, Set<Variable> actions)
-    {
-        this.question = question;
-        this.given = given;
-        this.actions = actions;
-    }
-
-    public Set<Variable> getQuestion()
-    {
-        Set<Variable> result = new HashSet<Variable>();
-        result.addAll(question);
-        return result;
-    }
-
-    public Set<Variable> getGiven()
-    {
-        Set<Variable> result = new HashSet<Variable>();
-        result.addAll(given);
-        return result;
-    }
-    
-    public Set<Variable> getActions()
-    {
-        Set<Variable> result = new HashSet<Variable>();
-        result.addAll(actions);
-        return result;
-    }
-
-    public int getActionSize(Form f)
-    {
-    		return -1; // TODO !!!
-    }
+  def getActionSize(f: Form): Integer = -1 // TODO !!!
     
 //    public Case getConditionCase(Map<Variable, DoubleValue> values)
 //    {

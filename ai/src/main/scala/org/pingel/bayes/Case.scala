@@ -1,172 +1,114 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.Vector;
-
-public class Case implements Comparable<Case>
+class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
 {
-	private Map<RandomVariable,Value> assignments = new TreeMap<RandomVariable, Value>();
+  var assignments = new TreeMap[RandomVariable, Value]()
 
-	public Case() {}
+  assign(rv, value)
 
-	public Case(RandomVariable var, Value val)
-	{
-	    assign(var, val);
-	}
-
-	public Set<RandomVariable> getVariables()
-	{
-	    return assignments.keySet();
-	}
+  def getVariables(): Set[RandomVariable] = assignments.keySet
 	
-	public int size()
-	{
-		return assignments.keySet().size();
-	}
+  def size(): Int = assignments.keySet.size
 
-	public Value valueOf(RandomVariable var) {
-		return assignments.get(var);
-	}
+  def valueOf(variable: RandomVariable): Value = {
+    assignments(variable)
+  }
 
-	public List<Value> valuesOf(List<RandomVariable> vars) {
+  def valuesOf(vars: List[RandomVariable]): List[Value] =  {
 
-	    // Note: this may contain null entries if assignments.keySet()
-	    // is a strict subset of vars
-	    
-	    List<Value> result = new Vector<Value>();
-	    for(int i=0; i < vars.size(); i++) {
-	        result.add(assignments.get(vars.get(i)));
-	    }
-	    return result;
-	}
-	
-	public void assign(RandomVariable rv, Value val)
-	{
-		assignments.put(rv, val);
-	}
-
-	public void assign(List<RandomVariable> vars, List<Value> vals)
-	{
-	    for(int i=0; i < vars.size(); i++ ) {
-	        RandomVariable var = vars.get(i);
-	        Value val = vals.get(i);
-			assignments.put(var, val);
-	    }
-	}
-
-	public boolean isSupersetOf(Case other)
-	{
-		Iterator<RandomVariable> it = other.assignments.keySet().iterator();
-		while( it.hasNext() ) {
-		    RandomVariable var = it.next();
-		    Value otherVal = other.valueOf(var);
-		    Value thisVal = valueOf(var);
-			if ( otherVal != null &&
-				 thisVal != null &&
-				 ! thisVal.equals(otherVal) ) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public Case copy()
-	{
-		Case result = new Case();
-        result.assignments = new TreeMap<RandomVariable, Value>();
-        result.assignments.putAll(assignments);
-		return result;
-	}
-
-	public Case projectToVars(List<RandomVariable> pVars)
-	{
-		Case result = new Case();
-
-		for( RandomVariable var : pVars ) {
-			result.assign(var, valueOf(var));
-		}
-		
-		return result;
-	}
-
-	public boolean equals(Object o) {
-        if( o instanceof Case ) {
-            return compareTo((Case)o) == 0;
-        }
-        else {
-            return false;
-        }
-	}
-	
-	public int compareTo(Case other)
-	{
-	    if( assignments.size() < other.assignments.size() ) {
-			return -1;
-		}
-		if( assignments.size() > other.assignments.size() ) {
-			return 1;
-		}
-		
-		for( RandomVariable var : assignments.keySet() ) {
-			Value myValue = assignments.get(var);
-			Value otherValue = other.assignments.get(var);
-			
-			if( ! myValue.equals(otherValue) ) {
-				return myValue.compareTo(otherValue);
-			}
-		}
-
-		return 0;
-	}
-	
-    public String toString()
-    {
-        String result = "";
-        for( RandomVariable rv : assignments.keySet() ) {
-            // System.out.println("rv = " + rv.name);
-            result += rv.name + " = ";
-            if(  assignments.get(rv) == null ) {
-                result += "null";
-            }
-            else {
-                result += assignments.get(rv).toString();
-            }
-            result += ", ";
-        }
-        return result;
-    }
+    // Note: this may contain null entries if assignments.keySet()
+    // is a strict subset of vars
     
-    public String toOrderedString(RandomVariable... rvs)
-    {
-    		String result = "";
-    	
-    		for(int i=0; i < rvs.length; i++ ) {
-    			result += rvs[i].name + " = " + assignments.get(rvs[i]);
-    			if( i < rvs.length - 1 ) {
-    				result += ", ";
-    			}
-    		}
-    		
-    		return result;
+    var result = List[Value]()
+    for( i <- 0 to (vars.length-1) ) {
+      result.add(assignments(vars(i)))
     }
+    result
+  }
+  
+  def assign(rv: RandomVariable, value: Value): Unit = {
+    assignments.put(rv, value);
+  }
+
+  def assign(vars: List[RandomVariable], vals: List[Value]): Unit = {
+    for(i <- 0 to (vars.size-1) ) {
+      val variable = vars(i)
+      val value = vals(i)
+      assignments += variable -> value
+    }
+  }
+
+  def isSupersetOf(other: Case): Boolean = {
+    val it = other.assignments.keySet.iterator
+    while( it.hasNext() ) {
+      val variable = it.next
+      val otherVal = other.valueOf(variable)
+      val thisVal = valueOf(variable)
+      if ( otherVal != null && thisVal != null && ! thisVal.equals(otherVal) ) {
+	return false
+      }
+    }
+    true
+  }
+	
+  def copy(): Case = {
+    var result = new Case()
+    result.assignments = new TreeMap[RandomVariable, Value]();
+    result.assignments.putAll(assignments);
+    result
+  }
+
+  def projectToVars(pVars: List[RandomVariable]): Case = {
+    var result = new Case()
+    for( variable <- pVars ) {
+      result.assign(variable, valueOf(variable))
+    }
+    result
+  }
+
+  override def equals(o: Object): Boolean = {
+    if( o instanceof Case ) {
+      return compareTo((Case)o) == 0;
+    }
+    else {
+      return false
+    }
+  }
+	
+  def compareTo(other: Case): Integer = {
+    if( assignments.size < other.assignments.size ) {
+      return -1
+    }
+    if( assignments.size > other.assignments.size ) {
+      return 1
+    }
+    for( variable <- assignments.keySet ) {
+      val myValue = assignments(variable)
+      val otherValue = other.assignments(variable)
+      if( ! myValue.equals(otherValue) ) {
+	return myValue.compareTo(otherValue)
+      }
+    }
+    0
+  }
+  
+  override def toString(): String = {
+    var result = ""
+    for( rv <- assignments.keySet ) {
+      // System.out.println("rv = " + rv.name);
+      result += rv.name + " = ";
+      if(  assignments.contains(rv) ) {
+        result += assignments(rv).toString()
+      }
+      else {
+        result += "null"
+      }
+      result += ", "
+    }
+    result
+  }
     
-    public String toOrderedString(List<RandomVariable> vs)
-    {
-    		String result = "";
-		
-		Iterator<RandomVariable> it = vs.iterator();
-		for(int i=0; i < vs.size(); i++ ) {
-			RandomVariable var = it.next();
-			result += var.name + " = " + assignments.get(var);
-			if( it.hasNext() ) {
-				result += ", ";
-			}
-		}
-		
-		return result;
-	}
+  def toOrderedString(vs: List[RandomVariable]): String = 
+    (for( variable <- vs ) yield variable.getName + " = " + assignments(variable)).mkString(", ")
+  
 }

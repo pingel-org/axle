@@ -2,42 +2,25 @@
  * Created on Jun 2, 2005
  *
  */
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import java.util.HashMap;
-import java.util.Map;
+class VariableNamer {
 
-
-public class VariableNamer {
-
-    private Map<RandomVariable, Integer> counts;
-
-    public VariableNamer()
-    {
-        counts =  new HashMap<RandomVariable, Integer>();
-    }
+  var counts = Map[RandomVariable, Integer]()
     
-    public int increment(RandomVariable rv)
-    {
-        int c;
-        Integer count = counts.get(rv);
-        if( count == null ) {
-            c = 0;
-        }
-        else {
-            c = count.intValue();
-        }
-        counts.put(rv, new Integer(c+1));
-        return c;
-
+  def increment(rv: RandomVariable): Integer = {
+    var c: Integer = 0
+    var count: Integer = counts(rv)
+    if( counts.contains(rv) ) {
+      c = counts(rv)
     }
-    
-    public VariableNamer duplicate()
-    {
-        VariableNamer duplicate = new VariableNamer();
+    counts += rv -> new Integer(c+1)
+    c
+  }
 
-        duplicate.counts.putAll(counts);
-        
-        return duplicate;
-    }
+  def duplicate(): VariableNamer = {
+    var duplicate: VariableNamer = new VariableNamer()
+    duplicate.counts.putAll(counts);
+    duplicate
+  }
 }

@@ -1,11 +1,8 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import org.pingel.util.UndirectedGraphEdge;
+import org.pingel.util.UndirectedGraphEdge
 
-public class VariableLink extends UndirectedGraphEdge<RandomVariable> {
-
-	public VariableLink(RandomVariable v1, RandomVariable v2) {
-		super(v1, v2);
-	}
+class VariableLink(v1: RandomVariable, v2: RandomVariable) extends UndirectedGraphEdge[RandomVariable](v1, v2) { 
 
 }
+

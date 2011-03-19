@@ -375,7 +375,7 @@ class ScalaFigures {
 		
   }
 	
-  def main(String[] args): Unit = {
+  def main(args: List[String]): Unit = {
     var figures = new Figures()
 
     figures.setFigure6_1()

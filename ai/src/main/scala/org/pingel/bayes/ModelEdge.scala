@@ -1,12 +1,8 @@
 package org.pingel.bayes;
 
-import org.pingel.util.DirectedGraphEdge;
+import org.pingel.util.DirectedGraphEdge
 
-public class ModelEdge extends DirectedGraphEdge<RandomVariable>
+class ModelEdge(v1: RandomVariable, v2: RandomVariable)
+extends DirectedGraphEdge[RandomVariable](v1, v2)
 {
-
-    public ModelEdge(RandomVariable v1, RandomVariable v2)
-    {
-        super(v1, v2);
-    }
 }
