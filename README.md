@@ -1,15 +1,15 @@
 
-A wide range of code I've written over the years.
+pingel.org
+==========
 
-Primarily for the JVM.
+A wide range of code I've written over the years, primarily for the JVM.
 
 Adam Pingel
-pingel@gmail.com
-February 21, 2011
+<pingel@gmail.com>
+February 2011
 
-*************************************
-* python2json
-*************************************
+python2json
+-----------
 
 This is part of a larger project on source code
 search algorithms.
@@ -22,30 +22,22 @@ problems with it, but for the most part it works.
 Feel free to submit bug patches.
 
 
-*************************************
-* Linguistics
-*************************************
+Linguistics
+-----------
 
 Models the Gold Paradigm and Angluin's Language Learner, which
 I encountered in a couple of Ed Stabler's graduate courses
 on language evolution.
 
-*************************************
-* AI
-*************************************
+AI (Artificial Intelligence)
+----------------------------
 
-Code for Bayesian Networks and Causality.  This codebase
-became way too ambitious and entangled with other ideas.
-It's currently not buildable.  I may revisit this code
-at some point and extract the Bayesian code from the rest
-of the "gestalt" stuff, which was where I started to stray
-into language design, got interested in bidirectional
-program transformations, and then got mired in the desert
-of Category Theory.
+Code for Bayesian Networks and Causality.
+It's currently not buildable.
+I am actively rewriting this code in Scala.
 
-*************************************
-* Util
-*************************************
+Util
+----
 
 Mostly iterators like PowerSet and CrossProduct that were
 interesting to write while learning about Java 5's generics.
