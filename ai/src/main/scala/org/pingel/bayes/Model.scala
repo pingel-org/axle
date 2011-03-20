@@ -3,6 +3,14 @@ package org.pingel.bayes;
 import org.pingel.util.DirectedGraph
 import org.pingel.util.Lister
 
+object Direction {
+
+  val UNKNOWN = 0
+  val OUTWARD = -1
+  val INWARD = 1
+
+}
+
 class Model(name: String="no name") {
 	
   var graph = new ModelGraph()
@@ -24,71 +32,48 @@ class Model(name: String="no name") {
     
   }
 	
-	public DirectedGraph<RandomVariable, ModelEdge> getGraph()
-	{
-		return graph;
-	}
+  def getGraph(): DirectedGraph[RandomVariable, ModelEdge] = graph
 	
-	public void connect(RandomVariable source, RandomVariable dest)
-	{
-		graph.addEdge(new ModelEdge(source, dest));
-	}
+  def connect(source: RandomVariable, dest: RandomVariable): Unit = {
+    graph.addEdge(new ModelEdge(source, dest));
+  }
 	
-	private List<RandomVariable> variables = new ArrayList<RandomVariable>();
+  var variables = List[RandomVariable]()
 	
+  def addVariable(variable: RandomVariable): RandomVariable = {
+    variables.add(variable);
+    name2variable += variable.getName -> variable
+    graph.addVertex(variable)
+  }
 	
-	public RandomVariable addVariable(RandomVariable var)
-	{
-		variables.add(var);
-		name2variable.put(var.name, var);
-		return graph.addVertex(var);
-	}
+  def getRandomVariables(): List[RandomVariable] = variables
 	
-	public List<RandomVariable> getRandomVariables()
-	{
-		return variables;
-	}
-	
-	public RandomVariable getVariable(String name)
-	{
-		return name2variable.get(name);
-	}
+  def getVariable(name: String): RandomVariable = name2variable(name)
 
-	public void deleteVariable(RandomVariable var)
-	{
-		variables.remove(var);
-		graph.deleteVertex(var);
-	}
+  def deleteVariable(variable: RandomVariable): Unit = {
+    variables.remove(variable)
+    graph.deleteVertex(variable)
+  }
 	
-	public int numVariables()
-	{
-		return variables.size();
-	}
+  def numVariables(): Integer = variables.size()
 	
-	public boolean blocks(Set<RandomVariable> from, Set<RandomVariable> to, Set<RandomVariable> given)
-	{
-		List<RandomVariable> path = _findOpenPath(new HashMap<RandomVariable, Set<RandomVariable>>(), UNKNOWN, null, from, to, given);
-		return path == null;
-	}
+  def blocks(from: Set[RandomVariable], to: Set[RandomVariable], given: Set[RandomVariable]): Boolean = {
+    val path = _findOpenPath(Map[RandomVariable, Set[RandomVariable]](), Direction.UNKNOWN, null, from, to, given)
+    path == null
+  }
 	
-	final static int UNKNOWN = 0;
-	final static int OUTWARD = -1;
-	final static int INWARD = 1;
+  var rvNameGetter = new Lister[RandomVariable, String]() {
+    def function(rv: RandomVariable): String = rv.getName
+  }
 	
-	Lister<RandomVariable, String> rvNameGetter = new Lister<RandomVariable, String>() {
-		public String function(RandomVariable rv) {
-			return rv.name;
-		}
-	};
-	
-	private List<RandomVariable> _findOpenPath(
-			Map<RandomVariable, Set<RandomVariable>> visited,
-			int priorDirection,
-			RandomVariable prior,
-			Set<RandomVariable> current,
-			Set<RandomVariable> to,
-			Set<RandomVariable> given)
-			{
+  def _findOpenPath(
+    visited: Map[RandomVariable, Set[RandomVariable]],
+    priorDirection: Integer,
+    prior: RandomVariable,
+    current: Set[RandomVariable],
+    to: Set[RandomVariable],
+    given: Set[RandomVariable]): List[RandomVariable] =
+  {
 		
 //		System.out.println("_fOP: " + priorDirection +
 //		", prior = " + ((prior == null ) ? "null" : prior.name) +
@@ -96,62 +81,68 @@ class Model(name: String="no name") {
 //		", to = " + rvNameGetter.execute(to) +
 //		", evidence = " + rvNameGetter.execute(given));
 		
-		Set<RandomVariable> cachedOuts = visited.get(prior);
-		if( cachedOuts != null ) {
-			current.removeAll(cachedOuts);
-		}
+    val cachedOuts = visited(prior) // Set<RandomVariable>
+    if( cachedOuts != null ) {
+      current.removeAll(cachedOuts)
+    }
 		
-		for( RandomVariable var : current ) {
+    for( variable <- current ) {
 			
-			boolean openToVar = false;
-			int directionPriorToVar = UNKNOWN;
-			if( prior == null ) {
-				openToVar = true;
-			}
-			else {
-				directionPriorToVar = OUTWARD;
-				if( getGraph().precedes(var, prior) ) {
-					directionPriorToVar = INWARD;
-				}
-				
-				if( priorDirection != UNKNOWN ) {
-					boolean priorGiven = given.contains(prior);
-					openToVar =
-						(priorDirection == INWARD  && ! priorGiven                                  && directionPriorToVar == OUTWARD) ||
-						(priorDirection == OUTWARD && ! priorGiven                                  && directionPriorToVar == OUTWARD) ||
-						(priorDirection == INWARD  && graph.descendantsIntersectsSet(var, given) && directionPriorToVar == INWARD);
-				}
-				else {
-					openToVar = true;
-				}
-			}
-			
-			if( openToVar ) {
-				if( to.contains(var) ) {
-					Vector<RandomVariable> path = new Vector<RandomVariable>();
-					path.add(var);
-					return path;
-				}
-				Set<RandomVariable> neighbors = graph.getNeighbors(var);
-				neighbors.remove(prior);
-				
-				Map<RandomVariable, Set<RandomVariable>> visitedCopy = new HashMap<RandomVariable, Set<RandomVariable>>();
-				visitedCopy.putAll(visited);
-				Set<RandomVariable> outs = visited.get(prior);
-				if( outs == null ) {
-					outs = new HashSet<RandomVariable>();
-					visitedCopy.put(prior, outs);
-				}
-				outs.add(var);
-				
-				List<RandomVariable> path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, var, neighbors, to, given);
-				if( path != null ) {
-					path.add(var);
-					return path;
-				}
-			}
-		}
-		return null;
-			}
+      var openToVar = false
+      var directionPriorToVar = Direction.UNKNOWN
+      if( prior == null ) {
+	openToVar = true
+      }
+      else {
+	directionPriorToVar = Direction.OUTWARD
+	if( getGraph().precedes(variable, prior) ) {
+	  directionPriorToVar = Direction.INWARD
+	}
+	
+	if( priorDirection != Direction.UNKNOWN ) {
+	  var priorGiven = given.contains(prior)
+	  openToVar = (
+	    priorDirection == Direction.INWARD  &&
+	    ! priorGiven &&
+	    directionPriorToVar == Direction.OUTWARD) ||
+	  (priorDirection == Direction.OUTWARD &&
+	   ! priorGiven && 
+	   directionPriorToVar == Direction.OUTWARD) ||
+	  (priorDirection == Direction.INWARD  &&
+	   graph.descendantsIntersectsSet(variable, given) &&
+	   directionPriorToVar == Direction.INWARD)
+	}
+	else {
+	  openToVar = true
+	}
+      }
+      
+      if( openToVar ) {
+	if( to.contains(variable) ) {
+	  var path = List[RandomVariable]()
+	  path.add(variable);
+	  return path
+	}
+	var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>
+	neighbors.remove(prior)
+	
+	var visitedCopy = Map[RandomVariable, Set[RandomVariable]]()
+	visitedCopy.putAll(visited)
+	var outs = visited.get(prior) // Set<RandomVariable>
+	if( outs == null ) {
+	  outs = Set[RandomVariable]()
+	  visitedCopy.put(prior, outs)
+	}
+	outs.add(variable)
+	
+	var path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given);
+	if( path != null ) {
+	  path.add(variable)
+	  return path
+	}
+      }
+    }
+    return null
+  }
 	
 }
