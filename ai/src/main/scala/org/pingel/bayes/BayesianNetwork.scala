@@ -107,7 +107,8 @@ class BayesianNetwork extends Model
   def getJointProbabilityTable(): Factor = {
     var jpt = new Factor(getRandomVariables())
     for(j <- 0 to jpt.numCases - 1 ) {
-      jpt.write(jpt.caseOf(j), probabilityOf(c))
+      val c = jpt.caseOf(j)
+      jpt.write(c, probabilityOf(c))
     }
     jpt
   }
@@ -149,8 +150,8 @@ class BayesianNetwork extends Model
     var answer = 1.0
     val it = c.getVariables().iterator()
     while( it.hasNext() ) {
-      val rv = it.next();
-      answer *= getCPT(rv).read(c);
+      val rv = it.next()
+      answer *= getCPT(rv).read(c)
     }
     answer
   }
@@ -163,14 +164,15 @@ class BayesianNetwork extends Model
   }
   
   def getMarkovAssumptionsFor(rv: RandomVariable): Independence = {
-    var X = Set[RandomVariable]()
+
+    var X = scala.collection.mutable.Set[RandomVariable]()
     X.add(rv)
     
     var Z = getGraph().getPredecessors(rv)
 
-    var D = Set[RandomVariable]()
+    var D = scala.collection.mutable.Set[RandomVariable]()
     getGraph().collectDescendants(rv, D)
-    D.add(rv); // probably already includes this
+    D.add(rv) // probably already includes this
     D.addAll(getGraph().getPredecessors(rv))
 
     var Y = Set[RandomVariable]()
@@ -197,8 +199,8 @@ class BayesianNetwork extends Model
   def computeFullCase(c: Case): Double = {
     if( numVariables() != c.size() ) {
       // not an airtight check
-      System.err.println("malformed case to computeFullCase");
-      System.exit(1);
+      System.err.println("malformed case to computeFullCase")
+      System.exit(1)
     }
     
     // order variables such that all nodes appear before their ancestors
@@ -207,67 +209,66 @@ class BayesianNetwork extends Model
     // now each term should simply be a lookup in the curresponding CPT
     // multiply results
     
-    return -1.0; // TODO
+    -1.0 // TODO
   }
 
-  def variableEliminationPriorMarginalI(Q: Set[RandomVariable], pi: List[RandomVariable]): Factor = {
+  def variableEliminationPriorMarginalI(Q: Set[RandomVariable], π: List[RandomVariable]): Factor = {
     // Algorithm 1 from Chapter 6 (page  9)
     
     // Q is a set of variables
     // pi is an ordered list of the variables not in Q
     // returns the prior marginal pr(Q)
 
-    var S = Set[Factor]()
+    var S = scala.collection.mutable.Set[Factor]()
     for( rv <- getRandomVariables() ) {
       S.add(getCPT(rv))
     }
     
-    for( rv <- pi ) {
-      var allMentions = Set[Factor]()
-      var newS = Set[Factor]()
+    for( rv <- π ) {
+      var allMentions = scala.collection.mutable.Set[Factor]()
+      var newS = scala.collection.mutable.Set[Factor]()
       for( pt <- S ) {
 	if( pt.mentions(rv) ) {
-	  allMentions.add(pt);
-	} else {
-	  newS.add(pt);
+	  allMentions.add(pt)
+	}
+	else {
+	  newS.add(pt)
 	}
       }
       
       val T = Factor.multiply(allMentions)
       val Ti = T.sumOut(rv)
-      
-      newS.add(Ti);
-      S = newS;
+      newS.add(Ti)
+      S = newS
     }
     
     Factor.multiply(S)
 
     // the cost is the cost of the Tk multiplication
-    // this is highly dependent on pi
+    // this is highly dependent on π
   }
 
-  def variableEliminationPriorMarginalII(Q: Set[RandomVariable], pi: List[RandomVariable], e: Case): Factor = {
+  def variableEliminationPriorMarginalII(Q: Set[RandomVariable], π: List[RandomVariable], e: Case): Factor = {
     
     // Chapter 6 Algorithm 5 (page 17)
 
     // assert: Q subset of variables
-    // assert: pi ordering of variables in S but not in Q
+    // assert: π ordering of variables in S but not in Q
     // assert: e assigns values to variables in this network
     
-    var S = Set[Factor]()
+    var S = scala.collection.mutable.Set[Factor]()
     for( rv <- getRandomVariables() ) {
       S.add(getCPT(rv).projectRowsConsistentWith(e))
     }
     
-    for( rv <- pi ) {
-      
-      var allMentions = Set[Factor]()
-      var newS = Set[Factor]()
-      
+    for( rv <- π ) {
+      var allMentions = scala.collection.mutable.Set[Factor]()
+      var newS = scala.collection.mutable.Set[Factor]()
       for( pt <- S ) {
 	if( pt.mentions(rv) ) {
 	  allMentions.add(pt)
-	} else {
+	}
+	else {
 	  newS.add(pt)
 	}
       }
@@ -285,19 +286,17 @@ class BayesianNetwork extends Model
   def interactsWith(v1: RandomVariable, v2: RandomVariable): Boolean = {
     for( f <- getAllCPTs() ) {
       if( f.mentions(v1) && f.mentions(v2) ) {
-	return true;
+	return true
       }
     }
-    return false;
+    false
   }
   
   def interactionGraph(): InteractionGraph = {
     // Also called the "moral graph"
 
     var result = new InteractionGraph()
-    
     val rvs = getRandomVariables()
-
     for( rv <- rvs ) {
       result.addVertex(rv)
     }
@@ -315,7 +314,7 @@ class BayesianNetwork extends Model
     result
   }
   
-  def orderWidth(order: List): Integer = {
+  def orderWidth(order: List[RandomVariable]): Integer = {
     // Chapter 6 Algorithm 2 (page 13)
     
     var G = interactionGraph()
@@ -359,7 +358,7 @@ class BayesianNetwork extends Model
   }
   
   def pruneNodes(Q: Set[RandomVariable], e: Case): Unit = {
-    var vars = Set[RandomVariable]()
+    var vars = scala.collection.mutable.Set[RandomVariable]()
     if( Q != null ) {
       vars.addAll(Q)
     }
@@ -376,7 +375,7 @@ class BayesianNetwork extends Model
       keepGoing = false
       for( leaf <- getGraph().getLeaves()) { // RandomVariable
 	if( ! vars.contains(leaf) ) {
-	  this.deleteVariable(leaf)
+	  deleteVariable(leaf)
 	  keepGoing = true
 	}
       }
@@ -395,23 +394,23 @@ class BayesianNetwork extends Model
     copyTo(pruned)
     pruned.pruneNetwork(Q, e)
     
-    var R = Set[RandomVariable]()
+    var R = scala.collection.mutable.Set[RandomVariable]()
     for( v <- getRandomVariables() ) {
       if( ! Q.contains(v) ) {
 	R.add(v)
       }
     }
-    val pi = pruned.minDegreeOrder(R)
+    val π = pruned.minDegreeOrder(R)
     
-    var S = Set[Factor]()
+    var S = scala.collection.mutable.Set[Factor]()
     for( rv <- pruned.getRandomVariables() ) {
       S.add(pruned.getCPT(rv).projectRowsConsistentWith(e))
     }
     
-    for( rv <- pi ) {
+    for( rv <- π ) {
       
-      var allMentions = Set[Factor]()
-      var newS = Set[Factor]()
+      var allMentions = scala.collection.mutable.Set[Factor]()
+      var newS = scala.collection.mutable.Set[Factor]()
       
       for( pt <- S ) {
 	if( pt.mentions(rv) ) {
@@ -438,24 +437,24 @@ class BayesianNetwork extends Model
     pruned.pruneEdges(e)
     
     val Q = pruned.getRandomVariables()
-    val pi = pruned.minDegreeOrder(Q)
+    val π = pruned.minDegreeOrder(Q)
     
-    var S = Set[Factor]()
+    var S = scala.collection.mutable.Set[Factor]()
     for( rv <- Q ) {
       S.add(pruned.getCPT(rv).projectRowsConsistentWith(e))
     }
     
-    for( rv <- pi ) {
+    for( rv <- π ) {
       
-      var allMentions = Set[Factor]()
-      var newS = Set[Factor]()
+      var allMentions = scala.collection.mutable.Set[Factor]()
+      var newS = scala.collection.mutable.Set[Factor]()
       
       for( pt <- S ) {
 	if( pt.mentions(rv) ) {
-	  allMentions.add(pt);
+	  allMentions.add(pt)
 	}
 	else {
-	  newS.add(pt);
+	  newS.add(pt)
 	}
       }
       
@@ -469,7 +468,7 @@ class BayesianNetwork extends Model
     // at this point (since we're iterating over *all* variables in Q)
     // S will contain exactly one trivial Factor
     
-    if( S.size() != 1 ) {
+    if( S.size != 1 ) {
       System.err.println("Assertion failed S.size() != 1");
       System.exit(1);
     }
@@ -500,7 +499,7 @@ class BayesianNetwork extends Model
     var G = interactionGraph()
     var result = List[RandomVariable]()
     
-    while( X.size() > 0 ) {
+    while( X.size > 0 ) {
       val rv = G.vertexWithFewestNeighborsAmong(X)
       result.add(rv)
       G.eliminate(rv)
@@ -516,7 +515,7 @@ class BayesianNetwork extends Model
     var G = interactionGraph()
     var result = List[RandomVariable]()
     
-    while( X.size() > 0 ) {
+    while( X.size > 0 ) {
       val rv = G.vertexWithFewestEdgesToEliminateAmong(X)
       result.add(rv)
       G.eliminate(rv)
@@ -532,17 +531,17 @@ class BayesianNetwork extends Model
       S.add(getCPT(rv));
     }
     
-    while( S.size() > 1 ) {
+    while( S.size > 1 ) {
       
       val fi = S(0)
       S.remove(fi)
       
-      var V = Set[RandomVariable]()
+      var V = scala.collection.mutable.Set[RandomVariable]()
       for( v <- fi.getVariables()) {
 	if( ! Q.contains(v) ) {
 	  var vNotInS = true
 	  var j = 0
-	  while( vNotInS && j < S.size() ) {
+	  while( vNotInS && j < S.size ) {
 	    vNotInS = ! S(j).mentions(v)
 	    j += 1
 	  }
@@ -568,61 +567,61 @@ class BayesianNetwork extends Model
     val f = S(0)
     
     var qList = List[RandomVariable]()
-    qList.addAll(Q);
+    qList.addAll(Q)
     
     f.projectToOnly(qList)
   }
   
   
-  def factorElimination2(Q: Set[RandomVariable], tau: EliminationTree, r: EliminationTreeNode): Factor = {
+  def factorElimination2(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTreeNode): Factor = {
     // the variables Q appear on the CPT for the product of Factors assigned to node r
     
-    while( tau.getVertices().size() > 1 ) {
+    while( τ.getVertices().size() > 1 ) {
       
       // remove node i (other than r) that has single neighbor j in tau
       
-      val i = tau.firstLeafOtherThan(r)
-      val j = tau.getNeighbors(i).iterator().next()
-      val phi_i = tau.getFactor(i)
-      tau.delete(i)
+      val i = τ.firstLeafOtherThan(r)
+      val j = τ.getNeighbors(i).iterator().next()
+      val ɸ_i = τ.getFactor(i)
+      τ.delete(i)
       
-      val allVarsInTau = tau.getAllVariables()
-      var V = Set[RandomVariable]()
-      for( v <- phi_i.getVariables()) {
+      val allVarsInTau = τ.getAllVariables()
+      var V = scala.collection.mutable.Set[RandomVariable]()
+      for( v <- ɸ_i.getVariables()) {
 	if( ! allVarsInTau.contains(v) ) {
 	  V.add(v)
 	}
       }
-      tau.addFactor(j, phi_i.sumOut(V))
-      tau.draw()
+      τ.addFactor(j, ɸ_i.sumOut(V))
+      τ.draw()
     }
     
     var qList = List[RandomVariable]()
     qList.addAll(Q)
     
-    tau.getFactor(r).projectToOnly(qList)
+    τ.getFactor(r).projectToOnly(qList)
   }
   
   
-  def factorElimination3(Q: Set[RandomVariable], tau: EliminationTree, r: EliminationTreeNode): Factor = {
+  def factorElimination3(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTreeNode): Factor = {
     // Q is a subset of C_r
     
-    while( tau.getVertices().size() > 1 ) {
+    while( τ.getVertices().size() > 1 ) {
       // remove node i (other than r) that has single neighbor j in tau
-      val i = tau.firstLeafOtherThan(r)
-      val j = tau.getNeighbors(i).iterator().next()
-      val phi_i = tau.getFactor(i)
-      tau.delete(i)
-      val Sij = tau.separate(i, j)
+      val i = τ.firstLeafOtherThan(r)
+      val j = τ.getNeighbors(i).iterator().next()
+      val ɸ_i = τ.getFactor(i)
+      τ.delete(i)
+      val Sij = τ.separate(i, j)
       var sijList = List[RandomVariable]()
       sijList.addAll(Sij)
-      tau.addFactor(j, phi_i.projectToOnly(sijList))
-      tau.draw()
+      τ.addFactor(j, ɸ_i.projectToOnly(sijList))
+      τ.draw()
     }
     
     var qList = List[RandomVariable]()
     qList.addAll(Q)
-    tau.getFactor(r).projectToOnly(qList)
+    τ.getFactor(r).projectToOnly(qList)
   }
   
   //	public Map<EliminationTreeNode, Factor> factorElimination(EliminationTree tau, Case e)

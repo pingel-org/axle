@@ -48,7 +48,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     for( variable <- varList ) {
       valLists.add(variable.getDomain().getValues());
     }
-    cp = new ListCrossProduct<Value>(valLists);
+    cp = new ListCrossProduct[Value](valLists);
     elements = new Array[Double](cp.size())
   }
 	
@@ -71,7 +71,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     p / w
   }
 	
-  def indexOf(c: Case): Integer = {
+  def indexOf(c: Case): Int = {
     var objects = c.valuesOf(varList)
     cp.indexOf(objects)
   }
@@ -260,7 +260,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   
   def mentions(variable: RandomVariable): Boolean = {
     for( mine <- getVariables() ) {
-      if( variable.name.equals(mine.name) ) {
+      if( variable.getName.equals(mine.getName) ) {
 	return true
       }
     }
