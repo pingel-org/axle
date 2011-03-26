@@ -144,7 +144,7 @@ class Alphabet { // TODO: redefine as Set[Symbol]
 
   def addSymbol(m: Symbol): Unit = symbols.add(m)
 
-  def iterator(): Iterator[Symbol] = symbols.iterator()
+  def iterator() = symbols.iterator()
 }
 
 class CanonicalAcceptorFactory {
@@ -178,7 +178,7 @@ class Expression(v: List[Symbol]) {
     false
   }
 
-  override def toString(): String = "\"" + v.mkString(" ") + "\""
+  override def toString() = "\"" + v.mkString(" ") + "\""
 
 }
 
@@ -212,7 +212,7 @@ class HardCodedLearner(T: Text, G: Grammar) extends Learner(T)
 object ▦ extends Expression {
   // should this class throw an exception
   // if addMorpheme is called?
-  override def toString(): String = "▦"
+  override def toString() = "▦"
 }
 
 class Language {
@@ -233,7 +233,7 @@ class Language {
     null
   }
   
-  override def toString(): String = "{" + sequences.mkString(", ") + "}"
+  override def toString() = "{" + sequences.mkString(", ") + "}"
   
 }
 
@@ -282,7 +282,7 @@ class PrefixTreeFactory {
   }
 }
 
-class Quotient(A: Acceptor, pi: Partition) {
+class Quotient(A: Acceptor, π: Partition) {
   def evaluate(): Acceptor = {
     // TODO !!!
     null
@@ -324,7 +324,7 @@ class Text {
   
   def iterator() = v.iterator()
   
-  override def toString(): String = "<" + v.mkString(", ") + ">"
+  override def toString() = "<" + v.mkString(", ") + ">"
   
 }
 
