@@ -28,6 +28,18 @@ function install_scala {
 	)
 }
 
+function install_emacs {
+
+    apt-get install emacs
+
+    mkdir ~/.emacs.backups
+
+    echo <<EOF
+(defun make-backup-file-name (file)
+(concat “~/.emacs.backups/” (file-name-nondirectory file) “~”))
+EOF
+}
+
 function install_sbt {
 
     echo "install sbt"
@@ -40,6 +52,7 @@ function install_sbt {
     echo 'java -Xmx512M -jar `dirname $0`/sbt-launch-${SBTVERSION}.jar "$@"' > sbt
     chmod u+x sbt
 
+    # TODO: put this in .profile or .bashrc
     export PATH=~/bin:$PATH
 }
 
@@ -47,7 +60,38 @@ function install_ensime {
 
     echo "install ensime"
 
-    # TODO
+    # https://github.com/aemoncannon/ensime/blob/master/README.md
+
+    # Step 1: install scala distribution
+
+    (
+	cd /usr/local/scala/misc/scala-tool-support/emacs
+	make
+    )
+    echo <<EOF > ~/.emacs
+(add-to-list 'load-path "/usr/local/scala/misc/scala-tool-support/emacs")
+(require 'scala-mode-auto)
+
+EOF
+
+    # Step 2: ensime-mode
+    (
+	cd /usr/local
+	curl -O http://cloud.github.com/downloads/aemoncannon/ensime/ensime_2.8.1-0.4.4.tar.gz
+	tar xvfz ensime_2.8.1-0.4.4.tar.gz
+	ln -s ensime_2.8.1-0.4.4 ensime
+    )
+
+    echo <<"EOF" >> ~/.emacs
+(add-to-list 'load-path "/usr/local/ensime/elisp/")
+(require 'ensime)
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+EOF
+
+    # Step 3: Verify permissions
+
+    chmod +x /usr/local/ensime/bin/server
+
 }
 
 function install_mongo {
@@ -96,4 +140,28 @@ function install_mahout {
     echo "install mahout"
 
     # TODO
+}
+
+function new_project {
+
+    echo <<EOF
+import sbt._
+
+class Project(info: ProjectInfo) extends DefaultProject(info)
+with assembly.AssemblyBuilder
+{
+   // BEGIN
+   // END
+}
+EOF
+
+    echo <<EOF > project/plugins/Plugins.scala
+class Plugins(info: sbt.ProjectInfo) extends sbt.PluginDefinition(info) {
+  val codaRepo = "Coda Hale's Repository" at "http://repo.codahale.com/"
+  val assemblySBT = "com.codahale" % "assembly-sbt" % "0.1"
+}
+EOF
+
+    # emacs: M-x ensime-config-gen
+
 }
