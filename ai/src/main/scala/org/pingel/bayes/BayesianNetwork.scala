@@ -106,7 +106,7 @@ class BayesianNetwork extends Model
 	
   def getJointProbabilityTable(): Factor = {
     var jpt = new Factor(getRandomVariables())
-    for(j <- 0 to jpt.numCases-1 ) {
+    for(j <- 0 to jpt.numCases - 1 ) {
       jpt.write(jpt.caseOf(j), probabilityOf(c))
     }
     jpt
@@ -115,18 +115,17 @@ class BayesianNetwork extends Model
   def setCPT(rv: RandomVariable, factor: Factor): Unit = var2cpt += rv -> factor
 
   def makeFactorFor(variable: RandomVariable): Factor = {
-    var vars = getGraph().getPredecessors(variable); // Set<RandomVariable>
-    var cptVarList = new ArrayList<RandomVariable>(); // List<RandomVariable>
+    var vars = getGraph().getPredecessors(variable) // Set<RandomVariable>
+    var cptVarList = List[RandomVariable]() // List<RandomVariable>
     for( rv <- getRandomVariables() ) {
       if( vars.contains(rv) ) {
-	cptVarList.add(rv);
+	cptVarList.add(rv)
       }
     }
-    cptVarList.add(variable);
-    Factor cpt = new Factor(cptVarList);
-    cpt.setName("cpt for " + variable.name);
-
-    return cpt;
+    cptVarList.add(variable)
+    var cpt = new Factor(cptVarList)
+    cpt.setName("cpt for " + variable.getName)
+    cpt
   }
 	
   def getCPT(variable: RandomVariable): Factor = {
@@ -141,7 +140,7 @@ class BayesianNetwork extends Model
   def getAllCPTs(): List[Factor] = {
     var result = List[Factor]()
     for( rv <- getRandomVariables() ) {
-      result.add(getCPT(rv));
+      result.add(getCPT(rv))
     }
     result
   }
@@ -157,9 +156,9 @@ class BayesianNetwork extends Model
   }
 
   def copyTo(other: BayesianNetwork): Unit = {
-    super.copyTo(other);
-    for( v <- var2cpt.keySet()) {
-      other.var2cpt.put(v, var2cpt.get(v));
+    super.copyTo(other)
+    for( v <- var2cpt.keys ) {
+      other.var2cpt += v -> var2cpt(v)
     }
   }
   
@@ -247,7 +246,7 @@ class BayesianNetwork extends Model
     // this is highly dependent on pi
   }
 
-  def variableEliminationPriorMarginalII(Q: Set, pi: List[RandomVariable], e: Case): Factor = {
+  def variableEliminationPriorMarginalII(Q: Set[RandomVariable], pi: List[RandomVariable], e: Case): Factor = {
     
     // Chapter 6 Algorithm 5 (page 17)
 
@@ -544,8 +543,8 @@ class BayesianNetwork extends Model
 	  var vNotInS = true
 	  var j = 0
 	  while( vNotInS && j < S.size() ) {
-	    vNotInS = ! S.get(j).mentions(v)
-	    j++
+	    vNotInS = ! S(j).mentions(v)
+	    j += 1
 	  }
 	  if( vNotInS ) {
 	    V.add(v)
@@ -558,7 +557,7 @@ class BayesianNetwork extends Model
       
       val fjMinusV = fi.sumOut(V)
       
-      val fj = S.get(0)
+      val fj = S(0)
       S.remove(fj)
       val replacement = fj.multiply(fjMinusV)
       S.add(replacement)
@@ -566,7 +565,7 @@ class BayesianNetwork extends Model
     
     // there should be one element left in S
     
-    val f = S.get(0)
+    val f = S(0)
     
     var qList = List[RandomVariable]()
     qList.addAll(Q);

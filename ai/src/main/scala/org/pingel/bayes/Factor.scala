@@ -83,7 +83,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     result
   }
 	
-  def numCases(): Integer = elements.length
+  def numCases(): Int = elements.length
 	
   def write(c: Case, d: Double): Unit = {
 //		System.out.println("write: case = " + c.toOrderedString(variables) + ", d = " + d);
@@ -91,6 +91,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     elements(indexOf(c)) = d
   }
 	
+
   def read(c: Case): Double = elements(indexOf(c))
   
 	
@@ -115,7 +116,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     for( i <- 0 to newFactor.numCases() - 1 ) {
       def ci = newFactor.caseOf(i)
       var bestValue: Value = null
-      double maxSoFar = Double.MIN_VALUE
+      var maxSoFar = Double.MinValue
       for( value <- variable.getDomain().getValues()) {
 	var cj = newFactor.caseOf(i)
 	cj.assign(variable, value)
@@ -141,7 +142,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   def projectToOnly(remainingVars: List[RandomVariable]): Factor = {
     var result = new Factor(remainingVars)
     
-    for( j <- 0 to ( numCases-1 ) ) {
+    for( j <- 0 to ( numCases - 1 ) ) {
       var fromCase = this.caseOf(j)
       var toCase = fromCase.projectToVars(remainingVars)
       val additional = this.read(fromCase)
@@ -163,15 +164,15 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
       var c = 0
       for( bVal <- bValues ) {
 	w.assign(b, bVal)
-	for( j <- 0 to this.numCases-1 ) {
+	for( j <- 0 to this.numCases - 1 ) {
 	  val m = this.caseOf(j)
 	  if( m.isSupersetOf(w) ) {
 	    tally(r, c) += this.read(m)
 	  }
 	}
-	c++
+	c += 1
       }
-      r++
+      r += 1
     }
     return tally;
   }
@@ -218,7 +219,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
 		
     var result = new Factor(getVariables());
 		
-    for( j <- 0 to result.numCases()-1 ) {
+    for( j <- 0 to result.numCases() - 1 ) {
       var c = result.caseOf(j)
       if( c.isSupersetOf(e) ) {
 	result.elements(j) = elements(j)
@@ -247,7 +248,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     
     var result = new Factor(newVarList);
     
-    for(j <- 0 to result.numCases()-1 ) {
+    for(j <- 0 to result.numCases() - 1 ) {
       var c = result.caseOf(j)
       val myContribution = this.read(c)
       val otherContribution = other.read(c)
