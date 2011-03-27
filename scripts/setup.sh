@@ -26,6 +26,9 @@ function install_scala {
 	tar xvfz scala-${SCALATAG}.tgz
 	ln -s scala-${SCALATAG} scala
 	)
+
+    # TODO: put this somewhere
+    export PATH=/usr/local/scala/bin/:$PATH
 }
 
 function install_emacs {
@@ -35,8 +38,15 @@ function install_emacs {
     mkdir ~/.emacs.backups
 
     echo <<EOF
-(defun make-backup-file-name (file)
-(concat “~/.emacs.backups/” (file-name-nondirectory file) “~”))
+(setq
+   backup-by-copying t      ; don't clobber symlinks
+   backup-directory-alist
+    '(("." . "~/.emacs.backups"))    ; don't litter my fs tree
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t)       ; use versioned backups
+
 EOF
 }
 
