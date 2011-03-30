@@ -9,10 +9,7 @@ function install_base {
     apt-get install mysql-client mysql-server
     apt-get install subversion
     apt-get install git-core
-}
-
-function install_mvn {
-    echo "install mvn"
+    apt-get install maven2
 }
 
 function install_scala {
@@ -131,6 +128,19 @@ function install_lift {
     # TODO
 }
 
+function install_lucene {
+
+    echo "install lucene"
+
+    (
+	cd /usr/local/
+	curl -O http://apache.mirrors.hoobly.com//lucene/java/lucene-3.0.3.tar.gz
+	tar xvfz lucene-3.0.3.tar.gz
+	ln -s lucene-3.0.3 lucene
+    )
+
+}
+
 function install_hadoop {
 
     echo "install hadoop"
@@ -138,16 +148,16 @@ function install_hadoop {
     # TODO
 }
 
-function install_lucene {
-
-    echo "install lucene"
-
-    # TODO
-}
-
 function install_mahout {
 
     echo "install mahout"
+
+    (
+	cd /usr/local
+	curl -O http://apache.osuosl.org//mahout/0.4/mahout-distribution-0.4.tar.gz
+	tar xvfz mahout-distribution-0.4.tar.gz
+	ln -s mahout-distribution-0.4 mahout
+	)
 
     # TODO
 }
