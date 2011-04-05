@@ -6,6 +6,7 @@ function install_base {
     add-apt-repository "deb http://archive.canonical.com/ lucid partner"
     apt-get update
     apt-get install sun-java6-bin sun-java6-jre sun-java6-jdk
+    apt-get install strace dstat
     apt-get install mysql-client mysql-server
     apt-get install subversion
     apt-get install git-core
