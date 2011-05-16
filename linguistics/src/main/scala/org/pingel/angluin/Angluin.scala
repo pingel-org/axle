@@ -11,14 +11,14 @@ class Acceptor {
 
   def addState(p: AcceptorState, isInitial: Boolean, isFinal: Boolean): Unit = {
 
-    Q.add(p)
+    Q += p
 
     if( isInitial )
-      I.add(p)
+      I += p
 
     if( isFinal )
-      F.add(p)
-    
+      F += p
+
     outArcs += p -> Map[Symbol, Set[AcceptorState]]()
     inArcs += p -> Map[Symbol, Set[AcceptorState]]()
   }
