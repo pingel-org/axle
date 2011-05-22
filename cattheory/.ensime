@@ -1,0 +1,10 @@
+
+(
+:project-name "cattheory.pingel.org"
+:server-root "/usr/local/ensime/"
+:project-package "org.pingel.cattheory"
+:sources ("./src/main/scala/")
+:use-sbt t
+; :compile-jars ("./lib_managed/scala_2.8.0/compile/" "/usr/local/scala/lib")
+:target "./ensimetarget/"
+)
