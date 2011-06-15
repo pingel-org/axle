@@ -1,5 +1,7 @@
 package org.pingel.http
 
+/*
+
 import blueeyes.concurrent.Future
 import blueeyes.BlueEyesServer
 import net.lag.configgy.ConfigMap
@@ -17,7 +19,7 @@ import blueeyes.persistence.mongo.MockMongo
 
 object FooServer extends BlueEyesServer with FooService {
 	lazy val mongo = new MockMongo()
-	override def main(args: Array[String]) = super.main(Array("--configFile", "blueeyes.conf"))
+	// override def main(args: Array[String]) = super.main(Array("--configFile", "blueeyes.conf"))
 }
 
 trait FooService extends BlueEyesServiceBuilder with HttpRequestCombinators with BijectionsChunkJson {
@@ -105,3 +107,4 @@ case class FooConfig(config: ConfigMap, mongo: Mongo){
 	val database   = mongo.database(config.getString("mongo.database.contacts").getOrElse("mb"))
 	val collection = config.getString("mongo.collection.foos").getOrElse("foos")
 }
+*/
