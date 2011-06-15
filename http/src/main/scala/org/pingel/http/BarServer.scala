@@ -35,6 +35,6 @@ class BarServer extends ScalatraServlet {
         <input type="text" name="body"/>
         <input type="submit"/>
       </form>
-    </body>  
+    </body>
   }	
 }
