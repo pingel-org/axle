@@ -1,0 +1,10 @@
+#Source Hashes
+#Sat May 28 09:40:49 PDT 2011
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ProjectNature.scala=cce00a5854f9d480b7b40dcc60ac890f3405a370
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ProjectFile.scala=5f375cf7918522c091fd2cf8524f61f56d60a816
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathFile.scala=68638f349503ba077332845e734441286c3b2722
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/Filter.scala=71521b7360f0403d147b4f51671731aeab69d3f9
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathEntry.scala=0a5c9e963b69d7f607501c666c6d84baccf50f3e
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/Utils.scala=100b94b0475288d1756b1a2c04cbb1cc28e1aed3
+src_managed/assembly-sbt-0.1/assembly/AssemblyBuilder.scala=ec0f4b6817f5e9e3f7cd7539986e6fdaa9d2fa18
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/SbtEclipsify.scala=be787a2b5e7d21f7b212d5f11787c5ac8d13fb91

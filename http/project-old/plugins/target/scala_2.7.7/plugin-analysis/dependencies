@@ -1,0 +1,10 @@
+#Source Dependencies
+#Sat May 28 09:40:49 PDT 2011
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ProjectNature.scala=src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ProjectFile.scala\:src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathFile.scala\:src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/SbtEclipsify.scala
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ProjectFile.scala=src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/SbtEclipsify.scala
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathFile.scala=src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/SbtEclipsify.scala
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/Filter.scala=src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathEntry.scala\:src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathFile.scala
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathEntry.scala=src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathFile.scala
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/Utils.scala=src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ProjectFile.scala\:src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathFile.scala
+src_managed/assembly-sbt-0.1/assembly/AssemblyBuilder.scala=
+src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/SbtEclipsify.scala=src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ProjectFile.scala\:src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/ClasspathFile.scala\:src_managed/sbt-eclipsify-0.7.0/de/element34/sbteclipsify/Utils.scala

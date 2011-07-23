@@ -1,0 +1,5 @@
+
+(
+:project-name "ai.pingel.org"
+:use-sbt t
+)

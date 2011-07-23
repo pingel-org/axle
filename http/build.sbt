@@ -6,6 +6,8 @@ scalaVersion := "2.8.1"
 
 seq(WebPlugin.webSettings :_*)
 
+seq(sbtassembly.Plugin.assemblySettings: _*)
+
 libraryDependencies ++= Seq(
   "com.mongodb.casbah" %% "casbah" % "2.1.5.0",
   "org.scalatra" %% "scalatra" % "2.0.0-SNAPSHOT",

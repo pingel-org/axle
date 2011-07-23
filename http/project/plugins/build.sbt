@@ -12,3 +12,7 @@ resolvers += {
 libraryDependencies <<= (libraryDependencies, sbtVersion) { (deps, version) => 
   deps :+ ("com.typesafe.sbteclipse" %% "sbteclipse" % "1.1" extra("sbtversion" -> version))
 }
+
+libraryDependencies <+= (sbtVersion) {
+  sv => "com.eed3si9n" %% "sbt-assembly" % ("sbt" + sv + "_0.4")
+}

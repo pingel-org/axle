@@ -1,0 +1,10 @@
+#External Dependencies
+#Tue Jun 14 01:27:44 PDT 2011
+/Users/pingel/github-clones/pingel.org/http/project/boot/scala-2.7.7/lib/scala-library.jar=Project.scala
+/Users/pingel/github-clones/pingel.org/http/project/plugins/target/scala_2.7.7/plugin-classes/assembly/AssemblyBuilder$class.class=Project.scala
+/Users/pingel/github-clones/pingel.org/http/project/plugins/target/scala_2.7.7/plugin-classes/de/element34/sbteclipsify/Eclipsify$class.class=Project.scala
+/Users/pingel/github-clones/pingel.org/http/project/plugins/target/scala_2.7.7/plugin-classes/assembly/AssemblyBuilder.class=Project.scala
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar=Project.scala
+/Users/pingel/github-clones/pingel.org/http/project/plugins/target/scala_2.7.7/plugin-classes/de/element34/sbteclipsify/Eclipsify.class=Project.scala
+/Users/pingel/github-clones/pingel.org/http/project/boot/scala-2.7.7/org.scala-tools.sbt/sbt/0.7.4/sbt_2.7.7-0.7.4.jar=Project.scala
+/Users/pingel/github-clones/pingel.org/http/project/boot/scala-2.7.7/org.scala-tools.sbt/sbt/0.7.4/ivy_2.7.7-0.7.4.jar=Project.scala
