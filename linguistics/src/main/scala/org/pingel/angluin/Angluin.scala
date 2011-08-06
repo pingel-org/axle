@@ -26,44 +26,42 @@ class Acceptor {
   def addTransition(from: AcceptorState, symbol: Symbol, to: AcceptorState): Unit = {
 
     var symbol2outs = outArcs(symbol)
-    var outs = null
+    var outs: Set[AcceptorState] = null
     if( symbol2outs.contains(symbol) ) {
-      symbol2outs(symbol)
+      outs = symbol2outs(symbol)
     }
     else {
       outs = Set[AcceptorState]()
       symbol2outs += symbol -> outs
     }
-    outs.add(to)
+    outs += to
 
     var symbol2ins = inArcs(symbol)
-    var ins = null
+    var ins: Set[AcceptorState] = null
     if( symbol2ins.contains(symbol) ) {
-      symbol2ins(symbol)
+      ins = symbol2ins(symbol)
     }
     else {
       ins = Set[AcceptorState]()
       symbol2ins += symbol -> ins
     }
 
-    ins.add(from)
+    ins += from
   }
 
-  def δ(state: AcceptorState, symbol: Symbol): Set[AcceptorState] = outArcs(state)(symbol)
+  def δ(state: AcceptorState, symbol: Symbol) = outArcs(state)(symbol)
 
-  def δ(state: AcceptorState, exp: Expression): Set[AcceptorState] = {
+  def δ(state: AcceptorState, exp: Expression) = {
 
     var result = Set[AcceptorState]()
     if (exp == null) {
-      result.add(state)
+      result += state
     } 
     else {
       var head = exp.getHead()
       var tail = exp.getTail()
       var neighbors = δ(state, head)
-      val neighbor_it = neighbors.iterator()
-      while( neighbor_it.hasNext() ) {
-        val neighbor = neighbor_it.next()
+      for( neighbor <- neighbors ) {
         result.addAll( δ(neighbor, tail) )
       }
     }
@@ -72,20 +70,16 @@ class Acceptor {
   
   def isForwardDeterministic(): Boolean = {
 
-    if (I.size() > 1) {
+    if (I.size > 1) {
       return false
     }
 
-    val state_it = Q.iterator()
-    while( state_it.hasNext() ) {
-      val state = state_it.next()
+    for( state <- Q ) {
       val symbol2outs = outArcs(state)
-      val outSymbols = symbol2outs.keySet()
-      val outSymbolIt = outSymbols.iterator()
-      while (outSymbolIt.hasNext()) {
-        val symbol = outSymbolIt.next()
+      val outSymbols = symbol2outs.keys
+      for(symbol <- outSymbols ) {
         val outs = symbol2outs(symbol)
-        if (outs.size() > 1) {
+        if (outs.size > 1) {
           return false
         }
       }
@@ -95,21 +89,16 @@ class Acceptor {
 
   def isBackwardDeterministic(): Boolean = {
 
-    if (F.size() > 1) {
+    if (F.size > 1) {
       return false
     }
 
-    val state_it = Q.iterator()
-
-    while( state_it.hasNext() ) {
-      val state = state_it.next()
+    for( state <- Q ) {
       val symbol2ins = inArcs(state)
-      val inSymbols = symbol2ins.keySet()
-      val inSymbolIt = inSymbols.iterator()
-      while (inSymbolIt.hasNext()) {
-        val symbol = inSymbolIt.next()
+      val inSymbols = symbol2ins.keys
+      for ( symbol <- inSymbols ) {
         val ins = symbol2ins(symbol)
-        if (ins.size() > 1) {
+        if (ins.size > 1) {
           return false
         }
       }
@@ -142,9 +131,11 @@ class Alphabet { // TODO: redefine as Set[Symbol]
 
   var symbols = Set[Symbol]()
 
-  def addSymbol(m: Symbol): Unit = symbols.add(m)
+  def addSymbol(m: Symbol) = {
+	  symbols += m
+  }
 
-  def iterator() = symbols.iterator()
+  def iterator() = symbols.iterator
 }
 
 class CanonicalAcceptorFactory {
@@ -158,20 +149,17 @@ class CanonicalAcceptorFactory {
 
 class Expression(v: List[Symbol]) {
 
-  def getSymbolIterator(): Iterator[Symbol] = v.iterator()
+  def getSymbolIterator() = v.iterator
 
-  def addSymbol(s: Symbol): Unit = v.add(s)
-
-  def length() = v.size()
-
-  def getHead(): Symbol = v.elementAt(0)
-
-  def getTail(): Expression = {
-    var v_copy = List[Symbol]()
-    v_copy.addAll(v)
-    v_copy.removeElementAt(0)
-    new Expression(v_copy)
+  def addSymbol(s: Symbol) = { 
+    v = v ::: List(s)
   }
+
+  def length() = v.size 
+
+  def getHead() = v(0)
+
+  def getTail() = new Expression(v.tail)
 
   def equals(other: Expression): Boolean = {
     // TODO !!!
@@ -198,7 +186,7 @@ class HardCodedGrammar(ℒ: Language) extends Grammar
   // figure out how to write the extractor (or whatever)
   // to grab this
 
-  def getℒ(): Language = ℒ
+  def getℒ() = ℒ
 }
 
 class HardCodedLearner(T: Text, G: Grammar) extends Learner(T)
@@ -239,7 +227,7 @@ class Language {
 
 class Learner(T: Text)
 {
-  var iterator = T.iterator()
+  var iterator = T.iterator
   
   def processNextExpression(): Grammar = {
     val s = nextExpression()
@@ -247,9 +235,9 @@ class Learner(T: Text)
     null
   }
   
-  def nextExpression(): Expression = iterator.next()
+  def nextExpression() = iterator.next()
   
-  def hasNextExpression(): Boolean = iterator.hasNext()
+  def hasNextExpression() = iterator.hasNext
   
 }
 
@@ -259,15 +247,16 @@ class MemorizingLearner(T: Text) extends Learner(T) {
   
   def processNextExpression(): Grammar = {
     val s = nextExpression()
-    if( ! ( s instanceof ▦ ) ) {
-      runningGuess.addExpression(s)
+    s match {
+      case _: ▦ =>
+      case _ => runningGuess.addExpression(s)
     }
     new HardCodedGrammar(runningGuess)
   }
 }
 
 class Partition {
-  def restrictTo(subset: Set): Partition = {
+  def restrictTo(subset: Set[TODO]): Partition = {
     // TODO !!!
     return null;
   }
@@ -304,25 +293,26 @@ class Text {
 
   var v = List[Expression]()
   
-  def addExpression(s: Expression): Unit = v.add(s)
+  def addExpression(s: Expression) = { 
+    v += s
+  }
   
-  def length() = v.size()
+  def length() = v.size
   
   def isFor(ℒ: Language) = content().equals(ℒ)
   
   def content(): Language = {
     var ℒ = new Language()
-    val it = iterator()
-    while( it.hasNext() ) {
-      val s = it.next()
-      if( ! ( s instanceof ▦ ) ) {
-        ℒ.addExpression(s)
+    for( s <- v ) {
+      s match {
+        case _: ▦ =>
+        case _ => ℒ.addExpression(s)
       }
     }
     ℒ
   }
-  
-  def iterator() = v.iterator()
+
+  def iterator = v.iterator
   
   override def toString() = "<" + v.mkString(", ") + ">"
   
@@ -347,17 +337,17 @@ object test {
     
     val T = new Text( List(s1, ▦, ▦, s2, ▦, s2, s2) )
     
-    Console.println("Text T = " + T )
-    Console.println("Language ℒ = " + ℒ )
-    Console.println()
+    println("Text T = " + T )
+    println("Language ℒ = " + ℒ )
+    println()
     
     if( T.isFor(ℒ) ) {
-      Console.println("T is for ℒ")
+      println("T is for ℒ")
     }
     else {
-      Console.println("T is not for ℒ")
+      println("T is not for ℒ")
     }
-    Console.println()
+    println()
     
     var ɸ = new MemorizingLearner(T)
     
@@ -366,20 +356,20 @@ object test {
     while( ɸ.hasNextExpression() ) {
       guess = ɸ.processNextExpression()
       if( guess != null ) {
-        Language guessedLanguage = guess.ℒ()
-        Console.println("ɸ.processNextExpression().ℒ = " + guessedLanguage )
+        val guessedLanguage = guess.ℒ()
+        println("ɸ.processNextExpression().ℒ = " + guessedLanguage )
         if( guessedLanguage.equals(ℒ) ) {
-          Console.println("ɸ identified the language using the text")
-          System.exit(0)
+          println("ɸ identified the language using the text")
+          exit(0)
         }
         else {
-          Console.println("ɸ's guess was not correct\n")
+          println("ɸ's guess was not correct\n")
         }
       }
     }
     
     if ( guess == null ) {
-      Console.println("ɸ never made a guess");
+      println("ɸ never made a guess");
     }
     
   }
