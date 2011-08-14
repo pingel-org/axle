@@ -7,43 +7,27 @@ package org.pingel.forms
 import org.pingel.gestalt.core.Form
 import org.pingel.gestalt.core.Name
 import org.pingel.gestalt.core.SimpleForm
-import org.pingel.type.Reals
+import org.pingel.ptype.Reals
 
 class DoubleValue()  {
 
-	public double val;
+	var value: Double
 
-    public Form createDoubleValue(double val)
-    {
-        this.val = val;
-        return new SimpleForm(new Name(val + ""));
+    def createDoubleValue(pValue: Double) = {
+        this.value = pValue
+        new SimpleForm(new Name(pValue + ""))
     }
     
-    public boolean equals(Reals other) {
-    	
-        if( other instanceof DoubleValue ) {
-            DoubleValue dv = (DoubleValue) other;
-            return (dv != null) && this.val == dv.val;
-        }
-        else {
-            return false;
-        }
+    def equals(other: Reals) = other match {
+      case dv: DoubleValue => (dv != null) && this.value == dv.value
+      case _ => false
     }
 
-    public int compareTo(Form other)
-    {
-        if( other instanceof DoubleValue ) {
-            DoubleValue dv = (DoubleValue) other;
-            return new Double(val).compareTo(dv.val);
-        } 
-        else {
-            return -1;
-        }
-
+    def compareTo(other: Form) = other match {
+      case dv: DoubleValue => new Double(value).compareTo(dv.value)
+      case _ => -1
     }
 
-    public String toLaTeX()
-    {
-        return val + "";
-    }
+    def toLaTeX() = value + ""
+
 }
