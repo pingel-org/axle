@@ -1,25 +1,22 @@
-package org.pingel.forms.stats;
+package org.pingel.forms.stats
 
-import org.pingel.gestalt.core.ComplexForm;
-import org.pingel.gestalt.core.FormFactory;
-import org.pingel.gestalt.core.Lambda;
-import org.pingel.gestalt.core.Name;
-import org.pingel.gestalt.core.SimpleForm;
+import org.pingel.gestalt.core.ComplexForm
+import org.pingel.gestalt.core.FormFactory
+import org.pingel.gestalt.core.Lambda
+import org.pingel.gestalt.core.Name
+import org.pingel.gestalt.core.SimpleForm
 
-public class Variance extends FormFactory
+class Variance extends FormFactory
 {
 	
 	// public RandomVariable rv;
-    
-    public Variance()
-    {
-		Name rv = new Name("rv");
-		Lambda lambda = new Lambda();
-		lambda.add(rv, new Name("RandomVariable"));
 
-    		archetype = new ComplexForm(new SimpleForm(new Name("variance")), new SimpleForm(rv), lambda);
-    }
-    
+	val rv = new Name("rv")
+	val lambda = new Lambda()
+	lambda.add(rv, new Name("RandomVariable"))
+
+	archetype = new ComplexForm(new SimpleForm(new Name("variance")), new SimpleForm(rv), lambda)
+
 //    public Form reduce(VariableNamer namer)
 //    {
 //        // E[(X - E(X))^2]

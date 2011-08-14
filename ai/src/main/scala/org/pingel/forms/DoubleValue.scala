@@ -2,16 +2,16 @@
  * Created on Jun 2, 2005
  *
  */
-package org.pingel.forms;
+package org.pingel.forms
 
-import org.pingel.gestalt.core.Form;
-import org.pingel.gestalt.core.Name;
-import org.pingel.gestalt.core.SimpleForm;
-import org.pingel.type.Reals;
+import org.pingel.gestalt.core.Form
+import org.pingel.gestalt.core.Name
+import org.pingel.gestalt.core.SimpleForm
+import org.pingel.type.Reals
 
-public class DoubleValue  {
+class DoubleValue()  {
 
-    public double val;
+	public double val;
 
     public Form createDoubleValue(double val)
     {

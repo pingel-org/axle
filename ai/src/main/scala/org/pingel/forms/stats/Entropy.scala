@@ -1,12 +1,12 @@
 package org.pingel.forms.stats;
 
-import org.pingel.gestalt.core.ComplexForm;
-import org.pingel.gestalt.core.FormFactory;
-import org.pingel.gestalt.core.Lambda;
-import org.pingel.gestalt.core.Name;
-import org.pingel.gestalt.core.SimpleForm;
+import org.pingel.gestalt.core.ComplexForm
+import org.pingel.gestalt.core.FormFactory
+import org.pingel.gestalt.core.Lambda
+import org.pingel.gestalt.core.Name
+import org.pingel.gestalt.core.SimpleForm
 
-public class Entropy extends FormFactory
+class Entropy extends FormFactory
 {
 
 //    RandomVariable rv;

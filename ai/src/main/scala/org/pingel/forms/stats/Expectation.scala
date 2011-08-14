@@ -1,27 +1,27 @@
 
-package org.pingel.forms.stats;
-import java.util.HashSet;
-import java.util.Set;
+package org.pingel.forms.stats
 
-import org.pingel.forms.Variable;
-import org.pingel.gestalt.core.Form;
-import org.pingel.gestalt.core.FormFactory;
+import java.util.HashSet
+import java.util.Set
 
-public class Expectation extends FormFactory
+import org.pingel.forms.Variable
+import org.pingel.gestalt.core.Form
+import org.pingel.gestalt.core.FormFactory
+
+class Expectation extends FormFactory
 {
-    Set<Variable> expectors;
-    Set<Variable> condition;
+    val expectors: Set[Variable]
+    val condition: Set[Variable]
     
-    public Form createForm(Set<Variable> expectors, Set<Variable> condition, Form exp)
-    {
-        this.expectors = expectors;
+    def createForm(expectors: Set[Variable], condition: Set[Variable], exp: Form): Form =  {
+        this.expectors = expectors
         if( condition == null ) {
-            this.condition = new HashSet<Variable>();
+            this.condition = new HashSet[Variable]()
         }
         else {
-            this.condition = condition;
+            this.condition = condition
         }
-        this.exp = exp;
+        this.exp = exp
     }
 
 //    public Form reduce()

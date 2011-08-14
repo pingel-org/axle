@@ -1,23 +1,20 @@
-package org.pingel.forms.logic;
+package org.pingel.forms.logic
 
-import org.pingel.gestalt.core.ComplexForm;
-import org.pingel.gestalt.core.FormFactory;
-import org.pingel.gestalt.core.Lambda;
-import org.pingel.gestalt.core.Name;
-import org.pingel.gestalt.core.SimpleForm;
+import org.pingel.gestalt.core.ComplexForm
+import org.pingel.gestalt.core.FormFactory
+import org.pingel.gestalt.core.Lambda
+import org.pingel.gestalt.core.Name
+import org.pingel.gestalt.core.SimpleForm
 
-public class Implies extends FormFactory {
+class Implies extends FormFactory {
 
-	public Implies()
-	{
-		Name arg1 = new Name("arg1");
-		Name arg2 = new Name("arg2");
-		Lambda lambda = new Lambda();
-		lambda.add(arg1);
-		lambda.add(arg2);
+	val arg1 = new Name("arg1")
+	val arg2 = new Name("arg2")
+	val lambda = new Lambda()
+	lambda.add(arg1)
+	lambda.add(arg2)
 
-		archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("implies")), new SimpleForm(arg1)), new SimpleForm(arg2), lambda);
-	}
+	archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("implies")), new SimpleForm(arg1)), new SimpleForm(arg2), lambda)
 
 //    public Type getType()
 //    {

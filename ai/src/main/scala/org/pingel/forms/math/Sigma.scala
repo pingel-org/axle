@@ -1,17 +1,18 @@
 
-package org.pingel.forms.math;
-import java.util.List;
+package org.pingel.forms.math
 
-import org.pingel.forms.Variable;
-import org.pingel.gestalt.core.Form;
-import org.pingel.gestalt.core.FormFactory;
+import java.util.List
 
-public class Sigma extends FormFactory
+import org.pingel.forms.Variable
+import org.pingel.gestalt.core.Form
+import org.pingel.gestalt.core.FormFactory
+
+class Sigma extends FormFactory
 {
-    private List<Variable> iteratedVariables;
-    private Form arg;
+    var iteratedVariables: List[Variable]
+    var arg: Form
 
-    private List<List<Form>> valuesCollections;
+    var valuesCollections: List[List[Form]]
     
 //    public Form createForm(List<Variable> itVars, Form arg)
 //    {

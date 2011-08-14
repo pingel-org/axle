@@ -6,18 +6,15 @@ import org.pingel.gestalt.core.Lambda;
 import org.pingel.gestalt.core.Name;
 import org.pingel.gestalt.core.SimpleForm;
 
-public class Logarithm extends FormFactory
+class Logarithm extends FormFactory
 {
-    public Logarithm()
-    {
-		Name arg1 = new Name("arg1");
-		Name arg2 = new Name("arg2");
-		Lambda lambda = new Lambda();
-		lambda.add(arg1);
-		lambda.add(arg2);
-    		archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("log")), new SimpleForm(arg1)), new SimpleForm(arg2), lambda);
-    }
-    
+	val arg1 = new Name("arg1")
+	val arg2 = new Name("arg2")
+	val lambda = new Lambda();
+	lambda.add(arg1)
+	lambda.add(arg2)
+	archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("log")), new SimpleForm(arg1)), new SimpleForm(arg2), lambda)
+
 //    public Form evaluate(ProbabilityTable t, Map<Variable, Form> values, VariableNamer namer)
 //    {
 //        DoubleValue baseResult = (DoubleValue) base.evaluate(t, values, namer);

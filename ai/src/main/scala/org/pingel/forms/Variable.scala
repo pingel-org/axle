@@ -1,15 +1,15 @@
 
-package org.pingel.forms;
+package org.pingel.forms
 
-import org.pingel.bayes.RandomVariable;
-import org.pingel.gestalt.core.FormFactory;
-import org.pingel.type.Type;
+import org.pingel.bayes.RandomVariable
+import org.pingel.gestalt.core.FormFactory
+import org.pingel.ptype.PType
 
-public class Variable extends FormFactory
+class Variable extends FormFactory
 {
-	private String name;
-	private Type domain;
-    private RandomVariable rv;
+	val name: String
+	val domain: PType
+    val rv: RandomVariable
 
     public Variable(String name, Type domain)
     {
@@ -24,10 +24,7 @@ public class Variable extends FormFactory
         this.name = name;
     }
 
-    public RandomVariable getRandomVariable()
-    {
-        return rv;
-    }
+    def getRandomVariable() = rv
     
 //    public String toLaTeX()
 //    {

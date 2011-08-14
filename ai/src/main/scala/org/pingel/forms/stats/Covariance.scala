@@ -8,21 +8,19 @@ import org.pingel.gestalt.core.Name;
 import org.pingel.gestalt.core.SimpleForm;
 
 
-public class Covariance extends FormFactory {
+class Covariance extends FormFactory {
 
 //    RandomVariable X;
 //    RandomVariable Y;
     
-	public Covariance()
-    {
-		Name X = new Name("X");
-		Name Y = new Name("Y");
-		Lambda lambda = new Lambda();
-		lambda.add(X, new Name("RandomVariable"));
-		lambda.add(Y, new Name("RandomVariable"));
 
-		archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("covariance")), new SimpleForm(X)), new SimpleForm(Y), lambda);
-    }
+	val X = new Name("X")
+	val Y = new Name("Y")
+	val lambda = new Lambda()
+	lambda.add(X, new Name("RandomVariable"))
+	lambda.add(Y, new Name("RandomVariable"))
+
+	archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("covariance")), new SimpleForm(X)), new SimpleForm(Y), lambda)
 
 //    public Form reduce(VariableNamer namer)
 //    {

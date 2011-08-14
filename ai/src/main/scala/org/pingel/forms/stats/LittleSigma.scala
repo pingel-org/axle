@@ -1,24 +1,21 @@
 
 package org.pingel.forms.stats;
 
-import org.pingel.gestalt.core.ComplexForm;
-import org.pingel.gestalt.core.FormFactory;
-import org.pingel.gestalt.core.Lambda;
-import org.pingel.gestalt.core.Name;
-import org.pingel.gestalt.core.SimpleForm;
+import org.pingel.gestalt.core.ComplexForm
+import org.pingel.gestalt.core.FormFactory
+import org.pingel.gestalt.core.Lambda
+import org.pingel.gestalt.core.Name
+import org.pingel.gestalt.core.SimpleForm
 
-public class LittleSigma extends FormFactory {
+class LittleSigma extends FormFactory {
 
 //    RandomVariable X;
 
-	public LittleSigma()
-	{
-		Name X = new Name("X");
-		Lambda lambda = new Lambda();
-		lambda.add(X, new Name("RandomVariable"));
-
-		archetype = new ComplexForm(new SimpleForm(new Name("littleSigma")), new SimpleForm(X), lambda);
-	}
+	val X = new Name("X")
+	val lambda = new Lambda()
+	lambda.add(X, new Name("RandomVariable"))
+	
+	archetype = new ComplexForm(new SimpleForm(new Name("littleSigma")), new SimpleForm(X), lambda)
 
 //    public Form reduce(VariableNamer namer)
 //    {
