@@ -20,17 +20,14 @@ class Entropy extends FormFactory
 //        base = new DoubleValue(2.0);
 //    }
 
-    public Entropy()
-    {
-		Name rv = new Name("rv");
-		Name base = new Name("base");
-		Lambda lambda = new Lambda();
-		lambda.add(rv, new Name("RandomVariable"));
-		lambda.add(base, new Name("Double"));
-		
-        archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("entropy")), new SimpleForm(rv)), new SimpleForm(base), lambda);
-    }
-    
+	val rv = new Name("rv")
+	val base = new Name("base")
+	val lambda = new Lambda()
+	lambda.add(rv, new Name("RandomVariable"));
+	lambda.add(base, new Name("Double"));
+	
+	archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("entropy")), new SimpleForm(rv)), new SimpleForm(base), lambda)
+
 //    private Form reduce(VariableNamer namer)
 //    {
 //        Variable var = rv.nextVariable(namer);

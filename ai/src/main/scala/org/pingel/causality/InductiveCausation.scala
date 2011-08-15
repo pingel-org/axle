@@ -1,31 +1,17 @@
 
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
-
-
-public class InductiveCausation
+class InductiveCausation(pHat: Distribution)
 {
-	final private static Boolean FALSE = new Boolean(false);
-	final private static Boolean TRUE = new Boolean(true);
-	
-	private Distribution pHat;
+	val FALSE = new Boolean(false)
+	val TRUE = new Boolean(true)
 
-    private Vector<RandomVariable> varList;
-    
-	public InductiveCausation(Distribution pHat)
-    {
-		this.pHat = pHat;
-        
-		varList = new Vector<RandomVariable>();
-        varList.addAll(pHat.getVariables());
-    }
-	
-	private PartiallyDirectedGraph prepareGraph()
-	{
-		PartiallyDirectedGraph G = new PartiallyDirectedGraph(varList);
+	var varList = List[RandomVariable]()
+	varList.addAll(pHat.getVariables())
+
+	def prepareGraph(): PartiallyDirectedGraph = {
+	  
+		val G = new PartiallyDirectedGraph(varList)
 
         Set<RandomVariable>[][] separators = (Set<RandomVariable>[][])(new Set[varList.size()][varList.size()]);
         

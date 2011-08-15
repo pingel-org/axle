@@ -1,28 +1,10 @@
 package org.pingel.bayes;
 
-import java.util.List;
-import java.util.Vector;
+import org.pingel.gestalt.core.Form
 
-import org.pingel.gestalt.core.Form;
+// TODO: default "inputs" = Nil
+class Function(rv: RandomVariable, inputs: List[RandomVariable]) {
 
-public class Function
-{
-	protected RandomVariable rv;
-	public List<RandomVariable> inputs = new Vector<RandomVariable>();
-	
-	public Function(RandomVariable var)
-	{
-		this.rv = var;
-	}
-
-    public Function(RandomVariable var, RandomVariable... args)
-    {
-        this.rv = var;
-        for(RandomVariable arg : args) {
-            inputs.add(arg);
-        }
-    }
-	
 	// The API here is that the memo may already contain a precomputed answer
 	// that execute should look for first.
 	// If it isn't there, execute should call a private method
@@ -33,23 +15,21 @@ public class Function
 	// computed by a function.  If that comes up, I'll have to modify to use
 	// an out-of-band way to denote "not yet computed"
 	
-    final public void execute(CausalModel m, Case memo)
-	{
+    def execute(m: CausalModel, memo: Case): Unit = {
 		if( memo.valueOf(rv) == null ) {
-		    for(int i=0; i < inputs.size(); i++ ) {
+		    for(i <- 0 to inputs.size-1 ) {
 		        m.getFunction(inputs.get(i)).execute(m, memo);
 		    }
-		    Form result = compute(m, memo);
+		    val result = compute(m, memo)
 //            System.out.println("rv = " + rv + ", result = " + result);
-			memo.assign(rv, result);
+			memo.assign(rv, result)
 		}
 	}
 
 	// the inputs are guaranteed by execute to have already
 	// be computed before compute is called
 	
-    protected Value compute(CausalModel m, Case memo)
-    {
-        return null;
-    }
+    // returns "Form", not Value?:
+    def compute(m: CausalModel, memo: Case): Value = null
+
 }

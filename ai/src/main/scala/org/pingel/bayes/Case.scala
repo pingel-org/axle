@@ -2,7 +2,7 @@ package org.pingel.bayes
 
 class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
 {
-  var assignments = new TreeMap[RandomVariable, Value]()
+  var assignments = Map[RandomVariable, Value]() // NOTE: was TreeMap
 
   assign(rv, value)
 
@@ -15,19 +15,13 @@ class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
   }
 
   def valuesOf(vars: List[RandomVariable]): List[Value] =  {
-
     // Note: this may contain null entries if assignments.keySet()
     // is a strict subset of vars
-    
-    var result = List[Value]()
-    for( i <- 0 to (vars.length-1) ) {
-      result.add(assignments(vars(i)))
-    }
-    result
+    vars map { assignments(_) }
   }
   
   def assign(rv: RandomVariable, value: Value): Unit = {
-    assignments.put(rv, value);
+    assignments += rv -> value
   }
 
   def assign(vars: List[RandomVariable], vals: List[Value]): Unit = {
@@ -53,8 +47,8 @@ class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
 	
   def copy(): Case = {
     var result = new Case()
-    result.assignments = new TreeMap[RandomVariable, Value]();
-    result.assignments.putAll(assignments);
+    result.assignments = new TreeMap[RandomVariable, Value]()
+    result.assignments.putAll(assignments)
     result
   }
 
@@ -66,13 +60,9 @@ class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
     result
   }
 
-  override def equals(o: Object): Boolean = {
-    if( o instanceof Case ) {
-      return compareTo((Case)o) == 0;
-    }
-    else {
-      return false
-    }
+  override def equals(o: Object) = o match {
+    case c: Case => compareTo(c) == 0
+    case _ => false
   }
 	
   def compareTo(other: Case): Integer = {
