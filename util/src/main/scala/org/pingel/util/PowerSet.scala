@@ -26,14 +26,23 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+object PowerSetTest {
+
+  
+    def main(args: Array[String]) {
+
+        val elems = List("a", "b", "c", "d")
+        println("elems = " + elems)
+        for( set <- new PowerSet[String](elems) ) {
+        	println(set)
+        }
+
+    }
+  
+  
+}
 
 /**
  * A PowerSet constructed with a collection with elements of type E can construct
@@ -45,121 +54,74 @@ import java.util.Set;
  * @param <E> The type of elements in the Collection passed to the constructor.
  */
 
-public class PowerSet<E> implements Iterable<Set<E>>
+class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
 {
-    Collection<E> all;
-
-    public PowerSet(Collection<E> all)
-    {
-        this.all = all;
-    }
 
     /**
      * @return      an iterator over elements of type Collection<E> which enumerates
      *              the PowerSet of the collection used in the constructor
      */
 
-    public Iterator<Set<E>> iterator()
+    def iterator() = new PowerSetIterator[E](this)
+
+
+    class PowerSetIterator[InE](powerSet: PowerSet[InE]) extends Iterator[Set[InE]]
     {
-        return new PowerSetIterator<E>(this);
-    }
+    	val canonicalOrder = powerSet.all.toList
+      
+        var mask = List[InE]()
 
-    class PowerSetIterator<InE> implements Iterator<Set<InE>>
-    {
-        PowerSet<InE> powerSet;
-        List<InE> canonicalOrder = new ArrayList<InE>();
-        List<InE> mask = new ArrayList<InE>();
-        boolean hasNext = true;
-        
-        PowerSetIterator(PowerSet<InE> powerSet) {
-            
-            this.powerSet = powerSet;
-            canonicalOrder.addAll(powerSet.all);
-        }
+        var hasNextValue = true
 
-        public void remove()
-        {
-            throw new UnsupportedOperationException();
-        }
+        def remove() = throw new UnsupportedOperationException()
 
-        private boolean allOnes()
-        {
-            for( InE bit : mask) {
+        def allOnes(): Boolean = {
+            for( bit <- mask ) {
                 if( bit == null ) {
-                    return false;
+                    return false
                 }
             }
-            return true;
+            true
         }
 
-        private void increment()
-        {
-            int i=0;
+        def increment(): Unit = {
+            var i = 0
             while( true ) {
-                if( i < mask.size() ) {
-                    InE bit = mask.get(i);
+                if( i < mask.size ) {
+                    val bit = mask(i)
                     if( bit == null ) {
-                        mask.set(i, canonicalOrder.get(i));
-                        return;
+                        mask.set(i, canonicalOrder.get(i))
+                        return
                     }
                     else {
-                        mask.set(i, null);
-                        i++;
+                        mask.set(i, null)
+                        i += 1
                     }
                 }
                 else {
-                    mask.add(canonicalOrder.get(i));
-                    return;
+                    mask.add(canonicalOrder.get(i))
+                    return
                 }
             }
         }
         
-        public boolean hasNext()
-        {
-            return hasNext;
-        }
-        
-        public Set<InE> next()
-        {
+        def hasNext() = hasNextValue
+
+        def next() = {
             
-            Set<InE> result = new HashSet<InE>();
-            result.addAll(mask);
-            result.remove(null);
+            var result = Set[InE]()
+            result.addAll(mask)
+            result.remove(null)
 
-            hasNext = mask.size() < powerSet.all.size() || ! allOnes();
-
-            if( hasNext ) {
-                increment();
+            hasNextValue = mask.size < powerSet.all.size() || ! allOnes()
+            if( hasNextValue ) {
+                increment()
             }
             
-            return result;
+            result
 
         }
         
-    }
-    
-    /**
-     * Sample code to demonstrate the use of PowerSet.
-     * 
-     * @param args
-     */
-    
-    public static void main(String[] args)
-    {
-
-        List<String> elems = new ArrayList<String>();
-        elems.add("a");
-        elems.add("b");
-        elems.add("c");
-        elems.add("d");
-
-        System.out.println("elems = " + elems);
-        
-        PowerSet<String> pset = new PowerSet<String>(elems);
-        for( Set<String> set : pset ) {
-            System.out.println(set);
-        }
-
     }
 
 }

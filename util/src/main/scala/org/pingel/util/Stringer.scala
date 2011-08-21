@@ -26,26 +26,21 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-import java.util.Iterator;
+object Stringer {
 
-public class Stringer
-{
-
-    public static String render(Iterable<? extends Object> iterable, String sep) {
-
-        String result = "";
-        
-        Iterator<Object> it = (Iterator<Object>) iterable.iterator();
+    def render(iterable: Iterable[_ <: Object], sep: String) = {
+        var result = ""
+        val it = iterable.iterator()
         while( it.hasNext() ) {
-            Object o = it.next();
-            result += o.toString();
+            val o = it.next()
+            result += o.toString()
             if( it.hasNext() ) {
-                result += sep;
+                result += sep
             }
         }
-        return result;
+        result
     }
 
 }

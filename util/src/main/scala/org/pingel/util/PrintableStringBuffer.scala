@@ -26,45 +26,23 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-public class PrintableStringBuffer implements Printable
+class PrintableStringBuffer(sb: StringBuffer) extends Printable
 {
-    private StringBuffer sb;
 
-    public PrintableStringBuffer(StringBuffer sb)
-    {
-        this.sb = sb;
+    def print(string: String) = sb.append(string)
+
+    def println() = sb.append("\n")
+
+    def println(string: String) = {
+        sb.append(string)
+        sb.append("\n")
     }
 
-    public void print(String string)
-    {
-        sb.append(string);
-    }
+    def toString() = sb.toString()
 
-    public void println()
-    {
-        sb.append("\n");
+    def indent(c: Int) = for( i <- 0 to c-1 ) {
+    	sb.append("   ")
     }
-
-    public void println(String string)
-    {
-        sb.append(string);
-        sb.append("\n");
-    }
-
-    public String toString()
-    {
-        return sb.toString();
-    }
-
-    public void indent(int c)
-    {
-	int i = 0;
-	while( i < c ) {
-	    sb.append("   ");
-	    i++;
-	}
-    }
-
 }

@@ -26,127 +26,81 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+object CrossProductTest {
 
-public class CrossProduct<E> implements Iterable<List<E>>
-{
-	private List<Iterable<E>> iterables = new ArrayList<Iterable<E>>();
+  	def main(args: Array[String]) {
+  		val v1 = List("a", "b")
+  		val v2 = List("0", "1")
+  		val v3 = List("X")
 
-    public CrossProduct(List<? extends Iterable<E>> iterables)
-    {
-        this.iterables.addAll(iterables);
-    }
-    
-	public CrossProduct(Iterable<E>... iterables)
-	{
-	    this.iterables = new ArrayList<Iterable<E>>();
-        for( Iterable<E> it : iterables ) {
-            this.iterables.add(it);
-        }
-	}
-	
-	public List<? extends Iterable<E>> getCollections()
-	{
-		return iterables;
-	}
-
-	public Iterator<List<E>> iterator()
-	{
-		return new CrossProductIterator<E>(this);
-	}
-
-	public static void main(String[] argv)
-	{
-	    List<String> v1 = new ArrayList<String>();
-		List<String> v2 = new ArrayList<String>();
-		List<String> v3 = new ArrayList<String>();
+		val cp = new CrossProduct[String](List(v1, v2, v3, v2))
 		
-		v1.add("a");
-		v1.add("b");
-		v2.add("0");
-		v2.add("1");
-		v3.add("X");
-		
-		CrossProduct<String> cp = new CrossProduct<String>(v1, v2, v3, v2);
-		
-		Iterator<List<String>> it = cp.iterator();
+		val it = cp.iterator()
 		while( it.hasNext() ) {
-		    List<String> tuple = it.next();
-			System.out.println(tuple);
+		    val tuple = it.next()
+			println(tuple)
 		}
 		
 	}
-		
-	
-	class CrossProductIterator<InE> implements Iterator<List<InE>>
+
+
+}
+
+class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E]]
+{
+	def getCollections() = iterables
+
+	def iterator() = new CrossProductIterator[E](this)
+
+	class CrossProductIterator[InE](cp: CrossProduct[InE]) extends Iterator[List[InE]]
 	{
-        private CrossProduct<InE> cp;
-		private List<Iterator<InE>> iterators;
-		private List<InE> tuple;
-		
-		public CrossProductIterator(CrossProduct<InE> cp)
-		{
-            this.cp = cp;
-            
-			iterators = new ArrayList<Iterator<InE>>();
-			tuple = new ArrayList<InE>();
-			
-			for(int i=0; i < cp.getCollections().size(); i++ ) {
-				iterators.add(cp.getCollections().get(i).iterator());
-				tuple.add(iterators.get(i).next());
-			}
+	  
+		var iterators = new Array[Iterator[InE]](cp.getCollections().size)
+
+		var tuple = new Array[InE](cp.getCollections().size)
+				
+		for( i <- 0 to (cp.getCollections().size - 1) ) {
+			iterators(i) = cp.getCollections().get(i).iterator()
+			tuple(i) = iterators(i).next()
 		}
-		
-		public void remove()
-		{
-			// I don't think there are any reasonable semantics
-			// for "remove" since the "underlying collection"
-			// is never actually instantiated
-		    throw new UnsupportedOperationException();
-        }
-		
-		public boolean hasNext()
-		{
-			return tuple != null;
-		}
-		
-		boolean incrementFirstAvailable(int i)
-		{
-			if( i == iterators.size() ) {
-				return true;
+
+		def remove() = throw new UnsupportedOperationException()
+
+		def hasNext() = tuple != null
+
+		def incrementFirstAvailable(i: Int): Boolean = {
+
+			if( i == iterators.size ) {
+				return true
 			}
-			else if( iterators.get(i).hasNext() ) {
-				tuple.set(i, iterators.get(i).next());
-				return false;
+			else if( iterators(i).hasNext() ) {
+				tuple(i) = iterators(i).next()
+				return false
 			}
 			else {
-			    iterators.set(i, cp.iterables.get(i).iterator());
-			    tuple.set(i, iterators.get(i).next());
-				return incrementFirstAvailable(i+1);
+			    iterators(i) = cp.iterables(i).iterator()
+			    tuple(i) = iterators(i).next()
+				return incrementFirstAvailable(i+1)
 			}
 		}
 		
-		public List<InE> next()
-		{
+		def next() = {
 			if( tuple == null ) {
-				throw new NoSuchElementException();    		
+				throw new NoSuchElementException()
 			}
 			
-			List<InE> result = new ArrayList<InE>();
-			for(int i=0; i < tuple.size(); i++) {
-				result.add(tuple.get(i));
+			var result = new Array[InE](tuple.size)
+			for( i <- 0 to (tuple.size - 1) ) {
+				result(i) = tuple(i)
 			}
 			
 			if( incrementFirstAvailable(0) ) {
-				tuple = null;
+				tuple = null
 			}
 			
-			return result;
+			result
 		}
 	}
 

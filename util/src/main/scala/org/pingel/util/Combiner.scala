@@ -26,80 +26,45 @@
  *
  */
 
-package org.pingel.util;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+package org.pingel.util
 
 /*
  * NOTE: COMBINER IS NOT YET IMPLEMENTED
  */
 
-public class Combiner<E> implements Iterable<Set<E>>
-{
-    Collection<E> objects;
-    int n;
-    
-    public Combiner(Collection<E> objects, int n)
-    {
-        this.objects = objects;
-        this.n = n;
+object CombinerTest {
 
-        if( n > objects.size() ) {
-            throw new IndexOutOfBoundsException();
-        }
-    }
-
-    public Iterator<Set<E>> iterator()
-    {
-        return new CombinationIterator<E>(this);
-    }
-
-    class CombinationIterator<InE> implements Iterator<Set<InE>>
-    {
-        Combiner<InE> combiner;
-
-        CombinationIterator(Combiner<InE> combiner)
-        {
-            this.combiner = combiner;
-        }
-
-        public void remove()
-        {
-            throw new UnsupportedOperationException();
-        }
-        
-        public boolean hasNext()
-        {
-        	return false;
-        }
-        
-        public Set<InE> next()
-        {
-        	return null;
-        }
-    }
-
-
-    public static void main(String[] args) {
-
-        List<String> elems = new ArrayList<String>();
-        elems.add("a");
-        elems.add("b");
-        elems.add("c");
-
-        System.out.println("elems = " + elems);
-
-        for( int i=0; i <= elems.size(); i++ ) {
-            Combiner<String> combiner = new Combiner<String>(elems, i);
-            for( Set<String> combination : combiner ) {
+    def main(args: Array[String]) {
+        val elems = List("a", "b", "c")
+        println("elems = " + elems)
+        for( i <- 0 to elems.size ) {
+            for( combination <- new Combiner[String](elems, i) ) {
                 System.out.println("p = " + combination);
             }
         }
+    }
+  
+  
+}
+
+class Combiner[E](objects: Collection[E], n: Int) extends Iterable[Set[E]]
+{
+
+	if( n > objects.size ) {
+	  throw new IndexOutOfBoundsException()
+	}
+
+    def iterator() = new CombinationIterator[E](this)
+
+    class CombinationIterator[InE](combiner: Combiner[InE]) extends Iterator[Set[InE]]
+    {
+
+        def remove() = throw new UnsupportedOperationException()
         
+        def hasNext() = false
+
+        def next(): Set[InE] = null
+
     }
 
 }

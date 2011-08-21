@@ -26,22 +26,13 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-import java.util.ArrayList;
-import java.util.List;
 
-abstract public class Lister<In, Out> {
+abstract class Lister[In, Out] {
 
-    public abstract Out function(In in);
+    def function(in: In): Out
     
-    public List<Out> execute(Iterable<In> input) {
+    def execute(input: Iterable[In]) = input.map({ x => function(x) }).toList
 
-        List<Out> output = new ArrayList<Out>();
-        for( In in : input ) {
-            output.add(function(in));
-        }
-        return output;
-    }
-    
 }

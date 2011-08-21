@@ -26,22 +26,12 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-import java.util.HashSet;
-import java.util.Set;
+abstract class Collector[In, Out] {
 
-abstract public class Collector<In, Out> {
-
-    public abstract Out function(In in);
+    def function(in: In): Out
     
-    public Set<Out> execute(Iterable<In> input) {
-
-        Set<Out> output = new HashSet<Out>();
-        for( In in : input ) {
-            output.add(function(in));
-        }
-        return output;
-    }
+    def execute(input: Iterable[In]): Set[Out] = input.map({ x => function(x) }).toSet
     
 }

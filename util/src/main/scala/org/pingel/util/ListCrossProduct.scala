@@ -26,90 +26,51 @@
  *
  */
 
-package org.pingel.util;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.pingel.util
 
 
-public class ListCrossProduct<E> extends CrossProduct<E>
-{
-    private List<List<E>> lists;
-    private int[] modulos;
+class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
 
-    public ListCrossProduct(List<E>... lists )
-    {
-        super((Iterable<E>[])lists);
+	var modulos = new Array[Int](lists.size + 1)
+	modulos(lists.size) = 1
+	var j = lists.size - 1
+	while( j >= 0 ) {
+		modulos(j) = modulos(j+1) * lists(j).size
+		j -= 1
+	}
 
-        this.lists = new ArrayList<List<E>>();
-        for( List<E> list : lists ) {
-            this.lists.add(list);
+    def indexOf(objects: List[E]): Int = {
+      
+        if( objects.size != lists.size ) {
+            throw new Exception("ListCrossProduct: objects.size() != lists.size()")
         }
         
-        setModulos();
-    }
-
-    public ListCrossProduct(List<List<E>> lists)
-    {
-        super(lists);
-        
-        this.lists = lists;
-        
-        setModulos();
-    }
-    
-    private void setModulos()
-    {
-        modulos = new int[lists.size() + 1];
-        modulos[lists.size()] = 1;
-        for( int j = lists.size() - 1; j >= 0; j--) {
-            modulos[j] = modulos[j+1] * lists.get(j).size();
-        }
-    }
-    
-    public int indexOf(List<E> objects)
-    {
-        if( objects.size() != lists.size() ) {
-            System.err.println("ListCrossProduct: objects.size() != lists.size()");
-            System.exit(1);
-        }
-        
-        int i = 0;
-        for(int j=0; j < lists.size(); j++ ) {
-            List<E> l = lists.get(j);
-            E elem = objects.get(j);
-            int z = l.indexOf(elem);
+        var i = 0
+        for( j <- 0 to (lists.size - 1) ) {
+            val l = lists(j)
+            val elem = objects(j)
+            val z = l.indexOf(elem)
             if( z == -1 ) {
-                return -1;
+                return -1
             }
-            i += z * modulos[j+1];
+            i += z * modulos(j+1)
         }
-//      System.out.println("answer = " + i);
-        return i;
-
+        // println("answer = " + i);
+        i
     }
 
-    public List<E> get(int i) {
+    def get(i: Int): List[E] = {
 
-        List<E> result = new ArrayList<E>();
-        for( int k=0; k < lists.size(); k++ ) {
-            result.add(null);
+        var result = lists.map({x => null}).toList // Array[E] or List[E]?
+
+        for( j <- 0 to (lists.size - 1) ) {
+            result.set(j, lists(j)(i / modulos(j+1)))
+            i = i % modulos(j+1)
         }
 
-        for( int j=0; j < lists.size(); j++ ) {
-            List<E> l = lists.get(j);
-            int x = i / modulos[j+1];
-            E o = l.get(x);
-            result.set(j, o);
-            i = i % modulos[j+1];
-        }
-
-        return result;
+        result
     }
 
-    public int size()
-    {
-        return modulos[0];
-    }
+    def size() = modulos(0)
 
 }

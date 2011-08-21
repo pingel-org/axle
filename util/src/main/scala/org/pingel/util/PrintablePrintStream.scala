@@ -26,42 +26,22 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-import java.io.PrintStream;
+import java.io.PrintStream
 
 
-public class PrintablePrintStream implements Printable
+class PrintablePrintStream(ps: PrintStream) extends Printable
 {
-    private PrintStream ps;
 
-    public PrintablePrintStream(PrintStream ps)
-    {
-        this.ps = ps;
-    }
+    def print(string: String) = ps.print(string)
 
-    public void print(String string)
-    {
-        ps.print(string);
-    }
+    def println() = ps.println()
 
-    public void println()
-    {
-        ps.println();
-    }
+    def println(string: String) = ps.println(string)
 
-    public void println(String string)
-    {
-        ps.println(string);
-    }
-
-    public void indent(int c)
-    {
-	int i = 0;
-	while( i < c ) {
-	    ps.print("   ");
-	    i++;
-	}
+    def indent(c: Int) = for( i <- 0 to c-1 ) {
+    	ps.print("   ")
     }
 
 }

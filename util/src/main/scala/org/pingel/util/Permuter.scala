@@ -26,70 +26,60 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+object PermuterTest {
 
-public class Permuter<E> implements Iterable<List<E>>
+	def main(args: Array[String]) {
+
+		val elems = List("a", "b", "c")
+		println("elems = " + elems)
+        for( i <- 0 to elems.size ) {
+            for( permutation <- new Permuter[String](elems, i) ) {
+                println("p = " + permutation)
+            }
+        }
+        
+    }
+
+}
+
+class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
 {
-    List<E> objects;
-    int n;
+  
+	if( n > objects.size ) {
+		throw new IndexOutOfBoundsException()
+	}
 
-    public Permuter(List<E> objects, int n)
+	def getN() = n
+	
+    def iterator() = new PermutionIterator[E](this)
+
+    class PermutionIterator[InE](permuter: Permuter[InE]) extends Iterator[List[InE]]
     {
-        this.objects = objects;
-        this.n = n;
-        
-        if( n > objects.size() ) {
-            throw new IndexOutOfBoundsException();
-        }
-    }
+    	var remainders = new Array[Set[InE]](permuter.getN)
+    	var iterators = new Array[Iterator[InE]](permuter.getN)
+    	var tuple = new Array[InE](permuter.getN)
+    	var i: Int
 
-    public Iterator<List<E>> iterator()
-    {
-        return new PermutionIterator<E>(this);
-    }
-
-    class PermutionIterator<InE> implements Iterator<List<InE>>
-    {
-        private Permuter<InE> permuter;
-        private List<Set<InE>> remainders;
-        private List<Iterator<InE>> iterators;
-        private List<InE> tuple;
-        private int i;
-        
-        PermutionIterator(Permuter<InE> permuter)
-        {
-            this.permuter = permuter;
-
-            remainders = new ArrayList<Set<InE>>(permuter.n);
-            iterators = new ArrayList<Iterator<InE>>(permuter.n);
-            tuple = new ArrayList<InE>(permuter.n);
-
-            for( int i=0; i < permuter.n; i++ ) {
-                remainders.add(null);
-                iterators.add(null);
-                tuple.add(null);
-            }
+    	for( i <- 0 to (permuter.getN - 1) ) {
+    		remainders.add(null)
+    		iterators.add(null)
+    		tuple.add(null)
+    	}
             
-            if( permuter.n > 0 ) {
-                Set<InE> firstRemainder = new HashSet<InE>();
-                firstRemainder.addAll(permuter.objects);
-                remainders.set(0, firstRemainder);
-                iterators.set(0, firstRemainder.iterator());
-                tuple.set(0, iterators.get(i).next());
-            }
-            
-            for( int i=1; i < permuter.n; i++ ) {
-                setRemainder(i);
-                tuple.set(i, iterators.get(i).next());
-            }
-        }
+    	if ( permuter.getN > 0 ) {
+    		var firstRemainder = Set[InE]()
+    		firstRemainder.addAll(permuter.objects)
+    		remainders.set(0, firstRemainder)
+    		iterators.set(0, firstRemainder.iterator())
+    		tuple.set(0, iterators.get(i).next())
+    	}
+    	
+    	for( i <- 1 to (permuter.getN - 1) ) {
+    		setRemainder(i)
+    		tuple.set(i, iterators.get(i).next())
+    	}
 
 //        private void setTupleElement(int i)
 //        {
@@ -104,81 +94,53 @@ public class Permuter<E> implements Iterable<List<E>>
         // the visibility of such a statement.
 //        }
         
-        private void setRemainder(int i)
-        {
+        def setRemainder(i: Int) = {
             //System.out.println("setRemainder: i = " + i);
             if( i > 0 ) {
-                Set<InE> r = new HashSet<InE>();
-                r.addAll(remainders.get(i-1));
-                r.remove(tuple.get(i-1));
-                remainders.set(i, r);
+                var r = Set[InE]()
+                r.addAll(remainders.get(i-1))
+                r.remove(tuple.get(i-1))
+                remainders.set(i, r)
             }
-            iterators.set(i, remainders.get(i).iterator());
+            iterators.set(i, remainders.get(i).iterator())
         }
         
-        public void remove()
-        {
-            throw new UnsupportedOperationException();
-        }
-        
-        public boolean hasNext()
-        {
-            return tuple != null;
-        }
+        def remove() = throw new UnsupportedOperationException()
 
-        boolean incrementLastAvailable(int i)
-        {
+        def hasNext() = tuple != null
+
+        def incrementLastAvailable(i: Int) = {
             //System.out.println("incrementLastAvailable: i = " + i);
             if( i == -1 ) {
-                return true;
+                return true
             }
-            else if( iterators.get(i).hasNext() ) {
-                tuple.set(i, iterators.get(i).next());
-                return false;
+            else if( iterators(i).hasNext() ) {
+                tuple.set(i, iterators.get(i).next())
+                return false
             }
             else {
-                boolean touchedHead = incrementLastAvailable(i-1);
-                setRemainder(i);
-                tuple.set(i, iterators.get(i).next());
-                return touchedHead;
+                boolean touchedHead = incrementLastAvailable(i-1)
+                setRemainder(i)
+                tuple.set(i, iterators.get(i).next())
+                return touchedHead
             }
         }
         
-        public List<InE> next()
-        {
+        def next() = {
             //System.out.println("next: remainders = " + remainders + ", tuple = " + tuple);
             if( tuple == null ) {
-                throw new NoSuchElementException();         
+                throw new NoSuchElementException()
             }
             
-            List<InE> result = new ArrayList<InE>();
-            result.addAll(tuple);
+            var result = new Array[InE]()
+            result.addAll(tuple)
             
             if( incrementLastAvailable(permuter.n - 1) ) {
-                tuple = null;
+                tuple = null
             }
             
-            return result;
-
+            result
         }
-    }
-
-    public static void main(String[] args) {
-
-        List<String> elems = new ArrayList<String>();
-        elems.add("a");
-        elems.add("b");
-        elems.add("c");
-
-        System.out.println("elems = " + elems);
-
-        for( int i=0; i <= elems.size(); i++ ) {
-            Permuter<String> permuter = new Permuter<String>(elems, i);
-            for( List<String> permutation : permuter ) {
-                System.out.println("p = " + permutation);
-            }
-        }
-        
     }
 
 }

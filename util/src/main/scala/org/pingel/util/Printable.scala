@@ -26,17 +26,17 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-public interface Printable
+trait Printable
 {
 
-    public void print(String string);
+    def print(string: String)
     
-    public void println();
+    def println()
 
-    public void println(String string);
+    def println(string: String)
 
-    public void indent(int c);
+    def indent(c: Int)
 
 }

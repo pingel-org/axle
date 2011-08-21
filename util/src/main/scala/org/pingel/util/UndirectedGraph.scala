@@ -26,347 +26,293 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import javax.swing.JFrame
 
-import javax.swing.JFrame;
+import edu.uci.ics.jung.graph.Vertex
+import edu.uci.ics.jung.graph.decorators.VertexStringer
+import edu.uci.ics.jung.graph.impl.SimpleUndirectedSparseVertex
+import edu.uci.ics.jung.graph.impl.UndirectedSparseEdge
+import edu.uci.ics.jung.graph.impl.UndirectedSparseGraph
+import edu.uci.ics.jung.visualization.FRLayout
+import edu.uci.ics.jung.visualization.GraphDraw
+import edu.uci.ics.jung.visualization.Layout
+import edu.uci.ics.jung.visualization.PluggableRenderer
 
-import edu.uci.ics.jung.graph.Vertex;
-import edu.uci.ics.jung.graph.decorators.VertexStringer;
-import edu.uci.ics.jung.graph.impl.SimpleUndirectedSparseVertex;
-import edu.uci.ics.jung.graph.impl.UndirectedSparseEdge;
-import edu.uci.ics.jung.graph.impl.UndirectedSparseGraph;
-import edu.uci.ics.jung.visualization.FRLayout;
-import edu.uci.ics.jung.visualization.GraphDraw;
-import edu.uci.ics.jung.visualization.Layout;
-import edu.uci.ics.jung.visualization.PluggableRenderer;
+abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGraphEdge[V]] {
 
-public abstract class UndirectedGraph<V extends UndirectedGraphVertex<E>, E extends UndirectedGraphEdge<V>>
-{
+	var vertices = Set[V]()
+	var edges = Set[E]()
+	var vertex2edges = Map[V, Set[E]]()
 
-	private Set<V> vertices = new HashSet<V>();
-	private Set<E> edges = new HashSet<E>();
-	private Map<V,Set<E>> vertex2edges = new HashMap<V,Set<E>>();
-	
-	public UndirectedGraph() {
-		
+	def addVertex(v: V) {
+		vertices.add(v)
 	}
 
-	public void addVertex(V v) {
-		vertices.add(v);
-	}
+	def getVertices() = vertices
 
-	public Set<V> getVertices()
-	{
-		return vertices;
-	}
+    def getNumVertices() = vertices.size
 
-    public int getNumVertices()
-    {
-        return vertices.size();
-    }
-    
-	public Set<E> getEdges()
-	{
-		return edges;
-	}
-	
+	def getEdges() = edges
+
 	// dissertation idea: how best to have an "Edge" object without storing them
 	
-	public void addEdge(E e) {
+	def addEdge(e: E) {
 		
 		// assume that this edge isn't already in our list of edges
 		
-		edges.add(e);
-		Double<V,V> dble = e.getVertices();
+		edges.add(e)
+		val dble = e.getVertices()
 		
-		Set<E> es1 = getEdges(dble.getFirst());
-		es1.add(e);
-		Set<E> es2 = getEdges(dble.getSecond());
-		es2.add(e);
+		var es1 = getEdges(dble.getFirst())
+		es1.add(e)
+		
+		var es2 = getEdges(dble.getSecond())
+		es2.add(e)
 	}
 
-	public abstract E constructEdge(V v1, V v2);
+	def constructEdge(v1: V, v2: V): E
 
-
-    public void unlink(E e) 
-    {
-        Double<V,V> dble = e.getVertices();
+    def unlink(e: E) = {
+	  
+        val dble = e.getVertices()
         
-        Set<E> es1 = getEdges(dble.getFirst());
-        es1.remove(e);
+        var es1 = getEdges(dble._1)
+        es1.remove(e)
 
-        Set<E> es2 = getEdges(dble.getFirst());
-        es2.remove(e);
+        var es2 = getEdges(dble._2)
+        es2.remove(e)
         
-        edges.remove(e);
+        edges.remove(e)
     }
     
-	public void unlink(V v1, V v2)
-	{
+	def unlink(v1: V, v2: V) = {
 	    // TODO optimize
 	    
-	    Set<E> edges = getEdges(v1);
-	    
-	    for( E edge : edges ) {
+	    val edges = getEdges(v1)
+	    for( edge <- edges ) {
 	        if( edge.other(v1).equals(v2) ) {
-	            unlink(edge);
+	            unlink(edge)
 	        }
 	    }
     }
     
-	public boolean areNeighbors(V v1, V v2) {
+	def areNeighbors(v1: V, v2: V): Boolean = {
 
-		Set<E> es = getEdges(v1);
-		for(E e : es) {
+		val es = getEdges(v1)
+		for(e <- es) {
 			if( e.connects(v1, v2) ) {
-				return true;
+				return true
 			}
 		}
-		return false;
+		false
 	}
 	
-	public boolean isClique(Set<V> vs)
-	{
-		List<V> vList = new ArrayList<V>();
-		vList.addAll(vs);
-		
-		for(int i=0; i < vList.size()-1; i++) {
-			for(int j=0; j < vList.size(); j++) {
-				if( ! areNeighbors(vList.get(i), vList.get(j)) ) {
-					return false;
+	def isClique(vs: Set[V]): Boolean = {
+	  
+		var vList = new ArrayList[V]()
+		vList.addAll(vs)
+		for( i <- 0 to (vList.size - 1) ) {
+			for( j <- 0 to (vList.size - 1) ) {
+				if( ! areNeighbors(vList(i), vList(j)) ) {
+					return false
 				}
 			}
 		}
-		
-		return true;
+		true
 	}
 
-	public int getNumEdgesToForceClique(Set<V> vs)
-	{
-		List<V> N = new ArrayList<V>();
-		N.addAll(vs);
+	def getNumEdgesToForceClique(vs: Set[V]) = {
+	  
+		var N = new ArrayList<V>()
+		N.addAll(vs)
 
-		int result = 0;
+		var result = 0
 		
-		for(int i=0; i < N.size() - 1; i++) {
-			V vi = N.get(i);
-			for(int j=i+1; j < N.size(); j++) {
-				V vj = N.get(j);
+		for( i <- 0 to (N.size - 2) ) {
+			val vi = N.get(i);
+			for( j <- (i+1) to (N.size - 1)) {
+				val vj = N(j)
 				if( ! areNeighbors(vi, vj) ) {
-					addEdge(constructEdge(vi, vj));
-					result++;
+					addEdge(constructEdge(vi, vj))
+					result += 1
 				}
 			}
 		}
 
-		return result;
+		result
 	}
 	
-	public void forceClique(Set<V> vs) {
+	def forceClique(vs: Set[V]) {
 		
-		List<V> vList = new ArrayList<V>();
-		vList.addAll(vs);
+		var vList = new ArrayList[V]()
+		vList.addAll(vs)
 		
-		for(int i=0; i < vList.size() - 1; i++) {
-			V vi = vList.get(i);
-			for(int j=i+1; j < vList.size(); j++) {
-				V vj = vList.get(j);
+		for( i <- 0 to (vList.size - 2) ) {
+			val vi = vList(i)
+			for( j <- (i+1) to (vList.size - 1) ) {
+				val vj = vList(j)
 				if( ! areNeighbors(vi, vj) ) {
-					addEdge(constructEdge(vi, vj));
+					addEdge(constructEdge(vi, vj))
 				}
 			}
 		}
 		
 	}
 
-	public V vertexWithFewestEdgesToEliminateAmong(Set<V> among)
-	{
+	def vertexWithFewestEdgesToEliminateAmong(among: Set[V]) = {
+	  
 		// assert: among is a subset of vertices
 		
-		V result = null;
-		int minSoFar = Integer.MAX_VALUE;
+		var result: V = null
+		var minSoFar = Integer.MAX_VALUE
 		
-		for( V v : among ) {
-			int x = getNumEdgesToForceClique(getNeighbors(v));
-			if( result == null ) {
-				result = v;
-				minSoFar = x;
-			}
-			else if( x < minSoFar ) {
-				result = v;
-				minSoFar = x;
-			}
+		for( v <- among ) {
+		  val x = getNumEdgesToForceClique(getNeighbors(v))
+		  if( result == null ) {
+			  result = v
+			  minSoFar = x
+		  }
+		  else if( x < minSoFar ) {
+			  result = v
+			  minSoFar = x
+		  }
 		}
-
-		return result;
+		result
 	}
 
-	public V vertexWithFewestNeighborsAmong(Set<V> among)
-	{
+	def vertexWithFewestNeighborsAmong(among: Set[V]) = {
 		// assert: among is a subset of vertices
 		
-		V result = null;
-		int minSoFar = Integer.MAX_VALUE;
+		var result: V = null
+		var minSoFar = Integer.MAX_VALUE
 		
-		for( V v : among ) {
-			int x = getNeighbors(v).size();
+		for( v <- among ) {
+			val x = getNeighbors(v).size
 			if( result == null ) {
-				result = v;
-				minSoFar = x;
+				result = v
+				minSoFar = x
 			}
 			else if( x < minSoFar ) {
-				result = v;
-				minSoFar = x;
+				result = v
+				minSoFar = x
 			}
 		}
 		
-		return result;
+		result
 	}
 	
-	public int degree(V v)
-	{
-		return getEdges(v).size();
-	}
+	def degree(v: V) = getEdges(v).size
 
-	public Set<E> getEdges(V v)
-	{
-		Set<E> result = new HashSet<E>();
-		result = vertex2edges.get(v);
+	def getEdges(v: V) = {
+		var result = Set[E]()
+		result = vertex2edges(v)
 		if( result == null ) {
-			result = new HashSet<E>();
-			vertex2edges.put(v, result);
+			result = Set[E]()
+			vertex2edges += v -> result
 		}
-		return result;
+		result
 	}
 
-	public Set<V> getNeighbors(V v)
-	{
-		Set<V> result = new HashSet<V>();
-		
-		Set<E> es = getEdges(v);
-		for(E e : es) {
-			result.add(e.other(v));
+	def getNeighbors(v: V) = {
+		var result = Set[V]()
+		for(e <- getEdges(v)) {
+			result.add(e.other(v))
 		}
-		
-		return result;
+		result
 	}
 
-	public abstract void copyTo(UndirectedGraph<V,E> other);
+	def copyTo(other: UndirectedGraph[V, E]): Unit
 	
-	public void delete(V v)
-	{
-		Set<E> es = getEdges(v);
-		
-		vertices.remove(v);
-		vertex2edges.remove(v);
-		for( E e : es ) {
-			edges.remove(e);
-			vertex2edges.get(e.other(v)).remove(e);
+	def delete(v: V) = {
+		val es = getEdges(v)
+		vertices.remove(v)
+		vertex2edges.remove(v)
+		for( e <- es ) {
+			edges.remove(e)
+			vertex2edges.get(e.other(v)).remove(e)
 		}
 	}
 
-	public V firstLeafOtherThan(V r)
-	{
+	def firstLeafOtherThan(r: V): V = {
 		// a "leaf" is vertex with only one neighbor
-		for(V v : vertices ) {
-			if( getNeighbors(v).size() == 1 && ! v.equals(r) ) {
-				return v;
+		for( v <- vertices ) {
+			if( getNeighbors(v).size == 1 && ! v.equals(r) ) {
+				return v
 			}
 		}
-		
-		return null;
+		null
 	}
 	
-	public void eliminate(V v)
-	{
+	def eliminate(v: V) = {
 		// "decompositions" page 3 (Definition 3, Section 9.3)
 		// turn the neighbors of v into a clique
 		
-		Set<E> es = getEdges(v);
-		Set<V> vs = getNeighbors(v);
+		val es = getEdges(v)
+		val vs = getNeighbors(v)
 
-		vertices.remove(v);
-		vertex2edges.remove(v);
-		for( E e : es ) {
-			edges.remove(e);
+		vertices.remove(v)
+		vertex2edges.remove(v)
+		for( e <- es ) {
+			edges.remove(e)
 		}
 		
-		forceClique(vs);
-		
+		forceClique(vs)
 	}
 
-	public void eliminate(List<V> vs)
-	{
+	def eliminate(vs: List[V]) = {
 		// TODO there is probably a more efficient way to do this
-		
-		for(V v : vs) {
-			eliminate(v);
+		for(v <- vs) {
+			eliminate(v)
 		}
 	}
 
-
-	class UndirectedVertexStringer implements VertexStringer
+	class UndirectedVertexStringer(jung2pingel: Map[Vertex, V]) extends VertexStringer
 	{
-		Map<Vertex, V> jung2pingel = null;
-		
-		UndirectedVertexStringer(Map<Vertex, V> jung2pingel)
-		{
-			this.jung2pingel = jung2pingel;
-		}
-		
-	    public String getLabel(Vertex v)
-	    {
-	        return jung2pingel.get(v).getLabel();
-	    }
-		
+
+	    def getLabel(v: Vertex) = jung2pingel(v).getLabel()
+	    
 	}
 
-	public void draw()
-	{
+	def draw() = {
 
-        UndirectedSparseGraph jungGraph = new UndirectedSparseGraph();
+        var jungGraph = new UndirectedSparseGraph()
 
-        Map<V, Vertex> pingel2jung = new HashMap<V, Vertex>();
-        Map<Vertex, V> jung2pingel = new HashMap<Vertex, V>();
+        var pingel2jung = Map[V, Vertex]()
+        var jung2pingel = Map[Vertex, V]()
         
-        for( V pv : getVertices() ) {
-        		Vertex vertex = new SimpleUndirectedSparseVertex();
-        		jungGraph.addVertex(vertex);
-        		pingel2jung.put(pv, vertex);
-        		jung2pingel.put(vertex, pv);
+        for( pv <- getVertices() ) {
+        	val vertex = new SimpleUndirectedSparseVertex()
+        	jungGraph.addVertex(vertex)
+        	pingel2jung.put(pv, vertex)
+        	jung2pingel.put(vertex, pv)
         }
         
-        for( UndirectedGraphEdge<V> edge : getEdges() ) {
-        	 	Double<V,V> dbl = edge.getVertices();
-        	 	V v1 = dbl.getFirst();
-        	 	V v2 = dbl.getSecond();
-        	 	UndirectedSparseEdge jedge = new UndirectedSparseEdge(pingel2jung.get(v1), pingel2jung.get(v2));
-        	 	jungGraph.addEdge(jedge);
+        for( edge <- getEdges() ) {
+        	val dbl = edge.getVertices()
+        	val v1 = dbl._1
+        	val v2 = dbl._2
+        	val jedge = new UndirectedSparseEdge(pingel2jung.get(v1), pingel2jung.get(v2))
+        	jungGraph.addEdge(jedge)
         }
 
-        PluggableRenderer pr = new PluggableRenderer();
+        var pr = new PluggableRenderer()
 //      pr.setVertexPaintFunction(new ModelVertexPaintFunction(m));
 //      pr.setEdgeStrokeFunction(new ModelEdgeStrokeFunction(m));
 //      pr.setEdgeShapeFunction(new EdgeShape.Line());
-        pr.setVertexStringer(new UndirectedVertexStringer(jung2pingel));
+        pr.setVertexStringer(new UndirectedVertexStringer(jung2pingel))
 
-        Layout layout = new FRLayout(jungGraph);
+        val layout = new FRLayout(jungGraph)
         
-        JFrame jf = new JFrame();
-        GraphDraw gd = new GraphDraw(jungGraph);
-        gd.getVisualizationViewer().setGraphLayout(layout);
-        gd.getVisualizationViewer().setRenderer(pr);
-        jf.getContentPane().add(gd);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf.pack();
-        jf.setVisible(true);
+        var jf = new JFrame()
+        GraphDraw gd = new GraphDraw(jungGraph)
+        gd.getVisualizationViewer().setGraphLayout(layout)
+        gd.getVisualizationViewer().setRenderer(pr)
+        jf.getContentPane().add(gd)
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+        jf.pack()
+        jf.setVisible(true)
 	}
 
 }
