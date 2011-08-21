@@ -40,6 +40,25 @@ import edu.uci.ics.jung.visualization.GraphDraw
 import edu.uci.ics.jung.visualization.Layout
 import edu.uci.ics.jung.visualization.PluggableRenderer
 
+class UndirectedGraphEdge[V](v1: V, v2: V) {
+
+    def getVertices() = (v1, v2)
+
+    def connects(a1: V, a2: V) = (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
+
+    def other(u: V) = u match {
+      case v1 => v2
+      case v2 => v1
+      case _ => null
+    }
+}
+
+trait UndirectedGraphVertex[E <: UndirectedGraphEdge[_]] {
+	
+	def getLabel(): String
+	
+}
+
 abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGraphEdge[V]] {
 
 	var vertices = Set[V]()
