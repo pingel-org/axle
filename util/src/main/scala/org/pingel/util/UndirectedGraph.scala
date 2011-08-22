@@ -49,7 +49,7 @@ class UndirectedGraphEdge[V](v1: V, v2: V) {
     def other(u: V) = u match {
       case v1 => v2
       case v2 => v1
-      case _ => null
+      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
     }
 }
 
@@ -130,8 +130,8 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 	
 	def isClique(vs: Set[V]): Boolean = {
 	  
-		var vList = new ArrayList[V]()
-		vList.addAll(vs)
+		var vList = scala.collection.mutable.ArrayBuffer[V]()
+		vList ++= vs
 		for( i <- 0 to (vList.size - 1) ) {
 			for( j <- 0 to (vList.size - 1) ) {
 				if( ! areNeighbors(vList(i), vList(j)) ) {
@@ -144,13 +144,13 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 
 	def getNumEdgesToForceClique(vs: Set[V]) = {
 	  
-		var N = new ArrayList[V]()
-		N.addAll(vs)
+		var N = scala.collection.mutable.ArrayBuffer[V]()
+		N ++= vs
 
 		var result = 0
 		
 		for( i <- 0 to (N.size - 2) ) {
-			val vi = N.get(i);
+			val vi = N(i)
 			for( j <- (i+1) to (N.size - 1)) {
 				val vj = N(j)
 				if( ! areNeighbors(vi, vj) ) {
@@ -165,8 +165,8 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 	
 	def forceClique(vs: Set[V]) {
 		
-		var vList = new ArrayList[V]()
-		vList.addAll(vs)
+		var vList = scala.collection.mutable.ArrayBuffer[V]()
+		vList ++= vs
 		
 		for( i <- 0 to (vList.size - 2) ) {
 			val vi = vList(i)
@@ -184,17 +184,17 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 	  
 		// assert: among is a subset of vertices
 		
-		var result: V = null
+		var result: Option[V] = None
 		var minSoFar = Integer.MAX_VALUE
 		
 		for( v <- among ) {
 		  val x = getNumEdgesToForceClique(getNeighbors(v))
-		  if( result == null ) {
-			  result = v
+		  if( result == None ) {
+			  result = Some(v)
 			  minSoFar = x
 		  }
 		  else if( x < minSoFar ) {
-			  result = v
+			  result = Some(v)
 			  minSoFar = x
 		  }
 		}
@@ -204,17 +204,17 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 	def vertexWithFewestNeighborsAmong(among: Set[V]) = {
 		// assert: among is a subset of vertices
 		
-		var result: V = null
+		var result: Option[V] = None
 		var minSoFar = Integer.MAX_VALUE
 		
 		for( v <- among ) {
 			val x = getNeighbors(v).size
-			if( result == null ) {
-				result = v
+			if( result == None ) {
+				result = Some(v)
 				minSoFar = x
 			}
 			else if( x < minSoFar ) {
-				result = v
+				result = Some(v)
 				minSoFar = x
 			}
 		}
@@ -231,13 +231,7 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 		vertex2edges(v)
 	}
 
-	def getNeighbors(v: V) = {
-		var result = scala.collection.mutable.Set[V]()
-		for(e <- getEdges(v)) {
-			result.add(e.other(v))
-		}
-		result
-	}
+	def getNeighbors(v: V) = getEdges(v).map({ _.other(v)}).toSet
 
 	def copyTo(other: UndirectedGraph[V, E]): Unit
 	
@@ -247,19 +241,12 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 		vertex2edges.remove(v)
 		for( e <- es ) {
 			edges.remove(e)
-			vertex2edges.get(e.other(v)).remove(e)
+			vertex2edges.get(e.other(v)) map { otherEdges => otherEdges.remove(e) }
 		}
 	}
 
-	def firstLeafOtherThan(r: V): V = {
-		// a "leaf" is vertex with only one neighbor
-		for( v <- vertices ) {
-			if( getNeighbors(v).size == 1 && ! v.equals(r) ) {
-				return v
-			}
-		}
-		null
-	}
+	// a "leaf" is vertex with only one neighbor
+	def firstLeafOtherThan(r: V) = vertices.find({ v => getNeighbors(v).size == 1 && ! v.equals(r) })
 	
 	def eliminate(v: V) = {
 		// "decompositions" page 3 (Definition 3, Section 9.3)

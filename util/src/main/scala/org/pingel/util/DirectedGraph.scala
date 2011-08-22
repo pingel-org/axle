@@ -169,9 +169,7 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
 
     def outputEdgesOf(v: V) = {
         var result = scala.collection.mutable.Set[E]()
-        vertex2outedges.get(v) map { outEdges =>
-            result.addAll(outEdges)
-        }
+        vertex2outedges.get(v) map { outEdges => result ++= outEdges }
         result
     }
 

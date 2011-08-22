@@ -51,34 +51,39 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
 		throw new IndexOutOfBoundsException()
 	}
 
-	def getN() = n
+	def getN = n
+	
+	def getObjects = objects
 	
     def iterator() = new PermutionIterator[E](this)
 
     class PermutionIterator[InE](permuter: Permuter[InE]) extends Iterator[List[InE]]
     {
-    	var remainders = new Array[scala.collection.mutable.Set[InE]](permuter.getN)
-    	var iterators = new Array[Iterator[InE]](permuter.getN)
-    	var tuple = new Array[InE](permuter.getN)
-    	var i: Int
+    	var remainders = scala.collection.mutable.ArrayBuffer[scala.collection.mutable.Set[InE]]()
+    	
+    	var iterators = scala.collection.mutable.ArrayBuffer[Iterator[InE]]()
+    	
+    	var tuple = scala.collection.mutable.ArrayBuffer[InE]()
+    	
+//    	var i: Int
 
     	for( i <- 0 to (permuter.getN - 1) ) {
-    		remainders.add(null)
-    		iterators.add(null)
-    		tuple.add(null)
+    		remainders.append(null)
+    		iterators.append(null)
+    		tuple.append(null)
     	}
             
     	if ( permuter.getN > 0 ) {
-    		var firstRemainder = Set[InE]()
-    		firstRemainder.addAll(permuter.objects)
+    		var firstRemainder = scala.collection.mutable.Set[InE]()
+    		firstRemainder ++= permuter.getObjects
     		remainders(0) = firstRemainder
     		iterators(0) = firstRemainder.iterator
-    		tuple.set(0, iterators.get(i).next())
+    		tuple(0) = iterators(i).next()
     	}
     	
     	for( i <- 1 to (permuter.getN - 1) ) {
     		setRemainder(i)
-    		tuple.set(i, iterators.get(i).next())
+    		tuple(i) = iterators(i).next()
     	}
 
 //        private void setTupleElement(int i)
@@ -98,8 +103,8 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
             //System.out.println("setRemainder: i = " + i);
             if( i > 0 ) {
                 var r = scala.collection.mutable.Set[InE]()
-                r.addAll(remainders(i-1))
-                r.remove(tuple.get(i-1))
+                r ++= remainders(i-1)
+                r.remove(tuple(i-1))
                 remainders(i) = r
             }
             iterators(i) = remainders(i).iterator
@@ -115,13 +120,13 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
                 return true
             }
             else if( iterators(i).hasNext ) {
-                tuple.set(i, iterators(i).next())
+                tuple(i) = iterators(i).next()
                 return false
             }
             else {
                 val touchedHead = incrementLastAvailable(i-1)
                 setRemainder(i)
-                tuple.set(i, iterators(i).next())
+                tuple(i) = iterators(i).next()
                 return touchedHead
             }
         }
@@ -132,13 +137,10 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
                 throw new NoSuchElementException()
             }
             
-            var result = new Array[InE]()
-            result.addAll(tuple)
-            
+            var result = tuple.toList
             if( incrementLastAvailable(permuter.getN - 1) ) {
                 tuple = null
             }
-            
             result
         }
     }

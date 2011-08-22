@@ -56,7 +56,8 @@ object PowerSetTest {
 
 class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
 {
-
+	def getAll = all
+  
     /**
      * @return      an iterator over elements of type Collection<E> which enumerates
      *              the PowerSet of the collection used in the constructor
@@ -67,9 +68,9 @@ class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
 
     class PowerSetIterator[InE](powerSet: PowerSet[InE]) extends Iterator[Set[InE]]
     {
-    	val canonicalOrder = powerSet.all.toList
+    	val canonicalOrder = powerSet.getAll.toList
       
-        var mask = List[InE]()
+        var mask = scala.collection.mutable.ArrayBuffer[Option[InE]]()
 
         var hasNextValue = true
 
@@ -77,7 +78,7 @@ class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
 
         def allOnes(): Boolean = {
             for( bit <- mask ) {
-                if( bit == null ) {
+                if( bit == None ) {
                     return false
                 }
             }
@@ -89,17 +90,17 @@ class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
             while( true ) {
                 if( i < mask.size ) {
                     val bit = mask(i)
-                    if( bit == null ) {
-                        mask(i) = canonicalOrder.get(i)
+                    if( bit == None ) {
+                        mask(i) = Some(canonicalOrder(i))
                         return
                     }
                     else {
-                        mask(i) = null
+                        mask(i) = None
                         i += 1
                     }
                 }
                 else {
-                    mask.add(canonicalOrder.get(i))
+                    mask.append(Some(canonicalOrder(i)))
                     return
                 }
             }
@@ -108,17 +109,15 @@ class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
         def hasNext() = hasNextValue
 
         def next() = {
-            
-            var result = scala.collection.mutable.Set[InE]()
-            result.addAll(mask)
-            result.remove(null)
 
-            hasNextValue = mask.size < powerSet.all.size() || ! allOnes()
+            val result = mask.flatMap({ x => x })
+
+            hasNextValue = mask.size < powerSet.getAll.size || ! allOnes()
             if( hasNextValue ) {
                 increment()
             }
             
-            result
+            result.toSet
 
         }
         

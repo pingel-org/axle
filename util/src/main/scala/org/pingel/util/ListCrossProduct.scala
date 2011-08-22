@@ -60,14 +60,14 @@ class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
     }
 
     def get(i: Int) = {
-
         var c = i
-        var result = lists.map({x => null}).toList.toArray // Array[E] or List[E]?
+//        var result = lists.map({x => null}).toList.toArray // Array[E] or List[E]?
+        var result = scala.collection.mutable.ArrayBuffer[E]()
         for( j <- 0 to (lists.size - 1) ) {
-            result(j) = lists(j)(c / modulos(j+1))
+            result.append( lists(j)(c / modulos(j+1)) )
             c = c % modulos(j+1)
         }
-        result
+        result.toList
     }
 
     def size() = modulos(0)
