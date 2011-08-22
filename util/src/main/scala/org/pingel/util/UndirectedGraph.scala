@@ -48,9 +48,9 @@ class UndirectedGraphEdge[V](v1: V, v2: V) {
     def connects(a1: V, a2: V) = (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
 
     def other(u: V) = u match {
-      case v1 => v2
-      case v2 => v1
-//      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+      case _ if u.equals(v1) => v2
+      case _ if u.equals(v2) => v1
+      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
     }
 }
 
