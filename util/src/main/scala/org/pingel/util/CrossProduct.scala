@@ -53,7 +53,7 @@ class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E
 	def getCollections() = iterables
 
 	def iterator() = new CrossProductIterator[E](this)
-
+	
 	class CrossProductIterator[InE](cp: CrossProduct[InE]) extends Iterator[List[InE]]
 	{
 	  
@@ -62,7 +62,7 @@ class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E
 		var tuple = new Array[InE](cp.getCollections().size)
 				
 		for( i <- 0 to (cp.getCollections().size - 1) ) {
-			iterators(i) = cp.getCollections().get(i).iterator()
+			iterators(i) = cp.getCollections()(i).iterator
 			tuple(i) = iterators(i).next()
 		}
 
@@ -75,12 +75,12 @@ class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E
 			if( i == iterators.size ) {
 				return true
 			}
-			else if( iterators(i).hasNext() ) {
+			else if( iterators(i).hasNext ) {
 				tuple(i) = iterators(i).next()
 				return false
 			}
 			else {
-			    iterators(i) = cp.iterables(i).iterator()
+			    iterators(i) = cp.getCollections()(i).iterator
 			    tuple(i) = iterators(i).next()
 				return incrementFirstAvailable(i+1)
 			}

@@ -71,8 +71,8 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
     	if ( permuter.getN > 0 ) {
     		var firstRemainder = Set[InE]()
     		firstRemainder.addAll(permuter.objects)
-    		remainders.set(0, firstRemainder)
-    		iterators.set(0, firstRemainder.iterator())
+    		remainders(0) = firstRemainder
+    		iterators(0) = firstRemainder.iterator
     		tuple.set(0, iterators.get(i).next())
     	}
     	
@@ -98,30 +98,30 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
             //System.out.println("setRemainder: i = " + i);
             if( i > 0 ) {
                 var r = Set[InE]()
-                r.addAll(remainders.get(i-1))
+                r.addAll(remainders(i-1))
                 r.remove(tuple.get(i-1))
-                remainders.set(i, r)
+                remainders(i) = r
             }
-            iterators.set(i, remainders.get(i).iterator())
+            iterators(i) = remainders(i).iterator
         }
         
         def remove() = throw new UnsupportedOperationException()
 
         def hasNext() = tuple != null
 
-        def incrementLastAvailable(i: Int) = {
+        def incrementLastAvailable(i: Int): Boolean = {
             //System.out.println("incrementLastAvailable: i = " + i);
             if( i == -1 ) {
                 return true
             }
-            else if( iterators(i).hasNext() ) {
-                tuple.set(i, iterators.get(i).next())
+            else if( iterators(i).hasNext ) {
+                tuple.set(i, iterators(i).next())
                 return false
             }
             else {
-                boolean touchedHead = incrementLastAvailable(i-1)
+                val touchedHead = incrementLastAvailable(i-1)
                 setRemainder(i)
-                tuple.set(i, iterators.get(i).next())
+                tuple.set(i, iterators(i).next())
                 return touchedHead
             }
         }
