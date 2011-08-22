@@ -32,11 +32,11 @@ object Stringer {
 
     def render(iterable: Iterable[_ <: Object], sep: String) = {
         var result = ""
-        val it = iterable.iterator()
-        while( it.hasNext() ) {
+        val it = iterable.iterator
+        while( it.hasNext ) {
             val o = it.next()
             result += o.toString()
-            if( it.hasNext() ) {
+            if( it.hasNext ) {
                 result += sep
             }
         }

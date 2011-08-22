@@ -116,205 +116,179 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
     	vertices.remove(v)
     }
 
-    public Set<V> getLeaves()
-    {
-    		Set<V> result = new HashSet<V>();
-    		for( V v : getVertices() ) {
-    			if( isLeaf(v) ) {
-    				result.add(v);
-    			}
+    def getLeaves() = {
+    	var result = Set[V]()
+    	for( v <- getVertices() ) {
+    		if( isLeaf(v) ) {
+    			result.add(v)
     		}
-    		return result;
+    	}
+    	result
     }
     
-    public Set<V> getNeighbors(V v)
-    {
-        Set<V> result = new HashSet<V>();
-        Set<E> outEdges = vertex2outedges.get(v);
+    def getNeighbors(v: V) = {
+        var result = Set[V]()
+        val outEdges = vertex2outedges(v)
         if( outEdges != null ) {
-            for( E edge : outEdges) {
+            for( edge <- outEdges) {
                 result.add(edge.getDest());
             }
         }
-        Set<E> inEdges = vertex2inedges.get(v);
+        val inEdges = vertex2inedges(v)
         if( inEdges != null ) {
-            for( E edge : inEdges) {
-                result.add(edge.getSource());
+            for( edge <- inEdges) {
+                result.add(edge.getSource())
             }
         }
-        
-        return result;
+        result
     }
 
-    public boolean precedes(V v1, V v2)
-    {
-        Set<V> preds = getPredecessors(v2);
-        return preds.contains(v1);
-    }
-    
-    public Set<V> getPredecessors(V v)
-    {
-        Set<V> result = new HashSet<V>();
-        Set<E> inEdges = vertex2inedges.get(v);
+    def precedes(v1: V, v2: V) = getPredecessors(v2).contains(v1)
+
+    def getPredecessors(v: V) = {
+        var result = Set[V]()
+        val inEdges = vertex2inedges.get(v)
         if( inEdges != null ) {
-            for( E edge : inEdges ) {
-                result.add(edge.getSource());
+            for( edge <- inEdges ) {
+                result.add(edge.getSource())
             }
         }
-        return result;
+        result
     }
 
-    public boolean isLeaf(V v)
-    {
-    		Set<E> outEdges = vertex2outedges.get(v);
-    		return outEdges == null || outEdges.size() == 0;
-
+    def isLeaf(v: V) = {
+    	val outEdges = vertex2outedges.get(v)
+    	outEdges == null || outEdges.size == 0
     }
     
-    public Set<V> getSuccessors(V v)
-    {
-        Set<V> result = new HashSet<V>();
-        Set<E> outEdges = vertex2outedges.get(v);
+    def getSuccessors(v: V) = {
+        var result = Set[V]()
+        val outEdges = vertex2outedges.get(v)
         if( outEdges != null ) {
-            for( E edge : outEdges ) {
-                result.add(edge.getDest());
+            for( edge <- outEdges ) {
+                result.add(edge.getDest())
             }
         }
-        return result;
+        result
     }
 
-    public Set<E> outputEdgesOf(V v)
-    {
-        Set<E> result = new HashSet<E>();
-        Set<E> outEdges = vertex2outedges.get(v);
+    def outputEdgesOf(v: V) = {
+        var result = Set[E]()
+        val outEdges = vertex2outedges.get(v)
         if( outEdges != null ) {
-            result.addAll(outEdges);
+            result.addAll(outEdges)
         }
-        return result;
+        result
     }
-    
-    
-    public boolean descendantsIntersectsSet(V var, Set<V> s)
-    {
-        if( s.contains(var) ) {
-            return true;
+
+    def descendantsIntersectsSet(v: V, s: Set[V]): Boolean = {
+      
+        if( s.contains(v) ) {
+            return true
         }
-        for( V x : s ) {
+        for( x <- s ) {
             if( descendantsIntersectsSet(x, s) ) {
-                return true;
+                return true
             }
         }
-        return false;
+        return false
     }
     
-    public void collectDescendants(V v, Set<V> result)
-    {
+    def collectDescendants(v: V, result: Set[V]): Unit = {
         // inefficient
         if( ! result.contains(v) ) {
-            result.add(v);
-            for( V child : getSuccessors(v) ) {
-                collectDescendants(child, result);
+            result.add(v)
+            for( child <- getSuccessors(v) ) {
+                collectDescendants(child, result)
             }
         }
     }
 
-    
-    public void collectAncestors(V v, Set<V> result)
-    {
+    def collectAncestors(v: V, result: Set[V]): Unit = {
         // inefficient
         if( ! result.contains(v) ) {
-            result.add(v);
-            for( V child : getPredecessors(v) ) {
-                collectAncestors(child, result);
+            result.add(v)
+            for( child <- getPredecessors(v) ) {
+                collectAncestors(child, result)
             }
         }
     }
     
-    public void collectAncestors(Set<V> vs, Set<V> result)
-    {
-        for( V v : vs ) {
-            collectAncestors(v, result);
+    def collectAncestors(vs: Set[V], result: Set[V]): Unit = {
+        for( v <- vs ) {
+            collectAncestors(v, result)
         }
     }
     
-    public void removeInputs(Set<V> vs)
-    {
-        for( V v : vs ) {
-            Set<E> incoming = vertex2inedges.get(v);
+    def removeInputs(vs: Set[V]) {
+        for( v <- vs ) {
+            val incoming = vertex2inedges.get(v)
             if( incoming != null ) {
-                for( E edge : incoming ) {
-                    edges.remove(edge);
+                for( edge <- incoming ) {
+                    edges.remove(edge)
                 }
-                vertex2inedges.put(v, null);
+                vertex2inedges += v -> null
             }
         }
     }
 
-    public void removeOutputs(Set<V> vs)
-    {
-        for( V v : vs) {
-            Set<E> outgoing = vertex2outedges.get(v);
+    def removeOutputs(vs: Set[V]) {
+        for( v <- vs) {
+            val outgoing = vertex2outedges.get(v)
             if( outgoing != null ) {
-                for( E edge : outgoing ) {
-                    edges.remove(edge);
+                for( edge <- outgoing ) {
+                    edges.remove(edge)
                 }
-                vertex2outedges.put(v, null);
+                vertex2outedges += v -> null
             }
         }
     }
 
     //TODO remove this method
-    public void removeSuccessor(V v, V successor)
-    {
+    def removeSuccessor(v: V, successor: V) {
         
-        Set<E> outgoing = vertex2outedges.get(v);
+        val outgoing = vertex2outedges.get(v)
         if( outgoing != null ) {
 
-            E edgeToRemove = null;
+            var edgeToRemove: E = null
             
-            for( E edge : outgoing ) {
+            for( edge <- outgoing ) {
                 if( edge.getDest().equals(successor) ) {
-                    edgeToRemove = edge;
+                    edgeToRemove = edge
                 }
             }
             
             if( edgeToRemove != null ) {
-                outgoing.remove(edgeToRemove);
-                edges.remove(edgeToRemove);
+                outgoing.remove(edgeToRemove)
+                edges.remove(edgeToRemove)
             }
         }
 
     }
 
     //TODO remove this method
-    public void removePredecessor(V v, V predecessor)
+    def removePredecessor(v: V, predecessor: V)
     {
-        Set<E> incoming = vertex2inedges.get(v);
+        val incoming = vertex2inedges.get(v)
         if( incoming != null ) {
-            E edgeToRemove = null;
-            for( E edge : incoming ) {
+            var edgeToRemove: E = null
+            for( edge <- incoming ) {
                 if( edge.getSource().equals(predecessor)) {
-                    edgeToRemove = edge;
+                    edgeToRemove = edge
                 }
             }
             
             if( edgeToRemove != null ) {
-                incoming.remove(edgeToRemove);
-                edges.remove(edgeToRemove); // we should really only do this if it's the last of the pair of calls. ick.
+                incoming.remove(edgeToRemove)
+                edges.remove(edgeToRemove) // we should really only do this if it's the last of the pair of calls. ick.
             }
 
         }
 
     }
 
-    public UndirectedGraph moralGraph()
-    {
-        return null; // TODO
-    }
-    
-    public boolean isAcyclic()
-    {
-        return true; // TODO !!!
-    }
-    
+    def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
+
+    def isAcyclic() = true // TODO !!!
+
 }
