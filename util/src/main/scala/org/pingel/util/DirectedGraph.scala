@@ -43,10 +43,10 @@ trait DirectedGraphVertex[E] {
 
 class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
 
-    var vertices = Set[V]()
-    var edges = Set[E]()
-    var vertex2outedges = Map[V, Set[E]]()
-    var vertex2inedges = Map[V, Set[E]]()
+    var vertices = scala.collection.mutable.Set[V]()
+    var edges = scala.collection.mutable.Set[E]()
+    var vertex2outedges = Map[V, scala.collection.mutable.Set[E]]()
+    var vertex2inedges = Map[V, scala.collection.mutable.Set[E]]()
     
     def addEdge(edge: E) = {
       
@@ -57,14 +57,14 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
         
         var outEdges = vertex2outedges.get(source)
         if( outEdges == null ) {
-            outEdges = Set[E]()
+            outEdges = scala.collection.mutable.Set[E]()
             vertex2outedges += source -> outEdges
         }
         outEdges.add(edge)
         
         var inEdges = vertex2inedges.get(dest)
         if( inEdges == null ) {
-            inEdges = Set[E]()
+            inEdges = scala.collection.mutable.Set[E]()
             vertex2inedges += dest -> inEdges
         }
         inEdges.add(edge)
@@ -85,16 +85,18 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
 
       edges.remove(e)
         
-      var outwards = vertex2outedges.get(e.getSource())
-      outwards.remove(e)
+      vertex2outedges.get(e.getSource()) map { outwards =>
+      	outwards.remove(e)
+      }
         
-      var inwards = vertex2inedges.get(e.getDest())
-      inwards.remove(e)
+      vertex2inedges.get(e.getDest()) map { inwards => 
+      	inwards.remove(e)
+      }
     }
 
     def deleteVertex(v: V)
     {
-    	val outEdges = vertex2outedges.get(v);
+    	val outEdges = vertex2outedges.get(v)
     	if( outEdges != null ) {
     		for(e <- outEdges) {
     			edges.remove(e)
