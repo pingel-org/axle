@@ -109,7 +109,7 @@ class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
 
         def next() = {
             
-            var result = Set[InE]()
+            var result = scala.collection.mutable.Set[InE]()
             result.addAll(mask)
             result.remove(null)
 

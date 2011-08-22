@@ -57,7 +57,7 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
 
     class PermutionIterator[InE](permuter: Permuter[InE]) extends Iterator[List[InE]]
     {
-    	var remainders = new Array[Set[InE]](permuter.getN)
+    	var remainders = new Array[scala.collection.mutable.Set[InE]](permuter.getN)
     	var iterators = new Array[Iterator[InE]](permuter.getN)
     	var tuple = new Array[InE](permuter.getN)
     	var i: Int
@@ -97,7 +97,7 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
         def setRemainder(i: Int) = {
             //System.out.println("setRemainder: i = " + i);
             if( i > 0 ) {
-                var r = Set[InE]()
+                var r = scala.collection.mutable.Set[InE]()
                 r.addAll(remainders(i-1))
                 r.remove(tuple.get(i-1))
                 remainders(i) = r
@@ -135,7 +135,7 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
             var result = new Array[InE]()
             result.addAll(tuple)
             
-            if( incrementLastAvailable(permuter.n - 1) ) {
+            if( incrementLastAvailable(permuter.getN - 1) ) {
                 tuple = null
             }
             

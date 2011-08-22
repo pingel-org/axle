@@ -45,8 +45,8 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
 
     var vertices = scala.collection.mutable.Set[V]()
     var edges = scala.collection.mutable.Set[E]()
-    var vertex2outedges = Map[V, scala.collection.mutable.Set[E]]()
-    var vertex2inedges = Map[V, scala.collection.mutable.Set[E]]()
+    var vertex2outedges = scala.collection.mutable.Map[V, scala.collection.mutable.Set[E]]()
+    var vertex2inedges = scala.collection.mutable.Map[V, scala.collection.mutable.Set[E]]()
     
     def addEdge(edge: E) = {
       
@@ -54,20 +54,16 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
         val dest = edge.getDest()
         
         edges.add(edge)
-        
-        var outEdges = vertex2outedges.get(source)
-        if( outEdges == null ) {
-            outEdges = scala.collection.mutable.Set[E]()
-            vertex2outedges += source -> outEdges
+
+        if( ! vertex2outedges.contains(source) ) {
+          vertex2outedges += source -> scala.collection.mutable.Set[E]()
         }
-        outEdges.add(edge)
-        
-        var inEdges = vertex2inedges.get(dest)
-        if( inEdges == null ) {
-            inEdges = scala.collection.mutable.Set[E]()
-            vertex2inedges += dest -> inEdges
+        vertex2outedges(source).add(edge)
+
+        if( ! vertex2inedges.contains(dest) ) {
+          vertex2inedges += dest -> scala.collection.mutable.Set[E]()
         }
-        inEdges.add(edge)
+        vertex2inedges(dest).add(edge)
         
         edge
     }
@@ -96,30 +92,31 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
 
     def deleteVertex(v: V)
     {
-    	val outEdges = vertex2outedges.get(v)
-    	if( outEdges != null ) {
+    	vertex2outedges.get(v) map { outEdges =>
     		for(e <- outEdges) {
     			edges.remove(e)
-    			var out2in = vertex2inedges.get(e.getDest())
-    			out2in.remove(e)
+    			vertex2inedges.get(e.getDest()) map { out2in =>
+    				out2in.remove(e)
+    			}
     		}
     	}
     	vertex2outedges.remove(v)
     	
-    	val inEdges = vertex2inedges.get(v)
-    	if( inEdges != null ) {
+    	vertex2inedges.get(v) map { inEdges =>
     		for(e <- inEdges) {
     			edges.remove(e)
-    			var in2out = vertex2outedges.get(e.getSource())
-    			in2out.remove(e)
+    			vertex2outedges.get(e.getSource()) map { in2out =>
+    				in2out.remove(e)
+    			}
     		}
     	}
     	vertex2inedges.remove(v)
+    	
     	vertices.remove(v)
     }
 
     def getLeaves() = {
-    	var result = Set[V]()
+    	var result = scala.collection.mutable.Set[V]()
     	for( v <- getVertices() ) {
     		if( isLeaf(v) ) {
     			result.add(v)
@@ -129,15 +126,13 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
     }
     
     def getNeighbors(v: V) = {
-        var result = Set[V]()
-        val outEdges = vertex2outedges(v)
-        if( outEdges != null ) {
+        var result = scala.collection.mutable.Set[V]()
+        vertex2outedges.get(v) map { outEdges =>
             for( edge <- outEdges) {
-                result.add(edge.getDest());
+                result.add(edge.getDest())
             }
         }
-        val inEdges = vertex2inedges(v)
-        if( inEdges != null ) {
+        vertex2inedges.get(v) map { inEdges =>
             for( edge <- inEdges) {
                 result.add(edge.getSource())
             }
@@ -148,9 +143,8 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
     def precedes(v1: V, v2: V) = getPredecessors(v2).contains(v1)
 
     def getPredecessors(v: V) = {
-        var result = Set[V]()
-        val inEdges = vertex2inedges.get(v)
-        if( inEdges != null ) {
+        var result = scala.collection.mutable.Set[V]()
+        vertex2inedges.get(v) map { inEdges =>
             for( edge <- inEdges ) {
                 result.add(edge.getSource())
             }
@@ -164,9 +158,8 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
     }
     
     def getSuccessors(v: V) = {
-        var result = Set[V]()
-        val outEdges = vertex2outedges.get(v)
-        if( outEdges != null ) {
+        var result = scala.collection.mutable.Set[V]()
+        vertex2outedges.get(v) map { outEdges =>
             for( edge <- outEdges ) {
                 result.add(edge.getDest())
             }
@@ -175,9 +168,8 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
     }
 
     def outputEdgesOf(v: V) = {
-        var result = Set[E]()
-        val outEdges = vertex2outedges.get(v)
-        if( outEdges != null ) {
+        var result = scala.collection.mutable.Set[E]()
+        vertex2outedges.get(v) map { outEdges =>
             result.addAll(outEdges)
         }
         result
@@ -196,7 +188,7 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
         return false
     }
     
-    def collectDescendants(v: V, result: Set[V]): Unit = {
+    def collectDescendants(v: V, result: scala.collection.mutable.Set[V]): Unit = {
         // inefficient
         if( ! result.contains(v) ) {
             result.add(v)
@@ -206,7 +198,7 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
         }
     }
 
-    def collectAncestors(v: V, result: Set[V]): Unit = {
+    def collectAncestors(v: V, result: scala.collection.mutable.Set[V]): Unit = {
         // inefficient
         if( ! result.contains(v) ) {
             result.add(v)
@@ -216,7 +208,7 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
         }
     }
     
-    def collectAncestors(vs: Set[V], result: Set[V]): Unit = {
+    def collectAncestors(vs: Set[V], result: scala.collection.mutable.Set[V]): Unit = {
         for( v <- vs ) {
             collectAncestors(v, result)
         }
@@ -224,8 +216,7 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
     
     def removeInputs(vs: Set[V]) {
         for( v <- vs ) {
-            val incoming = vertex2inedges.get(v)
-            if( incoming != null ) {
+            vertex2inedges.get(v) map { incoming =>
                 for( edge <- incoming ) {
                     edges.remove(edge)
                 }
@@ -236,8 +227,7 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
 
     def removeOutputs(vs: Set[V]) {
         for( v <- vs) {
-            val outgoing = vertex2outedges.get(v)
-            if( outgoing != null ) {
+            vertex2outedges.get(v) map { outgoing =>
                 for( edge <- outgoing ) {
                     edges.remove(edge)
                 }
@@ -248,45 +238,22 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
 
     //TODO remove this method
     def removeSuccessor(v: V, successor: V) {
-        
-        val outgoing = vertex2outedges.get(v)
-        if( outgoing != null ) {
-
-            var edgeToRemove: E = null
-            
-            for( edge <- outgoing ) {
-                if( edge.getDest().equals(successor) ) {
-                    edgeToRemove = edge
-                }
-            }
-            
-            if( edgeToRemove != null ) {
+        vertex2outedges.get(v) map { outgoing =>
+          	outgoing.find({_.getDest().equals(successor)}) map { edgeToRemove =>
                 outgoing.remove(edgeToRemove)
                 edges.remove(edgeToRemove)
-            }
+          	}
         }
-
     }
 
     //TODO remove this method
-    def removePredecessor(v: V, predecessor: V)
-    {
-        val incoming = vertex2inedges.get(v)
-        if( incoming != null ) {
-            var edgeToRemove: E = null
-            for( edge <- incoming ) {
-                if( edge.getSource().equals(predecessor)) {
-                    edgeToRemove = edge
-                }
-            }
-            
-            if( edgeToRemove != null ) {
+    def removePredecessor(v: V, predecessor: V) {
+        vertex2inedges.get(v) map { incoming =>
+            incoming.find({_.getSource().equals(predecessor)}) map { edgeToRemove =>
                 incoming.remove(edgeToRemove)
                 edges.remove(edgeToRemove) // we should really only do this if it's the last of the pair of calls. ick.
             }
-
         }
-
     }
 
     def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!

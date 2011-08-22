@@ -61,9 +61,9 @@ trait UndirectedGraphVertex[E <: UndirectedGraphEdge[_]] {
 
 abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGraphEdge[V]] {
 
-	var vertices = Set[V]()
-	var edges = Set[E]()
-	var vertex2edges = Map[V, Set[E]]()
+	var vertices = scala.collection.mutable.Set[V]()
+	var edges = scala.collection.mutable.Set[E]()
+	var vertex2edges = scala.collection.mutable.Map[V, scala.collection.mutable.Set[E]]()
 
 	def addVertex(v: V) {
 		vertices.add(v)
@@ -93,7 +93,7 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 
 	def constructEdge(v1: V, v2: V): E
 
-    def unlink(e: E) = {
+    def unlink(e: E): Unit = {
 	  
         val dble = e.getVertices()
         
@@ -106,7 +106,7 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
         edges.remove(e)
     }
     
-	def unlink(v1: V, v2: V) = {
+	def unlink(v1: V, v2: V): Unit = {
 	    // TODO optimize
 	    
 	    val edges = getEdges(v1)
@@ -144,7 +144,7 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 
 	def getNumEdgesToForceClique(vs: Set[V]) = {
 	  
-		var N = new ArrayList<V>()
+		var N = new ArrayList[V]()
 		N.addAll(vs)
 
 		var result = 0
@@ -225,17 +225,14 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 	def degree(v: V) = getEdges(v).size
 
 	def getEdges(v: V) = {
-		var result = Set[E]()
-		result = vertex2edges(v)
-		if( result == null ) {
-			result = Set[E]()
-			vertex2edges += v -> result
+		if( ! vertex2edges.contains(v) ) {
+		  vertex2edges += v -> scala.collection.mutable.Set[E]()
 		}
-		result
+		vertex2edges(v)
 	}
 
 	def getNeighbors(v: V) = {
-		var result = Set[V]()
+		var result = scala.collection.mutable.Set[V]()
 		for(e <- getEdges(v)) {
 			result.add(e.other(v))
 		}
@@ -277,10 +274,10 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 			edges.remove(e)
 		}
 		
-		forceClique(vs)
+		forceClique(vs.asInstanceOf[Set[V]])
 	}
 
-	def eliminate(vs: List[V]) = {
+	def eliminate(vs: List[V]): Unit = {
 		// TODO there is probably a more efficient way to do this
 		for(v <- vs) {
 			eliminate(v)
