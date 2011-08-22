@@ -51,7 +51,7 @@ object PowerSetTest {
  * 
  * @author pingel
  *
- * @param <E> The type of elements in the Collection passed to the constructor.
+ * @param [E] The type of elements in the Collection passed to the constructor.
  */
 
 class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
@@ -90,11 +90,11 @@ class PowerSet[E](all: Collection[E]) extends Iterable[Set[E]]
                 if( i < mask.size ) {
                     val bit = mask(i)
                     if( bit == null ) {
-                        mask.set(i, canonicalOrder.get(i))
+                        mask(i) = canonicalOrder.get(i)
                         return
                     }
                     else {
-                        mask.set(i, null)
+                        mask(i) = null
                         i += 1
                     }
                 }

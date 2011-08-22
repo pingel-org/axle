@@ -61,13 +61,12 @@ class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
 
     def get(i: Int): List[E] = {
 
+        var c = i
         var result = lists.map({x => null}).toList // Array[E] or List[E]?
-
         for( j <- 0 to (lists.size - 1) ) {
-            result.set(j, lists(j)(i / modulos(j+1)))
-            i = i % modulos(j+1)
+            result(j) = lists(j)(c / modulos(j+1))
+            c = c % modulos(j+1)
         }
-
         result
     }
 

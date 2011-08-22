@@ -59,16 +59,16 @@ class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E
 	  
 		var iterators = new Array[Iterator[InE]](cp.getCollections().size)
 
-		var tuple = new Array[InE](cp.getCollections().size)
+		var current = new Array[InE](cp.getCollections().size)
 				
 		for( i <- 0 to (cp.getCollections().size - 1) ) {
 			iterators(i) = cp.getCollections()(i).iterator
-			tuple(i) = iterators(i).next()
+			current(i) = iterators(i).next()
 		}
 
 		def remove() = throw new UnsupportedOperationException()
 
-		def hasNext() = tuple != null
+		def hasNext() = current != null
 
 		def incrementFirstAvailable(i: Int): Boolean = {
 
@@ -76,28 +76,28 @@ class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E
 				return true
 			}
 			else if( iterators(i).hasNext ) {
-				tuple(i) = iterators(i).next()
+				current(i) = iterators(i).next()
 				return false
 			}
 			else {
 			    iterators(i) = cp.getCollections()(i).iterator
-			    tuple(i) = iterators(i).next()
+			    current(i) = iterators(i).next()
 				return incrementFirstAvailable(i+1)
 			}
 		}
 		
 		def next() = {
-			if( tuple == null ) {
+			if( current == null ) {
 				throw new NoSuchElementException()
 			}
 			
-			var result = new Array[InE](tuple.size)
-			for( i <- 0 to (tuple.size - 1) ) {
+			var result = new Array[InE](current.size)
+			for( i <- 0 to (current.size - 1) ) {
 				result(i) = tuple(i)
 			}
 			
 			if( incrementFirstAvailable(0) ) {
-				tuple = null
+				current = null
 			}
 			
 			result

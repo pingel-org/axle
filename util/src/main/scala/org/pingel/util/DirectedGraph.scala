@@ -98,7 +98,7 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
     	if( outEdges != null ) {
     		for(e <- outEdges) {
     			edges.remove(e)
-    			Set<E> out2in = vertex2inedges.get(e.getDest())
+    			var out2in = vertex2inedges.get(e.getDest())
     			out2in.remove(e)
     		}
     	}
