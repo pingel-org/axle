@@ -28,94 +28,92 @@
 
 package org.pingel.util;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
-public class DirectedGraph<V extends DirectedGraphVertex<E>, E extends DirectedGraphEdge<V>>
-{
+class DirectedGraphEdge[V](source: V, dest: V) {
 
-    private Set<V> vertices = new HashSet<V>();
-    private Set<E> edges = new HashSet<E>();
-    private Map<V, Set<E>> vertex2outedges = new HashMap<V, Set<E>>();
-    private Map<V, Set<E>> vertex2inedges = new HashMap<V, Set<E>>();
+  def getSource() = source
+  
+  def getDest() = dest
+
+}
+
+trait DirectedGraphVertex[E] {
+
+}
+
+class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
+
+    var vertices = Set[V]()
+    var edges = Set[E]()
+    var vertex2outedges = Map[V, Set[E]]()
+    var vertex2inedges = Map[V, Set[E]]()
     
-    public E addEdge(E edge)
-    {
-        V source = edge.getSource();
-        V dest = edge.getDest();
+    def addEdge(edge: E) = {
+      
+        val source = edge.getSource()
+        val dest = edge.getDest()
         
-        edges.add(edge);
+        edges.add(edge)
         
-        Set<E> outEdges = vertex2outedges.get(source);
+        var outEdges = vertex2outedges.get(source)
         if( outEdges == null ) {
-            outEdges = new HashSet<E>();
-            vertex2outedges.put(source, outEdges);
+            outEdges = Set[E]()
+            vertex2outedges += source -> outEdges
         }
-        outEdges.add(edge);
+        outEdges.add(edge)
         
-        Set<E> inEdges = vertex2inedges.get(dest);
+        var inEdges = vertex2inedges.get(dest)
         if( inEdges == null ) {
-            inEdges = new HashSet<E>();
-            vertex2inedges.put(dest, inEdges);
+            inEdges = Set[E]()
+            vertex2inedges += dest -> inEdges
         }
-        inEdges.add(edge);
+        inEdges.add(edge)
         
-        return edge;
+        edge
     }
     
-    public Set<E> getEdges()
-    {
-        return edges;
+    def getEdges() = edges
+
+    def getVertices = vertices
+
+    def addVertex(v: V) = {
+      vertices.add(v)
+      v
     }
 
-    public Set<V> getVertices() 
-    {
-        return vertices;
-    }
+    def deleteEdge(e: E) = {
+
+      edges.remove(e)
         
-    public V addVertex(V v)
-    {
-        vertices.add(v);
+      var outwards = vertex2outedges.get(e.getSource())
+      outwards.remove(e)
         
-        return v;
+      var inwards = vertex2inedges.get(e.getDest())
+      inwards.remove(e)
     }
 
-    public void deleteEdge(E e)
+    def deleteVertex(v: V)
     {
-        edges.remove(e);
-        
-        Set<E> outwards = vertex2outedges.get(e.getSource());
-        outwards.remove(e);
-        
-        Set<E> inwards = vertex2inedges.get(e.getDest());
-        inwards.remove(e);
-    }
-
-    public void deleteVertex(V v)
-    {
-    		Set<E> outEdges = vertex2outedges.get(v);
-    		if( outEdges != null ) {
-    			for(E e : outEdges) {
-    				edges.remove(e);
-    				Set<E> out2in = vertex2inedges.get(e.getDest());
-    				out2in.remove(e);
-    			}
+    	val outEdges = vertex2outedges.get(v);
+    	if( outEdges != null ) {
+    		for(e <- outEdges) {
+    			edges.remove(e)
+    			Set<E> out2in = vertex2inedges.get(e.getDest())
+    			out2in.remove(e)
     		}
-    		vertex2outedges.remove(v);
+    	}
+    	vertex2outedges.remove(v)
     	
-    		Set<E> inEdges = vertex2inedges.get(v);
-    		if( inEdges != null ) {
-    			for(E e : inEdges) {
-    				edges.remove(e);
-    				Set<E> in2out = vertex2outedges.get(e.getSource());
-    				in2out.remove(e);
-    			}
+    	val inEdges = vertex2inedges.get(v)
+    	if( inEdges != null ) {
+    		for(e <- inEdges) {
+    			edges.remove(e)
+    			var in2out = vertex2outedges.get(e.getSource())
+    			in2out.remove(e)
     		}
-    		vertex2inedges.remove(v);
-    	
-    		vertices.remove(v);
+    	}
+    	vertex2inedges.remove(v)
+    	vertices.remove(v)
     }
 
     public Set<V> getLeaves()

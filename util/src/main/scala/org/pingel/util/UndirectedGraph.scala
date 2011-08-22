@@ -84,10 +84,10 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 		edges.add(e)
 		val dble = e.getVertices()
 		
-		var es1 = getEdges(dble.getFirst())
+		var es1 = getEdges(dble._1)
 		es1.add(e)
 		
-		var es2 = getEdges(dble.getSecond())
+		var es2 = getEdges(dble._2)
 		es2.add(e)
 	}
 
@@ -304,15 +304,15 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
         for( pv <- getVertices() ) {
         	val vertex = new SimpleUndirectedSparseVertex()
         	jungGraph.addVertex(vertex)
-        	pingel2jung.put(pv, vertex)
-        	jung2pingel.put(vertex, pv)
+        	pingel2jung += pv -> vertex
+        	jung2pingel += vertex -> pv
         }
         
         for( edge <- getEdges() ) {
         	val dbl = edge.getVertices()
         	val v1 = dbl._1
         	val v2 = dbl._2
-        	val jedge = new UndirectedSparseEdge(pingel2jung.get(v1), pingel2jung.get(v2))
+        	val jedge = new UndirectedSparseEdge(pingel2jung(v1), pingel2jung(v2))
         	jungGraph.addEdge(jedge)
         }
 
@@ -325,7 +325,7 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
         val layout = new FRLayout(jungGraph)
         
         var jf = new JFrame()
-        GraphDraw gd = new GraphDraw(jungGraph)
+        var gd = new GraphDraw(jungGraph)
         gd.getVisualizationViewer().setGraphLayout(layout)
         gd.getVisualizationViewer().setRenderer(pr)
         jf.getContentPane().add(gd)

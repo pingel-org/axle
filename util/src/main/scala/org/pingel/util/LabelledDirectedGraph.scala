@@ -26,10 +26,16 @@
  *
  */
 
-package org.pingel.util;
+package org.pingel.util
 
-public class LabelledDirectedGraph<V extends DirectedGraphVertex<E>, E extends LabelledDirectedEdge<V>>
-extends DirectedGraph<V, E> {
+class LabelledDirectedEdge[V](source: V, label: String, dest: V) extends DirectedGraphEdge[V](source, dest) {
+
+  def getLabel = label
+  
+}
+
+class LabelledDirectedGraph[V <: DirectedGraphVertex[E], E <: LabelledDirectedEdge[V]]
+extends DirectedGraph[V, E] {
 
 
 }
