@@ -57,13 +57,12 @@ class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E
 	class CrossProductIterator[InE](cp: CrossProduct[InE]) extends Iterator[List[InE]]
 	{
 	  
-		var iterators = new Array[Iterator[InE]](cp.getCollections().size)
-
-		var current = new Array[InE](cp.getCollections().size)
+		var iterators = scala.collection.mutable.ArrayBuffer[Iterator[InE]]()
+		var current = scala.collection.mutable.ArrayBuffer[InE]()
 				
 		for( i <- 0 to (cp.getCollections().size - 1) ) {
-			iterators(i) = cp.getCollections()(i).iterator
-			current(i) = iterators(i).next()
+			iterators.append(cp.getCollections()(i).iterator)
+			current.append(iterators(i).next())
 		}
 
 		def remove() = throw new UnsupportedOperationException()
@@ -91,15 +90,10 @@ class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E
 				throw new NoSuchElementException()
 			}
 			
-			var result = new Array[InE](current.size)
-			for( i <- 0 to (current.size - 1) ) {
-				result(i) = tuple(i)
-			}
-			
+			val result = current.toList
 			if( incrementFirstAvailable(0) ) {
 				current = null
 			}
-			
 			result
 		}
 	}

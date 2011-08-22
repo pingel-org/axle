@@ -70,7 +70,7 @@ class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
     
     def getEdges() = edges
 
-    def getVertices = vertices
+    def getVertices() = vertices
 
     def addVertex(v: V) = {
       vertices.add(v)

@@ -40,7 +40,7 @@ class PrintableStringBuffer(sb: StringBuffer) extends Printable
         sb.append("\n")
     }
 
-    def toString() = sb.toString()
+    override def toString() = sb.toString()
 
     def indent(c: Int) = for( i <- 0 to c-1 ) {
     	sb.append("   ")

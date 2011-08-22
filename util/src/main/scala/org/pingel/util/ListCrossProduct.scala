@@ -70,6 +70,6 @@ class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
         result.toList
     }
 
-    def size() = modulos(0)
+    override def size() = modulos(0)
 
 }

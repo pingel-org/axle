@@ -67,23 +67,19 @@ class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
     	
 //    	var i: Int
 
-    	for( i <- 0 to (permuter.getN - 1) ) {
-    		remainders.append(null)
-    		iterators.append(null)
-    		tuple.append(null)
-    	}
-            
     	if ( permuter.getN > 0 ) {
     		var firstRemainder = scala.collection.mutable.Set[InE]()
     		firstRemainder ++= permuter.getObjects
-    		remainders(0) = firstRemainder
-    		iterators(0) = firstRemainder.iterator
-    		tuple(0) = iterators(i).next()
+    		remainders.append(firstRemainder)
+    		iterators.append(firstRemainder.iterator)
+    		tuple.append(iterators(0).next())
     	}
     	
     	for( i <- 1 to (permuter.getN - 1) ) {
+    		remainders.append(null)
+    		iterators.append(null)
     		setRemainder(i)
-    		tuple(i) = iterators(i).next()
+    		tuple.append(iterators(i).next())
     	}
 
 //        private void setTupleElement(int i)

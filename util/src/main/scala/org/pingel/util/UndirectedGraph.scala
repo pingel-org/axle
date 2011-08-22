@@ -31,6 +31,7 @@ package org.pingel.util
 import javax.swing.JFrame
 
 import edu.uci.ics.jung.graph.Vertex
+import edu.uci.ics.jung.graph.ArchetypeVertex
 import edu.uci.ics.jung.graph.decorators.VertexStringer
 import edu.uci.ics.jung.graph.impl.SimpleUndirectedSparseVertex
 import edu.uci.ics.jung.graph.impl.UndirectedSparseEdge
@@ -49,7 +50,7 @@ class UndirectedGraphEdge[V](v1: V, v2: V) {
     def other(u: V) = u match {
       case v1 => v2
       case v2 => v1
-      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+//      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
     }
 }
 
@@ -274,8 +275,10 @@ abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGra
 	class UndirectedVertexStringer(jung2pingel: Map[Vertex, V]) extends VertexStringer
 	{
 
-	    def getLabel(v: Vertex) = jung2pingel(v).getLabel()
-	    
+//	    def getLabel(v: Vertex) = jung2pingel(v).getLabel()
+
+		def getLabel(v: ArchetypeVertex) = "TODO" // jung2pingel(v.getEquivalentVertex(this)).getLabel()
+
 	}
 
 	def draw() = {
