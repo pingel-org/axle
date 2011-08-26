@@ -1,10 +1,10 @@
 
-package org.pingel.causality;
+package org.pingel.causality
 
-import org.pingel.bayes.Case;
-import org.pingel.bayes.RandomVariable;
-import org.pingel.bayes.Value;
-import org.pingel.type.Booleans;
+import org.pingel.bayes.Case
+import org.pingel.bayes.RandomVariable
+import org.pingel.bayes.Value
+import org.pingel.ptype.Booleans
 
 class RandomBooleanFunction(rv: RandomVariable, p: Double) extends Function(rv, Nil) {
 
