@@ -92,14 +92,10 @@ class InductiveCausation(pHat: Distribution)
         // a -> b such that a and c are nonadjacent
 
     	var applied = false
-    	
-        for( int i=0; i < (varList.size()-1); i++) {
-            RandomVariable a = varList.get(i)
-            Vector<RandomVariable> aOutputs = G.links(a, null, null, TRUE)
-            for( int j=0; j < aOutputs.size(); j++) {
-                RandomVariable b = aOutputs.get(j)
-                Vector<RandomVariable> bNeighbors = G.links(b, null, null, FALSE)
-                for( RandomVariable c : bNeighbors ) {
+        for( i <- 0 to (varList.size - 2) ) {
+            val a = varList(i)
+            for( b <- G.links(a, null, null, TRUE) ) {
+                for( c <- G.links(b, null, null, FALSE) ) {
                 	if( ! G.areAdjacent(a, c) ) {
                 		G.orient(b, c)
                 		applied = true
@@ -111,20 +107,13 @@ class InductiveCausation(pHat: Distribution)
     }
 
     def applyICR2(G: PartiallyDirectedGraph): Boolean = {
+      
         // R2: Orient a - b into a -> b whenever there is chain a -> c -> b
 
     	var applied = false
-
-    	for(int i=0; i < varList.size(); i++) {
-    		RandomVariable a = varList.get(i)
-    		
-    		Vector<RandomVariable> aOutputs = G.links(a, null, null, TRUE);
-    		for(int j=0; j < aOutputs.size(); j++) {
-    			RandomVariable c = aOutputs.elementAt(j)
-    			
-    			Vector<RandomVariable> cOutputs = G.links(c, null, null, TRUE);
-    			for(int m=0; m < cOutputs.size(); m++) {
-    				RandomVariable b = cOutputs.elementAt(m)
+    	for( a <- varList ) {
+    		for( c <- G.links(a, null, null, TRUE) ) {
+    			for( b <- G.links(c, null, null, TRUE) ) {
     				if( G.undirectedAdjacent(a, b) ) {
     					G.orient(a, b)
     					applied = true
@@ -188,35 +177,22 @@ class InductiveCausation(pHat: Distribution)
     	var applied = false
 
     	for(int i=0; i < varList.size(); i++) {
-
-    		RandomVariable a = varList.get(i);
+    		RandomVariable a = varList.get(i)
     		Vector<RandomVariable> aNeighbors = G.links(a, null, null, null);
-    		
     		for(int j=0; j < aNeighbors.size(); j++) {
-
-    			RandomVariable c = aNeighbors.get(j);
+    			RandomVariable c = aNeighbors.get(j)
     			Vector<RandomVariable> cOutputs = G.links(c, null, null, TRUE);
-    			
     			for(int m=0; m < cOutputs.size(); m++) {
-    				
-    				RandomVariable d = cOutputs.elementAt(m);
-    				
+    				RandomVariable d = cOutputs.elementAt(m)
     				if( ! a.equals(d) ) {
-
     					Vector<RandomVariable> dOutputs = G.links(d, null, null, TRUE);
-    					
     					if( G.areAdjacent(a, d) ) {
-    						
     						Vector<RandomVariable> adOutputs = intersection(aNeighbors, dOutputs);
-    						
     						for(int n=0; n < adOutputs.size(); n++) {
-    							
-    							RandomVariable b = adOutputs.get(n);
-    							
-    							if( ( ! b.equals(c) ) &&
-    									(! G.areAdjacent(c, b)) ) {
-    								G.orient(a, b);
-    								applied = true;
+    							RandomVariable b = adOutputs.get(n)
+    							if( ( ! b.equals(c) ) && (! G.areAdjacent(c, b)) ) {
+    								G.orient(a, b)
+    								applied = true
     							}
     						}
     					}
@@ -266,21 +242,15 @@ class InductiveCausation(pHat: Distribution)
     }
 
     def applyICStarR2(G: PartiallyDirectedGraph): Boolean = {
+      
     	/* R2: If a and b are adjacent and there is a directed path (composed strictly
    		 * of marked links) from a to b (as in Figure 2.2), then add an arrowhead
    		 * pointing toward b on the link between a and b.
     	*/
 
     	var applied = false
-
-    	for(int i=0; i < varList.size(); i++) {
-
-    		RandomVariable a = varList.get(i);
-
-    		Vector<RandomVariable> bList = G.links(a, null, null, null);
-
-    		for(int j=0; j < bList.size(); j++) {
-    			RandomVariable b = bList.get(j);
+    	for( a <- varList ) {
+    		for( b <- G.links(a, null, null, null)) {
     			if( G.markedPathExists(a, b) ) {
     				G.orient(a, b);
     			}
