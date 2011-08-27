@@ -1,28 +1,21 @@
 
 package org.pingel.causality.examples;
 
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.Function;
-import org.pingel.bayes.ModelVisualizer;
-import org.pingel.bayes.RandomVariable;
+import org.pingel.causality.CausalModel
+import org.pingel.bayes.Function
+import org.pingel.bayes.ModelVisualizer
+import org.pingel.bayes.RandomVariable
 
-public class Model3dot8a extends CausalModel
-{
+class Model3dot8a extends CausalModel("3.8a") {
 
-    public Model3dot8a()
-    {
-        super("3.8a");
+	val X = addVariable(new RandomVariable("X", "x"))
+	val Y = addVariable(new RandomVariable("Y", "y"))
 
-        RandomVariable X = addVariable(new RandomVariable("X", "x"));
-        RandomVariable Y = addVariable(new RandomVariable("Y", "y"));
-
-        addFunction(new Function(Y, X));
-    }
+	addFunction(new Function(Y, X))
     
-    public static void main(String[] argv)
-    {
-        CausalModel model = new Model3dot8a();
-        ModelVisualizer.draw(model);
+    def main(args: Array[String]) {
+        val model = new Model3dot8a()
+        ModelVisualizer.draw(model)
     }
     
     

@@ -35,13 +35,13 @@ class Model(name: String="no name") {
   def getGraph(): DirectedGraph[RandomVariable, ModelEdge] = graph
 	
   def connect(source: RandomVariable, dest: RandomVariable): Unit = {
-    graph.addEdge(new ModelEdge(source, dest));
+    graph.addEdge(new ModelEdge(source, dest))
   }
 	
   var variables = List[RandomVariable]()
 	
   def addVariable(variable: RandomVariable): RandomVariable = {
-    variables.add(variable);
+    variables.add(variable)
     name2variable += variable.getName -> variable
     graph.addVertex(variable)
   }
@@ -55,7 +55,7 @@ class Model(name: String="no name") {
     graph.deleteVertex(variable)
   }
 	
-  def numVariables(): Integer = variables.size()
+  def numVariables(): Int = variables.size
 	
   def blocks(from: Set[RandomVariable], to: Set[RandomVariable], given: Set[RandomVariable]): Boolean = {
     val path = _findOpenPath(Map[RandomVariable, Set[RandomVariable]](), Direction.UNKNOWN, null, from, to, given)
@@ -120,7 +120,7 @@ class Model(name: String="no name") {
       if( openToVar ) {
 	if( to.contains(variable) ) {
 	  var path = List[RandomVariable]()
-	  path.add(variable);
+	  path.add(variable)
 	  return path
 	}
 	var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>

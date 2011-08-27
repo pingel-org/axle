@@ -1,165 +1,136 @@
 
-package org.pingel.bayes;
+package org.pingel.causality
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.pingel.bayes._
+import org.pingel.ptype._
 
-import org.pingel.util.Collector;
-import org.pingel.util.CrossProduct;
-import org.pingel.util.PowerSet;
+import org.pingel.util.Collector
+import org.pingel.util.CrossProduct
+import org.pingel.util.PowerSet
 
-public class CausalModel extends Model
-{
-    public CausalModel() { super(); }
 
-    public CausalModel(String name) { super(name); }
-    
-    Map<RandomVariable, Function> variable2function = new HashMap<RandomVariable, Function>();
+class CausalModel(name: String) extends Model(name) {
+
+    var variable2function = Map[RandomVariable, PFunction]()
 	
-	public Factor sampleDistribution(int numSamples)
-	{
-        System.out.println("creating probabilitytable of " + getObservableRandomVariables().size() + " variables");
-		Factor result = new Factor(getObservableRandomVariables());
-		
-		for(int j=0; j < numSamples; j++) {
-			Case sample = getSample();
-			double previous = result.read(sample);
-			result.write(sample, previous + 1);
+	def sampleDistribution(numSamples: Int) = {
+        println("creating probabilitytable of " + getObservableRandomVariables().size() + " variables")
+		var result = new Factor(getObservableRandomVariables())
+		for( j <- 0 to (numSamples - 1) ) {
+			val sample = getSample()
+			val previous = result.read(sample)
+			result.write(sample, previous + 1)
 		}
-		
-		return result;
+		result
 	}
 
-	protected void addFunction(Function f)
-	{
-	    variable2function.put(f.rv, f);
-
-	    for(int i=0; i < f.inputs.size(); i++) 
-	    {
-	    	connect(f.inputs.get(i), f.rv);
+	def addFunction(f: PFunction) = {
+	    variable2function.put(f.rv, f)
+	    for( i <- f.inputs) {
+	    	connect(i, f.rv)
 	    }
 	}
 	
-	protected Function getFunction(RandomVariable v)
-	{
-	    return variable2function.get(v);
-	}
-	
-	public Case getSample()
-	{
-		Case all = new Case();
-		for( RandomVariable rv : getRandomVariables() ) {
-			getFunction(rv).execute(this, all);
+	def getFunction(v: RandomVariable) = variable2function.get(v)
+
+	def getSample(): Case = {
+		var all = new Case()
+		for( rv <- getRandomVariables() ) {
+			getFunction(rv).execute(this, all)
 		}
-		return all.projectToVars(getObservableRandomVariables());
+		all.projectToVars(getObservableRandomVariables())
 	}
 
-    public boolean isSemiMarkovian()
-    {
-        return getGraph().isAcyclic();
-    }
+    def isSemiMarkovian() = getGraph().isAcyclic()
 
-    public boolean isMarkovian()
-    {
+    def isMarkovian(): Boolean = {
         // page 69.  I'm not confident I have this right.
-        
-        for( RandomVariable var : getRandomVariables() ) {
-            if( (! var.observable) &&
-                    (getGraph().getSuccessors(var).size() > 1) ) {
-                return false;
+        for( rv <- getRandomVariables() ) {
+            if( (! rv.observable) && (getGraph().getSuccessors(rv).size() > 1) ) {
+                return false
             }
         }
-        return true;
+        true
     }
 
-    public boolean identifies(Probability p)
-    {
+    def identifies(p: Probability): Boolean = {
         if( isMarkovian() ) {
             
             // page 78 Theorem 3.2.5
 
-            for( RandomVariable var : p.getActions() ) {
-                RandomVariable rv = var.getRandomVariable();
+            for( variable <- p.getActions() ) {
+                val rv = variable.getRandomVariable()
                 if( ! rv.observable ) {
-                    return false;
+                    return false
                 }
-                for( RandomVariable parent : getGraph().getPredecessors(rv) ) {
+                for( parent <- getGraph().getPredecessors(rv) ) {
                     if( ! parent.observable ) {
-                        return false;
+                        return false
                     }
                 }
             }
             
-            for( RandomVariable var : p.getQuestion() ) {
-                if( ! var.getRandomVariable().observable ) {
-                    return false;
+            for( variable <- p.getQuestion() ) {
+                if( ! variable.getRandomVariable().observable ) {
+                    return false
                 }
             }
             
-            return true;
+            return true
         }
         else if ( isSemiMarkovian() ) {
-            return hasDoor(p);
+            return hasDoor(p)
         }
         else {
             // TODO chapter 7 can help??
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException()
         }
     }
 
-    protected Collector<Variable, RandomVariable> rvGetter = new Collector<Variable, RandomVariable>() {
-        public RandomVariable function(Variable var) {
-            return var.getRandomVariable();
-        }
-    };
+    def rvGetter = new Collector[Variable, RandomVariable]() {
+    	override def function(variable: Variable) = variable.getRandomVariable()
+    }
 
     
-    public boolean hasDoor(Probability p)
-    {
-        Set<RandomVariable> V = new HashSet<RandomVariable>();
-        Set<RandomVariable> questionRVs = rvGetter.execute(p.getQuestion());
-        Set<RandomVariable> actionRVs = rvGetter.execute(p.getActions());
-        for( RandomVariable rv : getRandomVariables() ) {
+    def hasDoor(p: Probability): Boolean = {
+        var V = Set[RandomVariable]()
+        var questionRVs = rvGetter.execute(p.getQuestion())
+        var actionRVs = rvGetter.execute(p.getActions())
+        for( rv <- getRandomVariables() ) {
             if( rv.observable && ! questionRVs.contains(rv) && ! actionRVs.contains(rv) ) {
-                V.add(rv);
+                V.add(rv)
             }
         }
 
         // a very naive search strategy
         
-        for( List<RandomVariable> pair : new CrossProduct<RandomVariable>(actionRVs, questionRVs) ) {
-            for( Set<RandomVariable> Z : new PowerSet<RandomVariable>(V) ) {
+        for( pair <- new CrossProduct[RandomVariable](actionRVs, questionRVs) ) {
+            for( Z <- new PowerSet[RandomVariable](V) ) {
                 if( satisfiesBackdoorCriterion(pair.get(0), pair.get(1), Z) ||
                         satisfiesFrontdoorCriterion(pair.get(0), pair.get(1), Z) ) {
-                    return true;
+                    return true
                 }
             }
         }
-        return false;
+        false
     }
     
-    private boolean allBackdoorsBlocked(Set<RandomVariable> XiSet, Set<RandomVariable> XjSet, Set<RandomVariable> Z)
-    {
-        CausalModel subModel = duplicate();
-        subModel.getGraph().removeOutputs(XiSet);
-
-        return subModel.blocks(XiSet, XjSet, Z);
+    def allBackdoorsBlocked(XiSet: Set[RandomVariable], XjSet: Set[RandomVariable], Z: Set[RandomVariable]) = {
+        var subModel = duplicate()
+        subModel.getGraph().removeOutputs(XiSet)
+        subModel.blocks(XiSet, XjSet, Z)
     }
     
-	public boolean satisfiesBackdoorCriterion(RandomVariable Xi, RandomVariable Xj, Set<RandomVariable> Z)
-	{
+	def satisfiesBackdoorCriterion(Xi: RandomVariable, Xj: RandomVariable, Z: Set[RandomVariable]): Boolean = {
 	    // Definition 3.3.1; page 79
         
 	    // i) no node in Z is a descendant of Xi
         
-        Set<RandomVariable> descendants = new HashSet<RandomVariable>();
-        getGraph().collectDescendants(Xi, descendants);
-        for( RandomVariable z : Z ) {
+        var descendants = Set[RandomVariable]()
+        getGraph().collectDescendants(Xi, descendants)
+        for( z <- Z ) {
             if( descendants.contains(z) ) {
-                return false;
+                return false
             }
         }
 
@@ -167,71 +138,58 @@ public class CausalModel extends Model
         
 	    // ii) Z blocks every path between Xi and Xj that contains an arrow into Xi
 
-        Set<RandomVariable> XiSet = new HashSet<RandomVariable>();
-        XiSet.add(Xi);
-        Set<RandomVariable> XjSet = new HashSet<RandomVariable>();
-        XjSet.add(Xj);
+        var XiSet = Set[RandomVariable](Xi)
+        var XjSet = Set[RandomVariable](Xj)
 
-        return allBackdoorsBlocked(XiSet, XjSet, Z);
+        allBackdoorsBlocked(XiSet, XjSet, Z)
         
 	}
 
-    private boolean pathsInterceptBefore(RandomVariable from, Set<RandomVariable> interceptors, RandomVariable to)
-    {
+    def pathsInterceptBefore(from: RandomVariable, interceptors: Set[RandomVariable], to: RandomVariable): Boolean = {
         if( from == to ) {
-            return false;
+            return false
         }
         
         if( ! interceptors.contains(from) ) {
-            
-            for( RandomVariable rv : getGraph().getSuccessors(from)) {
+            for( rv <- getGraph().getSuccessors(from)) {
                 if( ! pathsInterceptBefore(rv, interceptors, to) ) {
-                    return false;
+                    return false
                 }
             }
         }
         
-        return true;
+        true
     }
     
-	public boolean satisfiesFrontdoorCriterion(RandomVariable X, RandomVariable Y, Set<RandomVariable> Z) 
-	{
+	def satisfiesFrontdoorCriterion(X: RandomVariable, Y: RandomVariable, Z: Set[RandomVariable]) = {
         // Definition 3.3.3 page 82
         
         // i) Z intercepts all directed paths from X to Y;
         // ii) there is no back-door path from X to Z; and
         // iii) all back-door paths from Z to Y are blocked by X
 
-        Set<RandomVariable> XSet = new HashSet<RandomVariable>();
-        XSet.add(X);
-        Set<RandomVariable> YSet = new HashSet<RandomVariable>();
-        YSet.add(Y);
+        val XSet = Set[RandomVariable](X)
+        val YSet = Set[RandomVariable](Y)
         
-        return
         pathsInterceptBefore(X, Z, Y) &&
-        allBackdoorsBlocked(XSet, Z, new HashSet<RandomVariable>()) &&
-        allBackdoorsBlocked(Z, YSet, XSet);
+          allBackdoorsBlocked(XSet, Z, Set[RandomVariable]()) &&
+          allBackdoorsBlocked(Z, YSet, XSet);
     }
 
 
-	public CausalModel duplicate()
-	{
-		CausalModel answer = new CausalModel();
-		for( RandomVariable var : getRandomVariables() ) {
-			answer.addVariable(var);
+	def duplicate() = {
+		var answer = new CausalModel(name)
+		for( v <- getRandomVariables() ) {
+			answer.addVariable(v)
 		}
-		
-		for( RandomVariable var : getRandomVariables() ) {
-			Set<RandomVariable> outputs = getGraph().getSuccessors(var);
-            for( RandomVariable out : outputs ) {
-				answer.connect(var, out);
+		for( v <- getRandomVariables() ) {
+            for( output <- getGraph().getSuccessors(v) ) {
+				answer.connect(v, output)
 			}
 		}
-		
-		answer.variable2function = new HashMap<RandomVariable, Function>();
-        answer.variable2function.putAll(variable2function);
-
-		return answer;
+		answer.variable2function = Map[RandomVariable, Function]()
+        answer.variable2function.putAll(variable2function)
+		answer
 	}
 	
 	
