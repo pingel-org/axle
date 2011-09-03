@@ -39,3 +39,13 @@ extends DirectedGraph[V, E] {
 
 
 }
+
+object LabelledDirectedGraphTest {
+
+  def main(args: Array[String]) {
+
+    var ldg = new LabelledDirectedGraph()
+    
+  }
+  
+}
