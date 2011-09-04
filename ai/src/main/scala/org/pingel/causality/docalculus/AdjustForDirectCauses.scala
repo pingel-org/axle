@@ -1,22 +1,17 @@
 
-package org.pingel.causality.docalculus;
+package org.pingel.causality.docalculus
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
+import org.pingel.causality.CausalModel
+import org.pingel.bayes.Probability
+import org.pingel.bayes.RandomVariable
+import org.pingel.bayes.VariableNamer
+import org.pingel.forms.Variable
+import org.pingel.forms.math.Product
+import org.pingel.forms.math.Sigma
+import org.pingel.gestalt.core.Form
+import org.pingel.gestalt.core.Unifier
 
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.Probability;
-import org.pingel.bayes.RandomVariable;
-import org.pingel.bayes.VariableNamer;
-import org.pingel.forms.Variable;
-import org.pingel.forms.math.Product;
-import org.pingel.forms.math.Sigma;
-import org.pingel.gestalt.core.Form;
-import org.pingel.gestalt.core.Unifier;
-
-public class AdjustForDirectCauses extends Rule
+class AdjustForDirectCauses extends Rule
 {
 	
 	public Form adjustForDirectCauses(CausalModel model, Probability q, VariableNamer namer, Variable action)

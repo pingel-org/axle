@@ -1,97 +1,83 @@
-package org.pingel.causality.examples;
+package org.pingel.causality.examples
 
-import java.util.HashSet;
-import java.util.Set;
+import org.pingel.causality.CausalModel
+import org.pingel.bayes.Domain
+import org.pingel.causality.Function
+import org.pingel.bayes.ModelVisualizer
+import org.pingel.bayes.Probability
+import org.pingel.bayes.RandomVariable
+import org.pingel.bayes.VariableNamer
+import org.pingel.forms.Variable
+import org.pingel.ptype.Booleans
 
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.Domain;
-import org.pingel.bayes.Function;
-import org.pingel.bayes.ModelVisualizer;
-import org.pingel.bayes.Probability;
-import org.pingel.bayes.RandomVariable;
-import org.pingel.bayes.VariableNamer;
-import org.pingel.forms.Variable;
-import org.pingel.type.Booleans;
-
-public class MidtermModel1 extends CausalModel
+object MidtermModel1 extends CausalModel("Midterm Model 1")
 {
 
-    public MidtermModel1()
-    {
-        super("Midterm Model 1");
+        val bools = Some(new Booleans())
         
-        Domain bools = new Booleans();
-        
-		RandomVariable U1 = new RandomVariable("U1", bools, "u1", false);
-		addVariable(U1);
+		val U1 = new RandomVariable("U1", bools, false)
+		addVariable(U1)
 
-		RandomVariable U2 = new RandomVariable("U2", bools, "u2", false);
-		addVariable(U2);
+		val U2 = new RandomVariable("U2", bools, false)
+		addVariable(U2)
 
-		RandomVariable U3 = new RandomVariable("U3", bools, "u3", false);
-		addVariable(U3);
+		val U3 = new RandomVariable("U3", bools, false)
+		addVariable(U3)
 
-		RandomVariable X1 = new RandomVariable("X1", bools, "x1");
-		addVariable(X1);
-		addFunction(new Function(X1, U1));
+		val X1 = new RandomVariable("X1", bools)
+		addVariable(X1)
+		addFunction(new Function(X1, List(U1)))
 
-		RandomVariable X2 = new RandomVariable("X2", bools, "x2");
-		addVariable(X2);
-		addFunction(new Function(X2, X1, U2));
+		val X2 = new RandomVariable("X2", bools)
+		addVariable(X2)
+		addFunction(new Function(X2, List(X1, U2)))
 
-		RandomVariable X3 = new RandomVariable("X3", bools, "x3");
-		addVariable(X3);
-		addFunction(new Function(X3, X2, U1, U3));
+		val X3 = new RandomVariable("X3", bools)
+		addVariable(X3)
+		addFunction(new Function(X3, List(X2, U1, U3)))
 
-		RandomVariable X4 = new RandomVariable("X4", bools, "x4");
-		addVariable(X4);
-		addFunction(new Function(X4, X3, U2));
+		val X4 = new RandomVariable("X4", bools)
+		addVariable(X4)
+		addFunction(new Function(X4, List(X3, U2)))
 
-		RandomVariable Y = new RandomVariable("Y", bools, "y");
-		addVariable(Y);
-		addFunction(new Function(Y, X4, U3));
+		val Y = new RandomVariable("Y", bools)
+		addVariable(Y)
+		addFunction(new Function(Y, List(X4, U3)))
 
-    }
-
-    public Probability getQuantity(VariableNamer namer)
-    {
+  def getQuantity(namer: VariableNamer) = {
         // this returns the quantity which is involved in
         // the question: P(y|do{x1},do{x2},do{x3},do{x4})
         
-        Set<Variable> question = new HashSet<Variable>();
-        question.add(getVariable("Y").nextVariable(namer));
+        var question = Set[Variable]()
+        question += getVariable("Y").nextVariable(namer)
 
-        Set<Variable> given = new HashSet<Variable>();
+        var given = Set[Variable]()
         
-        Set<Variable> actions = new HashSet<Variable>();
-        actions.add(getVariable("X1").nextVariable(namer));
-        actions.add(getVariable("X2").nextVariable(namer));
-        actions.add(getVariable("X3").nextVariable(namer));
-        actions.add(getVariable("X4").nextVariable(namer));
+        var actions = Set[Variable]()
+        actions += getVariable("X1").nextVariable(namer)
+        actions += getVariable("X2").nextVariable(namer)
+        actions += getVariable("X3").nextVariable(namer)
+        actions += getVariable("X4").nextVariable(namer)
         
-        Probability result = new Probability(question, given, actions);
-        
-        return result;
+        new Probability(question, given, actions)
     }
 
-    public Probability getClose(VariableNamer namer)
-    {
-        Set<Variable> question = new HashSet<Variable>();
-        question.add(getVariable("Y").nextVariable(namer));
-        Set<Variable> given = new HashSet<Variable>();
-        Set<Variable> actions = new HashSet<Variable>();
-        actions.add(getVariable("X3").nextVariable(namer));
-        actions.add(getVariable("X4").nextVariable(namer));
-        Probability close = new Probability(question, given, actions);
+    def getClose(namer: VariableNamer) = {
+      
+        var question = Set[Variable]()
+        question += getVariable("Y").nextVariable(namer)
 
-        return close;
+        var given = Set[Variable]()
+        
+        var actions = Set[Variable]()
+        actions += getVariable("X3").nextVariable(namer)
+        actions += getVariable("X4").nextVariable(namer)
+        
+        new Probability(question, given, actions)
     }
     
-    public static void main(String[] argv)
-    {
-        MidtermModel1 model = new MidtermModel1();
-        ModelVisualizer.draw(model);
-        
-    }
+  def main(args: Array[String]) {
+    ModelVisualizer.draw(MidtermModel1)
+  }
     
 }

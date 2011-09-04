@@ -3,18 +3,20 @@ package org.pingel.bayes
 import org.pingel.util.DirectedGraphVertex
 import org.pingel.util.UndirectedGraphVertex
 
-class RandomVariable(name: String, domain: Domain, lcName: String="TODO", observable: Boolean=true)
+class RandomVariable(name: String, domain: Option[Domain]=None, observable: Boolean=true)
 // TODO: extends DirectedGraphVertex[ModelEdge], UndirectedGraphVertex[VariableLink], Comparable[RandomVariable]
 {
 
-  def getName(): String = name
+  val lcName = name.toLowerCase()
+
+  def getName() = name
 	
-  def getDomain(): Domain = domain
+  def getDomain() = domain
 
-  def compareTo(other: RandomVariable): Int = name.compareTo(other.name)
+  def compareTo(other: RandomVariable): Int = name.compareTo(other.getName)
 
-  override def toString(): String = name
+  override def toString() = name
 
-  def getLabel(): String = name
+  def getLabel() = name
 
 }

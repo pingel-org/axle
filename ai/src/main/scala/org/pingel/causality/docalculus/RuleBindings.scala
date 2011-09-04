@@ -1,10 +1,9 @@
 
-package org.pingel.causality.docalculus;
+package org.pingel.causality.docalculus
 
 
-public class RuleBindings
+class RuleBindings
 {
 
-    
     
 }

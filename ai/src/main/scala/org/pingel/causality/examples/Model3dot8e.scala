@@ -2,33 +2,26 @@
  * Created on Jun 7, 2005
  *
  */
-package org.pingel.causality.examples;
+package org.pingel.causality.examples
 
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.Function;
-import org.pingel.bayes.ModelVisualizer;
-import org.pingel.bayes.RandomVariable;
+import org.pingel.causality.CausalModel
+import org.pingel.causality.Function
+import org.pingel.bayes.ModelVisualizer
+import org.pingel.bayes.RandomVariable
 
-public class Model3dot8e extends CausalModel {
+object Model3dot8e extends CausalModel("3.8e") {
 
-    public Model3dot8e()
-    {
-        super("3.8e");
+	val X = addVariable(new RandomVariable("X"))
+	val Y = addVariable(new RandomVariable("Y"))
+    val Z = addVariable(new RandomVariable("Z"))
+    val U = addVariable(new RandomVariable("U", None, false))
 
-        RandomVariable X = addVariable(new RandomVariable("X", "x"));
-        RandomVariable Y = addVariable(new RandomVariable("Y", "y"));
-        RandomVariable Z = addVariable(new RandomVariable("Z", "z"));
-        RandomVariable U = addVariable(new RandomVariable("U", "u", false));
+    addFunction(new Function(X, List(U)))
+    addFunction(new Function(Y, List(Z, U)))
+    addFunction(new Function(Z, List(X)))
 
-        addFunction(new Function(X, U));
-        addFunction(new Function(Y, Z, U));
-        addFunction(new Function(Z, X));
-    }
-    
-    public static void main(String[] argv)
-    {
-        CausalModel model = new Model3dot8e();
-        ModelVisualizer.draw(model);
-    }
+  def main(args: Array[String]) {
+    ModelVisualizer.draw(Model3dot8e)
+  }
 
 }

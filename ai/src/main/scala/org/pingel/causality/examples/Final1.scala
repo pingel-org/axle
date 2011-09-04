@@ -1,13 +1,12 @@
-package org.pingel.causality.examples;
+package org.pingel.causality.examples
 
 
-public class Final1 {
+object Final1 {
 
-    public static void main(String[] args)
-    {
+  def main(args: Array[String]) {
 
 //        Expression lhs = new Expectation();
         
-    }
+  }
 
 }

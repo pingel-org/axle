@@ -1,100 +1,84 @@
 package org.pingel.causality.examples;
 
-import org.pingel.bayes.Case;
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.Domain;
-import org.pingel.bayes.Function;
-import org.pingel.bayes.ModelVisualizer;
-import org.pingel.bayes.RandomVariable;
-import org.pingel.causality.RandomBooleanFunction;
-import org.pingel.gestalt.core.Form;
-import org.pingel.type.Booleans;
+import org.pingel.bayes.Case
+import org.pingel.causality.CausalModel
+import org.pingel.bayes.Domain
+import org.pingel.causality.Function
+import org.pingel.bayes.ModelVisualizer
+import org.pingel.bayes.RandomVariable
+import org.pingel.causality.RandomBooleanFunction
+import org.pingel.gestalt.core.Form
+import org.pingel.ptype.Booleans
 
-class XorOrFunction extends Function
+class XorOrFunction(variable: RandomVariable, in1: RandomVariable, in2: RandomVariable, in3: RandomVariable) extends Function(variable, List(in1, in2, in3))
 {
-    private RandomVariable in1;
-    private RandomVariable in2;
-    private RandomVariable in3;
+    def compute(m: CausalModel, memo: Case) = {
+        val val1 = new Boolean(memo.valueOf(in1).toString()).booleanValue()
+        val val2 = new Boolean(memo.valueOf(in2).toString()).booleanValue()
+        val val3 = new Boolean(memo.valueOf(in3).toString()).booleanValue()
 
-    public XorOrFunction(RandomVariable var, RandomVariable in1, RandomVariable in2, RandomVariable in3)
-    {
-        super(var, in1, in2, in3);
-        this.in1 = in1;
-        this.in2 = in2;
-        this.in3 = in3;
-    }
-
-    protected Form compute(CausalModel m, Case memo)
-    {
-        boolean val1 = new Boolean(memo.valueOf(in1).toString()).booleanValue();
-        boolean val2 = new Boolean(memo.valueOf(in2).toString()).booleanValue();
-        boolean val3 = new Boolean(memo.valueOf(in3).toString()).booleanValue();
-
-        boolean result = (val2 || val3) ^ val1;
-        
-        return result ?
-                Booleans.tVal :
-                    Booleans.fVal;
+        if( (val2 || val3) ^ val1 ) {
+          Booleans.tVal
+        }
+        else {
+          Booleans.fVal
+        }
     }
         
 }
 
-public class Homework4Model extends CausalModel
-{
-	private double p = 0.0;
-	private int k;
-	
-	public Homework4Model(int k, double p)
-	{
-        super("Homework 4 Model");
-        
-		this.k = k;
-		this.p = p;
-		
-		Domain bools = new Booleans();
-		
-		RandomVariable oldE = null, oldEp = null, oldX = null, oldY = null;
-		
-		for(int i=0; i <= k; i++)
-		{
-			RandomVariable ei = new RandomVariable("E" + i, bools, "e" + i, false);
-			addVariable(ei);
-			addFunction(new RandomBooleanFunction(ei, p));
+class Homework4Model(k: Int, p: Double) extends CausalModel("Homework 4 Model") {
+  
+  val bools = Some(new Booleans())
 
-			RandomVariable epi = new RandomVariable("E'" + i, bools, "e'" + i, false);
-			addVariable(epi);
-			addFunction(new RandomBooleanFunction(epi, p));
+  var oldE: Option[RandomVariable] = None
+  var oldEp: Option[RandomVariable] = None
+  var oldX: Option[RandomVariable] = None
+  var oldY: Option[RandomVariable] = None
+		
+  for(i <- 0 to k) {
+	  val ei = new RandomVariable("E" + i, bools, false)
+      addVariable(ei)
+	  addFunction(new RandomBooleanFunction(ei, p))
+
+	  val epi = new RandomVariable("E'" + i, bools, false)
+	  addVariable(epi)
+	  addFunction(new RandomBooleanFunction(epi, p))
 			
-			RandomVariable xi = new RandomVariable("X" + i, bools, "x" + i);
-			addVariable(xi);
-			if( i == 0 ) {
-			    addFunction(new RandomBooleanFunction(xi, 0.25));
-			}
-			else {
-			    addFunction(new XorOrFunction(xi, oldE, oldX, oldY));
-			}
+	  val xi = new RandomVariable("X" + i, bools)
+	  addVariable(xi)
+	  
+	  if( i == 0 ) {
+		  addFunction(new RandomBooleanFunction(xi, 0.25))
+	  }
+	  else {
+		  addFunction(new XorOrFunction(xi, oldE, oldX, oldY))
+	  }
 
-			RandomVariable yi = new RandomVariable("Y" + i, bools, "y" + i);
-			addVariable(yi);
-			if( i == 0 ) {
-				addFunction(new RandomBooleanFunction(yi, 0.25));
-			}
-			else {
-			    addFunction(new XorOrFunction(yi, oldEp, oldX, oldY));
-			}
-			
-			oldE = ei;
-			oldEp = epi;
-			oldX = xi;
-			oldY = yi;
-		}
-	}
-	
-	public static void main(String[] argv)
-	{
-        CausalModel hw4 = new Homework4Model(5, 0.2);
+	  val yi = new RandomVariable("Y" + i, bools)
+	  addVariable(yi)
+	  
+	  if( i == 0 ) {
+		  addFunction(new RandomBooleanFunction(yi, 0.25))
+	  }
+	  else {
+		  addFunction(new XorOrFunction(yi, oldEp, oldX, oldY))
+      }
 
-        ModelVisualizer.draw(hw4);
+	  oldE = Some(ei)
+	  oldEp = Some(epi)
+	  oldX = Some(xi)
+	  oldY = Some(yi)
 	}
-	
+  
+}
+
+
+object Homework4Model {
+
+	def main(args: Array[String]) = {
+        val hw4 = new Homework4Model(5, 0.2)
+        ModelVisualizer.draw(hw4)
+	}
+  
 }

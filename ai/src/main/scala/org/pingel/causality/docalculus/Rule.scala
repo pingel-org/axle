@@ -1,27 +1,22 @@
 
-package org.pingel.causality.docalculus;
+package org.pingel.causality.docalculus
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.pingel.causality.CausalModel
+import org.pingel.causality.Probability
+import org.pingel.bayes.RandomVariable
+import org.pingel.bayes.VariableNamer
+import org.pingel.forms.Variable
+import org.pingel.gestalt.core.Form
 
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.Probability;
-import org.pingel.bayes.RandomVariable;
-import org.pingel.bayes.VariableNamer;
-import org.pingel.forms.Variable;
-import org.pingel.gestalt.core.Form;
-
-abstract public class Rule
-{
-    public abstract List<Form> apply(Probability q, CausalModel m, VariableNamer namer);
+abstract class Rule {
+  
+    def apply(q: Probability, m: CausalModel, namer: VariableNamer): List[Form]
     
-    protected Set<RandomVariable> randomVariablesOf(Set<Variable> variables)
-    {
-        Set<RandomVariable> result = new HashSet<RandomVariable>();
-        for( Variable v : variables ) {
-            result.add(v.getRandomVariable());
+    def randomVariablesOf(variables: Set[RandomVariable]) = {
+        var result = Set[RandomVariable]()
+        for( v <- variables ) {
+            result += v.getRandomVariable()
         }
-        return result;
+        result
     }
 }

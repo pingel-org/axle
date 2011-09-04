@@ -14,21 +14,21 @@ object AllModels {
 //      new Homework4Model(5, 0.2) ::
 //      new MidtermModel1() ::
 //      new MidtermModel2() ::
-        new Model3dot8a() ::
-        new Model3dot8b() ::
-        new Model3dot8c() ::
-        new Model3dot8d() ::
-        new Model3dot8e() ::
-        new Model3dot8f() ::
-        new Model3dot8g() ::
-        new Model3dot9a() ::
-        new Model3dot9b() ::
-        new Model3dot9c() ::
-        new Model3dot9d() ::
-        new Model3dot9e() ::
-        new Model3dot9f() ::
-        new Model3dot9g() ::
-        new Model3dot9h() ::
+        Model3dot8a ::
+        Model3dot8b ::
+        Model3dot8c ::
+        Model3dot8d ::
+        Model3dot8e ::
+        Model3dot8f ::
+        Model3dot8g ::
+        Model3dot9a ::
+        Model3dot9b ::
+        Model3dot9c ::
+        Model3dot9d ::
+        Model3dot9e ::
+        Model3dot9f ::
+        Model3dot9g ::
+        Model3dot9h ::
         Nil
     }
 
@@ -42,9 +42,9 @@ object AllModels {
     
     def main(args: Array[String]) {
         for( model <- getModels() ) {
-//            System.out.println("is Markovian? " + model.isMarkovian());
-            Probability yGivenDoX = getStandardQuantity(model);
-            println(model.getName() + " identifies " + yGivenDoX.toString() + "? " + model.identifies(yGivenDoX));
+	        println("is Markovian? " + model.isMarkovian())
+            Probability yGivenDoX = getStandardQuantity(model)
+            println(model.getName() + " identifies " + yGivenDoX.toString() + "? " + model.identifies(yGivenDoX))
         }
     }
 }

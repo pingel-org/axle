@@ -1,15 +1,14 @@
-package org.pingel.causality.examples;
+package org.pingel.causality.examples
 
+import org.pingel.causality.CausalModel
+import org.pingel.bayes.ModelVisualizer
 
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.ModelVisualizer;
-
-public class midterm
-{
-    public static void main(String[] args) {
+class midterm {
+  
+    def main(args: Array[String]) {
         
-        CausalModel hw4 = new Homework4Model(5, 0.2);
+        val hw4 = new Homework4Model(5, 0.2)
 
-        ModelVisualizer.draw(hw4);
+        ModelVisualizer.draw(hw4)
     }
 }

@@ -1,9 +1,12 @@
-package org.pingel.bayes;
+package org.pingel.causality
 
+import org.pingel.bayes.Case
+import org.pingel.bayes.RandomVariable
+import org.pingel.bayes.Value
 import org.pingel.gestalt.core.Form
 
-// TODO: default "inputs" = Nil
-class Function(rv: RandomVariable, inputs: List[RandomVariable]) {
+
+class Function(rv: RandomVariable, inputs: List[RandomVariable]=Nil) {
 
 	// The API here is that the memo may already contain a precomputed answer
 	// that execute should look for first.

@@ -1,18 +1,13 @@
-package org.pingel.causality.docalculus;
+package org.pingel.causality.docalculus
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.pingel.causality.CausalModel
+import org.pingel.bayes.Probability
+import org.pingel.bayes.VariableNamer
+import org.pingel.forms.Variable
+import org.pingel.gestalt.core.Form
+import org.pingel.gestalt.core.Unifier
 
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.Probability;
-import org.pingel.bayes.VariableNamer;
-import org.pingel.forms.Variable;
-import org.pingel.gestalt.core.Form;
-import org.pingel.gestalt.core.Unifier;
-
-public class DeleteObservation extends Rule {
+class DeleteObservation extends Rule {
 
     public List<Form> apply(Probability q, CausalModel m, VariableNamer namer) {
 

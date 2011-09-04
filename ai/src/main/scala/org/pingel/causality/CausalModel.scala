@@ -9,7 +9,7 @@ import org.pingel.util.CrossProduct
 import org.pingel.util.PowerSet
 
 
-class CausalModel(name: String) extends Model(name) {
+class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
 
     var variable2function = Map[RandomVariable, PFunction]()
 	

@@ -1,30 +1,21 @@
-package org.pingel.causality.examples;
+package org.pingel.causality.examples
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.pingel.causality.CausalModel
+import org.pingel.bayes.Function
+import org.pingel.bayes.ModelVisualizer
+import org.pingel.bayes.Probability
+import org.pingel.bayes.RandomVariable
+import org.pingel.bayes.VariableNamer
+import org.pingel.causality.docalculus.ActionToObservation
+import org.pingel.causality.docalculus.DeleteAction
+import org.pingel.causality.docalculus.ObservationToAction
+import org.pingel.forms.Variable
+import org.pingel.forms.math.Product
+import org.pingel.forms.math.Sigma
+import org.pingel.gestalt.core.Form
 
-import org.pingel.bayes.CausalModel;
-import org.pingel.bayes.Function;
-import org.pingel.bayes.ModelVisualizer;
-import org.pingel.bayes.Probability;
-import org.pingel.bayes.RandomVariable;
-import org.pingel.bayes.VariableNamer;
-import org.pingel.causality.docalculus.ActionToObservation;
-import org.pingel.causality.docalculus.DeleteAction;
-import org.pingel.causality.docalculus.ObservationToAction;
-import org.pingel.forms.Variable;
-import org.pingel.forms.math.Product;
-import org.pingel.forms.math.Sigma;
-import org.pingel.gestalt.core.Form;
+class SmokingModel extends CausalModel("Smoking Model") {
 
-public class SmokingModel extends CausalModel
-{
-
-    public SmokingModel()
-    {
-        super("Smoking Model");
-        
         RandomVariable U = new RandomVariable("U", "u", false);
         addVariable(U);
         
@@ -39,7 +30,6 @@ public class SmokingModel extends CausalModel
         RandomVariable Y = new RandomVariable("Y", "y"); // cancer
         addVariable(Y);
         addFunction(new Function(Y, Z, U));
-    }
 
     private static void doTask1(CausalModel model, VariableNamer namer)
     {
