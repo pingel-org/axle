@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2008 Adam Pingel
+ * Copyright (c) 2008-2011 Adam Pingel
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,21 +28,17 @@
 
 package org.pingel.util
 
-object PermuterTest {
-
-	def main(args: Array[String]) {
-
-		val elems = List("a", "b", "c")
-		println("elems = " + elems)
-        for( i <- 0 to elems.size ) {
-            for( permutation <- new Permuter[String](elems, i) ) {
-                println("p = " + permutation)
-            }
-        }
-        
-    }
-
-}
+/**
+ * Computes the permutations of length n from the given list
+ * of objects.
+ * 
+ * For example:
+ * 
+ * new Permuter(List("a", "b", "c"), 2) will return 6 lists:
+ * 
+ * List(b, a), List(b, c), List(a, b), List(a, c), List(c, b), List(c, a)
+ * 
+ */
 
 class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]]
 {

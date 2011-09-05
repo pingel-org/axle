@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2008 Adam Pingel
+ * Copyright (c) 2008-2011 Adam Pingel
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,11 @@
 
 package org.pingel.util
 
+/**
+ * org.pinge.util.Lister is a trivial class that was helpful
+ * when this library was implemented in Java.  It is deprecated,
+ * and will be deleted as soon as the referring code is updated.
+ */
 
 abstract class Lister[In, Out] {
 

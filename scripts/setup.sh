@@ -17,7 +17,7 @@ function install_scala {
 
     echo "install scala"
 
-    SCALATAG=2.8.1.final
+    SCALATAG=2.9.0.1
 
     (cd /usr/local
 	curl -O http://www.scala-lang.org/downloads/distrib/files/scala-${SCALATAG}.tgz
@@ -52,16 +52,20 @@ function install_sbt {
 
     echo "install sbt"
 
-    SBTVERSION=0.7.4
+    SBTVERSION=0.10.0
 
-    mkdir -p ~/bin
-    cd ~/bin
-    curl -O http://simple-build-tool.googlecode.com/files/sbt-launch-${SBTVERSION}.jar
-    echo 'java -Xmx512M -jar `dirname $0`/sbt-launch-${SBTVERSION}.jar "$@"' > sbt
+    (
+    cd /usr/local/bin
+    curl -O http://typesafe.artifactoryonline.com/typesafe/ivy-releases/org.scala-tools.sbt/sbt-launch/0.10.0/sbt-launch.jar
+    echo <<EOF > sbt
+#!/bin/sh
+if test -f ~/.sbtconfig; then
+  . ~/.sbtconfig
+fi
+exec java -Xmx512M ${SBT_OPTS} -jar /usr/local/bin/sbt-launch.jar "$@"
+EOF
     chmod u+x sbt
-
-    # TODO: put this in .profile or .bashrc
-    export PATH=~/bin:$PATH
+    )
 }
 
 function install_ensime {
@@ -84,10 +88,12 @@ EOF
 
     # Step 2: ensime-mode
     (
+	# ENSIMETAG=2.8.1-0.4.4
+	ENSIMETAG=2.9.0-1-0.6.0
 	cd /usr/local
-	curl -O http://cloud.github.com/downloads/aemoncannon/ensime/ensime_2.8.1-0.4.4.tar.gz
-	tar xvfz ensime_2.8.1-0.4.4.tar.gz
-	ln -s ensime_2.8.1-0.4.4 ensime
+	curl -O http://cloud.github.com/downloads/aemoncannon/ensime/ensime_${ENSIMETAG}.tar.gz
+	tar xvfz ensime_${ENSIMETAG}.tar.gz
+	ln -s ensime_${ENSIMETAG} ensime
     )
 
     echo <<"EOF" >> ~/.emacs
@@ -107,7 +113,7 @@ function install_mongo {
     echo "install mongo"
 
     DATADIR=/data/db
-    MONGOVERSION=1.6.5
+    MONGOVERSION=1.8.2
 
     mkdir -p $DATADIR
 
@@ -120,13 +126,10 @@ function install_mongo {
     # /usr/local/mongodb/bin/mongod --dbpath $DATADIR &
     # http://localhost:28017/
 
-}
+    # TODO: add this to /etc/profile
 
-function install_lift {
+    export PATH=/usr/local/mongodb/bin/:$PATH
 
-    echo "install lift"
-
-    # TODO
 }
 
 function install_lucene {
