@@ -1,7 +1,7 @@
 package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
-import org.pingel.bayes.Function
+import org.pingel.causality.Function
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
@@ -14,52 +14,54 @@ import org.pingel.forms.math.Product
 import org.pingel.forms.math.Sigma
 import org.pingel.gestalt.core.Form
 
-class SmokingModel extends CausalModel("Smoking Model") {
+object SmokingModel extends CausalModel("Smoking Model") {
 
-        RandomVariable U = new RandomVariable("U", "u", false);
-        addVariable(U);
+        val U = new RandomVariable("U", None, false)
+        addVariable(U)
         
-        RandomVariable X = new RandomVariable("X", "x"); // smoke
-        addVariable(X);
-        addFunction(new Function(X, U));
+        val X = new RandomVariable("X") // smoke
+        addVariable(X)
+        addFunction(new Function(X, List(U)))
 
-        RandomVariable Z = new RandomVariable("Z", "z"); // tar
-        addVariable(Z);
-        addFunction(new Function(Z, X));
+        val Z = new RandomVariable("Z") // tar
+        addVariable(Z)
+        addFunction(new Function(Z, List(X)))
 
-        RandomVariable Y = new RandomVariable("Y", "y"); // cancer
-        addVariable(Y);
-        addFunction(new Function(Y, Z, U));
+        val Y = new RandomVariable("Y") // cancer
+        addVariable(Y)
+        addFunction(new Function(Y, List(Z, U)))
 
-    private static void doTask1(CausalModel model, VariableNamer namer)
-    {
-        Set<Variable> question = new HashSet<Variable>();
-        question.add(model.getVariable("Z").nextVariable(namer));
-        Set<Variable> given = new HashSet<Variable>();
-        Set<Variable> actions = new HashSet<Variable>();
-        actions.add(model.getVariable("X").nextVariable(namer));
+    def doTask1(model: CausalModel, namer: VariableNamer) = {
+          
+        var question = Set[Variable]()
+        question += model.getVariable("Z").nextVariable(namer)
         
-        Probability task1 = new Probability(question, given, actions);
-        System.out.println("task1: " + task1.toString());
-
-        List<Form> result = (new ActionToObservation()).apply(task1, model, namer);
+        val given = Set[Variable]()
         
-        for( Form q : result ) {
-        		System.out.println("after rule 2 application: " + q);
+        var actions = Set[Variable]()
+        actions += model.getVariable("X").nextVariable(namer)
+        
+        val task1 = new Probability(question, given, actions)
+        println("task1: " + task1.toString())
+
+        for( q <- new ActionToObservation().apply(task1, model, namer) ) {
+          println("after rule 2 application: " + q)
         }
 
     }
 
-    private static void doTask2(CausalModel model, VariableNamer namer)
-    {
-        Set<Variable> question = new HashSet<Variable>();
-        question.add(model.getVariable("Y").nextVariable(namer));
-        Set<Variable> given = new HashSet<Variable>();
-        Set<Variable> actions = new HashSet<Variable>();
-        actions.add(model.getVariable("Z").nextVariable(namer));
+    def doTask2(model: CausalModel, namer: VariableNamer) = {
+      
+        var question = Set[Variable]()
+        question += model.getVariable("Y").nextVariable(namer)
         
-        Probability task2 = new Probability(question, given, actions);
-        System.out.println("task2: " + task2.toString());
+        val given = Set[Variable]()
+        
+        var actions = Set[Variable]()
+        actions += model.getVariable("Z").nextVariable(namer)
+        
+        val task2 = new Probability(question, given, actions)
+        println("task2: " + task2.toString())
 
 //        System.out.println("Trying ActionToObservation");
 //        Vector result = (new ActionToObservation()).apply(task2, model);
@@ -69,80 +71,72 @@ class SmokingModel extends CausalModel("Smoking Model") {
 //        	System.out.println("after rule 2 application: " + q);
 //        }
         
-        Sigma e = task2.caseAnalysis(model.getVariable("X"), namer);
-        System.out.println("after conditioning and summing over X:\n" + e);
+        val e = task2.caseAnalysis(model.getVariable("X"), namer)
+        println("after conditioning and summing over X:\n" + e)
 
-        Product p = (Product) e.getExpression();
+        val p = e.getExpression() // asInstanceOf[Product]
 
-        Probability former = (Probability) p.getMultiplicand(0);
-        System.out.println("former = " + former);
-        
-        List<Form> result2 = (new ActionToObservation()).apply(former, model, namer);
-        for( Form q : result2 ) {
-        		System.out.println("after rule ActionToObservation application: " + q);
+        val former = p.getMultiplicand(0) // Probabiblity
+        println("former = " + former)
+
+        for( q <- (new ActionToObservation()).apply(former, model, namer) ) {
+        	println("after rule ActionToObservation application: " + q)
         }
-        
-        
-        Probability latter = (Probability) p.getMultiplicand(1);
-        System.out.println("latter = " + latter);
-        
-        List<Form> result3 = (new DeleteAction()).apply(latter, model, namer);
-        for( Form q : result3 ) {
-        		System.out.println("after rule DeleteAction application: " + q);
+
+        val latter = p.getMultiplicand(1)
+        println("latter = " + latter)
+
+        for( q <- (new DeleteAction()).apply(latter, model, namer) ) {
+        	println("after rule DeleteAction application: " + q)
         }
     }
 
-    private static void doTask3(CausalModel model, VariableNamer namer)
-    {
-        Set<Variable> question = new HashSet<Variable>();
-        question.add(model.getVariable("Y").nextVariable(namer));
-        Set<Variable> given = new HashSet<Variable>();
-        Set<Variable> actions = new HashSet<Variable>();
-        actions.add(model.getVariable("X").nextVariable(namer));
+    def doTask3(model: CausalModel, namer: VariableNamer) = {
+      
+        var question = Set[Variable]()
+        question.add(model.getVariable("Y").nextVariable(namer))
         
-        Probability task3 = new Probability(question, given, actions);
-        System.out.println("task3: " + task3.toString());
+        val given = Set[Variable]()
         
-        Sigma s = task3.caseAnalysis(model.getVariable("Z"), namer);
-        System.out.println("after summing over Z:");
-        System.out.println(s);
+        val actions = Set[Variable]()
+        actions.add(model.getVariable("X").nextVariable(namer))
         
-        Product p = (Product) s.getExpression();
+        val task3 = new Probability(question, given, actions)
+        println("task3: " + task3.toString())
+        
+        val s = task3.caseAnalysis(model.getVariable("Z"), namer)
+        println("after summing over Z:")
+        println(s)
+        
+        val p = s.getExpression() // Product
 
-        Probability former = (Probability) p.getMultiplicand(0);
-        System.out.println("former = " + former);
-        
-        List<Form> result2 = (new ObservationToAction()).apply(former, model, namer);
-        for( Form q : result2 ) {
-        		System.out.println("after rule ObservationToAction application: " + q);
+        val former = p.getMultiplicand(0) // Probabiblity
+        println("former = " + former)
+
+        for( q <- new ObservationToAction().apply(former, model, namer) ) {
+          println("after rule ObservationToAction application: " + q)
         }
 
-        Probability former2 = (Probability) result2.get(0);
-        System.out.println("former2 = " + former2);
+        val former2 = result2.get(0) // Probability
+        println("former2 = " + former2)
         
-        List<Form> result3 = (new DeleteAction()).apply(former2, model, namer);
-        for( Form q : result3 ) {
-        		System.out.println("after rule DeleteAction application: " + q);
+        for( q <- new DeleteAction().apply(former2, model, namer) ) {
+        	println("after rule DeleteAction application: " + q)
         }
-        
-        
-        Probability latter = (Probability) p.getMultiplicand(1);
-        System.out.println("latter = " + latter);
+
+        println("latter = " + p.getMultiplicand(1)) // Probabiblity
         // see task 1
-        
     }
 
-    public static void main(String[] argv)
-    {
-    		SmokingModel model = new SmokingModel();
+    def main(args: Array[String]) = {
+      
+        val model = new SmokingModel()
 
-    		VariableNamer namer = new VariableNamer();
+//    	doTask1(model)
+//    	doTask2(model)
+        doTask3(model, new VariableNamer())
         
-//    	doTask1(model);
-//    	doTask2(model);
-    		doTask3(model, namer);
-        
-        ModelVisualizer.draw(model);
+        ModelVisualizer.draw(model)
     }
 
 }

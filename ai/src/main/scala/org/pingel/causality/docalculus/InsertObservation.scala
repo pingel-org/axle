@@ -10,55 +10,55 @@ import org.pingel.gestalt.core.Form
 
 class InsertObservation extends Rule {
 
-    public List<Form> apply(Probability q, CausalModel m, VariableNamer namer) {
+    def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
 
-        Vector<Form> results = new Vector<Form>();
+        var results = List[Form]()
 
-        Set<Variable> Y = q.getQuestion();
-        Set<Variable> X = q.getActions();
-        Set<Variable> W = q.getGiven();
+        val Y = q.getQuestion()
+        val X = q.getActions()
+        val W = q.getGiven()
 
-        CausalModel subModel = m.duplicate();
-        subModel.getGraph().removeInputs(randomVariablesOf(X));
+        val subModel = m.duplicate()
+        subModel.getGraph().removeInputs(randomVariablesOf(X))
 
-        Set<Variable> XW = new HashSet<Variable>();
-        XW.addAll(X);
-        XW.addAll(W);
-        
+        var XW = Set[Variable]()
+        XW ++= X
+        XW ++= W
+
         // TODO Question: are all actions necessarily in q? Is
         // is possible to have relevant actions that are not in q?
         // I assume not.
         
-        Set<RandomVariable> potentialZ = new HashSet<RandomVariable>();
-        potentialZ.addAll(m.getRandomVariables());
-        potentialZ.removeAll(randomVariablesOf(Y));
-        potentialZ.removeAll(randomVariablesOf(X));
-        potentialZ.removeAll(randomVariablesOf(W));
+        var potentialZ = Set[RandomVariable]()
+        potentialZ ++= m.getRandomVariables()
+        potentialZ --= randomVariablesOf(Y)
+        potentialZ --= randomVariablesOf(X)
+        potentialZ --= randomVariablesOf(W)
         
-        for( RandomVariable zRandomVariable : potentialZ ) {
+        for( zRandomVariable <- potentialZ ) {
             
         	if( zRandomVariable.observable ) {
                 
-        	    Set<Variable> Z = new HashSet<Variable>();
-        		Z.add(zRandomVariable.nextVariable(namer));
+        	    var Z = Set[Variable]()
+        		Z += zRandomVariable.nextVariable(namer)
         		
         		if( subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW)) ) {
                     
-        		    Set<Variable> ZW = Z;
-        			ZW.addAll(W);
+        		    var ZW = Z
+        			ZW ++= W
+
+                    var Ycopy = Set[Variable]()
+                    Ycopy ++= Y
+
+                    var Xcopy = Set[Variable]()
+                    Xcopy ++= X
                     
-                    Set<Variable> Ycopy = new HashSet<Variable>();
-                    Ycopy.addAll(Y);
-                    
-                    Set<Variable> Xcopy = new HashSet<Variable>();
-                    Xcopy.addAll(X);
-                    
-        			results.add(new Probability(Ycopy, ZW, Xcopy));
+        			results.add(new Probability(Ycopy, ZW, Xcopy))
         		}
             }
         }
         
-        return results;
+        results
     }
 
 }

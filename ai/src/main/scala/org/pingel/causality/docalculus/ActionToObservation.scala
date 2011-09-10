@@ -11,58 +11,58 @@ import org.pingel.gestalt.core.Unifier
 
 class ActionToObservation extends Rule {
 
-    public List<Form> apply(Probability q, CausalModel m, VariableNamer namer) {
+    def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
 
-        Vector<Form> results = new Vector<Form>();
+       var results = List[Form]()
 
-        Set<Variable> Y = q.getQuestion();
-        Set<Variable> W = q.getGiven();
+        val Y = q.getQuestion()
+        val W = q.getGiven()
 
-//        System.out.println("Y = " + Y);
-//        System.out.println("W = " + W);
+        // println("Y = " + Y)
+        // println("W = " + W)
         
-        for( Variable z : q.getActions() ) {
+        for( z <- q.getActions() ) {
             
-            Set<Variable> X = new HashSet<Variable>();
-            X.addAll(q.getActions());
-            X.remove(z);
+            var X = Set[Variable]()
+            X ++= q.getActions()
+            X -= z
 
-//            System.out.println("X = " + X);
+            // println("X = " + X)
             
-            HashSet<Variable> Z = new HashSet<Variable>();
-            Z.add(z);
+            var Z = Set[Variable]()
+            Z += z
 
-//            System.out.println("Z = " + Z);
+            // println("Z = " + Z)
             
-            CausalModel subModel = m.duplicate();
-            subModel.getGraph().removeInputs(randomVariablesOf(X));
-            subModel.getGraph().removeOutputs(randomVariablesOf(Z));
+            val subModel = m.duplicate()
+            subModel.getGraph().removeInputs(randomVariablesOf(X))
+            subModel.getGraph().removeOutputs(randomVariablesOf(Z))
 
-//            ModelVisualizer.draw(subModel);
+            // ModelVisualizer.draw(subModel)
             
-            Set<Variable> XW = new HashSet<Variable>();
-            XW.addAll(W);
-            XW.addAll(X);
+            var XW = Set[Variable]()
+            XW ++= W
+            XW ++= X
             
             if( subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW)) ) {
-                Set<Variable> ZW = new HashSet<Variable>();
-                ZW.addAll(W);
-                ZW.add(z);
+              
+                var ZW = Set[Variable]()
+                ZW ++= W
+                ZW += z
                 
-                Set<Variable> Ycopy = new HashSet<Variable>();
-                Ycopy.addAll(Y);
-                
-                Probability probFactory = new Probability();
-                Unifier unifier = new Unifier();
-                unifier.put(probFactory.question, Ycopy);
-                unifier.put(probFactory.given, ZW);
-                unifier.put(probFactory.actions, X);
-                Form f = probFactory.createForm(unifier);
-                results.add(f);
+                var Ycopy = Set[Variable]()
+                Ycopy ++= Y
+
+                val probFactory = new Probability()
+                val unifier = new Unifier()
+                unifier.put(probFactory.question, Ycopy)
+                unifier.put(probFactory.given, ZW)
+                unifier.put(probFactory.actions, X)
+                results.add(probFactory.createForm(unifier))
             }
         }
         
-        return results;
+        results
     }
 
 }

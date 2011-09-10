@@ -11,52 +11,54 @@ import org.pingel.gestalt.core.Unifier
 
 class DeleteAction extends Rule {
 
-    public List<Form> apply(Probability q, CausalModel m, VariableNamer namer) {
+    def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
 
-        Vector<Form> results = new Vector<Form>();
+        var results = List[Form]()
         
-        Set<Variable> Y = q.getQuestion();
-        Set<Variable> W = q.getGiven();
+        var Y = q.getQuestion()
+        var W = q.getGiven()
             
-        for( Variable z : q.getActions() ) {
+        for( z <- q.getActions() ) {
         	
-            Set<Variable> Z = new HashSet<Variable>();
-        	Z.add(z);
+            var Z = Set[Variable]()
+        	Z += z
+
+        	var X = Set[Variable]()
+            X ++= q.getActions()
+        	X -= z
         	
-        	Set<Variable> X = new HashSet<Variable>();
-            X.addAll(q.getActions());
-        	X.remove(z);
+        	var XW = Set[Variable]()
+        	XW ++= X
+        	XW ++= W
         	
-        	Set<Variable> XW = new HashSet<Variable>();
-        	XW.addAll(X);
-        	XW.addAll(W);
-        	
-        	CausalModel subModel = m.duplicate();
-        	subModel.getGraph().removeInputs(randomVariablesOf(X));
-        	
-        	Set<RandomVariable> ancestorsOfW = new HashSet<RandomVariable>();
-        	subModel.getGraph().collectAncestors(randomVariablesOf(W), ancestorsOfW);
+        	val subModel = m.duplicate()
+        	subModel.getGraph().removeInputs(randomVariablesOf(X))
+
+        	var ancestorsOfW = Set[RandomVariable]()
+        	subModel.getGraph().collectAncestors(randomVariablesOf(W), ancestorsOfW)
         	if( ! ancestorsOfW.contains(z.getRandomVariable()) ) {
-        		subModel.getGraph().removeInputs(randomVariablesOf(Z));
+        		subModel.getGraph().removeInputs(randomVariablesOf(Z))
         	}
         	
             if( subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW)) ) {
-                Set<Variable> Ycopy = new HashSet<Variable>();
-                Ycopy.addAll(Y);
-                Set<Variable> Wcopy = new HashSet<Variable>();
-                Wcopy.addAll(W);
+              
+                var Ycopy = Set[Variable]()
+                Ycopy.addAll(Y)
                 
-                Probability probFactory = new Probability();
-                Unifier unifier = new Unifier();
-                unifier.put(probFactory.question, Ycopy);
-                unifier.put(probFactory.given, Wcopy);
-                unifier.put(probFactory.actions, X);
-                Form f = probFactory.createForm(unifier);
-                results.add(f);
+                var Wcopy = Set[Variable]()
+                Wcopy.addAll(W)
+                
+                val probFactory = new Probability()
+                val unifier = new Unifier()
+                unifier.put(probFactory.question, Ycopy)
+                unifier.put(probFactory.given, Wcopy)
+                unifier.put(probFactory.actions, X)
+                val f = probFactory.createForm(unifier)
+                results.add(f)
             }
         }
         
-        return results;
+        results
     }
 
 }

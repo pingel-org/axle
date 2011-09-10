@@ -9,44 +9,46 @@ import org.pingel.gestalt.core.Unifier
 
 class DeleteObservation extends Rule {
 
-    public List<Form> apply(Probability q, CausalModel m, VariableNamer namer) {
+    apply(q: Probability, m: CausalModel, namer: VariableNamer)  = {
 
-    		List<Form> results = new ArrayList<Form>();
+    	var results = ArrayList[Form]()
         
-        Set<Variable> Y = q.getQuestion();
-        Set<Variable> X = q.getActions();
-        CausalModel subModel = m.duplicate();
-        subModel.getGraph().removeInputs(randomVariablesOf(X));
+        val Y = q.getQuestion()
+        val X = q.getActions()
+        val subModel = m.duplicate()
+        subModel.getGraph().removeInputs(randomVariablesOf(X))
         
-        for( Variable zObservation : q.getGiven() ) {
-            Set<Variable> Z = new HashSet<Variable>();
-            Z.add(zObservation);
+        for( zObservation <- q.getGiven() ) {
+          
+            var Z = Set[Variable]()
+            Z += zObservation
             
-            Set<Variable> W = new HashSet<Variable>();
-            W.addAll(q.getGiven());
-            W.remove(zObservation);
+            val W = Set[Variable]()
+            W ++= q.getGiven()
+            W.remove(zObservation)
 
-            Set<Variable> WX = new HashSet<Variable>();
-            WX.addAll(W);
-            WX.addAll(X);
+            var WX = Set[Variable]()
+            WX ++= W
+            WX ++= X
+
             
             if( subModel.blocks(randomVariablesOf(q.getGiven()), randomVariablesOf(Z), randomVariablesOf(WX)) ) {
-                Set<Variable> Ycopy = new HashSet<Variable>();
-                Ycopy.addAll(Y);
-                Set<Variable> Xcopy = new HashSet<Variable>();
-                Xcopy.addAll(X);
 
-                Probability probFactory = new Probability();
-                Unifier unifier = new Unifier();
-                unifier.put(probFactory.question, Ycopy);
-                unifier.put(probFactory.given, W);
-                unifier.put(probFactory.actions, Xcopy);
-                Form f = probFactory.createForm(unifier);
-                results.add(f);
+            	var Ycopy = Set[Variable]()
+                Ycopy ++= Y
+                var Xcopy = Set[Variable]()
+                Xcopy ++= X
+
+                val probFactory = new Probability()
+                val unifier = new Unifier()
+                unifier.put(probFactory.question, Ycopy)
+                unifier.put(probFactory.given, W)
+                unifier.put(probFactory.actions, Xcopy)
+                results.add(probFactory.createForm(unifier))
             }
         }
         
-        return results;
+        results
     }
 
 }

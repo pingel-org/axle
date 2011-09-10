@@ -13,8 +13,7 @@ class InductiveCausation(pHat: Distribution)
 	  
 		val G = new PartiallyDirectedGraph(varList)
 
-		// Set<RandomVariable>[][]
-        var separators = Set[RandomVariable](varList.size, varList.size)
+        var separators = Matrix[Set[RandomVariable]](varList.size, varList.size)
         
         for(i <- 0 to (varList.size - 2) ) {
             val a = varList(i)
@@ -32,33 +31,32 @@ class InductiveCausation(pHat: Distribution)
                     println("separating ("+ a.name + ", " + b.name + ") with " + S)
                 }
 
-                separators[i][j] = S
-                separators[j][i] = S
-
+                separators.get(i, j) = S
+                separators.get(j, i) = S
             }
         }
 
-        	for( int i=0; i < (varList.size() - 1); i++) {
-        		RandomVariable a = varList.get(i)
-        		Vector<RandomVariable> aNeighbors = G.links(a, null, null, null)
+        	for(i <- 0 to (varList.size - 2) ) {
+        		val a = varList.get(i)
+        		val aNeighbors = G.links(a, null, null, null)
 
-        		for( int j=(i+1); j < varList.size(); j++) {
-        			RandomVariable b = varList.get(j)
+        		for( j <- (i+1) to (varList.size - 1) ) {
+        			val b = varList.get(j)
         			if( ! G.areAdjacent(a, b) ) {
-        				Set S = separators[i][j]
+        				val S = separators.get(i, j)
         				if( S != null ) {
                     	
         					println("prepareGraph second loop")
                         
-        					Vector<RandomVariable> bNeighbors = G.links(b, null, null, null);
-        					Vector<RandomVariable> cList = intersection(aNeighbors, bNeighbors);
+        					val bNeighbors = G.links(b, null, null, null)
+        					val cList = intersection(aNeighbors, bNeighbors)
                     	
-        					for( RandomVariable c : cList ) {
+        					for( c <- cList ) {
         						if( ! S.contains(c) ) {
-        							G.connect(a, c);
-        							G.orient(a, c);
-        							G.connect(b, c);
-        							G.orient(b, c);
+        							G.connect(a, c)
+        							G.orient(a, c)
+        							G.connect(b, c)
+        							G.orient(b, c)
         						}
         					}
         				}
@@ -129,42 +127,26 @@ class InductiveCausation(pHat: Distribution)
         // a - c -> b and a - d -> b such that c and d are nonadjacent
 
     	var applied = false
-
-    	for(int i=0; i < varList.size(); i++) {
-    		RandomVariable a = varList.get(i);
-
-    		Vector<RandomVariable> aNeighbors = G.links(a, null, null, FALSE);
-
-        	for(int j=0; j < aNeighbors.size() - 1; j++) {
-
-        		RandomVariable c = aNeighbors.elementAt(j);
-        		
-        		for(int m=j+1; m < aNeighbors.size(); m++) {
-
-        			RandomVariable d = aNeighbors.elementAt(m);
-
+    	for( i <- 0 to (varList.size - 1) ) {
+    		val a = varList.get(i)
+    		val aNeighbors = G.links(a, null, null, FALSE)
+        	for( j <- 0 to (aNeighbors.size - 2) ) {
+        		val c = aNeighbors.elementAt(j)
+        		for( m <- (j+1) to (aNeighbors.size - 1) ) {
+        			val d = aNeighbors.elementAt(m)
         			if( ! G.undirectedAdjacent(c, d) ) {
-
-        				Vector<RandomVariable> dOutputs = G.links(d, null, null, TRUE);
-        				Vector<RandomVariable> cOutputs = G.links(c, null, null, TRUE);
-        				
-        				Vector<RandomVariable> dcOutputs = intersection(dOutputs, cOutputs);
-        				
-        				for( RandomVariable b : dcOutputs ) {
-
+        				val dOutputs = G.links(d, null, null, TRUE)
+        				val cOutputs = G.links(c, null, null, TRUE)
+        				val dcOutputs = intersection(dOutputs, cOutputs)
+        				for( b <- dcOutputs ) {
         					if( G.undirectedAdjacent(a, b) ) {
-        						G.orient(a, b);
-        						applied = true;
+        						G.orient(a, b)
+        						applied = true
         					}
-        					
         				}
-        				
         			}
-        			
         		}
-
         	}
-    		
     	}
     	applied
     }
@@ -175,21 +157,20 @@ class InductiveCausation(pHat: Distribution)
         // and a and d are adjacent.
 
     	var applied = false
-
-    	for(int i=0; i < varList.size(); i++) {
-    		RandomVariable a = varList.get(i)
-    		Vector<RandomVariable> aNeighbors = G.links(a, null, null, null);
-    		for(int j=0; j < aNeighbors.size(); j++) {
-    			RandomVariable c = aNeighbors.get(j)
-    			Vector<RandomVariable> cOutputs = G.links(c, null, null, TRUE);
-    			for(int m=0; m < cOutputs.size(); m++) {
-    				RandomVariable d = cOutputs.elementAt(m)
+    	for( i <- 0 to (varList.size - 1) ) {
+    		val a = varList.get(i)
+    		val aNeighbors = G.links(a, null, null, null)
+    		for( j <- 0 to (aNeighbors.size - 1) ) {
+    			val c = aNeighbors.get(j)
+    			val cOutputs = G.links(c, null, null, TRUE)
+    			for( m <- 0 to (cOutputs.size - 1) ) {
+    				val d = cOutputs.elementAt(m)
     				if( ! a.equals(d) ) {
-    					Vector<RandomVariable> dOutputs = G.links(d, null, null, TRUE);
+    					val dOutputs = G.links(d, null, null, TRUE);
     					if( G.areAdjacent(a, d) ) {
-    						Vector<RandomVariable> adOutputs = intersection(aNeighbors, dOutputs);
-    						for(int n=0; n < adOutputs.size(); n++) {
-    							RandomVariable b = adOutputs.get(n)
+    						val adOutputs = intersection(aNeighbors, dOutputs);
+    						for( n <- 0 to (adOutputs.size - 1) ) {
+    							val b = adOutputs.get(n)
     							if( ( ! b.equals(c) ) && (! G.areAdjacent(c, b)) ) {
     								G.orient(a, b)
     								applied = true
@@ -213,28 +194,22 @@ class InductiveCausation(pHat: Distribution)
 
     	var applied = false
 
-    	for(int i=0; i < varList.size; i++) {
+    	for( i <- 0 to (varList.size-1) ) {
 
-    		RandomVariable a = varList.get(i);
+    		val a = varList.get(i)
 
-    		Vector<RandomVariable> cList = G.links(a, null, FALSE, TRUE);
+    		val cList = G.links(a, null, FALSE, TRUE)
     		
-    		for(int j=0; j < cList.size(); j++) {
-    			
-    			RandomVariable c = cList.elementAt(j);
-    			
-    			Vector<RandomVariable> bList = G.links(c, FALSE, FALSE, null);
-    			
-    			for(int m=0; m < bList.size(); m++) {
-    				
-    				RandomVariable b = bList.elementAt(m);
-    				
+    		for( j <- 0 to (cList.size()-1) ) {
+    			val c = cList.elementAt(j)
+    			val bList = G.links(c, FALSE, FALSE, null)
+    			for(m <-  0 to (bList.size()-1) ) {
+    				val b = bList.elementAt(m)
     				if( ! G.areAdjacent(a, b) ) {
-    					G.orient(c, b);
-    					G.mark(c, b);
-    					applied = true;
+    					G.orient(c, b)
+    					G.mark(c, b)
+    					applied = true
     				}
-    				
     			}
     		}
     	}
