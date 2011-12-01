@@ -5,6 +5,7 @@ import Scalaz._
 
 // http://www.cs.nott.ac.uk/~vxc/mgs/MGS2011_categories.pdf
 
+/*
 object ScalazTest {
 
 	def main(args: Array[String]) {
@@ -57,3 +58,4 @@ object ScalazTest {
 	}
 
 }
+*/
