@@ -5,14 +5,11 @@ version := "2.0"
 scalaVersion := "2.9.1"
 
 libraryDependencies ++= Seq(
-//  "org.pingel.util" %% "org.pingel.util" % "2.0",
-//  "org.pingel.util" % "org.pingel.util" % "1.1.0",
-  "org.scalaz" % "scalaz-core_2.8.1" % "6.0-SNAPSHOT",
+  "org.scalaz" % "scalaz-core_2.9.1" % "6.0.3",
   "org.slf4j" % "slf4j-simple" % "1.6.1",
-  "org.slf4j" % "slf4j-api" % "1.6.1",
-  "org.specs2" % "specs2_2.9.0" % "1.5" % "test",
-  "org.specs2" % "specs2-scalaz-core_2.9.0" % "6.0.RC2" % "test",
-  "org.scalala" % "scalala_2.9.0" % "1.0.0.RC2-SNAPSHOT"
+  "org.slf4j" % "slf4j-api" % "1.6.1"
+  // "org.specs2" % "specs2" %% "1.5" % "test"
+  // "org.specs2" % "specs2-scalaz-core" % "6.0.3" % "test"
 )
 
 resolvers ++= Seq(
