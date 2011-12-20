@@ -9,9 +9,9 @@ object Enrichments {
 
   case class EnrichedSet[T](s: Set[T]) {
     def ∀(p: T => Boolean) = s.forall(p)
-    def doubles: Set[(T, T)] = null // TODO
-    def triples: Set[(T, T, T)] = null // TODO
-    def quadruples: Set[(T, T, T, T)] = null // TODO
+    def doubles: Set[(T, T)] = for (x<-s; y<-s) yield (x,y)
+    def triples: Set[(T, T, T)] = for (x<-s; y<-s; z<-s) yield (x,y,z)
+    def quadruples: Set[(T, T, T, T)] = for (w<-s; x<-s; y<-s; z<-s) yield (w,x,y,z)
   }
 
   implicit def enrichSet[T](s: Set[T]) = EnrichedSet(s)
@@ -57,7 +57,20 @@ object Awodney {
 
     def unitProperty = arrows.∀( f ⇒ ((f ≡ (f ∘ I(dom(f)) ) ) ∧ (f ≡ ( I(cod(f)) ∘ f))))
 
-    require( containsUnits ∧ isAssociative ∧ unitProperty  )
+    def isValid = {
+      val cu = containsUnits
+      println("contains units: " + cu)
+
+      val ia = isAssociative
+      println("is associative: " + ia)
+
+      val up = unitProperty
+      println("unit property : " + up)
+
+      cu ∧ ia ∧ up
+    }
+
+    require(isValid)
 
   }
 
@@ -115,7 +128,19 @@ object Examples {
 object Main {
 
   def main(args: Array[String]) {
+
     println("Hello, world")
+
+    import Awodney._
+
+    val ints = ⋅(Set(1, 2))
+    val strings = ⋅(Set("A", "B"))
+    val fii = →(ints, ints) /* TODO */
+    val fis = →(ints, strings) /* TODO */
+    val fsi = →(strings, ints) /* TODO */
+    val fss = →(strings, strings) /* TODO */
+    val setsFin1 = Category(Set(ints, strings), Set(fii, fis, fsi, fss))
+
   }
 
 }
