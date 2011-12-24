@@ -18,6 +18,10 @@ object Enrichments {
 
   case class EnrichedBoolean(b: Boolean) {
     def ∧(other: Boolean) = b && other
+    def and(other: Boolean) = b && other
+    def vee(other: Boolean) = b || other // TODO vee = "V"
+    def or(other: Boolean) = b || other
+    def implies(other: Boolean) = (! b) || other
   }
 
   implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
@@ -29,15 +33,25 @@ object Awodney {
   import Enrichments._
 
   case class ⋅(v: Any) { // "object"
-    def ≡(other: ⋅): Boolean = true // TODO
+    def ≡(other: ⋅) = this == other // TODO
   }
 
   def I(o: ⋅) = →(o, o) // TODO the identity arrow
 
   case class →(domain: ⋅, codomain: ⋅) { // "arrow"
-    def ∘(other: →): →  = null // TODO
+    def ∘(other: →) = (codomain ≡ other.domain) match {
+      case true => →(domain, other.codomain)
+      case false => null // TODO wrap in Option?
+    }
     def ∈(as: Set[→]) = as.contains(this)
-    def ≡(other: →): Boolean = true // TODO
+    def ≡(other: →) = {
+      println(
+	"→.≡ "+
+	"this("+this.domain+", "+this.codomain+"), "+
+	"other("+other.domain+", "+other.codomain+")"
+      )
+      (domain ≡ other.domain) ∧ (codomain ≡ other.codomain) // TODO
+    }
   }
 
   def dom(f: →) = f.domain
@@ -76,6 +90,61 @@ object Awodney {
 
 }
 
+object Foo { // TODO find a name for this 
+
+  import Enrichments._
+
+  case class BinaryRelation[T](domain: Set[T], relation: Set[(T, T)]) {
+    
+    def contains(a1: T, a2: T) = relation.contains( (a1, a2) )
+    
+    def isReflexive = 
+      domain.∀( a ⇒ relation.contains(a, a)  )
+    
+    def isTransitive = 
+      domain.triples.∀({
+	case (a, b, c) ⇒ 
+	(relation.contains(a, b) ∧ relation.contains(b, c)) implies relation.contains(a, c)
+      })
+    
+    def isAntiSymmetric = 
+      domain.doubles.∀({
+	case (a, b) ⇒
+	(relation.contains(a, b) ∧ relation.contains(b, a)) implies (a == b)
+      })
+    
+    def isSymmetric = 
+      domain.doubles.∀({
+	case (a, b) ⇒ relation.contains(a, b) implies relation.contains(b, a)
+      })
+  }
+  
+  case class PoSet[T](A: Set[T], RA: BinaryRelation[T]) { // ≤A
+    
+    // TODO: check that ≤A is for A
+    
+    // a partially ordered set or "poset" is a set A
+    // equipped with a binary relation a ≤A b such that the following
+    // conditions hold for all a,b,c in A:
+    
+    def isValid = {
+      val re = RA.isReflexive
+      println("≤A is reflexive: " + re)
+      
+      val tr = RA.isTransitive
+      println("≤A is transitive: " + tr)
+	
+      val as = RA.isAntiSymmetric
+      println("≤A is antisymmetric: " + as)
+
+      re ∧ tr ∧ as
+    }
+
+    require(isValid)
+  }
+
+}
+
 object Examples {
 
   import Awodney._
@@ -87,10 +156,10 @@ object Examples {
     // finite sets
     val ints = ⋅(Set(1, 2))
     val strings = ⋅(Set("A", "B"))
-    val fii = →(ints, ints) /* TODO */
-    val fis = →(ints, strings) /* TODO */
-    val fsi = →(strings, ints) /* TODO */
-    val fss = →(strings, strings) /* TODO */
+    val fii = →(ints, ints)       // TODO
+    val fis = →(ints, strings)    // TODO
+    val fsi = →(strings, ints)    // TODO
+    val fss = →(strings, strings) // TODO
     val setsFin1 = Category(Set(ints, strings), Set(fii, fis, fsi, fss))
   }
 
@@ -110,18 +179,16 @@ object Examples {
 
   {
     // poset + monotone functions
-    
-    // a partially ordered set or "poset" is a set A
-    // equipped with a binary relation a ≤A b such that the following
-    // conditions hold for all a,b,c in A:
-      
-    // reflexivity: a ≤A a
-    // transitivity: (a ≤A b ∧ b ≤A c) then a ≤A c
-    // antisymmetry: (a ≤A b ∧ b ≤A a) then a ≡ b
-      
+
+    import Foo._
+
+    println("TODO")
+    // TODO
+     
     // an arrow, m: A → B, is "monotone" if 
     // for all a and a' in A
     // TODO
+
   }
 }
 
@@ -135,11 +202,20 @@ object Main {
 
     val ints = ⋅(Set(1, 2))
     val strings = ⋅(Set("A", "B"))
-    val fii = →(ints, ints) /* TODO */
-    val fis = →(ints, strings) /* TODO */
-    val fsi = →(strings, ints) /* TODO */
+
+    println("ints ≡ strings: " + (ints ≡ strings))
+    println("ints ≡ ints   : " + (ints ≡ ints))
+
+    val fii = →(ints, ints)       /* TODO */
+    val fis = →(ints, strings)    /* TODO */
+    val fsi = →(strings, ints)    /* TODO */
     val fss = →(strings, strings) /* TODO */
-    val setsFin1 = Category(Set(ints, strings), Set(fii, fis, fsi, fss))
+
+    println("fii ≡ fii: " + (fii ≡ fii) )
+    println("fii ≡ fis: " + (fii ≡ fis) )
+
+    // val setsFin1 = Category(Set(ints, strings), Set(fii, fis, fsi, fss))
+    val setsFin1 = Category(Set(ints), Set(fii))
 
   }
 
