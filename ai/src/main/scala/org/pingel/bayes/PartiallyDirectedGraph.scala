@@ -1,23 +1,20 @@
 
 package org.pingel.bayes
 
-object Constants {
-  // I have no idea what the point of these are
-  val TRUE = new Boolean(true)
-  val FALSE = new Boolean(false)
-}
+import scalala.tensor.mutable._
+import scalala.tensor.dense._
+import scala.collection._
 
 class PartiallyDirectedGraph(variables: List[RandomVariable]) {
 
-
   var variable2index = Map[RandomVariable, Integer]()
-	
-  var connect = new Matrix[Boolean](vars.size, vars.size)
-  var mark = new Matrix[Boolean](vars.size, vars.size)
-  var arrow = new Matrix[Boolean](vars.size, vars.size)
+
+  var connect = DenseMatrix.zeros[Boolean](variables.size, variables.size)
+  var mark = DenseMatrix.zeros[Boolean](variables.size, variables.size)
+  var arrow = DenseMatrix.zeros[Boolean](variables.size, variables.size)
   
   for( i <- 0 to variables.size-1 ) {
-    variable2index.put(variables(i), new Integer(i));
+    variable2index += variables(i) -> new Integer(i)
     for( j <- 0 to variables.size-1 ) {
       connect(i, j) = false
       mark(i, j) = false
@@ -58,27 +55,29 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     arrow(i1, i2) = true
   }
 
+  def size: Int = TODO()
+  
   // TODO: scala version should probably use Option[Boolean] instead of allowing null
-  def links(v: RandomVariable, arrowIn: Boolean, marked: Boolean, arrowOut: Boolean): List[RandomVariable] = {
+  def links(v: RandomVariable, arrowIn: Option[Boolean], marked: Option[Boolean], arrowOut: Option[Boolean]): List[RandomVariable] = {
 
-    var result = new List[RandomVariable]()
+    var result = List[RandomVariable]()
     	
     val i = indexOf(v)
     	
-    for(j <- 0 to size-1) {
+    for(j <- 0 to (size - 1) ) {
 
       val u = variables(j)
       var pass = connect(i, j)
       
-      if( pass && (arrowIn != null) ) {
+      if( pass && (arrowIn != None) ) {
     	  pass = ( arrowIn.booleanValue() == arrow(j, i) )
       }
       
-      if( pass && (marked != null) ) {
+      if( pass && (marked != None) ) {
     	pass = ( marked.booleanValue() == mark(i, j) )
       }
       
-      if( pass && (arrowOut != null) ) {
+      if( pass && (arrowOut != None) ) {
     	  pass = ( arrowOut.booleanValue() == arrow(i, j) )
       }
       
@@ -93,17 +92,17 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
   def markedPathExists(from: RandomVariable, target: RandomVariable): Boolean = {
     // this will not terminate if there are cycles
 
-    var frontier = List[RandomVariable]()
-    frontier.add(from)
+    var frontier = mutable.ListBuffer[RandomVariable]()
+    frontier += from
     	
     while( frontier.size > 0 ) {
-      val head = frontier.firstElement()
+      val head = frontier(0)
       frontier.removeElementAt(0)
       if( head.equals(target) ) {
     	return true
       }
-      var follow = links(head, null, Constants.TRUE, Constants.TRUE)
-      frontier.addAll(follow)
+      var follow = links(head, None, Some(true), Some(true))
+      frontier.appendAll(follow)
     }
     false
   }
@@ -120,12 +119,12 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     result += "connect\n\n"
     for( i <- 0 to variables.size-1 ) {
       for( j <- 0 to variables.size-1 ) {
-	if( connect(i, j) ) {
-	  result += "x"
-	}
-	else {
-	  result += " "
-	}
+    	  if( connect(i, j) ) {
+    		  result += "x"
+    	  }
+    	  else {
+    		  result += " "
+    	  }
       }
       result += "\n"
     }
@@ -134,12 +133,12 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     result += "mark\n\n"
     for( i <- 0 to variables.size-1 ) {
       for( j <- 0 to variables.size-1 ) {
-	if( mark(i, j) ) {
-	  result += "x"
-	}
-	else {
-	  result += " "
-	}
+    	  if( mark(i, j) ) {
+    		  result += "x"
+    	  }
+    	  else {
+    		  result += " "
+    	  }
       }
       result += "\n"
     }
@@ -148,12 +147,12 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     result += "arrow\n\n"
     for( i <- 0 to variables.size-1 ) {
       for( j <- 0 to variables.size-1 ) {
-	if( arrow(i, j) ) {
-	  result += "x"
-	}
-	else {
-	  result += " "
-	}
+    	  if( arrow(i, j) ) {
+    		  result += "x"
+    	  }
+    	  else {
+    		  result += " "
+    	  }
       }
       result += "\n"
     }

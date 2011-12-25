@@ -1,11 +1,13 @@
 package org.pingel.bayes;
 
+import scalala.tensor.mutable._
+
 object ChiSquaredTest {
 
     def chiSquared(tally: Matrix[Double]) = {
 
-    	val height = tally.height
-    	val width = tally.width
+    	val height = tally.numRows
+    	val width = tally.numCols
       
         var rowTotals = new Array[Double](height)
         for( r <- 0 to height-1) {
@@ -23,16 +25,8 @@ object ChiSquaredTest {
             }
         }
 
-        var total = 0.0
-        for(r <- 0 to height-1 ) {
-            total += rowTotals(r)
-        }
-
-        var total2 = 0.0
-        for(c <- 0 to width-1 ) {
-            total2 += columnTotals(c)
-        }
-        
+        val total = 0.to(height-1).map(rowTotals(_)).foldLeft(0.0)({_+_})
+        val total2 = 0.to(width-1).map(columnTotals(_)).foldLeft(0.0)({_+_})
         if( total != total2 ) {
         	throw new Exception("error calculating chi squared")
         }
@@ -65,14 +59,14 @@ object ChiSquaredTest {
 //    }
 
     def independent(table: Matrix[Double]) = {
-        val chiSquared = chiSquared(table)
+        val chiSq = chiSquared(table)
         // System.out.println("chi squared = " + chiSquared);
         
         // int degreesOfFreedom = (height - 1) * (width - 1);
         
         // TODO generalize this so that it looks up the P value from the
         
-        chiSquared < 0.004 // a 95% probability that this correlation happened by chance
+        chiSq < 0.004 // a 95% probability that this correlation happened by chance
     }
     
 

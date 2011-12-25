@@ -1,6 +1,7 @@
 package org.pingel.bayes
 
 import org.pingel.util.UndirectedGraph
+import scala.collection._
 
 class EliminationTree
 extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
@@ -10,25 +11,22 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
 	
   // public EliminationTree()	{ }
 
-  def gatherVars(stop: EliminationTreeNode, node: EliminationTreeNode, result: Set[RandomVariable])
+  def gatherVars(stop: EliminationTreeNode, node: EliminationTreeNode, result: mutable.Set[RandomVariable])
   {
-    result.addAll(node2phi(node).getVariables);
+    result ++= node2phi(node).getVariables
     for( n <- getNeighbors(node)) {
       if( ! n.equals(stop) ) {
-	gatherVars(node, n, result)
+    	  gatherVars(node, n, result)
       }
     }
   }
 	
   def cluster(i: EliminationTreeNode): Set[RandomVariable] = {
-    var result = Set[RandomVariable]()
-		
+    var result = mutable.Set[RandomVariable]()
     for( j <- getNeighbors(i)) {
       result.addAll(separate(i, j))
     }
-		
-    result.addAll(node2phi(i).getVariables)
-		
+    result ++= node2phi(i).getVariables
     result
   }
 
@@ -41,15 +39,8 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
 		
       var jSide = Set[RandomVariable]()
       gatherVars(i, j, jSide)
-		
-      var result = Set[RandomVariable]()
-      for( iv <- iSide) {
-	if( jSide.contains(iv) ) {
-	  result.add(iv)
-	}
-      }
-		
-      result
+
+      iSide.filter( iv => jSide.contains(iv) ) // aka "intersection"
     }
 	
   def constructEdge(v1: EliminationTreeNode, v2: EliminationTreeNode): EliminationTreeEdge = new EliminationTreeEdge(v1, v2)
@@ -62,7 +53,7 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
   def getAllVariables(): Set[RandomVariable] = {
     var result = Set[RandomVariable]()
     for( node <- node2phi.keySet ) {
-      result.addAll(node2phi(node).getVariables());
+      result.addAll(node2phi(node).getVariables())
     }
     result
   }
@@ -82,19 +73,9 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
 	
   // UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
   def copyTo(other: EliminationTree): Unit = {
-		
-    for( node <- getVertices ) {
-      other.addVertex(node)
-    }
-    
-    for( edge <- getEdges ) {
-      other.addEdge(edge)
-    }
-    
-    for( node <- node2phi.keySet ) {
-      other.setFactor(node, node2phi(node))
-    }
-      
+    getVertices.map( node => other.addVertex(node) )
+    getEdges.map( edge => other.addEdge(edge) )
+    node2phi.keySet.map( node => other.setFactor(node, node2phi(node)) )
   }
 	
 }

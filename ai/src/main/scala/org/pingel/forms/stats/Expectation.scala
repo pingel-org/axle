@@ -16,7 +16,7 @@ class Expectation extends FormFactory
     def createForm(expectors: Set[Variable], condition: Set[Variable], exp: Form): Form =  {
         this.expectors = expectors
         if( condition == null ) {
-            this.condition = new HashSet[Variable]()
+            this.condition = Set[Variable]()
         }
         else {
             this.condition = condition

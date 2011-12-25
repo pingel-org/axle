@@ -1,12 +1,17 @@
 
 package org.pingel.bayes
 
+import scala.collection._
+import scalala.tensor.mutable._
+import scalala.tensor.dense._
+
+
 class InductiveCausation(pHat: Distribution)
 {
 	val FALSE = new PBoolean(false)
 	val TRUE = new PBoolean(true)
 
-	var varList = List[RandomVariable]()
+	var varList = new ListBuffer[RandomVariable]()
 	varList.addAll(pHat.getVariables())
 
 	def prepareGraph(): PartiallyDirectedGraph = {
@@ -69,7 +74,7 @@ class InductiveCausation(pHat: Distribution)
 
 	def intersection(v1: List[RandomVariable], v2: List[RandomVariable]) = {
 	  
-		var result = ListBuffer[RandomVariable]()
+		var result = mutable.ListBuffer[RandomVariable]()
 		
 		for( o1 <- v1 ) {
 			var found = false
@@ -131,12 +136,12 @@ class InductiveCausation(pHat: Distribution)
     		val a = varList.get(i)
     		val aNeighbors = G.links(a, null, null, FALSE)
         	for( j <- 0 to (aNeighbors.size - 2) ) {
-        		val c = aNeighbors.elementAt(j)
+        		val c = aNeighbors(j)
         		for( m <- (j+1) to (aNeighbors.size - 1) ) {
-        			val d = aNeighbors.elementAt(m)
+        			val d = aNeighbors(m)
         			if( ! G.undirectedAdjacent(c, d) ) {
-        				val dOutputs = G.links(d, null, null, TRUE)
-        				val cOutputs = G.links(c, null, null, TRUE)
+        				val dOutputs = G.links(d, None, None, Some(true))
+        				val cOutputs = G.links(c, None, None, Some(true))
         				val dcOutputs = intersection(dOutputs, cOutputs)
         				for( b <- dcOutputs ) {
         					if( G.undirectedAdjacent(a, b) ) {
@@ -158,19 +163,19 @@ class InductiveCausation(pHat: Distribution)
 
     	var applied = false
     	for( i <- 0 to (varList.size - 1) ) {
-    		val a = varList.get(i)
-    		val aNeighbors = G.links(a, null, null, null)
+    		val a = varList(i)
+    		val aNeighbors = G.links(a, None, None, Some(true))
     		for( j <- 0 to (aNeighbors.size - 1) ) {
-    			val c = aNeighbors.get(j)
-    			val cOutputs = G.links(c, null, null, TRUE)
+    			val c = aNeighbors(j)
+    			val cOutputs = G.links(c, None, None, Some(true))
     			for( m <- 0 to (cOutputs.size - 1) ) {
-    				val d = cOutputs.elementAt(m)
+    				val d = cOutputs(m)
     				if( ! a.equals(d) ) {
-    					val dOutputs = G.links(d, null, null, TRUE);
+    					val dOutputs = G.links(d, None, None, Some(true))
     					if( G.areAdjacent(a, d) ) {
-    						val adOutputs = intersection(aNeighbors, dOutputs);
+    						val adOutputs = intersection(aNeighbors, dOutputs)
     						for( n <- 0 to (adOutputs.size - 1) ) {
-    							val b = adOutputs.get(n)
+    							val b = adOutputs(n)
     							if( ( ! b.equals(c) ) && (! G.areAdjacent(c, b)) ) {
     								G.orient(a, b)
     								applied = true
@@ -198,13 +203,13 @@ class InductiveCausation(pHat: Distribution)
 
     		val a = varList.get(i)
 
-    		val cList = G.links(a, null, FALSE, TRUE)
+    		val cList = G.links(a, None, Some(false), Some(true))
     		
-    		for( j <- 0 to (cList.size()-1) ) {
-    			val c = cList.elementAt(j)
-    			val bList = G.links(c, FALSE, FALSE, null)
-    			for(m <-  0 to (bList.size()-1) ) {
-    				val b = bList.elementAt(m)
+    		for( j <- 0 to (cList.size-1) ) {
+    			val c = cList(j)
+    			val bList = G.links(c, Some(false), Some(false), None)
+    			for(m <-  0 to (bList.size - 1) ) {
+    				val b = bList(m)
     				if( ! G.areAdjacent(a, b) ) {
     					G.orient(c, b)
     					G.mark(c, b)

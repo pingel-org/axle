@@ -34,12 +34,12 @@ class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
 
   def isSupersetOf(other: Case): Boolean = {
     val it = other.assignments.keySet.iterator
-    while( it.hasNext() ) {
+    while( it.hasNext ) {
       val variable = it.next
       val otherVal = other.valueOf(variable)
       val thisVal = valueOf(variable)
       if ( otherVal != null && thisVal != null && ! thisVal.equals(otherVal) ) {
-	return false
+    	  return false
       }
     }
     true
@@ -76,7 +76,7 @@ class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
       val myValue = assignments(variable)
       val otherValue = other.assignments(variable)
       if( ! myValue.equals(otherValue) ) {
-	return myValue.compareTo(otherValue)
+    	  return myValue.compareTo(otherValue)
       }
     }
     0

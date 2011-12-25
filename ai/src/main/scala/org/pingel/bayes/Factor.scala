@@ -2,12 +2,16 @@ package org.pingel.bayes
 
 import org.pingel.util.ListCrossProduct
 
+import scalala.tensor.mutable._
+import scalala.tensor.dense._
+import scala.collection._
+
 object Factor {
 
   def multiply(tables: Collection[Factor]): Factor = {
 		
     if( tables.size == 0 ) {
-      return null;
+      return null
     }
 		
     // TODO this can be made more efficient by constructing a single
@@ -58,13 +62,13 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
 		
     var w: Double = 0.0
     var p: Double = 0.0
-    for( i <- 0 to (numCases - 1) ) {
+    for( i <- 0 until numCases ) {
       val c = caseOf(i)
       if( c.isSupersetOf(prior) ) {
-	w += read(c)
-	if( c.isSupersetOf(condition) ) {
-	  p += read(c)
-	}
+    	  w += read(c)
+    	  if( c.isSupersetOf(condition) ) {
+             p += read(c)
+    	  }
       }
     }
 		
@@ -98,51 +102,44 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   def print(): Unit = {
     for( i <- 0 to (elements.length - 1) ) {
       val c = caseOf(i)
-      System.out.println(c.toOrderedString(varList) + " " + read(c))
+      println(c.toOrderedString(varList) + " " + read(c))
     }
   }
 	
   def maxOut(variable: RandomVariable): Factor = {
     // Chapter 6 definition 6
 
-    var vars = List[RandomVariable]()
-    for( v <- getVariables() ) {
-      if( ! variable.equals(v) ) {
-	vars.add(v)
-      }
-    }
-		
+    var vars = getVariables.filter( v => ! variable.equals(v) )
+
     var newFactor = new Factor(vars)
     for( i <- 0 to newFactor.numCases() - 1 ) {
       def ci = newFactor.caseOf(i)
       var bestValue: Value = null
       var maxSoFar = Double.MinValue
       for( value <- variable.getDomain().getValues()) {
-	var cj = newFactor.caseOf(i)
-	cj.assign(variable, value)
-	val s = this.read(cj)
-	if( bestValue == null ) {
-	  maxSoFar = s
-	  bestValue = value
-	}
-	else {
-	  if( s > maxSoFar ) {
-	    maxSoFar = s;
-	    bestValue = value
-	  }
-	}
+    	  var cj = newFactor.caseOf(i)
+    	  cj.assign(variable, value)
+          val s = this.read(cj)
+          if( bestValue == null ) {
+             maxSoFar = s
+             bestValue = value
+          }
+          else {
+             if( s > maxSoFar ) {
+                maxSoFar = s
+                bestValue = value
+             }
+          }
       }
-      
-      newFactor.write(ci, maxSoFar);
+      newFactor.write(ci, maxSoFar)
     }
-    
     newFactor
   }
   
   def projectToOnly(remainingVars: List[RandomVariable]): Factor = {
     var result = new Factor(remainingVars)
     
-    for( j <- 0 to ( numCases - 1 ) ) {
+    for( j <- 0 until numCases ) {
       var fromCase = this.caseOf(j)
       var toCase = fromCase.projectToVars(remainingVars)
       val additional = this.read(fromCase)
@@ -156,21 +153,21 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     val aValues = a.getDomain.getValues
     val bValues = b.getDomain.getValues
 		
-    var tally = new Matrix[Double](aValues.size, bValues.size)
+    var tally = DenseMatrix.zeros[Double](aValues.size, bValues.size)
     var w = new Case()
     var r = 0
     for( aVal <- aValues ) {
       w.assign(a, aVal)
       var c = 0
       for( bVal <- bValues ) {
-	w.assign(b, bVal)
-	for( j <- 0 to this.numCases - 1 ) {
-	  val m = this.caseOf(j)
-	  if( m.isSupersetOf(w) ) {
-	    tally(r, c) += this.read(m)
-	  }
-	}
-	c += 1
+    	  w.assign(b, bVal)
+    	  for( j <- 0 until numCases ) {
+    		  val m = this.caseOf(j)
+    		  if( m.isSupersetOf(w) ) {
+    			  tally(r, c) += this.read(m)
+    		  }
+    	  }
+    	  c += 1
       }
       r += 1
     }
@@ -180,21 +177,21 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   def sumOut(varToSumOut: RandomVariable): Factor = {
     // depending on assumptions, this may not be the best way to remove the vars
     
-    var newVars = List[RandomVariable]()
+    var newVars = mutable.ListBuffer[RandomVariable]()
     for( x <- getVariables() ) {
       if( x.compareTo(varToSumOut) != 0 ) {
-	newVars.add(x);
+    	  newVars += x
       }
     }
 		
-    var result = new Factor(newVars)
-    for( j <- 0 to result.numCases()-1 ) {
+    var result = new Factor(newVars.toList)
+    for( j <- 0 until result.numCases() ) {
       var c = result.caseOf(j)
       var p = 0.0
       for( value <- varToSumOut.getDomain.getValues ) {
-	var f = c.copy()
-	f.assign(varToSumOut, value)
-	p += read(f)
+    	  var f = c.copy()
+    	  f.assign(varToSumOut, value)
+    	  p += read(f)
       }
       result.write(c, p)
     }
@@ -206,10 +203,9 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     // TODO not the most efficient way to sum out a set of variables
 		
     var result = this
-    for( v <- varsToSumOut ) {
+    varsToSumOut.map( v => {
       result = result.sumOut(v)
-    }
-    
+    })
     result
   }
 	
@@ -217,15 +213,15 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
 		
     // as defined on chapter 6 page 15
 		
-    var result = new Factor(getVariables());
+    var result = new Factor(getVariables())
 		
-    for( j <- 0 to result.numCases() - 1 ) {
+    for( j <- 0 until result.numCases() ) {
       var c = result.caseOf(j)
       if( c.isSupersetOf(e) ) {
-	result.elements(j) = elements(j)
+    	  result.elements(j) = elements(j)
       }
       else {
-	result.elements(j) = 0.0
+    	  result.elements(j) = 0.0
       }
     }
     
@@ -234,21 +230,21 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
 	
   def multiply(other: Factor): Factor = {
 		
-    def newVarList = List[RandomVariable]()
-    newVarList.addAll(getVariables())
+    var newVarList = mutable.ListBuffer[RandomVariable]()
+    newVarList ++= getVariables()
 
     var myVarsAsSet = Set[RandomVariable]()
-    myVarsAsSet.addAll(getVariables());
+    myVarsAsSet ++= getVariables()
 
     for( x <- other.getVariables() ) {
       if( ! myVarsAsSet.contains(x) ) {
-	newVarList.add(x)
+    	  newVarList += x
       }
     }
     
-    var result = new Factor(newVarList);
+    var result = new Factor(newVarList)
     
-    for(j <- 0 to result.numCases() - 1 ) {
+    for(j <- 0 until result.numCases() ) {
       var c = result.caseOf(j)
       val myContribution = this.read(c)
       val otherContribution = other.read(c)
@@ -258,13 +254,6 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     result
   }
   
-  def mentions(variable: RandomVariable): Boolean = {
-    for( mine <- getVariables() ) {
-      if( variable.getName.equals(mine.getName) ) {
-	return true
-      }
-    }
-    false
-  }
+  def mentions(variable: RandomVariable) = getVariables.exists( v => variable.getName.equals(v.getName) ) 
 	
 }

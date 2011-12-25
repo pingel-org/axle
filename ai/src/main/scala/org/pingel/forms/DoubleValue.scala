@@ -9,10 +9,8 @@ import org.pingel.gestalt.core.Name
 import org.pingel.gestalt.core.SimpleForm
 import org.pingel.ptype.Reals
 
-class DoubleValue()  {
-
-	var value: Double
-
+class DoubleValue(value: Double)  {
+  
     def createDoubleValue(pValue: Double) = {
         this.value = pValue
         new SimpleForm(new Name(pValue + ""))
@@ -24,7 +22,7 @@ class DoubleValue()  {
     }
 
     def compareTo(other: Form) = other match {
-      case dv: DoubleValue => new Double(value).compareTo(dv.value)
+      case dv: DoubleValue => new DoubleValue(value).compareTo(dv.value)
       case _ => -1
     }
 
