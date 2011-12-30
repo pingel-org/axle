@@ -2,11 +2,69 @@
 pingel.org
 ==========
 
-A wide range of code I've written over the years, primarily for the JVM.
+These project focuses on core programming concepts, languages, and patterns.
+I am particularly intersted in in domains like linguistics, artificial intelligence,
+(interactive) data visualization, and Category Theory.
+
+Some of these projects started their life as Java code.  But I have found that its 
+unexpressive syntax and typesystem diminished the utility of this code as a study
+aid.
+
+After reading a paper on Scala in the spring of 2008, I began using it for
+a personal project a year later.  I became convinced that Scala will do a much better job
+of allowing me to express these concepts more concisely and discover deeper connections
+among them.  Not only is Scala helping me express (and learn about) these subjects, but the
+subjects are also forcing me to really understand my chosen language.
+
+I have also embraced using unicode characters whenever there the original literature
+uses them.  I would likely not do this for production code meant for the workplace, but
+as the primary goal of this project is pedagogy, I think it's appropriate to use this
+technique to minimize the cognitive overhead of switching between the printed literature
+and the working Scala models.
 
 Adam Pingel
 <pingel@gmail.com>
-February 2011
+December 2011
+
+cattheory
+---------
+
+Notes I've taken while exploring the deeper functional, theoretical aspects of Scala.
+
+It's clear that Haskell has been a strong influence on Scala and the functional
+faction of its community, so some of that this is oriented towards mapping Haskell concepts
+to Scala.
+
+Other notes are directly related to Category Theory.  I first encountered "Category Theory"
+by name when my advisor at UCLA suggested that some of my interests seemed similar.  At the time
+I was about five years into a PhD program in computer science with a major field in programming
+languages, and minor fields in linguistics and artificial intelligence.
+I never finished that degree, but in the years since then, I have come to realize that
+Category Theory is in fact an important piece of what I was looking for.  Now the pressure of
+completing a degree is off, I am taking my time to properly learn this subject.
+
+The goal is to have working models of concepts that bear a stong resemblance to their
+presentation in the original source material.  Eventually that will mean providing
+typeset TeX output, as well as other visualizations for specific data types (such as
+graphs).
+
+
+linguistics
+-----------
+
+Models the Gold Paradigm and Angluin's Language Learner, which
+I encountered in a couple of Ed Stabler's graduate courses
+on language evolution.
+
+ai 
+----------------------------
+
+Artificial Intelligence
+
+Code for Bayesian Networks and Causality.
+It's currently not buildable.
+Originally written in Java.
+I am actively rewriting this code in Scala.
 
 python2json
 -----------
@@ -21,22 +79,7 @@ problems with it, but for the most part it works.
 
 Feel free to submit bug patches.
 
-
-Linguistics
------------
-
-Models the Gold Paradigm and Angluin's Language Learner, which
-I encountered in a couple of Ed Stabler's graduate courses
-on language evolution.
-
-AI (Artificial Intelligence)
-----------------------------
-
-Code for Bayesian Networks and Causality.
-It's currently not buildable.
-I am actively rewriting this code in Scala.
-
-Util
+util
 ----
 
 Mostly iterators like PowerSet and CrossProduct that were
