@@ -2,7 +2,7 @@
 pingel.org
 ==========
 
-These project focuses on core programming concepts, languages, and patterns.
+These projects focus on core programming concepts, languages, and patterns.
 I am particularly intersted in in domains like linguistics, artificial intelligence,
 (interactive) data visualization, and Category Theory.
 
