@@ -39,9 +39,10 @@ Other notes are directly related to Category Theory.  I first encountered "Categ
 by name when my advisor at UCLA suggested that some of my interests seemed similar.  At the time
 I was about five years into a PhD program in computer science with a major field in programming
 languages, and minor fields in linguistics and artificial intelligence.
-I never finished that degree, but in the years since then, I have come to realize that
-Category Theory is in fact an important piece of what I was looking for.  Now the pressure of
-completing a degree is off, I am taking my time to properly learn this subject.
+I never finished that degree, but in the years since then I have come to realize that
+Category Theory is in fact an important piece of what I was looking for.
+Now that the pressure of
+completing a degree is off I am taking my time to properly learn this subject.
 
 The goal is to have working models of concepts that bear a stong resemblance to their
 presentation in the original source material.  Eventually that will mean providing
