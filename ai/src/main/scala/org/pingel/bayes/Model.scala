@@ -11,7 +11,7 @@ object Direction {
 
 }
 
-class Model(name: String="no name") {
+case class Model(name: String="no name") {
 	
   var graph = new ModelGraph()
   var newVarIndex = 0
@@ -91,55 +91,53 @@ class Model(name: String="no name") {
       var openToVar = false
       var directionPriorToVar = Direction.UNKNOWN
       if( prior == null ) {
-	openToVar = true
+    	  openToVar = true
       }
       else {
-	directionPriorToVar = Direction.OUTWARD
-	if( getGraph().precedes(variable, prior) ) {
-	  directionPriorToVar = Direction.INWARD
-	}
+    	  directionPriorToVar = Direction.OUTWARD
+		  if( getGraph().precedes(variable, prior) ) {
+			  directionPriorToVar = Direction.INWARD
+		  }
 	
-	if( priorDirection != Direction.UNKNOWN ) {
-	  var priorGiven = given.contains(prior)
-	  openToVar = (
-	    priorDirection == Direction.INWARD  &&
-	    ! priorGiven &&
-	    directionPriorToVar == Direction.OUTWARD) ||
-	  (priorDirection == Direction.OUTWARD &&
-	   ! priorGiven && 
-	   directionPriorToVar == Direction.OUTWARD) ||
-	  (priorDirection == Direction.INWARD  &&
-	   graph.descendantsIntersectsSet(variable, given) &&
-	   directionPriorToVar == Direction.INWARD)
-	}
-	else {
-	  openToVar = true
-	}
+    	  if( priorDirection != Direction.UNKNOWN ) {
+    		  var priorGiven = given.contains(prior)
+    		  openToVar = (
+    				  priorDirection == Direction.INWARD  &&
+    				  ! priorGiven &&
+    				  directionPriorToVar == Direction.OUTWARD) ||
+    				  (priorDirection == Direction.OUTWARD &&
+    				  ! priorGiven && 
+    				  directionPriorToVar == Direction.OUTWARD) ||
+    				  (priorDirection == Direction.INWARD  &&
+    				  graph.descendantsIntersectsSet(variable, given) &&
+    				  directionPriorToVar == Direction.INWARD)
+    	  }
+    	  else {
+    		  openToVar = true
+    	  }
       }
       
       if( openToVar ) {
-	if( to.contains(variable) ) {
-	  var path = List[RandomVariable]()
-	  path.add(variable)
-	  return path
-	}
-	var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>
-	neighbors.remove(prior)
+    	  if( to.contains(variable) ) {
+    		  return List(variable)
+    	  }
+    	  var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>
+    	  neighbors.remove(prior)
 	
-	var visitedCopy = Map[RandomVariable, Set[RandomVariable]]()
-	visitedCopy.putAll(visited)
-	var outs = visited.get(prior) // Set<RandomVariable>
-	if( outs == null ) {
-	  outs = Set[RandomVariable]()
-	  visitedCopy.put(prior, outs)
-	}
-	outs.add(variable)
+    	  var visitedCopy = Map[RandomVariable, Set[RandomVariable]]()
+    	  visitedCopy.putAll(visited)
+    	  var outs = visited.get(prior) // Set<RandomVariable>
+    	  if( outs == null ) {
+    		  outs = Set[RandomVariable]()
+    		  visitedCopy.put(prior, outs)
+    	  }
+    	  outs.add(variable)
 	
-	var path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given);
-	if( path != null ) {
-	  path.add(variable)
-	  return path
-	}
+    	  var path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given);
+    	  if( path != null ) {
+    		  path.add(variable)
+    		  return path
+    	  }
       }
     }
     return null

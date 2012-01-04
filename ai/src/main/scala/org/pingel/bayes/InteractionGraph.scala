@@ -1,6 +1,7 @@
 package org.pingel.bayes
 
 import org.pingel.util.UndirectedGraph
+import scala.collection._
 
 class InteractionGraph extends UndirectedGraph[RandomVariable, VariableLink] {
 
@@ -18,21 +19,21 @@ class InteractionGraph extends UndirectedGraph[RandomVariable, VariableLink] {
     }
   }
 
-  def eliminationSequence(pi: List[RandomVariable]): List[InteractionGraph] = {
+  def eliminationSequence(π: List[RandomVariable]): List[InteractionGraph] = {
 
-    var result = List[InteractionGraph]()
+    var result = mutable.ListBuffer[InteractionGraph]()
     var G: InteractionGraph = this
-    result.add(G)
+    result += G
 		
-    for( rv <- pi ) {
+    π.map( rv => {
       var newG = new InteractionGraph()
       G.copyTo(newG)
       newG.eliminate(rv)
-      result.add(newG)
+      result += newG
       G = newG
-    }
+    })
     
-    result
+    result.toList
   }
 
 }

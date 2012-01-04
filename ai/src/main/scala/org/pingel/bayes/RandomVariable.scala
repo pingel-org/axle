@@ -3,8 +3,10 @@ package org.pingel.bayes
 import org.pingel.util.DirectedGraphVertex
 import org.pingel.util.UndirectedGraphVertex
 
-class RandomVariable(name: String, domain: Option[Domain]=None, observable: Boolean=true)
-// TODO: extends DirectedGraphVertex[ModelEdge], UndirectedGraphVertex[VariableLink], Comparable[RandomVariable]
+case class RandomVariable(name: String, domain: Option[Domain]=None, observable: Boolean=true)
+extends DirectedGraphVertex[ModelEdge]
+// , UndirectedGraphVertex[VariableLink]
+with Comparable[RandomVariable]
 {
 
   val lcName = name.toLowerCase()

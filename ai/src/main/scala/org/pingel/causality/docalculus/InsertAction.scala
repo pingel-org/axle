@@ -9,26 +9,26 @@ import org.pingel.forms.Variable
 import org.pingel.gestalt.core.Form
 import org.pingel.gestalt.core.Unifier
 
+import scala.collection._
+
 class InsertAction extends Rule {
 	
 	def apply(q: Probability, m: CausalModel, namer: VariableNamer): List[Form] =  {
 		
-		var results = List[Form]()
+		var results = mutable.ListBuffer[Form]()
 		
 		var Y = q.getQuestion()
 		var X = q.getActions()
 		var W = q.getGiven()
 		
-		var XW = Set[Variable]()
-		XW.addAll(X)
-		XW.addAll(W)
+		var XW = X ++ W
 		
 		// TODO Question: are all actions necessarily in q? Is
 		// is possible to have relevant actions that are not in q?
 		// I assume not.
 		
-		var potentialZ = Set[RandomVariable]()
-		potentialZ.addAll(m.getRandomVariables())
+		var potentialZ = mutable.Set[RandomVariable]()
+		potentialZ ++= m.getRandomVariables()
 		potentialZ.removeAll(randomVariablesOf(Y))
 		potentialZ.removeAll(randomVariablesOf(X))
 		potentialZ.removeAll(randomVariablesOf(W))
@@ -36,9 +36,8 @@ class InsertAction extends Rule {
 		
 		for( zRandomVariable <- potentialZ ) {
 			if( zRandomVariable.observable ) {
-				var Z = Set[Variable]()
 				val zAction = zRandomVariable.nextVariable(namer)
-				Z.add(zAction)
+				val Z = Set(zAction)
 				
 				var subModel = m.duplicate()
 				subModel.getGraph().removeInputs(randomVariablesOf(X))
@@ -50,14 +49,14 @@ class InsertAction extends Rule {
 				
 				if( subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW)) ) {
 					var XZ = Set[Variable]()
-					XZ.addAll(X)
-					XZ.add(zAction)
+					XZ ++= X
+					XZ += zAction
 					
 					var Ycopy = Set[Variable]()
-					Ycopy.addAll(Y)
+					Ycopy ++= Y
 					
 					var Wcopy = Set[Variable]()
-					Wcopy.addAll(W)
+					Wcopy ++= W
 					
 					var probFactory = new Probability()
 					var unifier = new Unifier()
@@ -70,7 +69,7 @@ class InsertAction extends Rule {
 			}
 		}
 		
-		results
+		results.toList
 	}
 	
 }

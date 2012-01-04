@@ -2,7 +2,8 @@
  * Created on May 31, 2005
  *
  */
-package org.pingel.forms.math;
+
+package org.pingel.forms.math
 
 import org.pingel.gestalt.core.ComplexForm
 import org.pingel.gestalt.core.FormFactory
@@ -12,15 +13,13 @@ import org.pingel.gestalt.core.SimpleForm
 
 class Difference extends FormFactory {
 
+  val arg1 = new Name("arg1")
+  val arg2 = new Name("arg2")
+  val lambda = new Lambda()
+  lambda.add(arg1)
+  lambda.add(arg2)
+  archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("-")), new SimpleForm(arg1)), new SimpleForm(arg2), lambda)
 
-	val arg1 = new Name("arg1")
-	val arg2 = new Name("arg2")
-	val lambda = new Lambda()
-	lambda.add(arg1)
-	lambda.add(arg2)
-	archetype = new ComplexForm(new ComplexForm(new SimpleForm(new Name("-")), new SimpleForm(arg1)), new SimpleForm(arg2), lambda)
-
-    
 //    public Form evaluate(ProbabilityTable t,
 //            Map<Variable, Form> values, VariableNamer namer) {
 //        

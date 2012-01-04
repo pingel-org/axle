@@ -2,8 +2,9 @@ package org.pingel.bayes
 
 import org.pingel.util.ListCrossProduct
 
-import scalala.tensor.mutable._
-import scalala.tensor.dense._
+//import scalala.tensor.mutable._
+//import scalala.tensor.dense._
+import org.pingel.util.Matrix
 import scala.collection._
 
 object Factor {
@@ -50,18 +51,18 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   def makeCrossProduct(): Unit = {
     var valLists = List[List[Value]]()
     for( variable <- varList ) {
-      valLists.add(variable.getDomain().getValues());
+      valLists.add(variable.getDomain().getValues())
     }
-    cp = new ListCrossProduct[Value](valLists);
-    elements = new Array[Double](cp.size())
+    cp = new ListCrossProduct[Value](valLists)
+    elements = new Array[Double](cp.size)
   }
 	
   def evaluate(prior: Case, condition: Case): Double = {
     // assume prior and condition are disjoint, and that they are
     // each compatible with this table
 		
-    var w: Double = 0.0
-    var p: Double = 0.0
+    var w = 0.0
+    var p = 0.0
     for( i <- 0 until numCases ) {
       val c = caseOf(i)
       if( c.isSupersetOf(prior) ) {
@@ -242,7 +243,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
       }
     }
     
-    var result = new Factor(newVarList)
+    var result = new Factor(newVarList.toList)
     
     for(j <- 0 until result.numCases() ) {
       var c = result.caseOf(j)

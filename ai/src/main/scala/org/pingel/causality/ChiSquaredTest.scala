@@ -1,6 +1,8 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
-import scalala.tensor.mutable._
+import org.pingel.util.Matrix
+
+// import scalala.tensor.mutable._
 
 object ChiSquaredTest {
 

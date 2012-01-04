@@ -1,8 +1,8 @@
 
 package org.pingel.bayes
 
-import scalala.tensor.mutable._
-import scalala.tensor.dense._
+//import scalala.tensor.mutable._
+//import scalala.tensor.dense._
 import scala.collection._
 
 class PartiallyDirectedGraph(variables: List[RandomVariable]) {
@@ -13,9 +13,9 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
   var mark = DenseMatrix.zeros[Boolean](variables.size, variables.size)
   var arrow = DenseMatrix.zeros[Boolean](variables.size, variables.size)
   
-  for( i <- 0 to variables.size-1 ) {
+  for( i <- 0 until variables.size ) {
     variable2index += variables(i) -> new Integer(i)
-    for( j <- 0 to variables.size-1 ) {
+    for( j <- 0 until variables.size ) {
       connect(i, j) = false
       mark(i, j) = false
       arrow(i, j) = false
@@ -64,7 +64,7 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     	
     val i = indexOf(v)
     	
-    for(j <- 0 to (size - 1) ) {
+    for(j <- 0 until size) {
 
       val u = variables(j)
       var pass = connect(i, j)

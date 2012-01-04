@@ -22,25 +22,23 @@ import edu.uci.ics.jung.visualization.GraphDraw
 import edu.uci.ics.jung.visualization.Layout
 import edu.uci.ics.jung.visualization.PluggableRenderer
 
-class VisVariableVertex(variable: RandomVariable) extends DirectedSparseVertex {
+case class VisVariableVertex(variable: RandomVariable)
+extends DirectedSparseVertex {
 
 }
 
-class VisModelEdge(source: VisVariableVertex, dest: VisVariableVertex) extends DirectedSparseEdge {
+case class VisModelEdge(source: VisVariableVertex, dest: VisVariableVertex)
+extends DirectedSparseEdge(source, dest) {
 
 }
 
 class ModelVertexPaintFunction(m: Model) extends VertexPaintFunction {
 	
-  def getDrawPaint(v: Vertex): Paint = Color.BLACK
+  def getDrawPaint(v: Vertex) = Color.BLACK
     
-  def getFillPaint(v: Vertex): Paint = {
-    if( v.asInstanceOf[VisVariableVertex].variable.observable ) {
-      return Color.BLUE
-    }
-    else {
-      return Color.WHITE
-    }
+  def getFillPaint(v: Vertex) = v.asInstanceOf[VisVariableVertex].variable.observable match {
+    case true  => Color.BLUE
+    case false => Color.WHITE
   }
 }
 
@@ -53,16 +51,11 @@ object Strokes {
 
 class ModelEdgeStrokeFunction(m: Model) extends EdgeStrokeFunction {
 
-  def getStroke(e: Edge): Stroke = {
-    var me = e.asInstanceOf[VisModelEdge]
-    if( me.source.variable.observable ) {
-      return Strokes.basic
-    }
-    else {
-      return Strokes.dotted
-    }
+  def getStroke(e: Edge) = e.asInstanceOf[VisModelEdge].source.variable.observable match {
+  case true => Strokes.basic
+  case false => Strokes.dotted
   }
-    
+
 }
 
 class ModelVertexStringer(m: Model) extends VertexStringer {

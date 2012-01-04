@@ -4,9 +4,11 @@ import java.util.TreeMap;
 
 import org.pingel.gestalt.core.Form
 
+import scala.collection._
+
 class PType {
 
-    var values = List[Form]()
+    var values = mutable.ListBuffer[Form]()
     
     var values2index = new TreeMap[Form,Integer]()
 
@@ -14,7 +16,7 @@ class PType {
 
     def addValue(value: Form) = {
         val index = values.size
-        values.add(value)
+        values += value
         values2index.put(value, new Integer(index))
     }
     

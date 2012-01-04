@@ -24,7 +24,7 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
   def cluster(i: EliminationTreeNode): Set[RandomVariable] = {
     var result = mutable.Set[RandomVariable]()
     for( j <- getNeighbors(i)) {
-      result.addAll(separate(i, j))
+      result ++= separate(i, j)
     }
     result ++= node2phi(i).getVariables
     result
@@ -34,10 +34,10 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
 	
   def separate(i: EliminationTreeNode, j: EliminationTreeNode): Set[RandomVariable] =
     {
-      var iSide = Set[RandomVariable]()
+      var iSide = mutable.Set[RandomVariable]()
       gatherVars(j, i, iSide)
 		
-      var jSide = Set[RandomVariable]()
+      var jSide = mutable.Set[RandomVariable]()
       gatherVars(i, j, jSide)
 
       iSide.filter( iv => jSide.contains(iv) ) // aka "intersection"
@@ -53,7 +53,7 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
   def getAllVariables(): Set[RandomVariable] = {
     var result = Set[RandomVariable]()
     for( node <- node2phi.keySet ) {
-      result.addAll(node2phi(node).getVariables())
+      result ++= node2phi(node).getVariables()
     }
     result
   }

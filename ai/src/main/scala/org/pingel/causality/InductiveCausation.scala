@@ -2,17 +2,18 @@
 package org.pingel.bayes
 
 import scala.collection._
-import scalala.tensor.mutable._
-import scalala.tensor.dense._
+//import scalala.tensor.mutable._
+//import scalala.tensor.dense._
 
+import org.pingel.ptype.PBoolean
 
 class InductiveCausation(pHat: Distribution)
 {
 	val FALSE = new PBoolean(false)
 	val TRUE = new PBoolean(true)
 
-	var varList = new ListBuffer[RandomVariable]()
-	varList.addAll(pHat.getVariables())
+	var varList = mutable.ListBuffer[RandomVariable]()
+	varList ++= pHat.getVariables()
 
 	def prepareGraph(): PartiallyDirectedGraph = {
 	  

@@ -1,6 +1,6 @@
 package org.pingel.bayes
 
-class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
+case class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
 {
   var assignments = Map[RandomVariable, Value]() // NOTE: was TreeMap
 
@@ -8,7 +8,7 @@ class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
 
   def getVariables(): Set[RandomVariable] = assignments.keySet
 	
-  def size(): Int = assignments.keySet.size
+  def size() = assignments.keySet.size
 
   def valueOf(variable: RandomVariable): Value = {
     assignments(variable)
@@ -25,10 +25,8 @@ class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
   }
 
   def assign(vars: List[RandomVariable], vals: List[Value]): Unit = {
-    for(i <- 0 to (vars.size-1) ) {
-      val variable = vars(i)
-      val value = vals(i)
-      assignments += variable -> value
+    for(i <- 0 until vars.size ) {
+      assignments += vars(i) -> vals(i)
     }
   }
 

@@ -6,12 +6,12 @@ import org.pingel.util.UndirectedGraph
 object JoinTree {
 
   // TODO:
-  def fromEliminationOrder(G: DirectedGraph, pi: List[RandomVariable]): JoinTree = {
+  def fromEliminationOrder(G: DirectedGraph[_, _], pi: List[RandomVariable]): JoinTree = {
     // returns a jointree for DAG G with width equal to width(pi, G)
     var T = new JoinTree()
     val Gm = G.moralGraph() // UndirectedGraph
-    var clusterSequence: List[Set[RandomVariable]] = null; // Gm.induceClusterSequence(pi);
-    return T;
+    var clusterSequence: List[Set[RandomVariable]] = null // Gm.induceClusterSequence(pi);
+    T
   }
 
 }
@@ -32,7 +32,7 @@ class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
     if( ! node2cluster.contains(n) ) {
       node2cluster += n -> Set[RandomVariable]()
     }
-    node2cluster(n).add(v);
+    node2cluster(n).add(v)
   }
 	
   def constructEdge(n1: JoinTreeNode, n2: JoinTreeNode): JoinTreeEdge = new JoinTreeEdge(n1, n2)
@@ -43,7 +43,7 @@ class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
     
     for( v <- node2cluster.get(n1)) {
       if( node2cluster(n2).contains(v) ) {
-	result.add(v)
+    	  result.add(v)
       }
     }
     result
@@ -56,13 +56,13 @@ class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
     var T = new JoinTree()
     copyTo(T); // not yet implemented
 		
-    while( T.getVertices().size() > 1 ) {
+    while( T.getVertices().size > 1 ) {
       val i = T.firstLeafOtherThan(r)
-      val j = null; // TODO theNeighbor(); a JoinTreeNode
+      val j = null // TODO theNeighbor(); a JoinTreeNode
       for(v <- node2cluster.get(i)) {
-	if( ! node2cluster(j).contains(v) ) {
-	  result.add(v);
-	}
+    	  if( ! node2cluster(j).contains(v) ) {
+    		  result.add(v)
+    	  }
       }
     }
 
@@ -76,11 +76,11 @@ class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
   def embeds(eTree: EliminationTree, embedding: Map[JoinTreeNode, EliminationTreeNode]): Boolean = {
     for(jtn <- getVertices() ) {
       val cluster = node2cluster(jtn)
-      val etn = embedding(jtn);
+      val etn = embedding(jtn)
       for( v <- eTree.getFactor(etn).getVariables ) {
-	if( ! cluster.contains(v) ) {
-	  return false
-	}
+    	  if( ! cluster.contains(v) ) {
+    		  return false
+    	  }
       }
     }
     

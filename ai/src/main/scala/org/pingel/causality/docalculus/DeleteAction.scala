@@ -1,6 +1,8 @@
 
 package org.pingel.causality.docalculus
 
+import scala.collection._
+
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
@@ -13,7 +15,7 @@ class DeleteAction extends Rule {
 
     def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
 
-        var results = List[Form]()
+        var results = mutable.ListBuffer[Form]()
         
         var Y = q.getQuestion()
         var W = q.getGiven()
@@ -43,10 +45,10 @@ class DeleteAction extends Rule {
             if( subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW)) ) {
               
                 var Ycopy = Set[Variable]()
-                Ycopy.addAll(Y)
+                Ycopy ++= Y
                 
                 var Wcopy = Set[Variable]()
-                Wcopy.addAll(W)
+                Wcopy ++= W
                 
                 val probFactory = new Probability()
                 val unifier = new Unifier()
@@ -54,11 +56,11 @@ class DeleteAction extends Rule {
                 unifier.put(probFactory.given, Wcopy)
                 unifier.put(probFactory.actions, X)
                 val f = probFactory.createForm(unifier)
-                results.add(f)
+                results += f
             }
         }
         
-        results
+        results.toList
     }
 
 }

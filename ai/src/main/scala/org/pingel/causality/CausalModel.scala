@@ -16,7 +16,7 @@ class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
 	def sampleDistribution(numSamples: Int) = {
         println("creating probabilitytable of " + getObservableRandomVariables().size() + " variables")
 		var result = new Factor(getObservableRandomVariables())
-		for( j <- 0 to (numSamples - 1) ) {
+		for( j <- 0 until numSamples ) {
 			val sample = getSample()
 			val previous = result.read(sample)
 			result.write(sample, previous + 1)
@@ -46,7 +46,7 @@ class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
     def isMarkovian(): Boolean = {
         // page 69.  I'm not confident I have this right.
         for( rv <- getRandomVariables() ) {
-            if( (! rv.observable) && (getGraph().getSuccessors(rv).size() > 1) ) {
+            if( (! rv.observable) && (getGraph().getSuccessors(rv).size > 1) ) {
                 return false
             }
         }
@@ -173,7 +173,7 @@ class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
         
         pathsInterceptBefore(X, Z, Y) &&
           allBackdoorsBlocked(XSet, Z, Set[RandomVariable]()) &&
-          allBackdoorsBlocked(Z, YSet, XSet);
+          allBackdoorsBlocked(Z, YSet, XSet)
     }
 
 

@@ -9,7 +9,7 @@ class VariableNamer {
   var counts = Map[RandomVariable, Integer]()
     
   def increment(rv: RandomVariable): Integer = {
-    var c: Integer = 0
+    var c = 0
     var count: Integer = counts(rv)
     if( counts.contains(rv) ) {
       c = counts(rv)
@@ -20,7 +20,7 @@ class VariableNamer {
 
   def duplicate(): VariableNamer = {
     var duplicate: VariableNamer = new VariableNamer()
-    duplicate.counts.putAll(counts);
+    duplicate.counts.putAll(counts)
     duplicate
   }
 }

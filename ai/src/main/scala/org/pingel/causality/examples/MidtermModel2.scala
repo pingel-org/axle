@@ -3,8 +3,8 @@ package org.pingel.causality.examples
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Distribution
 import org.pingel.bayes.Domain
-import org.pingel.bayes.Function
-import org.pingel.bayes.InductiveCausation
+import org.pingel.causality.Function
+import org.pingel.causality.InductiveCausation
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.PartiallyDirectedGraph
 import org.pingel.bayes.RandomVariable

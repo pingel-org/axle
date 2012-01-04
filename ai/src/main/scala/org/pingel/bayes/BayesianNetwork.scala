@@ -286,7 +286,7 @@ class BayesianNetwork(name: String="bn") extends Model(name)
     var w = 0
     
     for( rv <- getRandomVariables() ) {
-      val d = G.getNeighbors(rv).size()
+      val d = G.getNeighbors(rv).size
       w = Math.max(w, d)
       G.eliminate(rv)
     }
@@ -437,7 +437,7 @@ class BayesianNetwork(name: String="bn") extends Model(name)
       System.exit(1)
     }
     
-    val fit = S.iterator()
+    val fit = S.iterator
     val result = fit.next()
     
     if( result.numCases() != 1 ) {
@@ -462,7 +462,7 @@ class BayesianNetwork(name: String="bn") extends Model(name)
     X ++= pX
     
     var G = interactionGraph()
-    var result = mutable.List[RandomVariable]()
+    var result = mutable.ListBuffer[RandomVariable]()
     
     while( X.size > 0 ) {
       val rv = G.vertexWithFewestNeighborsAmong(X)
@@ -470,7 +470,7 @@ class BayesianNetwork(name: String="bn") extends Model(name)
       G.eliminate(rv)
       X -= rv
     }
-    result
+    result.toList
   }
   
   def minFillOrder(pX: Set[RandomVariable]): List[RandomVariable] = {
@@ -536,12 +536,12 @@ class BayesianNetwork(name: String="bn") extends Model(name)
   def factorElimination2(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTreeNode): Factor = {
     // the variables Q appear on the CPT for the product of Factors assigned to node r
     
-    while( τ.getVertices().size() > 1 ) {
+    while( τ.getVertices().size > 1 ) {
       
       // remove node i (other than r) that has single neighbor j in tau
       
       val i = τ.firstLeafOtherThan(r)
-      val j = τ.getNeighbors(i).iterator().next()
+      val j = τ.getNeighbors(i).iterator.next()
       val ɸ_i = τ.getFactor(i)
       τ.delete(i)
       
@@ -563,15 +563,15 @@ class BayesianNetwork(name: String="bn") extends Model(name)
   def factorElimination3(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTreeNode): Factor = {
     // Q is a subset of C_r
     
-    while( τ.getVertices().size() > 1 ) {
+    while( τ.getVertices().size > 1 ) {
       // remove node i (other than r) that has single neighbor j in tau
       val i = τ.firstLeafOtherThan(r)
-      val j = τ.getNeighbors(i).iterator().next()
+      val j = τ.getNeighbors(i).iterator.next()
       val ɸ_i = τ.getFactor(i)
       τ.delete(i)
       val Sij = τ.separate(i, j)
-      var sijList = List[RandomVariable]()
-      sijList.addAll(Sij)
+      var sijList = mutable.ListBuffer[RandomVariable]()
+      sijList ++= Sij
       τ.addFactor(j, ɸ_i.projectToOnly(sijList))
       τ.draw()
     }

@@ -93,14 +93,12 @@ object SmokingModel extends CausalModel("Smoking Model") {
 
     def doTask3(model: CausalModel, namer: VariableNamer) = {
       
-        var question = Set[Variable]()
-        question.add(model.getVariable("Y").nextVariable(namer))
-        
+        var question = Set[Variable](model.getVariable("Y").nextVariable(namer))
+
         val given = Set[Variable]()
         
-        val actions = Set[Variable]()
-        actions.add(model.getVariable("X").nextVariable(namer))
-        
+        val actions = Set[Variable](model.getVariable("X").nextVariable(namer))
+
         val task3 = new Probability(question, given, actions)
         println("task3: " + task3.toString())
         
