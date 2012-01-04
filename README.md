@@ -24,7 +24,7 @@ and the working Scala models.
 
 Adam Pingel
 <pingel@gmail.com>
-December 2011
+January 2012
 
 cattheory
 ---------
@@ -48,6 +48,13 @@ The goal is to have working models of concepts that bear a stong resemblance to 
 presentation in the original source material.  Eventually that will mean providing
 typeset TeX output, as well as other visualizations for specific data types (such as
 graphs).
+
+axle
+----
+
+An attempt to implement a Haskell-like language as an internal DSL in Scala.
+My goal is to make the examples in "Learn You a Haskell for Great Good" work
+using a syntax as similar to Haskell as possible using Scala.
 
 
 linguistics
