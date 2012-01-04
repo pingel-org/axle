@@ -56,7 +56,7 @@ object Axle {
     // def fmap2[M[_,_], T, A, B](f: A => B, functor: M[T,A])(implicit tc: Functor2[M]): M[T,B] = 
     //   tc.fmap(f, functor)
 
-    // These versions of the implicit fmaps use the "implicitely" lookup instead of 
+    // These versions of the implicit fmaps use the "implicitly" lookup instead of 
     // placing it in an implicit parameter group.  This is available as of Scala 2.8
 
     def fmap[M[_] : Functor, A, B](f: A => B, functor: M[A]): M[B] =
