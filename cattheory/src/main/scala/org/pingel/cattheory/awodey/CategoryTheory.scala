@@ -1,5 +1,5 @@
 
-package org.pingel.cattheory.awodney
+package org.pingel.cattheory.awodey
 
 // unicode
 // http://formex.publications.europa.eu/formex-4/physspec/formex-4-character-encoding-c06.htm

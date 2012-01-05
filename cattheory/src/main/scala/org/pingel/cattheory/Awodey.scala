@@ -10,7 +10,7 @@ object Main {
 
     println("Hello, world")
 
-    import awodney.CategoryTheory._
+    import awodey.CategoryTheory._
 
     val ints = ⋅(Set(1, 2))
     val strings = ⋅(Set("A", "B"))

@@ -1,5 +1,5 @@
 
-package org.pingel.cattheory.awodney
+package org.pingel.cattheory.awodey
 
 object DiscreteMath {
 
