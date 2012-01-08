@@ -29,9 +29,9 @@ class InsertAction extends Rule {
 		
 		var potentialZ = mutable.Set[RandomVariable]()
 		potentialZ ++= m.getRandomVariables()
-		potentialZ.removeAll(randomVariablesOf(Y))
-		potentialZ.removeAll(randomVariablesOf(X))
-		potentialZ.removeAll(randomVariablesOf(W))
+		potentialZ --= randomVariablesOf(Y)
+		potentialZ --= randomVariablesOf(X)
+		potentialZ --= randomVariablesOf(W)
 		
 		
 		for( zRandomVariable <- potentialZ ) {
@@ -64,7 +64,7 @@ class InsertAction extends Rule {
 					unifier.put(probFactory.given, Wcopy)
 					unifier.put(probFactory.actions, XZ)
 					val f = probFactory.createForm(unifier)
-					results.add(f)
+					results += f
 				}
 			}
 		}

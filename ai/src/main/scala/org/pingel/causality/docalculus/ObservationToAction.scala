@@ -1,6 +1,7 @@
 
 package org.pingel.causality.docalculus
 
+import scala.collection._
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Probability
 import org.pingel.bayes.VariableNamer
@@ -12,7 +13,7 @@ class ObservationToAction extends Rule {
 	
 	def apply(q: Probability, m: CausalModel, namer: VariableNamer): List[Form] = {
 		
-		var results = List[Form]()
+		var results = new mutable.ListBuffer[Form]()
 		
 		var Y = q.getQuestion()
 		var X = q.getActions()
@@ -22,9 +23,9 @@ class ObservationToAction extends Rule {
 			var Z = Set[Variable]()
 			Z += z
 			
-			var W = Set[Variable]()
+			var W = new mutable.Set[Variable]()
 			W ++= q.getGiven()
-			W.remove(z)
+			W -= z
 			
 			var subModel = m.duplicate()
 			subModel.getGraph().removeInputs(randomVariablesOf(X))
@@ -49,11 +50,11 @@ class ObservationToAction extends Rule {
 				unifier.put(probFactory.given, W)
 				unifier.put(probFactory.actions, XZ)
 				val f = probFactory.createForm(unifier)
-				results.add(f)
+				results += f
 			}
 		}
 		
-		results
+		results.toList
 	}
 	
 }

@@ -53,7 +53,7 @@ class InsertObservation extends Rule {
                     var Xcopy = Set[Variable]()
                     Xcopy ++= X
                     
-        			results.add(new Probability(Ycopy, ZW, Xcopy))
+        			results += new Probability(Ycopy, ZW, Xcopy)
         		}
             }
         }

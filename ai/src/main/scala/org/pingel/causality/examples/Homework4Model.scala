@@ -10,8 +10,10 @@ import org.pingel.causality.RandomBooleanFunction
 import org.pingel.gestalt.core.Form
 import org.pingel.ptype.PBooleans
 import org.pingel.ptype.PBooleansValues
+import org.pingel.ptype.PFunction
 
-class XorOrFunction(variable: RandomVariable, in1: RandomVariable, in2: RandomVariable, in3: RandomVariable) extends Function(variable, List(in1, in2, in3))
+class XorOrFunction(variable: RandomVariable, in1: RandomVariable, in2: RandomVariable, in3: RandomVariable)
+extends PFunction(variable, List(in1, in2, in3))
 {
     def compute(m: CausalModel, memo: Case) = {
         val val1 = new java.lang.Boolean(memo.valueOf(in1).toString()).booleanValue()

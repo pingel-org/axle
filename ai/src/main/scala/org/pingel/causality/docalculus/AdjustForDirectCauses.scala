@@ -1,6 +1,7 @@
 
 package org.pingel.causality.docalculus
 
+import scala.collection._
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
@@ -60,14 +61,14 @@ class AdjustForDirectCauses extends Rule {
 	
 	def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
 	  
-		var results = List[Form]()
+		var results = new mutable.ListBuffer[Form]()
 		for( action <- q.getActions() ) {
 			val result = adjustForDirectCauses(m, q, namer, action)
 			if( result != null ) {
-				results.add(result)
+				results += result
 			}
 		}
-		results
+		results.toList
 	}
 	
 }
