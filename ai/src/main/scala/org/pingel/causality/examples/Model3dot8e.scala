@@ -5,7 +5,7 @@
 package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
-import org.pingel.causality.Function
+import org.pingel.ptype.PFunction
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
 
@@ -16,9 +16,9 @@ object Model3dot8e extends CausalModel("3.8e") {
     val Z = addVariable(new RandomVariable("Z"))
     val U = addVariable(new RandomVariable("U", None, false))
 
-    addFunction(new Function(X, List(U)))
-    addFunction(new Function(Y, List(Z, U)))
-    addFunction(new Function(Z, List(X)))
+    addFunction(new PFunction(X, List(U)))
+    addFunction(new PFunction(Y, List(Z, U)))
+    addFunction(new PFunction(Z, List(X)))
 
   def main(args: Array[String]) {
     ModelVisualizer.draw(Model3dot8e)

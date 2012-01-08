@@ -1,5 +1,5 @@
 package org.pingel.ptype
 
-class Model extends PType {
+class PModel extends PType {
 
 }

@@ -1,6 +1,6 @@
 package org.pingel.ptype
 
-import java.util.TreeMap;
+import java.util.TreeMap
 
 import org.pingel.gestalt.core.Form
 

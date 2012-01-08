@@ -8,20 +8,21 @@ import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
 import org.pingel.causality.RandomBooleanFunction
 import org.pingel.gestalt.core.Form
-import org.pingel.ptype.Booleans
+import org.pingel.ptype.PBooleans
+import org.pingel.ptype.PBooleansValues
 
 class XorOrFunction(variable: RandomVariable, in1: RandomVariable, in2: RandomVariable, in3: RandomVariable) extends Function(variable, List(in1, in2, in3))
 {
     def compute(m: CausalModel, memo: Case) = {
-        val val1 = new Boolean(memo.valueOf(in1).toString()).booleanValue()
-        val val2 = new Boolean(memo.valueOf(in2).toString()).booleanValue()
-        val val3 = new Boolean(memo.valueOf(in3).toString()).booleanValue()
+        val val1 = new java.lang.Boolean(memo.valueOf(in1).toString()).booleanValue()
+        val val2 = new java.lang.Boolean(memo.valueOf(in2).toString()).booleanValue()
+        val val3 = new java.lang.Boolean(memo.valueOf(in3).toString()).booleanValue()
 
         if( (val2 || val3) ^ val1 ) {
-          Booleans.tVal
+          PBooleansValues.tVal
         }
         else {
-          Booleans.fVal
+          PBooleansValues.fVal
         }
     }
         
@@ -29,7 +30,7 @@ class XorOrFunction(variable: RandomVariable, in1: RandomVariable, in2: RandomVa
 
 class Homework4Model(k: Int, p: Double) extends CausalModel("Homework 4 Model") {
   
-  val bools = Some(new Booleans())
+  val bools = Some(new PBooleans())
 
   var oldE: Option[RandomVariable] = None
   var oldEp: Option[RandomVariable] = None

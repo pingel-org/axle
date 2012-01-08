@@ -10,6 +10,8 @@ import org.pingel.bayes.VariableNamer
 import org.pingel.causality.examples.MidtermModel1
 import org.pingel.gestalt.core.Form
 
+import scala.collection._
+
 object Search {
 
     def main(args: Array[String])
@@ -64,8 +66,8 @@ class Search {
     				val probFactory = new Probability()
     				if( probFactory.isCreatorOf(e) ) {
     					if( probFactory.getActionSize(e) == 0 ) {
-    						var result = new ListBuffer[Form]()
-    						result.add(e)
+    						var result = new mutable.ListBuffer[Form]()
+    						result += e
     						result.toList
     					}
     					else {

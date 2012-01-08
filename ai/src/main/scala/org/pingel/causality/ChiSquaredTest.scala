@@ -12,31 +12,31 @@ object ChiSquaredTest {
     	val width = tally.numCols
       
         var rowTotals = new Array[Double](height)
-        for( r <- 0 to height-1) {
+        for( r <- 0 until height ) {
             rowTotals(r) = 0
-            for( c <- 0 to width-1 ) {
-                rowTotals(r) += tally(r, c)
+            for( c <- 0 until width ) {
+                rowTotals(r) += tally.valueAt(r, c)
             }
         }
 
         var columnTotals = new Array[Double](width)
-        for(c <- 0 to width-1 ) {
+        for(c <- 0 until width ) {
             columnTotals(c) = 0
-            for( r <- 0 to height-1 ) {
-                columnTotals(c) += tally(r, c)
+            for( r <- 0 until height ) {
+                columnTotals(c) += tally.valueAt(r, c)
             }
         }
 
-        val total = 0.to(height-1).map(rowTotals(_)).foldLeft(0.0)({_+_})
-        val total2 = 0.to(width-1).map(columnTotals(_)).foldLeft(0.0)({_+_})
+        val total = 0.until(height).map(rowTotals(_)).foldLeft(0.0)({_+_})
+        val total2 = 0.until(width).map(columnTotals(_)).foldLeft(0.0)({_+_})
         if( total != total2 ) {
         	throw new Exception("error calculating chi squared")
         }
         
     	var result = 0.0
-        for(r <- 0 to height-1 ) {
-            for(c <- 0 to width-1 ) {
-                val observed = tally(r, c)
+        for(r <- 0 until height ) {
+            for(c <- 0 until width ) {
+                val observed = tally.valueAt(r, c)
                 val expected = rowTotals(r) * columnTotals(c) / total
                 result += (observed - expected)*(observed - expected) / expected;
             }

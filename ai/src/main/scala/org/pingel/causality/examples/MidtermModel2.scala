@@ -3,19 +3,19 @@ package org.pingel.causality.examples
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Distribution
 import org.pingel.bayes.Domain
-import org.pingel.causality.Function
-import org.pingel.causality.InductiveCausation
+import org.pingel.ptype.PFunction
+import org.pingel.bayes.InductiveCausation
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.PartiallyDirectedGraph
 import org.pingel.bayes.RandomVariable
 import org.pingel.causality.PerfectDistribution
-import org.pingel.ptype.Booleans
+import org.pingel.ptype.PBooleans
 
 
 
 object MidtermModel2 extends CausalModel("Midterm Model 2") {
 
-  val bools = new Booleans()
+  val bools = new PBooleans()
 
   val a = new RandomVariable("A", bools)
   addVariable(a)
@@ -25,18 +25,18 @@ object MidtermModel2 extends CausalModel("Midterm Model 2") {
 
   val c = new RandomVariable("C", bools)
   addVariable(c)
-  addFunction(new Function(c, List(a, b)))
+  addFunction(new PFunction(c, List(a, b)))
 
   val f = new RandomVariable("F", bools, false)
   addVariable(f)
 
   val d = new RandomVariable("D", bools)
   addVariable(d)
-  addFunction(new Function(d, List(c, f)))
+  addFunction(new PFunction(d, List(c, f)))
 
   val e = new RandomVariable("E", bools)
   addVariable(e)
-  addFunction(new Function(e, List(d, f)))
+  addFunction(new PFunction(e, List(d, f)))
 
   def main(args: Array[String]) {
     val model = MidtermModel2

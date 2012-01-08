@@ -7,7 +7,7 @@ class EliminationTree
 extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
 {
 	
-  var node2phi = Map[EliminationTreeNode, Factor]()
+  var node2phi = mutable.Map[EliminationTreeNode, Factor]()
 	
   // public EliminationTree()	{ }
 
@@ -47,7 +47,7 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
 
   def delete(node: EliminationTreeNode): Unit = {
     super.delete(node)
-    node2phi.remove(node)
+    node2phi -= node
   }
 	
   def getAllVariables(): Set[RandomVariable] = {

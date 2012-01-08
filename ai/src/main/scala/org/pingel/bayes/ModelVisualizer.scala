@@ -71,12 +71,12 @@ object ModelVisualizer {
     for( variable <- m.getGraph.getVertices ) {
       var vvv = new VisVariableVertex(variable)
       graph.addVertex(vvv)
-      var2vvv.put(variable, vvv)
+      var2vvv += variable -> vvv
     }
     for( edge <- m.getGraph.getEdges ) {
       var sourceVar = edge.getSource()
       var destVar = edge.getDest()
-      var vme = new VisModelEdge(var2vvv.get(sourceVar), var2vvv.get(destVar))
+      var vme = new VisModelEdge(var2vvv(sourceVar), var2vvv(destVar))
       graph.addEdge(vme)
     }
   }

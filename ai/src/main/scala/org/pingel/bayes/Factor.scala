@@ -49,10 +49,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   def getLabel(): String = name
 	
   def makeCrossProduct(): Unit = {
-    var valLists = List[List[Value]]()
-    for( variable <- varList ) {
-      valLists.add(variable.getDomain().getValues())
-    }
+    val valLists: List[List[Value]] = varList.map( v => v.getDomain.getValues )
     cp = new ListCrossProduct[Value](valLists)
     elements = new Array[Double](cp.size)
   }
@@ -101,7 +98,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   
 	
   def print(): Unit = {
-    for( i <- 0 to (elements.length - 1) ) {
+    for( i <- 0 until elements.length ) {
       val c = caseOf(i)
       println(c.toOrderedString(varList) + " " + read(c))
     }
@@ -113,7 +110,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     var vars = getVariables.filter( v => ! variable.equals(v) )
 
     var newFactor = new Factor(vars)
-    for( i <- 0 to newFactor.numCases() - 1 ) {
+    for( i <- 0 until newFactor.numCases() ) {
       def ci = newFactor.caseOf(i)
       var bestValue: Value = null
       var maxSoFar = Double.MinValue
@@ -154,7 +151,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     val aValues = a.getDomain.getValues
     val bValues = b.getDomain.getValues
 		
-    var tally = DenseMatrix.zeros[Double](aValues.size, bValues.size)
+    var tally = Matrix.zeros[Double](aValues.size, bValues.size)
     var w = new Case()
     var r = 0
     for( aVal <- aValues ) {
@@ -216,7 +213,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
 		
     var result = new Factor(getVariables())
 		
-    for( j <- 0 until result.numCases() ) {
+    for( j <- 0 until result.numCases ) {
       var c = result.caseOf(j)
       if( c.isSupersetOf(e) ) {
     	  result.elements(j) = elements(j)

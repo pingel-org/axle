@@ -1,7 +1,8 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
 import org.pingel.util.DirectedGraph
 import org.pingel.util.Lister
+import scala.collection._
 
 object Direction {
 
@@ -38,15 +39,15 @@ case class Model(name: String="no name") {
     graph.addEdge(new ModelEdge(source, dest))
   }
 	
-  var variables = List[RandomVariable]()
+  var variables = mutable.ListBuffer[RandomVariable]()
 	
   def addVariable(variable: RandomVariable): RandomVariable = {
-    variables.add(variable)
+    variables += variable
     name2variable += variable.getName -> variable
     graph.addVertex(variable)
   }
 	
-  def getRandomVariables(): List[RandomVariable] = variables
+  def getRandomVariables(): List[RandomVariable] = variables.toList
 	
   def getVariable(name: String): RandomVariable = name2variable(name)
 
@@ -62,9 +63,9 @@ case class Model(name: String="no name") {
     path == null
   }
 	
-  var rvNameGetter = new Lister[RandomVariable, String]() {
-    def function(rv: RandomVariable): String = rv.getName
-  }
+//  var rvNameGetter = new Lister[RandomVariable, String]() {
+//    def function(rv: RandomVariable): String = rv.getName
+//  }
 	
   def _findOpenPath(
     visited: Map[RandomVariable, Set[RandomVariable]],
@@ -75,11 +76,11 @@ case class Model(name: String="no name") {
     given: Set[RandomVariable]): List[RandomVariable] =
   {
 		
-//		System.out.println("_fOP: " + priorDirection +
-//		", prior = " + ((prior == null ) ? "null" : prior.name) +
-//		", current = " + rvNameGetter.execute(current) +
-//		", to = " + rvNameGetter.execute(to) +
-//		", evidence = " + rvNameGetter.execute(given));
+	println("_fOP: " + priorDirection +
+			", prior = " + "TODO" + // ((prior == null ) ? "null" : prior.name) +
+			", current = " +  current.map( _.getName ).mkString(", ") + 
+			", to = " + to.map( _.getName ).mkString(", ") +
+			", evidence = " + given.map( _.getName ).mkString(", ") )
 		
     val cachedOuts = visited(prior) // Set<RandomVariable>
     if( cachedOuts != null ) {
@@ -124,14 +125,14 @@ case class Model(name: String="no name") {
     	  var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>
     	  neighbors.remove(prior)
 	
-    	  var visitedCopy = Map[RandomVariable, Set[RandomVariable]]()
+    	  var visitedCopy = mutable.Map[RandomVariable, Set[RandomVariable]]()
     	  visitedCopy.putAll(visited)
     	  var outs = visited.get(prior) // Set<RandomVariable>
     	  if( outs == null ) {
-    		  outs = Set[RandomVariable]()
+    		  outs = mutable.Set[RandomVariable]()
     		  visitedCopy.put(prior, outs)
     	  }
-    	  outs.add(variable)
+    	  outs += variable
 	
     	  var path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given);
     	  if( path != null ) {

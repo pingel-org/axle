@@ -2,7 +2,7 @@
 package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
-import org.pingel.causality.Function
+import org.pingel.ptype.PFunction
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
 
@@ -17,10 +17,10 @@ object Model3dot9h extends CausalModel("3.9h") {
 	val U3 = addVariable(new RandomVariable("U3", None, false))
 	val U4 = addVariable(new RandomVariable("U4", None, false))
 
-    addFunction(new Function(W, List(X, U3)))
-    addFunction(new Function(X, List(Z, U1, U2)))
-    addFunction(new Function(Y, List(W, U2, U4)))
-    addFunction(new Function(Z, List(U1, U3, U4)))
+    addFunction(new PFunction(W, List(X, U3)))
+    addFunction(new PFunction(X, List(Z, U1, U2)))
+    addFunction(new PFunction(Y, List(W, U2, U4)))
+    addFunction(new PFunction(Z, List(U1, U3, U4)))
 
     def main(args: Array[String])
     {

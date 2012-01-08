@@ -1,7 +1,7 @@
 package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
-import org.pingel.causality.Function
+import org.pingel.ptype.PFunction
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
@@ -21,15 +21,15 @@ object SmokingModel extends CausalModel("Smoking Model") {
         
         val X = new RandomVariable("X") // smoke
         addVariable(X)
-        addFunction(new Function(X, List(U)))
+        addFunction(new PFunction(X, List(U)))
 
         val Z = new RandomVariable("Z") // tar
         addVariable(Z)
-        addFunction(new Function(Z, List(X)))
+        addFunction(new PFunction(Z, List(X)))
 
         val Y = new RandomVariable("Y") // cancer
         addVariable(Y)
-        addFunction(new Function(Y, List(Z, U)))
+        addFunction(new PFunction(Y, List(Z, U)))
 
     def doTask1(model: CausalModel, namer: VariableNamer) = {
           
@@ -128,7 +128,7 @@ object SmokingModel extends CausalModel("Smoking Model") {
 
     def main(args: Array[String]) = {
       
-        val model = new SmokingModel()
+        val model = SmokingModel
 
 //    	doTask1(model)
 //    	doTask2(model)

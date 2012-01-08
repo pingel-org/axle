@@ -10,10 +10,10 @@ object AllModels {
 
     def getModels() = {
       
-//      new SmokingModel() ::
-//      new Homework4Model(5, 0.2) ::
-//      new MidtermModel1() ::
-//      new MidtermModel2() ::
+      SmokingModel ::
+      new Homework4Model(5, 0.2) ::
+      MidtermModel1 ::
+      MidtermModel2 ::
         Model3dot8a ::
         Model3dot8b ::
         Model3dot8c ::
@@ -43,7 +43,7 @@ object AllModels {
     def main(args: Array[String]) {
         for( model <- getModels() ) {
 	        println("is Markovian? " + model.isMarkovian())
-            Probability yGivenDoX = getStandardQuantity(model)
+            val yGivenDoX: Probability = getStandardQuantity(model)
             println(model.getName() + " identifies " + yGivenDoX.toString() + "? " + model.identifies(yGivenDoX))
         }
     }

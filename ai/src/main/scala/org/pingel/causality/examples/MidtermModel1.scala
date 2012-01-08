@@ -8,12 +8,13 @@ import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
 import org.pingel.bayes.VariableNamer
 import org.pingel.forms.Variable
-import org.pingel.ptype.Booleans
+import org.pingel.ptype.PBooleans
+import org.pingel.ptype.PFunction
 
 object MidtermModel1 extends CausalModel("Midterm Model 1")
 {
 
-        val bools = Some(new Booleans())
+        val bools = Some(new PBooleans())
         
 		val U1 = new RandomVariable("U1", bools, false)
 		addVariable(U1)
@@ -26,19 +27,19 @@ object MidtermModel1 extends CausalModel("Midterm Model 1")
 
 		val X1 = new RandomVariable("X1", bools)
 		addVariable(X1)
-		addFunction(new Function(X1, List(U1)))
+		addFunction(new PFunction(X1, List(U1)))
 
 		val X2 = new RandomVariable("X2", bools)
 		addVariable(X2)
-		addFunction(new Function(X2, List(X1, U2)))
+		addFunction(new PFunction(X2, List(X1, U2)))
 
 		val X3 = new RandomVariable("X3", bools)
 		addVariable(X3)
-		addFunction(new Function(X3, List(X2, U1, U3)))
+		addFunction(new PFunction(X3, List(X2, U1, U3)))
 
 		val X4 = new RandomVariable("X4", bools)
 		addVariable(X4)
-		addFunction(new Function(X4, List(X3, U2)))
+		addFunction(new PFunction(X4, List(X3, U2)))
 
 		val Y = new RandomVariable("Y", bools)
 		addVariable(Y)

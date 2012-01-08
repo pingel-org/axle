@@ -1,4 +1,4 @@
-package org.pingel.bayes;
+package org.pingel.bayes
 
 import org.pingel.forms.Variable
 import org.pingel.gestalt.core.Form

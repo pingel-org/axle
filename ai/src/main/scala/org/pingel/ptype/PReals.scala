@@ -1,5 +1,5 @@
 package org.pingel.ptype
 
-class Reals extends PType {
+class PReals extends PType {
 
 }

@@ -5,7 +5,9 @@ import scala.collection._
 //import scalala.tensor.mutable._
 //import scalala.tensor.dense._
 
-import org.pingel.ptype.PBoolean
+import org.pingel.util._
+
+import org.pingel.ptype.PBooleans
 
 class InductiveCausation(pHat: Distribution)
 {
@@ -19,11 +21,11 @@ class InductiveCausation(pHat: Distribution)
 	  
 		val G = new PartiallyDirectedGraph(varList)
 
-        var separators = Matrix[Set[RandomVariable]](varList.size, varList.size)
+        var separators = new DenseMatrix[Set[RandomVariable]](varList.size, varList.size)
         
         for(i <- 0 to (varList.size - 2) ) {
             val a = varList(i)
-            for( j <- (i+1) to (varList.size - 1) ) {
+            for( j <- (i+1) until varList.size ) {
                 val b = varList(j)
 
                 val S = pHat.separate(a, b) // Set<RandomVariable>
@@ -37,8 +39,8 @@ class InductiveCausation(pHat: Distribution)
                     println("separating ("+ a.name + ", " + b.name + ") with " + S)
                 }
 
-                separators.get(i, j) = S
-                separators.get(j, i) = S
+                separators.setValueAt(i, j, S)
+                separators.setValueAt(j, i, S)
             }
         }
 
@@ -49,7 +51,7 @@ class InductiveCausation(pHat: Distribution)
         		for( j <- (i+1) to (varList.size - 1) ) {
         			val b = varList.get(j)
         			if( ! G.areAdjacent(a, b) ) {
-        				val S = separators.get(i, j)
+        				val S = separators.valueAt(i, j)
         				if( S != null ) {
                     	
         					println("prepareGraph second loop")
@@ -206,10 +208,10 @@ class InductiveCausation(pHat: Distribution)
 
     		val cList = G.links(a, None, Some(false), Some(true))
     		
-    		for( j <- 0 to (cList.size-1) ) {
+    		for( j <- 0 until cList.size ) {
     			val c = cList(j)
     			val bList = G.links(c, Some(false), Some(false), None)
-    			for(m <-  0 to (bList.size - 1) ) {
+    			for(m <-  0 until bList.size ) {
     				val b = bList(m)
     				if( ! G.areAdjacent(a, b) ) {
     					G.orient(c, b)

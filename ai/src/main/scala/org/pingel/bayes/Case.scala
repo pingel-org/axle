@@ -1,10 +1,13 @@
 package org.pingel.bayes
 
-case class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
+// OLD VERSION HAD THESE DATA MEMBERS IN CONSTRUCTOR:
+// rv: RandomVariable, value: Value
+
+case class Case() extends Comparable[Case]
 {
   var assignments = Map[RandomVariable, Value]() // NOTE: was TreeMap
 
-  assign(rv, value)
+  // OLD VERSION DID THIS: assign(rv, value)
 
   def getVariables(): Set[RandomVariable] = assignments.keySet
 	
@@ -45,8 +48,9 @@ case class Case(rv: RandomVariable, value: Value) extends Comparable[Case]
 	
   def copy(): Case = {
     var result = new Case()
-    result.assignments = new TreeMap[RandomVariable, Value]()
-    result.assignments.putAll(assignments)
+    for( (rv, value) <- assignments ) {
+      result.assignments += rv -> value
+    }
     result
   }
 

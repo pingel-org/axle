@@ -2,6 +2,7 @@ package org.pingel.bayes;
 
 import org.pingel.util.DirectedGraph
 import org.pingel.util.UndirectedGraph
+import scala.collection._
 
 object JoinTree {
 
@@ -19,7 +20,7 @@ object JoinTree {
 class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
 {
 	
-  var node2cluster = Map[JoinTreeNode, Set[RandomVariable]]()
+  var node2cluster = mutable.Map[JoinTreeNode, Set[RandomVariable]]().withDefaultValue(Set[RandomVariable]())
   
   def copyTo(other: UndirectedGraph[JoinTreeNode, JoinTreeEdge]): Unit = 
   {
@@ -29,10 +30,7 @@ class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
   def setCluster(n: JoinTreeNode, cluster: Set[RandomVariable]): Unit = node2cluster += n -> cluster
 
   def addToCluster(n: JoinTreeNode, v: RandomVariable): Unit = {
-    if( ! node2cluster.contains(n) ) {
-      node2cluster += n -> Set[RandomVariable]()
-    }
-    node2cluster(n).add(v)
+    node2cluster(n) += v
   }
 	
   def constructEdge(n1: JoinTreeNode, n2: JoinTreeNode): JoinTreeEdge = new JoinTreeEdge(n1, n2)
@@ -43,7 +41,7 @@ class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
     
     for( v <- node2cluster.get(n1)) {
       if( node2cluster(n2).contains(v) ) {
-    	  result.add(v)
+    	  result += v
       }
     }
     result
@@ -51,26 +49,26 @@ class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
 
 
   def toEliminationOrder(r: JoinTreeNode): List[RandomVariable] =  {
-    var result: List[RandomVariable] = Nil
+    var result = new mutable.ListBuffer[RandomVariable]()
 		
     var T = new JoinTree()
-    copyTo(T); // not yet implemented
+    copyTo(T) // not yet implemented
 		
     while( T.getVertices().size > 1 ) {
       val i = T.firstLeafOtherThan(r)
       val j = null // TODO theNeighbor(); a JoinTreeNode
       for(v <- node2cluster.get(i)) {
     	  if( ! node2cluster(j).contains(v) ) {
-    		  result.add(v)
+    		  result += v
     	  }
       }
     }
 
     for( v <- node2cluster(r) )  {
-      result.add(v)
+      result += v
     }
 		
-    result
+    result.toList
   }
 	
   def embeds(eTree: EliminationTree, embedding: Map[JoinTreeNode, EliminationTreeNode]): Boolean = {

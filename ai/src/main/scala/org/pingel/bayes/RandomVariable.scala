@@ -3,9 +3,15 @@ package org.pingel.bayes
 import org.pingel.util.DirectedGraphVertex
 import org.pingel.util.UndirectedGraphVertex
 
+// import org.pingel.forms.Variable
+
+import org.pingel.ptype.PType
+import org.pingel.forms.Variable
+
 case class RandomVariable(name: String, domain: Option[Domain]=None, observable: Boolean=true)
-extends DirectedGraphVertex[ModelEdge]
-// , UndirectedGraphVertex[VariableLink]
+extends Variable
+with DirectedGraphVertex[ModelEdge]
+with UndirectedGraphVertex[VariableLink]
 with Comparable[RandomVariable]
 {
 
@@ -21,4 +27,5 @@ with Comparable[RandomVariable]
 
   def getLabel() = name
 
+  def nextVariable(namer: VariableNamer): RandomVariable // TODO
 }

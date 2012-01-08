@@ -20,8 +20,8 @@ class Function(rv: RandomVariable, inputs: List[RandomVariable]=Nil) {
 	
     def execute(m: CausalModel, memo: Case): Unit = {
 		if( memo.valueOf(rv) == null ) {
-		    for(i <- 0 to inputs.size-1 ) {
-		        m.getFunction(inputs.get(i)).execute(m, memo);
+		    for(input <- inputs ) {
+		        m.getFunction(input).execute(m, memo);
 		    }
 		    val result = compute(m, memo)
 //            System.out.println("rv = " + rv + ", result = " + result);

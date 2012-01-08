@@ -7,7 +7,7 @@ import org.pingel.ptype._
 import org.pingel.util.Collector
 import org.pingel.util.CrossProduct
 import org.pingel.util.PowerSet
-
+import org.pingel.bayes.RandomVariable
 
 class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
 
@@ -25,7 +25,7 @@ class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
 	}
 
 	def addFunction(f: PFunction) = {
-	    variable2function.put(f.rv, f)
+	    variable2function += f.rv -> f
 	    for( i <- f.inputs) {
 	    	connect(i, f.rv)
 	    }

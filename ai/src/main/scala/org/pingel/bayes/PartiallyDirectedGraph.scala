@@ -4,21 +4,22 @@ package org.pingel.bayes
 //import scalala.tensor.mutable._
 //import scalala.tensor.dense._
 import scala.collection._
+import org.pingel.util.Matrix
 
 class PartiallyDirectedGraph(variables: List[RandomVariable]) {
 
   var variable2index = Map[RandomVariable, Integer]()
 
-  var connect = DenseMatrix.zeros[Boolean](variables.size, variables.size)
-  var mark = DenseMatrix.zeros[Boolean](variables.size, variables.size)
-  var arrow = DenseMatrix.zeros[Boolean](variables.size, variables.size)
+  var connect = Matrix.zeros[Boolean](variables.size, variables.size)
+  var mark = Matrix.zeros[Boolean](variables.size, variables.size)
+  var arrow = Matrix.zeros[Boolean](variables.size, variables.size)
   
   for( i <- 0 until variables.size ) {
     variable2index += variables(i) -> new Integer(i)
     for( j <- 0 until variables.size ) {
-      connect(i, j) = false
-      mark(i, j) = false
-      arrow(i, j) = false
+      connect.setValueAt(i, j, false)
+      mark.setValueAt(i, j, false)
+      arrow.setValueAt(i, j, false)
     }
   }
 
@@ -27,32 +28,31 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
   def connect(v1: RandomVariable, v2: RandomVariable): Unit = {
     val i1 = indexOf(v1)
     val i2 = indexOf(v2)
-    connect(i1, i2) = true
-    connect(i2, i1) = true
+    connect.setValueAt(i1, i2, true)
+    connect.setValueAt(i2, i1, true)
   }
   
-  def areAdjacent(v1: RandomVariable, v2: RandomVariable): Boolean = {
-    connect(indexOf(v1), indexOf(v2))
-  }
+  def areAdjacent(v1: RandomVariable, v2: RandomVariable): Boolean =
+    connect.valueAt(indexOf(v1), indexOf(v2))
 
   def undirectedAdjacent(v1: RandomVariable, v2: RandomVariable): Boolean = {
     val i1 = indexOf(v1)
     val i2 = indexOf(v2)
-    connect(i1, i2) && ! arrow(i1, i2) && ! arrow(i2, i1)
+    connect.valueAt(i1, i2) && (! arrow.valueAt(i1, i2)) && (! arrow.valueAt(i2, i1))
   }
 
   def mark(v1: RandomVariable, v2: RandomVariable): Unit = {
     val i1 = indexOf(v1)
     val i2 = indexOf(v2)
-    mark(i1, i2) = true
-    mark(i2, i1) = true
+    mark.setValueAt(i1, i2, true)
+    mark.setValueAt(i2, i1, true)
   }
     
   def orient(v1: RandomVariable, v2: RandomVariable): Unit = {
     // Note: we assume they are already adjacent without checking
     val i1 = indexOf(v1)
     val i2 = indexOf(v2)
-    arrow(i1, i2) = true
+    arrow.setValueAt(i1, i2, true)
   }
 
   def size: Int = TODO()
@@ -60,33 +60,33 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
   // TODO: scala version should probably use Option[Boolean] instead of allowing null
   def links(v: RandomVariable, arrowIn: Option[Boolean], marked: Option[Boolean], arrowOut: Option[Boolean]): List[RandomVariable] = {
 
-    var result = List[RandomVariable]()
+    var result = mutable.ListBuffer[RandomVariable]()
     	
     val i = indexOf(v)
     	
     for(j <- 0 until size) {
 
       val u = variables(j)
-      var pass = connect(i, j)
+      var pass = connect.valueAt(i, j)
       
       if( pass && (arrowIn != None) ) {
-    	  pass = ( arrowIn.booleanValue() == arrow(j, i) )
+    	  pass = ( arrowIn.get == arrow.valueAt(j, i) )
       }
       
       if( pass && (marked != None) ) {
-    	pass = ( marked.booleanValue() == mark(i, j) )
+    	pass = ( marked.get == mark.valueAt(i, j) )
       }
       
       if( pass && (arrowOut != None) ) {
-    	  pass = ( arrowOut.booleanValue() == arrow(i, j) )
+    	  pass = ( arrowOut.get == arrow.valueAt(i, j) )
       }
       
       if( pass ) {
-    	result.add(u)
+    	result += u
       }
     }
     
-    result
+    result.toList
   }
 
   def markedPathExists(from: RandomVariable, target: RandomVariable): Boolean = {
@@ -117,9 +117,9 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     }
     
     result += "connect\n\n"
-    for( i <- 0 to variables.size-1 ) {
-      for( j <- 0 to variables.size-1 ) {
-    	  if( connect(i, j) ) {
+    for( i <- 0 until variables.size ) {
+      for( j <- 0 until variables.size ) {
+    	  if( connect.valueAt(i, j) ) {
     		  result += "x"
     	  }
     	  else {
@@ -131,9 +131,9 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     result += "\n\n"
     
     result += "mark\n\n"
-    for( i <- 0 to variables.size-1 ) {
-      for( j <- 0 to variables.size-1 ) {
-    	  if( mark(i, j) ) {
+    for( i <- 0 until variables.size ) {
+      for( j <- 0 until variables.size ) {
+    	  if( mark.valueAt(i, j) ) {
     		  result += "x"
     	  }
     	  else {
@@ -145,9 +145,9 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     result += "\n\n"
     
     result += "arrow\n\n"
-    for( i <- 0 to variables.size-1 ) {
-      for( j <- 0 to variables.size-1 ) {
-    	  if( arrow(i, j) ) {
+    for( i <- 0 until variables.size ) {
+      for( j <- 0 until variables.size ) {
+    	  if( arrow.valueAt(i, j) ) {
     		  result += "x"
     	  }
     	  else {

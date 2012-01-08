@@ -1,5 +1,5 @@
 package org.pingel.ptype
 
-class Set(memberType: PType) extends PType {
+class PSet(memberType: PType) extends PType {
 
 }

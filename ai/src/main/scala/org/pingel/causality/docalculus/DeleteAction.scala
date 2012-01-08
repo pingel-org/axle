@@ -44,10 +44,10 @@ class DeleteAction extends Rule {
         	
             if( subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW)) ) {
               
-                var Ycopy = Set[Variable]()
+                var Ycopy = mutable.Set[Variable]()
                 Ycopy ++= Y
                 
-                var Wcopy = Set[Variable]()
+                var Wcopy = mutable.Set[Variable]()
                 Wcopy ++= W
                 
                 val probFactory = new Probability()

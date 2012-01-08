@@ -5,15 +5,14 @@ import org.pingel.bayes.RandomVariable
 import org.pingel.gestalt.core.FormFactory
 import org.pingel.ptype.PType
 
-class Variable(name: String) extends FormFactory {
-
-  
+trait Variable extends PType {
+  def getName(): String
 }
 
-class DVariable(name: String, domain: PType) extends Variable(name) {
+/*
+class Variable(name: String) extends FormFactory {}
 
-  
-}
+class DVariable(name: String, domain: PType) extends Variable(name) {}
 
 class RVVariable(name: String, rv: RandomVariable) extends Variable(name) {
 
@@ -32,3 +31,5 @@ class RVVariable(name: String, rv: RandomVariable) extends Variable(name) {
 //    }
 
 }
+
+*/

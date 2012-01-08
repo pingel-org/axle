@@ -20,7 +20,9 @@ class VariableNamer {
 
   def duplicate(): VariableNamer = {
     var duplicate: VariableNamer = new VariableNamer()
-    duplicate.counts.putAll(counts)
+    for( (rv, count) <- counts ) {
+      duplicate.counts += rv -> count
+    }
     duplicate
   }
 }

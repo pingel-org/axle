@@ -1,7 +1,9 @@
 package org.pingel.ptype
 
-class Function(from: PType, to: PType) extends PType {
+class PFunction(from: PType, to: List[PType]) extends PType {
 
+  // TODO: are "from" and "to" reversed ??
+  
 	def toString() = from.toString + " => " + to.toString
 
 }

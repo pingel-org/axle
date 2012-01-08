@@ -1,41 +1,70 @@
 
 package org.pingel.util {
 
-	case class UndirectedGraphVertex[ET]()
+  import scala.collection._
+  
+	trait UndirectedGraphVertex[ET]
 
-	case class UndirectedGraphEdge[VT](v1: Any, v2: Any)
+	trait UndirectedGraphEdge[VT] {
+	  def getVertices(): (VT, VT)
+	}
 
-	case class UndirectedGraph[VT, ET]() {
-		def addVertex(v: VT)
-		def addEdge(e: ET)
+	trait UndirectedGraph[VT, ET] {
+		def addVertex(v: VT): VT
+		def addEdge(e: ET): ET
 		def getVertices(): Set[VT]
 		def getNeighbors(v: VT): Set[VT]
 		def getEdges(): Set[ET]
+		def draw(): Unit
+		// def vertexWithFewestNeighborsAmong
 	}
 
-	case class DirectedGraphVertex[ET]()
+	trait DirectedGraphVertex[ET]
 
-	case class DirectedGraphEdge[VT](source: VT, dest: VT) {
+	trait DirectedGraphEdge[VT] {
 		def getSource(): VT
 		def getDest(): VT
 	}
 
-	case class DirectedGraph[VT, ET]() {
-		def addVertex(v: VT)
-		def addEdge(e: ET)
+	trait DirectedGraph[VT, ET] {
+		def addVertex(v: VT): VT
+		def addEdge(e: ET): ET
 		def getVertices(): Set[VT]
 		def getEdges(): Set[ET]
 		def getNeighbors(v: VT): Set[VT]
+		def collectAncestors(v: VT, result: mutable.Set[VT])
+		def collectDescendants(v: VT, result: mutable.Set[VT])
 		def getPredecessors(v: VT): Set[VT]
 		def getSuccessors(v: VT): Set[VT]
 		def removeInputs(ins: Set[VT])
 		def removeOutputs(outs: Set[VT])
+		def draw(): Unit
+		
 	}
 
-	case class Matrix[T]() {
+	object Matrix {
+	  
+	  def zeros[T](numRows: Int, numCols: Int): Matrix[T] = {
+	    var result = new DenseMatrix[T](numRows, numCols)
+	    // TODO
+	    result
+	  }
+	  
+	}
+	
+	trait Matrix[T] {
 	  def numRows: Int
 	  def numCols: Int
+	  def valueAt(r: Int, c: Int): T
+	  def setValueAt(r: Int, c: Int, v: T): Unit = { } // TODO
 	}
+	
+	class DenseMatrix[T](nr: Int, nc: Int) extends Matrix[T] {
+	  def numRows = nr
+	  def numCols = nc
+	  // TODO: initialize
+	}
+	
 	case class Lister()
 	case class ListCrossProduct[T](ts: Seq[Seq[T]])
 	case class CrossProduct[T]()
