@@ -1,5 +1,6 @@
 package org.pingel.causality.docalculus
 
+import scala.collection._
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Probability
 import org.pingel.bayes.VariableNamer
@@ -9,7 +10,7 @@ import org.pingel.gestalt.core.Unifier
 
 class DeleteObservation extends Rule {
 
-    apply(q: Probability, m: CausalModel, namer: VariableNamer)  = {
+    def apply(q: Probability, m: CausalModel, namer: VariableNamer)  = {
 
     	var results = ArrayList[Form]()
         
@@ -20,12 +21,12 @@ class DeleteObservation extends Rule {
         
         for( zObservation <- q.getGiven() ) {
           
-            var Z = Set[Variable]()
+            var Z = mutable.Set[Variable]()
             Z += zObservation
             
-            val W = Set[Variable]()
+            val W = mutable.Set[Variable]()
             W ++= q.getGiven()
-            W.remove(zObservation)
+            W -= zObservation
 
             var WX = Set[Variable]()
             WX ++= W

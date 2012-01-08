@@ -2,7 +2,7 @@
 package org.pingel.causality.docalculus
 
 import org.pingel.causality.CausalModel
-import org.pingel.causality.Probability
+import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
 import org.pingel.bayes.VariableNamer
 import org.pingel.forms.Variable

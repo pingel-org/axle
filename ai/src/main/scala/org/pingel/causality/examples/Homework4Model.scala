@@ -53,7 +53,7 @@ class Homework4Model(k: Int, p: Double) extends CausalModel("Homework 4 Model") 
 		  addFunction(new RandomBooleanFunction(xi, 0.25))
 	  }
 	  else {
-		  addFunction(new XorOrFunction(xi, oldE, oldX, oldY))
+		  addFunction(new XorOrFunction(xi, oldE.get, oldX.get, oldY.get))
 	  }
 
 	  val yi = new RandomVariable("Y" + i, bools)
@@ -63,7 +63,7 @@ class Homework4Model(k: Int, p: Double) extends CausalModel("Homework 4 Model") 
 		  addFunction(new RandomBooleanFunction(yi, 0.25))
 	  }
 	  else {
-		  addFunction(new XorOrFunction(yi, oldEp, oldX, oldY))
+		  addFunction(new XorOrFunction(yi, oldEp.get, oldX.get, oldY.get))
       }
 
 	  oldE = Some(ei)

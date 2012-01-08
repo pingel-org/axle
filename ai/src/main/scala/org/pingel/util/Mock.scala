@@ -27,6 +27,7 @@ package org.pingel.util {
 	}
 
 	trait DirectedGraph[VT, ET] {
+		def isAcyclic(): Boolean
 		def addVertex(v: VT): VT
 		def addEdge(e: ET): ET
 		def getVertices(): Set[VT]
@@ -39,7 +40,6 @@ package org.pingel.util {
 		def removeInputs(ins: Set[VT])
 		def removeOutputs(outs: Set[VT])
 		def draw(): Unit
-		
 	}
 
 	object Matrix {

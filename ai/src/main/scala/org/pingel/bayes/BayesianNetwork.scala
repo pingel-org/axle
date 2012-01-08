@@ -268,7 +268,7 @@ class BayesianNetwork(name: String="bn") extends Model(name)
     val rvs = getRandomVariables()
     for( i <- 0 to rvs.size-2 ) {
       val vi = rvs(i)
-      for( j <- i+1 until rvs.size ) {
+      for( j <- (i+1) until rvs.size ) {
     	  val vj = rvs(j)
           if( interactsWith(vi, vj) ) {
         	  result.addEdge(new VariableLink(vi, vj))

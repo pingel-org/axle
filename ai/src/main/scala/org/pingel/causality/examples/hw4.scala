@@ -32,12 +32,10 @@ object hw4 {
         
 		val search = new InductiveCausation(table)
 		if( ic ) {
-			val g = search.ic()
-			println(g)
+			println(search.ic())
 		}
 		else {
-			val g = search.icstar()
-			println(g)
+			println(search.icstar())
 		}
     }
 }

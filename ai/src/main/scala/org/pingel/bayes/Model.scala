@@ -123,13 +123,13 @@ case class Model(name: String="no name") {
     		  return List(variable)
     	  }
     	  var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>
-    	  neighbors.remove(prior)
+    	  neighbors -= prior
 	
     	  var visitedCopy = mutable.Map[RandomVariable, Set[RandomVariable]]()
     	  visitedCopy.putAll(visited)
     	  var outs = visited.get(prior) // Set<RandomVariable>
     	  if( outs == null ) {
-    		  outs = mutable.Set[RandomVariable]()
+    		  outs = new mutable.Set[RandomVariable]()
     		  visitedCopy.put(prior, outs)
     	  }
     	  outs += variable

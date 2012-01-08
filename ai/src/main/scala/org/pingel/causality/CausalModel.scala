@@ -1,15 +1,17 @@
 
 package org.pingel.causality
 
-import org.pingel.bayes._
-import org.pingel.ptype._
+import scala.collection._
+import org.pingel.bayes.Model
+import org.pingel.ptype.PFunction
 
 import org.pingel.util.Collector
 import org.pingel.util.CrossProduct
 import org.pingel.util.PowerSet
 import org.pingel.bayes.RandomVariable
 
-class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
+class CausalModel(name: String)
+extends Model(name) {
 
     var variable2function = Map[RandomVariable, PFunction]()
 	
@@ -93,12 +95,12 @@ class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
 
     
     def hasDoor(p: Probability): Boolean = {
-        var V = Set[RandomVariable]()
+        var V = mutable.Set[RandomVariable]()
         var questionRVs = rvGetter.execute(p.getQuestion())
         var actionRVs = rvGetter.execute(p.getActions())
         for( rv <- getRandomVariables() ) {
             if( rv.observable && ! questionRVs.contains(rv) && ! actionRVs.contains(rv) ) {
-                V.add(rv)
+                V += rv
             }
         }
 
@@ -187,7 +189,7 @@ class CausalModel(name: String) extends org.pingel.bayes.Model(name) {
 				answer.connect(v, output)
 			}
 		}
-		answer.variable2function = Map[RandomVariable, Function]()
+		answer.variable2function = mutable.Map[RandomVariable, PFunction]()
         answer.variable2function.putAll(variable2function)
 		answer
 	}

@@ -46,7 +46,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   def getLabel(): String = name
 	
   def makeCrossProduct(): Unit = {
-    val valLists: List[List[Value]] = varList.map( v => v.getDomain.getValues )
+    val valLists: List[List[Value]] = varList.map(_.getDomain.map(_.getValues).getOrElse(Nil))
     cp = new ListCrossProduct[Value](valLists)
     elements = new Array[Double](cp.size)
   }
@@ -82,7 +82,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     result
   }
 	
-  def numCases(): Int = elements.length
+  def numCases() = elements.length
 	
   def write(c: Case, d: Double): Unit = {
 //		System.out.println("write: case = " + c.toOrderedString(variables) + ", d = " + d);
@@ -111,7 +111,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
       def ci = newFactor.caseOf(i)
       var bestValue: Value = null
       var maxSoFar = Double.MinValue
-      for( value <- variable.getDomain().getValues()) {
+      for( value <- variable.getDomain.map(_.getValues).getOrElse(Nil) ) {
     	  var cj = newFactor.caseOf(i)
     	  cj.assign(variable, value)
           val s = this.read(cj)
@@ -145,8 +145,8 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
   }
 	
   def tally(a: RandomVariable, b: RandomVariable): Matrix[Double] = {
-    val aValues = a.getDomain.getValues
-    val bValues = b.getDomain.getValues
+    val aValues = a.getDomain.map(_.getValues).getOrElse(Nil)
+    val bValues = b.getDomain.map(_.getValues).getOrElse(Nil)
 		
     var tally = Matrix.zeros[Double](aValues.size, bValues.size)
     var w = new Case()
@@ -159,14 +159,14 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     	  for( j <- 0 until numCases ) {
     		  val m = this.caseOf(j)
     		  if( m.isSupersetOf(w) ) {
-    			  tally(r, c) += this.read(m)
+    			  tally.setValueAt(r, c, tally.valueAt(r, c) + this.read(m))
     		  }
     	  }
     	  c += 1
       }
       r += 1
     }
-    return tally;
+    tally
   }
   
   def sumOut(varToSumOut: RandomVariable): Factor = {
@@ -183,7 +183,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     for( j <- 0 until result.numCases() ) {
       var c = result.caseOf(j)
       var p = 0.0
-      for( value <- varToSumOut.getDomain.getValues ) {
+      for( value <- varToSumOut.getDomain.map(_.getValues).getOrElse(Nil) ) {
     	  var f = c.copy()
     	  f.assign(varToSumOut, value)
     	  p += read(f)
@@ -211,12 +211,9 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList)
     var result = new Factor(getVariables())
 		
     for( j <- 0 until result.numCases ) {
-      var c = result.caseOf(j)
-      if( c.isSupersetOf(e) ) {
-    	  result.elements(j) = elements(j)
-      }
-      else {
-    	  result.elements(j) = 0.0
+      result.elements(j) = c.isSupersetOf(e) match {
+        case true  => elements(j)
+        case false => 0.0
       }
     }
     

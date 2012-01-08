@@ -59,12 +59,10 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
   }
 	
   def addFactor(node: EliminationTreeNode, f: Factor): Unit = {
-    if( node2phi.contains(node) ) {
-      node2phi += node -> existing.multiply(f)
-    }
-    else {
-      node2phi += node -> f
-    }
+    node2phi += node -> ( node2phi.contains(node) match {
+      case true  => existing.multiply(f)
+      case false => f
+    })
   }
 
   def getFactor(node: EliminationTreeNode): Factor = node2phi(node)
