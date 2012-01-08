@@ -23,7 +23,7 @@ class ObservationToAction extends Rule {
 			var Z = Set[Variable]()
 			Z += z
 			
-			var W = new mutable.Set[Variable]()
+			var W = Set[Variable]()
 			W ++= q.getGiven()
 			W -= z
 			

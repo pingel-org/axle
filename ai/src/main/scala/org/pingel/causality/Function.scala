@@ -5,7 +5,6 @@ import org.pingel.bayes.RandomVariable
 import org.pingel.bayes.Value
 import org.pingel.gestalt.core.Form
 
-
 class Function(rv: RandomVariable, inputs: List[RandomVariable]=Nil) {
 
 	// The API here is that the memo may already contain a precomputed answer

@@ -1,8 +1,23 @@
 package org.pingel.bayes;
 
+import scala.collection._
 import org.pingel.util.DirectedGraph
 import org.pingel.util.UndirectedGraph
-import scala.collection._
+import org.pingel.util.UndirectedGraphEdge
+import org.pingel.util.UndirectedGraphVertex
+
+class JoinTreeNode(name: String)
+extends UndirectedGraphVertex[JoinTreeEdge]
+{
+	// Note: we should probably return cluster contents instead
+	def getLabel(): String = name
+}
+
+class JoinTreeEdge(v1: JoinTreeNode, v2: JoinTreeNode)
+extends UndirectedGraphEdge[JoinTreeNode]
+{
+	def getVertices() = (v1, v2)
+}
 
 object JoinTree {
 

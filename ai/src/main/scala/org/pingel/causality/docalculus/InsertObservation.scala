@@ -1,6 +1,7 @@
 
 package org.pingel.causality.docalculus
 
+import scala.collection._
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
@@ -12,7 +13,7 @@ class InsertObservation extends Rule {
 
     def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
 
-        var results = List[Form]()
+        var results = new mutable.ListBuffer[Form]()
 
         val Y = q.getQuestion()
         val X = q.getActions()
@@ -58,7 +59,7 @@ class InsertObservation extends Rule {
             }
         }
         
-        results
+        results.toList
     }
 
 }

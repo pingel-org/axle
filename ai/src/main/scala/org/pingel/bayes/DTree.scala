@@ -2,6 +2,10 @@ package org.pingel.bayes
 
 import scala.collection._
 
+class DTreeEdge { }
+
+class DTreeNode { }
+
 class DTree {
 
   def cluster(n: DTreeNode): Set[RandomVariable] = null // TODO

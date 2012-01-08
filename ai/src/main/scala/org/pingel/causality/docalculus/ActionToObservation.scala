@@ -8,12 +8,13 @@ import org.pingel.bayes.VariableNamer
 import org.pingel.forms.Variable
 import org.pingel.gestalt.core.Form
 import org.pingel.gestalt.core.Unifier
+import scala.collection._
 
 class ActionToObservation extends Rule {
 
     def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
 
-       var results = List[Form]()
+       var results = mutable.ListBuffer[Form]()
 
         val Y = q.getQuestion()
         val W = q.getGiven()
@@ -58,11 +59,11 @@ class ActionToObservation extends Rule {
                 unifier.put(probFactory.question, Ycopy)
                 unifier.put(probFactory.given, ZW)
                 unifier.put(probFactory.actions, X)
-                results.add(probFactory.createForm(unifier))
+                results += probFactory.createForm(unifier)
             }
         }
         
-        results
+        results.toList
     }
 
 }

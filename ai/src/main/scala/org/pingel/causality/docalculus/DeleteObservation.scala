@@ -12,7 +12,7 @@ class DeleteObservation extends Rule {
 
     def apply(q: Probability, m: CausalModel, namer: VariableNamer)  = {
 
-    	var results = ArrayList[Form]()
+    	var results = new mutable.ListBuffer[Form]()
         
         val Y = q.getQuestion()
         val X = q.getActions()
@@ -45,11 +45,11 @@ class DeleteObservation extends Rule {
                 unifier.put(probFactory.question, Ycopy)
                 unifier.put(probFactory.given, W)
                 unifier.put(probFactory.actions, Xcopy)
-                results.add(probFactory.createForm(unifier))
+                results += probFactory.createForm(unifier)
             }
         }
         
-        results
+        results.toList
     }
 
 }

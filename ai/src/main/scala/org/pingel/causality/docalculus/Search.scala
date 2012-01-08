@@ -14,8 +14,7 @@ import scala.collection._
 
 object Search {
 
-    def main(args: Array[String])
-    {
+    def main(args: Array[String]) {
         val model = MidtermModel1
         val namer = new VariableNamer()
         
@@ -59,7 +58,7 @@ class Search {
     		if( next != null ) {
     			
     			for( e <- next ) {
-    				for( i <- 0 to (depth - 1) ) {
+    				for( i <- 0 until depth ) {
     					print("\t")
     				}
     				// println(e.toLaTeX())

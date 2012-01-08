@@ -4,7 +4,7 @@ import org.pingel.forms.Variable
 import org.pingel.gestalt.core.Form
 
 
-class Probability(question: Set[Variable], given: Set[Variable]=Set(), actions: Set[Variable]=Set()) {
+case class Probability(question: Set[Variable], given: Set[Variable]=Set(), actions: Set[Variable]=Set()) {
     // For now I'll just use sets of variables instead of assignments.
     // I'm confused about what the best representation for this stuff is.
 

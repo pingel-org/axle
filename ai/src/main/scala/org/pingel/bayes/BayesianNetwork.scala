@@ -102,7 +102,8 @@ A polytree is:
 
 import scala.collection._
 
-class BayesianNetwork(name: String="bn") extends Model(name)
+class BayesianNetwork(name: String="bn")
+extends Model(name)
 {
   var var2cpt = Map[RandomVariable, Factor]()
 	
