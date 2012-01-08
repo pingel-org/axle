@@ -43,7 +43,7 @@ object MidtermModel1 extends CausalModel("Midterm Model 1")
 
 		val Y = new RandomVariable("Y", bools)
 		addVariable(Y)
-		addFunction(new Function(Y, List(X4, U3)))
+		addFunction(new PFunction(Y, List(X4, U3)))
 
   def getQuantity(namer: VariableNamer) = {
         // this returns the quantity which is involved in

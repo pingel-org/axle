@@ -1,17 +1,14 @@
 
 package org.pingel.forms.stats
 
-import java.util.HashSet
-import java.util.Set
-
 import org.pingel.forms.Variable
 import org.pingel.gestalt.core.Form
 import org.pingel.gestalt.core.FormFactory
 
 class Expectation extends FormFactory
 {
-    val expectors: Set[Variable]
-    val condition: Set[Variable]
+    var expectors: Set[Variable]
+    var condition: Set[Variable]
     
     def createForm(expectors: Set[Variable], condition: Set[Variable], exp: Form): Form =  {
         this.expectors = expectors

@@ -6,6 +6,7 @@ import org.pingel.bayes.VariableNamer
 import org.pingel.forms.Variable
 import org.pingel.forms.math.Product
 import org.pingel.forms.math.Sigma
+import scala.collection._
 
 object CaseAnalysis {
 
@@ -15,13 +16,13 @@ object CaseAnalysis {
         val variable = rv.nextVariable(namer)
         
         val firstQuestion = probability.getQuestion() // Set[Variable]
-        val firstGiven = probability.getGiven() // returns a copy // Set<Variable>
+        var firstGiven = probability.getGiven() // returns a copy // Set<Variable>
         firstGiven += variable
         val firstActions = probability.getActions() // Set<Variable>
         
         val first = new Probability(firstQuestion, firstGiven, firstActions) // Probability
         
-        val secondQuestion = Set[Variable]()
+        val secondQuestion = mutable.Set[Variable]()
         secondQuestion += variable
         val secondGiven = probability.getGiven() // returns a copy
         val secondActions = probability.getActions()

@@ -48,7 +48,7 @@ class InductiveCausation(pHat: Distribution)
         		val a = varList.get(i)
         		val aNeighbors = G.links(a, null, null, null)
 
-        		for( j <- (i+1) to (varList.size - 1) ) {
+        		for( j <- (i+1) until varList.size ) {
         			val b = varList.get(j)
         			if( ! G.areAdjacent(a, b) ) {
         				val S = separators.valueAt(i, j)

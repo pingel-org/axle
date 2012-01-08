@@ -1,9 +1,6 @@
 package org.pingel.bayes
 
 import org.pingel.util.ListCrossProduct
-
-//import scalala.tensor.mutable._
-//import scalala.tensor.dense._
 import org.pingel.util.Matrix
 import scala.collection._
 

@@ -15,7 +15,7 @@ import org.pingel.ptype.PBooleans
 
 object MidtermModel2 extends CausalModel("Midterm Model 2") {
 
-  val bools = new PBooleans()
+  val bools = Some(new PBooleans())
 
   val a = new RandomVariable("A", bools)
   addVariable(a)

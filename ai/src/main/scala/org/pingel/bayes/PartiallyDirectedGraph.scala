@@ -96,8 +96,9 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
     frontier += from
     	
     while( frontier.size > 0 ) {
-      val head = frontier(0)
-      frontier.removeElementAt(0)
+      val head = frontier.remove(0)
+//      val head = frontier(0)
+//      frontier.removeElementAt(0)
       if( head.equals(target) ) {
     	return true
       }
