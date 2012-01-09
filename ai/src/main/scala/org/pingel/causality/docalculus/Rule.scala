@@ -12,7 +12,7 @@ abstract class Rule {
   
     def apply(q: Probability, m: CausalModel, namer: VariableNamer): List[Form]
     
-    def randomVariablesOf(variables: Set[RandomVariable]) = {
+    def randomVariablesOf(variables: Set[RandomVariable]): Set[RandomVariable] = {
         var result = Set[RandomVariable]()
         for( v <- variables ) {
             result += v.getRandomVariable()

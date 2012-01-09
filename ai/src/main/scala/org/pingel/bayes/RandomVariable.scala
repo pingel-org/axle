@@ -2,7 +2,6 @@ package org.pingel.bayes
 
 import org.pingel.util.DirectedGraphVertex
 import org.pingel.util.UndirectedGraphVertex
-
 import org.pingel.ptype.PType
 import org.pingel.forms.Variable
 

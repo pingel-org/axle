@@ -63,13 +63,11 @@ object SmokingModel extends CausalModel("Smoking Model") {
         val task2 = new Probability(question, given, actions)
         println("task2: " + task2.toString())
 
-//        System.out.println("Trying ActionToObservation");
-//        Vector result = (new ActionToObservation()).apply(task2, model);
-//        Iterator it = result.iterator();
-//        while( it.hasNext() ) {
-//        	Quantity q = (Quantity) it.next();
-//        	System.out.println("after rule 2 application: " + q);
-//        }
+        println("Trying ActionToObservation")
+        val result = new ActionToObservation().apply(task2, model)
+        result.map( q => {
+          println("after rule 2 application: " + q)
+        })
         
         val e = task2.caseAnalysis(model.getVariable("X"), namer)
         println("after conditioning and summing over X:\n" + e)
@@ -111,11 +109,12 @@ object SmokingModel extends CausalModel("Smoking Model") {
         val former = p.getMultiplicand(0) // Probabiblity
         println("former = " + former)
 
-        for( q <- new ObservationToAction().apply(former, model, namer) ) {
+        val result2 = new ObservationToAction().apply(former, model, namer)
+        for( q <- result2 ) {
           println("after rule ObservationToAction application: " + q)
         }
 
-        val former2 = result2.get(0) // Probability
+        val former2 = result2(0) // Probability
         println("former2 = " + former2)
         
         for( q <- new DeleteAction().apply(former2, model, namer) ) {

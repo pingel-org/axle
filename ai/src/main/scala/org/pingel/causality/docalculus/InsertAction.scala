@@ -33,7 +33,6 @@ class InsertAction extends Rule {
 		potentialZ --= randomVariablesOf(X)
 		potentialZ --= randomVariablesOf(W)
 		
-		
 		for( zRandomVariable <- potentialZ ) {
 			if( zRandomVariable.observable ) {
 				val zAction = zRandomVariable.nextVariable(namer)

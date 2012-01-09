@@ -1,7 +1,6 @@
 
 package org.pingel.forms
 
-import org.pingel.bayes.RandomVariable
 import org.pingel.gestalt.core.FormFactory
 import org.pingel.ptype.PType
 

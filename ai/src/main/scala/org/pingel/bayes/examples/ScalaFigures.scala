@@ -1,6 +1,7 @@
 
 package org.pingel.bayes.examples
 
+import org.pingel.ptype.PBooleans
 import org.pingel.bayes.BayesianNetwork
 import org.pingel.bayes.Case
 import org.pingel.bayes.Domain
@@ -14,12 +15,10 @@ import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
 import org.pingel.bayes.Value
 
-class ScalaFigures {
+object ScalaFigures {
 
-  val trueValue = new Value("true")
-  val falseValue = new Value("false")
-  val booleanDomain = new Domain(trueValue, falseValue)
-
+  val booleanDomain = Some(new PBooleans())
+  
   var figure6_1: BayesianNetwork = null
 
   val A = new RandomVariable("A", booleanDomain)
@@ -376,7 +375,7 @@ class ScalaFigures {
   }
 	
   def main(args: List[String]): Unit = {
-    var figures = new Figures()
+    var figures = ScalaFigures
 
     figures.setFigure6_1()
 //		figures.setFigure6_2()

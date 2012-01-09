@@ -5,6 +5,7 @@ package org.pingel.causality.docalculus
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Probability
 import org.pingel.bayes.VariableNamer
+import org.pingel.bayes.RandomVariable
 import org.pingel.forms.Variable
 import org.pingel.gestalt.core.Form
 import org.pingel.gestalt.core.Unifier
@@ -36,8 +37,8 @@ class ActionToObservation extends Rule {
             // println("Z = " + Z)
             
             val subModel = m.duplicate()
-            subModel.getGraph().removeInputs(randomVariablesOf(X))
-            subModel.getGraph().removeOutputs(randomVariablesOf(Z))
+            subModel.getGraph().removeInputs(X)
+            subModel.getGraph().removeOutputs(Z)
 
             // ModelVisualizer.draw(subModel)
             
@@ -45,7 +46,7 @@ class ActionToObservation extends Rule {
             XW ++= W
             XW ++= X
             
-            if( subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW)) ) {
+            if( subModel.blocks(Y, Z, XW) ) {
               
                 var ZW = Set[Variable]()
                 ZW ++= W

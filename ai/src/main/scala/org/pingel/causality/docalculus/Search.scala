@@ -8,7 +8,7 @@ import org.pingel.causality.CausalModel
 import org.pingel.bayes.Probability
 import org.pingel.bayes.VariableNamer
 import org.pingel.causality.examples.MidtermModel1
-import org.pingel.gestalt.core.Form
+// import org.pingel.gestalt.core.Form
 
 import scala.collection._
 
