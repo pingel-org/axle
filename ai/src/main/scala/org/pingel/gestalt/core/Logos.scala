@@ -1,31 +1,27 @@
 
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.Graphics
+import java.awt.Point
 
-import org.pingel.util.Printable;
+//import org.pingel.util.Printable;
 
-public abstract class Logos {
+abstract class Logos {
 
-    protected int radius = 15;
+    val radius = 15
 
-    protected boolean highlighted = false;
+    var highlighted = false
     
-    public void setHighlighted(boolean h)
-    {
-        highlighted = h;
+    def setHighlighted(h: Boolean): Unit = {
+        highlighted = h
     }
     
-    abstract public boolean contains(Point p);
+    def contains(p: Point): Boolean
 
-    abstract public void paint(Graphics g);
+    def paint(g: Graphics): Unit
 
-    protected int distanceSquared(Point p1, Point p2)
-    {
-        return (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y);
-    }
+    def distanceSquared(p1: Point, p2: Point) = (p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y)
 
-    public abstract void printToStream(Name name, Printable p);
+    def printToStream(name: Name, p: Printable): Unit
 
 }

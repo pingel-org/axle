@@ -1,24 +1,21 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Point
+import java.awt.event.MouseEvent
+import java.awt.geom.Ellipse2D
+import org.pingel.gestalt.ui.Widget
+import org.pingel.ptype.PType
+import org.pingel.util.Printable
 
-import org.pingel.gestalt.ui.Widget;
-import org.pingel.type.Type;
-import org.pingel.util.Printable;
-
-public abstract class Form
+case class Form(lambda: Lambda=new Lambda())
 extends Logos
-implements Widget, Comparable<Form>
+with Widget
+with Comparable[Form]
 {
-	private Map<Transform, Type> transform2type = new HashMap<Transform, Type>();
+	private Map<Transform, Type> transform2type = new HashMap<Transform, Type>()
 
 	public void addTransform(Transform transform, Type type)
 	{
@@ -32,14 +29,9 @@ implements Widget, Comparable<Form>
 	
 	protected Lambda lambda = null;
 
-	public Lambda getLambda()
-	{
-		return lambda;
-	}
-	
-    Point center = new Point();
-    
-    protected Color color = Color.WHITE;
+	def getLambda() = lambda
+	val center = new Point()
+	var color = Color.WHITE
 
     private ComplexForm parent;
 
@@ -48,15 +40,6 @@ implements Widget, Comparable<Form>
     private CallGraph inputTo = null;
 
     protected boolean detachable = false;
-    
-    public Form()
-    {
-    		this.lambda = new Lambda();
-    }
-    
-    public Form(Lambda lambda) {
-    		this.lambda = lambda;
-    }
 
     public abstract Integer size();
     
@@ -348,57 +331,50 @@ implements Widget, Comparable<Form>
         return null;
     }
 
-    public void release(Point p, History history, Lexicon lookupLexicon, Lexicon newlexicon)
-    {
-        System.out.println("FormController.mouseReleased");
+    def release(p: Point, history: History, lookupLexicon: Lexicon, newlexicon: Lexicon): Unit = {
+      
+    	println("FormController.mouseReleased")
 
         if( ! moveOK(p) ) {
-            return;
+            return
         }
 
         if( parent != null ) {
-            return;
+            return
         }
  
-        for( Form other : newlexicon.getTopForms() ) {
+        for( other <- newlexicon.getTopForms() ) {
             if( other != this ) {
-                
-                Form f = other.memberIntersects(this);
-                
+                val f = other.memberIntersects(this)
                 if( f instanceof Blank ) {
-                    
-                    Blank blank = (Blank) f;
+                    val blank = f.asInstanceOf[Blank]
                     if ( intersects(blank) ) {
-
-                        ComplexForm binaryParent = blank.getParent();
+                        ComplexForm binaryParent = blank.getParent()
                         if( blank == binaryParent.getLeft() ){
-                            binaryParent.setLeft(this);
+                            binaryParent.setLeft(this)
                         }
                         else {
-                            binaryParent.setRight(this);
+                            binaryParent.setRight(this)
                         }
-                        
-                        setParent(blank.getParent());
-                        blank.setParent(null);
-                        
-                        reAttachToCallGraph(history, newlexicon);
-                        
-                        return;
+                        setParent(blank.getParent())
+                        blank.setParent(null)
+                        reAttachToCallGraph(history, newlexicon)
+                        return
                     }
                 }
             }
         }
         
-        for( CallGraph cg : history.getCalls() ) {
+        for( cg <- history.getCalls() ) {
             
             if( parent == null && cg.intersects(this) && ! cg.isUnified()) {
 
-                CallVertex cv = new CallVertex(history.nextVertexId(), cg.transform.start, this);
-                System.out.println("calling unify on callGraphToAttachTo");
-                cg.unify(history, cv);
+                val cv = new CallVertex(history.nextVertexId(), cg.transform.start, this)
+                println("calling unify on callGraphToAttachTo")
+                cg.unify(history, cv)
                 if( cg.isUnified() ) {
-                    cg.proceed(history, lookupLexicon);
-                    cg.arrange(center);
+                    cg.proceed(history, lookupLexicon)
+                    cg.arrange(center)
                 }
             }
         }

@@ -1,92 +1,76 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import scala.collection._
 
-import org.pingel.util.Printable;
-import org.pingel.util.PrintableStringBuffer;
+import org.pingel.util.Printable
+// import org.pingel.util.PrintableStringBuffer
 
-public class History {
+class History {
 
-    private int nextEdgeId = 0;
+	var _nextEdgeId = 0
+	var _nextVertexId = 0
+	var _nextCallId = 0
 
-    private int nextVertexId = 0;
+	var calls = mutable.Set[CallGraph]()
 
-    private int nextCallId = 0;
-
-    private Set<CallGraph> calls = new HashSet<CallGraph>();
-
-    public History() {
+    def nextEdgeId() = {
+	  _nextEdgeId += 1
+	  _nextEdgeId
     }
 
-    public int nextEdgeId() {
-        return nextEdgeId++;
+    def nextVertexId() = {
+        _nextVertexId += 1
+        _nextVertexId
     }
 
-    public int nextVertexId() {
-        return nextVertexId++;
+    def nextCallId() = {
+      _nextCallId += 1
+      _nextCallId
     }
 
-    public int nextCallId() {
-        return nextCallId++;
+	def addCall(call: CallGraph): Unit = {
+        calls += call
     }
 
-    public void addCall(CallGraph call) {
-        calls.add(call);
+	def remove(call: CallGraph): Unit = {
+        calls -= call
     }
 
-    public void remove(CallGraph call) {
-        calls.remove(call);
-    }
+	def getCalls(): Set[CallGraph] = calls
 
-    public Set<CallGraph> getCalls() {
-        return calls;
-    }
+    def callVerticesByTransformVertex(tv: TransformVertex): Set[CallGraph] = null // TODO
 
-    public Set<CallGraph> callVerticesByTransformVertex(TransformVertex tv) {
-        // TODO
-        return null;
-    }
-
-    public void printTo(Printable out, Lexicon lexicon) {
-        Iterator<CallGraph> callIt = calls.iterator();
-        while (callIt.hasNext()) {
-
-            CallGraph call = callIt.next();
-
-            out.println(call.getId() + " " + lexicon.getNameOf(call.transform));
-            out.println();
-            call.printNetworkTo(out, 0);
-            out.println();
+    def printTo(out: Printable, lexicon: Lexicon): Unit = {
+        for( call <- calls ) {
+            out.println(call.getId() + " " + lexicon.getNameOf(call.transform))
+            out.println()
+            call.printNetworkTo(out, 0)
+            out.println()
         }
     }
 
-    public String toString(Lexicon lexicon) {
-        Printable psb = new PrintableStringBuffer(new StringBuffer());
-
-        this.printTo(psb, lexicon);
-
-        return psb.toString();
+    def toString(lexicon: Lexicon): String = {
+    	val psb = new PrintableStringBuffer(new StringBuffer())
+        this.printTo(psb, lexicon)
+        psb.toString()
     }
 
-    public void run(String formName, String transformName, Lexicon lexicon) {
-        Form form = lexicon.getForm(new Name(formName));
-        Transform transform = lexicon.getTransform(new Name(transformName));
+    def run(formName: String, transformName: String, lexicon: Lexicon): Unit = {
+		val form = lexicon.getForm(new Name(formName))
+        val transform = lexicon.getTransform(new Name(transformName))
         if (transform == null) {
-            GLogger.global.severe("Couldn't find transform with name " + transformName);
-            System.exit(1);
+            GLogger.global.severe("Couldn't find transform with name " + transformName)
+            System.exit(1)
         }
 
-        CallGraph call = transform.constructCall(nextCallId(), this, lexicon,
-                null);
-        CallVertex cv = new CallVertex(nextVertexId(), transform.start, form);
-        call.unify(this, cv);
+        val call = transform.constructCall(nextCallId(), this, lexicon, null)
+        val cv = new CallVertex(nextVertexId(), transform.start, form)
+        call.unify(this, cv)
 
         while (call.hasNext()) {
-            GLogger.global.info("top-level call\n");
-            GLogger.global.info(call.toString() + "\n");
-            call.next(this, lexicon);
+            GLogger.global.info("top-level call\n")
+            GLogger.global.info(call.toString() + "\n")
+            call.next(this, lexicon)
         }
 
     }

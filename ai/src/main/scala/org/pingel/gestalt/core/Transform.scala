@@ -1,81 +1,60 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.Ellipse2D;
-import java.util.HashSet;
-import java.util.Set;
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Point
+import java.awt.geom.Ellipse2D
 
-import org.pingel.util.LabelledDirectedGraph;
+import org.pingel.util.LabelledDirectedGraph
 
-public abstract class Transform extends Logos
+abstract case class Transform(guardName: Name) extends Logos
 {
-    public Name guardName;
-    public TransformVertex start;
-    private Set<TransformVertex> exits = new HashSet<TransformVertex>();
+    var start: TransformVertex = null
+    var exits = Set[TransformVertex]()
 
-    class TransformGraph extends LabelledDirectedGraph<TransformVertex, TransformEdge>
+    class TransformGraph extends LabelledDirectedGraph[TransformVertex, TransformEdge]
     {
-        public TransformVertex addVertex(TransformVertex tv)
-        {
-            super.addVertex(tv);
+        def addVertex(tv: TransformVertex) = {
+            super.addVertex(tv)
             
-            if( tv.isStart() ) {
-                start = tv;
+            if( tv.isStart ) {
+                start = tv
             }
-            if( tv.isExit() ) {
-                exits.add(tv);
+            if( tv.isExit ) {
+                exits += tv
             }
-            return tv;
+            tv
         }
     }
 
-    private TransformGraph graph = new TransformGraph();
+    var graph = new TransformGraph()
     
-    Point center = new Point();
-    
-    Transform(Name guardName)
-	{
-    	this.guardName = guardName;
-	}
+    val center = new Point()
 
-    public LabelledDirectedGraph<TransformVertex, TransformEdge> getGraph()
-    {
-        return graph;
-    }
-    
-    public abstract CallGraph constructCall(int id, History history, Lexicon lexicon, TransformEdge macro);
+    def getGraph() = graph
 
-    public void arrange(Point p)
-    {
-        center.move(p.x, p.y);
-    }
-    
-    public Point getCenter()
-    {
-        return center;
+    def constructCall(id: Int, history: History, lexicon: Lexicon, macro: TransformEdge): CallGraph
+
+    def arrange(p: Point): Unit = {
+        center.move(p.x, p.y)
     }
 
-    public void paint(Graphics g)
-    {
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(Color.RED);
-        Ellipse2D circle = new Ellipse2D.Double(center.x - radius, center.y - radius, 2*radius, 2*radius);
-        g2d.fill(circle);
-        g2d.setColor(Color.BLACK);
-        g2d.draw(circle);
+    def getCenter() = center
+
+    def paint(g: Graphics): Unit = {
+    	val g2d = g.asInstanceOf[Graphics2D]
+        g2d.setColor(Color.RED)
+        val circle = new Ellipse2D.Double(center.x - radius, center.y - radius, 2*radius, 2*radius)
+        g2d.fill(circle)
+        g2d.setColor(Color.BLACK)
+        g2d.draw(circle)
     }
 
-    public void move(Point p)
-    {
-        center.move(p.x, p.y);
+    def move(p: Point): Unit = {
+        center.move(p.x, p.y)
     }
     
-    public boolean contains(Point p)
-    {
-        return distanceSquared(center, p) < radius*radius;
-    }
+    def contains(p: Point) = distanceSquared(center, p) < radius*radius
 
 }

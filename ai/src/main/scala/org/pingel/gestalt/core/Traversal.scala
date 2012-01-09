@@ -1,40 +1,20 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-public class Traversal
+case class Traversal(var offset: String)
 {
-    private String offset;
-    private char[] chars;
-    
-    public Traversal(String n) 
-    {
-		offset = n;
-		chars = offset.toCharArray();
-    }
+  var chars = offset.toList
 
-    public String toString()
-    {
-        return offset;
-    }
+  def toString = offset
 
-    public Traversal copy()
-    {
-		return new Traversal(offset);
-    }
+  def copy() = new Traversal(offset)
 
-    public void append(String tail)
-    {
-		offset += tail;
-		chars = offset.toCharArray();
-    }
+  def append(tail: String): Unit = {
+    offset += tail
+    chars = offset.toList
+  }
 
-    public int length()
-    {
-		return chars.length;
-    }
+  def length() = chars.length
 
-    public char elementAt(int i)
-    {
-		return chars[i];
-    }
+  def elementAt(i: Int) = chars(i)
 
 }

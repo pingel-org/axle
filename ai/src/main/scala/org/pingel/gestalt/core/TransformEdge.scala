@@ -1,32 +1,21 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import org.pingel.util.LabelledDirectedEdge;
+import org.pingel.util.LabelledDirectedEdge
 
-public class TransformEdge extends LabelledDirectedEdge<TransformVertex>
+case class TransformEdge(transformName: Name, traversal: Traversal, source: TransformVertex, dest: TransformVertex)
+extends LabelledDirectedEdge[TransformVertex]
 {
-    public Name transformName;
-    public Traversal traversal;
+    def getSource() = source
     
-    public TransformEdge(Name transformName,
-    		Traversal traversal,
-			TransformVertex source,
-			TransformVertex dest)
-    {
-        super(source, transformName.base, dest);
-        this.transformName = transformName;
-    	this.traversal = traversal;
-    }
-
+    def getDest() = dest
     
-    public String toString() {
-    	
-    	if( traversal == null ) {
-    		return "apply " + transformName + " " +
-    		getSource().toString() + " " + getDest().toString();
-    	}
-    	else {
-    		return "apply " + transformName + " " +
-    		getSource().toString() + "." + traversal + " " + getDest().toString();
-    	}
+    def getLabel() = transformName.base
+    
+    def toString(): String = {
+      (traversal == null) match {
+        case true  => "apply " + transformName + " " + source.toString() + " " + dest.toString()
+        case false => "apply " + transformName + " " + source.toString() + "." + traversal + " " + dest.toString()
+      }
     }
+    
 }

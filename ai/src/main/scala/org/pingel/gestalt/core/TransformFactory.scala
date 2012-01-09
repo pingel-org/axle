@@ -1,75 +1,38 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Point;
-import java.awt.event.MouseEvent;
+import java.awt.Point
+import java.awt.event.MouseEvent
+import org.pingel.gestalt.ui.Widget
 
-import org.pingel.gestalt.ui.Widget;
+case class TransformFactory(transform: Transform, factoryLexicon: Lexicon)
+extends Widget {
 
+  def getTransform() = transform
 
-public class TransformFactory
-implements Widget
-{
+  def mousePressed(e: MouseEvent, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Widget = {
+	println("TransformFactory.mousePressed")
+	val p = e.getPoint()
+	val transform = getTransform()
+	if( transform.contains(p) ) {
+		val cg = transform.constructCall(history.nextCallId(), history, factoryLexicon, null)
+		cg.move(transform.getCenter())
+        cg.arrange(transform.getCenter())
+        return cg
+	}
+	return null
+  }
 
-    Transform transform;
-    Lexicon factoryLexicon;
-    
-    public TransformFactory(Transform t, Lexicon factoryLexicon)
-    {
-        transform = t;
-        this.factoryLexicon = factoryLexicon;
-    }
+  def mouseClicked(e: MouseEvent, history: History, lexicon: Lexicon) = false
 
-    public Transform getTransform()
-    {
-        return transform;
-    }
+  def release(p: Point, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Unit = { }
 
-    public Widget mousePressed(MouseEvent e, History history, Lexicon lookupLexicon, Lexicon newLexicon)
-    {
+  def drag(p: Point, history: History, lexicon: Lexicon): Unit = { }
 
-        System.out.println("TransformFactory.mousePressed");
+  def getCenter() = getTransform().getCenter()
 
-        Point p = e.getPoint();
-        
-        Transform transform = getTransform();
-        
-        if( transform.contains(p) ) {
+  def setHighlighted(h: Boolean): Unit = {}
 
-            CallGraph cg = transform.constructCall(history.nextCallId(), history, factoryLexicon, null);
-            cg.move(transform.getCenter());
-            cg.arrange(transform.getCenter());
-            
-            return cg;
-        }
-        
-        return null;
-    }
-
-    public boolean mouseClicked(MouseEvent e, History history, Lexicon lexicon)
-    {
-        return false;
-    }
-    
-    public void release(Point p, History history, Lexicon lookupLexicon, Lexicon newLexicon)
-    {
-    }
-    
-    public void drag(Point p, History history, Lexicon lexicon)
-    {
-    }
-
-    public Point getCenter()
-    {
-        return getTransform().getCenter();
-    }
-
-    public void setHighlighted(boolean h)
-    {
-    }
-
-    public Point getBounds()
-    {
-        return getTransform().getCenter(); // TODO not quite right
-    }
+  // TODO: not quite right
+  def getBounds() = getTransform().getCenter()
 
 }

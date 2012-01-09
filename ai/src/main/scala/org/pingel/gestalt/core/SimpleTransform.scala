@@ -1,80 +1,49 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Point;
-import java.util.Iterator;
-import java.util.Map;
+import java.awt.Point
+import org.pingel.util.Printable
 
-import org.pingel.util.Printable;
-
-public class SimpleTransform extends Transform
+case class SimpleTransform(guardName: Name, outName: Name, map: Map[Name, Name], cost: Double)
+extends Transform(guardName)
 {
-	public Name outName;
-	public Map<Name, Name> map;
-	public double cost;
-	public TransformVertex exitNode; // TODO sort of a trivial case of super.exits; maybe I should split them
 
-    Point center = new Point(0, 0);
-    
-	public SimpleTransform(Name guardName, Name outName, Map<Name, Name> map, double cost)
-	{
-		super(guardName);
+	var center = new Point(0, 0)
 
-		getGraph().addVertex(new TransformVertex(new Name("in"), true, false));
+    getGraph().addVertex(new TransformVertex(new Name("in"), true, false))
 		
-		GLogger.global.entering("SimpleSystm", "<init>: in = " + guardName.toString() +
-				", out = " + outName.toString() );
-		
-		this.outName = outName;
-		this.map = map;
-		this.cost = cost;
-		
-		exitNode = getGraph().addVertex(new TransformVertex(new Name("out"), false, true));
+    GLogger.global.entering("SimpleSystm", "<init>: in = " + guardName.toString() +
+    		", out = " + outName.toString() )
+
+	// TODO sort of a trivial case of super.exits; maybe I should split them:
+    val exitNode = getGraph().addVertex(new TransformVertex(new Name("out"), false, true))
         
-        getGraph().addEdge(new TransformEdge(new Name(), null, start, exitNode));
-	}
+    getGraph().addEdge(new TransformEdge(new Name(), null, start, exitNode))
 
-    public SimpleTransform()
-    {
-        super(new Name()); // TODO this should be the name of the precondition form
-    }
+// removed for Scala conversion:
+//    public SimpleTransform()
+//    {
+//        super(new Name()); // TODO this should be the name of the precondition form
+//    }
 
-	public CallGraph constructCall(int id, History history, Lexicon lexicon, TransformEdge macro)
-	{
-		GLogger.global.entering("SimpleSystm", "constructCall");
-		
-		return new SimpleTransformCall(id, history, lexicon, this, macro);
+	def constructCall(id: Int, history: History, lexicon: Lexicon, macro: TransformEdge) = {
+		GLogger.global.entering("SimpleSystm", "constructCall")
+		new SimpleTransformCall(id, history, lexicon, this, macro)
 	}
 	
-	public String toString()
-	{
+	def toString() = {
 		// this may not be right... do we want the names of the guard
 		// and the output, 
 		// or do we want the structural description?? !!!
-		
-		String result = new String();
-		
-		result += guardName + " " + outName + " ";
-		
-		result += "{";
-		
-		Iterator<Name> it = map.keySet().iterator();
-		while( it.hasNext() ) {
-			Name from = it.next();
-			Name to = map.get(from);
-			result += from + "/" + to;
-			if( it.hasNext() ) {
-				result += " ";
-			}
-		}
-		
-		result += "}";
-		
-		return result;
+		guardName + " " + outName + " {" +
+		map.keySet.map( from => {
+		  val to = map.get(from)
+		  from + "/" + to
+		} ).mkString(" ") + "}"
 	}
 	
-	public void printToStream(Name name, Printable p) {
-		p.print("transform " + name.base + " " + this.toString());
-		p.println();
+	def printToStream(name: Name, p: Printable): Unit = {
+		p.print("transform " + name.base + " " + this.toString())
+		p.println()
 	}
 
 }

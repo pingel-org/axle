@@ -1,27 +1,25 @@
 package org.pingel.gestalt.core;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+//import java.util.HashMap;
+//import java.util.HashSet;
+//import java.util.Iterator;
+//import java.util.Map;
+//import java.util.Set;
+//import java.util.TreeMap;
 
-import org.pingel.util.Printable;
+// import org.pingel.util.Printable;
 
-public class Lexicon
+import scala.collection._
+
+case class Lexicon
 {
-    private Map<Name, Logos> name2object = new TreeMap<Name, Logos>();
-    private Map<Logos, Name> object2name = new HashMap<Logos, Name>(); // this may be buggy
+    var name2object = mutable.Map[Name, Logos]()
+    var object2name = mutable.Map[Logos, Name]() // this may be buggy
 
-    Set<FormFactory> formFactories = new HashSet<FormFactory>();
-    Set<TransformFactory> transformFactories = new HashSet<TransformFactory>();
-    
-    
-    public Lexicon() {}
-    
-    public void put(Name name, Logos o)
-    {
+    var formFactories = mutable.Set[FormFactory]()
+    var transformFactories = mutable.Set[TransformFactory]()
+
+    def put(name: Name, o: Logos): Unit = {
     	GLogger.global.info("putting " + name + " of class " + o.getClass() + " = " + o.toString());
     	
     	/*
@@ -32,143 +30,105 @@ public class Lexicon
     	 }
     	 */
     	
-    	name2object.put(name, o);
-    	object2name.put(o, name);
+    	name2object += name -> o
+    	object2name += o -> name
     }
 
     
-    public void addFactories()
-    {
-        for( Form form : getTopForms() ) {
-            formFactories.add(new FormFactory(form));
+    def addFactories(): Unit = {
+        for( form <- getTopForms() ) {
+            formFactories.add(new FormFactory(form))
         }
         
-        for( Transform t : getTransforms() ) {
-            transformFactories.add(new TransformFactory(t, this));
-        }            
+        for( t <- getTransforms() ) {
+            transformFactories.add(new TransformFactory(t, this))
+        }
         
-        Blank leftBlank = new Blank();
-        Blank rightBlank = new Blank();
-        ComplexForm cf = new ComplexForm(leftBlank, rightBlank);
-        leftBlank.setParent(cf);
-        rightBlank.setParent(cf);
-        formFactories.add(new FormFactory(cf));
-    }
-    
-    
-    public void addFormFactory(FormFactory ff)
-    {
-        formFactories.add(ff);
+        val leftBlank = new Blank()
+        val rightBlank = new Blank()
+        val cf = new ComplexForm(leftBlank, rightBlank)
+        leftBlank.setParent(cf)
+        rightBlank.setParent(cf)
+        formFactories.add(new FormFactory(cf))
     }
 
-    public Set<FormFactory> getFormFactories()
-    {
-        return formFactories;
-    }
-    
-    public void addTransformFactory(TransformFactory tf)
-    {
-        transformFactories.add(tf);
+    def addFormFactory(ff: FormFactory): Unit = {
+        formFactories.add(ff)
     }
 
-    public Set<TransformFactory> getTransformFactories()
-    {
-        return transformFactories;
-    }
-    
-    public Set<Name> getNames()
-    {
-        return name2object.keySet();
-    }
-    
-    public Logos get(Name name)
-    {
-    	return name2object.get(name);
+    def getFormFactories() = formFactories
+
+    def addTransformFactory(tf: TransformFactory): Unit = {
+        transformFactories.add(tf)
     }
 
-    public Transform getTransform(Name name)
-    {
-    	GLogger.global.info("getTransform(" + name + ")");
-    	
-    	Transform t = (Transform) name2object.get(name);
-    	return t;
+    def getTransformFactories() = transformFactories
+
+    def getNames() = name2object.keySet
+
+    def get(name: Name) = name2object(name)
+
+    def getTransform(name: Name) = {
+    	GLogger.global.info("getTransform(" + name + ")")
+    	name2object(name)
     }
 
-    public void renameTransform(Name from, Name to)
-    {
-    	Transform t = (Transform) name2object.get(from);
-    	name2object.remove(from);
-    	object2name.remove(t);
-    	name2object.put(to, t);
-    	object2name.put(t, to);
+    def renameTransform(from: Name, to: Name): Unit = {
+    	val t = name2object(from)
+    	name2object.remove(from)
+    	object2name.remove(t)
+    	name2object += to -> t
+    	object2name += t -> to
     }
 
-    public void renameForm(Name from, Name to)
-    {
-    	Form f = (Form) name2object.get(from);
-    	name2object.remove(from);
-    	object2name.remove(f);
-    	name2object.put(to, f);
-    	object2name.put(f, to);
+    def renameForm(from: Name, to: Name): Unit = {
+    	val f = name2object(from)
+    	name2object.remove(from)
+    	object2name.remove(f)
+    	name2object += to -> f
+    	object2name += f -> to
     }
     
-    public Form getForm(Name name)
-    {
-    	GLogger.global.info("getForm(" + name + ")");
-    	
-    	Form f = (Form) name2object.get(name);
-    	return f;
+    def getForm(name: Name): Form = {
+    	GLogger.global.info("getForm(" + name + ")")
+    	name2object(name).asInstanceOf[Form]
     }
     
-    public void remove(Logos logos)
-    {
-        Name name = object2name.get(logos);
+    def remove(logos: Logos): Unit = {
+        val name = object2name(logos)
         if( name != null ) {
-            object2name.remove(logos);
-            name2object.remove(name);
+            object2name.remove(logos)
+            name2object.remove(name)
         }
     }
     
-    public Set<Transform> getTransforms()
-    {
-        Set<Transform> result = new HashSet<Transform>();
-        
-        for( Logos logos : object2name.keySet() ) {
+    def getTransforms() = {
+        var result = Set[Transform]()
+        for( logos <- object2name.keySet ) {
             if( logos instanceof Transform ) {
-                result.add((Transform)logos);
+                result += logos.asInstanceOf[Transform]
             }
         }
-        
-        return result;
+        result
     }
 
-    public Set<Form> getTopForms()
-    {
-        Set<Form> result = new HashSet<Form>();
-        
-        for( Logos logos : object2name.keySet() ) {
+    def getTopForms() = {
+        var result = Set[Form]()
+        for( logos <- object2name.keySet ) {
             if( logos instanceof Form ) {
-                result.add((Form)logos);
+                result += logos.asInstanceOf[Form]
             }
         }
-        
-        return result;
+        result
     }
     
-    public Name getNameOf(Logos logos)
-    {
-    	return object2name.get(logos);
-    }
-        
-    
-    public void printToStream(Printable p)
-    {
-    	Iterator<Name> names_it = name2object.keySet().iterator();
-    	while( names_it.hasNext() ) {
-    	    Name name = names_it.next();
-    	    Logos logos = get(name);
-    	    logos.printToStream(name, p);
-    	    p.println();
+    def getNameOf(logos: Logos) = object2name.get(logos)
+
+    def printToStream(p: Printable): Unit = {
+    	for( name <- name2object.keySet ) {
+    	    val logos = get(name)
+    	    logos.printToStream(name, p)
+    	    p.println()
     	}
     }
     

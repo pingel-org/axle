@@ -1,13 +1,12 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.util.Map;
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Point
 
-import org.pingel.util.Printable;
+import org.pingel.util.Printable
 
-public class ComplexForm extends Form
+case class ComplexForm extends Form
 {
     private Form left = null;
     private Form right = null;

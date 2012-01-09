@@ -1,37 +1,17 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
+import scala.collection._
 
-public class Unifier {
+case class Unifier {
 
-    private Map<Name, Form> name2form = new TreeMap<Name, Form>();
+    var name2form = Map[Name, Form]()
 
-    public Unifier() {}
+    def get(name: Name) = name2form(name)
 
-    public Form get(Name name)
-    {
-		return name2form.get(name);
-    }
+    def put(name: Name, f: Form) = name2form += name -> f
 
-    public void put(Name name, Form f)
-    {
-		name2form.put(name, f);
-    }
+    def toString() = "{\n" +
+    		name2form.keySet.map( n => n + " -> " + name2form(n).toString()).mkString("\n") +
+    		" }"
 
-    public String toString()
-    {
-		String result = "{\n";
-
-		Iterator<Name> keyIt = name2form.keySet().iterator();
-		while( keyIt.hasNext() ) {
-		    Name n = keyIt.next();
-		    Form f = name2form.get(n);
-		    result += n + " -> " + f.toString() + "\n";
-		}
-		result += " }";
-
-		return result;
-    }
 }

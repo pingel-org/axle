@@ -1,13 +1,6 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.Vector;
-
-public class SimulationExplanation implements Comparable<SimulationExplanation>
+case class SimulationExplanation extends Comparable[SimulationExplanation]
 {
     private Map<SimpleTransform, ComplexTransform> betaSystemByConstraint = new HashMap<SimpleTransform, ComplexTransform>();
     private Map<SimpleTransform, ComplexTransformCall> betaCallByConstraint = new HashMap<SimpleTransform, ComplexTransformCall>();

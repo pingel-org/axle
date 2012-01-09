@@ -1,17 +1,11 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Color;
+import java.awt.Color
 
-public class Blank extends SimpleForm {
+case class Blank extends SimpleForm(new Name("?")) {
 
-    public Blank()
-    {
-        super(new Name("?"));
-        color = new Color(100, 200, 240);
-    }
-    
-    public Form duplicate() {
-        return new Blank();
-    }
-    
+	color = new Color(100, 200, 240)
+
+	def duplicate(): Form = new Blank()
+
 }

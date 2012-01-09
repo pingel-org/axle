@@ -1,45 +1,18 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import org.pingel.util.DirectedGraphVertex;
+import org.pingel.util.DirectedGraphVertex
 
-public class TransformVertex 
-implements DirectedGraphVertex<TransformEdge>
+case class TransformVertex(name: Name, var isStart: Boolean, var isExit: Boolean)
+extends DirectedGraphVertex[TransformEdge]
 {
-    public Name name;
-    private boolean isStart;
-    private boolean isExit;
-    
-    public TransformVertex(Name name, boolean is, boolean ie)
-    {
-        this.name = name;
-        this.isStart = is;
-        this.isExit = ie;
-    }
-    
-    public boolean isStart()
-    {
-    	return isStart;
+    def setIsStart(is: Boolean): Unit = {
+      isStart = is
     }
 
-    public void isStart(boolean is)
-    {
-    	isStart = is;
-    }
-    
-    public boolean isExit()
-    {
-        return isExit;
+    def setIsExit(is: Boolean): Unit = {
+      isExit = is
     }
 
-    public void isExit(boolean ie)
-    {
-        this.isExit = ie;
-    }
-
-    public String toString()
-    {
-        return name.toString();
-    }
-
+    def toString() = name.toString()
     
 }

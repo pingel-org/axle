@@ -1,105 +1,75 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.Ellipse2D;
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Point
+import java.awt.geom.Ellipse2D
 
-import org.pingel.util.DirectedGraphVertex;
-import org.pingel.util.Printable;
+import org.pingel.util.DirectedGraphVertex
+// import org.pingel.util.Printable
 
-public class CallVertex
-implements DirectedGraphVertex<CallEdge>
+case class CallVertex(id: Int, tv: TransformVertex, var form: Form)
+extends DirectedGraphVertex[CallEdge]
 {
-	private int id;
-	private TransformVertex tv;
-	private Form form;
 
-    private Point center = new Point();
-    
-    private static int radius = 15;
-    
-	public CallVertex(int id, TransformVertex tv, Form form)
-	{
-		super();
-		this.id = id;
-		this.tv = tv;
-		this.form = form;
-	}
+    val center = new Point()
+    val radius = 15
 
-	public int getId()
-	{
-		return id;
-	}
+    def getId() = id
 
-	public TransformVertex getTransformVertex()
-	{
-		return tv;
-	}
+    def getTransformVertex() = tv
 
-    public void clearForm()
-    {
-        form = null;
+    def clearForm(): Unit = {
+        form = null
     }
 
-    public void setForm(Form f)
-    {
-        form = f;
+    def setForm(f: Form): Unit = {
+        form = f
     }
 
-    public Point getCenter()
-    {
-        return center;
-    }
-    
-    public void move(Point p)
-    {
+    def getCenter() = center
+
+    def move(p: Point): Unit = {
 //        System.out.println("CallVertex.move: p = " + p);
-        
-        center.move(p.x, p.y);
+        center.move(p.x, p.y)
         if( form != null ) {
-            form.arrange(p);
+            form.arrange(p)
         }
     }
     
-	public Form getForm()
-	{
-		return form;
-	}
-	
-    public void printTo(Printable out)
-    {
-        if( tv.isExit() ) {
-            out.print("*");
+	def getForm() = form
+
+    def printTo(out: Printable): Unit = {
+        if( tv.isExit ) {
+            out.print("*")
         }
         else {
-            out.print(" ");
+            out.print(" ")
         }
-        out.print("<" + tv.name + ", " + getId() + ", ");
-        form.printToStream(new Name("s" + id), out);
-        out.print(">");
+        out.print("<" + tv.name + ", " + getId() + ", ")
+        form.printToStream(new Name("s" + id), out)
+        out.print(">")
     }
 
     // See http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html for colors
-    Color darkOrange = new Color(255, 140, 0); // Dark orange 
+    val darkOrange = new Color(255, 140, 0) // Dark orange 
     // 178, 34, 34); // firebrick
-    Color turquoise = new Color(64, 224, 208); // turquose
+    val turquoise = new Color(64, 224, 208) // turquose
     
-    public void paint(Graphics g)
-    {
-        Graphics2D g2d = (Graphics2D)g;
+    def paint(g: Graphics): Unit = {
+        val g2d = g.asInstanceOf[Graphics2D]
 
         if( form == null ) {
-            Ellipse2D inCircle = new Ellipse2D.Double(center.x - radius, center.y - radius, 2*radius, 2*radius);
-            g2d.setColor(darkOrange);
-            g2d.fill(inCircle);
-            g2d.setColor(Color.BLACK);
-            g2d.draw(inCircle);
+            val inCircle = new Ellipse2D.Double(center.x - radius, center.y - radius, 2*radius, 2*radius)
+            g2d.setColor(darkOrange)
+            g2d.fill(inCircle)
+            g2d.setColor(Color.BLACK)
+            g2d.draw(inCircle)
         }
         else {
 //            System.out.println("painting cv's form: " + getForm().toString());
-            form.paint(g);
+            form.paint(g)
         }
         
     }

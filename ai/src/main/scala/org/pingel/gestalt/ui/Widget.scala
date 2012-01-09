@@ -1,25 +1,25 @@
-package org.pingel.gestalt.ui;
+package org.pingel.gestalt.ui
 
-import java.awt.Point;
-import java.awt.event.MouseEvent;
+import java.awt.Point
+import java.awt.event.MouseEvent
 
-import org.pingel.gestalt.core.History;
-import org.pingel.gestalt.core.Lexicon;
+import org.pingel.gestalt.core.History
+import org.pingel.gestalt.core.Lexicon
 
-public interface Widget {
+trait Widget {
     
-    public Widget mousePressed(MouseEvent e, History history, Lexicon lookupLexicon, Lexicon newLexicon);
+	def mousePressed(e: MouseEvent, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Widget
 
-    public boolean mouseClicked(MouseEvent e, History history, Lexicon lexicon);
+	def mouseClicked(e: MouseEvent, history: History, lexicon: Lexicon): Boolean
     
-    public void release(Point p, History history, Lexicon lookupLexicon, Lexicon newlexicon);
+	def release(p: Point, history: History, lookupLexicon: Lexicon, newlexicon: Lexicon): Unit
     
-    public void drag(Point p, History history, Lexicon lexicon);
+	def drag(p: Point, history: History, lexicon: Lexicon): Unit
     
-    public Point getCenter();
+	def getCenter(): Point
     
-    public void setHighlighted(boolean h);
+	def setHighlighted(h: Boolean): Unit
  
-    public Point getBounds();
+	def getBounds(): Point
 
 }

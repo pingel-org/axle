@@ -1,130 +1,95 @@
 package org.pingel.gestalt.core;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.event.MouseEvent;
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Point
+import java.awt.Polygon
+import java.awt.event.MouseEvent
 
-import org.pingel.gestalt.ui.Widget;
-import org.pingel.util.DirectedGraphEdge;
+import org.pingel.gestalt.ui.Widget
+import org.pingel.util.DirectedGraphEdge
 
-public class CallEdge
-extends DirectedGraphEdge<CallVertex>
-implements Widget
+case class CallEdge(id: Int, v1: CallVertex, v2: CallVertex, transformEdge: TransformEdge)
+extends DirectedGraphEdge[CallVertex]
+with Widget
 {
-	public TransformEdge transformEdge;
 
-	private int id;
-	
-    private static int radius = 15;
-    Polygon poly;
-    
-	public CallEdge(int id, CallVertex v1, CallVertex v2, TransformEdge transformEdge)
-	{
-		super(v1, v2);
-		this.transformEdge = transformEdge;
-        updatePoly();
-	}
-	
-	public int getId()
-	{
-		return id;
-	}
-    
-    public void arrange(Point p)
-    {
-        getSource().getForm().arrange(p);
-        Point p2 = new Point(p);
-        p2.translate(100, 0);
-        getDest().getForm().arrange(p2);
+    val radius = 15
+    var poly: Polygon = null
 
-        updatePoly();
-        
+    updatePoly()
+
+    def getSource() = v1
+    def getDest() = v2
+
+    def getId() = id
+
+    def arrange(p: Point): Unit = {
+    	getSource().getForm().arrange(p)
+        val p2 = new Point(p)
+        p2.translate(100, 0)
+        getDest().getForm().arrange(p2)
+        updatePoly()
     }
     
-    public Point getBounds()
-    {
-        return poly.getBounds().getLocation(); // TODO this is not quite right
-    }
-    
-    
-    public boolean contains(Point p)
-    {
-        return poly.contains(p);
-    }
-    
-    public void updatePoly()
-    {
-        // System.out.println("CallEdge.updatePoly: center = " + getSource().getForm().center + ", radius = ");
-        
-        poly = new Polygon();
-        poly.addPoint(getSource().getForm().center.x, getSource().getForm().center.y - radius);
-        poly.addPoint(getSource().getForm().center.x, getSource().getForm().center.y + radius);
-        poly.addPoint(getDest().getForm().center.x, getDest().getForm().center.y);
+    // TODO this is not quite right
+    def getBounds() = poly.getBounds().getLocation()
+
+    def contains(p: Point) = poly.contains(p)
+
+    def updatePoly(): Unit = {
+        // println("CallEdge.updatePoly: center = " + getSource().getForm().center + ", radius = ")
+        poly = new Polygon()
+        poly.addPoint(getSource().getForm().center.x, getSource().getForm().center.y - radius)
+        poly.addPoint(getSource().getForm().center.x, getSource().getForm().center.y + radius)
+        poly.addPoint(getDest().getForm().center.x, getDest().getForm().center.y)
     }
 
-    Color navajoWhite = new Color(255, 222, 173); // Navajo White
+    val navajoWhite = new Color(255, 222, 173) // Navajo White
 
-    public void paint(Graphics g) {
-        
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(navajoWhite);
-        g2d.fill(poly);
-        g2d.setColor(Color.BLACK);
-        g2d.draw(poly);
+    def paint(g: Graphics): Unit = {
+        val g2d = g.asInstanceOf[Graphics2D]
+        g2d.setColor(navajoWhite)
+        g2d.fill(poly)
+        g2d.setColor(Color.BLACK)
+        g2d.draw(poly)
     }
 
-    public void drag(Point p, History history, Lexicon lexicon) {
+    def drag(p: Point, history: History, lexicon: Lexicon): Unit = {
 
-        System.out.println("CallEdge.mouseDragged");
+        println("CallEdge.mouseDragged")
 
-        Point origin = getCenter();
-        Point dp = new Point(p.x - origin.x, p.y - origin.y);
+        val origin = getCenter()
+        val dp = new Point(p.x - origin.x, p.y - origin.y)
 
-        getSource().move(p);
+        getSource().move(p)
         
-        Point newDestPosition = new Point(getDest().getCenter());
-        newDestPosition.translate(dp.x, dp.y);
-        getDest().move(newDestPosition);
+        val newDestPosition = new Point(getDest().getCenter())
+        newDestPosition.translate(dp.x, dp.y)
+        getDest().move(newDestPosition)
         
-        updatePoly();
+        updatePoly()
     }
 
-    public Widget mousePressed(MouseEvent e, History history, Lexicon lookupLexicon, Lexicon newLexicon) {
-
-        System.out.println("CallEdge.mousePressed");
-
-        Point p = e.getPoint();
-        
+    def mousePressed(e: MouseEvent, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Widget = {
+        println("CallEdge.mousePressed")
+        val p = e.getPoint()
         if( contains(p) ) {
-            return this;
+            return this
         }
-        
         // TODO carry just a vertex
         // TODO see if a edge contains p
         // TODO see if the start vertex contains p
-        
-        return null;
+        null
     }
 
-    public boolean mouseClicked(MouseEvent e, History history, Lexicon lexicon)
-    {
-        return false;
-    }
-    
-    public void release(Point p, History history, Lexicon lookupLexicon, Lexicon newLexicon)
-    {
-    }
+    def mouseClicked(e: MouseEvent, history: History, lexicon: Lexicon) = false
 
-    public Point getCenter()
-    {
-        return getSource().getCenter();
-    }
+    def release(p: Point, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Unit = { }
 
-    public void setHighlighted(boolean h)
-    {
-    }
+    def getCenter() = getSource().getCenter()
+
+    def setHighlighted(h: Boolean): Unit = {}
 
 }

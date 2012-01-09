@@ -1,13 +1,8 @@
 package org.pingel.gestalt.core;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.logging.Logger;
+import java.util.logging.Logger
 
-public class Simulation
+case class Simulation
 {
     // the problem description:
     public List<Name> goals;

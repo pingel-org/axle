@@ -1,36 +1,28 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-public class Name implements Comparable
+object Name {
+  var count = 0
+  def nextName() = {
+    val result = "s" + count
+    count += 1
+    result
+  }
+}
+
+case class Name(var base: String=null) extends Comparable
 {
-    static int counter = 0;
+	if( base == null ) {
+	  base = Name.nextName()
+	}
 
-    public String base;
+    def toString() = base
 
-    public Name()
-    {
-		base = "s" + Integer.toString(counter);
-		counter++;
-    }
-
-    public Name(String n)
-    {
-		base = n;
-    }
-    
-    public String toString() 
-    {
-		return base;
-    }
-    
-    public int compareTo(Object obj)
-    {
-		Name other = (Name) obj;
-		return base.compareTo(other.base);
+    def compareTo(obj: Object) = {
+		val other = obj.asInstanceOf[Name]
+		base.compareTo(other.base)
     }
 
-    public boolean equals(Object obj)
-    {
-		return base.equals(((Name)obj).base);
-    }
+    // runtime error in asInstanceOf:
+    def equals(obj: Object) = base.equals(obj.asInstanceOf[Name].base)
 
 }

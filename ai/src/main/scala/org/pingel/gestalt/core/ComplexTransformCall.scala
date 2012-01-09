@@ -1,75 +1,42 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-public class ComplexTransformCall extends CallGraph
+case class ComplexTransformCall(id: Int, history: History, lexicon: Lexicon, 
+		transform: ComplexTransform, macro: TransformEdge)
+extends CallGraph(id, history, lexicon, transform, macro)
 {
-    private Set<CallGraph> activeCalls = new HashSet<CallGraph>();
-    private Map<CallGraph, CallVertex> call2input = new HashMap<CallGraph, CallVertex>();
-    private boolean initialized = false;
+    var activeCalls = Set[CallGraph]()
+    var call2input = Map[CallGraph, CallVertex]()
+    var initialized = false
 
-    ComplexTransform transform;
-    
-    public ComplexTransformCall(int id, History history, Lexicon lexicon,
-    		ComplexTransform transform, TransformEdge macro)
-    {
-    	super(id, history, lexicon, transform, macro);
-    	
-    	this.transform = transform;
-    }
-    
-    private CallGraph cheapestCall()
-    {
-        CallGraph cheapest = null;
-        double cheapest_cost = 999999;
-        
-		GLogger.global.info("ComplexTransformCall.cheapestCall: activeCalls.size() = " + activeCalls.size());
-        
-		for( CallGraph call : activeCalls ) {
-            
-            GLogger.global.info("cheapestCall in loop");
-            
-            double current_cost = call.cost();
-            
+    def cheapestCall(): CallGraph = {
+        var cheapest: CallGraph = null
+        var cheapest_cost = 999999.0
+		GLogger.global.info("ComplexTransformCall.cheapestCall: activeCalls.size() = " + activeCalls.size)
+		for( call <- activeCalls ) {
+            GLogger.global.info("cheapestCall in loop")
+            var current_cost = call.cost()
             if( call == null || current_cost < cheapest_cost ) {
-                cheapest_cost = current_cost;
-                cheapest = call;
+                cheapest_cost = current_cost
+                cheapest = call
             }
         }
-
-        GLogger.global.info("cheapestCall done");
-        
-        return cheapest;
+        GLogger.global.info("cheapestCall done")
+        cheapest
     }
 
-    private double networkCost(CallVertex cv)
-    {
-        double running_total = 0;
-        
-        Set<CallEdge> outputEdges = getGraph().outputEdgesOf(cv);
-        for( CallEdge outputEdge : outputEdges ) {
-            running_total += networkCost(outputEdge.getDest());
+    def networkCost(cv: CallVertex): Double = {
+        var running_total = 0.0
+        for( outputEdge <- getGraph().outputEdgesOf(cv) ) {
+            running_total += networkCost(outputEdge.getDest())
         }
-        
-        return 1 + running_total;
+        1 + running_total
     }
 
-    
-    public double cost() 
-    {
-        if( start == null ) {
-            return 0;
-        }
-        else {
-            return networkCost(start);
-        }
+    def cost() = (start == null) match {
+      case true => 0.0
+      case false => networkCost(start)
     }
 
-   
     public void createNextCalls(History history,
             Lexicon lexicon,
             CallVertex state)

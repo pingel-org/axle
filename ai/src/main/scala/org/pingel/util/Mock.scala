@@ -42,6 +42,10 @@ package org.pingel.util {
 		def draw(): Unit
 	}
 
+	trait LabelledDirectedGraph[VT, ET] extends DirectedGraph[VT, ET]
+
+	trait LabelledDirectedEdge[VT] extends DirectedGraphEdge[VT]
+	
 	object Matrix {
 	  
 	  def zeros[T](numRows: Int, numCols: Int): Matrix[T] = {
@@ -70,7 +74,11 @@ package org.pingel.util {
 	case class CrossProduct[T]()
 	case class PowerSet()
 	case class Collector()
-
+	
+	trait Printable {
+	  def print(s: String=""): Unit
+	  def println(s: String=""): Unit
+	}
 }
 
 /*

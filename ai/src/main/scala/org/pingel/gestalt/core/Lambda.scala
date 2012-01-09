@@ -1,41 +1,28 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import scala.collection._
 
-public class Lambda {
+object Lambda {
+    val top = new Name("top")  
+}
 
-	TreeSet<Name> names = new TreeSet<Name>();
-    Map<Name, Name> name2type = new TreeMap<Name, Name>();
-	
-	public Lambda() { }
+case class Lambda {
 
-	public Set<Name> getNames()
-	{
-		return names;
+	var names = Set[Name]()
+    var name2type = mutable.Map[Name, Name]()
+
+    def getNames() = names
+
+    def contains(n: Name) = names.contains(n)  
+
+    def add(varName: Name): Unit = add(varName, Lambda.top)
+
+	def add(varName: Name, typeName: Name): Unit = {
+		names += varName
+        name2type += varName -> typeName
 	}
 	
-	public boolean contains(Name n)
-	{
-		return names.contains(n);
-	}
-    private static Name top = new Name("top");
-    
-    public void add(Name var)
-    {
-        add(var, top);
-    }
-    
-	public void add(Name var, Name type)
-	{
-		names.add(var);
-        name2type.put(var, type);
-	}
-	
-	public void addAll(Lambda other)
-	{
-		names.addAll(other.getNames());
+	def addAll(other: Lambda) = {
+		names ++= other.getNames()
 	}
 }
