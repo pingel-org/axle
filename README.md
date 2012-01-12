@@ -63,25 +63,22 @@ Linguistics (org.pingel.linguistics)
 Gold Paradigm and Angluin's Language Learner.
 
 
+python2json
+-----------
+
+This file will take any python 2.6 (or less) file
+and return a json document that represents the
+abstract syntax tree.
+This is part of a larger project on source code
+search algorithms.
+
+
 Utilities and Common Data Structures (org.pingel.util)
 ------------------------------------------------------
 
 Directed and Undirected Graphs.
 Collections like PowerSet, Permutation, etc.
 
-
-python2json
------------
-
-This is part of a larger project on source code
-search algorithms.
-
-This file will take any python 2.6 (or less) file
-and return a json document that represents the
-abstract syntax tree.  There are a couple of minor
-problems with it, but for the most part it works.
-
-Feel free to submit bug patches.
 
 Philosophy
 ==========
