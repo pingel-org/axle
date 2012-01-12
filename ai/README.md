@@ -1,27 +1,31 @@
 
-pingel.org AI
-=============
+Artificial Intelligence (org.pingel.{bayes,causality,gestalt})
+==============================================================
 
-Bayesian Networks and Causality.
 This codebase became way too ambitious and entangled with other ideas.
-I am slowly but actively rewriting this stuf in Scala.
+I am slowly but actively rewriting this stuff in Scala.
 
-The "gestalt" stuff is where I went astray.
-I became interested in language design, bi-directional
-program transformations, and then hopelessly lost
-in Category Theory.
-
-With the benefit of a few years' of hindsight, as well as
-new language tools (Scala), I plan to extract the core
-bayes and causality algorithms from the rest of it.
-
-
-org.pingel.bayes
-----------------
+Bayesian Networks (org.pingel.bayes)
+------------------------------------
 
 See ScalaFigures for example usage.
 
-org.pingel.causality
---------------------
 
-Do-Calculus, etc.
+Causality (org.pingel.causality)
+--------------------------------
+
+Do-Calculus, Smoking Model, etc.
+
+
+Gestalt (org.pingel.gestalt)
+----------------------------
+
+Playing with programming language concepts.
+It was during this project somewhere around 2005 that the relationship
+between programming language design, tools, and bidirectional transformations
+started to dawn on me.
+Eventually I looked to Category Theory.
+I'm still trying to make sense of all the connections.
+
+There's a lot going on inside this project.
+Hopefully I can modernize, modularize, and explain some of this later in 2012.

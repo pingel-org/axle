@@ -2,77 +2,196 @@
 pingel.org
 ==========
 
-These projects focus on core programming concepts, languages, and patterns.
-I am particularly interested in in domains like linguistics, artificial intelligence,
-(interactive) data visualization, and Category Theory.
+Models for a variety of domains, including: linguistics,
+artificial intelligence, (interactive) data visualization, and Category Theory.
 
-Some of these projects started their life as Java code.  But I have found that its 
-unexpressive syntax and typesystem diminished the utility of this code as a study
-aid.
+Implemented in Scala.
 
-After reading a paper on Scala in the spring of 2008, I began using it for
-a personal project a year later.  I became convinced that Scala will do a much better job
-of allowing me to express these concepts more concisely and discover deeper connections
-among them.  Not only is Scala helping me express (and learn about) these subjects, but the
-subjects are also forcing me to really understand my chosen language.
+Philosophy
+----------
 
-I have also embraced using unicode characters whenever there the original literature
-uses them.  I would likely not do this for production code meant for the workplace, but
-as the primary goal of this project is pedagogy, I think it's appropriate to use this
-technique to minimize the cognitive overhead of switching between the printed literature
-and the working Scala models.
+There is a lot to know.
+
+In 1910 Russel and Whitehead published the first of three volumes of their
+"Principia Mathematica",
+which was an attempt to "derive all mathematical truths from a well-defined set
+of axioms and inference rules in symbolic logic. [...] 
+A fourth volume on the foundations of geometry had been planned, but the authors admitted to intellectual exhaustion upon completion of the third.
+"
+(http://en.wikipedia.org/wiki/Principia_Mathematica).
+
+Some claim that John von Neumann (who died in 1957) was the last human to
+master all branches of mathematics.
+(See http://en.wikipedia.org/wiki/John_von_Neumann).
+For decades, it has been clear to college freshmen planning a degree
+that only a small portion of all knowledge could be studied, let alone mastered.
+
+Disciplines like philosophy, mathematics, and physics promise
+to offer general purpose languages and analytical frameworks that
+make other more concrete or applied fields easier to cut through.
+And yet without concrete examples along the way it can be difficult
+to keep one's bearing among the maze of overlapping or even contradictory
+theories.
+
+Pingel.org models a set of formal subjects that the author has encountered
+throughout his lifetime.
+They take the form of functioning code that allows the reader to experiment
+with alternative examples.
+
+Graph Theory, for instance, arises repeatedly in subjects studied by 
+computer scientists, mathematicians, operations researchers, and many others.
+By providing a concrete, functional interface to Graph Theory, these
+domains can be encoded directly in terms of the same shared library.
+This allows the reader to more quickly understand similarities between
+topics.
+
+The primary goal of this project is to provide implementations of a range
+of theories that enable experimentation and exploration, which can
+ultimately lead to better understanding of complex subjects and the
+connections between them.
+Modern programming languages and tools are narrowing the gap between
+implementation of an idea and the typeset representation of an idea.
+To the greatest extent possible, the programs created with this 
+code should resemble the subjects as they are described in the literature.
+
+On the spectrum of "library" to "language", they strive to be
+as close to languages as possible.
+They leverage the host language -- Scala -- to make the space of valid
+constructions exactly the set of programs that are well-formed under the
+theories that the models claim to represent.
+
+There are a couple of reasons why this kind of project is difficult.
+
+The first is that without the resources to hire engineers to craft new
+languages for each domain, a project like this must build on a highly expressive
+host language.
+Such languages are a relatively new phenomenon.
+
+The other reason is more fundamental.
+In software engineering, it's called the "tyranny of the dominant decomposition".
+There are many equivalent ways to encode the same behavior, no matter what
+language is used.
+Choosing a particular representation for a program will *always* make other
+programs that wish to share code less well-tuned in that language.
+
+For example: In choosing the "matrix" is a core concept, Matlab necessarily makes
+other data types more difficult to support.
+The constraints are both theoretical and technical.
+The subject of bidirectional transformations and Category Theory is an active
+area of computer science research.
+(For example see: http://www.cs.cornell.edu/~jnfoster/papers/grace-report.pdf)
+A deeper understanding of these subjects may help resolve some of this tension.
+
+The pingel.org packages address the first concern by utilizing Scala's expressive
+syntax and typesystem.
+The second concern is not addressed, and therefore these packages do have
+their own kind of "tyranny".
+Care has been taken to choose conceptual pillars that cover a wide range of 
+ideas without introducing unnecessary inconsistencies or impedance mismatches.
+As computer science evolves these packages will be udpated to make use of
+helpful new tools and techniques wherever possible.
+
+Many of these projects started their life as Java.
+However, difficulties with its unexpressive syntax and typesystem diminished
+the utility of this code as a study aid.
+The conversion to Scala began in 2009.
+Scala's support of "family polymorphism" and other advanced capabilities
+promise to solve some of those modelling difficulties.
+
+Unicode characters are used whenever there is substantial pre-existing literature
+that establishes symbolic conventions.
+
+Although the primary aim of this code is education, scalability and performance
+are secondary goals.
+
+Status
+------
+
+This project is both an attempt use modern tools to aid the authors own
+ understanding,
+as well as an attempt to build tools for other students of these subjects.
+
+It should be considered pre-alpha, and will likely remain in that state
+throughout 2012 and probably well beyond that.
+Much of the code is undergoing rapid transformation (being rewritten from
+java, perl, and python).
+
+This status will be updated as the code matures.
+
+License
+-------
+
+To be written.
+
+
+About the Author
+----------------
+
+Adam Pingel is a Iowa native who moved to the San Francisco Bay Area in 1992
+to study Computer Science at Stanford.  After graduating in 1996, he spent
+six years working in the nascent internet industry writing tools for Operations
+at Excite.com and then NOCpulse (a startup that was acuired by Red Hat).
+In 2002 he left Silicon Valley to pursue a PhD in Computer Science at UCLA.
+
+While there he worked for a year as a TA for the undergraduate Artificial
+Intelligence class, another year as a researcher working on programming tools
+for artists at the UCLA School of Theater, Film, and Television.
+
+From 2005 - 2009 he mixed continued graduate studies with occasional 
+consulting.
+In 2009 he left the PhD program early (with an MS) to return to industry in
+San Francisco.
+
+Since then he works as a Lead Systems Engineer in the music industry.
 
 Adam Pingel
 <pingel@gmail.com>
 January 2012
 
-cattheory
----------
+Projects
+========
 
-Notes I've taken while exploring the deeper functional, theoretical aspects of Scala.
+Category Theory (org.pingel.cattheory)
+--------------------------------------
 
-It's clear that Haskell has been a strong influence on Scala and the functional
-faction of its community, so some of that this is oriented towards mapping Haskell concepts
-to Scala.
+Working towards the typeclass hierarchy of Haskell (in Scala) from a
+category theoretic point of view.
 
-Other notes are directly related to Category Theory.  I first encountered "Category Theory"
-by name when my advisor at UCLA suggested that some of my interests seemed similar.  At the time
-I was about five years into a PhD program in computer science with a major field in programming
-languages, and minor fields in linguistics and artificial intelligence.
-I never finished that degree, but in the years since then I have come to realize that
-Category Theory is in fact an important piece of what I was looking for.
-Now that the pressure of
-completing a degree is off I am taking my time to properly learn this subject.
 
-The goal is to have working models of concepts that bear a stong resemblance to their
-presentation in the original source material.  Eventually that will mean providing
-typeset TeX output, as well as other visualizations for specific data types (such as
-graphs).
-
-axle
-----
+Axle (org.pingel.axle)
+----------------------
 
 An attempt to implement a Haskell-like language as an internal DSL in Scala.
 My goal is to make the examples in "Learn You a Haskell for Great Good" work
 using a syntax as similar to Haskell as possible using Scala.
 
 
-linguistics
------------
+Artificial Intelligence (org.pingel.{bayes,causality,gestalt})
+--------------------------------------------------------------
 
-Models the Gold Paradigm and Angluin's Language Learner, which
-I encountered in a couple of Ed Stabler's graduate courses
-on language evolution.
+Bayesian Networks, Causality, and some thoughts on programming language
+UI and advanced search.
+Not quite yet buildable.
 
-ai 
-----------------------------
 
-Artificial Intelligence
+Game Theory (org.pingel.gametheory)
+-----------------------------------
 
-Code for Bayesian Networks and Causality.
-It's currently not buildable.
-Originally written in Java.
-I am actively rewriting this code in Scala.
+A placeholder project for modelling a range of games.
+
+
+Linguistics (org.pingel.linguistics)
+------------------------------------
+
+Gold Paradigm and Angluin's Language Learner.
+
+
+Utilities and Common Data Structures (org.pingel.util)
+------------------------------------------------------
+
+Directed and Undirected Graphs.
+Collections like PowerSet, Permutation, etc.
+
 
 python2json
 -----------
@@ -86,14 +205,3 @@ abstract syntax tree.  There are a couple of minor
 problems with it, but for the most part it works.
 
 Feel free to submit bug patches.
-
-util
-----
-
-Mostly iterators like PowerSet and CrossProduct that were
-interesting to write while learning about Java 5's generics.
-The difficulty in expressing the difference between a
-DirectedGraph and an UndirectedGraph with Java 5 is one of
-the main reason I have gravitated recently to Scala -- its
-algebraic data types can properly model this kind of
-"family polymorphism".
