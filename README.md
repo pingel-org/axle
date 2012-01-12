@@ -2,7 +2,7 @@
 pingel.org
 ==========
 
-Models for a variety of domains, including: linguistics,
+Models for a variety of domains including: linguistics,
 artificial intelligence, (interactive) data visualization, and Category Theory.
 Implemented in Scala.
 
@@ -27,11 +27,13 @@ To be written.
 Projects
 ========
 
-Category Theory (org.pingel.cattheory)
---------------------------------------
 
-Working towards the typeclass hierarchy of Haskell (in Scala) from a
-category theoretic point of view.
+Artificial Intelligence (org.pingel.{bayes,causality,gestalt})
+--------------------------------------------------------------
+
+Bayesian Networks, Causality, and some thoughts on programming language
+UI and advanced search.
+Not quite yet buildable.
 
 
 Axle (org.pingel.axle)
@@ -42,12 +44,11 @@ My goal is to make the examples in "Learn You a Haskell for Great Good" work
 using a syntax as similar to Haskell as possible using Scala.
 
 
-Artificial Intelligence (org.pingel.{bayes,causality,gestalt})
---------------------------------------------------------------
+Category Theory (org.pingel.cattheory)
+--------------------------------------
 
-Bayesian Networks, Causality, and some thoughts on programming language
-UI and advanced search.
-Not quite yet buildable.
+Working towards the typeclass hierarchy of Haskell (in Scala) from a
+category theoretic point of view.
 
 
 Game Theory (org.pingel.gametheory)
