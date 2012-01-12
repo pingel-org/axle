@@ -7,8 +7,86 @@ artificial intelligence, (interactive) data visualization, and Category Theory.
 
 Implemented in Scala.
 
+Status
+------
+
+This project is both an attempt use modern tools to aid the authors own
+ understanding,
+as well as an attempt to build tools for other students of these subjects.
+
+It should be considered pre-alpha, and will likely remain in that state
+throughout 2012 and probably well beyond that.
+Much of the code is undergoing rapid transformation (being rewritten from
+java, perl, and python).
+
+This status will be updated as the code matures.
+
+License
+-------
+
+To be written.
+
+
+Projects
+========
+
+Category Theory (org.pingel.cattheory)
+--------------------------------------
+
+Working towards the typeclass hierarchy of Haskell (in Scala) from a
+category theoretic point of view.
+
+
+Axle (org.pingel.axle)
+----------------------
+
+An attempt to implement a Haskell-like language as an internal DSL in Scala.
+My goal is to make the examples in "Learn You a Haskell for Great Good" work
+using a syntax as similar to Haskell as possible using Scala.
+
+
+Artificial Intelligence (org.pingel.{bayes,causality,gestalt})
+--------------------------------------------------------------
+
+Bayesian Networks, Causality, and some thoughts on programming language
+UI and advanced search.
+Not quite yet buildable.
+
+
+Game Theory (org.pingel.gametheory)
+-----------------------------------
+
+A placeholder project for modelling a range of games.
+
+
+Linguistics (org.pingel.linguistics)
+------------------------------------
+
+Gold Paradigm and Angluin's Language Learner.
+
+
+Utilities and Common Data Structures (org.pingel.util)
+------------------------------------------------------
+
+Directed and Undirected Graphs.
+Collections like PowerSet, Permutation, etc.
+
+
+python2json
+-----------
+
+This is part of a larger project on source code
+search algorithms.
+
+This file will take any python 2.6 (or less) file
+and return a json document that represents the
+abstract syntax tree.  There are a couple of minor
+problems with it, but for the most part it works.
+
+Feel free to submit bug patches.
+
 Philosophy
-----------
+==========
 
 There is a lot to know.
 
@@ -104,26 +182,6 @@ that establishes symbolic conventions.
 Although the primary aim of this code is education, scalability and performance
 are secondary goals.
 
-Status
-------
-
-This project is both an attempt use modern tools to aid the authors own
- understanding,
-as well as an attempt to build tools for other students of these subjects.
-
-It should be considered pre-alpha, and will likely remain in that state
-throughout 2012 and probably well beyond that.
-Much of the code is undergoing rapid transformation (being rewritten from
-java, perl, and python).
-
-This status will be updated as the code matures.
-
-License
--------
-
-To be written.
-
-
 About the Author
 ----------------
 
@@ -147,61 +205,3 @@ Since then he works as a Lead Systems Engineer in the music industry.
 Adam Pingel
 <pingel@gmail.com>
 January 2012
-
-Projects
-========
-
-Category Theory (org.pingel.cattheory)
---------------------------------------
-
-Working towards the typeclass hierarchy of Haskell (in Scala) from a
-category theoretic point of view.
-
-
-Axle (org.pingel.axle)
-----------------------
-
-An attempt to implement a Haskell-like language as an internal DSL in Scala.
-My goal is to make the examples in "Learn You a Haskell for Great Good" work
-using a syntax as similar to Haskell as possible using Scala.
-
-
-Artificial Intelligence (org.pingel.{bayes,causality,gestalt})
---------------------------------------------------------------
-
-Bayesian Networks, Causality, and some thoughts on programming language
-UI and advanced search.
-Not quite yet buildable.
-
-
-Game Theory (org.pingel.gametheory)
------------------------------------
-
-A placeholder project for modelling a range of games.
-
-
-Linguistics (org.pingel.linguistics)
-------------------------------------
-
-Gold Paradigm and Angluin's Language Learner.
-
-
-Utilities and Common Data Structures (org.pingel.util)
-------------------------------------------------------
-
-Directed and Undirected Graphs.
-Collections like PowerSet, Permutation, etc.
-
-
-python2json
------------
-
-This is part of a larger project on source code
-search algorithms.
-
-This file will take any python 2.6 (or less) file
-and return a json document that represents the
-abstract syntax tree.  There are a couple of minor
-problems with it, but for the most part it works.
-
-Feel free to submit bug patches.
