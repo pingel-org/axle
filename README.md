@@ -4,7 +4,6 @@ pingel.org
 
 Models for a variety of domains, including: linguistics,
 artificial intelligence, (interactive) data visualization, and Category Theory.
-
 Implemented in Scala.
 
 Status
@@ -13,12 +12,10 @@ Status
 This project is both an attempt use modern tools to aid the authors own
  understanding,
 as well as an attempt to build tools for other students of these subjects.
-
 It should be considered pre-alpha, and will likely remain in that state
 throughout 2012 and probably well beyond that.
 Much of the code is undergoing rapid transformation (being rewritten from
 java, perl, and python).
-
 This status will be updated as the code matures.
 
 License
