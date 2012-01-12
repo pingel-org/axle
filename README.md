@@ -167,11 +167,12 @@ programs that wish to share code less well-tuned in that language.
 
 For example: In choosing the "matrix" is a core concept, Matlab necessarily makes
 other data types more difficult to support.
+
 The constraints are both theoretical and technical.
-The subject of bidirectional transformations and Category Theory is an active
-area of computer science research.
-(For example see: http://www.cs.cornell.edu/~jnfoster/papers/grace-report.pdf)
-A deeper understanding of these subjects may help resolve some of this tension.
+This is an active area of computer science research.
+For example see: http://www.cs.cornell.edu/~jnfoster/papers/grace-report.pdf
+A deeper understanding of bidirectional transformations and Category Theory
+may help resolve resolve some of this tension.
 
 The pingel.org packages address the first concern by utilizing Scala's expressive
 syntax and typesystem.
@@ -179,8 +180,6 @@ The second concern is not addressed, and therefore these packages do have
 their own kind of "tyranny".
 Care has been taken to choose conceptual pillars that cover a wide range of 
 ideas without introducing unnecessary inconsistencies or impedance mismatches.
-As computer science evolves these packages will be udpated to make use of
-helpful new tools and techniques wherever possible.
 
 History
 -------
@@ -191,6 +190,9 @@ the utility of this code as a study aid.
 The conversion to Scala began in 2009.
 Scala's support of "family polymorphism" and other advanced capabilities
 promise to solve some of those modelling difficulties.
+
+As computer science evolves these packages will be udpated to make use of
+helpful new tools and techniques wherever possible.
 
 About the Author
 ----------------
@@ -207,6 +209,6 @@ for artists at the UCLA School of Theater, Film, and Television.
 
 From 2005 - 2009 he mixed continued graduate studies with occasional 
 consulting.
-In 2009 he returned to San Francisco with an MS to return to industry full-time.
+In 2009 he moved to San Francisco with an MS to return to industry full-time.
 
 Since then he works as a Lead Systems Engineer in the music industry.
