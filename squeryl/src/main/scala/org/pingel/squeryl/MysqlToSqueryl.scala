@@ -9,6 +9,49 @@ import org.pingel.squeryl.InformationSchema._
 import org.pingel.squeryl.information_schema.entities._
 import org.squeryl.PrimitiveTypeMode._
 
+trait Ast {
+  def toScala(): String
+}
+
+class AstPackage(pkg: String) extends Ast {
+  override def toScala() = {
+    "package " + pkg
+  }
+}
+
+class AstImport(pkg: String, underscore: Boolean=false, atoms: List[String]=Nil) extends Ast {    
+  
+  override def toScala() = {
+	  "import " + pkg + 
+		  	(underscore match {
+		  	    case true => "._"
+                case _ => ""
+		    }) +
+		    (atoms match {
+		      case Nil => ""
+		      case _ => "{"+atoms.mkString(",")+"}"
+		    })
+  }
+  
+}
+
+class AstClassDef(name: String, isCase: Boolean=false) {
+
+  override def toScala() = {
+
+	 (isCase match {
+	   case true => "case "
+	   case _ => ""
+	 }) +
+	 name +
+	 "(\n" + asdf +
+	 ")" + "\n{" +
+	 "}"
+  }
+  
+}
+
+
 class MysqlToSqueryl() {
 
   // def getX = x.lookup(id)
@@ -19,51 +62,34 @@ class MysqlToSqueryl() {
   def getColumnsByTable(t: Tables) = 
     columns.where( c => c.TABLE_NAME === t.TABLE_NAME and c.TABLE_SCHEMA === t.TABLE_SCHEMA ) // TODO: orderBy(c.ORDINAL_POSITION asc)
 
-
   def scalaTypeFor(c: Columns) = "String" // TODO
 
   def scalaInitArgFor(c: Columns) = "None" // TODO
 
-  def scalaForColumnDefinition(c: Columns) = 
-    "  var " + c.COLUMN_NAME + ": " + scalaTypeFor(c)
+  def scalaForColumnDefinition(c: Columns) = "  var " + c.COLUMN_NAME + ": " + scalaTypeFor(c)
 
   def scalaForTable(t: Tables, pkg: String) = {
 
-    val scala = new mutable.ListBuffer[String]()
-
     val cols = getColumnsByTable(t)
 
-    scala.appendAll(List(
-      "package "+pkg,
-      "",
-      "import org.squeryl._",
-      "import org.squeryl.PrimitiveTypeMode._",
-      "import org.squeryl.annotations.Column",
-      "import org.squeryl.adapters.MySQLAdapter",
-      "",
-      "import java.sql._", // TODO compute only what's needed
-      "",
-      "case class " + t.TABLE_NAME.toUpperCase + "("
-      ))
+    // val scala = new mutable.ListBuffer[Ast]()
 
-    scala.append((
-      for( col <- cols ) yield scalaForColumnDefinition(col)).mkString(",\n"))
-
-    scala.appendAll(List(
-      ")",
-      "{",
-      "",
-      "  def this() = this("))
-
-    scala.append((
-      for(col <- cols) yield scalaInitArgFor(col)).mkString(", "))
-
-    scala.appendAll(List(
-      "  )",
-      "",
-      "}"))
-
-    scala.mkString("\n")
+    val s = List[Ast](
+      new AstPackage(pkg),
+      new AstImport("org.squeryl", true),
+      new AstImport("org.squeryl.PrimitiveTypeMode", true),
+      new AstImport("org.squeryl.annotations.Column", false),
+      new AstImport("org.squeryl.adapters.MySQLAdapter", false),
+      new AstImport("java.sql", true), // TODO compute only what's needed
+      new AstClassDef(t.TABLE_NAME.toUpperCase, true)
+    )
+ 
+// def this() = this(")
+// scala.append((for(col <- cols) yield scalaInitArgFor(col)).mkString(", "))
+// scala.append((for( col <- cols ) yield scalaForColumnDefinition(col)).mkString(",\n"))
+    
+   s.toList.map( _.toScala ).mkString("")
+    
   }
 
 
