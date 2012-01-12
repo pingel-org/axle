@@ -143,6 +143,9 @@ They leverage the host language -- Scala -- to make the space of valid
 constructions exactly the set of programs that are well-formed under the
 theories that the models claim to represent.
 
+Although the primary aim of this code is education, scalability and performance
+are secondary goals.
+
 Theory
 ------
 
@@ -178,9 +181,6 @@ Care has been taken to choose conceptual pillars that cover a wide range of
 ideas without introducing unnecessary inconsistencies or impedance mismatches.
 As computer science evolves these packages will be udpated to make use of
 helpful new tools and techniques wherever possible.
-
-Although the primary aim of this code is education, scalability and performance
-are secondary goals.
 
 History
 -------
