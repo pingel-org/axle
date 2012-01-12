@@ -111,6 +111,9 @@ And yet without concrete examples along the way it can be difficult
 to keep one's bearing among the maze of overlapping or even contradictory
 theories.
 
+Introduction
+------------
+
 Pingel.org models a set of formal subjects that the author has encountered
 throughout his lifetime.
 They take the form of functioning code that allows the reader to experiment
@@ -131,12 +134,19 @@ Modern programming languages and tools are narrowing the gap between
 implementation of an idea and the typeset representation of an idea.
 To the greatest extent possible, the programs created with this 
 code should resemble the subjects as they are described in the literature.
+Unicode characters are used whenever there is substantial pre-existing literature
+that establishes symbolic conventions.
 
 On the spectrum of "library" to "language", they strive to be
 as close to languages as possible.
 They leverage the host language -- Scala -- to make the space of valid
 constructions exactly the set of programs that are well-formed under the
 theories that the models claim to represent.
+
+Theory
+------
+
+(This section will eventually be updated with more concrete examples.)
 
 There are a couple of reasons why this kind of project is difficult.
 
@@ -169,18 +179,18 @@ ideas without introducing unnecessary inconsistencies or impedance mismatches.
 As computer science evolves these packages will be udpated to make use of
 helpful new tools and techniques wherever possible.
 
+Although the primary aim of this code is education, scalability and performance
+are secondary goals.
+
+History
+-------
+
 Many of these projects started their life as Java.
 However, difficulties with its unexpressive syntax and typesystem diminished
 the utility of this code as a study aid.
 The conversion to Scala began in 2009.
 Scala's support of "family polymorphism" and other advanced capabilities
 promise to solve some of those modelling difficulties.
-
-Unicode characters are used whenever there is substantial pre-existing literature
-that establishes symbolic conventions.
-
-Although the primary aim of this code is education, scalability and performance
-are secondary goals.
 
 About the Author
 ----------------
@@ -197,11 +207,6 @@ for artists at the UCLA School of Theater, Film, and Television.
 
 From 2005 - 2009 he mixed continued graduate studies with occasional 
 consulting.
-In 2009 he left the PhD program early (with an MS) to return to industry in
-San Francisco.
+In 2009 he returned to San Francisco with an MS to return to industry full-time.
 
 Since then he works as a Lead Systems Engineer in the music industry.
-
-Adam Pingel
-<pingel@gmail.com>
-January 2012
