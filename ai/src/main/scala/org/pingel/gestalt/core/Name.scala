@@ -9,7 +9,7 @@ object Name {
   }
 }
 
-case class Name(var base: String=null) extends Comparable
+case class Name(var base: String=null) extends Comparable[Name]
 {
 	if( base == null ) {
 	  base = Name.nextName()

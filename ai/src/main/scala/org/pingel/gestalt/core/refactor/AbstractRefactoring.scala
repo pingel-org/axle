@@ -1,15 +1,11 @@
-package org.pingel.gestalt.core.refactor;
+package org.pingel.gestalt.core.refactor
 
-import org.pingel.gestalt.core.Lexicon;
+import org.pingel.gestalt.core.Lexicon
 
-public class AbstractRefactoring extends Refactoring {
-
-	AbstractRefactoring(Lexicon lexicon)
-	{
-		super(lexicon);
+case class AbstractRefactoring(lexicon: Lexicon)
+extends Refactoring(lexicon) 
+{
+	def execute(): Unit = {
+	  
 	}
-	
-	public void execute() {
-	}
-
 }

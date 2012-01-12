@@ -2,81 +2,51 @@ package org.pingel.gestalt.core;
 
 import java.util.logging.Logger
 
-case class Simulation
+case class Simulation(goals: List[Name], constraints: List[SimpleTransform], forms: List[Form], transforms: List[Transform])
 {
-    // the problem description:
-    public List<Name> goals;
-    public List<SimpleTransform> constraints;
-    public List<Form> forms;
-    public List<Transform> transforms;
-
     // the working variables:
-    public SimulationFrontier frontier;
+    var frontier: SimulationFrontier = null
 
-    private boolean complete = false;
+    var complete = false
 
-    public Simulation(List<Name> goals,
-                      List<SimpleTransform> constraints,
-                      List<Form> forms,
-                      List<Transform> transforms)
-    {
-		this.goals = goals;
-		this.constraints = constraints;
-		this.forms = forms;
-		this.transforms = transforms;
-    }
-
-	public void initialize(Lexicon lexicon) {
-		frontier = new SimulationFrontier();
-		frontier.initialize(this, lexicon);
+	def initialize(lexicon: Lexicon): Unit = {
+		frontier = new SimulationFrontier()
+		frontier.initialize(this, lexicon)
 	}
 
-	public SimpleForm createAtom()
-	{
-		Name name = new Name();
+	def createAtom() = {
+		val name = new Name()
 		// Note: this name is free !!
-		return new SimpleForm(name, null);
+		new SimpleForm(name, null)
 	}
 
-	public ComplexForm createComplex()
-	{
-		return new ComplexForm(createAtom(), createAtom(), null);
-	}
+	def createComplex() = new ComplexForm(createAtom(), createAtom(), null)
 
-    public boolean hasNext()
-    {
-        return (! complete);
-    }
+    def hasNext() = (! complete)
 
-    public void next(History history, Lexicon lexicon)
-    {
-        Iterator<Name> goalIt = goals.iterator();
-        while( goalIt.hasNext() ) {
-	    
-            Name goal = goalIt.next();
-	    
-            SimulationExplanation explanation = frontier.smallest(goal);
+    def next(history: History, lexicon: Lexicon): Unit = {
+
+        for( goal <- goals ) {
+            val explanation = frontier.smallest(goal)
             
-            Logger.global.info("Simulation.next explanation.candidate " + explanation.candidate.toString());
-	    	Logger.global.info("Simulation.next before calls to explanation.next()");
+            Logger.global.info("Simulation.next explanation.candidate " + explanation.candidate.toString())
+	    	Logger.global.info("Simulation.next before calls to explanation.next()")
 	    
-		    explanation.next(history, lexicon);
+		    explanation.next(history, lexicon)
 
-	    	Logger.global.info("Simulation.next after call to explanation.next()");
+	    	Logger.global.info("Simulation.next after call to explanation.next()")
 	    
             if ( ! explanation.hasNext() ) {
 
-				frontier.remove(goal, explanation);
+				frontier.remove(goal, explanation)
 
 				if( explanation.fits(lexicon) ) {
-                
-				    System.out.println();
-				    System.out.println("goal is satisfied by: " + explanation.candidate.toString());
-				    System.out.println();
-				    System.out.println("explanation:");
-				    System.out.println(explanation.toString(lexicon));
-			
-				    complete = true;
+				    println()
+				    println("goal is satisfied by: " + explanation.candidate.toString())
+				    println()
+				    println("explanation:")
+				    println(explanation.toString(lexicon))
+				    complete = true
 				}
 				else {
 		
@@ -84,11 +54,10 @@ case class Simulation
 				    // because it seems that "explore" doesn't need the entire explanation.  This
 				    // may change.
 					
-					CandidateExploration exploration =
-						new CandidateExploration(this, goal, explanation.candidate);
+					val exploration = new CandidateExploration(this, goal, explanation.candidate)
 
 					while( exploration.hasNext() ) {
-						exploration.next(history, lexicon);
+						exploration.next(history, lexicon)
 					}
 				}
 
@@ -99,61 +68,46 @@ case class Simulation
 
     }
 
-	class CandidateExploration  {
+	class CandidateExploration(simulation: Simulation, goal: Name, candidate: Form)  {
 
-		private Simulation simulation;
-		private Name goal;
-		private Form candidate;		
+		// private Set variables;
 
-		private Set variables;
-		private Iterator<Name> variable_it;
+		// TODO this will change if the semantics of "scopedVars" changes
+		// (I imagine someday scoping will happen elsewhere)
+		val variable_it = candidate.lambda.getNames().iterator
 
-		CandidateExploration(Simulation simulation, Name goal, Form candidate) {
-
-			this.simulation = simulation;
-			this.goal = goal;
-			this.candidate = candidate;
-
-			// TODO this will change if the semantics of "scopedVars" changes
-			// (I imagine someday scoping will happen elsewhere)
-			variable_it = candidate.lambda.getNames().iterator();
-
-		}
-
-		public void next(History history, Lexicon lexicon) {
+		def next(history: History, lexicon: Lexicon): Unit = {
         
-			Name variable = variable_it.next();
+			val variable = variable_it.next()
             
-			Logger.global.info("Simulation.explore variable is " + variable);
+			Logger.global.info("Simulation.explore variable is " + variable)
             
-			int literal_index = 0;
-			while( literal_index < forms.size() ) {
+			var literal_index = 0
+			while( literal_index < forms.size ) {
                 
-				Form literal = forms.get(literal_index);
+				val literal = forms(literal_index)
                 
-				Map<Name, Form> replacement_map = new TreeMap<Name, Form>();
-				replacement_map.put(variable, literal);
+				var replacement_map = Map[Name, Form]()
+				replacement_map += variable -> literal
 		
 				frontier.add(goal,
 									new SimulationExplanation(simulation,
 													   goal,
-													   candidate.duplicateAndReplace(replacement_map), lexicon));
+													   candidate.duplicateAndReplace(replacement_map), lexicon))
                 	
-				literal_index++;
+				literal_index += 1
 			}
             	
-			Map<Name, Form> replacement_map = new TreeMap<Name, Form>();
-			replacement_map.put(variable, createComplex());
+			var replacement_map = Map[Name, Form]()
+			replacement_map += variable -> createComplex()
 			frontier.add(goal,
 						 new SimulationExplanation(simulation,
 						   						   goal,
-												   candidate.duplicateAndReplace(replacement_map), lexicon));
+												   candidate.duplicateAndReplace(replacement_map), lexicon))
 
 		}
 
-		public boolean hasNext() {
-			return( variable_it.hasNext() );
-		}
-		
+		def hasNext() = variable_it.hasNext
+
 	}
 }

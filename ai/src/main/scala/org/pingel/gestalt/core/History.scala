@@ -3,7 +3,7 @@ package org.pingel.gestalt.core
 import scala.collection._
 
 import org.pingel.util.Printable
-// import org.pingel.util.PrintableStringBuffer
+import org.pingel.util.PrintableStringBuffer
 
 class History {
 

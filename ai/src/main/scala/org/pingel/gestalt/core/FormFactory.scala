@@ -1,36 +1,20 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import java.awt.Point;
-import java.awt.event.MouseEvent;
+import java.awt.Point
+import java.awt.event.MouseEvent
+import org.pingel.gestalt.ui.Widget
 
-import org.pingel.gestalt.ui.Widget;
+case class FormFactory(archetype: Form) extends Widget {
+  
+	// removed during scalification:
+	// public FormFactory(){}
 
-
-public class FormFactory
-implements Widget
-{
-	protected Form archetype = null;
-
-	public FormFactory()
-	{
-		
-	}
-	
-    public FormFactory(Form archetype)
-    {
-        this.archetype = archetype;
-    }
-
-
-    public Form createForm()
-    {
+    def createForm(): Form = {
         // This is called by mousePressed
-        
-        Form f = archetype.duplicate();
-        f.arrange(getArchetype().getCenter());
-        f.setDetachable(true);
-
-        return f;
+        var f = archetype.duplicate()
+        f.arrange(getArchetype().getCenter())
+        f.setDetachable(true)
+        f
     }
 
 //    public Form createForm(Unifier unifier)
@@ -44,58 +28,32 @@ implements Widget
 //        // TODO bind vars in unifier
 //        return null;
 //    }
-    	
-    public Form getArchetype()
-    {
-        return archetype;
-    }
 
-    public String toString()
-    {
-        return archetype.getClass().getName() + " factory";
-    }
+    def getArchetype() = archetype
 
+    def toString() = archetype.getClass().getName() + " factory"
 
-    public Widget mousePressed(MouseEvent e, History history, Lexicon lookupLexicon, Lexicon newLexicon) {
-
-        System.out.println("FormFactoryController.mousePressed");
-        
-        Point p = e.getPoint();
-        
+    def mousePressed(e: MouseEvent, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Widget = {
+        println("FormFactoryController.mousePressed")
+        val p = e.getPoint()
         if( getArchetype().contains(p)) {
-            Form f = createForm();
-            newLexicon.put(new Name(), f);
-            return f;
+            val f = createForm()
+            newLexicon.put(new Name(), f)
+            return f
         }
-
-        return null;
+        null
     }
 
-    public boolean mouseClicked(MouseEvent e, History history, Lexicon lexicon)
-    {
-        return false;
-    }
+    def mouseClicked(e: MouseEvent, history: History, lexicon: Lexicon) = false
+
+    def release(p: Point, history: History, lookupLexicon: Lexicon, newlexicon: Lexicon): Unit = { }
     
-    public void release(Point p, History history, Lexicon lookupLexicon, Lexicon newlexicon)
-    {
-    }
-    
-    public void drag(Point p, History history, Lexicon lexicon)
-    {
-    }
+    def drag(p: Point, history: History, lexicon: Lexicon): Unit = {}
 
-    public Point getCenter()
-    {
-        return getArchetype().getCenter();
-    }
+    def getCenter() = getArchetype().getCenter()
 
-    public void setHighlighted(boolean h)
-    {
-    }
+    def setHighlighted(h: Boolean): Unit = { }
 
-    public Point getBounds()
-    {
-        return getArchetype().getBounds();
-    }
+    def getBounds() = getArchetype().getBounds()
 
 }

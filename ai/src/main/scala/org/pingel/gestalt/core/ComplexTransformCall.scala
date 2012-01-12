@@ -37,94 +37,84 @@ extends CallGraph(id, history, lexicon, transform, macro)
       case false => networkCost(start)
     }
 
-    public void createNextCalls(History history,
-            Lexicon lexicon,
-            CallVertex state)
-    {
-        GLogger.global.entering("ComplexTransformCall", "createNextCalls: state = " + state.toString());
-        GLogger.global.fine("state.pnode.isExit() = " + state.getTransformVertex().isExit());
-
+    def createNextCalls(history: History, lexicon: Lexicon, state: CallVertex): Unit = {
+      
+        GLogger.global.entering("ComplexTransformCall", "createNextCalls: state = " + state.toString())
+        GLogger.global.fine("state.pnode.isExit() = " + state.getTransformVertex().isExit )
         GLogger.global.fine("prior to state.pnode.createNextCalls, there are " +
-                activeCalls.size() + " calls in active_calls");
+                activeCalls.size + " calls in active_calls")
 
-        if( state.getTransformVertex().isExit() ) {
-            outputs.add(state);
+        if( state.getTransformVertex().isExit ) {
+            outputs += state
         }
 
-        Set<TransformEdge> outputEdges = transform.getGraph().outputEdgesOf(state.getTransformVertex());
+        val outputEdges = transform.getGraph().outputEdgesOf(state.getTransformVertex())
+        
+        for( nextEdge <- outputEdges ) {
             
-        for( TransformEdge nextEdge : outputEdges ) {
+            GLogger.global.info("found node successor with system " + nextEdge.getDest().name )
             
-            GLogger.global.info("found node successor with system " + nextEdge.getDest().name );
+            val nextTransform = lexicon.getTransform(nextEdge.transformName)
             
-            Transform nextTransform = lexicon.getTransform(nextEdge.transformName);
+            val traversedState = new CallVertex(history.nextVertexId(),
+            		nextTransform.start,
+                    state.getForm().traverse(nextEdge.traversal))
             
-            CallVertex traversedState =
-                new CallVertex(history.nextVertexId(),
-                        nextTransform.start,
-                        state.getForm().traverse(nextEdge.traversal));
+            val nextCall = nextTransform.constructCall(history.nextCallId(), history, lexicon, nextEdge)
+                
+            nextCall.unify(history, traversedState)
             
-            CallGraph nextCall =
-                nextTransform.constructCall(history.nextCallId(), history, lexicon, nextEdge);
-            nextCall.unify(history, traversedState);
+            call2input.put(nextCall, state)
             
-            call2input.put(nextCall, state);
-            
-            activeCalls.add(nextCall);
+            activeCalls.add(nextCall)
 
-            GLogger.global.fine("after state.pnode.createNextCalls, there are " +
-                    activeCalls.size() + " calls in active_calls");
-}
+            GLogger.global.fine("after state.pnode.createNextCalls, there are " + activeCalls.size + " calls in active_calls")
+        }
     }
     
-    public void next(History history, Lexicon lexicon)
-    {
-		GLogger.global.entering("ComplexTransformCall", "next");
+    def next(history: History, lexicon: Lexicon): Unit = {
+		GLogger.global.entering("ComplexTransformCall", "next")
 
 		if( ! initialized ) {
-			createNextCalls(history, lexicon, start);
-			initialized = true;
+			createNextCalls(history, lexicon, start)
+			initialized = true
 		}
     
-        CallGraph cg = cheapestCall();
+        val cg = cheapestCall()
         if( cg == null ) {
-            hasNext = false;
-		    GLogger.global.fine("ComplexTransformCall.next: call == null. end");
-            return;
+            _hasNext = false
+		    GLogger.global.fine("ComplexTransformCall.next: call == null. end")
+            return
         }
 
-		GLogger.global.info("ComplexTransformCall's call is " + cg.toString());
+		GLogger.global.info("ComplexTransformCall's call is " + cg.toString())
         
         if( cg.hasNext() ) {
-            cg.next(history, lexicon);
+            cg.next(history, lexicon)
         }
         else {
           
-            activeCalls.remove(cg);
+            activeCalls -= cg
             
             if ( cg.isUnified() ) {
 
-				GLogger.global.fine("ComplexTransformCall: call doesn't have next but it matched");
+				GLogger.global.fine("ComplexTransformCall: call doesn't have next but it matched")
                 
-                CallVertex untraversedInputState = call2input.get(cg);
-                
-                Iterator<CallVertex> outIt = cg.outputs.iterator();
-                while( outIt.hasNext() ) {
-                    
-                	CallVertex output = outIt.next();
-                    
-                    Form embeddedResultSituation = 
+                val untraversedInputState = call2input(cg)
+
+                for( output <- cg.outputs ) {
+                    val embeddedResultSituation = 
                         untraversedInputState.getForm().duplicateAndEmbed(cg.macroEdge.traversal,
-                        		output.getForm()); // TODO !!??
+                        		output.getForm()) // TODO !!??
                     
-                    CallVertex nextState = getGraph().addVertex(new CallVertex(history.nextVertexId(),
-                    		cg.macroEdge.getDest(), embeddedResultSituation));
+                    val nextState = getGraph().addVertex(new CallVertex(history.nextVertexId(),
+                    		cg.macroEdge.getDest(), embeddedResultSituation))
 
 					// FYI at this point we could like output to next_state
                     
-                    getGraph().addEdge(new CallEdge(history.nextEdgeId(), untraversedInputState, nextState, macroEdge));
+                    getGraph().addEdge(new CallEdge(history.nextEdgeId(), untraversedInputState, nextState, macroEdge))
                     
-        	        createNextCalls(history, lexicon, nextState);
+        	        createNextCalls(history, lexicon, nextState)
                 }
             }
             else {
@@ -134,13 +124,10 @@ extends CallGraph(id, history, lexicon, transform, macro)
             
         }
 
-        GLogger.global.exiting("ComplexTransformCall", "next");
+        GLogger.global.exiting("ComplexTransformCall", "next")
     }
 
-
-
-    public ComplexTransform getTransformSystemTo(Name guardName, Form guard, CallVertex s)
-    {
+    def getTransformSystemTo(guardName: Name, guard: Form, s: CallVertex): ComplexTransform = {
     	/*
         Set arc_set = new HashSet();
         Set exit_set = new HashSet();
@@ -163,7 +150,7 @@ extends CallGraph(id, history, lexicon, transform, macro)
 
         return new ComplexTransform(guardName, sn, arc_vector, exits);
         */
-    	return null;
+    	null
     }
 
 }

@@ -1,13 +1,7 @@
 package org.pingel.gestalt.core;
 
-//import java.util.HashMap;
-//import java.util.HashSet;
-//import java.util.Iterator;
-//import java.util.Map;
-//import java.util.Set;
-//import java.util.TreeMap;
 
-// import org.pingel.util.Printable;
+import org.pingel.util.Printable
 
 import scala.collection._
 
@@ -105,9 +99,12 @@ case class Lexicon
     def getTransforms() = {
         var result = Set[Transform]()
         for( logos <- object2name.keySet ) {
-            if( logos instanceof Transform ) {
-                result += logos.asInstanceOf[Transform]
+          logos match {
+            case t: Transform => {
+              result += t
             }
+            case _ => { }
+          }
         }
         result
     }
@@ -115,9 +112,10 @@ case class Lexicon
     def getTopForms() = {
         var result = Set[Form]()
         for( logos <- object2name.keySet ) {
-            if( logos instanceof Form ) {
-                result += logos.asInstanceOf[Form]
-            }
+        	logos match {
+        	  case f: Form => result += f
+        	  case _ => { }
+        	}
         }
         result
     }

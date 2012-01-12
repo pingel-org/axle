@@ -1,138 +1,111 @@
 package org.pingel.gestalt.core
 
-case class SimulationExplanation extends Comparable[SimulationExplanation]
+import scala.collection._
+
+case class SimulationExplanation(simulation: Simulation, goal: Name, candidate: Form, lexicon: Lexicon)
+extends Comparable[SimulationExplanation]
 {
-    private Map<SimpleTransform, ComplexTransform> betaSystemByConstraint = new HashMap<SimpleTransform, ComplexTransform>();
-    private Map<SimpleTransform, ComplexTransformCall> betaCallByConstraint = new HashMap<SimpleTransform, ComplexTransformCall>();
-    private Map<SimpleTransform, Form> sourceByConstraint = new HashMap<SimpleTransform, Form>();
-    private Map<SimpleTransform, Form> destinationByConstraint = new HashMap<SimpleTransform, Form>();
-    private Simulation simulation;
+    var betaSystemByConstraint = Map[SimpleTransform, ComplexTransform]()
+    var betaCallByConstraint = Map[SimpleTransform, ComplexTransformCall]()
+    var sourceByConstraint = Map[SimpleTransform, Form]()
+    var destinationByConstraint = Map[SimpleTransform, Form]()
 
-    private int steps = 0;
+    var steps = 0
 
-    public Name goal;
-    public Form candidate;
-
-    public SimulationExplanation(Simulation simulation, Name goal, Form candidate,
-				 Lexicon lexicon)
-    {
-        this.simulation = simulation;
-        this.goal = goal;
-        this.candidate = candidate;
-
-        int constraintIndex = 0;
+    var constraintIndex = 0
         
-        while( constraintIndex < simulation.constraints.size() ) {
-            
-            SimpleTransform constraint = simulation.constraints.get(constraintIndex);
-            
-            ComplexTransformCall betaCall = makeBetaCall(constraint, lexicon);
-            
-            betaCallByConstraint.put(constraint, betaCall);
-            
-            constraintIndex++;
-        }
-
+    while( constraintIndex < simulation.constraints.size ) {
+    	val constraint = simulation.constraints(constraintIndex)
+    	val betaCall = makeBetaCall(constraint, lexicon)
+    	betaCallByConstraint += constraint -> betaCall
+    	constraintIndex += 1
     }
 
-    private ComplexTransformCall makeBetaCall(SimpleTransform constraint, Lexicon lexicon)
-    {
-        Map<Name, Form> goal_replacement_map = new TreeMap<Name, Form>();
-        goal_replacement_map.put(goal, candidate);
+    def makeBetaCall(constraint: SimpleTransform, lexicon: Lexicon): ComplexTransformCall = {
+        var goal_replacement_map = Map[Name, Form]()
+        goal_replacement_map += goal -> candidate
 
-        Map<Name, Form> source_replacement_map = new TreeMap<Name, Form>(); // though I'm only using SimpleFormm
-        for( Name from_name : constraint.map.keySet() ) {
-            Name to_name = constraint.map.get(from_name);
+        var source_replacement_map = Map[Name, Form]() // though I'm only using SimpleFormm
+        for( from_name <- constraint.map.keySet ) {
+            val to_name = constraint.map(from_name)
             // is this replacement free or not ???
-            SimpleForm replacement = new SimpleForm(to_name, null);
-            source_replacement_map.put(from_name, replacement);
+            val replacement = new SimpleForm(to_name, null)
+            source_replacement_map += from_name -> replacement
         }
         
-        Form source = lexicon.getForm(constraint.guardName).duplicateAndReplace(source_replacement_map);
-        source = source.duplicateAndReplace(goal_replacement_map);
+        var source = lexicon.getForm(constraint.guardName).duplicateAndReplace(source_replacement_map)
+        source = source.duplicateAndReplace(goal_replacement_map)
 
-        sourceByConstraint.put(constraint, source);
+        sourceByConstraint += constraint -> source
 
-        Form destination = lexicon.getForm(constraint.outName).duplicateAndReplace(goal_replacement_map);
+        val destination = lexicon.getForm(constraint.outName).duplicateAndReplace(goal_replacement_map)
 
-        destinationByConstraint.put(constraint, destination);
+        destinationByConstraint += constraint -> destination
             
-        GLogger.global.info("SimulationExplanation.makeBetaCall goal is " + goal);
-        GLogger.global.info("SimulationExplanation.makeBetaCall source is " + source);
-        GLogger.global.info("SimulationExplanation.makeBetaCall destination is " + destination);
+        GLogger.global.info("SimulationExplanation.makeBetaCall goal is " + goal)
+        GLogger.global.info("SimulationExplanation.makeBetaCall source is " + source)
+        GLogger.global.info("SimulationExplanation.makeBetaCall destination is " + destination)
 
-        Vector<TransformEdge> arcs = new Vector<TransformEdge>();
-        Set<TransformVertex> exits = new HashSet<TransformVertex>();
+        var arcs = new mutable.ListBuffer[TransformEdge]()
+        var exits = Set[TransformVertex]()
         
-        TransformVertex beta_in_node = new TransformVertex(new Name("in"), true, false);
-        exits.add(beta_in_node);
-		int procedure_index = 0;
-		while( procedure_index < simulation.transforms.size() ) {
-            Transform procedure = simulation.transforms.get(procedure_index);
+        val beta_in_node = new TransformVertex(new Name("in"), true, false)
+        exits += beta_in_node
+		var procedure_index = 0
+		while( procedure_index < simulation.transforms.size ) {
+            val procedure = simulation.transforms(procedure_index)
 	    	// note: this should be a "wild" Traversal
             // TODO !!!!!!!! arcs.add(new TransformEdge(procedure, beta_in_node, null, beta_in_node));
-            procedure_index++;
+            procedure_index += 1
 		}
         
         // TODO does this really need to be the frontier's createAtom() ?
 	
 		if( simulation.frontier == null ) {
-		    GLogger.global.info("SimulationExplanation.makeBetaCall simulation.frontier == null");
-		    System.exit(1);
+		    GLogger.global.info("SimulationExplanation.makeBetaCall simulation.frontier == null")
+		    System.exit(1)
 		}
 
-	
-		Form newSituation = simulation.createAtom();
-		Name newName = new Name();
-		lexicon.put(newName, newSituation);
-        ComplexTransform betaSystem = new ComplexTransform(newName);
-        betaSystem.getGraph().addVertex(beta_in_node);
+		val newSituation = simulation.createAtom()
+		val newName = new Name()
+		lexicon += newName -> newSituation
+        val betaSystem = new ComplexTransform(newName)
+        betaSystem.getGraph().addVertex(beta_in_node)
         // TODO add nodes to the betaSystem (mark exit nodes, too)
-        for( TransformEdge arc : arcs ) {
+        for( arc <- arcs ) {
             // TODO add arcs to the betaSystem
         }
         
-        History betaHistory = new History();
+        var betaHistory = new History()
         
         // TODO what is the traversal of betaCall ?? !!!!
 
-        CallVertex betaCV = new CallVertex(betaHistory.nextVertexId(), betaSystem.start, source);
-        ComplexTransformCall betaCall =
-        	(ComplexTransformCall) betaSystem.constructCall(betaHistory.nextCallId(),
-        			betaHistory, lexicon, null);
-        betaCall.unify(betaHistory, betaCV);
-        betaHistory.addCall(betaCall);
+        val betaCV = new CallVertex(betaHistory.nextVertexId(), betaSystem.start, source);
+        val betaCall = betaSystem.constructCall(betaHistory.nextCallId(), betaHistory, lexicon, null).asInstanceOf[ComplexTransformCall]
+        betaCall.unify(betaHistory, betaCV)
+        betaHistory.addCall(betaCall)
 
 		if( ! betaCall.hasNext ) {
-		    GLogger.global.info("SimulationExplanation.makeBetaCall the betaCall is immediately not active");
+		    GLogger.global.info("SimulationExplanation.makeBetaCall the betaCall is immediately not active")
 		}
 
-        return betaCall;
+        betaCall
     }
     
-    public void next(History history, Lexicon lexicon)
-    {
-		steps++;
-	
+    def next(history: History, lexicon: Lexicon): Unit = {
+		steps += 1
 		GLogger.global.entering("SimulationExplanation", "next");
-
-        int constraintIndex = 0;
-        
-        while( constraintIndex < simulation.constraints.size() ) {
-
-	    GLogger.global.info("SimulationExplanation.next constraintIndex = " + constraintIndex);
-
-            SimpleTransform constraint = simulation.constraints.get(constraintIndex);
-            ComplexTransformCall betaCall = betaCallByConstraint.get(constraint);
-
+        var constraintIndex = 0
+        while( constraintIndex < simulation.constraints.size ) {
+        	GLogger.global.info("SimulationExplanation.next constraintIndex = " + constraintIndex)
+            val constraint = simulation.constraints(constraintIndex)
+            val betaCall = betaCallByConstraint(constraint)
             if( betaCall.hasNext ) {
-				GLogger.global.info("SimulationExplanation.next betaCall.next()");
-				betaCall.next(history, lexicon);
+				GLogger.global.info("SimulationExplanation.next betaCall.next()")
+				betaCall.next(history, lexicon)
             }
-
-            constraintIndex++;
+            constraintIndex += 1
         }
-
     }
 
     // For a SimulationExplanation to be "complete" means that
@@ -141,134 +114,104 @@ case class SimulationExplanation extends Comparable[SimulationExplanation]
     // ended in an output state which matches what the constraint needs.
     // This is what constraintFits is for.
 
-    public boolean hasNext()
-    {
-		GLogger.global.entering("SimulationExplanation", "hasNext");
-
-        int constraintIndex = 0;
-        
-        while( constraintIndex < simulation.constraints.size() ) {
-
-		    GLogger.global.info("SimulationExplanation.hasNext constraintIndex = " + constraintIndex);
-            
-            SimpleTransform constraint = simulation.constraints.get(constraintIndex);
-            ComplexTransformCall betaCall = betaCallByConstraint.get(constraint);
-            
+    def hasNext(): Boolean = {
+		GLogger.global.entering("SimulationExplanation", "hasNext")
+        var constraintIndex = 0
+        while( constraintIndex < simulation.constraints.size ) {
+		    GLogger.global.info("SimulationExplanation.hasNext constraintIndex = " + constraintIndex)
+            val constraint = simulation.constraints(constraintIndex)
+		    val betaCall = betaCallByConstraint(constraint)
             if( betaCall.hasNext ) {
-				GLogger.global.info("SimulationExplanation.hasNext constraint " + constraintIndex + " is active.  returning true");
-                return true;
+				GLogger.global.info("SimulationExplanation.hasNext constraint " + constraintIndex + " is active.  returning true")
+                return true
             }
-            
-            constraintIndex++;
+            constraintIndex += 1
         }
-
-		GLogger.global.info("SimulationExplanation.hasNext about to return false");
-
-        return false;
+		GLogger.global.info("SimulationExplanation.hasNext about to return false")
+        false
     }
     
-    public ComplexTransform constraintFits(SimpleTransform constraint, Lexicon lexicon)
-    {
-    	GLogger.global.entering("SimulationExplanation", "constraintFits");
+    def constraintFits(constraint: SimpleTransform, lexicon: Lexicon): ComplexTransform = {
+    	GLogger.global.entering("SimulationExplanation", "constraintFits")
     	
-    	GLogger.global.info("SimulationExplanation.constraintFits constraint = " + constraint.toString() );
+    	GLogger.global.info("SimulationExplanation.constraintFits constraint = " + constraint.toString() )
     	
     	// return the cached copy
     	// when is this ever called ???
-    	ComplexTransform rs = betaSystemByConstraint.get(constraint);
+    	val rs = betaSystemByConstraint(constraint)
     	if( rs != null ) {
-    		GLogger.global.info("SimulationExplanation.constraintFits returning cached copy of the transform system");
-    		return rs;
+    		GLogger.global.info("SimulationExplanation.constraintFits returning cached copy of the transform system")
+    		return rs
     	}
     	
-    	ComplexTransformCall betaCall = betaCallByConstraint.get(constraint);
-    	Form source = sourceByConstraint.get(constraint);
-    	Form destination = destinationByConstraint.get(constraint);
+    	val betaCall = betaCallByConstraint(constraint)
+    	val source = sourceByConstraint(constraint)
+    	val destination = destinationByConstraint(constraint)
     	
-    	GLogger.global.info("SimulationExplanation.constraintFits source situation is " + source.toString());
-    	GLogger.global.info("SimulationExplanation.constraintFits destination situation is " + destination.toString());
+    	GLogger.global.info("SimulationExplanation.constraintFits source situation is " + source.toString())
+    	GLogger.global.info("SimulationExplanation.constraintFits destination situation is " + destination.toString())
     	
-    	for( CallVertex output : betaCall.getGraph().getVertices() ) {
+    	for( output <- betaCall.getGraph().getVertices() ) {
     		
-    		GLogger.global.info("SimulationExplanation.constraintFits checking to see if this output matches the destination: " + output.getForm().toString());
-    		GLogger.global.info("SimulationExplanation.constraintFits betaCall output situation: " + output.getForm());
+    		GLogger.global.info("SimulationExplanation.constraintFits checking to see if this output matches the destination: " + output.getForm().toString())
+    		GLogger.global.info("SimulationExplanation.constraintFits betaCall output situation: " + output.getForm())
     		
     		if( output.getForm().equals(destination) ) {
     			
-    			GLogger.global.info("SimulationExplanation.constraintFits it does");
+    			GLogger.global.info("SimulationExplanation.constraintFits it does")
     			
     			// TODO this first parameter (new Name()) is wrong !!!
-    			rs = betaCall.getTransformSystemTo(new Name(), source, output);
+    			rs = betaCall.getTransformSystemTo(new Name(), source, output)
     			
-    			betaSystemByConstraint.put(constraint, rs);
+    			betaSystemByConstraint.put(constraint, rs)
     			
     			// TODO not sure if this is the best place to alter the newLexicon.  It may be that these
     			// TransformSystem's go unused, in which case we don't want to leave junk that refers to them
     			
-    			lexicon.put(new Name((lexicon.getNameOf(constraint)).base + "_implementation"), rs);
-    			lexicon.put(new Name((lexicon.getNameOf(constraint)).base + "_guard"), source);
+    			lexicon.put(new Name((lexicon.getNameOf(constraint)).base + "_implementation"), rs)
+    			lexicon.put(new Name((lexicon.getNameOf(constraint)).base + "_guard"), source)
     			
-    			return rs;
+    			return rs
     		}
     		else {
-    			GLogger.global.info("SimulationExplanation.constraintFits it doesn't");
+    			GLogger.global.info("SimulationExplanation.constraintFits it doesn't")
     		}
     	}
-    	
-    	return null;
+    	null
     }
     
-    public boolean fits(Lexicon lexicon)
-    {
-	GLogger.global.entering("SimulationExplanation", "fits");
-	
-	int constraintIndex = 0;
-	while( constraintIndex < simulation.constraints.size() ) {
-	    
-            SimpleTransform constraint = simulation.constraints.get(constraintIndex);
-
-	    if( constraintFits(constraint, lexicon) == null ) {
-		return false;
-	    }
-	    
-	    constraintIndex++;
-	}
-
-	return true;
+    def fits(lexicon: Lexicon): Boolean = {
+    	GLogger.global.entering("SimulationExplanation", "fits")
+    	var constraintIndex = 0
+    	while( constraintIndex < simulation.constraints.size ) {
+            val constraint = simulation.constraints(constraintIndex)
+            if( constraintFits(constraint, lexicon) == null ) {
+            	return false
+            }
+            constraintIndex += 1
+    	}
+    	true
     }
 
-    public int compareTo(SimulationExplanation other)
-    {
-        return candidate.size().compareTo(other.candidate.size());
-        // return candidate.size() + steps;
-    }
-    
-    public String toString(Lexicon lexicon)
-    {
-        String result = "";
-        
-        int constraintIndex = 0;
-        
-        while( constraintIndex < simulation.constraints.size() ) {
-            
-            SimpleTransform constraint = simulation.constraints.get(constraintIndex);
-            
-            result += constraint.toString() + "\n";
-            result += "\n";
-            
-            ComplexTransform rs = betaSystemByConstraint.get(constraint);
-            if( rs == null ) {
-                GLogger.global.info("SimulationExplanation.toString rs == null!");
+    def compareTo(other: SimulationExplanation) = candidate.size.compareTo(other.candidate.size())
+    // return candidate.size() + steps;
+
+    def toString(lexicon: Lexicon) = {
+
+      (0 until simulation.constraints.size).map( constraintIndex => {
+            val constraint = simulation.constraints(constraintIndex)
+            constraint.toString() + "\n\n"
+            val rs = betaSystemByConstraint.get(constraint);
+            rs match {
+              case null => GLogger.global.info("SimulationExplanation.toString rs == null!")
+              case _ => {
+                "situation " + rs.guardName + " " + lexicon.getForm(rs.guardName).toString() + "\n" +
+                "\n" +
+                rs.toString() + "\n"
+              }
             }
-            else {
-                result += "situation " + rs.guardName + " " + lexicon.getForm(rs.guardName).toString() + "\n";
-                result += "\n";
-                result += rs.toString() + "\n";
-            }
-            constraintIndex++;
-        }
-        
-        return result;
+      }).mkString("")
+      
     }
     
 }

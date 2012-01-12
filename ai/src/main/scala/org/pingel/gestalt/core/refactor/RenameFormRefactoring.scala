@@ -1,24 +1,12 @@
-package org.pingel.gestalt.core.refactor;
+package org.pingel.gestalt.core.refactor
 
-import org.pingel.gestalt.core.Lexicon;
-import org.pingel.gestalt.core.Name;
+import org.pingel.gestalt.core.Lexicon
+import org.pingel.gestalt.core.Name
 
-public class RenameFormRefactoring extends Refactoring {
-
-	Name from;
-	Name to;
-	
-	public RenameFormRefactoring(Lexicon lexicon, Name from, Name to)
-	{
-		super(lexicon);
-		this.from = from;
-		this.to = to;
+class RenameFormRefactoring(lexicon: Lexicon, from: Name, to: Name)
+extends Refactoring(lexicon)
+{
+	def execute(): Unit = {
+		lexicon.renameForm(from, to)
 	}
-
-	public void execute()
-	{
-		lexicon.renameForm(from, to);
-	}
-	
-	
 }

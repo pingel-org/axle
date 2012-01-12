@@ -7,7 +7,7 @@ import java.awt.Point
 import java.awt.geom.Ellipse2D
 
 import org.pingel.util.DirectedGraphVertex
-// import org.pingel.util.Printable
+import org.pingel.util.Printable
 
 case class CallVertex(id: Int, tv: TransformVertex, var form: Form)
 extends DirectedGraphVertex[CallEdge]

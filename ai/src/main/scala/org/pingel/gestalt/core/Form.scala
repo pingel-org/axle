@@ -10,67 +10,60 @@ import org.pingel.gestalt.ui.Widget
 import org.pingel.ptype.PType
 import org.pingel.util.Printable
 
-case class Form(lambda: Lambda=new Lambda())
+abstract case class Form(lambda: Lambda=new Lambda())
 extends Logos
 with Widget
 with Comparable[Form]
 {
-	private Map<Transform, Type> transform2type = new HashMap<Transform, Type>()
+	var transform2type = Map[Transform, PType]()
 
-	public void addTransform(Transform transform, Type type)
-	{
-		transform2type.put(transform, type);
+	def addTransform(transform: Transform, pType: PType): Unit = {
+		transform2type += transform -> pType
 	}
 
-	public Type getType(Transform transform)
-	{
-		return transform2type.get(transform);
-	}
-	
-	protected Lambda lambda = null;
+	def getType(transform: Transform) = transform2type(transform)
 
 	def getLambda() = lambda
 	val center = new Point()
 	var color = Color.WHITE
 
-    private ComplexForm parent;
+	var parent: ComplexForm = null
 
 //    private CallVertex outputFrom = null;
+
+	var inputTo: CallGraph = null
+
+    var detachable = false
+
+    def size(): Int
     
-    private CallGraph inputTo = null;
+    def equals(other: Form): Boolean
 
-    protected boolean detachable = false;
-
-    public abstract Integer size();
+    def unify(freeLambda: Lambda, target: Form, unifier: Unifier): Boolean
     
-    public abstract boolean equals(Form other);
+    def duplicate(): Form
 
-    public abstract boolean unify(Lambda freeLambda, Form target, Unifier unifier);
-    
-    public abstract Form duplicate();
+    def duplicateAndReplace(replacements: Map[Name, Form]): Form
 
-    public abstract Form duplicateAndReplace(Map<Name, Form> replacements);
-
-    public Form traverse(Traversal traversal) {
+    def traverse(traversal: Traversal): Form = {
 		if( traversal == null ) {
-		    return this;
+		    return this
 		}
 		else {
-		    return _traverse(traversal, 0);
+		    return _traverse(traversal, 0)
 		}
     }
 
-    abstract Form _traverse(Traversal traversal, int i);
+    def _traverse(traversal: Traversal, i: Int): Form
 
-    public abstract Form _duplicateAndEmbed(Traversal traversal, int i, Form s);
+    def _duplicateAndEmbed(traversal: Traversal, i: Int, s: Form): Form
 
-    public Form duplicateAndEmbed(Traversal traversal, Form s)
-    {
+    def duplicateAndEmbed(traversal: Traversal, s: Form): Form = {
 		if( traversal == null ) {
-		    return s;
+		    return s
 		}
 		else {
-		    return _duplicateAndEmbed(traversal, 0, s);
+		    return _duplicateAndEmbed(traversal, 0, s)
 		}
     }
 
@@ -81,254 +74,210 @@ with Comparable[Form]
 //      return psb.toString();
 //  }
 
-    public void printToStream(Name name, Printable out)
-    {
+    def printToStream(name: Name, out: Printable): Unit = {
     		if( name != null ) {
-    			out.print("form " + name);
+    			out.print("form " + name)
     			if( lambda != null ) {
-    				out.print(" [");
-    				Iterator<Name> it = lambda.getNames().iterator();
-    				while( it.hasNext() ) {
-    					out.print(it.next().toString());
-    					if( it.hasNext() ) {
-    						out.print(" ");
+    				out.print(" [")
+    				val it = lambda.getNames().iterator
+    				while( it.hasNext ) {
+    					out.print(it.next().toString())
+    					if( it.hasNext ) {
+    						out.print(" ")
     					}
     				}
-    				out.print("]");
+    				out.print("]")
     			}
-    			out.print(" ");
+    			out.print(" ")
     		}
     }
     
-    public void setParent(ComplexForm parent)
-    {
-        this.parent = parent;
+    def setParent(parent: ComplexForm): Unit = {
+        this.parent = parent
     }
 
-    public ComplexForm getParent()
-    {
-        return parent;
-    }
-    
-    public Point getCenter()
-    {
-        return center;
+    def getParent() = parent
+
+    def getCenter() = center
+
+    def clearInputTo(): Unit = {
+      inputTo = null
     }
 
-    public void clearInputTo()
-    {
-        inputTo = null;
-    }
-    
-    public CallGraph getInputTo()
-    {
-        return inputTo;
-    }
+    def getInputTo() = inputTo
 
-    public void reAttachToCallGraph(History history, Lexicon lexicon)
-    {
-        System.out.println("Form.reAttachToCallGraph: begin");
-        
+    def reAttachToCallGraph(history: History, lexicon: Lexicon): Unit = {
+        println("Form.reAttachToCallGraph: begin")
         if( parent == null ) {
-            System.out.println("Form.reAttachToCallGraph: parent == null");
+            println("Form.reAttachToCallGraph: parent == null")
             if( inputTo != null ) {
-                System.out.println("Form.reAttachToCallGraph: inputTo != null");
-                inputTo.detachInput(history, lexicon);
-                CallVertex cv = new CallVertex(history.nextVertexId(), inputTo.transform.start, this);
-                CallGraph cg = inputTo.transform.constructCall(history.nextCallId(), history, lexicon, null);
-                cg.unify(history, cv);
+                println("Form.reAttachToCallGraph: inputTo != null")
+                inputTo.detachInput(history, lexicon)
+                val cv = new CallVertex(history.nextVertexId(), inputTo.transform.start, this)
+                var cg = inputTo.transform.constructCall(history.nextCallId(), history, lexicon, null)
+                cg.unify(history, cv)
                 if( cg.isUnified() ) {
                     while( cg.hasNext() ) {
-                        cg.next(history, lexicon);
+                        cg.next(history, lexicon)
                     }
-                    inputTo = cg;
+                    inputTo = cg
                 }
                 else {
-                    cg.detachInput(history, lexicon);
-                    history.remove(cg);
-                    inputTo = null;
+                    cg.detachInput(history, lexicon)
+                    history.remove(cg)
+                    inputTo = null
                 }
             }
         }
         else {
-            parent.reAttachToCallGraph(history, lexicon);
+            parent.reAttachToCallGraph(history, lexicon)
         }
     }
     
-    public boolean contains(Point p)
-    {
-        System.out.println("Form.contains: p = " + p + ", center = " + center + ", radius = " + radius);
-        return distanceSquared(center, p) <= radius*radius;
+    def contains(p: Point): Boolean = {
+        println("Form.contains: p = " + p + ", center = " + center + ", radius = " + radius)
+        distanceSquared(center, p) <= radius*radius
     }
 
 
-    public boolean moveOK(Point p)
-    {
+    def moveOK(p: Point): Boolean = {
         if( parent != null ) {
             if( p.y <= parent.center.y ) {
-                return false;
+                return false
             }
             if( this == parent.getLeft() ) {
                 if( p.x >= parent.center.x) {
-                    return false;
+                    return false
                 }
             }
             else {
                 if( p.x <= parent.center.x) {
-                    return false;
+                    return false
                 }
             }
         }
-        return true;
+        return true
     }
 
-    abstract public Point getBounds();
+    def getBounds(): Point
 
-    abstract public void arrange(Point p);
+    def arrange(p: Point): Unit
 
-    public void move(Point p)
-    {
-        center.move(p.x, p.y);
-
+    def move(p: Point): Unit = {
+        center.move(p.x, p.y)
         // TODO this must work differently !!!
-        
         if( inputTo != null ) {
-            for( CallEdge edge : inputTo.getGraph().getEdges() ) {
-                edge.updatePoly();
+            for( edge <- inputTo.getGraph().getEdges() ) {
+                edge.updatePoly()
             }
         }
-
     }
 
-    public abstract Form memberIntersects(Form other);
+    def memberIntersects(other: Form): Form
     
-    public abstract Form memberContains(Point p);
+    def memberContains(p: Point): Form
     
-    public boolean intersects(Form other)
-    {
-        return distanceSquared(center, other.center) < 4*radius*radius;
-    }
+    def intersects(other: Form): Boolean = 
+    	distanceSquared(center, other.center) < 4*radius*radius
 
-    public boolean intersects(CallVertex cv)
-    {
+    def intersects(cv: CallVertex): Boolean = {
         if( cv.getForm() == null ) {
-            System.err.println("Form.intersects: cv.getForm == null");
-            return false;
+            System.err.println("Form.intersects: cv.getForm == null")
+            return false
         }
         
-        return distanceSquared(center, cv.getForm().getCenter()) < 4*radius*radius;
+        distanceSquared(center, cv.getForm().getCenter()) < 4*radius*radius
     }
     
-    public void setDetachable(boolean b)
-    {
-        detachable = b;
+    def setDetachable(b: Boolean): Unit = {
+        detachable = b
     }
     
-    public boolean isDetachable()
-    {
-        return detachable;
-    }
+    def isDetachable() = detachable
 
     // Detach 'this' from parent, and replace with new Blank
-    public void detachFromParent(History history, Lexicon lexicon)
-    {
+    def detachFromParent(history: History, lexicon: Lexicon): Unit = {
         if( parent == null ) {
-            System.err.println("attempting to detach something that has no parent");
-            System.exit(1);
+            System.err.println("attempting to detach something that has no parent")
+            System.exit(1)
         }
 
-        Blank blank = new Blank();
-        blank.arrange(center);
+        val blank = new Blank()
+        blank.arrange(center)
         
         if( this == parent.getLeft() ){
-            parent.setLeft(blank);
+            parent.setLeft(blank)
         }
         else {
-            parent.setRight(blank);
+            parent.setRight(blank)
         }
-        blank.setParent(parent);
+        blank.setParent(parent)
         
-        parent.reAttachToCallGraph(history, lexicon);
+        parent.reAttachToCallGraph(history, lexicon)
         
-        parent = null;
-        lexicon.put(new Name(), this);
+        parent = null
+        lexicon.put(new Name(), this)
     }
 
-    public void paint(Graphics g)
-    {
-        Graphics2D g2d = (Graphics2D)g;
+    def paint(g: Graphics): Unit = {
+        val g2d = g.asInstanceOf[Graphics2D]
 
         if( highlighted ) {
-            g2d.setColor(Color.YELLOW);
+            g2d.setColor(Color.YELLOW)
         }
         else {
-            g2d.setColor(color);
+            g2d.setColor(color)
         }
         
-        Ellipse2D circle = new Ellipse2D.Double(center.x - radius, center.y - radius, 2*radius, 2*radius);
-        g2d.fill(circle);
-        g2d.setColor(Color.BLACK);
-        g2d.draw(circle);
+        val circle = new Ellipse2D.Double(center.x - radius, center.y - radius, 2*radius, 2*radius)
+        g2d.fill(circle)
+        g2d.setColor(Color.BLACK)
+        g2d.draw(circle)
     }
 
-    public boolean mouseClicked(MouseEvent e, History history, Lexicon lexicon)
-    {
-
-        System.out.println("FormController.mouseClicked");
-        
+    def mouseClicked(e: MouseEvent, history: History, lexicon: Lexicon): Boolean = {
+        println("FormController.mouseClicked")
         // Delete the selected form
-        
         if( contains(e.getPoint()) && isDetachable() ) {
             if( e.getButton() == 2 ) {
                 if( getParent() != null ) {
-                    detachFromParent(history, lexicon);
+                    detachFromParent(history, lexicon)
                 }
-                lexicon.remove(this);
+                lexicon.remove(this)
             }
-            
-            return true;
+            return true
         }
-            
-        return false;
+        false
     }
 
-    public void drag(Point p, History history, Lexicon lexicon)
-    {
-
-        System.out.println("FormController.mouseDragged");
-
+    def drag(p: Point, history: History, lexicon: Lexicon): Unit = {
+    	println("FormController.mouseDragged")
         if( moveOK(p) ) {
-            move(p);
+            move(p)
         }
     }
 
-    public Widget mousePressed(MouseEvent e, History history, Lexicon lookupLexicon, Lexicon newLexicon)
-    {
-        System.out.println("FormController.mousePressed");
-
-        Point p = e.getPoint();
-        
-        Form f = memberContains(p);
+    def mousePressed(e: MouseEvent, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Widget = {
+        println("FormController.mousePressed")
+        val p = e.getPoint()
+        val f = memberContains(p)
         if( f != null ) {
-            
-            if( e.getButton() == 3 ) {
+        	if( e.getButton() == 3 ) {
                 if( f.isDetachable() ) {
-                    Form parent = f.getParent();
+                    val parent = f.getParent()
                     if( parent != null ) {
-                        f.detachFromParent(history, newLexicon);
+                        f.detachFromParent(history, newLexicon)
                     }
                     else if ( f.getInputTo() != null ) {
                         // TODO smells bad
-                        CallGraph cg = f.getInputTo();
-                        cg.detachInput(history, newLexicon);
+                        val cg = f.getInputTo()
+                        cg.detachInput(history, newLexicon)
                     }
                 }
             }
-            
-            return f;
+            return f
         }
-        
-        return null;
+        null
     }
 
     def release(p: Point, history: History, lookupLexicon: Lexicon, newlexicon: Lexicon): Unit = {
@@ -345,11 +294,10 @@ with Comparable[Form]
  
         for( other <- newlexicon.getTopForms() ) {
             if( other != this ) {
-                val f = other.memberIntersects(this)
-                if( f instanceof Blank ) {
-                    val blank = f.asInstanceOf[Blank]
+                other.memberIntersects(this) match {
+                  case blank: Blank => {
                     if ( intersects(blank) ) {
-                        ComplexForm binaryParent = blank.getParent()
+                        val binaryParent = blank.getParent()
                         if( blank == binaryParent.getLeft() ){
                             binaryParent.setLeft(this)
                         }
@@ -361,6 +309,8 @@ with Comparable[Form]
                         reAttachToCallGraph(history, newlexicon)
                         return
                     }
+                  }
+                  case _ => {}
                 }
             }
         }

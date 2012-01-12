@@ -8,19 +8,19 @@ extends CallGraph(id, history, lexicon, transform, macro)
     def replacements(): Map[Name, Form] = {
 		GLogger.global.entering("SimpleTransformCall", "replacements")
 		var replacements = Map[Name, Form]()
-		var map_it = transform.map.keySet.iterator()
-		while( map_it.hasNext() ) {
+		var map_it = transform.map.keySet.iterator
+		while( map_it.hasNext ) {
 		    val mi = map_it.next()
-		    val variable = transform.map.get(mi)
+		    val variable = transform.map(mi)
 		    val replacement = unifier.get(mi)
 
 		    // too strict !!
-		    val already = replacements.get(variable)
+		    val already = replacements(variable)
 		    if( already != null ) {
 		    	GLogger.global.info("SimpleSystmCall.replacements variable is already bound to " + already.toString())
 		    	// TODO Shouldn't this have already been done in the Call superclass ??
 		    	// matched = false;
-		    	hasNext = false
+		    	_hasNext = false
 		    	return null
 		    }
 
@@ -40,8 +40,8 @@ extends CallGraph(id, history, lexicon, transform, macro)
 		val resultVertex = getGraph().addVertex(new CallVertex(history.nextVertexId(), transform.exitNode, resultForm))
 		GLogger.global.info("Transform result is " + resultForm.toString())
 		getGraph().addEdge(new CallEdge(history.nextEdgeId(), start, resultVertex, macroEdge))
-		outputs.add(resultVertex)
-		hasNext = false
+		outputs += resultVertex
+		_hasNext = false
         GLogger.global.exiting("SimpleTransformCall", "next")
     }
 
