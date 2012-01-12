@@ -52,7 +52,7 @@ case class Model(name: String="no name") {
   def getVariable(name: String): RandomVariable = name2variable(name)
 
   def deleteVariable(variable: RandomVariable): Unit = {
-    variables.remove(variable)
+    variables -= variable
     graph.deleteVertex(variable)
   }
 	
@@ -71,7 +71,7 @@ case class Model(name: String="no name") {
     visited: Map[RandomVariable, Set[RandomVariable]],
     priorDirection: Integer,
     prior: RandomVariable,
-    current: Set[RandomVariable],
+    current: mutable.Set[RandomVariable],
     to: Set[RandomVariable],
     given: Set[RandomVariable]): List[RandomVariable] =
   {
@@ -84,7 +84,7 @@ case class Model(name: String="no name") {
 		
     val cachedOuts = visited(prior) // Set<RandomVariable>
     if( cachedOuts != null ) {
-      current.removeAll(cachedOuts)
+      current --= cachedOuts
     }
 		
     for( variable <- current ) {
@@ -125,12 +125,12 @@ case class Model(name: String="no name") {
     	  var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>
     	  neighbors -= prior
 	
-    	  var visitedCopy = mutable.Map[RandomVariable, Set[RandomVariable]]()
-    	  visitedCopy.putAll(visited)
+    	  var visitedCopy = mutable.Map[RandomVariable, mutable.Set[RandomVariable]]()
+    	  visitedCopy ++= visited
     	  var outs = visited.get(prior) // Set<RandomVariable>
     	  if( outs == null ) {
-    		  outs = new mutable.Set[RandomVariable]()
-    		  visitedCopy.put(prior, outs)
+    		  outs = mutable.Set[RandomVariable]()
+    		  visitedCopy += prior -> outs
     	  }
     	  outs += variable
 	

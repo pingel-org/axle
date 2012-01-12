@@ -22,17 +22,13 @@ extends Comparable[SimulationExplanation]
     }
 
     def makeBetaCall(constraint: SimpleTransform, lexicon: Lexicon): ComplexTransformCall = {
-        var goal_replacement_map = Map[Name, Form]()
-        goal_replacement_map += goal -> candidate
+        val goal_replacement_map = immutable.Map[Name, Form]( goal -> candidate )
 
-        var source_replacement_map = Map[Name, Form]() // though I'm only using SimpleFormm
-        for( from_name <- constraint.map.keySet ) {
-            val to_name = constraint.map(from_name)
-            // is this replacement free or not ???
-            val replacement = new SimpleForm(to_name, null)
-            source_replacement_map += from_name -> replacement
-        }
-        
+        // is this replacement free or not ???
+        val source_replacement_map = immutable.Map[Name, Form](
+            constraint.map.keySet.map( k => (k, new SimpleForm(constraint.map(k), null))).toList : _ *
+            ) // though I'm only using SimpleFormm
+
         var source = lexicon.getForm(constraint.guardName).duplicateAndReplace(source_replacement_map)
         source = source.duplicateAndReplace(goal_replacement_map)
 
@@ -68,7 +64,7 @@ extends Comparable[SimulationExplanation]
 
 		val newSituation = simulation.createAtom()
 		val newName = new Name()
-		lexicon += newName -> newSituation
+		lexicon.put(newName, newSituation)
         val betaSystem = new ComplexTransform(newName)
         betaSystem.getGraph().addVertex(beta_in_node)
         // TODO add nodes to the betaSystem (mark exit nodes, too)
@@ -201,7 +197,7 @@ extends Comparable[SimulationExplanation]
       (0 until simulation.constraints.size).map( constraintIndex => {
             val constraint = simulation.constraints(constraintIndex)
             constraint.toString() + "\n\n"
-            val rs = betaSystemByConstraint.get(constraint);
+            val rs = betaSystemByConstraint(constraint)
             rs match {
               case null => GLogger.global.info("SimulationExplanation.toString rs == null!")
               case _ => {

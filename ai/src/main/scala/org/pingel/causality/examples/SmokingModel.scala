@@ -64,7 +64,7 @@ object SmokingModel extends CausalModel("Smoking Model") {
         println("task2: " + task2.toString())
 
         println("Trying ActionToObservation")
-        val result = new ActionToObservation().apply(task2, model)
+        val result = new ActionToObservation().apply(task2, model, namer)
         result.map( q => {
           println("after rule 2 application: " + q)
         })
@@ -114,7 +114,7 @@ object SmokingModel extends CausalModel("Smoking Model") {
           println("after rule ObservationToAction application: " + q)
         }
 
-        val former2 = result2(0) // Probability
+        val former2 = result2(0).asInstanceOf[Probability] // Probability
         println("former2 = " + former2)
         
         for( q <- new DeleteAction().apply(former2, model, namer) ) {

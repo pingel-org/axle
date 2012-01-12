@@ -15,7 +15,7 @@ abstract class Rule {
     def randomVariablesOf(variables: Set[RandomVariable]): Set[RandomVariable] = {
         var result = Set[RandomVariable]()
         for( v <- variables ) {
-            result += v.getRandomVariable()
+            result += v // NOTE: was "v.getRandomVariable()".  I suspect I may revisit this...
         }
         result
     }

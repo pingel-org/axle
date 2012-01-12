@@ -21,7 +21,7 @@ case class DoubleValue(value: Double)  extends SimpleForm(new Name(value + "")) 
     }
 
     def compareTo(other: Form) = other match {
-      case dv: DoubleValue => DoubleValue(value).compareTo(dv.value)
+      case dv: DoubleValue => value.compareTo(dv.value)
       case _ => -1
     }
 
