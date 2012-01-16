@@ -28,7 +28,7 @@ Projects
 ========
 
 
-Artificial Intelligence (org.pingel.{bayes,causality,gestalt})
+Artificial Intelligence (org.pingel.{bayes,causality})
 --------------------------------------------------------------
 
 Bayesian Networks and Causality.
