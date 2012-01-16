@@ -1,4 +1,4 @@
-package org.pingel.bayes
+package org.pingel.gestalt.core
 
 class Domain(values: List[Value]) {
    

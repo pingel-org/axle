@@ -10,7 +10,8 @@ import org.pingel.gestalt.parser.ParseException
 import org.pingel.gestalt.parser.StaticAnalyzingVisitor
 import org.pingel.gestalt.parser.syntaxtree.Goal
 
-import scala.collection._
+import scala.collection.mutable.ListBuffer
+import scala.collection.JavaConversions._
 
 object Common {
 	
@@ -18,7 +19,7 @@ object Common {
 	
 	val included = Set[String]()
 	
-	def processFile(name: String, lexicon: Lexicon): List[String] = {
+	def processFile(name: String, lexicon: Lexicon): ListBuffer[String] = {
 		val gestaltHome = System.getProperty("GESTALT_HOME")
 		val separator = System.getProperty("file.separator")
 		val fullFilename = gestaltHome + separator + "cl" + separator + name + ".cl"
@@ -45,12 +46,15 @@ object Common {
 			throw(e2)
 		  }
 		}
+
+		var result = new ListBuffer[String]()
 		var v = new StaticAnalyzingVisitor(lexicon)
 		goal.accept(v, null)
-		v.getIncludes()
+		result ++= v.getIncludes().toList
+		result
 	}
 	
-	def processStream(in: InputStream, lexicon: Lexicon): List[String] = {
+	def processStream(in: InputStream, lexicon: Lexicon): ListBuffer[String] = {
 		var goal: Goal = null
 		try {
 			if( parser == null ) {
@@ -67,36 +71,38 @@ object Common {
 			System.exit(1)
 		  }
 		}
-		
+
+		var result = new ListBuffer[String]()
 		var v = new StaticAnalyzingVisitor(lexicon)
 		goal.accept(v, null)
-		v.getIncludes()
+		result ++= v.getIncludes().toList
+		result
 	}
 	
 	
-	def include(includes: List[String], lexicon: Lexicon): Unit = {
+	def includeListBuffer(includes: ListBuffer[String], lexicon: Lexicon): Unit = {
 		// BFS traversal
 		// TODO add cycle detection
 		while( includes.size > 0 ) {
 			val include = includes.remove(0)
 			if( ! included.contains(include) ) {
-				included += include
+				includes += include
 				val newIncludes = Common.processFile(include, lexicon)  // or pass a new newLexicon???
 				includes ++= newIncludes
 			}
 		}
 	}
 	
-	def include(inc: String, lexicon: Lexicon): Unit = {
+	def includeString(inc: String, lexicon: Lexicon): Unit = {
 		println("including " + inc)
-		var includes = mutable.ListBuffer[String]()
+		var includes = ListBuffer[String]()
 		includes += inc
-		include(includes, lexicon)
+		includeListBuffer(includes, lexicon)
 	}
 	
 	def include(in: InputStream, lexicon: Lexicon): Unit = {
 		var includes = Common.processStream(in, lexicon)
-		include(includes, lexicon)
+		includeListBuffer(includes, lexicon)
 	}
 	
 }

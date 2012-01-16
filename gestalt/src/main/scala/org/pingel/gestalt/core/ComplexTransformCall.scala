@@ -26,7 +26,7 @@ extends CallGraph(id, history, lexicon, transform, macro)
 
     def networkCost(cv: CallVertex): Double = {
         var running_total = 0.0
-        for( outputEdge <- getGraph().outputEdgesOf(cv) ) {
+        for( outputEdge <- outputEdgesOf(cv) ) {
             running_total += networkCost(outputEdge.getDest())
         }
         1 + running_total
@@ -64,9 +64,9 @@ extends CallGraph(id, history, lexicon, transform, macro)
                 
             nextCall.unify(history, traversedState)
             
-            call2input.put(nextCall, state)
+            call2input += nextCall -> state
             
-            activeCalls.add(nextCall)
+            activeCalls += nextCall
 
             GLogger.global.fine("after state.pnode.createNextCalls, there are " + activeCalls.size + " calls in active_calls")
         }
@@ -107,13 +107,11 @@ extends CallGraph(id, history, lexicon, transform, macro)
                         untraversedInputState.getForm().duplicateAndEmbed(cg.macroEdge.traversal,
                         		output.getForm()) // TODO !!??
                     
-                    val nextState = getGraph().addVertex(new CallVertex(history.nextVertexId(),
-                    		cg.macroEdge.getDest(), embeddedResultSituation))
+                    val nextState = addVertex(new CallVertex(history.nextVertexId(), cg.macroEdge.getDest(), embeddedResultSituation))
 
 					// FYI at this point we could like output to next_state
                     
-                    getGraph().addEdge(new CallEdge(history.nextEdgeId(), untraversedInputState, nextState, macroEdge))
-                    
+                    addEdge(new CallEdge(history.nextEdgeId(), untraversedInputState, nextState, macroEdge))
         	        createNextCalls(history, lexicon, nextState)
                 }
             }

@@ -134,7 +134,7 @@ extends Comparable[SimulationExplanation]
     	
     	// return the cached copy
     	// when is this ever called ???
-    	val rs = betaSystemByConstraint(constraint)
+    	var rs = betaSystemByConstraint(constraint)
     	if( rs != null ) {
     		GLogger.global.info("SimulationExplanation.constraintFits returning cached copy of the transform system")
     		return rs
@@ -147,7 +147,7 @@ extends Comparable[SimulationExplanation]
     	GLogger.global.info("SimulationExplanation.constraintFits source situation is " + source.toString())
     	GLogger.global.info("SimulationExplanation.constraintFits destination situation is " + destination.toString())
     	
-    	for( output <- betaCall.getGraph().getVertices() ) {
+    	for( output <- betaCall.getVertices() ) {
     		
     		GLogger.global.info("SimulationExplanation.constraintFits checking to see if this output matches the destination: " + output.getForm().toString())
     		GLogger.global.info("SimulationExplanation.constraintFits betaCall output situation: " + output.getForm())
@@ -159,7 +159,7 @@ extends Comparable[SimulationExplanation]
     			// TODO this first parameter (new Name()) is wrong !!!
     			rs = betaCall.getTransformSystemTo(new Name(), source, output)
     			
-    			betaSystemByConstraint.put(constraint, rs)
+    			betaSystemByConstraint += constraint -> rs
     			
     			// TODO not sure if this is the best place to alter the newLexicon.  It may be that these
     			// TransformSystem's go unused, in which case we don't want to leave junk that refers to them

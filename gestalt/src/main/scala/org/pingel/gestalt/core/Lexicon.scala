@@ -62,9 +62,9 @@ case class Lexicon
 
     def get(name: Name) = name2object(name)
 
-    def getTransform(name: Name) = {
+    def getTransform(name: Name): Transform = {
     	GLogger.global.info("getTransform(" + name + ")")
-    	name2object(name)
+    	name2object(name).asInstanceOf[Transform]
     }
 
     def renameTransform(from: Name, to: Name): Unit = {

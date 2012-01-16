@@ -14,19 +14,13 @@ extends Form(lambda)
 	def size() = 1
 
 	def compareTo(other: Form): Int = other match {
+	  case sf: SimpleForm  => name.compareTo(sf.name)
 	  case cf: ComplexForm => -1
-	  case sf: SimpleForm => {
-		  val otherSimpleForm = other.asInstanceOf[SimpleForm]
-		  name.compareTo(otherSimpleForm.name)
-	  }
-	  case _ => -1 // or throw exception ???
+	  case _               => -1 // or throw exception ???
 	}
 	
 	def equals(other: Form): Boolean = other match {
-	  case sf: SimpleForm => {
-		val leaf_other = other.asInstanceOf[SimpleForm]
-		name.equals(leaf_other.name)
-	  }
+	  case sf: SimpleForm => name.equals(sf.name)
 	  case _ => false
 	}
 	

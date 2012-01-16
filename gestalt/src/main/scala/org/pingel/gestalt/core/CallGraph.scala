@@ -16,6 +16,7 @@ import scala.collection._
 
 abstract case class CallGraph(id: Int, history: History, lexicon: Lexicon, transform: Transform, macroEdge: TransformEdge)
 extends Widget
+with DirectedGraph[CallVertex, CallEdge]
 {
 
 	var in: CallVertex = null
@@ -30,7 +31,6 @@ extends Widget
     var _hasNext = true
     var unifier = new Unifier()
     var outputs = new mutable.ListBuffer[CallVertex]()
-    var graph = new DirectedGraph[CallVertex, CallEdge]()
 
     GLogger.global.entering("Call", "<init>")
     history.addCall(this)
@@ -39,7 +39,7 @@ extends Widget
 
     def unify(history: History, in: CallVertex): Unit = {
         this.in = in
-        start = graph.addVertex(new CallVertex(history.nextVertexId(), transform.start, in.getForm()))
+        start = addVertex(new CallVertex(history.nextVertexId(), transform.start, in.getForm()))
         unificationSucceeded = guard.unify(guard.lambda, start.getForm(), unifier)
         if( ! unificationSucceeded ) {
             GLogger.global.fine("Call.constructor guard is not met")
@@ -50,8 +50,6 @@ extends Widget
     }
 
     def isUnified() = unificationSucceeded
-
-    def getGraph() = graph
 
 	def getId() = this.id
 
@@ -80,9 +78,8 @@ extends Widget
             out.print(" " + callId)
         }
         out.println()
-        for( outEdge <- getGraph().outputEdgesOf(cv) ) {
-            CallVertex successor = outEdge.getDest()
-            printNetworkTo(successor, out, i+1, cv.getId())
+        for( outEdge <- outputEdgesOf(cv) ) {
+            printNetworkTo(outEdge.getDest(), out, i+1, cv.getId())
         }
     }
     
@@ -120,13 +117,13 @@ extends Widget
 //        return null;
 //    }
     
-    def _detachInput(history: History, lexicon: Lexicon, cv: CallVertex) = {
+    def _detachInput(history: History, lexicon: Lexicon, cv: CallVertex): Unit = {
         val f = cv.getForm()
         f.clearInputTo()
         cv.clearForm()
         lexicon.remove(f)
 
-        for( nextVertex <- this.getGraph().getSuccessors(cv) ) {
+        for( nextVertex <- getSuccessors(cv) ) {
             // TODO delete sub-graph
             _detachInput(history, lexicon, nextVertex)
         }
@@ -144,8 +141,7 @@ extends Widget
         guard = null
         unifier = new Unifier()
         outputs = new mutable.ListBuffer[CallVertex]()
-        graph = new DirectedGraph[CallVertex, CallEdge]()
-
+        removeAllEdgesAndVertices() // was: graph = new DG[]()
         _detachInput(history, lexicon, in)
     }
 
@@ -183,7 +179,7 @@ extends Widget
         		// arrange them in a circle
         }
 
-        for( cv <- graph.getVertices() ) {
+        for( cv <- getVertices() ) {
             if( cv != start ) {
                 cv.move(p2)
             }
@@ -196,7 +192,7 @@ extends Widget
         	te.updatePoly()
         }
 
-        for( ce <- graph.getEdges() ) {
+        for( ce <- getEdges() ) {
         	ce.updatePoly()
         }
 
@@ -206,12 +202,12 @@ extends Widget
         guard.move(p)
         val dp = new Point(p.x - center.x, p.y - center.y)
         center.move(p.x, p.y)
-        for( cv <- graph.getVertices() ) {
-            Point newPosition = new Point(cv.getForm().center)
+        for( cv <- getVertices() ) {
+            var newPosition = new Point(cv.getForm().center)
             newPosition.translate(dp.x, dp.y)
             cv.move(newPosition)
         }
-        for( ce <- graph.getEdges() ) {
+        for( ce <- getEdges() ) {
             ce.updatePoly()
         }
     }
@@ -260,11 +256,11 @@ extends Widget
         if( ! unificationAttempted ) {
             guard.paint(g)
         }
-        for( ce <- graph.getEdges() ) {
+        for( ce <- getEdges() ) {
 //            System.out.println("CallGraph.paint calling CallEdge.paint");
             ce.paint(g)
         }
-        for( cv <- graph.getVertices() ) {
+        for( cv <- getVertices() ) {
             cv.paint(g)
         }
     }

@@ -1,10 +1,7 @@
-package org.pingel.ptype
+package org.pingel.gestalt.core
 
 import java.util.TreeMap
 import scala.collection._
-import org.pingel.gestalt.core.Form
-import org.pingel.bayes.Domain
-import org.pingel.bayes.Value
 
 class PType {
 

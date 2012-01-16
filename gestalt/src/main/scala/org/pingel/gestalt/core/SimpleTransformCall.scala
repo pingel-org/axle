@@ -37,9 +37,9 @@ extends CallGraph(id, history, lexicon, transform, macro)
             return
         }
 		val resultForm = lexicon.getForm(transform.outName).duplicateAndReplace(repls)
-		val resultVertex = getGraph().addVertex(new CallVertex(history.nextVertexId(), transform.exitNode, resultForm))
+		val resultVertex = addVertex(new CallVertex(history.nextVertexId(), transform.exitNode, resultForm))
 		GLogger.global.info("Transform result is " + resultForm.toString())
-		getGraph().addEdge(new CallEdge(history.nextEdgeId(), start, resultVertex, macroEdge))
+		addEdge(new CallEdge(history.nextEdgeId(), start, resultVertex, macroEdge))
 		outputs += resultVertex
 		_hasNext = false
         GLogger.global.exiting("SimpleTransformCall", "next")

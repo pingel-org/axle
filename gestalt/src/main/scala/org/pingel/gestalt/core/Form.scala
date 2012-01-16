@@ -7,7 +7,6 @@ import java.awt.Point
 import java.awt.event.MouseEvent
 import java.awt.geom.Ellipse2D
 import org.pingel.gestalt.ui.Widget
-import org.pingel.ptype.PType
 import org.pingel.axle.util.Printable
 
 abstract case class Form(lambda: Lambda=new Lambda())
@@ -167,7 +166,7 @@ with Comparable[Form]
         center.move(p.x, p.y)
         // TODO this must work differently !!!
         if( inputTo != null ) {
-            for( edge <- inputTo.getGraph().getEdges() ) {
+            for( edge <- inputTo.getEdges() ) {
                 edge.updatePoly()
             }
         }
