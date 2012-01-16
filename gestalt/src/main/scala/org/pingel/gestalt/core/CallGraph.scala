@@ -189,7 +189,7 @@ with DirectedGraph[CallVertex, CallEdge]
         }
 
         for( te <- this.transform.getGraph().getEdges() ) {
-        	te.updatePoly()
+        	// TODO: te.updatePoly()
         }
 
         for( ce <- getEdges() ) {

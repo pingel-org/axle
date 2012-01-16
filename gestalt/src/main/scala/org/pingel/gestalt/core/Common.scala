@@ -24,7 +24,7 @@ object Common {
 		val separator = System.getProperty("file.separator")
 		val fullFilename = gestaltHome + separator + "cl" + separator + name + ".cl"
 		GLogger.global.info("parsing " + fullFilename)
-		var goal = null
+		var goal: Goal = null
 		try {
 			var rdr = new FileReader(fullFilename)
 			if( parser == null ) {

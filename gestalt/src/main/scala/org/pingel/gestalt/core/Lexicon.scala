@@ -120,7 +120,7 @@ case class Lexicon
         result
     }
     
-    def getNameOf(logos: Logos) = object2name.get(logos)
+    def getNameOf(logos: Logos) = object2name(logos)
 
     def printToStream(p: Printable): Unit = {
     	for( name <- name2object.keySet ) {
