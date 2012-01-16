@@ -92,9 +92,19 @@ object Axle {
     // Law 2: fmap (f . g) = fmap f . fmap g
     //   aka: forall functors F: fmap (f . g) F = fmap f (fmap g F)
 
-    def functorLaw2a[M[_] : Functor, A, B, C](f: (B) => C, g: (A) => B, functor: M[A] ): Boolean = {
-      val fog: Function1[A, C] = f.compose(g)
-      val lhs = fmap(fog, functor)
+    // def fmap[T, A, B](f: A => B, functor: Function1[T, A]): Function1[T, B] = f.compose(functor)
+
+/*
+    val lhs = f.compose(g).compose(functor)
+    val rhs = f.compose(g.compose(functor))
+
+    functor;(g;f)
+    (functor;g);f
+*/
+
+    def functorLaw2a[M[_] : Functor, A, B, C](f: (B) => C, g: (A) => B, functor: M[A] ): Boolean ={
+      // val fog: Function1[A, C] = f.compose(g)
+      val lhs = fmap(f.compose(g), functor)
       val rhs = fmap(f, fmap(g, functor))
       val ok = lhs == rhs
       println("lhs = " + lhs)
@@ -112,14 +122,21 @@ object Axle {
       ok
     }
 
+    // Applicative Functor stuff
+    /*
+    def pure[M[_] : Applicative, A](a: A): M[A] = implicitly[Applicative[M]].pure(a)
+
+    def pure2[M[_, _] : Applicative2, T, A](a: A): M[T, A] = implicitly[Applicative2[M]].pure(a)
+
+    def pure3[M[_, _, _] : Applicative3, T, U, A](a: A): M[T, U, A] = implicitly[Applicative3[M]].pure(a)
+    */
   }
 
-  // Typeclass traits and implicit objects
+  // Functor traits and implicit objects
 
   trait Functor[F[_]] {
     def fmap[A, B](f: A => B, functor: F[A]): F[B]
   }
-
 
   object Functor {
 
@@ -137,7 +154,7 @@ object Axle {
     }
   }
 
-  trait Functor2[F[_, _]]  {
+  trait Functor2[F[_, _]] {
     def fmap[T, A, B](f: A => B, functor: F[T, A]): F[T, B]
   }
 
@@ -156,5 +173,51 @@ object Axle {
 
   }
 
+  // Applicative traits and implicit objects
+
+  // TODO: create an implicit "enrichment" for Option (for starters)
+  //   def enApplicativeOption ...
+  // that will allow me to embue Option[(A) => B] with the <*> method
+/*
+  trait Applicative[M[_]] {
+    def pure[A](a: A): M[A]
+    def <*>[A, B](something: X): M[B] = fOpt match {
+      case Some(f) => fmap(f, something)
+      case None    => None
+    }
+  }
+
+  object Applicative {
+    // TODO: how would this "pure" route to List vs Some ?
+    implicit object ListApplicative extends Applicative[List] {
+      def pure[A](a: A) = List(a)
+    }
+    implicit object OptionApplicative extends Applicative[Option] {
+      def pure[A](a: A) = Some(a)
+    }
+  }
+
+  trait Applicative2[M[_,_]] {
+    def pure[T, A](a: A): M[T,A]
+    // def <*>[T, A, B](f: A => B, applicative: M[T, A]): M[T, B]
+  }
+
+  object Applicative2 {
+    implicit object Function1Applicative extends Applicative2[Function1] {
+      def pure[T, A](a: A) = (t: T) => a // TODO
+    }
+  }
+
+  trait Applicative3[M[_,_,_]] {
+    def pure[T, U, A](a: A): M[T,U,A]
+    // def <*>[T, U, A, B](f: A => B, applicative: M[T, U, A]): M[T, U, B]
+  }
+
+  object Applicative3 {
+    implicit object Function2Applicative extends Applicative3[Function2] {
+      def pure[T, U, A](a: A) = (t: T, u: U) => a // TODO
+     }
+  }
+  */
 }
 
