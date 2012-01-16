@@ -1,13 +1,17 @@
-name := "org.pingel.axle"
+name := "axle"
 
 version := "1.0"
 
+organization := "org.pingel"
+
 scalaVersion := "2.9.1"
 
-// libraryDependencies ++= Seq()
+libraryDependencies ++= Seq(
+  "jung" % "jung" % "1.7.6"
+)
 
-// resolvers ++= Seq(
-//   "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots",
-//   "ibiblio" at "http://mirrors.ibiblio.org/pub/mirrors/maven2",
-//   "GlassFish Maven Repository" at "http://download.java.net/maven/glassfish"
-// )
+//resolvers ++= Seq(
+//"Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots",
+//"ibiblio" at "http://mirrors.ibiblio.org/pub/mirrors/maven2",
+//"GlassFish Maven Repository" at "http://download.java.net/maven/glassfish"
+//)
