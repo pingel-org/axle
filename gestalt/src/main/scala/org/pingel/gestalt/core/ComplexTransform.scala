@@ -13,9 +13,9 @@ extends Transform(guardName)
 	
     override def toString(): String = {
     	guardName + " {\n" +
-    	getGraph().getEdges().map( "   " + _.toString() + "\n" ).mkString("") +
+    	getEdges().map( "   " + _.toString() + "\n" ).mkString("") +
     	"} <" +
-    	getGraph().getVertices().filter( _.isExit ).map( _.name ).mkString(" ") +
+    	getVertices().filter( _.isExit ).map( _.name ).mkString(" ") +
     	">\n"
     }
     

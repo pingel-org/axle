@@ -66,7 +66,7 @@ extends Comparable[SimulationExplanation]
 		val newName = new Name()
 		lexicon.put(newName, newSituation)
         val betaSystem = new ComplexTransform(newName)
-        betaSystem.getGraph().addVertex(beta_in_node)
+        betaSystem.addVertex(beta_in_node)
         // TODO add nodes to the betaSystem (mark exit nodes, too)
         for( arc <- arcs ) {
             // TODO add arcs to the betaSystem

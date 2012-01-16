@@ -9,15 +9,15 @@ extends Transform(guardName)
 
 	center = new Point(0, 0)
 
-    getGraph().addVertex(new TransformVertex(new Name("in"), true, false))
+    addVertex(new TransformVertex(new Name("in"), true, false))
 		
     GLogger.global.entering("SimpleSystm", "<init>: in = " + guardName.toString() +
     		", out = " + outName.toString() )
 
 	// TODO sort of a trivial case of super.exits; maybe I should split them:
-    val exitNode = getGraph().addVertex(new TransformVertex(new Name("out"), false, true))
+    val exitNode = addVertex(new TransformVertex(new Name("out"), false, true))
         
-    getGraph().addEdge(new TransformEdge(new Name(), null, start, exitNode))
+    addEdge(new TransformEdge(new Name(), null, start, exitNode))
 
 // removed for Scala conversion:
 //    public SimpleTransform()

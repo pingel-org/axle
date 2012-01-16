@@ -173,7 +173,7 @@ with DirectedGraph[CallVertex, CallEdge]
         // happens exactly when a form is presented to a Transform.  But there are perhaps other
         // ways of thinking about this.
 
-        for( tv <- this.transform.getGraph().getVertices() ) {
+        for( tv <- transform.getVertices() ) {
         		// arrange these in a circle
         		// then iterate through each of the CallVertexes that reference this TransformVertex
         		// arrange them in a circle
@@ -188,7 +188,7 @@ with DirectedGraph[CallVertex, CallEdge]
             // from the TransformVertex
         }
 
-        for( te <- this.transform.getGraph().getEdges() ) {
+        for( te <- transform.getEdges() ) {
         	// TODO: te.updatePoly()
         }
 

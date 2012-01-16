@@ -51,7 +51,7 @@ extends CallGraph(id, history, lexicon, transform, macro)
             outputs += state
         }
 
-        val outputEdges = transform.getGraph().outputEdgesOf(state.getTransformVertex())
+        val outputEdges = transform.outputEdgesOf(state.getTransformVertex())
         
         for( nextEdge <- outputEdges ) {
             

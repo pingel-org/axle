@@ -178,7 +178,7 @@ class StaticAnalyzingVisitor(lexicon: Lexicon) extends ObjectDepthFirst {
     var inNode = name2node(inNodeName)
     if (inNode == null) {
       inNode = new TransformVertex(inNodeName, false, false)
-      t.getGraph().addVertex(inNode)
+      t.addVertex(inNode)
       name2node += inNodeName -> inNode
     }
 
@@ -192,12 +192,12 @@ class StaticAnalyzingVisitor(lexicon: Lexicon) extends ObjectDepthFirst {
     var outNode = name2node(outNodeName)
     if (outNode == null) {
       outNode = new TransformVertex(outNodeName, false, false)
-      t.getGraph().addVertex(outNode)
+      t.addVertex(outNode)
       name2node += outNodeName -> outNode
     }
 
     val arc = new TransformEdge(transformName, traversal, inNode, outNode)
-    t.getGraph().addEdge(arc)
+    t.addEdge(arc)
 
     return null
   }
