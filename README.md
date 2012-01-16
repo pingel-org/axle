@@ -31,8 +31,7 @@ Projects
 Artificial Intelligence (org.pingel.{bayes,causality,gestalt})
 --------------------------------------------------------------
 
-Bayesian Networks, Causality, and some thoughts on programming language
-UI and advanced search.
+Bayesian Networks and Causality.
 Not quite yet buildable.
 
 
@@ -55,6 +54,13 @@ Game Theory (org.pingel.gametheory)
 -----------------------------------
 
 A placeholder project for modelling a range of games.
+
+
+Gestalt
+-------
+
+A sandbox for experimentation with visual programming/authoring,
+and programming language design.
 
 
 Linguistics (org.pingel.linguistics)
