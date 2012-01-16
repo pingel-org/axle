@@ -1,7 +1,10 @@
 package org.pingel.gestalt.core
 
-case class ComplexTransformCall(id: Int, history: History, lexicon: Lexicon, 
-		transform: ComplexTransform, macro: TransformEdge)
+case class ComplexTransformCall(
+    override val id: Int,
+    override val history: History,
+    override val lexicon: Lexicon, 
+    override val transform: ComplexTransform, macro: TransformEdge)
 extends CallGraph(id, history, lexicon, transform, macro)
 {
     var activeCalls = Set[CallGraph]()

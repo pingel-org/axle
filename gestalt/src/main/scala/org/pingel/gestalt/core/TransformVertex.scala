@@ -13,6 +13,6 @@ extends DirectedGraphVertex[TransformEdge]
       isExit = is
     }
 
-    def toString() = name.toString()
+    override def toString() = name.toString()
     
 }

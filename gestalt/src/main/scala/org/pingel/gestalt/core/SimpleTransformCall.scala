@@ -1,6 +1,11 @@
 package org.pingel.gestalt.core
 
-case class SimpleTransformCall(id: Int, history: History, lexicon: Lexicon, transform: SimpleTransform, macro: TransformEdge)
+case class SimpleTransformCall(
+    override val id: Int,
+    override val history: History,
+    override val lexicon: Lexicon,
+    override val transform: SimpleTransform,
+    macro: TransformEdge)
 extends CallGraph(id, history, lexicon, transform, macro)
 {
 	// TODO assert: out.variables equals bindings.keySet

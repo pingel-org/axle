@@ -93,7 +93,7 @@ with DirectedGraph[CallVertex, CallEdge]
 		}
 	}
 	
-	def toString(): String = {
+	override def toString(): String = {
 		var psb = new PrintableStringBuffer(new StringBuffer())
 		printNetworkTo(psb, 0)
 		psb.toString()

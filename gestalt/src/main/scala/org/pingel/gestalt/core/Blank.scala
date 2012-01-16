@@ -6,6 +6,6 @@ case class Blank extends SimpleForm(new Name("?")) {
 
 	color = new Color(100, 200, 240)
 
-	def duplicate(): Form = new Blank()
+	override def duplicate() = new Blank()
 
 }

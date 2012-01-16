@@ -15,7 +15,7 @@ case class Name(var base: String=null) extends Comparable[Name]
 	  base = Name.nextName()
 	}
 
-    def toString() = base
+    override def toString() = base
 
     def compareTo(other: Name) = base.compareTo(other.base)
     

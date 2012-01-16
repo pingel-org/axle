@@ -6,7 +6,9 @@ import java.awt.Point
 
 import org.pingel.axle.util.Printable
 
-case class SimpleForm(name: Name, lambda: Lambda=new Lambda())
+case class SimpleForm(
+    name: Name,
+    override val lambda: Lambda=new Lambda())
 extends Form(lambda)
 {
 	GLogger.global.entering("SimpleSituation", "<init>: " + name)
@@ -113,16 +115,16 @@ extends Form(lambda)
 
     def getBounds() = center
 
-    def toString() = name.base
+    override def toString() = name.base
 
-    def printToStream(name: Name, out: Printable): Unit = {
+    override def printToStream(name: Name, out: Printable): Unit = {
     	super.printToStream(name, out)
     	out.print(this.name.toString())
     }
     
     val font = new Font("TimesRoman", Font.BOLD, 24)
 
-    def paint(g: Graphics): Unit = {
+    override def paint(g: Graphics): Unit = {
         super.paint(g)
         g.setFont(font)
         g.drawString(name.base, center.x - 5, center.y + 10)

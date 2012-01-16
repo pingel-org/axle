@@ -3,11 +3,11 @@ package org.pingel.gestalt.core
 import java.awt.Point
 import org.pingel.axle.util.Printable
 
-case class SimpleTransform(guardName: Name, outName: Name, map: Map[Name, Name], cost: Double)
+case class SimpleTransform(override val guardName: Name, outName: Name, map: Map[Name, Name], cost: Double)
 extends Transform(guardName)
 {
 
-	var center = new Point(0, 0)
+	center = new Point(0, 0)
 
     getGraph().addVertex(new TransformVertex(new Name("in"), true, false))
 		
@@ -30,7 +30,7 @@ extends Transform(guardName)
 		new SimpleTransformCall(id, history, lexicon, this, macro)
 	}
 	
-	def toString() = {
+	override def toString() = {
 		// this may not be right... do we want the names of the guard
 		// and the output, 
 		// or do we want the structural description?? !!!

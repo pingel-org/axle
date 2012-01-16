@@ -15,7 +15,7 @@ abstract case class Transform(guardName: Name) extends Logos
 
     class TransformGraph extends LabelledDirectedGraph[TransformVertex, TransformEdge]
     {
-        def addVertex(tv: TransformVertex) = {
+        override def addVertex(tv: TransformVertex) = {
             super.addVertex(tv)
             
             if( tv.isStart ) {
@@ -30,7 +30,7 @@ abstract case class Transform(guardName: Name) extends Logos
 
     var graph = new TransformGraph()
     
-    val center = new Point()
+    var center = new Point()
 
     def getGraph() = graph
 

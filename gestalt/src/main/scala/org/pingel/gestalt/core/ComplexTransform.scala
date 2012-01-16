@@ -2,7 +2,7 @@ package org.pingel.gestalt.core
 
 import org.pingel.axle.util.Printable
 
-case class ComplexTransform(guardName: Name)
+case class ComplexTransform(override val guardName: Name)
 extends Transform(guardName)
 {
 
@@ -11,7 +11,7 @@ extends Transform(guardName)
 		new ComplexTransformCall(id, history, lexicon, this, macro)
 	}    
 	
-    def toString(): String = {
+    override def toString(): String = {
     	guardName + " {\n" +
     	getGraph().getEdges().map( "   " + _.toString() + "\n" ).mkString("") +
     	"} <" +

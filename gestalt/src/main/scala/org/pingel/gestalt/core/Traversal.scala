@@ -4,7 +4,7 @@ case class Traversal(var offset: String)
 {
   var chars = offset.toList
 
-  def toString = offset
+  override def toString = offset
 
   def copy() = new Traversal(offset)
 

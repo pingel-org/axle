@@ -6,8 +6,12 @@ import java.awt.Point
 
 import org.pingel.axle.util.Printable
 
-case class ComplexForm(var left: Form, var right: Form, lambda: Lambda=new Lambda()) extends Form(lambda)
-{
+case class ComplexForm(
+    var left: Form,
+    var right: Form, 
+    override val lambda: Lambda=new Lambda())
+extends Form(lambda) {
+  
 	var _size = -1
 
     def getLeft() = left
@@ -109,7 +113,7 @@ case class ComplexForm(var left: Form, var right: Form, lambda: Lambda=new Lambd
     	}
     }
     
-    def printToStream(name: Name, out: Printable): Unit = {
+    override def printToStream(name: Name, out: Printable): Unit = {
     	super.printToStream(name, out)
     	out.print("(")
     	if( left == null ) {
@@ -129,7 +133,7 @@ case class ComplexForm(var left: Form, var right: Form, lambda: Lambda=new Lambd
     }
 
 
-    def toString() = "(" + left.toString() + " " + right.toString() + ")"
+    override def toString() = "(" + left.toString() + " " + right.toString() + ")"
 
     def getLabel() = ""
 
@@ -144,7 +148,7 @@ case class ComplexForm(var left: Form, var right: Form, lambda: Lambda=new Lambd
     }
 
     
-    def move(p: Point): Unit = {
+    override def move(p: Point): Unit = {
         // TODO the vector from parent to child won't change if the parent is the one that's doing the moving
         val p2l = new Point(left.center.x - center.x, left.center.y - center.y)
         val p2r = new Point(right.center.x - center.x, right.center.y - center.y)
@@ -160,13 +164,13 @@ case class ComplexForm(var left: Form, var right: Form, lambda: Lambda=new Lambd
         right.move(rc)
     }
     
-    def setDetachable(b: Boolean): Unit = {
+    override def setDetachable(b: Boolean): Unit = {
         super.setDetachable(b)
         left.setDetachable(b)
         right.setDetachable(b)
     }
 
-    def setHighlighted(h: Boolean): Unit = {
+    override def setHighlighted(h: Boolean): Unit = {
         left.setHighlighted(h)
         right.setHighlighted(h)
         highlighted = h
@@ -226,7 +230,7 @@ case class ComplexForm(var left: Form, var right: Form, lambda: Lambda=new Lambd
     }
 
     
-    def paint(g: Graphics): Unit = {
+    override def paint(g: Graphics): Unit = {
         g.setColor(Color.BLACK)
         g.drawLine(center.x, center.y, left.center.x, left.center.y)
         g.setColor(Color.BLACK)

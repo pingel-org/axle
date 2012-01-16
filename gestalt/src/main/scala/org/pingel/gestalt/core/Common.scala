@@ -7,7 +7,7 @@ import java.io.Reader
 
 import org.pingel.gestalt.parser.GestaltParser
 import org.pingel.gestalt.parser.ParseException
-import org.pingel.gestalt.parser.StaticAnalyzingVisitor
+//import org.pingel.gestalt.parser.StaticAnalyzingVisitor
 import org.pingel.gestalt.parser.syntaxtree.Goal
 
 import scala.collection.mutable.ListBuffer

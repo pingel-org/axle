@@ -97,7 +97,7 @@ extends JPanel
 
     val serialVersionUID = 123123L
     
-    def paintComponent(g: Graphics): Unit = {
+    override def paintComponent(g: Graphics): Unit = {
         
         super.paintComponent(g)
         

@@ -1,333 +1,280 @@
 
-package org.pingel.gestalt.parser;
+package org.pingel.gestalt.core
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.Vector;
+import scala.collection._
+import org.pingel.gestalt.parser._
+import org.pingel.gestalt.parser.visitor.ObjectDepthFirst
 
-import org.pingel.gestalt.core.GLogger;
-import org.pingel.gestalt.core.Lambda;
-import org.pingel.gestalt.core.Name;
-import org.pingel.gestalt.core.TransformEdge;
-import org.pingel.gestalt.parser.syntaxtree.Application;
-import org.pingel.gestalt.parser.syntaxtree.Expression;
-import org.pingel.gestalt.parser.syntaxtree.Form;
-import org.pingel.gestalt.parser.syntaxtree.GSystem;
-import org.pingel.gestalt.parser.syntaxtree.Goal;
-import org.pingel.gestalt.parser.syntaxtree.Identifier;
-import org.pingel.gestalt.parser.syntaxtree.Include;
-import org.pingel.gestalt.parser.syntaxtree.Node;
-import org.pingel.gestalt.parser.syntaxtree.NodeSequence;
-import org.pingel.gestalt.parser.syntaxtree.Path;
-import org.pingel.gestalt.parser.syntaxtree.Statement;
-import org.pingel.gestalt.parser.syntaxtree.Substitution;
-import org.pingel.gestalt.parser.syntaxtree.Transform;
-import org.pingel.gestalt.parser.visitor.ObjectDepthFirst;
+class StaticAnalyzingVisitor(lexicon: Lexicon) extends ObjectDepthFirst {
 
-public class StaticAnalyzingVisitor extends ObjectDepthFirst {
+  var includes = new mutable.ListBuffer[String]()
 
-    public org.pingel.gestalt.core.Lexicon lexicon;
+  def getIncludes() = includes
 
-    private List<String> includes = new Vector<String>();
+  /**
+   * f0 -> ( Statement() )*
+   * f1 -> <EOF>
+   */
+  override def visit(n: syntaxtree.Goal, argu: Object): Object = { // done
 
-    public List<String> getIncludes()
-    {
-	return includes;
+    n.f0.accept(this, null);
+
+    return null;
+  }
+
+  /**
+   * f0 -> Transform()
+   *       | GSystem()
+   *       | Form()
+   *       | Include()
+   */
+  override def visit(n: syntaxtree.Statement, argu: Object): Object = { // done
+
+    n.f0.accept(this, null)
+
+    return null
+  }
+
+  /**
+   * f0 -> "include"
+   * f1 -> Identifier()
+   */
+  override def visit(n: syntaxtree.Include, argu: Object): Object = {
+
+    includes += n.f1.f0.toString()
+
+    return null;
+  }
+
+  /**
+   * f0 -> "rule"
+   * f1 -> Identifier()
+   * f2 -> Identifier()
+   * f3 -> Identifier()
+   * f4 -> "{"
+   * f5 -> ( Substitution() )*
+   * f6 -> "}"
+   * f7 -> ( "$" Identifier() )?
+   */
+  override def visit(n: syntaxtree.Transform, argu: Object): Object = {
+
+    var ruleName = new Name(n.f1.f0.toString())
+    var inName = new Name(n.f2.f0.toString())
+    var outName = new Name(n.f3.f0.toString())
+
+    var map = Map[Name, Name]() // Note: was TreeMap
+    n.f5.accept(this, map)
+
+    var cost = 0.0
+    if (n.f7.present) {
+      val ns = n.f7.node.asInstanceOf[syntaxtree.NodeSequence]
+      val costIdNode = ns.elementAt(1).asInstanceOf[syntaxtree.Identifier]
+      cost = costIdNode.f0.toString.toDouble
     }
 
-    public StaticAnalyzingVisitor(org.pingel.gestalt.core.Lexicon l)
-    {
-	this.lexicon = l;
+    var r = new SimpleTransform(inName, outName, map.toMap, cost) // note map conversion to immutable
+
+    lexicon.put(ruleName, r)
+
+    return null
+  }
+
+  /**
+   * f0 -> Identifier()
+   * f1 -> "/"
+   * f2 -> Identifier()
+   */
+  override def visit(n: syntaxtree.Substitution, argu: Object): Object = {
+
+    var map = argu.asInstanceOf[Map[Name, Name]]
+
+    val from = new Name(n.f0.f0.toString())
+    val to = new Name(n.f2.f0.toString())
+
+    GLogger.global.fine("adding " + from + "/" + to + " to substitution map")
+
+    map += from -> to
+
+    null
+  }
+
+  /**
+   * f0 -> "system"
+   * f1 -> Identifier()
+   * f2 -> Identifier()
+   * f3 -> "{"
+   * f4 -> ( Application() )*
+   * f5 -> "}"
+   * f6 -> "<"
+   * f7 -> ( Identifier() )*
+   * f8 -> ">"
+   */
+  override def visit(n: syntaxtree.GSystem, argu: Object): Object = {
+
+    val name = Name(n.f1.f0.toString())
+
+    val guardName = new Name(n.f2.f0.toString())
+
+    val t = new ComplexTransform(guardName)
+
+    //	StringLabeller labeller = GlobalStringLabeller.getLabeller(t);
+
+    var name2node = Map[Name, TransformVertex]() // Note: was TreeMap
+
+    val argDouble = (t, name2node)
+    n.f4.accept(this, argDouble)
+
+    var startNode = name2node(Name("in"))
+    startNode.setIsStart(true)
+    t.start = startNode
+
+    if (startNode == null) {
+      GLogger.global.severe("no input defined")
+      System.exit(1)
     }
 
-    /**
-     * f0 -> ( Statement() )*
-     * f1 -> <EOF>
-     */
-    public Object visit(Goal n, Object argu) { // done
+    var exitNames = Set[Name]()
+    n.f7.accept(this, exitNames)
 
+    var exitNodes = Set[TransformVertex]()
 
-	n.f0.accept(this, null);
+    var exit_it = exitNames.iterator
+    while (exit_it.hasNext) {
 
-	return null;
-    }
+      val eName = exit_it.next()
+      val eNode = name2node(eName)
+      eNode.setIsExit(true)
 
-    /**
-     * f0 -> Transform()
-     *       | GSystem()
-     *       | Form()
-     *       | Include()
-     */
-    public Object visit(Statement n, Object argu) { // done
-
-	n.f0.accept(this, null);
-
-	return null;
-    }
-
-    /**
-     * f0 -> "include"
-     * f1 -> Identifier()
-     */
-    public Object visit(Include n, Object argu) {
-	
-	includes.add(n.f1.f0.toString());
-
-	return null;
-    }
-
-    /**
-     * f0 -> "rule"
-     * f1 -> Identifier()
-     * f2 -> Identifier()
-     * f3 -> Identifier()
-     * f4 -> "{"
-     * f5 -> ( Substitution() )*
-     * f6 -> "}"
-     * f7 -> ( "$" Identifier() )?
-     */
-    public Object visit(Transform n, Object argu) {
-
-	org.pingel.gestalt.core.Name ruleName;
-	org.pingel.gestalt.core.Name inName;
-	org.pingel.gestalt.core.Name outName;
-
-	ruleName = new org.pingel.gestalt.core.Name(n.f1.f0.toString());
-	inName = new org.pingel.gestalt.core.Name(n.f2.f0.toString());
-	outName = new org.pingel.gestalt.core.Name(n.f3.f0.toString());
-
-	Map<org.pingel.gestalt.core.Name, org.pingel.gestalt.core.Name> map =
-        new TreeMap<org.pingel.gestalt.core.Name, org.pingel.gestalt.core.Name>();
-	n.f5.accept(this, map);
-
-	double cost = 0;
-	if( n.f7.present() ) {
-	    Node costIdNode = ((NodeSequence)(n.f7.node)).elementAt(1);
-	    cost = Double.parseDouble((((Identifier)costIdNode).f0).toString());
-	}
-	
-	org.pingel.gestalt.core.SimpleTransform r =
-	    new org.pingel.gestalt.core.SimpleTransform(inName, outName, map, cost);
-	
-	lexicon.put(ruleName, r);
-
-	return null;
-    }
-
-    /**
-     * f0 -> Identifier()
-     * f1 -> "/"
-     * f2 -> Identifier()
-     */
-    public Object visit(Substitution n, Object argu) {
-
-	Map<org.pingel.gestalt.core.Name, org.pingel.gestalt.core.Name> map = (Map<org.pingel.gestalt.core.Name, org.pingel.gestalt.core.Name>) argu;
-
-	org.pingel.gestalt.core.Name from = new org.pingel.gestalt.core.Name(n.f0.f0.toString());
-	org.pingel.gestalt.core.Name to = new org.pingel.gestalt.core.Name(n.f2.f0.toString());
-
-	GLogger.global.fine("adding " + from + "/" + to + " to substitution map");
-	
-	map.put(from, to);
-
-	return null;
-    }
-
-    /**
-     * f0 -> "system"
-     * f1 -> Identifier()
-     * f2 -> Identifier()
-     * f3 -> "{"
-     * f4 -> ( Application() )*
-     * f5 -> "}"
-     * f6 -> "<"
-     * f7 -> ( Identifier() )*
-     * f8 -> ">"
-     */
-    public Object visit(GSystem n, Object argu) {
-	
-	org.pingel.gestalt.core.Name name = new org.pingel.gestalt.core.Name(n.f1.f0.toString());
-
-	org.pingel.gestalt.core.Name guardName = new org.pingel.gestalt.core.Name(n.f2.f0.toString());
-
-	org.pingel.gestalt.core.ComplexTransform t =
-	    new org.pingel.gestalt.core.ComplexTransform(guardName);
-
-//	StringLabeller labeller = GlobalStringLabeller.getLabeller(t);
-
-	Map<org.pingel.gestalt.core.Name, org.pingel.gestalt.core.TransformVertex> name2node=
-        new TreeMap<org.pingel.gestalt.core.Name, org.pingel.gestalt.core.TransformVertex>();
-
-	Object[] a = {t, name2node};
-	n.f4.accept(this, a);
-
-	org.pingel.gestalt.core.TransformVertex startNode = name2node.get(new org.pingel.gestalt.core.Name("in"));
-	startNode.isStart(true);
-	t.start = startNode;
-
-	if( startNode == null ) {
-	    GLogger.global.severe("no input defined");
-	    System.exit(1);
-	}
-
-	Set<org.pingel.gestalt.core.Name> exitNames = new HashSet<org.pingel.gestalt.core.Name>();
-	n.f7.accept(this, exitNames);
-
-	Set<org.pingel.gestalt.core.TransformVertex> exitNodes = new HashSet<org.pingel.gestalt.core.TransformVertex>();
-
-	Iterator<org.pingel.gestalt.core.Name> exit_it = exitNames.iterator();
-	while( exit_it.hasNext() ) {
-
-	    org.pingel.gestalt.core.Name eName = exit_it.next();
-	    org.pingel.gestalt.core.TransformVertex eNode = name2node.get(eName);
-	    eNode.isExit(true);
-
-	    exitNodes.add(eNode);
-	    GLogger.global.info("marking " + eName.toString() + " as exit");
-
-	}
-
-	GLogger.global.info("registering transform " + name);
-	
-	lexicon.put(name, t);
-
-	GLogger.global.info("details:\n" + t.toString());
-	
-	return null;
-    }
-
-    /**
-     * f0 -> "apply"
-     * f1 -> Identifier()
-     * f2 -> Identifier()
-     * f3 -> ( Path() )?
-     * f4 -> Identifier()
-     */
-    public Object visit(Application n, Object argu) {
-        
-        Object[] arguList = (Object[]) argu;
-        
-        org.pingel.gestalt.core.ComplexTransform t = (org.pingel.gestalt.core.ComplexTransform) arguList[0];
-        Map<org.pingel.gestalt.core.Name, org.pingel.gestalt.core.TransformVertex> name2node =
-            (Map<org.pingel.gestalt.core.Name, org.pingel.gestalt.core.TransformVertex>) arguList[1];
-        
-        org.pingel.gestalt.core.Name transformName = new org.pingel.gestalt.core.Name(n.f1.f0.toString());
-        org.pingel.gestalt.core.Name inNodeName = new org.pingel.gestalt.core.Name(n.f2.f0.toString());
-        
-        org.pingel.gestalt.core.TransformVertex inNode = name2node.get(inNodeName);
-        if( inNode == null ) {
-            inNode = new org.pingel.gestalt.core.TransformVertex(inNodeName, false, false);
-            t.getGraph().addVertex(inNode);
-            name2node.put(inNodeName, inNode);
-        }
-
-        org.pingel.gestalt.core.Traversal traversal = null;
-        if( n.f3.present() ) {
-            traversal = (org.pingel.gestalt.core.Traversal) n.f3.accept(this, null);
-        }
-        
-        org.pingel.gestalt.core.Name outNodeName = new org.pingel.gestalt.core.Name(n.f4.f0.toString());
-        
-        org.pingel.gestalt.core.TransformVertex outNode = name2node.get(outNodeName);
-        if( outNode == null ) {
-            outNode = new org.pingel.gestalt.core.TransformVertex(outNodeName, false, false);
-            t.getGraph().addVertex(outNode);
-            name2node.put(outNodeName, outNode);
-        }
-
-        TransformEdge arc = new org.pingel.gestalt.core.TransformEdge(transformName, traversal, inNode, outNode);
-        t.getGraph().addEdge(arc);
-        
-        return null;
-    }
-
-    /**
-     * f0 -> "firm"
-     * f1 -> Identifier()
-     * f2 -> "["
-     * f3 -> ( Identifier() )*
-     * f4 -> "]"
-     * f5 -> Expression()
-     */
-    public Object visit(Form n, Object argu) { // done
-
-		org.pingel.gestalt.core.Name name = new org.pingel.gestalt.core.Name(n.f1.f0.toString());
-
-		TreeSet scopedVars = new TreeSet();
-		n.f3.accept(this, scopedVars);
-
-		GLogger.global.info("scoped vars for form " + name + " are " + scopedVars);
-		
-		org.pingel.gestalt.core.Form f = (org.pingel.gestalt.core.Form) n.f5.accept(this, scopedVars);
-      
-		lexicon.put(name, f);
-
-		return null;
-    }
-
-    /**
-     * f0 -> Identifier()
-     *       | "(" Expression() Expression() ")"
-     */
-    public Object visit(Expression n, Object argu) { // done
-
-		TreeSet<org.pingel.gestalt.core.Name> scopedVars = (TreeSet<org.pingel.gestalt.core.Name>) argu;
-
-        org.pingel.gestalt.core.Name top = new Name("top");
-        
-        Lambda lambda = new Lambda();
-        if( scopedVars != null ) {
-            for( org.pingel.gestalt.core.Name name : scopedVars ) {
-                lambda.add(name, top);
-            }
-        }
-        
-		if( n.f0.which == 0 ) {
-
-		    org.pingel.gestalt.core.Name aname = new org.pingel.gestalt.core.Name(((Identifier)(n.f0.choice)).f0.toString());
-            
-		    return new org.pingel.gestalt.core.SimpleForm(aname, lambda);
-
-		}
-		else {
-	    
-		    org.pingel.gestalt.core.Form s1 = 
-				(org.pingel.gestalt.core.Form)((NodeSequence)(n.f0.choice)).elementAt(1).accept(this, null);
-		    org.pingel.gestalt.core.Form s2 = 
-				(org.pingel.gestalt.core.Form)((NodeSequence)(n.f0.choice)).elementAt(2).accept(this, null);
-            
-		    return new org.pingel.gestalt.core.ComplexForm(s1, s2, lambda);
-		}
+      exitNodes += eNode
+      GLogger.global.info("marking " + eName.toString() + " as exit")
 
     }
 
-    /**
-     * f0 -> <PATH>
-     */
-    public Object visit(Path n, Object argu) { // done
-	
-	String pathString = n.f0.toString().substring(1);
+    GLogger.global.info("registering transform " + name)
 
-	return new org.pingel.gestalt.core.Traversal(pathString);
+    lexicon.put(name, t)
 
+    GLogger.global.info("details:\n" + t.toString())
+
+    return null
+  }
+
+  /**
+   * f0 -> "apply"
+   * f1 -> Identifier()
+   * f2 -> Identifier()
+   * f3 -> ( Path() )?
+   * f4 -> Identifier()
+   */
+  override def visit(n: syntaxtree.Application, argu: Object): Object = {
+
+    val argDouble = argu.asInstanceOf[Tuple2[ComplexTransform, Map[Name, TransformVertex]]]
+    val t = argDouble._1
+    var name2node = argDouble._2
+
+    val transformName = new Name(n.f1.f0.toString())
+    val inNodeName = new Name(n.f2.f0.toString())
+
+    var inNode = name2node(inNodeName)
+    if (inNode == null) {
+      inNode = new TransformVertex(inNodeName, false, false)
+      t.getGraph().addVertex(inNode)
+      name2node += inNodeName -> inNode
     }
 
-    /**
-     * f0 -> <IDENTIFIER>
-     */
-    public Object visit(Identifier n, Object argu) { // done
-
-	if( argu != null) {
-	    Set<org.pingel.gestalt.core.Name> s = (Set<org.pingel.gestalt.core.Name>) argu;
-	    s.add(new org.pingel.gestalt.core.Name(n.f0.toString()));
-	}
-
-	return null;
+    var traversal: Traversal = null
+    if (n.f3.present()) {
+      traversal = n.f3.accept(this, null).asInstanceOf[Traversal]
     }
+
+    val outNodeName = new Name(n.f4.f0.toString())
+
+    var outNode = name2node(outNodeName)
+    if (outNode == null) {
+      outNode = new TransformVertex(outNodeName, false, false)
+      t.getGraph().addVertex(outNode)
+      name2node += outNodeName -> outNode
+    }
+
+    val arc = new TransformEdge(transformName, traversal, inNode, outNode)
+    t.getGraph().addEdge(arc)
+
+    return null
+  }
+
+  /**
+   * f0 -> "firm"
+   * f1 -> Identifier()
+   * f2 -> "["
+   * f3 -> ( Identifier() )*
+   * f4 -> "]"
+   * f5 -> Expression()
+   */
+  override def visit(n: syntaxtree.Form, argu: Object): Object = { // done
+
+    val name = new Name(n.f1.f0.toString())
+
+    var scopedVars = Set()
+    n.f3.accept(this, scopedVars)
+
+    GLogger.global.info("scoped vars for form " + name + " are " + scopedVars)
+
+    val f = n.f5.accept(this, scopedVars).asInstanceOf[Form]
+
+    lexicon.put(name, f)
+
+    return null
+  }
+
+  /**
+   * f0 -> Identifier()
+   *       | "(" Expression() Expression() ")"
+   */
+  override def visit(n: syntaxtree.Expression, argu: Object): Object = { // done
+
+    var scopedVars = argu.asInstanceOf[Set[Name]]
+
+    val top = new Name("top")
+
+    val lambda = new Lambda()
+    if (scopedVars != null) {
+      for (name <- scopedVars) {
+        lambda.add(name, top)
+      }
+    }
+
+    if (n.f0.which == 0) {
+      val id = n.f0.choice.asInstanceOf[syntaxtree.Identifier]
+      val aname = new org.pingel.gestalt.core.Name(id.f0.toString())
+      return new SimpleForm(aname, lambda)
+    } else {
+      val ns = n.f0.choice.asInstanceOf[syntaxtree.NodeSequence]
+      val s1 = ns.elementAt(1).accept(this, null).asInstanceOf[Form]
+      val s2 = ns.elementAt(2).accept(this, null).asInstanceOf[Form]
+      return new ComplexForm(s1, s2, lambda)
+    }
+
+  }
+
+  /**
+   * f0 -> <PATH>
+   */
+  override def visit(n: syntaxtree.Path, argu: Object): Object = { // done
+    val pathString = n.f0.toString().substring(1)
+    return new Traversal(pathString)
+  }
+
+  /**
+   * f0 -> <IDENTIFIER>
+   */
+  override def visit(n: syntaxtree.Identifier, argu: Object): Object = { // done
+
+    if (argu != null) {
+      var s = argu.asInstanceOf[Set[Name]]
+      s += new Name(n.f0.toString())
+    }
+
+    return null
+  }
 
 }

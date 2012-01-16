@@ -11,7 +11,7 @@ extends LabelledDirectedEdge[TransformVertex]
     
     def getLabel() = transformName.base
     
-    def toString() = (traversal == null) match {
+    override def toString() = (traversal == null) match {
       case true  => "apply " + transformName + " " + source.toString() + " " + dest.toString()
       case false => "apply " + transformName + " " + source.toString() + "." + traversal + " " + dest.toString()
     }

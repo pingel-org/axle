@@ -31,7 +31,7 @@ case class FormFactory(archetype: Form) extends Widget {
 
     def getArchetype() = archetype
 
-    def toString() = archetype.getClass().getName() + " factory"
+    override def toString() = archetype.getClass().getName() + " factory"
 
     def mousePressed(e: MouseEvent, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Widget = {
         println("FormFactoryController.mousePressed")
