@@ -1,4 +1,4 @@
-package org.pingel.cattheory
+package org.pingel.category
 
 // see 
 // http://reperiendi.wordpress.com/2007/11/03/category-theory-for-the-java-programmer/

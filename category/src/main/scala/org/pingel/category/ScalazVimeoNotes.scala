@@ -1,4 +1,4 @@
-package org.pingel.cattheory
+package org.pingel.category
 
 // http://vimeo.com/10482466
 //

@@ -1,5 +1,5 @@
 
-package org.pingel.cattheory
+package org.pingel.category
 
 /*
  * These are my notes from Nick Partidge's presentation to the Melbourne Scala Users Group
@@ -276,6 +276,8 @@ object Step8 {
 
 }
 
+/*
+ 
 object Step9 {
 
   // Pull out a FoldLeft typeclass, using the same technique that we used for Monoid
@@ -627,3 +629,5 @@ object Step14 {
   }
 
 }
+
+*/

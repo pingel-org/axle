@@ -1,5 +1,5 @@
 
-package org.pingel.cattheory
+package org.pingel.category
 
 object CategoryTheory {
 

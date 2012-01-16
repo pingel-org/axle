@@ -1,5 +1,5 @@
 
-package org.pingel.cattheory.awoney
+package org.pingel.category.awoney
 
 object Examples {
 

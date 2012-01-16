@@ -1,5 +1,5 @@
 
-package org.pingel.cattheory
+package org.pingel.category
 
 // Type Classes in Scala: http://java.dzone.com/articles/scala-implicits-type-classes
 

@@ -1,4 +1,4 @@
-package org.pingel.cattheory
+package org.pingel.category
 
 import scalaz._
 import Scalaz._

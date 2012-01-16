@@ -2,6 +2,7 @@
 
 object Foo {
 
+/*
   trait Monad[M[_]] { // Note: was +M
     def unit[A](a: A): M[A]
     def bind[A, B](m: M[A])(f: A => M[B]): M[B]
@@ -21,5 +22,6 @@ object Foo {
 
     def bind[A, B](opt: Option[A])(f: A => Option[B]) = opt flatMap f
   }
+*/
   
 }

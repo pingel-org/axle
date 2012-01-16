@@ -1,5 +1,5 @@
 
-package org.pingel.cattheory
+package org.pingel.category
 
 // http://prezi.com/3yecwrcccpj-/monads-functors-functions-javascala/
 

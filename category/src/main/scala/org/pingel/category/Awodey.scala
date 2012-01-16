@@ -1,5 +1,5 @@
 
-package org.pingel.cattheory
+package org.pingel.category
 
 // TODO: produce latex images of these categories, arrows, objects, etc
 //   use one of the latex webservices
