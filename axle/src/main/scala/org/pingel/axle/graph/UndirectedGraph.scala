@@ -16,26 +16,19 @@ package org.pingel.axle.graph {
   import edu.uci.ics.jung.visualization.Layout
   import edu.uci.ics.jung.visualization.PluggableRenderer
 
-  /*
-  trait UndirectedGraphVertex[ET]
-
   trait UndirectedGraphEdge[VT] {
     def getVertices(): (VT, VT)
+    def other(v: VT): VT
+    def connects(v1: VT, v2: VT): Boolean
   }
 
-  trait UndirectedGraph[VT, ET] {
-    def addVertex(v: VT): VT
-    def addEdge(e: ET): ET
-    def getVertices(): Set[VT]
-    def getNeighbors(v: VT): Set[VT]
-    def getEdges(): Set[ET]
-    def draw(): Unit
-    def eliminate(v: VT): Unit
-    // def vertexWithFewestNeighborsAmong
-  }
-*/
+  trait UndirectedGraphVertex[E <: UndirectedGraphEdge[_]] {
 
-  class UndirectedGraphEdge[V](v1: V, v2: V) {
+    def getLabel(): String
+
+  }
+
+  class UndirectedGraphEdgeImpl[V](v1: V, v2: V) extends UndirectedGraphEdge[V] {
 
     def getVertices() = (v1, v2)
 
@@ -48,20 +41,16 @@ package org.pingel.axle.graph {
     }
   }
 
-  trait UndirectedGraphVertex[E <: UndirectedGraphEdge[_]] {
-
-    def getLabel(): String
-
-  }
-
-  abstract class UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGraphEdge[V]] {
+  trait UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGraphEdge[V]] 
+  {
 
     var vertices = scala.collection.mutable.Set[V]()
     var edges = scala.collection.mutable.Set[E]()
     var vertex2edges = scala.collection.mutable.Map[V, scala.collection.mutable.Set[E]]()
 
-    def addVertex(v: V) {
+    def addVertex(v: V): V = {
       vertices.add(v)
+      v
     }
 
     def getVertices() = vertices
@@ -72,7 +61,7 @@ package org.pingel.axle.graph {
 
     // dissertation idea: how best to have an "Edge" object without storing them
 
-    def addEdge(e: E) {
+    def addEdge(e: E): E = {
 
       // assume that this edge isn't already in our list of edges
 
@@ -84,8 +73,12 @@ package org.pingel.axle.graph {
 
       var es2 = getEdges(dble._2)
       es2.add(e)
+      
+      e
     }
 
+    def copyTo(other: UndirectedGraph[V, E]): Unit
+    
     def constructEdge(v1: V, v2: V): E
 
     def unlink(e: E): Unit = {
@@ -225,8 +218,6 @@ package org.pingel.axle.graph {
     }
 
     def getNeighbors(v: V) = getEdges(v).map({ _.other(v) }).toSet
-
-    def copyTo(other: UndirectedGraph[V, E]): Unit
 
     def delete(v: V) = {
       val es = getEdges(v)

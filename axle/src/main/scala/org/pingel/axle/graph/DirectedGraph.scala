@@ -3,44 +3,19 @@ package org.pingel.axle.graph {
 
   import scala.collection._
 
-/*
-  trait DirectedGraphVertex[ET]
+  trait DirectedGraphVertex[E]
 
-  trait DirectedGraphEdge[VT] {
-    def getSource(): VT
-    def getDest(): VT
+  trait DirectedGraphEdge[V] {
+    def getSource(): V
+    def getDest(): V
   }
-
-  trait DirectedGraph[VT, ET] {
-    def isAcyclic(): Boolean
-    def addVertex(v: VT): VT
-    def addEdge(e: ET): ET
-    def getVertices(): Set[VT]
-    def getEdges(): Set[ET]
-    def getNeighbors(v: VT): Set[VT]
-    def collectAncestors(v: VT, result: mutable.Set[VT])
-    def collectDescendants(v: VT, result: mutable.Set[VT])
-    def getPredecessors(v: VT): Set[VT]
-    def getSuccessors(v: VT): Set[VT]
-    def removeInputs(ins: Set[VT])
-    def removeOutputs(outs: Set[VT])
-    def draw(): Unit
-  }
-*/
-
-  class DirectedGraphEdge[V](source: V, dest: V) {
-
+  
+  class DirectedGraphEdgeImpl[V](source: V, dest: V) extends DirectedGraphEdge[V] {
     def getSource() = source
-
     def getDest() = dest
-
   }
 
-  trait DirectedGraphVertex[E] {
-
-  }
-
-  class DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
+  trait DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
 
     var vertices = scala.collection.mutable.Set[V]()
     var edges = scala.collection.mutable.Set[E]()
