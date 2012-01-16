@@ -3,7 +3,7 @@ package org.pingel.category.awodey
 
 object DiscreteMath {
 
-  import Enrichments._
+  import org.pingel.axle.Enrichments._
 
   object ℝ { }
 

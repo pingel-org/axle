@@ -1,5 +1,5 @@
 
-package org.pingel.category.awoney
+package org.pingel.category.awodey
 
 object Examples {
 
