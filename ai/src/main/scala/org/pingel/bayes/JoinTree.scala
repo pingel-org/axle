@@ -1,10 +1,10 @@
 package org.pingel.bayes;
 
 import scala.collection._
-import org.pingel.util.DirectedGraph
-import org.pingel.util.UndirectedGraph
-import org.pingel.util.UndirectedGraphEdge
-import org.pingel.util.UndirectedGraphVertex
+import org.pingel.axle.graph.DirectedGraph
+import org.pingel.axle.graph.UndirectedGraph
+import org.pingel.axle.graph.UndirectedGraphEdge
+import org.pingel.axle.graph.UndirectedGraphVertex
 
 class JoinTreeNode(name: String)
 extends UndirectedGraphVertex[JoinTreeEdge]

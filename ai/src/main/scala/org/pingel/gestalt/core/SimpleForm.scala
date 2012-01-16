@@ -4,7 +4,7 @@ import java.awt.Font
 import java.awt.Graphics
 import java.awt.Point
 
-import org.pingel.util.Printable
+import org.pingel.axle.util.Printable
 
 case class SimpleForm(name: Name, lambda: Lambda=new Lambda())
 extends Form(lambda)

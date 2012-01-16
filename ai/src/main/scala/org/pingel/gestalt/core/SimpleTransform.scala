@@ -1,7 +1,7 @@
 package org.pingel.gestalt.core
 
 import java.awt.Point
-import org.pingel.util.Printable
+import org.pingel.axle.util.Printable
 
 case class SimpleTransform(guardName: Name, outName: Name, map: Map[Name, Name], cost: Double)
 extends Transform(guardName)

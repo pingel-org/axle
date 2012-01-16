@@ -1,9 +1,9 @@
 package org.pingel.bayes
 
 import scala.collection._
-import org.pingel.util.UndirectedGraph
-import org.pingel.util.UndirectedGraphVertex
-import org.pingel.util.UndirectedGraphEdge
+import org.pingel.axle.graph.UndirectedGraph
+import org.pingel.axle.graph.UndirectedGraphVertex
+import org.pingel.axle.graph.UndirectedGraphEdge
 
 class EliminationTreeEdge(v1: EliminationTreeNode, v2: EliminationTreeNode)
 extends UndirectedGraphEdge[EliminationTreeNode]

@@ -4,7 +4,7 @@ package org.pingel.bayes
 //import scalala.tensor.mutable._
 //import scalala.tensor.dense._
 import scala.collection._
-import org.pingel.util.Matrix
+import org.pingel.axle.matrix.Matrix
 
 class PartiallyDirectedGraph(variables: List[RandomVariable]) {
 

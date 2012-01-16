@@ -1,6 +1,6 @@
 package org.pingel.bayes
 
-import org.pingel.util.UndirectedGraph
+import org.pingel.axle.graph.UndirectedGraph
 import scala.collection._
 
 class InteractionGraph extends UndirectedGraph[RandomVariable, VariableLink] {

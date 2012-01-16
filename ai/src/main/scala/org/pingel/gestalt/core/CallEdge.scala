@@ -8,7 +8,7 @@ import java.awt.Polygon
 import java.awt.event.MouseEvent
 
 import org.pingel.gestalt.ui.Widget
-import org.pingel.util.DirectedGraphEdge
+import org.pingel.axle.graph.DirectedGraphEdge
 
 case class CallEdge(id: Int, v1: CallVertex, v2: CallVertex, transformEdge: TransformEdge)
 extends DirectedGraphEdge[CallVertex]

@@ -6,7 +6,7 @@ import java.awt.Graphics2D
 import java.awt.Point
 import java.awt.geom.Ellipse2D
 
-import org.pingel.util.LabelledDirectedGraph
+import org.pingel.axle.graph.LabelledDirectedGraph
 
 abstract case class Transform(guardName: Name) extends Logos
 {

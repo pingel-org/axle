@@ -1,7 +1,7 @@
 package org.pingel.bayes
 
-import org.pingel.util.DirectedGraph
-import org.pingel.util.DirectedGraphEdge
+import org.pingel.axle.graph.DirectedGraph
+import org.pingel.axle.graph.DirectedGraphEdge
 
 class ModelGraph extends DirectedGraph[RandomVariable, ModelEdge]
 {

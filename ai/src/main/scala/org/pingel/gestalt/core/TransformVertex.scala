@@ -1,6 +1,6 @@
 package org.pingel.gestalt.core
 
-import org.pingel.util.DirectedGraphVertex
+import org.pingel.axle.graph.DirectedGraphVertex
 
 case class TransformVertex(name: Name, var isStart: Boolean, var isExit: Boolean)
 extends DirectedGraphVertex[TransformEdge]

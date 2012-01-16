@@ -2,8 +2,8 @@ package org.pingel.gestalt.core
 
 import scala.collection._
 
-import org.pingel.util.Printable
-import org.pingel.util.PrintableStringBuffer
+import org.pingel.axle.util.Printable
+import org.pingel.axle.util.PrintableStringBuffer
 
 class History {
 

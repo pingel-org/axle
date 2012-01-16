@@ -1,6 +1,6 @@
 package org.pingel.bayes
 
-import org.pingel.util.Matrix
+import org.pingel.axle.matrix.Matrix
 
 // import scalala.tensor.mutable._
 

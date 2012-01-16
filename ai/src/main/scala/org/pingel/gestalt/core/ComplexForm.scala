@@ -4,7 +4,7 @@ import java.awt.Color
 import java.awt.Graphics
 import java.awt.Point
 
-import org.pingel.util.Printable
+import org.pingel.axle.util.Printable
 
 case class ComplexForm(var left: Form, var right: Form, lambda: Lambda=new Lambda()) extends Form(lambda)
 {

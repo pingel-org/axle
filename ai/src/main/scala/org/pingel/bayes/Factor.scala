@@ -1,7 +1,7 @@
 package org.pingel.bayes
 
-import org.pingel.util.ListCrossProduct
-import org.pingel.util.Matrix
+import org.pingel.axle.iterator.ListCrossProduct
+import org.pingel.axle.matrix.Matrix
 import scala.collection._
 
 object Factor {

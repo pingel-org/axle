@@ -8,9 +8,9 @@ import java.awt.event.MouseEvent
 import java.awt.geom.Ellipse2D
 
 import org.pingel.gestalt.ui.Widget
-import org.pingel.util.DirectedGraph
-import org.pingel.util.Printable
-import org.pingel.util.PrintableStringBuffer
+import org.pingel.axle.graph.DirectedGraph
+import org.pingel.axle.util.Printable
+import org.pingel.axle.util.PrintableStringBuffer
 
 import scala.collection._
 

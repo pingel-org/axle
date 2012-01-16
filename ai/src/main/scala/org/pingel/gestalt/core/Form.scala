@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent
 import java.awt.geom.Ellipse2D
 import org.pingel.gestalt.ui.Widget
 import org.pingel.ptype.PType
-import org.pingel.util.Printable
+import org.pingel.axle.util.Printable
 
 abstract case class Form(lambda: Lambda=new Lambda())
 extends Logos

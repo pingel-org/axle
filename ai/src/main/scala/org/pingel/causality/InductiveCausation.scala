@@ -2,10 +2,8 @@
 package org.pingel.bayes
 
 import scala.collection._
-//import scalala.tensor.mutable._
-//import scalala.tensor.dense._
 
-import org.pingel.util._
+import org.pingel.axle.matrix.Matrix
 
 import org.pingel.ptype.PBooleans
 
@@ -21,7 +19,7 @@ class InductiveCausation(pHat: Distribution)
 	  
 		val G = new PartiallyDirectedGraph(varList)
 
-        var separators = new DenseMatrix[Set[RandomVariable]](varList.size, varList.size)
+        var separators = Matrix.dense[Set[RandomVariable]](varList.size, varList.size)
         
         for(i <- 0 to (varList.size - 2) ) {
             val a = varList(i)
@@ -45,11 +43,11 @@ class InductiveCausation(pHat: Distribution)
         }
 
         	for(i <- 0 to (varList.size - 2) ) {
-        		val a = varList.get(i)
+        		val a = varList(i)
         		val aNeighbors = G.links(a, null, null, null)
 
         		for( j <- (i+1) until varList.size ) {
-        			val b = varList.get(j)
+        			val b = varList(j)
         			if( ! G.areAdjacent(a, b) ) {
         				val S = separators.valueAt(i, j)
         				if( S != null ) {
@@ -136,7 +134,7 @@ class InductiveCausation(pHat: Distribution)
 
     	var applied = false
     	for( i <- 0 to (varList.size - 1) ) {
-    		val a = varList.get(i)
+    		val a = varList(i)
     		val aNeighbors = G.links(a, null, null, FALSE)
         	for( j <- 0 to (aNeighbors.size - 2) ) {
         		val c = aNeighbors(j)
@@ -204,7 +202,7 @@ class InductiveCausation(pHat: Distribution)
 
     	for( i <- 0 to (varList.size-1) ) {
 
-    		val a = varList.get(i)
+    		val a = varList(i)
 
     		val cList = G.links(a, None, Some(false), Some(true))
     		

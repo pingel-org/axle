@@ -1,9 +1,8 @@
 
-package org.pingel.util {
+package org.pingel.axle.graph {
 
   import scala.collection._
-  import java.lang.StringBuffer
-  
+
 	trait UndirectedGraphVertex[ET]
 
 	trait UndirectedGraphEdge[VT] {
@@ -17,6 +16,7 @@ package org.pingel.util {
 		def getNeighbors(v: VT): Set[VT]
 		def getEdges(): Set[ET]
 		def draw(): Unit
+		def eliminate(v: VT): Unit
 		// def vertexWithFewestNeighborsAmong
 	}
 
@@ -46,8 +46,22 @@ package org.pingel.util {
 	trait LabelledDirectedGraph[VT, ET] extends DirectedGraph[VT, ET]
 
 	trait LabelledDirectedEdge[VT] extends DirectedGraphEdge[VT]
-	
+  
+}
+
+package org.pingel.axle.matrix {
+
+  import scala.collection._
+
 	object Matrix {
+	  
+	  def sparse[T](numRows: Int, numCols: Int): Matrix[T] = {
+		null // TODO
+	  }
+	  
+	  def dense[T](numRows: Int, numCols: Int): Matrix[T] = {
+	    null // TODO
+	  }
 	  
 	  def zeros[T](numRows: Int, numCols: Int): Matrix[T] = {
 	    var result = new DenseMatrix[T](numRows, numCols)
@@ -69,13 +83,27 @@ package org.pingel.util {
 	  def numCols = nc
 	  // TODO: initialize
 	}
-	
+  
+  
+}
+
+package org.pingel.axle.iterator {
+
+  import scala.collection._
+
 	case class Lister()
 	case class ListCrossProduct[T](ts: Seq[Seq[T]])
 	case class CrossProduct[T]()
 	case class PowerSet()
 	case class Collector()
-	
+
+}
+
+package org.pingel.axle.util {
+
+  import scala.collection._
+  import java.lang.StringBuffer
+
 	trait Printable {
 	  def print(s: String=""): Unit
 	  def println(s: String=""): Unit

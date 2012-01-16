@@ -1,6 +1,6 @@
 package org.pingel.gestalt.core
 
-import org.pingel.util.LabelledDirectedEdge
+import org.pingel.axle.graph.LabelledDirectedEdge
 
 case class TransformEdge(transformName: Name, traversal: Traversal, source: TransformVertex, dest: TransformVertex)
 extends LabelledDirectedEdge[TransformVertex]

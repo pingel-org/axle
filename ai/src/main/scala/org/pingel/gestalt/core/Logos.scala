@@ -3,7 +3,7 @@ package org.pingel.gestalt.core
 
 import java.awt.Graphics
 import java.awt.Point
-import org.pingel.util.Printable
+import org.pingel.axle.util.Printable
 
 abstract class Logos {
 

@@ -1,7 +1,7 @@
 package org.pingel.gestalt.core;
 
 
-import org.pingel.util.Printable
+import org.pingel.axle.util.Printable
 
 import scala.collection._
 

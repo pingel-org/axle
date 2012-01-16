@@ -5,9 +5,9 @@ import scala.collection._
 import org.pingel.bayes.Model
 import org.pingel.ptype.PFunction
 
-import org.pingel.util.Collector
-import org.pingel.util.CrossProduct
-import org.pingel.util.PowerSet
+import org.pingel.axle.iterator.Collector
+import org.pingel.axle.iterator.CrossProduct
+import org.pingel.axle.iterator.PowerSet
 import org.pingel.bayes.RandomVariable
 
 class CausalModel(name: String)
