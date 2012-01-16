@@ -7,6 +7,7 @@ organization := "org.pingel"
 scalaVersion := "2.9.1"
 
 libraryDependencies ++= Seq(
+  "org.pingel" %% "gestalt" % "1.0",
   "org.pingel" %% "axle" % "1.0",
   "org.slf4j" % "slf4j-simple" % "1.6.1",
   "org.slf4j" % "slf4j-api" % "1.6.1",
