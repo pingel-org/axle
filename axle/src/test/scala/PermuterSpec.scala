@@ -6,6 +6,8 @@ import org.specs2.mutable._
 	  
 class PermuterSpec extends Specification {
 
+  import org.pingel.axle.iterator.Permuter
+  
   "Permuter" should {
 
     "Permute () 0" in {
