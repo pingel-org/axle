@@ -9,16 +9,15 @@ object Name {
   }
 }
 
-case class Name(var base: String=null) extends Comparable[Name]
-{
-	if( base == null ) {
-	  base = Name.nextName()
-	}
+case class Name(var base: String = null) extends Comparable[Name] {
+  if (base == null) {
+    base = Name.nextName()
+  }
 
-    override def toString() = base
+  override def toString() = base
 
-    def compareTo(other: Name) = base.compareTo(other.base)
-    
-    def equals(other: Name) = base.equals(other.base)
+  def compareTo(other: Name) = base.compareTo(other.base)
+
+  def equals(other: Name) = base.equals(other.base)
 
 }

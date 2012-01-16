@@ -4,8 +4,8 @@ import java.awt.Color
 
 case class Blank extends SimpleForm(new Name("?")) {
 
-	color = new Color(100, 200, 240)
+  color = new Color(100, 200, 240)
 
-	override def duplicate() = new Blank()
+  override def duplicate() = new Blank()
 
 }

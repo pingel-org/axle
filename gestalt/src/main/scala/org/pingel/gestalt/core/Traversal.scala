@@ -1,7 +1,6 @@
 package org.pingel.gestalt.core
 
-case class Traversal(var offset: String)
-{
+case class Traversal(var offset: String) {
   var chars = offset.toList
 
   override def toString = offset
