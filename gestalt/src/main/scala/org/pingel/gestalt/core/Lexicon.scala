@@ -8,7 +8,7 @@ case class Lexicon {
   var name2object = mutable.Map[Name, Logos]()
   var object2name = mutable.Map[Logos, Name]() // this may be buggy
 
-  var formFactories = mutable.Set[FormFactory]()
+  var formFactories = mutable.Set[FormFactory[Form]]()
   var transformFactories = mutable.Set[TransformFactory]()
 
   def put(name: Name, o: Logos): Unit = {
@@ -28,7 +28,7 @@ case class Lexicon {
 
   def addFactories(): Unit = {
     for (form <- getTopForms()) {
-      formFactories.add(new FormFactory(form))
+      formFactories.add(new DynamicFormFactory(form))
     }
 
     for (t <- getTransforms()) {
@@ -40,10 +40,10 @@ case class Lexicon {
     val cf = new ComplexForm(leftBlank, rightBlank)
     leftBlank.setParent(cf)
     rightBlank.setParent(cf)
-    formFactories.add(new FormFactory(cf))
+    formFactories.add(new DynamicFormFactory(cf))
   }
 
-  def addFormFactory(ff: FormFactory): Unit = {
+  def addFormFactory(ff: FormFactory[Form]): Unit = {
     formFactories.add(ff)
   }
 

@@ -21,7 +21,7 @@ case class DoubleValue(value: Double)
     case _ => false
   }
 
-  def compareTo(other: Form) = other match {
+  override def compareTo(other: Form) = other match {
     case dv: DoubleValue => value.compareTo(dv.value)
     case _ => -1
   }

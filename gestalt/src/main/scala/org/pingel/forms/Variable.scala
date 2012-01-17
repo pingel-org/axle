@@ -4,13 +4,13 @@ package org.pingel.forms
 import org.pingel.gestalt.core.FormFactory
 import org.pingel.gestalt.core.PType
 
-trait Variable extends PType {
-  def getName(): String
-}
+//trait Variable extends PType {
+//  def getName(): String
+//}
+
+class Variable(name: String) // extends FormFactory {}
 
 /*
-class Variable(name: String) extends FormFactory {}
-
 class DVariable(name: String, domain: PType) extends Variable(name) {}
 
 class RVVariable(name: String, rv: RandomVariable) extends Variable(name) {

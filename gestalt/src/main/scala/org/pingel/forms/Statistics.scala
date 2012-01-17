@@ -4,10 +4,13 @@ import org.pingel.gestalt.core.ComplexForm
 import org.pingel.gestalt.core.FormFactory
 import org.pingel.gestalt.core.Lambda
 import org.pingel.gestalt.core.Name
+import org.pingel.gestalt.core.Form
 import org.pingel.gestalt.core.SimpleForm
 
 object Statistics {
 
+/*  
+  
   object CorrelationCoefficient extends FormFactory {
 
     //    RandomVariable X;
@@ -69,8 +72,8 @@ object Statistics {
 
   object Covariance extends FormFactory {
 
-    //    RandomVariable X;
-    //    RandomVariable Y;
+    // RandomVariable X;
+    // RandomVariable Y;
 
     val X = new Name("X")
     val Y = new Name("Y")
@@ -182,7 +185,8 @@ object Statistics {
       this.expectors = expectors
       if (condition == null) {
         this.condition = Set[Variable]()
-      } else {
+      }
+      else {
         this.condition = condition
       }
       this.exp = exp
@@ -216,7 +220,7 @@ object Statistics {
 
   object LittleSigma extends FormFactory {
 
-    //    RandomVariable X;
+    // RandomVariable X;
 
     val X = new Name("X")
     val lambda = new Lambda()
@@ -325,5 +329,6 @@ object Statistics {
     //    }
 
   }
-
+*/
+  
 }

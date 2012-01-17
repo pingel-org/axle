@@ -4,7 +4,9 @@ import java.awt.Point
 import java.awt.event.MouseEvent
 import org.pingel.gestalt.ui.Widget
 
-trait FormFactory extends Widget {
+class DynamicFormFactory(override val archetype: Form) extends FormFactory[Form] { }
+
+trait FormFactory[F <: Form] extends Widget {
 
   val archetype: Form
   
