@@ -158,8 +158,9 @@ For example: In choosing the "matrix" is a core concept, Matlab necessarily make
 other data types more difficult to support.
 
 The constraints are both theoretical and technical.
-This is an active area of computer science research.
-[for example](http://www.cs.cornell.edu/~jnfoster/papers/grace-report.pdf)
+This is an active area of computer science research
+(eg [example](http://www.cs.cornell.edu/~jnfoster/papers/grace-report.pdf) )
+.
 A deeper understanding of bidirectional transformations and Category Theory
 may help resolve resolve some of this tension.
 
