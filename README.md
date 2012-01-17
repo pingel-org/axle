@@ -43,14 +43,14 @@ My goal is to make the examples in "Learn You a Haskell for Great Good" work
 using a syntax as similar to Haskell as possible using Scala.
 
 
-Category Theory (org.pingel.cattheory)
+Category Theory (org.pingel.category)
 --------------------------------------
 
 Working towards the typeclass hierarchy of Haskell (in Scala) from a
 category theoretic point of view.
 
 
-Game Theory (org.pingel.gametheory)
+Game Theory (org.pingel.game)
 -----------------------------------
 
 A placeholder project for modelling a range of games.
@@ -61,7 +61,6 @@ Gestalt
 
 A sandbox for experimentation with visual programming/authoring,
 and programming language design.
-
 
 Linguistics (org.pingel.linguistics)
 ------------------------------------
