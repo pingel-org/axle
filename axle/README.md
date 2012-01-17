@@ -30,6 +30,7 @@ Tutorial
 
 To be written.  It will contain examples of:
 
+* Streamline imports
 * Functor, ApplicativeFunctor, Monoid, Monad, ...
 * DirectedGraph
 * UndirectedGraph

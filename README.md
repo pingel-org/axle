@@ -6,17 +6,18 @@ Models for a variety of domains including: linguistics,
 artificial intelligence, (interactive) data visualization, and Category Theory.
 Implemented in Scala.
 
+This project is both an attempt use modern tools to aid the author's own understanding,
+as well as an attempt to build tools for other students of these subjects.
+
 Status
 ------
 
-This project is both an attempt use modern tools to aid the authors own
- understanding,
-as well as an attempt to build tools for other students of these subjects.
-It should be considered pre-alpha, and will likely remain in that state
-throughout 2012 and probably well beyond that.
-Much of the code is undergoing rapid transformation (being rewritten from
-java, perl, and python).
+Pre-alpha. 
+It should be considered pre-alpha, and will likely remain in that state throughout 2012 and probably
+well beyond that.
+Much of the code is undergoing rapid transformation (being rewritten from java, perl, and python).
 This status will be updated as the code matures.
+No public jars are maintained.
 
 License
 -------
@@ -27,62 +28,54 @@ To be written.
 Projects
 ========
 
-
 Artificial Intelligence (org.pingel.{bayes,causality})
 --------------------------------------------------------------
 
 Bayesian Networks and Causality.
-Not quite yet buildable.
 
 
 Axle (org.pingel.axle)
 ----------------------
 
 An attempt to implement a Haskell-like language as an internal DSL in Scala.
-My goal is to make the examples in "Learn You a Haskell for Great Good" work
-using a syntax as similar to Haskell as possible using Scala.
+The examples in "Learn You a Haskell for Great Good" work using a syntax as similar
+to Haskell as possible using Scala.
+This project also includes useful data structures for graphs and matrices and enrichments to
+other standard Scala datatypes.
 
 
 Category Theory (org.pingel.category)
 --------------------------------------
 
-Working towards the typeclass hierarchy of Haskell (in Scala) from a
-category theoretic point of view.
+"A monad is a monoid in the category of endofunctors."
+
+Early sketch of my reading of a book on Category Theory.
 
 
 Game Theory (org.pingel.game)
 -----------------------------------
 
-A placeholder project for modelling a range of games.
+A placeholder project for modelling a range of games and a general model of Game Theory.
 
 
 Gestalt
 -------
 
-A sandbox for experimentation with visual programming/authoring,
-and programming language design.
+A sandbox for experimentation with visual programming and programming language design.
+
 
 Linguistics (org.pingel.linguistics)
 ------------------------------------
 
-Gold Paradigm and Angluin's Language Learner.
+The Gold Paradigm and Angluin's Language Learner.
 
 
 python2json
 -----------
 
-This file will take any python 2.6 (or less) file
-and return a json document that represents the
+Takes any python 2.6 (or older) file and return a json document that represents the
 abstract syntax tree.
-This is part of a larger project on source code
-search algorithms.
-
-
-Utilities and Common Data Structures (org.pingel.util)
-------------------------------------------------------
-
-Directed and Undirected Graphs.
-Collections like PowerSet, Permutation, etc.
+This is part of a larger project on source code search algorithms.
 
 
 Philosophy
@@ -149,8 +142,6 @@ are secondary goals.
 Theory
 ------
 
-(This section will eventually be updated with more concrete examples.)
-
 There are a couple of reasons why this kind of project is difficult.
 
 The first is that without the resources to hire engineers to craft new
@@ -181,6 +172,9 @@ their own kind of "tyranny".
 Care has been taken to choose conceptual pillars that cover a wide range of 
 ideas without introducing unnecessary inconsistencies or impedance mismatches.
 
+(This section will eventually be updated with more concrete examples.)
+
+
 History
 -------
 
@@ -193,6 +187,7 @@ promise to solve some of those modelling difficulties.
 
 As computer science evolves these packages will be udpated to make use of
 helpful new tools and techniques wherever possible.
+
 
 About the Author
 ----------------
