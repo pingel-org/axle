@@ -47,15 +47,15 @@ class AdjustForDirectCauses extends Rule {
 		
 		val sigmaFactory = new Sigma()
         val unifier = new Unifier()
-        unifier.bind(sa1, parentObservations)
+        unifier.put(sa1, parentObservations)
 
         val productFactory = new Product()
         val productUnifier = new Unifier()
-        productUnifier.bind(pa1, first)
-        productUnifier.bind(pa2, second)
+        productUnifier.put(pa1, first)
+        productUnifier.put(pa2, second)
         val product = productFactory.createForm(unifier)
 
-        unifier.bind(sa2, product)
+        unifier.put(sa2, product)
         sigmaFactory.createForm(unifier)
 	}
 	

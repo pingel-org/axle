@@ -12,7 +12,7 @@ object Direction {
 
 }
 
-case class Model(name: String="no name") {
+case class Model(var name: String="no name") {
 	
   var graph = new ModelGraph()
   var newVarIndex = 0
@@ -59,7 +59,7 @@ case class Model(name: String="no name") {
   def numVariables(): Int = variables.size
 	
   def blocks(from: Set[RandomVariable], to: Set[RandomVariable], given: Set[RandomVariable]): Boolean = {
-    val path = _findOpenPath(Map[RandomVariable, Set[RandomVariable]](), Direction.UNKNOWN, null, from, to, given)
+    val path = _findOpenPath(Map[RandomVariable, Set[RandomVariable]](), Direction.UNKNOWN, null, from.toSet, to, given)
     path == null
   }
 	
