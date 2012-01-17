@@ -27,3 +27,53 @@ This project may also eventually include what is currently in my "util" package.
 This depends on whether I think I think those data structures can neatly
 fit into whatever emerges at the Axle design philosophy.
 I don't want to encumber "util" with too much arbitrary opinion.
+
+Tutorial
+--------
+
+To be written.  It will contain examples of:
+
+* DirectedGraph
+* UndirectedGraph
+* PowerSet
+* etc...
+
+```scala
+
+import org.pingel.axle.graph.UndirectedGraph
+import org.pingel.axle.graph.UndirectedGraphVertex
+import org.pingel.axle.graph.UndirectedGraphEdge
+
+class EliminationTreeEdge(v1: EliminationTreeNode, v2: EliminationTreeNode)
+extends UndirectedGraphEdge[EliminationTreeNode]
+{
+	def getVertices() = (v1, v2)
+}
+
+class EliminationTreeNode(label: String)
+extends UndirectedGraphVertex[EliminationTreeEdge]
+{
+  def getLabel(): String = label
+
+}
+
+
+class EliminationTree
+extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
+{
+   ...
+}
+
+```
+
+To Do
+-----
+
+* Specs
+* Separate Jung and AWT references from core library
+* Write tutorial
+
+
+
+
+
