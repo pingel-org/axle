@@ -4,7 +4,6 @@ package org.pingel.bayes.examples
 import org.pingel.ptype.PBooleans
 import org.pingel.bayes.BayesianNetwork
 import org.pingel.bayes.Case
-import org.pingel.bayes.Domain
 import org.pingel.bayes.EliminationTree
 import org.pingel.bayes.EliminationTreeNode
 import org.pingel.bayes.Factor
@@ -13,7 +12,8 @@ import org.pingel.bayes.JoinTree
 import org.pingel.bayes.JoinTreeNode
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
-import org.pingel.bayes.Value
+import org.pingel.gestalt.core.Domain
+import org.pingel.gestalt.core.Value
 
 object ScalaFigures {
 

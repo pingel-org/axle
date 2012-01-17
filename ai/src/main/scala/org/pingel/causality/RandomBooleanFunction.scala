@@ -3,9 +3,9 @@ package org.pingel.causality
 
 import org.pingel.bayes.Case
 import org.pingel.bayes.RandomVariable
-import org.pingel.bayes.Value
-import org.pingel.ptype.PBooleansValues
-import org.pingel.ptype.PFunction
+import org.pingel.gestalt.core.Value
+import org.pingel.forms.Basic.PBooleansValues
+import org.pingel.forms.Basic.PFunction
 
 class RandomBooleanFunction(rv: RandomVariable, p: Double) extends PFunction(rv, Nil) {
 

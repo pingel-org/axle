@@ -1,5 +1,8 @@
 package org.pingel.bayes
 
+import org.pingel.gestalt.core.Value
+
+
 // OLD VERSION HAD THESE DATA MEMBERS IN CONSTRUCTOR:
 // rv: RandomVariable, value: Value
 

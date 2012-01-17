@@ -2,15 +2,15 @@ package org.pingel.causality.examples;
 
 import org.pingel.bayes.Case
 import org.pingel.causality.CausalModel
-import org.pingel.bayes.Domain
+import org.pingel.gestalt.core.Domain
 import org.pingel.causality.Function
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
 import org.pingel.causality.RandomBooleanFunction
 import org.pingel.gestalt.core.Form
-import org.pingel.ptype.PBooleans
-import org.pingel.ptype.PBooleansValues
-import org.pingel.ptype.PFunction
+import org.pingel.forms.Basic.PBooleans
+import org.pingel.forms.Basic.PBooleansValues
+import org.pingel.forms.Basic.PFunction
 
 class XorOrFunction(variable: RandomVariable, in1: RandomVariable, in2: RandomVariable, in3: RandomVariable)
 extends PFunction(variable, List(in1, in2, in3))

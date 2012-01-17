@@ -2,7 +2,7 @@
 package org.pingel.forms
 
 import org.pingel.gestalt.core.FormFactory
-import org.pingel.ptype.PType
+import org.pingel.gestalt.core.PType
 
 trait Variable extends PType {
   def getName(): String

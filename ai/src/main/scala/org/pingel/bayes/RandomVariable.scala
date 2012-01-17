@@ -4,6 +4,8 @@ import org.pingel.axle.graph.DirectedGraphVertex
 import org.pingel.axle.graph.UndirectedGraphVertex
 import org.pingel.ptype.PType
 import org.pingel.forms.Variable
+import org.pingel.gestalt.core.Value
+import org.pingel.gestalt.core.Domain
 
 case class RandomVariable(name: String, domain: Option[Domain]=None, observable: Boolean=true)
 extends Variable

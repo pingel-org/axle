@@ -7,8 +7,8 @@ import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
 import org.pingel.bayes.VariableNamer
 import org.pingel.forms.Variable
-import org.pingel.forms.math.Product
-import org.pingel.forms.math.Sigma
+import org.pingel.forms.Math.Product
+import org.pingel.forms.Math.Sigma
 import org.pingel.gestalt.core.Form
 import org.pingel.gestalt.core.Unifier
 

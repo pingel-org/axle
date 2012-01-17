@@ -5,7 +5,7 @@
 package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
-import org.pingel.ptype.PFunction
+import org.pingel.forms.Basic.PFunction
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
 

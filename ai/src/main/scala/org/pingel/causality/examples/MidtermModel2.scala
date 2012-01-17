@@ -2,16 +2,14 @@ package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
 import org.pingel.bayes.Distribution
-import org.pingel.bayes.Domain
-import org.pingel.ptype.PFunction
+import org.pingel.gestalt.core.Domain
+import org.pingel.forms.Basic.PFunction
 import org.pingel.bayes.InductiveCausation
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.PartiallyDirectedGraph
 import org.pingel.bayes.RandomVariable
 import org.pingel.causality.PerfectDistribution
-import org.pingel.ptype.PBooleans
-
-
+import org.pingel.forms.Basic.PBooleans
 
 object MidtermModel2 extends CausalModel("Midterm Model 2") {
 
@@ -45,5 +43,5 @@ object MidtermModel2 extends CausalModel("Midterm Model 2") {
     val search = new InductiveCausation(distribution)
     val g = search.ic()
   }
-    
+
 }

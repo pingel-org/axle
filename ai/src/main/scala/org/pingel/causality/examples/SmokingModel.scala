@@ -1,7 +1,7 @@
 package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
-import org.pingel.ptype.PFunction
+import org.pingel.forms.Basic.PFunction
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
@@ -10,8 +10,8 @@ import org.pingel.causality.docalculus.ActionToObservation
 import org.pingel.causality.docalculus.DeleteAction
 import org.pingel.causality.docalculus.ObservationToAction
 import org.pingel.forms.Variable
-import org.pingel.forms.math.Product
-import org.pingel.forms.math.Sigma
+import org.pingel.forms.Math.Product
+import org.pingel.forms.Math.Sigma
 import org.pingel.gestalt.core.Form
 
 object SmokingModel extends CausalModel("Smoking Model") {

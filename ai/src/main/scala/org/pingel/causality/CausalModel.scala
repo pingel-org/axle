@@ -3,9 +3,9 @@ package org.pingel.causality
 
 import scala.collection._
 import org.pingel.bayes.Model
-import org.pingel.ptype.PFunction
+import org.pingel.forms.Basic.PFunction
 
-import org.pingel.axle.iterator.Collector
+import org.pingel.axle.util.Collector
 import org.pingel.axle.iterator.CrossProduct
 import org.pingel.axle.iterator.PowerSet
 import org.pingel.bayes.RandomVariable
@@ -190,7 +190,7 @@ extends Model(name) {
 			}
 		}
 		answer.variable2function = mutable.Map[RandomVariable, PFunction]()
-        answer.variable2function.putAll(variable2function)
+        answer.variable2function ++= variable2function
 		answer
 	}
 	

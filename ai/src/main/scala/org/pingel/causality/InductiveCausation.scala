@@ -5,7 +5,7 @@ import scala.collection._
 
 import org.pingel.axle.matrix.Matrix
 
-import org.pingel.ptype.PBooleans
+import org.pingel.forms.Basic.PBooleans
 
 class InductiveCausation(pHat: Distribution)
 {

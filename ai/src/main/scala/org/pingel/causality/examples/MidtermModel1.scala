@@ -1,15 +1,15 @@
 package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
-import org.pingel.bayes.Domain
+import org.pingel.gestalt.core.Domain
 import org.pingel.causality.Function
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.Probability
 import org.pingel.bayes.RandomVariable
 import org.pingel.bayes.VariableNamer
 import org.pingel.forms.Variable
-import org.pingel.ptype.PBooleans
-import org.pingel.ptype.PFunction
+import org.pingel.forms.Basic.PBooleans
+import org.pingel.forms.Basic.PFunction
 
 object MidtermModel1 extends CausalModel("Midterm Model 1")
 {

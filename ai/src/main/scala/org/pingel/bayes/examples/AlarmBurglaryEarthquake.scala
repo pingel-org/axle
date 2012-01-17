@@ -3,18 +3,17 @@ package org.pingel.bayes.examples
 import scala.collection._
 import org.pingel.bayes.BayesianNetwork
 import org.pingel.bayes.Case
-import org.pingel.bayes.Domain
+import org.pingel.gestalt.core.Domain
 import org.pingel.bayes.Factor
 import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
-import org.pingel.ptype.PBooleans
+import org.pingel.forms.Basic.PBooleans
+import org.pingel.forms.Basic.PBooleansValues._
 
 object AlarmBurglaryEarthquake {
 
 	def main(args: Array[String]) {
-		
-	  import org.pingel.ptype.PBooleansValues._
-	  
+
 		var bn = new BayesianNetwork()
 		
 		var bools = Some(new PBooleans())

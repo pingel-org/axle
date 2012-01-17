@@ -2,6 +2,7 @@ package org.pingel.bayes
 
 import org.pingel.axle.iterator.ListCrossProduct
 import org.pingel.axle.matrix.Matrix
+import org.pingel.gestalt.core.Value
 import scala.collection._
 
 object Factor {
