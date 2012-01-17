@@ -6,9 +6,9 @@ An attempt to implement a Haskell-like language as an internal DSL in Scala.
 
 The three main contributions are:
 
-# Haskell-like typeclasses
-# Data structures like (un)directed graphs and matrices
-# Enrichments to Boolean and Set
+1. Haskell-like typeclasses
+1. Data structures like (un)directed graphs and matrices
+1. Enrichments to Boolean and Set
 
 The examples in "Learn You a Haskell for Great Good" should be expressible
 with a syntax as similar to Haskell as possible -- but in Scala.
