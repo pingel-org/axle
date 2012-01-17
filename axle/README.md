@@ -4,39 +4,37 @@ Axle (org.pingel.axle)
 
 An attempt to implement a Haskell-like language as an internal DSL in Scala.
 
-My goal is to make the examples in "Learn You a Haskell for Great Good" work
-using a syntax as similar to Haskell as possible using Scala.
+The three main contributions are:
 
-In particular, I would like typeclasses like Functor, Applicative Functor,
-Monoid, and Monad to be modelled explicitely.
+# Haskell-like typeclasses
+# Data structures like (un)directed graphs and matrices
+# Enrichments to Boolean and Set
 
+The examples in "Learn You a Haskell for Great Good" should be expressible
+with a syntax as similar to Haskell as possible -- but in Scala.
+Typeclasses like Functor, Applicative Functor, Monoid, and Monad are modelled explicitely.
 This is similar to the goal of the Scalaz project.
-One notable exception is that I would like to preserve little syntactic details
-like the order of arguments to "fmap".
+One exception is that little syntactic details like the order of arguments to "fmap"
+are the same as in Haskell.
 
-I would/will also enjoy thinking through the Scala->Haskell mapping on my own,
-since I don't fully understand Scala, Haskell, or Scalaz's choice of mapping
-concepts between them.
-Forcing myself to learn about all of these from scratch should substantially
-deepen my understanding of all those subjects.
+Future versions may include examples of Miles Sabin's work with HList, including his Shapeless project.
 
-I would also like to include some examples of Miles Sabin's work with HList,
-including his Shapeless project.
+Status
+------
 
-This project may also eventually include what is currently in my "util" package.
-This depends on whether I think I think those data structures can neatly
-fit into whatever emerges at the Axle design philosophy.
-I don't want to encumber "util" with too much arbitrary opinion.
+Still under active development.
+
 
 Tutorial
 --------
 
 To be written.  It will contain examples of:
 
+* Functor, ApplicativeFunctor, Monoid, Monad, ...
 * DirectedGraph
 * UndirectedGraph
 * PowerSet
-* etc...
+* Set and Boolean enrichments
 
 ```scala
 
@@ -70,6 +68,7 @@ To Do
 -----
 
 * Specs
+* Family polymorphism (with self types) for DG and UG families
 * Separate Jung and AWT references from core library
 * Write tutorial
 
