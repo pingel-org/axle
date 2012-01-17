@@ -4,14 +4,15 @@ import java.awt.Point
 import java.awt.event.MouseEvent
 import org.pingel.gestalt.ui.Widget
 
-case class FormFactory(archetype: Form) extends Widget {
+trait FormFactory extends Widget {
 
-  // removed during scalification:
-  // public FormFactory(){}
+  val archetype: Form
+  
+  def getArchetype() = archetype
 
   def createForm(): Form = {
     // This is called by mousePressed
-    var f = archetype.duplicate()
+    var f = getArchetype.duplicate()
     f.arrange(getArchetype().getCenter())
     f.setDetachable(true)
     f
@@ -29,9 +30,7 @@ case class FormFactory(archetype: Form) extends Widget {
   //        return null;
   //    }
 
-  def getArchetype() = archetype
-
-  override def toString() = archetype.getClass().getName() + " factory"
+  override def toString() = getArchetype.getClass().getName() + " factory"
 
   def mousePressed(e: MouseEvent, history: History, lookupLexicon: Lexicon, newLexicon: Lexicon): Widget = {
     println("FormFactoryController.mousePressed")
