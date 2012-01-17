@@ -53,13 +53,13 @@ Early sketch of my reading of a book on Category Theory.
 
 
 Game Theory (org.pingel.game)
------------------------------------
+-----------------------------
 
 A placeholder project for modelling a range of games and a general model of Game Theory.
 
 
-Gestalt
--------
+Gestalt (org.pingel.gestalt)
+----------------------------
 
 A sandbox for experimentation with visual programming and programming language design.
 
@@ -84,16 +84,14 @@ Philosophy
 There is a lot to know.
 
 In 1910 Russel and Whitehead published the first of three volumes of their
-"Principia Mathematica",
+["Principia Mathematica"](http://en.wikipedia.org/wiki/Principia_Mathematica),
 which was an attempt to "derive all mathematical truths from a well-defined set
 of axioms and inference rules in symbolic logic. [...] 
-A fourth volume on the foundations of geometry had been planned, but the authors admitted to intellectual exhaustion upon completion of the third.
-"
-(http://en.wikipedia.org/wiki/Principia_Mathematica).
+A fourth volume on the foundations of geometry had been planned, but the authors admitted to intellectual exhaustion upon completion of the third."
 
-Some claim that John von Neumann (who died in 1957) was the last human to
-master all branches of mathematics.
-(See http://en.wikipedia.org/wiki/John_von_Neumann).
+
+Some [claim](http://en.wikipedia.org/wiki/John_von_Neumann) that John von Neumann
+(who died in 1957) was the last human to master all branches of mathematics.
 For decades, it has been clear to college freshmen planning a degree
 that only a small portion of all knowledge could be studied, let alone mastered.
 
@@ -161,7 +159,7 @@ other data types more difficult to support.
 
 The constraints are both theoretical and technical.
 This is an active area of computer science research.
-For example see: http://www.cs.cornell.edu/~jnfoster/papers/grace-report.pdf
+[for example](http://www.cs.cornell.edu/~jnfoster/papers/grace-report.pdf)
 A deeper understanding of bidirectional transformations and Category Theory
 may help resolve resolve some of this tension.
 
