@@ -5,14 +5,14 @@ Artificial Intelligence (org.pingel.{bayes,causality})
 Bayesian Networks (org.pingel.bayes)
 ------------------------------------
 
-See [ScalaFigures](src/main/scala/org/pingel/bayes/examples/ScalaFigures.scala) for example usage.
+See [ScalaFigures](ai/src/main/scala/org/pingel/bayes/examples/ScalaFigures.scala) for example usage.
 
 
 Causality (org.pingel.causality)
 --------------------------------
 
-[Do-Calculus](src/main/scala/org/pingel/causality/docalculus/),
-[Smoking Model](src/main/scala/org/pingel/causality/examples/SmokingModel.scala),
+[Do-Calculus](ai/src/main/scala/org/pingel/causality/docalculus/),
+[Smoking Model](ai/src/main/scala/org/pingel/causality/examples/SmokingModel.scala),
 etc.
 
 Notes from Judea Pearl's class on "Causality".
