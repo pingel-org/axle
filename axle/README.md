@@ -22,7 +22,7 @@ Future versions may include examples of Miles Sabin's work with HList, including
 Status
 ------
 
-Still under active development.
+Pre-alpha.  Still under active development.  No public jar is maintained.
 
 
 Tutorial
