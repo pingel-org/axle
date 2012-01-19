@@ -44,9 +44,9 @@ package org.pingel.axle.graph {
   trait UndirectedGraph[V <: UndirectedGraphVertex[E], E <: UndirectedGraphEdge[V]] 
   {
 
-    var vertices = scala.collection.mutable.Set[V]()
-    var edges = scala.collection.mutable.Set[E]()
-    var vertex2edges = scala.collection.mutable.Map[V, scala.collection.mutable.Set[E]]()
+    var vertices = mutable.Set[V]()
+    var edges = mutable.Set[E]()
+    var vertex2edges = mutable.Map[V, mutable.Set[E]]()
 
     def addVertex(v: V): V = {
       vertices.add(v)
@@ -139,7 +139,7 @@ package org.pingel.axle.graph {
 
       for (i <- 0 to (N.size - 2)) {
         val vi = N(i)
-        for (j <- (i + 1) to (N.size - 1)) {
+        for (j <- (i + 1) until N.size) {
           val vj = N(j)
           if (!areNeighbors(vi, vj)) {
             addEdge(constructEdge(vi, vj))
@@ -168,7 +168,7 @@ package org.pingel.axle.graph {
 
     }
 
-    def vertexWithFewestEdgesToEliminateAmong(among: Set[V]) = {
+    def vertexWithFewestEdgesToEliminateAmong(among: Set[V]): Option[V] = {
 
       // assert: among is a subset of vertices
 
@@ -188,7 +188,7 @@ package org.pingel.axle.graph {
       result
     }
 
-    def vertexWithFewestNeighborsAmong(among: Set[V]) = {
+    def vertexWithFewestNeighborsAmong(among: Set[V]): Option[V] = {
       // assert: among is a subset of vertices
 
       var result: Option[V] = None
