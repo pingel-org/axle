@@ -42,7 +42,7 @@ class PowerSet[E](all: Collection[E]) extends ℘[E](all)
  * @param [E] The type of elements in the Collection passed to the constructor.
  */
 
-class ℘[E](all: Collection[E]) extends Iterable[Set[E]] {
+case class ℘[E](all: Collection[E]) extends Iterable[Set[E]] {
 
   def getAll = all
 
@@ -100,21 +100,6 @@ class ℘[E](all: Collection[E]) extends Iterable[Set[E]] {
         increment()
       }
       result.toSet
-    }
-    
-  }
-  
-}
-
-
-object PowerSetTest {
-
-  def main(args: Array[String]) {
-    
-    val elems = List("a", "b", "c", "d")
-    println("elems = " + elems)
-    for (set <- new PowerSet[String](elems)) {
-      println(set)
     }
     
   }

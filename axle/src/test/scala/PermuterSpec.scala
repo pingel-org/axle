@@ -1,5 +1,5 @@
 
-package org.pingel.util
+package org.pingel.axle.iterator
 
 import org.specs2.mutable._
 
