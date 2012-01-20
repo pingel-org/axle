@@ -21,6 +21,8 @@ package org.pingel.axle.graph {
     var vertex2outedges = Map[V, mutable.Set[E]]()
     var vertex2inedges = Map[V, mutable.Set[E]]()
 
+    def size() = vertices.size
+
     def addEdge(edge: E) = {
 
       val source = edge.getSource()
@@ -327,20 +329,5 @@ object UndirectedFamily extends GraphFamily {
   
 }
 
-object Tests {
- 
-  def main(args: Array[String]) {
-
-    import DirectedFamily._
-	  
-    var g = new DirectedGraph()
-
-    val n1 = g.newNode("1")
-    val n2 = g.newNode("2")
-    
-    
-  }
-
-}
 
 */

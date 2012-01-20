@@ -48,6 +48,8 @@ package org.pingel.axle.graph {
     var edges = mutable.Set[E]()
     var vertex2edges = mutable.Map[V, mutable.Set[E]]()
 
+    def size() = vertices.size
+
     def addVertex(v: V): V = {
       vertices.add(v)
       v
@@ -77,7 +79,9 @@ package org.pingel.axle.graph {
       e
     }
 
-    def copyTo(other: UndirectedGraph[V, E]): Unit
+    def copyTo(other: UndirectedGraph[V, E]) = {
+      // TODO
+    }
     
     def constructEdge(v1: V, v2: V): E
 
