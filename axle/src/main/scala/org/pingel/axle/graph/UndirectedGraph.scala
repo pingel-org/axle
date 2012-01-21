@@ -23,28 +23,31 @@ package org.pingel.axle.graph {
   }
 
   trait UndirectedGraphEdge[UV <: UndirectedGraphVertex[_]] extends GraphEdge[UV] {
+
     def getVertices(): (UV, UV)
-    def other(v: UV): UV
-    def connects(v1: UV, v2: UV): Boolean
-  }
 
-  class UndirectedGraphEdgeImpl[UV <: UndirectedGraphVertex[_]](v1: UV, v2: UV)
-  extends UndirectedGraphEdge[UV] {
+    def other(u: UV): UV = {
+      val (v1, v2) = getVertices()
+      u match {
+        case _ if u.equals(v1) => v2
+        case _ if u.equals(v2) => v1
+        case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+      }
+    }
 
-    def getVertices() = (v1, v2)
-
-    def connects(a1: UV, a2: UV) = (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
-
-    def other(u: UV) = u match {
-      case _ if u.equals(v1) => v2
-      case _ if u.equals(v2) => v1
-      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+    def connects(a1: UV, a2: UV) = {
+      val (v1, v2) = getVertices()
+      (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
     }
   }
 
-  trait UndirectedGraph[UV <: UndirectedGraphVertex[UE], UE <: UndirectedGraphEdge[UV]] 
-  extends Graph[UV, UE]
-  {
+  class UndirectedGraphEdgeImpl[UV <: UndirectedGraphVertex[_]](v1: UV, v2: UV)
+    extends UndirectedGraphEdge[UV] {
+    def getVertices() = (v1, v2)
+  }
+
+  trait UndirectedGraph[UV <: UndirectedGraphVertex[UE], UE <: UndirectedGraphEdge[UV]]
+    extends Graph[UV, UE] {
 
     var vertex2edges = mutable.Map[UV, mutable.Set[UE]]()
 
@@ -67,14 +70,14 @@ package org.pingel.axle.graph {
 
       var es2 = getEdges(dble._2)
       es2.add(e)
-      
+
       e
     }
 
     def copyTo(other: UndirectedGraph[UV, UE]) = {
       // TODO
     }
-    
+
     def constructEdge(v1: UV, v2: UV): UE
 
     def unlink(e: UE): Unit = {
@@ -175,8 +178,7 @@ package org.pingel.axle.graph {
         if (result == None) {
           result = Some(v)
           minSoFar = x
-        }
-	else if (x < minSoFar) {
+        } else if (x < minSoFar) {
           result = Some(v)
           minSoFar = x
         }
@@ -195,8 +197,7 @@ package org.pingel.axle.graph {
         if (result == None) {
           result = Some(v)
           minSoFar = x
-        }
-	else if (x < minSoFar) {
+        } else if (x < minSoFar) {
           result = Some(v)
           minSoFar = x
         }
