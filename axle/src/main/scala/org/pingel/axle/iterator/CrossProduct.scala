@@ -75,24 +75,6 @@ class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
   
 }
 
-object CrossProductTest {
-  
-  def main(args: Array[String]) {
-    val v1 = List("a", "b")
-    val v2 = List("0", "1")
-    val v3 = List("X")
-    
-    val cp = new CrossProduct[String](List(v1, v2, v3, v2))
-
-    val it = cp.iterator()
-    while (it.hasNext()) {
-      val tuple = it.next()
-      println(tuple)
-    }
-    
-  }
-  
-}
 
 class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E]] {
   def getCollections() = iterables

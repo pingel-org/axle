@@ -2,28 +2,27 @@ package org.pingel.axle.graph {
 
   import scala.collection._
 
-  trait DirectedGraphVertex[E]
+  trait DirectedGraphVertex[DE <: DirectedGraphEdge[_]] extends GraphVertex[DE]
 
-  trait DirectedGraphEdge[V] {
-    def getSource(): V
-    def getDest(): V
+  trait DirectedGraphEdge[DV <: DirectedGraphVertex[_]] extends GraphEdge[DV] {
+    def getSource(): DV
+    def getDest(): DV
   }
   
-  class DirectedGraphEdgeImpl[V](source: V, dest: V) extends DirectedGraphEdge[V] {
+  class DirectedGraphEdgeImpl[V <: DirectedGraphVertex[_]](source: V, dest: V)
+  extends DirectedGraphEdge[V] {
     def getSource() = source
     def getDest() = dest
   }
 
-  trait DirectedGraph[V <: DirectedGraphVertex[E], E <: DirectedGraphEdge[V]] {
+  trait DirectedGraph[DV <: DirectedGraphVertex[DE], DE <: DirectedGraphEdge[DV]] 
+  extends Graph[DV, DE]
+  {
 
-    var vertices = Set[V]()
-    var edges = Set[E]()
-    var vertex2outedges = Map[V, mutable.Set[E]]()
-    var vertex2inedges = Map[V, mutable.Set[E]]()
+    var vertex2outedges = Map[DV, mutable.Set[DE]]()
+    var vertex2inedges = Map[DV, mutable.Set[DE]]()
 
-    def size() = vertices.size
-
-    def addEdge(edge: E) = {
+    def addEdge(edge: DE) = {
 
       val source = edge.getSource()
       val dest = edge.getDest()
@@ -31,35 +30,31 @@ package org.pingel.axle.graph {
       edges += edge
 
       if (!vertex2outedges.contains(source)) {
-        vertex2outedges += source -> mutable.Set[E]()
+        vertex2outedges += source -> mutable.Set[DE]()
       }
       vertex2outedges(source) += edge
 
       if (!vertex2inedges.contains(dest)) {
-        vertex2inedges += dest -> mutable.Set[E]()
+        vertex2inedges += dest -> mutable.Set[DE]()
       }
       vertex2inedges(dest) += edge
 
       edge
     }
 
-    def getEdges() = edges
-
-    def getVertices() = vertices
-
-    def addVertex(v: V) = {
+    def addVertex(v: DV) = {
       vertices += v
       v
     }
 
     def removeAllEdgesAndVertices(): Unit = {
-      vertices = Set[V]()
-      edges = Set[E]()
-      vertex2outedges = Map[V, mutable.Set[E]]()
-      vertex2inedges = Map[V, mutable.Set[E]]()
+      vertices = Set[DV]()
+      edges = Set[DE]()
+      vertex2outedges = Map[DV, mutable.Set[DE]]()
+      vertex2inedges = Map[DV, mutable.Set[DE]]()
     }
-    
-    def deleteEdge(e: E) = {
+ 
+    def deleteEdge(e: DE) = {
 
       edges -= e
 
@@ -72,7 +67,7 @@ package org.pingel.axle.graph {
       }
     }
 
-    def deleteVertex(v: V) {
+    def deleteVertex(v: DV) {
       vertex2outedges.get(v) map { outEdges =>
         for (e <- outEdges) {
           edges -= e
@@ -97,7 +92,7 @@ package org.pingel.axle.graph {
     }
 
     def getLeaves() = {
-      var result = Set[V]()
+      var result = Set[DV]()
       for (v <- getVertices()) {
         if (isLeaf(v)) {
           result += v
@@ -106,8 +101,8 @@ package org.pingel.axle.graph {
       result
     }
 
-    def getNeighbors(v: V) = {
-      var result = Set[V]()
+    def getNeighbors(v: DV) = {
+      var result = Set[DV]()
       vertex2outedges.get(v) map { outEdges =>
         for (edge <- outEdges) {
           result += edge.getDest()
@@ -121,10 +116,10 @@ package org.pingel.axle.graph {
       result
     }
 
-    def precedes(v1: V, v2: V) = getPredecessors(v2).contains(v1)
+    def precedes(v1: DV, v2: DV) = getPredecessors(v2).contains(v1)
 
-    def getPredecessors(v: V) = {
-      var result = Set[V]()
+    def getPredecessors(v: DV) = {
+      var result = Set[DV]()
       vertex2inedges.get(v) map { inEdges =>
         for (edge <- inEdges) {
           result += edge.getSource()
@@ -133,13 +128,13 @@ package org.pingel.axle.graph {
       result
     }
 
-    def isLeaf(v: V) = {
+    def isLeaf(v: DV) = {
       val outEdges = vertex2outedges.get(v)
       outEdges == null || outEdges.size == 0
     }
 
-    def getSuccessors(v: V) = {
-      var result = Set[V]()
+    def getSuccessors(v: DV) = {
+      var result = Set[DV]()
       vertex2outedges.get(v) map { outEdges =>
         for (edge <- outEdges) {
           result += edge.getDest()
@@ -148,13 +143,13 @@ package org.pingel.axle.graph {
       result
     }
 
-    def outputEdgesOf(v: V) = {
-      var result = Set[E]()
+    def outputEdgesOf(v: DV) = {
+      var result = Set[DE]()
       vertex2outedges.get(v) map { outEdges => result ++= outEdges }
       result
     }
 
-    def descendantsIntersectsSet(v: V, s: Set[V]): Boolean = {
+    def descendantsIntersectsSet(v: DV, s: Set[DV]): Boolean = {
 
       if (s.contains(v)) {
         return true
@@ -167,7 +162,7 @@ package org.pingel.axle.graph {
       return false
     }
 
-    def collectDescendants(v: V, result: mutable.Set[V]): Unit = {
+    def collectDescendants(v: DV, result: mutable.Set[DV]): Unit = {
       // inefficient
       if (!result.contains(v)) {
         result.add(v)
@@ -177,7 +172,7 @@ package org.pingel.axle.graph {
       }
     }
 
-    def collectAncestors(v: V, result: mutable.Set[V]): Unit = {
+    def collectAncestors(v: DV, result: mutable.Set[DV]): Unit = {
       // inefficient
       if (!result.contains(v)) {
         result.add(v)
@@ -187,13 +182,13 @@ package org.pingel.axle.graph {
       }
     }
 
-    def collectAncestors(vs: Set[V], result: mutable.Set[V]): Unit = {
+    def collectAncestors(vs: Set[DV], result: mutable.Set[DV]): Unit = {
       for (v <- vs) {
         collectAncestors(v, result)
       }
     }
 
-    def removeInputs(vs: Set[V]) {
+    def removeInputs(vs: Set[DV]) {
       for (v <- vs) {
         vertex2inedges.get(v) map { incoming =>
           for (edge <- incoming) {
@@ -204,7 +199,7 @@ package org.pingel.axle.graph {
       }
     }
 
-    def removeOutputs(vs: Set[V]) {
+    def removeOutputs(vs: Set[DV]) {
       for (v <- vs) {
         vertex2outedges.get(v) map { outgoing =>
           for (edge <- outgoing) {
@@ -216,7 +211,7 @@ package org.pingel.axle.graph {
     }
 
     //TODO remove this method
-    def removeSuccessor(v: V, successor: V) {
+    def removeSuccessor(v: DV, successor: DV) {
       vertex2outedges.get(v) map { outgoing =>
         outgoing.find({ _.getDest().equals(successor) }) map { edgeToRemove =>
           outgoing.remove(edgeToRemove)
@@ -226,7 +221,7 @@ package org.pingel.axle.graph {
     }
 
     //TODO remove this method
-    def removePredecessor(v: V, predecessor: V) {
+    def removePredecessor(v: DV, predecessor: DV) {
       vertex2inedges.get(v) map { incoming =>
         incoming.find({ _.getSource().equals(predecessor) }) map { edgeToRemove =>
           incoming.remove(edgeToRemove)
@@ -242,92 +237,3 @@ package org.pingel.axle.graph {
   }
 
 }
-
-/*
-
-// http://ctp.di.fct.unl.pt/~amd/pmp/teoricas/10.html
-
-trait GraphFamily {
-
-    type G <: Graph
-    type E <: Edge
-    type V <: Vertex
-
-    abstract class Graph {
-//      this: G =>
-//      private var vertexSet: Set[V] = Set()
-//      private var edgeSet: Set[E] = Set()
-      def vertices(): Set[V]
-      def edges(): Set[E]
-      def newNode(): V
-    }
-    
-    abstract class Edge {
-//        this: E =>
-//       private var from: List[O] = List()
-        def vertices(): Set[V]
-        def contains(v: V): Boolean
-//      def publish = for (obs <- observers) obs.notify(this)
-    }
-    
-    abstract class Vertex(label: String) {
-        def edges(): Set[E]
-    }
-}
-
-object DirectedFamily extends GraphFamily {
-
-  type G = DirectedGraph
-  type E = DirectedEdge
-  type V = DirectedVertex
-
-  class DirectedGraph extends Graph {
-    def vertices() = Set[V]() // TODO
-    def edges() = Set[E]() // TODO
-    def newNode(label: String) = new DirectedVertex(label)
-  }
-  
-  class DirectedEdge extends Edge {
-    def contains(v: V) = true // TODO
-    def vertices() = {
-      Set[V]() // TODO
-    }
-  }
-
-  class DirectedVertex(label: String) extends Vertex(label) {
-    def edges() = {
-      Set[E]() // TODO
-    }
-  }
-  
-}
-
-object UndirectedFamily extends GraphFamily {
-
-  type G = UndirectedGraph
-  type E = UndirectedEdge
-  type V = UndirectedVertex
-
-  class UndirectedGraph extends Graph {
-    def vertices() = Set[V]() // TODO
-    def edges() = Set[E]() // TODO
-    def newNode(label: String) = new UndirectedVertex(label)
-  }
-  
-  class UndirectedEdge extends Edge {
-    def contains(v: V) = true // TODO
-    def vertices() = {
-      Set[V]() // TODO
-    }
-  }
-
-  class UndirectedVertex(label: String) extends Vertex(label) {
-    def edges() = {
-      Set[E]() // TODO
-    }
-  }
-  
-}
-
-
-*/
