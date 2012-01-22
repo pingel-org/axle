@@ -1,6 +1,10 @@
 
 package org.pingel.angluin
 
+import scala.collection._
+
+// TODO: rephrase this graph in terms of org.pingel.axle.graph.DirectedGraph
+
 class Acceptor {
 
   var Q = Set[AcceptorState]()
@@ -49,9 +53,9 @@ class Acceptor {
     ins += from
   }
 
-  def δ(state: AcceptorState, symbol: Symbol) = outArcs(state)(symbol)
+  def δ(state: AcceptorState, symbol: Symbol): Set[AcceptorState] = outArcs(state)(symbol)
 
-  def δ(state: AcceptorState, exp: Expression) = {
+  def δ(state: AcceptorState, exp: Expression): Set[AcceptorState] = {
 
     var result = Set[AcceptorState]()
     if (exp == null) {
@@ -62,7 +66,7 @@ class Acceptor {
       var tail = exp.getTail()
       var neighbors = δ(state, head)
       for( neighbor <- neighbors ) {
-        result.addAll( δ(neighbor, tail) )
+        result ++= δ(neighbor, tail)
       }
     }
     result
@@ -138,7 +142,7 @@ class Alphabet { // TODO: redefine as Set[Symbol]
   def iterator() = symbols.iterator
 }
 
-class CanonicalAcceptorFactory {
+case class CanonicalAcceptorFactory {
 
   def makeCanonicalAcceptor(ℒ: Language): Acceptor = {
     // TODO !!!
@@ -147,19 +151,31 @@ class CanonicalAcceptorFactory {
 
 }
 
-class Expression(v: List[Symbol]) {
+trait Expression {
 
+  def getHead(): Symbol
+
+  def getTail(): Expression // List[Symbol]
+  
+}
+
+class MutableExpression(vs: List[Symbol]) extends Expression {
+
+  var v = new mutable.ListBuffer[Symbol]()
+
+  v ++= vs
+  
   def getSymbolIterator() = v.iterator
 
   def addSymbol(s: Symbol) = { 
-    v = v ::: List(s)
+    v += s
   }
 
   def length() = v.size 
 
-  def getHead() = v(0)
+  override def getHead() = v(0)
 
-  def getTail() = new Expression(v.tail)
+  override def getTail() = new MutableExpression(v.toList.tail)
 
   def equals(other: Expression): Boolean = {
     // TODO !!!
@@ -171,7 +187,7 @@ class Expression(v: List[Symbol]) {
 }
 
 
-class ExpressionComparator extends Comparator[Expression]
+class ExpressionComparator extends Comparable[Expression]
 {
   def compare(o1: Expression, o2: Expression): Int = (o1.toString()).compareTo(o2.toString())
 }
@@ -197,7 +213,7 @@ class HardCodedLearner(T: Text, G: Grammar) extends Learner(T)
   }
 }
 
-object ▦ extends Expression {
+case class ▦ extends Expression() {
   // should this class throw an exception
   // if addMorpheme is called?
   override def toString() = "▦"
@@ -205,9 +221,9 @@ object ▦ extends Expression {
 
 class Language {
 
-  var sequences = TreeSet[Expression](new ExpressionComparator())
+  var sequences = Set[Expression]() // TOOD: was TreSet with new ExpressionComparator()
   
-  def addExpression(s: Expression): Unit = sequences.add(s)
+  def addExpression(s: Expression): Unit = sequences += s
   
   def equals(other: Language): Boolean = sequences.equals(other.sequences)
   
@@ -248,7 +264,7 @@ class MemorizingLearner(T: Text) extends Learner(T) {
   def processNextExpression(): Grammar = {
     val s = nextExpression()
     s match {
-      case _: ▦ =>
+      case ▦() => { }
       case _ => runningGuess.addExpression(s)
     }
     new HardCodedGrammar(runningGuess)
@@ -256,7 +272,7 @@ class MemorizingLearner(T: Text) extends Learner(T) {
 }
 
 class Partition {
-  def restrictTo(subset: Set[TODO]): Partition = {
+  def restrictTo(subset: Set[Any]): Partition = {
     // TODO !!!
     return null;
   }
@@ -271,7 +287,7 @@ class PrefixTreeFactory {
   }
 }
 
-class Quotient(A: Acceptor, π: Partition) {
+case class Quotient(A: Acceptor, π: Partition) {
   def evaluate(): Acceptor = {
     // TODO !!!
     null
@@ -279,7 +295,7 @@ class Quotient(A: Acceptor, π: Partition) {
 }
 
 
-class Symbol(s: String, Σ: Alphabet)  {
+case class Symbol(s: String, Σ: Alphabet)  {
 
   Σ.addSymbol(this)
   
@@ -289,9 +305,9 @@ class Symbol(s: String, Σ: Alphabet)  {
   
 }
 
-class Text {
+case class Text {
 
-  var v = List[Expression]()
+  var v = mutable.ListBuffer[Expression]()
   
   def addExpression(s: Expression) = { 
     v += s
@@ -305,7 +321,7 @@ class Text {
     var ℒ = new Language()
     for( s <- v ) {
       s match {
-        case _: ▦ =>
+        case ▦() => {}
         case _ => ℒ.addExpression(s)
       }
     }
@@ -315,63 +331,5 @@ class Text {
   def iterator = v.iterator
   
   override def toString() = "<" + v.mkString(", ") + ">"
-  
-}
-
-object test {
-  
-  def main(args: List[String]): Unit = {
-
-    var Σ = new Alphabet()
-    
-    val mHi = new Symbol("hi", Σ)
-    val mIm = new Symbol("I'm", Σ)
-    val mYour = new Symbol("your", Σ)
-    val mMother = new Symbol("Mother", Σ)
-    val mShut = new Symbol("shut", Σ)
-    val mUp = new Symbol("up", Σ)
-    
-    val s1 = new Expression( List(mHi, mIm, mYour, mMother) )
-    val s2 = new Expression( List(mShut, mUp) )
-    val ℒ = new Language( List(s1, s2) )
-    
-    val T = new Text( List(s1, ▦, ▦, s2, ▦, s2, s2) )
-    
-    println("Text T = " + T )
-    println("Language ℒ = " + ℒ )
-    println()
-    
-    if( T.isFor(ℒ) ) {
-      println("T is for ℒ")
-    }
-    else {
-      println("T is not for ℒ")
-    }
-    println()
-    
-    var ɸ = new MemorizingLearner(T)
-    
-    var guess: Grammar = null
-    
-    while( ɸ.hasNextExpression() ) {
-      guess = ɸ.processNextExpression()
-      if( guess != null ) {
-        val guessedLanguage = guess.ℒ()
-        println("ɸ.processNextExpression().ℒ = " + guessedLanguage )
-        if( guessedLanguage.equals(ℒ) ) {
-          println("ɸ identified the language using the text")
-          exit(0)
-        }
-        else {
-          println("ɸ's guess was not correct\n")
-        }
-      }
-    }
-    
-    if ( guess == null ) {
-      println("ɸ never made a guess");
-    }
-    
-  }
   
 }
