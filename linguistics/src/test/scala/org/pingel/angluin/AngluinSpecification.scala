@@ -21,7 +21,7 @@ class AngluinSpecification extends Specification {
       val s2 = new MutableExpression(List(mShut, mUp))
       val ℒ = new Language(List(s1, s2))
 
-      val T = new Text(List(s1, ▦, ▦, s2, ▦, s2, s2))
+      val T = new Text(List(s1, ▦(), ▦(), s2, ▦(), s2, s2))
 
       println("Text T = " + T)
       println("Language ℒ = " + ℒ)
@@ -41,7 +41,7 @@ class AngluinSpecification extends Specification {
       while (ɸ.hasNextExpression()) {
         guess = ɸ.processNextExpression()
         if (guess != null) {
-          val guessedLanguage = guess.ℒ()
+          val guessedLanguage = guess.getℒ
           println("ɸ.processNextExpression().ℒ = " + guessedLanguage)
           if (guessedLanguage.equals(ℒ)) {
             println("ɸ identified the language using the text")

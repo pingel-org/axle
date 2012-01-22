@@ -56,7 +56,7 @@ class GoldSpecification extends Specification {
       while (ɸ.hasNextExpression()) {
         guess = ɸ.processNextExpression()
         if (guess != null) {
-          var guessedLanguage = guess.L()
+          var guessedLanguage = guess.getL
           println("ɸ.processNextExpression().L = " + guessedLanguage)
           if (guessedLanguage.equals(L)) {
             println("ɸ identified the language using the text")

@@ -17,10 +17,10 @@ class Acceptor {
 
     Q += p
 
-    if( isInitial )
+    if (isInitial)
       I += p
 
-    if( isFinal )
+    if (isFinal)
       F += p
 
     outArcs += p -> Map[Symbol, Set[AcceptorState]]()
@@ -29,23 +29,21 @@ class Acceptor {
 
   def addTransition(from: AcceptorState, symbol: Symbol, to: AcceptorState): Unit = {
 
-    var symbol2outs = outArcs(symbol)
+    var symbol2outs = outArcs(from)
     var outs: Set[AcceptorState] = null
-    if( symbol2outs.contains(symbol) ) {
+    if (symbol2outs.contains(symbol)) {
       outs = symbol2outs(symbol)
-    }
-    else {
+    } else {
       outs = Set[AcceptorState]()
       symbol2outs += symbol -> outs
     }
     outs += to
 
-    var symbol2ins = inArcs(symbol)
+    var symbol2ins = inArcs(to)
     var ins: Set[AcceptorState] = null
-    if( symbol2ins.contains(symbol) ) {
+    if (symbol2ins.contains(symbol)) {
       ins = symbol2ins(symbol)
-    }
-    else {
+    } else {
       ins = Set[AcceptorState]()
       symbol2ins += symbol -> ins
     }
@@ -60,28 +58,27 @@ class Acceptor {
     var result = Set[AcceptorState]()
     if (exp == null) {
       result += state
-    } 
-    else {
+    } else {
       var head = exp.getHead()
       var tail = exp.getTail()
       var neighbors = δ(state, head)
-      for( neighbor <- neighbors ) {
+      for (neighbor <- neighbors) {
         result ++= δ(neighbor, tail)
       }
     }
     result
   }
-  
+
   def isForwardDeterministic(): Boolean = {
 
     if (I.size > 1) {
       return false
     }
 
-    for( state <- Q ) {
+    for (state <- Q) {
       val symbol2outs = outArcs(state)
       val outSymbols = symbol2outs.keys
-      for(symbol <- outSymbols ) {
+      for (symbol <- outSymbols) {
         val outs = symbol2outs(symbol)
         if (outs.size > 1) {
           return false
@@ -97,10 +94,10 @@ class Acceptor {
       return false
     }
 
-    for( state <- Q ) {
+    for (state <- Q) {
       val symbol2ins = inArcs(state)
       val inSymbols = symbol2ins.keys
-      for ( symbol <- inSymbols ) {
+      for (symbol <- inSymbols) {
         val ins = symbol2ins(symbol)
         if (ins.size > 1) {
           return false
@@ -126,17 +123,17 @@ class Acceptor {
     // TODO !!!
     null
   }
-  
+
 }
 
-class AcceptorState { }
+class AcceptorState {}
 
 class Alphabet { // TODO: redefine as Set[Symbol]
 
   var symbols = Set[Symbol]()
 
   def addSymbol(m: Symbol) = {
-	  symbols += m
+    symbols += m
   }
 
   def iterator() = symbols.iterator
@@ -156,7 +153,7 @@ trait Expression {
   def getHead(): Symbol
 
   def getTail(): Expression // List[Symbol]
-  
+
 }
 
 class MutableExpression(vs: List[Symbol]) extends Expression {
@@ -164,14 +161,14 @@ class MutableExpression(vs: List[Symbol]) extends Expression {
   var v = new mutable.ListBuffer[Symbol]()
 
   v ++= vs
-  
+
   def getSymbolIterator() = v.iterator
 
-  def addSymbol(s: Symbol) = { 
+  def addSymbol(s: Symbol) = {
     v += s
   }
 
-  def length() = v.size 
+  def length() = v.size
 
   override def getHead() = v(0)
 
@@ -186,18 +183,16 @@ class MutableExpression(vs: List[Symbol]) extends Expression {
 
 }
 
-
-class ExpressionComparator extends Comparable[Expression]
-{
-  def compare(o1: Expression, o2: Expression): Int = (o1.toString()).compareTo(o2.toString())
+class ExpressionComparator extends Comparable[Expression] {
+  def compareTo(other: Expression) = (this.toString()).compareTo(other.toString)
+  // def compare(o1: Expression, o2: Expression): Int = (o1.toString()).compareTo(o2.toString())
 }
 
 trait Grammar {
-  def ℒ(): Language
+  def getℒ(): Language
 }
 
-class HardCodedGrammar(ℒ: Language) extends Grammar
-{
+class HardCodedGrammar(ℒ: Language) extends Grammar {
   // Note: This was orginally a getter called simply ℒ()
   // figure out how to write the extractor (or whatever)
   // to grab this
@@ -205,66 +200,69 @@ class HardCodedGrammar(ℒ: Language) extends Grammar
   def getℒ() = ℒ
 }
 
-class HardCodedLearner(T: Text, G: Grammar) extends Learner(T)
-{
-  def processNextExpression(): Grammar = {
+class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
+  override def processNextExpression(): Grammar = {
     val s = nextExpression()
     G
   }
 }
 
-case class ▦ extends Expression() {
+case class ▦() extends Expression() {
+
+  // TOOD: not sure about head and tail here:
+  def getHead(): Symbol = null
+  def getTail(): Expression = null
+  
   // should this class throw an exception
   // if addMorpheme is called?
   override def toString() = "▦"
 }
 
-class Language {
+case class Language(var sequences: List[Expression] = Nil) {
 
-  var sequences = Set[Expression]() // TOOD: was TreSet with new ExpressionComparator()
-  
-  def addExpression(s: Expression): Unit = sequences += s
-  
+  def addExpression(s: Expression): Unit = {
+    sequences = sequences ::: List(s)
+  }
+
   def equals(other: Language): Boolean = sequences.equals(other.sequences)
-  
+
   def prefixes(): Language = {
     // TODO !!!
     null
   }
-  
+
   def goodFinals(w: Expression): Language = {
     // TODO !!!
     null
   }
-  
+
   override def toString() = "{" + sequences.mkString(", ") + "}"
-  
+
 }
 
-class Learner(T: Text)
-{
+class Learner(T: Text) {
   var iterator = T.iterator
-  
+
   def processNextExpression(): Grammar = {
     val s = nextExpression()
     // default implementation never guesses a Grammar
     null
   }
-  
+
   def nextExpression() = iterator.next()
-  
+
   def hasNextExpression() = iterator.hasNext
-  
+
 }
 
 class MemorizingLearner(T: Text) extends Learner(T) {
 
   var runningGuess = new Language()
-  
-  def processNextExpression(): Grammar = {
+
+  override def processNextExpression(): Grammar = {
     val s = nextExpression()
     s match {
-      case ▦() => { }
+      case ▦() => {}
       case _ => runningGuess.addExpression(s)
     }
     new HardCodedGrammar(runningGuess)
@@ -278,7 +276,7 @@ class Partition {
   }
 }
 
-class PartitionBlock { }
+class PartitionBlock {}
 
 class PrefixTreeFactory {
   def makePrefixTree(ℒ: Language): Acceptor = {
@@ -294,32 +292,29 @@ case class Quotient(A: Acceptor, π: Partition) {
   }
 }
 
-
-case class Symbol(s: String, Σ: Alphabet)  {
+case class Symbol(s: String, Σ: Alphabet) {
 
   Σ.addSymbol(this)
-  
+
   override def toString() = s
-  
+
   def equals(other: Symbol): Boolean = s.equals(other.s)
-  
+
 }
 
-case class Text {
+case class Text(var v: List[Expression]) {
 
-  var v = mutable.ListBuffer[Expression]()
-  
-  def addExpression(s: Expression) = { 
-    v += s
+  def addExpression(s: Expression) = {
+    v  = v ::: List(s)
   }
-  
+
   def length() = v.size
-  
+
   def isFor(ℒ: Language) = content().equals(ℒ)
-  
+
   def content(): Language = {
     var ℒ = new Language()
-    for( s <- v ) {
+    for (s <- v) {
       s match {
         case ▦() => {}
         case _ => ℒ.addExpression(s)
@@ -329,7 +324,7 @@ case class Text {
   }
 
   def iterator = v.iterator
-  
+
   override def toString() = "<" + v.mkString(", ") + ">"
-  
+
 }

@@ -17,11 +17,11 @@ class Expression {
 }
 
 class ExpressionComparator extends Comparable[Expression] {
-  def compare(e1: Expression, e2: Expression): Int = e1.toString().compareTo(e2.toString())
+  def compareTo(other: Expression): Int = this.toString().compareTo(other.toString())
 }
 
 trait Grammar {
-  def L(): Language
+  def getL(): Language
 }
 
 class HardCodedGrammar(L: Language) extends Grammar {
@@ -30,7 +30,7 @@ class HardCodedGrammar(L: Language) extends Grammar {
 
 class HardCodedLearner(T: Text, G: Grammar) extends Learner(T)
 {
-  def processNextExpression(): Grammar = {
+  override def processNextExpression(): Grammar = {
     val s = nextExpression()
     G
   }
@@ -39,7 +39,7 @@ class HardCodedLearner(T: Text, G: Grammar) extends Learner(T)
 class ▦ extends Expression {
   // should this class throw an exception
   // if addMorpheme is called?
-  def toString()  = "▦"
+  override def toString()  = "▦"
 }
 
 class Language {
@@ -72,7 +72,7 @@ class MemorizingLearner(T: Text) extends Learner(T) {
 
   def runningGuess = new Language()
 
-  def processNextExpression(): Grammar = {
+  override def processNextExpression(): Grammar = {
     val s = nextExpression()
     s match {
       case _: ▦ => 
@@ -87,7 +87,7 @@ class Morpheme(s: String, vocabulary: Vocabulary) {
 
   vocabulary.addMorpheme(this)
 
-  def toString() = s
+  override def toString() = s
 }
 
 class Text {
