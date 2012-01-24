@@ -4,7 +4,7 @@ pingel.org
 
 Models for a variety of domains including: linguistics,
 artificial intelligence, (interactive) data visualization, and Category Theory.
-Implemented in Scala.
+Implemented in (Scala)[http://www.scala-lang.org/].
 
 This project is both an attempt use modern tools to aid the author's own understanding,
 as well as an attempt to build tools for other students of these subjects.
@@ -13,8 +13,7 @@ Status
 ------
 
 Pre-alpha. 
-It should be considered pre-alpha, and will likely remain in that state throughout 2012 and probably
-well beyond that.
+It will likely remain in that state throughout 2012 and probably well beyond that.
 Much of the code is undergoing rapid transformation (being rewritten from java, perl, and python).
 This status will be updated as the code matures.
 No public jars are maintained.
@@ -38,8 +37,6 @@ Axle (org.pingel.axle)
 ----------------------
 
 An attempt to implement a Haskell-like language as an internal DSL in Scala.
-The examples in "Learn You a Haskell for Great Good" work using a syntax as similar
-to Haskell as possible using Scala.
 This project also includes useful data structures for graphs and matrices and enrichments to
 other standard Scala datatypes.
 
@@ -194,7 +191,7 @@ About the Author
 Adam Pingel is a Iowa native who moved to the San Francisco Bay Area in 1992
 to study Computer Science at Stanford.  After graduating in 1996, he spent
 six years working in the nascent internet industry writing tools for Operations
-at Excite.com and then NOCpulse (a startup that was acuired by Red Hat).
+at Excite.com and then NOCpulse (a startup that was acquired by Red Hat).
 In 2002 he left Silicon Valley to pursue a PhD in Computer Science at UCLA.
 
 While there he worked for a year as a TA for the undergraduate Artificial

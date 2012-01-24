@@ -2,8 +2,9 @@
 Category Theory (org.pingel.cattheory)
 ======================================
 
-I first encountered Category Theory by name when my advisor at UCLA suggested
-that some of my interests seemed similar.
+I first encountered (Category Theory)[http://en.wikipedia.org/wiki/Category_theory]
+by name when my advisor at UCLA,
+(Stott Parker)[http://www.cs.ucla.edu/~stott/], suggested that some of my interests seemed similar.
 At the time I was about five years into a PhD program in computer science with
 a major field in programming languages, and minor fields in linguistics and
 artificial intelligence.
@@ -18,5 +19,6 @@ their presentation in the original source material.
 Eventually that will mean providing typeset TeX output, as well as other
 visualizations for specific data types (such as graphs).
 
-A book on Catheory Theory by Steve Awodey is the portion of this code
-that is receiving the most of my attention.
+My notes while reading (Steve Awodey)[http://www.andrew.cmu.edu/user/awodey/]'s book
+("Catheory Theory")[http://www.amazon.com/Category-Theory-Oxford-Logic-Guides/dp/0199237182/ref=sr_1_1?ie=UTF8]
+is the portion of this code that is receiving the most of my attention.
