@@ -17,14 +17,14 @@ class MatrixSpecification extends Specification {
       val dm = DoubleMatrix.rand(3, 3)
       val c2 = dm.getColumn(2)
       val r2 = dm.getRow(2)
-      
+
       1 must be equalTo (1)
     }
   }
-  
+
   "IntMatrix" should {
     "work" in {
-      
+
       IntMatrix.zeros(1, 3)
       IntMatrix.ones(2, 2)
       IntMatrix.eye(3)
@@ -35,20 +35,20 @@ class MatrixSpecification extends Specification {
 
   "BooleanMatrix" should {
     "work" in {
-      
+
       BooleanMatrix.falses(2, 3)
       BooleanMatrix.trues(3, 2)
       BooleanMatrix.eye(4)
-      
+
       1 must be equalTo (1)
     }
   }
 
   "SetMatrix" should {
     "work" in {
-      
-      SetMatrix.empties[Int](3, 3)
-      
+
+      SetMatrix.zeros[Int](3, 3)
+
       1 must be equalTo (1)
     }
   }
