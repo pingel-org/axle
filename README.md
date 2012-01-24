@@ -125,11 +125,10 @@ code should resemble the subjects as they are described in the literature.
 Unicode characters are used whenever there is substantial pre-existing literature
 that establishes symbolic conventions.
 
-On the spectrum of "library" to "language", they strive to be
-as close to languages as possible.
-They leverage the host language -- Scala -- to make the space of valid
-constructions exactly the set of programs that are well-formed under the
-theories that the models claim to represent.
+On the spectrum of "library" to "language", this project prefers the latter.
+The expressive syntax and type-system of the host language -- Scala --
+is leveraged to make the space of valid constructions as close as possible to the set of
+programs that are well-formed under the theories that the models claim to represent.
 
 Although the primary aim of this code is education, scalability and performance
 are secondary goals.
@@ -149,7 +148,7 @@ In software engineering, it's called the "tyranny of the dominant decomposition"
 There are many equivalent ways to encode the same behavior, no matter what
 language is used.
 Choosing a particular representation for a program will *always* make other
-programs that wish to share code less well-tuned in that language.
+programs that share code less well-tuned in that language.
 
 For example: In choosing the "matrix" is a core concept, Matlab necessarily makes
 other data types more difficult to support.
