@@ -33,7 +33,7 @@ Projects
 Bayesian Networks and Causality.
 
 
-Axle (org.pingel.axle)
+[Axle](axle) (org.pingel.axle)
 ----------------------
 
 An attempt to implement a Haskell-like language as an internal DSL in Scala.
@@ -41,7 +41,7 @@ This project also includes useful data structures for graphs and matrices and en
 other standard Scala datatypes.
 
 
-Category Theory (org.pingel.category)
+[Category Theory](category) (org.pingel.category)
 --------------------------------------
 
 "A monad is a monoid in the category of endofunctors."
@@ -49,25 +49,25 @@ Category Theory (org.pingel.category)
 Early sketch of my reading of a book on Category Theory.
 
 
-Game Theory (org.pingel.game)
+[Game Theory](game) (org.pingel.game)
 -----------------------------
 
 A placeholder project for modelling a range of games and a general model of Game Theory.
 
 
-Gestalt (org.pingel.gestalt)
+[Gestalt](gestalt) (org.pingel.gestalt)
 ----------------------------
 
 A sandbox for experimentation with visual programming and programming language design.
 
 
-Linguistics (org.pingel.linguistics)
+[Linguistics](linguistics) (org.pingel.linguistics)
 ------------------------------------
 
 The Gold Paradigm and Angluin's Language Learner.
 
 
-python2json
+[python2json](python2json)
 -----------
 
 Takes any python 2.6 (or older) file and return a json document that represents the
