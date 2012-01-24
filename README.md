@@ -27,7 +27,7 @@ To be written.
 Projects
 ========
 
-Artificial Intelligence (org.pingel.{bayes,causality})
+[Artificial Intelligence](ai) (org.pingel.{bayes,causality})
 --------------------------------------------------------------
 
 Bayesian Networks and Causality.
