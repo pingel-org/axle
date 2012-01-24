@@ -4,15 +4,15 @@ Game Theory (org.pingel.gametheory)
 
 As a senior CS major at Stanford in 1996, I did some
 independent research with
-Professor (Daphne Koller)[http://ai.stanford.edu/~koller/] and
-PhD student (Avi Pfeffer)[http://www.gelberpfeffer.net/avi].
+Professor [Daphne Koller](http://ai.stanford.edu/~koller/) and
+PhD student [Avi Pfeffer](http://www.gelberpfeffer.net/avi).
 
 This work spanned two quarters.
 
 The first quarter invovled using Koller and Pfeffer's
-("Gala" language)[http://ai.stanford.edu/~koller/Papers/Koller+Pfeffer:AIJ97.pdf]
+["Gala" language](http://ai.stanford.edu/~koller/Papers/Koller+Pfeffer:AIJ97.pdf)
 (a Prolog-based DSL for describing games) to study a small
-version of Poker and solve for the (Nash equilibria)[http://en.wikipedia.org/wiki/Nash_equilibrium].
+version of Poker and solve for the [Nash equilibria](http://en.wikipedia.org/wiki/Nash_equilibrium).
 
 The second (still unfinished) piece was to extend the
 solver to handle non-zero-sum games.

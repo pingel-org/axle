@@ -4,7 +4,7 @@ pingel.org
 
 Models for a variety of domains including: linguistics,
 artificial intelligence, (interactive) data visualization, and Category Theory.
-Implemented in (Scala)[http://www.scala-lang.org/].
+Implemented in [Scala](http://www.scala-lang.org/).
 
 This project is both an attempt use modern tools to aid the author's own understanding,
 as well as an attempt to build tools for other students of these subjects.

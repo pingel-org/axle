@@ -7,8 +7,8 @@ Bayesian Networks (org.pingel.bayes)
 
 See [ScalaFigures](ai/src/main/scala/org/pingel/bayes/examples/ScalaFigures.scala) for example usage.
 
-Study guide for (Adnan Darwiche)[http://www.cs.ucla.edu/~darwiche/]'s book
-("Modeling and Reasoning with Bayesian Networks")[http://www.amazon.com/Modeling-Reasoning-Bayesian-Networks-Darwiche/dp/0521884381/ref=sr_1_1?ie=UTF8]
+Study guide for [Adnan Darwiche](http://www.cs.ucla.edu/~darwiche/)'s book
+["Modeling and Reasoning with Bayesian Networks"](http://www.amazon.com/Modeling-Reasoning-Bayesian-Networks-Darwiche/dp/0521884381/ref=sr_1_1?ie=UTF8)
 
 
 Causality (org.pingel.causality)
