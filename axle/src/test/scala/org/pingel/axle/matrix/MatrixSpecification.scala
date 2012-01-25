@@ -9,12 +9,12 @@ class MatrixSpecification extends Specification {
   "DoubleMatrix" should {
     "work" in {
 
-      DoubleMatrix.zeros(3, 4)
-      DoubleMatrix.ones(2, 3)
-      DoubleMatrix.rand(1, 2)
-      DoubleMatrix.randn(2, 2)
+      DoubleMatrixFactory.zeros(3, 4)
+      DoubleMatrixFactory.ones(2, 3)
+      DoubleMatrixFactory.rand(1, 2)
+      DoubleMatrixFactory.randn(2, 2)
 
-      val dm = DoubleMatrix.rand(3, 3)
+      val dm = DoubleMatrixFactory.rand(3, 3)
       val c2 = dm.getColumn(2)
       val r2 = dm.getRow(2)
 
@@ -25,9 +25,9 @@ class MatrixSpecification extends Specification {
   "IntMatrix" should {
     "work" in {
 
-      IntMatrix.zeros(1, 3)
-      IntMatrix.ones(2, 2)
-      IntMatrix.eye(3)
+      IntMatrixFactory.zeros(1, 3)
+      IntMatrixFactory.ones(2, 2)
+      IntMatrixFactory.eye(3)
 
       1 must be equalTo (1)
     }
@@ -36,9 +36,9 @@ class MatrixSpecification extends Specification {
   "BooleanMatrix" should {
     "work" in {
 
-      BooleanMatrix.falses(2, 3)
-      BooleanMatrix.trues(3, 2)
-      BooleanMatrix.eye(4)
+      BooleanMatrixFactory.falses(2, 3)
+      BooleanMatrixFactory.trues(3, 2)
+      BooleanMatrixFactory.eye(4)
 
       1 must be equalTo (1)
     }
@@ -47,7 +47,7 @@ class MatrixSpecification extends Specification {
   "SetMatrix" should {
     "work" in {
 
-      SetMatrix.zeros[Int](3, 3)
+      SetMatrixFactory.zeros[Int](3, 3)
 
       1 must be equalTo (1)
     }
