@@ -6,15 +6,17 @@ class MatrixSpecification extends Specification {
 
   import org.pingel.axle.matrix._
 
-  "DoubleMatrix" should {
+  "JblasMatrix[Double]" should {
     "work" in {
 
-      DoubleMatrixFactory.zeros(3, 4)
-      DoubleMatrixFactory.ones(2, 3)
-      DoubleMatrixFactory.rand(1, 2)
-      DoubleMatrixFactory.randn(2, 2)
+      import JblasMatrixFactory._
+      
+      val z = zeros[Double](3, 4)
+      val o = ones[Double](2, 3)
+      val r = rand[Double](1, 2)
+      val rn = randn[Double](2, 2)
 
-      val dm = DoubleMatrixFactory.rand(3, 3)
+      val dm: Matrix[Double] = rand[Double](3, 3)
       val c2 = dm.getColumn(2)
       val r2 = dm.getRow(2)
 
@@ -22,23 +24,27 @@ class MatrixSpecification extends Specification {
     }
   }
 
-  "IntMatrix" should {
+  "JblasMatrix[Int]" should {
     "work" in {
 
-      IntMatrixFactory.zeros(1, 3)
-      IntMatrixFactory.ones(2, 2)
-      IntMatrixFactory.eye(3)
+      import JblasMatrixFactory._
+      
+      val z = zeros[Int](1, 3)
+      val o = ones[Int](2, 2)
+      val e = eye[Int](3)
 
       1 must be equalTo (1)
     }
   }
 
-  "BooleanMatrix" should {
+  "JblasMatrix[Boolean]" should {
     "work" in {
 
-      BooleanMatrixFactory.falses(2, 3)
-      BooleanMatrixFactory.trues(3, 2)
-      BooleanMatrixFactory.eye(4)
+      import JblasMatrixFactory._
+      
+      val f = falses(2, 3)
+      val t = trues(3, 2)
+      val e = eye[Boolean](4)
 
       1 must be equalTo (1)
     }
@@ -47,7 +53,7 @@ class MatrixSpecification extends Specification {
   "SetMatrix" should {
     "work" in {
 
-      SetMatrixFactory.zeros[Int](3, 3)
+      // SetMatrixFactory.zeros[Int](3, 3)
 
       1 must be equalTo (1)
     }
