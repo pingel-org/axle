@@ -4,19 +4,17 @@ import org.specs2.mutable._
 
 class MatrixSpecification extends Specification {
 
-  import org.pingel.axle.matrix._
-
   "JblasMatrix[Double]" should {
     "work" in {
 
-      import JblasMatrixFactory._
-      
-      val z = zeros[Double](3, 4)
-      val o = ones[Double](2, 3)
-      val r = rand[Double](1, 2)
-      val rn = randn[Double](2, 2)
+      import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
 
-      val dm: Matrix[Double] = rand[Double](3, 3)
+      val z: Matrix[Double] = zeros(3, 4)
+      val o = ones(2, 3)
+      val r = rand(1, 2)
+      val rn = randn(2, 2)
+
+      val dm = rand(3, 3)
       val c2 = dm.getColumn(2)
       val r2 = dm.getRow(2)
 
@@ -27,11 +25,11 @@ class MatrixSpecification extends Specification {
   "JblasMatrix[Int]" should {
     "work" in {
 
-      import JblasMatrixFactory._
-      
-      val z = zeros[Int](1, 3)
-      val o = ones[Int](2, 2)
-      val e = eye[Int](3)
+      import org.pingel.axle.matrix.IntJblasMatrixFactory._
+
+      val z: Matrix[Int] = zeros(1, 3)
+      val o = ones(2, 2)
+      val e = eye(3)
 
       1 must be equalTo (1)
     }
@@ -40,11 +38,11 @@ class MatrixSpecification extends Specification {
   "JblasMatrix[Boolean]" should {
     "work" in {
 
-      import JblasMatrixFactory._
-      
-      val f = falses(2, 3)
+      import org.pingel.axle.matrix.BooleanJblasMatrixFactory._
+
+      val f: Matrix[Boolean] = falses(2, 3)
       val t = trues(3, 2)
-      val e = eye[Boolean](4)
+      val e = eye(4)
 
       1 must be equalTo (1)
     }
