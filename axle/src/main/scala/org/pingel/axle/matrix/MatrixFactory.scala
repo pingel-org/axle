@@ -37,28 +37,29 @@ abstract class MatrixFactory {
 
     def negate(): M
     def transpose(): M
+    def ceil(): M
+    def floor(): M
+    def log(): M
+    def log10(): M
+    def fullSVD(): (M, M, M) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
+    // def truth(): M[Boolean]
+
+    def pow(p: Double): M
+    def add(x: T): M
+    def subtract(x: T): M
+    def multiply(x: T): M
+    def divide(x: T): M
 
     // Operations on pairs of matrices
-    
-    def add(other: M): M
-    def subtract(other: M): M
-    def multiply(other: M): M
+
     def matrixMultiply(other: M): M
-    def divide(other: M): M
     def concatenateHorizontally(right: M): M
     def concatenateVertically(under: M): M
-
-    // aliases
-    def +(other: M) = add(other)
-    def -(other: M) = subtract(other)
-    // def .(other: M[T]) = multiply(other)
-    def x(other: M) = matrixMultiply(other)
-    def +|+ (right: M) = concatenateHorizontally(right)
-    def +/+ (under: M) = concatenateVertically(under)
+    def solve(B: M): M // returns X, where this == A and A x X = B
 
     // Operations on pair of matrices that return M[Boolean]
 
-    def lt(other: M): M
+    def lt(other: M): M // TODO Matrix[Boolean]
     def le(other: M): M
     def gt(other: M): M
     def ge(other: M): M
@@ -69,20 +70,7 @@ abstract class MatrixFactory {
     def or(other: M): M
     def xor(other: M): M
     def not(): M
-    
-    // aliases
-    def <(other: M) = lt(other)
-    def <=(other: M) = le(other)
-    def >(other: M) = gt(other)
-    def >=(other: M) = ge(other)
-    def ==(other: M) = eq(other)
-    def !=(other: M) = ne(other)
 
-    def &(other: M) = and(other)
-    def |(other: M) = or(other)
-    def ^(other: M) = xor(other)
-    def !() = not()
- 
     // various mins and maxs
     
     def max(): T
@@ -93,8 +81,40 @@ abstract class MatrixFactory {
     // def columnArgmins
     def columnMaxs(): M
     // def columnArgmaxs
+
+    // In-place versions (Their names are confusing.  They may change.)
     
-    // def truth(): M[Boolean]
+    def ceili(): Unit
+    def floori(): Unit
+    def powi(p: Double): Unit
+    def addi(x: T): Unit
+    def subtracti(x: T): Unit
+    def multiplyi(x: T): Unit
+    def dividei(x: T): Unit
+
+    // aliases
+    
+    def +(x: T) = add(x)
+    def -(x: T) = subtract(x)
+    def *(x: T) = multiply(x)
+    def x(other: M) = matrixMultiply(other)
+    def +|+ (right: M) = concatenateHorizontally(right)
+    def +/+ (under: M) = concatenateVertically(under)
+    def <(other: M) = lt(other)
+    def <=(other: M) = le(other)
+    def >(other: M) = gt(other)
+    def >=(other: M) = ge(other)
+    def ==(other: M) = eq(other)
+    def !=(other: M) = ne(other)
+    def &(other: M) = and(other)
+    def |(other: M) = or(other)
+    def ^(other: M) = xor(other)
+    def !() = not()
+
+    def +=(x: T) = addi(x)
+    def -=(x: T) = subtracti(x)
+    def *=(x: T) = multiplyi(x)
+    def /=(x: T) = dividei(x)
   }
 
   protected def pure(s: S): M

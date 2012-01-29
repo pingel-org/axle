@@ -3,6 +3,8 @@ package org.pingel.axle.matrix
 
 abstract class JblasMatrixFactoryClass extends MatrixFactory {
 
+  import org.jblas.{MatrixFunctions,Solve,Singular}
+  
   type M = JblasMatrixImpl
 
   type S = org.jblas.DoubleMatrix
@@ -32,19 +34,36 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     def isVector() = jblas.isVector
     def isSquare() = jblas.isSquare
     def isScalar() = jblas.isScalar
-    
-    def add(other: M) = pure(jblas.add(other.getJblas))
-    def subtract(other: M) = pure(jblas.sub(other.getJblas))
-    def multiply(other: M) = pure(jblas.mul(other.getJblas))
-    def matrixMultiply(other: M) = pure(jblas.mmul(other.getJblas))
-    // dot?
-    def divide(other: M) = pure(jblas.div(other.getJblas))
-    
-    def concatenateHorizontally(right: M) = pure(org.jblas.DoubleMatrix.concatHorizontally(this.jblas, right.getJblas))
-    def concatenateVertically(under: M) = pure(org.jblas.DoubleMatrix.concatVertically(this.jblas, under.getJblas))
+
+//    def add(other: M) = pure(jblas.add(other.getJblas))
+//    def subtract(other: M) = pure(jblas.sub(other.getJblas))
+//    def multiply(other: M) = pure(jblas.mul(other.getJblas))
+//    def matrixMultiply(other: M) = pure(jblas.mmul(other.getJblas))
+//    def divide(other: M) = pure(jblas.div(other.getJblas))
 
     def negate() = pure(jblas.neg())
     def transpose() = pure(jblas.transpose())
+    def ceil() = pure(MatrixFunctions.ceil(jblas))
+    def floor() = pure(MatrixFunctions.floor(jblas))
+    def log() = pure(MatrixFunctions.log(jblas))
+    def log10() = pure(MatrixFunctions.log10(jblas))
+    
+    def fullSVD() = {
+    	val usv = Singular.fullSVD(jblas)
+    	(pure(usv(0)), pure(usv(1)), pure(usv(2)))
+    }
+
+    def add(x: T) = pure(jblas.add(tToDouble(x)))
+    def subtract(x: T) = pure(jblas.sub(tToDouble(x)))
+    def multiply(x: T) = pure(jblas.mul(tToDouble(x)))
+    def divide(x: T) = pure(jblas.div(tToDouble(x)))
+    
+    def pow(p: Double) = pure(MatrixFunctions.pow(jblas, p))
+
+    def matrixMultiply(other: M) = pure(jblas.mmul(other.getJblas))
+    def concatenateHorizontally(right: M) = pure(org.jblas.DoubleMatrix.concatHorizontally(jblas, right.getJblas))
+    def concatenateVertically(under: M) = pure(org.jblas.DoubleMatrix.concatVertically(jblas, under.getJblas))
+    def solve(B: M) = pure(Solve.solve(jblas, B.getJblas))
 
     def lt(other: M) = pure(jblas.lt(other.getJblas))
     def le(other: M) = pure(jblas.le(other.getJblas))
@@ -71,7 +90,18 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     def columnMins() = pure(jblas.columnMins())
     def columnMaxs() = pure(jblas.columnMaxs())
 
-    // def truth() = BooleanJblasMatrixFactory.pure(jblas.truth())
+    // in-place operations
+    
+    def addi(x: T) = jblas.addi(tToDouble(x))
+    def subtracti(x: T) = jblas.subi(tToDouble(x))
+    def multiplyi(x: T) = jblas.muli(tToDouble(x))
+    def matrixMultiplyi(x: T) = jblas.mmuli(tToDouble(x))
+    def dividei(x: T) = jblas.divi(tToDouble(x))
+    def ceili() = MatrixFunctions.ceili(jblas)
+    def floori() = MatrixFunctions.floori(jblas)
+    def logi() = MatrixFunctions.logi(jblas)
+    def log10i() = MatrixFunctions.log10i(jblas)
+    def powi(p: Double) = MatrixFunctions.powi(jblas, p)
 
     override def toString() =
       (0 until rows).map(i => (0 until columns).map(j => doubleToT(jblas.get(i, j))).mkString(" ")).mkString("\n")
