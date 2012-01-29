@@ -3,17 +3,16 @@ package org.pingel.axle.matrix
 abstract class MatrixFactory {
 
   /**
-   * T: element type
-   * S: Storage type
-   * M: Matrix[T] that is backed by storage S
+   * Type Parameters:
+   * 
+   * T element type
+   * S storage type
+   * M subtype of Matrix[T] that is backed by storage S
    */
   
   type T
   type S
   type M <: Matrix[T]
-
-  // TODO: svd, solve, boolean operators, comparisons, max/min/argmax/...,
-  // stuff in MatrixFunctions
 
   trait Matrix[T] {
 
@@ -27,9 +26,20 @@ abstract class MatrixFactory {
     def getColumn(j: Int): M
     def getRow(i: Int): M
 
+    def isEmpty(): Boolean
+    def isRowVector(): Boolean
+    def isColumnVector(): Boolean
+    def isVector(): Boolean
+    def isSquare(): Boolean
+    def isScalar(): Boolean
+    // resize
+    // reshape
+
     def negate(): M
     def transpose(): M
 
+    // Operations on pairs of matrices
+    
     def add(other: M): M
     def subtract(other: M): M
     def multiply(other: M): M
@@ -45,6 +55,44 @@ abstract class MatrixFactory {
     def x(other: M) = matrixMultiply(other)
     def +|+ (right: M) = concatenateHorizontally(right)
     def +/+ (under: M) = concatenateVertically(under)
+
+    // Operations on pair of matrices that return M[Boolean]
+
+    def lt(other: M): M
+    def le(other: M): M
+    def gt(other: M): M
+    def ge(other: M): M
+    def eq(other: M): M
+    def ne(other: M): M
+    
+    def and(other: M): M
+    def or(other: M): M
+    def xor(other: M): M
+    def not(): M
+    
+    // aliases
+    def <(other: M) = lt(other)
+    def <=(other: M) = le(other)
+    def >(other: M) = gt(other)
+    def >=(other: M) = ge(other)
+    def ==(other: M) = eq(other)
+    def !=(other: M) = ne(other)
+
+    def &(other: M) = and(other)
+    def |(other: M) = or(other)
+    def ^(other: M) = xor(other)
+    def !() = not()
+ 
+    // various mins and maxs
+    
+    def max(): T
+    def argmax(): (Int, Int)
+    def min(): T
+    def argmin(): (Int, Int)
+    def columnMins(): M
+    // def columnArgmins
+    def columnMaxs(): M
+    // def columnArgmaxs
     
     // def truth(): M[Boolean]
   }

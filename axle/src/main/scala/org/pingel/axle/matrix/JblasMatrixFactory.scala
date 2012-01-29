@@ -24,28 +24,52 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     def setValueAt(i: Int, j: Int, v: T) = jblas.put(i, j, tToDouble(v))
 
     def getColumn(j: Int) = pure(jblas.getColumn(j))
-
     def getRow(i: Int) = pure(jblas.getRow(i))
 
-    def add(other: M) = pure(jblas.add(other.getJblas()))
-
+    def isEmpty() = jblas.isEmpty
+    def isRowVector() = jblas.isRowVector
+    def isColumnVector() = jblas.isColumnVector
+    def isVector() = jblas.isVector
+    def isSquare() = jblas.isSquare
+    def isScalar() = jblas.isScalar
+    
+    def add(other: M) = pure(jblas.add(other.getJblas))
     def subtract(other: M) = pure(jblas.sub(other.getJblas))
-
     def multiply(other: M) = pure(jblas.mul(other.getJblas))
-
     def matrixMultiply(other: M) = pure(jblas.mmul(other.getJblas))
-
     // dot?
-
     def divide(other: M) = pure(jblas.div(other.getJblas))
-
+    
     def concatenateHorizontally(right: M) = pure(org.jblas.DoubleMatrix.concatHorizontally(this.jblas, right.getJblas))
-
     def concatenateVertically(under: M) = pure(org.jblas.DoubleMatrix.concatVertically(this.jblas, under.getJblas))
 
     def negate() = pure(jblas.neg())
-
     def transpose() = pure(jblas.transpose())
+
+    def lt(other: M) = pure(jblas.lt(other.getJblas))
+    def le(other: M) = pure(jblas.le(other.getJblas))
+    def gt(other: M) = pure(jblas.gt(other.getJblas))
+    def ge(other: M) = pure(jblas.ge(other.getJblas))
+    def eq(other: M) = pure(jblas.eq(other.getJblas))
+    def ne(other: M) = pure(jblas.ne(other.getJblas))
+
+    def and(other: M) = pure(jblas.and(other.getJblas))
+    def or(other: M) = pure(jblas.or(other.getJblas))
+    def xor(other: M) = pure(jblas.xor(other.getJblas))
+    def not() = pure(jblas.not())
+    
+    def max() = doubleToT(jblas.max())
+    def argmax() = {
+      val i = jblas.argmax()
+      (i % columns, i / columns)
+    }
+    def min() = doubleToT(jblas.min())
+    def argmin() = {
+      val i = jblas.argmin()
+      (i % columns, i / columns)
+    }
+    def columnMins() = pure(jblas.columnMins())
+    def columnMaxs() = pure(jblas.columnMaxs())
 
     // def truth() = BooleanJblasMatrixFactory.pure(jblas.truth())
 
