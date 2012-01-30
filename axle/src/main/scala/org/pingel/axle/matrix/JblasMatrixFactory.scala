@@ -47,6 +47,7 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
 
     def negate() = pure(jblas.neg())
     def transpose() = pure(jblas.transpose())
+    def invert() = pure(Solve.solve(jblas, DoubleMatrix.eye(jblas.rows)))
     def ceil() = pure(MatrixFunctions.ceil(jblas))
     def floor() = pure(MatrixFunctions.floor(jblas))
     def log() = pure(MatrixFunctions.log(jblas))
@@ -57,14 +58,17 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     	(pure(usv(0)), pure(usv(1)), pure(usv(2)))
     }
 
-    def add(x: T) = pure(jblas.add(m.backward(x)))
-    def subtract(x: T) = pure(jblas.sub(m.backward(x)))
-    def multiply(x: T) = pure(jblas.mul(m.backward(x)))
-    def divide(x: T) = pure(jblas.div(m.backward(x)))
+    def addScalar(x: T) = pure(jblas.add(m.backward(x)))
+    def subtractScalar(x: T) = pure(jblas.sub(m.backward(x)))
+    def multiplyScalar(x: T) = pure(jblas.mul(m.backward(x)))
+    def divideScalar(x: T) = pure(jblas.div(m.backward(x)))
     
     def pow(p: Double) = pure(MatrixFunctions.pow(jblas, p))
 
-    def matrixMultiply(other: M) = pure(jblas.mmul(other.getJblas))
+    def addMatrix(other: M) = pure(jblas.add(other.getJblas))
+    def subtractMatrix(other: M) = pure(jblas.sub(other.getJblas))
+    def multiplyMatrix(other: M) = pure(jblas.mmul(other.getJblas))
+    
     def concatenateHorizontally(right: M) = pure(DoubleMatrix.concatHorizontally(jblas, right.getJblas))
     def concatenateVertically(under: M) = pure(DoubleMatrix.concatVertically(jblas, under.getJblas))
     def solve(B: M) = pure(Solve.solve(jblas, B.getJblas))
@@ -116,6 +120,7 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
   def zeros(m: Int, n: Int) = pure(DoubleMatrix.zeros(m, n))
   def ones(m: Int, n: Int) = pure(DoubleMatrix.ones(m, n))
   def eye(n: Int) = pure(DoubleMatrix.eye(n))
+  def diag(dsRow: M) = pure(DoubleMatrix.diag(dsRow.getJblas()))
   
   // evenly distributed from 0.0 to 1.0
   def rand(m: Int, n: Int) = pure(DoubleMatrix.rand(m, n))

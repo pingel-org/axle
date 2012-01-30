@@ -37,6 +37,7 @@ abstract class MatrixFactory {
 
     def negate(): M
     def transpose(): M
+    def invert(): M
     def ceil(): M
     def floor(): M
     def log(): M
@@ -45,14 +46,17 @@ abstract class MatrixFactory {
     // def truth(): M[Boolean]
 
     def pow(p: Double): M
-    def add(x: T): M
-    def subtract(x: T): M
-    def multiply(x: T): M
-    def divide(x: T): M
+    
+    def addScalar(x: T): M
+    def subtractScalar(x: T): M
+    def multiplyScalar(x: T): M
+    def divideScalar(x: T): M
 
     // Operations on pairs of matrices
 
-    def matrixMultiply(other: M): M
+    def addMatrix(other: M): M
+    def subtractMatrix(other: M): M
+    def multiplyMatrix(other: M): M
     def concatenateHorizontally(right: M): M
     def concatenateVertically(under: M): M
     def solve(B: M): M // returns X, where this == A and A x X = B
@@ -82,24 +86,40 @@ abstract class MatrixFactory {
     def columnMaxs(): M
     // def columnArgmaxs
 
-    // In-place versions (Their names are confusing.  They may change.)
+    // In-place versions
     
     def ceili(): Unit
     def floori(): Unit
     def powi(p: Double): Unit
+    
     def addi(x: T): Unit
     def subtracti(x: T): Unit
     def multiplyi(x: T): Unit
     def dividei(x: T): Unit
 
-    // aliases
+    // TODO: matrix versions of addi, etc
     
-    def +(x: T) = add(x)
-    def -(x: T) = subtract(x)
-    def *(x: T) = multiply(x)
-    def x(other: M) = matrixMultiply(other)
+    // aliases
+
+    def t() = transpose()
+    def inv() = invert()
+
+    def +(x: T) = addScalar(x)
+    def -(x: T) = subtractScalar(x)
+    def *(x: T) = multiplyScalar(x)
+    def /(x: T) = divideScalar(x)
+    def +=(x: T) = addi(x)
+    def -=(x: T) = subtracti(x)
+    def *=(x: T) = multiplyi(x)
+    def /=(x: T) = dividei(x)
+
+    def +(other: M) = addMatrix(other)
+    def -(other: M) = subtractMatrix(other)
+    def ⨯(other: M) = multiplyMatrix(other)
+    def mm(other: M) = multiplyMatrix(other)
     def +|+ (right: M) = concatenateHorizontally(right)
     def +/+ (under: M) = concatenateVertically(under)
+
     def <(other: M) = lt(other)
     def <=(other: M) = le(other)
     def >(other: M) = gt(other)
@@ -111,10 +131,6 @@ abstract class MatrixFactory {
     def ^(other: M) = xor(other)
     def !() = not()
 
-    def +=(x: T) = addi(x)
-    def -=(x: T) = subtracti(x)
-    def *=(x: T) = multiplyi(x)
-    def /=(x: T) = dividei(x)
   }
 
   protected def pure(s: S): M

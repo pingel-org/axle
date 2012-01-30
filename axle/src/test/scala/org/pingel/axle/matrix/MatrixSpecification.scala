@@ -57,5 +57,29 @@ class MatrixSpecification extends Specification {
     }
   }
 
+  "Logistic Regression" should {
+    "work" in {
+/*
+    	val y = matrix((460, 232, 315, 178), 4, 1, byrow=TRUE)
+
+    	val X = matrix()
+//   1, 2104, 5, 1, 45,
+//   1, 1416, 3, 2, 40,
+//   1, 1534, 3, 2, 30,
+//   1,  852, 2, 1, 36),
+
+
+    	val Xs = scaleX(X)
+    	val ys = scaleY(y)
+
+    	gradientDescent(Xs, ys, t(t(rep(1, ncol(Xs)))), 0.1, 100)
+
+    	//# TODO: an h that incorporates the scaling that was applied in scaleX and scaleY
+*/
+      
+      1 must be equalTo (1)
+    }
+  }
+
 }
 
