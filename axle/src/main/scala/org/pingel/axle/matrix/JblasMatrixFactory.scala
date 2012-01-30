@@ -1,6 +1,12 @@
 package org.pingel.axle.matrix
 
 
+trait FunctionPair[A, B] {
+  // not necessarily a bijection, but related
+  val forward: A => B
+  val backward: B => A
+}
+
 abstract class JblasMatrixFactoryClass extends MatrixFactory {
 
   import org.jblas.{MatrixFunctions,Solve,Singular,DoubleMatrix}
@@ -9,9 +15,7 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
 
   type S = DoubleMatrix
 
-  def doubleToT(d: Double): T
-
-  def tToDouble(t: T): Double
+  val m: FunctionPair[Double, T]
 
   class JblasMatrixImpl(jblas: DoubleMatrix) extends Matrix[T] {
 
@@ -21,9 +25,9 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
 
     def length() = jblas.length
 
-    def valueAt(i: Int, j: Int): T = doubleToT(jblas.get(i, j))
+    def valueAt(i: Int, j: Int): T = m.forward(jblas.get(i, j))
 
-    def setValueAt(i: Int, j: Int, v: T) = jblas.put(i, j, tToDouble(v))
+    def setValueAt(i: Int, j: Int, v: T) = jblas.put(i, j, m.backward(v))
 
     def getColumn(j: Int) = pure(jblas.getColumn(j))
     def getRow(i: Int) = pure(jblas.getRow(i))
@@ -53,10 +57,10 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     	(pure(usv(0)), pure(usv(1)), pure(usv(2)))
     }
 
-    def add(x: T) = pure(jblas.add(tToDouble(x)))
-    def subtract(x: T) = pure(jblas.sub(tToDouble(x)))
-    def multiply(x: T) = pure(jblas.mul(tToDouble(x)))
-    def divide(x: T) = pure(jblas.div(tToDouble(x)))
+    def add(x: T) = pure(jblas.add(m.backward(x)))
+    def subtract(x: T) = pure(jblas.sub(m.backward(x)))
+    def multiply(x: T) = pure(jblas.mul(m.backward(x)))
+    def divide(x: T) = pure(jblas.div(m.backward(x)))
     
     def pow(p: Double) = pure(MatrixFunctions.pow(jblas, p))
 
@@ -77,12 +81,12 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     def xor(other: M) = pure(jblas.xor(other.getJblas))
     def not() = pure(jblas.not())
     
-    def max() = doubleToT(jblas.max())
+    def max() = m.forward(jblas.max())
     def argmax() = {
       val i = jblas.argmax()
       (i % columns, i / columns)
     }
-    def min() = doubleToT(jblas.min())
+    def min() = m.forward(jblas.min())
     def argmin() = {
       val i = jblas.argmin()
       (i % columns, i / columns)
@@ -92,11 +96,11 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
 
     // in-place operations
     
-    def addi(x: T) = jblas.addi(tToDouble(x))
-    def subtracti(x: T) = jblas.subi(tToDouble(x))
-    def multiplyi(x: T) = jblas.muli(tToDouble(x))
-    def matrixMultiplyi(x: T) = jblas.mmuli(tToDouble(x))
-    def dividei(x: T) = jblas.divi(tToDouble(x))
+    def addi(x: T) = jblas.addi(m.backward(x))
+    def subtracti(x: T) = jblas.subi(m.backward(x))
+    def multiplyi(x: T) = jblas.muli(m.backward(x))
+    def matrixMultiplyi(x: T) = jblas.mmuli(m.backward(x))
+    def dividei(x: T) = jblas.divi(m.backward(x))
     def ceili() = MatrixFunctions.ceili(jblas)
     def floori() = MatrixFunctions.floori(jblas)
     def logi() = MatrixFunctions.logi(jblas)
@@ -104,7 +108,7 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     def powi(p: Double) = MatrixFunctions.powi(jblas, p)
 
     override def toString() =
-      (0 until rows).map(i => (0 until columns).map(j => doubleToT(jblas.get(i, j))).mkString(" ")).mkString("\n")
+      (0 until rows).map(i => (0 until columns).map(j => m.forward(jblas.get(i, j))).mkString(" ")).mkString("\n")
 
     def getJblas() = jblas
   }
@@ -125,8 +129,11 @@ object DoubleJblasMatrixFactory extends DoubleJblasMatrixFactoryClass()
 
 class DoubleJblasMatrixFactoryClass extends JblasMatrixFactoryClass {
   type T = Double
-  def doubleToT(d: Double) = d
-  def tToDouble(t: T) = t
+  
+  val m = new FunctionPair[Double, Double] {
+	  val forward = (d: Double) => d
+	  val backward = (t: T) => t
+  }
 }
 
 object IntJblasMatrixFactory extends IntJblasMatrixFactoryClass()
@@ -135,8 +142,10 @@ class IntJblasMatrixFactoryClass extends JblasMatrixFactoryClass {
   
   type T = Int
   
-  def doubleToT(d: Double) = d.toInt
-  def tToDouble(t: T) = t
+  val m = new FunctionPair[Double, Int] {
+	  val forward = (d: Double) => d.toInt
+	  val backward = (t: T) => t.toDouble
+  }
   
   // TOOD: rand and randn should probably floor the result
 }
@@ -146,10 +155,12 @@ object BooleanJblasMatrixFactory extends BooleanJblasMatrixFactoryClass()
 class BooleanJblasMatrixFactoryClass extends JblasMatrixFactoryClass {
   
   type T = Boolean
-  
-  def doubleToT(d: Double) = d > 0
-  def tToDouble(t: T) = t match { case true => 0.0 case false => 1.0 }
-  
+
+  val m = new FunctionPair[Double, Boolean] {
+	  val forward = (d: Double) => d > 0
+	  val backward = (t: T) => t match { case true => 0.0 case false => 1.0 }
+  }
+
   import org.jblas.DoubleMatrix
   
   def falses(m: Int, n: Int) = pure(DoubleMatrix.zeros(m, n))
