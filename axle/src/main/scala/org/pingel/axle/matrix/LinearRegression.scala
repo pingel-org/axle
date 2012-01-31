@@ -8,10 +8,10 @@ class LinearRegression {
 
   // def normalEquation(X: Matrix[Double], y: Matrix[Double]): Matrix[Double] = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
-  def scale(X: Matrix[Double]): (Matrix[Double], Matrix[Double], Matrix[Double]) = {
+  def scaleColumns(X: Matrix[Double]): (Matrix[Double], Matrix[Double], Matrix[Double]) = {
     val colMins = X.columnMins
     val colRanges = X.columnMaxs - colMins
-    val scaled = (diag(colRanges.inv) ⨯ X.subRowVector(colMins).t).t
+    val scaled = (diag(colRanges).inv ⨯ X.subRowVector(colMins).t).t
     (scaled, colMins, colRanges)
   }
 

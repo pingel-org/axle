@@ -19,13 +19,10 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
   class JblasMatrixImpl(jblas: DoubleMatrix) extends Matrix[T] {
 
     def rows() = jblas.rows
-
     def columns() = jblas.columns
-
     def length() = jblas.length
 
     def valueAt(i: Int, j: Int): T = m.forward(jblas.get(i, j))
-
     def setValueAt(i: Int, j: Int, v: T) = jblas.put(i, j, m.backward(v))
 
     def getColumn(j: Int) = pure(jblas.getColumn(j))
@@ -124,21 +121,18 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     def getJblas() = jblas
   }
 
-  def zeros(m: Int, n: Int) = pure(DoubleMatrix.zeros(m, n))
-  def ones(m: Int, n: Int) = pure(DoubleMatrix.ones(m, n))
-  def eye(n: Int) = pure(DoubleMatrix.eye(n))
-  def diag(dsRow: M) = pure(DoubleMatrix.diag(dsRow.getJblas()))
-
   def fromArray(r: Int, c: Int, values: Array[T]) = {
     val jblas = new DoubleMatrix(values.map(m.backward(_)))
     jblas.reshape(r, c)
     pure(jblas)
   }
 
-  // evenly distributed from 0.0 to 1.0
-  def rand(m: Int, n: Int) = pure(DoubleMatrix.rand(m, n))
-  // normal distribution
-  def randn(m: Int, n: Int) = pure(DoubleMatrix.randn(m, n))
+  def zeros(m: Int, n: Int) = pure(DoubleMatrix.zeros(m, n))
+  def ones(m: Int, n: Int) = pure(DoubleMatrix.ones(m, n))
+  def eye(n: Int) = pure(DoubleMatrix.eye(n))
+  def diag(dsRow: M) = pure(DoubleMatrix.diag(dsRow.getJblas()))
+  def rand(m: Int, n: Int) = pure(DoubleMatrix.rand(m, n)) // evenly distributed from 0.0 to 1.0
+  def randn(m: Int, n: Int) = pure(DoubleMatrix.randn(m, n)) // normal distribution 
 
   def pure(jblas: DoubleMatrix): M = new JblasMatrixImpl(jblas)
 }
