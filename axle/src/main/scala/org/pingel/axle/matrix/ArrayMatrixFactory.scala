@@ -2,11 +2,11 @@ package org.pingel.axle.matrix
 
 abstract class ArrayMatrixFactory extends MatrixFactory {
 
-  type M = ArrayMatrixImpl
+  type Matrix = ArrayMatrixImpl
 
   type S = (Int, Int, Array[T])
 
-  abstract class ArrayMatrixImpl(triple: (Int, Int, Array[T])) extends Matrix[T] {
+  abstract class ArrayMatrixImpl(triple: (Int, Int, Array[T])) extends MatrixIntf[T] {
     // def add(other: M) = pure(triple) // TODO
     // def getTriple() = triple
   }

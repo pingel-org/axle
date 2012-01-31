@@ -12,9 +12,9 @@ abstract class MatrixFactory {
   
   type T
   type S
-  type M <: Matrix[T]
+  type Matrix <: MatrixIntf[T]
 
-  trait Matrix[T] {
+  trait MatrixIntf[T] {
 
     def rows: Int
     def columns: Int
@@ -23,8 +23,8 @@ abstract class MatrixFactory {
     def valueAt(i: Int, j: Int): T
     def setValueAt(i: Int, j: Int, v: T): Unit
 
-    def getColumn(j: Int): M
-    def getRow(i: Int): M
+    def getColumn(j: Int): Matrix
+    def getRow(i: Int): Matrix
 
     def isEmpty(): Boolean
     def isRowVector(): Boolean
@@ -35,55 +35,55 @@ abstract class MatrixFactory {
     // resize
     // reshape
 
-    def dup(): M
-    def negate(): M
-    def transpose(): M
-    def invert(): M
-    def ceil(): M
-    def floor(): M
-    def log(): M
-    def log10(): M
-    def fullSVD(): (M, M, M) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
+    def dup(): Matrix
+    def negate(): Matrix
+    def transpose(): Matrix
+    def invert(): Matrix
+    def ceil(): Matrix
+    def floor(): Matrix
+    def log(): Matrix
+    def log10(): Matrix
+    def fullSVD(): (Matrix, Matrix, Matrix) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
     // def truth(): M[Boolean]
 
-    def pow(p: Double): M
+    def pow(p: Double): Matrix
     
-    def addScalar(x: T): M
-    def subtractScalar(x: T): M
-    def multiplyScalar(x: T): M
-    def divideScalar(x: T): M
-    def mulRow(i: Int, x: T): M
-    def mulColumn(i: Int, x: T): M
+    def addScalar(x: T): Matrix
+    def subtractScalar(x: T): Matrix
+    def multiplyScalar(x: T): Matrix
+    def divideScalar(x: T): Matrix
+    def mulRow(i: Int, x: T): Matrix
+    def mulColumn(i: Int, x: T): Matrix
 
     // Operations on pairs of matrices
 
-    def addMatrix(other: M): M
-    def subtractMatrix(other: M): M
-    def multiplyMatrix(other: M): M
-    def concatenateHorizontally(right: M): M
-    def concatenateVertically(under: M): M
-    def solve(B: M): M // returns X, where this == A and A x X = B
+    def addMatrix(other: Matrix): Matrix
+    def subtractMatrix(other: Matrix): Matrix
+    def multiplyMatrix(other: Matrix): Matrix
+    def concatenateHorizontally(right: Matrix): Matrix
+    def concatenateVertically(under: Matrix): Matrix
+    def solve(B: Matrix): Matrix // returns X, where this == A and A x X = B
 
     // Operations on a matrix and a column/row vector
     
-    def addRowVector(row: M): M
-    def addColumnVector(column: M): M
-    def subRowVector(row: M): M
-    def subColumnVector(column: M): M
+    def addRowVector(row: Matrix): Matrix
+    def addColumnVector(column: Matrix): Matrix
+    def subRowVector(row: Matrix): Matrix
+    def subColumnVector(column: Matrix): Matrix
 
     // Operations on pair of matrices that return M[Boolean]
 
-    def lt(other: M): M // TODO Matrix[Boolean]
-    def le(other: M): M
-    def gt(other: M): M
-    def ge(other: M): M
-    def eq(other: M): M
-    def ne(other: M): M
+    def lt(other: Matrix): Matrix // TODO Matrix[Boolean]
+    def le(other: Matrix): Matrix
+    def gt(other: Matrix): Matrix
+    def ge(other: Matrix): Matrix
+    def eq(other: Matrix): Matrix
+    def ne(other: Matrix): Matrix
     
-    def and(other: M): M
-    def or(other: M): M
-    def xor(other: M): M
-    def not(): M
+    def and(other: Matrix): Matrix
+    def or(other: Matrix): Matrix
+    def xor(other: Matrix): Matrix
+    def not(): Matrix
 
     // various mins and maxs
     
@@ -91,9 +91,9 @@ abstract class MatrixFactory {
     def argmax(): (Int, Int)
     def min(): T
     def argmin(): (Int, Int)
-    def columnMins(): M
+    def columnMins(): Matrix
     // def columnArgmins
-    def columnMaxs(): M
+    def columnMaxs(): Matrix
     // def columnArgmaxs
 
     // In-place versions
@@ -107,12 +107,12 @@ abstract class MatrixFactory {
     def multiplyi(x: T): Unit
     def dividei(x: T): Unit
 
-    def addMatrixi(other: M): Unit
-    def subtractMatrixi(other: M): Unit
-    def addiRowVector(row: M): Unit
-    def addiColumnVector(column: M): Unit
-    def subiRowVector(row: M): Unit
-    def subiColumnVector(column: M): Unit
+    def addMatrixi(other: Matrix): Unit
+    def subtractMatrixi(other: Matrix): Unit
+    def addiRowVector(row: Matrix): Unit
+    def addiColumnVector(column: Matrix): Unit
+    def subiRowVector(row: Matrix): Unit
+    def subiColumnVector(column: Matrix): Unit
 
     
     // aliases
@@ -122,37 +122,37 @@ abstract class MatrixFactory {
 
     def +(x: T) = addScalar(x)
     def +=(x: T) = addi(x)
-    def +(other: M) = addMatrix(other)
-    def +=(other: M) = addMatrixi(other)
+    def +(other: Matrix) = addMatrix(other)
+    def +=(other: Matrix) = addMatrixi(other)
     
     def -(x: T) = subtractScalar(x)
     def -=(x: T) = subtracti(x)
-    def -(other: M) = subtractMatrix(other)
-    def -=(other: M) = subtractMatrixi(other)
+    def -(other: Matrix) = subtractMatrix(other)
+    def -=(other: Matrix) = subtractMatrixi(other)
     
     def *(x: T) = multiplyScalar(x)
     def *=(x: T) = multiplyi(x)
-    def ⨯(other: M) = multiplyMatrix(other)
-    def mm(other: M) = multiplyMatrix(other)
+    def ⨯(other: Matrix) = multiplyMatrix(other)
+    def mm(other: Matrix) = multiplyMatrix(other)
     
     def /(x: T) = divideScalar(x)
     def /=(x: T) = dividei(x)
 
-    def +|+ (right: M) = concatenateHorizontally(right)
-    def +/+ (under: M) = concatenateVertically(under)
+    def +|+ (right: Matrix) = concatenateHorizontally(right)
+    def +/+ (under: Matrix) = concatenateVertically(under)
 
-    def <(other: M) = lt(other)
-    def <=(other: M) = le(other)
-    def >(other: M) = gt(other)
-    def >=(other: M) = ge(other)
-    def ==(other: M) = eq(other)
-    def !=(other: M) = ne(other)
-    def &(other: M) = and(other)
-    def |(other: M) = or(other)
-    def ^(other: M) = xor(other)
+    def <(other: Matrix) = lt(other)
+    def <=(other: Matrix) = le(other)
+    def >(other: Matrix) = gt(other)
+    def >=(other: Matrix) = ge(other)
+    def ==(other: Matrix) = eq(other)
+    def !=(other: Matrix) = ne(other)
+    def &(other: Matrix) = and(other)
+    def |(other: Matrix) = or(other)
+    def ^(other: Matrix) = xor(other)
     def !() = not()
 
   }
 
-  protected def pure(s: S): M
+  protected def pure(s: S): Matrix
 }

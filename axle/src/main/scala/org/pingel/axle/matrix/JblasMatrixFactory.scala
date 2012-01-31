@@ -10,13 +10,13 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
 
   import org.jblas.{ MatrixFunctions, Solve, Singular, DoubleMatrix }
 
-  type M = JblasMatrixImpl
+  type Matrix = JblasMatrixImpl
 
   type S = DoubleMatrix
 
   val m: FunctionPair[Double, T]
 
-  class JblasMatrixImpl(jblas: DoubleMatrix) extends Matrix[T] {
+  class JblasMatrixImpl(jblas: DoubleMatrix) extends MatrixIntf[T] {
 
     def rows() = jblas.rows
     def columns() = jblas.columns
@@ -58,29 +58,29 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
 
     def pow(p: Double) = pure(MatrixFunctions.pow(jblas, p))
 
-    def addMatrix(other: M) = pure(jblas.add(other.getJblas))
-    def subtractMatrix(other: M) = pure(jblas.sub(other.getJblas))
-    def multiplyMatrix(other: M) = pure(jblas.mmul(other.getJblas))
+    def addMatrix(other: Matrix) = pure(jblas.add(other.getJblas))
+    def subtractMatrix(other: Matrix) = pure(jblas.sub(other.getJblas))
+    def multiplyMatrix(other: Matrix) = pure(jblas.mmul(other.getJblas))
 
-    def concatenateHorizontally(right: M) = pure(DoubleMatrix.concatHorizontally(jblas, right.getJblas))
-    def concatenateVertically(under: M) = pure(DoubleMatrix.concatVertically(jblas, under.getJblas))
-    def solve(B: M) = pure(Solve.solve(jblas, B.getJblas))
+    def concatenateHorizontally(right: Matrix) = pure(DoubleMatrix.concatHorizontally(jblas, right.getJblas))
+    def concatenateVertically(under: Matrix) = pure(DoubleMatrix.concatVertically(jblas, under.getJblas))
+    def solve(B: Matrix) = pure(Solve.solve(jblas, B.getJblas))
 
-    def addRowVector(row: M) = pure(jblas.addRowVector(row.getJblas))
-    def addColumnVector(column: M) = pure(jblas.addRowVector(column.getJblas))
-    def subRowVector(row: M) = pure(jblas.subRowVector(row.getJblas))
-    def subColumnVector(column: M) = pure(jblas.subRowVector(column.getJblas))
+    def addRowVector(row: Matrix) = pure(jblas.addRowVector(row.getJblas))
+    def addColumnVector(column: Matrix) = pure(jblas.addRowVector(column.getJblas))
+    def subRowVector(row: Matrix) = pure(jblas.subRowVector(row.getJblas))
+    def subColumnVector(column: Matrix) = pure(jblas.subRowVector(column.getJblas))
 
-    def lt(other: M) = pure(jblas.lt(other.getJblas))
-    def le(other: M) = pure(jblas.le(other.getJblas))
-    def gt(other: M) = pure(jblas.gt(other.getJblas))
-    def ge(other: M) = pure(jblas.ge(other.getJblas))
-    def eq(other: M) = pure(jblas.eq(other.getJblas))
-    def ne(other: M) = pure(jblas.ne(other.getJblas))
+    def lt(other: Matrix) = pure(jblas.lt(other.getJblas))
+    def le(other: Matrix) = pure(jblas.le(other.getJblas))
+    def gt(other: Matrix) = pure(jblas.gt(other.getJblas))
+    def ge(other: Matrix) = pure(jblas.ge(other.getJblas))
+    def eq(other: Matrix) = pure(jblas.eq(other.getJblas))
+    def ne(other: Matrix) = pure(jblas.ne(other.getJblas))
 
-    def and(other: M) = pure(jblas.and(other.getJblas))
-    def or(other: M) = pure(jblas.or(other.getJblas))
-    def xor(other: M) = pure(jblas.xor(other.getJblas))
+    def and(other: Matrix) = pure(jblas.and(other.getJblas))
+    def or(other: Matrix) = pure(jblas.or(other.getJblas))
+    def xor(other: Matrix) = pure(jblas.xor(other.getJblas))
     def not() = pure(jblas.not())
 
     def max() = m.forward(jblas.max())
@@ -108,12 +108,12 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
     def logi() = MatrixFunctions.logi(jblas)
     def log10i() = MatrixFunctions.log10i(jblas)
     def powi(p: Double) = MatrixFunctions.powi(jblas, p)
-    def addMatrixi(other: M) = jblas.addi(other.getJblas)
-    def subtractMatrixi(other: M) = jblas.subi(other.getJblas)
-    def addiRowVector(row: M) = jblas.addiRowVector(row.getJblas)
-    def addiColumnVector(column: M) = jblas.addiRowVector(column.getJblas)
-    def subiRowVector(row: M) = jblas.subiRowVector(row.getJblas)
-    def subiColumnVector(column: M) = jblas.subiRowVector(column.getJblas)
+    def addMatrixi(other: Matrix) = jblas.addi(other.getJblas)
+    def subtractMatrixi(other: Matrix) = jblas.subi(other.getJblas)
+    def addiRowVector(row: Matrix) = jblas.addiRowVector(row.getJblas)
+    def addiColumnVector(column: Matrix) = jblas.addiRowVector(column.getJblas)
+    def subiRowVector(row: Matrix) = jblas.subiRowVector(row.getJblas)
+    def subiColumnVector(column: Matrix) = jblas.subiRowVector(column.getJblas)
 
     override def toString() =
       (0 until rows).map(i => (0 until columns).map(j => m.forward(jblas.get(i, j))).mkString(" ")).mkString("\n")
@@ -130,11 +130,11 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
   def zeros(m: Int, n: Int) = pure(DoubleMatrix.zeros(m, n))
   def ones(m: Int, n: Int) = pure(DoubleMatrix.ones(m, n))
   def eye(n: Int) = pure(DoubleMatrix.eye(n))
-  def diag(dsRow: M) = pure(DoubleMatrix.diag(dsRow.getJblas()))
+  def diag(dsRow: Matrix) = pure(DoubleMatrix.diag(dsRow.getJblas()))
   def rand(m: Int, n: Int) = pure(DoubleMatrix.rand(m, n)) // evenly distributed from 0.0 to 1.0
   def randn(m: Int, n: Int) = pure(DoubleMatrix.randn(m, n)) // normal distribution 
 
-  def pure(jblas: DoubleMatrix): M = new JblasMatrixImpl(jblas)
+  def pure(jblas: DoubleMatrix): Matrix = new JblasMatrixImpl(jblas)
 }
 
 object DoubleJblasMatrixFactory extends DoubleJblasMatrixFactoryClass()
