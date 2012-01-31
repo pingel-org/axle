@@ -17,13 +17,14 @@ class LinearRegression {
 
   def h(xi: Matrix, θ: Matrix) = xi ⨯ θ
 
-  def dTheta(X: Matrix, y: Matrix, θ: Matrix) = (0 until X.rows).foldLeft(zeros(1, X.columns))(
+  def dθ(X: Matrix, y: Matrix, θ: Matrix) = (0 until X.rows).foldLeft(zeros(1, X.columns))(
     (m: Matrix, i: Int) => m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0)))
   ) / X.rows
-
-  def dθ(X: Matrix, y: Matrix, θ: Matrix) = dTheta(X, y, θ)
 
   def gradientDescent(X: Matrix, y: Matrix, θ: Matrix, α: Double, iterations: Int) =
     (0 until iterations).foldLeft(θ)((θi: Matrix, i: Int) => θi - (dθ(X, y, θi) * α))
 
+  // non-unicode alias
+  def dTheta(X: Matrix, y: Matrix, θ: Matrix) = dθ(X, y, θ)
+    
 }
