@@ -10,8 +10,6 @@ class LinearRegressionSpecification extends Specification {
       import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
       import org.pingel.axle.matrix.LinearRegression._
 
-      def h(m1: M, m2: M) = m1 mm m2
-      
       val y = fromArray(4, 1, Array(460.0, 232.0, 315.0, 178.0))
 
       val examples = fromArray(4, 4, Array[Double](
