@@ -65,14 +65,15 @@ class MatrixSpecification extends Specification {
 
       val y = fromArray(4, 1, Array(460.0, 232.0, 315.0, 178.0))
 
+      // unfortunately fromArray interprets this as the transpose of how it's typed:
       val examples = fromArray(4, 4, Array[Double](
         2104, 5, 1, 45,
         1416, 3, 2, 40,
         1534, 3, 2, 30,
          852, 2, 1, 36
-      ))
+      )).t
 
-      val N = y.columns
+      val N = y.rows
       
       val examplesScaled = scale(examples) // (scaled, colMins, colRanges)
 
