@@ -35,6 +35,7 @@ abstract class MatrixFactory {
     // resize
     // reshape
 
+    def dup(): M
     def negate(): M
     def transpose(): M
     def invert(): M
@@ -51,6 +52,8 @@ abstract class MatrixFactory {
     def subtractScalar(x: T): M
     def multiplyScalar(x: T): M
     def divideScalar(x: T): M
+    def mulRow(i: Int, x: T): M
+    def mulColumn(i: Int, x: T): M
 
     // Operations on pairs of matrices
 
@@ -60,6 +63,13 @@ abstract class MatrixFactory {
     def concatenateHorizontally(right: M): M
     def concatenateVertically(under: M): M
     def solve(B: M): M // returns X, where this == A and A x X = B
+
+    // Operations on a matrix and a column/row vector
+    
+    def addRowVector(row: M): M
+    def addColumnVector(column: M): M
+    def subRowVector(row: M): M
+    def subColumnVector(column: M): M
 
     // Operations on pair of matrices that return M[Boolean]
 
@@ -97,7 +107,13 @@ abstract class MatrixFactory {
     def multiplyi(x: T): Unit
     def dividei(x: T): Unit
 
-    // TODO: matrix versions of addi, etc
+    def addMatrixi(other: M): Unit
+    def subtractMatrixi(other: M): Unit
+    def addiRowVector(row: M): Unit
+    def addiColumnVector(column: M): Unit
+    def subiRowVector(row: M): Unit
+    def subiColumnVector(column: M): Unit
+
     
     // aliases
 
@@ -105,18 +121,23 @@ abstract class MatrixFactory {
     def inv() = invert()
 
     def +(x: T) = addScalar(x)
-    def -(x: T) = subtractScalar(x)
-    def *(x: T) = multiplyScalar(x)
-    def /(x: T) = divideScalar(x)
     def +=(x: T) = addi(x)
-    def -=(x: T) = subtracti(x)
-    def *=(x: T) = multiplyi(x)
-    def /=(x: T) = dividei(x)
-
     def +(other: M) = addMatrix(other)
+    def +=(other: M) = addMatrixi(other)
+    
+    def -(x: T) = subtractScalar(x)
+    def -=(x: T) = subtracti(x)
     def -(other: M) = subtractMatrix(other)
+    def -=(other: M) = subtractMatrixi(other)
+    
+    def *(x: T) = multiplyScalar(x)
+    def *=(x: T) = multiplyi(x)
     def ⨯(other: M) = multiplyMatrix(other)
     def mm(other: M) = multiplyMatrix(other)
+    
+    def /(x: T) = divideScalar(x)
+    def /=(x: T) = dividei(x)
+
     def +|+ (right: M) = concatenateHorizontally(right)
     def +/+ (under: M) = concatenateVertically(under)
 

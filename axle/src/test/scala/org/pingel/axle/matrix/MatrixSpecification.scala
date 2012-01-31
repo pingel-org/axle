@@ -57,26 +57,33 @@ class MatrixSpecification extends Specification {
     }
   }
 
-  "Logistic Regression" should {
+  "Linear Regression" should {
     "work" in {
-/*
-    	val y = matrix((460, 232, 315, 178), 4, 1, byrow=TRUE)
 
-    	val X = matrix()
-//   1, 2104, 5, 1, 45,
-//   1, 1416, 3, 2, 40,
-//   1, 1534, 3, 2, 30,
-//   1,  852, 2, 1, 36),
+      import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
+      import org.pingel.axle.matrix.LinearRegression._
 
+      val y = fromArray(4, 1, Array(460.0, 232.0, 315.0, 178.0))
 
-    	val Xs = scaleX(X)
-    	val ys = scaleY(y)
+      val examples = fromArray(4, 4, Array[Double](
+        2104, 5, 1, 45,
+        1416, 3, 2, 40,
+        1534, 3, 2, 30,
+         852, 2, 1, 36
+      ))
 
-    	gradientDescent(Xs, ys, t(t(rep(1, ncol(Xs)))), 0.1, 100)
-
-    	//# TODO: an h that incorporates the scaling that was applied in scaleX and scaleY
-*/
+      val N = y.columns
       
+      val examplesScaled = scale(examples) // (scaled, colMins, colRanges)
+
+      val X = ones(N, 1) +|+ examplesScaled._1
+      
+      val yScaled = scale(y)
+      
+      val θ = gradientDescent(X, yScaled._1, ones(N, 1), 0.1, 100)
+
+      // TODO: an h that incorporates the scaling that was applied in X and y
+
       1 must be equalTo (1)
     }
   }
