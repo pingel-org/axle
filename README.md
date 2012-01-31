@@ -27,13 +27,13 @@ To be written.
 Projects
 ========
 
-[Artificial Intelligence](ai) (org.pingel.{bayes,causality})
+[Artificial Intelligence](pingel.org/ai) (org.pingel.{bayes,causality})
 --------------------------------------------------------------
 
 Bayesian Networks and Causality.
 
 
-[Axle](axle) (org.pingel.axle)
+[Axle](pingel.org/axle) (org.pingel.axle)
 ----------------------
 
 An attempt to implement a Haskell-like language as an internal DSL in Scala.
@@ -41,7 +41,7 @@ This project also includes useful data structures for graphs and matrices and en
 other standard Scala datatypes.
 
 
-[Category Theory](category) (org.pingel.category)
+[Category Theory](pingel.org/category) (org.pingel.category)
 --------------------------------------
 
 "A monad is a monoid in the category of endofunctors."
@@ -49,25 +49,25 @@ other standard Scala datatypes.
 Early sketch of my reading of a book on Category Theory.
 
 
-[Game Theory](game) (org.pingel.game)
+[Game Theory](pingel.org/game) (org.pingel.game)
 -----------------------------
 
 A placeholder project for modelling a range of games and a general model of Game Theory.
 
 
-[Gestalt](gestalt) (org.pingel.gestalt)
+[Gestalt](pingel.org/gestalt) (org.pingel.gestalt)
 ----------------------------
 
 A sandbox for experimentation with visual programming and programming language design.
 
 
-[Linguistics](linguistics) (org.pingel.linguistics)
+[Linguistics](pingel.org/linguistics) (org.pingel.linguistics)
 ------------------------------------
 
 The Gold Paradigm and Angluin's Language Learner.
 
 
-[python2json](python2json)
+[python2json](pingel.org/python2json)
 -----------
 
 Takes any python 2.6 (or older) file and return a json document that represents the
