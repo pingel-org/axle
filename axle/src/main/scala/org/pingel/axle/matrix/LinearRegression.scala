@@ -17,9 +17,11 @@ class LinearRegression {
 
   def h(xi: M, θ: M) = xi ⨯ θ
 
-  def dθ(X: M, y: M, θ: M) = (0 until X.rows).foldLeft(zeros(1, X.columns))(
-    (m: M, i: Int) => m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 1)))
+  def dTheta(X: M, y: M, θ: M) = (0 until X.rows).foldLeft(zeros(1, X.columns))(
+    (m: M, i: Int) => m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0)))
   ) / X.rows
+
+  def dθ(X: M, y: M, θ: M) = dTheta(X, y, θ)
 
   def gradientDescent(X: M, y: M, θ: M, α: Double, iterations: Int) =
     (0 until iterations).foldLeft(θ)((θi: M, i: Int) => θi - (dθ(X, y, θi) * α))

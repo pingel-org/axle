@@ -19,15 +19,14 @@ class LinearRegressionSpecification extends Specification {
          852, 2, 1, 36
       )).t // fromArray transposes
 
-      val N = y.rows
-
       val examplesScaled = scaleColumns(examples)
-
-      val X = ones(N, 1) +|+ examplesScaled._1
-      
+      val X = ones(examples.rows, 1) +|+ examplesScaled._1
       val yScaled = scaleColumns(y)
+      val theta = ones(X.columns, 1)
+      val alpha = 0.1
+      val iterations = 100
       
-      val θ = gradientDescent(X, yScaled._1, ones(N, 1), 0.1, 100)
+      val θ = gradientDescent(X, yScaled._1, theta, 0.1, 100)
 
       // TODO: an h that incorporates the scaling that was applied in X and y
 
