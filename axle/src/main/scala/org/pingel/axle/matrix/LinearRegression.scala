@@ -17,14 +17,36 @@ class LinearRegression {
 
   def h(xi: Matrix, θ: Matrix) = xi ⨯ θ
 
-  def dθ(X: Matrix, y: Matrix, θ: Matrix) = (0 until X.rows).foldLeft(zeros(1, X.columns))(
-    (m: Matrix, i: Int) => m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0)))
-  ) / X.rows
+  def cost(xi: Matrix, θ: Matrix, yi: Double) = h(xi, θ) - yi
 
-  def gradientDescent(X: Matrix, y: Matrix, θ: Matrix, α: Double, iterations: Int) =
+  def dθdecomposed(X: Matrix, y: Matrix, θ: Matrix) =
+    (0 until X.rows).foldLeft(zeros(1, X.columns))(
+      (m: Matrix, i: Int) => {
+        val xi = X.getRow(i)
+        val yi = y.valueAt(i, 0)
+        m + (xi ⨯ cost(xi, θ, yi))
+      }
+    ) / X.rows
+
+  def dθ(X: Matrix, y: Matrix, θ: Matrix) =
+    (0 until X.rows).foldLeft(zeros(1, X.columns))(
+      (m: Matrix, i: Int) => m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0)))
+    ) / X.rows
+
+  def gradientDescentImmutable(X: Matrix, y: Matrix, θ: Matrix, α: Double, iterations: Int) =
     (0 until iterations).foldLeft(θ)((θi: Matrix, i: Int) => θi - (dθ(X, y, θi) * α))
+
+  def gradientDescentMutable(X: Matrix, y: Matrix, θo: Matrix, α: Double, iterations: Int) = {
+    var θi = θo.dup
+    var i = 0
+    while (i < iterations) {
+      θi -= (dθ(X, y, θi) * α)
+      i = i + 1
+    }
+    θi
+  }
 
   // non-unicode alias
   def dTheta(X: Matrix, y: Matrix, θ: Matrix) = dθ(X, y, θ)
-    
+
 }
