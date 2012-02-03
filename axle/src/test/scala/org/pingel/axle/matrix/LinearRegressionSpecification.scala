@@ -26,7 +26,7 @@ class LinearRegressionSpecification extends Specification {
       val alpha = 0.1
       val iterations = 100
       
-      val θ = gradientDescent(X, yScaled._1, theta, 0.1, 100)
+      val θ = gradientDescentMutable(X, yScaled._1, theta, 0.1, 100)
 
       // TODO: an h that incorporates the scaling that was applied in X and y
 

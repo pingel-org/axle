@@ -130,6 +130,7 @@ abstract class JblasMatrixFactoryClass extends MatrixFactory {
   def zeros(m: Int, n: Int) = pure(DoubleMatrix.zeros(m, n))
   def ones(m: Int, n: Int) = pure(DoubleMatrix.ones(m, n))
   def eye(n: Int) = pure(DoubleMatrix.eye(n))
+  def I(n: Int) = eye(n)
   def diag(dsRow: Matrix) = pure(DoubleMatrix.diag(dsRow.getJblas()))
   def rand(m: Int, n: Int) = pure(DoubleMatrix.rand(m, n)) // evenly distributed from 0.0 to 1.0
   def randn(m: Int, n: Int) = pure(DoubleMatrix.randn(m, n)) // normal distribution 

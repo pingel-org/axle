@@ -73,7 +73,8 @@ abstract class MatrixFactory {
 
     // Operations on pair of matrices that return M[Boolean]
 
-    def lt(other: Matrix): Matrix // TODO Matrix[Boolean]
+    // TODO: get the return type right
+    def lt(other: Matrix): Matrix
     def le(other: Matrix): Matrix
     def gt(other: Matrix): Matrix
     def ge(other: Matrix): Matrix
@@ -118,8 +119,14 @@ abstract class MatrixFactory {
     // aliases
 
     def t() = transpose()
+    def tr() = transpose()
     def inv() = invert()
 
+    def scalar() = {
+      assert(isScalar)
+      valueAt(0, 0)
+    }
+    
     def +(x: T) = addScalar(x)
     def +=(x: T) = addi(x)
     def +(other: Matrix) = addMatrix(other)
@@ -143,14 +150,22 @@ abstract class MatrixFactory {
 
     def <(other: Matrix) = lt(other)
     def <=(other: Matrix) = le(other)
+    def ≤(other: Matrix) = le(other)
     def >(other: Matrix) = gt(other)
     def >=(other: Matrix) = ge(other)
+    def ≥(other: Matrix) = ge(other)
     def ==(other: Matrix) = eq(other)
     def !=(other: Matrix) = ne(other)
+    def ≠(other: Matrix) = ne(other)
     def &(other: Matrix) = and(other)
+    def ∧(other: Matrix) = and(other)
     def |(other: Matrix) = or(other)
-    def ^(other: Matrix) = xor(other)
+    def ∨(other: Matrix) = or(other)
+    def ⊕(other: Matrix) = xor(other)
+    def ⊻(other: Matrix) = xor(other)
     def !() = not()
+    def ~() = not()
+    def ¬() = not()
 
   }
 
