@@ -21,5 +21,6 @@ This project is a placeholder.
 I'm not sure if I still have any of that work,
 but if I do I will put it here and translate it to Scala.
 If not, I will try to reconstruct some of it.
-The text I was using at the time was Rasmussen's
-"Games and Information".
+The text I was using at the time was
+[Eric Rasmusen](http://www.rasmusen.org/)'s
+["Games and Information"](http://www.amazon.com/Games-Information-Introduction-Game-Theory/dp/1405136669/ref=sr_1_1?ie=UTF8).
