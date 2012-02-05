@@ -30,6 +30,6 @@ It's still under active development.  No public jar is maintained.
 Table of Contents
 -----------------
 
-* Installation
-* Tutorial
-* Road Map
+* [Installation](doc/Installation)
+* [Tutorial](doc/Tutorial)
+* [Road Map](doc/RoadMap)
