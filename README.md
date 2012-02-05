@@ -32,9 +32,8 @@ Bayesian Networks and Causality.
 
 ### [Axle](https://github.com/adampingel/pingel.org/tree/master/axle) (org.pingel.axle)
 
-An attempt to implement a Haskell-like language as an internal DSL in Scala.
-This project also includes useful data structures for graphs and matrices and enrichments to
-other standard Scala datatypes.
+Common concepts from computer science and mathematics presented as an
+internal Domain Specific Language. Graphs, Matrices, Monoids, etc.
 
 
 ### [Category Theory](https://github.com/adampingel/pingel.org/tree/master/category) (org.pingel.category)
