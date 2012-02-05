@@ -2,6 +2,22 @@
 Tutorial
 ========
 
+Table of contents:
+
+* Functor
+* Applicative Functor
+* Monoid
+* Monad
+* PowerSet
+* Permuter
+* Boolean Enrichments
+* Set Enrichments
+* List Enrichments
+* Matrix
+* Directed Graph
+* Undirected Graph
+* Scala
+
 Functor
 -------
 
@@ -10,9 +26,9 @@ The examples in
 should be expressible with a syntax as similar to Haskell as possible --
 but in Scala.
 Typeclasses like Functor, Applicative Functor, Monoid, and Monad are modelled explicitely.
-(This is similar to the goal of the [Scalaz](https://github.com/scalaz/scalaz) project.)
+(This is similar to the goal of the [Scalaz](https://github.com/scalaz/scalaz) project.
 One exception is that little syntactic details like the order of arguments to "fmap"
-are the same as in Haskell.
+are the same as in Haskell.)
 
 ```scala
 TODO
