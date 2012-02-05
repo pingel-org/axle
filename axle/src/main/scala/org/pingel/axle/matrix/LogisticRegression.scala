@@ -30,7 +30,16 @@ class LogisticRegression {
   def dθ(X: Matrix, y: Matrix, θ: Matrix) = {
     var result = zeros(θ.rows, 1)
     (0 until θ.rows).map(j =>
-      result.setValueAt(j, 0, (0 until X.rows).foldLeft(0.0)( TODO ))
+      result.setValueAt(j, 0,
+        (0 until X.rows).foldLeft(0.0)(
+          (r: Double, i: Int) => {
+            val xi = X.getRow(i)
+            val xij = xi.getColumn(j).scalar
+            val yi: Boolean = y.getRow(i).scalar
+            r + ( h(xi, θ) - yi ) * xij
+          }
+        )
+      )
     )
     result
   }

@@ -1,13 +1,21 @@
 
 package org.pingel.axle
 
+import iterator.ListCrossProduct
+
 object Enrichments {
 
+  case class EnrichedList[T](list: List[T]) {
+    def ⨯(right: List[T]) = new ListCrossProduct[T](List(list, right)).iterator
+  }
+
+  implicit def enrichList[T](list: List[T]) = EnrichedList(list)
+  
   case class EnrichedSet[T](s: Set[T]) {
     def ∀(p: T => Boolean) = s.forall(p)
     def ∃(p: T => Boolean) = s.exists(p)
-    def doubles: Set[(T, T)] = for (x<-s; y<-s) yield (x,y)
-    def triples: Set[(T, T, T)] = for (x<-s; y<-s; z<-s) yield (x,y,z)
+    def doubles: Set[(T, T)] = for (x <- s; y <- s) yield (x, y)
+    def triples: Set[(T, T, T)] = for (x <- s; y <- s; z <- s) yield (x, y, z)
   }
 
   implicit def enrichSet[T](s: Set[T]) = EnrichedSet(s)
@@ -20,7 +28,7 @@ object Enrichments {
     def ∨(other: Boolean) = b || other // TODO vee = "V"
     def or(other: Boolean) = b || other
 
-    def implies(other: Boolean) = (! b) || other
+    def implies(other: Boolean) = (!b) || other
   }
 
   implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
