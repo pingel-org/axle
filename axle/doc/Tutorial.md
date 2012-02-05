@@ -40,6 +40,55 @@ Monad
 TODO
 ```
 
+PowerSet
+--------
+
+```scala
+TODO
+```
+
+Permuter
+--------
+
+```scala
+TODO
+```
+
+Boolean Enrichments
+-------------------
+
+```scala
+TODO
+```
+
+Set Enrichments
+---------------
+
+```scala
+TODO
+```
+
+List Enrichments
+----------------
+
+```scala
+TODO
+```
+
+Matrix
+--------------
+
+I would eventually like to cover some of the same kinds of expressions in these
+Octave and Matlab tutorials:
+
+* http://volga.eng.yale.edu/sohrab/matlab_tutorial.html
+* http://en.wikibooks.org/wiki/Octave_Programming_Tutorial
+* http://www-mdp.eng.cam.ac.uk/web/CD/engapps/octave/octavetut.pdf
+
+```scala
+TODO
+```
+
 Directed Graph
 --------------
 
@@ -78,46 +127,10 @@ extends UndirectedGraph[EliminationTreeNode, EliminationTreeEdge]
 
 ```
 
-PowerSet
---------
-
-```scala
-TODO
-```
-
-
-Permuter
---------
-
-```scala
-TODO
-```
-
-
-Boolean Enrichments
--------------------
-
-```scala
-TODO
-```
-
-
-Set Enrichments
----------------
-
-```scala
-TODO
-```
-
-List Enrichments
-----------------
-
-```scala
-TODO
-```
-
 Scala
 -----
+
+Collections of useful links:
 
 * Daniel Sobral's [Scala on the Web](http://dcsobral.blogspot.com/2011/12/scala-on-web.html)
 * [StackOverflow Scala Tutorial](http://stackoverflow.com/tags/scala/info) Awesome guide to the most useful and helpful questions.

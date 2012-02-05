@@ -20,10 +20,7 @@ Road Map
 * Matrix: lt, gt, etc, should return Matrix[Boolean]
 * Matrix: invert
 * More tests in specs
-* More tutorial. See
-   * http://volga.eng.yale.edu/sohrab/matlab_tutorial.html
-   * http://en.wikibooks.org/wiki/Octave_Programming_Tutorial
-   * http://www-mdp.eng.cam.ac.uk/web/CD/engapps/octave/octavetut.pdf
+* Write tutorials
 
 * Streamline imports
 
