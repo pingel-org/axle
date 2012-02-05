@@ -26,4 +26,7 @@ Road Map
    * http://en.wikibooks.org/wiki/Octave_Programming_Tutorial
    * http://www-mdp.eng.cam.ac.uk/web/CD/engapps/octave/octavetut.pdf
 
+* Streamline imports
+
 Future versions may include examples of Miles Sabin's work with HList, including his [Shapeless](https://github.com/milessabin/shapeless) project.
+

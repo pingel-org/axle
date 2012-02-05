@@ -30,6 +30,6 @@ It's still under active development.  No public jar is maintained.
 Table of Contents
 -----------------
 
-* [Installation](doc/Installation)
-* [Tutorial](doc/Tutorial)
-* [Road Map](doc/RoadMap)
+* [Installation](axle/doc/Installation.md)
+* [Tutorial](axle/doc/Tutorial.md)
+* [Road Map](axle/doc/RoadMap.md)

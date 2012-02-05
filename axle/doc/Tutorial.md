@@ -4,12 +4,11 @@ Tutorial
 
 To be written.  It will contain examples of:
 
-* Streamline imports
 * Functor, ApplicativeFunctor, Monoid, Monad, ...
 * DirectedGraph
 * UndirectedGraph
 * PowerSet
-* Set and Boolean enrichments
+* Set, Boolean, List enrichments
 
 ```scala
 
