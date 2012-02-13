@@ -5,3 +5,9 @@ case class Quantity(
   unit: UnitOfMeasurement,
   name: Option[String] = None,
   link: Option[String] = None)
+  extends UnitOfMeasurement(
+    unit.quantum,
+    name.getOrElse("?"),
+    name.getOrElse("?")
+  )
+
