@@ -13,7 +13,9 @@ package org.pingel.axle.quanta
  * 
  */
 
-trait Quantum {
+import org.pingel.axle.graph._
+
+trait Quantum extends DirectedGraph[UnitOfMeasurement, Conversion] {
 
   val wikipediaUrl: String
 
@@ -31,9 +33,8 @@ trait Quantum {
   
   override def toString() = this.getClass().getSimpleName()
 
-  def path(source: UnitOfMeasurement, goal: UnitOfMeasurement): Option[List[Quantity]] = {
-	  Some(List(Distance.kilometer)) // TODO search the graph
-  }
+  def conversionPath(source: UnitOfMeasurement, goal: UnitOfMeasurement): Option[List[Conversion]] = shortestPath(source, goal)
+  
 
 }
 

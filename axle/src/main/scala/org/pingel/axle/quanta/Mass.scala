@@ -10,7 +10,7 @@ object Mass extends Quantum {
   val milligram = gram milli
   val kilogram = gram kilo
   val megagram = gram mega
-  val tonne = Quantity("1.0", megagram, Some("tonne"), Some("t"), Some("http://en.wikipedia.org/wiki/Tonne"))
+  val tonne = Quantity("1", megagram, Some("tonne"), Some("t"), Some("http://en.wikipedia.org/wiki/Tonne"))
   val kilotonne = tonne kilo
   val megatonne = tonne mega
   val gigatonne = tonne giga
@@ -19,8 +19,6 @@ object Mass extends Quantum {
   val exatonne = tonne exa
   val zettatonne = tonne zetta
   val yottatonne = tonne yotta
-
-  // conversion: tonne = megagram
 
   val unitsOfMeasurement = List(gram, kilogram, milligram)
 

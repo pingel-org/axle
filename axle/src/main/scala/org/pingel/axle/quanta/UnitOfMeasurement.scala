@@ -1,15 +1,20 @@
 package org.pingel.axle.quanta
 
-case class UnitOfMeasurement(quantum: Quantum, name: String, symbol: String, link: Option[String]=None) {
+import org.pingel.axle.graph._
 
+case class UnitOfMeasurement(quantum: Quantum, name: String, symbol: String, link: Option[String] = None)
+  extends DirectedGraphVertex[Conversion] {
+  
   import Quantity._
-  
+
+  def getLabel() = name
+
   def *(right: UnitOfMeasurement) = UomMultiplication(this, right)
-  
+
   def /(right: UnitOfMeasurement) = UomDivision(this, right)
-  
+
   def squared() = UomMultiplication(this, this)
-  
+
   def kilo() = Quantity("1000", this, Some("kilo" + name), Some("K" + symbol)) // 3
   def mega() = Quantity("1000", kilo, Some("mega" + name), Some("M" + symbol)) // 6
   def giga() = Quantity("1000", mega, Some("giga" + name), Some("G" + symbol)) // 9
@@ -28,12 +33,12 @@ case class UnitOfMeasurement(quantum: Quantum, name: String, symbol: String, lin
 }
 
 case class UomMultiplication(left: UnitOfMeasurement, right: UnitOfMeasurement)
-extends UnitOfMeasurement(
+  extends UnitOfMeasurement(
     left.quantum * right.quantum,
     left.name + " " + right.name,
     left.symbol + right.symbol,
     None
-    )
+  )
 
 case class UomDivision(numerator: UnitOfMeasurement, denominator: UnitOfMeasurement)
   extends UnitOfMeasurement(

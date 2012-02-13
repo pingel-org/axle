@@ -2,12 +2,22 @@ package org.pingel.axle.quanta
 
 import java.math.BigDecimal
 
+import org.pingel.axle.graph._
+
 object Scalar {
   implicit def toScalar(s: String) = Scalar(new BigDecimal(s))
 }
 
 case class Scalar(bd: BigDecimal) {
   implicit def in(uom: UnitOfMeasurement) = Quantity(bd, uom)
+}
+
+case class Conversion(cbd: BigDecimal, from: UnitOfMeasurement, to: UnitOfMeasurement)
+extends Scalar(cbd)
+with DirectedGraphEdge[UnitOfMeasurement] {
+  def getVertices() = (from, to)
+  def getSource() = from
+  def getDest() = to
 }
 
 object Quantity {
@@ -28,20 +38,24 @@ case class Quantity(
     qlink
   ) {
 
+  unit.quantum.addVertex(this)
+  unit.quantum.addEdge(Conversion(magnitude, unit, this))
+  
   override def toString() = magnitude + " " + unit.symbol
 
-  def convert(conversion: Quantity): Quantity = {
-    if( this.unit != conversion ) {
+  def convert(conversion: Conversion): Quantity = {
+    if (this.unit != conversion.from) {
       throw new Exception("can't apply conversion " + conversion + " to " + this)
     }
-    Quantity(magnitude.multiply(conversion.magnitude), conversion.unit)
+    Quantity(magnitude.multiply(conversion.cbd), conversion.to)
   }
-  
+
   implicit def in(other: UnitOfMeasurement): Option[Quantity] = {
     if (unit.quantum != other.quantum) {
       throw new Exception("incompatible quanta: " + unit.quantum + " and " + other.quantum)
     }
-    unit.quantum.path(unit, other).map( _.foldLeft(this)( (q: Quantity, conversion: Quantity) => q.convert(conversion) ) )
+    unit.quantum.conversionPath(unit, other).map(_.foldLeft(this)(
+        (q: Quantity, conversion: Conversion) => q.convert(conversion)))
   }
-  
+
 }
