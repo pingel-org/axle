@@ -38,8 +38,11 @@ case class Quantity(
     qlink
   ) {
 
+  val one = new BigDecimal("1")
+  
   unit.quantum.addVertex(this)
-  unit.quantum.addEdge(Conversion(magnitude, unit, this))
+  unit.quantum.addEdge(Conversion(magnitude, this, unit))
+  unit.quantum.addEdge(Conversion(one.divide(magnitude, magnitude.precision, java.math.RoundingMode.HALF_UP), unit, this))
   
   override def toString() = magnitude + " " + unit.symbol
 
