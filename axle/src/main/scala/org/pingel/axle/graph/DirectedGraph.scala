@@ -8,19 +8,20 @@ package org.pingel.axle.graph {
     def getSource(): DV
     def getDest(): DV
   }
-  
+
   class DirectedGraphEdgeImpl[V <: DirectedGraphVertex[_]](source: V, dest: V)
-  extends DirectedGraphEdge[V] {
+    extends DirectedGraphEdge[V] {
     def getSource() = source
     def getDest() = dest
   }
 
-  trait DirectedGraph[DV <: DirectedGraphVertex[DE], DE <: DirectedGraphEdge[DV]] 
-  extends Graph[DV, DE]
-  {
+  trait DirectedGraph[DV <: DirectedGraphVertex[DE], DE <: DirectedGraphEdge[DV]]
+    extends Graph[DV, DE] {
 
     var vertex2outedges = Map[DV, mutable.Set[DE]]()
     var vertex2inedges = Map[DV, mutable.Set[DE]]()
+
+    def getEdge(from: DV, to: DV): Option[DE] = vertex2outedges(from).find( e => e.getDest == to )
 
     def addEdge(edge: DE) = {
 
@@ -53,7 +54,7 @@ package org.pingel.axle.graph {
       vertex2outedges = Map[DV, mutable.Set[DE]]()
       vertex2inedges = Map[DV, mutable.Set[DE]]()
     }
- 
+
     def deleteEdge(e: DE) = {
 
       edges -= e
@@ -223,16 +224,38 @@ package org.pingel.axle.graph {
     //TODO remove this method
     def removePredecessor(v: DV, predecessor: DV) {
       vertex2inedges.get(v) map { incoming =>
-        incoming.find({ _.getSource().equals(predecessor) }) map { edgeToRemove =>
+        incoming.find(_.getSource().equals(predecessor)).map(edgeToRemove => {
           incoming.remove(edgeToRemove)
           edges -= edgeToRemove // we should really only do this if it's the last of the pair of calls. ick.
+        })
+      }
+    }
+
+    // def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
+
+    def isAcyclic() = true // TODO !!!
+
+    // won't terminate for graphs w/cycles:
+    def _shortestPath(source: DV, goal: DV, visited: Set[DV]): Option[List[DE]] = (source == goal) match {
+      case true => Some(List())
+      case false => {
+        val paths = getSuccessors(source)
+          .filter(!visited.contains(_)).flatMap(newSuccessor => {
+            getEdge(source, newSuccessor).flatMap( edge => 
+            _shortestPath(newSuccessor, goal, visited + source).map(sp => edge :: sp) 
+            )
+          }
+          )
+        paths.size match {
+          case 0 => None
+          case _ => Some( paths.reduceLeft(
+            (l1, l2) => (l1.length < l2.length) match { case true => l1 case false => l2 }
+          ))
         }
       }
     }
 
-    def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
-
-    def isAcyclic() = true // TODO !!!
+    def shortestPath(source: DV, goal: DV) = _shortestPath(source, goal, Set())
 
   }
 
