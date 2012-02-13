@@ -21,7 +21,6 @@ trait Quantum {
 
   val derivations: List[Quantum]
 
-  // examples are often used as units in their own right
   val examples: List[Quantity]
 
   def *(right: Quantum) = QuantumMultiplication(this, right)
@@ -29,12 +28,34 @@ trait Quantum {
   def /(right: Quantum) = QuantumMultiplication(this, right)
 
   def squared() = QuantumMultiplication(this, this)
+  
+  override def toString() = this.getClass().getSimpleName()
+
+  def path(source: UnitOfMeasurement, goal: UnitOfMeasurement): Option[List[Quantity]] = {
+	  Some(List(Distance.kilometer)) // TODO search the graph
+  }
+
 }
 
 case class QuantumMultiplication(left: Quantum, right: Quantum) extends Quantum {
-  // units = multiplications of the cross-product of left and right
+
+  val wikipediaUrl = ""
+  
+  val unitsOfMeasurement = Nil // TODO multiplications of the cross-product of left and right
+  
+  val derivations = Nil
+  
+  val examples = Nil
 }
 
 case class QuantumDivision(left: Quantum, right: Quantum) extends Quantum {
-  // units = divisions of the cross-product of left and right
+
+  val wikipediaUrl = ""
+  
+  val unitsOfMeasurement = Nil // TODO divisions of the cross-product of left and right
+
+  val derivations = Nil
+  
+  val examples = Nil
+ 
 }

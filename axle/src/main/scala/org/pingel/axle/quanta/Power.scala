@@ -2,6 +2,8 @@ package org.pingel.axle.quanta
 
 object Power extends Quantum {
 
+  import Quantity._
+  
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
 
   val watt = UnitOfMeasurement(this, "watt", "w")
@@ -19,9 +21,9 @@ object Power extends Quantum {
   )
 
   val examples = List(
-    Quantity(60.0, watt, Some("Light Bulb"), Some("Light Bulb")),
-    Quantity(2080.0, megawatt, Some("Hoover Dam"), Some("http://en.wikipedia.org/wiki/Hoover_Dam")),
-    Quantity(420.0, horsepower, Some("2012 Mustang GT"), Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
+    Quantity("60", watt, Some("Light Bulb"), None, Some("Light Bulb")),
+    Quantity("2080", megawatt, Some("Hoover Dam"), None, Some("http://en.wikipedia.org/wiki/Hoover_Dam")),
+    Quantity("420", horsepower, Some("2012 Mustang GT"), None, Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
   )
 
 }

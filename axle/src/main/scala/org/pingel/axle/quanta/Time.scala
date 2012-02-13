@@ -2,6 +2,8 @@ package org.pingel.axle.quanta
 
 object Time extends Quantum {
 
+  import Quantity._
+  
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Time"
 
   val second = UnitOfMeasurement(this, "second", "s")
@@ -14,8 +16,8 @@ object Time extends Quantum {
   val derivations = Nil
   
   val examples = List(
-    Quantity(67.2, year, Some("2010 global average life expectancy"), Some("http://en.wikipedia.org/wiki/Life_expectancy")),
-    Quantity(4540000000.0, year, Some("age of earth"), Some("http://en.wikipedia.org/wiki/Age_of_the_Earth"))
+    Quantity("67.2", year, Some("2010 global average life expectancy"), None, Some("http://en.wikipedia.org/wiki/Life_expectancy")),
+    Quantity("4540000000", year, Some("age of earth"), None, Some("http://en.wikipedia.org/wiki/Age_of_the_Earth"))
   )
 
 }

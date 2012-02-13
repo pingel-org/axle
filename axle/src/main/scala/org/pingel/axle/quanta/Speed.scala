@@ -2,6 +2,8 @@ package org.pingel.axle.quanta
 
 object Speed extends Quantum {
 
+  import Quantity._
+  
   import Distance._
   import Time._
   
@@ -14,10 +16,10 @@ object Speed extends Quantum {
 
   val derivations = List(Distance / Time)
 
-  val c = Quantity(299792458.0, mps, Some("Light Speed"), Some("http://en.wikipedia.org/wiki/Speed_of_light"))
+  val c = Quantity("299792458", mps, Some("Light Speed"), Some("c"), Some("http://en.wikipedia.org/wiki/Speed_of_light"))
   
   val examples = List(
-      Quantity(65.0, mph, Some("Speed limit"), None),
+      Quantity("65", mph, Some("Speed limit"), None),
       c
   )
 
