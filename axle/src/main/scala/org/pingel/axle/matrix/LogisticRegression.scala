@@ -18,7 +18,7 @@ class LogisticRegression {
   })
 
   def predictedY(xi: Matrix, θ: Matrix) = h(xi, θ) >= 0.5
-
+/*
   // TODO: y is Boolean
   def Jθ(X: Matrix, θ: Matrix, y: Matrix) =
     (0 until X.rows).foldLeft(0.0)((r: Double, i: Int) => {
@@ -36,11 +36,8 @@ class LogisticRegression {
             val xi = X.getRow(i)
             val xij = xi.getColumn(j).scalar
             val yi: Boolean = y.getRow(i).scalar
-            r + ( h(xi, θ) - yi ) * xij
-          }
-        )
-      )
-    )
+            r + (h(xi, θ) - yi) * xij
+          })))
     result
   }
 
@@ -48,7 +45,6 @@ class LogisticRegression {
 
   def gradientDescent(X: Matrix, y: Matrix, θ: Matrix, α: Double, iterations: Int) =
     (0 until iterations).foldLeft(θ)((θi: Matrix, i: Int) => θi - (dθ(X, y, θi) * α))
-
-  // 
+*/
 
 }
