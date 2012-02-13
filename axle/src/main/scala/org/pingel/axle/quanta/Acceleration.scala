@@ -11,7 +11,7 @@ object Acceleration extends Quantum {
 
   val derivations = List(mpsps.quantum)
 
-  val g = Quantity(9.80665, mpsps, Some("g"), Some("http://en.wikipedia.org/wiki/Standard_gravity"))
+  val g = Quantity(9.80665, mpsps, Some("g"), Some("g"), Some("http://en.wikipedia.org/wiki/Standard_gravity"))
 
   val examples = List(g)
 

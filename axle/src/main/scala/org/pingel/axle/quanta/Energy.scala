@@ -9,7 +9,7 @@ object Energy extends Quantum {
 
   val joule = UnitOfMeasurement(this, "joule", "J")
 
-  val ton = UnitOfMeasurement(this, "ton TNT", "T") // http://en.wikipedia.org/wiki/TNT_equivalent
+  val ton = UnitOfMeasurement(this, "ton TNT", "T", Some("http://en.wikipedia.org/wiki/TNT_equivalent"))
   val kiloton = ton kilo
   val megaton = ton mega
   val gigaton = ton giga
