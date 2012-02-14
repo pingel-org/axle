@@ -137,10 +137,11 @@ The various Quanta also define "derivations".
 For instance, Power is Energy / Time.
 This isn't used for anything just yet, but it should be soon...
 
-There are obvious paths to take from this point, such as
-  #. Less run-time exception throwing.  More static type-safety.
-  #. Define Monoid for Quantity addition, multiplication
-  #. Sorting out difference between Quantity and Conversion
-  #. Using Quantum.derivations to allow for reduction of Quantities produced by division. (eg Distance / Time = Speed)
+There are obvious paths to take from this point, such as:
+
+1. Less run-time exception throwing.  More static type-safety.
+1. Define Monoid for Quantity addition, multiplication
+1. Sorting out difference between Quantity and Conversion
+1. Using Quantum.derivations to allow for reduction of Quantities produced by division. (eg Distance / Time = Speed)
 
 Check back in the future.
