@@ -97,8 +97,10 @@ two UnitsOfMeasurement.
 A Quantum defines a directed graph, where the UnitsOfMeasurement
 are the vertices, and the Conversions (there are two Conversions
 for each Quantity -- one forward and one backward) define the
-directed edges.  See the [Graph Tutorial] for more on how
-graphs work.
+directed edges.
+
+See the [Graph Tutorial](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialGraph.md)
+for more on how graphs work.
 
 ```scala
 scala> ("10" in gram) in kilogram
