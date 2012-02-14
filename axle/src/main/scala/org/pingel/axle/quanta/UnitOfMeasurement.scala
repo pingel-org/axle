@@ -30,6 +30,7 @@ case class UnitOfMeasurement(quantum: Quantum, name: String, symbol: String, lin
   def micro() = Quantity("0.001", milli, Some("micro" + name), Some("μ" + symbol)) // -6
   def nano() = Quantity("0.001", micro, Some("nano" + name), Some("n" + symbol)) // -9
 
+  override def toString() = name + " (" + symbol + "): a measure of " + quantum
 }
 
 case class UomMultiplication(left: UnitOfMeasurement, right: UnitOfMeasurement)

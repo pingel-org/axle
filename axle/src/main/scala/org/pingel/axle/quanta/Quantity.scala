@@ -46,6 +46,9 @@ case class Quantity(
   
   override def toString() = magnitude + " " + unit.symbol
 
+  def +(right: Quantity) = Quantity(magnitude.add((right in unit).magnitude), unit)
+  def -(right: Quantity) = Quantity(magnitude.subtract((right in unit).magnitude), unit)
+
   def convert(conversion: Conversion): Quantity = {
     if (this.unit != conversion.from) {
       throw new Exception("can't apply conversion " + conversion + " to " + this)
@@ -53,12 +56,16 @@ case class Quantity(
     Quantity(magnitude.multiply(conversion.cbd), conversion.to)
   }
 
-  implicit def in(other: UnitOfMeasurement): Option[Quantity] = {
+  implicit def in(other: UnitOfMeasurement): Quantity = {
     if (unit.quantum != other.quantum) {
       throw new Exception("incompatible quanta: " + unit.quantum + " and " + other.quantum)
     }
-    unit.quantum.conversionPath(unit, other).map(_.foldLeft(this)(
+    val result = unit.quantum.conversionPath(unit, other).map(_.foldLeft(this)(
         (q: Quantity, conversion: Conversion) => q.convert(conversion)))
+    if( result.isEmpty ) {
+      throw new Exception("no conversion path from " + unit + " to " + other)
+    }
+    result.get
   }
 
 }

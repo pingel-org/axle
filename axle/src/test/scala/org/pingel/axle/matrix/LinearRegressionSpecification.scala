@@ -20,7 +20,9 @@ class LinearRegressionSpecification extends Specification {
       )).t // fromArray transposes
 
       val examplesScaled = scaleColumns(examples)
+      
       val X = ones(examples.rows, 1) +|+ examplesScaled._1
+      
       val yScaled = scaleColumns(y)
       val theta = ones(X.columns, 1)
       val alpha = 0.1

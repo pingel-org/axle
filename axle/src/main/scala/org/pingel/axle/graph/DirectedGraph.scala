@@ -21,7 +21,7 @@ package org.pingel.axle.graph {
     var vertex2outedges = Map[DV, mutable.Set[DE]]()
     var vertex2inedges = Map[DV, mutable.Set[DE]]()
 
-    def getEdge(from: DV, to: DV): Option[DE] = vertex2outedges(from).find( e => e.getDest == to )
+    def getEdge(from: DV, to: DV): Option[DE] = vertex2outedges(from).find(e => e.getDest == to)
 
     def addEdge(edge: DE) = {
 
@@ -241,14 +241,14 @@ package org.pingel.axle.graph {
       case false => {
         val paths = getSuccessors(source)
           .filter(!visited.contains(_)).flatMap(newSuccessor => {
-            getEdge(source, newSuccessor).flatMap( edge => 
-            _shortestPath(newSuccessor, goal, visited + source).map(sp => edge :: sp) 
+            getEdge(source, newSuccessor).flatMap(edge =>
+              _shortestPath(newSuccessor, goal, visited + source).map(sp => edge :: sp)
             )
           }
           )
         paths.size match {
           case 0 => None
-          case _ => Some( paths.reduceLeft(
+          case _ => Some(paths.reduceLeft(
             (l1, l2) => (l1.length < l2.length) match { case true => l1 case false => l2 }
           ))
         }

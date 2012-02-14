@@ -19,23 +19,15 @@ trait Quantum extends DirectedGraph[UnitOfMeasurement, Conversion] {
 
   val wikipediaUrl: String
 
-  val unitsOfMeasurement: List[UnitOfMeasurement]
-
   val derivations: List[Quantum]
 
-  val examples: List[Quantity]
-
   def *(right: Quantum) = QuantumMultiplication(this, right)
-
   def /(right: Quantum) = QuantumMultiplication(this, right)
-
   def squared() = QuantumMultiplication(this, this)
   
   override def toString() = this.getClass().getSimpleName()
 
   def conversionPath(source: UnitOfMeasurement, goal: UnitOfMeasurement): Option[List[Conversion]] = shortestPath(source, goal)
-  
-
 }
 
 case class QuantumMultiplication(left: Quantum, right: Quantum) extends Quantum {
