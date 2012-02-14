@@ -29,8 +29,9 @@ object Mass extends Quantum {
   val ⊕ = earth
 
   // also 1.9891 x 10^30 kg
-  val sun = Quantity("333000", earth, Some("Sun"), Some("☼"), Some("http://en.wikipedia.org/wiki/Sun"))
+  val sun = Quantity("332950", earth, Some("Sun"), Some("☉"), Some("http://en.wikipedia.org/wiki/Solar_mass"))
   val ☼ = sun
+  val ☉ = sun
 
  // http://en.wikipedia.org/wiki/Astronomical_symbols
 //  val ♃ = jupiter
@@ -41,5 +42,8 @@ object Mass extends Quantum {
 //  val ♂ = mars
 //  val ☿ = mercury
 
+  val milkyWayMass = Quantity("5.8E+11", sun, Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
+  val andromedaMass = Quantity("7.1E+11", sun, Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
+  
 }
 

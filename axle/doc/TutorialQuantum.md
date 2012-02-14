@@ -23,6 +23,9 @@ import Power._
 import Speed._
 import Acceleration._
 import Force._
+import Area._
+import Volume._
+import Flow._
 ```
 
 Various standard Units of Measurement are defined:
@@ -113,7 +116,7 @@ scala> man in earth
 res16: org.pingel.axle.quanta.Quantity = 1.4496840000000000E-23 ⊕
 
 scala> earth in sun
-res17: org.pingel.axle.quanta.Quantity = 0.000002999941920 ☼
+res17: org.pingel.axle.quanta.Quantity = 0.000002999941920 ☉
 
 scala> hooverDam in lightBulb
 res23: org.pingel.axle.quanta.Quantity = 41600000.00 ?
@@ -132,7 +135,7 @@ scala> ("7" in mile) - ("123" in foot)
 res4: org.pingel.axle.quanta.Quantity = 6.9754 m
 
 scala> (sun - earth) in sun
-res5: org.pingel.axle.quanta.Quantity = 0.998997000058080 ☼
+res5: org.pingel.axle.quanta.Quantity = 0.998997000058080 ☉
 ```
 
 The various Quanta also define "derivations".

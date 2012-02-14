@@ -24,6 +24,7 @@ trait Quantum extends DirectedGraph[UnitOfMeasurement, Conversion] {
   def *(right: Quantum) = QuantumMultiplication(this, right)
   def /(right: Quantum) = QuantumMultiplication(this, right)
   def squared() = QuantumMultiplication(this, this)
+  def cubed() = QuantumMultiplication(this, QuantumMultiplication(this, this))
   
   override def toString() = this.getClass().getSimpleName()
 

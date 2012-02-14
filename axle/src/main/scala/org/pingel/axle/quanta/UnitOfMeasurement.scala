@@ -15,6 +15,8 @@ case class UnitOfMeasurement(quantum: Quantum, name: String, symbol: String, lin
 
   def squared() = UomMultiplication(this, this)
 
+  def cubed() = UomMultiplication(this, UomMultiplication(this, this))
+
   def kilo() = Quantity("1000", this, Some("kilo" + name), Some("K" + symbol)) // 3
   def mega() = Quantity("1000", kilo, Some("mega" + name), Some("M" + symbol)) // 6
   def giga() = Quantity("1000", mega, Some("giga" + name), Some("G" + symbol)) // 9
