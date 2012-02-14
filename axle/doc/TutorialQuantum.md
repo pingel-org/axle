@@ -41,7 +41,18 @@ import Volume._
 import Flow._
 ```
 
-Various standard Units of Measurement are defined:
+Quanta each define a Wikipedia link where you can find out more
+about relative scale:
+
+```scala
+scala> Distance.wikipediaUrl
+res3: java.lang.String = http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)
+```
+
+Units
+=====
+
+Standard Units of Measurement are defined:
 
 ```scala
 scala> gram
@@ -66,6 +77,9 @@ res5: org.pingel.axle.quanta.Quantum = Distance$
 scala> second.quantum
 res6: org.pingel.axle.quanta.Quantum = Time$
 ```
+
+Quantities
+==========
 
 There are also quite a few non-standard interesting Quantities defined.
 Any quantity can be used as a UnitOfMeasurement.
@@ -99,6 +113,9 @@ res10: org.pingel.axle.quanta.Quantity = 420 hp
 scala> mustangGT.link
 res11: Option[String] = Some(http://en.wikipedia.org/wiki/Ford_Mustang)
 ```
+
+Unit Conversion
+===============
 
 Scalars are implicitly constructed from Strings.
 They are converted to Quantities by using the "in" method:
@@ -140,16 +157,8 @@ directed edges.
 See the [Graph Tutorial](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialGraph.md)
 for more on how graphs work.
 
-An example of a case that is not yet fully worked out is calculating
-the length of time required for a volume to be consumed at a flow rate.
-
-```scala
-scala> greatLakes / niagaraFalls
-res0: org.pingel.axle.quanta.Quantity = 12.36150 KmKmKm/mmm/s
-
-scala> (greatLakes / niagaraFalls) in year
-java.lang.Exception: incompatible quanta: QuantumMultiplication and Time$
-```
+Math
+====
 
 Addition and subtraction are defined on Quantity by converting the
 right Quantity to the unit of the left.
@@ -165,9 +174,23 @@ scala> (sun - earth) in sun
 res5: org.pingel.axle.quanta.Quantity = 0.998997000058080 ☉
 ```
 
+An example of a case that is not yet fully worked out is calculating
+the time required for a volume to be consumed at a flow rate.
+
+```scala
+scala> greatLakes / niagaraFalls
+res0: org.pingel.axle.quanta.Quantity = 12.36150 KmKmKm/mmm/s
+
+scala> (greatLakes / niagaraFalls) in year
+java.lang.Exception: incompatible quanta: QuantumMultiplication and Time$
+```
+
+Future
+======
+
 The various Quanta also define "derivations".
 For instance, Power is Energy / Time.
-This isn't used for anything just yet, but it should be soon...
+This isn't used for anything just yet, but it should be soon.
 
 There are obvious paths to take from this point, such as:
 
