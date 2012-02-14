@@ -120,6 +120,9 @@ res17: org.pingel.axle.quanta.Quantity = 0.000002999941920 ☉
 
 scala> hooverDam in lightBulb
 res23: org.pingel.axle.quanta.Quantity = 41600000.00 ?
+
+scala> toAndromeda in parsec
+res2: org.pingel.axle.quanta.Quantity = 798200.000 pc
 ```
 
 Never be stumped by a classic Microsoft interview question again!
