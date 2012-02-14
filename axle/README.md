@@ -20,6 +20,7 @@ Highlights include:
 
 1. Haskell-like [typeclasses](http://www.haskell.org/haskellwiki/Typeclassopedia) such as Functor, Monoid, and Monad
 1. Directed and undirected graphs.  [JUNG](http://jung.sourceforge.net/) is used for visualization.
+1. Quantity and UnitOfMeasurement defined for various Quanta (eg second, mile, gram)
 1. Iterators like PowerSet and Permuter
 1. Matrices.  Type-safe, expressive wrapper for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/) -- a very fast matrix library.
 1. Enrichments to Boolean, Set, and List
