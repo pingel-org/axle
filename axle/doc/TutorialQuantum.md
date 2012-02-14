@@ -63,6 +63,12 @@ res3: org.pingel.axle.quanta.Quantity = 5.9736 Zt
 
 scala> man
 res12: org.pingel.axle.quanta.Quantity = 86.6 Kg
+
+scala> niagaraFalls
+res0: org.pingel.axle.quanta.Quantity = 1834 mmm/s
+
+scala> greatLakes
+res1: org.pingel.axle.quanta.Quantity = 22671 KmKmKm
 ```
 
 Some define a link (often to Wikipedia):

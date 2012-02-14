@@ -4,7 +4,8 @@ object Time extends Quantum {
 
   import Quantity._
   
-  val wikipediaUrl = "http://en.wikipedia.org/wiki/Time"
+  val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
+  // "http://en.wikipedia.org/wiki/Time"
   val derivations = Nil
 
   val second = UnitOfMeasurement(this, "second", "s")

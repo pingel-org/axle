@@ -13,4 +13,6 @@ object Flow extends Quantum {
 
   val m3s = m3 / second
 
+  val niagaraFalls = Quantity("1834", m3s, Some("Niagara Falls Flow"), None, Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
+  
 }

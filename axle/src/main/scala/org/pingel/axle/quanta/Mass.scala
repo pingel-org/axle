@@ -3,8 +3,9 @@ package org.pingel.axle.quanta
 object Mass extends Quantum {
 
   import Quantity._
-  
-  val wikipediaUrl = "http://en.wikipedia.org/wiki/Mass"
+
+  val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
+  // "http://en.wikipedia.org/wiki/Mass"
   val derivations = List(Energy / (Speed squared)) // via E=mc^2
 
   val gram = UnitOfMeasurement(this, "gram", "g")

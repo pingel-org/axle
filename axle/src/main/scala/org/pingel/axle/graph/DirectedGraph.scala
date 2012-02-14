@@ -235,7 +235,7 @@ package org.pingel.axle.graph {
 
     def isAcyclic() = true // TODO !!!
 
-    // won't terminate for graphs w/cycles:
+    // not so efficient:
     def _shortestPath(source: DV, goal: DV, visited: Set[DV]): Option[List[DE]] = (source == goal) match {
       case true => Some(List())
       case false => {

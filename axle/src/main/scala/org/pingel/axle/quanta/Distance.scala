@@ -4,7 +4,9 @@ object Distance extends Quantum {
 
   import Quantity._
 
-  val wikipediaUrl = "http://en.wikipedia.org/wiki/Distance"
+  val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
+  // "http://en.wikipedia.org/wiki/Distance"
+    
   val derivations = Nil
   
   val foot = UnitOfMeasurement(this, "foot", "ft")
