@@ -2,6 +2,19 @@
 Quanta, Quantities, and Units
 =============================
 
+The org.pingel.axle.quanta package is an experiment in units of measurement.
+It implements expected operators like +, -, *, and /, and unit conversion.
+
+The fun part are the non-standard units of measurement.
+How many 60 Watt light bulbs can the Hoover Dam power at peak capacity?
+How many parsecs to the Andromeda Galaxy?
+Find out below.
+
+Hopefully this creates a sandbox for experimenting with the scale of things.
+Like an interactive ["Powers of 10" video](http://www.youtube.com/watch?v=0fKBhvDjuy0)
+
+See the bottom of this page for some possible next steps for this code.
+
 The following code snippets are all preceded by this block of import statements:
 
 ```scala
