@@ -103,23 +103,11 @@ This is possible as long as 1) the Quantities are in the same
 Quantum, and 2) there is a path in the Quantum between the
 two UnitsOfMeasurement.
 
-A Quantum defines a directed graph, where the UnitsOfMeasurement
-are the vertices, and the Conversions (there are two Conversions
-for each Quantity -- one forward and one backward) define the
-directed edges.
-
-See the [Graph Tutorial](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialGraph.md)
-for more on how graphs work.
+Never be stumped by a classic Microsoft interview question again!
 
 ```scala
 scala> ("10" in gram) in kilogram
 res14: org.pingel.axle.quanta.Quantity = 0.0100 Kg
-
-scala> earth in man
-res15: org.pingel.axle.quanta.Quantity = 71683200000000000000000.0000000 ?
-
-scala> man in earth
-res16: org.pingel.axle.quanta.Quantity = 1.4496840000000000E-23 ⊕
 
 scala> earth in sun
 res17: org.pingel.axle.quanta.Quantity = 0.000002999941920 ☉
@@ -131,7 +119,24 @@ scala> toAndromeda in parsec
 res2: org.pingel.axle.quanta.Quantity = 798200.000 pc
 ```
 
-Never be stumped by a classic Microsoft interview question again!
+A Quantum defines a directed graph, where the UnitsOfMeasurement
+are the vertices, and the Conversions (there are two Conversions
+for each Quantity -- one forward and one backward) define the
+directed edges.
+
+See the [Graph Tutorial](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialGraph.md)
+for more on how graphs work.
+
+An example of a case that is not yet fully worked out is calculating
+the length of time required for a volume to be consumed at a flow rate.
+
+```scala
+scala> greatLakes / niagaraFalls
+res0: org.pingel.axle.quanta.Quantity = 12.36150 KmKmKm/mmm/s
+
+scala> (greatLakes / niagaraFalls) in year
+java.lang.Exception: incompatible quanta: QuantumMultiplication and Time$
+```
 
 Addition and subtraction are defined on Quantity by converting the
 right Quantity to the unit of the left.
@@ -156,6 +161,6 @@ There are obvious paths to take from this point, such as:
 1. Less run-time exception throwing.  More static type-safety.
 1. Define Monoid for Quantity addition, multiplication
 1. Sorting out difference between Quantity and Conversion
-1. Using Quantum.derivations to allow for reduction of Quantities produced by division. (eg Distance / Time = Speed)
+1. Fix the "(greatLakes / niagaraFalls) in year" example.
 
 Check back in the future.
