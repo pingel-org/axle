@@ -44,7 +44,7 @@ object CombinerTest {
   
 }
 
-class Combiner[E](objects: Collection[E], n: Int) extends Iterable[Set[E]] {
+case class Combiner[E](objects: Collection[E], n: Int) extends Iterable[Set[E]] {
 
   if (n > objects.size) {
     throw new IndexOutOfBoundsException()

@@ -11,12 +11,12 @@ class PermuterSpec extends Specification {
   "Permuter" should {
 
     "Permute () 0" in {
-      val p0 = new Permuter[String](List(), 0).toList
+      val p0 = Permuter[String](List(), 0).toList
       p0 must have size(1) // TODO: should this be 0 or 1 ?
     }
     
     "Permute (a) 1" in {
-      val pA1 = new Permuter[String](List("a"), 1).toList
+      val pA1 = Permuter[String](List("a"), 1).toList
       pA1 must have size(1)
       pA1 must contain(List("a"))
     }

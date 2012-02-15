@@ -42,7 +42,7 @@ import scala.collection._
  *
  */
 
-class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
+case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
 
   if (n > objects.size) {
     throw new IndexOutOfBoundsException()

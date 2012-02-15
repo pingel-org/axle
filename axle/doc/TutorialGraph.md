@@ -2,6 +2,13 @@
 Graph
 =====
 
+Here are a couple of simple examples.
+Eventually this page will include repl sessions showing in-depth interaction with these graphs.
+The interfaces are likely to change substantially, as I have learned a lot about the 
+type system and family polymorphism since I wrote this.
+
+I also have some code that will use JUNG to create AWT visualizations.
+More on that soon.
 
 Undirected Graph
 ----------------
