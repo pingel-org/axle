@@ -25,7 +25,7 @@ Tutorials
 1. [Type Classes](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialTypeClasses.md): Haskell-like [typeclasses](http://www.haskell.org/haskellwiki/Typeclassopedia) such as Functor, Applicative Functor, Monoid, and Monad
 1. [Iterators](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialIterators.md): Power Set, Permuter, Cross Product
 1. [Enrichments](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialEnrichments.md): Boolean, Set, List
-1. [Quanta](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialQuantum.md) units (second, mile, gram) and quantities for various quanta (Speed, Distance, Mass) and conversions between them
+1. [Quanta](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialQuantum.md) units (second, mile, gram, etc) and quantities for various quanta (Speed, Distance, Mass, etc) and conversions between them
 1. [Matrix](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialMatrix.md) Type-safe, expressive wrapper for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/) -- a very fast matrix library.
 1. [Graphs](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialGraph.md): Directed and undirected graphs.  [JUNG](http://jung.sourceforge.net/) is used for visualization.
 1. [Machine Learning](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialMachineLearning.md): Linear Regression, Logistic Regression, Neural Networks, K-Means Clustering, Principal Component Analysis
