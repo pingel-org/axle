@@ -27,6 +27,8 @@ res17: org.pingel.axle.iterator.Permuter[java.lang.String] = Permuter(List(b, a)
 Cross Product
 -------------
 
+Note: This should probably take a Tuple2..22 of collections as an argument.
+
 ```scala
 scala> import org.pingel.axle.iterator.CrossProduct
 import org.pingel.axle.iterator.CrossProduct
