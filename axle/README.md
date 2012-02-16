@@ -22,23 +22,23 @@ The first such subject is Graph Theory.
 Tutorials
 ---------
 
-1. [Type Classes](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialTypeClasses.md): Haskell-like [typeclasses](http://www.haskell.org/haskellwiki/Typeclassopedia) such as Functor, Applicative Functor, Monoid, and Monad
-1. [Iterators](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialIterators.md): Power Set, Permuter, Cross Product
-1. [Enrichments](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialEnrichments.md): Boolean, Set, List
-1. [Quanta](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialQuantum.md) units (second, mile, gram, etc) and quantities for various quanta (Speed, Distance, Mass, etc) and conversions between them
-1. [Matrix](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialMatrix.md) Type-safe, expressive wrapper for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/) -- a very fast matrix library.
-1. [Graphs](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialGraph.md): Directed and undirected graphs.  [JUNG](http://jung.sourceforge.net/) is used for visualization.
-1. [Machine Learning](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialMachineLearning.md): Linear Regression, Logistic Regression, Neural Networks, K-Means Clustering, Principal Component Analysis
-1. [Scala](https://github.com/adampingel/pingel.org/blob/master/axle/doc/TutorialScala.md)
+1. [Type Classes](doc/TutorialTypeClasses.md): Haskell-like [typeclasses](http://www.haskell.org/haskellwiki/Typeclassopedia) such as Functor, Applicative Functor, Monoid, and Monad
+1. [Iterators](doc/TutorialIterators.md): Power Set, Permuter, Cross Product
+1. [Enrichments](doc/TutorialEnrichments.md): Boolean, Set, List
+1. [Quanta](doc/TutorialQuantum.md) units (second, mile, gram, etc) and quantities for various quanta (Speed, Distance, Mass, etc) and conversions between them
+1. [Matrix](doc/TutorialMatrix.md) Type-safe, expressive wrapper for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/) -- a very fast matrix library.
+1. [Graphs](doc/TutorialGraph.md): Directed and undirected graphs.  [JUNG](http://jung.sourceforge.net/) is used for visualization.
+1. [Machine Learning](doc/TutorialMachineLearning.md): Linear Regression, Logistic Regression, Neural Networks, K-Means Clustering, Principal Component Analysis
+1. [Scala](doc/TutorialScala.md)
 
 Details
 -------
 
-See [Installation notes](axle/doc/Installation.md)
+See [Installation notes](doc/Installation.md)
 
 This project is in a "pre-alpha" state.
 It's still under active development.  No public jar is maintained.
 
-The [Road Map](axle/doc/RoadMap.md) contains some ideas about future direction.
+The [Road Map](doc/RoadMap.md) contains some ideas about future direction.
 
 Axle is a component of the [pingel.org](./) umbrella project.
