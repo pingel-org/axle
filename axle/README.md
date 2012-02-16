@@ -28,8 +28,8 @@ Tutorials
 1. [Quanta](/adampingel/pingel.org/blob/master/axle/doc/TutorialQuantum.md) units (second, mile, gram, etc) and quantities for various quanta (Speed, Distance, Mass, etc) and conversions between them
 1. [Matrix](/adampingel/pingel.org/blob/master/axle/doc/TutorialMatrix.md) Type-safe, expressive wrapper for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/) -- a very fast matrix library.
 1. [Graphs](/adampingel/pingel.org/blob/master/axle/doc/TutorialGraph.md): Directed and undirected graphs.  [JUNG](http://jung.sourceforge.net/) is used for visualization.
-1. [Machine Learning](/adampingel/pingel.org/blob/master/axle/doc/TutorialMachineLearning.md): Linear Regression, Logistic Regression, Neural Networks, K-Means Clustering, Principal Component Analysis
-1. [Scala](/adampingel/pingel.org/blob/master/axle/doc/TutorialScala.md)
+1. [Machine Learning](axle/doc/TutorialMachineLearning.md): Linear Regression, Logistic Regression, Neural Networks, K-Means Clustering, Principal Component Analysis
+1. [Scala](axle/doc/TutorialScala.md)
 
 Details
 -------
