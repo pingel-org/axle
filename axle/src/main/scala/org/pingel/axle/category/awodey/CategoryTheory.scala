@@ -1,5 +1,5 @@
 
-package org.pingel.category.awodey
+package org.pingel.axle.category.awodey
 
 // unicode
 // http://formex.publications.europa.eu/formex-4/physspec/formex-4-character-encoding-c06.htm
