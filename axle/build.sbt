@@ -1,11 +1,17 @@
+import AssemblyKeys._
+
 name := "axle"
 
 version := "1.0"
 
 organization := "org.pingel"
 
+seq(assemblySettings: _*)
+
 // scalaVersion := "2.9.1"
 crossScalaVersions := Seq("2.9.1") // "2.8.1"
+
+test in assembly := {}
 
 libraryDependencies ++= Seq(
   "jung" % "jung" % "1.7.6",
