@@ -1,28 +1,22 @@
 
 package org.pingel.axle.graph {
 
-  // trait LabelledDirectedGraph[VT, ET] extends DirectedGraph[VT, ET]
+  trait LabelledDirectedGraph extends DirectedGraph {
 
-  trait LabelledDirectedEdge[DV <: DirectedGraphVertex[_]]
-  extends DirectedGraphEdge[DV] {
-    def getLabel(): String
+    type E = LabelledDirectedEdge[V]
+
+    trait LabelledDirectedEdge[V] extends DirectedGraphEdge[V] {
+      def getLabel(): String
+    }
+
+    class LabelledDirectedEdgeImpl[V](source: V, label: String, dest: V) extends LabelledDirectedEdge[V] {
+      def getSource = source
+      def getDest = dest
+      def getLabel = label
+    }
+
   }
 
-  class LabelledDirectedEdgeImpl[DV <: DirectedGraphVertex[_]](
-    source: DV, label: String, dest: DV)
-  extends LabelledDirectedEdge[DV] {
-    def getSource = source
-    def getDest = dest
-    def getLabel = label
-  }
+  class LabelledDirectedGraphImpl extends LabelledDirectedGraph
 
-  //trait DirectedGraph[DV <: DirectedGraphVertex[DE], DE <: DirectedGraphEdge[DV]] 
-  //extends Graph[DV, DE]
-  
-  trait LabelledDirectedGraph[DV <: DirectedGraphVertex[LDE], LDE <: LabelledDirectedEdge[DV]]
-  extends DirectedGraph[DV, LDE] {
-  }
-
-  class LabelledDirectedGraphImpl[DV <: DirectedGraphVertex[LDE], LDE <: LabelledDirectedEdge[DV]] 
-  extends LabelledDirectedGraph[DV, LDE]
 }

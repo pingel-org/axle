@@ -2,28 +2,30 @@ package org.pingel.axle.graph {
 
   import scala.collection._
 
-  trait DirectedGraphVertex[DE <: DirectedGraphEdge[_]] extends GraphVertex[DE]
+  trait DirectedGraph extends Graph {
 
-  trait DirectedGraphEdge[DV <: DirectedGraphVertex[_]] extends GraphEdge[DV] {
-    def getSource(): DV
-    def getDest(): DV
-  }
+    type V <: DirectedGraphVertex[E]
+    type E <: DirectedGraphEdge[V]
+    
+    trait DirectedGraphVertex[E] extends GraphVertex[E]
 
-  class DirectedGraphEdgeImpl[V <: DirectedGraphVertex[_]](source: V, dest: V)
-    extends DirectedGraphEdge[V] {
-    def getSource() = source
-    def getDest() = dest
-  }
+    trait DirectedGraphEdge[V] extends GraphEdge[V] {
+      def getSource(): V
+      def getDest(): V
+    }
 
-  trait DirectedGraph[DV <: DirectedGraphVertex[DE], DE <: DirectedGraphEdge[DV]]
-    extends Graph[DV, DE] {
+    class DirectedGraphEdgeImpl[V <: DirectedGraphVertex[_]](source: V, dest: V)
+      extends DirectedGraphEdge[V] {
+      def getSource() = source
+      def getDest() = dest
+    }
 
-    var vertex2outedges = Map[DV, mutable.Set[DE]]()
-    var vertex2inedges = Map[DV, mutable.Set[DE]]()
+    var vertex2outedges = Map[V, mutable.Set[E]]()
+    var vertex2inedges = Map[V, mutable.Set[E]]()
 
-    def getEdge(from: DV, to: DV): Option[DE] = vertex2outedges(from).find(e => e.getDest == to)
+    def getEdge(from: V, to: V): Option[E] = vertex2outedges(from).find(e => e.getDest == to)
 
-    def addEdge(edge: DE) = {
+    def addEdge(edge: E) = {
 
       val source = edge.getSource()
       val dest = edge.getDest()
@@ -31,31 +33,31 @@ package org.pingel.axle.graph {
       edges += edge
 
       if (!vertex2outedges.contains(source)) {
-        vertex2outedges += source -> mutable.Set[DE]()
+        vertex2outedges += source -> mutable.Set[E]()
       }
       vertex2outedges(source) += edge
 
       if (!vertex2inedges.contains(dest)) {
-        vertex2inedges += dest -> mutable.Set[DE]()
+        vertex2inedges += dest -> mutable.Set[E]()
       }
       vertex2inedges(dest) += edge
 
       edge
     }
 
-    def addVertex(v: DV) = {
+    def addVertex(v: V) = {
       vertices += v
       v
     }
 
     def removeAllEdgesAndVertices(): Unit = {
-      vertices = Set[DV]()
-      edges = Set[DE]()
-      vertex2outedges = Map[DV, mutable.Set[DE]]()
-      vertex2inedges = Map[DV, mutable.Set[DE]]()
+      vertices = Set[V]()
+      edges = Set[E]()
+      vertex2outedges = Map[V, mutable.Set[E]]()
+      vertex2inedges = Map[V, mutable.Set[E]]()
     }
 
-    def deleteEdge(e: DE) = {
+    def deleteEdge(e: E) = {
 
       edges -= e
 
@@ -68,7 +70,7 @@ package org.pingel.axle.graph {
       }
     }
 
-    def deleteVertex(v: DV) {
+    def deleteVertex(v: V) {
       vertex2outedges.get(v) map { outEdges =>
         for (e <- outEdges) {
           edges -= e
@@ -93,7 +95,7 @@ package org.pingel.axle.graph {
     }
 
     def getLeaves() = {
-      var result = Set[DV]()
+      var result = Set[V]()
       for (v <- getVertices()) {
         if (isLeaf(v)) {
           result += v
@@ -102,8 +104,8 @@ package org.pingel.axle.graph {
       result
     }
 
-    def getNeighbors(v: DV) = {
-      var result = Set[DV]()
+    def getNeighbors(v: V) = {
+      var result = Set[V]()
       vertex2outedges.get(v) map { outEdges =>
         for (edge <- outEdges) {
           result += edge.getDest()
@@ -117,10 +119,10 @@ package org.pingel.axle.graph {
       result
     }
 
-    def precedes(v1: DV, v2: DV) = getPredecessors(v2).contains(v1)
+    def precedes(v1: V, v2: V) = getPredecessors(v2).contains(v1)
 
-    def getPredecessors(v: DV) = {
-      var result = Set[DV]()
+    def getPredecessors(v: V) = {
+      var result = Set[V]()
       vertex2inedges.get(v) map { inEdges =>
         for (edge <- inEdges) {
           result += edge.getSource()
@@ -129,13 +131,13 @@ package org.pingel.axle.graph {
       result
     }
 
-    def isLeaf(v: DV) = {
+    def isLeaf(v: V) = {
       val outEdges = vertex2outedges.get(v)
       outEdges == null || outEdges.size == 0
     }
 
-    def getSuccessors(v: DV) = {
-      var result = Set[DV]()
+    def getSuccessors(v: V) = {
+      var result = Set[V]()
       vertex2outedges.get(v) map { outEdges =>
         for (edge <- outEdges) {
           result += edge.getDest()
@@ -144,13 +146,13 @@ package org.pingel.axle.graph {
       result
     }
 
-    def outputEdgesOf(v: DV) = {
-      var result = Set[DE]()
+    def outputEdgesOf(v: V) = {
+      var result = Set[E]()
       vertex2outedges.get(v) map { outEdges => result ++= outEdges }
       result
     }
 
-    def descendantsIntersectsSet(v: DV, s: Set[DV]): Boolean = {
+    def descendantsIntersectsSet(v: V, s: Set[V]): Boolean = {
 
       if (s.contains(v)) {
         return true
@@ -163,7 +165,7 @@ package org.pingel.axle.graph {
       return false
     }
 
-    def collectDescendants(v: DV, result: mutable.Set[DV]): Unit = {
+    def collectDescendants(v: V, result: mutable.Set[V]): Unit = {
       // inefficient
       if (!result.contains(v)) {
         result.add(v)
@@ -173,7 +175,7 @@ package org.pingel.axle.graph {
       }
     }
 
-    def collectAncestors(v: DV, result: mutable.Set[DV]): Unit = {
+    def collectAncestors(v: V, result: mutable.Set[V]): Unit = {
       // inefficient
       if (!result.contains(v)) {
         result.add(v)
@@ -183,13 +185,13 @@ package org.pingel.axle.graph {
       }
     }
 
-    def collectAncestors(vs: Set[DV], result: mutable.Set[DV]): Unit = {
+    def collectAncestors(vs: Set[V], result: mutable.Set[V]): Unit = {
       for (v <- vs) {
         collectAncestors(v, result)
       }
     }
 
-    def removeInputs(vs: Set[DV]) {
+    def removeInputs(vs: Set[V]) {
       for (v <- vs) {
         vertex2inedges.get(v) map { incoming =>
           for (edge <- incoming) {
@@ -200,7 +202,7 @@ package org.pingel.axle.graph {
       }
     }
 
-    def removeOutputs(vs: Set[DV]) {
+    def removeOutputs(vs: Set[V]) {
       for (v <- vs) {
         vertex2outedges.get(v) map { outgoing =>
           for (edge <- outgoing) {
@@ -212,7 +214,7 @@ package org.pingel.axle.graph {
     }
 
     //TODO remove this method
-    def removeSuccessor(v: DV, successor: DV) {
+    def removeSuccessor(v: V, successor: V) {
       vertex2outedges.get(v) map { outgoing =>
         outgoing.find({ _.getDest().equals(successor) }) map { edgeToRemove =>
           outgoing.remove(edgeToRemove)
@@ -222,7 +224,7 @@ package org.pingel.axle.graph {
     }
 
     //TODO remove this method
-    def removePredecessor(v: DV, predecessor: DV) {
+    def removePredecessor(v: V, predecessor: V) {
       vertex2inedges.get(v) map { incoming =>
         incoming.find(_.getSource().equals(predecessor)).map(edgeToRemove => {
           incoming.remove(edgeToRemove)
@@ -236,7 +238,7 @@ package org.pingel.axle.graph {
     def isAcyclic() = true // TODO !!!
 
     // not so efficient:
-    def _shortestPath(source: DV, goal: DV, visited: Set[DV]): Option[List[DE]] = (source == goal) match {
+    def _shortestPath(source: V, goal: V, visited: Set[V]): Option[List[E]] = (source == goal) match {
       case true => Some(List())
       case false => {
         val paths = getSuccessors(source)
@@ -255,7 +257,7 @@ package org.pingel.axle.graph {
       }
     }
 
-    def shortestPath(source: DV, goal: DV) = _shortestPath(source, goal, Set())
+    def shortestPath(source: V, goal: V) = _shortestPath(source, goal, Set())
 
   }
 

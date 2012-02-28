@@ -3,84 +3,66 @@ package org.pingel.axle.graph {
 
   import scala.collection._
 
-  import javax.swing.JFrame
+  trait UndirectedGraph extends Graph {
 
-  import edu.uci.ics.jung.graph.Vertex
-  import edu.uci.ics.jung.graph.ArchetypeVertex
-  import edu.uci.ics.jung.graph.decorators.VertexStringer
-  import edu.uci.ics.jung.graph.impl.SimpleUndirectedSparseVertex
-  import edu.uci.ics.jung.graph.impl.UndirectedSparseEdge
-  import edu.uci.ics.jung.graph.impl.UndirectedSparseGraph
-  import edu.uci.ics.jung.visualization.FRLayout
-  import edu.uci.ics.jung.visualization.GraphDraw
-  import edu.uci.ics.jung.visualization.Layout
-  import edu.uci.ics.jung.visualization.PluggableRenderer
+    type V <: UndirectedGraphVertex[E]
+    type E <: UndirectedGraphEdge[V]
 
-  trait UndirectedGraphVertex[UE <: UndirectedGraphEdge[_]] extends GraphVertex[UE] {
+    trait UndirectedGraphVertex[E] extends GraphVertex[E] {
+      def getLabel(): String
+    }
 
-    def getLabel(): String
+    trait UndirectedGraphEdge[V] extends GraphEdge[V] {
 
-  }
+      def getVertices(): (V, V)
 
-  trait UndirectedGraphEdge[UV <: UndirectedGraphVertex[_]] extends GraphEdge[UV] {
+      def other(u: V): V = {
+        val (v1, v2) = getVertices()
+        u match {
+          case _ if u.equals(v1) => v2
+          case _ if u.equals(v2) => v1
+          case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+        }
+      }
 
-    def getVertices(): (UV, UV)
-
-    def other(u: UV): UV = {
-      val (v1, v2) = getVertices()
-      u match {
-        case _ if u.equals(v1) => v2
-        case _ if u.equals(v2) => v1
-        case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+      def connects(a1: V, a2: V) = {
+        val (v1, v2) = getVertices()
+        (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
       }
     }
 
-    def connects(a1: UV, a2: UV) = {
-      val (v1, v2) = getVertices()
-      (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
+    class UndirectedGraphEdgeImpl[V](v1: V, v2: V)
+      extends UndirectedGraphEdge[V] {
+      def getVertices() = (v1, v2)
     }
-  }
 
-  class UndirectedGraphEdgeImpl[UV <: UndirectedGraphVertex[_]](v1: UV, v2: UV)
-    extends UndirectedGraphEdge[UV] {
-    def getVertices() = (v1, v2)
-  }
+    var vertex2edges = mutable.Map[V, mutable.Set[E]]()
 
-  trait UndirectedGraph[UV <: UndirectedGraphVertex[UE], UE <: UndirectedGraphEdge[UV]]
-    extends Graph[UV, UE] {
-
-    var vertex2edges = mutable.Map[UV, mutable.Set[UE]]()
-
-    def addVertex(v: UV): UV = {
+    def addVertex(v: V): V = {
       vertices += v
       v
     }
 
     // dissertation idea: how best to have an "Edge" object without storing them
 
-    def addEdge(e: UE): UE = {
-
+    def addEdge(e: E): E = {
       // assume that this edge isn't already in our list of edges
-
       edges += e
       val dble = e.getVertices()
-
       var es1 = getEdges(dble._1)
       es1.add(e)
-
       var es2 = getEdges(dble._2)
       es2.add(e)
-
       e
     }
 
-    def copyTo(other: UndirectedGraph[UV, UE]) = {
+    def copyTo(other: UndirectedGraph) = {
       // TODO
     }
 
-    def constructEdge(v1: UV, v2: UV): UE
+    def constructEdge(v1: V, v2: V): E
 
-    def unlink(e: UE): Unit = {
+    def unlink(e: E): Unit = {
 
       val dble = e.getVertices()
 
@@ -93,30 +75,13 @@ package org.pingel.axle.graph {
       edges -= e
     }
 
-    def unlink(v1: UV, v2: UV): Unit = {
-      // TODO optimize
+    def unlink(v1: V, v2: V): Unit = getEdges(v1).filter(_.other(v1).equals(v2)).map(unlink(_))
 
-      val edges = getEdges(v1)
-      for (edge <- edges) {
-        if (edge.other(v1).equals(v2)) {
-          unlink(edge)
-        }
-      }
-    }
+    def areNeighbors(v1: V, v2: V) = getEdges(v1).exists(_.connects(v1, v2))
 
-    def areNeighbors(v1: UV, v2: UV): Boolean = {
-      val es = getEdges(v1)
-      for (e <- es) {
-        if (e.connects(v1, v2)) {
-          return true
-        }
-      }
-      false
-    }
-
-    def isClique(vs: Set[UV]): Boolean = {
-
-      var vList = mutable.ArrayBuffer[UV]()
+    def isClique(vs: Set[V]): Boolean = {
+      // vs.pairs().forall({ case (a, b) => ( (a == b) || areNeighbors(a, b) ) })
+      var vList = mutable.ArrayBuffer[V]()
       vList ++= vs
       for (i <- 0 until vList.size) {
         for (j <- 0 until vList.size) {
@@ -128,9 +93,9 @@ package org.pingel.axle.graph {
       true
     }
 
-    def getNumEdgesToForceClique(vs: Set[UV]) = {
+    def getNumEdgesToForceClique(vs: Set[V]) = {
 
-      var N = mutable.ArrayBuffer[UV]()
+      var N = mutable.ArrayBuffer[V]()
       N ++= vs
 
       var result = 0
@@ -149,9 +114,9 @@ package org.pingel.axle.graph {
       result
     }
 
-    def forceClique(vs: Set[UV]) {
+    def forceClique(vs: Set[V]) {
 
-      var vList = mutable.ArrayBuffer[UV]()
+      var vList = mutable.ArrayBuffer[V]()
       vList ++= vs
 
       for (i <- 0 to (vList.size - 2)) {
@@ -166,11 +131,11 @@ package org.pingel.axle.graph {
 
     }
 
-    def vertexWithFewestEdgesToEliminateAmong(among: Set[UV]): Option[UV] = {
+    def vertexWithFewestEdgesToEliminateAmong(among: Set[V]): Option[V] = {
 
       // assert: among is a subset of vertices
 
-      var result: Option[UV] = None
+      var result: Option[V] = None
       var minSoFar = Integer.MAX_VALUE
 
       for (v <- among) {
@@ -186,10 +151,10 @@ package org.pingel.axle.graph {
       result
     }
 
-    def vertexWithFewestNeighborsAmong(among: Set[UV]): Option[UV] = {
+    def vertexWithFewestNeighborsAmong(among: Set[V]): Option[V] = {
       // assert: among is a subset of vertices
 
-      var result: Option[UV] = None
+      var result: Option[V] = None
       var minSoFar = Integer.MAX_VALUE
 
       for (v <- among) {
@@ -206,18 +171,18 @@ package org.pingel.axle.graph {
       result
     }
 
-    def degree(v: UV) = getEdges(v).size
+    def degree(v: V) = getEdges(v).size
 
-    def getEdges(v: UV) = {
+    def getEdges(v: V) = {
       if (!vertex2edges.contains(v)) {
-        vertex2edges += v -> scala.collection.mutable.Set[UE]()
+        vertex2edges += v -> scala.collection.mutable.Set[E]()
       }
       vertex2edges(v)
     }
 
-    def getNeighbors(v: UV) = getEdges(v).map({ _.other(v) }).toSet
+    def getNeighbors(v: V) = getEdges(v).map(_.other(v)).toSet
 
-    def delete(v: UV) = {
+    def delete(v: V) = {
       val es = getEdges(v)
       vertices -= v
       vertex2edges.remove(v)
@@ -228,11 +193,11 @@ package org.pingel.axle.graph {
     }
 
     // a "leaf" is vertex with only one neighbor
-    def firstLeafOtherThan(r: UV) = vertices.find({
+    def firstLeafOtherThan(r: V) = vertices.find({
       v => getNeighbors(v).size == 1 && !v.equals(r)
     })
 
-    def eliminate(v: UV) = {
+    def eliminate(v: V) = {
       // "decompositions" page 3 (Definition 3, Section 9.3)
       // turn the neighbors of v into a clique
 
@@ -245,51 +210,66 @@ package org.pingel.axle.graph {
         edges -= e
       }
 
-      forceClique(vs.asInstanceOf[Set[UV]])
+      forceClique(vs.asInstanceOf[Set[V]])
     }
 
-    def eliminate(vs: List[UV]): Unit = {
-      // TODO there is probably a more efficient way to do this
-      for (v <- vs) {
-        eliminate(v)
-      }
+    // TODO there is probably a more efficient way to do this:
+    def eliminate(vs: List[V]): Unit = vs.map(eliminate(_))
+
+    def draw(): Unit = {
+      val v = new UndirectedGraphVisualization(this)
+      val jf = v.jframe
+      jf.setVisible(true)
     }
 
-    class UndirectedVertexStringer(jung2pingel: Map[Vertex, UV]) extends VertexStringer {
+  }
 
+  class UndirectedGraphVisualization(ug: UndirectedGraph) {
+
+    import javax.swing.JFrame
+    import edu.uci.ics.jung.graph.Vertex
+    import edu.uci.ics.jung.graph.ArchetypeVertex
+    import edu.uci.ics.jung.graph.decorators.VertexStringer
+    import edu.uci.ics.jung.graph.impl.SimpleUndirectedSparseVertex
+    import edu.uci.ics.jung.graph.impl.UndirectedSparseEdge
+    import edu.uci.ics.jung.graph.impl.UndirectedSparseGraph
+    import edu.uci.ics.jung.visualization.FRLayout
+    import edu.uci.ics.jung.visualization.GraphDraw
+    import edu.uci.ics.jung.visualization.Layout
+    import edu.uci.ics.jung.visualization.PluggableRenderer
+
+    class UndirectedVertexStringer(jung2pingel: Map[Vertex, ug.type#V]) extends VertexStringer {
       // def getLabel(v: Vertex) = jung2pingel(v).getLabel()
-
       def getLabel(v: ArchetypeVertex) = "TODO" // jung2pingel(v.getEquivalentVertex(this)).getLabel()
-
     }
 
-    def draw() = {
+    def jframe(): JFrame = {
 
       var jungGraph = new UndirectedSparseGraph()
 
-      var pingel2jung = Map[UV, Vertex]()
-      var jung2pingel = Map[Vertex, UV]()
+      var axle2jung = Map[ug.type#V, Vertex]()
+      var jung2axle = Map[Vertex, ug.type#V]()
 
-      for (pv <- getVertices()) {
+      for (pv <- ug.getVertices()) {
         val vertex = new SimpleUndirectedSparseVertex()
         jungGraph.addVertex(vertex)
-        pingel2jung += pv -> vertex
-        jung2pingel += vertex -> pv
+        axle2jung += pv -> vertex
+        jung2axle += vertex -> pv
       }
 
-      for (edge <- getEdges()) {
+      for (edge <- ug.getEdges()) {
         val dbl = edge.getVertices()
         val v1 = dbl._1
         val v2 = dbl._2
-        val jedge = new UndirectedSparseEdge(pingel2jung(v1), pingel2jung(v2))
+        val jedge = new UndirectedSparseEdge(axle2jung(v1), axle2jung(v2))
         jungGraph.addEdge(jedge)
       }
 
       var pr = new PluggableRenderer()
-      //      pr.setVertexPaintFunction(new ModelVertexPaintFunction(m));
-      //      pr.setEdgeStrokeFunction(new ModelEdgeStrokeFunction(m));
-      //      pr.setEdgeShapeFunction(new EdgeShape.Line());
-      pr.setVertexStringer(new UndirectedVertexStringer(jung2pingel))
+      // pr.setVertexPaintFunction(new ModelVertexPaintFunction(m));
+      // pr.setEdgeStrokeFunction(new ModelEdgeStrokeFunction(m));
+      // pr.setEdgeShapeFunction(new EdgeShape.Line());
+      pr.setVertexStringer(new UndirectedVertexStringer(jung2axle))
 
       val layout = new FRLayout(jungGraph)
 
@@ -300,9 +280,28 @@ package org.pingel.axle.graph {
       jf.getContentPane().add(gd)
       jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
       jf.pack()
-      jf.setVisible(true)
+      jf
+    }
+  }
+
+  class SimpleGraph() extends UndirectedGraph {
+
+    type V = SimpleVertex
+    type E = SimpleEdge
+    
+    class SimpleVertex(label: String) extends UndirectedGraphVertex[SimpleEdge] {
+      def getLabel() = label
     }
 
+    class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex) extends UndirectedGraphEdge[SimpleVertex] {
+      def getVertices() = (v1, v2)
+    }
+
+    def constructEdge(v1: SimpleVertex, v2: SimpleVertex) = {
+      val result = new SimpleEdge(v1, v2)
+      addEdge(result)
+      result
+    }
   }
 
 }

@@ -3,13 +3,14 @@ package org.pingel.axle.graph {
 
   import scala.collection._
 
-  trait GraphVertex[E]
+  trait Graph {
 
-  trait GraphEdge[V] { 
-    
-  }
+    trait GraphVertex[E]
 
-  trait Graph[V <: GraphVertex[E], E <: GraphEdge[V]] {
+    trait GraphEdge[V] {}
+
+    type V <: GraphVertex[E]
+    type E <: GraphEdge[V]
 
     var vertices = Set[V]()
     var edges = Set[E]()

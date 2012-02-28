@@ -1,20 +1,17 @@
 package org.pingel.axle.quanta
 
+import org.pingel.axle.graph._
+
 /**
  * Quantum
  * 
  * World English Dictionary
- * 
- * quantum
- * 
+ *
  * 4. something that can be quantified or measured
  * 
- * http://dictionary.reference.com/browse/quantum
+ * [[http://dictionary.reference.com/browse/quantum]]
  * 
  */
-
-import org.pingel.axle.graph._
-
 trait Quantum extends DirectedGraph[UnitOfMeasurement, Conversion] {
 
   val wikipediaUrl: String
@@ -28,6 +25,11 @@ trait Quantum extends DirectedGraph[UnitOfMeasurement, Conversion] {
   
   override def toString() = this.getClass().getSimpleName()
 
+  /**
+   * Searches the Directed Graph defined by this Quantum for a path of Conversions from source to goal
+   * @param source Start node for shortest path search
+   * @param goal End node for shortest path search
+   */
   def conversionPath(source: UnitOfMeasurement, goal: UnitOfMeasurement): Option[List[Conversion]] = shortestPath(source, goal)
 }
 
