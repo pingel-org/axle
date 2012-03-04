@@ -5,14 +5,15 @@ package org.pingel.axle.graph {
 
   trait UndirectedGraph extends Graph {
 
-    type V <: UndirectedGraphVertex[E]
-    type E <: UndirectedGraphEdge[V]
+    type V <: UndirectedGraphVertex
+    
+    type E <: UndirectedGraphEdge
 
-    trait UndirectedGraphVertex[E] extends GraphVertex[E] {
+    trait UndirectedGraphVertex extends GraphVertex {
       def getLabel(): String
     }
 
-    trait UndirectedGraphEdge[V] extends GraphEdge[V] {
+    trait UndirectedGraphEdge extends GraphEdge {
 
       def getVertices(): (V, V)
 
@@ -31,8 +32,8 @@ package org.pingel.axle.graph {
       }
     }
 
-    class UndirectedGraphEdgeImpl[V](v1: V, v2: V)
-      extends UndirectedGraphEdge[V] {
+    class UndirectedGraphEdgeImpl(v1: V, v2: V)
+      extends UndirectedGraphEdge {
       def getVertices() = (v1, v2)
     }
 
@@ -59,8 +60,6 @@ package org.pingel.axle.graph {
     def copyTo(other: UndirectedGraph) = {
       // TODO
     }
-
-    def constructEdge(v1: V, v2: V): E
 
     def unlink(e: E): Unit = {
 
@@ -105,7 +104,7 @@ package org.pingel.axle.graph {
         for (j <- (i + 1) until N.size) {
           val vj = N(j)
           if (!areNeighbors(vi, vj)) {
-            addEdge(constructEdge(vi, vj))
+            addEdge(newEdge(vi, vj))
             result += 1
           }
         }
@@ -119,12 +118,12 @@ package org.pingel.axle.graph {
       var vList = mutable.ArrayBuffer[V]()
       vList ++= vs
 
-      for (i <- 0 to (vList.size - 2)) {
+      for (i <- 0 until (vList.size - 1)) {
         val vi = vList(i)
         for (j <- (i + 1) until vList.size) {
           val vj = vList(j)
           if (!areNeighbors(vi, vj)) {
-            addEdge(constructEdge(vi, vj))
+            addEdge(newEdge(vi, vj))
           }
         }
       }
@@ -289,15 +288,17 @@ package org.pingel.axle.graph {
     type V = SimpleVertex
     type E = SimpleEdge
     
-    class SimpleVertex(label: String) extends UndirectedGraphVertex[SimpleEdge] {
+    class SimpleVertex(label: String) extends UndirectedGraphVertex {
       def getLabel() = label
     }
 
-    class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex) extends UndirectedGraphEdge[SimpleVertex] {
+    def newVertex(name: String) = new SimpleVertex(name)
+    
+    class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex) extends UndirectedGraphEdge {
       def getVertices() = (v1, v2)
     }
 
-    def constructEdge(v1: SimpleVertex, v2: SimpleVertex) = {
+    def newEdge(v1: SimpleVertex, v2: SimpleVertex) = {
       val result = new SimpleEdge(v1, v2)
       addEdge(result)
       result

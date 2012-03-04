@@ -4,18 +4,23 @@ package org.pingel.axle.graph {
 
   trait DirectedGraph extends Graph {
 
-    type V <: DirectedGraphVertex[E]
-    type E <: DirectedGraphEdge[V]
+    type V <: DirectedGraphVertex
     
-    trait DirectedGraphVertex[E] extends GraphVertex[E]
+    type E <: DirectedGraphEdge
+    
+    trait DirectedGraphVertex extends GraphVertex {
+      // type E <: DirectedGraphEdge
+    }
 
-    trait DirectedGraphEdge[V] extends GraphEdge[V] {
+    trait DirectedGraphEdge extends GraphEdge {
+      
+      // type V <: DirectedGraphVertex
+      
       def getSource(): V
       def getDest(): V
     }
 
-    class DirectedGraphEdgeImpl[V <: DirectedGraphVertex[_]](source: V, dest: V)
-      extends DirectedGraphEdge[V] {
+    class DirectedGraphEdgeImpl(source: V, dest: V) extends DirectedGraphEdge {
       def getSource() = source
       def getDest() = dest
     }

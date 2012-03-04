@@ -9,22 +9,29 @@ class UndirectedGraphSpec extends Specification {
   "Undirected Graph" should {
     "work" in {
 
-      class UDE(v1: UDN, v2: UDN) extends UndirectedGraphEdge[UDN] {
-        def getVertices() = (v1, v2)
-      }
+      class UDG extends UndirectedGraph {
 
-      class UDN(label: String) extends UndirectedGraphVertex[UDE] {
-        def getLabel(): String = label
-      }
+    	type E = UDE
+    	
+    	type V = UDN
+        
+        class UDE(v1: UDN, v2: UDN) extends UndirectedGraphEdge {
+          def getVertices() = (v1, v2)
+        }
 
-      class UDG extends UndirectedGraph[UDN, UDE] {
-        def constructEdge(v1: UDN, v2: UDN) = new UDE(v1, v2)
+        class UDN(label: String) extends UndirectedGraphVertex {
+          def getLabel(): String = label
+        }
+
+        def newEdge(v1: UDN, v2: UDN) = new UDE(v1, v2)
+
+        def newVertex(label: String) = new UDN(label)
       }
 
       val g = new UDG()
-      val a = g.addVertex(new UDN("a"))
-      val b = g.addVertex(new UDN("b"))
-      val c = g.addVertex(new UDN("c"))
+      val a = g.addVertex(g.newVertex("a"))
+      val b = g.addVertex(g.newVertex("b"))
+      val c = g.addVertex(g.newVertex("c"))
 
       g.size must be equalTo (3)
     }

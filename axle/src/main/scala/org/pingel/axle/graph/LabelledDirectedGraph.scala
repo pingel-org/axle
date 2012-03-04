@@ -3,20 +3,43 @@ package org.pingel.axle.graph {
 
   trait LabelledDirectedGraph extends DirectedGraph {
 
-    type E = LabelledDirectedEdge[V]
+    type E = LabelledDirectedEdge
 
-    trait LabelledDirectedEdge[V] extends DirectedGraphEdge[V] {
+    type V = LabelledDirectedVertex
+
+    trait LabelledDirectedVertex extends DirectedGraphVertex {
+
+    }
+
+    trait LabelledDirectedEdge extends DirectedGraphEdge {
+
       def getLabel(): String
     }
 
-    class LabelledDirectedEdgeImpl[V](source: V, label: String, dest: V) extends LabelledDirectedEdge[V] {
+  }
+
+  class LabelledDirectedGraphImpl extends LabelledDirectedGraph {
+
+    class LabelledDirectedVertexImpl(label: String) extends LabelledDirectedVertex {
+
+    }
+
+    def newVertex(name: String) = new LabelledDirectedVertexImpl(name)
+
+    class LabelledDirectedEdgeImpl(source: V, label: String, dest: V) extends LabelledDirectedEdge {
+
       def getSource = source
       def getDest = dest
       def getLabel = label
     }
 
-  }
+    def newEdge(source: V, dest: V) = {
+      val label: String = "TODO" // TODO
+      val edge = new LabelledDirectedEdgeImpl(source, label, dest)
+      addEdge(edge)
+      edge
+    }
 
-  class LabelledDirectedGraphImpl extends LabelledDirectedGraph
+  }
 
 }
