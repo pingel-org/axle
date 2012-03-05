@@ -13,11 +13,14 @@ class Power extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): PowerUnit = new PowerUnit(baseUnit, magnitude, name, symbol, link)
   
-}
-
-object Power extends Quantum {
-
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
   val derivations = List(Energy over Time)
 
@@ -31,5 +34,7 @@ object Power extends Quantum {
   val lightBulb = quantity("60", watt, Some("Light Bulb"), None, Some("Light Bulb"))
   val hooverDam = quantity("2080", megawatt, Some("Hoover Dam"), None, Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
   val mustangGT = quantity("420", horsepower, Some("2012 Mustang GT"), None, Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
-
+  
 }
+
+object Power extends Power()

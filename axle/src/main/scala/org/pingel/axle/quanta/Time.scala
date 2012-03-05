@@ -13,11 +13,15 @@ class Time extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
-  
-}
 
-object Time extends Quantum {
- 
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): TimeUnit = new TimeUnit(baseUnit, magnitude, name, symbol, link)
+  
+
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
   // "http://en.wikipedia.org/wiki/Time"
   val derivations = Nil
@@ -51,5 +55,7 @@ object Time extends Quantum {
   val primateAge = quantity("60", my, Some("order Primate age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
   val australopithecusAge = quantity("4", my, Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
   val modernHumanAge = quantity("200", ky, Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-
+  
 }
+
+object Time extends Time()

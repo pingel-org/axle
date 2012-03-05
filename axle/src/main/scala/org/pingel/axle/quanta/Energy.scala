@@ -14,11 +14,12 @@ class Energy extends Quantum {
     link: Option[String] = None)
     extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
  
-  
-}
-
-
-object Energy extends Quantum {
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): EnergyUnit = new EnergyUnit(baseUnit, magnitude, name, symbol, link)
 
   import Power.{kilowatt}
   import Time.{hour}
@@ -27,7 +28,7 @@ object Energy extends Quantum {
 
   val derivations = List(Power by Time)
 
-  val kwh = derive(kilowatt.by[Time.type, Energy.type](hour, Energy))
+  val kwh = derive(kilowatt.by[Time.type, this.type](hour, this))
  
   val joule = unit("joule", "J")
   
@@ -38,5 +39,7 @@ object Energy extends Quantum {
   val megaton = ton mega
   val gigaton = ton giga
   val castleBravo = quantity("15", megaton, Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
-
+  
 }
+
+object Energy extends Energy()

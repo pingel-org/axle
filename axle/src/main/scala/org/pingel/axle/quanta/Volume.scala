@@ -13,11 +13,13 @@ class Volume extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
- 
-  
-}
 
-object Volume extends Volume {
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): VolumeUnit = new VolumeUnit(baseUnit, magnitude, name, symbol, link)
 
   import Distance.{meter, km}
   import Area.{m2, km2}
@@ -26,10 +28,13 @@ object Volume extends Volume {
     
   val derivations = List(Distance cubed)
 
-  val m3 = derive(m2.by[Distance.type, Volume.type](meter, Volume))
+  val m3 = derive(m2.by[Distance.type, this.type](meter, this))
   
-  val km3 = derive(km2.by[Distance.type, Volume.type](km, Volume))
+  val km3 = derive(km2.by[Distance.type, this.type](km, this))
   
   val greatLakes = quantity("22671", km3, Some("Great Lakes Volume"), None, Some("http://en.wikipedia.org/wiki/Great_Lakes"))
   
+  
 }
+
+object Volume extends Volume()

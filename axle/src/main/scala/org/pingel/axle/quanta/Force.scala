@@ -13,11 +13,14 @@ class Force extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
-  
-}
 
-object Force extends Quantum {
-  
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): ForceUnit = new ForceUnit(baseUnit, magnitude, name, symbol, link)
+
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
   val derivations = List(Mass by Acceleration)
 
@@ -25,5 +28,7 @@ object Force extends Quantum {
   val newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
   val dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
   
-  // val lightBulb = Quantity("60", watt, Some("Light Bulb"), None, Some("Light Bulb"))
+  // val lightBulb = Quantity("60", watt, Some("Light Bulb"), None, Some("Light Bulb"))  
 }
+
+object Force extends Force()

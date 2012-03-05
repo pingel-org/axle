@@ -211,20 +211,42 @@ trait Quantum extends DirectedGraph {
 
 case class QuantumMultiplication(left: Quantum, right: Quantum) extends Quantum {
 
-  type U = Int // (left.type#U, right.type#U) // TODO
+  type UOM = Int // (left.type#U, right.type#U) // TODO
 
   val wikipediaUrl = ""
   val unitsOfMeasurement = Nil // TODO multiplications of the cross-product of left and right
   val derivations = Nil
   val examples = Nil
+  
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): UOM = {
+
+    5
+  }
+  
 }
 
 case class QuantumDivision(left: Quantum, right: Quantum) extends Quantum {
 
-  type U = Int // (left.type#U, right.type#U) // TODO
+  type UOM = Int // (left.type#U, right.type#U) // TODO
 
   val wikipediaUrl = ""
   val unitsOfMeasurement = Nil // TODO divisions of the cross-product of left and right
   val derivations = Nil
   val examples = Nil
+  
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): UOM = {
+    
+    5 // TODO
+  }
+  
 }

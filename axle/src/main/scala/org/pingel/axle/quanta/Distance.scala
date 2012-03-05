@@ -14,10 +14,13 @@ class Distance extends Quantum {
     link: Option[String] = None)
     extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
 
-}
-
-object Distance extends Quantum {
-
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): DistanceUnit = new DistanceUnit(baseUnit, magnitude, name, symbol, link)
+  
   // import Distance.unit
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
@@ -58,5 +61,7 @@ object Distance extends Quantum {
   val milkyWayDiameter = quantity("100000", lightyear, Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
 
   val toAndromeda = quantity("2600000", lightyear, Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
-
+  
 }
+
+object Distance extends Distance()
