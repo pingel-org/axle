@@ -42,12 +42,10 @@ trait Quantum extends DirectedGraph {
     link: Option[String] = None)
     extends DirectedGraphVertex {
 
-    // self: UOM =>
-    val thisAsUOM = this.asInstanceOf[UOM] // TODO: figure out how to use self-type
+    // self: UOM => // TODO: figure out how to use self-type
+    val thisAsUOM = this.asInstanceOf[UOM]
 
     def getLabel() = name
-
-    // def *(scalar: Scalar): UnitOfMeasurement = TODO
 
     // TODO: why is this toBD necessary?  figure out search order for implicits
 
@@ -70,13 +68,14 @@ trait Quantum extends DirectedGraph {
       .map(u => magnitude + " " + u.symbol)
       .getOrElse(name + " (" + symbol + "): a measure of " + this.getClass().getSimpleName())
 
-    // TODO: this was copied from Quantity
-
     def +(right: UOM): UOM =
       quantity(magnitude.add((right in baseUnit.getOrElse(thisAsUOM)).magnitude), baseUnit.getOrElse(thisAsUOM))
 
     def -(right: UOM): UOM =
       quantity(magnitude.subtract((right in baseUnit.getOrElse(thisAsUOM)).magnitude), baseUnit.getOrElse(thisAsUOM))
+
+    def *(bd: BigDecimal): UOM =
+      quantity(magnitude.multiply(bd), baseUnit.getOrElse(thisAsUOM))
 
     // TODO: use HList for by, over, squared, cubed
 
@@ -102,14 +101,7 @@ trait Quantum extends DirectedGraph {
           quantum.quantity(one, thisAsUOM by right)
         }
       }
-
-      // quantum.quantity(bd, baseUnit.getOrElse(thisAsUOM) by right.baseUnit.getOrElse(right))
-      // newQuantum.quantity(bd, None, Some(left.name + " " + right.name), Some(left.symbol + right.symbol))
-
     }
-
-    // def squared[QRES <: Quantum](): QRES#UOM = this.by[THISQ, QRES](this)
-    // def cubed[QRES <: Quantum](): QRES#UOM = this.by(this.by(this))
 
     // def /(bd: BigDecimal) // TODO
 
