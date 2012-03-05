@@ -18,14 +18,15 @@ class Speed extends Quantum {
 
 object Speed extends Speed {
 
-  import Distance.{meter, mile}
+  import Distance.{meter, mile, ft}
   import Time.{second, hour}
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Speed"
   val derivations = List(Distance over Time)
 
-  val mps = derive(meter over second)
-  val mph = derive(mile over hour)
+  val mps = derive(meter.over[Time.type, Speed.type](second))
+  val fps = derive(ft.over[Time.type, Speed.type](second))
+  val mph = derive(mile.over[Time.type, Speed.type](hour))
 
   val c = quantity("299792458", mps, Some("Light Speed"), Some("c"), Some("http://en.wikipedia.org/wiki/Speed_of_light"))
 

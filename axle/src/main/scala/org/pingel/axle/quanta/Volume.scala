@@ -19,15 +19,16 @@ class Volume extends Quantum {
 
 object Volume extends Volume {
 
-  import Distance.{meter, kilometer}
+  import Distance.{meter, km}
+  import Area.{m2, km2}
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
     
   val derivations = List(Distance cubed)
 
-  val m3 = derive(meter cubed)
+  val m3 = derive(m2.by[Distance.type, Volume.type](meter))
   
-  val km3 = derive(kilometer cubed)
+  val km3 = derive(km2.by[Distance.type, Volume.type](km))
   
   val greatLakes = quantity("22671", km3, Some("Great Lakes Volume"), None, Some("http://en.wikipedia.org/wiki/Great_Lakes"))
   

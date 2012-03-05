@@ -27,7 +27,7 @@ object Energy extends Quantum {
 
   val derivations = List(Power by Time)
 
-  val kwh = derive(kilowatt by hour)
+  val kwh = derive(kilowatt.by[Time.type, Energy.type](hour))
  
   val joule = unit("joule", "J")
   

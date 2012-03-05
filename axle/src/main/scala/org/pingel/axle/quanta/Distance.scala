@@ -26,13 +26,25 @@ object Distance extends Quantum {
   val derivations = Nil
 
   val foot = unit("foot", "ft")
+  val ft = foot
+  
   val mile = quantity("5280", foot, Some("mile"), Some("m"), Some("http://en.wikipedia.org/wiki/Mile"))
   val meter = unit("meter", "m")
+  
   val kilometer = meter kilo
+  val km = kilometer
+  
   val centimeter = meter centi
+  val cm = centimeter
+  
   val millimeter = meter milli
-  val micrometer = meter micro // μ
+  val mm = millimeter
+  
+  val micrometer = meter micro
+  val μm = micrometer
+  
   val nanometer = meter nano
+  val nm = nanometer
 
   val ny2LA = quantity("2443.79", mile, Some("NY to LA"), None, Some("http://www.mapcrow.info/Distance_between_New_York_US_and_Los_Angeles_US.html"))
 

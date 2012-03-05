@@ -78,48 +78,66 @@ trait Quantum extends DirectedGraph {
     def -(right: UOM): UOM =
       quantity(magnitude.subtract((right in baseUnit.getOrElse(thisAsUOM)).magnitude), baseUnit.getOrElse(thisAsUOM))
 
-    def by(right: UnitOfMeasurement): UnitOfMeasurement = {
+    // TODO: use HList for by, over, squared, cubed
 
-      val bd = magnitude.multiply(right.magnitude)
+    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM): QRES#UOM = baseUnit match {
 
-      val q: Quantum = null // TODO
+      case Some(base) => right.baseUnit match {
+        case Some(rightBase) => {
+          val quantum: QRES = TODO
+          quantum.quantity(magnitude.multiply(right.magnitude), base by rightBase)
+        }
+        case _ => {
+          val quantum: QRES = TODO
+          quantum.quantity(magnitude, base by right)
+        }
+      }
+      case _ => right.baseUnit match {
+        case Some(rightBase) => {
+          val quantum: QRES = TODO
+          quantum.quantity(right.magnitude, thisAsUOM by rightBase)
+        }
+        case _ => {
+          val quantum: QRES = TODO
+          quantum.quantity(one, thisAsUOM by right)
+        }
+      }
 
-      q.quantity(bd, baseUnit.getOrElse(thisAsUOM) by right.baseUnit.getOrElse(right))
+      // quantum.quantity(bd, baseUnit.getOrElse(thisAsUOM) by right.baseUnit.getOrElse(right))
       // newQuantum.quantity(bd, None, Some(left.name + " " + right.name), Some(left.symbol + right.symbol))
 
     }
 
-    def squared() = this by this // TODO: HList of UOM
+    // def squared[QRES <: Quantum](): QRES#UOM = this.by[THISQ, QRES](this)
+    // def cubed[QRES <: Quantum](): QRES#UOM = this.by(this.by(this))
 
-    def cubed() = this by this by this // TODO: HList of UOM
+    // def /(bd: BigDecimal) // TODO
 
-    //    def /(bd: BigDecimal) = {
-    //      null // TODO
-    //    }
-
-    def over(right: UnitOfMeasurement): UnitOfMeasurement = right match {
-      // TODO: RESULT = quantum / right.quantum 
-      // TODO: RESULT.quantity above
-      // TODO: don't create RESULT if it exists
-      case r: UOM => {
-        Scalar.quantity(new BigDecimal("TODO")) // TODO
-      }
+    def over[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM): QRES#UOM = right match {
+      case r: UOM => Scalar.quantity(new BigDecimal("TODO")) // TODO
       case _ => baseUnit match {
         case Some(base) => right.baseUnit match {
           case Some(rightBase) => {
             val bd = magnitude.divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), java.math.RoundingMode.HALF_UP)
-            quantity(bd, base over rightBase)
+            val quantum: QRES = TODO
+            quantum.quantity(bd, base over rightBase)
           }
-          case None => quantity(magnitude, base over right)
-          
+          case None => {
+            val quantum: QRES = TODO
+            quantum.quantity(magnitude, base over right)
+          }
+
         }
         case None => right.baseUnit match {
           case Some(rightBase) => {
-            val bd = new BigDecimal("TODO")
-            quantity(bd, thisAsUOM over rightBase)
+            val bd = new BigDecimal("TODO") // TODO
+            val quantum: QRES = TODO
+            quantum.quantity(bd, thisAsUOM over rightBase)
           }
-          case None => quantity(one, thisAsUOM over right)
-          
+          case None => {
+            val quantum: QRES = TODO
+            quantum.quantity(one, thisAsUOM over right)
+          }
         }
       }
     }

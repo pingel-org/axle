@@ -19,12 +19,14 @@ class Area extends Quantum {
 
 object Area extends Quantum {
 
-  import Distance.{meter}
+  import Distance.{meter, km}
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Area"
     
   val derivations = List(Distance squared)
 
-  val m2 = meter squared
+  val m2 = derive(meter.by[Distance.type, Area.type](meter))
+
+  val km2 = derive(km.by[Distance.type, Area.type](km))
   
 }

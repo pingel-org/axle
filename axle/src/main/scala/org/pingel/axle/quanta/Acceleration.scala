@@ -18,15 +18,16 @@ class Acceleration extends Quantum {
 
 object Acceleration extends Quantum {
 
-  import Distance.{meter, foot}
+  import Speed.{mps, fps}
   import Time.{second}
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Acceleration"
 
-  val derivations = List(Distance over (Time squared))
+  val derivations = List(Speed over Time)
 
-  val mpsps = derive(meter over (second squared))
-  val fpsps = derive(foot over (second squared))
+  val mpsps = derive(mps.over[Time.type, Acceleration.type](second) )
+  
+  val fpsps = derive(fps.over[Time.type, Acceleration.type](second) )
 
   val g = quantity("9.80665", mpsps, Some("g"), Some("g"), Some("http://en.wikipedia.org/wiki/Standard_gravity"))
 
