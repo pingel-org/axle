@@ -1,21 +1,35 @@
 package org.pingel.axle.quanta
 
+import java.math.BigDecimal
+
+class Power extends Quantum {
+
+  type UOM = PowerUnit
+
+  class PowerUnit(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None)
+    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+  
+}
+
 object Power extends Quantum {
 
-  import Quantity._
-  
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
-  val derivations = List(Energy / Time)
+  val derivations = List(Energy over Time)
 
-  val watt = UnitOfMeasurement(this, "watt", "w")
+  val watt = unit("watt", "w")
   val kilowatt = watt kilo
   val megawatt = watt mega
   val gigawatt = watt giga
   val milliwatt = watt milli
-  val horsepower = UnitOfMeasurement(this, "horsepower", "hp")
+  val horsepower = unit("horsepower", "hp")
   
-  val lightBulb = Quantity("60", watt, Some("Light Bulb"), None, Some("Light Bulb"))
-  val hooverDam = Quantity("2080", megawatt, Some("Hoover Dam"), None, Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
-  val mustangGT = Quantity("420", horsepower, Some("2012 Mustang GT"), None, Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
+  val lightBulb = quantity("60", watt, Some("Light Bulb"), None, Some("Light Bulb"))
+  val hooverDam = quantity("2080", megawatt, Some("Hoover Dam"), None, Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
+  val mustangGT = quantity("420", horsepower, Some("2012 Mustang GT"), None, Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
 
 }

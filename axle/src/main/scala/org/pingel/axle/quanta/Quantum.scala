@@ -1,149 +1,7 @@
 package org.pingel.axle.quanta
 
 import org.pingel.axle.graph._
-
 import java.math.BigDecimal
-
-case class UnitOfMeasurement(
-  quantum: Quantum,
-  name: String,
-  symbol: String,
-  link: Option[String] = None) {
-
-  import Scalar._
-  import Quantity._
-
-  def getLabel() = name
-
-  def *(right: UnitOfMeasurement) = UomMultiplication(this, right)
-
-  def /(right: UnitOfMeasurement) = UomDivision(this, right)
-
-  def squared() = UomMultiplication(this, this)
-
-  def cubed() = UomMultiplication(this, UomMultiplication(this, this))
-
-  // TODO: why is this toBD necessary?  figure out search order for implicits
-  def kilo() = Quantity(toBD("1000"), this, Some("kilo" + name), Some("K" + symbol)) // 3
-  def mega() = Quantity("1000", kilo, Some("mega" + name), Some("M" + symbol)) // 6
-  def giga() = Quantity("1000", mega, Some("giga" + name), Some("G" + symbol)) // 9
-  def tera() = Quantity("1000", giga, Some("kilo" + name), Some("T" + symbol)) // 12
-  def peta() = Quantity("1000", tera, Some("peta" + name), Some("P" + symbol)) // 15
-  def exa() = Quantity("1000", peta, Some("exa" + name), Some("E" + symbol)) // 18
-  def zetta() = Quantity("1000", exa, Some("zetta" + name), Some("Z" + symbol)) // 21
-  def yotta() = Quantity("1000", zetta, Some("yotta" + name), Some("Y" + symbol)) // 24
-
-  def deci() = Quantity("0.1", this, Some("deci" + name), Some("d" + symbol)) // -1
-  def centi() = Quantity("0.01", this, Some("centi" + name), Some("c" + symbol)) // -2
-  def milli() = Quantity("0.001", this, Some("milli" + name), Some("m" + symbol)) // -3
-  def micro() = Quantity("0.001", milli, Some("micro" + name), Some("μ" + symbol)) // -6
-  def nano() = Quantity("0.001", micro, Some("nano" + name), Some("n" + symbol)) // -9
-
-  override def toString() = name + " (" + symbol + "): a measure of " + quantum
-
-}
-
-import java.math.BigDecimal
-
-object Scalar {
-  implicit def toScalar(s: String) = new ScalarImpl(new BigDecimal(s))
-}
-
-trait Scalar {
-  def getBD(): BigDecimal
-  def in(uom: UnitOfMeasurement) = Quantity(getBD, uom)
-}
-
-case class ScalarImpl(bd: BigDecimal) {
-  // Note: this used to be implicit
-  def in(uom: UnitOfMeasurement) = Quantity(bd, uom)
-}
-
-case class UomMultiplication(left: UnitOfMeasurement, right: UnitOfMeasurement)
-  extends UnitOfMeasurement(
-    left.quantum * right.quantum,
-    left.name + " " + right.name,
-    left.symbol + right.symbol,
-    None
-  )
-
-case class UomDivision(numerator: UnitOfMeasurement, denominator: UnitOfMeasurement)
-  extends UnitOfMeasurement(
-    numerator.quantum / denominator.quantum,
-    numerator.name + " per " + denominator.name,
-    numerator.symbol + "/" + denominator.symbol,
-    None
-  ) {
-
-}
-
-trait Conversion extends Scalar {
-  def getFrom(): UnitOfMeasurement
-  def getTo(): UnitOfMeasurement
-}
-
-case class ConversionImpl(from: UnitOfMeasurement, to: UnitOfMeasurement, cbd: BigDecimal)
-  extends Conversion {
-  def getBD() = cbd
-  def getFrom(): UnitOfMeasurement = from
-  def getTo(): UnitOfMeasurement = to
-}
-
-object Quantity {
-  implicit def toBD(s: String) = new BigDecimal(s)
-  implicit def toQuantity(sc: Scalar)(implicit uom: UnitOfMeasurement): Quantity = Quantity(sc.getBD, uom)
-}
-
-case class Quantity(
-  magnitude: BigDecimal,
-  unit: UnitOfMeasurement,
-  qname: Option[String] = None,
-  qsymbol: Option[String] = None,
-  qlink: Option[String] = None)
-  extends UnitOfMeasurement(
-    unit.quantum,
-    qname.getOrElse("?"),
-    qsymbol.getOrElse("?"),
-    qlink
-  ) {
-
-  unit.quantum.addQuantity(this)
-
-  override def toString() = magnitude + " " + unit.symbol
-
-  def +(right: Quantity): Quantity = Quantity(magnitude.add((right in unit).magnitude), unit)
-
-  def -(right: Quantity): Quantity = Quantity(magnitude.subtract((right in unit).magnitude), unit)
-
-  def *(right: Quantity): Quantity = Quantity(magnitude.multiply(right.magnitude), unit * right.unit)
-
-  def /(right: Quantity): Quantity = Quantity(
-    magnitude.divide(right.magnitude,
-      scala.Math.max(magnitude.precision, right.magnitude.precision),
-      java.math.RoundingMode.HALF_UP),
-    unit / right.unit
-  )
-
-  def convert(conversion: Conversion): Quantity = {
-    if (this.unit != conversion.getFrom()) {
-      throw new Exception("can't apply conversion " + conversion + " to " + this)
-    }
-    Quantity(magnitude.multiply(conversion.getBD()), conversion.getTo())
-  }
-
-  implicit def in(other: UnitOfMeasurement): Quantity = {
-    if (unit.quantum != other.quantum) {
-      throw new Exception("incompatible quanta: " + unit.quantum + " and " + other.quantum)
-    }
-    val result = unit.quantum.conversionPath(unit, other).map(_.foldLeft(this)(
-      (q: Quantity, conversion: Conversion) => q.convert(conversion)))
-    if (result.isEmpty) {
-      throw new Exception("no conversion path from " + unit + " to " + other)
-    }
-    result.get
-  }
-
-}
 
 /**
  * Quantum
@@ -158,44 +16,177 @@ case class Quantity(
 
 trait Quantum extends DirectedGraph {
 
-  case class UnitOfMeasurementAsVertex(vquantum: Quantum, vname: String, vsymbol: String, vlink: Option[String] = None)
-    extends UnitOfMeasurement(vquantum, vname, vsymbol, vlink)
-    with DirectedGraphVertex {
+  type UOM <: UnitOfMeasurement
 
+  implicit def toBD(s: String) = new BigDecimal(s)
+
+  //  implicit def toUoM(bd: BigDecimal)(implicit uom: UnitOfMeasurement): UnitOfMeasurement =
+  //    uom.quantum.quantity(bd, uom)
+  //    
+  //  implicit def in(uom: UnitOfMeasurement) = uom.quantum.quantity(bd, uom, None, None, None)
+
+  case class Conversion(from: UOM, to: UOM, bd: BigDecimal) {
+    def getVertices() = (from, to)
+    def getSource() = from
+    def getDest() = to
+    def getBD() = bd
   }
-
-  case class ConversionAsEdge(efrom: UnitOfMeasurementAsVertex, eto: UnitOfMeasurementAsVertex, ecbd: BigDecimal)
-    extends ConversionImpl(efrom, eto, ecbd)
-    with DirectedGraphEdge {
-    def getVertices() = (efrom, eto)
-    def getSource() = efrom
-    def getDest() = eto
-  }
-
-  type V = UnitOfMeasurementAsVertex
-  
-  type E = ConversionAsEdge
 
   val one = new BigDecimal("1")
-  
-  def addQuantity(q: Quantity): Unit = {
-    val qv = q.asInstanceOf[UnitOfMeasurementAsVertex] // TODO remove cast
-    val uv = q.unit.asInstanceOf[UnitOfMeasurementAsVertex] // TODO remove cast
-    addVertex(qv)
-    newEdge(qv, uv, q.magnitude)
-    newEdge(uv, qv, one.divide(q.magnitude, q.magnitude.precision, java.math.RoundingMode.HALF_UP))
+
+  case class UnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None)
+    extends DirectedGraphVertex {
+
+    // self: UOM =>
+    val thisAsUOM = this.asInstanceOf[UOM] // TODO: figure out how to use self-type
+
+    def getLabel() = name
+
+    // def *(scalar: Scalar): UnitOfMeasurement = TODO
+
+    // TODO: why is this toBD necessary?  figure out search order for implicits
+
+    def kilo() = quantity(toBD("1000"), thisAsUOM, Some("kilo" + name), Some("K" + symbol)) // 3
+    def mega() = quantity("1000", kilo, Some("mega" + name), Some("M" + symbol)) // 6
+    def giga() = quantity("1000", mega, Some("giga" + name), Some("G" + symbol)) // 9
+    def tera() = quantity("1000", giga, Some("kilo" + name), Some("T" + symbol)) // 12
+    def peta() = quantity("1000", tera, Some("peta" + name), Some("P" + symbol)) // 15
+    def exa() = quantity("1000", peta, Some("exa" + name), Some("E" + symbol)) // 18
+    def zetta() = quantity("1000", exa, Some("zetta" + name), Some("Z" + symbol)) // 21
+    def yotta() = quantity("1000", zetta, Some("yotta" + name), Some("Y" + symbol)) // 24
+
+    def deci() = quantity("0.1", thisAsUOM, Some("deci" + name), Some("d" + symbol)) // -1
+    def centi() = quantity("0.01", thisAsUOM, Some("centi" + name), Some("c" + symbol)) // -2
+    def milli() = quantity("0.001", thisAsUOM, Some("milli" + name), Some("m" + symbol)) // -3
+    def micro() = quantity("0.001", milli, Some("micro" + name), Some("μ" + symbol)) // -6
+    def nano() = quantity("0.001", micro, Some("nano" + name), Some("n" + symbol)) // -9
+
+    override def toString() = baseUnit
+      .map(u => magnitude + " " + u.symbol)
+      .getOrElse(name + " (" + symbol + "): a measure of " + this.getClass().getSimpleName())
+
+    // TODO: this was copied from Quantity
+
+    def +(right: UOM): UOM =
+      quantity(magnitude.add((right in baseUnit.getOrElse(thisAsUOM)).magnitude), baseUnit.getOrElse(thisAsUOM))
+
+    def -(right: UOM): UOM =
+      quantity(magnitude.subtract((right in baseUnit.getOrElse(thisAsUOM)).magnitude), baseUnit.getOrElse(thisAsUOM))
+
+    def by(right: UnitOfMeasurement): UnitOfMeasurement = {
+
+      val bd = magnitude.multiply(right.magnitude)
+
+      val q: Quantum = null // TODO
+
+      q.quantity(bd, baseUnit.getOrElse(thisAsUOM) by right.baseUnit.getOrElse(right))
+      // newQuantum.quantity(bd, None, Some(left.name + " " + right.name), Some(left.symbol + right.symbol))
+
+    }
+
+    def squared() = this by this // TODO: HList of UOM
+
+    def cubed() = this by this by this // TODO: HList of UOM
+
+    //    def /(bd: BigDecimal) = {
+    //      null // TODO
+    //    }
+
+    def over(right: UnitOfMeasurement): UnitOfMeasurement = right match {
+      // TODO: RESULT = quantum / right.quantum 
+      // TODO: RESULT.quantity above
+      // TODO: don't create RESULT if it exists
+      case r: UOM => {
+        Scalar.quantity(new BigDecimal("TODO")) // TODO
+      }
+      case _ => baseUnit match {
+        case Some(base) => right.baseUnit match {
+          case Some(rightBase) => {
+            val bd = magnitude.divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), java.math.RoundingMode.HALF_UP)
+            quantity(bd, base over rightBase)
+          }
+          case None => quantity(magnitude, base over right)
+          
+        }
+        case None => right.baseUnit match {
+          case Some(rightBase) => {
+            val bd = new BigDecimal("TODO")
+            quantity(bd, thisAsUOM over rightBase)
+          }
+          case None => quantity(one, thisAsUOM over right)
+          
+        }
+      }
+    }
+
+    def convert(conversion: Conversion): UOM = {
+      if (this != conversion.getSource()) {
+        throw new Exception("can't apply conversion " + conversion + " to " + this)
+      }
+      quantity(magnitude.multiply(conversion.getBD()), conversion.getDest())
+    }
+
+    // Note: used to be implicit
+    def in(other: UOM): UOM = {
+      val result = conversionPath(thisAsUOM, other).map(_.foldLeft(thisAsUOM)(
+        (q: UOM, conversion: Conversion) => q.convert(conversion)
+      ))
+      if (result.isEmpty) {
+        throw new Exception("no conversion path from " + this + " to " + other)
+      }
+      result.get
+    }
+
   }
 
-  def newVertex(label: String): UnitOfMeasurementAsVertex = {
-    null // TODO
+  type V = UOM
+
+  type E = Conversion
+
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): UOM
+
+  def unit(name: String, symbol: String, linkOpt: Option[String] = None): UOM =
+    newUnitOfMeasurement(None, one, Some(name), Some(symbol), linkOpt)
+
+  def derive(compoundUnit: UnitOfMeasurement): UOM = {
+    // TODO: Check that the given compound unit is in this quantum's list of derivations
+    // TODO: add the compoundUnit to the graph?
+    newUnitOfMeasurement(None, one, Some("TODO"), Some("TODO"), None) // TODO
   }
-  
-  def newEdge(source: UnitOfMeasurementAsVertex, dest: UnitOfMeasurementAsVertex): ConversionAsEdge = {
-    null // TODO
+
+  def quantity(
+    magnitude: BigDecimal,
+    unit: UOM,
+    qname: Option[String] = None,
+    qsymbol: Option[String] = None,
+    qlink: Option[String] = None): UOM = {
+
+    val q = newUnitOfMeasurement(Some(unit), magnitude, qname, qsymbol, qlink)
+    addVertex(q)
+    newEdge(q, unit, magnitude)
+    newEdge(unit, q, one.divide(magnitude, magnitude.precision, java.math.RoundingMode.HALF_UP))
+    q
   }
-  
-  def newEdge(source: UnitOfMeasurementAsVertex, dest: UnitOfMeasurementAsVertex, magnitude: BigDecimal): ConversionAsEdge = {
-    val edge = new ConversionAsEdge(source, dest, magnitude)
+
+  def newVertex(label: String): UOM = newUnitOfMeasurement(None, one, Some(label), None, None)
+
+  def newEdge(source: UOM, dest: UOM): Conversion = {
+    val result: Conversion = null // TODO
+    result
+  }
+
+  def newEdge(source: UOM, dest: UOM, magnitude: BigDecimal): Conversion = {
+    val edge = new Conversion(source, dest, magnitude)
     addEdge(edge)
     edge
   }
@@ -204,9 +195,12 @@ trait Quantum extends DirectedGraph {
 
   val derivations: List[Quantum]
 
-  def *(right: Quantum): Quantum = QuantumMultiplication(this, right)
-  def /(right: Quantum): Quantum = QuantumMultiplication(this, right)
+  def by(right: Quantum): Quantum = QuantumMultiplication(this, right)
+
+  def over(right: Quantum): Quantum = QuantumMultiplication(this, right)
+
   def squared(): Quantum = QuantumMultiplication(this, this)
+
   def cubed(): Quantum = QuantumMultiplication(this, QuantumMultiplication(this, this))
 
   override def toString() = this.getClass().getSimpleName()
@@ -216,15 +210,17 @@ trait Quantum extends DirectedGraph {
    * @param source Start node for shortest path search
    * @param goal End node for shortest path search
    */
-  def conversionPath(source: UnitOfMeasurement, goal: UnitOfMeasurement): Option[List[Conversion]] =
+  def conversionPath(source: UOM, goal: UOM): Option[List[Conversion]] =
     shortestPath(
       source.asInstanceOf[V],
       goal.asInstanceOf[V])
-      // .asInstanceOf[Option[List[Conversion]]] // TODO: remove cast
 
 }
 
 case class QuantumMultiplication(left: Quantum, right: Quantum) extends Quantum {
+
+  type U = Int // (left.type#U, right.type#U)
+
   val wikipediaUrl = ""
   val unitsOfMeasurement = Nil // TODO multiplications of the cross-product of left and right
   val derivations = Nil
@@ -232,6 +228,9 @@ case class QuantumMultiplication(left: Quantum, right: Quantum) extends Quantum 
 }
 
 case class QuantumDivision(left: Quantum, right: Quantum) extends Quantum {
+
+  type U = Int // (left.type#U, right.type#U)
+
   val wikipediaUrl = ""
   val unitsOfMeasurement = Nil // TODO divisions of the cross-product of left and right
   val derivations = Nil

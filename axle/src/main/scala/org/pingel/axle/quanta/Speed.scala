@@ -1,18 +1,34 @@
 package org.pingel.axle.quanta
 
-object Speed extends Quantum {
+import java.math.BigDecimal
 
-  import Quantity._
+class Speed extends Quantum {
+
+  type UOM = SpeedUnit
+
+  class SpeedUnit(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None)
+    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
   
-  import Distance._
-  import Time._
-  
+}
+
+object Speed extends Speed {
+
+  import Distance.{meter, mile}
+  import Time.{second, hour}
+
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Speed"
-  val derivations = List(Distance / Time)
+  val derivations = List(Distance over Time)
 
-  val mps = meter / second
-  val mph = mile / hour
-  val c = Quantity("299792458", mps, Some("Light Speed"), Some("c"), Some("http://en.wikipedia.org/wiki/Speed_of_light"))
-  val speedLimit = Quantity("65", mph, Some("Speed limit"), None)
+  val mps = derive(meter over second)
+  val mph = derive(mile over hour)
+
+  val c = quantity("299792458", mps, Some("Light Speed"), Some("c"), Some("http://en.wikipedia.org/wiki/Speed_of_light"))
+
+  val speedLimit = quantity("65", mph, Some("Speed limit"), None)
 
 }
