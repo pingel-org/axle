@@ -25,7 +25,7 @@ object Flow extends Quantum {
     
   val derivations = List(Volume over Time)
 
-  val m3s = m3 over second
+  val m3s = m3.over[Time.type, Flow.type](second, Flow)
 
   val niagaraFalls = quantity("1834", m3s, Some("Niagara Falls Flow"), None, Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
   

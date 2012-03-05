@@ -24,9 +24,9 @@ object Speed extends Speed {
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Speed"
   val derivations = List(Distance over Time)
 
-  val mps = derive(meter.over[Time.type, Speed.type](second))
-  val fps = derive(ft.over[Time.type, Speed.type](second))
-  val mph = derive(mile.over[Time.type, Speed.type](hour))
+  val mps = derive(meter.over[Time.type, Speed.type](second, Speed))
+  val fps = derive(ft.over[Time.type, Speed.type](second, Speed))
+  val mph = derive(mile.over[Time.type, Speed.type](hour, Speed))
 
   val c = quantity("299792458", mps, Some("Light Speed"), Some("c"), Some("http://en.wikipedia.org/wiki/Speed_of_light"))
 

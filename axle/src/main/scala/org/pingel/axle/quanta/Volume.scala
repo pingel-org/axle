@@ -26,9 +26,9 @@ object Volume extends Volume {
     
   val derivations = List(Distance cubed)
 
-  val m3 = derive(m2.by[Distance.type, Volume.type](meter))
+  val m3 = derive(m2.by[Distance.type, Volume.type](meter, Volume))
   
-  val km3 = derive(km2.by[Distance.type, Volume.type](km))
+  val km3 = derive(km2.by[Distance.type, Volume.type](km, Volume))
   
   val greatLakes = quantity("22671", km3, Some("Great Lakes Volume"), None, Some("http://en.wikipedia.org/wiki/Great_Lakes"))
   

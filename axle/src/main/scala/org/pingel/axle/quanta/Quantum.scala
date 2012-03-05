@@ -25,7 +25,7 @@ trait Quantum extends DirectedGraph {
   //    
   //  implicit def in(uom: UnitOfMeasurement) = uom.quantum.quantity(bd, uom, None, None, None)
 
-  case class Conversion(from: UOM, to: UOM, bd: BigDecimal) {
+  case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
     def getVertices() = (from, to)
     def getSource() = from
     def getDest() = to
@@ -80,51 +80,39 @@ trait Quantum extends DirectedGraph {
 
     // TODO: use HList for by, over, squared, cubed
 
-    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM): QRES#UOM = baseUnit match {
 
+    // TODO: name, symbol, link for new units
+      
+    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = baseUnit match {
       case Some(base) => right.baseUnit match {
-        case Some(rightBase) => {
-          val quantum: QRES = TODO
-          quantum.quantity(magnitude.multiply(right.magnitude), base by rightBase)
-        }
-        case _ => {
-          val quantum: QRES = TODO
-          quantum.quantity(magnitude, base by right)
-        }
+        case Some(rightBase) => resultQuantum.quantity(magnitude.multiply(right.magnitude), resultQuantum.unit("TODO", "TODO")) // base by rightBase
+        case _ => resultQuantum.quantity(magnitude, resultQuantum.unit("TODO", "TODO")) // (base, right)
       }
       case _ => right.baseUnit match {
-        case Some(rightBase) => {
-          val quantum: QRES = TODO
-          quantum.quantity(right.magnitude, thisAsUOM by rightBase)
-        }
-        case _ => {
-          val quantum: QRES = TODO
-          quantum.quantity(one, thisAsUOM by right)
-        }
+        case Some(rightBase) => resultQuantum.quantity(right.magnitude, resultQuantum.unit("TODO", "TODO")) // thisAsUOM by rightBase
+        case _ => resultQuantum.quantity(one, resultQuantum.unit("TODO", "TODO")) // hisAsUOM by right
       }
     }
 
-    def over[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM): QRES#UOM = baseUnit match {
+    def over[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = baseUnit match {
+
       case Some(base) => right.baseUnit match {
-        case Some(rightBase) => {
-          val bd = magnitude.divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), java.math.RoundingMode.HALF_UP)
-          val quantum: QRES = TODO
-          quantum.quantity(bd, base over rightBase)
-        }
-        case None => {
-          val quantum: QRES = TODO
-          quantum.quantity(magnitude, base over right)
-        }
+
+        case Some(rightBase) => resultQuantum.quantity(
+          magnitude.divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), java.math.RoundingMode.HALF_UP),
+          resultQuantum.unit("TODO", "TODO")) // base over rightBase)
+
+        case None => resultQuantum.quantity(magnitude, resultQuantum.unit("TODO", "TODO")) // base over right)
+
       }
       case None => right.baseUnit match {
-        case Some(rightBase) => {
-          val quantum: QRES = TODO
-          quantum.quantity(one.divide(right.magnitude, right.magnitude.precision, java.math.RoundingMode.HALF_UP), thisAsUOM over rightBase)
-        }
-        case None => {
-          val quantum: QRES = TODO
-          quantum.quantity(one, thisAsUOM over right)
-        }
+
+        case Some(rightBase) => resultQuantum.quantity(
+          one.divide(right.magnitude, right.magnitude.precision, java.math.RoundingMode.HALF_UP),
+          resultQuantum.unit("TODO", "TODO")) // thisAsUOM over rightBase)
+
+        case None => resultQuantum.quantity(one, resultQuantum.unit("TODO", "TODO")) // thisAsUOM over right)
+
       }
     }
 

@@ -25,9 +25,9 @@ object Acceleration extends Quantum {
 
   val derivations = List(Speed over Time)
 
-  val mpsps = derive(mps.over[Time.type, Acceleration.type](second) )
+  val mpsps = derive(mps.over[Time.type, Acceleration.type](second, Acceleration) )
   
-  val fpsps = derive(fps.over[Time.type, Acceleration.type](second) )
+  val fpsps = derive(fps.over[Time.type, Acceleration.type](second, Acceleration) )
 
   val g = quantity("9.80665", mpsps, Some("g"), Some("g"), Some("http://en.wikipedia.org/wiki/Standard_gravity"))
 

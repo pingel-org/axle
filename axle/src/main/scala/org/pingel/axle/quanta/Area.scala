@@ -25,8 +25,8 @@ object Area extends Quantum {
     
   val derivations = List(Distance squared)
 
-  val m2 = derive(meter.by[Distance.type, Area.type](meter))
+  val m2 = derive(meter.by[Distance.type, Area.type](meter, Area))
 
-  val km2 = derive(km.by[Distance.type, Area.type](km))
+  val km2 = derive(km.by[Distance.type, Area.type](km, Area))
   
 }
