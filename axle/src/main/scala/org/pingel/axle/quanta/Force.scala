@@ -22,7 +22,8 @@ class Force extends Quantum {
     link: Option[String] = None): ForceUnit = new ForceUnit(baseUnit, magnitude, name, symbol, link)
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
-  val derivations = List(Mass by Acceleration)
+    
+  // val derivations = List(Mass.by(Acceleration, this))
 
   val pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
   val newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))

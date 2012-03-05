@@ -26,7 +26,7 @@ class Volume extends Quantum {
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
     
-  val derivations = List(Distance cubed)
+  // val derivations = List(Area.by(Distance, this))
 
   val m3 = derive(m2.by[Distance.type, this.type](meter, this))
   

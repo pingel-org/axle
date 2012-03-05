@@ -26,7 +26,7 @@ class Energy extends Quantum {
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Energy"
 
-  val derivations = List(Power by Time)
+  // val derivations = List(Power.by(Time, this))
 
   val kwh = derive(kilowatt.by[Time.type, this.type](hour, this))
  

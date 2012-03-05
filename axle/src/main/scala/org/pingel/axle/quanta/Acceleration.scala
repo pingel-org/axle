@@ -26,7 +26,7 @@ class Acceleration extends Quantum {
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Acceleration"
 
-  val derivations = List(Speed over Time)
+  // val derivations = List(Speed.over(Time, this))
 
   val mpsps = derive(mps.over[Time.type, this.type](second, this) )
   

@@ -22,7 +22,8 @@ class Power extends Quantum {
     link: Option[String] = None): PowerUnit = new PowerUnit(baseUnit, magnitude, name, symbol, link)
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
-  val derivations = List(Energy over Time)
+    
+  // val derivations = List(Energy.over(Time, this))
 
   val watt = unit("watt", "w")
   val kilowatt = watt kilo

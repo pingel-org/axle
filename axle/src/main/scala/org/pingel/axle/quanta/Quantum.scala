@@ -80,7 +80,6 @@ trait Quantum extends DirectedGraph {
 
     // TODO: use HList for by, over, squared, cubed
 
-
     // TODO: name, symbol, link for new units
       
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = baseUnit match {
@@ -185,15 +184,11 @@ trait Quantum extends DirectedGraph {
 
   val wikipediaUrl: String
 
-  val derivations: List[Quantum]
-
-  def by(right: Quantum): Quantum = QuantumMultiplication(this, right)
-
-  def over(right: Quantum): Quantum = QuantumMultiplication(this, right)
-
-  def squared(): Quantum = QuantumMultiplication(this, this)
-
-  def cubed(): Quantum = QuantumMultiplication(this, QuantumMultiplication(this, this))
+//  val derivations: List[Quantum]
+//
+//  def by(right: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, right, resultQuantum)
+//
+//  def over(bottom: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, bottom, resultQuantum)
 
   override def toString() = this.getClass().getSimpleName()
 
@@ -209,44 +204,46 @@ trait Quantum extends DirectedGraph {
 
 }
 
-case class QuantumMultiplication(left: Quantum, right: Quantum) extends Quantum {
-
-  type UOM = Int // (left.type#U, right.type#U) // TODO
-
-  val wikipediaUrl = ""
-  val unitsOfMeasurement = Nil // TODO multiplications of the cross-product of left and right
-  val derivations = Nil
-  val examples = Nil
-  
-  def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None): UOM = {
-
-    5
-  }
-  
-}
-
-case class QuantumDivision(left: Quantum, right: Quantum) extends Quantum {
-
-  type UOM = Int // (left.type#U, right.type#U) // TODO
-
-  val wikipediaUrl = ""
-  val unitsOfMeasurement = Nil // TODO divisions of the cross-product of left and right
-  val derivations = Nil
-  val examples = Nil
-  
-  def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None): UOM = {
-    
-    5 // TODO
-  }
-  
-}
+//case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum {
+//
+//  type UOM = QRESULT#UOM
+//
+//  val wikipediaUrl = ""
+//  val unitsOfMeasurement = Nil // TODO multiplications of the cross-product of left and right
+//  val derivations = Nil
+//  val examples = Nil
+//  
+//  def newUnitOfMeasurement(
+//    baseUnit: Option[QRESULT#UOM] = None,
+//    magnitude: BigDecimal,
+//    name: Option[String] = None,
+//    symbol: Option[String] = None,
+//    link: Option[String] = None): UOM = {
+//
+//    // TODO: pass on baseUnit
+//    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
+//  }
+//  
+//}
+//
+//case class QuantumDivision[QTOP <: Quantum, QBOTTOM <: Quantum, QRESULT <: Quantum](top: QTOP, bottom: QBOTTOM, resultQuantum: QRESULT) extends Quantum {
+//
+//  type UOM = QRESULT#UOM
+//
+//  val wikipediaUrl = ""
+//  val unitsOfMeasurement = Nil // TODO divisions of the cross-product of left and right
+//  val derivations = Nil
+//  val examples = Nil
+//  
+//  def newUnitOfMeasurement(
+//    baseUnit: Option[UOM] = None,
+//    magnitude: BigDecimal,
+//    name: Option[String] = None,
+//    symbol: Option[String] = None,
+//    link: Option[String] = None): UOM = {
+//
+//    // TODO pass on baseUnit
+//    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
+//  }
+//  
+//}

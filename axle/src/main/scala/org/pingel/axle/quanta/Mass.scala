@@ -23,7 +23,7 @@ class Mass extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"
-  val derivations = List(Energy over (Speed squared)) // via E=mc^2
+  val derivations = List() // Energy over (Speed by Speed)) // via E=mc^2
 
   val gram = unit("gram", "g")
   val milligram = gram milli

@@ -25,7 +25,7 @@ class Area extends Quantum {
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Area"
     
-  val derivations = List(Distance squared)
+  // val derivations = List(Distance.by(Distance, this))
 
   val m2 = derive(meter.by[Distance.type, this.type](meter, this))
 

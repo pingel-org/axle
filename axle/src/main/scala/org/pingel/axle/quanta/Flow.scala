@@ -23,7 +23,7 @@ class Flow extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
     
-  val derivations = List(Volume over Time)
+  // val derivations = List(Volume.over(Time, this))
 
   import Volume.{m3}
   import Time.{second}
