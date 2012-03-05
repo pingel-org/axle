@@ -47,9 +47,7 @@ trait Quantum extends DirectedGraph {
 
     def getLabel() = name
 
-    // TODO: why is this toBD necessary?  figure out search order for implicits
-
-    def kilo() = quantity(toBD("1000"), thisAsUOM, Some("kilo" + name), Some("K" + symbol)) // 3
+    def kilo() = quantity("1000", thisAsUOM, Some("kilo" + name), Some("K" + symbol)) // 3
     def mega() = quantity("1000", kilo, Some("mega" + name), Some("M" + symbol)) // 6
     def giga() = quantity("1000", mega, Some("giga" + name), Some("G" + symbol)) // 9
     def tera() = quantity("1000", giga, Some("kilo" + name), Some("T" + symbol)) // 12
@@ -77,6 +75,9 @@ trait Quantum extends DirectedGraph {
     def *(bd: BigDecimal): UOM =
       quantity(magnitude.multiply(bd), baseUnit.getOrElse(thisAsUOM))
 
+    def /(bd: BigDecimal): UOM =
+      quantity(magnitude.divide(bd, scala.Math.max(magnitude.precision, bd.precision), java.math.RoundingMode.HALF_UP), baseUnit.getOrElse(thisAsUOM))
+
     // TODO: use HList for by, over, squared, cubed
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM): QRES#UOM = baseUnit match {
@@ -103,33 +104,26 @@ trait Quantum extends DirectedGraph {
       }
     }
 
-    // def /(bd: BigDecimal) // TODO
-
-    def over[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM): QRES#UOM = right match {
-      case r: UOM => Scalar.quantity(new BigDecimal("TODO")) // TODO
-      case _ => baseUnit match {
-        case Some(base) => right.baseUnit match {
-          case Some(rightBase) => {
-            val bd = magnitude.divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), java.math.RoundingMode.HALF_UP)
-            val quantum: QRES = TODO
-            quantum.quantity(bd, base over rightBase)
-          }
-          case None => {
-            val quantum: QRES = TODO
-            quantum.quantity(magnitude, base over right)
-          }
-
+    def over[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM): QRES#UOM = baseUnit match {
+      case Some(base) => right.baseUnit match {
+        case Some(rightBase) => {
+          val bd = magnitude.divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), java.math.RoundingMode.HALF_UP)
+          val quantum: QRES = TODO
+          quantum.quantity(bd, base over rightBase)
         }
-        case None => right.baseUnit match {
-          case Some(rightBase) => {
-            val bd = new BigDecimal("TODO") // TODO
-            val quantum: QRES = TODO
-            quantum.quantity(bd, thisAsUOM over rightBase)
-          }
-          case None => {
-            val quantum: QRES = TODO
-            quantum.quantity(one, thisAsUOM over right)
-          }
+        case None => {
+          val quantum: QRES = TODO
+          quantum.quantity(magnitude, base over right)
+        }
+      }
+      case None => right.baseUnit match {
+        case Some(rightBase) => {
+          val quantum: QRES = TODO
+          quantum.quantity(one.divide(right.magnitude, right.magnitude.precision, java.math.RoundingMode.HALF_UP), thisAsUOM over rightBase)
+        }
+        case None => {
+          val quantum: QRES = TODO
+          quantum.quantity(one, thisAsUOM over right)
         }
       }
     }
@@ -168,10 +162,10 @@ trait Quantum extends DirectedGraph {
   def unit(name: String, symbol: String, linkOpt: Option[String] = None): UOM =
     newUnitOfMeasurement(None, one, Some(name), Some(symbol), linkOpt)
 
-  def derive(compoundUnit: UnitOfMeasurement): UOM = {
+  def derive(compoundUnit: UnitOfMeasurement, nameOpt: Option[String] = None, symbolOpt: Option[String] = None, linkOpt: Option[String] = None): UOM = {
     // TODO: Check that the given compound unit is in this quantum's list of derivations
     // TODO: add the compoundUnit to the graph?
-    newUnitOfMeasurement(None, one, Some("TODO"), Some("TODO"), None) // TODO
+    newUnitOfMeasurement(None, one, nameOpt, symbolOpt, linkOpt)
   }
 
   def quantity(
@@ -229,7 +223,7 @@ trait Quantum extends DirectedGraph {
 
 case class QuantumMultiplication(left: Quantum, right: Quantum) extends Quantum {
 
-  type U = Int // (left.type#U, right.type#U)
+  type U = Int // (left.type#U, right.type#U) // TODO
 
   val wikipediaUrl = ""
   val unitsOfMeasurement = Nil // TODO multiplications of the cross-product of left and right
@@ -239,7 +233,7 @@ case class QuantumMultiplication(left: Quantum, right: Quantum) extends Quantum 
 
 case class QuantumDivision(left: Quantum, right: Quantum) extends Quantum {
 
-  type U = Int // (left.type#U, right.type#U)
+  type U = Int // (left.type#U, right.type#U) // TODO
 
   val wikipediaUrl = ""
   val unitsOfMeasurement = Nil // TODO divisions of the cross-product of left and right
