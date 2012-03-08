@@ -60,14 +60,12 @@ trait Quantum extends DirectedGraph {
     link: Option[String] = None)
     extends DirectedGraphVertex {
 
-    // TODO: figure out how to use self-type
-    // self: UOM => 
-    val thisAsUOM = this.asInstanceOf[UOM]
+    self: UOM => 
 
     def getLabel() = name
     def getSymbol() = symbol
 
-    def kilo() = quantity("1000", thisAsUOM, Some("kilo" + name.getOrElse("")), Some("K" + symbol.getOrElse(""))) // 3
+    def kilo() = quantity("1000", this, Some("kilo" + name.getOrElse("")), Some("K" + symbol.getOrElse(""))) // 3
     def mega() = quantity("1000", kilo, Some("mega" + name.getOrElse("")), Some("M" + symbol.getOrElse(""))) // 6
     def giga() = quantity("1000", mega, Some("giga" + name.getOrElse("")), Some("G" + symbol.getOrElse(""))) // 9
     def tera() = quantity("1000", giga, Some("kilo" + name.getOrElse("")), Some("T" + symbol.getOrElse(""))) // 12
@@ -76,35 +74,35 @@ trait Quantum extends DirectedGraph {
     def zetta() = quantity("1000", exa, Some("zetta" + name.getOrElse("")), Some("Z" + symbol.getOrElse(""))) // 21
     def yotta() = quantity("1000", zetta, Some("yotta" + name.getOrElse("")), Some("Y" + symbol.getOrElse(""))) // 24
 
-    def deci() = quantity("0.1", thisAsUOM, Some("deci" + name.getOrElse("")), Some("d" + symbol.getOrElse(""))) // -1
-    def centi() = quantity("0.01", thisAsUOM, Some("centi" + name.getOrElse("")), Some("c" + symbol.getOrElse(""))) // -2
-    def milli() = quantity("0.001", thisAsUOM, Some("milli" + name.getOrElse("")), Some("m" + symbol.getOrElse(""))) // -3
+    def deci() = quantity("0.1", this, Some("deci" + name.getOrElse("")), Some("d" + symbol.getOrElse(""))) // -1
+    def centi() = quantity("0.01", this, Some("centi" + name.getOrElse("")), Some("c" + symbol.getOrElse(""))) // -2
+    def milli() = quantity("0.001", this, Some("milli" + name.getOrElse("")), Some("m" + symbol.getOrElse(""))) // -3
     def micro() = quantity("0.001", milli, Some("micro" + name.getOrElse("")), Some("μ" + symbol.getOrElse(""))) // -6
     def nano() = quantity("0.001", micro, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse(""))) // -9
 
-    override def hashCode = 42 // TODO
+    override def hashCode = 42 // TODO (was overflowing stack)
 
     override def toString() = conversion
-      .map(c => c.bd + " " + c.getDest().getSymbol.getOrElse(""))
+      .map(c => c.bd + " " + c.getSource().getSymbol.getOrElse(""))
       .getOrElse(name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName())
 
     def +(right: UOM): UOM = {
-      val (bd, uom) = conversion.map(c => (c.bd, c.getDest)).getOrElse((one, thisAsUOM))
+      val (bd, uom) = conversion.map(c => (c.bd, c.getSource)).getOrElse((one, this))
       quantity(bd.add((right in uom).bd), uom)
     }
 
     def -(right: UOM): UOM = {
-      val (bd, uom) = conversion.map(c => (c.bd, c.getDest)).getOrElse((one, thisAsUOM))
+      val (bd, uom) = conversion.map(c => (c.bd, c.getSource)).getOrElse((one, this))
       quantity(bd.subtract((right in uom).bd), uom)
     }
 
     def *(bd: BigDecimal): UOM = conversion
-      .map(c => quantity(c.bd.multiply(bd), c.getDest))
-      .getOrElse(quantity(bd, thisAsUOM))
+      .map(c => quantity(c.bd.multiply(bd), c.getSource))
+      .getOrElse(quantity(bd, this))
 
     def /(bd: BigDecimal): UOM = conversion
-      .map(c => quantity(c.bd.divide(bd, scala.Math.max(c.bd.precision, bd.precision), HALF_UP), c.getDest))
-      .getOrElse(quantity(one.divide(bd, bd.precision, HALF_UP), thisAsUOM))
+      .map(c => quantity(c.bd.divide(bd, scala.Math.max(c.bd.precision, bd.precision), HALF_UP), c.getSource))
+      .getOrElse(quantity(one.divide(bd, bd.precision, HALF_UP), this))
 
     // TODO: use HList for by, over (?)
 
@@ -134,13 +132,13 @@ trait Quantum extends DirectedGraph {
     }
 
     def in(other: UOM): Conversion = {
-      val resultBD = conversionPath(thisAsUOM, other).map(path => {
+      val resultBD = conversionPath(other, this).map(path => {
         path.foldLeft(one)((bd: BigDecimal, conversion: Conversion) => bd.multiply(conversion.bd))
       })
       if (resultBD.isEmpty) {
-        throw new Exception("no conversion path from " + thisAsUOM + " to " + other)
+        throw new Exception("no conversion path from " + this + " to " + other)
       }
-      val result = new Conversion(thisAsUOM, other, resultBD.get)
+      val result = new Conversion(this, other, resultBD.get)
       addEdge(result) // TODO: make this optional
       result
     }
@@ -175,9 +173,9 @@ trait Quantum extends DirectedGraph {
 
     val q = newUnitOfMeasurement(None, qname, qsymbol, qlink)
     addVertex(q)
-    val conversion = newEdge(q, unit, one.divide(magnitude, magnitude.precision, HALF_UP))
-    q.conversion = Some(conversion)
-    newEdge(unit, q, magnitude)
+    val conversion1 = newEdge(q, unit, one.divide(magnitude, magnitude.precision, HALF_UP))
+    val conversion2 = newEdge(unit, q, magnitude)
+    q.conversion = Some(conversion2)
     q
   }
 
