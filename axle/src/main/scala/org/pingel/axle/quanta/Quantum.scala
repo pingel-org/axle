@@ -17,16 +17,18 @@ import java.math.RoundingMode.HALF_UP
 
 /**
  *
+ * Tests
+ *
  * kilogram in gram
- * gram + kilogram
  * megagram in milligram
  * mile in ft
- * bug: earth + sun
- * update quanta wiki
+ * earth + sun
+ * gram + kilogram
+ * gram + mile
+ * greatLakes.over(niagaraFalls, Time)
+ * "5" in gram
+ *
  * quantum graph on wiki
- * implicit String -> BigDecimal
- * “5” in gram
- * greatLakes.over[Flow.type, Time.type](niagaraFalls, Time)
  * newEdge and newVertex
  */
 
@@ -36,10 +38,11 @@ trait Quantum extends DirectedGraph {
 
   implicit def toBD(s: String) = new BigDecimal(s)
 
-  //  implicit def toUoM(bd: BigDecimal)(implicit uom: UnitOfMeasurement): UnitOfMeasurement =
-  //    uom.quantum.quantity(bd, uom)
-  //    
-  //  implicit def in(uom: UnitOfMeasurement) = uom.quantum.quantity(bd, uom, None, None, None)
+  case class Scalar(bd: BigDecimal) {
+    def in(uom: UOM) = quantity(bd, uom)
+  }
+
+  implicit def enrichString(s: String) = Scalar(new BigDecimal(s))
 
   case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
 
