@@ -7,19 +7,17 @@ class Power extends Quantum {
   type UOM = PowerUnit
 
   class PowerUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): PowerUnit = new PowerUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): PowerUnit = new PowerUnit(conversion, name, symbol, link)
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
     

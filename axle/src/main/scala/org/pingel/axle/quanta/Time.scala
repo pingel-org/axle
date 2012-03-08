@@ -7,19 +7,17 @@ class Time extends Quantum {
   type UOM = TimeUnit
 
   class TimeUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): TimeUnit = new TimeUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): TimeUnit = new TimeUnit(conversion, name, symbol, link)
   
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"

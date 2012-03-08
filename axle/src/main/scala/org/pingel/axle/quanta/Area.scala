@@ -7,19 +7,17 @@ class Area extends Quantum {
   type UOM = AreaUnit
 
   class AreaUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): AreaUnit = new AreaUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): AreaUnit = new AreaUnit(conversion, name, symbol, link)
   
   import Distance.{meter, km}
   

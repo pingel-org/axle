@@ -2,6 +2,7 @@ package org.pingel.axle.quanta
 
 import org.pingel.axle.graph._
 import java.math.BigDecimal
+import java.math.RoundingMode.HALF_UP
 
 /**
  * Quantum
@@ -12,6 +13,21 @@ import java.math.BigDecimal
  *
  * [[http://dictionary.reference.com/browse/quantum]]
  *
+ */
+
+/**
+ *
+ * kilogram in gram
+ * gram + kilogram
+ * megagram in milligram
+ * mile in ft
+ * bug: earth + sun
+ * update quanta wiki
+ * quantum graph on wiki
+ * implicit String -> BigDecimal
+ * “5” in gram
+ * greatLakes.over[Flow.type, Time.type](niagaraFalls, Time)
+ * newEdge and newVertex
  */
 
 trait Quantum extends DirectedGraph {
@@ -26,111 +42,107 @@ trait Quantum extends DirectedGraph {
   //  implicit def in(uom: UnitOfMeasurement) = uom.quantum.quantity(bd, uom, None, None, None)
 
   case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
+
     def getVertices() = (from, to)
     def getSource() = from
     def getDest() = to
     def getBD() = bd
+
+    override def toString() = from.toString() + " -> " + bd + " -> " + to.toString()
   }
 
   val one = new BigDecimal("1")
 
-  case class UnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+  class UnitOfMeasurement(
+    var conversion: Option[Conversion],
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends DirectedGraphVertex {
 
-    // self: UOM => // TODO: figure out how to use self-type
+    // TODO: figure out how to use self-type
+    // self: UOM => 
     val thisAsUOM = this.asInstanceOf[UOM]
 
     def getLabel() = name
+    def getSymbol() = symbol
 
-    def kilo() = quantity("1000", thisAsUOM, Some("kilo" + name), Some("K" + symbol)) // 3
-    def mega() = quantity("1000", kilo, Some("mega" + name), Some("M" + symbol)) // 6
-    def giga() = quantity("1000", mega, Some("giga" + name), Some("G" + symbol)) // 9
-    def tera() = quantity("1000", giga, Some("kilo" + name), Some("T" + symbol)) // 12
-    def peta() = quantity("1000", tera, Some("peta" + name), Some("P" + symbol)) // 15
-    def exa() = quantity("1000", peta, Some("exa" + name), Some("E" + symbol)) // 18
-    def zetta() = quantity("1000", exa, Some("zetta" + name), Some("Z" + symbol)) // 21
-    def yotta() = quantity("1000", zetta, Some("yotta" + name), Some("Y" + symbol)) // 24
+    def kilo() = quantity("1000", thisAsUOM, Some("kilo" + name.getOrElse("")), Some("K" + symbol.getOrElse(""))) // 3
+    def mega() = quantity("1000", kilo, Some("mega" + name.getOrElse("")), Some("M" + symbol.getOrElse(""))) // 6
+    def giga() = quantity("1000", mega, Some("giga" + name.getOrElse("")), Some("G" + symbol.getOrElse(""))) // 9
+    def tera() = quantity("1000", giga, Some("kilo" + name.getOrElse("")), Some("T" + symbol.getOrElse(""))) // 12
+    def peta() = quantity("1000", tera, Some("peta" + name.getOrElse("")), Some("P" + symbol.getOrElse(""))) // 15
+    def exa() = quantity("1000", peta, Some("exa" + name.getOrElse("")), Some("E" + symbol.getOrElse(""))) // 18
+    def zetta() = quantity("1000", exa, Some("zetta" + name.getOrElse("")), Some("Z" + symbol.getOrElse(""))) // 21
+    def yotta() = quantity("1000", zetta, Some("yotta" + name.getOrElse("")), Some("Y" + symbol.getOrElse(""))) // 24
 
-    def deci() = quantity("0.1", thisAsUOM, Some("deci" + name), Some("d" + symbol)) // -1
-    def centi() = quantity("0.01", thisAsUOM, Some("centi" + name), Some("c" + symbol)) // -2
-    def milli() = quantity("0.001", thisAsUOM, Some("milli" + name), Some("m" + symbol)) // -3
-    def micro() = quantity("0.001", milli, Some("micro" + name), Some("μ" + symbol)) // -6
-    def nano() = quantity("0.001", micro, Some("nano" + name), Some("n" + symbol)) // -9
+    def deci() = quantity("0.1", thisAsUOM, Some("deci" + name.getOrElse("")), Some("d" + symbol.getOrElse(""))) // -1
+    def centi() = quantity("0.01", thisAsUOM, Some("centi" + name.getOrElse("")), Some("c" + symbol.getOrElse(""))) // -2
+    def milli() = quantity("0.001", thisAsUOM, Some("milli" + name.getOrElse("")), Some("m" + symbol.getOrElse(""))) // -3
+    def micro() = quantity("0.001", milli, Some("micro" + name.getOrElse("")), Some("μ" + symbol.getOrElse(""))) // -6
+    def nano() = quantity("0.001", micro, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse(""))) // -9
 
-    override def toString() = baseUnit
-      .map(u => magnitude + " " + u.symbol)
-      .getOrElse(name + " (" + symbol + "): a measure of " + this.getClass().getSimpleName())
+    override def hashCode = 42 // TODO
 
-    def +(right: UOM): UOM =
-      quantity(magnitude.add((right in baseUnit.getOrElse(thisAsUOM)).magnitude), baseUnit.getOrElse(thisAsUOM))
+    override def toString() = conversion
+      .map(c => c.bd + " " + c.getDest().getSymbol.getOrElse(""))
+      .getOrElse(name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName())
 
-    def -(right: UOM): UOM =
-      quantity(magnitude.subtract((right in baseUnit.getOrElse(thisAsUOM)).magnitude), baseUnit.getOrElse(thisAsUOM))
+    def +(right: UOM): UOM = {
+      val (bd, uom) = conversion.map(c => (c.bd, c.getDest)).getOrElse((one, thisAsUOM))
+      quantity(bd.add((right in uom).bd), uom)
+    }
 
-    def *(bd: BigDecimal): UOM =
-      quantity(magnitude.multiply(bd), baseUnit.getOrElse(thisAsUOM))
+    def -(right: UOM): UOM = {
+      val (bd, uom) = conversion.map(c => (c.bd, c.getDest)).getOrElse((one, thisAsUOM))
+      quantity(bd.subtract((right in uom).bd), uom)
+    }
 
-    def /(bd: BigDecimal): UOM =
-      quantity(magnitude.divide(bd, scala.Math.max(magnitude.precision, bd.precision), java.math.RoundingMode.HALF_UP), baseUnit.getOrElse(thisAsUOM))
+    def *(bd: BigDecimal): UOM = conversion
+      .map(c => quantity(c.bd.multiply(bd), c.getDest))
+      .getOrElse(quantity(bd, thisAsUOM))
 
-    // TODO: use HList for by, over, squared, cubed
+    def /(bd: BigDecimal): UOM = conversion
+      .map(c => quantity(c.bd.divide(bd, scala.Math.max(c.bd.precision, bd.precision), HALF_UP), c.getDest))
+      .getOrElse(quantity(one.divide(bd, bd.precision, HALF_UP), thisAsUOM))
+
+    // TODO: use HList for by, over (?)
 
     // TODO: name, symbol, link for new units
-      
-    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = baseUnit match {
-      case Some(base) => right.baseUnit match {
-        case Some(rightBase) => resultQuantum.quantity(magnitude.multiply(right.magnitude), resultQuantum.unit("TODO", "TODO")) // base by rightBase
-        case _ => resultQuantum.quantity(magnitude, resultQuantum.unit("TODO", "TODO")) // (base, right)
+
+    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = conversion match {
+      case Some(c) => right.conversion match {
+        case Some(rc) => resultQuantum.quantity(c.bd.multiply(rc.bd), resultQuantum.newUnitOfMeasurement(None)) // c.getDest x rc.getDest
+        case None => resultQuantum.quantity(c.bd, resultQuantum.newUnitOfMeasurement(None)) // c x right
       }
-      case _ => right.baseUnit match {
-        case Some(rightBase) => resultQuantum.quantity(right.magnitude, resultQuantum.unit("TODO", "TODO")) // thisAsUOM by rightBase
-        case _ => resultQuantum.quantity(one, resultQuantum.unit("TODO", "TODO")) // hisAsUOM by right
-      }
-    }
-
-    def over[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = baseUnit match {
-
-      case Some(base) => right.baseUnit match {
-
-        case Some(rightBase) => resultQuantum.quantity(
-          magnitude.divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), java.math.RoundingMode.HALF_UP),
-          resultQuantum.unit("TODO", "TODO")) // base over rightBase)
-
-        case None => resultQuantum.quantity(magnitude, resultQuantum.unit("TODO", "TODO")) // base over right)
-
-      }
-      case None => right.baseUnit match {
-
-        case Some(rightBase) => resultQuantum.quantity(
-          one.divide(right.magnitude, right.magnitude.precision, java.math.RoundingMode.HALF_UP),
-          resultQuantum.unit("TODO", "TODO")) // thisAsUOM over rightBase)
-
-        case None => resultQuantum.quantity(one, resultQuantum.unit("TODO", "TODO")) // thisAsUOM over right)
-
+      case None => right.conversion match {
+        case Some(rc) => resultQuantum.quantity(rc.bd, resultQuantum.newUnitOfMeasurement(None)) // thisAsUOM x rc.getDest
+        case None => resultQuantum.quantity(one, resultQuantum.newUnitOfMeasurement(None)) // thisAsUOM x right
       }
     }
 
-    def convert(conversion: Conversion): UOM = {
-      if (this != conversion.getSource()) {
-        throw new Exception("can't apply conversion " + conversion + " to " + this)
+    def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = conversion match {
+      // divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), HALF_UP)
+      case Some(c) => bottom.conversion match {
+        case Some(bc) => resultQuantum.quantity(c.bd.divide(bc.bd, scala.Math.max(c.bd.precision, bc.bd.precision), HALF_UP), resultQuantum.newUnitOfMeasurement(None))
+        case None => resultQuantum.quantity(c.bd, resultQuantum.newUnitOfMeasurement(None))
       }
-      quantity(magnitude.multiply(conversion.getBD()), conversion.getDest())
+      case None => bottom.conversion match {
+        case Some(bc) => resultQuantum.quantity(one.divide(bc.bd, bc.bd.precision, HALF_UP), resultQuantum.newUnitOfMeasurement(None))
+        case None => resultQuantum.quantity(one, resultQuantum.newUnitOfMeasurement(None))
+      }
     }
 
-    // Note: used to be implicit
-    def in(other: UOM): UOM = {
-      val result = conversionPath(thisAsUOM, other).map(_.foldLeft(thisAsUOM)(
-        (q: UOM, conversion: Conversion) => q.convert(conversion)
-      ))
-      if (result.isEmpty) {
-        throw new Exception("no conversion path from " + this + " to " + other)
+    def in(other: UOM): Conversion = {
+      val resultBD = conversionPath(thisAsUOM, other).map(path => {
+        path.foldLeft(one)((bd: BigDecimal, conversion: Conversion) => bd.multiply(conversion.bd))
+      })
+      if (resultBD.isEmpty) {
+        throw new Exception("no conversion path from " + thisAsUOM + " to " + other)
       }
-      result.get
+      val result = new Conversion(thisAsUOM, other, resultBD.get)
+      addEdge(result) // TODO: make this optional
+      result
     }
 
   }
@@ -140,19 +152,18 @@ trait Quantum extends DirectedGraph {
   type E = Conversion
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): UOM
 
   def unit(name: String, symbol: String, linkOpt: Option[String] = None): UOM =
-    newUnitOfMeasurement(None, one, Some(name), Some(symbol), linkOpt)
+    newUnitOfMeasurement(None, Some(name), Some(symbol), linkOpt)
 
   def derive(compoundUnit: UnitOfMeasurement, nameOpt: Option[String] = None, symbolOpt: Option[String] = None, linkOpt: Option[String] = None): UOM = {
     // TODO: Check that the given compound unit is in this quantum's list of derivations
     // TODO: add the compoundUnit to the graph?
-    newUnitOfMeasurement(None, one, nameOpt, symbolOpt, linkOpt)
+    newUnitOfMeasurement(None, nameOpt, symbolOpt, linkOpt)
   }
 
   def quantity(
@@ -162,14 +173,15 @@ trait Quantum extends DirectedGraph {
     qsymbol: Option[String] = None,
     qlink: Option[String] = None): UOM = {
 
-    val q = newUnitOfMeasurement(Some(unit), magnitude, qname, qsymbol, qlink)
+    val q = newUnitOfMeasurement(None, qname, qsymbol, qlink)
     addVertex(q)
-    newEdge(q, unit, magnitude)
-    newEdge(unit, q, one.divide(magnitude, magnitude.precision, java.math.RoundingMode.HALF_UP))
+    val conversion = newEdge(q, unit, one.divide(magnitude, magnitude.precision, HALF_UP))
+    q.conversion = Some(conversion)
+    newEdge(unit, q, magnitude)
     q
   }
 
-  def newVertex(label: String): UOM = newUnitOfMeasurement(None, one, Some(label), None, None)
+  def newVertex(label: String): UOM = newUnitOfMeasurement(None, Some(label), None, None)
 
   def newEdge(source: UOM, dest: UOM): Conversion = {
     val result: Conversion = null // TODO
@@ -184,11 +196,11 @@ trait Quantum extends DirectedGraph {
 
   val wikipediaUrl: String
 
-//  val derivations: List[Quantum]
-//
-//  def by(right: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, right, resultQuantum)
-//
-//  def over(bottom: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, bottom, resultQuantum)
+  //  val derivations: List[Quantum]
+  //
+  //  def by(right: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, right, resultQuantum)
+  //
+  //  def over(bottom: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, bottom, resultQuantum)
 
   override def toString() = this.getClass().getSimpleName()
 

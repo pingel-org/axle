@@ -7,19 +7,17 @@ class Volume extends Quantum {
   type UOM = VolumeUnit
 
   class VolumeUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): VolumeUnit = new VolumeUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): VolumeUnit = new VolumeUnit(conversion, name, symbol, link)
 
   import Distance.{meter, km}
   import Area.{m2, km2}

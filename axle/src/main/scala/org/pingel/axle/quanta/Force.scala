@@ -7,19 +7,17 @@ class Force extends Quantum {
   type UOM = ForceUnit
 
   class ForceUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): ForceUnit = new ForceUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): ForceUnit = new ForceUnit(conversion, name, symbol, link)
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
     

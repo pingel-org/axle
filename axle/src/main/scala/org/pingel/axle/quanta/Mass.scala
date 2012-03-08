@@ -7,19 +7,17 @@ class Mass extends Quantum {
   type UOM = MassUnit
 
   class MassUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): MassUnit = new MassUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): MassUnit = new MassUnit(conversion, name, symbol, link)
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"

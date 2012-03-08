@@ -7,19 +7,17 @@ class Distance extends Quantum {
   type UOM = DistanceUnit
   
   class DistanceUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): DistanceUnit = new DistanceUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): DistanceUnit = new DistanceUnit(conversion, name, symbol, link)
   
   // import Distance.unit
   

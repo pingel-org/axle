@@ -7,19 +7,17 @@ class Flow extends Quantum {
   type UOM = FlowUnit
 
   class FlowUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): FlowUnit = new FlowUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): FlowUnit = new FlowUnit(conversion, name, symbol, link)
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
     

@@ -7,19 +7,17 @@ class Acceleration extends Quantum {
   type UOM = AccelerationUnit
 
   class AccelerationUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): AccelerationUnit = new AccelerationUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): AccelerationUnit = new AccelerationUnit(conversion, name, symbol, link)
 
   import Speed.{mps, fps}
   import Time.{second}

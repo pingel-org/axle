@@ -7,19 +7,17 @@ class Energy extends Quantum {
   type UOM = EnergyUnit
 
   class EnergyUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
  
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): EnergyUnit = new EnergyUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): EnergyUnit = new EnergyUnit(conversion, name, symbol, link)
 
   import Power.{kilowatt}
   import Time.{hour}

@@ -7,20 +7,18 @@ class Speed extends Quantum {
   type UOM = SpeedUnit
 
   class SpeedUnit(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(baseUnit, magnitude, name, symbol, link)
+    extends UnitOfMeasurement(conversion, name, symbol, link)
 
 
   def newUnitOfMeasurement(
-    baseUnit: Option[UOM] = None,
-    magnitude: BigDecimal,
+    conversion: Option[Conversion] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): SpeedUnit = new SpeedUnit(baseUnit, magnitude, name, symbol, link)
+    link: Option[String] = None): SpeedUnit = new SpeedUnit(conversion, name, symbol, link)
   
   import Distance.{meter, mile, ft}
   import Time.{second, hour}
