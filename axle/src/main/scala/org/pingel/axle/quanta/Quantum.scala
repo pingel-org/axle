@@ -106,26 +106,24 @@ trait Quantum extends DirectedGraph {
       .map(c => quantity(c.bd.divide(bd, scala.Math.max(c.bd.precision, bd.precision), HALF_UP), c.getSource))
       .getOrElse(quantity(one.divide(bd, bd.precision, HALF_UP), this))
 
-    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = conversion match {
-      case Some(c) => right.conversion match {
-        case Some(rc) => resultQuantum.quantity(c.bd.multiply(rc.bd), resultQuantum.newUnitOfMeasurement(None))
-        case None => resultQuantum.quantity(c.bd, resultQuantum.newUnitOfMeasurement(None))
-      }
-      case None => right.conversion match {
-        case Some(rc) => resultQuantum.quantity(rc.bd, resultQuantum.newUnitOfMeasurement(None))
-        case None => resultQuantum.quantity(one, resultQuantum.newUnitOfMeasurement(None))
-      }
+    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
+      val resultBD = conversion.map(c =>
+        right.conversion.map(rc => c.bd.multiply(rc.bd)
+        ).getOrElse(c.bd)
+      ).getOrElse(right.conversion.map(rc => rc.bd)
+        .getOrElse(one)
+      )
+      resultQuantum.quantity(resultBD, resultQuantum.newUnitOfMeasurement(None))
     }
 
-    def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = conversion match {
-      case Some(c) => bottom.conversion match {
-        case Some(bc) => resultQuantum.quantity(c.bd.divide(bc.bd, scala.Math.max(c.bd.precision, bc.bd.precision), HALF_UP), resultQuantum.newUnitOfMeasurement(None))
-        case None => resultQuantum.quantity(c.bd, resultQuantum.newUnitOfMeasurement(None))
-      }
-      case None => bottom.conversion match {
-        case Some(bc) => resultQuantum.quantity(one.divide(bc.bd, bc.bd.precision, HALF_UP), resultQuantum.newUnitOfMeasurement(None))
-        case None => resultQuantum.quantity(one, resultQuantum.newUnitOfMeasurement(None))
-      }
+    def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = {
+      val resultBD = conversion.map(c =>
+        bottom.conversion.map(bc => c.bd.divide(bc.bd, scala.Math.max(c.bd.precision, bc.bd.precision))
+        ).getOrElse(c.bd)
+      ).getOrElse(bottom.conversion.map(bc => one.divide(bc.bd, bc.bd.precision, HALF_UP))
+        .getOrElse(one)
+      )
+      resultQuantum.quantity(resultBD, resultQuantum.newUnitOfMeasurement(None))
     }
 
     def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
