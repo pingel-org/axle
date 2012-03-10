@@ -28,9 +28,9 @@ class QuantaSpec extends Specification {
       import Distance._
       import Mass._
 
-      (kilogram in gram).bd must be equalTo new BigDecimal("1000")
-      (megagram in milligram).bd must be equalTo new BigDecimal("1000000000.0")
-      (mile in ft).bd must be equalTo new BigDecimal("5280")
+      (kilogram in gram).conversion.get.bd must be equalTo new BigDecimal("1000")
+      (megagram in milligram).conversion.get.bd must be equalTo new BigDecimal("1000000000.0")
+      (mile in ft).conversion.get.bd must be equalTo new BigDecimal("5280")
      
     }
   }

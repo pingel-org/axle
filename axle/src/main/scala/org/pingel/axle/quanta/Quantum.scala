@@ -24,7 +24,7 @@ trait Quantum extends DirectedGraph {
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
   implicit def toBD(d: Double) = new BigDecimal(d.toString)
-  
+
   implicit def toBD(s: String) = new BigDecimal(s)
 
   case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
@@ -80,12 +80,12 @@ trait Quantum extends DirectedGraph {
 
     def +(right: UOM): UOM = {
       val (bd, uom) = conversion.map(c => (c.bd, c.getSource)).getOrElse((one, this))
-      quantity(bd.add((right in uom).bd), uom)
+      quantity(bd.add((right in uom).conversion.get.bd), uom) // TODO remove .get
     }
 
     def -(right: UOM): UOM = {
       val (bd, uom) = conversion.map(c => (c.bd, c.getSource)).getOrElse((one, this))
-      quantity(bd.subtract((right in uom).bd), uom)
+      quantity(bd.subtract((right in uom).conversion.get.bd), uom) // TODO remove .get
     }
 
     def *(bd: BigDecimal): UOM = conversion
@@ -127,16 +127,20 @@ trait Quantum extends DirectedGraph {
 
     def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
 
-    def in(other: UOM): Conversion = {
+    def in(other: UOM): UOM = { /* Conversion */
       val resultBD = conversionPath(other, this).map(path => {
         path.foldLeft(one)((bd: BigDecimal, conversion: Conversion) => bd.multiply(conversion.bd))
       })
       if (resultBD.isEmpty) {
         throw new Exception("no conversion path from " + this + " to " + other)
       }
-      val result = new Conversion(this, other, resultBD.get)
-      addEdge(result) // TODO: make this optional
-      result
+
+      //      val result = new Conversion(this, other, resultBD.get)
+      //      addEdge(result) // TODO: make this optional
+      //      result
+
+      val q = quantity(resultBD.get, other)
+      q
     }
 
   }

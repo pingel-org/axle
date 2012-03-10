@@ -26,9 +26,9 @@ class Volume extends Quantum {
     
   // val derivations = List(Area.by(Distance, this))
 
-  val m3 = derive(m2.by[Distance.type, this.type](meter, this))
+  val m3 = derive(m2.by[Distance.type, this.type](meter, this), Some("cubic meters"), Some("m^3"))
   
-  val km3 = derive(km2.by[Distance.type, this.type](km, this))
+  val km3 = derive(km2.by[Distance.type, this.type](km, this), Some("cubic kilometers"), Some("km^3"))
   
   val greatLakes = quantity("22671", km3, Some("Great Lakes Volume"), None, Some("http://en.wikipedia.org/wiki/Great_Lakes"))
   

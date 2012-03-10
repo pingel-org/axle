@@ -26,7 +26,7 @@ class Flow extends Quantum {
   import Volume.{m3}
   import Time.{second}
 
-  val m3s = m3.over[Time.type, this.type](second, this)
+  val m3s = derive(m3.over[Time.type, this.type](second, this), Some("cubic meters per second"), Some("m^3/s"))
 
   val niagaraFalls = quantity("1834", m3s, Some("Niagara Falls Flow"), None, Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
   
