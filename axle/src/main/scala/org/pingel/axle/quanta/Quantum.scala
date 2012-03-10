@@ -15,6 +15,16 @@ import java.math.RoundingMode.HALF_UP
  *
  */
 
+/**
+ * TODO
+ *
+ * HSet for numerator + HSet for denominator ?
+ * name, symbol, link for new units resulting from by and over
+ * derive should heck that the given compound unit is in this quantum's list of derivations?
+ * derive should add the compoundUnit to the graph?
+ * reconcile newEdge(source, dest) and newEdge(source, dest, magnitude)
+ */
+
 trait Quantum extends DirectedGraph {
 
   outer =>
@@ -96,23 +106,18 @@ trait Quantum extends DirectedGraph {
       .map(c => quantity(c.bd.divide(bd, scala.Math.max(c.bd.precision, bd.precision), HALF_UP), c.getSource))
       .getOrElse(quantity(one.divide(bd, bd.precision, HALF_UP), this))
 
-    // TODO: use HList for by, over (?)
-
-    // TODO: name, symbol, link for new units
-
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = conversion match {
       case Some(c) => right.conversion match {
-        case Some(rc) => resultQuantum.quantity(c.bd.multiply(rc.bd), resultQuantum.newUnitOfMeasurement(None)) // c.getDest x rc.getDest
-        case None => resultQuantum.quantity(c.bd, resultQuantum.newUnitOfMeasurement(None)) // c x right
+        case Some(rc) => resultQuantum.quantity(c.bd.multiply(rc.bd), resultQuantum.newUnitOfMeasurement(None))
+        case None => resultQuantum.quantity(c.bd, resultQuantum.newUnitOfMeasurement(None))
       }
       case None => right.conversion match {
-        case Some(rc) => resultQuantum.quantity(rc.bd, resultQuantum.newUnitOfMeasurement(None)) // thisAsUOM x rc.getDest
-        case None => resultQuantum.quantity(one, resultQuantum.newUnitOfMeasurement(None)) // thisAsUOM x right
+        case Some(rc) => resultQuantum.quantity(rc.bd, resultQuantum.newUnitOfMeasurement(None))
+        case None => resultQuantum.quantity(one, resultQuantum.newUnitOfMeasurement(None))
       }
     }
 
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = conversion match {
-      // divide(right.magnitude, scala.Math.max(magnitude.precision, right.magnitude.precision), HALF_UP)
       case Some(c) => bottom.conversion match {
         case Some(bc) => resultQuantum.quantity(c.bd.divide(bc.bd, scala.Math.max(c.bd.precision, bc.bd.precision), HALF_UP), resultQuantum.newUnitOfMeasurement(None))
         case None => resultQuantum.quantity(c.bd, resultQuantum.newUnitOfMeasurement(None))
@@ -127,7 +132,7 @@ trait Quantum extends DirectedGraph {
 
     def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
 
-    def in(other: UOM): UOM = { /* Conversion */
+    def in(other: UOM): UOM = {
       val resultBD = conversionPath(other, this).map(path => {
         path.foldLeft(one)((bd: BigDecimal, conversion: Conversion) => bd.multiply(conversion.bd))
       })
@@ -135,12 +140,7 @@ trait Quantum extends DirectedGraph {
         throw new Exception("no conversion path from " + this + " to " + other)
       }
 
-      //      val result = new Conversion(this, other, resultBD.get)
-      //      addEdge(result) // TODO: make this optional
-      //      result
-
-      val q = quantity(resultBD.get, other)
-      q
+      quantity(resultBD.get, other)
     }
 
   }
@@ -158,11 +158,11 @@ trait Quantum extends DirectedGraph {
   def unit(name: String, symbol: String, linkOpt: Option[String] = None): UOM =
     newUnitOfMeasurement(None, Some(name), Some(symbol), linkOpt)
 
-  def derive(compoundUnit: UnitOfMeasurement, nameOpt: Option[String] = None, symbolOpt: Option[String] = None, linkOpt: Option[String] = None): UOM = {
-    // TODO: Check that the given compound unit is in this quantum's list of derivations
-    // TODO: add the compoundUnit to the graph?
+  def derive(compoundUnit: UnitOfMeasurement,
+    nameOpt: Option[String] = None,
+    symbolOpt: Option[String] = None,
+    linkOpt: Option[String] = None): UOM =
     newUnitOfMeasurement(None, nameOpt, symbolOpt, linkOpt)
-  }
 
   def quantity(
     magnitude: BigDecimal,
@@ -182,7 +182,7 @@ trait Quantum extends DirectedGraph {
   def newVertex(label: String): UOM = newUnitOfMeasurement(None, Some(label), None, None)
 
   def newEdge(source: UOM, dest: UOM): Conversion = {
-    val result: Conversion = null // TODO
+    val result: Conversion = null
     result
   }
 
@@ -219,7 +219,7 @@ trait Quantum extends DirectedGraph {
 //  type UOM = QRESULT#UOM
 //
 //  val wikipediaUrl = ""
-//  val unitsOfMeasurement = Nil // TODO multiplications of the cross-product of left and right
+//  val unitsOfMeasurement = Nil
 //  val derivations = Nil
 //  val examples = Nil
 //  
@@ -230,7 +230,6 @@ trait Quantum extends DirectedGraph {
 //    symbol: Option[String] = None,
 //    link: Option[String] = None): UOM = {
 //
-//    // TODO: pass on baseUnit
 //    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
 //  }
 //  
@@ -241,7 +240,7 @@ trait Quantum extends DirectedGraph {
 //  type UOM = QRESULT#UOM
 //
 //  val wikipediaUrl = ""
-//  val unitsOfMeasurement = Nil // TODO divisions of the cross-product of left and right
+//  val unitsOfMeasurement = Nil
 //  val derivations = Nil
 //  val examples = Nil
 //  
@@ -252,19 +251,7 @@ trait Quantum extends DirectedGraph {
 //    symbol: Option[String] = None,
 //    link: Option[String] = None): UOM = {
 //
-//    // TODO pass on baseUnit
 //    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
 //  }
 //  
-//}
-
-
-//object Quantum {
-//
-//  case class Scalar(bd: BigDecimal) {
-//    def in[Q <: Quantum](uom: Q#UOM) = uom.quantum.quantity(bd, uom.asInstanceOf[uom.quantum.type#UOM]) // TODO remove cast
-//  }
-//
-//  implicit def enrichString(s: String) = Scalar(new BigDecimal(s))
-//
 //}
