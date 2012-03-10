@@ -7,7 +7,7 @@ import java.math.RoundingMode.HALF_UP
 /**
  * Quantum
  *
- * World English Dictionary
+ * Used in the sense of the World English Dictionary's 4th definition:
  *
  * 4. something that can be quantified or measured
  *
@@ -15,34 +15,13 @@ import java.math.RoundingMode.HALF_UP
  *
  */
 
-/**
- *
- * Tests
- *
- * kilogram in gram
- * megagram in milligram
- * mile in ft
- * earth + sun
- * gram + kilogram
- * gram + mile
- * greatLakes.over(niagaraFalls, Time)
- * "5" in gram
- *
- * quantum graph on wiki
- * newEdge and newVertex
- */
-
 trait Quantum extends DirectedGraph {
+
+  outer =>
 
   type UOM <: UnitOfMeasurement
 
   implicit def toBD(s: String) = new BigDecimal(s)
-
-  case class Scalar(bd: BigDecimal) {
-    def in(uom: UOM) = quantity(bd, uom)
-  }
-
-  implicit def enrichString(s: String) = Scalar(new BigDecimal(s))
 
   case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
 
@@ -63,10 +42,12 @@ trait Quantum extends DirectedGraph {
     link: Option[String] = None)
     extends DirectedGraphVertex {
 
-    self: UOM => 
+    self: UOM =>
 
     def getLabel() = name
     def getSymbol() = symbol
+
+    val quantum: Quantum = outer
 
     def kilo() = quantity("1000", this, Some("kilo" + name.getOrElse("")), Some("K" + symbol.getOrElse(""))) // 3
     def mega() = quantity("1000", kilo, Some("mega" + name.getOrElse("")), Some("M" + symbol.getOrElse(""))) // 6
@@ -88,6 +69,10 @@ trait Quantum extends DirectedGraph {
     override def toString() = conversion
       .map(c => c.bd + " " + c.getSource().getSymbol.getOrElse(""))
       .getOrElse(name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName())
+
+    def *:(s: String) = quantity(new BigDecimal(s), this)
+
+    def in_:(s: String) = quantity(new BigDecimal(s), this)
 
     def +(right: UOM): UOM = {
       val (bd, uom) = conversion.map(c => (c.bd, c.getSource)).getOrElse((one, this))
@@ -133,6 +118,10 @@ trait Quantum extends DirectedGraph {
         case None => resultQuantum.quantity(one, resultQuantum.newUnitOfMeasurement(None))
       }
     }
+
+    def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
+
+    def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
 
     def in(other: UOM): Conversion = {
       val resultBD = conversionPath(other, this).map(path => {
@@ -259,4 +248,15 @@ trait Quantum extends DirectedGraph {
 //    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
 //  }
 //  
+//}
+
+
+//object Quantum {
+//
+//  case class Scalar(bd: BigDecimal) {
+//    def in[Q <: Quantum](uom: Q#UOM) = uom.quantum.quantity(bd, uom.asInstanceOf[uom.quantum.type#UOM]) // TODO remove cast
+//  }
+//
+//  implicit def enrichString(s: String) = Scalar(new BigDecimal(s))
+//
 //}
