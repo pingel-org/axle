@@ -21,6 +21,10 @@ trait Quantum extends DirectedGraph {
 
   type UOM <: UnitOfMeasurement
 
+  implicit def toBD(i: Int) = new BigDecimal(i.toString)
+
+  implicit def toBD(d: Double) = new BigDecimal(d.toString)
+  
   implicit def toBD(s: String) = new BigDecimal(s)
 
   case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
@@ -46,6 +50,7 @@ trait Quantum extends DirectedGraph {
 
     def getLabel() = name
     def getSymbol() = symbol
+    def getLink() = link
 
     val quantum: Quantum = outer
 
@@ -70,9 +75,8 @@ trait Quantum extends DirectedGraph {
       .map(c => c.bd + " " + c.getSource().getSymbol.getOrElse(""))
       .getOrElse(name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName())
 
-    def *:(s: String) = quantity(new BigDecimal(s), this)
-
-    def in_:(s: String) = quantity(new BigDecimal(s), this)
+    def *:(bd: BigDecimal) = quantity(bd, this)
+    def in_:(bd: BigDecimal) = quantity(bd, this)
 
     def +(right: UOM): UOM = {
       val (bd, uom) = conversion.map(c => (c.bd, c.getSource)).getOrElse((one, this))
