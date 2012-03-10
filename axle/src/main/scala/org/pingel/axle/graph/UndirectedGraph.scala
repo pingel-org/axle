@@ -6,7 +6,7 @@ package org.pingel.axle.graph {
   trait UndirectedGraph extends Graph {
 
     type V <: UndirectedGraphVertex
-    
+
     type E <: UndirectedGraphEdge
 
     trait UndirectedGraphVertex extends GraphVertex {
@@ -237,37 +237,40 @@ package org.pingel.axle.graph {
     import edu.uci.ics.jung.visualization.Layout
     import edu.uci.ics.jung.visualization.PluggableRenderer
 
+    var jungGraph = new UndirectedSparseGraph()
+
     class UndirectedVertexStringer(jung2pingel: Map[Vertex, ug.type#V]) extends VertexStringer {
-      // def getLabel(v: Vertex) = jung2pingel(v).getLabel()
-      def getLabel(v: ArchetypeVertex) = "TODO" // jung2pingel(v.getEquivalentVertex(this)).getLabel()
+      // def getLabel(v: ArchetypeVertex) = jung2pingel(v.getEquivalentVertex(this)).getLabel()
+
+      def getLabel(av: ArchetypeVertex) = "" // TODO
     }
 
     def jframe(): JFrame = {
 
-      var jungGraph = new UndirectedSparseGraph()
-
       var axle2jung = Map[ug.type#V, Vertex]()
       var jung2axle = Map[Vertex, ug.type#V]()
 
-      for (pv <- ug.getVertices()) {
+      ug.getVertices().map(pv => {
         val vertex = new SimpleUndirectedSparseVertex()
         jungGraph.addVertex(vertex)
         axle2jung += pv -> vertex
         jung2axle += vertex -> pv
-      }
+      })
 
-      for (edge <- ug.getEdges()) {
+      ug.getEdges().map(edge => {
         val dbl = edge.getVertices()
         val v1 = dbl._1
         val v2 = dbl._2
-        val jedge = new UndirectedSparseEdge(axle2jung(v1), axle2jung(v2))
+        val j1 = axle2jung(v1)
+        val j2 = axle2jung(v2)
+        val jedge = new UndirectedSparseEdge(j1, j2)
         jungGraph.addEdge(jedge)
-      }
+      })
 
       var pr = new PluggableRenderer()
-      // pr.setVertexPaintFunction(new ModelVertexPaintFunction(m));
-      // pr.setEdgeStrokeFunction(new ModelEdgeStrokeFunction(m));
-      // pr.setEdgeShapeFunction(new EdgeShape.Line());
+      // pr.setVertexPaintFunction(new ModelVertexPaintFunction(m))
+      // pr.setEdgeStrokeFunction(new ModelEdgeStrokeFunction(m))
+      // pr.setEdgeShapeFunction(new EdgeShape.Line())
       pr.setVertexStringer(new UndirectedVertexStringer(jung2axle))
 
       val layout = new FRLayout(jungGraph)
@@ -287,13 +290,17 @@ package org.pingel.axle.graph {
 
     type V = SimpleVertex
     type E = SimpleEdge
-    
+
     class SimpleVertex(label: String) extends UndirectedGraphVertex {
       def getLabel() = label
     }
 
-    def newVertex(name: String) = new SimpleVertex(name)
-    
+    def newVertex(name: String) = {
+      val v = new SimpleVertex(name)
+      addVertex(v)
+      v
+    }
+
     class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex) extends UndirectedGraphEdge {
       def getVertices() = (v1, v2)
     }
