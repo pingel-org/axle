@@ -201,6 +201,51 @@ package org.pingel.axle.graph {
 
     def shortestPath(source: V, goal: V) = _shortestPath(source, goal, Set())
 
+    def draw(): Unit = {
+      val v = new DirectedGraphAsJUNG2(this)
+      val jf = v.jframe
+      jf.setVisible(true)
+    }
+
   }
 
+  class DirectedGraphAsJUNG2(ugf: DirectedGraph) // extends edu.uci.ics.jung.graph.UndirectedSparseGraph[ugf.type#V, ugf.type#E]
+  {
+    import edu.uci.ics.jung.graph.DirectedSparseGraph
+
+    val ug = ugf
+
+    var jungGraph = new DirectedSparseGraph[ug.type#V, ug.type#E]()
+    ug.getVertices().map(jungGraph.addVertex(_))
+    ug.getEdges().map(edge => jungGraph.addEdge(edge, edge.getSource(), edge.getDest()))
+
+    import javax.swing.JFrame
+    import java.awt.Dimension
+    import edu.uci.ics.jung.algorithms.layout.CircleLayout
+    import edu.uci.ics.jung.algorithms.layout.Layout
+    import edu.uci.ics.jung.graph.Graph
+    import edu.uci.ics.jung.graph.SparseMultigraph
+    import edu.uci.ics.jung.visualization.BasicVisualizationServer
+
+    def jframe(): JFrame = {
+
+      // see http://www.grotto-networking.com/JUNG/
+      // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf
+
+      val layout = new CircleLayout(jungGraph) // FRLayout
+      layout.setSize(new Dimension(300, 300))
+      val vv = new BasicVisualizationServer[ug.type#V, ug.type#E](layout)
+      vv.setPreferredSize(new Dimension(350, 350))
+
+      val jf = new JFrame("Simple Graph View")
+      jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+      jf.getContentPane().add(vv)
+      jf.pack()
+      jf
+
+    }
+
+  }
+  
+  
 }
