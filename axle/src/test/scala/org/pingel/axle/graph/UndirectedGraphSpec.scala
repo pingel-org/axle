@@ -23,16 +23,29 @@ class UndirectedGraphSpec extends Specification {
           def getLabel(): String = label
         }
 
-        def newEdge(v1: UDN, v2: UDN) = new UDE(v1, v2)
+        def newEdge(v1: UDN, v2: UDN) = {
+          val e = new UDE(v1, v2)
+          addEdge(e)
+          e
+        }
 
-        def newVertex(label: String) = new UDN(label)
+        def newVertex(label: String) = {
+          val v = new UDN(label)
+          addVertex(v)
+          v
+        }
       }
 
       val g = new UDG()
-      val a = g.addVertex(g.newVertex("a"))
-      val b = g.addVertex(g.newVertex("b"))
-      val c = g.addVertex(g.newVertex("c"))
+      
+      val a = g += "a"
+      val b = g += "b"
+      val c = g += "c"
 
+      g += (a, b)
+      g += (b, c)
+      g += (c, a)
+        
       g.size must be equalTo (3)
     }
   }

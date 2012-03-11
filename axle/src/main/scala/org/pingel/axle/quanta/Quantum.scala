@@ -44,7 +44,7 @@ trait Quantum extends DirectedGraph {
     def getDest() = to
     def getBD() = bd
 
-    override def toString() = from.toString() + " -> " + bd + " -> " + to.toString()
+    override def toString() = from.toString() + " * " + bd + " = " + to.toString()
   }
 
   val one = new BigDecimal("1")

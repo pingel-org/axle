@@ -32,10 +32,14 @@ class DirectedGraphSpec extends Specification {
       }
 
       val g = new DG()
-      val a = g.newVertex("a")
-      val b = g.newVertex("b")
-      val c = g.newVertex("c")
+      val a = g += "a"
+      val b = g += "b"
+      val c = g += "c"
 
+      g += a -> b
+      g += b -> c
+      g += c -> a
+        
       g.size must be equalTo (3)
     }
   }
