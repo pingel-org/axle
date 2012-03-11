@@ -14,7 +14,12 @@ crossScalaVersions := Seq("2.9.1") // "2.8.1"
 test in assembly := {}
 
 libraryDependencies ++= Seq(
-  "jung" % "jung" % "1.7.6",
+  // "jung" % "jung" % "1.7.6",
+  "net.sf.jung" % "jung-algorithms" % "2.0.1",
+  "net.sf.jung" % "jung-api" % "2.0.1",
+  "net.sf.jung" % "jung-graph-impl" % "2.0.1",
+  "net.sf.jung" % "jung-io" % "2.0.1",
+  "net.sf.jung" % "jung-visualization" % "2.0.1",
   "org" % "jblas" % "1.2.0",
   "org.specs2" %% "specs2" % "1.8.1" % "test"
 )

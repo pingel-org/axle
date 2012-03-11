@@ -216,74 +216,65 @@ package org.pingel.axle.graph {
     def eliminate(vs: List[V]): Unit = vs.map(eliminate(_))
 
     def draw(): Unit = {
-      val v = new UndirectedGraphVisualization(this)
+      val v = new UndirectedGraphAsJUNG2(this)
       val jf = v.jframe
       jf.setVisible(true)
     }
 
   }
 
-  class UndirectedGraphVisualization(ug: UndirectedGraph) {
+  class UndirectedGraphAsJUNG2(ugf: UndirectedGraph) // extends edu.uci.ics.jung.graph.UndirectedSparseGraph[ugf.type#V, ugf.type#E]
+  {
+    import edu.uci.ics.jung.graph.UndirectedSparseGraph
+
+    val ug = ugf
+
+    var jungGraph = new UndirectedSparseGraph[ug.type#V, ug.type#E]()
+
+    ug.getVertices().map(jungGraph.addVertex(_))
+
+    ug.getEdges().map(edge => {
+      val dbl = edge.getVertices()
+      val v1 = dbl._1
+      val v2 = dbl._2
+      jungGraph.addEdge(edge, v1, v2)
+    })
 
     import javax.swing.JFrame
-    import edu.uci.ics.jung.graph.Vertex
-    import edu.uci.ics.jung.graph.ArchetypeVertex
-    import edu.uci.ics.jung.graph.decorators.VertexStringer
-    import edu.uci.ics.jung.graph.impl.SimpleUndirectedSparseVertex
-    import edu.uci.ics.jung.graph.impl.UndirectedSparseEdge
-    import edu.uci.ics.jung.graph.impl.UndirectedSparseGraph
-    import edu.uci.ics.jung.visualization.FRLayout
-    import edu.uci.ics.jung.visualization.GraphDraw
-    import edu.uci.ics.jung.visualization.Layout
-    import edu.uci.ics.jung.visualization.PluggableRenderer
-
-    var jungGraph = new UndirectedSparseGraph()
-
-    class UndirectedVertexStringer(jung2pingel: Map[Vertex, ug.type#V]) extends VertexStringer {
-      // def getLabel(v: ArchetypeVertex) = jung2pingel(v.getEquivalentVertex(this)).getLabel()
-
-      def getLabel(av: ArchetypeVertex) = "" // TODO
-    }
+    import java.awt.Dimension
+    import edu.uci.ics.jung.algorithms.layout.CircleLayout
+    import edu.uci.ics.jung.algorithms.layout.Layout
+    import edu.uci.ics.jung.graph.Graph
+    import edu.uci.ics.jung.graph.SparseMultigraph
+    import edu.uci.ics.jung.visualization.BasicVisualizationServer
 
     def jframe(): JFrame = {
 
-      var axle2jung = Map[ug.type#V, Vertex]()
-      var jung2axle = Map[Vertex, ug.type#V]()
+      // see http://www.grotto-networking.com/JUNG/
+      // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf
 
-      ug.getVertices().map(pv => {
-        val vertex = new SimpleUndirectedSparseVertex()
-        jungGraph.addVertex(vertex)
-        axle2jung += pv -> vertex
-        jung2axle += vertex -> pv
-      })
+      // var pr = new PluggableRenderer()
+      // // pr.setVertexPaintFunction(new ModelVertexPaintFunction(m))
+      // // pr.setEdgeStrokeFunction(new ModelEdgeStrokeFunction(m))
+      // // pr.setEdgeShapeFunction(new EdgeShape.Line())
+      // pr.setVertexStringer(new UndirectedVertexStringer(jung2axle))
 
-      ug.getEdges().map(edge => {
-        val dbl = edge.getVertices()
-        val v1 = dbl._1
-        val v2 = dbl._2
-        val j1 = axle2jung(v1)
-        val j2 = axle2jung(v2)
-        val jedge = new UndirectedSparseEdge(j1, j2)
-        jungGraph.addEdge(jedge)
-      })
+      val layout = new CircleLayout(jungGraph) // FRLayout
+      layout.setSize(new Dimension(300, 300))
+      val vv = new BasicVisualizationServer[ug.type#V, ug.type#E](layout)
+      vv.setPreferredSize(new Dimension(350, 350))
+      //      var gd = new GraphDraw(jungGraph)
+      //      gd.getVisualizationViewer().setGraphLayout(layout)
+      //      gd.getVisualizationViewer().setRenderer(pr)
 
-      var pr = new PluggableRenderer()
-      // pr.setVertexPaintFunction(new ModelVertexPaintFunction(m))
-      // pr.setEdgeStrokeFunction(new ModelEdgeStrokeFunction(m))
-      // pr.setEdgeShapeFunction(new EdgeShape.Line())
-      pr.setVertexStringer(new UndirectedVertexStringer(jung2axle))
-
-      val layout = new FRLayout(jungGraph)
-
-      var jf = new JFrame()
-      var gd = new GraphDraw(jungGraph)
-      gd.getVisualizationViewer().setGraphLayout(layout)
-      gd.getVisualizationViewer().setRenderer(pr)
-      jf.getContentPane().add(gd)
+      val jf = new JFrame("Simple Graph View")
       jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+      jf.getContentPane().add(vv)
       jf.pack()
       jf
+
     }
+
   }
 
   class SimpleGraph() extends UndirectedGraph {
