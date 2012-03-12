@@ -2,7 +2,7 @@ package org.pingel.axle.quanta
 
 import org.pingel.axle.graph._
 import java.math.BigDecimal
-import java.math.RoundingMode.HALF_UP
+import scala.Math.{max, abs}
 
 /**
  * Quantum
@@ -37,6 +37,13 @@ trait Quantum extends DirectedGraph {
 
   implicit def toBD(s: String) = new BigDecimal(s)
 
+  def bdDivide(numerator: BigDecimal, denominator: BigDecimal) =
+    numerator.divide(
+      denominator,
+      max(max(numerator.precision, abs(numerator.scale)),
+          max(denominator.precision, abs(denominator.scale))),
+      java.math.RoundingMode.HALF_UP)
+
   case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
 
     def getVertices() = (from, to)
@@ -65,20 +72,20 @@ trait Quantum extends DirectedGraph {
 
     val quantum: Quantum = outer
 
-    def kilo() = quantity("1000", this, Some("kilo" + name.getOrElse("")), Some("K" + symbol.getOrElse(""))) // 3
-    def mega() = quantity("1000", kilo, Some("mega" + name.getOrElse("")), Some("M" + symbol.getOrElse(""))) // 6
-    def giga() = quantity("1000", mega, Some("giga" + name.getOrElse("")), Some("G" + symbol.getOrElse(""))) // 9
-    def tera() = quantity("1000", giga, Some("kilo" + name.getOrElse("")), Some("T" + symbol.getOrElse(""))) // 12
-    def peta() = quantity("1000", tera, Some("peta" + name.getOrElse("")), Some("P" + symbol.getOrElse(""))) // 15
-    def exa() = quantity("1000", peta, Some("exa" + name.getOrElse("")), Some("E" + symbol.getOrElse(""))) // 18
-    def zetta() = quantity("1000", exa, Some("zetta" + name.getOrElse("")), Some("Z" + symbol.getOrElse(""))) // 21
-    def yotta() = quantity("1000", zetta, Some("yotta" + name.getOrElse("")), Some("Y" + symbol.getOrElse(""))) // 24
+    def kilo() = quantity(one.scaleByPowerOfTen(3), this, Some("kilo" + name.getOrElse("")), Some("K" + symbol.getOrElse("")))
+    def mega() = quantity(one.scaleByPowerOfTen(6), this, Some("mega" + name.getOrElse("")), Some("M" + symbol.getOrElse("")))
+    def giga() = quantity(one.scaleByPowerOfTen(9), this, Some("giga" + name.getOrElse("")), Some("G" + symbol.getOrElse("")))
+    def tera() = quantity(one.scaleByPowerOfTen(12), this, Some("kilo" + name.getOrElse("")), Some("T" + symbol.getOrElse("")))
+    def peta() = quantity(one.scaleByPowerOfTen(15), this, Some("peta" + name.getOrElse("")), Some("P" + symbol.getOrElse("")))
+    def exa() = quantity(one.scaleByPowerOfTen(18), this, Some("exa" + name.getOrElse("")), Some("E" + symbol.getOrElse("")))
+    def zetta() = quantity(one.scaleByPowerOfTen(21), this, Some("zetta" + name.getOrElse("")), Some("Z" + symbol.getOrElse("")))
+    def yotta() = quantity(one.scaleByPowerOfTen(24), this, Some("yotta" + name.getOrElse("")), Some("Y" + symbol.getOrElse("")))
 
-    def deci() = quantity("0.1", this, Some("deci" + name.getOrElse("")), Some("d" + symbol.getOrElse(""))) // -1
-    def centi() = quantity("0.01", this, Some("centi" + name.getOrElse("")), Some("c" + symbol.getOrElse(""))) // -2
-    def milli() = quantity("0.001", this, Some("milli" + name.getOrElse("")), Some("m" + symbol.getOrElse(""))) // -3
-    def micro() = quantity("0.001", milli, Some("micro" + name.getOrElse("")), Some("μ" + symbol.getOrElse(""))) // -6
-    def nano() = quantity("0.001", micro, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse(""))) // -9
+    def deci() = quantity(one.scaleByPowerOfTen(-1), this, Some("deci" + name.getOrElse("")), Some("d" + symbol.getOrElse("")))
+    def centi() = quantity(one.scaleByPowerOfTen(-2), this, Some("centi" + name.getOrElse("")), Some("c" + symbol.getOrElse("")))
+    def milli() = quantity(one.scaleByPowerOfTen(-3), this, Some("milli" + name.getOrElse("")), Some("m" + symbol.getOrElse("")))
+    def micro() = quantity(one.scaleByPowerOfTen(-6), this, Some("micro" + name.getOrElse("")), Some("μ" + symbol.getOrElse("")))
+    def nano() = quantity(one.scaleByPowerOfTen(-9), this, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse("")))
 
     override def hashCode = 42 // TODO (was overflowing stack)
 
@@ -104,8 +111,8 @@ trait Quantum extends DirectedGraph {
       .getOrElse(quantity(bd, this))
 
     def /(bd: BigDecimal): UOM = conversion
-      .map(c => quantity(c.bd.divide(bd, scala.Math.max(c.bd.precision, bd.precision), HALF_UP), c.getSource))
-      .getOrElse(quantity(one.divide(bd, bd.precision, HALF_UP), this))
+      .map(c => quantity(bdDivide(c.bd, bd), c.getSource))
+      .getOrElse(quantity(bdDivide(one, bd), this))
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
       val resultBD = conversion.map(c =>
@@ -119,9 +126,9 @@ trait Quantum extends DirectedGraph {
 
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = {
       val resultBD = conversion.map(c =>
-        bottom.conversion.map(bc => c.bd.divide(bc.bd, scala.Math.max(c.bd.precision, bc.bd.precision))
+        bottom.conversion.map(bc => bdDivide(c.bd, bc.bd)
         ).getOrElse(c.bd)
-      ).getOrElse(bottom.conversion.map(bc => one.divide(bc.bd, bc.bd.precision, HALF_UP))
+      ).getOrElse(bottom.conversion.map(bc => bdDivide(one, bc.bd))
         .getOrElse(one)
       )
       resultQuantum.quantity(resultBD, resultQuantum.newUnitOfMeasurement(None))
@@ -172,7 +179,7 @@ trait Quantum extends DirectedGraph {
 
     val q = newUnitOfMeasurement(None, qname, qsymbol, qlink)
     addVertex(q)
-    val conversion1 = newEdge(q, unit, one.divide(magnitude, magnitude.precision, HALF_UP))
+    val conversion1 = newEdge(q, unit, bdDivide(one, magnitude))
     val conversion2 = newEdge(unit, q, magnitude)
     q.conversion = Some(conversion2)
     q
