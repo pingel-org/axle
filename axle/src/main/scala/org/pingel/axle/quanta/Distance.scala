@@ -34,6 +34,8 @@ class Distance extends Quantum {
   
   val kilometer = meter kilo
   val km = kilometer
+
+  link(mile, "1.609344", kilometer)
   
   val centimeter = meter centi
   val cm = centimeter
@@ -56,9 +58,9 @@ class Distance extends Quantum {
 
   val parsec = quantity("3.26", lightyear, Some("Parsec"), Some("pc"), Some("http://en.wikipedia.org/wiki/Parsec"))
 
-  val milkyWayDiameter = quantity("100000", lightyear, Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
+  val milkyWayDiameter = quantity(one.scaleByPowerOfTen(5), lightyear, Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
 
-  val toAndromeda = quantity("2600000", lightyear, Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
+  val toAndromeda = quantity("2.6E6", lightyear, Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
   
 }
 

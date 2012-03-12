@@ -170,6 +170,11 @@ trait Quantum extends DirectedGraph {
     linkOpt: Option[String] = None): UOM =
     newUnitOfMeasurement(None, nameOpt, symbolOpt, linkOpt)
 
+  def link(base: UOM, multiple: BigDecimal, result: UOM): Unit = {
+    newEdge(result, base, multiple)
+    newEdge(base, result, bdDivide(one, multiple))
+  }
+    
   def quantity(
     magnitude: BigDecimal,
     unit: UOM,
