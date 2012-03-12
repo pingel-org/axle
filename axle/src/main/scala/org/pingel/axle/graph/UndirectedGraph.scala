@@ -35,6 +35,7 @@ package org.pingel.axle.graph {
     class UndirectedGraphEdgeImpl(v1: V, v2: V)
       extends UndirectedGraphEdge {
       def getVertices() = (v1, v2)
+      def getLabel() = ""
     }
 
     var vertex2edges = mutable.Map[V, mutable.Set[E]]()
@@ -294,6 +295,7 @@ package org.pingel.axle.graph {
 
     class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex) extends UndirectedGraphEdge {
       def getVertices() = (v1, v2)
+      def getLabel() = ""
     }
 
     def newEdge(v1: SimpleVertex, v2: SimpleVertex) = {

@@ -6,18 +6,15 @@ package org.pingel.axle.graph {
   trait Graph {
 
     trait GraphVertex {
-     
-      // type E <: GraphEdge
+      def getLabel(): String
     }
 
     trait GraphEdge {
-      
-      // type V <: GraphVertex
-      
+      def getLabel(): String
     }
 
     type V <: GraphVertex
-    
+
     type E <: GraphEdge
 
     var vertices = Set[V]()
@@ -32,11 +29,11 @@ package org.pingel.axle.graph {
     def newEdge(v1: V, v2: V): E
 
     def +=(vs: (V, V)): E = newEdge(vs._1, vs._2)
-    
+
     def newVertex(name: String): V
 
     def +=(name: String): V = newVertex(name)
-    
+
   }
 
 }

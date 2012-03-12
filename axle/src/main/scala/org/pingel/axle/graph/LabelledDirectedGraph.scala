@@ -21,7 +21,7 @@ package org.pingel.axle.graph {
   class LabelledDirectedGraphImpl extends LabelledDirectedGraph {
 
     class LabelledDirectedVertexImpl(label: String) extends LabelledDirectedVertex {
-
+    	def getLabel() = label
     }
 
     def newVertex(name: String) = new LabelledDirectedVertexImpl(name)

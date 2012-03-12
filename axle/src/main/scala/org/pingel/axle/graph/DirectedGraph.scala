@@ -9,26 +9,24 @@ package org.pingel.axle.graph {
     type E <: DirectedGraphEdge
 
     trait DirectedGraphVertex extends GraphVertex {
-      // type E <: DirectedGraphEdge
+
     }
 
     trait DirectedGraphEdge extends GraphEdge {
-
-      // type V <: DirectedGraphVertex
 
       def getSource(): V
       def getDest(): V
     }
 
-    class DirectedGraphEdgeImpl(source: V, dest: V) extends DirectedGraphEdge {
-      def getSource() = source
-      def getDest() = dest
-    }
+//    class DirectedGraphEdgeImpl(source: V, dest: V) extends DirectedGraphEdge {
+//      def getSource() = source
+//      def getDest() = dest
+//    }
 
     var vertex2outedges = Map[V, mutable.Set[E]]()
     var vertex2inedges = Map[V, mutable.Set[E]]()
 
-    def getEdge(from: V, to: V): Option[E] = vertex2outedges(from).find(e => e.getDest == to)
+    def getEdge(from: V, to: V): Option[E] = vertex2outedges(from).find(_.getDest == to)
 
     def addEdge(edge: E): E = {
 
@@ -232,17 +230,17 @@ package org.pingel.axle.graph {
     import edu.uci.ics.jung.algorithms.layout.Layout
     import edu.uci.ics.jung.graph.Graph
     import edu.uci.ics.jung.graph.SparseGraph
-    import edu.uci.ics.jung.graph.SparseMultigraph
+    // import edu.uci.ics.jung.graph.SparseMultigraph
     // import edu.uci.ics.jung.visualization.BasicVisualizationServer
     import edu.uci.ics.jung.visualization.VisualizationViewer
     // import edu.uci.ics.jung.visualization.control.CrossoverScalingControl
     // import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse
     import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
     import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
-    import edu.uci.ics.jung.visualization.control.ModalGraphMouse
+    // import edu.uci.ics.jung.visualization.control.ModalGraphMouse
     // import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin
     import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
-    import edu.uci.ics.jung.visualization.decorators.ToStringLabeller
+    // import edu.uci.ics.jung.visualization.decorators.ToStringLabeller
     import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 
     import org.apache.commons.collections15.Transformer
@@ -276,11 +274,11 @@ package org.pingel.axle.graph {
       }
 
       val vertexLabelTransformer = new Transformer[ug.type#V, String]() {
-        def transform(vertex: ug.type#V) = "bar"
+        def transform(vertex: ug.type#V) = vertex.getLabel()
       }
-      
+
       val edgeLabelTransformer = new Transformer[ug.type#E, String]() {
-        def transform(edge: ug.type#E) = "foo"
+        def transform(edge: ug.type#E) = edge.getLabel()
       }
 
       vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)

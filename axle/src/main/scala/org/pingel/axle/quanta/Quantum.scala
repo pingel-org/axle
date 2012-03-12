@@ -43,6 +43,7 @@ trait Quantum extends DirectedGraph {
     def getSource() = from
     def getDest() = to
     def getBD() = bd
+    def getLabel() = bd.toString
 
     override def toString() = from.toString() + " * " + bd + " = " + to.toString()
   }
@@ -58,7 +59,7 @@ trait Quantum extends DirectedGraph {
 
     self: UOM =>
 
-    def getLabel() = name
+    def getLabel() = name.getOrElse("")
     def getSymbol() = symbol
     def getLink() = link
 
