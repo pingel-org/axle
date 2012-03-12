@@ -17,6 +17,7 @@ class UndirectedGraphSpec extends Specification {
         
         class UDE(v1: UDN, v2: UDN) extends UndirectedGraphEdge {
           def getVertices() = (v1, v2)
+          def getLabel() = ""
         }
 
         class UDN(label: String) extends UndirectedGraphVertex {

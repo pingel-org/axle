@@ -20,6 +20,7 @@ class DirectedGraphSpec extends Specification {
           def getVertices() = (v1, v2)
           def getSource() = v1
           def getDest() = v2
+          def getLabel() = ""
         }
 
         class DN(label: String) extends DirectedGraphVertex {
