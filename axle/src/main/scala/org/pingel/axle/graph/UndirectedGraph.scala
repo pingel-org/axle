@@ -93,7 +93,7 @@ package org.pingel.axle.graph {
       true
     }
 
-    def getNumEdgesToForceClique(vs: Set[V]) = {
+    def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
 
       var N = mutable.ArrayBuffer[V]()
       N ++= vs
@@ -105,7 +105,7 @@ package org.pingel.axle.graph {
         for (j <- (i + 1) until N.size) {
           val vj = N(j)
           if (!areNeighbors(vi, vj)) {
-            addEdge(newEdge(vi, vj))
+            addEdge(newEdge(vi, vj, payload(vi, vj)))
             result += 1
           }
         }
@@ -114,7 +114,7 @@ package org.pingel.axle.graph {
       result
     }
 
-    def forceClique(vs: Set[V]) {
+    def forceClique(vs: Set[V], payload: (V, V) => EP) {
 
       var vList = mutable.ArrayBuffer[V]()
       vList ++= vs
@@ -124,14 +124,14 @@ package org.pingel.axle.graph {
         for (j <- (i + 1) until vList.size) {
           val vj = vList(j)
           if (!areNeighbors(vi, vj)) {
-            addEdge(newEdge(vi, vj))
+            addEdge(newEdge(vi, vj, payload(vi, vj)))
           }
         }
       }
 
     }
 
-    def vertexWithFewestEdgesToEliminateAmong(among: Set[V]): Option[V] = {
+    def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): Option[V] = {
 
       // assert: among is a subset of vertices
 
@@ -139,7 +139,7 @@ package org.pingel.axle.graph {
       var minSoFar = Integer.MAX_VALUE
 
       for (v <- among) {
-        val x = getNumEdgesToForceClique(getNeighbors(v))
+        val x = getNumEdgesToForceClique(getNeighbors(v), payload)
         if (result == None) {
           result = Some(v)
           minSoFar = x
@@ -197,7 +197,7 @@ package org.pingel.axle.graph {
       v => getNeighbors(v).size == 1 && !v.equals(r)
     })
 
-    def eliminate(v: V) = {
+    def eliminate(v: V, payload: (V, V) => EP) = {
       // "decompositions" page 3 (Definition 3, Section 9.3)
       // turn the neighbors of v into a clique
 
@@ -210,11 +210,11 @@ package org.pingel.axle.graph {
         edges -= e
       }
 
-      forceClique(vs.asInstanceOf[Set[V]])
+      forceClique(vs.asInstanceOf[Set[V]], payload)
     }
 
     // TODO there is probably a more efficient way to do this:
-    def eliminate(vs: List[V]): Unit = vs.map(eliminate(_))
+    def eliminate(vs: List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
 
     def draw(): Unit = {
       val v = new UndirectedGraphAsJUNG2(this)
@@ -243,37 +243,69 @@ package org.pingel.axle.graph {
 
     import javax.swing.JFrame
     import java.awt.Dimension
-    import edu.uci.ics.jung.algorithms.layout.CircleLayout
+    import java.awt.BasicStroke
+    import java.awt.Color
+    import java.awt.Paint
+    import java.awt.Stroke
+    import java.awt.event.MouseEvent
+    import edu.uci.ics.jung.algorithms.layout.FRLayout
     import edu.uci.ics.jung.algorithms.layout.Layout
     import edu.uci.ics.jung.graph.Graph
-    import edu.uci.ics.jung.graph.SparseMultigraph
-    import edu.uci.ics.jung.visualization.BasicVisualizationServer
+    import edu.uci.ics.jung.graph.SparseGraph
+    import edu.uci.ics.jung.visualization.VisualizationViewer
+    import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
+    import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
+    import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
+    import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
+    import org.apache.commons.collections15.Transformer
+
+    val width = 700
+    val height = 700
+    val border = 50
 
     def jframe(): JFrame = {
 
-      // see http://www.grotto-networking.com/JUNG/
-      // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf
+      val layout = new FRLayout(jungGraph)
+      layout.setSize(new Dimension(width, height))
+      val vv = new VisualizationViewer[ug.type#V, ug.type#E](layout) // interactive
+      vv.setPreferredSize(new Dimension(width + border, height + border))
 
-      // var pr = new PluggableRenderer()
-      // // pr.setVertexPaintFunction(new ModelVertexPaintFunction(m))
-      // // pr.setEdgeStrokeFunction(new ModelEdgeStrokeFunction(m))
-      // // pr.setEdgeShapeFunction(new EdgeShape.Line())
-      // pr.setVertexStringer(new UndirectedVertexStringer(jung2axle))
+      val vertexPaint = new Transformer[ug.type#V, Paint]() {
+        def transform(i: ug.type#V): Paint = Color.GREEN
+      }
 
-      val layout = new CircleLayout(jungGraph) // FRLayout
-      layout.setSize(new Dimension(300, 300))
-      val vv = new BasicVisualizationServer[ug.type#V, ug.type#E](layout)
-      vv.setPreferredSize(new Dimension(350, 350))
-      //      var gd = new GraphDraw(jungGraph)
-      //      gd.getVisualizationViewer().setGraphLayout(layout)
-      //      gd.getVisualizationViewer().setRenderer(pr)
+      val dash = List(10.0f).toArray
 
-      val jf = new JFrame("Simple Graph View")
-      jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-      jf.getContentPane().add(vv)
-      jf.pack()
-      jf
+      val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
+      val edgeStrokeTransformer = new Transformer[ug.type#E, Stroke]() {
+        def transform(edge: ug.type#E) = edgeStroke
+      }
+
+      val vertexLabelTransformer = new Transformer[ug.type#V, String]() {
+        def transform(vertex: ug.type#V) = vertex.getLabel()
+      }
+
+      val edgeLabelTransformer = new Transformer[ug.type#E, String]() {
+        def transform(edge: ug.type#E) = edge.getLabel()
+      }
+
+      vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
+      vv.getRenderContext().setEdgeStrokeTransformer(edgeStrokeTransformer)
+      vv.getRenderContext().setVertexLabelTransformer(vertexLabelTransformer)
+      vv.getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer)
+      vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR)
+
+      val gm = new PluggableGraphMouse()
+      gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1))
+      gm.add(new PickingGraphMousePlugin())
+      vv.setGraphMouse(gm)
+
+      val frame = new JFrame("graph name")
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+      frame.getContentPane().add(vv)
+      frame.pack()
+      frame
     }
 
   }
@@ -281,10 +313,12 @@ package org.pingel.axle.graph {
   class SimpleGraph() extends UndirectedGraph {
 
     type V = SimpleVertex
+    type VP = String
     type E = SimpleEdge
+    type EP = String
 
-    class SimpleVertex(label: String) extends UndirectedGraphVertex {
-      def getLabel() = label
+    class SimpleVertex(vp: String) extends UndirectedGraphVertex {
+      def getLabel() = vp
     }
 
     def newVertex(name: String) = {
@@ -293,13 +327,13 @@ package org.pingel.axle.graph {
       v
     }
 
-    class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex) extends UndirectedGraphEdge {
+    class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex, ep: String) extends UndirectedGraphEdge {
       def getVertices() = (v1, v2)
-      def getLabel() = ""
+      def getLabel() = ep
     }
 
-    def newEdge(v1: SimpleVertex, v2: SimpleVertex) = {
-      val result = new SimpleEdge(v1, v2)
+    def newEdge(v1: SimpleVertex, v2: SimpleVertex, ep: String) = {
+      val result = new SimpleEdge(v1, v2, ep)
       addEdge(result)
       result
     }

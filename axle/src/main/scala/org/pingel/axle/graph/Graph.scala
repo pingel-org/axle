@@ -14,9 +14,11 @@ package org.pingel.axle.graph {
     }
 
     type V <: GraphVertex
+    type VP // Vertex Payload
 
     type E <: GraphEdge
-
+    type EP // Edge Payload
+    
     var vertices = Set[V]()
     var edges = Set[E]()
 
@@ -26,13 +28,13 @@ package org.pingel.axle.graph {
 
     def getVertices() = vertices
 
-    def newEdge(v1: V, v2: V): E
+    def newEdge(v1: V, v2: V, ep: EP): E
 
-    def +=(vs: (V, V)): E = newEdge(vs._1, vs._2)
+    def +=(vs: (V, V), ep: EP): E = newEdge(vs._1, vs._2, ep)
 
-    def newVertex(name: String): V
+    def newVertex(vp: VP): V
 
-    def +=(name: String): V = newVertex(name)
+    def +=(vp: VP): V = newVertex(vp)
 
   }
 

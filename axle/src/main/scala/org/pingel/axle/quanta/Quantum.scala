@@ -152,8 +152,9 @@ trait Quantum extends DirectedGraph {
   }
 
   type V = UOM
-
+  type VP = String
   type E = Conversion
+  type EP = BigDecimal
 
   def newUnitOfMeasurement(
     conversion: Option[Conversion] = None,
@@ -190,15 +191,10 @@ trait Quantum extends DirectedGraph {
     q
   }
 
-  def newVertex(label: String): UOM = newUnitOfMeasurement(None, Some(label), None, None)
+  def newVertex(vp: String): UOM = newUnitOfMeasurement(None, Some(vp), None, None)
 
-  def newEdge(source: UOM, dest: UOM): Conversion = {
-    val result: Conversion = null
-    result
-  }
-
-  def newEdge(source: UOM, dest: UOM, magnitude: BigDecimal): Conversion = {
-    val edge = new Conversion(source, dest, magnitude)
+  def newEdge(source: UOM, dest: UOM, ep: BigDecimal): Conversion = {
+    val edge = new Conversion(source, dest, ep)
     addEdge(edge)
     edge
   }

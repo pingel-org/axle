@@ -207,15 +207,15 @@ package org.pingel.axle.graph {
 
   }
 
-  class DirectedGraphAsJUNG2(ugf: DirectedGraph) // extends edu.uci.ics.jung.graph.UndirectedSparseGraph[ugf.type#V, ugf.type#E]
+  class DirectedGraphAsJUNG2(dgf: DirectedGraph) // extends edu.uci.ics.jung.graph.UndirectedSparseGraph[ugf.type#V, ugf.type#E]
   {
     import edu.uci.ics.jung.graph.DirectedSparseGraph
 
-    val ug = ugf
+    val dg = dgf
 
-    var jungGraph = new DirectedSparseGraph[ug.type#V, ug.type#E]()
-    ug.getVertices().map(jungGraph.addVertex(_))
-    ug.getEdges().map(edge => jungGraph.addEdge(edge, edge.getSource(), edge.getDest()))
+    var jungGraph = new DirectedSparseGraph[dg.type#V, dg.type#E]()
+    dg.getVertices().map(jungGraph.addVertex(_))
+    dg.getEdges().map(edge => jungGraph.addEdge(edge, edge.getSource(), edge.getDest()))
 
     import javax.swing.JFrame
     import java.awt.Dimension
@@ -258,27 +258,27 @@ package org.pingel.axle.graph {
       val layout = new FRLayout(jungGraph)
       layout.setSize(new Dimension(width, height))
       // val vv = new BasicVisualizationServer[ug.type#V, ug.type#E](layout) // non-interactive
-      val vv = new VisualizationViewer[ug.type#V, ug.type#E](layout) // interactive
+      val vv = new VisualizationViewer[dg.type#V, dg.type#E](layout) // interactive
       vv.setPreferredSize(new Dimension(width + border, height + border))
 
-      val vertexPaint = new Transformer[ug.type#V, Paint]() {
-        def transform(i: ug.type#V): Paint = Color.GREEN
+      val vertexPaint = new Transformer[dg.type#V, Paint]() {
+        def transform(i: dg.type#V): Paint = Color.GREEN
       }
 
       val dash = List(10.0f).toArray
 
       val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
-      val edgeStrokeTransformer = new Transformer[ug.type#E, Stroke]() {
-        def transform(edge: ug.type#E) = edgeStroke
+      val edgeStrokeTransformer = new Transformer[dg.type#E, Stroke]() {
+        def transform(edge: dg.type#E) = edgeStroke
       }
 
-      val vertexLabelTransformer = new Transformer[ug.type#V, String]() {
-        def transform(vertex: ug.type#V) = vertex.getLabel()
+      val vertexLabelTransformer = new Transformer[dg.type#V, String]() {
+        def transform(vertex: dg.type#V) = vertex.getLabel()
       }
 
-      val edgeLabelTransformer = new Transformer[ug.type#E, String]() {
-        def transform(edge: ug.type#E) = edge.getLabel()
+      val edgeLabelTransformer = new Transformer[dg.type#E, String]() {
+        def transform(edge: dg.type#E) = edge.getLabel()
       }
 
       vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
@@ -303,5 +303,36 @@ package org.pingel.axle.graph {
     }
 
   }
+  
+  class SimpleDirectedGraph() extends DirectedGraph {
+
+    type V = SimpleDirectedVertex
+    type VP = String
+    type E = SimpleDirectedEdge
+    type EP = String
+
+    class SimpleDirectedVertex(label: String) extends DirectedGraphVertex {
+      def getLabel() = label
+    }
+
+    def newVertex(vp: String) = {
+      val v = new SimpleDirectedVertex(vp)
+      addVertex(v)
+      v
+    }
+
+    class SimpleDirectedEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: EP) extends DirectedGraphEdge {
+      def getSource() = v1
+      def getDest() = v2
+      def getLabel() = ""
+    }
+
+    def newEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: EP) = {
+      val result = new SimpleDirectedEdge(v1, v2, ep)
+      addEdge(result)
+      result
+    }
+  }
+  
 
 }
