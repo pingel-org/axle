@@ -8,26 +8,23 @@ class LogisticRegression {
   import Math.log
   import Math.exp
 
-  def h(xi: Matrix, θ: Matrix) = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
+  def h(xi: Matrix[Double], θ: Matrix[Double]): Double = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
 
   // h is essentially P(y=1 | X;θ)
 
-  def cost(xi: Matrix, θ: Matrix, yi: Boolean) = -1 * log(yi match {
+  def cost(xi: Matrix[Double], θ: Matrix[Double], yi: Boolean) = -1 * log(yi match {
     case true => h(θ, xi)
     case false => 1 - h(θ, xi)
   })
 
-  def predictedY(xi: Matrix, θ: Matrix) = h(xi, θ) >= 0.5
-/*
-  // TODO: y is Boolean
-  def Jθ(X: Matrix, θ: Matrix, y: Matrix) =
+  def predictedY(xi: Matrix[Double], θ: Matrix[Double]) = h(xi, θ) >= 0.5
+
+  def Jθ(X: Matrix[Double], θ: Matrix[Double], y: Matrix[Boolean]) =
     (0 until X.rows).foldLeft(0.0)((r: Double, i: Int) => {
-      val xi = X.getRow(i)
-      val yi = y.getRow(i)
-      r + cost(xi, θ, yi.scalar)
+      r + cost(X.getRow(i), θ, y.getRow(i).scalar)
     }) / X.rows
 
-  def dθ(X: Matrix, y: Matrix, θ: Matrix) = {
+  def dθ(X: Matrix[Double], y: Matrix[Boolean], θ: Matrix[Double]) = {
     var result = zeros(θ.rows, 1)
     (0 until θ.rows).map(j =>
       result.setValueAt(j, 0,
@@ -35,7 +32,7 @@ class LogisticRegression {
           (r: Double, i: Int) => {
             val xi = X.getRow(i)
             val xij = xi.getColumn(j).scalar
-            val yi: Boolean = y.getRow(i).scalar
+            val yi: Double = y.getRow(i).scalar match { case true => 1.0 case false => 0.0 }
             r + (h(xi, θ) - yi) * xij
           })))
     result
@@ -43,8 +40,7 @@ class LogisticRegression {
 
   // objective: minimize (over θ) the value of Jθ
 
-  def gradientDescent(X: Matrix, y: Matrix, θ: Matrix, α: Double, iterations: Int) =
-    (0 until iterations).foldLeft(θ)((θi: Matrix, i: Int) => θi - (dθ(X, y, θi) * α))
-*/
+  def gradientDescent(X: Matrix[Double], y: Matrix[Boolean], θ: Matrix[Double], α: Double, iterations: Int) =
+    (0 until iterations).foldLeft(θ)((θi: Matrix[Double], i: Int) => θi - (dθ(X, y, θi) * α))
 
 }

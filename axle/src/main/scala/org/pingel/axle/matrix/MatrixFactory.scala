@@ -1,173 +1,172 @@
 package org.pingel.axle.matrix
 
+trait Matrix[E] {
+
+  def rows: Int
+  def columns: Int
+  def length: Int
+
+  def valueAt(i: Int, j: Int): E
+  def setValueAt(i: Int, j: Int, v: E): Unit
+
+  def getColumn(j: Int): Matrix[E]
+  def getRow(i: Int): Matrix[E]
+
+  def isEmpty(): Boolean
+  def isRowVector(): Boolean
+  def isColumnVector(): Boolean
+  def isVector(): Boolean
+  def isSquare(): Boolean
+  def isScalar(): Boolean
+  // resize
+  // reshape
+
+  def dup(): Matrix[E]
+  def negate(): Matrix[E]
+  def transpose(): Matrix[E]
+  def diag(): Matrix[E]
+  def invert(): Matrix[E]
+  def ceil(): Matrix[E]
+  def floor(): Matrix[E]
+  def log(): Matrix[E]
+  def log10(): Matrix[E]
+  def fullSVD(): (Matrix[E], Matrix[E], Matrix[E]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
+  // def truth(): M[Boolean]
+
+  def pow(p: Double): Matrix[E]
+
+  def addScalar(x: E): Matrix[E]
+  def subtractScalar(x: E): Matrix[E]
+  def multiplyScalar(x: E): Matrix[E]
+  def divideScalar(x: E): Matrix[E]
+  def mulRow(i: Int, x: E): Matrix[E]
+  def mulColumn(i: Int, x: E): Matrix[E]
+
+  // Operations on pairs of matrices
+
+  def addMatrix(other: Matrix[E]): Matrix[E]
+  def subtractMatrix(other: Matrix[E]): Matrix[E]
+  def multiplyMatrix(other: Matrix[E]): Matrix[E]
+  def concatenateHorizontally(right: Matrix[E]): Matrix[E]
+  def concatenateVertically(under: Matrix[E]): Matrix[E]
+  def solve(B: Matrix[E]): Matrix[E] // returns X, where this == A and A x X = B
+
+  // Operations on a matrix and a column/row vector
+
+  def addRowVector(row: Matrix[E]): Matrix[E]
+  def addColumnVector(column: Matrix[E]): Matrix[E]
+  def subRowVector(row: Matrix[E]): Matrix[E]
+  def subColumnVector(column: Matrix[E]): Matrix[E]
+
+  // Operations on pair of matrices that return M[Boolean]
+
+  def lt(other: Matrix[E]): Matrix[Boolean]
+  def le(other: Matrix[E]): Matrix[Boolean]
+  def gt(other: Matrix[E]): Matrix[Boolean]
+  def ge(other: Matrix[E]): Matrix[Boolean]
+  def eq(other: Matrix[E]): Matrix[Boolean]
+  def ne(other: Matrix[E]): Matrix[Boolean]
+
+  def and(other: Matrix[E]): Matrix[Boolean]
+  def or(other: Matrix[E]): Matrix[Boolean]
+  def xor(other: Matrix[E]): Matrix[Boolean]
+  def not(): Matrix[Boolean]
+
+  // various mins and maxs
+
+  def max(): E
+  def argmax(): (Int, Int)
+  def min(): E
+  def argmin(): (Int, Int)
+  def columnMins(): Matrix[E]
+  // def columnArgmins
+  def columnMaxs(): Matrix[E]
+  // def columnArgmaxs
+
+  // In-place versions
+
+  def ceili(): Unit
+  def floori(): Unit
+  def powi(p: Double): Unit
+
+  def addi(x: E): Unit
+  def subtracti(x: E): Unit
+  def multiplyi(x: E): Unit
+  def dividei(x: E): Unit
+
+  def addMatrixi(other: Matrix[E]): Unit
+  def subtractMatrixi(other: Matrix[E]): Unit
+  def addiRowVector(row: Matrix[E]): Unit
+  def addiColumnVector(column: Matrix[E]): Unit
+  def subiRowVector(row: Matrix[E]): Unit
+  def subiColumnVector(column: Matrix[E]): Unit
+
+  // aliases
+
+  def t() = transpose()
+  def tr() = transpose()
+  def inv() = invert()
+
+  def scalar() = {
+    assert(isScalar)
+    valueAt(0, 0)
+  }
+
+  def +(x: E) = addScalar(x)
+  def +=(x: E) = addi(x)
+  def +(other: Matrix[E]) = addMatrix(other)
+  def +=(other: Matrix[E]) = addMatrixi(other)
+
+  def -(x: E) = subtractScalar(x)
+  def -=(x: E) = subtracti(x)
+  def -(other: Matrix[E]) = subtractMatrix(other)
+  def -=(other: Matrix[E]) = subtractMatrixi(other)
+
+  def *(x: E) = multiplyScalar(x)
+  def *=(x: E) = multiplyi(x)
+  def ⨯(other: Matrix[E]) = multiplyMatrix(other)
+  def mm(other: Matrix[E]) = multiplyMatrix(other)
+
+  def /(x: E) = divideScalar(x)
+  def /=(x: E) = dividei(x)
+
+  def +|+(right: Matrix[E]) = concatenateHorizontally(right)
+  def +/+(under: Matrix[E]) = concatenateVertically(under)
+
+  def <(other: Matrix[E]) = lt(other)
+  def <=(other: Matrix[E]) = le(other)
+  def ≤(other: Matrix[E]) = le(other)
+  def >(other: Matrix[E]) = gt(other)
+  def >=(other: Matrix[E]) = ge(other)
+  def ≥(other: Matrix[E]) = ge(other)
+  def ==(other: Matrix[E]) = eq(other)
+  def !=(other: Matrix[E]) = ne(other)
+  def ≠(other: Matrix[E]) = ne(other)
+  def &(other: Matrix[E]) = and(other)
+  def ∧(other: Matrix[E]) = and(other)
+  def |(other: Matrix[E]) = or(other)
+  def ∨(other: Matrix[E]) = or(other)
+  def ⊕(other: Matrix[E]) = xor(other)
+  def ⊻(other: Matrix[E]) = xor(other)
+  def !() = not()
+  def ~() = not()
+  def ¬() = not()
+
+}
+
 abstract class MatrixFactory {
 
   /**
    * Type Parameters:
-   * 
+   *
    * T element type
    * S storage type
-   * M subtype of Matrix[T] that is backed by storage S
+   * Matrix subtype of MatrixIntf that is backed by storage S and has elements of type T
    */
-  
+
   type T
   type S
-  type Matrix <: MatrixIntf[T]
+  type M <: Matrix[T]
 
-  trait MatrixIntf[T] {
-
-    def rows: Int
-    def columns: Int
-    def length: Int
-
-    def valueAt(i: Int, j: Int): T
-    def setValueAt(i: Int, j: Int, v: T): Unit
-
-    def getColumn(j: Int): Matrix
-    def getRow(i: Int): Matrix
-
-    def isEmpty(): Boolean
-    def isRowVector(): Boolean
-    def isColumnVector(): Boolean
-    def isVector(): Boolean
-    def isSquare(): Boolean
-    def isScalar(): Boolean
-    // resize
-    // reshape
-
-    def dup(): Matrix
-    def negate(): Matrix
-    def transpose(): Matrix
-    def invert(): Matrix
-    def ceil(): Matrix
-    def floor(): Matrix
-    def log(): Matrix
-    def log10(): Matrix
-    def fullSVD(): (Matrix, Matrix, Matrix) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
-    // def truth(): M[Boolean]
-
-    def pow(p: Double): Matrix
-    
-    def addScalar(x: T): Matrix
-    def subtractScalar(x: T): Matrix
-    def multiplyScalar(x: T): Matrix
-    def divideScalar(x: T): Matrix
-    def mulRow(i: Int, x: T): Matrix
-    def mulColumn(i: Int, x: T): Matrix
-
-    // Operations on pairs of matrices
-
-    def addMatrix(other: Matrix): Matrix
-    def subtractMatrix(other: Matrix): Matrix
-    def multiplyMatrix(other: Matrix): Matrix
-    def concatenateHorizontally(right: Matrix): Matrix
-    def concatenateVertically(under: Matrix): Matrix
-    def solve(B: Matrix): Matrix // returns X, where this == A and A x X = B
-
-    // Operations on a matrix and a column/row vector
-    
-    def addRowVector(row: Matrix): Matrix
-    def addColumnVector(column: Matrix): Matrix
-    def subRowVector(row: Matrix): Matrix
-    def subColumnVector(column: Matrix): Matrix
-
-    // Operations on pair of matrices that return M[Boolean]
-
-    // TODO: get the return type right
-    def lt(other: Matrix): Matrix
-    def le(other: Matrix): Matrix
-    def gt(other: Matrix): Matrix
-    def ge(other: Matrix): Matrix
-    def eq(other: Matrix): Matrix
-    def ne(other: Matrix): Matrix
-    
-    def and(other: Matrix): Matrix
-    def or(other: Matrix): Matrix
-    def xor(other: Matrix): Matrix
-    def not(): Matrix
-
-    // various mins and maxs
-    
-    def max(): T
-    def argmax(): (Int, Int)
-    def min(): T
-    def argmin(): (Int, Int)
-    def columnMins(): Matrix
-    // def columnArgmins
-    def columnMaxs(): Matrix
-    // def columnArgmaxs
-
-    // In-place versions
-    
-    def ceili(): Unit
-    def floori(): Unit
-    def powi(p: Double): Unit
-    
-    def addi(x: T): Unit
-    def subtracti(x: T): Unit
-    def multiplyi(x: T): Unit
-    def dividei(x: T): Unit
-
-    def addMatrixi(other: Matrix): Unit
-    def subtractMatrixi(other: Matrix): Unit
-    def addiRowVector(row: Matrix): Unit
-    def addiColumnVector(column: Matrix): Unit
-    def subiRowVector(row: Matrix): Unit
-    def subiColumnVector(column: Matrix): Unit
-
-    
-    // aliases
-
-    def t() = transpose()
-    def tr() = transpose()
-    def inv() = invert()
-
-    def scalar() = {
-      assert(isScalar)
-      valueAt(0, 0)
-    }
-    
-    def +(x: T) = addScalar(x)
-    def +=(x: T) = addi(x)
-    def +(other: Matrix) = addMatrix(other)
-    def +=(other: Matrix) = addMatrixi(other)
-    
-    def -(x: T) = subtractScalar(x)
-    def -=(x: T) = subtracti(x)
-    def -(other: Matrix) = subtractMatrix(other)
-    def -=(other: Matrix) = subtractMatrixi(other)
-    
-    def *(x: T) = multiplyScalar(x)
-    def *=(x: T) = multiplyi(x)
-    def ⨯(other: Matrix) = multiplyMatrix(other)
-    def mm(other: Matrix) = multiplyMatrix(other)
-    
-    def /(x: T) = divideScalar(x)
-    def /=(x: T) = dividei(x)
-
-    def +|+ (right: Matrix) = concatenateHorizontally(right)
-    def +/+ (under: Matrix) = concatenateVertically(under)
-
-    def <(other: Matrix) = lt(other)
-    def <=(other: Matrix) = le(other)
-    def ≤(other: Matrix) = le(other)
-    def >(other: Matrix) = gt(other)
-    def >=(other: Matrix) = ge(other)
-    def ≥(other: Matrix) = ge(other)
-    def ==(other: Matrix) = eq(other)
-    def !=(other: Matrix) = ne(other)
-    def ≠(other: Matrix) = ne(other)
-    def &(other: Matrix) = and(other)
-    def ∧(other: Matrix) = and(other)
-    def |(other: Matrix) = or(other)
-    def ∨(other: Matrix) = or(other)
-    def ⊕(other: Matrix) = xor(other)
-    def ⊻(other: Matrix) = xor(other)
-    def !() = not()
-    def ~() = not()
-    def ¬() = not()
-
-  }
-
-  protected def pure(s: S): Matrix
+  protected def pure(s: S): M
 }
