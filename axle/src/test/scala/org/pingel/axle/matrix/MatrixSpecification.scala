@@ -9,12 +9,12 @@ class MatrixSpecification extends Specification {
 
       import org.pingel.axle.matrix.JblasMatrixFactory._
 
-      val z: JblasMatrix[Double] = zeros[Double](3, 4, double2double)
-      val o = ones[Double](2, 3, double2double)
-      val r = rand[Double](1, 2, double2double)
-      val rn = randn[Double](2, 2, double2double)
+      val z: JblasMatrix[Double] = zeros[Double](3, 4)
+      val o = ones[Double](2, 3)
+      val r = rand[Double](1, 2)
+      val rn = randn[Double](2, 2)
 
-      val dm = rand[Double](3, 3, double2double)
+      val dm = rand[Double](3, 3)
       val c2 = dm.getColumn(2)
       val r2 = dm.getRow(2)
 
@@ -27,9 +27,9 @@ class MatrixSpecification extends Specification {
 
       import org.pingel.axle.matrix.JblasMatrixFactory._
 
-      val z: JblasMatrix[Int] = zeros[Int](1, 3, double2int)
-      val o = ones[Int](2, 2, double2int)
-      val e = eye[Int](3, double2int)
+      val z: JblasMatrix[Int] = zeros[Int](1, 3)
+      val o = ones[Int](2, 2)
+      val e = eye[Int](3)
 
       1 must be equalTo (1)
     }
@@ -40,9 +40,9 @@ class MatrixSpecification extends Specification {
 
       import org.pingel.axle.matrix.JblasMatrixFactory._
 
-      val f: JblasMatrix[Boolean] = zeros[Boolean](2, 3, double2boolean) // TODO: "falses"
-      val t = ones[Boolean](3, 2, double2boolean) // TODO: "trues"
-      val e = eye[Boolean](4, double2boolean)
+      val f: JblasMatrix[Boolean] = zeros[Boolean](2, 3) // TODO: "falses"
+      val t = ones[Boolean](3, 2) // TODO: "trues"
+      val e = eye[Boolean](4)
 
       1 must be equalTo (1)
     }

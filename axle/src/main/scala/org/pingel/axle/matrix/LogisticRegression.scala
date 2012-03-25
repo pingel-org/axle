@@ -24,7 +24,7 @@ class LogisticRegression {
     }) / X.rows
 
   def dθ(X: JblasMatrix[Double], y: JblasMatrix[Boolean], θ: JblasMatrix[Double]): JblasMatrix[Double] = {
-    var result = zeros[Double](θ.rows, 1, double2double)
+    var result = zeros[Double](θ.rows, 1)
     (0 until θ.rows).map(j =>
       result.setValueAt(j, 0,
         (0 until X.rows).foldLeft(0.0)(

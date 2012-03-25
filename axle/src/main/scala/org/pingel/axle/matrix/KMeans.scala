@@ -15,9 +15,9 @@ class KMeans {
     
     // TODO: normalize X
 
-    var centroids = rand[Double](K, n, double2double) // random initial K centroids μ in R^n (aka M)
+    var centroids = rand[Double](K, n) // random initial K centroids μ in R^n (aka M)
 
-    var C = rand[Double](1, 1, double2double) // TODO indexes of centroids closest to xi
+    var C = rand[Double](1, 1) // TODO indexes of centroids closest to xi
     
     (0 until iterations).map(x => {
       (0 until m).map(i => {

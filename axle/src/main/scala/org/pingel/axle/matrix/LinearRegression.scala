@@ -20,7 +20,7 @@ class LinearRegression {
   def cost(xi: JblasMatrix[Double], θ: JblasMatrix[Double], yi: Double): JblasMatrix[Double] = h(xi, θ) - yi
 
   def dθdecomposed(X: JblasMatrix[Double], y: JblasMatrix[Double], θ: JblasMatrix[Double]): JblasMatrix[Double] =
-    (0 until X.rows).foldLeft(zeros[Double](1, X.columns, double2double))(
+    (0 until X.rows).foldLeft(zeros[Double](1, X.columns))(
       (m: JblasMatrix[Double], i: Int) => {
         val xi = X.getRow(i)
         val c: JblasMatrix[Double] = (xi ⨯ cost(xi, θ, y.valueAt(i, 0)))
@@ -29,7 +29,7 @@ class LinearRegression {
     ) / X.rows
 
   def dθ(X: JblasMatrix[Double], y: JblasMatrix[Double], θ: JblasMatrix[Double]): JblasMatrix[Double] =
-    (0 until X.rows).foldLeft(zeros[Double](1, X.columns, double2double))(
+    (0 until X.rows).foldLeft(zeros[Double](1, X.columns))(
       (m: JblasMatrix[Double], i: Int) => {
         m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0)))
       }

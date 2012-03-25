@@ -165,12 +165,12 @@ trait JblasMatrixFactory extends MatrixFactory {
     matrix[T](jblas)(fp)
   }
 
-  def zeros[T](m: Int, n: Int, fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.zeros(m, n))(fp)
-  def ones[T](m: Int, n: Int, fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.ones(m, n))(fp)
-  def eye[T](n: Int, fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.eye(n))(fp)
-  def I[T](n: Int, fp: FunctionPair[Double, T]) = eye[T](n, fp)
-  def rand[T](m: Int, n: Int, fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.rand(m, n))(fp) // evenly distributed from 0.0 to 1.0
-  def randn[T](m: Int, n: Int, fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.randn(m, n))(fp) // normal distribution 
+  def zeros[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.zeros(m, n))(fp)
+  def ones[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.ones(m, n))(fp)
+  def eye[T](n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.eye(n))(fp)
+  def I[T](n: Int)(implicit fp: FunctionPair[Double, T]) = eye[T](n)(fp)
+  def rand[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.rand(m, n))(fp) // evenly distributed from 0.0 to 1.0
+  def randn[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.randn(m, n))(fp) // normal distribution 
 
   // TODO: Boolean def falses(m: Int, n: Int) = matrix(DoubleMatrix.zeros(m, n))
   // TODO: Boolean def trues(m: Int, n: Int) = matrix(DoubleMatrix.ones(m, n))
