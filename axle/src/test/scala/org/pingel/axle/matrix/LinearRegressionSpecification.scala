@@ -7,26 +7,24 @@ class LinearRegressionSpecification extends Specification {
   "Linear Regression" should {
     "work" in {
 
-      import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
+      import org.pingel.axle.matrix.JblasMatrixFactory._
       import org.pingel.axle.matrix.LinearRegression._
 
-      type DoubleMatrix = DoubleJblasMatrixFactoryClass#DoubleJblasMatrixImpl
-
-      val y = matrix(4, 1, Array(460.0, 232.0, 315.0, 178.0))
+      val y = matrix(4, 1, Array(460.0, 232.0, 315.0, 178.0), double2double)
 
       val examples = matrix(4, 4, Array[Double](
         2104, 5, 1, 45,
         1416, 3, 2, 40,
         1534, 3, 2, 30,
          852, 2, 1, 36
-      )).t // fromArray transposes
+      ), double2double).t // fromArray transposes
 
       val examplesScaled = scaleColumns(examples)
       
-      val X = ones(examples.rows, 1) +|+ examplesScaled._1
+      val X: JblasMatrix[Double] = ones[Double](examples.rows, 1, double2double) +|+ examplesScaled._1
       
       val yScaled = scaleColumns(y)
-      val θ0 = ones(X.columns, 1)
+      val θ0 = ones[Double](X.columns, 1, double2double)
       val α = 0.1
       val N = 100 // iterations
       

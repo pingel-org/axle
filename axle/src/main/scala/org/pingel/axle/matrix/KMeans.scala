@@ -2,11 +2,11 @@ package org.pingel.axle.matrix
 
 class KMeans {
 
-  import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
+  import org.pingel.axle.matrix.JblasMatrixFactory._
 
   // X is NOT left-padded with 1's for k-means clustering
   
-  def cluster(K: Int, X: Matrix /*[Double]*/, iterations: Int): (Matrix, Matrix) = {
+  def cluster(K: Int, X: JblasMatrix[Double], iterations: Int): (JblasMatrix[Double], JblasMatrix[Double]) = {
 
     val n = X.columns
     val m = X.rows
@@ -15,9 +15,9 @@ class KMeans {
     
     // TODO: normalize X
 
-    var centroids = rand(K, n) // random initial K centroids μ in R^n (aka M)
+    var centroids = rand[Double](K, n, double2double) // random initial K centroids μ in R^n (aka M)
 
-    var C = rand(1, 1) // TODO indexes of centroids closest to xi
+    var C = rand[Double](1, 1, double2double) // TODO indexes of centroids closest to xi
     
     (0 until iterations).map(x => {
       (0 until m).map(i => {

@@ -4,28 +4,27 @@ object LogisticRegression extends LogisticRegression()
 
 class LogisticRegression {
 
-  import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
+  import org.pingel.axle.matrix.JblasMatrixFactory._
   import Math.log
   import Math.exp
 
-  def h(xi: Matrix[Double], θ: Matrix[Double]): Double = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
-
   // h is essentially P(y=1 | X;θ)
+  def h(xi: JblasMatrix[Double], θ: JblasMatrix[Double]): Double = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
 
-  def cost(xi: Matrix[Double], θ: Matrix[Double], yi: Boolean) = -1 * log(yi match {
+  def cost(xi: JblasMatrix[Double], θ: JblasMatrix[Double], yi: Boolean) = -1 * log(yi match {
     case true => h(θ, xi)
     case false => 1 - h(θ, xi)
   })
 
-  def predictedY(xi: Matrix[Double], θ: Matrix[Double]) = h(xi, θ) >= 0.5
+  def predictedY(xi: JblasMatrix[Double], θ: JblasMatrix[Double]) = h(xi, θ) >= 0.5
 
-  def Jθ(X: Matrix[Double], θ: Matrix[Double], y: Matrix[Boolean]) =
+  def Jθ(X: JblasMatrix[Double], θ: JblasMatrix[Double], y: JblasMatrix[Boolean]) =
     (0 until X.rows).foldLeft(0.0)((r: Double, i: Int) => {
       r + cost(X.getRow(i), θ, y.getRow(i).scalar)
     }) / X.rows
 
-  def dθ(X: Matrix[Double], y: Matrix[Boolean], θ: Matrix[Double]) = {
-    var result = zeros(θ.rows, 1)
+  def dθ(X: JblasMatrix[Double], y: JblasMatrix[Boolean], θ: JblasMatrix[Double]): JblasMatrix[Double] = {
+    var result = zeros[Double](θ.rows, 1, double2double)
     (0 until θ.rows).map(j =>
       result.setValueAt(j, 0,
         (0 until X.rows).foldLeft(0.0)(
@@ -40,7 +39,7 @@ class LogisticRegression {
 
   // objective: minimize (over θ) the value of Jθ
 
-  def gradientDescent(X: Matrix[Double], y: Matrix[Boolean], θ: Matrix[Double], α: Double, iterations: Int) =
-    (0 until iterations).foldLeft(θ)((θi: Matrix[Double], i: Int) => θi - (dθ(X, y, θi) * α))
+  def gradientDescent(X: JblasMatrix[Double], y: JblasMatrix[Boolean], θ: JblasMatrix[Double], α: Double, iterations: Int): JblasMatrix[Double] =
+    (0 until iterations).foldLeft(θ)((θi: JblasMatrix[Double], i: Int) => θi - (dθ(X, y, θi) * α))
 
 }
