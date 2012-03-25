@@ -172,8 +172,9 @@ trait JblasMatrixFactory extends MatrixFactory {
   def rand[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.rand(m, n))(fp) // evenly distributed from 0.0 to 1.0
   def randn[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.randn(m, n))(fp) // normal distribution 
 
-  // TODO: Boolean def falses(m: Int, n: Int) = matrix(DoubleMatrix.zeros(m, n))
-  // TODO: Boolean def trues(m: Int, n: Int) = matrix(DoubleMatrix.ones(m, n))
+  def falses(m: Int, n: Int) = matrix[Boolean](DoubleMatrix.zeros(m, n))
+  def trues(m: Int, n: Int) = matrix[Boolean](DoubleMatrix.ones(m, n))
+
   // TODO: Int jblas' rand and randn should probably floor the result
 
 }

@@ -40,8 +40,8 @@ class MatrixSpecification extends Specification {
 
       import org.pingel.axle.matrix.JblasMatrixFactory._
 
-      val f: JblasMatrix[Boolean] = zeros[Boolean](2, 3) // TODO: "falses"
-      val t = ones[Boolean](3, 2) // TODO: "trues"
+      val f: JblasMatrix[Boolean] = falses(2, 3)
+      val t = trues(3, 2)
       val e = eye[Boolean](4)
 
       1 must be equalTo (1)
