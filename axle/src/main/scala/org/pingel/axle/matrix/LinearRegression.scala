@@ -4,38 +4,45 @@ object LinearRegression extends LinearRegression()
 
 class LinearRegression {
 
+  import org.pingel.axle.matrix._
   import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
 
-  def normalEquation(X: Matrix[Double], y: Matrix[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
+  type DoubleMatrix = DoubleJblasMatrixFactoryClass#M
+  type BooleanMatrix = BooleanJblasMatrixFactoryClass#M
+  
+  def normalEquation(X: DoubleMatrix, y: DoubleMatrix) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
-  def scaleColumns(X: Matrix[Double]) = {
-    val colMins = X.columnMins
-    val colRanges = X.columnMaxs - colMins
-    val scaled = (colRanges.diag().inv ⨯ X.subRowVector(colMins).t).t
+  def scaleColumns(X: DoubleMatrix): (DoubleMatrix, DoubleMatrix, DoubleMatrix) = {
+    val colMins: DoubleMatrix = X.columnMins
+    val colRanges: DoubleMatrix = X.columnMaxs - colMins
+    val scaled: DoubleMatrix = (colRanges.diag().inv ⨯ X.subRowVector(colMins).t).t
     (scaled, colMins, colRanges)
   }
 
-  def h(xi: Matrix[Double], θ: Matrix[Double]) = xi ⨯ θ
+  def h(xi: DoubleMatrix, θ: DoubleMatrix): DoubleMatrix = xi ⨯ θ
 
-  def cost(xi: Matrix[Double], θ: Matrix[Double], yi: Double) = h(xi, θ) - yi
+  def cost(xi: DoubleMatrix, θ: DoubleMatrix, yi: Double): DoubleMatrix = h(xi, θ) - yi
 
-  def dθdecomposed(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double]) =
+  def dθdecomposed(X: DoubleMatrix, y: DoubleMatrix, θ: DoubleMatrix): DoubleMatrix =
     (0 until X.rows).foldLeft(zeros(1, X.columns))(
-      (m: Matrix[Double], i: Int) => {
+      (m: DoubleMatrix, i: Int) => {
         val xi = X.getRow(i)
-        m + (xi ⨯ cost(xi, θ, y.valueAt(i, 0)))
+        val c: DoubleMatrix = (xi ⨯ cost(xi, θ, y.valueAt(i, 0)))
+        m + c
       }
     ) / X.rows
 
-  def dθ(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double]) =
+  def dθ(X: DoubleMatrix, y: DoubleMatrix, θ: DoubleMatrix): DoubleMatrix =
     (0 until X.rows).foldLeft(zeros(1, X.columns))(
-      (m: Matrix[Double], i: Int) => m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0)))
+      (m: DoubleMatrix, i: Int) => {
+        m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0)))
+      }
     ) / X.rows
 
-  def gradientDescentImmutable(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double], α: Double, iterations: Int) =
-    (0 until iterations).foldLeft(θ)((θi: Matrix[Double], i: Int) => θi - (dθ(X, y, θi) * α))
+  def gradientDescentImmutable(X: DoubleMatrix, y: DoubleMatrix, θ: DoubleMatrix, α: Double, iterations: Int): DoubleMatrix =
+    (0 until iterations).foldLeft(θ)((θi: DoubleMatrix, i: Int) => θi - (dθ(X, y, θi) * α))
 
-  def gradientDescentMutable(X: Matrix[Double], y: Matrix[Double], θo: Matrix[Double], α: Double, iterations: Int) = {
+  def gradientDescentMutable(X: DoubleMatrix, y: DoubleMatrix, θo: DoubleMatrix, α: Double, iterations: Int): DoubleMatrix = {
     var θi = θo.dup
     var i = 0
     while (i < iterations) {
@@ -46,6 +53,6 @@ class LinearRegression {
   }
 
   // non-unicode alias
-  def dTheta(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double]) = dθ(X, y, θ)
+  def dTheta(X: DoubleMatrix, y: DoubleMatrix, θ: DoubleMatrix) = dθ(X, y, θ)
 
 }
