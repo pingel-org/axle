@@ -7,9 +7,12 @@ class LinearRegression {
   import org.pingel.axle.matrix._
   import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
 
-  type DoubleMatrix = DoubleJblasMatrixFactoryClass#M
-  type BooleanMatrix = BooleanJblasMatrixFactoryClass#M
-  
+//  type DoubleMatrix = DoubleJblasMatrixFactoryClass#DoubleJblasMatrixImpl
+//  type BooleanMatrix = BooleanJblasMatrixFactoryClass#BooleanJblasMatrixImpl
+
+  type DoubleMatrix = Matrix { type T = Double }
+  type BooleanMatrix = Matrix { type T = Boolean }
+
   def normalEquation(X: DoubleMatrix, y: DoubleMatrix) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
   def scaleColumns(X: DoubleMatrix): (DoubleMatrix, DoubleMatrix, DoubleMatrix) = {

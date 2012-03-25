@@ -13,12 +13,16 @@ trait MatrixFactory {
 
   type M <: Matrix
 
-  protected def pure(s: M#S): M
+  protected def matrix(s: M#S): M
 
   trait Matrix {
 
+    type BM <: Matrix { type T = Boolean }
+    
     type S // Storage
     type T
+
+    def getStorage: S
     
     def rows: Int
     def columns: Int
@@ -78,17 +82,17 @@ trait MatrixFactory {
 
     // Operations on pair of matrices that return M[Boolean]
 
-    def lt(other: M): Matrix { type T = Boolean }
-    def le(other: M): Matrix { type T = Boolean }
-    def gt(other: M): Matrix { type T = Boolean }
-    def ge(other: M): Matrix { type T = Boolean }
-    def eq(other: M): Matrix { type T = Boolean }
-    def ne(other: M): Matrix { type T = Boolean }
+    def lt(other: M): BM
+    def le(other: M): BM
+    def gt(other: M): BM
+    def ge(other: M): BM
+    def eq(other: M): BM
+    def ne(other: M): BM
 
-    def and(other: M): Matrix { type T = Boolean }
-    def or(other: M): Matrix { type T = Boolean }
-    def xor(other: M): Matrix { type T = Boolean }
-    def not(): M { type T = Boolean }
+    def and(other: M): BM
+    def or(other: M): BM
+    def xor(other: M): BM
+    def not(): BM
 
     // various mins and maxs
 

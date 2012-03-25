@@ -10,9 +10,11 @@ class LinearRegressionSpecification extends Specification {
       import org.pingel.axle.matrix.DoubleJblasMatrixFactory._
       import org.pingel.axle.matrix.LinearRegression._
 
-      val y = fromArray(4, 1, Array(460.0, 232.0, 315.0, 178.0))
+      type DoubleMatrix = DoubleJblasMatrixFactoryClass#DoubleJblasMatrixImpl
 
-      val examples = fromArray(4, 4, Array[Double](
+      val y = matrix(4, 1, Array(460.0, 232.0, 315.0, 178.0))
+
+      val examples = matrix(4, 4, Array[Double](
         2104, 5, 1, 45,
         1416, 3, 2, 40,
         1534, 3, 2, 30,
@@ -24,11 +26,11 @@ class LinearRegressionSpecification extends Specification {
       val X = ones(examples.rows, 1) +|+ examplesScaled._1
       
       val yScaled = scaleColumns(y)
-      val theta = ones(X.columns, 1)
-      val alpha = 0.1
-      val iterations = 100
+      val θ0 = ones(X.columns, 1)
+      val α = 0.1
+      val N = 100 // iterations
       
-      val θ = gradientDescentMutable(X, yScaled._1, theta, 0.1, 100)
+      val θ = gradientDescentMutable(X, yScaled._1, θ0, α, N)
 
       // TODO: an h that incorporates the scaling that was applied in X and y
 
