@@ -53,6 +53,11 @@ trait Quantum extends DirectedGraph {
     def getLabel() = bd.toString
 
     override def toString() = from.toString() + " * " + bd + " = " + to.toString()
+
+    type EP = BigDecimal
+
+    def getPayload() = bd
+    
   }
 
   val one = new BigDecimal("1")
@@ -66,6 +71,10 @@ trait Quantum extends DirectedGraph {
 
     self: UOM =>
 
+  	type VP = String
+
+  	def getPayload() = getLabel()
+  	
     def getLabel() = name.getOrElse("")
     def getSymbol() = symbol
     def getLink() = link
@@ -152,9 +161,7 @@ trait Quantum extends DirectedGraph {
   }
 
   type V = UOM
-  type VP = String
   type E = Conversion
-  type EP = BigDecimal
 
   def newUnitOfMeasurement(
     conversion: Option[Conversion] = None,

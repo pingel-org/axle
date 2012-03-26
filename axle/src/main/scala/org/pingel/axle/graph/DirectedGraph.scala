@@ -5,15 +5,11 @@ package org.pingel.axle.graph {
   trait DirectedGraph extends Graph {
 
     type V <: DirectedGraphVertex
-
     type E <: DirectedGraphEdge
 
-    trait DirectedGraphVertex extends GraphVertex {
-
-    }
+    trait DirectedGraphVertex extends GraphVertex
 
     trait DirectedGraphEdge extends GraphEdge {
-
       def getSource(): V
       def getDest(): V
     }
@@ -274,11 +270,11 @@ package org.pingel.axle.graph {
       }
 
       val vertexLabelTransformer = new Transformer[dg.type#V, String]() {
-        def transform(vertex: dg.type#V) = vertex.getLabel()
+        def transform(vertex: dg.type#V) = vertex.getPayload().toString()
       }
 
       val edgeLabelTransformer = new Transformer[dg.type#E, String]() {
-        def transform(edge: dg.type#E) = edge.getLabel()
+        def transform(edge: dg.type#E) = edge.getPayload().toString()
       }
 
       vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
@@ -307,12 +303,12 @@ package org.pingel.axle.graph {
   class SimpleDirectedGraph() extends DirectedGraph {
 
     type V = SimpleDirectedVertex
-    type VP = String
     type E = SimpleDirectedEdge
-    type EP = String
 
     class SimpleDirectedVertex(label: String) extends DirectedGraphVertex {
       def getLabel() = label
+      type VP = String
+      def getPayload() = label
     }
 
     def newVertex(vp: String) = {
@@ -321,13 +317,15 @@ package org.pingel.axle.graph {
       v
     }
 
-    class SimpleDirectedEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: EP) extends DirectedGraphEdge {
+    class SimpleDirectedEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: E#EP) extends DirectedGraphEdge {
       def getSource() = v1
       def getDest() = v2
-      def getLabel() = ""
+      def getLabel() = ep
+      type EP = String
+      def getPayload() = ep
     }
 
-    def newEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: EP) = {
+    def newEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: E#EP) = {
       val result = new SimpleDirectedEdge(v1, v2, ep)
       addEdge(result)
       result

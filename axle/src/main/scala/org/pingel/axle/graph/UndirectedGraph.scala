@@ -6,12 +6,9 @@ package org.pingel.axle.graph {
   trait UndirectedGraph extends Graph {
 
     type V <: UndirectedGraphVertex
-
     type E <: UndirectedGraphEdge
 
-    trait UndirectedGraphVertex extends GraphVertex {
-      def getLabel(): String
-    }
+    trait UndirectedGraphVertex extends GraphVertex
 
     trait UndirectedGraphEdge extends GraphEdge {
 
@@ -32,11 +29,9 @@ package org.pingel.axle.graph {
       }
     }
 
-    class UndirectedGraphEdgeImpl(v1: V, v2: V)
-      extends UndirectedGraphEdge {
-      def getVertices() = (v1, v2)
-      def getLabel() = ""
-    }
+//    class UndirectedGraphEdgeImpl(v1: V, v2: V) extends UndirectedGraphEdge {
+//      def getVertices() = (v1, v2)
+//    }
 
     var vertex2edges = mutable.Map[V, mutable.Set[E]]()
 
@@ -93,7 +88,7 @@ package org.pingel.axle.graph {
       true
     }
 
-    def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
+    def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => E#EP) = {
 
       var N = mutable.ArrayBuffer[V]()
       N ++= vs
@@ -114,7 +109,7 @@ package org.pingel.axle.graph {
       result
     }
 
-    def forceClique(vs: Set[V], payload: (V, V) => EP) {
+    def forceClique(vs: Set[V], payload: (V, V) => E#EP) {
 
       var vList = mutable.ArrayBuffer[V]()
       vList ++= vs
@@ -131,7 +126,7 @@ package org.pingel.axle.graph {
 
     }
 
-    def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): Option[V] = {
+    def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => E#EP): Option[V] = {
 
       // assert: among is a subset of vertices
 
@@ -197,7 +192,7 @@ package org.pingel.axle.graph {
       v => getNeighbors(v).size == 1 && !v.equals(r)
     })
 
-    def eliminate(v: V, payload: (V, V) => EP) = {
+    def eliminate(v: V, payload: (V, V) => E#EP) = {
       // "decompositions" page 3 (Definition 3, Section 9.3)
       // turn the neighbors of v into a clique
 
@@ -214,7 +209,7 @@ package org.pingel.axle.graph {
     }
 
     // TODO there is probably a more efficient way to do this:
-    def eliminate(vs: List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
+    def eliminate(vs: List[V], payload: (V, V) => E#EP): Unit = vs.map(eliminate(_, payload))
 
     def draw(): Unit = {
       val v = new UndirectedGraphAsJUNG2(this)
@@ -283,11 +278,11 @@ package org.pingel.axle.graph {
       }
 
       val vertexLabelTransformer = new Transformer[ug.type#V, String]() {
-        def transform(vertex: ug.type#V) = vertex.getLabel()
+        def transform(vertex: ug.type#V) = vertex.getPayload().toString()
       }
 
       val edgeLabelTransformer = new Transformer[ug.type#E, String]() {
-        def transform(edge: ug.type#E) = edge.getLabel()
+        def transform(edge: ug.type#E) = edge.getPayload().toString()
       }
 
       vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
@@ -313,12 +308,11 @@ package org.pingel.axle.graph {
   class SimpleGraph() extends UndirectedGraph {
 
     type V = SimpleVertex
-    type VP = String
     type E = SimpleEdge
-    type EP = String
 
     class SimpleVertex(vp: String) extends UndirectedGraphVertex {
-      def getLabel() = vp
+      type VP = String
+      def getPayload() = vp
     }
 
     def newVertex(name: String) = {
@@ -328,8 +322,9 @@ package org.pingel.axle.graph {
     }
 
     class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex, ep: String) extends UndirectedGraphEdge {
+      type EP = String
       def getVertices() = (v1, v2)
-      def getLabel() = ep
+      def getPayload() = ep
     }
 
     def newEdge(v1: SimpleVertex, v2: SimpleVertex, ep: String) = {
