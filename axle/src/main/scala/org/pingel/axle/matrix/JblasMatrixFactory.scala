@@ -145,9 +145,9 @@ trait JblasMatrixFactory extends MatrixFactory {
     def addMatrixi(other: JblasMatrix[T]) = getStorage.addi(other.getJblas)
     def subtractMatrixi(other: JblasMatrix[T]) = getStorage.subi(other.getJblas)
     def addiRowVector(row: JblasMatrix[T]) = getStorage.addiRowVector(row.getJblas)
-    def addiColumnVector(column: JblasMatrix[T]) = getStorage.addiRowVector(column.getJblas)
+    def addiColumnVector(column: JblasMatrix[T]) = getStorage.addiColumnVector(column.getJblas)
     def subiRowVector(row: JblasMatrix[T]) = getStorage.subiRowVector(row.getJblas)
-    def subiColumnVector(column: JblasMatrix[T]) = getStorage.subiRowVector(column.getJblas)
+    def subiColumnVector(column: JblasMatrix[T]) = getStorage.subiColumnVector(column.getJblas)
 
     override def toString() =
       (0 until rows).map(i => (0 until columns).map(j => functionPair.forward(getStorage.get(i, j))).mkString(" ")).mkString("\n")

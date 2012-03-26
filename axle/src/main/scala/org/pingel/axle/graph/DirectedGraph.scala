@@ -301,7 +301,6 @@ package org.pingel.axle.graph {
     type E = SimpleDirectedEdge
 
     class SimpleDirectedVertex(label: String) extends DirectedGraphVertex {
-      def getLabel() = label
       type VP = String
       def getPayload() = label
     }
@@ -315,7 +314,6 @@ package org.pingel.axle.graph {
     class SimpleDirectedEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: E#EP) extends DirectedGraphEdge {
       def getSource() = v1
       def getDest() = v2
-      def getLabel() = ep
       type EP = String
       def getPayload() = ep
     }
