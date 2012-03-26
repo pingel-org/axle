@@ -29,18 +29,12 @@ package org.pingel.axle.graph {
       }
     }
 
-//    class UndirectedGraphEdgeImpl(v1: V, v2: V) extends UndirectedGraphEdge {
-//      def getVertices() = (v1, v2)
-//    }
-
     var vertex2edges = mutable.Map[V, mutable.Set[E]]()
 
     def addVertex(v: V): V = {
       vertices += v
       v
     }
-
-    // dissertation idea: how best to have an "Edge" object without storing them
 
     def addEdge(e: E): E = {
       // assume that this edge isn't already in our list of edges

@@ -14,11 +14,6 @@ package org.pingel.axle.graph {
       def getDest(): V
     }
 
-//    class DirectedGraphEdgeImpl(source: V, dest: V) extends DirectedGraphEdge {
-//      def getSource() = source
-//      def getDest() = dest
-//    }
-
     var vertex2outedges = Map[V, mutable.Set[E]]()
     var vertex2inedges = Map[V, mutable.Set[E]]()
 
