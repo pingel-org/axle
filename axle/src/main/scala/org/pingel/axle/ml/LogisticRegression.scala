@@ -1,4 +1,11 @@
-package org.pingel.axle.matrix
+package org.pingel.axle.ml
+
+import org.pingel.axle.matrix.JblasMatrixFactory.JblasMatrix
+import org.pingel.axle.matrix.JblasMatrixFactory.double2double
+import org.pingel.axle.matrix.JblasMatrixFactory.zeros
+import org.pingel.axle.matrix.LogisticRegression
+import scala.Math.exp
+import scala.Math.log
 
 object LogisticRegression extends LogisticRegression()
 

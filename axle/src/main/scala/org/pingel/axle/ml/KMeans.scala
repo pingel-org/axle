@@ -1,4 +1,8 @@
-package org.pingel.axle.matrix
+package org.pingel.axle.ml
+
+import org.pingel.axle.matrix.JblasMatrixFactory.JblasMatrix
+import org.pingel.axle.matrix.JblasMatrixFactory.double2double
+import org.pingel.axle.matrix.JblasMatrixFactory.rand
 
 class KMeans {
 
