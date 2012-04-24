@@ -8,7 +8,7 @@ class LinearRegressionSpecification extends Specification {
     "work" in {
 
       import org.pingel.axle.matrix.JblasMatrixFactory._
-      import org.pingel.axle.matrix.LinearRegression._
+      import org.pingel.axle.ml.LinearRegression._
 
       val y = matrix(4, 1, Array(460.0, 232.0, 315.0, 178.0))
 

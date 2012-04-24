@@ -3,7 +3,6 @@ package org.pingel.axle.ml
 import org.pingel.axle.matrix.JblasMatrixFactory.JblasMatrix
 import org.pingel.axle.matrix.JblasMatrixFactory.double2double
 import org.pingel.axle.matrix.JblasMatrixFactory.zeros
-import org.pingel.axle.matrix.LinearRegression
 
 object LinearRegression extends LinearRegression()
 
