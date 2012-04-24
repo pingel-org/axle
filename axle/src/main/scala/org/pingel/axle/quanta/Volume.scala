@@ -7,14 +7,14 @@ class Volume extends Quantum {
   type UOM = VolumeUnit
 
   class VolumeUnit(
-    conversion: Option[Conversion] = None,
+    conversion: Option[E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[Conversion] = None,
+    conversion: Option[E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): VolumeUnit = new VolumeUnit(conversion, name, symbol, link)

@@ -7,7 +7,7 @@ class Speed extends Quantum {
   type UOM = SpeedUnit
 
   class SpeedUnit(
-    conversion: Option[Conversion] = None,
+    conversion: Option[E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
@@ -15,7 +15,7 @@ class Speed extends Quantum {
 
 
   def newUnitOfMeasurement(
-    conversion: Option[Conversion] = None,
+    conversion: Option[E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): SpeedUnit = new SpeedUnit(conversion, name, symbol, link)
