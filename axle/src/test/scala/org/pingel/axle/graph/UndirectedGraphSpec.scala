@@ -4,12 +4,12 @@ import org.specs2.mutable._
 
 class UndirectedGraphSpec extends Specification {
 
-  import org.pingel.axle.graph._
+  import org.pingel.axle.graph.JungUndirectedGraphFactory
 
   "Undirected Graph" should {
     "work" in {
 
-      val g = new SimpleGraph()
+      val g = JungUndirectedGraphFactory.graph[String, String]()
       
       val a = g += "a"
       val b = g += "b"
