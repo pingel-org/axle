@@ -47,18 +47,14 @@ package org.pingel.axle.graph {
       e
     }
 
-    def copyTo(other: UndirectedGraph) = {
-      // TODO
-    }
-
     def unlink(e: E): Unit = {
 
       val dble = e.getVertices()
 
-      var es1 = getEdges(dble._1)
+      val es1 = getEdges(dble._1)
       es1.remove(e)
 
-      var es2 = getEdges(dble._2)
+      val es2 = getEdges(dble._2)
       es2.remove(e)
 
       edges -= e
@@ -89,7 +85,7 @@ package org.pingel.axle.graph {
 
       var result = 0
 
-      for (i <- 0 to (N.size - 2)) {
+      for (i <- 0 until (N.size - 1)) {
         val vi = N(i)
         for (j <- (i + 1) until N.size) {
           val vj = N(j)

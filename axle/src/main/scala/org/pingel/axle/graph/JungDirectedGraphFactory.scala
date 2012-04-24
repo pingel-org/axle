@@ -10,10 +10,26 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
   def graph[VP, EP]() = new JungDirectedGraph[VP, EP]() {}
 
-  def graphFrom[VP, EP, DG <: DirectedGraph[VP, EP]](other: DG): JungDirectedGraph[VP, EP] = {
-    var jdg = graph[VP, EP]()
-    other.getVertices().map( ov => jdg.vertex(ov.getPayload))
-    other.getEdges().map( oe => jdg.edge(oe.getSource(), oe.getDest(), oe.getPayload()))
+  def graphFrom[OVP, OEP, NVP, NEP](other: DirectedGraph[OVP, OEP])(convertVP: OVP => NVP, convertEP: OEP => NEP): JungDirectedGraph[NVP, NEP] = {
+
+    var jdg: JungDirectedGraph[NVP, NEP] = graph[NVP, NEP]()
+    var vp2vp = Map[OVP, NVP]()
+
+    other.getVertices().map(oldV => {
+      val oldVP = oldV.getPayload()
+      val newVP = convertVP(oldVP)
+      jdg.vertex(newVP)
+      vp2vp += oldVP -> newVP
+    })
+
+    other.getEdges().map(oldE => {
+      val oldSource = oldE.getSource
+      val oldDest = oldE.getDest
+      val newSource = convertVP(oldSource.getPayload)
+      val newDest = convertVP(oldDest.getPayload)
+      jdg.edge(newSource, newDest, convertEP(oldE.getPayload), true)
+    })
+
     jdg
   }
 
@@ -32,90 +48,81 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     trait JungDirectedGraphEdge extends DirectedGraphEdge
 
-    class JungDirectedGraphVertexImpl(payload: VP) extends JungDirectedGraphVertex {
+    class JungDirectedGraphVertexImpl(payload: VP, insert: Boolean) extends JungDirectedGraphVertex {
 
-      // TODO: Would be nice to not have to create any new objects here
-
-      createJungVertex
-      // jungGraph.addVertex(v)
+      if (insert) {
+        jungGraph.addVertex(payload)
+      }
 
       def getPayload(): VP = payload
     }
 
-    class JungDirectedGraphEdgeImpl(source: V, dest: V, payload: EP) extends JungDirectedGraphEdge {
+    class JungDirectedGraphEdgeImpl(source: V, dest: V, payload: EP, insert: Boolean) extends JungDirectedGraphEdge {
 
-      // TODO: Would be nice to not have to create any new objects here
-
-      createJungEdge
-      // jungGraph.addEdge(e)
+      if (insert) {
+        jungGraph.addEdge(payload, source.getPayload, dest.getPayload)
+      }
 
       def getSource() = source
       def getDest() = dest
       def getPayload(): EP = payload
     }
 
-    var jungGraph = new DirectedSparseGraph[VP, EP]()
+    val jungGraph = new DirectedSparseGraph[VP, EP]()
+
+    // TODO: make enVertex implicit
+
+    def enEdge(payload: EP): JungDirectedGraphEdge = {
+      val endpoints = jungGraph.getEndpoints(payload)
+      edge(endpoints.getFirst, endpoints.getSecond, payload, false)
+    }
 
     def getStorage() = jungGraph
 
     def size(): Int = jungGraph.getVertexCount()
 
-    def getEdges(): Set[E] = jungGraph.getEdges.toSet
+    def getEdges(): immutable.Set[E] = jungGraph.getEdges().map(ep => enEdge(ep)).toSet
 
-    def getVertices(): Set[V] = jungGraph.getVertices.toSet
+    def getVertices(): immutable.Set[V] = jungGraph.getVertices().map(vp => vertexWrap(vp)).toSet
 
     def getEdge(from: V, to: V): Option[E] = {
       val result = jungGraph.findEdge(from.getPayload(), to.getPayload())
       result match {
         case null => None
-        case _ => Some(result)
+        case _ => Some(enEdge(result))
       }
     }
 
-    def edge(source: V, dest: V, payload: EP): JungDirectedGraphEdge = new JungDirectedGraphEdgeImpl(source, dest, payload)
+    def edge(sourceP: VP, destP: VP, payload: EP, insert: Boolean = true): JungDirectedGraphEdge = new JungDirectedGraphEdgeImpl(vertexWrap(sourceP), vertexWrap(destP), payload, insert)
 
-    def vertex(payload: VP): JungDirectedGraphVertex = new JungDirectedGraphVertexImpl(payload)
+    def edge(source: V, dest: V, payload: EP): JungDirectedGraphEdge = new JungDirectedGraphEdgeImpl(source, dest, payload, true)
 
-    def removeAllEdgesAndVertices(): Unit = getVertices().map(jungGraph.removeVertex(_))
+    def vertex(payload: VP): JungDirectedGraphVertex = new JungDirectedGraphVertexImpl(payload, false)
 
-    def deleteEdge(e: E): Unit = jungGraph.removeEdge(e)
+    def vertexWrap(payload: VP): JungDirectedGraphVertex = new JungDirectedGraphVertexImpl(payload, true)
 
-    def deleteVertex(v: V): Unit = jungGraph.removeVertex(v)
+    def removeAllEdgesAndVertices(): Unit = getVertices().map(v => jungGraph.removeVertex(v.getPayload))
+
+    def deleteEdge(e: E): Unit = jungGraph.removeEdge(e.getPayload)
+
+    def deleteVertex(v: V): Unit = jungGraph.removeVertex(v.getPayload)
 
     def getLeaves(): Set[V] = getVertices().filter(isLeaf(_))
 
-    def getNeighbors(v: V): Set[V] = {
-      var result = Set[V]()
-      for (neighbor <- jungGraph.getNeighbors(v.getPayload())) {
-        result += neighbor
-      }
-      result
-    }
+    def getNeighbors(v: V): Set[V] = jungGraph.getNeighbors(v.getPayload).map(vp => vertexWrap(vp)).toSet
 
     def precedes(v1: V, v2: V): Boolean = getPredecessors(v2).contains(v1)
 
-    def getPredecessors(v: V): Set[V] = {
-      var result = Set[V]()
-      for (predecessor <- jungGraph.getPredecessors(v)) {
-        result += predecessor
-      }
-      result
-    }
+    def getPredecessors(v: V): Set[V] = jungGraph.getPredecessors(v.getPayload).map(vp => vertexWrap(vp)).toSet
 
     def isLeaf(v: V): Boolean = jungGraph.getSuccessorCount(v.getPayload()) == 0
 
-    def getSuccessors(v: V): Set[V] = {
-      var result = Set[V]()
-      for (successor <- jungGraph.getSuccessors(v)) {
-        result += successor
-      }
-      result
-    }
+    def getSuccessors(v: V): Set[V] = jungGraph.getSuccessors(v.getPayload).map(vp => vertexWrap(vp)).toSet
 
     def outputEdgesOf(v: V): Set[E] = {
       var result = Set[E]()
-      for (outEdge <- jungGraph.getOutEdges(v)) {
-        result += outEdge
+      for (outEdge <- jungGraph.getOutEdges(v.getPayload)) {
+        result += enEdge(outEdge)
       }
       result
     }
@@ -142,13 +149,13 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
     def collectAncestors(vs: Set[V], result: mutable.Set[V]): Unit = vs.map(collectAncestors(_, result))
 
     def removeInputs(vs: Set[V]): Unit = vs.map(v => {
-      for (inEdge <- jungGraph.getInEdges(v)) {
+      for (inEdge <- jungGraph.getInEdges(v.getPayload)) {
         jungGraph.removeEdge(inEdge)
       }
     })
 
     def removeOutputs(vs: Set[V]): Unit = vs.map(v => {
-      for (outEdge <- jungGraph.getOutEdges(v)) {
+      for (outEdge <- jungGraph.getOutEdges(v.getPayload)) {
         jungGraph.removeEdge(outEdge)
       }
     })
@@ -163,13 +170,13 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     def isAcyclic() = true // TODO !!!
 
-    def shortestPath(source: V, goal: V): Option[List[E]] = {
+    def shortestPath(source: V, goal: V): Option[scala.collection.immutable.List[E]] = {
       import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
       val dsp = new DijkstraShortestPath(jungGraph)
       val path = dsp.getPath(source.getPayload, goal.getPayload)
       path match {
         case null => None
-        case _ => Some(path)
+        case _ => Some(path.toList.map(ep => enEdge(ep)))
       }
     }
 
@@ -225,7 +232,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       vv.setPreferredSize(new Dimension(width + border, height + border))
 
       val vertexPaint = new Transformer[VP, Paint]() {
-        def transform(i: V): Paint = Color.GREEN
+        def transform(i: VP): Paint = Color.GREEN
       }
 
       val dash = List(10.0f).toArray
@@ -233,15 +240,15 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
       val edgeStrokeTransformer = new Transformer[EP, Stroke]() {
-        def transform(edge: E) = edgeStroke
+        def transform(edge: EP) = edgeStroke
       }
 
       val vertexLabelTransformer = new Transformer[VP, String]() {
-        def transform(vertex: V) = vertex.getPayload().toString()
+        def transform(vertex: VP) = vertex.toString()
       }
 
       val edgeLabelTransformer = new Transformer[EP, String]() {
-        def transform(edge: E) = edge.getPayload().toString()
+        def transform(edge: EP) = edge.toString()
       }
 
       vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
@@ -250,8 +257,8 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       vv.getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer)
       vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR)
 
-      //      val gm = new DefaultModalGraphMouse()
-      //      gm.setMode(ModalGraphMouse.Mode.TRANSFORMING)
+      // val gm = new DefaultModalGraphMouse()
+      // gm.setMode(ModalGraphMouse.Mode.TRANSFORMING)
       val gm = new PluggableGraphMouse()
       gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1))
       gm.add(new PickingGraphMousePlugin())

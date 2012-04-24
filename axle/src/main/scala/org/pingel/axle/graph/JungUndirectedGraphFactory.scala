@@ -1,6 +1,7 @@
 package org.pingel.axle.graph
 
 import scala.collection.JavaConversions._
+import scala.collection._
 
 object JungUndirectedGraphFactory extends JungUndirectedGraphFactory
 
@@ -24,10 +25,9 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     other.getEdges().map(oldE => {
       val (otherv1, otherv2) = oldE.getVertices()
-      // TODO: lots of waste
       val newVP1 = convertVP(otherv1.getPayload)
       val newVP2 = convertVP(otherv2.getPayload)
-      jug.edge(newVP1, newVP2, convertEP(oldE.getPayload), true)
+      jug.edge(newVP1, newVP2, convertEP(oldE.getPayload))
     })
 
     jug
@@ -42,7 +42,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     type E = JungUndirectedGraphEdge
 
-    type S = UndirectedSparseGraph[V, E]
+    type S = UndirectedSparseGraph[VP, EP]
 
     trait JungUndirectedGraphVertex extends UndirectedGraphVertex
 
@@ -67,28 +67,39 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
       def getPayload(): EP = payload
     }
 
-    var jungGraph = new UndirectedSparseGraph[VP, EP]()
+    val jungGraph = new UndirectedSparseGraph[VP, EP]()
+
+    def getStorage() = jungGraph
+
+    def getVertices(): immutable.Set[V] = jungGraph.getVertices().map(vp => vertexWrap(vp)).toSet
+
+    def getEdges(): immutable.Set[E] = jungGraph.getEdges().map(ep => enEdge(ep)).toSet
+
+    def size(): Int = jungGraph.getVertexCount()
 
     // TODO: make enVertex implicit
-    def enVertex(payload: VP, insert: Boolean): JungUndirectedGraphVertex = vertex(payload, insert)
+    def vertexWrap(payload: VP): JungUndirectedGraphVertex = new JungUndirectedGraphVertexImpl(payload, false)
 
-    def vertex(payload: VP, insert: Boolean = true): JungUndirectedGraphVertex = new JungUndirectedGraphVertexImpl(payload, insert)
+    def vertex(payload: VP): JungUndirectedGraphVertex = new JungUndirectedGraphVertexImpl(payload, true)
 
     // TODO: make enEdge implicit
-    def enEdge(payload: EP, insert: Boolean): JungUndirectedGraphEdge = {
+    def enEdge(payload: EP): JungUndirectedGraphEdge = {
       val endpoints = jungGraph.getEndpoints(payload)
       val v1 = endpoints.getFirst
       val v2 = endpoints.getSecond
-      edge(enVertex(v1, false), enVertex(v2, false), payload, true)
+      edgeWrap(v1, v2, payload)
     }
 
-    def edge(v1: V, v2: V, payload: EP, insert: Boolean = true): JungUndirectedGraphEdge = new JungUndirectedGraphEdgeImpl(v1, v2, payload, insert)
+    def edge(v1: V, v2: V, payload: EP): JungUndirectedGraphEdge = new JungUndirectedGraphEdgeImpl(v1, v2, payload, true)
 
-    def edge(vp1: VP, vp2: VP, payload: EP, insert: Boolean = true): JungUndirectedGraphEdge = new JungUndirectedGraphEdgeImpl(enVertex(vp1, false), enVertex(vp2, false), payload, insert)
+    def edge(vp1: VP, vp2: VP, payload: EP): JungUndirectedGraphEdge = new JungUndirectedGraphEdgeImpl(vertexWrap(vp1), vertexWrap(vp2), payload, true)
 
-    def copyTo[VP, EP](other: UndirectedGraph[VP, EP]) = {
-      // TODO
-    }
+    def edgeWrap(vp1: VP, vp2: VP, payload: EP): JungUndirectedGraphEdge = new JungUndirectedGraphEdgeImpl(vertexWrap(vp1), vertexWrap(vp2), payload, false)
+
+////    def copyTo[VP, EP](other: UndirectedGraph[VP, EP]) = {
+//    def copyTo[VP, EP](other: G) = {
+//      // TODO
+//    }
 
     def unlink(e: E): Unit = jungGraph.removeEdge(e.getPayload)
 
@@ -98,9 +109,9 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def degree(v: V) = getEdges(v).size
 
-    def getEdges(v: V): Set[E] = jungGraph.getIncidentEdges(v.getPayload).map(enEdge(_, false)).toSet
+    def getEdges(v: V): Set[E] = jungGraph.getIncidentEdges(v.getPayload).map(enEdge(_)).toSet
 
-    def getNeighbors(v: V): Set[V] = jungGraph.getNeighbors(v.getPayload).map(enVertex(_, false)).toSet
+    def getNeighbors(v: V): Set[V] = jungGraph.getNeighbors(v.getPayload).map(vertexWrap(_)).toSet
 
     def delete(v: V): Unit = jungGraph.removeVertex(v.getPayload)
 
@@ -116,7 +127,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
     }
 
     // TODO there is probably a more efficient way to do this:
-    def eliminate(vs: List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
+    def eliminate(vs: immutable.List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
 
     def draw(): Unit = {
       val jf = jframe()

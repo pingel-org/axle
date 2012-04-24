@@ -12,8 +12,6 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
   trait NativeDirectedGraph[VP, EP] extends DirectedGraph[VP, EP] {
 
-//    outer =>
-
     import scala.collection._
 
     type V = NativeDirectedGraphVertex
@@ -223,7 +221,11 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def shortestPath(source: V, goal: V): Option[List[E]] = _shortestPath(source, goal, Set())
 
-    def draw(): Unit = JungDirectedGraphFactory.graphFrom[VP, EP, NativeDirectedGraph[_, _]](this).draw()
+    def draw(): Unit = {
+      // TODO: remove this cast
+      val thisAsDG = this.asInstanceOf[JungDirectedGraphFactory.DirectedGraph[VP, EP]]
+      JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsDG)(vp=>vp, ep=>ep).draw()
+    }
 
   }
 

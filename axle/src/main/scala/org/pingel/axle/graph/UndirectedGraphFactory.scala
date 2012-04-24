@@ -35,8 +35,6 @@ trait UndirectedGraphFactory extends GraphFactory {
     
     def edge(v1: V, v2: V, payload: EP): E
 
-    def copyTo(other: UndirectedGraph[VP, EP]): Unit
-
     def unlink(e: E): Unit
 
     def unlink(v1: V, v2: V): Unit

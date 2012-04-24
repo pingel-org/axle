@@ -1,5 +1,7 @@
 package org.pingel.axle.graph
 
+import scala.collection._
+
 object NativeUndirectedGraphFactory extends NativeUndirectedGraphFactory
 
 trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
@@ -21,6 +23,14 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     var vertices = mutable.Set[V]()
     var edges = mutable.Set[E]()
     var vertex2edges = mutable.Map[V, mutable.Set[E]]()
+
+    def getStorage() = (vertices, edges, vertex2edges)
+
+    def getVertices() = vertices.toSet
+
+    def getEdges() = edges.toSet
+
+    def size() = vertices.size
 
     trait NativeUndirectedGraphVertex extends UndirectedGraphVertex
 
@@ -75,7 +85,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def areNeighbors(v1: V, v2: V) = getEdges(v1).exists(_.connects(v1, v2))
 
-    def isClique(vs: Set[V]): Boolean = {
+    override def isClique(vs: Set[V]): Boolean = {
       // vs.pairs().forall({ case (a, b) => ( (a == b) || areNeighbors(a, b) ) })
       var vList = mutable.ArrayBuffer[V]()
       vList ++= vs
@@ -89,7 +99,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
       true
     }
 
-    def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
+    override def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
 
       var N = mutable.ArrayBuffer[V]()
       N ++= vs
@@ -110,7 +120,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
       result
     }
 
-    def forceClique(vs: Set[V], payload: (V, V) => EP): Unit = {
+    override def forceClique(vs: Set[V], payload: (V, V) => EP): Unit = {
 
       var vList = mutable.ArrayBuffer[V]()
       vList ++= vs
@@ -127,7 +137,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     }
 
-    def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): Option[V] = {
+    override def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): Option[V] = {
 
       // assert: among is a subset of vertices
 
@@ -147,7 +157,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
       result
     }
 
-    def vertexWithFewestNeighborsAmong(among: Set[V]): Option[V] = {
+    override def vertexWithFewestNeighborsAmong(among: Set[V]): Option[V] = {
       // assert: among is a subset of vertices
 
       var result: Option[V] = None
@@ -206,7 +216,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     }
 
     // TODO there is probably a more efficient way to do this:
-    def eliminate(vs: List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
+    def eliminate(vs: immutable.List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
 
     def draw(): Unit = {
       // TODO: remove this cast
