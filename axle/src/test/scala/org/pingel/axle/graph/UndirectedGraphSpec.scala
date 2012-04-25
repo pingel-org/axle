@@ -9,7 +9,7 @@ class UndirectedGraphSpec extends Specification {
   "Undirected Graph" should {
     "work" in {
 
-      val g = JungUndirectedGraphFactory.graph[String, String]()
+      var g = JungUndirectedGraphFactory.graph[String, String]()
       
       val a = g += "a"
       val b = g += "b"

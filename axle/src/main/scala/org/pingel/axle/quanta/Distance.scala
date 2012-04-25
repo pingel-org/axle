@@ -1,26 +1,25 @@
 package org.pingel.axle.quanta
 
 import java.math.BigDecimal
+import org.pingel.axle.graph.NativeDirectedGraphFactory
 
 class Distance extends Quantum {
 
   type UOM = DistanceUnit
-  
+
   class DistanceUnit(
-    conversion: Option[E] = None,
+    conversion: Option[CG#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[E] = None,
+    conversion: Option[CG#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): DistanceUnit = new DistanceUnit(conversion, name, symbol, link)
-  
-  // import Distance.unit
-  
+
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
   // "http://en.wikipedia.org/wiki/Distance"
 
@@ -28,24 +27,24 @@ class Distance extends Quantum {
 
   val foot = unit("foot", "ft")
   val ft = foot
-  
+
   val mile = quantity("5280", foot, Some("mile"), Some("m"), Some("http://en.wikipedia.org/wiki/Mile"))
   val meter = unit("meter", "m")
-  
+
   val kilometer = meter kilo
   val km = kilometer
 
   link(mile, "1.609344", kilometer)
-  
+
   val centimeter = meter centi
   val cm = centimeter
-  
+
   val millimeter = meter milli
   val mm = millimeter
-  
+
   val micrometer = meter micro
   val μm = micrometer
-  
+
   val nanometer = meter nano
   val nm = nanometer
 
@@ -61,7 +60,7 @@ class Distance extends Quantum {
   val milkyWayDiameter = quantity(one.scaleByPowerOfTen(5), lightyear, Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
 
   val toAndromeda = quantity("2.6E6", lightyear, Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
-  
+
 }
 
 object Distance extends Distance()

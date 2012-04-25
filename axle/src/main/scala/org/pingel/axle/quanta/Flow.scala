@@ -7,14 +7,14 @@ class Flow extends Quantum {
   type UOM = FlowUnit
 
   class FlowUnit(
-    conversion: Option[E] = None,
+    conversion: Option[CG#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[E] = None,
+    conversion: Option[CG#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): FlowUnit = new FlowUnit(conversion, name, symbol, link)

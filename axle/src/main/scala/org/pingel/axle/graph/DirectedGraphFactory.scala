@@ -4,6 +4,8 @@ trait DirectedGraphFactory extends GraphFactory {
 
   import scala.collection._
 
+  type G[VP, EP] <: DirectedGraph[VP, EP]
+
   trait DirectedGraph[VP, EP] extends Graph[VP, EP] {
 
     type V <: DirectedGraphVertex

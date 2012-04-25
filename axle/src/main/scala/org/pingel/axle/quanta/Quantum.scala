@@ -1,6 +1,6 @@
 package org.pingel.axle.quanta
 
-import org.pingel.axle.graph.NativeDirectedGraphFactory
+import org.pingel.axle.graph.NativeDirectedGraphFactory._
 import java.math.BigDecimal
 import scala.Math.{ max, abs }
 
@@ -31,10 +31,9 @@ trait Quantum { // extended DirectedGraph
 
   type UOM <: UnitOfMeasurement
 
-  val conversionGraph = NativeDirectedGraphFactory.graph[UOM, BigDecimal]()
+  type CG = DirectedGraph[UOM, BigDecimal]
 
-  type V = conversionGraph.V
-  type E = conversionGraph.E
+  val conversionGraph: CG = graph[UOM, BigDecimal]()
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
@@ -68,22 +67,21 @@ trait Quantum { // extended DirectedGraph
   val one = new BigDecimal("1")
 
   class UnitOfMeasurement(
-    var conversion: Option[conversionGraph.E],
+    var conversion: Option[CG#E],
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None) { // extended DirectedGraphVertex
+    link: Option[String] = None) {
 
     self: UOM =>
-    //
-    //    type VP = String
-    //
-    //    def getPayload() = getLabel()
-    //
+
+    val quantum: Quantum = outer
+
+    val vertex = conversionGraph.vertex(this)
+    uom2vertex += this -> vertex
+
     def getLabel() = name.getOrElse("")
     def getSymbol() = symbol
     def getLink() = link
-
-    val quantum: Quantum = outer
 
     def kilo() = quantity(one.scaleByPowerOfTen(3), this, Some("kilo" + name.getOrElse("")), Some("K" + symbol.getOrElse("")))
     def mega() = quantity(one.scaleByPowerOfTen(6), this, Some("mega" + name.getOrElse("")), Some("M" + symbol.getOrElse("")))
@@ -100,7 +98,7 @@ trait Quantum { // extended DirectedGraph
     def micro() = quantity(one.scaleByPowerOfTen(-6), this, Some("micro" + name.getOrElse("")), Some("μ" + symbol.getOrElse("")))
     def nano() = quantity(one.scaleByPowerOfTen(-9), this, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse("")))
 
-    override def hashCode = 42 // TODO (was overflowing stack)
+    // override def hashCode = 42 // TODO (was overflowing stack)
 
     override def toString() = conversion
       .map(c => c.getPayload + " " + c.getSource.getPayload.getSymbol.getOrElse(""))
@@ -155,7 +153,7 @@ trait Quantum { // extended DirectedGraph
       val otherVertex = vertexFor(other)
       val thisVertex = vertexFor(this)
       val resultBD = conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
-        path.foldLeft(one)((bd: BigDecimal, conversion: E) => bd.multiply(conversion.getPayload))
+        path.foldLeft(one)((bd: BigDecimal, edge: CG#E) => bd.multiply(edge.getPayload))
       })
       if (resultBD.isEmpty) {
         throw new Exception("no conversion path from " + this + " to " + other)
@@ -167,13 +165,14 @@ trait Quantum { // extended DirectedGraph
   }
 
   def newUnitOfMeasurement(
-    conversion: Option[E] = None,
+    conversion: Option[CG#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): UOM
 
-  def unit(name: String, symbol: String, linkOpt: Option[String] = None): UOM =
+  def unit(name: String, symbol: String, linkOpt: Option[String] = None): UOM = {
     newUnitOfMeasurement(None, Some(name), Some(symbol), linkOpt)
+  }
 
   def derive(compoundUnit: UnitOfMeasurement,
     nameOpt: Option[String] = None,
@@ -188,9 +187,9 @@ trait Quantum { // extended DirectedGraph
     conversionGraph.edge(baseVertex, resultVertex, bdDivide(one, multiple))
   }
 
-  var uom2vertex = Map[UOM, conversionGraph.V]()
+  var uom2vertex = Map[UOM, CG#V]()
 
-  def vertexFor(uom: UOM): conversionGraph.V = uom2vertex(uom)
+  def vertexFor(uom: UOM): CG#V = uom2vertex(uom)
 
   def quantity(
     magnitude: BigDecimal,
@@ -200,20 +199,13 @@ trait Quantum { // extended DirectedGraph
     qlink: Option[String] = None): UOM = {
 
     val uom = newUnitOfMeasurement(None, qname, qsymbol, qlink)
-    val vertex = conversionGraph.vertex(uom)
-    uom2vertex += uom -> vertex
-    val uv = vertexFor(unit)
-    val conversion1 = conversionGraph.edge(vertex, uv, bdDivide(one, magnitude))
-    val conversion2 = conversionGraph.edge(uv, vertex, magnitude)
+    val uomVertex = vertexFor(unit)
+    val unitVertex = vertexFor(unit)
+    val conversion1 = conversionGraph.edge(uomVertex, unitVertex, bdDivide(one, magnitude))
+    val conversion2 = conversionGraph.edge(unitVertex, uomVertex, magnitude)
     uom.conversion = Some(conversion2)
     uom
   }
-
-  //  def newVertex(vp: String): UOM = newUnitOfMeasurement(None, Some(vp), None, None)
-  //
-  //  def newEdge(source: UOM, dest: UOM, ep: BigDecimal): conversionGraph.E = {
-  //    conversionGraph.edge(source, dest, ep)
-  //  }
 
   val wikipediaUrl: String
 

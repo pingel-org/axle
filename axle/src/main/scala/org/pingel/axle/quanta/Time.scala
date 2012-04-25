@@ -7,14 +7,14 @@ class Time extends Quantum {
   type UOM = TimeUnit
 
   class TimeUnit(
-    conversion: Option[E] = None,
+    conversion: Option[CG#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[E] = None,
+    conversion: Option[CG#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): TimeUnit = new TimeUnit(conversion, name, symbol, link)

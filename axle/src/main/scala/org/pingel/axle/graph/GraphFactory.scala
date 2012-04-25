@@ -2,7 +2,9 @@ package org.pingel.axle.graph
 
 trait GraphFactory {
 
-  type G <: Graph[_, _]
+  type G[VP, EP] <: Graph[VP, EP]
+
+  def graph[VP, EP](): G[VP, EP]
 
   trait Graph[VP, EP] {
 

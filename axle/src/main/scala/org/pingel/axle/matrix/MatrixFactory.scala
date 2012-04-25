@@ -13,13 +13,9 @@ trait MatrixFactory {
 
   type M[T] <: Matrix[T]
 
-  // protected def matrix[T](s: M[T]#S): M[T]
-
   trait Matrix[T] {
 
-    // type Matrix[Boolean] <: Matrix[Boolean]
-    
-    type S // Storage
+    type S
 
     def getStorage: S
     

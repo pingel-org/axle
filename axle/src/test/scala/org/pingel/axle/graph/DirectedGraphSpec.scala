@@ -10,7 +10,7 @@ class DirectedGraphSpec extends Specification {
   "Directed Graph" should {
     "work" in {
 
-      val g = JungDirectedGraphFactory.graph[String, String]()
+      var g = JungDirectedGraphFactory.graph[String, String]()
       val a = g += "a"
       val b = g += "b"
       val c = g += "c"

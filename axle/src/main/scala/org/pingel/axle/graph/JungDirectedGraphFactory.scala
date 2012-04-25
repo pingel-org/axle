@@ -6,9 +6,9 @@ object JungDirectedGraphFactory extends JungDirectedGraphFactory
 
 trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
-  type G = JungDirectedGraph[_, _]
+  type G[VP, EP] = JungDirectedGraph[VP, EP]
 
-  def graph[VP, EP]() = new JungDirectedGraph[VP, EP]() {}
+  def graph[VP, EP](): G[VP, EP] = new JungDirectedGraph[VP, EP]() {}
 
   def graphFrom[OVP, OEP, NVP, NEP](other: DirectedGraph[OVP, OEP])(convertVP: OVP => NVP, convertEP: OEP => NEP): JungDirectedGraph[NVP, NEP] = {
 

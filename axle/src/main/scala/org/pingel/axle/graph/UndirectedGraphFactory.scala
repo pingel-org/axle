@@ -4,6 +4,8 @@ trait UndirectedGraphFactory extends GraphFactory {
 
   import scala.collection._
 
+  type G[VP, EP] <: UndirectedGraph[VP, EP]
+
   trait UndirectedGraph[VP, EP] extends Graph[VP, EP] {
 
     type V <: UndirectedGraphVertex
