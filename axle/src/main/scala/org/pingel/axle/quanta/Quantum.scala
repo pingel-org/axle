@@ -1,6 +1,7 @@
 package org.pingel.axle.quanta
 
 import org.pingel.axle.graph.NativeDirectedGraphFactory._
+
 import java.math.BigDecimal
 import scala.Math.{ max, abs }
 
@@ -25,15 +26,13 @@ import scala.Math.{ max, abs }
  * reconcile newEdge(source, dest) and newEdge(source, dest, magnitude)
  */
 
-trait Quantum { // extended DirectedGraph
+trait Quantum {
 
   outer =>
 
   type UOM <: UnitOfMeasurement
 
-  type CG = DirectedGraph[UOM, BigDecimal]
-
-  val conversionGraph: CG = graph[UOM, BigDecimal]()
+  val conversionGraph = graph[UOM, BigDecimal]()
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
@@ -48,26 +47,10 @@ trait Quantum { // extended DirectedGraph
         max(denominator.precision, abs(denominator.scale))),
       java.math.RoundingMode.HALF_UP)
 
-  //  case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
-  //
-  //    def getVertices() = (from, to)
-  //    def getSource() = from
-  //    def getDest() = to
-  //    def getBD() = bd
-  //    def getLabel() = bd.toString
-  //
-  //    override def toString() = from.toString() + " * " + bd + " = " + to.toString()
-  //
-  //    type EP = BigDecimal
-  //
-  //    def getPayload() = bd
-  //    
-  //  }
-
   val one = new BigDecimal("1")
 
   class UnitOfMeasurement(
-    var conversion: Option[CG#E],
+    var conversion: Option[conversionGraph.type#E],
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None) {
@@ -98,7 +81,7 @@ trait Quantum { // extended DirectedGraph
     def micro() = quantity(one.scaleByPowerOfTen(-6), this, Some("micro" + name.getOrElse("")), Some("μ" + symbol.getOrElse("")))
     def nano() = quantity(one.scaleByPowerOfTen(-9), this, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse("")))
 
-    // override def hashCode = 42 // TODO (was overflowing stack)
+    // override def hashCode = 42
 
     override def toString() = conversion
       .map(c => c.getPayload + " " + c.getSource.getPayload.getSymbol.getOrElse(""))
@@ -153,7 +136,7 @@ trait Quantum { // extended DirectedGraph
       val otherVertex = vertexFor(other)
       val thisVertex = vertexFor(this)
       val resultBD = conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
-        path.foldLeft(one)((bd: BigDecimal, edge: CG#E) => bd.multiply(edge.getPayload))
+        path.foldLeft(one)((bd: BigDecimal, edge: conversionGraph.type#E) => bd.multiply(edge.getPayload))
       })
       if (resultBD.isEmpty) {
         throw new Exception("no conversion path from " + this + " to " + other)
@@ -165,7 +148,7 @@ trait Quantum { // extended DirectedGraph
   }
 
   def newUnitOfMeasurement(
-    conversion: Option[CG#E] = None,
+    conversion: Option[conversionGraph.type#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): UOM
@@ -187,9 +170,9 @@ trait Quantum { // extended DirectedGraph
     conversionGraph.edge(baseVertex, resultVertex, bdDivide(one, multiple))
   }
 
-  var uom2vertex = Map[UOM, CG#V]()
+  var uom2vertex = Map[UOM, conversionGraph.type#V]()
 
-  def vertexFor(uom: UOM): CG#V = uom2vertex(uom)
+  def vertexFor(uom: UOM): conversionGraph.type#V = uom2vertex(uom)
 
   def quantity(
     magnitude: BigDecimal,
@@ -227,44 +210,85 @@ trait Quantum { // extended DirectedGraph
 
 }
 
-//case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum {
-//
-//  type UOM = QRESULT#UOM
-//
-//  val wikipediaUrl = ""
-//  val unitsOfMeasurement = Nil
-//  val derivations = Nil
-//  val examples = Nil
-//  
-//  def newUnitOfMeasurement(
-//    baseUnit: Option[QRESULT#UOM] = None,
-//    magnitude: BigDecimal,
-//    name: Option[String] = None,
-//    symbol: Option[String] = None,
-//    link: Option[String] = None): UOM = {
-//
-//    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
-//  }
-//  
-//}
-//
-//case class QuantumDivision[QTOP <: Quantum, QBOTTOM <: Quantum, QRESULT <: Quantum](top: QTOP, bottom: QBOTTOM, resultQuantum: QRESULT) extends Quantum {
-//
-//  type UOM = QRESULT#UOM
-//
-//  val wikipediaUrl = ""
-//  val unitsOfMeasurement = Nil
-//  val derivations = Nil
-//  val examples = Nil
-//  
-//  def newUnitOfMeasurement(
-//    baseUnit: Option[UOM] = None,
-//    magnitude: BigDecimal,
-//    name: Option[String] = None,
-//    symbol: Option[String] = None,
-//    link: Option[String] = None): UOM = {
-//
-//    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
-//  }
-//  
-//}
+/**
+case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum {
+
+  type UOM = QRESULT#UOM
+
+  val wikipediaUrl = ""
+  val unitsOfMeasurement = Nil
+  val derivations = Nil
+  val examples = Nil
+  
+  def newUnitOfMeasurement(
+    baseUnit: Option[QRESULT#UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): UOM = {
+
+    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
+  }
+  
+}
+
+case class QuantumDivision[QTOP <: Quantum, QBOTTOM <: Quantum, QRESULT <: Quantum](top: QTOP, bottom: QBOTTOM, resultQuantum: QRESULT) extends Quantum {
+
+  type UOM = QRESULT#UOM
+
+  val wikipediaUrl = ""
+  val unitsOfMeasurement = Nil
+  val derivations = Nil
+  val examples = Nil
+  
+  def newUnitOfMeasurement(
+    baseUnit: Option[UOM] = None,
+    magnitude: BigDecimal,
+    name: Option[String] = None,
+    symbol: Option[String] = None,
+    link: Option[String] = None): UOM = {
+
+    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
+  }
+  
+}
+*/
+
+/**
+  object ConversionGraphFactoryObject extends ConversionGraphFactory
+  trait ConversionGraphFactory extends JungDirectedGraphFactory {
+    
+    type G = ConversionGraph
+    
+    trait ConversionGraph extends JungDirectedGraph[UOM, BigDecimal] {
+
+      type V = ConversionGraphVertex
+      trait ConversionGraphVertex extends JungDirectedGraphVertex[UOM]
+
+      type E = ConversionGraphEdge
+      trait ConversionGraphEdge extends JungDirectedGraphEdge[BigDecimal]
+    }
+  }
+  import ConversionGraphFactoryObject._
+ * 
+ * 
+ */
+
+/**
+  //  case class Conversion(from: UOM, to: UOM, bd: BigDecimal) extends DirectedGraphEdge {
+  //
+  //    def getVertices() = (from, to)
+  //    def getSource() = from
+  //    def getDest() = to
+  //    def getBD() = bd
+  //    def getLabel() = bd.toString
+  //
+  //    override def toString() = from.toString() + " * " + bd + " = " + to.toString()
+  //
+  //    type EP = BigDecimal
+  //
+  //    def getPayload() = bd
+  //    
+  //  }
+
+*/

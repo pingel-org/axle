@@ -6,17 +6,16 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
   import scala.collection._
 
-  type G = NativeDirectedGraph[_, _]
+  type G[VP, EP] = NativeDirectedGraph[VP, EP]
 
-  def graph[VP, EP]() = new NativeDirectedGraph[VP, EP]() {}
+  def graph[A, B](): G[A, B] = new NativeDirectedGraph[A, B]() {}
 
   trait NativeDirectedGraph[VP, EP] extends DirectedGraph[VP, EP] {
 
     import scala.collection._
 
-    type V = NativeDirectedGraphVertex
-
-    type E = NativeDirectedGraphEdge
+    type V = NativeDirectedGraphVertex[VP]
+    type E = NativeDirectedGraphEdge[EP]
 
     type S = (mutable.Set[V], mutable.Set[E], Map[V, mutable.Set[E]], Map[V, mutable.Set[E]])
 
@@ -29,20 +28,20 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def size() = vertices.size
 
-    trait NativeDirectedGraphVertex extends DirectedGraphVertex
+    trait NativeDirectedGraphVertex[P] extends DirectedGraphVertex[P]
 
-    trait NativeDirectedGraphEdge extends DirectedGraphEdge
+    trait NativeDirectedGraphEdge[P] extends DirectedGraphEdge[P]
 
-    class NativeDirectedGraphVertexImpl(payload: VP) extends NativeDirectedGraphVertex {
+    class NativeDirectedGraphVertexImpl[P](payload: P) extends NativeDirectedGraphVertex[P] {
 
       self: V =>
 
       vertices += this
 
-      def getPayload(): VP = payload
+      def getPayload(): P = payload
     }
 
-    class NativeDirectedGraphEdgeImpl(source: V, dest: V, payload: EP) extends NativeDirectedGraphEdge {
+    class NativeDirectedGraphEdgeImpl[P](source: V, dest: V, payload: P) extends NativeDirectedGraphEdge[P] {
 
       self: E =>
 
@@ -61,7 +60,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
       def getSource(): V = source
       def getDest(): V = dest
 
-      def getPayload(): EP = payload
+      def getPayload(): P = payload
 
     }
 
@@ -71,9 +70,9 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def getEdge(from: V, to: V): Option[E] = vertex2outedges(from).find(_.getDest == to)
 
-    def edge(source: V, dest: V, payload: EP): E = new NativeDirectedGraphEdgeImpl(source, dest, payload)
+    def edge(source: V, dest: V, payload: EP): E = new NativeDirectedGraphEdgeImpl[EP](source, dest, payload)
 
-    def vertex(payload: VP): V = new NativeDirectedGraphVertexImpl(payload)
+    def vertex(payload: VP): V = new NativeDirectedGraphVertexImpl[VP](payload)
 
     def removeAllEdgesAndVertices(): Unit = {
       vertices = mutable.Set[V]()

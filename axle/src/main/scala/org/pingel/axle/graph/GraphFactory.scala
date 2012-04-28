@@ -4,24 +4,23 @@ trait GraphFactory {
 
   type G[VP, EP] <: Graph[VP, EP]
 
-  def graph[VP, EP](): G[VP, EP]
+  def graph[A, B](): G[A, B]
 
   trait Graph[VP, EP] {
 
+    type V <: GraphVertex[VP]
+    type E <: GraphEdge[EP]
     type S
 
     def getStorage: S
 
-    trait GraphVertex {
-      def getPayload(): VP
+    trait GraphVertex[P] {
+      def getPayload(): P
     }
 
-    trait GraphEdge {
-      def getPayload(): EP
+    trait GraphEdge[P] {
+      def getPayload(): P
     }
-
-    type V <: GraphVertex
-    type E <: GraphEdge
 
     def size(): Int
 
@@ -40,7 +39,7 @@ trait GraphFactory {
     // TODO // def dup(): G
 
     def draw(): Unit
-    
+
   }
 
 }

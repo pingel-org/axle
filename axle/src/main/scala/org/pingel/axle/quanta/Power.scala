@@ -7,14 +7,14 @@ class Power extends Quantum {
   type UOM = PowerUnit
 
   class PowerUnit(
-    conversion: Option[CG#E] = None,
+    conversion: Option[conversionGraph.type#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[CG#E] = None,
+    conversion: Option[conversionGraph.type#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): PowerUnit = new PowerUnit(conversion, name, symbol, link)

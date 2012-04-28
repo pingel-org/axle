@@ -7,14 +7,14 @@ class Area extends Quantum {
   type UOM = AreaUnit
 
   class AreaUnit(
-    conversion: Option[CG#E] = None,
+    conversion: Option[conversionGraph.type#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[CG#E] = None,
+    conversion: Option[conversionGraph.type#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): AreaUnit = new AreaUnit(conversion, name, symbol, link)

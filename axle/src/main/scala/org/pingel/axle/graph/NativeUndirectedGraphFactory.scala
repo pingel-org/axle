@@ -6,17 +6,16 @@ object NativeUndirectedGraphFactory extends NativeUndirectedGraphFactory
 
 trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
-  type G = NativeUndirectedGraph[_, _]
+  type G[VP, EP] = NativeUndirectedGraph[VP, EP]
 
-  def graph[VP, EP]() = new NativeUndirectedGraph[VP, EP]() {}
+  def graph[A, B](): G[A, B] = new NativeUndirectedGraph[A, B]() {}
 
-  trait NativeUndirectedGraph[VP, EP] extends UndirectedGraph[VP, EP] {
+   trait NativeUndirectedGraph[VP, EP] extends UndirectedGraph[VP, EP] {
 
     import scala.collection._
 
-    type V = NativeUndirectedGraphVertex
-
-    type E = NativeUndirectedGraphEdge
+    type V = NativeUndirectedGraphVertex[VP]
+    type E = NativeUndirectedGraphEdge[EP]
 
     type S = (mutable.Set[V], mutable.Set[E], Map[V, mutable.Set[E]])
 
@@ -32,20 +31,20 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def size() = vertices.size
 
-    trait NativeUndirectedGraphVertex extends UndirectedGraphVertex
+    trait NativeUndirectedGraphVertex[P] extends UndirectedGraphVertex[P]
 
-    trait NativeUndirectedGraphEdge extends UndirectedGraphEdge
+    trait NativeUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
 
-    class NativeUndirectedGraphVertexImpl(payload: VP) extends NativeUndirectedGraphVertex {
+    class NativeUndirectedGraphVertexImpl[P](payload: P) extends NativeUndirectedGraphVertex[P] {
 
       self: V =>
 
       vertices += this
 
-      def getPayload(): VP = payload
+      def getPayload(): P = payload
     }
 
-    class NativeUndirectedGraphEdgeImpl(v1: V, v2: V, payload: EP) extends NativeUndirectedGraphEdge {
+    class NativeUndirectedGraphEdgeImpl[P](v1: V, v2: V, payload: P) extends NativeUndirectedGraphEdge[P] {
 
       self: E =>
 
@@ -57,12 +56,12 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
       es2.add(this)
 
       def getVertices(): (V, V) = (v1, v2)
-      def getPayload(): EP = payload
+      def getPayload(): P = payload
     }
 
-    def vertex(payload: VP): NativeUndirectedGraphVertex = new NativeUndirectedGraphVertexImpl(payload)
+    def vertex(payload: VP): NativeUndirectedGraphVertex[VP] = new NativeUndirectedGraphVertexImpl[VP](payload)
 
-    def edge(v1: V, v2: V, payload: EP): NativeUndirectedGraphEdge = new NativeUndirectedGraphEdgeImpl(v1, v2, payload)
+    def edge(v1: V, v2: V, payload: EP): NativeUndirectedGraphEdge[EP] = new NativeUndirectedGraphEdgeImpl[EP](v1, v2, payload)
 
     def copyTo(other: UndirectedGraph[VP, EP]) = {
       // TODO

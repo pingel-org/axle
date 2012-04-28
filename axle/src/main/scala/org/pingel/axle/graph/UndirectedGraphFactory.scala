@@ -8,12 +8,13 @@ trait UndirectedGraphFactory extends GraphFactory {
 
   trait UndirectedGraph[VP, EP] extends Graph[VP, EP] {
 
-    type V <: UndirectedGraphVertex
-    type E <: UndirectedGraphEdge
 
-    trait UndirectedGraphVertex extends GraphVertex
+    type V <: UndirectedGraphVertex[VP]
+    type E <: UndirectedGraphEdge[EP]
 
-    trait UndirectedGraphEdge extends GraphEdge {
+    trait UndirectedGraphVertex[P] extends GraphVertex[P]
+
+    trait UndirectedGraphEdge[P] extends GraphEdge[P] {
 
       def getVertices(): (V, V)
 

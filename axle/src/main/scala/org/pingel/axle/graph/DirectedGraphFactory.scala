@@ -8,12 +8,12 @@ trait DirectedGraphFactory extends GraphFactory {
 
   trait DirectedGraph[VP, EP] extends Graph[VP, EP] {
 
-    type V <: DirectedGraphVertex
-    type E <: DirectedGraphEdge
+    type V <: DirectedGraphVertex[VP]
+    type E <: DirectedGraphEdge[EP]
 
-    trait DirectedGraphVertex extends GraphVertex
+    trait DirectedGraphVertex[P] extends GraphVertex[P]
 
-    trait DirectedGraphEdge extends GraphEdge {
+    trait DirectedGraphEdge[P] extends GraphEdge[P] {
       def getSource(): V
       def getDest(): V
     }
@@ -42,34 +42,34 @@ trait DirectedGraphFactory extends GraphFactory {
     def shortestPath(source: V, goal: V): Option[List[E]]
   }
 
-//  class SimpleDirectedGraph() extends DirectedGraph {
-//
-//    type V = SimpleDirectedVertex
-//    type E = SimpleDirectedEdge
-//
-//    class SimpleDirectedVertex(label: String) extends DirectedGraphVertex {
-//      type VP = String
-//      def getPayload() = label
-//    }
-//
-//    def newVertex(vp: String) = {
-//      val v = new SimpleDirectedVertex(vp)
-//      addVertex(v)
-//      v
-//    }
-//
-//    class SimpleDirectedEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: E#EP) extends DirectedGraphEdge {
-//      def getSource() = v1
-//      def getDest() = v2
-//      type EP = String
-//      def getPayload() = ep
-//    }
-//
-//    def newEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: E#EP) = {
-//      val result = new SimpleDirectedEdge(v1, v2, ep)
-//      addEdge(result)
-//      result
-//    }
-//  }
+  //  class SimpleDirectedGraph() extends DirectedGraph {
+  //
+  //    type V = SimpleDirectedVertex
+  //    type E = SimpleDirectedEdge
+  //
+  //    class SimpleDirectedVertex(label: String) extends DirectedGraphVertex {
+  //      type VP = String
+  //      def getPayload() = label
+  //    }
+  //
+  //    def newVertex(vp: String) = {
+  //      val v = new SimpleDirectedVertex(vp)
+  //      addVertex(v)
+  //      v
+  //    }
+  //
+  //    class SimpleDirectedEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: E#EP) extends DirectedGraphEdge {
+  //      def getSource() = v1
+  //      def getDest() = v2
+  //      type EP = String
+  //      def getPayload() = ep
+  //    }
+  //
+  //    def newEdge(v1: SimpleDirectedVertex, v2: SimpleDirectedVertex, ep: E#EP) = {
+  //      val result = new SimpleDirectedEdge(v1, v2, ep)
+  //      addEdge(result)
+  //      result
+  //    }
+  //  }
 
 }

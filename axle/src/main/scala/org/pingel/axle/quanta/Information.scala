@@ -7,14 +7,14 @@ class Information extends Quantum {
   type UOM = InformationUnit
   
   class InformationUnit(
-    conversion: Option[CG#E] = None,
+    conversion: Option[conversionGraph.type#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurement(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[CG#E] = None,
+    conversion: Option[conversionGraph.type#E] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): InformationUnit = new InformationUnit(conversion, name, symbol, link)
