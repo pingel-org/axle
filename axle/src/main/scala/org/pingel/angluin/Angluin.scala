@@ -3,55 +3,33 @@ package org.pingel.angluin
 
 import scala.collection._
 
-// TODO: rephrase this graph in terms of org.pingel.axle.graph.DirectedGraph
+import org.pingel.axle.graph.JungDirectedGraphFactory._
+import org.pingel.axle.Enrichments._
 
-class Acceptor {
+case class Acceptor() {
 
-  var Q = Set[AcceptorState]()
+  val g = graph[String, Symbol]()
+
+  type AcceptorState = g.V
+
+  def Q() = g.getVertices
+
   var I = Set[AcceptorState]()
   var F = Set[AcceptorState]()
-  var outArcs = Map[AcceptorState, Map[Symbol, Set[AcceptorState]]]()
-  var inArcs = Map[AcceptorState, Map[Symbol, Set[AcceptorState]]]()
 
-  def addState(p: AcceptorState, isInitial: Boolean, isFinal: Boolean): Unit = {
+  def addState(isInitial: Boolean, isFinal: Boolean): Unit = {
 
-    Q += p
+    val p = g += "" // TODO
 
     if (isInitial)
       I += p
 
     if (isFinal)
       F += p
-
-    outArcs += p -> Map[Symbol, Set[AcceptorState]]()
-    inArcs += p -> Map[Symbol, Set[AcceptorState]]()
   }
 
-  def addTransition(from: AcceptorState, symbol: Symbol, to: AcceptorState): Unit = {
-
-    var symbol2outs = outArcs(from)
-    var outs: Set[AcceptorState] = null
-    if (symbol2outs.contains(symbol)) {
-      outs = symbol2outs(symbol)
-    } else {
-      outs = Set[AcceptorState]()
-      symbol2outs += symbol -> outs
-    }
-    outs += to
-
-    var symbol2ins = inArcs(to)
-    var ins: Set[AcceptorState] = null
-    if (symbol2ins.contains(symbol)) {
-      ins = symbol2ins(symbol)
-    } else {
-      ins = Set[AcceptorState]()
-      symbol2ins += symbol -> ins
-    }
-
-    ins += from
-  }
-
-  def δ(state: AcceptorState, symbol: Symbol): Set[AcceptorState] = outArcs(state)(symbol)
+  def δ(state: AcceptorState, symbol: Symbol): Set[AcceptorState] =
+    g.getEdges.filter(e => e.getSource == state && e.getPayload == symbol).map(_.getDest)
 
   def δ(state: AcceptorState, exp: Expression): Set[AcceptorState] = {
 
@@ -69,43 +47,10 @@ class Acceptor {
     result
   }
 
-  def isForwardDeterministic(): Boolean = {
+  // TODO: not sure if this should count edges or nodes:
+  def isForwardDeterministic(): Boolean = (I.size <= 1) && Q.∀(g.getSuccessors(_).size <= 1)
 
-    if (I.size > 1) {
-      return false
-    }
-
-    for (state <- Q) {
-      val symbol2outs = outArcs(state)
-      val outSymbols = symbol2outs.keys
-      for (symbol <- outSymbols) {
-        val outs = symbol2outs(symbol)
-        if (outs.size > 1) {
-          return false
-        }
-      }
-    }
-    true
-  }
-
-  def isBackwardDeterministic(): Boolean = {
-
-    if (F.size > 1) {
-      return false
-    }
-
-    for (state <- Q) {
-      val symbol2ins = inArcs(state)
-      val inSymbols = symbol2ins.keys
-      for (symbol <- inSymbols) {
-        val ins = symbol2ins(symbol)
-        if (ins.size > 1) {
-          return false
-        }
-      }
-    }
-    true
-  }
+  def isBackwardDeterministic(): Boolean = (F.size <= 1) && Q.∀(g.getPredecessors(_).size <= 1)
 
   def isZeroReversible(): Boolean = isForwardDeterministic() && isBackwardDeterministic()
 
@@ -126,19 +71,6 @@ class Acceptor {
 
 }
 
-class AcceptorState {}
-
-class Alphabet { // TODO: redefine as Set[Symbol]
-
-  var symbols = Set[Symbol]()
-
-  def addSymbol(m: Symbol) = {
-    symbols += m
-  }
-
-  def iterator() = symbols.iterator
-}
-
 case class CanonicalAcceptorFactory {
 
   def makeCanonicalAcceptor(ℒ: Language): Acceptor = {
@@ -156,7 +88,7 @@ trait Expression {
 
 }
 
-class MutableExpression(vs: List[Symbol]) extends Expression {
+case class MutableExpression(vs: List[Symbol]) extends Expression {
 
   var v = new mutable.ListBuffer[Symbol]()
 
@@ -164,9 +96,7 @@ class MutableExpression(vs: List[Symbol]) extends Expression {
 
   def getSymbolIterator() = v.iterator
 
-  def addSymbol(s: Symbol) = {
-    v += s
-  }
+  def addSymbol(s: Symbol) = v += s
 
   def length() = v.size
 
@@ -212,7 +142,7 @@ case class ▦() extends Expression() {
   // TOOD: not sure about head and tail here:
   def getHead(): Symbol = null
   def getTail(): Expression = null
-  
+
   // should this class throw an exception
   // if addMorpheme is called?
   override def toString() = "▦"
@@ -255,9 +185,9 @@ class Learner(T: Text) {
 
 }
 
-class MemorizingLearner(T: Text) extends Learner(T) {
+case class MemorizingLearner(T: Text) extends Learner(T) {
 
-  var runningGuess = new Language()
+  var runningGuess = Language(Nil)
 
   override def processNextExpression(): Grammar = {
     val s = nextExpression()
@@ -292,9 +222,9 @@ case class Quotient(A: Acceptor, π: Partition) {
   }
 }
 
-case class Symbol(s: String, Σ: Alphabet) {
+case class Symbol(s: String, Σ: mutable.Set[Symbol]) {
 
-  Σ.addSymbol(this)
+  Σ += this
 
   override def toString() = s
 
@@ -304,9 +234,7 @@ case class Symbol(s: String, Σ: Alphabet) {
 
 case class Text(var v: List[Expression]) {
 
-  def addExpression(s: Expression) = {
-    v  = v ::: List(s)
-  }
+  def addExpression(s: Expression): Unit = v = v ::: List(s)
 
   def length() = v.size
 

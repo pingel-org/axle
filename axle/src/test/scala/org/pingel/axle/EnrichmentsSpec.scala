@@ -18,4 +18,13 @@ class EnrichmentsSpec extends Specification {
     }
   }
 
+  "Set Enrichment" should {
+    "work" in {
+      
+      val evens = Set(2, 4, 6)
+      
+      evens.∀( _ % 2 == 0) must be equalTo true
+    }
+  }
+  
 }
