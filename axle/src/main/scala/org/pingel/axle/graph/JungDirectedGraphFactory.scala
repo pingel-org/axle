@@ -59,7 +59,10 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     class JungDirectedGraphEdgeImpl(source: V, dest: V, payload: EP, insert: Boolean) extends JungDirectedGraphEdge[EP] {
 
+      println("JungDirectedGraphEdgeImpl: source " + source.getPayload + ", dest " + dest.getPayload)
+      
       if (insert) {
+        println("adding to underlying jungGraph")
         jungGraph.addEdge(payload, source.getPayload, dest.getPayload)
       }
 
@@ -97,7 +100,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     def edge(source: V, dest: V, payload: EP): E = new JungDirectedGraphEdgeImpl(source, dest, payload, true)
 
-    def vertex(payload: VP): V = new JungDirectedGraphVertexImpl(payload, false)
+    def vertex(payload: VP): V = new JungDirectedGraphVertexImpl(payload, true)
 
     def vertexWrap(payload: VP): JungDirectedGraphVertex[VP] = new JungDirectedGraphVertexImpl(payload, true)
 

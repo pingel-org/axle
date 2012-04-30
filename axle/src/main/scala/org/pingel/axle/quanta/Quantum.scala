@@ -34,6 +34,9 @@ trait Quantum {
 
   val conversionGraph = graph[UOM, BigDecimal]()
 
+  type CGE = conversionGraph.type#E
+  type CGV = conversionGraph.type#V
+  
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
   implicit def toBD(d: Double) = new BigDecimal(d.toString)
@@ -50,7 +53,7 @@ trait Quantum {
   val one = new BigDecimal("1")
 
   class UnitOfMeasurement(
-    var conversion: Option[conversionGraph.type#E],
+    var conversion: Option[CGE],
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None) {
@@ -59,7 +62,7 @@ trait Quantum {
 
     val quantum: Quantum = outer
 
-    val vertex = conversionGraph.vertex(this)
+    val vertex = conversionGraph += this
     uom2vertex += this -> vertex
 
     def getLabel() = name.getOrElse("")
@@ -81,11 +84,9 @@ trait Quantum {
     def micro() = quantity(one.scaleByPowerOfTen(-6), this, Some("micro" + name.getOrElse("")), Some("μ" + symbol.getOrElse("")))
     def nano() = quantity(one.scaleByPowerOfTen(-9), this, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse("")))
 
-    // override def hashCode = 42
-
-    override def toString() = conversion
+    override def toString() = name.getOrElse(conversion
       .map(c => c.getPayload + " " + c.getSource.getPayload.getSymbol.getOrElse(""))
-      .getOrElse(name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName())
+      .getOrElse(name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()))
 
     def *:(bd: BigDecimal) = quantity(bd, this)
     def in_:(bd: BigDecimal) = quantity(bd, this)
@@ -136,7 +137,7 @@ trait Quantum {
       val otherVertex = vertexFor(other)
       val thisVertex = vertexFor(this)
       val resultBD = conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
-        path.foldLeft(one)((bd: BigDecimal, edge: conversionGraph.type#E) => bd.multiply(edge.getPayload))
+        path.foldLeft(one)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.getPayload))
       })
       if (resultBD.isEmpty) {
         throw new Exception("no conversion path from " + this + " to " + other)
@@ -148,7 +149,7 @@ trait Quantum {
   }
 
   def newUnitOfMeasurement(
-    conversion: Option[conversionGraph.type#E] = None,
+    conversion: Option[CGE] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): UOM
@@ -166,13 +167,17 @@ trait Quantum {
   def link(base: UOM, multiple: BigDecimal, result: UOM): Unit = {
     val baseVertex = vertexFor(base)
     val resultVertex = vertexFor(result)
-    conversionGraph.edge(resultVertex, baseVertex, multiple)
-    conversionGraph.edge(baseVertex, resultVertex, bdDivide(one, multiple))
+    conversionGraph += (resultVertex -> baseVertex, multiple)
+    conversionGraph += (baseVertex -> resultVertex, bdDivide(one, multiple))
   }
 
-  var uom2vertex = Map[UOM, conversionGraph.type#V]()
+  var uom2vertex = Map[UOM, CGV]()
 
-  def vertexFor(uom: UOM): conversionGraph.type#V = uom2vertex(uom)
+  def vertexFor(uom: UOM): CGV = {
+    val result = uom2vertex(uom)
+    println("Quantum.vertexFor(" + uom + ") -> " + result.toString)
+    result
+  }
 
   def quantity(
     magnitude: BigDecimal,
@@ -182,10 +187,10 @@ trait Quantum {
     qlink: Option[String] = None): UOM = {
 
     val uom = newUnitOfMeasurement(None, qname, qsymbol, qlink)
-    val uomVertex = vertexFor(unit)
+    val uomVertex = vertexFor(uom)
     val unitVertex = vertexFor(unit)
-    val conversion1 = conversionGraph.edge(uomVertex, unitVertex, bdDivide(one, magnitude))
-    val conversion2 = conversionGraph.edge(unitVertex, uomVertex, magnitude)
+    val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(one, magnitude))
+    val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
     uom.conversion = Some(conversion2)
     uom
   }
