@@ -173,11 +173,7 @@ trait Quantum {
 
   var uom2vertex = Map[UOM, CGV]()
 
-  def vertexFor(uom: UOM): CGV = {
-    val result = uom2vertex(uom)
-    println("Quantum.vertexFor(" + uom + ") -> " + result.toString)
-    result
-  }
+  def vertexFor(uom: UOM): CGV = uom2vertex(uom)
 
   def quantity(
     magnitude: BigDecimal,

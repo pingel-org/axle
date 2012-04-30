@@ -52,6 +52,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
     extends JungUndirectedGraphVertex[VP] {
 
       val ok = jungGraph.addVertex(this)
+      // TODO check 'ok'
 
       def getPayload(): VP = payload
     }
@@ -60,6 +61,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
     extends JungUndirectedGraphEdge[EP] {
 
       val ok = jungGraph.addEdge(this, v1, v2)
+      // TODO check 'ok'
 
       def getVertices(): (V, V) = (v1, v2)
 
@@ -76,24 +78,9 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def size(): Int = jungGraph.getVertexCount()
 
-//    // TODO: make enVertex implicit
-//    def vertexWrap(payload: VP): JungUndirectedGraphVertex[VP] = new JungUndirectedGraphVertexImpl(payload, false)
-
     def vertex(payload: VP): JungUndirectedGraphVertex[VP] = new JungUndirectedGraphVertexImpl(payload)
 
-//    // TODO: make enEdge implicit
-//    def enEdge(payload: EP): JungUndirectedGraphEdge[EP] = {
-//      val endpoints = jungGraph.getEndpoints(payload)
-//      val v1 = endpoints.getFirst
-//      val v2 = endpoints.getSecond
-//      edgeWrap(v1, v2, payload)
-//    }
-
     def edge(v1: V, v2: V, payload: EP): JungUndirectedGraphEdge[EP] = new JungUndirectedGraphEdgeImpl(v1, v2, payload, true)
-
-//    def edge(vp1: VP, vp2: VP, payload: EP): JungUndirectedGraphEdge[EP] = new JungUndirectedGraphEdgeImpl(vp1, vp2, payload, true)
-
-//    def edgeWrap(vp1: VP, vp2: VP, payload: EP): JungUndirectedGraphEdge[EP] = new JungUndirectedGraphEdgeImpl(vp1, vp2, payload, false)
 
     def unlink(e: E): Unit = jungGraph.removeEdge(e)
 
