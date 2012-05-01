@@ -10,7 +10,7 @@ class InteractionGraph {
   def eliminationSequence(π: List[RandomVariable]): List[InteractionGraph] = {
 
     var G: InteractionGraph = this
-    val result = List(G)
+    val result = mutable.ListBuffer(G)
 
     π.map(rv => {
       val newG = new InteractionGraph()

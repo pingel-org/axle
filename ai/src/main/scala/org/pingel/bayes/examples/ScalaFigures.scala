@@ -1,6 +1,8 @@
 
 package org.pingel.bayes.examples
 
+
+import scala.collection._
 import org.pingel.bayes.BayesianNetwork
 import org.pingel.bayes.Case
 import org.pingel.bayes.EliminationTree
@@ -24,17 +26,17 @@ object ScalaFigures {
   lazy val figure6_1 = {
 
     val result = new BayesianNetwork()
-    result.addVariable(A)
-    result.addVariable(B)
-    result.addVariable(C)
-    result.addVariable(D)
-    result.addVariable(E)
+    val av = result.g += A
+    val bv = result.g += B
+    val cv = result.g += C
+    val dv = result.g += D
+    val ev = result.g += E
 
-    result.connect(A, B)
-    result.connect(A, C)
-    result.connect(B, D)
-    result.connect(C, D)
-    result.connect(C, E)
+    result.g.edge(av, bv, "")
+    result.g.edge(av, cv, "")
+    result.g.edge(bv, dv, "")
+    result.g.edge(cv, dv, "")
+    result.g.edge(cv, ev, "")
 
     val cptA = result.getCPT(A) // A
     cptA.write(cptA.caseOf(0), 0.6)
@@ -119,12 +121,12 @@ object ScalaFigures {
   lazy val figure6_4 = {
 
     val result = new BayesianNetwork()
-    result.addVariable(A)
-    result.addVariable(B)
-    result.addVariable(C)
+    val av = result.g += A
+    val bv = result.g += B
+    val cv = result.g += C
 
-    result.connect(A, B)
-    result.connect(B, C)
+    result.g.edge(av, bv, "")
+    result.g.edge(bv, cv, "")
 
     val cptA = result.getCPT(A) // A
     cptA.write(cptA.caseOf(0), 0.6)
@@ -271,7 +273,8 @@ object ScalaFigures {
 
     println("Doing factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3")
     elim.print
-    result
+    
+    (result, τ, τ_n3)
   }
 
   lazy val figure7_5 = {
@@ -279,6 +282,8 @@ object ScalaFigures {
     val result = new BayesianNetwork()
     figure6_1.copyTo(result)
 
+    val (bn, τ, τ_n3) = figure7_4
+    
     val elim = result.factorElimination2(Set(C), τ, τ_n3)
 
     println("Doing factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3")
@@ -288,9 +293,9 @@ object ScalaFigures {
 
   lazy val figure7_12 = {
     val result = new JoinTree()
-    val jtn1 = result.g.vertex(Set(A, B, C))
-    val jtn2 = result.g.vertex(Set(B, C, D))
-    val jtn3 = result.g.vertex(Set(C, E))
+    val jtn1 = result.g.vertex(mutable.Set(A, B, C))
+    val jtn2 = result.g.vertex(mutable.Set(B, C, D))
+    val jtn3 = result.g.vertex(mutable.Set(C, E))
     result.g.edge(jtn1, jtn2, "")
     result.g.edge(jtn2, jtn3, "")
     result.g.draw

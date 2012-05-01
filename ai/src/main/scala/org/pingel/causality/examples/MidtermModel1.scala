@@ -15,32 +15,32 @@ object MidtermModel1 extends CausalModel("Midterm Model 1") {
   val bools = Some(new PBooleans())
 
   val U1 = new RandomVariable("U1", bools, false)
-  addVariable(U1)
+  g += U1
 
   val U2 = new RandomVariable("U2", bools, false)
-  addVariable(U2)
+  g += U2
 
   val U3 = new RandomVariable("U3", bools, false)
-  addVariable(U3)
+  g += U3
 
   val X1 = new RandomVariable("X1", bools, true)
-  addVariable(X1)
+  g += X1
   addFunction(new PFunction(X1, List(U1)))
 
   val X2 = new RandomVariable("X2", bools, true)
-  addVariable(X2)
+  g += X2
   addFunction(new PFunction(X2, List(X1, U2)))
 
   val X3 = new RandomVariable("X3", bools, true)
-  addVariable(X3)
+  g += X3
   addFunction(new PFunction(X3, List(X2, U1, U3)))
 
   val X4 = new RandomVariable("X4", bools, true)
-  addVariable(X4)
+  g += X4
   addFunction(new PFunction(X4, List(X3, U2)))
 
   val Y = new RandomVariable("Y", bools, true)
-  addVariable(Y)
+  g += Y
   addFunction(new PFunction(Y, List(X4, U3)))
 
   def getQuantity(namer: VariableNamer) = {

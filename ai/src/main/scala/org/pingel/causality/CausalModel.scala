@@ -8,16 +8,15 @@ import org.pingel.forms.Basic.PFunction
 import org.pingel.axle.util.Collector
 import org.pingel.axle.iterator.CrossProduct
 import org.pingel.axle.iterator.PowerSet
-import org.pingel.bayes.{RandomVariable, Factor}
+import org.pingel.bayes.{RandomVariable, Factor, Case, Probability}
 
-class CausalModel(name: String)
-  extends Model(name) {
+class CausalModel(name: String) extends Model(name) {
 
   var variable2function = Map[RandomVariable, PFunction]()
 
   def sampleDistribution(numSamples: Int) = {
     println("creating probabilitytable of " + getObservableRandomVariables().size() + " variables")
-    var result = new Factor(getObservableRandomVariables())
+    val result = new Factor(getObservableRandomVariables())
     for (j <- 0 until numSamples) {
       val sample = getSample()
       val previous = result.read(sample)
@@ -36,7 +35,7 @@ class CausalModel(name: String)
   def getFunction(v: RandomVariable) = variable2function.get(v)
 
   def getSample(): Case = {
-    var all = new Case()
+    val all = new Case()
     for (rv <- getRandomVariables()) {
       getFunction(rv).execute(this, all)
     }
@@ -92,9 +91,9 @@ class CausalModel(name: String)
   }
 
   def hasDoor(p: Probability): Boolean = {
-    var V = mutable.Set[RandomVariable]()
-    var questionRVs = rvGetter.execute(p.getQuestion())
-    var actionRVs = rvGetter.execute(p.getActions())
+    val V = mutable.Set[RandomVariable]()
+    val questionRVs = rvGetter.execute(p.getQuestion())
+    val actionRVs = rvGetter.execute(p.getActions())
     for (rv <- getRandomVariables()) {
       if (rv.observable && !questionRVs.contains(rv) && !actionRVs.contains(rv)) {
         V += rv
@@ -115,7 +114,7 @@ class CausalModel(name: String)
   }
 
   def allBackdoorsBlocked(XiSet: Set[RandomVariable], XjSet: Set[RandomVariable], Z: Set[RandomVariable]) = {
-    var subModel = duplicate()
+    val subModel = duplicate()
     subModel.getGraph().removeOutputs(XiSet)
     subModel.blocks(XiSet, XjSet, Z)
   }
@@ -137,8 +136,8 @@ class CausalModel(name: String)
 
     // ii) Z blocks every path between Xi and Xj that contains an arrow into Xi
 
-    var XiSet = Set[RandomVariable](Xi)
-    var XjSet = Set[RandomVariable](Xj)
+    val XiSet = Set[RandomVariable](Xi)
+    val XjSet = Set[RandomVariable](Xj)
 
     allBackdoorsBlocked(XiSet, XjSet, Z)
 
@@ -176,7 +175,7 @@ class CausalModel(name: String)
   }
 
   def duplicate() = {
-    var answer = new CausalModel(name)
+    val answer = new CausalModel(name)
     for (v <- getRandomVariables()) {
       answer.addVariable(v)
     }

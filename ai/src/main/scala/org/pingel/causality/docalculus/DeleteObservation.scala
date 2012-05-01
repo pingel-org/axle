@@ -17,15 +17,15 @@ class DeleteObservation extends Rule {
     val Y = q.getQuestion()
     val X = q.getActions()
     val subModel = m.duplicate()
-    subModel.getGraph().removeInputs(randomVariablesOf(X))
+    subModel.g.removeInputs(X)
 
     for (zObservation <- q.getGiven()) {
 
-      val Z = Set[Variable]() + zObservation
-      val W = Set[Variable]() ++ q.getGiven - zObservation
-      val WX = Set[Variable]() ++ W ++ X
+      val Z = Set(zObservation)
+      val W = q.getGiven - zObservation
+      val WX = W ++ X
 
-      if (subModel.blocks(randomVariablesOf(q.getGiven()), randomVariablesOf(Z), randomVariablesOf(WX))) {
+      if (subModel.blocks(q.getGiven(), Z, WX)) {
 
         val Ycopy = Set[Variable]() ++ Y
         val Xcopy = Set[Variable]() ++ X

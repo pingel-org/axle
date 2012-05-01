@@ -20,7 +20,7 @@ class InsertObservation extends Rule {
     val W = q.getGiven()
 
     val subModel = m.duplicate()
-    subModel.getGraph().removeInputs(randomVariablesOf(X))
+    subModel.g.removeInputs(X)
 
     val XW = X ++ W
 
@@ -28,12 +28,12 @@ class InsertObservation extends Rule {
     // is possible to have relevant actions that are not in q?
     // I assume not.
 
-    val potentialZ = m.getRandomVariables() -- randomVariablesOf(Y) -- randomVariablesOf(X) -- randomVariablesOf(W)
+    val potentialZ = m.getRandomVariables().toSet -- Y -- X -- W
 
     for (zRandomVariable <- potentialZ) {
       if (zRandomVariable.observable) {
         val Z = Set[Variable](zRandomVariable.nextVariable(namer))
-        if (subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW))) {
+        if (subModel.blocks(Y, Z, XW)) {
           val ZW = Z ++ W
           val Ycopy = Set[Variable]() ++ Y
           val Xcopy = Set[Variable]() ++ X

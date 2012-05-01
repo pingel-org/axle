@@ -16,18 +16,19 @@ import org.pingel.gestalt.core.Form
 object SmokingModel extends CausalModel("Smoking Model") {
 
   val U = new RandomVariable("U", None, false)
-  addVariable(U)
+  g += U
 
   val X = new RandomVariable("X") // smoke
-  addVariable(X)
-  addFunction(new PFunction(X, List(U)))
+  g += X
 
   val Z = new RandomVariable("Z") // tar
-  addVariable(Z)
-  addFunction(new PFunction(Z, List(X)))
+  g += Z
 
   val Y = new RandomVariable("Y") // cancer
-  addVariable(Y)
+  g += Y
+
+  addFunction(new PFunction(Z, List(X)))
+  addFunction(new PFunction(X, List(U)))
   addFunction(new PFunction(Y, List(Z, U)))
 
   def doTask1(model: CausalModel, namer: VariableNamer) = {
@@ -48,9 +49,7 @@ object SmokingModel extends CausalModel("Smoking Model") {
   def doTask2(model: CausalModel, namer: VariableNamer) = {
 
     val question = Set(model.getVariable("Y").nextVariable(namer))
-
     val given = Set[Variable]()
-
     val actions = Set(model.getVariable("Z").nextVariable(namer))
 
     val task2 = new Probability(question, given, actions)

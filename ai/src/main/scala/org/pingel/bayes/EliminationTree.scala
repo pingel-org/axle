@@ -16,16 +16,16 @@ class EliminationTree {
   }
 
   def cluster(i: GV): Set[RandomVariable] = {
-    var result = mutable.Set[RandomVariable]()
+    val result = mutable.Set[RandomVariable]()
     g.getNeighbors(i).map(j => result ++= separate(i, j))
     result ++= i.getPayload.getVariables
     result
   }
 
   def separate(i: GV, j: GV): Set[RandomVariable] = {
-    var iSide = mutable.Set[RandomVariable]()
+    val iSide = mutable.Set[RandomVariable]()
     gatherVars(j, i, iSide)
-    var jSide = mutable.Set[RandomVariable]()
+    val jSide = mutable.Set[RandomVariable]()
     gatherVars(i, j, jSide)
     iSide.intersect(jSide)
   }
@@ -34,13 +34,7 @@ class EliminationTree {
 
   def delete(node: GV): Unit = g.delete(node)
 
-  def getAllVariables(): Set[RandomVariable] = {
-    var result = Set[RandomVariable]()
-    for (node <- g.getVertices) {
-      result ++= node.getPayload.getVariables
-    }
-    result
-  }
+  def getAllVariables(): Set[RandomVariable] = g.getVertices.flatMap(_.getPayload.getVariables)
 
   // Note: previous version also handled case where 'node' wasn't in the graph
   def addFactor(node: GV, f: Factor): Unit = node.setPayload(node.getPayload.multiply(f))
@@ -48,11 +42,5 @@ class EliminationTree {
   def getFactor(node: GV): Factor = node.getPayload
 
   def setFactor(node: GV, f: Factor): Unit = node.setPayload(f)
-
-  def copyTo(other: EliminationTree): Unit = {
-    g.getVertices.map(node => other.g += node.getPayload)
-    g.getEdges.map(edge => other.addEdge(edge))
-    node2phi.keySet.map(node => other.setFactor(node, node2phi(node)))
-  }
 
 }

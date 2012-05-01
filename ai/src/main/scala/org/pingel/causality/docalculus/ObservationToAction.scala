@@ -24,12 +24,12 @@ class ObservationToAction extends Rule {
       val W = q.getGiven() - z
 
       val subModel = m.duplicate()
-      subModel.getGraph().removeInputs(randomVariablesOf(X))
-      subModel.getGraph().removeOutputs(randomVariablesOf(Z))
+      subModel.getGraph().removeInputs(X)
+      subModel.getGraph().removeOutputs(Z)
 
       val XW = X ++ W
 
-      if (subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW))) {
+      if (subModel.blocks(Y, Z, XW)) {
 
         val XZ = X + z
         val Ycopy = Set[Variable]() ++ Y

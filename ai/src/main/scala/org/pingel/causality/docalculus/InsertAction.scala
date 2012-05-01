@@ -27,23 +27,22 @@ class InsertAction extends Rule {
     // is possible to have relevant actions that are not in q?
     // I assume not.
 
-    val potentialZ = Set[RandomVariable]() ++
-      m.getRandomVariables() -- randomVariablesOf(Y) -- randomVariablesOf(X) -- randomVariablesOf(W)
+    val potentialZ = m.getRandomVariables().toSet -- Y -- X -- W
 
     for (zRandomVariable <- potentialZ) {
       if (zRandomVariable.observable) {
         val zAction = zRandomVariable.nextVariable(namer)
         val Z = Set(zAction)
 
-        var subModel = m.duplicate()
-        subModel.getGraph().removeInputs(randomVariablesOf(X))
+        val subModel = m.duplicate()
+        subModel.g.removeInputs(X)
         val ancestorsOfW = Set[RandomVariable]()
-        subModel.getGraph().collectAncestors(randomVariablesOf(W), ancestorsOfW)
+        subModel.g.collectAncestors(W, ancestorsOfW)
         if (!ancestorsOfW.contains(zRandomVariable)) {
-          subModel.getGraph().removeInputs(randomVariablesOf(Z))
+          subModel.g.removeInputs(Z)
         }
 
-        if (subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW))) {
+        if (subModel.blocks(Y, Z, XW)) {
           val XZ = X + zAction
           val Ycopy = Set[Variable]() ++ Y
           val Wcopy = Set[Variable]() ++ W

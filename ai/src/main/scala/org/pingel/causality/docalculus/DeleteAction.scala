@@ -27,15 +27,15 @@ class DeleteAction extends Rule {
       val XW = X ++ W
 
       val subModel = m.duplicate()
-      subModel.getGraph().removeInputs(randomVariablesOf(X))
+      subModel.g.removeInputs(X)
 
       var ancestorsOfW = Set[RandomVariable]()
-      subModel.getGraph().collectAncestors(randomVariablesOf(W), ancestorsOfW)
+      subModel.g.collectAncestors(W, ancestorsOfW)
       if (!ancestorsOfW.contains(z.getRandomVariable())) {
-        subModel.getGraph().removeInputs(randomVariablesOf(Z))
+        subModel.g.removeInputs(Z)
       }
 
-      if (subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW))) {
+      if (subModel.blocks(Y, Z, XW)) {
 
         val Ycopy = Set[Variable]() ++ Y
         val Wcopy = Set[Variable]() ++ W

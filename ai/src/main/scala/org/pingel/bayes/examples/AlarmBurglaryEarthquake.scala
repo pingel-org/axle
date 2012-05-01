@@ -18,20 +18,24 @@ object AlarmBurglaryEarthquake {
     val bools = Some(new PBooleans())
 
     val burglary = new RandomVariable("burglary", bools)
-    bn.addVariable(burglary)
-    val earthquake = new RandomVariable("earthquake", bools)
-    bn.addVariable(earthquake)
-    val alarm = new RandomVariable("alarm", bools)
-    bn.addVariable(alarm)
-    val johnCalls = new RandomVariable("johnCalls", bools)
-    bn.addVariable(johnCalls)
-    val maryCalls = new RandomVariable("maryCalls", bools)
-    bn.addVariable(maryCalls)
+    val burglaryVertex = bn.g += burglary
 
-    bn.connect(burglary, alarm)
-    bn.connect(earthquake, alarm)
-    bn.connect(alarm, johnCalls)
-    bn.connect(alarm, maryCalls)
+    val earthquake = new RandomVariable("earthquake", bools)
+    val earthquakeVertex = bn.g += earthquake
+    
+    val alarm = new RandomVariable("alarm", bools)
+    val alarmVertex = bn.g += alarm
+    
+    val johnCalls = new RandomVariable("johnCalls", bools)
+    val johnCallsVertex = bn.g += johnCalls
+    
+    val maryCalls = new RandomVariable("maryCalls", bools)
+    val maryCallsVertex = bn.g += maryCalls
+
+    bn.g.edge(burglaryVertex, alarmVertex, "")
+    bn.g.edge(earthquakeVertex, alarmVertex, "")
+    bn.g.edge(alarmVertex, johnCallsVertex, "")
+    bn.g.edge(alarmVertex, maryCallsVertex, "")
 
     bn.getCPT(burglary).write(new Case(burglary, tVal), 0.001)
     bn.getCPT(burglary).write(new Case(burglary, fVal), 0.999)

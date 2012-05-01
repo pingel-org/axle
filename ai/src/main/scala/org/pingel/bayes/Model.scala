@@ -20,40 +20,13 @@ case class Model(var name: String = "no name") {
 
   def getName(): String = name
 
-  def copyTo(other: Model): Unit = {
-    other.name = name
-    for (variable <- variables) {
-      other.addVariable(variable)
-    }
-    for (edge <- graph.getEdges()) {
-      other.connect(edge.getSource(), edge.getDest())
-    }
-  }
-
   def getGraph() = g
 
-  def connect(source: RandomVariable, dest: RandomVariable): Unit = {
-    g += ((source, dest), "")
-  }
-
-  var variables = mutable.ListBuffer[RandomVariable]()
-
-  def addVariable(variable: RandomVariable): RandomVariable = {
-    variables += variable
-    name2variable += variable.getName -> variable
-    g += variable
-  }
-
-  def getRandomVariables(): List[RandomVariable] = variables.toList
+  def getRandomVariables(): List[RandomVariable] = g.getVertices().map(_.getPayload).toList
 
   def getVariable(name: String): RandomVariable = name2variable(name)
 
-  def deleteVariable(variable: RandomVariable): Unit = {
-    variables -= variable
-    graph.deleteVertex(variable)
-  }
-
-  def numVariables(): Int = variables.size
+  def numVariables(): Int = g.size
 
   def blocks(from: Set[RandomVariable], to: Set[RandomVariable], given: Set[RandomVariable]): Boolean = {
     val path = _findOpenPath(Map[RandomVariable, Set[RandomVariable]](), Direction.UNKNOWN, null, from.toSet, to, given)
@@ -66,7 +39,7 @@ case class Model(var name: String = "no name") {
 
   def _findOpenPath(
     visited: Map[RandomVariable, Set[RandomVariable]],
-    priorDirection: Integer,
+    priorDirection: Int,
     prior: RandomVariable,
     current: mutable.Set[RandomVariable],
     to: Set[RandomVariable],

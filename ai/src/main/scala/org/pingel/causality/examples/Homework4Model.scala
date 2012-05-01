@@ -38,15 +38,15 @@ class Homework4Model(k: Int, p: Double) extends CausalModel("Homework 4 Model") 
 
   for (i <- 0 to k) {
     val ei = new RandomVariable("E" + i, bools, false)
-    addVariable(ei)
+    g += ei
     addFunction(new RandomBooleanFunction(ei, p))
 
     val epi = new RandomVariable("E'" + i, bools, false)
-    addVariable(epi)
+    g += epi
     addFunction(new RandomBooleanFunction(epi, p))
 
     val xi = new RandomVariable("X" + i, bools, true)
-    addVariable(xi)
+    g += xi
 
     if (i == 0) {
       addFunction(new RandomBooleanFunction(xi, 0.25))
@@ -55,7 +55,7 @@ class Homework4Model(k: Int, p: Double) extends CausalModel("Homework 4 Model") 
     }
 
     val yi = new RandomVariable("Y" + i, bools, true)
-    addVariable(yi)
+    g += yi
 
     if (i == 0) {
       addFunction(new RandomBooleanFunction(yi, 0.25))
@@ -75,7 +75,7 @@ object Homework4Model {
 
   def main(args: Array[String]): Unit = {
     val hw4 = new Homework4Model(5, 0.2)
-    hw4.g.draw()
+    hw4.g.draw
   }
 
 }

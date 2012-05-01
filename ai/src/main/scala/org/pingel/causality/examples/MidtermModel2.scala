@@ -15,24 +15,24 @@ object MidtermModel2 extends CausalModel("Midterm Model 2") {
   val bools = Some(new PBooleans())
 
   val a = new RandomVariable("A", bools, true)
-  addVariable(a)
+  g += a
 
   val b = new RandomVariable("B", bools, true)
-  addVariable(b)
+  g += b
 
   val c = new RandomVariable("C", bools, true)
-  addVariable(c)
+  g += c
   addFunction(new PFunction(c, List(a, b)))
 
   val f = new RandomVariable("F", bools, false)
-  addVariable(f)
+  g += f
 
   val d = new RandomVariable("D", bools, true)
-  addVariable(d)
+  g += d
   addFunction(new PFunction(d, List(c, f)))
 
   val e = new RandomVariable("E", bools, true)
-  addVariable(e)
+  g += e
   addFunction(new PFunction(e, List(d, f)))
 
   def main(args: Array[String]) {

@@ -10,15 +10,32 @@ import org.pingel.bayes.RandomVariable
 
 object Model3dot8g extends CausalModel("3.8g") {
 
-  val X = addVariable(new RandomVariable("X"))
-  val Y = addVariable(new RandomVariable("Y"))
-  val Z1 = addVariable(new RandomVariable("Z1"))
-  val Z2 = addVariable(new RandomVariable("Z2"))
-  val Z3 = addVariable(new RandomVariable("Z3"))
-  val U1 = addVariable(new RandomVariable("U1", None, false))
-  val U2 = addVariable(new RandomVariable("U2", None, false))
-  val U3 = addVariable(new RandomVariable("U3", None, false))
-  val U4 = addVariable(new RandomVariable("U4", None, false))
+  val X = new RandomVariable("X")
+  g += X
+  
+  val Y = new RandomVariable("Y")
+  g += Y
+  
+  val Z1 = new RandomVariable("Z1")
+  g += Z1
+  
+  val Z2 = new RandomVariable("Z2")
+  g += Z2
+  
+  val Z3 = new RandomVariable("Z3")
+  g += Z3
+  
+  val U1 = new RandomVariable("U1", None, false)
+  g += U1
+  
+  val U2 = new RandomVariable("U2", None, false)
+  g += U2
+  
+  val U3 = new RandomVariable("U3", None, false)
+  g += U3
+  
+  val U4 = new RandomVariable("U4", None, false)
+  g += U4
 
   addFunction(new PFunction(X, List(Z2, U1, U2, U3)))
   addFunction(new PFunction(Y, List(Z1, Z3, U1, U4)))

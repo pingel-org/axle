@@ -107,7 +107,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
   var var2cpt = Map[RandomVariable, Factor]()
 
   def getJointProbabilityTable(): Factor = {
-    var jpt = new Factor(getRandomVariables())
+    val jpt = new Factor(getRandomVariables())
     for (j <- 0 until jpt.numCases) {
       val c = jpt.caseOf(j)
       jpt.write(c, probabilityOf(c))
@@ -119,7 +119,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
 
   def makeFactorFor(variable: RandomVariable): Factor = {
     val cptVarList = getRandomVariables.intersect(g.getPredecessors(variable))
-    var cpt = new Factor(cptVarList ++ List(variable))
+    val cpt = new Factor(cptVarList ++ List(variable))
     cpt.setName("cpt for " + variable.getName)
     cpt
   }
@@ -136,11 +136,6 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
   def getAllCPTs(): List[Factor] = getRandomVariables.map(getCPT(_))
 
   def probabilityOf(c: Case) = c.getVariables.map(getCPT(_).read(c)).foldLeft(1.0)(_ * _)
-
-  def copyTo(other: BayesianNetwork): Unit = {
-    super.copyTo(other)
-    var2cpt.keys.map(v => { other.var2cpt += v -> var2cpt(v) })
-  }
 
   def getMarkovAssumptionsFor(rv: RandomVariable): Independence = {
 
@@ -188,8 +183,8 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
     }
 
     for (rv <- π) {
-      var allMentions = mutable.Set[Factor]()
-      var newS = mutable.Set[Factor]()
+      val allMentions = mutable.Set[Factor]()
+      val newS = mutable.Set[Factor]()
       for (pt <- S) {
         if (pt.mentions(rv)) {
           allMentions.add(pt)
@@ -224,8 +219,8 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
     }
 
     for (rv <- π) {
-      var allMentions = mutable.Set[Factor]()
-      var newS = mutable.Set[Factor]()
+      val allMentions = mutable.Set[Factor]()
+      val newS = mutable.Set[Factor]()
       for (pt <- S) {
         if (pt.mentions(rv)) {
           allMentions.add(pt)
@@ -244,21 +239,15 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
     Factor.multiply(S)
   }
 
-  def interactsWith(v1: RandomVariable, v2: RandomVariable): Boolean = {
-    for (f <- getAllCPTs()) {
-      if (f.mentions(v1) && f.mentions(v2)) {
-        return true
-      }
-    }
-    false
-  }
+  def interactsWith(v1: RandomVariable, v2: RandomVariable): Boolean =
+    getAllCPTs().exists(f => f.mentions(v1) && f.mentions(v2))
 
   def interactionGraph(): InteractionGraph = {
     // Also called the "moral graph"
 
     val result = new InteractionGraph()
 
-    getRandomVariables.map(rv => result.addVertex(rv))
+    getRandomVariables.map(result.g += _)
 
     val rvs = getRandomVariables()
     for (i <- 0 until rvs.size - 1) {
@@ -266,7 +255,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
       for (j <- (i + 1) until rvs.size) {
         val vj = rvs(j)
         if (interactsWith(vi, vj)) {
-          result.addEdge(new VariableLink(vi, vj))
+          result.g.edge(vi, vj, "")
         }
       }
     }
@@ -328,7 +317,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
       keepGoing = false
       for (leaf <- getGraph().getLeaves()) { // RandomVariable
         if (!vars.contains(leaf)) {
-          deleteVariable(leaf)
+          g -= leaf
           keepGoing = true
         }
       }
@@ -342,16 +331,17 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
   }
 
   def variableEliminationPR(Q: Set[RandomVariable], e: Case): Factor = {
-    var pruned = new BayesianNetwork()
+    val pruned = new BayesianNetwork()
     copyTo(pruned)
     pruned.pruneNetwork(Q, e)
 
-    var R = mutable.Set[RandomVariable]()
+    val R = mutable.Set[RandomVariable]()
     for (v <- getRandomVariables()) {
       if (!Q.contains(v)) {
         R.add(v)
       }
     }
+    
     val π = pruned.minDegreeOrder(R)
 
     var S = mutable.Set[Factor]()
@@ -361,8 +351,8 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
 
     for (rv <- π) {
 
-      var allMentions = mutable.Set[Factor]()
-      var newS = mutable.Set[Factor]()
+      val allMentions = mutable.Set[Factor]()
+      val newS = mutable.Set[Factor]()
 
       for (pt <- S) {
         if (pt.mentions(rv)) {
@@ -383,7 +373,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
   }
 
   def variableEliminationMPE(e: Case): Double = {
-    var pruned = new BayesianNetwork()
+    val pruned = new BayesianNetwork()
     copyTo(pruned)
     pruned.pruneEdges(e)
 
@@ -397,8 +387,8 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
 
     for (rv <- π) {
 
-      var allMentions = mutable.Set[Factor]()
-      var newS = mutable.Set[Factor]()
+      val allMentions = mutable.Set[Factor]()
+      val newS = mutable.Set[Factor]()
 
       for (pt <- S) {
         if (pt.mentions(rv)) {
@@ -438,14 +428,13 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
 
   def minDegreeOrder(pX: Collection[RandomVariable]): List[RandomVariable] = {
 
-    var X = Set[RandomVariable]()
-    X ++= pX
+    val X = Set[RandomVariable]() ++ pX
 
-    var G = interactionGraph()
-    var result = mutable.ListBuffer[RandomVariable]()
+    val G = interactionGraph()
+    val result = mutable.ListBuffer[RandomVariable]()
 
     while (X.size > 0) {
-      G.vertexWithFewestNeighborsAmong(X).map(rv => {
+      G.g.vertexWithFewestNeighborsAmong(X).map(rv => {
         result += rv
         G.eliminate(rv)
         X -= rv
@@ -455,14 +444,13 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
   }
 
   def minFillOrder(pX: Set[RandomVariable]): List[RandomVariable] = {
-    var X = Set[RandomVariable]()
-    X ++= pX
+    val X = Set[RandomVariable]() ++ pX
 
-    var G = interactionGraph()
-    var result = mutable.ListBuffer[RandomVariable]()
+    val G = interactionGraph()
+    val result = mutable.ListBuffer[RandomVariable]()
 
     while (X.size > 0) {
-      G.vertexWithFewestEdgesToEliminateAmong(X).map(rv => {
+      G.g.vertexWithFewestEdgesToEliminateAmong(X).map(rv => {
         result += rv
         G.eliminate(rv)
         X -= rv
@@ -473,7 +461,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
 
   def factorElimination1(Q: Set[RandomVariable]): Factor = {
 
-    var S = mutable.ListBuffer[Factor]()
+    val S = mutable.ListBuffer[Factor]()
     getRandomVariables.map(rv => S += getCPT(rv))
 
     while (S.size > 1) {
@@ -481,7 +469,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
       val fi = S(0)
       S -= fi
 
-      var V = mutable.Set[RandomVariable]()
+      val V = mutable.Set[RandomVariable]()
       for (v <- fi.getVariables()) {
         if (!Q.contains(v)) {
           var vNotInS = true
@@ -516,11 +504,11 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
   def factorElimination2(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTree#GV): Factor = {
     // the variables Q appear on the CPT for the product of Factors assigned to node r
 
-    while (τ.getVertices().size > 1) {
+    while (τ.g.getVertices().size > 1) {
 
       // remove node i (other than r) that has single neighbor j in tau
 
-      τ.firstLeafOtherThan(r).map(i => {
+      τ.g.firstLeafOtherThan(r).map(i => {
         val j = τ.getNeighbors(i).iterator.next()
         val ɸ_i = τ.getFactor(i)
         τ.delete(i)
