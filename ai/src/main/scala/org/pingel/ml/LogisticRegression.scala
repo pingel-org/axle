@@ -13,7 +13,6 @@
 //import scalala.library.Plotting._
 //import scalala.operators.Implicits._
 
-
 // http://s3.amazonaws.com/mlclass-resources/docs/slides/Lecture4.pdf
 
 /*

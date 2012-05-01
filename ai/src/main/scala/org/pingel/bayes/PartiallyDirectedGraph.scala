@@ -1,91 +1,84 @@
 
 package org.pingel.bayes
 
-//import scalala.tensor.mutable._
-//import scalala.tensor.dense._
 import scala.collection._
-import org.pingel.axle.matrix.Matrix
+import org.pingel.axle.matrix.JblasMatrixFactory._
 
 class PartiallyDirectedGraph(variables: List[RandomVariable]) {
 
-  var variable2index = Map[RandomVariable, Integer]()
+  var variable2index = Map[RandomVariable, Int]()
 
-  var connect = Matrix.zeros[Boolean](variables.size, variables.size)
-  var mark = Matrix.zeros[Boolean](variables.size, variables.size)
-  var arrow = Matrix.zeros[Boolean](variables.size, variables.size)
-  
-  for( i <- 0 until variables.size ) {
-    variable2index += variables(i) -> new Integer(i)
-    for( j <- 0 until variables.size ) {
-      connect.setValueAt(i, j, false)
-      mark.setValueAt(i, j, false)
-      arrow.setValueAt(i, j, false)
-    }
+  val connected = falses(variables.size, variables.size)
+  val marked = falses(variables.size, variables.size)
+  val arrowed = falses(variables.size, variables.size)
+
+  for (i <- 0 until variables.size) {
+    variable2index += variables(i) -> i
   }
 
-  def indexOf(v: RandomVariable): Integer = variable2index(v).intValue
-	
+  def indexOf(v: RandomVariable): Int = variable2index(v).intValue
+
   def connect(v1: RandomVariable, v2: RandomVariable): Unit = {
     val i1 = indexOf(v1)
     val i2 = indexOf(v2)
-    connect.setValueAt(i1, i2, true)
-    connect.setValueAt(i2, i1, true)
+    connected.setValueAt(i1, i2, true)
+    connected.setValueAt(i2, i1, true)
   }
-  
+
   def areAdjacent(v1: RandomVariable, v2: RandomVariable): Boolean =
-    connect.valueAt(indexOf(v1), indexOf(v2))
+    connected.valueAt(indexOf(v1), indexOf(v2))
 
   def undirectedAdjacent(v1: RandomVariable, v2: RandomVariable): Boolean = {
     val i1 = indexOf(v1)
     val i2 = indexOf(v2)
-    connect.valueAt(i1, i2) && (! arrow.valueAt(i1, i2)) && (! arrow.valueAt(i2, i1))
+    connected.valueAt(i1, i2) && (!arrowed.valueAt(i1, i2)) && (!arrowed.valueAt(i2, i1))
   }
 
   def mark(v1: RandomVariable, v2: RandomVariable): Unit = {
     val i1 = indexOf(v1)
     val i2 = indexOf(v2)
-    mark.setValueAt(i1, i2, true)
-    mark.setValueAt(i2, i1, true)
+    marked.setValueAt(i1, i2, true)
+    marked.setValueAt(i2, i1, true)
   }
-    
+
   def orient(v1: RandomVariable, v2: RandomVariable): Unit = {
     // Note: we assume they are already adjacent without checking
     val i1 = indexOf(v1)
     val i2 = indexOf(v2)
-    arrow.setValueAt(i1, i2, true)
+    arrowed.setValueAt(i1, i2, true)
   }
 
-  def size: Int = TODO()
-  
+  def size: Int = variables.size
+
   // TODO: scala version should probably use Option[Boolean] instead of allowing null
-  def links(v: RandomVariable, arrowIn: Option[Boolean], marked: Option[Boolean], arrowOut: Option[Boolean]): List[RandomVariable] = {
+  def links(v: RandomVariable, arrowInOpt: Option[Boolean], markedOpt: Option[Boolean], arrowOutOpt: Option[Boolean]): List[RandomVariable] = {
 
     var result = mutable.ListBuffer[RandomVariable]()
-    	
+
     val i = indexOf(v)
-    	
-    for(j <- 0 until size) {
+
+    for (j <- 0 until size) {
 
       val u = variables(j)
-      var pass = connect.valueAt(i, j)
-      
-      if( pass && (arrowIn != None) ) {
-    	  pass = ( arrowIn.get == arrow.valueAt(j, i) )
+      var pass = connected.valueAt(i, j)
+
+      if (pass && (arrowInOpt != None)) {
+        pass = (arrowInOpt.get == arrowed.valueAt(j, i))
       }
-      
-      if( pass && (marked != None) ) {
-    	pass = ( marked.get == mark.valueAt(i, j) )
+
+      if (pass && (markedOpt != None)) {
+        pass = (markedOpt.get == marked.valueAt(i, j))
       }
-      
-      if( pass && (arrowOut != None) ) {
-    	  pass = ( arrowOut.get == arrow.valueAt(i, j) )
+
+      if (pass && (arrowOutOpt != None)) {
+        pass = (arrowOutOpt.get == arrowed.valueAt(i, j))
       }
-      
-      if( pass ) {
-    	result += u
+
+      if (pass) {
+        result += u
       }
     }
-    
+
     result.toList
   }
 
@@ -94,71 +87,68 @@ class PartiallyDirectedGraph(variables: List[RandomVariable]) {
 
     var frontier = mutable.ListBuffer[RandomVariable]()
     frontier += from
-    	
-    while( frontier.size > 0 ) {
+
+    while (frontier.size > 0) {
       val head = frontier.remove(0)
-//      val head = frontier(0)
-//      frontier.removeElementAt(0)
-      if( head.equals(target) ) {
-    	return true
+      //      val head = frontier(0)
+      //      frontier.removeElementAt(0)
+      if (head.equals(target)) {
+        return true
       }
       var follow = links(head, None, Some(true), Some(true))
       frontier.appendAll(follow)
     }
     false
   }
-    
+
   override def toString(): String = {
-        
+
     var result = ""
-    
-    for( rv <- variables ) {
+
+    for (rv <- variables) {
       result += "var " + rv + " has index " + variable2index(rv)
       result += "\n"
     }
-    
+
     result += "connect\n\n"
-    for( i <- 0 until variables.size ) {
-      for( j <- 0 until variables.size ) {
-    	  if( connect.valueAt(i, j) ) {
-    		  result += "x"
-    	  }
-    	  else {
-    		  result += " "
-    	  }
+    for (i <- 0 until variables.size) {
+      for (j <- 0 until variables.size) {
+        if (connected.valueAt(i, j)) {
+          result += "x"
+        } else {
+          result += " "
+        }
       }
       result += "\n"
     }
     result += "\n\n"
-    
+
     result += "mark\n\n"
-    for( i <- 0 until variables.size ) {
-      for( j <- 0 until variables.size ) {
-    	  if( mark.valueAt(i, j) ) {
-    		  result += "x"
-    	  }
-    	  else {
-    		  result += " "
-    	  }
+    for (i <- 0 until variables.size) {
+      for (j <- 0 until variables.size) {
+        if (marked.valueAt(i, j)) {
+          result += "x"
+        } else {
+          result += " "
+        }
       }
       result += "\n"
     }
     result += "\n\n"
-    
+
     result += "arrow\n\n"
-    for( i <- 0 until variables.size ) {
-      for( j <- 0 until variables.size ) {
-    	  if( arrow.valueAt(i, j) ) {
-    		  result += "x"
-    	  }
-    	  else {
-    		  result += " "
-    	  }
+    for (i <- 0 until variables.size) {
+      for (j <- 0 until variables.size) {
+        if (arrowed.valueAt(i, j)) {
+          result += "x"
+        } else {
+          result += " "
+        }
       }
       result += "\n"
     }
     result += "\n\n"
-    
+
     result
   }
 }

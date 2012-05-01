@@ -4,16 +4,16 @@ package org.pingel.bayes;
 
 class Independence(X: Set[RandomVariable], Z: Set[RandomVariable], Y: Set[RandomVariable]) {
 
-  def variablesToString(s: Set[RandomVariable]): String =  "{" + ( for( v <- s ) yield v.getName() ).mkString("") + "}"
-  
+  def variablesToString(s: Set[RandomVariable]): String = "{" + (for (v <- s) yield v.getName()).mkString("") + "}"
+
   override def toString(): String = {
     "I(" +
-    variablesToString(X) +
-    ", " +
-    variablesToString(Z) +
-    ", " +
-    variablesToString(Y) +
-    ")"
+      variablesToString(X) +
+      ", " +
+      variablesToString(Z) +
+      ", " +
+      variablesToString(Y) +
+      ")"
   }
-	
+
 }

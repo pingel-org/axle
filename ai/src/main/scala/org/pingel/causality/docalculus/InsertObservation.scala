@@ -11,55 +11,38 @@ import org.pingel.gestalt.core.Form
 
 class InsertObservation extends Rule {
 
-    def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
+  def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
 
-        var results = new mutable.ListBuffer[Form]()
+    val results = new mutable.ListBuffer[Form]()
 
-        val Y = q.getQuestion()
-        val X = q.getActions()
-        val W = q.getGiven()
+    val Y = q.getQuestion()
+    val X = q.getActions()
+    val W = q.getGiven()
 
-        val subModel = m.duplicate()
-        subModel.getGraph().removeInputs(randomVariablesOf(X))
+    val subModel = m.duplicate()
+    subModel.getGraph().removeInputs(randomVariablesOf(X))
 
-        var XW = Set[Variable]()
-        XW ++= X
-        XW ++= W
+    val XW = X ++ W
 
-        // TODO Question: are all actions necessarily in q? Is
-        // is possible to have relevant actions that are not in q?
-        // I assume not.
-        
-        var potentialZ = Set[RandomVariable]()
-        potentialZ ++= m.getRandomVariables()
-        potentialZ --= randomVariablesOf(Y)
-        potentialZ --= randomVariablesOf(X)
-        potentialZ --= randomVariablesOf(W)
-        
-        for( zRandomVariable <- potentialZ ) {
-            
-        	if( zRandomVariable.observable ) {
-                
-        	    var Z = Set[Variable]()
-        		Z += zRandomVariable.nextVariable(namer)
-        		
-        		if( subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW)) ) {
-                    
-        		    var ZW = Z
-        			ZW ++= W
+    // TODO Question: are all actions necessarily in q? Is
+    // is possible to have relevant actions that are not in q?
+    // I assume not.
 
-                    var Ycopy = Set[Variable]()
-                    Ycopy ++= Y
+    val potentialZ = m.getRandomVariables() -- randomVariablesOf(Y) -- randomVariablesOf(X) -- randomVariablesOf(W)
 
-                    var Xcopy = Set[Variable]()
-                    Xcopy ++= X
-                    
-        			results += new Probability(Ycopy, ZW, Xcopy)
-        		}
-            }
+    for (zRandomVariable <- potentialZ) {
+      if (zRandomVariable.observable) {
+        val Z = Set[Variable](zRandomVariable.nextVariable(namer))
+        if (subModel.blocks(randomVariablesOf(Y), randomVariablesOf(Z), randomVariablesOf(XW))) {
+          val ZW = Z ++ W
+          val Ycopy = Set[Variable]() ++ Y
+          val Xcopy = Set[Variable]() ++ X
+          results += new Probability(Ycopy, ZW, Xcopy)
         }
-        
-        results.toList
+      }
     }
+
+    results.toList
+  }
 
 }

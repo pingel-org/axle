@@ -1,3 +1,3 @@
 package org.pingel.causality.docalculus
 
-class RuleBindings { }
+class RuleBindings {}

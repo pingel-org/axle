@@ -9,9 +9,9 @@ import org.pingel.forms.Basic.PFunction
 
 class RandomBooleanFunction(rv: RandomVariable, p: Double) extends PFunction(rv, Nil) {
 
-	def compute(m: CausalModel, memo: Case) = (scala.math.random < p) match {
-		case true => PBooleansValues.tVal
-		case false => PBooleansValues.fVal
-	}
+  def compute(m: CausalModel, memo: Case) = (scala.math.random < p) match {
+    case true => PBooleansValues.tVal
+    case false => PBooleansValues.fVal
+  }
 
 }

@@ -1,28 +1,14 @@
 package org.pingel.bayes;
 
 import scala.collection._
-import org.pingel.axle.graph.DirectedGraph
-import org.pingel.axle.graph.UndirectedGraph
-import org.pingel.axle.graph.UndirectedGraphEdge
-import org.pingel.axle.graph.UndirectedGraphVertex
-
-class JoinTreeNode(name: String)
-extends UndirectedGraphVertex[JoinTreeEdge]
-{
-	// Note: we should probably return cluster contents instead
-	def getLabel(): String = name
-}
-
-class JoinTreeEdge(v1: JoinTreeNode, v2: JoinTreeNode)
-extends UndirectedGraphEdge[JoinTreeNode]
-{
-	def getVertices() = (v1, v2)
-}
+import org.pingel.axle.graph.JungDirectedGraphFactory
+import org.pingel.axle.graph.JungUndirectedGraphFactory
 
 object JoinTree {
 
   // TODO:
-  def fromEliminationOrder(G: DirectedGraph[_, _], pi: List[RandomVariable]): JoinTree = {
+  def fromEliminationOrder(m: Model, pi: List[RandomVariable]): JoinTree = {
+    val G = m.g // Note: G used ot be passed in as DirectedGraph[_, _]
     // returns a jointree for DAG G with width equal to width(pi, G)
     var T = new JoinTree()
     val Gm = G.moralGraph() // UndirectedGraph
@@ -32,72 +18,35 @@ object JoinTree {
 
 }
 
-class JoinTree extends UndirectedGraph[JoinTreeNode, JoinTreeEdge]
-{
-	
-  var node2cluster = mutable.Map[JoinTreeNode, Set[RandomVariable]]().withDefaultValue(Set[RandomVariable]())
-  
-  def copyTo(other: UndirectedGraph[JoinTreeNode, JoinTreeEdge]): Unit = 
-  {
-    // asdf();
-  }
+class JoinTree {
 
-  def setCluster(n: JoinTreeNode, cluster: Set[RandomVariable]): Unit = node2cluster += n -> cluster
+  val g = JungUndirectedGraphFactory.graph[mutable.Set[RandomVariable], String]()
 
-  def addToCluster(n: JoinTreeNode, v: RandomVariable): Unit = {
-    node2cluster(n) += v
-  }
-	
-  def constructEdge(n1: JoinTreeNode, n2: JoinTreeNode): JoinTreeEdge = new JoinTreeEdge(n1, n2)
-  
+  type GV = g.type#V
+  type GE = g.type#E
 
-  def separate(n1: JoinTreeNode, n2: JoinTreeNode): Set[RandomVariable] = {
-    var result = Set[RandomVariable]()
-    
-    for( v <- node2cluster.get(n1)) {
-      if( node2cluster(n2).contains(v) ) {
-    	  result += v
-      }
-    }
-    result
-  }
+  def setCluster(n: GV, cluster: Set[RandomVariable]): Unit = n.setPayload(cluster)
 
+  def addToCluster(n: GV, v: RandomVariable): Unit = n.getPayload += v
 
-  def toEliminationOrder(r: JoinTreeNode): List[RandomVariable] =  {
+  def constructEdge(n1: GV, n2: GV): GE = g += ((n1, n2), "")
+
+  def separate(n1: GV, n2: GV): Set[RandomVariable] = n1.getPayload.intersect(n2.getPayload)
+
+  def toEliminationOrder(r: GV): List[RandomVariable] = {
     var result = new mutable.ListBuffer[RandomVariable]()
-		
-    var T = new JoinTree()
-    copyTo(T) // not yet implemented
-		
-    while( T.getVertices().size > 1 ) {
-      val i = T.firstLeafOtherThan(r)
+    var T: JoinTree = this.duplicate()
+    while (T.g.getVertices().size > 1) {
+      val i = T.g.firstLeafOtherThan(r)
       val j = null // TODO theNeighbor(); a JoinTreeNode
-      for(v <- node2cluster.get(i)) {
-    	  if( ! node2cluster(j).contains(v) ) {
-    		  result += v
-    	  }
-      }
+      result ++= i.getPayload - j.getPayload
     }
-
-    for( v <- node2cluster(r) )  {
-      result += v
-    }
-		
+    result ++= r.getPayload
     result.toList
   }
-	
-  def embeds(eTree: EliminationTree, embedding: Map[JoinTreeNode, EliminationTreeNode]): Boolean = {
-    for(jtn <- getVertices() ) {
-      val cluster = node2cluster(jtn)
-      val etn = embedding(jtn)
-      for( v <- eTree.getFactor(etn).getVariables ) {
-    	  if( ! cluster.contains(v) ) {
-    		  return false
-    	  }
-      }
-    }
-    
-    true
-  }
-	
+
+  def embeds(eTree: EliminationTree, embedding: Map[GV, EliminationTree#GV]): Boolean =
+    g.getVertices().forall(jtn =>
+      eTree.getFactor(embedding(jtn)).getVariables.forall(ev => jtn.getPayload.contains(ev)))
+
 }

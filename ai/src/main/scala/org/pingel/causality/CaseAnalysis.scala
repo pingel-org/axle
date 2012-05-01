@@ -10,27 +10,24 @@ import scala.collection._
 
 object CaseAnalysis {
 
-    
-    def caseAnalyze(probability: Probability, rv: RandomVariable, namer: VariableNamer): Sigma = {
-      
-        val variable = rv.nextVariable(namer)
-        
-        val firstQuestion = probability.getQuestion() // Set[Variable]
-        var firstGiven = probability.getGiven() // returns a copy // Set<Variable>
-        firstGiven += variable
-        val firstActions = probability.getActions() // Set<Variable>
-        
-        val first = new Probability(firstQuestion, firstGiven, firstActions) // Probability
-        
-        val secondQuestion = mutable.Set[Variable]()
-        secondQuestion += variable
-        val secondGiven = probability.getGiven() // returns a copy
-        val secondActions = probability.getActions()
-        
-        val second = new Probability(secondQuestion, secondGiven, secondActions)
+  def caseAnalyze(probability: Probability, rv: RandomVariable, namer: VariableNamer): Sigma = {
 
-        new Sigma(List(variable), new Product(first, second))
-        
-    }
-    
+    val variable = rv.nextVariable(namer)
+
+    val firstQuestion = probability.getQuestion
+    val firstGiven = probability.getGiven + variable
+    val firstActions = probability.getActions
+
+    val first = new Probability(firstQuestion, firstGiven, firstActions)
+
+    val secondQuestion = Set(variable)
+    val secondGiven = probability.getGiven
+    val secondActions = probability.getActions
+
+    val second = new Probability(secondQuestion, secondGiven, secondActions)
+
+    new Sigma(List(variable), new Product(first, second))
+
+  }
+
 }

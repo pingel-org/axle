@@ -2,34 +2,33 @@ package org.pingel.bayes
 
 import scala.collection._
 
-class DTreeEdge { }
+class DTreeEdge {}
 
-class DTreeNode { }
+class DTreeNode {}
 
 class DTree {
 
   def cluster(n: DTreeNode): Set[RandomVariable] = null // TODO
-	
+
   def context(n: DTreeNode): Set[RandomVariable] = null // TODO
-	
+
   def isLeaf(n: DTreeNode): Boolean = false // TODO
-	
+
   // returns an order pi with width(pi,G) no greater than the width
   // of dtree rooted at t
-	
+
   def toEliminationOrder(t: DTreeNode): List[RandomVariable] = {
 
     var result = mutable.ListBuffer[RandomVariable]()
 
-    if( isLeaf(t) ) {
+    if (isLeaf(t)) {
       var ct = context(t) // Set<RandomVariable>
-      for( v <- cluster(t)) {
-    	  if( ! ct.contains(v) ) {
-    		  result += v
-    	  }
+      for (v <- cluster(t)) {
+        if (!ct.contains(v)) {
+          result += v
+        }
       }
-    }
-    else {
+    } else {
       var leftPi: List[RandomVariable] = null // TODO
       var rightPi: List[RandomVariable] = null // TODO
       // TODO merge them
@@ -37,5 +36,5 @@ class DTree {
     }
     result.toList
   }
-	
+
 }

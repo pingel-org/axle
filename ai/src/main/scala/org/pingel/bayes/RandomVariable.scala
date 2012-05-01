@@ -1,27 +1,23 @@
 package org.pingel.bayes
 
-import org.pingel.axle.graph.DirectedGraphVertex
-import org.pingel.axle.graph.UndirectedGraphVertex
+import org.pingel.axle.graph.JungDirectedGraphFactory
+import org.pingel.axle.graph.JungUndirectedGraphFactory
 import org.pingel.gestalt.core.PType
-// import org.pingel.forms.Variable
 import org.pingel.gestalt.core.Value
 import org.pingel.gestalt.core.Domain
 
-class Variable {
-  
+class Variable extends PType {
+
 }
 
-case class RandomVariable(name: String, domain: Option[Domain]=None, observable: Boolean=true)
-extends Variable
-with DirectedGraphVertex[ModelEdge]
-with UndirectedGraphVertex[VariableLink]
-with Comparable[RandomVariable]
-{
+case class RandomVariable(name: String, domain: Option[Domain] = None, observable: Boolean = true)
+  extends Variable
+  with Comparable[RandomVariable] {
 
   val lcName = name.toLowerCase()
 
   def getName() = name
-	
+
   def getDomain() = domain
 
   def compareTo(other: RandomVariable): Int = name.compareTo(other.getName)

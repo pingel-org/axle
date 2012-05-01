@@ -3,11 +3,10 @@ package org.pingel.causality.examples
 
 import org.pingel.causality.CausalModel
 import org.pingel.forms.Basic.PFunction
-import org.pingel.bayes.ModelVisualizer
 import org.pingel.bayes.RandomVariable
 
 object Model3dot9b extends CausalModel("3.9b") {
-  
+
   val X = addVariable(new RandomVariable("X"))
   val Y = addVariable(new RandomVariable("Y"))
   val Z = addVariable(new RandomVariable("Z"))
@@ -18,7 +17,7 @@ object Model3dot9b extends CausalModel("3.9b") {
   addFunction(new PFunction(Y, List(Z)))
 
   def main(args: Array[String]) {
-    ModelVisualizer.draw(Model3dot9b)
+    g.draw
   }
 
 }

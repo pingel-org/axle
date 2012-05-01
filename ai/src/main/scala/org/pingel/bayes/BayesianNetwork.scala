@@ -102,8 +102,8 @@ package org.pingel.bayes;
 
 import scala.collection._
 
-class BayesianNetwork(name: String = "bn")
-  extends Model(name) {
+class BayesianNetwork(name: String = "bn") extends Model(name) {
+
   var var2cpt = Map[RandomVariable, Factor]()
 
   def getJointProbabilityTable(): Factor = {
@@ -118,8 +118,7 @@ class BayesianNetwork(name: String = "bn")
   def setCPT(rv: RandomVariable, factor: Factor): Unit = var2cpt += rv -> factor
 
   def makeFactorFor(variable: RandomVariable): Factor = {
-    var vars = getGraph().getPredecessors(variable) // Set<RandomVariable>
-    val cptVarList = getRandomVariables.filter(rv => vars.contains(rv))
+    val cptVarList = getRandomVariables.intersect(g.getPredecessors(variable))
     var cpt = new Factor(cptVarList ++ List(variable))
     cpt.setName("cpt for " + variable.getName)
     cpt
@@ -145,11 +144,11 @@ class BayesianNetwork(name: String = "bn")
 
   def getMarkovAssumptionsFor(rv: RandomVariable): Independence = {
 
-    var X = immutable.Set(rv)
+    val X = immutable.Set(rv)
 
-    var Z = getGraph().getPredecessors(rv)
+    val Z = getGraph().getPredecessors(rv)
 
-    var D = mutable.Set[RandomVariable]()
+    val D = mutable.Set[RandomVariable]()
     getGraph().collectDescendants(rv, D)
     D += rv // probably already includes this
     D ++= getGraph().getPredecessors(rv)
@@ -163,11 +162,9 @@ class BayesianNetwork(name: String = "bn")
     getRandomVariables.map(rv => println(getMarkovAssumptionsFor(rv)))
 
   def computeFullCase(c: Case): Double = {
-    if (numVariables() != c.size()) {
-      // not an airtight check
-      System.err.println("malformed case to computeFullCase")
-      System.exit(1)
-    }
+
+    // not an airtight check
+    assert(numVariables == c.size)
 
     // order variables such that all nodes appear before their ancestors
     // rewrite using chain rule
@@ -259,12 +256,12 @@ class BayesianNetwork(name: String = "bn")
   def interactionGraph(): InteractionGraph = {
     // Also called the "moral graph"
 
-    var result = new InteractionGraph()
+    val result = new InteractionGraph()
 
     getRandomVariables.map(rv => result.addVertex(rv))
 
     val rvs = getRandomVariables()
-    for (i <- 0 to rvs.size - 2) {
+    for (i <- 0 until rvs.size - 1) {
       val vi = rvs(i)
       for (j <- (i + 1) until rvs.size) {
         val vj = rvs(j)
@@ -277,10 +274,10 @@ class BayesianNetwork(name: String = "bn")
     result
   }
 
-  def orderWidth(order: List[RandomVariable]): Integer = {
+  def orderWidth(order: List[RandomVariable]): Int = {
     // Chapter 6 Algorithm 2 (page 13)
 
-    var G = interactionGraph()
+    val G = interactionGraph()
     var w = 0
 
     for (rv <- getRandomVariables()) {
@@ -320,18 +317,12 @@ class BayesianNetwork(name: String = "bn")
   }
 
   def pruneNodes(Q: Set[RandomVariable], e: Case): Unit = {
-    var vars = mutable.Set[RandomVariable]()
-    if (Q != null) {
-      vars ++= Q
-    }
-    if (e != null) {
-      vars ++= e.getVariables()
-    }
+
+    // TODO: check if Q or e are null?
+    val vars = Set[RandomVariable]() ++ Q ++ e.getVariables
 
     // System.out.println("BN.pruneNodes vars = " + vars);
-
     // not optimally efficient
-
     var keepGoing = true
     while (keepGoing) {
       keepGoing = false
@@ -342,7 +333,6 @@ class BayesianNetwork(name: String = "bn")
         }
       }
     }
-
   }
 
   def pruneNetwork(Q: Set[RandomVariable], e: Case): Unit = {
@@ -428,18 +418,12 @@ class BayesianNetwork(name: String = "bn")
     // at this point (since we're iterating over *all* variables in Q)
     // S will contain exactly one trivial Factor
 
-    if (S.size != 1) {
-      System.err.println("Assertion failed S.size() != 1")
-      System.exit(1)
-    }
+    assert(S.size == 1)
 
     val fit = S.iterator
     val result = fit.next()
 
-    if (result.numCases() != 1) {
-      System.err.println("Assertion failed result.numCases() != 1")
-      System.exit(1)
-    }
+    assert(result.numCases() == 1)
 
     result.read(result.caseOf(0))
   }
@@ -529,7 +513,7 @@ class BayesianNetwork(name: String = "bn")
     f.projectToOnly(Q.toList)
   }
 
-  def factorElimination2(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTreeNode): Factor = {
+  def factorElimination2(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTree#GV): Factor = {
     // the variables Q appear on the CPT for the product of Factors assigned to node r
 
     while (τ.getVertices().size > 1) {
@@ -556,12 +540,12 @@ class BayesianNetwork(name: String = "bn")
     τ.getFactor(r).projectToOnly(Q.toList)
   }
 
-  def factorElimination3(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTreeNode): Factor = {
+  def factorElimination3(Q: Set[RandomVariable], τ: EliminationTree, r: EliminationTree#GV): Factor = {
     // Q is a subset of C_r
 
-    while (τ.getVertices().size > 1) {
+    while (τ.g.getVertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in tau
-      τ.firstLeafOtherThan(r).map(i => {
+      τ.g.firstLeafOtherThan(r).map(i => {
         val j = τ.getNeighbors(i).iterator.next()
         val ɸ_i = τ.getFactor(i)
         τ.delete(i)
