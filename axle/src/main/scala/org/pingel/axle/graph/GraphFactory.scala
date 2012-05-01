@@ -36,6 +36,8 @@ trait GraphFactory {
 
     def +=(vp: VP): V = vertex(vp)
 
+    def ++=(vps: Seq[VP]) = vps.map(vertex(_))
+
     // TODO // def dup(): G
 
     def draw(): Unit
