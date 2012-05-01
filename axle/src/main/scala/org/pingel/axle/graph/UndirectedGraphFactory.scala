@@ -8,7 +8,6 @@ trait UndirectedGraphFactory extends GraphFactory {
 
   trait UndirectedGraph[VP, EP] extends Graph[VP, EP] {
 
-
     type V <: UndirectedGraphVertex[VP]
     type E <: UndirectedGraphEdge[EP]
 
@@ -33,22 +32,15 @@ trait UndirectedGraphFactory extends GraphFactory {
       }
     }
 
-    
     def vertex(payload: VP): V
-    
     def edge(v1: V, v2: V, payload: EP): E
-
     def unlink(e: E): Unit
-
     def unlink(v1: V, v2: V): Unit
-
     def areNeighbors(v1: V, v2: V): Boolean
 
-    
     def isClique(vs: Set[V]): Boolean = {
       // vs.pairs().forall({ case (a, b) => ( (a == b) || areNeighbors(a, b) ) })
-      var vList = mutable.ArrayBuffer[V]()
-      vList ++= vs
+      val vList = vs.toList
       for (i <- 0 until vList.size) {
         for (j <- 0 until vList.size) {
           if (!areNeighbors(vList(i), vList(j))) {
@@ -61,12 +53,10 @@ trait UndirectedGraphFactory extends GraphFactory {
 
     def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
 
-      var N = mutable.ArrayBuffer[V]()
-      N ++= vs
+      val N = vs.toList
 
       var result = 0
-
-      for (i <- 0 to (N.size - 2)) {
+      for (i <- 0 until (N.size - 1)) {
         val vi = N(i)
         for (j <- (i + 1) until N.size) {
           val vj = N(j)
@@ -82,9 +72,7 @@ trait UndirectedGraphFactory extends GraphFactory {
 
     def forceClique(vs: Set[V], payload: (V, V) => EP) {
 
-      var vList = mutable.ArrayBuffer[V]()
-      vList ++= vs
-
+      val vList = vs.toList
       for (i <- 0 until (vList.size - 1)) {
         val vi = vList(i)
         for (j <- (i + 1) until vList.size) {
@@ -138,50 +126,13 @@ trait UndirectedGraphFactory extends GraphFactory {
     }
 
     def degree(v: V): Int
-
     def getEdges(v: V): Set[E]
-
     def getNeighbors(v: V): Set[V]
-
     def delete(v: V): Unit
-
     // a "leaf" is vertex with only one neighbor
     def firstLeafOtherThan(r: V): Option[V]
-
     def eliminate(v: V, payload: (V, V) => EP): Unit
-
     def eliminate(vs: List[V], payload: (V, V) => EP): Unit
-
   }
 
-//  class SimpleGraph() extends UndirectedGraph {
-//
-//    type V = SimpleVertex
-//    type E = SimpleEdge
-//
-//    class SimpleVertex(vp: String) extends UndirectedGraphVertex {
-//      type VP = String
-//      def getPayload() = vp
-//    }
-//
-//    def vertex(name: String) = {
-//      val v = new SimpleVertex(name)
-//      addVertex(v)
-//      v
-//    }
-//
-//    class SimpleEdge(v1: SimpleVertex, v2: SimpleVertex, ep: String) extends UndirectedGraphEdge {
-//      type EP = String
-//      def getVertices() = (v1, v2)
-//      def getPayload() = ep
-//    }
-//
-//    def edge(v1: SimpleVertex, v2: SimpleVertex, ep: String) = {
-//      val result = new SimpleEdge(v1, v2, ep)
-//      addEdge(result)
-//      result
-//    }
-//  }
-  
-  
 }

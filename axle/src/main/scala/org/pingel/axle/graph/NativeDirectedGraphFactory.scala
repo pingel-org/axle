@@ -28,11 +28,15 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def size() = vertices.size
 
-    trait NativeDirectedGraphVertex[P] extends DirectedGraphVertex[P]
+    trait NativeDirectedGraphVertex[P] extends DirectedGraphVertex[P] {
+      def setPayload(p: P): Unit = {} // TODO: payload = p // type erasure problem
+    }
 
-    trait NativeDirectedGraphEdge[P] extends DirectedGraphEdge[P]
+    trait NativeDirectedGraphEdge[P] extends DirectedGraphEdge[P] {
+       def setPayload(p: P): Unit = {} // TODO: payload = p // type erasure problem
+    }
 
-    class NativeDirectedGraphVertexImpl[P](payload: P) extends NativeDirectedGraphVertex[P] {
+    class NativeDirectedGraphVertexImpl[P](var payload: P) extends NativeDirectedGraphVertex[P] {
 
       self: V =>
 
@@ -41,7 +45,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
       def getPayload(): P = payload
     }
 
-    class NativeDirectedGraphEdgeImpl[P](source: V, dest: V, payload: P) extends NativeDirectedGraphEdge[P] {
+    class NativeDirectedGraphEdgeImpl[P](source: V, dest: V, var payload: P) extends NativeDirectedGraphEdge[P] {
 
       self: E =>
 
@@ -61,7 +65,6 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
       def getDest(): V = dest
 
       def getPayload(): P = payload
-
     }
 
     def getEdges() = edges.toSet // immutable copy
@@ -223,7 +226,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
     def draw(): Unit = {
       // TODO: remove this cast
       val thisAsDG = this.asInstanceOf[JungDirectedGraphFactory.DirectedGraph[VP, EP]]
-      JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsDG)(vp=>vp, ep=>ep).draw()
+      JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsDG)(vp => vp, ep => ep).draw()
     }
 
   }

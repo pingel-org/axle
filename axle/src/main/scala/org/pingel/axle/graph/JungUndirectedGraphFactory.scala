@@ -48,16 +48,17 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     trait JungUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
 
-    class JungUndirectedGraphVertexImpl(payload: VP)
+    class JungUndirectedGraphVertexImpl(var payload: VP)
     extends JungUndirectedGraphVertex[VP] {
 
       val ok = jungGraph.addVertex(this)
       // TODO check 'ok'
 
       def getPayload(): VP = payload
+      def setPayload(p: VP) = payload = p
     }
 
-    class JungUndirectedGraphEdgeImpl(v1: V, v2: V, payload: EP, insert: Boolean)
+    class JungUndirectedGraphEdgeImpl(v1: V, v2: V, var payload: EP)
     extends JungUndirectedGraphEdge[EP] {
 
       val ok = jungGraph.addEdge(this, v1, v2)
@@ -66,6 +67,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
       def getVertices(): (V, V) = (v1, v2)
 
       def getPayload(): EP = payload
+      def setPayload(p: EP) = payload = p
     }
 
     val jungGraph = new UndirectedSparseGraph[V, E]()
@@ -80,7 +82,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def vertex(payload: VP): JungUndirectedGraphVertex[VP] = new JungUndirectedGraphVertexImpl(payload)
 
-    def edge(v1: V, v2: V, payload: EP): JungUndirectedGraphEdge[EP] = new JungUndirectedGraphEdgeImpl(v1, v2, payload, true)
+    def edge(v1: V, v2: V, payload: EP): JungUndirectedGraphEdge[EP] = new JungUndirectedGraphEdgeImpl(v1, v2, payload)
 
     def unlink(e: E): Unit = jungGraph.removeEdge(e)
 

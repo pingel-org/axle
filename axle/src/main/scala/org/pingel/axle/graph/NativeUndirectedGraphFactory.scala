@@ -10,7 +10,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
   def graph[A, B](): G[A, B] = new NativeUndirectedGraph[A, B]() {}
 
-   trait NativeUndirectedGraph[VP, EP] extends UndirectedGraph[VP, EP] {
+  trait NativeUndirectedGraph[VP, EP] extends UndirectedGraph[VP, EP] {
 
     import scala.collection._
 
@@ -31,20 +31,21 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def size() = vertices.size
 
-    trait NativeUndirectedGraphVertex[P] extends UndirectedGraphVertex[P]
+    trait NativeUndirectedGraphVertex[P] extends UndirectedGraphVertex[P] {
+      def setPayload(p: P): Unit = {} // TODO payload = p // type erasure problem
+    }
 
-    trait NativeUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
+    trait NativeUndirectedGraphEdge[P] extends UndirectedGraphEdge[P] {
+      def setPayload(p: P): Unit = {} // TODO payload = p // type erasure problem
+    }
 
-    class NativeUndirectedGraphVertexImpl[P](payload: P) extends NativeUndirectedGraphVertex[P] {
-
+    class NativeUndirectedGraphVertexImpl[P](var payload: P) extends NativeUndirectedGraphVertex[P] {
       self: V =>
-
       vertices += this
-
       def getPayload(): P = payload
     }
 
-    class NativeUndirectedGraphEdgeImpl[P](v1: V, v2: V, payload: P) extends NativeUndirectedGraphEdge[P] {
+    class NativeUndirectedGraphEdgeImpl[P](v1: V, v2: V, var payload: P) extends NativeUndirectedGraphEdge[P] {
 
       self: E =>
 

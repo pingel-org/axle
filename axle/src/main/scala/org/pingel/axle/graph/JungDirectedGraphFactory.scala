@@ -46,15 +46,17 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     trait JungDirectedGraphEdge[P] extends DirectedGraphEdge[P]
 
-    class JungDirectedGraphVertexImpl(payload: VP) extends JungDirectedGraphVertex[VP] {
+    class JungDirectedGraphVertexImpl(var payload: VP) extends JungDirectedGraphVertex[VP] {
 
       val ok = jungGraph.addVertex(this)
       // TODO check 'ok'
 
       def getPayload(): VP = payload
+      
+      def setPayload(p: VP) = payload = p
     }
 
-    class JungDirectedGraphEdgeImpl(source: V, dest: V, payload: EP) extends JungDirectedGraphEdge[EP] {
+    class JungDirectedGraphEdgeImpl(source: V, dest: V, var payload: EP) extends JungDirectedGraphEdge[EP] {
 
       val ok = jungGraph.addEdge(this, source, dest)
       // TODO check 'ok'
@@ -62,7 +64,8 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       def getSource() = source
       def getDest() = dest
       def getPayload(): EP = payload
-    }
+      def setPayload(p: EP) = payload = p
+   }
 
     val jungGraph = new DirectedSparseGraph[V, E]()
 
