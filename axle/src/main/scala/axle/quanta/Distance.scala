@@ -1,7 +1,6 @@
 package axle.quanta
 
 import java.math.BigDecimal
-import org.pingel.axle.graph.NativeDirectedGraphFactory
 
 class Distance extends Quantum {
 

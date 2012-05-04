@@ -3,7 +3,7 @@ package axle
 import scala.collection._
 import scala.math.log
 
-import org.pingel.axle.quanta.Information
+import axle.quanta.Information
 
 object InformationTheory {
 
