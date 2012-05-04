@@ -5,9 +5,9 @@ import scala.collection._
 import org.pingel.bayes.Model
 import org.pingel.forms.Basic.PFunction
 
-import org.pingel.axle.util.Collector
-import org.pingel.axle.iterator.CrossProduct
-import org.pingel.axle.iterator.PowerSet
+import axle.util.Collector
+import axle.iterator.CrossProduct
+import axle.iterator.PowerSet
 import org.pingel.bayes.{ RandomVariable, Factor, Case, Probability }
 
 class CausalModel(name: String) extends Model(name) {

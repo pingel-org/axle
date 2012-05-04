@@ -1,8 +1,8 @@
 package org.pingel.bayes;
 
 import scala.collection._
-import org.pingel.axle.graph.JungDirectedGraphFactory
-import org.pingel.axle.graph.JungUndirectedGraphFactory
+import axle.graph.JungDirectedGraphFactory
+import axle.graph.JungUndirectedGraphFactory
 
 object JoinTree {
 

@@ -1,6 +1,6 @@
 package org.pingel.bayes
 
-import org.pingel.axle.matrix.JblasMatrixFactory._ // TODO: converto to MatrixFactory
+import axle.matrix.JblasMatrixFactory._ // TODO: converto to MatrixFactory
 
 // import scalala.tensor.mutable._
 

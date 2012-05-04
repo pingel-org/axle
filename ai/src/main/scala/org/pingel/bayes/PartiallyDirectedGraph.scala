@@ -2,7 +2,7 @@
 package org.pingel.bayes
 
 import scala.collection._
-import org.pingel.axle.matrix.JblasMatrixFactory._
+import axle.matrix.JblasMatrixFactory._
 
 class PartiallyDirectedGraph(variables: List[RandomVariable]) {
 

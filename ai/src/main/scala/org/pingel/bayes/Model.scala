@@ -1,7 +1,7 @@
 package org.pingel.bayes
 
-import org.pingel.axle.graph.JungDirectedGraphFactory._
-import org.pingel.axle.iterator.Lister
+import axle.graph.JungDirectedGraphFactory._
+import axle.iterator.Lister
 import scala.collection._
 
 object Direction {

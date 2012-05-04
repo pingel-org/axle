@@ -1,7 +1,7 @@
 package org.pingel.bayes
 
 import scala.collection._
-import org.pingel.axle.graph.JungUndirectedGraphFactory._
+import axle.graph.JungUndirectedGraphFactory._
 
 class EliminationTree {
 

@@ -1,7 +1,7 @@
 package org.pingel.bayes
 
-import org.pingel.axle.iterator.ListCrossProduct
-import org.pingel.axle.matrix.JblasMatrixFactory._
+import axle.iterator.ListCrossProduct
+import axle.matrix.JblasMatrixFactory._
 import org.pingel.gestalt.core.Value
 import scala.collection._
 

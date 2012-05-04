@@ -1,6 +1,6 @@
 package org.pingel.bayes
 
-import org.pingel.axle.graph.JungDirectedGraphFactory._
+import axle.graph.JungDirectedGraphFactory._
 import scala.collection._
 
 class InteractionGraph {

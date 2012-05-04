@@ -1,7 +1,7 @@
 package org.pingel.bayes
 
-import org.pingel.axle.graph.JungDirectedGraphFactory
-import org.pingel.axle.graph.JungUndirectedGraphFactory
+import axle.graph.JungDirectedGraphFactory
+import axle.graph.JungUndirectedGraphFactory
 import org.pingel.gestalt.core.PType
 import org.pingel.gestalt.core.Value
 import org.pingel.gestalt.core.Domain
