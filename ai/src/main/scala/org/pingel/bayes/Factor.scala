@@ -67,12 +67,12 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
   }
 
   def indexOf(c: Case): Int = {
-    var objects = c.valuesOf(varList)
+    val objects = c.valuesOf(varList)
     cp.indexOf(objects)
   }
 
   def caseOf(i: Int): Case = {
-    var result = new Case()
+    val result = new Case()
     val values = cp(i)
     result.assign(varList, values)
     result
@@ -86,6 +86,11 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
     elements(indexOf(c)) = d
   }
 
+  def writes(values: List[Double]): Unit = {
+    assert(values.length == elements.length)
+    values.zipWithIndex.map({ case (v, i) => elements(i) = v})
+  }
+  
   def read(c: Case): Double = elements(indexOf(c))
 
   def print(): Unit = {

@@ -15,31 +15,23 @@ object MidtermModel2 extends CausalModel("Midterm Model 2") {
   val bools = Some(new PBooleans())
 
   val a = new RandomVariable("A", bools, true)
-  g += a
-
   val b = new RandomVariable("B", bools, true)
-  g += b
-
   val c = new RandomVariable("C", bools, true)
-  g += c
-  addFunction(new PFunction(c, List(a, b)))
-
   val f = new RandomVariable("F", bools, false)
-  g += f
-
   val d = new RandomVariable("D", bools, true)
-  g += d
-  addFunction(new PFunction(d, List(c, f)))
-
   val e = new RandomVariable("E", bools, true)
-  g += e
+
+  g ++= (a :: b :: c :: f :: d :: e :: Nil)
+  
+  addFunction(new PFunction(c, List(a, b)))
+  addFunction(new PFunction(d, List(c, f)))
   addFunction(new PFunction(e, List(d, f)))
 
   def main(args: Array[String]) {
     val distribution = new PerfectDistribution(this)
     val search = new InductiveCausation(distribution)
-    val g = search.ic()
-    g.draw
+    val pdg = search.ic()
+    pdg.draw
   }
 
 }

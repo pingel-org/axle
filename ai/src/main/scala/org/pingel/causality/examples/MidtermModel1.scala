@@ -15,32 +15,20 @@ object MidtermModel1 extends CausalModel("Midterm Model 1") {
   val bools = Some(new PBooleans())
 
   val U1 = new RandomVariable("U1", bools, false)
-  g += U1
-
   val U2 = new RandomVariable("U2", bools, false)
-  g += U2
-
   val U3 = new RandomVariable("U3", bools, false)
-  g += U3
-
   val X1 = new RandomVariable("X1", bools, true)
-  g += X1
-  addFunction(new PFunction(X1, List(U1)))
-
   val X2 = new RandomVariable("X2", bools, true)
-  g += X2
-  addFunction(new PFunction(X2, List(X1, U2)))
-
   val X3 = new RandomVariable("X3", bools, true)
-  g += X3
-  addFunction(new PFunction(X3, List(X2, U1, U3)))
-
   val X4 = new RandomVariable("X4", bools, true)
-  g += X4
-  addFunction(new PFunction(X4, List(X3, U2)))
-
   val Y = new RandomVariable("Y", bools, true)
-  g += Y
+
+  g ++= (U1 :: U2 :: U3 :: X1 :: X2 :: X3 :: X4 :: Y :: Nil)
+
+  addFunction(new PFunction(X1, List(U1)))
+  addFunction(new PFunction(X2, List(X1, U2)))
+  addFunction(new PFunction(X3, List(X2, U1, U3)))
+  addFunction(new PFunction(X4, List(X3, U2)))
   addFunction(new PFunction(Y, List(X4, U3)))
 
   def getQuantity(namer: VariableNamer) = {
@@ -76,7 +64,7 @@ object MidtermModel1 extends CausalModel("Midterm Model 1") {
   }
 
   def main(args: Array[String]): Unit = {
-    MidtermModel1.g.draw()
+    g.draw
   }
 
 }

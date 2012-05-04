@@ -43,73 +43,72 @@ case class Model(var name: String = "no name") {
     prior: RandomVariable,
     current: mutable.Set[RandomVariable],
     to: Set[RandomVariable],
-    given: Set[RandomVariable]): List[RandomVariable] =
-    {
+    given: Set[RandomVariable]): List[RandomVariable] = {
 
-      println("_fOP: " + priorDirection +
-        ", prior = " + "TODO" + // ((prior == null ) ? "null" : prior.name) +
-        ", current = " + current.map(_.getName).mkString(", ") +
-        ", to = " + to.map(_.getName).mkString(", ") +
-        ", evidence = " + given.map(_.getName).mkString(", "))
+    println("_fOP: " + priorDirection +
+      ", prior = " + "TODO" + // ((prior == null ) ? "null" : prior.name) +
+      ", current = " + current.map(_.getName).mkString(", ") +
+      ", to = " + to.map(_.getName).mkString(", ") +
+      ", evidence = " + given.map(_.getName).mkString(", "))
 
-      val cachedOuts = visited(prior) // Set<RandomVariable>
-      if (cachedOuts != null) {
-        current --= cachedOuts
-      }
+    val cachedOuts = visited(prior) // Set<RandomVariable>
+    if (cachedOuts != null) {
+      current --= cachedOuts
+    }
 
-      for (variable <- current) {
+    for (variable <- current) {
 
-        var openToVar = false
-        var directionPriorToVar = Direction.UNKNOWN
-        if (prior == null) {
-          openToVar = true
-        } else {
-          directionPriorToVar = Direction.OUTWARD
-          if (getGraph().precedes(variable, prior)) {
-            directionPriorToVar = Direction.INWARD
-          }
+      var openToVar = false
+      var directionPriorToVar = Direction.UNKNOWN
+      if (prior == null) {
+        openToVar = true
+      } else {
+        directionPriorToVar = Direction.OUTWARD
+        if (getGraph().precedes(variable, prior)) {
+          directionPriorToVar = Direction.INWARD
+        }
 
-          if (priorDirection != Direction.UNKNOWN) {
-            var priorGiven = given.contains(prior)
-            openToVar = (
-              priorDirection == Direction.INWARD &&
+        if (priorDirection != Direction.UNKNOWN) {
+          var priorGiven = given.contains(prior)
+          openToVar = (
+            priorDirection == Direction.INWARD &&
+            !priorGiven &&
+            directionPriorToVar == Direction.OUTWARD) ||
+            (priorDirection == Direction.OUTWARD &&
               !priorGiven &&
               directionPriorToVar == Direction.OUTWARD) ||
-              (priorDirection == Direction.OUTWARD &&
-                !priorGiven &&
-                directionPriorToVar == Direction.OUTWARD) ||
-                (priorDirection == Direction.INWARD &&
-                  graph.descendantsIntersectsSet(variable, given) &&
-                  directionPriorToVar == Direction.INWARD)
-          } else {
-            openToVar = true
-          }
-        }
-
-        if (openToVar) {
-          if (to.contains(variable)) {
-            return List(variable)
-          }
-          var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>
-          neighbors -= prior
-
-          var visitedCopy = mutable.Map[RandomVariable, mutable.Set[RandomVariable]]()
-          visitedCopy ++= visited
-          var outs = visited.get(prior) // Set<RandomVariable>
-          if (outs == null) {
-            outs = mutable.Set[RandomVariable]()
-            visitedCopy += prior -> outs
-          }
-          outs += variable
-
-          var path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given);
-          if (path != null) {
-            path.add(variable)
-            return path
-          }
+              (priorDirection == Direction.INWARD &&
+                graph.descendantsIntersectsSet(variable, given) &&
+                directionPriorToVar == Direction.INWARD)
+        } else {
+          openToVar = true
         }
       }
-      return null
+
+      if (openToVar) {
+        if (to.contains(variable)) {
+          return List(variable)
+        }
+        var neighbors = graph.getNeighbors(variable) // Set<RandomVariable>
+        neighbors -= prior
+
+        var visitedCopy = mutable.Map[RandomVariable, mutable.Set[RandomVariable]]()
+        visitedCopy ++= visited
+        var outs = visited.get(prior) // Set<RandomVariable>
+        if (outs == null) {
+          outs = mutable.Set[RandomVariable]()
+          visitedCopy += prior -> outs
+        }
+        outs += variable
+
+        var path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given);
+        if (path != null) {
+          path.add(variable)
+          return path
+        }
+      }
     }
+    return null
+  }
 
 }

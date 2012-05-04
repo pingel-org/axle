@@ -10,7 +10,7 @@ object JoinTree {
   def fromEliminationOrder(m: Model, pi: List[RandomVariable]): JoinTree = {
     val G = m.g // Note: G used ot be passed in as DirectedGraph[_, _]
     // returns a jointree for DAG G with width equal to width(pi, G)
-    var T = new JoinTree()
+    val T = new JoinTree()
     val Gm = G.moralGraph() // UndirectedGraph
     var clusterSequence: List[Set[RandomVariable]] = null // Gm.induceClusterSequence(pi);
     T
@@ -35,7 +35,7 @@ class JoinTree {
 
   def toEliminationOrder(r: GV): List[RandomVariable] = {
     var result = new mutable.ListBuffer[RandomVariable]()
-    var T: JoinTree = this.duplicate()
+    val T: JoinTree = this.duplicate()
     while (T.g.getVertices().size > 1) {
       val i = T.g.firstLeafOtherThan(r)
       val j = null // TODO theNeighbor(); a JoinTreeNode

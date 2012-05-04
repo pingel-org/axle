@@ -8,7 +8,7 @@ import org.pingel.forms.Basic.PFunction
 import org.pingel.axle.util.Collector
 import org.pingel.axle.iterator.CrossProduct
 import org.pingel.axle.iterator.PowerSet
-import org.pingel.bayes.{RandomVariable, Factor, Case, Probability}
+import org.pingel.bayes.{ RandomVariable, Factor, Case, Probability }
 
 class CausalModel(name: String) extends Model(name) {
 
@@ -44,42 +44,17 @@ class CausalModel(name: String) extends Model(name) {
 
   def isSemiMarkovian() = getGraph().isAcyclic()
 
-  def isMarkovian(): Boolean = {
-    // page 69.  I'm not confident I have this right.
-    for (rv <- getRandomVariables()) {
-      if ((!rv.observable) && (getGraph().getSuccessors(rv).size > 1)) {
-        return false
-      }
-    }
-    true
-  }
+  // page 69.  I'm not confident I have this right.
+  def isMarkovian(): Boolean =
+    getRandomVariables().forall(rv => (rv.observable || (g.getSuccessors(rv).size <= 1)))
 
   def identifies(p: Probability): Boolean = {
-    if (isMarkovian()) {
-
+    if (isMarkovian) {
       // page 78 Theorem 3.2.5
-
-      for (variable <- p.getActions()) {
-        val rv = variable.getRandomVariable()
-        if (!rv.observable) {
-          return false
-        }
-        for (parent <- getGraph().getPredecessors(rv)) {
-          if (!parent.observable) {
-            return false
-          }
-        }
-      }
-
-      for (variable <- p.getQuestion()) {
-        if (!variable.getRandomVariable().observable) {
-          return false
-        }
-      }
-
-      return true
-    } else if (isSemiMarkovian()) {
-      return hasDoor(p)
+      p.getActions().forall(rv => rv.observable && g.getPredecessors(rv).forall(_.observable)) &&
+        p.getQuestion().forall(_.observable)
+    } else if (isSemiMarkovian) {
+      hasDoor(p)
     } else {
       // TODO chapter 7 can help??
       throw new UnsupportedOperationException()
@@ -125,7 +100,7 @@ class CausalModel(name: String) extends Model(name) {
     // i) no node in Z is a descendant of Xi
 
     var descendants = Set[RandomVariable]()
-    getGraph().collectDescendants(Xi, descendants)
+    g.collectDescendants(Xi, descendants)
     for (z <- Z) {
       if (descendants.contains(z)) {
         return false
@@ -138,7 +113,6 @@ class CausalModel(name: String) extends Model(name) {
 
     val XiSet = Set[RandomVariable](Xi)
     val XjSet = Set[RandomVariable](Xj)
-
     allBackdoorsBlocked(XiSet, XjSet, Z)
 
   }
@@ -184,8 +158,7 @@ class CausalModel(name: String) extends Model(name) {
         answer.connect(v, output)
       }
     }
-    answer.variable2function = mutable.Map[RandomVariable, PFunction]()
-    answer.variable2function ++= variable2function
+    answer.variable2function = mutable.Map[RandomVariable, PFunction]() ++ variable2function
     answer
   }
 

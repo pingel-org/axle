@@ -37,25 +37,22 @@ class Homework4Model(k: Int, p: Double) extends CausalModel("Homework 4 Model") 
   var oldY: Option[RandomVariable] = None
 
   for (i <- 0 to k) {
+    
     val ei = new RandomVariable("E" + i, bools, false)
-    g += ei
-    addFunction(new RandomBooleanFunction(ei, p))
-
     val epi = new RandomVariable("E'" + i, bools, false)
-    g += epi
-    addFunction(new RandomBooleanFunction(epi, p))
-
     val xi = new RandomVariable("X" + i, bools, true)
-    g += xi
+    val yi = new RandomVariable("Y" + i, bools, true)
+    
+    g ++= (ei :: epi :: xi :: yi :: Nil)
 
+    addFunction(new RandomBooleanFunction(ei, p))
+    addFunction(new RandomBooleanFunction(epi, p))
+    
     if (i == 0) {
       addFunction(new RandomBooleanFunction(xi, 0.25))
     } else {
       addFunction(new XorOrFunction(xi, oldE.get, oldX.get, oldY.get))
     }
-
-    val yi = new RandomVariable("Y" + i, bools, true)
-    g += yi
 
     if (i == 0) {
       addFunction(new RandomBooleanFunction(yi, 0.25))

@@ -11,16 +11,11 @@ import org.pingel.bayes.RandomVariable
 object Model3dot8b extends CausalModel("3.8b") {
 
   val X = new RandomVariable("X")
-  g += X
-  
   val Y = new RandomVariable("Y")
-  g += Y
-  
   val Z = new RandomVariable("Z")
-  g += Z
-
   val U = new RandomVariable("U", None, false)
-  g += U
+
+  g ++= (X :: Y :: Z :: U :: Nil)
 
   addFunction(new PFunction(Y, List(X, Z, U)))
   addFunction(new PFunction(Z, List(X, U)))

@@ -1,7 +1,6 @@
 
 package org.pingel.bayes.examples
 
-
 import scala.collection._
 import org.pingel.bayes.BayesianNetwork
 import org.pingel.bayes.Case
@@ -39,36 +38,33 @@ object ScalaFigures {
     result.g.edge(cv, ev, "")
 
     val cptA = result.getCPT(A) // A
-    cptA.write(cptA.caseOf(0), 0.6)
-    cptA.write(cptA.caseOf(1), 0.4)
+    cptA.writes(0.6 :: 0.4 :: Nil)
 
     val cptB = result.getCPT(B) // B | A
-    cptB.write(cptB.caseOf(0), 0.2)
-    cptB.write(cptB.caseOf(1), 0.8)
-    cptB.write(cptB.caseOf(2), 0.75)
-    cptB.write(cptB.caseOf(3), 0.25)
+    cptB.writes(
+      0.2  :: 0.8 ::
+      0.75 :: 0.25 ::
+      Nil)
 
     val cptC = result.getCPT(C) // C | A
-    cptC.write(cptC.caseOf(0), 0.8)
-    cptC.write(cptC.caseOf(1), 0.2)
-    cptC.write(cptC.caseOf(2), 0.1)
-    cptC.write(cptC.caseOf(3), 0.9)
+    cptC.writes(
+      0.8 :: 0.2 ::
+      0.1 :: 0.9 ::
+      Nil)
 
     val cptD = result.getCPT(D) // D | BC
-    cptD.write(cptD.caseOf(0), 0.95)
-    cptD.write(cptD.caseOf(1), 0.05)
-    cptD.write(cptD.caseOf(2), 0.9)
-    cptD.write(cptD.caseOf(3), 0.1)
-    cptD.write(cptD.caseOf(4), 0.8)
-    cptD.write(cptD.caseOf(5), 0.2)
-    cptD.write(cptD.caseOf(6), 0)
-    cptD.write(cptD.caseOf(7), 1)
+    cptD.writes(
+      0.95 :: 0.5 ::
+      0.9  :: 0.1 ::
+      0.8  :: 0.2 ::
+      0.0  :: 1.0 ::
+      Nil)
 
     val cptE = result.getCPT(E) // E | C
-    cptE.write(cptE.caseOf(0), 0.7)
-    cptE.write(cptE.caseOf(1), 0.3)
-    cptE.write(cptE.caseOf(2), 0)
-    cptE.write(cptE.caseOf(3), 1)
+    cptE.writes(
+      0.7 :: 0.3 ::
+      0.0 :: 1.0 ::
+      Nil)
 
     result
   }
@@ -82,14 +78,12 @@ object ScalaFigures {
   lazy val figure6_3 = {
 
     val result1 = new Factor(B :: C :: D :: Nil)
-    result1.write(result1.caseOf(0), 0.95)
-    result1.write(result1.caseOf(1), 0.05)
-    result1.write(result1.caseOf(2), 0.9)
-    result1.write(result1.caseOf(3), 0.1)
-    result1.write(result1.caseOf(4), 0.8)
-    result1.write(result1.caseOf(5), 0.2)
-    result1.write(result1.caseOf(6), 0)
-    result1.write(result1.caseOf(7), 1)
+    result1.writes(
+        0.95 :: 0.05 ::
+        0.9  :: 0.1  ::
+        0.8  :: 0.2  ::
+        0.0  :: 1.0  ::
+        Nil)
 
     println("figure3sub1")
     result1.print
@@ -103,10 +97,7 @@ object ScalaFigures {
     h.print
 
     val result2 = new Factor(D :: E :: Nil)
-    result2.write(result2.caseOf(0), 0.448)
-    result2.write(result2.caseOf(1), 0.192)
-    result2.write(result2.caseOf(2), 0.112)
-    result2.write(result2.caseOf(3), 0.248)
+    result2.writes(0.448 :: 0.192 :: 0.112 :: 0.248 :: Nil)
 
     println("figure3sub2")
     result2.print
@@ -114,7 +105,7 @@ object ScalaFigures {
     val m = result1.multiply(result2)
     println("f1 * f2")
     m.print
-    
+
     (result1, result2)
   }
 
@@ -129,20 +120,13 @@ object ScalaFigures {
     result.g.edge(bv, cv, "")
 
     val cptA = result.getCPT(A) // A
-    cptA.write(cptA.caseOf(0), 0.6)
-    cptA.write(cptA.caseOf(1), 0.4)
+    cptA.writes(0.6 :: 0.4 :: Nil)
 
     val cptB = result.getCPT(B) // B | A
-    cptB.write(cptB.caseOf(0), 0.9)
-    cptB.write(cptB.caseOf(1), 0.1)
-    cptB.write(cptB.caseOf(2), 0.2)
-    cptB.write(cptB.caseOf(3), 0.8)
+    cptB.writes(0.9 :: 0.1 :: 0.2 :: 0.8 :: Nil)
 
     val cptC = result.getCPT(C) // C | B
-    cptC.write(cptC.caseOf(0), 0.3)
-    cptC.write(cptC.caseOf(1), 0.7)
-    cptC.write(cptC.caseOf(2), 0.5)
-    cptC.write(cptC.caseOf(3), 0.5)
+    cptC.writes(0.3 :: 0.7 :: 0.5 :: 0.5 :: Nil)
 
     // result.g.draw
 
@@ -161,7 +145,7 @@ object ScalaFigures {
     val bar = foo.sumOut(C)
     println("sumout(C, cptC * sumout(A, cptA * cptB))")
     bar.print
-    
+
     result
   }
 
@@ -181,27 +165,24 @@ object ScalaFigures {
 
   lazy val figure6_7 = {
 
-    val result1 = new BayesianNetwork()
-    figure6_1.copyTo(result1)
+    val result1 = figure6_1.duplicate()
     val Q1 = Set(B, E)
     result1.pruneNetwork(Q1, null)
     println("Figure 6.1 pruned towards " + Q1)
     result2.g.draw
 
-    val result2 = new BayesianNetwork()
-    figure6_1.copyTo(result2)
+    val result2 = figure6_2.duplicate()
     val Q2 = Set(B)
     result2.pruneNetwork(Q2, null)
     println("Figure 6.2 pruned towards " + Q2)
     result2.g.draw
-    
+
     (result1, result2)
   }
 
   lazy val figure6_8 = {
 
-    val result = new BayesianNetwork()
-    figure6_1.copyTo(result)
+    val result = figure6_1.duplicate()
 
     var c = new Case()
     c.assign(C, falseValue)
@@ -220,8 +201,7 @@ object ScalaFigures {
 
   lazy val figure6_9 = {
 
-    val result = new BayesianNetwork()
-    figure6_1.copyTo(result)
+    val result = figure6_1.duplicate()
 
     val c = new Case()
     c.assign(A, trueValue)
@@ -243,8 +223,7 @@ object ScalaFigures {
 
   lazy val figure7_2 = {
 
-    val result = new BayesianNetwork()
-    figure6_4.copyTo(result)
+    val result = figure6_4.duplicate()
     val f = result.factorElimination1(Set(C))
     println("Result of fe-i on a->b->c with Q={C}")
     f.print
@@ -253,8 +232,7 @@ object ScalaFigures {
 
   lazy val figure7_4 = {
 
-    val result = new BayesianNetwork()
-    figure6_1.copyTo(result)
+    val result = figure6_1.duplicate()
 
     val τ = new EliminationTree()
 
@@ -273,17 +251,16 @@ object ScalaFigures {
 
     println("Doing factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3")
     elim.print
-    
+
     (result, τ, τ_n3)
   }
 
   lazy val figure7_5 = {
 
-    val result = new BayesianNetwork()
-    figure6_1.copyTo(result)
+    val result = figure6_1.duplicate()
 
     val (bn, τ, τ_n3) = figure7_4
-    
+
     val elim = result.factorElimination2(Set(C), τ, τ_n3)
 
     println("Doing factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3")
