@@ -1,4 +1,4 @@
-package org.pingel.axle
+package axle
 
 import scala.collection._
 import scala.math.log

@@ -1,4 +1,4 @@
-package org.pingel.axle.graph
+package axle.graph
 
 import scala.collection.JavaConversions._
 import scala.collection._

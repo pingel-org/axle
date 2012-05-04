@@ -1,4 +1,4 @@
-package org.pingel.axle.matrix
+package axle.matrix
 
 
 trait MatrixFactory {

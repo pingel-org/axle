@@ -1,12 +1,12 @@
-package org.pingel.axle.ml
+package axle.ml
 
-import org.pingel.axle.matrix.JblasMatrixFactory.JblasMatrix
-import org.pingel.axle.matrix.JblasMatrixFactory.double2double
-import org.pingel.axle.matrix.JblasMatrixFactory.rand
+import axle.matrix.JblasMatrixFactory.JblasMatrix
+import axle.matrix.JblasMatrixFactory.double2double
+import axle.matrix.JblasMatrixFactory.rand
 
 class KMeans {
 
-  import org.pingel.axle.matrix.JblasMatrixFactory._
+  import axle.matrix.JblasMatrixFactory._
 
   // X is NOT left-padded with 1's for k-means clustering
   

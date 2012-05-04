@@ -1,5 +1,5 @@
 
-package org.pingel.axle.category.awodey
+package axle.category.awodey
 
 object Examples {
 

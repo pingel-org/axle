@@ -1,4 +1,4 @@
-package org.pingel.axle.matrix
+package axle.matrix
 
 import org.specs2.mutable._
 
@@ -7,8 +7,8 @@ class LinearRegressionSpecification extends Specification {
   "Linear Regression" should {
     "work" in {
 
-      import org.pingel.axle.matrix.JblasMatrixFactory._
-      import org.pingel.axle.ml.LinearRegression._
+      import JblasMatrixFactory._
+      import axle.ml.LinearRegression._
 
       val y = matrix(4, 1, Array(460.0, 232.0, 315.0, 178.0))
 

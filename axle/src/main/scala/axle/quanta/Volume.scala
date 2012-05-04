@@ -1,4 +1,4 @@
-package org.pingel.axle.quanta
+package axle.quanta
 
 import java.math.BigDecimal
 

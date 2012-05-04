@@ -1,4 +1,4 @@
-package org.pingel.axle.category
+package axle.category
 
 import org.specs2.mutable._
 

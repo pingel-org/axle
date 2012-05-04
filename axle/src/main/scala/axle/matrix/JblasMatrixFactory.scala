@@ -1,4 +1,4 @@
-package org.pingel.axle.matrix
+package axle.matrix
 
 // not necessarily a bijection, but related
 trait FunctionPair[A, B] {

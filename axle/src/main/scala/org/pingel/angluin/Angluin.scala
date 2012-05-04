@@ -3,8 +3,8 @@ package org.pingel.angluin
 
 import scala.collection._
 
-import org.pingel.axle.graph.JungDirectedGraphFactory._
-import org.pingel.axle.Enrichments._
+import axle.graph.JungDirectedGraphFactory._
+import axle.Enrichments._
 
 case class Acceptor() {
 

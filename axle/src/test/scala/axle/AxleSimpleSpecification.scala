@@ -1,5 +1,5 @@
 
-package org.pingel.axle
+package axle
 
 import org.specs2.mutable._
 

@@ -1,9 +1,9 @@
 
-package org.pingel.axle.category.awodey
+package axle.category.awodey
 
 object DiscreteMath {
 
-  import org.pingel.axle.Enrichments._
+  import axle.Enrichments._
 
   object ℝ { }
 

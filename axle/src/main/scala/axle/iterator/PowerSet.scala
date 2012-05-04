@@ -26,7 +26,7 @@
  *
  */
 
-package org.pingel.axle.iterator
+package axle.iterator
 
 import scala.collection._
 

@@ -1,5 +1,5 @@
 
-package org.pingel.axle
+package axle
 
 /**
  * Axle is an attempt at duplicating just enough Haskell in Scala

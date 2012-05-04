@@ -1,4 +1,4 @@
-package org.pingel.axle.ml
+package axle.ml
 
 class LatentSemanticAnalysis {
   

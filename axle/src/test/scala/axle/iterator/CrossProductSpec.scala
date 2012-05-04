@@ -1,11 +1,9 @@
 
-package org.pingel.axle.iterator
+package axle.iterator
 
 import org.specs2.mutable._
 	  
 class CrossProductSpec extends Specification {
-
-  import org.pingel.axle.iterator._
 
   "Cross Product" should {
     "work" in {

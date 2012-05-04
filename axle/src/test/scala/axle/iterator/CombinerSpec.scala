@@ -1,10 +1,8 @@
-package org.pingel.axle.iterator
+package axle.iterator
 
 import org.specs2.mutable._
 
 class CombinerSpec extends Specification {
-
-  import org.pingel.axle.iterator._
 
   "Combiner" should {
     "work" in {

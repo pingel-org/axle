@@ -1,5 +1,5 @@
 
-package org.pingel.axle.util {
+package axle.util {
 
   import scala.collection._
   import java.lang.StringBuffer

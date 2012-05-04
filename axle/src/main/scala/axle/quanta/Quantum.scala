@@ -1,6 +1,6 @@
-package org.pingel.axle.quanta
+package axle.quanta
 
-import org.pingel.axle.graph.NativeDirectedGraphFactory._
+import axle.graph.NativeDirectedGraphFactory._
 
 import java.math.BigDecimal
 import scala.Math.{ max, abs }

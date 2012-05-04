@@ -1,14 +1,14 @@
-package org.pingel.axle.ml
+package axle.ml
 
-import org.pingel.axle.matrix.JblasMatrixFactory.JblasMatrix
-import org.pingel.axle.matrix.JblasMatrixFactory.double2double
-import org.pingel.axle.matrix.JblasMatrixFactory.zeros
+import axle.matrix.JblasMatrixFactory.JblasMatrix
+import axle.matrix.JblasMatrixFactory.double2double
+import axle.matrix.JblasMatrixFactory.zeros
 
 object LinearRegression extends LinearRegression()
 
 class LinearRegression {
 
-  import org.pingel.axle.matrix.JblasMatrixFactory._
+  import axle.matrix.JblasMatrixFactory._
 
   def normalEquation(X: JblasMatrix[Double], y: JblasMatrix[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 

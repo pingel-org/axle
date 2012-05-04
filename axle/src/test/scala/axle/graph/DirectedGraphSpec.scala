@@ -1,11 +1,11 @@
 
-package org.pingel.axle.graph
+package axle.graph
 
 import org.specs2.mutable._
 
 class DirectedGraphSpec extends Specification {
 
-  import org.pingel.axle.graph.JungDirectedGraphFactory._
+  import JungDirectedGraphFactory._
 
   "Directed Graph" should {
     "work" in {

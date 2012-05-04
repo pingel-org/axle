@@ -1,4 +1,4 @@
-package org.pingel.axle.matrix
+package axle.matrix
 
 import org.specs2.mutable._
 
@@ -7,7 +7,7 @@ class MatrixSpecification extends Specification {
   "DoubleJblasMatrix" should {
     "work" in {
 
-      import org.pingel.axle.matrix.JblasMatrixFactory._
+      import JblasMatrixFactory._
 
       val z: JblasMatrix[Double] = zeros[Double](3, 4)
       val o = ones[Double](2, 3)
@@ -25,7 +25,7 @@ class MatrixSpecification extends Specification {
   "IntJblasMatrix" should {
     "work" in {
 
-      import org.pingel.axle.matrix.JblasMatrixFactory._
+      import JblasMatrixFactory._
 
       val z: JblasMatrix[Int] = zeros[Int](1, 3)
       val o = ones[Int](2, 2)
@@ -38,7 +38,7 @@ class MatrixSpecification extends Specification {
   "BooleanJblasMatrix" should {
     "work" in {
 
-      import org.pingel.axle.matrix.JblasMatrixFactory._
+      import axle.matrix.JblasMatrixFactory._
 
       val f: JblasMatrix[Boolean] = falses(2, 3)
       val t = trues(3, 2)

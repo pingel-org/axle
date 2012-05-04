@@ -1,4 +1,4 @@
-package org.pingel.axle.quanta
+package axle.quanta
 
 import org.specs2.mutable._
 
@@ -6,7 +6,7 @@ import java.math.BigDecimal
 
 class QuantaSpec extends Specification {
 
-  import org.pingel.axle.Enrichments._
+  import axle.Enrichments._
 
   "Scalar conversion" should {
     "work" in {

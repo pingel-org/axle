@@ -1,5 +1,5 @@
 
-package org.pingel.axle.category.awodey
+package axle.category.awodey
 
 // unicode
 // http://formex.publications.europa.eu/formex-4/physspec/formex-4-character-encoding-c06.htm
@@ -7,7 +7,7 @@ package org.pingel.axle.category.awodey
 
 object CategoryTheory {
 
-  import org.pingel.axle.Enrichments._
+  import axle.Enrichments._
 
   case class ⋅(v: Any) { // "object"
     def ≡(other: ⋅) = this == other // TODO

@@ -1,4 +1,4 @@
-package org.pingel.axle.graph
+package axle.graph
 
 trait UndirectedGraphFactory extends GraphFactory {
 

@@ -1,10 +1,10 @@
-package org.pingel.axle
+package axle
 
 import org.specs2.mutable._
 
 class EnrichmentsSpec extends Specification {
 
-  import org.pingel.axle.Enrichments._
+  import Enrichments._
 
   "List Enrichment" should {
     "work" in {

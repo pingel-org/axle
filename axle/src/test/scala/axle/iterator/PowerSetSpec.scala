@@ -1,11 +1,9 @@
 
-package org.pingel.axle.iterator
+package axle.iterator
 
 import org.specs2.mutable._
 	  
 class PowerSetSpec extends Specification {
-
-  import org.pingel.axle.iterator.℘
 
   "PowerSet" should {
     "Enumerate subsets of {a, b}" in {

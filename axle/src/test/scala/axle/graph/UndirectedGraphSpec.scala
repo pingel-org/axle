@@ -1,10 +1,10 @@
-package org.pingel.axle.graph
+package axle.graph
 
 import org.specs2.mutable._
 
 class UndirectedGraphSpec extends Specification {
 
-  import org.pingel.axle.graph.JungUndirectedGraphFactory._
+  import JungUndirectedGraphFactory._
 
   "Undirected Graph" should {
     "work" in {

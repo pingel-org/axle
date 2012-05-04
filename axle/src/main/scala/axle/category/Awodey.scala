@@ -1,5 +1,5 @@
 
-package org.pingel.category
+package axle.category
 
 
 object Main {
