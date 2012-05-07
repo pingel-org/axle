@@ -32,7 +32,7 @@ import scala.collection._
 
 class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
 
-  var modulos = new Array[Int](lists.size + 1)
+  val modulos = new Array[Int](lists.size + 1)
   modulos(lists.size) = 1
   var j = lists.size - 1
   while (j >= 0) {
@@ -48,9 +48,7 @@ class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
     
     var i = 0
     for (j <- 0 until lists.size) {
-      val l = lists(j)
-      val elem = objects(j)
-      val z = l.indexOf(elem)
+      val z = lists(j).indexOf(objects(j))
       if (z == -1) {
         return -1
       }
@@ -62,8 +60,7 @@ class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
   
   def get(i: Int) = {
     var c = i
-    //        var result = lists.map({x => null}).toList.toArray // Array[E] or List[E]?
-    var result = scala.collection.mutable.ArrayBuffer[E]()
+    val result = mutable.ArrayBuffer[E]()
     for (j <- 0 until lists.size) {
       result.append(lists(j)(c / modulos(j + 1)))
       c = c % modulos(j + 1)
@@ -83,8 +80,8 @@ class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E
   
   class CrossProductIterator[InE](cp: CrossProduct[InE]) extends Iterator[List[InE]] {
     
-    var iterators = scala.collection.mutable.ArrayBuffer[Iterator[InE]]()
-    var current = scala.collection.mutable.ArrayBuffer[InE]()
+    val iterators = mutable.ArrayBuffer[Iterator[InE]]()
+    var current = mutable.ArrayBuffer[InE]()
     
     for (i <- 0 until cp.getCollections().size) {
       iterators.append(cp.getCollections()(i).iterator)

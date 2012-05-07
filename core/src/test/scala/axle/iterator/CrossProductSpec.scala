@@ -12,7 +12,8 @@ class CrossProductSpec extends Specification {
       val v3 = List("X")
       val cp = new CrossProduct[String](List(v1, v2, v3, v2))
       val cl = cp.toList
-      cl.size must be equalTo(3)
+      println("cp = " + cp)
+      cl.size must be equalTo(8)
     }
   }
 
