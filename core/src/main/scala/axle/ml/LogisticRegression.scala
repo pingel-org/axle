@@ -2,10 +2,9 @@ package axle.ml
 
 object LogisticRegression extends LogisticRegression()
 
-trait LogisticRegression {
+trait LogisticRegression extends Regression {
 
   import axle.matrix.JblasMatrixFactory._
-  type M[T] = JblasMatrix[T] // TODO: generalize
   import Math.{ exp, log }
 
   // h is essentially P(y=1 | X;θ)
@@ -19,9 +18,7 @@ trait LogisticRegression {
   def predictedY(xi: M[Double], θ: M[Double]) = h(xi, θ) >= 0.5
 
   def Jθ(X: M[Double], θ: M[Double], y: M[Boolean]) = (0 until X.rows)
-    .foldLeft(0.0)((r: Double, i: Int) => {
-      r + cost(X.getRow(i), θ, y.getRow(i).scalar)
-    }) / X.rows
+    .foldLeft(0.0)((r: Double, i: Int) => { r + cost(X.getRow(i), θ, y.getRow(i).scalar) }) / X.rows
 
   def dθ(X: M[Double], y: M[Boolean], θ: M[Double]) = {
     val result = zeros[Double](θ.rows, 1)
@@ -41,5 +38,31 @@ trait LogisticRegression {
 
   def gradientDescent(X: M[Double], y: M[Boolean], θ: M[Double], α: Double, iterations: Int) =
     (0 until iterations).foldLeft(θ)((θi: M[Double], i: Int) => θi - (dθ(X, y, θi) * α))
+
+  def regression[D](
+    examples: List[D],
+    numObservations: Int,
+    observationExtractor: D => List[Double],
+    objectiveExtractor: D => Boolean) = {
+
+    val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
+
+    val inputX = matrix(
+      examples.length,
+      numObservations,
+      examples.flatMap(observationExtractor(_)).toArray).t
+
+    val scaledX = scaleColumns(inputX)
+
+    val X = ones[Double](examples.length, 1) +|+ scaledX._1
+
+    val θ0 = ones[Double](X.columns, 1)
+    val α = 0.1
+    val N = 100 // iterations
+
+    val θ = gradientDescent(X, y, θ0, α, N)
+
+    θ // TODO also return enough information to scale the result
+  }
 
 }

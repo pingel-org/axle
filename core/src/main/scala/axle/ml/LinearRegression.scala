@@ -1,20 +1,12 @@
 package axle.ml
 
 object LinearRegression extends LinearRegression()
- 
-trait LinearRegression {
+
+trait LinearRegression extends Regression {
 
   import axle.matrix.JblasMatrixFactory._ // TODO: generalize
-  type M[T] = JblasMatrix[T]
 
   def normalEquation(X: M[Double], y: M[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
-
-  def scaleColumns(X: M[Double]) = {
-    val colMins = X.columnMins
-    val colRanges = X.columnMaxs - colMins
-    val scaled = (diag(colRanges).inv ⨯ X.subRowVector(colMins).t).t
-    (scaled, colMins, colRanges)
-  }
 
   def h(xi: M[Double], θ: M[Double]) = xi ⨯ θ
 
@@ -38,7 +30,34 @@ trait LinearRegression {
     θi
   }
 
-  // non-unicode alias
-  def dTheta(X: JblasMatrix[Double], y: JblasMatrix[Double], θ: JblasMatrix[Double]) = dθ(X, y, θ)
+  def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) = 
+    gradientDescentImmutable(X, y, θ, α, iterations)
 
+  // non-unicode alias
+  def dTheta(X: M[Double], y: M[Double], θ: M[Double]) = dθ(X, y, θ)
+
+  
+  def regression[D](examples: List[D], numObservations: Int, observationExtractor: D => List[Double], objectiveExtractor: D => Double) = {
+
+    val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
+
+    val inputX = matrix(
+      examples.length,
+      numObservations,
+      examples.flatMap(observationExtractor(_)).toArray).t
+
+    val scaledX = scaleColumns(inputX)
+
+    val X = ones[Double](inputX.rows, 1) +|+ scaledX._1
+
+    val yScaled = scaleColumns(y)
+    val θ0 = ones[Double](X.columns, 1)
+    val α = 0.1
+    val N = 100 // iterations
+
+    val θ = gradientDescent(X, yScaled._1, θ0, α, N)
+
+    θ // TODO also return enough information to scale the result
+  }
+  
 }
