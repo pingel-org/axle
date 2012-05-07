@@ -222,9 +222,18 @@ case class Quotient(A: Acceptor, π: Partition) {
   }
 }
 
-case class Symbol(s: String, Σ: mutable.Set[Symbol]) {
+case class Alphabet() {
+  
+  val symbols = mutable.Set[Symbol]()
+  
+  def +=(symbol: Symbol): Symbol = {
+    symbols += symbol
+    symbol
+  }
+  
+}
 
-  Σ += this
+case class Symbol(s: String) {
 
   override def toString() = s
 
@@ -251,7 +260,7 @@ case class Text(var v: List[Expression]) {
     ℒ
   }
 
-  def iterator = v.iterator
+  def iterator() = v.iterator
 
   override def toString() = "<" + v.mkString(", ") + ">"
 

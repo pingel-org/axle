@@ -10,14 +10,14 @@ class AngluinSpecification extends Specification {
 
     "work" in {
 
-      var Σ = mutable.Set[Symbol]()
+      val Σ = Alphabet()
 
-      val mHi = Symbol("hi", Σ)
-      val mIm = Symbol("I'm", Σ)
-      val mYour = Symbol("your", Σ)
-      val mMother = Symbol("Mother", Σ)
-      val mShut = Symbol("shut", Σ)
-      val mUp = Symbol("up", Σ)
+      val mHi = Σ += Symbol("hi")
+      val mIm = Σ += Symbol("I'm")
+      val mYour = Σ += Symbol("your")
+      val mMother = Σ += Symbol("Mother")
+      val mShut = Σ += Symbol("shut")
+      val mUp = Σ += Symbol("up")
 
       val s1 = MutableExpression(List(mHi, mIm, mYour, mMother))
       val s2 = MutableExpression(List(mShut, mUp))
@@ -36,7 +36,7 @@ class AngluinSpecification extends Specification {
       }
       println()
 
-      var ɸ = MemorizingLearner(T)
+      val ɸ = MemorizingLearner(T)
 
       var guess: Grammar = null
 
