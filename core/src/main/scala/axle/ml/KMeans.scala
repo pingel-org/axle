@@ -1,16 +1,13 @@
 package axle.ml
 
-import axle.matrix.JblasMatrixFactory.JblasMatrix
-import axle.matrix.JblasMatrixFactory.double2double
-import axle.matrix.JblasMatrixFactory.rand
+trait KMeans {
 
-class KMeans {
-
-  import axle.matrix.JblasMatrixFactory._
+  import axle.matrix.JblasMatrixFactory._ // TODO: generalize
+  type M[T] = JblasMatrix[T]
 
   // X is NOT left-padded with 1's for k-means clustering
   
-  def cluster(K: Int, X: JblasMatrix[Double], iterations: Int): (JblasMatrix[Double], JblasMatrix[Double]) = {
+  def cluster(K: Int, X: M[Double], iterations: Int): (M[Double], M[Double]) = {
 
     val n = X.columns
     val m = X.rows
@@ -19,9 +16,9 @@ class KMeans {
     
     // TODO: normalize X
 
-    var centroids = rand[Double](K, n) // random initial K centroids μ in R^n (aka M)
+    val centroids = rand[Double](K, n) // random initial K centroids μ in R^n (aka M)
 
-    var C = rand[Double](1, 1) // TODO indexes of centroids closest to xi
+    val C = rand[Double](1, 1) // TODO indexes of centroids closest to xi
     
     (0 until iterations).map(x => {
       (0 until m).map(i => {
