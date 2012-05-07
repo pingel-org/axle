@@ -1,5 +1,6 @@
 package axle.matrix
 
+object MatrixFactory extends MatrixFactory()
 
 trait MatrixFactory {
 

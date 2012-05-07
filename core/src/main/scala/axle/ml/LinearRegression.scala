@@ -1,45 +1,34 @@
 package axle.ml
 
-import axle.matrix.JblasMatrixFactory._
-
 object LinearRegression extends LinearRegression()
+ 
+trait LinearRegression {
 
-class LinearRegression {
+  import axle.matrix.JblasMatrixFactory._ // TODO: generalize
+  type M[T] = JblasMatrix[T]
 
-  def normalEquation(X: JblasMatrix[Double], y: JblasMatrix[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
+  def normalEquation(X: M[Double], y: M[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
-  def scaleColumns(X: JblasMatrix[Double]) = {
+  def scaleColumns(X: M[Double]) = {
     val colMins = X.columnMins
     val colRanges = X.columnMaxs - colMins
     val scaled = (diag(colRanges).inv ⨯ X.subRowVector(colMins).t).t
     (scaled, colMins, colRanges)
   }
 
-  def h(xi: JblasMatrix[Double], θ: JblasMatrix[Double]) = xi ⨯ θ
+  def h(xi: M[Double], θ: M[Double]) = xi ⨯ θ
 
-  def cost(xi: JblasMatrix[Double], θ: JblasMatrix[Double], yi: Double) = h(xi, θ) - yi
+  def cost(xi: M[Double], θ: M[Double], yi: Double) = h(xi, θ) - yi
 
-  def dθ(X: JblasMatrix[Double], y: JblasMatrix[Double], θ: JblasMatrix[Double]) =
-    (0 until X.rows).foldLeft(zeros[Double](1, X.columns))(
-      (m: JblasMatrix[Double], i: Int) => {
-        m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0)))
-      }
+  def dθ(X: M[Double], y: M[Double], θ: M[Double]) = (0 until X.rows)
+    .foldLeft(zeros[Double](1, X.columns))(
+      (m: M[Double], i: Int) => { m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0))) }
     ) / X.rows
 
-  def gradientDescentImmutable(
-    X: JblasMatrix[Double],
-    y: JblasMatrix[Double],
-    θ: JblasMatrix[Double],
-    α: Double,
-    iterations: Int) =
+  def gradientDescentImmutable(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
     (0 until iterations).foldLeft(θ)((θi: JblasMatrix[Double], i: Int) => θi - (dθ(X, y, θi) * α))
 
-  def gradientDescentMutable(
-    X: JblasMatrix[Double],
-    y: JblasMatrix[Double],
-    θo: JblasMatrix[Double],
-    α: Double,
-    iterations: Int) = {
+  def gradientDescentMutable(X: M[Double], y: M[Double], θo: M[Double], α: Double, iterations: Int) = {
     var θi = θo.dup
     var i = 0
     while (i < iterations) {
