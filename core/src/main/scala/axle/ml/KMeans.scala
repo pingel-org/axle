@@ -7,12 +7,12 @@ trait KMeans {
 
   // X is NOT left-padded with 1's for k-means clustering
   
-  def cluster(K: Int, X: M[Double], iterations: Int): (M[Double], M[Double]) = {
+  def cluster(K: Int, X: M[Double], iterations: Int) = { // (M[Double], M[Double])
 
     val n = X.columns
     val m = X.rows
 
-    // assert: K < m
+    assert(K < m)
     
     // TODO: normalize X
 
