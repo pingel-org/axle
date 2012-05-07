@@ -14,7 +14,7 @@ trait LinearRegression extends Regression {
 
   def dθ(X: M[Double], y: M[Double], θ: M[Double]) = (0 until X.rows)
     .foldLeft(zeros[Double](1, X.columns))(
-      (m: M[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ) - y.valueAt(i, 0)))
+      (m: M[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ) - y(i, 0)))
     ) / X.rows
 
   def gradientDescentImmutable(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =

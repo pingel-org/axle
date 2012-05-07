@@ -50,8 +50,8 @@ trait JblasMatrixFactory extends MatrixFactory {
     def columns() = getStorage.columns
     def length() = getStorage.length
 
-    def valueAt(i: Int, j: Int): T = functionPair.forward(getStorage.get(i, j))
-    def setValueAt(i: Int, j: Int, v: T) = getStorage.put(i, j, functionPair.backward(v))
+    def apply(i: Int, j: Int): T = functionPair.forward(getStorage.get(i, j))
+    def update(i: Int, j: Int, v: T) = getStorage.put(i, j, functionPair.backward(v))
 
     def column(j: Int) = matrix(getStorage.getColumn(j))(functionPair)
     def row(i: Int) = matrix(getStorage.getRow(i))(functionPair)

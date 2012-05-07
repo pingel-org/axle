@@ -24,8 +24,8 @@ trait MatrixFactory {
     def columns: Int
     def length: Int
 
-    def valueAt(i: Int, j: Int): T
-    def setValueAt(i: Int, j: Int, v: T): Unit
+    def apply(i: Int, j: Int): T
+    def update(i: Int, j: Int, v: T): Unit
 
     def column(j: Int): M[T]
     def row(i: Int): M[T]
@@ -127,7 +127,7 @@ trait MatrixFactory {
 
     def scalar() = {
       assert(isScalar)
-      valueAt(0, 0)
+      this(0, 0)
     }
 
     def +(x: T) = addScalar(x)
