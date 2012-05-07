@@ -27,8 +27,8 @@ trait MatrixFactory {
     def valueAt(i: Int, j: Int): T
     def setValueAt(i: Int, j: Int, v: T): Unit
 
-    def getColumn(j: Int): M[T]
-    def getRow(i: Int): M[T]
+    def column(j: Int): M[T]
+    def row(i: Int): M[T]
 
     def isEmpty(): Boolean
     def isRowVector(): Boolean

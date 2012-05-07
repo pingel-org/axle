@@ -18,7 +18,7 @@ trait LogisticRegression extends Regression {
   def predictedY(xi: M[Double], θ: M[Double]) = h(xi, θ) >= 0.5
 
   def Jθ(X: M[Double], θ: M[Double], y: M[Boolean]) = (0 until X.rows)
-    .foldLeft(0.0)((r: Double, i: Int) => { r + cost(X.getRow(i), θ, y.getRow(i).scalar) }) / X.rows
+    .foldLeft(0.0)((r: Double, i: Int) => r + cost(X.row(i), θ, y.row(i).scalar) ) / X.rows
 
   def dθ(X: M[Double], y: M[Boolean], θ: M[Double]) = {
     val result = zeros[Double](θ.rows, 1)
@@ -26,9 +26,9 @@ trait LogisticRegression extends Regression {
       result.setValueAt(j, 0,
         (0 until X.rows).foldLeft(0.0)(
           (r: Double, i: Int) => {
-            val xi = X.getRow(i)
-            val xij = xi.getColumn(j).scalar
-            val yi = y.getRow(i).scalar match { case true => 1.0 case false => 0.0 }
+            val xi = X.row(i)
+            val xij = xi.column(j).scalar
+            val yi = y.row(i).scalar match { case true => 1.0 case false => 0.0 }
             r + (h(xi, θ) - yi) * xij
           })))
     result

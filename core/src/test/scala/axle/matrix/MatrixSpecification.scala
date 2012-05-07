@@ -15,8 +15,8 @@ class MatrixSpecification extends Specification {
       val rn = randn[Double](2, 2)
 
       val dm = rand[Double](3, 3)
-      val c2 = dm.getColumn(2)
-      val r2 = dm.getRow(2)
+      val c2 = dm.column(2)
+      val r2 = dm.row(2)
 
       1 must be equalTo (1)
     }

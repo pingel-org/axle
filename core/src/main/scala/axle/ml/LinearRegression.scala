@@ -14,11 +14,11 @@ trait LinearRegression extends Regression {
 
   def dθ(X: M[Double], y: M[Double], θ: M[Double]) = (0 until X.rows)
     .foldLeft(zeros[Double](1, X.columns))(
-      (m: M[Double], i: Int) => { m + (X.getRow(i) ⨯ (h(X.getRow(i), θ) - y.valueAt(i, 0))) }
+      (m: M[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ) - y.valueAt(i, 0)))
     ) / X.rows
 
   def gradientDescentImmutable(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
-    (0 until iterations).foldLeft(θ)((θi: JblasMatrix[Double], i: Int) => θi - (dθ(X, y, θi) * α))
+    (0 until iterations).foldLeft(θ)((θi: M[Double], i: Int) => θi - (dθ(X, y, θi) * α))
 
   def gradientDescentMutable(X: M[Double], y: M[Double], θo: M[Double], α: Double, iterations: Int) = {
     var θi = θo.dup
