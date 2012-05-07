@@ -49,8 +49,8 @@ pomExtra := (
   <url>http://axle-lang.org</url>
   <licenses>
     <license>
-      <name>BSD-style</name>
-      <url>http://www.opensource.org/licenses/bsd-license.php</url>
+      <name>BSD-2-Clause</name>
+      <url>http://www.opensource.org/licenses/BSD-2-Clause</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
