@@ -165,6 +165,11 @@ trait JblasMatrixFactory extends MatrixFactory {
     matrix[T](jblas)(fp)
   }
 
+  def diag[T](row: JblasMatrix[T])(implicit fp: FunctionPair[Double, T]): JblasMatrix[T] = {
+    assert(row.isRowVector)
+    matrix[T](DoubleMatrix.diag(row.getJblas))
+  }
+
   def zeros[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.zeros(m, n))(fp)
   def ones[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.ones(m, n))(fp)
   def eye[T](n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.eye(n))(fp)

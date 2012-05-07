@@ -30,6 +30,11 @@ package axle.iterator
 
 import scala.collection._
 
+/*
+ * The cross-product should return tuples
+ * 
+ */
+
 class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
 
   val modulos = new Array[Int](lists.size + 1)
