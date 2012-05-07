@@ -1,4 +1,4 @@
-package axle.matrix
+package axle.ml
 
 class PrincipalComponentAnalysis {
 
