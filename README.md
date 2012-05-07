@@ -1,6 +1,4 @@
 
-See the [wiki](https://github.com/adampingel/pingel.org/wiki)
+See the [wiki](https://github.com/adampingel/axle/wiki)
 ==========
-
-Test
 
