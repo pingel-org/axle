@@ -1,5 +1,6 @@
 package axle.ml
 
+
 trait Regression {
 
   import axle.matrix.JblasMatrixFactory._
@@ -11,6 +12,5 @@ trait Regression {
     val scaled = (diag(colRanges).inv ⨯ X.subRowVector(colMins).t).t
     (scaled, colMins, colRanges)
   }
-
 
 }

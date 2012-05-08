@@ -30,34 +30,55 @@ trait LinearRegression extends Regression {
     θi
   }
 
-  def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) = 
+  def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
     gradientDescentImmutable(X, y, θ, α, iterations)
 
   // non-unicode alias
   def dTheta(X: M[Double], y: M[Double], θ: M[Double]) = dθ(X, y, θ)
 
-  
-  def regression[D](examples: List[D], numObservations: Int, observationExtractor: D => List[Double], objectiveExtractor: D => Double) = {
-
-    val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
+  def regression[D](
+    examples: Seq[D],
+    numObservations: Int,
+    featureExtractor: D => List[Double],
+    objectiveExtractor: D => Double,
+    α: Double = 0.1,
+    N: Int = 100 // iterations
+    ) = {
 
     val inputX = matrix(
       examples.length,
       numObservations,
-      examples.flatMap(observationExtractor(_)).toArray).t
+      examples.flatMap(featureExtractor(_)).toArray).t
 
-    val scaledX = scaleColumns(inputX)
+    val (scaledX, colMins, colRanges) = scaleColumns(inputX)
+    val X = ones[Double](inputX.rows, 1) +|+ scaledX
 
-    val X = ones[Double](inputX.rows, 1) +|+ scaledX._1
-
-    val yScaled = scaleColumns(y)
+    val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
+    val (scaledY, yMin, yRange) = scaleColumns(y)
     val θ0 = ones[Double](X.columns, 1)
-    val α = 0.1
-    val N = 100 // iterations
 
-    val θ = gradientDescent(X, yScaled._1, θ0, α, N)
+    val θ = gradientDescent(X, scaledY, θ0, α, N)
 
-    θ // TODO also return enough information to scale the result
+    LinearEstimator(featureExtractor, colMins, colRanges, θ, yMin, yRange)
   }
-  
+
+  case class LinearEstimator[D](
+    featureExtractor: D => List[Double],
+    colMins: M[Double],
+    colRanges: M[Double],
+    θ: M[Double],
+    yMin: M[Double],
+    yRange: M[Double]) {
+
+    def estimate(observation: D) = {
+      // TODO: verify this math:
+      val featureList = featureExtractor(observation)
+      val featureRowMatrix = matrix(1, featureList.length, featureList.toArray)
+      val scaledX = diag(colRanges).inv ⨯ featureRowMatrix.subRowVector(colMins)
+      val scaledY = (scaledX ⨯ θ).scalar
+      (scaledY * yRange.scalar) + yMin.scalar
+    }
+
+  }
+
 }

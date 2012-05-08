@@ -19,15 +19,19 @@ class LinearRegressionSpecification extends Specification {
           RealtyListing(852, 2, 1, 36, 178.0) ::
           Nil
 
-      val theta = regression(
+      val estimator = regression(
         data,
         4,
         (rl: RealtyListing) => (rl.size :: rl.bedrooms.toDouble :: rl.floors.toDouble :: rl.age.toDouble :: Nil),
-        (rl: RealtyListing) => rl.price)
+        (rl: RealtyListing) => rl.price,
+        0.1,
+        10)
 
-      // TODO: incorporate the scaling that was applied in X and y
+      val unknown = RealtyListing(1416, 3, 2, 40, 0.0)
 
-      1 must be equalTo (1)
+      val priceGuess = estimator.estimate(unknown)
+      
+      priceGuess must be equalTo (200.0)
     }
   }
 
