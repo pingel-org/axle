@@ -71,10 +71,9 @@ trait LinearRegression extends Regression {
     yRange: M[Double]) {
 
     def estimate(observation: D) = {
-      // TODO: verify this math:
       val featureList = featureExtractor(observation)
       val featureRowMatrix = matrix(1, featureList.length, featureList.toArray)
-      val scaledX = diag(colRanges).inv ⨯ featureRowMatrix.subRowVector(colMins)
+      val scaledX = ones[Double](1,1) +|+ (diag(colRanges).inv ⨯ (featureRowMatrix.subRowVector(colMins).t)).t
       val scaledY = (scaledX ⨯ θ).scalar
       (scaledY * yRange.scalar) + yMin.scalar
     }

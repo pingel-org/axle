@@ -7,7 +7,6 @@ class LinearRegressionSpecification extends Specification {
   "Linear Regression" should {
     "work" in {
 
-      import axle.matrix.JblasMatrixFactory._
       import LinearRegression._
 
       case class RealtyListing(size: Double, bedrooms: Int, floors: Int, age: Int, price: Double)
@@ -31,7 +30,7 @@ class LinearRegressionSpecification extends Specification {
 
       val priceGuess = estimator.estimate(unknown)
       
-      priceGuess must be equalTo (200.0)
+      priceGuess must be equalTo (412.6509523494042)
     }
   }
 
