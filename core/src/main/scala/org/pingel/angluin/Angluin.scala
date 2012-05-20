@@ -81,7 +81,7 @@ trait Expression {
 
 }
 
-case class MutableExpression(vs: List[Symbol]) extends Expression {
+case class ListExpression(vs: List[Symbol]) extends Expression {
 
   var v = new mutable.ListBuffer[Symbol]()
 
@@ -89,13 +89,13 @@ case class MutableExpression(vs: List[Symbol]) extends Expression {
 
   def getSymbolIterator() = v.iterator
 
-  def addSymbol(s: Symbol) = v += s
+//  def addSymbol(s: Symbol) = v += s
 
   def length() = v.size
 
   override def getHead() = v(0)
 
-  override def getTail() = new MutableExpression(v.toList.tail)
+  override def getTail() = ListExpression(v.toList.tail)
 
   def equals(other: Expression): Boolean = {
     // TODO !!!

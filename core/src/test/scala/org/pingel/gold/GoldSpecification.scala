@@ -39,10 +39,10 @@ class GoldSpecification extends Specification {
           }
         }
       }
+      
       if (guess == null) {
         println("ɸ never made a guess")
       }
-
       println("Language ℒ = " + ℒ)
       println("Text T = " + T)
       println()

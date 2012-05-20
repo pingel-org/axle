@@ -19,8 +19,8 @@ class AngluinSpecification extends Specification {
       val mShut = Σ += Symbol("shut")
       val mUp = Σ += Symbol("up")
 
-      val s1 = MutableExpression(List(mHi, mIm, mYour, mMother))
-      val s2 = MutableExpression(List(mShut, mUp))
+      val s1 = ListExpression(List(mHi, mIm, mYour, mMother))
+      val s2 = ListExpression(List(mShut, mUp))
       val ℒ = Language(List(s1, s2))
 
       val T = Text(List(s1, ▦, ▦, s2, ▦, s2, s2))
