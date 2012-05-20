@@ -5,12 +5,6 @@ import scala.collection._
 
 class Expression(v: List[Morpheme]) {
 
-  //  var v = List[Morpheme]()
-
-  //  def addMorpheme(m: Morpheme): Unit = {
-  //    v = v ::: List(m) // TODO: slow
-  //  }
-
   def length = v.size
 
   override def toString() = "\"" + v.mkString(" ") + "\""
@@ -102,7 +96,7 @@ case class Text(v: List[Expression]) {
 
   def content() = {
 
-    var ℒ = new Language()
+    val ℒ = new Language()
     for (s <- v) {
       s match {
         case _: ▦ =>

@@ -23,7 +23,7 @@ class AngluinSpecification extends Specification {
       val s2 = MutableExpression(List(mShut, mUp))
       val ℒ = Language(List(s1, s2))
 
-      val T = Text(List(s1, ▦(), ▦(), s2, ▦(), s2, s2))
+      val T = Text(List(s1, ▦, ▦, s2, ▦, s2, s2))
 
       val ɸ = MemorizingLearner(T)
 

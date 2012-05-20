@@ -130,6 +130,8 @@ class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
   }
 }
 
+object ▦ extends ▦
+
 case class ▦() extends Expression() {
 
   // TOOD: not sure about head and tail here:
@@ -186,7 +188,7 @@ case class MemorizingLearner(T: Text) extends Learner(T) {
   override def processNextExpression(): Grammar = {
     val s = nextExpression()
     s match {
-      case ▦() => {}
+      case ▦ => {}
       case _ => runningGuess.addExpression(s)
     }
     new HardCodedGrammar(runningGuess)
@@ -247,7 +249,7 @@ case class Text(var v: List[Expression]) {
     val ℒ = new Language()
     for (s <- v) {
       s match {
-        case ▦() => {}
+        case ▦ => {}
         case _ => ℒ.addExpression(s)
       }
     }
