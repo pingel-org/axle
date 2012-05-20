@@ -2,6 +2,8 @@ package axle.lx
 
 import org.specs2.mutable._
 
+import Gold._
+
 class GoldSpecification extends Specification {
 
   "Gold Paradigm" should {
