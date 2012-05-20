@@ -2,9 +2,12 @@ package axle.ml
 
 object LinearRegression extends LinearRegression()
 
-trait LinearRegression extends Regression {
+trait LinearRegression {
 
   import axle.matrix.JblasMatrixFactory._ // TODO: generalize
+  type M[T] = JblasMatrix[T] // TODO: generalize
+
+  import Utilities._
 
   def normalEquation(X: M[Double], y: M[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
@@ -73,7 +76,7 @@ trait LinearRegression extends Regression {
     def estimate(observation: D) = {
       val featureList = featureExtractor(observation)
       val featureRowMatrix = matrix(1, featureList.length, featureList.toArray)
-      val scaledX = ones[Double](1,1) +|+ (diag(colRanges).inv ⨯ (featureRowMatrix.subRowVector(colMins).t)).t
+      val scaledX = ones[Double](1, 1) +|+ (diag(colRanges).inv ⨯ (featureRowMatrix.subRowVector(colMins).t)).t
       val scaledY = (scaledX ⨯ θ).scalar
       (scaledY * yRange.scalar) + yMin.scalar
     }

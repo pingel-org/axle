@@ -1,7 +1,6 @@
 package axle.ml
 
-
-trait Regression {
+object Utilities {
 
   import axle.matrix.JblasMatrixFactory._
   type M[T] = JblasMatrix[T] // TODO: generalize

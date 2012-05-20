@@ -2,10 +2,13 @@ package axle.ml
 
 object LogisticRegression extends LogisticRegression()
 
-trait LogisticRegression extends Regression {
+trait LogisticRegression {
 
   import axle.matrix.JblasMatrixFactory._
   import Math.{ exp, log }
+  import Utilities._
+
+  type M[T] = JblasMatrix[T] // TODO: generalize
 
   // h is essentially P(y=1 | X;θ)
   def h(xi: M[Double], θ: M[Double]) = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
@@ -24,7 +27,7 @@ trait LogisticRegression extends Regression {
     val result = zeros[Double](θ.rows, 1)
     (0 until θ.rows).map(j => result(j, 0) = (0 until X.rows).foldLeft(0.0)(
       (r: Double, i: Int) => {
-        val yi = y(i,0) match { case true => 1.0 case false => 0.0 }
+        val yi = y(i, 0) match { case true => 1.0 case false => 0.0 }
         r + (h(X.row(i), θ) - yi) * X(i, j)
       }))
     result
