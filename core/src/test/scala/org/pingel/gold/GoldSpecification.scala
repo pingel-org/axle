@@ -5,10 +5,10 @@ import org.specs2.mutable._
 class GoldSpecification extends Specification {
 
   "Gold Paradigm" should {
-    
+
     "work" in {
 
-      val Σ = new Vocabulary()
+      val Σ = Vocabulary()
 
       val mHi = Σ.morpheme("hi")
       val mIm = Σ.morpheme("I'm")
@@ -17,30 +17,29 @@ class GoldSpecification extends Specification {
       val mShut = Σ.morpheme("shut")
       val mUp = Σ.morpheme("up")
 
-      val ℒ = new Language()
+      val ℒ = Language()
 
       val s1 = ℒ.expression(mHi :: mIm :: mYour :: mMother :: Nil)
       val s2 = ℒ.expression(mShut :: mUp :: Nil)
 
-      val T = new Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
+      val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
 
-      val ɸ = new MemorizingLearner(T)
-      var guess: Grammar = null
-      while (ɸ.hasNextExpression()) {
-        guess = ɸ.processNextExpression()
-        if (guess != null) {
-          var guessedLanguage = guess.getL
-          println("ɸ.processNextExpression().L = " + guessedLanguage)
-          if (guessedLanguage.equals(ℒ)) {
-            println("ɸ identified the language using the text")
-            exit(0)
-          } else {
-            println("ɸ's guess was not correct\n")
-          }
+      val ɸ = MemorizingLearner(T)
+
+      val guessOpt = ɸ.learn(guess => {
+        val guessedLanguage = guess.getL
+        println("ɸ.processNextExpression().L = " + guessedLanguage)
+        val correct = guessedLanguage.equals(ℒ)
+        if( correct ) {
+          println("ɸ identified the language using the text")
         }
-      }
-      
-      if (guess == null) {
+        else {
+          println("ɸ's guess was not correct\n")
+        }
+        correct
+      })
+
+      if (guessOpt.isEmpty) {
         println("ɸ never made a guess")
       }
       println("Language ℒ = " + ℒ)
@@ -50,7 +49,7 @@ class GoldSpecification extends Specification {
       println()
 
       1 must be equalTo (1)
-    
+
     }
   }
 }

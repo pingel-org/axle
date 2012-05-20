@@ -3,7 +3,7 @@ package org.pingel.gold
 
 import scala.collection._
 
-class Expression(v: List[Morpheme]) {
+case class Expression(v: List[Morpheme]) {
 
   def length = v.size
 
@@ -37,7 +37,7 @@ class ▦() extends Expression(Nil) {
   override def toString() = "▦"
 }
 
-class Language {
+case class Language {
 
   var sequences = Set[Expression]() // TODO: was TreeSet using new ExpressionComparator()
 
@@ -56,7 +56,7 @@ class Language {
 
 class Learner(T: Text) {
 
-  var iterator = T.iterator()
+  val iterator = T.iterator()
 
   def processNextExpression(): Grammar = {
     val s = nextExpression()
@@ -66,10 +66,23 @@ class Learner(T: Text) {
 
   def nextExpression() = iterator.next()
 
-  def hasNextExpression() = iterator.hasNext
+  def hasNextExpression(): Boolean = iterator.hasNext
+
+  def learn(correct: Grammar => Boolean): Option[Grammar] = {
+    while (hasNextExpression()) {
+      val guess = processNextExpression()
+      if (guess != null) {
+        if (correct(guess)) {
+          return Some(guess)
+        }
+      }
+    }
+    None
+  }
+
 }
 
-class MemorizingLearner(T: Text) extends Learner(T) {
+case class MemorizingLearner(T: Text) extends Learner(T) {
 
   def runningGuess = new Language()
 
@@ -84,7 +97,7 @@ class MemorizingLearner(T: Text) extends Learner(T) {
 
 }
 
-class Morpheme(s: String) {
+case class Morpheme(s: String) {
   override def toString() = s
 }
 
@@ -112,7 +125,7 @@ case class Text(v: List[Expression]) {
 
 }
 
-class Vocabulary {
+case class Vocabulary {
 
   var morphemes = Set[Morpheme]()
 
