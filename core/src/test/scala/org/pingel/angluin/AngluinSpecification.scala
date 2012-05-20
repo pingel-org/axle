@@ -25,17 +25,6 @@ class AngluinSpecification extends Specification {
 
       val T = Text(List(s1, ▦(), ▦(), s2, ▦(), s2, s2))
 
-      println("Text T = " + T)
-      println("Language ℒ = " + ℒ)
-      println()
-
-      if (T.isFor(ℒ)) {
-        println("T is for ℒ")
-      } else {
-        println("T is not for ℒ")
-      }
-      println()
-
       val ɸ = MemorizingLearner(T)
 
       var guess: Grammar = null
@@ -56,6 +45,11 @@ class AngluinSpecification extends Specification {
         continue &= ɸ.hasNextExpression()
       }
 
+      println("Text T = " + T)
+      println("Language ℒ = " + ℒ)
+      println()
+      println("T is for ℒ? " + T.isFor(ℒ))
+      println()
       if (guess == null) {
         println("ɸ never made a guess")
       }

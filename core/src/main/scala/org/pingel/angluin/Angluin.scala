@@ -32,19 +32,12 @@ case class Acceptor() {
     g.getEdges.filter(e => e.getSource == state && e.getPayload == symbol).map(_.getDest)
 
   def δ(state: AcceptorState, exp: Expression): Set[AcceptorState] = {
-
-    var result = Set[AcceptorState]()
     if (exp == null) {
-      result += state
+      Set(state)
     } else {
-      var head = exp.getHead()
-      var tail = exp.getTail()
-      var neighbors = δ(state, head)
-      for (neighbor <- neighbors) {
-        result ++= δ(neighbor, tail)
-      }
+      val tail = exp.getTail()
+      δ(state, exp.getHead()).map(δ(_, tail)).reduce(_ ++ _)
     }
-    result
   }
 
   // TODO: not sure if this should count edges or nodes:
@@ -171,7 +164,8 @@ case class Language(var sequences: List[Expression] = Nil) {
 }
 
 class Learner(T: Text) {
-  var iterator = T.iterator
+  
+  val iterator = T.iterator
 
   def processNextExpression(): Grammar = {
     val s = nextExpression()
@@ -187,7 +181,7 @@ class Learner(T: Text) {
 
 case class MemorizingLearner(T: Text) extends Learner(T) {
 
-  var runningGuess = Language(Nil)
+  val runningGuess = Language(Nil)
 
   override def processNextExpression(): Grammar = {
     val s = nextExpression()
@@ -223,14 +217,14 @@ case class Quotient(A: Acceptor, π: Partition) {
 }
 
 case class Alphabet() {
-  
+
   val symbols = mutable.Set[Symbol]()
-  
+
   def +=(symbol: Symbol): Symbol = {
     symbols += symbol
     symbol
   }
-  
+
 }
 
 case class Symbol(s: String) {
@@ -250,7 +244,7 @@ case class Text(var v: List[Expression]) {
   def isFor(ℒ: Language) = content().equals(ℒ)
 
   def content(): Language = {
-    var ℒ = new Language()
+    val ℒ = new Language()
     for (s <- v) {
       s match {
         case ▦() => {}

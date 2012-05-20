@@ -24,7 +24,7 @@ trait LinearRegression extends Regression {
     var θi = θo.dup
     var i = 0
     while (i < iterations) {
-      θi -= (dθ(X, y, θi) * α)
+      θi -= dθ(X, y, θi) * α
       i = i + 1
     }
     θi
