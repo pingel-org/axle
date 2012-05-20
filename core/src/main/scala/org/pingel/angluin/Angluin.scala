@@ -124,9 +124,9 @@ class HardCodedGrammar(ℒ: Language) extends Grammar {
 }
 
 class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
-  override def processExpression(e: Expression): Grammar = {
+  override def processExpression(e: Expression): Option[Grammar] = {
     val s = e
-    G
+    Some(G)
   }
 }
 
@@ -167,24 +167,17 @@ case class Language(var sequences: List[Expression] = Nil) {
 
 class Learner(T: Text) {
 
-  def processExpression(e: Expression): Grammar = {
+  def processExpression(e: Expression): Option[Grammar] = {
     val s = e
     // default implementation never guesses a Grammar
-    null
-  }
-
-  def learn(correct: Grammar => Boolean): Option[Grammar] = {
-    val it = T.iterator
-    while (it.hasNext) {
-      val guess = processExpression(it.next)
-      if (guess != null) {
-        if(correct(guess)) {
-          return Some(guess)
-        }
-      }
-    }
     None
   }
+
+  def learn(correct: Grammar => Boolean): Option[Grammar] =
+    T.expressions
+      .map(processExpression(_).filter(correct(_)))
+      .find(_.isDefined)
+      .getOrElse(None)
 
 }
 
@@ -192,12 +185,12 @@ case class MemorizingLearner(T: Text) extends Learner(T) {
 
   val runningGuess = Language(Nil)
 
-  override def processExpression(e: Expression): Grammar = {
+  override def processExpression(e: Expression): Option[Grammar] = {
     e match {
       case ▦ => {}
       case _ => runningGuess.addExpression(e)
     }
-    new HardCodedGrammar(runningGuess)
+    Some(new HardCodedGrammar(runningGuess))
   }
 }
 
@@ -228,7 +221,8 @@ case class Alphabet() {
 
   val symbols = mutable.Set[Symbol]()
 
-  def +=(symbol: Symbol): Symbol = {
+  def symbol(s: String): Symbol = {
+    val symbol = new Symbol(s)
     symbols += symbol
     symbol
   }
@@ -243,17 +237,17 @@ case class Symbol(s: String) {
 
 }
 
-case class Text(var v: List[Expression]) {
+case class Text(var expressions: List[Expression]) {
 
-  def addExpression(s: Expression): Unit = v = v ::: List(s)
+  def addExpression(s: Expression): Unit = expressions = expressions ::: List(s)
 
-  def length() = v.size
+  def length() = expressions.size
 
   def isFor(ℒ: Language) = content().equals(ℒ)
 
   def content(): Language = {
     val ℒ = new Language()
-    for (s <- v) {
+    for (s <- expressions) {
       s match {
         case ▦ => {}
         case _ => ℒ.addExpression(s)
@@ -262,8 +256,6 @@ case class Text(var v: List[Expression]) {
     ℒ
   }
 
-  def iterator() = v.iterator
-
-  override def toString() = "<" + v.mkString(", ") + ">"
+  override def toString() = "<" + expressions.mkString(", ") + ">"
 
 }

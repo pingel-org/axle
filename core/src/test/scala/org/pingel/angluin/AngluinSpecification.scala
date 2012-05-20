@@ -12,12 +12,12 @@ class AngluinSpecification extends Specification {
 
       val Σ = Alphabet()
 
-      val mHi = Σ += Symbol("hi")
-      val mIm = Σ += Symbol("I'm")
-      val mYour = Σ += Symbol("your")
-      val mMother = Σ += Symbol("Mother")
-      val mShut = Σ += Symbol("shut")
-      val mUp = Σ += Symbol("up")
+      val mHi = Σ.symbol("hi")
+      val mIm = Σ.symbol("I'm")
+      val mYour = Σ.symbol("your")
+      val mMother = Σ.symbol("Mother")
+      val mShut = Σ.symbol("shut")
+      val mUp = Σ.symbol("up")
 
       val s1 = ListExpression(List(mHi, mIm, mYour, mMother))
       val s2 = ListExpression(List(mShut, mUp))

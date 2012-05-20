@@ -23,9 +23,9 @@ class HardCodedGrammar(L: Language) extends Grammar {
 }
 
 class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
-  override def processExpression(e: Expression): Grammar = {
+  override def processExpression(e: Expression): Option[Grammar] = {
     val s = e
-    G
+    Some(G)
   }
 }
 
@@ -56,25 +56,17 @@ case class Language {
 
 class Learner(T: Text) {
 
-  def processExpression(e: Expression): Grammar = {
+  def processExpression(e: Expression): Option[Grammar] = {
     val s = e
     // default implementation never guesses a Grammar
-    null
-  }
-
-  def learn(correct: Grammar => Boolean): Option[Grammar] = {
-    val it = T.iterator
-    while (it.hasNext) {
-      val e = it.next()
-      val guess = processExpression(e)
-      if (guess != null) {
-        if (correct(guess)) {
-          return Some(guess)
-        }
-      }
-    }
     None
   }
+
+  def learn(correct: Grammar => Boolean): Option[Grammar] =
+    T.expressions
+      .map(processExpression(_).filter(correct(_)))
+      .find(_.isDefined)
+      .getOrElse(None)
 
 }
 
@@ -82,12 +74,12 @@ case class MemorizingLearner(T: Text) extends Learner(T) {
 
   def runningGuess = new Language()
 
-  override def processExpression(e: Expression): Grammar = {
+  override def processExpression(e: Expression): Option[Grammar] = {
     e match {
       case _: ▦ =>
       case _ => runningGuess.addExpression(e)
     }
-    new HardCodedGrammar(runningGuess)
+    Some(new HardCodedGrammar(runningGuess))
   }
 
 }
@@ -96,16 +88,16 @@ case class Morpheme(s: String) {
   override def toString() = s
 }
 
-case class Text(v: List[Expression]) {
+case class Text(expressions: List[Expression]) {
 
-  def length() = v.size
+  def length() = expressions.size
 
   def isFor(ℒ: Language) = content().equals(ℒ)
 
   def content() = {
 
     val ℒ = new Language()
-    for (s <- v) {
+    for (s <- expressions) {
       s match {
         case _: ▦ =>
         case _ => ℒ.addExpression(s)
@@ -114,9 +106,7 @@ case class Text(v: List[Expression]) {
     ℒ
   }
 
-  def iterator() = v.iterator
-
-  override def toString() = "<" + v.mkString(", ") + ">"
+  override def toString() = "<" + expressions.mkString(", ") + ">"
 
 }
 
