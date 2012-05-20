@@ -89,7 +89,7 @@ case class ListExpression(vs: List[Symbol]) extends Expression {
 
   def getSymbolIterator() = v.iterator
 
-//  def addSymbol(s: Symbol) = v += s
+  //  def addSymbol(s: Symbol) = v += s
 
   def length() = v.size
 
@@ -124,8 +124,8 @@ class HardCodedGrammar(ℒ: Language) extends Grammar {
 }
 
 class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
-  override def processNextExpression(): Grammar = {
-    val s = nextExpression()
+  override def processExpression(e: Expression): Grammar = {
+    val s = e
     G
   }
 }
@@ -166,18 +166,25 @@ case class Language(var sequences: List[Expression] = Nil) {
 }
 
 class Learner(T: Text) {
-  
-  val iterator = T.iterator
 
-  def processNextExpression(): Grammar = {
-    val s = nextExpression()
+  def processExpression(e: Expression): Grammar = {
+    val s = e
     // default implementation never guesses a Grammar
     null
   }
 
-  def nextExpression() = iterator.next()
-
-  def hasNextExpression() = iterator.hasNext
+  def learn(correct: Grammar => Boolean): Option[Grammar] = {
+    val it = T.iterator
+    while (it.hasNext) {
+      val guess = processExpression(it.next)
+      if (guess != null) {
+        if(correct(guess)) {
+          return Some(guess)
+        }
+      }
+    }
+    None
+  }
 
 }
 
@@ -185,11 +192,10 @@ case class MemorizingLearner(T: Text) extends Learner(T) {
 
   val runningGuess = Language(Nil)
 
-  override def processNextExpression(): Grammar = {
-    val s = nextExpression()
-    s match {
+  override def processExpression(e: Expression): Grammar = {
+    e match {
       case ▦ => {}
-      case _ => runningGuess.addExpression(s)
+      case _ => runningGuess.addExpression(e)
     }
     new HardCodedGrammar(runningGuess)
   }

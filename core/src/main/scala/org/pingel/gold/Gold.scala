@@ -23,8 +23,8 @@ class HardCodedGrammar(L: Language) extends Grammar {
 }
 
 class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
-  override def processNextExpression(): Grammar = {
-    val s = nextExpression()
+  override def processExpression(e: Expression): Grammar = {
+    val s = e
     G
   }
 }
@@ -56,21 +56,17 @@ case class Language {
 
 class Learner(T: Text) {
 
-  val iterator = T.iterator()
-
-  def processNextExpression(): Grammar = {
-    val s = nextExpression()
+  def processExpression(e: Expression): Grammar = {
+    val s = e
     // default implementation never guesses a Grammar
     null
   }
 
-  def nextExpression() = iterator.next()
-
-  def hasNextExpression(): Boolean = iterator.hasNext
-
   def learn(correct: Grammar => Boolean): Option[Grammar] = {
-    while (hasNextExpression()) {
-      val guess = processNextExpression()
+    val it = T.iterator
+    while (it.hasNext) {
+      val e = it.next()
+      val guess = processExpression(e)
       if (guess != null) {
         if (correct(guess)) {
           return Some(guess)
@@ -86,11 +82,10 @@ case class MemorizingLearner(T: Text) extends Learner(T) {
 
   def runningGuess = new Language()
 
-  override def processNextExpression(): Grammar = {
-    val s = nextExpression()
-    s match {
+  override def processExpression(e: Expression): Grammar = {
+    e match {
       case _: ▦ =>
-      case _ => runningGuess.addExpression(s)
+      case _ => runningGuess.addExpression(e)
     }
     new HardCodedGrammar(runningGuess)
   }

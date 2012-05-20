@@ -27,30 +27,24 @@ class AngluinSpecification extends Specification {
 
       val ɸ = MemorizingLearner(T)
 
-      var guess: Grammar = null
-      var continue = true
-
-      while (continue) {
-        guess = ɸ.processNextExpression()
-        if (guess != null) {
-          val guessedLanguage = guess.getℒ
-          println("ɸ.processNextExpression().ℒ = " + guessedLanguage)
-          if (guessedLanguage.equals(ℒ)) {
-            println("ɸ identified the language using the text")
-            continue = false
-          } else {
-            println("ɸ's guess was not correct\n")
-          }
+      val guessOpt = ɸ.learn(guess => {
+        val guessedLanguage = guess.getℒ
+        println("ɸ.processNextExpression().ℒ = " + guessedLanguage)
+        val correct = guessedLanguage.equals(ℒ)
+        if (correct) {
+          println("ɸ identified the language using the text")
+        } else {
+          println("ɸ's guess was not correct\n")
         }
-        continue &= ɸ.hasNextExpression()
-      }
+        correct
+      })
 
       println("Text T = " + T)
       println("Language ℒ = " + ℒ)
       println()
       println("T is for ℒ? " + T.isFor(ℒ))
       println()
-      if (guess == null) {
+      if (guessOpt.isEmpty) {
         println("ɸ never made a guess")
       }
 
