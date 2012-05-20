@@ -1,4 +1,4 @@
-package org.pingel.gold
+package axle.lx
 
 import org.specs2.mutable._
 

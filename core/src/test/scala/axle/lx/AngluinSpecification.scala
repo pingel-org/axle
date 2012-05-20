@@ -1,4 +1,4 @@
-package org.pingel.angluin
+package axle.lx
 
 import org.specs2.mutable._
 
@@ -42,7 +42,7 @@ class AngluinSpecification extends Specification {
       println("Text T = " + T)
       println("Language ℒ = " + ℒ)
       println()
-      println("T is for ℒ? " + T.isFor(ℒ))
+      println("T is for ℒ ?" + T.isFor(ℒ))
       println()
       if (guessOpt.isEmpty) {
         println("ɸ never made a guess")
