@@ -63,7 +63,7 @@ class Learner(T: Text) {
   }
 
   def learn(correct: Grammar => Boolean): Option[Grammar] =
-    T.expressions
+    T.expressions.iterator
       .map(processExpression(_).filter(correct(_)))
       .find(_.isDefined)
       .getOrElse(None)
