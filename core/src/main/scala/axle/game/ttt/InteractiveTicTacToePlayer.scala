@@ -10,8 +10,8 @@ case class InteractiveTicTacToePlayer(game: TicTacToe, playerId: String, descrip
 
   def introduceGame(): Unit = {
     val intro = """
-Welcome to Tic-Tac-Toe.  Please make your move selection by entering
-a number 1-%s corresponding to the movement key on the right.""".format(game.numPositions)
+Tic Tac Toe
+Moves are numbers 1-%s.""".format(game.numPositions)
     println(intro)
   }
 
