@@ -14,6 +14,8 @@ case class TicTacToe(boardSize: Int = 3, initializePlayers: Boolean = true) exte
 
   override var state: TicTacToeState
 
+  override var players = Map[String, TicTacToePlayer]() // id -> player
+  
   if (initializePlayers) {
     val x = InteractiveTicTacToePlayer(this, "X")
     addPlayer(x)

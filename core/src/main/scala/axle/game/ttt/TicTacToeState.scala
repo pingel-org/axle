@@ -3,25 +3,26 @@ package axle.game.ttt
 
 import axle.game._
 
+import axle.matrix.ArrayMatrixFactory._
+
 case class TicTacToeState(game: TicTacToe, var player: TicTacToePlayer)
   extends State(game, player) {
 
-  val board = zeros[String](game.boardSize, game.boardSize)
+  val board = matrix[String](game.boardSize, game.boardSize, " ")
 
   override def toString(): String = {
 
     def none2space(c: Option[String]) = c.getOrElse(" ")
 
-    val keyWidth = "%s".format(game.numPositions).length
+    val keyWidth = game.numPositions.toString().length
 
-    //        """\
-    //Board:         Movement Key:
-    //%s
-    //""".format("\n".join( ["%s          %s" % \
-    //                 ("|".join([none2space(p) for p in self.board[r]]), \
-    //                  "|".join([("%s" % k).rjust(keyWidth) for k in range(1+r*game.boardSize, 1+(r+1)*game.boardSize)]))\
-    //                 for r in range(0, game.boardSize)] ))
-    "TODO"
+    "Board:         Movement Key:\n" +
+      0.until(game.boardSize).map(r => {
+        board.row(r).map(none2space(_)).mkString("|") +
+          "          " +
+          (1 + r * game.boardSize).to(1 + (r + 1) * game.boardSize).mkString("|") // TODO rjust(keyWidth)
+      }).mkString("\n")
+
   }
 
   def positionToRow(position: Int) = (position - 1) / game.boardSize
@@ -49,8 +50,8 @@ case class TicTacToeState(game: TicTacToe, var player: TicTacToePlayer)
 
   def applyMove(move: TicTacToeMove): Option[Outcome] = {
 
-    setBoardAt(move.position, move.player)
-    player = game.playerAfter(move.player)
+    setBoardAt(move.position, move.tttPlayer)
+    player = game.playerAfter(move.tttPlayer)
 
     for (player <- game.players.values) {
       if (hasWon(player)) {

@@ -3,8 +3,8 @@ package axle.game.ttt
 
 import axle.game._
 
-case class TicTacToeMove(game: TicTacToe, player: TicTacToePlayer, position: Int)
-  extends Move(game, player) {
+case class TicTacToeMove(game: TicTacToe, tttPlayer: TicTacToePlayer, position: Int)
+  extends Move(game, tttPlayer) {
 
   def description(): String = game.boardSize match {
     case 3 => position match {
@@ -23,7 +23,7 @@ case class TicTacToeMove(game: TicTacToe, player: TicTacToePlayer, position: Int
 
   def displayTo(p: TicTacToePlayer): String = {
 
-    val beginSentence = if (player != p) {
+    val beginSentence = if (tttPlayer != p) {
       "I will"
     } else {
       "You have"
@@ -31,7 +31,7 @@ case class TicTacToeMove(game: TicTacToe, player: TicTacToePlayer, position: Int
 
     "%s put an %s in the %s.".format(
       beginSentence,
-      player.id,
+      tttPlayer.id,
       description()
     )
   }

@@ -1,22 +1,7 @@
 package axle.matrix
 
+object ArrayMatrixFactory extends ArrayMatrixFactory {}
+
 abstract class ArrayMatrixFactory extends MatrixFactory {
-
-//  type Matrix = ArrayMatrixImpl
-
-//  type S = (Int, Int, Array[T])
-
-//  abstract class ArrayMatrixImpl(triple: (Int, Int, Array[T])) extends Matrix {
-    // def add(other: M) = pure(triple) // TODO
-    // def getTriple() = triple
-//  }
-
-//  def pure(double: (Int, Int)): M = {
-//      var array = new Array[Set[T]](m * n)
-//      for (i <- 0 until m; j <- 0 until n) {
-//        array(i * m + j) = Set[T]()
-//      }
-//      new ArrayMatrixImpl(triple)
-//  }
 
 }
