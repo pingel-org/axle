@@ -4,7 +4,7 @@ package axle.game
 object TicTacToeSpec {
 
   import ttt._
-  
+
   val game = TicTacToe(3, false)
   val x = InteractiveTicTacToePlayer(game, "X", "Player X")
   val o = InteractiveTicTacToePlayer(game, "O", "Player O")
@@ -22,11 +22,11 @@ object TicTacToeSpec {
 
     println
     println("moves: %s\n".format(moves))
-    moves.reverse
 
-    val outcomes = moves.map( move => game.state.applyMove(TicTacToeMove(game, game.state.player, move)).isDefined)
+    val outcome = moves.flatMap(move => game.state.applyMove(TicTacToeMove(game, game.state.player, move))).first
 
-    println("game state:\n%s".format(game.state))
+    println("game state:")
+    println(game.state)
     println("winner: %s, expected winner: %s".format(outcome.winner, winner))
     assert(winner == outcome.winner)
   }
