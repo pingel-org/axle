@@ -3,25 +3,27 @@ package axle.game.ttt
 import axle.game._
 import scala.collection._
 
-case class InteractiveTicTacToePlayer(game: TicTacToe, playerId: String, description: String = "the human")
-  extends TicTacToePlayer(game, playerId, description) {
+case class InteractiveTicTacToePlayer(
+  itttPlayerId: String,
+  itttDescription: String = "the human")
+  extends Player[TicTacToe](itttPlayerId, itttDescription) {
 
   val eventQueue = mutable.ListBuffer[Event]()
 
-  def introduceGame(): Unit = {
+  override def introduceGame(): Unit = {
     val intro = """
 Tic Tac Toe
 Moves are numbers 1-%s.""".format(game.numPositions)
     println(intro)
   }
 
-  def endGame(): Unit = {
+  override def endGame(state: State[TicTacToe]): Unit = {
     displayEvents()
-    println(game.state)
+    println(state)
   }
 
-  def notify(event: Event): Unit = {
-    eventQueue.append(event)
+  override def notify(event: Event): Unit = {
+    eventQueue += event
   }
 
   def displayEvents(): Unit = {
@@ -30,9 +32,9 @@ Moves are numbers 1-%s.""".format(game.numPositions)
     eventQueue.clear()
   }
 
-  def chooseMove(): TicTacToeMove = {
+  def chooseMove(state: TicTacToeState, game: TicTacToe): Move[TicTacToe] = {
     displayEvents()
-    println(game.state)
+    println(state)
     while (true) {
       print("Enter move: ")
       val num = readLine()
@@ -40,8 +42,8 @@ Moves are numbers 1-%s.""".format(game.numPositions)
       try {
         val i = num.toInt
         if (i >= 1 && i <= game.numPositions) {
-          if (game.state.getBoardAt(i).isEmpty) {
-            return TicTacToeMove(game, this, i)
+          if (state.getBoardAt(i).isEmpty) {
+            return TicTacToeMove(this, i, game)
           } else {
             println("That space is occupied.")
           }

@@ -1,9 +1,9 @@
 
 package axle.game
 
-abstract class Event(game: Game) {
+trait Event { // game: Game
 
-  def displayTo(player: Player): Unit
+  def displayTo(player: Player[_]): Unit
 
 }
 

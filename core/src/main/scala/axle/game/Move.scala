@@ -1,6 +1,7 @@
 
 package axle.game
 
-class Move(game: Game, player: Player) extends Event(game) {
+abstract class Move[GAME <: Game](player: Player[GAME], game: GAME)
+  extends Event {
 
 }

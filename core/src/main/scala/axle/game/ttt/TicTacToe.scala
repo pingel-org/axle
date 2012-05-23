@@ -3,28 +3,27 @@ package axle.game.ttt
 
 import axle.game._
 import scala.util.Random
+import axle.matrix.ArrayMatrixFactory._
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game
  */
 
-case class TicTacToe(boardSize: Int = 3, initializePlayers: Boolean = true) extends Game {
+case class TicTacToe(
+  boardSize: Int = 3,
+  x: Player[TicTacToe] = InteractiveTicTacToePlayer("X"),
+  o: Player[TicTacToe] = AITicTacToePlayer("O"))
+  extends Game {
 
-  val numPositions = boardSize * boardSize
+  def numPositions() = boardSize * boardSize
 
-  override var state: TicTacToeState
+  def startBoard() = matrix[Option[String]](boardSize, boardSize, None)
 
-  override var players = Map[String, TicTacToePlayer]() // id -> player
-  
-  if (initializePlayers) {
-    val x = InteractiveTicTacToePlayer(this, "X")
-    addPlayer(x)
-    val o = AITicTacToePlayer(this, "O")
-    addPlayer(o)
-    state = TicTacToeState(this, x)
-  }
+  val playas = Map[String, Player[G]]("X" -> x, "O" -> o)
 
-  def playerAfter(player: Player): Player = {
+  def players() = playas
+
+  def playerAfter(player: Player[TicTacToe]): Player[TicTacToe] = {
 
     // In more complex games, this would be a function of the move or state as well
     // This method might evolve up into the superclass.

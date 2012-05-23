@@ -1,9 +1,9 @@
 
 package axle.game
 
-abstract case class Player(game: Game, id: String, description: String) {
+abstract case class Player[GAME <: Game](id: String, description: String) {
 
-  def chooseMove(): Move
+  def chooseMove(state: State[GAME], game: GAME): Move[GAME]
 
   override def toString(): String = description
 

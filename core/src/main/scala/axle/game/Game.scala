@@ -7,38 +7,42 @@ package axle.game
  *  2) call addPlayer during init
  */
 
-abstract class Game {
-    
-  var state: State
-  
-  var players = Map[String, Player]() // id -> player
+trait Game {
+
+  type G = this.type
+
+  //  var state: State[G]
+  //  var players = Map[String, Player[G]]() // id -> player
+
+  //  def addPlayer[P <: Player[G]](player: P): Unit = players += player.id -> player
+
+  def players(): Map[String, Player[G]]
+
+  def playerById(id: String): Player[G] = players()(id)
 
   def introMessage(): Unit
 
-  def addPlayer(player: Player): Unit = players += player.id -> player
+  def play(start: State[G]): Unit = {
 
-  def playerById(id: String): Player = players(id)
-
-  def play(): Unit = {
-    
-    for( player <- players.values ) {
+    for (player <- players.values) {
       player.introduceGame()
     }
-    
-    var outcome: Option[Outcome] = None
-    while ( outcome.isEmpty ) {
-      val move = state.player.chooseMove()
-      for( player <- players.values ) {
-          player.notify(move)
+
+    var state = start
+    while (!state.isTerminal) {
+      val move = state.player.chooseMove(state, this)
+      for (player <- players.values) {
+        player.notify(move)
       }
-      outcome = Some(state.applyMove(move))
+      state = state.applyMove(move)
     }
-    
-    for( player <- players.values ) {
-      player.notify(outcome.get)
+
+    val outcome = state.getOutcome
+    for (player <- players.values) {
+      player.notify(outcome)
       player.endGame()
     }
-    
+
   }
 
 }

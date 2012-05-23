@@ -1,10 +1,14 @@
 
 package axle.game
 
-abstract case class State(game: Game, player: Player) {
+trait State[GAME <: Game] {
 
-  def applyMove(move: Move): Outcome
+  def player(): Player[GAME]
 
-  // Currently there is only one mutable game "state" reused by the game
+  def applyMove(move: Move[GAME]): State[GAME]
+
+  def isTerminal(): Boolean
+
+  def getOutcome(): Outcome[GAME]
 
 }
