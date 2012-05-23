@@ -10,7 +10,7 @@ case class InteractiveTicTacToePlayer(
 
   val eventQueue = mutable.ListBuffer[Event]()
 
-  override def introduceGame(): Unit = {
+  override def introduceGame(game: TicTacToe): Unit = {
     val intro = """
 Tic Tac Toe
 Moves are numbers 1-%s.""".format(game.numPositions)

@@ -25,7 +25,7 @@ trait Game {
   def play(start: State[G]): Unit = {
 
     for (player <- players.values) {
-      player.introduceGame()
+      player.introduceGame(this)
     }
 
     var state = start

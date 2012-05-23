@@ -7,7 +7,7 @@ abstract case class Player[GAME <: Game](id: String, description: String) {
 
   override def toString(): String = description
 
-  def introduceGame(): Unit = {}
+  def introduceGame(game: GAME): Unit = {}
 
   def notify(event: Event): Unit = {}
 

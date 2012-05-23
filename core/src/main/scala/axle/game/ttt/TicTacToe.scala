@@ -19,7 +19,7 @@ case class TicTacToe(
 
   def startBoard() = matrix[Option[String]](boardSize, boardSize, None)
 
-  val playas = Map[String, Player[G]]("X" -> x, "O" -> o)
+  val playas = Map[String, Player[_]]("X" -> x, "O" -> o)
 
   def players() = playas
 
