@@ -9,31 +9,30 @@ object TicTacToeSpec {
   val o = InteractiveTicTacToePlayer("O", "Player O")
   val game = TicTacToe(3, x, o)
 
-  def testTTT(moves: List[Int], winner: Option[Player[TicTacToe]]): Unit = {
+  def testTTT(moves: List[(Player[TicTacToe], Int)], winner: Option[Player[TicTacToe]]): Unit = {
 
     // the game wasn't designed to support multiple rounds,
     // but this happens to work because we're not notifying
     // the players and setting game.state is enough to clear the
     // memory
 
-    val start = new TicTacToeState(x, game.startBoard)
+    val start = new TicTacToeState(x, game.startBoard).asInstanceOf[State[TicTacToe#G]]
 
     println
     println("moves: %s\n".format(moves))
 
-    var state = start
-    moves.map(move => { state = state.applyMove(TicTacToeMove(state.player, move, game)) })
-    val outcomeOpt = state.getOutcome
-
+    val lastMoveState = game.scriptedMoveStateStream(start, moves.toStream.map(pp => TicTacToeMove(pp._1, pp._2))).last
     println("game state:")
-    println(state)
-    println("winner: %s, expected winner: %s".format(outcomeOpt.get.winner, winner))
-    assert(winner == outcomeOpt.get.winner)
+    println(lastMoveState._2)
+
+    val outcome = lastMoveState._2.getOutcome
+    println("winner: %s, expected winner: %s".format(outcome.map(_.winner), winner))
+    assert(winner == outcome.map(_.winner))
   }
 
-  testTTT(List(1, 2, 3, 4, 5, 6, 7), Some(x))
-  testTTT(List(2, 3, 4, 5, 6, 7, 8), Some(o))
-  testTTT(List(1, 2, 3, 4, 5, 7, 8, 9, 6), None)
+  testTTT(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 6), (x, 7)), Some(x))
+  testTTT(List((x, 2), (o, 3), (x, 4), (o, 5), (x, 6), (o, 7), (x, 8)), Some(o))
+  testTTT(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 7), (x, 8), (o, 9), (x, 6)), None)
 
   // To run the game interactively:
   // val ttt = TicTacToe(4)

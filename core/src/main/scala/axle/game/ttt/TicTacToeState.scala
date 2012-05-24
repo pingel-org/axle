@@ -8,26 +8,25 @@ import axle.matrix.ArrayMatrixFactory._
 case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[String]])
   extends State[TicTacToe] {
 
-  val game: TicTacToe = null // TODO
+  val boardSize = board.columns
+  val numPositions = board.length
 
   override def toString(): String = {
 
-    // def none2space(c: Option[String]) = c.getOrElse(" ")
-
-    val keyWidth = game.numPositions.toString().length
+    val keyWidth = numPositions.toString().length
 
     "Board:         Movement Key:\n" +
-      0.until(game.boardSize).map(r => {
-        board.row(r).toList.mkString("|") +
+      0.until(boardSize).map(r => {
+        board.row(r).toList.map(_.getOrElse(" ")).mkString("|") +
           "          " +
-          (1 + r * game.boardSize).to(1 + (r + 1) * game.boardSize).mkString("|") // TODO rjust(keyWidth)
+          (1 + r * boardSize).to(1 + (r + 1) * boardSize).mkString("|") // TODO rjust(keyWidth)
       }).mkString("\n")
 
   }
 
-  def positionToRow(position: Int) = (position - 1) / game.boardSize
+  def positionToRow(position: Int) = (position - 1) / boardSize
 
-  def positionToColumn(position: Int) = (position - 1) % game.boardSize
+  def positionToColumn(position: Int) = (position - 1) % boardSize
 
   def getBoardAt(position: Int) = board(positionToRow(position), positionToColumn(position))
 
@@ -35,23 +34,24 @@ case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[S
   def setBoardAt(position: Int, player: Player[TicTacToe]) =
     board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
-  def hasWonRow(player: Player[TicTacToe]) = 0.until(game.boardSize).exists(board.row(_).toList.forall(_ == player.id))
+  def hasWonRow(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.row(_).toList.forall(_ == player.id))
 
-  def hasWonColumn(player: Player[TicTacToe]) = 0.until(game.boardSize).exists(board.column(_).toList.forall(_ == player.id))
+  def hasWonColumn(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.column(_).toList.forall(_ == player.id))
 
   def hasWonDiagonal(player: Player[TicTacToe]) = {
-    val indexes = 0 until game.boardSize
-    indexes.forall(i => board(i, i) == player.id) || indexes.forall(i => board(i, (game.boardSize - 1) - i) == player.id)
+    val indexes = 0 until boardSize
+    indexes.forall(i => board(i, i) == player.id) || indexes.forall(i => board(i, (boardSize - 1) - i) == player.id)
   }
 
   def hasWon(player: Player[TicTacToe]) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
-  def openPositions() = 1.to(game.numPositions).filter(getBoardAt(_).isEmpty)
+  def openPositions() = 1.to(numPositions).filter(getBoardAt(_).isEmpty)
 
   def getOutcome(): Option[Outcome[TicTacToe]] = {
     for (player <- game.players.values) {
-      if (hasWon(player)) {
-        return Some(Outcome[TicTacToe](game, Some(player)))
+      val tttp = player.asInstanceOf[Player[TicTacToe]] // TODO remove cast
+      if (hasWon(tttp)) {
+        return Some(Outcome[TicTacToe](game, Some(tttp)))
       }
     }
 

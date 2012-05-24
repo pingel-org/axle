@@ -9,40 +9,49 @@ package axle.game
 
 trait Game {
 
-  type G = this.type
-
-  //  var state: State[G]
-  //  var players = Map[String, Player[G]]() // id -> player
-
-  //  def addPlayer[P <: Player[G]](player: P): Unit = players += player.id -> player
+  type G <: Game
 
   def players(): Map[String, Player[G]]
 
-  def playerById(id: String): Player[G] = players()(id)
+  def playerById(id: String) = players()(id)
 
   def introMessage(): Unit
 
-  def play(start: State[G]): Unit = {
-
-    for (player <- players.values) {
-      player.introduceGame(this)
-    }
-
-    var state = start
-    while (!state.isTerminal) {
-      val move = state.player.chooseMove(state, this)
+  def moveStateStream(state: State[G]): Stream[(Move[G], State[G])] = state.isTerminal match {
+    case true => Stream.empty
+    case false => {
+      val move = state.player.chooseMove(state, this.asInstanceOf[G]) // TODO cast
       for (player <- players.values) {
         player.notify(move)
       }
-      state = state.applyMove(move)
+      val nextState = state.applyMove(move)
+      Stream.cons((move, nextState), moveStateStream(nextState))
     }
+  }
 
-    val outcome = state.getOutcome
+  def scriptedMoveStateStream(state: State[G], moveStream: Stream[Move[G]]): Stream[(Move[G], State[G])] = state.isTerminal match {
+    case true => Stream.empty
+    case false => {
+      val move = null // TODO moveStream.next
+      for (player <- players.values) {
+        player.notify(move)
+      }
+      val nextState = state.applyMove(move)
+      Stream.cons((move, nextState), scriptedMoveStateStream(nextState, moveStream))
+    }
+  }
+
+  def play(start: State[G]): Unit = {
     for (player <- players.values) {
-      player.notify(outcome)
-      player.endGame()
+      player.introduceGame(this.asInstanceOf[G]) // TODO cast
     }
-
+    val lastMoveState = moveStateStream(start).last
+    lastMoveState._2.getOutcome.map(outcome =>
+      for (player <- players.values) {
+        player.notify(outcome)
+        player.endGame(lastMoveState._2, this.asInstanceOf[G]) // TODO cast
+      }
+    )
   }
 
 }

@@ -9,6 +9,6 @@ trait State[GAME <: Game] {
 
   def isTerminal(): Boolean
 
-  def getOutcome(): Outcome[GAME]
+  def getOutcome(): Option[Outcome[GAME]]
 
 }

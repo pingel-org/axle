@@ -9,10 +9,10 @@ case class AITicTacToePlayer(
   aitttDescription: String = "my poor AI")
   extends Player[TicTacToe](aitttPlayerId, aitttDescription) {
 
-  def chooseMove(state: TicTacToeState, game: TicTacToe): Move[TicTacToe] = {
+  def chooseMove(state: State[TicTacToe], game: TicTacToe): Move[TicTacToe] = {
     // pick a move at random.  not so "I"
-    val opens = state.openPositions()
-    TicTacToeMove(this, opens(Random.nextInt(opens.length)), game)
+    val opens = state.asInstanceOf[TicTacToeState].openPositions() // TODO cast
+    TicTacToeMove(this, opens(Random.nextInt(opens.length)))
   }
 
 }

@@ -11,17 +11,21 @@ import axle.matrix.ArrayMatrixFactory._
 
 case class TicTacToe(
   boardSize: Int = 3,
-  x: Player[TicTacToe] = InteractiveTicTacToePlayer("X"),
-  o: Player[TicTacToe] = AITicTacToePlayer("O"))
+  x: Player[TicTacToe], // InteractiveTicTacToePlayer("X")
+  o: Player[TicTacToe]) // AITicTacToePlayer("O")
   extends Game {
 
+  type G = TicTacToe
+  
   def numPositions() = boardSize * boardSize
 
+  def introMessage() = "Intro message to Tic Tac Toe"
+  
   def startBoard() = matrix[Option[String]](boardSize, boardSize, None)
 
-  val playas = Map[String, Player[_]]("X" -> x, "O" -> o)
+  val playas = Map("X" -> x, "O" -> o)
 
-  def players() = playas
+  def players() = playas.asInstanceOf[Map[String, Player[TicTacToe]]] // TODO remove cast
 
   def playerAfter(player: Player[TicTacToe]): Player[TicTacToe] = {
 
@@ -35,7 +39,7 @@ case class TicTacToe(
 
     for (other <- players.values) {
       if (other != player) {
-        return other
+        return other.asInstanceOf[Player[TicTacToe]] // TODO remove cast
       }
     }
     null

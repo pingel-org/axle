@@ -11,5 +11,5 @@ abstract case class Player[GAME <: Game](id: String, description: String) {
 
   def notify(event: Event): Unit = {}
 
-  def endGame(): Unit = {}
+  def endGame(state: State[GAME], game: GAME): Unit = {}
 }
