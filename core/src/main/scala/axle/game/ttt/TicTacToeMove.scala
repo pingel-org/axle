@@ -18,22 +18,13 @@ case class TicTacToeMove(player: Player[TicTacToe], position: Int)
       case 8 => "lower middle"
       case 9 => "lower right"
     }
-    case _ => "%s".format(position)
+    case _ => position.toString
   }
 
-  def displayTo(p: Player[Game], game: Game): String = {
+  def displayTo(p: Player[Game], game: Game): String = 
+    (if (player != p) { "I will" } else { "You have" }) +
+      " put an " + player.id +
+      " in the " + description(game.asInstanceOf[TicTacToe]) + "."
 
-    val beginSentence = if (player != p) {
-      "I will"
-    } else {
-      "You have"
-    }
-
-    "%s put an %s in the %s.".format(
-      beginSentence,
-      player.id,
-      description(game.asInstanceOf[TicTacToe]) // TODO cast
-    )
-  }
 
 }
