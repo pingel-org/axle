@@ -5,7 +5,7 @@ import axle.game._
 
 import axle.matrix.ArrayMatrixFactory._
 
-case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[String]])
+case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[String]], game: TicTacToe)
   extends State[TicTacToe] {
 
   val boardSize = board.columns
@@ -47,6 +47,8 @@ case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[S
 
   def openPositions() = 1.to(numPositions).filter(getBoardAt(_).isEmpty)
 
+  def isTerminal(): Boolean = openPositions().length == 0
+
   def getOutcome(): Option[Outcome[TicTacToe]] = {
     for (player <- game.players.values) {
       val tttp = player.asInstanceOf[Player[TicTacToe]] // TODO remove cast
@@ -55,17 +57,18 @@ case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[S
       }
     }
 
-    if (openPositions().length == 0) {
+    if (isTerminal) {
       return Some(Outcome[TicTacToe](game, None))
     }
 
     None
   }
 
-  def applyMove(move: TicTacToeMove): TicTacToeState = {
+  def applyMove(move: Move[TicTacToe]): TicTacToeState = {
+    val tttMove = move.asInstanceOf[TicTacToeMove] // TODO: remove cast
     val resultBoard = board.dup
-    resultBoard(positionToRow(move.position), positionToColumn(move.position)) = Some(player.id)
-    TicTacToeState(game.playerAfter(move.player), resultBoard)
+    resultBoard(positionToRow(tttMove.position), positionToColumn(tttMove.position)) = Some(player.id)
+    TicTacToeState(game.playerAfter(tttMove.player), resultBoard, game)
   }
 
 }

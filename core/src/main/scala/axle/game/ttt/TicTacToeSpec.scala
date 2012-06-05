@@ -16,7 +16,7 @@ object TicTacToeSpec {
     // the players and setting game.state is enough to clear the
     // memory
 
-    val start = new TicTacToeState(x, game.startBoard).asInstanceOf[State[TicTacToe#G]]
+    val start = new TicTacToeState(x, game.startBoard, game).asInstanceOf[State[TicTacToe#G]]
 
     println
     println("moves: %s\n".format(moves))
