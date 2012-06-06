@@ -35,14 +35,13 @@ case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[S
   def setBoardAt(position: Int, player: Player[TicTacToe]) =
     board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
-  def hasWonRow(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.row(_).toList.forall(_ == player.id))
+  def hasWonRow(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.row(_).toList.forall(_ == Some(player.id)))
 
-  def hasWonColumn(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.column(_).toList.forall(_ == player.id))
+  def hasWonColumn(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.column(_).toList.forall(_ == Some(player.id)))
 
-  def hasWonDiagonal(player: Player[TicTacToe]) = {
-    val indexes = 0 until boardSize
-    indexes.forall(i => board(i, i) == player.id) || indexes.forall(i => board(i, (boardSize - 1) - i) == player.id)
-  }
+  def hasWonDiagonal(player: Player[TicTacToe]) =
+    (0 until boardSize).forall(i => board(i, i) == Some(player.id)) ||
+      (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player.id))
 
   def hasWon(player: Player[TicTacToe]) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 

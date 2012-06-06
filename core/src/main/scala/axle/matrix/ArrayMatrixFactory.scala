@@ -22,13 +22,13 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def columns = nColumns
     def length = storage.length
 
-    def apply(i: Int, j: Int): T = storage(i * nRows + j)
-    def update(i: Int, j: Int, v: T) = getStorage(i * nRows + j) = v
+    def apply(r: Int, c: Int): T = storage(r * nColumns + c)
+    def update(r: Int, c: Int, v: T) = storage(r * nColumns + c) = v
     def toList(): List[T] = storage.toList
 
     def column(c: Int) = {
       val result = matrix(new Array[T](nRows), nRows, 1)
-      for (r <- 0 until nColumns) {
+      for (r <- 0 until nRows) {
     	  result(r, 0) = this(r, c)
       }
       result
@@ -36,7 +36,7 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
 
     def row(r: Int) = {
       val result = matrix(new Array[T](nColumns), 1, nColumns)
-      for (c <- 0 until nRows) {
+      for (c <- 0 until nColumns) {
         result(0, c) = this(r, c)
       }
       result
