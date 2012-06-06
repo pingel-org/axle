@@ -24,10 +24,23 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
 
     def apply(i: Int, j: Int): T = storage(i * nRows + j)
     def update(i: Int, j: Int, v: T) = getStorage(i * nRows + j) = v
-    def toList(): List[T] = 0.until(storage.length).map(storage(_)).toList
+    def toList(): List[T] = storage.toList
 
-    def column(c: Int) = matrix(new Array[T](length), nRows, 1)
-    def row(r: Int) = matrix(new Array[T](length), 1, nColumns)
+    def column(c: Int) = {
+      val result = matrix(new Array[T](nRows), nRows, 1)
+      for (r <- 0 until nColumns) {
+    	  result(r, 0) = this(r, c)
+      }
+      result
+    }
+
+    def row(r: Int) = {
+      val result = matrix(new Array[T](nColumns), 1, nColumns)
+      for (c <- 0 until nRows) {
+        result(0, c) = this(r, c)
+      }
+      result
+    }
 
     def isEmpty(): Boolean = false // TODO
     def isRowVector(): Boolean = columns == 1
@@ -36,7 +49,7 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def isSquare(): Boolean = columns == rows
     def isScalar(): Boolean = isRowVector && isColumnVector
 
-    def dup(): M[T] = null // TODO
+    def dup(): M[T] = matrix(storage.clone, nRows, nColumns)
     def negate(): M[T] = null // TODO
     def transpose(): M[T] = null // TODO
     def diag(): M[T] = null // TODO
@@ -94,7 +107,7 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def argmin(): (Int, Int) = null // TODO
     def columnMins(): M[T] = null // TODO
     def columnMaxs(): M[T] = null // TODO
-    
+
     // In-place versions
 
     def ceili(): Unit = {} // TODO

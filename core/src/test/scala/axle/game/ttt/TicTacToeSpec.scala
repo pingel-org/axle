@@ -21,7 +21,7 @@ object TicTacToeSpec {
     println
     println("moves: %s\n".format(moves))
 
-    val lastMoveState = game.scriptedMoveStateStream(start, moves.toStream.map(pp => TicTacToeMove(pp._1, pp._2))).last
+    val lastMoveState = game.scriptedMoveStateStream(start, moves.map(pp => TicTacToeMove(pp._1, pp._2)).iterator ).last
     println("game state:")
     println(lastMoveState._2)
 

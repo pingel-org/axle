@@ -17,9 +17,10 @@ case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[S
 
     "Board:         Movement Key:\n" +
       0.until(boardSize).map(r => {
-        board.row(r).toList.map(_.getOrElse(" ")).mkString("|") +
+        val rowlist = board.row(r).toList
+        rowlist.map(_.getOrElse(" ")).mkString("|") +
           "          " +
-          (1 + r * boardSize).to(1 + (r + 1) * boardSize).mkString("|") // TODO rjust(keyWidth)
+          (1 + r * boardSize).until(1 + (r + 1) * boardSize).mkString("|") // TODO rjust(keyWidth)
       }).mkString("\n")
 
   }

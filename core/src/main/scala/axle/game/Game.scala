@@ -29,15 +29,12 @@ trait Game {
     }
   }
 
-  def scriptedMoveStateStream(state: State[G], moveStream: Stream[Move[G]]): Stream[(Move[G], State[G])] = state.isTerminal match {
+  def scriptedMoveStateStream(state: State[G], moveIt: Iterator[Move[G]]): Stream[(Move[G], State[G])] = (state.isTerminal || ! moveIt.hasNext ) match {
     case true => Stream.empty
     case false => {
-      val move = null // TODO moveStream.next
-      for (player <- players.values) {
-        player.notify(move)
-      }
+      val move = moveIt.next
       val nextState = state.applyMove(move)
-      Stream.cons((move, nextState), scriptedMoveStateStream(nextState, moveStream))
+      Stream.cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
   }
 
