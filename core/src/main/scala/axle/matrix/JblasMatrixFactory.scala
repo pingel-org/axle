@@ -53,6 +53,8 @@ trait JblasMatrixFactory extends MatrixFactory {
     def apply(i: Int, j: Int): T = functionPair.forward(getStorage.get(i, j))
     def update(i: Int, j: Int, v: T) = getStorage.put(i, j, functionPair.backward(v))
 
+    def toList(): List[T] = getStorage.toArray.toList.map(functionPair.forward(_))
+
     def column(j: Int) = matrix(getStorage.getColumn(j))(functionPair)
     def row(i: Int) = matrix(getStorage.getRow(i))(functionPair)
 

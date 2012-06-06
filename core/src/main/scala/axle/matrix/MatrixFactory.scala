@@ -26,7 +26,8 @@ trait MatrixFactory {
 
     def apply(i: Int, j: Int): T
     def update(i: Int, j: Int, v: T): Unit
-
+    def toList(): List[T]
+    
     def column(j: Int): M[T]
     def row(i: Int): M[T]
 

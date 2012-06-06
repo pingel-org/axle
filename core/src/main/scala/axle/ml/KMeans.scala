@@ -10,23 +10,21 @@ trait KMeans {
   def square(x: Double) = x * x
 
   import Math.sqrt
-  
-  def √(x: Double) = sqrt(x)
 
-  def rowToList[D](row: M[D]) = (0 until row.columns).map(row(0, _)).toList
+  def √(x: Double) = sqrt(x)
 
   /**
    * cluster[T]
-   * 
+   *
    * @typeparam T  type of the objects being classified
-   * 
+   *
    * @param data
    * @param N
    * @param featureExtractor
    * @param constructor
-   * 
+   *
    */
-  
+
   def cluster[T](
     data: Seq[T],
     N: Int,
@@ -120,11 +118,13 @@ trait KMeans {
 
     def K(): Int = μ.rows
 
-    def exemplar(i: Int): D = {
+    val exemplars: List[D] = (0 until K).map(i => {
       val centroid = μ.row(i)
       val unscaledCentroid = (diag(colRanges) ⨯ centroid) + colMins
-      constructor(rowToList(unscaledCentroid))
-    }
+      constructor(unscaledCentroid.toList)
+    }).toList
+
+    def exemplar(i: Int): D = exemplars(i)
 
     def classify(observation: D): Int = {
       val featureList = featureExtractor(observation)
