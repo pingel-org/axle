@@ -10,6 +10,8 @@ seq(assemblySettings: _*)
 
 crossScalaVersions := Seq("2.9.1", "2.8.1")
 
+scalacOptions ++= Seq("-unchecked", "-deprecation")
+
 resolvers += "array.ca" at "http://www.array.ca/nest-web/maven/" // for jblas
 
 // curl http://cloud.github.com/downloads/mikiobraun/jblas/jblas-1.2.0.jar -o lib/jblas-1.2.0.jar

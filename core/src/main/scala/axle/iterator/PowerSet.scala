@@ -30,7 +30,7 @@ package axle.iterator
 
 import scala.collection._
 
-class PowerSet[E](all: Collection[E]) extends ℘[E](all)
+class PowerSet[E](all: Iterator[E]) extends ℘[E](all)
 
 /**
  * A ℘ (PowerSet) constructed with a collection with elements of type E can construct
@@ -42,7 +42,7 @@ class PowerSet[E](all: Collection[E]) extends ℘[E](all)
  * @param [E] The type of elements in the Collection passed to the constructor.
  */
 
-case class ℘[E](all: Collection[E]) extends Iterable[Set[E]] {
+case class ℘[E](all: Iterator[E]) extends Iterable[Set[E]] {
 
   def getAll = all
 

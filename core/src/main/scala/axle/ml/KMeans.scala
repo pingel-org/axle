@@ -9,7 +9,7 @@ trait KMeans {
 
   def square(x: Double) = x * x
 
-  import Math.sqrt
+  import math.sqrt
 
   def √(x: Double) = sqrt(x)
 
@@ -87,7 +87,7 @@ trait KMeans {
       val v = counts(r, 0)
       for (c <- 0 until X.columns) {
         if (v == 0) {
-          accumulator(r, c) = Math.random // TODO verify KMeans algorithm
+          accumulator(r, c) = math.random // TODO verify KMeans algorithm
         } else {
           accumulator(r, c) /= v
         }

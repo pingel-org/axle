@@ -5,7 +5,7 @@ object LogisticRegression extends LogisticRegression()
 trait LogisticRegression {
 
   import axle.matrix.JblasMatrixFactory._
-  import Math.{ exp, log }
+  import math.{ exp, log }
   import Utilities._
 
   type M[T] = JblasMatrix[T] // TODO: generalize

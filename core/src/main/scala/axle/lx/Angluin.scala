@@ -66,7 +66,7 @@ object Angluin {
 
   }
 
-  case class CanonicalAcceptorFactory {
+  case class CanonicalAcceptorFactory() {
 
     def makeCanonicalAcceptor(ℒ: Language): Acceptor = {
       // TODO !!!

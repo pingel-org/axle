@@ -3,7 +3,7 @@ package axle.quanta
 import axle.graph.NativeDirectedGraphFactory._
 
 import java.math.BigDecimal
-import scala.Math.{ max, abs }
+import scala.math.{ max, abs }
 
 /**
  * Quantum

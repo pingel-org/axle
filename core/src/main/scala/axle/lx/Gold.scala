@@ -39,7 +39,7 @@ object Gold {
     override def toString() = "▦"
   }
 
-  case class Language {
+  case class Language() {
 
     var sequences = Set[Expression]() // TODO: was TreeSet using new ExpressionComparator()
 
@@ -112,7 +112,7 @@ object Gold {
 
   }
 
-  case class Vocabulary {
+  case class Vocabulary() {
 
     var morphemes = Set[Morpheme]()
 

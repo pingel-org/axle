@@ -36,7 +36,7 @@ object CombinerTest {
     val elems = List("a", "b", "c")
     println("elems = " + elems)
     for (i <- 0 to elems.size) {
-      for (combination <- new Combiner[String](elems, i)) {
+      for (combination <- new Combiner[String](elems.iterator, i)) {
         println("p = " + combination);
       }
     }
@@ -44,7 +44,7 @@ object CombinerTest {
   
 }
 
-case class Combiner[E](objects: Collection[E], n: Int) extends Iterable[Set[E]] {
+case class Combiner[E](objects: Iterator[E], n: Int) extends Iterable[Set[E]] {
 
   if (n > objects.size) {
     throw new IndexOutOfBoundsException()
