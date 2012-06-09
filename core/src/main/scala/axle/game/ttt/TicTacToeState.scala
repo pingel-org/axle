@@ -33,15 +33,15 @@ case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[S
 
   // The validation in InteractiveTicTacToePlayer.chooseMove might be better placed here
   def setBoardAt(position: Int, player: Player[TicTacToe]) =
-    board(positionToRow(position), positionToColumn(position)) = Some(player.id)
+    board(positionToRow(position), positionToColumn(position)) = Some(player.getId)
 
-  def hasWonRow(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.row(_).toList.forall(_ == Some(player.id)))
+  def hasWonRow(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.row(_).toList.forall(_ == Some(player.getId)))
 
-  def hasWonColumn(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.column(_).toList.forall(_ == Some(player.id)))
+  def hasWonColumn(player: Player[TicTacToe]) = 0.until(boardSize).exists(board.column(_).toList.forall(_ == Some(player.getId)))
 
   def hasWonDiagonal(player: Player[TicTacToe]) =
-    (0 until boardSize).forall(i => board(i, i) == Some(player.id)) ||
-      (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player.id))
+    (0 until boardSize).forall(i => board(i, i) == Some(player.getId)) ||
+      (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player.getId))
 
   def hasWon(player: Player[TicTacToe]) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
@@ -67,7 +67,7 @@ case class TicTacToeState(player: Player[TicTacToe], board: ArrayMatrix[Option[S
   def applyMove(move: Move[TicTacToe]): TicTacToeState = {
     val tttMove = move.asInstanceOf[TicTacToeMove] // TODO: remove cast
     val resultBoard = board.dup
-    resultBoard(positionToRow(tttMove.position), positionToColumn(tttMove.position)) = Some(player.id)
+    resultBoard(positionToRow(tttMove.position), positionToColumn(tttMove.position)) = Some(player.getId)
     TicTacToeState(game.playerAfter(tttMove.player), resultBoard, game)
   }
 

@@ -26,7 +26,7 @@ object Axle {
 
     // IO
 
-    def getLine: List[Char] = scala.io.Source.stdin.getLine(1).toList // List[Char]
+    def getLine(): String = scala.io.Source.stdin.getLines().next
 
     // List enrichments:
 

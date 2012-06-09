@@ -23,7 +23,7 @@ case class TicTacToeMove(player: Player[TicTacToe], position: Int)
 
   def displayTo(p: Player[Game], game: Game): String = 
     (if (player != p) { "I will" } else { "You have" }) +
-      " put an " + player.id +
+      " put an " + player.getId +
       " in the " + description(game.asInstanceOf[TicTacToe]) + "."
 
 

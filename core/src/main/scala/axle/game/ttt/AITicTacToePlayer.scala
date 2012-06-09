@@ -4,7 +4,7 @@ import axle.game._
 
 import scala.util.Random
 
-case class AITicTacToePlayer(
+class AITicTacToePlayer(
   aitttPlayerId: String,
   aitttDescription: String = "my poor AI")
   extends Player[TicTacToe](aitttPlayerId, aitttDescription) {

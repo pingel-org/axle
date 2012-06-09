@@ -1,8 +1,10 @@
 
 package axle.game
 
-abstract case class Player[GAME <: Game](id: String, description: String) {
+abstract class Player[GAME <: Game](id: String, description: String) {
 
+  def getId() = id
+  
   def chooseMove(state: State[GAME], game: GAME): Move[GAME]
 
   override def toString(): String = description

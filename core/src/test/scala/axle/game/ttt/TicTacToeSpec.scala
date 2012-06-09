@@ -7,8 +7,8 @@ class TicTacToeSpec extends Specification {
 
   import ttt._
 
-  val x = InteractiveTicTacToePlayer("X", "Player X")
-  val o = InteractiveTicTacToePlayer("O", "Player O")
+  val x = new InteractiveTicTacToePlayer("X", "Player X")
+  val o = new InteractiveTicTacToePlayer("O", "Player O")
   val game = TicTacToe(3, x, o)
 
   def script(moves: List[(Player[TicTacToe], Int)]) = {

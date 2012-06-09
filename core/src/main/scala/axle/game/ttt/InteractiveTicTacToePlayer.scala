@@ -3,7 +3,7 @@ package axle.game.ttt
 import axle.game._
 import scala.collection._
 
-case class InteractiveTicTacToePlayer(
+class InteractiveTicTacToePlayer(
   itttPlayerId: String,
   itttDescription: String = "the human")
   extends Player[TicTacToe](itttPlayerId, itttDescription) {

@@ -8,7 +8,7 @@ class PowerSetSpec extends Specification {
   "PowerSet" should {
     "Enumerate subsets of {a, b}" in {
       val elems = List("a", "b")
-      val psAB = ℘(elems)
+      val psAB = ℘(elems.iterator)
       psAB must have size(4)
       psAB must contain(Set())
       psAB must contain(Set("a"))
