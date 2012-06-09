@@ -37,7 +37,7 @@ trait KMeans {
     val X = matrix(
       data.length,
       numFeatures,
-      data.flatMap(featureExtractor(_)).toArray).t
+      data.flatMap(featureExtractor(_)).toArray)
 
     val (scaledX, colMins, colRanges) = Utilities.scaleColumns(X)
     val (μ, c) = clusterLA(scaledX, K, iterations)
@@ -67,7 +67,7 @@ trait KMeans {
 
   def centroids(X: M[Double], K: Int, C: M[Int]): M[Double] = {
     val accumulator = zeros[Double](K, X.columns)
-    val counts = zeros[Double](K, 1) // Note: Could be a M[Int]
+    val counts = zeros[Int](K, 1) // Note: Could be a M[Int]
     for (i <- 0 until X.rows) {
       val xi = X.row(i)
       val a = C(i, 0)
@@ -76,7 +76,24 @@ trait KMeans {
         accumulator(a, c) += xi(0, c)
       }
     }
-    diag(counts).inv ⨯ accumulator
+    //    println("accumulator")
+    //    println(accumulator)
+    //    println("counts")
+    //    println(counts)
+
+    // accumulator ⨯ counts.inv
+    // TODO rephrase this using linear algebra:
+    for (r <- 0 until K) {
+      val v = counts(r, 0)
+      for (c <- 0 until X.columns) {
+        if (v == 0) {
+          accumulator(r, c) = Math.random // TODO verify KMeans algorithm
+        } else {
+          accumulator(r, c) /= v
+        }
+      }
+    }
+    accumulator
   }
 
   /**
@@ -100,12 +117,12 @@ trait KMeans {
    *
    * @typeparam D       type of the objects being classified
    *
-   * @param N                see definitions of featureExtractor and constructor
+   * @param N                number of features
    * @param featureExtractor creates a list of features (Doubles) of length N given a D
    * @param constructor      creates a D from list of arguments of length N
-   * @param μ                a K x n Matrix[Double], where each row is a centroid
-   * @param colMins
-   * @param colRanges
+   * @param μ                K x N Matrix[Double], where each row is a centroid
+   * @param colMins          1 x N
+   * @param colRanges        1 x N
    */
 
   case class KMeansClassifier[D](
@@ -119,8 +136,7 @@ trait KMeans {
     def K(): Int = μ.rows
 
     val exemplars: List[D] = (0 until K).map(i => {
-      val centroid = μ.row(i)
-      val unscaledCentroid = (diag(colRanges) ⨯ centroid) + colMins
+      val unscaledCentroid = (μ.row(i) ⨯ diag(colRanges)) + colMins
       constructor(unscaledCentroid.toList)
     }).toList
 
