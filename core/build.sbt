@@ -25,6 +25,8 @@ libraryDependencies ++= Seq(
   "net.sf.jung" % "jung-graph-impl" % "2.0.1",
   "net.sf.jung" % "jung-io" % "2.0.1",
   "net.sf.jung" % "jung-visualization" % "2.0.1",
+  "net.liftweb" % "lift-json_2.9.0-1" % "2.4-M3",
+  "net.liftweb" % "lift-common_2.9.0-1" % "2.4-M3",
   "org" % "jblas" % "1.2.0",
   "org.specs2" %% "specs2" % "1.8.1" % "test"
 )

@@ -2,7 +2,7 @@ package axle.ml
 
 import org.specs2.mutable._
 import scala.util.Random
-import scala.Math.{ Pi, cos, sin }
+import scala.math.{ Pi, cos, sin }
 
 class KMeansSpecification extends Specification {
 
