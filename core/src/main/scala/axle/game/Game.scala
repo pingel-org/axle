@@ -1,27 +1,26 @@
 
 package axle.game
 
-/**
- *  subclasses of Game must:
- *  1) set self.state during init
- *  2) call addPlayer during init
- */
+import scala.collection._
 
 trait Game {
 
-  type G <: Game
+  game =>
+  
+  type PLAYER <: Player
+  type MOVE <: Move
+  type STATE <: State
+  type OUTCOME <: Outcome
 
-  def players(): Map[String, Player[G]]
-
-  def playerById(id: String) = players()(id)
+  def players(): immutable.Set[PLAYER]
 
   def introMessage(): Unit
 
-  def moveStateStream(state: State[G]): Stream[(Move[G], State[G])] = state.isTerminal match {
+  def moveStateStream(state: STATE): Stream[(MOVE, STATE)] = state.isTerminal match {
     case true => Stream.empty
     case false => {
-      val move = state.player.chooseMove(state, this.asInstanceOf[G]) // TODO cast
-      for (player <- players.values) {
+      val move = state.player.chooseMove(state)
+      for (player <- players()) {
         player.notify(move)
       }
       val nextState = state.applyMove(move)
@@ -29,7 +28,7 @@ trait Game {
     }
   }
 
-  def scriptedMoveStateStream(state: State[G], moveIt: Iterator[Move[G]]): Stream[(Move[G], State[G])] = (state.isTerminal || ! moveIt.hasNext ) match {
+  def scriptedMoveStateStream(state: STATE, moveIt: Iterator[MOVE]): Stream[(MOVE, STATE)] = (state.isTerminal || !moveIt.hasNext) match {
     case true => Stream.empty
     case false => {
       val move = moveIt.next
@@ -38,17 +37,70 @@ trait Game {
     }
   }
 
-  def play(start: State[G]): Unit = {
-    for (player <- players.values) {
-      player.introduceGame(this.asInstanceOf[G]) // TODO cast
+  def play(start: STATE): Unit = {
+    for (player <- players()) {
+      player.introduceGame()
     }
     val lastMoveState = moveStateStream(start).last
     lastMoveState._2.getOutcome.map(outcome =>
-      for (player <- players.values) {
+      for (player <- players()) {
         player.notify(outcome)
-        player.endGame(lastMoveState._2, this.asInstanceOf[G]) // TODO cast
+        player.endGame(lastMoveState._2)
       }
     )
+
+  }
+
+  trait Event { // game: Game
+
+    def displayTo(player: PLAYER): String
+
+  }
+
+  abstract class Move(player: PLAYER)
+    extends Event {
+
+  }
+
+  class Outcome(winner: Option[PLAYER])
+    extends Event {
+
+    def displayTo(player: PLAYER): String = winner match {
+
+      case None => "The game was a draw."
+
+      case Some(player) => "You have beaten " + game.players().filter(_ != winner).map(_.toString).toList.mkString(" and ") + "!"
+
+      case _ => "%s beat you!".format(winner)
+    }
+
+  }
+
+  abstract class Player(id: String, description: String) {
+
+    def getId() = id
+
+    def chooseMove(state: STATE): MOVE
+
+    override def toString(): String = description
+
+    def introduceGame(): Unit = {}
+
+    def notify(event: Event): Unit = {}
+
+    def endGame(state: STATE): Unit = {}
+  }
+
+  trait State {
+
+    def player(): PLAYER
+
+    def applyMove(move: MOVE): STATE
+
+    def isTerminal(): Boolean
+
+    def getOutcome(): Option[OUTCOME]
+
   }
 
 }

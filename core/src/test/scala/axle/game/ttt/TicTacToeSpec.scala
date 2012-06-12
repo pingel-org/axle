@@ -7,13 +7,13 @@ class TicTacToeSpec extends Specification {
 
   import ttt._
 
-  val x = new InteractiveTicTacToePlayer("X", "Player X")
-  val o = new InteractiveTicTacToePlayer("O", "Player O")
-  val game = TicTacToe(3, x, o)
+  val game = TicTacToe(3)
+  val x = game.player("X", "Player X", true)
+  val o = game.player("O", "Player O", true)
 
-  def script(moves: List[(Player[TicTacToe], Int)]) = {
-    val start = new TicTacToeState(x, game.startBoard, game).asInstanceOf[State[TicTacToe#G]]
-    val lastMoveState = game.scriptedMoveStateStream(start, moves.map(pp => TicTacToeMove(pp._1, pp._2)).iterator).last
+  def script(moveScript: List[(game.type#TicTacToePlayer, Int)]) = {
+    val start = game.state(x, game.startBoard)
+    val lastMoveState = game.scriptedMoveStateStream(start, moveScript.map(pp => game.move(pp._1, pp._2)).iterator).last
     lastMoveState._2.getOutcome.get.winner
   }
 
