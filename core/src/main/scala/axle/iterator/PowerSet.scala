@@ -30,7 +30,7 @@ package axle.iterator
 
 import scala.collection._
 
-class PowerSet[E](all: Iterator[E]) extends ℘[E](all)
+class PowerSet[E](all: Seq[E]) extends ℘[E](all)
 
 /**
  * A ℘ (PowerSet) constructed with a collection with elements of type E can construct
@@ -42,7 +42,7 @@ class PowerSet[E](all: Iterator[E]) extends ℘[E](all)
  * @param [E] The type of elements in the Collection passed to the constructor.
  */
 
-case class ℘[E](all: Iterator[E]) extends Iterable[Set[E]] {
+case class ℘[E](all: Seq[E]) extends Iterable[Set[E]] {
 
   def getAll = all
 
@@ -57,20 +57,13 @@ case class ℘[E](all: Iterator[E]) extends Iterable[Set[E]] {
 
     val canonicalOrder = powerSet.getAll.toList
 
-    var mask = mutable.ArrayBuffer[Option[InE]]()
+    val mask = mutable.ArrayBuffer[Option[InE]]()
 
     var hasNextValue = true
 
     def remove() = throw new UnsupportedOperationException()
 
-    def allOnes(): Boolean = {
-      for (bit <- mask) {
-        if (bit == None) {
-          return false
-        }
-      }
-      true
-    }
+    def allOnes(): Boolean = mask.forall(_.isDefined)
 
     def increment(): Unit = {
       var i = 0
@@ -90,18 +83,18 @@ case class ℘[E](all: Iterator[E]) extends Iterable[Set[E]] {
         }
       }
     }
-    
+
     def hasNext() = hasNextValue
-    
+
     def next() = {
-      val result = mask.flatMap({ x => x })
+      val result = mask.flatMap(x => x).toSet
       hasNextValue = mask.size < powerSet.getAll.size || !allOnes()
       if (hasNextValue) {
         increment()
       }
-      result.toSet
+      result
     }
-    
+
   }
-  
+
 }
