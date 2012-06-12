@@ -8,7 +8,6 @@ package axle.ast
 
 // TODO test first and follow (including scribd example)
 // TODO model input buffer
-// TODO create lift webapp
 // TODO create AST
 
 import scala.collection._
