@@ -1,6 +1,6 @@
 package axle.graph
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._ // sions._
 import scala.collection._
 
 object JungDirectedGraphFactory extends JungDirectedGraphFactory
@@ -52,7 +52,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       // TODO check 'ok'
 
       def getPayload(): VP = payload
-      
+
       def setPayload(p: VP) = payload = p
     }
 
@@ -65,7 +65,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       def getDest() = dest
       def getPayload(): EP = payload
       def setPayload(p: EP) = payload = p
-   }
+    }
 
     val jungGraph = new DirectedSparseGraph[V, E]()
 
@@ -80,9 +80,9 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     def size(): Int = jungGraph.getVertexCount()
 
-    def getEdges(): immutable.Set[E] = jungGraph.getEdges.toSet
+    def getEdges(): immutable.Set[E] = jungGraph.getEdges().asScala.toSet
 
-    def getVertices(): immutable.Set[V] = jungGraph.getVertices.toSet
+    def getVertices(): immutable.Set[V] = jungGraph.getVertices.asScala.toSet
 
     def getEdge(from: V, to: V): Option[E] = {
       val result = jungGraph.findEdge(from, to)
@@ -104,17 +104,17 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     def getLeaves(): Set[V] = getVertices().filter(isLeaf(_))
 
-    def getNeighbors(v: V): Set[V] = jungGraph.getNeighbors(v).toSet
+    def getNeighbors(v: V): Set[V] = jungGraph.getNeighbors(v).asScala.toSet
 
     def precedes(v1: V, v2: V): Boolean = getPredecessors(v2).contains(v1)
 
-    def getPredecessors(v: V): Set[V] = jungGraph.getPredecessors(v).toSet
+    def getPredecessors(v: V): Set[V] = jungGraph.getPredecessors(v).asScala.toSet
 
     def isLeaf(v: V): Boolean = jungGraph.getSuccessorCount(v) == 0
 
-    def getSuccessors(v: V): Set[V] = jungGraph.getSuccessors(v).toSet
+    def getSuccessors(v: V): Set[V] = jungGraph.getSuccessors(v).asScala.toSet
 
-    def outputEdgesOf(v: V): Set[E] = jungGraph.getOutEdges(v).toSet
+    def outputEdgesOf(v: V): Set[E] = jungGraph.getOutEdges(v).asScala.toSet
 
     def descendantsIntersectsSet(v: V, s: Set[V]): Boolean =
       s.contains(v) || s.exists(x => descendantsIntersectsSet(x, s))
@@ -138,10 +138,10 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
     def collectAncestors(vs: Set[V], result: mutable.Set[V]): Unit = vs.map(collectAncestors(_, result))
 
     def removeInputs(vs: Set[V]): Unit =
-      vs.map(v => jungGraph.getInEdges(v).map(inEdge => jungGraph.removeEdge(inEdge)))
+      vs.map(v => jungGraph.getInEdges(v).asScala.map(inEdge => jungGraph.removeEdge(inEdge)))
 
     def removeOutputs(vs: Set[V]): Unit =
-      vs.map(v => jungGraph.getOutEdges(v).map(outEdge => jungGraph.removeEdge(outEdge)))
+      vs.map(v => jungGraph.getOutEdges(v).asScala.map(outEdge => jungGraph.removeEdge(outEdge)))
 
     //TODO remove this method
     def removeSuccessor(v: V, successor: V): Unit = getEdge(v, successor).map(e => deleteEdge(e))
@@ -162,9 +162,9 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
         val path = dsp.getPath(source, goal)
         path match {
           case null => None
-          case _ => path.length match {
+          case _ => path.size match {
             case 0 => None
-            case _ => Some(path.toList)
+            case _ => Some(path.asScala.toList)
           }
         }
       }
