@@ -28,10 +28,11 @@ class KMeansSpecification extends Specification {
           (0 until 30).map(i => randomPoint(center2, 1.0)) ++
           (0 until 25).map(i => randomPoint(center3, 1.0)))
 
-      val classifier = cluster(data, 2,
+      val classifier = cluster(
+        data, 2,
         (p: Point) => List(p.x, p.y),
         (features: List[Double]) => new Point(features(0), features(1)),
-        2, 3, 100)
+        3, 100)
 
       val closestIndex = classifier.classify(new Point(14, 14))
       val closest = classifier.exemplar(closestIndex)

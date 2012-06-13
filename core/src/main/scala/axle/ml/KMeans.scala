@@ -1,5 +1,10 @@
 package axle.ml
 
+import javax.swing.JFrame
+import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D }
+import javax.swing.{ JPanel, JFrame }
+import java.awt.event.MouseEvent
+
 object KMeans extends KMeans()
 
 trait KMeans {
@@ -9,9 +14,7 @@ trait KMeans {
 
   def square(x: Double) = x * x
 
-  import math.sqrt
-
-  def √(x: Double) = sqrt(x)
+  def √(x: Double) = math.sqrt(x)
 
   /**
    * cluster[T]
@@ -30,24 +33,24 @@ trait KMeans {
     N: Int,
     featureExtractor: T => List[Double],
     constructor: List[Double] => T,
-    numFeatures: Int,
     K: Int,
     iterations: Int): KMeansClassifier[T] = {
 
     val X = matrix(
       data.length,
-      numFeatures,
+      N,
       data.flatMap(featureExtractor(_)).toArray)
 
     val (scaledX, colMins, colRanges) = Utilities.scaleColumns(X)
     val (μ, c) = clusterLA(scaledX, K, iterations)
-    KMeansClassifier(N, featureExtractor, constructor, μ, colMins, colRanges)
+    val classifier = KMeansClassifier(N, featureExtractor, constructor, μ, colMins, colRanges, scaledX, c)
+    classifier
   }
 
   def distanceRow(r1: M[Double], r2: M[Double]): Double = {
     // assert(r1.isRowVector && r2.isRowVector && r1.length == r2.length)
     val dRow = r1 - r2
-    sqrt((0 until r1.columns).map(i => square(dRow(0, i))).reduce(_ + _))
+    math.sqrt((0 until r1.columns).map(i => square(dRow(0, i))).reduce(_ + _))
   }
 
   def centroidIndexClosestTo(μ: M[Double], x: M[Double]): Int = {
@@ -76,10 +79,6 @@ trait KMeans {
         accumulator(a, c) += xi(0, c)
       }
     }
-    //    println("accumulator")
-    //    println(accumulator)
-    //    println("counts")
-    //    println(counts)
 
     // accumulator ⨯ counts.inv
     // TODO rephrase this using linear algebra:
@@ -112,6 +111,63 @@ trait KMeans {
     })
   }
 
+  class KMeansVisualization[D](classifier: KMeansClassifier[D]) {
+
+    val PAD = 50
+    val WIDTH = 600
+    val HEIGHT = 600
+    val DIAMETER = 10 // of data points
+
+    def draw(): Unit = {
+      val frame = new JFrame("KMeans Clustering")
+      frame.setBackground(Color.white)
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+      frame.setSize(WIDTH, HEIGHT)
+      frame.add(new KMeansPanel(classifier))
+      //frame.pack()
+      //frame.setLocationRelativeTo(null)
+      frame.setVisible(true)
+    }
+
+    class KMeansPanel(classifier: KMeansClassifier[D]) extends JPanel {
+
+      val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
+
+      // TODO: paintComponent is executed for many kinds of events that will not change the image
+
+      def project(x: Double, y: Double): (Int, Int) = {
+        val xp = PAD + (x * (WIDTH - 2 * PAD)).toInt
+        val yp = PAD + (y * (HEIGHT - 2 * PAD)).toInt
+        (xp, yp)
+      }
+
+      override def paintComponent(g: Graphics): Unit = {
+        println("KMeansPanel.paintComponent")
+        // super.paintComponent(g)
+        val size = getSize()
+        // val insets = getInsets()
+        // val w = size.width - (insets.left + insets.right)
+        // val h = size.height - (insets.top + insets.bottom)
+        val g2d = g.asInstanceOf[Graphics2D]
+        for (i <- 0 until classifier.K()) {
+          // TODO: inefficient loop
+          g2d.setColor(colors(i % colors.length))
+          for (r <- 0 until classifier.scaledX.rows) {
+            if (classifier.C(r, 0) == i) {
+              // TODO figure out what to do when N > 2
+              val (xp, yp) = project(classifier.scaledX(r, 0), classifier.scaledX(r, 1))
+              g2d.fillOval(xp, yp, DIAMETER, DIAMETER)
+            }
+          }
+        }
+        g2d.setColor(Color.black)
+        val p0 = project(0, 0)
+        val p1 = project(1, 1)
+        g2d.drawRect(p0._1, p0._2, p1._1, p1._2)
+      }
+    }
+  }
+
   /**
    * KMeansClassifier[D]
    *
@@ -131,7 +187,9 @@ trait KMeans {
     constructor: List[Double] => D,
     μ: M[Double],
     colMins: M[Double],
-    colRanges: M[Double]) {
+    colRanges: M[Double],
+    scaledX: M[Double],
+    C: M[Int]) {
 
     def K(): Int = μ.rows
 
@@ -148,6 +206,8 @@ trait KMeans {
       val scaledX = diag(colRanges).inv ⨯ (featureRowMatrix.subRowVector(colMins).t)
       centroidIndexClosestTo(μ, scaledX)
     }
+
+    def draw(): Unit = new KMeansVisualization(this).draw()
 
   }
 
