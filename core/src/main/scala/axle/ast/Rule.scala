@@ -1,14 +1,12 @@
 
 package axle.ast
 
-case class Rule(name: String, _statement: Statement) {
+case class Rule(name: String, statement: Statement) {
 
-  def statement = _statement
-
-  var _precedence_level: Option[Int] = None
-  def precedence_level = _precedence_level
-  def precedence_level_=(p: Int) = {
-    _precedence_level = Some(p)
+  var _precedenceLevel: Option[Int] = None
+  def precedenceLevel = _precedenceLevel
+  def precedenceLevel_=(p: Int) = {
+    _precedenceLevel = Some(p)
   }
 
   private var _associativity: Option[String] = None

@@ -3,11 +3,10 @@ package axle.ast.view
 
 import axle.ast._
 import axle.Loggable
-import scala.util.matching.Regex
-import scala.collection._
+import util.matching.Regex
+import collection._
 
-import scala.xml._
-import scala.xml.NodeSeq
+import xml._
 
 trait Accumulator {
 
@@ -64,8 +63,8 @@ abstract class MetaNodeFormatter[R, S](language: Language, highlight: Set[MetaNo
             val subtree_rule = grammar.name2rule(sr)
             attr_name match {
               // TODO assumptions about the names of "left" and "right" should be externalized
-              case "left" => subtree_rule.precedence_level == node_rule.precedence_level && node_rule.associativity == "right" // (2 ** 3) ** 4
-              case "right" => subtree_rule.precedence_level == node_rule.precedence_level && node_rule.associativity == "left"
+              case "left" => subtree_rule.precedenceLevel == node_rule.precedenceLevel && node_rule.associativity == "right" // (2 ** 3) ** 4
+              case "right" => subtree_rule.precedenceLevel == node_rule.precedenceLevel && node_rule.associativity == "left"
               case _ => false
             }
           }
@@ -164,7 +163,7 @@ abstract class MetaNodeFormatter[R, S](language: Language, highlight: Set[MetaNo
       _indent()
       column += r.length()
       // result.appendAll(<span class={"repr"}>{scala.xml.Utility.escape(r)}</span>)
-      accSpan("repr", scala.xml.Utility.escape(r))
+      accSpan("repr", xml.Utility.escape(r))
       // NOTE: may not need to escape non-html
     }
   }

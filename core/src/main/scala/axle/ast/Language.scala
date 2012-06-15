@@ -2,7 +2,7 @@
 package axle.ast
 
 import axle.Loggable
-import scala.collection._
+import collection._
 
 case class Language(
   name: String,
@@ -22,7 +22,7 @@ case class Language(
     for (rule_name <- names) {
       info("rule %s level %s".format(rule_name, level))
       var rule = name2rule(rule_name)
-      rule.precedence_level = level
+      rule.precedenceLevel = level
       rule.associativity = assoc
     }
     level += 1
@@ -36,7 +36,7 @@ case class Language(
   def parseString(code: String) = parser(code)
 
   def precedenceOf(rule_name: String): Option[Int] = name2rule.contains(rule_name) match {
-    case true => name2rule(rule_name).precedence_level
+    case true => name2rule(rule_name).precedenceLevel
     case false => None
   }
 
