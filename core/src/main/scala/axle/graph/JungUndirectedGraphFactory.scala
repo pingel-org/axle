@@ -15,7 +15,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     val result = graph[NVP, NEP]()
 
-    var ov2nv = Map[other.V, result.V]()
+    val ov2nv = mutable.Map[other.V, result.V]()
 
     other.getVertices().map(oldV => {
       val oldVP = oldV.getPayload()
@@ -36,7 +36,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
   trait JungUndirectedGraph[VP, EP] extends UndirectedGraph[VP, EP] {
 
-    import scala.collection._
+    import collection._
     import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
     type V = JungUndirectedGraphVertex[VP]
@@ -49,7 +49,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
     trait JungUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
 
     class JungUndirectedGraphVertexImpl(var payload: VP)
-    extends JungUndirectedGraphVertex[VP] {
+      extends JungUndirectedGraphVertex[VP] {
 
       val ok = jungGraph.addVertex(this)
       // TODO check 'ok'
@@ -59,7 +59,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
     }
 
     class JungUndirectedGraphEdgeImpl(v1: V, v2: V, var payload: EP)
-    extends JungUndirectedGraphEdge[EP] {
+      extends JungUndirectedGraphEdge[EP] {
 
       val ok = jungGraph.addEdge(this, v1, v2)
       // TODO check 'ok'
@@ -99,7 +99,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
     def delete(v: V): Unit = jungGraph.removeVertex(v)
 
     // a "leaf" is vertex with only one neighbor
-    def firstLeafOtherThan(r: V) = getVertices().find({ v => getNeighbors(v).size == 1 && !v.equals(r) })
+    def firstLeafOtherThan(r: V) = getVertices().find(v => getNeighbors(v).size == 1 && !v.equals(r))
 
     def eliminate(v: V, payload: (V, V) => EP) = {
       // "decompositions" page 3 (Definition 3, Section 9.3)
@@ -111,79 +111,6 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     // TODO there is probably a more efficient way to do this:
     def eliminate(vs: immutable.List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
-
-    def draw(): Unit = {
-      val jf = jframe()
-      jf.setVisible(true)
-    }
-
-    import javax.swing.JFrame
-
-    def jframe(): JFrame = {
-
-      import java.awt.Dimension
-      import java.awt.BasicStroke
-      import java.awt.Color
-      import java.awt.Paint
-      import java.awt.Stroke
-      import java.awt.event.MouseEvent
-      import edu.uci.ics.jung.algorithms.layout.FRLayout
-      import edu.uci.ics.jung.algorithms.layout.Layout
-      import edu.uci.ics.jung.graph.Graph
-      import edu.uci.ics.jung.graph.SparseGraph
-      import edu.uci.ics.jung.visualization.VisualizationViewer
-      import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
-      import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
-      import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
-      import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
-      import org.apache.commons.collections15.Transformer
-
-      val width = 700
-      val height = 700
-      val border = 50
-
-      val layout = new FRLayout(jungGraph)
-      layout.setSize(new Dimension(width, height))
-      val vv = new VisualizationViewer[V, E](layout) // interactive
-      vv.setPreferredSize(new Dimension(width + border, height + border))
-
-      val vertexPaint = new Transformer[V, Paint]() {
-        def transform(i: V): Paint = Color.GREEN
-      }
-
-      val dash = List(10.0f).toArray
-
-      val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
-
-      val edgeStrokeTransformer = new Transformer[E, Stroke]() {
-        def transform(edge: E) = edgeStroke
-      }
-
-      val vertexLabelTransformer = new Transformer[V, String]() {
-        def transform(vertex: V) = vertex.toString()
-      }
-
-      val edgeLabelTransformer = new Transformer[E, String]() {
-        def transform(edge: E) = edge.toString()
-      }
-
-      vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
-      vv.getRenderContext().setEdgeStrokeTransformer(edgeStrokeTransformer)
-      vv.getRenderContext().setVertexLabelTransformer(vertexLabelTransformer)
-      vv.getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer)
-      vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR)
-
-      val gm = new PluggableGraphMouse()
-      gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1))
-      gm.add(new PickingGraphMousePlugin())
-      vv.setGraphMouse(gm)
-
-      val frame = new JFrame("graph name")
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-      frame.getContentPane().add(vv)
-      frame.pack()
-      frame
-    }
 
   }
 

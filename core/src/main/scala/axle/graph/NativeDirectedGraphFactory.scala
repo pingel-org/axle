@@ -12,7 +12,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
   trait NativeDirectedGraph[VP, EP] extends DirectedGraph[VP, EP] {
 
-    import scala.collection._
+    import collection._
 
     type V = NativeDirectedGraphVertex[VP]
     type E = NativeDirectedGraphEdge[EP]
@@ -21,8 +21,8 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     var vertices = mutable.Set[V]()
     var edges = mutable.Set[E]()
-    var vertex2outedges = Map[V, mutable.Set[E]]()
-    var vertex2inedges = Map[V, mutable.Set[E]]()
+    var vertex2outedges = mutable.Map[V, mutable.Set[E]]()
+    var vertex2inedges = mutable.Map[V, mutable.Set[E]]()
 
     def getStorage() = (vertices, edges, vertex2outedges, vertex2inedges)
 
@@ -33,7 +33,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
     }
 
     trait NativeDirectedGraphEdge[P] extends DirectedGraphEdge[P] {
-       def setPayload(p: P): Unit = {} // TODO: payload = p // type erasure problem
+      def setPayload(p: P): Unit = {} // TODO: payload = p // type erasure problem
     }
 
     class NativeDirectedGraphVertexImpl[P](var payload: P) extends NativeDirectedGraphVertex[P] {
@@ -80,8 +80,8 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
     def removeAllEdgesAndVertices(): Unit = {
       vertices = mutable.Set[V]()
       edges = mutable.Set[E]()
-      vertex2outedges = Map[V, mutable.Set[E]]()
-      vertex2inedges = Map[V, mutable.Set[E]]()
+      vertex2outedges = mutable.Map[V, mutable.Set[E]]()
+      vertex2inedges = mutable.Map[V, mutable.Set[E]]()
     }
 
     def deleteEdge(e: E): Unit = {
@@ -223,11 +223,11 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def shortestPath(source: V, goal: V): Option[List[E]] = _shortestPath(source, goal, Set())
 
-    def draw(): Unit = {
-      // TODO: remove this cast
-      val thisAsDG = this.asInstanceOf[JungDirectedGraphFactory.DirectedGraph[VP, EP]]
-      JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsDG)(vp => vp, ep => ep).draw()
-    }
+//    def draw(): Unit = {
+//      // TODO: remove this cast
+//      val thisAsDG = this.asInstanceOf[JungDirectedGraphFactory.DirectedGraph[VP, EP]]
+//      JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsDG)(vp => vp, ep => ep).draw()
+//    }
 
   }
 

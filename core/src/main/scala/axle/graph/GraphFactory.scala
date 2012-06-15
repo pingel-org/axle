@@ -32,7 +32,7 @@ trait GraphFactory {
     def vertex(vp: VP): V
     def +=(vp: VP): V = vertex(vp)
     def ++=(vps: Seq[VP]) = vps.map(vertex(_))
-    def draw(): Unit
+
   }
 
 }
