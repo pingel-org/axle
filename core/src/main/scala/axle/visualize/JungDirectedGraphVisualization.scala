@@ -2,33 +2,25 @@ package axle.visualize
 
 import axle.graph.JungDirectedGraphFactory._
 
-class JungDirectedGraphVisualization() {
+import javax.swing.JFrame
+import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke }
+import java.awt.event.MouseEvent
 
-  import javax.swing.JFrame
+import edu.uci.ics.jung.algorithms.layout.{ Layout, FRLayout, CircleLayout }
+import edu.uci.ics.jung.graph.{ Graph, SparseGraph, SparseMultigraph }
+import edu.uci.ics.jung.visualization.{ BasicVisualizationServer, VisualizationViewer }
+import edu.uci.ics.jung.visualization.control.{ CrossoverScalingControl, DefaultModalGraphMouse, PluggableGraphMouse, PickingGraphMousePlugin, TranslatingGraphMousePlugin, ModalGraphMouse, ScalingGraphMousePlugin }
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller
+import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
+
+import org.apache.commons.collections15.Transformer
+
+class JungDirectedGraphVisualization() {
 
   def draw[VP, EP](jdg: JungDirectedGraph[VP, EP]): Unit = {
 
     type V = jdg.type#V
     type E = jdg.type#E
-
-    import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke }
-    import java.awt.event.MouseEvent
-
-    // import edu.uci.ics.jung.algorithms.layout.CircleLayout
-    import edu.uci.ics.jung.algorithms.layout.{ Layout, FRLayout }
-    import edu.uci.ics.jung.graph.{ Graph, SparseGraph }
-    // import edu.uci.ics.jung.graph.SparseMultigraph
-    // import edu.uci.ics.jung.visualization.BasicVisualizationServer
-    import edu.uci.ics.jung.visualization.VisualizationViewer
-    // import edu.uci.ics.jung.visualization.control.CrossoverScalingControl
-    // import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse
-    import edu.uci.ics.jung.visualization.control.{ PluggableGraphMouse, PickingGraphMousePlugin, TranslatingGraphMousePlugin }
-    // import edu.uci.ics.jung.visualization.control.ModalGraphMouse
-    // import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin
-    // import edu.uci.ics.jung.visualization.decorators.ToStringLabeller
-    import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
-
-    import org.apache.commons.collections15.Transformer
 
     val width = 700
     val height = 700
@@ -82,7 +74,6 @@ class JungDirectedGraphVisualization() {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     frame.getContentPane().add(vv)
     frame.pack()
-
     frame.setVisible(true)
   }
 
