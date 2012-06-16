@@ -15,22 +15,21 @@ class KMeansVisualization[D](classifier: KMeansClassifier[D]) extends JPanel {
 
   val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
 
-  // xMin: Double, xRange: Double, yMin: Double, yRange: Double
-  // classifier.colMins(0,0), classifier.colRanges(0,0), classifier.colMins(0,1), classifier.colRanges(0,1)
-  // TODO: this should be function composition
-  // def unscaled2frame(p: PointDouble) = scaled2frame(scalePoint(p))
-  //  def scale(v: Double, d: Int) = (v - classifier.colMins(0, d)) / classifier.colRanges(0, d)
-  //  def scalePoint(p: PointDouble) = PointDouble(scale(p.x, 0), scale(p.y, 1))
+  val diffDouble = (d0: Double, d1: Double) => (d0 - d1)
+  val divDouble = (d0: Double, d1: Double) => (d0 / d1)
 
-  val scaledArea = new ScaledArea2D(WIDTH, HEIGHT, PAD, 0.0, 1.0, 0.0, 1.0)
+  val scaledArea = new ScaledArea2D(
+    WIDTH, HEIGHT, PAD,
+    0.0, 1.0, diffDouble, divDouble,
+    0.0, 1.0, diffDouble, divDouble)
 
   def boundingRectangle(g2d: Graphics2D): Unit = {
     g2d.setColor(Color.black)
-    scaledArea.drawRectangle(g2d, PointDouble(0.0, 0.0), PointDouble(1.0, 1.0))
+    scaledArea.drawRectangle(g2d, Point2D(0.0, 0.0), Point2D(1.0, 1.0))
   }
 
   def centroid(g2d: Graphics2D, i: Int): Unit = {
-    val center = PointDouble(classifier.μ(i, 0), classifier.μ(i, 1))
+    val center = Point2D(classifier.μ(i, 0), classifier.μ(i, 1))
     g2d.setColor(Color.darkGray)
     scaledArea.fillOval(g2d, center, 3 * DIAMETER, 3 * DIAMETER)
     g2d.setColor(colors(i % colors.length))
@@ -42,7 +41,7 @@ class KMeansVisualization[D](classifier: KMeansClassifier[D]) extends JPanel {
     for (r <- 0 until classifier.scaledX.rows) {
       if (classifier.C(r, 0) == i) {
         // TODO figure out what to do when N > 2
-        val center = PointDouble(classifier.scaledX(r, 0), classifier.scaledX(r, 1))
+        val center = Point2D(classifier.scaledX(r, 0), classifier.scaledX(r, 1))
         scaledArea.fillOval(g2d, center, DIAMETER, DIAMETER)
         // scaledArea.drawString(g2d, r.toString + "(%.2f,%.2f)".format(center.x, center.y), center)
       }
