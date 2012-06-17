@@ -5,6 +5,7 @@ import javax.swing.JPanel
 import java.awt.event.MouseEvent
 
 import axle.ml.KMeans._
+import axle.visualize.Plottable._
 
 class KMeansVisualization[D](classifier: KMeansClassifier[D]) extends JPanel {
 
@@ -18,10 +19,7 @@ class KMeansVisualization[D](classifier: KMeansClassifier[D]) extends JPanel {
   val diffDouble = (d0: Double, d1: Double) => (d0 - d1)
   val divDouble = (d0: Double, d1: Double) => (d0 / d1)
 
-  val scaledArea = new ScaledArea2D(
-    WIDTH, HEIGHT, PAD,
-    0.0, 1.0, diffDouble, divDouble,
-    0.0, 1.0, diffDouble, divDouble)
+  val scaledArea = new ScaledArea2D(WIDTH, HEIGHT, PAD, 0.0, 1.0, 0.0, 1.0)
 
   def boundingRectangle(g2d: Graphics2D): Unit = {
     g2d.setColor(Color.black)

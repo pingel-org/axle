@@ -3,61 +3,10 @@ package axle.visualize
 import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point }
 import javax.swing.JPanel
 import java.awt.event.MouseEvent
-import org.joda.time.DateTime
 import collection._
 
-trait Plottable[T, DT] extends Ordering[T] {
-
-  // TODO: There must be some existing abstraction that captures this already
-  
-  // Ordering needs: def compare(t1: T, t2: T): Int
-
-  def diff(v1: T, v2: T): DT
-
-  def div(v1: DT, v2: DT): Double
-}
-
-object Plot {
-
-  implicit object DoublePlottable extends Plottable[Double, Double] {
-
-    def compare(d1: Double, d2: Double) = (d1 - d2) match {
-      case 0.0 => 0
-      case r @ _ if r > 0.0 => 1
-      case _ => -1
-    }
-
-    def diff(d0: Double, d1: Double) = (d0 - d1)
-
-    def div(d0: Double, d1: Double) = (d0 / d1)
-  }
-
-  implicit object LongPlottable extends Plottable[Long, Long] {
-
-    def compare(l1: Long, l2: Long) = (l1 - l2) match {
-      case 0L => 0
-      case r @ _ if r > 0L => 1
-      case _ => -1
-    }
-
-    def diff(d0: Long, d1: Long) = (d0 - d1)
-
-    def div(d0: Long, d1: Long) = (d0 / d1)
-  }
-
-  implicit object DateTimePlottable extends Plottable[DateTime, Long] {
-
-    def compare(dt1: DateTime, dt2: DateTime) = dt1.compareTo(dt2)
-
-    def diff(t0: DateTime, t1: DateTime) = (t0.getMillis - t1.getMillis)
-
-    def div(dt0: Long, dt1: Long) = (dt0.toDouble / dt1)
-  }
-
-}
-
 class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]], connect: Boolean = true)(
-  implicit xPlottable: Plottable[X, DX], yPlottable: Plottable[Y, DY]) extends JPanel {
+  implicit xPlottable: Plottable[X], yPlottable: Plottable[Y]) extends JPanel {
 
   val PAD = 50
   val WIDTH = 600
@@ -73,10 +22,7 @@ class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]], connect: Boolean = true)(
   val minY = fs.map(_.values.min(yPlottable)).min(yPlottable)
   val maxY = fs.map(_.values.max(yPlottable)).max(yPlottable)
 
-  val scaledArea = new ScaledArea2D(
-    WIDTH, HEIGHT, PAD,
-    minX, maxX, xPlottable.diff, xPlottable.div,
-    minY, maxY, yPlottable.diff, yPlottable.div)
+  val scaledArea = new ScaledArea2D(WIDTH, HEIGHT, PAD, minX, maxX, minY, maxY)
 
   override def paintComponent(g: Graphics): Unit = {
     val size = getSize()

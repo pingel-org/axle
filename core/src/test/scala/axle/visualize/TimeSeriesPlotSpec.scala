@@ -6,7 +6,7 @@ class TimeSeriesPlotSpec {
   import collection._
   import math.{ Pi, cos, sin }
   import axle.visualize._
-  import axle.visualize.Plot._
+  import axle.visualize.Plottable._
   import org.joda.time.DateTime
 
   def randomTimeSeries() = {
@@ -15,7 +15,7 @@ class TimeSeriesPlotSpec {
     val f = Random.nextDouble
     val now = new DateTime()
     new immutable.TreeMap[DateTime, Double]() ++
-      (0 to 100).map(i => (now.plusMinutes(2 * i) -> amp * sin(phase + (i / (10 * f))))).toMap
+      (0 to 100).map(j => (now.plusMinutes(2 * j) -> amp * sin(phase + (j / (10 * f))))).toMap
   }
 
   val tss = (0 until 20).map(i => randomTimeSeries()).toList
