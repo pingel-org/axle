@@ -1,23 +1,26 @@
 package axle.visualize
 
-import axle.graph.JungDirectedGraphFactory._
-
-import javax.swing.JFrame
-import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke }
 import java.awt.event.MouseEvent
-
-import edu.uci.ics.jung.algorithms.layout.{ Layout, FRLayout, CircleLayout }
-import edu.uci.ics.jung.graph.{ Graph, SparseGraph, SparseMultigraph }
-import edu.uci.ics.jung.visualization.{ BasicVisualizationServer, VisualizationViewer }
-import edu.uci.ics.jung.visualization.control.{ CrossoverScalingControl, DefaultModalGraphMouse, PluggableGraphMouse, PickingGraphMousePlugin, TranslatingGraphMousePlugin, ModalGraphMouse, ScalingGraphMousePlugin }
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller
-import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
+import java.awt.BasicStroke
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Paint
+import java.awt.Stroke
 
 import org.apache.commons.collections15.Transformer
 
+import axle.graph.JungDirectedGraphFactory.{JungDirectedGraph => jdg}
+import axle.graph.JungDirectedGraphFactory.JungDirectedGraph
+import edu.uci.ics.jung.algorithms.layout.FRLayout
+import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
+import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
+import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
+import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
+import edu.uci.ics.jung.visualization.VisualizationViewer
+
 class JungDirectedGraphVisualization() {
 
-  def draw[VP, EP](jdg: JungDirectedGraph[VP, EP]): Unit = {
+  def component[VP, EP](jdg: JungDirectedGraph[VP, EP]) = {
 
     type V = jdg.type#V
     type E = jdg.type#E
@@ -70,11 +73,12 @@ class JungDirectedGraphVisualization() {
     // gm.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, 1.1f, 0.9f))
     vv.setGraphMouse(gm)
 
-    val frame = new JFrame("graph name")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    frame.getContentPane().add(vv)
-    frame.pack()
-    frame.setVisible(true)
+    // val frame = new JFrame("graph name")
+    // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    // frame.getContentPane().add(vv)
+    // frame.pack()
+    // frame.setVisible(true)
+    vv
   }
 
 }

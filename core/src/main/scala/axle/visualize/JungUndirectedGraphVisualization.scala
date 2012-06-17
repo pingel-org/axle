@@ -1,23 +1,28 @@
 package axle.visualize
 
-class JungUndirectedGraphVisualization {
+import java.awt.event.MouseEvent
+import java.awt.BasicStroke
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Paint
+import java.awt.Stroke
 
-  import javax.swing.JFrame
-  import axle.graph.JungUndirectedGraphFactory._
+import org.apache.commons.collections15.Transformer
 
-  def draw[VP, EP](jug: JungUndirectedGraph[VP, EP]): Unit = {
+import axle.graph.JungUndirectedGraphFactory.JungUndirectedGraph
+import edu.uci.ics.jung.algorithms.layout.FRLayout
+import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
+import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
+import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
+import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
+import edu.uci.ics.jung.visualization.VisualizationViewer
+
+class JungUndirectedGraphVisualization() {
+
+  def component[VP, EP](jug: JungUndirectedGraph[VP, EP]) = {
 
     type V = jug.type#V
     type E = jug.type#E
-
-    import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke }
-    import java.awt.event.MouseEvent
-    import edu.uci.ics.jung.algorithms.layout.{ FRLayout, Layout }
-    import edu.uci.ics.jung.graph.{ Graph, SparseGraph }
-    import edu.uci.ics.jung.visualization.VisualizationViewer
-    import edu.uci.ics.jung.visualization.control.{ PluggableGraphMouse, PickingGraphMousePlugin, TranslatingGraphMousePlugin }
-    import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
-    import org.apache.commons.collections15.Transformer
 
     val width = 700
     val height = 700
@@ -41,11 +46,11 @@ class JungUndirectedGraphVisualization {
     }
 
     val vertexLabelTransformer = new Transformer[V, String]() {
-      def transform(vertex: V) = vertex.toString()
+      def transform(vertex: V) = vertex.getPayload.toString
     }
 
     val edgeLabelTransformer = new Transformer[E, String]() {
-      def transform(edge: E) = edge.toString()
+      def transform(edge: E) = edge.getPayload.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
@@ -59,12 +64,7 @@ class JungUndirectedGraphVisualization {
     gm.add(new PickingGraphMousePlugin())
     vv.setGraphMouse(gm)
 
-    val frame = new JFrame("graph name")
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    frame.getContentPane().add(vv)
-    frame.pack()
-
-    frame.setVisible(true)
+    vv
   }
 
 }
