@@ -20,21 +20,18 @@ trait LinearRegression {
       (m: M[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ) - y(i, 0)))
     ) / X.rows
 
-  def gradientDescentImmutable(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
-    (0 until iterations).foldLeft(θ)((θi: M[Double], i: Int) => θi - (dθ(X, y, θi) * α))
-
-  def gradientDescentMutable(X: M[Double], y: M[Double], θo: M[Double], α: Double, iterations: Int) = {
-    var θi = θo.dup
-    var i = 0
-    while (i < iterations) {
-      θi -= dθ(X, y, θi) * α
-      i = i + 1
-    }
-    θi
-  }
-
   def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
-    gradientDescentImmutable(X, y, θ, α, iterations)
+    (0 until iterations).foldLeft((θ, List[Double]()))(
+      (in, i: Int) => {
+        val (θi: M[Double], errLog: List[Double]) = in
+        val errMatrix = dθ(X, y, θi)
+        val errTotal = (0 until errMatrix.rows).map(errMatrix(_, 0)).reduce(_+_)
+        (θi - (errMatrix * α), errTotal :: errLog)
+      }
+    )
+
+  //  def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
+  //    gradientDescentImmutable(X, y, θ, α, iterations)
 
   // non-unicode alias
   def dTheta(X: M[Double], y: M[Double], θ: M[Double]) = dθ(X, y, θ)
@@ -60,9 +57,9 @@ trait LinearRegression {
     val (scaledY, yMin, yRange) = scaleColumns(y)
     val θ0 = ones[Double](X.columns, 1)
 
-    val θ = gradientDescent(X, scaledY, θ0, α, N)
+    val (θ, errLog) = gradientDescent(X, scaledY, θ0, α, N)
 
-    LinearEstimator(featureExtractor, colMins, colRanges, θ, yMin, yRange)
+    LinearEstimator(featureExtractor, colMins, colRanges, θ, yMin, yRange, errLog.reverse)
   }
 
   case class LinearEstimator[D](
@@ -71,7 +68,8 @@ trait LinearRegression {
     colRanges: M[Double],
     θ: M[Double],
     yMin: M[Double],
-    yRange: M[Double]) {
+    yRange: M[Double],
+    errLog: List[Double]) {
 
     def estimate(observation: D) = {
       val featureList = featureExtractor(observation)

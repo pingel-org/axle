@@ -1,6 +1,7 @@
 package axle.ml
 
 import org.specs2.mutable._
+import collection._
 
 class LinearRegressionSpecification extends Specification {
 
@@ -8,6 +9,8 @@ class LinearRegressionSpecification extends Specification {
     "work" in {
 
       import LinearRegression._
+      import axle.visualize._
+      import axle.visualize.Plottable._
 
       case class RealtyListing(size: Double, bedrooms: Int, floors: Int, age: Int, price: Double)
 
@@ -29,7 +32,14 @@ class LinearRegressionSpecification extends Specification {
       val unknown = RealtyListing(1416, 3, 2, 40, 0.0)
 
       val priceGuess = estimator.estimate(unknown)
-      
+
+      val errTree = new immutable.TreeMap[Int, Double]() ++
+        (0 until estimator.errLog.length).map(j => j -> estimator.errLog(j)).toMap
+
+      val frame = new AxleFrame()
+      val vis = new Plot(List(errTree), true)
+      frame.add(vis)
+
       priceGuess must be equalTo (412.6509523494042)
     }
   }

@@ -28,6 +28,18 @@ object Plottable {
     def portion(left: Long, v: Long, right: Long) = (v - left).toDouble / (right - left)
   }
 
+  implicit object IntPlottable extends Plottable[Int] {
+
+    def compare(i1: Int, i2: Int) = (i1 - i2) match {
+      case 0 => 0
+      case r @ _ if r > 0 => 1
+      case _ => -1
+    }
+
+    def portion(left: Int, v: Int, right: Int) = (v - left).toDouble / (right - left)
+  }
+  
+  
   implicit object DateTimePlottable extends Plottable[DateTime] {
 
     def compare(dt1: DateTime, dt2: DateTime) = dt1.compareTo(dt2)
