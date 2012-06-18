@@ -1,3 +1,3 @@
 
-See the [wiki](https://github.com/adampingel/pingel.org/wiki/Axle)
-==============
+See the [wiki](https://github.com/adampingel/axle/wiki)
+=======================================================
