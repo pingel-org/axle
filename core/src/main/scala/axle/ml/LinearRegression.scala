@@ -1,5 +1,7 @@
 package axle.ml
 
+import collection._
+
 object LinearRegression extends LinearRegression()
 
 trait LinearRegression {
@@ -20,21 +22,17 @@ trait LinearRegression {
       (m: M[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ) - y(i, 0)))
     ) / X.rows
 
+  def dTheta(X: M[Double], y: M[Double], θ: M[Double]) = dθ(X, y, θ)
+
   def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
     (0 until iterations).foldLeft((θ, List[Double]()))(
-      (in, i: Int) => {
-        val (θi: M[Double], errLog: List[Double]) = in
+      (θiErrLog: (M[Double], List[Double]), i: Int) => {
+        val (θi, errLog) = θiErrLog
         val errMatrix = dθ(X, y, θi)
-        val errTotal = (0 until errMatrix.rows).map(errMatrix(_, 0)).reduce(_+_)
+        val errTotal = (0 until errMatrix.rows).map(errMatrix(_, 0)).reduce(_ + _)
         (θi - (errMatrix * α), errTotal :: errLog)
       }
     )
-
-  //  def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
-  //    gradientDescentImmutable(X, y, θ, α, iterations)
-
-  // non-unicode alias
-  def dTheta(X: M[Double], y: M[Double], θ: M[Double]) = dθ(X, y, θ)
 
   def regression[D](
     examples: Seq[D],
@@ -70,6 +68,9 @@ trait LinearRegression {
     yMin: M[Double],
     yRange: M[Double],
     errLog: List[Double]) {
+
+    def errTree() = new immutable.TreeMap[Int, Double]() ++
+      (0 until errLog.length).map(j => j -> errLog(j)).toMap
 
     def estimate(observation: D) = {
       val featureList = featureExtractor(observation)

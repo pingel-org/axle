@@ -33,12 +33,9 @@ class LinearRegressionSpecification extends Specification {
 
       val priceGuess = estimator.estimate(unknown)
 
-      val errTree = new immutable.TreeMap[Int, Double]() ++
-        (0 until estimator.errLog.length).map(j => j -> estimator.errLog(j)).toMap
-
-      val frame = new AxleFrame()
-      val vis = new Plot(List(errTree), true)
-      frame.add(vis)
+//      val frame = new AxleFrame()
+//      val vis = new Plot(List(estimator.errTree), true)
+//      frame.add(vis)
 
       priceGuess must be equalTo (412.6509523494042)
     }
