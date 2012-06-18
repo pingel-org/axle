@@ -31,8 +31,8 @@ val classifier = cluster(
   3, // K
   100) // iterations
 
-val frame = new AxleFrame()
-//frame.add(new KMeansVisualization(classifier))
+val frame1 = new AxleFrame()
+frame1.add(new KMeansVisualization(classifier))
 
-val plot = new Plot(classifier.distanceLogTreeMaps, true)
-frame.add(plot)
+//val frame2 = new AxleFrame()
+//frame2.add(new Plot(classifier.distanceLogTreeMaps, true))
