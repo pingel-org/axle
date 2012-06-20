@@ -6,22 +6,16 @@ import axle.visualize._
 
 case class Foo(x: Double, y: Double)
 
-def randomFoo(center: Foo, σ2: Double): Foo = {
+def randomFoo(center: Foo, σ2: Double) = {
   val distance = Random.nextGaussian() * σ2
   val angle = 2 * Pi * Random.nextDouble
   Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
 }
 
-val center1 = Foo(15, 15)
-val center2 = Foo(5, 15)
-val center3 = Foo(15, 5)
-
 val data = Random.shuffle(
-  (0 until 20).map(i => randomFoo(center1, 1.0)) ++
-  (0 until 30).map(i => randomFoo(center2, 1.0)) ++
-  (0 until 25).map(i => randomFoo(center3, 1.0)))
-
-println("data.length = " + data.length)
+  (0 until 20).map(i => randomFoo(Foo(15, 15), 1.0)) ++
+  (0 until 30).map(i => randomFoo(Foo( 5, 15), 1.0)) ++
+  (0 until 25).map(i => randomFoo(Foo(15,  5), 1.0)))
 
 val classifier = cluster(
   data,
@@ -31,8 +25,6 @@ val classifier = cluster(
   3, // K
   100) // iterations
 
-val frame1 = new AxleFrame()
-frame1.add(new KMeansVisualization(classifier))
+new AxleFrame().add(new KMeansVisualization(classifier))
 
-//val frame2 = new AxleFrame()
-//frame2.add(new Plot(classifier.distanceLogTreeMaps, true))
+new AxleFrame().add(new Plot(classifier.distanceLogTreeMaps, true))
