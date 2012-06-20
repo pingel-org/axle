@@ -20,10 +20,8 @@ trait Game {
     case true => Stream.empty
     case false => {
       val move = state.player.chooseMove(state)
-      for (player <- players()) {
-        player.notify(move)
-      }
-      val nextState = state.applyMove(move)
+      players.map(_.notify(move))
+      val nextState = state(move)
       Stream.cons((move, nextState), moveStateStream(nextState))
     }
   }
@@ -32,7 +30,7 @@ trait Game {
     case true => Stream.empty
     case false => {
       val move = moveIt.next
-      val nextState = state.applyMove(move)
+      val nextState = state(move)
       Stream.cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
   }
@@ -95,7 +93,7 @@ trait Game {
 
     def player(): PLAYER
 
-    def applyMove(move: MOVE): STATE
+    def apply(move: MOVE): STATE
 
     def isTerminal(): Boolean
 

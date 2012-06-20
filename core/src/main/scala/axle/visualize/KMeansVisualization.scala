@@ -16,9 +16,6 @@ class KMeansVisualization[D](classifier: KMeansClassifier[D]) extends JPanel {
 
   val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
 
-  val diffDouble = (d0: Double, d1: Double) => (d0 - d1)
-  val divDouble = (d0: Double, d1: Double) => (d0 / d1)
-
   val scaledArea = new ScaledArea2D(WIDTH, HEIGHT, PAD, 0.0, 1.0, 0.0, 1.0)
 
   def boundingRectangle(g2d: Graphics2D): Unit = {
