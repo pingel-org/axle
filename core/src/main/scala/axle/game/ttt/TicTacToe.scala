@@ -141,7 +141,7 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
       None
     }
 
-    def applyMove(move: TicTacToeMove): TicTacToeState = {
+    def apply(move: TicTacToeMove): TicTacToeState = {
       val resultBoard = board.dup
       resultBoard(positionToRow(move.position), positionToColumn(move.position)) = Some(player.getId)
       ttt.state(ttt.playerAfter(move.tttPlayer), resultBoard)
