@@ -1,8 +1,8 @@
 package axle.ml
 
 import org.specs2.mutable._
-import scala.util.Random
-import scala.math.{ Pi, cos, sin }
+import util.Random
+import math.{ Pi, cos, sin }
 
 class KMeansSpecification extends Specification {
 
@@ -11,34 +11,32 @@ class KMeansSpecification extends Specification {
 
       import KMeans._
 
-      case class Point(x: Double, y: Double)
+      case class Foo(x: Double, y: Double)
 
-      def randomPoint(center: Point, σ2: Double): Point = {
+      def fooSimilarity(foo1: Foo, foo2: Foo) = List(foo1.x - foo2.x, foo1.y - foo2.y).map(x => x * x).sum
+
+      def randomPoint(center: Foo, σ2: Double): Foo = {
         val distance = Random.nextGaussian() * σ2
         val angle = 2 * Pi * Random.nextDouble
-        Point(center.x + distance * cos(angle), center.y + distance * sin(angle))
+        Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
       }
 
-      val center1 = Point(15, 15)
-      val center2 = Point(5, 15)
-      val center3 = Point(15, 5)
-
       val data = Random.shuffle(
-        (0 until 20).map(i => randomPoint(center1, 1.0)) ++
-          (0 until 30).map(i => randomPoint(center2, 1.0)) ++
-          (0 until 25).map(i => randomPoint(center3, 1.0)))
+        (0 until 20).map(i => randomPoint(Foo(15, 15), 1.0)) ++
+          (0 until 30).map(i => randomPoint(Foo(5, 15), 1.0)) ++
+          (0 until 25).map(i => randomPoint(Foo(15, 5), 1.0)))
 
       val classifier = cluster(
         data, 2,
-        (p: Point) => List(p.x, p.y),
-        (features: List[Double]) => new Point(features(0), features(1)),
-        3, 100)
+        (p: Foo) => List(p.x, p.y),
+        (features: List[Double]) => Foo(features(0), features(1)),
+        3,
+        100)
 
-      val closestIndex = classifier.classify(new Point(14, 14))
+      val closestIndex = classifier.classify(Foo(14, 14))
       val closest = classifier.exemplar(closestIndex)
 
-      // TODO: assertions
-      closest must be equalTo (Point(15, 15))
+      fooSimilarity(closest, Foo(15, 15)) must be lessThan 2.0
     }
   }
 
