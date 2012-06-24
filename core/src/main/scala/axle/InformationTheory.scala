@@ -12,7 +12,7 @@ object InformationTheory {
 
   trait Distribution[A, INPUT] {
 
-    def getValues(): Set[A]
+    def getObjects(): Set[A]
 
     // val d: Map[A, Double]
 
@@ -20,6 +20,8 @@ object InformationTheory {
 
     def entropy(): Information#UOM
 
+    def H_:(): Information#UOM = entropy()
+    
     def huffmanCode[S](alphabet: Set[S]): Map[A, Seq[S]] = {
       // TODO
       // http://en.wikipedia.org/wiki/Huffman_coding
@@ -37,7 +39,7 @@ object InformationTheory {
 
     import Information._
 
-    def getValues() = values
+    def getObjects() = values
 
     def entropy() = {
       val n = 1 // TODO
@@ -66,9 +68,9 @@ object InformationTheory {
 
       import Information._
 
-      override def getValues() = p.keySet
+      override def getObjects() = p.keySet
 
-      def X() = getValues()
+      def X() = p.keySet
       
       def choose(): A = {
         var r = math.random
