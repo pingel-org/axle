@@ -33,10 +33,7 @@ class KMeansSpecification extends Specification {
         3,
         100)
 
-      val closestIndex = classifier.classify(Foo(14, 14))
-      val closest = classifier.exemplar(closestIndex)
-
-      fooSimilarity(closest, Foo(15, 15)) must be lessThan 2.0
+      fooSimilarity(classifier.exemplar(classifier.classify(Foo(14, 14))), Foo(15, 15)) must be lessThan 1.0
     }
   }
 
