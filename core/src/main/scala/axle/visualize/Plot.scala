@@ -5,8 +5,9 @@ import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import collection._
 
-class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]], connect: Boolean = true,
-  width: Int = 600, height: Int = 600,
+class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]],
+  connect: Boolean = true, drawKey: Boolean = true,
+  width: Int = 700, height: Int = 600,
   border: Int = 50, pointDiameter: Int = 4,
   title: Option[String] = None, xAxisLabel: Option[String] = None, yAxisLabel: Option[String] = None)(
     implicit xPlottable: Plottable[X], yPlottable: Plottable[Y]) extends JPanel {
@@ -23,11 +24,10 @@ class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]], connect: Boolean = true,
   val minY = fs.map(_.values.min(yPlottable)).min(yPlottable)
   val maxY = fs.map(_.values.max(yPlottable)).max(yPlottable)
 
-  val scaledArea = new ScaledArea2D(width, height, border, minX, maxX, minY, maxY)
+  val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)
 
-  override def paintComponent(g: Graphics): Unit = {
-    // val size = getSize()
-    val g2d = g.asInstanceOf[Graphics2D]
+  def labels(g2d: Graphics2D): Unit = {
+
     val fontMetrics = g2d.getFontMetrics
 
     title.map(text =>
@@ -48,7 +48,23 @@ class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]], connect: Boolean = true,
       g2d.translate(-tx, -ty)
     })
 
-    // yAxisLabel.map(_.zipWithIndex.map({ case (c: Char, i: Int) => g2d.drawString(c.toString, 20, height / 2 + i * 10) }))
+  }
+
+  def key(g2d: Graphics2D): Unit = {
+    val lineHeight = g2d.getFontMetrics.getHeight
+    for (((f, color), i) <- fs.zip(colorStream).zipWithIndex) {
+      g2d.setColor(color)
+      // TODO labels
+      g2d.drawString("series label", 620, 50 + lineHeight * i) // TODO embed position
+    }
+  }
+
+  override def paintComponent(g: Graphics): Unit = {
+
+    val g2d = g.asInstanceOf[Graphics2D]
+
+    labels(g2d)
+
     for ((f, color) <- fs.zip(colorStream)) {
       g2d.setColor(color)
       if (connect) {
@@ -60,6 +76,10 @@ class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]], connect: Boolean = true,
       for (x <- f.keys) {
         scaledArea.fillOval(g2d, Point2D(x, f(x)), pointDiameter, pointDiameter)
       }
+    }
+
+    if (drawKey) {
+      key(g2d)
     }
   }
 
