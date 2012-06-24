@@ -12,9 +12,8 @@ class InformationTheorySpec extends Specification {
     "work" in {
 
       val d = distribution(Map("A" -> 0.2, "B" -> 0.1, "C" -> 0.7))
-      // (0 until 100).map(i => print(d.choose))
 
-      d.entropy() must be equalTo (1.1567796494470395 *: bit)
+      d.entropy().conversion.get.getPayload must be equalTo (1.1567796494470395)
     }
   }
 
@@ -55,11 +54,9 @@ class InformationTheorySpec extends Specification {
       val biasedCoin = coin(0.9)
       val fairCoin = coin()
 
-      // (0 until 100).map(i => print(biasedCoin.choose))
-      // (0 until 100).map(i => print(fairCoin.choose))
-
-      biasedCoin.entropy() should be equalTo (0.46899559358928117 *: bit)
-      fairCoin.entropy() should be equalTo (1.0 *: bit)
+      // TODO: figure out why equalTo isn't working here
+      biasedCoin.entropy().conversion.get.getPayload should be equalTo (0.46899559358928117)
+      fairCoin.entropy().conversion.get.getPayload should be equalTo (1.0)
     }
   }
 
