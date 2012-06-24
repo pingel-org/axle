@@ -28,14 +28,14 @@
 
 package axle.iterator
 
-import scala.collection._
+import collection._
 
 /*
  * The cross-product should return tuples
  * 
  */
 
-class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
+class ListCrossProduct[E](lists: Seq[List[E]]) extends CrossProduct[E](lists) {
 
   val modulos = new Array[Int](lists.size + 1)
   modulos(lists.size) = 1
@@ -63,7 +63,7 @@ class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
     i
   }
   
-  def get(i: Int) = {
+  def apply(i: Int) = {
     var c = i
     val result = mutable.ArrayBuffer[E]()
     for (j <- 0 until lists.size) {
@@ -78,7 +78,7 @@ class ListCrossProduct[E](lists: List[List[E]]) extends CrossProduct[E](lists) {
 }
 
 
-class CrossProduct[E](iterables: List[_ <: Iterable[E]]) extends Iterable[List[E]] {
+class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]] {
   def getCollections() = iterables
   
   def iterator() = new CrossProductIterator[E](this)
