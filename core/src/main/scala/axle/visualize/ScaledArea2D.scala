@@ -3,16 +3,18 @@ package axle.visualize
 import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point }
 import javax.swing.JPanel
 import java.awt.event.MouseEvent
+import math.{ min, abs }
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
 case class Point2D[X, Y](x: X, y: Y)
 
-class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int, minX: X, maxX: X, minY: Y, maxY: Y)(
-  implicit xPortionable: Portionable[X], yPortionable: Portionable[Y]) {
+class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int,
+  minX: X, maxX: X, minY: Y, maxY: Y)(
+    implicit xPortionable: Portionable[X], yPortionable: Portionable[Y]) {
 
   val drawableWidth = width - (2 * pad)
-  
+
   val drawableHeight = height - (2 * pad)
 
   def framePoint(sp: Point2D[X, Y]) = new Point(
@@ -39,7 +41,7 @@ class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int, minX: X, maxX: X, mi
   def drawRectangle(g2d: Graphics2D, p0: Point2D[X, Y], p1: Point2D[X, Y]) = {
     val fp0 = framePoint(p0)
     val fp1 = framePoint(p1)
-    g2d.drawRect(math.min(fp0.x, fp1.x), math.min(fp0.y, fp1.y), math.abs(fp0.x - fp1.x), math.abs(fp0.y - fp1.y))
+    g2d.drawRect(min(fp0.x, fp1.x), min(fp0.y, fp1.y), abs(fp0.x - fp1.x), abs(fp0.y - fp1.y))
   }
 
   def drawString(g2d: Graphics2D, s: String, p: Point2D[X, Y]) = {

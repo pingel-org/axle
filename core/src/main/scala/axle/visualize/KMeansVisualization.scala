@@ -7,16 +7,14 @@ import java.awt.event.MouseEvent
 import axle.ml.KMeans._
 import axle.visualize.Plottable._
 
-class KMeansVisualization[D](classifier: KMeansClassifier[D]) extends JPanel {
-
-  val PAD = 50
-  val WIDTH = 600
-  val HEIGHT = 600
-  val DIAMETER = 10 // of data points
+class KMeansVisualization[D](
+  classifier: KMeansClassifier[D],
+  width: Int = 600, height: Int = 600,
+  border: Int = 50, pointDiameter: Int = 10) extends JPanel {
 
   val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
 
-  val scaledArea = new ScaledArea2D(WIDTH, HEIGHT, PAD, 0.0, 1.0, 0.0, 1.0)
+  val scaledArea = new ScaledArea2D(width, height, border, 0.0, 1.0, 0.0, 1.0)
 
   def boundingRectangle(g2d: Graphics2D): Unit = {
     g2d.setColor(Color.black)
@@ -26,9 +24,9 @@ class KMeansVisualization[D](classifier: KMeansClassifier[D]) extends JPanel {
   def centroid(g2d: Graphics2D, i: Int): Unit = {
     val center = Point2D(classifier.μ(i, 0), classifier.μ(i, 1))
     g2d.setColor(Color.darkGray)
-    scaledArea.fillOval(g2d, center, 3 * DIAMETER, 3 * DIAMETER)
+    scaledArea.fillOval(g2d, center, 3 * pointDiameter, 3 * pointDiameter)
     g2d.setColor(colors(i % colors.length))
-    scaledArea.drawOval(g2d, center, 3 * DIAMETER, 3 * DIAMETER)
+    scaledArea.drawOval(g2d, center, 3 * pointDiameter, 3 * pointDiameter)
   }
 
   def cluster(g2d: Graphics2D, i: Int): Unit = {
@@ -37,7 +35,7 @@ class KMeansVisualization[D](classifier: KMeansClassifier[D]) extends JPanel {
       if (classifier.A(r, 0) == i) {
         // TODO figure out what to do when N > 2
         val center = Point2D(classifier.scaledX(r, 0), classifier.scaledX(r, 1))
-        scaledArea.fillOval(g2d, center, DIAMETER, DIAMETER)
+        scaledArea.fillOval(g2d, center, pointDiameter, pointDiameter)
         // scaledArea.drawString(g2d, r.toString + "(%.2f,%.2f)".format(center.x, center.y), center)
       }
     }

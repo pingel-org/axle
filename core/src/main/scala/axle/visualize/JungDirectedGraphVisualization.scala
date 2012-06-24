@@ -9,7 +9,7 @@ import java.awt.Stroke
 
 import org.apache.commons.collections15.Transformer
 
-import axle.graph.JungDirectedGraphFactory.{JungDirectedGraph => jdg}
+import axle.graph.JungDirectedGraphFactory.{ JungDirectedGraph => jdg }
 import axle.graph.JungDirectedGraphFactory.JungDirectedGraph
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
@@ -18,16 +18,12 @@ import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 import edu.uci.ics.jung.visualization.VisualizationViewer
 
-class JungDirectedGraphVisualization() {
+class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
   def component[VP, EP](jdg: JungDirectedGraph[VP, EP]) = {
 
     type V = jdg.type#V
     type E = jdg.type#E
-
-    val width = 700
-    val height = 700
-    val border = 50
 
     // see
     // http://www.grotto-networking.com/JUNG/

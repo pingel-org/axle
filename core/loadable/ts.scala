@@ -17,7 +17,7 @@ def randomTimeSeries() = {
 
 val tss = (0 until 20).map(i => randomTimeSeries()).toList
 val frame = new AxleFrame()
-val vis = new Plot(tss, true)
+val vis = new Plot(tss, true, title = Some("Random Sin Waves"), xAxisLabel=Some("x"), yAxisLabel=Some("random f(x) involving sin"))
 
 frame.add(vis)
 
