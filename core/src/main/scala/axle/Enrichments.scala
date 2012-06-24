@@ -9,17 +9,12 @@ object Enrichments {
 
   case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
 
-    // Note: When gt is a Set, Sigma and Pi
-    // would harmfully unique results of f(_)
-    // if not for the toSeq call.
-    // We may want GenTraversable.aggregate here
-    
-    def Σ(f: T => Double): Double = gt.toSeq.map(f(_)).sum
+    def Σ(f: T => Double) = gt.aggregate(0.0)(_ + f(_), _ + _)
 
     def Sigma(f: T => Double) = Σ(f)
 
-    def Π(f: T => Double): Double = gt.toSeq.map(f(_)).product
-    
+    def Π(f: T => Double): Double = gt.aggregate(1.0)(_ * f(_), _ * _)
+
     def Pi(f: T => Double) = Π(f)
 
     def ∀(p: T => Boolean) = gt.forall(p)
@@ -30,13 +25,15 @@ object Enrichments {
 
     def triples(): GenTraversable[(T, T, T)] = for (x <- gt; y <- gt; z <- gt) yield (x, y, z)
 
-    def ⨯[S](right: GenTraversable[S]) = for(x <- gt; y <- right) yield (x, y)
-    
+    def ⨯[S](right: GenTraversable[S]) = for (x <- gt; y <- right) yield (x, y)
+
   }
 
   implicit def enrichGenTraversable[T](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
 
   case class EnrichedBoolean(b: Boolean) {
+
+    def ¬:() = !b
 
     def ∧(other: Boolean) = b && other
     def and(other: Boolean) = b && other
@@ -44,7 +41,11 @@ object Enrichments {
     def ∨(other: Boolean) = b || other
     def or(other: Boolean) = b || other
 
+    def ⊃(other: Boolean) = (!b) || other
     def implies(other: Boolean) = (!b) || other
+
+    def ⊕(other: Boolean) = ((!b) && (!other)) || (b && other)
+    def ⊻(other: Boolean) = ((!b) && (!other)) || (b && other)
   }
 
   implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
@@ -52,15 +53,13 @@ object Enrichments {
   case class EnrichedList[T](list: List[T]) {
 
     // def ⨯[S](right: GenTraversable[S]) = new ListCrossProduct[T](Seq(list, right)).iterator
-    
+
   }
 
   implicit def enrichList[T](list: List[T]) = EnrichedList(list)
 
+  //  case class EnrichedSet[T](s: Set[T]) {}
+  //
+  //  implicit def enrichSet[T](s: Set[T]) = EnrichedSet(s)
 
-//  case class EnrichedSet[T](s: Set[T]) {}
-//
-//  implicit def enrichSet[T](s: Set[T]) = EnrichedSet(s)
-  
-  
 }
