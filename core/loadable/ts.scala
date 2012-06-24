@@ -11,13 +11,13 @@ def randomTimeSeries() = {
   val amp = Random.nextDouble
   val f = Random.nextDouble
   val now = new DateTime()
-  new immutable.TreeMap[DateTime, Double]() ++
-      (0 to 100).map(j => (now.plusMinutes(2 * j) -> amp * sin(phase + (j / (10 * f))))).toMap
+  (phase + " " + amp + " " + f, new immutable.TreeMap[DateTime, Double]() ++
+      (0 to 100).map(j => (now.plusMinutes(2 * j) -> amp * sin(phase + (j / (10 * f))))).toMap)
 }
 
-val tss = (0 until 20).map(i => randomTimeSeries()).toList
+val lfs = (0 until 20).map(i => randomTimeSeries()).toList
 val frame = new AxleFrame()
-val vis = new Plot(tss, true, title = Some("Random Sin Waves"), xAxisLabel=Some("x"), yAxisLabel=Some("random f(x) involving sin"))
+val vis = new Plot(lfs, true, title = Some("Random Sin Waves"), xAxisLabel=Some("x"), yAxisLabel=Some("random f(x) involving sin"))
 
 frame.add(vis)
 

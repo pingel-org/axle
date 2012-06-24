@@ -5,7 +5,7 @@ import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import collection._
 
-class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]],
+class Plot[X, DX, Y, DY](lfs: Seq[(String, SortedMap[X, Y])],
   connect: Boolean = true, drawKey: Boolean = true,
   width: Int = 700, height: Int = 600,
   border: Int = 50, pointDiameter: Int = 4,
@@ -19,10 +19,10 @@ class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]],
   val clockwise90 = math.Pi / -2.0
   val counterClockwise90 = -1.0 * clockwise90
 
-  val minX = fs.map(_.firstKey).min(xPlottable)
-  val maxX = fs.map(_.lastKey).max(xPlottable)
-  val minY = fs.map(_.values.min(yPlottable)).min(yPlottable)
-  val maxY = fs.map(_.values.max(yPlottable)).max(yPlottable)
+  val minX = lfs.map(_._2.firstKey).min(xPlottable)
+  val maxX = lfs.map(_._2.lastKey).max(xPlottable)
+  val minY = lfs.map(_._2.values.min(yPlottable)).min(yPlottable)
+  val maxY = lfs.map(_._2.values.max(yPlottable)).max(yPlottable)
 
   val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)
 
@@ -52,10 +52,10 @@ class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]],
 
   def key(g2d: Graphics2D): Unit = {
     val lineHeight = g2d.getFontMetrics.getHeight
-    for (((f, color), i) <- fs.zip(colorStream).zipWithIndex) {
+    for ((((label, f), color), i) <- lfs.zip(colorStream).zipWithIndex) {
       g2d.setColor(color)
       // TODO labels
-      g2d.drawString("series label", 620, 50 + lineHeight * i) // TODO embed position
+      g2d.drawString(label, 620, 50 + lineHeight * i) // TODO embed position
     }
   }
 
@@ -65,7 +65,7 @@ class Plot[X, DX, Y, DY](fs: Seq[SortedMap[X, Y]],
 
     labels(g2d)
 
-    for ((f, color) <- fs.zip(colorStream)) {
+    for (((label, f), color) <- lfs.zip(colorStream)) {
       g2d.setColor(color)
       if (connect) {
         val xsStream = f.keysIterator.toStream
