@@ -9,11 +9,16 @@ object Enrichments {
 
   case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
 
-    def Σ(f: T => Double): Double = gt.map(f(_)).sum
+    // Note: When gt is a Set, Sigma and Pi
+    // would harmfully unique results of f(_)
+    // if not for the toSeq call.
+    // We may want GenTraversable.aggregate here
+    
+    def Σ(f: T => Double): Double = gt.toSeq.map(f(_)).sum
 
     def Sigma(f: T => Double) = Σ(f)
 
-    def Π(f: T => Double): Double = gt.map(f(_)).product
+    def Π(f: T => Double): Double = gt.toSeq.map(f(_)).product
     
     def Pi(f: T => Double) = Π(f)
 
@@ -26,8 +31,7 @@ object Enrichments {
     def triples(): GenTraversable[(T, T, T)] = for (x <- gt; y <- gt; z <- gt) yield (x, y, z)
 
     def ⨯[S](right: GenTraversable[S]) = for(x <- gt; y <- right) yield (x, y)
-    // new ListCrossProduct[T](List(gt, right)).iterator
-
+    
   }
 
   implicit def enrichGenTraversable[T](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
