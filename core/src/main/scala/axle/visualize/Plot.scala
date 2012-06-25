@@ -9,7 +9,9 @@ class Plot[X, DX, Y, DY](lfs: Seq[(String, SortedMap[X, Y])],
   connect: Boolean = true, drawKey: Boolean = true,
   width: Int = 700, height: Int = 600,
   border: Int = 50, pointDiameter: Int = 4,
-  title: Option[String] = None, xAxisLabel: Option[String] = None, yAxisLabel: Option[String] = None)(
+  title: Option[String] = None,
+  xAxis: Y, xAxisLabel: Option[String] = None,
+  yAxis: X, yAxisLabel: Option[String] = None)(
     implicit xPlottable: Plottable[X], yPlottable: Plottable[Y]) extends JPanel {
 
   val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
@@ -63,8 +65,11 @@ class Plot[X, DX, Y, DY](lfs: Seq[(String, SortedMap[X, Y])],
 
     val g2d = g.asInstanceOf[Graphics2D]
 
+    g2d.setColor(Color.black)
     labels(g2d)
-
+    scaledArea.verticalLine(g2d, yAxis)
+    scaledArea.horizontalLine(g2d, xAxis)
+    
     for (((label, f), color) <- lfs.zip(colorStream)) {
       g2d.setColor(color)
       if (connect) {
