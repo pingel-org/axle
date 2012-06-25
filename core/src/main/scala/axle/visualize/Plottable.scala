@@ -1,5 +1,7 @@
 package axle.visualize
 
+import math.{ pow, abs, log, floor, ceil }
+
 trait Plottable[T] extends Ordering[T] with Portionable[T]
 
 object Plottable {
@@ -7,8 +9,6 @@ object Plottable {
   import org.joda.time.DateTime
 
   implicit object DoublePlottable extends Plottable[Double] {
-
-    import math.{ pow, abs, log, floor, ceil, BigDecimal }
 
     def compare(d1: Double, d2: Double) = (d1 - d2) match {
       case 0.0 => 0
@@ -59,11 +59,36 @@ object Plottable {
 
   implicit object DateTimePlottable extends Plottable[DateTime] {
 
+    import org.joda.time._
+
     def compare(dt1: DateTime, dt2: DateTime) = dt1.compareTo(dt2)
 
     def portion(left: DateTime, v: DateTime, right: DateTime) = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
 
-    def tics(from: DateTime, to: DateTime): Seq[(DateTime, String)] = List()
+    def step(duration: Duration): Duration = {
+      // TODO: bigger and smaller time-scales
+      if (duration.isLongerThan(Days.ONE.toStandardDuration)) {
+        Days.ONE.toStandardDuration
+      } else if (duration.isLongerThan(Hours.SEVEN.toStandardDuration)) {
+        Hours.TWO.toStandardDuration
+      } else if (duration.isLongerThan(Hours.ONE.toStandardDuration)) {
+        Hours.ONE.toStandardDuration
+      } else if (duration.isLongerThan(Minutes.THREE.toStandardDuration)) {
+        Minutes.ONE.toStandardDuration
+      } else {
+        Seconds.ONE.toStandardDuration
+      }
+    }
+
+    def tics(from: DateTime, to: DateTime): Seq[(DateTime, String)] = {
+      val dur = new Interval(from, to).toDuration
+      val s = step(dur)
+      val n = dur.getMillis / s.getMillis
+      (0L to n).map(i => {
+        val d = from.plus(s.getMillis * i)
+        (d, d.toString()) // TODO: Format
+      })
+    }
   }
 
 }

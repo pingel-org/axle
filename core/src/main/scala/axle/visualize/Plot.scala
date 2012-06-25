@@ -76,8 +76,14 @@ class Plot[X, DX, Y, DY](
 
   def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = xTics.map({
     case (x, label) => {
+      val bottomScaled = Point2D(x, minY)
+      val bottomUnscaled = scaledArea.framePoint(bottomScaled)
       g2d.setColor(Color.lightGray)
       scaledArea.drawLine(g2d, Point2D(x, minY), Point2D(x, maxY))
+      g2d.setColor(Color.black)
+      // TODO: angle xtics?
+      g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
+      g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
     }
   })
 
