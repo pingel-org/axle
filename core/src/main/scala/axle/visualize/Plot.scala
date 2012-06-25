@@ -94,7 +94,7 @@ class Plot[X, DX, Y, DY](
       g2d.setColor(Color.lightGray)
       scaledArea.drawLine(g2d, leftScaled, Point2D(maxX, y))
       g2d.setColor(Color.black)
-      g2d.drawString(label, leftUnscaled.x - fontMetrics.stringWidth(label) - 2, leftUnscaled.y + fontMetrics.getHeight / 2)
+      g2d.drawString(label, leftUnscaled.x - fontMetrics.stringWidth(label) - 2, leftUnscaled.y - fontMetrics.getHeight / 2)
       g2d.drawLine(leftUnscaled.x - 2, leftUnscaled.y, leftUnscaled.x + 2, leftUnscaled.y)
     }
   })
