@@ -1,18 +1,24 @@
 package axle.visualize
 
-import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point, FontMetrics }
+import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point, FontMetrics, Font }
 import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import collection._
 import math.{ pow, floor, log, abs }
 
-class Plot[X, DX, Y, DY](lfs: Seq[(String, SortedMap[X, Y])],
-  connect: Boolean = true, drawKey: Boolean = true,
-  width: Int = 700, height: Int = 600,
-  border: Int = 50, pointDiameter: Int = 4,
+class Plot[X, DX, Y, DY](
+  lfs: Seq[(String, SortedMap[X, Y])],
+  connect: Boolean = true,
+  drawKey: Boolean = true,
+  width: Int = 700,
+  height: Int = 600,
+  border: Int = 50,
+  pointDiameter: Int = 4,
   title: Option[String] = None,
-  xAxis: Y, xAxisLabel: Option[String] = None,
-  yAxis: X, yAxisLabel: Option[String] = None)(
+  xAxis: Y,
+  xAxisLabel: Option[String] = None,
+  yAxis: X,
+  yAxisLabel: Option[String] = None)(
     implicit xPlottable: Plottable[X], yPlottable: Plottable[Y]) extends JPanel {
 
   val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
@@ -32,14 +38,20 @@ class Plot[X, DX, Y, DY](lfs: Seq[(String, SortedMap[X, Y])],
 
   val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)
 
+  val normalFont = new Font("Courier New", Font.BOLD, 12)
+  val titleFont = new Font("Palatino", Font.BOLD, 20)
+
   def labels(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = {
 
-    title.map(text =>
+    title.map(text => {
+      g2d.setFont(titleFont)
       g2d.drawString(text, (width - fontMetrics.stringWidth(text)) / 2, 20)
-    )
+    })
+
+    g2d.setFont(normalFont)
 
     xAxisLabel.map(text =>
-      g2d.drawString(text, (width - fontMetrics.stringWidth(text)) / 2, height - 20)
+      g2d.drawString(text, (width - fontMetrics.stringWidth(text)) / 2, height + (fontMetrics.getHeight - border) / 2)
     )
 
     yAxisLabel.map(text => {
