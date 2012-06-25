@@ -65,28 +65,28 @@ object Plottable {
 
     def portion(left: DateTime, v: DateTime, right: DateTime) = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
 
-    def step(duration: Duration): Duration = {
+    def step(duration: Duration): (Duration, String) = {
       // TODO: bigger and smaller time-scales
       if (duration.isLongerThan(Days.ONE.toStandardDuration)) {
-        Days.ONE.toStandardDuration
+        (Days.ONE.toStandardDuration, "MM/dd hh")
       } else if (duration.isLongerThan(Hours.SEVEN.toStandardDuration)) {
-        Hours.TWO.toStandardDuration
+        (Hours.TWO.toStandardDuration, "dd hh:mm")
       } else if (duration.isLongerThan(Hours.ONE.toStandardDuration)) {
-        Hours.ONE.toStandardDuration
+        (Hours.ONE.toStandardDuration, "dd hh:mm")
       } else if (duration.isLongerThan(Minutes.THREE.toStandardDuration)) {
-        Minutes.ONE.toStandardDuration
+        (Minutes.ONE.toStandardDuration, "hh:mm")
       } else {
-        Seconds.ONE.toStandardDuration
+        (Seconds.ONE.toStandardDuration, "mm:ss")
       }
     }
 
     def tics(from: DateTime, to: DateTime): Seq[(DateTime, String)] = {
       val dur = new Interval(from, to).toDuration
-      val s = step(dur)
+      val (s, fmt) = step(dur)
       val n = dur.getMillis / s.getMillis
       (0L to n).map(i => {
         val d = from.plus(s.getMillis * i)
-        (d, d.toString()) // TODO: Format
+        (d, d.toString(fmt))
       })
     }
   }
