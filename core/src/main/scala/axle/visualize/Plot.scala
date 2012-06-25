@@ -1,9 +1,10 @@
 package axle.visualize
 
-import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point }
+import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point, FontMetrics }
 import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import collection._
+import math.{ pow, floor, log, abs }
 
 class Plot[X, DX, Y, DY](lfs: Seq[(String, SortedMap[X, Y])],
   connect: Boolean = true, drawKey: Boolean = true,
@@ -26,11 +27,12 @@ class Plot[X, DX, Y, DY](lfs: Seq[(String, SortedMap[X, Y])],
   val minY = lfs.map(_._2.values.min(yPlottable)).min(yPlottable)
   val maxY = lfs.map(_._2.values.max(yPlottable)).max(yPlottable)
 
+  val xTics = xPlottable.tics(minX, maxX)
+  val yTics = yPlottable.tics(minY, maxY)
+
   val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)
 
-  def labels(g2d: Graphics2D): Unit = {
-
-    val fontMetrics = g2d.getFontMetrics
+  def labels(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = {
 
     title.map(text =>
       g2d.drawString(text, (width - fontMetrics.stringWidth(text)) / 2, 20)
@@ -56,20 +58,42 @@ class Plot[X, DX, Y, DY](lfs: Seq[(String, SortedMap[X, Y])],
     val lineHeight = g2d.getFontMetrics.getHeight
     for ((((label, f), color), i) <- lfs.zip(colorStream).zipWithIndex) {
       g2d.setColor(color)
-      // TODO labels
       g2d.drawString(label, 620, 50 + lineHeight * i) // TODO embed position
     }
   }
 
+  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = xTics.map({
+    case (x, label) => {
+      g2d.setColor(Color.lightGray)
+      scaledArea.drawLine(g2d, Point2D(x, minY), Point2D(x, maxY))
+    }
+  })
+
+  def drawYTics(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = yTics.map({
+    case (y, label) => {
+      val leftScaled = Point2D(minX, y)
+      val leftUnscaled = scaledArea.framePoint(leftScaled)
+      g2d.setColor(Color.lightGray)
+      scaledArea.drawLine(g2d, leftScaled, Point2D(maxX, y))
+      g2d.setColor(Color.black)
+      g2d.drawString(label, leftUnscaled.x - fontMetrics.stringWidth(label) - 2, leftUnscaled.y + fontMetrics.getHeight / 2)
+      g2d.drawLine(leftUnscaled.x - 2, leftUnscaled.y, leftUnscaled.x + 2, leftUnscaled.y)
+    }
+  })
+
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
+    val fontMetrics = g2d.getFontMetrics
 
     g2d.setColor(Color.black)
-    labels(g2d)
+    labels(g2d, fontMetrics)
     scaledArea.verticalLine(g2d, yAxis)
     scaledArea.horizontalLine(g2d, xAxis)
-    
+
+    drawXTics(g2d, fontMetrics)
+    drawYTics(g2d, fontMetrics)
+
     for (((label, f), color) <- lfs.zip(colorStream)) {
       g2d.setColor(color)
       if (connect) {
