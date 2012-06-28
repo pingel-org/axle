@@ -1,6 +1,6 @@
 package axle.visualize
 
-import math.{ pow, abs, log, floor, ceil }
+import math.{ pow, abs, log10, floor, ceil }
 
 trait Plottable[T] extends Ordering[T] with Portionable[T]
 
@@ -18,7 +18,7 @@ object Plottable {
 
     def portion(left: Double, v: Double, right: Double) = (v - left) / (right - left)
 
-    def step(from: Double, to: Double): Double = pow(10, floor(log(abs(to - from))) - 1)
+    def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
 
     def tics(from: Double, to: Double): Seq[(Double, String)] = {
       val s = step(from, to)
@@ -41,7 +41,18 @@ object Plottable {
 
     def portion(left: Long, v: Long, right: Long) = (v - left).toDouble / (right - left)
 
-    def tics(from: Long, to: Long): Seq[(Long, String)] = List()
+    def step(from: Long, to: Long): Long = max(1, pow(10, ceil(log10(abs(to - from))) - 1).toLong)
+
+    def tics(from: Long, to: Long): Seq[(Long, String)] = {
+      val s = step(from, to)
+      val n = (to - from) / s
+      val start = (s * (from / s))
+      (0L to n).map(i => {
+        val v = start + s * i
+        (v, v.toString)
+      }).filter(vs => (vs._1 >= from && vs._1 <= to))
+    }
+
   }
 
   implicit object IntPlottable extends Plottable[Int] {
@@ -54,7 +65,17 @@ object Plottable {
 
     def portion(left: Int, v: Int, right: Int) = (v - left).toDouble / (right - left)
 
-    def tics(from: Int, to: Int): Seq[(Int, String)] = List()
+    def step(from: Int, to: Int): Int = max(1, pow(10, ceil(log10(abs(to - from))) - 1).toInt)
+
+    def tics(from: Int, to: Int): Seq[(Int, String)] = {
+      val s = step(from, to)
+      val n = (to - from) / s
+      val start = (s * (from / s))
+      (0 to n).map(i => {
+        val v = start + s * i
+        (v, v.toString)
+      }).filter(vs => (vs._1 >= from && vs._1 <= to))
+    }
   }
 
   implicit object DateTimePlottable extends Plottable[DateTime] {
