@@ -6,7 +6,7 @@ object KMeans extends KMeans()
 
 /**
  * KMeans
- * 
+ *
  */
 
 trait KMeans {
@@ -192,9 +192,10 @@ trait KMeans {
       cid._1
     }
 
-    def distanceLogTreeMaps() = (0 until K()).map(i =>
-      new immutable.TreeMap[Int, Double]() ++ (0 until distanceLog.columns).map(j => j -> distanceLog(i, j)).toMap
-    )
+    def distanceTreeMap(i: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++ (0 until distanceLog.columns).map(j => j -> distanceLog(i, j)).toMap
+
+    def distanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K()).map(i =>
+      ("centroid " + i, distanceTreeMap(i))).toList
 
     // def draw(): Unit = new KMeansVisualization(this).draw()
   }
