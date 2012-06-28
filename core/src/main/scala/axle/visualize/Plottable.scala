@@ -112,4 +112,40 @@ object Plottable {
     }
   }
 
+  import axle.quanta.Information
+
+  object InfoPlottable extends InfoPlottable()
+  
+  class InfoPlottable extends Plottable[Information#UOM] {
+
+    type UOM = Information#UOM
+
+    def unit2double(u: UOM) = u.conversion.get.getPayload.doubleValue // TODO: this should not be used
+
+    def compare(u1: UOM, u2: UOM) = (unit2double(u1) - unit2double(u2)) match {
+      case 0.0 => 0
+      case r @ _ if r > 0.0 => 1
+      case _ => -1
+    }
+
+    def portion(left: UOM, v: UOM, right: UOM) =
+      (unit2double(v) - unit2double(left)) / (unit2double(right) - unit2double(left))
+
+    def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
+
+    def tics(from: UOM, to: UOM): Seq[(UOM, String)] = {
+      val fromD = unit2double(from)
+      val toD = unit2double(to)
+      val toUnit = to.conversion.get.getDest.getPayload
+      val s = step(fromD, toD)
+      val n = ceil((toD - fromD) / s).toInt
+      val start = s * floor(fromD / s)
+      (1 to n).map(i => { // TODO: should be (0 to n) but there's a divide by zero error
+        val v = start + s * i
+        (toUnit.*:(new java.math.BigDecimal(v)), v.toString) // new BigDecimal(v) *:
+      }) // TODO filter(vs => (vs._1 >= fromD && vs._1 <= toD))
+    }
+
+  }
+
 }
