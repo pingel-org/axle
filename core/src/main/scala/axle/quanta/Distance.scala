@@ -11,7 +11,7 @@ class Distance extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(conversion, name, symbol, link)
+    extends UnitOfMeasurementImpl(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
     conversion: Option[CGE] = None,
@@ -56,7 +56,7 @@ class Distance extends Quantum {
 
   val parsec = quantity("3.26", lightyear, Some("Parsec"), Some("pc"), Some("http://en.wikipedia.org/wiki/Parsec"))
 
-  val milkyWayDiameter = quantity(one.scaleByPowerOfTen(5), lightyear, Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
+  val milkyWayDiameter = quantity(oneBD.scaleByPowerOfTen(5), lightyear, Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
 
   val toAndromeda = quantity("2.6E6", lightyear, Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
 

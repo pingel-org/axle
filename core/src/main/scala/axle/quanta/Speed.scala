@@ -11,7 +11,7 @@ class Speed extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurement(conversion, name, symbol, link)
+    extends UnitOfMeasurementImpl(conversion, name, symbol, link)
 
 
   def newUnitOfMeasurement(

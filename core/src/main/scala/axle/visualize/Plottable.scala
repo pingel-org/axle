@@ -115,12 +115,12 @@ object Plottable {
   import axle.quanta.Information
 
   object InfoPlottable extends InfoPlottable()
-  
+
   class InfoPlottable extends Plottable[Information#UOM] {
 
     type UOM = Information#UOM
 
-    def unit2double(u: UOM) = u.conversion.get.getPayload.doubleValue // TODO: this should not be used
+    def unit2double(u: UOM) = u.getConversion.get.getPayload.doubleValue // TODO: this should not be used
 
     def compare(u1: UOM, u2: UOM) = (unit2double(u1) - unit2double(u2)) match {
       case 0.0 => 0
@@ -136,7 +136,7 @@ object Plottable {
     def tics(from: UOM, to: UOM): Seq[(UOM, String)] = {
       val fromD = unit2double(from)
       val toD = unit2double(to)
-      val toUnit = to.conversion.get.getDest.getPayload
+      val toUnit = to.getConversion.get.getDest.getPayload
       val s = step(fromD, toD)
       val n = ceil((toD - fromD) / s).toInt
       val start = s * floor(fromD / s)
