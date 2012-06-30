@@ -76,30 +76,26 @@ trait Quantum {
     def in(other: UOM): UOM
   }
 
-  class ZeroWithUnit() extends UnitOfMeasurement {
+  trait ZeroWithUnit extends UnitOfMeasurement {
 
     self: UOM =>
 
-    def getConversion(): Option[CGE] = None
-    def setConversion(cge: CGE): Unit = {}
-    def getLabel(): String = "zero with unit"
-    def getSymbol(): Option[String] = Some("zero with unit")
-    def getLink(): Option[String] = None
+    override def setConversion(cge: CGE): Unit = {}
 
-    def +(right: UOM): UOM = right
-    def -(right: UOM): UOM = right * -1
-    def *(bd: BigDecimal): UOM = self
-    def /(bd: BigDecimal): UOM = self
+    override def +(right: UOM): UOM = right
+    override def -(right: UOM): UOM = right * -1
+    override def *(bd: BigDecimal): UOM = self
+    override def /(bd: BigDecimal): UOM = self
 
     override def *:(bd: BigDecimal) = self
     // def in_:(bd: BigDecimal) = quantity(bd, this) // How would this be defined on the zero?
 
     // TODO: remove nulls
-    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
-    def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
-    def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
-    def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
-    def in(other: UOM): UOM = null.asInstanceOf[UOM]
+    override def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
+    override def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
+    override def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
+    override def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
+    override def in(other: UOM): UOM = null.asInstanceOf[UOM]
 
   }
 
@@ -202,7 +198,7 @@ trait Quantum {
 
   }
 
-  // def zero(): UOM
+  def zero(): UOM
 
   def newUnitOfMeasurement(
     conversion: Option[CGE] = None,

@@ -18,7 +18,8 @@ class Time extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): TimeUnit = new TimeUnit(conversion, name, symbol, link)
-  
+
+  def zero() = new TimeUnit(None, None, None, None) with ZeroWithUnit
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
   // "http://en.wikipedia.org/wiki/Time"

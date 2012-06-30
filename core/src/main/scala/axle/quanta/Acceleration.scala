@@ -6,10 +6,6 @@ class Acceleration extends Quantum {
 
   type UOM = AccelerationUnit
 
-//  class NoAcceleration() extends ZeroWithUnit()
-
-  // def zero() = new NoAcceleration()
-
   class AccelerationUnit(
     conversion: Option[CGE] = None,
     name: Option[String] = None,
@@ -22,6 +18,8 @@ class Acceleration extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): AccelerationUnit = new AccelerationUnit(conversion, name, symbol, link)
+
+  def zero() = new AccelerationUnit(None, None, None, None) with ZeroWithUnit
 
   import Speed.{ mps, fps }
   import Time.{ second }

@@ -19,6 +19,8 @@ class Volume extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): VolumeUnit = new VolumeUnit(conversion, name, symbol, link)
 
+  def zero() = new VolumeUnit(None, None, None, None) with ZeroWithUnit
+
   import Distance.{ meter, km }
   import Area.{ m2, km2 }
 

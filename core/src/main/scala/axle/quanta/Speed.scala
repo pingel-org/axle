@@ -13,13 +13,14 @@ class Speed extends Quantum {
     link: Option[String] = None)
     extends UnitOfMeasurementImpl(conversion, name, symbol, link)
 
-
   def newUnitOfMeasurement(
     conversion: Option[CGE] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): SpeedUnit = new SpeedUnit(conversion, name, symbol, link)
-  
+
+  def zero() = new SpeedUnit(None, None, None, None) with ZeroWithUnit
+
   import Distance.{meter, mile, ft}
   import Time.{second, hour}
 
