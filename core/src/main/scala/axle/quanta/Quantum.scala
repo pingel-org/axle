@@ -252,7 +252,7 @@ trait Quantum {
     qsymbol: Option[String] = None,
     qlink: Option[String] = None): UOM = {
     // TODO (mutually recursive?) (magnitude.doubleValue == 0.0) match { case true => zero()
-    println("quantity " + magnitude + " " + unit)
+    // println("quantity " + magnitude + " " + unit)
     val uom = newUnitOfMeasurement(None, qname, qsymbol, qlink)
     val uomVertex = vertexFor(uom)
     val unitVertex = vertexFor(unit)
