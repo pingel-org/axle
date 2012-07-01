@@ -39,11 +39,8 @@ trait Quantum {
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
-  implicit def toBD(d: Double) = {
-    println("d = " + d + " d.toString = " + d.toString)
-    new BigDecimal(d.toString)
-  }
-
+  implicit def toBD(d: Double) = new BigDecimal(d.toString)
+ 
   implicit def toBD(s: String) = new BigDecimal(s)
 
   def bdDivide(numerator: BigDecimal, denominator: BigDecimal) = numerator.divide(
