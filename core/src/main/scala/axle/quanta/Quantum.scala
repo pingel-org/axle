@@ -43,12 +43,11 @@ trait Quantum {
 
   implicit def toBD(s: String) = new BigDecimal(s)
 
-  def bdDivide(numerator: BigDecimal, denominator: BigDecimal) =
-    numerator.divide(
-      denominator,
-      max(max(numerator.precision, abs(numerator.scale)),
-        max(denominator.precision, abs(denominator.scale))),
-      java.math.RoundingMode.HALF_UP)
+  def bdDivide(numerator: BigDecimal, denominator: BigDecimal) = numerator.divide(
+    denominator,
+    max(max(numerator.precision, abs(numerator.scale)),
+      max(denominator.precision, abs(denominator.scale))),
+    java.math.RoundingMode.HALF_UP)
 
   val oneBD = new BigDecimal("1")
   val zeroBD = new BigDecimal("0")
@@ -70,6 +69,8 @@ trait Quantum {
 
     def *:(bd: BigDecimal): UOM
 
+    def magnitudeIn(u: UOM): BigDecimal
+
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM
     def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM
@@ -90,6 +91,7 @@ trait Quantum {
 
     override def *:(bd: BigDecimal) = self
     // def in_:(bd: BigDecimal) = quantity(bd, this) // How would this be defined on the zero?
+    override def magnitudeIn(u: UOM): BigDecimal = zeroBD
 
     // TODO: remove nulls
     override def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = null.asInstanceOf[QRES#UOM]
@@ -148,17 +150,30 @@ trait Quantum {
       quantity(bd.subtract((right in uom).getConversion.get.getPayload), uom) // TODO remove .get
     }
 
-    def *(bd: BigDecimal): UOM = conversion
-      .map(c => quantity(c.getPayload.multiply(bd), c.getSource.getPayload))
-      .getOrElse(quantity(bd, this))
+    def *(bd: BigDecimal): UOM = bd.doubleValue match {
+      case 0.0 => zero()
+      case _ => conversion
+        .map(c => quantity(c.getPayload.multiply(bd), c.getSource.getPayload))
+        .getOrElse(quantity(bd, this))
+    }
 
     def /(bd: BigDecimal): UOM = conversion
       .map(c => quantity(bdDivide(c.getPayload, bd), c.getSource.getPayload))
       .getOrElse(quantity(bdDivide(oneBD, bd), this))
 
-    override def *:(bd: BigDecimal) = quantity(bd, this)
+    override def *:(bd: BigDecimal) = bd.doubleValue match {
+      case 0.0 => zero()
+      case _ => quantity(bd, this)
+    }
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
+
+    // TODO: arm's length?
+    def magnitudeIn(u: UOM): BigDecimal = if (getConversion.get == u) {
+      getConversion.get.getPayload
+    } else {
+      in(u).getConversion.get.getPayload
+    }
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
       val resultBD = conversion.map(c =>
@@ -232,17 +247,16 @@ trait Quantum {
     unit: UOM,
     qname: Option[String] = None,
     qsymbol: Option[String] = None,
-    qlink: Option[String] = None): UOM = (magnitude.doubleValue == 0.0) match {
-    case true => zero()
-    case _ => {
-      val uom = newUnitOfMeasurement(None, qname, qsymbol, qlink)
-      val uomVertex = vertexFor(uom)
-      val unitVertex = vertexFor(unit)
-      val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
-      val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
-      uom.setConversion(conversion2)
-      uom
-    }
+    qlink: Option[String] = None): UOM = {
+    // TODO (mutually recursive?) (magnitude.doubleValue == 0.0) match { case true => zero()
+    println("quantity " + magnitude + " " + unit)
+    val uom = newUnitOfMeasurement(None, qname, qsymbol, qlink)
+    val uomVertex = vertexFor(uom)
+    val unitVertex = vertexFor(unit)
+    val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
+    val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
+    uom.setConversion(conversion2)
+    uom
   }
 
   val wikipediaUrl: String
