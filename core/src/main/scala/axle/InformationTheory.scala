@@ -21,7 +21,7 @@ object InformationTheory {
     def entropy(): Information#UOM
 
     def H_:(): Information#UOM = entropy()
-    
+
     def huffmanCode[S](alphabet: Set[S]): Map[A, Seq[S]] = {
       // TODO
       // http://en.wikipedia.org/wiki/Huffman_coding
@@ -71,7 +71,7 @@ object InformationTheory {
       override def getObjects() = p.keySet
 
       def X() = p.keySet
-      
+
       def choose(): A = {
         var r = math.random
         for ((k, v) <- p) {
@@ -83,7 +83,10 @@ object InformationTheory {
         throw new Exception("malformed distribution")
       }
 
-      def entropy() = X.Σ(x => -p(x) * log2(p(x))) *: bit
+      def entropy() = X.Σ(x => p(x) match {
+        case 0.0 => 0.0
+        case _ => -p(x) * log2(p(x))
+      }) *: bit
 
     }
   }

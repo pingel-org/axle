@@ -116,7 +116,7 @@ object Plottable {
 
   import axle.quanta.Information._
 
-//  object InfoPlottable extends InfoPlottable()
+  //  object InfoPlottable extends InfoPlottable()
 
   class InfoPlottable(base: UOM) extends Plottable[UOM] {
 
@@ -126,7 +126,7 @@ object Plottable {
       case _ => -1
     }
 
-    def portion(left: UOM, v: UOM, right: UOM) = 
+    def portion(left: UOM, v: UOM, right: UOM) =
       (v.magnitudeIn(base).doubleValue - left.magnitudeIn(base).doubleValue) /
         (right.magnitudeIn(base).doubleValue - left.magnitudeIn(base).doubleValue)
 

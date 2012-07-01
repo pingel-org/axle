@@ -39,7 +39,10 @@ trait Quantum {
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
-  implicit def toBD(d: Double) = new BigDecimal(d.toString)
+  implicit def toBD(d: Double) = {
+    println("d = " + d + " d.toString = " + d.toString)
+    new BigDecimal(d.toString)
+  }
 
   implicit def toBD(s: String) = new BigDecimal(s)
 
@@ -85,7 +88,7 @@ trait Quantum {
     override def setConversion(cge: CGE): Unit = {}
 
     override def +(right: UOM): UOM = right
-    override def -(right: UOM): UOM = right * -1
+    override def -(right: UOM): UOM = right * -1.0
     override def *(bd: BigDecimal): UOM = self
     override def /(bd: BigDecimal): UOM = self
 
