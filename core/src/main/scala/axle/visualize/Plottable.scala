@@ -126,11 +126,9 @@ object Plottable {
       case _ => -1
     }
 
-    def portion(left: UOM, v: UOM, right: UOM) = {
-      println("portion: " + left + " " + v + " " + right)
+    def portion(left: UOM, v: UOM, right: UOM) = 
       (v.magnitudeIn(base).doubleValue - left.magnitudeIn(base).doubleValue) /
         (right.magnitudeIn(base).doubleValue - left.magnitudeIn(base).doubleValue)
-    }
 
     def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
 
