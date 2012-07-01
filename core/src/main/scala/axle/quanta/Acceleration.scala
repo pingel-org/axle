@@ -19,7 +19,7 @@ class Acceleration extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): AccelerationUnit = new AccelerationUnit(conversion, name, symbol, link)
 
-  def zero() = new AccelerationUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new AccelerationUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
 
   import Speed.{ mps, fps }
   import Time.{ second }

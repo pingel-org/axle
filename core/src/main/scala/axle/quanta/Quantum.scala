@@ -51,6 +51,7 @@ trait Quantum {
       java.math.RoundingMode.HALF_UP)
 
   val oneBD = new BigDecimal("1")
+  val zeroBD = new BigDecimal("0")
 
   trait UnitOfMeasurement {
 
@@ -231,15 +232,17 @@ trait Quantum {
     unit: UOM,
     qname: Option[String] = None,
     qsymbol: Option[String] = None,
-    qlink: Option[String] = None): UOM = {
-
-    val uom = newUnitOfMeasurement(None, qname, qsymbol, qlink)
-    val uomVertex = vertexFor(uom)
-    val unitVertex = vertexFor(unit)
-    val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
-    val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
-    uom.setConversion(conversion2)
-    uom
+    qlink: Option[String] = None): UOM = (magnitude.doubleValue == 0.0) match {
+    case true => zero()
+    case _ => {
+      val uom = newUnitOfMeasurement(None, qname, qsymbol, qlink)
+      val uomVertex = vertexFor(uom)
+      val unitVertex = vertexFor(unit)
+      val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
+      val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
+      uom.setConversion(conversion2)
+      uom
+    }
   }
 
   val wikipediaUrl: String

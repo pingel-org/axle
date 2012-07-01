@@ -19,7 +19,7 @@ class Distance extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): DistanceUnit = new DistanceUnit(conversion, name, symbol, link)
 
-  def zero() = new DistanceUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new DistanceUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
   // "http://en.wikipedia.org/wiki/Distance"

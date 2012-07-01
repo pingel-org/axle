@@ -19,7 +19,7 @@ class Power extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): PowerUnit = new PowerUnit(conversion, name, symbol, link)
 
-  def zero() = new PowerUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new PowerUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
     

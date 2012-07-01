@@ -19,7 +19,7 @@ class Force extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): ForceUnit = new ForceUnit(conversion, name, symbol, link)
 
-  def zero() = new ForceUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new ForceUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
     

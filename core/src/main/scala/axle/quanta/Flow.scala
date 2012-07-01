@@ -19,7 +19,7 @@ class Flow extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): FlowUnit = new FlowUnit(conversion, name, symbol, link)
 
-  def zero() = new FlowUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new FlowUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
     

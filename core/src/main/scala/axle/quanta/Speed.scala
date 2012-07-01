@@ -19,7 +19,7 @@ class Speed extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): SpeedUnit = new SpeedUnit(conversion, name, symbol, link)
 
-  def zero() = new SpeedUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new SpeedUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
 
   import Distance.{meter, mile, ft}
   import Time.{second, hour}

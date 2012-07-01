@@ -19,7 +19,7 @@ class Information extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): InformationUnit = new InformationUnit(conversion, name, symbol, link)
 
-  def zero() = new InformationUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new InformationUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
   
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Information"
 

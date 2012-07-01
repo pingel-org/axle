@@ -13,7 +13,7 @@ class Energy extends Quantum {
     link: Option[String] = None)
     extends UnitOfMeasurementImpl(conversion, name, symbol, link)
 
-  def zero() = new EnergyUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new EnergyUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
   
   def newUnitOfMeasurement(
     conversion: Option[CGE] = None,

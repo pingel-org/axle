@@ -19,7 +19,7 @@ class Mass extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): MassUnit = new MassUnit(conversion, name, symbol, link)
 
-  def zero() = new MassUnit(None, None, None, None) with ZeroWithUnit
+  def zero() = new MassUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"
