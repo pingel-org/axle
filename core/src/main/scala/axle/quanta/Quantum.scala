@@ -168,11 +168,14 @@ trait Quantum {
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
-    // TODO: arm's length?
     def magnitudeIn(u: UOM): BigDecimal = if (getConversion.get == u) {
       getConversion.get.getPayload
     } else {
-      in(u).getConversion.get.getPayload
+      val otherVertex = vertexFor(u)
+      val thisVertex = vertexFor(this)
+      conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.getPayload))
+      }).getOrElse(throw new Exception("no conversion path from " + this + " to " + u))
     }
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
