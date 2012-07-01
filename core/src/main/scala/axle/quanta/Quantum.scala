@@ -40,7 +40,7 @@ trait Quantum {
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
   implicit def toBD(d: Double) = new BigDecimal(d.toString)
- 
+
   implicit def toBD(s: String) = new BigDecimal(s)
 
   def bdDivide(numerator: BigDecimal, denominator: BigDecimal) = numerator.divide(
@@ -168,15 +168,20 @@ trait Quantum {
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
-    def magnitudeIn(u: UOM): BigDecimal = if (getConversion.get == u) {
-      getConversion.get.getPayload
-    } else {
-      val otherVertex = vertexFor(u)
-      val thisVertex = vertexFor(this)
-      conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
+    //    def magnitudeIn(u: UOM): BigDecimal = if (getConversion.get == u) {
+    //      getConversion.get.getPayload
+    //    } else {
+    //      val otherVertex = vertexFor(u)
+    //      val thisVertex = vertexFor(this)
+    //      conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
+    //        path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.getPayload))
+    //      }).getOrElse(throw new Exception("no conversion path from " + this + " to " + u))
+    //    }
+
+    def magnitudeIn(u: UOM): BigDecimal =
+      conversionGraph.shortestPath(vertexFor(u), vertexFor(this)).map(path => {
         path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.getPayload))
       }).getOrElse(throw new Exception("no conversion path from " + this + " to " + u))
-    }
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
       val resultBD = conversion.map(c =>

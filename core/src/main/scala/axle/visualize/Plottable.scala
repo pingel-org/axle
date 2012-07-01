@@ -116,8 +116,6 @@ object Plottable {
 
   import axle.quanta.Information._
 
-  //  object InfoPlottable extends InfoPlottable()
-
   class InfoPlottable(base: UOM) extends Plottable[UOM] {
 
     def compare(u1: UOM, u2: UOM) = (u1.magnitudeIn(base).doubleValue - u2.magnitudeIn(base).doubleValue) match {
