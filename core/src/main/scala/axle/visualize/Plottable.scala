@@ -136,9 +136,10 @@ object Plottable {
       val s = step(fromD, toD)
       val n = ceil((toD - fromD) / s).toInt
       val start = s * floor(fromD / s)
+      val sD = new BigDecimal(s)
       (0 to n).map(i => {
-        val v = start + s * i
-        (v *: base, v.toString)
+        val v = start + sD * i
+        (v.underlying *: base, v.toString)
       }) // TODO filter(vs => (vs._1 >= fromD && vs._1 <= toD))
     }
 
