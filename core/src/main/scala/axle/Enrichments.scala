@@ -31,6 +31,22 @@ object Enrichments {
 
   implicit def enrichGenTraversable[T](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
 
+  case class EnrichedByteArray(barr: Array[Byte]) {
+    def ⊕(other: Array[Byte]): Array[Byte] = barr.zip(other).map(lr => (lr._1 ^ lr._2).toByte).toArray
+  }
+
+  implicit def enrichByteArray(barr: Array[Byte]) = EnrichedByteArray(barr)
+
+  case class EnrichedArray[T](arr: Array[T]) {
+
+    def apply(range: Range) = {
+      assert(range.step == 1)
+      arr.slice(range.start, range.end)
+    }
+  }
+
+  implicit def enrichArray[T](arr: Array[T]) = EnrichedArray(arr)
+
   case class EnrichedBoolean(b: Boolean) {
 
     def ¬:() = !b
