@@ -2,11 +2,10 @@
 import collection._
 import axle.visualize.{ Plot, Plottable, AxleFrame }
 import Plottable._
-import axle.quanta.Information
-import Information._
+import axle.quanta.Information._
 import axle.InformationTheory._
 
-val hm: SortedMap[Double, UOM] = new immutable.TreeMap[Double, UOM]() ++ (0 to 100).map(i => (i / 100.0, coin(i / 100.0).entropy())).toMap
+val hm = new immutable.TreeMap[Double, UOM]() ++ (0 to 100).map(i => (i / 100.0, coin(i / 100.0).entropy())).toMap
 
 new AxleFrame().add(new Plot(List(("h", hm)),
  connect = true, drawKey = false,
