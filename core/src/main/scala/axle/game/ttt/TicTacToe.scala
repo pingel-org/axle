@@ -19,7 +19,7 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
   type STATE = TicTacToeState
   type OUTCOME = TicTacToeOutcome
 
-  var playas = Map[String, TicTacToePlayer]()
+  val playas = mutable.Map[String, TicTacToePlayer]()
 
   def state(player: TicTacToePlayer, board: Matrix[Option[String]]) =
     new TicTacToeState(player, board)

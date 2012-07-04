@@ -34,8 +34,8 @@ case class ParseError(msg: String) extends ParserAction()
 
 class Parse(grammar: LLLanguage, symbol: String, input: String) {
 
-  var inputBuffer: String = ""
-  var stack = new mutable.Stack[Symbol]()
+  val inputBuffer = ""
+  val stack = new mutable.Stack[Symbol]()
 
   var i = 0
 
@@ -43,7 +43,7 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
   val target = grammar.nonTerminals(symbol)
   stack.push(target)
 
-  var derivation = List[ParserAction]()
+  val derivation = new mutable.ListBuffer[ParserAction]()
 
   def inputBufferWithMarker = input.substring(0, i) + "|" + input.substring(i, input.length)
 
@@ -68,7 +68,7 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
       }
       case ParseError(msg) => { sys.error(this + "\nparse error: " + msg) }
     }
-    derivation = action :: derivation
+    derivation += action // Note: reversed from previous version
   }
 
   def nextAction: ParserAction = stack.top match {
@@ -107,7 +107,7 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
 
 class ParseTableGrammarBuilder(ptgName: String) {
 
-  var grammar = new LLLanguage(ptgName)
+  val grammar = new LLLanguage(ptgName)
 
   def nt(label: String): ParseTableGrammarBuilder = {
     grammar.nonTerminals += (label -> NonTerminal(label))

@@ -21,7 +21,7 @@ case class Language(
   for ((names, assoc) <- precedence_groups) {
     for (rule_name <- names) {
       info("rule %s level %s".format(rule_name, level))
-      var rule = name2rule(rule_name)
+      val rule = name2rule(rule_name)
       rule.precedenceLevel = level
       rule.associativity = assoc
     }

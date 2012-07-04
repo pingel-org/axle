@@ -4,6 +4,6 @@ import axle.ast._
 
 object EmptyParseTableLanguage {
 
-  var grammar = new ParseTableGrammarBuilder("empty").build
+  val grammar = new ParseTableGrammarBuilder("empty").build
 
 }

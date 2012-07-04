@@ -28,15 +28,16 @@ trait Accumulator {
 
 abstract class MetaNodeFormatter[R, S](language: Language, highlight: Set[MetaNode], conform: Boolean)
   extends Accumulator {
-  def result: R
-  var tokens: S
+  
+  def result(): R
+  val tokens: S
 
-  var indentation_level: Int = 0
-  var column: Int = 0
-  var needs_indent: Boolean = true
+  var indentation_level = 0
+  var column = 0
+  var needs_indent = true
   var lineno = 1
-  var stack = new mutable.Stack[Option[(Int, String)]]()
-  var _node2lineno = mutable.Map[MetaNode, Int]()
+  val stack = new mutable.Stack[Option[(Int, String)]]()
+  val _node2lineno = mutable.Map[MetaNode, Int]()
 
   def isConforming() = conform
   def shouldHighlight(node: MetaNode) = highlight.contains(node)

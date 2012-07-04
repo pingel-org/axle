@@ -26,7 +26,7 @@ object LLTest1 extends Loggable {
 	info(grammar)
 	info
 	info("Parser Actions:")
-	var replay = new Parse(grammar, "S", "(a+a)")
+	val replay = new Parse(grammar, "S", "(a+a)")
 	for( action <- parse.derivation ) {
 	  info(action)
 	  replay.apply(action)

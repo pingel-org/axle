@@ -12,7 +12,7 @@ object Util {
 
   def findLeaves(dirname: String, suffix: String): List[String] = {
     val dir = new File(dirname)
-    var result = new ListBuffer[String]()
+    val result = new ListBuffer[String]()
     for (f <- dir.listFiles) {
       if (f.isDirectory) {
         result.appendAll(findLeaves(f.getName(), suffix).map(h => f.getName + File.separator + h))
@@ -29,12 +29,11 @@ object Util {
     case null => ""
     case _ => {
       val sb = new StringBuilder()
-      var line = ""
       try {
         val reader = new BufferedReader(new InputStreamReader(is, "UTF-8"))
         var keepGoing = true
         while (keepGoing) {
-          line = reader.readLine()
+          val line = reader.readLine()
           if (line != null) {
             sb.append(line).append("\n")
           } else {

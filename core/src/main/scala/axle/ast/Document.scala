@@ -37,8 +37,8 @@ trait Document extends Loggable {
   //    val htmlFilename = Config.htmlDirectory + File.separator + shortFilename + ".html"
   //    new File(new File(htmlFilename).getParent).mkdirs
   //    val html = getGrammar.ast2html(getAst)
-  //    var outFile = new File(htmlFilename)
-  //    var out = new FileWriter(outFile)
+  //    val outFile = new File(htmlFilename)
+  //    val out = new FileWriter(outFile)
   //    out.write(html.toString)
   //    out.close()
   //  }

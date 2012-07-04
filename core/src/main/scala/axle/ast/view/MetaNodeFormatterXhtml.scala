@@ -7,9 +7,9 @@ import scala.xml._
 class XhtmlMetaNodeFormatter(language: Language, highlight: Set[MetaNode], conform: Boolean)
   extends MetaNodeFormatter[List[scala.xml.Node], mutable.ListBuffer[scala.xml.Node]](language, highlight, conform) {
 
-  override def result = tokens.toList
+  override def result() = tokens.toList
 
-  override var tokens = new mutable.ListBuffer[scala.xml.Node]()
+  override val tokens = new mutable.ListBuffer[scala.xml.Node]()
 
   override def toString(): String = tokens.toList.mkString("")
 

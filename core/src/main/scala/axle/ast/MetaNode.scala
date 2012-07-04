@@ -1,6 +1,8 @@
 
 package axle.ast
 
+import collection._
+
 abstract class MetaNode(lineno: Int) {
   def getLineNo: Int = lineno
   def column: Int = -1
@@ -32,8 +34,8 @@ object MetaNode {
 
     case JObject(fields: List[JField]) => {
 
-      var lineno: Int = parentLineNo
-      var meta_map: Map[String, MetaNode] = Map()
+      var lineno = parentLineNo
+      val meta_map = mutable.Map[String, MetaNode]()
       var meta_type = ""
 
       // TODO: use "find":

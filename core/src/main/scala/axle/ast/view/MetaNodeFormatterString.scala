@@ -8,7 +8,7 @@ class MetaNodeFormatterString(language: Language, highlight: mutable.Set[MetaNod
   extends MetaNodeFormatter[String, mutable.ListBuffer[String]](language, highlight, conform)
   with Loggable {
 
-  override var tokens = new mutable.ListBuffer[String]()
+  override val tokens = new mutable.ListBuffer[String]()
 
   override def result() = tokens.mkString("")
 

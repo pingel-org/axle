@@ -1,14 +1,14 @@
 package axle.ast.view
 
-import scala.xml.{ NodeSeq, Text }
-import scala.collection._
+import xml.{ NodeSeq, Text }
+import collection._
 import axle.ast._
 
 class XhtmlLinesMetaNodeAccumulatorState(xlf: XhtmlLinesMetaNodeFormatter) {
 
   var currentLine = new mutable.ListBuffer[scala.xml.Node]()
 
-  var lines = Map[Int, NodeSeq]()
+  val lines = mutable.Map[Int, NodeSeq]()
 
   def getLines(): Map[Int, NodeSeq] = {
     if (currentLine != null) {
@@ -69,11 +69,11 @@ class XhtmlLinesMetaNodeFormatter(language: Language, highlight: Set[MetaNode], 
   var currentLineNo = 1
   def advanceLine(): Unit = currentLineNo += 1
 
-  override var tokens = new mutable.Stack[XhtmlLinesMetaNodeAccumulatorState]()
+  override val tokens = new mutable.Stack[XhtmlLinesMetaNodeAccumulatorState]()
 
   tokens.push(new XhtmlLinesMetaNodeAccumulatorState(this))
 
-  def getLines: Map[Int, NodeSeq] = tokens.top.getLines
+  def getLines(): Map[Int, NodeSeq] = tokens.top.getLines
 
   override def toString() = "XhtmlLinesAccumulator.toString not implemented"
 

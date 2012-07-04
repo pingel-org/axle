@@ -19,10 +19,10 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     type S = (mutable.Set[V], mutable.Set[E], Map[V, mutable.Set[E]], Map[V, mutable.Set[E]])
 
-    var vertices = mutable.Set[V]()
-    var edges = mutable.Set[E]()
-    var vertex2outedges = mutable.Map[V, mutable.Set[E]]()
-    var vertex2inedges = mutable.Map[V, mutable.Set[E]]()
+    val vertices = mutable.Set[V]()
+    val edges = mutable.Set[E]()
+    val vertex2outedges = mutable.Map[V, mutable.Set[E]]()
+    val vertex2inedges = mutable.Map[V, mutable.Set[E]]()
 
     def getStorage() = (vertices, edges, vertex2outedges, vertex2inedges)
 
@@ -78,10 +78,10 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
     def vertex(payload: VP): V = new NativeDirectedGraphVertexImpl[VP](payload)
 
     def removeAllEdgesAndVertices(): Unit = {
-      vertices = mutable.Set[V]()
-      edges = mutable.Set[E]()
-      vertex2outedges = mutable.Map[V, mutable.Set[E]]()
-      vertex2inedges = mutable.Map[V, mutable.Set[E]]()
+      vertices.clear()
+      edges.clear()
+      vertex2outedges.clear()
+      vertex2inedges.clear()
     }
 
     def deleteEdge(e: E): Unit = {
@@ -110,31 +110,20 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def getLeaves(): Set[V] = getVertices().filter(isLeaf(_))
 
-    def getNeighbors(v: V): Set[V] = {
-      var result = Set[V]()
-      vertex2outedges.get(v).map(_.map(edge => result += edge.getDest()))
-      vertex2inedges.get(v).map(_.map(edge => result += edge.getSource()))
-      result
-    }
+    def getNeighbors(v: V): Set[V] = getPredecessors(v) ++ getSuccessors(v)
 
     def precedes(v1: V, v2: V): Boolean = getPredecessors(v2).contains(v1)
 
-    def getPredecessors(v: V): Set[V] = {
-      var result = Set[V]()
-      vertex2inedges.get(v).map(_.map(edge => result += edge.getSource()))
-      result
-    }
+    def getPredecessors(v: V): Set[V] = 
+      vertex2inedges.get(v).map(_.map(_.getSource())).toSet.asInstanceOf[Set[V]]
 
     def isLeaf(v: V): Boolean = {
       val outEdges = vertex2outedges.get(v)
       outEdges == null || outEdges.size == 0
     }
 
-    def getSuccessors(v: V): Set[V] = {
-      var result = Set[V]()
-      vertex2outedges.get(v).map(_.map(edge => result += edge.getDest()))
-      result
-    }
+    def getSuccessors(v: V): Set[V] = 
+      vertex2inedges.get(v).map(_.map(_.getDest())).toSet.asInstanceOf[Set[V]]
 
     def outputEdgesOf(v: V): Set[E] = {
       var result = Set[E]()
@@ -223,11 +212,11 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def shortestPath(source: V, goal: V): Option[List[E]] = _shortestPath(source, goal, Set())
 
-//    def draw(): Unit = {
-//      // TODO: remove this cast
-//      val thisAsDG = this.asInstanceOf[JungDirectedGraphFactory.DirectedGraph[VP, EP]]
-//      JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsDG)(vp => vp, ep => ep).draw()
-//    }
+    //    def draw(): Unit = {
+    //      // TODO: remove this cast
+    //      val thisAsDG = this.asInstanceOf[JungDirectedGraphFactory.DirectedGraph[VP, EP]]
+    //      JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsDG)(vp => vp, ep => ep).draw()
+    //    }
 
   }
 
