@@ -58,8 +58,7 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
     val remainders = mutable.ArrayBuffer[scala.collection.mutable.Set[InE]]()
     val iterators = mutable.ArrayBuffer[Iterator[InE]]()
     var tuple = mutable.ArrayBuffer[InE]()
-    
-    //    	var i: Int
+
     if (permuter.getN > 0) {
       val firstRemainder = mutable.Set[InE]()
       firstRemainder ++= permuter.getObjects
@@ -91,7 +90,7 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
     def setRemainder(i: Int) = {
       //System.out.println("setRemainder: i = " + i);
       if (i > 0) {
-        var r = mutable.Set[InE]()
+        val r = mutable.Set[InE]()
         r ++= remainders(i - 1)
         r.remove(tuple(i - 1))
         remainders(i) = r
@@ -119,12 +118,12 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
     }
     
     def next() = {
-      //System.out.println("next: remainders = " + remainders + ", tuple = " + tuple);
+      // println("next: remainders = " + remainders + ", tuple = " + tuple);
       if (tuple == null) {
         throw new NoSuchElementException()
       }
       
-      var result = tuple.toList
+      val result = tuple.toList
       if (incrementLastAvailable(permuter.getN - 1)) {
         tuple = null
       }

@@ -2,7 +2,6 @@
 package axle.lx
 
 import collection._
-
 import axle.graph.JungDirectedGraphFactory._
 import axle.Enrichments._
 
@@ -16,8 +15,8 @@ object Angluin {
 
     def Q() = g.getVertices
 
-    var I = Set[AcceptorState]()
-    var F = Set[AcceptorState]()
+    val I = mutable.Set[AcceptorState]()
+    val F = mutable.Set[AcceptorState]()
 
     def addState(isInitial: Boolean, isFinal: Boolean): Unit = {
 
@@ -85,7 +84,7 @@ object Angluin {
 
   case class ListExpression(vs: List[Symbol]) extends Expression {
 
-    var v = new mutable.ListBuffer[Symbol]()
+    val v = new mutable.ListBuffer[Symbol]()
 
     v ++= vs
 

@@ -41,7 +41,7 @@ object Gold {
 
   case class Language() {
 
-    var sequences = Set[Expression]() // TODO: was TreeSet using new ExpressionComparator()
+    val sequences = mutable.Set[Expression]() // TODO: was TreeSet using new ExpressionComparator()
 
     def expression(ms: List[Morpheme]): Expression = {
       val expression = new Expression(ms)
@@ -114,7 +114,7 @@ object Gold {
 
   case class Vocabulary() {
 
-    var morphemes = Set[Morpheme]()
+    val morphemes = mutable.Set[Morpheme]()
 
     def morpheme(s: String) = {
       val m = new Morpheme(s)

@@ -4,6 +4,7 @@ import axle.graph.NativeDirectedGraphFactory._
 
 import java.math.BigDecimal
 import math.{ max, abs }
+import collection._
 
 /**
  * Quantum
@@ -246,7 +247,7 @@ trait Quantum {
     conversionGraph += (baseVertex -> resultVertex, bdDivide(oneBD, multiple))
   }
 
-  var uom2vertex = Map[UOM, CGV]()
+  val uom2vertex = mutable.Map[UOM, CGV]()
 
   def vertexFor(uom: UOM): CGV = uom2vertex(uom)
 

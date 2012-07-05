@@ -81,34 +81,6 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     override def isClique(vs: Set[V]): Boolean =
       vs.doubles.∀({ case (a, b) => ((a == b) || areNeighbors(a, b)) })
 
-    /**
-     *
-     * Note: getNumEdgesToForceClique used to also call:
-     *
-     *   edge(vi, vj, payload(vi, vj))
-     *
-     * for any edges counting towards the total
-     */
-
-    override def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
-      val vl = vs.toList
-      val ns = for (i <- 0 until (vl.size - 1); j <- (i + 1) until vl.size) yield {
-        if (areNeighbors(vl(i), vl(j))) { 0 } else { 1 }
-      }
-      ns.sum
-    }
-
-    override def forceClique(vs: Set[V], payload: (V, V) => EP): Unit = {
-      val vl = vs.toList
-      for (i <- 0 until (vl.size - 1); j <- (i + 1) until vl.size) {
-        val vi = vl(i)
-        val vj = vl(j)
-        if (!areNeighbors(vi, vj)) {
-          edge(vi, vj, payload(vi, vj))
-        }
-      }
-    }
-
     def degree(v: V) = getEdges(v).size
 
     def getEdges(v: V) = {

@@ -51,38 +51,23 @@ trait UndirectedGraphFactory extends GraphFactory {
       true
     }
 
-    def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
-
-      val N = vs.toList
-
-      var result = 0
-      for (i <- 0 until (N.size - 1)) {
-        val vi = N(i)
-        for (j <- (i + 1) until N.size) {
-          val vj = N(j)
-          if (!areNeighbors(vi, vj)) {
-            edge(vi, vj, payload(vi, vj))
-            result += 1
-          }
-        }
+    override def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
+      val vl = vs.toList
+      val ns = for (i <- 0 until (vl.size - 1); j <- (i + 1) until vl.size) yield {
+        if (areNeighbors(vl(i), vl(j))) { 0 } else { 1 }
       }
-
-      result
+      ns.sum
     }
 
-    def forceClique(vs: Set[V], payload: (V, V) => EP) {
-
-      val vList = vs.toList
-      for (i <- 0 until (vList.size - 1)) {
-        val vi = vList(i)
-        for (j <- (i + 1) until vList.size) {
-          val vj = vList(j)
-          if (!areNeighbors(vi, vj)) {
-            edge(vi, vj, payload(vi, vj))
-          }
+    override def forceClique(vs: Set[V], payload: (V, V) => EP): Unit = {
+      val vl = vs.toList
+      for (i <- 0 until (vl.size - 1); j <- (i + 1) until vl.size) {
+        val vi = vl(i)
+        val vj = vl(j)
+        if (!areNeighbors(vi, vj)) {
+          edge(vi, vj, payload(vi, vj))
         }
       }
-
     }
 
     // assert: among is a subset of vertices
