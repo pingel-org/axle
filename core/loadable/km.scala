@@ -1,6 +1,6 @@
 
-import scala.util.Random
-import scala.math.{ Pi, cos, sin }
+import util.Random
+import math.{ Pi, cos, sin }
 import axle.ml.KMeans._
 import axle.visualize._
 
