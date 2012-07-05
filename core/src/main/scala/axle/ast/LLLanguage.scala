@@ -19,7 +19,7 @@ class LLLanguage(override val name: String) extends Language(
 
   val llRules = mutable.Map[String, LLRule]()
 
-  val followMemo = scala.collection.mutable.Map[Symbol, Set[Symbol]]()
+  val followMemo = mutable.Map[Symbol, Set[Symbol]]()
 
   val parseTable = mutable.Map[Tuple2[NonTerminal, Symbol], LLRule]()
 

@@ -55,7 +55,7 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
   def iterator() = new PermutionIterator[E](this)
 
   class PermutionIterator[InE](permuter: Permuter[InE]) extends Iterator[List[InE]] {
-    val remainders = mutable.ArrayBuffer[scala.collection.mutable.Set[InE]]()
+    val remainders = mutable.ArrayBuffer[mutable.Set[InE]]()
     val iterators = mutable.ArrayBuffer[Iterator[InE]]()
     var tuple = mutable.ArrayBuffer[InE]()
 
