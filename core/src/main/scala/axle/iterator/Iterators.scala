@@ -1,7 +1,7 @@
 
 package axle.iterator {
 
-  import scala.collection._
+  import collection._
 
   case class Lister()
 

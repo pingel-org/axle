@@ -1,7 +1,7 @@
 
 package axle.lx
 
-import scala.collection._
+import collection._
 
 object Gold {
 

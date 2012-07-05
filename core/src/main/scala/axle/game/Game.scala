@@ -1,7 +1,7 @@
 
 package axle.game
 
-import scala.collection._
+import collection._
 
 trait Game {
 

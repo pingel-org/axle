@@ -1,8 +1,6 @@
 package axle.ast.language
 
-import scala.collection.mutable.Stack
-import scala.collection.mutable.Map
-
+import collection._
 import axle.ast._
 
 object LLTest2 {

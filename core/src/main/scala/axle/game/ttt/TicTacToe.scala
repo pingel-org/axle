@@ -3,8 +3,8 @@ package axle.game.ttt
 
 import axle.game._
 import axle.matrix.ArrayMatrixFactory._
-import scala.util.Random
-import scala.collection._
+import util.Random
+import collection._
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game

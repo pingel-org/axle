@@ -1,7 +1,7 @@
 
 package axle.lx
 
-import scala.collection._
+import collection._
 
 import axle.graph.JungDirectedGraphFactory._
 import axle.Enrichments._

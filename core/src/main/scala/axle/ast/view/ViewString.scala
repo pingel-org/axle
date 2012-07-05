@@ -2,7 +2,7 @@ package axle.ast.view
 
 import axle.ast._
 import axle.Loggable
-import scala.collection._
+import collection._
 
 object ViewString extends View[String] with Loggable {
 

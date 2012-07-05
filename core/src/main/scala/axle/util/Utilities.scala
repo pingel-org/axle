@@ -1,7 +1,7 @@
 
 package axle.util {
 
-  import scala.collection._
+  import collection._
   import java.lang.StringBuffer
 
   trait Printable {

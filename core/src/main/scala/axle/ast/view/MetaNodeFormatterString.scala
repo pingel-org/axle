@@ -2,7 +2,7 @@ package axle.ast.view
 
 import axle.Loggable
 import axle.ast._
-import scala.collection._
+import collection._
 
 class MetaNodeFormatterString(language: Language, highlight: mutable.Set[MetaNode], conform: Boolean)
   extends MetaNodeFormatter[String, mutable.ListBuffer[String]](language, highlight, conform)

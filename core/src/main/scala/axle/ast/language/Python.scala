@@ -1,7 +1,7 @@
 package axle.ast.language
 
 import axle.ast._
-import scala.util.matching.Regex
+import util.matching.Regex
 
 object Python {
 

@@ -2,7 +2,7 @@ package axle.graph
 
 trait UndirectedGraphFactory extends GraphFactory {
 
-  import scala.collection._
+  import collection._
 
   type G[VP, EP] <: UndirectedGraph[VP, EP]
 

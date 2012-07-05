@@ -1,7 +1,7 @@
 package axle.graph
 
-import scala.collection.JavaConverters._ // sions._
-import scala.collection._
+import collection.JavaConverters._
+import collection._
 
 object JungDirectedGraphFactory extends JungDirectedGraphFactory {
 

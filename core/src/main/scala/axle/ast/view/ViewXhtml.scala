@@ -3,8 +3,8 @@ package axle.ast.view
 
 import axle.ast._
 import axle.Loggable
-import scala.collection._
-import scala.xml.{ NodeSeq, Text }
+import collection._
+import xml.{ NodeSeq, Text }
 
 object ViewXhtml extends View[scala.xml.NodeSeq] with Loggable {
   // <html><head><link ref=... /></head><body>...</body><html>

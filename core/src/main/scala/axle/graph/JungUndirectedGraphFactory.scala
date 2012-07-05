@@ -1,7 +1,7 @@
 package axle.graph
 
-import scala.collection.JavaConversions._
-import scala.collection._
+import collection.JavaConverters._
+import collection._
 
 object JungUndirectedGraphFactory extends JungUndirectedGraphFactory
 
@@ -74,9 +74,9 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def getStorage() = jungGraph
 
-    def getVertices(): immutable.Set[V] = jungGraph.getVertices.toSet
+    def getVertices(): immutable.Set[V] = jungGraph.getVertices.asScala.toSet
 
-    def getEdges(): immutable.Set[E] = jungGraph.getEdges.toSet
+    def getEdges(): immutable.Set[E] = jungGraph.getEdges.asScala.toSet
 
     def size(): Int = jungGraph.getVertexCount()
 
@@ -92,9 +92,9 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def degree(v: V) = getEdges(v).size
 
-    def getEdges(v: V): Set[E] = jungGraph.getIncidentEdges(v).toSet
+    def getEdges(v: V): Set[E] = jungGraph.getIncidentEdges(v).asScala.toSet
 
-    def getNeighbors(v: V): Set[V] = jungGraph.getNeighbors(v).toSet
+    def getNeighbors(v: V): Set[V] = jungGraph.getNeighbors(v).asScala.toSet
 
     def delete(v: V): Unit = jungGraph.removeVertex(v)
 

@@ -4,7 +4,7 @@ object NativeDirectedGraphFactory extends NativeDirectedGraphFactory
 
 trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
-  import scala.collection._
+  import collection._
 
   type G[VP, EP] = NativeDirectedGraph[VP, EP]
 
@@ -114,7 +114,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def precedes(v1: V, v2: V): Boolean = getPredecessors(v2).contains(v1)
 
-    def getPredecessors(v: V): Set[V] = 
+    def getPredecessors(v: V): Set[V] =
       vertex2inedges.get(v).map(_.map(_.getSource())).toSet.asInstanceOf[Set[V]]
 
     def isLeaf(v: V): Boolean = {
@@ -122,14 +122,10 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
       outEdges == null || outEdges.size == 0
     }
 
-    def getSuccessors(v: V): Set[V] = 
-      vertex2inedges.get(v).map(_.map(_.getDest())).toSet.asInstanceOf[Set[V]]
+    def getSuccessors(v: V): Set[V] =
+      vertex2inedges.get(v).map(_.map(_.getDest())).toSet.asInstanceOf[Set[V]] // TODO cast
 
-    def outputEdgesOf(v: V): Set[E] = {
-      var result = Set[E]()
-      vertex2outedges.get(v).map(outEdges => result ++= outEdges)
-      result
-    }
+    def outputEdgesOf(v: V): immutable.Set[E] = vertex2outedges(v).toSet
 
     def descendantsIntersectsSet(v: V, s: Set[V]): Boolean =
       s.contains(v) || s.exists(x => descendantsIntersectsSet(x, s))

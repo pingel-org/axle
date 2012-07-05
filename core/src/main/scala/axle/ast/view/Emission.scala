@@ -1,8 +1,8 @@
 package axle.ast.view
 
 import axle.ast._
-import scala.xml._
-import scala.collection.mutable.ArrayBuffer
+import xml._
+import collection._
 import axle.Loggable
 
 object Emission extends Loggable {
@@ -10,10 +10,8 @@ object Emission extends Loggable {
   def emit(stmt: Statement, node: MetaNode, grammar: Language, formatter: MetaNodeFormatter[_, _]): Unit = {
 
     // println("emit(stmt = " + stmt + ", nodeOpt = " + nodeOpt + ", grammar, formatter)")
-
     //info("stmt: " + stmt)
     //info("node: " + node)
-    //info
 
     (node, stmt) match {
       case (MetaNodeRule(_, m, _), Sub(name)) => {

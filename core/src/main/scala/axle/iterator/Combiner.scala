@@ -28,7 +28,7 @@
 
 package axle.iterator
 
-import scala.collection._
+import collection._
 
 object CombinerTest {
 

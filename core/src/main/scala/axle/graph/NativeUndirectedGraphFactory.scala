@@ -1,6 +1,7 @@
 package axle.graph
 
-import scala.collection._
+import collection._
+import axle.Enrichments._
 
 object NativeUndirectedGraphFactory extends NativeUndirectedGraphFactory
 
@@ -51,10 +52,8 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
       // assume that this edge isn't already in our list of edges
       edges += this
-      var es1 = getEdges(v1)
-      es1.add(this)
-      var es2 = getEdges(v2)
-      es2.add(this)
+      getEdges(v1).add(this)
+      getEdges(v2).add(this)
 
       def getVertices(): (V, V) = (v1, v2)
       def getPayload(): P = payload
@@ -69,15 +68,9 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     }
 
     def unlink(e: E): Unit = {
-
       val dble = e.getVertices()
-
-      val es1 = getEdges(dble._1)
-      es1.remove(e)
-
-      val es2 = getEdges(dble._2)
-      es2.remove(e)
-
+      getEdges(dble._1).remove(e)
+      getEdges(dble._2).remove(e)
       edges -= e
     }
 
@@ -85,19 +78,8 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def areNeighbors(v1: V, v2: V) = getEdges(v1).exists(_.connects(v1, v2))
 
-    override def isClique(vs: Set[V]): Boolean = {
-      // vs.pairs().forall({ case (a, b) => ( (a == b) || areNeighbors(a, b) ) })
-      val vList = mutable.ArrayBuffer[V]()
-      vList ++= vs
-      for (i <- 0 until vList.size) {
-        for (j <- 0 until vList.size) {
-          if (!areNeighbors(vList(i), vList(j))) {
-            return false
-          }
-        }
-      }
-      true
-    }
+    override def isClique(vs: Set[V]): Boolean =
+      vs.doubles.forall({ case (a, b) => ((a == b) || areNeighbors(a, b)) })
 
     override def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
 
@@ -106,7 +88,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
       var result = 0
 
-      for (i <- 0 to (N.size - 2)) {
+      for (i <- 0 until (N.size - 1)) {
         val vi = N(i)
         for (j <- (i + 1) until N.size) {
           val vj = N(j)
@@ -218,11 +200,11 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     // TODO there is probably a more efficient way to do this:
     def eliminate(vs: immutable.List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
 
-//    def draw(): Unit = {
-//      // TODO: remove this cast
-//      val thisAsUG = this.asInstanceOf[JungUndirectedGraphFactory.UndirectedGraph[VP, EP]]
-//      JungUndirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsUG)(vp => vp, ep => ep).draw()
-//    }
+    //    def draw(): Unit = {
+    //      // TODO: remove this cast
+    //      val thisAsUG = this.asInstanceOf[JungUndirectedGraphFactory.UndirectedGraph[VP, EP]]
+    //      JungUndirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsUG)(vp => vp, ep => ep).draw()
+    //    }
 
   }
 

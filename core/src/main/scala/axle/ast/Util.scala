@@ -1,18 +1,18 @@
 package axle.ast
 
-import scala.util.matching.Regex
+import util.matching.Regex
 
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.BufferedReader
 import java.io.File
-import scala.collection.mutable.ListBuffer
+import collection._
 
 object Util {
 
   def findLeaves(dirname: String, suffix: String): List[String] = {
     val dir = new File(dirname)
-    val result = new ListBuffer[String]()
+    val result = new mutable.ListBuffer[String]()
     for (f <- dir.listFiles) {
       if (f.isDirectory) {
         result.appendAll(findLeaves(f.getName(), suffix).map(h => f.getName + File.separator + h))

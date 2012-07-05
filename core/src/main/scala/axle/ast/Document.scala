@@ -2,8 +2,7 @@
 package axle.ast
 
 import axle.Loggable
-import scala.collection.mutable.Set
-import scala.collection.mutable.LinkedHashMap
+import collection._
 import java.io.File
 import java.io.FileWriter
 

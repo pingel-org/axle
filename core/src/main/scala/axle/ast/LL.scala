@@ -10,7 +10,7 @@ package axle.ast
 // TODO model input buffer
 // TODO create AST
 
-import scala.collection._
+import collection._
 import axle.Loggable
 
 case class Symbol(label: String) {

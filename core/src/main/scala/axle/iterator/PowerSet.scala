@@ -28,7 +28,7 @@
 
 package axle.iterator
 
-import scala.collection._
+import collection._
 
 class PowerSet[E](all: Seq[E]) extends ℘[E](all)
 

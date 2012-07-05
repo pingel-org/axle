@@ -28,7 +28,7 @@
 
 package axle.iterator
 
-import scala.collection._
+import collection._
 
 /**
  * Computes the permutations of length n from the given list
@@ -55,16 +55,13 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
   def iterator() = new PermutionIterator[E](this)
 
   class PermutionIterator[InE](permuter: Permuter[InE]) extends Iterator[List[InE]] {
-    var remainders = scala.collection.mutable.ArrayBuffer[scala.collection.mutable.Set[InE]]()
-
-    var iterators = scala.collection.mutable.ArrayBuffer[Iterator[InE]]()
-
-    var tuple = scala.collection.mutable.ArrayBuffer[InE]()
-
+    val remainders = mutable.ArrayBuffer[scala.collection.mutable.Set[InE]]()
+    val iterators = mutable.ArrayBuffer[Iterator[InE]]()
+    var tuple = mutable.ArrayBuffer[InE]()
+    
     //    	var i: Int
-
     if (permuter.getN > 0) {
-      var firstRemainder = scala.collection.mutable.Set[InE]()
+      val firstRemainder = mutable.Set[InE]()
       firstRemainder ++= permuter.getObjects
       remainders.append(firstRemainder)
       iterators.append(firstRemainder.iterator)
@@ -94,7 +91,7 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
     def setRemainder(i: Int) = {
       //System.out.println("setRemainder: i = " + i);
       if (i > 0) {
-        var r = scala.collection.mutable.Set[InE]()
+        var r = mutable.Set[InE]()
         r ++= remainders(i - 1)
         r.remove(tuple(i - 1))
         remainders(i) = r

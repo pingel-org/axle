@@ -1,6 +1,6 @@
 package axle.ast
 
-import scala.util.matching.Regex
+import util.matching.Regex
 import axle.Loggable
 
 class Bar {}

@@ -1,7 +1,7 @@
 package axle.lx
 
 import org.specs2.mutable._
-import scala.collection._
+import collection._
 import Angluin._
 
 class AngluinSpecification extends Specification {

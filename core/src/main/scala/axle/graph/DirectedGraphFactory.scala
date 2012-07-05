@@ -2,7 +2,7 @@ package axle.graph
 
 trait DirectedGraphFactory extends GraphFactory {
 
-  import scala.collection._
+  import collection._
 
   type G[VP, EP] <: DirectedGraph[VP, EP]
 

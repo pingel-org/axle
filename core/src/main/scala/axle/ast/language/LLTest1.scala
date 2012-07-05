@@ -1,8 +1,7 @@
 
 package axle.ast.language
 
-import scala.collection.mutable.Stack
-import scala.collection.mutable.Map
+import collection._
 import axle.Loggable
 import axle.ast._
 

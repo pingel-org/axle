@@ -1,8 +1,8 @@
 package axle.ast.view
 
 import axle.ast._
-import scala.collection._
-import scala.xml._
+import collection._
+import xml._
 
 class XhtmlMetaNodeFormatter(language: Language, highlight: Set[MetaNode], conform: Boolean)
   extends MetaNodeFormatter[List[scala.xml.Node], mutable.ListBuffer[scala.xml.Node]](language, highlight, conform) {
