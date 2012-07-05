@@ -72,15 +72,15 @@ object InformationTheory {
 
       def X() = p.keySet
 
+      // def randomStream(): Stream[Double] = Stream.cons(math.random, randomStream())
+
+      // TODO Is there a version of scanLeft that is more like a reduce?
+      // This would allow me to avoid having to construct the initial dummy element
+      val bars = p.scanLeft((null.asInstanceOf[A], 0.0))((x, y) => (y._1, x._2 + y._2))
+
       def choose(): A = {
-        var r = math.random
-        for ((k, v) <- p) {
-          r -= v
-          if (r < 0) {
-            return k
-          }
-        }
-        throw new Exception("malformed distribution")
+        val r = math.random
+        bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
       }
 
       def entropy() = X.Σ(x => p(x) match {
