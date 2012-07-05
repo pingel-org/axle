@@ -86,7 +86,7 @@ class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]
   class CrossProductIterator[InE](cp: CrossProduct[InE]) extends Iterator[List[InE]] {
     
     val iterators = mutable.ArrayBuffer[Iterator[InE]]()
-    val current = mutable.ArrayBuffer[InE]()
+    var current = mutable.ArrayBuffer[InE]()
     
     for (i <- 0 until cp.getCollections().size) {
       iterators.append(cp.getCollections()(i).iterator)

@@ -51,7 +51,7 @@ trait UndirectedGraphFactory extends GraphFactory {
       true
     }
 
-    override def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
+    def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
       val vl = vs.toList
       val ns = for (i <- 0 until (vl.size - 1); j <- (i + 1) until vl.size) yield {
         if (areNeighbors(vl(i), vl(j))) { 0 } else { 1 }
@@ -59,7 +59,7 @@ trait UndirectedGraphFactory extends GraphFactory {
       ns.sum
     }
 
-    override def forceClique(vs: Set[V], payload: (V, V) => EP): Unit = {
+    def forceClique(vs: Set[V], payload: (V, V) => EP): Unit = {
       val vl = vs.toList
       for (i <- 0 until (vl.size - 1); j <- (i + 1) until vl.size) {
         val vi = vl(i)
