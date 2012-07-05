@@ -85,45 +85,13 @@ trait UndirectedGraphFactory extends GraphFactory {
 
     }
 
-    def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): Option[V] = {
+    // assert: among is a subset of vertices
+    def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): V =
+      among.map(v => (v, getNumEdgesToForceClique(getNeighbors(v), payload))).minBy(_._2)._1
 
-      // assert: among is a subset of vertices
-
-      var result: Option[V] = None
-      var minSoFar = Integer.MAX_VALUE
-
-      for (v <- among) {
-        val x = getNumEdgesToForceClique(getNeighbors(v), payload)
-        if (result == None) {
-          result = Some(v)
-          minSoFar = x
-        } else if (x < minSoFar) {
-          result = Some(v)
-          minSoFar = x
-        }
-      }
-      result
-    }
-
-    def vertexWithFewestNeighborsAmong(among: Set[V]): Option[V] = {
-      // assert: among is a subset of vertices
-
-      var result: Option[V] = None
-      var minSoFar = Integer.MAX_VALUE
-
-      for (v <- among) {
-        val x = getNeighbors(v).size
-        if (result == None) {
-          result = Some(v)
-          minSoFar = x
-        } else if (x < minSoFar) {
-          result = Some(v)
-          minSoFar = x
-        }
-      }
-
-      result
-    }
+    // assert: among is a subset of vertices
+    def vertexWithFewestNeighborsAmong(among: Set[V]): V =
+      among.map(v => (v, getNeighbors(v).size)).minBy(_._2)._1
 
     def degree(v: V): Int
     def getEdges(v: V): Set[E]

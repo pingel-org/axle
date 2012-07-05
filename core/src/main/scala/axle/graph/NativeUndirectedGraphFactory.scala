@@ -79,91 +79,41 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     def areNeighbors(v1: V, v2: V) = getEdges(v1).exists(_.connects(v1, v2))
 
     override def isClique(vs: Set[V]): Boolean =
-      vs.doubles.forall({ case (a, b) => ((a == b) || areNeighbors(a, b)) })
+      vs.doubles.∀({ case (a, b) => ((a == b) || areNeighbors(a, b)) })
+
+    /**
+     *
+     * Note: getNumEdgesToForceClique used to also call:
+     *
+     *   edge(vi, vj, payload(vi, vj))
+     *
+     * for any edges counting towards the total
+     */
 
     override def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) = {
-
-      val N = mutable.ArrayBuffer[V]()
-      N ++= vs
-
-      var result = 0
-
-      for (i <- 0 until (N.size - 1)) {
-        val vi = N(i)
-        for (j <- (i + 1) until N.size) {
-          val vj = N(j)
-          if (!areNeighbors(vi, vj)) {
-            edge(vi, vj, payload(vi, vj))
-            result += 1
-          }
-        }
+      val vl = vs.toList
+      val ns = for (i <- 0 until (vl.size - 1); j <- (i + 1) until vl.size) yield {
+        if (areNeighbors(vl(i), vl(j))) { 0 } else { 1 }
       }
-
-      result
+      ns.sum
     }
 
     override def forceClique(vs: Set[V], payload: (V, V) => EP): Unit = {
-
-      val vList = mutable.ArrayBuffer[V]()
-      vList ++= vs
-
-      for (i <- 0 until (vList.size - 1)) {
-        val vi = vList(i)
-        for (j <- (i + 1) until vList.size) {
-          val vj = vList(j)
-          if (!areNeighbors(vi, vj)) {
-            edge(vi, vj, payload(vi, vj))
-          }
+      val vl = vs.toList
+      for (i <- 0 until (vl.size - 1); j <- (i + 1) until vl.size) {
+        val vi = vl(i)
+        val vj = vl(j)
+        if (!areNeighbors(vi, vj)) {
+          edge(vi, vj, payload(vi, vj))
         }
       }
-
-    }
-
-    override def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): Option[V] = {
-
-      // assert: among is a subset of vertices
-
-      var result: Option[V] = None
-      var minSoFar = Integer.MAX_VALUE
-
-      for (v <- among) {
-        val x = getNumEdgesToForceClique(getNeighbors(v), payload)
-        if (result == None) {
-          result = Some(v)
-          minSoFar = x
-        } else if (x < minSoFar) {
-          result = Some(v)
-          minSoFar = x
-        }
-      }
-      result
-    }
-
-    override def vertexWithFewestNeighborsAmong(among: Set[V]): Option[V] = {
-      // assert: among is a subset of vertices
-
-      var result: Option[V] = None
-      var minSoFar = Integer.MAX_VALUE
-
-      for (v <- among) {
-        val x = getNeighbors(v).size
-        if (result == None) {
-          result = Some(v)
-          minSoFar = x
-        } else if (x < minSoFar) {
-          result = Some(v)
-          minSoFar = x
-        }
-      }
-
-      result
     }
 
     def degree(v: V) = getEdges(v).size
 
     def getEdges(v: V) = {
       if (!vertex2edges.contains(v)) {
-        vertex2edges += v -> scala.collection.mutable.Set[E]()
+        vertex2edges += v -> mutable.Set[E]()
       }
       vertex2edges(v)
     }
