@@ -30,6 +30,8 @@ val classifier = cluster(
 
 new AxleFrame().add(new KMeansVisualization(classifier))
 
-new AxleFrame().add(new Plot[Int, Int, Double, Double](classifier.distanceLogSeries(), true,
-    title = Some("KMeans Centroid Distances"),
-    xAxis=0.0, xAxisLabel=Some("step"), yAxis=0, yAxisLabel=Some("total distance to centroid")))
+new AxleFrame().add(new Plot[Int, Int, Double, Double](classifier.averageDistanceLogSeries(),
+    true,
+    title = Some("KMeans Mean Centroid Distances"),
+    xAxis=0.0, xAxisLabel=Some("step"),
+    yAxis=0, yAxisLabel=Some("total distance to centroid")))

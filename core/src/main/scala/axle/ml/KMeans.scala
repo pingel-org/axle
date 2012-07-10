@@ -36,11 +36,12 @@ trait KMeans {
 
     val X = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
     val distanceLog = zeros[Double](K, iterations)
+    val countLog = zeros[Int](K, iterations)
 
     val (scaledX, colMins, colRanges) = Utilities.scaleColumns(X)
-    val (μ, c) = clusterLA(scaledX, K, iterations, distanceLog)
+    val (μ, c) = clusterLA(scaledX, K, iterations, distanceLog, countLog)
 
-    KMeansClassifier(N, featureExtractor, constructor, μ, colMins, colRanges, scaledX, c, distanceLog)
+    KMeansClassifier(N, featureExtractor, constructor, μ, colMins, colRanges, scaledX, c, distanceLog, countLog)
   }
 
   /**
@@ -75,6 +76,7 @@ trait KMeans {
    * @param X
    * @param μ
    * @param distanceLog
+   * @param countLog
    * @param i
    *
    * Returns:
@@ -82,11 +84,12 @@ trait KMeans {
    *
    */
 
-  def assignments(X: M[Double], μ: M[Double], distanceLog: M[Double], i: Int): M[Int] = {
+  def assignments(X: M[Double], μ: M[Double], distanceLog: M[Double], countLog: M[Int], i: Int): M[Int] = {
     val A = zeros[Int](X.rows, 1)
     for (r <- 0 until X.rows) {
       val ad = centroidIndexAndDistanceClosestTo(μ, X.row(r))
       A(r, 0) = ad._1
+      countLog(ad._1, i) += 1
       distanceLog(ad._1, i) += ad._2
     }
     A
@@ -139,13 +142,13 @@ trait KMeans {
    * assumes that X has already been normalized
    */
 
-  def clusterLA(scaledX: M[Double], K: Int, iterations: Int, distanceLog: M[Double]): (M[Double], M[Int]) = {
+  def clusterLA(scaledX: M[Double], K: Int, iterations: Int, distanceLog: M[Double], countLog: M[Int]): (M[Double], M[Int]) = {
     assert(K < scaledX.rows)
     (0 until iterations).foldLeft((
       rand[Double](K, scaledX.columns), // random initial K centroids μ in R^n (aka M)
       zeros[Int](scaledX.rows, 1)) // indexes of centroids closest to xi
     )((μA: (M[Double], M[Int]), i: Int) => {
-      val A = assignments(scaledX, μA._1, distanceLog, i) // K-element column vector
+      val A = assignments(scaledX, μA._1, distanceLog, countLog, i) // K-element column vector
       val μ = centroids(scaledX, K, A) // K x n
       (μ, A)
     })
@@ -176,7 +179,8 @@ trait KMeans {
     colRanges: M[Double],
     scaledX: M[Double],
     A: M[Int],
-    distanceLog: M[Double]) {
+    distanceLog: M[Double],
+    countLog: M[Int]) {
 
     def K(): Int = μ.rows
 
@@ -192,10 +196,20 @@ trait KMeans {
       cid._1
     }
 
-    def distanceTreeMap(i: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++ (0 until distanceLog.columns).map(j => j -> distanceLog(i, j)).toMap
+    def distanceTreeMap(i: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
+      (0 until distanceLog.columns).map(j => j -> distanceLog(i, j)).toMap
+
+    def countTreeMap(i: Int): SortedMap[Int, Int] = new immutable.TreeMap[Int, Int]() ++
+      (0 until countLog.columns).map(j => j -> countLog(i, j)).toMap
+
+    def averageDistanceTreeMap(i: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
+      (0 until distanceLog.columns).map(j => j -> distanceLog(i, j) / countLog(i, j)).toMap
 
     def distanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K()).map(i =>
       ("centroid " + i, distanceTreeMap(i))).toList
+
+    def averageDistanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K()).map(i =>
+      ("centroid " + i, averageDistanceTreeMap(i))).toList
 
     // def draw(): Unit = new KMeansVisualization(this).draw()
   }
