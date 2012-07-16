@@ -8,7 +8,7 @@ organization := "org.pingel"
 
 seq(assemblySettings: _*)
 
-crossScalaVersions := Seq("2.9.1", "2.8.1")
+crossScalaVersions := Seq("2.9.1")
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
