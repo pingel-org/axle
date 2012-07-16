@@ -182,11 +182,10 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def isAcyclic() = true // TODO !!!
 
-    // not so efficient:
+    // TODO: slow & complex:
     def _shortestPath(source: V, goal: V, visited: Set[V]): Option[List[E]] = (source == goal) match {
       case true => Some(List())
       case false => {
-        // .filter(!visited.contains(_))
         val paths = (getSuccessors(source) -- visited).flatMap(newSuccessor => {
           getEdge(source, newSuccessor)
             .flatMap(edge => _shortestPath(newSuccessor, goal, visited + source).map(sp => edge :: sp))
@@ -201,12 +200,6 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
     }
 
     def shortestPath(source: V, goal: V): Option[List[E]] = _shortestPath(source, goal, Set())
-
-    //    def draw(): Unit = {
-    //      // TODO: remove this cast
-    //      val thisAsDG = this.asInstanceOf[JungDirectedGraphFactory.DirectedGraph[VP, EP]]
-    //      JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsDG)(vp => vp, ep => ep).draw()
-    //    }
 
   }
 
