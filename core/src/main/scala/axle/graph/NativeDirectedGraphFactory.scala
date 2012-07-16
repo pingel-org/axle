@@ -12,8 +12,6 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
   trait NativeDirectedGraph[VP, EP] extends DirectedGraph[VP, EP] {
 
-    import collection._
-
     type V = NativeDirectedGraphVertex[VP]
     type E = NativeDirectedGraphEdge[EP]
 
@@ -114,16 +112,14 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def precedes(v1: V, v2: V): Boolean = getPredecessors(v2).contains(v1)
 
-    def getPredecessors(v: V): Set[V] =
-      vertex2inedges.get(v).map(_.map(_.getSource())).toSet.asInstanceOf[Set[V]]
+    def getPredecessors(v: V): Set[V] = vertex2inedges(v).map(_.getSource())
 
     def isLeaf(v: V): Boolean = {
-      val outEdges = vertex2outedges.get(v)
+      val outEdges = vertex2outedges(v)
       outEdges == null || outEdges.size == 0
     }
 
-    def getSuccessors(v: V): Set[V] =
-      vertex2inedges.get(v).map(_.map(_.getDest())).toSet.asInstanceOf[Set[V]] // TODO cast
+    def getSuccessors(v: V): Set[V] = vertex2outedges(v).map(_.getDest())
 
     def outputEdgesOf(v: V): immutable.Set[E] = vertex2outedges(v).toSet
 
@@ -190,13 +186,11 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
     def _shortestPath(source: V, goal: V, visited: Set[V]): Option[List[E]] = (source == goal) match {
       case true => Some(List())
       case false => {
-        val paths = getSuccessors(source)
-          .filter(!visited.contains(_)).flatMap(newSuccessor => {
-            getEdge(source, newSuccessor).flatMap(edge =>
-              _shortestPath(newSuccessor, goal, visited + source).map(sp => edge :: sp)
-            )
-          }
-          )
+        // .filter(!visited.contains(_))
+        val paths = (getSuccessors(source) -- visited).flatMap(newSuccessor => {
+          getEdge(source, newSuccessor)
+            .flatMap(edge => _shortestPath(newSuccessor, goal, visited + source)) // map(sp => edge :: sp)
+        })
         paths.size match {
           case 0 => None
           case _ => Some(paths.reduceLeft(
