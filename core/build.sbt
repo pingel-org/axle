@@ -28,9 +28,10 @@ libraryDependencies ++= Seq(
   "net.liftweb" % "lift-json_2.9.0-1" % "2.4-M3",
   "net.liftweb" % "lift-common_2.9.0-1" % "2.4-M3",
   "org" % "jblas" % "1.2.0",
-  "org.specs2" %% "specs2" % "1.8.1" % "test",
+  "org.specs2" %% "specs2" % "1.11" % "test",
   "joda-time" % "joda-time" % "2.1",
   "org.joda" % "joda-convert" % "1.2"
+  // "org.scalaz" %% "scalaz-core" % "6.0.3"
 )
 
 test in assembly := {}
