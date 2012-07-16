@@ -189,7 +189,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
         // .filter(!visited.contains(_))
         val paths = (getSuccessors(source) -- visited).flatMap(newSuccessor => {
           getEdge(source, newSuccessor)
-            .flatMap(edge => _shortestPath(newSuccessor, goal, visited + source)) // map(sp => edge :: sp)
+            .flatMap(edge => _shortestPath(newSuccessor, goal, visited + source).map(sp => edge :: sp))
         })
         paths.size match {
           case 0 => None
