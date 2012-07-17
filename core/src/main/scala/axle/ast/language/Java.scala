@@ -7,9 +7,9 @@ object Java {
 
   val precedence = Nil
 
-  def java_compiler_parse(text: String): Option[MetaNode] = None
+  def java_compiler_parse(text: String): Option[AstNode] = None
 
-  def parse(text: String): MetaNode = MetaNodeValue(Some("TODO"), 1)
+  def parse(text: String): AstNode = AstNodeValue(Some("TODO"), 1)
 
   val lang = new Language(
     "java",

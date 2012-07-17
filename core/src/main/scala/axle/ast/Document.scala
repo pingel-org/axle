@@ -26,7 +26,7 @@ class DocumentFromFile(grammar: Language, shortFilename: String, filename: Strin
 
 trait Document extends Loggable {
 
-  def getAst(): Option[MetaNode]
+  def getAst(): Option[AstNode]
 
   def getGrammar(): Language
 

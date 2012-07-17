@@ -8,8 +8,8 @@ case class Language(
   name: String,
   rules: List[Rule],
   precedence_groups: List[Tuple2[List[String], String]],
-  parser: String => Option[MetaNode],
-  trimmer: MetaNode => MetaNode)
+  parser: String => Option[AstNode],
+  trimmer: AstNode => AstNode)
   extends Loggable {
 
   // def name = _name
@@ -17,18 +17,16 @@ case class Language(
 
   val name2rule = rules.map(r => r.name -> r).toMap
 
-  var level = 0
-  for ((names, assoc) <- precedence_groups) {
+  for (((names, assoc), i) <- precedence_groups.zipWithIndex) {
     for (rule_name <- names) {
-      info("rule %s level %s".format(rule_name, level))
+      info("rule %s level %s".format(rule_name, i))
       val rule = name2rule(rule_name)
-      rule.precedenceLevel = level
+      rule.precedenceLevel = i
       rule.associativity = assoc
     }
-    level += 1
   }
 
-  def trim(ast: MetaNode) = trimmer(ast)
+  def trim(ast: AstNode) = trimmer(ast)
 
   // info("cat " + filename + " | parser")
   def parseFile(filename: String) = parser(scala.io.Source.fromFile(filename).mkString)

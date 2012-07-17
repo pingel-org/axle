@@ -39,18 +39,14 @@ class ListCrossProduct[E](lists: Seq[List[E]]) extends CrossProduct[E](lists) {
 
   val modulos = new Array[Int](lists.size + 1)
   modulos(lists.size) = 1
-  var j = lists.size - 1
-  while (j >= 0) {
+  for (j <- (lists.size - 1).to(0, -1)) {
     modulos(j) = modulos(j + 1) * lists(j).size
-    j -= 1
   }
 
   def indexOf(objects: List[E]): Int = {
-    
     if (objects.size != lists.size) {
       throw new Exception("ListCrossProduct: objects.size() != lists.size()")
     }
-    
     var i = 0
     for (j <- 0 until lists.size) {
       val z = lists(j).indexOf(objects(j))
@@ -59,10 +55,9 @@ class ListCrossProduct[E](lists: Seq[List[E]]) extends CrossProduct[E](lists) {
       }
       i += z * modulos(j + 1)
     }
-    // println("answer = " + i);
     i
   }
-  
+
   def apply(i: Int) = {
     var c = i
     val result = mutable.ArrayBuffer[E]()
@@ -72,52 +67,49 @@ class ListCrossProduct[E](lists: Seq[List[E]]) extends CrossProduct[E](lists) {
     }
     result.toList
   }
-  
-  override def size() = modulos(0)
-  
-}
 
+  override def size() = modulos(0)
+
+}
 
 class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]] {
   def getCollections() = iterables
-  
+
   def iterator() = new CrossProductIterator[E](this)
-  
+
   class CrossProductIterator[InE](cp: CrossProduct[InE]) extends Iterator[List[InE]] {
-    
+
     val iterators = mutable.ArrayBuffer[Iterator[InE]]()
     var current = mutable.ArrayBuffer[InE]()
-    
+
     for (i <- 0 until cp.getCollections().size) {
       iterators.append(cp.getCollections()(i).iterator)
       current.append(iterators(i).next())
     }
 
     def remove() = throw new UnsupportedOperationException()
-    
+
     def hasNext() = current != null
-    
+
     def incrementFirstAvailable(i: Int): Boolean = {
-      
+
       if (i == iterators.size) {
         return true
-      }
-      else if (iterators(i).hasNext) {
+      } else if (iterators(i).hasNext) {
         current(i) = iterators(i).next()
         return false
-      }
-      else {
+      } else {
         iterators(i) = cp.getCollections()(i).iterator
         current(i) = iterators(i).next()
         return incrementFirstAvailable(i + 1)
       }
     }
-    
+
     def next() = {
       if (current == null) {
         throw new NoSuchElementException()
       }
-      
+
       val result = current.toList
       if (incrementFirstAvailable(0)) {
         current = null
@@ -125,5 +117,5 @@ class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]
       result
     }
   }
-  
+
 }

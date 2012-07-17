@@ -10,24 +10,24 @@ import net.liftweb.common.Full
 import net.liftweb.json.JsonParser
 
 object PythonSpecification extends Specification {
-  "conversion from JSON to MetaNode" should {
+  "conversion from JSON to AstNode" should {
 
     "turn 3 into 3" in {
 
-      //MetaNode.fromJson("""{"node": {"spread": [{"expr": {"right": {"type": "Const", "value": 2}, "type": "Add", "left": {"type": "Const", "value": 1}}, "type": "Discard"}], "type": "Stmt"}, "type": "Module"}""")
-      //MetaNode.fromJson("""{"node": {"spread": [{"test": {"type": "Name", "name": "True"}, "fail": {"type": "Name", "name": "True"}, "type": "Assert"}], "type": "Stmt"}, "type": "Module"}""")
+      //AstNode.fromJson("""{"node": {"spread": [{"expr": {"right": {"type": "Const", "value": 2}, "type": "Add", "left": {"type": "Const", "value": 1}}, "type": "Discard"}], "type": "Stmt"}, "type": "Module"}""")
+      //AstNode.fromJson("""{"node": {"spread": [{"test": {"type": "Name", "name": "True"}, "fail": {"type": "Name", "name": "True"}, "type": "Assert"}], "type": "Stmt"}, "type": "Module"}""")
 
-      MetaNode.fromJson("""{"node": {"spread": [{"test": {"type": "Name", "name": "True"}, "fail": null, "type": "Assert"}], "type": "Stmt"}, "type": "Module"}""")
+      AstNode.fromJson("""{"node": {"spread": [{"test": {"type": "Name", "name": "True"}, "fail": null, "type": "Assert"}], "type": "Stmt"}, "type": "Module"}""")
 
       // TODO add some assertions about how Python.trim should work
 
-      MetaNode.fromJson(
+      AstNode.fromJson(
         """{"type": "Const", "value": 3}"""
       ) must be equalTo (
-          MetaNodeRule("Const", Map("value" -> MetaNodeValue(Some("3"), 1)), 1)
+          AstNodeRule("Const", Map("value" -> AstNodeValue(Some("3"), 1)), 1)
         )
 
-      MetaNode.fromJson(
+      AstNode.fromJson(
         """
 {
    "node": {
@@ -48,14 +48,14 @@ object PythonSpecification extends Specification {
 }
 """
       ) must be equalTo (
-          MetaNodeRule("Module", Map(
-            "node" -> MetaNodeRule("Stmt", Map(
-              "spread" -> MetaNodeList(List(MetaNodeRule("Discard", Map(
-                "expr" -> MetaNodeRule("Add", Map(
-                  "right" -> MetaNodeRule("Const", Map(
-                    "value" -> MetaNodeValue(Some("3"), 1)), 1),
-                  "left" -> MetaNodeRule("Const", Map(
-                    "value" -> MetaNodeValue(Some("3"), 1)), 1)), 1)), 1)), 1)), 1)), 1)
+          AstNodeRule("Module", Map(
+            "node" -> AstNodeRule("Stmt", Map(
+              "spread" -> AstNodeList(List(AstNodeRule("Discard", Map(
+                "expr" -> AstNodeRule("Add", Map(
+                  "right" -> AstNodeRule("Const", Map(
+                    "value" -> AstNodeValue(Some("3"), 1)), 1),
+                  "left" -> AstNodeRule("Const", Map(
+                    "value" -> AstNodeValue(Some("3"), 1)), 1)), 1)), 1)), 1)), 1)), 1)
         )
     }
   }
@@ -141,7 +141,7 @@ def f(a, b, x=True, y=False):
         .map(expectedText => {
           language
             .parseString(expectedText)
-            .map(ViewString.metaNode(_, language))
+            .map(ViewString.AstNode(_, language))
             .getOrElse("") must be equalTo (expectedText)
         })
 

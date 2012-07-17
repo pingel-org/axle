@@ -4,12 +4,12 @@ import axle.ast._
 import collection._
 import xml._
 
-class XhtmlMetaNodeFormatter(language: Language, highlight: Set[MetaNode], conform: Boolean)
-  extends MetaNodeFormatter[List[scala.xml.Node], mutable.ListBuffer[scala.xml.Node]](language, highlight, conform) {
+class XhtmlAstNodeFormatter(language: Language, highlight: Set[AstNode], conform: Boolean)
+  extends AstNodeFormatter[List[xml.Node], mutable.ListBuffer[xml.Node]](language, highlight, conform) {
 
   override def result() = tokens.toList
 
-  override val tokens = new mutable.ListBuffer[scala.xml.Node]()
+  override val tokens = new mutable.ListBuffer[xml.Node]()
 
   override def toString(): String = tokens.toList.mkString("")
 

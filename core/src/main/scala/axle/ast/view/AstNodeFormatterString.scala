@@ -4,8 +4,8 @@ import axle.Loggable
 import axle.ast._
 import collection._
 
-class MetaNodeFormatterString(language: Language, highlight: mutable.Set[MetaNode], conform: Boolean)
-  extends MetaNodeFormatter[String, mutable.ListBuffer[String]](language, highlight, conform)
+class AstNodeFormatterString(language: Language, highlight: mutable.Set[AstNode], conform: Boolean)
+  extends AstNodeFormatter[String, mutable.ListBuffer[String]](language, highlight, conform)
   with Loggable {
 
   override val tokens = new mutable.ListBuffer[String]()
@@ -19,7 +19,7 @@ class MetaNodeFormatterString(language: Language, highlight: mutable.Set[MetaNod
   override def accRaw(s: String): Unit = tokens.append(s)
 
   override def accNewline(): Unit = {
-    // println("info: MetaNodeFormatterString accNewine")
+    // println("info: AstNodeFormatterString accNewine")
     tokens.append("\n")
   }
 

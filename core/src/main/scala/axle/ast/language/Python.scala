@@ -189,7 +189,7 @@ object Python {
     (List("Tuple", "List", "Dict", "Backquote"), "left")
   )
 
-  val parse: String => Option[MetaNode] =
+  val parse: String => Option[AstNode] =
     
     (code: String) => {
 
@@ -208,21 +208,21 @@ object Python {
         throw new Exception("error parsing python or converting it to json")
       }
 
-      Some(MetaNode.fromJson(json))
+      Some(AstNode.fromJson(json))
     }
 
   // trim:
-  // MetaNodeRule("Module", Map("node" -> MetaNodeRule("Stmt", Map("spread" -> MetaNodeList(List(_))))))
+  // AstNodeRule("Module", Map("node" -> AstNodeRule("Stmt", Map("spread" -> AstNodeList(List(_))))))
 
-  val trim = (ast: MetaNode) => ast match {
+  val trim = (ast: AstNode) => ast match {
 
-    case MetaNodeRule("Module", topmap, _) => {
-      topmap("node").asInstanceOf[MetaNodeRule] match {
-        case MetaNodeRule("Stmt", stmtmap, _) => {
-          val mnl = stmtmap("spread").asInstanceOf[MetaNodeList]
+    case AstNodeRule("Module", topmap, _) => {
+      topmap("node").asInstanceOf[AstNodeRule] match {
+        case AstNodeRule("Stmt", stmtmap, _) => {
+          val mnl = stmtmap("spread").asInstanceOf[AstNodeList]
           if (mnl.list.length == 1) {
             mnl.list.head match {
-              case MetaNodeRule("Discard", cm, _) => cm("expr")
+              case AstNodeRule("Discard", cm, _) => cm("expr")
               case _ => mnl.list.head
             }
           } else {

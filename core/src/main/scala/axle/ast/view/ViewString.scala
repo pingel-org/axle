@@ -6,15 +6,15 @@ import collection._
 
 object ViewString extends View[String] with Loggable {
 
-  override def metaNode(root: MetaNode, language: Language): String = {
-    val formatter = new MetaNodeFormatterString(language, mutable.Set.empty, true)
+  override def AstNode(root: AstNode, language: Language): String = {
+    val formatter = new AstNodeFormatterString(language, mutable.Set.empty, true)
     Emission.emit(language, root, formatter)
     formatter.result
   }
 
-  override def docNodeInContext(doc: Document, docNode: MetaNode): String = {
+  override def docNodeInContext(doc: Document, docNode: AstNode): String = {
 
-    val contextFormatter = new MetaNodeFormatterString(doc.getGrammar, mutable.Set(docNode), true)
+    val contextFormatter = new AstNodeFormatterString(doc.getGrammar, mutable.Set(docNode), true)
     doc.getAst().map(ast => {
       Emission.emit(doc.getGrammar, ast, contextFormatter)
       val highlighted_string = contextFormatter.result

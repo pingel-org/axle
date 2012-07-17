@@ -7,9 +7,9 @@ object Scala {
 
   val precedence = List()
 
-  def scalaCompilerParse(text: String): Option[MetaNode] = None // TODO !!! 
+  def scalaCompilerParse(text: String): Option[AstNode] = None // TODO !!! 
 
-  def parse(text: String): MetaNode = MetaNodeValue(Some("TODO"), 1)
+  def parse(text: String): AstNode = AstNodeValue(Some("TODO"), 1)
 
   val lang = new Language(
     "scala",

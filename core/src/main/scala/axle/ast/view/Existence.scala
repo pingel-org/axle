@@ -6,7 +6,7 @@ import axle.Loggable
 
 object Existence extends Loggable {
 
-  def exists(stmt: Statement, node: MetaNode, grammar: Language): Boolean = stmt match {
+  def exists(stmt: Statement, node: AstNode, grammar: Language): Boolean = stmt match {
 
     case Spread() => true
 
@@ -41,27 +41,27 @@ object Existence extends Loggable {
     case SqT(stmts @ _*) => stmts.find(!exists(_, node, grammar)).isEmpty
 
     case Sub(name) => node match {
-      case MetaNodeRule(ruleName, mm, _) => {
+      case AstNodeRule(ruleName, mm, _) => {
         mm.contains(name) && {
           mm(name) match {
-            case MetaNodeValue(None, _) => false
+            case AstNodeValue(None, _) => false
             case _ => true
           }
         }
       }
-      case _ => throw new Exception("Can't apply Sub to a non-rule metanode")
+      case _ => throw new Exception("Can't apply Sub to a non-rule AstNode")
     }
 
     case Attr(name) => node match {
-      case MetaNodeRule(ruleName, mm, _) => {
+      case AstNodeRule(ruleName, mm, _) => {
         mm.contains(name) && {
           mm(name) match {
-            case MetaNodeValue(None, _) => false
+            case AstNodeValue(None, _) => false
             case _ => true // need to recurse?
           }
         }
       }
-      case _ => throw new Exception("Can't apply Attr to a non-rule metanode")
+      case _ => throw new Exception("Can't apply Attr to a non-rule AstNode")
     }
 
     case For(subtree, stmt) => {
@@ -84,9 +84,9 @@ object Existence extends Loggable {
     case Var() => true // TODO ?
 
     case VarN(n) => node match {
-      case MetaNodeList(l: List[MetaNode], _) if n < l.length => {
+      case AstNodeList(l: List[AstNode], _) if n < l.length => {
         l(n) match {
-          case MetaNodeValue(None, _) => false
+          case AstNodeValue(None, _) => false
           case _ => true // need to recurse?
         }
       }

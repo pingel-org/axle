@@ -6,9 +6,9 @@ trait View[T] {
 
   val CONTEXT_PAD: Int = 5
 
-  def metaNode(root: MetaNode, language: Language): T
+  def AstNode(root: AstNode, language: Language): T
 
-  def docNodeInContext(doc: Document, docNode: MetaNode): T
+  def docNodeInContext(doc: Document, docNode: AstNode): T
 
   def lllRules(lll: LLLanguage): T
 

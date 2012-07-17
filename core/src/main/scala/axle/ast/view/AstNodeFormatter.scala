@@ -26,7 +26,7 @@ trait Accumulator {
 
 }
 
-abstract class MetaNodeFormatter[R, S](language: Language, highlight: Set[MetaNode], conform: Boolean)
+abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode], conform: Boolean)
   extends Accumulator {
   
   def result(): R
@@ -37,10 +37,10 @@ abstract class MetaNodeFormatter[R, S](language: Language, highlight: Set[MetaNo
   var needs_indent = true
   var lineno = 1
   val stack = new mutable.Stack[Option[(Int, String)]]()
-  val _node2lineno = mutable.Map[MetaNode, Int]()
+  val _node2lineno = mutable.Map[AstNode, Int]()
 
   def isConforming() = conform
-  def shouldHighlight(node: MetaNode) = highlight.contains(node)
+  def shouldHighlight(node: AstNode) = highlight.contains(node)
 
   def node2lineno = _node2lineno
 
@@ -53,10 +53,10 @@ abstract class MetaNodeFormatter[R, S](language: Language, highlight: Set[MetaNo
     needs_indent = false
   }
 
-  def needsParens(attr_name: String, node: MetaNode, subtree: MetaNode, grammar: Language): Boolean =
+  def needsParens(attr_name: String, node: AstNode, subtree: AstNode, grammar: Language): Boolean =
     (node, subtree) match {
 
-      case (MetaNodeRule(nr, nm, _), MetaNodeRule(sr, sm, _)) => {
+      case (AstNodeRule(nr, nm, _), AstNodeRule(sr, sm, _)) => {
         grammar.lowerThan(sr, nr) match {
           case true => true
           case false => {
@@ -116,13 +116,13 @@ abstract class MetaNodeFormatter[R, S](language: Language, highlight: Set[MetaNo
 
   def endSpan(spanType: String): Unit = accPopAndWrapStack(spanType)
 
-  def conformTo(node: MetaNode): Unit = {
+  def conformTo(node: AstNode): Unit = {
 
   }
 
-  def newline(hard: Boolean, node: MetaNode, indent: Boolean = true): Unit = {
+  def newline(hard: Boolean, node: AstNode, indent: Boolean = true): Unit = {
 
-    // println("MetaNodeFormatter.newline(hard="+hard+", node="+node+", indent="+indent+")")
+    // println("AstNodeFormatter.newline(hard="+hard+", node="+node+", indent="+indent+")")
     // println("   column = " + column)
     // println("   conform = " + conform)
 

@@ -6,21 +6,21 @@ import axle.Loggable
 import collection._
 import xml.{ NodeSeq, Text }
 
-object ViewXhtml extends View[scala.xml.NodeSeq] with Loggable {
+object ViewXhtml extends View[xml.NodeSeq] with Loggable {
   // <html><head><link ref=... /></head><body>...</body><html>
 
-  override def metaNode(root: MetaNode, language: Language): scala.xml.NodeSeq = {
-    val result = new mutable.ArrayBuffer[scala.xml.Node]()
+  override def AstNode(root: AstNode, language: Language): xml.NodeSeq = {
+    val result = new mutable.ArrayBuffer[xml.Node]()
     // <div class={"code"}></div>
     result.append(<link rel={ "stylesheet" } type={ "text/css" } href={ "/static/lodbms.css" }/>)
-    val formatter = new XhtmlMetaNodeFormatter(language, mutable.Set.empty, true)
+    val formatter = new XhtmlAstNodeFormatter(language, mutable.Set.empty, true)
     Emission.emit(language, root, formatter)
     result.appendAll(formatter.result)
     result.toList
   }
 
-  def nodeContext(language: Language, node: MetaNode, uri: String): scala.xml.NodeSeq = {
-    val contextFormatter = new XhtmlLinesMetaNodeFormatter(language, mutable.Set(node), true)
+  def nodeContext(language: Language, node: AstNode, uri: String): xml.NodeSeq = {
+    val contextFormatter = new XhtmlLinesAstNodeFormatter(language, mutable.Set(node), true)
     Emission.emit(language, node, contextFormatter)
     val highlightedHtml = contextFormatter.result // NOTE: python version cached this
 
@@ -41,7 +41,7 @@ object ViewXhtml extends View[scala.xml.NodeSeq] with Loggable {
 
   // Option[mutable.LinkedHashMap[Int, NodeSeq]]
   // def contextHtmlLines(): Option[LinkedHashMap[Int, NodeSeq]] = contextHtml(doc, docNode) 
-  override def docNodeInContext(doc: Document, docNode: MetaNode): scala.xml.NodeSeq =
+  override def docNodeInContext(doc: Document, docNode: AstNode): xml.NodeSeq =
     doc.getAst().map(ast => nodeContext(doc.getGrammar(), docNode, "/document/" + doc.getName))
       .getOrElse(<span>Oh no</span>)
 
