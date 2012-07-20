@@ -1,33 +1,36 @@
 
-import axle.Enrichments._
+object enrichedO {
 
-true and false
+  import axle.Enrichments._
 
-true ∧ false
+  true and false
 
-true and true
+  true ∧ false
 
-true ∧ true
-    
-true or false
-    
-true ∨ false
-    
-true implies false
-    
-true implies true
+  true and true
 
-Set(1, 2, 3) ∃( _ % 2 == 0 )
-    
-List(1, 2, 3) ∀( _ % 2 == 0 )
+  true ∧ true
 
-(1 to 10) Π(_ * 3)
+  true or false
 
-(1 to 10) Σ(_ * 2)
+  true ∨ false
 
-List(1, 2, 3).doubles
-    
-Set(1, 2, 3).triples
+  true implies false
 
-(List(1, 2, 3) ⨯ List(4, 5, 6)).toList
+  true implies true
 
+  Set(1, 2, 3) ∃ (_ % 2 == 0)
+
+  List(1, 2, 3) ∀ (_ % 2 == 0)
+
+  (1 to 10) Π (_ * 3)
+
+  (1 to 10) Σ (_ * 2)
+
+  List(1, 2, 3).doubles
+
+  Set(1, 2, 3).triples
+
+  (List(1, 2, 3) ⨯ List(4, 5, 6)).toList
+
+}

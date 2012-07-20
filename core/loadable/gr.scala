@@ -1,18 +1,21 @@
 
-import axle.graph.JungUndirectedGraphFactory._
-import axle.visualize._
+object grO {
 
-val g = graph[String, String]()
+  import axle.graph.JungUndirectedGraphFactory._
+  import axle.visualize._
 
-val a = g += "a"
-val b = g += "b"
-val c = g += "c"
+  val g = graph[String, String]()
 
-g += ((a, b), "hello")
-g += ((b, c), "world")
-g += ((c, a), "!")
+  val a = g += "a"
+  val b = g += "b"
+  val c = g += "c"
 
-val frame = new AxleFrame()
-val vis = new JungUndirectedGraphVisualization()
-frame.add(vis.component(g))
+  g += ((a, b), "hello")
+  g += ((b, c), "world")
+  g += ((c, a), "!")
 
+  val frame = new AxleFrame()
+  val vis = new JungUndirectedGraphVisualization()
+  frame.add(vis.component(g))
+
+}

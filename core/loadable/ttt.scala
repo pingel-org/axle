@@ -1,15 +1,18 @@
 
-import axle.game._
+object tttO {
 
-import ttt._
+  import axle.game._
+  import ttt._
 
-val game = TicTacToe(3)
+  val game = new TicTacToe(3)
 
-// two interactive players:
+  // two interactive players:
 
-val x = game.player("X", "Player X", true)
-val o = game.player("O", "Player O", false)
+  val x = game.player("X", "Player X", true)
+  val o = game.player("O", "Player O", false)
 
-val start = game.state(x, game.startBoard())
+  val start = game.state(x, game.startBoard())
 
-game.play(start)
+  game.play(start)
+
+}
