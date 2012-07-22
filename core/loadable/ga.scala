@@ -2,7 +2,9 @@
 object gaO {
 
   import axle.ml.{ Species, GeneticAlgorithm }
+  import axle.visualize._
   import util.Random
+  import collection._
 
   type RG = (Int, Double, Double, Double, Double, Double, Double, Double)
 
@@ -13,12 +15,12 @@ object gaO {
     def random(): RG = (
       randomInt(0, 2), // num eyes
       5 + 20 * Random.nextDouble(), // speed
-      1 + 4 * Random.nextDouble(),  // iron
-      3 + 10 * Random.nextDouble(), // calcium
-      10 + 5 * Random.nextDouble(), // phosphorus
-      2 + 2 * Random.nextDouble(), // x
-      3 + 5 * Random.nextDouble(), // y
-      2 + 10 * Random.nextDouble() // z
+      1 + 4 * Random.nextDouble(),
+      3 + 10 * Random.nextDouble(),
+      10 + 5 * Random.nextDouble(),
+      2 + 2 * Random.nextDouble(),
+      3 + 5 * Random.nextDouble(),
+      2 + 10 * Random.nextDouble()
     )
 
     def fitness(g: RG) = 100.0 * g._1 +
@@ -41,8 +43,16 @@ object gaO {
     }
   }
 
-  val ga = new GeneticAlgorithm(populationSize = 1000, numGenerations = 100, pCrossover = 0.3, pMutation = 0.01)
+  val ga = new GeneticAlgorithm(RabbitSpecies,
+    populationSize = 1000, numGenerations = 100,
+    pCrossover = 0.3, pMutation = 0.01)
 
-  ga.run()
+  val popLog = ga.run()
+  val logs = popLog._2.reverse
+  val mins = ("min", new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._1)))
+  val maxs = ("max", new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._2)))
+  val aves = ("ave", new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._3)))
+
+  new AxleFrame().add(new Plot(List(mins, aves, maxs), true, title = Some("GA Demo"), xAxis = 0.0, xAxisLabel = Some("generation"), yAxis = 0, yAxisLabel = Some("fitness")))
 
 }
