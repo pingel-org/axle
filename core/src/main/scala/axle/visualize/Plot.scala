@@ -28,10 +28,10 @@ class Plot[X, DX, Y, DY](
   val clockwise90 = math.Pi / -2.0
   val counterClockwise90 = -1.0 * clockwise90
 
-  val minX = lfs.map(_._2.firstKey).min(xPlottable)
-  val maxX = lfs.map(_._2.lastKey).max(xPlottable)
-  val minY = lfs.map(_._2.values.min(yPlottable)).min(yPlottable)
-  val maxY = lfs.map(_._2.values.max(yPlottable)).max(yPlottable)
+  val minX = List(yAxis, lfs.map(_._2.firstKey).min(xPlottable)).min(xPlottable)
+  val maxX = List(yAxis, lfs.map(_._2.lastKey).max(xPlottable)).max(xPlottable)
+  val minY = List(xAxis, lfs.map(_._2.values.min(yPlottable)).min(yPlottable)).min(yPlottable)
+  val maxY = List(xAxis, lfs.map(_._2.values.max(yPlottable)).max(yPlottable)).max(yPlottable)
 
   val xTics = xPlottable.tics(minX, maxX)
   val yTics = yPlottable.tics(minY, maxY)
