@@ -20,7 +20,7 @@ object lrO {
 
   val priceGuess = estimator.estimate(RealtyListing(1416, 3, 2, 40, 0.0))
 
-  val plot = new Plot[Int, Int, Double, Double](lfs = List(("f" -> estimator.errTree)),
+  val plot = new Plot[Int, Int, Double, Double](lfs = List(("error" -> estimator.errTree)),
     connect = true,
     drawKey = true,
     title = Some("Linear Regression Error"),
