@@ -45,7 +45,7 @@ object gaO {
 
   }
 
-  val ga = new GeneticAlgorithm(RabbitSpecies, populationSize = 1000, numGenerations = 100)
+  val ga = new GeneticAlgorithm(RabbitSpecies, populationSize = 100, numGenerations = 100)
 
   val (population, (mins, maxs, aves)) = ga.run()
 
