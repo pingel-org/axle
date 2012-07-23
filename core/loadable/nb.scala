@@ -3,7 +3,7 @@
  * Useful links:
  *
  * http://en.wikipedia.org/wiki/Naive_Bayes_classifier
- * 
+ *
  */
 
 object nbO {
@@ -38,8 +38,10 @@ object nbO {
     (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
     (t: Tennis) => t.play.toString)
 
-  val (featureP, labelP, totalCount) = nbModel.train(data)
+  val (featureTally, labelTally, totalCount) = nbModel.train(data)
 
-  nbModel.test(data, featureP, labelP, totalCount)
+  for (datum <- data) {
+    println("classifier: " + nbModel.classify(datum, featureTally, labelTally, totalCount) + " given " + datum)
+  }
 
 }

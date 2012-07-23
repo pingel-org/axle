@@ -35,24 +35,16 @@ class NaiveBayes[T](featureNames: List[String], featureSpace: Map[String, List[S
   def classify(datum: T, featureTally: Map[(String, String, String), Int], labelTally: Map[String, Int], totalCount: Int): (String, Double) = {
 
     val label2prob = labelTally.keys.map(lv => {
-
       val logP = featureNames
         .zip(extractFeatures(datum))
-        .map({ case (f, fv) => math.log(featureTally((lv, f, fv)) / labelTally(lv)) })
+        .map({ case (f, fv) => math.log(featureTally((lv, f, fv)).toDouble / labelTally(lv)) })
         .reduce(_ + _)
-
       (lv, (labelTally(lv).toDouble / totalCount) * math.exp(logP))
     })
 
     println(label2prob)
 
     label2prob.maxBy(_._2)
-  }
-
-  def test(data: Seq[T], featureP: Map[(String, String, String), Int], labelP: Map[String, Int], totalCount: Int): Unit = {
-    for (datum <- data) {
-      println("classifier: " + classify(datum, featureP, labelP, totalCount) + " given " + extractLabel(datum))
-    }
   }
 
 }
