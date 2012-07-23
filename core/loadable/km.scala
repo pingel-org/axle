@@ -36,6 +36,6 @@ object kmO {
     connect = true, drawKey = true,
     title = Some("KMeans Mean Centroid Distances"),
     xAxis = 0.0, xAxisLabel = Some("step"),
-    yAxis = 0, yAxisLabel = Some("total distance to centroid")))
+    yAxis = 0, yAxisLabel = Some("average distance to centroid")))
 
 }
