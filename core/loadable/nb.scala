@@ -41,7 +41,8 @@ object nbO {
   val (featureTally, labelTally, totalCount) = nbModel.train(data)
 
   for (datum <- data) {
-    println("classifier: " + nbModel.classify(datum, featureTally, labelTally, totalCount) + " given " + datum)
+    println(datum)
+    println("\t" + nbModel.classify(datum, featureTally, labelTally, totalCount))
   }
 
 }
