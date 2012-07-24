@@ -7,11 +7,15 @@ import collection._
 
 object Enrichments {
 
+  import math.{ exp, log }
+
   case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
 
     def Σ(f: T => Double) = gt.aggregate(0.0)(_ + f(_), _ + _)
 
     def Sigma(f: T => Double) = Σ(f)
+
+    def Πx(f: T => Double): Double = exp(gt.map(x => log(f(x))).sum) // TODO: use aggregate for sum?
 
     def Π(f: T => Double): Double = gt.aggregate(1.0)(_ * f(_), _ * _)
 

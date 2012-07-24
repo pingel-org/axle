@@ -2,10 +2,12 @@ package axle.ml
 
 class NaiveBayesClassifier[D](data: Seq[D],
   featureSpace: List[(String, List[String])],
-  fs: D => List[String], // feature extractor
-  c: D => String) { // class extractor
+  classValues: List[String],
+  featureExtractor: D => List[String],
+  classExtractor: D => String) {
 
   import axle.ScalaMapReduce._
+  import axle.Enrichments._
   import collection._
   import scalaz._
   import Scalaz._
@@ -16,29 +18,30 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   val featureTally = mapReduce(
     data.iterator,
-    mapper = (d: D) => featureNames.zip(fs(d)).map({ case (f, fv) => ((c(d), f, fv), 1) }),
+    mapper = (d: D) => featureNames.zip(featureExtractor(d)).map({ case (f, fv) => ((classExtractor(d), f, fv), 1) }),
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
 
-  val unsmoothedLabelTally = mapReduce(
+  val unsmoothedClassTally = mapReduce(
     data.iterator,
-    mapper = (d: D) => List((c(d), 1)),
+    mapper = (d: D) => List((classExtractor(d), 1)),
     reducer = (x: Int, y: Int) => x + y
   )
+  
+  val smoothing = classValues.flatMap(c => featureNames.map(featureName => (c, featureMap(featureName).size))).toMap
 
-  val smoothing = unsmoothedLabelTally.keys.flatMap(lv => featureNames.map(featureName => (lv, featureMap(featureName).size))).toMap
-
-  val cTally = (unsmoothedLabelTally |+| smoothing).withDefaultValue(0)
+  val cTally = (unsmoothedClassTally |+| smoothing).withDefaultValue(0)
 
   val totalCount = cTally.values.sum
 
-  def predict(datum: D): String = cTally.keys.map(lv => {
-    val logP = featureNames
-      .zip(fs(datum))
-      .map({ case (f, fv) => math.log(featureTally((lv, f, fv)).toDouble / cTally(lv)) })
-      .sum
-    (lv, (cTally(lv).toDouble / totalCount) * math.exp(logP))
-  }).maxBy(_._2)._1
+  def argmax[K](s: Iterable[(K, Double)]): K = s.maxBy(_._2)._1
+
+  def predict(datum: D): String = argmax(classValues.map(c => {
+    val fs = featureExtractor(datum)
+    val probC = (cTally(c).toDouble / totalCount)
+    val probFsGivenC = (0 until fs.length) Πx (i => featureTally(c, featureNames(i), fs(i)).toDouble / cTally(c))
+    (c, probC * probFsGivenC)
+  }))
 
   /**
    * For a given class (label value), predictedVsActual returns a tally of 4 cases:
@@ -51,7 +54,7 @@ class NaiveBayesClassifier[D](data: Seq[D],
    */
 
   def predictedVsActual(dit: Iterator[D], k: String): (Int, Int, Int, Int) = dit.map(d => {
-    val actual = c(d)
+    val actual = classExtractor(d)
     val predicted = predict(d)
     (actual === k, predicted === k) match {
       case (true, true) => (1, 0, 0, 0) // true positive
@@ -90,9 +93,6 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
 }
 
-
-  // def combineMaps[K](map1: immutable.Map[K, Int], map2: immutable.Map[K, Int]): immutable.Map[K, Int] = map1 ++ map2.map({ case (k, v) => k -> (v + map1.getOrElse(k, 0)) })
-  
   //  val smoothing = (for {
   //    lv <- unsmoothedLabelTally.keys
   //    featureName <- featureNames

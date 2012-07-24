@@ -29,14 +29,15 @@ object nbO {
 
   val classifier = new NaiveBayesClassifier(
     data,
-    List(
+    featureSpace = List(
       "Outlook" -> List("Sunny", "Overcast", "Rain"),
       "Temperature" -> List("Hot", "Mild", "Cool"),
       "Humidity" -> List("High", "Normal", "Low"),
       "Wind" -> List("Weak", "Strong")
     ),
-    (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
-    (t: Tennis) => t.play.toString)
+    classValues = "true" :: "false" :: Nil,
+    featureExtractor = (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
+    classExtractor = (t: Tennis) => t.play.toString)
 
   for (datum <- data) {
     println(datum + "\t" + classifier.predict(datum))
