@@ -39,7 +39,14 @@ object nbO {
     (t: Tennis) => t.play.toString)
 
   for (datum <- data) {
-    println(datum + "\t" + classifier.classify(datum))
+    println(datum + "\t" + classifier.predict(datum))
   }
+
+  val (precision, recall, specificity, accuracy) = classifier.performance(data.iterator, "true")
+
+  println("precision  : " + precision)
+  println("recall     : " + recall)
+  println("specificity: " + specificity)
+  println("accuracy   : " + accuracy)
 
 }

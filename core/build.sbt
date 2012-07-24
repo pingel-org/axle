@@ -32,8 +32,8 @@ libraryDependencies ++= Seq(
   "org" % "jblas" % "1.2.0",
   "org.specs2" %% "specs2" % "1.11" % "test",
   "joda-time" % "joda-time" % "2.1",
-  "org.joda" % "joda-convert" % "1.2"
-  // "org.scalaz" %% "scalaz-core" % "6.0.3"
+  "org.joda" % "joda-convert" % "1.2",
+  "org.scalaz" %% "scalaz-core" % "6.0.3"
 )
 
 test in assembly := {}
