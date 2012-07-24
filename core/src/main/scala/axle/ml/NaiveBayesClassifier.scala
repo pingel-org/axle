@@ -1,26 +1,13 @@
 package axle.ml
 
-object NaiveBayesUtil {
-
-  import collection._
-
-  def mapReduce[D, K, V](data: Iterator[D], mapper: D => Seq[(K, V)], reducer: (V, V) => V): immutable.Map[K, V] =
-    data
-      .map(mapper(_))
-      .flatMap(x => x)
-      .toList // TODO inefficient
-      .groupBy(_._1)
-      .map(kv => (kv._1, kv._2.map(_._2).reduce(reducer)))
-
-  // Note: with scalaz, combineMaps just becomes map1 |+| map2
-  def combineMaps[K](map1: immutable.Map[K, Int], map2: immutable.Map[K, Int]): immutable.Map[K, Int] = map1 ++ map2.map({ case (k, v) => k -> (v + map1.getOrElse(k, 0)) })
-
-}
-
 class NaiveBayesClassifier[T](data: Seq[T],
   featureSpace: List[(String, List[String])], extractFeatures: T => List[String], extractLabel: T => String) {
 
-  import NaiveBayesUtil._
+  import axle.ScalaMapReduce._
+  import collection._
+
+  // Note: with scalaz, combineMaps just becomes map1 |+| map2
+  def combineMaps[K](map1: immutable.Map[K, Int], map2: immutable.Map[K, Int]): immutable.Map[K, Int] = map1 ++ map2.map({ case (k, v) => k -> (v + map1.getOrElse(k, 0)) })
 
   val featureNames = featureSpace.map(_._1)
 
@@ -28,14 +15,14 @@ class NaiveBayesClassifier[T](data: Seq[T],
 
   val featureTally = mapReduce(
     data.iterator,
-    (t: T) => featureNames.zip(extractFeatures(t)).map({ case (f, fv) => ((extractLabel(t), f, fv), 1) }),
-    (x: Int, y: Int) => x + y
+    mapper = (t: T) => featureNames.zip(extractFeatures(t)).map({ case (f, fv) => ((extractLabel(t), f, fv), 1) }),
+    reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
 
   val unsmoothedLabelTally = mapReduce(
     data.iterator,
-    (t: T) => List((extractLabel(t), 1)),
-    (x: Int, y: Int) => x + y
+    mapper = (t: T) => List((extractLabel(t), 1)),
+    reducer = (x: Int, y: Int) => x + y
   )
 
   val smoothing = unsmoothedLabelTally.keys.flatMap(lv => featureNames.map(featureName => (lv, featureMap(featureName).size))).toMap
