@@ -18,7 +18,10 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   val featureTally = mapReduce(
     data.iterator,
-    mapper = (d: D) => featureNames.zip(featureExtractor(d)).map({ case (f, fv) => ((classExtractor(d), f, fv), 1) }),
+    mapper = (d: D) => {
+      val fs = featureExtractor(d)
+      (0 until fs.length).map(i => ((classExtractor(d), featureNames(i), fs(i)), 1))
+    },
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
 
@@ -32,12 +35,11 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   def argmax[K](s: Iterable[(K, Double)]): K = s.maxBy(_._2)._1
 
-  def predict(datum: D): String = argmax(classValues.map(c => {
-    val fs = featureExtractor(datum)
-    val probC = (classTally(c).toDouble / totalCount)
-    val probFsGivenC = (0 until fs.length) Π (i => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
-    (c, probC * probFsGivenC)
-  }))
+  def probC(c: String): Double = classTally(c).toDouble / totalCount
+
+  def probFsGivenC(fs: List[String], c: String) = (0 until fs.length) Π (i => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
+
+  def predict(d: D): String = argmax(classValues.map(c => (c, probC(c) * probFsGivenC(featureExtractor(d), c))))
 
   /**
    * For a given class (label value), predictedVsActual returns a tally of 4 cases:
