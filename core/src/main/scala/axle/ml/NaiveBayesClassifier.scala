@@ -24,11 +24,11 @@ class NaiveBayesClassifier[D](data: Seq[D],
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
 
-  val classTally = classValues.map((_, 1)).toMap |+| mapReduce(
+  val classTally = mapReduce(
     data.iterator,
     mapper = (d: D) => List((classExtractor(d), 1)),
     reducer = (x: Int, y: Int) => x + y
-  )
+  ).withDefaultValue(1) // to avoid division by zero
 
   val totalCount = classTally.values.sum
 
@@ -37,7 +37,7 @@ class NaiveBayesClassifier[D](data: Seq[D],
   def predict(datum: D): String = argmax(classValues.map(c => {
     val fs = featureExtractor(datum)
     val probC = (classTally(c).toDouble / totalCount)
-    val probFsGivenC = (0 until fs.length) Πx (i => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
+    val probFsGivenC = (0 until fs.length) Π (i => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
     (c, probC * probFsGivenC)
   }))
 
