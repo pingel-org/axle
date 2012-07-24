@@ -16,8 +16,6 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   val featureMap = featureSpace.toMap
 
-  val numFeatureValues = featureSpace.map(kv => kv._2.size).sum
-  
   val featureTally = mapReduce(
     data.iterator,
     mapper = (d: D) => featureNames.zip(featureExtractor(d)).map({ case (f, fv) => ((classExtractor(d), f, fv), 1) }),
@@ -90,8 +88,3 @@ class NaiveBayesClassifier[D](data: Seq[D],
   }
 
 }
-
-  //  val smoothing = (for {
-  //    lv <- unsmoothedLabelTally.keys
-  //    featureName <- featureNames
-  //  } yield (lv, featureMap(featureName).size)).toMap
