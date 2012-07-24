@@ -16,30 +16,28 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   val featureMap = featureSpace.toMap
 
+  val numFeatureValues = featureSpace.map(kv => kv._2.size).sum
+  
   val featureTally = mapReduce(
     data.iterator,
     mapper = (d: D) => featureNames.zip(featureExtractor(d)).map({ case (f, fv) => ((classExtractor(d), f, fv), 1) }),
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
 
-  val unsmoothedClassTally = mapReduce(
+  val classTally = classValues.map((_, 1)).toMap |+| mapReduce(
     data.iterator,
     mapper = (d: D) => List((classExtractor(d), 1)),
     reducer = (x: Int, y: Int) => x + y
   )
-  
-  val smoothing = classValues.flatMap(c => featureNames.map(featureName => (c, featureMap(featureName).size))).toMap
 
-  val cTally = (unsmoothedClassTally |+| smoothing).withDefaultValue(0)
-
-  val totalCount = cTally.values.sum
+  val totalCount = classTally.values.sum
 
   def argmax[K](s: Iterable[(K, Double)]): K = s.maxBy(_._2)._1
 
   def predict(datum: D): String = argmax(classValues.map(c => {
     val fs = featureExtractor(datum)
-    val probC = (cTally(c).toDouble / totalCount)
-    val probFsGivenC = (0 until fs.length) Πx (i => featureTally(c, featureNames(i), fs(i)).toDouble / cTally(c))
+    val probC = (classTally(c).toDouble / totalCount)
+    val probFsGivenC = (0 until fs.length) Πx (i => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
     (c, probC * probFsGivenC)
   }))
 
