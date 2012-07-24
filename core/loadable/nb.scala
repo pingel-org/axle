@@ -8,7 +8,7 @@
 
 object nbO {
 
-  import axle.ml.NaiveBayes
+  import axle.ml.NaiveBayesClassifier
 
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 
@@ -27,9 +27,9 @@ object nbO {
     Tennis("Overcast", "Hot", "Normal", "Weak", true) ::
     Tennis("Rain", "Mild", "High", "Strong", false) :: Nil
 
-  val nbModel = new NaiveBayes(
-    "Outlook" :: "Temperature" :: "Humidity" :: "Wind" :: Nil,
-    Map(
+  val classifier = new NaiveBayesClassifier(
+    data,
+    List(
       "Outlook" -> List("Sunny", "Overcast", "Rain"),
       "Temperature" -> List("Hot", "Mild", "Cool"),
       "Humidity" -> List("High", "Normal", "Low"),
@@ -38,11 +38,8 @@ object nbO {
     (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
     (t: Tennis) => t.play.toString)
 
-  val (featureTally, labelTally, totalCount) = nbModel.train(data)
-
   for (datum <- data) {
-    println(datum)
-    println("\t" + nbModel.classify(datum, featureTally, labelTally, totalCount))
+    println(datum + "\t" + classifier.classify(datum))
   }
 
 }
