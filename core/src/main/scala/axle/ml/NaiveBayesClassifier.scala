@@ -36,7 +36,7 @@ class NaiveBayesClassifier[D](data: Seq[D],
     val logP = featureNames
       .zip(fs(datum))
       .map({ case (f, fv) => math.log(featureTally((lv, f, fv)).toDouble / cTally(lv)) })
-      .reduce(_ + _)
+      .sum
     (lv, (cTally(lv).toDouble / totalCount) * math.exp(logP))
   }).maxBy(_._2)._1
 
@@ -59,7 +59,7 @@ class NaiveBayesClassifier[D](data: Seq[D],
       case (false, false) => (0, 0, 1, 0) // false negative
       case (true, false) => (0, 0, 0, 1) // true negative
     }
-  }).foldLeft((0, 0, 0, 0))(_ |+| _)
+  }).reduce(_ |+| _)
 
   /**
    * "performance" returns four measures of classification performance

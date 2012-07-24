@@ -36,16 +36,16 @@ trait LinearRegression {
 
   def regression[D](
     examples: Seq[D],
-    numObservations: Int,
+    numFeatures: Int,
     featureExtractor: D => List[Double],
     objectiveExtractor: D => Double,
     α: Double = 0.1,
-    N: Int = 100 // iterations
+    iterations: Int = 100
     ) = {
 
     val inputX = matrix(
       examples.length,
-      numObservations,
+      numFeatures,
       examples.flatMap(featureExtractor(_)).toArray).t
 
     val (scaledX, colMins, colRanges) = scaleColumns(inputX)
@@ -55,7 +55,7 @@ trait LinearRegression {
     val (scaledY, yMin, yRange) = scaleColumns(y)
     val θ0 = ones[Double](X.columns, 1)
 
-    val (θ, errLog) = gradientDescent(X, scaledY, θ0, α, N)
+    val (θ, errLog) = gradientDescent(X, scaledY, θ0, α, iterations)
 
     LinearEstimator(featureExtractor, colMins, colRanges, θ, yMin, yRange, errLog.reverse)
   }

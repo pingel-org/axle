@@ -12,23 +12,21 @@ object lrO {
 
   val estimator = regression(
     data,
-    4,
-    (rl: RealtyListing) => (rl.size :: rl.bedrooms.toDouble :: rl.floors.toDouble :: rl.age.toDouble :: Nil),
-    (rl: RealtyListing) => rl.price,
-    0.1,
-    100)
+    numFeatures = 4,
+    featureExtractor = (rl: RealtyListing) => (rl.size :: rl.bedrooms.toDouble :: rl.floors.toDouble :: rl.age.toDouble :: Nil),
+    objectiveExtractor = (rl: RealtyListing) => rl.price,
+    α = 0.1,
+    iterations = 100)
 
   val priceGuess = estimator.estimate(RealtyListing(1416, 3, 2, 40, 0.0))
 
-  val plot = new Plot[Int, Int, Double, Double](lfs = List(("error" -> estimator.errTree)),
+  new AxleFrame().add(new Plot(lfs = List(("error" -> estimator.errTree)),
     connect = true,
     drawKey = true,
     title = Some("Linear Regression Error"),
-    xAxis = 0.0, xAxisLabel = Some("step"),
-    yAxis = 0, yAxisLabel = Some("error"))
-
-  // new AxleFrame(width = 500, height = 300, bgColor = java.awt.Color.WHITE, title = "linear regression plot").add(plot)
-
-  new AxleFrame().add(plot)
+    xAxis = 0.0,
+    xAxisLabel = Some("step"),
+    yAxis = 0,
+    yAxisLabel = Some("error")))
 
 }

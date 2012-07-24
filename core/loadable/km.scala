@@ -24,18 +24,21 @@ object kmO {
 
   val classifier = cluster(
     data,
-    2, // numFeatures
-    (p: Foo) => List(p.x, p.y),
-    (features: List[Double]) => new Foo(features(0), features(1)),
-    6, // K
-    100) // iterations
+    N = 2,
+    featureExtractor = (p: Foo) => List(p.x, p.y),
+    constructor = (features: List[Double]) => new Foo(features(0), features(1)),
+    K = 6,
+    iterations = 100)
 
   new AxleFrame().add(new KMeansVisualization(classifier))
 
-  new AxleFrame().add(new Plot[Int, Int, Double, Double](classifier.averageDistanceLogSeries(),
-    connect = true, drawKey = true,
+  new AxleFrame().add(new Plot(classifier.averageDistanceLogSeries(),
+    connect = true,
+    drawKey = true,
     title = Some("KMeans Mean Centroid Distances"),
-    xAxis = 0.0, xAxisLabel = Some("step"),
-    yAxis = 0, yAxisLabel = Some("average distance to centroid")))
+    xAxis = 0.0,
+    xAxisLabel = Some("step"),
+    yAxis = 0,
+    yAxisLabel = Some("average distance to centroid")))
 
 }

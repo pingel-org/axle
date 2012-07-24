@@ -30,9 +30,12 @@ trait KMeans {
    *
    */
 
-  def cluster[T](data: Seq[T], N: Int,
-    featureExtractor: T => List[Double], constructor: List[Double] => T,
-    K: Int, iterations: Int): KMeansClassifier[T] = {
+  def cluster[T](data: Seq[T],
+    N: Int,
+    featureExtractor: T => List[Double],
+    constructor: List[Double] => T,
+    K: Int,
+    iterations: Int): KMeansClassifier[T] = {
 
     val X = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
     val distanceLog = zeros[Double](K, iterations)
