@@ -23,7 +23,7 @@ object enrichedO {
 
   List(1, 2, 3) ∀ (_ % 2 == 0)
 
-  (1 to 10) Π (_ * 3)
+  (1 to 10) Π((i: Int) => { () => i * 3 }) // TODO: clean this up
 
   (1 to 10) Σ (_ * 2)
 

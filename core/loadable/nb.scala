@@ -8,6 +8,7 @@
 
 object nbO {
 
+  import axle.Statistics._
   import axle.ml.NaiveBayesClassifier
 
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
@@ -29,13 +30,11 @@ object nbO {
 
   val classifier = new NaiveBayesClassifier(
     data,
-    featureSpace = List(
-      "Outlook" -> List("Sunny", "Overcast", "Rain"),
-      "Temperature" -> List("Hot", "Mild", "Cool"),
-      "Humidity" -> List("High", "Normal", "Low"),
-      "Wind" -> List("Weak", "Strong")
-    ),
-    classValues = "true" :: "false" :: Nil,
+    Fs = RandomVariable("Outlook", values = Some(Set("Sunny", "Overcast", "Rain"))) ::
+      RandomVariable("Temperature", values = Some(Set("Hot", "Mild", "Cool"))) ::
+      RandomVariable("Humidity", values = Some(Set("High", "Normal", "Low"))) ::
+      RandomVariable("Wind", values = Some(Set("Weak", "Strong"))) :: Nil,
+    C = RandomVariable("Play", values = Some(Set("true", "false"))),
     featureExtractor = (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
     classExtractor = (t: Tennis) => t.play.toString)
 

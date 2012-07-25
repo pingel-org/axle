@@ -1,8 +1,11 @@
 package axle.ml
 
+import axle.InformationTheory._
+import axle.Statistics._
+
 class NaiveBayesClassifier[D](data: Seq[D],
-  featureSpace: List[(String, List[String])],
-  classValues: List[String],
+  Fs: List[RandomVariable[String]],
+  C: RandomVariable[String],
   featureExtractor: D => List[String],
   classExtractor: D => String) {
 
@@ -12,34 +15,38 @@ class NaiveBayesClassifier[D](data: Seq[D],
   import scalaz._
   import Scalaz._
 
-  val featureNames = featureSpace.map(_._1)
+  val featureNames = Fs.map(_.name)
 
-  val featureMap = featureSpace.toMap
+  val N = featureNames.size
 
-  val featureTally = mapReduce(
-    data.iterator,
+  def argmax[K](s: Iterable[(K, () => Double)]): K = s.maxBy(_._2())._1
+
+  // def probC(c: String): Double = classTally(c).toDouble / totalCount
+  // def probFsGivenC(fs: List[String], c: String) = (0 until fs.length) Π ((i: Int) => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
+
+  // TODO no probability should ever be 0
+
+  val featureTally = mapReduce(data.iterator,
     mapper = (d: D) => {
       val fs = featureExtractor(d)
-      (0 until fs.length).map(i => ((classExtractor(d), featureNames(i), fs(i)), 1))
+      (0 until fs.length).map(i => ((classExtractor(d), fs(i)), 1)) // featureNames(i)
     },
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
 
-  val classTally = mapReduce(
-    data.iterator,
+  val ftd = new TallyDistribution("foo", featureTally)
+  val fd = new RandomVariable(Fs(0).name, values = Fs(0).values, input = Some(ftd))
+  val pfd = P(fd eq "bar")
+
+  val classTally = mapReduce(data.iterator,
     mapper = (d: D) => List((classExtractor(d), 1)),
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(1) // to avoid division by zero
 
-  val totalCount = classTally.values.sum
-
-  def argmax[K](s: Iterable[(K, Double)]): K = s.maxBy(_._2)._1
-
-  def probC(c: String): Double = classTally(c).toDouble / totalCount
-
-  def probFsGivenC(fs: List[String], c: String) = (0 until fs.length) Π (i => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
-
-  def predict(d: D): String = argmax(classValues.map(c => (c, probC(c) * probFsGivenC(featureExtractor(d), c))))
+  def predict(d: D): String = {
+    val fs = featureExtractor(d)
+    argmax(C.values.get.map(c => (c, P(C eq c) * (0 until N).Π((i: Int) => P((Fs(i) eq fs(i)) | (C eq c))))))
+  }
 
   /**
    * For a given class (label value), predictedVsActual returns a tally of 4 cases:

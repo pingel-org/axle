@@ -17,9 +17,9 @@ object Enrichments {
 
     def Πx(f: T => Double): Double = exp(gt.map(x => log(f(x))).sum) // TODO: use aggregate for sum?
 
-    def Π(f: T => Double): Double = gt.aggregate(1.0)(_ * f(_), _ * _)
+    def Π(f: T => (() => Double)): Double = gt.aggregate(1.0)((a, b) => a * f(b)(), (x, y) => x * y)
 
-    def Pi(f: T => Double) = Π(f)
+    def Pi(f: T => (() => Double)) = Π(f)
 
     def ∀(p: T => Boolean) = gt.forall(p)
 
@@ -69,17 +69,5 @@ object Enrichments {
   }
 
   implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
-
-  case class EnrichedList[T](list: List[T]) {
-
-    // def ⨯[S](right: GenTraversable[S]) = new ListCrossProduct[T](Seq(list, right)).iterator
-
-  }
-
-  implicit def enrichList[T](list: List[T]) = EnrichedList(list)
-
-  //  case class EnrichedSet[T](s: Set[T]) {}
-  //
-  //  implicit def enrichSet[T](s: Set[T]) = EnrichedSet(s)
 
 }

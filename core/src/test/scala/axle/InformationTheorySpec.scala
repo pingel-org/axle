@@ -4,8 +4,9 @@ import org.specs2.mutable._
 
 class InformationTheorySpec extends Specification {
 
-  import InformationTheory._
-  import quanta.Information._
+  import axle.Statistics._
+  import axle.InformationTheory._
+  import axle.quanta.Information._
 
   "hard-coded distributions" should {
 
@@ -20,23 +21,19 @@ class InformationTheorySpec extends Specification {
   "cpt" should {
     "work" in {
 
-      val X = RandomVariable("X", distribution(Map("foo" -> 0.1, "food" -> 0.9)))
+      val X = RandomVariable("X", input = Some(distribution(Map("foo" -> 0.1, "food" -> 0.9))))
 
-      val Y = RandomVariable("Y", distribution(Map("bar" -> 0.9, "bard" -> 0.1)))
+      val Y = RandomVariable("Y", input = Some(distribution(Map("bar" -> 0.9, "bard" -> 0.1))))
 
-      val A = RandomVariable("A",
-        cpt(X, Y, Set("a", "b"),
-          Map(
-            ("foo", "bar") -> Map("a" -> 0.3, "b" -> 0.7),
-            ("foo", "bard") -> Map("a" -> 0.2, "b" -> 0.8),
-            ("food", "bar") -> Map("a" -> 0.9, "b" -> 0.1),
-            ("food", "bard") -> Map("a" -> 0.5, "b" -> 0.5)
-          )
-        )
-      )
+      val A = RandomVariable("A", input = Some(cpt(X, Y, Set("a", "b"), Map(
+        ("foo", "bar") -> Map("a" -> 0.3, "b" -> 0.7),
+        ("foo", "bard") -> Map("a" -> 0.2, "b" -> 0.8),
+        ("food", "bar") -> Map("a" -> 0.9, "b" -> 0.1),
+        ("food", "bard") -> Map("a" -> 0.5, "b" -> 0.5)
+      ))))
 
-      val p = P((A == "a") | (X == "foo") ∧ (Y != "bar"))
-      val b = bayes(P((A == "a") ∧ (X == "foo")))
+      val p = P((A eq "a") | (X eq "foo") ∧ (Y ne "bar"))
+      val b = bayes(P((A eq "a") ∧ (X eq "foo")))
 
       //      println("p = " + p)
       //      println("p() = " + p())
