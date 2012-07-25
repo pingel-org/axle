@@ -30,11 +30,11 @@ object nbO {
 
   val classifier = new NaiveBayesClassifier(
     data,
-    Fs = RandomVariable("Outlook", values = Some(Set("Sunny", "Overcast", "Rain"))) ::
-      RandomVariable("Temperature", values = Some(Set("Hot", "Mild", "Cool"))) ::
-      RandomVariable("Humidity", values = Some(Set("High", "Normal", "Low"))) ::
-      RandomVariable("Wind", values = Some(Set("Weak", "Strong"))) :: Nil,
-    C = RandomVariable("Play", values = Some(Set("true", "false"))),
+    Fs = RandomVariableNoInput("Outlook", values = Some(Set("Sunny", "Overcast", "Rain"))) ::
+      RandomVariableNoInput("Temperature", values = Some(Set("Hot", "Mild", "Cool"))) ::
+      RandomVariableNoInput("Humidity", values = Some(Set("High", "Normal", "Low"))) ::
+      RandomVariableNoInput("Wind", values = Some(Set("Weak", "Strong"))) :: Nil,
+    C = RandomVariableNoInput("Play", values = Some(Set("true", "false"))),
     featureExtractor = (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
     classExtractor = (t: Tennis) => t.play.toString)
 

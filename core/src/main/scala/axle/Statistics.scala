@@ -33,12 +33,27 @@ object Statistics {
     }
   }
 
+  // TODO: may want CaseIs{With, No] classes to avoid the run-time type-checking below
   case class CaseIs[A](rv: RandomVariable[A], v: A) extends Case[A] {
-    def probability[B](given: Option[Case[B]]): Double = rv.probability(v, given)
+    def probability[B](given: Option[Case[B]]): Double = rv match {
+      case rvNo: RandomVariableNoInput[A] => given
+        .map(g => throw new Exception("caller provided a 'given' to a random variable that has no inputs"))
+        .getOrElse(rvNo.probability(v))
+      case rvWith: RandomVariableWithInput[A, B] => given
+        .map(g => rvWith.probability(v, g))
+        .getOrElse(rvWith.probability(v))
+    }
   }
 
   case class CaseIsnt[A](rv: RandomVariable[A], v: A) extends Case[A] {
-    def probability[B](given: Option[Case[B]] = None): Double = 1 - rv.probability(v, given)
+    def probability[B](given: Option[Case[B]] = None): Double = 1.0 - (rv match {
+      case rvNo: RandomVariableNoInput[A] => given
+        .map(g => throw new Exception("caller provided a 'given' to a random variable that has no inputs"))
+        .getOrElse(rvNo.probability(v))
+      case rvWith: RandomVariableWithInput[A, B] => given
+        .map(g => rvWith.probability(v, g))
+        .getOrElse(rvWith.probability(v))
+    })
   }
 
   case class EnrichedCaseGenTraversable[A](cgt: GenTraversable[Case[A]]) {
@@ -47,11 +62,28 @@ object Statistics {
 
   implicit def enrichCaseGenTraversable[A](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
 
-  case class RandomVariable[A](name: String, values: Option[Set[A]] = None, input: Option[Distribution[A, _]] = None) {
+  trait RandomVariable[A] {
+    def getValues(): Option[Set[A]]
+    def eq(v: A): Case[A]
+    def ne(v: A): Case[A]
+    def probability(a: A): Double
+  }
+
+  case class RandomVariableNoInput[A](name: String, values: Option[Set[A]] = None, distribution: Option[DistributionNoInput[A]] = None)
+    extends RandomVariable[A] {
+    def getValues() = values
     def eq(v: A): Case[A] = CaseIs(this, v)
     def ne(v: A): Case[A] = CaseIsnt(this, v)
-    def probability[B](a: A, given: Option[Case[B]]): Double = input.get.probabilityOf(a, given)
+    def probability(a: A): Double = distribution.get.probabilityOf(a)
+  }
 
+  case class RandomVariableWithInput[A, G](name: String, values: Option[Set[A]] = None, distribution: Option[DistributionWithInput[A, G]] = None)
+    extends RandomVariable[A] {
+    def getValues() = values
+    def eq(v: A): Case[A] = CaseIs(this, v)
+    def ne(v: A): Case[A] = CaseIsnt(this, v)
+    def probability(a: A): Double = -1.0 // TODO
+    def probability(a: A, given: Case[G]): Double = distribution.get.probabilityOf(a, given)
   }
 
   case class P[A](c: Case[A]) extends Function0[Double] {
@@ -70,7 +102,7 @@ object Statistics {
     case _ => P(p.c)
   }
 
-  trait Distribution[A, I] {
+  trait DistributionNoInput[A] {
 
     def getObjects(): Set[A]
 
@@ -78,7 +110,7 @@ object Statistics {
 
     def choose(): A
 
-    def probabilityOf[B](a: A, given: Option[Case[B]]): Double
+    def probabilityOf(a: A): Double
 
     def entropy(): Information#UOM
 
@@ -92,17 +124,45 @@ object Statistics {
 
   }
 
-  class TallyDistribution[A, G, I](name: String, tally: Map[(A, G), Int]) extends Distribution[A, I] {
+  trait DistributionWithInput[A, G] {
 
-    def getObjects(): Set[A] = null // TODO
+    def getObjects(): Set[A]
 
-    def choose(): A = null.asInstanceOf[A] // TODO
+    def probabilityOf(a: A): Double
 
-    def probabilityOf[B](a: A, given: Option[Case[B]]): Double = {
-      0.0 // "a"
+    def probabilityOf(a: A, given: Case[G]): Double
+
+  }
+
+  class TallyDistributionNoInput[A, G](rv: RandomVariableNoInput[A], tally: Map[A, Int])
+    extends DistributionNoInput[A] {
+
+    val totalCount = tally.values.sum
+
+    def getObjects(): Set[A] = rv.getValues.get
+
+    def choose() = null.asInstanceOf[A] // TODO
+
+    def probabilityOf(a: A): Double = tally(a).toDouble / totalCount
+
+    def entropy() = null // TODO
+  }
+
+  class TallyDistributionWithInput[A, G](rv: RandomVariableWithInput[A, G], grv: RandomVariable[G], tally: Map[(A, G), Int])
+    extends DistributionWithInput[A, G] {
+
+    def getObjects(): Set[A] = rv.getValues.get
+
+    val totalCount = tally.values.sum
+
+    def probabilityOf(a: A): Double = grv.getValues.get.map(gv => tally((a, gv))).sum / totalCount
+
+    def probabilityOf(a: A, given: Case[G]): Double = given match {
+      case CaseIs(argGrv, gv) => tally((a, gv)).toDouble / totalCount
+      case CaseIsnt(argGrv, gv) => 1.0 - (tally((a, gv)).toDouble / totalCount)
+      case _ => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
     }
 
-    def entropy(): Information#UOM = null // TODO
   }
 
 }

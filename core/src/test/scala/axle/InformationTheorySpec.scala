@@ -21,11 +21,11 @@ class InformationTheorySpec extends Specification {
   "cpt" should {
     "work" in {
 
-      val X = RandomVariable("X", input = Some(distribution(Map("foo" -> 0.1, "food" -> 0.9))))
+      val X = RandomVariableNoInput("X", distribution = Some(distribution(Map("foo" -> 0.1, "food" -> 0.9))))
 
-      val Y = RandomVariable("Y", input = Some(distribution(Map("bar" -> 0.9, "bard" -> 0.1))))
+      val Y = RandomVariableNoInput("Y", distribution = Some(distribution(Map("bar" -> 0.9, "bard" -> 0.1))))
 
-      val A = RandomVariable("A", input = Some(cpt(X, Y, Set("a", "b"), Map(
+      val A = RandomVariableWithInput("A", distribution = Some(cpt(X, Y, Set("a", "b"), Map(
         ("foo", "bar") -> Map("a" -> 0.3, "b" -> 0.7),
         ("foo", "bard") -> Map("a" -> 0.2, "b" -> 0.8),
         ("food", "bar") -> Map("a" -> 0.9, "b" -> 0.1),

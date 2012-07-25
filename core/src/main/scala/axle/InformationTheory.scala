@@ -15,7 +15,7 @@ object InformationTheory {
     prior1: RandomVariable[P1],
     prior2: RandomVariable[P2],
     values: Set[A],
-    m: Map[(P1, P2), Map[A, Double]]) extends Distribution[A, (P1, P2)] {
+    m: Map[(P1, P2), Map[A, Double]]) extends DistributionWithInput[A, (P1, P2)] {
 
     import Information._
 
@@ -25,6 +25,10 @@ object InformationTheory {
       val n = 1 // TODO
       n *: bit
     }
+
+    def probabilityOf(a: A): Double = -1.0 // TODO
+
+    def probabilityOf(a: A, given: Case[(P1, P2)]): Double = -1.0 // TODO
 
     def choose(): A = {
       // val pv1 = prior1.choose
@@ -44,7 +48,7 @@ object InformationTheory {
 
     // TODO: verify that the distribution sums to 1
 
-    new Distribution[A, Unit] {
+    new DistributionNoInput[A] {
 
       import Information._
 
@@ -62,6 +66,8 @@ object InformationTheory {
         val r = math.random
         bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
       }
+
+      def probabilityOf(a: A): Double = p(a)
 
       def entropy() = X.Σ(x => p(x) match {
         case 0.0 => 0.0

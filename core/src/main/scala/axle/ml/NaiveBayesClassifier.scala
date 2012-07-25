@@ -4,7 +4,7 @@ import axle.InformationTheory._
 import axle.Statistics._
 
 class NaiveBayesClassifier[D](data: Seq[D],
-  Fs: List[RandomVariable[String]],
+  Fs: List[RandomVariableNoInput[String]],
   C: RandomVariable[String],
   featureExtractor: D => List[String],
   classExtractor: D => String) {
@@ -21,21 +21,18 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   def argmax[K](s: Iterable[(K, () => Double)]): K = s.maxBy(_._2())._1
 
-  // def probC(c: String): Double = classTally(c).toDouble / totalCount
-  // def probFsGivenC(fs: List[String], c: String) = (0 until fs.length) Π ((i: Int) => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
-
   // TODO no probability should ever be 0
 
   val featureTally = mapReduce(data.iterator,
     mapper = (d: D) => {
       val fs = featureExtractor(d)
-      (0 until fs.length).map(i => ((classExtractor(d), fs(i)), 1)) // featureNames(i)
+      (0 until fs.length).map(i => (fs(i), 1)) // ((classExtractor(d), (featureNames(i), fs(i))), 1))
     },
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
 
-  val ftd = new TallyDistribution("foo", featureTally)
-  val fd = new RandomVariable(Fs(0).name, values = Fs(0).values, input = Some(ftd))
+  val ftd = new TallyDistributionNoInput(Fs(0), featureTally)
+  val fd = new RandomVariableNoInput(Fs(0).name, values = Fs(0).getValues, distribution = Some(ftd))
   val pfd = P(fd eq "bar")
 
   val classTally = mapReduce(data.iterator,
@@ -45,7 +42,7 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   def predict(d: D): String = {
     val fs = featureExtractor(d)
-    argmax(C.values.get.map(c => (c, P(C eq c) * (0 until N).Π((i: Int) => P((Fs(i) eq fs(i)) | (C eq c))))))
+    argmax(C.getValues.get.map(c => (c, P(C eq c) * (0 until N).Π((i: Int) => P((Fs(i) eq fs(i)) | (C eq c))))))
   }
 
   /**
@@ -97,3 +94,6 @@ class NaiveBayesClassifier[D](data: Seq[D],
   }
 
 }
+
+// def probC(c: String): Double = classTally(c).toDouble / totalCount
+// def probFsGivenC(fs: List[String], c: String) = (0 until fs.length) Π ((i: Int) => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
