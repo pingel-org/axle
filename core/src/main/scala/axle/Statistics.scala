@@ -139,6 +139,8 @@ object Statistics {
 
   }
 
+  // TODO: division by zero
+  
   class TallyDistributionNoInput[A, G](rv: RandomVariable[A], tally: Map[A, Int])
     extends DistributionNoInput[A] {
 
@@ -163,8 +165,8 @@ object Statistics {
     def probabilityOf(a: A): Double = grv.getValues.get.map(gv => tally((a, gv))).sum / totalCount
 
     def probabilityOf(a: A, given: Case[G]): Double = given match {
-      case CaseIs(argGrv, gv) => tally((a, gv)).toDouble / totalCount
-      case CaseIsnt(argGrv, gv) => 1.0 - (tally((a, gv)).toDouble / totalCount)
+      case CaseIs(argGrv, gv) => tally((a, gv)).toDouble / tally.filter(_._1._2 == gv).map(_._2).sum
+      case CaseIsnt(argGrv, gv) => 1.0 - (tally((a, gv)).toDouble / tally.filter(_._1._2 == gv).map(_._2).sum)
       case _ => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
     }
 

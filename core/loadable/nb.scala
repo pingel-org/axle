@@ -34,19 +34,20 @@ object nbO {
       RandomVariableNoInput("Temperature", values = Some(Set("Hot", "Mild", "Cool"))) ::
       RandomVariableNoInput("Humidity", values = Some(Set("High", "Normal", "Low"))) ::
       RandomVariableNoInput("Wind", values = Some(Set("Weak", "Strong"))) :: Nil,
-    pC = RandomVariableNoInput("Play", values = Some(Set("true", "false"))),
+    pC = RandomVariableNoInput("Play", values = Some(Set(true, false))),
     featureExtractor = (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
-    classExtractor = (t: Tennis) => t.play.toString)
+    classExtractor = (t: Tennis) => t.play)
 
   for (datum <- data) {
     println(datum + "\t" + classifier.predict(datum))
   }
 
-  val (precision, recall, specificity, accuracy) = classifier.performance(data.iterator, "true")
+  val (precision, recall, specificity, accuracy) = classifier.performance(data.iterator, true)
 
   println("precision  : " + precision)
   println("recall     : " + recall)
   println("specificity: " + specificity)
   println("accuracy   : " + accuracy)
 
+  // P( (Fs(0) eq "Rain") | (C eq false))()
 }

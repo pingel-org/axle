@@ -23,7 +23,7 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
 
   // TODO no probability should ever be 0
 
-  val featureTally = mapReduce(data.iterator,
+  val featureTally: immutable.Map[(TC, String, TF), Int] = mapReduce(data.iterator,
     mapper = (d: D) => {
       val fs = featureExtractor(d)
       (0 until fs.length).map(i => ((classExtractor(d), featureNames(i), fs(i)), 1))
@@ -31,7 +31,7 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
 
-  val classTally = mapReduce(data.iterator,
+  val classTally: immutable.Map[TC, Int] = mapReduce(data.iterator,
     mapper = (d: D) => List((classExtractor(d), 1)),
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(1) // to avoid division by zero
