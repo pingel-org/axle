@@ -3,11 +3,11 @@ package axle.ml
 import axle.InformationTheory._
 import axle.Statistics._
 
-class NaiveBayesClassifier[D](data: Seq[D],
-  pFs: List[RandomVariable[String]],
-  pC: RandomVariable[String],
-  featureExtractor: D => List[String],
-  classExtractor: D => String) {
+class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
+  pFs: List[RandomVariable[TF]],
+  pC: RandomVariable[TC],
+  featureExtractor: D => List[TF],
+  classExtractor: D => TC) {
 
   import axle.ScalaMapReduce._
   import axle.Enrichments._
@@ -46,15 +46,15 @@ class NaiveBayesClassifier[D](data: Seq[D],
   val Fs = pFs.map(pF => new RandomVariableWithInput(
     pF.getName,
     values = pF.getValues,
-    distribution = Some(new TallyDistributionWithInput(pF, C,
+    distribution = Some(new TallyDistributionWithInput(pF, pC,
       featureTally
         .filter(_._1._2 == pF.getName)
         .map(kv => ((kv._1._3, kv._1._1), kv._2))
         .withDefaultValue(0)))))
 
-  def predict(d: D): String = {
+  def predict(d: D): TC = {
     val fs = featureExtractor(d)
-    argmax(C, (c: String) => P(C eq c) * (0 until N).Π((i: Int) => P((Fs(i) eq fs(i)) | (C eq c))))
+    argmax(C, (c: TC) => P(C eq c) * (0 until N).Π((i: Int) => P((Fs(i) eq fs(i)) | (C eq c))))
   }
 
   /**
@@ -67,10 +67,10 @@ class NaiveBayesClassifier[D](data: Seq[D],
    *
    */
 
-  def predictedVsActual(dit: Iterator[D], k: String): (Int, Int, Int, Int) = dit.map(d => {
+  def predictedVsActual(dit: Iterator[D], k: TC): (Int, Int, Int, Int) = dit.map(d => {
     val actual = classExtractor(d)
     val predicted = predict(d)
-    (actual === k, predicted === k) match {
+    (actual == k, predicted == k) match { // TODO use type-safe equality (===)
       case (true, true) => (1, 0, 0, 0) // true positive
       case (false, true) => (0, 1, 0, 0) // false positive
       case (false, false) => (0, 0, 1, 0) // false negative
@@ -93,7 +93,7 @@ class NaiveBayesClassifier[D](data: Seq[D],
    *
    */
 
-  def performance(dit: Iterator[D], k: String): (Double, Double, Double, Double) = {
+  def performance(dit: Iterator[D], k: TC): (Double, Double, Double, Double) = {
 
     val (tp, fp, fn, tn) = predictedVsActual(dit, k)
 
@@ -106,6 +106,3 @@ class NaiveBayesClassifier[D](data: Seq[D],
   }
 
 }
-
-// def probC(c: String): Double = classTally(c).toDouble / totalCount
-// def probFsGivenC(fs: List[String], c: String) = (0 until fs.length) Π ((i: Int) => featureTally(c, featureNames(i), fs(i)).toDouble / classTally(c))
