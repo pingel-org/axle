@@ -19,7 +19,9 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   val N = featureNames.size
 
-  def argmax[K](s: Iterable[(K, () => Double)]): K = s.maxBy(_._2())._1
+  implicit def rv2it[K](rv: RandomVariable[K]) = rv.getValues.get
+
+  def argmax[K](ks: Iterable[K], f: K => () => Double): K = ks.map(k => (k, f(k)())).maxBy(_._2)._1
 
   // TODO no probability should ever be 0
 
@@ -52,7 +54,7 @@ class NaiveBayesClassifier[D](data: Seq[D],
 
   def predict(d: D): String = {
     val fs = featureExtractor(d)
-    argmax(C.getValues.get.map(c => (c, P(C eq c) * (0 until N).Π((i: Int) => P((Fs(i) eq fs(i)) | (C eq c))))))
+    argmax(C, (c: String) => P(C eq c) * (0 until N).Π((i: Int) => P((Fs(i) eq fs(i)) | (C eq c))))
   }
 
   /**
