@@ -4,8 +4,8 @@ import axle.InformationTheory._
 import axle.Statistics._
 
 class NaiveBayesClassifier[D](data: Seq[D],
-  Fs: List[RandomVariableNoInput[String]],
-  C: RandomVariable[String],
+  pFs: List[RandomVariable[String]],
+  pC: RandomVariable[String],
   featureExtractor: D => List[String],
   classExtractor: D => String) {
 
@@ -15,7 +15,7 @@ class NaiveBayesClassifier[D](data: Seq[D],
   import scalaz._
   import Scalaz._
 
-  val featureNames = Fs.map(_.name)
+  val featureNames = pFs.map(_.getName)
 
   val N = featureNames.size
 
@@ -26,19 +26,29 @@ class NaiveBayesClassifier[D](data: Seq[D],
   val featureTally = mapReduce(data.iterator,
     mapper = (d: D) => {
       val fs = featureExtractor(d)
-      (0 until fs.length).map(i => (fs(i), 1)) // ((classExtractor(d), (featureNames(i), fs(i))), 1))
+      (0 until fs.length).map(i => ((classExtractor(d), featureNames(i), fs(i)), 1))
     },
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(0)
-
-  val ftd = new TallyDistributionNoInput(Fs(0), featureTally)
-  val fd = new RandomVariableNoInput(Fs(0).name, values = Fs(0).getValues, distribution = Some(ftd))
-  val pfd = P(fd eq "bar")
 
   val classTally = mapReduce(data.iterator,
     mapper = (d: D) => List((classExtractor(d), 1)),
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(1) // to avoid division by zero
+
+  val C = new RandomVariableNoInput(
+    pC.getName,
+    values = pC.getValues,
+    distribution = Some(new TallyDistributionNoInput(pC, classTally)))
+
+  val Fs = pFs.map(pF => new RandomVariableWithInput(
+    pF.getName,
+    values = pF.getValues,
+    distribution = Some(new TallyDistributionWithInput(pF, C,
+      featureTally
+        .filter(_._1._2 == pF.getName)
+        .map(kv => ((kv._1._3, kv._1._1), kv._2))
+        .withDefaultValue(0)))))
 
   def predict(d: D): String = {
     val fs = featureExtractor(d)

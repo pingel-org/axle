@@ -63,6 +63,7 @@ object Statistics {
   implicit def enrichCaseGenTraversable[A](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
 
   trait RandomVariable[A] {
+    def getName(): String
     def getValues(): Option[Set[A]]
     def eq(v: A): Case[A]
     def ne(v: A): Case[A]
@@ -71,6 +72,7 @@ object Statistics {
 
   case class RandomVariableNoInput[A](name: String, values: Option[Set[A]] = None, distribution: Option[DistributionNoInput[A]] = None)
     extends RandomVariable[A] {
+    def getName() = name
     def getValues() = values
     def eq(v: A): Case[A] = CaseIs(this, v)
     def ne(v: A): Case[A] = CaseIsnt(this, v)
@@ -79,6 +81,7 @@ object Statistics {
 
   case class RandomVariableWithInput[A, G](name: String, values: Option[Set[A]] = None, distribution: Option[DistributionWithInput[A, G]] = None)
     extends RandomVariable[A] {
+    def getName() = name
     def getValues() = values
     def eq(v: A): Case[A] = CaseIs(this, v)
     def ne(v: A): Case[A] = CaseIsnt(this, v)
@@ -134,7 +137,7 @@ object Statistics {
 
   }
 
-  class TallyDistributionNoInput[A, G](rv: RandomVariableNoInput[A], tally: Map[A, Int])
+  class TallyDistributionNoInput[A, G](rv: RandomVariable[A], tally: Map[A, Int])
     extends DistributionNoInput[A] {
 
     val totalCount = tally.values.sum
@@ -148,7 +151,7 @@ object Statistics {
     def entropy() = null // TODO
   }
 
-  class TallyDistributionWithInput[A, G](rv: RandomVariableWithInput[A, G], grv: RandomVariable[G], tally: Map[(A, G), Int])
+  class TallyDistributionWithInput[A, G](rv: RandomVariable[A], grv: RandomVariable[G], tally: Map[(A, G), Int])
     extends DistributionWithInput[A, G] {
 
     def getObjects(): Set[A] = rv.getValues.get
