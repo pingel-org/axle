@@ -6,6 +6,8 @@ object Statistics {
   import axle.Enrichments._
   import axle.quanta.Information
 
+  implicit def rv2it[K](rv: RandomVariable[K]) = rv.getValues.get
+
   trait Case[A] {
     def ∧[B](right: Case[B]): Case[(A, B)] = CaseAnd[A, B](this, right)
     def ∨[B](right: Case[B]): Case[(A, B)] = CaseOr[A, B](this, right)
