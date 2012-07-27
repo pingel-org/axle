@@ -1,6 +1,7 @@
 
 object infotheoryO {
 
+  import axle.Statistics._
   import axle.InformationTheory._
 
   val biasedCoin = coin(0.9)
@@ -9,7 +10,7 @@ object infotheoryO {
   val fairCoin = coin()
   println((0 until 100).map(i => fairCoin.choose()).mkString(" "))
 
-  println("entropy of 90/10 coin: " + biasedCoin.entropy())
-  println("entropy of 50/50 coin: " + fairCoin.entropy())
+  println("entropy of 90/10 coin: " + entropy(biasedCoin))
+  println("entropy of 50/50 coin: " + entropy(fairCoin))
 
 }

@@ -3,8 +3,8 @@ package axle
 object Statistics {
 
   import collection._
+  import scala.util.Random
   import axle.Enrichments._
-  import axle.quanta.Information
 
   implicit def rv2it[K](rv: RandomVariable[K]) = rv.getValues.get
 
@@ -38,10 +38,10 @@ object Statistics {
   // TODO: may want CaseIs{With, No] classes to avoid the run-time type-checking below
   case class CaseIs[A](rv: RandomVariable[A], v: A) extends Case[A] {
     def probability[B](given: Option[Case[B]]): Double = rv match {
-      case rvNo: RandomVariableNoInput[A] => given
+      case rvNo: RandomVariable0[A] => given
         .map(g => throw new Exception("caller provided a 'given' to a random variable that has no inputs"))
         .getOrElse(rvNo.probability(v))
-      case rvWith: RandomVariableWithInput[A, B] => given
+      case rvWith: RandomVariable1[A, B] => given
         .map(g => rvWith.probability(v, g))
         .getOrElse(rvWith.probability(v))
     }
@@ -49,10 +49,10 @@ object Statistics {
 
   case class CaseIsnt[A](rv: RandomVariable[A], v: A) extends Case[A] {
     def probability[B](given: Option[Case[B]] = None): Double = 1.0 - (rv match {
-      case rvNo: RandomVariableNoInput[A] => given
+      case rvNo: RandomVariable0[A] => given
         .map(g => throw new Exception("caller provided a 'given' to a random variable that has no inputs"))
         .getOrElse(rvNo.probability(v))
-      case rvWith: RandomVariableWithInput[A, B] => given
+      case rvWith: RandomVariable1[A, B] => given
         .map(g => rvWith.probability(v, g))
         .getOrElse(rvWith.probability(v))
     })
@@ -70,25 +70,46 @@ object Statistics {
     def eq(v: A): Case[A]
     def ne(v: A): Case[A]
     def probability(a: A): Double
+    def choose(): A
   }
 
-  case class RandomVariableNoInput[A](name: String, values: Option[Set[A]] = None, distribution: Option[DistributionNoInput[A]] = None)
+  case class RandomVariable0[A](name: String, values: Option[Set[A]] = None, distribution: Option[Distribution0[A]] = None)
     extends RandomVariable[A] {
+
     def getName() = name
     def getValues() = values
     def eq(v: A): Case[A] = CaseIs(this, v)
     def ne(v: A): Case[A] = CaseIsnt(this, v)
     def probability(a: A): Double = distribution.get.probabilityOf(a)
+    def choose(): A = distribution.get.choose
   }
 
-  case class RandomVariableWithInput[A, G](name: String, values: Option[Set[A]] = None, distribution: Option[DistributionWithInput[A, G]] = None)
+  case class RandomVariable1[A, G1](name: String, values: Option[Set[A]] = None,
+    grv: RandomVariable[G1], distribution: Option[Distribution1[A, G1]] = None)
     extends RandomVariable[A] {
+
     def getName() = name
     def getValues() = values
     def eq(v: A): Case[A] = CaseIs(this, v)
     def ne(v: A): Case[A] = CaseIsnt(this, v)
-    def probability(a: A): Double = -1.0 // TODO
-    def probability(a: A, given: Case[G]): Double = distribution.get.probabilityOf(a, given)
+    def probability(a: A): Double = -1.0 // "TODO"
+    def probability(a: A, given: Case[G1]): Double = distribution.get.probabilityOf(a, given)
+    def choose(): A = choose(grv.choose)
+    def choose(gv: G1): A = distribution.get.choose(gv)
+  }
+
+  case class RandomVariable2[A, G1, G2](name: String, values: Option[Set[A]] = None,
+    grv1: RandomVariable[G1], grv2: RandomVariable[G2], distribution: Option[Distribution2[A, G1, G2]] = None)
+    extends RandomVariable[A] {
+
+    def getName() = name
+    def getValues() = values
+    def eq(v: A): Case[A] = CaseIs(this, v)
+    def ne(v: A): Case[A] = CaseIsnt(this, v)
+    def probability(a: A): Double = -1.0 // "TODO"
+    def probability(a: A, given1: Case[G1], given2: Case[G2]): Double = distribution.get.probabilityOf(a, given1, given2)
+    def choose(): A = choose(grv1.choose, grv2.choose)
+    def choose(gv1: G1, gv2: G2): A = distribution.get.choose(gv1, gv2)
   }
 
   case class P[A](c: Case[A]) extends Function0[Double] {
@@ -107,62 +128,68 @@ object Statistics {
     case _ => P(p.c)
   }
 
-  trait DistributionNoInput[A] {
-
-    def getObjects(): Set[A]
-
-    // val d: Map[A, Double]
-
+  trait Distribution0[A] {
     def choose(): A
-
     def probabilityOf(a: A): Double
-
-    def entropy(): Information#UOM
-
-    def H_:(): Information#UOM = entropy()
-
-    def huffmanCode[S](alphabet: Set[S]): Map[A, Seq[S]] = {
-      // TODO
-      // http://en.wikipedia.org/wiki/Huffman_coding
-      Map()
-    }
-
   }
 
-  trait DistributionWithInput[A, G] {
-
-    def getObjects(): Set[A]
-
+  trait Distribution1[A, G1] {
+    def choose(gv: G1): A
     def probabilityOf(a: A): Double
+    def probabilityOf(a: A, given: Case[G1]): Double
+  }
 
-    def probabilityOf(a: A, given: Case[G]): Double
-
+  trait Distribution2[A, G1, G2] {
+    def choose(gv1: G1, gv2: G2): A
+    def probabilityOf(a: A): Double
+    def probabilityOf(a: A, given1: Case[G1], given2: Case[G2]): Double
   }
 
   // TODO: division by zero
-  
-  class TallyDistributionNoInput[A, G](rv: RandomVariable[A], tally: Map[A, Int])
-    extends DistributionNoInput[A] {
 
-    val totalCount = tally.values.sum
+  class ConditionalProbabilityTable0[A](p: Map[A, Double]) extends Distribution0[A] {
 
-    def getObjects(): Set[A] = rv.getValues.get
+    // def randomStream(): Stream[Double] = Stream.cons(math.random, randomStream())
 
-    def choose() = null.asInstanceOf[A] // TODO
+    // TODO Is there a version of scanLeft that is more like a reduce?
+    // This would allow me to avoid having to construct the initial dummy element
+    val bars = p.scanLeft((null.asInstanceOf[A], 0.0))((x, y) => (y._1, x._2 + y._2))
 
-    def probabilityOf(a: A): Double = tally(a).toDouble / totalCount
+    def choose(): A = {
+      val r = math.random
+      bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
+    }
 
-    def entropy() = null // TODO
+    def probabilityOf(a: A): Double = p(a)
   }
 
-  class TallyDistributionWithInput[A, G](rv: RandomVariable[A], grv: RandomVariable[G], tally: Map[(A, G), Int])
-    extends DistributionWithInput[A, G] {
-
-    def getObjects(): Set[A] = rv.getValues.get
+  class TallyDistribution0[A](tally: Map[A, Int])
+    extends Distribution0[A] {
 
     val totalCount = tally.values.sum
 
-    def probabilityOf(a: A): Double = grv.getValues.get.map(gv => tally((a, gv))).sum / totalCount
+    val bars = tally.scanLeft((null.asInstanceOf[A], 0.0))((x, y) => (y._1, x._2 + y._2))
+
+    def choose(): A = {
+      val r = Random.nextInt(totalCount + 1)
+      bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
+    }
+
+    def probabilityOf(a: A): Double = tally(a).toDouble / totalCount
+  }
+
+  class TallyDistribution1[A, G](tally: Map[(A, G), Int])
+    extends Distribution1[A, G] {
+
+    val gvs = tally.keys.map(k => k._2).toSet
+
+    val totalCount = tally.values.sum
+
+    def choose(): A = null.asInstanceOf[A] // TODO
+
+    def choose(gv: G): A = null.asInstanceOf[A] // TODO
+
+    def probabilityOf(a: A): Double = gvs.map(gv => tally((a, gv))).sum / totalCount
 
     def probabilityOf(a: A, given: Case[G]): Double = given match {
       case CaseIs(argGrv, gv) => tally((a, gv)).toDouble / tally.filter(_._1._2 == gv).map(_._2).sum
@@ -171,5 +198,9 @@ object Statistics {
     }
 
   }
+
+  def coin(pHead: Double = 0.5) = RandomVariable0("coin",
+    values = Some(Set('HEAD, 'TAIL)),
+    distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1.0 - pHead)))))
 
 }

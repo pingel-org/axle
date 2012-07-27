@@ -36,15 +36,16 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(1) // to avoid division by zero
 
-  val C = new RandomVariableNoInput(
+  val C = new RandomVariable0(
     pC.getName,
     values = pC.getValues,
-    distribution = Some(new TallyDistributionNoInput(pC, classTally)))
+    distribution = Some(new TallyDistribution0(classTally)))
 
-  val Fs = pFs.map(pF => new RandomVariableWithInput(
+  val Fs = pFs.map(pF => new RandomVariable1(
     pF.getName,
     values = pF.getValues,
-    distribution = Some(new TallyDistributionWithInput(pF, pC,
+    grv = C,
+    distribution = Some(new TallyDistribution1(
       featureTally
         .filter(_._1._2 == pF.getName)
         .map(kv => ((kv._1._3, kv._1._1), kv._2))
