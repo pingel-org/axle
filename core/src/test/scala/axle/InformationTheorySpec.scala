@@ -7,6 +7,7 @@ class InformationTheorySpec extends Specification {
   import axle.Statistics._
   import axle.InformationTheory._
   import axle.quanta.Information._
+  import axle.stats._
 
   "hard-coded distributions" should {
 

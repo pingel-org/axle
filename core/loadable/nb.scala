@@ -9,6 +9,7 @@
 object nbO {
 
   import axle.Statistics._
+  import axle.stats._
   import axle.ml.NaiveBayesClassifier
 
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
