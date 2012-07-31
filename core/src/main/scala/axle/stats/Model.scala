@@ -13,16 +13,16 @@ object Direction {
 
 }
 
-case class Model(name: String = "no name") {
+class Model(name: String = "no name") {
 
   def duplicate(): Model = {
     "TODO"
   }
-  
+
   def copyTo(other: Model): Unit = {
     todo()
   }
-  
+
   val g = graph[RandomVariable[_], String]()
   var newVarIndex = 0
   val name2variable = mutable.Map[String, RandomVariable[_]]()

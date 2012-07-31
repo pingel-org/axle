@@ -11,19 +11,19 @@ object AlarmBurglaryEarthquake {
 
     val bools = Some(List(true, false))
 
-    val burglary = new RandomVariable0("burglary", bools)
+    val burglary = new RandomVariable0("burglary", bools, None)
     val burglaryVertex = bn.g += burglary
 
-    val earthquake = new RandomVariable0("earthquake", bools)
+    val earthquake = new RandomVariable0("earthquake", bools, None)
     val earthquakeVertex = bn.g += earthquake
 
-    val alarm = new RandomVariable0("alarm", bools)
+    val alarm = new RandomVariable0("alarm", bools, None)
     val alarmVertex = bn.g += alarm
 
-    val johnCalls = new RandomVariable0("johnCalls", bools)
+    val johnCalls = new RandomVariable0("johnCalls", bools, None)
     val johnCallsVertex = bn.g += johnCalls
 
-    val maryCalls = new RandomVariable0("maryCalls", bools)
+    val maryCalls = new RandomVariable0("maryCalls", bools, None)
     val maryCallsVertex = bn.g += maryCalls
 
     bn.g.edge(burglaryVertex, alarmVertex, "")
@@ -31,11 +31,17 @@ object AlarmBurglaryEarthquake {
     bn.g.edge(alarmVertex, johnCallsVertex, "")
     bn.g.edge(alarmVertex, maryCallsVertex, "")
 
-    bn.getCPT(burglary).write(new CaseX(burglary, true), 0.001)
-    bn.getCPT(burglary).write(new CaseX(burglary, false), 0.999)
+    val bCase = new CaseX()
+    bCase.assign(burglary, true)
+    bn.getCPT(burglary).write(bCase, 0.001)
+    bCase.assign(burglary, false)
+    bn.getCPT(burglary).write(bCase, 0.999)
 
-    bn.getCPT(earthquake).write(new CaseX(earthquake, true), 0.002)
-    bn.getCPT(earthquake).write(new CaseX(earthquake, false), 0.998)
+    val eCase = new CaseX()
+    eCase.assign(earthquake, true)
+    bn.getCPT(earthquake).write(eCase, 0.002)
+    eCase.assign(earthquake, false)
+    bn.getCPT(earthquake).write(eCase, 0.998)
 
     val beaCase = new CaseX()
     beaCase.assign(burglary, false)

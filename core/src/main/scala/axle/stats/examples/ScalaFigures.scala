@@ -8,11 +8,11 @@ object ScalaFigures {
 
   val bools = Some(List(true, false))
 
-  val A = new RandomVariable0("A", bools)
-  val B = new RandomVariable0("B", bools)
-  val C = new RandomVariable0("C", bools)
-  val D = new RandomVariable0("D", bools)
-  val E = new RandomVariable0("E", bools)
+  val A = new RandomVariable0("A", bools, None)
+  val B = new RandomVariable0("B", bools, None)
+  val C = new RandomVariable0("C", bools, None)
+  val D = new RandomVariable0("D", bools, None)
+  val E = new RandomVariable0("E", bools, None)
 
   lazy val figure6_1 = {
 
