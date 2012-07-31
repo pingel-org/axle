@@ -14,7 +14,7 @@ class InformationTheorySpec extends Specification {
     "work" in {
 
       val d = new RandomVariable0("d",
-        values = Some(Set("A", "B", "C")),
+        values = Some(List("A", "B", "C")),
         distribution = Some(new ConditionalProbabilityTable0(Map("A" -> 0.2, "B" -> 0.1, "C" -> 0.7))))
 
       entropy(d).conversion.get.getPayload must be equalTo (1.1567796494470395)
@@ -39,12 +39,12 @@ class InformationTheorySpec extends Specification {
         distribution = Some(cpt))
 
       val p = P((A eq "a") | (X eq "foo") ∧ (Y ne "bar"))
-      val b = bayes(P((A eq "a") ∧ (X eq "foo")))
+      val b = P((A eq "a") ∧ (X eq "foo")).bayes
 
-      //      println("p = " + p)
-      //      println("p() = " + p())
-      //      println("b = " + b)
-      //      println("b() = " + b())
+      // println("p = " + p)
+      // println("p() = " + p())
+      // println("b = " + b)
+      // println("b() = " + b())
 
       // TODO
       1 should be equalTo (1)

@@ -1,13 +1,13 @@
-package org.pingel.bayes
+package axle.stats
 
 import axle.graph.JungDirectedGraphFactory._
-import scala.collection._
+import collection._
 
 class InteractionGraph {
 
-  val g = graph[RandomVariable, String]()
-  
-  def eliminationSequence(π: List[RandomVariable]): List[InteractionGraph] = {
+  val g = graph[RandomVariable[_], String]()
+
+  def eliminationSequence(π: List[RandomVariable[_]]): List[InteractionGraph] = {
 
     var G: InteractionGraph = this
     val result = mutable.ListBuffer(G)

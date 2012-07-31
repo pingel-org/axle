@@ -1,26 +1,18 @@
 
 package org.pingel.bayes.examples
 
-import scala.collection._
-import org.pingel.bayes.BayesianNetwork
-import org.pingel.bayes.Case
-import org.pingel.bayes.EliminationTree
-import org.pingel.bayes.Factor
-import org.pingel.bayes.InteractionGraph
-import org.pingel.bayes.JoinTree
-import org.pingel.bayes.RandomVariable
-import org.pingel.gestalt.core.Domain
-import org.pingel.gestalt.core.Value
+import collection._
+import axle.stats._
 
 object ScalaFigures {
 
-  val booleanDomain = Some(new PBooleans())
+  val bools = Some(List(true, false))
 
-  val A = new RandomVariable("A", booleanDomain)
-  val B = new RandomVariable("B", booleanDomain)
-  val C = new RandomVariable("C", booleanDomain)
-  val D = new RandomVariable("D", booleanDomain)
-  val E = new RandomVariable("E", booleanDomain)
+  val A = new RandomVariable0("A", bools)
+  val B = new RandomVariable0("B", bools)
+  val C = new RandomVariable0("C", bools)
+  val D = new RandomVariable0("D", bools)
+  val E = new RandomVariable0("E", bools)
 
   lazy val figure6_1 = {
 
@@ -42,29 +34,29 @@ object ScalaFigures {
 
     val cptB = result.getCPT(B) // B | A
     cptB.writes(
-      0.2  :: 0.8 ::
-      0.75 :: 0.25 ::
-      Nil)
+      0.2 :: 0.8 ::
+        0.75 :: 0.25 ::
+        Nil)
 
     val cptC = result.getCPT(C) // C | A
     cptC.writes(
       0.8 :: 0.2 ::
-      0.1 :: 0.9 ::
-      Nil)
+        0.1 :: 0.9 ::
+        Nil)
 
     val cptD = result.getCPT(D) // D | BC
     cptD.writes(
       0.95 :: 0.5 ::
-      0.9  :: 0.1 ::
-      0.8  :: 0.2 ::
-      0.0  :: 1.0 ::
-      Nil)
+        0.9 :: 0.1 ::
+        0.8 :: 0.2 ::
+        0.0 :: 1.0 ::
+        Nil)
 
     val cptE = result.getCPT(E) // E | C
     cptE.writes(
       0.7 :: 0.3 ::
-      0.0 :: 1.0 ::
-      Nil)
+        0.0 :: 1.0 ::
+        Nil)
 
     result
   }
@@ -79,10 +71,10 @@ object ScalaFigures {
 
     val result1 = new Factor(B :: C :: D :: Nil)
     result1.writes(
-        0.95 :: 0.05 ::
-        0.9  :: 0.1  ::
-        0.8  :: 0.2  ::
-        0.0  :: 1.0  ::
+      0.95 :: 0.05 ::
+        0.9 :: 0.1 ::
+        0.8 :: 0.2 ::
+        0.0 :: 1.0 ::
         Nil)
 
     println("figure3sub1")
@@ -184,8 +176,8 @@ object ScalaFigures {
 
     val result = figure6_1.duplicate()
 
-    var c = new Case()
-    c.assign(C, falseValue)
+    var c = new CaseX()
+    c.assign(C, false)
     result.pruneEdges(c)
 
     println("Figure 6.1 with edges pruned towards C=false")
@@ -203,9 +195,9 @@ object ScalaFigures {
 
     val result = figure6_1.duplicate()
 
-    val c = new Case()
-    c.assign(A, trueValue)
-    c.assign(C, falseValue)
+    val c = new CaseX()
+    c.assign(A, true)
+    c.assign(C, false)
 
     result.pruneNetwork(Set(D), c)
 

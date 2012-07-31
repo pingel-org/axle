@@ -1,13 +1,13 @@
-package org.pingel.bayes
+package axle.stats
 
 import axle.iterator.ListCrossProduct
 import axle.matrix.JblasMatrixFactory._
-import org.pingel.gestalt.core.Value
-import scala.collection._
+//import org.pingel.gestalt.core.Value
+import collection._
 
 object Factor {
-
-  def multiply(tables: Collection[Factor]): Factor = {
+  
+  def multiply(tables: Seq[Factor]): Factor = {
 
     if (tables.size == 0) {
       return null
@@ -25,29 +25,32 @@ object Factor {
  * always true in a Factor.  They should be siblings rather than parent/child.
  */
 
-class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
+class Factor(varList: List[RandomVariable[_]]) extends DistributionX(varList) {
+
+  def duplicate(): Factor = {
+    "TODO"
+  }
 
   var elements: Array[Double]
-
-  var cp: ListCrossProduct[Value] = null
+  var cp: ListCrossProduct[Any] = null
 
   makeCrossProduct()
 
   var name = "unnamed"
 
-  def setName(name: String): Unit = { this.name = name; }
+  def setName(name: String): Unit = { this.name = name }
 
   def getName(): String = name
 
   def getLabel(): String = name
 
   def makeCrossProduct(): Unit = {
-    val valLists: List[List[Value]] = varList.map(_.getDomain.map(_.getValues).getOrElse(Nil))
-    cp = new ListCrossProduct[Value](valLists)
+    val valLists = varList.map(rv => rv.getValues.getOrElse(Nil).toList)
+    cp = new ListCrossProduct(valLists)
     elements = new Array[Double](cp.size)
   }
 
-  def evaluate(prior: Case, condition: Case): Double = {
+  def evaluate(prior: CaseX, condition: CaseX): Double = {
     // assume prior and condition are disjoint, and that they are
     // each compatible with this table
 
@@ -66,13 +69,13 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
     p / w
   }
 
-  def indexOf(c: Case): Int = {
+  def indexOf(c: CaseX): Int = {
     val objects = c.valuesOf(varList)
     cp.indexOf(objects)
   }
 
-  def caseOf(i: Int): Case = {
-    val result = new Case()
+  def caseOf(i: Int): CaseX = {
+    val result = new CaseX()
     val values = cp(i)
     result.assign(varList, values)
     result
@@ -80,7 +83,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
 
   def numCases() = elements.length
 
-  def write(c: Case, d: Double): Unit = {
+  def write(c: CaseX, d: Double): Unit = {
     // println("write: case = " + c.toOrderedString(variables) + ", d = " + d)
     // println("variables.length = " + variables.length)
     elements(indexOf(c)) = d
@@ -88,10 +91,10 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
 
   def writes(values: List[Double]): Unit = {
     assert(values.length == elements.length)
-    values.zipWithIndex.map({ case (v, i) => elements(i) = v})
+    values.zipWithIndex.map({ case (v, i) => elements(i) = v })
   }
-  
-  def read(c: Case): Double = elements(indexOf(c))
+
+  def read(c: CaseX): Double = elements(indexOf(c))
 
   def print(): Unit = {
     for (i <- 0 until elements.length) {
@@ -100,7 +103,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
     }
   }
 
-  def maxOut(variable: RandomVariable): Factor = {
+  def maxOut[T](variable: RandomVariable[T]): Factor = {
     // Chapter 6 definition 6
 
     val vars = getVariables.filter(v => !variable.equals(v))
@@ -108,10 +111,10 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
     val newFactor = new Factor(vars)
     for (i <- 0 until newFactor.numCases()) {
       def ci = newFactor.caseOf(i)
-      var bestValue: Value = null
+      var bestValue: Any = null
       var maxSoFar = Double.MinValue
-      for (value <- variable.getDomain.map(_.getValues).getOrElse(Nil)) {
-        var cj = newFactor.caseOf(i)
+      for (value <- variable.getValues.getOrElse(Nil)) {
+        val cj = newFactor.caseOf(i)
         cj.assign(variable, value)
         val s = this.read(cj)
         if (bestValue == null) {
@@ -129,7 +132,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
     newFactor
   }
 
-  def projectToOnly(remainingVars: List[RandomVariable]): Factor = {
+  def projectToOnly(remainingVars: List[RandomVariable[_]]): Factor = {
     val result = new Factor(remainingVars)
     for (j <- 0 until numCases) {
       val fromCase = this.caseOf(j)
@@ -141,12 +144,12 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
     result
   }
 
-  def tally(a: RandomVariable, b: RandomVariable): Matrix[Double] = {
-    val aValues = a.getDomain.map(_.getValues).getOrElse(Nil)
-    val bValues = b.getDomain.map(_.getValues).getOrElse(Nil)
+  def tally[A, B](a: RandomVariable[A], b: RandomVariable[B]): Matrix[Double] = {
+    val aValues = a.getValues.getOrElse(Nil).toList
+    val bValues = b.getValues.getOrElse(Nil).toList
 
     val tally = zeros[Double](aValues.size, bValues.size)
-    val w = new Case()
+    val w = new CaseX()
     var r = 0
     for (aVal <- aValues) {
       w.assign(a, aVal)
@@ -156,7 +159,7 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
         for (j <- 0 until numCases) {
           val m = this.caseOf(j)
           if (m.isSupersetOf(w)) {
-            tally.setValueAt(r, c, tally.valueAt(r, c) + this.read(m))
+            tally(r, c) += this.read(m)
           }
         }
         c += 1
@@ -166,35 +169,34 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
     tally
   }
 
-  def sumOut(varToSumOut: RandomVariable): Factor = {
+  def sumOut[T](varToSumOut: RandomVariable[T]): Factor = {
     // depending on assumptions, this may not be the best way to remove the vars
 
-    val result = new Factor(getVariables().filter(x => x.compareTo(varToSumOut) != 0).toList)
+    val result = new Factor(getVariables().filter(!_.equals(varToSumOut)).toList)
     for (j <- 0 until result.numCases()) {
       val c = result.caseOf(j)
       var p = 0.0
-      for (value <- varToSumOut.getDomain.map(_.getValues).getOrElse(Nil)) {
+      for (value <- varToSumOut.getValues.getOrElse(Nil)) {
         val f = c.copy()
         f.assign(varToSumOut, value)
         p += read(f)
       }
       result.write(c, p)
     }
-
     result
   }
 
-  def sumOut(varsToSumOut: Set[RandomVariable]): Factor =
+  def sumOut(varsToSumOut: Set[RandomVariable[_]]): Factor =
     varsToSumOut.foldLeft(this)((result, v) => result.sumOut(v))
 
-  def projectRowsConsistentWith(e: Case): Factor = {
+  def projectRowsConsistentWith(e: CaseX): Factor = {
     // as defined on chapter 6 page 15
     val result = new Factor(getVariables())
     for (j <- 0 until result.numCases) {
-      result.elements(j) = c.isSupersetOf(e) match {
+      result.elements(j) = (c.isSupersetOf(e) match {
         case true => elements(j)
         case false => 0.0
-      }
+      })
     }
     result
   }
@@ -212,6 +214,6 @@ class Factor(varList: List[RandomVariable]) extends Distribution(varList) {
     result
   }
 
-  def mentions(variable: RandomVariable) = getVariables.exists(v => variable.getName.equals(v.getName))
+  def mentions(variable: RandomVariable[_]) = getVariables.exists(v => variable.getName.equals(v.getName))
 
 }
