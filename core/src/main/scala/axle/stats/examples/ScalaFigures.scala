@@ -3,6 +3,7 @@ package org.pingel.bayes.examples
 
 import collection._
 import axle.stats._
+import axle.visualize._
 
 object ScalaFigures {
 
@@ -146,11 +147,12 @@ object ScalaFigures {
     val pi = List(B, C, A, D)
 
     val G = figure6_1.interactionGraph()
-    G.g.draw
+
+    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(G.g))
 
     val result = G.eliminationSequence(pi)
     for (gi <- result) {
-      gi.g.draw
+      new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(gi.g))
     }
     result
   }
@@ -161,13 +163,13 @@ object ScalaFigures {
     val Q1 = Set(B, E)
     result1.pruneNetwork(Q1, null)
     println("Figure 6.1 pruned towards " + Q1)
-    result2.g.draw
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result2.g))
 
     val result2 = figure6_2.duplicate()
     val Q2 = Set(B)
     result2.pruneNetwork(Q2, null)
     println("Figure 6.2 pruned towards " + Q2)
-    result2.g.draw
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result2.g))
 
     (result1, result2)
   }
@@ -176,12 +178,12 @@ object ScalaFigures {
 
     val result = figure6_1.duplicate()
 
-    var c = new CaseX()
+    val c = new CaseX()
     c.assign(C, false)
     result.pruneEdges(c)
 
     println("Figure 6.1 with edges pruned towards C=false")
-    result.g.draw
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result.g))
 
     for (rv <- result.getRandomVariables) {
       val f = result.getCPT(rv)
@@ -202,7 +204,7 @@ object ScalaFigures {
     result.pruneNetwork(Set(D), c)
 
     println("Figure 6.1 pruned towards Q={D} and A=true,C=false")
-    result.g.draw
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result.g))
 
     for (rv <- result.getRandomVariables()) {
       val f = result.getCPT(rv)
@@ -267,13 +269,14 @@ object ScalaFigures {
     val jtn3 = result.g.vertex(mutable.Set(C, E))
     result.g.edge(jtn1, jtn2, "")
     result.g.edge(jtn2, jtn3, "")
-    result.g.draw
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result.g))
     result
   }
 
   def main(args: List[String]): Unit = {
 
-    figure6_1.g.draw
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(figure6_1.g))
+
     //figure6_2
     //figure6_3
     //figure6_4

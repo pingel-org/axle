@@ -11,8 +11,8 @@ object JoinTree {
     val G = m.g // Note: G used ot be passed in as DirectedGraph[_, _]
     // returns a jointree for DAG G with width equal to width(pi, G)
     val T = new JoinTree()
-    val Gm = G.moralGraph() // UndirectedGraph
-    var clusterSequence: List[Set[RandomVariable[_]]] = null // Gm.induceClusterSequence(pi);
+    val Gm = G.moralGraph()
+    val clusterSequence: List[Set[RandomVariable[_]]] = null // Gm.induceClusterSequence(pi)
     T
   }
 

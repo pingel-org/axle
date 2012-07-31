@@ -2,6 +2,7 @@ package axle.stats.examples
 
 import collection._
 import axle.stats._
+import axle.visualize._
 
 object AlarmBurglaryEarthquake {
 
@@ -101,7 +102,7 @@ object AlarmBurglaryEarthquake {
     amCase.assign(maryCalls, false)
     bn.getCPT(maryCalls).write(amCase, 0.99)
 
-    bn.g.draw
+    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(bn.g))
 
     bn.printAllMarkovAssumptions()
 
@@ -157,7 +158,7 @@ object AlarmBurglaryEarthquake {
     val Q = Set(earthquake, burglary, alarm)
     val order = List(johnCalls, maryCalls)
 
-    //		ProbabilityTable afterVE = bn.variableEliminationPriorMarginalI(Q, order);
+    // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
 
     val vepr2case = new CaseX()
     vepr2case.assign(earthquake, true)
