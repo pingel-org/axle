@@ -34,7 +34,7 @@ class JoinTree {
   def separate(n1: GV, n2: GV): Set[RandomVariable[_]] = n1.getPayload.intersect(n2.getPayload)
 
   def toEliminationOrder(r: GV): List[RandomVariable[_]] = {
-    var result = new mutable.ListBuffer[RandomVariable[_]]()
+    val result = new mutable.ListBuffer[RandomVariable[_]]()
     val T: JoinTree = this.duplicate()
     while (T.g.getVertices().size > 1) {
       val i = T.g.firstLeafOtherThan(r)

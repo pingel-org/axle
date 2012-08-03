@@ -3,34 +3,37 @@ package axle.stats.examples
 import collection._
 import axle.stats._
 import axle.visualize._
+import axle.graph.JungDirectedGraphFactory._
 
 object AlarmBurglaryEarthquake {
 
   def main(args: Array[String]) {
 
-    val bn = new BayesianNetwork()
-
     val bools = Some(List(true, false))
 
+    val g = graph[RandomVariable[_], String]()
+
     val burglary = new RandomVariable0("burglary", bools, None)
-    val burglaryVertex = bn.g += burglary
+    val burglaryVertex = g += burglary
 
     val earthquake = new RandomVariable0("earthquake", bools, None)
-    val earthquakeVertex = bn.g += earthquake
+    val earthquakeVertex = g += earthquake
 
     val alarm = new RandomVariable0("alarm", bools, None)
-    val alarmVertex = bn.g += alarm
+    val alarmVertex = g += alarm
 
     val johnCalls = new RandomVariable0("johnCalls", bools, None)
-    val johnCallsVertex = bn.g += johnCalls
+    val johnCallsVertex = g += johnCalls
 
     val maryCalls = new RandomVariable0("maryCalls", bools, None)
-    val maryCallsVertex = bn.g += maryCalls
+    val maryCallsVertex = g += maryCalls
 
-    bn.g.edge(burglaryVertex, alarmVertex, "")
-    bn.g.edge(earthquakeVertex, alarmVertex, "")
-    bn.g.edge(alarmVertex, johnCallsVertex, "")
-    bn.g.edge(alarmVertex, maryCallsVertex, "")
+    g.edge(burglaryVertex, alarmVertex, "")
+    g.edge(earthquakeVertex, alarmVertex, "")
+    g.edge(alarmVertex, johnCallsVertex, "")
+    g.edge(alarmVertex, maryCallsVertex, "")
+
+    val bn = new BayesianNetwork("abe", g)
 
     val bCase = new CaseX()
     bCase.assign(burglary, true)
@@ -102,7 +105,7 @@ object AlarmBurglaryEarthquake {
     amCase.assign(maryCalls, false)
     bn.getCPT(maryCalls).write(amCase, 0.99)
 
-    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(bn.g))
+    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(g))
 
     bn.printAllMarkovAssumptions()
 

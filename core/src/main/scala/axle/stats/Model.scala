@@ -13,17 +13,16 @@ object Direction {
 
 }
 
-class Model(name: String = "no name") {
+class Model(name: String = "no name", g: DirectedGraph[RandomVariable[_], String]) {
 
-  def duplicate(): Model = {
-    "TODO"
-  }
+  def duplicate(): Model = new Model(name, graphFrom(g)(v => v, e => e))
 
-  def copyTo(other: Model): Unit = {
-    todo()
-  }
+  //  def copyTo(other: Model): Unit = {
+  //    todo()
+  //  }
 
-  val g = graph[RandomVariable[_], String]()
+  // val g = graph[RandomVariable[_], String]()
+
   var newVarIndex = 0
   val name2variable = mutable.Map[String, RandomVariable[_]]()
 
@@ -103,14 +102,13 @@ class Model(name: String = "no name") {
 
         val visitedCopy = mutable.Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]()
         visitedCopy ++= visited
-        var outs = visited.get(prior)
-        if (outs == null) {
-          outs = mutable.Set[RandomVariable[_]]()
-          visitedCopy += prior -> outs
-        }
-        outs += variable
 
-        var path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given)
+        if (!visited.contains(prior)) {
+          visitedCopy += prior -> mutable.Set[RandomVariable[_]]()
+        }
+        visited(prior) += variable
+
+        val path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given)
         if (path.isDefined) {
           return path.get + variable
         }

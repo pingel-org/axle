@@ -102,14 +102,13 @@ package axle.stats
 
 import collection._
 import math.max
+import axle.graph.JungDirectedGraphFactory._
 
-class BayesianNetwork(name: String = "bn") extends Model(name) {
+class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], String]) extends Model(name, g) {
 
-  def duplicate(): BayesianNetwork = {
-    "TODO"
-  }
+  def duplicate(): BayesianNetwork = new BayesianNetwork(name, graphFrom(g)(v => v, e => e))
 
-  var var2cpt = Map[RandomVariable[_], Factor]()
+  val var2cpt = mutable.Map[RandomVariable[_], Factor]()
 
   def getJointProbabilityTable(): Factor = {
     val jpt = new Factor(getRandomVariables())
@@ -130,12 +129,10 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
   }
 
   def getCPT(variable: RandomVariable[_]): Factor = {
-    var cpt = var2cpt(variable)
-    if (cpt == null) {
-      cpt = makeFactorFor(variable)
-      var2cpt += variable -> cpt
+    if (!var2cpt.contains(variable)) {
+      var2cpt += variable -> makeFactorFor(variable)
     }
-    cpt
+    var2cpt(variable)
   }
 
   def getAllCPTs(): List[Factor] = getRandomVariables.map(getCPT(_))
@@ -281,7 +278,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
     w
   }
 
-  def pruneEdges(e: CaseX): Unit = {
+  def pruneEdges(e: CaseX, g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] = {
     // 6.8.2
 
     if (e == null) {
@@ -289,7 +286,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
     }
 
     for (U <- e.getVariables()) {
-      for (edge <- getGraph().outputEdgesOf(U)) { // ModelEdge
+      for (edge <- g.outputEdgesOf(U)) { // ModelEdge
 
         val X = edge.getDest()
         val oldF = getCPT(X)
@@ -308,7 +305,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
 
   }
 
-  def pruneNodes(Q: Set[RandomVariable[_]], e: CaseX): Unit = {
+  def pruneNodes(Q: Set[RandomVariable[_]], e: CaseX, g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] = {
 
     // TODO: check if Q or e are null?
     val vars = Q ++ e.getVariables
@@ -318,7 +315,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
     var keepGoing = true
     while (keepGoing) {
       keepGoing = false
-      for (leaf <- getGraph().getLeaves()) {
+      for (leaf <- g.getLeaves()) {
         if (!vars.contains(leaf)) {
           g -= leaf
           keepGoing = true
@@ -327,16 +324,15 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
     }
   }
 
-  def pruneNetwork(Q: Set[RandomVariable[_]], e: CaseX): Unit = {
-    // 6.8.3
-    pruneEdges(e)
-    pruneNodes(Q, e)
-  }
+  def pruneNetworkEdges(e: CaseX): BayesianNetwork = new BayesianNetwork(this.name, pruneEdges(e, g))
 
-  def variableEliminationPR(Q: Set[RandomVariable[_]], e: CaseX): Factor = {
-    val pruned = new BayesianNetwork()
-    copyTo(pruned)
-    pruned.pruneNetwork(Q, e)
+  // 6.8.3
+  def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], e: CaseX): BayesianNetwork =
+    new BayesianNetwork(this.name, pruneNodes(Q, e, pruneEdges(e, g)))
+
+  def variableEliminationPR(Q: Set[RandomVariable[_]], e: CaseX): (Factor, BayesianNetwork) = {
+
+    val pruned = pruneNetworkVarsAndEdges(Q, e)
 
     val R = mutable.Set[RandomVariable[_]]()
     for (v <- getRandomVariables()) {
@@ -372,13 +368,12 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
       S = newS
     }
 
-    Factor.multiply(S.toList)
+    (Factor.multiply(S.toList), pruned)
   }
 
-  def variableEliminationMPE(e: CaseX): Double = {
-    val pruned = new BayesianNetwork()
-    copyTo(pruned)
-    pruned.pruneEdges(e)
+  def variableEliminationMPE(e: CaseX): (Double, BayesianNetwork) = {
+
+    val pruned = pruneNetworkEdges(e)
 
     val Q = pruned.getRandomVariables()
     val π = pruned.minDegreeOrder(Q)
@@ -418,7 +413,7 @@ class BayesianNetwork(name: String = "bn") extends Model(name) {
 
     assert(result.numCases() == 1)
 
-    result.read(result.caseOf(0))
+    (result.read(result.caseOf(0)), pruned)
   }
 
   //	public Case variableEliminationMAP(Set Q, Case e)

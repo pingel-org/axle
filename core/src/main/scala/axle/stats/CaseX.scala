@@ -1,10 +1,12 @@
 package axle.stats
 
+import collection._
+
 // OLD VERSION HAD THESE DATA MEMBERS IN CONSTRUCTOR:
 // rv: RandomVariable, value: Value
 
 case class CaseX() extends Comparable[CaseX] {
-  var assignments = Map[RandomVariable[_], Any]() // NOTE: was TreeMap
+  val assignments = mutable.Map[RandomVariable[_], Any]() // NOTE: was TreeMap
 
   // OLD VERSION DID THIS: assign(rv, value)
 
@@ -81,15 +83,14 @@ case class CaseX() extends Comparable[CaseX] {
     0
   }
 
-  override def toString(): String =
-    assignments.keySet.map(rv => {
-      rv.getName + " = " +
-        (if (assignments.contains(rv)) {
-          assignments(rv).toString()
-        } else {
-          "null"
-        })
-    }).mkString(", ")
+  override def toString(): String = assignments.keySet.map(rv => {
+    rv.getName + " = " +
+      (if (assignments.contains(rv)) {
+        assignments(rv).toString()
+      } else {
+        "null"
+      })
+  }).mkString(", ")
 
   def toOrderedString(vs: List[RandomVariable[_]]): String =
     (for (variable <- vs) yield variable.getName + " = " + assignments(variable)).mkString(", ")
