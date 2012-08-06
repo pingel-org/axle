@@ -4,6 +4,7 @@ package org.pingel.bayes.examples
 import collection._
 import axle.stats._
 import axle.visualize._
+import axle.graph.JungDirectedGraphFactory._
 
 object ScalaFigures {
 
@@ -15,20 +16,23 @@ object ScalaFigures {
   val D = new RandomVariable0("D", bools, None)
   val E = new RandomVariable0("E", bools, None)
 
-  lazy val figure6_1 = {
+  def figure6_1() = {
 
-    val result = new BayesianNetwork()
-    val av = result.g += A
-    val bv = result.g += B
-    val cv = result.g += C
-    val dv = result.g += D
-    val ev = result.g += E
+    val g = graph[RandomVariable[_], String]()
 
-    result.g.edge(av, bv, "")
-    result.g.edge(av, cv, "")
-    result.g.edge(bv, dv, "")
-    result.g.edge(cv, dv, "")
-    result.g.edge(cv, ev, "")
+    val av = g += A
+    val bv = g += B
+    val cv = g += C
+    val dv = g += D
+    val ev = g += E
+
+    g.edge(av, bv, "")
+    g.edge(av, cv, "")
+    g.edge(bv, dv, "")
+    g.edge(cv, dv, "")
+    g.edge(cv, ev, "")
+
+    val result = new BayesianNetwork("6.1", g)
 
     val cptA = result.getCPT(A) // A
     cptA.writes(0.6 :: 0.4 :: Nil)
@@ -59,16 +63,18 @@ object ScalaFigures {
         0.0 :: 1.0 ::
         Nil)
 
+    // new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(g))
+
     result
   }
 
-  lazy val figure6_2 = {
+  def figure6_2() = {
     val result = figure6_1.getJointProbabilityTable()
     result.print
     result
   }
 
-  lazy val figure6_3 = {
+  def figure6_3() = {
 
     val result1 = new Factor(B :: C :: D :: Nil)
     result1.writes(
@@ -102,15 +108,18 @@ object ScalaFigures {
     (result1, result2)
   }
 
-  lazy val figure6_4 = {
+  def figure6_4() = {
 
-    val result = new BayesianNetwork()
-    val av = result.g += A
-    val bv = result.g += B
-    val cv = result.g += C
+    val g = graph[RandomVariable[_], String]()
 
-    result.g.edge(av, bv, "")
-    result.g.edge(bv, cv, "")
+    val av = g += A
+    val bv = g += B
+    val cv = g += C
+
+    g.edge(av, bv, "")
+    g.edge(bv, cv, "")
+
+    val result = new BayesianNetwork("6.4", g)
 
     val cptA = result.getCPT(A) // A
     cptA.writes(0.6 :: 0.4 :: Nil)
@@ -142,80 +151,80 @@ object ScalaFigures {
     result
   }
 
-  lazy val figure6_5: List[InteractionGraph] = {
+  def figure6_5(): List[InteractionGraph] = {
 
-    val pi = List(B, C, A, D)
+    val π = List(B, C, A, D)
 
-    val G = figure6_1.interactionGraph()
+    val G = figure6_1().interactionGraph()
 
-    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(G.g))
+    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(G.getGraph))
 
-    val result = G.eliminationSequence(pi)
+    val result = G.eliminationSequence(π)
     for (gi <- result) {
-      new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(gi.g))
+      new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(gi.getGraph))
     }
     result
   }
 
-  lazy val figure6_7 = {
+  def figure6_7() = {
 
-    val result1 = figure6_1.duplicate()
+    val f61 = figure6_1()
+
     val Q1 = Set(B, E)
-    result1.pruneNetwork(Q1, null)
+    val f67pBE = f61.pruneNetworkVarsAndEdges(Q1, None)
     println("Figure 6.1 pruned towards " + Q1)
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result2.g))
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(f67pBE.g))
 
-    val result2 = figure6_2.duplicate()
     val Q2 = Set(B)
-    result2.pruneNetwork(Q2, null)
+    val f67pB = f61.pruneNetworkVarsAndEdges(Q2, None)
     println("Figure 6.2 pruned towards " + Q2)
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result2.g))
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(f67pB.g))
 
-    (result1, result2)
+    (f67pBE, f67pB)
   }
 
-  lazy val figure6_8 = {
+  def figure6_8() = {
 
-    val result = figure6_1.duplicate()
+    val f61 = figure6_1()
 
     val c = new CaseX()
     c.assign(C, false)
-    result.pruneEdges(c)
+    val f68 = new BayesianNetwork("f68", f61.pruneEdges(Some(c), f61.getGraph))
 
     println("Figure 6.1 with edges pruned towards C=false")
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result.g))
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(f68.getGraph))
 
-    for (rv <- result.getRandomVariables) {
-      val f = result.getCPT(rv)
+    for (rv <- f68.getRandomVariables) {
+      val f = f68.getCPT(rv)
       println("Factor for " + rv)
       f.print
     }
-    result
+    f68
   }
 
-  lazy val figure6_9 = {
+  def figure6_9() = {
 
-    val result = figure6_1.duplicate()
+    val f61 = figure6_1()
 
     val c = new CaseX()
     c.assign(A, true)
     c.assign(C, false)
 
-    result.pruneNetwork(Set(D), c)
+    val f69 = f61.pruneNetworkVarsAndEdges(Set(D), Some(c))
 
     println("Figure 6.1 pruned towards Q={D} and A=true,C=false")
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result.g))
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(f69.getGraph))
 
-    for (rv <- result.getRandomVariables()) {
-      val f = result.getCPT(rv)
+    for (rv <- f69.getRandomVariables()) {
+      val f = f69.getCPT(rv)
       println("Factor for " + rv)
       f.print
     }
 
-    result
+    f69
   }
 
-  lazy val figure7_2 = {
+  def figure7_2() = {
 
     val result = figure6_4.duplicate()
     val f = result.factorElimination1(Set(C))
@@ -224,45 +233,45 @@ object ScalaFigures {
     result
   }
 
-  lazy val figure7_4 = {
+  def figure7_4() = {
 
-    val result = figure6_1.duplicate()
+    val f61 = figure6_1()
 
     val τ = new EliminationTree()
 
-    val τ_n1 = τ.g.vertex(result.getCPT(A))
-    val τ_n2 = τ.g.vertex(result.getCPT(B))
-    val τ_n3 = τ.g.vertex(result.getCPT(C))
-    val τ_n4 = τ.g.vertex(result.getCPT(D))
-    val τ_n5 = τ.g.vertex(result.getCPT(E))
+    val τ_n1 = τ.g.vertex(f61.getCPT(A))
+    val τ_n2 = τ.g.vertex(f61.getCPT(B))
+    val τ_n3 = τ.g.vertex(f61.getCPT(C))
+    val τ_n4 = τ.g.vertex(f61.getCPT(D))
+    val τ_n5 = τ.g.vertex(f61.getCPT(E))
 
     τ.g.edge(τ_n1, τ_n2, "")
     τ.g.edge(τ_n1, τ_n4, "")
     τ.g.edge(τ_n4, τ_n3, "")
     τ.g.edge(τ_n3, τ_n5, "")
 
-    val elim = result.factorElimination2(Set(C), τ, τ_n3)
+    val (f68, elim) = f61.factorElimination2(Set(C), τ, τ_n3)
 
     println("Doing factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3")
     elim.print
 
-    (result, τ, τ_n3)
+    (f68, τ, τ_n3)
   }
 
-  lazy val figure7_5 = {
+  def figure7_5() = {
 
-    val result = figure6_1.duplicate()
+    val f61 = figure6_1()
 
-    val (bn, τ, τ_n3) = figure7_4
+    val (bn, τ, τ_n3) = figure7_4()
 
-    val elim = result.factorElimination2(Set(C), τ, τ_n3)
+    val (f75, elim) = f61.factorElimination2(Set(C), τ, τ_n3)
 
     println("Doing factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3")
     elim.print
-    result
+    f61
   }
 
-  lazy val figure7_12 = {
+  def figure7_12() = {
     val result = new JoinTree()
     val jtn1 = result.g.vertex(mutable.Set(A, B, C))
     val jtn2 = result.g.vertex(mutable.Set(B, C, D))
@@ -274,8 +283,6 @@ object ScalaFigures {
   }
 
   def main(args: List[String]): Unit = {
-
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(figure6_1.g))
 
     //figure6_2
     //figure6_3

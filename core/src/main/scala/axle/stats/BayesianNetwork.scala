@@ -121,10 +121,10 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
 
   def setCPT(rv: RandomVariable[_], factor: Factor): Unit = var2cpt += rv -> factor
 
-  def makeFactorFor(variable: RandomVariable[_]): Factor = {
-    val cptVarList = getRandomVariables.intersect(g.getPredecessors(variable))
+  def makeFactorFor(rv: RandomVariable[_]): Factor = {
+    val cptVarList = getRandomVariables.intersect(g.getPredecessors(rv))
     val cpt = new Factor(cptVarList ++ List(variable))
-    cpt.setName("cpt for " + variable.getName)
+    cpt.setName("cpt for " + rv.getName)
     cpt
   }
 
@@ -142,9 +142,7 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
   def getMarkovAssumptionsFor(rv: RandomVariable[_]): Independence = {
 
     val X = immutable.Set(rv)
-
     val Z = getGraph().getPredecessors(rv)
-
     val D = mutable.Set[RandomVariable[_]]()
     getGraph().collectDescendants(rv, D)
     D += rv // probably already includes this
@@ -179,28 +177,13 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
     // pi is an ordered list of the variables not in Q
     // returns the prior marginal pr(Q)
 
-    var S = mutable.Set[Factor]()
-    for (rv <- getRandomVariables()) {
-      S.add(getCPT(rv))
-    }
-
-    for (rv <- π) {
-      val allMentions = mutable.Set[Factor]()
-      val newS = mutable.Set[Factor]()
-      for (pt <- S) {
-        if (pt.mentions(rv)) {
-          allMentions.add(pt)
-        } else {
-          newS.add(pt)
-        }
-      }
-
+    val S = π.foldLeft(getRandomVariables().map(getCPT(_)).toSet)((S, rv) => {
+      val allMentions = S.filter(_.mentions(rv))
+      val newS = S -- allMentions
       val T = Factor.multiply(allMentions.toList)
       val Ti = T.sumOut(rv)
-      newS.add(Ti)
-      S = newS
-    }
-
+      newS + Ti
+    })
     Factor.multiply(S.toList)
 
     // the cost is the cost of the Tk multiplication
@@ -215,28 +198,14 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
     // assert: π ordering of variables in S but not in Q
     // assert: e assigns values to variables in this network
 
-    var S = mutable.Set[Factor]()
-    for (rv <- getRandomVariables()) {
-      S.add(getCPT(rv).projectRowsConsistentWith(e))
-    }
-
-    for (rv <- π) {
-      val allMentions = mutable.Set[Factor]()
-      val newS = mutable.Set[Factor]()
-      for (pt <- S) {
-        if (pt.mentions(rv)) {
-          allMentions.add(pt)
-        } else {
-          newS += pt
-        }
-      }
-
-      val T = Factor.multiply(allMentions.toList)
-      val Ti = T.sumOut(rv)
-
-      newS.add(Ti)
-      S = newS
-    }
+    val S = π.foldLeft(getRandomVariables().map(getCPT(_).projectRowsConsistentWith(Some(e))).toSet)(
+      (S, rv) => {
+        val allMentions = S.filter(_.mentions(rv))
+        val newS = S -- allMentions
+        val T = Factor.multiply(allMentions.toList)
+        val Ti = T.sumOut(rv)
+        newS + Ti
+      })
 
     Factor.multiply(S.toList)
   }
@@ -244,129 +213,93 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
   def interactsWith(v1: RandomVariable[_], v2: RandomVariable[_]): Boolean =
     getAllCPTs().exists(f => f.mentions(v1) && f.mentions(v2))
 
+  // Also called the "moral graph"
   def interactionGraph(): InteractionGraph = {
-    // Also called the "moral graph"
-
-    val result = new InteractionGraph()
-
-    getRandomVariables.map(result.g += _)
-
+    val g = graph[RandomVariable[_], String]()
+    getRandomVariables.map(g += _)
     val rvs = getRandomVariables()
     for (i <- 0 until rvs.size - 1) {
       val vi = rvs(i)
       for (j <- (i + 1) until rvs.size) {
         val vj = rvs(j)
         if (interactsWith(vi, vj)) {
-          result.g.edge(vi, vj, "")
+          g.edge(vi, vj, "")
         }
       }
     }
-
-    result
+    new InteractionGraph(g)
   }
 
-  def orderWidth(order: List[RandomVariable[_]]): Int = {
-    // Chapter 6 Algorithm 2 (page 13)
-
-    val G = interactionGraph()
-    var w = 0
-    for (rv <- getRandomVariables()) {
-      val d = G.getNeighbors(rv).size
-      w = max(w, d)
-      G.eliminate(rv)
-    }
-    w
-  }
-
-  def pruneEdges(e: CaseX, g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] = {
-    // 6.8.2
-
-    if (e == null) {
-      return
-    }
-
-    for (U <- e.getVariables()) {
-      for (edge <- g.outputEdgesOf(U)) { // ModelEdge
-
-        val X = edge.getDest()
-        val oldF = getCPT(X)
-        getGraph().deleteEdge(edge)
-        val smallerF = makeFactorFor(X)
-        for (i <- 0 until smallerF.numCases) {
-          val c = smallerF.caseOf(i)
-          // set its value to what e sets it to
-          c.assign(U, e.valueOf(U))
-          val oldValue = oldF.read(c)
-          smallerF.write(smallerF.caseOf(i), oldValue)
-        }
-        setCPT(edge.getDest(), smallerF)
+  // Chapter 6 Algorithm 2 (page 13)
+  def orderWidth(order: List[RandomVariable[_]]): Int =
+    getRandomVariables().scanLeft((interactionGraph(), 0))(
+      (gi, rv) => {
+        val G = gi._1
+        val size = G.getNeighbors(rv).size
+        val newG = G.eliminate(rv)
+        (newG, 1)
       }
-    }
+    ).map(_._2).max
 
-  }
+  // 6.8.2
+  // TODO: !!!! this should either be pulled out of BayesianNetwork, or otherwise the second graph
+  // argument should always be this.g
+  def pruneEdges(eOpt: Option[CaseX], g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] =
+    eOpt.map(e => {
+      for (U <- e.getVariables()) {
+        for (edge <- g.outputEdgesOf(U)) { // ModelEdge
+          val X = edge.getDest()
+          val oldF = getCPT(X)
+          getGraph().deleteEdge(edge)
+          val smallerF = makeFactorFor(X)
+          for (i <- 0 until smallerF.numCases) {
+            val c = smallerF.caseOf(i)
+            // set its value to what e sets it to
+            c.assign(U, e.valueOf(U))
+            val oldValue = oldF.read(c)
+            smallerF.write(smallerF.caseOf(i), oldValue)
+          }
+          setCPT(edge.getDest(), smallerF)
+        }
+      }
+    }).getOrElse(this.duplicate)
 
-  def pruneNodes(Q: Set[RandomVariable[_]], e: CaseX, g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] = {
+  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[CaseX], g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] = {
 
     // TODO: check if Q or e are null?
-    val vars = Q ++ e.getVariables
+    val vars = eOpt.map(Q ++ _.getVariables).getOrElse(Q)
 
     // println("BN.pruneNodes vars = " + vars)
-    // not optimal
+
     var keepGoing = true
     while (keepGoing) {
-      keepGoing = false
-      for (leaf <- g.getLeaves()) {
-        if (!vars.contains(leaf)) {
-          g -= leaf
-          keepGoing = true
-        }
-      }
+      val X = g.getLeaves() -- vars
+      keepGoing = X.size > 0
+      g = g -- X
     }
+    g
   }
 
-  def pruneNetworkEdges(e: CaseX): BayesianNetwork = new BayesianNetwork(this.name, pruneEdges(e, g))
+  def pruneNetworkEdges(e: CaseX): BayesianNetwork = new BayesianNetwork(this.name, pruneEdges(Some(e), g))
 
   // 6.8.3
-  def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], e: CaseX): BayesianNetwork =
-    new BayesianNetwork(this.name, pruneNodes(Q, e, pruneEdges(e, g)))
+  def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[CaseX]): BayesianNetwork =
+    new BayesianNetwork(this.name, pruneNodes(Q, eOpt, pruneEdges(eOpt, g)))
 
-  def variableEliminationPR(Q: Set[RandomVariable[_]], e: CaseX): (Factor, BayesianNetwork) = {
+  def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[CaseX]): (Factor, BayesianNetwork) = {
 
-    val pruned = pruneNetworkVarsAndEdges(Q, e)
-
-    val R = mutable.Set[RandomVariable[_]]()
-    for (v <- getRandomVariables()) {
-      if (!Q.contains(v)) {
-        R.add(v)
-      }
-    }
-
+    val pruned = pruneNetworkVarsAndEdges(Q, eOpt)
+    val R = getRandomVariables.filter(!Q.contains(_)).toSet
     val π = pruned.minDegreeOrder(R)
 
-    var S = mutable.Set[Factor]()
-    for (rv <- pruned.getRandomVariables()) {
-      S.add(pruned.getCPT(rv).projectRowsConsistentWith(e))
-    }
-
-    for (rv <- π) {
-
-      val allMentions = mutable.Set[Factor]()
-      val newS = mutable.Set[Factor]()
-
-      for (pt <- S) {
-        if (pt.mentions(rv)) {
-          allMentions.add(pt)
-        } else {
-          newS.add(pt)
-        }
-      }
-
-      val T = Factor.multiply(allMentions.toList)
-      val Ti = T.sumOut(rv)
-
-      newS.add(Ti)
-      S = newS
-    }
+    val S = π.foldLeft(pruned.getRandomVariables().map(rv => pruned.getCPT(rv).projectRowsConsistentWith(eOpt)).toSet)(
+      (S, rv) => {
+        val allMentions = S.filter(_.mentions(rv))
+        val newS = S -- allMentions
+        val T = Factor.multiply(allMentions.toList)
+        val Ti = T.sumOut(rv)
+        newS + Ti
+      })
 
     (Factor.multiply(S.toList), pruned)
   }
@@ -374,42 +307,25 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
   def variableEliminationMPE(e: CaseX): (Double, BayesianNetwork) = {
 
     val pruned = pruneNetworkEdges(e)
-
     val Q = pruned.getRandomVariables()
-    val π = pruned.minDegreeOrder(Q)
+    val π = pruned.minDegreeOrder(Q.toSet)
 
-    val S = mutable.Set[Factor]()
-    for (rv <- Q) {
-      S.add(pruned.getCPT(rv).projectRowsConsistentWith(e))
-    }
-
-    for (rv <- π) {
-
-      val allMentions = mutable.Set[Factor]()
-      val newS = mutable.Set[Factor]()
-
-      for (pt <- S) {
-        if (pt.mentions(rv)) {
-          allMentions.add(pt)
-        } else {
-          newS.add(pt)
-        }
-      }
-
-      val T = Factor.multiply(allMentions)
-      val Ti = T.maxOut(rv)
-
-      newS.add(Ti)
-      S = newS
-    }
+    val S = π.foldLeft(Q.map(rv => pruned.getCPT(rv).projectRowsConsistentWith(Some(e))).toSet)(
+      (S, rv) => {
+        val allMentions = S.filter(_.mentions(rv))
+        val newS = S -- allMentions
+        val T = Factor.multiply(allMentions.toList)
+        val Ti = T.maxOut(rv)
+        newS + Ti
+      })
 
     // at this point (since we're iterating over *all* variables in Q)
     // S will contain exactly one trivial Factor
 
     assert(S.size == 1)
 
-    val fit = S.iterator
-    val result = fit.next()
+    val sl = S.toList
+    val result = sl(0)
 
     assert(result.numCases() == 1)
 
@@ -432,7 +348,7 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
     val result = mutable.ListBuffer[RandomVariable[_]]()
 
     while (X.size > 0) {
-      G.g.vertexWithFewestNeighborsAmong(X).map(rv => {
+      G.getGraph.vertexWithFewestNeighborsAmong(X).map(rv => {
         result += rv
         G.eliminate(rv)
         X -= rv
@@ -442,13 +358,13 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
   }
 
   def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
-    val X = Set[RandomVariable[_]]() ++ pX
 
+    val X = Set[RandomVariable[_]]() ++ pX
     val G = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
 
     while (X.size > 0) {
-      G.g.vertexWithFewestEdgesToEliminateAmong(X).map(rv => {
+      G.getGraph.vertexWithFewestEdgesToEliminateAmong(X).map(rv => {
         result += rv
         G.eliminate(rv)
         X -= rv
@@ -459,76 +375,47 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
 
   def factorElimination1(Q: Set[RandomVariable[_]]): Factor = {
 
-    val S = mutable.ListBuffer[Factor]()
-    getRandomVariables.map(rv => S += getCPT(rv))
+    val S = mutable.ListBuffer[Factor]() ++ getRandomVariables().map(getCPT(_)).toList
 
     while (S.size > 1) {
 
-      val fi = S(0)
-      S -= fi
+      val fi = S.remove(0)
 
-      val V = mutable.Set[RandomVariable[_]]()
-      for (v <- fi.getVariables()) {
-        if (!Q.contains(v)) {
-          var vNotInS = true
-          var j = 0
-          while (vNotInS && j < S.size) {
-            vNotInS = !S(j).mentions(v)
-            j += 1
-          }
-          if (vNotInS) {
-            V.add(v)
-          }
-        }
-      }
+      val V = fi.getVariables
+        .filter(!Q.contains(_))
+        .filter(v => S.forall(!_.mentions(v)))
+        .toSet
 
       // At this point, V is the set of vars that are unique to this particular
       // factor, fj, and do not appear in Q
 
       val fjMinusV = fi.sumOut(V)
-
-      val fj = S(0)
-      S -= fj
+      val fj = S.remove(0)
       S += fj.multiply(fjMinusV)
     }
 
     // there should be one element left in S
-
-    val f = S(0)
-
-    f.projectToOnly(Q.toList)
+    S(0).projectToOnly(Q.toList)
   }
 
-  def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, r: EliminationTree#GV): Factor = {
-    // the variables Q appear on the CPT for the product of Factors assigned to node r
-
+  // the variables Q appear on the CPT for the product of Factors assigned to node r
+  def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, r: EliminationTree#GV): (BayesianNetwork, Factor) = {
     while (τ.g.getVertices().size > 1) {
-
       // remove node i (other than r) that has single neighbor j in tau
-
       τ.g.firstLeafOtherThan(r).map(i => {
         val j = τ.getNeighbors(i).iterator.next()
         val ɸ_i = τ.getFactor(i)
         τ.delete(i)
-        val allVarsInTau = τ.getAllVariables()
-        var V = mutable.Set[RandomVariable]()
-        for (v <- ɸ_i.getVariables()) {
-          if (!allVarsInTau.contains(v)) {
-            V.add(v)
-          }
-        }
+        val V = ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet
         τ.addFactor(j, ɸ_i.sumOut(V))
         τ.draw()
       })
-
     }
-
-    τ.getFactor(r).projectToOnly(Q.toList)
+    (foo, τ.getFactor(r).projectToOnly(Q.toList))
   }
 
   def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, r: EliminationTree#GV): Factor = {
     // Q is a subset of C_r
-
     while (τ.g.getVertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in tau
       τ.g.firstLeafOtherThan(r).map(i => {
@@ -541,9 +428,7 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
         τ.addFactor(j, ɸ_i.projectToOnly(sijList.toList))
         τ.draw()
       })
-
     }
-
     τ.getFactor(r).projectToOnly(Q.toList)
   }
 

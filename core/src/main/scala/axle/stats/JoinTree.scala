@@ -8,7 +8,7 @@ object JoinTree {
 
   // TODO:
   def fromEliminationOrder(m: Model, pi: List[RandomVariable[_]]): JoinTree = {
-    val G = m.g // Note: G used ot be passed in as DirectedGraph[_, _]
+    val G = m.getGraph // Note: G used ot be passed in as DirectedGraph[_, _]
     // returns a jointree for DAG G with width equal to width(pi, G)
     val T = new JoinTree()
     val Gm = G.moralGraph()

@@ -134,15 +134,15 @@ object AlarmBurglaryEarthquake {
     sansAll.print()
 
     /*
-		double ans1 = burglary.lookup(BooleanVariable.true, new Case());
-		System.out.println("pr(B) = " + ans1); // 0.001
+		double ans1 = burglary.lookup(BooleanVariable.true, new Case())
+		println("P(B) = " + ans1) // 0.001
 		
-		Case burglaryTrue_earthquakeFalse2 = new Case();
-		burglaryTrue_earthquakeFalse2.assign(burglary, BooleanVariable.true);
-		burglaryTrue_earthquakeFalse2.assign(earthquake, BooleanVariable.false);
-		double ans2 = alarm.lookup(BooleanVariable.true, burglaryTrue_earthquakeFalse2);
-		System.out.println("pr(A| B, -E) = " + ans2); // 0.94
-		*/
+		Case burglaryTrue_earthquakeFalse2 = new Case()
+		burglaryTrue_earthquakeFalse2.assign(burglary, true)
+		burglaryTrue_earthquakeFalse2.assign(earthquake, false)
+		double ans2 = alarm.lookup(BooleanVariable.true, burglaryTrue_earthquakeFalse2)
+		println("P(A| B, -E) = " + ans2) // 0.94
+    */
 
     println("alarm")
     bn.getCPT(alarm).print()

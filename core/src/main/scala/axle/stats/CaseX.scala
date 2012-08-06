@@ -16,15 +16,11 @@ case class CaseX() extends Comparable[CaseX] {
 
   def valueOf(variable: RandomVariable[_]): Any = assignments(variable)
 
-  def valuesOf(vars: List[RandomVariable[_]]): List[Any] = {
-    // Note: this may contain null entries if assignments.keySet()
-    // is a strict subset of vars
-    vars map { assignments(_) }
-  }
+  // Note: this may contain null entries if assignments.keySet()
+  // is a strict subset of vars
+  def valuesOf(vars: List[RandomVariable[_]]): List[Any] = vars.map(assignments(_))
 
-  def assign(rv: RandomVariable[_], value: Any): Unit = {
-    assignments += rv -> value
-  }
+  def assign(rv: RandomVariable[_], value: Any): Unit = assignments += rv -> value
 
   def assign(vars: List[RandomVariable[_]], vals: List[Any]): Unit = {
     for (i <- 0 until vars.size) {
@@ -46,18 +42,14 @@ case class CaseX() extends Comparable[CaseX] {
   }
 
   def copy(): CaseX = {
-    var result = new CaseX()
-    for ((rv, value) <- assignments) {
-      result.assignments += rv -> value
-    }
+    val result = new CaseX()
+    for ((rv, value) <- assignments) { result.assignments += rv -> value }
     result
   }
 
   def projectToVars(pVars: List[RandomVariable[_]]): CaseX = {
-    var result = new CaseX()
-    for (variable <- pVars) {
-      result.assign(variable, valueOf(variable))
-    }
+    val result = new CaseX()
+    for (variable <- pVars) { result.assign(variable, valueOf(variable)) }
     result
   }
 
