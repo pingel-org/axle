@@ -5,8 +5,18 @@ import collection._
 import axle.stats._
 import axle.visualize._
 import axle.graph.JungDirectedGraphFactory._
+import axle.graph.JungUndirectedGraphFactory.UndirectedGraph
+//import axle.graph.JungUndirectedGraphFactory._
 
 object ScalaFigures {
+
+  def draw(title: String, dg: DirectedGraph[RandomVariable[_], String]): Unit = {
+    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(dg))
+  }
+
+//  def draw(title: String, ug: UndirectedGraph[RandomVariable[_], String]): Unit = {
+//    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(ug))
+//  }
 
   val bools = Some(List(true, false))
 
@@ -153,16 +163,14 @@ object ScalaFigures {
 
   def figure6_5(): List[InteractionGraph] = {
 
-    val π = List(B, C, A, D)
+    val IG = figure6_1().interactionGraph()
+    val result = IG.eliminationSequence(List(B, C, A, D))
 
-    val G = figure6_1().interactionGraph()
-
-    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(G.getGraph))
-
-    val result = G.eliminationSequence(π)
+    draw("figure 6.1 interaction graph", IG.getGraph)
     for (gi <- result) {
-      new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(gi.getGraph))
+      draw("6.1 interaction graph pruned", gi.getGraph)
     }
+
     result
   }
 
@@ -172,13 +180,12 @@ object ScalaFigures {
 
     val Q1 = Set(B, E)
     val f67pBE = f61.pruneNetworkVarsAndEdges(Q1, None)
-    println("Figure 6.1 pruned towards " + Q1)
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(f67pBE.g))
 
     val Q2 = Set(B)
     val f67pB = f61.pruneNetworkVarsAndEdges(Q2, None)
-    println("Figure 6.2 pruned towards " + Q2)
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(f67pB.g))
+
+    draw("Figure 6.1 pruned towards " + Q1, f67pBE.g)
+    draw("Figure 6.2 pruned towards " + Q2, f67pB.g)
 
     (f67pBE, f67pB)
   }
@@ -191,8 +198,7 @@ object ScalaFigures {
     c.assign(C, false)
     val f68 = new BayesianNetwork("f68", f61.pruneEdges(Some(c), f61.getGraph))
 
-    println("Figure 6.1 with edges pruned towards C=false")
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(f68.getGraph))
+    draw("Figure 6.1 with edges pruned towards C=false", f68.getGraph)
 
     for (rv <- f68.getRandomVariables) {
       val f = f68.getCPT(rv)
@@ -211,9 +217,7 @@ object ScalaFigures {
     c.assign(C, false)
 
     val f69 = f61.pruneNetworkVarsAndEdges(Set(D), Some(c))
-
-    println("Figure 6.1 pruned towards Q={D} and A=true,C=false")
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(f69.getGraph))
+    draw("Figure 6.1 pruned towards Q={D} and A=true,C=false", f69.getGraph)
 
     for (rv <- f69.getRandomVariables()) {
       val f = f69.getCPT(rv)
@@ -278,6 +282,7 @@ object ScalaFigures {
     val jtn3 = result.g.vertex(mutable.Set(C, E))
     result.g.edge(jtn1, jtn2, "")
     result.g.edge(jtn2, jtn3, "")
+    // draw("figure 7.12", result.g)
     new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result.g))
     result
   }
