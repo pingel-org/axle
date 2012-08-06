@@ -266,17 +266,20 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
 
   def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[CaseX], g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] = {
 
-    // TODO: check if Q or e are null?
     val vars = eOpt.map(Q ++ _.getVariables).getOrElse(Q)
 
-    // println("BN.pruneNodes vars = " + vars)
-
-    var keepGoing = true
-    while (keepGoing) {
-      val X = g.getLeaves() -- vars
-      keepGoing = X.size > 0
-      g = g -- X
+    def nodePruneStream(g: DirectedGraph[RandomVariable[_], String]): Stream[DirectedGraph[RandomVariable[_], String]] = {
+      val X = g.getLeaves().toSet -- vars
+      val keepGoing = X.size > 0
+      keepGoing match {
+        case false => Stream.empty
+        case true => {
+          val newG = g -- X
+          Stream.cons(newG, nodePruneStream(newG))
+        }
+      }
     }
+    nodePruneStream(g).last
     g
   }
 
