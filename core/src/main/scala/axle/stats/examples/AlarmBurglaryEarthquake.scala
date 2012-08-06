@@ -158,7 +158,7 @@ object AlarmBurglaryEarthquake {
     println("abe")
     abe.print()
 
-    val Q = Set(earthquake, burglary, alarm)
+    val Q: immutable.Set[RandomVariable[_]] = immutable.Set(earthquake, burglary, alarm)
     val order = List(johnCalls, maryCalls)
 
     // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)

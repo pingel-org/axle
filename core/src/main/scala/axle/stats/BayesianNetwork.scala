@@ -104,7 +104,7 @@ import collection._
 import math.max
 import axle.graph.JungDirectedGraphFactory._
 
-class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], String]) extends Model(name, g) {
+class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_], String]) extends Model(name, g) {
 
   def duplicate(): BayesianNetwork = new BayesianNetwork(name, graphFrom(g)(v => v, e => e))
 
@@ -141,14 +141,18 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
 
   def getMarkovAssumptionsFor(rv: RandomVariable[_]): Independence = {
 
-    val X = immutable.Set(rv)
-    val Z = getGraph().getPredecessors(rv)
-    val D = mutable.Set[RandomVariable[_]]()
-    getGraph().collectDescendants(rv, D)
-    D += rv // probably already includes this
-    D ++= getGraph().getPredecessors(rv)
+    val rvVertex = g.findVertex(rv).get
 
-    val Y = getRandomVariables.filter(!D.contains(_)).toSet
+    val X: immutable.Set[RandomVariable[_]] = immutable.Set(rv)
+
+    val Z: immutable.Set[RandomVariable[_]] = g.getPredecessors(rvVertex).map(_.getPayload).toSet
+
+    val D = mutable.Set[g.V]()
+    g.collectDescendants(rvVertex, D)
+    D += rvVertex // probably already includes this
+    D ++= g.getPredecessors(rvVertex)
+    val Dvars = D.map(_.getPayload)
+    val Y = getRandomVariables.filter(!Dvars.contains(_)).toSet
 
     new Independence(X, Z, Y)
   }
@@ -244,7 +248,7 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
   // 6.8.2
   // TODO: !!!! this should either be pulled out of BayesianNetwork, or otherwise the second graph
   // argument should always be this.g
-  def pruneEdges(eOpt: Option[CaseX], g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] =
+  def pruneEdges(eOpt: Option[CaseX], g: JungDirectedGraph[RandomVariable[_], String]): JungDirectedGraph[RandomVariable[_], String] =
     eOpt.map(e => {
       for (U <- e.getVariables()) {
         for (edge <- g.outputEdgesOf(U)) { // ModelEdge
@@ -264,11 +268,11 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
       }
     }).getOrElse(this.duplicate)
 
-  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[CaseX], g: DirectedGraph[RandomVariable[_], String]): DirectedGraph[RandomVariable[_], String] = {
+  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[CaseX], g: JungDirectedGraph[RandomVariable[_], String]): JungDirectedGraph[RandomVariable[_], String] = {
 
     val vars = eOpt.map(Q ++ _.getVariables).getOrElse(Q)
 
-    def nodePruneStream(g: DirectedGraph[RandomVariable[_], String]): Stream[DirectedGraph[RandomVariable[_], String]] = {
+    def nodePruneStream(g: JungDirectedGraph[RandomVariable[_], String]): Stream[JungDirectedGraph[RandomVariable[_], String]] = {
       val X = g.getLeaves().toSet -- vars // TODO: hidden type mismatch
       X.size match {
         case 0 => Stream.empty

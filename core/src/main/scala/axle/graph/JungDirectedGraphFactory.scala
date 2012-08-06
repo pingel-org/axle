@@ -5,12 +5,12 @@ import collection._
 
 object JungDirectedGraphFactory extends JungDirectedGraphFactory {
 
-//    def draw(): Unit = {
-//      import axle.visualize._
-//      val vis = new JungDirectedGraphVisualization()
-//      vis.draw[VP, EP](this)
-//    }
-  
+  //    def draw(): Unit = {
+  //      import axle.visualize._
+  //      val vis = new JungDirectedGraphVisualization()
+  //      vis.draw[VP, EP](this)
+  //    }
+
 }
 
 trait JungDirectedGraphFactory extends DirectedGraphFactory {
@@ -103,6 +103,9 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
     def edge(source: V, dest: V, payload: EP): E = new JungDirectedGraphEdgeImpl(source, dest, payload)
 
     def vertex(payload: VP): V = new JungDirectedGraphVertexImpl(payload)
+
+    // TODO: findVertex needs an index:
+    def findVertex(payload: VP): Option[V] = getVertices().find(_.getPayload == payload)
 
     def removeAllEdgesAndVertices(): Unit = getVertices().map(jungGraph.removeVertex(_))
 

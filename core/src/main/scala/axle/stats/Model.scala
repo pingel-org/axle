@@ -13,7 +13,7 @@ object Direction {
 
 }
 
-class Model(name: String = "no name", g: DirectedGraph[RandomVariable[_], String]) {
+class Model(name: String = "no name", g: JungDirectedGraph[RandomVariable[_], String]) {
 
   // def duplicate(): Model = new Model(name, graphFrom(g)(v => v, e => e))
 

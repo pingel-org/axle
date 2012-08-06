@@ -10,13 +10,13 @@ import axle.graph.JungUndirectedGraphFactory.UndirectedGraph
 
 object ScalaFigures {
 
-  def draw(title: String, dg: DirectedGraph[RandomVariable[_], String]): Unit = {
+  def draw(title: String, dg: JungDirectedGraph[RandomVariable[_], String]): Unit = {
     new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(dg))
   }
 
-//  def draw(title: String, ug: UndirectedGraph[RandomVariable[_], String]): Unit = {
-//    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(ug))
-//  }
+  //  def draw(title: String, ug: UndirectedGraph[RandomVariable[_], String]): Unit = {
+  //    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(ug))
+  //  }
 
   val bools = Some(List(true, false))
 
@@ -178,14 +178,14 @@ object ScalaFigures {
 
     val f61 = figure6_1()
 
-    val Q1 = Set(B, E)
+    val Q1: immutable.Set[RandomVariable[_]] = immutable.Set(B, E)
     val f67pBE = f61.pruneNetworkVarsAndEdges(Q1, None)
 
-    val Q2 = Set(B)
+    val Q2: immutable.Set[RandomVariable[_]] = immutable.Set(B)
     val f67pB = f61.pruneNetworkVarsAndEdges(Q2, None)
 
-    draw("Figure 6.1 pruned towards " + Q1, f67pBE.g)
-    draw("Figure 6.2 pruned towards " + Q2, f67pB.g)
+    draw("Figure 6.1 pruned towards " + Q1, f67pBE.getGraph)
+    draw("Figure 6.2 pruned towards " + Q2, f67pB.getGraph)
 
     (f67pBE, f67pB)
   }

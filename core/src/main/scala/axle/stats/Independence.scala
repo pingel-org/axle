@@ -1,8 +1,16 @@
 package axle.stats
 
-// this is read "X is independent of Y given Z"
+import collection._
 
-class Independence(X: Set[RandomVariable[_]], Z: Set[RandomVariable[_]], Y: Set[RandomVariable[_]]) {
+/**
+ *
+ * Read: "X is independent of Y given Z"
+ */
+
+class Independence(
+  X: immutable.Set[RandomVariable[_]],
+  Z: immutable.Set[RandomVariable[_]],
+  Y: immutable.Set[RandomVariable[_]]) {
 
   def variablesToString(s: Set[RandomVariable[_]]): String = "{" + (for (v <- s) yield v.getName()).mkString("") + "}"
 
