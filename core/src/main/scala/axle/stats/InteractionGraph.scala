@@ -3,7 +3,7 @@ package axle.stats
 import axle.graph.JungUndirectedGraphFactory._
 import collection._
 
-class InteractionGraph(g: JungUndirectedGraph[RandomVariable[_], String] = graph[RandomVariable[_], String]()) {
+class InteractionGraph(g: JungUndirectedGraph[RandomVariable[_], String]) {
 
   def getGraph() = g
 

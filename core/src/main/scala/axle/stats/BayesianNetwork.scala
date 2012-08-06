@@ -237,16 +237,19 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   }
 
   // Chapter 6 Algorithm 2 (page 13)
-  def orderWidth(order: List[RandomVariable[_]]): Int =
+  def orderWidth(order: List[RandomVariable[_]]): Int = {
+    import axle.graph.JungUndirectedGraphFactory._
     getRandomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
         val IG = gi._1
-        val rvVertex = IG.getGraph.findVertex(rv).get
-        val size = IG.getGraph.getNeighbors(rvVertex).size
+        val igg = IG.getGraph
+        val rvVertex = igg.findVertex(rv).get
+        val size = igg.getNeighbors(rvVertex).size
         val newIG = IG.eliminate(rv)
-        (newG, size)
+        (newIG, size)
       }
     ).map(_._2).max
+  }
 
   // 6.8.2
   def pruneEdges(resultName: String, eOpt: Option[CaseX]): BayesianNetwork = {
@@ -280,12 +283,12 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     val vars = eOpt.map(Q ++ _.getVariables).getOrElse(Q)
 
     def nodePruneStream(g: JungDirectedGraph[RandomVariable[_], String]): Stream[JungDirectedGraph[RandomVariable[_], String]] = {
-      val X = g.getLeaves().toSet -- vars // TODO: hidden type mismatch
-      X.size match {
+      val xVertices = g.getLeaves().toSet -- vars.map(g.findVertex(_).get)
+      xVertices.size match {
         case 0 => Stream.empty
         case _ => {
-          val newG = g -- X
-          Stream.cons(newG, nodePruneStream(newG))
+          xVertices.map(xV => g.deleteVertex(xV))
+          Stream.cons(g, nodePruneStream(g))
         }
       }
     }
@@ -352,36 +355,33 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   //	}
 
   def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
-
     val X = mutable.Set[RandomVariable[_]]() ++ pX
-
     val IG = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
-
     while (X.size > 0) {
-      val xVertices = X.map(IG.getGraph.findVertex(_).get)
-      IG.getGraph.vertexWithFewestNeighborsAmong(xVertices).map(rvVertex => {
-        val rv = rvVertex.getPayload
-        result += rv
-        IG.eliminate(rv)
-        X -= rv
-      })
+      val igg = IG.getGraph
+      val xVertices = X.map(igg.findVertex(_).get)
+      val rv = igg.vertexWithFewestNeighborsAmong(xVertices).getPayload
+      result += rv
+      IG.eliminate(rv)
+      X -= rv
     }
     result.toList
   }
 
   def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
 
-    val X = Set[RandomVariable[_]]() ++ pX
+    val X = mutable.Set[RandomVariable[_]]() ++ pX
     val IG = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
 
     while (X.size > 0) {
-      IG.getGraph.vertexWithFewestEdgesToEliminateAmong(X).map(rv => {
-        result += rv
-        IG.eliminate(rv)
-        X -= rv
-      })
+      val igg = IG.getGraph
+      val xVertices = X.map(igg.findVertex(_).get)
+      val rv = igg.vertexWithFewestEdgesToEliminateAmong(xVertices, (v1, v2) => { "x" }).getPayload
+      result += rv
+      IG.eliminate(rv)
+      X -= rv
     }
     result.toList
   }
@@ -425,7 +425,8 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
         j.setPayload(ɸ_i.sumOut(V))
       })
     }
-    (foo, f.projectToOnly(Q.toList))
+    val result = null.asInstanceOf[BayesianNetwork] // TODO !!!
+    (result, f.projectToOnly(Q.toList))
   }
 
   // TODO: Make immutable: this should not be calling delete or setPayload

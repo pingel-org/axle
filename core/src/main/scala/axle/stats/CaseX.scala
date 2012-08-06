@@ -2,13 +2,9 @@ package axle.stats
 
 import collection._
 
-// OLD VERSION HAD THESE DATA MEMBERS IN CONSTRUCTOR:
-// rv: RandomVariable, value: Value
-
 case class CaseX() extends Comparable[CaseX] {
-  val assignments = mutable.Map[RandomVariable[_], Any]() // NOTE: was TreeMap
 
-  // OLD VERSION DID THIS: assign(rv, value)
+  val assignments = mutable.Map[RandomVariable[_], Any]() // NOTE: was TreeMap
 
   def getVariables(): Set[RandomVariable[_]] = assignments.keySet
 
@@ -16,8 +12,7 @@ case class CaseX() extends Comparable[CaseX] {
 
   def valueOf(variable: RandomVariable[_]): Any = assignments(variable)
 
-  // Note: this may contain null entries if assignments.keySet()
-  // is a strict subset of vars
+  // Note: this may contain null entries if assignments.keySet() is a strict subset of vars
   def valuesOf(vars: List[RandomVariable[_]]): List[Any] = vars.map(assignments(_))
 
   def assign(rv: RandomVariable[_], value: Any): Unit = assignments += rv -> value
@@ -53,10 +48,11 @@ case class CaseX() extends Comparable[CaseX] {
     result
   }
 
-  override def equals(o: Object) = o match {
-    case c: CaseX => compareTo(c) == 0
-    case _ => false
-  }
+  // TODO !!!
+//  override def equals(o: Object) = o match {
+//    case c: CaseX => compareTo(c) == 0
+//    case _ => false
+//  }
 
   def compareTo(other: CaseX): Int = {
     if (assignments.size < other.assignments.size) {
@@ -69,7 +65,7 @@ case class CaseX() extends Comparable[CaseX] {
       val myValue = assignments(variable)
       val otherValue = other.assignments(variable)
       if (!myValue.equals(otherValue)) {
-        return myValue.compareTo(otherValue)
+        return 0 // TODO !!! myValue.compareTo(otherValue)
       }
     }
     0
