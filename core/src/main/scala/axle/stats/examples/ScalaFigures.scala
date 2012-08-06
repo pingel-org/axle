@@ -254,21 +254,21 @@ object ScalaFigures {
     τ.g.edge(τ_n4, τ_n3, "")
     τ.g.edge(τ_n3, τ_n5, "")
 
-    val (f68, elim) = f61.factorElimination2(Set(C), τ, τ_n3)
+    val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.getCPT(C))
 
     println("Doing factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3")
     elim.print
 
-    (f68, τ, τ_n3)
+    (f68, τ, f61.getCPT(C))
   }
 
   def figure7_5() = {
 
     val f61 = figure6_1()
 
-    val (bn, τ, τ_n3) = figure7_4()
+    val (bn, τ, cptC) = figure7_4()
 
-    val (f75, elim) = f61.factorElimination2(Set(C), τ, τ_n3)
+    val (f75, elim) = f61.factorElimination2(Set(C), τ, cptC)
 
     println("Doing factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3")
     elim.print

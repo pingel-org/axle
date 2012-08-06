@@ -411,40 +411,38 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     S(0).projectToOnly(Q.toList)
   }
 
+  // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
-  def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, r: EliminationTree#GV): (BayesianNetwork, Factor) = {
+  def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): (BayesianNetwork, Factor) = {
     while (τ.g.getVertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in τ
-      val fl = τ.g.firstLeafOtherThan(r)
-
+      val fl = τ.g.firstLeafOtherThan(τ.g.findVertex(f).get)
       fl.map(i => {
-        val j = τ.getNeighbors(i).iterator.next()
-        val ɸ_i = τ.getFactor(i)
-        τ.delete(i)
+        val j = τ.g.getNeighbors(i).iterator.next()
+        val ɸ_i = i.getPayload
+        τ.g.delete(i)
         val V = ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet
-        τ.addFactor(j, ɸ_i.sumOut(V))
-        τ.draw()
+        j.setPayload(ɸ_i.sumOut(V))
       })
     }
-    (foo, τ.getFactor(r).projectToOnly(Q.toList))
+    (foo, f.projectToOnly(Q.toList))
   }
 
-  def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, r: EliminationTree#GV): Factor = {
+  // TODO: Make immutable: this should not be calling delete or setPayload
+  def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): Factor = {
     // Q is a subset of C_r
     while (τ.g.getVertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in tau
-      τ.g.firstLeafOtherThan(r).map(i => {
-        val j = τ.getNeighbors(i).iterator.next()
-        val ɸ_i = τ.getFactor(i)
-        τ.delete(i)
+      val fl = τ.g.firstLeafOtherThan(τ.g.findVertex(f).get)
+      fl.map(i => {
+        val j = τ.g.getNeighbors(i).iterator.next()
+        val ɸ_i = i.getPayload
+        τ.g.delete(i)
         val Sij = τ.separate(i, j)
-        var sijList = mutable.ListBuffer[RandomVariable]()
-        sijList ++= Sij
-        τ.addFactor(j, ɸ_i.projectToOnly(sijList.toList))
-        τ.draw()
+        j.setPayload(ɸ_i.projectToOnly(Sij.toList))
       })
     }
-    τ.getFactor(r).projectToOnly(Q.toList)
+    f.projectToOnly(Q.toList)
   }
 
   //	public Map<EliminationTreeNode, Factor> factorElimination(EliminationTree tau, Case e)
