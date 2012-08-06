@@ -122,10 +122,9 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   def setCPT(rv: RandomVariable[_], factor: Factor): Unit = var2cpt += rv -> factor
 
   def makeFactorFor(rv: RandomVariable[_]): Factor = {
-    val cptVarList = getRandomVariables.intersect(g.getPredecessors(rv))
-    val cpt = new Factor(cptVarList ++ List(variable))
-    cpt.setName("cpt for " + rv.getName)
-    cpt
+    val preds = g.getPredecessors(g.findVertex(rv).get).map(_.getPayload)
+    val cptVarList = getRandomVariables.filter(preds.contains(_))
+    new Factor(cptVarList ++ List(rv), "cpt for " + rv.getName)
   }
 
   def getCPT(variable: RandomVariable[_]): Factor = {
@@ -219,42 +218,48 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   // Also called the "moral graph"
   def interactionGraph(): InteractionGraph = {
-    val g = graph[RandomVariable[_], String]()
-    getRandomVariables.map(g += _)
+    import axle.graph.JungUndirectedGraphFactory._
+    val ig = graph[RandomVariable[_], String]()
+    getRandomVariables.map(ig += _)
     val rvs = getRandomVariables()
     for (i <- 0 until rvs.size - 1) {
       val vi = rvs(i)
+      val viVertex = ig.findVertex(vi).get
       for (j <- (i + 1) until rvs.size) {
         val vj = rvs(j)
+        val vjVertex = ig.findVertex(vj).get
         if (interactsWith(vi, vj)) {
-          g.edge(vi, vj, "")
+          ig.edge(viVertex, vjVertex, "")
         }
       }
     }
-    new InteractionGraph(g)
+    new InteractionGraph(ig)
   }
 
   // Chapter 6 Algorithm 2 (page 13)
   def orderWidth(order: List[RandomVariable[_]]): Int =
     getRandomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
-        val G = gi._1
-        val size = G.getNeighbors(rv).size
-        val newG = G.eliminate(rv)
-        (newG, 1)
+        val IG = gi._1
+        val rvVertex = IG.getGraph.findVertex(rv).get
+        val size = IG.getGraph.getNeighbors(rvVertex).size
+        val newIG = IG.eliminate(rv)
+        (newG, size)
       }
     ).map(_._2).max
 
   // 6.8.2
-  // TODO: !!!! this should either be pulled out of BayesianNetwork, or otherwise the second graph
-  // argument should always be this.g
-  def pruneEdges(eOpt: Option[CaseX], g: JungDirectedGraph[RandomVariable[_], String]): JungDirectedGraph[RandomVariable[_], String] =
+  def pruneEdges(resultName: String, eOpt: Option[CaseX]): BayesianNetwork = {
+    import axle.graph.JungDirectedGraphFactory._
+    val outG = graphFrom(g)(v => v, e => e)
+    val result = new BayesianNetwork(resultName, outG)
     eOpt.map(e => {
       for (U <- e.getVariables()) {
-        for (edge <- g.outputEdgesOf(U)) { // ModelEdge
-          val X = edge.getDest()
-          val oldF = getCPT(X)
-          getGraph().deleteEdge(edge)
+        val uVertex = outG.findVertex(U).get
+        for (edge <- outG.outputEdgesOf(uVertex)) { // ModelEdge
+          val X = edge.getDest().getPayload
+          val oldF = result.getCPT(X)
+          outG.deleteEdge(edge) // TODO: this should be acting on a copy
           val smallerF = makeFactorFor(X)
           for (i <- 0 until smallerF.numCases) {
             val c = smallerF.caseOf(i)
@@ -263,10 +268,12 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
             val oldValue = oldF.read(c)
             smallerF.write(smallerF.caseOf(i), oldValue)
           }
-          setCPT(edge.getDest(), smallerF)
+          result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
         }
       }
-    }).getOrElse(this.duplicate)
+      result
+    }).getOrElse(result)
+  }
 
   def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[CaseX], g: JungDirectedGraph[RandomVariable[_], String]): JungDirectedGraph[RandomVariable[_], String] = {
 
@@ -286,11 +293,9 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     g
   }
 
-  def pruneNetworkEdges(e: CaseX): BayesianNetwork = new BayesianNetwork(this.name, pruneEdges(Some(e), g))
-
   // 6.8.3
   def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[CaseX]): BayesianNetwork =
-    new BayesianNetwork(this.name, pruneNodes(Q, eOpt, pruneEdges(eOpt, g)))
+    new BayesianNetwork(this.name, pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph))
 
   def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[CaseX]): (Factor, BayesianNetwork) = {
 
@@ -312,7 +317,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   def variableEliminationMPE(e: CaseX): (Double, BayesianNetwork) = {
 
-    val pruned = pruneNetworkEdges(e)
+    val pruned = pruneEdges("pruned", Some(e))
     val Q = pruned.getRandomVariables()
     val π = pruned.minDegreeOrder(Q.toSet)
 
@@ -348,15 +353,17 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
 
-    val X = Set[RandomVariable[_]]() ++ pX
+    val X = mutable.Set[RandomVariable[_]]() ++ pX
 
-    val G = interactionGraph()
+    val IG = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
 
     while (X.size > 0) {
-      G.getGraph.vertexWithFewestNeighborsAmong(X).map(rv => {
+      val xVertices = X.map(IG.getGraph.findVertex(_).get)
+      IG.getGraph.vertexWithFewestNeighborsAmong(xVertices).map(rvVertex => {
+        val rv = rvVertex.getPayload
         result += rv
-        G.eliminate(rv)
+        IG.eliminate(rv)
         X -= rv
       })
     }
@@ -366,13 +373,13 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
 
     val X = Set[RandomVariable[_]]() ++ pX
-    val G = interactionGraph()
+    val IG = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
 
     while (X.size > 0) {
-      G.getGraph.vertexWithFewestEdgesToEliminateAmong(X).map(rv => {
+      IG.getGraph.vertexWithFewestEdgesToEliminateAmong(X).map(rv => {
         result += rv
-        G.eliminate(rv)
+        IG.eliminate(rv)
         X -= rv
       })
     }
@@ -407,8 +414,10 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   // the variables Q appear on the CPT for the product of Factors assigned to node r
   def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, r: EliminationTree#GV): (BayesianNetwork, Factor) = {
     while (τ.g.getVertices().size > 1) {
-      // remove node i (other than r) that has single neighbor j in tau
-      τ.g.firstLeafOtherThan(r).map(i => {
+      // remove node i (other than r) that has single neighbor j in τ
+      val fl = τ.g.firstLeafOtherThan(r)
+
+      fl.map(i => {
         val j = τ.getNeighbors(i).iterator.next()
         val ɸ_i = τ.getFactor(i)
         τ.delete(i)

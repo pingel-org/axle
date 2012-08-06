@@ -160,7 +160,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
     //TODO remove this method
     def removePredecessor(v: V, predecessor: V): Unit = getEdge(predecessor, v).map(e => deleteEdge(e))
 
-    // def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
+    def moralGraph(): JungUndirectedGraphFactory.UndirectedGraph[_, _] = null // TODO !!!
 
     def isAcyclic() = true // TODO !!!
 

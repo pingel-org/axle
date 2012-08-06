@@ -30,11 +30,15 @@ class Model(name: String = "no name", g: JungDirectedGraph[RandomVariable[_], St
 
   def numVariables(): Int = g.size
 
-  def blocks(from: immutable.Set[RandomVariable[_]],
+  def blocks(
+    from: immutable.Set[RandomVariable[_]],
     to: immutable.Set[RandomVariable[_]],
-    given: immutable.Set[RandomVariable[_]]): Boolean =
-    _findOpenPath(Map[RandomVariable[_], Set[RandomVariable[_]]](), Direction.UNKNOWN,
-      null, from, to, given).isEmpty
+    given: immutable.Set[RandomVariable[_]]): Boolean = {
+
+    val x = Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]()
+    val mutableFromCopy = mutable.Set() ++ from
+    _findOpenPath(x, Direction.UNKNOWN, null, mutableFromCopy, to, given).isEmpty
+  }
 
   //  var rvNameGetter = new Lister[RandomVariable, String]() {
   //    def function(rv: RandomVariable): String = rv.getName
@@ -59,7 +63,12 @@ class Model(name: String = "no name", g: JungDirectedGraph[RandomVariable[_], St
       current --= cachedOuts
     }
 
+    val priorVertex = g.findVertex(prior).get
+    val givenVertices = given.map(g.findVertex(_).get)
+
     for (variable <- current) {
+
+      val variableVertex = g.findVertex(variable).get
 
       var openToVar = false
       var directionPriorToVar = Direction.UNKNOWN
@@ -67,22 +76,15 @@ class Model(name: String = "no name", g: JungDirectedGraph[RandomVariable[_], St
         openToVar = true
       } else {
         directionPriorToVar = Direction.OUTWARD
-        if (getGraph().precedes(variable, prior)) {
+        if (g.precedes(variableVertex, priorVertex)) {
           directionPriorToVar = Direction.INWARD
         }
 
         if (priorDirection != Direction.UNKNOWN) {
           val priorGiven = given.contains(prior)
-          openToVar = (
-            priorDirection == Direction.INWARD &&
-            !priorGiven &&
-            directionPriorToVar == Direction.OUTWARD) ||
-            (priorDirection == Direction.OUTWARD &&
-              !priorGiven &&
-              directionPriorToVar == Direction.OUTWARD) ||
-              (priorDirection == Direction.INWARD &&
-                graph.descendantsIntersectsSet(variable, given) &&
-                directionPriorToVar == Direction.INWARD)
+          openToVar = (priorDirection == Direction.INWARD && !priorGiven && directionPriorToVar == Direction.OUTWARD) ||
+            (priorDirection == Direction.OUTWARD && !priorGiven && directionPriorToVar == Direction.OUTWARD) ||
+            (priorDirection == Direction.INWARD && g.descendantsIntersectsSet(variableVertex, givenVertices) && directionPriorToVar == Direction.INWARD)
         } else {
           openToVar = true
         }
@@ -92,7 +94,7 @@ class Model(name: String = "no name", g: JungDirectedGraph[RandomVariable[_], St
         if (to.contains(variable)) {
           return Some(List(variable))
         }
-        val neighbors = graph.getNeighbors(variable) - prior
+        val neighbors = mutable.Set() ++ (g.getNeighbors(variableVertex) - priorVertex).map(_.getPayload)
 
         val visitedCopy = mutable.Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]()
         visitedCopy ++= visited
@@ -104,7 +106,7 @@ class Model(name: String = "no name", g: JungDirectedGraph[RandomVariable[_], St
 
         val path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors, to, given)
         if (path.isDefined) {
-          return Some(path.get + variable)
+          return Some(path.get ++ List(variable))
         }
       }
     }

@@ -82,6 +82,9 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def vertex(payload: VP): JungUndirectedGraphVertex[VP] = new JungUndirectedGraphVertexImpl(payload)
 
+    // TODO: findVertex needs an index:
+    def findVertex(payload: VP): Option[V] = getVertices().find(_.getPayload == payload)
+
     def edge(v1: V, v2: V, payload: EP): JungUndirectedGraphEdge[EP] = new JungUndirectedGraphEdgeImpl(v1, v2, payload)
 
     def unlink(e: E): Unit = jungGraph.removeEdge(e)

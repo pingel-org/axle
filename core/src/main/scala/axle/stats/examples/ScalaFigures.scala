@@ -5,7 +5,7 @@ import collection._
 import axle.stats._
 import axle.visualize._
 import axle.graph.JungDirectedGraphFactory._
-import axle.graph.JungUndirectedGraphFactory.UndirectedGraph
+import axle.graph.JungUndirectedGraphFactory.JungUndirectedGraph
 //import axle.graph.JungUndirectedGraphFactory._
 
 object ScalaFigures {
@@ -14,9 +14,9 @@ object ScalaFigures {
     new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(dg))
   }
 
-  //  def draw(title: String, ug: UndirectedGraph[RandomVariable[_], String]): Unit = {
-  //    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(ug))
-  //  }
+  def draw(title: String, ug: JungUndirectedGraph[RandomVariable[_], String]): Unit = {
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(ug))
+  }
 
   val bools = Some(List(true, false))
 
@@ -196,7 +196,7 @@ object ScalaFigures {
 
     val c = new CaseX()
     c.assign(C, false)
-    val f68 = new BayesianNetwork("f68", f61.pruneEdges(Some(c), f61.getGraph))
+    val f68 = f61.pruneEdges("Figure 6.8", Some(c))
 
     draw("Figure 6.1 with edges pruned towards C=false", f68.getGraph)
 
@@ -276,15 +276,16 @@ object ScalaFigures {
   }
 
   def figure7_12() = {
-    val result = new JoinTree()
-    val jtn1 = result.g.vertex(mutable.Set(A, B, C))
-    val jtn2 = result.g.vertex(mutable.Set(B, C, D))
-    val jtn3 = result.g.vertex(mutable.Set(C, E))
-    result.g.edge(jtn1, jtn2, "")
-    result.g.edge(jtn2, jtn3, "")
+    import axle.graph.JungUndirectedGraphFactory._
+    val g = graph[mutable.Set[RandomVariable[_]], String]()
+    val jtn1 = g.vertex(mutable.Set(A, B, C))
+    val jtn2 = g.vertex(mutable.Set(B, C, D))
+    val jtn3 = g.vertex(mutable.Set(C, E))
+    g.edge(jtn1, jtn2, "")
+    g.edge(jtn2, jtn3, "")
     // draw("figure 7.12", result.g)
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(result.g))
-    result
+    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(g))
+    new JoinTree(g)
   }
 
   def main(args: List[String]): Unit = {

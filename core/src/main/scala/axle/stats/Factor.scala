@@ -24,29 +24,21 @@ object Factor {
  * always true in a Factor.  They should be siblings rather than parent/child.
  */
 
-class Factor(varList: List[RandomVariable[_]]) extends DistributionX(varList) {
+class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends DistributionX(varList) {
 
   import scalaz._
   import Scalaz._
 
-  var elements: Array[Double]
-  var cp: ListCrossProduct[Any] = null
+  val valLists = varList.map(rv => rv.getValues.getOrElse(Nil).toList)
+  val cp = new ListCrossProduct(valLists)
+  val elements = new Array[Double](cp.size)
 
-  makeCrossProduct()
-
-  var name = "unnamed"
-
-  def setName(name: String): Unit = { this.name = name }
+  // var name = "unnamed"
+  // def setName(name: String): Unit = { this.name = name }
 
   def getName(): String = name
 
   def getLabel(): String = name
-
-  def makeCrossProduct(): Unit = {
-    val valLists = varList.map(rv => rv.getValues.getOrElse(Nil).toList)
-    cp = new ListCrossProduct(valLists)
-    elements = new Array[Double](cp.size)
-  }
 
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
@@ -164,10 +156,12 @@ class Factor(varList: List[RandomVariable[_]]) extends DistributionX(varList) {
   def sumOut(varsToSumOut: Set[RandomVariable[_]]): Factor =
     varsToSumOut.foldLeft(this)((result, v) => result.sumOut(v))
 
+  // as defined on chapter 6 page 15
   def projectRowsConsistentWith(eOpt: Option[CaseX]): Factor = {
-    // as defined on chapter 6 page 15
+    val e = eOpt.get
     val result = new Factor(getVariables())
     for (j <- 0 until result.numCases) {
+      val c = caseOf(j)
       result.elements(j) = (c.isSupersetOf(e) match {
         case true => elements(j)
         case false => 0.0
