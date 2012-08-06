@@ -269,11 +269,10 @@ class BayesianNetwork(name: String = "bn", g: DirectedGraph[RandomVariable[_], S
     val vars = eOpt.map(Q ++ _.getVariables).getOrElse(Q)
 
     def nodePruneStream(g: DirectedGraph[RandomVariable[_], String]): Stream[DirectedGraph[RandomVariable[_], String]] = {
-      val X = g.getLeaves().toSet -- vars
-      val keepGoing = X.size > 0
-      keepGoing match {
-        case false => Stream.empty
-        case true => {
+      val X = g.getLeaves().toSet -- vars // TODO: hidden type mismatch
+      X.size match {
+        case 0 => Stream.empty
+        case _ => {
           val newG = g -- X
           Stream.cons(newG, nodePruneStream(newG))
         }
