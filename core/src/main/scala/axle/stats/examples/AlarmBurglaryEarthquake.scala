@@ -28,10 +28,10 @@ object AlarmBurglaryEarthquake {
     val maryCalls = new RandomVariable0("maryCalls", bools, None)
     val maryCallsVertex = g += maryCalls
 
-    g.edge(burglaryVertex, alarmVertex, "")
-    g.edge(earthquakeVertex, alarmVertex, "")
-    g.edge(alarmVertex, johnCallsVertex, "")
-    g.edge(alarmVertex, maryCallsVertex, "")
+    g += (burglaryVertex -> alarmVertex, "")
+    g += (earthquakeVertex -> alarmVertex, "")
+    g += (alarmVertex -> johnCallsVertex, "")
+    g += (alarmVertex -> maryCallsVertex, "")
 
     val bn = new BayesianNetwork("abe", g)
 

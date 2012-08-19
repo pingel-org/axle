@@ -13,12 +13,14 @@ package axle.ast
 import collection._
 import axle.Loggable
 
-case class Symbol(label: String) {
+class Symbol(label: String) {
+  def getLabel() = label
   //override def toString() = "'" + label + "'"
   override def toString() = label
 }
-case class Terminal(override val label: String) extends Symbol(label)
-case class NonTerminal(override val label: String) extends Symbol(label)
+
+case class Terminal(label: String) extends Symbol(label)
+case class NonTerminal(label: String) extends Symbol(label)
 object Start extends NonTerminal("S")
 object BottomOfStack extends Terminal("$")
 object Epsilon extends Symbol("\u03B5") // TODO terminal or non-terminal?

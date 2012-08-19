@@ -60,7 +60,7 @@ class LLLanguage(override val name: String) extends Language(
   def first(X: Symbol): mutable.Set[Symbol] = {
 
     // 1. If X is a terminal then First(X) is just X
-    terminals.contains(X.label) match {
+    terminals.contains(X.getLabel) match {
       case true => mutable.Set(X)
       case false => {
         val result = mutable.Set[Symbol]()
@@ -147,7 +147,7 @@ class LLLanguage(override val name: String) extends Language(
 
     for ((id, rule) <- llRules) {
       for (a <- first(rule.rhs)) {
-        if (terminals.contains(a.label)) {
+        if (terminals.contains(a.getLabel)) {
           parseTable += (rule.from, a) -> rule // TODO warn on overwrite
         } else if (a == Epsilon) {
           for (t <- follow(rule.from)) {

@@ -6,7 +6,6 @@ import axle.stats._
 import axle.visualize._
 import axle.graph.JungDirectedGraphFactory._
 import axle.graph.JungUndirectedGraphFactory.JungUndirectedGraph
-//import axle.graph.JungUndirectedGraphFactory._
 
 object ScalaFigures {
 
@@ -36,11 +35,11 @@ object ScalaFigures {
     val dv = g += D
     val ev = g += E
 
-    g.edge(av, bv, "")
-    g.edge(av, cv, "")
-    g.edge(bv, dv, "")
-    g.edge(cv, dv, "")
-    g.edge(cv, ev, "")
+    g += (av -> bv, "")
+    g += (av -> cv, "")
+    g += (bv -> dv, "")
+    g += (cv -> dv, "")
+    g += (cv -> ev, "")
 
     val result = new BayesianNetwork("6.1", g)
 
@@ -126,8 +125,8 @@ object ScalaFigures {
     val bv = g += B
     val cv = g += C
 
-    g.edge(av, bv, "")
-    g.edge(bv, cv, "")
+    g += (av -> bv, "")
+    g += (bv -> cv, "")
 
     val result = new BayesianNetwork("6.4", g)
 
@@ -243,16 +242,16 @@ object ScalaFigures {
 
     val τ = new EliminationTree()
 
-    val τ_n1 = τ.g.vertex(f61.getCPT(A))
-    val τ_n2 = τ.g.vertex(f61.getCPT(B))
-    val τ_n3 = τ.g.vertex(f61.getCPT(C))
-    val τ_n4 = τ.g.vertex(f61.getCPT(D))
-    val τ_n5 = τ.g.vertex(f61.getCPT(E))
+    val τ_vA = τ.g += f61.getCPT(A)
+    val τ_vB = τ.g += f61.getCPT(B)
+    val τ_vC = τ.g += f61.getCPT(C)
+    val τ_vD = τ.g += f61.getCPT(D)
+    val τ_vE = τ.g += f61.getCPT(E)
 
-    τ.g.edge(τ_n1, τ_n2, "")
-    τ.g.edge(τ_n1, τ_n4, "")
-    τ.g.edge(τ_n4, τ_n3, "")
-    τ.g.edge(τ_n3, τ_n5, "")
+    τ.g += (τ_vA -> τ_vB, "")
+    τ.g += (τ_vA -> τ_vD, "")
+    τ.g += (τ_vD -> τ_vC, "")
+    τ.g += (τ_vC -> τ_vE, "")
 
     val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.getCPT(C))
 
@@ -278,11 +277,11 @@ object ScalaFigures {
   def figure7_12() = {
     import axle.graph.JungUndirectedGraphFactory._
     val g = graph[mutable.Set[RandomVariable[_]], String]()
-    val jtn1 = g.vertex(mutable.Set(A, B, C))
-    val jtn2 = g.vertex(mutable.Set(B, C, D))
-    val jtn3 = g.vertex(mutable.Set(C, E))
-    g.edge(jtn1, jtn2, "")
-    g.edge(jtn2, jtn3, "")
+    val vABC = g += mutable.Set(A, B, C)
+    val vBCD = g += mutable.Set(B, C, D)
+    val vCE = g += mutable.Set(C, E)
+    g += (vABC -> vBCD, "")
+    g += (vBCD -> vCE, "")
     // draw("figure 7.12", result.g)
     new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(g))
     new JoinTree(g)
