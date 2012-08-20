@@ -136,7 +136,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   def getAllCPTs(): List[Factor] = getRandomVariables.map(getCPT(_))
 
-  def probabilityOf(c: CaseX) = c.getVariables.map(getCPT(_)(c)).foldLeft(1.0)(_ * _)
+  def probabilityOf(cs: List[CaseIs[_]]) = cs.map(c => getCPT(c.rv)(cs)).reduce(_ * _)
 
   def getMarkovAssumptionsFor(rv: RandomVariable[_]): Independence = {
 
@@ -159,7 +159,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   def printAllMarkovAssumptions(): Unit =
     getRandomVariables.map(rv => println(getMarkovAssumptionsFor(rv)))
 
-  def computeFullCase(c: CaseX): Double = {
+  def computeFullCase(c: List[CaseIs[_]]): Double = {
 
     // not an airtight check
     assert(numVariables == c.size)
@@ -193,7 +193,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     // this is highly dependent on π
   }
 
-  def variableEliminationPriorMarginalII(Q: Set[RandomVariable[_]], π: List[RandomVariable[_]], e: CaseX): Factor = {
+  def variableEliminationPriorMarginalII[A](Q: Set[RandomVariable[_]], π: List[RandomVariable[_]], e: CaseIs[A]): Factor = {
 
     // Chapter 6 Algorithm 5 (page 17)
 
@@ -201,7 +201,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     // assert: π ordering of variables in S but not in Q
     // assert: e assigns values to variables in this network
 
-    val S = π.foldLeft(getRandomVariables().map(getCPT(_).projectRowsConsistentWith(Some(e))).toSet)(
+    val S = π.foldLeft(getRandomVariables().map(getCPT(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         val newS = S -- allMentions
@@ -252,12 +252,12 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   }
 
   // 6.8.2
-  def pruneEdges(resultName: String, eOpt: Option[CaseX]): BayesianNetwork = {
+  def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[_]]]): BayesianNetwork = {
     import axle.graph.JungDirectedGraphFactory._
     val outG = graphFrom(g)(v => v, e => e)
     val result = new BayesianNetwork(resultName, outG)
     eOpt.map(e => {
-      for (U <- e.getVariables()) {
+      for (U <- e.map(_.rv)) {
         val uVertex = outG.findVertex(U).get
         for (edge <- outG.outputEdgesOf(uVertex)) { // ModelEdge
           val X = edge.getDest().getPayload
@@ -267,7 +267,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
           for (i <- 0 until smallerF.numCases) {
             val c = smallerF.caseOf(i)
             // set its value to what e sets it to
-            c.assign(U, e.valueOf(U))
+            c(U) = e.valueOf(U)
             smallerF(smallerF.caseOf(i)) = oldF(c)
           }
           result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
@@ -277,9 +277,9 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     }).getOrElse(result)
   }
 
-  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[CaseX], g: JungDirectedGraph[RandomVariable[_], String]): JungDirectedGraph[RandomVariable[_], String] = {
+  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]], g: JungDirectedGraph[RandomVariable[_], String]): JungDirectedGraph[RandomVariable[_], String] = {
 
-    val vars = eOpt.map(Q ++ _.getVariables).getOrElse(Q)
+    val vars = eOpt.map(Q ++ _.map(_.rv)).getOrElse(Q)
 
     def nodePruneStream(g: JungDirectedGraph[RandomVariable[_], String]): Stream[JungDirectedGraph[RandomVariable[_], String]] = {
       val xVertices = g.getLeaves().toSet -- vars.map(g.findVertex(_).get)
@@ -296,10 +296,10 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   }
 
   // 6.8.3
-  def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[CaseX]): BayesianNetwork =
+  def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): BayesianNetwork =
     new BayesianNetwork(this.name, pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph))
 
-  def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[CaseX]): (Factor, BayesianNetwork) = {
+  def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
 
     val pruned = pruneNetworkVarsAndEdges(Q, eOpt)
     val R = getRandomVariables.filter(!Q.contains(_)).toSet
@@ -317,7 +317,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     (Factor.multiply(S.toList), pruned)
   }
 
-  def variableEliminationMPE(e: CaseX): (Double, BayesianNetwork) = {
+  def variableEliminationMPE(e: List[CaseIs[_]]): (Double, BayesianNetwork) = {
 
     val pruned = pruneEdges("pruned", Some(e))
     val Q = pruned.getRandomVariables()

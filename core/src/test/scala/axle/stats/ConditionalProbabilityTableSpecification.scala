@@ -64,8 +64,8 @@ class ConditionalProbabilityTableSpecification extends Specification {
           Nil)
 
       val cB0 = cptB.caseOf(0)
-      for ((variable, value) <- cB0.assignments) {
-        println(variable + " " + value)
+      for (caseIs <- cB0) {
+        println(caseIs.rv + " " + caseIs.v)
       }
 
       1 must be equalTo (1)

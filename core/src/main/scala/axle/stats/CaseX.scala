@@ -15,44 +15,26 @@ case class CaseX() extends Comparable[CaseX] {
   // Note: this may contain null entries if assignments.keySet() is a strict subset of vars
   def valuesOf(vars: List[RandomVariable[_]]): List[Any] = vars.map(assignments(_))
 
-  def assign(rv: RandomVariable[_], value: Any): Unit = assignments += rv -> value
+  //  def assign(rv: RandomVariable[_], value: Any): Unit = assignments += rv -> value
+  //
+  //  def assign(vars: List[RandomVariable[_]], vals: List[Any]): Unit = {
+  //    for (i <- 0 until vars.size) {
+  //      assignments += vars(i) -> vals(i)
+  //    }
+  //  }
 
-  def assign(vars: List[RandomVariable[_]], vals: List[Any]): Unit = {
-    for (i <- 0 until vars.size) {
-      assignments += vars(i) -> vals(i)
-    }
-  }
+//  def copy(): CaseX = {
+//    val result = new CaseX()
+//    for ((rv, value) <- assignments) { result.assignments += rv -> value }
+//    result
+//  }
 
-  def isSupersetOf(other: CaseX): Boolean = {
-    val it = other.assignments.keySet.iterator
-    while (it.hasNext) {
-      val variable = it.next
-      val otherVal = other.valueOf(variable)
-      val thisVal = valueOf(variable)
-      if (otherVal != null && thisVal != null && !thisVal.equals(otherVal)) {
-        return false
-      }
-    }
-    true
-  }
-
-  def copy(): CaseX = {
-    val result = new CaseX()
-    for ((rv, value) <- assignments) { result.assignments += rv -> value }
-    result
-  }
-
-  def projectToVars(pVars: List[RandomVariable[_]]): CaseX = {
-    val result = new CaseX()
-    for (variable <- pVars) { result.assign(variable, valueOf(variable)) }
-    result
-  }
 
   // TODO !!!
-//  override def equals(o: Object) = o match {
-//    case c: CaseX => compareTo(c) == 0
-//    case _ => false
-//  }
+  //  override def equals(o: Object) = o match {
+  //    case c: CaseX => compareTo(c) == 0
+  //    case _ => false
+  //  }
 
   def compareTo(other: CaseX): Int = {
     if (assignments.size < other.assignments.size) {

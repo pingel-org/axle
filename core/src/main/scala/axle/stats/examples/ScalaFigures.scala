@@ -193,9 +193,7 @@ object ScalaFigures {
 
     val f61 = figure6_1()
 
-    val c = new CaseX()
-    c.assign(C, false)
-    val f68 = f61.pruneEdges("Figure 6.8", Some(c))
+    val f68 = f61.pruneEdges("Figure 6.8", Some(List(C eq false)))
 
     draw("Figure 6.1 with edges pruned towards C=false", f68.getGraph)
 
@@ -211,9 +209,7 @@ object ScalaFigures {
 
     val f61 = figure6_1()
 
-    val c = new CaseX()
-    c.assign(A, true)
-    c.assign(C, false)
+    val c = List(A eq true, C eq false)
 
     val f69 = f61.pruneNetworkVarsAndEdges(Set(D), Some(c))
     draw("Figure 6.1 pruned towards Q={D} and A=true,C=false", f69.getGraph)

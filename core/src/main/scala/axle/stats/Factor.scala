@@ -42,11 +42,11 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
 
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
-  def evaluate(prior: CaseX, condition: CaseX): Double = {
+  def evaluate(prior: List[CaseIs[_]], condition: List[CaseIs[_]]): Double = {
     val pw = (0 until numCases).map(i => {
       val c = caseOf(i)
-      if (c.isSupersetOf(prior)) {
-        if (c.isSupersetOf(condition)) {
+      if (isSupersetOf(c, prior)) {
+        if (isSupersetOf(c, condition)) {
           (this(c), this(c))
         } else {
           (this(c), 0.0)
@@ -59,29 +59,25 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     pw._1 / pw._2
   }
 
-  def indexOf(c: CaseX): Int = cp.indexOf(c.valuesOf(varList))
+  def indexOf(c: List[CaseIs[_]]): Int = cp.indexOf(c.valuesOf(varList))
 
-  def caseOf(i: Int): CaseX = {
-    val result = new CaseX()
-    val values = cp(i)
-    result.assign(varList, values)
-    result
-  }
+  def caseOf(i: Int): List[CaseIs[_]] =
+    varList.zip(cp(i)).map({ case (variable, value) => CaseIs(variable, value) })
 
   def numCases() = elements.length
 
-  def update(c: CaseX, d: Double): Unit = {
-    // println("write: case = " + c.toOrderedString(variables) + ", d = " + d)
-    // println("variables.length = " + variables.length)
-    elements(indexOf(c)) = d
-  }
+  // println("write: case = " + c.toOrderedString(variables) + ", d = " + d)
+  // println("variables.length = " + variables.length)
+  // def update[A](c: CaseIs[A], d: Double): Unit = elements(indexOf(c)) = d
+
+  def update(c: List[CaseIs[_]], d: Double): Unit = elements(indexOf(c)) = d
 
   def writes(values: List[Double]): Unit = {
     assert(values.length == elements.length)
     values.zipWithIndex.map({ case (v, i) => elements(i) = v })
   }
 
-  def apply(c: CaseX): Double = elements(indexOf(c))
+  def apply(c: List[CaseIs[_]]): Double = elements(indexOf(c))
 
   def print(): Unit = {
     for (i <- 0 until elements.length) {
@@ -92,12 +88,9 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {
-    val vars = getVariables.filter(!variable.equals(_))
-    val newFactor = new Factor(vars)
+    val newFactor = new Factor(getVariables.filter(!variable.equals(_)))
     for (i <- 0 until newFactor.numCases()) {
-      def ci = newFactor.caseOf(i)
-      val maxSoFar = variable.getValues.getOrElse(Nil).map(value => this(newFactor.caseOf(i))).max
-      newFactor(ci) = maxSoFar
+      newFactor(newFactor.caseOf(i)) = variable.getValues.getOrElse(Nil).map(value => this(newFactor.caseOf(i))).max
     }
     newFactor
   }
@@ -106,7 +99,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     val result = new Factor(remainingVars)
     for (j <- 0 until numCases) {
       val fromCase = this.caseOf(j)
-      val toCase = fromCase.projectToVars(remainingVars)
+      val toCase = projectToVars(fromCase, remainingVars.toSet)
       val additional = this(fromCase)
       val previous = result(toCase)
       result(toCase) = previous + additional
@@ -118,16 +111,13 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     val aValues = a.getValues.getOrElse(Nil).toList
     val bValues = b.getValues.getOrElse(Nil).toList
     val tally = zeros[Double](aValues.size, bValues.size)
-    val w = new CaseX()
     aValues.zipWithIndex.map({
       case (aVal, r) => {
-        w.assign(a, aVal)
         bValues.zipWithIndex.map({
           case (bVal, c) => {
-            w.assign(b, bVal)
             for (j <- 0 until numCases) {
               val m = caseOf(j)
-              if (m.isSupersetOf(w)) {
+              if (isSupersetOf(m, List(a eq aVal, b eq bVal))) {
                 tally(r, c) += this(m)
               }
             }
@@ -145,7 +135,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
       val c = result.caseOf(j)
       val p = varToSumOut.getValues.getOrElse(Nil).map(value => {
         val f = c.copy
-        f.assign(varToSumOut, value)
+        f(varToSumOut) = value
         this(f)
       }).sum
       result(c) = p
@@ -157,12 +147,12 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     varsToSumOut.foldLeft(this)((result, v) => result.sumOut(v))
 
   // as defined on chapter 6 page 15
-  def projectRowsConsistentWith(eOpt: Option[CaseX]): Factor = {
+  def projectRowsConsistentWith(eOpt: Option[List[CaseIs[_]]]): Factor = {
     val e = eOpt.get
     val result = new Factor(getVariables())
     for (j <- 0 until result.numCases) {
       val c = caseOf(j)
-      result.elements(j) = (c.isSupersetOf(e) match {
+      result.elements(j) = (isSupersetOf(c, e) match {
         case true => elements(j)
         case false => 0.0
       })
@@ -171,7 +161,6 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   }
 
   def multiply(other: Factor): Factor = {
-
     val newVars = getVariables().union(other.getVariables())
     val result = new Factor(newVars.toList)
     for (j <- 0 until result.numCases()) {
@@ -182,5 +171,14 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   }
 
   def mentions(variable: RandomVariable[_]) = getVariables.exists(v => variable.getName.equals(v.getName))
+
+  def isSupersetOf(left: List[CaseIs[_]], right: List[CaseIs[_]]): Boolean = {
+    val ll: List[(RandomVariable[_], Any)] = left.map(ci => (ci.rv, ci.v))
+    val lm = ll.toMap
+    right.forall(rRV => lm.contains(rRV.rv) && (rRV.value == lm(rRV)))
+  }
+
+  def projectToVars(cs: List[CaseIs[_]], pVars: Set[RandomVariable[_]]): List[CaseIs[_]] =
+    cs.filter(ci => pVars.contains(ci.rv))
 
 }

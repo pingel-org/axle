@@ -35,75 +35,30 @@ object AlarmBurglaryEarthquake {
 
     val bn = new BayesianNetwork("abe", g)
 
-    val bCase = new CaseX()
-    bCase.assign(burglary, true)
-    bn.getCPT(burglary)(bCase) = 0.001
-    bCase.assign(burglary, false)
-    bn.getCPT(burglary)(bCase) = 0.999
+    bn.getCPT(burglary)(List(burglary eq true)) = 0.001
+    bn.getCPT(burglary)(List(burglary eq false)) = 0.999
 
-    val eCase = new CaseX()
-    eCase.assign(earthquake, true)
-    bn.getCPT(earthquake)(eCase) = 0.002
-    eCase.assign(earthquake, false)
-    bn.getCPT(earthquake)(eCase) = 0.998
+    bn.getCPT(earthquake)(List(earthquake eq true)) = 0.002
+    bn.getCPT(earthquake)(List(earthquake eq false)) = 0.998
 
-    val beaCase = new CaseX()
-    beaCase.assign(burglary, false)
-    beaCase.assign(earthquake, false)
-    beaCase.assign(alarm, true)
-    bn.getCPT(alarm)(beaCase) = 0.001
+    bn.getCPT(alarm)(List(burglary eq false, earthquake eq false, alarm eq true)) = 0.001
+    bn.getCPT(alarm)(List(burglary eq false, earthquake eq false, alarm eq false)) = 0.999
+    bn.getCPT(alarm)(List(burglary eq true, earthquake eq false, alarm eq true)) = 0.94
+    bn.getCPT(alarm)(List(burglary eq true, earthquake eq false, alarm eq false)) = 0.06
+    bn.getCPT(alarm)(List(burglary eq false, earthquake eq true, alarm eq true)) = 0.29
+    bn.getCPT(alarm)(List(burglary eq false, earthquake eq true, alarm eq false)) = 0.71
+    bn.getCPT(alarm)(List(burglary eq true, earthquake eq true, alarm eq true)) = 0.95
+    bn.getCPT(alarm)(List(burglary eq true, earthquake eq true, alarm eq false)) = 0.05
 
-    beaCase.assign(alarm, false)
-    bn.getCPT(alarm)(beaCase) = 0.999
+    bn.getCPT(johnCalls)(List(alarm eq true, johnCalls eq true)) = 0.9
+    bn.getCPT(johnCalls)(List(alarm eq true, johnCalls eq false)) = 0.1
+    bn.getCPT(johnCalls)(List(alarm eq false, johnCalls eq true)) = 0.05
+    bn.getCPT(johnCalls)(List(alarm eq false, johnCalls eq false)) = 0.95
 
-    beaCase.assign(burglary, true)
-    beaCase.assign(earthquake, false)
-    beaCase.assign(alarm, true)
-    bn.getCPT(alarm)(beaCase) = 0.94
-    beaCase.assign(alarm, false)
-    bn.getCPT(alarm)(beaCase) = 0.06
-
-    beaCase.assign(burglary, false)
-    beaCase.assign(earthquake, true)
-    beaCase.assign(alarm, true)
-    bn.getCPT(alarm)(beaCase) = 0.29
-    beaCase.assign(alarm, false)
-    bn.getCPT(alarm)(beaCase) = 0.71
-
-    beaCase.assign(burglary, true)
-    beaCase.assign(earthquake, true)
-    beaCase.assign(alarm, true)
-    bn.getCPT(alarm)(beaCase) = 0.95
-    beaCase.assign(alarm, false)
-    bn.getCPT(alarm)(beaCase) = 0.05
-
-    val ajCase = new CaseX()
-
-    ajCase.assign(alarm, true)
-    ajCase.assign(johnCalls, true)
-    bn.getCPT(johnCalls)(ajCase) = 0.9
-    ajCase.assign(johnCalls, false)
-    bn.getCPT(johnCalls)(ajCase) = 0.1
-
-    ajCase.assign(alarm, false)
-    ajCase.assign(johnCalls, true)
-    bn.getCPT(johnCalls)(ajCase) = 0.05
-    ajCase.assign(johnCalls, false)
-    bn.getCPT(johnCalls)(ajCase) = 0.95
-
-    val amCase = new CaseX()
-
-    amCase.assign(alarm, true)
-    amCase.assign(maryCalls, true)
-    bn.getCPT(maryCalls)(amCase) = 0.7
-    amCase.assign(maryCalls, false)
-    bn.getCPT(maryCalls)(amCase) = 0.3
-
-    amCase.assign(alarm, false)
-    amCase.assign(maryCalls, true)
-    bn.getCPT(maryCalls)(amCase) = 0.01
-    amCase.assign(maryCalls, false)
-    bn.getCPT(maryCalls)(amCase) = 0.99
+    bn.getCPT(maryCalls)(List(alarm eq true, maryCalls eq true)) = 0.7
+    bn.getCPT(maryCalls)(List(alarm eq true, maryCalls eq false)) = 0.3
+    bn.getCPT(maryCalls)(List(alarm eq false, maryCalls eq true)) = 0.01
+    bn.getCPT(maryCalls)(List(alarm eq false, maryCalls eq false)) = 0.99
 
     new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(g))
 
@@ -163,9 +118,7 @@ object AlarmBurglaryEarthquake {
 
     // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
 
-    val vepr2case = new CaseX()
-    vepr2case.assign(earthquake, true)
-    val afterVE = bn.variableEliminationPriorMarginalII(Q, order, vepr2case)
+    val afterVE = bn.variableEliminationPriorMarginalII(Q, order, earthquake eq true)
 
     println("eliminating variables other than alarm, burglary, and earthquake; and then finding those consistent with earthquake = true")
     afterVE.print()
