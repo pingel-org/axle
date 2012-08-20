@@ -114,7 +114,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     val jpt = new Factor(getRandomVariables())
     for (j <- 0 until jpt.numCases) {
       val c = jpt.caseOf(j)
-      jpt.write(c, probabilityOf(c))
+      jpt(c) = probabilityOf(c)
     }
     jpt
   }
@@ -136,7 +136,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   def getAllCPTs(): List[Factor] = getRandomVariables.map(getCPT(_))
 
-  def probabilityOf(c: CaseX) = c.getVariables.map(getCPT(_).read(c)).foldLeft(1.0)(_ * _)
+  def probabilityOf(c: CaseX) = c.getVariables.map(getCPT(_)(c)).foldLeft(1.0)(_ * _)
 
   def getMarkovAssumptionsFor(rv: RandomVariable[_]): Independence = {
 
@@ -268,8 +268,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
             val c = smallerF.caseOf(i)
             // set its value to what e sets it to
             c.assign(U, e.valueOf(U))
-            val oldValue = oldF.read(c)
-            smallerF.write(smallerF.caseOf(i), oldValue)
+            smallerF(smallerF.caseOf(i)) = oldF(c)
           }
           result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
         }
@@ -343,7 +342,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
     assert(result.numCases() == 1)
 
-    (result.read(result.caseOf(0)), pruned)
+    (result(result.caseOf(0)), pruned)
   }
 
   //	public Case variableEliminationMAP(Set Q, Case e)

@@ -37,73 +37,73 @@ object AlarmBurglaryEarthquake {
 
     val bCase = new CaseX()
     bCase.assign(burglary, true)
-    bn.getCPT(burglary).write(bCase, 0.001)
+    bn.getCPT(burglary)(bCase) = 0.001
     bCase.assign(burglary, false)
-    bn.getCPT(burglary).write(bCase, 0.999)
+    bn.getCPT(burglary)(bCase) = 0.999
 
     val eCase = new CaseX()
     eCase.assign(earthquake, true)
-    bn.getCPT(earthquake).write(eCase, 0.002)
+    bn.getCPT(earthquake)(eCase) = 0.002
     eCase.assign(earthquake, false)
-    bn.getCPT(earthquake).write(eCase, 0.998)
+    bn.getCPT(earthquake)(eCase) = 0.998
 
     val beaCase = new CaseX()
     beaCase.assign(burglary, false)
     beaCase.assign(earthquake, false)
     beaCase.assign(alarm, true)
-    bn.getCPT(alarm).write(beaCase, 0.001)
+    bn.getCPT(alarm)(beaCase) = 0.001
 
     beaCase.assign(alarm, false)
-    bn.getCPT(alarm).write(beaCase, 0.999)
+    bn.getCPT(alarm)(beaCase) = 0.999
 
     beaCase.assign(burglary, true)
     beaCase.assign(earthquake, false)
     beaCase.assign(alarm, true)
-    bn.getCPT(alarm).write(beaCase, 0.94)
+    bn.getCPT(alarm)(beaCase) = 0.94
     beaCase.assign(alarm, false)
-    bn.getCPT(alarm).write(beaCase, 0.06)
+    bn.getCPT(alarm)(beaCase) = 0.06
 
     beaCase.assign(burglary, false)
     beaCase.assign(earthquake, true)
     beaCase.assign(alarm, true)
-    bn.getCPT(alarm).write(beaCase, 0.29)
+    bn.getCPT(alarm)(beaCase) = 0.29
     beaCase.assign(alarm, false)
-    bn.getCPT(alarm).write(beaCase, 0.71)
+    bn.getCPT(alarm)(beaCase) = 0.71
 
     beaCase.assign(burglary, true)
     beaCase.assign(earthquake, true)
     beaCase.assign(alarm, true)
-    bn.getCPT(alarm).write(beaCase, 0.95)
+    bn.getCPT(alarm)(beaCase) = 0.95
     beaCase.assign(alarm, false)
-    bn.getCPT(alarm).write(beaCase, 0.05)
+    bn.getCPT(alarm)(beaCase) = 0.05
 
     val ajCase = new CaseX()
 
     ajCase.assign(alarm, true)
     ajCase.assign(johnCalls, true)
-    bn.getCPT(johnCalls).write(ajCase, 0.9)
+    bn.getCPT(johnCalls)(ajCase) = 0.9
     ajCase.assign(johnCalls, false)
-    bn.getCPT(johnCalls).write(ajCase, 0.1)
+    bn.getCPT(johnCalls)(ajCase) = 0.1
 
     ajCase.assign(alarm, false)
     ajCase.assign(johnCalls, true)
-    bn.getCPT(johnCalls).write(ajCase, 0.05)
+    bn.getCPT(johnCalls)(ajCase) = 0.05
     ajCase.assign(johnCalls, false)
-    bn.getCPT(johnCalls).write(ajCase, 0.95)
+    bn.getCPT(johnCalls)(ajCase) = 0.95
 
     val amCase = new CaseX()
 
     amCase.assign(alarm, true)
     amCase.assign(maryCalls, true)
-    bn.getCPT(maryCalls).write(amCase, 0.7)
+    bn.getCPT(maryCalls)(amCase) = 0.7
     amCase.assign(maryCalls, false)
-    bn.getCPT(maryCalls).write(amCase, 0.3)
+    bn.getCPT(maryCalls)(amCase) = 0.3
 
     amCase.assign(alarm, false)
     amCase.assign(maryCalls, true)
-    bn.getCPT(maryCalls).write(amCase, 0.01)
+    bn.getCPT(maryCalls)(amCase) = 0.01
     amCase.assign(maryCalls, false)
-    bn.getCPT(maryCalls).write(amCase, 0.99)
+    bn.getCPT(maryCalls)(amCase) = 0.99
 
     new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(g))
 

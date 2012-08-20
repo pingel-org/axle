@@ -47,9 +47,9 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
       val c = caseOf(i)
       if (c.isSupersetOf(prior)) {
         if (c.isSupersetOf(condition)) {
-          (read(c), read(c))
+          (this(c), this(c))
         } else {
-          (read(c), 0.0)
+          (this(c), 0.0)
         }
       } else {
         (0.0, 0.0)
@@ -70,7 +70,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
 
   def numCases() = elements.length
 
-  def write(c: CaseX, d: Double): Unit = {
+  def update(c: CaseX, d: Double): Unit = {
     // println("write: case = " + c.toOrderedString(variables) + ", d = " + d)
     // println("variables.length = " + variables.length)
     elements(indexOf(c)) = d
@@ -81,12 +81,12 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     values.zipWithIndex.map({ case (v, i) => elements(i) = v })
   }
 
-  def read(c: CaseX): Double = elements(indexOf(c))
+  def apply(c: CaseX): Double = elements(indexOf(c))
 
   def print(): Unit = {
     for (i <- 0 until elements.length) {
       val c = caseOf(i)
-      println(c.toOrderedString(varList) + " " + read(c))
+      println(c.toOrderedString(varList) + " " + this(c))
     }
   }
 
@@ -96,8 +96,8 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     val newFactor = new Factor(vars)
     for (i <- 0 until newFactor.numCases()) {
       def ci = newFactor.caseOf(i)
-      val maxSoFar = variable.getValues.getOrElse(Nil).map(value => read(newFactor.caseOf(i))).max
-      newFactor.write(ci, maxSoFar)
+      val maxSoFar = variable.getValues.getOrElse(Nil).map(value => this(newFactor.caseOf(i))).max
+      newFactor(ci) = maxSoFar
     }
     newFactor
   }
@@ -107,9 +107,9 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     for (j <- 0 until numCases) {
       val fromCase = this.caseOf(j)
       val toCase = fromCase.projectToVars(remainingVars)
-      val additional = this.read(fromCase)
-      val previous = result.read(toCase)
-      result.write(toCase, previous + additional)
+      val additional = this(fromCase)
+      val previous = result(toCase)
+      result(toCase) = previous + additional
     }
     result
   }
@@ -128,7 +128,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
             for (j <- 0 until numCases) {
               val m = caseOf(j)
               if (m.isSupersetOf(w)) {
-                tally(r, c) += read(m)
+                tally(r, c) += this(m)
               }
             }
           }
@@ -146,9 +146,9 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
       val p = varToSumOut.getValues.getOrElse(Nil).map(value => {
         val f = c.copy
         f.assign(varToSumOut, value)
-        read(f)
+        this(f)
       }).sum
-      result.write(c, p)
+      result(c) = p
     }
     result
   }
@@ -176,9 +176,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     val result = new Factor(newVars.toList)
     for (j <- 0 until result.numCases()) {
       val c = result.caseOf(j)
-      val myContribution = this.read(c)
-      val otherContribution = other.read(c)
-      result.write(c, myContribution * otherContribution)
+      result(c) = this(c) * other(c)
     }
     result
   }
