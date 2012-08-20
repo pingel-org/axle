@@ -62,31 +62,31 @@ object AlarmBurglaryEarthquake {
 
     new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(g))
 
-    bn.printAllMarkovAssumptions()
+    bn.getRandomVariables.map(rv => println(bn.getMarkovAssumptionsFor(rv)))
 
     println("creating joint probability table")
     val jpt = bn.getJointProbabilityTable()
-    jpt.print()
+    println(jpt)
 
     println("summing out maryCalls")
     val sansMaryCalls = jpt.sumOut(maryCalls)
-    sansMaryCalls.print()
+    println(sansMaryCalls)
 
     println("summing out johnCalls")
     val sansJohnCalls = sansMaryCalls.sumOut(johnCalls)
-    sansJohnCalls.print()
+    println(sansJohnCalls)
 
-    println("summing out alarm");
+    println("summing out alarm")
     val sansAlarm = sansJohnCalls.sumOut(alarm)
-    sansAlarm.print()
+    println(sansAlarm)
 
     println("summing out burglary")
     val sansBurglary = sansAlarm.sumOut(burglary)
-    sansBurglary.print()
+    println(sansBurglary)
 
     println("summing out earthquake")
     val sansAll = sansBurglary.sumOut(earthquake)
-    sansAll.print()
+    println(sansAll)
 
     /*
 		double ans1 = burglary.lookup(BooleanVariable.true, new Case())
@@ -100,18 +100,18 @@ object AlarmBurglaryEarthquake {
     */
 
     println("alarm")
-    bn.getCPT(alarm).print()
+    println(bn.getCPT(alarm))
 
     println("burglary")
-    bn.getCPT(burglary).print()
+    println(bn.getCPT(burglary))
 
     val ab = bn.getCPT(alarm).multiply(bn.getCPT(burglary))
     println("ab")
-    ab.print()
+    println(ab)
 
     val abe = ab.multiply(bn.getCPT(earthquake))
     println("abe")
-    abe.print()
+    println(abe)
 
     val Q: immutable.Set[RandomVariable[_]] = immutable.Set(earthquake, burglary, alarm)
     val order = List(johnCalls, maryCalls)
@@ -121,7 +121,7 @@ object AlarmBurglaryEarthquake {
     val afterVE = bn.variableEliminationPriorMarginalII(Q, order, earthquake eq true)
 
     println("eliminating variables other than alarm, burglary, and earthquake; and then finding those consistent with earthquake = true")
-    afterVE.print()
+    println(afterVE)
 
   }
 

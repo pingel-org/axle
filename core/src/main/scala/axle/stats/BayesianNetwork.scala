@@ -156,9 +156,6 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     new Independence(X, Z, Y)
   }
 
-  def printAllMarkovAssumptions(): Unit =
-    getRandomVariables.map(rv => println(getMarkovAssumptionsFor(rv)))
-
   def computeFullCase(c: List[CaseIs[_]]): Double = {
 
     // not an airtight check

@@ -59,7 +59,11 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     pw._1 / pw._2
   }
 
-  def indexOf(c: List[CaseIs[_]]): Int = cp.indexOf(c.valuesOf(varList))
+  def indexOf(cs: List[CaseIs[_]]): Int = {
+    val rvvs: List[(RandomVariable[_], Any)] = cs.map(ci => (ci.rv, ci.v))
+    val rvvm = rvvs.toMap
+    cp.indexOf(varList.map(rvvm(_)))
+  }
 
   def caseOf(i: Int): List[CaseIs[_]] =
     varList.zip(cp(i)).map({ case (variable, value) => CaseIs(variable, value) })
@@ -79,12 +83,11 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
 
   def apply(c: List[CaseIs[_]]): Double = elements(indexOf(c))
 
-  def print(): Unit = {
-    for (i <- 0 until elements.length) {
+  override def toString(): String =
+    (0 until elements.length).map(i => {
       val c = caseOf(i)
-      println(c.toOrderedString(varList) + " " + this(c))
-    }
-  }
+      c.mkString(" ") + " " + this(c)
+    }).mkString("\n")
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {

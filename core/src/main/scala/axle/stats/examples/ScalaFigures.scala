@@ -79,7 +79,7 @@ object ScalaFigures {
 
   def figure6_2() = {
     val result = figure6_1.getJointProbabilityTable()
-    result.print
+    println(result)
     result
   }
 
@@ -94,25 +94,25 @@ object ScalaFigures {
         Nil)
 
     println("figure3sub1")
-    result1.print
+    println(result1)
 
     val g = result1.sumOut(D)
     println("g")
-    g.print
+    println(g)
 
     val h = g.sumOut(C)
     println("h")
-    h.print
+    println(h)
 
     val result2 = new Factor(D :: E :: Nil)
     result2.writes(0.448 :: 0.192 :: 0.112 :: 0.248 :: Nil)
 
     println("figure3sub2")
-    result2.print
+    println(result2)
 
     val m = result1.multiply(result2)
     println("f1 * f2")
-    m.print
+    println(m)
 
     (result1, result2)
   }
@@ -143,19 +143,19 @@ object ScalaFigures {
 
     val ab = cptA.multiply(cptB)
     println("cptA * cptB:")
-    ab.print()
+    println(ab)
 
     val blah = ab.sumOut(A)
     println("sumout(A, cptA * cptB)")
-    blah.print
+    println(blah)
 
-    val foo = blah.multiply(cptC);
+    val foo = blah.multiply(cptC)
     println("cptC * sumout(A, cptA * cptB)")
-    foo.print
+    println(foo)
 
     val bar = foo.sumOut(C)
     println("sumout(C, cptC * sumout(A, cptA * cptB))")
-    bar.print
+    println(bar)
 
     result
   }
@@ -200,7 +200,7 @@ object ScalaFigures {
     for (rv <- f68.getRandomVariables) {
       val f = f68.getCPT(rv)
       println("Factor for " + rv)
-      f.print
+      println(f)
     }
     f68
   }
@@ -217,7 +217,7 @@ object ScalaFigures {
     for (rv <- f69.getRandomVariables()) {
       val f = f69.getCPT(rv)
       println("Factor for " + rv)
-      f.print
+      println(f)
     }
 
     f69
@@ -228,7 +228,7 @@ object ScalaFigures {
     val result = figure6_4.duplicate()
     val f = result.factorElimination1(Set(C))
     println("Result of fe-i on a->b->c with Q={C}")
-    f.print
+    println(f)
     result
   }
 
@@ -252,7 +252,7 @@ object ScalaFigures {
     val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.getCPT(C))
 
     println("Doing factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3")
-    elim.print
+    println(elim)
 
     (f68, τ, f61.getCPT(C))
   }
@@ -266,7 +266,7 @@ object ScalaFigures {
     val (f75, elim) = f61.factorElimination2(Set(C), τ, cptC)
 
     println("Doing factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3")
-    elim.print
+    println(elim)
     f61
   }
 
