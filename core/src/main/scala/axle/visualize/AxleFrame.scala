@@ -6,7 +6,7 @@ import javax.swing.JPanel
 
 class AxleFrame(
   width: Int = 1100, height: Int = 800,
-  bgColor: Color = Color.white, title: String = "-- Axle --") {
+  bgColor: Color = Color.white, title: String = "αχλε") {
 
   val frame = new JFrame(title)
   frame.setBackground(bgColor)
