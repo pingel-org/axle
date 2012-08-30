@@ -66,7 +66,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   }
 
   def caseOf(i: Int): List[CaseIs[_]] =
-    varList.zip(cp(i)).map({ case (variable, value) => CaseIs(variable, value) })
+    varList.zip(cp(i)).map({ case (variable: RandomVariable[_], value) => CaseIs(variable, value) })
 
   def numCases() = elements.length
 
@@ -178,7 +178,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   def isSupersetOf(left: List[CaseIs[_]], right: List[CaseIs[_]]): Boolean = {
     val ll: List[(RandomVariable[_], Any)] = left.map(ci => (ci.rv, ci.v))
     val lm = ll.toMap
-    right.forall(rRV => lm.contains(rRV.rv) && (rRV.value == lm(rRV)))
+    right.forall((rightCaseIs: CaseIs[_]) => lm.contains(rightCaseIs.rv) && (rightCaseIs.v == lm(rightCaseIs.rv)))
   }
 
   def projectToVars(cs: List[CaseIs[_]], pVars: Set[RandomVariable[_]]): List[CaseIs[_]] =
