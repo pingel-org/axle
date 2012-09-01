@@ -2,8 +2,7 @@
 package axle
 
 /**
- * Axle is an attempt at duplicating just enough Haskell in Scala
- * to be able to follow along with "Learn You a Haskell for Great Good"
+ * Enough Haskell in Scala to be able to follow along with "Learn You a Haskell for Great Good" in Axle/Scala
  *
  * Implementation details:
  *
@@ -16,7 +15,7 @@ package axle
  *     intersperse('-')
  */
 
-object Axle {
+object LearnYouAnAxle {
 
   object VariousFunctions {
 

@@ -7,7 +7,7 @@ package axle.category.awodey
 
 object CategoryTheory {
 
-  import axle.Enrichments._
+  import axle._
 
   case class ⋅(v: Any) { // "object"
     def ≡(other: ⋅) = this == other // TODO

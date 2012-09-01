@@ -1,6 +1,6 @@
 package axle.stats
 
-import axle.iterator.ListCrossProduct
+import axle.ListCrossProduct
 import axle.matrix.JblasMatrixFactory._
 import collection._
 

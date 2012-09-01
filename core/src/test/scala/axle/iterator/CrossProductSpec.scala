@@ -1,6 +1,7 @@
 
 package axle.iterator
 
+import axle._
 import org.specs2.mutable._
 	  
 class CrossProductSpec extends Specification {

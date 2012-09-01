@@ -6,9 +6,9 @@ import org.specs2.mutable._
 class AxleSpec extends Specification {
 
   // TODO: single import
-  import Axle.VariousFunctions._
-  import Axle.Functor._
-  import Axle.Functor2._
+  import LearnYouAnAxle.VariousFunctions._
+  import LearnYouAnAxle.Functor._
+  import LearnYouAnAxle.Functor2._
 
   "Functor Redux" should {
     "work" in {

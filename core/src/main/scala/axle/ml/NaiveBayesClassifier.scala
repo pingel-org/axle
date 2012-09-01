@@ -11,7 +11,7 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
   classExtractor: D => TC) {
 
   import axle.ScalaMapReduce._
-  import axle.Enrichments._
+  import axle._
   import collection._
   import scalaz._
   import Scalaz._
