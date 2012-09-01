@@ -2,7 +2,7 @@ package axle
 
 import collection._
 import math.log
-import axle.Enrichments._
+import axle._
 import axle.quanta.Information
 import axle.stats._
 

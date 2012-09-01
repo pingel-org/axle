@@ -4,7 +4,7 @@ object Statistics {
 
   import collection._
   import axle.stats._
-  import axle.Enrichments._
+  import axle._
 
   implicit def rv2it[K](rv: RandomVariable[K]) = rv.getValues.get
 

@@ -1,7 +1,7 @@
 package axle.graph
 
 import collection._
-import axle.Enrichments._
+import axle._
 
 object NativeUndirectedGraphFactory extends NativeUndirectedGraphFactory
 

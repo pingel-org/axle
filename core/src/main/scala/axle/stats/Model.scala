@@ -2,7 +2,6 @@ package axle.stats
 
 import collection._
 import axle.graph.JungDirectedGraphFactory._
-import axle.iterator.Lister
 import axle.stats._
 
 object Direction {

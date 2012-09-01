@@ -6,7 +6,7 @@ import java.math.BigDecimal
 
 class QuantaSpec extends Specification {
 
-  import axle.Enrichments._
+  import axle._
 
   "Scalar conversion" should {
     "work" in {

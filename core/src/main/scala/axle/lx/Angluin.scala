@@ -2,10 +2,11 @@
 package axle.lx
 
 import collection._
-import axle.graph.JungDirectedGraphFactory._
-import axle.Enrichments._
+import axle._
 
 object Angluin {
+
+  import axle.graph.JungDirectedGraphFactory._
 
   case class Acceptor() {
 

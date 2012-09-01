@@ -4,8 +4,6 @@ import org.specs2.mutable._
 
 class EnrichmentsSpec extends Specification {
 
-  import Enrichments._
-
   "x in EnrichedGenTraversable" should {
     "work" in {
       val cp = List(1, 2, 3) ⨯ List(4, 5, 6)

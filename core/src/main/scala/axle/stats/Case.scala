@@ -1,7 +1,7 @@
 package axle.stats
 
 import collection._
-import axle.Enrichments._
+import axle._
 import axle.Statistics._
 
 trait Case[A] {

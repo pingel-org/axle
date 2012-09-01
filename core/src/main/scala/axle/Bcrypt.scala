@@ -10,7 +10,7 @@ package axle
 class Bcrypt {
 
   import math.{ pow }
-  import axle.Enrichments._
+  import axle._
 
   case class BcryptState(var P: Array[Array[Byte]], var S: Array[Array[Array[Byte]]])
 
