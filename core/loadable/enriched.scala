@@ -1,7 +1,7 @@
 
 object enrichedO {
 
-  import axle.Enrichments._
+  import axle._
 
   true and false
 
