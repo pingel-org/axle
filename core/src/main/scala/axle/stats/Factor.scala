@@ -137,9 +137,12 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     for (j <- 0 until result.numCases()) {
       val c = result.caseOf(j)
       val p = varToSumOut.getValues.getOrElse(Nil).map(value => {
-        val f = c.copy
-        f(varToSumOut) = value
-        this(f)
+        assert(false)
+        // TODO c.copy is not defined
+//        val f = c.copy
+//        f(varToSumOut) = value
+//        this(f)
+        0
       }).sum
       result(c) = p
     }

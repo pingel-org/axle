@@ -264,7 +264,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
           for (i <- 0 until smallerF.numCases) {
             val c = smallerF.caseOf(i)
             // set its value to what e sets it to
-            c(U) = e.valueOf(U)
+            assert(false) // c(U) = e.valueOf(U)
             smallerF(smallerF.caseOf(i)) = oldF(c)
           }
           result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
