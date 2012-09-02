@@ -34,6 +34,7 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.1",
   "org.joda" % "joda-convert" % "1.2",
   "org.scalaz" %% "scalaz-core" % "6.0.3"
+  // "com.chuusai" % "shapeless_2.9.1" % "1.2.2"
 )
 
 test in assembly := {}
