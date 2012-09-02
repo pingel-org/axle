@@ -6,7 +6,7 @@ import collection._
 
 object Factor {
 
-  def multiply(tables: Seq[Factor]): Factor = {
+  def Π(tables: Seq[Factor]): Factor = {
 
     if (tables.size == 0) {
       return null
@@ -15,7 +15,7 @@ object Factor {
     // TODO this can be made more efficient by constructing a single
     // result table ahead of time.
 
-    tables.reduceLeft((current, table) => current.multiply(table))
+    tables.reduceLeft((current, table) => current * table)
   }
 
 }
@@ -133,11 +133,10 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     val result = new Factor(getVariables().filter(!_.equals(varToSumOut)).toList)
     for (c <- result.cases()) {
       val p = varToSumOut.getValues.getOrElse(Nil).map(value => {
-        assert(false)
-        // TODO c.copy is not defined
-        //        val f = c.copy
+        //        val f = c.copy()
         //        f(varToSumOut) = value
         //        this(f)
+        assert(false)
         0
       }).sum
       result(c) = p
@@ -161,7 +160,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     result
   }
 
-  def multiply(other: Factor): Factor = {
+  def *(other: Factor): Factor = {
     val newVars = getVariables().union(other.getVariables())
     val result = new Factor(newVars.toList)
     for (c <- result.cases()) {

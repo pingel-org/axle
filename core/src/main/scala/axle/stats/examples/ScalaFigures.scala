@@ -110,7 +110,7 @@ object ScalaFigures {
     println("figure3sub2")
     println(result2)
 
-    val m = result1.multiply(result2)
+    val m = result1 * result2
     println("f1 * f2")
     println(m)
 
@@ -141,7 +141,7 @@ object ScalaFigures {
 
     // result.g.draw
 
-    val ab = cptA.multiply(cptB)
+    val ab = cptA * cptB
     println("cptA * cptB:")
     println(ab)
 
@@ -149,7 +149,7 @@ object ScalaFigures {
     println("sumout(A, cptA * cptB)")
     println(blah)
 
-    val foo = blah.multiply(cptC)
+    val foo = blah * cptC
     println("cptC * sumout(A, cptA * cptB)")
     println(foo)
 

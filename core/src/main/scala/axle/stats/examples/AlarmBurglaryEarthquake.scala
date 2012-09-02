@@ -105,11 +105,11 @@ object AlarmBurglaryEarthquake {
     println("burglary")
     println(bn.getCPT(burglary))
 
-    val ab = bn.getCPT(alarm).multiply(bn.getCPT(burglary))
+    val ab = bn.getCPT(alarm) * bn.getCPT(burglary)
     println("ab")
     println(ab)
 
-    val abe = ab.multiply(bn.getCPT(earthquake))
+    val abe = ab * bn.getCPT(earthquake)
     println("abe")
     println(abe)
 
