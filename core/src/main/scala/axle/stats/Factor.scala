@@ -126,6 +126,8 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     tally
   }
 
+  def Σ[T](varToSumOut: RandomVariable[T]): Factor = sumOut(varToSumOut)
+
   // depending on assumptions, this may not be the best way to remove the vars
   def sumOut[T](varToSumOut: RandomVariable[T]): Factor = {
     val result = new Factor(getVariables().filter(!_.equals(varToSumOut)).toList)
@@ -134,6 +136,8 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     }
     result
   }
+
+  def Σ(varsToSumOut: Set[RandomVariable[_]]): Factor = sumOut(varsToSumOut)
 
   def sumOut(varsToSumOut: Set[RandomVariable[_]]): Factor =
     varsToSumOut.foldLeft(this)((result, v) => result.sumOut(v))
