@@ -49,30 +49,30 @@ object ScalaFigures {
 
     val cptB = result.getCPT(B) // B | A
     cptB(List(B eq true, A eq true)) = 0.2
-    cptB(List(B eq false, A eq true)) = 0.8
-    cptB(List(B eq true, A eq false)) = 0.75
+    cptB(List(B eq true, A eq false)) = 0.8
+    cptB(List(B eq false, A eq true)) = 0.75
     cptB(List(B eq false, A eq false)) = 0.25
 
     val cptC = result.getCPT(C) // C | A
     cptC(List(C eq true, A eq true)) = 0.8
-    cptC(List(C eq false, A eq true)) = 0.2
-    cptC(List(C eq true, A eq false)) = 0.1
+    cptC(List(C eq true, A eq false)) = 0.2
+    cptC(List(C eq false, A eq true)) = 0.1
     cptC(List(C eq false, A eq false)) = 0.9
 
     val cptD = result.getCPT(D) // D | BC
     cptD(List(D eq true, B eq true, C eq true)) = 0.95
-    cptD(List(D eq false, B eq true, C eq true)) = 0.05
+    cptD(List(D eq true, B eq true, C eq false)) = 0.05
     cptD(List(D eq true, B eq false, C eq true)) = 0.9
-    cptD(List(D eq false, B eq false, C eq true)) = 0.1
-    cptD(List(D eq true, B eq true, C eq false)) = 0.8
+    cptD(List(D eq true, B eq false, C eq false)) = 0.1
+    cptD(List(D eq false, B eq true, C eq true)) = 0.8
     cptD(List(D eq false, B eq true, C eq false)) = 0.2
-    cptD(List(D eq true, B eq false, C eq false)) = 0.0
+    cptD(List(D eq false, B eq false, C eq true)) = 0.0
     cptD(List(D eq false, B eq false, C eq false)) = 1.0
 
     val cptE = result.getCPT(E) // E | C
     cptE(List(E eq true, C eq true)) = 0.7
-    cptE(List(E eq false, C eq true)) = 0.3
-    cptE(List(E eq true, C eq false)) = 0.0
+    cptE(List(E eq true, C eq false)) = 0.3
+    cptE(List(E eq false, C eq true)) = 0.0
     cptE(List(E eq false, C eq false)) = 1.0
 
     // new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(g))
@@ -90,12 +90,12 @@ object ScalaFigures {
 
     val cptB = new Factor(B :: C :: D :: Nil)
     cptB(List(B eq true, C eq true, D eq true)) = 0.95
-    cptB(List(B eq false, C eq true, D eq true)) = 0.05
+    cptB(List(B eq true, C eq true, D eq false)) = 0.05
     cptB(List(B eq true, C eq false, D eq true)) = 0.9
-    cptB(List(B eq false, C eq false, D eq true)) = 0.1
-    cptB(List(B eq true, C eq true, D eq false)) = 0.8
+    cptB(List(B eq true, C eq false, D eq false)) = 0.1
+    cptB(List(B eq false, C eq true, D eq true)) = 0.8
     cptB(List(B eq false, C eq true, D eq false)) = 0.2
-    cptB(List(B eq true, C eq false, D eq false)) = 0.0
+    cptB(List(B eq false, C eq false, D eq true)) = 0.0
     cptB(List(B eq false, C eq false, D eq false)) = 1.0
 
     println("figure3sub1")
@@ -111,8 +111,8 @@ object ScalaFigures {
 
     val cptD = new Factor(D :: E :: Nil)
     cptD(List(D eq true, E eq true)) = 0.448
-    cptD(List(D eq false, E eq true)) = 0.192
-    cptD(List(D eq true, E eq false)) = 0.112
+    cptD(List(D eq true, E eq false)) = 0.192
+    cptD(List(D eq false, E eq true)) = 0.112
     cptD(List(D eq false, E eq false)) = 0.248
 
     println("figure3sub2")
@@ -144,14 +144,14 @@ object ScalaFigures {
 
     val cptB = result.getCPT(B) // B | A
     cptB(List(B eq true, A eq true)) = 0.9
-    cptB(List(B eq false, A eq true)) = 0.1
-    cptB(List(B eq true, A eq false)) = 0.2
+    cptB(List(B eq true, A eq false)) = 0.1
+    cptB(List(B eq false, A eq true)) = 0.2
     cptB(List(B eq false, A eq false)) = 0.8
 
     val cptC = result.getCPT(C) // C | B
     cptC(List(C eq true, B eq true)) = 0.3
-    cptC(List(C eq false, B eq true)) = 0.7
-    cptC(List(C eq true, B eq false)) = 0.5
+    cptC(List(C eq true, B eq false)) = 0.7
+    cptC(List(C eq false, B eq true)) = 0.5
     cptC(List(C eq false, B eq false)) = 0.5
 
     // result.g.draw

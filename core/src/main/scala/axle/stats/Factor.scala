@@ -61,7 +61,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   def indexOf(cs: List[CaseIs[_]]): Int = {
     val rvvs: List[(RandomVariable[_], Any)] = cs.map(ci => (ci.rv, ci.v))
     val rvvm = rvvs.toMap
-    cp.indexOf(varList.map(rv => rvvm(rv)))
+    cp.indexOf(varList.map(rvvm(_)))
   }
 
   private def caseOf(i: Int): List[CaseIs[_]] =
