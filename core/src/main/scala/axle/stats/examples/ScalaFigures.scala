@@ -44,33 +44,36 @@ object ScalaFigures {
     val result = new BayesianNetwork("6.1", g)
 
     val cptA = result.getCPT(A) // A
-    cptA.writes(0.6 :: 0.4 :: Nil)
+    cptA(List(A eq true)) = 0.6
+    cptA(List(A eq false)) = 0.4
 
     val cptB = result.getCPT(B) // B | A
-    cptB.writes(
-      0.2 :: 0.8 ::
-        0.75 :: 0.25 ::
-        Nil)
+    cptB(List(B eq true, A eq true)) = 0.2
+    cptB(List(B eq false, A eq true)) = 0.8
+    cptB(List(B eq true, A eq false)) = 0.75
+    cptB(List(B eq false, A eq false)) = 0.25
 
     val cptC = result.getCPT(C) // C | A
-    cptC.writes(
-      0.8 :: 0.2 ::
-        0.1 :: 0.9 ::
-        Nil)
+    cptC(List(C eq true, A eq true)) = 0.8
+    cptC(List(C eq false, A eq true)) = 0.2
+    cptC(List(C eq true, A eq false)) = 0.1
+    cptC(List(C eq false, A eq false)) = 0.9
 
     val cptD = result.getCPT(D) // D | BC
-    cptD.writes(
-      0.95 :: 0.5 ::
-        0.9 :: 0.1 ::
-        0.8 :: 0.2 ::
-        0.0 :: 1.0 ::
-        Nil)
+    cptD(List(D eq true, B eq true, C eq true)) = 0.95
+    cptD(List(D eq false, B eq true, C eq true)) = 0.05
+    cptD(List(D eq true, B eq false, C eq true)) = 0.9
+    cptD(List(D eq false, B eq false, C eq true)) = 0.1
+    cptD(List(D eq true, B eq true, C eq false)) = 0.8
+    cptD(List(D eq false, B eq true, C eq false)) = 0.2
+    cptD(List(D eq true, B eq false, C eq false)) = 0.0
+    cptD(List(D eq false, B eq false, C eq false)) = 1.0
 
     val cptE = result.getCPT(E) // E | C
-    cptE.writes(
-      0.7 :: 0.3 ::
-        0.0 :: 1.0 ::
-        Nil)
+    cptE(List(E eq true, C eq true)) = 0.7
+    cptE(List(E eq false, C eq true)) = 0.3
+    cptE(List(E eq true, C eq false)) = 0.0
+    cptE(List(E eq false, C eq false)) = 1.0
 
     // new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(g))
 
@@ -85,18 +88,20 @@ object ScalaFigures {
 
   def figure6_3() = {
 
-    val result1 = new Factor(B :: C :: D :: Nil)
-    result1.writes(
-      0.95 :: 0.05 ::
-        0.9 :: 0.1 ::
-        0.8 :: 0.2 ::
-        0.0 :: 1.0 ::
-        Nil)
+    val cptB = new Factor(B :: C :: D :: Nil)
+    cptB(List(B eq true, C eq true, D eq true)) = 0.95
+    cptB(List(B eq false, C eq true, D eq true)) = 0.05
+    cptB(List(B eq true, C eq false, D eq true)) = 0.9
+    cptB(List(B eq false, C eq false, D eq true)) = 0.1
+    cptB(List(B eq true, C eq true, D eq false)) = 0.8
+    cptB(List(B eq false, C eq true, D eq false)) = 0.2
+    cptB(List(B eq true, C eq false, D eq false)) = 0.0
+    cptB(List(B eq false, C eq false, D eq false)) = 1.0
 
     println("figure3sub1")
-    println(result1)
+    println(cptB)
 
-    val g = result1.sumOut(D)
+    val g = cptB.sumOut(D)
     println("g")
     println(g)
 
@@ -104,17 +109,20 @@ object ScalaFigures {
     println("h")
     println(h)
 
-    val result2 = new Factor(D :: E :: Nil)
-    result2.writes(0.448 :: 0.192 :: 0.112 :: 0.248 :: Nil)
+    val cptD = new Factor(D :: E :: Nil)
+    cptD(List(D eq true, E eq true)) = 0.448
+    cptD(List(D eq false, E eq true)) = 0.192
+    cptD(List(D eq true, E eq false)) = 0.112
+    cptD(List(D eq false, E eq false)) = 0.248
 
     println("figure3sub2")
-    println(result2)
+    println(cptD)
 
-    val m = result1 * result2
-    println("f1 * f2")
+    val m = cptB * cptD
+    println("cptB * cptD")
     println(m)
 
-    (result1, result2)
+    (cptB, cptD)
   }
 
   def figure6_4() = {
@@ -131,13 +139,20 @@ object ScalaFigures {
     val result = new BayesianNetwork("6.4", g)
 
     val cptA = result.getCPT(A) // A
-    cptA.writes(0.6 :: 0.4 :: Nil)
+    cptA(List(A eq true)) = 0.6
+    cptA(List(A eq false)) = 0.4
 
     val cptB = result.getCPT(B) // B | A
-    cptB.writes(0.9 :: 0.1 :: 0.2 :: 0.8 :: Nil)
+    cptB(List(B eq true, A eq true)) = 0.9
+    cptB(List(B eq false, A eq true)) = 0.1
+    cptB(List(B eq true, A eq false)) = 0.2
+    cptB(List(B eq false, A eq false)) = 0.8
 
     val cptC = result.getCPT(C) // C | B
-    cptC.writes(0.3 :: 0.7 :: 0.5 :: 0.5 :: Nil)
+    cptC(List(C eq true, B eq true)) = 0.3
+    cptC(List(C eq false, B eq true)) = 0.7
+    cptC(List(C eq true, B eq false)) = 0.5
+    cptC(List(C eq false, B eq false)) = 0.5
 
     // result.g.draw
 
