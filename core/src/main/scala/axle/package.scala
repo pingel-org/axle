@@ -32,6 +32,15 @@ import math.{ exp, log }
 
 package object axle {
 
+  case class EnrichedGenSet[T](s: GenSet[T]) {
+
+    def ∪(other: GenSet[T]) = s.union(other)
+    
+    def ∩(other: GenSet[T]) = s.intersect(other)
+  }
+
+  implicit def enrichGenSet[T](s: GenSet[T]) = EnrichedGenSet(s)
+
   case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
 
     def Σ(f: T => Double) = gt.aggregate(0.0)(_ + f(_), _ + _)
