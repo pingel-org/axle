@@ -6,8 +6,9 @@ import axle.stats._
 import axle.visualize._
 import axle.graph.JungDirectedGraphFactory._
 import axle.graph.JungUndirectedGraphFactory.JungUndirectedGraph
+import org.specs2.mutable._
 
-object ScalaFigures {
+class ScalaFigures extends Specification {
 
   def draw(title: String, dg: JungDirectedGraph[RandomVariable[_], String]): Unit = {
     new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(dg))
@@ -298,19 +299,12 @@ object ScalaFigures {
     new JoinTree(g)
   }
 
-  def main(args: List[String]): Unit = {
 
-    //figure6_2
-    //figure6_3
-    //figure6_4
-    //figure6_5
-    //figure6_7
-    //figure6_8
-    //figure6_9
-    //figure7_2
-    //figure7_4.g.draw
-    //figure7_5
-    //figure7_12
+  "bayesian networks" should {
+    "work" in {
+
+      1 must be equalTo 1
+    }
   }
 
 }
