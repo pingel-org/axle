@@ -75,18 +75,16 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
 
   def update(c: List[CaseIs[_]], d: Double): Unit = elements(indexOf(c)) = d
 
-//  def writes(values: List[Double]): Unit = {
-//    assert(values.length == elements.length)
-//    values.zipWithIndex.map({ case (v, i) => elements(i) = v })
-//  }
+  //  def writes(values: List[Double]): Unit = {
+  //    assert(values.length == elements.length)
+  //    values.zipWithIndex.map({ case (v, i) => elements(i) = v })
+  //  }
 
   def apply(c: List[CaseIs[_]]): Double = elements(indexOf(c))
 
-  override def toString(): String =
-    (0 until elements.length).map(i => {
-      val c = caseOf(i)
-      c.mkString(" ") + " " + this(c)
-    }).mkString("\n")
+  override def toString(): String = cases.map(kase =>
+    kase.map(_.toString).mkString("  ") + "  " + this(kase)
+  ).mkString("\n")
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {
