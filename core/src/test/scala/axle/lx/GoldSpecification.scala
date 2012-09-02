@@ -32,10 +32,9 @@ class GoldSpecification extends Specification {
         val guessedLanguage = guess.getL
         println("ɸ.processNextExpression().L = " + guessedLanguage)
         val correct = guessedLanguage.equals(ℒ)
-        if( correct ) {
+        if (correct) {
           println("ɸ identified the language using the text")
-        }
-        else {
+        } else {
           println("ɸ's guess was not correct\n")
         }
         correct

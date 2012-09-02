@@ -3,7 +3,7 @@ package axle.iterator
 
 import axle._
 import org.specs2.mutable._
-	  
+
 class CrossProductSpec extends Specification {
 
   "Cross Product" should {
@@ -14,7 +14,7 @@ class CrossProductSpec extends Specification {
       val cp = new CrossProduct[String](List(v1, v2, v3, v2))
       val cl = cp.toList
       println("cp = " + cp)
-      cl.size must be equalTo(8)
+      cl.size must be equalTo (8)
     }
   }
 

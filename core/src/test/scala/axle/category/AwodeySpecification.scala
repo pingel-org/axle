@@ -29,7 +29,7 @@ class AwodeySpecification extends Specification {
       // val setsFin1 = Category(Set(ints, strings), Set(fii, fis, fsi, fss))
       val setsFin1 = Category(Set(ints), Set(fii))
 
-      1 must be equalTo(1)
+      1 must be equalTo (1)
     }
   }
 

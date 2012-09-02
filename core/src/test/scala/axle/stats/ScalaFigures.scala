@@ -299,7 +299,6 @@ class ScalaFigures extends Specification {
     new JoinTree(g)
   }
 
-
   "bayesian networks" should {
     "work" in {
 
