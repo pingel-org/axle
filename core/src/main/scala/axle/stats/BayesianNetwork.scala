@@ -263,7 +263,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
           for (c <- smallerF.cases) {
             // set its value to what e sets it to
             assert(false)
-            // TODO c(U) = e.valueOf(U)
+            // c(U) = e.valueOf(U)
             smallerF(c) = oldF(c)
           }
           result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value

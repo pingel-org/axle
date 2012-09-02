@@ -61,7 +61,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   def indexOf(cs: List[CaseIs[_]]): Int = {
     val rvvs: List[(RandomVariable[_], Any)] = cs.map(ci => (ci.rv, ci.v))
     val rvvm = rvvs.toMap
-    cp.indexOf(varList.map(rvvm(_)))
+    cp.indexOf(varList.map(rv => rvvm(rv)))
   }
 
   private def caseOf(i: Int): List[CaseIs[_]] =
@@ -129,15 +129,8 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   // depending on assumptions, this may not be the best way to remove the vars
   def sumOut[T](varToSumOut: RandomVariable[T]): Factor = {
     val result = new Factor(getVariables().filter(!_.equals(varToSumOut)).toList)
-    for (c <- result.cases()) {
-      val p = varToSumOut.getValues.getOrElse(Nil).map(value => {
-        //        val f = c.copy()
-        //        f(varToSumOut) = value
-        //        this(f)
-        assert(false)
-        0
-      }).sum
-      result(c) = p
+    for (c <- cases()) {
+      result(c.filter(_.rv != varToSumOut)) += this(c)
     }
     result
   }
