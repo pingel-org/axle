@@ -74,10 +74,12 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
 
   def apply(c: List[CaseIs[_]]): Double = elements(indexOf(c))
 
-  override def toString(): String = varList.map(_.getName).mkString("     ") + "\n" +
-    cases.map(kase =>
-      kase.map(_.v).mkString("  ") + "  " + this(kase)
-    ).mkString("\n")
+  override def toString(): String =
+    varList.map(rv => rv.getName.padTo(rv.charWidth, " ").mkString("")).mkString(" ") + "\n" +
+      cases.map(kase =>
+        kase.map(ci => ci.v.toString.padTo(ci.rv.charWidth, " ").mkString("")).mkString(" ") +
+          " " + "%f".format(this(kase))
+      ).mkString("\n")
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {

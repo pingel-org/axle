@@ -7,6 +7,7 @@ trait RandomVariable[A] {
   def ne(v: A): CaseIsnt[A]
   def probability(a: A): Double
   def choose(): A
+  lazy val charWidth: Int = (getName().length :: getValues().map(vs => vs.map(_.toString.length).toList).getOrElse(Nil)).reduce(math.max)
 }
 
 case class RandomVariable0[A](name: String, values: Option[Seq[A]] = None, distribution: Option[Distribution0[A]] = None)
