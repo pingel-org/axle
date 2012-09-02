@@ -1,5 +1,6 @@
 package axle.stats
 
+import axle._
 import axle.ListCrossProduct
 import axle.matrix.JblasMatrixFactory._
 import collection._
@@ -148,7 +149,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   }
 
   def *(other: Factor): Factor = {
-    val newVars = getVariables().union(other.getVariables())
+    val newVars = getVariables().toSet union other.getVariables().toSet
     val result = new Factor(newVars.toList)
     for (c <- result.cases()) {
       result(c) = this(c) * other(c)
