@@ -112,8 +112,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   def getJointProbabilityTable(): Factor = {
     val jpt = new Factor(getRandomVariables())
-    for (j <- 0 until jpt.numCases) {
-      val c = jpt.caseOf(j)
+    for (c <- jpt.cases) {
       jpt(c) = probabilityOf(c)
     }
     jpt
@@ -261,11 +260,10 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
           val oldF = result.getCPT(X)
           outG.deleteEdge(edge) // TODO: this should be acting on a copy
           val smallerF = makeFactorFor(X)
-          for (i <- 0 until smallerF.numCases) {
-            val c = smallerF.caseOf(i)
+          for (c <- smallerF.cases) {
             // set its value to what e sets it to
             assert(false) // c(U) = e.valueOf(U)
-            smallerF(smallerF.caseOf(i)) = oldF(c)
+            smallerF(c) = oldF(c)
           }
           result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
         }
@@ -337,9 +335,9 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     val sl = S.toList
     val result = sl(0)
 
-    assert(result.numCases() == 1)
+    // assert(result.numCases() == 1)
 
-    (result(result.caseOf(0)), pruned)
+    (result(List()), pruned)
   }
 
   //	public Case variableEliminationMAP(Set Q, Case e)

@@ -43,8 +43,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
   def evaluate(prior: List[CaseIs[_]], condition: List[CaseIs[_]]): Double = {
-    val pw = (0 until numCases).map(i => {
-      val c = caseOf(i)
+    val pw = cases().map(c => {
       if (isSupersetOf(c, prior)) {
         if (isSupersetOf(c, condition)) {
           (this(c), this(c))
@@ -65,10 +64,10 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
     cp.indexOf(varList.map(rvvm(_)))
   }
 
-  def caseOf(i: Int): List[CaseIs[_]] =
+  private def caseOf(i: Int): List[CaseIs[_]] =
     varList.zip(cp(i)).map({ case (variable: RandomVariable[_], value) => CaseIs(variable, value) })
 
-  def numCases() = elements.length
+  def cases(): Iterator[List[CaseIs[_]]] = (0 until elements.length).iterator.map(caseOf(_))
 
   // println("write: case = " + c.toOrderedString(variables) + ", d = " + d)
   // println("variables.length = " + variables.length)
@@ -92,16 +91,15 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {
     val newFactor = new Factor(getVariables.filter(!variable.equals(_)))
-    for (i <- 0 until newFactor.numCases()) {
-      newFactor(newFactor.caseOf(i)) = variable.getValues.getOrElse(Nil).map(value => this(newFactor.caseOf(i))).max
+    for (c <- newFactor.cases()) {
+      newFactor(c) = variable.getValues.getOrElse(Nil).map(value => this(c)).max
     }
     newFactor
   }
 
   def projectToOnly(remainingVars: List[RandomVariable[_]]): Factor = {
     val result = new Factor(remainingVars)
-    for (j <- 0 until numCases) {
-      val fromCase = this.caseOf(j)
+    for (fromCase <- cases()) {
       val toCase = projectToVars(fromCase, remainingVars.toSet)
       val additional = this(fromCase)
       val previous = result(toCase)
@@ -118,8 +116,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
       case (aVal, r) => {
         bValues.zipWithIndex.map({
           case (bVal, c) => {
-            for (j <- 0 until numCases) {
-              val m = caseOf(j)
+            for (m <- cases()) {
               if (isSupersetOf(m, List(a eq aVal, b eq bVal))) {
                 tally(r, c) += this(m)
               }
@@ -134,14 +131,13 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   // depending on assumptions, this may not be the best way to remove the vars
   def sumOut[T](varToSumOut: RandomVariable[T]): Factor = {
     val result = new Factor(getVariables().filter(!_.equals(varToSumOut)).toList)
-    for (j <- 0 until result.numCases()) {
-      val c = result.caseOf(j)
+    for (c <- result.cases()) {
       val p = varToSumOut.getValues.getOrElse(Nil).map(value => {
         assert(false)
         // TODO c.copy is not defined
-//        val f = c.copy
-//        f(varToSumOut) = value
-//        this(f)
+        //        val f = c.copy
+        //        f(varToSumOut) = value
+        //        this(f)
         0
       }).sum
       result(c) = p
@@ -156,10 +152,9 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   def projectRowsConsistentWith(eOpt: Option[List[CaseIs[_]]]): Factor = {
     val e = eOpt.get
     val result = new Factor(getVariables())
-    for (j <- 0 until result.numCases) {
-      val c = caseOf(j)
-      result.elements(j) = (isSupersetOf(c, e) match {
-        case true => elements(j)
+    for (c <- result.cases()) {
+      result(c) = (isSupersetOf(c, e) match {
+        case true => this(c)
         case false => 0.0
       })
     }
@@ -169,8 +164,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   def multiply(other: Factor): Factor = {
     val newVars = getVariables().union(other.getVariables())
     val result = new Factor(newVars.toList)
-    for (j <- 0 until result.numCases()) {
-      val c = result.caseOf(j)
+    for (c <- result.cases()) {
       result(c) = this(c) * other(c)
     }
     result
