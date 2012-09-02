@@ -4,21 +4,12 @@ import axle.ListCrossProduct
 import axle.matrix.JblasMatrixFactory._
 import collection._
 
-object Factor {
-
-  def Π(tables: Seq[Factor]): Factor = {
-
-    if (tables.size == 0) {
-      return null
-    }
-
-    // TODO this can be made more efficient by constructing a single
-    // result table ahead of time.
-
-    tables.reduceLeft((current, table) => current * table)
-  }
-
-}
+//object Factor {
+//
+//  // TODO this can be made more efficient by constructing a single result table ahead of time.
+//  def Π(tables: Seq[Factor]): Factor = tables.reduce(_*_)
+//
+//}
 
 /* Technically a "Distribution" is probably a table that sums to 1, which is not
  * always true in a Factor.  They should be siblings rather than parent/child.
@@ -82,9 +73,10 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
 
   def apply(c: List[CaseIs[_]]): Double = elements(indexOf(c))
 
-  override def toString(): String = cases.map(kase =>
-    kase.map(_.toString).mkString("  ") + "  " + this(kase)
-  ).mkString("\n")
+  override def toString(): String = varList.map(_.getName).mkString("     ") + "\n" +
+    cases.map(kase =>
+      kase.map(_.v).mkString("  ") + "  " + this(kase)
+    ).mkString("\n")
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {

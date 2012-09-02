@@ -179,11 +179,11 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     val S = π.foldLeft(getRandomVariables().map(getCPT(_)).toSet)((S, rv) => {
       val allMentions = S.filter(_.mentions(rv))
       val newS = S -- allMentions
-      val T = Factor.Π(allMentions.toList)
+      val T = allMentions.reduce(_ * _)
       val Ti = T.sumOut(rv)
       newS + Ti
     })
-    Factor.Π(S.toList)
+    S.reduce(_ * _)
 
     // the cost is the cost of the Tk multiplication
     // this is highly dependent on π
@@ -201,12 +201,12 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         val newS = S -- allMentions
-        val T = Factor.Π(allMentions.toList)
+        val T = allMentions.reduce(_ * _)
         val Ti = T.sumOut(rv)
         newS + Ti
       })
 
-    Factor.Π(S.toList)
+    S.reduce(_ * _)
   }
 
   def interactsWith(v1: RandomVariable[_], v2: RandomVariable[_]): Boolean =
@@ -305,12 +305,12 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         val newS = S -- allMentions
-        val T = Factor.Π(allMentions.toList)
+        val T = allMentions.reduce(_ * _)
         val Ti = T.sumOut(rv)
         newS + Ti
       })
 
-    (Factor.Π(S.toList), pruned)
+    (S.reduce(_ * _), pruned)
   }
 
   def variableEliminationMPE(e: List[CaseIs[_]]): (Double, BayesianNetwork) = {
@@ -323,7 +323,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         val newS = S -- allMentions
-        val T = Factor.Π(allMentions.toList)
+        val T = allMentions.reduce(_ * _)
         val Ti = T.maxOut(rv)
         newS + Ti
       })
