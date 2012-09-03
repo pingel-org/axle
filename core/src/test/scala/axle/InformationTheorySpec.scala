@@ -4,7 +4,6 @@ import org.specs2.mutable._
 
 class InformationTheorySpec extends Specification {
 
-  import axle.InformationTheory._
   import axle.quanta.Information._
   import axle.stats._
 
