@@ -2,7 +2,6 @@
 object infotheoryO {
 
   import axle.stats._
-  import axle.InformationTheory._
 
   val biasedCoin = coin(0.9)
   println((0 until 100).map(i => biasedCoin.choose()).mkString(" "))
