@@ -16,7 +16,7 @@ import collection._
  * always true in a Factor.  They should be siblings rather than parent/child.
  */
 
-class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends DistributionX(varList) {
+class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") {
 
   import scalaz._
   import Scalaz._
@@ -31,6 +31,8 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") extends
   def getName(): String = name
 
   def getLabel(): String = name
+
+  def getVariables() = varList
 
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
