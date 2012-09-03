@@ -8,7 +8,6 @@
 
 object nbO {
 
-  import axle.Statistics._
   import axle.stats._
   import axle.ml.NaiveBayesClassifier
 

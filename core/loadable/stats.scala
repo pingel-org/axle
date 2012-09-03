@@ -5,7 +5,6 @@ object statsO {
   import axle.visualize._
   import axle.quanta.Information._
   import axle.InformationTheory._
-  import axle.Statistics._
   import axle.stats._
 
   val fairFlip1 = coin()

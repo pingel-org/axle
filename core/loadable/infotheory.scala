@@ -1,7 +1,7 @@
 
 object infotheoryO {
 
-  import axle.Statistics._
+  import axle.stats._
   import axle.InformationTheory._
 
   val biasedCoin = coin(0.9)

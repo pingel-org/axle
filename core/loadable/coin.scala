@@ -5,7 +5,7 @@ object coinO {
   import axle.visualize._
   import axle.quanta.Information._
   import axle.InformationTheory._
-  import axle.Statistics._
+  import axle.stats._
 
   val hm = new immutable.TreeMap[Double, Double]() ++ (1 to 99).map(i => (i / 100.0, entropy(coin(i / 100.0)).conversion.get.getPayload.doubleValue)).toMap
 
