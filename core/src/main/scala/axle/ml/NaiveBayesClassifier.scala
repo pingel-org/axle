@@ -1,7 +1,6 @@
 package axle.ml
 
 import axle.InformationTheory._
-import axle.Statistics._
 import axle.stats._
 
 class NaiveBayesClassifier[D, TF, TC](data: Seq[D],

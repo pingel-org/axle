@@ -2,7 +2,6 @@ package axle.stats
 
 import collection._
 import axle._
-import axle.Statistics._
 
 trait Case[A] {
   def and[B](right: Case[B]): Case[(A, B)] = CaseAnd[A, B](this, right)

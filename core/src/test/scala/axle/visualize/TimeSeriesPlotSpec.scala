@@ -38,7 +38,7 @@ class TimeSeriesPlotSpec {
     import Plottable._
     import axle.quanta.Information
     import Information._
-    import axle.Statistics._
+    import axle.stats._
     import axle.InformationTheory._
 
     val hm: SortedMap[Double, UOM] = new immutable.TreeMap[Double, UOM]() ++ (1 to 99).map(i => (i / 100.0, entropy(coin(i / 100.0)))).toMap

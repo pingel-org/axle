@@ -1,7 +1,5 @@
 package axle.stats
 
-import axle.Statistics._
-
 trait Probability extends Function0[Double] {
   def *(right: Double) = PMultiply(this, () => right)
   def *(right: () => Double) = PMultiply(this, right)

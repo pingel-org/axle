@@ -8,7 +8,7 @@ import axle.stats._
 
 object InformationTheory {
 
-  import axle.Statistics._
+  import axle.stats._
   import Information._
 
   def log2(x: Double) = log(x) / log(2)
