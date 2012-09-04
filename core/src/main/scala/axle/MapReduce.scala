@@ -17,6 +17,6 @@ object ScalaMapReduce extends MapReduce {
       .flatMap(mapper(_))
       .toList // TODO inefficient
       .groupBy(_._1)
-      .map(kv => (kv._1, kv._2.map(_._2).reduce(reducer)))
+      .map({ case (k, v) => (k, v.map(_._2).reduce(reducer)) })
 
 }
