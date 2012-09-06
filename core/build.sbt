@@ -12,6 +12,8 @@ seq(assemblySettings: _*)
 
 crossScalaVersions := Seq("2.9.1")
 
+initialCommands in console := "import axle._; import axle.stats._; import axle.quanta._; import axle.graph._; import axle.matrix._; import axle.ml._; import axle.visualize._; import scalaz._"
+
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
 resolvers += "array.ca" at "http://www.array.ca/nest-web/maven/" // for jblas
@@ -33,7 +35,7 @@ libraryDependencies ++= Seq(
   "org.specs2" %% "specs2" % "1.11" % "test",
   "joda-time" % "joda-time" % "2.1",
   "org.joda" % "joda-convert" % "1.2",
-  "org.scalaz" %% "scalaz-core" % "6.0.3"
+  "org.scalaz" %% "scalaz-core" % "6.0.4"
   // "com.chuusai" % "shapeless_2.9.1" % "1.2.2"
 )
 
