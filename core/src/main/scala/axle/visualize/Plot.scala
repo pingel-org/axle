@@ -1,10 +1,15 @@
 package axle.visualize
 
-import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point, FontMetrics, Font }
+import java.awt.Color
+import java.awt.Font
+import java.awt.FontMetrics
+import java.awt.Graphics
+import java.awt.Graphics2D
+
+import scala.collection.Seq
+import scala.collection.SortedMap
+
 import javax.swing.JPanel
-import java.awt.event.MouseEvent
-import collection._
-import math.{ pow, floor, log, abs }
 
 class Plot[X, DX, Y, DY](
   lfs: Seq[(String, SortedMap[X, Y])],

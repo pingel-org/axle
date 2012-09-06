@@ -24,7 +24,7 @@ class AxleFrame(
     frame.add(component)
     frame.setVisible(true)
   }
-
+  
   class BackgroundPanel extends JPanel {
     override def paintComponent(g: Graphics): Unit = {
       // super.paintComponent(g)
