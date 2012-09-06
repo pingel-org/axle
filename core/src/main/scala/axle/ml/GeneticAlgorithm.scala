@@ -12,6 +12,12 @@ trait Species[G] {
 
 }
 
+case class GeneticAlgorithmLog[G](
+  popLog: IndexedSeq[(G, Double)],
+  mins: SortedMap[Int, Double],
+  maxs: SortedMap[Int, Double],
+  aves: SortedMap[Int, Double])
+
 class GeneticAlgorithm[G](species: Species[G], populationSize: Int = 1000, numGenerations: Int = 100) {
 
   def initialPopulation(): IndexedSeq[(G, Double)] =
@@ -49,7 +55,7 @@ class GeneticAlgorithm[G](species: Species[G], populationSize: Int = 1000, numGe
   def minMaxAve(population: IndexedSeq[(G, Double)]): (Double, Double, Double) =
     (population.minBy(_._2)._2, population.maxBy(_._2)._2, population.map(_._2).sum / population.size)
 
-  def run(): (IndexedSeq[(G, Double)], (SortedMap[Int, Double], SortedMap[Int, Double], SortedMap[Int, Double])) = {
+  def run(): GeneticAlgorithmLog[G] = {
     val popLog = (0 until numGenerations)
       .foldLeft((initialPopulation(), List[(Double, Double, Double)]()))(
         (pl: (IndexedSeq[(G, Double)], List[(Double, Double, Double)]), i: Int) => live(pl._1, pl._2)
@@ -58,7 +64,7 @@ class GeneticAlgorithm[G](species: Species[G], populationSize: Int = 1000, numGe
     val mins = new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._1))
     val maxs = new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._2))
     val aves = new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._3))
-    (popLog._1, (mins, maxs, aves))
+    GeneticAlgorithmLog[G](popLog._1, mins, maxs, aves)
   }
 
 }
