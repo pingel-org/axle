@@ -35,32 +35,23 @@ case class ℘[E](all: Seq[E]) extends Iterable[Set[E]] {
 
     def remove() = throw new UnsupportedOperationException()
 
-    def allOnes(): Boolean = mask.forall(_.isDefined)
-
     def increment(): Unit = {
-      var i = 0
-      while (true) {
-        if (i < mask.size) {
-          val bit = mask(i)
-          if (bit == None) {
-            mask(i) = Some(canonicalOrder(i))
-            return
-          } else {
-            mask(i) = None
-            i += 1
-          }
-        } else {
-          mask.append(Some(canonicalOrder(i)))
+      for (i <- 0 until mask.size) {
+        if (mask(i) == None) {
+          mask(i) = Some(canonicalOrder(i))
           return
+        } else {
+          mask(i) = None
         }
       }
+      mask += Some(canonicalOrder(mask.size))
     }
 
     def hasNext() = hasNextValue
 
     def next() = {
       val result = mask.flatMap(x => x).toSet
-      hasNextValue = mask.size < powerSet.getAll.size || !allOnes()
+      hasNextValue = (mask.size < powerSet.getAll.size) || mask.exists(_.isEmpty)
       if (hasNextValue) {
         increment()
       }
