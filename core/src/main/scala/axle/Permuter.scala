@@ -60,7 +60,7 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
     //        }
 
     def setRemainder(i: Int) = {
-      //System.out.println("setRemainder: i = " + i);
+      //println("setRemainder: i = " + i)
       if (i > 0) {
         val r = mutable.Set[InE]()
         r ++= remainders(i - 1)
@@ -75,7 +75,7 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
     def hasNext() = tuple != null
 
     def incrementLastAvailable(i: Int): Boolean = {
-      //System.out.println("incrementLastAvailable: i = " + i);
+      //println("incrementLastAvailable: i = " + i)
       if (i == -1) {
         return true
       } else if (iterators(i).hasNext) {
@@ -90,7 +90,7 @@ case class Permuter[E](objects: List[E], n: Int) extends Iterable[List[E]] {
     }
 
     def next() = {
-      // println("next: remainders = " + remainders + ", tuple = " + tuple);
+      // println("next: remainders = " + remainders + ", tuple = " + tuple)
       if (tuple == null) {
         throw new NoSuchElementException()
       }
