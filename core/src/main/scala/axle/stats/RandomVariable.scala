@@ -17,7 +17,7 @@ case class RandomVariable0[A](name: String, values: Option[Seq[A]] = None, distr
   def getValues() = values
   def eq(v: A): CaseIs[A] = CaseIs(this, v)
   def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
-  def probability(a: A): Double = distribution.get.probabilityOf(a)
+  def probability(a: A): Double = distribution.map(_.probabilityOf(a)).getOrElse(0.0)
   def choose(): A = distribution.get.choose
 
 }
@@ -31,7 +31,7 @@ case class RandomVariable1[A, G1](name: String, values: Option[Seq[A]] = None,
   def eq(v: A): CaseIs[A] = CaseIs(this, v)
   def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
   def probability(a: A): Double = -1.0 // "TODO"
-  def probability(a: A, given: Case[G1]): Double = distribution.get.probabilityOf(a, given)
+  def probability(a: A, given: Case[G1]): Double = distribution.map(_.probabilityOf(a, given)).getOrElse(0.0)
   def choose(): A = choose(grv.choose)
   def choose(gv: G1): A = distribution.get.choose(gv)
 
@@ -46,7 +46,7 @@ case class RandomVariable2[A, G1, G2](name: String, values: Option[Seq[A]] = Non
   def eq(v: A): CaseIs[A] = CaseIs(this, v)
   def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
   def probability(a: A): Double = -1.0 // "TODO"
-  def probability(a: A, given1: Case[G1], given2: Case[G2]): Double = distribution.get.probabilityOf(a, given1, given2)
+  def probability(a: A, given1: Case[G1], given2: Case[G2]): Double = distribution.map(_.probabilityOf(a, given1, given2)).getOrElse(0.0)
   def choose(): A = choose(grv1.choose, grv2.choose)
   def choose(gv1: G1, gv2: G2): A = distribution.get.choose(gv1, gv2)
 
