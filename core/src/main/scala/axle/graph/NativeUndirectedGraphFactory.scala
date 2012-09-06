@@ -122,12 +122,6 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     // TODO there is probably a more efficient way to do this:
     def eliminate(vs: immutable.List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
 
-    //    def draw(): Unit = {
-    //      // TODO: remove this cast
-    //      val thisAsUG = this.asInstanceOf[JungUndirectedGraphFactory.UndirectedGraph[VP, EP]]
-    //      JungUndirectedGraphFactory.graphFrom[VP, EP, VP, EP](thisAsUG)(vp => vp, ep => ep).draw()
-    //    }
-
   }
 
 }
