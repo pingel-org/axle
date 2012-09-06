@@ -49,7 +49,7 @@ object Util {
 
   def matchAndTransform(string: String, regex: Regex, transform: (String, Regex.Match) => String): String = {
 
-    var last_end = -1;
+    var last_end = -1
     var result = ""
 
     for (md <- regex.findAllIn(string).matchData) {

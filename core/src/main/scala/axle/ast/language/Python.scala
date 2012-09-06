@@ -53,7 +53,7 @@ object Python {
       new Rule("Bitand", J("nodes", Sq(Sp(), Op("&"), Sp()))) ::
       new Rule("Bitor", J("nodes", Sq(Sp(), Op("|"), Sp()))) ::
       new Rule("Bitxor", J("nodes", Sq(Sp(), Op("^"), Sp()))) ::
-      Nil;
+      Nil
 
   val simpleStatements: List[Rule] =
     new Rule("Expression", Nop()) ::
@@ -76,7 +76,7 @@ object Python {
       new Rule("Import", SqT(Kw("import"), Sp(), ForDel("names", Sq(VarN(0), SqT(Sp(), Kw("as"), Sp(), VarN(1))), ", "))) ::
       new Rule("Global", Sq(Kw("global"), Sp(), J("names", Sq(Lit(","), Sp())))) ::
       new Rule("Exec", Sq(Kw("exec"), Sp(), Sub("expr"), SqT(Lit(" in "), Sub("locals")), SqT(Lit(", "), Sub("globals")))) ::
-      Nil;
+      Nil
 
   val if_rule = new Rule("If",
     Sq(For("tests",

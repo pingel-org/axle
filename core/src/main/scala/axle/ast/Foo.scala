@@ -29,18 +29,17 @@ object Foo extends Loggable {
 
     val s = "bc fidaa abmn fidabb nuaaabi fidjab bkjkj"
 
-    def transform(s: String, m: Regex.Match): String = {
+    def transform(s: String, m: Regex.Match): String = 
       "$" + s.substring(m.start(1), m.end(1))
-    }
 
     val x = match_and_transform(s, new Regex("fid(\\w+)"), transform)
     info(s)
     info(x)
 
     /*
-     val t = List[String]("a", "b", "c");
-     val u = t ::: List[String]("d", "e");
-     info("u = " + u);
+     val t = List[String]("a", "b", "c")
+     val u = t ::: List[String]("d", "e")
+     info("u = " + u)
      
      val z = (x: Int) => x + 1
      
@@ -52,7 +51,7 @@ object Foo extends Loggable {
      */
 
     //(ss: List[String]): Int => ss.length
-    // (for (s <- ss) yield s.length()).foldLeft(0)(_+_);
+    // (for (s <- ss) yield s.length()).foldLeft(0)(_+_)
 
     /*
      val element: String = "abc"
@@ -80,15 +79,15 @@ object Foo extends Loggable {
      }
      */
 
-    // val indentation_level: Int = 5;
-    // val x: String = ( List.range(0, indentation_level) map (i => "| -") ).mkString("");
+    // val indentation_level: Int = 5
+    // val x: String = ( List.range(0, indentation_level) map (i => "| -") ).mkString("")
     // val y: String = ( for ( x <- List.range(0, indentation_level)) yield "   " ).mkString("")
     // val tokens = new mutable.ListBuffer[String]()
     // tokens += "efoo"
     // tokens += "ebar"
 
     // val node2lineno = new mutable.Map[String, Int]()
-    // node2lineno.update("x", 5);
+    // node2lineno.update("x", 5)
 
     // val s : String = String.format("foo %s", "abc")
     // info("s = " + s)

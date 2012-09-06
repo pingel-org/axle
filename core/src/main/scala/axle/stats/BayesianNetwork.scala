@@ -443,21 +443,17 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   //	public Map<EliminationTreeNode, Factor> factorElimination(EliminationTree tau, Case e)
   //	{
-  //		
   //		for(EliminationTreeNode i : tau.getVertices() ) {
-  //
   //			for(RandomVariable E : e.getVariables() ) {
-  //
-  //				Factor lambdaE = new Factor(E);
+  //				Factor lambdaE = new Factor(E)
   //				// assign lambdaE.E to e.get(E)
   //			}
-  //			
   //		}
   //		
-  //    TODO EliminationTreeNode r = chooseRoot(tau);
+  //    TODO EliminationTreeNode r = chooseRoot(tau)
   //		
-  //    TODO pullMessagesTowardsRoot();
-  //	TODO pushMessagesFromRoot();
+  //    TODO pullMessagesTowardsRoot()
+  //	TODO pushMessagesFromRoot()
   //		
   //		for(EliminationTreeNode i : tau.getVertices()) {
   //			

@@ -41,7 +41,7 @@ class XhtmlLinesAstNodeAccumulatorState(xlf: XhtmlLinesAstNodeFormatter) {
       if (currentLine.size > 0) {
         val unfinishedLine: NodeSeq = currentLine.toList
         lines += lineno -> <span>{ unfinishedLine }</span><span class={ label }>{ line }</span>;
-        currentLine = new mutable.ListBuffer[scala.xml.Node]();
+        currentLine = new mutable.ListBuffer[scala.xml.Node]()
       } else {
         lines += lineno -> <span class={ label }>{ line }</span>
       }

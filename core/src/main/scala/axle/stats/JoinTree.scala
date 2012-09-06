@@ -44,7 +44,7 @@ class JoinTree(g: JungUndirectedGraph[mutable.Set[RandomVariable[_]], String]) {
 //    val T: JoinTree = new JoinTree(graphFrom(getGraph())(v => v, e => e))
 //    while (T.getGraph.size > 1) {
 //      val i = T.getGraph.firstLeafOtherThan(r)
-//      val j = null // TODO theNeighbor(); a JoinTreeNode
+//      val j = null // TODO theNeighbor() a JoinTreeNode
 //      result ++= i.getPayload - j.getPayload
 //    }
 //    result ++= r.getPayload
