@@ -24,11 +24,9 @@ class TimeSeriesPlotSpec {
 
     val lfs: Seq[(String, SortedMap[DateTime, Double])] = (0 until 20).map(i => randomTimeSeries(i)).toList
 
-    val frame = new AxleFrame(width = 1000, height = 600, bgColor = java.awt.Color.white)
+    val plot = new Plot(lfs, connect = true, drawKey = true, xAxis = 0.0, yAxis = now)
 
-    val vis = new Plot(lfs, connect = true, drawKey = true, xAxis = 0.0, yAxis = now)
-
-    frame.add(vis)
+    show(plot)
   }
 
   def t2(): Unit = {
@@ -42,11 +40,13 @@ class TimeSeriesPlotSpec {
 
     val hm: SortedMap[Double, UOM] = new immutable.TreeMap[Double, UOM]() ++ (1 to 99).map(i => (i / 100.0, entropy(coin(i / 100.0)))).toMap
 
-    new AxleFrame().add(new Plot(List(("h", hm)),
+    val plot = new Plot(List(("h", hm)),
       connect = true, drawKey = false,
       xAxis = zero(), xAxisLabel = Some("p(x='HEAD)"),
       yAxis = 0.0, yAxisLabel = Some("H"),
-      title = Some("Entropy"))(DoublePlottable, new InfoPlottable(bit)))
+      title = Some("Entropy"))(DoublePlottable, new InfoPlottable(bit))
+
+    show(plot)
 
   }
 

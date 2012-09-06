@@ -5,7 +5,6 @@ import java.awt.Component
 
 import axle.visualize.JungDirectedGraphVisualization
 import axle.visualize.JungUndirectedGraphVisualization
-import javax.swing.JPanel
 
 package object visualize {
 
@@ -17,8 +16,6 @@ package object visualize {
 
   def show(component: Component) = newFrame().add(component)
 
-  def show(panel: JPanel) = newFrame().add(panel)
-
   implicit def enComponentKMeansClassifier[T](classifier: axle.ml.KMeans.KMeansClassifier[T]): Component =
     new axle.visualize.KMeansVisualization[T](classifier)
 
@@ -28,4 +25,6 @@ package object visualize {
   implicit def enComponentJungDirectedGraph[VP, EP](g: axle.graph.JungDirectedGraphFactory.JungDirectedGraph[VP, EP]): Component = 
     new JungDirectedGraphVisualization().component(g)
 
+  implicit def enComponentPlot[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]): Component = new PlotComponent(plot)
+  
 }

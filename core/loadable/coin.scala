@@ -8,7 +8,9 @@ object coinO {
 
   val hm = new immutable.TreeMap[Double, Double]() ++ (1 to 99).map(i => (i / 100.0, entropy(coin(i / 100.0)).conversion.get.getPayload.doubleValue)).toMap
 
-  show(new Plot(List(("h", hm)), connect = true, drawKey = false,
-    xAxis = 0.0, xAxisLabel = Some("p(x='HEAD)"), yAxis = 0.0, yAxisLabel = Some("H"), title = Some("Entropy")))
+  val plot = new Plot(List(("h", hm)), connect = true, drawKey = false,
+    xAxis = 0.0, xAxisLabel = Some("p(x='HEAD)"), yAxis = 0.0, yAxisLabel = Some("H"), title = Some("Entropy"))
+
+  show(plot)
 
 }

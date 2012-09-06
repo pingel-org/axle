@@ -30,15 +30,16 @@ object kmO {
     K = 6,
     iterations = 100)
 
-  show(classifier)
-
-  show(new Plot(classifier.averageDistanceLogSeries(),
+  val plot = new Plot(classifier.averageDistanceLogSeries(),
     connect = true,
     drawKey = true,
     title = Some("KMeans Mean Centroid Distances"),
     xAxis = 0.0,
     xAxisLabel = Some("step"),
     yAxis = 0,
-    yAxisLabel = Some("average distance to centroid")))
+    yAxisLabel = Some("average distance to centroid"))
+
+  show(classifier)
+  show(plot)
 
 }
