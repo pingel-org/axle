@@ -30,9 +30,9 @@ object kmO {
     K = 6,
     iterations = 100)
 
-  new AxleFrame().add(new KMeansVisualization(classifier))
+  show(classifier)
 
-  new AxleFrame().add(new Plot(classifier.averageDistanceLogSeries(),
+  show(new Plot(classifier.averageDistanceLogSeries(),
     connect = true,
     drawKey = true,
     title = Some("KMeans Mean Centroid Distances"),

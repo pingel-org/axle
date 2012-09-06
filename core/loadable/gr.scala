@@ -14,8 +14,6 @@ object grO {
   g += ((b, c), "world")
   g += ((c, a), "!")
 
-  val frame = new AxleFrame()
-  val vis = new JungUndirectedGraphVisualization()
-  frame.add(vis.component(g))
+  show(g)
 
 }

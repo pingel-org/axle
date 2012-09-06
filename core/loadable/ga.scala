@@ -49,7 +49,7 @@ object gaO {
 
   val (population, (mins, maxs, aves)) = ga.run()
 
-  new AxleFrame().add(new Plot(List("min" -> mins, "ave" -> aves, "max" -> maxs),
+  show(new Plot(List("min" -> mins, "ave" -> aves, "max" -> maxs),
     connect = true, title = Some("GA Demo"), xAxis = 0.0, xAxisLabel = Some("generation"), yAxis = 0, yAxisLabel = Some("fitness")))
 
 }

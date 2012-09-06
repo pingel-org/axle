@@ -1,10 +1,10 @@
 
 object lrO {
 
+  import collection._
   import axle.ml.LinearRegression._
   import axle.visualize._
   import axle.visualize.Plottable._
-  import collection._
 
   case class RealtyListing(size: Double, bedrooms: Int, floors: Int, age: Int, price: Double)
 
@@ -20,7 +20,7 @@ object lrO {
 
   val priceGuess = estimator.estimate(RealtyListing(1416, 3, 2, 40, 0.0))
 
-  new AxleFrame().add(new Plot(lfs = List(("error" -> estimator.errTree)),
+  show(new Plot(lfs = List(("error" -> estimator.errTree)),
     connect = true,
     drawKey = true,
     title = Some("Linear Regression Error"),
