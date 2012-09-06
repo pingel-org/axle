@@ -4,37 +4,18 @@ import collection._
 
 class ListCrossProduct[E](lists: Seq[List[E]]) extends CrossProduct[E](lists) {
 
-  val modulos = new Array[Int](lists.size + 1)
-  modulos(lists.size) = 1
-  for (j <- (lists.size - 1).to(0, -1)) {
-    modulos(j) = modulos(j + 1) * lists(j).size
-  }
+  val mults = lists.reverse.map(_.size).scanLeft(1)(_ * _).reverse
 
-  def indexOf(objects: List[E]): Int = {
-    if (objects.size != lists.size) {
-      throw new Exception("ListCrossProduct: objects.size() != lists.size()")
-    }
-    var i = 0
-    for (j <- 0 until lists.size) {
-      val z = lists(j).indexOf(objects(j))
-      if (z == -1) {
-        return -1
-      }
-      i += z * modulos(j + 1)
-    }
-    i
-  }
+  val syze = mults.head
 
-  def apply(i: Int) = {
-    var c = i
-    val result = mutable.ArrayBuffer[E]()
-    for (j <- 0 until lists.size) {
-      result.append(lists(j)(c / modulos(j + 1)))
-      c = c % modulos(j + 1)
-    }
-    result.toList
-  }
+  val modulos = mults.tail
 
-  override def size() = modulos(0)
+  def indexOf(objects: List[E]): Int =
+    lists.zip(objects).map(lo => lo._1.indexOf(lo._2)).zip(modulos).map(im => im._1 * im._2).sum
+
+  def apply(i: Int): List[E] =
+    lists.zip(modulos).foldLeft((i, List[E]()))((cr, lm) => (cr._1 % lm._2, lm._1(cr._1 / lm._2) :: cr._2))._2.reverse
+
+  override def size() = syze
 
 }
