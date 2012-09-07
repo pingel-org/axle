@@ -10,7 +10,7 @@ class ConditionalProbabilityTableSpecification extends Specification {
   "CPT" should {
     "work" in {
 
-      val bools = Some(List(true, false))
+      val bools = Some(List(true, false).toIndexedSeq)
 
       val A = new RandomVariable0("A", bools, None)
       val B = new RandomVariable0("B", bools, None)

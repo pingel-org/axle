@@ -8,7 +8,7 @@ import org.specs2.mutable._
 
 class AlarmBurglaryEarthquake extends Specification {
 
-  val bools = Some(List(true, false))
+  val bools = Some(List(true, false).toIndexedSeq)
 
   val g = graph[RandomVariable[_], String]()
 

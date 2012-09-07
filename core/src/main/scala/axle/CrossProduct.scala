@@ -3,6 +3,7 @@ package axle
 import collection._
 
 class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]] {
+
   def getCollections() = iterables
 
   def iterator() = new CrossProductIterator[E](this)

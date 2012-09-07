@@ -2,7 +2,7 @@ package axle.stats
 
 trait RandomVariable[A] {
   def getName(): String
-  def getValues(): Option[Seq[A]]
+  def getValues(): Option[IndexedSeq[A]]
   def eq(v: A): CaseIs[A]
   def ne(v: A): CaseIsnt[A]
   def probability(a: A): Double
@@ -10,7 +10,7 @@ trait RandomVariable[A] {
   lazy val charWidth: Int = (getName().length :: getValues().map(vs => vs.map(_.toString.length).toList).getOrElse(Nil)).reduce(math.max)
 }
 
-case class RandomVariable0[A](name: String, values: Option[Seq[A]] = None, distribution: Option[Distribution0[A]] = None)
+case class RandomVariable0[A](name: String, values: Option[IndexedSeq[A]] = None, distribution: Option[Distribution0[A]] = None)
   extends RandomVariable[A] {
 
   def getName() = name
@@ -22,7 +22,7 @@ case class RandomVariable0[A](name: String, values: Option[Seq[A]] = None, distr
 
 }
 
-case class RandomVariable1[A, G1](name: String, values: Option[Seq[A]] = None,
+case class RandomVariable1[A, G1](name: String, values: Option[IndexedSeq[A]] = None,
   grv: RandomVariable[G1], distribution: Option[Distribution1[A, G1]] = None)
   extends RandomVariable[A] {
 
@@ -37,7 +37,7 @@ case class RandomVariable1[A, G1](name: String, values: Option[Seq[A]] = None,
 
 }
 
-case class RandomVariable2[A, G1, G2](name: String, values: Option[Seq[A]] = None,
+case class RandomVariable2[A, G1, G2](name: String, values: Option[IndexedSeq[A]] = None,
   grv1: RandomVariable[G1], grv2: RandomVariable[G2], distribution: Option[Distribution2[A, G1, G2]] = None)
   extends RandomVariable[A] {
 

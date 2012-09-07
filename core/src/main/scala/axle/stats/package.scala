@@ -12,7 +12,7 @@ package object stats {
   implicit def enrichCaseGenTraversable[A](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
 
   def coin(pHead: Double = 0.5) = RandomVariable0("coin",
-    values = Some(List('HEAD, 'TAIL)),
+    values = Some(List('HEAD, 'TAIL).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(immutable.Map('HEAD -> pHead, 'TAIL -> (1.0 - pHead)))))
 
   def log2(x: Double) = log(x) / log(2)

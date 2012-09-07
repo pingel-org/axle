@@ -135,7 +135,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   def getAllCPTs(): List[Factor] = getRandomVariables.map(getCPT(_))
 
-  def probabilityOf(cs: List[CaseIs[_]]) = cs.map(c => getCPT(c.rv)(cs)).reduce(_ * _)
+  def probabilityOf(cs: Seq[CaseIs[_]]) = cs.map(c => getCPT(c.rv)(cs)).reduce(_ * _)
 
   def getMarkovAssumptionsFor(rv: RandomVariable[_]): Independence = {
 

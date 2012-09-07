@@ -10,15 +10,15 @@ import org.specs2.mutable._
 
 class ScalaFigures extends Specification {
 
-  def draw(title: String, dg: JungDirectedGraph[RandomVariable[_], String]): Unit = {
-    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(dg))
-  }
-
-  def draw(title: String, ug: JungUndirectedGraph[RandomVariable[_], String]): Unit = {
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(ug))
-  }
-
-  val bools = Some(List(true, false))
+  //  def draw(title: String, dg: JungDirectedGraph[RandomVariable[_], String]): Unit = {
+  //    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(dg))
+  //  }
+  //
+  //  def draw(title: String, ug: JungUndirectedGraph[RandomVariable[_], String]): Unit = {
+  //    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(ug))
+  //  }
+  //
+  val bools = Some(List(true, false).toIndexedSeq)
 
   val A = new RandomVariable0("A", bools, None)
   val B = new RandomVariable0("B", bools, None)
@@ -181,9 +181,9 @@ class ScalaFigures extends Specification {
     val IG = figure6_1().interactionGraph()
     val result = IG.eliminationSequence(List(B, C, A, D))
 
-    draw("figure 6.1 interaction graph", IG.getGraph)
+    show(IG.getGraph) // figure 6.1 interaction graph
     for (gi <- result) {
-      draw("6.1 interaction graph pruned", gi.getGraph)
+      show(gi.getGraph) // 6.1 interaction graph pruned
     }
 
     result
@@ -199,8 +199,8 @@ class ScalaFigures extends Specification {
     val Q2: immutable.Set[RandomVariable[_]] = immutable.Set(B)
     val f67pB = f61.pruneNetworkVarsAndEdges(Q2, None)
 
-    draw("Figure 6.1 pruned towards " + Q1, f67pBE.getGraph)
-    draw("Figure 6.2 pruned towards " + Q2, f67pB.getGraph)
+    show(f67pBE.getGraph) // "Figure 6.1 pruned towards " + Q1
+    show(f67pB.getGraph) // Figure 6.2 pruned towards " + Q2
 
     (f67pBE, f67pB)
   }
@@ -211,7 +211,7 @@ class ScalaFigures extends Specification {
 
     val f68 = f61.pruneEdges("Figure 6.8", Some(List(C eq false)))
 
-    draw("Figure 6.1 with edges pruned towards C=false", f68.getGraph)
+    show(f68.getGraph) // Figure 6.1 with edges pruned towards C=false
 
     for (rv <- f68.getRandomVariables) {
       val f = f68.getCPT(rv)
@@ -228,7 +228,7 @@ class ScalaFigures extends Specification {
     val c = List(A eq true, C eq false)
 
     val f69 = f61.pruneNetworkVarsAndEdges(Set(D), Some(c))
-    draw("Figure 6.1 pruned towards Q={D} and A=true,C=false", f69.getGraph)
+    show(f69.getGraph) // Figure 6.1 pruned towards Q={D} and A=true,C=false
 
     for (rv <- f69.getRandomVariables()) {
       val f = f69.getCPT(rv)

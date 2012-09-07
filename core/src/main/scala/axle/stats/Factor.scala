@@ -1,28 +1,22 @@
 package axle.stats
 
 import axle._
-import axle.ListCrossProduct
+import axle.IndexedCrossProduct
 import axle.matrix.JblasMatrixFactory._
 import collection._
-
-//object Factor {
-//
-//  // TODO this can be made more efficient by constructing a single result table ahead of time.
-//  def Π(tables: Seq[Factor]): Factor = tables.reduce(_*_)
-//
-//}
 
 /* Technically a "Distribution" is probably a table that sums to 1, which is not
  * always true in a Factor.  They should be siblings rather than parent/child.
  */
 
-class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") {
+class Factor(varList: Seq[RandomVariable[_]], name: String = "unnamed") {
 
   import scalaz._
   import Scalaz._
 
-  val valLists = varList.map(rv => rv.getValues.getOrElse(Nil).toList)
-  val cp = new ListCrossProduct(valLists)
+  val cp = new IndexedCrossProduct(varList.map(rv => {
+    rv.getValues.getOrElse(Nil.toIndexedSeq)
+  }))
   val elements = new Array[Double](cp.size)
 
   // var name = "unnamed"
@@ -36,7 +30,7 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") {
 
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
-  def evaluate(prior: List[CaseIs[_]], condition: List[CaseIs[_]]): Double = {
+  def evaluate(prior: Seq[CaseIs[_]], condition: Seq[CaseIs[_]]): Double = {
     val pw = cases().map(c => {
       if (isSupersetOf(c, prior)) {
         if (isSupersetOf(c, condition)) {
@@ -52,29 +46,29 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") {
     pw._1 / pw._2
   }
 
-  def indexOf(cs: List[CaseIs[_]]): Int = {
-    val rvvs: List[(RandomVariable[_], Any)] = cs.map(ci => (ci.rv, ci.v))
+  def indexOf(cs: Seq[CaseIs[_]]): Int = {
+    val rvvs: Seq[(RandomVariable[_], Any)] = cs.map(ci => (ci.rv, ci.v))
     val rvvm = rvvs.toMap
     cp.indexOf(varList.map(rvvm(_)))
   }
 
-  private def caseOf(i: Int): List[CaseIs[_]] =
+  private def caseOf(i: Int): Seq[CaseIs[_]] =
     varList.zip(cp(i)).map({ case (variable: RandomVariable[_], value) => CaseIs(variable, value) })
 
-  def cases(): Iterator[List[CaseIs[_]]] = (0 until elements.length).iterator.map(caseOf(_))
+  def cases(): Iterator[Seq[CaseIs[_]]] = (0 until elements.length).iterator.map(caseOf(_))
 
   // println("write: case = " + c.toOrderedString(variables) + ", d = " + d)
   // println("variables.length = " + variables.length)
   // def update[A](c: CaseIs[A], d: Double): Unit = elements(indexOf(c)) = d
 
-  def update(c: List[CaseIs[_]], d: Double): Unit = elements(indexOf(c)) = d
+  def update(c: Seq[CaseIs[_]], d: Double): Unit = elements(indexOf(c)) = d
 
   //  def writes(values: List[Double]): Unit = {
   //    assert(values.length == elements.length)
   //    values.zipWithIndex.map({ case (v, i) => elements(i) = v })
   //  }
 
-  def apply(c: List[CaseIs[_]]): Double = elements(indexOf(c))
+  def apply(c: Seq[CaseIs[_]]): Double = elements(indexOf(c))
 
   override def toString(): String =
     varList.map(rv => rv.getName.padTo(rv.charWidth, " ").mkString("")).mkString(" ") + "\n" +
@@ -163,13 +157,13 @@ class Factor(varList: List[RandomVariable[_]], name: String = "unnamed") {
 
   def mentions(variable: RandomVariable[_]) = getVariables.exists(v => variable.getName.equals(v.getName))
 
-  def isSupersetOf(left: List[CaseIs[_]], right: List[CaseIs[_]]): Boolean = {
-    val ll: List[(RandomVariable[_], Any)] = left.map(ci => (ci.rv, ci.v))
+  def isSupersetOf(left: Seq[CaseIs[_]], right: Seq[CaseIs[_]]): Boolean = {
+    val ll: Seq[(RandomVariable[_], Any)] = left.map(ci => (ci.rv, ci.v))
     val lm = ll.toMap
     right.forall((rightCaseIs: CaseIs[_]) => lm.contains(rightCaseIs.rv) && (rightCaseIs.v == lm(rightCaseIs.rv)))
   }
 
-  def projectToVars(cs: List[CaseIs[_]], pVars: Set[RandomVariable[_]]): List[CaseIs[_]] =
+  def projectToVars(cs: Seq[CaseIs[_]], pVars: Set[RandomVariable[_]]): Seq[CaseIs[_]] =
     cs.filter(ci => pVars.contains(ci.rv))
 
 }
