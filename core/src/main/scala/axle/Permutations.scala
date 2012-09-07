@@ -1,91 +1,63 @@
 package axle
 
+import collection._
+
 /**
- * Computes the permutations of length n from the given list
- * of objects.
+ * Based on Python's itertools.permutations function
  *
- * For example:
+ * http://docs.python.org/library/itertools.html#itertools.permutations
  *
- * Permutations(List("a", "b", "c"), 2) will return 6 lists:
- *
- * List(b, a), List(b, c), List(a, b), List(a, c), List(c, b), List(c, a)
+ * Permutations("ABCD".toList, 2)
+ * Permutations(0 until 3)
  *
  */
 
-import collection._
-
 object Permutations {
 
-  def apply[E](objects: IndexedSeq[E], n: Int): Permutations[E] = new Permutations[E](objects, n)
+  def apply[E](objects: IndexedSeq[E], rOpt: Option[Int] = None): Permutations[E] = new Permutations[E](objects, rOpt)
 }
 
-class Permutations[E](objects: IndexedSeq[E], n: Int) extends Iterable[List[E]] {
+class Permutations[E](pool: IndexedSeq[E], rOpt: Option[Int]) extends Iterable[List[E]] {
 
-  if (n > objects.size) {
-    throw new IndexOutOfBoundsException()
+  val n = pool.length
+
+  val r = rOpt.getOrElse(n)
+
+  override def size() = if (r >= 0 && r <= n) { n.factorial / (n - r).factorial } else { 0 }
+
+  val yeeld = new mutable.ListBuffer[List[E]]() // TODO substitute for "yield" for now
+
+  if (r <= n) {
+    val indices = (0 until n).toBuffer
+    val cycles = n.until(n - r, -1).toBuffer
+    yeeld += indices(0 until r).map(pool(_)).toList
+    var done = false
+    while (n > 0 && !done) {
+      var i = r - 1
+      var broken = false
+      while (i >= 0 && !broken) {
+        cycles(i) -= 1
+        if (cycles(i) == 0) {
+          indices(i until n) = indices(i + 1 until n) ++ indices(i until i + 1)
+          cycles(i) = n - i
+        } else {
+          val j = cycles(i)
+          val (v1, v2) = (indices((n - j) % n), indices(i))
+          indices(i) = v1
+          indices((n - j) % n) = v2
+          yeeld += indices(0 until r).map(pool(_)).toList
+          broken = true
+        }
+        if (!broken) {
+          i -= 1
+        }
+      }
+      if (!broken) {
+        done = true
+      }
+    }
   }
 
-  def getN = n
-
-  def getObjects = objects
-
-  def iterator() = new PermutionIterator[E](this)
-
-  class PermutionIterator[InE](permuter: Permutations[InE]) extends Iterator[List[InE]] {
-    val remainders = mutable.ArrayBuffer[immutable.Set[InE]]()
-    val iterators = mutable.ArrayBuffer[Iterator[InE]]()
-    var tuple = mutable.ArrayBuffer[InE]()
-
-    if (permuter.getN > 0) {
-      val firstRemainder = permuter.getObjects.toSet
-      remainders += firstRemainder
-      iterators += firstRemainder.iterator
-      tuple += iterators(0).next()
-    }
-
-    for (i <- 1 until permuter.getN) {
-      remainders += null
-      iterators += null
-      setRemainder(i)
-      tuple += iterators(i).next()
-    }
-
-    def setRemainder(i: Int) = {
-      if (i > 0) {
-        remainders(i) = remainders(i - 1) - tuple(i - 1)
-      }
-      iterators(i) = remainders(i).iterator
-    }
-
-    def remove() = throw new UnsupportedOperationException()
-
-    def hasNext() = tuple != null
-
-    def incrementLastAvailable(i: Int): Boolean = {
-      if (i == -1) {
-        return true
-      } else if (iterators(i).hasNext) {
-        tuple(i) = iterators(i).next()
-        return false
-      } else {
-        val touchedHead = incrementLastAvailable(i - 1)
-        setRemainder(i)
-        tuple(i) = iterators(i).next()
-        return touchedHead
-      }
-    }
-
-    def next() = {
-      if (tuple == null) {
-        throw new NoSuchElementException()
-      }
-
-      val result = tuple.toList
-      if (incrementLastAvailable(permuter.getN - 1)) {
-        tuple = null
-      }
-      result
-    }
-  }
+  def iterator() = yeeld.iterator
 
 }
