@@ -1,6 +1,14 @@
 package axle
 
-class IndexedPowerSet[E](all: IndexedSeq[E]) extends ℘[E](all)
+object ℘ {
+
+  def apply[E](all: IndexedSeq[E]): IndexedPowerSet[E] = new IndexedPowerSet[E](all)
+}
+
+object IndexedPowerSet {
+
+  def apply[E](all: IndexedSeq[E]): IndexedPowerSet[E] = new IndexedPowerSet[E](all)
+}
 
 /**
  * A ℘ (IndexedPowerSet) constructed with a collection with elements of type E can construct
@@ -14,7 +22,7 @@ class IndexedPowerSet[E](all: IndexedSeq[E]) extends ℘[E](all)
 
 import collection._
 
-case class ℘[E](all: IndexedSeq[E]) extends Iterable[Set[E]] {
+class IndexedPowerSet[E](all: IndexedSeq[E]) extends Iterable[Set[E]] {
 
   val steps = all.length.to(0, -1).map(0x01 << _)
 

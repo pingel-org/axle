@@ -6,9 +6,9 @@ import org.specs2.mutable._
 
 class PowerSetSpec extends Specification {
 
-  "PowerSet" should {
+  "Indexed Power Set" should {
     "Enumerate subsets of {a, b}" in {
-      val elems = List("a", "b")
+      val elems = Vector("a", "b")
       val psAB = ℘(elems)
       psAB must have size (4)
       psAB must contain(Set())
