@@ -2,7 +2,7 @@ package axle
 
 import collection._
 
-class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]]) extends CrossProduct[E](lists) {
+class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]]) extends Iterable[Seq[E]] {
 
   val mults = lists.reverse.map(_.size).scanLeft(1)(_ * _).reverse
 
@@ -25,5 +25,7 @@ class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]]) extends CrossProduct[E](
     )._2.reverse
 
   override def size() = syze
+
+  def iterator() = (0.until(size)).iterator.map(this(_))
 
 }
