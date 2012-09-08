@@ -19,9 +19,13 @@ case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
 
   def ∃(p: T => Boolean) = gt.exists(p)
 
-  def doubles(): GenTraversable[(T, T)] = for (x <- gt; y <- gt) yield (x, y)
-  
-  def triples(): GenTraversable[(T, T, T)] = for (x <- gt; y <- gt; z <- gt) yield (x, y, z)
+  //  def doubles(): GenTraversable[(T, T)] = for (x <- gt; y <- gt) yield (x, y)
+  //  
+  //  def triples(): GenTraversable[(T, T, T)] = for (x <- gt; y <- gt; z <- gt) yield (x, y, z)
+
+  def doubles(): Seq[(T, T)] = gt.toIndexedSeq.permutations(2).map(d => (d(0), d(1))).toSeq
+
+  def triples(): Seq[(T, T, T)] = gt.toIndexedSeq.permutations(3).map(t => (t(0), t(1), t(2))).toSeq
 
   def ⨯[S](right: GenTraversable[S]) = for (x <- gt; y <- right) yield (x, y)
 
