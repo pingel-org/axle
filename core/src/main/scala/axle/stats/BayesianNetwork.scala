@@ -214,21 +214,17 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   // Also called the "moral graph"
   def interactionGraph(): InteractionGraph = {
+
     import axle.graph.JungUndirectedGraphFactory._
+
     val ig = graph[RandomVariable[_], String]()
+
     getRandomVariables.map(ig += _)
-    val rvs = getRandomVariables()
-    for (i <- 0 until rvs.size - 1) {
-      val vi = rvs(i)
-      val viVertex = ig.findVertex(vi).get
-      for (j <- (i + 1) until rvs.size) {
-        val vj = rvs(j)
-        val vjVertex = ig.findVertex(vj).get
-        if (interactsWith(vi, vj)) {
-          ig.edge(viVertex, vjVertex, "")
-        }
-      }
-    }
+
+    getRandomVariables().doubles()
+      .filter({ case (vi, vj) => interactsWith(vi, vj) })
+      .map({ case (vi, vj) => ig.edge(ig.findVertex(vi).get, ig.findVertex(vj).get, "") })
+
     new InteractionGraph(ig)
   }
 
