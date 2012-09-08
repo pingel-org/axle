@@ -30,4 +30,14 @@ package object stats {
     Map()
   }
 
+  def die() = RandomVariable0("die",
+    values = Some(List('⚀, '⚁, '⚂, '⚃, '⚄, '⚅).toIndexedSeq),
+    distribution = Some(new ConditionalProbabilityTable0(immutable.Map(
+      '⚀ -> 1d / 6,
+      '⚁ -> 1d / 6,
+      '⚂ -> 1d / 6,
+      '⚃ -> 1d / 6,
+      '⚄ -> 1d / 6,
+      '⚅ -> 1d / 6))))
+
 }
