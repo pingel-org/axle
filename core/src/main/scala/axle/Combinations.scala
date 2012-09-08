@@ -1,33 +1,61 @@
 package axle
 
 /**
- * Not yet implemented.
+ * Based on Python's itertools.permutations function
  *
- * I've heard told of a solution from Don Knuth
+ * http://docs.python.org/library/itertools.html#itertools.combinations
  *
+ * Combinations("ABCD".toIndexedSeq, 2)
+ * Combinations(0 until 4, 3)
  */
+
+import collection._
 
 object Combinations {
 
-  def apply[E](objects: Seq[E], n: Int): Combinations[E] = new Combinations[E](objects, n)
+  def apply[E](pool: IndexedSeq[E], r: Int): Combinations[E] = new Combinations[E](pool, r)
 }
 
-class Combinations[E](objects: Seq[E], n: Int) extends Iterable[Set[E]] {
+class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
 
-  if (n > objects.size) {
+  val n = pool.size
+
+  if (r > n) {
     throw new IndexOutOfBoundsException()
   }
 
-  def iterator() = new CombinationIterator[E](this)
+  lazy val syze = if (0 <= r && r <= n) { n.factorial / r.factorial / (n - r).factorial } else { 0 }
 
-  class CombinationIterator[InE](combiner: Combinations[InE]) extends Iterator[Set[InE]] {
+  override def size(): Int = syze
 
-    def remove() = throw new UnsupportedOperationException()
+  val yeeld = new mutable.ListBuffer[List[E]]() // TODO substitute for "yield" for now
 
-    def hasNext() = false
+  def iterator() = yeeld.iterator
 
-    def next(): Set[InE] = null
+  val indices = (0 until r).toBuffer
+  yeeld += indices.map(pool(_)).toList
+  var done = false
 
+  while (!done) {
+    var broken = false
+    var i = r - 1
+    while (i >= 0 && !broken) {
+      if (indices(i) != (i + n - r)) {
+        broken = true
+      }
+      if (!broken) {
+        i -= 1
+      }
+    }
+    if (!broken) {
+      done = true
+    } else {
+      indices(i) += 1
+      for (j <- (i + 1 until r)) {
+        indices(j) = indices(j - 1) + 1
+      }
+      yeeld += indices.map(pool(_)).toList
+    }
   }
 
 }

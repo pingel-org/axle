@@ -7,21 +7,19 @@ import collection._
  *
  * http://docs.python.org/library/itertools.html#itertools.permutations
  *
- * Permutations("ABCD".toList, 2)
+ * Permutations("ABCD".toIndexedSeq, 2)
  * Permutations(0 until 3)
  *
  */
 
 object Permutations {
 
-  def apply[E](objects: IndexedSeq[E], rOpt: Option[Int] = None): Permutations[E] = new Permutations[E](objects, rOpt)
+  def apply[E](pool: IndexedSeq[E], r: Int): Permutations[E] = new Permutations[E](pool, r)
 }
 
-class Permutations[E](pool: IndexedSeq[E], rOpt: Option[Int]) extends Iterable[List[E]] {
+class Permutations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
 
   val n = pool.length
-
-  val r = rOpt.getOrElse(n)
 
   override def size() = if (r >= 0 && r <= n) { n.factorial / (n - r).factorial } else { 0 }
 

@@ -20,7 +20,7 @@ case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
   def ∃(p: T => Boolean) = gt.exists(p)
 
   def doubles(): GenTraversable[(T, T)] = for (x <- gt; y <- gt) yield (x, y)
-
+  
   def triples(): GenTraversable[(T, T, T)] = for (x <- gt; y <- gt; z <- gt) yield (x, y, z)
 
   def ⨯[S](right: GenTraversable[S]) = for (x <- gt; y <- right) yield (x, y)

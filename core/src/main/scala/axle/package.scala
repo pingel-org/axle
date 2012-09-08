@@ -36,6 +36,8 @@ package object axle {
 
   implicit def enrichGenTraversable[T](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
 
+  implicit def enrichIndexedSeq[T](is: IndexedSeq[T]) = EnrichedIndexedSeq(is)
+  
   implicit def enrichByteArray(barr: Array[Byte]) = EnrichedByteArray(barr)
 
   implicit def enrichArray[T](arr: Array[T]) = EnrichedArray(arr)

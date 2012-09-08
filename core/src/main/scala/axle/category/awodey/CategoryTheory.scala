@@ -26,9 +26,9 @@ object CategoryTheory {
 
     def ≡(other: →) = {
       println(
-	"→.≡ " +
-	"this(" + domain + ", " + codomain + "), " +
-	"other(" + other.domain + ", " + other.codomain+")"
+        "→.≡ " +
+          "this(" + domain + ", " + codomain + "), " +
+          "other(" + other.domain + ", " + other.codomain + ")"
       )
       (domain ≡ other.domain) ∧ (codomain ≡ other.codomain) // TODO
     }
@@ -41,13 +41,13 @@ object CategoryTheory {
 
   case class Category(objects: Set[⋅], arrows: Set[→]) {
 
-    def containsUnits = objects.∀( I(_) ∈ arrows )
+    def containsUnits = objects.∀(I(_) ∈ arrows)
 
     def isAssociative = arrows.triples
       .filter({ case (f, g, h) ⇒ ((cod(f) ≡ dom(g)) ∧ (cod(g) ≡ dom(h))) }) // "can compose"
       .∀({ case (f, g, h) ⇒ (h ∘ (g ∘ f)) ≡ ((h ∘ g) ∘ f) })
 
-    def unitProperty = arrows.∀( f ⇒ ((f ≡ (f ∘ I(dom(f)))) ∧ (f ≡ (I(cod(f)) ∘ f))))
+    def unitProperty = arrows.∀(f ⇒ ((f ≡ (f ∘ I(dom(f)))) ∧ (f ≡ (I(cod(f)) ∘ f))))
 
     def isValid = {
       val cu = containsUnits
