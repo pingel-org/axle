@@ -51,15 +51,35 @@ class Mass extends Quantum {
   val ☼ = sun
   val ☉ = sun
 
- // http://en.wikipedia.org/wiki/Astronomical_symbols
-//  val ♃ = jupiter
-//  val ♄ = saturn
-//  val ♆ = neptune
-//  val ♅ = uranus
-//  val ♀ = venus
-//  val ♂ = mars
-//  val ☿ = mercury
+  // http://en.wikipedia.org/wiki/Astronomical_symbols
+  
+  val jupiter = quantity("1.8986", yottatonne, Some("Jupiter"), Some("♃"), Some("http://en.wikipedia.org/wiki/Jupiter"))
+  val ♃ = jupiter
 
+  val saturn = quantity("568.46", zettatonne, Some("Saturn"), Some("♄"), Some("http://en.wikipedia.org/wiki/Saturn"))
+  val ♄ = saturn
+
+  val neptune = quantity("102.43", zettatonne, Some("Neptune"), Some("♆"), Some("http://en.wikipedia.org/wiki/Neptune"))
+  val ♆ = neptune
+  
+  val uranus = quantity("86.810", zettatonne, Some("Uranus"), Some("♅"), Some("http://en.wikipedia.org/wiki/Uranus"))
+  val ♅ = uranus
+  
+  val venus = quantity("4.868", zettatonne, Some("Venus"), Some("♀"), Some("http://en.wikipedia.org/wiki/Venus"))
+  val ♀ = venus
+  
+  val mars = quantity("641.85", exatonne, Some("Mars"), Some("♂"), Some("http://en.wikipedia.org/wiki/Mars"))
+  val ♂ = mars
+  
+  val mercury = quantity("330.22", exatonne, Some("Mercury"), Some("☿"), Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
+  val ☿ = mercury
+
+  val pluto = quantity("13.05", exatonne, Some("Pluto"), Some("♇"), Some("http://en.wikipedia.org/wiki/Pluto"))
+  val ♇ = pluto
+
+  val moon = quantity("73.477", exatonne, Some("Moon"), Some("☽"), Some("http://en.wikipedia.org/wiki/Moon"))
+  val ☽ = moon
+  
   val milkyWayMass = quantity("5.8E+11", sun, Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
   val andromedaMass = quantity("7.1E+11", sun, Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
   
