@@ -387,7 +387,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
       val V = fi.getVariables
         .filter(!Q.contains(_))
-        .filter(v => S.forall(!_.mentions(v)))
+        .filter(v => !S.exists(_.mentions(v)))
         .toSet
 
       // At this point, V is the set of vars that are unique to this particular
