@@ -9,8 +9,6 @@ import Scalaz._
 
 package object stats {
 
-  implicit def rv2it[K](rv: RandomVariable[K]) = rv.getValues.get
-
   implicit def enrichCaseGenTraversable[A](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
 
   def coin(pHead: Double = 0.5) = RandomVariable0("coin",
@@ -31,10 +29,10 @@ package object stats {
 
   import Information._
 
-  def entropy[A](X: RandomVariable[A]): Information#UOM = rv2it(X).Σ(x => {
+  def entropy[A](X: RandomVariable[A]): Information#UOM = X.getValues.map(_.Σ(x => {
     val px = P(X eq x)()
     (px > 0) ? (-px * log2(px)) | 0.0
-  }) *: bit
+  })).getOrElse(0.0) *: bit
 
   def H[A](X: RandomVariable[A]): Information#UOM = entropy(X)
 
