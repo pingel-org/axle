@@ -4,6 +4,8 @@ import axle._
 import collection._
 import axle.quanta.Information
 import math.log
+import scalaz._
+import Scalaz._
 
 package object stats {
 
@@ -15,22 +17,7 @@ package object stats {
     values = Some(List('HEAD, 'TAIL).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(immutable.Map('HEAD -> pHead, 'TAIL -> (1.0 - pHead)))))
 
-  def log2(x: Double) = log(x) / log(2)
-
-  import Information._
-
-  // TODO: filter out P(X eq x) == 0
-  def entropy[A](X: RandomVariable[A]) = rv2it(X).Σ(x => -P(X eq x)() * log2(P(X eq x)())) *: bit
-
-  // def H_:(): Information#UOM = entropy()
-
-  def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
-    //   // TODO
-    //   // http://en.wikipedia.org/wiki/Huffman_coding
-    Map()
-  }
-
-  def die() = RandomVariable0("die",
+  def d6() = RandomVariable0("d6",
     values = Some(List('⚀, '⚁, '⚂, '⚃, '⚄, '⚅).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(immutable.Map(
       '⚀ -> 1d / 6,
@@ -39,5 +26,22 @@ package object stats {
       '⚃ -> 1d / 6,
       '⚄ -> 1d / 6,
       '⚅ -> 1d / 6))))
+
+  def log2(x: Double) = log(x) / log(2)
+
+  import Information._
+
+  def entropy[A](X: RandomVariable[A]): Information#UOM = rv2it(X).Σ(x => {
+    val px = P(X eq x)()
+    (px > 0) ? (-px * log2(px)) | 0.0
+  }) *: bit
+
+  def H[A](X: RandomVariable[A]): Information#UOM = entropy(X)
+
+  def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
+    //   // TODO
+    //   // http://en.wikipedia.org/wiki/Huffman_coding
+    Map()
+  }
 
 }
