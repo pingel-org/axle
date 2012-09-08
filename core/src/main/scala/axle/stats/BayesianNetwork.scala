@@ -412,8 +412,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
         val j = τ.g.getNeighbors(i).iterator.next()
         val ɸ_i = i.getPayload
         τ.g.delete(i)
-        val V = ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet
-        j.setPayload(ɸ_i.sumOut(V))
+        j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
       })
     }
     val result = null.asInstanceOf[BayesianNetwork] // TODO !!!
