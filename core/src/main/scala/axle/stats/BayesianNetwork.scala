@@ -229,7 +229,7 @@ class BayesianNetwork(name: String)
 
     import axle.graph.JungUndirectedGraphFactory._
 
-    val ig = graph[RandomVariable[_], String]()
+    val ig = new InteractionGraph()
 
     getRandomVariables.map(ig += _)
 
@@ -237,7 +237,7 @@ class BayesianNetwork(name: String)
       .filter({ case (vi, vj) => interactsWith(vi, vj) })
       .map({ case (vi, vj) => ig.edge(ig.findVertex(vi).get, ig.findVertex(vj).get, "") })
 
-    new InteractionGraph(ig)
+    ig
   }
 
   // Chapter 6 Algorithm 2 (page 13)
@@ -245,11 +245,10 @@ class BayesianNetwork(name: String)
     import axle.graph.JungUndirectedGraphFactory._
     getRandomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
-        val IG = gi._1
-        val igg = IG.getGraph
-        val rvVertex = igg.findVertex(rv).get
-        val size = igg.getNeighbors(rvVertex).size
-        val newIG = IG.eliminate(rv)
+        val ig = gi._1
+        val rvVertex = ig.findVertex(rv).get
+        val size = ig.getNeighbors(rvVertex).size
+        val newIG = ig.eliminate(rv)
         (newIG, size)
       }
     ).map(_._2).max
@@ -356,14 +355,13 @@ class BayesianNetwork(name: String)
 
   def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
     val X = mutable.Set[RandomVariable[_]]() ++ pX
-    val IG = interactionGraph()
+    val ig = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
     while (X.size > 0) {
-      val igg = IG.getGraph
-      val xVertices = X.map(igg.findVertex(_).get)
-      val rv = igg.vertexWithFewestNeighborsAmong(xVertices).getPayload
+      val xVertices = X.map(ig.findVertex(_).get)
+      val rv = ig.vertexWithFewestNeighborsAmong(xVertices).getPayload
       result += rv
-      IG.eliminate(rv)
+      ig.eliminate(rv)
       X -= rv
     }
     result.toList
@@ -372,15 +370,14 @@ class BayesianNetwork(name: String)
   def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
 
     val X = mutable.Set[RandomVariable[_]]() ++ pX
-    val IG = interactionGraph()
+    val ig = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
 
     while (X.size > 0) {
-      val igg = IG.getGraph
-      val xVertices = X.map(igg.findVertex(_).get)
-      val rv = igg.vertexWithFewestEdgesToEliminateAmong(xVertices, (v1, v2) => { "x" }).getPayload
+      val xVertices = X.map(ig.findVertex(_).get)
+      val rv = ig.vertexWithFewestEdgesToEliminateAmong(xVertices, (v1, v2) => { "x" }).getPayload
       result += rv
-      IG.eliminate(rv)
+      ig.eliminate(rv)
       X -= rv
     }
     result.toList
@@ -402,9 +399,7 @@ class BayesianNetwork(name: String)
       // At this point, V is the set of vars that are unique to this particular
       // factor, fj, and do not appear in Q
 
-      val fjMinusV = fi.sumOut(V)
-      val fj = S.remove(0)
-      S += fj * fjMinusV
+      S += S.remove(0) * fi.sumOut(V)
     }
 
     // there should be one element left in S
