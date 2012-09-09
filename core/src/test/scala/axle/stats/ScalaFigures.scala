@@ -112,29 +112,31 @@ class ScalaFigures extends Specification {
 
     val bn = new BayesianNetwork("6.4")
 
-    val cptA = Factor(Vector(A))
-    cptA(List(A eq true)) = 0.6
-    cptA(List(A eq false)) = 0.4
-    val av = bn += BayesianNetworkNode(A, cptA)
+    val av = bn += BayesianNetworkNode(A, Factor(Vector(A), Some(Map(
+      List(A eq true) -> 0.6,
+      List(A eq false) -> 0.4
+    ))))
 
-    val cptB = Factor(Vector(B)) // B | A
-    cptB(List(B eq true, A eq true)) = 0.9
-    cptB(List(B eq true, A eq false)) = 0.1
-    cptB(List(B eq false, A eq true)) = 0.2
-    cptB(List(B eq false, A eq false)) = 0.8
-    val bv = bn += BayesianNetworkNode(B, cptB)
+    // B | A
+    val bv = bn += BayesianNetworkNode(B, Factor(Vector(B), Some(Map(
+      List(B eq true, A eq true) -> 0.9,
+      List(B eq true, A eq false) -> 0.1,
+      List(B eq false, A eq true) -> 0.2,
+      List(B eq false, A eq false) -> 0.8
+    ))))
 
-    val cptC = Factor(Vector(C)) // C | B
-    cptC(List(C eq true, B eq true)) = 0.3
-    cptC(List(C eq true, B eq false)) = 0.7
-    cptC(List(C eq false, B eq true)) = 0.5
-    cptC(List(C eq false, B eq false)) = 0.5
-    val cv = bn += BayesianNetworkNode(C, cptC)
+    // C | B
+    val cv = bn += BayesianNetworkNode(C, Factor(Vector(C), Some(Map(
+      List(C eq true, B eq true) -> 0.3,
+      List(C eq true, B eq false) -> 0.7,
+      List(C eq false, B eq true) -> 0.5,
+      List(C eq false, B eq false) -> 0.5
+    ))))
 
     bn += (av -> bv, "")
     bn += (bv -> cv, "")
 
-    val pB = (((cptB * cptA).sumOut(A)) * cptC).sumOut(C)
+    val pB = (((bn.getCPT(B) * bn.getCPT(A)).sumOut(A)) * bn.getCPT(C)).sumOut(C)
 
     bn
   }

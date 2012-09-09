@@ -27,10 +27,6 @@ class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]]
 
   values.map(_.map({ case (k, v) => this(k) = v }))
 
-  def getName(): String = "TODO"
-
-  def getLabel(): String = "TODO"
-
   def getVariables() = varList
 
   // assume prior and condition are disjoint, and that they are
