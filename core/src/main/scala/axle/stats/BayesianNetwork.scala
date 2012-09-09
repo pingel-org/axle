@@ -409,13 +409,13 @@ class BayesianNetwork(name: String)
   // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
   def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): (BayesianNetwork, Factor) = {
-    while (τ.g.getVertices().size > 1) {
+    while (τ.getVertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in τ
-      val fl = τ.g.firstLeafOtherThan(τ.g.findVertex(f).get)
+      val fl = τ.firstLeafOtherThan(τ.findVertex(f).get)
       fl.map(i => {
-        val j = τ.g.getNeighbors(i).iterator.next()
+        val j = τ.getNeighbors(i).iterator.next()
         val ɸ_i = i.getPayload
-        τ.g.delete(i)
+        τ.delete(i)
         j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
       })
     }
@@ -426,13 +426,13 @@ class BayesianNetwork(name: String)
   // TODO: Make immutable: this should not be calling delete or setPayload
   def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): Factor = {
     // Q is a subset of C_r
-    while (τ.g.getVertices().size > 1) {
+    while (τ.getVertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in tau
-      val fl = τ.g.firstLeafOtherThan(τ.g.findVertex(f).get)
+      val fl = τ.firstLeafOtherThan(τ.findVertex(f).get)
       fl.map(i => {
-        val j = τ.g.getNeighbors(i).iterator.next()
+        val j = τ.getNeighbors(i).iterator.next()
         val ɸ_i = i.getPayload
-        τ.g.delete(i)
+        τ.delete(i)
         val Sij = τ.separate(i, j)
         j.setPayload(ɸ_i.projectToOnly(Sij.toList))
       })

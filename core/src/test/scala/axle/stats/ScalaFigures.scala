@@ -178,16 +178,16 @@ class ScalaFigures extends Specification {
 
     val τ = new EliminationTree()
 
-    val τ_vA = τ.g += f61.getCPT(A)
-    val τ_vB = τ.g += f61.getCPT(B)
-    val τ_vC = τ.g += f61.getCPT(C)
-    val τ_vD = τ.g += f61.getCPT(D)
-    val τ_vE = τ.g += f61.getCPT(E)
+    val τ_vA = τ += f61.getCPT(A)
+    val τ_vB = τ += f61.getCPT(B)
+    val τ_vC = τ += f61.getCPT(C)
+    val τ_vD = τ += f61.getCPT(D)
+    val τ_vE = τ += f61.getCPT(E)
 
-    τ.g += (τ_vA -> τ_vB, "")
-    τ.g += (τ_vA -> τ_vD, "")
-    τ.g += (τ_vD -> τ_vC, "")
-    τ.g += (τ_vC -> τ_vE, "")
+    τ += (τ_vA -> τ_vB, "")
+    τ += (τ_vA -> τ_vD, "")
+    τ += (τ_vD -> τ_vC, "")
+    τ += (τ_vC -> τ_vE, "")
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
     val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.getCPT(C))
