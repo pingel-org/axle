@@ -5,12 +5,6 @@ import collection._
 
 object JungDirectedGraphFactory extends JungDirectedGraphFactory {
 
-  //    def draw(): Unit = {
-  //      import axle.visualize._
-  //      val vis = new JungDirectedGraphVisualization()
-  //      vis.draw[VP, EP](this)
-  //    }
-
 }
 
 trait JungDirectedGraphFactory extends DirectedGraphFactory {
@@ -180,6 +174,8 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
         }
       }
     }
+
+    def vertexToVisualizationHtml(vp: VP): xml.Node = <span>{vp.toString}</span>
 
   }
 

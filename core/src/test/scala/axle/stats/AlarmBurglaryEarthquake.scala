@@ -14,7 +14,7 @@ class ABE extends Specification {
 
   val B = new RandomVariable0("Burglary", bools, None)
   val E = new RandomVariable0("Earthquake", bools, None)
-  val A = new RandomVariable0("A", bools, None)
+  val A = new RandomVariable0("Alarm", bools, None)
   val J = new RandomVariable0("John Calls", bools, None)
   val M = new RandomVariable0("Mary Calls", bools, None)
 

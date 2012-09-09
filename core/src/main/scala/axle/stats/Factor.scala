@@ -20,10 +20,12 @@ class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]]
   import scalaz._
   import Scalaz._
 
-  val cp = new IndexedCrossProduct(varList.map(rv => {
+  lazy val cp = new IndexedCrossProduct(varList.map(rv => {
     rv.getValues.getOrElse(Nil.toIndexedSeq)
   }))
-  val elements = new Array[Double](cp.size)
+  lazy val elements = new Array[Double](cp.size)
+
+  values.map(_.map({ case (k, v) => this(k) = v }))
 
   def getName(): String = "TODO"
 
@@ -70,6 +72,17 @@ class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]]
         kase.map(ci => ci.v.toString.padTo(ci.rv.charWidth, " ").mkString("")).mkString(" ") +
           " " + "%f".format(this(kase))
       ).mkString("\n")
+
+  def toHtml(): xml.Node =
+    <table border={ "1" }>
+      <tr>{ varList.map(rv => <td>{ rv.getName }</td>): xml.NodeSeq }<td>P</td></tr>
+      {
+        cases.map(kase => <tr>
+                            { kase.map(ci => <td>{ ci.v.toString }</td>) }
+                            <td>{ "%f".format(this(kase)) }</td>
+                          </tr>)
+      }
+    </table>
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {

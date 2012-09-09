@@ -6,9 +6,7 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.Paint
 import java.awt.Stroke
-
 import org.apache.commons.collections15.Transformer
-
 import axle.graph.JungDirectedGraphFactory.{ JungDirectedGraph => jdg }
 import axle.graph.JungDirectedGraphFactory.JungDirectedGraph
 import edu.uci.ics.jung.algorithms.layout.FRLayout
@@ -17,6 +15,8 @@ import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 import edu.uci.ics.jung.visualization.VisualizationViewer
+import org.apache.commons.collections15.functors.ChainedTransformer
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller
 
 class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
@@ -48,7 +48,7 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     }
 
     val vertexLabelTransformer = new Transformer[V, String]() {
-      def transform(vertex: V) = vertex.getPayload.toString
+      def transform(vertex: V) = jdg.vertexToVisualizationHtml(vertex.getPayload).toString
     }
 
     val edgeLabelTransformer = new Transformer[E, String]() {
@@ -57,7 +57,7 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
     vv.getRenderContext().setEdgeStrokeTransformer(edgeStrokeTransformer)
-    vv.getRenderContext().setVertexLabelTransformer(vertexLabelTransformer) // new ToStringLabeller())
+    vv.getRenderContext().setVertexLabelTransformer(vertexLabelTransformer)
     vv.getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer)
     vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR)
 

@@ -109,6 +109,7 @@ import Scalaz._
 case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) {
 
   override def toString(): String = rv.getName + "\n\n" + cpt
+
 }
 
 object BayesianNetwork {
@@ -124,6 +125,14 @@ class BayesianNetwork(name: String)
   def getGraph(): JungDirectedGraph[BayesianNetworkNode, String] = this
 
   def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
+
+  override def vertexToVisualizationHtml(vp: BayesianNetworkNode): xml.Node =
+    <html>
+      <div>
+        <center><h2>{ vp.rv.getName }</h2></center>
+        { vp.cpt.toHtml() }
+      </div>
+    </html>
 
   def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 
