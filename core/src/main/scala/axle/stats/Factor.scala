@@ -31,18 +31,11 @@ object Factor {
 
 class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double]) {
 
-  import scalaz._
-  import Scalaz._
-
-  lazy val cp = new IndexedCrossProduct(varList.map(rv => {
-    rv.getValues.getOrElse(Nil.toIndexedSeq)
-  }))
+  lazy val cp = new IndexedCrossProduct(varList.map(
+    _.getValues.getOrElse(Nil.toIndexedSeq)
+  ))
 
   lazy val elements = (0 until cp.size).map(i => values.get(caseOf(i)).getOrElse(0.0)).toArray
-
-  // lazy val elements = new Array[Double](cp.size)
-  // values.map(_.map({ case (k, v) => this(k) = v }))
-  // elements(indexOf(c)) = d
 
   def getVariables() = varList
 
@@ -140,7 +133,7 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
 
   // depending on assumptions, this may not be the best way to remove the vars
   def sumOut[T](varToSumOut: RandomVariable[T]): Factor = {
-    val newVars = getVariables().filter(!_.equals(varToSumOut)).toList
+    val newVars = varList.filter(!_.equals(varToSumOut)).toList
     new Factor(newVars,
       Factor.spaceFor(newVars).toSeq
         .map(kase => (kase.filter(_.rv != varToSumOut), this(kase)))
