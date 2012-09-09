@@ -204,14 +204,13 @@ class ScalaFigures extends Specification {
   }
 
   def figure7_12() = {
-    import axle.graph.JungUndirectedGraphFactory._
-    val g = graph[mutable.Set[RandomVariable[_]], String]()
-    val vABC = g += mutable.Set(A, B, C)
-    val vBCD = g += mutable.Set(B, C, D)
-    val vCE = g += mutable.Set(C, E)
-    g += (vABC -> vBCD, "")
-    g += (vBCD -> vCE, "")
-    new JoinTree(g)
+    val jt = new JoinTree()
+    val vABC = jt += mutable.Set(A, B, C)
+    val vBCD = jt += mutable.Set(B, C, D)
+    val vCE = jt += mutable.Set(C, E)
+    jt += (vABC -> vBCD, "")
+    jt += (vBCD -> vCE, "")
+    jt
   }
 
   "bayesian networks" should {

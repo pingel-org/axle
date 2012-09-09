@@ -7,28 +7,25 @@ import axle.graph.JungUndirectedGraphFactory._
 
 object JoinTree {
 
-  type G = JungUndirectedGraph[mutable.Set[RandomVariable[_]], String]
+  // type G = JungUndirectedGraph[mutable.Set[RandomVariable[_]], String]
 
   // TODO:
   def fromEliminationOrder[MVP](m: Model[MVP], pi: List[RandomVariable[_]]): JoinTree = {
-    val Gv = m // Note: G used ot be passed in as DirectedGraph[_, _]
     // returns a jointree for DAG G with width equal to width(pi, G)
-    val Gm = Gv.moralGraph()
-    val clusterSequence: List[Set[RandomVariable[_]]] = null // Gm.induceClusterSequence(pi)
-    val g = null.asInstanceOf[JungUndirectedGraph[mutable.Set[RandomVariable[_]], String]] // TODO
-    new JoinTree(g)
+    // val Gm = Gv.moralGraph()
+    // val clusterSequence: List[Set[RandomVariable[_]]] = null // Gm.induceClusterSequence(pi)
+    // val g = null.asInstanceOf[JungUndirectedGraph[mutable.Set[RandomVariable[_]], String]] // TODO
+    new JoinTree()
   }
 
 }
 
-class JoinTree(g: JungUndirectedGraph[mutable.Set[RandomVariable[_]], String]) {
+class JoinTree extends JungUndirectedGraph[mutable.Set[RandomVariable[_]], String] {
 
   // val g = JungUndirectedGraphFactory.graph[mutable.Set[RandomVariable[_]], String]()
 
   //  type GV = g.type#V
   //  type GE = g.type#E
-
-  def getGraph() = g
 
   //  def setCluster(n: GV, cluster: mutable.Set[RandomVariable[_]]): Unit = n.setPayload(cluster)
   //
