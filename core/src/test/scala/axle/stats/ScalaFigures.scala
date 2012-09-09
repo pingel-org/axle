@@ -10,15 +10,7 @@ import org.specs2.mutable._
 
 class ScalaFigures extends Specification {
 
-  //  def draw(title: String, dg: JungDirectedGraph[RandomVariable[_], String]): Unit = {
-  //    new AxleFrame().add(new JungDirectedGraphVisualization(500, 500, 10).component(dg))
-  //  }
-  //
-  //  def draw(title: String, ug: JungUndirectedGraph[RandomVariable[_], String]): Unit = {
-  //    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(ug))
-  //  }
-  //
-  val bools = Some(List(true, false).toIndexedSeq)
+  val bools = Some(Vector(true, false))
 
   val A = new RandomVariable0("A", bools, None)
   val B = new RandomVariable0("B", bools, None)
@@ -76,20 +68,14 @@ class ScalaFigures extends Specification {
     cptE(List(E eq false, C eq true)) = 0.0
     cptE(List(E eq false, C eq false)) = 1.0
 
-    // new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(g))
-
     result
   }
 
-  def figure6_2() = {
-    val result = figure6_1.getJointProbabilityTable()
-    println(result)
-    result
-  }
+  def figure6_2() = figure6_1.getJointProbabilityTable()
 
   def figure6_3() = {
 
-    val cptB = new Factor(B :: C :: D :: Nil)
+    val cptB = new Factor(B :: C :: D :: Nil) //Figure 3.1
     cptB(List(B eq true, C eq true, D eq true)) = 0.95
     cptB(List(B eq true, C eq true, D eq false)) = 0.05
     cptB(List(B eq true, C eq false, D eq true)) = 0.9
@@ -99,29 +85,14 @@ class ScalaFigures extends Specification {
     cptB(List(B eq false, C eq false, D eq true)) = 0.0
     cptB(List(B eq false, C eq false, D eq false)) = 1.0
 
-    println("figure3sub1")
-    println(cptB)
-
-    val g = cptB.sumOut(D)
-    println("g")
-    println(g)
-
-    val h = g.sumOut(C)
-    println("h")
-    println(h)
-
-    val cptD = new Factor(D :: E :: Nil)
+    val cptD = new Factor(D :: E :: Nil) // Figure 3.2
     cptD(List(D eq true, E eq true)) = 0.448
     cptD(List(D eq true, E eq false)) = 0.192
     cptD(List(D eq false, E eq true)) = 0.112
     cptD(List(D eq false, E eq false)) = 0.248
 
-    println("figure3sub2")
-    println(cptD)
-
+    val h = (cptB.sumOut(D)).sumOut(C)
     val m = cptB * cptD
-    println("cptB * cptD")
-    println(m)
 
     (cptB, cptD)
   }
@@ -139,7 +110,7 @@ class ScalaFigures extends Specification {
 
     val result = new BayesianNetwork("6.4", g)
 
-    val cptA = result.getCPT(A) // A
+    val cptA = result.getCPT(A)
     cptA(List(A eq true)) = 0.6
     cptA(List(A eq false)) = 0.4
 
@@ -155,23 +126,7 @@ class ScalaFigures extends Specification {
     cptC(List(C eq false, B eq true)) = 0.5
     cptC(List(C eq false, B eq false)) = 0.5
 
-    // result.g.draw
-
-    val ab = cptA * cptB
-    println("cptA * cptB:")
-    println(ab)
-
-    val blah = ab.sumOut(A)
-    println("sumout(A, cptA * cptB)")
-    println(blah)
-
-    val foo = blah * cptC
-    println("cptC * sumout(A, cptA * cptB)")
-    println(foo)
-
-    val bar = foo.sumOut(C)
-    println("sumout(C, cptC * sumout(A, cptA * cptB))")
-    println(bar)
+    val pB = (((cptB * cptA).sumOut(A)) * cptC).sumOut(C)
 
     result
   }
@@ -181,10 +136,10 @@ class ScalaFigures extends Specification {
     val IG = figure6_1().interactionGraph()
     val result = IG.eliminationSequence(List(B, C, A, D))
 
-    show(IG.getGraph) // figure 6.1 interaction graph
-    for (gi <- result) {
-      show(gi.getGraph) // 6.1 interaction graph pruned
-    }
+    //    show(IG.getGraph) // figure 6.1 interaction graph
+    //    for (gi <- result) {
+    //      show(gi.getGraph) // 6.1 interaction graph pruned
+    //    }
 
     result
   }
@@ -199,8 +154,8 @@ class ScalaFigures extends Specification {
     val Q2: immutable.Set[RandomVariable[_]] = immutable.Set(B)
     val f67pB = f61.pruneNetworkVarsAndEdges(Q2, None)
 
-    show(f67pBE.getGraph) // "Figure 6.1 pruned towards " + Q1
-    show(f67pB.getGraph) // Figure 6.2 pruned towards " + Q2
+    //    show(f67pBE.getGraph) // "Figure 6.1 pruned towards " + Q1
+    //    show(f67pB.getGraph) // Figure 6.2 pruned towards " + Q2
 
     (f67pBE, f67pB)
   }
@@ -208,34 +163,28 @@ class ScalaFigures extends Specification {
   def figure6_8() = {
 
     val f61 = figure6_1()
-
     val f68 = f61.pruneEdges("Figure 6.8", Some(List(C eq false)))
 
-    show(f68.getGraph) // Figure 6.1 with edges pruned towards C=false
-
-    for (rv <- f68.getRandomVariables) {
-      val f = f68.getCPT(rv)
-      println("Factor for " + rv)
-      println(f)
-    }
+    //    show(f68.getGraph) // Figure 6.1 with edges pruned towards C=false
+    //    for (rv <- f68.getRandomVariables) {
+    //      val f = f68.getCPT(rv)
+    //      println("Factor for " + rv)
+    //      println(f)
+    //    }
     f68
   }
 
   def figure6_9() = {
 
     val f61 = figure6_1()
-
     val c = List(A eq true, C eq false)
-
+    // Figure 6.1 pruned towards Q={D} and A=true,C=false
     val f69 = f61.pruneNetworkVarsAndEdges(Set(D), Some(c))
-    show(f69.getGraph) // Figure 6.1 pruned towards Q={D} and A=true,C=false
-
-    for (rv <- f69.getRandomVariables()) {
-      val f = f69.getCPT(rv)
-      println("Factor for " + rv)
-      println(f)
-    }
-
+    //    for (rv <- f69.getRandomVariables()) {
+    //      val f = f69.getCPT(rv)
+    //      println("Factor for " + rv)
+    //      println(f)
+    //    }
     f69
   }
 
@@ -243,8 +192,7 @@ class ScalaFigures extends Specification {
 
     val result = figure6_4.duplicate()
     val f = result.factorElimination1(Set(C))
-    println("Result of fe-i on a->b->c with Q={C}")
-    println(f)
+    // Result of fe-i on a->b->c with Q={C}
     result
   }
 
@@ -265,24 +213,17 @@ class ScalaFigures extends Specification {
     τ.g += (τ_vD -> τ_vC, "")
     τ.g += (τ_vC -> τ_vE, "")
 
+    // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
     val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.getCPT(C))
-
-    println("Doing factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3")
-    println(elim)
-
     (f68, τ, f61.getCPT(C))
   }
 
   def figure7_5() = {
 
     val f61 = figure6_1()
-
     val (bn, τ, cptC) = figure7_4()
-
     val (f75, elim) = f61.factorElimination2(Set(C), τ, cptC)
-
-    println("Doing factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3")
-    println(elim)
+    // factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3
     f61
   }
 
@@ -294,8 +235,6 @@ class ScalaFigures extends Specification {
     val vCE = g += mutable.Set(C, E)
     g += (vABC -> vBCD, "")
     g += (vBCD -> vCE, "")
-    // draw("figure 7.12", result.g)
-    new AxleFrame().add(new JungUndirectedGraphVisualization(500, 500, 10).component(g))
     new JoinTree(g)
   }
 
