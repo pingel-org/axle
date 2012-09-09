@@ -103,12 +103,29 @@ package axle.stats
 import collection._
 import math.max
 import axle.graph.JungDirectedGraphFactory._
+import scalaz._
+import Scalaz._
 
-class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_], String]) extends Model(name, g) {
+case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) {
 
-  def duplicate(): BayesianNetwork = new BayesianNetwork(name, graphFrom(g)(v => v, e => e))
+  override def toString(): String = rv.getName + "\n\n" + cpt
+}
 
-  val var2cpt = mutable.Map[RandomVariable[_], Factor]()
+object BayesianNetwork {
+
+  def apply(name: String): BayesianNetwork = new BayesianNetwork(name)
+}
+
+class BayesianNetwork(name: String)
+  extends Model[BayesianNetworkNode] {
+
+  def getName(): String = name
+
+  def getGraph(): JungDirectedGraph[BayesianNetworkNode, String] = this
+
+  def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
+
+  def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 
   def getJointProbabilityTable(): Factor = {
     val jpt = new Factor(getRandomVariables())
@@ -118,38 +135,28 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     jpt
   }
 
-  def setCPT(rv: RandomVariable[_], factor: Factor): Unit = var2cpt += rv -> factor
+  def makeFactorFor(rv: RandomVariable[_]): Factor =
+    Factor(getRandomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
 
-  def makeFactorFor(rv: RandomVariable[_]): Factor = {
-    val preds = g.getPredecessors(g.findVertex(rv).get).map(_.getPayload)
-    val cptVarList = getRandomVariables.filter(preds.contains(_))
-    new Factor(cptVarList ++ List(rv), "cpt for " + rv.getName)
-  }
+  def getCPT(variable: RandomVariable[_]): Factor = findVertex(_.rv == variable).map(_.getPayload.cpt).get
 
-  def getCPT(variable: RandomVariable[_]): Factor = {
-    if (!var2cpt.contains(variable)) {
-      var2cpt += variable -> makeFactorFor(variable)
-    }
-    var2cpt(variable)
-  }
-
-  def getAllCPTs(): List[Factor] = getRandomVariables.map(getCPT(_))
+  def getAllCPTs(): Seq[Factor] = getVertices().map(_.getPayload.cpt).toSeq
 
   def probabilityOf(cs: Seq[CaseIs[_]]) = cs.map(c => getCPT(c.rv)(cs)).reduce(_ * _)
 
   def getMarkovAssumptionsFor(rv: RandomVariable[_]): Independence = {
 
-    val rvVertex = g.findVertex(rv).get
+    val rvVertex = findVertex(_.rv == rv).get
 
     val X: immutable.Set[RandomVariable[_]] = immutable.Set(rv)
 
-    val Z: immutable.Set[RandomVariable[_]] = g.getPredecessors(rvVertex).map(_.getPayload).toSet
+    val Z: immutable.Set[RandomVariable[_]] = getPredecessors(rvVertex).map(_.getPayload.rv).toSet
 
-    val D = mutable.Set[g.V]()
-    g.collectDescendants(rvVertex, D)
+    val D = mutable.Set[this.V]()
+    collectDescendants(rvVertex, D)
     D += rvVertex // probably already includes this
-    D ++= g.getPredecessors(rvVertex)
-    val Dvars = D.map(_.getPayload)
+    D ++= getPredecessors(rvVertex)
+    val Dvars = D.map(_.getPayload.rv)
     val Y = getRandomVariables.filter(!Dvars.contains(_)).toSet
 
     new Independence(X, Z, Y)
@@ -169,45 +176,41 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     -1.0 // TODO
   }
 
-  def variableEliminationPriorMarginalI(Q: Set[RandomVariable[_]], π: List[RandomVariable[_]]): Factor = {
-    // Algorithm 1 from Chapter 6 (page  9)
+  /**
+   * Algorithm 1 from Chapter 6 (page 9)
+   *
+   * @param Q is a set of variables
+   * @param π is an ordered list of the variables not in Q
+   * @return the prior marginal pr(Q)
+   *
+   * The cost is the cost of the Tk multiplication. This is highly dependent on π
+   */
 
-    // Q is a set of variables
-    // pi is an ordered list of the variables not in Q
-    // returns the prior marginal pr(Q)
-
-    val S = π.foldLeft(getRandomVariables().map(getCPT(_)).toSet)((S, rv) => {
+  def variableEliminationPriorMarginalI(Q: Set[RandomVariable[_]], π: List[RandomVariable[_]]): Factor =
+    π.foldLeft(getRandomVariables().map(getCPT(_)).toSet)((S, rv) => {
       val allMentions = S.filter(_.mentions(rv))
-      val newS = S -- allMentions
-      val T = allMentions.reduce(_ * _)
-      val Ti = T.sumOut(rv)
-      newS + Ti
-    })
-    S.reduce(_ * _)
+      (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
+    }).reduce(_ * _)
 
-    // the cost is the cost of the Tk multiplication
-    // this is highly dependent on π
-  }
+  /**
+   *
+   * Chapter 6 Algorithm 5 (page 17)
+   *
+   * assert: Q subset of variables
+   * assert: π ordering of variables in S but not in Q
+   * assert: e assigns values to variables in this network
+   *
+   */
 
-  def variableEliminationPriorMarginalII[A](Q: Set[RandomVariable[_]], π: List[RandomVariable[_]], e: CaseIs[A]): Factor = {
-
-    // Chapter 6 Algorithm 5 (page 17)
-
-    // assert: Q subset of variables
-    // assert: π ordering of variables in S but not in Q
-    // assert: e assigns values to variables in this network
-
-    val S = π.foldLeft(getRandomVariables().map(getCPT(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
+  def variableEliminationPriorMarginalII[A](Q: Set[RandomVariable[_]], π: List[RandomVariable[_]], e: CaseIs[A]): Factor =
+    π.foldLeft(getRandomVariables().map(getCPT(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         val newS = S -- allMentions
         val T = allMentions.reduce(_ * _)
         val Ti = T.sumOut(rv)
         newS + Ti
-      })
-
-    S.reduce(_ * _)
-  }
+      }).reduce(_ * _)
 
   def interactsWith(v1: RandomVariable[_], v2: RandomVariable[_]): Boolean =
     getAllCPTs().exists(f => f.mentions(v1) && f.mentions(v2))
@@ -246,13 +249,13 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
   // 6.8.2
   def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[_]]]): BayesianNetwork = {
     import axle.graph.JungDirectedGraphFactory._
-    val outG = graphFrom(g)(v => v, e => e)
-    val result = new BayesianNetwork(resultName, outG)
+    val outG = graphFrom(getGraph())(v => v, e => e)
+    val result = new BayesianNetwork(resultName) // g = outG
     eOpt.map(e => {
       for (U <- e.map(_.rv)) {
-        val uVertex = outG.findVertex(U).get
+        val uVertex = outG.findVertex(_.rv == U).get
         for (edge <- outG.outputEdgesOf(uVertex)) { // ModelEdge
-          val X = edge.getDest().getPayload
+          val X = edge.getDest().getPayload.rv
           val oldF = result.getCPT(X)
           outG.deleteEdge(edge) // TODO: this should be acting on a copy
           val smallerF = makeFactorFor(X)
@@ -262,19 +265,19 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
             // c(U) = e.valueOf(U)
             smallerF(c) = oldF(c)
           }
-          result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
+          // TODO result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
         }
       }
       result
     }).getOrElse(result)
   }
 
-  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]], g: JungDirectedGraph[RandomVariable[_], String]): JungDirectedGraph[RandomVariable[_], String] = {
+  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]], g: JungDirectedGraph[BayesianNetworkNode, String]): JungDirectedGraph[BayesianNetworkNode, String] = {
 
     val vars = eOpt.map(Q ++ _.map(_.rv)).getOrElse(Q)
 
-    def nodePruneStream(g: JungDirectedGraph[RandomVariable[_], String]): Stream[JungDirectedGraph[RandomVariable[_], String]] = {
-      val xVertices = g.getLeaves().toSet -- vars.map(g.findVertex(_).get)
+    def nodePruneStream(g: JungDirectedGraph[BayesianNetworkNode, String]): Stream[JungDirectedGraph[BayesianNetworkNode, String]] = {
+      val xVertices = g.getLeaves().toSet -- vars.map(rv => g.findVertex(_.rv == rv).get)
       xVertices.size match {
         case 0 => Stream.empty
         case _ => {
@@ -289,7 +292,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
 
   // 6.8.3
   def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): BayesianNetwork =
-    new BayesianNetwork(this.name, pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph))
+    new BayesianNetwork(this.name) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
 
   def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
 
@@ -300,10 +303,7 @@ class BayesianNetwork(name: String = "bn", g: JungDirectedGraph[RandomVariable[_
     val S = π.foldLeft(pruned.getRandomVariables().map(rv => pruned.getCPT(rv).projectRowsConsistentWith(eOpt)).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        val newS = S -- allMentions
-        val T = allMentions.reduce(_ * _)
-        val Ti = T.sumOut(rv)
-        newS + Ti
+        (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
       })
 
     (S.reduce(_ * _), pruned)

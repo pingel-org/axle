@@ -105,7 +105,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
     def vertex(payload: VP): V = new JungDirectedGraphVertexImpl(payload)
 
     // TODO: findVertex needs an index:
-    def findVertex(payload: VP): Option[V] = getVertices().find(_.getPayload == payload)
+    def findVertex(test: VP => Boolean): Option[V] = getVertices().find(v => test(v.getPayload))
 
     def removeAllEdgesAndVertices(): Unit = getVertices().map(jungGraph.removeVertex(_))
 

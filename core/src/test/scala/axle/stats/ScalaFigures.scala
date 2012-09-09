@@ -20,39 +20,28 @@ class ScalaFigures extends Specification {
 
   def figure6_1() = {
 
-    val g = graph[RandomVariable[_], String]()
+    val bn = BayesianNetwork("6.1")
 
-    val av = g += A
-    val bv = g += B
-    val cv = g += C
-    val dv = g += D
-    val ev = g += E
-
-    g += (av -> bv, "")
-    g += (av -> cv, "")
-    g += (bv -> dv, "")
-    g += (cv -> dv, "")
-    g += (cv -> ev, "")
-
-    val result = new BayesianNetwork("6.1", g)
-
-    val cptA = result.getCPT(A) // A
+    val cptA = Factor(Vector(A)) // A
     cptA(List(A eq true)) = 0.6
     cptA(List(A eq false)) = 0.4
+    val av = bn += BayesianNetworkNode(A, cptA)
 
-    val cptB = result.getCPT(B) // B | A
+    val cptB = Factor(Vector(B, A)) // B | A
     cptB(List(B eq true, A eq true)) = 0.2
     cptB(List(B eq true, A eq false)) = 0.8
     cptB(List(B eq false, A eq true)) = 0.75
     cptB(List(B eq false, A eq false)) = 0.25
+    val bv = bn += BayesianNetworkNode(B, cptB)
 
-    val cptC = result.getCPT(C) // C | A
+    val cptC = Factor(Vector(C, A)) // C | A
     cptC(List(C eq true, A eq true)) = 0.8
     cptC(List(C eq true, A eq false)) = 0.2
     cptC(List(C eq false, A eq true)) = 0.1
     cptC(List(C eq false, A eq false)) = 0.9
+    val cv = bn += BayesianNetworkNode(C, cptC)
 
-    val cptD = result.getCPT(D) // D | BC
+    val cptD = Factor(Vector(D, B, C)) // D | BC
     cptD(List(D eq true, B eq true, C eq true)) = 0.95
     cptD(List(D eq true, B eq true, C eq false)) = 0.05
     cptD(List(D eq true, B eq false, C eq true)) = 0.9
@@ -61,21 +50,29 @@ class ScalaFigures extends Specification {
     cptD(List(D eq false, B eq true, C eq false)) = 0.2
     cptD(List(D eq false, B eq false, C eq true)) = 0.0
     cptD(List(D eq false, B eq false, C eq false)) = 1.0
+    val dv = bn += BayesianNetworkNode(D, cptD)
 
-    val cptE = result.getCPT(E) // E | C
+    val cptE = Factor(Vector(E, C)) // E | C
     cptE(List(E eq true, C eq true)) = 0.7
     cptE(List(E eq true, C eq false)) = 0.3
     cptE(List(E eq false, C eq true)) = 0.0
     cptE(List(E eq false, C eq false)) = 1.0
+    val ev = bn += BayesianNetworkNode(E, cptE)
 
-    result
+    bn += (av -> bv, "")
+    bn += (av -> cv, "")
+    bn += (bv -> dv, "")
+    bn += (cv -> dv, "")
+    bn += (cv -> ev, "")
+
+    bn
   }
 
   def figure6_2() = figure6_1.getJointProbabilityTable()
 
   def figure6_3() = {
 
-    val cptB = new Factor(B :: C :: D :: Nil) //Figure 3.1
+    val cptB = Factor(B :: C :: D :: Nil) //Figure 3.1
     cptB(List(B eq true, C eq true, D eq true)) = 0.95
     cptB(List(B eq true, C eq true, D eq false)) = 0.05
     cptB(List(B eq true, C eq false, D eq true)) = 0.9
@@ -85,7 +82,7 @@ class ScalaFigures extends Specification {
     cptB(List(B eq false, C eq false, D eq true)) = 0.0
     cptB(List(B eq false, C eq false, D eq false)) = 1.0
 
-    val cptD = new Factor(D :: E :: Nil) // Figure 3.2
+    val cptD = Factor(D :: E :: Nil) // Figure 3.2
     cptD(List(D eq true, E eq true)) = 0.448
     cptD(List(D eq true, E eq false)) = 0.192
     cptD(List(D eq false, E eq true)) = 0.112
@@ -99,101 +96,66 @@ class ScalaFigures extends Specification {
 
   def figure6_4() = {
 
-    val g = graph[RandomVariable[_], String]()
+    val bn = new BayesianNetwork("6.4")
 
-    val av = g += A
-    val bv = g += B
-    val cv = g += C
-
-    g += (av -> bv, "")
-    g += (bv -> cv, "")
-
-    val result = new BayesianNetwork("6.4", g)
-
-    val cptA = result.getCPT(A)
+    val cptA = Factor(Vector(A))
     cptA(List(A eq true)) = 0.6
     cptA(List(A eq false)) = 0.4
+    val av = bn += BayesianNetworkNode(A, cptA)
 
-    val cptB = result.getCPT(B) // B | A
+    val cptB = Factor(Vector(B)) // B | A
     cptB(List(B eq true, A eq true)) = 0.9
     cptB(List(B eq true, A eq false)) = 0.1
     cptB(List(B eq false, A eq true)) = 0.2
     cptB(List(B eq false, A eq false)) = 0.8
+    val bv = bn += BayesianNetworkNode(B, cptB)
 
-    val cptC = result.getCPT(C) // C | B
+    val cptC = Factor(Vector(C)) // C | B
     cptC(List(C eq true, B eq true)) = 0.3
     cptC(List(C eq true, B eq false)) = 0.7
     cptC(List(C eq false, B eq true)) = 0.5
     cptC(List(C eq false, B eq false)) = 0.5
+    val cv = bn += BayesianNetworkNode(C, cptC)
+
+    bn += (av -> bv, "")
+    bn += (bv -> cv, "")
 
     val pB = (((cptB * cptA).sumOut(A)) * cptC).sumOut(C)
 
-    result
+    bn
   }
 
-  def figure6_5(): List[InteractionGraph] = {
-
-    val IG = figure6_1().interactionGraph()
-    val result = IG.eliminationSequence(List(B, C, A, D))
-
-    //    show(IG.getGraph) // figure 6.1 interaction graph
-    //    for (gi <- result) {
-    //      show(gi.getGraph) // 6.1 interaction graph pruned
-    //    }
-
-    result
-  }
+  def figure6_5(): List[InteractionGraph] =
+    figure6_1().interactionGraph().eliminationSequence(List(B, C, A, D))
 
   def figure6_7() = {
 
     val f61 = figure6_1()
 
+    // Figure 6.1 pruned towards B & E
     val Q1: immutable.Set[RandomVariable[_]] = immutable.Set(B, E)
     val f67pBE = f61.pruneNetworkVarsAndEdges(Q1, None)
 
+    // Figure 6.2 pruned towards B
     val Q2: immutable.Set[RandomVariable[_]] = immutable.Set(B)
     val f67pB = f61.pruneNetworkVarsAndEdges(Q2, None)
-
-    //    show(f67pBE.getGraph) // "Figure 6.1 pruned towards " + Q1
-    //    show(f67pB.getGraph) // Figure 6.2 pruned towards " + Q2
 
     (f67pBE, f67pB)
   }
 
-  def figure6_8() = {
+  // Figure 6.1 with edges pruned towards C=false
+  def figure6_8() = figure6_1().pruneEdges("Figure 6.8", Some(List(C eq false)))
 
-    val f61 = figure6_1()
-    val f68 = f61.pruneEdges("Figure 6.8", Some(List(C eq false)))
+  // Figure 6.1 pruned towards Q={D} and A=true,C=false
+  def figure6_9() =
+    figure6_1().pruneNetworkVarsAndEdges(Set(D), Some(List(A eq true, C eq false)))
 
-    //    show(f68.getGraph) // Figure 6.1 with edges pruned towards C=false
-    //    for (rv <- f68.getRandomVariables) {
-    //      val f = f68.getCPT(rv)
-    //      println("Factor for " + rv)
-    //      println(f)
-    //    }
-    f68
-  }
-
-  def figure6_9() = {
-
-    val f61 = figure6_1()
-    val c = List(A eq true, C eq false)
-    // Figure 6.1 pruned towards Q={D} and A=true,C=false
-    val f69 = f61.pruneNetworkVarsAndEdges(Set(D), Some(c))
-    //    for (rv <- f69.getRandomVariables()) {
-    //      val f = f69.getCPT(rv)
-    //      println("Factor for " + rv)
-    //      println(f)
-    //    }
-    f69
-  }
-
+  // Result of fe-i on a->b->c with Q={C}
   def figure7_2() = {
-
-    val result = figure6_4.duplicate()
-    val f = result.factorElimination1(Set(C))
-    // Result of fe-i on a->b->c with Q={C}
-    result
+    // TODO: needs to be immutable
+    val f72 = figure6_4.duplicate()
+    val f = f72.factorElimination1(Set(C))
+    f72
   }
 
   def figure7_4() = {
@@ -218,12 +180,12 @@ class ScalaFigures extends Specification {
     (f68, τ, f61.getCPT(C))
   }
 
+  // factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3
   def figure7_5() = {
-
+    // TODO: needs to be immutable
     val f61 = figure6_1()
     val (bn, τ, cptC) = figure7_4()
     val (f75, elim) = f61.factorElimination2(Set(C), τ, cptC)
-    // factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3
     f61
   }
 

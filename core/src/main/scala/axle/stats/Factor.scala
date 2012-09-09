@@ -9,7 +9,12 @@ import collection._
  * always true in a Factor.  They should be siblings rather than parent/child.
  */
 
-class Factor(varList: Seq[RandomVariable[_]], name: String = "unnamed") {
+object Factor {
+  
+  def apply(varList: Seq[RandomVariable[_]]): Factor = new Factor(varList)
+}
+
+class Factor(varList: Seq[RandomVariable[_]]) {
 
   import scalaz._
   import Scalaz._
@@ -19,12 +24,9 @@ class Factor(varList: Seq[RandomVariable[_]], name: String = "unnamed") {
   }))
   val elements = new Array[Double](cp.size)
 
-  // var name = "unnamed"
-  // def setName(name: String): Unit = { this.name = name }
+  def getName(): String = "TODO"
 
-  def getName(): String = name
-
-  def getLabel(): String = name
+  def getLabel(): String = "TODO"
 
   def getVariables() = varList
 
