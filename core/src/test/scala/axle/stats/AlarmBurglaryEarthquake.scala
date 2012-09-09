@@ -1,12 +1,9 @@
-package axle.stats.examples
+package axle.stats
 
 import collection._
 import axle.stats._
 import axle.visualize._
-import axle.graph.JungDirectedGraphFactory._
 import org.specs2.mutable._
-import scalaz._
-import Scalaz._
 
 class ABE extends Specification {
 
@@ -68,9 +65,7 @@ class ABE extends Specification {
 
   val sansAll = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 
-  val ab = bn.getCPT(A) * bn.getCPT(B)
-
-  val abe = ab * bn.getCPT(E)
+  val abe = (bn.getCPT(A) * bn.getCPT(B)) * bn.getCPT(E)
 
   val Q: immutable.Set[RandomVariable[_]] = immutable.Set(E, B, A)
   val order = List(J, M)
