@@ -4,6 +4,8 @@ import axle._
 import axle.IndexedCrossProduct
 import axle.matrix.JblasMatrixFactory._
 import collection._
+import scalaz._
+import Scalaz._
 
 /* Technically a "Distribution" is probably a table that sums to 1, which is not
  * always true in a Factor.  They should be siblings rather than parent/child.
@@ -11,11 +13,23 @@ import collection._
 
 object Factor {
 
-  def apply(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]], Double]] = None): Factor =
+  def apply(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double]): Factor =
     new Factor(varList, values)
+
+  def spaceFor(varSeq: Seq[RandomVariable[_]]): Iterator[Seq[CaseIs[_]]] = {
+    val x = varSeq.map(_.getValues.getOrElse(Nil).toIndexedSeq)
+    val kaseIt = IndexedCrossProduct(x).iterator
+    kaseIt.map(kase => kase.zipWithIndex.map({
+      case (v, i: Int) => {
+        val rv = varSeq(i).asInstanceOf[RandomVariable[Any]] // TODO: remove cast
+        CaseIs(rv, v)
+      }
+    }))
+  }
+
 }
 
-class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]], Double]]) {
+class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double]) {
 
   import scalaz._
   import Scalaz._
@@ -23,9 +37,12 @@ class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]]
   lazy val cp = new IndexedCrossProduct(varList.map(rv => {
     rv.getValues.getOrElse(Nil.toIndexedSeq)
   }))
-  lazy val elements = new Array[Double](cp.size)
 
-  values.map(_.map({ case (k, v) => this(k) = v }))
+  lazy val elements = (0 until cp.size).map(i => values.get(caseOf(i)).getOrElse(0.0)).toArray
+
+  // lazy val elements = new Array[Double](cp.size)
+  // values.map(_.map({ case (k, v) => this(k) = v }))
+  // elements(indexOf(c)) = d
 
   def getVariables() = varList
 
@@ -58,7 +75,7 @@ class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]]
 
   def cases(): Iterator[Seq[CaseIs[_]]] = (0 until elements.length).iterator.map(caseOf(_))
 
-  def update(c: Seq[CaseIs[_]], d: Double): Unit = elements(indexOf(c)) = d
+  // def update(c: Seq[CaseIs[_]], d: Double): Unit = elements(indexOf(c)) = d
 
   def apply(c: Seq[CaseIs[_]]): Double = elements(indexOf(c))
 
@@ -82,23 +99,22 @@ class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]]
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {
-    val newFactor = new Factor(getVariables.filter(!variable.equals(_)), None)
-    for (c <- newFactor.cases()) {
-      newFactor(c) = variable.getValues.getOrElse(Nil).map(value => this(c)).max
-    }
-    newFactor
+    val newVars = getVariables.filter(!variable.equals(_))
+    new Factor(newVars,
+      Factor.spaceFor(newVars)
+        .map(kase => (kase, variable.getValues.getOrElse(Nil).map(value => this(kase)).max))
+        .toMap
+    )
   }
 
-  def projectToOnly(remainingVars: List[RandomVariable[_]]): Factor = {
-    val result = new Factor(remainingVars, None)
-    for (fromCase <- cases()) {
-      val toCase = projectToVars(fromCase, remainingVars.toSet)
-      val additional = this(fromCase)
-      val previous = result(toCase)
-      result(toCase) = previous + additional
-    }
-    result
-  }
+  def projectToOnly(remainingVars: List[RandomVariable[_]]): Factor =
+    new Factor(remainingVars,
+      Factor.spaceFor(remainingVars).toList
+        .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
+        .groupBy(_._1)
+        .map({ case (k, v) => (k, v.map(_._2).sum) })
+        .toMap
+    )
 
   def tally[A, B](a: RandomVariable[A], b: RandomVariable[B]): Matrix[Double] = {
     val aValues = a.getValues.getOrElse(Nil).toList
@@ -124,11 +140,14 @@ class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]]
 
   // depending on assumptions, this may not be the best way to remove the vars
   def sumOut[T](varToSumOut: RandomVariable[T]): Factor = {
-    val result = new Factor(getVariables().filter(!_.equals(varToSumOut)).toList, None)
-    for (c <- cases()) {
-      result(c.filter(_.rv != varToSumOut)) += this(c)
-    }
-    result
+    val newVars = getVariables().filter(!_.equals(varToSumOut)).toList
+    new Factor(newVars,
+      Factor.spaceFor(newVars).toSeq
+        .map(kase => (kase.filter(_.rv != varToSumOut), this(kase)))
+        .groupBy(kv => kv._1)
+        .map({ case (k, v) => (k, v.map(_._2).sum) })
+        .toMap
+    )
   }
 
   def Σ(varsToSumOut: Set[RandomVariable[_]]): Factor = sumOut(varsToSumOut)
@@ -139,23 +158,14 @@ class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]]
   // as defined on chapter 6 page 15
   def projectRowsConsistentWith(eOpt: Option[List[CaseIs[_]]]): Factor = {
     val e = eOpt.get
-    val result = new Factor(getVariables(), None)
-    for (c <- result.cases()) {
-      result(c) = (isSupersetOf(c, e) match {
-        case true => this(c)
-        case false => 0.0
-      })
-    }
-    result
+    new Factor(getVariables(),
+      Factor.spaceFor(e.map(_.rv)).map(kase => (kase, isSupersetOf(kase, e) ? this(kase) | 0.0)).toMap
+    )
   }
 
   def *(other: Factor): Factor = {
-    val newVars = getVariables().toSet union other.getVariables().toSet
-    val result = new Factor(newVars.toList, None)
-    for (c <- result.cases()) {
-      result(c) = this(c) * other(c)
-    }
-    result
+    val newVars = (getVariables().toSet union other.getVariables().toSet).toList
+    new Factor(newVars.toList, Factor.spaceFor(newVars).map(kase => (kase, this(kase) * other(kase))).toMap)
   }
 
   def mentions(variable: RandomVariable[_]) = getVariables.exists(v => variable.getName.equals(v.getName))

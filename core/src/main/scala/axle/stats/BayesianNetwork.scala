@@ -137,15 +137,13 @@ class BayesianNetwork(name: String)
   def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 
   def getJointProbabilityTable(): Factor = {
-    val jpt = new Factor(getRandomVariables(), None)
-    for (c <- jpt.cases) {
-      jpt(c) = probabilityOf(c)
-    }
-    jpt
+    val newVars = getRandomVariables()
+    new Factor(newVars,
+      Factor.spaceFor(newVars)
+        .map(kase => (kase, probabilityOf(kase)))
+        .toMap
+    )
   }
-
-  def makeFactorFor(rv: RandomVariable[_]): Factor =
-    Factor(getRandomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
 
   def getCPT(variable: RandomVariable[_]): Factor = findVertex(_.rv == variable).map(_.getPayload.cpt).get
 
@@ -254,24 +252,25 @@ class BayesianNetwork(name: String)
     ).map(_._2).max
   }
 
+  //  def makeFactorFor(rv: RandomVariable[_]): Factor =
+  //    Factor(getRandomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
+
   // 6.8.2
   def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[_]]]): BayesianNetwork = {
-    import axle.graph.JungDirectedGraphFactory._
-    val outG = graphFrom(getGraph())(v => v, e => e)
     val result = new BayesianNetwork(resultName) // g = outG
     eOpt.map(e => {
       for (U <- e.map(_.rv)) {
-        val uVertex = outG.findVertex(_.rv == U).get
-        for (edge <- outG.outputEdgesOf(uVertex)) { // ModelEdge
+        val uVertex = result.findVertex(_.rv == U).get
+        for (edge <- result.outputEdgesOf(uVertex)) { // ModelEdge
           val X = edge.getDest().getPayload.rv
           val oldF = result.getCPT(X)
-          outG.deleteEdge(edge) // TODO: this should be acting on a copy
-          val smallerF = makeFactorFor(X)
+          result.deleteEdge(edge) // TODO: not functional
+          val smallerF: Factor = null // TODO makeFactorFor(X)
           for (c <- smallerF.cases) {
             // set its value to what e sets it to
             assert(false)
             // c(U) = e.valueOf(U)
-            smallerF(c) = oldF(c)
+            // smallerF(c) = oldF(c)
           }
           // TODO result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
         }

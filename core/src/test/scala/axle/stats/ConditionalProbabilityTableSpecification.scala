@@ -19,32 +19,32 @@ class ConditionalProbabilityTableSpecification extends Specification {
 
   // A
   val av = bn += BayesianNetworkNode(A,
-    Factor(Vector(A), Some(Map(
+    Factor(Vector(A), Map(
       List(A eq true) -> 0.6,
       List(A eq false) -> 0.4
-    ))))
+    )))
 
   // B | A
   val bv = bn += BayesianNetworkNode(B,
-    Factor(Vector(B), Some(Map(
+    Factor(Vector(B), Map(
       List(B eq true, A eq true) -> 0.2,
       List(B eq true, A eq false) -> 0.8,
       List(B eq false, A eq true) -> 0.75,
       List(B eq false, A eq false) -> 0.25
-    ))))
+    )))
 
   // C | A
   val cv = bn += BayesianNetworkNode(C,
-    Factor(Vector(C), Some(Map(
+    Factor(Vector(C), Map(
       List(C eq true, A eq true) -> 0.8,
       List(C eq true, A eq false) -> 0.2,
       List(C eq false, A eq true) -> 0.1,
       List(C eq false, A eq false) -> 0.9
-    ))))
+    )))
 
   // D | BC
   val dv = bn += BayesianNetworkNode(D,
-    Factor(Vector(D), Some(Map(
+    Factor(Vector(D), Map(
       List(D eq true, B eq true, C eq true) -> 0.95,
       List(D eq true, B eq true, C eq false) -> 0.05,
       List(D eq true, B eq false, C eq true) -> 0.9,
@@ -53,16 +53,16 @@ class ConditionalProbabilityTableSpecification extends Specification {
       List(D eq false, B eq true, C eq false) -> 0.2,
       List(D eq false, B eq false, C eq true) -> 0.0,
       List(D eq false, B eq false, C eq false) -> 1.0
-    ))))
+    )))
 
   // E | C
   val ev = bn += BayesianNetworkNode(E,
-    Factor(Vector(E), Some(Map(
+    Factor(Vector(E), Map(
       List(E eq true, C eq true) -> 0.7,
       List(E eq true, C eq false) -> 0.3,
       List(E eq false, C eq true) -> 0.0,
       List(E eq false, C eq false) -> 1.0
-    ))))
+    )))
 
   bn += (av -> bv, "")
   bn += (av -> cv, "")
