@@ -22,42 +22,52 @@ class ScalaFigures extends Specification {
 
     val bn = BayesianNetwork("6.1")
 
-    val cptA = Factor(Vector(A)) // A
-    cptA(List(A eq true)) = 0.6
-    cptA(List(A eq false)) = 0.4
-    val av = bn += BayesianNetworkNode(A, cptA)
+    // A
+    val av = bn += BayesianNetworkNode(A,
+      Factor(Vector(A), Some(Map(
+        List(A eq true) -> 0.6,
+        List(A eq false) -> 0.4
+      ))))
 
-    val cptB = Factor(Vector(B, A)) // B | A
-    cptB(List(B eq true, A eq true)) = 0.2
-    cptB(List(B eq true, A eq false)) = 0.8
-    cptB(List(B eq false, A eq true)) = 0.75
-    cptB(List(B eq false, A eq false)) = 0.25
-    val bv = bn += BayesianNetworkNode(B, cptB)
+    // B | A
+    val bv = bn += BayesianNetworkNode(B,
+      Factor(Vector(B), Some(Map(
+        List(B eq true, A eq true) -> 0.2,
+        List(B eq true, A eq false) -> 0.8,
+        List(B eq false, A eq true) -> 0.75,
+        List(B eq false, A eq false) -> 0.25
+      ))))
 
-    val cptC = Factor(Vector(C, A)) // C | A
-    cptC(List(C eq true, A eq true)) = 0.8
-    cptC(List(C eq true, A eq false)) = 0.2
-    cptC(List(C eq false, A eq true)) = 0.1
-    cptC(List(C eq false, A eq false)) = 0.9
-    val cv = bn += BayesianNetworkNode(C, cptC)
+    // C | A
+    val cv = bn += BayesianNetworkNode(C,
+      Factor(Vector(C), Some(Map(
+        List(C eq true, A eq true) -> 0.8,
+        List(C eq true, A eq false) -> 0.2,
+        List(C eq false, A eq true) -> 0.1,
+        List(C eq false, A eq false) -> 0.9
+      ))))
 
-    val cptD = Factor(Vector(D, B, C)) // D | BC
-    cptD(List(D eq true, B eq true, C eq true)) = 0.95
-    cptD(List(D eq true, B eq true, C eq false)) = 0.05
-    cptD(List(D eq true, B eq false, C eq true)) = 0.9
-    cptD(List(D eq true, B eq false, C eq false)) = 0.1
-    cptD(List(D eq false, B eq true, C eq true)) = 0.8
-    cptD(List(D eq false, B eq true, C eq false)) = 0.2
-    cptD(List(D eq false, B eq false, C eq true)) = 0.0
-    cptD(List(D eq false, B eq false, C eq false)) = 1.0
-    val dv = bn += BayesianNetworkNode(D, cptD)
+    // D | BC
+    val dv = bn += BayesianNetworkNode(D,
+      Factor(Vector(D), Some(Map(
+        List(D eq true, B eq true, C eq true) -> 0.95,
+        List(D eq true, B eq true, C eq false) -> 0.05,
+        List(D eq true, B eq false, C eq true) -> 0.9,
+        List(D eq true, B eq false, C eq false) -> 0.1,
+        List(D eq false, B eq true, C eq true) -> 0.8,
+        List(D eq false, B eq true, C eq false) -> 0.2,
+        List(D eq false, B eq false, C eq true) -> 0.0,
+        List(D eq false, B eq false, C eq false) -> 1.0
+      ))))
 
-    val cptE = Factor(Vector(E, C)) // E | C
-    cptE(List(E eq true, C eq true)) = 0.7
-    cptE(List(E eq true, C eq false)) = 0.3
-    cptE(List(E eq false, C eq true)) = 0.0
-    cptE(List(E eq false, C eq false)) = 1.0
-    val ev = bn += BayesianNetworkNode(E, cptE)
+    // E | C
+    val ev = bn += BayesianNetworkNode(E,
+      Factor(Vector(E), Some(Map(
+        List(E eq true, C eq true) -> 0.7,
+        List(E eq true, C eq false) -> 0.3,
+        List(E eq false, C eq true) -> 0.0,
+        List(E eq false, C eq false) -> 1.0
+      ))))
 
     bn += (av -> bv, "")
     bn += (av -> cv, "")
@@ -72,21 +82,25 @@ class ScalaFigures extends Specification {
 
   def figure6_3() = {
 
-    val cptB = Factor(B :: C :: D :: Nil) //Figure 3.1
-    cptB(List(B eq true, C eq true, D eq true)) = 0.95
-    cptB(List(B eq true, C eq true, D eq false)) = 0.05
-    cptB(List(B eq true, C eq false, D eq true)) = 0.9
-    cptB(List(B eq true, C eq false, D eq false)) = 0.1
-    cptB(List(B eq false, C eq true, D eq true)) = 0.8
-    cptB(List(B eq false, C eq true, D eq false)) = 0.2
-    cptB(List(B eq false, C eq false, D eq true)) = 0.0
-    cptB(List(B eq false, C eq false, D eq false)) = 1.0
+    //Figure 3.1
+    val cptB = Factor(B :: C :: D :: Nil, Some(Map(
+      List(B eq true, C eq true, D eq true) -> 0.95,
+      List(B eq true, C eq true, D eq false) -> 0.05,
+      List(B eq true, C eq false, D eq true) -> 0.9,
+      List(B eq true, C eq false, D eq false) -> 0.1,
+      List(B eq false, C eq true, D eq true) -> 0.8,
+      List(B eq false, C eq true, D eq false) -> 0.2,
+      List(B eq false, C eq false, D eq true) -> 0.0,
+      List(B eq false, C eq false, D eq false) -> 1.0
+    )))
 
-    val cptD = Factor(D :: E :: Nil) // Figure 3.2
-    cptD(List(D eq true, E eq true)) = 0.448
-    cptD(List(D eq true, E eq false)) = 0.192
-    cptD(List(D eq false, E eq true)) = 0.112
-    cptD(List(D eq false, E eq false)) = 0.248
+    // Figure 3.2
+    val cptD = Factor(D :: E :: Nil, Some(Map(
+      List(D eq true, E eq true) -> 0.448,
+      List(D eq true, E eq false) -> 0.192,
+      List(D eq false, E eq true) -> 0.112,
+      List(D eq false, E eq false) -> 0.248
+    )))
 
     val h = (cptB.sumOut(D)).sumOut(C)
     val m = cptB * cptD

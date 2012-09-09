@@ -5,73 +5,79 @@ import axle.stats._
 import axle.visualize._
 import axle.graph.JungDirectedGraphFactory._
 import org.specs2.mutable._
+import scalaz._
+import Scalaz._
 
-class AlarmBurglaryEarthquake extends Specification {
+class ABE extends Specification {
 
   val bools = Some(Vector(true, false))
 
-  val burglary = new RandomVariable0("burglary", bools, None)
-  val earthquake = new RandomVariable0("earthquake", bools, None)
-  val alarm = new RandomVariable0("alarm", bools, None)
-  val johnCalls = new RandomVariable0("johnCalls", bools, None)
-  val maryCalls = new RandomVariable0("maryCalls", bools, None)
+  val B = new RandomVariable0("Burglary", bools, None)
+  val E = new RandomVariable0("Earthquake", bools, None)
+  val A = new RandomVariable0("A", bools, None)
+  val J = new RandomVariable0("John Calls", bools, None)
+  val M = new RandomVariable0("Mary Calls", bools, None)
 
-  val bn = BayesianNetwork("Alarm, Burglary, Earthquake, John and Mary Call")
+  val bn = BayesianNetwork("A sounds (due to Burglary or Earthquake) and John or Mary Call")
 
-  val cptB = Factor(Vector(burglary))
-  cptB(List(burglary eq true)) = 0.001
-  cptB(List(burglary eq false)) = 0.999
-  val burglaryVertex = bn += BayesianNetworkNode(burglary, cptB)
+  val bv = bn += BayesianNetworkNode(B,
+    Factor(Vector(B), Some(Map(
+      List(B eq true) -> 0.001,
+      List(B eq false) -> 0.999
+    ))))
 
-  val cptE = Factor(Vector(earthquake))
-  cptE(List(earthquake eq true)) = 0.002
-  cptE(List(earthquake eq false)) = 0.998
-  val earthquakeVertex = bn += BayesianNetworkNode(earthquake, cptE)
+  val ev = bn += BayesianNetworkNode(E,
+    Factor(Vector(E), Some(Map(
+      List(E eq true) -> 0.002,
+      List(E eq false) -> 0.998
+    ))))
 
-  val cptA = Factor(Vector(burglary, earthquake, alarm))
-  cptA(List(burglary eq false, earthquake eq false, alarm eq true)) = 0.001
-  cptA(List(burglary eq false, earthquake eq false, alarm eq false)) = 0.999
-  cptA(List(burglary eq true, earthquake eq false, alarm eq true)) = 0.94
-  cptA(List(burglary eq true, earthquake eq false, alarm eq false)) = 0.06
-  cptA(List(burglary eq false, earthquake eq true, alarm eq true)) = 0.29
-  cptA(List(burglary eq false, earthquake eq true, alarm eq false)) = 0.71
-  cptA(List(burglary eq true, earthquake eq true, alarm eq true)) = 0.95
-  cptA(List(burglary eq true, earthquake eq true, alarm eq false)) = 0.05
-  val alarmVertex = bn += BayesianNetworkNode(alarm, cptA)
+  val av = bn += BayesianNetworkNode(A,
+    Factor(Vector(B, E, A), Some(Map(
+      List(B eq false, E eq false, A eq true) -> 0.001,
+      List(B eq false, E eq false, A eq false) -> 0.999,
+      List(B eq true, E eq false, A eq true) -> 0.94,
+      List(B eq true, E eq false, A eq false) -> 0.06,
+      List(B eq false, E eq true, A eq true) -> 0.29,
+      List(B eq false, E eq true, A eq false) -> 0.71,
+      List(B eq true, E eq true, A eq true) -> 0.95,
+      List(B eq true, E eq true, A eq false) -> 0.05))))
 
-  val cptJ = Factor(Vector(alarm, johnCalls))
-  cptJ(List(alarm eq true, johnCalls eq true)) = 0.9
-  cptJ(List(alarm eq true, johnCalls eq false)) = 0.1
-  cptJ(List(alarm eq false, johnCalls eq true)) = 0.05
-  cptJ(List(alarm eq false, johnCalls eq false)) = 0.95
-  val johnCallsVertex = bn += BayesianNetworkNode(johnCalls, cptJ)
+  val jv = bn += BayesianNetworkNode(J,
+    Factor(Vector(A, J), Some(Map(
+      List(A eq true, J eq true) -> 0.9,
+      List(A eq true, J eq false) -> 0.1,
+      List(A eq false, J eq true) -> 0.05,
+      List(A eq false, J eq false) -> 0.95
+    ))))
 
-  val cptM = Factor(Vector(alarm, maryCalls))
-  cptM(List(alarm eq true, maryCalls eq true)) = 0.7
-  cptM(List(alarm eq true, maryCalls eq false)) = 0.3
-  cptM(List(alarm eq false, maryCalls eq true)) = 0.01
-  cptM(List(alarm eq false, maryCalls eq false)) = 0.99
-  val maryCallsVertex = bn += BayesianNetworkNode(maryCalls, cptM)
+  val mv = bn += BayesianNetworkNode(M,
+    Factor(Vector(A, M), Some(Map(
+      List(A eq true, M eq true) -> 0.7,
+      List(A eq true, M eq false) -> 0.3,
+      List(A eq false, M eq true) -> 0.01,
+      List(A eq false, M eq false) -> 0.99
+    ))))
 
-  bn += (burglaryVertex -> alarmVertex, "")
-  bn += (earthquakeVertex -> alarmVertex, "")
-  bn += (alarmVertex -> johnCallsVertex, "")
-  bn += (alarmVertex -> maryCallsVertex, "")
+  bn += (bv -> av, "")
+  bn += (ev -> av, "")
+  bn += (av -> jv, "")
+  bn += (av -> mv, "")
 
   val jpt = bn.getJointProbabilityTable()
 
-  val sansAll = jpt.Σ(maryCalls).Σ(johnCalls).Σ(alarm).Σ(burglary).Σ(earthquake)
+  val sansAll = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 
-  val ab = bn.getCPT(alarm) * bn.getCPT(burglary)
+  val ab = bn.getCPT(A) * bn.getCPT(B)
 
-  val abe = ab * bn.getCPT(earthquake)
+  val abe = ab * bn.getCPT(E)
 
-  val Q: immutable.Set[RandomVariable[_]] = immutable.Set(earthquake, burglary, alarm)
-  val order = List(johnCalls, maryCalls)
+  val Q: immutable.Set[RandomVariable[_]] = immutable.Set(E, B, A)
+  val order = List(J, M)
 
   // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
 
-  val afterVE = bn.variableEliminationPriorMarginalII(Q, order, earthquake eq true)
+  val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E eq true)
 
   "bayesian networks" should {
     "work" in {
@@ -81,7 +87,7 @@ class AlarmBurglaryEarthquake extends Specification {
       // println("P(B) = " + ans1) // 0.001
       // println("P(A| B, -E) = " + ans2) // 0.94
 
-      println("eliminating variables other than alarm, burglary, and earthquake; and then finding those consistent with earthquake = true")
+      println("eliminating variables other than A, B, and E; and then finding those consistent with E = true")
       println(afterVE)
 
       1 must be equalTo 1

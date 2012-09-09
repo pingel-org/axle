@@ -128,7 +128,7 @@ class BayesianNetwork(name: String)
   def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 
   def getJointProbabilityTable(): Factor = {
-    val jpt = new Factor(getRandomVariables())
+    val jpt = new Factor(getRandomVariables(), None)
     for (c <- jpt.cases) {
       jpt(c) = probabilityOf(c)
     }

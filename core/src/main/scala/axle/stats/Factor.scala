@@ -10,11 +10,12 @@ import collection._
  */
 
 object Factor {
-  
-  def apply(varList: Seq[RandomVariable[_]]): Factor = new Factor(varList)
+
+  def apply(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]], Double]] = None): Factor =
+    new Factor(varList, values)
 }
 
-class Factor(varList: Seq[RandomVariable[_]]) {
+class Factor(varList: Seq[RandomVariable[_]], values: Option[Map[List[CaseIs[_]], Double]]) {
 
   import scalaz._
   import Scalaz._
@@ -59,16 +60,7 @@ class Factor(varList: Seq[RandomVariable[_]]) {
 
   def cases(): Iterator[Seq[CaseIs[_]]] = (0 until elements.length).iterator.map(caseOf(_))
 
-  // println("write: case = " + c.toOrderedString(variables) + ", d = " + d)
-  // println("variables.length = " + variables.length)
-  // def update[A](c: CaseIs[A], d: Double): Unit = elements(indexOf(c)) = d
-
   def update(c: Seq[CaseIs[_]], d: Double): Unit = elements(indexOf(c)) = d
-
-  //  def writes(values: List[Double]): Unit = {
-  //    assert(values.length == elements.length)
-  //    values.zipWithIndex.map({ case (v, i) => elements(i) = v })
-  //  }
 
   def apply(c: Seq[CaseIs[_]]): Double = elements(indexOf(c))
 
@@ -81,7 +73,7 @@ class Factor(varList: Seq[RandomVariable[_]]) {
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {
-    val newFactor = new Factor(getVariables.filter(!variable.equals(_)))
+    val newFactor = new Factor(getVariables.filter(!variable.equals(_)), None)
     for (c <- newFactor.cases()) {
       newFactor(c) = variable.getValues.getOrElse(Nil).map(value => this(c)).max
     }
@@ -89,7 +81,7 @@ class Factor(varList: Seq[RandomVariable[_]]) {
   }
 
   def projectToOnly(remainingVars: List[RandomVariable[_]]): Factor = {
-    val result = new Factor(remainingVars)
+    val result = new Factor(remainingVars, None)
     for (fromCase <- cases()) {
       val toCase = projectToVars(fromCase, remainingVars.toSet)
       val additional = this(fromCase)
@@ -123,7 +115,7 @@ class Factor(varList: Seq[RandomVariable[_]]) {
 
   // depending on assumptions, this may not be the best way to remove the vars
   def sumOut[T](varToSumOut: RandomVariable[T]): Factor = {
-    val result = new Factor(getVariables().filter(!_.equals(varToSumOut)).toList)
+    val result = new Factor(getVariables().filter(!_.equals(varToSumOut)).toList, None)
     for (c <- cases()) {
       result(c.filter(_.rv != varToSumOut)) += this(c)
     }
@@ -138,7 +130,7 @@ class Factor(varList: Seq[RandomVariable[_]]) {
   // as defined on chapter 6 page 15
   def projectRowsConsistentWith(eOpt: Option[List[CaseIs[_]]]): Factor = {
     val e = eOpt.get
-    val result = new Factor(getVariables())
+    val result = new Factor(getVariables(), None)
     for (c <- result.cases()) {
       result(c) = (isSupersetOf(c, e) match {
         case true => this(c)
@@ -150,7 +142,7 @@ class Factor(varList: Seq[RandomVariable[_]]) {
 
   def *(other: Factor): Factor = {
     val newVars = getVariables().toSet union other.getVariables().toSet
-    val result = new Factor(newVars.toList)
+    val result = new Factor(newVars.toList, None)
     for (c <- result.cases()) {
       result(c) = this(c) * other(c)
     }
