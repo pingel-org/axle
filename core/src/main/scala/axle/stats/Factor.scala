@@ -16,7 +16,7 @@ object Factor {
   def apply(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double]): Factor =
     new Factor(varList, values)
 
-  def spaceFor(varSeq: Seq[RandomVariable[_]]): Iterator[Seq[CaseIs[_]]] = {
+  def spaceFor(varSeq: Seq[RandomVariable[_]]): Iterator[List[CaseIs[_]]] = {
     val x = varSeq.map(_.getValues.getOrElse(Nil).toIndexedSeq)
     val kaseIt = IndexedCrossProduct(x).iterator
     kaseIt.map(kase => kase.zipWithIndex.map({
@@ -24,7 +24,7 @@ object Factor {
         val rv = varSeq(i).asInstanceOf[RandomVariable[Any]] // TODO: remove cast
         CaseIs(rv, v)
       }
-    }))
+    }).toList)
   }
 
 }
@@ -132,14 +132,17 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
   def Σ[T](varToSumOut: RandomVariable[T]): Factor = sumOut(varToSumOut)
 
   // depending on assumptions, this may not be the best way to remove the vars
-  def sumOut[T](varToSumOut: RandomVariable[T]): Factor = {
-    val newVars = varList.filter(!_.equals(varToSumOut)).toList
+  def sumOut(gone: RandomVariable[_]): Factor = {
+    val position = varList.indexOf(gone)
+    val newVars = varList.filter(!_.equals(gone)).toList
     new Factor(newVars,
-      Factor.spaceFor(newVars).toSeq
-        .map(kase => (kase.filter(_.rv != varToSumOut), this(kase)))
-        .groupBy(kv => kv._1)
-        .map({ case (k, v) => (k, v.map(_._2).sum) })
-        .toMap
+      Factor.spaceFor(newVars)
+        .map(kase => (kase,
+          gone.getValues.getOrElse(Nil).map(gv => {
+            val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[Any]], gv)) // TODO cast
+            this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
+          }).reduce(_ + _)
+        )).toMap
     )
   }
 
