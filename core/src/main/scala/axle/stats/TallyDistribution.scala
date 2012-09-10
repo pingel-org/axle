@@ -9,7 +9,7 @@ class TallyDistribution0[A](tally: Map[A, Int])
 
   val bars = tally.scanLeft((null.asInstanceOf[A], 0.0))((x, y) => (y._1, x._2 + y._2))
 
-  def choose(): A = {
+  def observe(): A = {
     val r = Random.nextInt(totalCount + 1)
     bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
   }
@@ -24,9 +24,9 @@ class TallyDistribution1[A, G](tally: Map[(A, G), Int])
 
   val totalCount = tally.values.sum
 
-  def choose(): A = null.asInstanceOf[A] // TODO
+  def observe(): A = null.asInstanceOf[A] // TODO
 
-  def choose(gv: G): A = null.asInstanceOf[A] // TODO
+  def observe(gv: G): A = null.asInstanceOf[A] // TODO
 
   def probabilityOf(a: A): Double = gvs.map(gv => tally((a, gv))).sum / totalCount
 

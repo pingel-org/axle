@@ -10,7 +10,7 @@ class ConditionalProbabilityTable0[A](p: Map[A, Double]) extends Distribution0[A
   // This would allow me to avoid having to construct the initial dummy element
   val bars = p.scanLeft((null.asInstanceOf[A], 0.0))((x, y) => (y._1, x._2 + y._2))
 
-  def choose(): A = {
+  def observe(): A = {
     val r = math.random
     bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
   }
@@ -26,9 +26,9 @@ class ConditionalProbabilityTable2[A, G1, G2](p: Map[(G1, G2), Map[A, Double]]) 
   // This would allow me to avoid having to construct the initial dummy element
   // val barsByA = p.scanLeft((null.asInstanceOf[A], 0.0))((x, y) => (y._1._1, x._2 + y._2))
 
-  def choose(): A = null.asInstanceOf[A] // TODO
+  def observe(): A = null.asInstanceOf[A] // TODO
 
-  def choose(gv1: G1, gv2: G2): A = null.asInstanceOf[A] // TODO
+  def observe(gv1: G1, gv2: G2): A = null.asInstanceOf[A] // TODO
 
   def probabilityOf(a: A): Double = -1.0 // TODO
 
