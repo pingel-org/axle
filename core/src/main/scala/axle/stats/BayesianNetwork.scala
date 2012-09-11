@@ -213,10 +213,7 @@ class BayesianNetwork(name: String)
     π.foldLeft(getRandomVariables().map(getCPT(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        val newS = S -- allMentions
-        val T = allMentions.reduce(_ * _)
-        val Ti = T.sumOut(rv)
-        newS + Ti
+        (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
       }).reduce(_ * _)
 
   def interactsWith(v1: RandomVariable[_], v2: RandomVariable[_]): Boolean =
@@ -239,18 +236,13 @@ class BayesianNetwork(name: String)
   }
 
   // Chapter 6 Algorithm 2 (page 13)
-  def orderWidth(order: List[RandomVariable[_]]): Int = {
-    import axle.graph.JungUndirectedGraphFactory._
+  def orderWidth(order: List[RandomVariable[_]]): Int =
     getRandomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
         val ig = gi._1
-        val rvVertex = ig.findVertex(rv).get
-        val size = ig.getNeighbors(rvVertex).size
-        val newIG = ig.eliminate(rv)
-        (newIG, size)
+        (ig.eliminate(rv), ig.getNeighbors(ig.findVertex(rv).get).size)
       }
     ).map(_._2).max
-  }
 
   //  def makeFactorFor(rv: RandomVariable[_]): Factor =
   //    Factor(getRandomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
@@ -325,10 +317,7 @@ class BayesianNetwork(name: String)
     val S = π.foldLeft(Q.map(rv => pruned.getCPT(rv).projectRowsConsistentWith(Some(e))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        val newS = S -- allMentions
-        val T = allMentions.reduce(_ * _)
-        val Ti = T.maxOut(rv)
-        newS + Ti
+        (S -- allMentions) + allMentions.reduce(_ * _).maxOut(rv)
       })
 
     // at this point (since we're iterating over *all* variables in Q)
@@ -439,25 +428,23 @@ class BayesianNetwork(name: String)
     f.projectToOnly(Q.toList)
   }
 
-  //	public Map<EliminationTreeNode, Factor> factorElimination(EliminationTree tau, Case e)
-  //	{
-  //		for(EliminationTreeNode i : tau.getVertices() ) {
-  //			for(RandomVariable E : e.getVariables() ) {
-  //				Factor lambdaE = new Factor(E)
-  //				// assign lambdaE.E to e.get(E)
-  //			}
-  //		}
-  //		
-  //    TODO EliminationTreeNode r = chooseRoot(tau)
-  //		
-  //    TODO pullMessagesTowardsRoot()
-  //	TODO pushMessagesFromRoot()
-  //		
-  //		for(EliminationTreeNode i : tau.getVertices()) {
-  //			
-  //		}
-  //		
-  //	}
+  // Note: not sure about this return type:
+  def factorElimination(τ: EliminationTree, e: List[CaseIs[_]]): Map[Factor, Factor] =
+    {
+      for (i <- τ.getVertices()) {
+        for (ci <- e) {
+          // val lambdaE = new Factor(ci.rv, Map())
+          // assign lambdaE.E to e.get(E)
+        }
+      }
+      // TODO val root = chooseRoot(τ)
+      // TODO pullMessagesTowardsRoot()
+      // TODO pushMessagesFromRoot()
+      for (i <- τ.getVertices()) {
+
+      }
+      null // TODO
+    }
 
 }
 
