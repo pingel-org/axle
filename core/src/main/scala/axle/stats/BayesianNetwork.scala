@@ -122,8 +122,6 @@ class BayesianNetwork(name: String)
 
   def getName(): String = name
 
-  def getGraph(): JungDirectedGraph[BayesianNetworkNode, String] = this
-
   def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
 
   override def vertexToVisualizationHtml(vp: BayesianNetworkNode): xml.Node =
@@ -222,8 +220,6 @@ class BayesianNetwork(name: String)
   // Also called the "moral graph"
   def interactionGraph(): InteractionGraph = {
 
-    import axle.graph.JungUndirectedGraphFactory._
-
     val ig = new InteractionGraph()
 
     getRandomVariables.map(ig += _)
@@ -249,7 +245,7 @@ class BayesianNetwork(name: String)
 
   // 6.8.2
   def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[_]]]): BayesianNetwork = {
-    val result = new BayesianNetwork(resultName) // g = outG
+    val result = new BayesianNetwork(resultName)
     eOpt.map(e => {
       for (U <- e.map(_.rv)) {
         val uVertex = result.findVertex(_.rv == U).get
@@ -260,9 +256,8 @@ class BayesianNetwork(name: String)
           val smallerF: Factor = null // TODO makeFactorFor(X)
           for (c <- smallerF.cases) {
             // set its value to what e sets it to
-            assert(false)
-            // c(U) = e.valueOf(U)
-            // smallerF(c) = oldF(c)
+            // TODO c(U) = e.valueOf(U)
+            // TODO smallerF(c) = oldF(c)
           }
           // TODO result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
         }
