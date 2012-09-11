@@ -5,15 +5,15 @@ package axle.stats
  *
  * Bayes Rule
  *
- * pr(A=a|B=b) = pr(B=b|A=a)pr(A=a)/pr(B=b)
+ * P(A=a|B=b) = P(B=b|A=a)P(A=a)/P(B=b)
  *
  * Case analysis
  *
- * pr(A=a) = pr(A=a, B=b1) + ... + pr(A=a, B=bN)
+ * P(A=a) = P(A=a, B=b1) + ... + P(A=a, B=bN)
  *
  * Chain Rule
  *
- * pr(X1=x1, ..., XN = xN) = pr(X1=x1 | X2=x2, ..., XN=xN) * ... * pr(XN=xN)
+ * P(X1=x1, ..., XN = xN) = P(X1=x1 | X2=x2, ..., XN=xN) * ... * P(XN=xN)
  *
  * Jeffrey's Rule
  *
@@ -76,7 +76,7 @@ package axle.stats
  *
  * MPE: most probable explanation
  *
- * find {x1, ..., xN} such that pr(X1=x1, ..., XN=xN | e) is maximized
+ * find {x1, ..., xN} such that P(X1=x1, ..., XN=xN | e) is maximized
  *
  * MPE is much easier to compute algorithmically
  *
@@ -102,7 +102,6 @@ package axle.stats
 
 import collection._
 import math.max
-import axle.graph.JungDirectedGraphFactory._
 import scalaz._
 import Scalaz._
 
@@ -134,7 +133,7 @@ class BayesianNetwork(name: String)
 
   def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 
-  def getJointProbabilityTable(): Factor = {
+  def jointProbabilityTable(): Factor = {
     val newVars = getRandomVariables()
     new Factor(newVars,
       Factor.spaceFor(newVars)
@@ -143,13 +142,11 @@ class BayesianNetwork(name: String)
     )
   }
 
-  def getCPT(variable: RandomVariable[_]): Factor = findVertex(_.rv == variable).map(_.getPayload.cpt).get
+  def cpt(variable: RandomVariable[_]): Factor = findVertex(_.rv == variable).map(_.getPayload.cpt).get
 
-  def getAllCPTs(): Seq[Factor] = getVertices().map(_.getPayload.cpt).toSeq
+  def probabilityOf(cs: Seq[CaseIs[_]]) = cs.map(c => cpt(c.rv)(cs)).reduce(_ * _)
 
-  def probabilityOf(cs: Seq[CaseIs[_]]) = cs.map(c => getCPT(c.rv)(cs)).reduce(_ * _)
-
-  def getMarkovAssumptionsFor(rv: RandomVariable[_]): Independence = {
+  def markovAssumptionsFor(rv: RandomVariable[_]): Independence = {
 
     val rvVertex = findVertex(_.rv == rv).get
 
@@ -192,7 +189,7 @@ class BayesianNetwork(name: String)
    */
 
   def variableEliminationPriorMarginalI(Q: Set[RandomVariable[_]], π: List[RandomVariable[_]]): Factor =
-    π.foldLeft(getRandomVariables().map(getCPT(_)).toSet)((S, rv) => {
+    π.foldLeft(getRandomVariables().map(cpt(_)).toSet)((S, rv) => {
       val allMentions = S.filter(_.mentions(rv))
       (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
     }).reduce(_ * _)
@@ -208,16 +205,21 @@ class BayesianNetwork(name: String)
    */
 
   def variableEliminationPriorMarginalII[A](Q: Set[RandomVariable[_]], π: List[RandomVariable[_]], e: CaseIs[A]): Factor =
-    π.foldLeft(getRandomVariables().map(getCPT(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
+    π.foldLeft(getRandomVariables().map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
       }).reduce(_ * _)
 
   def interactsWith(v1: RandomVariable[_], v2: RandomVariable[_]): Boolean =
-    getAllCPTs().exists(f => f.mentions(v1) && f.mentions(v2))
+    getVertices().map(_.getPayload.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
 
-  // Also called the "moral graph"
+  /**
+   * interactionGraph
+   *
+   * Also called the "moral graph"
+   */
+
   def interactionGraph(): InteractionGraph = {
 
     val ig = new InteractionGraph()
@@ -231,7 +233,12 @@ class BayesianNetwork(name: String)
     ig
   }
 
-  // Chapter 6 Algorithm 2 (page 13)
+  /**
+   * orderWidth
+   *
+   * Chapter 6 Algorithm 2 (page 13)
+   */
+
   def orderWidth(order: List[RandomVariable[_]]): Int =
     getRandomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
@@ -243,7 +250,12 @@ class BayesianNetwork(name: String)
   //  def makeFactorFor(rv: RandomVariable[_]): Factor =
   //    Factor(getRandomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
 
-  // 6.8.2
+  /**
+   * pruneEdges
+   *
+   * 6.8.2
+   */
+
   def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[_]]]): BayesianNetwork = {
     val result = new BayesianNetwork(resultName)
     eOpt.map(e => {
@@ -251,7 +263,7 @@ class BayesianNetwork(name: String)
         val uVertex = result.findVertex(_.rv == U).get
         for (edge <- result.outputEdgesOf(uVertex)) { // ModelEdge
           val X = edge.getDest().getPayload.rv
-          val oldF = result.getCPT(X)
+          val oldF = result.cpt(X)
           result.deleteEdge(edge) // TODO: not functional
           val smallerF: Factor = null // TODO makeFactorFor(X)
           for (c <- smallerF.cases) {
@@ -266,11 +278,11 @@ class BayesianNetwork(name: String)
     }).getOrElse(result)
   }
 
-  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]], g: JungDirectedGraph[BayesianNetworkNode, String]): JungDirectedGraph[BayesianNetworkNode, String] = {
+  def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]], g: BayesianNetwork): BayesianNetwork = {
 
     val vars = eOpt.map(Q ++ _.map(_.rv)).getOrElse(Q)
 
-    def nodePruneStream(g: JungDirectedGraph[BayesianNetworkNode, String]): Stream[JungDirectedGraph[BayesianNetworkNode, String]] = {
+    def nodePruneStream(g: BayesianNetwork): Stream[BayesianNetwork] = {
       val xVertices = g.getLeaves().toSet -- vars.map(rv => g.findVertex(_.rv == rv).get)
       xVertices.size match {
         case 0 => Stream.empty
@@ -281,10 +293,14 @@ class BayesianNetwork(name: String)
       }
     }
     nodePruneStream(g).last
-    g
   }
 
-  // 6.8.3
+  /**
+   * pruneNetworkVarsAndEdges
+   *
+   * 6.8.3
+   */
+
   def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): BayesianNetwork =
     new BayesianNetwork(this.name) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
 
@@ -294,7 +310,7 @@ class BayesianNetwork(name: String)
     val R = getRandomVariables.filter(!Q.contains(_)).toSet
     val π = pruned.minDegreeOrder(R)
 
-    val S = π.foldLeft(pruned.getRandomVariables().map(rv => pruned.getCPT(rv).projectRowsConsistentWith(eOpt)).toSet)(
+    val S = π.foldLeft(pruned.getRandomVariables().map(rv => pruned.cpt(rv).projectRowsConsistentWith(eOpt)).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
@@ -309,7 +325,7 @@ class BayesianNetwork(name: String)
     val Q = pruned.getRandomVariables()
     val π = pruned.minDegreeOrder(Q.toSet)
 
-    val S = π.foldLeft(Q.map(rv => pruned.getCPT(rv).projectRowsConsistentWith(Some(e))).toSet)(
+    val S = π.foldLeft(Q.map(rv => pruned.cpt(rv).projectRowsConsistentWith(Some(e))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         (S -- allMentions) + allMentions.reduce(_ * _).maxOut(rv)
@@ -328,13 +344,18 @@ class BayesianNetwork(name: String)
     (result(List()), pruned)
   }
 
-  //	public Case variableEliminationMAP(Set Q, Case e)
-  //	{
-  //		 see ch 6 page 31: Algorithm 8
-  //		 TODO
-  //      returns an instantiation q which maximizes Pr(q,e) and that probability	
-  //
-  //	}
+  /**
+   * variableEliminationMAP
+   *
+   * returns an instantiation q which maximizes Pr(q,e) and that probability
+   *
+   * see ch 6 page 31: Algorithm 8
+   */
+
+  def variableEliminationMAP(Q: Set[RandomVariable[_]], e: List[RandomVariable[_]]): List[CaseIs[_]] = {
+    // TODO
+    Nil
+  }
 
   def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
     val X = mutable.Set[RandomVariable[_]]() ++ pX
@@ -368,7 +389,7 @@ class BayesianNetwork(name: String)
 
   def factorElimination1(Q: Set[RandomVariable[_]]): Factor = {
 
-    val S = mutable.ListBuffer[Factor]() ++ getRandomVariables().map(getCPT(_)).toList
+    val S = mutable.ListBuffer[Factor]() ++ getRandomVariables().map(cpt(_)).toList
 
     while (S.size > 1) {
 

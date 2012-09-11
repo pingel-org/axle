@@ -61,11 +61,11 @@ class ABE extends Specification {
   bn += (av -> jv, "")
   bn += (av -> mv, "")
 
-  val jpt = bn.getJointProbabilityTable()
+  val jpt = bn.jointProbabilityTable()
 
   val sansAll = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 
-  val abe = (bn.getCPT(A) * bn.getCPT(B)) * bn.getCPT(E)
+  val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
 
   val Q: immutable.Set[RandomVariable[_]] = immutable.Set(E, B, A)
   val order = List(J, M)

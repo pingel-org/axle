@@ -78,7 +78,7 @@ class ScalaFigures extends Specification {
     bn
   }
 
-  def figure6_2() = figure6_1.getJointProbabilityTable()
+  def figure6_2() = figure6_1.jointProbabilityTable()
 
   def figure6_3() = {
 
@@ -136,7 +136,7 @@ class ScalaFigures extends Specification {
     bn += (av -> bv, "")
     bn += (bv -> cv, "")
 
-    val pB = (((bn.getCPT(B) * bn.getCPT(A)).sumOut(A)) * bn.getCPT(C)).sumOut(C)
+    val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)
 
     bn
   }
@@ -180,11 +180,11 @@ class ScalaFigures extends Specification {
 
     val τ = new EliminationTree()
 
-    val τ_vA = τ += f61.getCPT(A)
-    val τ_vB = τ += f61.getCPT(B)
-    val τ_vC = τ += f61.getCPT(C)
-    val τ_vD = τ += f61.getCPT(D)
-    val τ_vE = τ += f61.getCPT(E)
+    val τ_vA = τ += f61.cpt(A)
+    val τ_vB = τ += f61.cpt(B)
+    val τ_vC = τ += f61.cpt(C)
+    val τ_vD = τ += f61.cpt(D)
+    val τ_vE = τ += f61.cpt(E)
 
     τ += (τ_vA -> τ_vB, "")
     τ += (τ_vA -> τ_vD, "")
@@ -192,8 +192,8 @@ class ScalaFigures extends Specification {
     τ += (τ_vC -> τ_vE, "")
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
-    val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.getCPT(C))
-    (f68, τ, f61.getCPT(C))
+    val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.cpt(C))
+    (f68, τ, f61.cpt(C))
   }
 
   // factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3

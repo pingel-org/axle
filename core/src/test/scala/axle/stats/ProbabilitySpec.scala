@@ -20,11 +20,11 @@ class ProbabilitySpec extends Specification {
   "dice" should {
     "work" in {
 
-      val d6a = d6()
-      val d6b = d6()
-      P(d6a eq '⚃)() must be equalTo 0.16666666666666666
-      P((d6a eq '⚃) and (d6b eq '⚃))() must be equalTo 0.027777777777777776
-      P((d6a ne '⚃))() must be equalTo 0.8333333333333334
+      val d6a = die(6)
+      val d6b = die(6)
+      P(d6a eq 1)() must be equalTo 0.16666666666666666
+      P((d6a eq 1) and (d6b eq 2))() must be equalTo 0.027777777777777776
+      P((d6a ne 3))() must be equalTo 0.8333333333333334
     }
   }
 
