@@ -14,20 +14,20 @@ trait DirectedGraphFactory extends GraphFactory {
     trait DirectedGraphVertex[P] extends GraphVertex[P]
 
     trait DirectedGraphEdge[P] extends GraphEdge[P] {
-      def getSource(): V
-      def getDest(): V
+      def source(): V
+      def dest(): V
     }
 
     def getEdge(from: V, to: V): Option[E]
     def removeAllEdgesAndVertices(): Unit
     def deleteEdge(e: E): Unit
     def deleteVertex(v: V): Unit
-    def getLeaves(): Set[V]
-    def getNeighbors(v: V): Set[V]
+    def leaves(): Set[V]
+    def neighbors(v: V): Set[V]
     def precedes(v1: V, v2: V): Boolean
-    def getPredecessors(v: V): Set[V]
+    def predecessors(v: V): Set[V]
     def isLeaf(v: V): Boolean
-    def getSuccessors(v: V): Set[V]
+    def successors(v: V): Set[V]
     def outputEdgesOf(v: V): Set[E]
     def descendantsIntersectsSet(v: V, s: Set[V]): Boolean
     def collectDescendants(v: V, result: mutable.Set[V]): Unit

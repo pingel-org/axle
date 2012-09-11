@@ -24,7 +24,7 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
     type V = jug.type#V
     type E = jug.type#E
 
-    val layout = new FRLayout(jug.getStorage)
+    val layout = new FRLayout(jug.storage)
     layout.setSize(new Dimension(width, height))
     val vv = new VisualizationViewer[V, E](layout) // interactive
     vv.setPreferredSize(new Dimension(width + border, height + border))
@@ -42,11 +42,11 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
     }
 
     val vertexLabelTransformer = new Transformer[V, String]() {
-      def transform(vertex: V) = vertex.getPayload.toString
+      def transform(vertex: V) = vertex.payload.toString
     }
 
     val edgeLabelTransformer = new Transformer[E, String]() {
-      def transform(edge: E) = edge.getPayload.toString
+      def transform(edge: E) = edge.payload.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)

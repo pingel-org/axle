@@ -5,24 +5,19 @@ import axle.graph.JungUndirectedGraphFactory._
 
 class EliminationTree extends JungUndirectedGraph[Factor, String] {
 
-  type GV = this.V
-  type GE = this.E
-  //  type GV = g.type#V
-  //  type GE = g.type#E
-
-  def gatherVars(stop: GV, node: GV, result: mutable.Set[RandomVariable[_]]): Unit = {
-    result ++= node.getPayload.getVariables
-    getNeighbors(node).filter(!_.equals(stop)).map(gatherVars(node, _, result))
+  def gatherVars(stop: V, node: V, result: mutable.Set[RandomVariable[_]]): Unit = {
+    result ++= node.payload.getVariables
+    neighbors(node).filter(!_.equals(stop)).map(gatherVars(node, _, result))
   }
 
-  def cluster(i: GV): Set[RandomVariable[_]] = {
+  def cluster(i: V): Set[RandomVariable[_]] = {
     val result = mutable.Set[RandomVariable[_]]()
-    getNeighbors(i).map(j => result ++= separate(i, j))
-    result ++= i.getPayload.getVariables
+    neighbors(i).map(j => result ++= separate(i, j))
+    result ++= i.payload.getVariables
     result
   }
 
-  def separate(i: GV, j: GV): Set[RandomVariable[_]] = {
+  def separate(i: V, j: V): Set[RandomVariable[_]] = {
     val iSide = mutable.Set[RandomVariable[_]]()
     gatherVars(j, i, iSide)
     val jSide = mutable.Set[RandomVariable[_]]()
@@ -33,7 +28,7 @@ class EliminationTree extends JungUndirectedGraph[Factor, String] {
   // def constructEdge(v1: GV, v2: GV): GE = g += ((v1, v2), "")
   // def delete(node: GV): Unit = g.delete(node)
 
-  def getAllVariables(): Set[RandomVariable[_]] = getVertices.flatMap(_.getPayload.getVariables)
+  def getAllVariables(): Set[RandomVariable[_]] = vertices.flatMap(_.payload.getVariables)
 
   // Note: previous version also handled case where 'node' wasn't in the graph
   // def addFactor(node: GV, f: Factor): Unit = node.setPayload(node.getPayload.multiply(f))

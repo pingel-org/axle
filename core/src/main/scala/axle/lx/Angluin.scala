@@ -14,7 +14,7 @@ object Angluin {
 
     type AcceptorState = g.V
 
-    def Q() = g.getVertices
+    def Q() = g.vertices
 
     val I = mutable.Set[AcceptorState]()
     val F = mutable.Set[AcceptorState]()
@@ -31,7 +31,7 @@ object Angluin {
     }
 
     def δ(state: AcceptorState, symbol: Symbol): Set[AcceptorState] =
-      g.getEdges.filter(e => e.getSource == state && e.getPayload == symbol).map(_.getDest)
+      g.edges.filter(e => e.source == state && e.payload == symbol).map(_.dest)
 
     def δ(state: AcceptorState, exp: Expression): Set[AcceptorState] = {
       if (exp == null) {
@@ -43,9 +43,9 @@ object Angluin {
     }
 
     // TODO: not sure if this should count edges or nodes:
-    def isForwardDeterministic(): Boolean = (I.size <= 1) && Q.∀(g.getSuccessors(_).size <= 1)
+    def isForwardDeterministic(): Boolean = (I.size <= 1) && Q.∀(g.successors(_).size <= 1)
 
-    def isBackwardDeterministic(): Boolean = (F.size <= 1) && Q.∀(g.getPredecessors(_).size <= 1)
+    def isBackwardDeterministic(): Boolean = (F.size <= 1) && Q.∀(g.predecessors(_).size <= 1)
 
     def isZeroReversible(): Boolean = isForwardDeterministic() && isBackwardDeterministic()
 

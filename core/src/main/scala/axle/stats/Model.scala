@@ -23,7 +23,7 @@ trait Model[MVP] extends JungDirectedGraph[MVP, String] {
 
   def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_]
 
-  def getRandomVariables(): List[RandomVariable[_]] = getVertices().map(v => vertexPayloadToRandomVariable(v.getPayload)).toList
+  def getRandomVariables(): List[RandomVariable[_]] = vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
 
   def getVariable(name: String): RandomVariable[_] = name2variable(name)
 
@@ -93,7 +93,7 @@ trait Model[MVP] extends JungDirectedGraph[MVP, String] {
         if (to.contains(variable)) {
           return Some(List(variable))
         }
-        val neighbors = mutable.Set() ++ (getNeighbors(variableVertex) - priorVertex).map(_.getPayload)
+        val neighs = mutable.Set() ++ (neighbors(variableVertex) - priorVertex).map(_.payload)
 
         val visitedCopy = mutable.Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]() ++ visited
         if (!visited.contains(prior)) {
@@ -101,7 +101,7 @@ trait Model[MVP] extends JungDirectedGraph[MVP, String] {
         }
         visited(prior) += variable
 
-        val path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighbors.map(vertexPayloadToRandomVariable(_)), to, given)
+        val path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighs.map(vertexPayloadToRandomVariable(_)), to, given)
         if (path.isDefined) {
           return Some(path.get ++ List(variable))
         }

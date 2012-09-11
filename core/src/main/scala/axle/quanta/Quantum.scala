@@ -138,28 +138,28 @@ trait Quantum {
     def nano() = quantity(oneBD.scaleByPowerOfTen(-9), this, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse("")))
 
     override def toString() = name.getOrElse(conversion
-      .map(c => c.getPayload + " " + c.getSource.getPayload.getSymbol.getOrElse(""))
+      .map(c => c.payload + " " + c.source.payload.getSymbol.getOrElse(""))
       .getOrElse(name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()))
 
     def +(right: UOM): UOM = {
-      val (bd, uom) = conversion.map(c => (c.getPayload, c.getSource.getPayload)).getOrElse((oneBD, this))
-      quantity(bd.add((right in uom).getConversion.get.getPayload), uom) // TODO remove .get
+      val (bd, uom) = conversion.map(c => (c.payload, c.source.payload)).getOrElse((oneBD, this))
+      quantity(bd.add((right in uom).getConversion.get.payload), uom) // TODO remove .get
     }
 
     def -(right: UOM): UOM = {
-      val (bd, uom) = conversion.map(c => (c.getPayload, c.getSource.getPayload)).getOrElse((oneBD, this))
-      quantity(bd.subtract((right in uom).getConversion.get.getPayload), uom) // TODO remove .get
+      val (bd, uom) = conversion.map(c => (c.payload, c.source.payload)).getOrElse((oneBD, this))
+      quantity(bd.subtract((right in uom).getConversion.get.payload), uom) // TODO remove .get
     }
 
     def *(bd: BigDecimal): UOM = bd.doubleValue match {
       case 0.0 => zero()
       case _ => conversion
-        .map(c => quantity(c.getPayload.multiply(bd), c.getSource.getPayload))
+        .map(c => quantity(c.payload.multiply(bd), c.source.payload))
         .getOrElse(quantity(bd, this))
     }
 
     def /(bd: BigDecimal): UOM = conversion
-      .map(c => quantity(bdDivide(c.getPayload, bd), c.getSource.getPayload))
+      .map(c => quantity(bdDivide(c.payload, bd), c.source.payload))
       .getOrElse(quantity(bdDivide(oneBD, bd), this))
 
     override def *:(bd: BigDecimal) = bd.doubleValue match {
@@ -181,14 +181,14 @@ trait Quantum {
 
     def magnitudeIn(u: UOM): BigDecimal =
       conversionGraph.shortestPath(vertexFor(u), vertexFor(this)).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.getPayload))
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.payload))
       }).getOrElse(throw new Exception("no conversion path from " + this + " to " + u))
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
       val resultBD = conversion.map(c =>
-        right.getConversion.map(rc => c.getPayload.multiply(rc.getPayload)
-        ).getOrElse(c.getPayload)
-      ).getOrElse(right.getConversion.map(_.getPayload)
+        right.getConversion.map(rc => c.payload.multiply(rc.payload)
+        ).getOrElse(c.payload)
+      ).getOrElse(right.getConversion.map(_.payload)
         .getOrElse(oneBD)
       )
       resultQuantum.quantity(resultBD, resultQuantum.newUnitOfMeasurement(None))
@@ -196,9 +196,9 @@ trait Quantum {
 
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = {
       val resultBD = conversion.map(c =>
-        bottom.getConversion.map(bc => bdDivide(c.getPayload, bc.getPayload)
-        ).getOrElse(c.getPayload)
-      ).getOrElse(bottom.getConversion.map(bc => bdDivide(oneBD, bc.getPayload))
+        bottom.getConversion.map(bc => bdDivide(c.payload, bc.payload)
+        ).getOrElse(c.payload)
+      ).getOrElse(bottom.getConversion.map(bc => bdDivide(oneBD, bc.payload))
         .getOrElse(oneBD)
       )
       resultQuantum.quantity(resultBD, resultQuantum.newUnitOfMeasurement(None))
@@ -212,7 +212,7 @@ trait Quantum {
       val otherVertex = vertexFor(other)
       val thisVertex = vertexFor(this)
       val resultBD = conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.getPayload))
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.payload))
       })
       if (resultBD.isEmpty) {
         throw new Exception("no conversion path from " + this + " to " + other)

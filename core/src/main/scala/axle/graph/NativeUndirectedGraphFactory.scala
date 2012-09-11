@@ -13,24 +13,22 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
   trait NativeUndirectedGraph[VP, EP] extends UndirectedGraph[VP, EP] {
 
-    import collection._
-
     type V = NativeUndirectedGraphVertex[VP]
     type E = NativeUndirectedGraphEdge[EP]
 
     type S = (mutable.Set[V], mutable.Set[E], Map[V, mutable.Set[E]])
 
-    val vertices = mutable.Set[V]()
-    val edges = mutable.Set[E]()
+    val _vertices = mutable.Set[V]()
+    val _edges = mutable.Set[E]()
     val vertex2edges = mutable.Map[V, mutable.Set[E]]()
 
-    def getStorage() = (vertices, edges, vertex2edges)
+    def storage() = (_vertices, _edges, vertex2edges)
 
-    def getVertices() = vertices.toSet
+    def vertices() = _vertices.toSet
 
-    def getEdges() = edges.toSet
+    def edges() = _edges.toSet
 
-    def size() = vertices.size
+    def size() = _vertices.size
 
     trait NativeUndirectedGraphVertex[P] extends UndirectedGraphVertex[P] {
       def setPayload(p: P): Unit = {} // TODO payload = p // type erasure problem
@@ -40,23 +38,23 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
       def setPayload(p: P): Unit = {} // TODO payload = p // type erasure problem
     }
 
-    class NativeUndirectedGraphVertexImpl[P](var payload: P) extends NativeUndirectedGraphVertex[P] {
+    class NativeUndirectedGraphVertexImpl[P](var _payload: P) extends NativeUndirectedGraphVertex[P] {
       self: V =>
-      vertices += this
-      def getPayload(): P = payload
+      _vertices += this
+      def payload(): P = _payload
     }
 
-    class NativeUndirectedGraphEdgeImpl[P](v1: V, v2: V, var payload: P) extends NativeUndirectedGraphEdge[P] {
+    class NativeUndirectedGraphEdgeImpl[P](v1: V, v2: V, var _payload: P) extends NativeUndirectedGraphEdge[P] {
 
       self: E =>
 
       // assume that this edge isn't already in our list of edges
-      edges += this
-      getEdges(v1).add(this)
-      getEdges(v2).add(this)
+      _edges += this
+      edges(v1) += this
+      edges(v2) += this
 
-      def getVertices(): (V, V) = (v1, v2)
-      def getPayload(): P = payload
+      def vertices(): (V, V) = (v1, v2)
+      def payload(): P = _payload
     }
 
     def vertex(payload: VP): NativeUndirectedGraphVertex[VP] = new NativeUndirectedGraphVertexImpl[VP](payload)
@@ -68,53 +66,53 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     }
 
     def unlink(e: E): Unit = {
-      val dble = e.getVertices()
-      getEdges(dble._1).remove(e)
-      getEdges(dble._2).remove(e)
-      edges -= e
+      val dble = e.vertices()
+      edges(dble._1) -= e
+      edges(dble._2) -= e
+      _edges -= e
     }
 
-    def unlink(v1: V, v2: V): Unit = getEdges(v1).filter(_.other(v1).equals(v2)).map(unlink(_))
+    def unlink(v1: V, v2: V): Unit = edges(v1).filter(_.other(v1).equals(v2)).map(unlink(_))
 
-    def areNeighbors(v1: V, v2: V) = getEdges(v1).exists(_.connects(v1, v2))
+    def areNeighbors(v1: V, v2: V) = edges(v1).exists(_.connects(v1, v2))
 
     override def isClique(vs: Set[V]): Boolean =
       vs.doubles.∀({ case (a, b) => ((a == b) || areNeighbors(a, b)) })
 
-    def degree(v: V) = getEdges(v).size
+    def degree(v: V) = edges(v).size
 
-    def getEdges(v: V) = {
+    def edges(v: V) = {
       if (!vertex2edges.contains(v)) {
         vertex2edges += v -> mutable.Set[E]()
       }
       vertex2edges(v)
     }
 
-    def getNeighbors(v: V): Set[V] = getEdges(v).map(_.other(v)).toSet
+    def neighbors(v: V): Set[V] = edges(v).map(_.other(v)).toSet
 
     def delete(v: V) = {
-      val es = getEdges(v)
-      vertices -= v
+      val es = edges(v)
+      _vertices -= v
       vertex2edges.remove(v)
       for (e <- es) {
-        edges -= e
+        _edges -= e
         vertex2edges.get(e.other(v)) map { otherEdges => otherEdges.remove(e) }
       }
     }
 
     // a "leaf" is vertex with only one neighbor
-    def firstLeafOtherThan(r: V) = vertices.find({ v => getNeighbors(v).size == 1 && !v.equals(r) })
+    def firstLeafOtherThan(r: V) = vertices.find({ v => neighbors(v).size == 1 && !v.equals(r) })
 
     def eliminate(v: V, payload: (V, V) => EP) = {
       // "decompositions" page 3 (Definition 3, Section 9.3)
       // turn the neighbors of v into a clique
 
-      val es = getEdges(v)
-      val vs = getNeighbors(v)
+      val es = edges(v)
+      val vs = neighbors(v)
 
-      vertices -= v
+      _vertices -= v
       vertex2edges.remove(v)
-      edges --= es
+      _edges --= es
 
       forceClique(vs.asInstanceOf[Set[V]], payload)
     }

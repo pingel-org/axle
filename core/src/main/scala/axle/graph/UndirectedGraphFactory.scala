@@ -15,10 +15,10 @@ trait UndirectedGraphFactory extends GraphFactory {
 
     trait UndirectedGraphEdge[P] extends GraphEdge[P] {
 
-      def getVertices(): (V, V)
+      def vertices(): (V, V)
 
       def other(u: V): V = {
-        val (v1, v2) = getVertices()
+        val (v1, v2) = vertices()
         u match {
           case _ if u.equals(v1) => v2
           case _ if u.equals(v2) => v1
@@ -27,7 +27,7 @@ trait UndirectedGraphFactory extends GraphFactory {
       }
 
       def connects(a1: V, a2: V) = {
-        val (v1, v2) = getVertices()
+        val (v1, v2) = vertices()
         (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
       }
     }
@@ -41,7 +41,7 @@ trait UndirectedGraphFactory extends GraphFactory {
     def isClique(vs: Set[V]): Boolean =
       vs.doubles().forall({ case (vi, vj) => areNeighbors(vi, vj) })
 
-    def getNumEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) =
+    def numEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) =
       vs.doubles().filter({ case (vi, vj) => areNeighbors(vi, vj) }).length
 
     def forceClique(vs: Set[V], payload: (V, V) => EP): Unit =
@@ -50,15 +50,15 @@ trait UndirectedGraphFactory extends GraphFactory {
 
     // assert: among is a subset of vertices
     def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): V =
-      among.map(v => (v, getNumEdgesToForceClique(getNeighbors(v), payload))).minBy(_._2)._1
+      among.map(v => (v, numEdgesToForceClique(neighbors(v), payload))).minBy(_._2)._1
 
     // assert: among is a subset of vertices
     def vertexWithFewestNeighborsAmong(among: Set[V]): V =
-      among.map(v => (v, getNeighbors(v).size)).minBy(_._2)._1
+      among.map(v => (v, neighbors(v).size)).minBy(_._2)._1
 
     def degree(v: V): Int
-    def getEdges(v: V): Set[E]
-    def getNeighbors(v: V): Set[V]
+    def edges(v: V): Set[E]
+    def neighbors(v: V): Set[V]
     def delete(v: V): Unit
     // a "leaf" is vertex with only one neighbor
     def firstLeafOtherThan(r: V): Option[V]

@@ -17,18 +17,18 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     val ov2nv = mutable.Map[other.V, result.V]()
 
-    other.getVertices().map(oldV => {
-      val oldVP = oldV.getPayload()
+    other.vertices().map(oldV => {
+      val oldVP = oldV.payload()
       val newVP = convertVP(oldVP)
       val newV = result += newVP
       ov2nv += oldV -> newV
     })
 
-    other.getEdges().map(oldE => {
-      val (otherv1, otherv2) = oldE.getVertices()
+    other.edges().map(oldE => {
+      val (otherv1, otherv2) = oldE.vertices()
       val nv1 = ov2nv(otherv1)
       val nv2 = ov2nv(otherv2)
-      result += ((nv1, nv2), convertEP(oldE.getPayload))
+      result += ((nv1, nv2), convertEP(oldE.payload))
     })
 
     result
@@ -36,7 +36,6 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
   trait JungUndirectedGraph[VP, EP] extends UndirectedGraph[VP, EP] {
 
-    import collection._
     import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
     type V = JungUndirectedGraphVertex[VP]
@@ -48,66 +47,66 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     trait JungUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
 
-    class JungUndirectedGraphVertexImpl(var payload: VP)
+    class JungUndirectedGraphVertexImpl(var _payload: VP)
       extends JungUndirectedGraphVertex[VP] {
 
       val ok = jungGraph.addVertex(this)
       // TODO check 'ok'
 
-      def getPayload(): VP = payload
-      def setPayload(p: VP) = payload = p
+      def payload(): VP = _payload
+      def setPayload(p: VP) = _payload = p
     }
 
-    class JungUndirectedGraphEdgeImpl(v1: V, v2: V, var payload: EP)
+    class JungUndirectedGraphEdgeImpl(v1: V, v2: V, var _payload: EP)
       extends JungUndirectedGraphEdge[EP] {
 
       val ok = jungGraph.addEdge(this, v1, v2)
       // TODO check 'ok'
 
-      def getVertices(): (V, V) = (v1, v2)
+      def vertices(): (V, V) = (v1, v2)
 
-      def getPayload(): EP = payload
-      def setPayload(p: EP) = payload = p
+      def payload(): EP = _payload
+      def setPayload(p: EP) = _payload = p
     }
 
     val jungGraph = new UndirectedSparseGraph[V, E]()
 
-    def getStorage() = jungGraph
+    def storage() = jungGraph
 
-    def getVertices(): immutable.Set[V] = jungGraph.getVertices.asScala.toSet
+    def vertices(): immutable.Set[V] = jungGraph.getVertices.asScala.toSet
 
-    def getEdges(): immutable.Set[E] = jungGraph.getEdges.asScala.toSet
+    def edges(): immutable.Set[E] = jungGraph.getEdges.asScala.toSet
 
     def size(): Int = jungGraph.getVertexCount()
 
     def vertex(payload: VP): JungUndirectedGraphVertex[VP] = new JungUndirectedGraphVertexImpl(payload)
 
     // TODO: findVertex needs an index:
-    def findVertex(payload: VP): Option[V] = getVertices().find(_.getPayload == payload)
+    def findVertex(payload: VP): Option[V] = vertices().find(_.payload == payload)
 
     def edge(v1: V, v2: V, payload: EP): JungUndirectedGraphEdge[EP] = new JungUndirectedGraphEdgeImpl(v1, v2, payload)
 
     def unlink(e: E): Unit = jungGraph.removeEdge(e)
 
-    def unlink(v1: V, v2: V): Unit = getEdges(v1).filter(_.other(v1).equals(v2)).map(unlink(_))
+    def unlink(v1: V, v2: V): Unit = edges(v1).filter(_.other(v1).equals(v2)).map(unlink(_))
 
-    def areNeighbors(v1: V, v2: V) = getEdges(v1).exists(_.connects(v1, v2))
+    def areNeighbors(v1: V, v2: V) = edges(v1).exists(_.connects(v1, v2))
 
-    def degree(v: V) = getEdges(v).size
+    def degree(v: V) = edges(v).size
 
-    def getEdges(v: V): Set[E] = jungGraph.getIncidentEdges(v).asScala.toSet
+    def edges(v: V): Set[E] = jungGraph.getIncidentEdges(v).asScala.toSet
 
-    def getNeighbors(v: V): Set[V] = jungGraph.getNeighbors(v).asScala.toSet
+    def neighbors(v: V): Set[V] = jungGraph.getNeighbors(v).asScala.toSet
 
     def delete(v: V): Unit = jungGraph.removeVertex(v)
 
     // a "leaf" is vertex with only one neighbor
-    def firstLeafOtherThan(r: V) = getVertices().find(v => getNeighbors(v).size == 1 && !v.equals(r))
+    def firstLeafOtherThan(r: V) = vertices().find(v => neighbors(v).size == 1 && !v.equals(r))
 
     def eliminate(v: V, payload: (V, V) => EP) = {
       // "decompositions" page 3 (Definition 3, Section 9.3)
       // turn the neighbors of v into a clique
-      val vs = getNeighbors(v)
+      val vs = neighbors(v)
       jungGraph.removeVertex(v)
       forceClique(vs.asInstanceOf[Set[V]], payload)
     }

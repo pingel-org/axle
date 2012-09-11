@@ -29,7 +29,7 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     // http://www.grotto-networking.com/JUNG/
     // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf
 
-    val layout = new FRLayout(jdg.getStorage)
+    val layout = new FRLayout(jdg.storage)
     layout.setSize(new Dimension(width, height))
     // val vv = new BasicVisualizationServer[ug.type#V, ug.type#E](layout) // non-interactive
     val vv = new VisualizationViewer[V, E](layout) // interactive
@@ -48,11 +48,11 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     }
 
     val vertexLabelTransformer = new Transformer[V, String]() {
-      def transform(vertex: V) = jdg.vertexToVisualizationHtml(vertex.getPayload).toString
+      def transform(vertex: V) = jdg.vertexToVisualizationHtml(vertex.payload).toString
     }
 
     val edgeLabelTransformer = new Transformer[E, String]() {
-      def transform(edge: E) = edge.getPayload.toString
+      def transform(edge: E) = edge.payload.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)

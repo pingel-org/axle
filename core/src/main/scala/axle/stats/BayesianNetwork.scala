@@ -142,7 +142,7 @@ class BayesianNetwork(name: String)
     )
   }
 
-  def cpt(variable: RandomVariable[_]): Factor = findVertex(_.rv == variable).map(_.getPayload.cpt).get
+  def cpt(variable: RandomVariable[_]): Factor = findVertex(_.rv == variable).map(_.payload.cpt).get
 
   def probabilityOf(cs: Seq[CaseIs[_]]) = cs.map(c => cpt(c.rv)(cs)).reduce(_ * _)
 
@@ -152,13 +152,13 @@ class BayesianNetwork(name: String)
 
     val X: immutable.Set[RandomVariable[_]] = immutable.Set(rv)
 
-    val Z: immutable.Set[RandomVariable[_]] = getPredecessors(rvVertex).map(_.getPayload.rv).toSet
+    val Z: immutable.Set[RandomVariable[_]] = predecessors(rvVertex).map(_.payload.rv).toSet
 
     val D = mutable.Set[this.V]()
     collectDescendants(rvVertex, D)
     D += rvVertex // probably already includes this
-    D ++= getPredecessors(rvVertex)
-    val Dvars = D.map(_.getPayload.rv)
+    D ++= predecessors(rvVertex)
+    val Dvars = D.map(_.payload.rv)
     val Y = getRandomVariables.filter(!Dvars.contains(_)).toSet
 
     new Independence(X, Z, Y)
@@ -212,7 +212,7 @@ class BayesianNetwork(name: String)
       }).reduce(_ * _)
 
   def interactsWith(v1: RandomVariable[_], v2: RandomVariable[_]): Boolean =
-    getVertices().map(_.getPayload.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
+    vertices().map(_.payload.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
 
   /**
    * interactionGraph
@@ -243,7 +243,7 @@ class BayesianNetwork(name: String)
     getRandomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
         val ig = gi._1
-        (ig.eliminate(rv), ig.getNeighbors(ig.findVertex(rv).get).size)
+        (ig.eliminate(rv), ig.neighbors(ig.findVertex(rv).get).size)
       }
     ).map(_._2).max
 
@@ -262,7 +262,7 @@ class BayesianNetwork(name: String)
       for (U <- e.map(_.rv)) {
         val uVertex = result.findVertex(_.rv == U).get
         for (edge <- result.outputEdgesOf(uVertex)) { // ModelEdge
-          val X = edge.getDest().getPayload.rv
+          val X = edge.dest().payload.rv
           val oldF = result.cpt(X)
           result.deleteEdge(edge) // TODO: not functional
           val smallerF: Factor = null // TODO makeFactorFor(X)
@@ -283,7 +283,7 @@ class BayesianNetwork(name: String)
     val vars = eOpt.map(Q ++ _.map(_.rv)).getOrElse(Q)
 
     def nodePruneStream(g: BayesianNetwork): Stream[BayesianNetwork] = {
-      val xVertices = g.getLeaves().toSet -- vars.map(rv => g.findVertex(_.rv == rv).get)
+      val xVertices = g.leaves().toSet -- vars.map(rv => g.findVertex(_.rv == rv).get)
       xVertices.size match {
         case 0 => Stream.empty
         case _ => {
@@ -363,7 +363,7 @@ class BayesianNetwork(name: String)
     val result = mutable.ListBuffer[RandomVariable[_]]()
     while (X.size > 0) {
       val xVertices = X.map(ig.findVertex(_).get)
-      val rv = ig.vertexWithFewestNeighborsAmong(xVertices).getPayload
+      val rv = ig.vertexWithFewestNeighborsAmong(xVertices).payload
       result += rv
       ig.eliminate(rv)
       X -= rv
@@ -379,7 +379,7 @@ class BayesianNetwork(name: String)
 
     while (X.size > 0) {
       val xVertices = X.map(ig.findVertex(_).get)
-      val rv = ig.vertexWithFewestEdgesToEliminateAmong(xVertices, (v1, v2) => { "x" }).getPayload
+      val rv = ig.vertexWithFewestEdgesToEliminateAmong(xVertices, (v1, v2) => { "x" }).payload
       result += rv
       ig.eliminate(rv)
       X -= rv
@@ -413,12 +413,12 @@ class BayesianNetwork(name: String)
   // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
   def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): (BayesianNetwork, Factor) = {
-    while (τ.getVertices().size > 1) {
+    while (τ.vertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in τ
       val fl = τ.firstLeafOtherThan(τ.findVertex(f).get)
       fl.map(i => {
-        val j = τ.getNeighbors(i).iterator.next()
-        val ɸ_i = i.getPayload
+        val j = τ.neighbors(i).iterator.next()
+        val ɸ_i = i.payload
         τ.delete(i)
         j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
       })
@@ -430,12 +430,12 @@ class BayesianNetwork(name: String)
   // TODO: Make immutable: this should not be calling delete or setPayload
   def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): Factor = {
     // Q is a subset of C_r
-    while (τ.getVertices().size > 1) {
+    while (τ.vertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in tau
       val fl = τ.firstLeafOtherThan(τ.findVertex(f).get)
       fl.map(i => {
-        val j = τ.getNeighbors(i).iterator.next()
-        val ɸ_i = i.getPayload
+        val j = τ.neighbors(i).iterator.next()
+        val ɸ_i = i.payload
         τ.delete(i)
         val Sij = τ.separate(i, j)
         j.setPayload(ɸ_i.projectToOnly(Sij.toList))
@@ -447,7 +447,7 @@ class BayesianNetwork(name: String)
   // Note: not sure about this return type:
   def factorElimination(τ: EliminationTree, e: List[CaseIs[_]]): Map[Factor, Factor] =
     {
-      for (i <- τ.getVertices()) {
+      for (i <- τ.vertices()) {
         for (ci <- e) {
           // val lambdaE = new Factor(ci.rv, Map())
           // assign lambdaE.E to e.get(E)
@@ -456,7 +456,7 @@ class BayesianNetwork(name: String)
       // TODO val root = chooseRoot(τ)
       // TODO pullMessagesTowardsRoot()
       // TODO pushMessagesFromRoot()
-      for (i <- τ.getVertices()) {
+      for (i <- τ.vertices()) {
 
       }
       null // TODO
