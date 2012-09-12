@@ -16,7 +16,7 @@ trait Game {
 
   def introMessage(): Unit
 
-  def moveStateStream(state: STATE): Stream[(MOVE, STATE)] = state.isTerminal match {
+  def moveStateStream(state: STATE): Stream[(MOVE, STATE)] = state.outcome.isDefined match {
     case true => Stream.empty
     case false => {
       val move = state.player.chooseMove(state)
@@ -26,7 +26,7 @@ trait Game {
     }
   }
 
-  def scriptedMoveStateStream(state: STATE, moveIt: Iterator[MOVE]): Stream[(MOVE, STATE)] = (state.isTerminal || !moveIt.hasNext) match {
+  def scriptedMoveStateStream(state: STATE, moveIt: Iterator[MOVE]): Stream[(MOVE, STATE)] = (state.outcome.isDefined || !moveIt.hasNext) match {
     case true => Stream.empty
     case false => {
       val move = moveIt.next
@@ -63,15 +63,14 @@ trait Game {
   class Outcome(winner: Option[PLAYER])
     extends Event {
 
-    def displayTo(player: PLAYER): String = winner match {
-
-      case None => "The game was a draw."
-
-      case Some(player) => "You have beaten " + game.players().filter(_ != winner).map(_.toString).toList.mkString(" and ") + "!"
-
-      case _ => "%s beat you!".format(winner)
-    }
-
+    def displayTo(player: PLAYER): String =
+      winner.map(wp =>
+        if (wp equals player) {
+          "You have beaten " + game.players().filter(p => !(p equals player)).map(_.toString).toList.mkString(" and ") + "!"
+        } else {
+          "%s beat you!".format(wp)
+        }
+      ).getOrElse("The game was a draw.")
   }
 
   abstract class Player(_id: String, description: String) {
@@ -94,8 +93,6 @@ trait Game {
     def player(): PLAYER
 
     def apply(move: MOVE): STATE
-
-    def isTerminal(): Boolean
 
     def outcome(): Option[OUTCOME]
 

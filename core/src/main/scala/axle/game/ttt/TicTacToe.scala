@@ -114,25 +114,28 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
       board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
     def hasWonRow(player: TicTacToePlayer) =
-      (0 until boardSize).exists(board.row(_).toList.forall(_ == Some(player.id)))
+      (0 until boardSize).exists(board.row(_).toList.forall(_ equals Some(player.id)))
 
     def hasWonColumn(player: TicTacToePlayer) =
-      (0 until boardSize).exists(board.column(_).toList.forall(_ == Some(player.id)))
+      (0 until boardSize).exists(board.column(_).toList.forall(_ equals Some(player.id)))
 
     def hasWonDiagonal(player: TicTacToePlayer) =
-      (0 until boardSize).forall(i => board(i, i) == Some(player.id)) ||
-        (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player.id))
+      (0 until boardSize).forall(i => board(i, i) equals Some(player.id)) ||
+        (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) equals Some(player.id))
 
     def hasWon(player: TicTacToePlayer) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
     def openPositions() = 1.to(numPositions).filter(this(_).isEmpty)
 
-    def isTerminal(): Boolean = openPositions().length == 0
-
-    def outcome(): Option[TicTacToeOutcome] = if (isTerminal) {
-      Some(TicTacToeOutcome(ttt.players.find(hasWon(_))))
-    } else {
-      None
+    def outcome(): Option[TicTacToeOutcome] = {
+      val winner = ttt.players.find(hasWon(_))
+      if (winner.isDefined) {
+        Some(TicTacToeOutcome(Some(winner.get)))
+      } else if (openPositions().length == 0) {
+        Some(TicTacToeOutcome(None))
+      } else {
+        None
+      }
     }
 
     def apply(move: TicTacToeMove): TicTacToeState = {
@@ -152,8 +155,8 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
     aitttDescription: String = "my poor AI")
     extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
 
+    // pick a move at random.  not so "I"
     def chooseMove(state: TicTacToeState): TicTacToeMove = {
-      // pick a move at random.  not so "I"
       val opens = state.openPositions()
       TicTacToeMove(this, opens(Random.nextInt(opens.length)))
     }
