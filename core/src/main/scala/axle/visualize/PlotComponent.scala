@@ -15,7 +15,7 @@ class PlotComponent[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]) extends JPanel {
 
   val colorStream = Stream.continually(colors.toStream).flatten
 
-  val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)(getXPlottable(), getYPlottable())
+  val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)(xPlottable(), yPlottable())
 
   val normalFont = new Font("Courier New", Font.BOLD, 12)
   val titleFont = new Font("Palatino", Font.BOLD, 20)

@@ -14,17 +14,17 @@ object ViewString extends View[String] with Loggable {
 
   override def docNodeInContext(doc: Document, docNode: AstNode): String = {
 
-    val contextFormatter = new AstNodeFormatterString(doc.getGrammar, mutable.Set(docNode), true)
-    doc.getAst().map(ast => {
-      Emission.emit(doc.getGrammar, ast, contextFormatter)
+    val contextFormatter = new AstNodeFormatterString(doc.grammar, mutable.Set(docNode), true)
+    doc.ast().map(ast => {
+      Emission.emit(doc.grammar, ast, contextFormatter)
       val highlighted_string = contextFormatter.result
       val highlighted_lines = highlighted_string.split("\n") // NOTE: python version used to cache highlighted_lines
       info("vs %s".format((for ((_, v) <- contextFormatter.node2lineno) yield v).mkString))
 
       // // TODO rjust(5) the second i+1
 
-      (math.max(0, docNode.getLineNo - CONTEXT_PAD) to math.min(highlighted_lines.length - 1, docNode.getLineNo + CONTEXT_PAD))
-        .map({ i => "<span class=lineno><a href='/view?filename=%s#%d'>%s</a></span> %s".format(doc.getName, i + 1, i + 1, highlighted_lines(i)) })
+      (math.max(0, docNode.lineNo - CONTEXT_PAD) to math.min(highlighted_lines.length - 1, docNode.lineNo + CONTEXT_PAD))
+        .map({ i => "<span class=lineno><a href='/view?filename=%s#%d'>%s</a></span> %s".format(doc.name, i + 1, i + 1, highlighted_lines(i)) })
         .mkString("\n")
 
     }

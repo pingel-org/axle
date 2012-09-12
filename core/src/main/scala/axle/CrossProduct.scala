@@ -4,7 +4,7 @@ import collection._
 
 class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]] {
 
-  def getCollections() = iterables
+  def collections() = iterables
 
   def iterator() = new CrossProductIterator[E](this)
 
@@ -13,8 +13,8 @@ class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]
     val iterators = mutable.ArrayBuffer[Iterator[InE]]()
     var current = mutable.ArrayBuffer[InE]()
 
-    for (i <- 0 until cp.getCollections().size) {
-      iterators.append(cp.getCollections()(i).iterator)
+    for (i <- 0 until cp.collections().size) {
+      iterators.append(cp.collections()(i).iterator)
       current.append(iterators(i).next())
     }
 
@@ -30,7 +30,7 @@ class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]
         current(i) = iterators(i).next()
         return false
       } else {
-        iterators(i) = cp.getCollections()(i).iterator
+        iterators(i) = cp.collections()(i).iterator
         current(i) = iterators(i).next()
         return incrementFirstAvailable(i + 1)
       }

@@ -17,11 +17,11 @@ object Gold {
   }
 
   trait Grammar {
-    def getL(): Language
+    def L(): Language
   }
 
   class HardCodedGrammar(L: Language) extends Grammar {
-    def getL() = L
+    def L() = L
   }
 
   class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {

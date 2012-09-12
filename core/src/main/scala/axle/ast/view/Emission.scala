@@ -176,7 +176,7 @@ object Emission extends Loggable {
 
     // println("emit(grammar, node = " + node + ", formatter)")
 
-    formatter._node2lineno.update(node, node.getLineNo)
+    formatter._node2lineno.update(node, node.lineNo)
 
     node match {
 

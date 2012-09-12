@@ -6,7 +6,7 @@ import collection._
 trait Game {
 
   game =>
-  
+
   type PLAYER <: Player
   type MOVE <: Move
   type STATE <: State
@@ -40,7 +40,7 @@ trait Game {
       player.introduceGame()
     }
     val lastMoveState = moveStateStream(start).last
-    lastMoveState._2.getOutcome.map(outcome =>
+    lastMoveState._2.outcome.map(outcome =>
       for (player <- players()) {
         player.notify(outcome)
         player.endGame(lastMoveState._2)
@@ -74,9 +74,9 @@ trait Game {
 
   }
 
-  abstract class Player(id: String, description: String) {
+  abstract class Player(_id: String, description: String) {
 
-    def getId() = id
+    def id() = _id
 
     def chooseMove(state: STATE): MOVE
 
@@ -97,7 +97,7 @@ trait Game {
 
     def isTerminal(): Boolean
 
-    def getOutcome(): Option[OUTCOME]
+    def outcome(): Option[OUTCOME]
 
   }
 

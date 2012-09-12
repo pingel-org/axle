@@ -29,7 +29,7 @@ class GoldSpecification extends Specification {
       val ɸ = MemorizingLearner(T)
 
       val guessOpt = ɸ.learn(guess => {
-        val guessedLanguage = guess.getL
+        val guessedLanguage = guess.L
         println("ɸ.processNextExpression().L = " + guessedLanguage)
         val correct = guessedLanguage.equals(ℒ)
         if (correct) {

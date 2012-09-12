@@ -47,17 +47,16 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     trait JungUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
 
-    class JungUndirectedGraphVertexImpl(var _payload: VP)
+    class JungUndirectedGraphVertexImpl(_payload: VP)
       extends JungUndirectedGraphVertex[VP] {
 
       val ok = jungGraph.addVertex(this)
       // TODO check 'ok'
 
       def payload(): VP = _payload
-      def setPayload(p: VP) = _payload = p
     }
 
-    class JungUndirectedGraphEdgeImpl(v1: V, v2: V, var _payload: EP)
+    class JungUndirectedGraphEdgeImpl(v1: V, v2: V, _payload: EP)
       extends JungUndirectedGraphEdge[EP] {
 
       val ok = jungGraph.addEdge(this, v1, v2)
@@ -66,7 +65,6 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
       def vertices(): (V, V) = (v1, v2)
 
       def payload(): EP = _payload
-      def setPayload(p: EP) = _payload = p
     }
 
     val jungGraph = new UndirectedSparseGraph[V, E]()

@@ -71,7 +71,7 @@ case class CaseIs[A](rv: RandomVariable[A], v: A) extends Case[A] {
 
   def bayes() = () => this.probability()
 
-  override def toString(): String = rv.getName + " = " + v
+  override def toString(): String = rv.name + " = " + v
 }
 
 case class CaseIsnt[A](rv: RandomVariable[A], v: A) extends Case[A] {

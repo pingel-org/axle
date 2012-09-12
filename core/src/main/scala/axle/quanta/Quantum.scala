@@ -57,11 +57,11 @@ trait Quantum {
 
     self: UOM =>
 
-    def getConversion(): Option[CGE]
-    def setConversion(cge: CGE): Unit
-    def getLabel(): String
-    def getSymbol(): Option[String]
-    def getLink(): Option[String]
+    def conversion(): Option[CGE]
+    def update(cge: CGE): Unit
+    def label(): String
+    def symbol(): Option[String]
+    def link(): Option[String]
 
     def +(right: UOM): UOM
     def -(right: UOM): UOM
@@ -83,7 +83,7 @@ trait Quantum {
 
     self: UOM =>
 
-    override def setConversion(cge: CGE): Unit = {}
+    override def update(cge: CGE): Unit = {}
 
     override def +(right: UOM): UOM = right
     override def -(right: UOM): UOM = right * -1.0
@@ -104,10 +104,10 @@ trait Quantum {
   }
 
   class UnitOfMeasurementImpl(
-    var conversion: Option[CGE],
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None) extends UnitOfMeasurement {
+    var _conversion: Option[CGE],
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends UnitOfMeasurement {
 
     self: UOM =>
 
@@ -116,39 +116,39 @@ trait Quantum {
     val vertex = conversionGraph += this
     uom2vertex += this -> vertex
 
-    def getConversion() = conversion
-    def setConversion(cge: CGE) = conversion = Some(cge)
-    def getLabel() = name.getOrElse("")
-    def getSymbol() = symbol
-    def getLink() = link
+    def conversion() = _conversion
+    def update(cge: CGE) = _conversion = Some(cge)
+    def label() = _name.getOrElse("")
+    def symbol() = _symbol
+    def link() = _link
 
-    def kilo() = quantity(oneBD.scaleByPowerOfTen(3), this, Some("kilo" + name.getOrElse("")), Some("K" + symbol.getOrElse("")))
-    def mega() = quantity(oneBD.scaleByPowerOfTen(6), this, Some("mega" + name.getOrElse("")), Some("M" + symbol.getOrElse("")))
-    def giga() = quantity(oneBD.scaleByPowerOfTen(9), this, Some("giga" + name.getOrElse("")), Some("G" + symbol.getOrElse("")))
-    def tera() = quantity(oneBD.scaleByPowerOfTen(12), this, Some("kilo" + name.getOrElse("")), Some("T" + symbol.getOrElse("")))
-    def peta() = quantity(oneBD.scaleByPowerOfTen(15), this, Some("peta" + name.getOrElse("")), Some("P" + symbol.getOrElse("")))
-    def exa() = quantity(oneBD.scaleByPowerOfTen(18), this, Some("exa" + name.getOrElse("")), Some("E" + symbol.getOrElse("")))
-    def zetta() = quantity(oneBD.scaleByPowerOfTen(21), this, Some("zetta" + name.getOrElse("")), Some("Z" + symbol.getOrElse("")))
-    def yotta() = quantity(oneBD.scaleByPowerOfTen(24), this, Some("yotta" + name.getOrElse("")), Some("Y" + symbol.getOrElse("")))
+    def kilo() = quantity(oneBD.scaleByPowerOfTen(3), this, Some("kilo" + _name.getOrElse("")), Some("K" + symbol.getOrElse("")))
+    def mega() = quantity(oneBD.scaleByPowerOfTen(6), this, Some("mega" + _name.getOrElse("")), Some("M" + symbol.getOrElse("")))
+    def giga() = quantity(oneBD.scaleByPowerOfTen(9), this, Some("giga" + _name.getOrElse("")), Some("G" + symbol.getOrElse("")))
+    def tera() = quantity(oneBD.scaleByPowerOfTen(12), this, Some("kilo" + _name.getOrElse("")), Some("T" + symbol.getOrElse("")))
+    def peta() = quantity(oneBD.scaleByPowerOfTen(15), this, Some("peta" + _name.getOrElse("")), Some("P" + symbol.getOrElse("")))
+    def exa() = quantity(oneBD.scaleByPowerOfTen(18), this, Some("exa" + _name.getOrElse("")), Some("E" + symbol.getOrElse("")))
+    def zetta() = quantity(oneBD.scaleByPowerOfTen(21), this, Some("zetta" + _name.getOrElse("")), Some("Z" + symbol.getOrElse("")))
+    def yotta() = quantity(oneBD.scaleByPowerOfTen(24), this, Some("yotta" + _name.getOrElse("")), Some("Y" + symbol.getOrElse("")))
 
-    def deci() = quantity(oneBD.scaleByPowerOfTen(-1), this, Some("deci" + name.getOrElse("")), Some("d" + symbol.getOrElse("")))
-    def centi() = quantity(oneBD.scaleByPowerOfTen(-2), this, Some("centi" + name.getOrElse("")), Some("c" + symbol.getOrElse("")))
-    def milli() = quantity(oneBD.scaleByPowerOfTen(-3), this, Some("milli" + name.getOrElse("")), Some("m" + symbol.getOrElse("")))
-    def micro() = quantity(oneBD.scaleByPowerOfTen(-6), this, Some("micro" + name.getOrElse("")), Some("μ" + symbol.getOrElse("")))
-    def nano() = quantity(oneBD.scaleByPowerOfTen(-9), this, Some("nano" + name.getOrElse("")), Some("n" + symbol.getOrElse("")))
+    def deci() = quantity(oneBD.scaleByPowerOfTen(-1), this, Some("deci" + _name.getOrElse("")), Some("d" + symbol.getOrElse("")))
+    def centi() = quantity(oneBD.scaleByPowerOfTen(-2), this, Some("centi" + _name.getOrElse("")), Some("c" + symbol.getOrElse("")))
+    def milli() = quantity(oneBD.scaleByPowerOfTen(-3), this, Some("milli" + _name.getOrElse("")), Some("m" + symbol.getOrElse("")))
+    def micro() = quantity(oneBD.scaleByPowerOfTen(-6), this, Some("micro" + _name.getOrElse("")), Some("μ" + symbol.getOrElse("")))
+    def nano() = quantity(oneBD.scaleByPowerOfTen(-9), this, Some("nano" + _name.getOrElse("")), Some("n" + symbol.getOrElse("")))
 
-    override def toString() = name.getOrElse(conversion
-      .map(c => c.payload + " " + c.source.payload.getSymbol.getOrElse(""))
-      .getOrElse(name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()))
+    override def toString() = _name.getOrElse(conversion
+      .map(c => c.payload + " " + c.source.payload.symbol.getOrElse(""))
+      .getOrElse(_name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()))
 
     def +(right: UOM): UOM = {
       val (bd, uom) = conversion.map(c => (c.payload, c.source.payload)).getOrElse((oneBD, this))
-      quantity(bd.add((right in uom).getConversion.get.payload), uom) // TODO remove .get
+      quantity(bd.add((right in uom).conversion.get.payload), uom) // TODO remove .get
     }
 
     def -(right: UOM): UOM = {
       val (bd, uom) = conversion.map(c => (c.payload, c.source.payload)).getOrElse((oneBD, this))
-      quantity(bd.subtract((right in uom).getConversion.get.payload), uom) // TODO remove .get
+      quantity(bd.subtract((right in uom).conversion.get.payload), uom) // TODO remove .get
     }
 
     def *(bd: BigDecimal): UOM = bd.doubleValue match {
@@ -186,9 +186,9 @@ trait Quantum {
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
       val resultBD = conversion.map(c =>
-        right.getConversion.map(rc => c.payload.multiply(rc.payload)
+        right.conversion.map(rc => c.payload.multiply(rc.payload)
         ).getOrElse(c.payload)
-      ).getOrElse(right.getConversion.map(_.payload)
+      ).getOrElse(right.conversion.map(_.payload)
         .getOrElse(oneBD)
       )
       resultQuantum.quantity(resultBD, resultQuantum.newUnitOfMeasurement(None))
@@ -196,9 +196,9 @@ trait Quantum {
 
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = {
       val resultBD = conversion.map(c =>
-        bottom.getConversion.map(bc => bdDivide(c.payload, bc.payload)
+        bottom.conversion.map(bc => bdDivide(c.payload, bc.payload)
         ).getOrElse(c.payload)
-      ).getOrElse(bottom.getConversion.map(bc => bdDivide(oneBD, bc.payload))
+      ).getOrElse(bottom.conversion.map(bc => bdDivide(oneBD, bc.payload))
         .getOrElse(oneBD)
       )
       resultQuantum.quantity(resultBD, resultQuantum.newUnitOfMeasurement(None))
@@ -264,7 +264,7 @@ trait Quantum {
     val unitVertex = vertexFor(unit)
     val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
     val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
-    uom.setConversion(conversion2)
+    uom() = conversion2
     uom
   }
 

@@ -8,22 +8,21 @@ class XhtmlLinesAstNodeAccumulatorState(xlf: XhtmlLinesAstNodeFormatter) {
 
   var currentLine = new mutable.ListBuffer[xml.Node]()
 
-  val lines = mutable.Map[Int, NodeSeq]()
+  val _lines = mutable.Map[Int, NodeSeq]()
 
-  def getLines(): Map[Int, NodeSeq] = {
+  def lines(): Map[Int, NodeSeq] = {
     if (currentLine != null) {
-      lines += xlf.currentLineNo -> currentLine.toList
+      _lines += xlf.currentLineNo -> currentLine.toList
       currentLine = null // effectively marking this as "finished".
       // need better way of handling subsequent writes if they happen
     }
-    lines
+    _lines
   }
 
   def raw(s: String): Unit = currentLine.append(Text(s))
 
   def newline(): Unit = {
-    val line = currentLine.toList
-    lines += xlf.currentLineNo -> line
+    _lines += xlf.currentLineNo -> currentLine.toList
     xlf.advanceLine()
     currentLine = new mutable.ListBuffer[xml.Node]()
   }
@@ -40,10 +39,10 @@ class XhtmlLinesAstNodeAccumulatorState(xlf: XhtmlLinesAstNodeFormatter) {
     for ((lineno, line) <- absorbee.lines) {
       if (currentLine.size > 0) {
         val unfinishedLine: NodeSeq = currentLine.toList
-        lines += lineno -> <span>{ unfinishedLine }</span><span class={ label }>{ line }</span>;
+        _lines += lineno -> <span>{ unfinishedLine }</span><span class={ label }>{ line }</span>;
         currentLine = new mutable.ListBuffer[scala.xml.Node]()
       } else {
-        lines += lineno -> <span class={ label }>{ line }</span>
+        _lines += lineno -> <span class={ label }>{ line }</span>
       }
     }
     if (absorbee.currentLine != null) {
@@ -73,7 +72,7 @@ class XhtmlLinesAstNodeFormatter(language: Language, highlight: Set[AstNode], co
 
   tokens.push(new XhtmlLinesAstNodeAccumulatorState(this))
 
-  def getLines(): Map[Int, NodeSeq] = tokens.top.getLines
+  def lines(): Map[Int, NodeSeq] = tokens.top.lines
 
   override def toString() = "XhtmlLinesAccumulator.toString not implemented"
 
@@ -83,7 +82,7 @@ class XhtmlLinesAstNodeFormatter(language: Language, highlight: Set[AstNode], co
 
   override def conformTo(node: AstNode): Unit = {
     if (isConforming()) {
-      while (node.getLineNo > lineno) {
+      while (node.lineNo > lineno) {
         // info("conforming.  formatter.lineno = " + formatter.lineno)
         newline(true, node)
       }

@@ -19,22 +19,20 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     val _vertices = mutable.Set[V]()
     val _edges = mutable.Set[E]()
-    val vertex2outedges = mutable.Map[V, mutable.Set[E]]()
-    val vertex2inedges = mutable.Map[V, mutable.Set[E]]()
+    val vertex2outedges = mutable.Map[V, mutable.Set[E]]().withDefaultValue(mutable.Set[E]())
+    val vertex2inedges = mutable.Map[V, mutable.Set[E]]().withDefaultValue(mutable.Set[E]())
 
     def storage() = (_vertices, _edges, vertex2outedges, vertex2inedges)
 
     def size() = _vertices.size
 
     trait NativeDirectedGraphVertex[P] extends DirectedGraphVertex[P] {
-      def setPayload(p: P): Unit = {} // TODO: payload = p // type erasure problem
     }
 
     trait NativeDirectedGraphEdge[P] extends DirectedGraphEdge[P] {
-      def setPayload(p: P): Unit = {} // TODO: payload = p // type erasure problem
     }
 
-    class NativeDirectedGraphVertexImpl[P](var _payload: P) extends NativeDirectedGraphVertex[P] {
+    class NativeDirectedGraphVertexImpl[P](_payload: P) extends NativeDirectedGraphVertex[P] {
 
       self: V =>
 
@@ -43,20 +41,13 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
       def payload(): P = _payload
     }
 
-    class NativeDirectedGraphEdgeImpl[P](source: V, dest: V, var _payload: P) extends NativeDirectedGraphEdge[P] {
+    class NativeDirectedGraphEdgeImpl[P](source: V, dest: V, _payload: P) extends NativeDirectedGraphEdge[P] {
 
       self: E =>
 
       _edges += this // assume that this edge isn't already in our list of edges
 
-      if (!vertex2outedges.contains(source)) {
-        vertex2outedges += source -> mutable.Set[E]()
-      }
       vertex2outedges(source) += this
-
-      if (!vertex2inedges.contains(dest)) {
-        vertex2inedges += dest -> mutable.Set[E]()
-      }
       vertex2inedges(dest) += this
 
       def source(): V = source
@@ -69,7 +60,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def vertices() = vertices.toSet // immutable copy
 
-    def getEdge(from: V, to: V): Option[E] = vertex2outedges(from).find(_.dest == to)
+    def findEdge(from: V, to: V): Option[E] = vertex2outedges(from).find(_.dest == to)
 
     def edge(source: V, dest: V, payload: EP): E = new NativeDirectedGraphEdgeImpl[EP](source, dest, payload)
 
@@ -187,7 +178,7 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
       case true => Some(List())
       case false => {
         val paths = (successors(source) -- visited).flatMap(newSuccessor => {
-          getEdge(source, newSuccessor)
+          findEdge(source, newSuccessor)
             .flatMap(edge => _shortestPath(newSuccessor, goal, visited + source).map(sp => edge :: sp))
         })
         paths.size match {

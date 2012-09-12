@@ -18,7 +18,7 @@ trait DirectedGraphFactory extends GraphFactory {
       def dest(): V
     }
 
-    def getEdge(from: V, to: V): Option[E]
+    def findEdge(from: V, to: V): Option[E]
     def removeAllEdgesAndVertices(): Unit
     def deleteEdge(e: E): Unit
     def deleteVertex(v: V): Unit

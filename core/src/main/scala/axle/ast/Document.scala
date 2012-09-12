@@ -6,31 +6,31 @@ import collection._
 import java.io.File
 import java.io.FileWriter
 
-class DocumentFromString(grammar: Language, label: String, content: String) extends Document {
+class DocumentFromString(_grammar: Language, _label: String, content: String) extends Document {
 
-  def getGrammar = grammar
+  def grammar = _grammar
 
-  def getAst() = grammar.parseString(content)
+  def ast() = _grammar.parseString(content)
 
-  def getName() = label
+  def name() = _label
 }
 
-class DocumentFromFile(grammar: Language, shortFilename: String, filename: String) extends Document {
+class DocumentFromFile(_grammar: Language, shortFilename: String, filename: String) extends Document {
 
-  def getGrammar = grammar
+  def grammar = _grammar
 
-  def getAst() = grammar.parseFile(filename)
+  def ast() = _grammar.parseFile(filename)
 
-  def getName() = shortFilename
+  def name() = shortFilename
 }
 
 trait Document extends Loggable {
 
-  def getAst(): Option[AstNode]
+  def ast(): Option[AstNode]
 
-  def getGrammar(): Language
+  def grammar(): Language
 
-  def getName(): String
+  def name(): String
 
   //  def makeHtml = {
   //    val htmlFilename = Config.htmlDirectory + File.separator + shortFilename + ".html"

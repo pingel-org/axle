@@ -35,7 +35,7 @@ object Util {
         while (keepGoing) {
           val line = reader.readLine()
           if (line != null) {
-            sb.append(line).append("\n")
+            sb.append(line + "\n")
           } else {
             keepGoing = false
           }

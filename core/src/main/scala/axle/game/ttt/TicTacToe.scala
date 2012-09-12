@@ -76,7 +76,7 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
     def displayTo(p: TicTacToePlayer): String =
       (if (tttPlayer != p) { "I will" } else { "You have" }) +
-        " put an " + tttPlayer.getId +
+        " put an " + tttPlayer.id +
         " in the " + description() + "."
 
   }
@@ -105,29 +105,29 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
     def positionToColumn(position: Int) = (position - 1) % boardSize
 
-    def getBoardAt(position: Int) = board(positionToRow(position), positionToColumn(position))
+    def apply(position: Int) = board(positionToRow(position), positionToColumn(position))
 
     // The validation in InteractiveTicTacToePlayer.chooseMove might be better placed here
-    def setBoardAt(position: Int, player: TicTacToePlayer) =
-      board(positionToRow(position), positionToColumn(position)) = Some(player.getId)
+    def update(position: Int, player: TicTacToePlayer) =
+      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
     def hasWonRow(player: TicTacToePlayer) =
-      (0 until boardSize).exists(board.row(_).toList.forall(_ == Some(player.getId)))
+      (0 until boardSize).exists(board.row(_).toList.forall(_ == Some(player.id)))
 
     def hasWonColumn(player: TicTacToePlayer) =
-      (0 until boardSize).exists(board.column(_).toList.forall(_ == Some(player.getId)))
+      (0 until boardSize).exists(board.column(_).toList.forall(_ == Some(player.id)))
 
     def hasWonDiagonal(player: TicTacToePlayer) =
-      (0 until boardSize).forall(i => board(i, i) == Some(player.getId)) ||
-        (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player.getId))
+      (0 until boardSize).forall(i => board(i, i) == Some(player.id)) ||
+        (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player.id))
 
     def hasWon(player: TicTacToePlayer) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
-    def openPositions() = 1.to(numPositions).filter(getBoardAt(_).isEmpty)
+    def openPositions() = 1.to(numPositions).filter(this(_).isEmpty)
 
     def isTerminal(): Boolean = openPositions().length == 0
 
-    def getOutcome(): Option[TicTacToeOutcome] = {
+    def outcome(): Option[TicTacToeOutcome] = {
       for (player <- ttt.players) {
         if (hasWon(player)) {
           return Some(TicTacToeOutcome(Some(player)))
@@ -143,7 +143,7 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
     def apply(move: TicTacToeMove): TicTacToeState = {
       val resultBoard = board.dup
-      resultBoard(positionToRow(move.position), positionToColumn(move.position)) = Some(player.getId)
+      resultBoard(positionToRow(move.position), positionToColumn(move.position)) = Some(player.id)
       ttt.state(ttt.playerAfter(move.tttPlayer), resultBoard)
     }
 
@@ -205,7 +205,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
         try {
           val i = num.toInt
           if (i >= 1 && i <= ttt.numPositions) {
-            if (state.getBoardAt(i).isEmpty) {
+            if (state(i).isEmpty) {
               return TicTacToeMove(this, i)
             } else {
               println("That space is occupied.")

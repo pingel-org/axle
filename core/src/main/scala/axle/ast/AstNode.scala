@@ -3,22 +3,22 @@ package axle.ast
 
 import collection._
 
-abstract class AstNode(lineno: Int) {
-  def getLineNo: Int = lineno
+abstract class AstNode(_lineno: Int) {
+  def lineNo: Int = _lineno
   def column: Int = -1
 }
 
-case class AstNodeValue(value: Option[String], lineno: Int)
-  extends AstNode(lineno) {
+case class AstNodeValue(value: Option[String], _lineno: Int)
+  extends AstNode(_lineno) {
 }
 
-case class AstNodeList(list: List[AstNode], lineno: Int)
-  extends AstNode(lineno) {
+case class AstNodeList(list: List[AstNode], _lineno: Int)
+  extends AstNode(_lineno) {
   def children = list
 }
 
-case class AstNodeRule(val ruleName: String, mm: Map[String, AstNode], lineno: Int)
-  extends AstNode(lineno) {
+case class AstNodeRule(val ruleName: String, mm: Map[String, AstNode], _lineno: Int)
+  extends AstNode(_lineno) {
   def children = mm.values.toList
 }
 
@@ -76,5 +76,3 @@ object AstNode {
   }
 
 }
-
-// List.fromIterator(map.values)

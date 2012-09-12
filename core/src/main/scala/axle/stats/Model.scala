@@ -19,13 +19,13 @@ trait Model[MVP] extends JungDirectedGraph[MVP, String] {
   var newVarIndex = 0
   val name2variable = mutable.Map[String, RandomVariable[_]]()
 
-  def getName(): String
+  def name(): String
 
   def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_]
 
-  def getRandomVariables(): List[RandomVariable[_]] = vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
+  def randomVariables(): List[RandomVariable[_]] = vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
 
-  def getVariable(name: String): RandomVariable[_] = name2variable(name)
+  def variable(name: String): RandomVariable[_] = name2variable(name)
 
   def numVariables(): Int = size()
 
@@ -39,7 +39,7 @@ trait Model[MVP] extends JungDirectedGraph[MVP, String] {
     _findOpenPath(x, Direction.UNKNOWN, null, mutableFromCopy, to, given).isEmpty
   }
 
-  //  var rvNameGetter = new Lister[RandomVariable, String]() {
+  //  val rvNameGetter = new Lister[RandomVariable, String]() {
   //    def function(rv: RandomVariable): String = rv.getName
   //  }
 
@@ -53,9 +53,9 @@ trait Model[MVP] extends JungDirectedGraph[MVP, String] {
 
     println("_fOP: " + priorDirection +
       ", prior = " + "TODO" + // ((prior == null ) ? "null" : prior.name) +
-      ", current = " + current.map(_.getName).mkString(", ") +
-      ", to = " + to.map(_.getName).mkString(", ") +
-      ", evidence = " + given.map(_.getName).mkString(", "))
+      ", current = " + current.map(_.name).mkString(", ") +
+      ", to = " + to.map(_.name).mkString(", ") +
+      ", evidence = " + given.map(_.name).mkString(", "))
 
     val cachedOuts = visited(prior)
     if (cachedOuts != null) {

@@ -13,14 +13,14 @@ package axle.ast
 import collection._
 import axle.Loggable
 
-class Symbol(label: String) {
-  def getLabel() = label
+class Symbol(_label: String) {
+  def label() = _label
   //override def toString() = "'" + label + "'"
-  override def toString() = label
+  override def toString() = _label
 }
 
-case class Terminal(label: String) extends Symbol(label)
-case class NonTerminal(label: String) extends Symbol(label)
+case class Terminal(_label: String) extends Symbol(_label)
+case class NonTerminal(_label: String) extends Symbol(_label)
 object Start extends NonTerminal("S")
 object BottomOfStack extends Terminal("$")
 object Epsilon extends Symbol("\u03B5") // TODO terminal or non-terminal?
@@ -124,7 +124,7 @@ class ParseTableGrammarBuilder(ptgName: String) {
   def r(ruleId: String, from: String, x: String): ParseTableGrammarBuilder = {
     grammar.llRules += ruleId -> LLRule(ruleId,
       grammar.nonTerminals(from),
-      List(grammar.getSymbol(x)).flatMap({ x => x })
+      List(grammar.symbol(x)).flatMap({ x => x })
     )
     this
   }
@@ -132,7 +132,7 @@ class ParseTableGrammarBuilder(ptgName: String) {
   def r(ruleId: String, from: String, strRhs: List[String]): ParseTableGrammarBuilder = {
     grammar.llRules += ruleId -> LLRule(ruleId,
       grammar.nonTerminals(from),
-      strRhs.map(grammar.getSymbol(_)).flatMap({ x => x })
+      strRhs.map(grammar.symbol(_)).flatMap({ x => x })
     )
     this
   }

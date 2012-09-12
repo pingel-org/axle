@@ -6,14 +6,14 @@ import axle.graph.JungUndirectedGraphFactory._
 class EliminationTree extends JungUndirectedGraph[Factor, String] {
 
   def gatherVars(stop: V, node: V, result: mutable.Set[RandomVariable[_]]): Unit = {
-    result ++= node.payload.getVariables
+    result ++= node.payload.variables
     neighbors(node).filter(!_.equals(stop)).map(gatherVars(node, _, result))
   }
 
   def cluster(i: V): Set[RandomVariable[_]] = {
     val result = mutable.Set[RandomVariable[_]]()
     neighbors(i).map(j => result ++= separate(i, j))
-    result ++= i.payload.getVariables
+    result ++= i.payload.variables
     result
   }
 
@@ -28,12 +28,12 @@ class EliminationTree extends JungUndirectedGraph[Factor, String] {
   // def constructEdge(v1: GV, v2: GV): GE = g += ((v1, v2), "")
   // def delete(node: GV): Unit = g.delete(node)
 
-  def getAllVariables(): Set[RandomVariable[_]] = vertices.flatMap(_.payload.getVariables)
+  def allVariables(): Set[RandomVariable[_]] = vertices.flatMap(_.payload.variables)
 
   // Note: previous version also handled case where 'node' wasn't in the graph
   // def addFactor(node: GV, f: Factor): Unit = node.setPayload(node.getPayload.multiply(f))
 
-  // def getFactor(node: GV): Factor = node.getPayload
-  // def setFactor(node: GV, f: Factor): Unit = node.setPayload(f)
+  // def factor(node: GV): Factor = node.getPayload
+  // def update(node: GV, f: Factor): Unit = node.setPayload(f)
 
 }

@@ -16,12 +16,10 @@ trait GraphFactory {
 
     trait GraphVertex[P] {
       def payload(): P
-      def setPayload(p: P): Unit
     }
 
     trait GraphEdge[P] {
       def payload(): P
-      def setPayload(p: P): Unit
     }
 
     def size(): Int

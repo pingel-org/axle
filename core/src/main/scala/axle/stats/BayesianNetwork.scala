@@ -107,7 +107,7 @@ import Scalaz._
 
 case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) {
 
-  override def toString(): String = rv.getName + "\n\n" + cpt
+  override def toString(): String = rv.name + "\n\n" + cpt
 
 }
 
@@ -116,17 +116,17 @@ object BayesianNetwork {
   def apply(name: String): BayesianNetwork = new BayesianNetwork(name)
 }
 
-class BayesianNetwork(name: String)
+class BayesianNetwork(_name: String)
   extends Model[BayesianNetworkNode] {
 
-  def getName(): String = name
+  def name(): String = _name
 
   def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
 
   override def vertexToVisualizationHtml(vp: BayesianNetworkNode): xml.Node =
     <html>
       <div>
-        <center><h2>{ vp.rv.getName }</h2></center>
+        <center><h2>{ vp.rv.name }</h2></center>
         { vp.cpt.toHtml() }
       </div>
     </html>
@@ -134,7 +134,7 @@ class BayesianNetwork(name: String)
   def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 
   def jointProbabilityTable(): Factor = {
-    val newVars = getRandomVariables()
+    val newVars = randomVariables()
     new Factor(newVars,
       Factor.spaceFor(newVars)
         .map(kase => (kase, probabilityOf(kase)))
@@ -159,7 +159,7 @@ class BayesianNetwork(name: String)
     D += rvVertex // probably already includes this
     D ++= predecessors(rvVertex)
     val Dvars = D.map(_.payload.rv)
-    val Y = getRandomVariables.filter(!Dvars.contains(_)).toSet
+    val Y = randomVariables.filter(!Dvars.contains(_)).toSet
 
     new Independence(X, Z, Y)
   }
@@ -189,7 +189,7 @@ class BayesianNetwork(name: String)
    */
 
   def variableEliminationPriorMarginalI(Q: Set[RandomVariable[_]], π: List[RandomVariable[_]]): Factor =
-    π.foldLeft(getRandomVariables().map(cpt(_)).toSet)((S, rv) => {
+    π.foldLeft(randomVariables().map(cpt(_)).toSet)((S, rv) => {
       val allMentions = S.filter(_.mentions(rv))
       (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
     }).reduce(_ * _)
@@ -205,7 +205,7 @@ class BayesianNetwork(name: String)
    */
 
   def variableEliminationPriorMarginalII[A](Q: Set[RandomVariable[_]], π: List[RandomVariable[_]], e: CaseIs[A]): Factor =
-    π.foldLeft(getRandomVariables().map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
+    π.foldLeft(randomVariables().map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
@@ -224,9 +224,9 @@ class BayesianNetwork(name: String)
 
     val ig = new InteractionGraph()
 
-    getRandomVariables.map(ig += _)
+    randomVariables.map(ig += _)
 
-    getRandomVariables().doubles()
+    randomVariables().doubles()
       .filter({ case (vi, vj) => interactsWith(vi, vj) })
       .map({ case (vi, vj) => ig.edge(ig.findVertex(vi).get, ig.findVertex(vj).get, "") })
 
@@ -240,7 +240,7 @@ class BayesianNetwork(name: String)
    */
 
   def orderWidth(order: List[RandomVariable[_]]): Int =
-    getRandomVariables().scanLeft((interactionGraph(), 0))(
+    randomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
         val ig = gi._1
         (ig.eliminate(rv), ig.neighbors(ig.findVertex(rv).get).size)
@@ -248,7 +248,7 @@ class BayesianNetwork(name: String)
     ).map(_._2).max
 
   //  def makeFactorFor(rv: RandomVariable[_]): Factor =
-  //    Factor(getRandomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
+  //    Factor(randomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
 
   /**
    * pruneEdges
@@ -307,10 +307,10 @@ class BayesianNetwork(name: String)
   def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
 
     val pruned = pruneNetworkVarsAndEdges(Q, eOpt)
-    val R = getRandomVariables.filter(!Q.contains(_)).toSet
+    val R = randomVariables.filter(!Q.contains(_)).toSet
     val π = pruned.minDegreeOrder(R)
 
-    val S = π.foldLeft(pruned.getRandomVariables().map(rv => pruned.cpt(rv).projectRowsConsistentWith(eOpt)).toSet)(
+    val S = π.foldLeft(pruned.randomVariables().map(rv => pruned.cpt(rv).projectRowsConsistentWith(eOpt)).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
@@ -322,7 +322,7 @@ class BayesianNetwork(name: String)
   def variableEliminationMPE(e: List[CaseIs[_]]): (Double, BayesianNetwork) = {
 
     val pruned = pruneEdges("pruned", Some(e))
-    val Q = pruned.getRandomVariables()
+    val Q = pruned.randomVariables()
     val π = pruned.minDegreeOrder(Q.toSet)
 
     val S = π.foldLeft(Q.map(rv => pruned.cpt(rv).projectRowsConsistentWith(Some(e))).toSet)(
@@ -389,13 +389,13 @@ class BayesianNetwork(name: String)
 
   def factorElimination1(Q: Set[RandomVariable[_]]): Factor = {
 
-    val S = mutable.ListBuffer[Factor]() ++ getRandomVariables().map(cpt(_)).toList
+    val S = mutable.ListBuffer[Factor]() ++ randomVariables().map(cpt(_)).toList
 
     while (S.size > 1) {
 
       val fi = S.remove(0)
 
-      val V = fi.getVariables
+      val V = fi.variables
         .filter(!Q.contains(_))
         .filter(v => !S.exists(_.mentions(v)))
         .toSet
@@ -420,10 +420,10 @@ class BayesianNetwork(name: String)
         val j = τ.neighbors(i).iterator.next()
         val ɸ_i = i.payload
         τ.delete(i)
-        j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
+        // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
       })
     }
-    val result = null.asInstanceOf[BayesianNetwork] // TODO !!!
+    val result = null.asInstanceOf[BayesianNetwork] // TODO
     (result, f.projectToOnly(Q.toList))
   }
 
@@ -438,7 +438,7 @@ class BayesianNetwork(name: String)
         val ɸ_i = i.payload
         τ.delete(i)
         val Sij = τ.separate(i, j)
-        j.setPayload(ɸ_i.projectToOnly(Sij.toList))
+        // TODO j.setPayload(ɸ_i.projectToOnly(Sij.toList))
       })
     }
     f.projectToOnly(Q.toList)

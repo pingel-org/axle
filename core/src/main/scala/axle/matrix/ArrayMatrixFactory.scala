@@ -14,17 +14,17 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
 
   type M[T] = ArrayMatrix[T]
 
-  class ArrayMatrixImpl[T: ClassManifest](storage: Array[T], nRows: Int, nColumns: Int) extends ArrayMatrix[T] {
+  class ArrayMatrixImpl[T: ClassManifest](_storage: Array[T], nRows: Int, nColumns: Int) extends ArrayMatrix[T] {
 
-    def getStorage = storage
+    def storage = _storage
 
     def rows = nRows
     def columns = nColumns
     def length = storage.length
 
-    def apply(r: Int, c: Int): T = storage(r * nColumns + c)
-    def update(r: Int, c: Int, v: T) = storage(r * nColumns + c) = v
-    def toList(): List[T] = storage.toList
+    def apply(r: Int, c: Int): T = _storage(r * nColumns + c)
+    def update(r: Int, c: Int, v: T) = _storage(r * nColumns + c) = v
+    def toList(): List[T] = _storage.toList
 
     def column(c: Int) = {
       val result = matrix(new Array[T](nRows), nRows, 1)
@@ -49,7 +49,7 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def isSquare(): Boolean = columns == rows
     def isScalar(): Boolean = isRowVector && isColumnVector
 
-    def dup(): M[T] = matrix(storage.clone, nRows, nColumns)
+    def dup(): M[T] = matrix(_storage.clone, nRows, nColumns)
     def negate(): M[T] = null // TODO
     def transpose(): M[T] = null // TODO
     def diag(): M[T] = null // TODO

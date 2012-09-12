@@ -20,7 +20,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     val _vertices = mutable.Set[V]()
     val _edges = mutable.Set[E]()
-    val vertex2edges = mutable.Map[V, mutable.Set[E]]()
+    val vertex2edges = mutable.Map[V, mutable.Set[E]]().withDefaultValue(mutable.Set[E]())
 
     def storage() = (_vertices, _edges, vertex2edges)
 
@@ -31,27 +31,25 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     def size() = _vertices.size
 
     trait NativeUndirectedGraphVertex[P] extends UndirectedGraphVertex[P] {
-      def setPayload(p: P): Unit = {} // TODO payload = p // type erasure problem
     }
 
     trait NativeUndirectedGraphEdge[P] extends UndirectedGraphEdge[P] {
-      def setPayload(p: P): Unit = {} // TODO payload = p // type erasure problem
     }
 
-    class NativeUndirectedGraphVertexImpl[P](var _payload: P) extends NativeUndirectedGraphVertex[P] {
+    class NativeUndirectedGraphVertexImpl[P](_payload: P) extends NativeUndirectedGraphVertex[P] {
       self: V =>
       _vertices += this
       def payload(): P = _payload
     }
 
-    class NativeUndirectedGraphEdgeImpl[P](v1: V, v2: V, var _payload: P) extends NativeUndirectedGraphEdge[P] {
+    class NativeUndirectedGraphEdgeImpl[P](v1: V, v2: V, _payload: P) extends NativeUndirectedGraphEdge[P] {
 
       self: E =>
 
       // assume that this edge isn't already in our list of edges
       _edges += this
-      edges(v1) += this
-      edges(v2) += this
+      vertex2edges(v1) += this
+      vertex2edges(v2) += this
 
       def vertices(): (V, V) = (v1, v2)
       def payload(): P = _payload
@@ -67,30 +65,25 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def unlink(e: E): Unit = {
       val dble = e.vertices()
-      edges(dble._1) -= e
-      edges(dble._2) -= e
+      vertex2edges(dble._1) -= e
+      vertex2edges(dble._2) -= e
       _edges -= e
     }
 
     def unlink(v1: V, v2: V): Unit = edges(v1).filter(_.other(v1).equals(v2)).map(unlink(_))
 
-    def areNeighbors(v1: V, v2: V) = edges(v1).exists(_.connects(v1, v2))
+    def areNeighbors(v1: V, v2: V): Boolean = edges(v1).exists(_.connects(v1, v2))
 
     override def isClique(vs: Set[V]): Boolean =
       vs.doubles.∀({ case (a, b) => ((a == b) || areNeighbors(a, b)) })
 
-    def degree(v: V) = edges(v).size
+    def degree(v: V): Int = edges(v).size
 
-    def edges(v: V) = {
-      if (!vertex2edges.contains(v)) {
-        vertex2edges += v -> mutable.Set[E]()
-      }
-      vertex2edges(v)
-    }
+    def edges(v: V): Set[E] = vertex2edges(v)
 
     def neighbors(v: V): Set[V] = edges(v).map(_.other(v)).toSet
 
-    def delete(v: V) = {
+    def delete(v: V): Unit = {
       val es = edges(v)
       _vertices -= v
       vertex2edges.remove(v)
@@ -103,7 +96,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     // a "leaf" is vertex with only one neighbor
     def firstLeafOtherThan(r: V) = vertices.find({ v => neighbors(v).size == 1 && !v.equals(r) })
 
-    def eliminate(v: V, payload: (V, V) => EP) = {
+    def eliminate(v: V, payload: (V, V) => EP): Unit = {
       // "decompositions" page 3 (Definition 3, Section 9.3)
       // turn the neighbors of v into a clique
 

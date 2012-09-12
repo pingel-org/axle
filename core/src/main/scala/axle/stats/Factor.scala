@@ -17,7 +17,7 @@ object Factor {
     new Factor(varList, values)
 
   def spaceFor(varSeq: Seq[RandomVariable[_]]): Iterator[List[CaseIs[_]]] = {
-    val x = varSeq.map(_.getValues.getOrElse(Nil).toIndexedSeq)
+    val x = varSeq.map(_.values.getOrElse(Nil).toIndexedSeq)
     val kaseIt = IndexedCrossProduct(x).iterator
     kaseIt.map(kase => kase.zipWithIndex.map({
       case (v, i: Int) => {
@@ -32,12 +32,12 @@ object Factor {
 class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double]) {
 
   lazy val cp = new IndexedCrossProduct(varList.map(
-    _.getValues.getOrElse(Nil.toIndexedSeq)
+    _.values.getOrElse(Nil.toIndexedSeq)
   ))
 
   lazy val elements = (0 until cp.size).map(i => values.get(caseOf(i)).getOrElse(0.0)).toArray
 
-  def getVariables() = varList
+  def variables() = varList
 
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
@@ -73,7 +73,7 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
   def apply(c: Seq[CaseIs[_]]): Double = elements(indexOf(c))
 
   override def toString(): String =
-    varList.map(rv => rv.getName.padTo(rv.charWidth, " ").mkString("")).mkString(" ") + "\n" +
+    varList.map(rv => rv.name.padTo(rv.charWidth, " ").mkString("")).mkString(" ") + "\n" +
       cases.map(kase =>
         kase.map(ci => ci.v.toString.padTo(ci.rv.charWidth, " ").mkString("")).mkString(" ") +
           " " + "%f".format(this(kase))
@@ -81,7 +81,7 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
 
   def toHtml(): xml.Node =
     <table border={ "1" }>
-      <tr>{ varList.map(rv => <td>{ rv.getName }</td>): xml.NodeSeq }<td>P</td></tr>
+      <tr>{ varList.map(rv => <td>{ rv.name }</td>): xml.NodeSeq }<td>P</td></tr>
       {
         cases.map(kase => <tr>
                             { kase.map(ci => <td>{ ci.v.toString }</td>) }
@@ -92,10 +92,10 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
 
   // Chapter 6 definition 6
   def maxOut[T](variable: RandomVariable[T]): Factor = {
-    val newVars = getVariables.filter(!variable.equals(_))
+    val newVars = variables.filter(!variable.equals(_))
     new Factor(newVars,
       Factor.spaceFor(newVars)
-        .map(kase => (kase, variable.getValues.getOrElse(Nil).map(value => this(kase)).max))
+        .map(kase => (kase, variable.values.getOrElse(Nil).map(value => this(kase)).max))
         .toMap
     )
   }
@@ -110,8 +110,8 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
     )
 
   def tally[A, B](a: RandomVariable[A], b: RandomVariable[B]): Matrix[Double] = {
-    val aValues = a.getValues.getOrElse(Nil).toList
-    val bValues = b.getValues.getOrElse(Nil).toList
+    val aValues = a.values.getOrElse(Nil).toList
+    val bValues = b.values.getOrElse(Nil).toList
     val tally = zeros[Double](aValues.size, bValues.size)
     aValues.zipWithIndex.map({
       case (aVal, r) => {
@@ -138,7 +138,7 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
     new Factor(newVars,
       Factor.spaceFor(newVars)
         .map(kase => (kase,
-          gone.getValues.getOrElse(Nil).map(gv => {
+          gone.values.getOrElse(Nil).map(gv => {
             val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[Any]], gv)) // TODO cast
             this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
           }).reduce(_ + _)
@@ -154,17 +154,17 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
   // as defined on chapter 6 page 15
   def projectRowsConsistentWith(eOpt: Option[List[CaseIs[_]]]): Factor = {
     val e = eOpt.get
-    new Factor(getVariables(),
+    new Factor(variables(),
       Factor.spaceFor(e.map(_.rv)).map(kase => (kase, isSupersetOf(kase, e) ? this(kase) | 0.0)).toMap
     )
   }
 
   def *(other: Factor): Factor = {
-    val newVars = (getVariables().toSet union other.getVariables().toSet).toList
+    val newVars = (variables().toSet union other.variables().toSet).toList
     new Factor(newVars.toList, Factor.spaceFor(newVars).map(kase => (kase, this(kase) * other(kase))).toMap)
   }
 
-  def mentions(variable: RandomVariable[_]) = getVariables.exists(v => variable.getName.equals(v.getName))
+  def mentions(variable: RandomVariable[_]) = variables.exists(v => variable.name.equals(v.name))
 
   def isSupersetOf(left: Seq[CaseIs[_]], right: Seq[CaseIs[_]]): Boolean = {
     val ll: Seq[(RandomVariable[_], Any)] = left.map(ci => (ci.rv, ci.v))

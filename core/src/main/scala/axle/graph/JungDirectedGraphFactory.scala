@@ -48,17 +48,15 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     trait JungDirectedGraphEdge[P] extends DirectedGraphEdge[P]
 
-    class JungDirectedGraphVertexImpl(var _payload: VP) extends JungDirectedGraphVertex[VP] {
+    class JungDirectedGraphVertexImpl(_payload: VP) extends JungDirectedGraphVertex[VP] {
 
       val ok = jungGraph.addVertex(this)
       // TODO check 'ok'
 
       def payload(): VP = _payload
-
-      def setPayload(p: VP) = _payload = p
     }
 
-    class JungDirectedGraphEdgeImpl(_source: V, _dest: V, var _payload: EP) extends JungDirectedGraphEdge[EP] {
+    class JungDirectedGraphEdgeImpl(_source: V, _dest: V, _payload: EP) extends JungDirectedGraphEdge[EP] {
 
       val ok = jungGraph.addEdge(this, source, dest)
       // TODO check 'ok'
@@ -66,7 +64,6 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       def source() = _source
       def dest() = _dest
       def payload(): EP = _payload
-      def setPayload(p: EP) = _payload = p
     }
 
     val jungGraph = new DirectedSparseGraph[V, E]()
@@ -79,13 +76,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     def vertices(): immutable.Set[V] = jungGraph.getVertices.asScala.toSet
 
-    def getEdge(from: V, to: V): Option[E] = {
-      val result = jungGraph.findEdge(from, to)
-      result match {
-        case null => None
-        case _ => Some(result)
-      }
-    }
+    def findEdge(from: V, to: V): Option[E] = Option(jungGraph.findEdge(from, to))
 
     def edge(source: V, dest: V, payload: EP): E = new JungDirectedGraphEdgeImpl(source, dest, payload)
 
@@ -142,10 +133,10 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       vs.map(v => jungGraph.getOutEdges(v).asScala.map(outEdge => jungGraph.removeEdge(outEdge)))
 
     //TODO remove this method
-    def removeSuccessor(v: V, successor: V): Unit = getEdge(v, successor).map(e => deleteEdge(e))
+    def removeSuccessor(v: V, successor: V): Unit = findEdge(v, successor).map(deleteEdge(_))
 
     //TODO remove this method
-    def removePredecessor(v: V, predecessor: V): Unit = getEdge(predecessor, v).map(e => deleteEdge(e))
+    def removePredecessor(v: V, predecessor: V): Unit = findEdge(predecessor, v).map(deleteEdge(_))
 
     def moralGraph(): JungUndirectedGraphFactory.UndirectedGraph[_, _] = null // TODO !!!
 

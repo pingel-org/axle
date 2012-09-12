@@ -16,7 +16,7 @@ case class Plot[X, DX, Y, DY](
   xAxisLabel: Option[String] = None,
   yAxis: X,
   yAxisLabel: Option[String] = None)(
-    implicit xPlottable: Plottable[X], yPlottable: Plottable[Y]) {
+    implicit _xPlottable: Plottable[X], _yPlottable: Plottable[Y]) {
 
   val clockwise90 = math.Pi / -2.0
   val counterClockwise90 = -1.0 * clockwise90
@@ -29,8 +29,8 @@ case class Plot[X, DX, Y, DY](
   val xTics = xPlottable.tics(minX, maxX)
   val yTics = yPlottable.tics(minY, maxY)
 
-  def getXPlottable(): Plottable[X] = xPlottable
+  def xPlottable(): Plottable[X] = _xPlottable
 
-  def getYPlottable(): Plottable[Y] = yPlottable
+  def yPlottable(): Plottable[Y] = _yPlottable
 
 }

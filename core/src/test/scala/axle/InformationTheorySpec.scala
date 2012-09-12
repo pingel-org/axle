@@ -11,8 +11,7 @@ class InformationTheorySpec extends Specification {
 
     "work" in {
 
-      val d = new RandomVariable0("d",
-        values = Some(List("A", "B", "C").toIndexedSeq),
+      val d = new RandomVariable0("d", Some(List("A", "B", "C").toIndexedSeq),
         distribution = Some(new ConditionalProbabilityTable0(Map("A" -> 0.2, "B" -> 0.1, "C" -> 0.7))))
 
       entropy(d).conversion.get.payload must be equalTo (1.1567796494470395)

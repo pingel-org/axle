@@ -14,7 +14,7 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
   import scalaz._
   import Scalaz._
 
-  val featureNames = pFs.map(_.getName)
+  val featureNames = pFs.map(_.name)
 
   val N = featureNames.size
 
@@ -35,18 +35,16 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
     reducer = (x: Int, y: Int) => x + y
   ).withDefaultValue(1) // to avoid division by zero
 
-  val C = new RandomVariable0(
-    pC.getName,
-    values = pC.getValues,
+  val C = new RandomVariable0(pC.name, pC.values,
     distribution = Some(new TallyDistribution0(classTally)))
 
   val Fs = pFs.map(pF => new RandomVariable1(
-    pF.getName,
-    values = pF.getValues,
+    pF.name,
+    pF.values,
     grv = C,
     distribution = Some(new TallyDistribution1(
       featureTally
-        .filter(_._1._2 == pF.getName)
+        .filter(_._1._2 == pF.name)
         .map(kv => ((kv._1._3, kv._1._1), kv._2))
         .withDefaultValue(0)))))
 

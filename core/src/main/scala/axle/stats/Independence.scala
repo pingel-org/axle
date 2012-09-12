@@ -12,7 +12,7 @@ case class Independence(
   Z: immutable.Set[RandomVariable[_]],
   Y: immutable.Set[RandomVariable[_]]) {
 
-  def variablesToString(s: Set[RandomVariable[_]]): String = "{" + (for (v <- s) yield v.getName()).mkString(", ") + "}"
+  def variablesToString(s: Set[RandomVariable[_]]): String = "{" + (for (v <- s) yield v.name()).mkString(", ") + "}"
 
   override def toString(): String =
     "I(" + variablesToString(X) + ", " + variablesToString(Z) + ", " + variablesToString(Y) + ")"

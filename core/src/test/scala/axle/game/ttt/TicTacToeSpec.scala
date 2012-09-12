@@ -11,30 +11,27 @@ class TicTacToeSpec extends Specification {
   val x = game.player("X", "Player X", true)
   val o = game.player("O", "Player O", true)
 
-  def script(moveScript: List[(game.type#TicTacToePlayer, Int)]) = {
-    val start = game.state(x, game.startBoard)
-    val lastMoveState = game.scriptedMoveStateStream(start, moveScript.map(pp => game.move(pp._1, pp._2)).iterator).last
-    lastMoveState._2.getOutcome.get.winner
-  }
+  def script(moveScript: List[(game.type#TicTacToePlayer, Int)]) =
+    game.scriptedMoveStateStream(
+      game.state(x, game.startBoard),
+      moveScript.map(pp => game.move(pp._1, pp._2)).iterator)
+      .last._2.outcome.flatMap(_.winner)
 
   "game1" should {
     "work" in {
-      val win1 = script(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 6), (x, 7)))
-      win1 should be equalTo (Some(x))
+      script(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 6), (x, 7))) should be equalTo (Some(x))
     }
   }
 
   "game2" should {
     "work" in {
-      val win2 = script(List((x, 2), (o, 3), (x, 4), (o, 5), (x, 6), (o, 7), (x, 8)))
-      win2 should be equalTo (Some(o))
+      script(List((x, 2), (o, 3), (x, 4), (o, 5), (x, 6), (o, 7), (x, 8))) should be equalTo (Some(o))
     }
   }
 
   "game3" should {
     "work" in {
-      val win3 = script(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 7), (x, 8), (o, 9), (x, 6)))
-      win3 should be equalTo (None)
+      script(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 7), (x, 8), (o, 9), (x, 6))) should be equalTo (None)
     }
   }
 

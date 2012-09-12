@@ -9,19 +9,19 @@ import Scalaz._
 
 package object stats {
 
-  implicit def rv2it[K](rv: RandomVariable[K]): IndexedSeq[K] = rv.getValues.getOrElse(Vector())
+  implicit def rv2it[K](rv: RandomVariable[K]): IndexedSeq[K] = rv.values.getOrElse(Vector())
   
   implicit def enrichCaseGenTraversable[A](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
 
   def coin(pHead: Double = 0.5) = RandomVariable0("coin",
-    values = Some(List('HEAD, 'TAIL).toIndexedSeq),
+    Some(List('HEAD, 'TAIL).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(immutable.Map('HEAD -> pHead, 'TAIL -> (1.0 - pHead)))))
 
-  def die(n: Int) = RandomVariable0("d"+n, values = Some(1 to n),
+  def die(n: Int) = RandomVariable0("d"+n, Some(1 to n),
     distribution = Some(new ConditionalProbabilityTable0((1 to n).map(i => (i, 1d/n)).toMap)))
 
   def utfD6() = RandomVariable0("UTF d6",
-    values = Some(List('⚀, '⚁, '⚂, '⚃, '⚄, '⚅).toIndexedSeq),
+    Some(List('⚀, '⚁, '⚂, '⚃, '⚄, '⚅).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(immutable.Map(
       '⚀ -> 1d / 6,
       '⚁ -> 1d / 6,
@@ -34,7 +34,7 @@ package object stats {
 
   import Information._
 
-  def entropy[A](X: RandomVariable[A]): Information.UOM = X.getValues.map(_.Σ(x => {
+  def entropy[A](X: RandomVariable[A]): Information.UOM = X.values.map(_.Σ(x => {
     val px = P(X eq x)()
     (px > 0) ? (-px * log2(px)) | 0.0
   })).getOrElse(0.0) *: bit

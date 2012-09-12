@@ -37,8 +37,8 @@ object Angluin {
       if (exp == null) {
         Set(state)
       } else {
-        val tail = exp.getTail()
-        δ(state, exp.getHead()).map(δ(_, tail)).reduce(_ ++ _)
+        val tail = exp.tail()
+        δ(state, exp.head()).map(δ(_, tail)).reduce(_ ++ _)
       }
     }
 
@@ -77,9 +77,9 @@ object Angluin {
 
   trait Expression {
 
-    def getHead(): Symbol
+    def head(): Symbol
 
-    def getTail(): Expression // List[Symbol]
+    def tail(): Expression // List[Symbol]
 
   }
 
@@ -89,15 +89,15 @@ object Angluin {
 
     v ++= vs
 
-    def getSymbolIterator() = v.iterator
+    def symbolIterator() = v.iterator
 
     //  def addSymbol(s: Symbol) = v += s
 
     def length() = v.size
 
-    override def getHead() = v(0)
+    override def head() = v(0)
 
-    override def getTail() = ListExpression(v.toList.tail)
+    override def tail() = ListExpression(v.toList.tail)
 
     def equals(other: Expression): Boolean = {
       // TODO !!!
@@ -114,15 +114,15 @@ object Angluin {
   }
 
   trait Grammar {
-    def getℒ(): Language
+    def ℒ(): Language
   }
 
-  class HardCodedGrammar(ℒ: Language) extends Grammar {
+  class HardCodedGrammar(_ℒ: Language) extends Grammar {
     // Note: This was orginally a getter called simply ℒ()
     // figure out how to write the extractor (or whatever)
     // to grab this
 
-    def getℒ() = ℒ
+    def ℒ() = _ℒ
   }
 
   class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
@@ -137,8 +137,8 @@ object Angluin {
   case class ▦() extends Expression() {
 
     // TOOD: not sure about head and tail here:
-    def getHead(): Symbol = null
-    def getTail(): Expression = null
+    def head(): Symbol = null
+    def tail(): Expression = null
 
     // should this class throw an exception
     // if addMorpheme is called?

@@ -26,7 +26,7 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
 
     val lines = new mutable.LinkedHashMap[Int, NodeSeq]()
 
-    (math.max(1, node.getLineNo - CONTEXT_PAD) to math.min(highlightedHtml.size, node.getLineNo + CONTEXT_PAD))
+    (math.max(1, node.lineNo - CONTEXT_PAD) to math.min(highlightedHtml.size, node.lineNo + CONTEXT_PAD))
       .map(i => { lines += i -> highlightedHtml(i) })
 
     info("contextHtml's result = " + lines)
@@ -42,7 +42,7 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
   // Option[mutable.LinkedHashMap[Int, NodeSeq]]
   // def contextHtmlLines(): Option[LinkedHashMap[Int, NodeSeq]] = contextHtml(doc, docNode) 
   override def docNodeInContext(doc: Document, docNode: AstNode): xml.NodeSeq =
-    doc.getAst().map(ast => nodeContext(doc.getGrammar(), docNode, "/document/" + doc.getName))
+    doc.ast().map(ast => nodeContext(doc.grammar(), docNode, "/document/" + doc.name))
       .getOrElse(<span>Oh no</span>)
 
   override def lllRules(lll: LLLanguage): NodeSeq = {

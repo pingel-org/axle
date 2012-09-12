@@ -18,7 +18,7 @@ trait MatrixFactory {
 
     type S
 
-    def getStorage: S
+    def storage: S
     
     def rows: Int
     def columns: Int
