@@ -5,6 +5,8 @@ import axle.game._
 import axle.matrix.ArrayMatrixFactory._
 import util.Random
 import collection._
+import scalaz._
+import Scalaz._
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game
@@ -127,17 +129,9 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
     def isTerminal(): Boolean = openPositions().length == 0
 
-    def outcome(): Option[TicTacToeOutcome] = {
-      for (player <- ttt.players) {
-        if (hasWon(player)) {
-          return Some(TicTacToeOutcome(Some(player)))
-        }
-      }
-
-      if (isTerminal) {
-        return Some(TicTacToeOutcome(None))
-      }
-
+    def outcome(): Option[TicTacToeOutcome] = if (isTerminal) {
+      Some(TicTacToeOutcome(ttt.players.find(hasWon(_))))
+    } else {
       None
     }
 
