@@ -3,7 +3,7 @@ object tttO {
 
   import axle.game.ttt._
 
-  val game = new TicTacToe(3)
+  val game = TicTacToe(3)
 
   val x = game.player("X", "Player X", interactive = true)
   val o = game.player("O", "Player O", interactive = false)

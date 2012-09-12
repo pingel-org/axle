@@ -137,28 +137,28 @@ trait Quantum {
     def micro() = quantity(oneBD.scaleByPowerOfTen(-6), this, Some("micro" + _name.getOrElse("")), Some("μ" + symbol.getOrElse("")))
     def nano() = quantity(oneBD.scaleByPowerOfTen(-9), this, Some("nano" + _name.getOrElse("")), Some("n" + symbol.getOrElse("")))
 
-    override def toString() = _name.getOrElse(conversion
+    override def toString() = _name.getOrElse(_conversion
       .map(c => c.payload + " " + c.source.payload.symbol.getOrElse(""))
       .getOrElse(_name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()))
 
     def +(right: UOM): UOM = {
-      val (bd, uom) = conversion.map(c => (c.payload, c.source.payload)).getOrElse((oneBD, this))
+      val (bd, uom) = _conversion.map(c => (c.payload, c.source.payload)).getOrElse((oneBD, this))
       quantity(bd.add((right in uom).conversion.get.payload), uom) // TODO remove .get
     }
 
     def -(right: UOM): UOM = {
-      val (bd, uom) = conversion.map(c => (c.payload, c.source.payload)).getOrElse((oneBD, this))
+      val (bd, uom) = _conversion.map(c => (c.payload, c.source.payload)).getOrElse((oneBD, this))
       quantity(bd.subtract((right in uom).conversion.get.payload), uom) // TODO remove .get
     }
 
     def *(bd: BigDecimal): UOM = bd.doubleValue match {
       case 0.0 => zero()
-      case _ => conversion
+      case _ => _conversion
         .map(c => quantity(c.payload.multiply(bd), c.source.payload))
         .getOrElse(quantity(bd, this))
     }
 
-    def /(bd: BigDecimal): UOM = conversion
+    def /(bd: BigDecimal): UOM = _conversion
       .map(c => quantity(bdDivide(c.payload, bd), c.source.payload))
       .getOrElse(quantity(bdDivide(oneBD, bd), this))
 
@@ -185,7 +185,7 @@ trait Quantum {
       }).getOrElse(throw new Exception("no conversion path from " + this + " to " + u))
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
-      val resultBD = conversion.map(c =>
+      val resultBD = _conversion.map(c =>
         right.conversion.map(rc => c.payload.multiply(rc.payload)
         ).getOrElse(c.payload)
       ).getOrElse(right.conversion.map(_.payload)
@@ -195,7 +195,7 @@ trait Quantum {
     }
 
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = {
-      val resultBD = conversion.map(c =>
+      val resultBD = _conversion.map(c =>
         bottom.conversion.map(bc => bdDivide(c.payload, bc.payload)
         ).getOrElse(c.payload)
       ).getOrElse(bottom.conversion.map(bc => bdDivide(oneBD, bc.payload))

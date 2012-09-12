@@ -10,11 +10,11 @@ trait RandomVariable[A] {
   lazy val charWidth: Int = (name().length :: values().map(vs => vs.map(_.toString.length).toList).getOrElse(Nil)).reduce(math.max)
 }
 
-case class RandomVariable0[A](_name: String, _values: Option[IndexedSeq[A]] = None, distribution: Option[Distribution0[A]])
+case class RandomVariable0[A](_name: String, _values: Option[IndexedSeq[A]] = None, distribution: Option[Distribution0[A]]=None)
   extends RandomVariable[A] {
 
-  def name() = name
-  def values() = values
+  def name() = _name
+  def values() = _values
   def eq(v: A): CaseIs[A] = CaseIs(this, v)
   def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
   def probability(a: A): Double = distribution.map(_.probabilityOf(a)).getOrElse(0.0)
@@ -23,7 +23,7 @@ case class RandomVariable0[A](_name: String, _values: Option[IndexedSeq[A]] = No
 }
 
 case class RandomVariable1[A, G1](_name: String, _values: Option[IndexedSeq[A]] = None,
-  grv: RandomVariable[G1], distribution: Option[Distribution1[A, G1]])
+  grv: RandomVariable[G1], distribution: Option[Distribution1[A, G1]]=None)
   extends RandomVariable[A] {
 
   def name() = _name
@@ -38,7 +38,7 @@ case class RandomVariable1[A, G1](_name: String, _values: Option[IndexedSeq[A]] 
 }
 
 case class RandomVariable2[A, G1, G2](_name: String, _values: Option[IndexedSeq[A]] = None,
-  grv1: RandomVariable[G1], grv2: RandomVariable[G2], distribution: Option[Distribution2[A, G1, G2]])
+  grv1: RandomVariable[G1], grv2: RandomVariable[G2], distribution: Option[Distribution2[A, G1, G2]]=None)
   extends RandomVariable[A] {
 
   def name() = _name

@@ -26,11 +26,11 @@ object kmO {
     data,
     N = 2,
     featureExtractor = (p: Foo) => List(p.x, p.y),
-    constructor = (features: List[Double]) => new Foo(features(0), features(1)),
+    constructor = (features: List[Double]) => Foo(features(0), features(1)),
     K = 6,
     iterations = 100)
 
-  val plot = new Plot(classifier.averageDistanceLogSeries(),
+  val plot = Plot(classifier.averageDistanceLogSeries(),
     connect = true,
     drawKey = true,
     title = Some("KMeans Mean Centroid Distances"),

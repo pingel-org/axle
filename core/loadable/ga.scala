@@ -45,11 +45,11 @@ object gaO {
 
   }
 
-  val ga = new GeneticAlgorithm(RabbitSpecies, populationSize = 100, numGenerations = 100)
+  val ga = GeneticAlgorithm(RabbitSpecies, populationSize = 100, numGenerations = 100)
 
   val log = ga.run()
 
-  val plot = new Plot(List("min" -> log.mins, "ave" -> log.aves, "max" -> log.maxs),
+  val plot = Plot(List("min" -> log.mins, "ave" -> log.aves, "max" -> log.maxs),
     connect = true, title = Some("GA Demo"), xAxis = 0.0, xAxisLabel = Some("generation"), yAxis = 0, yAxisLabel = Some("fitness"))
 
   show(plot)

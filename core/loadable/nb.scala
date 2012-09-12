@@ -13,28 +13,15 @@ object nbO {
 
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 
-  val data = Tennis("Sunny", "Hot", "High", "Weak", false) ::
-    Tennis("Sunny", "Hot", "High", "Strong", false) ::
-    Tennis("Overcast", "Hot", "High", "Weak", true) ::
-    Tennis("Rain", "Mild", "High", "Weak", true) ::
-    Tennis("Rain", "Cool", "Normal", "Weak", true) ::
-    Tennis("Rain", "Cool", "Normal", "Strong", false) ::
-    Tennis("Overcast", "Cool", "Normal", "Strong", true) ::
-    Tennis("Sunny", "Mild", "High", "Weak", false) ::
-    Tennis("Sunny", "Cool", "Normal", "Weak", true) ::
-    Tennis("Rain", "Mild", "Normal", "Weak", true) ::
-    Tennis("Sunny", "Mild", "Normal", "Strong", true) ::
-    Tennis("Overcast", "Mild", "High", "Strong", true) ::
-    Tennis("Overcast", "Hot", "Normal", "Weak", true) ::
-    Tennis("Rain", "Mild", "High", "Strong", false) :: Nil
+  val data = Tennis("Sunny", "Hot", "High", "Weak", false) :: Tennis("Sunny", "Hot", "High", "Strong", false) :: Tennis("Overcast", "Hot", "High", "Weak", true) :: Tennis("Rain", "Mild", "High", "Weak", true) :: Tennis("Rain", "Cool", "Normal", "Weak", true) :: Tennis("Rain", "Cool", "Normal", "Strong", false) :: Tennis("Overcast", "Cool", "Normal", "Strong", true) :: Tennis("Sunny", "Mild", "High", "Weak", false) :: Tennis("Sunny", "Cool", "Normal", "Weak", true) :: Tennis("Rain", "Mild", "Normal", "Weak", true) :: Tennis("Sunny", "Mild", "Normal", "Strong", true) :: Tennis("Overcast", "Mild", "High", "Strong", true) :: Tennis("Overcast", "Hot", "Normal", "Weak", true) :: Tennis("Rain", "Mild", "High", "Strong", false) :: Nil
 
-  val classifier = new NaiveBayesClassifier(
+  val classifier = NaiveBayesClassifier(
     data,
-    pFs = RandomVariable0("Outlook", values = Some(List("Sunny", "Overcast", "Rain"))) ::
-      RandomVariable0("Temperature", values = Some(List("Hot", "Mild", "Cool"))) ::
-      RandomVariable0("Humidity", values = Some(List("High", "Normal", "Low"))) ::
-      RandomVariable0("Wind", values = Some(List("Weak", "Strong"))) :: Nil,
-    pC = RandomVariable0("Play", values = Some(List(true, false))),
+    pFs = RandomVariable0("Outlook", Some(Vector("Sunny", "Overcast", "Rain"))) ::
+      RandomVariable0("Temperature", Some(Vector("Hot", "Mild", "Cool"))) ::
+      RandomVariable0("Humidity", Some(Vector("High", "Normal", "Low"))) ::
+      RandomVariable0("Wind", Some(Vector("Weak", "Strong"))) :: Nil,
+    pC = RandomVariable0("Play", Some(Vector(true, false))),
     featureExtractor = (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
     classExtractor = (t: Tennis) => t.play)
 

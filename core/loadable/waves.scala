@@ -17,7 +17,7 @@ object O {
       (0 to 100).map(j => (now.plusMinutes(2 * j) -> amp * sin(phase + (j / (10 * f))))).toMap)
   }
 
-  val plot = new Plot((0 until 20).map(i => randomTimeSeries(i)).toList, true,
+  val plot = Plot((0 until 20).map(i => randomTimeSeries(i)).toList, true,
     title = Some("Random Waves"), xAxis = 0.0, xAxisLabel = Some("time (t)"),
     yAxis = now, yAxisLabel = Some("a * sin(p + t/10f)"))
 

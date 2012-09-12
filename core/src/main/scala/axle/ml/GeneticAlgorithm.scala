@@ -18,6 +18,12 @@ case class GeneticAlgorithmLog[G](
   maxs: SortedMap[Int, Double],
   aves: SortedMap[Int, Double])
 
+object GeneticAlgorithm {
+
+  def apply[G](species: Species[G], populationSize: Int = 1000, numGenerations: Int = 100) = new GeneticAlgorithm(species, populationSize, numGenerations)
+  
+}
+  
 class GeneticAlgorithm[G](species: Species[G], populationSize: Int = 1000, numGenerations: Int = 100) {
 
   def initialPopulation(): IndexedSeq[(G, Double)] =

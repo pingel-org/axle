@@ -2,6 +2,13 @@ package axle.ml
 
 import axle.stats._
 
+object NaiveBayesClassifier {
+  
+  def apply[D, TF, TC](data: Seq[D], pFs: List[RandomVariable[TF]], pC: RandomVariable[TC], featureExtractor: D => List[TF], classExtractor: D => TC) =
+    new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
+
+}
+
 class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
   pFs: List[RandomVariable[TF]],
   pC: RandomVariable[TC],

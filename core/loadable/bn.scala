@@ -5,11 +5,11 @@ import axle.visualize._
 
 val bools = Some(Vector(true, false))
 
-val B = new RandomVariable0("Burglary", bools, None)
-val E = new RandomVariable0("Earthquake", bools, None)
-val A = new RandomVariable0("Alarm", bools, None)
-val J = new RandomVariable0("John Calls", bools, None)
-val M = new RandomVariable0("Mary Calls", bools, None)
+val B = RandomVariable0("Burglary", bools)
+val E = RandomVariable0("Earthquake", bools)
+val A = RandomVariable0("Alarm", bools)
+val J = RandomVariable0("John Calls", bools)
+val M = RandomVariable0("Mary Calls", bools)
 
 val bn = BayesianNetwork("Alarm sounds (due to Burglary or Earthquake) and John or Mary Call")
 
