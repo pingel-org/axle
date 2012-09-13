@@ -6,29 +6,31 @@ import collection._
 
 object ObservationToAction extends Rule {
 
-  def apply(q: CausalityProbability, m: Model[RandomVariable[_]], namer: VariableNamer): List[Form] = {
+  def apply(q: CausalityProbability, m: CausalModel, namer: VariableNamer): List[Form] = {
 
     val Y = q.question
     val X = q.actions
 
-    q.given.flatMap(z => {
+//    q.given.flatMap(z => {
+//
+//      val Z = immutable.Set(z)
+//      val W = q.given - z
+//
+//      val subModel = m.duplicate()
+//      subModel.removeInputs(subModel.nodesFor(X))
+//      subModel.removeOutputs(subModel.nodesFor(Z))
+//
+//      val XW = X ++ W
+//
+//      if (subModel.blocks(Y, Z, XW)) {
+//        Some(CausalityProbability(Y, W, X + z))
+//      } else {
+//        None
+//      }
+//    }).toList
 
-      val Z = immutable.Set(z)
-      val W = q.given - z
-
-      val subModel = m.duplicate()
-      subModel.removeInputs(X)
-      subModel.removeOutputs(Z)
-
-      val XW = X ++ W
-
-      if (subModel.blocks(Y, Z, XW)) {
-        Some(CausalityProbability(Y, W, X + z))
-      } else {
-        None
-      }
-    }).toList
-
+    Nil // TODO
+    
   }
 
 }

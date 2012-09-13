@@ -108,24 +108,6 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
     def descendantsIntersectsSet(v: V, s: Set[V]): Boolean =
       s.contains(v) || s.exists(x => descendantsIntersectsSet(x, s))
 
-    def collectDescendants(v: V, result: mutable.Set[V]): Unit = {
-      // inefficient
-      if (!result.contains(v)) {
-        result += v
-        successors(v).map(collectDescendants(_, result))
-      }
-    }
-
-    def collectAncestors(v: V, result: mutable.Set[V]): Unit = {
-      // inefficient
-      if (!result.contains(v)) {
-        result += v
-        predecessors(v).map(collectAncestors(_, result))
-      }
-    }
-
-    def collectAncestors(vs: Set[V], result: mutable.Set[V]): Unit = vs.map(collectAncestors(_, result))
-
     def removeInputs(vs: Set[V]): Unit =
       vs.map(v => jungGraph.getInEdges(v).asScala.map(inEdge => jungGraph.removeEdge(inEdge)))
 
@@ -159,7 +141,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       }
     }
 
-    def vertexToVisualizationHtml(vp: VP): xml.Node = <span>{vp.toString}</span>
+    def vertexToVisualizationHtml(vp: VP): xml.Node = <span>{ vp.toString }</span>
 
   }
 

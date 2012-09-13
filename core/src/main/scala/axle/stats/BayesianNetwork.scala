@@ -147,21 +147,12 @@ class BayesianNetwork(_name: String)
   def probabilityOf(cs: Seq[CaseIs[_]]) = cs.map(c => cpt(c.rv)(cs)).reduce(_ * _)
 
   def markovAssumptionsFor(rv: RandomVariable[_]): Independence = {
-
     val rvVertex = findVertex(_.rv == rv).get
-
     val X: immutable.Set[RandomVariable[_]] = immutable.Set(rv)
-
     val Z: immutable.Set[RandomVariable[_]] = predecessors(rvVertex).map(_.payload.rv).toSet
-
-    val D = mutable.Set[this.V]()
-    collectDescendants(rvVertex, D)
-    D += rvVertex // probably already includes this
-    D ++= predecessors(rvVertex)
+    val D = collectDescendants(rvVertex) ++ predecessors(rvVertex) + rvVertex
     val Dvars = D.map(_.payload.rv)
-    val Y = randomVariables.filter(!Dvars.contains(_)).toSet
-
-    new Independence(X, Z, Y)
+    new Independence(X, Z, randomVariables.filter(!Dvars.contains(_)).toSet)
   }
 
   def computeFullCase(c: List[CaseIs[_]]): Double = {

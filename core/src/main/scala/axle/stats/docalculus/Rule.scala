@@ -5,6 +5,6 @@ import axle.stats._
 
 abstract class Rule extends Form {
 
-  def apply(q: Probability, m: Model[RandomVariable[_]], namer: VariableNamer): List[Form]
+  def apply(q: CausalityProbability, m: CausalModel, namer: VariableNamer): List[Form]
 
 }

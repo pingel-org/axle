@@ -30,9 +30,45 @@ trait DirectedGraphFactory extends GraphFactory {
     def successors(v: V): Set[V]
     def outputEdgesOf(v: V): Set[E]
     def descendantsIntersectsSet(v: V, s: Set[V]): Boolean
-    def collectDescendants(v: V, result: mutable.Set[V]): Unit
-    def collectAncestors(v: V, result: mutable.Set[V]): Unit
-    def collectAncestors(vs: Set[V], result: mutable.Set[V]): Unit
+
+    //    def collectDescendants(v: V): immutable.Set[V]
+    //    def collectAncestors(v: V): immutable.Set[V]
+    //    def collectAncestors(vs: Set[V]): immutable.Set[V]
+
+    def _collectDescendants(v: V, result: mutable.Set[V]): Unit = {
+      // inefficient
+      if (!result.contains(v)) {
+        result += v
+        successors(v).map(_collectDescendants(_, result))
+      }
+    }
+
+    def collectDescendants(v: V): immutable.Set[V] = {
+      val result = mutable.Set[V]()
+      _collectDescendants(v, result)
+      result.toSet
+    }
+
+    // inefficient
+    def _collectAncestors(v: V, result: mutable.Set[V]): Unit = {
+      if (!result.contains(v)) {
+        result += v
+        predecessors(v).map(_collectAncestors(_, result))
+      }
+    }
+
+    def collectAncestors(v: V): immutable.Set[V] = {
+      val result = mutable.Set[V]()
+      _collectAncestors(v, result)
+      result.toSet
+    }
+
+    def collectAncestors(vs: Set[V]): immutable.Set[V] = {
+      val result = mutable.Set[V]()
+      vs.map(_collectAncestors(_, result))
+      result.toSet
+    }
+
     def removeInputs(vs: Set[V]): Unit
     def removeOutputs(vs: Set[V]): Unit
     def removeSuccessor(v: V, successor: V): Unit // TODO remove this method

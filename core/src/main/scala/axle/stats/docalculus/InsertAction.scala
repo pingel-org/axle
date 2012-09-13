@@ -6,7 +6,7 @@ import collection._
 
 object InsertAction extends Rule {
 
-  def apply(q: CausalityProbability, m: Model[RandomVariable[_]], namer: VariableNamer): List[Form] = {
+  def apply(q: CausalityProbability, m: CausalModel, namer: VariableNamer): List[Form] = {
 
     val Y = q.question
     val X = q.actions
@@ -18,29 +18,29 @@ object InsertAction extends Rule {
     // is possible to have relevant actions that are not in q?
     // I assume not.
 
-    (m.randomVariables().toSet -- Y -- X -- W).flatMap(zRandomVariable => {
-      if (zRandomVariable.observable) {
-        val zAction = namer.nextVariable(zRandomVariable)
-        val Z = immutable.Set(zAction)
+//    (m.randomVariables().toSet -- Y -- X -- W).flatMap(zRandomVariable => {
+//      if (m.observes(zRandomVariable)) {
+//        val zAction = namer.nextVariable(zRandomVariable)
+//        val Z = immutable.Set(zAction)
+//
+//        val subModel = m.duplicate()
+//        subModel.removeInputs(subModel.nodesFor(X))
+//        val ancestorsOfW = subModel.collectAncestors(subModel.nodesFor(W))
+//        if (!ancestorsOfW.contains(zRandomVariable)) {
+//          subModel.removeInputs(subModel.nodesFor(Z))
+//        }
+//
+//        if (subModel.blocks(Y, Z, XW)) {
+//          Some(CausalityProbability(Y, W, X + zAction))
+//        } else {
+//          None
+//        }
+//      } else {
+//        None
+//      }
+//    }).toList
 
-        val subModel = m.duplicate()
-        subModel.removeInputs(X)
-        val ancestorsOfW = Set[RandomVariable[_]]()
-        subModel.collectAncestors(W, ancestorsOfW)
-        if (!ancestorsOfW.contains(zRandomVariable)) {
-          subModel.removeInputs(Z)
-        }
-
-        if (subModel.blocks(Y, Z, XW)) {
-          Some(CausalityProbability(Y, W, X + zAction))
-        } else {
-          None
-        }
-      } else {
-        None
-      }
-    }).toList
-
+    Nil // TODO
   }
 
 }
