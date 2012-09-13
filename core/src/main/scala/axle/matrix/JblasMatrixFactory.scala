@@ -10,6 +10,7 @@ import org.jblas.DoubleMatrix
 
 object JblasMatrixFactory extends JblasMatrixFactory {
 
+  
 }
 
 trait JblasMatrixFactory extends MatrixFactory {
@@ -129,6 +130,9 @@ trait JblasMatrixFactory extends MatrixFactory {
       (i % columns, i / columns)
     }
 
+    def rowSums() = matrix(storage.rowSums)(functionPair)
+    def columnSums() = matrix(storage.columnSums())(functionPair)
+    
     def columnMins() = matrix(storage.columnMins())(functionPair)
     def columnMaxs() = matrix(storage.columnMaxs())(functionPair)
 

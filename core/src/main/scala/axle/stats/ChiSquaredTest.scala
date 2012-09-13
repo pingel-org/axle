@@ -6,37 +6,15 @@ import math.{ pow, sqrt }
 
 object ChiSquaredTest {
 
-  def χ2(tally: Matrix[Double]): Double = {
-
-    var rowTotals = new Array[Double](tally.rows)
-    for (r <- 0 until tally.rows) {
-      rowTotals(r) = 0
-      for (c <- 0 until tally.columns) {
-        rowTotals(r) += tally(r, c)
-      }
-    }
-
-    var columnTotals = new Array[Double](tally.columns)
-    for (c <- 0 until tally.columns) {
-      columnTotals(c) = 0
-      for (r <- 0 until tally.rows) {
-        columnTotals(c) += tally(r, c)
-      }
-    }
-
-    val total = 0.until(tally.rows).map(rowTotals(_)).sum
-    
-//    val total2 = 0.until(tally.columns).map(columnTotals(_)).sum
-//    if (total != total2) {
-//      throw new Exception("error calculating chi squared")
-//    }
-
+  def χ2(tally: JblasMatrix[Double]): Double = {
+    val rowTotals = tally.rowSums()
+    val columnTotals = tally.columnSums()
+    val total = rowTotals.columnSums()(0, 0)
     (for (r <- 0 until tally.rows; c <- 0 until tally.columns) yield {
       val observed = tally(r, c)
-      val expected = rowTotals(r) * columnTotals(c) / total
+      val expected = rowTotals(r, 0) * columnTotals(0, c) / total
       (observed - expected) * (observed - expected) / expected
     }).sum
-
   }
 
   /**
@@ -62,6 +40,6 @@ object ChiSquaredTest {
    *    val dof = (table.height - 1) * (table.width - 1)
    */
 
-  def independent(table: Matrix[Double]): Boolean = χ2(table) < 0.004
+  def independent(table: JblasMatrix[Double]): Boolean = χ2(table) < 0.004
 
 }
