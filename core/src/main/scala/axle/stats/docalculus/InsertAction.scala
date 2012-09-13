@@ -1,25 +1,16 @@
 
-package org.pingel.causality.docalculus
+package axle.stats.docalculus
 
-import org.pingel.causality.CausalModel
-import org.pingel.bayes.Probability
-import org.pingel.bayes.RandomVariable
-import org.pingel.bayes.VariableNamer
-import org.pingel.forms.Variable
-import org.pingel.gestalt.core.Form
-import org.pingel.gestalt.core.Unifier
+import axle.stats._
+import collection._
 
-import scala.collection._
+object InsertAction extends Rule {
 
-class InsertAction extends Rule {
+  def apply(q: CausalityProbability, m: Model[RandomVariable[_]], namer: VariableNamer): List[Form] = {
 
-  def apply(q: Probability, m: CausalModel, namer: VariableNamer): List[Form] = {
-
-    var results = mutable.ListBuffer[Form]()
-
-    val Y = q.getQuestion()
-    val X = q.getActions()
-    val W = q.getGiven()
+    val Y = q.question
+    val X = q.actions
+    val W = q.given
 
     val XW = X ++ W
 
@@ -27,37 +18,29 @@ class InsertAction extends Rule {
     // is possible to have relevant actions that are not in q?
     // I assume not.
 
-    val potentialZ = m.getRandomVariables().toSet -- Y -- X -- W
-
-    for (zRandomVariable <- potentialZ) {
+    (m.randomVariables().toSet -- Y -- X -- W).flatMap(zRandomVariable => {
       if (zRandomVariable.observable) {
-        val zAction = zRandomVariable.nextVariable(namer)
-        val Z = Set(zAction)
+        val zAction = namer.nextVariable(zRandomVariable)
+        val Z = immutable.Set(zAction)
 
         val subModel = m.duplicate()
-        subModel.g.removeInputs(X)
-        val ancestorsOfW = Set[RandomVariable]()
-        subModel.g.collectAncestors(W, ancestorsOfW)
+        subModel.removeInputs(X)
+        val ancestorsOfW = Set[RandomVariable[_]]()
+        subModel.collectAncestors(W, ancestorsOfW)
         if (!ancestorsOfW.contains(zRandomVariable)) {
-          subModel.g.removeInputs(Z)
+          subModel.removeInputs(Z)
         }
 
         if (subModel.blocks(Y, Z, XW)) {
-          val XZ = X + zAction
-          val Ycopy = Set[Variable]() ++ Y
-          val Wcopy = Set[Variable]() ++ W
-          val probFactory = new Probability()
-          val unifier = new Unifier()
-          unifier.put(probFactory.question, Ycopy)
-          unifier.put(probFactory.given, Wcopy)
-          unifier.put(probFactory.actions, XZ)
-          val f = probFactory.createForm(unifier)
-          results += f
+          Some(CausalityProbability(Y, W, X + zAction))
+        } else {
+          None
         }
+      } else {
+        None
       }
-    }
+    }).toList
 
-    results.toList
   }
 
 }

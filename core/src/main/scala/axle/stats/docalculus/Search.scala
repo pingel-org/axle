@@ -1,47 +1,35 @@
-/*
- * Created on Jun 7, 2005
- *
- */
-package org.pingel.causality.docalculus
 
-import org.pingel.causality.CausalModel
-import org.pingel.bayes.Probability
-import org.pingel.bayes.VariableNamer
-import org.pingel.causality.examples.MidtermModel1
-import org.pingel.gestalt.core.Form
 
-import scala.collection._
+package axle.stats.docalculus
+
+import axle.stats._
+import collection._
 
 object Search {
 
-  def main(args: Array[String]) {
-    val model = MidtermModel1
-    val namer = new VariableNamer()
+  //  def main(args: Array[String]) {
+  //    val model = MidtermModel1
+  //    val namer = new VariableNamer()
+  //
+  //    val quantity = model.getQuantity(namer) // Probability
+  //    val search = new Search()
+  //    search.reduce(model, quantity, namer, 0, 2)
+  //  }
 
-    val quantity = model.getQuantity(namer) // Probability
-    val search = new Search()
-    search.reduce(model, quantity, namer, 0, 2)
-  }
+  /**
+   * results.addAll(new AdjustForDirectCauses().apply(quantity, model, namer.duplicate()))
+   * TODO try chain rule
+   */
 
-}
+  def expand(model: Model[RandomVariable[_]], quantity: CausalityProbability, namer: VariableNamer) =
+    DeleteObservation(quantity, model, namer.duplicate()) ++
+      InsertObservation(quantity, model, namer.duplicate()) ++
+      ActionToObservation(quantity, model, namer.duplicate()) ++
+      ObservationToAction(quantity, model, namer.duplicate()) ++
+      DeleteAction(quantity, model, namer.duplicate()) ++
+      InsertAction(quantity, model, namer.duplicate())
 
-class Search {
-
-  def expand(model: CausalModel, quantity: Probability, namer: VariableNamer) = {
-
-    // results.addAll(new AdjustForDirectCauses().apply(quantity, model, namer.duplicate()))
-    // TODO try chain rule
-
-    List[Form]() ++
-      (new DeleteObservation().apply(quantity, model, namer.duplicate())) ++
-      (new InsertObservation().apply(quantity, model, namer.duplicate())) ++
-      (new ActionToObservation().apply(quantity, model, namer.duplicate())) ++
-      (new ObservationToAction().apply(quantity, model, namer.duplicate())) ++
-      (new DeleteAction().apply(quantity, model, namer.duplicate())) ++
-      (new InsertAction().apply(quantity, model, namer.duplicate()))
-  }
-
-  def reduce(model: CausalModel, quantity: Probability, namer: VariableNamer, depth: Int, maxDepth: Int): List[Form] = {
+  def reduce(model: Model[RandomVariable[_]], quantity: CausalityProbability, namer: VariableNamer, depth: Int, maxDepth: Int): List[Form] = {
     if (depth <= maxDepth) {
       val next = expand(model, quantity, namer)
       if (next != null) {
@@ -50,8 +38,7 @@ class Search {
           for (i <- 0 until depth) {
             print("\t")
           }
-          // println(e.toLaTeX())
-          val probFactory = new Probability()
+          val probFactory = CausalityProbability(Set(), Set(), Set())
           if (probFactory.isCreatorOf(e)) {
             if (probFactory.getActionSize(e) == 0) {
               return List(e)

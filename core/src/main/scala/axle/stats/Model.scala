@@ -14,7 +14,7 @@ object Direction {
 
 trait Model[MVP] extends JungDirectedGraph[MVP, String] {
 
-  // def duplicate(): Model = new Model(name, graphFrom(g)(v => v, e => e))
+  // def duplicate(): Model[MVP] = new Model[MVP](name, graphFrom(g)(v => v, e => e))
 
   var newVarIndex = 0
   val name2variable = mutable.Map[String, RandomVariable[_]]()

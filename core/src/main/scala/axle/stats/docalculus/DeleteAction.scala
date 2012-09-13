@@ -1,56 +1,36 @@
 
-package org.pingel.causality.docalculus
+package axle.stats.docalculus
 
-import scala.collection._
+import axle.stats._
+import collection._
 
-import org.pingel.causality.CausalModel
-import org.pingel.bayes.Probability
-import org.pingel.bayes.RandomVariable
-import org.pingel.bayes.VariableNamer
-import org.pingel.bayes.Variable
-import org.pingel.gestalt.core.Form
-import org.pingel.gestalt.core.Unifier
+object DeleteAction extends Rule {
 
-class DeleteAction extends Rule {
+  def apply(q: CausalityProbability, m: Model[RandomVariable[_]], namer: VariableNamer): List[Form] = {
 
-  def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
+    val Y = q.question
+    val W = q.given
 
-    val results = mutable.ListBuffer[Form]()
+    q.actions.flatMap(z => {
 
-    val Y = q.getQuestion()
-    val W = q.getGiven()
-
-    for (z <- q.getActions()) {
-
-      val Z = Set[Variable](z)
-      val X = q.getActions() - z
+      val Z = immutable.Set(z)
+      val X = q.actions - z
       val XW = X ++ W
 
       val subModel = m.duplicate()
-      subModel.g.removeInputs(X)
+      subModel.removeInputs(X)
 
-      var ancestorsOfW = Set[RandomVariable]()
-      subModel.g.collectAncestors(W, ancestorsOfW)
-      if (!ancestorsOfW.contains(z.getRandomVariable())) {
-        subModel.g.removeInputs(Z)
+      var ancestorsOfW = Set[RandomVariable[_]]()
+      subModel.collectAncestors(W, ancestorsOfW)
+      if (!ancestorsOfW.contains(z)) {
+        subModel.removeInputs(Z)
       }
-
       if (subModel.blocks(Y, Z, XW)) {
-
-        val Ycopy = Set[Variable]() ++ Y
-        val Wcopy = Set[Variable]() ++ W
-
-        val probFactory = new Probability(Set[Variable](), Set[Variable](), Set[Variable]())
-        val unifier = new Unifier()
-        unifier.put(probFactory.question, Ycopy)
-        unifier.put(probFactory.given, Wcopy)
-        unifier.put(probFactory.actions, X)
-        val f = probFactory.createForm(unifier)
-        results += f
+        Some(CausalityProbability(Y, W, X))
+      } else {
+        None
       }
-    }
-
-    results.toList
+    }).toList
   }
 
 }

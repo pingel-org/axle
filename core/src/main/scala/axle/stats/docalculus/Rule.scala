@@ -1,15 +1,10 @@
 
-package org.pingel.causality.docalculus
+package axle.stats.docalculus
 
-import org.pingel.causality.CausalModel
-import org.pingel.bayes.Probability
-import org.pingel.bayes.RandomVariable
-import org.pingel.bayes.VariableNamer
-import org.pingel.forms.Variable
-import org.pingel.gestalt.core.Form
+import axle.stats._
 
-abstract class Rule {
+abstract class Rule extends Form {
 
-  def apply(q: Probability, m: CausalModel, namer: VariableNamer): List[Form]
-  
+  def apply(q: Probability, m: Model[RandomVariable[_]], namer: VariableNamer): List[Form]
+
 }

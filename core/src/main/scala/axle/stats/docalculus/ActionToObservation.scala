@@ -1,58 +1,28 @@
 
-package org.pingel.causality.docalculus
+package axle.stats.docalculus
 
-import org.pingel.causality.CausalModel
-import org.pingel.bayes.Probability
-import org.pingel.bayes.VariableNamer
-import org.pingel.bayes.RandomVariable
-import org.pingel.bayes.Variable
-import org.pingel.gestalt.core.Form
-import org.pingel.gestalt.core.Unifier
-import scala.collection._
+import collection._
+import axle.stats._
 
-class ActionToObservation extends Rule {
+object ActionToObservation extends Rule {
 
-  def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
+  def apply(q: CausalityProbability, m: Model[RandomVariable[_]], namer: VariableNamer): List[Form] = {
 
-    val results = mutable.ListBuffer[Form]()
+    val Y = q.question
+    val W = q.given
 
-    val Y = q.getQuestion()
-    val W = q.getGiven()
-
-    // println("Y = " + Y)
-    // println("W = " + W)
-
-    for (z <- q.getActions()) {
-
-      val X = Set[Variable]() ++ q.getActions() - z
-      // println("X = " + X)
-
-      val Z = Set[Variable]() + z
-      // println("Z = " + Z)
-
+    q.actions.flatMap(z => {
+      val X = q.actions - z
+      val Z = immutable.Set(z)
       val subModel = m.duplicate()
-      subModel.getGraph().removeInputs(X)
-      subModel.getGraph().removeOutputs(Z)
-      // subModel.graph.draw
-
-      val XW = Set[Variable]() ++ W ++ X
-
-      if (subModel.blocks(Y, Z, XW)) {
-
-        val ZW = Set[Variable]() ++ W + z
-
-        val Ycopy = Set[Variable]() ++ Y
-
-        val probFactory = new Probability()
-        val unifier = new Unifier()
-        unifier.put(probFactory.question, Ycopy)
-        unifier.put(probFactory.given, ZW)
-        unifier.put(probFactory.actions, X)
-        results += probFactory.createForm(unifier)
+      subModel.removeInputs(X)
+      subModel.removeOutputs(Z)
+      if (subModel.blocks(Y, Z, W ++ X)) {
+        Some(CausalityProbability(Y, W + z, X))
+      } else {
+        None
       }
-    }
-
-    results.toList
+    }).toList
   }
 
 }

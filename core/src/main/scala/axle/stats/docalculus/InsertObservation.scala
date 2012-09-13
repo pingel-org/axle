@@ -1,48 +1,37 @@
 
-package org.pingel.causality.docalculus
+package axle.stats.docalculus
 
-import scala.collection._
-import org.pingel.causality.CausalModel
-import org.pingel.bayes.Probability
-import org.pingel.bayes.RandomVariable
-import org.pingel.bayes.VariableNamer
-import org.pingel.forms.Variable
-import org.pingel.gestalt.core.Form
+import collection._
+import axle.stats._
 
-class InsertObservation extends Rule {
+object InsertObservation extends Rule {
 
-  def apply(q: Probability, m: CausalModel, namer: VariableNamer) = {
+  // TODO Question: are all actions necessarily in q? Is
+  // is possible to have relevant actions that are not in q?
+  // I assume not.
 
-    val results = new mutable.ListBuffer[Form]()
+  def apply(q: CausalityProbability, m: Model[RandomVariable[_]], namer: VariableNamer): List[Form] = {
 
-    val Y = q.getQuestion()
-    val X = q.getActions()
-    val W = q.getGiven()
-
+    val Y = q.question
+    val X = q.actions
+    val W = q.given
     val subModel = m.duplicate()
-    subModel.g.removeInputs(X)
-
+    subModel.removeInputs(X)
     val XW = X ++ W
 
-    // TODO Question: are all actions necessarily in q? Is
-    // is possible to have relevant actions that are not in q?
-    // I assume not.
-
-    val potentialZ = m.getRandomVariables().toSet -- Y -- X -- W
-
-    for (zRandomVariable <- potentialZ) {
+    (m.randomVariables().toSet -- Y -- X -- W).flatMap(zRandomVariable => {
       if (zRandomVariable.observable) {
-        val Z = Set[Variable](zRandomVariable.nextVariable(namer))
-        if (subModel.blocks(Y, Z, XW)) {
-          val ZW = Z ++ W
-          val Ycopy = Set[Variable]() ++ Y
-          val Xcopy = Set[Variable]() ++ X
-          results += new Probability(Ycopy, ZW, Xcopy)
+        val z = namer.nextVariable(zRandomVariable)
+        if (subModel.blocks(Y, immutable.Set(Z), XW)) {
+          Some(CausalityProbability(Y, W + z, X))
+        } else {
+          None
         }
+      } else {
+        None
       }
-    }
+    }).toList
 
-    results.toList
   }
 
 }
