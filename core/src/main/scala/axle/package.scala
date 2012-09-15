@@ -37,7 +37,7 @@ package object axle {
   implicit def enrichGenTraversable[T](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
 
   implicit def enrichIndexedSeq[T](is: IndexedSeq[T]) = EnrichedIndexedSeq(is)
-  
+
   implicit def enrichByteArray(barr: Array[Byte]) = EnrichedByteArray(barr)
 
   implicit def enrichArray[T](arr: Array[T]) = EnrichedArray(arr)
@@ -47,4 +47,9 @@ package object axle {
   implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
 
   implicit def enrichInt(n: Int) = EnrichedInt(n)
+
+  def fib(n: Int) = (1 to n).foldLeft((1, 1))((pre, i) => (pre._2, pre._1 + pre._2))._1
+
+  def recfib(n: Int): Int = n match { case 0 | 1 => 1 case _ => recfib(n - 2) + recfib(n - 1) }
+
 }
