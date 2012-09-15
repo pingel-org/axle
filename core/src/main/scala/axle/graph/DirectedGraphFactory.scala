@@ -19,9 +19,6 @@ trait DirectedGraphFactory extends GraphFactory {
     }
 
     def findEdge(from: V, to: V): Option[E]
-    def removeAllEdgesAndVertices(): Unit
-    def deleteEdge(e: E): Unit
-    def deleteVertex(v: V): Unit
     def leaves(): Set[V]
     def neighbors(v: V): Set[V]
     def precedes(v1: V, v2: V): Boolean
@@ -31,51 +28,52 @@ trait DirectedGraphFactory extends GraphFactory {
     def outputEdgesOf(v: V): Set[E]
     def descendantsIntersectsSet(v: V, s: Set[V]): Boolean
 
-    //    def collectDescendants(v: V): immutable.Set[V]
-    //    def collectAncestors(v: V): immutable.Set[V]
-    //    def collectAncestors(vs: Set[V]): immutable.Set[V]
-
-    def _collectDescendants(v: V, result: mutable.Set[V]): Unit = {
+    def _descendants(v: V, result: mutable.Set[V]): Unit = {
       // inefficient
       if (!result.contains(v)) {
         result += v
-        successors(v).map(_collectDescendants(_, result))
+        successors(v).map(_descendants(_, result))
       }
     }
 
-    def collectDescendants(v: V): immutable.Set[V] = {
+    def descendants(v: V): immutable.Set[V] = {
       val result = mutable.Set[V]()
-      _collectDescendants(v, result)
+      _descendants(v, result)
       result.toSet
     }
 
     // inefficient
-    def _collectAncestors(v: V, result: mutable.Set[V]): Unit = {
+    def _ancestors(v: V, result: mutable.Set[V]): Unit = {
       if (!result.contains(v)) {
         result += v
-        predecessors(v).map(_collectAncestors(_, result))
+        predecessors(v).map(_ancestors(_, result))
       }
     }
 
-    def collectAncestors(v: V): immutable.Set[V] = {
+    def ancestors(v: V): immutable.Set[V] = {
       val result = mutable.Set[V]()
-      _collectAncestors(v, result)
+      _ancestors(v, result)
       result.toSet
     }
 
-    def collectAncestors(vs: Set[V]): immutable.Set[V] = {
+    def ancestors(vs: Set[V]): immutable.Set[V] = {
       val result = mutable.Set[V]()
-      vs.map(_collectAncestors(_, result))
+      vs.map(_ancestors(_, result))
       result.toSet
     }
 
+    def isAcyclic(): Boolean
+    def shortestPath(source: V, goal: V): Option[List[E]]
+    // def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
+
+    // mutating methods:
+
+    def deleteEdge(e: E): Unit
+    def deleteVertex(v: V): Unit
     def removeInputs(vs: Set[V]): Unit
     def removeOutputs(vs: Set[V]): Unit
     def removeSuccessor(v: V, successor: V): Unit // TODO remove this method
     def removePredecessor(v: V, predecessor: V): Unit //TODO remove this method
-    // def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
-    def isAcyclic(): Boolean
-    def shortestPath(source: V, goal: V): Option[List[E]]
   }
 
 }

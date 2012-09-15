@@ -113,6 +113,55 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     // TODO there is probably a more efficient way to do this:
     def eliminate(vs: immutable.List[V], payload: (V, V) => EP): Unit = vs.map(eliminate(_, payload))
 
+    /**
+     * dijkstra
+     *
+     * Modelled after psuedocode on Wikipedia:
+     *
+     *   http://en.wikipedia.org/wiki/Dijkstra's_algorithm
+     */
+
+    def dijkstra(source: V, target: V): Map[V, Int] = {
+
+      def edgeCost(v1: V, v2: V): Int = 1 // TODO: generalize
+
+      val undefined = -1
+      val dist = mutable.Map[V, Int]()
+      val previous = mutable.Map[V, V]()
+      for (v <- vertices) {
+        dist(v) = Int.MaxValue // Unknown distance function from source to v
+      }
+
+      dist(source) = 0 // Distance from source to source
+      val Q = mutable.Set[V]() ++ vertices // All nodes in the graph are unoptimized - thus are in Q
+      var broken = false
+      while (Q.size > 0 && !broken) {
+        val u = Q.minBy(dist(_)) // Start node in first case
+        Q -= u
+        if (u == target) {
+          var S = List[V]()
+          var u = target
+          while (previous.contains(u)) {
+            S = u :: S
+            u = previous(u)
+          }
+        }
+        if (dist(u) == Int.MaxValue) {
+          broken = true // all remaining vertices are inaccessible from source
+        } else {
+          for (v <- neighbors(u)) { // where v has not yet been removed from Q
+            val alt = dist(u) + edgeCost(u, v)
+            if (alt < dist(v)) { // Relax (u,v,a)
+              dist(v) = alt
+              previous(v) = u
+              // TODO decrease - key v in Q // Reorder v in the Queue
+            }
+          }
+        }
+      }
+      dist
+    }
+
   }
 
 }

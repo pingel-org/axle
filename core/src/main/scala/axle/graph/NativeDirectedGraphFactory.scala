@@ -1,5 +1,8 @@
 package axle.graph
 
+import scalaz._
+import Scalaz._
+
 object NativeDirectedGraphFactory extends NativeDirectedGraphFactory
 
 trait NativeDirectedGraphFactory extends DirectedGraphFactory {
@@ -65,13 +68,6 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
     def edge(source: V, dest: V, payload: EP): E = new NativeDirectedGraphEdgeImpl[EP](source, dest, payload)
 
     def vertex(payload: VP): V = new NativeDirectedGraphVertexImpl[VP](payload)
-
-    def removeAllEdgesAndVertices(): Unit = {
-      _vertices.clear()
-      _edges.clear()
-      vertex2outedges.clear()
-      vertex2inedges.clear()
-    }
 
     def deleteEdge(e: E): Unit = {
       _edges -= e
@@ -151,25 +147,20 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
       }
     }
 
-    // def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
-
     def isAcyclic() = true // TODO !!!
 
-    // TODO: slow & complex:
-    def _shortestPath(source: V, goal: V, visited: Set[V]): Option[List[E]] = (source == goal) match {
-      case true => Some(List())
-      case false => {
-        val paths = (successors(source) -- visited).flatMap(newSuccessor => {
-          findEdge(source, newSuccessor)
-            .flatMap(edge => _shortestPath(newSuccessor, goal, visited + source).map(sp => edge :: sp))
-        })
-        paths.size match {
-          case 0 => None
-          case _ => Some(paths.reduceLeft(
-            (l1, l2) => (l1.length < l2.length) match { case true => l1 case false => l2 }
-          ))
-        }
-      }
+    /**
+     * shortestPath
+     *
+     * TODO: This is just a quick, dirty, slow, and naive algorithm.
+     */
+
+    def _shortestPath(source: V, goal: V, visited: Set[V]): Option[List[E]] = if (source == goal) {
+      Some(List())
+    } else {
+      outputEdgesOf(source).filter(edge => !visited.contains(edge.dest))
+        .flatMap(edge => _shortestPath(edge.dest, goal, visited + source).map(sp => edge :: sp))
+        .reduceOption((l1, l2) => (l1.length < l2.length) ? l1 | l2)
     }
 
     def shortestPath(source: V, goal: V): Option[List[E]] = _shortestPath(source, goal, Set())
