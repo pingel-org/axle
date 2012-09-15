@@ -61,29 +61,28 @@ class ABE extends Specification {
   bn += (av -> jv, "")
   bn += (av -> mv, "")
 
-  val jpt = bn.jointProbabilityTable()
-
-  val sansAll = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
-
-  val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
-
-  val Q: immutable.Set[RandomVariable[_]] = immutable.Set(E, B, A)
-  val order = List(J, M)
-
-  // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
-
-  val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E eq true)
-
   "bayesian networks" should {
     "work" in {
+
+      val jpt = bn.jointProbabilityTable()
+
+      val sansAll = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
+
+      val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
+
+      val Q: immutable.Set[RandomVariable[_]] = immutable.Set(E, B, A)
+      val order = List(J, M)
+
+      // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
+      // val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E eq true)
 
       // bn.getRandomVariables.map(rv => println(bn.getMarkovAssumptionsFor(rv)))
 
       // println("P(B) = " + ans1) // 0.001
       // println("P(A| B, -E) = " + ans2) // 0.94
 
-      println("eliminating variables other than A, B, and E; and then finding those consistent with E = true")
-      println(afterVE)
+      // println("eliminating variables other than A, B, and E; and then finding those consistent with E = true")
+      // println(afterVE)
 
       1 must be equalTo 1
     }
