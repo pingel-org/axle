@@ -150,7 +150,7 @@ class BayesianNetwork(_name: String)
     val rvVertex = findVertex(_.rv == rv).get
     val X: immutable.Set[RandomVariable[_]] = immutable.Set(rv)
     val Z: immutable.Set[RandomVariable[_]] = predecessors(rvVertex).map(_.payload.rv).toSet
-    val D = collectDescendants(rvVertex) ++ predecessors(rvVertex) + rvVertex
+    val D = descendants(rvVertex) ++ predecessors(rvVertex) + rvVertex
     val Dvars = D.map(_.payload.rv)
     new Independence(X, Z, randomVariables.filter(!Dvars.contains(_)).toSet)
   }
