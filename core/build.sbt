@@ -16,7 +16,8 @@ initialCommands in console := "import axle._; import axle.stats._; import axle.q
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
-resolvers += "array.ca" at "http://www.array.ca/nest-web/maven/" // for jblas
+// resolvers += "array.ca" at "http://www.array.ca/nest-web/maven/" // for jblas 1.2.0
+resolvers += "clojars" at "http://www.clojars.org/repo" // for jblas 1.2.1
 
 // curl http://cloud.github.com/downloads/mikiobraun/jblas/jblas-1.2.0.jar -o lib/jblas-1.2.0.jar
 // mvn install:install-file -DgroupId=org.jblas -DartifactId=jblas \
@@ -29,9 +30,9 @@ libraryDependencies ++= Seq(
   "net.sf.jung" % "jung-graph-impl" % "2.0.1",
   "net.sf.jung" % "jung-io" % "2.0.1",
   "net.sf.jung" % "jung-visualization" % "2.0.1",
-  "net.liftweb" % "lift-json_2.9.0-1" % "2.4-M3",
-  "net.liftweb" % "lift-common_2.9.0-1" % "2.4-M3",
-  "org" % "jblas" % "1.2.0",
+  "net.liftweb" % "lift-json_2.9.0-1" % "2.4",
+  "net.liftweb" % "lift-common_2.9.0-1" % "2.4",
+  "jblas" % "jblas" % "1.2.1",
   "org.specs2" %% "specs2" % "1.11" % "test",
   "joda-time" % "joda-time" % "2.1",
   "org.joda" % "joda-convert" % "1.2",
