@@ -3,3 +3,4 @@ target
 .project
 .cache
 .settings
+/core/lib
