@@ -19,37 +19,24 @@ class AngluinSpecification extends Specification {
       val mShut = Σ.symbol("shut")
       val mUp = Σ.symbol("up")
 
-      val s1 = ListExpression(List(mHi, mIm, mYour, mMother))
-      val s2 = ListExpression(List(mShut, mUp))
-      val ℒ = Language(List(s1, s2))
+      val s1 = ListExpression(mHi :: mIm :: mYour :: mMother :: Nil)
+      val s2 = ListExpression(mShut :: mUp :: Nil)
+      val ℒ = Language(s1 :: s2 :: Nil)
 
-      val T = Text(List(s1, ▦, ▦, s2, ▦, s2, s2))
+      val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner(T)
-
-      val guessOpt = ɸ.learn(guess => {
-        val guessedLanguage = guess.ℒ
-        println("ɸ.processNextExpression().ℒ = " + guessedLanguage)
-        val correct = guessedLanguage.equals(ℒ)
-        if (correct) {
-          println("ɸ identified the language using the text")
-        } else {
-          println("ɸ's guess was not correct\n")
-        }
-        correct
-      })
+      ɸ.guesses.find(_.ℒ === ℒ)
+        .map(finalGuess => println("well done, ɸ"))
+        .getOrElse(println("ɸ never made a correct guess"))
 
       println("Text T = " + T)
       println("Language ℒ = " + ℒ)
       println()
       println("T is for ℒ ?" + T.isFor(ℒ))
       println()
-      if (guessOpt.isEmpty) {
-        println("ɸ never made a guess")
-      }
 
       1 must be equalTo (1)
-
     }
 
   }

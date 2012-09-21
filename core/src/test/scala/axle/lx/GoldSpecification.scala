@@ -1,7 +1,6 @@
 package axle.lx
 
 import org.specs2.mutable._
-
 import Gold._
 
 class GoldSpecification extends Specification {
@@ -27,22 +26,10 @@ class GoldSpecification extends Specification {
       val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner(T)
+      ɸ.guesses.find(_.ℒ === ℒ)
+        .map(finalGuess => println("well done, ɸ"))
+        .getOrElse(println("ɸ never made a correct guess"))
 
-      val guessOpt = ɸ.learn(guess => {
-        val guessedLanguage = guess.L
-        println("ɸ.processNextExpression().L = " + guessedLanguage)
-        val correct = guessedLanguage.equals(ℒ)
-        if (correct) {
-          println("ɸ identified the language using the text")
-        } else {
-          println("ɸ's guess was not correct\n")
-        }
-        correct
-      })
-
-      if (guessOpt.isEmpty) {
-        println("ɸ never made a guess")
-      }
       println("Language ℒ = " + ℒ)
       println("Text T = " + T)
       println()

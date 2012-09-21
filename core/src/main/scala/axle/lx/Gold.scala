@@ -17,11 +17,11 @@ object Gold {
   }
 
   trait Grammar {
-    def L(): Language
+    def ℒ(): Language
   }
 
-  class HardCodedGrammar(L: Language) extends Grammar {
-    def L() = L
+  class HardCodedGrammar(ℒ: Language) extends Grammar {
+    def ℒ() = ℒ
   }
 
   class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
@@ -64,11 +64,7 @@ object Gold {
       None
     }
 
-    def learn(correct: Grammar => Boolean): Option[Grammar] =
-      T.expressions.iterator
-        .map(processExpression(_).filter(correct(_)))
-        .find(_.isDefined)
-        .getOrElse(None)
+    def guesses(): Iterator[Grammar] = T.expressions.iterator.flatMap(processExpression(_))
 
   }
 

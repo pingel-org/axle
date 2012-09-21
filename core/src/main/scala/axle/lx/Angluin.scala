@@ -175,11 +175,7 @@ object Angluin {
       None
     }
 
-    def learn(correct: Grammar => Boolean): Option[Grammar] =
-      T.expressions.iterator
-        .map(processExpression(_).filter(correct(_)))
-        .find(_.isDefined)
-        .getOrElse(None)
+    def guesses(): Iterator[Grammar] = T.expressions.iterator.flatMap(processExpression(_))
 
   }
 
