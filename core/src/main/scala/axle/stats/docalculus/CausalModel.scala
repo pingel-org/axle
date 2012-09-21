@@ -2,7 +2,9 @@ package axle.stats.docalculus
 
 import axle.stats._
 
-case class CausalModelNode(rv: RandomVariable[_], observable: Boolean)
+case class CausalModelNode(rv: RandomVariable[_], observable: Boolean=true)
+
+case class PFunction(rv: RandomVariable[_], inputs: Seq[RandomVariable[_]])
 
 object CausalModel {
 
@@ -25,4 +27,8 @@ class CausalModel(_name: String)
 
   def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
 
+  def addFunction(pf: PFunction): Unit = {} // TODO
+
+  def getVariable(name: String): Int = 1 // TODO
+  
 }
