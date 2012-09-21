@@ -3,4 +3,5 @@ target
 .project
 .cache
 .settings
+.worksheet
 /core/lib
