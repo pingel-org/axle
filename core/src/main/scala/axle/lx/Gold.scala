@@ -5,12 +5,9 @@ import collection._
 
 object Gold {
 
-  case class Expression(v: List[Morpheme]) {
+  type Expression = List[Morpheme]
 
-    def length = v.size
-
-    override def toString() = "\"" + v.mkString(" ") + "\""
-  }
+  val ▦ = List[Morpheme]()
 
   class ExpressionComparator extends Comparable[Expression] {
     def compareTo(other: Expression): Int = this.toString().compareTo(other.toString())
@@ -31,26 +28,15 @@ object Gold {
     }
   }
 
-  object ▦ extends ▦
+  case class Language(_sequences: Set[Expression] = Set()) {
 
-  class ▦() extends Expression(Nil) {
-    // should this class throw an exception
-    // if addMorpheme is called?
-    override def toString() = "▦"
-  }
+    val sequences = mutable.Set() ++ _sequences
 
-  case class Language() {
-
-    val sequences = mutable.Set[Expression]() // TODO: was TreeSet using new ExpressionComparator()
-
-    def expression(ms: List[Morpheme]): Expression = {
-      val expression = new Expression(ms)
-      sequences += expression
-      expression
+    def expression(e: Expression): Expression = {
+      sequences += e
+      e
     }
-
-    def addExpression(e: Expression): Unit = sequences += e
-
+    
     def equals(other: Language) = sequences.equals(other.sequences)
 
     override def toString() = "{" + sequences.mkString(", ") + "}"
@@ -70,14 +56,11 @@ object Gold {
 
   case class MemorizingLearner(T: Text) extends Learner(T) {
 
-    def runningGuess = new Language()
+    var _runningGuess = new Language(Set())
 
     override def processExpression(e: Expression): Option[Grammar] = {
-      e match {
-        case _: ▦ =>
-        case _ => runningGuess.addExpression(e)
-      }
-      Some(new HardCodedGrammar(runningGuess))
+      _runningGuess = new Language(_runningGuess.sequences + e)
+      Some(new HardCodedGrammar(_runningGuess))
     }
 
   }
@@ -90,22 +73,11 @@ object Gold {
 
     def length() = expressions.size
 
-    def isFor(ℒ: Language) = content().equals(ℒ)
+    def isFor(ℒ: Language) = content().equals(ℒ) // TODO equals
 
-    def content() = {
-
-      val ℒ = new Language()
-      for (s <- expressions) {
-        s match {
-          case _: ▦ =>
-          case _ => ℒ.addExpression(s)
-        }
-      }
-      ℒ
-    }
+    def content() = new Language(expressions.filter(_ != ▦).toSet)
 
     override def toString() = "<" + expressions.mkString(", ") + ">"
-
   }
 
   case class Vocabulary() {

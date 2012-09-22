@@ -8,6 +8,10 @@ object Angluin {
 
   import axle.graph.JungDirectedGraphFactory._
 
+  type Expression = List[Symbol]
+
+  val ▦ = List[Symbol]()
+
   case class Acceptor() {
 
     val g = graph[String, Symbol]()
@@ -33,14 +37,11 @@ object Angluin {
     def δ(state: AcceptorState, symbol: Symbol): Set[AcceptorState] =
       g.edges.filter(e => e.source == state && e.payload == symbol).map(_.dest)
 
-    def δ(state: AcceptorState, exp: Expression): Set[AcceptorState] = {
-      if (exp == null) {
-        Set(state)
-      } else {
-        val tail = exp.tail()
-        δ(state, exp.head()).map(δ(_, tail)).reduce(_ ++ _)
+    def δ(state: AcceptorState, exp: Expression): Set[AcceptorState] =
+      exp match {
+        case Nil => Set(state)
+        case _ => δ(state, exp.head).map(δ(_, exp.tail)).reduce(_ ++ _)
       }
-    }
 
     // TODO: not sure if this should count edges or nodes:
     def isForwardDeterministic(): Boolean = (I.size <= 1) && Q.∀(g.successors(_).size <= 1)
@@ -75,39 +76,6 @@ object Angluin {
 
   }
 
-  trait Expression {
-
-    def head(): Symbol
-
-    def tail(): Expression // List[Symbol]
-
-  }
-
-  case class ListExpression(vs: List[Symbol]) extends Expression {
-
-    val v = new mutable.ListBuffer[Symbol]()
-
-    v ++= vs
-
-    def symbolIterator() = v.iterator
-
-    //  def addSymbol(s: Symbol) = v += s
-
-    def length() = v.size
-
-    override def head() = v(0)
-
-    override def tail() = ListExpression(v.toList.tail)
-
-    def equals(other: Expression): Boolean = {
-      // TODO !!!
-      false
-    }
-
-    override def toString() = "\"" + v.mkString(" ") + "\""
-
-  }
-
   class ExpressionComparator extends Comparable[Expression] {
     def compareTo(other: Expression) = (this.toString()).compareTo(other.toString)
     // def compare(o1: Expression, o2: Expression): Int = (o1.toString()).compareTo(o2.toString())
@@ -132,24 +100,7 @@ object Angluin {
     }
   }
 
-  object ▦ extends ▦
-
-  case class ▦() extends Expression() {
-
-    // TOOD: not sure about head and tail here:
-    def head(): Symbol = null
-    def tail(): Expression = null
-
-    // should this class throw an exception
-    // if addMorpheme is called?
-    override def toString() = "▦"
-  }
-
-  case class Language(var sequences: List[Expression] = Nil) {
-
-    def addExpression(s: Expression): Unit = {
-      sequences = sequences ::: List(s)
-    }
+  case class Language(sequences: List[Expression] = Nil) {
 
     def equals(other: Language): Boolean = sequences.equals(other.sequences)
 
@@ -181,15 +132,15 @@ object Angluin {
 
   case class MemorizingLearner(T: Text) extends Learner(T) {
 
-    val runningGuess = Language(Nil)
+    var _runningGuess = Language(Nil)
 
     override def processExpression(e: Expression): Option[Grammar] = {
-      e match {
-        case ▦ => {}
-        case _ => runningGuess.addExpression(e)
+      if (e != ▦) {
+        _runningGuess = new Language(_runningGuess.sequences ++ List(e))
       }
-      Some(new HardCodedGrammar(runningGuess))
+      Some(new HardCodedGrammar(_runningGuess))
     }
+
   }
 
   class Partition {
@@ -243,16 +194,7 @@ object Angluin {
 
     def isFor(ℒ: Language) = content().equals(ℒ)
 
-    def content(): Language = {
-      val ℒ = new Language()
-      for (s <- expressions) {
-        s match {
-          case ▦ => {}
-          case _ => ℒ.addExpression(s)
-        }
-      }
-      ℒ
-    }
+    def content(): Language = new Language(expressions.filter(_ != ▦))
 
     override def toString() = "<" + expressions.mkString(", ") + ">"
 

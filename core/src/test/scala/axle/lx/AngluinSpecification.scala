@@ -19,8 +19,8 @@ class AngluinSpecification extends Specification {
       val mShut = Σ.symbol("shut")
       val mUp = Σ.symbol("up")
 
-      val s1 = ListExpression(mHi :: mIm :: mYour :: mMother :: Nil)
-      val s2 = ListExpression(mShut :: mUp :: Nil)
+      val s1 = mHi :: mIm :: mYour :: mMother :: Nil
+      val s2 = mShut :: mUp :: Nil
       val ℒ = Language(s1 :: s2 :: Nil)
 
       val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
