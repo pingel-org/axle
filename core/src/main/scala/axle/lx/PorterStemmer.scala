@@ -60,10 +60,7 @@ object PorterStemmer {
     return -1
   }
 
-  private def vowelinstem(): Boolean = {
-    for (i <- 0 until j) if (!cons(i)) return true
-    return false
-  }
+  private def vowelinstem(): Boolean = (0 until j).exists(!cons(_))
 
   private def doublec(j: Int): Boolean = {
     if (j < 1) return false
@@ -89,7 +86,7 @@ object PorterStemmer {
   }
 
   private def setto(s: String): Unit = {
-    var l = s.length()
+    var l = s.length
     var o = j + 1
     for (i <- 0 until l) b(o + i) = s.charAt(i)
     k = j + l
@@ -155,7 +152,7 @@ object PorterStemmer {
           else if (ends("biliti")) { r("ble") }
         }
         case 'g' => if (ends("logi")) { r("log") }
-        case _ => { }
+        case _ => {}
       }
   }
 
@@ -171,7 +168,7 @@ object PorterStemmer {
       else if (ends("ful")) { r("") }
     }
     case 's' => if (ends("ness")) { r("") }
-    case _ => { }
+    case _ => {}
   }
 
   private def step5(): Unit = {
