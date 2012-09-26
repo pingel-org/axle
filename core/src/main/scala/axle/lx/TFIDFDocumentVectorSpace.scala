@@ -12,7 +12,7 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpus: List[String]) ex
 
   def stopwords() = _stopwords
 
-  def termWeight(term: String, doc: TV): Double = doc(term) * log(numDocs / df(term))
+  def termWeight(term: String, doc: TV): Double = doc(term) * log(numDocs / df(term).toDouble)
 
   def dotProduct(v1: TV, v2: TV): Double =
     (v1.keySet intersect v2.keySet).toList.map(term => termWeight(term, v1) * termWeight(term, v2)).sum

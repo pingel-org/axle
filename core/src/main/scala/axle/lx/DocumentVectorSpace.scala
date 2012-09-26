@@ -36,7 +36,7 @@ trait DocumentVectorSpace {
 
   val whitespace = """\s+""".r
 
-  def doc2vector(doc: String): TV = mrWordCount(List(doc).iterator)
+  def doc2vector(doc: String): TV = mrWordCount(List(doc.toLowerCase).iterator)
 
   def stopwords(): Set[String]
 
@@ -57,5 +57,10 @@ trait DocumentVectorSpace {
       c <- 0 until n
     ) yield { result(r, c) = similarity(vs(r), vs(c)) }
     result
+  }
+  
+  def nMostSimilar(query: String, n: Int): List[(Int, Double)] = {
+    val qv = doc2vector(query)
+    vectors.zipWithIndex.map({ case (v, i) => (i, similarity(qv, v))}).toList.sortBy(_._2).reverse.take(n)
   }
 }

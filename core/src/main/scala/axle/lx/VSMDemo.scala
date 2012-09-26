@@ -9,6 +9,7 @@ object VSMDemo {
   val corpus = List(
     "the quick brown fox jumps over the lazy dog",
     "fox jumps over dog eden was the sumerian word edine",
+    "hostname and fqdn for the instance can be critical if you're automating deployment with",
     "quick lazy word",
     "foo bar dog")
 
