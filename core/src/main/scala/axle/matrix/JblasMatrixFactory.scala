@@ -10,7 +10,6 @@ import org.jblas.DoubleMatrix
 
 object JblasMatrixFactory extends JblasMatrixFactory {
 
-  
 }
 
 trait JblasMatrixFactory extends MatrixFactory {
@@ -20,22 +19,29 @@ trait JblasMatrixFactory extends MatrixFactory {
     val backward = (t: Double) => t
   }
 
+  implicit val formatDouble = (d: Double) => "%.6f".format(d)
+
   implicit val double2int = new FunctionPair[Double, Int] {
     val forward = (d: Double) => d.toInt
     val backward = (t: Int) => t.toDouble
   }
+
+  implicit val formatInt = (i: Int) => i.toString
 
   implicit val double2boolean = new FunctionPair[Double, Boolean] {
     val forward = (d: Double) => d != 0.0
     val backward = (t: Boolean) => t match { case true => 0.0 case false => 1.0 }
   }
 
+  implicit val formatBoolean = (b: Boolean) => b.toString
+
   type M[T] = JblasMatrix[T]
 
-  class JblasMatrixImpl[T](_storage: DoubleMatrix)(fp: FunctionPair[Double, T])
+  class JblasMatrixImpl[T](_storage: DoubleMatrix)(fp: FunctionPair[Double, T], fmt: T => String)
     extends JblasMatrix[T] {
     def storage = _storage
     val functionPair = fp
+    val format = fmt
   }
 
   trait JblasMatrix[T]
@@ -43,9 +49,9 @@ trait JblasMatrixFactory extends MatrixFactory {
 
     type S = DoubleMatrix
 
-    // type BM = JblasMatrix[Boolean]
-
     val functionPair: FunctionPair[Double, T]
+
+    val format: T => String
 
     def rows() = storage.rows
     def columns() = storage.columns
@@ -56,8 +62,8 @@ trait JblasMatrixFactory extends MatrixFactory {
 
     def toList(): List[T] = storage.toArray.toList.map(functionPair.forward(_))
 
-    def column(j: Int) = matrix(storage.getColumn(j))(functionPair)
-    def row(i: Int) = matrix(storage.getRow(i))(functionPair)
+    def column(j: Int) = matrix(storage.getColumn(j))(functionPair, format)
+    def row(i: Int) = matrix(storage.getRow(i))(functionPair, format)
 
     def isEmpty() = storage.isEmpty
     def isRowVector() = storage.isRowVector
@@ -66,55 +72,55 @@ trait JblasMatrixFactory extends MatrixFactory {
     def isSquare() = storage.isSquare
     def isScalar() = storage.isScalar
 
-    def dup() = matrix(storage.dup())(functionPair)
-    def negate() = matrix(storage.neg())(functionPair)
-    def transpose() = matrix(storage.transpose())(functionPair)
-    def diag() = matrix(storage.diag())(functionPair)
-    def invert() = matrix(org.jblas.Solve.solve(storage, DoubleMatrix.eye(storage.rows)))(functionPair)
-    def ceil() = matrix(org.jblas.MatrixFunctions.ceil(storage))(functionPair)
-    def floor() = matrix(org.jblas.MatrixFunctions.floor(storage))(functionPair)
-    def log() = matrix(org.jblas.MatrixFunctions.log(storage))(functionPair)
-    def log10() = matrix(org.jblas.MatrixFunctions.log10(storage))(functionPair)
+    def dup() = matrix(storage.dup())(functionPair, format)
+    def negate() = matrix(storage.neg())(functionPair, format)
+    def transpose() = matrix(storage.transpose())(functionPair, format)
+    def diag() = matrix(storage.diag())(functionPair, format)
+    def invert() = matrix(org.jblas.Solve.solve(storage, DoubleMatrix.eye(storage.rows)))(functionPair, format)
+    def ceil() = matrix(org.jblas.MatrixFunctions.ceil(storage))(functionPair, format)
+    def floor() = matrix(org.jblas.MatrixFunctions.floor(storage))(functionPair, format)
+    def log() = matrix(org.jblas.MatrixFunctions.log(storage))(functionPair, format)
+    def log10() = matrix(org.jblas.MatrixFunctions.log10(storage))(functionPair, format)
 
     def fullSVD() = {
       val usv = org.jblas.Singular.fullSVD(storage)
-      (matrix(usv(0))(functionPair), matrix(usv(1))(functionPair), matrix(usv(2))(functionPair))
+      (matrix(usv(0))(functionPair, format), matrix(usv(1))(functionPair, format), matrix(usv(2))(functionPair, format))
     }
 
-    def addScalar(x: T) = matrix(storage.add(functionPair.backward(x)))(functionPair)
-    def subtractScalar(x: T) = matrix(storage.sub(functionPair.backward(x)))(functionPair)
-    def multiplyScalar(x: T) = matrix(storage.mul(functionPair.backward(x)))(functionPair)
-    def divideScalar(x: T) = matrix(storage.div(functionPair.backward(x)))(functionPair)
-    def mulRow(i: Int, x: T) = matrix(storage.mulRow(i, functionPair.backward(x)))(functionPair)
-    def mulColumn(i: Int, x: T) = matrix(storage.mulColumn(i, functionPair.backward(x)))(functionPair)
+    def addScalar(x: T) = matrix(storage.add(functionPair.backward(x)))(functionPair, format)
+    def subtractScalar(x: T) = matrix(storage.sub(functionPair.backward(x)))(functionPair, format)
+    def multiplyScalar(x: T) = matrix(storage.mul(functionPair.backward(x)))(functionPair, format)
+    def divideScalar(x: T) = matrix(storage.div(functionPair.backward(x)))(functionPair, format)
+    def mulRow(i: Int, x: T) = matrix(storage.mulRow(i, functionPair.backward(x)))(functionPair, format)
+    def mulColumn(i: Int, x: T) = matrix(storage.mulColumn(i, functionPair.backward(x)))(functionPair, format)
 
-    def pow(p: Double) = matrix(org.jblas.MatrixFunctions.pow(storage, p))(functionPair)
+    def pow(p: Double) = matrix(org.jblas.MatrixFunctions.pow(storage, p))(functionPair, format)
 
-    def addMatrix(other: JblasMatrix[T]) = matrix(storage.add(other.jblas))(functionPair)
-    def subtractMatrix(other: JblasMatrix[T]) = matrix(storage.sub(other.jblas))(functionPair)
-    def multiplyMatrix(other: JblasMatrix[T]) = matrix(storage.mmul(other.jblas))(functionPair)
+    def addMatrix(other: JblasMatrix[T]) = matrix(storage.add(other.jblas))(functionPair, format)
+    def subtractMatrix(other: JblasMatrix[T]) = matrix(storage.sub(other.jblas))(functionPair, format)
+    def multiplyMatrix(other: JblasMatrix[T]) = matrix(storage.mmul(other.jblas))(functionPair, format)
 
-    def concatenateHorizontally(right: JblasMatrix[T]) = matrix(DoubleMatrix.concatHorizontally(storage, right.jblas))(functionPair)
-    def concatenateVertically(under: JblasMatrix[T]) = matrix(DoubleMatrix.concatVertically(storage, under.jblas))(functionPair)
-    def solve(B: JblasMatrix[T]) = matrix(org.jblas.Solve.solve(storage, B.jblas))(functionPair)
+    def concatenateHorizontally(right: JblasMatrix[T]) = matrix(DoubleMatrix.concatHorizontally(storage, right.jblas))(functionPair, format)
+    def concatenateVertically(under: JblasMatrix[T]) = matrix(DoubleMatrix.concatVertically(storage, under.jblas))(functionPair, format)
+    def solve(B: JblasMatrix[T]) = matrix(org.jblas.Solve.solve(storage, B.jblas))(functionPair, format)
 
-    def addRowVector(row: JblasMatrix[T]) = matrix(storage.addRowVector(row.jblas))(functionPair)
-    def addColumnVector(column: JblasMatrix[T]) = matrix(storage.addRowVector(column.jblas))(functionPair)
-    def subRowVector(row: JblasMatrix[T]) = matrix(storage.subRowVector(row.jblas))(functionPair)
-    def subColumnVector(column: JblasMatrix[T]) = matrix(storage.subRowVector(column.jblas))(functionPair)
+    def addRowVector(row: JblasMatrix[T]) = matrix(storage.addRowVector(row.jblas))(functionPair, format)
+    def addColumnVector(column: JblasMatrix[T]) = matrix(storage.addRowVector(column.jblas))(functionPair, format)
+    def subRowVector(row: JblasMatrix[T]) = matrix(storage.subRowVector(row.jblas))(functionPair, format)
+    def subColumnVector(column: JblasMatrix[T]) = matrix(storage.subRowVector(column.jblas))(functionPair, format)
 
-    def lt(other: JblasMatrix[T]) = matrix(storage.lt(other.jblas))(double2boolean)
-    def le(other: JblasMatrix[T]) = matrix(storage.le(other.jblas))(double2boolean)
-    def gt(other: JblasMatrix[T]) = matrix(storage.gt(other.jblas))(double2boolean)
-    def ge(other: JblasMatrix[T]) = matrix(storage.ge(other.jblas))(double2boolean)
-    def eq(other: JblasMatrix[T]) = matrix(storage.eq(other.jblas))(double2boolean)
-    def ne(other: JblasMatrix[T]) = matrix(storage.ne(other.jblas))(double2boolean)
+    def lt(other: JblasMatrix[T]) = matrix(storage.lt(other.jblas))(double2boolean, formatBoolean)
+    def le(other: JblasMatrix[T]) = matrix(storage.le(other.jblas))(double2boolean, formatBoolean)
+    def gt(other: JblasMatrix[T]) = matrix(storage.gt(other.jblas))(double2boolean, formatBoolean)
+    def ge(other: JblasMatrix[T]) = matrix(storage.ge(other.jblas))(double2boolean, formatBoolean)
+    def eq(other: JblasMatrix[T]) = matrix(storage.eq(other.jblas))(double2boolean, formatBoolean)
+    def ne(other: JblasMatrix[T]) = matrix(storage.ne(other.jblas))(double2boolean, formatBoolean)
 
-    def and(other: JblasMatrix[T]) = matrix(storage.and(other.jblas))(double2boolean)
-    def or(other: JblasMatrix[T]) = matrix(storage.or(other.jblas))(double2boolean)
-    def xor(other: JblasMatrix[T]) = matrix(storage.xor(other.jblas))(double2boolean)
+    def and(other: JblasMatrix[T]) = matrix(storage.and(other.jblas))(double2boolean, formatBoolean)
+    def or(other: JblasMatrix[T]) = matrix(storage.or(other.jblas))(double2boolean, formatBoolean)
+    def xor(other: JblasMatrix[T]) = matrix(storage.xor(other.jblas))(double2boolean, formatBoolean)
 
-    def not() = matrix(storage.not())(double2boolean)
+    def not() = matrix(storage.not())(double2boolean, formatBoolean)
 
     def max() = functionPair.forward(storage.max())
 
@@ -130,11 +136,11 @@ trait JblasMatrixFactory extends MatrixFactory {
       (i % columns, i / columns)
     }
 
-    def rowSums() = matrix(storage.rowSums)(functionPair)
-    def columnSums() = matrix(storage.columnSums())(functionPair)
-    
-    def columnMins() = matrix(storage.columnMins())(functionPair)
-    def columnMaxs() = matrix(storage.columnMaxs())(functionPair)
+    def rowSums() = matrix(storage.rowSums)(functionPair, format)
+    def columnSums() = matrix(storage.columnSums())(functionPair, format)
+
+    def columnMins() = matrix(storage.columnMins())(functionPair, format)
+    def columnMaxs() = matrix(storage.columnMaxs())(functionPair, format)
 
     // in-place operations
 
@@ -156,32 +162,32 @@ trait JblasMatrixFactory extends MatrixFactory {
     def subiColumnVector(column: JblasMatrix[T]) = storage.subiColumnVector(column.jblas)
 
     override def toString() =
-      (0 until rows).map(i => (0 until columns).map(j => functionPair.forward(storage.get(i, j))).mkString(" ")).mkString("\n")
+      (0 until rows).map(i => (0 until columns).map(j => format(functionPair.forward(storage.get(i, j)))).mkString(" ")).mkString("\n")
 
     def jblas() = storage
   }
 
-  def matrix[T](s: DoubleMatrix)(implicit fp: FunctionPair[Double, T]): JblasMatrix[T] = {
-    new JblasMatrixImpl[T](s)(fp)
+  def matrix[T](s: DoubleMatrix)(implicit fp: FunctionPair[Double, T], format: T => String): JblasMatrix[T] = {
+    new JblasMatrixImpl[T](s)(fp, format)
   }
 
-  def matrix[T](r: Int, c: Int, values: Array[T])(implicit fp: FunctionPair[Double, T]): JblasMatrix[T] = {
+  def matrix[T](r: Int, c: Int, values: Array[T])(implicit fp: FunctionPair[Double, T], format: T => String): JblasMatrix[T] = {
     val jblas = new org.jblas.DoubleMatrix(values.map(fp.backward(_)))
     jblas.reshape(r, c)
-    matrix[T](jblas)(fp)
+    matrix[T](jblas)(fp, format)
   }
 
-  def diag[T](row: JblasMatrix[T])(implicit fp: FunctionPair[Double, T]): JblasMatrix[T] = {
+  def diag[T](row: JblasMatrix[T])(implicit fp: FunctionPair[Double, T], format: T => String): JblasMatrix[T] = {
     assert(row.isRowVector)
     matrix[T](DoubleMatrix.diag(row.jblas))
   }
 
-  def zeros[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.zeros(m, n))(fp)
-  def ones[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.ones(m, n))(fp)
-  def eye[T](n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.eye(n))(fp)
-  def I[T](n: Int)(implicit fp: FunctionPair[Double, T]) = eye[T](n)(fp)
-  def rand[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.rand(m, n))(fp) // evenly distributed from 0.0 to 1.0
-  def randn[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]) = matrix[T](DoubleMatrix.randn(m, n))(fp) // normal distribution 
+  def zeros[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T], format: T => String) = matrix[T](DoubleMatrix.zeros(m, n))(fp, format)
+  def ones[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T], format: T => String) = matrix[T](DoubleMatrix.ones(m, n))(fp, format)
+  def eye[T](n: Int)(implicit fp: FunctionPair[Double, T], format: T => String) = matrix[T](DoubleMatrix.eye(n))(fp, format)
+  def I[T](n: Int)(implicit fp: FunctionPair[Double, T], format: T => String) = eye[T](n)(fp, format)
+  def rand[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T], format: T => String) = matrix[T](DoubleMatrix.rand(m, n))(fp, format) // evenly distributed from 0.0 to 1.0
+  def randn[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T], format: T => String) = matrix[T](DoubleMatrix.randn(m, n))(fp, format) // normal distribution 
 
   def falses(m: Int, n: Int) = matrix[Boolean](DoubleMatrix.zeros(m, n))
   def trues(m: Int, n: Int) = matrix[Boolean](DoubleMatrix.ones(m, n))
