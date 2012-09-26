@@ -52,7 +52,10 @@ trait DocumentVectorSpace {
     val n = vectors.size
     val vs = vectors()
     val result = zeros[Double](n, n)
-    (0 until n).doubles.map({ case (r, c) => result(r, c) = similarity(vs(r), vs(c)) })
+    for (
+      r <- 0 until n;
+      c <- 0 until n
+    ) yield { result(r, c) = similarity(vs(r), vs(c)) }
     result
   }
 }
