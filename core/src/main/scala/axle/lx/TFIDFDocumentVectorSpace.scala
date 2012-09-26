@@ -6,14 +6,13 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpus: List[String]) ex
 
   lazy val numDocs = corpus.size
   lazy val _vectors = corpus.map(doc2vector(_)).toIndexedSeq
-  lazy val df = mrWordExistsCount(corpus.iterator)
+  lazy val df = mrWordExistsCount(corpus.iterator).withDefaultValue(1)
 
   def vectors() = _vectors
 
   def stopwords() = _stopwords
 
-  def termWeight(term: String, doc: TV): Double =
-    doc(term) * log(numDocs / ( if( df.contains(term) ) { df(term).toDouble } else { 1.0 } ))
+  def termWeight(term: String, doc: TV): Double = doc(term) * log(numDocs / df(term).toDouble)
 
   def dotProduct(v1: TV, v2: TV): Double =
     (v1.keySet intersect v2.keySet).toList.map(term => termWeight(term, v1) * termWeight(term, v2)).sum
