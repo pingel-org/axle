@@ -25,14 +25,14 @@ trait DocumentVectorSpace {
       is,
       mapper = (doc: String) => whitespace.split(doc).filter(!stopwords.contains(_)).map((_, 1)),
       reducer = (v1: Int, v2: Int) => v1 + v2
-    )
+    ).withDefaultValue(0)
 
   def mrWordExistsCount(is: Iterator[String]): Map[String, Int] =
     ScalaMapReduce.mapReduce(
       is,
       mapper = (doc: String) => whitespace.split(doc).toSet.filter(!stopwords.contains(_)).toList.map((_, 1)),
       reducer = (v1: Int, v2: Int) => v1 + v2
-    )
+    ).withDefaultValue(0)
 
   val whitespace = """\s+""".r
 
@@ -63,4 +63,8 @@ trait DocumentVectorSpace {
     val qv = doc2vector(query)
     vectors.zipWithIndex.map({ case (v, i) => (i, similarity(qv, v))}).toList.sortBy(_._2).reverse.take(n)
   }
+  
+//  def nMostSimilarReport(query: String, n: Int) = nMostSimilar(query, n)
+//    .map(is => (is._2, corpus(is._1))).map(sd => "%.4f %s".format(sd._1, sd._2)).mkString("\n")
+  
 }
