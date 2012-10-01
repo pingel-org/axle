@@ -7,32 +7,13 @@ class Bar {}
 
 object Foo extends Loggable {
 
-  def match_and_transform(string: String, regex: Regex, transform: (String, Regex.Match) => String): String = {
-    var last_end = -1
-    var result = ""
-    for (md <- regex.findAllIn(string).matchData) {
-      if (last_end == -1) {
-        result += string.substring(0, md.start)
-      } else {
-        result += string.substring(last_end, md.start)
-      }
-      result += transform(string, md)
-      last_end = md.end
-    }
-    if (last_end < string.length) {
-      result += string.substring(last_end, string.length)
-    }
-    result
-  }
-
-  def main(args: Array[String]): Unit = {
-
+  def doit(): Unit = {
+    
     val s = "bc fidaa abmn fidabb nuaaabi fidjab bkjkj"
 
-    def transform(s: String, m: Regex.Match): String = 
-      "$" + s.substring(m.start(1), m.end(1))
+    def transform(s: String, m: Regex.Match): String = "$" + s.substring(m.start(1), m.end(1))
 
-    val x = match_and_transform(s, new Regex("fid(\\w+)"), transform)
+    val x = Util.matchAndTransform(s, """fid(\w+)""".r, transform)
     info(s)
     info(x)
 
@@ -91,5 +72,7 @@ object Foo extends Loggable {
 
     // val s : String = String.format("foo %s", "abc")
     // info("s = " + s)
+
   }
+
 }
