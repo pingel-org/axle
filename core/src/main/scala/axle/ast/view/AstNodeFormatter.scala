@@ -28,7 +28,7 @@ trait Accumulator {
 
 abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode], conform: Boolean)
   extends Accumulator {
-  
+
   def result(): R
   val tokens: S
 
@@ -55,20 +55,18 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
 
   def needsParens(attr_name: String, node: AstNode, subtree: AstNode, grammar: Language): Boolean =
     (node, subtree) match {
-
-      case (AstNodeRule(nr, nm, _), AstNodeRule(sr, sm, _)) => {
-        grammar.lowerThan(sr, nr) match {
-          case true => true
-          case false => {
-            val node_rule = grammar.name2rule(nr)
-            val subtree_rule = grammar.name2rule(sr)
-            attr_name match {
-              // TODO assumptions about the names of "left" and "right" should be externalized
-              case "left" => subtree_rule.precedenceLevel == node_rule.precedenceLevel && node_rule.associativity == "right" // (2 ** 3) ** 4
-              case "right" => subtree_rule.precedenceLevel == node_rule.precedenceLevel && node_rule.associativity == "left"
-              case _ => false
-            }
+      case (AstNodeRule(nodeRuleName, nm, _), AstNodeRule(subtreeRuleName, sm, _)) => {
+        val nodeRule = grammar.name2rule(nodeRuleName)
+        val subtreeRule = grammar.name2rule(subtreeRuleName)
+        grammar.lowerThan(subtreeRule, nodeRule) match {
+          case Some(true) => true
+          case Some(false) => attr_name match {
+            // TODO assumptions about the names of "left" and "right" should be externalized
+            case "left" => grammar.precedenceOf(subtreeRule) == grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) == "right" // (2 ** 3) ** 4
+            case "right" => grammar.precedenceOf(subtreeRule) == grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) == "left"
+            case _ => false
           }
+          case None => true // is this right?
         }
       }
       case (_, _) => false

@@ -7,41 +7,32 @@ import collection._
 case class Language(
   name: String,
   rules: List[Rule],
-  precedence_groups: List[Tuple2[List[String], String]],
+  precedenceGroups: List[(List[String], String)],
   parser: String => Option[AstNode],
   trimmer: AstNode => AstNode)
   extends Loggable {
 
-  // def name = _name
-  // def uri = "/grammar/" + name
-
   val name2rule = rules.map(r => r.name -> r).toMap
 
-  for (((names, assoc), i) <- precedence_groups.zipWithIndex) {
-    for (rule_name <- names) {
-      info("rule %s level %s".format(rule_name, i))
-      val rule = name2rule(rule_name)
-      rule.precedenceLevel = i
-      rule.associativity = assoc
-    }
-  }
+  val rulename2precedence = precedenceGroups.zipWithIndex.flatMap({
+    case ((names, assoc), i) => names.map((_, i))
+  }).toMap
+
+  val rulename2associativity = precedenceGroups.flatMap({
+    case (names, assoc) => names.map((_, assoc))
+  }).toMap
 
   def trim(ast: AstNode) = trimmer(ast)
 
-  // info("cat " + filename + " | parser")
-  def parseFile(filename: String) = parser(scala.io.Source.fromFile(filename).mkString)
+  def parseFile(filename: String) = parser(io.Source.fromFile(filename).mkString)
 
   def parseString(code: String) = parser(code)
 
-  def precedenceOf(rule_name: String): Option[Int] = name2rule.contains(rule_name) match {
-    case true => name2rule(rule_name).precedenceLevel
-    case false => None
-  }
+  def precedenceOf(rule: Rule): Option[Int] = rulename2precedence.get(rule.name)
 
-  def lowerThan(x: String, y: String): Boolean = {
-    val lx = precedenceOf(x)
-    val ly = precedenceOf(y)
-    lx.isDefined && ly.isDefined && lx.get < ly.get
-  }
+  def associativityOf(rule: Rule): String = rulename2associativity.get(rule.name).getOrElse("left")
+
+  def lowerThan(x: Rule, y: Rule): Option[Boolean] =
+    precedenceOf(x).flatMap(px => precedenceOf(y).map(py => px < py))
 
 }
