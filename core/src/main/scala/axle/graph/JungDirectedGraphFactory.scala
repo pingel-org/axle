@@ -129,11 +129,11 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
         Some(Nil)
       } else {
         import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
-        val dsp = new DijkstraShortestPath(jungGraph)
-        val path = dsp.getPath(source, goal)
-        path match {
-          case null => None
-          case _ => path.size match {
+        val path = (new DijkstraShortestPath(jungGraph)).getPath(source, goal)
+        if (path == null) {
+          None
+        } else {
+          path.size match {
             case 0 => None
             case _ => Some(path.asScala.toList)
           }
@@ -141,7 +141,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
       }
     }
 
-    def vertexToVisualizationHtml(vp: VP): xml.Node = <span>{ vp.toString }</span>
+    def vertexToVisualizationHtml(vp: VP): xml.Node = xml.Text(vp.toString)
 
   }
 

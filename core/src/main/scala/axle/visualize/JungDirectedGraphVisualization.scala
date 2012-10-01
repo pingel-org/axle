@@ -68,12 +68,6 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     gm.add(new PickingGraphMousePlugin())
     // gm.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, 1.1f, 0.9f))
     vv.setGraphMouse(gm)
-
-    // val frame = new JFrame("graph name")
-    // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    // frame.getContentPane().add(vv)
-    // frame.pack()
-    // frame.setVisible(true)
     vv
   }
 
