@@ -86,8 +86,8 @@ object PorterStemmer {
   }
 
   private def setto(s: String): Unit = {
-    var l = s.length
-    var o = j + 1
+    val l = s.length
+    val o = j + 1
     for (i <- 0 until l) b(o + i) = s.charAt(i)
     k = j + l
   }
