@@ -19,35 +19,29 @@ object LearnYouAnAxle {
 
   object VariousFunctions {
 
-
     // TODO: merge fmap and fmap2
 
     // "explicit" fmap functions, which require the caller to specify the
     // FunctorN.*Functor typeclass that provides the implementation of fmap
 
-    def fmapexp[M[_], A, B](f: A => B, functor: M[A], tc: Functor[M]): M[B] =
-      tc.fmap(f, functor)
+    def fmapexp[M[_], A, B](f: A => B, functor: M[A], tc: Functor[M]): M[B] = tc.fmap(f, functor)
 
-    def fmap2exp[M[_, _], T, A, B](f: A => B, functor: M[T, A], tc: Functor2[M]): M[T, B] =
-      tc.fmap(f, functor)
+    def fmap2exp[M[_, _], T, A, B](f: A => B, functor: M[T, A], tc: Functor2[M]): M[T, B] = tc.fmap(f, functor)
 
     // "implicit" fmaps, which optionally allow Scala to determine the 
     // FunctorN.*Functor typeclass that provides the implementation of fmap
 
-    // def fmap[M[_], A, B](f: A => B, functor: M[A])(implicit tc: Functor[M]): M[B] =
-    //   tc.fmap(f, functor)
+    // def fmap[M[_], A, B](f: A => B, functor: M[A])(implicit tc: Functor[M]): M[B] = tc.fmap(f, functor)
 
-    // def fmap2[M[_,_], T, A, B](f: A => B, functor: M[T,A])(implicit tc: Functor2[M]): M[T,B] = 
-    //   tc.fmap(f, functor)
+    // def fmap2[M[_,_], T, A, B](f: A => B, functor: M[T,A])(implicit tc: Functor2[M]): M[T,B] = tc.fmap(f, functor)
 
     // These versions of the implicit fmaps use the "implicitly" lookup instead of 
     // placing it in an implicit parameter group.  This is available as of Scala 2.8
 
-    def fmap[M[_]: Functor, A, B](f: A => B, functor: M[A]): M[B] =
-      implicitly[Functor[M]].fmap(f, functor)
+    def fmap[M[_]: Functor, A, B](f: A => B, functor: M[A]): M[B] = implicitly[Functor[M]].fmap(f, functor)
 
-    def fmap2[M[_, _]: Functor2, T, A, B](f: A => B, functor: M[T, A]): M[T, B] =
-      implicitly[Functor2[M]].fmap(f, functor)
+    def fmap2[M[_, _]: Functor2, T, A, B](f: A => B, functor: M[T, A]): M[T, B] =  implicitly[Functor2[M]].fmap(f, functor)
+
 
     // Functor laws:
 

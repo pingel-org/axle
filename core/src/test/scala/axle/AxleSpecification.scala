@@ -2,71 +2,78 @@
 package axle
 
 import org.specs2.mutable._
+import scalaz._
+import Scalaz._
 
 class AxleSpec extends Specification {
 
-  // TODO: single import
-  import LearnYouAnAxle.VariousFunctions._
-  import LearnYouAnAxle.Functor._
-  import LearnYouAnAxle.Functor2._
+  // This file isn't so much an "Axle" spec as it is a list of expressions found
+  // in "Learn You a Haskell For Great Good" translated to Scala w/Scalaz
+  
+  def functorLaw1a[M[_]: Functor, A](functor: M[A]): Boolean = functor.map(id[A]) == id[M[A]](functor)
+
+  //  def functorLaw1b[M[_, _]: Functor, A, B](functor: M[A, B]): Boolean = {
+  //    val lhs = functor.map(id[B])
+  //    val rhs = id[M[A, B]](functor)
+  //    println("lhs = " + lhs)
+  //    println("rhs = " + rhs)
+  //    val ok = lhs == rhs
+  //    println("equal? " + ok)
+  //    ok
+  //  }
 
   "Functor Redux" should {
     "work" in {
 
-      def getLine() = "test data".toList // override the real getLine
-
-      val doit = ((xs: List[Char]) => intersperse('-')(xs.map(_.toUpper).reverse))
+      val getLine = () => "test data".toList // override the real getLine
+      val doit = ((xs: () => List[Char]) => intersperse('-')(xs().map(_.toUpper).reverse))
       val didit = doit(getLine).mkString("")
-
       val f: Function1[List[Char], List[Char]] = (intersperse('-') _) compose (reverse[Char] _) compose ((chars: List[Char]) => chars.map(_.toUpper))
 
-      (f)(getLine).mkString("")
+      f(getLine()).mkString("")
 
-      // fmap (intersperse '-' . reverse . map toUpper) getLine
-      fmap(((cs: List[Char]) => f(cs)), (getLine _).asInstanceOf[Function0[List[Char]]])
+      // getLine.map(intersperse "-" compose reverse compose map toUpper) 
+      getLine.map((cs: List[Char]) => f(cs))
 
-      fmap(replicate[Int](3) _, List(1, 2, 3))
-      fmap(replicate[Int](3) _, Some(4).asInstanceOf[Option[Int]])
-      fmap2(replicate[String](3) _, Right("blah").asInstanceOf[Either[Nothing, String]])
-      fmap2(replicate[String](3) _, Left("foo").asInstanceOf[Either[String, Nothing]])
+      List(1, 2, 3).map(replicate[Int](3) _)
+      Some(4).map(replicate[Int](3) _)
+      Right("blah").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
+      Left("foo").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
 
       // Functions as Functors
-
-      fmap2({ (_: Int) * 3 }, { (_: Int) + 100 }) apply (1)
+      { (_: Int) + 100 } map { _ * 3 } apply (1)
 
       { (_: Int) * 3 } compose { (_: Int) + 100 } apply (1)
 
-      fmap(replicate[Int](3) _, List(1, 2, 3, 4))
-      fmap(replicate[Int](3) _, Some(4).asInstanceOf[Option[Int]])
-      fmap2(replicate[String](3) _, Right("blah").asInstanceOf[Either[Nothing, String]])
-      fmap(replicate[Int](3) _, None.asInstanceOf[Option[Int]])
-      fmap2(replicate[Int](3) _, Left("foo").asInstanceOf[Either[String, Nothing]])
+      List(1, 2, 3, 4).map(replicate[Int](3) _)
 
-      // explicitly passing the typeclass to fmapexp
-      val e1 = fmapexp({ (x: Int) => x + 1 }, List(1, 2, 3, 4), ListFunctor)
-      val e2 = fmapexp({ (c: Char) => c.toUpper }, "hello".toList, ListFunctor)
-      val e3 = fmapexp(replicate[Int](3) _, List(1, 2, 3, 4), ListFunctor)
-      val e4 = fmapexp(replicate[Int](3) _, Some(4), OptionFunctor)
-      val e5 = fmapexp(replicate[Int](3) _, { () => 1 }, Function0Functor)
-      val e6 = fmap2exp(replicate(3) _, Left(5), EitherFunctor)
-      val e7 = fmap2exp(replicate[Any](3) _, Right(6), EitherFunctor)
-      val e8 = fmap2exp({ (_: Int) * 3 }, { (_: Int) + 100 }, Function1Functor).apply(1)
+      Some(4).map(replicate[Int](3) _)
 
-      // allowing fmap's implicit typeclass (tc) to be determined by Scala:
-      val i1 = fmap({ (x: Int) => x + 1 }, List(1, 2, 3, 4))
-      val i2 = fmap({ (c: Char) => c.toUpper }, "hello".toList)
-      val i3 = fmap(replicate[Int](3) _, List(1, 2, 3, 4))
+      Right("blah").asInstanceOf[Either[Nothing, String]].map(replicate[String](3) _)
 
-      // TODO: get rid of the following asInstanceOf calls:
-      val i4 = fmap(replicate[Int](3) _, Some(4).asInstanceOf[Option[Int]])
-      val i5 = fmap2(replicate(3) _, Left(5).asInstanceOf[Either[Int, Nothing]])
-      val i6 = fmap2(replicate[Any](3) _, Right(6).asInstanceOf[Either[Nothing, Int]])
+      None.asInstanceOf[Option[Int]].map(replicate[Int](3) _)
 
-      val i7 = fmap2({ (_: Int) * 3 }, { (_: Int) + 100 }).apply(1)
+      Left("foo").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
 
+      List(1, 2, 3, 4).map({ (x: Int) => x + 1 })
+
+      "hello".toList.map({ (c: Char) => c.toUpper })
+
+      List(1, 2, 3, 4).map(replicate[Int](3) _)
+
+      Some(4).map(replicate[Int](3) _)
+
+      { () => 1 }.map(replicate[Int](3) _)
+
+      Left(5).asInstanceOf[Either[Int, Int]].map(replicate(3) _)
+
+      Right(6).asInstanceOf[Either[Int, Int]].map(replicate[Any](3) _)
+
+      { (_: Int) + 100 }.map({ (_: Int) * 3 }).apply(1)
+
+      1 must be equalTo (1)
     }
 
-    1 must be equalTo (1)
   }
 
   "Functor Laws" should {
@@ -76,9 +83,9 @@ class AxleSpec extends Specification {
       functorLaw1a(None.asInstanceOf[Option[Int]])
       functorLaw1a(Some(4).asInstanceOf[Option[Int]])
       functorLaw1a(List(1, 2, 3, 4))
-      functorLaw1b(Right("blah").asInstanceOf[Either[Nothing, String]])
-      functorLaw1b(Left("foo").asInstanceOf[Either[String, Nothing]])
-      functorLaw1b({ (_: Int) + 100 })
+      // functorLaw1b(Right("blah").asInstanceOf[Either[String, String]])
+      // functorLaw1b(Left("foo").asInstanceOf[Either[String, String]])
+      // functorLaw1a({ (_: Int) + 100 })
 
       // Law 2: fmap (f . g) = fmap f . fmap g
       // Law 2 restated: forall x: fmap (f . g) x = fmap f (fmap g x)
@@ -86,11 +93,11 @@ class AxleSpec extends Specification {
       val f = { (x: Int) => x + 1 }
       val g = { (x: Int) => x * 10 }
 
-      functorLaw2a(f, g, Some(4).asInstanceOf[Option[Int]])
-      functorLaw2a(f, g, List(1, 2, 3, 4))
-      functorLaw2b(f, g, Right(5).asInstanceOf[Either[Nothing, Int]])
-      functorLaw2b(f, g, Left(6).asInstanceOf[Either[Int, Nothing]])
-      functorLaw2b(f, g, { (_: Int) + 100 })
+      //      functorLaw2a(f, g, Some(4).asInstanceOf[Option[Int]])
+      //      functorLaw2a(f, g, List(1, 2, 3, 4))
+      //      functorLaw2b(f, g, Right(5).asInstanceOf[Either[Nothing, Int]])
+      //      functorLaw2b(f, g, Left(6).asInstanceOf[Either[Int, Nothing]])
+      //      functorLaw2b(f, g, { (_: Int) + 100 })
 
       1 must be equalTo (1)
     }
