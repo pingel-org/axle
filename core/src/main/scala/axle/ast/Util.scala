@@ -25,26 +25,23 @@ object Util {
     result.toList
   }
 
-  def convertStreamToString(is: InputStream): String = is match {
-    case null => ""
-    case _ => {
-      val sb = new StringBuilder()
-      try {
-        val reader = new BufferedReader(new InputStreamReader(is, "UTF-8"))
-        var keepGoing = true
-        while (keepGoing) {
-          val line = reader.readLine()
-          if (line != null) {
-            sb.append(line + "\n")
-          } else {
-            keepGoing = false
-          }
+  def convertStreamToString(is: InputStream): String = {
+    val sb = new StringBuilder()
+    try {
+      val reader = new BufferedReader(new InputStreamReader(is, "UTF-8"))
+      var keepGoing = true
+      while (keepGoing) {
+        val line = reader.readLine()
+        if (line != null) {
+          sb.append(line + "\n")
+        } else {
+          keepGoing = false
         }
-      } finally {
-        is.close()
       }
-      sb.toString()
+    } finally {
+      is.close()
     }
+    sb.toString()
   }
 
   def matchAndTransform(string: String, regex: Regex, transform: (String, Regex.Match) => String): String = {
