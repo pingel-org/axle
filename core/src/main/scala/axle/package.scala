@@ -52,4 +52,20 @@ package object axle {
 
   def recfib(n: Int): Int = n match { case 0 | 1 => 1 case _ => recfib(n - 2) + recfib(n - 1) }
 
+  // Fundamental:
+
+  def id[A](x: A) = x
+
+  // IO
+
+  def getLine(): String = scala.io.Source.stdin.getLines().next
+
+  // List enrichments:
+
+  def replicate[T](n: Int)(v: T) = (0 until n).map(i => v).toList
+
+  def reverse[T](l: List[T]) = l.reverse
+
+  def intersperse[T](d: T)(l: List[T]) = (0 until (2 * l.size - 1)).map(i => i % 2 match { case 0 => l(i / 2) case 1 => d }).toList
+
 }
