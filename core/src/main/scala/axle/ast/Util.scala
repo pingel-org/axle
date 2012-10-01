@@ -48,30 +48,11 @@ object Util {
   }
 
   def matchAndTransform(string: String, regex: Regex, transform: (String, Regex.Match) => String): String = {
-
-    var last_end = -1
-    var result = ""
-
-    for (md <- regex.findAllIn(string).matchData) {
-      if (last_end == -1) {
-        result += string.substring(0, md.start)
-      } else {
-        result += string.substring(last_end, md.start)
-      }
-      result += transform(string, md)
-      last_end = md.end
-    }
-
-    last_end match {
-      case -1 => string
-      case _ => {
-        if (last_end < string.length) {
-          result += string.substring(last_end, string.length)
-        }
-        result
-      }
-    }
-
+    val matches = regex.findAllIn(string).matchData.toList
+    matches.scanLeft((0, ""))(
+      (is: (Int, String), md: util.matching.Regex.Match) => {
+        (md.end, string.substring(is._1, md.start) + transform(string, md))
+      }).map(_._2).mkString("") + (if (matches.length > 0) { string.substring(matches.last.end, string.length) } else { "" })
   }
 
 }
