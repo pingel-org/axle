@@ -34,27 +34,20 @@ object AstNode {
 
     case JObject(fields: List[JField]) => {
 
-      var lineno = parentLineNo
-      val meta_map = mutable.Map[String, AstNode]()
-      var meta_type = ""
+      val lineNo = fields.view.map((field: JField) => field match {
+        case JField("_lineno", JInt(i)) => Some(i.intValue)
+        case _ => None
+      }).find(_.isDefined).flatMap(x => x).getOrElse(parentLineNo) // yuck
 
-      // TODO: use "find":
-      fields.map(field =>
-        field match {
-          case JField("_lineno", JInt(i)) => lineno = i.intValue()
-          case _ => {}
-        }
-      )
+      val metaType = fields.view.map((field: JField) => field match {
+        case JField("type", JString(s)) => Some(s)
+        case _ => None
+      }).find(_.isDefined).flatMap(x => x).getOrElse("") // yuck
 
-      fields.map(field =>
-        field match {
-          case JField("_lineno", _) => {}
-          case JField("type", JString(s)) => meta_type = s
-          case _ => meta_map += field.name -> _fromJson(field.value, lineno)
-        }
-      )
+      // might want to filter out _lineno and type
+      val metaMap = fields.map(field => field.name -> _fromJson(field.value, lineNo)).toMap
 
-      AstNodeRule(meta_type, meta_map, lineno)
+      AstNodeRule(metaType, metaMap, lineNo)
     }
 
     case JArray(jvals: List[JValue]) => AstNodeList(jvals.map(_fromJson(_, parentLineNo)), parentLineNo)
