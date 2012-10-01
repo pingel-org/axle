@@ -15,7 +15,7 @@ class LLLanguage(override val name: String) extends Language(
   nonTerminals += Start.label -> Start
 
   val terminals = mutable.Map[String, Terminal]()
-  terminals += BottomOfStack.label -> BottomOfStack
+  terminals += ⊥.label -> ⊥
 
   val llRules = mutable.Map[String, LLRule]()
 
@@ -39,15 +39,15 @@ class LLLanguage(override val name: String) extends Language(
 
     case head :: rest => {
       val result = first(head)
-      if (!result.contains(Epsilon)) {
+      if (!result.contains(ε)) {
         result
       } else {
         rest match {
           case Nil => result
           case _ => {
             val rh_result = first(rest)
-            if (!rh_result.contains(Epsilon)) {
-              result -= Epsilon
+            if (!rh_result.contains(ε)) {
+              result -= ε
             }
             result ++= rh_result
             result
@@ -67,9 +67,9 @@ class LLLanguage(override val name: String) extends Language(
         for ((_, rule) <- llRules) {
           if (rule.from == X) { // TODO style: use pattern matching
             rule.rhs match {
-              case List(Epsilon) => {
+              case List(ε) => {
                 // 2. If there is a Production X -> epsilon then add epsilon to first(X)
-                result += Epsilon
+                result += ε
               }
               case _ => {
                 // 3. If there is a Production X -> Y1Y2..Yk then add first(Y1Y2..Yk) to first(X)
@@ -95,8 +95,8 @@ class LLLanguage(override val name: String) extends Language(
 
         symbol match {
           case Start => {
-            // 1. First put $ (the end of input marker) in Follow(S) (S is the start symbol)
-            result += BottomOfStack
+            // 1. First put ⊥ (the end of input marker) in Follow(S) (S is the start symbol)
+            result += ⊥
           }
           case _ =>
         }
@@ -113,8 +113,8 @@ class LLLanguage(override val name: String) extends Language(
             case Terminal(_) :: symbol :: rest => {
               // to do?: enforce that rest is composed of only terminals (maybe not the case)
               val foo = first(rest)
-              if (foo.contains(Epsilon)) {
-                foo -= Epsilon
+              if (foo.contains(ε)) {
+                foo -= ε
               }
               result ++= foo
             }
@@ -124,7 +124,7 @@ class LLLanguage(override val name: String) extends Language(
             case Terminal(_) :: symbol :: Nil => {
               result ++= follow(rule.from)
             }
-            case Terminal(_) :: symbol :: rest if (first(rest).contains(Epsilon)) => {
+            case Terminal(_) :: symbol :: rest if (first(rest).contains(ε)) => {
               result ++= follow(rule.from)
             }
             case _ => {}
@@ -149,7 +149,7 @@ class LLLanguage(override val name: String) extends Language(
       for (a <- first(rule.rhs)) {
         if (terminals.contains(a.label)) {
           parseTable += (rule.from, a) -> rule // TODO warn on overwrite
-        } else if (a == Epsilon) {
+        } else if (a == ε) {
           for (t <- follow(rule.from)) {
             // TODO including $
             parseTable += (rule.from, t) -> rule // TODO warn on overwrite

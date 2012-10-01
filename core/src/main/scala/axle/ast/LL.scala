@@ -1,14 +1,17 @@
 
 package axle.ast
 
-// http://en.wikipedia.org/wiki/LL_parser
-// http://www.jambe.co.nz/UNI/FirstAndFollowSets.html
-// http://www.cs.pitt.edu/~mock/cs1622/lectures/lecture10.pdf
-// see http://blog.rafaelferreira.net/2008/07/type-safe-builder-pattern-in-scala.html
-
-// TODO test first and follow (including scribd example)
-// TODO model input buffer
-// TODO create AST
+/**
+ *
+ * http://en.wikipedia.org/wiki/LL_parser
+ * http://www.jambe.co.nz/UNI/FirstAndFollowSets.html
+ * http://www.cs.pitt.edu/~mock/cs1622/lectures/lecture10.pdf
+ * see http://blog.rafaelferreira.net/2008/07/type-safe-builder-pattern-in-scala.html
+ *
+ * TODO test first and follow (including scribd example)
+ * TODO model input buffer
+ * TODO create AST
+ */
 
 import collection._
 import axle.Loggable
@@ -22,8 +25,8 @@ class Symbol(_label: String) {
 case class Terminal(_label: String) extends Symbol(_label)
 case class NonTerminal(_label: String) extends Symbol(_label)
 object Start extends NonTerminal("S")
-object BottomOfStack extends Terminal("$")
-object Epsilon extends Symbol("\u03B5") // TODO terminal or non-terminal?
+object ⊥ extends Terminal("⊥") // maybe best left as '$'
+object ε extends Symbol("ε") // TODO terminal or non-terminal? "\u03B5"
 
 case class LLRule(id: String, from: NonTerminal, rhs: List[Symbol]) {
   override def toString() = id + ": " + from + " " + "->" + " " + rhs.mkString("", " ", "")
@@ -41,9 +44,8 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
 
   var i = 0
 
-  stack.push(BottomOfStack)
-  val target = grammar.nonTerminals(symbol)
-  stack.push(target)
+  stack.push(⊥)
+  stack.push(grammar.nonTerminals(symbol))
 
   val derivation = new mutable.ListBuffer[ParserAction]()
 
@@ -91,7 +93,7 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
 
   def done: Boolean = (input.length == i) match {
     case true => stack.top match {
-      case BottomOfStack => true
+      case ⊥ => true
       case _ => false
     }
     case false => derivation.isEmpty match {
