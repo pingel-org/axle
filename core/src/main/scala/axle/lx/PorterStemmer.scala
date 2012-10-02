@@ -10,6 +10,7 @@ package axle.lx
 import scalaz._
 import Scalaz._
 import collection._
+import axle._
 
 object PorterStemmer {
 
@@ -69,20 +70,18 @@ object PorterStemmer {
   }
 
   private def cvc(i: Int): Boolean = {
-    if (i < 2 || !cons(i) || cons(i - 1) || !cons(i - 2))
-      return false
     val ch = b(i)
-    if (ch == 'w' || ch == 'x' || ch == 'y') return false
-    true
+    !(i < 2 || !cons(i) || cons(i - 1) || !cons(i - 2)) && !(ch == 'w' || ch == 'x' || ch == 'y')
   }
 
   private def ends(s: String): Boolean = {
     val l = s.length()
     val o = k - l + 1
-    if (o < 0) return false
-    for (i <- 0 until l) if (b(o + i) != s.charAt(i)) return false
-    j = k - l
-    true
+    val result = (o >= 0) && (0 until l).forall(i => b(o + i) == s.charAt(i))
+    if (result) {
+      j = k - l
+    }
+    result
   }
 
   private def setto(s: String): Unit = {
