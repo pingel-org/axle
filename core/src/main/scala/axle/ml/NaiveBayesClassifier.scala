@@ -3,7 +3,7 @@ package axle.ml
 import axle.stats._
 
 object NaiveBayesClassifier {
-  
+
   def apply[D, TF, TC](data: Seq[D], pFs: List[RandomVariable[TF]], pC: RandomVariable[TC], featureExtractor: D => List[TF], classExtractor: D => TC) =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
@@ -25,7 +25,7 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
 
   val N = featureNames.size
 
-  def argmax[K](ks: Iterable[K], f: K => () => Double): K = ks.map(k => (k, f(k)())).maxBy(_._2)._1
+  def argmax[K](ks: Iterable[K], f: K => Double): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
 
   // TODO no probability should ever be 0
 

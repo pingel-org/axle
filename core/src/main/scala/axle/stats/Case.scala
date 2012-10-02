@@ -19,20 +19,20 @@ case class CaseAndGT[A](conjuncts: GenTraversable[Case[A]]) extends Case[List[A]
 
   def probability[B](given: Option[Case[B]] = None): Double =
     given
-      .map(g => conjuncts.Π((c: Case[A]) => () => P(c | g)()))
-      .getOrElse(conjuncts.Π((c: Case[A]) => () => P(c)()))
+      .map(g => conjuncts.Π((c: Case[A]) => P(c | g)))
+      .getOrElse(conjuncts.Π((c: Case[A]) => P(c)))
 
-  def bayes() = null // TODO
+  def bayes() = null.asInstanceOf[() => Double] // TODO
 }
 
 case class CaseAnd[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
 
   def probability[C](given: Option[Case[C]] = None): Double =
-    given
-      .map(g => P(left | g)() * P(right | g)())
-      .getOrElse(P(left)() * P(right)())
+    (given.map(g => P(left | g) * P(right | g))
+      .getOrElse(P(left) * P(right))
+    )()
 
-  def bayes() = P(left | right) * P(right).bayes() // TODO: also check that "left" and "right" have no "given"
+  def bayes() = P(left | right) * P(right).bayes()() // TODO: also check that "left" and "right" have no "given"
 
 }
 
@@ -40,8 +40,8 @@ case class CaseOr[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
 
   def probability[C](given: Option[Case[C]] = None): Double =
     given
-      .map(g => P(left | g)() + P(right | g)() - P((left ∧ right) | g)())
-      .getOrElse(P(left)() + P(right)() - P(left ∧ right)())
+      .map(g => P(left | g) + P(right | g) - P((left ∧ right) | g))
+      .getOrElse(P(left) + P(right) - P(left ∧ right))
 
   def bayes() = () => this.probability()
 
@@ -76,7 +76,7 @@ case class CaseIs[A](rv: RandomVariable[A], v: A) extends Case[A] {
 
 case class CaseIsnt[A](rv: RandomVariable[A], v: A) extends Case[A] {
 
-  def probability[B](given: Option[Case[B]] = None): Double = 1.0 - P(rv eq v)()
+  def probability[B](given: Option[Case[B]] = None): Double = 1.0 - P(rv eq v)
 
   def bayes() = () => this.probability()
 

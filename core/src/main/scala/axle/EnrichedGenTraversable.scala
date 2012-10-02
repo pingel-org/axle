@@ -15,6 +15,10 @@ case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
 
   def Pi(f: T => (() => Double)) = Π(f)
 
+  //  def Π(f: T => (() => Double)): Double = gt.aggregate(1.0)((a, b) => a * f(b)(), (x, y) => x * y)
+  //
+  //  def Pi(f: T => (() => Double)) = Π(f)
+
   def ∀(p: T => Boolean) = gt.forall(p)
 
   def ∃(p: T => Boolean) = gt.exists(p)

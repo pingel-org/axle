@@ -23,12 +23,8 @@ object Foo extends Loggable {
      info("u = " + u)
      
      val z = (x: Int) => x + 1
-     
      //val abc = (x: List[String]): Int => { x.length }
-     
-     val score = new Function1[List[String], Int] {
-     def apply(ss: List[String]): Int = ss.length
-     }
+     val score = (ss: List[String]) => ss.length
      */
 
     //(ss: List[String]): Int => ss.length

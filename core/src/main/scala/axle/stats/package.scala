@@ -9,6 +9,8 @@ import Scalaz._
 
 package object stats {
 
+  implicit def probability2double = (p: Probability) => p()
+  
   implicit def rv2it[K](rv: RandomVariable[K]): IndexedSeq[K] = rv.values.getOrElse(Vector())
   
   implicit def enrichCaseGenTraversable[A](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)

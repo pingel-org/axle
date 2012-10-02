@@ -1,8 +1,9 @@
 package axle.stats
 
-trait Probability extends Function0[Double] {
-  def *(right: Double) = PMultiply(this, () => right)
-  def *(right: () => Double) = PMultiply(this, right)
+import axle.stats._
+
+trait Probability extends (() => Double) {
+  def *(right: => Double) = PMultiply(this, right)
   def bayes(): () => Double
 }
 
