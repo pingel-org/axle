@@ -29,7 +29,7 @@ class KMeansSpecification extends Specification {
       val classifier = cluster(
         data, 2,
         (p: Foo) => List(p.x, p.y),
-        (features: List[Double]) => Foo(features(0), features(1)),
+        (features: Seq[Double]) => Foo(features(0), features(1)),
         3,
         100)
 

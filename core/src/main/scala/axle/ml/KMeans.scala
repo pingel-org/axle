@@ -1,5 +1,6 @@
 package axle.ml
 
+import axle._
 import collection._
 
 object KMeans extends KMeans()
@@ -13,10 +14,6 @@ trait KMeans {
 
   import axle.matrix.JblasMatrixFactory._ // TODO: generalize
   type M[T] = JblasMatrix[T]
-
-  def square(x: Double) = x * x
-
-  def √(x: Double) = math.sqrt(x)
 
   /**
    * cluster[T]
@@ -32,8 +29,8 @@ trait KMeans {
 
   def cluster[T](data: Seq[T],
     N: Int,
-    featureExtractor: T => List[Double],
-    constructor: List[Double] => T,
+    featureExtractor: T => Seq[Double],
+    constructor: Seq[Double] => T,
     K: Int,
     iterations: Int): KMeansClassifier[T] = {
 
@@ -175,8 +172,8 @@ trait KMeans {
 
   case class KMeansClassifier[T](
     N: Int,
-    featureExtractor: T => List[Double],
-    constructor: List[Double] => T,
+    featureExtractor: T => Seq[Double],
+    constructor: Seq[Double] => T,
     μ: M[Double],
     colMins: M[Double],
     colRanges: M[Double],
@@ -195,8 +192,8 @@ trait KMeans {
       val featureList = featureExtractor(observation)
       val featureRowMatrix = matrix(1, featureList.length, featureList.toArray)
       val scaledX = diag(colRanges).inv ⨯ (featureRowMatrix.subRowVector(colMins).t)
-      val cid = centroidIndexAndDistanceClosestTo(μ, scaledX)
-      cid._1
+      val (i, d) = centroidIndexAndDistanceClosestTo(μ, scaledX)
+      i
     }
 
     def distanceTreeMap(i: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
@@ -214,7 +211,6 @@ trait KMeans {
     def averageDistanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K()).map(i =>
       ("centroid " + i, averageDistanceTreeMap(i))).toList
 
-    // def draw(): Unit = new KMeansVisualization(this).draw()
   }
 
 }

@@ -68,4 +68,8 @@ package object axle {
 
   def intersperse[T](d: T)(l: List[T]) = (0 until (2 * l.size - 1)).map(i => i % 2 match { case 0 => l(i / 2) case 1 => d }).toList
 
+  def square(x: Double) = x * x
+
+  def √(x: Double) = math.sqrt(x)
+  
 }
