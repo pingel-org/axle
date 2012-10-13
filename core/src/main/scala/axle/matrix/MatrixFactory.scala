@@ -66,6 +66,8 @@ trait MatrixFactory {
     def addMatrix(other: M[T]): M[T]
     def subtractMatrix(other: M[T]): M[T]
     def multiplyMatrix(other: M[T]): M[T]
+    def mulPointwise(other: M[T]): M[T]
+    def divPointwise(other: M[T]): M[T]
     def concatenateHorizontally(right: M[T]): M[T]
     def concatenateVertically(under: M[T]): M[T]
     def solve(B: M[T]): M[T] // returns X, where this == A and A x X = B

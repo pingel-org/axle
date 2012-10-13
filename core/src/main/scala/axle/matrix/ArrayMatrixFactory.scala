@@ -74,6 +74,8 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def addMatrix(other: M[T]): M[T] = null // TODO
     def subtractMatrix(other: M[T]): M[T] = null // TODO
     def multiplyMatrix(other: M[T]): M[T] = null // TODO
+    def mulPointwise(other: M[T]) = null // TODO
+    def divPointwise(other: M[T]) = null // TODO
     def concatenateHorizontally(right: M[T]): M[T] = null // TODO
     def concatenateVertically(under: M[T]): M[T] = null // TODO
     def solve(B: M[T]): M[T] = null // TODO // returns X, where this == A and A x X = B

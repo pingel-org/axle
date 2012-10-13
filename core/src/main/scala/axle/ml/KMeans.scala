@@ -190,8 +190,7 @@ trait KMeans {
 
     def classify(observation: T): Int = {
       val featureList = featureExtractor(observation)
-      val featureRowMatrix = matrix(1, featureList.length, featureList.toArray)
-      val scaledX = diag(colRanges).inv ⨯ (featureRowMatrix.subRowVector(colMins).t)
+      val scaledX = matrix(1, featureList.length, featureList.toArray).subRowVector(colMins).divPointwise(colRanges)
       val (i, d) = centroidIndexAndDistanceClosestTo(μ, scaledX)
       i
     }

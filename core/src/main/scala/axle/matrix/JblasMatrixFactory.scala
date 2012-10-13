@@ -100,6 +100,9 @@ trait JblasMatrixFactory extends MatrixFactory {
     def subtractMatrix(other: JblasMatrix[T]) = matrix(storage.sub(other.jblas))(functionPair, format)
     def multiplyMatrix(other: JblasMatrix[T]) = matrix(storage.mmul(other.jblas))(functionPair, format)
 
+    def mulPointwise(other: JblasMatrix[T]) = matrix(storage.mul(other.jblas))(functionPair, format)
+    def divPointwise(other: JblasMatrix[T]) = matrix(storage.div(other.jblas))(functionPair, format)
+    
     def concatenateHorizontally(right: JblasMatrix[T]) = matrix(DoubleMatrix.concatHorizontally(storage, right.jblas))(functionPair, format)
     def concatenateVertically(under: JblasMatrix[T]) = matrix(DoubleMatrix.concatVertically(storage, under.jblas))(functionPair, format)
     def solve(B: JblasMatrix[T]) = matrix(org.jblas.Solve.solve(storage, B.jblas))(functionPair, format)
