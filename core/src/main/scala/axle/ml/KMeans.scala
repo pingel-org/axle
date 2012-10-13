@@ -211,6 +211,25 @@ trait KMeans {
     def averageDistanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K()).map(i =>
       ("centroid " + i, averageDistanceTreeMap(i))).toList
 
+      
+    def confusionMatrix[L](data: Seq[T], labelExtractor: T => L) = new ConfusionMatrix(this, data, labelExtractor)
+  }
+
+  class ConfusionMatrix[T, L](classifier: KMeansClassifier[T], data: Seq[T], labelExtractor: T => L) {
+
+    val (goldClusterIds, predictions) = data.map(datum => (labelExtractor(datum), classifier.classify(datum))).unzip
+
+    val goldLabels = goldClusterIds.toSet.toList
+    val goldIndices = goldLabels.zipWithIndex.toMap
+    val numGoldClusters = goldIndices.size
+
+    val counts = zeros[Int](numGoldClusters, classifier.K)
+    val predictedClusterIndices = 0 until classifier.K
+    goldClusterIds.zip(predictions).map {
+      case (goldId, predIndex) => counts(goldIndices(goldId), predIndex) += 1
+    }
+
+    override def toString() = counts.toString // TODO after each line: row sum [ gold label ]
   }
 
 }
