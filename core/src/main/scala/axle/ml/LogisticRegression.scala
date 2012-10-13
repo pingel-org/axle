@@ -4,9 +4,9 @@ object LogisticRegression extends LogisticRegression()
 
 trait LogisticRegression {
 
+  import FeatureNormalizer._
   import axle.matrix.JblasMatrixFactory._
   import math.{ exp, log }
-  import Utilities._
 
   type M[T] = JblasMatrix[T] // TODO: generalize
 
@@ -42,26 +42,17 @@ trait LogisticRegression {
     examples: List[D],
     numObservations: Int,
     observationExtractor: D => List[Double],
-    objectiveExtractor: D => Boolean) = {
+    objectiveExtractor: D => Boolean,
+    α: Double = 0.1,
+    numIterations: Int = 100) = {
 
+    val inputX = matrix(examples.length, numObservations, examples.flatMap(observationExtractor(_)).toArray).t
     val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
-
-    val inputX = matrix(
-      examples.length,
-      numObservations,
-      examples.flatMap(observationExtractor(_)).toArray).t
-
-    val scaledX = scaleColumns(inputX)
-
-    val X = ones[Double](examples.length, 1) +|+ scaledX._1
-
+    val normalizer = new LinearFeatureNormalizer(inputX)
+    val X = ones[Double](examples.length, 1) +|+ normalizer.normalizedData()
     val θ0 = ones[Double](X.columns, 1)
-    val α = 0.1
-    val N = 100 // iterations
-
-    val θ = gradientDescent(X, y, θ0, α, N)
-
-    θ // TODO also return enough information to scale the result
+    val θ = gradientDescent(X, y, θ0, α, numIterations)
+    (θ, normalizer)
   }
 
 }

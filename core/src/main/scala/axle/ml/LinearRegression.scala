@@ -6,10 +6,9 @@ object LinearRegression extends LinearRegression()
 
 trait LinearRegression {
 
+  import FeatureNormalizer._
   import axle.matrix.JblasMatrixFactory._ // TODO: generalize
   type M[T] = JblasMatrix[T] // TODO: generalize
-
-  import Utilities._
 
   def normalEquation(X: M[Double], y: M[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
@@ -40,44 +39,39 @@ trait LinearRegression {
     featureExtractor: D => List[Double],
     objectiveExtractor: D => Double,
     α: Double = 0.1,
-    iterations: Int = 100
-    ) = {
+    iterations: Int = 100) = {
 
     val inputX = matrix(
       examples.length,
       numFeatures,
       examples.flatMap(featureExtractor(_)).toArray).t
 
-    val (scaledX, colMins, colRanges) = scaleColumns(inputX)
-    val X = ones[Double](inputX.rows, 1) +|+ scaledX
+    val featureNormalizer = new LinearFeatureNormalizer(inputX)
+
+    val X = ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData()
 
     val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
-    val (scaledY, yMin, yRange) = scaleColumns(y)
+
+    val objectiveNormalizer = new LinearFeatureNormalizer(y)
     val θ0 = ones[Double](X.columns, 1)
+    val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData(), θ0, α, iterations)
 
-    val (θ, errLog) = gradientDescent(X, scaledY, θ0, α, iterations)
-
-    LinearEstimator(featureExtractor, colMins, colRanges, θ, yMin, yRange, errLog.reverse)
+    LinearEstimator(featureExtractor, featureNormalizer, θ, objectiveNormalizer, errLog.reverse)
   }
 
   case class LinearEstimator[D](
     featureExtractor: D => List[Double],
-    colMins: M[Double],
-    colRanges: M[Double],
+    featureNormalizer: FeatureNormalizer,
     θ: M[Double],
-    yMin: M[Double],
-    yRange: M[Double],
+    objectiveNormalizer: FeatureNormalizer,
     errLog: List[Double]) {
 
     def errTree() = new immutable.TreeMap[Int, Double]() ++
       (0 until errLog.length).map(j => j -> errLog(j)).toMap
 
-    def estimate(observation: D) = {
-      val featureList = featureExtractor(observation)
-      val featureRowMatrix = matrix(1, featureList.length, featureList.toArray)
-      val scaledX = ones[Double](1, 1) +|+ (diag(colRanges).inv ⨯ (featureRowMatrix.subRowVector(colMins).t)).t
-      val scaledY = (scaledX ⨯ θ).scalar
-      (scaledY * yRange.scalar) + yMin.scalar
+    def estimate(observation: D): Double = {
+      val scaledX = ones[Double](1, 1) +|+ featureNormalizer.normalize(featureExtractor(observation))
+      objectiveNormalizer.denormalize(scaledX ⨯ θ).head
     }
 
   }
