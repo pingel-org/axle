@@ -215,14 +215,13 @@ trait KMeans {
 
   class ConfusionMatrix[T, L](classifier: KMeansClassifier[T], data: Seq[T], labelExtractor: T => L) {
 
-    val (labels, predictedClusterIds) = data.map(datum => (labelExtractor(datum), classifier.classify(datum))).unzip
+    val actualAndPredictedLabels = data.map(datum => (labelExtractor(datum), classifier.classify(datum)))
 
-    val labelList = labels.toSet.toList
-    val labelIndices = labels.zipWithIndex.toMap
+    val labelList = actualAndPredictedLabels.map(_._1).toSet.toList
+    val labelIndices = labelList.zipWithIndex.toMap
 
     val counts = zeros[Int](labelList.length, classifier.K)
-    val predictedClusterIndices = 0 until classifier.K
-    labels.zip(predictedClusterIds).map {
+    actualAndPredictedLabels.map {
       case (label, predictedClusterIndex) => counts(labelIndices(label), predictedClusterIndex) += 1
     }
 
