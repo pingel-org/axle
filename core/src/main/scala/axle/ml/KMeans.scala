@@ -225,7 +225,14 @@ trait KMeans {
       case (label, predictedClusterIndex) => counts(labelIndices(label), predictedClusterIndex) += 1
     }
 
-    override def toString() = counts.toString // TODO after each line: row sum [ label ]
+    lazy val rowSums = counts.rowSums()
+
+    lazy val asString = ( labelList.zipWithIndex.map({ case (label, r) =>
+      ( counts.row(r).toString + " : " + rowSums(r, 0) + " " + label + "\n") }).mkString("") ) + 
+      counts.columnSums().toString + "\n"
+
+
+    override def toString() = asString
   }
 
 }
