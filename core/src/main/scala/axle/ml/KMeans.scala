@@ -15,6 +15,41 @@ trait KMeans {
   import axle.matrix.JblasMatrixFactory._ // TODO: generalize
   type M[T] = JblasMatrix[T]
 
+  trait FeatureNormalizer {
+
+    def normalizedData(): M[Double]
+
+    def normalize(featureList: Seq[Double]): M[Double]
+
+    def denormalize(featureRow: M[Double]): Seq[Double]
+  }
+
+  class IdentityFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
+
+    def normalizedData(): M[Double] = X
+
+    def normalize(featureList: Seq[Double]): M[Double] =
+      matrix(1, featureList.length, featureList.toArray)
+
+    def denormalize(featureRow: M[Double]): Seq[Double] =
+      (0 until featureRow.length).map(r => featureRow(r, 0))
+  }
+
+  class LinearFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
+
+    val colMins = X.columnMins
+    val colRanges = X.columnMaxs - colMins
+    val nd = (diag(colRanges).inv ⨯ X.subRowVector(colMins).t).t
+
+    def normalizedData(): M[Double] = nd
+
+    def normalize(featureList: Seq[Double]): M[Double] =
+      matrix(1, featureList.length, featureList.toArray).subRowVector(colMins).divPointwise(colRanges)
+
+    def denormalize(featureRow: M[Double]): Seq[Double] = (featureRow.mulPointwise(colRanges) + colMins).toList
+
+  }
+
   /**
    * cluster[T]
    *
@@ -34,14 +69,17 @@ trait KMeans {
     K: Int,
     iterations: Int): KMeansClassifier[T] = {
 
-    val X = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
+    val features = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
     val distanceLog = zeros[Double](K, iterations)
     val countLog = zeros[Int](K, iterations)
 
-    val (scaledX, colMins, colRanges) = Utilities.scaleColumns(X)
-    val (μ, c) = clusterLA(scaledX, K, iterations, distanceLog, countLog)
+    val normalizer = new LinearFeatureNormalizer(features)
 
-    KMeansClassifier(N, featureExtractor, constructor, μ, colMins, colRanges, scaledX, c, distanceLog, countLog)
+    val nd = normalizer.normalizedData()
+
+    val (μ, c) = clusterLA(nd, K, iterations, distanceLog, countLog)
+
+    KMeansClassifier(N, featureExtractor, constructor, μ, normalizer, c, distanceLog, countLog)
   }
 
   /**
@@ -55,7 +93,7 @@ trait KMeans {
   def distanceRow(r1: M[Double], r2: M[Double]): Double = {
     // assert(r1.isRowVector && r2.isRowVector && r1.length == r2.length)
     val dRow = r1 - r2
-    math.sqrt((0 until r1.columns).map(i => square(dRow(0, i))).reduce(_ + _))
+    math.sqrt((0 until r1.columns).map(i => square(dRow(0, i))).sum)
   }
 
   /**
@@ -175,23 +213,19 @@ trait KMeans {
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
     μ: M[Double],
-    colMins: M[Double],
-    colRanges: M[Double],
-    scaledX: M[Double],
+    normalizer: FeatureNormalizer,
     A: M[Int],
     distanceLog: M[Double],
     countLog: M[Int]) {
 
     def K(): Int = μ.rows
 
-    val exemplars = (0 until K).map(i => constructor(((μ.row(i) ⨯ diag(colRanges)) + colMins).toList)).toList
+    val exemplars = (0 until K).map(i => constructor(normalizer.denormalize(μ.row(i)))).toList
 
     def exemplar(i: Int): T = exemplars(i)
 
     def classify(observation: T): Int = {
-      val featureList = featureExtractor(observation)
-      val scaledX = matrix(1, featureList.length, featureList.toArray).subRowVector(colMins).divPointwise(colRanges)
-      val (i, d) = centroidIndexAndDistanceClosestTo(μ, scaledX)
+      val (i, d) = centroidIndexAndDistanceClosestTo(μ, normalizer.normalize(featureExtractor(observation)))
       i
     }
 
@@ -227,10 +261,11 @@ trait KMeans {
 
     lazy val rowSums = counts.rowSums()
 
-    lazy val asString = ( labelList.zipWithIndex.map({ case (label, r) =>
-      ( counts.row(r).toString + " : " + rowSums(r, 0) + " " + label + "\n") }).mkString("") ) + 
+    lazy val asString = (labelList.zipWithIndex.map({
+      case (label, r) =>
+        (counts.row(r).toString + " : " + rowSums(r, 0) + " " + label + "\n")
+    }).mkString("")) +
       counts.columnSums().toString + "\n"
-
 
     override def toString() = asString
   }
