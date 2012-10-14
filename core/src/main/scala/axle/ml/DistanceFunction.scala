@@ -1,5 +1,7 @@
 package axle.ml
 
+import axle.square
+
 object DistanceFunction {
 
   import math.{ abs, sqrt }
