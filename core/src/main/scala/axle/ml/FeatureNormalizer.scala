@@ -8,14 +8,19 @@ object FeatureNormalizer {
   import axle.matrix.JblasMatrixFactory._ // TODO: generalize
   type M[T] = JblasMatrix[T]
 
-  trait FeatureNormalizer {
+  trait BatchFeatureNormalizer {
 
     def normalizedData(): M[Double]
+  }
+
+  trait SingleFeatureNormalizer {
 
     def normalize(featureList: Seq[Double]): M[Double]
 
     def denormalize(featureRow: M[Double]): Seq[Double]
   }
+
+  trait FeatureNormalizer extends SingleFeatureNormalizer with BatchFeatureNormalizer
 
   class IdentityFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
 
@@ -66,6 +71,27 @@ object FeatureNormalizer {
 
     def denormalize(featureRow: M[Double]): Seq[Double] =
       μs.zip(σ2s).zipWithIndex.map({ case ((μ, σ2), c) => (σ2 * featureRow(0, c)) + μ })
+
+  }
+
+  class PCAFeatureNormalizer(X: M[Double], cutoff: Double) extends BatchFeatureNormalizer {
+
+    def truncateEigenValues(s: M[Double], cutoff: Double) = {
+      val eigenValuesSquared = s.toList.map(square(_))
+      val eigenTotal = eigenValuesSquared.sum
+      val numComponents = eigenValuesSquared.map(_ / eigenTotal).scan(0.0)(_ + _).indexWhere(cutoff<)
+      matrix(s.rows, 1, (0 until s.rows).map(r => if (r < numComponents) { s(r, 0) } else { 0.0 }).toArray)
+    }
+
+    val subNormalizer = new ZScoreFeatureNormalizer(X)
+
+    val zd = subNormalizer.normalizedData
+
+    val (u, s, v) = zd.fullSVD // Note: zd == u ⨯ diag(s.t) ⨯ v.t
+
+    val nd = u ⨯ diag(truncateEigenValues(s, cutoff).t) ⨯ v.t
+
+    def normalizedData(): M[Double] = nd
 
   }
 
