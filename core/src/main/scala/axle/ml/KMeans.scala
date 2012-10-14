@@ -42,7 +42,9 @@ trait KMeans {
     val distanceLog = zeros[Double](K, iterations)
     val countLog = zeros[Int](K, iterations)
 
-    val normalizer = new LinearFeatureNormalizer(features)
+    // val normalizer = new LinearFeatureNormalizer(features)
+    val normalizer = new ZScoreFeatureNormalizer(features)
+    // val normalizer = new PCAFeatureNormalizer(features, 0.95)
 
     val nd = normalizer.normalizedData()
 
