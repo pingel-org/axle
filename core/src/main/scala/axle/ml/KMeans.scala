@@ -2,6 +2,39 @@ package axle.ml
 
 import axle._
 import collection._
+import FeatureNormalizer._
+
+object DistanceFunction {
+
+  import math.{ abs, sqrt }
+  import axle.matrix.JblasMatrixFactory._ // TODO: generalize
+  type M[T] = JblasMatrix[T]
+
+  trait DistanceFunction extends ((M[Double], M[Double]) => Double)
+
+  // TODO: apply should assert(r1.isRowVector && r2.isRowVector && r1.length == r2.length)
+
+  object EuclideanDistanceFunction extends DistanceFunction {
+    def apply(r1: M[Double], r2: M[Double]): Double = {
+      val dRow = r1 - r2
+      sqrt((0 until r1.columns).map(i => square(dRow(0, i))).sum)
+    }
+  }
+
+  object ManhattanDistanceFunction extends DistanceFunction {
+    def apply(r1: M[Double], r2: M[Double]): Double = {
+      val dRow = r1 - r2
+      (0 until r1.columns).map(i => abs(dRow(0, i))).sum
+    }
+  }
+
+  object CosineDistanceFunction extends DistanceFunction {
+    def apply(r1: M[Double], r2: M[Double]): Double = {
+      1.0 // TODO
+    }
+  }
+
+}
 
 object KMeans extends KMeans()
 
@@ -12,9 +45,11 @@ object KMeans extends KMeans()
 
 trait KMeans {
 
-  import FeatureNormalizer._
   import axle.matrix.JblasMatrixFactory._ // TODO: generalize
   type M[T] = JblasMatrix[T]
+
+  import DistanceFunction._
+  val distance = EuclideanDistanceFunction
 
   /**
    * cluster[T]
@@ -49,20 +84,6 @@ trait KMeans {
   }
 
   /**
-   * distanceRow
-   *
-   * @param r1
-   * @param r2
-   *
-   */
-
-  def distanceRow(r1: M[Double], r2: M[Double]): Double = {
-    // assert(r1.isRowVector && r2.isRowVector && r1.length == r2.length)
-    val dRow = r1 - r2
-    math.sqrt((0 until r1.columns).map(i => square(dRow(0, i))).sum)
-  }
-
-  /**
    * centroidIndexAndDistanceClosestTo
    *
    * @param μ
@@ -70,9 +91,7 @@ trait KMeans {
    */
 
   def centroidIndexAndDistanceClosestTo(μ: M[Double], x: M[Double]): (Int, Double) =
-    (0 until μ.rows)
-      .map(r => (r, distanceRow(μ.row(r), x)))
-      .minBy(_._2)
+    (0 until μ.rows).map(r => (r, distance(μ.row(r), x))).minBy(_._2)
 
   /**
    * assignments
