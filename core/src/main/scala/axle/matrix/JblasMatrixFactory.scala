@@ -83,8 +83,8 @@ trait JblasMatrixFactory extends MatrixFactory {
     def log10() = matrix(org.jblas.MatrixFunctions.log10(storage))(functionPair, format)
 
     def fullSVD() = {
-      val usv = org.jblas.Singular.fullSVD(storage)
-      (matrix(usv(0))(functionPair, format), matrix(usv(1))(functionPair, format), matrix(usv(2))(functionPair, format))
+      val usv = org.jblas.Singular.fullSVD(storage).map(matrix(_)(functionPair, format))
+      (usv(0), usv(1), usv(2))
     }
 
     def addScalar(x: T) = matrix(storage.add(functionPair.backward(x)))(functionPair, format)
