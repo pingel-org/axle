@@ -8,19 +8,14 @@ object FeatureNormalizer {
   import axle.matrix.JblasMatrixFactory._ // TODO: generalize
   type M[T] = JblasMatrix[T]
 
-  trait BatchFeatureNormalizer {
+  trait FeatureNormalizer {
 
     def normalizedData(): M[Double]
-  }
-
-  trait SingleFeatureNormalizer {
 
     def normalize(featureList: Seq[Double]): M[Double]
 
     def denormalize(featureRow: M[Double]): Seq[Double]
   }
-
-  trait FeatureNormalizer extends SingleFeatureNormalizer with BatchFeatureNormalizer
 
   class IdentityFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
 
@@ -74,7 +69,7 @@ object FeatureNormalizer {
 
   }
 
-  class PCAFeatureNormalizer(X: M[Double], cutoff: Double) extends BatchFeatureNormalizer {
+  class PCAFeatureNormalizer(X: M[Double], cutoff: Double) extends FeatureNormalizer {
 
     def truncateEigenValues(s: M[Double], cutoff: Double) = {
       val eigenValuesSquared = s.toList.map(square(_))
@@ -92,6 +87,10 @@ object FeatureNormalizer {
     val nd = u ⨯ diag(truncateEigenValues(s, cutoff).t) ⨯ v.t
 
     def normalizedData(): M[Double] = nd
+
+    def normalize(features: Seq[Double]): M[Double] = subNormalizer.normalize(features)
+
+    def denormalize(featureRow: M[Double]): Seq[Double] = subNormalizer.denormalize(featureRow)
 
   }
 
