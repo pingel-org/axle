@@ -1,5 +1,7 @@
 package axle.stats
 
+import math.sqrt
+
 trait Distribution[A] {
 
   def probabilityOf(a: A): Double
@@ -14,7 +16,7 @@ trait Distribution[A] {
     val p: (Double => Double) = (x: Double) => 0.0 // TODO
     val Xs: List[Double] = Nil // TODO
     val μ = Xs.map(xi => p(xi) * xi).sum
-    math.sqrt(Xs.map(xi => p(xi) * square(xi - μ)).sum)
+    sqrt(Xs.map(xi => p(xi) * square(xi - μ)).sum)
   }
   
 }
