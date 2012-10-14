@@ -17,7 +17,6 @@ trait KMeans {
   type M[T] = JblasMatrix[T]
 
   import DistanceFunction._
-  val distance = EuclideanDistanceFunction
 
   /**
    * cluster[T]
@@ -35,6 +34,7 @@ trait KMeans {
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
+    distance: DistanceFunction = EuclideanDistanceFunction,
     K: Int,
     iterations: Int): KMeansClassifier[T] = {
 
@@ -46,9 +46,9 @@ trait KMeans {
 
     val nd = normalizer.normalizedData()
 
-    val (μ, c) = clusterLA(nd, K, iterations, distanceLog, countLog)
+    val (μ, c) = clusterLA(nd, distance, K, iterations, distanceLog, countLog)
 
-    KMeansClassifier(N, featureExtractor, constructor, μ, normalizer, c, distanceLog, countLog)
+    KMeansClassifier(N, featureExtractor, constructor, μ, normalizer, distance, c, distanceLog, countLog)
   }
 
   /**
@@ -58,7 +58,7 @@ trait KMeans {
    * @param x
    */
 
-  def centroidIndexAndDistanceClosestTo(μ: M[Double], x: M[Double]): (Int, Double) =
+  def centroidIndexAndDistanceClosestTo(distance: DistanceFunction, μ: M[Double], x: M[Double]): (Int, Double) =
     (0 until μ.rows).map(r => (r, distance(μ.row(r), x))).minBy(_._2)
 
   /**
@@ -75,15 +75,38 @@ trait KMeans {
    *
    */
 
-  def assignments(X: M[Double], μ: M[Double], distanceLog: M[Double], countLog: M[Int], i: Int): M[Int] = {
+  def assignments(distance: DistanceFunction, X: M[Double], μ: M[Double], distanceLog: M[Double], countLog: M[Int], i: Int): M[Int] = {
     val A = zeros[Int](X.rows, 1)
     for (r <- 0 until X.rows) {
-      val ad = centroidIndexAndDistanceClosestTo(μ, X.row(r))
+      val ad = centroidIndexAndDistanceClosestTo(distance, μ, X.row(r))
       A(r, 0) = ad._1
       countLog(ad._1, i) += 1
       distanceLog(ad._1, i) += ad._2
     }
     A
+  }
+
+  /**
+   * clusterLA
+   *
+   * @param  scaledX
+   * @param  K
+   * @param  iterations
+   * @param  distanceLog
+   *
+   * assumes that X has already been normalized
+   */
+
+  def clusterLA(scaledX: M[Double], distance: DistanceFunction, K: Int, iterations: Int, distanceLog: M[Double], countLog: M[Int]): (M[Double], M[Int]) = {
+    assert(K < scaledX.rows)
+    (0 until iterations).foldLeft((
+      rand[Double](K, scaledX.columns), // random initial K centroids μ in R^n (aka M)
+      zeros[Int](scaledX.rows, 1)) // indexes of centroids closest to xi
+    )((μA: (M[Double], M[Int]), i: Int) => {
+      val A = assignments(distance, scaledX, μA._1, distanceLog, countLog, i) // K-element column vector
+      val μ = centroids(scaledX, K, A) // K x n
+      (μ, A)
+    })
   }
 
   /**
@@ -123,29 +146,6 @@ trait KMeans {
   }
 
   /**
-   * clusterLA
-   *
-   * @param  scaledX
-   * @param  K
-   * @param  iterations
-   * @param  distanceLog
-   *
-   * assumes that X has already been normalized
-   */
-
-  def clusterLA(scaledX: M[Double], K: Int, iterations: Int, distanceLog: M[Double], countLog: M[Int]): (M[Double], M[Int]) = {
-    assert(K < scaledX.rows)
-    (0 until iterations).foldLeft((
-      rand[Double](K, scaledX.columns), // random initial K centroids μ in R^n (aka M)
-      zeros[Int](scaledX.rows, 1)) // indexes of centroids closest to xi
-    )((μA: (M[Double], M[Int]), i: Int) => {
-      val A = assignments(scaledX, μA._1, distanceLog, countLog, i) // K-element column vector
-      val μ = centroids(scaledX, K, A) // K x n
-      (μ, A)
-    })
-  }
-
-  /**
    * KMeansClassifier[T]
    *
    * @tparam T       type of the objects being classified
@@ -154,8 +154,6 @@ trait KMeans {
    * @param featureExtractor creates a list of features (Doubles) of length N given a T
    * @param constructor      creates a T from list of arguments of length N
    * @param μ                K x N Matrix[Double], where each row is a centroid
-   * @param colMins          1 x N
-   * @param colRanges        1 x N
    * @param scaledX          ? x N
    * @param A                ? x 1
    * @param distanceLog      K x iterations
@@ -167,6 +165,7 @@ trait KMeans {
     constructor: Seq[Double] => T,
     μ: M[Double],
     normalizer: FeatureNormalizer,
+    distance: DistanceFunction,
     A: M[Int],
     distanceLog: M[Double],
     countLog: M[Int]) {
@@ -178,7 +177,7 @@ trait KMeans {
     def exemplar(i: Int): T = exemplars(i)
 
     def classify(observation: T): Int = {
-      val (i, d) = centroidIndexAndDistanceClosestTo(μ, normalizer.normalize(featureExtractor(observation)))
+      val (i, d) = centroidIndexAndDistanceClosestTo(distance, μ, normalizer.normalize(featureExtractor(observation)))
       i
     }
 
