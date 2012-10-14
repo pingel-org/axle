@@ -25,7 +25,7 @@ object DistanceFunction {
   }
 
   object CosineDistanceFunction extends DistanceFunction {
-    def apply(r1: M[Double], r2: M[Double]): Double = 1.0 - dotProduct(r1, r2) / (norm(r1) * norm(r2))
+    def apply(r1: M[Double], r2: M[Double]): Double = 1.0 - (dotProduct(r1, r2) / (norm(r1) * norm(r2)))
   }
 
 }
