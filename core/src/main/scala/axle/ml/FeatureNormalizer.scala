@@ -32,40 +32,30 @@ object FeatureNormalizer {
 
     val colMins = X.columnMins
     val colRanges = X.columnMaxs - colMins
-    val nd = (diag(colRanges).inv ⨯ X.subRowVector(colMins).t).t // SLOW
+    val nd = X.subRowVector(colMins).divRowVector(colRanges)
 
     def normalizedData(): M[Double] = nd
 
     def normalize(features: Seq[Double]): M[Double] =
       matrix(1, features.length, features.toArray).subRowVector(colMins).divPointwise(colRanges)
 
-    def denormalize(featureRow: M[Double]): Seq[Double] = (featureRow.mulPointwise(colRanges) + colMins).toList
+    def denormalize(featureRow: M[Double]): Seq[Double] =
+      (featureRow.mulPointwise(colRanges) + colMins).toList
 
   }
 
   class ZScoreFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
 
-    val μs = (X.columnSums() / X.rows()).toList
-
-    val μRow = matrix(1, μs.length, μs.toArray)
-
-    val σ2s = μs.zipWithIndex.map({
-      case (μ, c) => sqrt((0 until X.rows).map(r => square(X(r, c) - μ)).sum) // 1.0 when this is 0.0 ?
-    })
-
-    val σ2Row = matrix(1, σ2s.length, σ2s.toArray)
-
-    val nd = (diag(σ2Row).inv ⨯ X.subRowVector(μRow).t).t // SLOW
+    val μs = X.columnMeans
+    val σ2s = std(X)
+    val nd = zscore(X)
 
     def normalizedData(): M[Double] = nd
 
     def normalize(features: Seq[Double]): M[Double] =
-      matrix(1, features.length, features.zip(μs.zip(σ2s)).map({
-        case (f, (μ, σ2)) => (f - μ) / σ2
-      }).toArray)
+      (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
 
-    def denormalize(featureRow: M[Double]): Seq[Double] =
-      μs.zip(σ2s).zipWithIndex.map({ case ((μ, σ2), c) => (σ2 * featureRow(0, c)) + μ })
+    def denormalize(featureRow: M[Double]): Seq[Double] = (σ2s.mulPointwise(featureRow) + μs).toList
 
   }
 
