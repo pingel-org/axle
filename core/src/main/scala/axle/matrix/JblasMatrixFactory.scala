@@ -1,5 +1,7 @@
 package axle.matrix
 
+import math.sqrt
+
 // not necessarily a bijection, but related
 trait FunctionPair[A, B] {
   val forward: A => B
@@ -102,7 +104,7 @@ trait JblasMatrixFactory extends MatrixFactory {
 
     def mulPointwise(other: JblasMatrix[T]) = matrix(storage.mul(other.jblas))(functionPair, format)
     def divPointwise(other: JblasMatrix[T]) = matrix(storage.div(other.jblas))(functionPair, format)
-    
+
     def concatenateHorizontally(right: JblasMatrix[T]) = matrix(DoubleMatrix.concatHorizontally(storage, right.jblas))(functionPair, format)
     def concatenateVertically(under: JblasMatrix[T]) = matrix(DoubleMatrix.concatVertically(storage, under.jblas))(functionPair, format)
     def solve(B: JblasMatrix[T]) = matrix(org.jblas.Solve.solve(storage, B.jblas))(functionPair, format)
@@ -111,6 +113,10 @@ trait JblasMatrixFactory extends MatrixFactory {
     def addColumnVector(column: JblasMatrix[T]) = matrix(storage.addRowVector(column.jblas))(functionPair, format)
     def subRowVector(row: JblasMatrix[T]) = matrix(storage.subRowVector(row.jblas))(functionPair, format)
     def subColumnVector(column: JblasMatrix[T]) = matrix(storage.subRowVector(column.jblas))(functionPair, format)
+    def mulRowVector(row: JblasMatrix[T]) = matrix(storage.mulRowVector(row.jblas))(functionPair, format)
+    def mulColumnVector(column: JblasMatrix[T]) = matrix(storage.mulRowVector(column.jblas))(functionPair, format)
+    def divRowVector(row: JblasMatrix[T]) = matrix(storage.divRowVector(row.jblas))(functionPair, format)
+    def divColumnVector(column: JblasMatrix[T]) = matrix(storage.divRowVector(column.jblas))(functionPair, format)
 
     def lt(other: JblasMatrix[T]) = matrix(storage.lt(other.jblas))(double2boolean, formatBoolean)
     def le(other: JblasMatrix[T]) = matrix(storage.le(other.jblas))(double2boolean, formatBoolean)
@@ -144,6 +150,13 @@ trait JblasMatrixFactory extends MatrixFactory {
 
     def columnMins() = matrix(storage.columnMins())(functionPair, format)
     def columnMaxs() = matrix(storage.columnMaxs())(functionPair, format)
+    def columnMeans() = matrix(storage.columnMeans())(functionPair, format)
+    def sortColumns() = matrix(storage.sortColumns())(functionPair, format)
+
+    def rowMins() = matrix(storage.rowMins())(functionPair, format)
+    def rowMaxs() = matrix(storage.rowMaxs())(functionPair, format)
+    def rowMeans() = matrix(storage.rowMeans())(functionPair, format)
+    def sortRows() = matrix(storage.sortRows())(functionPair, format)
 
     // in-place operations
 
@@ -196,6 +209,31 @@ trait JblasMatrixFactory extends MatrixFactory {
   def trues(m: Int, n: Int) = matrix[Boolean](DoubleMatrix.ones(m, n))
 
   // TODO: Int jblas' rand and randn should probably floor the result
+
+  // additional matrix functions
+
+  def median(m: M[Double]): M[Double] = {
+    val sorted = m.sortColumns
+    if (m.rows % 2 == 0) {
+      (sorted.row(m.rows / 2 - 1) + sorted.row(m.rows / 2)) / 2.0
+    } else {
+      sorted.row(m.rows / 2)
+    }
+  }
+
+  def centerRows(m: M[Double]): M[Double] = m.subColumnVector(m.rowMeans)
+  def centerColumns(m: M[Double]): M[Double] = m.subRowVector(m.columnMeans)
+
+  def rowRange(m: M[Double]): M[Double] = m.rowMaxs - m.rowMins
+  def columnRange(m: M[Double]): M[Double] = m.columnMaxs - m.columnMins
+
+  def sumsq(m: M[Double]): M[Double] = m.mulPointwise(m).columnSums
+
+  def cov(m: M[Double]): M[Double] = (centerColumns(m).t ⨯ centerColumns(m)) / m.columns
+
+  def std(m: M[Double]): M[Double] = matrix(1, m.columns, (sumsq(centerColumns(m)) / m.columns).toList.map(sqrt(_)).toArray)
+
+  def zscore(m: M[Double]): M[Double] = centerColumns(m).divRowVector(std(m))
 
 }
 

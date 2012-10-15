@@ -94,4 +94,13 @@ object FeatureNormalizer {
 
   }
 
+  // https://mailman.cae.wisc.edu/pipermail/help-octave/2004-May/012772.html
+  def pca3(X: M[Double]): (M[Double], M[Double], M[Double]) = {
+    val (u, d, pc) = cov(X).fullSVD
+    val z = centerColumns(X) ⨯ pc
+    val w = diag(d.t)
+    val Tsq = sumsq(zscore(z))
+    (z, w, Tsq)
+  }
+
 }
