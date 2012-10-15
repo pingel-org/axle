@@ -46,8 +46,8 @@ object FeatureNormalizer {
 
   class ZScoreFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
 
-    val μs = X.columnMeans
-    val σ2s = std(X)
+    lazy val μs = X.columnMeans
+    lazy val σ2s = std(X)
     val nd = zscore(X)
 
     def normalizedData(): M[Double] = nd
@@ -55,42 +55,30 @@ object FeatureNormalizer {
     def normalize(features: Seq[Double]): M[Double] =
       (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
 
-    def denormalize(featureRow: M[Double]): Seq[Double] = (σ2s.mulPointwise(featureRow) + μs).toList
-
+    def denormalize(featureRow: M[Double]): Seq[Double] =
+      (σ2s.mulPointwise(featureRow) + μs).toList
   }
 
   class PCAFeatureNormalizer(X: M[Double], cutoff: Double) extends FeatureNormalizer {
 
-    def truncateEigenValues(s: M[Double], cutoff: Double) = {
-      val eigenValuesSquared = s.toList.map(square(_))
-      val eigenTotal = eigenValuesSquared.sum
-      val numComponents = eigenValuesSquared.map(_ / eigenTotal).scan(0.0)(_ + _).indexWhere(cutoff<)
-      matrix(s.rows, 1, (0 until s.rows).map(r => if (r < numComponents) { s(r, 0) } else { 0.0 }).toArray)
-    }
+    lazy val μs = X.columnMeans
+    lazy val σ2s = std(X)
+    val zd = zscore(X)
 
-    val subNormalizer = new ZScoreFeatureNormalizer(X)
+    val (u, s) = pca(zd)
 
-    val zd = subNormalizer.normalizedData
+    val k = numComponentsForCutoff(s, cutoff)
 
-    val (u, s, v) = zd.fullSVD // Note: zd == u ⨯ diag(s.t) ⨯ v.t
+    val truncatedU = u.dup
+    (k until u.columns).map(c => (0 until u.rows).map(r => truncatedU(r, c) = 0.0))
 
-    val nd = u ⨯ diag(truncateEigenValues(s, cutoff).t) ⨯ v.t
+    def normalizedData(): M[Double] = zd ⨯ truncatedU
 
-    def normalizedData(): M[Double] = nd
+    def normalize(features: Seq[Double]): M[Double] =
+      (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
 
-    def normalize(features: Seq[Double]): M[Double] = subNormalizer.normalize(features)
-
-    def denormalize(featureRow: M[Double]): Seq[Double] = subNormalizer.denormalize(featureRow)
-
-  }
-
-  // https://mailman.cae.wisc.edu/pipermail/help-octave/2004-May/012772.html
-  def pca3(X: M[Double]): (M[Double], M[Double], M[Double]) = {
-    val (u, d, pc) = cov(X).fullSVD
-    val z = centerColumns(X) ⨯ pc
-    val w = diag(d.t)
-    val Tsq = sumsq(zscore(z))
-    (z, w, Tsq)
+    def denormalize(featureRow: M[Double]): Seq[Double] =
+      (σ2s.mulPointwise(featureRow) + μs).toList
   }
 
 }

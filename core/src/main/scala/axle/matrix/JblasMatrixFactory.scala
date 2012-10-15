@@ -1,6 +1,7 @@
 package axle.matrix
 
 import math.sqrt
+import axle.square
 
 // not necessarily a bijection, but related
 trait FunctionPair[A, B] {
@@ -234,6 +235,32 @@ trait JblasMatrixFactory extends MatrixFactory {
   def std(m: M[Double]): M[Double] = matrix(1, m.columns, (sumsq(centerColumns(m)) / m.columns).toList.map(sqrt(_)).toArray)
 
   def zscore(m: M[Double]): M[Double] = centerColumns(m).divRowVector(std(m))
+
+  /**
+   * Principal Component Analysis (PCA)
+   *
+   * assumes that the input matrix, Xnorm, has been normalized, in other words:
+   *   mean of each column == 0.0
+   *   stddev of each column == 1.0 (I'm not clear if this is a strict requirement)
+   *
+   * https://mailman.cae.wisc.edu/pipermail/help-octave/2004-May/012772.html
+   *
+   * @return (U, S) where U = eigenvectors and S = eigenvalues (truncated to requested cutoff)
+   *
+   */
+
+  def pca(Xnorm: M[Double], cutoff: Double = 0.95): (M[Double], M[Double]) = {
+    val (u, s, v) = cov(Xnorm).fullSVD
+    (u, s)
+  }
+
+  def numComponentsForCutoff(s: M[Double], cutoff: Double): Int = {
+    val eigenValuesSquared = s.toList.map(square(_))
+    val eigenTotal = eigenValuesSquared.sum
+    val numComponents = eigenValuesSquared.map(_ / eigenTotal).scan(0.0)(_ + _).indexWhere(cutoff<)
+    numComponents
+    // matrix(s.rows, 1, (0 until s.rows).map(r => if (r < numComponents) { s(r, 0) } else { 0.0 }).toArray)
+  }
 
 }
 
