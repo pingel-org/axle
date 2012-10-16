@@ -99,10 +99,12 @@ trait KMeans {
    * assumes that X has already been normalized
    */
 
+  // rand[Double](K, scaledX.columns)
+
   def clusterLA(scaledX: M[Double], distance: DistanceFunction, K: Int, iterations: Int, distanceLog: M[Double], countLog: M[Int]): (M[Double], M[Int]) = {
     assert(K < scaledX.rows)
     (0 until iterations).foldLeft((
-      rand[Double](K, scaledX.columns), // random initial K centroids μ in R^n (aka M)
+      scaledX(util.Random.shuffle((0 until scaledX.rows)).take(K), 0 until scaledX.columns),
       zeros[Int](scaledX.rows, 1)) // indexes of centroids closest to xi
     )((μA: (M[Double], M[Int]), i: Int) => {
       val A = assignments(distance, scaledX, μA._1, distanceLog, countLog, i) // K-element column vector
