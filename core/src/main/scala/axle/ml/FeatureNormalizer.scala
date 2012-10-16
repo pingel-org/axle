@@ -71,26 +71,25 @@ object FeatureNormalizer {
     lazy val μs = X.columnMeans
     lazy val σ2s = std(X)
     val zd = zscore(X)
-
     val (u, s) = pca(zd)
-
     val k = numComponentsForCutoff(s, cutoff)
+    val Uk = u(0 until u.rows, 0 until k)
 
-    val truncatedU = u(0 until u.rows, 0 until k)
-
-    val truncatedSigmas = σ2s ⨯ truncatedU
-    val truncatedMeans = μs ⨯ truncatedU
-
-    def normalizedData(): M[Double] = zd ⨯ truncatedU
+    def normalizedData(): M[Double] = zd ⨯ Uk
 
     def normalize(features: Seq[Double]): M[Double] =
-      (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) ⨯ truncatedU
+      (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) ⨯ Uk
 
-    // Afaik, there's no meaningful way to incorporate the result of the SVD during denormalize
     def denormalize(featureRow: M[Double]): Seq[Double] =
-      (truncatedSigmas.mulPointwise(featureRow) + truncatedMeans).toList
+      ((featureRow ⨯ Uk.t).divPointwise(σ2s) + μs).toList
 
-    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ truncatedU
+    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ Uk
+
+    // (truncatedSigmas.mulPointwise(featureRow) + truncatedMeans).toList
+    // val truncatedSigmas = σ2s ⨯ Uk
+    // val truncatedMeans = μs ⨯ Uk
+    // ns = (fs - μs) .* σ2s ⨯ Uk
+    // (ns ⨯ Uk') ./ σ2s + μs  = fs 
   }
 
 }
