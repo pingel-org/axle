@@ -30,6 +30,7 @@ class KMeansSpecification extends Specification {
         data, 2,
         (p: Foo) => List(p.x, p.y),
         (features: Seq[Double]) => Foo(features(0), features(1)),
+        DistanceFunction.EuclideanDistanceFunction,
         3,
         100)
 
