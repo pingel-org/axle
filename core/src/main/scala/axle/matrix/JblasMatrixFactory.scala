@@ -61,11 +61,11 @@ trait JblasMatrixFactory extends MatrixFactory {
     def length() = storage.length
 
     def apply(i: Int, j: Int): T = functionPair.forward(storage.get(i, j))
-    def apply(rowRange: Range, colRange: Range): M[T] = {
-      val result = zeros[T](rowRange.length, colRange.length)(functionPair, format)
+    def apply(rs: Seq[Int], cs: Seq[Int]): M[T] = {
+      val result = zeros[T](rs.length, cs.length)(functionPair, format)
       for {
-        (fromRow, toRow) <- rowRange.zipWithIndex
-        (fromCol, toCol) <- colRange.zipWithIndex
+        (fromRow, toRow) <- rs.zipWithIndex
+        (fromCol, toCol) <- cs.zipWithIndex
       } yield {
         result(toRow, toCol) = this(fromRow, fromCol)
       }
