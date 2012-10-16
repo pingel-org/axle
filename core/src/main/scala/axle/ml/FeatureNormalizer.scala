@@ -73,8 +73,9 @@ object FeatureNormalizer {
     def normalizedData(): M[Double] = zd ⨯ truncatedU
 
     def normalize(features: Seq[Double]): M[Double] =
-      (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
+      (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) ⨯ truncatedU
 
+    // Afaik, there's no meaningful way to incorporate the result of the SVD during denormalize
     def denormalize(featureRow: M[Double]): Seq[Double] =
       (σ2s.mulPointwise(featureRow) + μs).toList
   }
