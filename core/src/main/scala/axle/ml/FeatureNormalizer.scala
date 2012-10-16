@@ -78,6 +78,9 @@ object FeatureNormalizer {
 
     val truncatedU = u(0 until u.rows, 0 until k)
 
+    val truncatedSigmas = σ2s ⨯ truncatedU
+    val truncatedMeans = μs ⨯ truncatedU
+
     def normalizedData(): M[Double] = zd ⨯ truncatedU
 
     def normalize(features: Seq[Double]): M[Double] =
@@ -85,7 +88,7 @@ object FeatureNormalizer {
 
     // Afaik, there's no meaningful way to incorporate the result of the SVD during denormalize
     def denormalize(featureRow: M[Double]): Seq[Double] =
-      (σ2s.mulPointwise(featureRow) + μs).toList
+      (truncatedSigmas.mulPointwise(featureRow) + truncatedMeans).toList
 
     def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ truncatedU
   }
