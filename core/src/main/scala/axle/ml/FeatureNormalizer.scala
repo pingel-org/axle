@@ -15,6 +15,8 @@ object FeatureNormalizer {
     def normalize(featureList: Seq[Double]): M[Double]
 
     def denormalize(featureRow: M[Double]): Seq[Double]
+
+    def random(): M[Double]
   }
 
   class IdentityFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
@@ -26,6 +28,8 @@ object FeatureNormalizer {
 
     def denormalize(featureRow: M[Double]): Seq[Double] =
       featureRow.toList
+
+    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
   }
 
   class LinearFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
@@ -41,6 +45,8 @@ object FeatureNormalizer {
 
     def denormalize(featureRow: M[Double]): Seq[Double] =
       (featureRow.mulPointwise(colRanges) + colMins).toList
+
+    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray).mulPointwise(colRanges) + colMins
   }
 
   class ZScoreFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
@@ -56,6 +62,8 @@ object FeatureNormalizer {
 
     def denormalize(featureRow: M[Double]): Seq[Double] =
       (σ2s.mulPointwise(featureRow) + μs).toList
+
+    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
   }
 
   class PCAFeatureNormalizer(X: M[Double], cutoff: Double) extends FeatureNormalizer {
@@ -78,6 +86,8 @@ object FeatureNormalizer {
     // Afaik, there's no meaningful way to incorporate the result of the SVD during denormalize
     def denormalize(featureRow: M[Double]): Seq[Double] =
       (σ2s.mulPointwise(featureRow) + μs).toList
+
+    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ truncatedU
   }
 
 }
