@@ -61,6 +61,16 @@ trait JblasMatrixFactory extends MatrixFactory {
     def length() = storage.length
 
     def apply(i: Int, j: Int): T = functionPair.forward(storage.get(i, j))
+    def apply(rowRange: Range, colRange: Range): M[T] = {
+      val result = zeros[T](rowRange.length, colRange.length)(functionPair, format)
+      for {
+        (fromRow, toRow) <- rowRange.zipWithIndex
+        (fromCol, toCol) <- colRange.zipWithIndex
+      } yield {
+        result(toRow, toCol) = this(fromRow, fromCol)
+      }
+      result
+    }
     def update(i: Int, j: Int, v: T) = storage.put(i, j, functionPair.backward(v))
 
     def toList(): List[T] = storage.toArray.toList.map(functionPair.forward(_))
@@ -243,6 +253,8 @@ trait JblasMatrixFactory extends MatrixFactory {
    *   mean of each column == 0.0
    *   stddev of each column == 1.0 (I'm not clear if this is a strict requirement)
    *
+   * http://folk.uio.no/henninri/pca_module/
+   * http://public.lanl.gov/mewall/kluwer2002.html
    * https://mailman.cae.wisc.edu/pipermail/help-octave/2004-May/012772.html
    *
    * @return (U, S) where U = eigenvectors and S = eigenvalues (truncated to requested cutoff)
