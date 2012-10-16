@@ -25,7 +25,7 @@ object FeatureNormalizer {
       matrix(1, featureList.length, featureList.toArray)
 
     def denormalize(featureRow: M[Double]): Seq[Double] =
-      (0 until featureRow.length).map(c => featureRow(0, c))
+      featureRow.toList
   }
 
   class LinearFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
@@ -41,7 +41,6 @@ object FeatureNormalizer {
 
     def denormalize(featureRow: M[Double]): Seq[Double] =
       (featureRow.mulPointwise(colRanges) + colMins).toList
-
   }
 
   class ZScoreFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
@@ -69,8 +68,7 @@ object FeatureNormalizer {
 
     val k = numComponentsForCutoff(s, cutoff)
 
-    val truncatedU = u.dup
-    (k until u.columns).map(c => (0 until u.rows).map(r => truncatedU(r, c) = 0.0))
+    val truncatedU = u(0 until u.rows, 0 until k)
 
     def normalizedData(): M[Double] = zd ⨯ truncatedU
 
