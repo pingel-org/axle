@@ -14,6 +14,8 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
 
   type M[T] = ArrayMatrix[T]
 
+  type E[T] = Unit
+  
   class ArrayMatrixImpl[T: ClassManifest](_storage: Array[T], nRows: Int, nColumns: Int) extends ArrayMatrix[T] {
 
     def storage = _storage
@@ -135,9 +137,8 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     type S = Array[T]
 
     def toList(): List[T]
-
   }
-
+  
   def matrix[T: ClassManifest](arr: Array[T], r: Int, c: Int): ArrayMatrix[T] = new ArrayMatrixImpl(arr, r, c)
 
   def matrix[T: ClassManifest](r: Int, c: Int, default: T): ArrayMatrix[T] = {
@@ -147,4 +148,8 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     matrix(arr, r, c)
   }
 
+  def zeros[T](m: Int, n: Int)(implicit elementAdapter: E[T]): M[T] = null // TODO
+  
+  def matrix[T](r: Int, c: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T] = null // TODO
+  
 }

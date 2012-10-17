@@ -21,7 +21,7 @@ object DistanceFunction {
   }
 
   object ManhattanDistanceFunction extends DistanceFunction {
-    def apply(r1: M[Double], r2: M[Double]): Double = (r1 - r2).toList.map(abs(_)).sum
+    def apply(r1: M[Double], r2: M[Double]): Double = (r1 - r2).map(abs(_)).toList.sum
   }
 
   object CosineDistanceFunction extends DistanceFunction {

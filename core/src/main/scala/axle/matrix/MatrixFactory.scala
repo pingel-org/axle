@@ -1,9 +1,11 @@
 package axle.matrix
 
-object MatrixFactory extends MatrixFactory()
+// object MatrixFactory extends MatrixFactory()
 
 trait MatrixFactory {
 
+  factory =>
+  
   /**
    * Type Parameters:
    *
@@ -14,12 +16,14 @@ trait MatrixFactory {
 
   type M[T] <: Matrix[T]
 
+  type E[T] // element adapter
+  
   trait Matrix[T] {
 
     type S
 
     def storage: S
-    
+
     def rows: Int
     def columns: Int
     def length: Int
@@ -27,7 +31,7 @@ trait MatrixFactory {
     def apply(i: Int, j: Int): T
     def update(i: Int, j: Int, v: T): Unit
     def toList(): List[T]
-    
+
     def column(j: Int): M[T]
     def row(i: Int): M[T]
 
@@ -104,6 +108,25 @@ trait MatrixFactory {
     def columnMaxs(): M[T]
     // def columnArgmaxs
 
+    // Higher-order methods
+
+    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = {
+      val result = factory.zeros[B](this.rows, this.columns)(elementAdapter)
+      for {
+        r <- (0 until this.rows)
+        c <- (0 until this.columns)
+      } yield {
+        result(r, c) = f(this(r, c))
+      }
+      result
+    }
+
+    def foldLeft[A](zero: M[A])(f: (M[A], M[T]) => M[A])(implicit elementAdapter: E[A]): M[A] =
+      (0 until this.columns).foldLeft(zero)((m: M[A], c: Int) => f(m, this.column(c)))
+
+    def foldTop[A](zero: M[A])(f: (M[A], M[T]) => M[A])(implicit elementAdapter: E[A]): M[A] =
+      (0 until this.rows).foldLeft(zero)((m: M[A], r: Int) => f(m, this.row(r)))
+
     // In-place versions
 
     def ceili(): Unit
@@ -175,4 +198,8 @@ trait MatrixFactory {
 
   }
 
+  def zeros[T](m: Int, n: Int)(implicit elementAdapter: E[T]): M[T]
+  
+  def matrix[T](r: Int, c: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T]
+  
 }
