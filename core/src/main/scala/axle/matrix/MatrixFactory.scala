@@ -111,12 +111,14 @@ trait MatrixFactory {
 
     def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B]
 
+    def flatMapColumns[A](f: M[T] => M[A])(implicit elementAdapter: E[A]): M[A]
+    
     def foldLeft[A](zero: M[A])(f: (M[A], M[T]) => M[A])(implicit elementAdapter: E[A]): M[A] =
-      (0 until this.columns).foldLeft(zero)((m: M[A], c: Int) => f(m, this.column(c)))
+      (0 until columns).foldLeft(zero)((m: M[A], c: Int) => f(m, column(c)))
 
     def foldTop[A](zero: M[A])(f: (M[A], M[T]) => M[A])(implicit elementAdapter: E[A]): M[A] =
-      (0 until this.rows).foldLeft(zero)((m: M[A], r: Int) => f(m, this.row(r)))
-     
+      (0 until rows).foldLeft(zero)((m: M[A], r: Int) => f(m, row(r)))
+
     // In-place versions
 
 //    def ceili(): Unit

@@ -126,6 +126,8 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = null // TODO
       // matrix(rows, columns, storage.map(f(_)))
 
+    def flatMapColumns[A](f: M[T] => M[A])(implicit elementAdapter: E[A]): M[A] = null // TODO
+    
   }
 
   trait ArrayMatrix[T] extends Matrix[T] {

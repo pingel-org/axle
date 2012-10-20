@@ -120,8 +120,8 @@ trait KMeans {
 
   def centroids(X: M[Double], K: Int, assignments: M[Int]): M[Double] = {
     val A = matrix(X.rows, K, (r: Int, c: Int) => if (c == assignments(r, 0)) 1.0 else 0.0)
-    val distances = A.t ⨯ X
-    val counts = A.columnSums.t
+    val distances = A.t ⨯ X     // K x N
+    val counts = A.columnSums.t // K x 1
     distances.divColumnVector(counts) // TODO: handle zeroes
   }
 

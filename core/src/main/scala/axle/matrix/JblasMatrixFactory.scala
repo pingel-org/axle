@@ -73,7 +73,7 @@ trait JblasMatrixFactory extends MatrixFactory {
     def length() = storage.length
 
     def apply(i: Int, j: Int): T = elementAdapter.fp.forward(storage.get(i, j))
-    
+
     def apply(rs: Seq[Int], cs: Seq[Int]): M[T] = {
       val jblas = DoubleMatrix.zeros(rs.length, cs.length)
       import elementAdapter.fp._
@@ -141,13 +141,13 @@ trait JblasMatrixFactory extends MatrixFactory {
     def solve(B: JblasMatrix[T]) = matrix(org.jblas.Solve.solve(storage, B.jblas))(elementAdapter)
 
     def addRowVector(row: JblasMatrix[T]) = matrix(storage.addRowVector(row.jblas))(elementAdapter)
-    def addColumnVector(column: JblasMatrix[T]) = matrix(storage.addRowVector(column.jblas))(elementAdapter)
+    def addColumnVector(column: JblasMatrix[T]) = matrix(storage.addColumnVector(column.jblas))(elementAdapter)
     def subRowVector(row: JblasMatrix[T]) = matrix(storage.subRowVector(row.jblas))(elementAdapter)
-    def subColumnVector(column: JblasMatrix[T]) = matrix(storage.subRowVector(column.jblas))(elementAdapter)
+    def subColumnVector(column: JblasMatrix[T]) = matrix(storage.subColumnVector(column.jblas))(elementAdapter)
     def mulRowVector(row: JblasMatrix[T]) = matrix(storage.mulRowVector(row.jblas))(elementAdapter)
-    def mulColumnVector(column: JblasMatrix[T]) = matrix(storage.mulRowVector(column.jblas))(elementAdapter)
+    def mulColumnVector(column: JblasMatrix[T]) = matrix(storage.mulColumnVector(column.jblas))(elementAdapter)
     def divRowVector(row: JblasMatrix[T]) = matrix(storage.divRowVector(row.jblas))(elementAdapter)
-    def divColumnVector(column: JblasMatrix[T]) = matrix(storage.divRowVector(column.jblas))(elementAdapter)
+    def divColumnVector(column: JblasMatrix[T]) = matrix(storage.divColumnVector(column.jblas))(elementAdapter)
 
     def lt(other: JblasMatrix[T]) = matrix(storage.lt(other.jblas))(elementAdapterBoolean)
     def le(other: JblasMatrix[T]) = matrix(storage.le(other.jblas))(elementAdapterBoolean)
@@ -211,15 +211,31 @@ trait JblasMatrixFactory extends MatrixFactory {
     // higher order methods
 
     def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = {
-      val jblas = DoubleMatrix.zeros(this.rows, this.columns)
+      val jblas = DoubleMatrix.zeros(rows, columns)
       import elementAdapter.fp._
       for {
-        r <- (0 until this.rows)
-        c <- (0 until this.columns)
+        r <- 0 until rows
+        c <- 0 until columns
       } yield {
         jblas.put(r, c, backward(f(this(r, c))))
       }
       matrix[B](jblas)
+    }
+
+    def flatMapColumns[A](f: M[T] => M[A])(implicit elementAdapter: E[A]): M[A] = {
+      val jblas = DoubleMatrix.zeros(rows, columns)
+      import elementAdapter.fp._
+      for {
+        c <- 0 until columns
+      } yield {
+        val fc = f(column(c))
+        for {
+          r <- (0 until rows) // assumes fc.rows == this.rows
+        } yield {
+          jblas.put(r, c, backward(fc(r, 0)))
+        }
+      }
+      matrix[A](jblas)
     }
 
     override def toString() =
