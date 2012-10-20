@@ -13,24 +13,22 @@ trait LogisticRegression {
   // h is essentially P(y=1 | X;θ)
   def h(xi: M[Double], θ: M[Double]) = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
 
-  def cost(xi: M[Double], θ: M[Double], yi: Boolean) = -1 * log(yi match {
-    case true => h(θ, xi)
-    case false => 1 - h(θ, xi)
+  def cost(xi: M[Double], θ: M[Double], yi: Boolean) = -1 * log(if (yi) {
+    h(θ, xi)
+  } else {
+    1 - h(θ, xi)
   })
 
-  def predictedY(xi: M[Double], θ: M[Double]) = h(xi, θ) >= 0.5
+  def predictedY(xi: M[Double], θ: M[Double]): Boolean = h(xi, θ) >= 0.5
 
   def Jθ(X: M[Double], θ: M[Double], y: M[Boolean]) = (0 until X.rows)
     .foldLeft(0.0)((r: Double, i: Int) => r + cost(X.row(i), θ, y(i, 0))) / X.rows
 
-  def dθ(X: M[Double], y: M[Boolean], θ: M[Double]) = {
-    val result = zeros[Double](θ.rows, 1)
-    (0 until θ.rows).map(j => result(j, 0) = (0 until X.rows).foldLeft(0.0)(
-      (r: Double, i: Int) => {
-        val yi = y(i, 0) match { case true => 1.0 case false => 0.0 }
-        r + (h(X.row(i), θ) - yi) * X(i, j)
-      }))
-    result
+  def dθ(X: M[Double], y: M[Boolean], θ: M[Double]): M[Double] = {
+    val yd = y.map(_ match { case true => 1.0 case false => 0.0 })
+    matrix(θ.rows, 1, (r: Int, c: Int) => {
+      (0 until X.rows).map(i => (h(X.row(i), θ) - yd(i, 0)) * X(i, r)).sum
+    })
   }
 
   // objective: minimize (over θ) the value of Jθ

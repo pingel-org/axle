@@ -15,14 +15,11 @@ object Levenshtein extends EditDistance {
     val lenStr1 = s1.length
     val lenStr2 = s2.length
 
-    val d = zeros[Int](lenStr1 + 1, lenStr2 + 1)
-
-    for (i <- 0 to lenStr1) d(i, 0) = i
-    for (j <- 0 to lenStr2) d(0, j) = j
-
-    for (i <- 1 to lenStr1; j <- 1 to lenStr2) {
-      d(i, j) = min(d(i - 1, j) + 1, d(i, j - 1) + 1, d(i - 1, j - 1) + (if (s1(i - 1) == s2(j - 1)) 0 else 1))
-    }
+    val d = matrix(lenStr1 + 1, lenStr2 + 1,
+      0,
+      (r: Int) => r,
+      (c: Int) => c,
+      (r: Int, c: Int, diag: Int, left: Int, top: Int) => min(left + 1, top + 1, diag + (if (s1(r - 1) == s2(c - 1)) 0 else 1)))
 
     d(lenStr1, lenStr2)
   }

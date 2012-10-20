@@ -12,10 +12,12 @@ object ArrayMatrixFactory extends ArrayMatrixFactory {}
 
 abstract class ArrayMatrixFactory extends MatrixFactory {
 
+  factory =>
+
   type M[T] = ArrayMatrix[T]
 
   type E[T] = Unit
-  
+
   class ArrayMatrixImpl[T: ClassManifest](_storage: Array[T], nRows: Int, nColumns: Int) extends ArrayMatrix[T] {
 
     def storage = _storage
@@ -25,24 +27,12 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def length = storage.length
 
     def apply(r: Int, c: Int): T = _storage(r * nColumns + c)
-    def update(r: Int, c: Int, v: T) = _storage(r * nColumns + c) = v
+    // def updat(r: Int, c: Int, v: T) = _storage(r * nColumns + c) = v
     def toList(): List[T] = _storage.toList
 
-    def column(c: Int) = {
-      val result = matrix(new Array[T](nRows), nRows, 1)
-      for (r <- 0 until nRows) {
-    	  result(r, 0) = this(r, c)
-      }
-      result
-    }
+    def column(c: Int) = matrix((0 until nRows).map(this(_, c)).toArray, nRows, 1)
 
-    def row(r: Int) = {
-      val result = matrix(new Array[T](nColumns), 1, nColumns)
-      for (c <- 0 until nColumns) {
-        result(0, c) = this(r, c)
-      }
-      result
-    }
+    def row(r: Int) = matrix((0 until nColumns).map(this(r, _)).toArray, 1, nColumns)
 
     def isEmpty(): Boolean = false // TODO
     def isRowVector(): Boolean = columns == 1
@@ -65,6 +55,7 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def pow(p: Double): M[T] = null // TODO
 
     def addScalar(x: T): M[T] = null // TODO
+    def addAssignment(r: Int, c: Int, v: T): M[T] = null // TODO
     def subtractScalar(x: T): M[T] = null // TODO
     def multiplyScalar(x: T): M[T] = null // TODO
     def divideScalar(x: T): M[T] = null // TODO
@@ -130,6 +121,11 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def subiRowVector(row: M[T]): Unit = {} // TODO
     def subiColumnVector(column: M[T]): Unit = {} // TODO
 
+    // higher order fuctions
+
+    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = null // TODO
+      // matrix(rows, columns, storage.map(f(_)))
+
   }
 
   trait ArrayMatrix[T] extends Matrix[T] {
@@ -138,7 +134,7 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
 
     def toList(): List[T]
   }
-  
+
   def matrix[T: ClassManifest](arr: Array[T], r: Int, c: Int): ArrayMatrix[T] = new ArrayMatrixImpl(arr, r, c)
 
   def matrix[T: ClassManifest](r: Int, c: Int, default: T): ArrayMatrix[T] = {
@@ -149,7 +145,11 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
   }
 
   def zeros[T](m: Int, n: Int)(implicit elementAdapter: E[T]): M[T] = null // TODO
-  
-  def matrix[T](r: Int, c: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T] = null // TODO
-  
+
+  def matrix[T](m: Int, n: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T] = null // TODO
+
+  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit elementAdapter: E[T]): M[T] = null // TODO
+
+  def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit elementAdapter: E[T]): M[T] = null // TODO
+
 }

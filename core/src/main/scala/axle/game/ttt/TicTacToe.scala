@@ -110,8 +110,8 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
     def apply(position: Int) = board(positionToRow(position), positionToColumn(position))
 
     // The validation in InteractiveTicTacToePlayer.chooseMove might be better placed here
-    def update(position: Int, player: TicTacToePlayer) =
-      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
+//    def updat(position: Int, player: TicTacToePlayer) =
+//      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
     def hasWonRow(player: TicTacToePlayer) =
       (0 until boardSize).exists(board.row(_).toList.forall(_ equals Some(player.id)))
@@ -139,9 +139,8 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
     }
 
     def apply(move: TicTacToeMove): TicTacToeState = {
-      val resultBoard = board.dup
-      resultBoard(positionToRow(move.position), positionToColumn(move.position)) = Some(player.id)
-      ttt.state(ttt.playerAfter(move.tttPlayer), resultBoard)
+      val rc2v = (positionToRow(move.position), positionToColumn(move.position)) -> Some(player.id)
+      ttt.state(ttt.playerAfter(move.tttPlayer), board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player.id)))
     }
 
   }

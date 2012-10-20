@@ -17,6 +17,8 @@ object JblasMatrixFactory extends JblasMatrixFactory {
 
 trait JblasMatrixFactory extends MatrixFactory {
 
+  factory =>
+
   case class JblasElementAdapter[I](fp: FunctionPair[Double, I], format: I => String)
 
   implicit val double2double = new FunctionPair[Double, Double] {
@@ -71,17 +73,19 @@ trait JblasMatrixFactory extends MatrixFactory {
     def length() = storage.length
 
     def apply(i: Int, j: Int): T = elementAdapter.fp.forward(storage.get(i, j))
+    
     def apply(rs: Seq[Int], cs: Seq[Int]): M[T] = {
-      val result = zeros[T](rs.length, cs.length)(elementAdapter)
+      val jblas = DoubleMatrix.zeros(rs.length, cs.length)
+      import elementAdapter.fp._
       for {
         (fromRow, toRow) <- rs.zipWithIndex
         (fromCol, toCol) <- cs.zipWithIndex
       } yield {
-        result(toRow, toCol) = this(fromRow, fromCol)
+        jblas.put(toRow, toCol, backward(this(fromRow, fromCol)))
       }
-      result
+      matrix[T](jblas)(elementAdapter)
     }
-    def update(i: Int, j: Int, v: T) = storage.put(i, j, elementAdapter.fp.backward(v))
+    // def update(i: Int, j: Int, v: T) = storage.put(i, j, elementAdapter.fp.backward(v))
 
     def toList(): List[T] = storage.toArray.toList.map(elementAdapter.fp.forward(_))
 
@@ -111,6 +115,12 @@ trait JblasMatrixFactory extends MatrixFactory {
     }
 
     def addScalar(x: T) = matrix(storage.add(elementAdapter.fp.backward(x)))(elementAdapter)
+    def addAssignment(r: Int, c: Int, v: T): M[T] = {
+      val jblas = storage.dup()
+      import elementAdapter.fp._
+      jblas.put(r, c, backward(v))
+      matrix(jblas)(elementAdapter)
+    }
     def subtractScalar(x: T) = matrix(storage.sub(elementAdapter.fp.backward(x)))(elementAdapter)
     def multiplyScalar(x: T) = matrix(storage.mul(elementAdapter.fp.backward(x)))(elementAdapter)
     def divideScalar(x: T) = matrix(storage.div(elementAdapter.fp.backward(x)))(elementAdapter)
@@ -181,22 +191,36 @@ trait JblasMatrixFactory extends MatrixFactory {
 
     // in-place operations
 
-    def addi(x: T) = storage.addi(elementAdapter.fp.backward(x))
-    def subtracti(x: T) = storage.subi(elementAdapter.fp.backward(x))
-    def multiplyi(x: T) = storage.muli(elementAdapter.fp.backward(x))
-    def matrixMultiplyi(x: T) = storage.mmuli(elementAdapter.fp.backward(x))
-    def dividei(x: T) = storage.divi(elementAdapter.fp.backward(x))
-    def ceili() = org.jblas.MatrixFunctions.ceili(storage)
-    def floori() = org.jblas.MatrixFunctions.floori(storage)
-    def logi() = org.jblas.MatrixFunctions.logi(storage)
-    def log10i() = org.jblas.MatrixFunctions.log10i(storage)
-    def powi(p: Double) = org.jblas.MatrixFunctions.powi(storage, p)
-    def addMatrixi(other: JblasMatrix[T]) = storage.addi(other.jblas)
-    def subtractMatrixi(other: JblasMatrix[T]) = storage.subi(other.jblas)
-    def addiRowVector(row: JblasMatrix[T]) = storage.addiRowVector(row.jblas)
-    def addiColumnVector(column: JblasMatrix[T]) = storage.addiColumnVector(column.jblas)
-    def subiRowVector(row: JblasMatrix[T]) = storage.subiRowVector(row.jblas)
-    def subiColumnVector(column: JblasMatrix[T]) = storage.subiColumnVector(column.jblas)
+    //    def addi(x: T) = storage.addi(elementAdapter.fp.backward(x))
+    //    def subtracti(x: T) = storage.subi(elementAdapter.fp.backward(x))
+    //    def multiplyi(x: T) = storage.muli(elementAdapter.fp.backward(x))
+    //    def matrixMultiplyi(x: T) = storage.mmuli(elementAdapter.fp.backward(x))
+    //    def dividei(x: T) = storage.divi(elementAdapter.fp.backward(x))
+    //    def ceili() = org.jblas.MatrixFunctions.ceili(storage)
+    //    def floori() = org.jblas.MatrixFunctions.floori(storage)
+    //    def logi() = org.jblas.MatrixFunctions.logi(storage)
+    //    def log10i() = org.jblas.MatrixFunctions.log10i(storage)
+    //    def powi(p: Double) = org.jblas.MatrixFunctions.powi(storage, p)
+    //    def addMatrixi(other: JblasMatrix[T]) = storage.addi(other.jblas)
+    //    def subtractMatrixi(other: JblasMatrix[T]) = storage.subi(other.jblas)
+    //    def addiRowVector(row: JblasMatrix[T]) = storage.addiRowVector(row.jblas)
+    //    def addiColumnVector(column: JblasMatrix[T]) = storage.addiColumnVector(column.jblas)
+    //    def subiRowVector(row: JblasMatrix[T]) = storage.subiRowVector(row.jblas)
+    //    def subiColumnVector(column: JblasMatrix[T]) = storage.subiColumnVector(column.jblas)
+
+    // higher order methods
+
+    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = {
+      val jblas = DoubleMatrix.zeros(this.rows, this.columns)
+      import elementAdapter.fp._
+      for {
+        r <- (0 until this.rows)
+        c <- (0 until this.columns)
+      } yield {
+        jblas.put(r, c, backward(f(this(r, c))))
+      }
+      matrix[B](jblas)
+    }
 
     override def toString() =
       (0 until rows).map(i => (0 until columns).map(j => elementAdapter.format(elementAdapter.fp.forward(storage.get(i, j)))).mkString(" ")).mkString("\n")
@@ -213,6 +237,36 @@ trait JblasMatrixFactory extends MatrixFactory {
     val jblas = new org.jblas.DoubleMatrix(values.map(elementAdapter.fp.backward(_)))
     jblas.reshape(r, c)
     matrix[T](jblas)(elementAdapter)
+  }
+
+  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit elementAdapter: E[T]): M[T] = {
+    val jblas = DoubleMatrix.zeros(m, n)
+    import elementAdapter.fp._
+    jblas.put(0, 0, backward(topleft))
+    (0 until m).map(r => jblas.put(r, 0, backward(left(r))))
+    (0 until n).map(c => jblas.put(0, c, backward(top(c))))
+    for {
+      r <- 1 until m
+      c <- 1 until n
+    } yield {
+      val diag = forward(jblas.get(r - 1, c - 1))
+      val left = forward(jblas.get(r, c - 1))
+      val right = forward(jblas.get(r - 1, c))
+      jblas.put(r, c, backward(fill(r, c, diag, left, right)))
+    }
+    matrix[T](jblas)
+  }
+
+  def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit elementAdapter: E[T]): M[T] = {
+    val jblas = DoubleMatrix.zeros(m, n)
+    import elementAdapter.fp._
+    for {
+      r <- 0 until m
+      c <- 0 until n
+    } yield {
+      jblas.put(r, c, backward(f(r, c)))
+    }
+    matrix[T](jblas)
   }
 
   def diag[T](row: JblasMatrix[T])(implicit elementAdapter: E[T]): JblasMatrix[T] = {

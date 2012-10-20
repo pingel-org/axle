@@ -1,7 +1,5 @@
 package axle.matrix
 
-// object MatrixFactory extends MatrixFactory()
-
 trait MatrixFactory {
 
   factory =>
@@ -29,7 +27,7 @@ trait MatrixFactory {
     def length: Int
 
     def apply(i: Int, j: Int): T
-    def update(i: Int, j: Int, v: T): Unit
+    // def update(i: Int, j: Int, v: T): Unit
     def toList(): List[T]
 
     def column(j: Int): M[T]
@@ -59,6 +57,7 @@ trait MatrixFactory {
     def pow(p: Double): M[T]
 
     def addScalar(x: T): M[T]
+    def addAssignment(r: Int, c: Int, v: T): M[T]
     def subtractScalar(x: T): M[T]
     def multiplyScalar(x: T): M[T]
     def divideScalar(x: T): M[T]
@@ -110,40 +109,29 @@ trait MatrixFactory {
 
     // Higher-order methods
 
-    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = {
-      val result = factory.zeros[B](this.rows, this.columns)(elementAdapter)
-      for {
-        r <- (0 until this.rows)
-        c <- (0 until this.columns)
-      } yield {
-        result(r, c) = f(this(r, c))
-      }
-      result
-    }
+    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B]
 
     def foldLeft[A](zero: M[A])(f: (M[A], M[T]) => M[A])(implicit elementAdapter: E[A]): M[A] =
       (0 until this.columns).foldLeft(zero)((m: M[A], c: Int) => f(m, this.column(c)))
 
     def foldTop[A](zero: M[A])(f: (M[A], M[T]) => M[A])(implicit elementAdapter: E[A]): M[A] =
       (0 until this.rows).foldLeft(zero)((m: M[A], r: Int) => f(m, this.row(r)))
-
+     
     // In-place versions
 
-    def ceili(): Unit
-    def floori(): Unit
-    def powi(p: Double): Unit
-
-    def addi(x: T): Unit
-    def subtracti(x: T): Unit
-    def multiplyi(x: T): Unit
-    def dividei(x: T): Unit
-
-    def addMatrixi(other: M[T]): Unit
-    def subtractMatrixi(other: M[T]): Unit
-    def addiRowVector(row: M[T]): Unit
-    def addiColumnVector(column: M[T]): Unit
-    def subiRowVector(row: M[T]): Unit
-    def subiColumnVector(column: M[T]): Unit
+//    def ceili(): Unit
+//    def floori(): Unit
+//    def powi(p: Double): Unit
+//    def addi(x: T): Unit
+//    def subtracti(x: T): Unit
+//    def multiplyi(x: T): Unit
+//    def dividei(x: T): Unit
+//    def addMatrixi(other: M[T]): Unit
+//    def subtractMatrixi(other: M[T]): Unit
+//    def addiRowVector(row: M[T]): Unit
+//    def addiColumnVector(column: M[T]): Unit
+//    def subiRowVector(row: M[T]): Unit
+//    def subiColumnVector(column: M[T]): Unit
 
     // aliases
 
@@ -157,25 +145,28 @@ trait MatrixFactory {
     }
 
     def +(x: T) = addScalar(x)
-    def +=(x: T) = addi(x)
+    // def +=(x: T) = addi(x)
     def +(other: M[T]) = addMatrix(other)
-    def +=(other: M[T]) = addMatrixi(other)
+    // def +=(other: M[T]) = addMatrixi(other)
+    def +(rc2v: ((Int, Int), T)) = addAssignment(rc2v._1._1, rc2v._1._2, rc2v._2)
 
     def -(x: T) = subtractScalar(x)
-    def -=(x: T) = subtracti(x)
+    // def -=(x: T) = subtracti(x)
     def -(other: M[T]) = subtractMatrix(other)
-    def -=(other: M[T]) = subtractMatrixi(other)
+    // def -=(other: M[T]) = subtractMatrixi(other)
 
     def *(x: T) = multiplyScalar(x)
-    def *=(x: T) = multiplyi(x)
+    // def *=(x: T) = multiplyi(x)
     def ⨯(other: M[T]) = multiplyMatrix(other)
     def mm(other: M[T]) = multiplyMatrix(other)
 
     def /(x: T) = divideScalar(x)
-    def /=(x: T) = dividei(x)
+    // def /=(x: T) = dividei(x)
 
     def +|+(right: M[T]) = concatenateHorizontally(right)
     def +/+(under: M[T]) = concatenateVertically(under)
+    def aside(right: M[T]) = concatenateHorizontally(right)
+    def atop(under: M[T]) = concatenateVertically(under)
 
     def <(other: M[T]) = lt(other)
     def <=(other: M[T]) = le(other)
@@ -200,6 +191,10 @@ trait MatrixFactory {
 
   def zeros[T](m: Int, n: Int)(implicit elementAdapter: E[T]): M[T]
   
-  def matrix[T](r: Int, c: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T]
+  def matrix[T](m: Int, n: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T]
+
+  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit elementAdapter: E[T]): M[T]
+
+  def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit elementAdapter: E[T]): M[T]
   
 }

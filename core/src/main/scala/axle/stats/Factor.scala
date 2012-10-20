@@ -1,6 +1,6 @@
 package axle.stats
 
-import axle._
+// import axle._
 import axle.IndexedCrossProduct
 import axle.matrix.JblasMatrixFactory._
 import collection._
@@ -110,23 +110,13 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
     )
 
   def tally[A, B](a: RandomVariable[A], b: RandomVariable[B]): Matrix[Double] = {
-    val aValues = a.values.getOrElse(Nil).toList
-    val bValues = b.values.getOrElse(Nil).toList
-    val tally = zeros[Double](aValues.size, bValues.size)
-    aValues.zipWithIndex.map({
-      case (aVal, r) => {
-        bValues.zipWithIndex.map({
-          case (bVal, c) => {
-            for (m <- cases()) {
-              if (isSupersetOf(m, List(a eq aVal, b eq bVal))) {
-                tally(r, c) += this(m)
-              }
-            }
-          }
-        })
-      }
-    })
-    tally
+    val aValues = a.values.getOrElse(Nil).toIndexedSeq
+    val bValues = b.values.getOrElse(Nil).toIndexedSeq
+    matrix[Double](
+      aValues.size,
+      bValues.size,
+      (r: Int, c: Int) => cases().filter(isSupersetOf(_, List(a eq aValues(r), b eq bValues(c)))).map(this(_)).sum
+    )
   }
 
   def Σ[T](varToSumOut: RandomVariable[T]): Factor = sumOut(varToSumOut)

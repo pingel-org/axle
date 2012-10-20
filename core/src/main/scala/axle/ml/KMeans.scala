@@ -38,19 +38,18 @@ trait KMeans {
     K: Int,
     iterations: Int): KMeansClassifier[T] = {
 
-    val features = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
-    val distanceLog = zeros[Double](K, iterations)
-    val countLog = zeros[Int](K, iterations)
+    val X = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
 
-    // val normalizer = new LinearFeatureNormalizer(features)
-    // val normalizer = new ZScoreFeatureNormalizer(features)
-    val normalizer = new PCAFeatureNormalizer(features, 0.95)
-
+    val normalizer = new PCAFeatureNormalizer(X, 0.95)
     val nd = normalizer.normalizedData()
+    val μads = clusterLA(nd, distance, K, iterations)
 
-    val (μ, c) = clusterLA(nd, distance, K, iterations, distanceLog, countLog)
+    val (μ, a, d) = μads.last
 
-    KMeansClassifier(N, featureExtractor, constructor, μ, normalizer, distance, c, distanceLog, countLog)
+    val assignmentLog = μads.map(_._2)
+    val distanceLog = μads.map(_._3)
+
+    KMeansClassifier(N, featureExtractor, constructor, μ, normalizer, distance, a, assignmentLog, distanceLog)
   }
 
   /**
@@ -64,89 +63,66 @@ trait KMeans {
     (0 until μ.rows).map(r => (r, distance(μ.row(r), x))).minBy(_._2)
 
   /**
-   * assignments
+   * assignmentsAndDistances
    *
    * @param X
    * @param μ
-   * @param distanceLog
-   * @param countLog
-   * @param i
    *
    * Returns:
    * N x 1 matrix: indexes of centroids closest to xi
-   *
+   * N x 1 matrix: distances to those centroids
    */
 
-  def assignments(distance: DistanceFunction, X: M[Double], μ: M[Double], distanceLog: M[Double], countLog: M[Int], i: Int): M[Int] = {
-    val A = zeros[Int](X.rows, 1)
-    for (r <- 0 until X.rows) {
-      val ad = centroidIndexAndDistanceClosestTo(distance, μ, X.row(r))
-      A(r, 0) = ad._1
-      countLog(ad._1, i) += 1
-      distanceLog(ad._1, i) += ad._2
-    }
-    A
+  def assignmentsAndDistances(distance: DistanceFunction, X: M[Double], μ: M[Double]): (M[Int], M[Double]) = {
+    val AD = (0 until X.rows).map(r => {
+      val xi = X.row(r)
+      val (a, d) = centroidIndexAndDistanceClosestTo(distance, μ, xi)
+      Vector(a, d)
+    }).transpose
+    // TODO: remove the map(_.toInt)
+    (matrix(X.rows, 1, AD(0).map(_.toInt).toArray), matrix(X.rows, 1, AD(1).toArray))
   }
 
   /**
    * clusterLA
    *
-   * @param  scaledX
+   * @param  scaledX (assumed to be normalized)
+   * @param  distance
    * @param  K
    * @param  iterations
-   * @param  distanceLog
    *
-   * assumes that X has already been normalized
    */
 
-  // rand[Double](K, scaledX.columns)
-
-  def clusterLA(scaledX: M[Double], distance: DistanceFunction, K: Int, iterations: Int, distanceLog: M[Double], countLog: M[Int]): (M[Double], M[Int]) = {
+  def clusterLA(
+    scaledX: M[Double],
+    distance: DistanceFunction,
+    K: Int,
+    iterations: Int): Seq[(M[Double], M[Int], M[Double])] = {
     assert(K < scaledX.rows)
-    (0 until iterations).foldLeft((
-      scaledX(util.Random.shuffle((0 until scaledX.rows)).take(K), 0 until scaledX.columns),
-      zeros[Int](scaledX.rows, 1)) // indexes of centroids closest to xi
-    )((μA: (M[Double], M[Int]), i: Int) => {
-      val A = assignments(distance, scaledX, μA._1, distanceLog, countLog, i) // K-element column vector
-      val μ = centroids(scaledX, K, A) // K x n
-      (μ, A)
+    val μ0 = scaledX(util.Random.shuffle((0 until scaledX.rows)).take(K), 0 until scaledX.columns)
+    val a0 = zeros[Int](scaledX.rows, 1)
+    val d0 = zeros[Double](scaledX.rows, 0)
+    (0 until iterations).scanLeft((μ0, a0, d0))((μad: (M[Double], M[Int], M[Double]), i: Int) => {
+      val (a, d) = assignmentsAndDistances(distance, scaledX, μad._1)
+      val μ = centroids(scaledX, K, a)
+      (μ, a, d)
     })
   }
 
   /**
    * centroids
    *
-   * @param X
-   * @param K
-   * @param A
+   * @param X            M x N feature matrix
+   * @param K            number of centroids
+   * @param assignments: M x 1 column vector of Ints which e
    *
    */
 
-  def centroids(X: M[Double], K: Int, A: M[Int]): M[Double] = {
-    val accumulator = zeros[Double](K, X.columns)
-    val counts = zeros[Int](K, 1) // Note: Could be a M[Int]
-    for (r <- 0 until X.rows) {
-      val x = X.row(r)
-      val a = A(r, 0)
-      counts(a, 0) += 1
-      for (c <- 0 until X.columns) {
-        accumulator(a, c) += x(0, c)
-      }
-    }
-
-    // accumulator ⨯ counts.inv
-    // TODO rephrase this using linear algebra:
-    for (r <- 0 until K) {
-      val v = counts(r, 0)
-      for (c <- 0 until X.columns) {
-        if (v == 0) {
-          accumulator(r, c) = math.random // TODO verify KMeans algorithm
-        } else {
-          accumulator(r, c) /= v
-        }
-      }
-    }
-    accumulator
+  def centroids(X: M[Double], K: Int, assignments: M[Int]): M[Double] = {
+    val A = matrix(X.rows, K, (r: Int, c: Int) => if (c == assignments(r, 0)) 1.0 else 0.0)
+    val distances = A.t ⨯ X
+    val counts = A.columnSums.t
+    distances.divColumnVector(counts) // TODO: handle zeroes
   }
 
   /**
@@ -158,8 +134,8 @@ trait KMeans {
    * @param featureExtractor creates a list of features (Doubles) of length N given a T
    * @param constructor      creates a T from list of arguments of length N
    * @param μ                K x N Matrix[Double], where each row is a centroid
-   * @param scaledX          ? x N
-   * @param A                ? x 1
+   * @param scaledX          M x N
+   * @param A                M x 1
    * @param distanceLog      K x iterations
    */
 
@@ -171,8 +147,8 @@ trait KMeans {
     normalizer: FeatureNormalizer,
     distance: DistanceFunction,
     A: M[Int],
-    distanceLog: M[Double],
-    countLog: M[Int]) {
+    countLog: Seq[M[Int]],
+    distanceLog: Seq[M[Double]]) {
 
     def K(): Int = μ.rows
 
@@ -185,14 +161,14 @@ trait KMeans {
       i
     }
 
-    def distanceTreeMap(i: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
-      (0 until distanceLog.columns).map(j => j -> distanceLog(i, j)).toMap
+    def distanceTreeMap(centroidId: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
+      distanceLog.zipWithIndex.map({ case (dl, i) => i -> dl(centroidId, 0) }).toMap
 
-    def countTreeMap(i: Int): SortedMap[Int, Int] = new immutable.TreeMap[Int, Int]() ++
-      (0 until countLog.columns).map(j => j -> countLog(i, j)).toMap
+    def countTreeMap(centroidId: Int): SortedMap[Int, Int] = new immutable.TreeMap[Int, Int]() ++
+      countLog.zipWithIndex.map({ case (cl, i) => i -> cl(centroidId, 0) }).toMap
 
-    def averageDistanceTreeMap(i: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
-      (0 until distanceLog.columns).map(j => j -> distanceLog(i, j) / countLog(i, j)).toMap
+    def averageDistanceTreeMap(centroidId: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
+      distanceLog.zip(countLog).zipWithIndex.map({ case ((dl, cl), i) => centroidId -> dl(centroidId, 0) / cl(centroidId, 0) }).toMap
 
     def distanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K()).map(i =>
       ("centroid " + i, distanceTreeMap(i))).toList
@@ -205,15 +181,17 @@ trait KMeans {
 
   class ConfusionMatrix[T, L](classifier: KMeansClassifier[T], data: Seq[T], labelExtractor: T => L) {
 
-    val actualAndPredictedLabels = data.map(datum => (labelExtractor(datum), classifier.classify(datum)))
+    val label2clusterId = data.map(datum => (labelExtractor(datum), classifier.classify(datum)))
 
-    val labelList = actualAndPredictedLabels.map(_._1).toSet.toList
+    val labelList = label2clusterId.map(_._1).toSet.toList
     val labelIndices = labelList.zipWithIndex.toMap
 
-    val counts = zeros[Int](labelList.length, classifier.K)
-    actualAndPredictedLabels.map {
-      case (label, predictedClusterIndex) => counts(labelIndices(label), predictedClusterIndex) += 1
-    }
+    val labelIdClusterId2count = label2clusterId
+      .map({ case (label, clusterId) => ((labelIndices(label), clusterId), 1) })
+      .groupBy(_._1)
+      .map({ case (k, v) => (k, v.map(_._2).sum) })
+
+    val counts = matrix[Int](labelList.length, classifier.K, (r: Int, c: Int) => labelIdClusterId2count((r, c)))
 
     lazy val rowSums = counts.rowSums()
 
