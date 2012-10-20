@@ -190,6 +190,7 @@ trait KMeans {
       .map({ case (label, clusterId) => ((labelIndices(label), clusterId), 1) })
       .groupBy(_._1)
       .map({ case (k, v) => (k, v.map(_._2).sum) })
+      .withDefaultValue(0)
 
     val counts = matrix[Int](labelList.length, classifier.K, (r: Int, c: Int) => labelIdClusterId2count((r, c)))
 
