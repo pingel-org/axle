@@ -101,12 +101,12 @@ trait KMeans {
     assert(K < scaledX.rows)
     val μ0 = scaledX(util.Random.shuffle((0 until scaledX.rows)).take(K), 0 until scaledX.columns)
     val a0 = zeros[Int](scaledX.rows, 1)
-    val d0 = zeros[Double](scaledX.rows, 0)
+    val d0 = zeros[Double](scaledX.rows, 1)
     (0 until iterations).scanLeft((μ0, a0, d0))((μad: (M[Double], M[Int], M[Double]), i: Int) => {
       val (a, d) = assignmentsAndDistances(distance, scaledX, μad._1)
       val μ = centroids(scaledX, K, a)
       (μ, a, d)
-    })
+    }).tail
   }
 
   /**
@@ -120,7 +120,7 @@ trait KMeans {
 
   def centroids(X: M[Double], K: Int, assignments: M[Int]): M[Double] = {
     val A = matrix(X.rows, K, (r: Int, c: Int) => if (c == assignments(r, 0)) 1.0 else 0.0)
-    val distances = A.t ⨯ X     // K x N
+    val distances = A.t ⨯ X // K x N
     val counts = A.columnSums.t // K x 1
     distances.divColumnVector(counts) // TODO: handle zeroes
   }
