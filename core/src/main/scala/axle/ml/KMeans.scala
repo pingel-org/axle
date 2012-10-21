@@ -99,12 +99,13 @@ trait KMeans {
     K: Int,
     iterations: Int): Seq[(M[Double], M[Int], M[Double])] = {
     assert(K < scaledX.rows)
-    val μ0 = scaledX(util.Random.shuffle((0 until scaledX.rows)).take(K), 0 until scaledX.columns)
+    val μ0 = scaledX(util.Random.shuffle(0 until scaledX.rows).take(K), 0 until scaledX.columns)
     val a0 = zeros[Int](scaledX.rows, 1)
     val d0 = zeros[Double](scaledX.rows, 1)
     (0 until iterations).scanLeft((μ0, a0, d0))((μad: (M[Double], M[Int], M[Double]), i: Int) => {
       val (a, d) = assignmentsAndDistances(distance, scaledX, μad._1)
-      val μ = centroids(scaledX, K, a)
+      val (μ, unassignedClusterIds) = centroids(scaledX, K, a)
+      // val replacements = scaledX(util.Random.shuffle(0 until scaledX.rows).take(unassignedClusterIds.length), 0 until scaledX.columns)
       (μ, a, d)
     }).tail
   }
@@ -118,11 +119,12 @@ trait KMeans {
    *
    */
 
-  def centroids(X: M[Double], K: Int, assignments: M[Int]): M[Double] = {
+  def centroids(X: M[Double], K: Int, assignments: M[Int]): (M[Double], Seq[Int]) = {
     val A = matrix(X.rows, K, (r: Int, c: Int) => if (c == assignments(r, 0)) 1.0 else 0.0)
     val distances = A.t ⨯ X // K x N
     val counts = A.columnSums.t // K x 1
-    distances.divColumnVector(counts) // TODO: handle zeroes
+    val unassignedClusterIds = (0 until K).filter(counts(_, 0) == 0.0)
+    (distances.divColumnVector(counts), unassignedClusterIds)
   }
 
   /**
@@ -168,7 +170,7 @@ trait KMeans {
       countLog.zipWithIndex.map({ case (cl, i) => i -> cl(centroidId, 0) }).toMap
 
     def averageDistanceTreeMap(centroidId: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
-      distanceLog.zip(countLog).zipWithIndex.map({ case ((dl, cl), i) => centroidId -> dl(centroidId, 0) / cl(centroidId, 0) }).toMap
+      distanceLog.zip(countLog).zipWithIndex.map({ case ((dl, cl), i) => i -> dl(centroidId, 0) / cl(centroidId, 0) }).toMap
 
     def distanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K()).map(i =>
       ("centroid " + i, distanceTreeMap(i))).toList
