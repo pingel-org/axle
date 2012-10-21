@@ -196,11 +196,15 @@ trait KMeans {
 
     val counts = matrix[Int](labelList.length, classifier.K, (r: Int, c: Int) => labelIdClusterId2count((r, c)))
 
+    val formatNumber = (i: Int) => ("%" + 5 + "d").format(i)
+
     lazy val rowSums = counts.rowSums()
+    lazy val columnSums = counts.columnSums()
 
     lazy val asString = (labelList.zipWithIndex.map({
-      case (label, r) => (counts.row(r).toString + " : " + rowSums(r, 0) + " " + label + "\n")
-    }).mkString("")) + counts.columnSums().toString + "\n"
+      case (label, r) => ((0 until counts.columns).map(c => formatNumber(counts(r, c))).mkString(" ") + " : " + formatNumber(rowSums(r, 0)) + " " + label + "\n")
+    }).mkString("")) + "\n" +
+      (0 until counts.columns).map(c => formatNumber(columnSums(0, c))).mkString(" ") + "\n"
 
     override def toString() = asString
   }
