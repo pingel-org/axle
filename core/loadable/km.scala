@@ -6,27 +6,27 @@ object kmO {
   import axle.ml.KMeans._
   import axle.visualize._
 
-  case class Foo(x: Double, y: Double)
+  case class Foo(x: Double, y: Double, label: String)
 
   def randomFoo(center: Foo, σ2: Double) = {
     val distance = Random.nextGaussian() * σ2
     val angle = 2 * Pi * Random.nextDouble
-    Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
+    Foo(center.x + distance * cos(angle), center.y + distance * sin(angle), center.label)
   }
 
   val data = Random.shuffle(
-    (0 until 20).map(i => randomFoo(Foo(15, 15), 2.0)) ++
-      (0 until 30).map(i => randomFoo(Foo(5, 15), 2.0)) ++
-      (0 until 25).map(i => randomFoo(Foo(15, 5), 2.0)) ++
-      (0 until 25).map(i => randomFoo(Foo(12, 6), 2.0)) ++
-      (0 until 25).map(i => randomFoo(Foo(4, 10), 2.0)) ++
-      (0 until 25).map(i => randomFoo(Foo(8, 3), 2.0)))
+    (0 until 20).map(i => randomFoo(Foo(15, 15, "A"), 2.0)) ++
+      (0 until 30).map(i => randomFoo(Foo(5, 15, "B"), 2.0)) ++
+      (0 until 25).map(i => randomFoo(Foo(15, 5, "C"), 2.0)) ++
+      (0 until 25).map(i => randomFoo(Foo(12, 6, "D"), 2.0)) ++
+      (0 until 25).map(i => randomFoo(Foo(4, 10, "E"), 2.0)) ++
+      (0 until 25).map(i => randomFoo(Foo(8, 3, "F"), 2.0)))
 
   val classifier = cluster(
     data,
     N = 2,
     featureExtractor = (p: Foo) => List(p.x, p.y),
-    constructor = (features: List[Double]) => Foo(features(0), features(1)),
+    constructor = (features: Seq[Double]) => Foo(features(0), features(1), ""),
     K = 6,
     iterations = 100)
 
@@ -39,6 +39,7 @@ object kmO {
     yAxis = 0,
     yAxisLabel = Some("average distance to centroid"))
 
+  println(classifier.confusionMatrix(data, (f: Foo) => f.label))
   show(classifier)
   show(plot)
 
