@@ -183,6 +183,8 @@ trait KMeans {
 
   class ConfusionMatrix[T, L](classifier: KMeansClassifier[T], data: Seq[T], labelExtractor: T => L) {
 
+    import math.{ceil, log10}
+    
     val label2clusterId = data.map(datum => (labelExtractor(datum), classifier.classify(datum)))
 
     val labelList = label2clusterId.map(_._1).toSet.toList
@@ -196,7 +198,9 @@ trait KMeans {
 
     val counts = matrix[Int](labelList.length, classifier.K, (r: Int, c: Int) => labelIdClusterId2count((r, c)))
 
-    val formatNumber = (i: Int) => ("%" + 5 + "d").format(i)
+    val width = ceil(log10(data.length)).toInt
+    
+    val formatNumber = (i: Int) => ("%" + width + "d").format(i)
 
     lazy val rowSums = counts.rowSums()
     lazy val columnSums = counts.columnSums()
