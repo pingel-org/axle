@@ -23,8 +23,8 @@ case class Plot[X, DX, Y, DY](
 
   val minX = List(yAxis, lfs.map(_._2.firstKey).min(xPlottable)).min(xPlottable)
   val maxX = List(yAxis, lfs.map(_._2.lastKey).max(xPlottable)).max(xPlottable)
-  val minY = List(xAxis, lfs.map(_._2.values.min(yPlottable)).min(yPlottable)).min(yPlottable)
-  val maxY = List(xAxis, lfs.map(_._2.values.max(yPlottable)).max(yPlottable)).max(yPlottable)
+  val minY = List(xAxis, lfs.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
+  val maxY = List(xAxis, lfs.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
 
   val xTics = xPlottable.tics(minX, maxX)
   val yTics = yPlottable.tics(minY, maxY)
