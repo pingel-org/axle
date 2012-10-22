@@ -13,13 +13,23 @@ class KMeansVisualization[D](
   width: Int = 600, height: Int = 600,
   border: Int = 50, pointDiameter: Int = 10) extends JPanel {
 
+  val features = classifier.features
+
   val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
 
-  val scaledArea = new ScaledArea2D(width, height, border, 0.0, 1.0, 0.0, 1.0)
+  val maxs = features.columnMaxs
+  val mins = features.columnMins
+
+  val minX = mins(0, 0)
+  val maxX = maxs(0, 0)
+  val minY = mins(0, 1)
+  val maxY = maxs(0, 1)
+
+  val scaledArea = new ScaledArea2D(width, height, border, minX, maxX, minY, maxY)
 
   def boundingRectangle(g2d: Graphics2D): Unit = {
     g2d.setColor(Color.black)
-    scaledArea.drawRectangle(g2d, Point2D(0.0, 0.0), Point2D(1.0, 1.0))
+    scaledArea.drawRectangle(g2d, Point2D(minX, minY), Point2D(maxX, maxY))
   }
 
   def centroid(g2d: Graphics2D, i: Int): Unit = {
@@ -33,7 +43,6 @@ class KMeansVisualization[D](
 
   def cluster(g2d: Graphics2D, i: Int): Unit = {
     g2d.setColor(colors(i % colors.length))
-    val features = classifier.features
     for (r <- 0 until features.rows) {
       if (classifier.a(r, 0) == i) {
         // TODO figure out what to do when N > 2
