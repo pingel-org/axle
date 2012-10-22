@@ -5,7 +5,7 @@ import org.specs2.mutable._
 import scalaz._
 import Scalaz._
 
-class AxleSpec extends Specification {
+class AxleSpecification extends Specification {
 
   // This file isn't so much an "Axle" spec as it is a list of expressions found
   // in "Learn You a Haskell For Great Good" translated to Scala w/Scalaz

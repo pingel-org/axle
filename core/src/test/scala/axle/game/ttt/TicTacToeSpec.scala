@@ -1,11 +1,9 @@
 
-package axle.game
+package axle.game.ttt
 
 import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {
-
-  import ttt._
 
   val game = TicTacToe(3)
   val x = game.player("X", "Player X", true)
