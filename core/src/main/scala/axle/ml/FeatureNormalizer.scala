@@ -81,7 +81,7 @@ object FeatureNormalizer {
       (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) ⨯ Uk
 
     def denormalize(featureRow: M[Double]): Seq[Double] =
-      ((featureRow ⨯ Uk.t).divPointwise(σ2s) + μs).toList
+      ((featureRow ⨯ Uk.t).mulPointwise(σ2s) + μs).toList
 
     def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ Uk
 
