@@ -3,6 +3,7 @@ package axle.visualize
 import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point }
 import javax.swing.JPanel
 import java.awt.event.MouseEvent
+import java.awt.FontMetrics
 import math.{ min, abs }
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
@@ -52,5 +53,30 @@ class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int,
     val fp = framePoint(p)
     g2d.drawString(s, fp.x, fp.y)
   }
+
+  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)]): Unit = xTics.map({
+    case (x, label) => {
+      val bottomScaled = Point2D(x, minY)
+      val bottomUnscaled = framePoint(bottomScaled)
+      g2d.setColor(Color.lightGray)
+      drawLine(g2d, Point2D(x, minY), Point2D(x, maxY))
+      g2d.setColor(Color.black)
+      // TODO: angle xtics?
+      g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
+      g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
+    }
+  })
+
+  def drawYTics(g2d: Graphics2D, fontMetrics: FontMetrics, yTics: Seq[(Y, String)]): Unit = yTics.map({
+    case (y, label) => {
+      val leftScaled = Point2D(minX, y)
+      val leftUnscaled = framePoint(leftScaled)
+      g2d.setColor(Color.lightGray)
+      drawLine(g2d, leftScaled, Point2D(maxX, y))
+      g2d.setColor(Color.black)
+      g2d.drawString(label, leftUnscaled.x - fontMetrics.stringWidth(label) - 5, leftUnscaled.y + fontMetrics.getHeight / 2)
+      g2d.drawLine(leftUnscaled.x - 2, leftUnscaled.y, leftUnscaled.x + 2, leftUnscaled.y)
+    }
+  })
 
 }

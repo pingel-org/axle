@@ -3,6 +3,7 @@ package axle.visualize
 import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point }
 import javax.swing.JPanel
 import java.awt.event.MouseEvent
+import java.awt.Font
 
 import axle.ml.KMeans._
 import axle.visualize.Plottable._
@@ -24,6 +25,9 @@ class KMeansVisualization[D](
   val maxX = maxs(0, 0)
   val minY = mins(0, 1)
   val maxY = maxs(0, 1)
+
+  val xTics = DoublePlottable.tics(minX, maxX)
+  val yTics = DoublePlottable.tics(minY, maxY)
 
   val scaledArea = new ScaledArea2D(width, height, border, minX, maxX, minY, maxY)
 
@@ -55,6 +59,8 @@ class KMeansVisualization[D](
 
   // TODO: paintComponent is executed for many kinds of events that will not change the image
 
+  val normalFont = new Font("Courier New", Font.BOLD, 12)
+  
   override def paintComponent(g: Graphics): Unit = {
     // super.paintComponent(g)
     val size = getSize()
@@ -62,7 +68,11 @@ class KMeansVisualization[D](
     // val w = size.width - (insets.left + insets.right)
     // val h = size.height - (insets.top + insets.bottom)
     val g2d = g.asInstanceOf[Graphics2D]
+    val fontMetrics = g2d.getFontMetrics
+    g2d.setFont(normalFont)
     boundingRectangle(g2d)
+    scaledArea.drawXTics(g2d, fontMetrics, xTics)
+    scaledArea.drawYTics(g2d, fontMetrics, yTics)
     for (i <- 0 until classifier.K) {
       centroid(g2d, i)
     }

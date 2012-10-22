@@ -53,31 +53,6 @@ class PlotComponent[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]) extends JPanel {
     }
   }
 
-  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = xTics.map({
-    case (x, label) => {
-      val bottomScaled = Point2D(x, minY)
-      val bottomUnscaled = scaledArea.framePoint(bottomScaled)
-      g2d.setColor(Color.lightGray)
-      scaledArea.drawLine(g2d, Point2D(x, minY), Point2D(x, maxY))
-      g2d.setColor(Color.black)
-      // TODO: angle xtics?
-      g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
-      g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
-    }
-  })
-
-  def drawYTics(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = yTics.map({
-    case (y, label) => {
-      val leftScaled = Point2D(minX, y)
-      val leftUnscaled = scaledArea.framePoint(leftScaled)
-      g2d.setColor(Color.lightGray)
-      scaledArea.drawLine(g2d, leftScaled, Point2D(maxX, y))
-      g2d.setColor(Color.black)
-      g2d.drawString(label, leftUnscaled.x - fontMetrics.stringWidth(label) - 5, leftUnscaled.y + fontMetrics.getHeight / 2)
-      g2d.drawLine(leftUnscaled.x - 2, leftUnscaled.y, leftUnscaled.x + 2, leftUnscaled.y)
-    }
-  })
-
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
@@ -88,8 +63,8 @@ class PlotComponent[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]) extends JPanel {
     scaledArea.verticalLine(g2d, yAxis)
     scaledArea.horizontalLine(g2d, xAxis)
 
-    drawXTics(g2d, fontMetrics)
-    drawYTics(g2d, fontMetrics)
+    scaledArea.drawXTics(g2d, fontMetrics, xTics)
+    scaledArea.drawYTics(g2d, fontMetrics, yTics)
 
     for (((label, f), color) <- lfs.zip(colorStream)) {
       g2d.setColor(color)
