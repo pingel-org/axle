@@ -38,7 +38,8 @@ package object visualize {
     jdg
   }
 
-  implicit def enComponentKMeansClassifier[T](classifier: axle.ml.KMeans.KMeansClassifier[T]): Component =
+  implicit def enComponentKMeansClassifier[T](
+    classifier: axle.ml.KMeans.KMeansClassifier[T]): Component =
     new axle.visualize.KMeansVisualization[T](classifier)
 
 }

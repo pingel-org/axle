@@ -22,7 +22,7 @@ object kmO {
       (0 until 25).map(i => randomFoo(Foo(4, 10, "E"), 2.0)) ++
       (0 until 25).map(i => randomFoo(Foo(8, 3, "F"), 2.0)))
 
-  val classifier = cluster(
+  val classifier = KMeans(
     data,
     N = 2,
     featureExtractor = (p: Foo) => List(p.x, p.y),
@@ -30,7 +30,7 @@ object kmO {
     K = 6,
     iterations = 100)
 
-  val plot = Plot(classifier.averageDistanceLogSeries(),
+  val plot = Plot(classifier.distanceLogSeries(),
     connect = true,
     drawKey = true,
     title = Some("KMeans Mean Centroid Distances"),

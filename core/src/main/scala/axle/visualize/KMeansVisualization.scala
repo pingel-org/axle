@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent
 
 import axle.ml.KMeans._
 import axle.visualize.Plottable._
+import axle.matrix.JblasMatrixFactory._
 
 class KMeansVisualization[D](
   classifier: KMeansClassifier[D],
@@ -22,7 +23,8 @@ class KMeansVisualization[D](
   }
 
   def centroid(g2d: Graphics2D, i: Int): Unit = {
-    val center = Point2D(classifier.μ(i, 0), classifier.μ(i, 1))
+    val denormalized = classifier.normalizer.denormalize(classifier.μ.row(i))
+    val center = Point2D(denormalized(0), denormalized(1))
     g2d.setColor(Color.darkGray)
     scaledArea.fillOval(g2d, center, 3 * pointDiameter, 3 * pointDiameter)
     g2d.setColor(colors(i % colors.length))
@@ -31,11 +33,11 @@ class KMeansVisualization[D](
 
   def cluster(g2d: Graphics2D, i: Int): Unit = {
     g2d.setColor(colors(i % colors.length))
-    val nd = classifier.normalizer.normalizedData()
-    for (r <- 0 until nd.rows) {
-      if (classifier.A(r, 0) == i) {
+    val features = classifier.features
+    for (r <- 0 until features.rows) {
+      if (classifier.a(r, 0) == i) {
         // TODO figure out what to do when N > 2
-        val center = Point2D(nd(r, 0), nd(r, 1))
+        val center = Point2D(features(r, 0), features(r, 1))
         scaledArea.fillOval(g2d, center, pointDiameter, pointDiameter)
         // scaledArea.drawString(g2d, r.toString + "(%.2f,%.2f)".format(center.x, center.y), center)
       }
@@ -52,10 +54,10 @@ class KMeansVisualization[D](
     // val h = size.height - (insets.top + insets.bottom)
     val g2d = g.asInstanceOf[Graphics2D]
     boundingRectangle(g2d)
-    for (i <- 0 until classifier.K()) {
+    for (i <- 0 until classifier.K) {
       centroid(g2d, i)
     }
-    for (i <- 0 until classifier.K()) {
+    for (i <- 0 until classifier.K) {
       // TODO: inefficient loop
       cluster(g2d, i)
     }
