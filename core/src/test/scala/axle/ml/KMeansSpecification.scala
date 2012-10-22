@@ -26,7 +26,7 @@ class KMeansSpecification extends Specification {
           (0 until 30).map(i => randomPoint(Foo(5, 15), 1.0)) ++
           (0 until 25).map(i => randomPoint(Foo(15, 5), 1.0)))
 
-      val classifier = cluster(
+      val classifier = KMeans(
         data, 2,
         (p: Foo) => List(p.x, p.y),
         (features: Seq[Double]) => Foo(features(0), features(1)),
