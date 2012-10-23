@@ -1,6 +1,6 @@
 package axle.quanta
 
-import axle.graph.NativeDirectedGraphFactory._
+import axle.graph.JungDirectedGraphFactory._
 
 import java.math.BigDecimal
 import math.{ max, abs }

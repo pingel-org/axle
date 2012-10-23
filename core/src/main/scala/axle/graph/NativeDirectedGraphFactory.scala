@@ -29,12 +29,10 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def size() = _vertices.size
 
-    trait NativeDirectedGraphVertex[P] extends DirectedGraphVertex[P] {
-    }
-
-    trait NativeDirectedGraphEdge[P] extends DirectedGraphEdge[P] {
-    }
-
+    trait NativeDirectedGraphVertex[P] extends DirectedGraphVertex[P]
+    
+    trait NativeDirectedGraphEdge[P] extends DirectedGraphEdge[P]
+    
     class NativeDirectedGraphVertexImpl[P](_payload: P) extends NativeDirectedGraphVertex[P] {
 
       self: V =>
