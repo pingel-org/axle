@@ -59,9 +59,9 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
       def payload(): P = _payload
     }
 
-    def edges() = edges.toSet // immutable copy
+    def edges() = _edges.toSet // immutable copy
 
-    def vertices() = vertices.toSet // immutable copy
+    def vertices() = _vertices.toSet // immutable copy
 
     def findEdge(from: V, to: V): Option[E] = vertex2outedges(from).find(_.dest == to)
 
