@@ -10,10 +10,8 @@ class TicTacToeSpec extends Specification {
   val o = game.player("O", "Player O", true)
 
   def script(moveScript: List[(game.type#TicTacToePlayer, Int)]) =
-    game.scriptedMoveStateStream(
-      game.state(x, game.startBoard),
-      moveScript.map(pp => game.move(pp._1, pp._2)).iterator)
-      .last._2.outcome.flatMap(_.winner)
+    game.scriptedMoveStateStream(game.state(x, game.startBoard),
+      moveScript.map(pp => game.move(pp._1, pp._2)).iterator).last._2.outcome.flatMap(_.winner)
 
   "game1" should {
     "work" in {

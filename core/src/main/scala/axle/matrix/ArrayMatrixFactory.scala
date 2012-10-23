@@ -55,7 +55,12 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def pow(p: Double): M[T] = null // TODO
 
     def addScalar(x: T): M[T] = null // TODO
-    def addAssignment(r: Int, c: Int, v: T): M[T] = null // TODO
+    def addAssignment(r: Int, c: Int, v: T): M[T] = {
+      val length = rows * columns
+      val arr = storage.clone
+      arr(r * columns + c) = v
+      matrix(arr, rows, columns)
+    }
     def subtractScalar(x: T): M[T] = null // TODO
     def multiplyScalar(x: T): M[T] = null // TODO
     def divideScalar(x: T): M[T] = null // TODO
@@ -124,10 +129,10 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     // higher order fuctions
 
     def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = null // TODO
-      // matrix(rows, columns, storage.map(f(_)))
+    // matrix(rows, columns, storage.map(f(_)))
 
     def flatMapColumns[A](f: M[T] => M[A])(implicit elementAdapter: E[A]): M[A] = null // TODO
-    
+
   }
 
   trait ArrayMatrix[T] extends Matrix[T] {
