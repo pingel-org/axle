@@ -7,7 +7,7 @@ object coin2O {
   import axle.quanta.Information._
   import Plottable._
 
-  val hm = new immutable.TreeMap[Double, UOM]() ++ (1 to 99).map(i => (i / 100.0, entropy(coin(i / 100.0)))).toMap
+  val hm = new immutable.TreeMap[Double, UOM]() ++ (0 to 100).map(i => (i / 100.0, entropy(coin(i / 100.0)))).toMap
 
   val plot = Plot(List(("h", hm)),
     connect = true, drawKey = false,
