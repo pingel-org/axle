@@ -44,8 +44,10 @@ object AstNode {
         case _ => None
       }).find(_.isDefined).flatMap(x => x).getOrElse("") // yuck
 
-      // might want to filter out _lineno and type
-      val metaMap = fields.map(field => field.name -> _fromJson(field.value, lineNo)).toMap
+      val metaMap = fields
+        .filter(field => (field.name != "type") && (field.name != "_lineno"))
+        .map(field => field.name -> _fromJson(field.value, lineNo))
+        .toMap
 
       AstNodeRule(metaType, metaMap, lineNo)
     }
