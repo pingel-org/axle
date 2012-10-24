@@ -7,7 +7,7 @@ class GoldSpecification extends Specification {
 
   "Gold Paradigm" should {
 
-    "work" in {
+    "memorizing learner memorizes" in {
 
       val Σ = Vocabulary()
 
@@ -26,7 +26,7 @@ class GoldSpecification extends Specification {
       val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner(T)
-      ɸ.guesses.find(_.ℒ === ℒ)
+      ɸ.guesses.find(_.ℒ == ℒ)
         .map(finalGuess => println("well done, ɸ"))
         .getOrElse(println("ɸ never made a correct guess"))
 

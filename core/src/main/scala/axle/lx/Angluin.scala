@@ -146,7 +146,7 @@ object Angluin {
   class Partition {
     def restrictTo(subset: Set[Any]): Partition = {
       // TODO !!!
-      return null;
+      return null
     }
   }
 
