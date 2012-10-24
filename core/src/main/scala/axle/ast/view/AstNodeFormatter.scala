@@ -66,7 +66,7 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
             case "right" => grammar.precedenceOf(subtreeRule) == grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) == "left"
             case _ => false
           }
-          case None => true // is this right?
+          case None => false // is this right?
         }
       }
       case (_, _) => false
