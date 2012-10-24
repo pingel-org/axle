@@ -32,9 +32,9 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
   def result(): R
   val tokens: S
 
-  var indentation_level = 0
+  var indentationLevel = 0
   var column = 0
-  var needs_indent = true
+  var needsIndent = true
   var lineno = 1
   val stack = new mutable.Stack[Option[(Int, String)]]()
   val _node2lineno = mutable.Map[AstNode, Int]()
@@ -45,12 +45,12 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
   def node2lineno = _node2lineno
 
   def _indent(): Unit = {
-    if (column == 0 && needs_indent) {
-      // val indentation = ( for ( x <- 1 to indentation_level) yield tab ).mkString("")
-      (1 to indentation_level).map(x => accSpaces()) // result.append(<span>&nbsp;&nbsp;&nbsp;</span>)
-      column = 3 * indentation_level // indentation.length()
+    if (column == 0 && needsIndent) {
+      // val indentation = ( for ( x <- 1 to indentationLevel) yield tab ).mkString("")
+      (1 to indentationLevel).map(x => accSpaces()) // result.append(<span>&nbsp;&nbsp;&nbsp;</span>)
+      column = 3 * indentationLevel // indentation.length()
     }
-    needs_indent = false
+    needsIndent = false
   }
 
   def needsParens(attr_name: String, node: AstNode, subtree: AstNode, grammar: Language): Boolean =
@@ -106,9 +106,9 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
     accSpace()
   }
 
-  def indent: Unit = indentation_level += 1
+  def indent: Unit = indentationLevel += 1
 
-  def dedent: Unit = indentation_level -= 1
+  def dedent: Unit = indentationLevel -= 1
 
   def beginSpan(): Unit = accPushStack
 
@@ -128,14 +128,14 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
     if ((node != null) && conform) {
       if (column > 0) {
         column = 0
-        needs_indent = indent
+        needsIndent = indent
         lineno += 1
         // result.appendAll(<br></br>)
         accNewline()
       }
     } else if (hard || column > 0) {
       column = 0
-      needs_indent = indent
+      needsIndent = indent
       lineno += 1
       // result.appendAll(<br></br>)
       accNewline()
