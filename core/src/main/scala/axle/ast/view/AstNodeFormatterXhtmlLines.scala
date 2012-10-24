@@ -92,7 +92,7 @@ class XhtmlLinesAstNodeFormatter(language: Language, highlight: Set[AstNode], co
   override def newline(hard: Boolean, node: AstNode, indent: Boolean = true): Unit = {
     if (node != null) {
       column = 0
-      needs_indent = indent
+      needsIndent = indent
       lineno += 1
       // result.appendAll(<br></br>)
       accNewline()
