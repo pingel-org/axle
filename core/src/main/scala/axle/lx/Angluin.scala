@@ -3,35 +3,30 @@ package axle.lx
 
 import collection._
 import axle._
+import scalaz._
+import Scalaz._
 
 object Angluin {
 
-  import axle.graph.JungDirectedGraphFactory._
+  import axle.graph.JungDirectedGraph
 
   type Expression = List[Symbol]
 
   val ▦ = List[Symbol]()
 
-  case class Acceptor() {
+  type AcceptorState = JungDirectedGraph[String, Symbol]#V
 
-    val g = graph[String, Symbol]()
+  // val g = graph[String, Symbol]()
 
-    type AcceptorState = g.V
+  case class Acceptor(g: JungDirectedGraph[String, Symbol], I: Set[AcceptorState], F: Set[AcceptorState]) {
 
     def Q() = g.vertices
 
-    val I = mutable.Set[AcceptorState]()
-    val F = mutable.Set[AcceptorState]()
-
-    def addState(isInitial: Boolean, isFinal: Boolean): Unit = {
-
-      val p = g += "" // TODO
-
-      if (isInitial)
-        I += p
-
-      if (isFinal)
-        F += p
+    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
+      val (newG, v) = g + "" // TODO
+      val newI = isInitial ? (I + v) | I
+      val newF = isFinal ? (F + v) | F
+      Acceptor(newG, newI, newF)
     }
 
     def δ(state: AcceptorState, symbol: Symbol): Set[AcceptorState] =

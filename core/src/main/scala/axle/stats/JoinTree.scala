@@ -1,9 +1,8 @@
 package axle.stats
 
 import collection._
-import axle.graph.JungDirectedGraphFactory
-import axle.graph.JungUndirectedGraphFactory
-import axle.graph.JungUndirectedGraphFactory._
+import axle.graph.JungDirectedGraph
+import axle.graph.JungUndirectedGraph
 
 object JoinTree {
 

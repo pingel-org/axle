@@ -9,7 +9,7 @@ import java.awt.Stroke
 
 import org.apache.commons.collections15.Transformer
 
-import axle.graph.JungUndirectedGraphFactory.JungUndirectedGraph
+import axle.graph.JungUndirectedGraph
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse

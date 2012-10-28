@@ -27,7 +27,7 @@ class CausalModel(_name: String)
 
   def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
 
-  def addFunction(pf: PFunction): Unit = {} // TODO
+  def addFunctions(pf: Seq[PFunction]): CausalModel = null // TODO
 
   def getVariable(name: String): Int = 1 // TODO
   

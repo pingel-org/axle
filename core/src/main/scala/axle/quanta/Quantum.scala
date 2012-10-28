@@ -1,6 +1,6 @@
 package axle.quanta
 
-import axle.graph.JungDirectedGraphFactory._
+import axle.graph.JungDirectedGraph
 
 import java.math.BigDecimal
 import math.{ max, abs }
@@ -33,7 +33,7 @@ trait Quantum {
 
   type UOM <: UnitOfMeasurement
 
-  val conversionGraph = graph[UOM, BigDecimal]()
+  val conversionGraph = JungDirectedGraph[UOM, BigDecimal]()
 
   type CGE = conversionGraph.type#E
   type CGV = conversionGraph.type#V
@@ -247,7 +247,7 @@ trait Quantum {
     conversionGraph += (baseVertex -> resultVertex, bdDivide(oneBD, multiple))
   }
 
-  val uom2vertex = mutable.Map[UOM, CGV]()
+  val uom2vertex = Map[UOM, CGV]()
 
   def vertexFor(uom: UOM): CGV = uom2vertex(uom)
 

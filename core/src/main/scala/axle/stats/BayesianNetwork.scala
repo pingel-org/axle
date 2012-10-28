@@ -212,15 +212,10 @@ class BayesianNetwork(_name: String)
    */
 
   def interactionGraph(): InteractionGraph = {
-
-    val ig = new InteractionGraph()
-
-    randomVariables.map(ig += _)
-
-    randomVariables().doubles()
-      .filter({ case (vi, vj) => interactsWith(vi, vj) })
-      .map({ case (vi, vj) => ig.edge(ig.findVertex(vi).get, ig.findVertex(vj).get, "") })
-
+    import axle._
+    val (ig0, vs) = (new InteractionGraph()) ++ randomVariables
+    val interactions = randomVariables.doubles().filter({ case (vi, vj) => interactsWith(vi, vj) })
+    val (ig, es) = ig0 ++ interactions.map({ case (vi, vj) => (ig0.findVertex(vi).get, ig0.findVertex(vj).get, "") })
     ig
   }
 

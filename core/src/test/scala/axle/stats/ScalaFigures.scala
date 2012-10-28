@@ -4,8 +4,7 @@ package org.pingel.bayes.examples
 import collection._
 import axle.stats._
 import axle.visualize._
-import axle.graph.JungDirectedGraphFactory._
-import axle.graph.JungUndirectedGraphFactory.JungUndirectedGraph
+import axle.graph.JungDirectedGraph
 import org.specs2.mutable._
 
 class ScalaFigures extends Specification {
@@ -18,69 +17,57 @@ class ScalaFigures extends Specification {
   val D = new RandomVariable0("D", bools, None)
   val E = new RandomVariable0("E", bools, None)
 
-  def figure6_1() = {
+  def figure6_1(): BayesianNetwork = {
 
-    val bn = BayesianNetwork("6.1")
+    val (bn0, vs) = BayesianNetwork("6.1") ++ List(
+      BayesianNetworkNode(A,
+        Factor(Vector(A), Map(
+          List(A eq true) -> 0.6,
+          List(A eq false) -> 0.4
+        ))),
+      BayesianNetworkNode(B, // B | A
+        Factor(Vector(B), Map(
+          List(B eq true, A eq true) -> 0.2,
+          List(B eq true, A eq false) -> 0.8,
+          List(B eq false, A eq true) -> 0.75,
+          List(B eq false, A eq false) -> 0.25
+        ))),
+      BayesianNetworkNode(C, // C | A
+        Factor(Vector(C), Map(
+          List(C eq true, A eq true) -> 0.8,
+          List(C eq true, A eq false) -> 0.2,
+          List(C eq false, A eq true) -> 0.1,
+          List(C eq false, A eq false) -> 0.9
+        ))),
+      BayesianNetworkNode(D, // D | BC
+        Factor(Vector(D), Map(
+          List(D eq true, B eq true, C eq true) -> 0.95,
+          List(D eq true, B eq true, C eq false) -> 0.05,
+          List(D eq true, B eq false, C eq true) -> 0.9,
+          List(D eq true, B eq false, C eq false) -> 0.1,
+          List(D eq false, B eq true, C eq true) -> 0.8,
+          List(D eq false, B eq true, C eq false) -> 0.2,
+          List(D eq false, B eq false, C eq true) -> 0.0,
+          List(D eq false, B eq false, C eq false) -> 1.0
+        ))),
+      BayesianNetworkNode(E, // E | C
+        Factor(Vector(E), Map(
+          List(E eq true, C eq true) -> 0.7,
+          List(E eq true, C eq false) -> 0.3,
+          List(E eq false, C eq true) -> 0.0,
+          List(E eq false, C eq false) -> 1.0
+        ))))
 
-    // A
-    val av = bn += BayesianNetworkNode(A,
-      Factor(Vector(A), Map(
-        List(A eq true) -> 0.6,
-        List(A eq false) -> 0.4
-      )))
-
-    // B | A
-    val bv = bn += BayesianNetworkNode(B,
-      Factor(Vector(B), Map(
-        List(B eq true, A eq true) -> 0.2,
-        List(B eq true, A eq false) -> 0.8,
-        List(B eq false, A eq true) -> 0.75,
-        List(B eq false, A eq false) -> 0.25
-      )))
-
-    // C | A
-    val cv = bn += BayesianNetworkNode(C,
-      Factor(Vector(C), Map(
-        List(C eq true, A eq true) -> 0.8,
-        List(C eq true, A eq false) -> 0.2,
-        List(C eq false, A eq true) -> 0.1,
-        List(C eq false, A eq false) -> 0.9
-      )))
-
-    // D | BC
-    val dv = bn += BayesianNetworkNode(D,
-      Factor(Vector(D), Map(
-        List(D eq true, B eq true, C eq true) -> 0.95,
-        List(D eq true, B eq true, C eq false) -> 0.05,
-        List(D eq true, B eq false, C eq true) -> 0.9,
-        List(D eq true, B eq false, C eq false) -> 0.1,
-        List(D eq false, B eq true, C eq true) -> 0.8,
-        List(D eq false, B eq true, C eq false) -> 0.2,
-        List(D eq false, B eq false, C eq true) -> 0.0,
-        List(D eq false, B eq false, C eq false) -> 1.0
-      )))
-
-    // E | C
-    val ev = bn += BayesianNetworkNode(E,
-      Factor(Vector(E), Map(
-        List(E eq true, C eq true) -> 0.7,
-        List(E eq true, C eq false) -> 0.3,
-        List(E eq false, C eq true) -> 0.0,
-        List(E eq false, C eq false) -> 1.0
-      )))
-
-    bn += (av -> bv, "")
-    bn += (av -> cv, "")
-    bn += (bv -> dv, "")
-    bn += (cv -> dv, "")
-    bn += (cv -> ev, "")
+    val (bn, es) = vs match {
+      case av :: bv :: cv :: dv :: ev :: Nil => bn0 ++ List((av, bv, ""), (av, cv, ""), (bv, dv, ""), (cv, dv, ""), (cv, ev, ""))
+    }
 
     bn
   }
 
-  def figure6_2() = figure6_1.jointProbabilityTable()
+  def figure6_2(): Factor = figure6_1.jointProbabilityTable()
 
-  def figure6_3() = {
+  def figure6_3(): (Factor, Factor) = {
 
     //Figure 3.1
     val cptB = Factor(B :: C :: D :: Nil, Map(
@@ -108,33 +95,29 @@ class ScalaFigures extends Specification {
     (cptB, cptD)
   }
 
-  def figure6_4() = {
+  def figure6_4(): BayesianNetwork = {
 
-    val bn = new BayesianNetwork("6.4")
+    val (bn0, vs) = new BayesianNetwork("6.4") ++ List(
+      BayesianNetworkNode(A, Factor(Vector(A), Map(
+        List(A eq true) -> 0.6,
+        List(A eq false) -> 0.4
+      ))),
+      BayesianNetworkNode(B, Factor(Vector(B), Map( // B | A
+        List(B eq true, A eq true) -> 0.9,
+        List(B eq true, A eq false) -> 0.1,
+        List(B eq false, A eq true) -> 0.2,
+        List(B eq false, A eq false) -> 0.8
+      ))),
+      BayesianNetworkNode(C, Factor(Vector(C), Map( // C | B
+        List(C eq true, B eq true) -> 0.3,
+        List(C eq true, B eq false) -> 0.7,
+        List(C eq false, B eq true) -> 0.5,
+        List(C eq false, B eq false) -> 0.5
+      ))))
 
-    val av = bn += BayesianNetworkNode(A, Factor(Vector(A), Map(
-      List(A eq true) -> 0.6,
-      List(A eq false) -> 0.4
-    )))
-
-    // B | A
-    val bv = bn += BayesianNetworkNode(B, Factor(Vector(B), Map(
-      List(B eq true, A eq true) -> 0.9,
-      List(B eq true, A eq false) -> 0.1,
-      List(B eq false, A eq true) -> 0.2,
-      List(B eq false, A eq false) -> 0.8
-    )))
-
-    // C | B
-    val cv = bn += BayesianNetworkNode(C, Factor(Vector(C), Map(
-      List(C eq true, B eq true) -> 0.3,
-      List(C eq true, B eq false) -> 0.7,
-      List(C eq false, B eq true) -> 0.5,
-      List(C eq false, B eq false) -> 0.5
-    )))
-
-    bn += (av -> bv, "")
-    bn += (bv -> cv, "")
+    val (bn, es) = vs match {
+      case av :: bv :: cv :: Nil => bn0 ++ List((av, bv, ""), (bv, cv, ""))
+    }
 
     val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)
 
@@ -178,18 +161,11 @@ class ScalaFigures extends Specification {
 
     val f61 = figure6_1()
 
-    val τ = new EliminationTree()
+    val (τ, vs) = (new EliminationTree()) ++ List(A, B, C, D, E).map(f61.cpt(_))
 
-    val τ_vA = τ += f61.cpt(A)
-    val τ_vB = τ += f61.cpt(B)
-    val τ_vC = τ += f61.cpt(C)
-    val τ_vD = τ += f61.cpt(D)
-    val τ_vE = τ += f61.cpt(E)
-
-    τ += (τ_vA -> τ_vB, "")
-    τ += (τ_vA -> τ_vD, "")
-    τ += (τ_vD -> τ_vC, "")
-    τ += (τ_vC -> τ_vE, "")
+    val () = vs match {
+      case vA :: vB :: vC :: vD :: vE :: Nil => τ ++ List((vA, vB, ""), (vA, vD, ""), (vD, vC, ""), (vC, vE, ""))
+    }
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
     val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.cpt(C))
@@ -205,13 +181,11 @@ class ScalaFigures extends Specification {
     f61
   }
 
-  def figure7_12() = {
-    val jt = new JoinTree()
-    val vABC = jt += mutable.Set(A, B, C)
-    val vBCD = jt += mutable.Set(B, C, D)
-    val vCE = jt += mutable.Set(C, E)
-    jt += (vABC -> vBCD, "")
-    jt += (vBCD -> vCE, "")
+  def figure7_12(): JoinTree = {
+    val (jt0, vs) = (new JoinTree()) ++ List(immutable.Set(A, B, C), immutable.Set(B, C, D), immutable.Set(C, E))
+    val (jt, es) = vs match {
+      case vABC :: vBCD :: vCE :: Nil => jt0 ++ List((vABC, vBCD, ""), (vBCD, vCE, ""))
+    }
     jt
   }
 

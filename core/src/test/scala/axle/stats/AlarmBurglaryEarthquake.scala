@@ -15,51 +15,47 @@ class ABE extends Specification {
   val J = new RandomVariable0("John Calls", bools, None)
   val M = new RandomVariable0("Mary Calls", bools, None)
 
-  val bn = BayesianNetwork("A sounds (due to Burglary or Earthquake) and John or Mary Call")
+  val (bn1, vs) = BayesianNetwork("A sounds (due to Burglary or Earthquake) and John or Mary Call") ++ List(
+    BayesianNetworkNode(B,
+      Factor(Vector(B), Map(
+        List(B eq true) -> 0.001,
+        List(B eq false) -> 0.999
+      ))),
+    BayesianNetworkNode(E,
+      Factor(Vector(E), Map(
+        List(E eq true) -> 0.002,
+        List(E eq false) -> 0.998
+      ))),
+    BayesianNetworkNode(A,
+      Factor(Vector(B, E, A), Map(
+        List(B eq false, E eq false, A eq true) -> 0.001,
+        List(B eq false, E eq false, A eq false) -> 0.999,
+        List(B eq true, E eq false, A eq true) -> 0.94,
+        List(B eq true, E eq false, A eq false) -> 0.06,
+        List(B eq false, E eq true, A eq true) -> 0.29,
+        List(B eq false, E eq true, A eq false) -> 0.71,
+        List(B eq true, E eq true, A eq true) -> 0.95,
+        List(B eq true, E eq true, A eq false) -> 0.05))),
+    BayesianNetworkNode(J,
+      Factor(Vector(A, J), Map(
+        List(A eq true, J eq true) -> 0.9,
+        List(A eq true, J eq false) -> 0.1,
+        List(A eq false, J eq true) -> 0.05,
+        List(A eq false, J eq false) -> 0.95
+      ))),
+    BayesianNetworkNode(M,
+      Factor(Vector(A, M), Map(
+        List(A eq true, M eq true) -> 0.7,
+        List(A eq true, M eq false) -> 0.3,
+        List(A eq false, M eq true) -> 0.01,
+        List(A eq false, M eq false) -> 0.99
+      ))))
 
-  val bv = bn += BayesianNetworkNode(B,
-    Factor(Vector(B), Map(
-      List(B eq true) -> 0.001,
-      List(B eq false) -> 0.999
-    )))
-
-  val ev = bn += BayesianNetworkNode(E,
-    Factor(Vector(E), Map(
-      List(E eq true) -> 0.002,
-      List(E eq false) -> 0.998
-    )))
-
-  val av = bn += BayesianNetworkNode(A,
-    Factor(Vector(B, E, A), Map(
-      List(B eq false, E eq false, A eq true) -> 0.001,
-      List(B eq false, E eq false, A eq false) -> 0.999,
-      List(B eq true, E eq false, A eq true) -> 0.94,
-      List(B eq true, E eq false, A eq false) -> 0.06,
-      List(B eq false, E eq true, A eq true) -> 0.29,
-      List(B eq false, E eq true, A eq false) -> 0.71,
-      List(B eq true, E eq true, A eq true) -> 0.95,
-      List(B eq true, E eq true, A eq false) -> 0.05)))
-
-  val jv = bn += BayesianNetworkNode(J,
-    Factor(Vector(A, J), Map(
-      List(A eq true, J eq true) -> 0.9,
-      List(A eq true, J eq false) -> 0.1,
-      List(A eq false, J eq true) -> 0.05,
-      List(A eq false, J eq false) -> 0.95
-    )))
-
-  val mv = bn += BayesianNetworkNode(M,
-    Factor(Vector(A, M), Map(
-      List(A eq true, M eq true) -> 0.7,
-      List(A eq true, M eq false) -> 0.3,
-      List(A eq false, M eq true) -> 0.01,
-      List(A eq false, M eq false) -> 0.99
-    )))
-
-  bn += (bv -> av, "")
-  bn += (ev -> av, "")
-  bn += (av -> jv, "")
-  bn += (av -> mv, "")
+  val (bn, es): (BayesianNetwork, Seq[BayesianNetwork#E]) = vs match {
+    case bv :: ev :: av :: jv :: mv :: Nil => bn1 ++ List(
+      (bv, av, ""), (ev, av, ""), (av, jv, ""), (av, mv, "")
+    )
+  }
 
   "bayesian networks" should {
     "work" in {

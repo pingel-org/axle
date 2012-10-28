@@ -18,23 +18,23 @@ package object visualize {
 
   implicit def enComponentPlot[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]): Component = new PlotComponent(plot)
 
-  implicit def enComponentJungUndirectedGraph[VP, EP](g: axle.graph.JungUndirectedGraphFactory.JungUndirectedGraph[VP, EP]): Component =
+  implicit def enComponentJungUndirectedGraph[VP, EP](g: axle.graph.JungUndirectedGraph[VP, EP]): Component =
     new JungUndirectedGraphVisualization().component(g)
 
-  implicit def enComponentNativeUndirectedGraph[VP, EP](g: axle.graph.NativeUndirectedGraphFactory.NativeUndirectedGraph[VP, EP]): Component = {
+  implicit def enComponentNativeUndirectedGraph[VP, EP](g: axle.graph.NativeUndirectedGraph[VP, EP]): Component = {
     // TODO: remove this cast
-    val asUG = this.asInstanceOf[axle.graph.JungUndirectedGraphFactory.UndirectedGraph[VP, EP]]
-    val jug = axle.graph.JungUndirectedGraphFactory.graphFrom[VP, EP, VP, EP](asUG)(vp => vp, ep => ep)
+    val asUG = this.asInstanceOf[axle.graph.JungUndirectedGraph[VP, EP]]
+    val jug = axle.graph.JungUndirectedGraph[VP, EP, VP, EP](asUG)(vp => vp, ep => ep)
     jug
   }
 
-  implicit def enComponentJungDirectedGraph[VP, EP](g: axle.graph.JungDirectedGraphFactory.JungDirectedGraph[VP, EP]): Component =
+  implicit def enComponentJungDirectedGraph[VP, EP](g: axle.graph.JungDirectedGraph[VP, EP]): Component =
     new JungDirectedGraphVisualization().component(g)
 
-  implicit def enComponentNativeDirectedGraph[VP, EP](g: axle.graph.NativeDirectedGraphFactory.NativeDirectedGraph[VP, EP]): Component = {
+  implicit def enComponentNativeDirectedGraph[VP, EP](g: axle.graph.NativeDirectedGraph[VP, EP]): Component = {
     // TODO: remove this cast
-    val asDG = g.asInstanceOf[axle.graph.JungDirectedGraphFactory.DirectedGraph[VP, EP]]
-    val jdg = axle.graph.JungDirectedGraphFactory.graphFrom[VP, EP, VP, EP](asDG)(vp => vp, ep => ep)
+    val asDG = g.asInstanceOf[axle.graph.JungDirectedGraph[VP, EP]]
+    val jdg = axle.graph.JungDirectedGraph[VP, EP, VP, EP](asDG)(vp => vp, ep => ep)
     jdg
   }
 

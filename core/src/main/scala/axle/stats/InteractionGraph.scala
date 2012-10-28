@@ -1,10 +1,9 @@
 package axle.stats
 
-import axle.graph.JungUndirectedGraphFactory._
+import axle.graph.JungUndirectedGraph
 import collection._
 
-class InteractionGraph()
-  extends JungUndirectedGraph[RandomVariable[_], String] {
+class InteractionGraph() extends JungUndirectedGraph[RandomVariable[_], String] {
 
   def eliminate(rv: RandomVariable[_]): InteractionGraph = null.asInstanceOf[InteractionGraph] // TODO
 
