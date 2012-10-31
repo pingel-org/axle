@@ -9,24 +9,21 @@ trait JoinTreeFactory extends JungUndirectedGraphFactory {
 
   def apply(
     vps: Seq[immutable.Set[RandomVariable[_]]],
-    ef: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]] => Seq[(JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], String)]): JoinTree = {
-    4
-  }
+    ef: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]] => Seq[(JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], String)]): JoinTree =
+    JungUndirectedGraph(vps, ef).asInstanceOf[JoinTree]
 
-  // TODO:
-  def fromEliminationOrder[MVP](m: Model[MVP], pi: List[RandomVariable[_]]): JoinTree = {
-    // returns a jointree for DAG G with width equal to width(pi, G)
+  // returns a jointree for DAG G with width equal to width(π, G)
+  def fromEliminationOrder[MVP](m: Model[MVP], π: List[RandomVariable[_]]): JoinTree = {
     // val Gm = Gv.moralGraph()
     // val clusterSequence: List[Set[RandomVariable[_]]] = null // Gm.induceClusterSequence(pi)
-    // val g = null.asInstanceOf[JungUndirectedGraph[mutable.Set[RandomVariable[_]], String]] // TODO
-    new JoinTree()
+    null.asInstanceOf[JoinTree] // TODO
   }
 
 }
 
 object JoinTree extends JoinTreeFactory
 
-class JoinTree extends JungUndirectedGraph[immutable.Set[RandomVariable[_]], String] {
+trait JoinTree extends JungUndirectedGraph[immutable.Set[RandomVariable[_]], String] {
 
   // val g = JungUndirectedGraphFactory.graph[mutable.Set[RandomVariable[_]], String]()
 

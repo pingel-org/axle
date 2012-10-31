@@ -223,7 +223,7 @@ class BayesianNetwork(_name: String) extends Model[BayesianNetworkNode] {
 
   def interactionGraph(): InteractionGraph = InteractionGraph(
     randomVariables,
-    (vs: Seq[JungDirectedGraphVertex[RandomVariable[_]]]) =>
+    (vs: Seq[JungUndirectedGraphVertex[RandomVariable[_]]]) =>
       (for (vi <- vs; vj <- vs) yield (vi, vj)) // TODO "doubles"
         .filter({ case (vi, vj) => interactsWith(vi.payload, vj.payload) })
         .map({ case (vi, vj) => (vi, vj, "") })

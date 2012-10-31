@@ -7,16 +7,14 @@ trait EliminationTreeFactory extends JungUndirectedGraphFactory {
 
   def apply(
     vps: Seq[Factor],
-    ef: Seq[JungUndirectedGraphVertex[Factor]] => Seq[(JungUndirectedGraphVertex[Factor], JungUndirectedGraphVertex[Factor], String)]): EliminationTree = {
-    4
-  }
-  
+    ef: Seq[JungUndirectedGraphVertex[Factor]] => Seq[(JungUndirectedGraphVertex[Factor], JungUndirectedGraphVertex[Factor], String)]): EliminationTree =
+    JungUndirectedGraph(vps, ef).asInstanceOf[EliminationTree] // TODO: cast
+
 }
 
 object EliminationTree extends EliminationTreeFactory
 
-
-class EliminationTree extends JungUndirectedGraph[Factor, String] {
+trait EliminationTree extends JungUndirectedGraph[Factor, String] {
 
   def gatherVars(stop: V, node: V, result: mutable.Set[RandomVariable[_]]): Unit = {
     result ++= node.payload.variables

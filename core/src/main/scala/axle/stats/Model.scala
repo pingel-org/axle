@@ -12,21 +12,23 @@ object Direction {
 
 }
 
+object Model extends ModelFactory {
+
+  var newVarIndex = 0
+
+}
+
 trait ModelFactory extends JungDirectedGraphFactory {
 
   def apply[A](): Model[A] = new Model[A]() {}
 
   def apply[A](vps: Seq[A],
-    ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], String)]): Model[A] = {
-    4
-  }
+    ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], String)]): Model[A] =
+    JungDirectedGraph(vps, ef).asInstanceOf[Model[A]] // TODO cast
 
 }
 
 trait Model[MVP] extends JungDirectedGraph[MVP, String] {
-
-  var newVarIndex = 0
-  val name2variable = mutable.Map[String, RandomVariable[_]]()
 
   def name(): String
 
@@ -34,7 +36,7 @@ trait Model[MVP] extends JungDirectedGraph[MVP, String] {
 
   def randomVariables(): List[RandomVariable[_]] = vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
 
-  def variable(name: String): RandomVariable[_] = name2variable(name)
+  def variable(name: String): RandomVariable[_] = null // TODO name2variable(name)
 
   def numVariables(): Int = size()
 

@@ -9,15 +9,14 @@ trait InteractionGraphFactory extends JungUndirectedGraphFactory {
 
   def apply(
     vps: Seq[RandomVariable[_]],
-    ef: Seq[JungDirectedGraphVertex[RandomVariable[_]]] => Seq[(JungDirectedGraphVertex[RandomVariable[_]], JungDirectedGraphVertex[RandomVariable[_]], String)]): InteractionGraph = {
-    4
-  }
+    ef: Seq[JungUndirectedGraphVertex[RandomVariable[_]]] => Seq[(JungUndirectedGraphVertex[RandomVariable[_]], JungUndirectedGraphVertex[RandomVariable[_]], String)]): InteractionGraph =
+    JungUndirectedGraph(vps, ef).asInstanceOf[InteractionGraph] // TODO: cast
 
 }
 
 object InteractionGraph extends InteractionGraphFactory
 
-class InteractionGraph() extends JungUndirectedGraph[RandomVariable[_], String] {
+trait InteractionGraph extends JungUndirectedGraph[RandomVariable[_], String] {
 
   def eliminate(rv: RandomVariable[_]): InteractionGraph = null.asInstanceOf[InteractionGraph] // TODO
 
