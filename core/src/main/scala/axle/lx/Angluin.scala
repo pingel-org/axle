@@ -5,36 +5,33 @@ import collection._
 import axle._
 import scalaz._
 import Scalaz._
+import axle.graph._
 
 object Angluin {
-
-  import axle.graph.JungDirectedGraph
 
   type Expression = List[Symbol]
 
   val ▦ = List[Symbol]()
 
-  type AcceptorState = JungDirectedGraph[String, Symbol]#V
-
   // val g = graph[String, Symbol]()
 
-  case class Acceptor(g: JungDirectedGraph[String, Symbol], I: Set[AcceptorState], F: Set[AcceptorState]) {
+  case class Acceptor(g: JungDirectedGraph[String, Symbol], I: Set[Symbol], F: Set[Symbol]) {
 
     def Q() = g.vertices
 
     def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
       val (newG, v) = g + "" // TODO
-      val newI = isInitial ? (I + v) | I
-      val newF = isFinal ? (F + v) | F
+      val newI = isInitial ? (I + v.payload) | I
+      val newF = isFinal ? (F + v.payload) | F
       Acceptor(newG, newI, newF)
     }
 
-    def δ(state: AcceptorState, symbol: Symbol): Set[AcceptorState] =
-      g.edges.filter(e => e.source == state && e.payload == symbol).map(_.dest)
+    def δ(state: JungDirectedGraph[String, Symbol]#V, symbol: Symbol): Set[String] =
+      g.edges.filter(e => e.source == state && e.payload == symbol).map(_.dest.payload)
 
-    def δ(state: AcceptorState, exp: Expression): Set[AcceptorState] =
+    def δ(state: JungDirectedGraph[String, Symbol]#V, exp: Expression): Set[String] =
       exp match {
-        case Nil => Set(state)
+        case Nil => Set(state.payload)
         case _ => δ(state, exp.head).map(δ(_, exp.tail)).reduce(_ ++ _)
       }
 
@@ -55,7 +52,7 @@ object Angluin {
       false
     }
 
-    def induce(P: Set[AcceptorState]): Acceptor = {
+    def induce(P: Set[JungDirectedGraph[String, Symbol]#V]): Acceptor = {
       // TODO !!!
       null
     }

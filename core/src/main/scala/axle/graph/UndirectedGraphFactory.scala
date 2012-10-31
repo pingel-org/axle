@@ -2,31 +2,31 @@ package axle.graph
 
 import collection._
 
+trait UndirectedGraphVertex[P] extends GraphVertex[P]
+
+trait UndirectedGraphEdge[P] extends GraphEdge[P] {
+
+  def vertices(): (UndirectedGraphVertex[P], UndirectedGraphVertex[P])
+
+  def other(u: UndirectedGraphVertex[P]): UndirectedGraphVertex[P] = {
+    val (v1, v2) = vertices()
+    u match {
+      case _ if u.equals(v1) => v2
+      case _ if u.equals(v2) => v1
+      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+    }
+  }
+
+  def connects(a1: UndirectedGraphVertex[P], a2: UndirectedGraphVertex[P]) = {
+    val (v1, v2) = vertices()
+    (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
+  }
+}
+
 trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
 
   type V <: UndirectedGraphVertex[VP]
   type E <: UndirectedGraphEdge[EP]
-
-  trait UndirectedGraphVertex[P] extends GraphVertex[P]
-
-  trait UndirectedGraphEdge[P] extends GraphEdge[P] {
-
-    def vertices(): (V, V)
-
-    def other(u: V): V = {
-      val (v1, v2) = vertices()
-      u match {
-        case _ if u.equals(v1) => v2
-        case _ if u.equals(v2) => v1
-        case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
-      }
-    }
-
-    def connects(a1: V, a2: V) = {
-      val (v1, v2) = vertices()
-      (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
-    }
-  }
 
   def vertex(payload: VP): V
   def edge(v1: V, v2: V, payload: EP): E
@@ -60,4 +60,10 @@ trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   def eliminate(vs: List[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
 }
 
-trait UndirectedGraphFactory extends GraphFactory
+trait UndirectedGraphFactory extends GraphFactory {
+  
+  def apply[A, B](): GenUndirectedGraph[A, B]
+  
+  def apply[A, B](vps: Seq[A], ef: Seq[UndirectedGraphVertex[A]] => Seq[(UndirectedGraphVertex[A], UndirectedGraphVertex[A], B)]): GenUndirectedGraph[A, B]
+ 
+}

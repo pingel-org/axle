@@ -7,11 +7,13 @@ class DirectedGraphSpec extends Specification {
 
   "Directed Graph" should {
     "work" in {
-      
-      val (g0, vs) = JungDirectedGraph[String, String]() ++ List("a", "b", "c")
-      val (g, es) = vs match {
-        case a :: b :: c :: Nil => List((a, b, "hello"), (b, c, "world"), (c, a, "!"))
-      }
+
+      val g = JungDirectedGraph(
+        vps = List("a", "b", "c"),
+        ef = (vs: Seq[JungDirectedGraphVertex[String]]) => vs match {
+          case a :: b :: c :: Nil => List((a, b, "hello"), (b, c, "world"), (c, a, "!"))
+        }
+      )
 
       g.size must be equalTo (3)
     }
@@ -20,10 +22,11 @@ class DirectedGraphSpec extends Specification {
   "REPL Demo" should {
     "work" in {
 
-      val (g0, vs) = JungDirectedGraph[String, Double]() ++ List("a", "b", "c")
-      val (g, es) = vs match {
-        case a :: b :: c :: Nil => List((a, b, 0.3), (a, c, 0.2), (b, c, 0.4))
-      }
+      val g = JungDirectedGraph(
+        vps = List("a", "b", "c"),
+        ef = (vs: Seq[JungDirectedGraphVertex[String]]) => vs match {
+          case a :: b :: c :: Nil => List((a, b, 0.3), (a, c, 0.2), (b, c, 0.4))
+        })
 
       1 must be equalTo (1)
     }

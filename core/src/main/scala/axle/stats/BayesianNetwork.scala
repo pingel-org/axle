@@ -101,6 +101,7 @@ package axle.stats
  */
 
 import collection._
+import axle.graph._
 import math.max
 import scalaz._
 import Scalaz._
@@ -111,13 +112,22 @@ case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) {
 
 }
 
-object BayesianNetwork {
+trait BayesianNetworkFactory extends ModelFactory {
 
   def apply(name: String): BayesianNetwork = new BayesianNetwork(name)
+
+  def apply(
+    name: String,
+    vps: Seq[BayesianNetworkNode],
+    ef: Seq[JungDirectedGraphVertex[BayesianNetworkNode]] => Seq[(JungDirectedGraphVertex[BayesianNetworkNode], JungDirectedGraphVertex[BayesianNetworkNode], String)]): BayesianNetwork = {
+    null
+  }
+
 }
 
-class BayesianNetwork(_name: String)
-  extends Model[BayesianNetworkNode] {
+object BayesianNetwork extends BayesianNetworkFactory
+
+class BayesianNetwork(_name: String) extends Model[BayesianNetworkNode] {
 
   def name(): String = _name
 
@@ -211,13 +221,14 @@ class BayesianNetwork(_name: String)
    * Also called the "moral graph"
    */
 
-  def interactionGraph(): InteractionGraph = {
-    import axle._
-    val (ig0, vs) = (new InteractionGraph()) ++ randomVariables
-    val interactions = randomVariables.doubles().filter({ case (vi, vj) => interactsWith(vi, vj) })
-    val (ig, es) = ig0 ++ interactions.map({ case (vi, vj) => (ig0.findVertex(vi).get, ig0.findVertex(vj).get, "") })
-    ig
-  }
+  def interactionGraph(): InteractionGraph = InteractionGraph(
+    randomVariables,
+    (vs: Seq[JungDirectedGraphVertex[RandomVariable[_]]]) =>
+      (for (vi <- vs; vj <- vs) yield (vi, vj)) // TODO "doubles"
+        .filter({ case (vi, vj) => interactsWith(vi.payload, vj.payload) })
+        .map({ case (vi, vj) => (vi, vj, "") })
+
+  )
 
   /**
    * orderWidth
@@ -248,15 +259,16 @@ class BayesianNetwork(_name: String)
       for (U <- e.map(_.rv)) {
         val uVertex = result.findVertex(_.rv == U).get
         for (edge <- result.outputEdgesOf(uVertex)) { // ModelEdge
-          val X = edge.dest().payload.rv
-          val oldF = result.cpt(X)
-          result.deleteEdge(edge) // TODO: not functional
-          val smallerF: Factor = null // TODO makeFactorFor(X)
-          for (c <- smallerF.cases) {
-            // set its value to what e sets it to
-            // TODO c(U) = e.valueOf(U)
-            // TODO smallerF(c) = oldF(c)
-          }
+          // TODO !!!
+//          val X = edge.dest().payload.rv
+//          val oldF = result.cpt(X)
+//          result.deleteEdge(edge) // TODO: not functional
+//          val smallerF: Factor = null // TODO makeFactorFor(X)
+//          for (c <- smallerF.cases) {
+//            // set its value to what e sets it to
+//            // TODO c(U) = e.valueOf(U)
+//            // TODO smallerF(c) = oldF(c)
+//          }
           // TODO result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
         }
       }

@@ -1,12 +1,17 @@
 package axle.stats
 
 import collection._
-import axle.graph.JungDirectedGraph
-import axle.graph.JungUndirectedGraph
+import axle.graph._
 
-object JoinTree {
+trait JoinTreeFactory extends JungUndirectedGraphFactory {
 
-  // type G = JungUndirectedGraph[mutable.Set[RandomVariable[_]], String]
+  def apply(): JoinTree = new JoinTree() {}
+
+  def apply(
+    vps: Seq[immutable.Set[RandomVariable[_]]],
+    ef: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]] => Seq[(JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], String)]): JoinTree = {
+    4
+  }
 
   // TODO:
   def fromEliminationOrder[MVP](m: Model[MVP], pi: List[RandomVariable[_]]): JoinTree = {
@@ -19,7 +24,9 @@ object JoinTree {
 
 }
 
-class JoinTree extends JungUndirectedGraph[mutable.Set[RandomVariable[_]], String] {
+object JoinTree extends JoinTreeFactory
+
+class JoinTree extends JungUndirectedGraph[immutable.Set[RandomVariable[_]], String] {
 
   // val g = JungUndirectedGraphFactory.graph[mutable.Set[RandomVariable[_]], String]()
 

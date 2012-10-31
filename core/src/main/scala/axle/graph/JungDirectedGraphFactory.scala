@@ -3,23 +3,21 @@ package axle.graph
 import collection.JavaConverters._
 import collection._
 
+trait JungDirectedGraphVertex[P] extends DirectedGraphVertex[P]
+
+trait JungDirectedGraphEdge[P] extends DirectedGraphEdge[P]
+
 trait JungDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
 
   import edu.uci.ics.jung.graph.DirectedSparseGraph
 
   type V = JungDirectedGraphVertex[VP]
   type E = JungDirectedGraphEdge[EP]
-
   type S = DirectedSparseGraph[V, E]
-
-  trait JungDirectedGraphVertex[P] extends DirectedGraphVertex[P]
-
-  trait JungDirectedGraphEdge[P] extends DirectedGraphEdge[P]
 
   class JungDirectedGraphVertexImpl(_payload: VP) extends JungDirectedGraphVertex[VP] {
 
-    val ok = jungGraph.addVertex(this)
-    // TODO check 'ok'
+    val ok = jungGraph.addVertex(this) // TODO check 'ok'
 
     def payload(): VP = _payload
   }
@@ -125,9 +123,14 @@ trait JungDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
 
 }
 
-object JungDirectedGraph extends DirectedGraphFactory {
+trait JungDirectedGraphFactory extends GenDirectedGraphFactory {
 
   def apply[A, B](): JungDirectedGraph[A, B] = new JungDirectedGraph[A, B]() {}
+
+  def apply[A, B](vps: Seq[A],
+    ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], B)]): JungDirectedGraph[A, B] = {
+    4
+  }
 
   def apply[OVP, OEP, NVP, NEP](other: GenDirectedGraph[OVP, OEP])(
     convertVP: OVP => NVP, convertEP: OEP => NEP): JungDirectedGraph[NVP, NEP] = {
@@ -149,4 +152,7 @@ object JungDirectedGraph extends DirectedGraphFactory {
 
     result
   }
+
 }
+
+object JungDirectedGraph extends JungDirectedGraphFactory

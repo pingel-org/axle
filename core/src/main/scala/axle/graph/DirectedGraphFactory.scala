@@ -2,17 +2,17 @@ package axle.graph
 
 import collection._
 
+trait DirectedGraphVertex[P] extends GraphVertex[P]
+
+trait DirectedGraphEdge[P] extends GraphEdge[P] {
+  def source(): DirectedGraphVertex[P]
+  def dest(): DirectedGraphVertex[P]
+}
+
 trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
 
   type V <: DirectedGraphVertex[VP]
   type E <: DirectedGraphEdge[EP]
-
-  trait DirectedGraphVertex[P] extends GraphVertex[P]
-
-  trait DirectedGraphEdge[P] extends GraphEdge[P] {
-    def source(): V
-    def dest(): V
-  }
 
   def findEdge(from: V, to: V): Option[E]
   def leaves(): Set[V]
@@ -70,7 +70,11 @@ trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   def removePredecessor(v: V, predecessor: V): GenDirectedGraph[VP, EP]
 }
 
-trait DirectedGraphFactory extends GraphFactory {
+//G[A, B] <: GenGraph[A, B]
+trait GenDirectedGraphFactory extends GraphFactory {
 
+  def apply[A, B](): GenDirectedGraph[A, B]
+
+  def apply[A, B](vps: Seq[A], ef: Seq[DirectedGraphVertex[A]] => Seq[(DirectedGraphVertex[A], DirectedGraphVertex[A], B)]): GenDirectedGraph[A, B]
 
 }

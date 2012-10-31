@@ -2,7 +2,7 @@ package axle.stats
 
 import org.specs2.mutable._
 import collection._
-import axle.graph.JungDirectedGraph
+import axle.graph._
 
 class ConditionalProbabilityTableSpecification extends Specification {
 
@@ -14,7 +14,7 @@ class ConditionalProbabilityTableSpecification extends Specification {
   val D = new RandomVariable0("D", bools, None)
   val E = new RandomVariable0("E", bools, None)
 
-  val (bn0, vs) = BayesianNetwork("6.1") ++ List(
+  val bn = BayesianNetwork("6.1", List(
     BayesianNetworkNode(A,
       Factor(Vector(A), Map(
         List(A eq true) -> 0.6,
@@ -51,11 +51,10 @@ class ConditionalProbabilityTableSpecification extends Specification {
         List(E eq true, C eq false) -> 0.3,
         List(E eq false, C eq true) -> 0.0,
         List(E eq false, C eq false) -> 1.0
-      ))))
-
-  val (bn, es) = vs match {
-    case av :: bv :: cv :: dv :: ev :: Nil => bn0 ++ List((av, bv, ""), (av, cv, ""), (bv, dv, ""), (cv, dv, ""), (cv, ev, ""))
-  }
+      )))),
+    (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+      case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
+    })
 
   "CPT" should {
     "work" in {

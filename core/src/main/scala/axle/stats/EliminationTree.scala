@@ -1,7 +1,20 @@
 package axle.stats
 
 import collection._
-import axle.graph.JungUndirectedGraph
+import axle.graph._
+
+trait EliminationTreeFactory extends JungUndirectedGraphFactory {
+
+  def apply(
+    vps: Seq[Factor],
+    ef: Seq[JungUndirectedGraphVertex[Factor]] => Seq[(JungUndirectedGraphVertex[Factor], JungUndirectedGraphVertex[Factor], String)]): EliminationTree = {
+    4
+  }
+  
+}
+
+object EliminationTree extends EliminationTreeFactory
+
 
 class EliminationTree extends JungUndirectedGraph[Factor, String] {
 

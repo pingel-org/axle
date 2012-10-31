@@ -1,5 +1,13 @@
 package axle.graph
 
+trait GraphVertex[P] {
+  def payload(): P
+}
+
+trait GraphEdge[P] {
+  def payload(): P
+}
+
 trait GenGraph[VP, EP] {
 
   type V <: GraphVertex[VP]
@@ -7,14 +15,6 @@ trait GenGraph[VP, EP] {
   type S
 
   def storage(): S
-
-  trait GraphVertex[P] {
-    def payload(): P
-  }
-
-  trait GraphEdge[P] {
-    def payload(): P
-  }
 
   def size(): Int
   def edges(): Set[E]
@@ -29,6 +29,11 @@ trait GenGraph[VP, EP] {
 
 }
 
+// CC[A, B] <: GenGraph[A, B]
+// type Coll = CC[_, _]
+// CC[A, B]
+
 trait GraphFactory {
   def apply[A, B](): GenGraph[A, B]
+  def apply[A, B](vps: Seq[A], ef: Seq[GraphVertex[A]] => Seq[(GraphVertex[A], GraphVertex[A], B)]): GenGraph[A, B]
 }

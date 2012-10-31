@@ -1,7 +1,7 @@
 package axle.stats
 
 import collection._
-import axle.graph.JungDirectedGraph
+import axle.graph._
 import axle.stats._
 
 object Direction {
@@ -12,9 +12,18 @@ object Direction {
 
 }
 
-trait Model[MVP] extends JungDirectedGraph[MVP, String] {
+trait ModelFactory extends JungDirectedGraphFactory {
 
-  // def duplicate(): Model[MVP] = new Model[MVP](name, graphFrom(g)(v => v, e => e))
+  def apply[A](): Model[A] = new Model[A]() {}
+
+  def apply[A](vps: Seq[A],
+    ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], String)]): Model[A] = {
+    4
+  }
+
+}
+
+trait Model[MVP] extends JungDirectedGraph[MVP, String] {
 
   var newVarIndex = 0
   val name2variable = mutable.Map[String, RandomVariable[_]]()

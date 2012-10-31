@@ -156,7 +156,7 @@ trait NativeDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
 
 }
 
-object NativeDirectedGraph extends DirectedGraphFactory {
+object NativeDirectedGraph extends GenDirectedGraphFactory {
 
   def apply[A, B](): NativeDirectedGraph[A, B] = new NativeDirectedGraph[A, B]() {}
 

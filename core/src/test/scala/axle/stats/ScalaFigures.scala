@@ -3,8 +3,7 @@ package org.pingel.bayes.examples
 
 import collection._
 import axle.stats._
-import axle.visualize._
-import axle.graph.JungDirectedGraph
+import axle.graph._
 import org.specs2.mutable._
 
 class ScalaFigures extends Specification {
@@ -19,48 +18,49 @@ class ScalaFigures extends Specification {
 
   def figure6_1(): BayesianNetwork = {
 
-    val (bn0, vs) = BayesianNetwork("6.1") ++ List(
-      BayesianNetworkNode(A,
-        Factor(Vector(A), Map(
-          List(A eq true) -> 0.6,
-          List(A eq false) -> 0.4
-        ))),
-      BayesianNetworkNode(B, // B | A
-        Factor(Vector(B), Map(
-          List(B eq true, A eq true) -> 0.2,
-          List(B eq true, A eq false) -> 0.8,
-          List(B eq false, A eq true) -> 0.75,
-          List(B eq false, A eq false) -> 0.25
-        ))),
-      BayesianNetworkNode(C, // C | A
-        Factor(Vector(C), Map(
-          List(C eq true, A eq true) -> 0.8,
-          List(C eq true, A eq false) -> 0.2,
-          List(C eq false, A eq true) -> 0.1,
-          List(C eq false, A eq false) -> 0.9
-        ))),
-      BayesianNetworkNode(D, // D | BC
-        Factor(Vector(D), Map(
-          List(D eq true, B eq true, C eq true) -> 0.95,
-          List(D eq true, B eq true, C eq false) -> 0.05,
-          List(D eq true, B eq false, C eq true) -> 0.9,
-          List(D eq true, B eq false, C eq false) -> 0.1,
-          List(D eq false, B eq true, C eq true) -> 0.8,
-          List(D eq false, B eq true, C eq false) -> 0.2,
-          List(D eq false, B eq false, C eq true) -> 0.0,
-          List(D eq false, B eq false, C eq false) -> 1.0
-        ))),
-      BayesianNetworkNode(E, // E | C
-        Factor(Vector(E), Map(
-          List(E eq true, C eq true) -> 0.7,
-          List(E eq true, C eq false) -> 0.3,
-          List(E eq false, C eq true) -> 0.0,
-          List(E eq false, C eq false) -> 1.0
-        ))))
-
-    val (bn, es) = vs match {
-      case av :: bv :: cv :: dv :: ev :: Nil => bn0 ++ List((av, bv, ""), (av, cv, ""), (bv, dv, ""), (cv, dv, ""), (cv, ev, ""))
-    }
+    val bn = BayesianNetwork(
+      "6.1",
+      List(
+        BayesianNetworkNode(A,
+          Factor(Vector(A), Map(
+            List(A eq true) -> 0.6,
+            List(A eq false) -> 0.4
+          ))),
+        BayesianNetworkNode(B, // B | A
+          Factor(Vector(B), Map(
+            List(B eq true, A eq true) -> 0.2,
+            List(B eq true, A eq false) -> 0.8,
+            List(B eq false, A eq true) -> 0.75,
+            List(B eq false, A eq false) -> 0.25
+          ))),
+        BayesianNetworkNode(C, // C | A
+          Factor(Vector(C), Map(
+            List(C eq true, A eq true) -> 0.8,
+            List(C eq true, A eq false) -> 0.2,
+            List(C eq false, A eq true) -> 0.1,
+            List(C eq false, A eq false) -> 0.9
+          ))),
+        BayesianNetworkNode(D, // D | BC
+          Factor(Vector(D), Map(
+            List(D eq true, B eq true, C eq true) -> 0.95,
+            List(D eq true, B eq true, C eq false) -> 0.05,
+            List(D eq true, B eq false, C eq true) -> 0.9,
+            List(D eq true, B eq false, C eq false) -> 0.1,
+            List(D eq false, B eq true, C eq true) -> 0.8,
+            List(D eq false, B eq true, C eq false) -> 0.2,
+            List(D eq false, B eq false, C eq true) -> 0.0,
+            List(D eq false, B eq false, C eq false) -> 1.0
+          ))),
+        BayesianNetworkNode(E, // E | C
+          Factor(Vector(E), Map(
+            List(E eq true, C eq true) -> 0.7,
+            List(E eq true, C eq false) -> 0.3,
+            List(E eq false, C eq true) -> 0.0,
+            List(E eq false, C eq false) -> 1.0
+          )))),
+      (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+        case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
+      })
 
     bn
   }
@@ -97,27 +97,27 @@ class ScalaFigures extends Specification {
 
   def figure6_4(): BayesianNetwork = {
 
-    val (bn0, vs) = new BayesianNetwork("6.4") ++ List(
-      BayesianNetworkNode(A, Factor(Vector(A), Map(
-        List(A eq true) -> 0.6,
-        List(A eq false) -> 0.4
-      ))),
-      BayesianNetworkNode(B, Factor(Vector(B), Map( // B | A
-        List(B eq true, A eq true) -> 0.9,
-        List(B eq true, A eq false) -> 0.1,
-        List(B eq false, A eq true) -> 0.2,
-        List(B eq false, A eq false) -> 0.8
-      ))),
-      BayesianNetworkNode(C, Factor(Vector(C), Map( // C | B
-        List(C eq true, B eq true) -> 0.3,
-        List(C eq true, B eq false) -> 0.7,
-        List(C eq false, B eq true) -> 0.5,
-        List(C eq false, B eq false) -> 0.5
-      ))))
-
-    val (bn, es) = vs match {
-      case av :: bv :: cv :: Nil => bn0 ++ List((av, bv, ""), (bv, cv, ""))
-    }
+    val bn = BayesianNetwork("6.4",
+      List(
+        BayesianNetworkNode(A, Factor(Vector(A), Map(
+          List(A eq true) -> 0.6,
+          List(A eq false) -> 0.4
+        ))),
+        BayesianNetworkNode(B, Factor(Vector(B), Map( // B | A
+          List(B eq true, A eq true) -> 0.9,
+          List(B eq true, A eq false) -> 0.1,
+          List(B eq false, A eq true) -> 0.2,
+          List(B eq false, A eq false) -> 0.8
+        ))),
+        BayesianNetworkNode(C, Factor(Vector(C), Map( // C | B
+          List(C eq true, B eq true) -> 0.3,
+          List(C eq true, B eq false) -> 0.7,
+          List(C eq false, B eq true) -> 0.5,
+          List(C eq false, B eq false) -> 0.5
+        )))),
+      (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+        case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
+      })
 
     val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)
 
@@ -161,11 +161,10 @@ class ScalaFigures extends Specification {
 
     val f61 = figure6_1()
 
-    val (τ, vs) = (new EliminationTree()) ++ List(A, B, C, D, E).map(f61.cpt(_))
-
-    val () = vs match {
-      case vA :: vB :: vC :: vD :: vE :: Nil => τ ++ List((vA, vB, ""), (vA, vD, ""), (vD, vC, ""), (vC, vE, ""))
-    }
+    val τ = EliminationTree(List(A, B, C, D, E).map(f61.cpt(_)),
+      (vs: Seq[JungUndirectedGraphVertex[Factor]]) => vs match {
+        case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
+      })
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
     val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.cpt(C))
@@ -181,12 +180,15 @@ class ScalaFigures extends Specification {
     f61
   }
 
-  def figure7_12(): JoinTree = {
-    val (jt0, vs) = (new JoinTree()) ++ List(immutable.Set(A, B, C), immutable.Set(B, C, D), immutable.Set(C, E))
-    val (jt, es) = vs match {
-      case vABC :: vBCD :: vCE :: Nil => jt0 ++ List((vABC, vBCD, ""), (vBCD, vCE, ""))
+  def figure7_12() = {
+
+    val vps: Seq[immutable.Set[RandomVariable[_]]] = List(immutable.Set(A, B, C), immutable.Set(B, C, D), immutable.Set(C, E))
+
+    val ef = (vs: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]]) => vs match {
+      case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))
     }
-    jt
+
+    JoinTree(vps, ef)
   }
 
   "bayesian networks" should {

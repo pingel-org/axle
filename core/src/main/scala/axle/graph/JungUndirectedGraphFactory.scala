@@ -3,6 +3,10 @@ package axle.graph
 import collection.JavaConverters._
 import collection._
 
+trait JungUndirectedGraphVertex[P] extends UndirectedGraphVertex[P]
+
+trait JungUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
+
 trait JungUndirectedGraph[VP, EP] extends GenUndirectedGraph[VP, EP] {
 
   import edu.uci.ics.jung.graph.UndirectedSparseGraph
@@ -11,10 +15,6 @@ trait JungUndirectedGraph[VP, EP] extends GenUndirectedGraph[VP, EP] {
   type E = JungUndirectedGraphEdge[EP]
 
   type S = UndirectedSparseGraph[V, E]
-
-  trait JungUndirectedGraphVertex[P] extends UndirectedGraphVertex[P]
-
-  trait JungUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
 
   class JungUndirectedGraphVertexImpl(_payload: VP)
     extends JungUndirectedGraphVertex[VP] {
@@ -107,14 +107,16 @@ trait JungUndirectedGraph[VP, EP] extends GenUndirectedGraph[VP, EP] {
 
 }
 
-object JungUndirectedGraph extends UndirectedGraphFactory {
+trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
-  def graph[A, B](): JungUndirectedGraph[A, B] = new JungUndirectedGraph[A, B]() {}
+  def apply[A, B](): JungUndirectedGraph[A, B]
+
+  def apply[A, B](vps: Seq[A], ef: Seq[JungUndirectedGraphVertex[A]] => Seq[(JungUndirectedGraphVertex[A], JungUndirectedGraphVertex[A], B)]): JungUndirectedGraph[A, B]
 
   def apply[OVP, OEP, NVP, NEP](other: GenUndirectedGraph[OVP, OEP])(
     convertVP: OVP => NVP, convertEP: OEP => NEP): JungUndirectedGraph[NVP, NEP] = {
 
-    val result = graph[NVP, NEP]()
+    val result = JungUndirectedGraph[NVP, NEP]()
 
     val ov2nv = mutable.Map[other.V, result.V]()
 
@@ -136,3 +138,5 @@ object JungUndirectedGraph extends UndirectedGraphFactory {
   }
 
 }
+
+object JungUndirectedGraph extends JungUndirectedGraphFactory
