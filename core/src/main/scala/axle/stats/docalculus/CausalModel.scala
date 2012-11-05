@@ -6,10 +6,13 @@ case class CausalModelNode(rv: RandomVariable[_], observable: Boolean=true)
 
 case class PFunction(rv: RandomVariable[_], inputs: Seq[RandomVariable[_]])
 
-object CausalModel {
+trait CausalModelFactory extends ModelFactory {
 
-  def apply(name: String): CausalModel = new CausalModel(name)
+  def apply(name: String, vs: Seq[CausalModelNode]): CausalModel = todo
+  
 }
+
+object CausalModel extends CausalModelFactory
 
 class CausalModel(_name: String)
   extends Model[CausalModelNode] {

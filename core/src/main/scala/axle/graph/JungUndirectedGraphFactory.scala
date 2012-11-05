@@ -3,61 +3,71 @@ package axle.graph
 import collection.JavaConverters._
 import collection._
 
+trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
+
+  def apply[A, B](): JungUndirectedGraph[A, B]
+
+  def apply[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphVertex[VP]] => Seq[(JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)]): JungUndirectedGraph[VP, EP] =
+    new JungUndirectedGraphImpl[VP, EP](vps, ef)
+}
+
+object JungUndirectedGraph extends JungUndirectedGraphFactory
+
 trait JungUndirectedGraphVertex[P] extends UndirectedGraphVertex[P]
 
 trait JungUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
 
-trait JungUndirectedGraph[VP, EP] extends GenUndirectedGraph[VP, EP] {
+class JungUndirectedGraphVertexImpl[VP](_payload: VP)
+  extends JungUndirectedGraphVertex[VP] {
+
+  def payload(): VP = _payload
+}
+
+class JungUndirectedGraphEdgeImpl[VP, EP](v1: V, v2: V, _payload: EP)
+  extends JungUndirectedGraphEdge[EP] {
+
+  def vertices(): (V, V) = (v1, v2)
+
+  def payload(): EP = _payload
+}
+
+trait JungUndirectedGraph[VP, EP] extends GenUndirectedGraph[VP, EP]
+
+class JungUndirectedGraphImpl[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphVertex[VP]] => Seq[(JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)])
+  extends JungUndirectedGraph[VP, EP] {
 
   import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
   type V = JungUndirectedGraphVertex[VP]
   type E = JungUndirectedGraphEdge[EP]
+  type S = UndirectedSparseGraph[V, EP]
 
-  type S = UndirectedSparseGraph[V, E]
+  lazy val jungGraph = new UndirectedSparseGraph[V, EP]()
 
-  class JungUndirectedGraphVertexImpl(_payload: VP)
-    extends JungUndirectedGraphVertex[VP] {
+  vps.map(vp => {
+    val v = new JungUndirectedGraphVertexImpl(vp)
+    jungGraph.addVertex(v) // TODO check return value
+  })
 
-    val ok = jungGraph.addVertex(this)
-    // TODO check 'ok'
+  ef(jungGraph.getVertices.asScala.toList).map({
+    case (vi, vj, ep) => {
+      // new JungUndirectedGraphEdgeImpl(vi, v2, payload)
+      jungGraph.addEdge(ep, vi, vj) // TODO check return value
+    }
+  })
 
-    def payload(): VP = _payload
-  }
+  def storage(): S = jungGraph
 
-  class JungUndirectedGraphEdgeImpl(v1: V, v2: V, _payload: EP)
-    extends JungUndirectedGraphEdge[EP] {
-
-    val ok = jungGraph.addEdge(this, v1, v2)
-    // TODO check 'ok'
-
-    def vertices(): (V, V) = (v1, v2)
-
-    def payload(): EP = _payload
-  }
-
-  val jungGraph = new UndirectedSparseGraph[V, E]()
-
-  def storage() = jungGraph
-
-  def vertices(): immutable.Set[V] = jungGraph.getVertices.asScala.toSet
-
-  def edges(): immutable.Set[E] = jungGraph.getEdges.asScala.toSet
-
+  def vertices(): Set[V] = jungGraph.getVertices.asScala.toSet
+  def edges(): Set[E] = jungGraph.getEdges.asScala.toSet.map(je => new JungUndirectedGraphEdgeImpl(je.vi, je.vj, je.payload))
   def size(): Int = jungGraph.getVertexCount()
 
-  def vertex(payload: VP): (JungUndirectedGraph[VP, EP], JungUndirectedGraphVertex[VP]) = {
-    new JungUndirectedGraphVertexImpl(payload)
-  }
+  def vertex(payload: VP): (JungUndirectedGraph[VP, EP], JungUndirectedGraphVertex[VP]) = 4
 
   // TODO: findVertex needs an index:
   def findVertex(payload: VP): Option[V] = vertices().find(_.payload == payload)
 
-  def edge(v1: V, v2: V, payload: EP): (JungUndirectedGraph[VP, EP], JungUndirectedGraphEdge[EP]) = {
-    new JungUndirectedGraphEdgeImpl(v1, v2, payload)
-  }
-
-  def ++(eps: Seq[(V, V, EP)]): (JungUndirectedGraph[VP, EP], Seq[E]) = todo
+  def edge(v1: V, v2: V, payload: EP): (JungUndirectedGraph[VP, EP], JungUndirectedGraphEdge[EP]) = 4
 
   def unlink(e: E): JungUndirectedGraph[VP, EP] = {
     jungGraph.removeEdge(e)
@@ -105,38 +115,8 @@ trait JungUndirectedGraph[VP, EP] extends GenUndirectedGraph[VP, EP] {
     vs.map(eliminate(_, payload))
   }
 
-}
+  def mapVertices[NVP](f: VP => NVP): JungUndirectedGraph[NVP, EP] = 4
 
-trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
-
-  def apply[A, B](): JungUndirectedGraph[A, B]
-
-  def apply[A, B](vps: Seq[A], ef: Seq[JungUndirectedGraphVertex[A]] => Seq[(JungUndirectedGraphVertex[A], JungUndirectedGraphVertex[A], B)]): JungUndirectedGraph[A, B]
-
-  def apply[OVP, OEP, NVP, NEP](other: GenUndirectedGraph[OVP, OEP])(
-    convertVP: OVP => NVP, convertEP: OEP => NEP): JungUndirectedGraph[NVP, NEP] = {
-
-    val result = JungUndirectedGraph[NVP, NEP]()
-
-    val ov2nv = mutable.Map[other.V, result.V]()
-
-    other.vertices().map(oldV => {
-      val oldVP = oldV.payload()
-      val newVP = convertVP(oldVP)
-      val newV = result += newVP
-      ov2nv += oldV -> newV
-    })
-
-    other.edges().map(oldE => {
-      val (otherv1, otherv2) = oldE.vertices()
-      val nv1 = ov2nv(otherv1)
-      val nv2 = ov2nv(otherv2)
-      result += ((nv1, nv2), convertEP(oldE.payload))
-    })
-
-    result
-  }
+  def mapEdges[NEP](f: EP => NEP): JungUndirectedGraph[VP, NEP] = 4
 
 }
-
-object JungUndirectedGraph extends JungUndirectedGraphFactory

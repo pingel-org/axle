@@ -109,7 +109,7 @@ class CausalitySpec extends Specification {
       val X4 = RandomVariable0("X4", bools)
       val Y = RandomVariable0("Y", bools)
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("Midterm Model 1")) ++ List(
+      val model = CausalModel("Midterm Model 1", List(
         CausalModelNode(U1, false),
         CausalModelNode(U2, false),
         CausalModelNode(U3, false),
@@ -118,9 +118,7 @@ class CausalitySpec extends Specification {
         CausalModelNode(X3),
         CausalModelNode(X4),
         CausalModelNode(Y)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X1, List(U1)),
         new PFunction(X2, List(X1, U2)),
         new PFunction(X3, List(X2, U1, U3)),
@@ -167,14 +165,10 @@ class CausalitySpec extends Specification {
       val d = RandomVariable0("D", bools)
       val e = RandomVariable0("E", bools)
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("Midterm Model 2")) ++ List(
-        CausalModelNode(a),
-        CausalModelNode(b),
-        CausalModelNode(c),
-        CausalModelNode(d),
-        CausalModelNode(e),
-        CausalModelNode(f, false)
-      )
+      val model0 = CausalModel("Midterm Model 2", List(
+        CausalModelNode(a), CausalModelNode(b), CausalModelNode(c),
+        CausalModelNode(d), CausalModelNode(e), CausalModelNode(f, false)
+      ))
 
       val model = model0 addFunctions List(
         new PFunction(c, List(a, b)),
@@ -197,11 +191,7 @@ class CausalitySpec extends Specification {
       val X = RandomVariable0("X")
       val Y = RandomVariable0("Y")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.8a")) ++ List(
-        CausalModelNode(X),
-        CausalModelNode(Y)
-      )
-
+      val model0 = CausalModel("3.8a", List(CausalModelNode(X), CausalModelNode(Y)))
       val model = model0 addFunctions List(
         new PFunction(Y, List(X))
       )
@@ -218,12 +208,7 @@ class CausalitySpec extends Specification {
       val Z = RandomVariable0("Z")
       val U = RandomVariable0("U")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.8b")) ++ List(
-        CausalModelNode(X),
-        CausalModelNode(Y),
-        CausalModelNode(Z),
-        CausalModelNode(U)
-      )
+      val model0 = CausalModel("3.8b", List(CausalModelNode(X), CausalModelNode(Y), CausalModelNode(Z), CausalModelNode(U)))
 
       val model = model0 addFunctions List(
         new PFunction(Y, List(X, Z, U)),
@@ -242,12 +227,12 @@ class CausalitySpec extends Specification {
       val Z = RandomVariable0("Z")
       val U = RandomVariable0("U")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.8c")) ++ List(
+      val model0 = CausalModel("3.8c", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U, false)
-      )
+      ))
 
       val model = model0 addFunctions List(
         new PFunction(X, List(Z)),
@@ -267,14 +252,12 @@ class CausalitySpec extends Specification {
       val Z = RandomVariable0("Z")
       val U = RandomVariable0("U")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.8d")) ++ List(
+      val model = CausalModel("3.8d", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(Z, U)),
         new PFunction(Y, List(X, Z)),
         new PFunction(Z, List(U))
@@ -292,14 +275,12 @@ class CausalitySpec extends Specification {
       val Z = RandomVariable0("Z")
       val U = RandomVariable0("U")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.8e")) ++ List(
+      val model = CausalModel("3.8e", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(U)),
         new PFunction(Y, List(Z, U)),
         new PFunction(Z, List(X))
@@ -319,16 +300,14 @@ class CausalitySpec extends Specification {
       val U1 = RandomVariable0("U1")
       val U2 = RandomVariable0("U2")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.8f")) ++ List(
+      val model = CausalModel("3.8f", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z1),
         CausalModelNode(Z2),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(U1)),
         new PFunction(Y, List(X, Z1, Z2, U2)),
         new PFunction(Z1, List(X, U2)),
@@ -352,7 +331,7 @@ class CausalitySpec extends Specification {
       val U3 = RandomVariable0("U3")
       val U4 = RandomVariable0("U4")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.8g")) ++ List(
+      val model = CausalModel("3.8g", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z1),
@@ -362,9 +341,7 @@ class CausalitySpec extends Specification {
         CausalModelNode(U2, false),
         CausalModelNode(U3, false),
         CausalModelNode(U4, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(Z2, U1, U2, U3)),
         new PFunction(Y, List(Z1, Z3, U1, U4)),
         new PFunction(Z1, List(X, Z2)),
@@ -383,13 +360,11 @@ class CausalitySpec extends Specification {
       val Y = RandomVariable0("Y")
       val U1 = RandomVariable0("U1")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.9a")) ++ List(
+      val model = CausalModel("3.9a", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(U1, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(U1)),
         new PFunction(Y, List(X, U1))
       )
@@ -406,14 +381,12 @@ class CausalitySpec extends Specification {
       val Z = RandomVariable0("Z")
       val U1 = RandomVariable0("U1")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.9b")) ++ List(
+      val model = CausalModel("3.9b", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U1, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(U1)),
         new PFunction(Z, List(X, U1)),
         new PFunction(Y, List(Z))
@@ -431,14 +404,12 @@ class CausalitySpec extends Specification {
       val Z = RandomVariable0("Z")
       val U1 = RandomVariable0("U1")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.9c")) ++ List(
+      val model = CausalModel("3.9c", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U1, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(U1)),
         new PFunction(Y, List(X, Z)),
         new PFunction(Z, List(X, U1))
@@ -450,21 +421,20 @@ class CausalitySpec extends Specification {
 
   "3.9d" should {
     "work" in {
+
       val X = RandomVariable0("X")
       val Y = RandomVariable0("Y")
       val Z = RandomVariable0("Z")
       val U1 = RandomVariable0("U1")
       val U2 = RandomVariable0("U2")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.9d")) ++ List(
+      val model = CausalModel("3.9d", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(U1)),
         new PFunction(Y, List(X, Z, U2)),
         new PFunction(Z, List(U1, U2))
@@ -483,15 +453,13 @@ class CausalitySpec extends Specification {
       val U1 = RandomVariable0("U1")
       val U2 = RandomVariable0("U2")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.9e")) ++ List(
+      val model = CausalModel("3.9e", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(Z, U1)),
         new PFunction(Y, List(X, Z, U2)),
         new PFunction(Z, List(U1, U2))
@@ -503,21 +471,20 @@ class CausalitySpec extends Specification {
 
   "3.9f" should {
     "work" in {
+
       val X = RandomVariable0("X")
       val Y = RandomVariable0("Y")
       val Z = RandomVariable0("Z")
       val U1 = RandomVariable0("U1")
       val U2 = RandomVariable0("U2")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.9f")) ++ List(
+      val model = CausalModel("3.9f", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(U1)),
         new PFunction(Z, List(X, U2)),
         new PFunction(Y, List(Z, U1, U2))
@@ -529,7 +496,7 @@ class CausalitySpec extends Specification {
 
   "3.9g" should {
     "work" in {
-      
+
       val X = RandomVariable0("X")
       val Y = RandomVariable0("Y")
       val Z1 = RandomVariable0("Z1")
@@ -537,16 +504,14 @@ class CausalitySpec extends Specification {
       val U1 = RandomVariable0("U1")
       val U2 = RandomVariable0("U2")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.9g")) ++ List(
+      val model = CausalModel("3.9g", List(
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(Z1),
         CausalModelNode(Z2),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(X, List(U1)),
         new PFunction(Z1, List(X, U2)),
         new PFunction(Z2, List(U1, U2)),
@@ -568,7 +533,7 @@ class CausalitySpec extends Specification {
       val U3 = RandomVariable0("U3")
       val U4 = RandomVariable0("U4")
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("3.9h")) ++ List(
+      val model = CausalModel("3.9h", List(
         CausalModelNode(W),
         CausalModelNode(X),
         CausalModelNode(Y),
@@ -577,9 +542,7 @@ class CausalitySpec extends Specification {
         CausalModelNode(U2, false),
         CausalModelNode(U3, false),
         CausalModelNode(U4, false)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(W, List(X, U3)),
         new PFunction(X, List(Z, U1, U2)),
         new PFunction(Y, List(W, U2, U4)),
@@ -598,14 +561,12 @@ class CausalitySpec extends Specification {
       val Z = RandomVariable0("Z") // tar
       val Y = RandomVariable0("Y") // cancer
 
-      val (model0, vs): (CausalModel, Seq[CausalModel#V]) = (new CausalModel("Smoking Model")) ++ List(
+      val model = CausalModel("Smoking Model", List(
         CausalModelNode(U, false),
         CausalModelNode(X),
         CausalModelNode(Z),
         CausalModelNode(Y)
-      )
-
-      val model = model0 addFunctions List(
+      )) addFunctions List(
         new PFunction(Z, List(X)),
         new PFunction(X, List(U)),
         new PFunction(Y, List(Z, U))

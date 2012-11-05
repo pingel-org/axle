@@ -3,36 +3,49 @@ package axle.graph
 import collection.JavaConverters._
 import collection._
 
-trait JungDirectedGraphVertex[P] extends DirectedGraphVertex[P]
+trait JungDirectedGraphFactory extends GenDirectedGraphFactory {
 
-trait JungDirectedGraphEdge[P] extends DirectedGraphEdge[P]
+  def apply[A, B](): JungDirectedGraph[A, B] = new JungDirectedGraph[A, B]() {}
+
+  def apply[A, B](vps: Seq[A],
+    ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], B)]): JungDirectedGraph[A, B] = {
+    4
+  }
+
+}
+
+object JungDirectedGraph extends JungDirectedGraphFactory
+
+trait JungDirectedGraphVertex[VP] extends DirectedGraphVertex[VP]
+
+trait JungDirectedGraphEdge[VP, EP] extends DirectedGraphEdge[VP, EP]
+
+class JungDirectedGraphVertexImpl[VP](_payload: VP)
+  extends JungDirectedGraphVertex[VP] {
+
+  def payload(): VP = _payload
+}
+
+class JungDirectedGraphEdgeImpl[VP, EP](_source: JungDirectedGraphVertex[VP], _dest: JungDirectedGraphVertex[VP], _payload: EP)
+  extends JungDirectedGraphEdge[VP, EP] {
+
+  def source() = _source
+  def dest() = _dest
+  def payload(): EP = _payload
+}
 
 trait JungDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
 
   import edu.uci.ics.jung.graph.DirectedSparseGraph
 
   type V = JungDirectedGraphVertex[VP]
-  type E = JungDirectedGraphEdge[EP]
+  type E = JungDirectedGraphEdge[VP, EP]
   type S = DirectedSparseGraph[V, E]
 
-  class JungDirectedGraphVertexImpl(_payload: VP) extends JungDirectedGraphVertex[VP] {
-
-    val ok = jungGraph.addVertex(this) // TODO check 'ok'
-
-    def payload(): VP = _payload
-  }
-
-  class JungDirectedGraphEdgeImpl(_source: V, _dest: V, _payload: EP) extends JungDirectedGraphEdge[EP] {
-
-    val ok = jungGraph.addEdge(this, source, dest)
-    // TODO check 'ok'
-
-    def source() = _source
-    def dest() = _dest
-    def payload(): EP = _payload
-  }
-
   val jungGraph = new DirectedSparseGraph[V, E]()
+
+  addvertices
+  addedges
 
   def storage() = jungGraph
 
@@ -49,10 +62,7 @@ trait JungDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
     new JungDirectedGraphEdgeImpl(source, dest, payload)
   }
 
-  def ++(eps: Seq[(V, V, EP)]): (JungDirectedGraph[VP, EP], Seq[E]) = todo
-
   def vertex(payload: VP): (JungDirectedGraph[VP, EP], V) = {
-
     new JungDirectedGraphVertexImpl(payload)
   }
 
@@ -90,14 +100,6 @@ trait JungDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
     vs.map(v => jungGraph.getOutEdges(v).asScala.map(outEdge => jungGraph.removeEdge(outEdge)))
   }
 
-  def removeSuccessor(v: V, successor: V): JungDirectedGraph[VP, EP] = {
-    findEdge(v, successor).map(deleteEdge(_))
-  }
-
-  def removePredecessor(v: V, predecessor: V): JungDirectedGraph[VP, EP] = {
-    findEdge(predecessor, v).map(deleteEdge(_))
-  }
-
   def moralGraph(): JungUndirectedGraph[_, _] = null // TODO !!!
 
   def isAcyclic() = true // TODO !!!
@@ -121,38 +123,8 @@ trait JungDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
 
   def vertexToVisualizationHtml(vp: VP): xml.Node = xml.Text(vp.toString)
 
-}
+  def mapVertices[NVP](f: VP => NVP): JungDirectedGraph[NVP, EP] = 4
 
-trait JungDirectedGraphFactory extends GenDirectedGraphFactory {
-
-  def apply[A, B](): JungDirectedGraph[A, B] = new JungDirectedGraph[A, B]() {}
-
-  def apply[A, B](vps: Seq[A],
-    ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], B)]): JungDirectedGraph[A, B] = {
-    4
-  }
-
-  def apply[OVP, OEP, NVP, NEP](other: GenDirectedGraph[OVP, OEP])(
-    convertVP: OVP => NVP, convertEP: OEP => NEP): JungDirectedGraph[NVP, NEP] = {
-
-    val result = JungDirectedGraph[NVP, NEP]()
-
-    val ov2nv = mutable.Map[other.V, result.V]()
-
-    other.vertices().map(ov => {
-      val nv = result += convertVP(ov.payload)
-      ov2nv += ov -> nv
-    })
-
-    other.edges().map(oe => {
-      val nSource = ov2nv(oe.source)
-      val nDest = ov2nv(oe.dest)
-      result += (nSource -> nDest, convertEP(oe.payload))
-    })
-
-    result
-  }
+  def mapEdges[NEP](f: EP => NEP): JungDirectedGraph[VP, NEP] = 4
 
 }
-
-object JungDirectedGraph extends JungDirectedGraphFactory

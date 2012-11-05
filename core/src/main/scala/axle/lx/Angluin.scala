@@ -2,7 +2,6 @@
 package axle.lx
 
 import collection._
-import axle._
 import scalaz._
 import Scalaz._
 import axle.graph._

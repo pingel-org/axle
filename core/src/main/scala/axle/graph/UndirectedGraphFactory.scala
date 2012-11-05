@@ -1,14 +1,23 @@
 package axle.graph
 
 import collection._
+import axle._
 
-trait UndirectedGraphVertex[P] extends GraphVertex[P]
+trait UndirectedGraphFactory extends GraphFactory {
 
-trait UndirectedGraphEdge[P] extends GraphEdge[P] {
+  def apply[A, B](): GenUndirectedGraph[A, B]
 
-  def vertices(): (UndirectedGraphVertex[P], UndirectedGraphVertex[P])
+  def apply[A, B](vps: Seq[A], ef: Seq[UndirectedGraphVertex[A]] => Seq[(UndirectedGraphVertex[A], UndirectedGraphVertex[A], B)]): GenUndirectedGraph[A, B]
 
-  def other(u: UndirectedGraphVertex[P]): UndirectedGraphVertex[P] = {
+}
+
+trait UndirectedGraphVertex[VP] extends GraphVertex[VP]
+
+trait UndirectedGraphEdge[VP, EP] extends GraphEdge[VP, EP] {
+
+  def vertices(): (UndirectedGraphVertex[VP], UndirectedGraphVertex[VP])
+
+  def other(u: UndirectedGraphVertex[VP]): UndirectedGraphVertex[VP] = {
     val (v1, v2) = vertices()
     u match {
       case _ if u.equals(v1) => v2
@@ -17,7 +26,7 @@ trait UndirectedGraphEdge[P] extends GraphEdge[P] {
     }
   }
 
-  def connects(a1: UndirectedGraphVertex[P], a2: UndirectedGraphVertex[P]) = {
+  def connects(a1: UndirectedGraphVertex[VP], a2: UndirectedGraphVertex[VP]) = {
     val (v1, v2) = vertices()
     (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
   }
@@ -26,7 +35,7 @@ trait UndirectedGraphEdge[P] extends GraphEdge[P] {
 trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
 
   type V <: UndirectedGraphVertex[VP]
-  type E <: UndirectedGraphEdge[EP]
+  type E <: UndirectedGraphEdge[VP, EP]
 
   def vertex(payload: VP): V
   def edge(v1: V, v2: V, payload: EP): E
@@ -34,10 +43,10 @@ trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   def unlink(v1: V, v2: V): GenUndirectedGraph[VP, EP]
   def areNeighbors(v1: V, v2: V): Boolean
 
-  def isClique(vs: Set[V]): Boolean =
+  def isClique(vs: GenTraversable[V]): Boolean =
     vs.doubles().forall({ case (vi, vj) => areNeighbors(vi, vj) })
 
-  def numEdgesToForceClique(vs: Set[V], payload: (V, V) => EP) =
+  def numEdgesToForceClique(vs: GenTraversable[V], payload: (V, V) => EP) =
     vs.doubles().filter({ case (vi, vj) => areNeighbors(vi, vj) }).length
 
   def forceClique(vs: Set[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
@@ -58,12 +67,4 @@ trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   def firstLeafOtherThan(r: V): Option[V]
   def eliminate(v: V, payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
   def eliminate(vs: List[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
-}
-
-trait UndirectedGraphFactory extends GraphFactory {
-  
-  def apply[A, B](): GenUndirectedGraph[A, B]
-  
-  def apply[A, B](vps: Seq[A], ef: Seq[UndirectedGraphVertex[A]] => Seq[(UndirectedGraphVertex[A], UndirectedGraphVertex[A], B)]): GenUndirectedGraph[A, B]
- 
 }

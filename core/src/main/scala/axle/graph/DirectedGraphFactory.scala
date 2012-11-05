@@ -2,17 +2,25 @@ package axle.graph
 
 import collection._
 
-trait DirectedGraphVertex[P] extends GraphVertex[P]
+trait GenDirectedGraphFactory extends GraphFactory {
 
-trait DirectedGraphEdge[P] extends GraphEdge[P] {
-  def source(): DirectedGraphVertex[P]
-  def dest(): DirectedGraphVertex[P]
+  def apply[VP, EP](): GenDirectedGraph[VP, EP]
+
+  def apply[VP, EP](vps: Seq[VP], ef: Seq[DirectedGraphVertex[VP]] => Seq[(DirectedGraphVertex[VP], DirectedGraphVertex[VP], EP)]): GenDirectedGraph[VP, EP]
+
+}
+
+trait DirectedGraphVertex[VP] extends GraphVertex[VP]
+
+trait DirectedGraphEdge[VP, EP] extends GraphEdge[VP, EP] {
+  def source(): DirectedGraphVertex[VP]
+  def dest(): DirectedGraphVertex[VP]
 }
 
 trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
 
   type V <: DirectedGraphVertex[VP]
-  type E <: DirectedGraphEdge[EP]
+  type E <: DirectedGraphEdge[VP, EP]
 
   def findEdge(from: V, to: V): Option[E]
   def leaves(): Set[V]
@@ -32,7 +40,7 @@ trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
     }
   }
 
-  def descendants(v: V): immutable.Set[V] = {
+  def descendants(v: V): Set[V] = {
     val result = mutable.Set[V]()
     _descendants(v, result)
     result.toSet
@@ -46,13 +54,13 @@ trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
     }
   }
 
-  def ancestors(v: V): immutable.Set[V] = {
+  def ancestors(v: V): Set[V] = {
     val result = mutable.Set[V]()
     _ancestors(v, result)
     result.toSet
   }
 
-  def ancestors(vs: Set[V]): immutable.Set[V] = {
+  def ancestors(vs: Set[V]): Set[V] = {
     val result = mutable.Set[V]()
     vs.map(_ancestors(_, result))
     result.toSet
@@ -66,15 +74,5 @@ trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   def deleteVertex(v: V): GenDirectedGraph[VP, EP]
   def removeInputs(vs: Set[V]): GenDirectedGraph[VP, EP]
   def removeOutputs(vs: Set[V]): GenDirectedGraph[VP, EP]
-  def removeSuccessor(v: V, successor: V): GenDirectedGraph[VP, EP]
-  def removePredecessor(v: V, predecessor: V): GenDirectedGraph[VP, EP]
-}
-
-//G[A, B] <: GenGraph[A, B]
-trait GenDirectedGraphFactory extends GraphFactory {
-
-  def apply[A, B](): GenDirectedGraph[A, B]
-
-  def apply[A, B](vps: Seq[A], ef: Seq[DirectedGraphVertex[A]] => Seq[(DirectedGraphVertex[A], DirectedGraphVertex[A], B)]): GenDirectedGraph[A, B]
 
 }

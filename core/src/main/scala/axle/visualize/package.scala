@@ -2,44 +2,34 @@ package axle
 
 import java.awt.Color
 import java.awt.Component
-
-import axle.visualize.JungDirectedGraphVisualization
-import axle.visualize.JungUndirectedGraphVisualization
+import axle.graph._
+import axle.visualize._
+import axle.ml._
 
 package object visualize {
 
-  def newFrame() = new axle.visualize.AxleFrame(
-    width = 1100,
-    height = 800,
-    bgColor = Color.white,
-    title = "αχλε")
+  def newFrame() = new AxleFrame(width = 1100, height = 800, bgColor = Color.white, title = "αχλε")
 
   def show(component: Component) = newFrame().add(component)
 
   implicit def enComponentPlot[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]): Component = new PlotComponent(plot)
 
-  implicit def enComponentJungUndirectedGraph[VP, EP](g: axle.graph.JungUndirectedGraph[VP, EP]): Component =
+  implicit def enComponentJungUndirectedGraph[VP, EP](g: JungUndirectedGraph[VP, EP]): Component =
     new JungUndirectedGraphVisualization().component(g)
 
-  implicit def enComponentNativeUndirectedGraph[VP, EP](g: axle.graph.NativeUndirectedGraph[VP, EP]): Component = {
-    // TODO: remove this cast
-    val asUG = this.asInstanceOf[axle.graph.JungUndirectedGraph[VP, EP]]
-    val jug = axle.graph.JungUndirectedGraph[VP, EP, VP, EP](asUG)(vp => vp, ep => ep)
-    jug
-  }
+  // TODO: remove this cast
+  implicit def enComponentNativeUndirectedGraph[VP, EP](g: NativeUndirectedGraph[VP, EP]): Component =
+    JungUndirectedGraph(this.asInstanceOf[JungUndirectedGraph[VP, EP]])(vp => vp, ep => ep)
 
-  implicit def enComponentJungDirectedGraph[VP, EP](g: axle.graph.JungDirectedGraph[VP, EP]): Component =
+  implicit def enComponentJungDirectedGraph[VP, EP](g: JungDirectedGraph[VP, EP]): Component =
     new JungDirectedGraphVisualization().component(g)
 
-  implicit def enComponentNativeDirectedGraph[VP, EP](g: axle.graph.NativeDirectedGraph[VP, EP]): Component = {
-    // TODO: remove this cast
-    val asDG = g.asInstanceOf[axle.graph.JungDirectedGraph[VP, EP]]
-    val jdg = axle.graph.JungDirectedGraph[VP, EP, VP, EP](asDG)(vp => vp, ep => ep)
-    jdg
-  }
+  // TODO: remove this cast
+  implicit def enComponentNativeDirectedGraph[VP, EP](g: NativeDirectedGraph[VP, EP]): Component =
+    JungDirectedGraph(g.asInstanceOf[JungDirectedGraph[VP, EP]])(vp => vp, ep => ep)
 
   implicit def enComponentKMeansClassifier[T](
-    classifier: axle.ml.KMeans.KMeansClassifier[T]): Component =
-    new axle.visualize.KMeansVisualization[T](classifier)
+    classifier: KMeans.KMeansClassifier[T]): Component =
+    new KMeansVisualization[T](classifier)
 
 }

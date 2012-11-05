@@ -4,85 +4,72 @@ import collection._
 import scalaz._
 import Scalaz._
 
-trait NativeDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
+trait NativeDirectedGraphFactory extends GenDirectedGraphFactory {
+
+  def apply[VP, EP](): NativeDirectedGraph[VP, EP] = new NativeDirectedGraph[VP, EP]() {}
+
+  def apply[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGraphVertex[VP]]) => Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)]): NativeDirectedGraph[VP, EP] =
+    new NativeDirectedGraphImpl[VP, EP](vps, ef)
+
+}
+
+object NativeDirectedGraph extends NativeDirectedGraphFactory
+
+trait NativeDirectedGraphVertex[VP] extends DirectedGraphVertex[VP]
+
+trait NativeDirectedGraphEdge[VP, EP] extends DirectedGraphEdge[VP, EP]
+
+class NativeDirectedGraphVertexImpl[VP](vp: VP) extends NativeDirectedGraphVertex[VP] {
+  def payload() = vp
+}
+
+class NativeDirectedGraphEdgeImpl[VP, EP](vi: NativeDirectedGraphVertex[VP], vj: NativeDirectedGraphVertex[VP], ep: EP)
+  extends NativeDirectedGraphEdge[VP, EP] {
+  def source(): NativeDirectedGraphVertex[VP] = vi
+  def dest(): NativeDirectedGraphVertex[VP] = vj
+  def payload() = ep
+}
+
+trait NativeDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP]
+
+class NativeDirectedGraphImpl[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGraphVertex[VP]]) => Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)])
+  extends NativeDirectedGraph[VP, EP] {
 
   type V = NativeDirectedGraphVertex[VP]
-  type E = NativeDirectedGraphEdge[EP]
+  type E = NativeDirectedGraphEdge[VP, EP]
 
-  type S = (mutable.Set[V], mutable.Set[E], Map[V, mutable.Set[E]], Map[V, mutable.Set[E]])
+  type S = (Set[V], Set[E], Map[V, Set[E]], Map[V, Set[E]])
 
-  val _vertices = mutable.Set[V]()
-  val _edges = mutable.Set[E]()
-  val vertex2outedges = mutable.Map[V, mutable.Set[E]]().withDefaultValue(mutable.Set[E]())
-  val vertex2inedges = mutable.Map[V, mutable.Set[E]]().withDefaultValue(mutable.Set[E]())
+  lazy val _vertices: Seq[V] = vps.map(new NativeDirectedGraphVertexImpl(_))
+  lazy val _verticesSet = _vertices.toSet
 
-  def storage() = (_vertices, _edges, vertex2outedges, vertex2inedges)
+  lazy val _edges: Seq[E] = ef(_vertices).map({
+    case (vi, vj, ep) => new NativeDirectedGraphEdgeImpl[VP, EP](vi, vj, ep)
+  })
 
-  def size() = _vertices.size
+  lazy val _edgesSet = _edges.toSet
 
-  trait NativeDirectedGraphVertex[P] extends DirectedGraphVertex[P]
+  lazy val vertex2outedges: Map[V, Set[E]] = _edges.groupBy(_.source).map({ case (k, v) => (k, v.toSet) }).withDefaultValue(Set[E]())
+  lazy val vertex2inedges: Map[V, Set[E]] = _edges.groupBy(_.dest).map({ case (k, v) => (k, v.toSet) }).withDefaultValue(Set[E]())
 
-  trait NativeDirectedGraphEdge[P] extends DirectedGraphEdge[P]
-
-  class NativeDirectedGraphVertexImpl[P](_payload: P) extends NativeDirectedGraphVertex[P] {
-
-    self: V =>
-
-    _vertices += this
-
-    def payload(): P = _payload
-  }
-
-  class NativeDirectedGraphEdgeImpl[P](source: V, dest: V, _payload: P) extends NativeDirectedGraphEdge[P] {
-
-    self: E =>
-
-    _edges += this // assume that this edge isn't already in our list of edges
-
-    vertex2outedges(source) += this
-    vertex2inedges(dest) += this
-
-    def source(): V = source
-    def dest(): V = dest
-
-    def payload(): P = _payload
-  }
-
-  def edges() = _edges.toSet // immutable copy
-
-  def vertices() = _vertices.toSet // immutable copy
+  def storage(): S = (_verticesSet, _edgesSet, vertex2outedges, vertex2inedges)
+  def vertices(): Set[V] = _verticesSet
+  def edges(): Set[E] = _edgesSet
+  def size(): Int = vps.size
 
   def findEdge(from: V, to: V): Option[E] = vertex2outedges(from).find(_.dest == to)
 
-  def edge(source: V, dest: V, payload: EP): (NativeDirectedGraph[VP, EP], E) = new NativeDirectedGraphEdgeImpl[EP](source, dest, payload)
+  def edge(source: V, dest: V, payload: EP): (NativeDirectedGraph[VP, EP], E) = 4
 
-  def ++(eps: Seq[(V, V, EP)]): (NativeDirectedGraph[VP, EP], Seq[E]) = todo
-
-  def vertex(payload: VP): (NativeDirectedGraph[VP, EP], V) = new NativeDirectedGraphVertexImpl[VP](payload)
+  def vertex(payload: VP): (NativeDirectedGraph[VP, EP], V) = 4
 
   def deleteEdge(e: E): NativeDirectedGraph[VP, EP] = {
-    _edges -= e
-    vertex2outedges.get(e.source()).map(_.remove(e))
-    vertex2inedges.get(e.dest()).map(_.remove(e))
+    val filter = (vs: Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)]) => vs.filter(_ != (e.source, e.dest, e.payload))
+    NativeDirectedGraph(vps, filter.compose(ef))
   }
 
-  def deleteVertex(v: V): NativeDirectedGraph[VP, EP] = {
-    vertex2outedges.get(v).map(outEdges =>
-      outEdges.map(e => {
-        _edges -= e
-        vertex2inedges.get(e.dest()).map(_.remove(e))
-      }))
-    vertex2outedges -= v
-
-    vertex2inedges.get(v).map(inEdges =>
-      inEdges.map(e => {
-        _edges -= e
-        vertex2outedges.get(e.source()).map(_.remove(e))
-      }))
-    vertex2inedges -= v
-
-    _vertices -= v
-  }
+  def deleteVertex(v: V): NativeDirectedGraph[VP, EP] =
+    NativeDirectedGraph(_vertices.filter(_ != v).map(_.payload), ef)
 
   def leaves(): Set[V] = vertices().filter(isLeaf(_))
 
@@ -90,50 +77,25 @@ trait NativeDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
 
   def precedes(v1: V, v2: V): Boolean = predecessors(v2).contains(v1)
 
-  def predecessors(v: V): Set[V] = vertex2inedges(v).map(_.source())
+  def predecessors(v: V): Set[V] = vertex2inedges(v).map(_.source)
 
-  def isLeaf(v: V): Boolean = {
-    val outEdges = vertex2outedges(v)
-    outEdges == null || outEdges.size == 0
-  }
+  def isLeaf(v: V): Boolean = vertex2outedges(v).size == 0
 
-  def successors(v: V): Set[V] = vertex2outedges(v).map(_.dest())
+  def successors(v: V): Set[V] = vertex2outedges(v).map(_.dest)
 
   def outputEdgesOf(v: V): immutable.Set[E] = vertex2outedges(v).toSet
 
   def descendantsIntersectsSet(v: V, s: Set[V]): Boolean =
     s.contains(v) || s.exists(x => descendantsIntersectsSet(x, s))
 
-  def removeInputs(vs: Set[V]): NativeDirectedGraph[VP, EP] = vs.map(v => {
-    vertex2inedges.get(v).map(incoming => {
-      incoming.map(_edges -= _)
-      vertex2inedges += v -> null
-    })
-  })
-
-  def removeOutputs(vs: Set[V]): NativeDirectedGraph[VP, EP] = vs.map(v => {
-    vertex2outedges.get(v).map(outgoing => {
-      outgoing.map(_edges -= _)
-      vertex2outedges += v -> null
-    })
-  })
-
-  def removeSuccessor(v: V, successor: V): NativeDirectedGraph[VP, EP] = {
-    vertex2outedges.get(v) map { outgoing =>
-      outgoing.find(_.dest().equals(successor)) map { edgeToRemove =>
-        outgoing.remove(edgeToRemove)
-        _edges -= edgeToRemove
-      }
-    }
+  def removeInputs(to: Set[V]): NativeDirectedGraph[VP, EP] = {
+    val filter = (vs: Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)]) => vs.filter(v => !to.contains(v._2))
+    NativeDirectedGraph(vps, filter.compose(ef))
   }
 
-  def removePredecessor(v: V, predecessor: V): NativeDirectedGraph[VP, EP] = {
-    vertex2inedges.get(v) map { incoming =>
-      incoming.find(_.source().equals(predecessor)).map(edgeToRemove => {
-        incoming.remove(edgeToRemove)
-        _edges -= edgeToRemove // we should really only do this if it's the last of the pair of calls. ick.
-      })
-    }
+  def removeOutputs(from: Set[V]): NativeDirectedGraph[VP, EP] = {
+    val filter = (vs: Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)]) => vs.filter(v => !from.contains(v._1))
+    NativeDirectedGraph(vps, filter.compose(ef))
   }
 
   def isAcyclic() = true // TODO !!!
@@ -153,11 +115,5 @@ trait NativeDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP] {
   }
 
   def shortestPath(source: V, goal: V): Option[List[E]] = _shortestPath(source, goal, Set())
-
-}
-
-object NativeDirectedGraph extends GenDirectedGraphFactory {
-
-  def apply[A, B](): NativeDirectedGraph[A, B] = new NativeDirectedGraph[A, B]() {}
 
 }

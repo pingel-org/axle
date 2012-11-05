@@ -19,7 +19,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer
 
 class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
-  def component[VP, EP](jug: JungUndirectedGraph[VP, EP]) = {
+  def component[VP, EP](jug: JungUndirectedGraphImpl[VP, EP]) = {
 
     type V = jug.type#V
     type E = jug.type#E
