@@ -260,15 +260,15 @@ class BayesianNetwork(_name: String) extends Model[BayesianNetworkNode] {
         val uVertex = result.findVertex(_.rv == U).get
         for (edge <- result.outputEdgesOf(uVertex)) { // ModelEdge
           // TODO !!!
-//          val X = edge.dest().payload.rv
-//          val oldF = result.cpt(X)
-//          result.deleteEdge(edge) // TODO: not functional
-//          val smallerF: Factor = null // TODO makeFactorFor(X)
-//          for (c <- smallerF.cases) {
-//            // set its value to what e sets it to
-//            // TODO c(U) = e.valueOf(U)
-//            // TODO smallerF(c) = oldF(c)
-//          }
+          //          val X = edge.dest().payload.rv
+          //          val oldF = result.cpt(X)
+          //          result.deleteEdge(edge) // TODO: not functional
+          //          val smallerF: Factor = null // TODO makeFactorFor(X)
+          //          for (c <- smallerF.cases) {
+          //            // set its value to what e sets it to
+          //            // TODO c(U) = e.valueOf(U)
+          //            // TODO smallerF(c) = oldF(c)
+          //          }
           // TODO result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
         }
       }
@@ -356,7 +356,7 @@ class BayesianNetwork(_name: String) extends Model[BayesianNetworkNode] {
   }
 
   def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
-    val X = mutable.Set[RandomVariable[_]]() ++ pX
+    val X = Set[RandomVariable[_]]() ++ pX
     val ig = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
     while (X.size > 0) {
@@ -371,7 +371,7 @@ class BayesianNetwork(_name: String) extends Model[BayesianNetworkNode] {
 
   def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
 
-    val X = mutable.Set[RandomVariable[_]]() ++ pX
+    val X = Set[RandomVariable[_]]() ++ pX
     val ig = interactionGraph()
     val result = mutable.ListBuffer[RandomVariable[_]]()
 

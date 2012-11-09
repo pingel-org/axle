@@ -19,11 +19,13 @@ trait GenGraph[VP, EP] {
   def size(): Int
   def edges(): Set[E]
   def vertices(): Set[V]
-  def edge(v1: V, v2: V, ep: EP): (GenGraph[VP, EP], E)
-  def +(vs: (V, V), ep: EP): (GenGraph[VP, EP], E) = edge(vs._1, vs._2, ep)
 
-  def vertex(vp: VP): (GenGraph[VP, EP], V)
-  def +(vp: VP): (GenGraph[VP, EP], V) = vertex(vp)
+  //  def edge(v1: V, v2: V, ep: EP): (GenGraph[VP, EP], E)
+  //  def +(vs: (V, V), ep: EP): (GenGraph[VP, EP], E) = edge(vs._1, vs._2, ep)
+  //  def vertex(vp: VP): (GenGraph[VP, EP], V)
+  //  def +(vp: VP): (GenGraph[VP, EP], V) = vertex(vp)
+
+  def findVertex(test: VP => Boolean): Option[V]
 
 }
 

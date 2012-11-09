@@ -8,44 +8,38 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
   def apply[A, B](): JungUndirectedGraph[A, B]
 
   def apply[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphVertex[VP]] => Seq[(JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)]): JungUndirectedGraph[VP, EP] =
-    new JungUndirectedGraphImpl[VP, EP](vps, ef)
+    new JungUndirectedGraph[VP, EP](vps, ef)
 }
 
 object JungUndirectedGraph extends JungUndirectedGraphFactory
 
-trait JungUndirectedGraphVertex[P] extends UndirectedGraphVertex[P]
-
-trait JungUndirectedGraphEdge[P] extends UndirectedGraphEdge[P]
-
-class JungUndirectedGraphVertexImpl[VP](_payload: VP)
-  extends JungUndirectedGraphVertex[VP] {
+class JungUndirectedGraphVertex[VP](_payload: VP)
+  extends UndirectedGraphVertex[VP] {
 
   def payload(): VP = _payload
 }
 
-class JungUndirectedGraphEdgeImpl[VP, EP](v1: V, v2: V, _payload: EP)
-  extends JungUndirectedGraphEdge[EP] {
+class JungUndirectedGraphEdge[VP, EP](v1: JungUndirectedGraphVertex[VP], v2: JungUndirectedGraphVertex[VP], _payload: EP)
+  extends UndirectedGraphEdge[VP, EP] {
 
-  def vertices(): (V, V) = (v1, v2)
+  def vertices() = (v1, v2)
 
   def payload(): EP = _payload
 }
 
-trait JungUndirectedGraph[VP, EP] extends GenUndirectedGraph[VP, EP]
-
-class JungUndirectedGraphImpl[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphVertex[VP]] => Seq[(JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)])
-  extends JungUndirectedGraph[VP, EP] {
+class JungUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphVertex[VP]] => Seq[(JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)])
+  extends GenUndirectedGraph[VP, EP] {
 
   import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
   type V = JungUndirectedGraphVertex[VP]
-  type E = JungUndirectedGraphEdge[EP]
+  type E = JungUndirectedGraphEdge[VP, EP]
   type S = UndirectedSparseGraph[V, EP]
 
   lazy val jungGraph = new UndirectedSparseGraph[V, EP]()
 
   vps.map(vp => {
-    val v = new JungUndirectedGraphVertexImpl(vp)
+    val v = new JungUndirectedGraphVertex(vp)
     jungGraph.addVertex(v) // TODO check return value
   })
 
@@ -59,43 +53,37 @@ class JungUndirectedGraphImpl[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphV
   def storage(): S = jungGraph
 
   def vertices(): Set[V] = jungGraph.getVertices.asScala.toSet
-  def edges(): Set[E] = jungGraph.getEdges.asScala.toSet.map(je => new JungUndirectedGraphEdgeImpl(je.vi, je.vj, je.payload))
+  def edges(): Set[E] = jungGraph.getEdges.asScala.map(je => new JungUndirectedGraphEdge(je.vi, je.vj, je.payload)).toSet
   def size(): Int = jungGraph.getVertexCount()
 
-  def vertex(payload: VP): (JungUndirectedGraph[VP, EP], JungUndirectedGraphVertex[VP]) = 4
+  def findVertex(payload: VP): Option[V] = vertices().find(_.payload == payload) // TODO an index would speed this up
 
-  // TODO: findVertex needs an index:
-  def findVertex(payload: VP): Option[V] = vertices().find(_.payload == payload)
-
-  def edge(v1: V, v2: V, payload: EP): (JungUndirectedGraph[VP, EP], JungUndirectedGraphEdge[EP]) = 4
-
-  def unlink(e: E): JungUndirectedGraph[VP, EP] = {
-    jungGraph.removeEdge(e)
+  def filterEdges(f: ((JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)) => Boolean): JungUndirectedGraph[VP, EP] = {
+    val filter = (es: Seq[(JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)]) => es.filter(f(_))
+    JungUndirectedGraph(vps, filter.compose(ef))
   }
 
-  def unlink(v1: V, v2: V): JungUndirectedGraph[VP, EP] = {
-    edges(v1).filter(_.other(v1).equals(v2)).map(unlink(_))
-  }
+  def unlink(e: E): JungUndirectedGraph[VP, EP] = filterEdges(_ != e)
+
+  def unlink(v1: V, v2: V): JungUndirectedGraph[VP, EP] = filterEdges(e => (e._1 == v1 && e._2 == v2) || (e._2 == v1 && e._1 == v2))
 
   def areNeighbors(v1: V, v2: V): Boolean = edges(v1).exists(_.connects(v1, v2))
 
   def forceClique(vs: Set[V], payload: (V, V) => EP): JungUndirectedGraph[VP, EP] =
-    vs.doubles().filter({ case (vi, vj) => !areNeighbors(vi, vj) })
-      .map({ case (vi, vj) => edge(vi, vj, payload(vi, vj)) })
+    vs.doubles().filter({ case (vi, vj) => !areNeighbors(vi, vj) }).map({ case (vi, vj) => edge(vi, vj, payload(vi, vj)) })
 
   def degree(v: V): Int = edges(v).size
 
   def edges(v: V): Set[E] = {
-    jungGraph.getIncidentEdges(v).asScala.toSet
+    val xxx = jungGraph.getIncidentEdges(v).asScala.toSet
+    xxx
   }
 
   def neighbors(v: V): Set[V] = {
     jungGraph.getNeighbors(v).asScala.toSet
   }
 
-  def delete(v: V): JungUndirectedGraph[VP, EP] = {
-    jungGraph.removeVertex(v)
-  }
+  def delete(v: V): JungUndirectedGraph[VP, EP] = JungUndirectedGraph(foo, ef)
 
   // a "leaf" is vertex with only one neighbor
   def firstLeafOtherThan(r: V): Option[V] = {
@@ -110,13 +98,7 @@ class JungUndirectedGraphImpl[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphV
     forceClique(vs.asInstanceOf[Set[V]], payload)
   }
 
-  // TODO there is probably a more efficient way to do this:
-  def eliminate(vs: immutable.List[V], payload: (V, V) => EP): JungUndirectedGraph[VP, EP] = {
-    vs.map(eliminate(_, payload))
-  }
-
-  def mapVertices[NVP](f: VP => NVP): JungUndirectedGraph[NVP, EP] = 4
-
-  def mapEdges[NEP](f: EP => NEP): JungUndirectedGraph[VP, NEP] = 4
+  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP): JungUndirectedGraph[NVP, NEP] =
+    JungUndirectedGraph(vps.map(vpf(_)), epf.compose(ef))
 
 }

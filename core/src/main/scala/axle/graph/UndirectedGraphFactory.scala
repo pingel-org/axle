@@ -25,7 +25,7 @@ trait UndirectedGraphEdge[VP, EP] extends GraphEdge[VP, EP] {
       case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
     }
   }
-
+  
   def connects(a1: UndirectedGraphVertex[VP], a2: UndirectedGraphVertex[VP]) = {
     val (v1, v2) = vertices()
     (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
@@ -37,12 +37,13 @@ trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   type V <: UndirectedGraphVertex[VP]
   type E <: UndirectedGraphEdge[VP, EP]
 
-  def vertex(payload: VP): V
-  def edge(v1: V, v2: V, payload: EP): E
+//  def vertex(payload: VP): V
+//  def edge(v1: V, v2: V, payload: EP): E
+  
   def unlink(e: E): GenUndirectedGraph[VP, EP]
   def unlink(v1: V, v2: V): GenUndirectedGraph[VP, EP]
   def areNeighbors(v1: V, v2: V): Boolean
-
+  
   def isClique(vs: GenTraversable[V]): Boolean =
     vs.doubles().forall({ case (vi, vj) => areNeighbors(vi, vj) })
 
