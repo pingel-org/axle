@@ -25,7 +25,7 @@ trait UndirectedGraphEdge[VP, EP] extends GraphEdge[VP, EP] {
       case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
     }
   }
-  
+
   def connects(a1: UndirectedGraphVertex[VP], a2: UndirectedGraphVertex[VP]) = {
     val (v1, v2) = vertices()
     (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
@@ -37,18 +37,26 @@ trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   type V <: UndirectedGraphVertex[VP]
   type E <: UndirectedGraphEdge[VP, EP]
 
-//  def vertex(payload: VP): V
-//  def edge(v1: V, v2: V, payload: EP): E
-  
+  //  def vertex(payload: VP): V
+  //  def edge(v1: V, v2: V, payload: EP): E
+
   def unlink(e: E): GenUndirectedGraph[VP, EP]
   def unlink(v1: V, v2: V): GenUndirectedGraph[VP, EP]
   def areNeighbors(v1: V, v2: V): Boolean
-  
-  def isClique(vs: GenTraversable[V]): Boolean =
-    vs.doubles().forall({ case (vi, vj) => areNeighbors(vi, vj) })
 
-  def numEdgesToForceClique(vs: GenTraversable[V], payload: (V, V) => EP) =
-    vs.doubles().filter({ case (vi, vj) => areNeighbors(vi, vj) }).length
+  def isClique(vs: GenTraversable[V]): Boolean = (for {
+    vi <- vs
+    vj <- vs
+  } yield {
+    (vi == vj) || areNeighbors(vi, vj)
+  }).forall(b => b)
+
+  def numEdgesToForceClique(vs: GenTraversable[V], payload: (V, V) => EP) = (for {
+    vi <- vs
+    vj <- vs
+  } yield {
+    if (areNeighbors(vi, vj)) 1 else 0
+  }).sum
 
   def forceClique(vs: Set[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
 
@@ -67,5 +75,6 @@ trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   // a "leaf" is vertex with only one neighbor
   def firstLeafOtherThan(r: V): Option[V]
   def eliminate(v: V, payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
-  def eliminate(vs: List[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
+
+  // def eliminate(vs: List[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
 }

@@ -63,11 +63,20 @@ class NativeUndirectedGraph[VP, EP](
 
   def size(): Int = _vertices.size
 
-  def unlink(e: NativeUndirectedGraphEdge[VP, EP]): NativeUndirectedGraph[VP, EP] = filterEdge(xxx)
+  def filterEdges(f: ((NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)) => Boolean): NativeUndirectedGraph[VP, EP] = {
+    val filter = (es: Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]) => es.filter(f(_))
+    NativeUndirectedGraph(vps, filter.compose(ef))
+  }
 
-  def unlink(v1: NativeUndirectedGraphVertex[VP], v2: NativeUndirectedGraphVertex[VP]): NativeUndirectedGraph[VP, EP] = 4
+  def unlink(e: NativeUndirectedGraphEdge[VP, EP]): NativeUndirectedGraph[VP, EP] = {
+    NativeUndirectedGraph(vps, bar)
+  }
 
-  def areNeighbors(v1: NativeUndirectedGraphVertex[VP], v2: NativeUndirectedGraphVertex[VP]): Boolean = edges(v1).exists(_.connects(v1, v2))
+  def unlink(v1: NativeUndirectedGraphVertex[VP], v2: NativeUndirectedGraphVertex[VP]): NativeUndirectedGraph[VP, EP] =
+    NativeUndirectedGraph(vps, bar)
+
+  def areNeighbors(v1: NativeUndirectedGraphVertex[VP], v2: NativeUndirectedGraphVertex[VP]): Boolean =
+    edges(v1).exists(_.connects(v1, v2))
 
   def forceClique(vs: GenTraversable[NativeUndirectedGraphVertex[VP]], payload: (NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP]) => EP): NativeUndirectedGraph[VP, EP] =
     NativeUndirectedGraph(vps, bar)
@@ -99,9 +108,6 @@ class NativeUndirectedGraph[VP, EP](
     // turn the neighbors of v into a clique
     null // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
   }
-
-  def eliminate(vs: List[NativeUndirectedGraphVertex[VP]], payload: (NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP]) => EP): NativeUndirectedGraph[VP, EP] =
-    vs.map(eliminate(_, payload))
 
   /**
    * dijkstra

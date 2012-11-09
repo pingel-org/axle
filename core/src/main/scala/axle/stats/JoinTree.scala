@@ -5,7 +5,7 @@ import axle.graph._
 
 trait JoinTreeFactory extends JungUndirectedGraphFactory {
 
-  def apply(): JoinTree = new JoinTree() {}
+  // def apply(): JoinTree = new JoinTree() {}
 
   def apply(
     vps: Seq[immutable.Set[RandomVariable[_]]],

@@ -5,8 +5,6 @@ import collection._
 
 trait InteractionGraphFactory extends JungUndirectedGraphFactory {
 
-  def apply(): InteractionGraph = new InteractionGraph() {}
-
   def apply(
     vps: Seq[RandomVariable[_]],
     ef: Seq[JungUndirectedGraphVertex[RandomVariable[_]]] => Seq[(JungUndirectedGraphVertex[RandomVariable[_]], JungUndirectedGraphVertex[RandomVariable[_]], String)]): InteractionGraph =
