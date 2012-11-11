@@ -39,7 +39,7 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
 
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
-    val edgeStrokeTransformer = new Transformer[EP, Stroke]() {
+    val edgeStrokeTransformer = new Transformer[JungUndirectedGraphEdge[VP, EP], Stroke]() {
       def transform(edge: JungUndirectedGraphEdge[VP, EP]) = edgeStroke
     }
 
@@ -47,7 +47,7 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
       def transform(vertex: JungUndirectedGraphVertex[VP]) = vertex.payload.toString
     }
 
-    val edgeLabelTransformer = new Transformer[EP, String]() {
+    val edgeLabelTransformer = new Transformer[JungUndirectedGraphEdge[VP, EP], String]() {
       def transform(edge: JungUndirectedGraphEdge[VP, EP]) = edge.payload.toString
     }
 

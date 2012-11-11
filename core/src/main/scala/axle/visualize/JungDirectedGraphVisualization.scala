@@ -35,24 +35,24 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     val vv = new VisualizationViewer(layout) // interactive
     vv.setPreferredSize(new Dimension(width + border, height + border))
 
-    val vertexPaint = new Transformer[VP, Paint]() {
-      def transform(i: VP): Paint = Color.GREEN
+    val vertexPaint = new Transformer[JungDirectedGraphVertex[VP], Paint]() {
+      def transform(i: JungDirectedGraphVertex[VP]): Paint = Color.GREEN
     }
 
     val dash = List(10.0f).toArray
 
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
-    val edgeStrokeTransformer = new Transformer[EP, Stroke]() {
-      def transform(ep: EP) = edgeStroke
+    val edgeStrokeTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], Stroke]() {
+      def transform(ep: JungDirectedGraphEdge[VP, EP]) = edgeStroke
     }
 
-    val vertexLabelTransformer = new Transformer[VP, String]() {
-      def transform(vp: VP) = jdg.vertexToVisualizationHtml(vp).toString
+    val vertexLabelTransformer = new Transformer[JungDirectedGraphVertex[VP], String]() {
+      def transform(v: JungUndirectedGraphVertex[VP]) = jdg.vertexToVisualizationHtml(v.payload).toString
     }
 
-    val edgeLabelTransformer = new Transformer[EP, String]() {
-      def transform(ep: EP) = ep.toString
+    val edgeLabelTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], String]() {
+      def transform(ep: JungDirectedGraphEdge[VP, EP]) = ep.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)

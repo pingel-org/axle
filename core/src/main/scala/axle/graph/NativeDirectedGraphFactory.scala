@@ -6,10 +6,10 @@ import Scalaz._
 
 trait NativeDirectedGraphFactory extends GenDirectedGraphFactory {
 
-  def apply[VP, EP](): NativeDirectedGraph[VP, EP] = new NativeDirectedGraph[VP, EP]() {}
+  // def apply[VP, EP](): NativeDirectedGraph[VP, EP] = new NativeDirectedGraph[VP, EP]() {}
 
   def apply[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGraphVertex[VP]]) => Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)]): NativeDirectedGraph[VP, EP] =
-    new NativeDirectedGraphImpl(vps, ef)
+    new NativeDirectedGraph(vps, ef)
 
 }
 
@@ -26,10 +26,8 @@ class NativeDirectedGraphEdge[VP, EP](vi: NativeDirectedGraphVertex[VP], vj: Nat
   def payload() = ep
 }
 
-trait NativeDirectedGraph[VP, EP] extends GenDirectedGraph[VP, EP]
-
-class NativeDirectedGraphImpl[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGraphVertex[VP]]) => Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)])
-  extends NativeDirectedGraph[VP, EP] {
+case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGraphVertex[VP]]) => Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)])
+  extends GenDirectedGraph[VP, EP] {
 
   // type V = NativeDirectedGraphVertex[VP]
   // type E = NativeDirectedGraphEdge[VP, EP]

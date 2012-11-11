@@ -35,7 +35,7 @@ class NativeUndirectedGraphEdge[VP, EP](
 
 }
 
-class NativeUndirectedGraph[VP, EP](
+case class NativeUndirectedGraph[VP, EP](
   vps: Seq[VP],
   ef: (Seq[NativeUndirectedGraphVertex[VP]]) => Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)])
   extends GenUndirectedGraph[VP, EP] {

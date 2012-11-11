@@ -14,19 +14,17 @@ package object visualize {
 
   implicit def enComponentPlot[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]): Component = new PlotComponent(plot)
 
-  implicit def enComponentJungUndirectedGraph[VP, EP](g: JungUndirectedGraph[VP, EP]): Component =
-    new JungUndirectedGraphVisualization().component(g)
+  implicit def enComponentJungUndirectedGraph[VP, EP](jug: JungUndirectedGraph[VP, EP]): Component =
+    new JungUndirectedGraphVisualization().component(jug)
 
-  // TODO: remove this cast
-  implicit def enComponentNativeUndirectedGraph[VP, EP](g: NativeUndirectedGraph[VP, EP]): Component =
-    JungUndirectedGraph(this.asInstanceOf[JungUndirectedGraph[VP, EP]])(vp => vp, ep => ep)
+  implicit def enComponentNativeUndirectedGraph[VP, EP](nug: NativeUndirectedGraph[VP, EP]): Component =
+    JungUndirectedGraph(nug.vps, nug.ef)
 
-  implicit def enComponentJungDirectedGraph[VP, EP](g: JungDirectedGraph[VP, EP]): Component =
-    new JungDirectedGraphVisualization().component(g)
+  implicit def enComponentJungDirectedGraph[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component =
+    new JungDirectedGraphVisualization().component(jdg)
 
-  // TODO: remove this cast
-  implicit def enComponentNativeDirectedGraph[VP, EP](g: NativeDirectedGraph[VP, EP]): Component =
-    JungDirectedGraph(g.asInstanceOf[JungDirectedGraph[VP, EP]])(vp => vp, ep => ep)
+  implicit def enComponentNativeDirectedGraph[VP, EP](ndg: NativeDirectedGraph[VP, EP]): Component =
+    JungDirectedGraph(ndg.vps, ndg.ef)
 
   implicit def enComponentKMeansClassifier[T](
     classifier: KMeans.KMeansClassifier[T]): Component =
