@@ -42,7 +42,7 @@ class CausalitySpec extends Specification {
 
       def homework4Model(k: Int, p: Double) = {
 
-        val result = new CausalModel("Homewor 4 model with k " + k + ", p = " + p)
+        val result = CausalModel("Homework 4 model with k " + k + ", p = " + p, Nil)
 
         val zero = Option(null.asInstanceOf[(RandomVariable[_], RandomVariable[_], RandomVariable[_], RandomVariable[_])])
 
