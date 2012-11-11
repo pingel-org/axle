@@ -90,19 +90,20 @@ class NativeUndirectedGraph[VP, EP](
 
     val cliqued = (newVs: Seq[NativeUndirectedGraphVertex[VP]]) => {
 
-      val existing = ef(newVs)
+      val old2new = _vertices.zip(newVs).toMap
 
-      // TODO: seems wasteful to build this set:
-      val existingConnectedSet = existing.flatMap(triple => Vector((triple._1, triple._2), (triple._2, triple._1))).toSet
+      val newEdges = among.toIndexedSeq.permutations(2)
+        .map({ case vi :: vj :: Nil => (vi, vj) })
+        .filter({ case (vi, vj) => !areNeighbors(vi, vj) })
+        .map({
+          case (vi, vj) => {
+            val newVi = old2new(vi)
+            val newVj = old2new(vj)
+            (newVi, newVj, payload(newVi, newVj))
+          }
+        })
 
-      existing ++
-        _vertices.zip(newVs)
-        .filter({ case (oldV, _) => among.contains(oldV) })
-        .map(_._2)
-        .toIndexedSeq
-        .permutations(2)
-        .map({ case vi :: vj :: Nil => (vi, vj, payload(vi, vj)) })
-        .filter(triple => !existingConnectedSet.contains((triple._1, triple._2)))
+      ef(newVs) ++ newEdges
     }
 
     NativeUndirectedGraph(vps, cliqued(_))
