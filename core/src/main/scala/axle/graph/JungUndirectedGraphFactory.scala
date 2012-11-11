@@ -2,6 +2,7 @@ package axle.graph
 
 import collection.JavaConverters._
 import collection._
+import axle._
 
 trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
@@ -101,14 +102,11 @@ case class JungUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraph
 
   def degree(v: JungUndirectedGraphVertex[VP]): Int = edges(v).size
 
-  def edges(v: JungUndirectedGraphVertex[VP]): Set[JungUndirectedGraphEdge[VP, EP]] = {
-    val xxx = jungGraph.getIncidentEdges(v).asScala.toSet
-    xxx
-  }
+  def edges(v: JungUndirectedGraphVertex[VP]): Set[JungUndirectedGraphEdge[VP, EP]] =
+    jungGraph.getIncidentEdges(v).asScala.toSet
 
-  def neighbors(v: JungUndirectedGraphVertex[VP]): Set[JungUndirectedGraphVertex[VP]] = {
+  def neighbors(v: JungUndirectedGraphVertex[VP]): Set[JungUndirectedGraphVertex[VP]] =
     jungGraph.getNeighbors(v).asScala.toSet
-  }
 
   def delete(v: JungUndirectedGraphVertex[VP]): JungUndirectedGraph[VP, EP] =
     JungUndirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
