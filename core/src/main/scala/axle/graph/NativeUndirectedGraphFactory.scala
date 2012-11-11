@@ -63,32 +63,53 @@ class NativeUndirectedGraph[VP, EP](
 
   def size(): Int = _vertices.size
 
+  def findEdge(vi: NativeUndirectedGraphVertex[VP], vj: NativeUndirectedGraphVertex[VP]): Option[NativeUndirectedGraphEdge[VP, EP]] =
+    _edges.find(e => (e.vertices == (vi, vj)) || (e.vertices == (vj, vi))) // Note: no matching on payload
+
   def filterEdges(f: ((NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)) => Boolean): NativeUndirectedGraph[VP, EP] = {
     val filter = (es: Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]) => es.filter(f(_))
     NativeUndirectedGraph(vps, filter.compose(ef))
   }
 
   def unlink(e: NativeUndirectedGraphEdge[VP, EP]): NativeUndirectedGraph[VP, EP] = {
-    NativeUndirectedGraph(vps, bar)
+    val filter = (es: Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]) => es.zip(_edges).filter({
+      case ((vi, vj, ep), oldEdge) => oldEdge != e
+    }).map(_._1)
+    NativeUndirectedGraph(vps, filter.compose(ef))
   }
 
-  def unlink(v1: NativeUndirectedGraphVertex[VP], v2: NativeUndirectedGraphVertex[VP]): NativeUndirectedGraph[VP, EP] =
-    NativeUndirectedGraph(vps, bar)
+  def unlink(vi: NativeUndirectedGraphVertex[VP], vj: NativeUndirectedGraphVertex[VP]): NativeUndirectedGraph[VP, EP] =
+    findEdge(vi, vj).map(unlink(_)).getOrElse(this)
 
-  def areNeighbors(v1: NativeUndirectedGraphVertex[VP], v2: NativeUndirectedGraphVertex[VP]): Boolean =
-    edges(v1).exists(_.connects(v1, v2))
+  def areNeighbors(vi: NativeUndirectedGraphVertex[VP], vj: NativeUndirectedGraphVertex[VP]): Boolean =
+    edges(vi).exists(_.connects(vi, vj))
 
-  def forceClique(vs: GenTraversable[NativeUndirectedGraphVertex[VP]], payload: (NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP]) => EP): NativeUndirectedGraph[VP, EP] =
-    NativeUndirectedGraph(vps, bar)
+  def forceClique(
+    among: Set[NativeUndirectedGraphVertex[VP]],
+    payload: (NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
 
-  // vs.doubles().filter({ case (vi, vj) => !areNeighbors(vi, vj) }).map({ case (vi, vj) => edge(vi, vj, payload(vi, vj)) })
+    val cliqued = (newVs: Seq[NativeUndirectedGraphVertex[VP]]) => {
 
-  override def isClique(vs: GenTraversable[NativeUndirectedGraphVertex[VP]]): Boolean = (for {
-    vi <- vs
-    vj <- vs
-  } yield {
-    (vi == vj) || areNeighbors(vi, vj)
-  }).forall(b => b) // TODO use 'doubles' and ∀
+      val existing = ef(newVs)
+
+      // TODO: seems wasteful to build this set:
+      val existingConnectedSet = existing.flatMap(triple => Vector((triple._1, triple._2), (triple._2, triple._1))).toSet
+
+      existing ++
+        _vertices.zip(newVs)
+        .filter({ case (oldV, _) => among.contains(oldV) })
+        .map(_._2)
+        .toIndexedSeq
+        .permutations(2)
+        .map({ case vi :: vj :: Nil => (vi, vj, payload(vi, vj)) })
+        .filter(triple => !existingConnectedSet.contains((triple._1, triple._2)))
+    }
+
+    NativeUndirectedGraph(vps, cliqued(_))
+  }
+
+  override def isClique(vs: IndexedSeq[NativeUndirectedGraphVertex[VP]]): Boolean =
+    vs.permutations(2).∀({ case vi :: vj :: Nil => areNeighbors(vi, vj) })
 
   def degree(v: NativeUndirectedGraphVertex[VP]): Int = vertex2edges.get(v).map(_.size).getOrElse(0)
 

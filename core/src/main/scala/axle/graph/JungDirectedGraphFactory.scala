@@ -69,7 +69,7 @@ class JungDirectedGraphImpl[VP, EP](vps: Seq[VP], ef: Seq[JungDirectedGraphVerte
   def findEdge(from: JungDirectedGraphVertex[VP], to: JungDirectedGraphVertex[VP]): Option[JungDirectedGraphEdge[VP, EP]] = Option(jungGraph.findEdge(from, to))
 
   // TODO: findVertex needs an index:
-  def findVertex(test: VP => Boolean): Option[JungDirectedGraphVertex[VP]] = vertices().find(v => test(v.payload))
+  def findVertex(f: VP => Boolean): Option[JungDirectedGraphVertex[VP]] = vertices().find(v => f(v.payload))
 
   def removeAllEdgesAndVertices(): JungDirectedGraph[VP, EP] = vertices().map(jungGraph.removeVertex(_))
 

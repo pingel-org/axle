@@ -3,6 +3,7 @@ package axle.visualize
 import java.awt.event.MouseEvent
 import java.awt.BasicStroke
 import java.awt.Color
+import java.awt.Component
 import java.awt.Dimension
 import java.awt.Paint
 import java.awt.Stroke
@@ -19,10 +20,10 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller
 
 class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
-  def component[VP, EP](jdg: JungDirectedGraph[VP, EP]) = {
+  def component[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component = {
 
-    type V = jdg.type#V
-    type E = jdg.type#E
+    // type V = jdg.type#V
+    // type E = jdg.type#E
 
     // see
     // http://www.grotto-networking.com/JUNG/
@@ -31,27 +32,27 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     val layout = new FRLayout(jdg.storage)
     layout.setSize(new Dimension(width, height))
     // val vv = new BasicVisualizationServer[ug.type#V, ug.type#E](layout) // non-interactive
-    val vv = new VisualizationViewer[V, E](layout) // interactive
+    val vv = new VisualizationViewer(layout) // interactive
     vv.setPreferredSize(new Dimension(width + border, height + border))
 
-    val vertexPaint = new Transformer[V, Paint]() {
-      def transform(i: V): Paint = Color.GREEN
+    val vertexPaint = new Transformer[VP, Paint]() {
+      def transform(i: VP): Paint = Color.GREEN
     }
 
     val dash = List(10.0f).toArray
 
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
-    val edgeStrokeTransformer = new Transformer[E, Stroke]() {
-      def transform(edge: E) = edgeStroke
+    val edgeStrokeTransformer = new Transformer[EP, Stroke]() {
+      def transform(ep: EP) = edgeStroke
     }
 
-    val vertexLabelTransformer = new Transformer[V, String]() {
-      def transform(vertex: V) = jdg.vertexToVisualizationHtml(vertex.payload).toString
+    val vertexLabelTransformer = new Transformer[VP, String]() {
+      def transform(vp: VP) = jdg.vertexToVisualizationHtml(vp).toString
     }
 
-    val edgeLabelTransformer = new Transformer[E, String]() {
-      def transform(edge: E) = edge.payload.toString
+    val edgeLabelTransformer = new Transformer[EP, String]() {
+      def transform(ep: EP) = ep.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
