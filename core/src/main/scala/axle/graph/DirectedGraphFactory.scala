@@ -28,11 +28,11 @@ trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
   def precedes(v1: V, v2: V): Boolean
   def predecessors(v: V): Set[V]
   def isLeaf(v: V): Boolean
-  def successors(v: V): Set[V]
+  def successors(v: DirectedGraphVertex[VP]): Set[DirectedGraphVertex[VP]]
   def outputEdgesOf(v: V): Set[E]
   def descendantsIntersectsSet(v: V, s: Set[V]): Boolean
 
-  def _descendants(v: V, result: mutable.Set[V]): Unit = {
+  def _descendants(v: DirectedGraphVertex[VP], result: mutable.Set[DirectedGraphVertex[VP]]): Unit = {
     // inefficient
     if (!result.contains(v)) {
       result += v
@@ -40,8 +40,8 @@ trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
     }
   }
 
-  def descendants(v: V): Set[V] = {
-    val result = mutable.Set[V]()
+  def descendants(v: DirectedGraphVertex[VP]): Set[DirectedGraphVertex[VP]] = {
+    val result = mutable.Set[DirectedGraphVertex[VP]]()
     _descendants(v, result)
     result.toSet
   }
