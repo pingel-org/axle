@@ -18,13 +18,13 @@ package object visualize {
     new JungUndirectedGraphVisualization().component(jug)
 
   implicit def enComponentNativeUndirectedGraph[VP, EP](nug: NativeUndirectedGraph[VP, EP]): Component =
-    JungUndirectedGraph(nug.vps, nug.ef)
+    new JungUndirectedGraph[VP, EP](nug.vps, nug.ef)
 
   implicit def enComponentJungDirectedGraph[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component =
     new JungDirectedGraphVisualization().component(jdg)
 
   implicit def enComponentNativeDirectedGraph[VP, EP](ndg: NativeDirectedGraph[VP, EP]): Component =
-    JungDirectedGraph(ndg.vps, ndg.ef)
+    new JungDirectedGraph[VP, EP](ndg.vps, ndg.ef)
 
   implicit def enComponentKMeansClassifier[T](
     classifier: KMeans.KMeansClassifier[T]): Component =

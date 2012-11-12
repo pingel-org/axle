@@ -1,6 +1,7 @@
 package axle.stats.docalculus
 
 import axle.stats._
+import axle.graph._
 
 case class CausalModelNode(rv: RandomVariable[_], observable: Boolean = true)
 
@@ -15,10 +16,8 @@ trait CausalModelFactory extends ModelFactory {
 object CausalModel extends CausalModelFactory
 
 class CausalModel(_name: String, vps: Seq[CausalModelNode])
-  extends Model(vps) {
+  extends Model[CausalModelNode](vps, (vs: Seq[JungDirectedGraphVertex[CausalModelNode]]) => Nil) {
 
-  import axle.graph._
-  
   def name(): String = _name
 
   def duplicate(): CausalModel = null // TODO

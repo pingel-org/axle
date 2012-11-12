@@ -114,20 +114,22 @@ case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) {
 
 trait BayesianNetworkFactory extends ModelFactory {
 
-  def apply(name: String): BayesianNetwork = new BayesianNetwork(name)
+  // def apply(name: String): BayesianNetwork = new BayesianNetwork(name)
 
   def apply(
     name: String,
     vps: Seq[BayesianNetworkNode],
-    ef: Seq[JungDirectedGraphVertex[BayesianNetworkNode]] => Seq[(JungDirectedGraphVertex[BayesianNetworkNode], JungDirectedGraphVertex[BayesianNetworkNode], String)]): BayesianNetwork = {
-    null
-  }
+    ef: Seq[JungDirectedGraphVertex[BayesianNetworkNode]] => Seq[(JungDirectedGraphVertex[BayesianNetworkNode], JungDirectedGraphVertex[BayesianNetworkNode], String)]): BayesianNetwork =
+    new BayesianNetwork(name, vps, ef)
 
 }
 
 object BayesianNetwork extends BayesianNetworkFactory
 
-class BayesianNetwork(_name: String) extends Model[BayesianNetworkNode] {
+class BayesianNetwork(
+  _name: String,
+  vps: Seq[BayesianNetworkNode],
+  ef: Seq[JungDirectedGraphVertex[BayesianNetworkNode]] => Seq[(JungDirectedGraphVertex[BayesianNetworkNode], JungDirectedGraphVertex[BayesianNetworkNode], String)]) extends Model(vps, ef) {
 
   def name(): String = _name
 
@@ -141,7 +143,7 @@ class BayesianNetwork(_name: String) extends Model[BayesianNetworkNode] {
       </div>
     </html>
 
-  def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
+  // def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 
   def jointProbabilityTable(): Factor = {
     val newVars = randomVariables()

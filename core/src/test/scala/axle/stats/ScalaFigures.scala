@@ -150,12 +150,7 @@ class ScalaFigures extends Specification {
     figure6_1().pruneNetworkVarsAndEdges(Set(D), Some(List(A eq true, C eq false)))
 
   // Result of fe-i on a->b->c with Q={C}
-  def figure7_2() = {
-    // TODO: needs to be immutable
-    val f72 = figure6_4.duplicate()
-    val f = f72.factorElimination1(Set(C))
-    f72
-  }
+  def figure7_2() = figure6_4.factorElimination1(Set(C))
 
   def figure7_4() = {
 
@@ -177,7 +172,7 @@ class ScalaFigures extends Specification {
     val f61 = figure6_1()
     val (bn, τ, cptC) = figure7_4()
     val (f75, elim) = f61.factorElimination2(Set(C), τ, cptC)
-    f61
+    f75
   }
 
   def figure7_12() = {
