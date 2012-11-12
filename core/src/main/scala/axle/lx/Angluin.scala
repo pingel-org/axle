@@ -18,8 +18,8 @@ case class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
   //      Acceptor(newG, newI, newF)
   //    }
 
-  def δSymbol(state: JungDirectedGraphVertex[String], symbol: Symbol): Set[String] =
-    edges().filter(e => e.source == state && e.payload == symbol).map(_.dest.payload)
+  def δSymbol(state: JungDirectedGraphVertex[String], symbol: Symbol): Set[JungDirectedGraphVertex[String]] =
+    edges().filter(e => e.source == state && e.payload == symbol).map(_.dest)
 
   def δ(state: JungDirectedGraphVertex[String], exp: List[Symbol]): Set[String] = exp match {
     case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
