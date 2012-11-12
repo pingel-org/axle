@@ -301,48 +301,48 @@ class BayesianNetwork(
    * 6.8.3
    */
 
-  def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): BayesianNetwork =
-    new BayesianNetwork(this.name) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
-
-  def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
-
-    val pruned = pruneNetworkVarsAndEdges(Q, eOpt)
-    val R = randomVariables.filter(!Q.contains(_)).toSet
-    val π = pruned.minDegreeOrder(R)
-
-    val S = π.foldLeft(pruned.randomVariables().map(rv => pruned.cpt(rv).projectRowsConsistentWith(eOpt)).toSet)(
-      (S, rv) => {
-        val allMentions = S.filter(_.mentions(rv))
-        (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
-      })
-
-    (S.reduce(_ * _), pruned)
-  }
-
-  def variableEliminationMPE(e: List[CaseIs[_]]): (Double, BayesianNetwork) = {
-
-    val pruned = pruneEdges("pruned", Some(e))
-    val Q = pruned.randomVariables()
-    val π = pruned.minDegreeOrder(Q.toSet)
-
-    val S = π.foldLeft(Q.map(rv => pruned.cpt(rv).projectRowsConsistentWith(Some(e))).toSet)(
-      (S, rv) => {
-        val allMentions = S.filter(_.mentions(rv))
-        (S -- allMentions) + allMentions.reduce(_ * _).maxOut(rv)
-      })
-
-    // at this point (since we're iterating over *all* variables in Q)
-    // S will contain exactly one trivial Factor
-
-    assert(S.size == 1)
-
-    val sl = S.toList
-    val result = sl(0)
-
-    // assert(result.numCases() == 1)
-
-    (result(List()), pruned)
-  }
+//  def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): BayesianNetwork =
+//    new BayesianNetwork(this.name) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
+//
+//  def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
+//
+//    val pruned = pruneNetworkVarsAndEdges(Q, eOpt)
+//    val R = randomVariables.filter(!Q.contains(_)).toSet
+//    val π = pruned.minDegreeOrder(R)
+//
+//    val S = π.foldLeft(pruned.randomVariables().map(rv => pruned.cpt(rv).projectRowsConsistentWith(eOpt)).toSet)(
+//      (S, rv) => {
+//        val allMentions = S.filter(_.mentions(rv))
+//        (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
+//      })
+//
+//    (S.reduce(_ * _), pruned)
+//  }
+//
+//  def variableEliminationMPE(e: List[CaseIs[_]]): (Double, BayesianNetwork) = {
+//
+//    val pruned = pruneEdges("pruned", Some(e))
+//    val Q = pruned.randomVariables()
+//    val π = pruned.minDegreeOrder(Q.toSet)
+//
+//    val S = π.foldLeft(Q.map(rv => pruned.cpt(rv).projectRowsConsistentWith(Some(e))).toSet)(
+//      (S, rv) => {
+//        val allMentions = S.filter(_.mentions(rv))
+//        (S -- allMentions) + allMentions.reduce(_ * _).maxOut(rv)
+//      })
+//
+//    // at this point (since we're iterating over *all* variables in Q)
+//    // S will contain exactly one trivial Factor
+//
+//    assert(S.size == 1)
+//
+//    val sl = S.toList
+//    val result = sl(0)
+//
+//    // assert(result.numCases() == 1)
+//
+//    (result(List()), pruned)
+//  }
 
   /**
    * variableEliminationMAP
@@ -357,35 +357,35 @@ class BayesianNetwork(
     Nil
   }
 
-  def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
-    val X = Set[RandomVariable[_]]() ++ pX
-    val ig = interactionGraph()
-    val result = mutable.ListBuffer[RandomVariable[_]]()
-    while (X.size > 0) {
-      val xVertices = X.map(ig.findVertex(_).get)
-      val rv = ig.vertexWithFewestNeighborsAmong(xVertices).payload
-      result += rv
-      ig.eliminate(rv)
-      X -= rv
-    }
-    result.toList
-  }
-
-  def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
-
-    val X = Set[RandomVariable[_]]() ++ pX
-    val ig = interactionGraph()
-    val result = mutable.ListBuffer[RandomVariable[_]]()
-
-    while (X.size > 0) {
-      val xVertices = X.map(ig.findVertex(_).get)
-      val rv = ig.vertexWithFewestEdgesToEliminateAmong(xVertices, (v1, v2) => { "x" }).payload
-      result += rv
-      ig.eliminate(rv)
-      X -= rv
-    }
-    result.toList
-  }
+//  def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
+//    val X = Set[RandomVariable[_]]() ++ pX
+//    val ig = interactionGraph()
+//    val result = mutable.ListBuffer[RandomVariable[_]]()
+//    while (X.size > 0) {
+//      val xVertices = X.map(ig.findVertex(_).get)
+//      val rv = ig.vertexWithFewestNeighborsAmong(xVertices).payload
+//      result += rv
+//      ig.eliminate(rv)
+//      X -= rv
+//    }
+//    result.toList
+//  }
+//
+//  def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
+//
+//    val X = Set[RandomVariable[_]]() ++ pX
+//    val ig = interactionGraph()
+//    val result = mutable.ListBuffer[RandomVariable[_]]()
+//
+//    while (X.size > 0) {
+//      val xVertices = X.map(ig.findVertex(_).get)
+//      val rv = ig.vertexWithFewestEdgesToEliminateAmong(xVertices, (v1, v2) => { "x" }).payload
+//      result += rv
+//      ig.eliminate(rv)
+//      X -= rv
+//    }
+//    result.toList
+//  }
 
   def factorElimination1(Q: Set[RandomVariable[_]]): Factor = {
 
@@ -427,22 +427,21 @@ class BayesianNetwork(
     (result, f.projectToOnly(Q.toList))
   }
 
-  // TODO: Make immutable: this should not be calling delete or setPayload
-  def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): Factor = {
-    // Q is a subset of C_r
-    while (τ.vertices().size > 1) {
-      // remove node i (other than r) that has single neighbor j in tau
-      val fl = τ.firstLeafOtherThan(τ.findVertex(f).get)
-      fl.map(i => {
-        val j = τ.neighbors(i).iterator.next()
-        val ɸ_i = i.payload
-        τ.delete(i)
-        val Sij = τ.separate(i, j)
-        // TODO j.setPayload(ɸ_i.projectToOnly(Sij.toList))
-      })
-    }
-    f.projectToOnly(Q.toList)
-  }
+//  def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): Factor = {
+//    // Q is a subset of C_r
+//    while (τ.vertices().size > 1) {
+//      // remove node i (other than r) that has single neighbor j in tau
+//      val fl = τ.firstLeafOtherThan(τ.findVertex(f).get)
+//      fl.map(i => {
+//        val j = τ.neighbors(i).iterator.next()
+//        val ɸ_i = i.payload
+//        τ.delete(i)
+//        val Sij = τ.separate(i, j)
+//        // TODO j.setPayload(ɸ_i.projectToOnly(Sij.toList))
+//      })
+//    }
+//    f.projectToOnly(Q.toList)
+//  }
 
   // Note: not sure about this return type:
   def factorElimination(τ: EliminationTree, e: List[CaseIs[_]]): Map[Factor, Factor] =
