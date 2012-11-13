@@ -112,8 +112,8 @@ trait Quantum {
 
     val quantum: Quantum = outer
 
-    val vertex = conversionGraph += this
-    uom2vertex += this -> vertex
+//    val vertex = conversionGraph += this
+//    uom2vertex += this -> vertex
 
     def conversion() = _conversion
     def update(cge: CGE) = _conversion = Some(cge)
@@ -239,12 +239,12 @@ trait Quantum {
     linkOpt: Option[String] = None): UOM =
     newUnitOfMeasurement(None, nameOpt, symbolOpt, linkOpt)
 
-  def link(base: UOM, multiple: BigDecimal, result: UOM): Unit = {
-    val baseVertex = vertexFor(base)
-    val resultVertex = vertexFor(result)
-    conversionGraph += (resultVertex -> baseVertex, multiple)
-    conversionGraph += (baseVertex -> resultVertex, bdDivide(oneBD, multiple))
-  }
+//  def link(base: UOM, multiple: BigDecimal, result: UOM): Unit = {
+//    val baseVertex = vertexFor(base)
+//    val resultVertex = vertexFor(result)
+//    conversionGraph += (resultVertex -> baseVertex, multiple)
+//    conversionGraph += (baseVertex -> resultVertex, bdDivide(oneBD, multiple))
+//  }
 
   val uom2vertex = Map[UOM, CGV]()
 
@@ -257,13 +257,13 @@ trait Quantum {
     qsymbol: Option[String] = None,
     qlink: Option[String] = None): UOM = {
     // TODO (mutually recursive?) (magnitude.doubleValue == 0.0) match { case true => zero()
-    // println("quantity " + magnitude + " " + unit)
     val uom = newUnitOfMeasurement(None, qname, qsymbol, qlink)
     val uomVertex = vertexFor(uom)
     val unitVertex = vertexFor(unit)
-    val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
-    val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
-    uom() = conversion2
+    // TODO
+//    val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
+//    val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
+//    uom() = conversion2
     uom
   }
 

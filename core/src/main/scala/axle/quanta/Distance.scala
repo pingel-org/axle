@@ -35,7 +35,7 @@ class Distance extends Quantum {
   val kilometer = meter kilo
   val km = kilometer
 
-  link(mile, "1.609344", kilometer)
+  // TODO link(mile, "1.609344", kilometer)
 
   val centimeter = meter centi
   val cm = centimeter
