@@ -7,13 +7,12 @@ class UndirectedGraphSpec extends Specification {
   "Undirected Graph" should {
     "work" in {
 
-      val g = JungUndirectedGraph(
-        vps = List("a", "b", "c", "d"),
-        ef = (vs: Seq[JungUndirectedGraphVertex[String]]) => vs match {
+      val g = JungUndirectedGraph(List("a", "b", "c", "d"),
+        (vs: Seq[JungUndirectedGraphVertex[String]]) => vs match {
           case a :: b :: c :: d :: Nil => List((a, b, ""), (b, c, ""), (c, d, ""), (d, a, ""), (a, c, ""), (b, d, ""))
         })
 
-      g.size must be equalTo (3)
+      g.size must be equalTo (4)
     }
   }
 
