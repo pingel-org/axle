@@ -34,6 +34,5 @@ trait GenGraph[VP, EP] {
 // CC[A, B]
 
 trait GraphFactory {
-  def apply[A, B](): GenGraph[A, B]
   def apply[A, B](vps: Seq[A], ef: Seq[GraphVertex[A]] => Seq[(GraphVertex[A], GraphVertex[A], B)]): GenGraph[A, B]
 }

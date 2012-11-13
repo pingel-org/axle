@@ -6,7 +6,7 @@ import axle._
 
 trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
-  def apply[A, B](): JungUndirectedGraph[A, B]
+  // def apply[A, B](): JungUndirectedGraph[A, B]
 
   def apply[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphVertex[VP]] => Seq[(JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)]): JungUndirectedGraph[VP, EP] =
     new JungUndirectedGraph[VP, EP](vps, ef)

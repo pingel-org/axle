@@ -72,7 +72,8 @@ trait GenDirectedGraph[VP, EP] extends GenGraph[VP, EP] {
 
   def deleteEdge(e: E): GenDirectedGraph[VP, EP]
   def deleteVertex(v: V): GenDirectedGraph[VP, EP]
-  def removeInputs(vs: Set[V]): GenDirectedGraph[VP, EP]
-  def removeOutputs(vs: Set[V]): GenDirectedGraph[VP, EP]
+  
+//  def removeInputs(vs: Set[V]): GenDirectedGraph[VP, EP]
+//  def removeOutputs(vs: Set[V]): GenDirectedGraph[VP, EP]
 
 }

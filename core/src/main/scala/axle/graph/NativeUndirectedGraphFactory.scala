@@ -5,8 +5,8 @@ import axle._
 
 trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
-  def apply[VP, EP](): NativeUndirectedGraph[VP, EP] =
-    new NativeUndirectedGraph(List[VP](), vs => List[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]())
+//  def apply[VP, EP](): NativeUndirectedGraph[VP, EP] =
+//    new NativeUndirectedGraph(List[VP](), vs => List[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]())
 
   def apply[VP, EP](vps: Seq[VP], ef: (Seq[NativeUndirectedGraphVertex[VP]]) => Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]): NativeUndirectedGraph[VP, EP] =
     new NativeUndirectedGraph(vps, ef)
