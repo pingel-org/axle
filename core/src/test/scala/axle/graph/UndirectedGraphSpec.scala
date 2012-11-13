@@ -8,9 +8,9 @@ class UndirectedGraphSpec extends Specification {
     "work" in {
 
       val g = JungUndirectedGraph(
-        vps = List("a", "b", "c"),
+        vps = List("a", "b", "c", "d"),
         ef = (vs: Seq[JungUndirectedGraphVertex[String]]) => vs match {
-          case a :: b :: c :: Nil => List((a, b, "hello"), (b, c, "world"), (c, a, "!"))
+          case a :: b :: c :: d :: Nil => List((a, b, ""), (b, c, ""), (c, d, ""), (d, a, ""), (a, c, ""), (b, d, ""))
         })
 
       g.size must be equalTo (3)
@@ -20,7 +20,7 @@ class UndirectedGraphSpec extends Specification {
   "REPL Demo" should {
     "work" in {
 
-      val g = JungUndirectedGraph[String, Double]()
+      val g = JungUndirectedGraph[String, Double](List("a"), (vs: Seq[JungUndirectedGraphVertex[String]]) => Nil)
 
       1 must be equalTo (1)
     }
