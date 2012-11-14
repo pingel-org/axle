@@ -1,13 +1,14 @@
 package axle.quanta
 
 import java.math.BigDecimal
+import axle.graph._
 
 class Energy extends Quantum {
 
   type UOM = EnergyUnit
 
   class EnergyUnit(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
@@ -16,7 +17,7 @@ class Energy extends Quantum {
   def zero() = new EnergyUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
   
   def newUnitOfMeasurement(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): EnergyUnit = new EnergyUnit(conversion, name, symbol, link)

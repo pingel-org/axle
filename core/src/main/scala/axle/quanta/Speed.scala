@@ -1,20 +1,21 @@
 package axle.quanta
 
 import java.math.BigDecimal
+import axle.graph._
 
 class Speed extends Quantum {
 
   type UOM = SpeedUnit
 
   class SpeedUnit(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurementImpl(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): SpeedUnit = new SpeedUnit(conversion, name, symbol, link)

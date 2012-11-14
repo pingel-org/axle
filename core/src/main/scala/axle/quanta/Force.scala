@@ -1,20 +1,21 @@
 package axle.quanta
 
 import java.math.BigDecimal
+import axle.graph._
 
 class Force extends Quantum {
 
   type UOM = ForceUnit
 
   class ForceUnit(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurementImpl(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): ForceUnit = new ForceUnit(conversion, name, symbol, link)

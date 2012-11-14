@@ -34,8 +34,8 @@ trait Quantum {
 
   val conversionGraph = JungDirectedGraph[UOM, BigDecimal]()
 
-  type CGE = JungDirectedGraphEdge[UOM, BigDecimal] // conversionGraph.type#E
-  type CGV = JungDirectedGraphVertex[UOM] // conversionGraph.type#V
+  //  type CGE = JungDirectedGraphEdge[UOM, BigDecimal] // conversionGraph.type#E
+  //  type CGV = JungDirectedGraphVertex[UOM] // conversionGraph.type#V
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
@@ -56,8 +56,8 @@ trait Quantum {
 
     self: UOM =>
 
-    def conversion(): Option[CGE]
-    def update(cge: CGE): Unit
+    def conversion(): Option[JungDirectedGraphEdge[UOM, BigDecimal]]
+    // def update(cge: JungDirectedGraphEdge[UOM, BigDecimal]): Unit
     def label(): String
     def symbol(): Option[String]
     def link(): Option[String]
@@ -82,7 +82,7 @@ trait Quantum {
 
     self: UOM =>
 
-    override def update(cge: CGE): Unit = {}
+    override def update(cge: JungDirectedGraphEdge[UOM, BigDecimal]): Unit = {}
 
     override def +(right: UOM): UOM = right
     override def -(right: UOM): UOM = right * -1.0
@@ -103,7 +103,7 @@ trait Quantum {
   }
 
   class UnitOfMeasurementImpl(
-    var _conversion: Option[CGE],
+    var _conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]],
     _name: Option[String] = None,
     _symbol: Option[String] = None,
     _link: Option[String] = None) extends UnitOfMeasurement {
@@ -116,7 +116,7 @@ trait Quantum {
     //    uom2vertex += this -> vertex
 
     def conversion() = _conversion
-    def update(cge: CGE) = _conversion = Some(cge)
+    // def update(cge: JungDirectedGraphEdge[UOM, BigDecimal]) = _conversion = Some(cge)
     def label() = _name.getOrElse("")
     def symbol() = _symbol
     def link() = _link
@@ -180,7 +180,7 @@ trait Quantum {
 
     def magnitudeIn(u: UOM): BigDecimal =
       conversionGraph.shortestPath(vertexFor(u), vertexFor(this)).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.payload))
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[UOM, BigDecimal]) => bd.multiply(edge.payload))
       }).getOrElse(throw new Exception("no conversion path from " + this + " to " + u))
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM = {
@@ -211,7 +211,7 @@ trait Quantum {
       val otherVertex = vertexFor(other)
       val thisVertex = vertexFor(this)
       val resultBD = conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: CGE) => bd.multiply(edge.payload))
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[UOM, BigDecimal]) => bd.multiply(edge.payload))
       })
       if (resultBD.isEmpty) {
         throw new Exception("no conversion path from " + this + " to " + other)
@@ -225,7 +225,7 @@ trait Quantum {
   def zero(): UOM
 
   def newUnitOfMeasurement(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): UOM
@@ -246,9 +246,9 @@ trait Quantum {
   //    conversionGraph += (baseVertex -> resultVertex, bdDivide(oneBD, multiple))
   //  }
 
-  val uom2vertex = Map[UOM, CGV]()
+  val uom2vertex = Map[UOM, JungDirectedGraphVertex[UOM]]()
 
-  def vertexFor(uom: UOM): CGV = uom2vertex(uom)
+  def vertexFor(uom: UOM): JungDirectedGraphVertex[UOM] = uom2vertex(uom)
 
   def quantity(
     magnitude: BigDecimal,

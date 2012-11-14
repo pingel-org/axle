@@ -1,20 +1,21 @@
 package axle.quanta
 
 import java.math.BigDecimal
+import axle.graph._
 
 class Information extends Quantum {
 
   type UOM = InformationUnit
   
   class InformationUnit(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
     extends UnitOfMeasurementImpl(conversion, name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[CGE] = None,
+    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): InformationUnit = new InformationUnit(conversion, name, symbol, link)
