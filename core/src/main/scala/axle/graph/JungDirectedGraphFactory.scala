@@ -76,7 +76,7 @@ case class JungDirectedGraph[VP, EP](
   def findVertex(f: JungDirectedGraphVertex[VP] => Boolean): Option[JungDirectedGraphVertex[VP]] =
     vertices().find(f(_))
 
-  def deleteEdge(e: E): JungDirectedGraph[VP, EP] = filterEdges(_ != e)
+  def deleteEdge(e: JungDirectedGraphEdge[VP, EP]): JungDirectedGraph[VP, EP] = filterEdges(_ != e)
 
   def deleteVertex(v: JungDirectedGraphVertex[VP]): JungDirectedGraph[VP, EP] =
     JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)

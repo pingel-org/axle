@@ -114,8 +114,6 @@ case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) {
 
 trait BayesianNetworkFactory extends ModelFactory {
 
-  // def apply(name: String): BayesianNetwork = new BayesianNetwork(name)
-
   def apply(
     name: String,
     vps: Seq[BayesianNetworkNode],

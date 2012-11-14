@@ -34,8 +34,8 @@ trait Quantum {
 
   val conversionGraph = JungDirectedGraph[UOM, BigDecimal]()
 
-  type CGE = conversionGraph.type#E
-  type CGV = conversionGraph.type#V
+  type CGE = JungDirectedGraphEdge[UOM, BigDecimal] // conversionGraph.type#E
+  type CGV = JungDirectedGraphVertex[UOM] // conversionGraph.type#V
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
@@ -112,8 +112,8 @@ trait Quantum {
 
     val quantum: Quantum = outer
 
-//    val vertex = conversionGraph += this
-//    uom2vertex += this -> vertex
+    //    val vertex = conversionGraph += this
+    //    uom2vertex += this -> vertex
 
     def conversion() = _conversion
     def update(cge: CGE) = _conversion = Some(cge)
@@ -239,12 +239,12 @@ trait Quantum {
     linkOpt: Option[String] = None): UOM =
     newUnitOfMeasurement(None, nameOpt, symbolOpt, linkOpt)
 
-//  def link(base: UOM, multiple: BigDecimal, result: UOM): Unit = {
-//    val baseVertex = vertexFor(base)
-//    val resultVertex = vertexFor(result)
-//    conversionGraph += (resultVertex -> baseVertex, multiple)
-//    conversionGraph += (baseVertex -> resultVertex, bdDivide(oneBD, multiple))
-//  }
+  //  def link(base: UOM, multiple: BigDecimal, result: UOM): Unit = {
+  //    val baseVertex = vertexFor(base)
+  //    val resultVertex = vertexFor(result)
+  //    conversionGraph += (resultVertex -> baseVertex, multiple)
+  //    conversionGraph += (baseVertex -> resultVertex, bdDivide(oneBD, multiple))
+  //  }
 
   val uom2vertex = Map[UOM, CGV]()
 
@@ -261,9 +261,9 @@ trait Quantum {
     val uomVertex = vertexFor(uom)
     val unitVertex = vertexFor(unit)
     // TODO
-//    val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
-//    val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
-//    uom() = conversion2
+    //    val conversion1 = conversionGraph += (uomVertex -> unitVertex, bdDivide(oneBD, magnitude))
+    //    val conversion2 = conversionGraph += (unitVertex -> uomVertex, magnitude)
+    //    uom() = conversion2
     uom
   }
 

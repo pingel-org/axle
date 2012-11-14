@@ -5,7 +5,7 @@ import axle._
 
 trait UndirectedGraphFactory extends GraphFactory {
 
-  def apply[A, B](): GenUndirectedGraph[A, B]
+  // def apply[A, B](): GenUndirectedGraph[A, B]
 
   def apply[A, B](vps: Seq[A], ef: Seq[UndirectedGraphVertex[A]] => Seq[(UndirectedGraphVertex[A], UndirectedGraphVertex[A], B)]): GenUndirectedGraph[A, B]
 
@@ -34,47 +34,52 @@ trait UndirectedGraphEdge[VP, EP] extends GraphEdge[VP, EP] {
 
 trait GenUndirectedGraph[VP, EP] extends GenGraph[VP, EP] {
 
-  type V <: UndirectedGraphVertex[VP]
-  type E <: UndirectedGraphEdge[VP, EP]
+  //  type V <: UndirectedGraphVertex[VP]
+  //  type E <: UndirectedGraphEdge[VP, EP]
 
   //  def vertex(payload: VP): V
   //  def edge(v1: V, v2: V, payload: EP): E
 
-  def unlink(e: E): GenUndirectedGraph[VP, EP]
-  def unlink(v1: V, v2: V): GenUndirectedGraph[VP, EP]
-  def areNeighbors(v1: V, v2: V): Boolean
+  def unlink(e: UndirectedGraphEdge[VP, EP]): GenUndirectedGraph[VP, EP]
+  def unlink(v1: UndirectedGraphVertex[VP], v2: UndirectedGraphVertex[VP]): GenUndirectedGraph[VP, EP]
+  def areNeighbors(v1: UndirectedGraphVertex[VP], v2: UndirectedGraphVertex[VP]): Boolean
 
-  def isClique(vs: GenTraversable[V]): Boolean = (for {
+  def isClique(vs: GenTraversable[UndirectedGraphVertex[VP]]): Boolean = (for {
     vi <- vs
     vj <- vs
   } yield {
     (vi == vj) || areNeighbors(vi, vj)
   }).forall(b => b)
 
-  def numEdgesToForceClique(vs: GenTraversable[V], payload: (V, V) => EP) = (for {
+  def numEdgesToForceClique(vs: GenTraversable[UndirectedGraphVertex[VP]], payload: (UndirectedGraphVertex[VP], UndirectedGraphVertex[VP]) => EP) = (for {
     vi <- vs
     vj <- vs
   } yield {
     if (areNeighbors(vi, vj)) 1 else 0
   }).sum
 
-  def forceClique(vs: Set[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
+  def forceClique(vs: Set[UndirectedGraphVertex[VP]], payload: (UndirectedGraphVertex[VP], UndirectedGraphVertex[VP]) => EP): GenUndirectedGraph[VP, EP]
 
   // assert: among is a subset of vertices
-  def vertexWithFewestEdgesToEliminateAmong(among: Set[V], payload: (V, V) => EP): V =
+  def vertexWithFewestEdgesToEliminateAmong(among: Set[UndirectedGraphVertex[VP]], payload: (UndirectedGraphVertex[VP], UndirectedGraphVertex[VP]) => EP): UndirectedGraphVertex[VP] =
     among.map(v => (v, numEdgesToForceClique(neighbors(v), payload))).minBy(_._2)._1
 
   // assert: among is a subset of vertices
-  def vertexWithFewestNeighborsAmong(among: Set[V]): V =
+  def vertexWithFewestNeighborsAmong(among: Set[UndirectedGraphVertex[VP]]): UndirectedGraphVertex[VP] =
     among.map(v => (v, neighbors(v).size)).minBy(_._2)._1
 
-  def degree(v: V): Int
-  def edges(v: V): Set[E]
-  def neighbors(v: V): Set[V]
-  def delete(v: V): GenUndirectedGraph[VP, EP]
+  def degree(v: UndirectedGraphVertex[VP]): Int
+
+  def edges(v: UndirectedGraphVertex[VP]): Set[UndirectedGraphEdge[VP, EP]]
+
+  def neighbors(v: UndirectedGraphVertex[VP]): Set[UndirectedGraphVertex[VP]]
+
+  def delete(v: UndirectedGraphVertex[VP]): GenUndirectedGraph[VP, EP]
+
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan(r: V): Option[V]
-  def eliminate(v: V, payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
+  def firstLeafOtherThan(r: UndirectedGraphVertex[VP]): Option[UndirectedGraphVertex[VP]]
+
+  def eliminate(v: UndirectedGraphVertex[VP], payload: (UndirectedGraphVertex[VP], UndirectedGraphVertex[VP]) => EP): GenUndirectedGraph[VP, EP]
 
   // def eliminate(vs: List[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
 }

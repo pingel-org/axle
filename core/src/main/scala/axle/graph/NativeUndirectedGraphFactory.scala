@@ -5,9 +5,6 @@ import axle._
 
 trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
-//  def apply[VP, EP](): NativeUndirectedGraph[VP, EP] =
-//    new NativeUndirectedGraph(List[VP](), vs => List[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]())
-
   def apply[VP, EP](vps: Seq[VP], ef: (Seq[NativeUndirectedGraphVertex[VP]]) => Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]): NativeUndirectedGraph[VP, EP] =
     new NativeUndirectedGraph(vps, ef)
 
@@ -42,8 +39,7 @@ case class NativeUndirectedGraph[VP, EP](
 
   // type V = NativeUndirectedGraphVertex[VP]
   // type E = NativeUndirectedGraphEdge[VP, EP]
-
-  type S = (Seq[NativeUndirectedGraphVertex[VP]], Seq[NativeUndirectedGraphEdge[VP, EP]], Map[NativeUndirectedGraphVertex[VP], Set[NativeUndirectedGraphEdge[VP, EP]]])
+  // type S = (Seq[NativeUndirectedGraphVertex[VP]], Seq[NativeUndirectedGraphEdge[VP, EP]], Map[NativeUndirectedGraphVertex[VP], Set[NativeUndirectedGraphEdge[VP, EP]]])
 
   val _vertices: Seq[NativeUndirectedGraphVertex[VP]] = vps.map(new NativeUndirectedGraphVertex(_))
 
@@ -57,8 +53,10 @@ case class NativeUndirectedGraph[VP, EP](
   lazy val vertex2edges: Map[NativeUndirectedGraphVertex[VP], Set[NativeUndirectedGraphEdge[VP, EP]]] =
     immutable.Map[NativeUndirectedGraphVertex[VP], Set[NativeUndirectedGraphEdge[VP, EP]]]().withDefaultValue(Set[NativeUndirectedGraphEdge[VP, EP]]())
 
-  def storage(): S = (_vertices, _edges, vertex2edges)
+  def storage() = (_vertices, _edges, vertex2edges)
+
   def vertices(): Set[NativeUndirectedGraphVertex[VP]] = vertexSet
+
   def edges(): Set[NativeUndirectedGraphEdge[VP, EP]] = edgeSet
 
   def size(): Int = _vertices.size
@@ -109,7 +107,7 @@ case class NativeUndirectedGraph[VP, EP](
     NativeUndirectedGraph(vps, cliqued(_))
   }
 
-  override def isClique(vs: IndexedSeq[NativeUndirectedGraphVertex[VP]]): Boolean =
+  def isClique(vs: IndexedSeq[NativeUndirectedGraphVertex[VP]]): Boolean =
     vs.permutations(2).∀({ case vi :: vj :: Nil => areNeighbors(vi, vj) })
 
   def degree(v: NativeUndirectedGraphVertex[VP]): Int = vertex2edges.get(v).map(_.size).getOrElse(0)

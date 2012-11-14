@@ -20,8 +20,6 @@ object Model extends ModelFactory {
 
 trait ModelFactory extends JungDirectedGraphFactory {
 
-  // def apply[A](): Model[A] = new Model[A]() {}
-
   def apply[A](
     vps: Seq[A],
     ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], String)]): Model[A] =

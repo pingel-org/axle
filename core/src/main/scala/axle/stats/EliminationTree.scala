@@ -16,19 +16,19 @@ object EliminationTree extends EliminationTreeFactory
 
 trait EliminationTree extends JungUndirectedGraph[Factor, String] {
 
-  def gatherVars(stop: V, node: V, result: mutable.Set[RandomVariable[_]]): Unit = {
+  def gatherVars(stop: JungUndirectedGraphVertex[Factor], node: JungUndirectedGraphVertex[Factor], result: mutable.Set[RandomVariable[_]]): Unit = {
     result ++= node.payload.variables
     neighbors(node).filter(!_.equals(stop)).map(gatherVars(node, _, result))
   }
 
-  def cluster(i: V): Set[RandomVariable[_]] = {
+  def cluster(i: JungUndirectedGraphVertex[Factor]): Set[RandomVariable[_]] = {
     val result = mutable.Set[RandomVariable[_]]()
     neighbors(i).map(j => result ++= separate(i, j))
     result ++= i.payload.variables
     result
   }
 
-  def separate(i: V, j: V): Set[RandomVariable[_]] = {
+  def separate(i: JungUndirectedGraphVertex[Factor], j: JungUndirectedGraphVertex[Factor]): Set[RandomVariable[_]] = {
     val iSide = mutable.Set[RandomVariable[_]]()
     gatherVars(j, i, iSide)
     val jSide = mutable.Set[RandomVariable[_]]()

@@ -6,8 +6,6 @@ import Scalaz._
 
 trait NativeDirectedGraphFactory extends GenDirectedGraphFactory {
 
-  // def apply[VP, EP](): NativeDirectedGraph[VP, EP] = new NativeDirectedGraph[VP, EP]() {}
-
   def apply[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGraphVertex[VP]]) => Seq[(NativeDirectedGraphVertex[VP], NativeDirectedGraphVertex[VP], EP)]): NativeDirectedGraph[VP, EP] =
     new NativeDirectedGraph(vps, ef)
 
@@ -21,8 +19,11 @@ class NativeDirectedGraphVertex[VP](vp: VP) extends DirectedGraphVertex[VP] {
 
 class NativeDirectedGraphEdge[VP, EP](vi: NativeDirectedGraphVertex[VP], vj: NativeDirectedGraphVertex[VP], ep: EP)
   extends DirectedGraphEdge[VP, EP] {
+  
   def source(): NativeDirectedGraphVertex[VP] = vi
+  
   def dest(): NativeDirectedGraphVertex[VP] = vj
+  
   def payload() = ep
 }
 
@@ -31,8 +32,7 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGrap
 
   // type V = NativeDirectedGraphVertex[VP]
   // type E = NativeDirectedGraphEdge[VP, EP]
-
-  type S = (Set[NativeDirectedGraphVertex[VP]], Set[NativeDirectedGraphEdge[VP, EP]], Map[NativeDirectedGraphVertex[VP], Set[NativeDirectedGraphEdge[VP, EP]]], Map[NativeDirectedGraphVertex[VP], Set[NativeDirectedGraphEdge[VP, EP]]])
+  // type S = (Set[NativeDirectedGraphVertex[VP]], Set[NativeDirectedGraphEdge[VP, EP]], Map[NativeDirectedGraphVertex[VP], Set[NativeDirectedGraphEdge[VP, EP]]], Map[NativeDirectedGraphVertex[VP], Set[NativeDirectedGraphEdge[VP, EP]]])
 
   lazy val _vertices: Seq[NativeDirectedGraphVertex[VP]] = vps.map(new NativeDirectedGraphVertex(_))
   lazy val _verticesSet = _vertices.toSet
@@ -49,14 +49,17 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGrap
   lazy val vertex2inedges: Map[NativeDirectedGraphVertex[VP], Set[NativeDirectedGraphEdge[VP, EP]]] =
     _edges.groupBy(_.dest).map({ case (k, v) => (k, v.toSet) }).withDefaultValue(Set[NativeDirectedGraphEdge[VP, EP]]())
 
-  def storage(): S = (_verticesSet, _edgesSet, vertex2outedges, vertex2inedges)
+  def storage() = (_verticesSet, _edgesSet, vertex2outedges, vertex2inedges)
+
   def vertices(): Set[NativeDirectedGraphVertex[VP]] = _verticesSet
+
   def edges(): Set[NativeDirectedGraphEdge[VP, EP]] = _edgesSet
+
   def size(): Int = vps.size
 
   def findEdge(from: NativeDirectedGraphVertex[VP], to: NativeDirectedGraphVertex[VP]): Option[NativeDirectedGraphEdge[VP, EP]] = vertex2outedges(from).find(_.dest == to)
 
-  def deleteEdge(e: E): NativeDirectedGraph[VP, EP] = filterEdges(_ != e)
+  def deleteEdge(e: NativeDirectedGraphEdge[VP, EP]): NativeDirectedGraph[VP, EP] = filterEdges(_ != e)
 
   def deleteVertex(v: NativeDirectedGraphVertex[VP]): NativeDirectedGraph[VP, EP] =
     NativeDirectedGraph(_vertices.filter(_ != v).map(_.payload), ef)
@@ -95,7 +98,7 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGrap
    * TODO: This is just a quick, dirty, slow, and naive algorithm.
    */
 
-  def _shortestPath(source: NativeDirectedGraphVertex[VP], goal: NativeDirectedGraphVertex[VP], visited: Set[NativeDirectedGraphVertex[VP]]): Option[List[E]] = if (source == goal) {
+  def _shortestPath(source: NativeDirectedGraphVertex[VP], goal: NativeDirectedGraphVertex[VP], visited: Set[NativeDirectedGraphVertex[VP]]): Option[List[NativeDirectedGraphEdge[VP, EP]]] = if (source == goal) {
     Some(List())
   } else {
     null
@@ -105,6 +108,6 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: (Seq[NativeDirectedGrap
     //      .reduceOption((l1, l2) => (l1.length < l2.length) ? l1 | l2)
   }
 
-  def shortestPath(source: NativeDirectedGraphVertex[VP], goal: NativeDirectedGraphVertex[VP]): Option[List[E]] = _shortestPath(source, goal, Set())
+  def shortestPath(source: NativeDirectedGraphVertex[VP], goal: NativeDirectedGraphVertex[VP]): Option[List[NativeDirectedGraphEdge[VP, EP]]] = _shortestPath(source, goal, Set())
 
 }

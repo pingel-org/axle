@@ -6,7 +6,7 @@ import scalaz._
 import Scalaz._
 import axle.graph._
 
-case class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
+class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
   extends JungDirectedGraph[String, Symbol](vps, vs => Nil) {
 
   def Q(): Set[JungDirectedGraphVertex[String]] = vertices()
@@ -41,7 +41,7 @@ case class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
     false
   }
 
-  def induce(P: Set[JungDirectedGraph[String, Symbol]#V]): AngluinAcceptor = {
+  def induce(P: Set[JungDirectedGraphVertex[String]]): AngluinAcceptor = {
     // TODO !!!
     null
   }

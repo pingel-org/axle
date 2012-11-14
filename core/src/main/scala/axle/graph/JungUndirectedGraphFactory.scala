@@ -6,8 +6,6 @@ import axle._
 
 trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
-  // def apply[A, B](): JungUndirectedGraph[A, B]
-
   def apply[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraphVertex[VP]] => Seq[(JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP], EP)]): JungUndirectedGraph[VP, EP] =
     new JungUndirectedGraph[VP, EP](vps, ef)
 }
@@ -20,7 +18,6 @@ class JungUndirectedGraphVertex[VP](_payload: VP)
   def payload(): VP = _payload
 }
 
-// v1: JungUndirectedGraphVertex[VP], v2: JungUndirectedGraphVertex[VP],
 class JungUndirectedGraphEdge[VP, EP](_payload: EP)
   extends UndirectedGraphEdge[VP, EP] {
 
@@ -46,7 +43,7 @@ case class JungUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[JungUndirectedGraph
 
   ef(jungGraph.getVertices.asScala.toList).map({
     case (vi, vj, ep) => {
-      val edge: JungUndirectedGraphEdge[VP, EP] = new JungUndirectedGraphEdge[VP, EP](ep) {
+      val edge = new JungUndirectedGraphEdge[VP, EP](ep) {
         def vertices(): (JungUndirectedGraphVertex[VP], JungUndirectedGraphVertex[VP]) = (vi, vj)
       }
       jungGraph.addEdge(edge, vi, vj) // TODO check return value
