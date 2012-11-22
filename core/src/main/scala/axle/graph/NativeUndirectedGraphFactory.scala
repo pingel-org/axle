@@ -154,13 +154,13 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def payload(): EP = ep
 
-    def other(u: V[VP]): V[VP] = super.other(u).asInstanceOf[V[VP]] // TODO cast
+    // def other(u: V[VP]): V[VP] = super.other(u).asInstanceOf[V[VP]]
 
   }
 
   class NativeUndirectedGraphVertex[VP](vp: VP)
     extends UndirectedGraphVertex[VP] {
-    override def payload(): VP = vp
+    def payload(): VP = vp
   }
 
 }

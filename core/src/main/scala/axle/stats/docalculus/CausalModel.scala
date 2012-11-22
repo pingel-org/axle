@@ -14,7 +14,7 @@ trait CausalModelFactory extends ModelFactory {
   class CausalModel(_name: String, vps: Seq[CausalModelNode])
     extends Model[CausalModelNode](vps, (vs: Seq[JungDirectedGraphVertex[CausalModelNode]]) => Nil) {
 
-    def name(): String = _name
+    override def name(): String = _name
 
     def duplicate(): CausalModel = null // TODO
 
@@ -25,7 +25,7 @@ trait CausalModelFactory extends ModelFactory {
 
     def nodeFor(rv: RandomVariable[_]) = findVertex((n: JungDirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv)
 
-    def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
+    override def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
 
     def addFunctions(pf: Seq[PFunction]): CausalModel = null // TODO
 

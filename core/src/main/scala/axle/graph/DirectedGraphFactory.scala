@@ -8,7 +8,7 @@ trait DirectedGraphFactory {
   type V[VP] <: DirectedGraphVertex[VP]
   type E[VP, EP] <: DirectedGraphEdge[VP, EP]
 
-  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)])
+  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP]
 
   trait DirectedGraph[VP, EP] {
 

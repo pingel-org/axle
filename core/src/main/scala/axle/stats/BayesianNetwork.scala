@@ -123,9 +123,9 @@ trait BayesianNetworkFactory extends ModelFactory {
     ef: Seq[JungDirectedGraphVertex[BayesianNetworkNode]] => Seq[(JungDirectedGraphVertex[BayesianNetworkNode], JungDirectedGraphVertex[BayesianNetworkNode], String)])
     extends Model(vps, ef) {
 
-    def name(): String = _name
+    override def name(): String = _name
 
-    def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
+    override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
 
     override def vertexToVisualizationHtml(vp: BayesianNetworkNode): xml.Node =
       <html>

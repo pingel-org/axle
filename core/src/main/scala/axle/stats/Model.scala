@@ -25,9 +25,9 @@ trait ModelFactory extends JungDirectedGraphFactory {
     ef: Seq[JungDirectedGraphVertex[MVP]] => Seq[(JungDirectedGraphVertex[MVP], JungDirectedGraphVertex[MVP], String)])
     extends JungDirectedGraph[MVP, String](vps, ef) {
 
-    def name(): String
+    def name(): String = "model name"
 
-    def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_]
+    def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_] = null // TODO
 
     def randomVariables(): List[RandomVariable[_]] = vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
 

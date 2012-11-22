@@ -10,7 +10,8 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
   type E[VP, EP] = JungDirectedGraphEdge[VP, EP]
   // type S = DirectedSparseGraph[JungDirectedGraphVertex[VP], JungDirectedGraphEdge[VP, EP]]
 
-  override def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP] = new JungDirectedGraph(vps, ef)
+  override def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP] =
+    new JungDirectedGraph(vps, ef)
 
   case class JungDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)])
     extends DirectedGraph[VP, EP] {
@@ -117,11 +118,10 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
   }
 
-  // vi: V[VP], vj: V[VP]
-  case class JungDirectedGraphEdge[VP, EP](payload: EP) extends DirectedGraphEdge[VP, EP] {
-    // def source(): V[VP] = vi
-    // def dest(): V[VP] = vj
-    // def payload(): EP = ep
+  class JungDirectedGraphEdge[VP, EP](ep: EP) extends DirectedGraphEdge[VP, EP] {
+    def source(): V[VP] = null // TODO
+    def dest(): V[VP] = null // TODO
+    def payload(): EP = ep
   }
 
   class JungDirectedGraphVertex[VP](vp: VP) extends DirectedGraphVertex[VP] {

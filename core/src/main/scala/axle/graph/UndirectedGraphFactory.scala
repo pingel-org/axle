@@ -9,7 +9,7 @@ trait UndirectedGraphFactory {
   type V[VP] <: UndirectedGraphVertex[VP]
   type E[VP, EP] <: UndirectedGraphEdge[VP, EP]
 
-  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)])
+  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP]
 
   trait UndirectedGraph[VP, EP] {
 
@@ -81,6 +81,8 @@ trait UndirectedGraphFactory {
 
   }
 
-  trait UndirectedGraphVertex[VP]
+  trait UndirectedGraphVertex[VP] {
+    def payload(): VP
+  }
 }
 

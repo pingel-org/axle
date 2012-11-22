@@ -11,7 +11,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
   type G[VP, EP] = JungUndirectedGraph[VP, EP]
   type V[VP] = JungUndirectedGraphVertex[VP]
   type E[VP, EP] = JungUndirectedGraphEdge[VP, EP]
-  //  type S = UndirectedSparseGraph[V, EP]
+  // type S = UndirectedSparseGraph[V, EP]
 
   override def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP] = new JungUndirectedGraph(vps, ef)
 
@@ -26,9 +26,8 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     ef(jungGraph.getVertices.asScala.toList).map({
       case (vi, vj, ep) => {
-        val edge = new JungUndirectedGraphEdge[VP, EP](ep) {
-          def vertices(): (V[VP], V[VP]) = (vi, vj)
-        }
+        val edge = new JungUndirectedGraphEdge[VP, EP](ep)
+        // def vertices(): (V[VP], V[VP]) = (vi, vj)
         jungGraph.addEdge(edge, vi, vj) // TODO check return value
       }
     })
@@ -125,7 +124,7 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
   }
 
   class JungUndirectedGraphEdge[VP, EP](ep: EP) extends UndirectedGraphEdge[VP, EP] {
-    def vertices(): (V[VP], V[VP]) // (v1, v2)
+    def vertices(): (V[VP], V[VP]) = null // TODO (v1, v2)
     def payload(): EP = ep
   }
 
