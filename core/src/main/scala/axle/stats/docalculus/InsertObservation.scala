@@ -3,6 +3,7 @@ package axle.stats.docalculus
 
 import collection._
 import axle.stats._
+import axle.stats.docalculus.CausalModel._
 
 object InsertObservation extends Rule {
 

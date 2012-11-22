@@ -2,12 +2,14 @@ package axle.stats
 
 import collection._
 import axle.stats._
-import axle.graph._
+import axle.graph.JungDirectedGraph._
 // import axle.visualize._
 import org.specs2.mutable._
 
 class ABE extends Specification {
 
+  import BayesianNetwork._
+  
   val bools = Some(Vector(true, false))
 
   val B = new RandomVariable0("Burglary", bools, None)

@@ -1,6 +1,7 @@
 package axle.stats
 
 import axle.graph._
+import axle.graph.JungUndirectedGraph._
 import collection._
 
 trait InteractionGraphFactory extends JungUndirectedGraphFactory {

@@ -2,6 +2,7 @@
 package axle.graph
 
 import org.specs2.mutable._
+import axle.graph.JungDirectedGraph._
 
 class DirectedGraphSpec extends Specification {
 

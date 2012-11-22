@@ -2,6 +2,7 @@ package axle.stats
 
 import collection._
 import axle.graph._
+import axle.graph.JungUndirectedGraph._
 
 trait EliminationTreeFactory extends JungUndirectedGraphFactory {
 

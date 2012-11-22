@@ -1,6 +1,7 @@
 package axle.stats.docalculus
 
 import axle.stats._
+import axle.stats.docalculus.CausalModel._
 import collection._
 
 object DeleteObservation extends Rule {

@@ -2,7 +2,11 @@ package axle
 
 import java.awt.Color
 import java.awt.Component
-import axle.graph._
+//import axle.graph._
+import axle.graph.JungUndirectedGraph._
+import axle.graph.JungDirectedGraph._
+import axle.graph.NativeUndirectedGraph._
+import axle.graph.NativeDirectedGraph._
 import axle.visualize._
 import axle.ml._
 
@@ -24,7 +28,7 @@ package object visualize {
       nug.ef(vs.map(v => new NativeUndirectedGraphVertex(v.payload)))
         .map({ case (nv1, nv2, ep) => (new JungUndirectedGraphVertex(nv1.payload), new JungUndirectedGraphVertex(nv2.payload), ep) })
 
-    new JungUndirectedGraph[VP, EP](nug.vps, wrappedEf)
+    JungUndirectedGraph[VP, EP](nug.vps, wrappedEf)
   }
 
   implicit def enComponentJungDirectedGraph[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component =

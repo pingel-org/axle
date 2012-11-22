@@ -1,6 +1,6 @@
 package axle.quanta
 
-import axle.graph._
+import axle.graph.JungDirectedGraph._
 import java.math.BigDecimal
 import math.{ max, abs }
 import collection._
@@ -32,7 +32,7 @@ trait Quantum {
 
   type UOM <: UnitOfMeasurement
 
-  val conversionGraph = JungDirectedGraph[UOM, BigDecimal]()
+  val conversionGraph: JungDirectedGraph[UOM, BigDecimal] = null // TODO
 
   //  type CGE = JungDirectedGraphEdge[UOM, BigDecimal] // conversionGraph.type#E
   //  type CGV = JungDirectedGraphVertex[UOM] // conversionGraph.type#V
@@ -82,7 +82,7 @@ trait Quantum {
 
     self: UOM =>
 
-    override def update(cge: JungDirectedGraphEdge[UOM, BigDecimal]): Unit = {}
+    // override def update(cge: JungDirectedGraphEdge[UOM, BigDecimal]): Unit = {}
 
     override def +(right: UOM): UOM = right
     override def -(right: UOM): UOM = right * -1.0
@@ -216,7 +216,6 @@ trait Quantum {
       if (resultBD.isEmpty) {
         throw new Exception("no conversion path from " + this + " to " + other)
       }
-
       quantity(resultBD.get, other)
     }
 

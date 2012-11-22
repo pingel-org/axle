@@ -1,6 +1,7 @@
 package axle.graph
 
 import org.specs2.mutable._
+import axle.graph.JungUndirectedGraph._
 
 class UndirectedGraphSpec extends Specification {
 

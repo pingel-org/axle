@@ -2,10 +2,12 @@ package axle.stats
 
 import org.specs2.mutable._
 import collection._
-import axle.graph._
+import axle.graph.JungDirectedGraph._
 
 class ConditionalProbabilityTableSpecification extends Specification {
 
+  import BayesianNetwork._
+  
   val bools = Some(Vector(true, false))
 
   val A = new RandomVariable0("A", bools, None)

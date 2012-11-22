@@ -2,11 +2,12 @@ package axle.stats
 
 import collection._
 import axle.graph._
+import axle.graph.JungUndirectedGraph._
 
 trait JoinTreeFactory extends JungUndirectedGraphFactory {
 
-  // def apply(): JoinTree = new JoinTree() {}
-
+  import axle.stats.Model._
+  
   def apply(
     vps: Seq[immutable.Set[RandomVariable[_]]],
     ef: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]] => Seq[(JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], String)]): JoinTree =

@@ -3,7 +3,8 @@ package org.pingel.bayes.examples
 
 import collection._
 import axle.stats._
-import axle.graph._
+//import axle.graph.JungDirectedGraph._
+//import axle.graph.JungUndirectedGraph._
 import org.specs2.mutable._
 
 class ScalaFigures extends Specification {
@@ -16,8 +17,10 @@ class ScalaFigures extends Specification {
   val D = new RandomVariable0("D", bools, None)
   val E = new RandomVariable0("E", bools, None)
 
-  def figure6_1(): BayesianNetwork = {
+  def figure6_1(): BayesianNetworkFactory#BayesianNetwork = {
 
+    import BayesianNetwork._
+    
     val bn = BayesianNetwork(
       "6.1",
       List(
@@ -95,8 +98,10 @@ class ScalaFigures extends Specification {
     (cptB, cptD)
   }
 
-  def figure6_4(): BayesianNetwork = {
+  def figure6_4(): BayesianNetworkFactory#BayesianNetwork = {
 
+    import BayesianNetwork._
+    
     val bn = BayesianNetwork("6.4",
       List(
         BayesianNetworkNode(A, Factor(Vector(A), Map(
@@ -154,6 +159,8 @@ class ScalaFigures extends Specification {
 
   def figure7_4() = {
 
+    import EliminationTree._
+    
     val f61 = figure6_1()
 
     val τ = EliminationTree(List(A, B, C, D, E).map(f61.cpt(_)),
@@ -177,6 +184,8 @@ class ScalaFigures extends Specification {
 
   def figure7_12() = {
 
+    import JoinTree._
+    
     val vps: Seq[immutable.Set[RandomVariable[_]]] = List(immutable.Set(A, B, C), immutable.Set(B, C, D), immutable.Set(C, E))
 
     val ef = (vs: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]]) => vs match {

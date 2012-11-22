@@ -8,7 +8,7 @@ import java.awt.Dimension
 import java.awt.Paint
 import java.awt.Stroke
 import org.apache.commons.collections15.Transformer
-import axle.graph._
+import axle.graph.JungDirectedGraph._
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
@@ -48,7 +48,7 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     }
 
     val vertexLabelTransformer = new Transformer[JungDirectedGraphVertex[VP], String]() {
-      def transform(v: JungUndirectedGraphVertex[VP]) = jdg.vertexToVisualizationHtml(v.payload).toString
+      def transform(v: JungDirectedGraphVertex[VP]) = jdg.vertexToVisualizationHtml(v.payload).toString
     }
 
     val edgeLabelTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], String]() {

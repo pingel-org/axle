@@ -1,7 +1,7 @@
 package axle.quanta
 
 import java.math.BigDecimal
-import axle.graph._
+import axle.graph.JungDirectedGraph._
 
 class Acceleration extends Quantum {
 

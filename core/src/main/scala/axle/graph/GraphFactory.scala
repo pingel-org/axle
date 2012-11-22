@@ -1,5 +1,6 @@
 package axle.graph
 
+/*
 trait GraphVertex[VP] {
   def payload(): VP
 }
@@ -28,13 +29,12 @@ trait GenGraph[VP, EP] {
   //  def +(vp: VP): (GenGraph[VP, EP], V) = vertex(vp)
 
   def findVertex(test: VP => Boolean): Option[GraphVertex[VP]]
-
 }
 
-// CC[A, B] <: GenGraph[A, B]
-// type Coll = CC[_, _]
-// CC[A, B]
-
+// G <: GenGraph[_, _], GV <: GraphVertex[_], GE <: GraphEdge[_, _]
 trait GraphFactory {
-  def apply[A, B](vps: Seq[A], ef: Seq[GraphVertex[A]] => Seq[(GraphVertex[A], GraphVertex[A], B)]): GenGraph[A, B]
+
+  def apply[VP, EP](vps: Seq[VP], ef: Seq[GraphVertex[VP]] => Seq[(GraphVertex[VP], GraphVertex[VP], GraphEdge[VP, EP])]): GenGraph[VP, EP]
+
 }
+*/
