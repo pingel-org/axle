@@ -116,34 +116,50 @@ object Plottable {
     def portion(left: DateTime, v: DateTime, right: DateTime) = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
 
     // TODO: bigger and smaller time-scales
-    def step(duration: Duration): (Duration, String) =
+    def step(duration: Duration): (DateTime => DateTime, String) =
       if (duration.isLongerThan(Weeks.ONE.multipliedBy(52).toStandardDuration)) {
-        (Weeks.ONE.multipliedBy(26).toStandardDuration, "MM/dd YY")
+        (_.plusMonths(3), "MM/dd YY")
       } else if (duration.isLongerThan(Weeks.ONE.multipliedBy(20).toStandardDuration)) {
-        (Weeks.ONE.multipliedBy(4).toStandardDuration, "MM/dd YY")
+        (_.plusMonths(1), "MM/dd YY")
       } else if (duration.isLongerThan(Weeks.THREE.toStandardDuration)) {
-        (Weeks.ONE.toStandardDuration, "MM/dd")
+        (_.plusWeeks(1), "MM/dd")
       } else if (duration.isLongerThan(Days.ONE.toStandardDuration)) {
-        (Days.ONE.toStandardDuration, "MM/dd hh")
+        (_.plusDays(1), "MM/dd hh")
       } else if (duration.isLongerThan(Hours.SEVEN.toStandardDuration)) {
-        (Hours.TWO.toStandardDuration, "dd hh:mm")
+        (_.plusHours(2), "dd hh:mm")
       } else if (duration.isLongerThan(Hours.ONE.toStandardDuration)) {
-        (Hours.ONE.toStandardDuration, "dd hh:mm")
+        (_.plusHours(1), "dd hh:mm")
       } else if (duration.isLongerThan(Minutes.THREE.toStandardDuration)) {
-        (Minutes.ONE.toStandardDuration, "hh:mm")
+        (_.plusMinutes(1), "hh:mm")
       } else {
-        (Seconds.ONE.toStandardDuration, "mm:ss")
+        (_.plusSeconds(1), "mm:ss")
       }
+
+    def ticStream(from: DateTime, to: DateTime, stepFn: DateTime => DateTime, fmt: String): Stream[(DateTime, String)] = {
+      if (from.isAfter(to)) {
+        Stream.empty
+      } else {
+        val nextTic = stepFn(from)
+        Stream.cons((nextTic, nextTic.toString(fmt)), ticStream(nextTic, to, stepFn, fmt))
+      }
+    }
 
     def tics(from: DateTime, to: DateTime): Seq[(DateTime, String)] = {
       val dur = new Interval(from, to).toDuration
-      val (s, fmt) = step(dur)
-      val n = dur.getMillis / s.getMillis
-      (0L to n).map(i => {
-        val d = from.plus(s.getMillis * i)
-        (d, d.toString(fmt))
-      })
+      val (stepFn, fmt) = step(dur)
+      ticStream(from, to, stepFn, fmt).toList
     }
+
+    //    def ticsOld(from: DateTime, to: DateTime): Seq[(DateTime, String)] = {
+    //      val dur = new Interval(from, to).toDuration
+    //      val (stepFn, fmt) = step(dur)
+    //      val n = dur.getMillis / s.getMillis
+    //      (0L to n).map(i => {
+    //        val d = from.plus(0L * i) // s.getMillis
+    //        (d, d.toString(fmt))
+    //      })
+    //    }
+
   }
 
   import axle.quanta.Information._
