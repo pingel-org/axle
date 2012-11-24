@@ -136,10 +136,10 @@ object Plottable {
       }
 
     def ticStream(from: DateTime, to: DateTime, stepFn: DateTime => DateTime, fmt: String): Stream[(DateTime, String)] = {
-      if (from.isAfter(to)) {
+      val nextTic = stepFn(from)
+      if (nextTic.isAfter(to)) {
         Stream.empty
       } else {
-        val nextTic = stepFn(from)
         Stream.cons((nextTic, nextTic.toString(fmt)), ticStream(nextTic, to, stepFn, fmt))
       }
     }
