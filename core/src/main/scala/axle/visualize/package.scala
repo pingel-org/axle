@@ -19,7 +19,10 @@ package object visualize {
 
   def newFrame() = new AxleFrame(width = 1100, height = 800, bgColor = Color.white, title = "αχλε")
 
-  def show(component: Component) = newFrame().add(component)
+  def show(component: Component) = {
+    val frame = newFrame().add(component)
+    frame.setVisible(true)
+  }
 
   implicit def enComponentPlot[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]): Component = new PlotComponent(plot)
 
@@ -55,20 +58,21 @@ package object visualize {
 
   /**
    * component2file
-   * 
+   *
    * encoding: PNG, JPEG, gif, BMP
+   * 
+   * http://stackoverflow.com/questions/4028898/create-an-image-from-a-non-visible-awt-component
    */
 
   def component2file(component: Component, filename: String, encoding: String): Unit = {
 
-    val axleFrame = newFrame()
-    axleFrame.add(component)
-    
-    val img = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB 8-bit RGBA packed into integer pixels
+    val fr = newFrame()
+    fr.add(component)
+    fr.setVisible(true)
+
+    val img = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB
     val g = img.createGraphics()
-    g.setColor(component.getForeground())
-    g.setFont(component.getFont())
-    component.paintAll(g)
+    fr.paintAll(g)
 
     ImageIO.write(img, encoding, new File(filename))
 
