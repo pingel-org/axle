@@ -1,6 +1,8 @@
 package axle.visualize
 
 import math.{ pow, abs, log10, floor, ceil }
+import org.joda.time.Months
+import org.joda.time.Months
 
 trait Plottable[T] extends Ordering[T] with Portionable[T] {
 
@@ -47,9 +49,9 @@ object Plottable {
   implicit object LongPlottable extends Plottable[Long] {
 
     def isPlottable(t: Long): Boolean = true
-    
+
     def zero() = 0L
-    
+
     def compare(l1: Long, l2: Long) = (l1 - l2) match {
       case 0L => 0
       case r @ _ if r > 0L => 1
@@ -77,7 +79,7 @@ object Plottable {
     def isPlottable(t: Int): Boolean = true
 
     def zero() = 0
-   
+
     def compare(i1: Int, i2: Int) = (i1 - i2) match {
       case 0 => 0
       case r @ _ if r > 0 => 1
@@ -106,16 +108,22 @@ object Plottable {
     def isPlottable(t: DateTime): Boolean = true
 
     lazy val now = new DateTime()
-    
+
     def zero() = now
-    
+
     def compare(dt1: DateTime, dt2: DateTime) = dt1.compareTo(dt2)
 
     def portion(left: DateTime, v: DateTime, right: DateTime) = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
 
-    def step(duration: Duration): (Duration, String) = {
-      // TODO: bigger and smaller time-scales
-      if (duration.isLongerThan(Days.ONE.toStandardDuration)) {
+    // TODO: bigger and smaller time-scales
+    def step(duration: Duration): (Duration, String) =
+      if (duration.isLongerThan(Weeks.ONE.multipliedBy(52).toStandardDuration)) {
+        (Weeks.ONE.multipliedBy(8).toStandardDuration, "MM/dd YY")
+      } else if (duration.isLongerThan(Weeks.ONE.multipliedBy(20).toStandardDuration)) {
+        (Weeks.ONE.multipliedBy(4).toStandardDuration, "MM/dd YY")
+      } else if (duration.isLongerThan(Weeks.THREE.toStandardDuration)) {
+        (Weeks.ONE.toStandardDuration, "MM/dd")
+      } else if (duration.isLongerThan(Days.ONE.toStandardDuration)) {
         (Days.ONE.toStandardDuration, "MM/dd hh")
       } else if (duration.isLongerThan(Hours.SEVEN.toStandardDuration)) {
         (Hours.TWO.toStandardDuration, "dd hh:mm")
@@ -126,7 +134,6 @@ object Plottable {
       } else {
         (Seconds.ONE.toStandardDuration, "mm:ss")
       }
-    }
 
     def tics(from: DateTime, to: DateTime): Seq[(DateTime, String)] = {
       val dur = new Interval(from, to).toDuration
@@ -146,7 +153,7 @@ object Plottable {
     def isPlottable(t: UOM): Boolean = true
 
     def zero() = 0.0 *: bit
-    
+
     def compare(u1: UOM, u2: UOM) = (u1.magnitudeIn(base).doubleValue - u2.magnitudeIn(base).doubleValue) match {
       case 0.0 => 0
       case r @ _ if r > 0.0 => 1
