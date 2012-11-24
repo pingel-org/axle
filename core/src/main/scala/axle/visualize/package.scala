@@ -2,13 +2,18 @@ package axle
 
 import java.awt.Color
 import java.awt.Component
-//import axle.graph._
+import java.io.File
 import axle.graph.JungUndirectedGraph._
 import axle.graph.JungDirectedGraph._
 import axle.graph.NativeUndirectedGraph._
 import axle.graph.NativeDirectedGraph._
 import axle.visualize._
 import axle.ml._
+import java.awt.Font
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
+import javax.swing.JPanel
+import javax.swing.CellRendererPane
 
 package object visualize {
 
@@ -47,5 +52,35 @@ package object visualize {
   implicit def enComponentKMeansClassifier[T](
     classifier: KMeans.KMeansClassifier[T]): Component =
     new KMeansVisualization[T](classifier)
+
+  /**
+   * component2file
+   * 
+   * encoding: PNG, JPEG, gif, BMP
+   */
+
+  def component2file(component: Component, filename: String, encoding: String): Unit = {
+
+    val axleFrame = newFrame()
+    axleFrame.add(component)
+    
+    val img = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB 8-bit RGBA packed into integer pixels
+    val g = img.createGraphics()
+    g.setColor(component.getForeground())
+    g.setFont(component.getFont())
+    component.paintAll(g)
+
+    ImageIO.write(img, encoding, new File(filename))
+
+    // g.dispose()
+  }
+
+  def png(component: Component, filename: String) = component2file(component, filename, "PNG")
+
+  def jpeg(component: Component, filename: String) = component2file(component, filename, "JPEG")
+
+  def gif(component: Component, filename: String) = component2file(component, filename, "gif")
+
+  def bmp(component: Component, filename: String) = component2file(component, filename, "BMP")
 
 }
