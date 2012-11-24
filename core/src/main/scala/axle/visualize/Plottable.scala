@@ -118,7 +118,7 @@ object Plottable {
     // TODO: bigger and smaller time-scales
     def step(duration: Duration): (Duration, String) =
       if (duration.isLongerThan(Weeks.ONE.multipliedBy(52).toStandardDuration)) {
-        (Weeks.ONE.multipliedBy(8).toStandardDuration, "MM/dd YY")
+        (Weeks.ONE.multipliedBy(26).toStandardDuration, "MM/dd YY")
       } else if (duration.isLongerThan(Weeks.ONE.multipliedBy(20).toStandardDuration)) {
         (Weeks.ONE.multipliedBy(4).toStandardDuration, "MM/dd YY")
       } else if (duration.isLongerThan(Weeks.THREE.toStandardDuration)) {
