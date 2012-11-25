@@ -20,11 +20,14 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     lazy val jungGraph = new DirectedSparseGraph[V[VP], E[VP, EP]]()
 
-    vps.map(vp => {
-      jungGraph.addVertex(new JungDirectedGraphVertex(vp)) // TODO check return value
-    })
+    // Note: Have to compensate for JUNG not preserving vertex order
+    lazy val vertexSeq = vps.map(vp => new JungDirectedGraphVertex(vp))
 
-    ef(jungGraph.getVertices.asScala.toList).map({
+    lazy val vertexSet = verticesSeq.toSet
+
+    vertexSeq.map(v => jungGraph.addVertex(v)) // TODO check return value
+
+    ef(vertexSeq).map({
       case (vi, vj, ep) => {
         val edge: JungDirectedGraphEdge[VP, EP] = new JungDirectedGraphEdge[VP, EP](ep)
         jungGraph.addEdge(edge, vi, vj) // TODO check return value
@@ -37,9 +40,9 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
 
     override def edges(): Set[E[VP, EP]] = jungGraph.getEdges().asScala.toSet
 
-    def verticesSeq(): Seq[V[VP]] = jungGraph.getVertices.asScala.toSeq
+    def verticesSeq(): Seq[V[VP]] = vertexSeq
 
-    override def vertices(): Set[V[VP]] = verticesSeq.toSet
+    override def vertices(): Set[V[VP]] = vertexSet
 
     def findEdge(from: V[VP], to: V[VP]): Option[E[VP, EP]] = Option(jungGraph.findEdge(from, to))
 

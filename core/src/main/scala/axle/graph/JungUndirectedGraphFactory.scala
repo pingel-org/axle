@@ -20,27 +20,29 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     lazy val jungGraph = new UndirectedSparseGraph[V[VP], E[VP, EP]]()
 
-    vps.map(vp => {
-      jungGraph.addVertex(new JungUndirectedGraphVertex(vp)) // TODO check return value
-    })
+    lazy val vertexSeq = vps.map(vp => new JungUndirectedGraphVertex(vp))
 
-    ef(jungGraph.getVertices.asScala.toList).map({
+    vertexSeq.map(v => jungGraph.addVertex(v)) // TODO check return value
+
+    lazy val vertexSet = vertexSeq.toSet
+
+    ef(vertexSeq).map({
       case (vi, vj, ep) => {
         val edge = new JungUndirectedGraphEdge[VP, EP](ep)
-        // def vertices(): (V[VP], V[VP]) = (vi, vj)
         jungGraph.addEdge(edge, vi, vj) // TODO check return value
       }
     })
 
     def storage(): UndirectedSparseGraph[V[VP], E[VP, EP]] = jungGraph
 
-    def vertices(): Set[V[VP]] = jungGraph.getVertices.asScala.toSet
+    def vertices(): Set[V[VP]] = vertexSet
 
     def edges(): Set[E[VP, EP]] = jungGraph.getEdges().asScala.toSet
 
     def size(): Int = jungGraph.getVertexCount()
 
-    def findVertex(payload: VP): Option[V[VP]] = vertices().find(_.payload == payload) // TODO an index would speed this up
+    // def findVertex(payload: VP): Option[V[VP]] = vertices().find(_.payload == payload) // TODO an index would speed this up
+    def findVertex(f: V[VP] => Boolean): Option[V[VP]] = vertices().find(f(_))
 
     def filterEdges(f: ((V[VP], V[VP], EP)) => Boolean): G[VP, EP] = {
       val filter = (es: Seq[(V[VP], V[VP], EP)]) => es.filter(f(_))
