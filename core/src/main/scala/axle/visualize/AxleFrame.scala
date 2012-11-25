@@ -16,10 +16,11 @@ class BackgroundPanel(title: String) extends JPanel {
 class AxleFrame(width: Int = 1100, height: Int = 800, bgColor: Color = Color.white, title: String = "αχλε")
   extends JFrame(title) {
 
-  setBackground(bgColor)
-  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-  setSize(width, height)
-
-  add(new BackgroundPanel(title))
+  def initialize(): Unit = {
+    setBackground(bgColor)
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    setSize(width, height)
+    add(new BackgroundPanel(title))
+  }
 
 }

@@ -20,7 +20,9 @@ package object visualize {
   def newFrame() = new AxleFrame(width = 1100, height = 800, bgColor = Color.white, title = "αχλε")
 
   def show(component: Component) = {
-    val frame = newFrame().add(component)
+    val frame = newFrame()
+    frame.initialize()
+    frame.add(component)
     frame.setVisible(true)
   }
 
