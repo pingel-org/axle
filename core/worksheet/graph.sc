@@ -16,16 +16,16 @@ object graph {
   dg.size                                         //> res0: Int = 4
 
   dg.findVertex(_.payload == "a").map(v => dg.successors(v).map(_.payload))
-                                                  //> res1: Option[scala.collection.Set[String]] = Some(Set(c, b))
+                                                  //> res1: Option[scala.collection.Set[String]] = Some(Set(b, c))
 
   dg.findVertex(_.payload == "c").map(v => dg.successors(v).map(_.payload))
                                                   //> res2: Option[scala.collection.Set[String]] = Some(Set(d))
 
   dg.findVertex(_.payload == "c").map(v => dg.predecessors(v).map(_.payload))
-                                                  //> res3: Option[scala.collection.Set[String]] = Some(Set(a, b))
+                                                  //> res3: Option[scala.collection.Set[String]] = Some(Set(b, a))
 
   dg.findVertex(_.payload == "c").map(v => dg.neighbors(v).map(_.payload))
-                                                  //> res4: Option[scala.collection.Set[String]] = Some(Set(d, a, b))
+                                                  //> res4: Option[scala.collection.Set[String]] = Some(Set(b, d, a))
   // TODO g.shortestPath(a, d).map( _.map( edge => (edge.dest.payload, edge.payload) ) )
 
   //----------------------------------------------------
@@ -39,10 +39,10 @@ object graph {
   ug.size                                         //> res5: Int = 4
 
   ug.findVertex(_.payload == "c").map(v => ug.neighbors(v).map(_.payload))
-                                                  //> res6: Option[scala.collection.Set[String]] = Some(Set(b, a, d))
+                                                  //> res6: Option[scala.collection.Set[String]] = Some(Set(a, d, b))
 
   ug.findVertex(_.payload == "a").map(v => ug.neighbors(v).map(_.payload))
-                                                  //> res7: Option[scala.collection.Set[String]] = Some(Set(c, b, d))
+                                                  //> res7: Option[scala.collection.Set[String]] = Some(Set(c, d, b))
 
   //----------------------------------------------------
 
@@ -77,9 +77,9 @@ object graph {
   nug.size                                        //> res13: Int = 4
 
   nug.findVertex(_.payload == "c").map(v => nug.neighbors(v).map(_.payload))
-                                                  //> res14: Option[scala.collection.Set[String]] = Some(Set())
+                                                  //> res14: Option[scala.collection.Set[String]] = Some(Set(b, d, a))
 
   nug.findVertex(_.payload == "a").map(v => nug.neighbors(v).map(_.payload))
-                                                  //> res15: Option[scala.collection.Set[String]] = Some(Set())
+                                                  //> res15: Option[scala.collection.Set[String]] = Some(Set(b, d, c))
 
 }

@@ -15,9 +15,11 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
   case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)])
     extends UndirectedGraph[VP, EP] {
 
-    val _vertices: Seq[V[VP]] = vps.map(new NativeUndirectedGraphVertex(_))
+    // Seq[V[VP]]
+    val _vertices = vps.map(new NativeUndirectedGraphVertex(_))
 
-    val _edges: Seq[E[VP, EP]] = ef(_vertices).map({
+    // Seq[E[VP, EP]]
+    val _edges = ef(_vertices).map({
       case (vi, vj, ep) => new NativeUndirectedGraphEdge(vi, vj, ep)
     })
 
@@ -25,7 +27,12 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     lazy val edgeSet = _edges.toSet
 
     lazy val vertex2edges: Map[V[VP], Set[E[VP, EP]]] =
-      immutable.Map[V[VP], Set[E[VP, EP]]]().withDefaultValue(Set[E[VP, EP]]())
+      _edges
+        .flatMap(e => {
+          val (vi, vj): (V[VP], V[VP]) = e.vertices()
+          Vector((vi, e), (vj, e))
+        }).groupBy(_._1).map(kv => (kv._1, kv._2.map(_._2).toSet))
+        .withDefaultValue(Set())
 
     def storage() = (_vertices, _edges, vertex2edges)
 
@@ -40,7 +47,7 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     // TODO findVertex needs an index
     def findVertex(f: V[VP] => Boolean): Option[V[VP]] = _vertices.find(f(_))
-      
+
     def filterEdges(f: ((V[VP], V[VP], EP)) => Boolean): G[VP, EP] = {
       val filter = (es: Seq[(V[VP], V[VP], EP)]) => es.filter(f(_))
       NativeUndirectedGraph(vps, filter.compose(ef))
@@ -85,9 +92,10 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def degree(v: V[VP]): Int = vertex2edges.get(v).map(_.size).getOrElse(0)
 
-    def edges(v: V[VP]): Set[E[VP, EP]] = vertex2edges(v)
+    def edges(v: V[VP]): Set[E[VP, EP]] = vertex2edges.get(v).getOrElse(Set())
 
-    def neighbors(v: V[VP]): Set[V[VP]] = vertex2edges(v).map(_.other(v))
+    def neighbors(v: V[VP]): Set[V[VP]] =
+      vertex2edges.get(v).map(edges => edges.map(edge => edge.other(v))).getOrElse(Set())
 
     def delete(v: V[VP]): G[VP, EP] = NativeUndirectedGraph(vps.filter(_ != v), ef)
 
