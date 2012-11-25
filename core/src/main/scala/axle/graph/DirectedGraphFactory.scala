@@ -15,6 +15,7 @@ trait DirectedGraphFactory {
     def vertices(): Set[V[VP]]
     def edges(): Set[E[VP, EP]]
 
+    def findVertex(f: V[VP] => Boolean): Option[V[VP]]
     def findEdge(from: V[VP], to: V[VP]): Option[E[VP, EP]]
     def leaves(): Set[V[VP]]
     def neighbors(v: V[VP]): Set[V[VP]]

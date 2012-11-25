@@ -47,9 +47,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
     def findEdge(from: V[VP], to: V[VP]): Option[E[VP, EP]] = Option(jungGraph.findEdge(from, to))
 
     // TODO: findVertex needs an index
-    // TOOD: findVertex f should probably take JungDirectedGraphVertex[VP]
-    // def findVertex(f: VP => Boolean): Option[JungDirectedGraphVertex[VP]] = vertices().find(v => f(v.payload))
-    def findVertex(f: V[VP] => Boolean): Option[V[VP]] = vertices().find(f(_))
+    def findVertex(f: V[VP] => Boolean): Option[V[VP]] = vertexSeq.find(f(_))
 
     def deleteEdge(e: E[VP, EP]): G[VP, EP] = filterEdges(_ != e)
 

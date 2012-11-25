@@ -38,6 +38,9 @@ trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
     def findEdge(vi: V[VP], vj: V[VP]): Option[E[VP, EP]] =
       _edges.find(e => (e.vertices == (vi, vj)) || (e.vertices == (vj, vi))) // Note: no matching on payload
 
+    // TODO findVertex needs an index
+    def findVertex(f: V[VP] => Boolean): Option[V[VP]] = _vertices.find(f(_))
+      
     def filterEdges(f: ((V[VP], V[VP], EP)) => Boolean): G[VP, EP] = {
       val filter = (es: Seq[(V[VP], V[VP], EP)]) => es.filter(f(_))
       NativeUndirectedGraph(vps, filter.compose(ef))

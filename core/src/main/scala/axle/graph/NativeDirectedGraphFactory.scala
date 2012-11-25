@@ -43,6 +43,9 @@ trait NativeDirectedGraphFactory extends DirectedGraphFactory {
 
     def findEdge(from: V[VP], to: V[VP]): Option[E[VP, EP]] = vertex2outedges(from).find(_.dest == to)
 
+    // TODO findVertex needs an index
+    def findVertex(f: V[VP] => Boolean): Option[V[VP]] = _vertices.find(f(_))
+
     def deleteEdge(e: E[VP, EP]): G[VP, EP] = filterEdges(_ != e)
 
     def deleteVertex(v: V[VP]): G[VP, EP] =

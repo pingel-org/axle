@@ -16,6 +16,7 @@ trait UndirectedGraphFactory {
     def vertices(): Set[V[VP]]
     def edges(): Set[E[VP, EP]]
 
+    def findVertex(f: V[VP] => Boolean): Option[V[VP]]
     def unlink(e: E[VP, EP]): G[VP, EP]
     def unlink(v1: V[VP], v2: V[VP]): G[VP, EP]
     def areNeighbors(v1: V[VP], v2: V[VP]): Boolean

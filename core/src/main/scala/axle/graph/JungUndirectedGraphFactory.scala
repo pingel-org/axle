@@ -41,8 +41,8 @@ trait JungUndirectedGraphFactory extends UndirectedGraphFactory {
 
     def size(): Int = jungGraph.getVertexCount()
 
-    // def findVertex(payload: VP): Option[V[VP]] = vertices().find(_.payload == payload) // TODO an index would speed this up
-    def findVertex(f: V[VP] => Boolean): Option[V[VP]] = vertices().find(f(_))
+    // TODO findVertex needs an index
+    def findVertex(f: V[VP] => Boolean): Option[V[VP]] = vertexSeq.find(f(_))
 
     def filterEdges(f: ((V[VP], V[VP], EP)) => Boolean): G[VP, EP] = {
       val filter = (es: Seq[(V[VP], V[VP], EP)]) => es.filter(f(_))
