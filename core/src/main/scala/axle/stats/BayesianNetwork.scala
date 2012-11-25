@@ -235,7 +235,7 @@ trait BayesianNetworkFactory extends ModelFactory {
       randomVariables().scanLeft((interactionGraph(), 0))(
         (gi, rv) => {
           val ig = gi._1
-          (ig.eliminate(rv), ig.neighbors(ig.findVertex(rv).get).size)
+          (ig.eliminate(rv), ig.neighbors(ig.findVertex(_.payload == rv).get).size)
         }
       ).map(_._2).max
 
@@ -408,7 +408,7 @@ trait BayesianNetworkFactory extends ModelFactory {
     def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): (BayesianNetwork, Factor) = {
       while (τ.vertices().size > 1) {
         // remove node i (other than r) that has single neighbor j in τ
-        val fl = τ.firstLeafOtherThan(τ.findVertex(f).get)
+        val fl = τ.firstLeafOtherThan(τ.findVertex(_.payload == f).get)
         fl.map(i => {
           val j = τ.neighbors(i).iterator.next()
           val ɸ_i = i.payload
