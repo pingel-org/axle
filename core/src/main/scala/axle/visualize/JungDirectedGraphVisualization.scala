@@ -44,7 +44,7 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
     val edgeStrokeTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], Stroke]() {
-      def transform(ep: JungDirectedGraphEdge[VP, EP]) = edgeStroke
+      def transform(e: JungDirectedGraphEdge[VP, EP]) = edgeStroke
     }
 
     val vertexLabelTransformer = new Transformer[JungDirectedGraphVertex[VP], String]() {
@@ -52,7 +52,7 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     }
 
     val edgeLabelTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], String]() {
-      def transform(ep: JungDirectedGraphEdge[VP, EP]) = ep.toString
+      def transform(e: JungDirectedGraphEdge[VP, EP]) = e.payload.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
