@@ -38,7 +38,7 @@ class TimeSeriesPlotSpec {
     import Information._
     import axle.stats._
 
-    val hm: SortedMap[Double, UOM] = new immutable.TreeMap[Double, UOM]() ++ (0 to 100).map(i => (i / 100.0, H(coin(i / 100.0)))).toMap
+    val hm: SortedMap[Double, Q] = new immutable.TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(i / 100.0)))).toMap
 
     val plot = new Plot(List(("h", hm)),
       connect = true, drawKey = false,

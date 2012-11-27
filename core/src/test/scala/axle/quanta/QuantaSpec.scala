@@ -14,9 +14,9 @@ class QuantaSpec extends Specification {
       import Mass._
       import Distance._
 
-      ("5" *: gram).conversion.get.payload must be equalTo new BigDecimal("5")
-      ("1" *: parsec + "4" *: lightyear).conversion.get.payload must be equalTo new BigDecimal("2.228")
-      ("4" *: lightyear + "1" *: parsec).conversion.get.payload must be equalTo new BigDecimal("7.26")
+      ("5" *: gram).magnitude must be equalTo new BigDecimal("5")
+      ("1" *: parsec + "4" *: lightyear).magnitude must be equalTo new BigDecimal("2.228")
+      ("4" *: lightyear + "1" *: parsec).magnitude must be equalTo new BigDecimal("7.26")
 
     }
   }
@@ -28,9 +28,9 @@ class QuantaSpec extends Specification {
       import Distance._
       import Mass._
 
-      (kilogram in gram).conversion.get.payload must be equalTo new BigDecimal("1E+3")
-      (megagram in milligram).conversion.get.payload must be equalTo new BigDecimal("1.000000E+9")
-      (mile in ft).conversion.get.payload must be equalTo new BigDecimal("5280")
+      (kilogram in gram).magnitude must be equalTo new BigDecimal("1E+3")
+      (megagram in milligram).magnitude must be equalTo new BigDecimal("1.000000E+9")
+      (mile in ft).magnitude must be equalTo new BigDecimal("5280")
 
     }
   }
@@ -43,8 +43,8 @@ class QuantaSpec extends Specification {
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-      (earth + sun).conversion.get.payload must be equalTo new BigDecimal("1988916.0936")
-      (gram + kilogram).conversion.get.payload must be equalTo new BigDecimal("1001")
+      (earth + sun).magnitude must be equalTo new BigDecimal("1988916.0936")
+      (gram + kilogram).magnitude must be equalTo new BigDecimal("1001")
     }
   }
 
@@ -54,7 +54,7 @@ class QuantaSpec extends Specification {
       import Volume._
       import Flow._
 
-      greatLakes.over(niagaraFalls, Time).conversion.get.payload must be equalTo new BigDecimal("12.36150")
+      greatLakes.over(niagaraFalls, Time).magnitude must be equalTo new BigDecimal("12.36150")
       // TODO convert that to years
     }
   }

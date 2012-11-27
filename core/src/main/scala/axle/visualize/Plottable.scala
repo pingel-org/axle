@@ -164,27 +164,27 @@ object Plottable {
 
   import axle.quanta.Information._
 
-  case class InfoPlottable(base: UOM) extends Plottable[UOM] {
+  case class InfoPlottable(base: UOM) extends Plottable[Q] {
 
     def isPlottable(t: UOM): Boolean = true
 
     def zero() = 0.0 *: bit
 
-    def compare(u1: UOM, u2: UOM) = (u1.magnitudeIn(base).doubleValue - u2.magnitudeIn(base).doubleValue) match {
+    def compare(u1: Q, u2: Q) = ((u1 in base).magnitude.doubleValue - (u2 in base).magnitude.doubleValue) match {
       case 0.0 => 0
       case r @ _ if r > 0.0 => 1
       case _ => -1
     }
 
-    def portion(left: UOM, v: UOM, right: UOM) =
-      (v.magnitudeIn(base).doubleValue - left.magnitudeIn(base).doubleValue) /
-        (right.magnitudeIn(base).doubleValue - left.magnitudeIn(base).doubleValue)
+    def portion(left: Q, v: Q, right: Q) =
+      ((v in base).magnitude.doubleValue - (left in base).magnitude.doubleValue) /
+        ((right in base).magnitude.doubleValue - (left in base).magnitude.doubleValue)
 
     def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
 
-    def tics(from: UOM, to: UOM): Seq[(UOM, String)] = {
-      val fromD = from.magnitudeIn(base).doubleValue
-      val toD = to.magnitudeIn(base).doubleValue
+    def tics(from: Q, to: Q): Seq[(Q, String)] = {
+      val fromD = (from in base).magnitude.doubleValue
+      val toD = (to in base).magnitude.doubleValue
       val s = step(fromD, toD)
       val n = ceil((toD - fromD) / s).toInt
       val start = s * floor(fromD / s)

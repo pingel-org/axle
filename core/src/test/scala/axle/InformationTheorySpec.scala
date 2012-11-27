@@ -14,7 +14,7 @@ class InformationTheorySpec extends Specification {
       val d = new RandomVariable0("d", Some(List("A", "B", "C").toIndexedSeq),
         distribution = Some(new ConditionalProbabilityTable0(Map("A" -> 0.2, "B" -> 0.1, "C" -> 0.7))))
 
-      entropy(d).conversion.get.payload must be equalTo (1.1567796494470395)
+      entropy(d).magnitude must be equalTo (1.1567796494470395)
     }
   }
 
@@ -55,8 +55,8 @@ class InformationTheorySpec extends Specification {
       val fairCoin = coin()
 
       // TODO: figure out why equalTo isn't working here
-      entropy(biasedCoin).conversion.get.payload should be equalTo (0.46899559358928117)
-      entropy(fairCoin).conversion.get.payload should be equalTo (1.0)
+      entropy(biasedCoin).magnitude should be equalTo (0.46899559358928117)
+      entropy(fairCoin).magnitude should be equalTo (1.0)
     }
   }
 

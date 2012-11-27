@@ -36,12 +36,12 @@ package object stats {
 
   import Information._
 
-  def entropy[A](X: RandomVariable[A]): Information.UOM = X.values.map(_.Σ(x => {
+  def entropy[A](X: RandomVariable[A]): Information.Q = X.values.map(_.Σ(x => {
     val px = P(X eq x)()
     (px > 0) ? (-px * log2(px)) | 0.0
   })).getOrElse(0.0) *: bit
 
-  def H[A](X: RandomVariable[A]): Information.UOM = entropy(X)
+  def H[A](X: RandomVariable[A]): Information.Q = entropy(X)
 
   def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
     //   // TODO
