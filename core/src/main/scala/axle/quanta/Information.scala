@@ -5,6 +5,7 @@ import axle.graph.JungDirectedGraph._
 
 class Information extends Quantum {
 
+  type Q = InformationQuantity
   type UOM = InformationUnit
 
   case class InformationUnit(
@@ -54,14 +55,14 @@ class Information extends Quantum {
 
   val derivations = Nil
 
-  val bit = lookup("bit")
-  val nibble = lookup("nibble")
-  val byte = lookup("byte")
-  val kilobyte = lookup("kilobyte")
-  val megabyte = lookup("megabyte")
-  val gigabyte = lookup("gigabyte")
-  val terabyte = lookup("terabyte")
-  val petabyte = lookup("petabyte")
+  val bit = byName("bit")
+  val nibble = byName("nibble")
+  val byte = byName("byte")
+  val kilobyte = byName("kilobyte")
+  val megabyte = byName("megabyte")
+  val gigabyte = byName("gigabyte")
+  val terabyte = byName("terabyte")
+  val petabyte = byName("petabyte")
 
   val KB = kilobyte
   val MB = megabyte

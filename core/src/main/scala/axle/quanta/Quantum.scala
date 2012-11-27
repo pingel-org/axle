@@ -30,11 +30,12 @@ trait Quantum {
 
   outer =>
 
+  type Q <: Quantity
   type UOM <: UnitOfMeasurement
 
   def conversionGraph(): JungDirectedGraph[UOM, BigDecimal]
 
-  def lookup(unitName: String): UOM = conversionGraph.findVertex(_.payload.name == unitName).get.payload
+  def byName(unitName: String): UOM = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
@@ -56,16 +57,31 @@ trait Quantum {
     def magnitude(): BigDecimal
     def unit(): UOM
 
-    def +(right: UOM): UOM
-    def -(right: UOM): UOM
-    def *(bd: BigDecimal): UOM
-    def /(bd: BigDecimal): UOM
-    def *:(bd: BigDecimal): UOM
+    def +(right: UOM): UOM =
+      quantity(this.magnitude.add((this in right).magnitude), right.unit)
 
-    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM
-    def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM
-    def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM
-    def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM
+    def -(right: UOM): UOM =
+      quantity(this.magnitude.subtract((this in right).magnitude), right.unit)
+
+    def *(bd: BigDecimal): UOM = bd.doubleValue match {
+      case 0.0 => zero()
+      case _ => quantity(this.magnitude.multiply(bd), this.unit)
+    }
+
+    def /(bd: BigDecimal): UOM = quantity(bdDivide(this.magnitude, bd), this.unit)
+
+    // def *:(bd: BigDecimal): UOM
+
+    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM =
+      resultQuantum.quantity(this.magnitude.multiply(right.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
+
+    def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM =
+      resultQuantum.quantity(bdDivide(this.magnitude, bottom.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
+
+    def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
+
+    def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
+
     def in(other: UOM): UOM
   }
 
@@ -88,7 +104,7 @@ trait Quantum {
     override def *(bd: BigDecimal): UOM = self
     override def /(bd: BigDecimal): UOM = self
 
-    override def *:(bd: BigDecimal) = self
+    // override def *:(bd: BigDecimal) = self
     // def in_:(bd: BigDecimal) = quantity(bd, this) // How would this be defined on the zero?
     // override def magnitudeIn(u: UOM): BigDecimal = zeroBD
 
@@ -102,8 +118,17 @@ trait Quantum {
   }
 
   class QuantityImpl(magnitude: BigDecimal, unit: UOM) extends Quantity {
+
     def magnitude() = magnitude
     def unit() = unit
+
+    def in(other: UOM): UOM =
+      conversionGraph.shortestPath(vertexFor(other), vertexFor(this.unit)).map(path => {
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[UOM, BigDecimal]) => bd.multiply(edge.payload))
+      })
+        .map(bd => quantity(this.magnitude.multiply(bd), other))
+        .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
+
   }
 
   class UnitOfMeasurementImpl(
@@ -122,7 +147,7 @@ trait Quantum {
 
     def magnitude() = oneBD
     def unit() = this
-    
+
     def vertex() = quantum.conversionGraph.findVertex(_.payload == this).get
 
     //    def kilo() = quantity(oneBD.scaleByPowerOfTen(3), this, Some("kilo" + _name.getOrElse("")), Some("K" + symbol.getOrElse("")))
@@ -141,52 +166,19 @@ trait Quantum {
 
     override def toString() = _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()
 
-    def +(right: UOM): UOM =
-      quantity(this.magnitude.add((this in right).magnitude), right.unit)
-
-    def -(right: UOM): UOM =
-      quantity(this.magnitude.subtract((this in right).magnitude), right.unit)
-
-    def *(bd: BigDecimal): UOM = bd.doubleValue match {
-      case 0.0 => zero()
-      case _ => quantity(this.magnitude.multiply(bd), this.unit)
-    }
-
-    def /(bd: BigDecimal): UOM = quantity(bdDivide(this.magnitude, bd), this.unit)
-
-    override def *:(bd: BigDecimal) = bd.doubleValue match {
+    def *:(bd: BigDecimal) = bd.doubleValue match {
       case 0.0 => zero()
       case _ => quantity(bd, this)
     }
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
-    //    def magnitudeIn(u: UOM): BigDecimal =
-    //      conversionGraph.shortestPath(vertexFor(u), vertexFor(this)).map(path => {
-    //        path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[UOM, BigDecimal]) => bd.multiply(edge.payload))
-    //      }).getOrElse(throw new Exception("no conversion path from " + this + " to " + u))
-
-    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#UOM, resultQuantum: QRES): QRES#UOM =
-      resultQuantum.quantity(this.magnitude.multiply(right.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
-
-    def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM =
-      resultQuantum.quantity(bdDivide(this.magnitude, bottom.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
-
-    def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
-
-    def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#UOM, resultQuantum: QRES): QRES#UOM = over(bottom, resultQuantum)
-
-    def in(other: UOM): UOM = {
-      val otherVertex = vertexFor(other)
-      val thisVertex = vertexFor(this)
-      val resultBD = conversionGraph.shortestPath(otherVertex, thisVertex).map(path => {
+    def in(other: UOM): UOM =
+      conversionGraph.shortestPath(vertexFor(other), vertexFor(this)).map(path => {
         path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[UOM, BigDecimal]) => bd.multiply(edge.payload))
       })
-      if (resultBD.isEmpty) {
-        throw new Exception("no conversion path from " + this + " to " + other)
-      }
-      quantity(resultBD.get, other)
-    }
+        .map(quantity(_, other))
+        .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
 
   }
 
@@ -221,9 +213,7 @@ trait Quantum {
   val wikipediaUrl: String
 
   //  val derivations: List[Quantum]
-  //
   //  def by(right: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, right, resultQuantum)
-  //
   //  def over(bottom: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, bottom, resultQuantum)
 
   override def toString() = this.getClass().getSimpleName()
