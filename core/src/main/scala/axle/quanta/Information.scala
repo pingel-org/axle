@@ -6,45 +6,67 @@ import axle.graph.JungDirectedGraph._
 class Information extends Quantum {
 
   type UOM = InformationUnit
-  
-  class InformationUnit(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(conversion, name, symbol, link)
+
+  case class InformationUnit(
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None)
+    extends UnitOfMeasurementImpl(_name, _symbol, _link)
 
   def newUnitOfMeasurement(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): InformationUnit = new InformationUnit(conversion, name, symbol, link)
+    link: Option[String] = None): InformationUnit = new InformationUnit(name, symbol, link)
 
-  def zero() = new InformationUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
-  
+  class InformationQuantity(magnitude: BigDecimal, unit: InformationUnit) extends QuantityImpl(magnitude, unit)
+
+  def newQuantity(magnitude: BigDecimal, unit: InformationUnit): InformationQuantity = new InformationQuantity(magnitude, unit)
+
+  def zero() = new InformationUnit(Some("zero"), Some("0"), None) with ZeroWithUnit
+
+  def conversionGraph() = _conversionGraph
+
+  lazy val _conversionGraph = JungDirectedGraph[InformationUnit, BigDecimal](
+    List(
+      unit("bit", "b"),
+      unit("nibble", "nibble"),
+      unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte")),
+      unit("kilobyte", "KB"),
+      unit("megabyte", "MB"),
+      unit("gigabyte", "GB"),
+      unit("terabyte", "TB"),
+      unit("petabyte", "PB")
+    ),
+    (vs: Seq[JungDirectedGraphVertex[InformationUnit]]) => vs match {
+      case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil => List(
+        (bit, nibble, "4"),
+        (bit, byte, "8"),
+        (byte, kilobyte, "1024"),
+        (kilobyte, megabyte, "1024"),
+        (megabyte, gigabyte, "1024"),
+        (gigabyte, terabyte, "1024"),
+        (terabyte, petabyte, "1024")
+      )
+    }
+  )
+
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Information"
 
   val derivations = Nil
 
-  // link(mile, "1.609344", kilometer)
+  val bit = lookup("bit")
+  val nibble = lookup("nibble")
+  val byte = lookup("byte")
+  val kilobyte = lookup("kilobyte")
+  val megabyte = lookup("megabyte")
+  val gigabyte = lookup("gigabyte")
+  val terabyte = lookup("terabyte")
+  val petabyte = lookup("petabyte")
 
-  val bit = unit("bit", "b")
-  val nibble = quantity("4", bit, Some("nibble"))
-  val byte = quantity("8", bit, Some("byte"), Some("B"), Some("http://en.wikipedia.org/wiki/Byte"))
-
-  val kilobyte = quantity("1024", byte, Some("kilobyte"), Some("KB"))
   val KB = kilobyte
-  
-  val megabyte = quantity("1024", kilobyte, Some("megabyte"), Some("MB"))
   val MB = megabyte
-  
-  val gigabyte = quantity("1024", megabyte, Some("gigabyte"), Some("GB"))
   val GB = gigabyte
-  
-  val terabyte = quantity("1024", gigabyte, Some("terabyte"), Some("TB"))
   val TB = terabyte
-  
-  val petabyte = quantity("1024", terabyte, Some("petabyte"), Some("PB"))
   val PB = petabyte
 
 }
