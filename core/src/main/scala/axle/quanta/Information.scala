@@ -23,7 +23,7 @@ class Information extends Quantum {
 
   def newQuantity(magnitude: BigDecimal, unit: InformationUnit): InformationQuantity = new InformationQuantity(magnitude, unit)
 
-  def zero() = new InformationUnit(Some("zero"), Some("0"), None) with ZeroWithUnit
+  def zero() = new InformationQuantity(0, bit) with ZeroWithUnit
 
   def conversionGraph() = _conversionGraph
 
