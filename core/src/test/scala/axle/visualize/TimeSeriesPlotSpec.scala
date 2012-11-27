@@ -26,7 +26,7 @@ class TimeSeriesPlotSpec {
 
     val plot = new Plot(lfs, connect = true, drawKey = true, xAxis = 0.0, yAxis = now)
 
-    show(plot)
+    // show(plot)
   }
 
   def t2(): Unit = {
@@ -46,7 +46,7 @@ class TimeSeriesPlotSpec {
       yAxis = 0.0, yAxisLabel = Some("H"),
       title = Some("Entropy"))(DoublePlottable, new InfoPlottable(bit))
 
-    show(plot)
+    // show(plot)
 
   }
 
