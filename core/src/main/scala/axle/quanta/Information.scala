@@ -23,7 +23,7 @@ class Information extends Quantum {
 
   def newQuantity(magnitude: BigDecimal, unit: InformationUnit): InformationQuantity = new InformationQuantity(magnitude, unit)
 
-  def zero() = new InformationQuantity(0, bit) with ZeroWithUnit
+  // def zero() = new InformationQuantity(0, bit) with ZeroWithUnit
 
   def conversionGraph() = _conversionGraph
 
@@ -53,22 +53,20 @@ class Information extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Information"
 
-  val derivations = Nil
+  lazy val bit = byName("bit")
+  lazy val nibble = byName("nibble")
+  lazy val byte = byName("byte")
+  lazy val kilobyte = byName("kilobyte")
+  lazy val megabyte = byName("megabyte")
+  lazy val gigabyte = byName("gigabyte")
+  lazy val terabyte = byName("terabyte")
+  lazy val petabyte = byName("petabyte")
 
-  val bit = byName("bit")
-  val nibble = byName("nibble")
-  val byte = byName("byte")
-  val kilobyte = byName("kilobyte")
-  val megabyte = byName("megabyte")
-  val gigabyte = byName("gigabyte")
-  val terabyte = byName("terabyte")
-  val petabyte = byName("petabyte")
-
-  val KB = kilobyte
-  val MB = megabyte
-  val GB = gigabyte
-  val TB = terabyte
-  val PB = petabyte
+  lazy val KB = kilobyte
+  lazy val MB = megabyte
+  lazy val GB = gigabyte
+  lazy val TB = terabyte
+  lazy val PB = petabyte
 
 }
 

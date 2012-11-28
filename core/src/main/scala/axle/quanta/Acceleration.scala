@@ -5,37 +5,47 @@ import axle.graph.JungDirectedGraph._
 
 class Acceleration extends Quantum {
 
+  type Q = AccelerationQuantity
   type UOM = AccelerationUnit
 
   class AccelerationUnit(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurementImpl(conversion, name, symbol, link)
+    extends UnitOfMeasurementImpl(name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): AccelerationUnit = new AccelerationUnit(conversion, name, symbol, link)
+    link: Option[String] = None): AccelerationUnit = new AccelerationUnit(name, symbol, link)
 
-  def zero() = new AccelerationUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
+  class AccelerationQuantity(magnitude: BigDecimal, unit: AccelerationUnit) extends QuantityImpl(magnitude, unit)
+
+  def newQuantity(magnitude: BigDecimal, unit: AccelerationUnit): AccelerationQuantity = new AccelerationQuantity(magnitude, unit)
 
   import Speed.{ mps, fps }
   import Time.{ second }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Acceleration"
 
-  // val derivations = List(Speed.over(Time, this))
+  def conversionGraph() = _conversionGraph
 
-  val mpsps = derive(mps.over[Time.type, this.type](second, this))
+  lazy val _conversionGraph = JungDirectedGraph[AccelerationUnit, BigDecimal](
+    List(
+      derive(mps.over[Time.type, this.type](second, this)),
+      derive(fps.over[Time.type, this.type](second, this)),
+      unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
+    ),
+    (vs: Seq[JungDirectedGraphVertex[AccelerationUnit]]) => vs match {
+      case mpsps :: fpsps :: g :: Nil => List(
+        (mpsps, g, "9.80665")
+      )
+    }
+  )
 
-  val fpsps = derive(fps.over[Time.type, this.type](second, this))
-
-  val g = quantity("9.80665", mpsps, Some("g"), Some("g"), Some("http://en.wikipedia.org/wiki/Standard_gravity"))
-
-  val examples = List(g)
+  lazy val mpsps = byName("mpsps")
+  lazy val fpsps = byName("fpsps")
+  lazy val g = byName("g")
 
 }
 

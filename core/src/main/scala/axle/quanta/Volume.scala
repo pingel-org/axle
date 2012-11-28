@@ -5,35 +5,47 @@ import axle.graph.JungDirectedGraph._
 
 class Volume extends Quantum {
 
+  type Q = VolumeQuantity
   type UOM = VolumeUnit
 
   class VolumeUnit(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurementImpl(conversion, name, symbol, link)
+    extends UnitOfMeasurementImpl(name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): VolumeUnit = new VolumeUnit(conversion, name, symbol, link)
+    link: Option[String] = None): VolumeUnit = new VolumeUnit(name, symbol, link)
 
-  def zero() = new VolumeUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
+  class VolumeQuantity(magnitude: BigDecimal, unit: VolumeUnit) extends QuantityImpl(magnitude, unit)
+
+  def newQuantity(magnitude: BigDecimal, unit: VolumeUnit): VolumeQuantity = new VolumeQuantity(magnitude, unit)
+
+  def conversionGraph() = _conversionGraph
 
   import Distance.{ meter, km }
   import Area.{ m2, km2 }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
 
-  // val derivations = List(Area.by(Distance, this))
+  lazy val _conversionGraph = JungDirectedGraph[VolumeUnit, BigDecimal](
+    List(
+      derive(m2.by[Distance.type, this.type](meter, this), Some("cubic meters"), Some("m^3")),
+      derive(km2.by[Distance.type, this.type](km, this), Some("cubic kilometers"), Some("km^3")),
+      unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
+    ),
+    (vs: Seq[JungDirectedGraphVertex[VolumeUnit]]) => vs match {
+      case m3 :: km3 :: greatLakes :: Nil => List(
+        (km3, greatLakes, 22671)
+      )
+    }
+  )
 
-  val m3 = derive(m2.by[Distance.type, this.type](meter, this), Some("cubic meters"), Some("m^3"))
-
-  val km3 = derive(km2.by[Distance.type, this.type](km, this), Some("cubic kilometers"), Some("km^3"))
-
-  val greatLakes = quantity("22671", km3, Some("Great Lakes Volume"), None, Some("http://en.wikipedia.org/wiki/Great_Lakes"))
+  lazy val m3 = byName("m3")
+  lazy val km3 = byName("km3")
+  lazy val greatLakes = byName("Great Lakes Volume")
 
 }
 

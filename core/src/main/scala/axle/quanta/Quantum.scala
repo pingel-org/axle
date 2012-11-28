@@ -63,10 +63,11 @@ trait Quantum {
     def -(right: Q): Q =
       quantity(this.magnitude.subtract((this in right.unit).magnitude), right.unit)
 
-    def *(bd: BigDecimal): Q = bd.doubleValue match {
-      case 0.0 => zero()
-      case _ => quantity(this.magnitude.multiply(bd), this.unit)
-    }
+    def *(bd: BigDecimal): Q = quantity(this.magnitude.multiply(bd), this.unit)
+//      bd.doubleValue match {
+//      case 0.0 => zero()
+//      case _ => quantity(this.magnitude.multiply(bd), this.unit)
+//    }
 
     def /(bd: BigDecimal): Q = quantity(bdDivide(this.magnitude, bd), this.unit)
 
@@ -95,17 +96,17 @@ trait Quantum {
     def link(): Option[String]
   }
 
-  trait ZeroWithUnit extends Quantity {
-
-    self: Q =>
-
-    override def +(right: Q): Q = right
-    override def -(right: Q): Q = right * -1.0
-    override def *(bd: BigDecimal): Q = self
-    override def /(bd: BigDecimal): Q = self
-
-    // override by, over, through, per, and in?
-  }
+//  trait ZeroWithUnit extends Quantity {
+//
+//    self: Q =>
+//
+//    override def +(right: Q): Q = right
+//    override def -(right: Q): Q = right * -1.0
+//    override def *(bd: BigDecimal): Q = self
+//    override def /(bd: BigDecimal): Q = self
+//
+//    // override by, over, through, per, and in?
+//  }
 
   class QuantityImpl(magnitude: BigDecimal, unit: UOM) extends Quantity {
 
@@ -156,10 +157,11 @@ trait Quantum {
 
     override def toString() = _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()
 
-    def *:(bd: BigDecimal) = bd.doubleValue match {
-      case 0.0 => zero()
-      case _ => quantity(bd, this)
-    }
+    def *:(bd: BigDecimal) = quantity(bd, this)
+//    bd.doubleValue match {
+//      case 0.0 => zero()
+//      case _ => quantity(bd, this)
+//    }
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
@@ -172,7 +174,7 @@ trait Quantum {
 
   }
 
-  def zero(): Q
+  // def zero(): Q
 
   def newQuantity(magnitude: BigDecimal, unit: UOM): Q
 
@@ -186,11 +188,11 @@ trait Quantum {
   def unit(name: String, symbol: String, linkOpt: Option[String] = None): UOM =
     newUnitOfMeasurement(Some(name), Some(symbol), linkOpt)
 
-  def derive(compoundUnit: UnitOfMeasurement,
+  def derive(compoundUnit: Q,
     nameOpt: Option[String] = None,
     symbolOpt: Option[String] = None,
     linkOpt: Option[String] = None): UOM =
-    newUnitOfMeasurement(nameOpt, symbolOpt, linkOpt)
+    newUnitOfMeasurement(nameOpt, symbolOpt, linkOpt) // TODO pass Some(compountUnit)
 
   val uom2vertex = Map[UOM, JungDirectedGraphVertex[UOM]]()
 

@@ -5,38 +5,53 @@ import axle.graph.JungDirectedGraph._
 
 class Speed extends Quantum {
 
+  type Q = SpeedQuantity
   type UOM = SpeedUnit
 
   class SpeedUnit(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurementImpl(conversion, name, symbol, link)
+    extends UnitOfMeasurementImpl(name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): SpeedUnit = new SpeedUnit(conversion, name, symbol, link)
+    link: Option[String] = None): SpeedUnit = new SpeedUnit(name, symbol, link)
 
-  def zero() = new SpeedUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
+  class SpeedQuantity(magnitude: BigDecimal, unit: SpeedUnit) extends QuantityImpl(magnitude, unit)
 
-  import Distance.{meter, mile, ft}
-  import Time.{second, hour}
+  def newQuantity(magnitude: BigDecimal, unit: SpeedUnit): SpeedQuantity = new SpeedQuantity(magnitude, unit)
+
+  import Distance.{ meter, mile, ft }
+  import Time.{ second, hour }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Speed"
-    
-  // val derivations = List(Distance.over(Time, this))
 
-  val mps = derive(meter.over[Time.type, this.type](second, this))
-  val fps = derive(ft.over[Time.type, this.type](second, this))
-  val mph = derive(mile.over[Time.type, this.type](hour, this))
+  def conversionGraph() = _conversionGraph
 
-  val c = quantity("299792458", mps, Some("Light Speed"), Some("c"), Some("http://en.wikipedia.org/wiki/Speed_of_light"))
+  lazy val _conversionGraph = JungDirectedGraph[SpeedUnit, BigDecimal](
+    List(
+      derive(meter.over[Time.type, this.type](second, this)),
+      derive(ft.over[Time.type, this.type](second, this)),
+      derive(mile.over[Time.type, this.type](hour, this)),
+      unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light")),
+      unit("Speed limit", "speed limit")
+    ),
+    (vs: Seq[JungDirectedGraphVertex[SpeedUnit]]) => vs match {
+      case mps :: fps :: mph :: c :: speedLimit :: Nil => List(
+        (c, mps, "299792458"),
+        (mph, speedLimit, "65")
+      )
+    }
+  )
 
-  val speedLimit = quantity("65", mph, Some("Speed limit"), None)
-  
+  lazy val mps = byName("mps")
+  lazy val fps = byName("fps")
+  lazy val mph = byName("mph")
+  lazy val c = byName("c")
+  lazy val speedLimit = byName("Speed limit")
+
 }
 
 object Speed extends Speed()

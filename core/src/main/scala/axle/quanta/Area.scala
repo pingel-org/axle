@@ -5,6 +5,7 @@ import axle.graph.JungDirectedGraph._
 
 class Area extends Quantum {
 
+  type Q = AreaQuantity
   type UOM = AreaUnit
 
   class AreaUnit(
@@ -18,17 +19,30 @@ class Area extends Quantum {
     symbol: Option[String] = None,
     link: Option[String] = None): AreaUnit = new AreaUnit(name, symbol, link)
 
-  def zero() = new AreaUnit(Some("zero"), Some("0"), None) with ZeroWithUnit
+  class AreaQuantity(magnitude: BigDecimal, unit: AreaUnit) extends QuantityImpl(magnitude, unit)
+
+  def newQuantity(magnitude: BigDecimal, unit: AreaUnit): AreaQuantity = new AreaQuantity(magnitude, unit)
+
+  def conversionGraph() = _conversionGraph
 
   import Distance.{ meter, km }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Area"
 
-  // val derivations = List(Distance.by(Distance, this))
+  lazy val _conversionGraph = JungDirectedGraph[AreaUnit, BigDecimal](
+    List(
+      derive(meter.by[Distance.type, this.type](meter, this)),
+      derive(km.by[Distance.type, this.type](km, this))
+    ),
+    (vs: Seq[JungDirectedGraphVertex[AreaUnit]]) => vs match {
+      case m2 :: km2 :: Nil => List(
+        (m2, km2, "1E6")
+      )
+    }
+  )
 
-  val m2 = derive(meter.by[Distance.type, this.type](meter, this))
-
-  val km2 = derive(km.by[Distance.type, this.type](km, this))
+  lazy val m2 = byName("m2")
+  lazy val km2 = byName("km2")
 
 }
 

@@ -5,32 +5,43 @@ import axle.graph.JungDirectedGraph._
 
 class Force extends Quantum {
 
+  type Q = ForceQuantity
   type UOM = ForceUnit
 
   class ForceUnit(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None)
-    extends UnitOfMeasurementImpl(conversion, name, symbol, link)
+    extends UnitOfMeasurementImpl(name, symbol, link)
 
   def newUnitOfMeasurement(
-    conversion: Option[JungDirectedGraphEdge[UOM, BigDecimal]] = None,
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): ForceUnit = new ForceUnit(conversion, name, symbol, link)
+    link: Option[String] = None): ForceUnit = new ForceUnit(name, symbol, link)
 
-  def zero() = new ForceUnit(None, Some("zero"), Some("0"), None) with ZeroWithUnit
-  
+  class ForceQuantity(magnitude: BigDecimal, unit: ForceUnit) extends QuantityImpl(magnitude, unit)
+
+  def newQuantity(magnitude: BigDecimal, unit: ForceUnit): ForceQuantity = new ForceQuantity(magnitude, unit)
+
+  def conversionGraph() = _conversionGraph
+
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
-    
-  // val derivations = List(Mass.by(Acceleration, this))
 
-  val pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
-  val newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
-  val dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
-  
-  // val lightBulb = Quantity("60", watt, Some("Light Bulb"), None, Some("Light Bulb"))  
+  lazy val _conversionGraph = JungDirectedGraph[ForceUnit, BigDecimal](
+    List(
+      unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force")),
+      unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)")),
+      unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
+    ),
+    (vs: Seq[JungDirectedGraphVertex[ForceUnit]]) => vs match {
+      case Nil => List()
+    }
+  )
+
+  lazy val pound = byName("pound")
+  lazy val newton = byName("newton")
+  lazy val dyne = byName("dyne")
+
 }
 
 object Force extends Force()

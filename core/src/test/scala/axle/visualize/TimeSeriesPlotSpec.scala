@@ -42,7 +42,7 @@ class TimeSeriesPlotSpec {
 
     val plot = new Plot(List(("h", hm)),
       connect = true, drawKey = false,
-      xAxis = zero(), xAxisLabel = Some("p(x='HEAD)"),
+      xAxis = 0.0 *: bit, xAxisLabel = Some("p(x='HEAD)"),
       yAxis = 0.0, yAxisLabel = Some("H"),
       title = Some("Entropy"))(DoublePlottable, new InfoPlottable(bit))
 
