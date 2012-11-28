@@ -30,73 +30,51 @@ class Mass extends Quantum {
 
   lazy val _conversionGraph = JungDirectedGraph[MassUnit, BigDecimal](
     List(
+      unit("gram", "g"),
+      unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne")),
+      unit("milligram", "mg"),
+      unit("kilogram", "Kg"),
+      unit("megagram", "Mg"),
+      unit("kilotonne", "KT"),
+      unit("megatonne", "MT"),
+      unit("gigatonne", "GT"),
+      unit("tera", "TT"),
+      unit("peta", "PT"),
+      unit("exa", "ET"),
+      unit("zetta", "ZT"),
+      unit("yotta", "YT")
     ),
     (vs: Seq[JungDirectedGraphVertex[MassUnit]]) => vs match {
-      case Nil => List(
+      case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt :: Nil => List(
+        (t, meg, 1),
+        (mg, g, "1E3"),
+        (g, kg, "1E3"),
+        (g, meg, "1E6"),
+        (t, kt, "1E3"),
+        (t, mt, "1E6"),
+        (t, gt, "1E9"),
+        (t, tt, "1E12"),
+        (t, pt, "1E15"),
+        (t, et, "1E18"),
+        (t, zt, "1E21"),
+        (t, tt, "1E24")
       )
     }
   )
 
-  lazy val gram = unit("gram", "g")
-  lazy val tonne = quantity("1", megagram, Some("tonne"), Some("t"), Some("http://en.wikipedia.org/wiki/Tonne"))
-  
-  lazy val milligram = gram milli
-  lazy val kilogram = gram kilo
-  lazy val megagram = gram mega
-  lazy val kilotonne = tonne kilo
-  lazy val megatonne = tonne mega
-  lazy val gigatonne = tonne giga
-  lazy val teratonne = tonne tera
-  lazy val petatonne = tonne peta
-  lazy val exatonne = tonne exa
-  lazy val zettatonne = tonne zetta
-  lazy val yottatonne = tonne yotta
-  // hydrogen atom
- 
-  lazy val man = quantity("86.6", kilogram, Some("Average US Man"), None, Some("http://en.wikipedia.org/wiki/Body_weight"))
-  
-  // earthunit = 5.9 x 10^24 kg
-  // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
-  lazy val earth = quantity("5.9736", zettatonne, Some("Earth"), Some("⊕"), Some("http://en.wikipedia.org/wiki/Earth"))
-  lazy val ⊕ = earth
-
-  // also 1.9891 x 10^30 kg
-  lazy val sun = quantity("332950", earth, Some("Sun"), Some("☉"), Some("http://en.wikipedia.org/wiki/Solar_mass"))
-  lazy val ☼ = sun
-  lazy val ☉ = sun
-
-  // http://en.wikipedia.org/wiki/Astronomical_symbols
-  
-  lazy val jupiter = quantity("1.8986", yottatonne, Some("Jupiter"), Some("♃"), Some("http://en.wikipedia.org/wiki/Jupiter"))
-  lazy val ♃ = jupiter
-
-  lazy val saturn = quantity("568.46", zettatonne, Some("Saturn"), Some("♄"), Some("http://en.wikipedia.org/wiki/Saturn"))
-  lazy val ♄ = saturn
-
-  lazy val neptune = quantity("102.43", zettatonne, Some("Neptune"), Some("♆"), Some("http://en.wikipedia.org/wiki/Neptune"))
-  lazy val ♆ = neptune
-  
-  lazy val uranus = quantity("86.810", zettatonne, Some("Uranus"), Some("♅"), Some("http://en.wikipedia.org/wiki/Uranus"))
-  lazy val ♅ = uranus
-  
-  lazy val venus = quantity("4.868", zettatonne, Some("Venus"), Some("♀"), Some("http://en.wikipedia.org/wiki/Venus"))
-  lazy val ♀ = venus
-  
-  lazy val mars = quantity("641.85", exatonne, Some("Mars"), Some("♂"), Some("http://en.wikipedia.org/wiki/Mars"))
-  lazy val ♂ = mars
-  
-  lazy val mercury = quantity("330.22", exatonne, Some("Mercury"), Some("☿"), Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
-  lazy val ☿ = mercury
-
-  lazy val pluto = quantity("13.05", exatonne, Some("Pluto"), Some("♇"), Some("http://en.wikipedia.org/wiki/Pluto"))
-  lazy val ♇ = pluto
-
-  lazy val moon = quantity("73.477", exatonne, Some("Moon"), Some("☽"), Some("http://en.wikipedia.org/wiki/Moon"))
-  lazy val ☽ = moon
-  
-  lazy val milkyWayMass = quantity("5.8E+11", sun, Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
-  lazy val andromedaMass = quantity("7.1E+11", sun, Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
-  
+  lazy val gram = byName("gram")
+  lazy val tonne = byName("tonne")
+  lazy val milligram = byName("milligram")
+  lazy val kilogram = byName("kilogram")
+  lazy val megagram = byName("megagram")
+  lazy val kilotonne = byName("kilotonne")
+  lazy val megatonne = byName("megatonne")
+  lazy val gigatonne = byName("gigatonne")
+  lazy val teratonne = byName("teratonne")
+  lazy val petatonne = byName("petatonne")
+  lazy val exatonne = byName("exatonne")
+  lazy val zettatonne = byName("zettatonne")
+  lazy val yottatonne = byName("yottatonne")
 }
 
 object Mass extends Mass()

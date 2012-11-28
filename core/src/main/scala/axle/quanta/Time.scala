@@ -30,43 +30,54 @@ class Time extends Quantum {
 
   lazy val _conversionGraph = JungDirectedGraph[TimeUnit, BigDecimal](
     List(
+      unit("second", "s"),
+      unit("millisecond", "ms"),
+      unit("microsecond", "μs"),
+      unit("nanosecond", "ns"),
+      unit("minute", "m"),
+      unit("hour", "hr"),
+      unit("day", "d"),
+      unit("year", "yr", Some("http://en.wikipedia.org/wiki/Year")),
+      unit("century", "century", Some("http://en.wikipedia.org/wiki/Century")),
+      unit("millenium", "ky", Some("http://en.wikipedia.org/wiki/Millenium")),
+      unit("megayear", "my"),
+      unit("gigayear", "gy")
     ),
     (vs: Seq[JungDirectedGraphVertex[TimeUnit]]) => vs match {
-      case Nil => List(
+      case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => List(
+        (ms, s, "1E3"),
+        (μs, s, "1E6"),
+        (ns, s, "1E9"),
+        (s, m, 60),
+        (m, hr, 60),
+        (hr, d, 24),
+        (d, y, "365.25"),
+        (y, c, "1E2"),
+        (y, ky, "1E3"),
+        (y, my, "1E6"),
+        (y, gy, "1E9")
       )
     }
   )
 
-  lazy val second = unit("second", "s")
-  lazy val millisecond = second milli
-  lazy val microsecond = second micro
-  lazy val nanosecond = second nano
+  lazy val second = byName("second")
+  lazy val millisecond = byName("millisecond")
+  lazy val microsecond = byName("microsecond")
+  lazy val nanosecond = byName("nanosecond")
+  lazy val hour = byName("hour")
+  lazy val day = byName("day")
+  lazy val year = byName("year")
+  lazy val century = byName("century")
+  lazy val millenium = byName("millenium")
+  lazy val my = byName("megayear")
+  lazy val gy = byName("gigayear")
+
+  lazy val ky = millenium
   lazy val s = second
   lazy val ms = millisecond
   lazy val μs = microsecond
   lazy val ns = nanosecond
-  lazy val hour = unit("hour", "hr")
-  lazy val day = unit("day", "d")
-  lazy val year = quantity("365.25", day, Some("year"), Some("yr"), Some("http://en.wikipedia.org/wiki/Year"))
-  lazy val century = quantity("100", year, Some("century"), None, Some("http://en.wikipedia.org/wiki/Century"))
-  lazy val millenium = quantity("1000", year, Some("millenium"), None, Some("http://en.wikipedia.org/wiki/Millenium"))  
-  lazy val ky = millenium
-  lazy val my = quantity("1000000", year, Some("million year"), Some("my"), None)
-  lazy val gy = quantity("1000000000", year, Some("billion year"), Some("gy"), None)
 
-  lazy val globalLifeExpectancy = quantity("67.2", year, Some("2010 global average life expectancy"), None, Some("http://en.wikipedia.org/wiki/Life_expectancy"))
-
-  // Distant Past:
-  lazy val universeAge = quantity("13.7", gy, Some("universe age"), None, Some("http://en.wikipedia.org/wiki/Age_of_the_Universe"))
-  lazy val earthAge = quantity("4.54", gy, Some("earth age"), None, Some("http://en.wikipedia.org/wiki/Age_of_the_Earth"))
-  lazy val simpleCellsAge = quantity("3.8", gy, Some("simple cells evolve"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-  lazy val multiCellularLifeAge = quantity("1", gy, Some("multi-cellular life evolves"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-  lazy val fungiAge = quantity("560", my, Some("kingdom Fungi age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-  lazy val classMammalAge = quantity("215", my, Some("class Mammalia age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-  lazy val primateAge = quantity("60", my, Some("order Primate age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-  lazy val australopithecusAge = quantity("4", my, Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-  lazy val modernHumanAge = quantity("200", ky, Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-  
 }
 
 object Time extends Time()
