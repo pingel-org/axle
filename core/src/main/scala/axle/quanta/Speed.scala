@@ -5,23 +5,23 @@ import axle.graph.JungDirectedGraph._
 
 class Speed extends Quantum {
 
-  type Q = SpeedQuantity
-  type UOM = SpeedUnit
+  class SpeedQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class SpeedUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = SpeedQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): SpeedUnit = new SpeedUnit(name, symbol, link)
+    link: Option[String] = None): SpeedQuantity =
+    new SpeedQuantity(oneBD, None, name, symbol, link)
 
-  class SpeedQuantity(magnitude: BigDecimal, unit: SpeedUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: SpeedUnit): SpeedQuantity = new SpeedQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: SpeedQuantity): SpeedQuantity =
+    new SpeedQuantity(magnitude, Some(unit), None, None, None)
 
   import Distance.{ meter, mile, ft }
   import Time.{ second, hour }
@@ -30,7 +30,7 @@ class Speed extends Quantum {
 
   def conversionGraph() = _conversionGraph
 
-  lazy val _conversionGraph = JungDirectedGraph[SpeedUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[SpeedQuantity, BigDecimal](
     List(
       derive(meter.over[Time.type, this.type](second, this)),
       derive(ft.over[Time.type, this.type](second, this)),
@@ -38,7 +38,7 @@ class Speed extends Quantum {
       unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light")),
       unit("Speed limit", "speed limit")
     ),
-    (vs: Seq[JungDirectedGraphVertex[SpeedUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[SpeedQuantity]]) => vs match {
       case mps :: fps :: mph :: c :: speedLimit :: Nil => List(
         (c, mps, "299792458"),
         (mph, speedLimit, "65")

@@ -5,35 +5,35 @@ import axle.graph.JungDirectedGraph._
 
 class Force extends Quantum {
 
-  type Q = ForceQuantity
-  type UOM = ForceUnit
+  class ForceQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class ForceUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = ForceQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): ForceUnit = new ForceUnit(name, symbol, link)
+    link: Option[String] = None): ForceQuantity =
+    new ForceQuantity(oneBD, None, name, symbol, link)
 
-  class ForceQuantity(magnitude: BigDecimal, unit: ForceUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: ForceUnit): ForceQuantity = new ForceQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: ForceQuantity): ForceQuantity =
+    new ForceQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
 
-  lazy val _conversionGraph = JungDirectedGraph[ForceUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[ForceQuantity, BigDecimal](
     List(
       unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force")),
       unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)")),
       unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[ForceUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[ForceQuantity]]) => vs match {
       case Nil => List()
     }
   )

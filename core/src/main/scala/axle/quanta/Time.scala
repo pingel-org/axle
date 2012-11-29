@@ -5,30 +5,30 @@ import axle.graph.JungDirectedGraph._
 
 class Time extends Quantum {
 
-  type Q = TimeQuantity
-  type UOM = TimeUnit
+  class TimeQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class TimeUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = TimeQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): TimeUnit = new TimeUnit(name, symbol, link)
+    link: Option[String] = None): TimeQuantity =
+    new TimeQuantity(oneBD, None, name, symbol, link)
 
-  class TimeQuantity(magnitude: BigDecimal, unit: TimeUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: TimeUnit): TimeQuantity = new TimeQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: TimeQuantity): TimeQuantity =
+    new TimeQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
   // "http://en.wikipedia.org/wiki/Time"
 
-  lazy val _conversionGraph = JungDirectedGraph[TimeUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[TimeQuantity, BigDecimal](
     List(
       unit("second", "s"),
       unit("millisecond", "ms"),
@@ -43,7 +43,7 @@ class Time extends Quantum {
       unit("megayear", "my"),
       unit("gigayear", "gy")
     ),
-    (vs: Seq[JungDirectedGraphVertex[TimeUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[TimeQuantity]]) => vs match {
       case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => List(
         (ms, s, "1E3"),
         (μs, s, "1E6"),

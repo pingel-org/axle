@@ -5,23 +5,23 @@ import axle.graph.JungDirectedGraph._
 
 class Volume extends Quantum {
 
-  type Q = VolumeQuantity
-  type UOM = VolumeUnit
+  class VolumeQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class VolumeUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = VolumeQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): VolumeUnit = new VolumeUnit(name, symbol, link)
+    link: Option[String] = None): VolumeQuantity =
+    new VolumeQuantity(oneBD, None, name, symbol, link)
 
-  class VolumeQuantity(magnitude: BigDecimal, unit: VolumeUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: VolumeUnit): VolumeQuantity = new VolumeQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: VolumeQuantity): VolumeQuantity =
+    new VolumeQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
 
@@ -30,13 +30,13 @@ class Volume extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
 
-  lazy val _conversionGraph = JungDirectedGraph[VolumeUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[VolumeQuantity, BigDecimal](
     List(
       derive(m2.by[Distance.type, this.type](meter, this), Some("cubic meters"), Some("m^3")),
       derive(km2.by[Distance.type, this.type](km, this), Some("cubic kilometers"), Some("km^3")),
       unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[VolumeUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[VolumeQuantity]]) => vs match {
       case m3 :: km3 :: greatLakes :: Nil => List(
         (km3, greatLakes, 22671)
       )

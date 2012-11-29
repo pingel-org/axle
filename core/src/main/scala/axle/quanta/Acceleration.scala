@@ -5,23 +5,23 @@ import axle.graph.JungDirectedGraph._
 
 class Acceleration extends Quantum {
 
-  type Q = AccelerationQuantity
-  type UOM = AccelerationUnit
+  class AccelerationQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class AccelerationUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = AccelerationQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): AccelerationUnit = new AccelerationUnit(name, symbol, link)
+    link: Option[String] = None): AccelerationQuantity =
+    new AccelerationQuantity(oneBD, None, name, symbol, link)
 
-  class AccelerationQuantity(magnitude: BigDecimal, unit: AccelerationUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: AccelerationUnit): AccelerationQuantity = new AccelerationQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: AccelerationQuantity): AccelerationQuantity =
+    new AccelerationQuantity(magnitude, Some(unit), None, None, None)
 
   import Speed.{ mps, fps }
   import Time.{ second }
@@ -30,13 +30,13 @@ class Acceleration extends Quantum {
 
   def conversionGraph() = _conversionGraph
 
-  lazy val _conversionGraph = JungDirectedGraph[AccelerationUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[AccelerationQuantity, BigDecimal](
     List(
       derive(mps.over[Time.type, this.type](second, this)),
       derive(fps.over[Time.type, this.type](second, this)),
       unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[AccelerationUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[AccelerationQuantity]]) => vs match {
       case mpsps :: fpsps :: g :: Nil => List(
         (mpsps, g, "9.80665")
       )

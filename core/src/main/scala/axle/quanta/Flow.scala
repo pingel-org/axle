@@ -5,23 +5,23 @@ import axle.graph.JungDirectedGraph._
 
 class Flow extends Quantum {
 
-  type Q = FlowQuantity
-  type UOM = FlowUnit
+  class FlowQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class FlowUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = FlowQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): FlowUnit = new FlowUnit(name, symbol, link)
+    link: Option[String] = None): FlowQuantity =
+    new FlowQuantity(oneBD, None, name, symbol, link)
 
-  class FlowQuantity(magnitude: BigDecimal, unit: FlowUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: FlowUnit): FlowQuantity = new FlowQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: FlowQuantity): FlowQuantity =
+    new FlowQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
 
@@ -30,12 +30,12 @@ class Flow extends Quantum {
   import Volume.{ m3 }
   import Time.{ second }
 
-  lazy val _conversionGraph = JungDirectedGraph[FlowUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[FlowQuantity, BigDecimal](
     List(
       derive(m3.over[Time.type, this.type](second, this), Some("cubic meters per second"), Some("m^3/s")),
       unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[FlowUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[FlowQuantity]]) => vs match {
       case m3s :: niagaraFalls :: Nil => List(
         (m3s, niagaraFalls, 1834)
       )

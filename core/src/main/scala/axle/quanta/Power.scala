@@ -5,29 +5,29 @@ import axle.graph.JungDirectedGraph._
 
 class Power extends Quantum {
 
-  type Q = PowerQuantity
-  type UOM = PowerUnit
+  class PowerQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class PowerUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = PowerQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): PowerUnit = new PowerUnit(name, symbol, link)
+    link: Option[String] = None): PowerQuantity =
+    new PowerQuantity(oneBD, None, name, symbol, link)
 
-  class PowerQuantity(magnitude: BigDecimal, unit: PowerUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: PowerUnit): PowerQuantity = new PowerQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: PowerQuantity): PowerQuantity =
+    new PowerQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
 
-  lazy val _conversionGraph = JungDirectedGraph[PowerUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[PowerQuantity, BigDecimal](
     List(
       unit("watt", "W"),
       unit("kilowatt", "KW"),
@@ -39,7 +39,7 @@ class Power extends Quantum {
       unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam")),
       unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[PowerUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[PowerQuantity]]) => vs match {
       case w :: kw :: mw :: gw :: miw :: hp :: lightBulb :: hooverDam :: mustangGT :: Nil => List(
         (w, kw, "1E3"),
         (kw, mw, "1E3"),

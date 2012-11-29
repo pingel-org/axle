@@ -150,23 +150,13 @@ object Plottable {
       ticStream(from, to, stepFn, fmt).toList
     }
 
-    //    def ticsOld(from: DateTime, to: DateTime): Seq[(DateTime, String)] = {
-    //      val dur = new Interval(from, to).toDuration
-    //      val (stepFn, fmt) = step(dur)
-    //      val n = dur.getMillis / s.getMillis
-    //      (0L to n).map(i => {
-    //        val d = from.plus(0L * i) // s.getMillis
-    //        (d, d.toString(fmt))
-    //      })
-    //    }
-
   }
 
   import axle.quanta.Information._
 
-  case class InfoPlottable(base: UOM) extends Plottable[Q] {
+  case class InfoPlottable(base: Q) extends Plottable[Q] {
 
-    def isPlottable(t: UOM): Boolean = true
+    def isPlottable(t: Q): Boolean = true
 
     def zero() = 0.0 *: bit
 

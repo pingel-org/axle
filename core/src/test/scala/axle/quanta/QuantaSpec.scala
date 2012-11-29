@@ -35,7 +35,7 @@ class QuantaSpec extends Specification {
     }
   }
 
-  "addiiton" should {
+  "addition" should {
     "work" in {
 
       import Mass._
@@ -43,8 +43,9 @@ class QuantaSpec extends Specification {
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-      (earth + sun).magnitude must be equalTo new BigDecimal("1988916.0936")
-      (gram + kilogram).magnitude must be equalTo new BigDecimal("1001")
+      // TODO (earth + sun).magnitude must be equalTo new BigDecimal("1988916.0936")
+      // TODO (gram + kilogram).magnitude must be equalTo new BigDecimal("1001")
+      1 should be equalTo(0)
     }
   }
 

@@ -5,23 +5,23 @@ import axle.graph.JungDirectedGraph._
 
 class Energy extends Quantum {
 
-  type Q = EnergyQuantity
-  type UOM = EnergyUnit
+  class EnergyQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class EnergyUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = EnergyQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): EnergyUnit = new EnergyUnit(name, symbol, link)
+    link: Option[String] = None): EnergyQuantity =
+    new EnergyQuantity(oneBD, None, name, symbol, link)
 
-  class EnergyQuantity(magnitude: BigDecimal, unit: EnergyUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: EnergyUnit): EnergyQuantity = new EnergyQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: EnergyQuantity): EnergyQuantity =
+    new EnergyQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
 
@@ -30,7 +30,7 @@ class Energy extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Energy"
 
-  lazy val _conversionGraph = JungDirectedGraph[EnergyUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[EnergyQuantity, BigDecimal](
     List(
       derive(kilowatt.by[Time.type, this.type](hour, this)),
       unit("joule", "J"),
@@ -41,7 +41,7 @@ class Energy extends Quantum {
       unit("megaton", "MT"),
       unit("gigaton", "GT")
     ),
-    (vs: Seq[JungDirectedGraphVertex[EnergyUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[EnergyQuantity]]) => vs match {
       case kwh :: j :: kj :: mj :: t :: kt :: mt :: gt :: Nil => List(
         (mj, t, "4.184"),
         (j, kj, "1E3"),

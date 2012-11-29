@@ -5,30 +5,30 @@ import axle.graph.JungDirectedGraph._
 
 class Distance extends Quantum {
 
-  type Q = DistanceQuantity
-  type UOM = DistanceUnit
+  class DistanceQuantity(
+    magnitude: BigDecimal = oneBD,
+    _unit: Option[Q] = None,
+    _name: Option[String] = None,
+    _symbol: Option[String] = None,
+    _link: Option[String] = None) extends Quantity(magnitude, _unit, _name, _symbol, _link)
 
-  class DistanceUnit(
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None)
-    extends UnitOfMeasurementImpl(name, symbol, link)
+  type Q = DistanceQuantity
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
-    link: Option[String] = None): DistanceUnit = new DistanceUnit(name, symbol, link)
+    link: Option[String] = None): DistanceQuantity =
+    new DistanceQuantity(oneBD, None, name, symbol, link)
 
-  class DistanceQuantity(magnitude: BigDecimal, unit: DistanceUnit) extends QuantityImpl(magnitude, unit)
-
-  def newQuantity(magnitude: BigDecimal, unit: DistanceUnit): DistanceQuantity = new DistanceQuantity(magnitude, unit)
+  def newQuantity(magnitude: BigDecimal, unit: DistanceQuantity): DistanceQuantity =
+    new DistanceQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
   // "http://en.wikipedia.org/wiki/Distance"
 
-  lazy val _conversionGraph = JungDirectedGraph[DistanceUnit, BigDecimal](
+  lazy val _conversionGraph = JungDirectedGraph[DistanceQuantity, BigDecimal](
     List(
       unit("foot", "ft"),
       unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile")),
@@ -43,7 +43,7 @@ class Distance extends Quantum {
       unit("light year", "ly", Some("http://en.wikipedia.org/wiki/Light-year")),
       unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[DistanceUnit]]) => vs match {
+    (vs: Seq[JungDirectedGraphVertex[DistanceQuantity]]) => vs match {
       case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => List(
         (ft, mile, 5280),
         (km, mile, "1.609344"),
