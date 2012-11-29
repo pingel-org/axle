@@ -43,9 +43,8 @@ class QuantaSpec extends Specification {
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-      // TODO (earth + sun).magnitude must be equalTo new BigDecimal("1988916.0936")
-      // TODO (gram + kilogram).magnitude must be equalTo new BigDecimal("1001")
-      1 should be equalTo(0)
+      (earth + sun).magnitude must be equalTo new BigDecimal("1988916.0936")
+      (gram + kilogram).magnitude must be equalTo new BigDecimal("1001")
     }
   }
 
