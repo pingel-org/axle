@@ -61,10 +61,10 @@ trait Quantum {
     self: Q =>
 
     def +(right: Q): Q =
-      quantity(this.magnitude.add((this in right.unit).magnitude), right.unit)
+      quantity((this in right.unit).magnitude.add(right.magnitude), right.unit)
 
     def -(right: Q): Q =
-      quantity(this.magnitude.subtract((this in right.unit).magnitude), right.unit)
+      quantity((this in right.unit).magnitude.subtract(right.magnitude), right.unit)
 
     def *(bd: BigDecimal): Q = quantity(this.magnitude.multiply(bd), this.unit)
 
@@ -89,7 +89,8 @@ trait Quantum {
     def symbol() = _symbol
     def link() = _link
 
-    def vertex() = quantum.conversionGraph.findVertex(_.payload == this).get
+    def vertex(): JungDirectedGraphVertex[Q] =
+      quantum.conversionGraph.findVertex(_.payload == this).get.asInstanceOf[JungDirectedGraphVertex[Q]]
 
     override def toString() =
       if (_unit.isDefined)
@@ -102,12 +103,11 @@ trait Quantum {
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
     def in(other: Q): Q =
-      conversionGraph.shortestPath(vertexFor(other), vertexFor(this.unit)).map(path => {
+      conversionGraph.shortestPath(other.unit.vertex, this.unit.vertex).map(path => {
         path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[Q, BigDecimal]) => bd.multiply(edge.payload))
       })
         .map(bd => quantity(this.magnitude.multiply(bd), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
-
   }
 
   def newQuantity(magnitude: BigDecimal, unit: Q): Q
@@ -128,25 +128,9 @@ trait Quantum {
     linkOpt: Option[String] = None): Q =
     newUnitOfMeasurement(Some(compoundUnit.unit.name), compoundUnit.unit.symbol, linkOpt)
 
-  val Q2vertex = Map[Q, JungDirectedGraphVertex[Q]]()
-
-  def vertexFor(Q: Q): JungDirectedGraphVertex[Q] = Q2vertex(Q)
-
   val wikipediaUrl: String
 
-  //  val derivations: List[Quantum]
-  //  def by(right: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, right, resultQuantum)
-  //  def over(bottom: Quantum, resultQuantum: Quantum): Quantum = QuantumMultiplication(this, bottom, resultQuantum)
-
   override def toString() = this.getClass().getSimpleName()
-
-  /**
-   * Searches the Directed Graph defined by this Quantum for a path of Conversions from source to goal
-   * @param source Start node for shortest path search
-   * @param goal End node for shortest path search
-   */
-  //  def conversionPath(source: Q, goal: Q): Option[List[Conversion]] =
-  //    shortestPath(source.asInstanceOf[V], goal.asInstanceOf[V])
 
 }
 
