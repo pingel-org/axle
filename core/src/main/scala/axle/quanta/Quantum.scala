@@ -34,7 +34,7 @@ trait Quantum {
 
   def conversionGraph(): JungDirectedGraph[Q, BigDecimal]
 
-  def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == Some(unitName)).get.payload
+  def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
@@ -91,7 +91,11 @@ trait Quantum {
 
     def vertex() = quantum.conversionGraph.findVertex(_.payload == this).get
 
-    override def toString() = _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()
+    override def toString() =
+      if (_unit.isDefined)
+        magnitude + unit.symbol.map(" " + _).getOrElse("")
+      else
+        _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()
 
     def *:(bd: BigDecimal) = quantity(this.magnitude.multiply(bd), this)
 
