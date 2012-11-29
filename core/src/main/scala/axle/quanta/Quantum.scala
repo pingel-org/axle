@@ -109,7 +109,7 @@ trait Quantum {
       conversionGraph.shortestPath(other.unit.vertex, this.unit.vertex).map(path => {
         path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[Q, BigDecimal]) => bd.multiply(edge.payload))
       })
-        .map(bd => quantity(this.magnitude.multiply(bd), other))
+        .map(bd => quantity(bdDivide(this.magnitude.multiply(bd), other.magnitude), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
   }
 
