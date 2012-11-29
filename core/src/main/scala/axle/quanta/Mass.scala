@@ -45,20 +45,21 @@ class Mass extends Quantum {
       unit("yotta", "YT")
     ),
     (vs: Seq[JungDirectedGraphVertex[MassQuantity]]) => vs match {
-      case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt :: Nil => List(
-        (t, meg, 1),
-        (mg, g, "1E3"),
-        (g, kg, "1E3"),
-        (g, meg, "1E6"),
-        (t, kt, "1E3"),
-        (t, mt, "1E6"),
-        (t, gt, "1E9"),
-        (t, tt, "1E12"),
-        (t, pt, "1E15"),
-        (t, et, "1E18"),
-        (t, zt, "1E21"),
-        (t, tt, "1E24")
-      )
+      case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt :: Nil =>
+        withInverses(List(
+          (t, meg, 1),
+          (mg, g, "1E3"),
+          (g, kg, "1E3"),
+          (g, meg, "1E6"),
+          (t, kt, "1E3"),
+          (t, mt, "1E6"),
+          (t, gt, "1E9"),
+          (t, tt, "1E12"),
+          (t, pt, "1E15"),
+          (t, et, "1E18"),
+          (t, zt, "1E21"),
+          (t, tt, "1E24")
+        ))
     }
   )
 

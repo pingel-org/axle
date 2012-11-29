@@ -51,6 +51,9 @@ trait Quantum {
   val oneBD = new BigDecimal("1")
   val zeroBD = new BigDecimal("0")
 
+  def withInverses(trips: Seq[(JungDirectedGraphVertex[Q], JungDirectedGraphVertex[Q], BigDecimal)]): Seq[(JungDirectedGraphVertex[Q], JungDirectedGraphVertex[Q], BigDecimal)] =
+    trips.flatMap(trip => Vector(trip, (trip._2, trip._1, bdDivide(oneBD, trip._3))))
+
   class Quantity(
     magnitude: BigDecimal = oneBD,
     _unit: Option[Q] = None,
