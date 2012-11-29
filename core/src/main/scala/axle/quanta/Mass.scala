@@ -38,11 +38,11 @@ class Mass extends Quantum {
       unit("kilotonne", "KT"),
       unit("megatonne", "MT"),
       unit("gigatonne", "GT"),
-      unit("tera", "TT"),
-      unit("peta", "PT"),
-      unit("exa", "ET"),
-      unit("zetta", "ZT"),
-      unit("yotta", "YT")
+      unit("teratonne", "TT"),
+      unit("petatonne", "PT"),
+      unit("exatonne", "ET"),
+      unit("zettatonne", "ZT"),
+      unit("yottatonne", "YT")
     ),
     (vs: Seq[JungDirectedGraphVertex[MassQuantity]]) => vs match {
       case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt :: Nil =>
