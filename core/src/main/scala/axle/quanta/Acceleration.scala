@@ -37,9 +37,9 @@ class Acceleration extends Quantum {
       unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
     ),
     (vs: Seq[JungDirectedGraphVertex[AccelerationQuantity]]) => vs match {
-      case mpsps :: fpsps :: g :: Nil => List(
+      case mpsps :: fpsps :: g :: Nil => withInverses(List(
         (mpsps, g, "9.80665")
-      )
+      ))
     }
   )
 

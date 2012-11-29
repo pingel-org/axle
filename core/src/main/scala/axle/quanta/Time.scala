@@ -44,7 +44,7 @@ class Time extends Quantum {
       unit("gigayear", "gy")
     ),
     (vs: Seq[JungDirectedGraphVertex[TimeQuantity]]) => vs match {
-      case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => List(
+      case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => withInverses(List(
         (ms, s, "1E3"),
         (μs, s, "1E6"),
         (ns, s, "1E9"),
@@ -56,7 +56,7 @@ class Time extends Quantum {
         (y, ky, "1E3"),
         (y, my, "1E6"),
         (y, gy, "1E9")
-      )
+      ))
     }
   )
 

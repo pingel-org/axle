@@ -39,10 +39,10 @@ class Speed extends Quantum {
       unit("Speed limit", "speed limit")
     ),
     (vs: Seq[JungDirectedGraphVertex[SpeedQuantity]]) => vs match {
-      case mps :: fps :: mph :: c :: speedLimit :: Nil => List(
+      case mps :: fps :: mph :: c :: speedLimit :: Nil => withInverses(List(
         (c, mps, "299792458"),
         (mph, speedLimit, "65")
-      )
+      ))
     }
   )
 

@@ -37,7 +37,7 @@ class Information extends Quantum {
       unit("petabyte", "PB")
     ),
     (vs: Seq[JungDirectedGraphVertex[InformationQuantity]]) => vs match {
-      case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil => List(
+      case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil => withInverses(List(
         (bit, nibble, "4"),
         (bit, byte, "8"),
         (byte, kilobyte, "1024"),
@@ -45,7 +45,7 @@ class Information extends Quantum {
         (megabyte, gigabyte, "1024"),
         (gigabyte, terabyte, "1024"),
         (terabyte, petabyte, "1024")
-      )
+      ))
     }
   )
 

@@ -34,7 +34,7 @@ class Force extends Quantum {
       unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
     ),
     (vs: Seq[JungDirectedGraphVertex[ForceQuantity]]) => vs match {
-      case Nil => List()
+      case Nil => withInverses(List())
     }
   )
 

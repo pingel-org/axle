@@ -37,9 +37,9 @@ class Volume extends Quantum {
       unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
     ),
     (vs: Seq[JungDirectedGraphVertex[VolumeQuantity]]) => vs match {
-      case m3 :: km3 :: greatLakes :: Nil => List(
+      case m3 :: km3 :: greatLakes :: Nil => withInverses(List(
         (km3, greatLakes, 22671)
-      )
+      ))
     }
   )
 

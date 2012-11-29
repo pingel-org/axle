@@ -44,7 +44,7 @@ class Distance extends Quantum {
       unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
     ),
     (vs: Seq[JungDirectedGraphVertex[DistanceQuantity]]) => vs match {
-      case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => List(
+      case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => withInverses(List(
         (ft, mile, 5280),
         (km, mile, "1.609344"),
         (meter, km, "1E3"),
@@ -56,7 +56,7 @@ class Distance extends Quantum {
         (km, ausi, "149597870.7"),
         (km, ly, "9460730472580.8"),
         (ly, pc, "3.26")
-      )
+      ))
     }
   )
 

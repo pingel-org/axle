@@ -40,7 +40,7 @@ class Power extends Quantum {
       unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
     ),
     (vs: Seq[JungDirectedGraphVertex[PowerQuantity]]) => vs match {
-      case w :: kw :: mw :: gw :: miw :: hp :: lightBulb :: hooverDam :: mustangGT :: Nil => List(
+      case w :: kw :: mw :: gw :: miw :: hp :: lightBulb :: hooverDam :: mustangGT :: Nil => withInverses(List(
         (w, kw, "1E3"),
         (kw, mw, "1E3"),
         (mw, gw, "1E3"),
@@ -48,7 +48,7 @@ class Power extends Quantum {
         (w, lightBulb, 60),
         (mw, hooverDam, 2080),
         (hp, mustangGT, 420)
-      )
+      ))
     }
   )
 
