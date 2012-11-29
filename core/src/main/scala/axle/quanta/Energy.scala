@@ -62,6 +62,8 @@ class Energy extends Quantum {
   lazy val megaton = byName("megaton")
   lazy val gigaton = byName("gigaton")
 
+  lazy val castleBravo = "15" *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
+  
 }
 
 object Energy extends Energy()

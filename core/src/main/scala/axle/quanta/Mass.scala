@@ -76,6 +76,52 @@ class Mass extends Quantum {
   lazy val exatonne = byName("exatonne")
   lazy val zettatonne = byName("zettatonne")
   lazy val yottatonne = byName("yottatonne")
+
+  // hydrogen atom
+  lazy val man = "86.6" *: kilogram // Some("Average US Man"), None, Some("http://en.wikipedia.org/wiki/Body_weight"))
+
+  // earthunit = 5.9 x 10^24 kg
+  // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
+  lazy val earth = "5.9736" *: zettatonne // Some("Earth"), Some("⊕"), Some("http://en.wikipedia.org/wiki/Earth"))
+  lazy val ⊕ = earth
+
+  // also 1.9891 x 10^30 kg
+  lazy val sun = "332950" *: earth // Some("Sun"), Some("☉"), Some("http://en.wikipedia.org/wiki/Solar_mass"))
+  lazy val ☼ = sun
+  lazy val ☉ = sun
+
+  // http://en.wikipedia.org/wiki/Astronomical_symbols
+
+  lazy val jupiter = "1.8986" *: yottatonne // Some("Jupiter"), Some("♃"), Some("http://en.wikipedia.org/wiki/Jupiter"))
+  lazy val ♃ = jupiter
+
+  lazy val saturn = "568.46" *: zettatonne // Some("Saturn"), Some("♄"), Some("http://en.wikipedia.org/wiki/Saturn"))
+  lazy val ♄ = saturn
+
+  lazy val neptune = "102.43" *: zettatonne // Some("Neptune"), Some("♆"), Some("http://en.wikipedia.org/wiki/Neptune"))
+  lazy val ♆ = neptune
+
+  lazy val uranus = "86.810" *: zettatonne // Some("Uranus"), Some("♅"), Some("http://en.wikipedia.org/wiki/Uranus"))
+  lazy val ♅ = uranus
+
+  lazy val venus = "4.868" *: zettatonne // Some("Venus"), Some("♀"), Some("http://en.wikipedia.org/wiki/Venus"))
+  lazy val ♀ = venus
+
+  lazy val mars = "641.85" *: exatonne // Some("Mars"), Some("♂"), Some("http://en.wikipedia.org/wiki/Mars"))
+  lazy val ♂ = mars
+
+  lazy val mercury = "330.22" *: exatonne // Some("Mercury"), Some("☿"), Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
+  lazy val ☿ = mercury
+
+  lazy val pluto = "13.05" *: exatonne // Some("Pluto"), Some("♇"), Some("http://en.wikipedia.org/wiki/Pluto"))
+  lazy val ♇ = pluto
+
+  lazy val moon = "73.477" *: exatonne // Some("Moon"), Some("☽"), Some("http://en.wikipedia.org/wiki/Moon"))
+  lazy val ☽ = moon
+
+  lazy val milkyWayMass = "5.8E+11" *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
+  lazy val andromedaMass = "7.1E+11" *: sun // Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
+
 }
 
 object Mass extends Mass()

@@ -61,6 +61,8 @@ class Power extends Quantum {
   lazy val lightBulb = byName("light bulb")
   lazy val hooverDam = byName("Hoover Dam")
   lazy val mustangGT = byName("2012 Mustang GT")
+ 
+  
 }
 
 object Power extends Power()

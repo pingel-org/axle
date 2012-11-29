@@ -79,6 +79,10 @@ class Distance extends Quantum {
   lazy val lightyear = byName("light year")
   lazy val parsec = byName("parsec")
 
+  lazy val ny2LA = "2443.79" *: mile // Some("NY to LA"), None, Some("http://www.mapcrow.info/Distance_between_New_York_US_and_Los_Angeles_US.html"))
+  lazy val milkyWayDiameter = oneBD.scaleByPowerOfTen(5) *: lightyear // Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
+  lazy val toAndromeda = "2.6E6" *: lightyear // Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
+
 }
 
 object Distance extends Distance()
