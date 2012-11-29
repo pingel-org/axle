@@ -37,17 +37,25 @@ class Distance extends Quantum {
       unit("centimeter", "cm"),
       unit("millimeter", "mm"),
       unit("micrometer", "μm"),
-      unit("nanometer", "nm")
+      unit("nanometer", "nm"),
+      unit("Astronomical Unit", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit")),
+      unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit")),
+      unit("light year", "ly", Some("http://en.wikipedia.org/wiki/Light-year")),
+      unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
     ),
     (vs: Seq[JungDirectedGraphVertex[DistanceUnit]]) => vs match {
-      case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: Nil => List(
+      case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => List(
         (ft, mile, 5280),
         (km, mile, "1.609344"),
         (meter, km, "1E3"),
         (cm, meter, "1E2"),
         (mm, meter, "1E3"),
         (μm, meter, "1E6"),
-        (nm, meter, "1E9")
+        (nm, meter, "1E9"),
+        (mile, au, "92955807.3"),
+        (km, ausi, "149597870.7"),
+        (km, ly, "9460730472580.8"),
+        (ly, pc, "3.26")
       )
     }
   )
@@ -66,11 +74,10 @@ class Distance extends Quantum {
   lazy val μm = micrometer
   lazy val nanometer = byName("nanometer")
   lazy val nm = nanometer
-
-//  lazy val au = quantity("92955807.3", mile, Some("Astronomical Unit"), Some("AU"), Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
-//  lazy val auSI = quantity("149597870.7", kilometer, Some("Astronomical Unit (SI)"), Some("AU"), Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
-//  lazy val lightyear = quantity("9460730472580.8", kilometer, Some("Light Year"), Some("ly"), Some("http://en.wikipedia.org/wiki/Light-year"))
-//  lazy val parsec = quantity("3.26", lightyear, Some("Parsec"), Some("pc"), Some("http://en.wikipedia.org/wiki/Parsec"))
+  lazy val au = byName("Astronomical Unit")
+  lazy val auSI = byName("Astronomical Unit (SI)")
+  lazy val lightyear = byName("light year")
+  lazy val parsec = byName("parsec")
 
 }
 
