@@ -22,7 +22,8 @@ package object visualize {
   def show(component: Component) = {
     val frame = newFrame()
     frame.initialize()
-    frame.add(component)
+    val rc = frame.add(component)
+    rc.setVisible(true)
     frame.setVisible(true)
   }
 
@@ -69,12 +70,13 @@ package object visualize {
   def component2file(component: Component, filename: String, encoding: String): Unit = {
 
     val fr = newFrame()
-    fr.add(component)
+    val rc = fr.add(component)
+    rc.setVisible(true)
     fr.setVisible(true)
 
     val img = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB
     val g = img.createGraphics()
-    fr.paintAll(g)
+    component.paintAll(g)
 
     ImageIO.write(img, encoding, new File(filename))
 
