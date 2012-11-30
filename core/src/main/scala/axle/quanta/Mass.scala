@@ -64,9 +64,12 @@ class Mass extends Quantum {
   )
 
   lazy val gram = byName("gram")
+  lazy val g = gram
   lazy val tonne = byName("tonne")
   lazy val milligram = byName("milligram")
+  lazy val mg = milligram
   lazy val kilogram = byName("kilogram")
+  lazy val kg = kilogram
   lazy val megagram = byName("megagram")
   lazy val kilotonne = byName("kilotonne")
   lazy val megatonne = byName("megatonne")
@@ -85,8 +88,8 @@ class Mass extends Quantum {
   lazy val earth = "5.9736" *: zettatonne // Some("Earth"), Some("⊕"), Some("http://en.wikipedia.org/wiki/Earth"))
   lazy val ⊕ = earth
 
-  // also 1.9891 x 10^30 kg
-  lazy val sun = "332950" *: earth // Some("Sun"), Some("☉"), Some("http://en.wikipedia.org/wiki/Solar_mass"))
+  // sun also = "332950" *: earth
+  lazy val sun = "1.9891E30" *: kilogram // Some("Sun"), Some("☉"), Some("http://en.wikipedia.org/wiki/Solar_mass"))
   lazy val ☼ = sun
   lazy val ☉ = sun
 
@@ -119,6 +122,7 @@ class Mass extends Quantum {
   lazy val moon = "73.477" *: exatonne // Some("Moon"), Some("☽"), Some("http://en.wikipedia.org/wiki/Moon"))
   lazy val ☽ = moon
 
+  // TODO: sun is not in conversion graph
   lazy val milkyWayMass = "5.8E+11" *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
   lazy val andromedaMass = "7.1E+11" *: sun // Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
 
