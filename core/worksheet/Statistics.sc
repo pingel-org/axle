@@ -4,9 +4,9 @@ import axle.stats._
 object Statistics {
 
   val fairCoin = coin()                           //> fairCoin  : axle.stats.RandomVariable0[Symbol] = RandomVariable0(coin,Some(Ve
-                                                  //| ctor('HEAD, 'TAIL)),Some(axle.stats.ConditionalProbabilityTable0@a94884d))
+                                                  //| ctor('HEAD, 'TAIL)),Some(axle.stats.ConditionalProbabilityTable0@19e3118a))
   val biasedCoin = coin(0.9)                      //> biasedCoin  : axle.stats.RandomVariable0[Symbol] = RandomVariable0(coin,Some(
-                                                  //| Vector('HEAD, 'TAIL)),Some(axle.stats.ConditionalProbabilityTable0@5705b99f))
+                                                  //| Vector('HEAD, 'TAIL)),Some(axle.stats.ConditionalProbabilityTable0@4ac9131c))
                                                   //| 
   fairCoin.observe                                //> res0: Symbol = 'TAIL
 
@@ -19,14 +19,14 @@ object Statistics {
                                                   //|  3, 4, 5, 6)),Some(axle.stats.ConditionalProbabilityTable0@2dec8909))
 
   val hist = new immutable.TreeMap[Int, Int]() ++ (0 until 10000).map(i => d6a.observe + d6b.observe).map(v => (v, 1)).groupBy(_._1).map({ case (k, v) => (k, v.map(_._2).sum) })
-                                                  //> hist  : scala.collection.immutable.TreeMap[Int,Int] = Map(2 -> 264, 3 -> 531
-                                                  //| , 4 -> 819, 5 -> 1073, 6 -> 1407, 7 -> 1692, 8 -> 1436, 9 -> 1104, 10 -> 883
-                                                  //| , 11 -> 529, 12 -> 262)
+                                                  //> hist  : scala.collection.immutable.TreeMap[Int,Int] = Map(2 -> 291, 3 -> 578
+                                                  //| , 4 -> 799, 5 -> 1100, 6 -> 1393, 7 -> 1706, 8 -> 1407, 9 -> 1130, 10 -> 814
+                                                  //| , 11 -> 522, 12 -> 260)
 
   val plot = Plot(List(("count", hist)), connect = true, drawKey = false, xAxis = 0, yAxis = 0, title = Some("d6 + d6"))
                                                   //> plot  : axle.visualize.Plot[Int,Nothing,Int,Nothing] = Plot(List((count,Map(
-                                                  //| 2 -> 264, 3 -> 531, 4 -> 819, 5 -> 1073, 6 -> 1407, 7 -> 1692, 8 -> 1436, 9 
-                                                  //| -> 1104, 10 -> 883, 11 -> 529, 12 -> 262))),true,false,700,600,50,4,Some(d6 
+                                                  //| 2 -> 291, 3 -> 578, 4 -> 799, 5 -> 1100, 6 -> 1393, 7 -> 1706, 8 -> 1407, 9 
+                                                  //| -> 1130, 10 -> 814, 11 -> 522, 12 -> 260))),true,false,700,600,50,4,Some(d6 
                                                   //| + d6),0,None,0,None)
 
   // show(plot)
@@ -35,25 +35,29 @@ object Statistics {
 
   // Probability
 
-  val coin1 = coin()                              //> coin1  : axle.stats.RandomVariable0[Symbol] = RandomVariable0(coin,Some(Vect
-                                                  //| or('HEAD, 'TAIL)),Some(axle.stats.ConditionalProbabilityTable0@13f6ba0f))
-  val coin2 = coin()                              //> coin2  : axle.stats.RandomVariable0[Symbol] = RandomVariable0(coin,Some(Vect
-                                                  //| or('HEAD, 'TAIL)),Some(axle.stats.ConditionalProbabilityTable0@2b313906))
+  val fairFlip1 = coin()                          //> fairFlip1  : axle.stats.RandomVariable0[Symbol] = RandomVariable0(coin,Some(
+                                                  //| Vector('HEAD, 'TAIL)),Some(axle.stats.ConditionalProbabilityTable0@52f6438d)
+                                                  //| )
+  val fairFlip2 = coin()                          //> fairFlip2  : axle.stats.RandomVariable0[Symbol] = RandomVariable0(coin,Some(
+                                                  //| Vector('HEAD, 'TAIL)),Some(axle.stats.ConditionalProbabilityTable0@25cd0888)
+                                                  //| )
 
-  P(coin1 eq 'HEAD)()                             //> res2: Double = 0.5
+  P(fairFlip1 eq 'HEAD)()                         //> res2: Double = 0.5
 
-  P((coin1 eq 'HEAD) and (coin2 eq 'HEAD))()      //> res3: Double = 0.25
+  P((fairFlip1 eq 'HEAD) and (fairFlip2 eq 'HEAD))() // ∧
+                                                  //> res3: Double = 0.25
 
-  P((coin1 eq 'HEAD) or (coin2 eq 'HEAD))()       //> res4: Double = 0.75
+  P((fairFlip1 eq 'HEAD) or (fairFlip2 eq 'HEAD))() // ∨
+                                                  //> res4: Double = 0.75
 
-  P((coin1 eq 'HEAD) | (coin2 eq 'TAIL))()        //> res5: Double = 0.5
+  P((fairFlip1 eq 'HEAD) | (fairFlip2 eq 'TAIL))()//> res5: Double = 0.5
 
   val utfD6a = utfD6()                            //> utfD6a  : axle.stats.RandomVariable0[Symbol] = RandomVariable0(UTF d6,Some(V
                                                   //| ector('?, '?, '?, '?, '?, '?)),Some(axle.stats.ConditionalProbabilityTable0@
-                                                  //| 8f0c85e))
+                                                  //| 42552c))
   val utfD6b = utfD6()                            //> utfD6b  : axle.stats.RandomVariable0[Symbol] = RandomVariable0(UTF d6,Some(V
                                                   //| ector('?, '?, '?, '?, '?, '?)),Some(axle.stats.ConditionalProbabilityTable0@
-                                                  //| 77f297e7))
+                                                  //| 2e5bbd6))
 
   // P((utfD6a ne '⚃))()
 
