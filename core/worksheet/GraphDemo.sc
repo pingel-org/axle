@@ -5,7 +5,7 @@ import JungUndirectedGraph.JungUndirectedGraphVertex
 import NativeDirectedGraph.NativeDirectedGraphVertex
 import NativeUndirectedGraph.NativeUndirectedGraphVertex
 
-object graph {
+object GraphDemo {
 
   val dg = JungDirectedGraph(List("a", "b", "c", "d"),
     (vs: Seq[JungDirectedGraphVertex[String]]) => vs match {
@@ -16,16 +16,16 @@ object graph {
   dg.size                                         //> res0: Int = 4
 
   dg.findVertex(_.payload == "a").map(v => dg.successors(v).map(_.payload))
-                                                  //> res1: Option[scala.collection.Set[String]] = Some(Set(b, c))
+                                                  //> res1: Option[scala.collection.Set[String]] = Some(Set(c, b))
 
   dg.findVertex(_.payload == "c").map(v => dg.successors(v).map(_.payload))
                                                   //> res2: Option[scala.collection.Set[String]] = Some(Set(d))
 
   dg.findVertex(_.payload == "c").map(v => dg.predecessors(v).map(_.payload))
-                                                  //> res3: Option[scala.collection.Set[String]] = Some(Set(b, a))
+                                                  //> res3: Option[scala.collection.Set[String]] = Some(Set(a, b))
 
   dg.findVertex(_.payload == "c").map(v => dg.neighbors(v).map(_.payload))
-                                                  //> res4: Option[scala.collection.Set[String]] = Some(Set(b, d, a))
+                                                  //> res4: Option[scala.collection.Set[String]] = Some(Set(d, a, b))
   // TODO g.shortestPath(a, d).map( _.map( edge => (edge.dest.payload, edge.payload) ) )
 
   //----------------------------------------------------
@@ -39,10 +39,10 @@ object graph {
   ug.size                                         //> res5: Int = 4
 
   ug.findVertex(_.payload == "c").map(v => ug.neighbors(v).map(_.payload))
-                                                  //> res6: Option[scala.collection.Set[String]] = Some(Set(a, d, b))
+                                                  //> res6: Option[scala.collection.Set[String]] = Some(Set(b, a, d))
 
   ug.findVertex(_.payload == "a").map(v => ug.neighbors(v).map(_.payload))
-                                                  //> res7: Option[scala.collection.Set[String]] = Some(Set(c, d, b))
+                                                  //> res7: Option[scala.collection.Set[String]] = Some(Set(b, d, c))
 
   //----------------------------------------------------
 
