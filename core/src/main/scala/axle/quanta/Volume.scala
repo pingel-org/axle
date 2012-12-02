@@ -32,8 +32,8 @@ class Volume extends Quantum {
 
   lazy val _conversionGraph = JungDirectedGraph[VolumeQuantity, BigDecimal](
     List(
-      derive(m2.by[Distance.type, this.type](meter, this), Some("cubic meters"), Some("m^3")),
-      derive(km2.by[Distance.type, this.type](km, this), Some("cubic kilometers"), Some("km^3")),
+      derive(m2.by[Distance.type, this.type](meter, this), Some("m3"), Some("m3")),
+      derive(km2.by[Distance.type, this.type](km, this), Some("km3"), Some("km3")),
       unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
     ),
     (vs: Seq[JungDirectedGraphVertex[VolumeQuantity]]) => vs match {

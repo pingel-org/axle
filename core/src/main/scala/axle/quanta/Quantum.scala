@@ -129,7 +129,10 @@ trait Quantum {
     nameOpt: Option[String] = None,
     symbolOpt: Option[String] = None,
     linkOpt: Option[String] = None): Q =
-    newUnitOfMeasurement(Some(compoundUnit.unit.name), compoundUnit.unit.symbol, linkOpt)
+    newUnitOfMeasurement(
+      if (nameOpt.isDefined) nameOpt else Some(compoundUnit.unit.name),
+      if (symbolOpt.isDefined) symbolOpt else compoundUnit.unit.symbol,
+      linkOpt)
 
   val wikipediaUrl: String
 

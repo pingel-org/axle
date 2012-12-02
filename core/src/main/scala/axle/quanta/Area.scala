@@ -31,8 +31,8 @@ class Area extends Quantum {
 
   lazy val _conversionGraph = JungDirectedGraph[AreaQuantity, BigDecimal](
     List(
-      derive(meter.by[Distance.type, this.type](meter, this)),
-      derive(km.by[Distance.type, this.type](km, this))
+      derive(meter.by[Distance.type, this.type](meter, this), Some("m2"), Some("m2")),
+      derive(km.by[Distance.type, this.type](km, this), Some("km2"), Some("km2"))
     ),
     (vs: Seq[JungDirectedGraphVertex[AreaQuantity]]) => vs match {
       case m2 :: km2 :: Nil => withInverses(List(
