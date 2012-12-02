@@ -130,6 +130,9 @@ object Angluin {
    */
   
   case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
+    
+    def initialState() = null
+    
     def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null, Some(G))
   }
  
