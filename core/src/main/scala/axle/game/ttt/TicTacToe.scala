@@ -110,8 +110,8 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
     def apply(position: Int) = board(positionToRow(position), positionToColumn(position))
 
     // The validation in InteractiveTicTacToePlayer.chooseMove might be better placed here
-//    def updat(position: Int, player: TicTacToePlayer) =
-//      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
+    //    def updat(position: Int, player: TicTacToePlayer) =
+    //      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
     def hasWonRow(player: TicTacToePlayer) =
       (0 until boardSize).exists(board.row(_).toList.forall(_ equals Some(player.id)))
@@ -191,29 +191,39 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       eventQueue.clear()
     }
 
+    def userInputStream(): Stream[String] = {
+      print("Enter move: ")
+      val num = readLine()
+      println
+      Stream.cons(num, userInputStream)
+    }
+
+    def isValidMove(num: String, state: TicTacToeState): Boolean = {
+      try {
+        val i = num.toInt
+        if (i >= 1 && i <= ttt.numPositions) {
+          if (state(i).isEmpty) {
+            true
+          } else {
+            println("That space is occupied.")
+            false
+          }
+        } else {
+          println("Please enter a number between 1 and " + ttt.numPositions)
+          false
+        }
+      } catch {
+        case e: Exception => {
+          println(num + " is not a valid move.  Please select again")
+          false
+        }
+      }
+    }
+
     def chooseMove(state: TicTacToeState): TicTacToeMove = {
       displayEvents()
       println(state)
-      while (true) {
-        print("Enter move: ")
-        val num = readLine()
-        println
-        try {
-          val i = num.toInt
-          if (i >= 1 && i <= ttt.numPositions) {
-            if (state(i).isEmpty) {
-              return TicTacToeMove(this, i)
-            } else {
-              println("That space is occupied.")
-            }
-          } else {
-            println("Please enter a number between 1 and " + ttt.numPositions)
-          }
-        } catch {
-          case e: Exception => println(num + " is not a valid move.  Please select again")
-        }
-      }
-      null
+      TicTacToeMove(this, userInputStream().find(input => isValidMove(input, state)).map(_.toInt).get)
     }
 
   }
