@@ -74,7 +74,7 @@ object Angluin {
     def ℒ(): Language
   }
 
-  class HardCodedGrammar(_ℒ: Language) extends Grammar {
+  case class HardCodedGrammar(_ℒ: Language) extends Grammar {
     // Note: This was orginally a getter called simply ℒ()
     // figure out how to write the extractor (or whatever)
     // to grab this
@@ -82,14 +82,7 @@ object Angluin {
     def ℒ() = _ℒ
   }
 
-  class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
-    override def processExpression(e: List[Symbol]): Option[Grammar] = {
-      val s = e
-      Some(G)
-    }
-  }
-
-  case class Language(sequences: List[List[Symbol]] = Nil) {
+  case class Language(sequences: Iterable[Iterable[Symbol]] = Nil) {
 
     def equals(other: Language): Boolean = sequences.equals(other.sequences)
 
@@ -107,28 +100,55 @@ object Angluin {
 
   }
 
-  class Learner(T: Text) {
+  trait Learner[S] {
 
-    def processExpression(e: List[Symbol]): Option[Grammar] = {
-      val s = e
-      // default implementation never guesses a Grammar
-      None
-    }
+    def initialState(): S
 
-    def guesses(): Iterator[Grammar] = T.expressions.iterator.flatMap(processExpression(_))
+    def processExpression(state: S, expression: Iterable[Symbol]): (S, Option[Grammar])
 
+    val noGuess = None.asInstanceOf[Option[Grammar]]
+
+    def guesses(T: Text): Iterator[Grammar] =
+      T.expressions.iterator
+        .scanLeft((initialState(), noGuess))((sg, e) => processExpression(sg._1, e))
+        .flatMap(_._2)
   }
 
-  case class MemorizingLearner(T: Text) extends Learner(T) {
+  /**
+   * The SilentLearner never makes a guess
+   */
 
-    var _runningGuess = Language(Nil)
+  case class SilentLearner(T: Text) extends Learner[Nothing] {
 
-    override def processExpression(e: List[Symbol]): Option[Grammar] = {
-      if (e != ▦) {
-        _runningGuess = new Language(_runningGuess.sequences ++ List(e))
+    def initialState() = null
+
+    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null, None)
+  }
+
+  /**
+   * The HardCodedLearner always guesses the same thing
+   */
+  
+  case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
+    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null, Some(G))
+  }
+ 
+  /**
+   * The MemorizingLearner accrues expressions
+   */
+  
+  case class MemorizingLearner() extends Learner[Language] {
+
+    def initialState() = Language(Nil)
+
+    def processExpression(state: Language, expression: Iterable[Symbol]): (Language, Option[Grammar]) =
+      expression match {
+        case ▦ => (state, Some(HardCodedGrammar(state)))
+        case _ => {
+          val newState = Language(state.sequences ++ List(expression))
+          (newState, Some(HardCodedGrammar(newState)))
+        }
       }
-      Some(new HardCodedGrammar(_runningGuess))
-    }
 
   }
 
@@ -155,17 +175,9 @@ object Angluin {
     }
   }
 
-  case class Alphabet() {
+  // implicit def enAlphabet(symbols: Set[Symbol]): Alphabet = Alphabet(symbols)
 
-    val symbols = mutable.Set[Symbol]()
-
-    def symbol(s: String): Symbol = {
-      val symbol = new Symbol(s)
-      symbols += symbol
-      symbol
-    }
-
-  }
+  case class Alphabet(symbols: Set[Symbol])
 
   case class Symbol(s: String) {
 
@@ -175,9 +187,11 @@ object Angluin {
 
   }
 
-  case class Text(var expressions: List[List[Symbol]]) {
+  // implicit def enText(expressions: Iterable[Iterable[Symbol]]): Text = Text(expressions)
 
-    def addExpression(s: List[Symbol]): Unit = expressions = expressions ::: List(s)
+  case class Text(expressions: Iterable[Iterable[Symbol]]) {
+
+    // def addExpression(s: List[Symbol]): Unit = expressions = expressions ::: List(s)
 
     def length() = expressions.size
 

@@ -10,23 +10,23 @@ class AngluinSpecification extends Specification {
 
     "memorizing learner memorizes" in {
 
-      val Σ = Alphabet()
+      val mHi = Symbol("hi")
+      val mIm = Symbol("I'm")
+      val mYour = Symbol("your")
+      val mMother = Symbol("Mother")
+      val mShut = Symbol("shut")
+      val mUp = Symbol("up")
 
-      val mHi = Σ.symbol("hi")
-      val mIm = Σ.symbol("I'm")
-      val mYour = Σ.symbol("your")
-      val mMother = Σ.symbol("Mother")
-      val mShut = Σ.symbol("shut")
-      val mUp = Σ.symbol("up")
-
+      val Σ = Alphabet(Set(mHi, mIm, mYour, mMother, mShut, mUp))
+      
       val s1 = mHi :: mIm :: mYour :: mMother :: Nil
       val s2 = mShut :: mUp :: Nil
       val ℒ = Language(s1 :: s2 :: Nil)
 
       val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
 
-      val ɸ = MemorizingLearner(T)
-      ɸ.guesses.find(_.ℒ == ℒ)
+      val ɸ = MemorizingLearner()
+      ɸ.guesses(T).find(_.ℒ == ℒ)
         .map(finalGuess => println("well done, ɸ"))
         .getOrElse(println("ɸ never made a correct guess"))
 
