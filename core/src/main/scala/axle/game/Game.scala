@@ -35,7 +35,7 @@ trait Game {
     }
   }
 
-  def play(start: STATE): Unit = {
+  def play(start: STATE): Option[OUTCOME] = {
     for (player <- players()) {
       player.introduceGame()
     }
@@ -46,7 +46,7 @@ trait Game {
         player.endGame(lastMoveState._2)
       }
     )
-
+    lastMoveState._2.outcome
   }
 
   trait Event { // game: Game
