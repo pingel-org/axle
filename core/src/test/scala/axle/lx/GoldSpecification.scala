@@ -9,24 +9,24 @@ class GoldSpecification extends Specification {
 
     "memorizing learner memorizes" in {
 
-      val Σ = Vocabulary()
+      val mHi = Morpheme("hi")
+      val mIm = Morpheme("I'm")
+      val mYour = Morpheme("your")
+      val mMother = Morpheme("Mother")
+      val mShut = Morpheme("shut")
+      val mUp = Morpheme("up")
 
-      val mHi = Σ.morpheme("hi")
-      val mIm = Σ.morpheme("I'm")
-      val mYour = Σ.morpheme("your")
-      val mMother = Σ.morpheme("Mother")
-      val mShut = Σ.morpheme("shut")
-      val mUp = Σ.morpheme("up")
+      val Σ = Vocabulary(Set(mHi, mIm, mYour, mMother, mShut, mUp))
 
-      val ℒ = Language()
+      val s1 = mHi :: mIm :: mYour :: mMother :: Nil
+      val s2 = mShut :: mUp :: Nil
 
-      val s1 = ℒ.expression(mHi :: mIm :: mYour :: mMother :: Nil)
-      val s2 = ℒ.expression(mShut :: mUp :: Nil)
-
+      val ℒ = Language(Set(s1, s2))
+      
       val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
 
-      val ɸ = MemorizingLearner(T)
-      ɸ.guesses.find(_.ℒ == ℒ)
+      val ɸ = MemorizingLearner()
+      ɸ.guesses(T).find(_.ℒ == ℒ)
         .map(finalGuess => println("well done, ɸ"))
         .getOrElse(println("ɸ never made a correct guess"))
 

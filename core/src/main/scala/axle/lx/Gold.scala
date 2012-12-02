@@ -5,7 +5,7 @@ import collection._
 
 object Gold {
 
-  type Expression = List[Morpheme]
+  type Expression = Iterable[Morpheme]
 
   val ▦ = List[Morpheme]()
 
@@ -21,46 +21,43 @@ object Gold {
     def ℒ() = ℒ
   }
 
-  class HardCodedLearner(T: Text, G: Grammar) extends Learner(T) {
-    override def processExpression(e: Expression): Option[Grammar] = {
-      val s = e
-      Some(G)
-    }
-  }
+  implicit def enLanguage(sequences: Set[Expression]): Language = Language(sequences)
 
-  case class Language(_sequences: Set[Expression] = Set()) {
+  case class Language(sequences: Set[Expression]) {
 
-    val sequences = mutable.Set() ++ _sequences
-
-    def expression(e: Expression): Expression = {
-      sequences += e
-      e
-    }
-    
     def equals(other: Language) = sequences.equals(other.sequences)
 
     override def toString() = "{" + sequences.mkString(", ") + "}"
   }
 
-  class Learner(T: Text) {
+  trait Learner[S] {
 
-    def processExpression(e: Expression): Option[Grammar] = {
-      val s = e
-      // default implementation never guesses a Grammar
-      None
-    }
+    def initialState(): S
 
-    def guesses(): Iterator[Grammar] = T.expressions.iterator.flatMap(processExpression(_))
+    def processExpression(state: S, expression: Expression): (S, Option[Grammar])
 
+    val noGuess = None.asInstanceOf[Option[Grammar]]
+
+    def guesses(T: Text): Iterator[Grammar] =
+      T.expressions.iterator
+        .scanLeft((initialState(), noGuess))((sg, e) => processExpression(sg._1, e))
+        .flatMap(_._2)
   }
 
-  case class MemorizingLearner(T: Text) extends Learner(T) {
+  case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
 
-    var _runningGuess = new Language(Set())
+    def initialState() = null.asInstanceOf[Nothing]
 
-    override def processExpression(e: Expression): Option[Grammar] = {
-      _runningGuess = new Language(_runningGuess.sequences + e)
-      Some(new HardCodedGrammar(_runningGuess))
+    def processExpression(state: Nothing, e: Expression) = (null.asInstanceOf[Nothing], Some(G))
+  }
+
+  case class MemorizingLearner() extends Learner[Language] {
+
+    def initialState() = Language(Set())
+    
+    def processExpression(state: Language, expression: Expression) = {
+      val newState = Language(state.sequences ++ List(expression))
+      (newState, Some(new HardCodedGrammar(newState)))
     }
 
   }
@@ -80,15 +77,9 @@ object Gold {
     override def toString() = "<" + expressions.mkString(", ") + ">"
   }
 
-  case class Vocabulary() {
+  implicit def enVocabulary(morphemes: Set[Morpheme]): Vocabulary = Vocabulary(morphemes)
 
-    val morphemes = mutable.Set[Morpheme]()
-
-    def morpheme(s: String) = {
-      val m = new Morpheme(s)
-      morphemes += m
-      m
-    }
+  case class Vocabulary(morphemes: Set[Morpheme]) {
 
     def iterator() = morphemes.iterator
   }
