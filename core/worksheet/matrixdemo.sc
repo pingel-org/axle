@@ -1,6 +1,6 @@
-object matrixdemo {
+object MatrixDemo {
 
- println("Matrix demo")                           //> Matrix demo
+ println("Matrix Demo")                           //> Matrix Demo
 
   import axle.matrix.JblasMatrixFactory._
 
@@ -35,10 +35,10 @@ object matrixdemo {
 
   // Random matrices
 
-  val r = rand[Double](3, 3)                      //> r  : axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.997153 0.833041 
-                                                  //| 0.938390
-                                                  //| 0.297144 0.287289 0.241956
-                                                  //| 0.434082 0.152285 0.892456
+  val r = rand[Double](3, 3)                      //> r  : axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.696931 0.416299 
+                                                  //| 0.573214
+                                                  //| 0.885652 0.647719 0.810950
+                                                  //| 0.979660 0.692330 0.788157
 
   // Matrices defined by functions
   
@@ -134,77 +134,77 @@ object matrixdemo {
   x.divideScalar(100.0)                           //> res31: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.040000
                                                   //| 0.051000
                                                   //| 0.062000
-  r.max                                           //> res32: Double = 0.9971529841940523
-  r.min                                           //> res33: Double = 0.15228489751361618
-  r.rowMaxs                                       //> res34: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.997153
-                                                  //| 0.297144
-                                                  //| 0.892456
-  r.rowMins                                       //> res35: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.833041
-                                                  //| 0.241956
-                                                  //| 0.152285
-  r.columnMaxs                                    //> res36: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.997153 0.8330
-                                                  //| 41 0.938390
-  r.columnMins                                    //> res37: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.297144 0.1522
-                                                  //| 85 0.241956
+  r.max                                           //> res32: Double = 0.9796597953349846
+  r.min                                           //> res33: Double = 0.41629858519312235
+  r.rowMaxs                                       //> res34: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.696931
+                                                  //| 0.885652
+                                                  //| 0.979660
+  r.rowMins                                       //> res35: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.416299
+                                                  //| 0.647719
+                                                  //| 0.692330
+  r.columnMaxs                                    //> res36: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.979660 0.6923
+                                                  //| 30 0.810950
+  r.columnMins                                    //> res37: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.696931 0.4162
+                                                  //| 99 0.573214
 
-  rowRange(r)                                     //> res38: axle.matrix.JblasMatrixFactory.M[Double] = 0.164112
-                                                  //| 0.055187
-                                                  //| 0.740171
-  columnRange(r)                                  //> res39: axle.matrix.JblasMatrixFactory.M[Double] = 0.700009 0.680756 0.69643
-                                                  //| 4
+  rowRange(r)                                     //> res38: axle.matrix.JblasMatrixFactory.M[Double] = 0.280633
+                                                  //| 0.237933
+                                                  //| 0.287329
+  columnRange(r)                                  //> res39: axle.matrix.JblasMatrixFactory.M[Double] = 0.282728 0.276032 0.23773
+                                                  //| 6
 
-  r.sortRows                                      //> res40: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.833041 0.9383
-                                                  //| 90 0.997153
-                                                  //| 0.241956 0.287289 0.297144
-                                                  //| 0.152285 0.434082 0.892456
+  r.sortRows                                      //> res40: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.416299 0.5732
+                                                  //| 14 0.696931
+                                                  //| 0.647719 0.810950 0.885652
+                                                  //| 0.692330 0.788157 0.979660
 
-  r.sortColumns                                   //> res41: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.297144 0.1522
-                                                  //| 85 0.241956
-                                                  //| 0.434082 0.287289 0.892456
-                                                  //| 0.997153 0.833041 0.938390
+  r.sortColumns                                   //> res41: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.696931 0.4162
+                                                  //| 99 0.573214
+                                                  //| 0.885652 0.647719 0.788157
+                                                  //| 0.979660 0.692330 0.810950
 
-  r.sortRows.sortColumns                          //> res42: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.152285 0.2872
-                                                  //| 89 0.297144
-                                                  //| 0.241956 0.434082 0.892456
-                                                  //| 0.833041 0.938390 0.997153
+  r.sortRows.sortColumns                          //> res42: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.416299 0.5732
+                                                  //| 14 0.696931
+                                                  //| 0.647719 0.788157 0.885652
+                                                  //| 0.692330 0.810950 0.979660
 
   // Statistics
 
-  r.rowMeans                                      //> res43: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.922861
-                                                  //| 0.275463
-                                                  //| 0.492941
-  r.columnMeans                                   //> res44: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.576126 0.4242
-                                                  //| 05 0.690934
+  r.rowMeans                                      //> res43: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.562148
+                                                  //| 0.781440
+                                                  //| 0.820049
+  r.columnMeans                                   //> res44: axle.matrix.JblasMatrixFactory.JblasMatrix[Double] = 0.854081 0.5854
+                                                  //| 49 0.724107
   
-  median(r)                                       //> res45: axle.matrix.JblasMatrixFactory.M[Double] = 0.434082 0.287289 0.89245
-                                                  //| 6
-  sumsq(r)                                        //> res46: axle.matrix.JblasMatrixFactory.M[Double] = 1.271036 0.799683 1.73559
+  median(r)                                       //> res45: axle.matrix.JblasMatrixFactory.M[Double] = 0.885652 0.647719 0.78815
                                                   //| 7
-  std(r)                                          //> res47: axle.matrix.JblasMatrixFactory.M[Double] = 0.302914 0.294298 0.31802
+  sumsq(r)                                        //> res46: axle.matrix.JblasMatrixFactory.M[Double] = 2.229827 1.072166 1.60740
+                                                  //| 4
+  std(r)                                          //> res47: axle.matrix.JblasMatrixFactory.M[Double] = 0.117562 0.120986 0.10710
+                                                  //| 2
+  cov(r)                                          //> res48: axle.matrix.JblasMatrixFactory.M[Double] = 0.013821 0.013990 0.01149
                                                   //| 9
-  cov(r)                                          //> res48: axle.matrix.JblasMatrixFactory.M[Double] = 0.091757 0.082984 0.06693
-                                                  //| 9
-                                                  //| 0.082984 0.086611 0.035948
-                                                  //| 0.066939 0.035948 0.101142
-  centerRows(r)                                   //> res49: axle.matrix.JblasMatrixFactory.M[Double] = 0.074292 -0.089820 0.0155
-                                                  //| 29
-                                                  //| 0.021681 0.011826 -0.033507
-                                                  //| -0.058859 -0.340656 0.399515
-  centerColumns(r)                                //> res50: axle.matrix.JblasMatrixFactory.M[Double] = 0.421027 0.408836 0.24745
-                                                  //| 6
-                                                  //| -0.278983 -0.136916 -0.448978
-                                                  //| -0.142044 -0.271920 0.201522
-  zscore(r)                                       //> res51: axle.matrix.JblasMatrixFactory.M[Double] = 1.389920 1.389192 0.77809
-                                                  //| 3
-                                                  //| -0.920995 -0.465230 -1.411753
-                                                  //| -0.468925 -0.923963 0.633660
+                                                  //| 0.013990 0.014638 0.012592
+                                                  //| 0.011499 0.012592 0.011471
+  centerRows(r)                                   //> res49: axle.matrix.JblasMatrixFactory.M[Double] = 0.134783 -0.145849 0.0110
+                                                  //| 66
+                                                  //| 0.104212 -0.133721 0.029509
+                                                  //| 0.159611 -0.127718 -0.031892
+  centerColumns(r)                                //> res50: axle.matrix.JblasMatrixFactory.M[Double] = -0.157150 -0.169151 -0.15
+                                                  //| 0893
+                                                  //| 0.031571 0.062270 0.086843
+                                                  //| 0.125579 0.106881 0.064050
+  zscore(r)                                       //> res51: axle.matrix.JblasMatrixFactory.M[Double] = -1.336735 -1.398099 -1.40
+                                                  //| 8866
+                                                  //| 0.268549 0.514685 0.810841
+                                                  //| 1.068186 0.883413 0.598025
   
-  val (u, s) = pca(r)                             //> u  : axle.matrix.JblasMatrixFactory.M[Double] = -0.642064 -0.165697 -0.7485
-                                                  //| 31
-                                                  //| -0.549603 -0.581227 0.600093
-                                                  //| -0.534500 0.796693 0.282118
-                                                  //| s  : axle.matrix.JblasMatrixFactory.M[Double] = 0.218516
-                                                  //| 0.060995
+  val (u, s) = pca(r)                             //> u  : axle.matrix.JblasMatrixFactory.M[Double] = -0.586208 0.659696 0.470279
+                                                  //| 
+                                                  //| -0.613874 0.017121 -0.789218
+                                                  //| -0.528695 -0.751338 0.394934
+                                                  //| s  : axle.matrix.JblasMatrixFactory.M[Double] = 0.038842
+                                                  //| 0.001087
                                                   //| 0.000000
 
 
@@ -248,25 +248,25 @@ object matrixdemo {
                                                   //| 0.500000 0.500000 0.500000
                                                   //| 0.500000 0.500000 0.500000
 
-  r lt half                                       //> res56: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = false false fa
-                                                  //| lse
-                                                  //| true true true
-                                                  //| true true false
-  
-  r le half                                       //> res57: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = false false fa
-                                                  //| lse
-                                                  //| true true true
-                                                  //| true true false
-  
-  r gt half                                       //> res58: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = true true true
-                                                  //| 
+  r lt half                                       //> res56: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = false true fal
+                                                  //| se
                                                   //| false false false
-                                                  //| false false true
-  
-  r ge half                                       //> res59: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = true true true
-                                                  //| 
                                                   //| false false false
-                                                  //| false false true
+  
+  r le half                                       //> res57: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = false true fal
+                                                  //| se
+                                                  //| false false false
+                                                  //| false false false
+  
+  r gt half                                       //> res58: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = true false tru
+                                                  //| e
+                                                  //| true true true
+                                                  //| true true true
+  
+  r ge half                                       //> res59: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = true false tru
+                                                  //| e
+                                                  //| true true true
+                                                  //| true true true
   
   r eq half                                       //> res60: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = false false fa
                                                   //| lse
@@ -293,10 +293,10 @@ object matrixdemo {
                                                   //| true true true
                                                   //| true true true
   
-  (r lt half) not                                 //> res65: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = true true true
-                                                  //| 
-                                                  //| false false false
-                                                  //| false false true
+  (r lt half) not                                 //> res65: axle.matrix.JblasMatrixFactory.JblasMatrix[Boolean] = true false tru
+                                                  //| e
+                                                  //| true true true
+                                                  //| true true true
 
   // Higher order methods
 
