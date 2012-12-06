@@ -86,10 +86,11 @@ package object visualize {
 
   def component2file(component: Component, filename: String, encoding: String): Unit = {
 
-    val fr = newFrame()
-    val rc = fr.add(component)
+    val frame = newFrame()
+    frame.initialize()
+    val rc = frame.add(component)
     rc.setVisible(true)
-    fr.setVisible(true)
+    frame.setVisible(true)
 
     val img = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB
     val g = img.createGraphics()
