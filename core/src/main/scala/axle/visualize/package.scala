@@ -55,6 +55,19 @@ package object visualize {
     new JungDirectedGraph[VP, EP](ndg.vps, wrappedEf)
   }
 
+  // TODO: This is a hack to get M3 out the door:
+  import axle.stats.BayesianNetwork.BayesianNetwork
+  implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component = {
+
+    import axle.stats.BayesianNetwork.{ BayesianNetworkNode, JungDirectedGraphVertex => bjdg }
+
+    val wrappedEf = (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) =>
+      bn.ef(vs.map(v => new bjdg(v.payload)))
+        .map({ case (nv1, nv2, ep) => (new JungDirectedGraphVertex(nv1.payload), new JungDirectedGraphVertex(nv2.payload), ep) })
+
+    new JungDirectedGraph(bn.vps, wrappedEf)
+  }
+
   implicit def enComponentKMeansClassifier[T](
     classifier: KMeans.KMeansClassifier[T]): Component =
     new KMeansVisualization[T](classifier)
@@ -63,7 +76,7 @@ package object visualize {
    * component2file
    *
    * encoding: PNG, JPEG, gif, BMP
-   * 
+   *
    * http://stackoverflow.com/questions/4028898/create-an-image-from-a-non-visible-awt-component
    */
 
