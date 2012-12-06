@@ -101,6 +101,7 @@ package axle.stats
  */
 
 import collection._
+import axle.XmlAble
 import axle.graph.JungDirectedGraph._
 import axle.graph.JungUndirectedGraph._
 import math.max
@@ -109,11 +110,11 @@ import Scalaz._
 
 trait BayesianNetworkFactory extends ModelFactory {
 
-  case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) {
+  case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) extends XmlAble {
 
     override def toString(): String = rv.name + "\n\n" + cpt
 
-    def toVisualizationHtml(): xml.Node =
+    def toXml(): xml.Node =
       <html>
         <div>
           <center><h2>{ rv.name }</h2></center>
@@ -135,8 +136,6 @@ trait BayesianNetworkFactory extends ModelFactory {
     override def name(): String = _name
 
     override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
-
-    override def vertexToVisualizationHtml(vp: BayesianNetworkNode): xml.Node = vp.toVisualizationHtml
 
     // def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 

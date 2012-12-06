@@ -93,7 +93,7 @@ package object visualize {
 
     val img = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB
     val g = img.createGraphics()
-    component.paintAll(g)
+    rc.paintAll(g)
 
     ImageIO.write(img, encoding, new File(filename))
 

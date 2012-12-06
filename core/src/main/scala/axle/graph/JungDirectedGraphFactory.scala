@@ -102,8 +102,7 @@ trait JungDirectedGraphFactory extends DirectedGraphFactory {
     }
 
     def vertexToVisualizationHtml(vp: VP): xml.Node = vp match {
-      // TODO: this is a hack for M3
-      case bn: axle.stats.BayesianNetwork.BayesianNetworkNode => bn.toVisualizationHtml
+      case x: axle.XmlAble => x.toXml
       case _ => xml.Text(vp.toString)
     }
 
