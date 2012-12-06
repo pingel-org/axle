@@ -110,7 +110,16 @@ import Scalaz._
 trait BayesianNetworkFactory extends ModelFactory {
 
   case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) {
+
     override def toString(): String = rv.name + "\n\n" + cpt
+
+    def toVisualizationHtml(): xml.Node =
+      <html>
+        <div>
+          <center><h2>{ rv.name }</h2></center>
+          { cpt.toHtml() }
+        </div>
+      </html>
   }
 
   def apply(
@@ -127,13 +136,7 @@ trait BayesianNetworkFactory extends ModelFactory {
 
     override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
 
-    override def vertexToVisualizationHtml(vp: BayesianNetworkNode): xml.Node =
-      <html>
-        <div>
-          <center><h2>{ vp.rv.name }</h2></center>
-          { vp.cpt.toHtml() }
-        </div>
-      </html>
+    override def vertexToVisualizationHtml(vp: BayesianNetworkNode): xml.Node = vp.toVisualizationHtml
 
     // def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
 
