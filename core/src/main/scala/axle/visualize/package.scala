@@ -32,15 +32,13 @@ package object visualize {
   implicit def enComponentJungUndirectedGraph[VP, EP](jug: JungUndirectedGraph[VP, EP]): Component =
     new JungUndirectedGraphVisualization().component(jug)
 
-  implicit def enComponentNativeUndirectedGraph[VP, EP](nug: NativeUndirectedGraph[VP, EP]): Component = {
-
-    // TODO: Avoid very wastefully converting to Native vertices and back
-    val wrappedEf = (vs: Seq[JungUndirectedGraphVertex[VP]]) =>
-      nug.ef(vs.map(v => new NativeUndirectedGraphVertex(v.payload)))
-        .map({ case (nv1, nv2, ep) => (new JungUndirectedGraphVertex(nv1.payload), new JungUndirectedGraphVertex(nv2.payload), ep) })
-
-    JungUndirectedGraph[VP, EP](nug.vps, wrappedEf)
-  }
+  // TODO: Avoid very wastefully converting to Native vertices and back
+  implicit def enComponentNativeUndirectedGraph[VP, EP](nug: NativeUndirectedGraph[VP, EP]): Component =
+    JungUndirectedGraph[VP, EP](nug.vps,
+      (vs: Seq[JungUndirectedGraphVertex[VP]]) =>
+        nug.ef(vs.map(v => new NativeUndirectedGraphVertex(v.payload)))
+          .map({ case (nv1, nv2, ep) => (new JungUndirectedGraphVertex(nv1.payload), new JungUndirectedGraphVertex(nv2.payload), ep) })
+    )
 
   implicit def enComponentJungDirectedGraph[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component =
     new JungDirectedGraphVisualization().component(jdg)
@@ -87,12 +85,13 @@ package object visualize {
   def component2file(component: Component, filename: String, encoding: String): Unit = {
 
     val frame = newFrame()
+    frame.setUndecorated(true)
     frame.initialize()
     val rc = frame.add(component)
-    rc.setVisible(true)
+    // rc.setVisible(true)
     frame.setVisible(true)
 
-    val img = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB
+    val img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB
     val g = img.createGraphics()
     frame.paintAll(g)
 
