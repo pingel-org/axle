@@ -97,7 +97,7 @@ package object visualize {
 
     ImageIO.write(img, encoding, new File(filename))
 
-    // g.dispose()
+    g.dispose()
   }
 
   def png(component: Component, filename: String) = component2file(component, filename, "PNG")
