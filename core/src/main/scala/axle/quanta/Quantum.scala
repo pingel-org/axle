@@ -136,8 +136,8 @@ trait Quantum {
 
   case class UnitPlottable(base: quantum.Q) extends axle.visualize.Plottable[quantum.Q] {
 
-    import math.{pow, ceil, floor, log10}
-    
+    import math.{ pow, ceil, floor, log10 }
+
     def isPlottable(t: quantum.Q): Boolean = true
 
     def zero() = 0.0 *: base
@@ -153,18 +153,24 @@ trait Quantum {
       ((v in base).magnitude.doubleValue - (left in base).magnitude.doubleValue) /
         ((right in base).magnitude.doubleValue - (left in base).magnitude.doubleValue)
 
-    def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
+    def step(from: BigDecimal, to: BigDecimal): BigDecimal =
+      new BigDecimal("1E" + (ceil(log10(abs(to.doubleValue - from.doubleValue))) - 1).toInt)
+
+    import Stream.{ empty, cons }
+
+    def ticValueStream(v: BigDecimal, to: BigDecimal, step: BigDecimal): Stream[BigDecimal] =
+      if (v.doubleValue > to.doubleValue) empty else cons(v, ticValueStream(v.add(step), to, step))
 
     def tics(from: quantum.Q, to: quantum.Q): Seq[(quantum.Q, String)] = {
-      val fromD = (from in base).magnitude.doubleValue
-      val toD = (to in base).magnitude.doubleValue
-      val s = step(fromD, toD)
-      val n = ceil((toD - fromD) / s).toInt
-      val start = s * floor(fromD / s)
-      (0 to n).map(i => {
-        val v = start + s * i
-        (new BigDecimal(v) *: base, v.toString)
-      }) // TODO filter(vs => (vs._1 >= fromD && vs._1 <= toD))
+      val fromMagnitude = (from in base).magnitude
+      val toMagnitude = (to in base).magnitude
+      val s = step(fromMagnitude, toMagnitude)
+      val sD = s.doubleValue
+      val start = new BigDecimal(sD * floor(fromMagnitude.doubleValue / sD))
+      ticValueStream(start, toMagnitude, s).map(v => {
+        val x = v *: base
+        (x, v.toString)
+      })
     }
 
   }
