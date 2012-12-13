@@ -170,7 +170,7 @@ trait Quantum {
       ticValueStream(start, toMagnitude, s).map(v => {
         val x = v *: base
         (x, v.toString)
-      })
+      }).toList
     }
 
   }
