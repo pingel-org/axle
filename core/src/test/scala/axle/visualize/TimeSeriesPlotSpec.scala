@@ -34,7 +34,7 @@ class TimeSeriesPlotSpec {
     import collection._
     import axle.visualize.{ Plot, Plottable }
     import Plottable._
-    import axle.quanta.Information
+    import axle.quanta._
     import Information._
     import axle.stats._
 
@@ -44,7 +44,7 @@ class TimeSeriesPlotSpec {
       connect = true, drawKey = false,
       xAxis = 0.0 *: bit, xAxisLabel = Some("p(x='HEAD)"),
       yAxis = 0.0, yAxisLabel = Some("H"),
-      title = Some("Entropy"))(DoublePlottable, new InfoPlottable(bit))
+      title = Some("Entropy"))(DoublePlottable, Information.UnitPlottable(bit))
 
     // show(plot)
 

@@ -1,5 +1,6 @@
 package axle.quanta
 
+import axle.quanta._
 import axle.graph._
 import java.math.BigDecimal
 import math.{ max, abs }
@@ -28,19 +29,13 @@ import collection._
 
 trait Quantum {
 
-  outer =>
+  quantum =>
 
   type Q <: Quantity
 
   def conversionGraph(): JungDirectedGraph[Q, BigDecimal]
 
   def byName(unitName: String): Q = conversionGraph.findVertex((v: JungDirectedGraphVertex[Q]) => v.payload.name == unitName).get.payload
-
-  implicit def toBD(i: Int) = new BigDecimal(i.toString)
-
-  implicit def toBD(d: Double) = new BigDecimal(d.toString)
-
-  implicit def toBD(s: String) = new BigDecimal(s)
 
   def bdDivide(numerator: BigDecimal, denominator: BigDecimal) = numerator.divide(
     denominator,
@@ -63,27 +58,27 @@ trait Quantum {
 
     self: Q =>
 
+    type QUA = quantum.type
+
     def +(right: Q): Q =
       quantity((this in right.unit).magnitude.add(right.magnitude), right.unit)
 
     def -(right: Q): Q =
       quantity((this in right.unit).magnitude.subtract(right.magnitude), right.unit)
 
-    def *(bd: BigDecimal): Q = quantity(this.magnitude.multiply(bd), this.unit)
+    def *(bd: BigDecimal): Q = quantity(magnitude.multiply(bd), unit)
 
-    def /(bd: BigDecimal): Q = quantity(bdDivide(this.magnitude, bd), this.unit)
+    def /(bd: BigDecimal): Q = quantity(bdDivide(magnitude, bd), unit)
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#Q, resultQuantum: QRES): QRES#Q =
-      resultQuantum.quantity(this.magnitude.multiply(right.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
+      resultQuantum.quantity(magnitude.multiply(right.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
 
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q =
-      resultQuantum.quantity(bdDivide(this.magnitude, bottom.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
+      resultQuantum.quantity(bdDivide(magnitude, bottom.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
 
     def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
 
     def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
-
-    val quantum: Quantum = outer
 
     def magnitude(): BigDecimal = magnitude
     def unit() = _unit.getOrElse(this)
@@ -93,25 +88,23 @@ trait Quantum {
     def link() = _link
 
     def vertex() =
-      quantum.conversionGraph.findVertex((v: JungDirectedGraphVertex[Quantity.this.quantum.Q]) => v.payload == this).get // .asInstanceOf[JungDirectedGraphVertex[Q]]
+      quantum.conversionGraph.findVertex((v: JungDirectedGraphVertex[quantum.Q]) => v.payload == this).get // .asInstanceOf[JungDirectedGraphVertex[Q]]
 
     override def toString() =
       if (_unit.isDefined)
         magnitude + unit.symbol.map(" " + _).getOrElse("")
       else
-        _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + this.getClass().getSimpleName()
+        _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + getClass().getSimpleName()
 
-    def *:(bd: BigDecimal) = quantity(this.magnitude.multiply(bd), this)
+    def *:(bd: BigDecimal) = quantity(magnitude.multiply(bd), this)
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
     def in(other: Q): Q = {
-      val thisV = this.unit.vertex.asInstanceOf[JungDirectedGraphVertex[Quantum.this.Q]]
-      val otherV = other.unit.vertex.asInstanceOf[JungDirectedGraphVertex[Quantum.this.Q]]
-      conversionGraph.shortestPath(otherV, thisV).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: JungDirectedGraphEdge[Quantum.this.Q, BigDecimal]) => bd.multiply(edge.payload))
+      conversionGraph.shortestPath(other.unit.vertex, unit.vertex).map(path => {
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: JungDirectedGraphEdge[quantum.Q, BigDecimal]) => bd.multiply(edge.payload))
       })
-        .map(bd => quantity(bdDivide(this.magnitude.multiply(bd), other.magnitude), other))
+        .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
     }
   }
@@ -139,7 +132,42 @@ trait Quantum {
 
   val wikipediaUrl: String
 
-  override def toString() = this.getClass().getSimpleName()
+  override def toString() = getClass().getSimpleName()
+
+  case class UnitPlottable(base: quantum.Q) extends axle.visualize.Plottable[quantum.Q] {
+
+    import math.{pow, ceil, floor, log10}
+    
+    def isPlottable(t: quantum.Q): Boolean = true
+
+    def zero() = 0.0 *: base
+
+    def compare(u1: quantum.Q, u2: quantum.Q) =
+      ((u1 in base).magnitude.doubleValue - (u2 in base).magnitude.doubleValue) match {
+        case 0.0 => 0
+        case r @ _ if r > 0.0 => 1
+        case _ => -1
+      }
+
+    def portion(left: quantum.Q, v: quantum.Q, right: quantum.Q) =
+      ((v in base).magnitude.doubleValue - (left in base).magnitude.doubleValue) /
+        ((right in base).magnitude.doubleValue - (left in base).magnitude.doubleValue)
+
+    def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
+
+    def tics(from: quantum.Q, to: quantum.Q): Seq[(quantum.Q, String)] = {
+      val fromD = (from in base).magnitude.doubleValue
+      val toD = (to in base).magnitude.doubleValue
+      val s = step(fromD, toD)
+      val n = ceil((toD - fromD) / s).toInt
+      val start = s * floor(fromD / s)
+      (0 to n).map(i => {
+        val v = start + s * i
+        (new BigDecimal(v) *: base, v.toString)
+      }) // TODO filter(vs => (vs._1 >= fromD && vs._1 <= toD))
+    }
+
+  }
 
 }
 

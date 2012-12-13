@@ -4,7 +4,8 @@ import org.specs2.mutable._
 
 class InformationTheorySpec extends Specification {
 
-  import axle.quanta.Information._
+  import axle.quanta._
+  import Information._
   import axle.stats._
 
   "hard-coded distributions" should {

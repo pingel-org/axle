@@ -35,7 +35,8 @@ package object stats {
   def log2(x: Double) = log(x) / log(2)
 
   import Information._
-
+  import axle.quanta._
+  
   def entropy[A](X: RandomVariable[A]): Information.Q = X.values.map(_.Σ(x => {
     val px = P(X eq x)()
     (px > 0) ? (-px * log2(px)) | 0.0
