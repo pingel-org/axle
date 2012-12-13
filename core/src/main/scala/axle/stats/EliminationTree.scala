@@ -2,21 +2,24 @@ package axle.stats
 
 import collection._
 import axle.graph._
-import axle.graph.JungUndirectedGraph._
 
-trait EliminationTreeFactory extends JungUndirectedGraphFactory {
+object EliminationTree {
 
   def apply(
     vps: Seq[Factor],
     ef: Seq[JungUndirectedGraphVertex[Factor]] => Seq[(JungUndirectedGraphVertex[Factor], JungUndirectedGraphVertex[Factor], String)]): EliminationTree =
-    JungUndirectedGraph(vps, ef).asInstanceOf[EliminationTree] // TODO: cast
+    new EliminationTree(vps, ef)
 
 }
 
-object EliminationTree extends EliminationTreeFactory
+class EliminationTree(
+  vps: Seq[Factor],
+  ef: Seq[JungUndirectedGraphVertex[Factor]] => Seq[(JungUndirectedGraphVertex[Factor], JungUndirectedGraphVertex[Factor], String)]) {
 
-trait EliminationTree extends JungUndirectedGraph[Factor, String] {
-
+  val graph = JungUndirectedGraph[Factor, String](vps, ef)
+  
+  import graph._
+  
   def gatherVars(stop: JungUndirectedGraphVertex[Factor], node: JungUndirectedGraphVertex[Factor], result: mutable.Set[RandomVariable[_]]): Unit = {
     result ++= node.payload.variables
     neighbors(node).filter(!_.equals(stop)).map(gatherVars(node, _, result))

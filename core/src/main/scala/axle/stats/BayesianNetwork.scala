@@ -386,13 +386,13 @@ case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
   // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
   def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): (BayesianNetwork, Factor) = {
-    while (τ.vertices().size > 1) {
+    while (τ.graph.vertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in τ
-      val fl = τ.firstLeafOtherThan(τ.findVertex(_.payload == f).get)
+      val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_.payload == f).get)
       fl.map(i => {
-        val j = τ.neighbors(i).iterator.next()
+        val j = τ.graph.neighbors(i).iterator.next()
         val ɸ_i = i.payload
-        τ.delete(i)
+        τ.graph.delete(i)
         // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
       })
     }
@@ -419,7 +419,7 @@ case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
   // Note: not sure about this return type:
   def factorElimination(τ: EliminationTree, e: List[CaseIs[_]]): Map[Factor, Factor] =
     {
-      for (i <- τ.vertices()) {
+      for (i <- τ.graph.vertices()) {
         for (ci <- e) {
           // val lambdaE = new Factor(ci.rv, Map())
           // assign lambdaE.E to e.get(E)
@@ -428,7 +428,7 @@ case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
       // TODO val root = chooseRoot(τ)
       // TODO pullMessagesTowardsRoot()
       // TODO pushMessagesFromRoot()
-      for (i <- τ.vertices()) {
+      for (i <- τ.graph.vertices()) {
 
       }
       null // TODO
