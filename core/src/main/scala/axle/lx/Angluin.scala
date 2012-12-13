@@ -9,7 +9,7 @@ import axle.graph._
 class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
   extends JungDirectedGraph[String, Symbol](vps, vs => Nil) {
 
-  def Q(): Set[JungDirectedGraphVertex[String]] = vertices()
+  def Q() = vertices()
 
   //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
   //      val (newG, v) = g + "" // TODO
@@ -18,10 +18,10 @@ class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
   //      Acceptor(newG, newI, newF)
   //    }
 
-  def δSymbol(state: JungDirectedGraphVertex[String], symbol: Symbol): Set[JungDirectedGraphVertex[String]] =
+  def δSymbol(state: DirectedGraphVertex[String], symbol: Symbol): Set[DirectedGraphVertex[String]] =
     edges().filter(e => e.source == state && e.payload == symbol).map(_.dest)
 
-  def δ(state: JungDirectedGraphVertex[String], exp: List[Symbol]): Set[String] = exp match {
+  def δ(state: DirectedGraphVertex[String], exp: List[Symbol]): Set[String] = exp match {
     case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
     case Nil => Set(state.payload)
   }
@@ -41,7 +41,7 @@ class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
     false
   }
 
-  def induce(P: Set[JungDirectedGraphVertex[String]]): AngluinAcceptor = {
+  def induce(P: Set[DirectedGraphVertex[String]]): AngluinAcceptor = {
     // TODO !!!
     null
   }
@@ -128,18 +128,18 @@ object Angluin {
   /**
    * The HardCodedLearner always guesses the same thing
    */
-  
+
   case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
-    
+
     def initialState() = null
-    
+
     def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null, Some(G))
   }
- 
+
   /**
    * The MemorizingLearner accrues expressions
    */
-  
+
   case class MemorizingLearner() extends Learner[Language] {
 
     def initialState() = Language(Nil)
