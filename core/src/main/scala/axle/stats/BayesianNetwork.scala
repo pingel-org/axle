@@ -215,7 +215,7 @@ case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
     randomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
         val ig = gi._1
-        (ig.eliminate(rv), ig.neighbors(ig.findVertex(_.payload == rv).get).size)
+        (ig.eliminate(rv), ig.graph.neighbors(ig.graph.findVertex(_.payload == rv).get).size)
       }
     ).map(_._2).max
 

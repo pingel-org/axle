@@ -1,22 +1,23 @@
 package axle.stats
 
 import axle.graph._
-import axle.graph.JungUndirectedGraph._
 import collection._
 
-trait InteractionGraphFactory extends JungUndirectedGraphFactory {
+object InteractionGraph {
 
   def apply(
     vps: Seq[RandomVariable[_]],
     ef: Seq[JungUndirectedGraphVertex[RandomVariable[_]]] => Seq[(JungUndirectedGraphVertex[RandomVariable[_]], JungUndirectedGraphVertex[RandomVariable[_]], String)]): InteractionGraph =
-    JungUndirectedGraph(vps, ef).asInstanceOf[InteractionGraph] // TODO: cast
+    InteractionGraph(vps, ef)
 
 }
 
-object InteractionGraph extends InteractionGraphFactory
+class InteractionGraph(
+  vps: Seq[RandomVariable[_]],
+  ef: Seq[JungUndirectedGraphVertex[RandomVariable[_]]] => Seq[(JungUndirectedGraphVertex[RandomVariable[_]], JungUndirectedGraphVertex[RandomVariable[_]], String)]) {
 
-trait InteractionGraph extends JungUndirectedGraph[RandomVariable[_], String] {
-
+  val graph = JungUndirectedGraph(vps, ef)
+  
   def eliminate(rv: RandomVariable[_]): InteractionGraph = null.asInstanceOf[InteractionGraph] // TODO
 
   def eliminationSequence(π: List[RandomVariable[_]]): List[InteractionGraph] =
