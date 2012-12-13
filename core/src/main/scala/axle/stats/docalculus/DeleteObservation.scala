@@ -11,7 +11,7 @@ object DeleteObservation extends Rule {
     val Y = q.question
     val X = q.actions
     val subModel = m.duplicate()
-    subModel.removeInputs(subModel.nodesFor(X))
+    subModel.graph.removeInputs(subModel.nodesFor(X))
 
 //    q.given.flatMap(zObservation => {
 //      val W = q.given - zObservation

@@ -2,7 +2,6 @@ package axle.stats
 
 import collection._
 import axle.graph._
-import axle.graph.JungDirectedGraph._
 import axle.stats._
 
 object Direction {
@@ -13,20 +12,20 @@ object Direction {
 
 }
 
-class Model[MVP](
-  vps: Seq[MVP],
-  ef: Seq[JungDirectedGraphVertex[MVP]] => Seq[(JungDirectedGraphVertex[MVP], JungDirectedGraphVertex[MVP], String)])
-  extends JungDirectedGraph[MVP, String](vps, ef) {
+class Model[MVP](vps: Seq[MVP],
+  ef: Seq[JungDirectedGraphVertex[MVP]] => Seq[(JungDirectedGraphVertex[MVP], JungDirectedGraphVertex[MVP], String)]) {
+
+  val graph = JungDirectedGraph(vps, ef)
 
   def name(): String = "model name"
 
   def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_] = null // TODO
 
-  def randomVariables(): List[RandomVariable[_]] = vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
+  def randomVariables(): List[RandomVariable[_]] = graph.vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
 
   def variable(name: String): RandomVariable[_] = null // TODO name2variable(name)
 
-  def numVariables(): Int = size()
+  def numVariables(): Int = graph.size()
 
   def blocks(
     from: immutable.Set[RandomVariable[_]],
@@ -61,12 +60,12 @@ class Model[MVP](
       current --= cachedOuts
     }
 
-    val priorVertex = findVertex((v: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get
-    val givenVertices = given.map(v1 => findVertex((v2: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
+    val priorVertex = graph.findVertex((v: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get
+    val givenVertices = given.map(v1 => graph.findVertex((v2: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
 
     for (variable <- current) {
 
-      val variableVertex = findVertex((v: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
+      val variableVertex = graph.findVertex((v: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
 
       var openToVar = false
       var directionPriorToVar = Direction.UNKNOWN
@@ -74,7 +73,7 @@ class Model[MVP](
         openToVar = true
       } else {
         directionPriorToVar = Direction.OUTWARD
-        if (precedes(variableVertex, priorVertex)) {
+        if (graph.precedes(variableVertex, priorVertex)) {
           directionPriorToVar = Direction.INWARD
         }
 
@@ -82,7 +81,7 @@ class Model[MVP](
           val priorGiven = given.contains(prior)
           openToVar = (priorDirection == Direction.INWARD && !priorGiven && directionPriorToVar == Direction.OUTWARD) ||
             (priorDirection == Direction.OUTWARD && !priorGiven && directionPriorToVar == Direction.OUTWARD) ||
-            (priorDirection == Direction.INWARD && descendantsIntersectsSet(variableVertex, givenVertices) && directionPriorToVar == Direction.INWARD)
+            (priorDirection == Direction.INWARD && graph.descendantsIntersectsSet(variableVertex, givenVertices) && directionPriorToVar == Direction.INWARD)
         } else {
           openToVar = true
         }
@@ -92,7 +91,7 @@ class Model[MVP](
         if (to.contains(variable)) {
           return Some(List(variable))
         }
-        val neighs = mutable.Set() ++ (neighbors(variableVertex) - priorVertex).map(_.payload)
+        val neighs = mutable.Set() ++ (graph.neighbors(variableVertex) - priorVertex).map(_.payload)
 
         val visitedCopy = mutable.Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]() ++ visited
         if (!visited.contains(prior)) {

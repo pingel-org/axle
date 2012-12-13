@@ -107,10 +107,12 @@ import math.max
 import scalaz._
 import Scalaz._
 
-class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
+case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
   ef: Seq[JungDirectedGraphVertex[BayesianNetworkNode]] => Seq[(JungDirectedGraphVertex[BayesianNetworkNode], JungDirectedGraphVertex[BayesianNetworkNode], String)])
   extends Model(vps, ef) {
 
+  import graph._
+  
   override def name(): String = _name
 
   override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
@@ -126,12 +128,12 @@ class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
     )
   }
 
-  def cpt(variable: RandomVariable[_]): Factor = findVertex((v: JungDirectedGraphVertex[BayesianNetworkNode]) => v.payload.rv == variable).map(_.payload.cpt).get
+  def cpt(variable: RandomVariable[_]): Factor = findVertex(_.payload.rv == variable).map(_.payload.cpt).get
 
   def probabilityOf(cs: Seq[CaseIs[_]]) = cs.map(c => cpt(c.rv)(cs)).reduce(_ * _)
 
   def markovAssumptionsFor(rv: RandomVariable[_]): Independence = {
-    val rvVertex: JungDirectedGraphVertex[BayesianNetworkNode] = findVertex((v: JungDirectedGraphVertex[BayesianNetworkNode]) => v.payload.rv == rv).get
+    val rvVertex = findVertex(_.payload.rv == rv).get
     val X: immutable.Set[RandomVariable[_]] = immutable.Set(rv)
     val Z: immutable.Set[RandomVariable[_]] = predecessors(rvVertex).map(_.payload.rv).toSet
     val D = descendants(rvVertex) ++ predecessors(rvVertex) + rvVertex
@@ -213,7 +215,7 @@ class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
     randomVariables().scanLeft((interactionGraph(), 0))(
       (gi, rv) => {
         val ig = gi._1
-        (ig.eliminate(rv), ig.neighbors(ig.findVertex((v: JungUndirectedGraphVertex[RandomVariable[_]]) => v.payload == rv).get).size)
+        (ig.eliminate(rv), ig.neighbors(ig.findVertex(_.payload == rv).get).size)
       }
     ).map(_._2).max
 
@@ -230,8 +232,8 @@ class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
     val result = new BayesianNetwork(resultName, null, null) // TODO
     eOpt.map(e => {
       for (U <- e.map(_.rv)) {
-        val uVertex = result.findVertex((v: JungDirectedGraphVertex[BayesianNetworkNode]) => v.payload.rv == U).get
-        for (edge <- result.outputEdgesOf(uVertex)) { // ModelEdge
+        val uVertex = result.graph.findVertex(_.payload.rv == U).get
+        for (edge <- result.graph.outputEdgesOf(uVertex)) { // ModelEdge
           // TODO !!!
           //          val X = edge.dest().payload.rv
           //          val oldF = result.cpt(X)
@@ -254,11 +256,11 @@ class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
     val vars = eOpt.map(Q ++ _.map(_.rv)).getOrElse(Q)
 
     def nodePruneStream(g: BayesianNetwork): Stream[BayesianNetwork] = {
-      val xVertices = g.leaves().toSet -- vars.map(rv => g.findVertex((v: JungDirectedGraphVertex[BayesianNetworkNode]) => v.payload.rv == rv).get)
+      val xVertices = g.graph.leaves().toSet -- vars.map(rv => g.graph.findVertex(_.payload.rv == rv).get)
       xVertices.size match {
         case 0 => Stream.empty
         case _ => {
-          xVertices.map(xV => g.deleteVertex(xV))
+          xVertices.map(xV => g.graph.deleteVertex(xV))
           Stream.cons(g, nodePruneStream(g))
         }
       }
@@ -386,7 +388,7 @@ class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
   def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): (BayesianNetwork, Factor) = {
     while (τ.vertices().size > 1) {
       // remove node i (other than r) that has single neighbor j in τ
-      val fl = τ.firstLeafOtherThan(τ.findVertex((v: JungUndirectedGraphVertex[Factor]) => v.payload == f).get)
+      val fl = τ.firstLeafOtherThan(τ.findVertex(_.payload == f).get)
       fl.map(i => {
         val j = τ.neighbors(i).iterator.next()
         val ɸ_i = i.payload

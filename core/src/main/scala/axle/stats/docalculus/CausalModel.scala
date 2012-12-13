@@ -14,6 +14,8 @@ trait CausalModelFactory extends ModelFactory {
   class CausalModel(_name: String, vps: Seq[CausalModelNode])
     extends Model[CausalModelNode](vps, (vs: Seq[JungDirectedGraphVertex[CausalModelNode]]) => Nil) {
 
+    import graph._
+    
     override def name(): String = _name
 
     def duplicate(): CausalModel = null // TODO
