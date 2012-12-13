@@ -30,13 +30,13 @@ class Volume extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
 
-  lazy val _conversionGraph = JungDirectedGraph[VolumeQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       derive(m2.by[Distance.type, this.type](meter, this), Some("m3"), Some("m3")),
       derive(km2.by[Distance.type, this.type](km, this), Some("km3"), Some("km3")),
       unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[VolumeQuantity]]) => vs match {
+    (vs: Seq[V[VolumeQuantity]]) => vs match {
       case m3 :: km3 :: greatLakes :: Nil => withInverses(List(
         (km3, greatLakes, 22671)
       ))

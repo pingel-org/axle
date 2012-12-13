@@ -28,7 +28,7 @@ class Time extends Quantum {
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
   // "http://en.wikipedia.org/wiki/Time"
 
-  lazy val _conversionGraph = JungDirectedGraph[TimeQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       unit("second", "s"),
       unit("millisecond", "ms"),
@@ -43,7 +43,7 @@ class Time extends Quantum {
       unit("megayear", "my"),
       unit("gigayear", "gy")
     ),
-    (vs: Seq[JungDirectedGraphVertex[TimeQuantity]]) => vs match {
+    (vs: Seq[V[TimeQuantity]]) => vs match {
       case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => withInverses(List(
         (ms, s, "1E3"),
         (μs, s, "1E6"),

@@ -30,13 +30,13 @@ class Acceleration extends Quantum {
 
   def conversionGraph() = _conversionGraph
 
-  lazy val _conversionGraph = JungDirectedGraph[AccelerationQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       derive(mps.over[Time.type, this.type](second, this)),
       derive(fps.over[Time.type, this.type](second, this)),
       unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[AccelerationQuantity]]) => vs match {
+    (vs: Seq[V[AccelerationQuantity]]) => vs match {
       case mpsps :: fpsps :: g :: Nil => withInverses(List(
         (mpsps, g, "9.80665")
       ))

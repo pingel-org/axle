@@ -33,9 +33,16 @@ trait Quantum {
 
   type Q <: Quantity
 
-  def conversionGraph(): JungDirectedGraph[Q, BigDecimal]
+  type G[VP, EP] = JungDirectedGraph[VP, EP]
+  type V[VP] = JungDirectedGraphVertex[VP]
+  type E[VP, EP] = DirectedGraphEdge[VP, EP]
 
-  def byName(unitName: String): Q = conversionGraph.findVertex((v: JungDirectedGraphVertex[Q]) => v.payload.name == unitName).get.payload
+  def conversionGraph(): G[Q, BigDecimal]
+
+  def conversions(vps: Seq[Q], ef: Seq[V[Q]] => Seq[(V[Q], V[Q], BigDecimal)]): JungDirectedGraph[Q, BigDecimal] =
+    JungDirectedGraph[Q, BigDecimal](vps, ef)
+
+  def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
   def bdDivide(numerator: BigDecimal, denominator: BigDecimal) = numerator.divide(
     denominator,
@@ -46,7 +53,7 @@ trait Quantum {
   val oneBD = new BigDecimal("1")
   val zeroBD = new BigDecimal("0")
 
-  def withInverses(trips: Seq[(JungDirectedGraphVertex[Q], JungDirectedGraphVertex[Q], BigDecimal)]): Seq[(JungDirectedGraphVertex[Q], JungDirectedGraphVertex[Q], BigDecimal)] =
+  def withInverses(trips: Seq[(V[Q], V[Q], BigDecimal)]): Seq[(V[Q], V[Q], BigDecimal)] =
     trips.flatMap(trip => Vector(trip, (trip._2, trip._1, bdDivide(oneBD, trip._3))))
 
   class Quantity(
@@ -87,8 +94,7 @@ trait Quantum {
     def symbol() = _symbol
     def link() = _link
 
-    def vertex() =
-      quantum.conversionGraph.findVertex((v: JungDirectedGraphVertex[quantum.Q]) => v.payload == this).get // .asInstanceOf[JungDirectedGraphVertex[Q]]
+    def vertex() = quantum.conversionGraph.findVertex(_.payload == this).get
 
     override def toString() =
       if (_unit.isDefined)
@@ -102,7 +108,7 @@ trait Quantum {
 
     def in(other: Q): Q = {
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: JungDirectedGraphEdge[quantum.Q, BigDecimal]) => bd.multiply(edge.payload))
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: E[quantum.Q, BigDecimal]) => bd.multiply(edge.payload))
       })
         .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
@@ -220,26 +226,6 @@ case class QuantumDivision[QTOP <: Quantum, QBOTTOM <: Quantum, QRESULT <: Quant
   
 }
 */
-
-/**
-  object ConversionGraphFactoryObject extends ConversionGraphFactory
-  trait ConversionGraphFactory extends JungDirectedGraphFactory {
-    
-    type G = ConversionGraph
-    
-    trait ConversionGraph extends JungDirectedGraph[Q, BigDecimal] {
-
-      type V = ConversionGraphVertex
-      trait ConversionGraphVertex extends JungDirectedGraphVertex[Q]
-
-      type E = ConversionGraphEdge
-      trait ConversionGraphEdge extends JungDirectedGraphEdge[BigDecimal]
-    }
-  }
-  import ConversionGraphFactoryObject._
- * 
- * 
- */
 
 //    def kilo() = quantity(oneBD.scaleByPowerOfTen(3), this, Some("kilo" + _name.getOrElse("")), Some("K" + symbol.getOrElse("")))
 //    def mega() = quantity(oneBD.scaleByPowerOfTen(6), this, Some("mega" + _name.getOrElse("")), Some("M" + symbol.getOrElse("")))

@@ -30,7 +30,7 @@ class Speed extends Quantum {
 
   def conversionGraph() = _conversionGraph
 
-  lazy val _conversionGraph = JungDirectedGraph[SpeedQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       derive(meter.over[Time.type, this.type](second, this)),
       derive(ft.over[Time.type, this.type](second, this)),
@@ -38,7 +38,7 @@ class Speed extends Quantum {
       unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light")),
       unit("Speed limit", "speed limit")
     ),
-    (vs: Seq[JungDirectedGraphVertex[SpeedQuantity]]) => vs match {
+    (vs: Seq[V[SpeedQuantity]]) => vs match {
       case mps :: fps :: mph :: c :: speedLimit :: Nil => withInverses(List(
         (c, mps, "299792458"),
         (mph, speedLimit, "65")

@@ -30,12 +30,12 @@ class Flow extends Quantum {
   import Volume.{ m3 }
   import Time.{ second }
 
-  lazy val _conversionGraph = JungDirectedGraph[FlowQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       derive(m3.over[Time.type, this.type](second, this), Some("cubic meters per second"), Some("m^3/s")),
       unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[FlowQuantity]]) => vs match {
+    (vs: Seq[V[FlowQuantity]]) => vs match {
       case m3s :: niagaraFalls :: Nil => withInverses(List(
         (m3s, niagaraFalls, 1834)
       ))

@@ -27,13 +27,13 @@ class Force extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
 
-  lazy val _conversionGraph = JungDirectedGraph[ForceQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force")),
       unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)")),
       unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[ForceQuantity]]) => vs match {
+    (vs: Seq[V[ForceQuantity]]) => vs match {
       case Nil => withInverses(List())
     }
   )

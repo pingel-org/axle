@@ -29,12 +29,12 @@ class Area extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Area"
 
-  lazy val _conversionGraph = JungDirectedGraph[AreaQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       derive(meter.by[Distance.type, this.type](meter, this), Some("m2"), Some("m2")),
       derive(km.by[Distance.type, this.type](km, this), Some("km2"), Some("km2"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[AreaQuantity]]) => vs match {
+    (vs: Seq[V[AreaQuantity]]) => vs match {
       case m2 :: km2 :: Nil => withInverses(List(
         (m2, km2, "1E6")
       ))

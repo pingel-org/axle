@@ -30,7 +30,7 @@ class Energy extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Energy"
 
-  lazy val _conversionGraph = JungDirectedGraph[EnergyQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       derive(kilowatt.by[Time.type, this.type](hour, this)),
       unit("joule", "J"),
@@ -41,7 +41,7 @@ class Energy extends Quantum {
       unit("megaton", "MT"),
       unit("gigaton", "GT")
     ),
-    (vs: Seq[JungDirectedGraphVertex[EnergyQuantity]]) => vs match {
+    (vs: Seq[V[EnergyQuantity]]) => vs match {
       case kwh :: j :: kj :: mj :: t :: kt :: mt :: gt :: Nil => withInverses(List(
         (mj, t, "4.184"),
         (j, kj, "1E3"),
@@ -63,7 +63,7 @@ class Energy extends Quantum {
   lazy val gigaton = byName("gigaton")
 
   lazy val castleBravo = "15" *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
-  
+
 }
 
 object Energy extends Energy()

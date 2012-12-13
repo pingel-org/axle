@@ -28,7 +28,7 @@ class Mass extends Quantum {
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"
 
-  lazy val _conversionGraph = JungDirectedGraph[MassQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       unit("gram", "g"),
       unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne")),
@@ -44,7 +44,7 @@ class Mass extends Quantum {
       unit("zettatonne", "ZT"),
       unit("yottatonne", "YT")
     ),
-    (vs: Seq[JungDirectedGraphVertex[MassQuantity]]) => vs match {
+    (vs: Seq[V[MassQuantity]]) => vs match {
       case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt :: Nil =>
         withInverses(List(
           (t, meg, 1),

@@ -25,7 +25,7 @@ class Information extends Quantum {
 
   def conversionGraph() = _conversionGraph
 
-  lazy val _conversionGraph = JungDirectedGraph[InformationQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       unit("bit", "b"),
       unit("nibble", "nibble"),
@@ -36,7 +36,7 @@ class Information extends Quantum {
       unit("terabyte", "TB"),
       unit("petabyte", "PB")
     ),
-    (vs: Seq[JungDirectedGraphVertex[InformationQuantity]]) => vs match {
+    (vs: Seq[V[InformationQuantity]]) => vs match {
       case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil => withInverses(List(
         (bit, nibble, "4"),
         (bit, byte, "8"),

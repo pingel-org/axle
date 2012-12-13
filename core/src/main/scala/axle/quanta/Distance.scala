@@ -28,7 +28,7 @@ class Distance extends Quantum {
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
   // "http://en.wikipedia.org/wiki/Distance"
 
-  lazy val _conversionGraph = JungDirectedGraph[DistanceQuantity, BigDecimal](
+  lazy val _conversionGraph = conversions(
     List(
       unit("foot", "ft"),
       unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile")),
@@ -43,7 +43,7 @@ class Distance extends Quantum {
       unit("light year", "ly", Some("http://en.wikipedia.org/wiki/Light-year")),
       unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
     ),
-    (vs: Seq[JungDirectedGraphVertex[DistanceQuantity]]) => vs match {
+    (vs: Seq[V[DistanceQuantity]]) => vs match {
       case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => withInverses(List(
         (ft, mile, 5280),
         (km, mile, "1.609344"),
