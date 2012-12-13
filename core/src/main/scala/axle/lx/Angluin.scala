@@ -6,9 +6,12 @@ import scalaz._
 import Scalaz._
 import axle.graph._
 
-class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
-  extends JungDirectedGraph[String, Symbol](vps, vs => Nil) {
+class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
 
+  val graph = JungDirectedGraph[String, Symbol](vps, vs => Nil)
+
+  import graph._
+  
   def Q() = vertices()
 
   //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
