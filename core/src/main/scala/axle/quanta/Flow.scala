@@ -1,7 +1,7 @@
 package axle.quanta
 
 import java.math.BigDecimal
-import axle.graph.JungDirectedGraph._
+import axle.graph._
 
 class Flow extends Quantum {
 

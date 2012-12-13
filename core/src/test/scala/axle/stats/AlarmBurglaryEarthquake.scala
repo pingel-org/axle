@@ -2,8 +2,7 @@ package axle.stats
 
 import collection._
 import axle.stats._
-import axle.graph.JungDirectedGraph._
-// import axle.visualize._
+import axle.graph._
 import org.specs2.mutable._
 
 class ABE extends Specification {

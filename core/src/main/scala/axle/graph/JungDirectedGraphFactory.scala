@@ -3,135 +3,140 @@ package axle.graph
 import collection.JavaConverters._
 import collection._
 
-trait JungDirectedGraphFactory extends DirectedGraphFactory {
+case class JungDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[JungDirectedGraphVertex[VP]] => Seq[(JungDirectedGraphVertex[VP], JungDirectedGraphVertex[VP], EP)])
+  extends DirectedGraph[VP, EP] {
 
   type G[VP, EP] = JungDirectedGraph[VP, EP]
   type V[VP] = JungDirectedGraphVertex[VP]
   type E[VP, EP] = JungDirectedGraphEdge[VP, EP]
   // type S = DirectedSparseGraph[JungDirectedGraphVertex[VP], JungDirectedGraphEdge[VP, EP]]
 
-  override def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP] =
-    new JungDirectedGraph(vps, ef)
+  import edu.uci.ics.jung.graph.DirectedSparseGraph
 
-  case class JungDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)])
-    extends DirectedGraph[VP, EP] {
+  lazy val jungGraph = new DirectedSparseGraph[JungDirectedGraphVertex[VP], JungDirectedGraphEdge[VP, EP]]()
 
-    import edu.uci.ics.jung.graph.DirectedSparseGraph
+  // Note: Have to compensate for JUNG not preserving vertex order
+  lazy val vertexSeq = vps.map(vp => new JungDirectedGraphVertex(vp))
 
-    lazy val jungGraph = new DirectedSparseGraph[V[VP], E[VP, EP]]()
+  lazy val vertexSet = verticesSeq.toSet
 
-    // Note: Have to compensate for JUNG not preserving vertex order
-    lazy val vertexSeq = vps.map(vp => new JungDirectedGraphVertex(vp))
+  vertexSeq.map(v => jungGraph.addVertex(v)) // TODO check return value
 
-    lazy val vertexSet = verticesSeq.toSet
-
-    vertexSeq.map(v => jungGraph.addVertex(v)) // TODO check return value
-
-    ef(vertexSeq).map({
-      case (vi, vj, ep) => {
-        val edge: JungDirectedGraphEdge[VP, EP] = new JungDirectedGraphEdge[VP, EP](ep)
-        jungGraph.addEdge(edge, vi, vj) // TODO check return value
-      }
-    })
-
-    def storage(): DirectedSparseGraph[V[VP], E[VP, EP]] = jungGraph
-
-    def size(): Int = jungGraph.getVertexCount()
-
-    override def edges(): Set[E[VP, EP]] = jungGraph.getEdges().asScala.toSet
-
-    def verticesSeq(): Seq[V[VP]] = vertexSeq
-
-    override def vertices(): Set[V[VP]] = vertexSet
-
-    def findEdge(from: V[VP], to: V[VP]): Option[E[VP, EP]] = Option(jungGraph.findEdge(from, to))
-
-    // TODO: findVertex needs an index
-    def findVertex(f: V[VP] => Boolean): Option[V[VP]] = vertexSeq.find(f(_))
-
-    def deleteEdge(e: E[VP, EP]): G[VP, EP] = filterEdges(_ != e)
-
-    def deleteVertex(v: V[VP]): G[VP, EP] =
-      JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
-
-    def filterEdges(f: ((V[VP], V[VP], EP)) => Boolean): G[VP, EP] = {
-      val filter = (es: Seq[(V[VP], V[VP], EP)]) => es.filter(f(_))
-      JungDirectedGraph(vps, filter.compose(ef))
+  ef(vertexSeq).map({
+    case (vi, vj, ep) => {
+      val edge: JungDirectedGraphEdge[VP, EP] = new JungDirectedGraphEdge[VP, EP](ep)
+      jungGraph.addEdge(edge, vi, vj) // TODO check return value
     }
+  })
 
-    def leaves(): Set[V[VP]] = vertices().filter(isLeaf(_))
+  def storage(): DirectedSparseGraph[JungDirectedGraphVertex[VP], JungDirectedGraphEdge[VP, EP]] = jungGraph
 
-    def neighbors(v: V[VP]): Set[V[VP]] = jungGraph.getNeighbors(v).asScala.toSet
+  def size(): Int = jungGraph.getVertexCount()
 
-    def precedes(v1: V[VP], v2: V[VP]): Boolean = predecessors(v2).contains(v1)
+  override def edges(): Set[JungDirectedGraphEdge[VP, EP]] = jungGraph.getEdges().asScala.toSet
 
-    def predecessors(v: V[VP]): Set[V[VP]] = jungGraph.getPredecessors(v).asScala.toSet
+  def verticesSeq(): Seq[JungDirectedGraphVertex[VP]] = vertexSeq
 
-    def isLeaf(v: JungDirectedGraphVertex[VP]): Boolean = jungGraph.getSuccessorCount(v) == 0
+  override def vertices(): Set[JungDirectedGraphVertex[VP]] = vertexSet // 
 
-    def successors(v: V[VP]): Set[V[VP]] = jungGraph.getSuccessors(v).asScala.toSet
+  def findEdge(from: JungDirectedGraphVertex[VP], to: JungDirectedGraphVertex[VP]): Option[JungDirectedGraphEdge[VP, EP]] = Option(jungGraph.findEdge(from, to))
 
-    def outputEdgesOf(v: V[VP]): Set[E[VP, EP]] = jungGraph.getOutEdges(v).asScala.toSet
+  // TODO: findVertex needs an index
+  def findVertex(f: JungDirectedGraphVertex[VP] => Boolean): Option[JungDirectedGraphVertex[VP]] = vertexSeq.find(f(_))
 
-    def descendantsIntersectsSet(v: V[VP], s: Set[V[VP]]): Boolean =
-      s.contains(v) || s.exists(x => descendantsIntersectsSet(x, s))
+  def deleteEdge(e: JungDirectedGraphEdge[VP, EP]): JungDirectedGraph[VP, EP] = filterEdges(_ != e)
 
-    def removeInputs(to: Set[V[VP]]): G[VP, EP] = filterEdges(v => !to.contains(v._2))
+  def deleteVertex(v: JungDirectedGraphVertex[VP]): JungDirectedGraph[VP, EP] =
+    JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
 
-    def removeOutputs(from: Set[V[VP]]): G[VP, EP] = filterEdges(v => !from.contains(v._1))
+  def filterEdges(f: ((JungDirectedGraphVertex[VP], JungDirectedGraphVertex[VP], EP)) => Boolean): JungDirectedGraph[VP, EP] = {
+    val filter = (es: Seq[(JungDirectedGraphVertex[VP], JungDirectedGraphVertex[VP], EP)]) => es.filter(f(_))
+    JungDirectedGraph(vps, filter.compose(ef))
+  }
 
-    def moralGraph(): G[_, _] = null // TODO !!!
+  def leaves(): Set[JungDirectedGraphVertex[VP]] = vertices().filter(isLeaf(_))
 
-    def isAcyclic() = true // TODO !!!
+  def neighbors(v: JungDirectedGraphVertex[VP]): Set[JungDirectedGraphVertex[VP]] = jungGraph.getNeighbors(v).asScala.toSet
 
-    def shortestPath(source: V[VP], goal: V[VP]): Option[List[E[VP, EP]]] = {
-      if (source == goal) {
-        Some(Nil)
+  def precedes(v1: JungDirectedGraphVertex[VP], v2: JungDirectedGraphVertex[VP]): Boolean = predecessors(v2).contains(v1)
+
+  def predecessors(v: JungDirectedGraphVertex[VP]): Set[JungDirectedGraphVertex[VP]] = jungGraph.getPredecessors(v).asScala.toSet
+
+  def isLeaf(v: JungDirectedGraphVertex[VP]): Boolean = jungGraph.getSuccessorCount(v) == 0
+
+  def successors(v: JungDirectedGraphVertex[VP]): Set[JungDirectedGraphVertex[VP]] = jungGraph.getSuccessors(v).asScala.toSet
+
+  def outputEdgesOf(v: JungDirectedGraphVertex[VP]): Set[JungDirectedGraphEdge[VP, EP]] = jungGraph.getOutEdges(v).asScala.toSet
+
+  def descendantsIntersectsSet(v: JungDirectedGraphVertex[VP], s: Set[JungDirectedGraphVertex[VP]]): Boolean =
+    s.contains(v) || s.exists(x => descendantsIntersectsSet(x, s))
+
+  def removeInputs(to: Set[JungDirectedGraphVertex[VP]]): JungDirectedGraph[VP, EP] = filterEdges(v => !to.contains(v._2))
+
+  def removeOutputs(from: Set[JungDirectedGraphVertex[VP]]): JungDirectedGraph[VP, EP] = filterEdges(v => !from.contains(v._1))
+
+  def moralGraph(): JungDirectedGraph[_, _] = null // TODO !!!
+
+  def isAcyclic() = true // TODO !!!
+
+  def shortestPath(source: JungDirectedGraphVertex[VP], goal: JungDirectedGraphVertex[VP]): Option[List[JungDirectedGraphEdge[VP, EP]]] = {
+    if (source == goal) {
+      Some(Nil)
+    } else {
+      import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
+      val path = (new DijkstraShortestPath(jungGraph)).getPath(source, goal)
+      if (path == null) {
+        None
       } else {
-        import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
-        val path = (new DijkstraShortestPath(jungGraph)).getPath(source, goal)
-        if (path == null) {
-          None
-        } else {
-          path.size match {
-            case 0 => None
-            case _ => Some(path.asScala.toList)
-          }
+        path.size match {
+          case 0 => None
+          case _ => Some(path.asScala.toList)
         }
       }
     }
-
-    def vertexToVisualizationHtml(vp: VP): xml.Node = vp match {
-      case x: axle.XmlAble => x.toXml
-      case _ => xml.Text(vp.toString)
-    }
-
-    def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP] = {
-
-      val newVps = vps.map(vpf(_))
-
-      val oldVs = null // TODO // Seq[JungDirectedGraphVertex[VP]]
-
-      val newEf = (newVs: Seq[JungDirectedGraphVertex[NVP]]) =>
-        ef(oldVs).map({
-          case (vi, vj, ep) => (new JungDirectedGraphVertex(vpf(vi.payload)), new JungDirectedGraphVertex(vpf(vj.payload)), epf(ep))
-        })
-
-      JungDirectedGraph(newVps, newEf)
-    }
-
   }
 
-  class JungDirectedGraphEdge[VP, EP](ep: EP) extends DirectedGraphEdge[VP, EP] {
-    def source(): V[VP] = null // TODO
-    def dest(): V[VP] = null // TODO
-    def payload(): EP = ep
+  def vertexToVisualizationHtml(vp: VP): xml.Node = vp match {
+    case x: axle.XmlAble => x.toXml
+    case _ => xml.Text(vp.toString)
   }
 
-  class JungDirectedGraphVertex[VP](vp: VP) extends DirectedGraphVertex[VP] {
-    def payload(): VP = vp
+  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP): JungDirectedGraph[NVP, NEP] = {
+
+    val newVps = vps.map(vpf(_))
+
+    val oldVs = null // TODO // Seq[JungDirectedGraphVertex[VP]]
+
+    val newEf = (newVs: Seq[JungDirectedGraphVertex[NVP]]) =>
+      ef(oldVs).map({
+        case (vi, vj, ep) => (new JungDirectedGraphVertex(vpf(vi.payload)), new JungDirectedGraphVertex(vpf(vj.payload)), epf(ep))
+      })
+
+    JungDirectedGraph(newVps, newEf)
   }
 
+}
+
+class JungDirectedGraphEdge[VP, EP](ep: EP) extends DirectedGraphEdge[VP, EP] {
+
+  type V[VP] = JungDirectedGraphVertex[VP]
+  
+  def source(): JungDirectedGraphVertex[VP] = null // TODO
+  def dest(): JungDirectedGraphVertex[VP] = null // TODO
+  def payload(): EP = ep
+}
+
+class JungDirectedGraphVertex[VP](vp: VP) extends DirectedGraphVertex[VP] {
+  def payload(): VP = vp
+}
+
+trait JungDirectedGraphFactory extends DirectedGraphFactory {
+
+  type G[VP, EP] = JungDirectedGraph[VP, EP]
+  type V[VP] = JungDirectedGraphVertex[VP]
+  
+  override def apply[VP, EP](vps: Seq[VP], ef: Seq[JungDirectedGraphVertex[VP]] => Seq[(JungDirectedGraphVertex[VP], JungDirectedGraphVertex[VP], EP)]): JungDirectedGraph[VP, EP] =
+    new JungDirectedGraph(vps, ef)
 }
 
 object JungDirectedGraph extends JungDirectedGraphFactory

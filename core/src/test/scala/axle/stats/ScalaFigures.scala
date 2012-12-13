@@ -3,8 +3,7 @@ package org.pingel.bayes.examples
 
 import collection._
 import axle.stats._
-//import axle.graph.JungDirectedGraph._
-//import axle.graph.JungUndirectedGraph._
+import axle.graph._
 import org.specs2.mutable._
 
 class ScalaFigures extends Specification {
@@ -17,9 +16,7 @@ class ScalaFigures extends Specification {
   val D = new RandomVariable0("D", bools, None)
   val E = new RandomVariable0("E", bools, None)
 
-  def figure6_1(): BayesianNetworkFactory#BayesianNetwork = {
-
-    import BayesianNetwork._
+  def figure6_1(): BayesianNetwork = {
     
     val bn = BayesianNetwork(
       "6.1",
@@ -98,9 +95,7 @@ class ScalaFigures extends Specification {
     (cptB, cptD)
   }
 
-  def figure6_4(): BayesianNetworkFactory#BayesianNetwork = {
-
-    import BayesianNetwork._
+  def figure6_4(): BayesianNetwork = {
     
     val bn = BayesianNetwork("6.4",
       List(

@@ -1,7 +1,7 @@
 package axle.stats.docalculus
 
 import axle.stats._
-import axle.graph.JungDirectedGraph._
+import axle.graph._
 
 case class CausalModelNode(rv: RandomVariable[_], observable: Boolean = true)
 

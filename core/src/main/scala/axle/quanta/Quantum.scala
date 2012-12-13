@@ -1,6 +1,6 @@
 package axle.quanta
 
-import axle.graph.JungDirectedGraph._
+import axle.graph._
 import java.math.BigDecimal
 import math.{ max, abs }
 import collection._
@@ -34,7 +34,7 @@ trait Quantum {
 
   def conversionGraph(): JungDirectedGraph[Q, BigDecimal]
 
-  def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
+  def byName(unitName: String): Q = conversionGraph.findVertex((v: JungDirectedGraphVertex[Q]) => v.payload.name == unitName).get.payload
 
   implicit def toBD(i: Int) = new BigDecimal(i.toString)
 
@@ -92,8 +92,8 @@ trait Quantum {
     def symbol() = _symbol
     def link() = _link
 
-    def vertex(): JungDirectedGraphVertex[Q] =
-      quantum.conversionGraph.findVertex(_.payload == this).get.asInstanceOf[JungDirectedGraphVertex[Q]]
+    def vertex() =
+      quantum.conversionGraph.findVertex((v: JungDirectedGraphVertex[Quantity.this.quantum.Q]) => v.payload == this).get // .asInstanceOf[JungDirectedGraphVertex[Q]]
 
     override def toString() =
       if (_unit.isDefined)
@@ -105,12 +105,15 @@ trait Quantum {
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
-    def in(other: Q): Q =
-      conversionGraph.shortestPath(other.unit.vertex, this.unit.vertex).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[Q, BigDecimal]) => bd.multiply(edge.payload))
+    def in(other: Q): Q = {
+      val thisV = this.unit.vertex.asInstanceOf[JungDirectedGraphVertex[Quantum.this.Q]]
+      val otherV = other.unit.vertex.asInstanceOf[JungDirectedGraphVertex[Quantum.this.Q]]
+      conversionGraph.shortestPath(otherV, thisV).map(path => {
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: JungDirectedGraphEdge[Quantum.this.Q, BigDecimal]) => bd.multiply(edge.payload))
       })
         .map(bd => quantity(bdDivide(this.magnitude.multiply(bd), other.magnitude), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
+    }
   }
 
   def newQuantity(magnitude: BigDecimal, unit: Q): Q

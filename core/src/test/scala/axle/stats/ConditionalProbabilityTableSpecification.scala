@@ -2,7 +2,7 @@ package axle.stats
 
 import org.specs2.mutable._
 import collection._
-import axle.graph.JungDirectedGraph._
+import axle.graph._
 
 class ConditionalProbabilityTableSpecification extends Specification {
 

@@ -4,7 +4,7 @@ package axle.lx
 import collection._
 import scalaz._
 import Scalaz._
-import axle.graph.JungDirectedGraph._
+import axle.graph._
 
 class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String])
   extends JungDirectedGraph[String, Symbol](vps, vs => Nil) {

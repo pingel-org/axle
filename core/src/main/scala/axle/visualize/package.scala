@@ -3,12 +3,10 @@ package axle
 import java.awt.Color
 import java.awt.Component
 import java.io.File
-import axle.graph.JungUndirectedGraph._
-import axle.graph.JungDirectedGraph._
-import axle.graph.NativeUndirectedGraph._
-import axle.graph.NativeDirectedGraph._
+import axle.graph._
 import axle.visualize._
 import axle.ml._
+import axle.stats._
 import java.awt.Font
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
@@ -55,20 +53,15 @@ package object visualize {
     )
 
   // TODO: This is a hack to get M3 out the door:
-  import axle.stats.BayesianNetwork.BayesianNetwork
-  implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component = {
-
-    import axle.stats.BayesianNetwork.{ BayesianNetworkNode, JungDirectedGraphVertex => bjdg }
-
+  implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component =
     new JungDirectedGraph(bn.vps,
       (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => {
-        val bayesVertices = vs.map(v => new bjdg(v.payload))
+        val bayesVertices = vs.map(v => new JungDirectedGraphVertex(v.payload))
         val bayes2jungVertex = bayesVertices.zip(vs).toMap
         bn.ef(bayesVertices)
           .map({ case (bv1, bv2, ep) => (bayes2jungVertex(bv1), bayes2jungVertex(bv2), ep) })
       }
     )
-  }
 
   implicit def enComponentKMeansClassifier[T](
     classifier: KMeans.KMeansClassifier[T]): Component =
