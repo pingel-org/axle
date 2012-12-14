@@ -6,8 +6,6 @@ import axle.graph._
 import org.specs2.mutable._
 
 class ABE extends Specification {
-
-  import BayesianNetwork._
   
   val bools = Some(Vector(true, false))
 
@@ -53,7 +51,7 @@ class ABE extends Specification {
           List(A eq false, M eq true) -> 0.01,
           List(A eq false, M eq false) -> 0.99
         )))),
-    (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+    (vs: Seq[DirectedGraphVertex[BayesianNetworkNode]]) => vs match {
       case b :: e :: a :: j :: m :: Nil => List((b, a, ""), (e, a, ""), (a, j, ""), (a, m, ""))
     })
 

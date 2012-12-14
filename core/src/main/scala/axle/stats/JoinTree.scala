@@ -10,7 +10,7 @@ object JoinTree {
   def apply(
     vps: Seq[immutable.Set[RandomVariable[_]]],
     ef: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]] => Seq[(JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], String)]): JoinTree =
-    JungUndirectedGraph(vps, ef).asInstanceOf[JoinTree]
+    new JoinTree(JungUndirectedGraph[immutable.Set[RandomVariable[_]], String](vps, ef))
 
   // returns a jointree for DAG G with width equal to width(π, G)
   def fromEliminationOrder[MVP](m: Model[MVP], π: List[RandomVariable[_]]): JoinTree = {
@@ -21,16 +21,7 @@ object JoinTree {
 
 }
 
-class JoinTree(
-  vps: Seq[immutable.Set[RandomVariable[_]]],
-  ef: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]] => Seq[(JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], String)]) {
-
-  val graph = JungUndirectedGraph[immutable.Set[RandomVariable[_]], String](vps, ef)
-
-  // val g = JungUndirectedGraphFactory.graph[mutable.Set[RandomVariable[_]], String]()
-
-  //  type GV = g.type#V
-  //  type GE = g.type#E
+case class JoinTree(graph: UndirectedGraph[immutable.Set[RandomVariable[_]], String]) {
 
   //  def setCluster(n: GV, cluster: mutable.Set[RandomVariable[_]]): Unit = n.setPayload(cluster)
   //
@@ -41,7 +32,6 @@ class JoinTree(
   //  def separate(n1: GV, n2: GV): Set[RandomVariable[_]] = n1.getPayload.intersect(n2.getPayload)
 
   //  def toEliminationOrder(r: GV): List[RandomVariable[_]] = {
-  //    import JungUndirectedGraphFactory._
   //    val result = new mutable.ListBuffer[RandomVariable[_]]()
   //    val T: JoinTree = new JoinTree(graphFrom(getGraph())(v => v, e => e))
   //    while (T.getGraph.size > 1) {

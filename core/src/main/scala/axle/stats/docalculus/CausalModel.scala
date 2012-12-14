@@ -7,34 +7,30 @@ case class CausalModelNode(rv: RandomVariable[_], observable: Boolean = true)
 
 case class PFunction(rv: RandomVariable[_], inputs: Seq[RandomVariable[_]])
 
-trait CausalModelFactory extends ModelFactory {
+case class CausalModel(name: String, graph: DirectedGraph[CausalModelNode, String])
+  extends Model[CausalModelNode](graph) {
 
-  def apply(name: String, vps: Seq[CausalModelNode]): CausalModel = new CausalModel(name, vps)
+  import graph._
 
-  class CausalModel(_name: String, vps: Seq[CausalModelNode])
-    extends Model[CausalModelNode](vps, (vs: Seq[JungDirectedGraphVertex[CausalModelNode]]) => Nil) {
+  def duplicate(): CausalModel = null // TODO
 
-    import graph._
-    
-    override def name(): String = _name
+  // TODO: this should probably be Option[Boolean] ?
+  def observes(rv: RandomVariable[_]): Boolean = findVertex((n: DirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
 
-    def duplicate(): CausalModel = null // TODO
+  def nodesFor(rvs: Set[RandomVariable[_]]) = rvs.flatMap(rv => findVertex((n: DirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv))
 
-    // TODO: this should probably be Option[Boolean] ?
-    def observes(rv: RandomVariable[_]): Boolean = findVertex((n: JungDirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
+  def nodeFor(rv: RandomVariable[_]) = findVertex((n: DirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv)
 
-    def nodesFor(rvs: Set[RandomVariable[_]]) = rvs.flatMap(rv => findVertex((n: JungDirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv))
+  override def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
 
-    def nodeFor(rv: RandomVariable[_]) = findVertex((n: JungDirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv)
+  def addFunctions(pf: Seq[PFunction]): CausalModel = null // TODO
 
-    override def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
-
-    def addFunctions(pf: Seq[PFunction]): CausalModel = null // TODO
-
-    def getVariable(name: String): Int = 1 // TODO
-
-  }
+  def getVariable(name: String): Int = 1 // TODO
 
 }
 
-object CausalModel extends CausalModelFactory
+object CausalModel {
+
+  def apply(name: String, vps: Seq[CausalModelNode]): CausalModel = new CausalModel(name, JungDirectedGraph(vps, vs => Nil))
+
+}

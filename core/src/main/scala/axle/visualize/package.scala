@@ -52,16 +52,11 @@ package object visualize {
       }
     )
 
-  // TODO: This is a hack to get M3 out the door:
-  implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component =
-    new JungDirectedGraph(bn.vps,
-      (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => {
-        val bayesVertices = vs.map(v => new JungDirectedGraphVertex(v.payload))
-        val bayes2jungVertex = bayesVertices.zip(vs).toMap
-        bn.ef(bayesVertices)
-          .map({ case (bv1, bv2, ep) => (bayes2jungVertex(bv1), bayes2jungVertex(bv2), ep) })
-      }
-    )
+  implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component = bn.graph match {
+    case jdg: JungDirectedGraph[_, _] => jdg
+    case ndg: NativeDirectedGraph[_, _] => ndg
+    case _ => null
+  }
 
   implicit def enComponentKMeansClassifier[T](
     classifier: KMeans.KMeansClassifier[T]): Component =

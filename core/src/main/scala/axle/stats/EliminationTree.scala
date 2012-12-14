@@ -8,31 +8,27 @@ object EliminationTree {
   def apply(
     vps: Seq[Factor],
     ef: Seq[JungUndirectedGraphVertex[Factor]] => Seq[(JungUndirectedGraphVertex[Factor], JungUndirectedGraphVertex[Factor], String)]): EliminationTree =
-    new EliminationTree(vps, ef)
+    new EliminationTree(JungUndirectedGraph[Factor, String](vps, ef))
 
 }
 
-class EliminationTree(
-  vps: Seq[Factor],
-  ef: Seq[JungUndirectedGraphVertex[Factor]] => Seq[(JungUndirectedGraphVertex[Factor], JungUndirectedGraphVertex[Factor], String)]) {
-
-  val graph = JungUndirectedGraph[Factor, String](vps, ef)
+case class EliminationTree(graph: UndirectedGraph[Factor, String]) {
   
   import graph._
-  
-  def gatherVars(stop: JungUndirectedGraphVertex[Factor], node: JungUndirectedGraphVertex[Factor], result: mutable.Set[RandomVariable[_]]): Unit = {
+
+  def gatherVars(stop: UndirectedGraphVertex[Factor], node: UndirectedGraphVertex[Factor], result: mutable.Set[RandomVariable[_]]): Unit = {
     result ++= node.payload.variables
     neighbors(node).filter(!_.equals(stop)).map(gatherVars(node, _, result))
   }
 
-  def cluster(i: JungUndirectedGraphVertex[Factor]): Set[RandomVariable[_]] = {
+  def cluster(i: UndirectedGraphVertex[Factor]): Set[RandomVariable[_]] = {
     val result = mutable.Set[RandomVariable[_]]()
     neighbors(i).map(j => result ++= separate(i, j))
     result ++= i.payload.variables
     result
   }
 
-  def separate(i: JungUndirectedGraphVertex[Factor], j: JungUndirectedGraphVertex[Factor]): Set[RandomVariable[_]] = {
+  def separate(i: UndirectedGraphVertex[Factor], j: UndirectedGraphVertex[Factor]): Set[RandomVariable[_]] = {
     val iSide = mutable.Set[RandomVariable[_]]()
     gatherVars(j, i, iSide)
     val jSide = mutable.Set[RandomVariable[_]]()

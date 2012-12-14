@@ -17,7 +17,7 @@ class ScalaFigures extends Specification {
   val E = new RandomVariable0("E", bools, None)
 
   def figure6_1(): BayesianNetwork = {
-    
+
     val bn = BayesianNetwork(
       "6.1",
       List(
@@ -58,7 +58,7 @@ class ScalaFigures extends Specification {
             List(E eq false, C eq true) -> 0.0,
             List(E eq false, C eq false) -> 1.0
           )))),
-      (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+      (vs: Seq[DirectedGraphVertex[BayesianNetworkNode]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
       })
 
@@ -96,7 +96,7 @@ class ScalaFigures extends Specification {
   }
 
   def figure6_4(): BayesianNetwork = {
-    
+
     val bn = BayesianNetwork("6.4",
       List(
         BayesianNetworkNode(A, Factor(Vector(A), Map(
@@ -115,7 +115,7 @@ class ScalaFigures extends Specification {
           List(C eq false, B eq true) -> 0.5,
           List(C eq false, B eq false) -> 0.5
         )))),
-      (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+      (vs: Seq[DirectedGraphVertex[BayesianNetworkNode]]) => vs match {
         case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
       })
 
@@ -154,13 +154,13 @@ class ScalaFigures extends Specification {
 
   def figure7_4() = {
 
-    import EliminationTree._
-    
     val f61 = figure6_1()
 
-    val τ = EliminationTree(List(A, B, C, D, E).map(f61.cpt(_)),
-      (vs: Seq[JungUndirectedGraphVertex[Factor]]) => vs match {
-        case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
+    val τ = EliminationTree(
+      List(A, B, C, D, E).map(f61.cpt(_)),
+      (vs: Seq[UndirectedGraphVertex[Factor]]) => vs match {
+        case a :: b :: c :: d :: e :: Nil => List(
+          (a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
       })
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
@@ -177,18 +177,12 @@ class ScalaFigures extends Specification {
     f75
   }
 
-  def figure7_12() = {
-
-    import JoinTree._
-    
-    val vps: Seq[immutable.Set[RandomVariable[_]]] = List(immutable.Set(A, B, C), immutable.Set(B, C, D), immutable.Set(C, E))
-
-    val ef = (vs: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]]) => vs match {
-      case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))
-    }
-
-    JoinTree(vps, ef)
-  }
+  def figure7_12() = JoinTree(
+    List(immutable.Set(A, B, C), immutable.Set(B, C, D), immutable.Set(C, E)),
+    (vs: Seq[UndirectedGraphVertex[immutable.Set[RandomVariable[_]]]]) => vs match {
+      case abc :: bcd :: ce :: Nil => List(
+        (abc, bcd, ""), (bcd, ce, ""))
+    })
 
   "bayesian networks" should {
     "work" in {

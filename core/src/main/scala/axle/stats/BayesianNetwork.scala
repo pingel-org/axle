@@ -106,15 +106,16 @@ import axle.graph._
 import math.max
 import scalaz._
 import Scalaz._
+import Stream.{ cons, empty }
 
-case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
-  ef: Seq[JungDirectedGraphVertex[BayesianNetworkNode]] => Seq[(JungDirectedGraphVertex[BayesianNetworkNode], JungDirectedGraphVertex[BayesianNetworkNode], String)])
-  extends Model(vps, ef) {
+class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, String])
+  extends Model(_graph) {
 
-  import graph._
+  import _graph._
+
+  def graph() = _graph
+  def name() = _name
   
-  override def name(): String = _name
-
   override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
 
   // def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
@@ -229,7 +230,7 @@ case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
    */
 
   def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[_]]]): BayesianNetwork = {
-    val result = new BayesianNetwork(resultName, null, null) // TODO
+    val result = BayesianNetwork(resultName, null) // TODO
     eOpt.map(e => {
       for (U <- e.map(_.rv)) {
         val uVertex = result.graph.findVertex(_.payload.rv == U).get
@@ -258,10 +259,12 @@ case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
     def nodePruneStream(g: BayesianNetwork): Stream[BayesianNetwork] = {
       val xVertices = g.graph.leaves().toSet -- vars.map(rv => g.graph.findVertex(_.payload.rv == rv).get)
       xVertices.size match {
-        case 0 => Stream.empty
+        case 0 => empty
         case _ => {
-          xVertices.map(xV => g.graph.deleteVertex(xV))
-          Stream.cons(g, nodePruneStream(g))
+          val result = xVertices.foldLeft(g)(
+            (bn, xV) => new BayesianNetwork(bn.name + " - " + xV, bn.graph.deleteVertex(xV))
+          )
+          cons(result, nodePruneStream(result))
         }
       }
     }
@@ -275,7 +278,7 @@ case class BayesianNetwork(_name: String, vps: Seq[BayesianNetworkNode],
    */
 
   def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): BayesianNetwork =
-    new BayesianNetwork(this.name, null, null) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
+    BayesianNetwork(this.name, null) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
   //
   //  def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
   //
@@ -449,16 +452,15 @@ case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) extends XmlAb
     </html>
 }
 
-trait BayesianNetworkFactory extends ModelFactory {
+object BayesianNetwork {
 
-  // self: ModelFactory =>
-
+  def apply(name: String, graph: DirectedGraph[BayesianNetworkNode, String]) =
+    new BayesianNetwork(name, graph)
+  
   def apply(
     name: String,
     vps: Seq[BayesianNetworkNode],
-    ef: Seq[JungDirectedGraphVertex[BayesianNetworkNode]] => Seq[(JungDirectedGraphVertex[BayesianNetworkNode], JungDirectedGraphVertex[BayesianNetworkNode], String)]): BayesianNetwork =
-    new BayesianNetwork(name, vps, ef)
+    ef: Seq[DirectedGraphVertex[BayesianNetworkNode]] => Seq[(DirectedGraphVertex[BayesianNetworkNode], DirectedGraphVertex[BayesianNetworkNode], String)]): BayesianNetwork =
+    new BayesianNetwork(name, JungDirectedGraph(vps, ef))
 
 }
-
-object BayesianNetwork extends BayesianNetworkFactory

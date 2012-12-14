@@ -12,11 +12,10 @@ object Direction {
 
 }
 
-class Model[MVP](vps: Seq[MVP],
-  ef: Seq[JungDirectedGraphVertex[MVP]] => Seq[(JungDirectedGraphVertex[MVP], JungDirectedGraphVertex[MVP], String)]) {
+class Model[MVP](graph: DirectedGraph[MVP, String]) {
 
-  val graph = JungDirectedGraph(vps, ef)
-
+  import graph._
+  
   def name(): String = "model name"
 
   def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_] = null // TODO
@@ -60,12 +59,12 @@ class Model[MVP](vps: Seq[MVP],
       current --= cachedOuts
     }
 
-    val priorVertex = graph.findVertex((v: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get
-    val givenVertices = given.map(v1 => graph.findVertex((v2: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
+    val priorVertex = graph.findVertex((v: DirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get
+    val givenVertices = given.map(v1 => graph.findVertex((v2: DirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
 
     for (variable <- current) {
 
-      val variableVertex = graph.findVertex((v: JungDirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
+      val variableVertex = graph.findVertex((v: DirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
 
       var openToVar = false
       var directionPriorToVar = Direction.UNKNOWN
@@ -110,16 +109,13 @@ class Model[MVP](vps: Seq[MVP],
 
 }
 
-trait ModelFactory extends JungDirectedGraphFactory {
+object Model {
+
+  var newVarIndex = 0
 
   def apply[A](
     vps: Seq[A],
     ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], String)]): Model[A] =
-    new Model(vps, ef)
-}
-
-object Model extends ModelFactory {
-
-  var newVarIndex = 0
+    new Model(JungDirectedGraph(vps, ef))
 
 }

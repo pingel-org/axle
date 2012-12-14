@@ -17,7 +17,7 @@ object InsertObservation extends Rule {
     val X = q.actions
     val W = q.given
     val subModel = m.duplicate()
-    subModel.graph.removeInputs(subModel.nodesFor(X))
+//    subModel.graph.removeInputs(subModel.nodesFor(X))
     val XW = X ++ W
 
     (m.randomVariables().toSet -- Y -- X -- W).flatMap(zRandomVariable => {
