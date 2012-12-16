@@ -57,6 +57,7 @@ class Distance extends Quantum {
         (km, ly, "9460730472580.8"),
         (ly, pc, "3.26")
       ))
+      case _ => Nil
     }
   )
 

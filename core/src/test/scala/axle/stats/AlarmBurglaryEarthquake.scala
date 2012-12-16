@@ -53,6 +53,7 @@ class ABE extends Specification {
         )))),
     (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
       case b :: e :: a :: j :: m :: Nil => List((b, a, ""), (e, a, ""), (a, j, ""), (a, m, ""))
+      case _ => Nil
     })
 
   // val (bn, es): (BayesianNetwork, Seq[BayesianNetwork#E]) = 

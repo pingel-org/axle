@@ -57,6 +57,7 @@ class Time extends Quantum {
         (y, my, "1E6"),
         (y, gy, "1E9")
       ))
+      case _ => Nil
     }
   )
 

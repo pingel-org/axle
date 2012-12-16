@@ -60,6 +60,7 @@ class Mass extends Quantum {
           (t, zt, "1E21"),
           (t, tt, "1E24")
         ))
+      case _ => Nil
     }
   )
 

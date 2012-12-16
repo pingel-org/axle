@@ -50,6 +50,7 @@ class Energy extends Quantum {
         (t, mt, "1E6"),
         (t, gt, "1E9")
       ))
+      case _ => Nil
     }
   )
 

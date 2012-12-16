@@ -46,6 +46,7 @@ class Information extends Quantum {
         (gigabyte, terabyte, "1024"),
         (terabyte, petabyte, "1024")
       ))
+      case _ => Nil
     }
   )
 

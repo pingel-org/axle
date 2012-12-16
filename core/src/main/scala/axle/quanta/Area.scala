@@ -38,6 +38,7 @@ class Area extends Quantum {
       case m2 :: km2 :: Nil => withInverses(List(
         (m2, km2, "1E6")
       ))
+      case _ => Nil
     }
   )
 

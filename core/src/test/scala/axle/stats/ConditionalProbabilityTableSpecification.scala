@@ -54,6 +54,7 @@ class ConditionalProbabilityTableSpecification extends Specification {
       )))),
     (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
       case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
+      case _ => Nil
     })
 
   "CPT" should {

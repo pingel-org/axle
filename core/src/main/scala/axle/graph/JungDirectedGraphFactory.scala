@@ -10,11 +10,11 @@ case class JungDirectedGraph[VP, EP](
   extends DirectedGraph[VP, EP] {
 
   type G[VP, EP] = JungDirectedGraph[VP, EP]
-  type ES = EP
+  type ES = (Vertex[VP], Vertex[VP], EP)
 
-  val edgePayloadFunction = (es: EP) => es
+  val edgePayloadFunction = (es: ES) => es._3
 
-  lazy val jungGraph = new DirectedSparseGraph[Vertex[VP], Edge[EP, EP]]()
+  lazy val jungGraph = new DirectedSparseGraph[Vertex[VP], Edge[ES, EP]]()
 
   // Note: Have to compensate for JUNG not preserving vertex order
   // ...which defeats some of the purpose.  At least this is lazy:
@@ -26,17 +26,17 @@ case class JungDirectedGraph[VP, EP](
 
   ef(vertexSeq).map({
     case (vi, vj, ep) => {
-      jungGraph.addEdge(Edge(ep, edgePayloadFunction), vi, vj) // TODO check return value
+      jungGraph.addEdge(Edge((vi, vj, ep), edgePayloadFunction), vi, vj) // TODO check return value
     }
   })
 
-  def storage(): DirectedSparseGraph[Vertex[VP], Edge[EP, EP]] = jungGraph
+  def storage(): DirectedSparseGraph[Vertex[VP], Edge[ES, EP]] = jungGraph
 
   def size(): Int = jungGraph.getVertexCount()
 
-  def source(edge: Edge[ES, EP]): Vertex[VP] = null // TODO
+  def source(edge: Edge[ES, EP]): Vertex[VP] = edge.storage._1
 
-  def dest(edge: Edge[ES, EP]): Vertex[VP] = null // TODO
+  def dest(edge: Edge[ES, EP]): Vertex[VP] = edge.storage._2
 
   def allEdges() = jungGraph.getEdges().asScala.toSet
 
@@ -44,12 +44,12 @@ case class JungDirectedGraph[VP, EP](
 
   def vertices() = vertexSet
 
-  def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[EP, EP]] = Option(jungGraph.findEdge(from, to))
+  def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[ES, EP]] = Option(jungGraph.findEdge(from, to))
 
   // TODO: findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = vertexSeq.find(f(_))
 
-  def deleteEdge(e: Edge[EP, EP]) = filterEdges(_ != e)
+  def deleteEdge(e: Edge[ES, EP]) = filterEdges(_ != e)
 
   def deleteVertex(v: Vertex[VP]) = JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
 
@@ -68,7 +68,7 @@ case class JungDirectedGraph[VP, EP](
 
   def successors(v: Vertex[VP]): Set[Vertex[VP]] = jungGraph.getSuccessors(v).asScala.toSet
 
-  def outputEdgesOf(v: Vertex[VP]): Set[Edge[EP, EP]] = jungGraph.getOutEdges(v).asScala.toSet
+  def outputEdgesOf(v: Vertex[VP]): Set[Edge[ES, EP]] = jungGraph.getOutEdges(v).asScala.toSet
 
   def descendantsIntersectsSet(v: Vertex[VP], s: Set[Vertex[VP]]): Boolean =
     s.contains(v) || s.exists(x => descendantsIntersectsSet(x, s))
@@ -81,7 +81,7 @@ case class JungDirectedGraph[VP, EP](
 
   def isAcyclic() = true // TODO !!!
 
-  def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[EP, EP]]] = {
+  def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[ES, EP]]] = {
     if (source == goal) {
       Some(Nil)
     } else {

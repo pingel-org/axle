@@ -11,11 +11,11 @@ case class JungUndirectedGraph[VP, EP](
   extends UndirectedGraph[VP, EP] {
 
   type G[VP, EP] = JungUndirectedGraph[VP, EP]
-  type ES = EP
+  type ES = (Vertex[VP], Vertex[VP], EP)
 
-  val edgePayloadFunction = (es: ES) => es
+  val edgePayloadFunction = (es: ES) => es._3
 
-  lazy val jungGraph = new UndirectedSparseGraph[Vertex[VP], Edge[EP, EP]]()
+  lazy val jungGraph = new UndirectedSparseGraph[Vertex[VP], Edge[ES, EP]]()
 
   lazy val vertexSeq = vps.map(Vertex(_))
 
@@ -25,11 +25,11 @@ case class JungUndirectedGraph[VP, EP](
 
   ef(vertexSeq).map({
     case (vi, vj, ep) => {
-      jungGraph.addEdge(Edge(ep, edgePayloadFunction), vi, vj) // TODO check return value
+      jungGraph.addEdge(Edge((vi, vj, ep), edgePayloadFunction), vi, vj) // TODO check return value
     }
   })
 
-  def storage(): UndirectedSparseGraph[Vertex[VP], Edge[EP, EP]] = jungGraph
+  def storage(): UndirectedSparseGraph[Vertex[VP], Edge[ES, EP]] = jungGraph
 
   def vertices() = vertexSet
 
@@ -37,15 +37,15 @@ case class JungUndirectedGraph[VP, EP](
 
   def size(): Int = jungGraph.getVertexCount()
 
-  def vertices(edge: Edge[EP, EP]) = (null, null) // TODO
-  
+  def vertices(edge: Edge[ES, EP]) = (edge.storage._1, edge.storage._2)
+
   // TODO findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean) = vertexSeq.find(f(_))
 
   def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean) =
     JungUndirectedGraph(vps, ((es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))).compose(ef))
 
-  def unlink(e: Edge[EP, EP]): JungUndirectedGraph[VP, EP] = filterEdges(_ != e)
+  def unlink(e: Edge[ES, EP]): JungUndirectedGraph[VP, EP] = filterEdges(_ != e)
 
   // JungUndirectedGraph[VP, EP]
   def unlink(v1: Vertex[VP], v2: Vertex[VP]) =
@@ -65,7 +65,7 @@ case class JungUndirectedGraph[VP, EP](
         .map({ case vi :: vj :: Nil => (vi, vj) })
         .filter({ case (vi, vj) => !areNeighbors(vi, vj) })
         .map({
-          case (vi, vj) => {
+          case (vi: Vertex[VP], vj: Vertex[VP]) => {
             val newVi = old2new(vi)
             val newVj = old2new(vj)
             (newVi, newVj, payload(newVi, newVj))

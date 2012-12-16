@@ -60,6 +60,7 @@ class ScalaFigures extends Specification {
           )))),
       (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
+        case _ => Nil
       })
 
     bn
@@ -117,6 +118,7 @@ class ScalaFigures extends Specification {
         )))),
       (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
         case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
+        case _ => Nil
       })
 
     val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)
@@ -161,6 +163,7 @@ class ScalaFigures extends Specification {
       (vs: Seq[Vertex[Factor]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List(
           (a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
+        case _ => Nil
       })
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
@@ -180,8 +183,8 @@ class ScalaFigures extends Specification {
   def figure7_12() = JoinTree(
     List(immutable.Set(A, B, C), immutable.Set(B, C, D), immutable.Set(C, E)),
     (vs: Seq[Vertex[immutable.Set[RandomVariable[_]]]]) => vs match {
-      case abc :: bcd :: ce :: Nil => List(
-        (abc, bcd, ""), (bcd, ce, ""))
+      case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))
+      case _ => Nil
     })
 
   "bayesian networks" should {

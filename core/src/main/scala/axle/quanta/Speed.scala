@@ -43,6 +43,7 @@ class Speed extends Quantum {
         (c, mps, "299792458"),
         (mph, speedLimit, "65")
       ))
+      case _ => Nil
     }
   )
 

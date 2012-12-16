@@ -40,6 +40,7 @@ class Volume extends Quantum {
       case m3 :: km3 :: greatLakes :: Nil => withInverses(List(
         (km3, greatLakes, 22671)
       ))
+      case _ => Nil
     }
   )
 

@@ -40,6 +40,7 @@ class Acceleration extends Quantum {
       case mpsps :: fpsps :: g :: Nil => withInverses(List(
         (mpsps, g, "9.80665")
       ))
+      case _ => Nil
     }
   )
 

@@ -39,6 +39,7 @@ class Flow extends Quantum {
       case m3s :: niagaraFalls :: Nil => withInverses(List(
         (m3s, niagaraFalls, 1834)
       ))
+      case _ => Nil
     }
   )
 
