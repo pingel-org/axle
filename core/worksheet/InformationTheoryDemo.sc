@@ -64,7 +64,7 @@ object InformationTheoryDemo {
     connect = true, drawKey = false,
     xAxis = 0.0 *: bit, xAxisLabel = Some("p(x='HEAD)"),
     yAxis = 0.0, yAxisLabel = Some("H"),
-    title = Some("Entropy"))(DoublePlottable, InfoPlottable(bit))
+    title = Some("Entropy"))(DoublePlottable, Information.UnitPlottable(bit))
                                                   //> plot  : axle.visualize.Plot[Double,Nothing,axle.quanta.Information.Q,Nothing
                                                   //| ] = Plot(List((h,Map(0.0 -> 0.0 b, 0.01 -> 0.08079313589591118 b, 0.02 -> 0.
                                                   //| 14144054254182067 b, 0.03 -> 0.19439185783157623 b, 0.04 -> 0.24229218908241
