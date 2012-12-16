@@ -6,7 +6,7 @@ object BayesianNetworkDemo {
   import collection._
   import axle.stats._
   import axle.visualize._
-  import BayesianNetwork.{BayesianNetworkNode, JungDirectedGraphVertex}
+  import BayesianNetwork.BayesianNetworkNode
 
   val bools = Some(Vector(true, false))           //> bools  : Some[scala.collection.immutable.Vector[Boolean]] = Some(Vector(true
                                                   //| , false))
@@ -63,7 +63,7 @@ object BayesianNetworkDemo {
           List(A eq false, M eq true) -> 0.01,
           List(A eq false, M eq false) -> 0.99
         )))),
-    (vs: Seq[JungDirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+    (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
       case b :: e :: a :: j :: m :: Nil => List((b, a, ""), (e, a, ""), (a, j, ""), (a, m, ""))
     })                                            //> bn  : axle.stats.BayesianNetwork.BayesianNetwork = JungDirectedGraph(List(B
                                                   //| urglary
