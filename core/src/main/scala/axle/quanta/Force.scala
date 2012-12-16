@@ -43,7 +43,7 @@ class Force extends Quantum {
       unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)")),
       unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
     ),
-    (vs: Seq[DirectedGraphVertex[ForceQuantity]]) => vs match {
+    (vs: Seq[Vertex[ForceQuantity]]) => vs match {
       case Nil => withInverses(List())
     }
   )

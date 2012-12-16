@@ -200,7 +200,7 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
 
   def interactionGraph(): InteractionGraph =
     InteractionGraph(randomVariables,
-      (vs: Seq[UndirectedGraphVertex[RandomVariable[_]]]) =>
+      (vs: Seq[Vertex[RandomVariable[_]]]) =>
         (for {
           vi <- vs // TODO "doubles"
           vj <- vs
@@ -463,7 +463,7 @@ object BayesianNetwork {
   def apply(
     name: String,
     vps: Seq[BayesianNetworkNode],
-    ef: Seq[DirectedGraphVertex[BayesianNetworkNode]] => Seq[(DirectedGraphVertex[BayesianNetworkNode], DirectedGraphVertex[BayesianNetworkNode], String)]): BayesianNetwork =
+    ef: Seq[Vertex[BayesianNetworkNode]] => Seq[(Vertex[BayesianNetworkNode], Vertex[BayesianNetworkNode], String)]): BayesianNetwork =
     new BayesianNetwork(name, JungDirectedGraph(vps, ef))
 
 }

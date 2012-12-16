@@ -36,7 +36,7 @@ class Volume extends Quantum {
       derive(km2.by[Distance.type, this.type](km, this), Some("km3"), Some("km3")),
       unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
     ),
-    (vs: Seq[DirectedGraphVertex[VolumeQuantity]]) => vs match {
+    (vs: Seq[Vertex[VolumeQuantity]]) => vs match {
       case m3 :: km3 :: greatLakes :: Nil => withInverses(List(
         (km3, greatLakes, 22671)
       ))

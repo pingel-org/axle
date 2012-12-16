@@ -5,27 +5,25 @@ import collection._
 trait DirectedGraph[VP, EP] {
 
   type G[VP, EP] <: DirectedGraph[VP, EP]
-  type V[VP] <: DirectedGraphVertex[VP]
-  type E[VP, EP] <: DirectedGraphEdge[VP, EP]
 
-  def vertices(): Set[V[VP]]
-  def edges(): Set[E[VP, EP]]
+  def vertices(): Set[Vertex[VP]]
+  def edges(): Set[Edge[EP]]
 
   def size(): Int
 
-  def deleteVertex(v: V[VP]): G[VP, EP]
-  def findVertex(f: V[VP] => Boolean): Option[V[VP]]
-  def findEdge(from: V[VP], to: V[VP]): Option[E[VP, EP]]
-  def leaves(): Set[V[VP]]
-  def neighbors(v: V[VP]): Set[V[VP]]
-  def precedes(v1: V[VP], v2: V[VP]): Boolean
-  def predecessors(v: V[VP]): Set[V[VP]]
-  def isLeaf(v: V[VP]): Boolean
-  def successors(v: V[VP]): Set[V[VP]]
-  def outputEdgesOf(v: V[VP]): Set[E[VP, EP]]
-  def descendantsIntersectsSet(v: V[VP], s: Set[V[VP]]): Boolean
+  def deleteVertex(v: Vertex[VP]): G[VP, EP]
+  def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]]
+  def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[EP]]
+  def leaves(): Set[Vertex[VP]]
+  def neighbors(v: Vertex[VP]): Set[Vertex[VP]]
+  def precedes(v1: Vertex[VP], v2: Vertex[VP]): Boolean
+  def predecessors(v: Vertex[VP]): Set[Vertex[VP]]
+  def isLeaf(v: Vertex[VP]): Boolean
+  def successors(v: Vertex[VP]): Set[Vertex[VP]]
+  def outputEdgesOf(v: Vertex[VP]): Set[Edge[EP]]
+  def descendantsIntersectsSet(v: Vertex[VP], s: Set[Vertex[VP]]): Boolean
 
-  def _descendants(v: V[VP], result: mutable.Set[V[VP]]): Unit = {
+  def _descendants(v: Vertex[VP], result: mutable.Set[Vertex[VP]]): Unit = {
     // inefficient
     if (!result.contains(v)) {
       result += v
@@ -33,64 +31,42 @@ trait DirectedGraph[VP, EP] {
     }
   }
 
-  def descendants(v: V[VP]): Set[V[VP]] = {
-    val result = mutable.Set[V[VP]]()
+  def descendants(v: Vertex[VP]): Set[Vertex[VP]] = {
+    val result = mutable.Set[Vertex[VP]]()
     _descendants(v, result)
     result.toSet
   }
 
   // inefficient
-  def _ancestors(v: V[VP], result: mutable.Set[V[VP]]): Unit = {
+  def _ancestors(v: Vertex[VP], result: mutable.Set[Vertex[VP]]): Unit = {
     if (!result.contains(v)) {
       result += v
       predecessors(v).map(_ancestors(_, result))
     }
   }
 
-  def ancestors(v: V[VP]): Set[V[VP]] = {
-    val result = mutable.Set[V[VP]]()
+  def ancestors(v: Vertex[VP]): Set[Vertex[VP]] = {
+    val result = mutable.Set[Vertex[VP]]()
     _ancestors(v, result)
     result.toSet
   }
 
-  def ancestors(vs: Set[V[VP]]): Set[V[VP]] = {
-    val result = mutable.Set[V[VP]]()
+  def ancestors(vs: Set[Vertex[VP]]): Set[Vertex[VP]] = {
+    val result = mutable.Set[Vertex[VP]]()
     vs.map(_ancestors(_, result))
     result.toSet
   }
 
   def isAcyclic(): Boolean
 
-  def shortestPath(source: DirectedGraphVertex[VP], goal: DirectedGraphVertex[VP]): Option[List[E[VP, EP]]]
+  def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[EP]]]
   // def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
 
-  // def deleteEdge(e: DirectedGraphEdge[VP, EP]): DirectedGraph[VP, EP]
+  // def deleteEdge(e: Edge[VP, EP]): DirectedGraph[VP, EP]
 
-  // def deleteVertex(v: DirectedGraphVertex[VP]): DirectedGraph[VP, EP]
+  // def deleteVertex(v: Vertex[VP]): DirectedGraph[VP, EP]
 
   //  def removeInputs(vs: Set[V]): GenDirectedGraph[VP, EP]
   //  def removeOutputs(vs: Set[V]): GenDirectedGraph[VP, EP]
 
 }
-
-trait DirectedGraphEdge[VP, EP] {
-
-  type V[VP] <: DirectedGraphVertex[VP]
-
-  def payload(): EP
-  def source(): V[VP]
-  def dest(): V[VP]
-}
-
-trait DirectedGraphVertex[VP] {
-  def payload(): VP
-}
-
-//trait DirectedGraphFactory {
-//
-//  type G[VP, EP] <: DirectedGraph[VP, EP]
-//  type V[VP] <: DirectedGraphVertex[VP]
-//
-//  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP]
-//
-//}

@@ -44,7 +44,7 @@ class Mass extends Quantum {
       unit("zettatonne", "ZT"),
       unit("yottatonne", "YT")
     ),
-    (vs: Seq[DirectedGraphVertex[MassQuantity]]) => vs match {
+    (vs: Seq[Vertex[MassQuantity]]) => vs match {
       case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt :: Nil =>
         withInverses(List(
           (t, meg, 1),

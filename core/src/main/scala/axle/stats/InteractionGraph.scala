@@ -3,16 +3,9 @@ package axle.stats
 import axle.graph._
 import collection._
 
-//object InteractionGraph {
-//  def apply(
-//    vps: Seq[RandomVariable[_]],
-//    ef: Seq[UndirectedGraphVertex[RandomVariable[_]]] => Seq[(UndirectedGraphVertex[RandomVariable[_]], UndirectedGraphVertex[RandomVariable[_]], String)]): InteractionGraph =
-//    new InteractionGraph(JungUndirectedGraph(vps, ef))
-//}
-
 case class InteractionGraph(
   vps: Seq[RandomVariable[_]],
-  ef: Seq[UndirectedGraphVertex[RandomVariable[_]]] => Seq[(UndirectedGraphVertex[RandomVariable[_]], UndirectedGraphVertex[RandomVariable[_]], String)]) {
+  ef: Seq[Vertex[RandomVariable[_]]] => Seq[(Vertex[RandomVariable[_]], Vertex[RandomVariable[_]], String)]) {
 
   lazy val graph = JungUndirectedGraph(vps, ef)
 

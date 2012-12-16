@@ -22,9 +22,6 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
 
   def component[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component = {
 
-    // type V = jdg.type#V
-    // type E = jdg.type#E
-
     // see
     // http://www.grotto-networking.com/JUNG/
     // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf
@@ -35,24 +32,24 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     val vv = new VisualizationViewer(layout) // interactive
     vv.setPreferredSize(new Dimension(width + border, height + border))
 
-    val vertexPaint = new Transformer[JungDirectedGraphVertex[VP], Paint]() {
-      def transform(i: JungDirectedGraphVertex[VP]): Paint = Color.GREEN
+    val vertexPaint = new Transformer[Vertex[VP], Paint]() {
+      def transform(i: Vertex[VP]): Paint = Color.GREEN
     }
 
     val dash = List(10.0f).toArray
 
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
-    val edgeStrokeTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], Stroke]() {
-      def transform(e: JungDirectedGraphEdge[VP, EP]) = edgeStroke
+    val edgeStrokeTransformer = new Transformer[Edge[EP], Stroke]() {
+      def transform(e: Edge[EP]) = edgeStroke
     }
 
-    val vertexLabelTransformer = new Transformer[JungDirectedGraphVertex[VP], String]() {
-      def transform(v: JungDirectedGraphVertex[VP]) = jdg.vertexToVisualizationHtml(v.payload).toString
+    val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
+      def transform(v: Vertex[VP]) = jdg.vertexToVisualizationHtml(v.payload).toString
     }
 
-    val edgeLabelTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], String]() {
-      def transform(e: JungDirectedGraphEdge[VP, EP]) = e.payload.toString
+    val edgeLabelTransformer = new Transformer[Edge[EP], String]() {
+      def transform(e: Edge[EP]) = e.payload.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)

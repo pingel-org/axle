@@ -21,10 +21,10 @@ class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
   //      Acceptor(newG, newI, newF)
   //    }
 
-  def δSymbol(state: DirectedGraphVertex[String], symbol: Symbol): Set[DirectedGraphVertex[String]] =
+  def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
     edges().filter(e => e.source == state && e.payload == symbol).map(_.dest)
 
-  def δ(state: DirectedGraphVertex[String], exp: List[Symbol]): Set[String] = exp match {
+  def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
     case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
     case Nil => Set(state.payload)
   }
@@ -44,7 +44,7 @@ class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
     false
   }
 
-  def induce(P: Set[DirectedGraphVertex[String]]): AngluinAcceptor = {
+  def induce(P: Set[Vertex[String]]): AngluinAcceptor = {
     // TODO !!!
     null
   }

@@ -52,7 +52,7 @@ class ConditionalProbabilityTableSpecification extends Specification {
         List(E eq false, C eq true) -> 0.0,
         List(E eq false, C eq false) -> 1.0
       )))),
-    (vs: Seq[DirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+    (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
       case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
     })
 

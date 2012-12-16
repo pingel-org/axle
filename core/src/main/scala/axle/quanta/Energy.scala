@@ -41,7 +41,7 @@ class Energy extends Quantum {
       unit("megaton", "MT"),
       unit("gigaton", "GT")
     ),
-    (vs: Seq[DirectedGraphVertex[EnergyQuantity]]) => vs match {
+    (vs: Seq[Vertex[EnergyQuantity]]) => vs match {
       case kwh :: j :: kj :: mj :: t :: kt :: mt :: gt :: Nil => withInverses(List(
         (mj, t, "4.184"),
         (j, kj, "1E3"),

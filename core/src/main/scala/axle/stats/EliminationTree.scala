@@ -5,23 +5,23 @@ import axle.graph._
 
 case class EliminationTree(
   vps: Seq[Factor],
-  ef: Seq[UndirectedGraphVertex[Factor]] => Seq[(UndirectedGraphVertex[Factor], UndirectedGraphVertex[Factor], String)]) {
+  ef: Seq[Vertex[Factor]] => Seq[(Vertex[Factor], Vertex[Factor], String)]) {
 
   lazy val graph = JungUndirectedGraph(vps, ef) // [Factor, String]
 
-  def gatherVars(stop: UndirectedGraphVertex[Factor], node: UndirectedGraphVertex[Factor], result: mutable.Set[RandomVariable[_]]): Unit = {
+  def gatherVars(stop: Vertex[Factor], node: Vertex[Factor], result: mutable.Set[RandomVariable[_]]): Unit = {
     result ++= node.payload.variables
     graph.neighbors(node).filter(!_.equals(stop)).map(gatherVars(node, _, result))
   }
 
-  def cluster(i: UndirectedGraphVertex[Factor]): Set[RandomVariable[_]] = {
+  def cluster(i: Vertex[Factor]): Set[RandomVariable[_]] = {
     val result = mutable.Set[RandomVariable[_]]()
     graph.neighbors(i).map(j => result ++= separate(i, j))
     result ++= i.payload.variables
     result
   }
 
-  def separate(i: UndirectedGraphVertex[Factor], j: UndirectedGraphVertex[Factor]): Set[RandomVariable[_]] = {
+  def separate(i: Vertex[Factor], j: Vertex[Factor]): Set[RandomVariable[_]] = {
     val iSide = mutable.Set[RandomVariable[_]]()
     gatherVars(j, i, iSide)
     val jSide = mutable.Set[RandomVariable[_]]()

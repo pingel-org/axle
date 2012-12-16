@@ -15,11 +15,11 @@ case class CausalModel(name: String, graph: DirectedGraph[CausalModelNode, Strin
   def duplicate(): CausalModel = null // TODO
 
   // TODO: this should probably be Option[Boolean] ?
-  def observes(rv: RandomVariable[_]): Boolean = findVertex((n: DirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
+  def observes(rv: RandomVariable[_]): Boolean = findVertex((n: Vertex[CausalModelNode]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
 
-  def nodesFor(rvs: Set[RandomVariable[_]]) = rvs.flatMap(rv => findVertex((n: DirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv))
+  def nodesFor(rvs: Set[RandomVariable[_]]) = rvs.flatMap(rv => findVertex((n: Vertex[CausalModelNode]) => n.payload.rv == rv))
 
-  def nodeFor(rv: RandomVariable[_]) = findVertex((n: DirectedGraphVertex[CausalModelNode]) => n.payload.rv == rv)
+  def nodeFor(rv: RandomVariable[_]) = findVertex((n: Vertex[CausalModelNode]) => n.payload.rv == rv)
 
   override def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
 

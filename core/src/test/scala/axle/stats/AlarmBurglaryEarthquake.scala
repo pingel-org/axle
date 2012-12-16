@@ -51,7 +51,7 @@ class ABE extends Specification {
           List(A eq false, M eq true) -> 0.01,
           List(A eq false, M eq false) -> 0.99
         )))),
-    (vs: Seq[DirectedGraphVertex[BayesianNetworkNode]]) => vs match {
+    (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
       case b :: e :: a :: j :: m :: Nil => List((b, a, ""), (e, a, ""), (a, j, ""), (a, m, ""))
     })
 

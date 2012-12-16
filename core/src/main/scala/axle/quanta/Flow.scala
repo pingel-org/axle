@@ -35,7 +35,7 @@ class Flow extends Quantum {
       derive(m3.over[Time.type, this.type](second, this), Some("cubic meters per second"), Some("m^3/s")),
       unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
     ),
-    (vs: Seq[DirectedGraphVertex[FlowQuantity]]) => vs match {
+    (vs: Seq[Vertex[FlowQuantity]]) => vs match {
       case m3s :: niagaraFalls :: Nil => withInverses(List(
         (m3s, niagaraFalls, 1834)
       ))

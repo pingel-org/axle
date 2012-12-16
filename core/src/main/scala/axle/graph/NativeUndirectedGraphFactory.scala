@@ -3,65 +3,61 @@ package axle.graph
 import collection._
 import axle._
 
-case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[NativeUndirectedGraphVertex[VP]] => Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)])
+class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends UndirectedGraph[VP, EP] {
 
   type G[VP, EP] = NativeUndirectedGraph[VP, EP]
-  type V[VP] = NativeUndirectedGraphVertex[VP]
-  type E[VP, EP] = NativeUndirectedGraphEdge[VP, EP]
 
-  // Seq[NativeUndirectedGraphVertex[VP]]
-  val _vertices = vps.map(new NativeUndirectedGraphVertex(_))
+  val _vertices = vps.map(Vertex(_))
 
-  // Seq[NativeUndirectedGraphEdge{VP, EP]]
   val _edges = ef(_vertices).map({
-    case (vi, vj, ep) => new NativeUndirectedGraphEdge(vi, vj, ep)
+    case (vi, vj, ep) => Edge(vi, vj, ep)
   })
 
   lazy val vertexSet = _vertices.toSet
   lazy val edgeSet = _edges.toSet
 
-  lazy val vertex2edges: Map[NativeUndirectedGraphVertex[VP], Set[NativeUndirectedGraphEdge[VP, EP]]] =
+  lazy val vertex2edges: Map[Vertex[VP], Set[Edge[EP]]] =
     _edges
       .flatMap(e => {
-        val (vi, vj): (NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP]) = e.vertices()
+        val (vi, vj): (Vertex[VP], Vertex[VP]) = e.vertices()
         Vector((vi, e), (vj, e))
       }).groupBy(_._1).map(kv => (kv._1, kv._2.map(_._2).toSet))
       .withDefaultValue(Set())
 
   def storage() = (_vertices, _edges, vertex2edges)
 
-  def vertices(): Set[NativeUndirectedGraphVertex[VP]] = vertexSet
+  def vertices() = vertexSet
 
-  def allEdges(): Set[NativeUndirectedGraphEdge[VP, EP]] = edgeSet
+  def allEdges() = edgeSet
 
   def size(): Int = _vertices.size
 
-  def findEdge(vi: NativeUndirectedGraphVertex[VP], vj: NativeUndirectedGraphVertex[VP]): Option[NativeUndirectedGraphEdge[VP, EP]] =
+  def findEdge(vi: Vertex[VP], vj: Vertex[VP]): Option[Edge[EP]] =
     _edges.find(e => (e.vertices == (vi, vj)) || (e.vertices == (vj, vi))) // Note: no matching on payload
 
   // TODO findVertex needs an index
-  def findVertex(f: NativeUndirectedGraphVertex[VP] => Boolean): Option[NativeUndirectedGraphVertex[VP]] = _vertices.find(f(_))
+  def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = _vertices.find(f(_))
 
-  def filterEdges(f: ((NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)) => Boolean): NativeUndirectedGraph[VP, EP] = {
-    val filter = (es: Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]) => es.filter(f(_))
+  def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean): NativeUndirectedGraph[VP, EP] = {
+    val filter = (es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))
     NativeUndirectedGraph(vps, filter.compose(ef))
   }
 
-  def unlink(e: NativeUndirectedGraphEdge[VP, EP]): NativeUndirectedGraph[VP, EP] = {
-    val filter = (es: Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)]) => es.zip(_edges).filter({
+  def unlink(e: Edge[EP]): NativeUndirectedGraph[VP, EP] = {
+    val filter = (es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.zip(_edges).filter({
       case ((vi, vj, ep), oldEdge) => oldEdge != e
     }).map(_._1)
     NativeUndirectedGraph(vps, filter.compose(ef))
   }
 
-  def unlink(vi: NativeUndirectedGraphVertex[VP], vj: NativeUndirectedGraphVertex[VP]): NativeUndirectedGraph[VP, EP] = findEdge(vi, vj).map(unlink(_)).getOrElse(this)
+  def unlink(vi: Vertex[VP], vj: Vertex[VP]): NativeUndirectedGraph[VP, EP] = findEdge(vi, vj).map(unlink(_)).getOrElse(this)
 
-  def areNeighbors(vi: NativeUndirectedGraphVertex[VP], vj: NativeUndirectedGraphVertex[VP]): Boolean = edges(vi).exists(_.connects(vi, vj))
+  def areNeighbors(vi: Vertex[VP], vj: Vertex[VP]): Boolean = edges(vi).exists(_.connects(vi, vj))
 
-  def forceClique(among: Set[NativeUndirectedGraphVertex[VP]], payload: (NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
+  def forceClique(among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
 
-    val cliqued: Seq[NativeUndirectedGraphVertex[VP]] => Seq[(NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP], EP)] = (newVs: Seq[NativeUndirectedGraphVertex[VP]]) => {
+    val cliqued: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)] = (newVs: Seq[Vertex[VP]]) => {
 
       val old2new = _vertices.zip(newVs).toMap
 
@@ -82,23 +78,23 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[NativeUndirectedG
     NativeUndirectedGraph(vps, cliqued(_)) // TODO: phrase in terms of mapEdges?
   }
 
-  def isClique(vs: IndexedSeq[NativeUndirectedGraphVertex[VP]]): Boolean =
+  def isClique(vs: IndexedSeq[Vertex[VP]]): Boolean =
     vs.permutations(2).∀({ case vi :: vj :: Nil => areNeighbors(vi, vj) })
 
-  def degree(v: NativeUndirectedGraphVertex[VP]): Int = vertex2edges.get(v).map(_.size).getOrElse(0)
+  def degree(v: Vertex[VP]): Int = vertex2edges.get(v).map(_.size).getOrElse(0)
 
-  def edges(v: NativeUndirectedGraphVertex[VP]): Set[NativeUndirectedGraphEdge[VP, EP]] = vertex2edges.get(v).getOrElse(Set())
+  def edges(v: Vertex[VP]): Set[Edge[EP]] = vertex2edges.get(v).getOrElse(Set())
 
-  def neighbors(v: NativeUndirectedGraphVertex[VP]): Set[NativeUndirectedGraphVertex[VP]] =
+  def neighbors(v: Vertex[VP]): Set[Vertex[VP]] =
     vertex2edges.get(v).map(edges => edges.map(edge => edge.other(v)))
-    .getOrElse(Set[NativeUndirectedGraphVertex[VP]]())
+      .getOrElse(Set[Vertex[VP]]())
 
-  def delete(v: NativeUndirectedGraphVertex[VP]): NativeUndirectedGraph[VP, EP] = NativeUndirectedGraph(vps.filter(_ != v), ef)
+  def delete(v: Vertex[VP]): NativeUndirectedGraph[VP, EP] = NativeUndirectedGraph(vps.filter(_ != v), ef)
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan(r: NativeUndirectedGraphVertex[VP]): Option[NativeUndirectedGraphVertex[VP]] = vertices.find({ v => neighbors(v).size == 1 && !v.equals(r) })
+  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find({ v => neighbors(v).size == 1 && !v.equals(r) })
 
-  def eliminate(v: NativeUndirectedGraphVertex[VP], payload: (NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
+  def eliminate(v: Vertex[VP], payload: (Vertex[VP], Vertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
     // "decompositions" page 3 (Definition 3, Section 9.3)
     // turn the neighbors of v into a clique
     null // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
@@ -154,31 +150,23 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[NativeUndirectedG
 
 }
 
-class NativeUndirectedGraphEdge[VP, EP](v1: NativeUndirectedGraphVertex[VP], v2: NativeUndirectedGraphVertex[VP], ep: EP)
-  extends UndirectedGraphEdge[VP, EP] {
+//class Edge[VP, EP](v1: Vertex[VP], v2: Vertex[VP], ep: EP)
+//  extends UndirectedGraphEdge[VP, EP] {
+//
+//  type V[VP] = Vertex[VP]
+//  
+//  def vertices(): (Vertex[VP], Vertex[VP]) = (v1, v2)
+//
+//  def payload(): EP = ep
+//
+//  override def other(u: Vertex[VP]): Vertex[VP] = super.other(u).asInstanceOf[Vertex[VP]]
+//
+//}
 
-  type V[VP] = NativeUndirectedGraphVertex[VP]
-  
-  def vertices(): (NativeUndirectedGraphVertex[VP], NativeUndirectedGraphVertex[VP]) = (v1, v2)
+object NativeUndirectedGraph {
 
-  def payload(): EP = ep
+  // type S = (Seq[Vertex[VP]], Seq[Edge[VP, EP]], Map[Vertex[VP], Set[Edge[VP, EP]]])
 
-  override def other(u: NativeUndirectedGraphVertex[VP]): NativeUndirectedGraphVertex[VP] = super.other(u).asInstanceOf[NativeUndirectedGraphVertex[VP]]
-
+  def apply[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) = new NativeUndirectedGraph(vps, ef)
 }
 
-class NativeUndirectedGraphVertex[VP](vp: VP)
-  extends UndirectedGraphVertex[VP] {
-  def payload(): VP = vp
-}
-
-trait NativeUndirectedGraphFactory { // extends UndirectedGraphFactory {
-
-  type G[VP, EP] = NativeUndirectedGraph[VP, EP]
-  type V[VP] = NativeUndirectedGraphVertex[VP]
-  // type S = (Seq[NativeUndirectedGraphVertex[VP]], Seq[NativeUndirectedGraphEdge[VP, EP]], Map[NativeUndirectedGraphVertex[VP], Set[NativeUndirectedGraphEdge[VP, EP]]])
-
-  override def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): NativeUndirectedGraph[VP, EP] = new NativeUndirectedGraph(vps, ef)
-}
-
-object NativeUndirectedGraph extends NativeUndirectedGraphFactory

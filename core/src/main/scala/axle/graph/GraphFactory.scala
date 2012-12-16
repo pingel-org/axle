@@ -1,13 +1,11 @@
 package axle.graph
 
-/*
-trait GraphVertex[VP] {
-  def payload(): VP
-}
 
-trait GraphEdge[VP, EP] {
-  def payload(): EP
-}
+case class Edge[EP](payload: EP)
+
+case class Vertex[VP](payload: VP)
+
+/*
 
 trait GenGraph[VP, EP] {
 

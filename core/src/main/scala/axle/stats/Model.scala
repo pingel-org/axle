@@ -59,12 +59,12 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
       current --= cachedOuts
     }
 
-    val priorVertex = graph.findVertex((v: DirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get
-    val givenVertices = given.map(v1 => graph.findVertex((v2: DirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
+    val priorVertex = graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get
+    val givenVertices = given.map(v1 => graph.findVertex((v2: Vertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
 
     for (variable <- current) {
 
-      val variableVertex = graph.findVertex((v: DirectedGraphVertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
+      val variableVertex = graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
 
       var openToVar = false
       var directionPriorToVar = Direction.UNKNOWN
@@ -115,7 +115,7 @@ object Model {
 
   def apply[A](
     vps: Seq[A],
-    ef: Seq[DirectedGraphVertex[A]] => Seq[(DirectedGraphVertex[A], DirectedGraphVertex[A], String)]): Model[A] =
+    ef: Seq[Vertex[A]] => Seq[(Vertex[A], Vertex[A], String)]): Model[A] =
     new Model(JungDirectedGraph(vps, ef))
 
 }
