@@ -36,6 +36,8 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
 
   def size(): Int = _vertices.size
 
+  def vertices(edge: Edge[ES, EP]) = (edge.storage._1, edge.storage._2)
+  
   def findEdge(vi: Vertex[VP], vj: Vertex[VP]): Option[Edge[ES, EP]] =
     _edges.find(e => (vertices(e) == (vi, vj)) || (vertices(e) == (vj, vi))) // Note: no matching on payload
 
@@ -54,7 +56,7 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
 
   def unlink(vi: Vertex[VP], vj: Vertex[VP]): NativeUndirectedGraph[VP, EP] = findEdge(vi, vj).map(unlink(_)).getOrElse(this)
 
-  def areNeighbors(vi: Vertex[VP], vj: Vertex[VP]): Boolean = edges(vi).exists(connects(_, vi, vj))
+  def areNeighbors(vi: Vertex[VP], vj: Vertex[VP]): Boolean = edgesTouching(vi).exists(connects(_, vi, vj))
 
   def forceClique(among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
 
@@ -84,7 +86,7 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
 
   def degree(v: Vertex[VP]): Int = vertex2edges.get(v).map(_.size).getOrElse(0)
 
-  def edges(v: Vertex[VP]): Set[Edge[ES, EP]] = vertex2edges.get(v).getOrElse(Set())
+  def edgesTouching(v: Vertex[VP]): Set[Edge[ES, EP]] = vertex2edges.get(v).getOrElse(Set())
 
   def neighbors(v: Vertex[VP]): Set[Vertex[VP]] =
     vertex2edges.get(v).map(edges => edges.map(edge => other(edge, v)))

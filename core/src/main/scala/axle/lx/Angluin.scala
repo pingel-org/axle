@@ -22,7 +22,7 @@ class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
   //    }
 
   def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
-    edges().filter(e => source(e) == state && e.payload == symbol).map(dest(_))
+    allEdges().filter(e => source(e) == state && e.payload == symbol).map(dest(_))
 
   def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
     case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)

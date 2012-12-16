@@ -11,7 +11,6 @@ case class JungUndirectedGraph[VP, EP](
   extends UndirectedGraph[VP, EP] {
 
   type G[VP, EP] = JungUndirectedGraph[VP, EP]
-
   type ES = EP
 
   val edgePayloadFunction = (es: ES) => es
@@ -38,6 +37,8 @@ case class JungUndirectedGraph[VP, EP](
 
   def size(): Int = jungGraph.getVertexCount()
 
+  def vertices(edge: Edge[EP, EP]) = (null, null) // TODO
+  
   // TODO findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean) = vertexSeq.find(f(_))
 

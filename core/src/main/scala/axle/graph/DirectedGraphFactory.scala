@@ -8,7 +8,7 @@ trait DirectedGraph[VP, EP] {
   type ES  
   
   def vertices(): Set[Vertex[VP]]
-  def edges(): Set[Edge[ES, EP]]
+  def allEdges(): Set[Edge[ES, EP]]
 
   def size(): Int
 
