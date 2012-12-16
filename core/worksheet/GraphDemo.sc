@@ -1,14 +1,10 @@
 
 import axle.graph._
-import JungDirectedGraph.JungDirectedGraphVertex
-import JungUndirectedGraph.JungUndirectedGraphVertex
-import NativeDirectedGraph.NativeDirectedGraphVertex
-import NativeUndirectedGraph.NativeUndirectedGraphVertex
 
 object GraphDemo {
 
   val dg = JungDirectedGraph(List("a", "b", "c", "d"),
-    (vs: Seq[JungDirectedGraphVertex[String]]) => vs match {
+    (vs: Seq[Vertex[String]]) => vs match {
       case a :: b :: c :: d :: Nil => List((a, b, ""), (b, c, ""), (c, d, ""), (d, a, ""), (a, c, ""), (b, d, ""))
     })                                            //> dg  : axle.graph.JungDirectedGraph.G[String,java.lang.String] = JungDirected
                                                   //| Graph(List(a, b, c, d),<function1>)
@@ -31,7 +27,7 @@ object GraphDemo {
   //----------------------------------------------------
 
   val ug = JungUndirectedGraph(List("a", "b", "c", "d"),
-    (vs: Seq[JungUndirectedGraphVertex[String]]) => vs match {
+    (vs: Seq[Vertex[String]]) => vs match {
       case a :: b :: c :: d :: Nil => List((a, b, ""), (b, c, ""), (c, d, ""), (d, a, ""), (a, c, ""), (b, d, ""))
     })                                            //> ug  : axle.graph.JungUndirectedGraph.G[String,java.lang.String] = JungUndir
                                                   //| ectedGraph(List(a, b, c, d),<function1>)
