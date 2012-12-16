@@ -1,7 +1,8 @@
 package axle.graph
 
-
-case class Edge[EP](payload: EP)
+case class Edge[S, EP](storage: S, payloadF: S => EP) {
+  def payload(): EP = payloadF(storage)
+}
 
 case class Vertex[VP](payload: VP)
 

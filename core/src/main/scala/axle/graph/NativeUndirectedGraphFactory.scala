@@ -3,24 +3,27 @@ package axle.graph
 import collection._
 import axle._
 
-class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
+case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends UndirectedGraph[VP, EP] {
 
   type G[VP, EP] = NativeUndirectedGraph[VP, EP]
+  type ES = (Vertex[VP], Vertex[VP], EP)
+
+  val edgePayloadFunction = (es: ES) => es._3
 
   val _vertices = vps.map(Vertex(_))
 
   val _edges = ef(_vertices).map({
-    case (vi, vj, ep) => Edge(vi, vj, ep)
+    case (vi, vj, ep) => Edge((vi, vj, ep), edgePayloadFunction)
   })
 
   lazy val vertexSet = _vertices.toSet
   lazy val edgeSet = _edges.toSet
 
-  lazy val vertex2edges: Map[Vertex[VP], Set[Edge[EP]]] =
+  lazy val vertex2edges: Map[Vertex[VP], Set[Edge[ES, EP]]] =
     _edges
       .flatMap(e => {
-        val (vi, vj): (Vertex[VP], Vertex[VP]) = e.vertices()
+        val (vi, vj) = vertices(e)
         Vector((vi, e), (vj, e))
       }).groupBy(_._1).map(kv => (kv._1, kv._2.map(_._2).toSet))
       .withDefaultValue(Set())
@@ -33,18 +36,16 @@ class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Ve
 
   def size(): Int = _vertices.size
 
-  def findEdge(vi: Vertex[VP], vj: Vertex[VP]): Option[Edge[EP]] =
-    _edges.find(e => (e.vertices == (vi, vj)) || (e.vertices == (vj, vi))) // Note: no matching on payload
+  def findEdge(vi: Vertex[VP], vj: Vertex[VP]): Option[Edge[ES, EP]] =
+    _edges.find(e => (vertices(e) == (vi, vj)) || (vertices(e) == (vj, vi))) // Note: no matching on payload
 
   // TODO findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = _vertices.find(f(_))
 
-  def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean): NativeUndirectedGraph[VP, EP] = {
-    val filter = (es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))
-    NativeUndirectedGraph(vps, filter.compose(ef))
-  }
+  def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean): NativeUndirectedGraph[VP, EP] =
+    NativeUndirectedGraph(vps, ((es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))).compose(ef))
 
-  def unlink(e: Edge[EP]): NativeUndirectedGraph[VP, EP] = {
+  def unlink(e: Edge[ES, EP]): NativeUndirectedGraph[VP, EP] = {
     val filter = (es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.zip(_edges).filter({
       case ((vi, vj, ep), oldEdge) => oldEdge != e
     }).map(_._1)
@@ -53,7 +54,7 @@ class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Ve
 
   def unlink(vi: Vertex[VP], vj: Vertex[VP]): NativeUndirectedGraph[VP, EP] = findEdge(vi, vj).map(unlink(_)).getOrElse(this)
 
-  def areNeighbors(vi: Vertex[VP], vj: Vertex[VP]): Boolean = edges(vi).exists(_.connects(vi, vj))
+  def areNeighbors(vi: Vertex[VP], vj: Vertex[VP]): Boolean = edges(vi).exists(connects(_, vi, vj))
 
   def forceClique(among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
 
@@ -83,10 +84,10 @@ class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Ve
 
   def degree(v: Vertex[VP]): Int = vertex2edges.get(v).map(_.size).getOrElse(0)
 
-  def edges(v: Vertex[VP]): Set[Edge[EP]] = vertex2edges.get(v).getOrElse(Set())
+  def edges(v: Vertex[VP]): Set[Edge[ES, EP]] = vertex2edges.get(v).getOrElse(Set())
 
   def neighbors(v: Vertex[VP]): Set[Vertex[VP]] =
-    vertex2edges.get(v).map(edges => edges.map(edge => edge.other(v)))
+    vertex2edges.get(v).map(edges => edges.map(edge => other(edge, v)))
       .getOrElse(Set[Vertex[VP]]())
 
   def delete(v: Vertex[VP]): NativeUndirectedGraph[VP, EP] = NativeUndirectedGraph(vps.filter(_ != v), ef)
@@ -162,11 +163,3 @@ class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Ve
 //  override def other(u: Vertex[VP]): Vertex[VP] = super.other(u).asInstanceOf[Vertex[VP]]
 //
 //}
-
-object NativeUndirectedGraph {
-
-  // type S = (Seq[Vertex[VP]], Seq[Edge[VP, EP]], Map[Vertex[VP], Set[Edge[VP, EP]]])
-
-  def apply[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) = new NativeUndirectedGraph(vps, ef)
-}
-

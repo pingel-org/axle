@@ -7,11 +7,13 @@ case class CausalModelNode(rv: RandomVariable[_], observable: Boolean = true)
 
 case class PFunction(rv: RandomVariable[_], inputs: Seq[RandomVariable[_]])
 
-case class CausalModel(name: String, graph: DirectedGraph[CausalModelNode, String])
+class CausalModel(_name: String, graph: DirectedGraph[CausalModelNode, String])
   extends Model[CausalModelNode](graph) {
 
   import graph._
 
+  override def name() = _name
+  
   def duplicate(): CausalModel = null // TODO
 
   // TODO: this should probably be Option[Boolean] ?

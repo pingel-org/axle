@@ -7,11 +7,13 @@ trait UndirectedGraph[VP, EP] {
 
   type G[VP, EP] <: UndirectedGraph[VP, EP]
 
+  type ES
+  
   def vertices(): Set[Vertex[VP]]
-  def allEdges(): Set[Edge[EP]]
+  def allEdges(): Set[Edge[ES, EP]]
 
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]]
-  def unlink(e: Edge[EP]): G[VP, EP]
+  def unlink(e: Edge[ES, EP]): G[VP, EP]
   def unlink(v1: Vertex[VP], v2: Vertex[VP]): G[VP, EP]
   def areNeighbors(v1: Vertex[VP], v2: Vertex[VP]): Boolean
 
@@ -25,8 +27,9 @@ trait UndirectedGraph[VP, EP] {
   def numEdgesToForceClique(vs: GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP) = (for {
     vi <- vs
     vj <- vs
+    if (areNeighbors(vi, vj))
   } yield {
-    if (areNeighbors(vi, vj)) 1 else 0
+    1
   }).sum
 
   def forceClique(vs: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): G[VP, EP]
@@ -41,7 +44,7 @@ trait UndirectedGraph[VP, EP] {
 
   def degree(v: Vertex[VP]): Int
 
-  def edgesTouching(v: Vertex[VP]): Set[Edge[EP]]
+  def edgesTouching(v: Vertex[VP]): Set[Edge[ES, EP]]
 
   def neighbors(v: Vertex[VP]): Set[Vertex[VP]]
 
@@ -54,9 +57,9 @@ trait UndirectedGraph[VP, EP] {
 
   // def eliminate(vs: List[V], payload: (V, V) => EP): GenUndirectedGraph[VP, EP]
 
-  def vertices(edge: Edge[EP]): (Vertex[VP], Vertex[VP])
+  def vertices(edge: Edge[ES, EP]): (Vertex[VP], Vertex[VP])
 
-  def other(edge: Edge[EP], u: Vertex[VP]): Vertex[VP] = {
+  def other(edge: Edge[ES, EP], u: Vertex[VP]): Vertex[VP] = {
     val (v1, v2) = vertices(edge)
     u match {
       case _ if u.equals(v1) => v2
@@ -65,10 +68,9 @@ trait UndirectedGraph[VP, EP] {
     }
   }
 
-  def connects(edge: Edge[EP], a1: Vertex[VP], a2: Vertex[VP]) = {
+  def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]) = {
     val (v1, v2) = vertices(edge)
     (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
   }
-  
-  
+
 }

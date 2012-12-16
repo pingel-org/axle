@@ -37,7 +37,8 @@ trait Quantum {
 
   def conversionGraph(): DirectedGraph[Q, BigDecimal]
 
-  def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], BigDecimal)]): DirectedGraph[Q, BigDecimal]
+  def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], BigDecimal)]): DirectedGraph[Q, BigDecimal] =
+    JungDirectedGraph(vps, ef)
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
@@ -105,7 +106,7 @@ trait Quantum {
 
     def in(other: Q): Q =
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: Edge[BigDecimal]) => bd.multiply(edge.payload))
+        path.foldLeft(oneBD)((bd, edge) => bd.multiply(edge.payload))
       })
         .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))

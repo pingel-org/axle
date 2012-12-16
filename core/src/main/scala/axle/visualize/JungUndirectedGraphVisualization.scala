@@ -22,12 +22,8 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
 
   def component[VP, EP](jug: JungUndirectedGraph[VP, EP]): Component = {
 
-    // type V = jug.type#V
-    // type E = jug.type#E
-
     val layout = new FRLayout(jug.storage)
     layout.setSize(new Dimension(width, height))
-    // JungUndirectedGraphVertex[VP], JungUndirectedGraphEdge[VP, EP]
     val vv = new VisualizationViewer(layout) // interactive
     vv.setPreferredSize(new Dimension(width + border, height + border))
 
@@ -39,16 +35,16 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
 
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
-    val edgeStrokeTransformer = new Transformer[Edge[EP], Stroke]() {
-      def transform(edge: Edge[EP]) = edgeStroke
+    val edgeStrokeTransformer = new Transformer[Edge[jug.ES, EP], Stroke]() {
+      def transform(edge: Edge[jug.ES, EP]) = edgeStroke
     }
 
     val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
       def transform(vertex: Vertex[VP]) = vertex.payload.toString
     }
 
-    val edgeLabelTransformer = new Transformer[Edge[EP], String]() {
-      def transform(edge: Edge[EP]) = edge.payload.toString
+    val edgeLabelTransformer = new Transformer[Edge[jug.ES, EP], String]() {
+      def transform(edge: Edge[jug.ES, EP]) = edge.payload.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)

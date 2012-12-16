@@ -40,16 +40,16 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
 
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
-    val edgeStrokeTransformer = new Transformer[Edge[EP], Stroke]() {
-      def transform(e: Edge[EP]) = edgeStroke
+    val edgeStrokeTransformer = new Transformer[Edge[jdg.ES, EP], Stroke]() {
+      def transform(e: Edge[jdg.ES, EP]) = edgeStroke
     }
 
     val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
       def transform(v: Vertex[VP]) = jdg.vertexToVisualizationHtml(v.payload).toString
     }
 
-    val edgeLabelTransformer = new Transformer[Edge[EP], String]() {
-      def transform(e: Edge[EP]) = e.payload.toString
+    val edgeLabelTransformer = new Transformer[Edge[jdg.ES, EP], String]() {
+      def transform(e: Edge[jdg.ES, EP]) = e.payload.toString
     }
 
     vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)

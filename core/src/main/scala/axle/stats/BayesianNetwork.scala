@@ -113,9 +113,9 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
 
   import _graph._
 
+  override def name() = _name  
   def graph() = _graph
-  def name() = _name
-
+  
   override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
 
   // def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)

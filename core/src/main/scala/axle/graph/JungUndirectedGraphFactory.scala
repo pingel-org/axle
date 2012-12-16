@@ -5,14 +5,18 @@ import collection._
 import axle._
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
-class JungUndirectedGraph[VP, EP](
+case class JungUndirectedGraph[VP, EP](
   vps: Seq[VP],
   ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends UndirectedGraph[VP, EP] {
 
   type G[VP, EP] = JungUndirectedGraph[VP, EP]
 
-  lazy val jungGraph = new UndirectedSparseGraph[Vertex[VP], Edge[EP]]()
+  type ES = EP
+
+  val edgePayloadFunction = (es: ES) => es
+
+  lazy val jungGraph = new UndirectedSparseGraph[Vertex[VP], Edge[EP, EP]]()
 
   lazy val vertexSeq = vps.map(Vertex(_))
 
@@ -22,11 +26,11 @@ class JungUndirectedGraph[VP, EP](
 
   ef(vertexSeq).map({
     case (vi, vj, ep) => {
-      jungGraph.addEdge(Edge(ep), vi, vj) // TODO check return value
+      jungGraph.addEdge(Edge(ep, edgePayloadFunction), vi, vj) // TODO check return value
     }
   })
 
-  def storage(): UndirectedSparseGraph[Vertex[VP], Edge[EP]] = jungGraph
+  def storage(): UndirectedSparseGraph[Vertex[VP], Edge[EP, EP]] = jungGraph
 
   def vertices() = vertexSet
 
@@ -37,12 +41,10 @@ class JungUndirectedGraph[VP, EP](
   // TODO findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean) = vertexSeq.find(f(_))
 
-  def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean) = {
-    val filter = (es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))
-    JungUndirectedGraph(vps, filter.compose(ef))
-  }
+  def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean) =
+    JungUndirectedGraph(vps, ((es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))).compose(ef))
 
-  def unlink(e: Edge[EP]): JungUndirectedGraph[VP, EP] = filterEdges(_ != e)
+  def unlink(e: Edge[EP, EP]): JungUndirectedGraph[VP, EP] = filterEdges(_ != e)
 
   // JungUndirectedGraph[VP, EP]
   def unlink(v1: Vertex[VP], v2: Vertex[VP]) =
@@ -117,19 +119,3 @@ class JungUndirectedGraph[VP, EP](
   }
 
 }
-
-//class Edge[VP, EP](ep: EP) extends UndirectedGraphEdge[VP, EP] {
-//
-//  type V[VP] = JungVertex[VP]
-//
-//  def vertices(): (JungVertex[VP], JungVertex[VP]) = null // TODO (v1, v2)
-//  def payload(): EP = ep
-//}
-
-object JungUndirectedGraph {
-
-  def apply[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) =
-    new JungUndirectedGraph(vps, ef)
-
-}
-
