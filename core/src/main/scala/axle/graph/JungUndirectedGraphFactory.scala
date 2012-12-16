@@ -13,6 +13,9 @@ case class JungUndirectedGraph[VP, EP](
   type G[VP, EP] = JungUndirectedGraph[VP, EP]
   type ES = (Vertex[VP], Vertex[VP], EP)
 
+  // Note: ES includes the vertices in order to provide uniquess for jung
+  // This could also be accomplished by making Edge not a case class
+  
   val edgePayloadFunction = (es: ES) => es._3
 
   lazy val jungGraph = new UndirectedSparseGraph[Vertex[VP], Edge[ES, EP]]()
