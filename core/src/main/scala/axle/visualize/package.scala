@@ -33,7 +33,7 @@ package object visualize {
   // TODO: Avoid very wastefully converting to Native vertices and back
   implicit def enComponentNativeUndirectedGraph[VP, EP](nug: NativeUndirectedGraph[VP, EP]): Component =
     JungUndirectedGraph[VP, EP](nug.vps,
-      (vs: Seq[JungUndirectedGraphVertex[VP]]) =>
+      (vs: Seq[UndirectedGraphVertex[VP]]) =>
         nug.ef(vs.map(v => new NativeUndirectedGraphVertex(v.payload)))
           .map({ case (nv1, nv2, ep) => (new JungUndirectedGraphVertex(nv1.payload), new JungUndirectedGraphVertex(nv2.payload), ep) })
     )
@@ -44,7 +44,7 @@ package object visualize {
   // TODO: Avoid very wastefully converting to Native vertices and back
   implicit def enComponentNativeDirectedGraph[VP, EP](ndg: NativeDirectedGraph[VP, EP]): Component =
     new JungDirectedGraph[VP, EP](ndg.vps,
-      (vs: Seq[JungDirectedGraphVertex[VP]]) => {
+      (vs: Seq[DirectedGraphVertex[VP]]) => {
         val nativeVertices = vs.map(v => new NativeDirectedGraphVertex(v.payload))
         val native2jungVertex = nativeVertices.zip(vs).toMap
         ndg.ef(nativeVertices)

@@ -43,7 +43,7 @@ class Time extends Quantum {
       unit("megayear", "my"),
       unit("gigayear", "gy")
     ),
-    (vs: Seq[V[TimeQuantity]]) => vs match {
+    (vs: Seq[DirectedGraphVertex[TimeQuantity]]) => vs match {
       case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => withInverses(List(
         (ms, s, "1E3"),
         (μs, s, "1E6"),

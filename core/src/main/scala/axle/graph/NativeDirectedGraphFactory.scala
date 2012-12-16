@@ -96,7 +96,7 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[NativeDirectedGraph
 class NativeDirectedGraphEdge[VP, EP](vi: NativeDirectedGraphVertex[VP], vj: NativeDirectedGraphVertex[VP], ep: EP) extends DirectedGraphEdge[VP, EP] {
 
   type V[VP] = NativeDirectedGraphVertex[VP]
-  
+
   def source(): NativeDirectedGraphVertex[VP] = vi
   def dest(): NativeDirectedGraphVertex[VP] = vj
   def payload() = ep
@@ -106,7 +106,7 @@ class NativeDirectedGraphVertex[VP](vp: VP) extends DirectedGraphVertex[VP] {
   def payload() = vp
 }
 
-trait NativeDirectedGraphFactory extends DirectedGraphFactory {
+trait NativeDirectedGraphFactory { // }extends DirectedGraphFactory {
 
   type G[VP, EP] = NativeDirectedGraph[VP, EP]
   type V[VP] = NativeDirectedGraphVertex[VP]

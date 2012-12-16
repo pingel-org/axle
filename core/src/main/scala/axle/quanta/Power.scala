@@ -39,7 +39,7 @@ class Power extends Quantum {
       unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam")),
       unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
     ),
-    (vs: Seq[V[PowerQuantity]]) => vs match {
+    (vs: Seq[DirectedGraphVertex[PowerQuantity]]) => vs match {
       case w :: kw :: mw :: gw :: miw :: hp :: lightBulb :: hooverDam :: mustangGT :: Nil => withInverses(List(
         (w, kw, "1E3"),
         (kw, mw, "1E3"),

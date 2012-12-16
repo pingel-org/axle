@@ -36,7 +36,7 @@ class Acceleration extends Quantum {
       derive(fps.over[Time.type, this.type](second, this)),
       unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
     ),
-    (vs: Seq[V[AccelerationQuantity]]) => vs match {
+    (vs: Seq[DirectedGraphVertex[AccelerationQuantity]]) => vs match {
       case mpsps :: fpsps :: g :: Nil => withInverses(List(
         (mpsps, g, "9.80665")
       ))

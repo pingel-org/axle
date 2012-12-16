@@ -3,17 +3,17 @@ package axle.graph
 import collection._
 
 trait DirectedGraph[VP, EP] {
-  
+
   type G[VP, EP] <: DirectedGraph[VP, EP]
   type V[VP] <: DirectedGraphVertex[VP]
   type E[VP, EP] <: DirectedGraphEdge[VP, EP]
-  
+
   def vertices(): Set[V[VP]]
   def edges(): Set[E[VP, EP]]
 
   def size(): Int
-  
-  def deleteVertex(v: V[VP]): DirectedGraph[VP, EP]
+
+  def deleteVertex(v: V[VP]): G[VP, EP]
   def findVertex(f: V[VP] => Boolean): Option[V[VP]]
   def findEdge(from: V[VP], to: V[VP]): Option[E[VP, EP]]
   def leaves(): Set[V[VP]]
@@ -61,7 +61,7 @@ trait DirectedGraph[VP, EP] {
 
   def isAcyclic(): Boolean
 
-  def shortestPath(source: V[VP], goal: V[VP]): Option[List[E[VP, EP]]]
+  def shortestPath(source: DirectedGraphVertex[VP], goal: DirectedGraphVertex[VP]): Option[List[E[VP, EP]]]
   // def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
 
   // def deleteEdge(e: DirectedGraphEdge[VP, EP]): DirectedGraph[VP, EP]
@@ -76,7 +76,7 @@ trait DirectedGraph[VP, EP] {
 trait DirectedGraphEdge[VP, EP] {
 
   type V[VP] <: DirectedGraphVertex[VP]
-  
+
   def payload(): EP
   def source(): V[VP]
   def dest(): V[VP]
@@ -86,11 +86,11 @@ trait DirectedGraphVertex[VP] {
   def payload(): VP
 }
 
-trait DirectedGraphFactory {
-
-  type G[VP, EP] <: DirectedGraph[VP, EP]
-  type V[VP] <: DirectedGraphVertex[VP]
-
-  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP]
-
-}
+//trait DirectedGraphFactory {
+//
+//  type G[VP, EP] <: DirectedGraph[VP, EP]
+//  type V[VP] <: DirectedGraphVertex[VP]
+//
+//  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP]
+//
+//}

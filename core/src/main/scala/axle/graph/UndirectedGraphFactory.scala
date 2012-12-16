@@ -10,7 +10,7 @@ trait UndirectedGraph[VP, EP] {
   type E[VP, EP] <: UndirectedGraphEdge[VP, EP]
   
   def vertices(): Set[V[VP]]
-  def edges(): Set[E[VP, EP]]
+  def allEdges(): Set[E[VP, EP]]
 
   def findVertex(f: V[VP] => Boolean): Option[V[VP]]
   def unlink(e: E[VP, EP]): G[VP, EP]
@@ -43,7 +43,7 @@ trait UndirectedGraph[VP, EP] {
 
   def degree(v: V[VP]): Int
 
-  def edges(v: V[VP]): Set[E[VP, EP]]
+  def edgesTouching(v: V[VP]): Set[E[VP, EP]]
 
   def neighbors(v: V[VP]): Set[V[VP]]
 
@@ -84,12 +84,12 @@ trait UndirectedGraphVertex[VP] {
   def payload(): VP
 }
 
-trait UndirectedGraphFactory {
-  
-  type G[VP, EP] <: UndirectedGraph[VP, EP]
-  type V[VP] <: UndirectedGraphVertex[VP]
-
-  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP]
-
-}
-
+//trait UndirectedGraphFactory {
+//  
+//  type G[VP, EP] <: UndirectedGraph[VP, EP]
+//  type V[VP] <: UndirectedGraphVertex[VP]
+//
+//  def apply[VP, EP](vps: Seq[VP], ef: Seq[V[VP]] => Seq[(V[VP], V[VP], EP)]): G[VP, EP]
+//
+//}
+//

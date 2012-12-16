@@ -115,7 +115,7 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
 
   def graph() = _graph
   def name() = _name
-  
+
   override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
 
   // def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
@@ -200,11 +200,14 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
 
   def interactionGraph(): InteractionGraph =
     InteractionGraph(randomVariables,
-      (vs: Seq[JungUndirectedGraphVertex[RandomVariable[_]]]) =>
-        (for (vi <- vs; vj <- vs) yield (vi, vj)) // TODO "doubles"
-          .filter({ case (vi, vj) => interactsWith(vi.payload, vj.payload) })
-          .map({ case (vi, vj) => (vi, vj, "") })
-    )
+      (vs: Seq[UndirectedGraphVertex[RandomVariable[_]]]) =>
+        (for {
+          vi <- vs // TODO "doubles"
+          vj <- vs
+          if interactsWith(vi.payload, vj.payload)
+        } yield {
+          (vi, vj, "")
+        }))
 
   /**
    * orderWidth
@@ -456,7 +459,7 @@ object BayesianNetwork {
 
   def apply(name: String, graph: DirectedGraph[BayesianNetworkNode, String]) =
     new BayesianNetwork(name, graph)
-  
+
   def apply(
     name: String,
     vps: Seq[BayesianNetworkNode],

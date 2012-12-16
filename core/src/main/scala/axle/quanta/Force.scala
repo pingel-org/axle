@@ -27,13 +27,23 @@ class Force extends Quantum {
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
 
+//  def vps() = List(
+//    unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force")),
+//    unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)")),
+//    unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
+//  )
+//
+//  def ef() = (vs: Seq[DirectedGraphVertex[ForceQuantity]]) => vs match {
+//    case Nil => withInverses(List())
+//  }
+
   lazy val _conversionGraph = conversions(
     List(
       unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force")),
       unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)")),
       unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
     ),
-    (vs: Seq[V[ForceQuantity]]) => vs match {
+    (vs: Seq[DirectedGraphVertex[ForceQuantity]]) => vs match {
       case Nil => withInverses(List())
     }
   )

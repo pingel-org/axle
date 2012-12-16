@@ -7,10 +7,11 @@ object JoinTree {
 
   import axle.stats.Model._
 
+  // [immutable.Set[RandomVariable[_]], String]
   def apply(
     vps: Seq[immutable.Set[RandomVariable[_]]],
-    ef: Seq[JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]]] => Seq[(JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], JungUndirectedGraphVertex[immutable.Set[RandomVariable[_]]], String)]): JoinTree =
-    new JoinTree(JungUndirectedGraph[immutable.Set[RandomVariable[_]], String](vps, ef))
+    ef: Seq[UndirectedGraphVertex[immutable.Set[RandomVariable[_]]]] => Seq[(UndirectedGraphVertex[immutable.Set[RandomVariable[_]]], UndirectedGraphVertex[immutable.Set[RandomVariable[_]]], String)]): JoinTree =
+    new JoinTree(JungUndirectedGraph(vps, ef))
 
   // returns a jointree for DAG G with width equal to width(π, G)
   def fromEliminationOrder[MVP](m: Model[MVP], π: List[RandomVariable[_]]): JoinTree = {

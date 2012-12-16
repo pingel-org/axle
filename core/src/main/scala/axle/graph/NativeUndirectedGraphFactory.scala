@@ -31,9 +31,9 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[NativeUndirectedG
 
   def storage() = (_vertices, _edges, vertex2edges)
 
-  override def vertices(): Set[NativeUndirectedGraphVertex[VP]] = vertexSet
+  def vertices(): Set[NativeUndirectedGraphVertex[VP]] = vertexSet
 
-  override def edges(): Set[NativeUndirectedGraphEdge[VP, EP]] = edgeSet
+  def allEdges(): Set[NativeUndirectedGraphEdge[VP, EP]] = edgeSet
 
   def size(): Int = _vertices.size
 
@@ -172,7 +172,7 @@ class NativeUndirectedGraphVertex[VP](vp: VP)
   def payload(): VP = vp
 }
 
-trait NativeUndirectedGraphFactory extends UndirectedGraphFactory {
+trait NativeUndirectedGraphFactory { // extends UndirectedGraphFactory {
 
   type G[VP, EP] = NativeUndirectedGraph[VP, EP]
   type V[VP] = NativeUndirectedGraphVertex[VP]

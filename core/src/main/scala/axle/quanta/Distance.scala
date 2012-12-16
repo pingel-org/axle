@@ -43,7 +43,7 @@ class Distance extends Quantum {
       unit("light year", "ly", Some("http://en.wikipedia.org/wiki/Light-year")),
       unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
     ),
-    (vs: Seq[V[DistanceQuantity]]) => vs match {
+    (vs: Seq[DirectedGraphVertex[DistanceQuantity]]) => vs match {
       case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => withInverses(List(
         (ft, mile, 5280),
         (km, mile, "1.609344"),

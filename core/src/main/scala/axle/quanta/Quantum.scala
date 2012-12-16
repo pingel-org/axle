@@ -33,14 +33,17 @@ trait Quantum {
 
   type Q <: Quantity
 
-  type G[VP, EP] = JungDirectedGraph[VP, EP]
-  type V[VP] = JungDirectedGraphVertex[VP]
-  type E[VP, EP] = DirectedGraphEdge[VP, EP]
+  //  type G[VP, EP] = DirectedGraph[VP, EP]
+  //  type V[VP] = DirectedGraphVertex[VP]
+  //  type E[VP, EP] = DirectedGraphEdge[VP, EP]
 
-  def conversionGraph(): G[Q, BigDecimal]
-
-  def conversions(vps: Seq[Q], ef: Seq[V[Q]] => Seq[(V[Q], V[Q], BigDecimal)]): JungDirectedGraph[Q, BigDecimal] =
-    JungDirectedGraph[Q, BigDecimal](vps, ef)
+//  def vps(): Seq[Q]
+//  def ef(): Seq[DirectedGraphVertex[Q]] => Seq[(DirectedGraphVertex[Q], DirectedGraphVertex[Q], BigDecimal)]
+//  lazy val conversionGraph = JungDirectedGraph[Q, BigDecimal](vps, ef)
+  
+  def conversionGraph(): DirectedGraph[Q, BigDecimal]
+  
+  def conversions(vps: Seq[Q], ef: Seq[DirectedGraphVertex[Q]] => Seq[(DirectedGraphVertex[Q], DirectedGraphVertex[Q], BigDecimal)]): DirectedGraph[Q, BigDecimal]
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
@@ -53,7 +56,7 @@ trait Quantum {
   val oneBD = new BigDecimal("1")
   val zeroBD = new BigDecimal("0")
 
-  def withInverses(trips: Seq[(V[Q], V[Q], BigDecimal)]): Seq[(V[Q], V[Q], BigDecimal)] =
+  def withInverses(trips: Seq[(DirectedGraphVertex[Q], DirectedGraphVertex[Q], BigDecimal)]): Seq[(DirectedGraphVertex[Q], DirectedGraphVertex[Q], BigDecimal)] =
     trips.flatMap(trip => Vector(trip, (trip._2, trip._1, bdDivide(oneBD, trip._3))))
 
   class Quantity(
@@ -107,8 +110,10 @@ trait Quantum {
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
     def in(other: Q): Q = {
-      conversionGraph.shortestPath(other.unit.vertex, unit.vertex).map(path => {
-        path.foldLeft(oneBD)((bd: BigDecimal, edge: E[quantum.Q, BigDecimal]) => bd.multiply(edge.payload))
+      val ouv: DirectedGraphVertex[Q] = other.unit.vertex
+      val uv = unit.vertex
+      conversionGraph.shortestPath(ouv, uv).map(path => {
+        path.foldLeft(oneBD)((bd: BigDecimal, edge: DirectedGraphEdge[quantum.Q, BigDecimal]) => bd.multiply(edge.payload))
       })
         .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))

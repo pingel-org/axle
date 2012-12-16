@@ -15,7 +15,7 @@ object Direction {
 class Model[MVP](graph: DirectedGraph[MVP, String]) {
 
   import graph._
-  
+
   def name(): String = "model name"
 
   def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_] = null // TODO
@@ -115,7 +115,7 @@ object Model {
 
   def apply[A](
     vps: Seq[A],
-    ef: Seq[JungDirectedGraphVertex[A]] => Seq[(JungDirectedGraphVertex[A], JungDirectedGraphVertex[A], String)]): Model[A] =
+    ef: Seq[DirectedGraphVertex[A]] => Seq[(DirectedGraphVertex[A], DirectedGraphVertex[A], String)]): Model[A] =
     new Model(JungDirectedGraph(vps, ef))
 
 }

@@ -38,7 +38,7 @@ class Speed extends Quantum {
       unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light")),
       unit("Speed limit", "speed limit")
     ),
-    (vs: Seq[V[SpeedQuantity]]) => vs match {
+    (vs: Seq[DirectedGraphVertex[SpeedQuantity]]) => vs match {
       case mps :: fps :: mph :: c :: speedLimit :: Nil => withInverses(List(
         (c, mps, "299792458"),
         (mph, speedLimit, "65")
