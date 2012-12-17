@@ -5,10 +5,10 @@ import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {
 
-  val game = TicTacToe(3)
-  val x = game.player("X", "Player X", true)
-  val o = game.player("O", "Player O", true)
+  val game = TicTacToe(3, "human", "human")
 
+  import game.{x, o}
+  
   def script(moveScript: List[(game.type#TicTacToePlayer, Int)]) =
     game.scriptedMoveStateStream(game.state(x, game.startBoard),
       moveScript.map(pp => game.move(pp._1, pp._2)).iterator).last._2.outcome.flatMap(_.winner)

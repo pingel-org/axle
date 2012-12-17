@@ -12,7 +12,8 @@ import Scalaz._
  * TicTacToe is a 2-player perfect information zero-sum game
  */
 
-case class TicTacToe(boardSize: Int = 3) extends Game {
+case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: String = "ai")
+  extends Game {
 
   ttt =>
 
@@ -21,22 +22,18 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
   type STATE = TicTacToeState
   type OUTCOME = TicTacToeOutcome
 
-  val playas = mutable.Map[String, TicTacToePlayer]()
+  val x = player("X", "Player X", xClass)
+  val o = player("O", "Player O", oClass)
 
   def state(player: TicTacToePlayer, board: Matrix[Option[String]]) =
     new TicTacToeState(player, board)
 
   def move(player: TicTacToePlayer, position: Int) = TicTacToeMove(player, position)
 
-  def player(id: String, description: String, which: String) = {
-    // TODO: stop accepting new players after 2
-    val result = which match {
-      case "random" => new RandomTicTacToePlayer(id, description)
-      case "ai" => new AITicTacToePlayer(id, description)
-      case _ => new InteractiveTicTacToePlayer(id, description)
-    }
-    playas += id -> result
-    result
+  def player(id: String, description: String, which: String) = which match {
+    case "random" => new RandomTicTacToePlayer(id, description)
+    case "ai" => new AITicTacToePlayer(id, description)
+    case _ => new InteractiveTicTacToePlayer(id, description)
   }
 
   def numPositions() = boardSize * boardSize
@@ -45,19 +42,10 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
   def startBoard() = matrix[Option[String]](boardSize, boardSize, None)
 
-  def players(): immutable.Set[TicTacToePlayer] = playas.values.toSet
+  def players(): immutable.Set[TicTacToePlayer] = immutable.Set(x, o)
 
-  def playerAfter(player: TicTacToePlayer): TicTacToePlayer = {
-
-    // In more complex games, this would be a function of the move or state as well
-    // This method might evolve up into the superclass.
-    // There's an unchecked assertion in this class that there are exactly 2 players.
-    // I'll leave this very crude implementation here for now, since this is beyond
-    // the scope of what this needs to do for Tic Tac Toe.
-
-    // find someone who isn't 'player'
-    players.find(_ != player).getOrElse(null) // TODO remove null
-  }
+  def playerAfter(player: TicTacToePlayer): TicTacToePlayer =
+    if (player == x) o else x
 
   case class TicTacToeMove(tttPlayer: TicTacToePlayer, position: Int)
     extends Move(tttPlayer) {
@@ -133,7 +121,7 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
     def outcome(): Option[TicTacToeOutcome] = {
       val winner = ttt.players.find(hasWon(_))
       if (winner.isDefined) {
-        Some(TicTacToeOutcome(Some(winner.get)))
+        Some(TicTacToeOutcome(winner))
       } else if (openPositions().length == 0) {
         Some(TicTacToeOutcome(None))
       } else {
@@ -152,7 +140,7 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
   abstract class TicTacToePlayer(id: String, description: String) extends Player(id, description)
 
-  class AITicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "my poor AI")
+  class AITicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "minimax")
     extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
 
     val heuristic = (state: TicTacToeState) => players.map(p => {
