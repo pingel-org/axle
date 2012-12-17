@@ -28,11 +28,12 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
   def move(player: TicTacToePlayer, position: Int) = TicTacToeMove(player, position)
 
-  def player(id: String, description: String, interactive: Boolean) = {
+  def player(id: String, description: String, which: String) = {
     // TODO: stop accepting new players after 2
-    val result = interactive match {
-      case true => new InteractiveTicTacToePlayer(id, description)
-      case false => new AITicTacToePlayer(id, description)
+    val result = which match {
+      case "random" => new RandomTicTacToePlayer(id, description)
+      case "ai" => new AITicTacToePlayer(id, description)
+      case _ => new InteractiveTicTacToePlayer(id, description)
     }
     playas += id -> result
     result
@@ -127,6 +128,8 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
     def openPositions() = 1.to(numPositions).filter(this(_).isEmpty)
 
+    def moves(): Seq[TicTacToeMove] = openPositions().map(TicTacToeMove(player, _))
+
     def outcome(): Option[TicTacToeOutcome] = {
       val winner = ttt.players.find(hasWon(_))
       if (winner.isDefined) {
@@ -149,22 +152,26 @@ case class TicTacToe(boardSize: Int = 3) extends Game {
 
   abstract class TicTacToePlayer(id: String, description: String) extends Player(id, description)
 
-  class AITicTacToePlayer(
-    aitttPlayerId: String,
-    aitttDescription: String = "my poor AI")
+  class AITicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "my poor AI")
     extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
 
-    // pick a move at random.  not so "I"
-    def chooseMove(state: TicTacToeState): TicTacToeMove = {
-      val opens = state.openPositions()
-      TicTacToeMove(this, opens(Random.nextInt(opens.length)))
-    }
+    val heuristic = (state: TicTacToeState) => players.map(p => {
+      (p, state.outcome.map(o => if (o.winner == p) 1.0 else -1.0).getOrElse(0.0))
+    }).toMap
 
+    def chooseMove(state: TicTacToeState): TicTacToeMove = ttt.minimax(state, 3, heuristic)._1
   }
 
-  class InteractiveTicTacToePlayer(
-    itttPlayerId: String,
-    itttDescription: String = "the human")
+  class RandomTicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "random")
+    extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
+
+    def chooseMove(state: TicTacToeState): TicTacToeMove = {
+      val opens = state.moves
+      opens(Random.nextInt(opens.length))
+    }
+  }
+
+  class InteractiveTicTacToePlayer(itttPlayerId: String, itttDescription: String = "human")
     extends TicTacToePlayer(itttPlayerId, itttDescription) {
 
     val eventQueue = mutable.ListBuffer[Event]()

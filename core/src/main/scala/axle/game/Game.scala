@@ -2,6 +2,7 @@
 package axle.game
 
 import collection._
+import Stream.{ empty, cons }
 
 trait Game {
 
@@ -16,13 +17,22 @@ trait Game {
 
   def introMessage(): Unit
 
+  def minimax(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
+    if (state.outcome.isDefined || depth <= 0) {
+      (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
+    } else {
+      state.moves
+        .map(move => (move, minimax(state(move), depth - 1, heuristic)._2))
+        .maxBy(mcr => (mcr._2)(state.player))
+    }
+
   def moveStateStream(state: STATE): Stream[(MOVE, STATE)] = state.outcome.isDefined match {
-    case true => Stream.empty
+    case true => empty
     case false => {
       val move = state.player.chooseMove(state)
       players.map(_.notify(move))
       val nextState = state(move)
-      Stream.cons((move, nextState), moveStateStream(nextState))
+      cons((move, nextState), moveStateStream(nextState))
     }
   }
 
@@ -31,7 +41,7 @@ trait Game {
     case false => {
       val move = moveIt.next
       val nextState = state(move)
-      Stream.cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
+      cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
   }
 
@@ -95,6 +105,8 @@ trait Game {
     def apply(move: MOVE): STATE
 
     def outcome(): Option[OUTCOME]
+
+    def moves(): Seq[MOVE]
 
   }
 
