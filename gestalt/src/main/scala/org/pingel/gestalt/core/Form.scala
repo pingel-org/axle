@@ -7,7 +7,6 @@ import java.awt.Point
 import java.awt.event.MouseEvent
 import java.awt.geom.Ellipse2D
 import org.pingel.gestalt.ui.Widget
-import org.pingel.axle.util.Printable
 
 abstract case class Form(lambda: Lambda = new Lambda())
   extends Logos
@@ -27,7 +26,7 @@ abstract case class Form(lambda: Lambda = new Lambda())
 
   var parent: ComplexForm = null
 
-  //    private CallVertex outputFrom = null;
+  // private CallVertex outputFrom = null
 
   var inputTo: CallGraph = null
 

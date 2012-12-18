@@ -1,7 +1,5 @@
 package org.pingel.gestalt.core
 
-import org.pingel.axle.util.Printable
-
 case class ComplexTransform(override val guardName: Name)
   extends Transform(guardName) {
 

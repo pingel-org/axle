@@ -1,8 +1,6 @@
-package org.pingel.gestalt.core;
+package org.pingel.gestalt.core
 
-import org.pingel.axle.util.Printable
-
-import scala.collection._
+import collection._
 
 case class Lexicon {
   var name2object = mutable.Map[Name, Logos]()

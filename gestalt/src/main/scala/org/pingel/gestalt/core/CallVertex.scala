@@ -5,12 +5,10 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Point
 import java.awt.geom.Ellipse2D
-
-import org.pingel.axle.graph.DirectedGraphVertex
-import org.pingel.axle.util.Printable
+import axle.graph._
 
 case class CallVertex(id: Int, tv: TransformVertex, var form: Form)
-  extends DirectedGraphVertex[CallEdge] {
+  extends Vertex[CallEdge] {
 
   val center = new Point()
   val radius = 15
@@ -30,7 +28,7 @@ case class CallVertex(id: Int, tv: TransformVertex, var form: Form)
   def getCenter() = center
 
   def move(p: Point): Unit = {
-    //        System.out.println("CallVertex.move: p = " + p);
+    // println("CallVertex.move: p = " + p)
     center.move(p.x, p.y)
     if (form != null) {
       form.arrange(p)
@@ -39,15 +37,15 @@ case class CallVertex(id: Int, tv: TransformVertex, var form: Form)
 
   def getForm() = form
 
-  def printTo(out: Printable): Unit = {
+  def printTo(sb: StringBuffer): Unit = {
     if (tv.isExit) {
-      out.print("*")
+      sb.append("*")
     } else {
-      out.print(" ")
+      sb.append(" ")
     }
-    out.print("<" + tv.name + ", " + getId() + ", ")
-    form.printToStream(new Name("s" + id), out)
-    out.print(">")
+    sb.append("<" + tv.name + ", " + getId() + ", ")
+    form.printToStream(new Name("s" + id), sb)
+    sb.append(">")
   }
 
   // See http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html for colors
@@ -65,7 +63,7 @@ case class CallVertex(id: Int, tv: TransformVertex, var form: Form)
       g2d.setColor(Color.BLACK)
       g2d.draw(inCircle)
     } else {
-      //            System.out.println("painting cv's form: " + getForm().toString());
+      // println("painting cv's form: " + getForm().toString())
       form.paint(g)
     }
 

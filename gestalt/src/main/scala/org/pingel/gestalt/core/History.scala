@@ -1,9 +1,6 @@
 package org.pingel.gestalt.core
 
-import scala.collection._
-
-import org.pingel.axle.util.Printable
-import org.pingel.axle.util.PrintableStringBuffer
+import collection._
 
 class History {
 

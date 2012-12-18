@@ -6,12 +6,11 @@ import java.awt.Graphics2D
 import java.awt.Point
 import java.awt.Polygon
 import java.awt.event.MouseEvent
-
 import org.pingel.gestalt.ui.Widget
-import org.pingel.axle.graph.DirectedGraphEdge
+import axle.graph._
 
 case class CallEdge(id: Int, v1: CallVertex, v2: CallVertex, transformEdge: TransformEdge)
-  extends DirectedGraphEdge[CallVertex]
+  extends Edge[CallVertex]
   with Widget {
 
   val radius = 15

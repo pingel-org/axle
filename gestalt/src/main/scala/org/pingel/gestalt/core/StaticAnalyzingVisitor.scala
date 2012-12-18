@@ -1,7 +1,7 @@
 
 package org.pingel.gestalt.core
 
-import scala.collection._
+import collection._
 import org.pingel.gestalt.parser._
 import org.pingel.gestalt.parser.visitor.ObjectDepthFirst
 
@@ -17,9 +17,9 @@ class StaticAnalyzingVisitor(lexicon: Lexicon) extends ObjectDepthFirst {
    */
   override def visit(n: syntaxtree.Goal, argu: Object): Object = { // done
 
-    n.f0.accept(this, null);
+    n.f0.accept(this, null)
 
-    return null;
+    null
   }
 
   /**
@@ -32,7 +32,7 @@ class StaticAnalyzingVisitor(lexicon: Lexicon) extends ObjectDepthFirst {
 
     n.f0.accept(this, null)
 
-    return null
+    null
   }
 
   /**
@@ -43,7 +43,7 @@ class StaticAnalyzingVisitor(lexicon: Lexicon) extends ObjectDepthFirst {
 
     includes += n.f1.f0.toString()
 
-    return null;
+    null
   }
 
   /**
@@ -223,7 +223,7 @@ class StaticAnalyzingVisitor(lexicon: Lexicon) extends ObjectDepthFirst {
 
     lexicon.put(name, f)
 
-    return null
+    null
   }
 
   /**

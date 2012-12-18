@@ -6,7 +6,8 @@ import org.pingel.gestalt.core.Lambda
 import org.pingel.gestalt.core.Name
 import org.pingel.gestalt.core.SimpleForm
 import org.pingel.gestalt.core.Form
-import org.pingel.axle.iterator.ListCrossProduct
+
+import axle._
 
 class ProbabilityTable
 
