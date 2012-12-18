@@ -36,6 +36,8 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
     case _ => new InteractiveTicTacToePlayer(id, description)
   }
 
+  def startState() = state(x, startBoard())
+  
   def numPositions() = boardSize * boardSize
 
   def introMessage() = "Intro message to Tic Tac Toe"
@@ -144,7 +146,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
     extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
 
     val heuristic = (state: TicTacToeState) => players.map(p => {
-      (p, state.outcome.map(o => if (o.winner == p) 1.0 else -1.0).getOrElse(0.0))
+      (p, state.outcome.map(out => if (out.winner == Some(p)) 1.0 else -1.0).getOrElse(0.0))
     }).toMap
 
     def chooseMove(state: TicTacToeState): TicTacToeMove = ttt.minimax(state, 3, heuristic)._1

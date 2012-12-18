@@ -3,6 +3,7 @@ package axle.game
 
 import collection._
 import Stream.{ empty, cons }
+import util.Random.shuffle
 
 trait Game {
 
@@ -17,33 +18,35 @@ trait Game {
 
   def introMessage(): Unit
 
+  def startState(): STATE
+  
   def minimax(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
     if (state.outcome.isDefined || depth <= 0) {
       (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
     } else {
-      state.moves
+      shuffle(state.moves) // TODO: shuffle only moves with max utility
         .map(move => (move, minimax(state(move), depth - 1, heuristic)._2))
         .maxBy(mcr => (mcr._2)(state.player))
     }
 
-  def moveStateStream(state: STATE): Stream[(MOVE, STATE)] = state.outcome.isDefined match {
-    case true => empty
-    case false => {
+  def moveStateStream(state: STATE): Stream[(MOVE, STATE)] =
+    if (state.outcome.isDefined) {
+      empty
+    } else {
       val move = state.player.chooseMove(state)
       players.map(_.notify(move))
       val nextState = state(move)
       cons((move, nextState), moveStateStream(nextState))
     }
-  }
 
-  def scriptedMoveStateStream(state: STATE, moveIt: Iterator[MOVE]): Stream[(MOVE, STATE)] = (state.outcome.isDefined || !moveIt.hasNext) match {
-    case true => Stream.empty
-    case false => {
+  def scriptedMoveStateStream(state: STATE, moveIt: Iterator[MOVE]): Stream[(MOVE, STATE)] =
+    if (state.outcome.isDefined || !moveIt.hasNext) {
+      empty
+    } else {
       val move = moveIt.next
       val nextState = state(move)
       cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
-  }
 
   def play(start: STATE): Option[OUTCOME] = {
     for (player <- players()) {
@@ -59,7 +62,7 @@ trait Game {
     lastMoveState._2.outcome
   }
 
-  trait Event { // game: Game
+  trait Event {
 
     def displayTo(player: PLAYER): String
 
