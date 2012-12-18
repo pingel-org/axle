@@ -1,6 +1,7 @@
 package axle
 
 import collection._
+import util.Random.nextInt
 
 object EnrichedIndexedSeq {
 
@@ -20,10 +21,12 @@ class EnrichedIndexedSeq[T](is: IndexedSeq[T]) {
     }
   }
 
+  def random(): T = is(nextInt(is.size))
+
   def powerset(): IndexedPowerSet[T] = IndexedPowerSet(is)
 
   def ℘(): IndexedPowerSet[T] = IndexedPowerSet(is)
-  
+
   def permutations(r: Int): Permutations[T] = Permutations(is, r)
 
   def combinations(r: Int): Combinations[T] = Combinations(is, r)
