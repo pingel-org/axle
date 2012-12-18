@@ -42,21 +42,27 @@ trait Game {
   def alphabeta(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
     _alphabeta(state, depth, players.map((_, Double.MinValue)).toMap, heuristic)
 
-  case class AlphaBetaFold(move: MOVE, cutoff: Map[PLAYER, Double], continue: Boolean)
+  case class AlphaBetaFold(move: MOVE, cutoff: Map[PLAYER, Double], done: Boolean) {
+
+    def process(m: MOVE, state: STATE, heuristic: STATE => Map[PLAYER, Double]): AlphaBetaFold =
+      if (done) {
+        this
+      } else {
+        val α = heuristic(state(m))
+        if (cutoff(state.player) <= α(state.player)) // TODO: forall other players ??
+          AlphaBetaFold(m, α, false) // TODO move = m?
+        else
+          AlphaBetaFold(m, cutoff, true)
+      }
+  }
 
   def _alphabeta(state: STATE, depth: Int, cutoff: Map[PLAYER, Double], heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
+
     if (state.outcome.isDefined || depth <= 0) {
       (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
     } else {
-      val result = state.moves.foldLeft(AlphaBetaFold(null.asInstanceOf[MOVE], cutoff, true))(
-        (in: AlphaBetaFold, move: MOVE) => {
-          // TODO handle incoming null ?
-          val α = List(in, AlphaBetaFold(move, heuristic(state(move)), true)).maxBy(_.cutoff(state.player))
-          if (α.cutoff(state.player) <= cutoff(state.player)) // TODO: forall other players ??
-            α // TODO continue not always 'move'
-          else
-            null.asInstanceOf[AlphaBetaFold] // TODO: handle 'break' ?
-        }
+      val result = state.moves.foldLeft(AlphaBetaFold(null.asInstanceOf[MOVE], cutoff, false))(
+        (in: AlphaBetaFold, move: MOVE) => in.process(move, state, heuristic)
       )
       (result.move, result.cutoff)
     }
