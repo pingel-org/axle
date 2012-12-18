@@ -1,6 +1,7 @@
 
 package axle.game
 
+import axle._
 import collection._
 import Stream.{ empty, cons }
 import util.Random.shuffle
@@ -19,14 +20,45 @@ trait Game {
   def introMessage(): Unit
 
   def startState(): STATE
-  
+
   def minimax(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
     if (state.outcome.isDefined || depth <= 0) {
       (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
     } else {
-      shuffle(state.moves) // TODO: shuffle only moves with max utility
-        .map(move => (move, minimax(state(move), depth - 1, heuristic)._2))
-        .maxBy(mcr => (mcr._2)(state.player))
+      val moveValue = state.moves.map(move => (move, minimax(state(move), depth - 1, heuristic)._2))
+      val bestValue = moveValue.map(mcr => (mcr._2)(state.player)).max
+      moveValue.filter(mcr => (mcr._2)(state.player) == bestValue).toIndexedSeq.random
+    }
+
+  /**
+   * α-β pruning generalized for N-player non-zero-sum games
+   *
+   * 2-player zero-sum version described at:
+   *
+   *   http://en.wikipedia.org/wiki/Alpha-beta_pruning
+   *
+   */
+
+  def alphabeta(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
+    _alphabeta(state, depth, players.map((_, Double.MinValue)).toMap, heuristic)
+
+  case class AlphaBetaFold(move: MOVE, cutoff: Map[PLAYER, Double], continue: Boolean)
+
+  def _alphabeta(state: STATE, depth: Int, cutoff: Map[PLAYER, Double], heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
+    if (state.outcome.isDefined || depth <= 0) {
+      (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
+    } else {
+      val result = state.moves.foldLeft(AlphaBetaFold(null.asInstanceOf[MOVE], cutoff, true))(
+        (in: AlphaBetaFold, move: MOVE) => {
+          // TODO handle incoming null ?
+          val α = List(in, AlphaBetaFold(move, heuristic(state(move)), true)).maxBy(_.cutoff(state.player))
+          if (α.cutoff(state.player) <= cutoff(state.player)) // TODO: forall other players ??
+            α // TODO continue not always 'move'
+          else
+            null.asInstanceOf[AlphaBetaFold] // TODO: handle 'break' ?
+        }
+      )
+      (result.move, result.cutoff)
     }
 
   def moveStateStream(state: STATE): Stream[(MOVE, STATE)] =
