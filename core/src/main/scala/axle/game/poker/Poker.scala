@@ -7,7 +7,7 @@ import util.Random.nextInt
 import collection._
 import Stream.cons
 
-class Poker extends Game {
+class Poker(numPlayers: Int) extends Game {
 
   poker =>
 
@@ -16,10 +16,7 @@ class Poker extends Game {
   type STATE = PokerState
   type OUTCOME = PokerOutcome
 
-  // TODO: dynamic # of players
-  val player1 = player("P1", "Player 1", "human")
-  val player2 = player("P2", "Player 2", "ai")
-  val player3 = player("P3", "Player 3", "ai")
+  val _players = (1 to numPlayers).map(i => player("P"+i, "Player "+i, "human"))
 
   //  def state(player: PokerPlayer, deck: Deck) =
   //    new PokerState(player, deck)
@@ -36,32 +33,27 @@ class Poker extends Game {
     val deck = Deck()
 
     // TODO clean up these range calculations
-    val hands = players.zipWithIndex.map({ case (player, i) => (player, deck.cards.apply(i * 2 to i * 2 + 1)) }).toMap
-    val shared = deck.cards(players.size * 2 to players.size * 2 + 4) // flop, river
+    val hands = _players.zipWithIndex.map({ case (player, i) => (player, deck.cards.apply(i * 2 to i * 2 + 1)) }).toMap
+    val shared = deck.cards(_players.size * 2 to _players.size * 2 + 4) // flop, river
 
     PokerState(
-      player1,
-      Deck(deck.cards((players.size * 2 + 5) until deck.cards.length)),
+      _players(0),
+      Deck(deck.cards((_players.size * 2 + 5) until deck.cards.length)),
       shared,
       0, // # of shared cards showing
       hands,
       0.0, // pot
       0.0, // current bet // TODO big/small blind
-      players.map(player => (player, 0.0)).toMap // inFor
+      players.map(player => (player, 0.0)).toMap, // inFor
+      players.map(player => (player, 100.0)).toMap // piles
     )
   }
 
   def introMessage() = "Welcome to Poker"
 
-  def players() = immutable.Set(player1, player2, player3)
+  def players() = _players.toSet
 
-  def playerAfter(player: PokerPlayer): PokerPlayer =
-    if (player == player1)
-      player2
-    else if (player == player2)
-      player3
-    else
-      player1
+  def playerAfter(player: PokerPlayer): PokerPlayer = _players(_players.indexOf(player) + 1 % _players.length)
 
   class PokerMove(_pokerPlayer: PokerPlayer) extends Move(_pokerPlayer) {
     def player() = _pokerPlayer
@@ -84,7 +76,8 @@ class Poker extends Game {
     hands: Map[PokerPlayer, Seq[Card]],
     pot: Double,
     currentBet: Double,
-    inFor: Map[PokerPlayer, Double])
+    inFors: Map[PokerPlayer, Double],
+    piles: Map[PokerPlayer, Double])
     extends State() {
 
     override def toString(): String =
@@ -92,7 +85,12 @@ class Poker extends Game {
         "Pot: " + pot + "\n" +
         "Shared: " + shared.zipWithIndex.map({ case (card, i) => if (i < numShown) card.toString else "??" }).mkString(" ") + "\n" +
         "\n" +
-        players.map(player => player.id + ": " + hands(player).map(_.toString).mkString(" ") + "   $" + inFor(player)).mkString("\n")
+        players.map(player => {
+          val hand = hands(player)
+          val inFor = inFors(player)
+          val pile = piles(player)
+          player.id + ": hand " + hands(player).map(_.toString).mkString(" ") + " in for $" + inFor + ", $" + pile + " remaining"
+        }).mkString("\n")
 
     def hasWon(player: PokerPlayer) = true
 
