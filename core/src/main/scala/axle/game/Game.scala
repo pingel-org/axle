@@ -90,14 +90,17 @@ trait Game {
     for (player <- players()) {
       player.introduceGame()
     }
-    val lastMoveState = moveStateStream(start).last
-    lastMoveState._2.outcome.map(outcome =>
-      for (player <- players()) {
-        player.notify(outcome)
-        player.endGame(lastMoveState._2)
+    moveStateStream(start).lastOption.flatMap({
+      case (lastMove, lastState) => {
+        lastState.outcome.map(outcome =>
+          for (player <- players()) {
+            player.notify(outcome)
+            player.endGame(lastState)
+          }
+        )
+        lastState.outcome
       }
-    )
-    lastMoveState._2.outcome
+    })
   }
 
   trait Event {

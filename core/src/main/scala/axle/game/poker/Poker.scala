@@ -16,7 +16,7 @@ class Poker(numPlayers: Int) extends Game {
   type STATE = PokerState
   type OUTCOME = PokerOutcome
 
-  val _players = (1 to numPlayers).map(i => player("P"+i, "Player "+i, "human"))
+  val _players = (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
 
   //  def state(player: PokerPlayer, deck: Deck) =
   //    new PokerState(player, deck)
@@ -63,7 +63,7 @@ class Poker(numPlayers: Int) extends Game {
         " done " + description() + "."
   }
 
-  case class Pass(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer)
+  case class See(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer)
   case class Call(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer)
   case class Raise(pokerPlayer: PokerPlayer, amount: Double) extends PokerMove(pokerPlayer)
   case class Fold(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer)
@@ -96,17 +96,14 @@ class Poker(numPlayers: Int) extends Game {
 
     def moves(): Seq[PokerMove] = List()
 
-    def outcome(): Option[PokerOutcome] = {
-      val winner = poker.players.find(hasWon(_))
-      if (winner.isDefined) {
+    def outcome(): Option[PokerOutcome] =
+      if (numShown < 5) {
+        None
+      } else {
+        // TODO: sort by best hand (not player id)
+        val winner = poker._players.sortBy(_.id).last
         Some(PokerOutcome(winner))
-      } else { // no moves left
-        Some(PokerOutcome(None))
       }
-      //      else {
-      //        None
-      //      }
-    }
 
     def apply(move: PokerMove): PokerState = move match {
       case Raise(player, amount) => null
@@ -115,7 +112,7 @@ class Poker(numPlayers: Int) extends Game {
 
   }
 
-  case class PokerOutcome(winner: Option[PokerPlayer]) extends Outcome(winner)
+  case class PokerOutcome(winner: PokerPlayer) extends Outcome(Some(winner))
 
   abstract class PokerPlayer(id: String, description: String) extends Player(id, description)
 
@@ -145,8 +142,16 @@ class Poker(numPlayers: Int) extends Game {
 
     override def introduceGame(): Unit = {
       val intro = """
-Poker
-Description of moves goes here"""
+Texas Hold Em Poker
+
+Example moves:
+        
+  raise 1.0
+  see
+  fold
+  call
+        
+"""
       println(intro)
     }
 
@@ -172,14 +177,18 @@ Description of moves goes here"""
       cons(num, userInputStream)
     }
 
-    def isValidMove(num: String, state: PokerState): Boolean = {
-      true
+    def parseMove(moveStr: String): Option[PokerMove] = {
+      Some(Raise(this, 1.0)) // TODO
+    }
+
+    def isValidMove(state: PokerState, move: PokerMove): Boolean = {
+      util.Random.nextDouble < 0.6 // TODO
     }
 
     def chooseMove(state: PokerState): PokerMove = {
       displayEvents()
       println(state)
-      null // PokerMove(this, userInputStream().find(input => isValidMove(input, state)).map(_.toInt).get)
+      userInputStream().flatMap(parseMove(_)).find(move => isValidMove(state, move)).get
     }
 
   }
