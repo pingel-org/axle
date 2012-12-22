@@ -3,7 +3,7 @@ package axle.game.ttt
 
 import axle.game._
 import axle.matrix.ArrayMatrixFactory._
-import util.Random
+import util.Random.{nextInt}
 import collection._
 import scalaz._
 import Scalaz._
@@ -157,7 +157,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
 
     def chooseMove(state: TicTacToeState): TicTacToeMove = {
       val opens = state.moves
-      opens(Random.nextInt(opens.length))
+      opens(nextInt(opens.length))
     }
   }
 
