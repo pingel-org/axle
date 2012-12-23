@@ -29,7 +29,7 @@ class Poker(numPlayers: Int) extends Game {
 
   def startState() =
     PokerState(
-      dealer,
+      state => dealer,
       Deck(),
       List(),
       0, // # of shared cards showing
@@ -44,18 +44,6 @@ class Poker(numPlayers: Int) extends Game {
   def introMessage() = "Welcome to Axle Texas Hold Em Poker"
 
   def players() = _players.toSet
-
-  def playerAfter(state: PokerState, player: PokerPlayer): PokerPlayer =
-    if (player == dealer) {
-      _players.find(state.stillIn.contains(_)).get
-    } else {
-      if (state.stillIn.forall(p => state.inFors.get(p).map(_ == state.currentBet).getOrElse(false))) {
-        dealer
-      } else {
-        val psi = _players.filter(state.stillIn.contains(_))
-        psi((psi.indexOf(player) + 1) % psi.length)
-      }
-    }
 
   abstract class PokerMove(_pokerPlayer: PokerPlayer) extends Move(_pokerPlayer) {
     def player() = _pokerPlayer
@@ -87,7 +75,7 @@ class Poker(numPlayers: Int) extends Game {
   }
 
   case class PokerState(
-    player: PokerPlayer,
+    playerFn: PokerState => PokerPlayer,
     deck: Deck,
     shared: Seq[Card], // flop, river, etc
     numShown: Int,
@@ -98,6 +86,21 @@ class Poker(numPlayers: Int) extends Game {
     inFors: Map[PokerPlayer, Double],
     piles: Map[PokerPlayer, Double])
     extends State() {
+
+    lazy val _player = playerFn(this)
+
+    def player() = _player
+
+    def firstBetter() = _players.find(stillIn.contains(_)).get
+
+    def betterAfter(before: PokerPlayer): Option[PokerPlayer] = {
+      if (stillIn.forall(p => inFors.get(p).map(_ == currentBet).getOrElse(false))) {
+        None
+      } else {
+        val psi = _players.filter(stillIn.contains(_))
+        Some(psi((psi.indexOf(before) + 1) % psi.length))
+      }
+    }
 
     override def toString(): String =
       "To: " + player + "\n" +
@@ -126,7 +129,6 @@ class Poker(numPlayers: Int) extends Game {
       }
 
     def apply(move: PokerMove): PokerState = {
-      val nextPlayer = playerAfter(this, player)
       move match {
 
         case Deal() => {
@@ -137,7 +139,7 @@ class Poker(numPlayers: Int) extends Game {
           val shared = cards(_players.size * 2 to _players.size * 2 + 4)
           val unused = cards((_players.size * 2 + 5) until cards.length)
           PokerState(
-            nextPlayer,
+            _.firstBetter,
             Deck(unused),
             shared,
             numShown,
@@ -153,7 +155,7 @@ class Poker(numPlayers: Int) extends Game {
         case Raise(player, amount) => {
           val diff = currentBet + amount - inFors.get(player).getOrElse(0.0)
           PokerState(
-            nextPlayer,
+            _.betterAfter(player).getOrElse(dealer),
             deck,
             shared,
             numShown,
@@ -169,7 +171,7 @@ class Poker(numPlayers: Int) extends Game {
         case Call(player) => {
           val diff = currentBet - inFors.get(player).getOrElse(0.0)
           PokerState(
-            nextPlayer,
+            _.betterAfter(player).getOrElse(dealer),
             deck,
             shared,
             numShown,
@@ -183,17 +185,24 @@ class Poker(numPlayers: Int) extends Game {
         }
 
         case Fold(player) =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles)
+          PokerState(
+            _.betterAfter(player).getOrElse(dealer),
+            deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles)
 
-        // inFors.map({ case (p, _) => (p, 0.0) })
         case Flop() =>
-          PokerState(nextPlayer, deck, shared, 3, hands, pot, 0, stillIn, Map(), piles)
+          PokerState(
+            _.firstBetter,
+            deck, shared, 3, hands, pot, 0, stillIn, Map(), piles)
 
         case Turn() =>
-          PokerState(nextPlayer, deck, shared, 4, hands, pot, 0, stillIn, Map(), piles)
+          PokerState(
+            _.firstBetter,
+            deck, shared, 4, hands, pot, 0, stillIn, Map(), piles)
 
         case River() =>
-          PokerState(nextPlayer, deck, shared, 5, hands, pot, 0, stillIn, Map(), piles)
+          PokerState(
+            _.firstBetter,
+            deck, shared, 5, hands, pot, 0, stillIn, Map(), piles)
 
       }
     }
