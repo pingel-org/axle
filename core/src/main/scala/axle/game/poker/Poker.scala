@@ -20,11 +20,6 @@ class Poker(numPlayers: Int) extends Game {
 
   val _players = (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
 
-  //  def state(player: PokerPlayer, deck: Deck) =
-  //    new PokerState(player, deck)
-
-  def move(player: PokerPlayer) = null // PokerMove(player)
-
   def player(id: String, description: String, which: String) = which match {
     case "random" => new RandomPokerPlayer(id, description)
     case "ai" => new AIPokerPlayer(id, description)
@@ -40,7 +35,7 @@ class Poker(numPlayers: Int) extends Game {
       0, // # of shared cards showing
       Map(),
       0.0, // pot
-      0.0, // current bet // TODO big/small blind
+      0.0, // current bet
       players.map(player => (player, 0.0)).toMap,
       players.map(player => (player, 100.0)).toMap // piles
     )
@@ -301,6 +296,8 @@ Example moves:
     }
 
     def isValidMove(state: PokerState, move: PokerMove): Boolean = {
+      // TODO: is there a limit to the number of raises that can occur?
+      // TODO: maximum bet
       true // TODO
     }
 
