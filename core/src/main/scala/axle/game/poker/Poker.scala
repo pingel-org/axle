@@ -113,6 +113,7 @@ class Poker(numPlayers: Int) extends Game {
     def apply(move: PokerMove): PokerState = {
       val nextPlayer = playerAfter(player)
       move match {
+        
         case Deal() => {
           // TODO big/small blind
           // TODO clean up these range calculations
@@ -164,19 +165,19 @@ class Poker(numPlayers: Int) extends Game {
         }
 
         case Call(player) =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles) // TODO
 
         case Fold(player) =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles) // TODO
 
         case Flop() =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+          PokerState(nextPlayer, deck, shared, 3, hands, pot, currentBet, inFors, piles)
 
         case Turn() =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+          PokerState(nextPlayer, deck, shared, 4, hands, pot, currentBet, inFors, piles)
 
         case River() =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+          PokerState(nextPlayer, deck, shared, 5, hands, pot, currentBet, inFors, piles)
 
       }
     }
