@@ -282,9 +282,15 @@ Example moves:
       cons(num, userInputStream)
     }
 
-    def parseMove(moveStr: String): Option[PokerMove] = {
-      Some(Raise(this, 1.0)) // TODO
-    }
+    // TODO parse moveStr (including raise amount)
+    def parseMove(player: PokerPlayer, moveStr: String): Option[PokerMove] =
+      moveStr match {
+        case "see" => Some(See(player))
+        case "call" => Some(Call(player))
+        case "raise" => Some(Raise(player, 1.0))
+        case "fold" => Some(Fold(player))
+        case _ => None
+      }
 
     def isValidMove(state: PokerState, move: PokerMove): Boolean = {
       true // TODO
@@ -293,7 +299,7 @@ Example moves:
     def chooseMove(state: PokerState): PokerMove = {
       displayEvents()
       println(state)
-      userInputStream().flatMap(parseMove(_)).find(move => isValidMove(state, move)).get
+      userInputStream().flatMap(parseMove(state.player, _)).find(move => isValidMove(state, move)).get
     }
 
   }
