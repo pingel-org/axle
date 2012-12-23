@@ -60,22 +60,38 @@ class Poker(numPlayers: Int) extends Game {
     }
   }
 
-  class PokerMove(_pokerPlayer: PokerPlayer) extends Move(_pokerPlayer) {
+  abstract class PokerMove(_pokerPlayer: PokerPlayer) extends Move(_pokerPlayer) {
     def player() = _pokerPlayer
-    def description(): String = "something"
+    def description(): String
     def displayTo(p: PokerPlayer): String =
-      (if (_pokerPlayer != p) { "I will" } else { "You have" }) +
-        " done " + description() + "."
+      (if (_pokerPlayer != p) { _pokerPlayer.id } else { "You" }) +
+        " " + description() + "."
   }
 
-  case class See(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer)
-  case class Call(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer)
-  case class Raise(pokerPlayer: PokerPlayer, amount: Double) extends PokerMove(pokerPlayer)
-  case class Fold(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer)
-  case class Deal() extends PokerMove(dealer)
-  case class Flop() extends PokerMove(dealer)
-  case class Turn() extends PokerMove(dealer)
-  case class River() extends PokerMove(dealer)
+  case class See(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
+    def description() = "see the bet"
+  }
+  case class Call(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
+    def description() = "call"
+  }
+  case class Raise(pokerPlayer: PokerPlayer, amount: Double) extends PokerMove(pokerPlayer) {
+    def description() = "raise the bet by " + amount
+  }
+  case class Fold(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
+    def description() = "fold"
+  }
+  case class Deal() extends PokerMove(dealer) {
+    def description() = "initial deal"
+  }
+  case class Flop() extends PokerMove(dealer) {
+    def description() = "reveal the flop"
+  }
+  case class Turn() extends PokerMove(dealer) {
+    def description() = "reveal the turn"
+  }
+  case class River() extends PokerMove(dealer) {
+    def description() = "reveal the river"
+  }
 
   case class PokerState(
     player: PokerPlayer,
@@ -90,7 +106,8 @@ class Poker(numPlayers: Int) extends Game {
     extends State() {
 
     override def toString(): String =
-      "Current bet: " + currentBet + "\n" +
+      "To: " + player + "\n" +
+        "Current bet: " + currentBet + "\n" +
         "Pot: " + pot + "\n" +
         "Shared: " + shared.zipWithIndex.map({ case (card, i) => if (i < numShown) card.toString else "??" }).mkString(" ") + "\n" +
         "\n" +
@@ -115,7 +132,7 @@ class Poker(numPlayers: Int) extends Game {
     def apply(move: PokerMove): PokerState = {
       val nextPlayer = playerAfter(this, player)
       move match {
-        
+
         case Deal() => {
           // TODO big/small blind
           // TODO clean up these range calculations
