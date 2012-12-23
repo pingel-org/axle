@@ -282,15 +282,29 @@ Example moves:
       cons(num, userInputStream)
     }
 
-    // TODO parse moveStr (including raise amount)
-    def parseMove(player: PokerPlayer, moveStr: String): Option[PokerMove] =
-      moveStr match {
-        case "see" => Some(See(player))
-        case "call" => Some(Call(player))
-        case "raise" => Some(Raise(player, 1.0))
-        case "fold" => Some(Fold(player))
-        case _ => None
+    def parseMove(player: PokerPlayer, moveStr: String): Option[PokerMove] = {
+      val tokens = moveStr.split("\\s+")
+      if (tokens.length > 0) {
+        tokens(0) match {
+          case "see" => Some(See(player))
+          case "call" => Some(Call(player))
+          case "raise" => {
+            if (tokens.length == 2)
+              try {
+                Some(Raise(player, tokens(1).toDouble))
+              } catch {
+                case e: Exception => None
+              }
+            else
+              None
+          }
+          case "fold" => Some(Fold(player))
+          case _ => None
+        }
+      } else {
+        None
       }
+    }
 
     def isValidMove(state: PokerState, move: PokerMove): Boolean = {
       true // TODO
