@@ -49,14 +49,16 @@ class Poker(numPlayers: Int) extends Game {
 
   def players() = _players.toSet
 
-  def playerAfter(player: PokerPlayer): PokerPlayer =
+  def playerAfter(state: PokerState, player: PokerPlayer): PokerPlayer = {
+    val stillIn = _players.filter(state.inFors.contains(_))
     if (player == dealer) {
-      _players(0)
-    } else if (_players.indexOf(player) == (_players.length - 1)) {
+      stillIn(0)
+    } else if (stillIn.indexOf(player) == (stillIn.length - 1)) {
       dealer
     } else {
-      _players(_players.indexOf(player) + 1)
+      stillIn(stillIn.indexOf(player) + 1)
     }
+  }
 
   class PokerMove(_pokerPlayer: PokerPlayer) extends Move(_pokerPlayer) {
     def player() = _pokerPlayer
@@ -111,7 +113,7 @@ class Poker(numPlayers: Int) extends Game {
       }
 
     def apply(move: PokerMove): PokerState = {
-      val nextPlayer = playerAfter(player)
+      val nextPlayer = playerAfter(this, player)
       move match {
         
         case Deal() => {
@@ -168,7 +170,7 @@ class Poker(numPlayers: Int) extends Game {
           PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles) // TODO
 
         case Fold(player) =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles) // TODO
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors - player, piles)
 
         case Flop() =>
           PokerState(nextPlayer, deck, shared, 3, hands, pot, currentBet, inFors, piles)
