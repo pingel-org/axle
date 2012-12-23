@@ -36,31 +36,32 @@ class Poker(numPlayers: Int) extends Game {
       Map(),
       0.0, // pot
       0.0, // current bet
-      players.map(player => (player, 0.0)).toMap,
+      _players.toSet, // stillIn
+      Map(), // inFors
       players.map(player => (player, 100.0)).toMap // piles
     )
 
-  def introMessage() = "Welcome to Texas Hold Em Poker"
+  def introMessage() = "Welcome to Axle Texas Hold Em Poker"
 
   def players() = _players.toSet
 
-  def playerAfter(state: PokerState, player: PokerPlayer): PokerPlayer = {
-    val stillIn = _players.filter(state.inFors.contains(_))
+  def playerAfter(state: PokerState, player: PokerPlayer): PokerPlayer =
     if (player == dealer) {
-      stillIn(0)
-    } else if (stillIn.indexOf(player) == (stillIn.length - 1)) {
-      dealer
+      _players.find(state.stillIn.contains(_)).get
     } else {
-      stillIn(stillIn.indexOf(player) + 1)
+      if (state.stillIn.forall(p => state.inFors.get(p).map(_ == state.currentBet).getOrElse(false))) {
+        dealer
+      } else {
+        val psi = _players.filter(state.stillIn.contains(_))
+        psi((psi.indexOf(player) + 1) % psi.length)
+      }
     }
-  }
 
   abstract class PokerMove(_pokerPlayer: PokerPlayer) extends Move(_pokerPlayer) {
     def player() = _pokerPlayer
     def description(): String
     def displayTo(p: PokerPlayer): String =
-      (if (_pokerPlayer != p) { _pokerPlayer.id } else { "You" }) +
-        " " + description() + "."
+      (if (_pokerPlayer != p) _pokerPlayer.id else "You") + " " + description() + "."
   }
 
   case class Call(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
@@ -93,6 +94,7 @@ class Poker(numPlayers: Int) extends Game {
     hands: Map[PokerPlayer, Seq[Card]],
     pot: Double,
     currentBet: Double,
+    stillIn: Set[PokerPlayer],
     inFors: Map[PokerPlayer, Double],
     piles: Map[PokerPlayer, Double])
     extends State() {
@@ -101,7 +103,9 @@ class Poker(numPlayers: Int) extends Game {
       "To: " + player + "\n" +
         "Current bet: " + currentBet + "\n" +
         "Pot: " + pot + "\n" +
-        "Shared: " + shared.zipWithIndex.map({ case (card, i) => if (i < numShown) card.toString else "??" }).mkString(" ") + "\n" +
+        "Shared: " + shared.zipWithIndex.map({
+          case (card, i) => if (i < numShown) card.toString else "??"
+        }).mkString(" ") + "\n" +
         "\n" +
         players.map(player => {
           val handString = hands.get(player).map(_.map(_.toString).mkString(" ")).getOrElse("--")
@@ -140,7 +144,8 @@ class Poker(numPlayers: Int) extends Game {
             hands,
             pot,
             currentBet,
-            inFors,
+            stillIn,
+            Map(),
             piles
           )
         }
@@ -155,6 +160,7 @@ class Poker(numPlayers: Int) extends Game {
             hands,
             pot + diff,
             currentBet + amount,
+            stillIn,
             inFors + (player -> (currentBet + amount)),
             piles + (player -> (piles(player) - diff))
           )
@@ -170,22 +176,24 @@ class Poker(numPlayers: Int) extends Game {
             hands,
             pot + diff,
             currentBet,
+            stillIn,
             inFors + (player -> currentBet),
             piles + (player -> (piles(player) - diff))
           )
         }
 
         case Fold(player) =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors - player, piles)
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles)
 
+        // inFors.map({ case (p, _) => (p, 0.0) })
         case Flop() =>
-          PokerState(nextPlayer, deck, shared, 3, hands, pot, 0, inFors.map({ case (p, _) => (p, 0.0) }), piles)
+          PokerState(nextPlayer, deck, shared, 3, hands, pot, 0, stillIn, Map(), piles)
 
         case Turn() =>
-          PokerState(nextPlayer, deck, shared, 4, hands, pot, 0, inFors.map({ case (p, _) => (p, 0.0) }), piles)
+          PokerState(nextPlayer, deck, shared, 4, hands, pot, 0, stillIn, Map(), piles)
 
         case River() =>
-          PokerState(nextPlayer, deck, shared, 5, hands, pot, 0, inFors.map({ case (p, _) => (p, 0.0) }), piles)
+          PokerState(nextPlayer, deck, shared, 5, hands, pot, 0, stillIn, Map(), piles)
 
       }
     }
@@ -220,7 +228,7 @@ class Poker(numPlayers: Int) extends Game {
 
     def chooseMove(state: PokerState): PokerMove = state.numShown match {
       case 0 =>
-        if (state.pot == 0.0)
+        if (state.inFors.size == 0)
           Deal()
         else
           Flop()
@@ -259,6 +267,7 @@ Example moves:
     }
 
     def displayEvents(): Unit = {
+      println()
       val info = eventQueue.map(_.displayTo(this)).mkString("  ")
       println(info)
       eventQueue.clear()
@@ -275,9 +284,9 @@ Example moves:
       val tokens = moveStr.split("\\s+")
       if (tokens.length > 0) {
         tokens(0) match {
-          case "check" => Some(Call(player)) // TODO 'check' is a 'call' when currentBet == 0.  Might want to model this.
-          case "call" => Some(Call(player))
-          case "raise" => {
+          // TODO 'check' is a 'call' when currentBet == 0.  Might want to model this.
+          case "c" | "check" | "call" => Some(Call(player))
+          case "r" | "raise" => {
             if (tokens.length == 2)
               try {
                 Some(Raise(player, tokens(1).toDouble))
@@ -287,7 +296,7 @@ Example moves:
             else
               None
           }
-          case "fold" => Some(Fold(player))
+          case "f" | "fold" => Some(Fold(player))
           case _ => None
         }
       } else {
