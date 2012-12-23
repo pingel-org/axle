@@ -93,6 +93,7 @@ class Poker(numPlayers: Int) extends Game {
 
     def firstBetter() = _players.find(stillIn.contains(_)).get
 
+    // TODO: another round of betting after river is shown
     def betterAfter(before: PokerPlayer): Option[PokerPlayer] = {
       if (stillIn.forall(p => inFors.get(p).map(_ == currentBet).getOrElse(false))) {
         None
@@ -124,12 +125,15 @@ class Poker(numPlayers: Int) extends Game {
     def moves(): Seq[PokerMove] = List()
 
     def outcome(): Option[PokerOutcome] =
-      if (numShown < 5) {
+      if (numShown < 5 && stillIn.size > 1) {
         None
       } else {
-        // TODO: another round of betting after river is shown
-        val winner = poker._players.sortBy(_.id).last // TODO: sort by best hand (not player id)
-        Some(PokerOutcome(winner))
+        if (stillIn.size == 1) {
+          Some(PokerOutcome(stillIn.toIndexedSeq.head))
+        } else {
+          val winner = poker._players.sortBy(_.id).last // TODO: sort by best hand (not player id)
+          Some(PokerOutcome(winner))
+        }
       }
 
     def apply(move: PokerMove): PokerState = {
