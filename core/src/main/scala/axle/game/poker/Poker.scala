@@ -68,9 +68,6 @@ class Poker(numPlayers: Int) extends Game {
         " " + description() + "."
   }
 
-  case class See(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
-    def description() = "see the bet"
-  }
   case class Call(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
     def description() = "call"
   }
@@ -168,7 +165,7 @@ class Poker(numPlayers: Int) extends Game {
           )
         }
 
-        case See(player) => {
+        case Call(player) => {
           val diff = currentBet - inFors.get(player).getOrElse(0.0)
           PokerState(
             nextPlayer,
@@ -183,20 +180,17 @@ class Poker(numPlayers: Int) extends Game {
           )
         }
 
-        case Call(player) =>
-          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles) // TODO
-
         case Fold(player) =>
           PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors - player, piles)
 
         case Flop() =>
-          PokerState(nextPlayer, deck, shared, 3, hands, pot, currentBet, inFors, piles)
+          PokerState(nextPlayer, deck, shared, 3, hands, pot, 0, inFors.map({ case (p, _) => (p, 0.0) }), piles)
 
         case Turn() =>
-          PokerState(nextPlayer, deck, shared, 4, hands, pot, currentBet, inFors, piles)
+          PokerState(nextPlayer, deck, shared, 4, hands, pot, 0, inFors.map({ case (p, _) => (p, 0.0) }), piles)
 
         case River() =>
-          PokerState(nextPlayer, deck, shared, 5, hands, pot, currentBet, inFors, piles)
+          PokerState(nextPlayer, deck, shared, 5, hands, pot, 0, inFors.map({ case (p, _) => (p, 0.0) }), piles)
 
       }
     }
@@ -251,10 +245,10 @@ Texas Hold Em Poker
 
 Example moves:
         
+  check
   raise 1.0
-  see
-  fold
   call
+  fold
         
 """
       println(intro)
@@ -286,7 +280,7 @@ Example moves:
       val tokens = moveStr.split("\\s+")
       if (tokens.length > 0) {
         tokens(0) match {
-          case "see" => Some(See(player))
+          case "check" => Some(Call(player)) // TODO 'check' is a 'call' when currentBet == 0.  Might want to model this.
           case "call" => Some(Call(player))
           case "raise" => {
             if (tokens.length == 2)
