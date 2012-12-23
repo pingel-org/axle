@@ -97,7 +97,8 @@ class Poker(numPlayers: Int) extends Game {
       if (stillIn.forall(p => inFors.get(p).map(_ == currentBet).getOrElse(false))) {
         None
       } else {
-        val psi = _players.filter(stillIn.contains(_))
+        // 'psi' !stillIn.contains(p) after a fold
+        val psi = _players.filter(p => stillIn.contains(p) || p == before)
         Some(psi((psi.indexOf(before) + 1) % psi.length))
       }
     }
@@ -111,10 +112,13 @@ class Poker(numPlayers: Int) extends Game {
         }).mkString(" ") + "\n" +
         "\n" +
         players.map(player => {
-          val handString = hands.get(player).map(_.map(_.toString).mkString(" ")).getOrElse("--")
-          val inForString = inFors.get(player).map(_.toString).getOrElse("--")
-          val pileString = piles.get(player).map(_.toString).getOrElse("--")
-          player.id + ": hand " + handString + " in for $" + inForString + ", $" + pileString + " remaining"
+          player.id + ": " +
+            " hand " + hands.get(player).map(_.map(_.toString).mkString(" ")).getOrElse("--") + " " +
+            (if (stillIn.contains(player))
+              "in for $" + inFors.get(player).map(_.toString).getOrElse("--")
+            else
+              "out") +
+            ", $" + piles.get(player).map(_.toString).getOrElse("--") + " remaining"
         }).mkString("\n")
 
     def moves(): Seq[PokerMove] = List()
