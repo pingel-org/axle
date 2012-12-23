@@ -45,7 +45,7 @@ class Poker(numPlayers: Int) extends Game {
       players.map(player => (player, 100.0)).toMap // piles
     )
 
-  def introMessage() = "Welcome to Poker"
+  def introMessage() = "Welcome to Texas Hold Em Poker"
 
   def players() = _players.toSet
 
