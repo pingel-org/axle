@@ -41,7 +41,7 @@ class Poker(numPlayers: Int) extends Game {
       Map(),
       0.0, // pot
       0.0, // current bet // TODO big/small blind
-      Map(),
+      players.map(player => (player, 0.0)).toMap,
       players.map(player => (player, 100.0)).toMap // piles
     )
 
@@ -110,44 +110,74 @@ class Poker(numPlayers: Int) extends Game {
         Some(PokerOutcome(winner))
       }
 
-    def apply(move: PokerMove): PokerState = move match {
-      case Deal() => {
-        // TODO clean up these range calculations
-        val hands = _players.zipWithIndex.map({ case (player, i) => (player, deck.cards.apply(i * 2 to i * 2 + 1)) }).toMap
-        val shared = deck.cards(_players.size * 2 to _players.size * 2 + 4) // flop, river
-        val unused = deck.cards((_players.size * 2 + 5) until deck.cards.length)
-        PokerState(
-          _players(0),
-          Deck(unused),
-          shared,
-          0, // # of shared cards showing
-          hands,
-          0.0, // pot
-          0.0, // current bet // TODO big/small blind
-          players.map(player => (player, 0.0)).toMap, // inFor
-          piles
-        )
-      }
-      case Raise(player, amount) => {
-        PokerState(player, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
-      }
-      case See(player) => {
-        PokerState(player, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
-      }
-      case Call(player) => {
-        PokerState(player, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
-      }
-      case Fold(player) => {
-        PokerState(player, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
-      }
-      case Flop() => {
-        PokerState(player, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
-      }
-      case Turn() => {
-        PokerState(player, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
-      }
-      case River() => {
-        PokerState(player, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+    def apply(move: PokerMove): PokerState = {
+      val nextPlayer = playerAfter(player)
+      move match {
+        case Deal() => {
+          // TODO big/small blind
+          // TODO clean up these range calculations
+          val cards = Vector() ++ deck.cards
+          val hands = _players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
+          val shared = cards(_players.size * 2 to _players.size * 2 + 4)
+          val unused = cards((_players.size * 2 + 5) until cards.length)
+          PokerState(
+            nextPlayer,
+            Deck(unused),
+            shared,
+            numShown,
+            hands,
+            pot,
+            currentBet,
+            inFors,
+            piles
+          )
+        }
+
+        case Raise(player, amount) => {
+          val diff = currentBet + amount - inFors.get(player).getOrElse(0.0)
+          PokerState(
+            nextPlayer,
+            deck,
+            shared,
+            numShown,
+            hands,
+            pot + diff,
+            currentBet + amount,
+            inFors + (player -> (currentBet + amount)),
+            piles + (player -> (piles(player) - diff))
+          )
+        }
+
+        case See(player) => {
+          val diff = currentBet - inFors.get(player).getOrElse(0.0)
+          PokerState(
+            nextPlayer,
+            deck,
+            shared,
+            numShown,
+            hands,
+            pot + diff,
+            currentBet,
+            inFors + (player -> currentBet),
+            piles + (player -> (piles(player) - diff))
+          )
+        }
+
+        case Call(player) =>
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+
+        case Fold(player) =>
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+
+        case Flop() =>
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+
+        case Turn() =>
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+
+        case River() =>
+          PokerState(nextPlayer, deck, shared, numShown, hands, pot, currentBet, inFors, piles)
+
       }
     }
 
@@ -237,7 +267,7 @@ Example moves:
     }
 
     def isValidMove(state: PokerState, move: PokerMove): Boolean = {
-      util.Random.nextDouble < 0.6 // TODO
+      true // TODO
     }
 
     def chooseMove(state: PokerState): PokerMove = {
