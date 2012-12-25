@@ -327,8 +327,10 @@ Example moves:
     }
 
     def isValidMove(state: PokerState, move: PokerMove): Boolean = {
+      // TODO: cannot call or raise to bet that exceeds pile
       // TODO: is there a limit to the number of raises that can occur?
       // TODO: maximum bet
+      // TODO: how to handle player exhausting pile during game?
       true // TODO
     }
 
