@@ -5,6 +5,7 @@ import axle.game._
 import axle._
 import util.Random.nextInt
 import collection._
+import axle.game.cards._
 import Stream.cons
 
 class Poker(numPlayers: Int) extends Game {
