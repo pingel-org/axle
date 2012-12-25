@@ -6,7 +6,7 @@ sealed trait PokerHandCategory {
   def asInt(): Int
 }
 
-case class RoyalStraight() extends PokerHandCategory {
+case class RoyalFlush(suit: Suit) extends PokerHandCategory {
   def asInt() = 9
 }
 
