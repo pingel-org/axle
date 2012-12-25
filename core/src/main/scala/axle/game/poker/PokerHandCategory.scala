@@ -48,12 +48,7 @@ case class High(rank: Rank) extends PokerHandCategory {
 
 class PokerHandCategoryOrdering extends Ordering[PokerHandCategory] {
 
-  def compare(a: PokerHandCategory, b: PokerHandCategory): Int = {
-    val c2c = a.asInt.compare(b.asInt)
-    if (c2c == 0)
-      0
-    else
-      c2c
-  }
+  def compare(a: PokerHandCategory, b: PokerHandCategory): Int =
+    a.asInt.compare(b.asInt)
 
 }
