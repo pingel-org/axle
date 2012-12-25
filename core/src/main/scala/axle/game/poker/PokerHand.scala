@@ -1,6 +1,6 @@
 package axle.game.cards
 
-case class Hand(cards: IndexedSeq[Card]) {
+case class PokerHand(cards: IndexedSeq[Card]) {
 
   implicit val co = Implicits.cardOrdering
 
@@ -15,7 +15,7 @@ case class Hand(cards: IndexedSeq[Card]) {
 
 }
 
-class HandOrdering extends Ordering[Hand] {
+class PokerHandOrdering extends Ordering[PokerHand] {
 
   import math.Ordering
   import math.Ordering.Implicits._
@@ -32,7 +32,7 @@ class HandOrdering extends Ordering[Hand] {
 
   implicit val co = Implicits.cardOrdering
 
-  def compare(a: Hand, b: Hand) = {
+  def compare(a: PokerHand, b: PokerHand) = {
     val aos = a.orderingStats
     val bos = b.orderingStats
 
