@@ -6,7 +6,7 @@ import axle._
 import util.Random.nextInt
 import collection._
 import axle.game.cards._
-//import axle.game.cards.Implicits._
+import axle.game.cards.Implicits._
 import Stream.cons
 
 class Poker(numPlayers: Int) extends Game {
@@ -33,7 +33,7 @@ class Poker(numPlayers: Int) extends Game {
     PokerState(
       state => dealer,
       Deck(),
-      List(),
+      Vector(),
       0, // # of shared cards showing
       Map(),
       0.0, // pot
@@ -79,7 +79,7 @@ class Poker(numPlayers: Int) extends Game {
   case class PokerState(
     playerFn: PokerState => PokerPlayer,
     deck: Deck,
-    shared: Seq[Card], // flop, river, etc
+    shared: IndexedSeq[Card], // flop, river, etc
     numShown: Int,
     hands: Map[PokerPlayer, Seq[Card]],
     pot: Double,
@@ -131,10 +131,13 @@ class Poker(numPlayers: Int) extends Game {
         None
       } else {
         if (stillIn.size == 1) {
-          Some(PokerOutcome(stillIn.toIndexedSeq.head))
+          Some(PokerOutcome(stillIn.toIndexedSeq.head, None))
         } else {
-          val winner = poker._players.sortBy(_.id).last // TODO: sort by best hand (not player id)
-          Some(PokerOutcome(winner))
+          val (winner, hand) = hands
+            .filter({ case (p, cards) => stillIn.contains(p) }).toList
+            .map({ case (p, cards) => (p, (shared ++ cards).combinations(5).map(PokerHand(_)).toList.max) })
+            .maxBy(_._2)
+          Some(PokerOutcome(winner, Some(hand)))
         }
       }
 
@@ -219,7 +222,7 @@ class Poker(numPlayers: Int) extends Game {
 
   }
 
-  case class PokerOutcome(winner: PokerPlayer) extends Outcome(Some(winner))
+  case class PokerOutcome(winner: PokerPlayer, hand: Option[PokerHand]) extends Outcome(Some(winner))
 
   abstract class PokerPlayer(id: String, description: String) extends Player(id, description)
 

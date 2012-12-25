@@ -9,7 +9,16 @@ case class PokerHand(cards: IndexedSeq[Card]) {
   lazy val sortedHand = cards.sorted.reverse
   lazy val isStraight = sortedHand.zipWithIndex.tail.forall({ case (c, i) => (sortedHand.head.rank.asInt - i) == c.rank.asInt })
 
-  def orderingStats() = (isFlush, isStraight, groups, sortedHand)
+  // TODO low ace
+  
+  def orderingStats() = (
+    isFlush && isStraight,
+    groups(0) == 4,
+    groups(0) == 3 && groups(1) == 2,
+    isFlush,
+    isStraight,
+    groups,
+    sortedHand)
 
   override def toString() = sortedHand.map(_.toString).mkString(" ")
 
