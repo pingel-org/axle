@@ -43,6 +43,12 @@ class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int,
     g2d.drawLine(fp0.x, fp0.y, fp1.x, fp1.y)
   }
 
+  def fillRectangle(g2d: Graphics2D, p0: Point2D[X, Y], p1: Point2D[X, Y]): Unit = {
+    val fp0 = framePoint(p0)
+    val fp1 = framePoint(p1)
+    g2d.fillRect(min(fp0.x, fp1.x), min(fp0.y, fp1.y), abs(fp0.x - fp1.x), abs(fp0.y - fp1.y))
+  }
+
   def drawRectangle(g2d: Graphics2D, p0: Point2D[X, Y], p1: Point2D[X, Y]): Unit = {
     val fp0 = framePoint(p0)
     val fp1 = framePoint(p1)
