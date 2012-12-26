@@ -7,7 +7,7 @@ case class BarChart[X, Y](
   width: Int = 700,
   height: Int = 600,
   border: Int = 50,
-  barWidthToGapRation: Double = 0.80,
+  barWidthPercent: Double = 0.80,
   title: Option[String] = None,
   xAxis: Y,
   xAxisLabel: Option[String] = None,

@@ -64,9 +64,13 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
 
     g2d.setColor(Color.blue)
 
+    val padding = 0.05 // on each side
+    val widthPerBar = (1.0 - (2*padding))/bars.size
+    val halfWhiteSpace = (widthPerBar * (1.0 - barWidthPercent)) / 2.0
+    
     for( ((label, value), i) <- bars.zipWithIndex ) {
-      val leftX = (i * 1d) / bars.size - 0.04
-      val rightX = (i * 1d) / bars.size + 0.04
+      val leftX = padding + halfWhiteSpace + i*widthPerBar
+      val rightX = padding - halfWhiteSpace + (i+1)*widthPerBar
       scaledArea.fillRectangle(g2d, Point2D(leftX, minY), Point2D(rightX, value))
     }
 
