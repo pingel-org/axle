@@ -119,7 +119,12 @@ class Poker(numPlayers: Int) extends Game {
         players.map(p => {
           p.id + ": " +
             " hand " + (
-              hands.get(p).map(_.map(c => if (viewer == p) c.toString else "??").mkString(" ")).getOrElse("--")
+              hands.get(p).map(_.map(c =>
+                if (viewer == p || (numShown == 5 && stillIn.size > 1)) // TODO update this logic when there is betting after the river
+                  c.toString
+                else
+                  "??"
+              ).mkString(" ")).getOrElse("--")
             ) + " " +
               (if (stillIn.contains(p))
                 "in for $" + inFors.get(p).map(_.toString).getOrElse("--")
