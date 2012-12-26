@@ -7,18 +7,20 @@ import java.awt.FontMetrics
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-class PlotComponent[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]) extends JPanel {
+import Plottable._
 
-  import plot._
+class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
+
+  import barChart._
 
   val clockwise90 = math.Pi / -2.0
   val counterClockwise90 = -1.0 * clockwise90
 
-  val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
-
-  val colorStream = Stream.continually(colors.toStream).flatten
-
-  val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)(xPlottable(), yPlottable())
+  val minX = 0.0
+  val maxX = 1.0
+  val yAxis = minX
+  
+  val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)(DoublePlottable, yPlottable())
 
   val normalFont = new Font("Courier New", Font.BOLD, 12)
   val titleFont = new Font("Palatino", Font.BOLD, 20)
@@ -48,14 +50,6 @@ class PlotComponent[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]) extends JPanel {
 
   }
 
-  def key(g2d: Graphics2D): Unit = {
-    val lineHeight = g2d.getFontMetrics.getHeight
-    for ((((label, f), color), i) <- lfs.zip(colorStream).zipWithIndex) {
-      g2d.setColor(color)
-      g2d.drawString(label, 620, 50 + lineHeight * i) // TODO embed position
-    }
-  }
-
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
@@ -66,25 +60,15 @@ class PlotComponent[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]) extends JPanel {
     scaledArea.verticalLine(g2d, yAxis)
     scaledArea.horizontalLine(g2d, xAxis)
 
-    scaledArea.drawXTics(g2d, fontMetrics, xTics)
     scaledArea.drawYTics(g2d, fontMetrics, yTics)
 
-    for (((label, f), color) <- lfs.zip(colorStream)) {
-      g2d.setColor(color)
-      if (connect) {
-        val xsStream = f.keysIterator.toStream
-        for ((x0, x1) <- xsStream.zip(xsStream.tail)) {
-          scaledArea.drawLine(g2d, Point2D(x0, f(x0)), Point2D(x1, f(x1)))
-        }
-      }
-      for (x <- f.keys) {
-        scaledArea.fillOval(g2d, Point2D(x, f(x)), pointDiameter, pointDiameter)
-      }
+    g2d.setColor(Color.blue)
+
+    for( ((label, value), i) <- bars.zipWithIndex ) {
+      val x = (i * 1d) / bars.size
+      scaledArea.drawLine(g2d, Point2D(x, minY), Point2D(x, value))
     }
 
-    if (drawKey) {
-      key(g2d)
-    }
   }
 
 }

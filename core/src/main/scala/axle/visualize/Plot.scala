@@ -18,9 +18,6 @@ case class Plot[X, DX, Y, DY](
   yAxisLabel: Option[String] = None)(
     implicit _xPlottable: Plottable[X], _yPlottable: Plottable[Y]) {
 
-  val clockwise90 = math.Pi / -2.0
-  val counterClockwise90 = -1.0 * clockwise90
-
   val minX = List(yAxis, lfs.map(_._2.firstKey).min(xPlottable)).min(xPlottable)
   val maxX = List(yAxis, lfs.map(_._2.lastKey).max(xPlottable)).max(xPlottable)
   val minY = List(xAxis, lfs.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
