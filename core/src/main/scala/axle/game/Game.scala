@@ -152,6 +152,8 @@ trait Game {
 
     def moves(): Seq[MOVE]
 
+    def displayTo(viewer: PLAYER): String
+    
   }
 
 }

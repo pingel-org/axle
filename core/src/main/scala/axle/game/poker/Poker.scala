@@ -287,7 +287,7 @@ Example moves:
 
     override def endGame(state: PokerState): Unit = {
       displayEvents()
-      println(state)
+      println(state.displayTo(state.player))
     }
 
     override def notify(event: Event): Unit = {

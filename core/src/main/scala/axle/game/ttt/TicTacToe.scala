@@ -80,7 +80,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
     val boardSize = board.columns
     val numPositions = board.length
 
-    override def toString(): String = {
+    def displayTo(viewer: TicTacToePlayer): String = {
 
       val keyWidth = numPositions.toString().length
 
@@ -175,7 +175,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
 
     override def endGame(state: TicTacToeState): Unit = {
       displayEvents()
-      println(state)
+      println(state.displayTo(state.player))
     }
 
     override def notify(event: Event): Unit = {
@@ -219,7 +219,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
 
     def chooseMove(state: TicTacToeState): TicTacToeMove = {
       displayEvents()
-      println(state)
+      println(state.displayTo(state.player))
       TicTacToeMove(this, userInputStream().find(input => isValidMove(input, state)).map(_.toInt).get)
     }
 

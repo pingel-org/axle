@@ -3,6 +3,7 @@ package axle.stats
 import org.specs2.mutable._
 
 import axle.stats._
+import axle.game.Dice._
 
 class ProbabilitySpec extends Specification {
 
