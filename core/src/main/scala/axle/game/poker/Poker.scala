@@ -19,7 +19,7 @@ class Poker(numPlayers: Int) extends Game {
 
   implicit val pokerHandOrdering = new PokerHandOrdering()
   implicit val pokerHandCategoryOrdering = new PokerHandCategoryOrdering()
-  
+
   val dealer = player("D", "Dealer", "dealer")
 
   val _players = (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
@@ -53,7 +53,7 @@ class Poker(numPlayers: Int) extends Game {
     def player() = _pokerPlayer
     def description(): String
     def displayTo(p: PokerPlayer): String =
-      (if (_pokerPlayer != p) _pokerPlayer.id else "You") + " " + description() + "."
+      (if (_pokerPlayer != p) _pokerPlayer.description else "You") + " " + description() + "."
   }
 
   case class Call(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
@@ -108,7 +108,7 @@ class Poker(numPlayers: Int) extends Game {
       }
     }
 
-    override def toString(): String =
+    def displayTo(viewer: PokerPlayer): String =
       "To: " + player + "\n" +
         "Current bet: " + currentBet + "\n" +
         "Pot: " + pot + "\n" +
@@ -116,14 +116,16 @@ class Poker(numPlayers: Int) extends Game {
           case (card, i) => if (i < numShown) card.toString else "??"
         }).mkString(" ") + "\n" +
         "\n" +
-        players.map(player => {
-          player.id + ": " +
-            " hand " + hands.get(player).map(_.map(_.toString).mkString(" ")).getOrElse("--") + " " +
-            (if (stillIn.contains(player))
-              "in for $" + inFors.get(player).map(_.toString).getOrElse("--")
-            else
-              "out") +
-            ", $" + piles.get(player).map(_.toString).getOrElse("--") + " remaining"
+        players.map(p => {
+          p.id + ": " +
+            " hand " + (
+              hands.get(p).map(_.map(c => if (viewer == p) c.toString else "??").mkString(" ")).getOrElse("--")
+            ) + " " +
+              (if (stillIn.contains(p))
+                "in for $" + inFors.get(p).map(_.toString).getOrElse("--")
+              else
+                "out") +
+              ", $" + piles.get(p).map(_.toString).getOrElse("--") + " remaining"
         }).mkString("\n")
 
     def moves(): Seq[PokerMove] = List()
@@ -226,7 +228,9 @@ class Poker(numPlayers: Int) extends Game {
 
   case class PokerOutcome(winner: PokerPlayer, hand: Option[PokerHand]) extends Outcome(Some(winner))
 
-  abstract class PokerPlayer(id: String, description: String) extends Player(id, description)
+  abstract class PokerPlayer(id: String, _description: String) extends Player(id, _description) {
+    def description() = _description
+  }
 
   class AIPokerPlayer(aitttPlayerId: String, aitttDescription: String = "minimax")
     extends PokerPlayer(aitttPlayerId, aitttDescription) {
@@ -338,7 +342,7 @@ Example moves:
 
     def chooseMove(state: PokerState): PokerMove = {
       displayEvents()
-      println(state)
+      println(state.displayTo(this))
       userInputStream().flatMap(parseMove(state.player, _)).find(move => isValidMove(state, move)).get
     }
 
