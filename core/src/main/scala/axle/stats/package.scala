@@ -19,19 +19,6 @@ package object stats {
     Some(List('HEAD, 'TAIL).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(immutable.Map('HEAD -> pHead, 'TAIL -> (1.0 - pHead)))))
 
-  def die(n: Int) = RandomVariable0("d"+n, Some(1 to n),
-    distribution = Some(new ConditionalProbabilityTable0((1 to n).map(i => (i, 1d/n)).toMap)))
-
-  def utfD6() = RandomVariable0("UTF d6",
-    Some(List('⚀, '⚁, '⚂, '⚃, '⚄, '⚅).toIndexedSeq),
-    distribution = Some(new ConditionalProbabilityTable0(immutable.Map(
-      '⚀ -> 1d / 6,
-      '⚁ -> 1d / 6,
-      '⚂ -> 1d / 6,
-      '⚃ -> 1d / 6,
-      '⚄ -> 1d / 6,
-      '⚅ -> 1d / 6))))
-
   def log2(x: Double) = log(x) / log(2)
 
   import Information._
