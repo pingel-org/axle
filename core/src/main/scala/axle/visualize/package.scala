@@ -25,7 +25,7 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  implicit def enComponentPlot[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]): Component = new PlotComponent(plot)
+  implicit def enComponentPlot[X, Y](plot: Plot[X, Y]): Component = new PlotComponent(plot)
 
   implicit def enComponentBarChart[X, Y](barChart: BarChart[X, Y]): Component = new BarChartComponent(barChart)
   

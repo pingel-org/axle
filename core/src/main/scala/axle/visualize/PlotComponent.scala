@@ -7,7 +7,7 @@ import java.awt.FontMetrics
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-class PlotComponent[X, DX, Y, DY](plot: Plot[X, DX, Y, DY]) extends JPanel {
+class PlotComponent[X, Y](plot: Plot[X, Y]) extends JPanel {
 
   import plot._
 

@@ -3,7 +3,7 @@ package axle.visualize
 import scala.collection.Seq
 import scala.collection.SortedMap
 
-case class Plot[X, DX, Y, DY](
+case class Plot[X, Y](
   lfs: Seq[(String, SortedMap[X, Y])],
   connect: Boolean = true,
   drawKey: Boolean = true,
