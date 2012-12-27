@@ -18,7 +18,7 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
   val counterClockwise90 = -1.0 * clockwise90
 
   val clockwise360 = Pi * 2
-  
+
   val minX = 0.0
   val maxX = 1.0
   val yAxis = minX
@@ -46,12 +46,13 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
     )
 
     yAxisLabel.map(text => {
-      // scaledArea.drawStringAtAngle(g2d, text, Point2D(20, (height + fontMetrics.stringWidth(text) / 2.0)), clockwise90)
-      //      g2d.translate(tx, ty)
-      //      g2d.rotate(clockwise90)
-      //      g2d.drawString(text, 0, 0)
-      //      g2d.rotate(counterClockwise90)
-      //      g2d.translate(-tx, -ty)
+      val tx = 20
+      val ty = height + fontMetrics.stringWidth(text) / 2
+      g2d.translate(tx, ty)
+      g2d.rotate(clockwise90)
+      g2d.drawString(text, 0, 0)
+      g2d.rotate(counterClockwise90)
+      g2d.translate(-tx, -ty)
     })
 
   }
