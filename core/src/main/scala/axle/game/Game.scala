@@ -21,14 +21,17 @@ trait Game {
 
   def startState(): STATE
 
-  def minimax(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
+  def minimax(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, STATE, Map[PLAYER, Double]) =
     if (state.outcome.isDefined || depth <= 0) {
-      (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
+      (null.asInstanceOf[MOVE], null.asInstanceOf[STATE], heuristic(state)) // TODO null
     } else {
       // TODO: .get
-      val moveValue = state.moves.map(move => (move, minimax(state(move).get, depth - 1, heuristic)._2))
-      val bestValue = moveValue.map(mcr => (mcr._2)(state.player)).max
-      moveValue.filter(mcr => (mcr._2)(state.player) == bestValue).toIndexedSeq.random
+      val moveValue = state.moves.map(move => {
+        val newState = state(move).get // TODO: .get
+        (move, state, minimax(newState, depth - 1, heuristic)._3)
+      })
+      val bestValue = moveValue.map(mcr => (mcr._3)(state.player)).max
+      moveValue.filter(mcr => (mcr._3)(state.player) == bestValue).toIndexedSeq.random
     }
 
   /**
@@ -72,9 +75,8 @@ trait Game {
     if (state.outcome.isDefined) {
       empty
     } else {
-      val move = state.player.chooseMove(state)
+      val (move, nextState) = state.player.move(state)
       players.map(_.notify(move))
-      val nextState = state(move).get // TODO .get
       cons((move, nextState), moveStateStream(nextState))
     }
 
@@ -132,7 +134,7 @@ trait Game {
 
     def id() = _id
 
-    def chooseMove(state: STATE): MOVE
+    def move(state: STATE): (MOVE, STATE)
 
     override def toString(): String = description
 

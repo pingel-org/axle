@@ -149,15 +149,19 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
       (p, state.outcome.map(out => if (out.winner == Some(p)) 1.0 else -1.0).getOrElse(0.0))
     }).toMap
 
-    def chooseMove(state: TicTacToeState): TicTacToeMove = ttt.minimax(state, 3, heuristic)._1
+    def move(state: TicTacToeState): (TicTacToeMove, TicTacToeState) = {
+      val (move, newState, values) = ttt.minimax(state, 3, heuristic)
+      (move, newState)
+    }
   }
 
   class RandomTicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "random")
     extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
 
-    def chooseMove(state: TicTacToeState): TicTacToeMove = {
+    def move(state: TicTacToeState): (TicTacToeMove, TicTacToeState) = {
       val opens = state.moves
-      opens(nextInt(opens.length))
+      val move = opens(nextInt(opens.length))
+      (move, state(move).get) // TODO: .get
     }
   }
 
@@ -217,10 +221,11 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       }
     }
 
-    def chooseMove(state: TicTacToeState): TicTacToeMove = {
+    def move(state: TicTacToeState): (TicTacToeMove, TicTacToeState) = {
       displayEvents()
       println(state.displayTo(state.player))
-      TicTacToeMove(this, userInputStream().find(input => isValidMove(input, state)).map(_.toInt).get)
+      val move = TicTacToeMove(this, userInputStream().find(input => isValidMove(input, state)).map(_.toInt).get)
+      (move, state(move).get) // TODO .get
     }
 
   }

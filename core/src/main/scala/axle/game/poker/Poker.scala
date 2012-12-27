@@ -259,29 +259,36 @@ class Poker(numPlayers: Int) extends Game {
       (p, state.outcome.map(out => if (out.winner == Some(p)) 1.0 else -1.0).getOrElse(0.0))
     }).toMap
 
-    def chooseMove(state: PokerState): PokerMove = poker.minimax(state, 3, heuristic)._1
+    def move(state: PokerState): (PokerMove, PokerState) = {
+      val (move, newState, values) = poker.minimax(state, 3, heuristic)
+      (move, newState)
+    }
   }
 
   class RandomPokerPlayer(id: String, description: String = "random")
     extends PokerPlayer(id, description) {
 
-    def chooseMove(state: PokerState): PokerMove = {
+    def move(state: PokerState): (PokerMove, PokerState) = {
       val opens = state.moves
-      opens(nextInt(opens.length))
+      val move = opens(nextInt(opens.length))
+      (move, state(move).get)
     }
   }
 
   class DealerPokerPlayer(id: String, description: String = "dealer")
     extends PokerPlayer(id, description) {
 
-    def chooseMove(state: PokerState): PokerMove = state.numShown match {
-      case 0 =>
-        if (state.inFors.size == 0)
-          Deal()
-        else
-          Flop()
-      case 3 => Turn()
-      case 4 => River()
+    def move(state: PokerState): (PokerMove, PokerState) = {
+      val move = state.numShown match {
+        case 0 =>
+          if (state.inFors.size == 0)
+            Deal()
+          else
+            Flop()
+        case 3 => Turn()
+        case 4 => River()
+      }
+      (move, state(move).get) // TODO .get
     }
   }
 
@@ -352,12 +359,13 @@ Example moves:
       }
     }
 
-    def chooseMove(state: PokerState): PokerMove = {
+    def move(state: PokerState): (PokerMove, PokerState) = {
       displayEvents()
       println(state.displayTo(this))
-      userInputStream()
+      val move = userInputStream()
         .flatMap(parseMove(state.player, _))
         .find(move => state(move).isDefined).get
+      (move, state(move).get) // TODO .get
     }
 
   }
