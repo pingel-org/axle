@@ -38,11 +38,11 @@ class Poker(numPlayers: Int) extends Game {
       Vector(),
       0, // # of shared cards showing
       Map(),
-      0.0, // pot
-      0.0, // current bet
+      0, // pot
+      0, // current bet
       _players.toSet, // stillIn
       Map(), // inFors
-      players.map(player => (player, 100.0)).toMap // piles
+      players.map(player => (player, 100)).toMap // piles
     )
 
   def introMessage() = "Welcome to Axle Texas Hold Em Poker"
@@ -59,7 +59,7 @@ class Poker(numPlayers: Int) extends Game {
   case class Call(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
     def description() = "call"
   }
-  case class Raise(pokerPlayer: PokerPlayer, amount: Double) extends PokerMove(pokerPlayer) {
+  case class Raise(pokerPlayer: PokerPlayer, amount: Int) extends PokerMove(pokerPlayer) {
     def description() = "raise the bet by " + amount
   }
   case class Fold(pokerPlayer: PokerPlayer) extends PokerMove(pokerPlayer) {
@@ -84,11 +84,11 @@ class Poker(numPlayers: Int) extends Game {
     shared: IndexedSeq[Card], // flop, river, etc
     numShown: Int,
     hands: Map[PokerPlayer, Seq[Card]],
-    pot: Double,
-    currentBet: Double,
+    pot: Int,
+    currentBet: Int,
     stillIn: Set[PokerPlayer],
-    inFors: Map[PokerPlayer, Double],
-    piles: Map[PokerPlayer, Double])
+    inFors: Map[PokerPlayer, Int],
+    piles: Map[PokerPlayer, Int])
     extends State() {
 
     lazy val _player = playerFn(this)
@@ -175,7 +175,7 @@ class Poker(numPlayers: Int) extends Game {
         }
 
         case Raise(player, amount) => {
-          val diff = currentBet + amount - inFors.get(player).getOrElse(0.0)
+          val diff = currentBet + amount - inFors.get(player).getOrElse(0)
           PokerState(
             _.betterAfter(player).getOrElse(dealer),
             deck,
@@ -191,7 +191,7 @@ class Poker(numPlayers: Int) extends Game {
         }
 
         case Call(player) => {
-          val diff = currentBet - inFors.get(player).getOrElse(0.0)
+          val diff = currentBet - inFors.get(player).getOrElse(0)
           PokerState(
             _.betterAfter(player).getOrElse(dealer),
             deck,
@@ -322,7 +322,7 @@ Example moves:
           case "r" | "raise" => {
             if (tokens.length == 2)
               try {
-                Some(Raise(player, tokens(1).toDouble))
+                Some(Raise(player, tokens(1).toInt))
               } catch {
                 case e: Exception => None
               }
