@@ -19,7 +19,7 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
   val minX = 0.0
   val maxX = 1.0
   val yAxis = minX
-  
+
   val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)(DoublePlottable, yPlottable())
 
   val normalFont = new Font("Courier New", Font.BOLD, 12)
@@ -62,15 +62,17 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
 
     scaledArea.drawYTics(g2d, fontMetrics, yTics)
 
-    g2d.setColor(Color.blue)
-
     val padding = 0.05 // on each side
-    val widthPerBar = (1.0 - (2*padding))/bars.size
+    val widthPerBar = (1.0 - (2 * padding)) / bars.size
     val halfWhiteSpace = (widthPerBar * (1.0 - barWidthPercent)) / 2.0
-    
-    for( ((label, value), i) <- bars.zipWithIndex ) {
-      val leftX = padding + halfWhiteSpace + i*widthPerBar
-      val rightX = padding - halfWhiteSpace + (i+1)*widthPerBar
+
+    val xTics = bars.keys.zipWithIndex.map({ case (x, i) => (padding + (i + 0.5) * widthPerBar, x.toString) }).toList
+    scaledArea.drawXTics(g2d, fontMetrics, xTics, false)
+
+    g2d.setColor(Color.blue)
+    for (((label, value), i) <- bars.zipWithIndex) {
+      val leftX = padding + halfWhiteSpace + i * widthPerBar
+      val rightX = padding - halfWhiteSpace + (i + 1) * widthPerBar
       scaledArea.fillRectangle(g2d, Point2D(leftX, minY), Point2D(rightX, value))
     }
 
