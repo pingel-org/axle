@@ -1,12 +1,23 @@
 package axle.game.poker
 
 import axle.game.cards._
+import axle.game.cards.Implicits.{ rankOrdering, cardOrdering }
+import math.Ordering
+import math.Ordering.Implicits._
 
 sealed trait PokerHandCategory {
+
   def asInt(): Int
   def name(): String
   def describe(hand: PokerHand) = name() + " " + specifics(hand)
   def specifics(hand: PokerHand): String
+  def compareAlike(a: PokerHand, b: PokerHand): Int =
+    if (a.sortedHand < b.sortedHand)
+      -1
+    else if (a.sortedHand > b.sortedHand)
+      1
+    else
+      0
 }
 
 object RoyalFlush extends PokerHandCategory {
@@ -31,11 +42,19 @@ object FourOfAKind extends PokerHandCategory {
 }
 
 object FullHouse extends PokerHandCategory {
+
   def asInt() = 6
   def name() = "full house"
   def specifics(hand: PokerHand) = three(hand) + " over " + two(hand)
   def three(hand: PokerHand) = hand.groups(0)._2
   def two(hand: PokerHand) = hand.groups(1)._2
+  override def compareAlike(a: PokerHand, b: PokerHand): Int = {
+    val cmp3 = rankOrdering.compare(three(a), three(b))
+    if (cmp3 == 0)
+      rankOrdering.compare(two(a), two(b))
+    else
+      cmp3
+  }
 }
 
 object Flush extends PokerHandCategory {

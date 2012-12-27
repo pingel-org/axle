@@ -54,12 +54,7 @@ class PokerHandOrdering extends Ordering[PokerHand] {
 
     val cmpCat = pokerHandCategoryOrdering.compare(ac, bc)
     if (cmpCat == 0)
-      if (a.sortedHand < b.sortedHand)
-        -1
-      else if (a.sortedHand > b.sortedHand)
-        1
-      else
-        0
+      ac.compareAlike(a, b)
     else
       cmpCat
 
