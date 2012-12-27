@@ -4,6 +4,7 @@ import collection._
 
 case class BarChart[X, Y](
   bars: SortedMap[X, Y],
+  labeller: X => String,
   width: Int = 700,
   height: Int = 600,
   border: Int = 50,

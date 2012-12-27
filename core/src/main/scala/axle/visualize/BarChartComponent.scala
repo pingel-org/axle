@@ -66,7 +66,9 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
 
     scaledArea.drawYTics(g2d, fontMetrics, yTics)
 
-    val xTics = bars.keys.zipWithIndex.map({ case (x, i) => (padding + (i + 0.5) * widthPerBar, x.toString) }).toList
+    val xTics = bars.keys.zipWithIndex.map({
+      case (x, i) => (padding + (i + 0.5) * widthPerBar, labeller(x))
+    }).toList
     scaledArea.drawXTics(g2d, fontMetrics, xTics, false)
 
     g2d.setColor(Color.blue)
