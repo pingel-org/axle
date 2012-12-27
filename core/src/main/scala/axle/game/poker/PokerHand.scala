@@ -17,28 +17,30 @@ case class PokerHand(cards: IndexedSeq[Card]) {
   lazy val category: PokerHandCategory =
     if (isFlush && isStraight)
       if (sortedHand(0).rank == Ace)
-        RoyalFlush(sortedHand(0).suit)
+        RoyalFlush
       else
-        StraightFlush(sortedHand(0))
+        StraightFlush
     else if (groups(0)._1 == 4)
-      FourOfAKind(groups(0)._2)
+      FourOfAKind
     else if (groups(0)._1 == 3 && groups(1)._1 == 2)
-      FullHouse(groups(0)._2, groups(1)._2)
+      FullHouse
     else if (isFlush)
-      Flush(sortedHand(0).suit)
+      Flush
     else if (isStraight)
-      Straight(sortedHand(0).rank)
+      Straight
     else if (groups(0)._1 == 3)
-      ThreeOfAKind(groups(0)._2)
+      ThreeOfAKind
     else if (groups(1)._1 == 2 && groups(1)._1 == 2)
-      TwoPair(groups(0)._2, groups(1)._2)
+      TwoPair
     else if (groups(0)._1 == 2)
-      Pair(groups(0)._2)
+      Pair
     else
-      High(sortedHand(0).rank)
+      High
 
   override def toString() = sortedHand.map(_.toString).mkString(" ")
 
+  def description() = category.describe(this)
+  
 }
 
 class PokerHandOrdering extends Ordering[PokerHand] {
