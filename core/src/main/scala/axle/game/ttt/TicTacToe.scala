@@ -26,7 +26,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
   val o = player("O", "Player O", oClass)
 
   def state(player: TicTacToePlayer, board: Matrix[Option[String]]) =
-    new TicTacToeState(player, board)
+    Some(new TicTacToeState(player, board))
 
   def move(player: TicTacToePlayer, position: Int) = TicTacToeMove(player, position)
 
@@ -36,7 +36,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
     case _ => new InteractiveTicTacToePlayer(id, description)
   }
 
-  def startState() = state(x, startBoard())
+  def startState() = new TicTacToeState(x, startBoard())
   
   def numPositions() = boardSize * boardSize
 
@@ -131,7 +131,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
       }
     }
 
-    def apply(move: TicTacToeMove): TicTacToeState = {
+    def apply(move: TicTacToeMove): Option[TicTacToeState] = {
       val rc2v = (positionToRow(move.position), positionToColumn(move.position)) -> Some(player.id)
       ttt.state(ttt.playerAfter(move.tttPlayer), board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player.id)))
     }

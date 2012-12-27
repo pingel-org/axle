@@ -150,33 +150,37 @@ class Poker(numPlayers: Int) extends Game {
         }
       }
 
-    def apply(move: PokerMove): PokerState = {
-      move match {
+    // TODO big/small blind
+    // TODO: is there a limit to the number of raises that can occur?
+    // TODO: maximum bet
+    // TODO: how to handle player exhausting pile during game?
 
-        case Deal() => {
-          // TODO big/small blind
-          // TODO clean up these range calculations
-          val cards = Vector() ++ deck.cards
-          val hands = _players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
-          val shared = cards(_players.size * 2 to _players.size * 2 + 4)
-          val unused = cards((_players.size * 2 + 5) until cards.length)
-          PokerState(
-            _.firstBetter,
-            Deck(unused),
-            shared,
-            numShown,
-            hands,
-            pot,
-            currentBet,
-            stillIn,
-            Map(),
-            piles
-          )
-        }
+    def apply(move: PokerMove): Option[PokerState] = move match {
 
-        case Raise(player, amount) => {
-          val diff = currentBet + amount - inFors.get(player).getOrElse(0)
-          PokerState(
+      case Deal() => {
+        // TODO clean up these range calculations
+        val cards = Vector() ++ deck.cards
+        val hands = _players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
+        val shared = cards(_players.size * 2 to _players.size * 2 + 4)
+        val unused = cards((_players.size * 2 + 5) until cards.length)
+        Some(PokerState(
+          _.firstBetter,
+          Deck(unused),
+          shared,
+          numShown,
+          hands,
+          pot,
+          currentBet,
+          stillIn,
+          Map(),
+          piles
+        ))
+      }
+
+      case Raise(player, amount) => {
+        val diff = currentBet + amount - inFors.get(player).getOrElse(0)
+        if (piles(player) - diff >= 0) {
+          Some(PokerState(
             _.betterAfter(player).getOrElse(dealer),
             deck,
             shared,
@@ -187,12 +191,16 @@ class Poker(numPlayers: Int) extends Game {
             stillIn,
             inFors + (player -> (currentBet + amount)),
             piles + (player -> (piles(player) - diff))
-          )
+          ))
+        } else {
+          None
         }
+      }
 
-        case Call(player) => {
-          val diff = currentBet - inFors.get(player).getOrElse(0)
-          PokerState(
+      case Call(player) => {
+        val diff = currentBet - inFors.get(player).getOrElse(0)
+        if (piles(player) - diff >= 0) {
+          Some(PokerState(
             _.betterAfter(player).getOrElse(dealer),
             deck,
             shared,
@@ -203,32 +211,33 @@ class Poker(numPlayers: Int) extends Game {
             stillIn,
             inFors + (player -> currentBet),
             piles + (player -> (piles(player) - diff))
-          )
+          ))
+        } else {
+          None
         }
-
-        case Fold(player) =>
-          PokerState(
-            _.betterAfter(player).getOrElse(dealer),
-            deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles)
-
-        case Flop() =>
-          PokerState(
-            _.firstBetter,
-            deck, shared, 3, hands, pot, 0, stillIn, Map(), piles)
-
-        case Turn() =>
-          PokerState(
-            _.firstBetter,
-            deck, shared, 4, hands, pot, 0, stillIn, Map(), piles)
-
-        case River() =>
-          PokerState(
-            _.firstBetter,
-            deck, shared, 5, hands, pot, 0, stillIn, Map(), piles)
-
       }
-    }
 
+      case Fold(player) =>
+        Some(PokerState(
+          _.betterAfter(player).getOrElse(dealer),
+          deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles))
+
+      case Flop() =>
+        Some(PokerState(
+          _.firstBetter,
+          deck, shared, 3, hands, pot, 0, stillIn, Map(), piles))
+
+      case Turn() =>
+        Some(PokerState(
+          _.firstBetter,
+          deck, shared, 4, hands, pot, 0, stillIn, Map(), piles))
+
+      case River() =>
+        Some(PokerState(
+          _.firstBetter,
+          deck, shared, 5, hands, pot, 0, stillIn, Map(), piles))
+
+    }
   }
 
   case class PokerOutcome(winner: PokerPlayer, hand: Option[PokerHand]) extends Outcome(Some(winner))
@@ -337,18 +346,12 @@ Example moves:
       }
     }
 
-    def isValidMove(state: PokerState, move: PokerMove): Boolean = {
-      // TODO: cannot call or raise to bet that exceeds pile
-      // TODO: is there a limit to the number of raises that can occur?
-      // TODO: maximum bet
-      // TODO: how to handle player exhausting pile during game?
-      true // TODO
-    }
-
     def chooseMove(state: PokerState): PokerMove = {
       displayEvents()
       println(state.displayTo(this))
-      userInputStream().flatMap(parseMove(state.player, _)).find(move => isValidMove(state, move)).get
+      userInputStream()
+        .flatMap(parseMove(state.player, _))
+        .find(move => state(move).isDefined).get
     }
 
   }

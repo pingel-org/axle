@@ -10,7 +10,7 @@ class TicTacToeSpec extends Specification {
   import game.{x, o}
   
   def script(moveScript: List[(game.type#TicTacToePlayer, Int)]) =
-    game.scriptedMoveStateStream(game.state(x, game.startBoard),
+    game.scriptedMoveStateStream(game.startState,
       moveScript.map(pp => game.move(pp._1, pp._2)).iterator).last._2.outcome.flatMap(_.winner)
 
   "game1" should {

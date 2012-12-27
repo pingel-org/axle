@@ -25,7 +25,8 @@ trait Game {
     if (state.outcome.isDefined || depth <= 0) {
       (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
     } else {
-      val moveValue = state.moves.map(move => (move, minimax(state(move), depth - 1, heuristic)._2))
+      // TODO: .get
+      val moveValue = state.moves.map(move => (move, minimax(state(move).get, depth - 1, heuristic)._2))
       val bestValue = moveValue.map(mcr => (mcr._2)(state.player)).max
       moveValue.filter(mcr => (mcr._2)(state.player) == bestValue).toIndexedSeq.random
     }
@@ -48,7 +49,7 @@ trait Game {
       if (done) {
         this
       } else {
-        val α = heuristic(state(m))
+        val α = heuristic(state(m).get)
         if (cutoff(state.player) <= α(state.player)) // TODO: forall other players ??
           AlphaBetaFold(m, α, false) // TODO move = m?
         else
@@ -73,7 +74,7 @@ trait Game {
     } else {
       val move = state.player.chooseMove(state)
       players.map(_.notify(move))
-      val nextState = state(move)
+      val nextState = state(move).get // TODO .get
       cons((move, nextState), moveStateStream(nextState))
     }
 
@@ -82,7 +83,7 @@ trait Game {
       empty
     } else {
       val move = moveIt.next
-      val nextState = state(move)
+      val nextState = state(move).get // TODO .get
       cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
 
@@ -146,7 +147,7 @@ trait Game {
 
     def player(): PLAYER
 
-    def apply(move: MOVE): STATE
+    def apply(move: MOVE): Option[STATE]
 
     def outcome(): Option[OUTCOME]
 
