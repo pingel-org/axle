@@ -308,9 +308,9 @@ Example moves:
 
     def userInputStream(): Stream[String] = {
       print("Enter move: ")
-      val num = readLine()
-      println
-      cons(num, userInputStream)
+      val command = readLine() // TODO echo characters as typed
+      println(command)
+      cons(command, userInputStream)
     }
 
     def parseMove(player: PokerPlayer, moveStr: String): Option[PokerMove] = {
