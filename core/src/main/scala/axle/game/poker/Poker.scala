@@ -240,7 +240,13 @@ class Poker(numPlayers: Int) extends Game {
     }
   }
 
-  case class PokerOutcome(winner: PokerPlayer, hand: Option[PokerHand]) extends Outcome(Some(winner))
+  case class PokerOutcome(winner: PokerPlayer, hand: Option[PokerHand]) extends Outcome(Some(winner)) {
+
+    override def toString(): String =
+      "Winner: " + winner.description + "\n" +
+        "Hand  : " + hand.map(h => h.toString + " " + h.description).getOrElse("not shown") + "\n"
+
+  }
 
   abstract class PokerPlayer(id: String, _description: String) extends Player(id, _description) {
     def description() = _description
