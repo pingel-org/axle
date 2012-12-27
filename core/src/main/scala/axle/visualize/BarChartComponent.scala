@@ -20,6 +20,10 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
   val maxX = 1.0
   val yAxis = minX
 
+  val padding = 0.05 // on each side
+  val widthPerBar = (1.0 - (2 * padding)) / bars.size
+  val halfWhiteSpace = (widthPerBar * (1.0 - barWidthPercent)) / 2.0
+
   val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)(DoublePlottable, yPlottable())
 
   val normalFont = new Font("Courier New", Font.BOLD, 12)
@@ -61,10 +65,6 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
     scaledArea.horizontalLine(g2d, xAxis)
 
     scaledArea.drawYTics(g2d, fontMetrics, yTics)
-
-    val padding = 0.05 // on each side
-    val widthPerBar = (1.0 - (2 * padding)) / bars.size
-    val halfWhiteSpace = (widthPerBar * (1.0 - barWidthPercent)) / 2.0
 
     val xTics = bars.keys.zipWithIndex.map({ case (x, i) => (padding + (i + 0.5) * widthPerBar, x.toString) }).toList
     scaledArea.drawXTics(g2d, fontMetrics, xTics, false)
