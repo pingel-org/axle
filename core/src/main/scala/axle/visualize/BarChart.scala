@@ -3,7 +3,9 @@ package axle.visualize
 import collection._
 
 case class BarChart[X, Y](
-  bars: SortedMap[X, Y],
+  xs: Seq[X],
+  numSeries: Int,
+  barFn: (X, Int) => Y,
   labeller: X => String,
   width: Int = 700,
   height: Int = 600,
@@ -14,8 +16,9 @@ case class BarChart[X, Y](
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None)(implicit _yPlottable: Plottable[Y]) {
 
-  val minY = List(xAxis, (bars.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)
-  val maxY = List(xAxis, (bars.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)
+  val minY = List(xAxis, (0 to numSeries).map(s => (xs.map(barFn(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
+
+  val maxY = List(xAxis, (0 to numSeries).map(s => (xs.map(barFn(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
 
   val yTics = yPlottable.tics(minY, maxY)
 
