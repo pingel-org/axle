@@ -37,7 +37,7 @@ case class PokerHand(cards: IndexedSeq[Card]) {
     else
       High
 
-  override def toString() = sortedHand.map(_.toString).mkString(" ")
+  override def toString() = sortedHand.reverse.map(_.toString).mkString(" ")
 
   def description() = category.describe(this)
   
