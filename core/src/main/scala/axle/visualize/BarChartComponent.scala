@@ -6,6 +6,7 @@ import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Graphics
 import java.awt.Graphics2D
+import math.Pi
 
 import Plottable._
 
@@ -13,9 +14,11 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
 
   import barChart._
 
-  val clockwise90 = math.Pi / -2.0
+  val clockwise90 = Pi / -2.0
   val counterClockwise90 = -1.0 * clockwise90
 
+  val clockwise360 = Pi * 2
+  
   val minX = 0.0
   val maxX = 1.0
   val yAxis = minX
@@ -43,13 +46,12 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
     )
 
     yAxisLabel.map(text => {
-      val tx = 20
-      val ty = (height + fontMetrics.stringWidth(text)) / 2
-      g2d.translate(tx, ty)
-      g2d.rotate(clockwise90)
-      g2d.drawString(text, 0, 0)
-      g2d.rotate(counterClockwise90)
-      g2d.translate(-tx, -ty)
+      // scaledArea.drawStringAtAngle(g2d, text, Point2D(20, (height + fontMetrics.stringWidth(text) / 2.0)), clockwise90)
+      //      g2d.translate(tx, ty)
+      //      g2d.rotate(clockwise90)
+      //      g2d.drawString(text, 0, 0)
+      //      g2d.rotate(counterClockwise90)
+      //      g2d.translate(-tx, -ty)
     })
 
   }
@@ -69,7 +71,7 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
     val xTics = bars.keys.zipWithIndex.map({
       case (x, i) => (padding + (i + 0.5) * widthPerBar, labeller(x))
     }).toList
-    scaledArea.drawXTics(g2d, fontMetrics, xTics, false)
+    scaledArea.drawXTics(g2d, fontMetrics, xTics, false, clockwise360 / 10)
 
     g2d.setColor(Color.blue)
     for (((label, value), i) <- bars.zipWithIndex) {
