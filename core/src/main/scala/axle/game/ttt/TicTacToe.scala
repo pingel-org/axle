@@ -37,6 +37,8 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
   }
 
   def startState() = new TicTacToeState(x, startBoard())
+
+  def startFrom(s: TicTacToeState) = startState()
   
   def numPositions() = boardSize * boardSize
 
@@ -177,16 +179,11 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       println(intro)
     }
 
-    override def endGame(state: TicTacToeState): Unit = {
-      displayEvents()
-      println(state.displayTo(state.player))
-    }
-
     override def notify(event: Event): Unit = {
       eventQueue += event
     }
 
-    def displayEvents(): Unit = {
+    override def displayEvents(): Unit = {
       val info = eventQueue.map(_.displayTo(this)).mkString("  ")
       println(info)
       eventQueue.clear()

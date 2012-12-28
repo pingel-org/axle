@@ -45,6 +45,22 @@ class Poker(numPlayers: Int) extends Game {
       players.map(player => (player, 100)).toMap // piles
     )
 
+  def startFrom(s: PokerState) =
+    PokerState(
+      state => dealer,
+      Deck(),
+      Vector(),
+      0,
+      Map(),
+      0,
+      0,
+      _players.toSet,
+      Map(),
+      s.outcome.map(o => {
+        s.piles + (o.winner -> (s.piles(o.winner) + s.pot))
+      }).getOrElse(s.piles)
+    )
+
   def introMessage() = "Welcome to Axle Texas Hold Em Poker"
 
   def players() = _players.toSet
@@ -312,20 +328,21 @@ Example moves:
       println(intro)
     }
 
-    override def endGame(state: PokerState): Unit = {
-      displayEvents()
-      println(state.displayTo(state.player))
-    }
-
     override def notify(event: Event): Unit = {
       eventQueue += event
     }
 
-    def displayEvents(): Unit = {
+    override def displayEvents(): Unit = {
       println()
       val info = eventQueue.map(_.displayTo(this)).mkString("  ")
       println(info)
       eventQueue.clear()
+    }
+
+    override def endGame(state: STATE): Unit = {
+      displayEvents()
+      println(state.displayTo(state.player))
+      println(state.outcome)
     }
 
     def userInputStream(): Stream[String] = {

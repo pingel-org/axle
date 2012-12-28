@@ -21,6 +21,8 @@ trait Game {
 
   def startState(): STATE
 
+  def startFrom(s: STATE): STATE
+
   def minimax(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, STATE, Map[PLAYER, Double]) =
     if (state.outcome.isDefined || depth <= 0) {
       (null.asInstanceOf[MOVE], null.asInstanceOf[STATE], heuristic(state)) // TODO null
@@ -89,21 +91,29 @@ trait Game {
       cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
 
-  def play(start: STATE): Option[OUTCOME] = {
+  def play(start: STATE): Option[STATE] = {
     for (player <- players()) {
       player.introduceGame()
     }
-    moveStateStream(start).lastOption.flatMap({
+    moveStateStream(start).lastOption.map({
       case (lastMove, lastState) => {
-        lastState.outcome.map(outcome =>
-          for (player <- players()) {
+        for (player <- players()) {
+          lastState.outcome.map(outcome =>
             player.notify(outcome)
-            player.endGame(lastState)
-          }
-        )
-        lastState.outcome
+          )
+          player.endGame(lastState)
+        }
+        lastState
       }
     })
+  }
+
+  def playContinuously(start: STATE = game.startState()): Stream[STATE] = {
+    game.play(start).map(end => {
+      println(end.outcome.getOrElse("no winner")) // TODO
+      cons(end, playContinuously(game.startFrom(end)))
+    })
+    .getOrElse(empty)
   }
 
   trait Event {
@@ -140,6 +150,8 @@ trait Game {
 
     def introduceGame(): Unit = {}
 
+    def displayEvents(): Unit = {}
+
     def notify(event: Event): Unit = {}
 
     def endGame(state: STATE): Unit = {}
@@ -156,7 +168,7 @@ trait Game {
     def moves(): Seq[MOVE]
 
     def displayTo(viewer: PLAYER): String
-    
+
   }
 
 }
