@@ -91,7 +91,7 @@ trait Game {
       cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
 
-  def play(start: STATE): Option[STATE] = {
+  def play(start: STATE = startState()): Option[STATE] = {
     for (player <- players()) {
       player.introduceGame()
     }
@@ -108,13 +108,14 @@ trait Game {
     })
   }
 
-  def playContinuously(start: STATE = game.startState()): Stream[STATE] = {
+  def gameStream(start: STATE): Stream[STATE] =
     game.play(start).map(end => {
       println(end.outcome.getOrElse("no winner")) // TODO
-      cons(end, playContinuously(game.startFrom(end)))
-    })
-    .getOrElse(empty)
-  }
+      cons(end, gameStream(game.startFrom(end)))
+    }).getOrElse(empty)
+
+  def playContinuously(start: STATE = game.startState()): STATE =
+    gameStream(start).last
 
   trait Event {
 
