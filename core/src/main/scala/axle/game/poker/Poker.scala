@@ -17,9 +17,6 @@ class Poker(numPlayers: Int) extends Game {
   type STATE = PokerState
   type OUTCOME = PokerOutcome
 
-  // implicit val pokerHandOrdering = new PokerHandOrdering()
-  // implicit val pokerHandCategoryOrdering = new PokerHandCategoryOrdering()
-
   val dealer = player("D", "Dealer", "dealer")
 
   val _players = (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
