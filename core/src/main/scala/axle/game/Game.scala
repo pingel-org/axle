@@ -63,7 +63,6 @@ trait Game {
   }
 
   def _alphabeta(state: STATE, depth: Int, cutoff: Map[PLAYER, Double], heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
-
     if (state.outcome.isDefined || depth <= 0) {
       (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
     } else {
@@ -91,9 +90,11 @@ trait Game {
       cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
 
-  def play(start: STATE = startState()): Option[STATE] = {
-    for (player <- players()) {
-      player.introduceGame()
+  def play(start: STATE = startState(), intro: Boolean = true): Option[STATE] = {
+    if (intro) {
+      for (player <- players()) {
+        player.introduceGame()
+      }
     }
     moveStateStream(start).lastOption.map({
       case (lastMove, lastState) => {
@@ -108,10 +109,10 @@ trait Game {
     })
   }
 
-  def gameStream(start: STATE): Stream[STATE] =
-    game.play(start).map(end => {
+  def gameStream(start: STATE, intro: Boolean = true): Stream[STATE] =
+    game.play(start, intro).map(end => {
       println(end.outcome.getOrElse("no winner")) // TODO
-      cons(end, gameStream(game.startFrom(end)))
+      cons(end, gameStream(game.startFrom(end), false))
     }).getOrElse(empty)
 
   def playContinuously(start: STATE = game.startState()): STATE =
