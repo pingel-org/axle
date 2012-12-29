@@ -22,10 +22,10 @@ class Poker(numPlayers: Int) extends Game {
   val _players = (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
 
   def player(id: String, description: String, which: String) = which match {
-    case "random" => new RandomPokerPlayer(id, description)(this)
-    case "ai" => new AIPokerPlayer(id, description)(this)
-    case "dealer" => new DealerPokerPlayer(id, description)(this)
-    case _ => new InteractivePokerPlayer(id, description)(this)
+    case "random" => new RandomPokerPlayer(id, description)
+    case "ai" => new AIPokerPlayer(id, description)
+    case "dealer" => new DealerPokerPlayer(id, description)
+    case _ => new InteractivePokerPlayer(id, description)
   }
 
   def startState() =
