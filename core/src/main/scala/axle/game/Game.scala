@@ -10,10 +10,11 @@ trait Game {
 
   game =>
 
-  type PLAYER <: Player
-  type MOVE <: Move
-  type STATE <: State
-  type OUTCOME <: Outcome
+  type PLAYER <: Player[this.type]
+  type STATE <: State[this.type]
+  // type EVENT <: Event[this.type]
+  type MOVE <: Move[this.type]
+  type OUTCOME <: Outcome[this.type]
 
   def players(): immutable.Set[PLAYER]
 
@@ -117,60 +118,5 @@ trait Game {
 
   def playContinuously(start: STATE = game.startState()): STATE =
     gameStream(start).last
-
-  trait Event {
-
-    def displayTo(player: PLAYER): String
-
-  }
-
-  abstract class Move(player: PLAYER)
-    extends Event {
-
-  }
-
-  class Outcome(winner: Option[PLAYER])
-    extends Event {
-
-    def displayTo(player: PLAYER): String =
-      winner.map(wp =>
-        if (wp equals player) {
-          "You have beaten " + game.players().filter(p => !(p equals player)).map(_.toString).toList.mkString(" and ") + "!"
-        } else {
-          "%s beat you!".format(wp)
-        }
-      ).getOrElse("The game was a draw.")
-  }
-
-  abstract class Player(_id: String, description: String) {
-
-    def id() = _id
-
-    def move(state: STATE): (MOVE, STATE)
-
-    override def toString(): String = description
-
-    def introduceGame(): Unit = {}
-
-    def displayEvents(): Unit = {}
-
-    def notify(event: Event): Unit = {}
-
-    def endGame(state: STATE): Unit = {}
-  }
-
-  trait State {
-
-    def player(): PLAYER
-
-    def apply(move: MOVE): Option[STATE]
-
-    def outcome(): Option[OUTCOME]
-
-    def moves(): Seq[MOVE]
-
-    def displayTo(viewer: PLAYER): String
-
-  }
 
 }
