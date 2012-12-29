@@ -45,7 +45,10 @@ class Poker(numPlayers: Int) extends Game {
       players.map(player => (player, 100)).toMap // piles
     )
 
-  def startFrom(s: PokerState) =
+  def startFrom(s: PokerState) = {
+    val newPiles = s.outcome.map(o => {
+      s.piles + (o.winner -> (s.piles(o.winner) + s.pot))
+    }).getOrElse(s.piles)
     PokerState(
       state => dealer,
       Deck(),
@@ -54,12 +57,11 @@ class Poker(numPlayers: Int) extends Game {
       Map(),
       0,
       0,
-      _players.toSet,
+      _players.filter(newPiles(_) > 0).toSet,
       Map(),
-      s.outcome.map(o => {
-        s.piles + (o.winner -> (s.piles(o.winner) + s.pot))
-      }).getOrElse(s.piles)
+      newPiles
     )
+  }
 
   def introMessage() = "Welcome to Axle Texas Hold Em Poker"
 
