@@ -1,7 +1,7 @@
 package axle.game
 
-trait Event[GAME <: Game] {
+trait Event[G <: Game[G]] {
 
-  def displayTo(player: GAME#PLAYER): String
+  def displayTo(player: G#PLAYER): String
 
 }

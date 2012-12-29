@@ -1,10 +1,10 @@
 package axle.game
 
-abstract class Player[GAME <: Game](_id: String, description: String) {
+abstract class Player[G <: Game[G]](_id: String, description: String) {
 
   def id() = _id
 
-  def move(state: GAME#STATE): (GAME#MOVE, GAME#STATE)
+  def move(state: G#STATE): (G#MOVE, G#STATE)
 
   override def toString(): String = description
 
@@ -12,7 +12,7 @@ abstract class Player[GAME <: Game](_id: String, description: String) {
 
   def displayEvents(): Unit = {}
 
-  def notify(event: Event[GAME]): Unit = {}
+  def notify(event: Event[G]): Unit = {}
 
-  def endGame(state: GAME#STATE): Unit = {}
+  def endGame(state: G#STATE): Unit = {}
 }

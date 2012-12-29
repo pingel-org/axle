@@ -1,15 +1,15 @@
 package axle.game
 
-trait State[GAME <: Game] {
+trait State[G <: Game[G]] {
 
-  def player(): GAME#PLAYER
+  def player(): G#PLAYER
 
-  def apply(move: GAME#MOVE): Option[GAME#STATE]
+  def apply(move: G#MOVE): Option[G#STATE]
 
-  def outcome(): Option[GAME#OUTCOME]
+  def outcome(): Option[G#OUTCOME]
 
-  def moves(): Seq[GAME#MOVE]
+  def moves(): Seq[G#MOVE]
 
-  def displayTo(viewer: GAME#PLAYER): String
+  def displayTo(viewer: G#PLAYER): String
 
 }

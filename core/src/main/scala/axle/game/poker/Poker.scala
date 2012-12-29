@@ -8,7 +8,7 @@ import collection._
 import axle.game.cards._
 import Stream.cons
 
-class Poker(numPlayers: Int) extends Game {
+class Poker(numPlayers: Int) extends Game[Poker] {
 
   implicit val poker = this
 

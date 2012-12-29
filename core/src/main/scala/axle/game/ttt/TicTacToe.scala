@@ -13,7 +13,7 @@ import Scalaz._
  */
 
 case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: String = "ai")
-  extends Game {
+  extends Game[TicTacToe] {
 
   implicit val ttt = this
 

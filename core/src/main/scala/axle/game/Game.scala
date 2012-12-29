@@ -6,26 +6,26 @@ import collection._
 import Stream.{ empty, cons }
 import util.Random.shuffle
 
-trait Game {
+abstract class Game[G <: Game[G]] {
 
-  game =>
+  self: G =>
 
-  type PLAYER <: Player[this.type]
-  type STATE <: State[this.type]
-  type MOVE <: Move[this.type]
-  type OUTCOME <: Outcome[this.type]
+  type PLAYER <: Player[G]
+  type STATE <: State[G]
+  type MOVE <: Move[G]
+  type OUTCOME <: Outcome[G]
 
-  def players(): immutable.Set[PLAYER]
+  def players(): immutable.Set[G#PLAYER]
 
   def introMessage(): Unit
 
-  def startState(): STATE
+  def startState(): G#STATE
 
-  def startFrom(s: STATE): STATE
+  def startFrom(s: G#STATE): G#STATE
 
-  def minimax(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, STATE, Map[PLAYER, Double]) =
+  def minimax(state: G#STATE, depth: Int, heuristic: G#STATE => Map[G#PLAYER, Double]): (G#MOVE, G#STATE, Map[G#PLAYER, Double]) =
     if (state.outcome.isDefined || depth <= 0) {
-      (null.asInstanceOf[MOVE], null.asInstanceOf[STATE], heuristic(state)) // TODO null
+      (null.asInstanceOf[MOVE], null.asInstanceOf[G#STATE], heuristic(state)) // TODO null
     } else {
       // TODO: .get
       val moveValue = state.moves.map(move => {
@@ -45,12 +45,12 @@ trait Game {
    *
    */
 
-  def alphabeta(state: STATE, depth: Int, heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
+  def alphabeta(state: G#STATE, depth: Int, heuristic: G#STATE => Map[G#PLAYER, Double]): (G#MOVE, Map[G#PLAYER, Double]) =
     _alphabeta(state, depth, players.map((_, Double.MinValue)).toMap, heuristic)
 
-  case class AlphaBetaFold(move: MOVE, cutoff: Map[PLAYER, Double], done: Boolean) {
+  case class AlphaBetaFold(move: G#MOVE, cutoff: Map[G#PLAYER, Double], done: Boolean) {
 
-    def process(m: MOVE, state: STATE, heuristic: STATE => Map[PLAYER, Double]): AlphaBetaFold =
+    def process(m: G#MOVE, state: G#STATE, heuristic: G#STATE => Map[G#PLAYER, Double]): AlphaBetaFold =
       if (done) {
         this
       } else {
@@ -62,17 +62,17 @@ trait Game {
       }
   }
 
-  def _alphabeta(state: STATE, depth: Int, cutoff: Map[PLAYER, Double], heuristic: STATE => Map[PLAYER, Double]): (MOVE, Map[PLAYER, Double]) =
+  def _alphabeta(state: G#STATE, depth: Int, cutoff: Map[G#PLAYER, Double], heuristic: G#STATE => Map[G#PLAYER, Double]): (G#MOVE, Map[G#PLAYER, Double]) =
     if (state.outcome.isDefined || depth <= 0) {
-      (null.asInstanceOf[MOVE], heuristic(state)) // TODO null
+      (null.asInstanceOf[G#MOVE], heuristic(state)) // TODO null
     } else {
-      val result = state.moves.foldLeft(AlphaBetaFold(null.asInstanceOf[MOVE], cutoff, false))(
-        (in: AlphaBetaFold, move: MOVE) => in.process(move, state, heuristic)
+      val result = state.moves.foldLeft(AlphaBetaFold(null.asInstanceOf[G#MOVE], cutoff, false))(
+        (in: AlphaBetaFold, move: G#MOVE) => in.process(move, state, heuristic)
       )
       (result.move, result.cutoff)
     }
 
-  def moveStateStream(state: STATE): Stream[(MOVE, STATE)] =
+  def moveStateStream(state: G#STATE): Stream[(G#MOVE, G#STATE)] =
     if (state.outcome.isDefined) {
       empty
     } else {
@@ -81,7 +81,7 @@ trait Game {
       cons((move, nextState), moveStateStream(nextState))
     }
 
-  def scriptedMoveStateStream(state: STATE, moveIt: Iterator[MOVE]): Stream[(MOVE, STATE)] =
+  def scriptedMoveStateStream(state: G#STATE, moveIt: Iterator[G#MOVE]): Stream[(G#MOVE, G#STATE)] =
     if (state.outcome.isDefined || !moveIt.hasNext) {
       empty
     } else {
@@ -90,7 +90,7 @@ trait Game {
       cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
 
-  def play(start: STATE = startState(), intro: Boolean = true): Option[STATE] = {
+  def play(start: G#STATE = startState(), intro: Boolean = true): Option[G#STATE] = {
     if (intro) {
       for (player <- players()) {
         player.introduceGame()
@@ -109,13 +109,13 @@ trait Game {
     })
   }
 
-  def gameStream(start: STATE, intro: Boolean = true): Stream[STATE] =
-    game.play(start, intro).map(end => {
+  def gameStream(start: G#STATE, intro: Boolean = true): Stream[G#STATE] =
+    play(start, intro).map(end => {
       println(end.outcome.getOrElse("no winner")) // TODO
-      cons(end, gameStream(game.startFrom(end), false))
+      cons(end, gameStream(startFrom(end), false))
     }).getOrElse(empty)
 
-  def playContinuously(start: STATE = game.startState()): STATE =
+  def playContinuously(start: G#STATE = startState()): G#STATE =
     gameStream(start).last
 
 }
