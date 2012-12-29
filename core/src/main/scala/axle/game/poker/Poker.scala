@@ -23,9 +23,9 @@ class Poker(numPlayers: Int) extends Game[Poker] {
 
   def player(id: String, description: String, which: String) = which match {
     case "random" => new RandomPokerPlayer(id, description)
-    case "ai" => new AIPokerPlayer(id, description)
-    case "dealer" => new DealerPokerPlayer(id, description)
-    case _ => new InteractivePokerPlayer(id, description)
+    case "ai" => new PokerPlayerAI(id, description)
+    case "dealer" => new PokerPlayerDealer(id, description)
+    case _ => new PokerPlayerInteractive(id, description)
   }
 
   def startState() =
