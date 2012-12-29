@@ -12,7 +12,6 @@ trait Game {
 
   type PLAYER <: Player[this.type]
   type STATE <: State[this.type]
-  // type EVENT <: Event[this.type]
   type MOVE <: Move[this.type]
   type OUTCOME <: Outcome[this.type]
 
