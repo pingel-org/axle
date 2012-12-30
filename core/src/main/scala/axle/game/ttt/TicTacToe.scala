@@ -38,7 +38,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
 
   def startState() = new TicTacToeState(x, startBoard())
 
-  def startFrom(s: TicTacToeState) = startState()
+  def startFrom(s: TicTacToeState) = Some(startState())
   
   def numPositions() = boardSize * boardSize
 

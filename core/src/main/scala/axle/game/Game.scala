@@ -21,7 +21,7 @@ abstract class Game[G <: Game[G]] {
 
   def startState(): G#STATE
 
-  def startFrom(s: G#STATE): G#STATE
+  def startFrom(s: G#STATE): Option[G#STATE]
 
   def minimax(state: G#STATE, depth: Int, heuristic: G#STATE => Map[G#PLAYER, Double]): (G#MOVE, G#STATE, Map[G#PLAYER, Double]) =
     if (state.outcome.isDefined || depth <= 0) {
@@ -110,9 +110,11 @@ abstract class Game[G <: Game[G]] {
   }
 
   def gameStream(start: G#STATE, intro: Boolean = true): Stream[G#STATE] =
-    play(start, intro).map(end => {
+    play(start, intro).flatMap(end => {
       println(end.outcome.getOrElse("no winner")) // TODO
-      cons(end, gameStream(startFrom(end), false))
+      startFrom(end).map(newStart =>
+        cons(end, gameStream(newStart, false))
+      )
     }).getOrElse(empty)
 
   def playContinuously(start: G#STATE = startState()): G#STATE =
