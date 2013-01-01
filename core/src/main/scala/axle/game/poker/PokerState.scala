@@ -154,11 +154,6 @@ case class PokerState(
         deck, shared, 5, hands, pot, 0, stillIn, Map(), piles))
 
     case Payout() => {
-      val newPiles = outcome.map(o => {
-        piles + (o.winner -> (piles(o.winner) + pot))
-      }).getOrElse(piles)
-
-      val newStillIn = game._players.filter(newPiles(_) > 0).toSet
 
       val (winner, handOpt) =
         if (stillIn.size == 1) {
@@ -172,9 +167,13 @@ case class PokerState(
           (winner, Some(hand))
         }
 
+      val newPiles = piles + (winner -> (piles(winner) + pot))
+
+      val newStillIn = game._players.filter(newPiles(_) > 0).toSet
+
       Some(PokerState(
         s => game.dealer,
-        deck, shared, 5, hands, pot, 0, newStillIn, Map(), newPiles, Some(PokerOutcome(winner, handOpt))
+        deck, shared, 5, hands, 0, 0, newStillIn, Map(), newPiles, Some(PokerOutcome(winner, handOpt))
       ))
     }
 
