@@ -11,23 +11,26 @@ extends Move[Poker](_pokerPlayer) {
 }
 
 case class Call(pokerPlayer: PokerPlayer)(implicit game: Poker) extends PokerMove(pokerPlayer) {
-  def description() = "call"
+  def description() = "calls"
 }
 case class Raise(pokerPlayer: PokerPlayer, amount: Int)(implicit game: Poker) extends PokerMove(pokerPlayer) {
-  def description() = "raise the bet by " + amount
+  def description() = "raises the bet by " + amount
 }
 case class Fold(pokerPlayer: PokerPlayer)(implicit game: Poker) extends PokerMove(pokerPlayer) {
-  def description() = "fold"
+  def description() = "folds"
 }
 case class Deal()(implicit game: Poker) extends PokerMove(game.dealer) {
   def description() = "initial deal"
 }
 case class Flop()(implicit game: Poker) extends PokerMove(game.dealer) {
-  def description() = "reveal the flop"
+  def description() = "reveals the flop"
 }
 case class Turn()(implicit game: Poker) extends PokerMove(game.dealer) {
-  def description() = "reveal the turn"
+  def description() = "reveals the turn"
 }
 case class River()(implicit game: Poker) extends PokerMove(game.dealer) {
-  def description() = "reveal the river"
+  def description() = "reveals the river"
+}
+case class Payout()(implicit game: Poker) extends PokerMove(game.dealer) {
+  def description() = "pays out"
 }

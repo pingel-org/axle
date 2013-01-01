@@ -44,13 +44,7 @@ class Poker(numPlayers: Int) extends Game[Poker] {
 
   def startFrom(s: PokerState) = {
 
-    val newPiles = s.outcome.map(o => {
-      s.piles + (o.winner -> (s.piles(o.winner) + s.pot))
-    }).getOrElse(s.piles)
-
-    val newStillIn = _players.filter(newPiles(_) > 0).toSet
-
-    if (newStillIn.size > 0)
+    if (s.stillIn.size > 0)
       Some(PokerState(
         state => dealer,
         Deck(),
@@ -59,9 +53,9 @@ class Poker(numPlayers: Int) extends Game[Poker] {
         immutable.Map(),
         0,
         0,
-        newStillIn,
+        s.stillIn,
         immutable.Map(),
-        newPiles
+        s.piles
       ))
     else
       None

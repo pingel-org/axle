@@ -12,6 +12,7 @@ class PokerPlayerDealer(id: String, description: String = "dealer")(implicit gam
           Flop()
       case 3 => Turn()
       case 4 => River()
+      case 5 => Payout()
     }
     (move, state(move).get) // TODO .get
   }

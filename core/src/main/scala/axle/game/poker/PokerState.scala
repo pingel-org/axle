@@ -7,26 +7,26 @@ import axle.game._
 case class PokerState(
   playerFn: PokerState => PokerPlayer,
   deck: Deck,
-  shared: IndexedSeq[Card], // flop, river, etc
+  shared: IndexedSeq[Card], // flop, turn, river
   numShown: Int,
   hands: Map[PokerPlayer, Seq[Card]],
   pot: Int,
   currentBet: Int,
   stillIn: Set[PokerPlayer],
   inFors: Map[PokerPlayer, Int],
-  piles: Map[PokerPlayer, Int])(implicit game: Poker)
+  piles: Map[PokerPlayer, Int],
+  _outcome: Option[PokerOutcome] = None)(implicit game: Poker)
   extends State[Poker]() {
 
   implicit val pokerHandOrdering = new PokerHandOrdering()
   implicit val pokerHandCategoryOrdering = new PokerHandCategoryOrdering()
-  
+
   lazy val _player = playerFn(this)
 
   def player() = _player
 
   def firstBetter() = game._players.find(stillIn.contains(_)).get
 
-  // TODO: another round of betting after river is shown
   def betterAfter(before: PokerPlayer): Option[PokerPlayer] = {
     if (stillIn.forall(p => inFors.get(p).map(_ == currentBet).getOrElse(false))) {
       None
@@ -49,7 +49,7 @@ case class PokerState(
         p.id + ": " +
           " hand " + (
             hands.get(p).map(_.map(c =>
-              if (viewer == p || (numShown == 5 && stillIn.size > 1)) // TODO update this logic when there is betting after the river
+              if (viewer == p || (_outcome.isDefined && stillIn.size > 1))
                 c.toString
               else
                 "??"
@@ -64,20 +64,7 @@ case class PokerState(
 
   def moves(): Seq[PokerMove] = List()
 
-  def outcome(): Option[PokerOutcome] =
-    if (numShown < 5 && stillIn.size > 1) {
-      None
-    } else {
-      if (stillIn.size == 1) {
-        Some(PokerOutcome(stillIn.toIndexedSeq.head, None))
-      } else {
-        val (winner, hand) = hands
-          .filter({ case (p, cards) => stillIn.contains(p) }).toList
-          .map({ case (p, cards) => (p, (shared ++ cards).combinations(5).map(PokerHand(_)).toList.max) })
-          .maxBy(_._2)
-        Some(PokerOutcome(winner, Some(hand)))
-      }
-    }
+  def outcome(): Option[PokerOutcome] = _outcome
 
   // TODO big/small blind
   // TODO: is there a limit to the number of raises that can occur?
@@ -165,6 +152,31 @@ case class PokerState(
       Some(PokerState(
         _.firstBetter,
         deck, shared, 5, hands, pot, 0, stillIn, Map(), piles))
+
+    case Payout() => {
+      val newPiles = outcome.map(o => {
+        piles + (o.winner -> (piles(o.winner) + pot))
+      }).getOrElse(piles)
+
+      val newStillIn = game._players.filter(newPiles(_) > 0).toSet
+
+      val (winner, handOpt) =
+        if (stillIn.size == 1) {
+          (stillIn.toIndexedSeq.head, None)
+        } else {
+          // TODO: handle tie
+          val (winner, hand) = hands
+            .filter({ case (p, cards) => stillIn.contains(p) }).toList
+            .map({ case (p, cards) => (p, (shared ++ cards).combinations(5).map(PokerHand(_)).toList.max) })
+            .maxBy(_._2)
+          (winner, Some(hand))
+        }
+
+      Some(PokerState(
+        s => game.dealer,
+        deck, shared, 5, hands, pot, 0, newStillIn, Map(), newPiles, Some(PokerOutcome(winner, handOpt))
+      ))
+    }
 
   }
 }
