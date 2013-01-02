@@ -183,7 +183,7 @@ case class PokerState(
 
       val newPiles = piles + (winner -> (piles(winner) + pot))
 
-      val newStillIn = game._players.filter(newPiles(_) > bigBlind).toSet
+      val newStillIn = game._players.filter(newPiles(_) >= bigBlind).toSet
 
       Some(PokerState(
         s => game.dealer,
