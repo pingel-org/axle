@@ -21,6 +21,9 @@ case class PokerState(
   implicit val pokerHandOrdering = new PokerHandOrdering()
   implicit val pokerHandCategoryOrdering = new PokerHandCategoryOrdering()
 
+  val smallBlind = 1
+  val bigBlind = 2
+
   lazy val _player = playerFn(this)
 
   def player() = _player
@@ -79,17 +82,23 @@ case class PokerState(
       val hands = game._players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
       val shared = cards(game._players.size * 2 to game._players.size * 2 + 4)
       val unused = cards((game._players.size * 2 + 5) until cards.length)
+
+      // TODO: should blinds be a part of the "deal" or are they minimums during first round of betting?
+      val orderedStillIn = game._players.filter(stillIn.contains(_))
+      val smallBlindPlayer = orderedStillIn(0)
+      val bigBlindPlayer = orderedStillIn(1) // list should be at least this long
+
       Some(PokerState(
-        _.firstBetter,
+        _.firstBetter, // TODO: confirm that this is the right better
         Deck(unused),
         shared,
         numShown,
         hands,
-        pot,
-        currentBet,
+        pot + smallBlind + bigBlind,
+        bigBlind,
         stillIn,
-        Map(),
-        piles
+        Map(smallBlindPlayer -> smallBlind, bigBlindPlayer -> bigBlind),
+        piles + (smallBlindPlayer -> (piles(smallBlindPlayer) - smallBlind)) + (bigBlindPlayer -> (piles(bigBlindPlayer) - bigBlind))
       ))
     }
 
@@ -169,6 +178,7 @@ case class PokerState(
 
       val newPiles = piles + (winner -> (piles(winner) + pot))
 
+      // TODO: this should remove any player not able to make the big blind
       val newStillIn = game._players.filter(newPiles(_) > 0).toSet
 
       Some(PokerState(
