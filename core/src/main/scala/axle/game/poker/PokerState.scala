@@ -69,9 +69,7 @@ case class PokerState(
 
   def outcome(): Option[PokerOutcome] = _outcome
 
-  // TODO big/small blind
   // TODO: is there a limit to the number of raises that can occur?
-  // TODO: maximum bet
   // TODO: how to handle player exhausting pile during game?
 
   def apply(move: PokerMove): Option[PokerState] = move match {
