@@ -21,8 +21,8 @@ case class PokerState(
   implicit val pokerHandOrdering = new PokerHandOrdering()
   implicit val pokerHandCategoryOrdering = new PokerHandCategoryOrdering()
 
-  val smallBlind = 1
-  val bigBlind = 2
+  val bigBlind = 2 // the "minimum bet"
+  val smallBlind = bigBlind / 2
 
   lazy val _player = playerFn(this)
 
@@ -88,6 +88,9 @@ case class PokerState(
       val smallBlindPlayer = orderedStillIn(0)
       val bigBlindPlayer = orderedStillIn(1) // list should be at least this long
 
+      // TODO: some kind of "transfer" method that handles money flow from better
+      // to pot would simplify the code and make it less error prone
+      
       Some(PokerState(
         _.firstBetter, // TODO: confirm that this is the right better
         Deck(unused),
