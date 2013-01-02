@@ -88,11 +88,13 @@ case class PokerState(
       val smallBlindPlayer = orderedStillIn(0)
       val bigBlindPlayer = orderedStillIn(1) // list should be at least this long
 
+      val nextBetter = orderedStillIn(2 % orderedStillIn.size)
+
       // TODO: some kind of "transfer" method that handles money flow from better
       // to pot would simplify the code and make it less error prone
-      
+
       Some(PokerState(
-        _.firstBetter, // TODO: confirm that this is the right better
+        s => nextBetter,
         Deck(unused),
         shared,
         numShown,
@@ -181,8 +183,7 @@ case class PokerState(
 
       val newPiles = piles + (winner -> (piles(winner) + pot))
 
-      // TODO: this should remove any player not able to make the big blind
-      val newStillIn = game._players.filter(newPiles(_) > 0).toSet
+      val newStillIn = game._players.filter(newPiles(_) > bigBlind).toSet
 
       Some(PokerState(
         s => game.dealer,
