@@ -65,7 +65,7 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
     val lineHeight = g2d.getFontMetrics.getHeight
     for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
       g2d.setColor(color)
-      g2d.drawString(s.toString, 620, 50 + lineHeight * j) // TODO embed position
+      g2d.drawString(sLabeller(s), 620, 50 + lineHeight * j) // TODO embed position
     }
   }
 
@@ -91,10 +91,9 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
     for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
       g2d.setColor(color)
       for ((x, i) <- xs.zipWithIndex) {
-        val value = barFn(x, s)
         val leftX = padding + (whiteSpace / 2.0) + i * widthPerX + j * barSliceWidth
         val rightX = leftX + barSliceWidth
-        scaledArea.fillRectangle(g2d, Point2D(leftX, minY), Point2D(rightX, value))
+        scaledArea.fillRectangle(g2d, Point2D(leftX, minY), Point2D(rightX, y(x, s)))
       }
     }
 

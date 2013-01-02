@@ -5,8 +5,9 @@ import collection._
 case class BarChart[X, S, Y](
   xs: Seq[X],
   ss: Seq[S],
-  barFn: (X, S) => Y,
-  xLabeller: X => String,
+  y: (X, S) => Y,
+  xLabeller: X => String = (x: X) => x.toString,
+  sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
   width: Int = 700,
   height: Int = 600,
@@ -17,9 +18,9 @@ case class BarChart[X, S, Y](
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None)(implicit _yPlottable: Plottable[Y]) {
 
-  val minY = List(xAxis, ss.map(s => (xs.map(barFn(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
+  val minY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
 
-  val maxY = List(xAxis, ss.map(s => (xs.map(barFn(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
+  val maxY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
 
   val yTics = yPlottable.tics(minY, maxY)
 
