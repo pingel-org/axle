@@ -27,7 +27,7 @@ package object visualize {
 
   implicit def enComponentPlot[X, Y](plot: Plot[X, Y]): Component = new PlotComponent(plot)
 
-  implicit def enComponentBarChart[X, Y](barChart: BarChart[X, Y]): Component = new BarChartComponent(barChart)
+  implicit def enComponentBarChart[X, S, Y](barChart: BarChart[X, S, Y]): Component = new BarChartComponent(barChart)
   
   implicit def enComponentJungUndirectedGraph[VP, EP](jug: JungUndirectedGraph[VP, EP]): Component =
     new JungUndirectedGraphVisualization().component(jug)

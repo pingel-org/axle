@@ -10,7 +10,7 @@ import math.Pi
 
 import Plottable._
 
-class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
+class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
 
   import barChart._
 
@@ -61,6 +61,14 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
 
   }
 
+  def key(g2d: Graphics2D): Unit = {
+    val lineHeight = g2d.getFontMetrics.getHeight
+    for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
+      g2d.setColor(color)
+      g2d.drawString(s.toString, 620, 50 + lineHeight * j) // TODO embed position
+    }
+  }
+
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
@@ -74,20 +82,24 @@ class BarChartComponent[X, Y](barChart: BarChart[X, Y]) extends JPanel {
     scaledArea.drawYTics(g2d, fontMetrics, yTics)
 
     val xTics = xs.zipWithIndex.map({
-      case (x, i) => (padding + (i + 0.5) * widthPerX, labeller(x))
+      case (x, i) => (padding + (i + 0.5) * widthPerX, xLabeller(x))
     }).toList
     scaledArea.drawXTics(g2d, fontMetrics, xTics, false, clockwise360 / 10)
 
-    val barSliceWidth = (widthPerX - (whiteSpace / 2.0)) / numSeries.toDouble
+    val barSliceWidth = (widthPerX - (whiteSpace / 2.0)) / ss.size.toDouble
 
-    for ((s, color) <- (0 until numSeries).zip(colorStream)) {
+    for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
       g2d.setColor(color)
       for ((x, i) <- xs.zipWithIndex) {
         val value = barFn(x, s)
-        val leftX = padding + (whiteSpace / 2.0) + i * widthPerX + s * barSliceWidth
+        val leftX = padding + (whiteSpace / 2.0) + i * widthPerX + j * barSliceWidth
         val rightX = leftX + barSliceWidth
         scaledArea.fillRectangle(g2d, Point2D(leftX, minY), Point2D(rightX, value))
       }
+    }
+
+    if (drawKey) {
+      key(g2d)
     }
 
   }
