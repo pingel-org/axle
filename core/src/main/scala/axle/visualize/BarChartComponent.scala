@@ -19,11 +19,12 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
 
   val clockwise360 = Pi * 2
 
-  val colors = List(blue, red, green, orange, pink, yellow)
-
   val keyLeftPadding = 20
+  val keyTopPadding = 50
   val keyWidth = 80
   
+  val colors = List(blue, red, green, orange, pink, yellow)
+
   val colorStream = Stream.continually(colors.toStream).flatten
 
   val minX = 0.0
@@ -73,7 +74,7 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
     val lineHeight = g2d.getFontMetrics.getHeight
     for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
       g2d.setColor(color)
-      g2d.drawString(sLabeller(s), width - keyWidth, 50 + lineHeight * j) // TODO embed position
+      g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j+1))
     }
   }
 
