@@ -11,6 +11,8 @@ class PlotComponent[X, Y](plot: Plot[X, Y]) extends JPanel {
 
   import plot._
 
+  setMinimumSize(new java.awt.Dimension(width, height))
+  
   val clockwise90 = math.Pi / -2.0
   val counterClockwise90 = -1.0 * clockwise90
 

@@ -1,6 +1,14 @@
 package axle.visualize
 
-import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point }
+import java.awt.Dimension
+import java.awt.BasicStroke
+import java.awt.Color._
+import java.awt.Paint
+import java.awt.Stroke
+import java.awt.Insets
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Point
 import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import java.awt.Font
@@ -14,9 +22,11 @@ class KMeansVisualization[D](
   width: Int = 600, height: Int = 600,
   border: Int = 50, pointDiameter: Int = 10) extends JPanel {
 
+  setMinimumSize(new Dimension(width + border, height + border))
+  
   val features = classifier.features
 
-  val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
+  val colors = List(blue, red, green, orange, pink, yellow)
 
   val maxs = features.columnMaxs
   val mins = features.columnMins
@@ -32,14 +42,14 @@ class KMeansVisualization[D](
   val scaledArea = new ScaledArea2D(width, height, border, minX, maxX, minY, maxY)
 
   def boundingRectangle(g2d: Graphics2D): Unit = {
-    g2d.setColor(Color.black)
+    g2d.setColor(black)
     scaledArea.drawRectangle(g2d, Point2D(minX, minY), Point2D(maxX, maxY))
   }
 
   def centroid(g2d: Graphics2D, i: Int): Unit = {
     val denormalized = classifier.normalizer.denormalize(classifier.μ.row(i))
     val center = Point2D(denormalized(0), denormalized(1))
-    g2d.setColor(Color.darkGray)
+    g2d.setColor(darkGray)
     scaledArea.fillOval(g2d, center, 3 * pointDiameter, 3 * pointDiameter)
     g2d.setColor(colors(i % colors.length))
     scaledArea.drawOval(g2d, center, 3 * pointDiameter, 3 * pointDiameter)

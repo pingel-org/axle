@@ -26,6 +26,7 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
     layout.setSize(new Dimension(width, height))
     val vv = new VisualizationViewer(layout) // interactive
     vv.setPreferredSize(new Dimension(width + border, height + border))
+    vv.setMinimumSize(new Dimension(width + border, height + border))
 
     val vertexPaint = new Transformer[Vertex[VP], Paint]() {
       def transform(i: Vertex[VP]): Paint = Color.GREEN

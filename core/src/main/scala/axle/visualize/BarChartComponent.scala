@@ -14,6 +14,8 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
 
   import barChart._
 
+  setMinimumSize(new java.awt.Dimension(width, height))
+  
   val clockwise90 = Pi / -2.0
   val counterClockwise90 = -1.0 * clockwise90
 

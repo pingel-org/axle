@@ -15,10 +15,13 @@ import javax.swing.CellRendererPane
 
 package object visualize {
 
-  def newFrame() = new AxleFrame(width = 1100, height = 800, bgColor = Color.white, title = "αχλε")
+  // default width/height was 1100/800
+  
+  def newFrame(width: Int, height: Int) = new AxleFrame(width, height, bgColor = Color.white, title = "αχλε")
 
   def show(component: Component) = {
-    val frame = newFrame()
+    val minSize = component.getMinimumSize
+    val frame = newFrame(minSize.width, minSize.height)
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
@@ -61,7 +64,8 @@ package object visualize {
 
   def component2file(component: Component, filename: String, encoding: String): Unit = {
 
-    val frame = newFrame()
+    val minSize = component.getMinimumSize
+    val frame = newFrame(minSize.width, minSize.height)
     frame.setUndecorated(true)
     frame.initialize()
     val rc = frame.add(component)
