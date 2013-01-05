@@ -1,7 +1,7 @@
 package axle.visualize
 
 import javax.swing.JPanel
-import java.awt.Color
+import java.awt.Color._
 import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Graphics
@@ -19,7 +19,7 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
 
   val clockwise360 = Pi * 2
 
-  val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
+  val colors = List(blue, red, green, orange, pink, yellow)
 
   val colorStream = Stream.continually(colors.toStream).flatten
 
@@ -74,7 +74,7 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    g2d.setColor(Color.black)
+    g2d.setColor(black)
     labels(g2d, fontMetrics)
     scaledArea.verticalLine(g2d, yAxis)
     scaledArea.horizontalLine(g2d, xAxis)
