@@ -21,6 +21,9 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
 
   val colors = List(blue, red, green, orange, pink, yellow)
 
+  val keyLeftPadding = 20
+  val keyWidth = 80
+  
   val colorStream = Stream.continually(colors.toStream).flatten
 
   val minX = 0.0
@@ -31,7 +34,12 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
   val widthPerX = (1.0 - (2 * padding)) / xs.size
   val whiteSpace = widthPerX * (1.0 - barWidthPercent)
 
-  val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)(DoublePlottable, yPlottable())
+  val scaledArea = new ScaledArea2D(
+    width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
+    height,
+    border,
+    minX, maxX, minY, maxY
+  )(DoublePlottable, yPlottable())
 
   val normalFont = new Font("Courier New", Font.BOLD, 12)
   val titleFont = new Font("Palatino", Font.BOLD, 20)
@@ -65,7 +73,7 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
     val lineHeight = g2d.getFontMetrics.getHeight
     for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
       g2d.setColor(color)
-      g2d.drawString(sLabeller(s), 620, 50 + lineHeight * j) // TODO embed position
+      g2d.drawString(sLabeller(s), width - keyWidth, 50 + lineHeight * j) // TODO embed position
     }
   }
 
