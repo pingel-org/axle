@@ -1,7 +1,7 @@
 package axle.visualize
 
 import javax.swing.JPanel
-import java.awt.Color
+import java.awt.Color._
 import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Graphics
@@ -14,11 +14,19 @@ class PlotComponent[X, Y](plot: Plot[X, Y]) extends JPanel {
   val clockwise90 = math.Pi / -2.0
   val counterClockwise90 = -1.0 * clockwise90
 
-  val colors = List(Color.blue, Color.red, Color.green, Color.orange, Color.pink, Color.yellow)
+  val keyLeftPadding = 20
+  val keyTopPadding = 50
+  val keyWidth = 80
+
+  val colors = List(blue, red, green, orange, pink, yellow)
 
   val colorStream = Stream.continually(colors.toStream).flatten
 
-  val scaledArea = new ScaledArea2D(width = width - 100, height, border, minX, maxX, minY, maxY)(xPlottable(), yPlottable())
+  val scaledArea = new ScaledArea2D(
+    width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
+    height, border,
+    minX, maxX, minY, maxY
+  )(xPlottable(), yPlottable())
 
   val normalFont = new Font("Courier New", Font.BOLD, 12)
   val titleFont = new Font("Palatino", Font.BOLD, 20)
@@ -52,7 +60,7 @@ class PlotComponent[X, Y](plot: Plot[X, Y]) extends JPanel {
     val lineHeight = g2d.getFontMetrics.getHeight
     for ((((label, f), color), i) <- lfs.zip(colorStream).zipWithIndex) {
       g2d.setColor(color)
-      g2d.drawString(label, 620, 50 + lineHeight * i) // TODO embed position
+      g2d.drawString(label, width - keyWidth, keyTopPadding + lineHeight * (i + 1))
     }
   }
 
@@ -61,7 +69,7 @@ class PlotComponent[X, Y](plot: Plot[X, Y]) extends JPanel {
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    g2d.setColor(Color.black)
+    g2d.setColor(black)
     labels(g2d, fontMetrics)
     scaledArea.verticalLine(g2d, yAxis)
     scaledArea.horizontalLine(g2d, xAxis)
