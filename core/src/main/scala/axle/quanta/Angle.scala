@@ -53,6 +53,9 @@ class Angle extends Quantum {
   lazy val circleDegrees = byName("circleDegrees")
   lazy val circleRadians = byName("circleRadians")
   
+  lazy val clockwise90 = -90.0 *: °
+  lazy val counterClockwise90 = 90.0 *: °
+  
 }
 
 object Angle extends Angle()

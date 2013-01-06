@@ -5,6 +5,8 @@ import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import java.awt.FontMetrics
 import math.{ min, abs }
+import axle.quanta._
+import Angle._
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
@@ -60,16 +62,19 @@ class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int,
     g2d.drawString(s, fp.x, fp.y)
   }
 
-  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: Double): Unit = {
+  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: Angle.Q): Unit = {
     val fp = framePoint(p)
+    val a = (angle in rad).magnitude.doubleValue
     g2d.translate(fp.x, fp.y + fontMetrics.getHeight)
-    g2d.rotate(angle)
+    g2d.rotate(a)
     g2d.drawString(s, 0, 0)
-    g2d.rotate(-angle)
+    g2d.rotate(-1 * a)
     g2d.translate(-fp.x, -fp.y - fontMetrics.getHeight)
   }
   
-  def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: Double = 0.0): Unit = {
+  val zeroDegrees = 0.0 *: °
+  
+  def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: Angle.Q = zeroDegrees): Unit = {
     val (x, label) = xTic
     if (fDrawLine) {
       g2d.setColor(Color.lightGray)
@@ -86,7 +91,7 @@ class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int,
     g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
   }
 
-  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean=true, angle: Double=0.0): Unit =
+  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean=true, angle: Angle.Q=zeroDegrees): Unit =
     xTics.map({
       case (x, label) => drawXTic(g2d: Graphics2D, fontMetrics, (x, label), fDrawLines, angle)
     })

@@ -7,7 +7,8 @@ import java.awt.FontMetrics
 import java.awt.Graphics
 import java.awt.Graphics2D
 import math.Pi
-
+import axle.quanta._
+import Angle._
 import Plottable._
 
 class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
@@ -16,10 +17,9 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
 
   setMinimumSize(new java.awt.Dimension(width, height))
   
-  val clockwise90 = Pi / -2.0
-  val counterClockwise90 = -1.0 * clockwise90
-
-  val clockwise360 = Pi * 2
+//  val clockwise90 = Pi / -2.0
+//  val counterClockwise90 = -1.0 * clockwise90
+//  val clockwise360 = Pi * 2
 
   val keyLeftPadding = 20
   val keyTopPadding = 50
@@ -47,6 +47,8 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
   val normalFont = new Font("Courier New", Font.BOLD, 12)
   val titleFont = new Font("Palatino", Font.BOLD, 20)
 
+  val twist = (clockwise90 in rad).magnitude.doubleValue
+  
   def labels(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = {
 
     title.map(text => {
@@ -64,9 +66,9 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
       val tx = 20
       val ty = height + fontMetrics.stringWidth(text) / 2
       g2d.translate(tx, ty)
-      g2d.rotate(clockwise90)
+      g2d.rotate(twist)
       g2d.drawString(text, 0, 0)
-      g2d.rotate(counterClockwise90)
+      g2d.rotate(-1 * twist)
       g2d.translate(-tx, -ty)
     })
 
@@ -95,7 +97,7 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
     val xTics = xs.zipWithIndex.map({
       case (x, i) => (padding + (i + 0.5) * widthPerX, xLabeller(x))
     }).toList
-    scaledArea.drawXTics(g2d, fontMetrics, xTics, false, clockwise360 / 10)
+    scaledArea.drawXTics(g2d, fontMetrics, xTics, false, -36 *: °)
 
     val barSliceWidth = (widthPerX - (whiteSpace / 2.0)) / ss.size.toDouble
 
