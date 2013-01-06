@@ -97,7 +97,7 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
     val xTics = xs.zipWithIndex.map({
       case (x, i) => (padding + (i + 0.5) * widthPerX, xLabeller(x))
     }).toList
-    scaledArea.drawXTics(g2d, fontMetrics, xTics, false, -36 *: °)
+    scaledArea.drawXTics(g2d, fontMetrics, xTics, false, 36 *: °)
 
     val barSliceWidth = (widthPerX - (whiteSpace / 2.0)) / ss.size.toDouble
 
