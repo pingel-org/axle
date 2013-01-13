@@ -2,31 +2,31 @@ package axle.quanta
 
 /**
  * The "Physics" objects models the graph of units
- * 
+ *
  * See http://en.wikipedia.org/wiki/SI_derived_unit
- * 
+ *
  */
 
 object Physics {
+  
+  val basic = Vector(
+    Mass, Distance, Information, Time
+  )
 
-  // The graph of quanta
+  Area is Distance * Distance
 
-  // Basic:
-  //
-  // mass
-  // distance
-  // information
-  // time
+  Volume is (Distance * Distance) * Distance
 
-  // Derived:
-  //
-  // area = distance * distance
-  // volume = distance * distance * distance
-  // speed = distance / time
-  // acceleration = speed / time
-  // force = mass * acceleration
-  // energy = power * time
-  // power = energy / time
-  // flow = volume / time
+  Speed is Distance / Time
+
+  Acceleration is Speed / Time
+
+  Force is Mass * Acceleration
+
+  Energy is Power * Time
+
+  Power is Energy / Time
+
+  Flow is Volume / Time
 
 }

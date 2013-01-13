@@ -27,7 +27,18 @@ import collection._
  * reconcile newEdge(source, dest) and newEdge(source, dest, magnitude)
  */
 
-trait Quantum {
+trait QuantumExpression {
+
+  def *(other: QuantumExpression): QuantumExpression = QuantumMultiplication(this, other)
+
+  def /(other: QuantumExpression): QuantumExpression = QuantumDivision(this, other)
+
+}
+
+case class QuantumMultiplication(left: QuantumExpression, right: QuantumExpression) extends QuantumExpression
+case class QuantumDivision(left: QuantumExpression, right: QuantumExpression) extends QuantumExpression
+
+trait Quantum extends QuantumExpression {
 
   quantum =>
 
@@ -47,6 +58,8 @@ trait Quantum {
     max(max(numerator.precision, abs(numerator.scale)),
       max(denominator.precision, abs(denominator.scale))),
     java.math.RoundingMode.HALF_UP)
+
+  def is(qe: QuantumExpression) = 4
 
   val oneBD = new BigDecimal("1")
   val zeroBD = new BigDecimal("0")
@@ -181,47 +194,7 @@ trait Quantum {
 }
 
 /**
-case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum {
-
-  type Q = QRESULT#Q
-
-  val wikipediaUrl = ""
-  val unitsOfMeasurement = Nil
-  val derivations = Nil
-  val examples = Nil
-  
-  def newUnitOfMeasurement(
-    baseUnit: Option[QRESULT#Q] = None,
-    magnitude: BigDecimal,
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None): Q = {
-
-    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
-  }
-  
-}
-
-case class QuantumDivision[QTOP <: Quantum, QBOTTOM <: Quantum, QRESULT <: Quantum](top: QTOP, bottom: QBOTTOM, resultQuantum: QRESULT) extends Quantum {
-
-  type Q = QRESULT#Q
-
-  val wikipediaUrl = ""
-  val unitsOfMeasurement = Nil
-  val derivations = Nil
-  val examples = Nil
-  
-  def newUnitOfMeasurement(
-    baseUnit: Option[Q] = None,
-    magnitude: BigDecimal,
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None): Q = {
-
-    resultQuantum.newUnitOfMeasurement(None, magnitude, name, symbol, link)
-  }
-  
-}
+case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
 */
 
 //    def kilo() = quantity(oneBD.scaleByPowerOfTen(3), this, Some("kilo" + _name.getOrElse("")), Some("K" + symbol.getOrElse("")))
