@@ -38,6 +38,13 @@ trait QuantumExpression {
 case class QuantumMultiplication(left: QuantumExpression, right: QuantumExpression) extends QuantumExpression
 case class QuantumDivision(left: QuantumExpression, right: QuantumExpression) extends QuantumExpression
 
+// case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
+
+/**
+case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
+*/
+
+
 trait Quantum extends QuantumExpression {
 
   quantum =>
@@ -193,9 +200,6 @@ trait Quantum extends QuantumExpression {
 
 }
 
-/**
-case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
-*/
 
 //    def kilo() = quantity(oneBD.scaleByPowerOfTen(3), this, Some("kilo" + _name.getOrElse("")), Some("K" + symbol.getOrElse("")))
 //    def mega() = quantity(oneBD.scaleByPowerOfTen(6), this, Some("mega" + _name.getOrElse("")), Some("M" + symbol.getOrElse("")))
