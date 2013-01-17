@@ -42,10 +42,24 @@ class Mass extends Quantum {
       unit("petatonne", "PT"),
       unit("exatonne", "ET"),
       unit("zettatonne", "ZT"),
-      unit("yottatonne", "YT")
+      unit("yottatonne", "YT"),
+      unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight")),
+      unit("earth", "⊕", Some("http://en.wikipedia.org/wiki/Earth")),
+      unit("sun", "☉", Some("http://en.wikipedia.org/wiki/Solar_mass")),
+      unit("jupiter", "♃", Some("http://en.wikipedia.org/wiki/Jupiter")),
+      unit("saturn", "♄", Some("http://en.wikipedia.org/wiki/Saturn")),
+      unit("neptune", "♆", Some("http://en.wikipedia.org/wiki/Neptune")),
+      unit("uranus", "♅", Some("http://en.wikipedia.org/wiki/Uranus")),
+      unit("venus", "♀", Some("http://en.wikipedia.org/wiki/Venus")),
+      unit("mars", "♂", Some("http://en.wikipedia.org/wiki/Mars")),
+      unit("mercury", "☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)")),
+      unit("pluto", "♇", Some("http://en.wikipedia.org/wiki/Pluto")),
+      unit("moon", "☽", Some("http://en.wikipedia.org/wiki/Moon"))
     ),
     (vs: Seq[Vertex[MassQuantity]]) => vs match {
-      case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt :: Nil =>
+      case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt ::
+        man :: earth :: sun :: jupiter :: saturn :: neptune :: uranus ::
+        venus :: mars :: mercury :: pluto :: moon :: Nil =>
         withInverses(List(
           (t, meg, 1),
           (mg, g, "1E3"),
@@ -58,7 +72,19 @@ class Mass extends Quantum {
           (t, pt, "1E15"),
           (t, et, "1E18"),
           (t, zt, "1E21"),
-          (t, tt, "1E24")
+          (t, yt, "1E24"),
+          (kg, man, "86.6"),
+          (zt, earth, "5.9736"),
+          (kg, sun, "1.9891E30"),
+          (yt, jupiter, "1.8986"),
+          (zt, saturn, "568.46"),
+          (zt, neptune, "102.43"),
+          (zt, uranus, "86.810"),
+          (zt, venus, "4.868"),
+          (et, mars, "641.85"),
+          (et, mercury, "330.22"),
+          (et, pluto, "13.05"),
+          (et, moon, "73.477")
         ))
       case _ => Nil
     }
@@ -80,52 +106,41 @@ class Mass extends Quantum {
   lazy val exatonne = byName("exatonne")
   lazy val zettatonne = byName("zettatonne")
   lazy val yottatonne = byName("yottatonne")
+  lazy val man = byName("man")
+  lazy val earth = byName("earth")
+  lazy val sun = byName("sun")
+  lazy val jupiter = byName("jupiter")
+  lazy val saturn = byName("saturn")
+  lazy val neptune = byName("neptune")
+  lazy val uranus = byName("uranus")
+  lazy val venus = byName("venus")
+  lazy val mars = byName("mars")
+  lazy val mercury = byName("mercury")
+  lazy val pluto = byName("pluto")
+  lazy val moon = byName("moon")
 
-  // hydrogen atom
-  lazy val man = "86.6" *: kilogram // Some("Average US Man"), None, Some("http://en.wikipedia.org/wiki/Body_weight"))
+  // sun also = "332950" *: earth
+  lazy val milkyWayMass = "5.8E+11" *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
+  lazy val andromedaMass = "7.1E+11" *: sun // Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
+
+  // TODO hydrogen atom
 
   // earthunit = 5.9 x 10^24 kg
   // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
-  lazy val earth = "5.9736" *: zettatonne // Some("Earth"), Some("⊕"), Some("http://en.wikipedia.org/wiki/Earth"))
-  lazy val ⊕ = earth
-
-  // sun also = "332950" *: earth
-  lazy val sun = "1.9891E30" *: kilogram // Some("Sun"), Some("☉"), Some("http://en.wikipedia.org/wiki/Solar_mass"))
-  lazy val ☼ = sun
-  lazy val ☉ = sun
 
   // http://en.wikipedia.org/wiki/Astronomical_symbols
-
-  lazy val jupiter = "1.8986" *: yottatonne // Some("Jupiter"), Some("♃"), Some("http://en.wikipedia.org/wiki/Jupiter"))
+  lazy val ⊕ = earth
+  lazy val ☼ = sun
+  lazy val ☉ = sun
   lazy val ♃ = jupiter
-
-  lazy val saturn = "568.46" *: zettatonne // Some("Saturn"), Some("♄"), Some("http://en.wikipedia.org/wiki/Saturn"))
   lazy val ♄ = saturn
-
-  lazy val neptune = "102.43" *: zettatonne // Some("Neptune"), Some("♆"), Some("http://en.wikipedia.org/wiki/Neptune"))
   lazy val ♆ = neptune
-
-  lazy val uranus = "86.810" *: zettatonne // Some("Uranus"), Some("♅"), Some("http://en.wikipedia.org/wiki/Uranus"))
   lazy val ♅ = uranus
-
-  lazy val venus = "4.868" *: zettatonne // Some("Venus"), Some("♀"), Some("http://en.wikipedia.org/wiki/Venus"))
   lazy val ♀ = venus
-
-  lazy val mars = "641.85" *: exatonne // Some("Mars"), Some("♂"), Some("http://en.wikipedia.org/wiki/Mars"))
   lazy val ♂ = mars
-
-  lazy val mercury = "330.22" *: exatonne // Some("Mercury"), Some("☿"), Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
   lazy val ☿ = mercury
-
-  lazy val pluto = "13.05" *: exatonne // Some("Pluto"), Some("♇"), Some("http://en.wikipedia.org/wiki/Pluto"))
   lazy val ♇ = pluto
-
-  lazy val moon = "73.477" *: exatonne // Some("Moon"), Some("☽"), Some("http://en.wikipedia.org/wiki/Moon"))
   lazy val ☽ = moon
-
-  // TODO: sun is not in conversion graph
-  lazy val milkyWayMass = "5.8E+11" *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
-  lazy val andromedaMass = "7.1E+11" *: sun // Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
 
 }
 
