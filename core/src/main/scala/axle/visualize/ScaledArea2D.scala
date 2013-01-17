@@ -71,9 +71,9 @@ class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int,
     g2d.rotate(-1 * a)
     g2d.translate(-fp.x, -fp.y - fontMetrics.getHeight)
   }
-  
+
   val zeroDegrees = 0.0 *: °
-  
+
   def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: Angle.Q = zeroDegrees): Unit = {
     val (x, label) = xTic
     if (fDrawLine) {
@@ -84,14 +84,14 @@ class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int,
     val bottomUnscaled = framePoint(bottomScaled)
     g2d.setColor(Color.black)
     // TODO: angle xtics?
-    if( angle == 0.0)
+    if (angle == 0.0)
       g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
     else
       drawStringAtAngle(g2d, fontMetrics, label, bottomScaled, angle)
     g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
   }
 
-  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean=true, angle: Angle.Q=zeroDegrees): Unit =
+  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean = true, angle: Angle.Q = zeroDegrees): Unit =
     xTics.map({
       case (x, label) => drawXTic(g2d: Graphics2D, fontMetrics, (x, label), fDrawLines, angle)
     })

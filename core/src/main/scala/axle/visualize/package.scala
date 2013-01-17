@@ -30,7 +30,7 @@ package object visualize {
 
   implicit def enComponentPlot[X, Y](plot: Plot[X, Y]): Component = new PlotComponent(plot)
 
-  implicit def enComponentUpdatingPlot[X, Y](plot: UpdatingPlot[X, Y]): Component = new UpdatingPlotComponent(plot)
+  implicit def enComponentReactivePlot[X, Y](plot: ReactivePlot[X, Y]): Component = new ReactivePlotComponent(plot)
   
   implicit def enComponentBarChart[X, S, Y](barChart: BarChart[X, S, Y]): Component = new BarChartComponent(barChart)
   
