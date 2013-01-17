@@ -65,6 +65,7 @@ class Time extends Quantum {
   lazy val millisecond = byName("millisecond")
   lazy val microsecond = byName("microsecond")
   lazy val nanosecond = byName("nanosecond")
+  lazy val minute = byName("minute")
   lazy val hour = byName("hour")
   lazy val day = byName("day")
   lazy val year = byName("year")
@@ -75,6 +76,7 @@ class Time extends Quantum {
 
   lazy val ky = millenium
   lazy val s = second
+  lazy val m = minute
   lazy val ms = millisecond
   lazy val μs = microsecond
   lazy val ns = nanosecond
