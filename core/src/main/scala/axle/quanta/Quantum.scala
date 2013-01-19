@@ -123,13 +123,6 @@ trait Quantum extends QuantumExpression {
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
-    //    def in(other: Q): Q =
-    //      conversionGraph.shortestPath(other.unit.vertex, unit.vertex).map(path => {
-    //        path.foldLeft(oneBD)((bd, edge) => bd.multiply(edge.payload))
-    //      })
-    //        .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
-    //        .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
-
     def in(other: Q): Q =
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex)
         .map(
