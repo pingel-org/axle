@@ -41,9 +41,8 @@ case class QuantumDivision(left: QuantumExpression, right: QuantumExpression) ex
 // case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
 
 /**
-case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
-*/
-
+ * case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
+ */
 
 trait Quantum extends QuantumExpression {
 
@@ -69,7 +68,7 @@ trait Quantum extends QuantumExpression {
   def is(qe: QuantumExpression) = 4
 
   val oneBD = new BigDecimal("1")
-  val zeroBD = new BigDecimal("0")
+  // val zeroBD = new BigDecimal("0")
 
   def withInverses(trips: Seq[(Vertex[Q], Vertex[Q], BigDecimal)]): Seq[(Vertex[Q], Vertex[Q], BigDecimal)] =
     trips.flatMap(trip => Vector(trip, (trip._2, trip._1, bdDivide(oneBD, trip._3))))
@@ -124,12 +123,21 @@ trait Quantum extends QuantumExpression {
 
     def in_:(bd: BigDecimal) = quantity(bd, this)
 
+    //    def in(other: Q): Q =
+    //      conversionGraph.shortestPath(other.unit.vertex, unit.vertex).map(path => {
+    //        path.foldLeft(oneBD)((bd, edge) => bd.multiply(edge.payload))
+    //      })
+    //        .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
+    //        .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
+
     def in(other: Q): Q =
-      conversionGraph.shortestPath(other.unit.vertex, unit.vertex).map(path => {
-        path.foldLeft(oneBD)((bd, edge) => bd.multiply(edge.payload))
-      })
+      conversionGraph.shortestPath(other.unit.vertex, unit.vertex)
+        .map(
+          _.map(_.payload).reduce(_.multiply(_))
+        )
         .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
+
   }
 
   def newQuantity(magnitude: BigDecimal, unit: Q): Q
