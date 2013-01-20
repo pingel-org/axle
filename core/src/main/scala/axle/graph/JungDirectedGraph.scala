@@ -42,7 +42,7 @@ case class JungDirectedGraph[VP, EP](
   def dest(edge: Edge[ES, EP]): Vertex[VP] = edge.storage._2
 
   def vertexPayloads() = vps
-  
+
   def edgeFunction() = ef
 
   def allEdges() = jungGraph.getEdges().asScala.toSet
@@ -110,18 +110,11 @@ case class JungDirectedGraph[VP, EP](
     case _ => xml.Text(vp.toString)
   }
 
-  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) = {
-
-    val newVps = vps.map(vpf(_))
-
-    val oldVs = null // TODO // Seq[JungVertex[VP]]
-
-    val newEf = (newVs: Seq[Vertex[NVP]]) =>
-      ef(oldVs).map({
-        case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))
-      })
-
-    JungDirectedGraph(newVps, newEf)
-  }
+  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =
+    JungDirectedGraph(vps.map(vpf(_)),
+      (newVs: Seq[Vertex[NVP]]) =>
+        ef(vertexSeq).map({
+          case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))
+        }))
 
 }

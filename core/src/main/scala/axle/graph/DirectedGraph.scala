@@ -76,4 +76,6 @@ trait DirectedGraph[VP, EP] {
   //  def removeInputs(vs: Set[V]): GenDirectedGraph[VP, EP]
   //  def removeOutputs(vs: Set[V]): GenDirectedGraph[VP, EP]
 
+  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
+  
 }

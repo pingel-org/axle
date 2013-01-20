@@ -98,4 +98,11 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
 
   def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[ES, EP]]] = _shortestPath(source, goal, Set())
 
+  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =
+    NativeDirectedGraph(vps.map(vpf(_)),
+      (newVs: Seq[Vertex[NVP]]) =>
+        ef(_vertices).map({
+          case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))
+        }))
+  
 }
