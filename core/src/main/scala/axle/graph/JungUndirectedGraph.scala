@@ -15,7 +15,7 @@ case class JungUndirectedGraph[VP, EP](
 
   // Note: ES includes the vertices in order to provide uniquess for jung
   // This could also be accomplished by making Edge not a case class
-  
+
   val edgePayloadFunction = (es: ES) => es._3
 
   lazy val jungGraph = new UndirectedSparseGraph[Vertex[VP], Edge[ES, EP]]()
@@ -35,9 +35,9 @@ case class JungUndirectedGraph[VP, EP](
   def storage(): UndirectedSparseGraph[Vertex[VP], Edge[ES, EP]] = jungGraph
 
   def vertexPayloads() = vps
-  
+
   def edgeFunction() = ef
-  
+
   def vertices() = vertexSet
 
   def allEdges() = jungGraph.getEdges().asScala.toSet
@@ -112,18 +112,11 @@ case class JungUndirectedGraph[VP, EP](
     null
   }
 
-  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) = {
-
-    val newVps = vps.map(vpf(_))
-
-    val oldVs = null // TODO
-
-    val newEf = (newVs: Seq[Vertex[NVP]]) =>
-      ef(oldVs).map({
-        case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))
-      })
-
-    JungUndirectedGraph(newVps, newEf)
-  }
+  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =
+    JungUndirectedGraph(vps.map(vpf(_)),
+      (newVs: Seq[Vertex[NVP]]) =>
+        ef(vertexSeq).map({
+          case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))
+        }))
 
 }

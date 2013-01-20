@@ -76,4 +76,6 @@ trait UndirectedGraph[VP, EP] {
     (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
   }
 
+  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
+  
 }

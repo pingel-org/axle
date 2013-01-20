@@ -107,6 +107,14 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
     null // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
   }
 
+  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =
+    NativeUndirectedGraph(vps.map(vpf(_)),
+      (newVs: Seq[Vertex[NVP]]) =>
+        ef(_vertices).map({
+          case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))
+        }))
+  
+  
   /**
    * dijkstra
    *
