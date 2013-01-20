@@ -43,7 +43,7 @@ class QuantaSpec extends Specification {
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-      (meter + foot).magnitude must be equalTo new BigDecimal("4.28083993600")
+      (meter + foot).magnitude must be equalTo new BigDecimal("4.280839895000")
       (gram + kilogram).magnitude must be equalTo new BigDecimal("1.001")
     }
   }
