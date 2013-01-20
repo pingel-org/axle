@@ -37,7 +37,7 @@ class Angle extends Quantum {
       unit("circleRadians", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
     ),
     (vs: Seq[Vertex[AngleQuantity]]) => vs match {
-      case degree :: radian :: circleDegrees :: circleRadians :: Nil => withInverses(List(
+      case degree :: radian :: circleDegrees :: circleRadians :: Nil => trips2fns(List(
         (degree, circleDegrees, 360.0), // TODO: precision
         (radian, circleRadians, 2.0 * Pi),
         (circleDegrees, circleRadians, 1.0)

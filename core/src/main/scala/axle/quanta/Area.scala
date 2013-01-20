@@ -35,7 +35,7 @@ class Area extends Quantum {
       derive(km.by[Distance.type, this.type](km, this), Some("km2"), Some("km2"))
     ),
     (vs: Seq[Vertex[AreaQuantity]]) => vs match {
-      case m2 :: km2 :: Nil => withInverses(List(
+      case m2 :: km2 :: Nil => trips2fns(List(
         (m2, km2, "1E6")
       ))
       case _ => Nil

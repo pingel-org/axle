@@ -42,7 +42,7 @@ class Energy extends Quantum {
       unit("gigaton", "GT")
     ),
     (vs: Seq[Vertex[EnergyQuantity]]) => vs match {
-      case kwh :: j :: kj :: mj :: t :: kt :: mt :: gt :: Nil => withInverses(List(
+      case kwh :: j :: kj :: mj :: t :: kt :: mt :: gt :: Nil => trips2fns(List(
         (mj, t, "4.184"),
         (j, kj, "1E3"),
         (j, mj, "1E6"),

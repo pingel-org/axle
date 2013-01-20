@@ -44,7 +44,7 @@ class Distance extends Quantum {
       unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
     ),
     (vs: Seq[Vertex[DistanceQuantity]]) => vs match {
-      case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => withInverses(List(
+      case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => trips2fns(List(
         (ft, mile, 5280),
         (km, mile, "1.609344"),
         (meter, km, "1E3"),

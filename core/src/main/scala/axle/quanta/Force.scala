@@ -44,7 +44,7 @@ class Force extends Quantum {
       unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
     ),
     (vs: Seq[Vertex[ForceQuantity]]) => vs match {
-      case Nil => withInverses(List())
+      case Nil => trips2fns(List())
     }
   )
 

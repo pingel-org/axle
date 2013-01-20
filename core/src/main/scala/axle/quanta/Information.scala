@@ -37,7 +37,7 @@ class Information extends Quantum {
       unit("petabyte", "PB")
     ),
     (vs: Seq[Vertex[InformationQuantity]]) => vs match {
-      case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil => withInverses(List(
+      case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil => trips2fns(List(
         (bit, nibble, "4"),
         (bit, byte, "8"),
         (byte, kilobyte, "1024"),

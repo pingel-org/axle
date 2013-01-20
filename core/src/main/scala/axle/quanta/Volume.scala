@@ -37,7 +37,7 @@ class Volume extends Quantum {
       unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
     ),
     (vs: Seq[Vertex[VolumeQuantity]]) => vs match {
-      case m3 :: km3 :: greatLakes :: Nil => withInverses(List(
+      case m3 :: km3 :: greatLakes :: Nil => trips2fns(List(
         (km3, greatLakes, 22671)
       ))
       case _ => Nil

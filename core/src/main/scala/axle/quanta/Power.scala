@@ -40,7 +40,7 @@ class Power extends Quantum {
       unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
     ),
     (vs: Seq[Vertex[PowerQuantity]]) => vs match {
-      case w :: kw :: mw :: gw :: miw :: hp :: lightBulb :: hooverDam :: mustangGT :: Nil => withInverses(List(
+      case w :: kw :: mw :: gw :: miw :: hp :: lightBulb :: hooverDam :: mustangGT :: Nil => trips2fns(List(
         (w, kw, "1E3"),
         (kw, mw, "1E3"),
         (mw, gw, "1E3"),

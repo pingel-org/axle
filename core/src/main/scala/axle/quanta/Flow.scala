@@ -36,7 +36,7 @@ class Flow extends Quantum {
       unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
     ),
     (vs: Seq[Vertex[FlowQuantity]]) => vs match {
-      case m3s :: niagaraFalls :: Nil => withInverses(List(
+      case m3s :: niagaraFalls :: Nil => trips2fns(List(
         (m3s, niagaraFalls, 1834)
       ))
       case _ => Nil

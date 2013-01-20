@@ -44,7 +44,7 @@ class Time extends Quantum {
       unit("gigayear", "gy")
     ),
     (vs: Seq[Vertex[TimeQuantity]]) => vs match {
-      case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => withInverses(List(
+      case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => trips2fns(List(
         (ms, s, "1E3"),
         (μs, s, "1E6"),
         (ns, s, "1E9"),

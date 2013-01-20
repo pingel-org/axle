@@ -44,23 +44,23 @@ class Mass extends Quantum {
       unit("zettatonne", "ZT"),
       unit("yottatonne", "YT"),
       unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight")),
-      unit("earth", "⊕", Some("http://en.wikipedia.org/wiki/Earth")),
-      unit("sun", "☉", Some("http://en.wikipedia.org/wiki/Solar_mass")),
-      unit("jupiter", "♃", Some("http://en.wikipedia.org/wiki/Jupiter")),
-      unit("saturn", "♄", Some("http://en.wikipedia.org/wiki/Saturn")),
-      unit("neptune", "♆", Some("http://en.wikipedia.org/wiki/Neptune")),
-      unit("uranus", "♅", Some("http://en.wikipedia.org/wiki/Uranus")),
-      unit("venus", "♀", Some("http://en.wikipedia.org/wiki/Venus")),
-      unit("mars", "♂", Some("http://en.wikipedia.org/wiki/Mars")),
-      unit("mercury", "☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)")),
-      unit("pluto", "♇", Some("http://en.wikipedia.org/wiki/Pluto")),
-      unit("moon", "☽", Some("http://en.wikipedia.org/wiki/Moon"))
+      unit("earth", "M⊕", Some("http://en.wikipedia.org/wiki/Earth")),
+      unit("sun", "M☉", Some("http://en.wikipedia.org/wiki/Solar_mass")),
+      unit("jupiter", "M♃", Some("http://en.wikipedia.org/wiki/Jupiter")),
+      unit("saturn", "M♄", Some("http://en.wikipedia.org/wiki/Saturn")),
+      unit("neptune", "M♆", Some("http://en.wikipedia.org/wiki/Neptune")),
+      unit("uranus", "M♅", Some("http://en.wikipedia.org/wiki/Uranus")),
+      unit("venus", "M♀", Some("http://en.wikipedia.org/wiki/Venus")),
+      unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars")),
+      unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)")),
+      unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto")),
+      unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
     ),
     (vs: Seq[Vertex[MassQuantity]]) => vs match {
       case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt ::
         man :: earth :: sun :: jupiter :: saturn :: neptune :: uranus ::
         venus :: mars :: mercury :: pluto :: moon :: Nil =>
-        withInverses(List(
+        trips2fns(List(
           (t, meg, 1),
           (mg, g, "1E3"),
           (g, kg, "1E3"),

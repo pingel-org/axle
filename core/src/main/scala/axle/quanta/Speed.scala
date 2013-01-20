@@ -39,7 +39,7 @@ class Speed extends Quantum {
       unit("Speed limit", "speed limit")
     ),
     (vs: Seq[Vertex[SpeedQuantity]]) => vs match {
-      case mps :: fps :: mph :: c :: speedLimit :: Nil => withInverses(List(
+      case mps :: fps :: mph :: c :: speedLimit :: Nil => trips2fns(List(
         (c, mps, "299792458"),
         (mph, speedLimit, "65")
       ))

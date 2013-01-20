@@ -3,6 +3,7 @@ package axle.quanta
 import axle.quanta._
 import axle.graph._
 import java.math.BigDecimal
+import java.math.RoundingMode
 import math.{ max, abs }
 import collection._
 
@@ -52,10 +53,18 @@ trait Quantum extends QuantumExpression {
 
   //  type G[VP, EP] = DirectedGraph[VP, EP]
 
-  def conversionGraph(): DirectedGraph[Q, BigDecimal]
+  def conversionGraph(): DirectedGraph[Q, BigDecimal => BigDecimal]
 
-  def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], BigDecimal)]): DirectedGraph[Q, BigDecimal] =
+  def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], BigDecimal => BigDecimal)]): DirectedGraph[Q, BigDecimal => BigDecimal] =
     JungDirectedGraph(vps, ef)
+
+  def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], BigDecimal)]) = trips.flatMap(trip2fns(_))
+
+  def trip2fns(trip: (Vertex[Q], Vertex[Q], BigDecimal)): Seq[(Vertex[Q], Vertex[Q], BigDecimal => BigDecimal)] =
+    Vector(
+      (trip._1, trip._2, x => x.multiply(trip._3)),
+      (trip._2, trip._1, x => bdDivide(x, trip._3))
+    )
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
@@ -63,15 +72,12 @@ trait Quantum extends QuantumExpression {
     denominator,
     max(max(numerator.precision, abs(numerator.scale)),
       max(denominator.precision, abs(denominator.scale))),
-    java.math.RoundingMode.HALF_UP)
+    RoundingMode.HALF_UP)
 
   def is(qe: QuantumExpression) = 4
 
   val oneBD = new BigDecimal("1")
   // val zeroBD = new BigDecimal("0")
-
-  def withInverses(trips: Seq[(Vertex[Q], Vertex[Q], BigDecimal)]): Seq[(Vertex[Q], Vertex[Q], BigDecimal)] =
-    trips.flatMap(trip => Vector(trip, (trip._2, trip._1, bdDivide(oneBD, trip._3))))
 
   class Quantity(
     magnitude: BigDecimal = oneBD,
@@ -126,7 +132,7 @@ trait Quantum extends QuantumExpression {
     def in(other: Q): Q =
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex)
         .map(
-          _.map(_.payload).reduce(_.multiply(_))
+          _.map(_.payload).foldLeft(oneBD)((bd, convert) => convert(bd))
         )
         .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
