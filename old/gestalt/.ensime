@@ -1,5 +1,0 @@
-
-(
-:project-name "gestalt.pingel.org"
-:use-sbt t
-)
