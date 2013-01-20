@@ -30,6 +30,10 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
 
   def storage() = (_vertices, _edges, vertex2edges)
 
+  def vertexPayloads() = vps
+  
+  def edgeFunction() = ef
+
   def vertices() = vertexSet
 
   def allEdges() = edgeSet

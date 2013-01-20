@@ -41,6 +41,10 @@ case class JungDirectedGraph[VP, EP](
 
   def dest(edge: Edge[ES, EP]): Vertex[VP] = edge.storage._2
 
+  def vertexPayloads() = vps
+  
+  def edgeFunction() = ef
+
   def allEdges() = jungGraph.getEdges().asScala.toSet
 
   def verticesSeq() = vertexSeq

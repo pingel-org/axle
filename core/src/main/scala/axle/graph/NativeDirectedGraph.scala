@@ -28,6 +28,10 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
 
   def storage() = (_verticesSet, _edgesSet, vertex2outedges, vertex2inedges)
 
+  def vertexPayloads() = vps
+  
+  def edgeFunction() = ef
+
   def vertices(): Set[Vertex[VP]] = _verticesSet
 
   def allEdges() = _edgesSet

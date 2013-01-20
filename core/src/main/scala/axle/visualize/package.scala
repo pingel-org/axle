@@ -16,7 +16,7 @@ import javax.swing.CellRendererPane
 package object visualize {
 
   // default width/height was 1100/800
-  
+
   def newFrame(width: Int, height: Int) = new AxleFrame(width, height, bgColor = Color.white, title = "αχλε")
 
   def show(component: Component) = {
@@ -31,26 +31,37 @@ package object visualize {
   implicit def enComponentPlot[X, Y](plot: Plot[X, Y]): Component = new PlotComponent(plot)
 
   implicit def enComponentReactivePlot[X, Y](plot: ReactivePlot[X, Y]): Component = new ReactivePlotComponent(plot)
-  
+
   implicit def enComponentBarChart[X, S, Y](barChart: BarChart[X, S, Y]): Component = new BarChartComponent(barChart)
-  
-  implicit def enComponentJungUndirectedGraph[VP, EP](jug: JungUndirectedGraph[VP, EP]): Component =
-    new JungUndirectedGraphVisualization().component(jug)
 
-  implicit def enComponentNativeUndirectedGraph[VP, EP](nug: NativeUndirectedGraph[VP, EP]): Component =
-    JungUndirectedGraph[VP, EP](nug.vps, nug.ef)
-
-  implicit def enComponentJungDirectedGraph[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component =
-    new JungDirectedGraphVisualization().component(jdg)
-
-  implicit def enComponentNativeDirectedGraph[VP, EP](ndg: NativeDirectedGraph[VP, EP]): Component =
-    new JungDirectedGraph[VP, EP](ndg.vps, ndg.ef)
-
-  implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component = bn.graph match {
-    case jdg: JungDirectedGraph[_, _] => jdg
-    case ndg: NativeDirectedGraph[_, _] => ndg
-    case _ => null
+  implicit def enCompnentUndirectedGraph[VP, EP](ug: UndirectedGraph[VP, EP]): Component = ug match {
+    case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
+    case _ => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads(), ug.edgeFunction()))
   }
+
+  implicit def enComponentDirectedGraph[VP, EP](dg: DirectedGraph[VP, EP]): Component = dg match {
+    case jdg: JungDirectedGraph[VP, EP] => new JungDirectedGraphVisualization().component(jdg)
+    case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads(), dg.edgeFunction()))
+  }
+
+  //  implicit def enComponentJungUndirectedGraph[VP, EP](jug: JungUndirectedGraph[VP, EP]): Component =
+  //    new JungUndirectedGraphVisualization().component(jug)
+  //
+  //  implicit def enComponentNativeUndirectedGraph[VP, EP](nug: NativeUndirectedGraph[VP, EP]): Component =
+  //    JungUndirectedGraph[VP, EP](nug.vps, nug.ef)
+  //
+  //  implicit def enComponentJungDirectedGraph[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component =
+  //    new JungDirectedGraphVisualization().component(jdg)
+  //
+  //  implicit def enComponentNativeDirectedGraph[VP, EP](ndg: NativeDirectedGraph[VP, EP]): Component =
+  //    new JungDirectedGraph[VP, EP](ndg.vps, ndg.ef)
+
+  implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component = bn.graph
+  //  match {
+  //    case jdg: JungDirectedGraph[_, _] => jdg
+  //    case ndg: NativeDirectedGraph[_, _] => ndg
+  //    case _ => null
+  //  }
 
   implicit def enComponentKMeansClassifier[T](
     classifier: KMeans.KMeansClassifier[T]): Component =

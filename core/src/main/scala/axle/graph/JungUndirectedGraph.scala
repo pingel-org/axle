@@ -34,6 +34,10 @@ case class JungUndirectedGraph[VP, EP](
 
   def storage(): UndirectedSparseGraph[Vertex[VP], Edge[ES, EP]] = jungGraph
 
+  def vertexPayloads() = vps
+  
+  def edgeFunction() = ef
+  
   def vertices() = vertexSet
 
   def allEdges() = jungGraph.getEdges().asScala.toSet

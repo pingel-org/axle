@@ -7,6 +7,9 @@ trait DirectedGraph[VP, EP] {
   type G[VP, EP] <: DirectedGraph[VP, EP]
   type ES  
   
+  def vertexPayloads(): Seq[VP]
+  def edgeFunction(): Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]
+
   def vertices(): Set[Vertex[VP]]
   def allEdges(): Set[Edge[ES, EP]]
 
