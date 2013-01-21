@@ -1,10 +1,9 @@
 package axle.visualize
 
-import scala.collection.Seq
-import scala.collection.SortedMap
+import scala.collection._
 
 case class ReactivePlot[X, Y](
-  dataB: Behavior[Seq[(String, SortedMap[X, Y])]],
+  dataB: Behavior[Unit, Seq[(String, SortedMap[X, Y])]],
   connect: Boolean = true,
   drawKey: Boolean = true,
   width: Int = 700,
