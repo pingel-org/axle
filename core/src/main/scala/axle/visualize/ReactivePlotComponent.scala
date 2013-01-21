@@ -13,24 +13,16 @@ import Angle._
 
 import Color._
 
-class ReactivePlotComponent[X, Y](
-  plot: ReactivePlot[X, Y],
-  normalFont: Font = new Font("Courier New", Font.BOLD, 12),
-  titleFont: Font = new Font("Palatino", Font.BOLD, 20),
-  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow)) extends JPanel {
+class ReactivePlotComponent[X, Y](plot: ReactivePlot[X, Y]) extends JPanel {
 
   setMinimumSize(new Dimension(plot.width, plot.height))
 
-  val keyLeftPadding = 20
-  val keyTopPadding = 50
-  val keyWidth = 80
-
-  val colorStream = Stream.continually(colors.toStream).flatten
+  val colorStream = Stream.continually(plot.colors.toStream).flatten
 
   val keyBehavior = new Behavior[Seq[(String, SortedMap[X, Y])], Key[X, Y]] {
 
     def observe(input: Seq[(String, SortedMap[X, Y])]) =
-      new Key(plot, colorStream, keyWidth, keyTopPadding, input)
+      new Key(plot, colorStream, plot.keyWidth, plot.keyTopPadding, input)
   }
 
   val keyBehaviorOpt = if (plot.drawKey)
@@ -55,16 +47,19 @@ class ReactivePlotComponent[X, Y](
 
     def observe(input: (Point2D[X, Y], Point2D[X, Y], Seq[(X, String)], Seq[(Y, String)])) =
       new ScaledArea2D(
-        width = if (plot.drawKey) plot.width - (keyWidth + keyLeftPadding) else plot.width,
+        width = if (plot.drawKey) plot.width - (plot.keyWidth + plot.keyLeftPadding) else plot.width,
         plot.height, plot.border,
         input._1.x, input._2.x, input._1.y, input._2.y // minPoint.x, maxPoint.x, minPoint.y, maxPoint.y
       )(plot.xPlottable, plot.yPlottable)
 
   }
 
-  val titleText = plot.title.map(new Text(_, titleFont, plot.width / 2, 20))
+  val normalFont = new Font(plot.fontName, Font.BOLD, plot.fontSize)
   val xAxisLabel = plot.xAxisLabel.map(new Text(_, normalFont, plot.width / 2, plot.height - plot.border / 2))
   val yAxisLabel = plot.yAxisLabel.map(new Text(_, normalFont, 20, plot.height / 2, angle = Some(90 *: °)))
+  
+  val titleFont = new Font(plot.titleFontName, Font.BOLD, plot.titleFontSize)
+  val titleText = plot.title.map(new Text(_, titleFont, plot.width / 2, 20))
 
   val vLineBehavior = new Behavior[ScaledArea2D[X, Y], VerticalLine[X, Y]] {
     def observe(input: ScaledArea2D[X, Y]) = new VerticalLine(input, plot.yAxis, black)
@@ -95,7 +90,6 @@ class ReactivePlotComponent[X, Y](
     val g2d = g.asInstanceOf[Graphics2D]
 
     val data = plot.dataB.observe()
-
     val bat = batBehavior.observe(data)
     val scaledArea = scaledAreaBehavior.observe(bat)
 
