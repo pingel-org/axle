@@ -27,25 +27,16 @@ class ReactivePlotComponent[X, Y](
 
   val colorStream = Stream.continually(colors.toStream).flatten
 
-  val key = if (plot.drawKey)
-    Some(new Key(plot, colorStream, keyWidth, keyTopPadding, plot.dataB))
+  val keyBehavior = new Behavior[Seq[(String, SortedMap[X, Y])], Key[X, Y]] {
+
+    def observe(input: Seq[(String, SortedMap[X, Y])]) =
+      new Key(plot, colorStream, keyWidth, keyTopPadding, input)
+  }
+
+  val keyBehaviorOpt = if (plot.drawKey)
+    Some(keyBehavior)
   else
     None
-
-  //  def boundsAndTics(
-  //    dataBehavior: Behavior[Unit, Seq[(String, SortedMap[X, Y])]]): (Point2D[X, Y], Point2D[X, Y], Seq[(X, String)], Seq[(Y, String)]) = {
-  //    import plot._
-  //    val data = dataBehavior.observe()
-  //    val minX = List(yAxis, data.map(_._2.firstKey).min(xPlottable)).min(xPlottable)
-  //    val maxX = List(yAxis, data.map(_._2.lastKey).max(xPlottable)).max(xPlottable)
-  //    val minY = List(xAxis, data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
-  //    val maxY = List(xAxis, data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
-  //    val xTics = plot.xPlottable.tics(minX, maxX)
-  //    val yTics = plot.yPlottable.tics(minY, maxY)
-  //    (Point2D(minX, minY), Point2D(maxX, maxY), xTics, yTics)
-  //  }
-
-  // val (minPoint, maxPoint, xTics, yTics) = boundsAndTics(plot.dataB)
 
   val batBehavior = new Behavior[Seq[(String, SortedMap[X, Y])], (Point2D[X, Y], Point2D[X, Y], Seq[(X, String)], Seq[(Y, String)])] {
     import plot._
@@ -59,12 +50,6 @@ class ReactivePlotComponent[X, Y](
       (Point2D(minX, minY), Point2D(maxX, maxY), xTics, yTics)
     }
   }
-
-  //  val scaledArea = new ScaledArea2D(
-  //    width = if (plot.drawKey) plot.width - (keyWidth + keyLeftPadding) else plot.width,
-  //    plot.height, plot.border,
-  //    minPoint.x, maxPoint.x, minPoint.y, maxPoint.y
-  //  )(plot.xPlottable, plot.yPlottable)
 
   val scaledAreaBehavior = new Behavior[(Point2D[X, Y], Point2D[X, Y], Seq[(X, String)], Seq[(Y, String)]), ScaledArea2D[X, Y]] {
 
@@ -100,8 +85,9 @@ class ReactivePlotComponent[X, Y](
   }
 
   val dataLinesBehavior = new Behavior[(ScaledArea2D[X, Y], Seq[(String, SortedMap[X, Y])]), DataLines[X, Y]] {
-    // TODO decide whether to get dataB from input or scope
-    def observe(input: (ScaledArea2D[X, Y], Seq[(String, SortedMap[X, Y])])) = new DataLines(input._1, plot.dataB, colorStream, plot.pointDiameter, plot.connect)
+
+    def observe(input: (ScaledArea2D[X, Y], Seq[(String, SortedMap[X, Y])])) =
+      new DataLines(input._1, input._2, colorStream, plot.pointDiameter, plot.connect)
   }
 
   override def paintComponent(g: Graphics): Unit = {
@@ -109,17 +95,27 @@ class ReactivePlotComponent[X, Y](
     val g2d = g.asInstanceOf[Graphics2D]
 
     val data = plot.dataB.observe()
+
     val bat = batBehavior.observe(data)
     val scaledArea = scaledAreaBehavior.observe(bat)
-    vLineBehavior.observe(scaledArea).paint(g2d)
-    hLineBehavior.observe(scaledArea).paint(g2d)
-    xTicsBehavior.observe((scaledArea, bat)).paint(g2d)
-    yTicsBehavior.observe((scaledArea, bat)).paint(g2d)
-    dataLinesBehavior.observe((scaledArea, data)).paint(g2d)
-    titleText.map(_.paint(g2d))
-    xAxisLabel.map(_.paint(g2d))
-    yAxisLabel.map(_.paint(g2d))
-    key.map(_.paint(g2d))
+
+    val paintables = Vector(
+      vLineBehavior.observe(scaledArea),
+      hLineBehavior.observe(scaledArea),
+      xTicsBehavior.observe((scaledArea, bat)),
+      yTicsBehavior.observe((scaledArea, bat)),
+      dataLinesBehavior.observe((scaledArea, data))
+    ) ++ Vector(
+        titleText,
+        xAxisLabel,
+        yAxisLabel,
+        keyBehaviorOpt.map(_.observe(data))
+      ).flatMap(i => i)
+
+    for (paintable <- paintables) {
+      paintable.paint(g2d)
+    }
+
   }
 
 }

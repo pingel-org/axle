@@ -9,11 +9,9 @@ class Key[X, Y](
   colorStream: Stream[Color],
   width: Int,
   topPadding: Int,
-  dataB: Behavior[Unit, Seq[(String, SortedMap[X, Y])]]) extends Paintable {
+  data: Seq[(String, SortedMap[X, Y])]) extends Paintable {
 
   def paint(g2d: Graphics2D): Unit = {
-
-    val data = dataB.observe() // TODO: this should not happen here
 
     val fontMetrics = g2d.getFontMetrics
 

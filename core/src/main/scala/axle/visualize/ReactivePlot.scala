@@ -1,6 +1,6 @@
 package axle.visualize
 
-import scala.collection._
+import collection._
 
 case class ReactivePlot[X, Y](
   dataB: Behavior[Unit, Seq[(String, SortedMap[X, Y])]],
