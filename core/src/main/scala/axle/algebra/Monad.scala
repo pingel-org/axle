@@ -30,16 +30,26 @@ object Monad {
 
   implicit val listMonad = new Monad[List] {
 
-    def bind[A, B](xs: List[A], f: A => List[B]): List[B] = xs.flatMap(f)
+    def bind[A, B](list: List[A], f: A => List[B]): List[B] = list.flatMap(f)
 
     def unit[A](a: A): List[A] = List(a)
   }
 
   implicit val optionMonad = new Monad[Option] {
 
-    def bind[A, B](xs: Option[A], f: A => Option[B]): Option[B] = xs.flatMap(f)
+    def bind[A, B](opt: Option[A], f: A => Option[B]): Option[B] = opt.flatMap(f)
 
     def unit[A](a: A): Option[A] = Some(a)
+  }
+
+  implicit def eitherMonad[A] = new Monad[({ type λ[α] = Either[A, α] })#λ] {
+
+    def bind[B, C](either: Either[A, B], f: B => Either[A, C]): Either[A, C] = either match {
+      case Left(a) => Left(a)
+      case Right(b) => f(b)
+    }
+
+    def unit[B](b: B): Either[A, B] = Right(b)
   }
 
   //  class Reader[A, B] extends Function1[A, B]
