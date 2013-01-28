@@ -29,15 +29,11 @@ libraryDependencies ++= Seq(
   "net.sf.jung" % "jung-graph-impl" % "2.0.1",
   "net.sf.jung" % "jung-io" % "2.0.1",
   "net.sf.jung" % "jung-visualization" % "2.0.1",
-  "net.liftweb" % "lift-json_2.9.0-1" % "2.4",
-  "net.liftweb" % "lift-common_2.9.0-1" % "2.4",
   "org.specs2" %% "specs2" % "1.11" % "test",
   "joda-time" % "joda-time" % "2.1",
   "org.joda" % "joda-convert" % "1.2"
   // "jblas" % "jblas" % "1.2.0",
   // "jblas" % "native" % "1.2.0",
-  // "org.scalaz" %% "scalaz-core" % "6.0.4"
-  // "com.chuusai" % "shapeless_2.9.1" % "1.2.2"
 )
 
 test in assembly := {}
