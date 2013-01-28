@@ -17,13 +17,15 @@ object Functor {
     xs.fmap(f).fmap(g) === xs.fmap(g compose f)
 
   implicit val listFunctor = new Functor[List] {
-    def fmap[A, B](xs: List[A], f: A => B): List[B] = xs.map(f)
+    def fmap[A, B](list: List[A], f: A => B): List[B] = list.map(f)
   }
 
   implicit val optFunctor = new Functor[Option] {
-    def fmap[A, B](xs: Option[A], f: A => B): Option[B] = xs.map(f)
+    def fmap[A, B](opt: Option[A], f: A => B): Option[B] = opt.map(f)
   }
 
-  // TODO: Function as functor
+//  implicit def function1Functor[A] = new Functor[Function1] {
+//    def fmap[B, C](fn: Function1[A, B], f: B => C): Function1[A, C] = fn.compose(fn)
+//  }
 
 }
