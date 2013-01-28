@@ -10,10 +10,10 @@ object Functor {
 
   def id[T](x: T) = x
 
-  def checkAxiom1[F[_]: Functor, A](xs: F[A]): Boolean =
+  def checkIdentity[F[_]: Functor, A](xs: F[A]): Boolean =
     xs.fmap(id) === id(xs)
 
-  def checkAxiom2[F[_]: Functor, A, B, C](xs: F[A], f: A => B, g: B => C): Boolean =
+  def checkComposition[F[_]: Functor, A, B, C](xs: F[A], f: A => B, g: B => C): Boolean =
     xs.fmap(f).fmap(g) === xs.fmap(g compose f)
 
   implicit val listFunctor = new Functor[List] {

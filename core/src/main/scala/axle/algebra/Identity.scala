@@ -11,6 +11,6 @@ trait Identity[A] {
     monoid.mzero()
   }
 
-  def ===(other: A): Boolean = this equals other // this.## == other.##  // TODO
-  
+  def ===(other: A): Boolean = (value equals other)
+
 }

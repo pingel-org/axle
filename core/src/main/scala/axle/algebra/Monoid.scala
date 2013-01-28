@@ -11,19 +11,19 @@ object Monoid {
   //  def checkAxiom1[A](x: A)(implicit monoid: Monoid[A]): Boolean =
   //    (x |+| monoid.mzero) == x
 
-  def checkAxiom1[A: Monoid](x: A): Boolean = {
+  def checkLeftZero[A: Monoid](x: A): Boolean = {
+    val monoid = implicitly[Monoid[A]]
+    (monoid.mzero |+| x) === x
+  }
+
+  def checkRightZero[A: Monoid](x: A): Boolean = {
     val monoid = implicitly[Monoid[A]]
     (x |+| monoid.mzero) === x
   }
 
-  def checkAxiom2[A: Monoid](x: A): Boolean = {
-    val monoid = implicitly[Monoid[A]]
-    x === (x |+| monoid.mzero)
-  }
-
   // associativity
 
-  def checkAxiom3[A: Monoid](x: A, y: A, z: A): Boolean =
+  def checkAssociativity[A: Monoid](x: A, y: A, z: A): Boolean =
     ((x |+| y) |+| z) == (x |+| (y |+| z))
 
   implicit val intMonoid = new Monoid[Int] {

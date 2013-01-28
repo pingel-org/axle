@@ -12,24 +12,18 @@ trait Monad[M[_]] {
 object Monad {
 
   import axle.algebra.toMA
-  
-  // left identity
 
-  def checkAxiom1[M[_]: Monad, A, B](x: A, f: A => M[B]): Boolean = {
+  def checkLeftIdentity[M[_]: Monad, A, B](x: A, f: A => M[B]): Boolean = {
     val monad = implicitly[Monad[M]]
     monad.unit(x).bind(f) === f(x)
   }
 
-  // right identity
-
-  def checkAxiom2[M[_]: Monad, A](ma: M[A]): Boolean = {
+  def checkRightIdentity[M[_]: Monad, A](ma: M[A]): Boolean = {
     val monad = implicitly[Monad[M]]
     ma.bind(monad.unit) === ma
   }
 
-  // associativity
-
-  def checkAxiom3[M[_]: Monad, A, B, C](ma: M[A], f: A => M[B], g: B => M[C]): Boolean = {
+  def checkAssociativity[M[_]: Monad, A, B, C](ma: M[A], f: A => M[B], g: B => M[C]): Boolean = {
     val monad = implicitly[Monad[M]]
     ma.bind(f).bind(g) === ma.bind(x => f(x).bind(g))
   }
