@@ -24,8 +24,8 @@ object Functor {
     def fmap[A, B](opt: Option[A], f: A => B): Option[B] = opt.map(f)
   }
 
-//  implicit def function1Functor[A] = new Functor[Function1] {
-//    def fmap[B, C](fn: Function1[A, B], f: B => C): Function1[A, C] = fn.compose(fn)
-//  }
+  implicit def function1Functor[A] = new Functor[({ type λ[α] = Function1[A, α] })#λ] {
+    def fmap[B, C](fn: Function1[A, B], f: B => C): Function1[A, C] = f.compose(fn)
+  }
 
 }
