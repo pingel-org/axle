@@ -1,8 +1,6 @@
 package axle.graph
 
 import collection._
-import scalaz._
-import Scalaz._
 
 case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends DirectedGraph[VP, EP] {

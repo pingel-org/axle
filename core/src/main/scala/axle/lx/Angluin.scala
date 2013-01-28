@@ -2,8 +2,6 @@
 package axle.lx
 
 import collection._
-import scalaz._
-import Scalaz._
 import axle.graph._
 
 class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
@@ -123,9 +121,9 @@ object Angluin {
 
   case class SilentLearner(T: Text) extends Learner[Nothing] {
 
-    def initialState() = null
+    def initialState() = null.asInstanceOf[Nothing]
 
-    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null, None)
+    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null.asInstanceOf[Nothing], None)
   }
 
   /**
@@ -134,9 +132,9 @@ object Angluin {
 
   case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
 
-    def initialState() = null
+    def initialState() = null.asInstanceOf[Nothing]
 
-    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null, Some(G))
+    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null.asInstanceOf[Nothing], Some(G))
   }
 
   /**

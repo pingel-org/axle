@@ -1,7 +1,11 @@
 package axle.visualize
 
-trait Behavior[I, +T] {
-  
-  def observe(input: I): T
-  
+trait Behavior[I, +A] {
+
+  def observe(input: I): A
+
+//  def map[B](f: A => B): Behavior[I, B] = null
+//
+//  def flatMap[B](f: A => Behavior[I, B]): Behavior[I, B] = null
+
 }

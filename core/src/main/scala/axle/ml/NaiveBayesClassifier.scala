@@ -18,8 +18,6 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
   import axle.ScalaMapReduce._
   import axle._
   import collection._
-  import scalaz._
-  import Scalaz._
 
   val featureNames = pFs.map(_.name)
 
@@ -70,10 +68,12 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
    *
    */
 
+  import axle.algebra._
+  implicit val foo = Monoid.tuple4Monoid[Int, Int, Int, Int]()
   def predictedVsActual(dit: Iterator[D], k: TC): (Int, Int, Int, Int) = dit.map(d => {
     val actual = classExtractor(d)
     val predicted = predict(d)
-    (actual == k, predicted == k) match { // TODO use type-safe equality (===)
+    (actual === k, predicted === k) match {
       case (true, true) => (1, 0, 0, 0) // true positive
       case (false, true) => (0, 1, 0, 0) // false positive
       case (false, false) => (0, 0, 1, 0) // false negative

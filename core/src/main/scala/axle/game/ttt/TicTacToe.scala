@@ -5,8 +5,6 @@ import axle.game._
 import axle.matrix.ArrayMatrixFactory._
 import util.Random.{nextInt}
 import collection._
-import scalaz._
-import Scalaz._
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game

@@ -4,8 +4,6 @@ import axle._
 import collection._
 import axle.quanta.Information
 import math.log
-import scalaz._
-import Scalaz._
 
 package object stats {
 
@@ -26,7 +24,7 @@ package object stats {
   
   def entropy[A](X: RandomVariable[A]): Information.Q = X.values.map(_.Σ(x => {
     val px = P(X eq x)()
-    (px > 0) ? (-px * log2(px)) | 0.0
+    if (px > 0) (-px * log2(px)) else 0.0
   })).getOrElse(0.0) *: bit
 
   def H[A](X: RandomVariable[A]): Information.Q = entropy(X)

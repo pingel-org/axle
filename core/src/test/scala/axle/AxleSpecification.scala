@@ -2,15 +2,14 @@
 package axle
 
 import org.specs2.mutable._
-import scalaz._
-import Scalaz._
+import axle.algebra._
 
 class AxleSpecification extends Specification {
 
   // This file isn't so much an "Axle" spec as it is a list of expressions found
   // in "Learn You a Haskell For Great Good" translated to Scala w/Scalaz
 
-  def functorLaw1a[M[_]: Functor, A](functor: M[A]): Boolean = functor.map(id[A]) == id[M[A]](functor)
+  def functorLaw1a[M[_]: Functor, A](functor: M[A]): Boolean = functor.mapp(id[A]) == id[M[A]](functor)
 
   //  def functorLaw1b[M[_, _]: Functor, A, B](functor: M[A, B]): Boolean = {
   //    val lhs = functor.map(id[B])
@@ -33,15 +32,15 @@ class AxleSpecification extends Specification {
       f(getLine()).mkString("")
 
       // getLine.map(intersperse "-" compose reverse compose map toUpper) 
-      getLine.map((cs: List[Char]) => f(cs))
+      // getLine.map((cs: List[Char]) => f(cs))
 
       List(1, 2, 3).map(replicate[Int](3) _)
       Some(4).map(replicate[Int](3) _)
-      Right("blah").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
-      Left("foo").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
+      //Right("blah").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
+      //Left("foo").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
 
       // Functions as Functors
-      { (_: Int) + 100 } map { _ * 3 } apply (1)
+      //{ (_: Int) + 100 } map { _ * 3 } apply (1)
 
       { (_: Int) * 3 } compose { (_: Int) + 100 } apply (1)
 
@@ -49,11 +48,11 @@ class AxleSpecification extends Specification {
 
       Some(4).map(replicate[Int](3) _)
 
-      Right("blah").asInstanceOf[Either[Nothing, String]].map(replicate[String](3) _)
+      // Right("blah").asInstanceOf[Either[Nothing, String]].map(replicate[String](3) _)
 
       None.asInstanceOf[Option[Int]].map(replicate[Int](3) _)
 
-      Left("foo").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
+      // Left("foo").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
 
       List(1, 2, 3, 4).map({ (x: Int) => x + 1 })
 
@@ -63,13 +62,13 @@ class AxleSpecification extends Specification {
 
       Some(4).map(replicate[Int](3) _)
 
-      { () => 1 }.map(replicate[Int](3) _)
+      // { () => 1 }.map(replicate[Int](3) _)
 
-      Left(5).asInstanceOf[Either[Int, Int]].map(replicate(3) _)
+      // Left(5).asInstanceOf[Either[Int, Int]].map(replicate(3) _)
 
-      Right(6).asInstanceOf[Either[Int, Int]].map(replicate[Any](3) _)
+      // Right(6).asInstanceOf[Either[Int, Int]].map(replicate[Any](3) _)
 
-      { (_: Int) + 100 }.map({ (_: Int) * 3 }).apply(1)
+      // { (_: Int) + 100 }.map({ (_: Int) * 3 }).apply(1)
 
       1 must be equalTo (1)
     }

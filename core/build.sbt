@@ -12,7 +12,7 @@ seq(assemblySettings: _*)
 
 crossScalaVersions := Seq("2.9.1")
 
-initialCommands in console := "import axle._; import axle.stats._; import axle.quanta._; import axle.graph._; import axle.matrix._; import axle.ml._; import axle.visualize._; import scalaz._; import collection._"
+initialCommands in console := "import axle._; import axle.stats._; import axle.quanta._; import axle.graph._; import axle.matrix._; import axle.ml._; import axle.visualize._; import collection._"
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
@@ -24,7 +24,6 @@ scalacOptions ++= Seq("-unchecked", "-deprecation")
 //    -Dversion=1.2.0 -Dfile=jblas-1.2.0.jar -Dpackaging=jar -DgeneratePom=true
 
 libraryDependencies ++= Seq(
-  // "jung" % "jung" % "1.7.6",
   "net.sf.jung" % "jung-algorithms" % "2.0.1",
   "net.sf.jung" % "jung-api" % "2.0.1",
   "net.sf.jung" % "jung-graph-impl" % "2.0.1",
@@ -32,12 +31,12 @@ libraryDependencies ++= Seq(
   "net.sf.jung" % "jung-visualization" % "2.0.1",
   "net.liftweb" % "lift-json_2.9.0-1" % "2.4",
   "net.liftweb" % "lift-common_2.9.0-1" % "2.4",
-  // "jblas" % "jblas" % "1.2.0",
-  // "jblas" % "native" % "1.2.0",
   "org.specs2" %% "specs2" % "1.11" % "test",
   "joda-time" % "joda-time" % "2.1",
-  "org.joda" % "joda-convert" % "1.2",
-  "org.scalaz" %% "scalaz-core" % "6.0.4"
+  "org.joda" % "joda-convert" % "1.2"
+  // "jblas" % "jblas" % "1.2.0",
+  // "jblas" % "native" % "1.2.0",
+  // "org.scalaz" %% "scalaz-core" % "6.0.4"
   // "com.chuusai" % "shapeless_2.9.1" % "1.2.2"
 )
 

@@ -104,8 +104,6 @@ import collection._
 import axle.XmlAble
 import axle.graph._
 import math.max
-import scalaz._
-import Scalaz._
 import Stream.{ cons, empty }
 
 class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, String])
