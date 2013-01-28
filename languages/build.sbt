@@ -14,10 +14,8 @@ initialCommands in console := "import axle._; import axle.stats._; import axle.q
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
 libraryDependencies ++= Seq(
-  "org.pingel" %% "axle" % "0.1-SNAPSHOT"
+  "org.pingel" %% "axle" % "0.1-SNAPSHOT",
   "net.liftweb" % "lift-json_2.9.0-1" % "2.4",
   "net.liftweb" % "lift-common_2.9.0-1" % "2.4",
   "org.specs2" %% "specs2" % "1.11" % "test"
 )
-
-test in assembly := {}
