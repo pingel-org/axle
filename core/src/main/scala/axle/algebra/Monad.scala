@@ -4,7 +4,7 @@ trait Monad[M[_]] {
 
   def bind[A, B](xs: M[A], f: A => M[B]): M[B]
 
-  // unit = "apply"?
+  // unit/apply/point
   def unit[A](a: A): M[A]
 
 }
