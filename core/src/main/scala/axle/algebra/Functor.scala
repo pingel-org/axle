@@ -16,11 +16,11 @@ object Functor {
   def checkComposition[F[_]: Functor, A, B, C](xs: F[A], f: A => B, g: B => C): Boolean =
     xs.fmap(f).fmap(g) === xs.fmap(g compose f)
 
-  implicit val ListFunctor = new Functor[List] {
+  implicit def ListFunctor = new Functor[List] {
     def fmap[A, B](list: List[A], f: A => B) = list.map(f)
   }
 
-  implicit val OptFunctor = new Functor[Option] {
+  implicit def OptFunctor = new Functor[Option] {
     def fmap[A, B](opt: Option[A], f: A => B) = opt.map(f)
   }
 

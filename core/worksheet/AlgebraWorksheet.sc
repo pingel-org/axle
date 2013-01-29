@@ -4,7 +4,7 @@ object AlgebraWorksheet {
 
   import axle.algebra._
   2 |+| 2                                         //> res0: Int = 4
-  
+ 
   1.0 |+| 2.0                                     //> res1: Double = 3.0
 
   List(1, 2, 3) |+| List(3, 4, 5)                 //> res2: List[Int] = List(1, 2, 3, 3, 4, 5)
@@ -20,7 +20,7 @@ object AlgebraWorksheet {
   List(1, 2, 3).fmap(_ |+| 3)                     //> res8: List[Int] = List(4, 5, 6)
 
   List(1, 2, 3).fmap(_ |+| 1)                     //> res9: List[Int] = List(2, 3, 4)
-  Option(4).fmap(_ |+| 1)                         //> res10: Option[Int] = Some(5)
+  Option(1).fmap(_ |+| 1)                         //> res10: Option[Int] = Some(2)
 
   val f1 = (x: Int) => x |+| 1                    //> f1  : Int => Int = <function1>
   val f2 = (x: Int) => x * 10                     //> f2  : Int => Int = <function1>

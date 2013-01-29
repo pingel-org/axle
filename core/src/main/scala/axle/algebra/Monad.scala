@@ -11,22 +11,14 @@ trait Monad[M[_]] {
 
 object Monad {
 
-  // import axle.algebra.toMA
+  def checkLeftIdentity[M[_]: Monad, A, B](x: A, f: A => M[B]): Boolean =
+    implicitly[Monad[M]].unit(x).bind(f) === f(x)
 
-  def checkLeftIdentity[M[_]: Monad, A, B](x: A, f: A => M[B]): Boolean = {
-    val monad = implicitly[Monad[M]]
-    monad.unit(x).bind(f) === f(x)
-  }
+  def checkRightIdentity[M[_]: Monad, A](ma: M[A]): Boolean =
+    ma.bind(implicitly[Monad[M]].unit) === ma
 
-  def checkRightIdentity[M[_]: Monad, A](ma: M[A]): Boolean = {
-    val monad = implicitly[Monad[M]]
-    ma.bind(monad.unit) === ma
-  }
-
-  def checkAssociativity[M[_]: Monad, A, B, C](ma: M[A], f: A => M[B], g: B => M[C]): Boolean = {
-    val monad = implicitly[Monad[M]]
+  def checkAssociativity[M[_]: Monad, A, B, C](ma: M[A], f: A => M[B], g: B => M[C]): Boolean =
     ma.bind(f).bind(g) === ma.bind(x => f(x).bind(g))
-  }
 
   implicit val listMonad = new Monad[List] {
 

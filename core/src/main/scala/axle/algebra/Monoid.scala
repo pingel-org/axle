@@ -11,15 +11,11 @@ object Monoid {
     def mzero = z.mzero
   }
 
-  def checkLeftZero[A: Monoid](x: A): Boolean = {
-    val monoid = implicitly[Monoid[A]]
-    (monoid.mzero |+| x) === x
-  }
+  def checkLeftZero[A: Monoid](x: A): Boolean =
+    (implicitly[Monoid[A]].mzero |+| x) === x
 
-  def checkRightZero[A: Monoid](x: A): Boolean = {
-    val monoid = implicitly[Monoid[A]]
-    (x |+| monoid.mzero) === x
-  }
+  def checkRightZero[A: Monoid](x: A): Boolean =
+    (x |+| implicitly[Monoid[A]].mzero) === x
 
   def checkAssociativity[A: Monoid](x: A, y: A, z: A): Boolean =
     ((x |+| y) |+| z) == (x |+| (y |+| z))
