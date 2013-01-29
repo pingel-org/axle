@@ -39,9 +39,8 @@ class Factor(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double
 
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
+  import axle.algebra._
   def evaluate(prior: Seq[CaseIs[_]], condition: Seq[CaseIs[_]]): Double = {
-    import axle.algebra._
-    implicit val foo = Monoid.tuple2Monoid[Double, Double]()
     val pw = cases().map(c => {
       if (isSupersetOf(c, prior)) {
         if (isSupersetOf(c, condition)) {

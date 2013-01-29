@@ -11,7 +11,7 @@ trait Monad[M[_]] {
 
 object Monad {
 
-  import axle.algebra.toMA
+  // import axle.algebra.toMA
 
   def checkLeftIdentity[M[_]: Monad, A, B](x: A, f: A => M[B]): Boolean = {
     val monad = implicitly[Monad[M]]

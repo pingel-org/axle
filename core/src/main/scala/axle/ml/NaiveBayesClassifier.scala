@@ -69,7 +69,6 @@ class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
    */
 
   import axle.algebra._
-  implicit val foo = Monoid.tuple4Monoid[Int, Int, Int, Int]()
   def predictedVsActual(dit: Iterator[D], k: TC): (Int, Int, Int, Int) = dit.map(d => {
     val actual = classExtractor(d)
     val predicted = predict(d)
