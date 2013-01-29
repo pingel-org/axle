@@ -23,7 +23,7 @@ class GoldSpecification extends Specification {
 
       val ℒ = Language(Set(s1, s2))
       
-      val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
+      val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner()
       ɸ.guesses(T).find(_.ℒ == ℒ)

@@ -23,7 +23,7 @@ class AngluinSpecification extends Specification {
       val s2 = mShut :: mUp :: Nil
       val ℒ = Language(s1 :: s2 :: Nil)
 
-      val T = Text(s1 :: ▦ :: ▦ :: s2 :: ▦ :: s2 :: s2 :: Nil)
+      val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner()
       ɸ.guesses(T).find(_.ℒ == ℒ)

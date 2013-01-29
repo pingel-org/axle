@@ -7,7 +7,7 @@ object Gold {
 
   type Expression = Iterable[Morpheme]
 
-  val ▦ = List[Morpheme]()
+  val ♯ = List[Morpheme]()
 
   class ExpressionComparator extends Comparable[Expression] {
     def compareTo(other: Expression): Int = this.toString().compareTo(other.toString())
@@ -72,7 +72,7 @@ object Gold {
 
     def isFor(ℒ: Language) = content().equals(ℒ) // TODO equals
 
-    def content() = new Language(expressions.filter(_ != ▦).toSet)
+    def content() = new Language(expressions.filter(_ != ♯).toSet)
 
     override def toString() = "<" + expressions.mkString(", ") + ">"
   }

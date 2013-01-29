@@ -53,7 +53,7 @@ object Angluin {
 
   // type Expression = List[Symbol]
 
-  val ▦ = List[Symbol]()
+  val ♯ = List[Symbol]()
 
   // val g = graph[String, Symbol]()
 
@@ -147,7 +147,7 @@ object Angluin {
 
     def processExpression(state: Language, expression: Iterable[Symbol]): (Language, Option[Grammar]) =
       expression match {
-        case ▦ => (state, Some(HardCodedGrammar(state)))
+        case ♯ => (state, Some(HardCodedGrammar(state)))
         case _ => {
           val newState = Language(state.sequences ++ List(expression))
           (newState, Some(HardCodedGrammar(newState)))
@@ -201,7 +201,7 @@ object Angluin {
 
     def isFor(ℒ: Language) = content().equals(ℒ)
 
-    def content(): Language = new Language(expressions.filter(_ != ▦))
+    def content(): Language = new Language(expressions.filter(_ != ♯))
 
     override def toString() = "<" + expressions.mkString(", ") + ">"
 
