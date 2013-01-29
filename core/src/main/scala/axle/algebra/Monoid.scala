@@ -12,10 +12,10 @@ object Monoid {
   }
 
   def checkLeftZero[A: Monoid](x: A): Boolean =
-    (implicitly[Monoid[A]].mzero |+| x) === x
+    (∅[A] |+| x) === x
 
   def checkRightZero[A: Monoid](x: A): Boolean =
-    (x |+| implicitly[Monoid[A]].mzero) === x
+    (x |+| ∅[A]) === x
 
   def checkAssociativity[A: Monoid](x: A, y: A, z: A): Boolean =
     ((x |+| y) |+| z) == (x |+| (y |+| z))

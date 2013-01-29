@@ -28,15 +28,15 @@ object Pure {
   }
 
   implicit def Tuple2Pure[R: Zero]: Pure[({ type λ[α] = (R, α) })#λ] = new Pure[({ type λ[α] = (R, α) })#λ] {
-    def pure[A](a: => A) = (implicitly[Zero[R]].mzero, a)
+    def pure[A](a: => A) = (∅[R], a)
   }
 
   implicit def Tuple3Pure[R: Zero, S: Zero]: Pure[({ type λ[α] = (R, S, α) })#λ] = new Pure[({ type λ[α] = (R, S, α) })#λ] {
-    def pure[A](a: => A) = (implicitly[Zero[R]].mzero, implicitly[Zero[S]].mzero, a)
+    def pure[A](a: => A) = (∅[R], ∅[S], a)
   }
 
   implicit def Tuple4Pure[R: Zero, S: Zero, T: Zero]: Pure[({ type λ[α] = (R, S, T, α) })#λ] = new Pure[({ type λ[α] = (R, S, T, α) })#λ] {
-    def pure[A](a: => A) = (implicitly[Zero[R]].mzero, implicitly[Zero[S]].mzero, implicitly[Zero[T]].mzero, a)
+    def pure[A](a: => A) = (∅[R], ∅[S], ∅[T], a)
   }
 
 }

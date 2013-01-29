@@ -7,7 +7,7 @@ trait Zero[A] {
 }
 
 object Zero {
-
+  
   implicit def IntZero = new Zero[Int] { def mzero() = 0 }
 
   implicit def DoubleZero = new Zero[Double] { def mzero() = 0.0 }

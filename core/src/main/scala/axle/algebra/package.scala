@@ -5,6 +5,8 @@ package axle
 
 package object algebra {
 
+  def ∅[Z](implicit z: Zero[Z]): Z = z.mzero
+  
   implicit def toIdent[A](a: A): Identity[A] = new Identity[A] {
     lazy val value = a
   }
