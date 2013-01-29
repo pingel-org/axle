@@ -12,7 +12,7 @@ seq(assemblySettings: _*)
 
 crossScalaVersions := Seq("2.9.1")
 
-initialCommands in console := "import axle._; import axle.stats._; import axle.quanta._; import axle.graph._; import axle.matrix._; import axle.ml._; import axle.visualize._; import collection._"
+initialCommands in console := "import axle._; import axle.algebra._; import axle.stats._; import axle.quanta._; import axle.graph._; import axle.matrix._; import axle.ml._; import axle.visualize._; import collection._"
 
 scalacOptions ++= Seq("-unchecked", "-deprecation")
 
