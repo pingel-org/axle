@@ -1,5 +1,7 @@
 package axle.matrix
 
+import axle._
+
 object ArrayMatrixFactory extends ArrayMatrixFactory {}
 
 /**
@@ -42,71 +44,71 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def isScalar(): Boolean = isRowVector && isColumnVector
 
     def dup(): M[T] = matrix(_storage.clone, nRows, nColumns)
-    def negate(): M[T] = null // TODO
-    def transpose(): M[T] = null // TODO
-    def diag(): M[T] = null // TODO
-    def invert(): M[T] = null // TODO
-    def ceil(): M[T] = null // TODO
-    def floor(): M[T] = null // TODO
-    def log(): M[T] = null // TODO
-    def log10(): M[T] = null // TODO
-    def fullSVD(): (M[T], M[T], M[T]) = null // TODO doesn't really make sense
+    def negate(): M[T] = ???
+    def transpose(): M[T] = ???
+    def diag(): M[T] = ???
+    def invert(): M[T] = ???
+    def ceil(): M[T] = ???
+    def floor(): M[T] = ???
+    def log(): M[T] = ???
+    def log10(): M[T] = ???
+    def fullSVD(): (M[T], M[T], M[T]) = ??? doesn't really make sense
 
-    def pow(p: Double): M[T] = null // TODO
+    def pow(p: Double): M[T] = ???
 
-    def addScalar(x: T): M[T] = null // TODO
+    def addScalar(x: T): M[T] = ???
     def addAssignment(r: Int, c: Int, v: T): M[T] = {
       val length = rows * columns
       val arr = storage.clone
       arr(r * columns + c) = v
       matrix(arr, rows, columns)
     }
-    def subtractScalar(x: T): M[T] = null // TODO
-    def multiplyScalar(x: T): M[T] = null // TODO
-    def divideScalar(x: T): M[T] = null // TODO
-    def mulRow(i: Int, x: T): M[T] = null // TODO
-    def mulColumn(i: Int, x: T): M[T] = null // TODO
+    def subtractScalar(x: T): M[T] = ???
+    def multiplyScalar(x: T): M[T] = ???
+    def divideScalar(x: T): M[T] = ???
+    def mulRow(i: Int, x: T): M[T] = ???
+    def mulColumn(i: Int, x: T): M[T] = ???
 
     // Operations on pairs of matrices
 
-    def addMatrix(other: M[T]): M[T] = null // TODO
-    def subtractMatrix(other: M[T]): M[T] = null // TODO
-    def multiplyMatrix(other: M[T]): M[T] = null // TODO
-    def mulPointwise(other: M[T]) = null // TODO
-    def divPointwise(other: M[T]) = null // TODO
-    def concatenateHorizontally(right: M[T]): M[T] = null // TODO
-    def concatenateVertically(under: M[T]): M[T] = null // TODO
-    def solve(B: M[T]): M[T] = null // TODO // returns X, where this == A and A x X = B
+    def addMatrix(other: M[T]): M[T] = ???
+    def subtractMatrix(other: M[T]): M[T] = ???
+    def multiplyMatrix(other: M[T]): M[T] = ???
+    def mulPointwise(other: M[T]) = ???
+    def divPointwise(other: M[T]) = ???
+    def concatenateHorizontally(right: M[T]): M[T] = ???
+    def concatenateVertically(under: M[T]): M[T] = ???
+    def solve(B: M[T]): M[T] = ??? // returns X, where this == A and A x X = B
 
     // Operations on a matrix and a column/row vector
 
-    def addRowVector(row: M[T]): M[T] = null // TODO
-    def addColumnVector(column: M[T]): M[T] = null // TODO
-    def subRowVector(row: M[T]): M[T] = null // TODO
-    def subColumnVector(column: M[T]): M[T] = null // TODO
+    def addRowVector(row: M[T]): M[T] = ???
+    def addColumnVector(column: M[T]): M[T] = ???
+    def subRowVector(row: M[T]): M[T] = ???
+    def subColumnVector(column: M[T]): M[T] = ???
 
     // Operations on pair of matrices that return M[Boolean]
 
-    def lt(other: M[T]): Matrix[Boolean] = null // TODO
-    def le(other: M[T]): Matrix[Boolean] = null // TODO
-    def gt(other: M[T]): Matrix[Boolean] = null // TODO
-    def ge(other: M[T]): Matrix[Boolean] = null // TODO
-    def eq(other: M[T]): Matrix[Boolean] = null // TODO
-    def ne(other: M[T]): Matrix[Boolean] = null // TODO
+    def lt(other: M[T]): Matrix[Boolean] = ???
+    def le(other: M[T]): Matrix[Boolean] = ???
+    def gt(other: M[T]): Matrix[Boolean] = ???
+    def ge(other: M[T]): Matrix[Boolean] = ???
+    def eq(other: M[T]): Matrix[Boolean] = ???
+    def ne(other: M[T]): Matrix[Boolean] = ???
 
-    def and(other: M[T]): Matrix[Boolean] = null // TODO
-    def or(other: M[T]): Matrix[Boolean] = null // TODO
-    def xor(other: M[T]): Matrix[Boolean] = null // TODO
-    def not(): Matrix[Boolean] = null // TODO
+    def and(other: M[T]): Matrix[Boolean] = ???
+    def or(other: M[T]): Matrix[Boolean] = ???
+    def xor(other: M[T]): Matrix[Boolean] = ???
+    def not(): Matrix[Boolean] = ???
 
     // various mins and maxs
 
     def max(): T = null.asInstanceOf[T] // TODO
-    def argmax(): (Int, Int) = null // TODO
+    def argmax(): (Int, Int) = ???
     def min(): T = null.asInstanceOf[T] // TODO
-    def argmin(): (Int, Int) = null // TODO
-    def columnMins(): M[T] = null // TODO
-    def columnMaxs(): M[T] = null // TODO
+    def argmin(): (Int, Int) = ???
+    def columnMins(): M[T] = ???
+    def columnMaxs(): M[T] = ???
 
     // In-place versions
 
@@ -128,10 +130,10 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
 
     // higher order fuctions
 
-    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = null // TODO
+    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = ???
     // matrix(rows, columns, storage.map(f(_)))
 
-    def flatMapColumns[A](f: M[T] => M[A])(implicit elementAdapter: E[A]): M[A] = null // TODO
+    def flatMapColumns[A](f: M[T] => M[A])(implicit elementAdapter: E[A]): M[A] = ???
 
   }
 
@@ -151,12 +153,12 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     matrix(arr, r, c)
   }
 
-  def zeros[T](m: Int, n: Int)(implicit elementAdapter: E[T]): M[T] = null // TODO
+  def zeros[T](m: Int, n: Int)(implicit elementAdapter: E[T]): M[T] = ???
 
-  def matrix[T](m: Int, n: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T] = null // TODO
+  def matrix[T](m: Int, n: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T] = ???
 
-  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit elementAdapter: E[T]): M[T] = null // TODO
+  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit elementAdapter: E[T]): M[T] = ???
 
-  def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit elementAdapter: E[T]): M[T] = null // TODO
+  def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit elementAdapter: E[T]): M[T] = ???
 
 }

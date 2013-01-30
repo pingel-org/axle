@@ -71,5 +71,6 @@ package object axle {
   def square(x: Double) = x * x
 
   def √(x: Double) = math.sqrt(x)
-  
+
+  def ??? : Nothing = throw new UnsupportedOperationException("not implemented")
 }
