@@ -48,35 +48,13 @@ Example moves:
     cons(command, userInputStream)
   }
 
-  def parseMove(player: PokerPlayer, moveStr: String): Option[PokerMove] = {
-    val tokens = moveStr.split("\\s+")
-    if (tokens.length > 0) {
-      tokens(0) match {
-        // TODO 'check' is a 'call' when currentBet == 0.  Might want to model this.
-        case "c" | "check" | "call" => Some(Call(player))
-        case "r" | "raise" => {
-          if (tokens.length == 2)
-            try {
-              Some(Raise(player, tokens(1).toInt))
-            } catch {
-              case e: Exception => None
-            }
-          else
-            None
-        }
-        case "f" | "fold" => Some(Fold(player))
-        case _ => None
-      }
-    } else {
-      None
-    }
-  }
+  val moveParser = new MoveParser()
 
   def move(state: PokerState): (PokerMove, PokerState) = {
     displayEvents()
     println(state.displayTo(this))
     val move = userInputStream()
-      .flatMap(parseMove(state.player, _))
+      .flatMap(moveParser.parse(_)(state.player, game))
       .find(move => state(move).isDefined).get
     (move, state(move).get) // TODO .get
   }
