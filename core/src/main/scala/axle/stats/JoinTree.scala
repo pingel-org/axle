@@ -2,6 +2,7 @@ package axle.stats
 
 import collection._
 import axle.graph._
+import axle._
 
 object JoinTree {
 
@@ -15,8 +16,8 @@ object JoinTree {
   // returns a jointree for DAG G with width equal to width(π, G)
   def fromEliminationOrder[MVP](m: Model[MVP], π: List[RandomVariable[_]]): JoinTree = {
     // val Gm = Gv.moralGraph()
-    // val clusterSequence: List[Set[RandomVariable[_]]] = null // Gm.induceClusterSequence(pi)
-    null.asInstanceOf[JoinTree] // TODO
+    // val clusterSequence: List[Set[RandomVariable[_]]] = Gm.induceClusterSequence(pi)
+    ???
   }
 
 }

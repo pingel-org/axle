@@ -104,7 +104,7 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
   def eliminate(v: Vertex[VP], payload: (Vertex[VP], Vertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
     // "decompositions" page 3 (Definition 3, Section 9.3)
     // turn the neighbors of v into a clique
-    null // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
+    ??? // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
   }
 
   def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =

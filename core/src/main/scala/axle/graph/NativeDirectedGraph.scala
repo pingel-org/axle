@@ -1,6 +1,7 @@
 package axle.graph
 
 import collection._
+import axle._
 
 case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends DirectedGraph[VP, EP] {
@@ -87,7 +88,7 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
   def _shortestPath(source: Vertex[VP], goal: Vertex[VP], visited: Set[Vertex[VP]]): Option[List[Edge[ES, EP]]] = if (source == goal) {
     Some(List())
   } else {
-    null
+    ???
     // TODO
     //    outputEdgesOf(source).filter(edge => !visited.contains(edge.dest))
     //      .flatMap(edge => _shortestPath(edge.dest, goal, visited + source).map(sp => edge :: sp))

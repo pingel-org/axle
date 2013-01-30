@@ -67,7 +67,7 @@ trait DirectedGraph[VP, EP] {
   def isAcyclic(): Boolean
 
   def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[ES, EP]]]
-  // def moralGraph(): UndirectedGraph[_, _] = null // TODO !!!
+  // def moralGraph(): UndirectedGraph[_, _] = ???
 
   // def deleteEdge(e: Edge[VP, EP]): DirectedGraph[VP, EP]
 

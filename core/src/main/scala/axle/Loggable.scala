@@ -19,23 +19,15 @@ trait Loggable {
     }
   }
 
-  protected def warn(msg: => AnyRef, t: => Throwable = null): Unit = {
+  protected def warn(msg: => AnyRef, t: => Option[Throwable] = None): Unit = {
     if (logger.isWarnEnabled) {
-      if (t != null) {
-        logger.warn(msg.toString, t)
-      } else {
-        logger.warn(msg.toString)
-      }
+      t.map(logger.warn(msg.toString, _)).getOrElse(logger.warn(msg.toString))
     }
   }
 
-  protected def error(msg: => AnyRef, t: => Throwable = null): Unit = {
+  protected def error(msg: => AnyRef, t: => Option[Throwable] = None): Unit = {
     if (logger.isErrorEnabled) {
-      if (t != null) {
-        logger.error(msg.toString, t)
-      } else {
-        logger.error(msg.toString)
-      }
+      t.map(logger.error(msg.toString, _)).getOrElse(logger.error(msg.toString))
     }
   }
 

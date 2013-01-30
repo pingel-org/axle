@@ -66,7 +66,7 @@ case class JungUndirectedGraph[VP, EP](
 
     val cliqued = (newVs: Seq[Vertex[VP]]) => {
 
-      val old2new: Map[Vertex[VP], Vertex[VP]] = null // TODO _vertices.zip(newVs).toMap
+      val old2new: Map[Vertex[VP], Vertex[VP]] = ??? // TODO _vertices.zip(newVs).toMap
 
       val newEdges = among.toIndexedSeq.permutations(2)
         .map({ case vi :: vj :: Nil => (vi, vj) })
@@ -109,7 +109,7 @@ case class JungUndirectedGraph[VP, EP](
     //    val vs = neighbors(v)
     //    makeFunctional.jungGraph.removeVertex(v)
     //    forceClique(vs, payload)
-    null
+    ???
   }
 
   def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =

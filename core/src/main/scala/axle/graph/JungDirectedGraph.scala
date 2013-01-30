@@ -1,5 +1,7 @@
 package axle.graph
 
+import axle._
+
 import collection.JavaConverters._
 import collection._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -84,9 +86,9 @@ case class JungDirectedGraph[VP, EP](
 
   def removeOutputs(from: Set[Vertex[VP]]) = filterEdges(v => !from.contains(v._1))
 
-  def moralGraph() = null // TODO !!!
+  def moralGraph() = ???
 
-  def isAcyclic() = true // TODO !!!
+  def isAcyclic() = ???
 
   def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[ES, EP]]] = {
     if (source == goal) {

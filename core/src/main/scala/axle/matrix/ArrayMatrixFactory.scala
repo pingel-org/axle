@@ -52,7 +52,7 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def floor(): M[T] = ???
     def log(): M[T] = ???
     def log10(): M[T] = ???
-    def fullSVD(): (M[T], M[T], M[T]) = ??? doesn't really make sense
+    def fullSVD(): (M[T], M[T], M[T]) = ???
 
     def pow(p: Double): M[T] = ???
 
@@ -103,30 +103,30 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
 
     // various mins and maxs
 
-    def max(): T = null.asInstanceOf[T] // TODO
+    def max(): T = ???
     def argmax(): (Int, Int) = ???
-    def min(): T = null.asInstanceOf[T] // TODO
+    def min(): T = ???
     def argmin(): (Int, Int) = ???
     def columnMins(): M[T] = ???
     def columnMaxs(): M[T] = ???
 
     // In-place versions
 
-    def ceili(): Unit = {} // TODO
-    def floori(): Unit = {} // TODO
-    def powi(p: Double): Unit = {} // TODO
+    def ceili(): Unit = ???
+    def floori(): Unit = ???
+    def powi(p: Double): Unit = ???
 
-    def addi(x: T): Unit = {} // TODO
-    def subtracti(x: T): Unit = {} // TODO
-    def multiplyi(x: T): Unit = {} // TODO
-    def dividei(x: T): Unit = {} // TODO
+    def addi(x: T): Unit = ???
+    def subtracti(x: T): Unit = ???
+    def multiplyi(x: T): Unit = ???
+    def dividei(x: T): Unit = ???
 
-    def addMatrixi(other: M[T]): Unit = {} // TODO
-    def subtractMatrixi(other: M[T]): Unit = {} // TODO
-    def addiRowVector(row: M[T]): Unit = {} // TODO
-    def addiColumnVector(column: M[T]): Unit = {} // TODO
-    def subiRowVector(row: M[T]): Unit = {} // TODO
-    def subiColumnVector(column: M[T]): Unit = {} // TODO
+    def addMatrixi(other: M[T]): Unit = ???
+    def subtractMatrixi(other: M[T]): Unit = ???
+    def addiRowVector(row: M[T]): Unit = ???
+    def addiColumnVector(column: M[T]): Unit = ???
+    def subiRowVector(row: M[T]): Unit = ???
+    def subiColumnVector(column: M[T]): Unit = ???
 
     // higher order fuctions
 
