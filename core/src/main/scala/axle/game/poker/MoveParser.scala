@@ -8,9 +8,9 @@ class MoveParser(player: PokerPlayer)(implicit game: Poker) extends RegexParsers
 
   lazy val NUMBER = "\\d+".r
 
-  lazy val raise: Parser[Raise] = (("r" | "raise") ~ NUMBER) ^^ { case r ~ n => Raise(player, n.toInt) }
-  lazy val call: Parser[Call] = ("c" | "call" | "check") ^^ { case c => Call(player) }
-  lazy val fold: Parser[Fold] = ("f" | "fold") ^^ { case f => Fold(player) }
+  lazy val raise: Parser[Raise] = ("r(aise)?".r ~ NUMBER) ^^ { case r ~ n => Raise(player, n.toInt) }
+  lazy val call: Parser[Call] = "c(all)?".r ^^ { case c => Call(player) }
+  lazy val fold: Parser[Fold] = "f(old)?".r ^^ { case f => Fold(player) }
 
   lazy val move: Parser[PokerMove] = (raise | call | fold)
 
