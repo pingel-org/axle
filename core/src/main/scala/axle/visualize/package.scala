@@ -44,24 +44,7 @@ package object visualize {
     case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads(), dg.edgeFunction()))
   }
 
-  //  implicit def enComponentJungUndirectedGraph[VP, EP](jug: JungUndirectedGraph[VP, EP]): Component =
-  //    new JungUndirectedGraphVisualization().component(jug)
-  //
-  //  implicit def enComponentNativeUndirectedGraph[VP, EP](nug: NativeUndirectedGraph[VP, EP]): Component =
-  //    JungUndirectedGraph[VP, EP](nug.vps, nug.ef)
-  //
-  //  implicit def enComponentJungDirectedGraph[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component =
-  //    new JungDirectedGraphVisualization().component(jdg)
-  //
-  //  implicit def enComponentNativeDirectedGraph[VP, EP](ndg: NativeDirectedGraph[VP, EP]): Component =
-  //    new JungDirectedGraph[VP, EP](ndg.vps, ndg.ef)
-
   implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component = bn.graph
-  //  match {
-  //    case jdg: JungDirectedGraph[_, _] => jdg
-  //    case ndg: NativeDirectedGraph[_, _] => ndg
-  //    case _ => null
-  //  }
 
   implicit def enComponentKMeansClassifier[T](
     classifier: KMeans.KMeansClassifier[T]): Component =

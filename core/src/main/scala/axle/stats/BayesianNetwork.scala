@@ -101,6 +101,7 @@ package axle.stats
  */
 
 import collection._
+import axle._
 import axle.XmlAble
 import axle.graph._
 import math.max
@@ -231,7 +232,7 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
    */
 
   def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[_]]]): BayesianNetwork = {
-    val result = BayesianNetwork(resultName, null) // TODO
+    val result = BayesianNetwork(resultName, ???)
     eOpt.map(e => {
       for (U <- e.map(_.rv)) {
         val uVertex = result.graph.findVertex(_.payload.rv == U).get
@@ -240,7 +241,7 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
           //          val X = edge.dest().payload.rv
           //          val oldF = result.cpt(X)
           //          result.deleteEdge(edge) // TODO: not functional
-          //          val smallerF: Factor = null // TODO makeFactorFor(X)
+          //          val smallerF: Factor = makeFactorFor(X)
           //          for (c <- smallerF.cases) {
           //            // set its value to what e sets it to
           //            // TODO c(U) = e.valueOf(U)
@@ -279,7 +280,7 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
    */
 
   def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): BayesianNetwork =
-    BayesianNetwork(this.name, null) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
+    BayesianNetwork(this.name, ???) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
   //
   //  def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
   //
@@ -400,8 +401,7 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
         // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
       })
     }
-    val result = null.asInstanceOf[BayesianNetwork] // TODO
-    (result, f.projectToOnly(Q.toList))
+    (???, f.projectToOnly(Q.toList))
   }
 
   //  def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): Factor = {
@@ -435,7 +435,7 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
       for (i <- τ.graph.vertices()) {
 
       }
-      null // TODO
+      ???
     }
 
 }

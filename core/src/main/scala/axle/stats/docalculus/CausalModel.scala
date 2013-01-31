@@ -1,5 +1,6 @@
 package axle.stats.docalculus
 
+import axle._
 import axle.stats._
 import axle.graph._
 
@@ -14,7 +15,7 @@ class CausalModel(_name: String, graph: DirectedGraph[CausalModelNode, String])
 
   override def name() = _name
   
-  def duplicate(): CausalModel = null // TODO
+  def duplicate(): CausalModel = ???
 
   // TODO: this should probably be Option[Boolean] ?
   def observes(rv: RandomVariable[_]): Boolean = findVertex((n: Vertex[CausalModelNode]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
@@ -25,7 +26,7 @@ class CausalModel(_name: String, graph: DirectedGraph[CausalModelNode, String])
 
   override def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
 
-  def addFunctions(pf: Seq[PFunction]): CausalModel = null // TODO
+  def addFunctions(pf: Seq[PFunction]): CausalModel = ???
 
   def getVariable(name: String): Int = 1 // TODO
 

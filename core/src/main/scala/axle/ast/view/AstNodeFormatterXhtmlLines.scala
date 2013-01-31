@@ -6,49 +6,49 @@ import axle.ast._
 
 class XhtmlLinesAstNodeAccumulatorState(xlf: XhtmlLinesAstNodeFormatter) {
 
-  var currentLine = new mutable.ListBuffer[xml.Node]()
+  var currentLine: Option[mutable.ListBuffer[xml.Node]] = Some(new mutable.ListBuffer[xml.Node]())
 
   val _lines = mutable.Map[Int, NodeSeq]()
 
   def lines(): Map[Int, NodeSeq] = {
-    if (currentLine != null) {
-      _lines += xlf.currentLineNo -> currentLine.toList
-      currentLine = null // effectively marking this as "finished".
+    if (currentLine.isDefined) {
+      _lines += xlf.currentLineNo -> currentLine.get.toList
+      currentLine = None // mark as "finished"
       // need better way of handling subsequent writes if they happen
     }
     _lines
   }
 
-  def raw(s: String): Unit = currentLine.append(Text(s))
+  def raw(s: String): Unit = currentLine.get.append(Text(s))
 
   def newline(): Unit = {
-    _lines += xlf.currentLineNo -> currentLine.toList
+    _lines += xlf.currentLineNo -> currentLine.get.toList
     xlf.advanceLine()
-    currentLine = new mutable.ListBuffer[xml.Node]()
+    currentLine = Some(new mutable.ListBuffer[xml.Node]())
   }
 
-  def space(): Unit = currentLine.append(Text(" "))
+  def space(): Unit = currentLine.get.append(Text(" "))
 
-  def spaces(): Unit = currentLine.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
+  def spaces(): Unit = currentLine.get.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
 
   // scala.xml.Utility.escape(word)
-  def span(spanclass: String, s: String): Unit = currentLine += <span class={ spanclass }>{ s }</span>
+  def span(spanclass: String, s: String): Unit = currentLine.get += <span class={ spanclass }>{ s }</span>
 
   def absorb(label: String, absorbee: XhtmlLinesAstNodeAccumulatorState): Unit = {
 
     for ((lineno, line) <- absorbee.lines) {
-      if (currentLine.size > 0) {
-        val unfinishedLine: NodeSeq = currentLine.toList
+      if (currentLine.get.size > 0) {
+        val unfinishedLine: NodeSeq = currentLine.get.toList
         _lines += lineno -> <span>{ unfinishedLine }</span><span class={ label }>{ line }</span>;
-        currentLine = new mutable.ListBuffer[scala.xml.Node]()
+        currentLine = Some(new mutable.ListBuffer[scala.xml.Node]())
       } else {
         _lines += lineno -> <span class={ label }>{ line }</span>
       }
     }
-    if (absorbee.currentLine != null) {
+    if (absorbee.currentLine.isDefined) {
       currentLine = absorbee.currentLine
       // popped.lines += currentLineNo -> popped.currentLine.toList
-      // popped.currentLine = null
+      // popped.currentLine = None
     }
   }
 }
@@ -84,20 +84,19 @@ class XhtmlLinesAstNodeFormatter(language: Language, highlight: Set[AstNode], co
     if (isConforming()) {
       while (node.lineNo > lineno) {
         // info("conforming.  formatter.lineno = " + formatter.lineno)
-        newline(true, node)
+        newline(true, Some(node))
       }
     }
   }
 
-  override def newline(hard: Boolean, node: AstNode, indent: Boolean = true): Unit = {
-    if (node != null) {
+  override def newline(hard: Boolean, nodeOpt: Option[AstNode], indent: Boolean = true): Unit =
+    nodeOpt.map(node => {
       column = 0
       needsIndent = indent
       lineno += 1
       // result.appendAll(<br></br>)
       accNewline()
-    }
-  }
+    })
 
   override def accRaw(s: String): Unit = tokens.top.raw(s)
 

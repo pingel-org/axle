@@ -73,27 +73,24 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
     }
 
   def raw(element: String): Unit = {
-    if (element != null) {
-      _indent()
-      val lines = element.split("\n")
-      lines.size match {
-        case 0 | 1 => {
-          column += element.length()
-        }
-        case _ => {
-          lineno += lines.size - 1
-          column = lines.last.length()
-        }
+    _indent()
+    val lines = element.split("\n")
+    lines.size match {
+      case 0 | 1 => {
+        column += element.length()
       }
-      // result.append(Text(element))
-      accRaw(element)
+      case _ => {
+        lineno += lines.size - 1
+        column = lines.last.length()
+      }
     }
+    // result.append(Text(element))
+    accRaw(element)
   }
 
-  def wrap(indent: Boolean = false): Unit = {
-    // TODO !!! toka.append("\\")
-    newline(true, null, indent)
-  }
+  // TODO !!! toka.append("\\")
+  def wrap(indent: Boolean = false): Unit =
+    newline(true, None, indent)
 
   def space(): Unit = {
     _indent()
@@ -118,14 +115,14 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
 
   }
 
-  def newline(hard: Boolean, node: AstNode, indent: Boolean = true): Unit = {
+  def newline(hard: Boolean, nodeOpt: Option[AstNode], indent: Boolean = true): Unit = {
 
     // println("AstNodeFormatter.newline(hard="+hard+", node="+node+", indent="+indent+")")
     // println("   column = " + column)
     // println("   conform = " + conform)
 
     // && node.getLineNo.isDefined && ( node.getLineNo.get < lineno )
-    if ((node != null) && conform) {
+    if (nodeOpt.isDefined && conform) {
       if (column > 0) {
         column = 0
         needsIndent = indent
@@ -156,35 +153,28 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
     accSpan("operator", op)
   }
 
-  def repr(r: String): Unit = r match {
-    case null => {}
-    case _ => {
-      _indent()
-      column += r.length()
-      // result.appendAll(<span class={"repr"}>{scala.xml.Utility.escape(r)}</span>)
-      accSpan("repr", xml.Utility.escape(r))
-      // NOTE: may not need to escape non-html
-    }
+  def repr(r: String): Unit = {
+    _indent()
+    column += r.length()
+    // result.appendAll(<span class={"repr"}>{scala.xml.Utility.escape(r)}</span>)
+    accSpan("repr", xml.Utility.escape(r))
+    // NOTE: may not need to escape non-html
   }
 
-  def name(n: String): Unit = n match {
-    case null => {}
-    case _ => {
-      _indent()
-      val special = false // TODO
-      special match {
-        case true => {
-          val (s, span) = (n, "special") // TODO
-          column += s.length
-          accSpan(span, s)
-        }
-        case false => {
-          column += n.length()
-          // result.append(Text(n))
-          accRaw(n)
-        }
+  def name(n: String): Unit = {
+    _indent()
+    val special = false // TODO
+    special match {
+      case true => {
+        val (s, span) = (n, "special") // TODO
+        column += s.length
+        accSpan(span, s)
       }
-
+      case false => {
+        column += n.length()
+        // result.append(Text(n))
+        accRaw(n)
+      }
     }
   }
 

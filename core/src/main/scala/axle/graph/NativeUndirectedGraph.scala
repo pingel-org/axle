@@ -135,13 +135,13 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
   //
   //    dist(source) = 0 // Distance from source to source
   //    val Q = mutable.Set[V]() ++ vertices // All nodes in the graph are unoptimized - thus are in Q
-  //    var broken = false
+  //    val broken = false
   //    while (Q.size > 0 && !broken) {
   //      val u = Q.minBy(dist(_)) // Start node in first case
   //      Q -= u
   //      if (u == target) {
-  //        var S = List[V]()
-  //        var u = target
+  //        val S = List[V]()
+  //        val u = target
   //        while (previous.contains(u)) {
   //          S = u :: S
   //          u = previous(u)

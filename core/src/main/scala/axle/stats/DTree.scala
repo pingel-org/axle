@@ -1,5 +1,6 @@
 package axle.stats
 
+import axle._
 import collection._
 
 class DTreeEdge {}
@@ -8,11 +9,11 @@ class DTreeNode {}
 
 class DTree {
 
-  def cluster(n: DTreeNode): Set[RandomVariable[_]] = null // TODO
+  def cluster(n: DTreeNode): Set[RandomVariable[_]] = ???
 
-  def context(n: DTreeNode): Set[RandomVariable[_]] = null // TODO
+  def context(n: DTreeNode): Set[RandomVariable[_]] = ???
 
-  def isLeaf(n: DTreeNode): Boolean = false // TODO
+  def isLeaf(n: DTreeNode): Boolean = ???
 
   // returns an order pi with width(pi,G) no greater than the width
   // of dtree rooted at t
@@ -29,8 +30,8 @@ class DTree {
         }
       }
     } else {
-      val leftPi: List[RandomVariable[_]] = null // TODO
-      val rightPi: List[RandomVariable[_]] = null // TODO
+      val leftPi: List[RandomVariable[_]] = ???
+      val rightPi: List[RandomVariable[_]] = ???
       // TODO merge them
       // TODO add cluster(t) - context(t) in any order to result
     }

@@ -1,8 +1,8 @@
 package axle.stats
 
 import collection._
+import axle._
 import axle.graph._
-import axle.stats._
 
 object Direction {
 
@@ -18,11 +18,11 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
 
   def name(): String = "model name"
 
-  def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_] = null // TODO
+  def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_] = ???
 
   def randomVariables(): List[RandomVariable[_]] = graph.vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
 
-  def variable(name: String): RandomVariable[_] = null // TODO name2variable(name)
+  def variable(name: String): RandomVariable[_] = ??? // TODO name2variable(name)
 
   def numVariables(): Int = graph.size()
 
@@ -33,7 +33,7 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
 
     val x = Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]()
     val mutableFromCopy = mutable.Set() ++ from
-    _findOpenPath(x, Direction.UNKNOWN, null, mutableFromCopy, to, given).isEmpty
+    _findOpenPath(x, Direction.UNKNOWN, None, mutableFromCopy, to, given).isEmpty
   }
 
   //  val rvNameGetter = new Lister[RandomVariable, String]() {
@@ -43,68 +43,64 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
   def _findOpenPath(
     visited: Map[RandomVariable[_], mutable.Set[RandomVariable[_]]],
     priorDirection: Int,
-    prior: RandomVariable[_],
+    priorOpt: Option[RandomVariable[_]],
     current: mutable.Set[RandomVariable[_]],
     to: immutable.Set[RandomVariable[_]],
     given: immutable.Set[RandomVariable[_]]): Option[List[RandomVariable[_]]] = {
 
     println("_fOP: " + priorDirection +
-      ", prior = " + "TODO" + // ((prior == null ) ? "null" : prior.name) +
+      ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
       ", current = " + current.map(_.name).mkString(", ") +
       ", to = " + to.map(_.name).mkString(", ") +
       ", evidence = " + given.map(_.name).mkString(", "))
 
-    val cachedOuts = visited(prior)
-    if (cachedOuts != null) {
-      current --= cachedOuts
-    }
+    current --= priorOpt.map(visited(_)).getOrElse(Set())
 
-    val priorVertex = graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get
+    val priorVertexOpt = priorOpt.map(prior => graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get)
     val givenVertices = given.map(v1 => graph.findVertex((v2: Vertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
 
-    for (variable <- current) {
+    current.toList.flatMap(variable => {
 
       val variableVertex = graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
 
-      var openToVar = false
-      var directionPriorToVar = Direction.UNKNOWN
-      if (prior == null) {
-        openToVar = true
-      } else {
-        directionPriorToVar = Direction.OUTWARD
-        if (graph.precedes(variableVertex, priorVertex)) {
-          directionPriorToVar = Direction.INWARD
-        }
-
-        if (priorDirection != Direction.UNKNOWN) {
-          val priorGiven = given.contains(prior)
-          openToVar = (priorDirection == Direction.INWARD && !priorGiven && directionPriorToVar == Direction.OUTWARD) ||
-            (priorDirection == Direction.OUTWARD && !priorGiven && directionPriorToVar == Direction.OUTWARD) ||
-            (priorDirection == Direction.INWARD && graph.descendantsIntersectsSet(variableVertex, givenVertices) && directionPriorToVar == Direction.INWARD)
+      val (directionPriorToVar, openToVar) = priorVertexOpt.map(priorVertex => {
+        val d = if (graph.precedes(variableVertex, priorVertex)) {
+          Direction.INWARD
         } else {
-          openToVar = true
+          Direction.OUTWARD
         }
-      }
+        (d, if (priorDirection != Direction.UNKNOWN) {
+          val priorGiven = given.contains(priorOpt.get)
+          (priorDirection == Direction.INWARD && !priorGiven && d == Direction.OUTWARD) ||
+            (priorDirection == Direction.OUTWARD && !priorGiven && d == Direction.OUTWARD) ||
+            (priorDirection == Direction.INWARD && graph.descendantsIntersectsSet(variableVertex, givenVertices) && d == Direction.INWARD)
+        } else {
+          true
+        })
+      }).getOrElse((Direction.UNKNOWN, true))
 
       if (openToVar) {
         if (to.contains(variable)) {
-          return Some(List(variable))
+          Some(List(variable))
+        } else {
+          // TODO remove .get
+          val neighs = mutable.Set() ++ (graph.neighbors(variableVertex) - priorVertexOpt.get).map(_.payload)
+          val visitedCopy = mutable.Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]() ++ visited
+          priorOpt.map(prior => {
+            if (!visited.contains(prior)) {
+              visitedCopy += prior -> mutable.Set[RandomVariable[_]]()
+            }
+            visited(prior) += variable
+          })
+          _findOpenPath(visitedCopy, -1 * directionPriorToVar, Some(variable), neighs.map(vertexPayloadToRandomVariable(_)), to, given).map(
+            _ ++ List(variable)
+          )
         }
-        val neighs = mutable.Set() ++ (graph.neighbors(variableVertex) - priorVertex).map(_.payload)
-
-        val visitedCopy = mutable.Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]() ++ visited
-        if (!visited.contains(prior)) {
-          visitedCopy += prior -> mutable.Set[RandomVariable[_]]()
-        }
-        visited(prior) += variable
-
-        val path = _findOpenPath(visitedCopy, -1 * directionPriorToVar, variable, neighs.map(vertexPayloadToRandomVariable(_)), to, given)
-        if (path.isDefined) {
-          return Some(path.get ++ List(variable))
-        }
+      } else {
+        None
       }
-    }
-    return None
+    }).headOption
+
   }
 
 }

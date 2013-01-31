@@ -7,14 +7,12 @@ import axle.Loggable
 
 object Emission extends Loggable {
 
-  def emit(stmt: Statement, node: AstNode, grammar: Language, formatter: AstNodeFormatter[_, _]): Unit = {
+  def emit(stmt: Statement, nodeOpt: Option[AstNode], grammar: Language, formatter: AstNodeFormatter[_, _]): Unit = {
 
-    // println("emit(stmt = " + stmt + ", nodeOpt = " + nodeOpt + ", grammar, formatter)")
-    //info("stmt: " + stmt)
-    //info("node: " + node)
+    // info("emit(stmt = " + stmt + ", nodeOpt = " + nodeOpt + ", grammar, formatter)")
 
-    (node, stmt) match {
-      case (AstNodeRule(_, m, _), Sub(name)) => {
+    (nodeOpt, stmt) match {
+      case (Some(node @ AstNodeRule(_, m, _)), Sub(name)) => {
         m.get(name).map(subtree =>
           formatter.needsParens(name, node, subtree, grammar) match {
             case true => {
@@ -26,12 +24,12 @@ object Emission extends Loggable {
           }
         )
       }
-      case (AstNodeRule(_, m, _), Spread()) => {
+      case (Some(AstNodeRule(_, m, _)), Spread()) => {
         m("spread") match {
           case AstNodeList(l, _) => l.map({ c =>
             {
               emit(grammar, c, formatter)
-              formatter.newline(false, c)
+              formatter.newline(false, Some(c))
             }
           })
           case _ => throw new Exception("spread statement is applied to something other than AstNodeList")
@@ -40,23 +38,23 @@ object Emission extends Loggable {
 
       case (_, Nop()) => Text("") // TODO is there an empty Node?
 
-      case (AstNodeRule(_, m, _), Attr(attr)) => m(attr).asInstanceOf[AstNodeValue].value.map(v => formatter.name(v))
+      case (Some(AstNodeRule(_, m, _)), Attr(attr)) => m(attr).asInstanceOf[AstNodeValue].value.map(v => formatter.name(v))
 
       case (_, Lit(value: String)) => formatter.raw(value)
 
-      case (_, Sq(stmts @ _*)) => stmts.map(s => emit(s, node, grammar, formatter))
+      case (_, Sq(stmts @ _*)) => stmts.map(s => emit(s, nodeOpt, grammar, formatter))
 
       // stmts.filter( ! Existence.exists(_, node, grammar) ).map( s => formatter.raw("") )
-      case (_, SqT(stmts @ _*)) => stmts.map(Existence.exists(_, node, grammar)).foldLeft(true)({ _ && _ }) match {
-        case true => stmts.map(emit(_, node, grammar, formatter))
+      case (Some(node), SqT(stmts @ _*)) => stmts.map(Existence.exists(_, node, grammar)).forall(x => x) match {
+        case true => stmts.map(emit(_, nodeOpt, grammar, formatter))
         case false =>
       }
 
-      case (AstNodeRule(_, m, _), Repr(name)) => m(name).asInstanceOf[AstNodeValue].value.map(v => formatter.repr(v)) // TODO !!! replace toString() with the equiv of repr()
+      case (Some(AstNodeRule(_, m, _)), Repr(name)) => m(name).asInstanceOf[AstNodeValue].value.map(v => formatter.repr(v)) // TODO !!! replace toString() with the equiv of repr()
 
       case (_, Emb(left, stmt, right)) => {
         formatter.raw(left)
-        emit(stmt, node, grammar, formatter)
+        emit(stmt, nodeOpt, grammar, formatter)
         formatter.raw(right)
       }
 
@@ -71,24 +69,24 @@ object Emission extends Loggable {
 
       case (_, Op(value)) => formatter.operator(value)
 
-      case (AstNodeRule(_, m, _), For(subtree, body)) => {
+      case (Some(AstNodeRule(_, m, _)), For(subtree, body)) => {
         formatter.enterFor()
         val elems = m(subtree).asInstanceOf[AstNodeList]
         for (i <- 0 until elems.list.length) {
           val c = elems.list(i)
           formatter.updateFor("TODO c")
-          emit(body, c, grammar, formatter)
+          emit(body, Some(c), grammar, formatter)
         }
         formatter.leaveFor()
       }
 
-      case (AstNodeRule(_, m, _), ForDel(subtree, body, delimiter)) => {
+      case (Some(AstNodeRule(_, m, _)), ForDel(subtree, body, delimiter)) => {
         formatter.enterFor()
         val elems = m(subtree).asInstanceOf[AstNodeList]
         for (i <- 0 until elems.list.length) {
           val c = elems.list(i)
           formatter.updateFor("TODO c")
-          emit(body, c, grammar, formatter)
+          emit(body, Some(c), grammar, formatter)
           if (i < elems.list.length - 1) {
             formatter.raw(delimiter)
           }
@@ -96,18 +94,18 @@ object Emission extends Loggable {
         formatter.leaveFor()
       }
 
-      case (AstNodeRule(_, m, _), J(subtree, delimiter)) => m.get(subtree).map(st => {
+      case (Some(AstNodeRule(_, m, _)), J(subtree, delimiter)) => m.get(subtree).map(st => {
         val elems = st.asInstanceOf[AstNodeList]
         val n = elems.list.length - 1
         for (i <- 0 to n) {
           emit(grammar, elems.list(i), formatter)
           if (i < n) {
-            emit(delimiter, null, grammar, formatter)
+            emit(delimiter, None, grammar, formatter)
           }
         }
       })
 
-      case (AstNodeRule(_, m, _), JItems(subtree, inner, outer)) => {
+      case (Some(AstNodeRule(_, m, _)), JItems(subtree, inner, outer)) => {
         // TODO? python set elems = node.items
         val elems = m(subtree).asInstanceOf[AstNodeList]
         for (i <- 0 until elems.list.length) {
@@ -121,7 +119,7 @@ object Emission extends Loggable {
         }
       }
 
-      case (AstNodeRule(_, m, _), Affix(subtree, prefix, postfix)) =>
+      case (Some(AstNodeRule(_, m, _)), Affix(subtree, prefix, postfix)) =>
         m.get(subtree).map(x => {
           x.asInstanceOf[AstNodeList].list.map(c => {
             formatter.raw(prefix)
@@ -134,15 +132,15 @@ object Emission extends Loggable {
 
       case (_, Dedent()) => formatter.dedent
 
-      case (_, CR()) => formatter.newline(false, node)
+      case (_, CR()) => formatter.newline(false, nodeOpt)
 
-      case (_, CRH()) => formatter.newline(true, node)
+      case (_, CRH()) => formatter.newline(true, nodeOpt)
 
-      case (_, Var()) => emit(grammar, node, formatter)
+      case (Some(node), Var()) => emit(grammar, node, formatter)
 
-      case (AstNodeList(l, _), VarN(n)) => emit(grammar, l(n), formatter)
+      case (Some(AstNodeList(l, _)), VarN(n)) => emit(grammar, l(n), formatter)
 
-      case (AstNodeRule(_, m, _), Arglist()) => {
+      case (Some(AstNodeRule(_, m, _)), Arglist()) => {
         // Note: This is far too python-specific
         val argnames = m("argnames").asInstanceOf[AstNodeList]
         val defaults = m("defaults").asInstanceOf[AstNodeList]
@@ -200,7 +198,7 @@ object Emission extends Loggable {
           formatter.beginSpan()
         }
 
-        emit(grammar.name2rule(r).statement, node, grammar, formatter)
+        emit(grammar.name2rule(r).statement, Some(node), grammar, formatter)
 
         if (formatter.shouldHighlight(node)) {
           formatter.endSpan("highlight")

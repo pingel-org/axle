@@ -2,6 +2,7 @@
 package axle.lx
 
 import collection._
+import axle._
 import axle.graph._
 
 class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
@@ -32,20 +33,11 @@ class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
   //    def isBackwardDeterministic(): Boolean = (F.size <= 1) && Q.∀(predecessors(_).size <= 1)
   //    def isZeroReversible(): Boolean = isForwardDeterministic() && isBackwardDeterministic()
 
-  def isIsomorphicTo(other: AngluinAcceptor): Boolean = {
-    // TODO !!!
-    false
-  }
+  def isIsomorphicTo(other: AngluinAcceptor): Boolean = ???
 
-  def isSubacceptorOf(other: AngluinAcceptor): Boolean = {
-    // TODO !!!
-    false
-  }
+  def isSubacceptorOf(other: AngluinAcceptor): Boolean = ???
 
-  def induce(P: Set[Vertex[String]]): AngluinAcceptor = {
-    // TODO !!!
-    null
-  }
+  def induce(P: Set[Vertex[String]]): AngluinAcceptor = ???
 
 }
 
@@ -59,10 +51,7 @@ object Angluin {
 
   case class CanonicalAcceptorFactory() {
 
-    def makeCanonicalAcceptor(ℒ: Language): AngluinAcceptor = {
-      // TODO !!!
-      null
-    }
+    def makeCanonicalAcceptor(ℒ: Language): AngluinAcceptor = ???
 
   }
 
@@ -87,15 +76,9 @@ object Angluin {
 
     def equals(other: Language): Boolean = sequences.equals(other.sequences)
 
-    def prefixes(): Language = {
-      // TODO !!!
-      null
-    }
+    def prefixes(): Language = ???
 
-    def goodFinals(w: List[Symbol]): Language = {
-      // TODO !!!
-      null
-    }
+    def goodFinals(w: List[Symbol]): Language = ???
 
     override def toString() = "{" + sequences.mkString(", ") + "}"
 
@@ -157,26 +140,17 @@ object Angluin {
   }
 
   class Partition {
-    def restrictTo(subset: Set[Any]): Partition = {
-      // TODO !!!
-      null
-    }
+    def restrictTo(subset: Set[Any]): Partition = ???
   }
 
   class PartitionBlock {}
 
   class PrefixTreeFactory {
-    def makePrefixTree(ℒ: Language): AngluinAcceptor = {
-      // TODO !!!
-      null
-    }
+    def makePrefixTree(ℒ: Language): AngluinAcceptor = ???
   }
 
   case class Quotient(A: AngluinAcceptor, π: Partition) {
-    def evaluate(): AngluinAcceptor = {
-      // TODO !!!
-      null
-    }
+    def evaluate(): AngluinAcceptor = ???
   }
 
   // implicit def enAlphabet(symbols: Set[Symbol]): Alphabet = Alphabet(symbols)
