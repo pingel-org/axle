@@ -1,12 +1,14 @@
 package axle.stats
 
+import axle._
+
 trait RandomVariable[A] {
   def name(): String
   def values(): Option[IndexedSeq[A]]
   def eq(v: A): CaseIs[A]
   def ne(v: A): CaseIsnt[A]
   def probability(a: A): Double
-  def observe(): A
+  def observe(): Option[A]
   lazy val charWidth: Int = (name().length :: values().map(vs => vs.map(_.toString.length).toList).getOrElse(Nil)).reduce(math.max)
 }
 
@@ -18,7 +20,7 @@ case class RandomVariable0[A](_name: String, _values: Option[IndexedSeq[A]] = No
   def eq(v: A): CaseIs[A] = CaseIs(this, v)
   def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
   def probability(a: A): Double = distribution.map(_.probabilityOf(a)).getOrElse(0.0)
-  def observe(): A = distribution.map(_.observe)
+  def observe(): Option[A] = distribution.map(_.observe)
 
 }
 
@@ -30,10 +32,10 @@ case class RandomVariable1[A, G1](_name: String, _values: Option[IndexedSeq[A]] 
   def values() = _values
   def eq(v: A): CaseIs[A] = CaseIs(this, v)
   def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
-  def probability(a: A): Double = -1.0 // TODO 
+  def probability(a: A): Double = ???
   def probability(a: A, given: Case[G1]): Double = distribution.map(_.probabilityOf(a, given)).getOrElse(0.0)
-  def observe(): A = observe(grv.observe)
-  def observe(gv: G1): A = distribution.map(_.observe(gv))
+  def observe(): Option[A] = grv.observe().flatMap(observe(_))
+  def observe(gv: G1): Option[A] = distribution.map(_.observe(gv))
 
 }
 
@@ -45,9 +47,15 @@ case class RandomVariable2[A, G1, G2](_name: String, _values: Option[IndexedSeq[
   def values() = _values
   def eq(v: A): CaseIs[A] = CaseIs(this, v)
   def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
-  def probability(a: A): Double = -1.0 // "TODO"
+  def probability(a: A): Double = ???
   def probability(a: A, given1: Case[G1], given2: Case[G2]): Double = distribution.map(_.probabilityOf(a, given1, given2)).getOrElse(0.0)
-  def observe(): A = observe(grv1.observe, grv2.observe)
-  def observe(gv1: G1, gv2: G2): A = distribution.map(_.observe(gv1, gv2))
+
+  def observe(): Option[A] = for {
+    g1 <- grv1.observe
+    g2 <- grv2.observe
+    r <- observe(g1, g2)
+  } yield r
+
+  def observe(gv1: G1, gv2: G2): Option[A] = distribution.map(_.observe(gv1, gv2))
 
 }
