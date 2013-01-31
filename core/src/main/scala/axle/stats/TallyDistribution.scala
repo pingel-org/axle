@@ -1,5 +1,6 @@
 package axle.stats
 
+import axle._
 import util.Random
 
 class TallyDistribution0[A](tally: Map[A, Int])
@@ -24,9 +25,9 @@ class TallyDistribution1[A, G](tally: Map[(A, G), Int])
 
   val totalCount = tally.values.sum
 
-  def observe(): A = null.asInstanceOf[A] // TODO
+  def observe(): A = ???
 
-  def observe(gv: G): A = null.asInstanceOf[A] // TODO
+  def observe(gv: G): A = ???
 
   def probabilityOf(a: A): Double = gvs.map(gv => tally((a, gv))).sum / totalCount
 

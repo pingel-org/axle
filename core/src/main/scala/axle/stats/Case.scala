@@ -22,7 +22,7 @@ case class CaseAndGT[A](conjuncts: GenTraversable[Case[A]]) extends Case[List[A]
       .map(g => conjuncts.Π((c: Case[A]) => P(c | g)))
       .getOrElse(conjuncts.Π((c: Case[A]) => P(c)))
 
-  def bayes() = null.asInstanceOf[() => Double] // TODO
+  def bayes() = ???
 }
 
 case class CaseAnd[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {

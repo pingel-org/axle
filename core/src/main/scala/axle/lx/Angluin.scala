@@ -10,7 +10,7 @@ class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
   val graph = JungDirectedGraph[String, Symbol](vps, vs => Nil)
 
   import graph._
-  
+
   def Q() = vertices()
 
   //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
@@ -106,7 +106,7 @@ object Angluin {
 
     def initialState() = null.asInstanceOf[Nothing]
 
-    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null.asInstanceOf[Nothing], None)
+    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (initialState(), None)
   }
 
   /**
@@ -117,7 +117,7 @@ object Angluin {
 
     def initialState() = null.asInstanceOf[Nothing]
 
-    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (null.asInstanceOf[Nothing], Some(G))
+    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (initialState(), Some(G))
   }
 
   /**

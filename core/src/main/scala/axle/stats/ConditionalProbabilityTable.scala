@@ -1,6 +1,7 @@
 package axle.stats
 
 // TODO: division by zero
+import axle._
 
 class ConditionalProbabilityTable0[A](p: Map[A, Double]) extends Distribution0[A] {
 
@@ -20,19 +21,13 @@ class ConditionalProbabilityTable0[A](p: Map[A, Double]) extends Distribution0[A
 
 class ConditionalProbabilityTable2[A, G1, G2](p: Map[(G1, G2), Map[A, Double]]) extends Distribution2[A, G1, G2] {
 
-  // def randomStream(): Stream[Double] = Stream.cons(math.random, randomStream())
+  def observe(): A = ???
 
-  // TODO Is there a version of scanLeft that is more like a reduce?
-  // This would allow me to avoid having to construct the initial dummy element
-  // val barsByA = p.scanLeft((null.asInstanceOf[A], 0.0))((x, y) => (y._1._1, x._2 + y._2))
+  def observe(gv1: G1, gv2: G2): A = ???
 
-  def observe(): A = null.asInstanceOf[A] // TODO
+  def probabilityOf(a: A): Double = ???
 
-  def observe(gv1: G1, gv2: G2): A = null.asInstanceOf[A] // TODO
-
-  def probabilityOf(a: A): Double = -1.0 // TODO
-
-  def probabilityOf(a: A, given1: Case[G1], given2: Case[G2]): Double = -1.0 // TODO
+  def probabilityOf(a: A, given1: Case[G1], given2: Case[G2]): Double = ???
 
 }
 

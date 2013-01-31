@@ -1,5 +1,6 @@
 package axle.stats
 
+import axle._
 import axle.graph._
 import collection._
 
@@ -9,7 +10,7 @@ case class InteractionGraph(
 
   lazy val graph = JungUndirectedGraph(vps, ef)
 
-  def eliminate(rv: RandomVariable[_]): InteractionGraph = null.asInstanceOf[InteractionGraph] // TODO
+  def eliminate(rv: RandomVariable[_]): InteractionGraph = ???
 
   def eliminationSequence(π: List[RandomVariable[_]]): List[InteractionGraph] =
     π.scanLeft(this)((G, rv) => G.eliminate(rv))

@@ -48,7 +48,7 @@ object Gold {
 
     def initialState() = null.asInstanceOf[Nothing]
 
-    def processExpression(state: Nothing, e: Expression) = (null.asInstanceOf[Nothing], Some(G))
+    def processExpression(state: Nothing, e: Expression) = (initialState(), Some(G))
   }
 
   case class MemorizingLearner() extends Learner[Language] {
