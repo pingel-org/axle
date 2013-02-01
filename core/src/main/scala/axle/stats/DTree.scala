@@ -18,24 +18,16 @@ class DTree {
   // returns an order pi with width(pi,G) no greater than the width
   // of dtree rooted at t
 
-  def toEliminationOrder(t: DTreeNode): List[RandomVariable[_]] = {
-
-    val result = mutable.ListBuffer[RandomVariable[_]]()
-
+  def toEliminationOrder(t: DTreeNode): List[RandomVariable[_]] =
     if (isLeaf(t)) {
       val ct = context(t) // Set<RandomVariable>
-      for (v <- cluster(t)) {
-        if (!ct.contains(v)) {
-          result += v
-        }
-      }
+      cluster(t).filter(v => !ct.contains(v)).toList
     } else {
       val leftPi: List[RandomVariable[_]] = ???
       val rightPi: List[RandomVariable[_]] = ???
       // TODO merge them
       // TODO add cluster(t) - context(t) in any order to result
+      Nil
     }
-    result.toList
-  }
 
 }
