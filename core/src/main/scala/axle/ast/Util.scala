@@ -1,7 +1,6 @@
 package axle.ast
 
 import util.matching.Regex
-
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.BufferedReader
@@ -10,20 +9,22 @@ import collection._
 
 object Util {
 
-  def findLeaves(dirname: String, suffix: String): List[String] = {
-    val dir = new File(dirname)
-    val result = new mutable.ListBuffer[String]()
-    for (f <- dir.listFiles) {
-      if (f.isDirectory) {
-        result.appendAll(findLeaves(f.getName(), suffix).map(h => f.getName + File.separator + h))
-      } else {
-        if (f.getName.endsWith(suffix)) {
-          result.append(f.getName)
+  def findLeaves(dirname: String, suffix: String): List[String] =
+    _findLeaves(new File(dirname), suffix)
+
+  def _findLeaves(dir: File, suffix: String): List[String] =
+    dir.listFiles.toList
+      .flatMap({ file =>
+        if (file.isDirectory) {
+          _findLeaves(file, suffix).map(h => file.getName + File.separator + h)
+        } else {
+          if (file.getName.endsWith(suffix)) {
+            List(file.getName)
+          } else {
+            Nil
+          }
         }
-      }
-    }
-    result.toList
-  }
+      })
 
   def convertStreamToString(is: InputStream): String = {
     val result = io.Source.fromInputStream(is, "UTF-8").getLines().mkString("\n")
