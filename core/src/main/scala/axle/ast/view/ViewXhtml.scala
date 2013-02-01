@@ -4,6 +4,7 @@ package axle.ast.view
 import axle.ast._
 import axle.Loggable
 import collection._
+import math.{ min, max }
 import xml.{ NodeSeq, Text }
 
 object ViewXhtml extends View[xml.NodeSeq] with Loggable {
@@ -23,16 +24,16 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
     Emission.emit(language, node, contextFormatter)
     val highlightedHtml = contextFormatter.result // NOTE: python version cached this
 
-    // Note: this was a LinkedHashMap:
-    val lines = Map[Int, NodeSeq]() ++
-      (math.max(1, node.lineNo - CONTEXT_PAD) to math.min(highlightedHtml.size, node.lineNo + CONTEXT_PAD))
-      .map(i => i -> highlightedHtml(i))
+    val lineNos = max(1, node.lineNo - CONTEXT_PAD) to min(highlightedHtml.size, node.lineNo + CONTEXT_PAD)
 
-    (for { (lineno, line) <- lines } yield {
-      <span class={ "lineno" }><a href={ uri + '#' + lineno }>{ "%5d".format(lineno) }</a></span><span>{ line }</span><br/>
-    })
-      .flatMap(identity)
-      .toSeq
+    <div>{
+      for { lineno <- lineNos } yield {
+        <span class={ "lineno" }>
+          <a href={ uri + '#' + lineno }>{ "%5d".format(lineno) }</a>
+        </span>
+        <span>{ highlightedHtml(lineno) }</span><br/>
+      }
+    }</div>
 
   }
 
