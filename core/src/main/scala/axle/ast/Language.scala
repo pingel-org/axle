@@ -4,7 +4,7 @@ package axle.ast
 import axle.Loggable
 import collection._
 
-case class Language(
+class Language(
   name: String,
   rules: List[Rule],
   precedenceGroups: List[(List[String], String)],

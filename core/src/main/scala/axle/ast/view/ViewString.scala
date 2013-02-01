@@ -39,19 +39,19 @@ object ViewString extends View[String] with Loggable {
 
     val result = new StringBuffer
     result.append("Rules:\n")
-    for ((id, rule) <- lll.llRules) {
+    for (rule <- lll.llRules) {
       result.append(rule + "\n")
     }
     result.append("\n")
     result.append("Parse Table:\n")
     result.append("   ")
-    for ((_, term) <- lll.terminals) {
+    for (term <- lll.terminals) {
       result.append(term + " ")
     }
     result.append("\n")
-    for ((_, nterm) <- lll.nonTerminals) {
+    for (nterm <- lll.nonTerminals) {
       result.append(nterm + ": ")
-      for ((_, term) <- lll.terminals) {
+      for (term <- lll.terminals) {
         if (lll.parseTable.contains((nterm, term))) {
           result.append(lll.parseTable((nterm, term)).id + " ")
         } else {

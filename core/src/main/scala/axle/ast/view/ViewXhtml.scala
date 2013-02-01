@@ -47,14 +47,16 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
 
   override def lllRules(lll: LLLanguage): NodeSeq = {
 
-    val rs = for ((_, rule) <- lll.llRules) yield {
-      <li>{ rule.id }:{ rule.from }->{ rule.rhs.mkString("", " ", "") }</li>
-    }
-
     <div>
       <span>Rules:</span>
       <ul>
-        { rs }
+        {
+          lll.llRules.zipWithIndex.map({
+            case (rule, id) => {
+              <li>{ id }:{ rule.from }->{ rule.rhs.mkString("", " ", "") }</li>
+            }
+          })
+        }
       </ul>
     </div>
   }
@@ -67,17 +69,17 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
         <tr>
           <td></td>
           {
-            for ((_, term) <- lll.terminals) yield {
+            for (term <- lll.terminals) yield {
               <td>{ term.label }</td>
             }
           }
         </tr>
         {
-          for ((_, nterm) <- lll.nonTerminals) yield {
+          for (nterm <- lll.nonTerminals) yield {
             <tr>
               <td>{ nterm }:</td>
               {
-                for ((_, term) <- lll.terminals) yield {
+                for (term <- lll.terminals) yield {
                   <td>
                     {
                       if (lll.parseTable.contains((nterm, term))) {

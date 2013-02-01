@@ -26,10 +26,10 @@ case class Terminal(_label: String) extends Symbol(_label)
 case class NonTerminal(_label: String) extends Symbol(_label)
 object Start extends NonTerminal("S")
 object ⊥ extends Terminal("⊥") // maybe best left as '$'
-object ε extends Symbol("ε") // TODO terminal or non-terminal? "\u03B5"
+object ε extends Symbol("ε") // TODO terminal or non-terminal?
 
-case class LLRule(id: String, from: NonTerminal, rhs: List[Symbol]) {
-  override def toString() = id + ": " + from + " " + "->" + " " + rhs.mkString("", " ", "")
+case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol]) {
+  override def toString() = from + " " + "->" + " " + rhs.mkString("", " ", "")
 }
 
 abstract class ParserAction()
@@ -45,7 +45,7 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
   var i = 0
 
   stack.push(⊥)
-  stack.push(grammar.nonTerminals(symbol))
+  stack.push(grammar.nonTerminalsByName(symbol))
 
   val derivation = new mutable.ListBuffer[ParserAction]()
 
@@ -56,7 +56,7 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
       stack.reverse.mkString("", " ", "") + "\n"
   // + derivation.mkString("", ", ", "") + "\n"
 
-  def inputSymbol: Terminal = grammar.terminals(input(i).toString)
+  def inputSymbol: Terminal = grammar.terminalsByName(input(i).toString)
 
   def apply(action: ParserAction): Unit = {
     action match {
@@ -72,76 +72,37 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
       }
       case ParseError(msg) => { sys.error(this + "\nparse error: " + msg) }
     }
-    derivation += action // Note: reversed from previous version
+    derivation += action
   }
 
-  def nextAction: ParserAction = stack.top match {
+  def nextAction(): ParserAction = stack.top match {
 
     case sts if sts == inputSymbol => Shift
 
-    case foo @ NonTerminal(_) => {
+    case foo @ NonTerminal(_) =>
       if (grammar.parseTable.contains((foo, inputSymbol))) {
         Reduce(grammar.parseTable((foo, inputSymbol)))
       } else {
         ParseError("no rule")
       }
-    }
 
     case _ => ParseError("stack = " + stack + ", inputSymbol = " + inputSymbol + ". A non-matching non-terminal")
 
   }
 
-  def done: Boolean = (input.length == i) match {
-    case true => stack.top match {
-      case ⊥ => true
-      case _ => false
-    }
-    case false => derivation.isEmpty match {
-      case true => false
-      case _ => derivation.head match {
+  def done(): Boolean = if (input.length == i) {
+    stack.top == ⊥
+  } else {
+    if (derivation.isEmpty) {
+      false
+    } else {
+      derivation.head match {
         case ParseError(_) => true
         case _ => false
       }
     }
   }
 
-  def parse = while (!done) { apply(nextAction) }
-
-}
-
-class ParseTableGrammarBuilder(ptgName: String) {
-
-  val grammar = new LLLanguage(ptgName)
-
-  def nt(label: String): ParseTableGrammarBuilder = {
-    grammar.nonTerminals += (label -> NonTerminal(label))
-    this
-  }
-
-  def t(label: String): ParseTableGrammarBuilder = {
-    grammar.terminals += (label -> Terminal(label))
-    this
-  }
-
-  def r(ruleId: String, from: String, x: String): ParseTableGrammarBuilder = {
-    grammar.llRules += ruleId -> LLRule(ruleId,
-      grammar.nonTerminals(from),
-      List(grammar.symbol(x)).flatMap({ x => x })
-    )
-    this
-  }
-
-  def r(ruleId: String, from: String, strRhs: List[String]): ParseTableGrammarBuilder = {
-    grammar.llRules += ruleId -> LLRule(ruleId,
-      grammar.nonTerminals(from),
-      strRhs.map(grammar.symbol(_)).flatMap({ x => x })
-    )
-    this
-  }
-
-  def build(): LLLanguage = {
-    grammar.buildParseTable
-    grammar
-  }
+  def parse() = while (!done) { apply(nextAction) }
 
 }
