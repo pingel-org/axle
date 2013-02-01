@@ -27,26 +27,28 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
   def numVariables(): Int = graph.size()
 
   def blocks(
-    from: immutable.Set[RandomVariable[_]],
-    to: immutable.Set[RandomVariable[_]],
-    given: immutable.Set[RandomVariable[_]]): Boolean = {
-
-    val x = Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]()
-    val mutableFromCopy = mutable.Set() ++ from
-    _findOpenPath(x, Direction.UNKNOWN, None, mutableFromCopy, to, given).isEmpty
-  }
+    from: Set[RandomVariable[_]],
+    to: Set[RandomVariable[_]],
+    given: Set[RandomVariable[_]]): Boolean =
+    _findOpenPath(
+      Map[RandomVariable[_], Set[RandomVariable[_]]](),
+      Direction.UNKNOWN,
+      None,
+      from,
+      to,
+      given).isEmpty
 
   //  val rvNameGetter = new Lister[RandomVariable, String]() {
   //    def function(rv: RandomVariable): String = rv.getName
   //  }
 
   def _findOpenPath(
-    visited: Map[RandomVariable[_], mutable.Set[RandomVariable[_]]],
+    visited: Map[RandomVariable[_], Set[RandomVariable[_]]],
     priorDirection: Int,
     priorOpt: Option[RandomVariable[_]],
-    current: mutable.Set[RandomVariable[_]],
-    to: immutable.Set[RandomVariable[_]],
-    given: immutable.Set[RandomVariable[_]]): Option[List[RandomVariable[_]]] = {
+    current: Set[RandomVariable[_]], // Note: this used to be mutabl.  I may have introduced bugs.
+    to: Set[RandomVariable[_]],
+    given: Set[RandomVariable[_]]): Option[List[RandomVariable[_]]] = {
 
     println("_fOP: " + priorDirection +
       ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
@@ -54,12 +56,10 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
       ", to = " + to.map(_.name).mkString(", ") +
       ", evidence = " + given.map(_.name).mkString(", "))
 
-    current --= priorOpt.map(visited(_)).getOrElse(Set())
-
     val priorVertexOpt = priorOpt.map(prior => graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get)
     val givenVertices = given.map(v1 => graph.findVertex((v2: Vertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
 
-    current.toList.flatMap(variable => {
+    (current -- priorOpt.map(visited(_)).getOrElse(Set())).toList.flatMap(variable => {
 
       val variableVertex = graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
 
@@ -83,23 +83,22 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
         if (to.contains(variable)) {
           Some(List(variable))
         } else {
-          // TODO remove .get
-          val neighs = mutable.Set() ++ (graph.neighbors(variableVertex) - priorVertexOpt.get).map(_.payload)
-          val visitedCopy = mutable.Map[RandomVariable[_], mutable.Set[RandomVariable[_]]]() ++ visited
-          priorOpt.map(prior => {
-            if (!visited.contains(prior)) {
-              visitedCopy += prior -> mutable.Set[RandomVariable[_]]()
-            }
-            visited(prior) += variable
-          })
-          _findOpenPath(visitedCopy, -1 * directionPriorToVar, Some(variable), neighs.map(vertexPayloadToRandomVariable(_)), to, given).map(
-            _ ++ List(variable)
-          )
+          _findOpenPath(
+            priorOpt.map(prior => {
+              visited + (prior -> (visited.get(prior).getOrElse(Set[RandomVariable[_]]()) ++ Set(variable)))
+            }).getOrElse(visited),
+            -1 * directionPriorToVar,
+            Some(variable),
+            (graph.neighbors(variableVertex) - priorVertexOpt.get).map(_.payload).map(vertexPayloadToRandomVariable(_)),
+            to,
+            given)
+            .map(_ ++ List(variable)
+            )
         }
       } else {
         None
       }
-    }).headOption
+    }).headOption // TODO: short-circuit
 
   }
 
