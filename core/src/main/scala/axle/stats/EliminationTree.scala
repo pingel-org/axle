@@ -7,27 +7,22 @@ case class EliminationTree(
   vps: Seq[Factor],
   ef: Seq[Vertex[Factor]] => Seq[(Vertex[Factor], Vertex[Factor], String)]) {
 
-  lazy val graph = JungUndirectedGraph(vps, ef) // [Factor, String]
+  lazy val graph = JungUndirectedGraph(vps, ef)
 
-  def gatherVars(stop: Vertex[Factor], node: Vertex[Factor], result: mutable.Set[RandomVariable[_]]): Unit = {
-    result ++= node.payload.variables
-    graph.neighbors(node).filter(!_.equals(stop)).map(gatherVars(node, _, result))
-  }
+  def gatherVars(
+    stop: Vertex[Factor],
+    node: Vertex[Factor],
+    accumulated: Set[RandomVariable[_]]): Set[RandomVariable[_]] =
+    graph
+      .neighbors(node)
+      .filter(!_.equals(stop))
+      .foldLeft(accumulated ++ node.payload.variables)((a, y) => gatherVars(node, y, a))
 
-  def cluster(i: Vertex[Factor]): Set[RandomVariable[_]] = {
-    val result = mutable.Set[RandomVariable[_]]()
-    graph.neighbors(i).map(j => result ++= separate(i, j))
-    result ++= i.payload.variables
-    result
-  }
+  def cluster(i: Vertex[Factor]): Set[RandomVariable[_]] =
+    graph.neighbors(i).flatMap(separate(i, _)) ++ i.payload.variables
 
-  def separate(i: Vertex[Factor], j: Vertex[Factor]): Set[RandomVariable[_]] = {
-    val iSide = mutable.Set[RandomVariable[_]]()
-    gatherVars(j, i, iSide)
-    val jSide = mutable.Set[RandomVariable[_]]()
-    gatherVars(i, j, jSide)
-    iSide.intersect(jSide)
-  }
+  def separate(i: Vertex[Factor], j: Vertex[Factor]): Set[RandomVariable[_]] =
+    gatherVars(j, i, Set[RandomVariable[_]]()).intersect(gatherVars(i, j, Set[RandomVariable[_]]()))
 
   // def constructEdge(v1: GV, v2: GV): GE = g += ((v1, v2), "")
   // def delete(node: GV): Unit = g.delete(node)
