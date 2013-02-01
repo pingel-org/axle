@@ -112,9 +112,9 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
 
   import _graph._
 
-  override def name() = _name  
+  override def name() = _name
   def graph() = _graph
-  
+
   override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
 
   // def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
@@ -361,28 +361,24 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
   //    }
   //  }
 
-  def factorElimination1(Q: Set[RandomVariable[_]]): Factor = {
+  def _factorElimination1(Q: Set[RandomVariable[_]], S: List[Factor]): Factor = S match {
 
-    val S = mutable.ListBuffer[Factor]() ++ randomVariables().map(cpt(_)).toList
+    case Nil => throw new Exception("S is empty")
 
-    while (S.size > 1) {
+    case fi :: Nil => fi.projectToOnly(Q.toList)
 
-      val fi = S.remove(0)
+    case fi :: fj :: rest =>
+      _factorElimination1(Q,
+        rest ++ List(fj * fi.sumOut(fi.variables
+          .filter(!Q.contains(_))
+          .filter(v => !S.exists(_.mentions(v)))
+          .toSet))
+      )
 
-      val V = fi.variables
-        .filter(!Q.contains(_))
-        .filter(v => !S.exists(_.mentions(v)))
-        .toSet
-
-      // At this point, V is the set of vars that are unique to this particular
-      // factor, fj, and do not appear in Q
-
-      S += S.remove(0) * fi.sumOut(V)
-    }
-
-    // there should be one element left in S
-    S(0).projectToOnly(Q.toList)
   }
+
+  def factorElimination1(Q: Set[RandomVariable[_]]): Factor =
+    _factorElimination1(Q, randomVariables().map(cpt(_)).toList)
 
   // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
