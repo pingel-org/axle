@@ -5,8 +5,8 @@ import collection._
 trait DirectedGraph[VP, EP] {
 
   type G[VP, EP] <: DirectedGraph[VP, EP]
-  type ES  
-  
+  type ES
+
   def vertexPayloads(): Seq[VP]
   def edgeFunction(): Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]
 
@@ -17,7 +17,7 @@ trait DirectedGraph[VP, EP] {
 
   def source(edge: Edge[ES, EP]): Vertex[VP]
   def dest(edge: Edge[ES, EP]): Vertex[VP]
-  
+
   def deleteVertex(v: Vertex[VP]): G[VP, EP]
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]]
   def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[ES, EP]]
@@ -30,39 +30,28 @@ trait DirectedGraph[VP, EP] {
   def outputEdgesOf(v: Vertex[VP]): Set[Edge[ES, EP]]
   def descendantsIntersectsSet(v: Vertex[VP], s: Set[Vertex[VP]]): Boolean
 
-  def _descendants(v: Vertex[VP], result: mutable.Set[Vertex[VP]]): Unit = {
-    // inefficient
-    if (!result.contains(v)) {
-      result += v
-      successors(v).map(_descendants(_, result))
+  // inefficient
+  def _descendants(v: Vertex[VP], accumulator: Set[Vertex[VP]]): Set[Vertex[VP]] =
+    if (!accumulator.contains(v)) {
+      successors(v).foldLeft(accumulator + v)((a, v) => _descendants(v, a))
+    } else {
+      accumulator
     }
-  }
 
-  def descendants(v: Vertex[VP]): Set[Vertex[VP]] = {
-    val result = mutable.Set[Vertex[VP]]()
-    _descendants(v, result)
-    result.toSet
-  }
+  def descendants(v: Vertex[VP]): Set[Vertex[VP]] = _descendants(v, Set[Vertex[VP]]())
 
   // inefficient
-  def _ancestors(v: Vertex[VP], result: mutable.Set[Vertex[VP]]): Unit = {
-    if (!result.contains(v)) {
-      result += v
-      predecessors(v).map(_ancestors(_, result))
+  def _ancestors(v: Vertex[VP], accumulator: Set[Vertex[VP]]): Set[Vertex[VP]] =
+    if (!accumulator.contains(v)) {
+      predecessors(v).foldLeft(accumulator + v)((a, v) => _ancestors(v, a))
+    } else {
+      accumulator
     }
-  }
 
-  def ancestors(v: Vertex[VP]): Set[Vertex[VP]] = {
-    val result = mutable.Set[Vertex[VP]]()
-    _ancestors(v, result)
-    result.toSet
-  }
+  def ancestors(v: Vertex[VP]): Set[Vertex[VP]] = _ancestors(v, Set[Vertex[VP]]())
 
-  def ancestors(vs: Set[Vertex[VP]]): Set[Vertex[VP]] = {
-    val result = mutable.Set[Vertex[VP]]()
-    vs.map(_ancestors(_, result))
-    result.toSet
-  }
+  def ancestors(vs: Set[Vertex[VP]]): Set[Vertex[VP]] =
+    vs.foldLeft(Set[Vertex[VP]]())((a, v) => _ancestors(v, a))
 
   def isAcyclic(): Boolean
 
@@ -77,5 +66,5 @@ trait DirectedGraph[VP, EP] {
   //  def removeOutputs(vs: Set[V]): GenDirectedGraph[VP, EP]
 
   def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
-  
+
 }
