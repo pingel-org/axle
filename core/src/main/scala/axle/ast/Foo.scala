@@ -59,12 +59,9 @@ object Foo extends Loggable {
     // val indentation_level: Int = 5
     // val x: String = ( List.range(0, indentation_level) map (i => "| -") ).mkString("")
     // val y: String = ( for ( x <- List.range(0, indentation_level)) yield "   " ).mkString("")
-    // val tokens = new mutable.ListBuffer[String]()
-    // tokens += "efoo"
-    // tokens += "ebar"
+    // val tokens = List("efoo", "ebar")
 
-    // val node2lineno = new mutable.Map[String, Int]()
-    // node2lineno.update("x", 5)
+    // val node2lineno = Map("x" -> 5)
 
     // val s : String = String.format("foo %s", "abc")
     // info("s = " + s)

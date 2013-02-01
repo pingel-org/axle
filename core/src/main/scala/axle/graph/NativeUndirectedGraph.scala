@@ -127,14 +127,14 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
   //    def edgeCost(v1: V, v2: V): Int = 1 // TODO: generalize
   //
   //    val undefined = -1
-  //    val dist = mutable.Map[V, Int]()
-  //    val previous = mutable.Map[V, V]()
+  //    val dist = Map[V, Int]()
+  //    val previous = Map[V, V]()
   //    for (v <- vertices) {
   //      dist(v) = Int.MaxValue // Unknown distance function from source to v
   //    }
   //
   //    dist(source) = 0 // Distance from source to source
-  //    val Q = mutable.Set[V]() ++ vertices // All nodes in the graph are unoptimized - thus are in Q
+  //    val Q = Set[V]() ++ vertices // All nodes in the graph are unoptimized - thus are in Q
   //    val broken = false
   //    while (Q.size > 0 && !broken) {
   //      val u = Q.minBy(dist(_)) // Start node in first case

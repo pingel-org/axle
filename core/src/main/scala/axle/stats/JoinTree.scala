@@ -24,8 +24,6 @@ object JoinTree {
 
 case class JoinTree(graph: UndirectedGraph[immutable.Set[RandomVariable[_]], String]) {
 
-  //  def setCluster(n: GV, cluster: mutable.Set[RandomVariable[_]]): Unit = n.setPayload(cluster)
-  //
   //  def addToCluster(n: GV, v: RandomVariable[_]): Unit = n.getPayload += v
   //
   //  def constructEdge(n1: GV, n2: GV): JoinTree.G#E = g += ((n1, n2), "")
@@ -33,7 +31,6 @@ case class JoinTree(graph: UndirectedGraph[immutable.Set[RandomVariable[_]], Str
   //  def separate(n1: GV, n2: GV): Set[RandomVariable[_]] = n1.getPayload.intersect(n2.getPayload)
 
   //  def toEliminationOrder(r: GV): List[RandomVariable[_]] = {
-  //    val result = new mutable.ListBuffer[RandomVariable[_]]()
   //    val T: JoinTree = new JoinTree(graphFrom(getGraph())(v => v, e => e))
   //    while (T.getGraph.size > 1) {
   //      val i = T.getGraph.firstLeafOtherThan(r)
@@ -41,7 +38,6 @@ case class JoinTree(graph: UndirectedGraph[immutable.Set[RandomVariable[_]], Str
   //      result ++= i.getPayload - j.getPayload
   //    }
   //    result ++= r.getPayload
-  //    result.toList
   //  }
 
   //  def embeds(eTree: EliminationTree, embedding: Map[JoinTree.G#V, EliminationTree#GV]): Boolean =

@@ -338,7 +338,6 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
   //  def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
   //    val X = Set[RandomVariable[_]]() ++ pX
   //    val ig = interactionGraph()
-  //    val result = mutable.ListBuffer[RandomVariable[_]]()
   //    while (X.size > 0) {
   //      val xVertices = X.map(ig.findVertex(_).get)
   //      val rv = ig.vertexWithFewestNeighborsAmong(xVertices).payload
@@ -346,14 +345,12 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
   //      ig.eliminate(rv)
   //      X -= rv
   //    }
-  //    result.toList
   //  }
   //
   //  def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
   //
   //    val X = Set[RandomVariable[_]]() ++ pX
   //    val ig = interactionGraph()
-  //    val result = mutable.ListBuffer[RandomVariable[_]]()
   //
   //    while (X.size > 0) {
   //      val xVertices = X.map(ig.findVertex(_).get)
@@ -362,7 +359,6 @@ class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, 
   //      ig.eliminate(rv)
   //      X -= rv
   //    }
-  //    result.toList
   //  }
 
   def factorElimination1(Q: Set[RandomVariable[_]]): Factor = {

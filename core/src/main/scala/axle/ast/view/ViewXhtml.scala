@@ -10,13 +10,12 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
   // <html><head><link ref=... /></head><body>...</body><html>
 
   override def AstNode(root: AstNode, language: Language): xml.NodeSeq = {
-    val result = new mutable.ArrayBuffer[xml.Node]()
     // <div class={"code"}></div>
-    result.append(<link rel={ "stylesheet" } type={ "text/css" } href={ "/static/lodbms.css" }/>)
     val formatter = new XhtmlAstNodeFormatter(language, mutable.Set.empty, true)
     Emission.emit(language, root, formatter)
-    result.appendAll(formatter.result)
-    result.toList
+    <link rel={ "stylesheet" } type={ "text/css" } href={ "/static/lodbms.css" }>
+      { formatter.result }
+    </link>
   }
 
   def nodeContext(language: Language, node: AstNode, uri: String): xml.NodeSeq = {
@@ -24,14 +23,12 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
     Emission.emit(language, node, contextFormatter)
     val highlightedHtml = contextFormatter.result // NOTE: python version cached this
 
-    val lines = new mutable.LinkedHashMap[Int, NodeSeq]()
+    // Note: this was a LinkedHashMap:
+    val lines = Map[Int, NodeSeq]() ++
+      (math.max(1, node.lineNo - CONTEXT_PAD) to math.min(highlightedHtml.size, node.lineNo + CONTEXT_PAD))
+      .map(i => i -> highlightedHtml(i))
 
-    (math.max(1, node.lineNo - CONTEXT_PAD) to math.min(highlightedHtml.size, node.lineNo + CONTEXT_PAD))
-      .map(i => { lines += i -> highlightedHtml(i) })
-
-    info("contextHtml's result = " + lines)
-
-    (for ((lineno, line) <- lines) yield {
+    (for { (lineno, line) <- lines } yield {
       <span class={ "lineno" }><a href={ uri + '#' + lineno }>{ "%5d".format(lineno) }</a></span><span>{ line }</span><br/>
     })
       .flatMap(identity)
@@ -39,7 +36,6 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
 
   }
 
-  // Option[mutable.LinkedHashMap[Int, NodeSeq]]
   // def contextHtmlLines(): Option[LinkedHashMap[Int, NodeSeq]] = contextHtml(doc, docNode) 
   override def docNodeInContext(doc: Document, docNode: AstNode): xml.NodeSeq =
     doc.ast().map(ast => nodeContext(doc.grammar(), docNode, "/document/" + doc.name))
