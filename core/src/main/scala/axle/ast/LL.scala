@@ -14,7 +14,6 @@ package axle.ast
  */
 
 import collection._
-import axle.Loggable
 import axle.algebra._
 
 class Symbol(_label: String) {
@@ -25,8 +24,8 @@ class Symbol(_label: String) {
 
 case class Terminal(_label: String) extends Symbol(_label)
 case class NonTerminal(_label: String) extends Symbol(_label)
-object Start extends NonTerminal("S")
-object ⊥ extends Terminal("⊥") // maybe best left as '$'
+
+object ⊥ extends Terminal("⊥") // also known as '$'
 object ε extends Symbol("ε") // TODO terminal or non-terminal?
 
 case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol]) {

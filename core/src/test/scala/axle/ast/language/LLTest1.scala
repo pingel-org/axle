@@ -9,22 +9,20 @@ class LLTest1 extends Specification {
   "LL Grammar #1" should {
     "work" in {
 
-      val ll1 = new LLLanguage("LLTest1", List(
+      val g = new LLLanguage("(...+a)", List(
         ("S", List("F")),
         ("S", List("(", "S", "+", "F", ")")),
         ("F", List("a"))
       ))
 
-      val derivationOpt = ll1.parse("(a+a)")
-
-      1 must be equalTo (1)
+      g.parse("(a+a)").map(_.map(_.id)) must be equalTo Some(List(2, 1, 3, 3))
     }
   }
 
   "LL Grammar #2" should {
     "work" in {
 
-      val ll2 = new LLLanguage("LLTest2", List(
+      val g = new LLLanguage("LL Test 2", List(
         ("S", List("F")),
         ("S", List("(", "S", "+", "F", ")")),
         ("S", List("(", "S", "-", "F", ")")),
@@ -36,10 +34,59 @@ class LLTest1 extends Specification {
         ("F", List("d"))
       ))
 
-      val derivationOpt = ll2.parse("(a+a)")
-
-      1 must be equalTo (1)
+      // TODO
+      g.parse("(a+a)").map(_.map(_.id)) must be equalTo None
     }
   }
+
+  "LL Grammar #3" should {
+    "work" in {
+
+      // http://www.cs.ucr.edu/~gupta/teaching/453-03/Recitation/2-parse.pdf
+
+      val g = new LLLanguage("LL Test 3", List(
+        ("S", List("A", "B", "e")),
+        ("A", List("d", "B")),
+        ("A", List("a", "S")),
+        ("A", List("c")),
+        ("B", List("A", "S")),
+        ("B", List("b"))
+      ))
+
+      g.parse("adbbeccbee").map(_.map(_.id)) must be equalTo Some(List(1, 3, 1, 2, 6, 6, 5, 4, 1, 4, 6))
+    }
+  }
+
+  "LL #4" should {
+    "work" in {
+
+      val g = new LLLanguage("{a^n c b^n | n > 0}", List(
+        ("S", List("a", "A", "b")),
+        ("A", List("a", "A", "b")),
+        ("A", List("c"))
+      ))
+
+      g.parse("aaacbbb").map(_.map(_.id)) must be equalTo Some(List(1, 2, 2, 3))
+    }
+  }
+
+
+  /*
+
+  // TODO remove left recursion
+  "LL #5" should {
+    "work" in {
+
+      val g = new LLLanguage("{a^n b^n c^m} | n >= 0, m > 0", List(
+        ("S", List("S", "c")),
+        ("S", List("A")),
+        ("A", List("a", "A", "b")),
+        ("A", List("a", "b"))
+      ))
+
+      g.parse("aaabbbcc").map(_.map(_.id)) must be equalTo Some(List(1, 3, 1, 2, 6, 6, 5, 4, 1, 4, 6))
+    }
+  }
+  */
 
 }

@@ -7,6 +7,12 @@ import util.matching.Regex
 import collection._
 import Stream.{ cons, empty }
 
+/**
+ *
+ * http://www.scribd.com/doc/7185137/First-and-Follow-Set
+ *
+ */
+
 case class LLLanguage(
   name: String,
   _llRuleDescriptions: List[(String, List[String])],
@@ -82,10 +88,9 @@ case class LLLanguage(
    *
    */
 
-  def first(X: Symbol): Set[Symbol] =
-    if (terminalsByName.contains(X.label)) {
-      Set(X)
-    } else {
+  def first(X: Symbol): Set[Symbol] = X match {
+    case Terminal(_) => Set(X)
+    case NonTerminal(_) => {
       llRules.filter(_.from equals X).flatMap({ rule =>
         rule.rhs match {
           case List(ε) => Set(ε) // Case 2
@@ -93,6 +98,7 @@ case class LLLanguage(
         }
       }).toSet
     }
+  }
 
   /**
    *
@@ -100,8 +106,6 @@ case class LLLanguage(
    * 2. If there is a production A -> aBb, (where 'a' can be a whole string) then everything in FIRST(b) except for epsilon is placed in FOLLOW(B).
    * 3. If there is a production A -> aB, then everything in FOLLOW(A) is in FOLLOW(B)
    * 4. If there is a production A -> aBb, where FIRST(b) contains epsilon, then everything in FOLLOW(A) is in FOLLOW(B)
-   *
-   * http://www.scribd.com/doc/7185137/First-and-Follow-Set
    *
    */
 
@@ -177,10 +181,13 @@ case class LLLanguage(
             "  " + state.stack.mkString("")
       }).mkString("\n\n")
 
-  def parse(input: String): Option[List[LLParserAction]] = {
+  def parse(input: String): Option[List[LLRule]] = {
     val record = parseStateStream(startState(input)).toList
     if (record.last._2.finished) {
-      Some(record.map(_._1))
+      Some(record.map(_._1).flatMap({
+        case Reduce(rule) => List(rule)
+        case _ => Nil
+      }))
     } else {
       None
     }
