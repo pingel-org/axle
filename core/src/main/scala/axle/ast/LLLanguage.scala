@@ -2,6 +2,7 @@
 package axle.ast
 
 import axle._
+import axle.algebra._
 import util.matching.Regex
 import collection._
 import Stream.{ cons, empty }
@@ -13,7 +14,7 @@ case class LLLanguage(
   name, Nil, Nil, (text: String) => None, ast => ast
 ) {
 
-  val _nonTerminals = _llRuleDescriptions.map(desc => NonTerminal(desc._1)).toSet + Start
+  val _nonTerminals = (_llRuleDescriptions.map(desc => NonTerminal(desc._1)).toSet).toList
 
   def nonTerminals = _nonTerminals
 
@@ -21,7 +22,7 @@ case class LLLanguage(
 
   val startSymbol = nonTerminalsByName(startSymbolString)
 
-  val _terminals = (_llRuleDescriptions.flatMap(_._2).toSet -- _llRuleDescriptions.map(_._1)).map(Terminal(_))
+  val _terminals = (_llRuleDescriptions.flatMap(_._2).toSet -- _llRuleDescriptions.map(_._1)).map(Terminal(_)).toList.sortBy(_.label) ++ List(⊥)
 
   def terminals = _terminals
 
@@ -29,9 +30,20 @@ case class LLLanguage(
 
   val _llRules =
     _llRuleDescriptions.zipWithIndex
-      .map({ case (desc, id) => LLRule(id, nonTerminalsByName(desc._1), desc._2.map(symbol(_).get)) })
+      .map({ case (desc, i) => LLRule(i + 1, nonTerminalsByName(desc._1), desc._2.map(symbol(_).get)) })
 
   def llRules = _llRules
+
+  override def toString(): String =
+    "Rules:\n\n" +
+      _llRules.map(rule => rule.id + ". " + rule.toString).mkString("\n") + "\n\n" +
+      "Parse Table:\n\n" +
+      "   " + terminals.map(_.label).mkString("  ") + "\n" +
+      nonTerminals.map(nt =>
+        nt.label + "  " + terminals.map(t =>
+          parseTable.get((nt, t)).map(_.id).getOrElse("-")
+        ).mkString("  ")
+      ).mkString("\n")
 
   val followMemo = mutable.Map[Symbol, Set[Symbol]]()
 
@@ -101,22 +113,21 @@ case class LLLanguage(
       followMemo(symbol)
     } else {
       // TODO allow Terminal(_) in cases below to be a list of Terminals
-      val result = (symbol match {
-        case Start => Set(⊥)
-        case _ => Set()
-      }) ++ (llRules.flatMap({
-        rule =>
-          (rule.rhs match {
-            // TODO?: enforce that rest is composed of only terminals (maybe not the case)
-            case Terminal(_) :: symbol :: rest => first(rest).filter(x => !(x equals ε))
-            case _ => Set()
-          }) ++
+      val result = (
+        if (symbol === startSymbol) Set(⊥) else Set()
+      ) ++ (llRules.flatMap({
+          rule =>
             (rule.rhs match {
-              case Terminal(_) :: symbol :: Nil => follow(rule.from)
-              case Terminal(_) :: symbol :: rest if (first(rest).contains(ε)) => follow(rule.from)
+              // TODO?: enforce that rest is composed of only terminals (maybe not the case)
+              case Terminal(_) :: symbol :: rest => first(rest).filter(x => !(x equals ε))
               case _ => Set()
-            })
-      }))
+            }) ++
+              (rule.rhs match {
+                case Terminal(_) :: symbol :: Nil => follow(rule.from)
+                case Terminal(_) :: symbol :: rest if (first(rest).contains(ε)) => follow(rule.from)
+                case _ => Set()
+              })
+        }))
       followMemo.update(symbol, result)
       result
     }
