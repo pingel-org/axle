@@ -34,7 +34,7 @@ case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol]) {
 }
 
 abstract class LLParserAction()
-object Shift extends LLParserAction()
+case class Shift() extends LLParserAction()
 case class Reduce(rule: LLRule) extends LLParserAction()
 case class ParseError(msg: String) extends LLParserAction()
 
@@ -49,25 +49,25 @@ case class LLParserState(
 
   override def toString =
     inputBufferWithMarker + "\n" +
-      stack.reverse.mkString("", " ", "")
+      stack.mkString("", " ", "")
 
   def inputSymbol: Terminal = grammar.terminalsByName(input(i).toString)
 
   def apply(action: LLParserAction): LLParserState = action match {
-    case Shift => {
+    case Shift() => {
       assert(stack.head === inputSymbol)
       LLParserState(grammar, input, stack.tail, i + 1)
     }
     case Reduce(rule) => {
       assert(stack.head == rule.from)
-      LLParserState(grammar, input, rule.rhs.reverse ++ stack.tail, i)
+      LLParserState(grammar, input, rule.rhs ++ stack.tail, i)
     }
     case ParseError(msg) => { sys.error(this + "\nparse error: " + msg) }
   }
 
   def nextAction(): LLParserAction = stack.head match {
 
-    case sts if sts === inputSymbol => Shift
+    case sts if sts === inputSymbol => Shift()
 
     case foo @ NonTerminal(_) =>
       if (grammar.parseTable.contains((foo, inputSymbol))) {

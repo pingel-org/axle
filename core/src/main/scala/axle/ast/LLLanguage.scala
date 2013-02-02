@@ -155,8 +155,19 @@ case class LLLanguage(
       }
     }
 
+  def startState(input: String) = LLParserState(this, input, List(startSymbol, ⊥), 0)
+
+  def parseDebug(input: String): String =
+    parseStateStream(startState(input)).toList
+      .map({
+        case (action, state) =>
+          action + "\n" +
+            "  " + state.inputBufferWithMarker + "\n" +
+            "  " + state.stack.mkString("")
+      }).mkString("\n\n")
+
   def parse(input: String): Option[List[LLParserAction]] = {
-    val record = parseStateStream(LLParserState(this, input, List(startSymbol, ⊥), 0)).toList
+    val record = parseStateStream(startState(input)).toList
     if (record.last._2.finished) {
       Some(record.map(_._1))
     } else {
