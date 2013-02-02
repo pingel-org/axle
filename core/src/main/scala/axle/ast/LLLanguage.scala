@@ -4,16 +4,12 @@ package axle.ast
 import axle._
 import util.matching.Regex
 import collection._
-
-object LLLanguage {
-
-  // implicit def tuple2llRule(tuple2: (String, List[String])) = LLRule(tuple2._1, tuple2._2)
-
-}
+import Stream.{ cons, empty }
 
 case class LLLanguage(
   name: String,
-  _llRuleDescriptions: List[(String, List[String])]) extends Language(
+  _llRuleDescriptions: List[(String, List[String])],
+  startSymbolString: String = "S") extends Language(
   name, Nil, Nil, (text: String) => None, ast => ast
 ) {
 
@@ -22,6 +18,8 @@ case class LLLanguage(
   def nonTerminals = _nonTerminals
 
   val nonTerminalsByName = _nonTerminals.map(nt => (nt.label, nt)).toMap
+
+  val startSymbol = nonTerminalsByName(startSymbolString)
 
   val _terminals = (_llRuleDescriptions.flatMap(_._2).toSet -- _llRuleDescriptions.map(_._1)).map(Terminal(_))
 
@@ -142,5 +140,28 @@ case class LLLanguage(
   }
 
   def parseTable = _parseTable
-  
+
+  def parseStateStream(state: LLParserState): Stream[(LLParserAction, LLParserState)] =
+    if (state.finished) {
+      empty
+    } else {
+      val action = state.nextAction
+      action match {
+        case ParseError(x) => empty
+        case _ => {
+          val nextState = state(action)
+          cons((action, nextState), parseStateStream(nextState))
+        }
+      }
+    }
+
+  def parse(input: String): Option[List[LLParserAction]] = {
+    val record = parseStateStream(LLParserState(this, input, List(startSymbol, ⊥), 0)).toList
+    if (record.last._2.finished) {
+      Some(record.map(_._1))
+    } else {
+      None
+    }
+  }
+
 }

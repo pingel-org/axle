@@ -15,6 +15,7 @@ package axle.ast
 
 import collection._
 import axle.Loggable
+import axle.algebra._
 
 class Symbol(_label: String) {
   def label() = _label
@@ -32,52 +33,41 @@ case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol]) {
   override def toString() = from + " " + "->" + " " + rhs.mkString("", " ", "")
 }
 
-abstract class ParserAction()
-object Shift extends ParserAction()
-case class Reduce(rule: LLRule) extends ParserAction()
-case class ParseError(msg: String) extends ParserAction()
+abstract class LLParserAction()
+object Shift extends LLParserAction()
+case class Reduce(rule: LLRule) extends LLParserAction()
+case class ParseError(msg: String) extends LLParserAction()
 
-class Parse(grammar: LLLanguage, symbol: String, input: String) {
+case class LLParserState(
+  grammar: LLLanguage,
+  input: String,
+  stack: List[Symbol],
+  // derivation: List[LLParserAction],
+  i: Int) {
 
-  val inputBuffer = ""
-  val stack = new mutable.Stack[Symbol]()
-
-  var i = 0
-
-  stack.push(⊥)
-  stack.push(grammar.nonTerminalsByName(symbol))
-
-  val derivation = new mutable.ListBuffer[ParserAction]()
-
-  def inputBufferWithMarker = input.substring(0, i) + "|" + input.substring(i, input.length)
+  lazy val inputBufferWithMarker = input.substring(0, i) + "|" + input.substring(i, input.length)
 
   override def toString =
     inputBufferWithMarker + "\n" +
-      stack.reverse.mkString("", " ", "") + "\n"
-  // + derivation.mkString("", ", ", "") + "\n"
+      stack.reverse.mkString("", " ", "")
 
   def inputSymbol: Terminal = grammar.terminalsByName(input(i).toString)
 
-  def apply(action: ParserAction): Unit = {
-    action match {
-      case Shift => {
-        assert(stack.top == inputSymbol)
-        stack.pop
-        i += 1
-      }
-      case Reduce(rule) => {
-        assert(stack.top == rule.from)
-        stack.pop
-        stack.pushAll(rule.rhs.reverse)
-      }
-      case ParseError(msg) => { sys.error(this + "\nparse error: " + msg) }
+  def apply(action: LLParserAction): LLParserState = action match {
+    case Shift => {
+      assert(stack.head === inputSymbol)
+      LLParserState(grammar, input, stack.tail, i + 1)
     }
-    derivation += action
+    case Reduce(rule) => {
+      assert(stack.head == rule.from)
+      LLParserState(grammar, input, rule.rhs.reverse ++ stack.tail, i)
+    }
+    case ParseError(msg) => { sys.error(this + "\nparse error: " + msg) }
   }
 
-  def nextAction(): ParserAction = stack.top match {
+  def nextAction(): LLParserAction = stack.head match {
 
-    case sts if sts == inputSymbol => Shift
+    case sts if sts === inputSymbol => Shift
 
     case foo @ NonTerminal(_) =>
       if (grammar.parseTable.contains((foo, inputSymbol))) {
@@ -90,19 +80,6 @@ class Parse(grammar: LLLanguage, symbol: String, input: String) {
 
   }
 
-  def done(): Boolean = if (input.length == i) {
-    stack.top == ⊥
-  } else {
-    if (derivation.isEmpty) {
-      false
-    } else {
-      derivation.head match {
-        case ParseError(_) => true
-        case _ => false
-      }
-    }
-  }
-
-  def parse() = while (!done) { apply(nextAction) }
+  def finished(): Boolean = input.length === i && stack.head === ⊥
 
 }
