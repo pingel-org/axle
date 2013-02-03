@@ -10,10 +10,10 @@ trait View[T] {
 
   def docNodeInContext(doc: Document, docNode: AstNode): T
 
-  def lllRules(lll: LLLanguage): T
+  def llRules(g: LLLanguage): T
 
-  def lllParseTable(lll: LLLanguage): T
+  def llParseTable(g: LLLanguage): T
 
-  def llLanguage(lll: LLLanguage): T
+  def llLanguage(g: LLLanguage): T
 
 }

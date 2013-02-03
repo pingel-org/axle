@@ -7,63 +7,64 @@ import axle.Loggable
 
 object Emission extends Loggable {
 
-  def emit(stmt: Statement, nodeOpt: Option[AstNode], grammar: Language, formatter: AstNodeFormatter[_, _]): Unit = {
+  def emit[R, S](
+    stmt: Statement,
+    nodeOpt: Option[AstNode],
+    grammar: Language,
+    formatter: AstNodeFormatter[R, S]): AstNodeFormatter[R, S] = {
 
     // info("emit(stmt = " + stmt + ", nodeOpt = " + nodeOpt + ", grammar, formatter)")
 
     (nodeOpt, stmt) match {
       case (Some(node @ AstNodeRule(_, m, _)), Sub(name)) => {
-        m.get(name).map(subtree =>
-          formatter.needsParens(name, node, subtree, grammar) match {
-            case true => {
-              formatter.raw("(")
-              emit(grammar, subtree, formatter)
-              formatter.raw(")")
-            }
-            case false => emit(grammar, subtree, formatter)
-          }
-        )
+        val subtree = m(name)
+        if (formatter.needsParens(name, node, subtree, grammar)) {
+          emit(grammar, subtree, formatter.raw("(")).raw(")")
+        } else {
+          emit(grammar, subtree, formatter)
+        }
       }
       case (Some(AstNodeRule(_, m, _)), Spread()) => {
         m("spread") match {
-          case AstNodeList(l, _) => l.map({ c =>
-            {
-              emit(grammar, c, formatter)
-              formatter.newline(false, Some(c))
-            }
+          case AstNodeList(l, _) => l.foldLeft(formatter)({
+            case (f, c) =>
+              emit(grammar, c, f).newline(false, Some(c))
           })
           case _ => throw new Exception("spread statement is applied to something other than AstNodeList")
         }
       }
 
-      case (_, Nop()) => Text("") // TODO is there an empty Node?
+      case (_, Nop()) => formatter.raw("") // TODO is there an empty Node?
 
-      case (Some(AstNodeRule(_, m, _)), Attr(attr)) => m(attr).asInstanceOf[AstNodeValue].value.map(v => formatter.name(v))
+      case (Some(AstNodeRule(_, m, _)), Attr(attr)) =>
+        m(attr).asInstanceOf[AstNodeValue].value.foldLeft(formatter)({ case (f, v) => f.name(v) })
 
       case (_, Lit(value: String)) => formatter.raw(value)
 
-      case (_, Sq(stmts @ _*)) => stmts.map(s => emit(s, nodeOpt, grammar, formatter))
+      case (_, Sq(stmts @ _*)) =>
+        stmts.foldLeft(formatter)({ case (f, s) => emit(s, nodeOpt, grammar, formatter) })
 
       // stmts.filter( ! Existence.exists(_, node, grammar) ).map( s => formatter.raw("") )
-      case (Some(node), SqT(stmts @ _*)) => stmts.map(Existence.exists(_, node, grammar)).forall(x => x) match {
-        case true => stmts.map(emit(_, nodeOpt, grammar, formatter))
-        case false =>
-      }
+      case (Some(node), SqT(stmts @ _*)) =>
+        if (stmts.forall(Existence.exists(_, node, grammar))) {
+          stmts.foldLeft(formatter)({ case (f, s) => emit(s, nodeOpt, grammar, f) })
+        } else {
+          formatter
+        }
 
-      case (Some(AstNodeRule(_, m, _)), Repr(name)) => m(name).asInstanceOf[AstNodeValue].value.map(v => formatter.repr(v)) // TODO !!! replace toString() with the equiv of repr()
+      // TODO !!! replace toString() with the equiv of repr()
+      case (Some(AstNodeRule(_, m, _)), Repr(name)) =>
+        m(name).asInstanceOf[AstNodeValue].value.map(formatter.repr(_)).getOrElse(formatter)
 
-      case (_, Emb(left, stmt, right)) => {
-        formatter.raw(left)
-        emit(stmt, nodeOpt, grammar, formatter)
-        formatter.raw(right)
-      }
+      case (_, Emb(left, stmt, right)) =>
+        emit(stmt, nodeOpt, grammar, formatter.raw(left)).raw(right)
 
       case (_, Kw(value)) => formatter.keyword(value)
 
-      case (_, PosKw(initial, rest)) => formatter.stack.top.map(_ match {
+      case (_, PosKw(initial, rest)) => formatter.state.stack.head.map(_ match {
         case (0, _) => formatter.keyword(initial)
         case _ => formatter.keyword(rest)
-      })
+      }).getOrElse(formatter)
 
       case (_, Sp()) => formatter.space()
 
@@ -94,38 +95,43 @@ object Emission extends Loggable {
         formatter.leaveFor()
       }
 
-      case (Some(AstNodeRule(_, m, _)), J(subtree, delimiter)) => m.get(subtree).map(st => {
-        val elems = st.asInstanceOf[AstNodeList]
-        val n = elems.list.length - 1
-        for (i <- 0 to n) {
-          emit(grammar, elems.list(i), formatter)
-          if (i < n) {
-            emit(delimiter, None, grammar, formatter)
-          }
-        }
-      })
-
-      case (Some(AstNodeRule(_, m, _)), JItems(subtree, inner, outer)) => {
-        // TODO? python set elems = node.items
+      case (Some(AstNodeRule(_, m, _)), J(subtree, delimiter)) => {
         val elems = m(subtree).asInstanceOf[AstNodeList]
-        for (i <- 0 until elems.list.length) {
-          val l = elems.list(i).asInstanceOf[AstNodeList].list
-          emit(grammar, l(0), formatter)
-          formatter.raw(inner)
-          emit(grammar, l(1), formatter)
-          if (i < elems.list.length - 1) {
-            formatter.raw(outer)
+        val n = elems.list.length - 1
+        (0 to n).foldLeft(formatter)({
+          case (f, i) => {
+            val f1 = emit(grammar, elems.list(i), f)
+            if (i < n) {
+              emit(delimiter, None, grammar, f1)
+            } else {
+              f1
+            }
           }
-        }
+        })
+      }
+
+      // TODO? python set elems = node.items
+      case (Some(AstNodeRule(_, m, _)), JItems(subtree, inner, outer)) => {
+        val elems = m(subtree).asInstanceOf[AstNodeList]
+        (0 until elems.list.length).foldLeft(formatter)({
+          case (f, i) => {
+            val l = elems.list(i).asInstanceOf[AstNodeList].list
+            val fN = emit(grammar, l(1), emit(grammar, l(0), f).raw(inner))
+            if (i < elems.list.length - 1) {
+              fN.raw(outer)
+            } else {
+              fN
+            }
+          }
+        })
       }
 
       case (Some(AstNodeRule(_, m, _)), Affix(subtree, prefix, postfix)) =>
-        m.get(subtree).map(x => {
-          x.asInstanceOf[AstNodeList].list.map(c => {
-            formatter.raw(prefix)
-            emit(grammar, c, formatter)
-            postfix.map(formatter.raw(_))
-          })
+        m(subtree).asInstanceOf[AstNodeList].list.foldLeft(formatter)({
+          case (f, c) => {
+            val f = emit(grammar, c, formatter.raw(prefix))
+            postfix.map(f.raw(_)).getOrElse(f)
+          }
         })
 
       case (_, Indent()) => formatter.indent
@@ -147,63 +153,65 @@ object Emission extends Loggable {
         val arity = argnames.list.length
         val num_defaults = defaults.list.length
         val num_undefaulted = arity - num_defaults
-        for (i <- 0 until argnames.list.length) {
-          val flags = m("flags").asInstanceOf[AstNodeValue].value
-          if ((((flags.equals("4")) && i == arity - 1) || ((flags.equals("12")) && i == arity - 2))) {
-            formatter.raw("*")
+        (0 until argnames.list.length).foldLeft(formatter)({
+          case (f, i) => {
+            val flags = m("flags").asInstanceOf[AstNodeValue].value
+            val f1 = if ((((flags.equals("4")) && i == arity - 1) || ((flags.equals("12")) && i == arity - 2))) {
+              f.raw("*")
+            } else if ((flags.equals("8") || flags.equals("12")) && i == arity - 1) {
+              f.raw("**")
+            } else {
+              f
+            }
+            val f2 = emit(grammar, argnames.list(i), f1)
+            val f3 = if (i >= num_undefaulted) {
+              emit(grammar, defaults.list(i - num_undefaulted), f2.raw("="))
+            } else {
+              f2
+            }
+            if (i < arity - 1) {
+              f3.raw(",").space()
+            } else {
+              f2
+            }
           }
-          if ((flags.equals("8") || flags.equals("12")) && i == arity - 1) {
-            formatter.raw("**")
-          }
-          emit(grammar, argnames.list(i), formatter)
-          if (i >= num_undefaulted) {
-            formatter.raw("=")
-            emit(grammar, defaults.list(i - num_undefaulted), formatter)
-          }
-          if (i < arity - 1) {
-            formatter.raw(",")
-            formatter.space()
-          }
-        }
+        })
       }
     }
 
   }
 
-  def emit(grammar: Language, node: AstNode, formatter: AstNodeFormatter[_, _]): Unit = {
+  def emit[R, S](
+    grammar: Language,
+    node: AstNode,
+    formatter: AstNodeFormatter[R, S]): AstNodeFormatter[R, S] = {
 
     // println("emit(grammar, node = " + node + ", formatter)")
 
-    formatter._node2lineno.update(node, node.lineNo)
+    val fLn = formatter.markLine(node, node.lineNo)
 
     node match {
 
-      case AstNodeValue(v, _) => v.map(formatter.raw(_))
+      case AstNodeValue(v, _) => v.map(fLn.raw(_)).getOrElse(formatter)
 
       case AstNodeList(l, _) => (0 until l.length)
-        .map({ i =>
+        .foldLeft(fLn)({ (f, i) =>
           {
-            emit(grammar, l(i), formatter)
             if (i < (l.length - 1)) {
-              formatter.space()
+              emit(grammar, l(i), f).space()
+            } else {
+              f
             }
           }
         })
 
       case AstNodeRule(r, m, lineno) => {
-
-        formatter.conformTo(node)
-
-        if (formatter.shouldHighlight(node)) {
-          formatter.beginSpan()
+        val f = formatter.conformTo(node)
+        if (f.shouldHighlight(node)) {
+          emit(grammar.name2rule(r).statement, Some(node), grammar, f.beginSpan()).endSpan("highlight")
+        } else {
+          emit(grammar.name2rule(r).statement, Some(node), grammar, f)
         }
-
-        emit(grammar.name2rule(r).statement, Some(node), grammar, formatter)
-
-        if (formatter.shouldHighlight(node)) {
-          formatter.endSpan("highlight")
-        }
-
       }
     }
   }

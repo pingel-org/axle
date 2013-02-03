@@ -2,9 +2,8 @@
 package axle.ast.view
 
 import axle.ast._
-import axle.Loggable
 
-object Existence extends Loggable {
+object Existence {
 
   def exists(stmt: Statement, node: AstNode, grammar: Language): Boolean = stmt match {
 

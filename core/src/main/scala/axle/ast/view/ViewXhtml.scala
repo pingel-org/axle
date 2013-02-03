@@ -2,27 +2,24 @@
 package axle.ast.view
 
 import axle.ast._
-import axle.Loggable
 import collection._
 import math.{ min, max }
-import xml.{ NodeSeq, Text }
+import Emission._
 
-object ViewXhtml extends View[xml.NodeSeq] with Loggable {
+/*
+object ViewXhtml extends View[xml.NodeSeq] {
   // <html><head><link ref=... /></head><body>...</body><html>
 
   override def AstNode(root: AstNode, language: Language): xml.NodeSeq = {
     // <div class={"code"}></div>
-    val formatter = new XhtmlAstNodeFormatter(language, mutable.Set.empty, true)
-    Emission.emit(language, root, formatter)
     <link rel={ "stylesheet" } type={ "text/css" } href={ "/static/lodbms.css" }>
-      { formatter.result }
+      { emit(language, root, new XhtmlAstNodeFormatter(language, Set.empty, true)).result }
     </link>
   }
 
   def nodeContext(language: Language, node: AstNode, uri: String): xml.NodeSeq = {
-    val contextFormatter = new XhtmlLinesAstNodeFormatter(language, mutable.Set(node), true)
-    Emission.emit(language, node, contextFormatter)
-    val highlightedHtml = contextFormatter.result // NOTE: python version cached this
+
+    val highlightedHtml = emit(language, node, new XhtmlLinesAstNodeFormatter(language, Set(node), true)).result // NOTE: python version cached this
 
     val lineNos = max(1, node.lineNo - CONTEXT_PAD) to min(highlightedHtml.size, node.lineNo + CONTEXT_PAD)
 
@@ -42,7 +39,7 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
     doc.ast().map(ast => nodeContext(doc.grammar(), docNode, "/document/" + doc.name))
       .getOrElse(<span>Oh no</span>)
 
-  override def lllRules(lll: LLLanguage): NodeSeq = {
+  override def lllRules(lll: LLLanguage): xml.NodeSeq = {
 
     <div>
       <span>Rules:</span>
@@ -58,7 +55,7 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
     </div>
   }
 
-  override def lllParseTable(lll: LLLanguage): NodeSeq = {
+  override def lllParseTable(lll: LLLanguage): xml.NodeSeq = {
 
     <div>
       <span>Parse Table:</span>
@@ -104,3 +101,5 @@ object ViewXhtml extends View[xml.NodeSeq] with Loggable {
   }
 
 }
+
+*/

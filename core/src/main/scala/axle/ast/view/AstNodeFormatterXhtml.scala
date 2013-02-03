@@ -2,28 +2,31 @@ package axle.ast.view
 
 import axle.ast._
 import collection._
-import xml._
 
-class XhtmlAstNodeFormatter(language: Language, highlight: Set[AstNode], conform: Boolean)
-  extends AstNodeFormatter[List[xml.Node], mutable.ListBuffer[xml.Node]](language, highlight, conform) {
+/*
+class XhtmlAstNodeFormatter(
+  config: FormatterConfig,
+  state: FormatterState,
+  subState: List[xml.Node])
+  extends AstNodeFormatter[List[xml.Node], List[xml.Node]](config, state, subState) {
 
-  override def result() = tokens.toList
+  type A = XhtmlAstNodeFormatter
 
-  override val tokens = new mutable.ListBuffer[xml.Node]()
+  override def result() = subState.toList
 
-  override def toString(): String = tokens.toList.mkString("")
+  override def toString(): String = subState.toList.mkString("")
 
-  // override def append(t: String) { tokens += t }
+  override def accRaw(s: String): XhtmlAstNodeFormatter = subState.append(Text(s))
 
-  override def accRaw(s: String): Unit = tokens.append(Text(s))
+  override def accNewline(): XhtmlAstNodeFormatter = subState.appendAll(<br/>)
 
-  override def accNewline(): Unit = tokens.appendAll(<br/>)
+  override def accSpace(): XhtmlAstNodeFormatter = subState.append(Text(" "))
 
-  override def accSpace(): Unit = tokens.append(Text(" "))
+  override def accSpaces(): XhtmlAstNodeFormatter = subState.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
 
-  override def accSpaces(): Unit = tokens.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
-
-  // scala.xml.Utility.escape(word)
-  override def accSpan(spanclass: String, s: String): Unit = tokens += <span class={ spanclass }>{ s }</span>
+  // xml.Utility.escape(word)
+  override def accSpan(spanclass: String, s: String): XhtmlAstNodeFormatter = subState += <span class={ spanclass }>{ s }</span>
 
 }
+
+*/

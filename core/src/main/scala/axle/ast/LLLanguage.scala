@@ -34,22 +34,13 @@ case class LLLanguage(
 
   val terminalsByName = _terminals.map(t => (t.label, t)).toMap
 
-  val _llRules =
+  val _llRules: List[LLRule] =
     _llRuleDescriptions.zipWithIndex
       .map({ case (desc, i) => LLRule(i + 1, nonTerminalsByName(desc._1), desc._2.map(symbol(_).get)) })
 
   def llRules = _llRules
 
-  override def toString(): String =
-    "Rules:\n\n" +
-      _llRules.map(rule => rule.id + ". " + rule.toString).mkString("\n") + "\n\n" +
-      "Parse Table:\n\n" +
-      "   " + terminals.map(_.label).mkString("  ") + "\n" +
-      nonTerminals.map(nt =>
-        nt.label + "  " + terminals.map(t =>
-          parseTable.get((nt, t)).map(_.id).getOrElse("-")
-        ).mkString("  ")
-      ).mkString("\n")
+  override def toString(): String = view.ViewString.llLanguage(this)
 
   val followMemo = mutable.Map[Symbol, Set[Symbol]]()
 

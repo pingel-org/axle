@@ -1,32 +1,37 @@
 package axle.ast.view
 
-import axle.Loggable
 import axle.ast._
 import collection._
 
-class AstNodeFormatterString(language: Language, highlight: mutable.Set[AstNode], conform: Boolean)
-  extends AstNodeFormatter[String, mutable.ListBuffer[String]](language, highlight, conform)
-  with Loggable {
+class AstNodeFormatterString(
+  config: FormatterConfig,
+  state: FormatterState,
+  subState: List[String]) // was "tokens"
+  extends AstNodeFormatter[String, List[String]](config, state, subState) {
 
-  override val tokens = new mutable.ListBuffer[String]()
+  def apply(s: FormatterState, ss: List[String]) = new AstNodeFormatterString(config, s, ss)
 
-  override def result() = tokens.mkString("")
+  override def result() = subState.mkString("")
 
-  override def toString(): String = tokens.toList.mkString("")
+  override def toString(): String = subState.toList.mkString("")
 
-  // override def append(t: String) { tokens += t }
+  def accRaw(s: String, n: Int): AstNodeFormatterString =
+    new AstNodeFormatterString(config, state, subState ++ List(s))
 
-  override def accRaw(s: String): Unit = tokens.append(s)
+  def accNewline(): AstNodeFormatterString =
+    new AstNodeFormatterString(config, state, subState ++ List("\n"))
 
-  override def accNewline(): Unit = {
-    // println("info: AstNodeFormatterString accNewine")
-    tokens.append("\n")
-  }
+  def accSpace(): AstNodeFormatterString =
+    new AstNodeFormatterString(config, state, subState ++ List("  "))
 
-  override def accSpace(): Unit = tokens.append(" ")
+  def accSpaces(): AstNodeFormatterString =
+    new AstNodeFormatterString(config, state, subState ++ List("   "))
 
-  override def accSpaces(): Unit = tokens.append("   ") // TODO
+  def accSpan(spanclass: String, s: String, n: Int): AstNodeFormatterString =
+    new AstNodeFormatterString(config, state, subState ++ List(s))
 
-  override def accSpan(spanclass: String, s: String): Unit = tokens += s
+  def accPushStack() = this
+  
+  def accPopAndWrapStack(label: String) = this
 
 }

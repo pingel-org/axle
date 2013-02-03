@@ -2,55 +2,87 @@
 package axle.ast.view
 
 import axle.ast._
-import axle.Loggable
-import util.matching.Regex
 import collection._
 
-import xml._
+case class FormatterConfig(
+  language: Language,
+  conform: Boolean,
+  highlight: Set[AstNode])
 
-trait Accumulator {
+case class FormatterState(
+  indentationLevel: Int,
+  column: Int,
+  needsIndent: Boolean,
+  lineno: Int,
+  stack: List[Option[(Int, String)]],
+  _node2lineno: Map[AstNode, Int])
 
-  def accRaw(s: String) = {}
+abstract class AstNodeFormatter[R, S](
+  _config: FormatterConfig,
+  _state: FormatterState,
+  _subState: S) {
 
-  def accNewline() = {}
+  def apply(fs: FormatterState, ss: S): AstNodeFormatter[R, S]
 
-  def accSpace() = {}
+  def config() = _config
 
-  def accSpaces() = {}
+  def state() = _state
 
-  def accSpan(spanclass: String, s: String) = {}
+  def subState() = _subState
 
-  def accPushStack() = {}
+  def accRaw(s: String, n: Int): AstNodeFormatter[R, S]
 
-  def accPopAndWrapStack(label: String) = {}
+  def accNewline(): AstNodeFormatter[R, S]
 
-}
+  def accSpace(): AstNodeFormatter[R, S]
 
-abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode], conform: Boolean)
-  extends Accumulator {
+  def accSpaces(): AstNodeFormatter[R, S]
+
+  def accSpan(spanclass: String, s: String, n: Int): AstNodeFormatter[R, S]
+
+  def accPushStack(): AstNodeFormatter[R, S]
+
+  def accPopAndWrapStack(label: String): AstNodeFormatter[R, S]
 
   def result(): R
-  val tokens: S
 
-  var indentationLevel = 0
-  var column = 0
-  var needsIndent = true
-  var lineno = 1
-  val stack = new mutable.Stack[Option[(Int, String)]]()
-  val _node2lineno = mutable.Map[AstNode, Int]()
+  def isConforming() = config.conform
 
-  def isConforming() = conform
-  def shouldHighlight(node: AstNode) = highlight.contains(node)
+  def shouldHighlight(node: AstNode) = config.highlight.contains(node)
 
-  def node2lineno = _node2lineno
+  def node2lineno() = state._node2lineno
 
-  def _indent(): Unit = {
-    if (column == 0 && needsIndent) {
-      // val indentation = ( for ( x <- 1 to indentationLevel) yield tab ).mkString("")
-      (1 to indentationLevel).map(x => accSpaces()) // result.append(<span>&nbsp;&nbsp;&nbsp;</span>)
-      column = 3 * indentationLevel // indentation.length()
+  def markLine(node: AstNode, lineNo: Int): AstNodeFormatter[R, S] =
+    this(FormatterState(
+      state.indentationLevel,
+      state.column,
+      state.needsIndent,
+      state.lineno,
+      state.stack,
+      state._node2lineno ++ List(node -> lineNo)),
+      subState)
+
+  def _indent(): AstNodeFormatter[R, S] = {
+    if (state.column == 0 && state.needsIndent) {
+      val newF = (1 to state.indentationLevel).foldLeft(this)({ case (f, x) => f.accSpaces })
+      this(FormatterState(
+        newF.state.indentationLevel,
+        3 * newF.state.indentationLevel,
+        false,
+        newF.state.lineno,
+        newF.state.stack,
+        newF.state._node2lineno),
+        newF.subState)
+    } else {
+      this(FormatterState(
+        state.indentationLevel,
+        state.column,
+        false,
+        state.lineno,
+        state.stack,
+        state._node2lineno),
+        subState)
     }
-    needsIndent = false
   }
 
   def needsParens(attr_name: String, node: AstNode, subtree: AstNode, grammar: Language): Boolean =
@@ -72,125 +104,169 @@ abstract class AstNodeFormatter[R, S](language: Language, highlight: Set[AstNode
       case (_, _) => false
     }
 
-  def raw(element: String): Unit = {
-    _indent()
+  def raw(element: String): AstNodeFormatter[R, S] = {
+    val f1 = this._indent()
     val lines = element.split("\n")
-    lines.size match {
-      case 0 | 1 => {
-        column += element.length()
-      }
-      case _ => {
-        lineno += lines.size - 1
-        column = lines.last.length()
-      }
+    val f2 = lines.size match {
+      case 0 | 1 =>
+        this(FormatterState(
+          state.indentationLevel,
+          state.column + element.length,
+          state.needsIndent,
+          state.lineno,
+          state.stack,
+          state._node2lineno),
+          subState)
+      case _ =>
+        this(FormatterState(
+          state.indentationLevel,
+          lines.last.length,
+          state.needsIndent,
+          state.lineno + lines.size - 1,
+          state.stack,
+          state._node2lineno),
+          subState)
     }
-    // result.append(Text(element))
-    accRaw(element)
+    f2.accRaw(element, element.length)
   }
 
   // TODO !!! toka.append("\\")
-  def wrap(indent: Boolean = false): Unit =
+  def wrap(indent: Boolean = false): AstNodeFormatter[R, S] =
     newline(true, None, indent)
 
-  def space(): Unit = {
-    _indent()
-    if (column > 80) {
-      wrap()
+  def space(): AstNodeFormatter[R, S] = {
+    val f1 = this._indent()
+    val f2 = (if (state.column > 80) {
+      f1.wrap()
     } else {
-      column += 1
-    }
-    // result.append(Text(" "))
-    accSpace()
+      f1(FormatterState(
+        state.indentationLevel,
+        state.column + 1,
+        state.needsIndent,
+        state.lineno,
+        state.stack,
+        state._node2lineno),
+        subState)
+    })
+    f2.accSpace()
   }
 
-  def indent: Unit = indentationLevel += 1
+  def indent(): AstNodeFormatter[R, S] =
+    this(FormatterState(
+      state.indentationLevel + 1,
+      state.column,
+      state.needsIndent,
+      state.lineno,
+      state.stack,
+      state._node2lineno),
+      subState)
 
-  def dedent: Unit = indentationLevel -= 1
+  def dedent(): AstNodeFormatter[R, S] =
+    this(FormatterState(
+      state.indentationLevel - 1,
+      state.column,
+      state.needsIndent,
+      state.lineno,
+      state.stack,
+      state._node2lineno),
+      subState)
 
-  def beginSpan(): Unit = accPushStack
+  def beginSpan(): AstNodeFormatter[R, S] = accPushStack
 
-  def endSpan(spanType: String): Unit = accPopAndWrapStack(spanType)
+  def endSpan(spanType: String): AstNodeFormatter[R, S] = accPopAndWrapStack(spanType)
 
-  def conformTo(node: AstNode): Unit = {
+  def conformTo(node: AstNode): AstNodeFormatter[R, S] = this
 
-  }
+  // println("AstNodeFormatter.newline(hard="+hard+", node="+node+", indent="+indent+")")
+  // println("   column = " + column)
+  // println("   conform = " + conform)
 
-  def newline(hard: Boolean, nodeOpt: Option[AstNode], indent: Boolean = true): Unit = {
-
-    // println("AstNodeFormatter.newline(hard="+hard+", node="+node+", indent="+indent+")")
-    // println("   column = " + column)
-    // println("   conform = " + conform)
-
+  def newline(hard: Boolean, nodeOpt: Option[AstNode], indent: Boolean = true): AstNodeFormatter[R, S] = {
     // && node.getLineNo.isDefined && ( node.getLineNo.get < lineno )
-    if (nodeOpt.isDefined && conform) {
-      if (column > 0) {
-        column = 0
-        needsIndent = indent
-        lineno += 1
-        // result.appendAll(<br></br>)
-        accNewline()
+    if (nodeOpt.isDefined && config.conform) {
+      if (state.column > 0) {
+        this(FormatterState(
+          state.indentationLevel,
+          0,
+          indent,
+          state.lineno + 1,
+          state.stack,
+          state._node2lineno),
+          subState).accNewline()
+      } else {
+        this
       }
-    } else if (hard || column > 0) {
-      column = 0
-      needsIndent = indent
-      lineno += 1
-      // result.appendAll(<br></br>)
-      accNewline()
+    } else if (hard || state.column > 0) {
+      this(FormatterState(
+        state.indentationLevel,
+        0,
+        indent,
+        state.lineno + 1,
+        state.stack,
+        state._node2lineno),
+        subState).accNewline()
+    } else {
+      this
     }
   }
 
-  def keyword(kw: String): Unit = {
-    _indent()
-    column += kw.length()
-    // result.appendAll(<span class={"keyword"}>{kw}</span>)
-    accSpan("keyword", kw)
-  }
+  def keyword(kw: String): AstNodeFormatter[R, S] =
+    _indent().accSpan("keyword", kw, kw.length)
 
-  def operator(op: String): Unit = {
-    _indent()
-    column += op.length()
-    // result.appendAll(<span class={"operator"}>{op}</span>)
-    accSpan("operator", op)
-  }
+  def operator(op: String): AstNodeFormatter[R, S] =
+    _indent().accSpan("operator", op, op.length)
 
-  def repr(r: String): Unit = {
-    _indent()
-    column += r.length()
-    // result.appendAll(<span class={"repr"}>{scala.xml.Utility.escape(r)}</span>)
-    accSpan("repr", xml.Utility.escape(r))
-    // NOTE: may not need to escape non-html
-  }
+  // NOTE: may not need to escape non-html
+  def repr(r: String): AstNodeFormatter[R, S] =
+    _indent().accSpan("repr", xml.Utility.escape(r), r.length)
 
-  def name(n: String): Unit = {
+  def name(n: String): AstNodeFormatter[R, S] = {
     _indent()
     val special = false // TODO
     special match {
       case true => {
         val (s, span) = (n, "special") // TODO
-        column += s.length
-        accSpan(span, s)
+        accSpan(span, s, s.length)
       }
-      case false => {
-        column += n.length()
-        // result.append(Text(n))
-        accRaw(n)
-      }
+      case false => accRaw(n, n.length)
+
     }
   }
 
-  def enterFor(): Unit = stack.push(None)
+  def enterFor(): AstNodeFormatter[R, S] =
+    this(FormatterState(
+      state.indentationLevel,
+      state.column,
+      state.needsIndent,
+      state.lineno,
+      List(None) ++ state.stack,
+      state._node2lineno),
+      subState)
 
-  def updateFor(varName: String): Unit =
-    stack.push(
-      Some(
-        stack
-          .pop()
-          .map(frame => (frame._1 + 1, varName))
-          .getOrElse((0, varName))
-      )
+  def updateFor(varName: String): AstNodeFormatter[R, S] = {
+    val frame = Some(state.stack.head
+      .map(frame => (frame._1 + 1, varName))
+      .getOrElse((0, varName))
     )
+    this(FormatterState(
+      state.indentationLevel,
+      state.column,
+      state.needsIndent,
+      state.lineno,
+      List(frame) ++ state.stack,
+      state._node2lineno),
+      subState)
+  }
 
-  def leaveFor(): Unit = stack.pop()
+  def leaveFor(): AstNodeFormatter[R, S] =
+    this(FormatterState(
+      state.indentationLevel,
+      state.column,
+      state.needsIndent,
+      state.lineno,
+      state.stack.tail,
+      state._node2lineno),
+      subState)
 
   // def result(): String = toka.toString()
 

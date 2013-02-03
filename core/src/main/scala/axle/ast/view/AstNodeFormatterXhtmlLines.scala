@@ -1,78 +1,81 @@
 package axle.ast.view
 
-import xml.{ NodeSeq, Text }
 import collection._
 import axle.ast._
 
-class XhtmlLinesAstNodeAccumulatorState(xlf: XhtmlLinesAstNodeFormatter) {
+/*
+case class XhtmlLinesAstNodeFormatterState(
+  tokens: List[xml.Node],
+  currentLine: Option[List[xml.Node]], // = Some(List[xml.Node]())
+  _lines: Map[Int, xml.NodeSeq])
 
-  var currentLine: Option[mutable.ListBuffer[xml.Node]] = Some(new mutable.ListBuffer[xml.Node]())
+class XhtmlLinesAstNodeFormatter(
+  config: FormatterConfig,
+  state: FormatterState,
+  subState: XhtmlLinesAstNodeFormatterState)
+  extends AstNodeFormatter[Map[Int, xml.NodeSeq], XhtmlLinesAstNodeFormatterState](config, state, subState) {
 
-  val _lines = mutable.Map[Int, NodeSeq]()
+  type A = XhtmlAstNodeFormatter
 
-  def lines(): Map[Int, NodeSeq] = {
+  def lines(): Map[Int, xml.NodeSeq] = {
     if (currentLine.isDefined) {
-      _lines += xlf.currentLineNo -> currentLine.get.toList
+      _lines += currentLineNo -> currentLine.get.toList
       currentLine = None // mark as "finished"
       // need better way of handling subsequent writes if they happen
     }
     _lines
   }
 
-  def raw(s: String): Unit = currentLine.get.append(Text(s))
+  def raw(s: String): XhtmlAstNodeFormatter = currentLine.get.append(xml.Text(s))
 
-  def newline(): Unit = {
-    _lines += xlf.currentLineNo -> currentLine.get.toList
-    xlf.advanceLine()
-    currentLine = Some(new mutable.ListBuffer[xml.Node]())
+  def newline(): XhtmlAstNodeFormatter = {
+    _lines += currentLineNo -> currentLine.get.toList
+    advanceLine()
+    currentLine = Some(List[xml.Node]())
   }
 
-  def space(): Unit = currentLine.get.append(Text(" "))
+  def space(): XhtmlAstNodeFormatter = currentLine.get.append(xml.Text(" "))
 
-  def spaces(): Unit = currentLine.get.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
+  def spaces(): XhtmlAstNodeFormatter = currentLine.get.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
 
-  // scala.xml.Utility.escape(word)
-  def span(spanclass: String, s: String): Unit = currentLine.get += <span class={ spanclass }>{ s }</span>
+  // xml.Utility.escape(word)
+  def span(spanclass: String, s: String): XhtmlAstNodeFormatter = currentLine.get += <span class={ spanclass }>{ s }</span>
 
-  def absorb(label: String, absorbee: XhtmlLinesAstNodeAccumulatorState): Unit = {
+  def absorb(label: String): XhtmlAstNodeFormatter = {
 
-    for ((lineno, line) <- absorbee.lines) {
+    for ((lineno, line) <- lines) {
       if (currentLine.get.size > 0) {
-        val unfinishedLine: NodeSeq = currentLine.get.toList
+        val unfinishedLine: xml.NodeSeq = currentLine.get.toList
         _lines += lineno -> <span>{ unfinishedLine }</span><span class={ label }>{ line }</span>;
-        currentLine = Some(new mutable.ListBuffer[scala.xml.Node]())
+        currentLine = Some(List[scala.xml.Node]())
       } else {
         _lines += lineno -> <span class={ label }>{ line }</span>
       }
     }
-    if (absorbee.currentLine.isDefined) {
-      currentLine = absorbee.currentLine
-      // popped.lines += currentLineNo -> popped.currentLine.toList
-      // popped.currentLine = None
+    if (currentLine.isDefined) {
+      // currentLine = absorbee.currentLine
+      //// popped.lines += currentLineNo -> popped.currentLine.toList
+      //// popped.currentLine = None
     }
   }
-}
 
-class XhtmlLinesAstNodeFormatter(language: Language, highlight: Set[AstNode], conform: Boolean)
-  extends AstNodeFormatter[Map[Int, NodeSeq], mutable.Stack[XhtmlLinesAstNodeAccumulatorState]](language, highlight, conform) {
-
-  def result(): Map[Int, NodeSeq] = {
+  def result(): Map[Int, xml.NodeSeq] = {
     if (tokens.size > 1) {
       throw new Exception(
         "called resultLines on XhtmlLinesFormatter with " +
           "an XhtmlLinesAccumulator that has a stack with more than one entry")
     }
-    tokens.top.lines
+    tokens.head.lines
   }
 
-  var currentLineNo = 1
-  def advanceLine(): Unit = currentLineNo += 1
+  val currentLineNo = 1
+  def advanceLine(): XhtmlLinesAstNodeFormatter = currentLineNo += 1
 
-  override val tokens = new mutable.Stack[XhtmlLinesAstNodeAccumulatorState]()
+  override val tokens = List[XhtmlLinesAstNodeAccumulator]()
 
-  tokens.push(new XhtmlLinesAstNodeAccumulatorState(this))
+  tokens.push(new XhtmlLinesAstNodeAccumulator(this))
 
-  def lines(): Map[Int, NodeSeq] = tokens.top.lines
+  def lines(): Map[Int, xml.NodeSeq] = tokens.head.lines
 
   override def toString() = "XhtmlLinesAccumulator.toString not implemented"
 
@@ -80,16 +83,18 @@ class XhtmlLinesAstNodeFormatter(language: Language, highlight: Set[AstNode], co
 
   // delegate to the top of the stack for all of these
 
-  override def conformTo(node: AstNode): Unit = {
+  override def conformTo(node: AstNode): XhtmlLinesAstNodeFormatter = {
     if (isConforming()) {
       while (node.lineNo > lineno) {
         // info("conforming.  formatter.lineno = " + formatter.lineno)
         newline(true, Some(node))
       }
+    } else {
+      this
     }
   }
 
-  override def newline(hard: Boolean, nodeOpt: Option[AstNode], indent: Boolean = true): Unit =
+  override def newline(hard: Boolean, nodeOpt: Option[AstNode], indent: Boolean = true): XhtmlLinesAstNodeFormatter =
     nodeOpt.map(node => {
       column = 0
       needsIndent = indent
@@ -98,19 +103,20 @@ class XhtmlLinesAstNodeFormatter(language: Language, highlight: Set[AstNode], co
       accNewline()
     })
 
-  override def accRaw(s: String): Unit = tokens.top.raw(s)
+  override def accRaw(s: String): XhtmlLinesAstNodeFormatter = tokens.top.raw(s)
 
-  override def accNewline(): Unit = tokens.top.newline()
+  override def accNewline(): XhtmlLinesAstNodeFormatter = tokens.top.newline()
 
-  override def accSpace(): Unit = tokens.top.space()
+  override def accSpace(): XhtmlLinesAstNodeFormatter = tokens.top.space()
 
-  override def accSpaces(): Unit = tokens.top.spaces()
+  override def accSpaces(): XhtmlLinesAstNodeFormatter = tokens.top.spaces()
 
-  override def accSpan(spanclass: String, s: String) = tokens.top.span(spanclass, s)
+  override def accSpan(spanclass: String, s: String): XhtmlLinesAstNodeFormatter = tokens.top.span(spanclass, s)
 
-  override def accPushStack(): Unit = tokens.push(new XhtmlLinesAstNodeAccumulatorState(this))
+  override def accPushStack(): XhtmlLinesAstNodeFormatter = tokens.push(new XhtmlLinesAstNodeAccumulatorState(this))
 
   // TODO: assert stack.size > 1
-  override def accPopAndWrapStack(label: String) = tokens.top.absorb(label, tokens.pop)
+  override def accPopAndWrapStack(label: String): XhtmlLinesAstNodeFormatter = tokens.top.absorb(label, tokens.pop)
 
 }
+*/
