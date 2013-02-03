@@ -102,8 +102,6 @@ case class LLLanguage(
 
   def follow(symbol: NonTerminal): Set[Symbol] = {
 
-    info("computing follow(" + symbol + ")")
-
     if (followMemo.contains(symbol)) {
       followMemo(symbol)
     } else {

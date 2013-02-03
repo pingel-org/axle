@@ -1,7 +1,6 @@
 
 package axle.ast
 
-import axle.Loggable
 import collection._
 import java.io.File
 import java.io.FileWriter
@@ -24,7 +23,7 @@ class DocumentFromFile(_grammar: Language, shortFilename: String, filename: Stri
   def name() = shortFilename
 }
 
-trait Document extends Loggable {
+trait Document {
 
   def ast(): Option[AstNode]
 

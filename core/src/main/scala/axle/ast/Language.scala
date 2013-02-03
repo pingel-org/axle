@@ -1,7 +1,6 @@
 
 package axle.ast
 
-import axle.Loggable
 import collection._
 
 class Language(
@@ -9,8 +8,7 @@ class Language(
   rules: List[Rule],
   precedenceGroups: List[(List[String], String)],
   parser: String => Option[AstNode],
-  trimmer: AstNode => AstNode)
-  extends Loggable {
+  trimmer: AstNode => AstNode) {
 
   val name2rule = rules.map(r => r.name -> r).toMap
 

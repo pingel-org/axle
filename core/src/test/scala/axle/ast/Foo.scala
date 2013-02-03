@@ -1,11 +1,10 @@
 package axle.ast
 
 import util.matching.Regex
-import axle.Loggable
 
 class Bar {}
 
-object Foo extends Loggable {
+object Foo {
 
   def doit(): Unit = {
     
@@ -14,14 +13,11 @@ object Foo extends Loggable {
     def transform(s: String, m: Regex.Match): String = "$" + s.substring(m.start(1), m.end(1))
 
     val x = Util.matchAndTransform(s, """fid(\w+)""".r, transform)
-    info(s)
-    info(x)
 
     /*
      val t = List[String]("a", "b", "c")
      val u = t ::: List[String]("d", "e")
-     info("u = " + u)
-     
+
      val z = (x: Int) => x + 1
      //val abc = (x: List[String]): Int => { x.length }
      val score = (ss: List[String]) => ss.length
@@ -45,15 +41,9 @@ object Foo extends Loggable {
     /*
      val list = List("A", "B")
 
-     info("list(1) = " + list(1))
-     
+
      val m = Map("X" -> 5, "Y" -> 8)
-     
-     info("m = " + m)
-     
-     for ( i <- m ) {
-       info("k = " + i._1 + " m[k] = " + i._2)
-     }
+
      */
 
     // val indentation_level: Int = 5
@@ -64,7 +54,6 @@ object Foo extends Loggable {
     // val node2lineno = Map("x" -> 5)
 
     // val s : String = String.format("foo %s", "abc")
-    // info("s = " + s)
 
   }
 

@@ -1,11 +1,9 @@
 package axle.ast.view
 
 import axle.ast._
-import xml._
 import collection._
-import axle.Loggable
 
-object Emission extends Loggable {
+object Emission {
 
   def emit[R, S](
     stmt: Statement,
