@@ -210,7 +210,7 @@ object Python {
         throw new Exception("error parsing python or converting it to json")
       }
 
-      Some(AstNode.fromJson(json))
+      Some(JsonAST.fromJson(json))
     }
 
   // trim:

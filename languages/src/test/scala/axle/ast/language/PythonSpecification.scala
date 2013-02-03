@@ -14,20 +14,20 @@ object PythonSpecification extends Specification {
 
     "turn 3 into 3" in {
 
-      //AstNode.fromJson("""{"node": {"spread": [{"expr": {"right": {"type": "Const", "value": 2}, "type": "Add", "left": {"type": "Const", "value": 1}}, "type": "Discard"}], "type": "Stmt"}, "type": "Module"}""")
-      //AstNode.fromJson("""{"node": {"spread": [{"test": {"type": "Name", "name": "True"}, "fail": {"type": "Name", "name": "True"}, "type": "Assert"}], "type": "Stmt"}, "type": "Module"}""")
+      //JsonAST.fromJson("""{"node": {"spread": [{"expr": {"right": {"type": "Const", "value": 2}, "type": "Add", "left": {"type": "Const", "value": 1}}, "type": "Discard"}], "type": "Stmt"}, "type": "Module"}""")
+      //JsonAST.fromJson("""{"node": {"spread": [{"test": {"type": "Name", "name": "True"}, "fail": {"type": "Name", "name": "True"}, "type": "Assert"}], "type": "Stmt"}, "type": "Module"}""")
 
-      AstNode.fromJson("""{"node": {"spread": [{"test": {"type": "Name", "name": "True"}, "fail": null, "type": "Assert"}], "type": "Stmt"}, "type": "Module"}""")
+      JsonAST.fromJson("""{"node": {"spread": [{"test": {"type": "Name", "name": "True"}, "fail": null, "type": "Assert"}], "type": "Stmt"}, "type": "Module"}""")
 
       // TODO add some assertions about how Python.trim should work
 
-      AstNode.fromJson(
+      JsonAST.fromJson(
         """{"type": "Const", "value": 3}"""
       ) must be equalTo (
           AstNodeRule("Const", Map("value" -> AstNodeValue(Some("3"), 1)), 1)
         )
 
-      AstNode.fromJson(
+      JsonAST.fromJson(
         """
 {
    "node": {
