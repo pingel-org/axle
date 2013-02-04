@@ -6,20 +6,24 @@ import collection._
 import math.{ min, max }
 import Emission._
 
-/*
 object ViewXhtml extends View[xml.NodeSeq] {
   // <html><head><link ref=... /></head><body>...</body><html>
 
-  override def AstNode(root: AstNode, language: Language): xml.NodeSeq = {
-    // <div class={"code"}></div>
+  def makeFormatter(language: Language, node: AstNode) =
+    new XhtmlAstNodeFormatter(
+      FormatterConfig(language, true, Set(node)),
+      FormatterState(0, 0, false, 0, Nil, Map()),
+      Nil)
+
+  // <div class={"code"}></div>
+  override def AstNode(root: AstNode, language: Language): xml.NodeSeq =
     <link rel={ "stylesheet" } type={ "text/css" } href={ "/static/lodbms.css" }>
-      { emit(language, root, new XhtmlAstNodeFormatter(language, Set.empty, true)).result }
+      { emit(language, root, makeFormatter(language, root)).result }
     </link>
-  }
 
   def nodeContext(language: Language, node: AstNode, uri: String): xml.NodeSeq = {
 
-    val highlightedHtml = emit(language, node, new XhtmlLinesAstNodeFormatter(language, Set(node), true)).result // NOTE: python version cached this
+    val highlightedHtml = emit(language, node, makeFormatter(language, node)).result // NOTE: python version cached this
 
     val lineNos = max(1, node.lineNo - CONTEXT_PAD) to min(highlightedHtml.size, node.lineNo + CONTEXT_PAD)
 
@@ -39,13 +43,12 @@ object ViewXhtml extends View[xml.NodeSeq] {
     doc.ast().map(ast => nodeContext(doc.grammar(), docNode, "/document/" + doc.name))
       .getOrElse(<span>Oh no</span>)
 
-  override def lllRules(lll: LLLanguage): xml.NodeSeq = {
-
+  def llRules(g: LLLanguage): xml.NodeSeq =
     <div>
       <span>Rules:</span>
       <ul>
         {
-          lll.llRules.zipWithIndex.map({
+          g.llRules.zipWithIndex.map({
             case (rule, id) => {
               <li>{ id }:{ rule.from }->{ rule.rhs.mkString("", " ", "") }</li>
             }
@@ -53,31 +56,29 @@ object ViewXhtml extends View[xml.NodeSeq] {
         }
       </ul>
     </div>
-  }
 
-  override def lllParseTable(lll: LLLanguage): xml.NodeSeq = {
-
+  def llParseTable(g: LLLanguage): xml.NodeSeq =
     <div>
       <span>Parse Table:</span>
       <table>
         <tr>
           <td></td>
           {
-            for (term <- lll.terminals) yield {
+            for (term <- g.terminals) yield {
               <td>{ term.label }</td>
             }
           }
         </tr>
         {
-          for (nterm <- lll.nonTerminals) yield {
+          for (nterm <- g.nonTerminals) yield {
             <tr>
               <td>{ nterm }:</td>
               {
-                for (term <- lll.terminals) yield {
+                for (term <- g.terminals) yield {
                   <td>
                     {
-                      if (lll.parseTable.contains((nterm, term))) {
-                        lll.parseTable((nterm, term)).id
+                      if (g.parseTable.contains((nterm, term))) {
+                        g.parseTable((nterm, term)).id
                       } else {
                         "-"
                       }
@@ -90,16 +91,12 @@ object ViewXhtml extends View[xml.NodeSeq] {
         }
       </table>
     </div>
-  }
 
-  override def llLanguage(lll: LLLanguage) = {
-    <h2>{ lll.name }</h2>
+  def llLanguage(g: LLLanguage) =
+    <h2>{ g.name }</h2>
     <div>
-      { lllRules(lll) }
-      { lllParseTable(lll) }
+      { llRules(g) }
+      { llParseTable(g) }
     </div>
-  }
 
 }
-
-*/

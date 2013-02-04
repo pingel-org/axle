@@ -18,7 +18,7 @@ object ViewString extends View[String] {
 
   override def docNodeInContext(doc: Document, docNode: AstNode): String = {
 
-    doc.ast().map(ast => {
+    doc.ast.map(ast => {
       val fN = emit(doc.grammar, ast, makeFormatter(doc.grammar, docNode))
       val highlightedString = fN.result
       val highlightedLines = highlightedString.split("\n") // NOTE: python version used to cache highlightedLines

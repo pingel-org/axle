@@ -3,12 +3,13 @@ package axle.ast.view
 import collection._
 import axle.ast._
 
-/*
 case class XhtmlLinesAstNodeFormatterState(
   tokens: List[xml.Node],
   currentLine: Option[List[xml.Node]], // = Some(List[xml.Node]())
   _lines: Map[Int, xml.NodeSeq])
 
+/*  
+  
 class XhtmlLinesAstNodeFormatter(
   config: FormatterConfig,
   state: FormatterState,
@@ -103,20 +104,21 @@ class XhtmlLinesAstNodeFormatter(
       accNewline()
     })
 
-  override def accRaw(s: String): XhtmlLinesAstNodeFormatter = tokens.top.raw(s)
+  def accRaw(s: String): XhtmlLinesAstNodeFormatter = tokens.top.raw(s)
 
-  override def accNewline(): XhtmlLinesAstNodeFormatter = tokens.top.newline()
+  def accNewline(): XhtmlLinesAstNodeFormatter = tokens.top.newline()
 
-  override def accSpace(): XhtmlLinesAstNodeFormatter = tokens.top.space()
+  def accSpace(): XhtmlLinesAstNodeFormatter = tokens.top.space()
 
-  override def accSpaces(): XhtmlLinesAstNodeFormatter = tokens.top.spaces()
+  def accSpaces(): XhtmlLinesAstNodeFormatter = tokens.top.spaces()
 
-  override def accSpan(spanclass: String, s: String): XhtmlLinesAstNodeFormatter = tokens.top.span(spanclass, s)
+  def accSpan(spanclass: String, s: String): XhtmlLinesAstNodeFormatter = tokens.top.span(spanclass, s)
 
-  override def accPushStack(): XhtmlLinesAstNodeFormatter = tokens.push(new XhtmlLinesAstNodeAccumulatorState(this))
+  def accPushStack(): XhtmlLinesAstNodeFormatter = tokens.push(new XhtmlLinesAstNodeAccumulatorState(this))
 
   // TODO: assert stack.size > 1
-  override def accPopAndWrapStack(label: String): XhtmlLinesAstNodeFormatter = tokens.top.absorb(label, tokens.pop)
-
+  def accPopAndWrapStack(label: String): XhtmlLinesAstNodeFormatter = tokens.top.absorb(label, tokens.pop)
+  
 }
+
 */

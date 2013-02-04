@@ -3,30 +3,36 @@ package axle.ast.view
 import axle.ast._
 import collection._
 
-/*
 class XhtmlAstNodeFormatter(
   config: FormatterConfig,
   state: FormatterState,
   subState: List[xml.Node])
   extends AstNodeFormatter[List[xml.Node], List[xml.Node]](config, state, subState) {
 
-  type A = XhtmlAstNodeFormatter
+  def apply(s: FormatterState, ss: List[xml.Node]) = new XhtmlAstNodeFormatter(config, s, ss)
 
-  override def result() = subState.toList
+  def result() = subState.toList
 
   override def toString(): String = subState.toList.mkString("")
 
-  override def accRaw(s: String): XhtmlAstNodeFormatter = subState.append(Text(s))
+  def accRaw(s: String, n: Int): XhtmlAstNodeFormatter =
+    new XhtmlAstNodeFormatter(config, state, subState ++ List(xml.Text(s)))
 
-  override def accNewline(): XhtmlAstNodeFormatter = subState.appendAll(<br/>)
+  def accNewline(): XhtmlAstNodeFormatter =
+    new XhtmlAstNodeFormatter(config, state, subState ++ List(<br/>))
 
-  override def accSpace(): XhtmlAstNodeFormatter = subState.append(Text(" "))
+  def accSpace(): XhtmlAstNodeFormatter =
+    new XhtmlAstNodeFormatter(config, state, subState ++ List(xml.Text(" ")))
 
-  override def accSpaces(): XhtmlAstNodeFormatter = subState.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
+  def accSpaces(): XhtmlAstNodeFormatter =
+    new XhtmlAstNodeFormatter(config, state, subState ++ List(<span>&nbsp;&nbsp;&nbsp;</span>))
 
   // xml.Utility.escape(word)
-  override def accSpan(spanclass: String, s: String): XhtmlAstNodeFormatter = subState += <span class={ spanclass }>{ s }</span>
+  def accSpan(spanclass: String, s: String, n: Int): XhtmlAstNodeFormatter =
+    new XhtmlAstNodeFormatter(config, state, subState ++ List(<span class={ spanclass }>{ s }</span>))
+
+  def accPushStack() = this
+
+  def accPopAndWrapStack(label: String) = this
 
 }
-
-*/
