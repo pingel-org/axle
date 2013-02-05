@@ -22,7 +22,9 @@ trait State[G <: Game[G]] {
     setEventQueues(qs + (player -> Nil))
   }
 
-  def broadcast[E <: Event[G]](move: E): G#STATE =
-    setEventQueues(eventQueues.map({ case (k, v) => (k, v ++ List(move)) }))
+  def broadcast[E <: Event[G]](players: Set[G#PLAYER], move: E): G#STATE =
+    setEventQueues(players.map(p => {
+      (p -> (eventQueues.get(p).getOrElse(Nil) ++ List(move)))
+    }).toMap)
 
 }

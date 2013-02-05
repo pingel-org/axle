@@ -63,14 +63,12 @@ case class TicTacToeState(
     }
   }
 
-  def apply(move: TicTacToeMove): Option[TicTacToeState] = {
-    // val rc2v = (positionToRow(move.position), positionToColumn(move.position)) -> Some(player.id)
+  def apply(move: TicTacToeMove): Option[TicTacToeState] =
     ttt.state(ttt.playerAfter(move.tttPlayer), board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player.id)))
-  }
 
   def eventQueues() = _eventQueues
 
   def setEventQueues(qs: Map[TicTacToePlayer, List[Event[TicTacToe]]]): TicTacToeState =
-    TicTacToeState(player, board, _eventQueues)
+    TicTacToeState(player, board, qs)
 
 }

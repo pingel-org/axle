@@ -78,9 +78,9 @@ abstract class Game[G <: Game[G]] {
       empty
     } else {
       val s1 = s0.displayEvents()
-      val (move, _) = s1.player.move(s1)
+      val (move, _) = s1.player.move(s1) // TODO: figure out why in some cases the second argument (a State) wasn't modified (eg minimax)
       val s2 = s1(move).get // TODO .get
-      val s3 = s2.broadcast(move)
+      val s3 = s2.broadcast(players, move)
       cons((move, s3), moveStateStream(s3))
     }
 
@@ -101,7 +101,8 @@ abstract class Game[G <: Game[G]] {
     }
     moveStateStream(start).lastOption.map({
       case (lastMove, s0) => {
-        val s1 = s0.outcome.map(o => s0.broadcast(o)).getOrElse(s0)
+        val s1 = s0.outcome.map(o => s0.broadcast(players, o)).getOrElse(s0)
+        println("moveStateStream.last defines move. players = " + players)
         val s2 = players.foldLeft(s1)({
           case (s, player) => s.displayEvents()
         })
