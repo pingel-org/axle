@@ -78,7 +78,8 @@ abstract class Game[G <: Game[G]] {
       empty
     } else {
       val s1 = s0.displayEvents()
-      val (move, s2) = s1.player.move(s1)
+      val (move, _) = s1.player.move(s1)
+      val s2 = s1(move).get // TODO .get
       val s3 = s2.broadcast(move)
       cons((move, s3), moveStateStream(s3))
     }
@@ -100,7 +101,7 @@ abstract class Game[G <: Game[G]] {
     }
     moveStateStream(start).lastOption.map({
       case (lastMove, s0) => {
-        val s1 = s0.outcome.map( o => s0.broadcast(o)).getOrElse(s0)
+        val s1 = s0.outcome.map(o => s0.broadcast(o)).getOrElse(s0)
         val s2 = players.foldLeft(s1)({
           case (s, player) => s.displayEvents()
         })
