@@ -7,8 +7,6 @@ import Stream.cons
 class PokerPlayerInteractive(id: String, description: String = "human")(implicit game: Poker)
   extends PokerPlayer(id, description) {
 
-  val eventQueue = mutable.ListBuffer[Event[Poker]]()
-
   override def introduceGame(): Unit = {
     val intro = """
 Texas Hold Em Poker
@@ -24,19 +22,12 @@ Example moves:
     println(intro)
   }
 
-  override def notify(event: Event[Poker]): Unit = {
-    eventQueue += event
-  }
-
-  override def displayEvents(): Unit = {
+  override def displayEvents(events: List[Event[Poker]]): Unit = {
     println()
-    val info = eventQueue.map(_.displayTo(this)).mkString("  ")
-    println(info)
-    eventQueue.clear()
+    println(events.map(_.displayTo(this)).mkString("  "))
   }
 
   override def endGame(state: PokerState): Unit = {
-    displayEvents()
     println(state.displayTo(state.player))
     state.outcome.map(oc => println(oc))
   }
@@ -51,7 +42,7 @@ Example moves:
   val moveParser = new MoveParser()
 
   def move(state: PokerState): (PokerMove, PokerState) = {
-    displayEvents()
+    // displayEvents()
     println(state.displayTo(this))
     val move = userInputStream()
       .flatMap(moveParser.parse(_)(state.player, game))

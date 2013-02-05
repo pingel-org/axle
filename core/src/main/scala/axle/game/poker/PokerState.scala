@@ -15,7 +15,8 @@ case class PokerState(
   stillIn: Set[PokerPlayer],
   inFors: Map[PokerPlayer, Int],
   piles: Map[PokerPlayer, Int],
-  _outcome: Option[PokerOutcome] = None)(implicit game: Poker)
+  _outcome: Option[PokerOutcome] = None,
+  _eventQueues: Map[PokerPlayer, List[Event[Poker]]] = Map())(implicit game: Poker)
   extends State[Poker]() {
 
   implicit val pokerHandOrdering = new PokerHandOrdering()
@@ -190,4 +191,22 @@ case class PokerState(
     }
 
   }
+
+  def eventQueues() = _eventQueues
+
+  def setEventQueues(qs: Map[PokerPlayer, List[Event[Poker]]]) = PokerState(
+    playerFn,
+    deck,
+    shared,
+    numShown,
+    hands,
+    pot,
+    currentBet,
+    stillIn,
+    inFors,
+    piles,
+    _outcome,
+    qs
+  )
+
 }

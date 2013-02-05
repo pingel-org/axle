@@ -12,6 +12,7 @@ abstract class Game[G <: Game[G]] {
 
   type PLAYER <: Player[G]
   type STATE <: State[G]
+  type EVENT <: Event[G]
   type MOVE <: Move[G]
   type OUTCOME <: Outcome[G]
 
@@ -72,13 +73,14 @@ abstract class Game[G <: Game[G]] {
       (result.move, result.cutoff)
     }
 
-  def moveStateStream(state: G#STATE): Stream[(G#MOVE, G#STATE)] =
-    if (state.outcome.isDefined) {
+  def moveStateStream(s0: G#STATE): Stream[(G#MOVE, G#STATE)] =
+    if (s0.outcome.isDefined) {
       empty
     } else {
-      val (move, nextState) = state.player.move(state)
-      players.map(_.notify(move))
-      cons((move, nextState), moveStateStream(nextState))
+      val s1 = s0.displayEvents()
+      val (move, s2) = s1.player.move(s1)
+      val s3 = s2.broadcast(move)
+      cons((move, s3), moveStateStream(s3))
     }
 
   def scriptedMoveStateStream(state: G#STATE, moveIt: Iterator[G#MOVE]): Stream[(G#MOVE, G#STATE)] =
@@ -97,14 +99,15 @@ abstract class Game[G <: Game[G]] {
       }
     }
     moveStateStream(start).lastOption.map({
-      case (lastMove, lastState) => {
+      case (lastMove, s0) => {
+        val s1 = s0.outcome.map( o => s0.broadcast(o)).getOrElse(s0)
+        val s2 = players.foldLeft(s1)({
+          case (s, player) => s.displayEvents()
+        })
         for (player <- players()) {
-          lastState.outcome.map(outcome =>
-            player.notify(outcome)
-          )
-          player.endGame(lastState)
+          player.endGame(s2)
         }
-        lastState
+        s2
       }
     })
   }

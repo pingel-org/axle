@@ -10,9 +10,7 @@ abstract class Player[G <: Game[G]](_id: String, description: String) {
 
   def introduceGame(): Unit = {}
 
-  def displayEvents(): Unit = {}
-
-  def notify(event: Event[G]): Unit = {}
+  def displayEvents(events: List[Event[G]]): Unit = {}
 
   def endGame(state: G#STATE): Unit = {}
 }

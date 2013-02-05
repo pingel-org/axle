@@ -3,7 +3,10 @@ package axle.game.ttt
 import axle.game._
 import axle.matrix.ArrayMatrixFactory._
 
-case class TicTacToeState(player: TicTacToePlayer, board: Matrix[Option[String]])(implicit ttt: TicTacToe)
+case class TicTacToeState(
+  player: TicTacToePlayer,
+  board: Matrix[Option[String]],
+  _eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = Map())(implicit ttt: TicTacToe)
   extends State[TicTacToe]() {
 
   val boardSize = board.columns
@@ -45,7 +48,7 @@ case class TicTacToeState(player: TicTacToePlayer, board: Matrix[Option[String]]
 
   def hasWon(player: TicTacToePlayer) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
-  def openPositions() = 1.to(numPositions).filter(this(_).isEmpty)
+  def openPositions() = (1 to numPositions).filter(this(_).isEmpty)
 
   def moves(): Seq[TicTacToeMove] = openPositions().map(TicTacToeMove(player, _))
 
@@ -61,8 +64,13 @@ case class TicTacToeState(player: TicTacToePlayer, board: Matrix[Option[String]]
   }
 
   def apply(move: TicTacToeMove): Option[TicTacToeState] = {
-    val rc2v = (positionToRow(move.position), positionToColumn(move.position)) -> Some(player.id)
+    // val rc2v = (positionToRow(move.position), positionToColumn(move.position)) -> Some(player.id)
     ttt.state(ttt.playerAfter(move.tttPlayer), board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player.id)))
   }
+
+  def eventQueues() = _eventQueues
+
+  def setEventQueues(qs: Map[TicTacToePlayer, List[Event[TicTacToe]]]): TicTacToeState =
+    TicTacToeState(player, board, _eventQueues)
 
 }

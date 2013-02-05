@@ -2,11 +2,10 @@ package axle.game.ttt
 
 import axle.game._
 import collection._
+import Stream.cons
 
 class InteractiveTicTacToePlayer(itttPlayerId: String, itttDescription: String = "human")(implicit ttt: TicTacToe)
   extends TicTacToePlayer(itttPlayerId, itttDescription) {
-
-  val eventQueue = mutable.ListBuffer[Event[TicTacToe]]()
 
   override def introduceGame(): Unit = {
     val intro = """
@@ -15,21 +14,15 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
     println(intro)
   }
 
-  override def notify(event: Event[TicTacToe]): Unit = {
-    eventQueue += event
-  }
-
-  override def displayEvents(): Unit = {
-    val info = eventQueue.map(_.displayTo(this)).mkString("  ")
-    println(info)
-    eventQueue.clear()
+  override def displayEvents(events: List[Event[TicTacToe]]): Unit = {
+    println(events.map(_.displayTo(this)).mkString("  "))
   }
 
   def userInputStream(): Stream[String] = {
     print("Enter move: ")
     val num = readLine()
     println
-    Stream.cons(num, userInputStream)
+    cons(num, userInputStream)
   }
 
   def isValidMove(num: String, state: TicTacToeState): Boolean = {
@@ -55,7 +48,6 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
   }
 
   def move(state: TicTacToeState): (TicTacToeMove, TicTacToeState) = {
-    displayEvents()
     println(state.displayTo(state.player))
     val move = TicTacToeMove(this, userInputStream().find(input => isValidMove(input, state)).map(_.toInt).get)
     (move, state(move).get) // TODO .get
