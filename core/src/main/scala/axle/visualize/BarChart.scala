@@ -2,7 +2,7 @@ package axle.visualize
 
 import collection._
 
-case class BarChart[X, S, Y](
+case class BarChart[X, S, Y : Plottable](
   xs: Seq[X],
   ss: Seq[S],
   y: (X, S) => Y,
@@ -16,7 +16,7 @@ case class BarChart[X, S, Y](
   title: Option[String] = None,
   xAxis: Y,
   xAxisLabel: Option[String] = None,
-  yAxisLabel: Option[String] = None)(implicit _yPlottable: Plottable[Y]) {
+  yAxisLabel: Option[String] = None) {
 
   val minY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
 
@@ -24,6 +24,6 @@ case class BarChart[X, S, Y](
 
   val yTics = yPlottable.tics(minY, maxY)
 
-  def yPlottable(): Plottable[Y] = _yPlottable
+  def yPlottable(): Plottable[Y] = implicitly[Plottable[Y]]
 
 }
