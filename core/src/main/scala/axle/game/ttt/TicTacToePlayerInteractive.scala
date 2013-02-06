@@ -15,7 +15,17 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
   }
 
   override def displayEvents(events: List[Event[TicTacToe]]): Unit = {
+    println()
     println(events.map(_.displayTo(this)).mkString("  "))
+    println()
+  }
+
+  override def endGame(state: TicTacToeState): Unit = {
+    println()
+    println(state.displayTo(this))
+    println()
+    println(state.outcome.map(_.displayTo(this)))
+    println()
   }
 
   def userInputStream(): Stream[String] = {

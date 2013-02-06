@@ -28,6 +28,7 @@ Example moves:
   }
 
   override def endGame(state: PokerState): Unit = {
+    println()
     println(state.displayTo(state.player))
     state.outcome.map(oc => println(oc))
   }

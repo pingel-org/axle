@@ -16,15 +16,17 @@ trait State[G <: Game[G]] {
 
   def setEventQueues(qs: Map[G#PLAYER, List[Event[G]]]): G#STATE
 
-  def displayEvents(): G#STATE = {
+  def displayEvents(players: Set[G#PLAYER]): G#STATE = {
     val qs = eventQueues
-    player.displayEvents(qs.get(player).getOrElse(Nil))
-    setEventQueues(qs + (player -> Nil))
+    players.map(p => p.displayEvents(qs.get(p).getOrElse(Nil)))
+    setEventQueues(qs ++ players.map(p => (p -> Nil)))
   }
 
-  def broadcast[E <: Event[G]](players: Set[G#PLAYER], move: E): G#STATE =
+  def broadcast[E <: Event[G]](players: Set[G#PLAYER], event: E): G#STATE = {
+    // println("BROADCAST to " + players + " MOVE " + event)
+    val qs = eventQueues
     setEventQueues(players.map(p => {
-      (p -> (eventQueues.get(p).getOrElse(Nil) ++ List(move)))
+      (p -> (qs.get(p).getOrElse(Nil) ++ List(event)))
     }).toMap)
-
+  }
 }

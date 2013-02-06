@@ -3,7 +3,7 @@ package axle.game.ttt
 
 import axle.game._
 import axle.matrix.ArrayMatrixFactory._
-import util.Random.{nextInt}
+import util.Random.{ nextInt }
 import collection._
 
 /**
@@ -23,8 +23,8 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
   val x = player("X", "Player X", xClass)
   val o = player("O", "Player O", oClass)
 
-  def state(player: TicTacToePlayer, board: Matrix[Option[String]]) =
-    Some(new TicTacToeState(player, board))
+  def state(player: TicTacToePlayer, board: Matrix[Option[String]], eventQueue: immutable.Map[TicTacToePlayer, List[Event[TicTacToe]]]) =
+    Some(new TicTacToeState(player, board, eventQueue))
 
   def move(player: TicTacToePlayer, position: Int) = TicTacToeMove(player, position)
 
@@ -37,7 +37,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
   def startState() = new TicTacToeState(x, startBoard())
 
   def startFrom(s: TicTacToeState) = Some(startState())
-  
+
   def numPositions() = boardSize * boardSize
 
   def introMessage() = "Intro message to Tic Tac Toe"

@@ -64,7 +64,12 @@ case class TicTacToeState(
   }
 
   def apply(move: TicTacToeMove): Option[TicTacToeState] =
-    ttt.state(ttt.playerAfter(move.tttPlayer), board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player.id)))
+    ttt.state(
+      ttt.playerAfter(move.tttPlayer),
+      board.addAssignment(positionToRow(move.position),
+        positionToColumn(move.position), Some(player.id)),
+      _eventQueues
+    )
 
   def eventQueues() = _eventQueues
 
