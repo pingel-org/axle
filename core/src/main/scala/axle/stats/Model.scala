@@ -106,7 +106,7 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
 
 object Model {
 
-  var newVarIndex = 0
+  val newVarIndex = 0
 
   def apply[A](
     vps: Seq[A],
