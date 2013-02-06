@@ -1,8 +1,6 @@
 package axle.visualize
 
 import math.{ pow, abs, log10, floor, ceil }
-import org.joda.time.Months
-import org.joda.time.Months
 
 trait Plottable[T] extends Ordering[T] with Portionable[T] {
 
