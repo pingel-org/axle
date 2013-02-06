@@ -1,5 +1,6 @@
 package axle.visualize
 
+import axle.algebra.Portionable
 import math.{ pow, abs, log10, floor, ceil }
 
 trait Plottable[T] extends Ordering[T] with Portionable[T] {

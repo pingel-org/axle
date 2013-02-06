@@ -8,7 +8,7 @@ object Monoid {
 
     def mappend(a: M, b: M) = s.mappend(a, b)
 
-    def mzero = z.mzero
+    def zero = z.zero
   }
 
   def checkLeftZero[A: Monoid](x: A): Boolean =

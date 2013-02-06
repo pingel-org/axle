@@ -2,12 +2,7 @@ package axle.matrix
 
 import math.sqrt
 import axle.square
-
-// not necessarily a bijection, but related
-trait FunctionPair[A, B] {
-  val forward: A => B
-  val backward: B => A
-}
+import axle.algebra.FunctionPair
 
 import org.jblas.DoubleMatrix
 
@@ -52,10 +47,10 @@ trait JblasMatrixFactory extends MatrixFactory {
 
   type E[T] = JblasElementAdapter[T]
 
-  class JblasMatrixImpl[T](_storage: DoubleMatrix)(_ea: JblasElementAdapter[T])
+  class JblasMatrixImpl[T: JblasElementAdapter](_storage: DoubleMatrix)
     extends JblasMatrix[T] {
     def storage = _storage
-    val elementAdapter = _ea
+    val elementAdapter = implicitly[JblasElementAdapter[T]]
   }
 
   trait JblasMatrix[T]
@@ -210,9 +205,11 @@ trait JblasMatrixFactory extends MatrixFactory {
 
     // higher order methods
 
-    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = {
+    // implicit elementAdapter: E[B]
+    def map[B: E](f: T => B): M[B] = {
       val jblas = DoubleMatrix.zeros(rows, columns)
-      import elementAdapter.fp._
+      val ea = implicitly[E[B]]
+      import ea.fp._
       for {
         r <- 0 until rows
         c <- 0 until columns
@@ -222,9 +219,10 @@ trait JblasMatrixFactory extends MatrixFactory {
       matrix[B](jblas)
     }
 
-    def flatMapColumns[A](f: M[T] => M[A])(implicit elementAdapter: E[A]): M[A] = {
+    def flatMapColumns[A: E](f: M[T] => M[A]): M[A] = {
       val jblas = DoubleMatrix.zeros(rows, columns)
-      import elementAdapter.fp._
+      val ea = implicitly[E[A]]
+      import ea.fp._
       for {
         c <- 0 until columns
       } yield {
@@ -246,8 +244,8 @@ trait JblasMatrixFactory extends MatrixFactory {
 
   // methods for creating matrices
 
-  def matrix[T](s: DoubleMatrix)(implicit elementAdapter: E[T]): JblasMatrix[T] =
-    new JblasMatrixImpl[T](s)(elementAdapter)
+  def matrix[T: E](s: DoubleMatrix): JblasMatrix[T] =
+    new JblasMatrixImpl[T](s) // (elementAdapter)
 
   def matrix[T](r: Int, c: Int, values: Array[T])(implicit elementAdapter: E[T]): JblasMatrix[T] = {
     val jblas = new org.jblas.DoubleMatrix(values.map(elementAdapter.fp.backward(_)))
@@ -255,9 +253,10 @@ trait JblasMatrixFactory extends MatrixFactory {
     matrix[T](jblas)(elementAdapter)
   }
 
-  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit elementAdapter: E[T]): M[T] = {
+  def matrix[T: E](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): M[T] = {
     val jblas = DoubleMatrix.zeros(m, n)
-    import elementAdapter.fp._
+    val ea = implicitly[E[T]]
+    import ea.fp._
     jblas.put(0, 0, backward(topleft))
     (0 until m).map(r => jblas.put(r, 0, backward(left(r))))
     (0 until n).map(c => jblas.put(0, c, backward(top(c))))
@@ -273,9 +272,10 @@ trait JblasMatrixFactory extends MatrixFactory {
     matrix[T](jblas)
   }
 
-  def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit elementAdapter: E[T]): M[T] = {
+  def matrix[T: E](m: Int, n: Int, f: (Int, Int) => T): M[T] = {
     val jblas = DoubleMatrix.zeros(m, n)
-    import elementAdapter.fp._
+    val ea = implicitly[E[T]]
+    import ea.fp._
     for {
       r <- 0 until m
       c <- 0 until n
@@ -285,17 +285,17 @@ trait JblasMatrixFactory extends MatrixFactory {
     matrix[T](jblas)
   }
 
-  def diag[T](row: JblasMatrix[T])(implicit elementAdapter: E[T]): JblasMatrix[T] = {
+  def diag[T: E](row: JblasMatrix[T]): JblasMatrix[T] = {
     assert(row.isRowVector)
     matrix[T](DoubleMatrix.diag(row.jblas))
   }
 
-  def zeros[T](m: Int, n: Int)(implicit elementAdapter: JblasElementAdapter[T]) = matrix[T](DoubleMatrix.zeros(m, n))(elementAdapter)
-  def ones[T](m: Int, n: Int)(implicit elementAdapter: JblasElementAdapter[T]) = matrix[T](DoubleMatrix.ones(m, n))(elementAdapter)
-  def eye[T](n: Int)(implicit elementAdapter: JblasElementAdapter[T]) = matrix[T](DoubleMatrix.eye(n))(elementAdapter)
-  def I[T](n: Int)(implicit elementAdapter: JblasElementAdapter[T]) = eye[T](n)(elementAdapter)
-  def rand[T](m: Int, n: Int)(implicit elementAdapter: JblasElementAdapter[T]) = matrix[T](DoubleMatrix.rand(m, n))(elementAdapter) // evenly distributed from 0.0 to 1.0
-  def randn[T](m: Int, n: Int)(implicit elementAdapter: JblasElementAdapter[T]) = matrix[T](DoubleMatrix.randn(m, n))(elementAdapter) // normal distribution 
+  def zeros[T: JblasElementAdapter](m: Int, n: Int) = matrix[T](DoubleMatrix.zeros(m, n))
+  def ones[T: JblasElementAdapter](m: Int, n: Int) = matrix[T](DoubleMatrix.ones(m, n))
+  def eye[T: JblasElementAdapter](n: Int) = matrix[T](DoubleMatrix.eye(n))
+  def I[T: JblasElementAdapter](n: Int) = eye[T](n)
+  def rand[T: JblasElementAdapter](m: Int, n: Int) = matrix[T](DoubleMatrix.rand(m, n)) // evenly distributed from 0.0 to 1.0
+  def randn[T: JblasElementAdapter](m: Int, n: Int) = matrix[T](DoubleMatrix.randn(m, n)) // normal distribution 
 
   def falses(m: Int, n: Int) = matrix[Boolean](DoubleMatrix.zeros(m, n))
   def trues(m: Int, n: Int) = matrix[Boolean](DoubleMatrix.ones(m, n))

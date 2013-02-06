@@ -130,10 +130,10 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
 
     // higher order fuctions
 
-    def map[B](f: T => B)(implicit elementAdapter: E[B]): M[B] = ???
+    def map[B: E](f: T => B): M[B] = ???
     // matrix(rows, columns, storage.map(f(_)))
 
-    def flatMapColumns[A](f: M[T] => M[A])(implicit elementAdapter: E[A]): M[A] = ???
+    def flatMapColumns[A: E](f: M[T] => M[A]): M[A] = ???
 
   }
 
@@ -153,12 +153,12 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     matrix(arr, r, c)
   }
 
-  def zeros[T](m: Int, n: Int)(implicit elementAdapter: E[T]): M[T] = ???
+  def zeros[T: E](m: Int, n: Int): M[T] = ???
 
-  def matrix[T](m: Int, n: Int, values: Array[T])(implicit elementAdapter: E[T]): M[T] = ???
+  def matrix[T: E](m: Int, n: Int, values: Array[T]): M[T] = ???
 
-  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit elementAdapter: E[T]): M[T] = ???
+  def matrix[T: E](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): M[T] = ???
 
-  def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit elementAdapter: E[T]): M[T] = ???
+  def matrix[T: E](m: Int, n: Int, f: (Int, Int) => T): M[T] = ???
 
 }

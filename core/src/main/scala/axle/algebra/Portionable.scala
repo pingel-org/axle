@@ -1,8 +1,8 @@
-package axle.visualize
+package axle.algebra
+
+// TODO find the name for this from mathematics
 
 trait Portionable[T] {
-
-  // TODO find the name for this from mathematics
 
   def portion(left: T, v: T, right: T): Double
 

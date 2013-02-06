@@ -5,6 +5,7 @@ import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import java.awt.FontMetrics
 import math.{ min, abs }
+import axle.algebra.Portionable
 import axle.quanta._
 import Angle._
 
@@ -12,10 +13,12 @@ import Angle._
 
 case class Point2D[X, Y](x: X, y: Y)
 
-class ScaledArea2D[X, Y](width: Int, height: Int, pad: Int,
-  minX: X, maxX: X, minY: Y, maxY: Y)(
-    implicit xPortionable: Portionable[X], yPortionable: Portionable[Y]) {
+class ScaledArea2D[X : Portionable, Y : Portionable](width: Int, height: Int, pad: Int,
+  minX: X, maxX: X, minY: Y, maxY: Y) {
 
+  val xPortionable = implicitly[Portionable[X]]
+  val yPortionable = implicitly[Portionable[Y]]
+  
   val drawableWidth = width - (2 * pad)
 
   val drawableHeight = height - (2 * pad)
