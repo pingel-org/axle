@@ -1,9 +1,8 @@
 package axle.visualize
 
-import scala.collection.Seq
-import scala.collection.SortedMap
+import collection._
 
-case class Plot[X, Y](
+case class Plot[X : Plottable, Y : Plottable](
   lfs: Seq[(String, SortedMap[X, Y])],
   connect: Boolean = true,
   drawKey: Boolean = true,
@@ -15,8 +14,7 @@ case class Plot[X, Y](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxis: X,
-  yAxisLabel: Option[String] = None)(
-    implicit _xPlottable: Plottable[X], _yPlottable: Plottable[Y]) {
+  yAxisLabel: Option[String] = None) {
 
   val minX = List(yAxis, lfs.map(_._2.firstKey).min(xPlottable)).min(xPlottable)
   val maxX = List(yAxis, lfs.map(_._2.lastKey).max(xPlottable)).max(xPlottable)
@@ -26,8 +24,8 @@ case class Plot[X, Y](
   val xTics = xPlottable.tics(minX, maxX)
   val yTics = yPlottable.tics(minY, maxY)
 
-  def xPlottable(): Plottable[X] = _xPlottable
+  def xPlottable(): Plottable[X] = implicitly[Plottable[X]]
 
-  def yPlottable(): Plottable[Y] = _yPlottable
+  def yPlottable(): Plottable[Y] = implicitly[Plottable[Y]]
 
 }
