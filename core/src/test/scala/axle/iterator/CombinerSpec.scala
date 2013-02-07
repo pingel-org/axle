@@ -4,11 +4,10 @@ import org.specs2.mutable._
 
 class CombinerSpec extends Specification {
 
-  "Combiner" should {
-    "work" in {
-      // TODO: Combiner is not yet implemented
-      1 must be equalTo (1)
-    }
+  "Combine (a, b) 2" in {
+    val cAB2 = Permutations(Vector("a", "b"), 2).toList
+    cAB2 must have size (1)
+    cAB2 must contain(List("a", "b"))
   }
 
 }
