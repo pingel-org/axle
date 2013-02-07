@@ -1,52 +1,29 @@
 package axle
 
 import collection._
+import Stream.{ cons, empty }
 
-class CrossProduct[E](iterables: Seq[_ <: Iterable[E]]) extends Iterable[List[E]] {
+class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]]) extends Iterable[List[E]] {
 
-  def collections() = iterables
+  def iterator() = result.toIterator
 
-  def iterator() = new CrossProductIterator[E](this)
+  lazy val result: Stream[List[E]] = tail(None, 0)
 
-  class CrossProductIterator[InE](cp: CrossProduct[InE]) extends Iterator[List[InE]] {
+  def current(indices: IndexedSeq[Int]) = collections.zip(indices).map({ case (c, i) => c(i) }).toList
 
-    val iterators = mutable.ArrayBuffer[Iterator[InE]]()
-    var current: Option[mutable.ArrayBuffer[InE]] = Some(mutable.ArrayBuffer[InE]())
-
-    for (i <- 0 until cp.collections().size) {
-      iterators.append(cp.collections()(i).iterator)
-      current.get.append(iterators(i).next()) // TODO .get
-    }
-
-    def remove() = throw new UnsupportedOperationException()
-
-    def hasNext() = current.isDefined
-
-    def incrementFirstAvailable(i: Int): Boolean = {
-
-      if (i == iterators.size) {
-        true
-      } else if (iterators(i).hasNext) {
-        current.get.update(i, iterators(i).next())
-        false
+  def tail(indices0opt: Option[IndexedSeq[Int]], i0: Int): Stream[List[E]] =
+    indices0opt.map( indices0 =>
+      if (i0 == collections.size) {
+        empty
+      } else if (indices0(i0) + 1 < collections(i0).size ) {
+        val indices1 = indices0.updated(i0, indices0(i0) + 1)
+        cons(current(indices1), tail(Some(indices1), 0))
       } else {
-        iterators(i) = cp.collections()(i).iterator
-        current.get.update(i, iterators(i).next())
-        incrementFirstAvailable(i + 1)
+        tail(Some(indices0.updated(i0, 0)), i0 + 1)
       }
-    }
-
-    def next() = {
-      if (current.isEmpty) {
-        throw new NoSuchElementException()
-      }
-
-      val result = current.get.toList // TODO .get
-      if (incrementFirstAvailable(0)) {
-        current = None.asInstanceOf[Option[mutable.ArrayBuffer[InE]]]
-      }
-      result
-    }
-  }
+    ).getOrElse({
+      val indices1 = collections.map(c => 0)
+      cons(current(indices1), tail(Some(indices1), 0))
+    })
 
 }
