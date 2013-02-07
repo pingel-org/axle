@@ -42,8 +42,6 @@ case class LLLanguage(
 
   override def toString(): String = view.ViewString.llLanguage(this)
 
-  val followMemo = mutable.Map[Symbol, Set[Symbol]]()
-
   def symbol(label: String) =
     (if (terminalsByName.contains(label)) terminalsByName else nonTerminalsByName).get(label)
 
@@ -100,42 +98,46 @@ case class LLLanguage(
    *
    */
 
-  def follow(symbol: NonTerminal): Set[Symbol] = {
+  def follow(symbol: NonTerminal, followMemo: Map[Symbol, Set[Symbol]]): (Set[Symbol], Map[Symbol, Set[Symbol]]) = {
 
     if (followMemo.contains(symbol)) {
-      followMemo(symbol)
+      (followMemo(symbol), followMemo)
     } else {
       // TODO allow Terminal(_) in cases below to be a list of Terminals
-      val result = (
-        if (symbol === startSymbol) Set(⊥) else Set()
-      ) ++ (llRules.flatMap({
-          rule =>
-            (rule.rhs match {
+      val s0: Set[Symbol] = if (symbol === startSymbol) Set[Symbol](⊥) else Set()
+      val result = llRules.foldLeft((s0, followMemo))({
+        case (v: (Set[Symbol], Map[Symbol, Set[Symbol]]), rule: LLRule) =>
+          {
+            val (accSet, followMemo): (Set[Symbol], Map[Symbol, Set[Symbol]]) = v
+            val x: Set[Symbol] = (rule.rhs match {
               // TODO?: enforce that rest is composed of only terminals (maybe not the case)
               case Terminal(_) :: symbol :: rest => first(rest).filter(x => !(x equals ε))
               case _ => Set()
-            }) ++
-              (rule.rhs match {
-                case Terminal(_) :: symbol :: Nil => follow(rule.from)
-                case Terminal(_) :: symbol :: rest if (first(rest).contains(ε)) => follow(rule.from)
-                case _ => Set()
-              })
-        }))
-      followMemo.update(symbol, result)
-      result
+            })
+            val y: (Set[Symbol], Map[Symbol, Set[Symbol]]) = (rule.rhs match {
+              case Terminal(_) :: symbol :: Nil => follow(rule.from, followMemo)
+              case Terminal(_) :: symbol :: rest if (first(rest).contains(ε)) => follow(rule.from, followMemo)
+              case _ => (Set(), followMemo)
+            })
+            (accSet ++ x ++ y._1, y._2)
+          }
+      })
+      (result._1, result._2 + (symbol -> result._1))
     }
   }
 
   lazy val _parseTable: Map[(NonTerminal, Symbol), LLRule] = {
     for (nt <- nonTerminals) {
-      first(nt)
+      first(nt) // TODO: where is this written?
     }
     llRules.flatMap({ rule =>
       first(rule.rhs).flatMap(a => {
         if (terminalsByName.contains(a.label)) {
           List((rule.from, a) -> rule)
         } else if (a == ε) {
-          follow(rule.from).map(t => (rule.from, t) -> rule).toList // TODO including $
+          val memo0 = Map[Symbol, Set[Symbol]]() // TODO !!!
+          val (foll, memo1) = follow(rule.from, memo0) // TODO including $
+          foll.map(t => (rule.from, t) -> rule)
         } else {
           Nil
         }
