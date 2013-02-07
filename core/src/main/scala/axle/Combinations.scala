@@ -33,8 +33,7 @@ class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
   def loop3(indices0: IndexedSeq[Int], i0: Int, broken0: Boolean): (Boolean, Int) =
     if (i0 >= 0 && !broken0) {
       val broken1 = (indices0(i0) != (i0 + n - r))
-      val i1 = if (broken1) i0 else (i0 - 1)
-      loop3(indices0, i1, broken1)
+      loop3(indices0, if (broken1) i0 else (i0 - 1), broken1)
     } else {
       (broken0, i0)
     }
