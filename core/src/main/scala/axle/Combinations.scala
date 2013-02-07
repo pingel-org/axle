@@ -10,6 +10,7 @@ package axle
  */
 
 import collection._
+import Stream.{ cons, empty }
 
 object Combinations {
 
@@ -24,38 +25,50 @@ class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
     throw new IndexOutOfBoundsException()
   }
 
-  lazy val syze = if (0 <= r && r <= n) { n.factorial / r.factorial / (n - r).factorial } else { 0 }
+  lazy val _size = if (0 <= r && r <= n) (n.factorial / r.factorial / (n - r).factorial) else 0
 
-  override def size(): Int = syze
+  override def size(): Int = _size
 
-  val yeeld = new mutable.ListBuffer[List[E]]() // TODO substitute for "yield" for now
-
-  def iterator() = yeeld.iterator
-
-  val indices = (0 until r).toBuffer
-  yeeld += indices.map(pool(_)).toList
-  var done = false
-
-  while (!done) {
-    var broken = false
-    var i = r - 1
-    while (i >= 0 && !broken) {
-      if (indices(i) != (i + n - r)) {
-        broken = true
-      }
-      if (!broken) {
-        i -= 1
-      }
-    }
-    if (!broken) {
-      done = true
+  // @tailrec
+  def loop3(indices0: IndexedSeq[Int], i0: Int, broken0: Boolean): (Boolean, Int) =
+    if (i0 >= 0 && !broken0) {
+      val broken1 = (indices0(i0) != (i0 + n - r))
+      val i1 = if (broken1) i0 else (i0 - 1)
+      loop3(indices0, i1, broken1)
     } else {
-      indices(i) += 1
-      for (j <- (i + 1 until r)) {
-        indices(j) = indices(j - 1) + 1
-      }
-      yeeld += indices.map(pool(_)).toList
+      (broken0, i0)
+    }
+
+  def loop2(indices0: IndexedSeq[Int]): (Stream[List[E]], IndexedSeq[Int], Boolean) = {
+    val (broken1, i0) = loop3(indices0, r - 1, false)
+    if (!broken1) {
+      (empty, indices0, true)
+    } else {
+      val indices1 = indices0.zipWithIndex.map({
+        case (v, j) =>
+          if (j == i0) v + 1
+          else if (j >= (i0 + 1) && j < r) (indices0(j - 1) + 1)
+          else v
+      })
+      val head: List[E] = indices1.map(pool(_)).toList
+      val (tail, indices2, done) = loop2(indices1)
+      (cons(head, tail), indices2, done)
     }
   }
+
+  def loop1(indices0: IndexedSeq[Int], done0: Boolean): Stream[List[E]] =
+    if (done0) {
+      empty
+    } else {
+      val (subStream, indices1, done1) = loop2(indices0)
+      subStream ++ loop1(indices1, done1)
+    }
+
+  lazy val result: Stream[List[E]] = {
+    val indices = (0 until r)
+    cons(indices.map(pool(_)).toList, loop1(indices, false))
+  }
+
+  def iterator() = result.iterator
 
 }
