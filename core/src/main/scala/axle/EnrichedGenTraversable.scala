@@ -3,7 +3,7 @@ package axle
 import collection._
 import math.{ exp, log }
 
-case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
+case class EnrichedGenTraversable[+T : ClassManifest](gt: GenTraversable[T]) {
 
   def Σ(f: T => Double) = gt.aggregate(0.0)(_ + f(_), _ + _)
 

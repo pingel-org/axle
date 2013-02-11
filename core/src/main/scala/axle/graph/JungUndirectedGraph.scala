@@ -69,7 +69,7 @@ case class JungUndirectedGraph[VP, EP](
       val old2new: Map[Vertex[VP], Vertex[VP]] = ??? // TODO _vertices.zip(newVs).toMap
 
       val newEdges = among.toIndexedSeq.permutations(2)
-        .map({ case vi :: vj :: Nil => (vi, vj) })
+        .map({ a => (a(0), a(1)) })
         .filter({ case (vi, vj) => !areNeighbors(vi, vj) })
         .map({
           case (vi: Vertex[VP], vj: Vertex[VP]) => {

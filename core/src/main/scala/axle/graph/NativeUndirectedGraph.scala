@@ -68,8 +68,8 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
 
       val old2new = _vertices.zip(newVs).toMap
 
-      val newEdges = among.toIndexedSeq.permutations(2)
-        .map({ case vi :: vj :: Nil => (vi, vj) })
+      val newEdges = among.toIndexedSeq.permutations(2).toList
+        .map({ a => (a(0), a(1)) })
         .filter({ case (vi, vj) => !areNeighbors(vi, vj) })
         .map({
           case (vi, vj) => {
@@ -86,7 +86,7 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
   }
 
   def isClique(vs: IndexedSeq[Vertex[VP]]): Boolean =
-    vs.permutations(2).∀({ case vi :: vj :: Nil => areNeighbors(vi, vj) })
+    vs.permutations(2).∀({ a => areNeighbors(a(0), a(1)) })
 
   def degree(v: Vertex[VP]): Int = vertex2edges.get(v).map(_.size).getOrElse(0)
 

@@ -9,15 +9,18 @@ package axle
  * Combinations(0 until 4, 3)
  */
 
+import annotation.tailrec
 import collection._
 import Stream.{ cons, empty }
 
 object Combinations {
 
-  def apply[E](pool: IndexedSeq[E], r: Int): Combinations[E] = new Combinations[E](pool, r)
+  def apply[E : ClassManifest](pool: Seq[E], r: Int): Combinations[E] = new Combinations(pool, r)
 }
 
-class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
+class Combinations[E : ClassManifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
+
+  val pool: Array[E] = _pool.toList.toArray
 
   val n = pool.size
 
@@ -29,8 +32,8 @@ class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
 
   override def size(): Int = _size
 
-  // @tailrec
-  def loop3(indices0: IndexedSeq[Int], i0: Int, broken0: Boolean): (Boolean, Int) =
+  @tailrec
+  private[this] def loop3(indices0: Array[Int], i0: Int, broken0: Boolean): (Boolean, Int) =
     if (i0 >= 0 && !broken0) {
       val broken1 = (indices0(i0) != (i0 + n - r))
       loop3(indices0, if (broken1) i0 else (i0 - 1), broken1)
@@ -38,7 +41,7 @@ class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
       (broken0, i0)
     }
 
-  def loop2(indices0: IndexedSeq[Int]): (Stream[List[E]], IndexedSeq[Int], Boolean) = {
+  def loop2(indices0: Array[Int]): (Stream[IndexedSeq[E]], Array[Int], Boolean) = {
     val (broken1, i0) = loop3(indices0, r - 1, false)
     if (!broken1) {
       (empty, indices0, true)
@@ -49,13 +52,13 @@ class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
           else if (j >= (i0 + 1) && j < r) (indices0(j - 1) + 1)
           else v
       })
-      val head: List[E] = indices1.map(pool(_)).toList
+      val head = indices1.map(pool(_))
       val (tail, indices2, done) = loop2(indices1)
       (cons(head, tail), indices2, done)
     }
   }
 
-  def loop1(indices0: IndexedSeq[Int], done0: Boolean): Stream[List[E]] =
+  def loop1(indices0: Array[Int], done0: Boolean): Stream[IndexedSeq[E]] =
     if (done0) {
       empty
     } else {
@@ -63,9 +66,9 @@ class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
       subStream ++ loop1(indices1, done1)
     }
 
-  lazy val result: Stream[List[E]] = {
-    val indices = (0 until r)
-    cons(indices.map(pool(_)).toList, loop1(indices, false))
+  lazy val result: Stream[IndexedSeq[E]] = {
+    val indices = (0 until r).toArray
+    cons(indices.map(pool(_)), loop1(indices, false))
   }
 
   def iterator() = result.iterator
