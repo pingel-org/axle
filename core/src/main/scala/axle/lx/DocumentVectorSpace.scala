@@ -11,10 +11,15 @@ package axle.lx
 // TODO edit distance tolerance
 // TODO stemming
 
+import axle.matrix._
+
 trait DocumentVectorSpace {
 
+  val dvsmm = new JblasMatrixModule {} // TODO TRAIT VAL
+
+  import dvsmm.{ Matrix, matrix, convertDouble }
+
   import axle.ScalaMapReduce
-  import axle.matrix.JblasMatrixFactory._
 
   def square(x: Double): Double = x * x
 

@@ -1,72 +1,74 @@
 package axle.ml
 
-import axle.square
 import math.sqrt
 
-object FeatureNormalizer {
+import axle.matrix._
 
-  import axle.matrix.JblasMatrixFactory._ // TODO: generalize
-  type M[T] = JblasMatrix[T]
+trait FeatureNormalizerModule {
 
+  val fnmm: MatrixModule
+  
+  import fnmm.{Matrix, matrix, std, zscore, pca, numComponentsForCutoff, convertDouble}
+  
   trait FeatureNormalizer {
 
-    def normalizedData(): M[Double]
+    def normalizedData(): Matrix[Double]
 
-    def normalize(featureList: Seq[Double]): M[Double]
+    def normalize(featureList: Seq[Double]): Matrix[Double]
 
-    def denormalize(featureRow: M[Double]): Seq[Double]
+    def denormalize(featureRow: Matrix[Double]): Seq[Double]
 
-    def random(): M[Double]
+    def random(): Matrix[Double]
   }
 
-  class IdentityFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
+  class IdentityFeatureNormalizer(X: Matrix[Double]) extends FeatureNormalizer {
 
-    def normalizedData(): M[Double] = X
+    def normalizedData(): Matrix[Double] = X
 
-    def normalize(featureList: Seq[Double]): M[Double] =
+    def normalize(featureList: Seq[Double]): Matrix[Double] =
       matrix(1, featureList.length, featureList.toArray)
 
-    def denormalize(featureRow: M[Double]): Seq[Double] =
+    def denormalize(featureRow: Matrix[Double]): Seq[Double] =
       featureRow.toList
 
-    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
+    def random(): Matrix[Double] = matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
   }
 
-  class LinearFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
+  class LinearFeatureNormalizer(X: Matrix[Double]) extends FeatureNormalizer {
 
     val colMins = X.columnMins
     val colRanges = X.columnMaxs - colMins
     val nd = X.subRowVector(colMins).divRowVector(colRanges)
 
-    def normalizedData(): M[Double] = nd
+    def normalizedData(): Matrix[Double] = nd
 
-    def normalize(features: Seq[Double]): M[Double] =
+    def normalize(features: Seq[Double]): Matrix[Double] =
       matrix(1, features.length, features.toArray).subRowVector(colMins).divPointwise(colRanges)
 
-    def denormalize(featureRow: M[Double]): Seq[Double] =
+    def denormalize(featureRow: Matrix[Double]): Seq[Double] =
       (featureRow.mulPointwise(colRanges) + colMins).toList
 
-    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray).mulPointwise(colRanges) + colMins
+    def random(): Matrix[Double] = matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray).mulPointwise(colRanges) + colMins
   }
 
-  class ZScoreFeatureNormalizer(X: M[Double]) extends FeatureNormalizer {
+  class ZScoreFeatureNormalizer(X: Matrix[Double]) extends FeatureNormalizer {
 
     lazy val μs = X.columnMeans
     lazy val σ2s = std(X)
     val nd = zscore(X)
 
-    def normalizedData(): M[Double] = nd
+    def normalizedData(): Matrix[Double] = nd
 
-    def normalize(features: Seq[Double]): M[Double] =
+    def normalize(features: Seq[Double]): Matrix[Double] =
       (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
 
-    def denormalize(featureRow: M[Double]): Seq[Double] =
+    def denormalize(featureRow: Matrix[Double]): Seq[Double] =
       (featureRow.mulPointwise(σ2s) + μs).toList
 
-    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
+    def random(): Matrix[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
   }
 
-  class PCAFeatureNormalizer(X: M[Double], cutoff: Double) extends FeatureNormalizer {
+  class PCAFeatureNormalizer(X: Matrix[Double], cutoff: Double) extends FeatureNormalizer {
 
     lazy val μs = X.columnMeans
     lazy val σ2s = std(X)
@@ -75,15 +77,15 @@ object FeatureNormalizer {
     val k = numComponentsForCutoff(s, cutoff)
     val Uk = u(0 until u.rows, 0 until k)
 
-    def normalizedData(): M[Double] = zd ⨯ Uk
+    def normalizedData(): Matrix[Double] = zd ⨯ Uk
 
-    def normalize(features: Seq[Double]): M[Double] =
+    def normalize(features: Seq[Double]): Matrix[Double] =
       (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) ⨯ Uk
 
-    def denormalize(featureRow: M[Double]): Seq[Double] =
+    def denormalize(featureRow: Matrix[Double]): Seq[Double] =
       ((featureRow ⨯ Uk.t).mulPointwise(σ2s) + μs).toList
 
-    def random(): M[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ Uk
+    def random(): Matrix[Double] = matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ Uk
 
     // (truncatedSigmas.mulPointwise(featureRow) + truncatedMeans).toList
     // val truncatedSigmas = σ2s ⨯ Uk

@@ -3,18 +3,19 @@ package axle.ml
 import axle._
 import axle.matrix._
 import collection._
-import FeatureNormalizer._
-import DistanceFunction._
 
 /**
  * KMeans
  *
  */
 
-object KMeans {
+trait KMeansModule {
 
-  import axle.matrix.JblasMatrixFactory._ // TODO: generalize
-  type M[T] = JblasMatrix[T]
+  // TODO drop asInstanceOf calls
+  val kmmm: MatrixModule // TRAIT VAL
+  val dist = new DistanceFunctionModule { val mm = kmmm } // TRAIT VAL
+  val fnm = new FeatureNormalizerModule { val fnmm = kmmm } // TRAIT VAL
+  import kmmm.{ Matrix, matrix, zeros, convertDouble, convertInt }
 
   /**
    * cluster[T]
@@ -28,15 +29,17 @@ object KMeans {
    *
    */
 
-  def apply[T](
+  def Classifier[T](
     data: Seq[T],
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
-    distance: DistanceFunction = EuclideanDistanceFunction,
+    distance: (Matrix[Double], Matrix[Double]) => Double,
     K: Int,
     iterations: Int): KMeansClassifier[T] =
     KMeansClassifier(data, N, featureExtractor, constructor, distance, K, iterations)
+
+  // TODO: default distance = distance.euclidean
 
   /**
    * KMeansClassifier[T]
@@ -57,14 +60,15 @@ object KMeans {
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
-    distance: DistanceFunction,
+    distance: (Matrix[Double], Matrix[Double]) => Double,
     K: Int,
     iterations: Int) {
 
     val features = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
+      .asInstanceOf[fnm.fnmm.Matrix[Double]]
 
-    val normalizer = new PCAFeatureNormalizer(features, 0.95)
-    val X = normalizer.normalizedData()
+    val normalizer = new fnm.PCAFeatureNormalizer(features, 0.95)
+    val X = normalizer.normalizedData().asInstanceOf[kmmm.Matrix[Double]]
     val μads = clusterLA(X, distance, K, iterations)
 
     val (μ, a, d) = μads.last
@@ -72,12 +76,14 @@ object KMeans {
     val assignmentLog = μads.map(_._2)
     val distanceLog = μads.map(_._3)
 
-    val exemplars = (0 until K).map(i => constructor(normalizer.denormalize(μ.row(i)))).toList
+    val exemplars = (0 until K).map(i => constructor(normalizer.denormalize(μ.row(i).asInstanceOf[fnm.fnmm.Matrix[Double]]))).toList
 
     def exemplar(i: Int): T = exemplars(i)
 
     def classify(observation: T): Int = {
-      val (i, d) = centroidIndexAndDistanceClosestTo(distance, μ, normalizer.normalize(featureExtractor(observation)))
+      val (i, d) = centroidIndexAndDistanceClosestTo(
+        distance, μ, normalizer.normalize(featureExtractor(observation)
+        ).asInstanceOf[kmmm.Matrix[Double]])
       i
     }
 
@@ -88,7 +94,10 @@ object KMeans {
      * @param x
      */
 
-    def centroidIndexAndDistanceClosestTo(distance: DistanceFunction, μ: M[Double], x: M[Double]): (Int, Double) =
+    def centroidIndexAndDistanceClosestTo(
+      distance: (Matrix[Double], Matrix[Double]) => Double,
+      μ: Matrix[Double],
+      x: Matrix[Double]): (Int, Double) =
       (0 until μ.rows).map(r => (r, distance(μ.row(r), x))).minBy(_._2)
 
     /**
@@ -102,7 +111,10 @@ object KMeans {
      * N x 1 matrix: distances to those centroids
      */
 
-    def assignmentsAndDistances(distance: DistanceFunction, X: M[Double], μ: M[Double]): (M[Int], M[Double]) = {
+    def assignmentsAndDistances(
+      distance: (Matrix[Double], Matrix[Double]) => Double,
+      X: Matrix[Double],
+      μ: Matrix[Double]): (Matrix[Int], Matrix[Double]) = {
       val AD = (0 until X.rows).map(r => {
         val xi = X.row(r)
         val (a, d) = centroidIndexAndDistanceClosestTo(distance, μ, xi)
@@ -123,15 +135,15 @@ object KMeans {
      */
 
     def clusterLA(
-      X: M[Double],
-      distance: DistanceFunction,
+      X: Matrix[Double],
+      distance: (Matrix[Double], Matrix[Double]) => Double,
       K: Int,
-      iterations: Int): Seq[(M[Double], M[Int], M[Double])] = {
+      iterations: Int): Seq[(Matrix[Double], Matrix[Int], Matrix[Double])] = {
       assert(K < X.rows)
       val μ0 = X(util.Random.shuffle(0 until X.rows).take(K), 0 until X.columns)
       val a0 = zeros[Int](X.rows, 1)
       val d0 = zeros[Double](X.rows, 1)
-      (0 until iterations).scanLeft((μ0, a0, d0))((μad: (M[Double], M[Int], M[Double]), i: Int) => {
+      (0 until iterations).scanLeft((μ0, a0, d0))((μad: (Matrix[Double], Matrix[Int], Matrix[Double]), i: Int) => {
         val (a, d) = assignmentsAndDistances(distance, X, μad._1)
         val (μ, unassignedClusterIds) = centroids(X, K, a)
         // val replacements = scaledX(util.Random.shuffle(0 until scaledX.rows).take(unassignedClusterIds.length), 0 until scaledX.columns)
@@ -148,10 +160,10 @@ object KMeans {
      *
      */
 
-    def centroids(X: M[Double], K: Int, assignments: M[Int]): (M[Double], Seq[Int]) = {
+    def centroids(X: Matrix[Double], K: Int, assignments: Matrix[Int]): (Matrix[Double], Seq[Int]) = {
       val A = matrix(X.rows, K, (r: Int, c: Int) => if (c == assignments(r, 0)) 1.0 else 0.0)
       val distances = A.t ⨯ X // K x N
-      val counts = A.columnSums.t // K x 1
+      val counts = A.columnSums().t // K x 1
       val unassignedClusterIds = (0 until K).filter(counts(_, 0) == 0.0)
       (distances.divColumnVector(counts), unassignedClusterIds)
     }

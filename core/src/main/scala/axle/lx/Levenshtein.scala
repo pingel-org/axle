@@ -1,15 +1,19 @@
 package axle.lx
 
+import axle.matrix._
+
 /**
  * Based on the Scala implementation of
  *
  * http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance
  */
 
-object Levenshtein extends EditDistance {
+trait Levenshtein extends EditDistance {
 
-  import axle.matrix.JblasMatrixFactory._
+  val mm: MatrixModule // TODO trait val
 
+  import mm.{matrix, Matrix, convertInt}
+  
   def distance(s1: String, s2: String): Int = {
 
     val lenStr1 = s1.length

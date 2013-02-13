@@ -17,3 +17,4 @@ class UnweightedDocumentVectorSpace(_stopwords: Set[String], corpus: List[String
   def similarity(d: TV, q: TV): Double = dotProduct(d, q) / (length(d) * length(q))
 
 }
+

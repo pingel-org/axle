@@ -2,8 +2,6 @@ package axle.matrix
 
 import axle._
 
-object ArrayMatrixFactory extends ArrayMatrixFactory {}
-
 /**
  *
  * Discussion of ClassManifest here:
@@ -12,93 +10,98 @@ object ArrayMatrixFactory extends ArrayMatrixFactory {}
  *
  */
 
-abstract class ArrayMatrixFactory extends MatrixFactory {
+/*
+trait ArrayMatrixModule extends MatrixModule {
 
-  factory =>
+  implicit val convertCM: C[T] = (v: ClassManifest[T]) => v
 
-  type M[T] = ArrayMatrix[T]
+  type C[T] = ClassManifest[T] => ClassManifest[T]
 
-  type E[T] = Unit
-
-  class ArrayMatrixImpl[T: ClassManifest](_storage: Array[T], nRows: Int, nColumns: Int) extends ArrayMatrix[T] {
+  class Matrix[T](_storage: Array[T], nRows: Int, nColumns: Int) extends MatrixLike[T] {
 
     def storage = _storage
+
+    type S = Array[T]
 
     def rows = nRows
     def columns = nColumns
     def length = storage.length
 
     def apply(r: Int, c: Int): T = _storage(r * nColumns + c)
+
+    def apply(rs: Seq[Int], cs: Seq[Int]): Matrix[T] = ???
+
     // def updat(r: Int, c: Int, v: T) = _storage(r * nColumns + c) = v
+
     def toList(): List[T] = _storage.toList
 
     def column(c: Int) = matrix((0 until nRows).map(this(_, c)).toArray, nRows, 1)
 
     def row(r: Int) = matrix((0 until nColumns).map(this(r, _)).toArray, 1, nColumns)
 
-    def isEmpty(): Boolean = false // TODO
+    def isEmpty(): Boolean = ???
     def isRowVector(): Boolean = columns == 1
     def isColumnVector(): Boolean = rows == 1
     def isVector(): Boolean = isRowVector || isColumnVector
     def isSquare(): Boolean = columns == rows
     def isScalar(): Boolean = isRowVector && isColumnVector
 
-    def dup(): M[T] = matrix(_storage.clone, nRows, nColumns)
-    def negate(): M[T] = ???
-    def transpose(): M[T] = ???
-    def diag(): M[T] = ???
-    def invert(): M[T] = ???
-    def ceil(): M[T] = ???
-    def floor(): M[T] = ???
-    def log(): M[T] = ???
-    def log10(): M[T] = ???
-    def fullSVD(): (M[T], M[T], M[T]) = ???
+    def dup(): Matrix[T] = matrix(_storage.clone, nRows, nColumns)
+    def negate(): Matrix[T] = ???
+    def transpose(): Matrix[T] = ???
+    def diag(): Matrix[T] = ???
+    def invert(): Matrix[T] = ???
+    def ceil(): Matrix[Int] = ???
+    def floor(): Matrix[Int] = ???
+    def log(): Matrix[Double] = ???
+    def log10(): Matrix[Double] = ???
+    def fullSVD(): (Matrix[T], Matrix[T], Matrix[T]) = ???
 
-    def pow(p: Double): M[T] = ???
+    def pow(p: Double): Matrix[T] = ???
 
-    def addScalar(x: T): M[T] = ???
-    def addAssignment(r: Int, c: Int, v: T): M[T] = {
+    def addScalar(x: T): Matrix[T] = ???
+    def addAssignment(r: Int, c: Int, v: T): Matrix[T] = {
       val length = rows * columns
       val arr = storage.clone
       arr(r * columns + c) = v
       matrix(arr, rows, columns)
     }
-    def subtractScalar(x: T): M[T] = ???
-    def multiplyScalar(x: T): M[T] = ???
-    def divideScalar(x: T): M[T] = ???
-    def mulRow(i: Int, x: T): M[T] = ???
-    def mulColumn(i: Int, x: T): M[T] = ???
+    def subtractScalar(x: T): Matrix[T] = ???
+    def multiplyScalar(x: T): Matrix[T] = ???
+    def divideScalar(x: T): Matrix[T] = ???
+    def mulRow(i: Int, x: T): Matrix[T] = ???
+    def mulColumn(i: Int, x: T): Matrix[T] = ???
 
     // Operations on pairs of matrices
 
-    def addMatrix(other: M[T]): M[T] = ???
-    def subtractMatrix(other: M[T]): M[T] = ???
-    def multiplyMatrix(other: M[T]): M[T] = ???
-    def mulPointwise(other: M[T]) = ???
-    def divPointwise(other: M[T]) = ???
-    def concatenateHorizontally(right: M[T]): M[T] = ???
-    def concatenateVertically(under: M[T]): M[T] = ???
-    def solve(B: M[T]): M[T] = ??? // returns X, where this == A and A x X = B
+    def addMatrix(other: Matrix[T]): Matrix[T] = ???
+    def subtractMatrix(other: Matrix[T]): Matrix[T] = ???
+    def multiplyMatrix(other: Matrix[T]): Matrix[T] = ???
+    def mulPointwise(other: Matrix[T]) = ???
+    def divPointwise(other: Matrix[T]) = ???
+    def concatenateHorizontally(right: Matrix[T]): Matrix[T] = ???
+    def concatenateVertically(under: Matrix[T]): Matrix[T] = ???
+    def solve(B: Matrix[T]): Matrix[T] = ??? // returns X, where this == A and A x X = B
 
     // Operations on a matrix and a column/row vector
 
-    def addRowVector(row: M[T]): M[T] = ???
-    def addColumnVector(column: M[T]): M[T] = ???
-    def subRowVector(row: M[T]): M[T] = ???
-    def subColumnVector(column: M[T]): M[T] = ???
+    def addRowVector(row: Matrix[T]): Matrix[T] = ???
+    def addColumnVector(column: Matrix[T]): Matrix[T] = ???
+    def subRowVector(row: Matrix[T]): Matrix[T] = ???
+    def subColumnVector(column: Matrix[T]): Matrix[T] = ???
 
     // Operations on pair of matrices that return M[Boolean]
 
-    def lt(other: M[T]): Matrix[Boolean] = ???
-    def le(other: M[T]): Matrix[Boolean] = ???
-    def gt(other: M[T]): Matrix[Boolean] = ???
-    def ge(other: M[T]): Matrix[Boolean] = ???
-    def eq(other: M[T]): Matrix[Boolean] = ???
-    def ne(other: M[T]): Matrix[Boolean] = ???
+    def lt(other: Matrix[T]): Matrix[Boolean] = ???
+    def le(other: Matrix[T]): Matrix[Boolean] = ???
+    def gt(other: Matrix[T]): Matrix[Boolean] = ???
+    def ge(other: Matrix[T]): Matrix[Boolean] = ???
+    def eq(other: Matrix[T]): Matrix[Boolean] = ???
+    def ne(other: Matrix[T]): Matrix[Boolean] = ???
 
-    def and(other: M[T]): Matrix[Boolean] = ???
-    def or(other: M[T]): Matrix[Boolean] = ???
-    def xor(other: M[T]): Matrix[Boolean] = ???
+    def and(other: Matrix[T]): Matrix[Boolean] = ???
+    def or(other: Matrix[T]): Matrix[Boolean] = ???
+    def xor(other: Matrix[T]): Matrix[Boolean] = ???
     def not(): Matrix[Boolean] = ???
 
     // various mins and maxs
@@ -107,8 +110,8 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def argmax(): (Int, Int) = ???
     def min(): T = ???
     def argmin(): (Int, Int) = ???
-    def columnMins(): M[T] = ???
-    def columnMaxs(): M[T] = ???
+    def columnMins(): Matrix[T] = ???
+    def columnMaxs(): Matrix[T] = ???
 
     // In-place versions
 
@@ -121,44 +124,70 @@ abstract class ArrayMatrixFactory extends MatrixFactory {
     def multiplyi(x: T): Unit = ???
     def dividei(x: T): Unit = ???
 
-    def addMatrixi(other: M[T]): Unit = ???
-    def subtractMatrixi(other: M[T]): Unit = ???
-    def addiRowVector(row: M[T]): Unit = ???
-    def addiColumnVector(column: M[T]): Unit = ???
-    def subiRowVector(row: M[T]): Unit = ???
-    def subiColumnVector(column: M[T]): Unit = ???
+    def addMatrixi(other: Matrix[T]): Unit = ???
+    def subtractMatrixi(other: Matrix[T]): Unit = ???
+    def addiRowVector(row: Matrix[T]): Unit = ???
+    def addiColumnVector(column: Matrix[T]): Unit = ???
+    def subiRowVector(row: Matrix[T]): Unit = ???
+    def subiColumnVector(column: Matrix[T]): Unit = ???
+
+    def rowSums(): Matrix[T] = ???
+    def columnSums(): Matrix[T] = ???
+
+    // def columnArgmins
+    // def columnArgmaxs
+
+    def columnMeans(): Matrix[T] = ???
+    def sortColumns(): Matrix[T] = ???
+
+    def rowMins(): Matrix[T] = ???
+    def rowMaxs(): Matrix[T] = ???
+    def rowMeans(): Matrix[T] = ???
+    def sortRows(): Matrix[T] = ???
 
     // higher order fuctions
 
-    def map[B: E](f: T => B): M[B] = ???
+    def map[B: C](f: T => B): Matrix[B] = ???
     // matrix(rows, columns, storage.map(f(_)))
 
-    def flatMapColumns[A: E](f: M[T] => M[A]): M[A] = ???
+    def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = ???
 
   }
 
-  trait ArrayMatrix[T] extends Matrix[T] {
+  def matrix[T: ClassManifest](arr: Array[T], r: Int, c: Int): Matrix[T] = new Matrix(arr, r, c)
 
-    type S = Array[T]
-
-    def toList(): List[T]
-  }
-
-  def matrix[T: ClassManifest](arr: Array[T], r: Int, c: Int): ArrayMatrix[T] = new ArrayMatrixImpl(arr, r, c)
-
-  def matrix[T: ClassManifest](r: Int, c: Int, default: T): ArrayMatrix[T] = {
+  def matrix[T: ClassManifest](r: Int, c: Int, default: T): Matrix[T] = {
     val length = r * c
     val arr = new Array[T](length)
     0.until(length).map(i => arr(i) = default)
     matrix(arr, r, c)
   }
 
-  def zeros[T: E](m: Int, n: Int): M[T] = ???
+  def zeros[T](m: Int, n: Int): Matrix[T] = ???
 
-  def matrix[T: E](m: Int, n: Int, values: Array[T]): M[T] = ???
+  def matrix[T](m: Int, n: Int, values: Array[T]): Matrix[T] = ???
 
-  def matrix[T: E](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): M[T] = ???
+  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): Matrix[T] = ???
 
-  def matrix[T: E](m: Int, n: Int, f: (Int, Int) => T): M[T] = ???
+  def matrix[T](m: Int, n: Int, f: (Int, Int) => T): Matrix[T] = ???
+
+  def centerRows(m: Matrix[Double]): Matrix[Double] = ???
+  def centerColumns(m: Matrix[Double]): Matrix[Double] = ???
+
+  def rowRange(m: Matrix[Double]): Matrix[Double] = ???
+  def columnRange(m: Matrix[Double]): Matrix[Double] = ???
+
+  def sumsq(m: Matrix[Double]): Matrix[Double] = ???
+
+  def cov(m: Matrix[Double]): Matrix[Double] = ???
+
+  def std(m: Matrix[Double]): Matrix[Double] = ???
+
+  def zscore(m: Matrix[Double]): Matrix[Double] = ???
+
+  def pca(Xnorm: Matrix[Double], cutoff: Double = 0.95): (Matrix[Double], Matrix[Double]) = ???
+
+  def numComponentsForCutoff(s: Matrix[Double], cutoff: Double): Int = ???
 
 }
+*/

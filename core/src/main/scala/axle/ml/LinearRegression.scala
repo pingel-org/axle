@@ -1,31 +1,34 @@
 package axle.ml
 
 import collection._
+import axle.matrix._
 
-object LinearRegression extends LinearRegression()
+trait LinearRegressionModule {
 
-trait LinearRegression {
+  val lrmm: MatrixModule
+  val fnm = new FeatureNormalizerModule {
+    val fnmm = new JblasMatrixModule {}
+  }
 
-  import FeatureNormalizer._
-  import axle.matrix.JblasMatrixFactory._ // TODO: generalize
-  type M[T] = JblasMatrix[T] // TODO: generalize
+  import lrmm.{ Matrix, zeros, ones, matrix, convertDouble, convertBoolean }
+  import fnm.{ FeatureNormalizer, LinearFeatureNormalizer }
 
-  def normalEquation(X: M[Double], y: M[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
+  def normalEquation(X: Matrix[Double], y: Matrix[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
-  def h(xi: M[Double], θ: M[Double]) = xi ⨯ θ
+  def h(xi: Matrix[Double], θ: Matrix[Double]) = xi ⨯ θ
 
-  def cost(xi: M[Double], θ: M[Double], yi: Double) = h(xi, θ) - yi
+  def cost(xi: Matrix[Double], θ: Matrix[Double], yi: Double) = h(xi, θ) - yi
 
-  def dθ(X: M[Double], y: M[Double], θ: M[Double]) = (0 until X.rows)
+  def dθ(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double]) = (0 until X.rows)
     .foldLeft(zeros[Double](1, X.columns))(
-      (m: M[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ) - y(i, 0)))
+      (m: Matrix[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ) - y(i, 0)))
     ) / X.rows
 
-  def dTheta(X: M[Double], y: M[Double], θ: M[Double]) = dθ(X, y, θ)
+  def dTheta(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double]) = dθ(X, y, θ)
 
-  def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
+  def gradientDescent(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double], α: Double, iterations: Int) =
     (0 until iterations).foldLeft((θ, List[Double]()))(
-      (θiErrLog: (M[Double], List[Double]), i: Int) => {
+      (θiErrLog: (Matrix[Double], List[Double]), i: Int) => {
         val (θi, errLog) = θiErrLog
         val errMatrix = dθ(X, y, θi)
         val errTotal = (0 until errMatrix.rows).map(errMatrix(_, 0)).reduce(_ + _)
@@ -46,15 +49,17 @@ trait LinearRegression {
       numFeatures,
       examples.flatMap(featureExtractor(_)).toArray).t
 
-    val featureNormalizer = new LinearFeatureNormalizer(inputX)
+    val featureNormalizer = new LinearFeatureNormalizer(inputX.asInstanceOf[fnm.fnmm.Matrix[Double]])
 
-    val X = ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData()
+    val X = ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData().asInstanceOf[lrmm.Matrix[Double]]
 
-    val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
+    import fnm.fnmm.convertDouble
+    val y = fnm.fnmm.matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
 
     val objectiveNormalizer = new LinearFeatureNormalizer(y)
+    import lrmm.convertDouble
     val θ0 = ones[Double](X.columns, 1)
-    val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData(), θ0, α, iterations)
+    val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData().asInstanceOf[lrmm.Matrix[Double]], θ0, α, iterations)
 
     LinearEstimator(featureExtractor, featureNormalizer, θ, objectiveNormalizer, errLog.reverse)
   }
@@ -62,7 +67,7 @@ trait LinearRegression {
   case class LinearEstimator[D](
     featureExtractor: D => List[Double],
     featureNormalizer: FeatureNormalizer,
-    θ: M[Double],
+    θ: Matrix[Double],
     objectiveNormalizer: FeatureNormalizer,
     errLog: List[Double]) {
 
@@ -70,8 +75,8 @@ trait LinearRegression {
       (0 until errLog.length).map(j => j -> errLog(j)).toMap
 
     def estimate(observation: D): Double = {
-      val scaledX = ones[Double](1, 1) +|+ featureNormalizer.normalize(featureExtractor(observation))
-      objectiveNormalizer.denormalize(scaledX ⨯ θ).head
+      val scaledX = ones[Double](1, 1) +|+ featureNormalizer.normalize(featureExtractor(observation)).asInstanceOf[lrmm.Matrix[Double]]
+      objectiveNormalizer.denormalize((scaledX ⨯ θ).asInstanceOf[fnm.fnmm.Matrix[Double]]).head
     }
 
   }

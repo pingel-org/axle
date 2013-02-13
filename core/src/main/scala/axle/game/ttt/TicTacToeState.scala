@@ -1,11 +1,11 @@
 package axle.game.ttt
 
 import axle.game._
-import axle.matrix.ArrayMatrixFactory._
+import axle.matrix._
 
 case class TicTacToeState(
   player: TicTacToePlayer,
-  board: Matrix[Option[String]],
+  board: TicTacToe#Matrix[Option[String]],
   _eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = Map())(implicit ttt: TicTacToe)
   extends State[TicTacToe]() {
 
@@ -66,8 +66,8 @@ case class TicTacToeState(
   def apply(move: TicTacToeMove): Option[TicTacToeState] =
     ttt.state(
       ttt.playerAfter(move.tttPlayer),
-      board.addAssignment(positionToRow(move.position),
-        positionToColumn(move.position), Some(player.id)),
+      board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player.id))
+        .asInstanceOf[ttt.Matrix[Option[String]]],
       _eventQueues
     )
 
@@ -77,3 +77,4 @@ case class TicTacToeState(
     TicTacToeState(player, board, qs)
 
 }
+

@@ -6,6 +6,14 @@ import axle.graph._
 import org.specs2.mutable._
 
 class ABE extends Specification {
+
+  val bnm = new BayesianNetworkModule {
+    val bnmmm = new axle.matrix.JblasMatrixModule {}
+  }
+  
+  import bnm.BayesianNetwork
+  import bnm.BayesianNetworkNode
+  import bnm.bnmfm.Factor
   
   val bools = Some(Vector(true, false))
 

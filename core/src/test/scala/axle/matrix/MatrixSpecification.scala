@@ -4,12 +4,13 @@ import org.specs2.mutable._
 
 class MatrixSpecification extends Specification {
 
+  val jblasMatrixFactory = new JblasMatrixModule {}
+  import jblasMatrixFactory._
+
   "DoubleJblasMatrix" should {
     "work" in {
 
-      import JblasMatrixFactory._
-
-      val z: JblasMatrix[Double] = zeros[Double](3, 4)
+      val z = zeros[Double](3, 4)
       val o = ones[Double](2, 3)
       val r = rand[Double](1, 2)
       val rn = randn[Double](2, 2)
@@ -25,9 +26,7 @@ class MatrixSpecification extends Specification {
   "IntJblasMatrix" should {
     "work" in {
 
-      import JblasMatrixFactory._
-
-      val z: JblasMatrix[Int] = zeros[Int](1, 3)
+      val z = zeros[Int](1, 3)
       val o = ones[Int](2, 2)
       val e = eye[Int](3)
 
@@ -38,9 +37,7 @@ class MatrixSpecification extends Specification {
   "BooleanJblasMatrix" should {
     "work" in {
 
-      import axle.matrix.JblasMatrixFactory._
-
-      val f: JblasMatrix[Boolean] = falses(2, 3)
+      val f = falses(2, 3)
       val t = trues(3, 2)
       val e = eye[Boolean](4)
 

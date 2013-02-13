@@ -8,7 +8,11 @@ class LinearRegressionSpecification extends Specification {
   "Linear Regression" should {
     "work" in {
 
-      import LinearRegression._
+      val mm = new axle.matrix.JblasMatrixModule {}
+      val lr = new axle.ml.LinearRegressionModule {
+        val lrmm = mm
+      }
+      
       import axle.visualize._
       import axle.visualize.Plottable._
 
@@ -21,7 +25,7 @@ class LinearRegressionSpecification extends Specification {
           RealtyListing(852, 2, 1, 36, 178.0) ::
           Nil
 
-      val estimator = regression(
+      val estimator = lr.regression(
         data,
         4,
         (rl: RealtyListing) => (rl.size :: rl.bedrooms.toDouble :: rl.floors.toDouble :: rl.age.toDouble :: Nil),

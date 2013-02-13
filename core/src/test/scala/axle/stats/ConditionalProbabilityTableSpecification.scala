@@ -6,6 +6,13 @@ import axle.graph._
 
 class ConditionalProbabilityTableSpecification extends Specification {
 
+  val bnm = new BayesianNetworkModule {
+    val bnmmm = new axle.matrix.JblasMatrixModule {}
+  }
+
+  import bnm._
+  import bnm.bnmfm.Factor
+  
   val bools = Some(Vector(true, false))
 
   val A = new RandomVariable0("A", bools, None)
