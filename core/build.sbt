@@ -2,9 +2,9 @@ import AssemblyKeys._
 
 name := "axle"
 
-// version := "0.1-SNAPSHOT"
+version := "0.1-SNAPSHOT"
 
-version := "0.1-M6"
+// version := "0.1-M6"
 
 organization := "org.pingel"
 
