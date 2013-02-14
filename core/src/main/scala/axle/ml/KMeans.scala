@@ -9,13 +9,11 @@ import collection._
  *
  */
 
-trait KMeansModule {
+object JblasKMeansModule extends KMeansModule {
 
-  // TODO drop asInstanceOf calls
-  val kmmm: MatrixModule // TRAIT VAL
-  val dist = new DistanceFunctionModule { val mm = kmmm } // TRAIT VAL
-  val fnm = new FeatureNormalizerModule { val fnmm = kmmm } // TRAIT VAL
-  import kmmm.{ Matrix, matrix, zeros, convertDouble, convertInt }
+}
+
+trait KMeansModule extends FeatureNormalizerModule {
 
   /**
    * cluster[T]
@@ -65,10 +63,9 @@ trait KMeansModule {
     iterations: Int) {
 
     val features = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
-      .asInstanceOf[fnm.fnmm.Matrix[Double]]
 
-    val normalizer = new fnm.PCAFeatureNormalizer(features, 0.95)
-    val X = normalizer.normalizedData().asInstanceOf[kmmm.Matrix[Double]]
+    val normalizer = new PCAFeatureNormalizer(features, 0.95)
+    val X = normalizer.normalizedData()
     val μads = clusterLA(X, distance, K, iterations)
 
     val (μ, a, d) = μads.last
@@ -76,14 +73,12 @@ trait KMeansModule {
     val assignmentLog = μads.map(_._2)
     val distanceLog = μads.map(_._3)
 
-    val exemplars = (0 until K).map(i => constructor(normalizer.denormalize(μ.row(i).asInstanceOf[fnm.fnmm.Matrix[Double]]))).toList
+    val exemplars = (0 until K).map(i => constructor(normalizer.denormalize(μ.row(i)))).toList
 
     def exemplar(i: Int): T = exemplars(i)
 
     def classify(observation: T): Int = {
-      val (i, d) = centroidIndexAndDistanceClosestTo(
-        distance, μ, normalizer.normalize(featureExtractor(observation)
-        ).asInstanceOf[kmmm.Matrix[Double]])
+      val (i, d) = centroidIndexAndDistanceClosestTo(distance, μ, normalizer.normalize(featureExtractor(observation)))
       i
     }
 

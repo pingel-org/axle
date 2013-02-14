@@ -3,15 +3,9 @@ package axle.ml
 import collection._
 import axle.matrix._
 
-trait LinearRegressionModule {
+object LinearRegressionModule extends LinearRegressionModule
 
-  val lrmm: MatrixModule
-  val fnm = new FeatureNormalizerModule {
-    val fnmm = new JblasMatrixModule {}
-  }
-
-  import lrmm.{ Matrix, zeros, ones, matrix, convertDouble, convertBoolean }
-  import fnm.{ FeatureNormalizer, LinearFeatureNormalizer }
+trait LinearRegressionModule extends FeatureNormalizerModule {
 
   def normalEquation(X: Matrix[Double], y: Matrix[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
@@ -49,17 +43,16 @@ trait LinearRegressionModule {
       numFeatures,
       examples.flatMap(featureExtractor(_)).toArray).t
 
-    val featureNormalizer = new LinearFeatureNormalizer(inputX.asInstanceOf[fnm.fnmm.Matrix[Double]])
+    val featureNormalizer = new LinearFeatureNormalizer(inputX)
 
-    val X = ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData().asInstanceOf[lrmm.Matrix[Double]]
+    val X = ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData()
 
-    import fnm.fnmm.convertDouble
-    val y = fnm.fnmm.matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
+    val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
 
     val objectiveNormalizer = new LinearFeatureNormalizer(y)
-    import lrmm.convertDouble
+
     val θ0 = ones[Double](X.columns, 1)
-    val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData().asInstanceOf[lrmm.Matrix[Double]], θ0, α, iterations)
+    val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData(), θ0, α, iterations)
 
     LinearEstimator(featureExtractor, featureNormalizer, θ, objectiveNormalizer, errLog.reverse)
   }
@@ -75,8 +68,8 @@ trait LinearRegressionModule {
       (0 until errLog.length).map(j => j -> errLog(j)).toMap
 
     def estimate(observation: D): Double = {
-      val scaledX = ones[Double](1, 1) +|+ featureNormalizer.normalize(featureExtractor(observation)).asInstanceOf[lrmm.Matrix[Double]]
-      objectiveNormalizer.denormalize((scaledX ⨯ θ).asInstanceOf[fnm.fnmm.Matrix[Double]]).head
+      val scaledX = ones[Double](1, 1) +|+ featureNormalizer.normalize(featureExtractor(observation))
+      objectiveNormalizer.denormalize((scaledX ⨯ θ)).head
     }
 
   }

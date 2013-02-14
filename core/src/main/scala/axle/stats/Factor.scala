@@ -4,11 +4,7 @@ import axle.matrix._
 import axle.IndexedCrossProduct
 import collection._
 
-trait FactorModule {
-
-  val mm: MatrixModule // TODO trait val
-
-  import mm.{ Matrix, convertDouble }
+trait FactorModule extends JblasMatrixModule {
 
   /* Technically a "Distribution" is probably a table that sums to 1, which is not
  * always true in a Factor.  They should be siblings rather than parent/child.
@@ -116,7 +112,7 @@ trait FactorModule {
     def tally[A, B](a: RandomVariable[A], b: RandomVariable[B]): Matrix[Double] = {
       val aValues = a.values.getOrElse(Nil).toIndexedSeq
       val bValues = b.values.getOrElse(Nil).toIndexedSeq
-      mm.matrix[Double](
+      matrix[Double](
         aValues.size,
         bValues.size,
         (r: Int, c: Int) => cases().filter(isSupersetOf(_, List(a eq aValues(r), b eq bValues(c)))).map(this(_)).sum

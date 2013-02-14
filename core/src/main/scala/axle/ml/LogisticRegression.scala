@@ -1,17 +1,11 @@
 package axle.ml
 
 import axle.matrix._
+import math.{ exp, log }
 
-trait LogisticRegressionModule {
+object LogisticRegressionModule extends LogisticRegressionModule
 
-  val lrmm: MatrixModule // TODO TRAIT VAL
-  val fnm = new FeatureNormalizerModule { // // TODO TRAIT VAL
-    val fnmm = lrmm
-  }
-
-  import lrmm.{ Matrix, zeros, ones, matrix, convertDouble, convertBoolean }
-  import fnm.{ FeatureNormalizer, LinearFeatureNormalizer }
-  import math.{ exp, log }
+trait LogisticRegressionModule extends FeatureNormalizerModule {
 
   // h is essentially P(y=1 | X;θ)
   def h(xi: Matrix[Double], θ: Matrix[Double]) = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
@@ -46,8 +40,8 @@ trait LogisticRegressionModule {
 
     val inputX = matrix(examples.length, numObservations, examples.flatMap(observationExtractor(_)).toArray).t
     val y = matrix[Boolean](examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
-    val normalizer = new LinearFeatureNormalizer(inputX.asInstanceOf[fnm.fnmm.Matrix[Double]])
-    val X = ones[Double](examples.length, 1) +|+ normalizer.normalizedData().asInstanceOf[lrmm.Matrix[Double]]
+    val normalizer = new LinearFeatureNormalizer(inputX)
+    val X = ones[Double](examples.length, 1) +|+ normalizer.normalizedData()
     val θ0 = ones[Double](X.columns, 1)
     val θ = gradientDescent(X, y, θ0, α, numIterations)
     (θ, normalizer)

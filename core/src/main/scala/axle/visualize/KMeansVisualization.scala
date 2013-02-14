@@ -16,17 +16,15 @@ import java.awt.Font
 import axle.ml.KMeansModule
 import axle.matrix._
 
-trait KmeansVisualizationModule {
+trait KmeansVisualizationModule extends KMeansModule {
 
-  val kmm: KMeansModule // TRAIT VAL
-
-  def visualize[D](classifier: kmm.KMeansClassifier[D],
+  def visualize[D](classifier: KMeansClassifier[D],
     width: Int = 600, height: Int = 600,
     border: Int = 50, pointDiameter: Int = 10) =
     new KMeansVisualization[D](classifier, width, height, border, pointDiameter)
 
   class KMeansVisualization[D](
-    classifier: kmm.KMeansClassifier[D],
+    classifier: KMeansClassifier[D],
     width: Int = 600, height: Int = 600,
     border: Int = 50, pointDiameter: Int = 10) extends JPanel {
 
@@ -57,7 +55,7 @@ trait KmeansVisualizationModule {
 
     def centroid(g2d: Graphics2D, i: Int): Unit = {
       // TODO asInstanceOF
-      val denormalized = classifier.normalizer.denormalize(classifier.μ.row(i).asInstanceOf[kmm.fnm.fnmm.Matrix[Double]])
+      val denormalized = classifier.normalizer.denormalize(classifier.μ.row(i))
       val center = Point2D(denormalized(0), denormalized(1))
       g2d.setColor(darkGray)
       scaledArea.fillOval(g2d, center, 3 * pointDiameter, 3 * pointDiameter)

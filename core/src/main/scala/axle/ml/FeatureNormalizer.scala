@@ -4,12 +4,8 @@ import math.sqrt
 
 import axle.matrix._
 
-trait FeatureNormalizerModule {
+trait FeatureNormalizerModule extends DistanceFunctionModule {
 
-  val fnmm: MatrixModule
-  
-  import fnmm.{Matrix, matrix, std, zscore, pca, numComponentsForCutoff, convertDouble}
-  
   trait FeatureNormalizer {
 
     def normalizedData(): Matrix[Double]

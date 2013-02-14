@@ -10,11 +10,7 @@ class KMeansSpecification extends Specification {
   "K-Means Clustering" should {
     "work" in {
 
-      val kMeans = new KMeansModule {
-        val kmmm = new JblasMatrixModule {}
-      }
-
-      import kMeans.dist.distance._
+      val kMeans = JblasKMeansModule
 
       case class Foo(x: Double, y: Double)
 
@@ -36,7 +32,7 @@ class KMeansSpecification extends Specification {
         N = 2,
         (p: Foo) => List(p.x, p.y),
         (features: Seq[Double]) => Foo(features(0), features(1)),
-        null, // TODO euclidean
+        kMeans.euclidian(),
         K = 3,
         iterations = 100)
 

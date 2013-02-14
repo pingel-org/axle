@@ -3,11 +3,9 @@ package org.pingel.bayes
 import axle.matrix._
 import math.{ pow, sqrt }
 
-trait ChiSquaredTestModule {
-
-  val mm: MatrixModule // TRAIT VAL
+trait ChiSquaredTestModule extends JblasMatrixModule {
   
-  def χ2(tally: mm.Matrix[Double]): Double = {
+  def χ2(tally: Matrix[Double]): Double = {
     val rowTotals = tally.rowSums()
     val columnTotals = tally.columnSums()
     val total = rowTotals.columnSums()(0, 0)
@@ -41,6 +39,6 @@ trait ChiSquaredTestModule {
    *    val dof = (table.height - 1) * (table.width - 1)
    */
 
-  def independent(table: mm.Matrix[Double]): Boolean = χ2(table) < 0.004
+  def independent(table: Matrix[Double]): Boolean = χ2(table) < 0.004
 
 }

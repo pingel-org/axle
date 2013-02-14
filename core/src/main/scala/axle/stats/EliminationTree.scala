@@ -3,11 +3,7 @@ package axle.stats
 import collection._
 import axle.graph._
 
-trait EliminationTreeModule {
-
-  val fm: FactorModule // TODO trait val
-
-  import fm._
+trait EliminationTreeModule extends FactorModule {
   
   case class EliminationTree(
     vps: Seq[Factor],

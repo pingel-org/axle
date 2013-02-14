@@ -4,6 +4,8 @@ import math.sqrt
 import axle.algebra.FunctionPair
 import org.jblas.DoubleMatrix
 
+object JblasMatrixModule extends JblasMatrixModule
+
 trait JblasMatrixModule extends MatrixModule {
 
   type C[T] = FunctionPair[Double, T]

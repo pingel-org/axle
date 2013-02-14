@@ -107,20 +107,9 @@ import axle.graph._
 import math.max
 import Stream.{ cons, empty }
 
-trait BayesianNetworkModule {
+object BayesianNetworkModule extends BayesianNetworkModule
 
-  val bnmmm: axle.matrix.MatrixModule // TODO trait val
-
-  val bnmfm = new FactorModule { // TODO trait val
-    val mm = bnmmm
-  }
-
-  val etm = new EliminationTreeModule {
-    val fm = bnmfm
-  } // TODO trait val
-
-  import bnmfm._
-  import etm._
+trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
 
   class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, String])
     extends Model(_graph) {

@@ -8,9 +8,7 @@ import axle.matrix._
  * http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance
  */
 
-trait Levenshtein extends EditDistance {
-
-  val mm: MatrixModule // TODO trait val
+case class Levenshtein(mm: MatrixModule) extends EditDistance {
 
   import mm.{matrix, Matrix, convertInt}
   

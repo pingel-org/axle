@@ -8,13 +8,11 @@ import org.specs2.mutable._
 
 class ScalaFigures extends Specification {
 
-  val bnm = new BayesianNetworkModule {
-    val bnmmm = new axle.matrix.JblasMatrixModule {}
-  }
+  val bnm = BayesianNetworkModule
 
   import bnm._
-  import bnm.bnmfm.Factor
-  import bnm.etm.EliminationTree
+  import bnm.Factor
+  import bnm.EliminationTree
 
   val bools = Some(Vector(true, false))
 
@@ -167,8 +165,8 @@ class ScalaFigures extends Specification {
     val f61 = figure6_1()
 
     val τ = EliminationTree(
-      List(A, B, C, D, E).map(f61.cpt(_).asInstanceOf[bnm.etm.fm.Factor]), // TODO asInstanceOf
-      (vs: Seq[Vertex[bnm.etm.fm.Factor]]) => vs match {
+      List(A, B, C, D, E).map(f61.cpt(_)), // TODO asInstanceOf
+      (vs: Seq[Vertex[Factor]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List(
           (a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
         case _ => Nil
@@ -184,10 +182,7 @@ class ScalaFigures extends Specification {
     // TODO: needs to be immutable
     val f61 = figure6_1()
     val (bn, τ, cptC) = figure7_4()
-    val (f75, elim) = f61.factorElimination2(
-      Set(C),
-      τ.asInstanceOf[bnm.etm.EliminationTree], // TODO asInstanceOf
-      cptC.asInstanceOf[bnm.bnmfm.Factor])
+    val (f75, elim) = f61.factorElimination2(Set(C), τ, cptC)
     f75
   }
 

@@ -8,11 +8,8 @@ class LinearRegressionSpecification extends Specification {
   "Linear Regression" should {
     "work" in {
 
-      val mm = new axle.matrix.JblasMatrixModule {}
-      val lr = new axle.ml.LinearRegressionModule {
-        val lrmm = mm
-      }
-      
+      val lr = new axle.ml.LinearRegressionModule {}
+
       import axle.visualize._
       import axle.visualize.Plottable._
 

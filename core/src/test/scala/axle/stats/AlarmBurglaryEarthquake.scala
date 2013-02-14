@@ -7,14 +7,8 @@ import org.specs2.mutable._
 
 class ABE extends Specification {
 
-  val bnm = new BayesianNetworkModule {
-    val bnmmm = new axle.matrix.JblasMatrixModule {}
-  }
-  
-  import bnm.BayesianNetwork
-  import bnm.BayesianNetworkNode
-  import bnm.bnmfm.Factor
-  
+  import BayesianNetworkModule._
+
   val bools = Some(Vector(true, false))
 
   val B = new RandomVariable0("Burglary", bools, None)

@@ -17,13 +17,13 @@ trait MatrixModule {
   implicit val convertDouble: C[Double]
   implicit val convertInt: C[Int]
   implicit val convertBoolean: C[Boolean]
-  
-//  implicit val formatDouble = (d: Double) => "%.6f".format(d)
-//  implicit val formatInt = (i: Int) => i.toString
-//  implicit val formatBoolean = (b: Boolean) => b.toString
-  
+
+  //  implicit val formatDouble = (d: Double) => "%.6f".format(d)
+  //  implicit val formatInt = (i: Int) => i.toString
+  //  implicit val formatBoolean = (b: Boolean) => b.toString
+
   type Matrix[T] <: MatrixLike[T]
-  
+
   trait MatrixLike[T] { this: Matrix[T] =>
 
     type S
