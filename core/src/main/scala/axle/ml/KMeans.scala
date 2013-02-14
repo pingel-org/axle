@@ -9,9 +9,7 @@ import collection._
  *
  */
 
-object JblasKMeansModule extends KMeansModule {
-
-}
+object KMeansModule extends KMeansModule
 
 trait KMeansModule extends FeatureNormalizerModule {
 
