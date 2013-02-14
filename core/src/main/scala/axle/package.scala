@@ -40,6 +40,8 @@ package object axle {
 
   implicit def enrichByteArray(barr: Array[Byte]) = EnrichedByteArray(barr)
 
+  implicit def enrichMutableBuffer[T](buffer: mutable.Buffer[T]) = EnrichedMutableBuffer(buffer)
+
   implicit def enrichArray[T : ClassManifest](arr: Array[T]) = EnrichedArray(arr)
 
   implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
