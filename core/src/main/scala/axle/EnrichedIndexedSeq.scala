@@ -31,7 +31,7 @@ class EnrichedIndexedSeq[T : ClassManifest](is: IndexedSeq[T]) {
 
   def ℘(): IndexedPowerSet[T] = IndexedPowerSet(is)
 
-  def permutations(r: Int): Permutations[T] = Permutations(is, r)
+  def permutations(r: Int): PermutationsFast[T] = PermutationsFast(is, r)
 
-  def combinations(r: Int): Combinations[T] = Combinations(is, r)
+  def combinations(r: Int): CombinationsFast[T] = CombinationsFast(is, r)
 }

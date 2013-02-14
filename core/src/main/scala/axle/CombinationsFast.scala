@@ -11,12 +11,12 @@ package axle
 
 import collection._
 
-object CombionationsFast {
+object CombinationsFast {
 
-  def apply[E](pool: IndexedSeq[E], r: Int): CombionationsFast[E] = new CombionationsFast[E](pool, r)
+  def apply[E](pool: IndexedSeq[E], r: Int): CombinationsFast[E] = new CombinationsFast[E](pool, r)
 }
 
-class CombionationsFast[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
+class CombinationsFast[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
 
   val n = pool.size
 
