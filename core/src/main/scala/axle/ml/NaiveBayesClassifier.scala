@@ -9,7 +9,8 @@ object NaiveBayesClassifier {
 
 }
 
-class NaiveBayesClassifier[D, TF, TC](data: Seq[D],
+class NaiveBayesClassifier[D, TF, TC](
+  data: Seq[D],
   pFs: List[RandomVariable[TF]],
   pC: RandomVariable[TC],
   featureExtractor: D => List[TF],
