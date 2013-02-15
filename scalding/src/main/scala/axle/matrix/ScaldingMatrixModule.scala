@@ -10,6 +10,12 @@ import axle.algebra.FunctionPair
 
 object ScaldingMatrixModule extends ScaldingMatrixModule
 
+/**
+ * 
+ * See https://github.com/twitter/scalding/tree/master/tutorial
+ * 
+ */
+
 trait ScaldingMatrixModule extends MatrixModule {
 
   type RowT = Int

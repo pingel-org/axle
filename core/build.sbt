@@ -1,4 +1,3 @@
-import AssemblyKeys._
 
 name := "axle"
 
@@ -8,9 +7,9 @@ version := "0.1-SNAPSHOT"
 
 organization := "org.pingel"
 
-seq(assemblySettings: _*)
+scalaVersion := "2.10.0"
 
-crossScalaVersions := Seq("2.9.1")
+crossScalaVersions := Seq("2.10.0")
 
 initialCommands in console := "import axle._; import axle.algebra._; import axle.stats._; import axle.quanta._; import axle.graph._; import axle.matrix._; import axle.ml._; import axle.visualize._; import axle.ast._; import collection._"
 
@@ -24,13 +23,12 @@ libraryDependencies ++= Seq(
   "net.sf.jung" % "jung-graph-impl" % "2.0.1",
   "net.sf.jung" % "jung-io" % "2.0.1",
   "net.sf.jung" % "jung-visualization" % "2.0.1",
-  "org.specs2" %% "specs2" % "1.11" % "test",
+  "org.spire-math" % "spire_2.10" % "0.3.0",
   "joda-time" % "joda-time" % "2.1",
-  "org.joda" % "joda-convert" % "1.2"
+  "org.joda" % "joda-convert" % "1.2",
+  "org.specs2" % "specs2_2.10" % "1.13" % "test"
   // "org.scalaz" %% "scalaz" % "6.0.4"
 )
-
-test in assembly := {}
 
 // http://www.scala-sbt.org/using_sonatype.html
 

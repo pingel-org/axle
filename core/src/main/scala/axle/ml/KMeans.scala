@@ -2,6 +2,7 @@ package axle.ml
 
 import axle._
 import axle.matrix._
+import util.Random.shuffle
 import collection._
 
 /**
@@ -133,13 +134,13 @@ trait KMeansModule extends FeatureNormalizerModule {
       K: Int,
       iterations: Int): Seq[(Matrix[Double], Matrix[Int], Matrix[Double])] = {
       assert(K < X.rows)
-      val μ0 = X(util.Random.shuffle(0 until X.rows).take(K), 0 until X.columns)
+      val μ0 = X(shuffle((0 until X.rows).toList).take(K), 0 until X.columns)
       val a0 = zeros[Int](X.rows, 1)
       val d0 = zeros[Double](X.rows, 1)
       (0 until iterations).scanLeft((μ0, a0, d0))((μad: (Matrix[Double], Matrix[Int], Matrix[Double]), i: Int) => {
         val (a, d) = assignmentsAndDistances(distance, X, μad._1)
         val (μ, unassignedClusterIds) = centroids(X, K, a)
-        // val replacements = scaledX(util.Random.shuffle(0 until scaledX.rows).take(unassignedClusterIds.length), 0 until scaledX.columns)
+        // val replacements = scaledX(shuffle(0 until scaledX.rows).take(unassignedClusterIds.length), 0 until scaledX.columns)
         (μ, a, d)
       }).tail
     }

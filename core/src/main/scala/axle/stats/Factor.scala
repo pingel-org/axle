@@ -64,7 +64,7 @@ trait FactorModule extends JblasMatrixModule {
     }
 
     private def caseOf(i: Int): Seq[CaseIs[_]] =
-      varList.zip(cp(i)).map({ case (variable: RandomVariable[_], value) => CaseIs(variable, value) })
+      varList.zip(cp(i)).map({ case (variable: RandomVariable[Any], value) => CaseIs(variable, value) })
 
     def cases(): Iterator[Seq[CaseIs[_]]] = (0 until elements.length).iterator.map(caseOf(_))
 
