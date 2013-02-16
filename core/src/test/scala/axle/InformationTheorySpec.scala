@@ -36,8 +36,8 @@ class InformationTheorySpec extends Specification {
       val A = RandomVariable2("A", grv1 = X, grv2 = Y,
         distribution = Some(cpt))
 
-      val p = P((A eq "a") | (X eq "foo") ∧ (Y ne "bar"))
-      val b = P((A eq "a") ∧ (X eq "foo")).bayes
+      val p = P((A is "a") | (X is "foo") ∧ (Y isnt "bar"))
+      val b = P((A is "a") ∧ (X is "foo")).bayes
 
       // println("p = " + p)
       // println("p() = " + p())
