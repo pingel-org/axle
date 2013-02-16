@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Energy extends Quantum {
 
   class EnergyQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Energy extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): EnergyQuantity =
-    new EnergyQuantity(oneBD, None, name, symbol, link)
+    new EnergyQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: EnergyQuantity): EnergyQuantity =
+  def newQuantity(magnitude: Number, unit: EnergyQuantity): EnergyQuantity =
     new EnergyQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
@@ -43,12 +43,12 @@ class Energy extends Quantum {
     ),
     (vs: Seq[Vertex[EnergyQuantity]]) => vs match {
       case kwh :: j :: kj :: mj :: t :: kt :: mt :: gt :: Nil => trips2fns(List(
-        (mj, t, "4.184"),
-        (j, kj, "1E3"),
-        (j, mj, "1E6"),
-        (t, kt, "1E3"),
-        (t, mt, "1E6"),
-        (t, gt, "1E9")
+        (mj, t, 4.184),
+        (j, kj, 1E3),
+        (j, mj, 1E6),
+        (t, kt, 1E3),
+        (t, mt, 1E6),
+        (t, gt, 1E9)
       ))
       case _ => Nil
     }
@@ -63,7 +63,7 @@ class Energy extends Quantum {
   lazy val megaton = byName("megaton")
   lazy val gigaton = byName("gigaton")
 
-  lazy val castleBravo = "15" *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
+  lazy val castleBravo = 15 *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
 
 }
 

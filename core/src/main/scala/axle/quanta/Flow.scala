@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Flow extends Quantum {
 
   class FlowQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Flow extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): FlowQuantity =
-    new FlowQuantity(oneBD, None, name, symbol, link)
+    new FlowQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: FlowQuantity): FlowQuantity =
+  def newQuantity(magnitude: Number, unit: FlowQuantity): FlowQuantity =
     new FlowQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph

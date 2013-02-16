@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Volume extends Quantum {
 
   class VolumeQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Volume extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): VolumeQuantity =
-    new VolumeQuantity(oneBD, None, name, symbol, link)
+    new VolumeQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: VolumeQuantity): VolumeQuantity =
+  def newQuantity(magnitude: Number, unit: VolumeQuantity): VolumeQuantity =
     new VolumeQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph

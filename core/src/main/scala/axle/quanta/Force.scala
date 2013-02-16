@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Force extends Quantum {
 
   class ForceQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Force extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): ForceQuantity =
-    new ForceQuantity(oneBD, None, name, symbol, link)
+    new ForceQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: ForceQuantity): ForceQuantity =
+  def newQuantity(magnitude: Number, unit: ForceQuantity): ForceQuantity =
     new ForceQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph

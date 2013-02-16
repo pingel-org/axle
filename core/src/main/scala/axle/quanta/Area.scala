@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Area extends Quantum {
 
   class AreaQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Area extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): AreaQuantity =
-    new AreaQuantity(oneBD, None, name, symbol, link)
+    new AreaQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: AreaQuantity): AreaQuantity =
+  def newQuantity(magnitude: Number, unit: AreaQuantity): AreaQuantity =
     new AreaQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
@@ -36,7 +36,7 @@ class Area extends Quantum {
     ),
     (vs: Seq[Vertex[AreaQuantity]]) => vs match {
       case m2 :: km2 :: Nil => trips2fns(List(
-        (m2, km2, "1E6")
+        (m2, km2, 1E6)
       ))
       case _ => Nil
     }

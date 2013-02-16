@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Mass extends Quantum {
 
   class MassQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Mass extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): MassQuantity =
-    new MassQuantity(oneBD, None, name, symbol, link)
+    new MassQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: MassQuantity): MassQuantity =
+  def newQuantity(magnitude: Number, unit: MassQuantity): MassQuantity =
     new MassQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
@@ -62,29 +62,29 @@ class Mass extends Quantum {
         venus :: mars :: mercury :: pluto :: moon :: Nil =>
         trips2fns(List(
           (t, meg, 1),
-          (mg, g, "1E3"),
-          (g, kg, "1E3"),
-          (g, meg, "1E6"),
-          (t, kt, "1E3"),
-          (t, mt, "1E6"),
-          (t, gt, "1E9"),
-          (t, tt, "1E12"),
-          (t, pt, "1E15"),
-          (t, et, "1E18"),
-          (t, zt, "1E21"),
-          (t, yt, "1E24"),
-          (kg, man, "86.6"),
-          (zt, earth, "5.9736"),
-          (kg, sun, "1.9891E30"),
-          (yt, jupiter, "1.8986"),
-          (zt, saturn, "568.46"),
-          (zt, neptune, "102.43"),
-          (zt, uranus, "86.810"),
-          (zt, venus, "4.868"),
-          (et, mars, "641.85"),
-          (et, mercury, "330.22"),
-          (et, pluto, "13.05"),
-          (et, moon, "73.477")
+          (mg, g, 1E3),
+          (g, kg, 1E3),
+          (g, meg, 1E6),
+          (t, kt, 1E3),
+          (t, mt, 1E6),
+          (t, gt, 1E9),
+          (t, tt, 1E12),
+          (t, pt, 1E15),
+          (t, et, 1E18),
+          (t, zt, 1E21),
+          (t, yt, 1E24),
+          (kg, man, 86.6),
+          (zt, earth, 5.9736),
+          (kg, sun, 1.9891E30),
+          (yt, jupiter, 1.8986),
+          (zt, saturn, 568.46),
+          (zt, neptune, 102.43),
+          (zt, uranus, 86.810),
+          (zt, venus, 4.868),
+          (et, mars, 641.85),
+          (et, mercury, 330.22),
+          (et, pluto, 13.05),
+          (et, moon, 73.477)
         ))
       case _ => Nil
     }
@@ -120,8 +120,8 @@ class Mass extends Quantum {
   lazy val moon = byName("moon")
 
   // sun also = "332950" *: earth
-  lazy val milkyWayMass = "5.8E+11" *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
-  lazy val andromedaMass = "7.1E+11" *: sun // Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
+  lazy val milkyWayMass = 5.8E11 *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
+  lazy val andromedaMass = 7.1E11 *: sun // Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
 
   // TODO hydrogen atom
 

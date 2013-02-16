@@ -2,8 +2,8 @@ package axle.quanta
 
 import axle.quanta._
 import axle.graph._
-import java.math.BigDecimal
-import java.math.RoundingMode
+import spire.math._
+import spire.implicits._
 import math.{ max, abs }
 import collection._
 
@@ -51,36 +51,27 @@ trait Quantum extends QuantumExpression {
 
   type Q <: Quantity
 
-  //  type G[VP, EP] = DirectedGraph[VP, EP]
+  def conversionGraph(): DirectedGraph[Q, Number => Number]
 
-  def conversionGraph(): DirectedGraph[Q, BigDecimal => BigDecimal]
-
-  def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], BigDecimal => BigDecimal)]): DirectedGraph[Q, BigDecimal => BigDecimal] =
+  def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], Number => Number)]): DirectedGraph[Q, Number => Number] =
     JungDirectedGraph(vps, ef)
 
-  def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], BigDecimal)]) = trips.flatMap(trip2fns(_))
+  def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], Number)]) = trips.flatMap(trip2fns(_))
 
-  def trip2fns(trip: (Vertex[Q], Vertex[Q], BigDecimal)): Seq[(Vertex[Q], Vertex[Q], BigDecimal => BigDecimal)] =
+  def trip2fns(trip: (Vertex[Q], Vertex[Q], Number)): Seq[(Vertex[Q], Vertex[Q], Number => Number)] =
     Vector(
-      (trip._1, trip._2, x => x.multiply(trip._3)),
-      (trip._2, trip._1, x => bdDivide(x, trip._3))
+      (trip._1, trip._2, x => x * trip._3),
+      (trip._2, trip._1, x => x / trip._3)
     )
+
+  val one = Number.one
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
-  def bdDivide(numerator: BigDecimal, denominator: BigDecimal) = numerator.divide(
-    denominator,
-    max(max(numerator.precision, abs(numerator.scale)),
-      max(denominator.precision, abs(denominator.scale))),
-    RoundingMode.HALF_UP)
-
   def is(qe: QuantumExpression) = 4
 
-  val oneBD = new BigDecimal("1")
-  // val zeroBD = new BigDecimal("0")
-
   class Quantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = Number(1),
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -91,26 +82,26 @@ trait Quantum extends QuantumExpression {
     type QUA = quantum.type
 
     def +(right: Q): Q =
-      quantity((this in right.unit).magnitude.add(right.magnitude), right.unit)
+      quantity((this in right.unit).magnitude + right.magnitude, right.unit)
 
     def -(right: Q): Q =
-      quantity((this in right.unit).magnitude.subtract(right.magnitude), right.unit)
+      quantity((this in right.unit).magnitude - right.magnitude, right.unit)
 
-    def *(bd: BigDecimal): Q = quantity(magnitude.multiply(bd), unit)
+    def *(n: Number): Q = quantity(magnitude * n, unit)
 
-    def /(bd: BigDecimal): Q = quantity(bdDivide(magnitude, bd), unit)
+    def /(n: Number): Q = quantity(magnitude / n, unit)
 
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#Q, resultQuantum: QRES): QRES#Q =
-      resultQuantum.quantity(magnitude.multiply(right.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
+      resultQuantum.quantity(magnitude * right.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
 
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q =
-      resultQuantum.quantity(bdDivide(magnitude, bottom.magnitude), resultQuantum.newUnitOfMeasurement(None, None, None))
+      resultQuantum.quantity(magnitude / bottom.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
 
     def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
 
     def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
 
-    def magnitude(): BigDecimal = magnitude
+    def magnitude(): Number = magnitude
     def unit() = _unit.getOrElse(this)
     def name() = _name.getOrElse("")
     def label() = _name.getOrElse("")
@@ -121,27 +112,27 @@ trait Quantum extends QuantumExpression {
 
     override def toString() =
       if (_unit.isDefined)
-        magnitude + unit.symbol.map(" " + _).getOrElse("")
+        magnitude.toString + unit.symbol.map(" " + _).getOrElse("")
       else
         _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + getClass().getSimpleName()
 
-    def *:(bd: BigDecimal) = quantity(magnitude.multiply(bd), this)
+    def *:(n: Number) = quantity(magnitude * n, this)
 
-    def in_:(bd: BigDecimal) = quantity(bd, this)
+    def in_:(n: Number) = quantity(n, this)
 
     def in(other: Q): Q =
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex)
         .map(
-          _.map(_.payload).foldLeft(oneBD)((bd, convert) => convert(bd))
+          _.map(_.payload).foldLeft(Number(1))((n, convert) => convert(n))
         )
-        .map(bd => quantity(bdDivide(magnitude.multiply(bd), other.magnitude), other))
+        .map(n => quantity((magnitude * n) / other.magnitude, other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
 
   }
 
-  def newQuantity(magnitude: BigDecimal, unit: Q): Q
+  def newQuantity(magnitude: Number, unit: Q): Q
 
-  def quantity(magnitude: BigDecimal, unit: Q): Q = newQuantity(magnitude, unit)
+  def quantity(magnitude: Number, unit: Q): Q = newQuantity(magnitude, unit)
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
@@ -164,43 +155,45 @@ trait Quantum extends QuantumExpression {
 
   override def toString() = getClass().getSimpleName()
 
-  case class UnitPlottable(base: quantum.Q) extends axle.visualize.Plottable[quantum.Q] {
+  import axle.visualize.Plottable
+
+  case class UnitPlottable(base: quantum.Q) extends Plottable[quantum.Q] {
 
     import math.{ pow, ceil, floor, log10 }
 
     def isPlottable(t: quantum.Q): Boolean = true
 
-    def zero() = 0.0 *: base
+    def zero() = Number(1) *: base
 
-    def compare(u1: quantum.Q, u2: quantum.Q) =
-      ((u1 in base).magnitude.doubleValue - (u2 in base).magnitude.doubleValue) match {
-        case 0.0 => 0
-        case r @ _ if r > 0.0 => 1
-        case _ => -1
-      }
+    def compare(u1: quantum.Q, u2: quantum.Q) = {
+      val m1 = (u1 in base).magnitude
+      val m2 = (u2 in base).magnitude
+      if (m1 == m2) 0
+      else if (m1 < m2) 1
+      else -1
+    }
 
-    def portion(left: quantum.Q, v: quantum.Q, right: quantum.Q) =
-      ((v in base).magnitude.doubleValue - (left in base).magnitude.doubleValue) /
-        ((right in base).magnitude.doubleValue - (left in base).magnitude.doubleValue)
+    def portion(left: quantum.Q, v: quantum.Q, right: quantum.Q): Double =
+      (((v in base).magnitude - (left in base).magnitude) / ((right in base).magnitude - (left in base).magnitude)).toDouble
 
-    def step(from: BigDecimal, to: BigDecimal): BigDecimal =
-      new BigDecimal("1E" + (ceil(log10(abs(to.doubleValue - from.doubleValue))) - 1).toInt)
+    def step(from: Number, to: Number): Number =
+      Number(10) ** ((log10((to - from).abs.toDouble)).floor)
 
     import Stream.{ empty, cons }
 
-    def ticValueStream(v: BigDecimal, to: BigDecimal, step: BigDecimal): Stream[BigDecimal] =
-      if (v.doubleValue > to.doubleValue) empty else cons(v, ticValueStream(v.add(step), to, step))
+    def ticValueStream(v: Number, to: Number, step: Number): Stream[Number] =
+      if (v > to) empty else cons(v, ticValueStream(v + step, to, step))
 
     def tics(from: quantum.Q, to: quantum.Q): Seq[(quantum.Q, String)] = {
-      val fromMagnitude = (from in base).magnitude
-      val toMagnitude = (to in base).magnitude
-      val s = step(fromMagnitude, toMagnitude)
-      val sD = s.doubleValue
-      val start = new BigDecimal(sD * floor(fromMagnitude.doubleValue / sD))
-      ticValueStream(start, toMagnitude, s).map(v => {
-        val x = v *: base
-        (x, v.toString)
-      }).toList
+      val fromD = (from in base).magnitude
+      val toD = (to in base).magnitude
+      val s = step(fromD, toD)
+      val n = ((toD - fromD) / s).ceil.toInt
+      val start = s * ((fromD / s).floor)
+      (0 to n).map(i => {
+        val v = start + (s * i)
+        (v *: base, v.toString)
+      }) // TODO filter(vs => (vs._1 >= fromD && vs._1 <= toD))
     }
 
   }

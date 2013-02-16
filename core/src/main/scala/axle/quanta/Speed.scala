@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Speed extends Quantum {
 
   class SpeedQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Speed extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): SpeedQuantity =
-    new SpeedQuantity(oneBD, None, name, symbol, link)
+    new SpeedQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: SpeedQuantity): SpeedQuantity =
+  def newQuantity(magnitude: Number, unit: SpeedQuantity): SpeedQuantity =
     new SpeedQuantity(magnitude, Some(unit), None, None, None)
 
   import Distance.{ meter, mile, ft }
@@ -40,8 +40,8 @@ class Speed extends Quantum {
     ),
     (vs: Seq[Vertex[SpeedQuantity]]) => vs match {
       case mps :: fps :: mph :: c :: speedLimit :: Nil => trips2fns(List(
-        (c, mps, "299792458"),
-        (mph, speedLimit, "65")
+        (c, mps, 299792458),
+        (mph, speedLimit, 65)
       ))
       case _ => Nil
     }

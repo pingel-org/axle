@@ -1,13 +1,13 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 import math.Pi
 
 class Angle extends Quantum {
 
   class AngleQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -19,9 +19,9 @@ class Angle extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): AngleQuantity =
-    new AngleQuantity(oneBD, None, name, symbol, link)
+    new AngleQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: AngleQuantity): AngleQuantity =
+  def newQuantity(magnitude: Number, unit: AngleQuantity): AngleQuantity =
     new AngleQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph

@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Power extends Quantum {
 
   class PowerQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Power extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): PowerQuantity =
-    new PowerQuantity(oneBD, None, name, symbol, link)
+    new PowerQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: PowerQuantity): PowerQuantity =
+  def newQuantity(magnitude: Number, unit: PowerQuantity): PowerQuantity =
     new PowerQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
@@ -41,10 +41,10 @@ class Power extends Quantum {
     ),
     (vs: Seq[Vertex[PowerQuantity]]) => vs match {
       case w :: kw :: mw :: gw :: miw :: hp :: lightBulb :: hooverDam :: mustangGT :: Nil => trips2fns(List(
-        (w, kw, "1E3"),
-        (kw, mw, "1E3"),
-        (mw, gw, "1E3"),
-        (miw, w, "1E3"),
+        (w, kw, 1E3),
+        (kw, mw, 1E3),
+        (mw, gw, 1E3),
+        (miw, w, 1E3),
         (w, lightBulb, 60),
         (mw, hooverDam, 2080),
         (hp, mustangGT, 420)

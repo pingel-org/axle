@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Information extends Quantum {
 
   class InformationQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Information extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): InformationQuantity =
-    new InformationQuantity(oneBD, None, name, symbol, link)
+    new InformationQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: InformationQuantity): InformationQuantity =
+  def newQuantity(magnitude: Number, unit: InformationQuantity): InformationQuantity =
     new InformationQuantity(magnitude, Some(unit), None, None, None)
 
   def conversionGraph() = _conversionGraph
@@ -38,13 +38,13 @@ class Information extends Quantum {
     ),
     (vs: Seq[Vertex[InformationQuantity]]) => vs match {
       case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil => trips2fns(List(
-        (bit, nibble, "4"),
-        (bit, byte, "8"),
-        (byte, kilobyte, "1024"),
-        (kilobyte, megabyte, "1024"),
-        (megabyte, gigabyte, "1024"),
-        (gigabyte, terabyte, "1024"),
-        (terabyte, petabyte, "1024")
+        (bit, nibble, 4),
+        (bit, byte, 8),
+        (byte, kilobyte, 1024),
+        (kilobyte, megabyte, 1024),
+        (megabyte, gigabyte, 1024),
+        (gigabyte, terabyte, 1024),
+        (terabyte, petabyte, 1024)
       ))
       case _ => Nil
     }

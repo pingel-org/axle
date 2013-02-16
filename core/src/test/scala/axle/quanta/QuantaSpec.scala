@@ -2,7 +2,7 @@ package axle.quanta
 
 import org.specs2.mutable._
 
-import java.math.BigDecimal
+import spire.math._
 
 class QuantaSpec extends Specification {
 
@@ -14,9 +14,9 @@ class QuantaSpec extends Specification {
       import Mass._
       import Distance._
 
-      ("5" *: gram).magnitude must be equalTo new BigDecimal("5")
-      ("1" *: parsec + "4" *: lightyear).magnitude must be equalTo new BigDecimal("7.260")
-      ("4" *: lightyear + "1" *: parsec).magnitude must be equalTo new BigDecimal("2.2280")
+      (5 *: gram).magnitude must be equalTo 5
+      (1 *: parsec + 4 *: lightyear).magnitude must be equalTo 7.260
+      (4 *: lightyear + 1 *: parsec).magnitude must be equalTo 2.2280
 
     }
   }
@@ -43,8 +43,8 @@ class QuantaSpec extends Specification {
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-      (meter + foot).magnitude must be equalTo new BigDecimal("4.280839895000")
-      (gram + kilogram).magnitude must be equalTo new BigDecimal("1.001")
+      (meter + foot).magnitude must be equalTo 4.280839895000
+      (gram + kilogram).magnitude must be equalTo 1.001
     }
   }
 
@@ -54,7 +54,7 @@ class QuantaSpec extends Specification {
       import Volume._
       import Flow._
       
-      greatLakes.over(niagaraFalls, Time).magnitude must be equalTo new BigDecimal("1.0") // TODO convert that to years
+      greatLakes.over(niagaraFalls, Time).magnitude must be equalTo 1.0 // TODO convert that to years
     }
   }
 

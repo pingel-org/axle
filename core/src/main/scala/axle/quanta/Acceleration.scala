@@ -1,12 +1,12 @@
 package axle.quanta
 
-import java.math.BigDecimal
+import spire.math._
 import axle.graph._
 
 class Acceleration extends Quantum {
 
   class AccelerationQuantity(
-    magnitude: BigDecimal = oneBD,
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -18,9 +18,9 @@ class Acceleration extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): AccelerationQuantity =
-    new AccelerationQuantity(oneBD, None, name, symbol, link)
+    new AccelerationQuantity(one, None, name, symbol, link)
 
-  def newQuantity(magnitude: BigDecimal, unit: AccelerationQuantity): AccelerationQuantity =
+  def newQuantity(magnitude: Number, unit: AccelerationQuantity): AccelerationQuantity =
     new AccelerationQuantity(magnitude, Some(unit), None, None, None)
 
   import Speed.{ mps, fps }
@@ -38,7 +38,7 @@ class Acceleration extends Quantum {
     ),
     (vs: Seq[Vertex[AccelerationQuantity]]) => vs match {
       case mpsps :: fpsps :: g :: Nil => trips2fns(List(
-        (mpsps, g, "9.80665")
+        (mpsps, g, 9.80665)
       ))
       case _ => Nil
     }
