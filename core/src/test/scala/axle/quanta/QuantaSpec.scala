@@ -16,8 +16,7 @@ class QuantaSpec extends Specification {
 
       (5 *: gram).magnitude must be equalTo 5
       (1 *: parsec + 4 *: lightyear).magnitude must be equalTo 7.260
-      (4 *: lightyear + 1 *: parsec).magnitude must be equalTo 2.2280
-
+      (4 *: lightyear + 1 *: parsec).magnitude must be equalTo 2.226993865030675 // TODO what precision do I want here?
     }
   }
 
@@ -43,7 +42,7 @@ class QuantaSpec extends Specification {
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-      (meter + foot).magnitude must be equalTo 4.280839895000
+      (meter + foot).magnitude must be equalTo 4.2808398950131235 // TODO what precision do I want here?
       (gram + kilogram).magnitude must be equalTo 1.001
     }
   }
