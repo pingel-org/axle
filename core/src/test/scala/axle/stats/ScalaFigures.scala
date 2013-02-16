@@ -29,40 +29,40 @@ class ScalaFigures extends Specification {
       List(
         BayesianNetworkNode(A,
           Factor(Vector(A), Map(
-            List(A eq true) -> 0.6,
-            List(A eq false) -> 0.4
+            List(A is true) -> 0.6,
+            List(A is false) -> 0.4
           ))),
         BayesianNetworkNode(B, // B | A
           Factor(Vector(B), Map(
-            List(B eq true, A eq true) -> 0.2,
-            List(B eq true, A eq false) -> 0.8,
-            List(B eq false, A eq true) -> 0.75,
-            List(B eq false, A eq false) -> 0.25
+            List(B is true, A is true) -> 0.2,
+            List(B is true, A is false) -> 0.8,
+            List(B is false, A is true) -> 0.75,
+            List(B is false, A is false) -> 0.25
           ))),
         BayesianNetworkNode(C, // C | A
           Factor(Vector(C), Map(
-            List(C eq true, A eq true) -> 0.8,
-            List(C eq true, A eq false) -> 0.2,
-            List(C eq false, A eq true) -> 0.1,
-            List(C eq false, A eq false) -> 0.9
+            List(C is true, A is true) -> 0.8,
+            List(C is true, A is false) -> 0.2,
+            List(C is false, A is true) -> 0.1,
+            List(C is false, A is false) -> 0.9
           ))),
         BayesianNetworkNode(D, // D | BC
           Factor(Vector(D), Map(
-            List(D eq true, B eq true, C eq true) -> 0.95,
-            List(D eq true, B eq true, C eq false) -> 0.05,
-            List(D eq true, B eq false, C eq true) -> 0.9,
-            List(D eq true, B eq false, C eq false) -> 0.1,
-            List(D eq false, B eq true, C eq true) -> 0.8,
-            List(D eq false, B eq true, C eq false) -> 0.2,
-            List(D eq false, B eq false, C eq true) -> 0.0,
-            List(D eq false, B eq false, C eq false) -> 1.0
+            List(D is true, B is true, C is true) -> 0.95,
+            List(D is true, B is true, C is false) -> 0.05,
+            List(D is true, B is false, C is true) -> 0.9,
+            List(D is true, B is false, C is false) -> 0.1,
+            List(D is false, B is true, C is true) -> 0.8,
+            List(D is false, B is true, C is false) -> 0.2,
+            List(D is false, B is false, C is true) -> 0.0,
+            List(D is false, B is false, C is false) -> 1.0
           ))),
         BayesianNetworkNode(E, // E | C
           Factor(Vector(E), Map(
-            List(E eq true, C eq true) -> 0.7,
-            List(E eq true, C eq false) -> 0.3,
-            List(E eq false, C eq true) -> 0.0,
-            List(E eq false, C eq false) -> 1.0
+            List(E is true, C is true) -> 0.7,
+            List(E is true, C is false) -> 0.3,
+            List(E is false, C is true) -> 0.0,
+            List(E is false, C is false) -> 1.0
           )))),
       (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
@@ -78,22 +78,22 @@ class ScalaFigures extends Specification {
 
     //Figure 3.1
     val cptB = Factor(B :: C :: D :: Nil, Map(
-      List(B eq true, C eq true, D eq true) -> 0.95,
-      List(B eq true, C eq true, D eq false) -> 0.05,
-      List(B eq true, C eq false, D eq true) -> 0.9,
-      List(B eq true, C eq false, D eq false) -> 0.1,
-      List(B eq false, C eq true, D eq true) -> 0.8,
-      List(B eq false, C eq true, D eq false) -> 0.2,
-      List(B eq false, C eq false, D eq true) -> 0.0,
-      List(B eq false, C eq false, D eq false) -> 1.0
+      List(B is true, C is true, D is true) -> 0.95,
+      List(B is true, C is true, D is false) -> 0.05,
+      List(B is true, C is false, D is true) -> 0.9,
+      List(B is true, C is false, D is false) -> 0.1,
+      List(B is false, C is true, D is true) -> 0.8,
+      List(B is false, C is true, D is false) -> 0.2,
+      List(B is false, C is false, D is true) -> 0.0,
+      List(B is false, C is false, D is false) -> 1.0
     ))
 
     // Figure 3.2
     val cptD = Factor(D :: E :: Nil, Map(
-      List(D eq true, E eq true) -> 0.448,
-      List(D eq true, E eq false) -> 0.192,
-      List(D eq false, E eq true) -> 0.112,
-      List(D eq false, E eq false) -> 0.248
+      List(D is true, E is true) -> 0.448,
+      List(D is true, E is false) -> 0.192,
+      List(D is false, E is true) -> 0.112,
+      List(D is false, E is false) -> 0.248
     ))
 
     val h = (cptB.sumOut(D)).sumOut(C)
@@ -107,20 +107,20 @@ class ScalaFigures extends Specification {
     val bn = BayesianNetwork("6.4",
       List(
         BayesianNetworkNode(A, Factor(Vector(A), Map(
-          List(A eq true) -> 0.6,
-          List(A eq false) -> 0.4
+          List(A is true) -> 0.6,
+          List(A is false) -> 0.4
         ))),
         BayesianNetworkNode(B, Factor(Vector(B), Map( // B | A
-          List(B eq true, A eq true) -> 0.9,
-          List(B eq true, A eq false) -> 0.1,
-          List(B eq false, A eq true) -> 0.2,
-          List(B eq false, A eq false) -> 0.8
+          List(B is true, A is true) -> 0.9,
+          List(B is true, A is false) -> 0.1,
+          List(B is false, A is true) -> 0.2,
+          List(B is false, A is false) -> 0.8
         ))),
         BayesianNetworkNode(C, Factor(Vector(C), Map( // C | B
-          List(C eq true, B eq true) -> 0.3,
-          List(C eq true, B eq false) -> 0.7,
-          List(C eq false, B eq true) -> 0.5,
-          List(C eq false, B eq false) -> 0.5
+          List(C is true, B is true) -> 0.3,
+          List(C is true, B is false) -> 0.7,
+          List(C is false, B is true) -> 0.5,
+          List(C is false, B is false) -> 0.5
         )))),
       (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
         case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
@@ -151,11 +151,11 @@ class ScalaFigures extends Specification {
   }
 
   // Figure 6.1 with edges pruned towards C=false
-  def figure6_8() = figure6_1().pruneEdges("Figure 6.8", Some(List(C eq false)))
+  def figure6_8() = figure6_1().pruneEdges("Figure 6.8", Some(List(C is false)))
 
   // Figure 6.1 pruned towards Q={D} and A=true,C=false
   def figure6_9() =
-    figure6_1().pruneNetworkVarsAndEdges(Set(D), Some(List(A eq true, C eq false)))
+    figure6_1().pruneNetworkVarsAndEdges(Set(D), Some(List(A is true, C is false)))
 
   // Result of fe-i on a->b->c with Q={C}
   def figure7_2() = figure6_4.factorElimination1(Set(C))

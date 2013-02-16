@@ -5,8 +5,8 @@ import axle._
 trait RandomVariable[A] {
   def name(): String
   def values(): Option[IndexedSeq[A]]
-  def eq(v: A): CaseIs[A]
-  def ne(v: A): CaseIsnt[A]
+  def is(v: A): CaseIs[A]
+  def isnt(v: A): CaseIsnt[A]
   def probability(a: A): Double
   def observe(): Option[A]
   lazy val charWidth: Int = (name().length :: values().map(vs => vs.map(_.toString.length).toList).getOrElse(Nil)).reduce(math.max)
@@ -17,8 +17,8 @@ case class RandomVariable0[A](_name: String, _values: Option[IndexedSeq[A]] = No
 
   def name() = _name
   def values() = _values
-  def eq(v: A): CaseIs[A] = CaseIs(this, v)
-  def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
+  def is(v: A): CaseIs[A] = CaseIs(this, v)
+  def isnt(v: A): CaseIsnt[A] = CaseIsnt(this, v)
   def probability(a: A): Double = distribution.map(_.probabilityOf(a)).getOrElse(0.0)
   def observe(): Option[A] = distribution.map(_.observe)
 
@@ -30,8 +30,8 @@ case class RandomVariable1[A, G1](_name: String, _values: Option[IndexedSeq[A]] 
 
   def name() = _name
   def values() = _values
-  def eq(v: A): CaseIs[A] = CaseIs(this, v)
-  def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
+  def is(v: A): CaseIs[A] = CaseIs(this, v)
+  def isnt(v: A): CaseIsnt[A] = CaseIsnt(this, v)
   def probability(a: A): Double = ???
   def probability(a: A, given: Case[G1]): Double = distribution.map(_.probabilityOf(a, given)).getOrElse(0.0)
   def observe(): Option[A] = grv.observe().flatMap(observe(_))
@@ -45,8 +45,8 @@ case class RandomVariable2[A, G1, G2](_name: String, _values: Option[IndexedSeq[
 
   def name() = _name
   def values() = _values
-  def eq(v: A): CaseIs[A] = CaseIs(this, v)
-  def ne(v: A): CaseIsnt[A] = CaseIsnt(this, v)
+  def is(v: A): CaseIs[A] = CaseIs(this, v)
+  def isnt(v: A): CaseIsnt[A] = CaseIsnt(this, v)
   def probability(a: A): Double = ???
   def probability(a: A, given1: Case[G1], given2: Case[G2]): Double = distribution.map(_.probabilityOf(a, given1, given2)).getOrElse(0.0)
 

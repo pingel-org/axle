@@ -115,7 +115,7 @@ trait FactorModule extends JblasMatrixModule {
       matrix[Double](
         aValues.size,
         bValues.size,
-        (r: Int, c: Int) => cases().filter(isSupersetOf(_, List(a eq aValues(r), b eq bValues(c)))).map(this(_)).sum
+        (r: Int, c: Int) => cases().filter(isSupersetOf(_, List(a is aValues(r), b is bValues(c)))).map(this(_)).sum
       )
     }
 

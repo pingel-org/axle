@@ -56,7 +56,7 @@ class NaiveBayesClassifier[D, TF, TC](
 
   def predict(d: D): TC = {
     val fs = featureExtractor(d)
-    argmax(C, (c: TC) => P(C eq c) * (0 until N).Π(i => P((Fs(i) eq fs(i)) | (C eq c))))
+    argmax(C, (c: TC) => P(C is c) * (0 until N).Π(i => P((Fs(i) is fs(i)) | (C is c))))
   }
 
   /**

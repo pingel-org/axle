@@ -21,37 +21,37 @@ class ABE extends Specification {
     "A sounds (due to Burglary or Earthquake) and John or Mary Call",
     List(BayesianNetworkNode(B,
       Factor(Vector(B), Map(
-        List(B eq true) -> 0.001,
-        List(B eq false) -> 0.999
+        List(B is true) -> 0.001,
+        List(B is false) -> 0.999
       ))),
       BayesianNetworkNode(E,
         Factor(Vector(E), Map(
-          List(E eq true) -> 0.002,
-          List(E eq false) -> 0.998
+          List(E is true) -> 0.002,
+          List(E is false) -> 0.998
         ))),
       BayesianNetworkNode(A,
         Factor(Vector(B, E, A), Map(
-          List(B eq false, E eq false, A eq true) -> 0.001,
-          List(B eq false, E eq false, A eq false) -> 0.999,
-          List(B eq true, E eq false, A eq true) -> 0.94,
-          List(B eq true, E eq false, A eq false) -> 0.06,
-          List(B eq false, E eq true, A eq true) -> 0.29,
-          List(B eq false, E eq true, A eq false) -> 0.71,
-          List(B eq true, E eq true, A eq true) -> 0.95,
-          List(B eq true, E eq true, A eq false) -> 0.05))),
+          List(B is false, E is false, A is true) -> 0.001,
+          List(B is false, E is false, A is false) -> 0.999,
+          List(B is true, E is false, A is true) -> 0.94,
+          List(B is true, E is false, A is false) -> 0.06,
+          List(B is false, E is true, A is true) -> 0.29,
+          List(B is false, E is true, A is false) -> 0.71,
+          List(B is true, E is true, A is true) -> 0.95,
+          List(B is true, E is true, A is false) -> 0.05))),
       BayesianNetworkNode(J,
         Factor(Vector(A, J), Map(
-          List(A eq true, J eq true) -> 0.9,
-          List(A eq true, J eq false) -> 0.1,
-          List(A eq false, J eq true) -> 0.05,
-          List(A eq false, J eq false) -> 0.95
+          List(A is true, J is true) -> 0.9,
+          List(A is true, J is false) -> 0.1,
+          List(A is false, J is true) -> 0.05,
+          List(A is false, J is false) -> 0.95
         ))),
       BayesianNetworkNode(M,
         Factor(Vector(A, M), Map(
-          List(A eq true, M eq true) -> 0.7,
-          List(A eq true, M eq false) -> 0.3,
-          List(A eq false, M eq true) -> 0.01,
-          List(A eq false, M eq false) -> 0.99
+          List(A is true, M is true) -> 0.7,
+          List(A is true, M is false) -> 0.3,
+          List(A is false, M is true) -> 0.01,
+          List(A is false, M is false) -> 0.99
         )))),
     (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
       case b :: e :: a :: j :: m :: Nil => List((b, a, ""), (e, a, ""), (a, j, ""), (a, m, ""))
@@ -73,7 +73,7 @@ class ABE extends Specification {
       val order = List(J, M)
 
       // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
-      // val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E eq true)
+      // val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E is true)
 
       // bn.getRandomVariables.map(rv => println(bn.getMarkovAssumptionsFor(rv)))
 

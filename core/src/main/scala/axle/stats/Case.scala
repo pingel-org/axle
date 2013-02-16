@@ -76,7 +76,7 @@ case class CaseIs[A](rv: RandomVariable[A], v: A) extends Case[A] {
 
 case class CaseIsnt[A](rv: RandomVariable[A], v: A) extends Case[A] {
 
-  def probability[B](given: Option[Case[B]] = None): Double = 1.0 - P(rv eq v)
+  def probability[B](given: Option[Case[B]] = None): Double = 1.0 - P(rv is v)
 
   def bayes() = () => this.probability()
 

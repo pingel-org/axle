@@ -19,40 +19,40 @@ class ConditionalProbabilityTableSpecification extends Specification {
   val bn = BayesianNetwork("6.1", List(
     BayesianNetworkNode(A,
       Factor(Vector(A), Map(
-        List(A eq true) -> 0.6,
-        List(A eq false) -> 0.4
+        List(A is true) -> 0.6,
+        List(A is false) -> 0.4
       ))),
     BayesianNetworkNode(B, // B | A
       Factor(Vector(B), Map(
-        List(B eq true, A eq true) -> 0.2,
-        List(B eq true, A eq false) -> 0.8,
-        List(B eq false, A eq true) -> 0.75,
-        List(B eq false, A eq false) -> 0.25
+        List(B is true, A is true) -> 0.2,
+        List(B is true, A is false) -> 0.8,
+        List(B is false, A is true) -> 0.75,
+        List(B is false, A is false) -> 0.25
       ))),
     BayesianNetworkNode(C, // C | A
       Factor(Vector(C), Map(
-        List(C eq true, A eq true) -> 0.8,
-        List(C eq true, A eq false) -> 0.2,
-        List(C eq false, A eq true) -> 0.1,
-        List(C eq false, A eq false) -> 0.9
+        List(C is true, A is true) -> 0.8,
+        List(C is true, A is false) -> 0.2,
+        List(C is false, A is true) -> 0.1,
+        List(C is false, A is false) -> 0.9
       ))),
     BayesianNetworkNode(D, // D | BC
       Factor(Vector(D), Map(
-        List(D eq true, B eq true, C eq true) -> 0.95,
-        List(D eq true, B eq true, C eq false) -> 0.05,
-        List(D eq true, B eq false, C eq true) -> 0.9,
-        List(D eq true, B eq false, C eq false) -> 0.1,
-        List(D eq false, B eq true, C eq true) -> 0.8,
-        List(D eq false, B eq true, C eq false) -> 0.2,
-        List(D eq false, B eq false, C eq true) -> 0.0,
-        List(D eq false, B eq false, C eq false) -> 1.0
+        List(D is true, B is true, C is true) -> 0.95,
+        List(D is true, B is true, C is false) -> 0.05,
+        List(D is true, B is false, C is true) -> 0.9,
+        List(D is true, B is false, C is false) -> 0.1,
+        List(D is false, B is true, C is true) -> 0.8,
+        List(D is false, B is true, C is false) -> 0.2,
+        List(D is false, B is false, C is true) -> 0.0,
+        List(D is false, B is false, C is false) -> 1.0
       ))),
     BayesianNetworkNode(E, // E | C
       Factor(Vector(E), Map(
-        List(E eq true, C eq true) -> 0.7,
-        List(E eq true, C eq false) -> 0.3,
-        List(E eq false, C eq true) -> 0.0,
-        List(E eq false, C eq false) -> 1.0
+        List(E is true, C is true) -> 0.7,
+        List(E is true, C is false) -> 0.3,
+        List(E is false, C is true) -> 0.0,
+        List(E is false, C is false) -> 1.0
       )))),
     (vs: Seq[Vertex[BayesianNetworkNode]]) => vs match {
       case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))

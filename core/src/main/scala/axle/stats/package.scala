@@ -23,7 +23,7 @@ package object stats {
   import axle.quanta._
   
   def entropy[A : ClassManifest](X: RandomVariable[A]): Information.Q = X.values.map(_.Σ(x => {
-    val px = P(X eq x)()
+    val px = P(X is x)()
     if (px > 0) (-px * log2(px)) else 0.0
   })).getOrElse(0.0) *: bit
 
