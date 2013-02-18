@@ -1,5 +1,7 @@
 package axle.algebra
 
+/*
+
 trait Monoid[A] extends Zero[A] with Semigroup[A]
 
 object Monoid {
@@ -23,3 +25,4 @@ object Monoid {
   // hyper log log, etc
 
 }
+*/

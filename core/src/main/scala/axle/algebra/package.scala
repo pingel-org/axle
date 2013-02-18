@@ -1,12 +1,13 @@
 
 package axle
 
+import spire.algebra.Monoid
 // http://en.wikipedia.org/wiki/Algebraic_structure
 
 package object algebra {
 
-  def ∅[Z](implicit z: Zero[Z]): Z = z.zero
-  
+  def ∅[T](implicit m: Monoid[T]): T = m.id
+
   implicit def toIdent[A](a: A): Identity[A] = new Identity[A] {
     lazy val value = a
   }

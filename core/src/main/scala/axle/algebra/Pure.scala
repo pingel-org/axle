@@ -1,5 +1,7 @@
 package axle.algebra
 
+import spire.algebra.Monoid
+
 trait Pure[P[_]] {
 
   def pure[A](a: => A): P[A]
@@ -27,15 +29,15 @@ object Pure {
     def pure[A](a: => A) = Right(a)
   }
 
-  implicit def Tuple2Pure[R: Zero]: Pure[({ type λ[α] = (R, α) })#λ] = new Pure[({ type λ[α] = (R, α) })#λ] {
+  implicit def Tuple2Pure[R: Monoid]: Pure[({ type λ[α] = (R, α) })#λ] = new Pure[({ type λ[α] = (R, α) })#λ] {
     def pure[A](a: => A) = (∅[R], a)
   }
 
-  implicit def Tuple3Pure[R: Zero, S: Zero]: Pure[({ type λ[α] = (R, S, α) })#λ] = new Pure[({ type λ[α] = (R, S, α) })#λ] {
+  implicit def Tuple3Pure[R: Monoid, S: Monoid]: Pure[({ type λ[α] = (R, S, α) })#λ] = new Pure[({ type λ[α] = (R, S, α) })#λ] {
     def pure[A](a: => A) = (∅[R], ∅[S], a)
   }
 
-  implicit def Tuple4Pure[R: Zero, S: Zero, T: Zero]: Pure[({ type λ[α] = (R, S, T, α) })#λ] = new Pure[({ type λ[α] = (R, S, T, α) })#λ] {
+  implicit def Tuple4Pure[R: Monoid, S: Monoid, T: Monoid]: Pure[({ type λ[α] = (R, S, T, α) })#λ] = new Pure[({ type λ[α] = (R, S, T, α) })#λ] {
     def pure[A](a: => A) = (∅[R], ∅[S], ∅[T], a)
   }
 

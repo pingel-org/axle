@@ -1,5 +1,7 @@
 package axle.algebra
 
+import spire.algebra.Monoid
+
 trait MA[M[_], A] {
 
   val value: M[A]
@@ -8,7 +10,7 @@ trait MA[M[_], A] {
     s.mappend(value, a2)
 
   def summ(implicit m: Monoid[A], fl: FoldLeft[M]): A =
-    fl.foldLeft(value, m.zero, m.mappend)
+    fl.foldLeft(value, m.id, m.op)
 
   def fmap[B](f: A => B)(implicit functor: Functor[M]): M[B] =
     functor.fmap(value, f)
