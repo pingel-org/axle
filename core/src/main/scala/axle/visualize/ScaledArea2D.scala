@@ -5,7 +5,7 @@ import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import java.awt.FontMetrics
 import math.{ min, abs }
-import axle.algebra.Portionable
+import axle.algebra._ //Portionable
 import axle.quanta._
 import Angle._
 
@@ -87,7 +87,7 @@ class ScaledArea2D[X : Portionable, Y : Portionable](width: Int, height: Int, pa
     val bottomUnscaled = framePoint(bottomScaled)
     g2d.setColor(Color.black)
     // TODO: angle xtics?
-    if (angle == 0.0)
+    if (angle === zeroDegrees)
       g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
     else
       drawStringAtAngle(g2d, fontMetrics, label, bottomScaled, angle)

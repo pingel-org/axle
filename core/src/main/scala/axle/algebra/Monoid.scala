@@ -1,6 +1,6 @@
 package axle.algebra
 
-object Monoid {
+object MonoidLaws {
 
   import spire.algebra.Monoid
 
