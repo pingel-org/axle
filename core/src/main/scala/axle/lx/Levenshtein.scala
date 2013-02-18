@@ -1,5 +1,6 @@
 package axle.lx
 
+import spire.algebra.MetricSpace
 import axle.matrix._
 
 /**
@@ -8,9 +9,9 @@ import axle.matrix._
  * http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance
  */
 
-case class Levenshtein(mm: MatrixModule) extends EditDistance {
+object Levenshtein extends MetricSpace[String, Int] {
 
-  import mm.{matrix, Matrix, convertInt}
+  import JblasMatrixModule.{matrix, Matrix, convertInt}
   
   def distance(s1: String, s2: String): Int = {
 
