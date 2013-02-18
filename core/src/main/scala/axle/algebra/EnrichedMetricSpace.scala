@@ -3,8 +3,9 @@ package axle.algebra
 import spire.math._
 import spire.algebra.MetricSpace
 import axle._
+import collection._
 
-class EnrichedMetricSpace[T](space: MetricSpace[T, Real]) {
+class EnrichedMetricSpace[T: ClassManifest](space: MetricSpace[T, Real]) {
 
   import axle.matrix.JblasMatrixModule._
 
@@ -24,8 +25,6 @@ class EnrichedMetricSpace[T](space: MetricSpace[T, Real]) {
   //  def nMostSimilarReport(query: String, n: Int) = nMostSimilar(query, n)
   //    .map(is => (is._2, corpus(is._1))).map(sd => "%.4f %s".format(sd._1, sd._2)).mkString("\n")
 
-  def distance(s1: String, s2: String): Int
-
   /**
    * triangleInequalityHolds
    *
@@ -35,10 +34,10 @@ class EnrichedMetricSpace[T](space: MetricSpace[T, Real]) {
    * http://en.wikipedia.org/wiki/Triangle_inequality
    */
 
-  def triangleInequalityHolds(data: IndexedSeq[String]): Boolean =
+  def triangleInequalityHolds(data: GenTraversable[T]): Boolean =
     data.triples.∀({
       case (a, b, c) =>
-        distance(a, b) + distance(b, c) >= distance(a, c)
+        space.distance(a, b) + space.distance(b, c) >= space.distance(a, c)
     })
 
 }
