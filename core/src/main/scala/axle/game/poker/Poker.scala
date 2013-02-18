@@ -61,7 +61,7 @@ class Poker(numPlayers: Int) extends Game[Poker] {
       None
   }
 
-  def introMessage() = "Welcome to Axle Texas Hold Em Poker"
+  def introMessage(): String = "Welcome to Axle Texas Hold Em Poker"
 
   def players() = _players.toSet
 

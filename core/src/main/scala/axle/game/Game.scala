@@ -18,7 +18,7 @@ abstract class Game[G <: Game[G]] {
 
   def players(): immutable.Set[G#PLAYER]
 
-  def introMessage(): Unit
+  def introMessage(): String
 
   def startState(): G#STATE
 

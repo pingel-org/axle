@@ -44,7 +44,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
 
   def numPositions() = boardSize * boardSize
 
-  def introMessage() = "Intro message to Tic Tac Toe"
+  def introMessage(): String = "Intro message to Tic Tac Toe"
 
   // tttmm.C[Option[String]]
   implicit val convertPlayerId = new axle.algebra.FunctionPair[Double, Option[String]] {
