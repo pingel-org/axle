@@ -1,7 +1,8 @@
 
 package axle
 
-import spire.algebra.Monoid
+import spire.math._
+import spire.algebra.{ Monoid, MetricSpace }
 // http://en.wikipedia.org/wiki/Algebraic_structure
 
 package object algebra {
@@ -15,5 +16,7 @@ package object algebra {
   implicit def toMA[M[_], A](ma: M[A]): MA[M, A] = new MA[M, A] {
     val value = ma
   }
+
+  implicit def enrichMetricSpace[T](space: MetricSpace[T, Real]) = new EnrichedMetricSpace(space)
 
 }
