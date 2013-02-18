@@ -5,7 +5,10 @@ import math.{ exp, log }
 
 object LogisticRegressionModule extends LogisticRegressionModule
 
-trait LogisticRegressionModule extends FeatureNormalizerModule {
+trait LogisticRegressionModule {
+
+  import FeatureNormalizerModule._
+  import axle.matrix.JblasMatrixModule._
 
   // h is essentially P(y=1 | X;θ)
   def h(xi: Matrix[Double], θ: Matrix[Double]) = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))

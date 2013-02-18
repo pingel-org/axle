@@ -4,8 +4,13 @@ import math.sqrt
 
 import axle.matrix._
 
-trait FeatureNormalizerModule extends DistanceFunctionModule {
+object FeatureNormalizerModule extends FeatureNormalizerModule
 
+trait FeatureNormalizerModule {
+
+  // DistanceFunctionModule
+  import axle.matrix.JblasMatrixModule._
+  
   trait FeatureNormalizer {
 
     def normalizedData(): Matrix[Double]

@@ -4,6 +4,7 @@ import axle._
 import axle.matrix._
 import util.Random.shuffle
 import collection._
+import spire.algebra._
 
 /**
  * KMeans
@@ -12,7 +13,10 @@ import collection._
 
 object KMeansModule extends KMeansModule
 
-trait KMeansModule extends FeatureNormalizerModule {
+trait KMeansModule {
+
+  import axle.matrix.JblasMatrixModule._
+  import FeatureNormalizerModule._
 
   /**
    * cluster[T]
@@ -31,10 +35,10 @@ trait KMeansModule extends FeatureNormalizerModule {
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
-    distance: (Matrix[Double], Matrix[Double]) => Double,
+    space: MetricSpace[Matrix[Double], Double],
     K: Int,
     iterations: Int): KMeansClassifier[T] =
-    KMeansClassifier(data, N, featureExtractor, constructor, distance, K, iterations)
+    KMeansClassifier(data, N, featureExtractor, constructor, space, K, iterations)
 
   // TODO: default distance = distance.euclidean
 
@@ -57,7 +61,7 @@ trait KMeansModule extends FeatureNormalizerModule {
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
-    distance: (Matrix[Double], Matrix[Double]) => Double,
+    space: MetricSpace[Matrix[Double], Double],
     K: Int,
     iterations: Int) {
 
@@ -65,7 +69,7 @@ trait KMeansModule extends FeatureNormalizerModule {
 
     val normalizer = new PCAFeatureNormalizer(features, 0.95)
     val X = normalizer.normalizedData()
-    val μads = clusterLA(X, distance, K, iterations)
+    val μads = clusterLA(X, space, K, iterations)
 
     val (μ, a, d) = μads.last
 
@@ -77,7 +81,7 @@ trait KMeansModule extends FeatureNormalizerModule {
     def exemplar(i: Int): T = exemplars(i)
 
     def classify(observation: T): Int = {
-      val (i, d) = centroidIndexAndDistanceClosestTo(distance, μ, normalizer.normalize(featureExtractor(observation)))
+      val (i, d) = centroidIndexAndDistanceClosestTo(space, μ, normalizer.normalize(featureExtractor(observation)))
       i
     }
 
@@ -89,10 +93,10 @@ trait KMeansModule extends FeatureNormalizerModule {
      */
 
     def centroidIndexAndDistanceClosestTo(
-      distance: (Matrix[Double], Matrix[Double]) => Double,
+      space: MetricSpace[Matrix[Double], Double],
       μ: Matrix[Double],
       x: Matrix[Double]): (Int, Double) =
-      (0 until μ.rows).map(r => (r, distance(μ.row(r), x))).minBy(_._2)
+      (0 until μ.rows).map(r => (r, space.distance(μ.row(r), x))).minBy(_._2)
 
     /**
      * assignmentsAndDistances
@@ -106,12 +110,12 @@ trait KMeansModule extends FeatureNormalizerModule {
      */
 
     def assignmentsAndDistances(
-      distance: (Matrix[Double], Matrix[Double]) => Double,
+      space: MetricSpace[Matrix[Double], Double],
       X: Matrix[Double],
       μ: Matrix[Double]): (Matrix[Int], Matrix[Double]) = {
       val AD = (0 until X.rows).map(r => {
         val xi = X.row(r)
-        val (a, d) = centroidIndexAndDistanceClosestTo(distance, μ, xi)
+        val (a, d) = centroidIndexAndDistanceClosestTo(space, μ, xi)
         Vector(a, d)
       }).transpose
       // TODO: remove the map(_.toInt)
@@ -130,7 +134,7 @@ trait KMeansModule extends FeatureNormalizerModule {
 
     def clusterLA(
       X: Matrix[Double],
-      distance: (Matrix[Double], Matrix[Double]) => Double,
+      space: MetricSpace[Matrix[Double], Double],
       K: Int,
       iterations: Int): Seq[(Matrix[Double], Matrix[Int], Matrix[Double])] = {
       assert(K < X.rows)
@@ -138,7 +142,7 @@ trait KMeansModule extends FeatureNormalizerModule {
       val a0 = zeros[Int](X.rows, 1)
       val d0 = zeros[Double](X.rows, 1)
       (0 until iterations).scanLeft((μ0, a0, d0))((μad: (Matrix[Double], Matrix[Int], Matrix[Double]), i: Int) => {
-        val (a, d) = assignmentsAndDistances(distance, X, μad._1)
+        val (a, d) = assignmentsAndDistances(space, X, μad._1)
         val (μ, unassignedClusterIds) = centroids(X, K, a)
         // val replacements = scaledX(shuffle(0 until scaledX.rows).take(unassignedClusterIds.length), 0 until scaledX.columns)
         (μ, a, d)
