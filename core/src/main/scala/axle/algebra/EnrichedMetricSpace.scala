@@ -5,7 +5,7 @@ import spire.algebra.MetricSpace
 import axle._
 import collection._
 
-class EnrichedMetricSpace[T: ClassManifest](space: MetricSpace[T, Real]) {
+class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Real]) {
 
   import axle.matrix.JblasMatrixModule._
 

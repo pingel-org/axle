@@ -112,7 +112,7 @@ case class JungDirectedGraph[VP, EP](
     case _ => xml.Text(vp.toString)
   }
 
-  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =
+  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
     JungDirectedGraph(vps.map(vpf(_)),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(vertexSeq).map({

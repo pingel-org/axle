@@ -1,6 +1,6 @@
 package axle
 
-case class EnrichedArray[T: ClassManifest](arr: Array[T]) {
+case class EnrichedArray[T: Manifest](arr: Array[T]) {
 
   def apply(range: Range) = {
     assert(range.step == 1)

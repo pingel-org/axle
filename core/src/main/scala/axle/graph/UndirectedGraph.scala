@@ -11,7 +11,7 @@ trait UndirectedGraph[VP, EP] {
 
   def vertexPayloads(): Seq[VP]
   def edgeFunction(): Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]
-  
+
   def vertices(): Set[Vertex[VP]]
   def allEdges(): Set[Edge[ES, EP]]
 
@@ -76,6 +76,6 @@ trait UndirectedGraph[VP, EP] {
     (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
   }
 
-  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
-  
+  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
+
 }

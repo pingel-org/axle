@@ -5,7 +5,7 @@ import collection._
 import axle._
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
-case class JungUndirectedGraph[VP, EP](
+case class JungUndirectedGraph[VP : Manifest, EP](
   vps: Seq[VP],
   ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends UndirectedGraph[VP, EP] {
@@ -112,7 +112,7 @@ case class JungUndirectedGraph[VP, EP](
     ???
   }
 
-  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =
+  def map[NVP : Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
     JungUndirectedGraph(vps.map(vpf(_)),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(vertexSeq).map({

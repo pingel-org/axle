@@ -15,10 +15,10 @@ import Stream.{ cons, empty }
 
 object Combinations {
 
-  def apply[E : ClassManifest](pool: Seq[E], r: Int): Combinations[E] = new Combinations(pool, r)
+  def apply[E : Manifest](pool: Seq[E], r: Int): Combinations[E] = new Combinations(pool, r)
 }
 
-class Combinations[E : ClassManifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
+class Combinations[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
   val pool: Array[E] = _pool.toList.toArray
 

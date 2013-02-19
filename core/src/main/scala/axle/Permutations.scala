@@ -15,10 +15,10 @@ import Stream.{ empty, cons }
 
 object Permutations {
 
-  def apply[E: ClassManifest](pool: Seq[E], r: Int): Permutations[E] = new Permutations(pool, r)
+  def apply[E: Manifest](pool: Seq[E], r: Int): Permutations[E] = new Permutations(pool, r)
 }
 
-class Permutations[E: ClassManifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
+class Permutations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
   val pool = _pool.toArray
   val n = pool.length

@@ -5,10 +5,10 @@ import util.Random.nextInt
 
 object EnrichedIndexedSeq {
 
-  def apply[T : ClassManifest](is: IndexedSeq[T]) = new EnrichedIndexedSeq(is)
+  def apply[T : Manifest](is: IndexedSeq[T]) = new EnrichedIndexedSeq(is)
 }
 
-class EnrichedIndexedSeq[T : ClassManifest](is: IndexedSeq[T]) {
+class EnrichedIndexedSeq[T : Manifest](is: IndexedSeq[T]) {
 
   def apply(range: Range): IndexedSeq[T] = {
     assert(range.step == 1)

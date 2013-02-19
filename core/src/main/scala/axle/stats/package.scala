@@ -11,7 +11,7 @@ package object stats {
   
   implicit def rv2it[K](rv: RandomVariable[K]): IndexedSeq[K] = rv.values.getOrElse(Vector())
   
-  implicit def enrichCaseGenTraversable[A : ClassManifest](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
+  implicit def enrichCaseGenTraversable[A : Manifest](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
 
   def coin(pHead: Double = 0.5) = RandomVariable0("coin",
     Some(List('HEAD, 'TAIL).toIndexedSeq),
@@ -22,12 +22,12 @@ package object stats {
   import Information._
   import axle.quanta._
   
-  def entropy[A : ClassManifest](X: RandomVariable[A]): Information.Q = X.values.map(_.Σ(x => {
+  def entropy[A : Manifest](X: RandomVariable[A]): Information.Q = X.values.map(_.Σ(x => {
     val px = P(X is x)()
     if (px > 0) (-px * log2(px)) else 0.0
   })).getOrElse(0.0) *: bit
 
-  def H[A : ClassManifest](X: RandomVariable[A]): Information.Q = entropy(X)
+  def H[A : Manifest](X: RandomVariable[A]): Information.Q = entropy(X)
 
   def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
     //   // TODO

@@ -34,15 +34,15 @@ package object axle {
 
   implicit def enrichGenSet[T](s: GenSet[T]) = EnrichedGenSet(s)
 
-  implicit def enrichGenTraversable[T : ClassManifest](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
+  implicit def enrichGenTraversable[T : Manifest](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
 
-  implicit def enrichIndexedSeq[T : ClassManifest](is: IndexedSeq[T]) = EnrichedIndexedSeq(is)
+  implicit def enrichIndexedSeq[T : Manifest](is: IndexedSeq[T]) = EnrichedIndexedSeq(is)
 
   implicit def enrichByteArray(barr: Array[Byte]) = EnrichedByteArray(barr)
 
   implicit def enrichMutableBuffer[T](buffer: mutable.Buffer[T]) = EnrichedMutableBuffer(buffer)
 
-  implicit def enrichArray[T : ClassManifest](arr: Array[T]) = EnrichedArray(arr)
+  implicit def enrichArray[T : Manifest](arr: Array[T]) = EnrichedArray(arr)
 
   implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
 

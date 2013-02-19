@@ -28,7 +28,7 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
   def storage() = (_verticesSet, _edgesSet, vertex2outedges, vertex2inedges)
 
   def vertexPayloads() = vps
-  
+
   def edgeFunction() = ef
 
   def vertices(): Set[Vertex[VP]] = _verticesSet
@@ -38,7 +38,7 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
   def size(): Int = vps.size
 
   def source(edge: Edge[ES, EP]): Vertex[VP] = edge.storage._1
-  
+
   def dest(edge: Edge[ES, EP]): Vertex[VP] = edge.storage._2
 
   def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[ES, EP]] = vertex2outedges(from).find(dest(_) == to)
@@ -97,11 +97,11 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
 
   def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[ES, EP]]] = _shortestPath(source, goal, Set())
 
-  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =
+  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
     NativeDirectedGraph(vps.map(vpf(_)),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(_vertices).map({
           case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))
         }))
-  
+
 }

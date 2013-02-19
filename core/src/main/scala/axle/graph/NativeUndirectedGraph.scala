@@ -3,7 +3,7 @@ package axle.graph
 import collection._
 import axle._
 
-case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
+case class NativeUndirectedGraph[VP: Manifest, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends UndirectedGraph[VP, EP] {
 
   type G[VP, EP] = NativeUndirectedGraph[VP, EP]
@@ -31,7 +31,7 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
   def storage() = (_vertices, _edges, vertex2edges)
 
   def vertexPayloads() = vps
-  
+
   def edgeFunction() = ef
 
   def vertices() = vertexSet
@@ -41,7 +41,7 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
   def size(): Int = _vertices.size
 
   def vertices(edge: Edge[ES, EP]) = (edge.storage._1, edge.storage._2)
-  
+
   def findEdge(vi: Vertex[VP], vj: Vertex[VP]): Option[Edge[ES, EP]] =
     _edges.find(e => (vertices(e) == (vi, vj)) || (vertices(e) == (vj, vi))) // Note: no matching on payload
 
@@ -107,14 +107,13 @@ case class NativeUndirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Se
     ??? // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
   }
 
-  def map[NVP, NEP](vpf: VP => NVP, epf: EP => NEP) =
+  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
     NativeUndirectedGraph(vps.map(vpf(_)),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(_vertices).map({
           case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))
         }))
-  
-  
+
   /**
    * dijkstra
    *

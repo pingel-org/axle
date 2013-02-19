@@ -4,7 +4,7 @@ package axle.game
 import axle._
 import collection._
 import Stream.{ empty, cons }
-import util.Random.shuffle
+import util.Random.{ shuffle, nextInt }
 
 abstract class Game[G <: Game[G]] {
 
@@ -34,7 +34,8 @@ abstract class Game[G <: Game[G]] {
         (move, state, minimax(newState, depth - 1, heuristic)._3)
       })
       val bestValue = moveValue.map(mcr => (mcr._3)(state.player)).max
-      moveValue.filter(mcr => (mcr._3)(state.player) == bestValue).toIndexedSeq.random
+      val matches = moveValue.filter(mcr => (mcr._3)(state.player) == bestValue).toIndexedSeq
+      matches(nextInt(matches.length))
     }
 
   /**

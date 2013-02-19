@@ -15,7 +15,7 @@ trait Case[A] {
   def bayes(): () => Double // perhaps bayes should return a Seq[Case] or similar
 }
 
-case class CaseAndGT[A](conjuncts: GenTraversable[Case[A]]) extends Case[List[A]] {
+case class CaseAndGT[A: Manifest](conjuncts: GenTraversable[Case[A]]) extends Case[List[A]] {
 
   def probability[B](given: Option[Case[B]] = None): Double =
     given
@@ -28,9 +28,7 @@ case class CaseAndGT[A](conjuncts: GenTraversable[Case[A]]) extends Case[List[A]
 case class CaseAnd[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
 
   def probability[C](given: Option[Case[C]] = None): Double =
-    (given.map(g => P(left | g) * P(right | g))
-      .getOrElse(P(left) * P(right))
-    )()
+    (given.map(g => P(left | g) * P(right | g)).getOrElse(P(left) * P(right))).apply()
 
   def bayes() = P(left | right) * P(right).bayes()() // TODO: also check that "left" and "right" have no "given"
 
