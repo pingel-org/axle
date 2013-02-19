@@ -25,12 +25,6 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
 
   def stopwords() = _stopwords
 
-  def termWeight(term: String, doc: TermVector) =
-    doc(term) * log(numDocs / documentFrequency(term).toDouble)
-
-//  def dot(v1: TermVector, v2: TermVector) =
-//    (v1.keySet intersect v2.keySet).toList.map(term => termWeight(term, v1) * termWeight(term, v2)).sum
-
   /**
    *
    *
@@ -55,9 +49,11 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
 
       implicit def scalar = Field.RealIsField
 
+      def termWeight(term: String, doc: TermVector) =
+        doc(term) * log(numDocs / documentFrequency(term).toDouble)
+
       def dot(v1: TermVector, v2: TermVector) =
         (v1.keySet intersect v2.keySet).toList.map(term => termWeight(term, v1) * termWeight(term, v2)).sum
-
     }
 
     def space() = _innerProductSpace

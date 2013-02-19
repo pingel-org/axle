@@ -7,8 +7,6 @@ import spire.algebra._
 class UnweightedDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => Iterator[String])
   extends DocumentVectorSpace {
 
-  import math.sqrt
-
   lazy val _vectors = corpusIterator().map(doc2vector(_)).toIndexedSeq
 
   def vectors() = _vectors
