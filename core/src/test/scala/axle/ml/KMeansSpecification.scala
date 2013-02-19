@@ -4,6 +4,7 @@ import org.specs2.mutable._
 import util.Random.{ shuffle, nextGaussian, nextDouble }
 import math.{ Pi, cos, sin, sqrt }
 import axle.matrix.JblasMatrixModule
+import axle.ml.DistanceFunctionModule._
 
 class KMeansSpecification extends Specification {
 
@@ -32,7 +33,7 @@ class KMeansSpecification extends Specification {
         N = 2,
         (p: Foo) => List(p.x, p.y),
         (features: Seq[Double]) => Foo(features(0), features(1)),
-        DistanceFunctionModule.euclidian(2),
+        euclidian(2),
         K = 3,
         iterations = 100)
 
