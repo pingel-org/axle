@@ -25,12 +25,6 @@ trait JblasMatrixModule extends MatrixModule {
     val backward = (t: Boolean) => t match { case true => 0.0 case false => 1.0 }
   }
 
-  //implicit val formatDouble = (d: Double) => """%.6f""".format(d)
-
-  // implicit val formatInt = (i: Int) => i.toString
-
-  // implicit val formatBoolean = (b: Boolean) => b.toString
-
   class Matrix[T: C](_storage: DoubleMatrix) extends MatrixLike[T] {
 
     val fp = implicitly[C[T]]
@@ -39,7 +33,10 @@ trait JblasMatrixModule extends MatrixModule {
 
     def storage = _storage
 
-    implicit val format = (t: T) => t.toString // TODO !!!
+    implicit val format = (t: T) => t match {
+      case d: Double => """%.6f""".format(d)
+      case _ => t.toString
+    }
 
     def rows() = storage.rows
     def columns() = storage.columns
@@ -194,7 +191,7 @@ trait JblasMatrixModule extends MatrixModule {
       matrix[B](jblas)
     }
 
-    def flatMapColumns[A : C](f: Matrix[T] => Matrix[A]): Matrix[A] = {
+    def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = {
       val fpA = implicitly[C[A]]
       val jblas = DoubleMatrix.zeros(rows, columns)
       for {
