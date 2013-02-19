@@ -6,7 +6,7 @@ import spire.algebra.MetricSpace
 import axle._
 import collection._
 
-class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Real]) {
+class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Double]) {
 
   import axle.matrix.JblasMatrixModule._
   import space._
@@ -16,7 +16,7 @@ class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Real]) {
     matrix(n, n, (r: Int, c: Int) => distance(vectors(r), vectors(c)).toDouble)
   }
 
-  def nMostSimilar(query: T, vectors: Iterator[T], c: Int): List[(Int, Real)] =
+  def nMostSimilar(query: T, vectors: Iterator[T], c: Int): List[(Int, Double)] =
     vectors.zipWithIndex
       .map({ case (v, i) => (i, distance(query, v)) })
       .toList

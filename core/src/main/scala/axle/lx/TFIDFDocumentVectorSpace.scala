@@ -18,7 +18,7 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
   extends DocumentVectorSpace {
 
   lazy val numDocs = corpusIterator().size // TODO expensive
-  lazy val _vectors = corpusIterator().map(doc2vector(_))
+  lazy val _vectors = corpusIterator().map(doc2vector(_)).toIndexedSeq
   lazy val documentFrequency = mrWordExistsCount(corpusIterator()).withDefaultValue(1)
 
   def vectors() = _vectors
@@ -28,15 +28,15 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
   /**
    *
    *
-   * distance(v1: TermVector, v2: TermVector): Real = 1 - dot(v1, v2) / (norm(v1) * norm(v2))
+   * distance(v1: TermVector, v2: TermVector) = 1 - dot(v1, v2) / (norm(v1) * norm(v2))
    *
    */
 
-  val _space = new NormedInnerProductSpace[TermVector, Real] {
+  val _space = new NormedInnerProductSpace[TermVector, Double] {
 
-    def nroot = NRoot.RealIsNRoot
+    def nroot = NRoot.DoubleIsNRoot
 
-    val _innerProductSpace = new InnerProductSpace[TermVector, Real] {
+    val _innerProductSpace = new InnerProductSpace[TermVector, Double] {
 
       def negate(x: TermVector) = x.map(kv => (kv._1, -1 * kv._2)) // Not sure this makes much sense
 
@@ -45,15 +45,16 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
       def plus(x: TermVector, y: TermVector) =
         (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
 
-      def timesl(r: Real, v: TermVector) = v.map(kv => (kv._1, (kv._2 * r).toInt))
+      def timesl(r: Double, v: TermVector) = v.map(kv => (kv._1, (kv._2 * r).toInt))
 
-      implicit def scalar = Field.RealIsField
+      implicit def scalar = Field.DoubleIsField
 
       def termWeight(term: String, doc: TermVector) =
-        doc(term) * log(numDocs / documentFrequency(term).toDouble)
+        doc(term) * math.log(numDocs / documentFrequency(term).toDouble)
 
       def dot(v1: TermVector, v2: TermVector) =
         (v1.keySet intersect v2.keySet).toList.map(term => termWeight(term, v1) * termWeight(term, v2)).sum
+
     }
 
     def space() = _innerProductSpace

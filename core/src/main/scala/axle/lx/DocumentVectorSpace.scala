@@ -20,7 +20,7 @@ import spire.algebra.MetricSpace
 trait DocumentVectorSpace {
 
   import ScalaMapReduce.mapReduce
-
+  
   type TermVector = Map[String, Int]
 
   val whitespace = """\s+""".r
@@ -41,6 +41,6 @@ trait DocumentVectorSpace {
 
   def doc2vector(doc: String): TermVector = mrWordCount(List(doc.toLowerCase).iterator).withDefaultValue(0)
   
-  def space(): MetricSpace[TermVector, Real]
+  def space(): MetricSpace[TermVector, Double]
 
 }
