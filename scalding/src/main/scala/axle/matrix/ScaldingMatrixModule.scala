@@ -1,45 +1,35 @@
 
 package axle.matrix
 
-//import com.twitter.algebird._
-//import com.twitter.algebird.Operators._
+import com.twitter.algebird.{ Group, Field, Monoid }
 import com.twitter.scalding._
-import com.twitter.scalding.mathematics.{ Matrix => ScaldingMatrix }
+import com.twitter.scalding.mathematics.{ Matrix => ScaldingMatrix, MatrixProduct }
 import axle._
 import axle.algebra.FunctionPair
 
 object ScaldingMatrixModule extends ScaldingMatrixModule
 
 /**
- * 
+ *
  * See https://github.com/twitter/scalding/tree/master/tutorial
- * 
+ *
  */
 
 trait ScaldingMatrixModule extends MatrixModule {
 
   type RowT = Int
   type ColT = Int
-  type C[T] = FunctionPair[Double, T]
+  type C[T] = Field[T]
 
-  implicit val convertDouble: C[Double] = new FunctionPair[Double, Double] {
-    val forward = (d: Double) => d
-    val backward = (t: Double) => t
-  }
-
-  implicit val convertInt: C[Int] = new FunctionPair[Double, Int] {
-    val forward = (d: Double) => d.toInt
-    val backward = (t: Int) => t.toDouble
-  }
-
-  implicit val convertBoolean: C[Boolean] = new FunctionPair[Double, Boolean] {
-    val forward = (d: Double) => d != 0.0
-    val backward = (t: Boolean) => t match { case true => 0.0 case false => 1.0 }
-  }
+  implicit val convertBoolean = Field.boolField
+  implicit val convertDouble = Field.doubleField
+  implicit val convertInt = ???
 
   class Matrix[T: C](_storage: ScaldingMatrix[RowT, ColT, T]) extends MatrixLike[T] {
 
-    val fp = implicitly[C[T]]
+    implicit val prod: MatrixProduct[ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T]] = null
+
+    val field = implicitly[Field[T]]
 
     type S = ScaldingMatrix[RowT, ColT, T]
 
@@ -47,18 +37,18 @@ trait ScaldingMatrixModule extends MatrixModule {
 
     implicit val format = (t: T) => t.toString // TODO !!!
 
-    def rows() = ???
+    def rows() = ??? // scalding.sizeHint.rows
     def columns() = ???
     def length() = ???
 
-    def apply(i: Int, j: Int): T = ???
+    def apply(i: Int, j: Int): T = ??? //scalding.elementAt(i, j)
 
     def apply(rs: Seq[Int], cs: Seq[Int]): Matrix[T] = ???
 
     def toList(): List[T] = ???
 
-    def column(j: Int) = ???
-    def row(i: Int) = ???
+    def column(j: Int) = matrix(scalding.getCol(j).toMatrix(0))
+    def row(i: Int) = ??? //scalding.getRow(i)
 
     def isEmpty() = ???
     def isRowVector() = ???
@@ -68,31 +58,31 @@ trait ScaldingMatrixModule extends MatrixModule {
     def isScalar() = ???
 
     def dup() = ???
-    def negate() = ???
-    def transpose() = ???
-    def diag() = ???
-    def invert() = ???
+    def negate() = matrix(scalding.mapValues(field.negate(_)))
+    def transpose() = matrix(scalding.transpose)
+    def diag() = matrix(scalding.diagonal)
+    def invert() = ??? // matrix(scalding.inverse)
     def ceil() = ???
-    def floor() = ???
+    def floor() = ??? // matrix(scalding.mapValues(v => math.floor(v)))
     def log() = ???
     def log10() = ???
 
     def fullSVD() = ???
 
-    def addScalar(x: T) = ???
+    def addScalar(x: T) = matrix(scalding.mapValues(field.plus(_, x)))
     def addAssignment(r: Int, c: Int, v: T): Matrix[T] = ???
 
-    def subtractScalar(x: T) = ???
-    def multiplyScalar(x: T) = ???
-    def divideScalar(x: T) = ???
+    def subtractScalar(x: T) = matrix(scalding.mapValues(field.minus(_, x)))
+    def multiplyScalar(x: T) = matrix(scalding.mapValues(field.times(_, x)))
+    def divideScalar(x: T) = matrix(scalding.mapValues(field.div(_, x)))
     def mulRow(i: Int, x: T) = ???
     def mulColumn(i: Int, x: T) = ???
 
     def pow(p: Double) = ???
 
-    def addMatrix(other: Matrix[T]) = ???
-    def subtractMatrix(other: Matrix[T]) = ???
-    def multiplyMatrix(other: Matrix[T]) = ???
+    def addMatrix(other: Matrix[T]) = matrix(scalding + other.scalding)
+    def subtractMatrix(other: Matrix[T]) = matrix(scalding - other.scalding)
+    def multiplyMatrix(other: Matrix[T]) = matrix(scalding * other.scalding)
 
     def mulPointwise(other: Matrix[T]) = ???
     def divPointwise(other: Matrix[T]) = ???
@@ -125,8 +115,12 @@ trait ScaldingMatrixModule extends MatrixModule {
     def argmax() = ???
     def min() = ???
     def argmin() = ???
-    def rowSums() = ???
-    def columnSums() = ???
+
+    def rowSums() = matrix(scalding.sumRowVectors.toMatrix(0))
+
+    def columnSums() = matrix(scalding.sumColVectors.toMatrix(0))
+
+    // def sum(): T = scalding.sum
 
     def columnMins() = ???
     def columnMaxs() = ???
@@ -140,32 +134,36 @@ trait ScaldingMatrixModule extends MatrixModule {
 
     // higher order methods
 
-    def map[B: C](f: T => B): Matrix[B] = ???
+    def map[B: C](f: T => B): Matrix[B] = matrix(scalding.mapValues(f(_)))
 
     def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = ???
 
-    override def toString() = ???
+    override def toString() = scalding.toString // TODO ?
 
-    def jblas() = storage
+    def scalding() = storage
   }
 
   // methods for creating matrices
 
-  def matrix[T: C](s: ScaldingMatrix[RowT, ColT, T]): Matrix[T] = ???
+  def matrix[T: C](s: ScaldingMatrix[RowT, ColT, T]): Matrix[T] = new Matrix(s)
+
   def matrix[T: C](r: Int, c: Int, values: Array[T]): Matrix[T] = ???
+
   def matrix[T: C](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): Matrix[T] = ???
+
   def matrix[T: C](m: Int, n: Int, f: (Int, Int) => T): Matrix[T] = ???
+
   def diag[T: C](row: Matrix[T]): Matrix[T] = ???
+
   def zeros[T: C](m: Int, n: Int): Matrix[T] = ???
   def ones[T: C](m: Int, n: Int): Matrix[T] = ???
   def eye[T: C](n: Int): Matrix[T] = ???
   def I[T: C](n: Int): Matrix[T] = ???
+
   def rand[T: C](m: Int, n: Int): Matrix[T] = ???
   def randn[T: C](m: Int, n: Int): Matrix[T] = ???
   def falses(m: Int, n: Int): Matrix[Boolean] = ???
   def trues(m: Int, n: Int): Matrix[Boolean] = ???
-
-  // TODO: Int jblas' rand and randn should probably floor the result
 
   override def median(m: Matrix[Double]): Matrix[Double] = ???
 
