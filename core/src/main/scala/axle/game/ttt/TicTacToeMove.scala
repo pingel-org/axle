@@ -21,7 +21,7 @@ case class TicTacToeMove(tttPlayer: TicTacToePlayer, position: Int)(implicit ttt
   }
 
   def displayTo(p: TicTacToePlayer): String =
-    (if (tttPlayer != p) { "I will" } else { "You have" }) +
+    (if (tttPlayer != p) "I will" else "You have") +
       " put an " + tttPlayer.id +
       " in the " + description() + "."
 

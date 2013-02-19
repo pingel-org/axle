@@ -3,7 +3,7 @@ package axle.game.ttt
 
 import axle.game._
 import axle.matrix._
-import axle.algebra.FunctionPair
+import axle.algebra._
 import util.Random.{ nextInt }
 import collection._
 
@@ -66,6 +66,6 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
   def players(): immutable.Set[TicTacToePlayer] = immutable.Set(x, o)
 
   def playerAfter(player: TicTacToePlayer): TicTacToePlayer =
-    if (player == x) o else x
+    if (player === x) o else x
 
 }
