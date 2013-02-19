@@ -23,10 +23,10 @@ libraryDependencies ++= Seq(
   "net.sf.jung" % "jung-graph-impl" % "2.0.1",
   "net.sf.jung" % "jung-io" % "2.0.1",
   "net.sf.jung" % "jung-visualization" % "2.0.1",
-  "org.spire-math" % "spire_2.10" % "0.3.0",
   "joda-time" % "joda-time" % "2.1",
   "org.joda" % "joda-convert" % "1.2",
-  "org.specs2" % "specs2_2.10" % "1.13" % "test"
+  "org.spire-math" %% "spire" % "0.3.0",
+  "org.specs2" %% "specs2" % "1.13" % "test"
   // "org.scalaz" %% "scalaz" % "6.0.4"
 )
 
