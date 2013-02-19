@@ -152,45 +152,4 @@ object Plottable {
 
   }
 
-  import axle.quanta._
-
-  case class QuantumPlottable(quantum: Quantum) {
-
-    def withBase(base: quantum.Q) = UnitPlottable(base)
-
-    case class UnitPlottable(base: quantum.Q) extends Plottable[quantum.Q] {
-
-      def isPlottable(t: quantum.Q): Boolean = true
-
-      def zero() = 0.0 *: base
-
-      def compare(u1: quantum.Q, u2: quantum.Q) = {
-        val m1 = (u1 in base).magnitude
-        val m2 = (u2 in base).magnitude
-        if (m1 == m2) 0
-        else if (m1 < m2) 1
-        else -1
-      }
-
-      def portion(left: quantum.Q, v: quantum.Q, right: quantum.Q): Double =
-        (((v in base).magnitude - (left in base).magnitude) / ((right in base).magnitude - (left in base).magnitude)).toDouble
-
-      def step(from: Number, to: Number): Number =
-        Number(10) ** ((log10((to - from).abs.toDouble)).floor)
-
-      def tics(from: quantum.Q, to: quantum.Q): Seq[(quantum.Q, String)] = {
-        val fromD = (from in base).magnitude
-        val toD = (to in base).magnitude
-        val s = step(fromD, toD)
-        val n = ((toD - fromD) / s).ceil.toInt
-        val start = s * ((fromD / s).floor)
-        (0 to n).map(i => {
-          val v = start + (s * i)
-          (v *: base, v.toString)
-        }) // TODO filter(vs => (vs._1 >= fromD && vs._1 <= toD))
-      }
-
-    }
-  }
-
 }
