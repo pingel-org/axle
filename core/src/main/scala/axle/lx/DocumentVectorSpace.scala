@@ -23,11 +23,9 @@ trait DocumentVectorSpace {
 
   type TermVector = Map[String, Int]
 
-  def doc2vector(doc: String): TermVector = mrWordCount(List(doc.toLowerCase).iterator).withDefaultValue(0)
+  val whitespace = """\s+""".r
 
-  def dotProduct(d: TermVector, q: TermVector): Double
-
-  def length(q: TermVector): Double
+  def stopwords(): Set[String]
 
   def mrWordCount(is: Iterator[String]): Map[String, Int] = mapReduce(
     is,
@@ -41,10 +39,8 @@ trait DocumentVectorSpace {
     reducer = (v1: Int, v2: Int) => v1 + v2
   )
 
-  val whitespace = """\s+""".r
-
-  def stopwords(): Set[String]
-
+  def doc2vector(doc: String): TermVector = mrWordCount(List(doc.toLowerCase).iterator).withDefaultValue(0)
+  
   def space(): MetricSpace[TermVector, Real]
 
 }

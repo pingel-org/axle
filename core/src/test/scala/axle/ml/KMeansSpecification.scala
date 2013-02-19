@@ -32,7 +32,7 @@ class KMeansSpecification extends Specification {
         N = 2,
         (p: Foo) => List(p.x, p.y),
         (features: Seq[Double]) => Foo(features(0), features(1)),
-        DistanceFunctionModule.euclidian,
+        DistanceFunctionModule.euclidian(2),
         K = 3,
         iterations = 100)
 
