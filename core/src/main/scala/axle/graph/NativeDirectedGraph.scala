@@ -2,6 +2,7 @@ package axle.graph
 
 import collection._
 import axle._
+import axle.algebra._
 
 case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends DirectedGraph[VP, EP] {
@@ -46,7 +47,8 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
   // TODO findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = _vertices.find(f(_))
 
-  def deleteEdge(e: Edge[ES, EP]): NativeDirectedGraph[VP, EP] = filterEdges(_ != e)
+  def deleteEdge(e: Edge[ES, EP]): NativeDirectedGraph[VP, EP] =
+    filterEdges(t => !((source(e), dest(e), e.payload) === t))
 
   def deleteVertex(v: Vertex[VP]): NativeDirectedGraph[VP, EP] =
     NativeDirectedGraph(_vertices.filter(_ != v).map(_.payload), ef)

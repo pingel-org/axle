@@ -3,9 +3,10 @@ package axle.graph
 import collection.JavaConverters._
 import collection._
 import axle._
+import axle.algebra._
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
-case class JungUndirectedGraph[VP : Manifest, EP](
+case class JungUndirectedGraph[VP: Manifest, EP](
   vps: Seq[VP],
   ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends UndirectedGraph[VP, EP] {
@@ -52,7 +53,12 @@ case class JungUndirectedGraph[VP : Manifest, EP](
   def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean) =
     JungUndirectedGraph(vps, ((es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))).compose(ef))
 
-  def unlink(e: Edge[ES, EP]): JungUndirectedGraph[VP, EP] = filterEdges(_ != e)
+  def unlink(e: Edge[ES, EP]): JungUndirectedGraph[VP, EP] =
+    filterEdges(t => {
+      val v1 = e.storage._1
+      val v2 = e.storage._2
+      !((v1, v2, e.payload) === t || (v2, v1, e.payload) === t)
+    })
 
   // JungUndirectedGraph[VP, EP]
   def unlink(v1: Vertex[VP], v2: Vertex[VP]) =
@@ -112,7 +118,7 @@ case class JungUndirectedGraph[VP : Manifest, EP](
     ???
   }
 
-  def map[NVP : Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
+  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
     JungUndirectedGraph(vps.map(vpf(_)),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(vertexSeq).map({

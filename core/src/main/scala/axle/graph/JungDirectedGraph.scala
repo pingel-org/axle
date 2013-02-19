@@ -1,7 +1,7 @@
 package axle.graph
 
 import axle._
-
+import axle.algebra._
 import collection.JavaConverters._
 import collection._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -58,7 +58,7 @@ case class JungDirectedGraph[VP, EP](
   // TODO: findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = vertexSeq.find(f(_))
 
-  def deleteEdge(e: Edge[ES, EP]) = filterEdges(_ != e)
+  def deleteEdge(e: Edge[ES, EP]) = filterEdges(t => !((source(e), dest(e), e.payload) === t))
 
   def deleteVertex(v: Vertex[VP]) = JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
 

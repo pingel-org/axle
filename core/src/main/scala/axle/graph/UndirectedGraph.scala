@@ -31,9 +31,8 @@ trait UndirectedGraph[VP, EP] {
     vi <- vs
     vj <- vs
     if (areNeighbors(vi, vj))
-  } yield {
-    1
-  }).sum
+  } yield 1
+  ).sum
 
   def forceClique(vs: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): G[VP, EP]
 
