@@ -13,11 +13,12 @@ import collection._
 
 object CombinationsFast {
 
-  def apply[E](pool: IndexedSeq[E], r: Int): CombinationsFast[E] = new CombinationsFast[E](pool, r)
+  def apply[E: Manifest](pool: Seq[E], r: Int): CombinationsFast[E] = new CombinationsFast[E](pool, r)
 }
 
-class CombinationsFast[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
+class CombinationsFast[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
+  val pool = _pool.toArray
   val n = pool.size
 
   if (r > n) {
@@ -28,12 +29,12 @@ class CombinationsFast[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]]
 
   override def size(): Int = syze
 
-  val yeeld = new mutable.ListBuffer[List[E]]() // TODO substitute for "yield" for now
+  val yeeld = new mutable.ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
 
   def iterator() = yeeld.iterator
 
   val indices = (0 until r).toBuffer
-  yeeld += indices.map(pool(_)).toList
+  yeeld += indices.map(pool(_)).toIndexedSeq
   var done = false
 
   while (!done) {
@@ -54,7 +55,7 @@ class CombinationsFast[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]]
       for (j <- (i + 1 until r)) {
         indices(j) = indices(j - 1) + 1
       }
-      yeeld += indices.map(pool(_)).toList
+      yeeld += indices.map(pool(_)).toIndexedSeq
     }
   }
 

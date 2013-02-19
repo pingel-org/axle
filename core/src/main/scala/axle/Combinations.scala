@@ -21,7 +21,6 @@ object Combinations {
 class Combinations[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
   val pool: Array[E] = _pool.toList.toArray
-
   val n = pool.size
 
   if (r > n) {

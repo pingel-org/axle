@@ -1,5 +1,6 @@
 package axle
 
+import axle._
 import collection._
 
 /**
@@ -14,21 +15,22 @@ import collection._
 
 object PermutationsFast {
 
-  def apply[E](pool: IndexedSeq[E], r: Int): PermutationsFast[E] = new PermutationsFast[E](pool, r)
+  def apply[E: Manifest](pool: Seq[E], r: Int): PermutationsFast[E] = new PermutationsFast[E](pool, r)
 }
 
-class PermutationsFast[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]] {
+class PermutationsFast[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
+  val pool = _pool.toArray
   val n = pool.length
 
   override def size() = if (r >= 0 && r <= n) { n.factorial / (n - r).factorial } else { 0 }
 
-  val yeeld = new mutable.ListBuffer[List[E]]() // TODO substitute for "yield" for now
+  val yeeld = new mutable.ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
 
   if (r <= n) {
     val indices = (0 until n).toBuffer
-    val cycles = n.until(n - r, -1).toBuffer
-    yeeld += indices(0 until r).map(pool(_)).toList
+    val cycles = n.until(n - r, -1).toArray
+    yeeld += indices(0 until r).map(pool(_)).toIndexedSeq
     var done = false
     while (n > 0 && !done) {
       var i = r - 1
@@ -43,7 +45,7 @@ class PermutationsFast[E](pool: IndexedSeq[E], r: Int) extends Iterable[List[E]]
           val (v1, v2) = (indices((n - j) % n), indices(i))
           indices(i) = v1
           indices((n - j) % n) = v2
-          yeeld += indices(0 until r).map(pool(_)).toList
+          yeeld += indices(0 until r).map(pool(_)).toIndexedSeq
           broken = true
         }
         if (!broken) {
