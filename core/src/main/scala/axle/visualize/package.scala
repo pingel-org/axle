@@ -44,10 +44,10 @@ package object visualize {
     case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads(), dg.edgeFunction()))
   }
 
-//  implicit def enComponentBayesianNetwork(bn: BayesianNetwork): Component = bn.graph
-//
-//  implicit def enComponentKMeansClassifier[T](kmm: KMeansModule, classifier: kmm.KMeansClassifier[T]): Component =
-//    new KMeansVisualizationn[T](classifier)
+  implicit def enComponentBayesianNetwork(bn: BayesianNetworkModule.BayesianNetwork): Component = bn.graph
+
+  implicit def enComponentKMeansClassifier[T](classifier: KMeansModule.KMeansClassifier[T]): Component =
+    new KMeansVisualizationModule.KMeansVisualization[T](classifier)
 
   /**
    * component2file

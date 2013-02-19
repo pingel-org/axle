@@ -16,7 +16,11 @@ import java.awt.Font
 import axle.ml.KMeansModule
 import axle.matrix._
 
-trait KmeansVisualizationModule extends KMeansModule {
+object KMeansVisualizationModule extends KMeansVisualizationModule
+
+trait KMeansVisualizationModule {
+
+  import KMeansModule._
 
   def visualize[D](classifier: KMeansClassifier[D],
     width: Int = 600, height: Int = 600,
