@@ -30,8 +30,7 @@ trait UndirectedGraph[VP, EP] {
   def numEdgesToForceClique(vs: GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP) = (for {
     vi <- vs
     vj <- vs
-    if (areNeighbors(vi, vj))
-  } yield 1
+  } yield { if (areNeighbors(vi, vj)) 1 else 0 }
   ).sum
 
   def forceClique(vs: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): G[VP, EP]
