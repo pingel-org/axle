@@ -3,6 +3,7 @@ package axle.game.ttt
 
 import axle.game._
 import axle.matrix._
+import axle.algebra.FunctionPair
 import util.Random.{ nextInt }
 import collection._
 
@@ -27,7 +28,9 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
   val x = player("X", "Player X", xClass)
   val o = player("O", "Player O", oClass)
 
-  def state(player: TicTacToePlayer, board: Matrix[Option[String]], eventQueue: immutable.Map[TicTacToePlayer, List[Event[TicTacToe]]]) =
+  val playersSeq = Vector(x, o)
+
+  def state(player: TicTacToePlayer, board: Matrix[Option[TicTacToePlayer]], eventQueue: immutable.Map[TicTacToePlayer, List[Event[TicTacToe]]]) =
     Some(new TicTacToeState(player, board, eventQueue))
 
   def move(player: TicTacToePlayer, position: Int) = TicTacToeMove(player, position)
@@ -47,22 +50,18 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
   def introMessage(): String = "Intro message to Tic Tac Toe"
 
   // tttmm.C[Option[String]]
-  implicit val convertPlayerId = new axle.algebra.FunctionPair[Double, Option[String]] {
+  implicit val convertPlayerId = new FunctionPair[Double, Option[TicTacToePlayer]] {
     val forward = (v: Double) => v match {
-      case 0D => None
-      case 1D => Some("X")
-      case 2D => Some("O")
-      case _ => None // or throw exception
+      case -1D => None
+      case _ => Some(playersSeq(v.toInt))
     }
-    val backward = (v: Option[String]) => v match {
-      case None => 0D
-      case Some("X") => 1D // TODO hard-coded player id
-      case Some("O") => 2D
-      case Some(_) => -1D
+    val backward = (v: Option[TicTacToePlayer]) => v match {
+      case None => -1D
+      case Some(player) => playersSeq.indexOf(player).toDouble
     }
   }
 
-  def startBoard() = tttmm.matrix[Option[String]](boardSize, boardSize, (r: Int, c: Int) => Option[String](null))(convertPlayerId)
+  def startBoard() = tttmm.matrix[Option[TicTacToePlayer]](boardSize, boardSize, (r: Int, c: Int) => Option[TicTacToePlayer](null))(convertPlayerId)
 
   def players(): immutable.Set[TicTacToePlayer] = immutable.Set(x, o)
 

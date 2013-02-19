@@ -5,7 +5,7 @@ import axle.matrix._
 
 case class TicTacToeState(
   player: TicTacToePlayer,
-  board: TicTacToe#Matrix[Option[String]],
+  board: TicTacToe#Matrix[Option[TicTacToePlayer]],
   _eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = Map())(implicit ttt: TicTacToe)
   extends State[TicTacToe]() {
 
@@ -54,20 +54,16 @@ case class TicTacToeState(
 
   def outcome(): Option[TicTacToeOutcome] = {
     val winner = ttt.players.find(hasWon(_))
-    if (winner.isDefined) {
-      Some(TicTacToeOutcome(winner))
-    } else if (openPositions().length == 0) {
-      Some(TicTacToeOutcome(None))
-    } else {
-      None
-    }
+    if (winner.isDefined) Some(TicTacToeOutcome(winner))
+    else if (openPositions().length == 0) Some(TicTacToeOutcome(None))
+    else None
   }
 
   def apply(move: TicTacToeMove): Option[TicTacToeState] =
     ttt.state(
       ttt.playerAfter(move.tttPlayer),
-      board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player.id))
-        .asInstanceOf[ttt.Matrix[Option[String]]],
+      board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player))
+        .asInstanceOf[ttt.Matrix[Option[TicTacToePlayer]]],
       _eventQueues
     )
 
