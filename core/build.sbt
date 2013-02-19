@@ -13,7 +13,7 @@ crossScalaVersions := Seq("2.10.0")
 
 initialCommands in console := "import axle._; import axle.algebra._; import axle.stats._; import axle.quanta._; import axle.graph._; import axle.matrix._; import axle.ml._; import axle.visualize._; import axle.ast._; import collection._"
 
-scalacOptions ++= Seq("-unchecked", "-deprecation")
+scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds", "-language:implicitConversions", "-language:existentials", "-language:postfixOps")
 
 // curl http://cloud.github.com/downloads/mikiobraun/jblas/jblas-1.2.0.jar -o lib/jblas-1.2.0.jar
 
