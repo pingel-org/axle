@@ -3,7 +3,9 @@ package org.pingel.bayes
 import axle.matrix._
 import math.{ pow, sqrt }
 
-trait ChiSquaredTestModule extends JblasMatrixModule {
+trait ChiSquaredTestModule {
+
+  import JblasMatrixModule._
   
   def χ2(tally: Matrix[Double]): Double = {
     val rowTotals = tally.rowSums()
