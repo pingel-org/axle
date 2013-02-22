@@ -137,7 +137,7 @@ trait ScaldingMatrixModule extends MatrixModule {
     def map[B: C](f: T => B): Matrix[B] = matrix(scalding.mapValues(f(_)))
 
     def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = ???
-
+    
     override def toString() = scalding.toString // TODO ?
 
     def scalding() = storage
@@ -147,21 +147,41 @@ trait ScaldingMatrixModule extends MatrixModule {
 
   def matrix[T: C](s: ScaldingMatrix[RowT, ColT, T]): Matrix[T] = new Matrix(s)
 
-  def matrix[T: C](r: Int, c: Int, values: Array[T]): Matrix[T] = ???
+  def matrix[T: C](r: Int, c: Int, values: Array[T]): Matrix[T] =
+    matrix(r, c, (i, j) => values(i * c + j))
 
   def matrix[T: C](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): Matrix[T] = ???
 
   def matrix[T: C](m: Int, n: Int, f: (Int, Int) => T): Matrix[T] = ???
 
-  def diag[T: C](row: Matrix[T]): Matrix[T] = ???
+  def diag[T: C](row: Matrix[T]): Matrix[T] = {
+    assert(row.isRowVector)
+    val field = implicitly[C[T]]
+    val n: Int = row.columns
+    matrix(n, n, (r, c) => if (r == c) row(0, r) else field.zero)
+  }
 
-  def zeros[T: C](m: Int, n: Int): Matrix[T] = ???
-  def ones[T: C](m: Int, n: Int): Matrix[T] = ???
-  def eye[T: C](n: Int): Matrix[T] = ???
-  def I[T: C](n: Int): Matrix[T] = ???
+  def zeros[T: C](m: Int, n: Int): Matrix[T] = {
+    val field = implicitly[C[T]]
+    matrix(m, n, (r, c) => field.zero)
+  }
+
+  def ones[T: C](m: Int, n: Int): Matrix[T] = {
+    val field = implicitly[C[T]]
+    matrix(m, n, (r, c) => field.one)
+  }
+
+  def eye[T: C](n: Int): Matrix[T] = {
+    val field = implicitly[C[T]]
+    matrix(n, n, (r, c) => if (r == c) field.one else field.zero)
+  }
+
+  def I[T: C](n: Int): Matrix[T] = eye(n)
 
   def rand[T: C](m: Int, n: Int): Matrix[T] = ???
+  
   def randn[T: C](m: Int, n: Int): Matrix[T] = ???
+  
   def falses(m: Int, n: Int): Matrix[Boolean] = ???
   def trues(m: Int, n: Int): Matrix[Boolean] = ???
 
