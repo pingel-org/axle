@@ -27,7 +27,7 @@ trait ScaldingMatrixModule extends MatrixModule {
 
   class Matrix[T: C](_storage: ScaldingMatrix[RowT, ColT, T]) extends MatrixLike[T] {
 
-    implicit val prod: MatrixProduct[ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T]] = null
+    // implicit val prod: MatrixProduct[ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T]] = ???
 
     val field = implicitly[Field[T]]
 
@@ -48,14 +48,14 @@ trait ScaldingMatrixModule extends MatrixModule {
     def toList(): List[T] = ???
 
     def column(j: Int) = matrix(scalding.getCol(j).toMatrix(0))
-    def row(i: Int) = ??? //scalding.getRow(i)
+    def row(i: Int) = ??? // ??? //scalding.getRow(i)
 
     def isEmpty() = ???
-    def isRowVector() = ???
-    def isColumnVector() = ???
-    def isVector() = ???
-    def isSquare() = ???
-    def isScalar() = ???
+    def isRowVector() = rows == 1
+    def isColumnVector() = columns == 1
+    def isVector() = rows == 1 || columns == 1
+    def isSquare() = rows == columns
+    def isScalar() = rows == 1 && columns == 1
 
     def dup() = ???
     def negate() = matrix(scalding.mapValues(field.negate(_)))
@@ -137,7 +137,7 @@ trait ScaldingMatrixModule extends MatrixModule {
     def map[B: C](f: T => B): Matrix[B] = matrix(scalding.mapValues(f(_)))
 
     def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = ???
-    
+
     override def toString() = scalding.toString // TODO ?
 
     def scalding() = storage
@@ -157,7 +157,7 @@ trait ScaldingMatrixModule extends MatrixModule {
   def diag[T: C](row: Matrix[T]): Matrix[T] = {
     assert(row.isRowVector)
     val field = implicitly[C[T]]
-    val n: Int = row.columns
+    val n = row.columns
     matrix(n, n, (r, c) => if (r == c) row(0, r) else field.zero)
   }
 
@@ -178,12 +178,22 @@ trait ScaldingMatrixModule extends MatrixModule {
 
   def I[T: C](n: Int): Matrix[T] = eye(n)
 
-  def rand[T: C](m: Int, n: Int): Matrix[T] = ???
-  
+  def rand[T: C](m: Int, n: Int): Matrix[T] = {
+    val field = implicitly[C[T]]
+    matrix(m, n, (r, c) => ???)
+  }
+
   def randn[T: C](m: Int, n: Int): Matrix[T] = ???
-  
-  def falses(m: Int, n: Int): Matrix[Boolean] = ???
-  def trues(m: Int, n: Int): Matrix[Boolean] = ???
+
+  def falses(m: Int, n: Int): Matrix[Boolean] = {
+    val field = implicitly[C[Boolean]]
+    matrix(m, n, (r, c) => field.zero)
+  }
+
+  def trues(m: Int, n: Int): Matrix[Boolean] = {
+    val field = implicitly[C[Boolean]]
+    matrix(m, n, (r, c) => field.one)
+  }
 
   override def median(m: Matrix[Double]): Matrix[Double] = ???
 
