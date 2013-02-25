@@ -28,10 +28,7 @@ class Runner extends hadoop.conf.Configured with hadoop.util.Tool {
   @tailrec
   private[this] def start(j: Job, cnt: Int): Unit =
     if (j.run) {
-      j.next match {
-        case Some(nextj) => start(nextj, cnt + 1)
-        case None => Unit
-      }
+      j.next.map(start(_, cnt + 1))
     } else {
       throw new RuntimeException("Job failed to run: " + j.getClass.getName +
         (if (cnt > 0) (" child: " + cnt.toString + ", class: " + j.getClass.getName) else "")
