@@ -70,6 +70,7 @@ class NaiveBayesClassifier[D, TF, TC](
    */
 
   import axle.algebra._
+  import Semigroups._
   def predictedVsActual(dit: Iterator[D], k: TC): (Int, Int, Int, Int) = dit.map(d => {
     val actual = classExtractor(d)
     val predicted = predict(d)
