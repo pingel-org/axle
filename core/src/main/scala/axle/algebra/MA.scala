@@ -1,13 +1,13 @@
 package axle.algebra
 
-import spire.algebra.Monoid
+import spire.algebra.{ Semigroup, Monoid }
 
 trait MA[M[_], A] {
 
   val value: M[A]
 
   def |+|(a2: M[A])(implicit s: Semigroup[M[A]]) =
-    s.mappend(value, a2)
+    s.op(value, a2)
 
   def summ(implicit m: Monoid[A], fl: FoldLeft[M]): A =
     fl.foldLeft(value, m.id, m.op)

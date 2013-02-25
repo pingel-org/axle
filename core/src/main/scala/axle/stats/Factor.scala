@@ -41,6 +41,7 @@ trait FactorModule extends JblasMatrixModule {
     // assume prior and condition are disjoint, and that they are
     // each compatible with this table
     import axle.algebra._
+    import Semigroups._
     def evaluate(prior: Seq[CaseIs[_]], condition: Seq[CaseIs[_]]): Double = {
       val pw = cases().map(c => {
         if (isSupersetOf(c, prior)) {
