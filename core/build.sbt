@@ -25,6 +25,7 @@ libraryDependencies ++= Seq(
   "net.sf.jung" % "jung-visualization" % "2.0.1",
   "joda-time" % "joda-time" % "2.1",
   "org.joda" % "joda-convert" % "1.2",
+  "org.jblas" % "jblas" % "1.2.3",
   "org.spire-math" %% "spire" % "0.3.0",
   "org.specs2" %% "specs2" % "1.13" % "test"
   // "org.scalaz" %% "scalaz" % "6.0.4"
