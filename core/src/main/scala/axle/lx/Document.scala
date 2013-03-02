@@ -4,12 +4,8 @@ import axle.ScalaMapReduce._
 
 class Document(text: String) {
 
-  lazy val tokens = text
-    .replaceAll("""([\?!()\";\|\[\]\.\,'])""", " ")
-    .trim
-    .split("\\s+")
-    .toIndexedSeq
-
+  lazy val tokens = language.English.tokenize(text)
+  
   lazy val bigrams = tokens.zip(tokens.tail)
 
   lazy val wordCounts = count(List(this).iterator, (d: Document) => d.tokens)
