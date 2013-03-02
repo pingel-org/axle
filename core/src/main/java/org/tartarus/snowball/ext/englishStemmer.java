@@ -222,7 +222,7 @@ private static final long serialVersionUID = 1L;
                     cursor = v_2;
                     // do, line 29
                     v_3 = cursor;
-                    lab2: do {
+                    do {
                         // repeat, line 29
                         replab3: while(true)
                         {

@@ -381,7 +381,7 @@ public class SnowballProgram {
     protected StringBuffer slice_to(StringBuffer s)
     {
 	slice_check();
-	int len = ket - bra;
+	//int len = ket - bra;
 	s.replace(0, s.length(), current.substring(bra, ket));
 	return s;
     }
@@ -390,7 +390,7 @@ public class SnowballProgram {
     protected StringBuilder slice_to(StringBuilder s)
     {
 	slice_check();
-	int len = ket - bra;
+	//int len = ket - bra;
 	s.replace(0, s.length(), current.substring(bra, ket));
 	return s;
     }
