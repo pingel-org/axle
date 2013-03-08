@@ -1,4 +1,4 @@
-package axle.lx
+package axle.nlp
 
 import spire.algebra.MetricSpace
 import axle.matrix._

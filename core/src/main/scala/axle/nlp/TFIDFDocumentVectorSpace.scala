@@ -1,4 +1,4 @@
-package axle.lx
+package axle.nlp
 
 import math.{ sqrt, log }
 import spire.algebra._

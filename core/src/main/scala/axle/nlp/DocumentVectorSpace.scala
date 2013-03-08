@@ -1,4 +1,4 @@
-package axle.lx
+package axle.nlp
 
 /**
  * Vector Space Model

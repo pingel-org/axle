@@ -1,4 +1,4 @@
-package axle.lx
+package axle.nlp
 
 import axle.ScalaMapReduce._
 

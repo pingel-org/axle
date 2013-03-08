@@ -1,4 +1,4 @@
-package axle.lx.language
+package axle.nlp.language
 
 import axle.visualize.AxleAkka
 import concurrent.duration._
