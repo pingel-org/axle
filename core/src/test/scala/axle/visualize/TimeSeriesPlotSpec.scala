@@ -40,7 +40,7 @@ class TimeSeriesPlotSpec {
 
     val hm: SortedMap[Double, Q] = new immutable.TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(i / 100.0)))).toMap
 
-    val plot = new Plot(List(("h", hm)),
+    val plot = new Plot(() => List(("h", hm)),
       connect = true, drawKey = false,
       xAxis = 0.0 *: bit, xAxisLabel = Some("p(x='HEAD)"),
       yAxis = 0.0, yAxisLabel = Some("H"),
