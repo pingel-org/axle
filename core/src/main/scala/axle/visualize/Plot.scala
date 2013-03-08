@@ -1,31 +1,33 @@
 package axle.visualize
 
-import collection._
+import java.awt.Color
+import Color._
+import scala.collection.immutable.TreeMap
+import akka.actor.Props
+import axle.akka.Defaults._
 
-case class Plot[X : Plottable, Y : Plottable](
-  lfs: Seq[(String, SortedMap[X, Y])],
+case class Plot[X: Plottable, Y: Plottable](
+  dataFunction: () => List[(String, TreeMap[X, Y])],
   connect: Boolean = true,
   drawKey: Boolean = true,
   width: Int = 700,
   height: Int = 600,
   border: Int = 50,
   pointDiameter: Int = 4,
+  keyLeftPadding: Int = 20,
+  keyTopPadding: Int = 50,
+  keyWidth: Int = 80,
+  fontName: String = "Courier New",
+  fontSize: Int = 12,
+  titleFontName: String = "Palatino",
+  titleFontSize: Int = 20,
+  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow),
   title: Option[String] = None,
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxis: X,
   yAxisLabel: Option[String] = None) {
 
-  val minX = List(yAxis, lfs.map(_._2.firstKey).min(xPlottable)).min(xPlottable)
-  val maxX = List(yAxis, lfs.map(_._2.lastKey).max(xPlottable)).max(xPlottable)
-  val minY = List(xAxis, lfs.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
-  val maxY = List(xAxis, lfs.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
-
-  val xTics = xPlottable.tics(minX, maxX)
-  val yTics = yPlottable.tics(minY, maxY)
-
-  def xPlottable(): Plottable[X] = implicitly[Plottable[X]]
-
-  def yPlottable(): Plottable[Y] = implicitly[Plottable[Y]]
+  val dataFeedActor = system.actorOf(Props(new DataFeedActor(dataFunction)))
 
 }

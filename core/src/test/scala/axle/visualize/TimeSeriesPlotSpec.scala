@@ -22,9 +22,9 @@ class TimeSeriesPlotSpec {
         (0 to 100).map(j => (now.plusMinutes(2 * j) -> amp * sin(phase + (j / (10 * f))))).toMap)
     }
 
-    val lfs: Seq[(String, SortedMap[DateTime, Double])] = (0 until 20).map(i => randomTimeSeries(i)).toList
+    val lfs = (0 until 20).map(i => randomTimeSeries(i)).toList
 
-    val plot = new Plot(lfs, connect = true, drawKey = true, xAxis = 0.0, yAxis = now)
+    val plot = new Plot(() => lfs, connect = true, drawKey = true, xAxis = 0.0, yAxis = now)
 
     // show(plot)
   }
@@ -38,7 +38,7 @@ class TimeSeriesPlotSpec {
     import Information._
     import axle.stats._
 
-    val hm: SortedMap[Double, Q] = new immutable.TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(i / 100.0)))).toMap
+    val hm = new immutable.TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(i / 100.0)))).toMap
 
     val plot = new Plot(() => List(("h", hm)),
       connect = true, drawKey = false,

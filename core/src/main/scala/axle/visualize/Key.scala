@@ -5,7 +5,7 @@ import java.awt.Graphics2D
 import java.awt.Color
 
 class Key[X, Y](
-  plot: ReactivePlot[X, Y],
+  plot: Plot[X, Y],
   colorStream: Stream[Color],
   width: Int,
   topPadding: Int,

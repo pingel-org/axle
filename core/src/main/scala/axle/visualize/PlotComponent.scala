@@ -1,100 +1,96 @@
 package axle.visualize
 
 import javax.swing.JPanel
-import java.awt.Color._
-import java.awt.Font
-import java.awt.FontMetrics
-import java.awt.Graphics
-import java.awt.Graphics2D
-import axle.quanta.Angle._
+import java.awt.{ Color, Font, FontMetrics, Graphics, Graphics2D, Dimension }
+import scala.concurrent.duration._
+import axle.quanta._
+import axle.akka.Defaults._
+import Angle._
+import Color._
+import collection._
+import Stream.continually
+import akka.pattern.ask
+import akka.actor.{ Props, Actor, ActorRef, ActorSystem, ActorLogging }
+import akka.util.Timeout
+import collection.immutable.TreeMap
+import scala.concurrent.duration._
+import DataFeed._
+import java.awt.Frame
+import scala.concurrent.Await
 
-class PlotComponent[X, Y](plot: Plot[X, Y]) extends JPanel {
+class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])]) {
 
   import plot._
 
-  setMinimumSize(new java.awt.Dimension(width, height))
+  val colorStream = continually(colors.toStream).flatten
 
-  val keyLeftPadding = 20
-  val keyTopPadding = 50
-  val keyWidth = 80
+  val xPlottable = implicitly[Plottable[X]]
+  val yPlottable = implicitly[Plottable[Y]]
 
-  val colors = List(blue, red, green, orange, pink, yellow)
+  val keyOpt = if (drawKey)
+    Some(new Key(plot, colorStream, keyWidth, keyTopPadding, data))
+  else
+    None
 
-  val colorStream = Stream.continually(colors.toStream).flatten
+  val minX = List(yAxis, data.map(_._2.firstKey).min(xPlottable)).min(xPlottable)
+  val maxX = List(yAxis, data.map(_._2.lastKey).max(xPlottable)).max(xPlottable)
+  val minY = List(xAxis, data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
+  val maxY = List(xAxis, data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
+  val minPoint = Point2D(minX, minY)
+  val maxPoint = Point2D(maxX, maxY)
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height, border,
-    minX, maxX, minY, maxY
-  )(xPlottable(), yPlottable())
+    minPoint.x, maxPoint.x, minPoint.y, maxPoint.y
+  )
 
-  val normalFont = new Font("Courier New", Font.BOLD, 12)
-  val titleFont = new Font("Palatino", Font.BOLD, 20)
+  val vLine = new VerticalLine(scaledArea, yAxis, black)
+  val hLine = new HorizontalLine(scaledArea, xAxis, black)
+  val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), black)
+  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), black)
 
-  val twist = (clockwise90 in rad).magnitude.doubleValue
-  
-  def labels(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = {
+  val dataLines = new DataLines(scaledArea, data, colorStream, pointDiameter, connect)
 
-    title.map(text => {
-      g2d.setFont(titleFont)
-      g2d.drawString(text, (width - fontMetrics.stringWidth(text)) / 2, 20)
-    })
+}
 
-    g2d.setFont(normalFont)
+class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel {
 
-    xAxisLabel.map(text =>
-      g2d.drawString(text, (width - fontMetrics.stringWidth(text)) / 2, height + (fontMetrics.getHeight - border) / 2)
-    )
+  import plot._
 
-    yAxisLabel.map(text => {
-      val tx = 20
-      val ty = (height + fontMetrics.stringWidth(text)) / 2
-      g2d.translate(tx, ty)
-      g2d.rotate(twist)
-      g2d.drawString(text, 0, 0)
-      g2d.rotate(-1 * twist)
-      g2d.translate(-tx, -ty)
-    })
+  setMinimumSize(new Dimension(width, height))
 
-  }
+  val normalFont = new Font(fontName, Font.BOLD, fontSize)
+  val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
+  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
+  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
+  val titleText = title.map(new Text(_, titleFont, width / 2, 20))
 
-  def key(g2d: Graphics2D): Unit = {
-    val lineHeight = g2d.getFontMetrics.getHeight
-    for ((((label, f), color), i) <- lfs.zip(colorStream).zipWithIndex) {
-      g2d.setColor(color)
-      g2d.drawString(label, width - keyWidth, keyTopPadding + lineHeight * (i + 1))
-    }
-  }
+  var timestamp = 0L
 
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
-    val fontMetrics = g2d.getFontMetrics
 
-    g2d.setColor(black)
-    labels(g2d, fontMetrics)
-    scaledArea.verticalLine(g2d, yAxis)
-    scaledArea.horizontalLine(g2d, xAxis)
+    val dataOptFuture = (dataFeedActor ? Fetch(timestamp)).mapTo[Option[List[(String, TreeMap[X, Y])]]]
+    
+    Await.result(dataOptFuture, 1.seconds).map(data => {
 
-    scaledArea.drawXTics(g2d, fontMetrics, xTics)
-    scaledArea.drawYTics(g2d, fontMetrics, yTics)
+      timestamp = System.currentTimeMillis
 
-    for (((label, f), color) <- lfs.zip(colorStream)) {
-      g2d.setColor(color)
-      if (connect) {
-        val xsStream = f.keysIterator.toStream
-        for ((x0, x1) <- xsStream.zip(xsStream.tail)) {
-          scaledArea.drawLine(g2d, Point2D(x0, f(x0)), Point2D(x1, f(x1)))
-        }
+      val view = new PlotView(plot, data)
+
+      import view._
+
+      val paintables =
+        Vector(vLine, hLine, xTics, yTics, dataLines) ++
+          Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
+
+      for (paintable <- paintables) {
+        paintable.paint(g2d)
       }
-      for (x <- f.keys) {
-        scaledArea.fillOval(g2d, Point2D(x, f(x)), pointDiameter, pointDiameter)
-      }
-    }
+    })
 
-    if (drawKey) {
-      key(g2d)
-    }
   }
 
 }
