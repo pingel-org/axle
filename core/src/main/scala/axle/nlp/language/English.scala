@@ -1,10 +1,9 @@
 package axle.nlp.language
 
-import axle.visualize.AxleAkka
+import axle.akka.Defaults._
 import concurrent.duration._
 import akka.actor._
 import akka.pattern.ask
-import akka.util.Timeout
 import concurrent.Await
 import org.tartarus.snowball.SnowballStemmer
 import org.tartarus.snowball.ext.englishStemmer
@@ -49,9 +48,8 @@ object English {
 
   import StemmerProtocol._
   
-  lazy val englishStemmerActor = AxleAkka.system.actorOf(Props(new StemmerActor(new englishStemmer())))
-  implicit val askTimeout = Timeout(1.minute)
-
+  lazy val englishStemmerActor = system.actorOf(Props(new StemmerActor(new englishStemmer())))
+ 
   def stem(word: String): String =
     Await.result((englishStemmerActor ? Stem(word)).mapTo[String], 1.second)
 

@@ -4,6 +4,7 @@ import javax.swing.JPanel
 import java.awt.{ Color, Font, FontMetrics, Graphics, Graphics2D, Dimension }
 import scala.concurrent.duration._
 import axle.quanta._
+import axle.akka.Defaults._
 import Angle._
 import Color._
 import collection._
@@ -65,18 +66,15 @@ class ReactivePlotComponent[X: Plottable, Y: Plottable](plot: ReactivePlot[X, Y]
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val titleText = title.map(new Text(_, titleFont, width / 2, 20))
 
-  implicit val askTimeout = Timeout(1.second)
   var timestamp = 0L
 
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
 
-    val update = dataFeedActor ? Fetch(timestamp)
-
-    val dataOpt = Await.result(update, 1.seconds).asInstanceOf[Option[List[(String, TreeMap[X, Y])]]]
+    val dataOptFuture = (dataFeedActor ? Fetch(timestamp)).mapTo[Option[List[(String, TreeMap[X, Y])]]]
     
-    dataOpt.map(data => {
+    Await.result(dataOptFuture, 1.seconds).map(data => {
 
       timestamp = System.currentTimeMillis
 

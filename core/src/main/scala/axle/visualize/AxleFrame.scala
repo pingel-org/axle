@@ -5,6 +5,7 @@ import java.awt.{ Dimension, Component, BasicStroke, Color, Paint, Stroke, Inset
 import akka.actor.{ Props, Actor, ActorLogging }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import axle.akka.Defaults._
 
 object FramePainter {
 
@@ -40,7 +41,7 @@ class BackgroundPanel(title: String) extends JPanel {
 class AxleFrame(width: Int = 1100, height: Int = 800, bgColor: Color = Color.white, title: String = "αχλε")
   extends JFrame(title) {
 
-  val frameRepaintingActor = AxleAkka.system.actorOf(Props(new FrameRepaintingActor(this)))
+  val frameRepaintingActor = system.actorOf(Props(new FrameRepaintingActor(this)))
   
   def initialize(): Unit = {
     setBackground(bgColor)

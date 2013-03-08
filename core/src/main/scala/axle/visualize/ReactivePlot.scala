@@ -4,6 +4,7 @@ import java.awt.Color
 import Color._
 import scala.collection.immutable.TreeMap
 import akka.actor.Props
+import axle.akka.Defaults._
 
 case class ReactivePlot[X: Plottable, Y: Plottable](
   dataFunction: () => List[(String, TreeMap[X, Y])],
@@ -27,6 +28,6 @@ case class ReactivePlot[X: Plottable, Y: Plottable](
   yAxis: X,
   yAxisLabel: Option[String] = None) {
 
-  val dataFeedActor = AxleAkka.system.actorOf(Props(new DataFeedActor(dataFunction)))
+  val dataFeedActor = system.actorOf(Props(new DataFeedActor(dataFunction)))
 
 }
