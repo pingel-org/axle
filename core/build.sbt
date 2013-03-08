@@ -27,6 +27,8 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.2",
   "org.jblas" % "jblas" % "1.2.3",
   "org.spire-math" %% "spire" % "0.3.0",
+  "com.typesafe.akka" %% "akka-actor" % "2.2-M1",
+  // "com.typesafe.akka" %% "akka-agent" % "2.2-M1",
   "org.specs2" %% "specs2" % "1.13" % "test"
   // "org.scalaz" %% "scalaz" % "6.0.4"
 )

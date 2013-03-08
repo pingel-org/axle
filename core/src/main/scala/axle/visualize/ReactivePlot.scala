@@ -1,11 +1,12 @@
 package axle.visualize
 
-import collection._
 import java.awt.Color
 import Color._
+import scala.collection.immutable.TreeMap
+import akka.actor.Props
 
 case class ReactivePlot[X: Plottable, Y: Plottable](
-  dataB: Behavior[Unit, Seq[(String, SortedMap[X, Y])]],
+  dataFunction: () => List[(String, TreeMap[X, Y])],
   connect: Boolean = true,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -26,8 +27,6 @@ case class ReactivePlot[X: Plottable, Y: Plottable](
   yAxis: X,
   yAxisLabel: Option[String] = None) {
 
-  def xPlottable(): Plottable[X] = implicitly[Plottable[X]]
-
-  def yPlottable(): Plottable[Y] = implicitly[Plottable[Y]]
+  val dataFeedActor = AxleAkka.system.actorOf(Props(new DataFeedActor(dataFunction)))
 
 }
