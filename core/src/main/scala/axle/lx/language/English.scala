@@ -1,5 +1,34 @@
 package axle.lx.language
 
+import axle.visualize.AxleAkka
+import concurrent.duration._
+import akka.actor._
+import akka.pattern.ask
+import akka.util.Timeout
+import concurrent.Await
+import org.tartarus.snowball.SnowballStemmer
+import org.tartarus.snowball.ext.englishStemmer
+
+object StemmerProtocol {
+  
+  case class Stem(word: String)
+}
+
+class StemmerActor(stemmer: SnowballStemmer) extends Actor {
+
+  import StemmerProtocol._
+
+  def receive = {
+    case Stem(word) => {
+      stemmer.setCurrent(word)
+      stemmer.stem
+      sender ! stemmer.getCurrent
+    }
+  }
+
+}
+
+
 object English {
 
   // From Lucene's list of stopwords:
@@ -18,13 +47,12 @@ object English {
     .split("\\s+")
     .toIndexedSeq
 
-  lazy val stemmer = new org.tartarus.snowball.ext.englishStemmer()
+  import StemmerProtocol._
+  
+  lazy val englishStemmerActor = AxleAkka.system.actorOf(Props(new StemmerActor(new englishStemmer())))
+  implicit val askTimeout = Timeout(1.minute)
 
-  // TODO serialize access to this method:
-  def stem(word: String): String = {
-    stemmer.setCurrent(word)
-    stemmer.stem
-    stemmer.getCurrent
-  }
+  def stem(word: String): String =
+    Await.result((englishStemmerActor ? Stem(word)).mapTo[String], 1.second)
 
 }
