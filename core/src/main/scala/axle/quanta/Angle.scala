@@ -2,7 +2,7 @@ package axle.quanta
 
 import spire.math._
 import axle.graph._
-import math.Pi
+import math.{Pi => π}
 
 class Angle extends Quantum {
 
@@ -39,7 +39,7 @@ class Angle extends Quantum {
     (vs: Seq[Vertex[AngleQuantity]]) => vs match {
       case degree :: radian :: circleDegrees :: circleRadians :: Nil => trips2fns(List(
         (degree, circleDegrees, 360.0), // TODO: precision
-        (radian, circleRadians, 2.0 * Pi),
+        (radian, circleRadians, 2.0 * π),
         (circleDegrees, circleRadians, 1.0)
       ))
       case _ => Nil
