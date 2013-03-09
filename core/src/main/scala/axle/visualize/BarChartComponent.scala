@@ -1,30 +1,25 @@
 package axle.visualize
 
 import javax.swing.JPanel
-import java.awt.Color._
+import java.awt.Color
+import Color._
 import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Graphics
 import java.awt.Graphics2D
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import DataFeed._
+import akka.pattern.ask
+import axle.akka.Defaults._
 import Stream.continually
 import axle.quanta._
 import Angle._
 import Plottable._
 
-class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JPanel {
+class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S), Y], colorStream: Stream[Color]) {
 
   import chart._
-
-  setMinimumSize(new java.awt.Dimension(width, height))
-
-  val colors = List(blue, red, green, orange, pink, yellow)
-  val colorStream = continually(colors.toStream).flatten
-  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
-  val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
-
-  val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
-  val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
 
   val minX = 0.0
   val maxX = 1.0
@@ -58,11 +53,6 @@ class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JP
 
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), black)
 
-  val keyOpt = if (drawKey)
-    Some(new BarChartKey(chart, colorStream))
-  else
-    None
-
   val barSliceWidth = (widthPerX - (whiteSpace / 2d)) / ss.size.toDouble
 
   val bars = for {
@@ -74,20 +64,54 @@ class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JP
     Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y(x, s)), color)
   }
 
+}
+
+class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JPanel {
+
+  import chart._
+
+  setMinimumSize(new java.awt.Dimension(width, height))
+
+  val colors = List(blue, red, green, orange, pink, yellow)
+  val colorStream = continually(colors.toStream).flatten
+  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
+  val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
+  val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
+  val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
+  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
+
+  val keyOpt = if (drawKey)
+    Some(new BarChartKey(chart, colorStream))
+  else
+    None
+
+  var timestamp = 0L
+
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    titleText.map(_.paint(g2d))
-    hLine.paint(g2d)
-    vLine.paint(g2d)
-    xAxisLabelText.map(_.paint(g2d))
-    yAxisLabelText.map(_.paint(g2d))
-    xTics.paint(g2d)
-    yTics.paint(g2d)
-    keyOpt.map(_.paint(g2d))
-    bars.map(_.paint(g2d))
+    val dataOptFuture = (dataFeedActor ? Fetch(timestamp)).mapTo[Option[Map[(X, S), Y]]]
+
+    Await.result(dataOptFuture, 1.seconds).map(data => {
+
+      timestamp = System.currentTimeMillis
+
+      val view = new BarChartView(chart, data, colorStream)
+
+      import view._
+
+      titleText.map(_.paint(g2d))
+      hLine.paint(g2d)
+      vLine.paint(g2d)
+      xAxisLabelText.map(_.paint(g2d))
+      yAxisLabelText.map(_.paint(g2d))
+      xTics.paint(g2d)
+      yTics.paint(g2d)
+      keyOpt.map(_.paint(g2d))
+      bars.map(_.paint(g2d))
+    })
 
   }
 

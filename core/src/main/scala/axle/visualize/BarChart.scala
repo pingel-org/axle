@@ -27,6 +27,7 @@ case class BarChart[X, S, Y: Plottable](
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None) {
 
+  // TODO: should be atomic (lock y)
   val dataFunction = () => (
     for {
       x <- xs
@@ -34,8 +35,7 @@ case class BarChart[X, S, Y: Plottable](
     } yield (x, s) -> y(x, s)
   ).toMap
 
-  val dataFeedActor = {
-    system.actorOf(Props(new DataFeedActor(dataFunction)))
-  }
+  val dataFeedActor = system.actorOf(Props(new DataFeedActor(dataFunction)))
+  
 
 }

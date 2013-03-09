@@ -64,7 +64,7 @@ class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
   val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
-  val titleText = title.map(new Text(_, titleFont, width / 2, 20))
+  val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
 
   var timestamp = 0L
 
