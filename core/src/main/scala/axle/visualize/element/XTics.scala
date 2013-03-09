@@ -1,17 +1,21 @@
-package axle.visualize
+package axle.visualize.element
 
+import axle.visualize._
 import java.awt.Color
 import java.awt.Graphics2D
+import axle.quanta._
 
-class YTics[X, Y](
+class XTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],
-  tics: Seq[(Y, String)],
+  tics: Seq[(X, String)],
+  fDrawLines: Boolean = true,
+  angle: Angle.Q,
   color: Color = Color.black) extends Paintable {
 
   def paint(g2d: Graphics2D): Unit = {
     g2d.setColor(color)
     val fontMetrics = g2d.getFontMetrics
-    scaledArea.drawYTics(g2d, fontMetrics, tics)
+    scaledArea.drawXTics(g2d, fontMetrics, tics, fDrawLines, angle)
   }
 
 }

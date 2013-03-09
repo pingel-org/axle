@@ -16,6 +16,7 @@ import Stream.continually
 import axle.quanta._
 import Angle._
 import Plottable._
+import axle.visualize.element._
 
 class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S), Y], colorStream: Stream[Color]) {
 

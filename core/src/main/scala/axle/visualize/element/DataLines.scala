@@ -1,5 +1,6 @@
-package axle.visualize
+package axle.visualize.element
 
+import axle.visualize._
 import collection._
 import java.awt.Color
 import java.awt.Graphics2D
