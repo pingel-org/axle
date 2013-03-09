@@ -30,7 +30,7 @@ package object visualize {
 
   implicit def enComponentPlot[X: Plottable, Y: Plottable](plot: Plot[X, Y]): Component = new PlotComponent(plot)
 
-  implicit def enComponentBarChart[X, S, Y](barChart: BarChart[X, S, Y]): Component = new BarChartComponent(barChart)
+  implicit def enComponentBarChart[X, S, Y: Plottable](barChart: BarChart[X, S, Y]): Component = new BarChartComponent(barChart)
 
   implicit def enComponentUndirectedGraph[VP: Manifest, EP](ug: UndirectedGraph[VP, EP]): Component = ug match {
     case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)

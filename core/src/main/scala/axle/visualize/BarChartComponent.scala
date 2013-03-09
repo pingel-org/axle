@@ -6,28 +6,25 @@ import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Graphics
 import java.awt.Graphics2D
-import math.Pi
+import Stream.continually
 import axle.quanta._
 import Angle._
 import Plottable._
 
-class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
+class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JPanel {
 
-  import barChart._
+  import chart._
 
   setMinimumSize(new java.awt.Dimension(width, height))
-  
-//  val clockwise90 = Pi / -2.0
-//  val counterClockwise90 = -1.0 * clockwise90
-//  val clockwise360 = Pi * 2
 
-  val keyLeftPadding = 20
-  val keyTopPadding = 50
-  val keyWidth = 80
-  
   val colors = List(blue, red, green, orange, pink, yellow)
+  val colorStream = continually(colors.toStream).flatten
+  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
+  val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
 
-  val colorStream = Stream.continually(colors.toStream).flatten
+  val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
+  val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
+  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
 
   val minX = 0.0
   val maxX = 1.0
@@ -37,49 +34,44 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
   val widthPerX = (1.0 - (2 * padding)) / xs.size
   val whiteSpace = widthPerX * (1.0 - barWidthPercent)
 
+  val yPlottable = implicitly[Plottable[Y]]
+
+  val minY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
+  val maxY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
+
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height,
     border,
     minX, maxX, minY, maxY
-  )(DoublePlottable, yPlottable())
+  )
 
-  val normalFont = new Font("Courier New", Font.BOLD, 12)
-  val titleFont = new Font("Palatino", Font.BOLD, 20)
+  val vLine = new VerticalLine(scaledArea, yAxis, black)
+  val hLine = new HorizontalLine(scaledArea, xAxis, black)
 
-  val twist = (clockwise90 in rad).magnitude.doubleValue
-  
-  def labels(g2d: Graphics2D, fontMetrics: FontMetrics): Unit = {
+  val xTics = new XTics(
+    scaledArea,
+    xs.zipWithIndex.map({ case (x, i) => (padding + (i + 0.5) * widthPerX, xLabeller(x)) }).toList,
+    false,
+    36 *: °,
+    black)
 
-    title.map(text => {
-      g2d.setFont(titleFont)
-      g2d.drawString(text, (width - fontMetrics.stringWidth(text)) / 2, 20)
-    })
+  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), black)
 
-    g2d.setFont(normalFont)
+  val keyOpt = if (drawKey)
+    Some(new BarChartKey(chart, colorStream))
+  else
+    None
 
-    xAxisLabel.map(text =>
-      g2d.drawString(text, (width - fontMetrics.stringWidth(text)) / 2, height + (fontMetrics.getHeight - border) / 2)
-    )
+  val barSliceWidth = (widthPerX - (whiteSpace / 2d)) / ss.size.toDouble
 
-    yAxisLabel.map(text => {
-      val tx = 20
-      val ty = height + fontMetrics.stringWidth(text) / 2
-      g2d.translate(tx, ty)
-      g2d.rotate(twist)
-      g2d.drawString(text, 0, 0)
-      g2d.rotate(-1 * twist)
-      g2d.translate(-tx, -ty)
-    })
-
-  }
-
-  def key(g2d: Graphics2D): Unit = {
-    val lineHeight = g2d.getFontMetrics.getHeight
-    for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
-      g2d.setColor(color)
-      g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j+1))
-    }
+  val bars = for {
+    ((s, j), color) <- ss.zipWithIndex.zip(colorStream)
+    (x, i) <- xs.zipWithIndex
+  } yield {
+    val leftX = padding + (whiteSpace / 2d) + i * widthPerX + j * barSliceWidth
+    val rightX = leftX + barSliceWidth
+    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y(x, s)), color)
   }
 
   override def paintComponent(g: Graphics): Unit = {
@@ -87,32 +79,15 @@ class BarChartComponent[X, S, Y](barChart: BarChart[X, S, Y]) extends JPanel {
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    g2d.setColor(black)
-    labels(g2d, fontMetrics)
-    scaledArea.verticalLine(g2d, yAxis)
-    scaledArea.horizontalLine(g2d, xAxis)
-
-    scaledArea.drawYTics(g2d, fontMetrics, yTics)
-
-    val xTics = xs.zipWithIndex.map({
-      case (x, i) => (padding + (i + 0.5) * widthPerX, xLabeller(x))
-    }).toList
-    scaledArea.drawXTics(g2d, fontMetrics, xTics, false, 36 *: °)
-
-    val barSliceWidth = (widthPerX - (whiteSpace / 2.0)) / ss.size.toDouble
-
-    for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
-      g2d.setColor(color)
-      for ((x, i) <- xs.zipWithIndex) {
-        val leftX = padding + (whiteSpace / 2.0) + i * widthPerX + j * barSliceWidth
-        val rightX = leftX + barSliceWidth
-        scaledArea.fillRectangle(g2d, Point2D(leftX, minY), Point2D(rightX, y(x, s)))
-      }
-    }
-
-    if (drawKey) {
-      key(g2d)
-    }
+    titleText.map(_.paint(g2d))
+    hLine.paint(g2d)
+    vLine.paint(g2d)
+    xAxisLabelText.map(_.paint(g2d))
+    yAxisLabelText.map(_.paint(g2d))
+    xTics.paint(g2d)
+    yTics.paint(g2d)
+    keyOpt.map(_.paint(g2d))
+    bars.map(_.paint(g2d))
 
   }
 

@@ -4,6 +4,20 @@ import collection._
 import java.awt.Graphics2D
 import java.awt.Color
 
+class BarChartKey[X, S, Y: Plottable](chart: BarChart[X, S, Y], colorStream: Stream[Color]) extends Paintable {
+
+  import chart._
+  
+  def paint(g2d: Graphics2D): Unit = {
+    val lineHeight = g2d.getFontMetrics.getHeight
+    for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
+      g2d.setColor(color)
+      g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+    }
+  }
+  
+}
+
 class Key[X, Y](
   plot: Plot[X, Y],
   colorStream: Stream[Color],

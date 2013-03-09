@@ -1,8 +1,10 @@
 package axle.visualize
 
 import collection._
+import axle.akka.Defaults._
+import akka.actor.Props
 
-case class BarChart[X, S, Y : Plottable](
+case class BarChart[X, S, Y: Plottable](
   xs: Seq[X],
   ss: Seq[S],
   y: (X, S) => Y,
@@ -13,17 +15,27 @@ case class BarChart[X, S, Y : Plottable](
   height: Int = 600,
   border: Int = 50,
   barWidthPercent: Double = 0.80,
+  keyLeftPadding: Int = 20,
+  keyTopPadding: Int = 50,
+  keyWidth: Int = 80,
   title: Option[String] = None,
+  normalFontName: String = "Courier New",
+  normalFontSize: Int = 12,
+  titleFontName: String = "Palatino",
+  titleFontSize: Int = 20,
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None) {
 
-  val minY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
+  val dataFunction = () => (
+    for {
+      x <- xs
+      s <- ss
+    } yield (x, s) -> y(x, s)
+  ).toMap
 
-  val maxY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
-
-  val yTics = yPlottable.tics(minY, maxY)
-
-  def yPlottable(): Plottable[Y] = implicitly[Plottable[Y]]
+  val dataFeedActor = {
+    system.actorOf(Props(new DataFeedActor(dataFunction)))
+  }
 
 }

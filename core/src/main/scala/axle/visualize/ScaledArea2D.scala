@@ -75,7 +75,7 @@ class ScaledArea2D[X : Portionable, Y : Portionable](width: Int, height: Int, pa
     g2d.translate(-fp.x, -fp.y - fontMetrics.getHeight)
   }
 
-  val zeroDegrees = 0.0 *: °
+  val zeroDegrees = 0 *: °
 
   def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: Angle.Q = zeroDegrees): Unit = {
     val (x, label) = xTic

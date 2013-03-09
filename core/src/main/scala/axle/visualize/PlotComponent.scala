@@ -47,7 +47,7 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
 
   val vLine = new VerticalLine(scaledArea, yAxis, black)
   val hLine = new HorizontalLine(scaledArea, xAxis, black)
-  val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), black)
+  val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), true, 0 *: °, black)
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), black)
 
   val dataLines = new DataLines(scaledArea, data, colorStream, pointDiameter, connect)
