@@ -85,18 +85,16 @@ class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JP
   else
     None
 
-  var timestamp = 0L
-
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    val dataOptFuture = (dataFeedActor ? Fetch(timestamp)).mapTo[Option[Map[(X, S), Y]]]
+    val dataOptFuture = (dataFeedActor ? Fetch()).mapTo[Option[Map[(X, S), Y]]]
 
+    // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
+    
     Await.result(dataOptFuture, 1.seconds).map(data => {
-
-      timestamp = System.currentTimeMillis
 
       val view = new BarChartView(chart, data, colorStream)
 

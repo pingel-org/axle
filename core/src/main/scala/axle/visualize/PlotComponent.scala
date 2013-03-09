@@ -66,17 +66,14 @@ class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
 
-  var timestamp = 0L
-
   override def paintComponent(g: Graphics): Unit = {
 
     val g2d = g.asInstanceOf[Graphics2D]
 
-    val dataOptFuture = (dataFeedActor ? Fetch(timestamp)).mapTo[Option[List[(String, TreeMap[X, Y])]]]
-    
-    Await.result(dataOptFuture, 1.seconds).map(data => {
+    val dataOptFuture = (dataFeedActor ? Fetch()).mapTo[Option[List[(String, TreeMap[X, Y])]]]
 
-      timestamp = System.currentTimeMillis
+    // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
+    Await.result(dataOptFuture, 1.seconds).map(data => {
 
       val view = new PlotView(plot, data)
 
