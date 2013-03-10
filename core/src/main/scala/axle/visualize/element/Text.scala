@@ -21,15 +21,18 @@ class Text(
   def paint(g2d: Graphics2D): Unit = {
 
     g2d.setColor(color)
-    val fontMetrics = g2d.getFontMetrics
     g2d.setFont(font)
+    val fontMetrics = g2d.getFontMetrics
 
     if (angleRadOpt.isDefined) {
       // TODO: handle centered, angled text
       val twist = angleRadOpt.get
       g2d.translate(x, y)
       g2d.rotate(-1 * twist)
-      g2d.drawString(text, 0, 0)
+      if (centered)
+        g2d.drawString(text, -fontMetrics.stringWidth(text) / 2, 0)
+      else
+        g2d.drawString(text, 0, 0)
       g2d.rotate(twist)
       g2d.translate(-x, -y)
     } else {
