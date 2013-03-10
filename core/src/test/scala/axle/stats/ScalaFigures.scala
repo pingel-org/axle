@@ -1,9 +1,10 @@
 
-package org.pingel.bayes.examples
+package axle.pgm
 
 import collection._
 import axle.stats._
 import axle.graph._
+import axle.pgm._
 import org.specs2.mutable._
 
 class ScalaFigures extends Specification {

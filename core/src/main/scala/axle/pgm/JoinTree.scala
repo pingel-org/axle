@@ -1,12 +1,13 @@
-package axle.stats
+package axle.pgm
 
-import collection._
-import axle.graph._
 import axle._
+import axle.graph._
+import axle.stats._
+import collection._
 
 object JoinTree {
 
-  import axle.stats.Model._
+  import axle.pgm.Model._
 
   def apply(
     vps: Seq[immutable.Set[RandomVariable[_]]],

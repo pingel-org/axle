@@ -1,6 +1,7 @@
 package axle.stats
 
 import collection._
+import axle.stats._
 import axle.graph._
 
 trait EliminationTreeModule extends FactorModule {

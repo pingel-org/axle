@@ -1,6 +1,7 @@
 package axle.stats
 
 import axle._
+import axle.stats._
 import axle.graph._
 import collection._
 

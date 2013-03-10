@@ -1,4 +1,4 @@
-package axle.stats
+package axle.pgm
 
 /**
  * Notes on unimplemented aspects of Bayesian networks:
@@ -104,6 +104,7 @@ import collection._
 import axle._
 import axle.XmlAble
 import axle.graph._
+import axle.stats._
 import math.max
 import Stream.{ cons, empty }
 

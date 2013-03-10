@@ -1,9 +1,10 @@
 
-package axle.stats.docalculus
+package axle.pgm.docalculus
 
 import collection._
 import axle.stats._
-import axle.stats.docalculus.CausalModel._
+import axle.pgm._
+import CausalModel._
 
 object InsertObservation extends Rule {
 

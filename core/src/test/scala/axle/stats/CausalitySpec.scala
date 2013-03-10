@@ -1,7 +1,8 @@
 
-package axle.stats
+package axle.pgm
 
-import axle.stats.docalculus._
+import axle.stats._
+import axle.pgm.docalculus._
 import org.specs2.mutable._
 
 class CausalitySpec extends Specification {

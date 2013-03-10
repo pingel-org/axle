@@ -1,8 +1,9 @@
-package axle.stats
+package axle.pgm
 
 import collection._
 import axle._
 import axle.graph._
+import axle.stats._
 
 object Direction {
 

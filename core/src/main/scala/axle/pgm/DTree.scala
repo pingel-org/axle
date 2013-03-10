@@ -1,6 +1,7 @@
-package axle.stats
+package axle.pgm
 
 import axle._
+import axle.stats._
 import collection._
 
 class DTreeEdge {}

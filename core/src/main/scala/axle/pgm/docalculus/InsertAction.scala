@@ -1,9 +1,9 @@
 
-package axle.stats.docalculus
+package axle.pgm.docalculus
 
 import axle.stats._
-import axle.stats.docalculus.CausalModel._
 import collection._
+import CausalModel._
 
 object InsertAction extends Rule {
 

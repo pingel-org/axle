@@ -1,8 +1,9 @@
-package axle.stats
+package axle.pgm
 
-import org.specs2.mutable._
-import collection._
 import axle.graph._
+import axle.stats._
+import collection._
+import org.specs2.mutable._
 
 class ConditionalProbabilityTableSpecification extends Specification {
 

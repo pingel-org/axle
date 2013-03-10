@@ -1,4 +1,4 @@
-package axle.stats.docalculus
+package axle.pgm.docalculus
 
 class Unifier {
 

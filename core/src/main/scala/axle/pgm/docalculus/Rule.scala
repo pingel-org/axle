@@ -1,8 +1,8 @@
 
-package axle.stats.docalculus
+package axle.pgm.docalculus
 
 import axle.stats._
-import axle.stats.docalculus.CausalModel._
+import CausalModel._
 
 abstract class Rule extends Form {
 

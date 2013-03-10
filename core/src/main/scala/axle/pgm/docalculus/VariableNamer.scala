@@ -1,4 +1,4 @@
-package axle.stats.docalculus
+package axle.pgm.docalculus
 
 import axle._
 import axle.stats._

@@ -1,9 +1,10 @@
 
-package axle.stats.docalculus
+package axle.pgm.docalculus
 
 import axle.stats._
-import axle.stats.docalculus.CausalModel._
+import axle.pgm._
 import collection._
+import CausalModel._
 
 case class Sigma[T](xs: Set[T], f: T => Form) extends Form {
 
