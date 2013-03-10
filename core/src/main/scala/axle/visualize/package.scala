@@ -7,6 +7,7 @@ import axle.graph._
 import axle.visualize._
 import axle.ml._
 import axle.stats._
+import axle.pgm._
 import java.awt.Font
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
