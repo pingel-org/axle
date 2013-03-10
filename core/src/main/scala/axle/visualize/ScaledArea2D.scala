@@ -13,14 +13,14 @@ import Angle._
 
 case class Point2D[X, Y](x: X, y: Y)
 
-class ScaledArea2D[X : Portionable, Y : Portionable](width: Int, height: Int, pad: Int,
+case class ScaledArea2D[X: Portionable, Y: Portionable](
+  width: Int, height: Int, pad: Int,
   minX: X, maxX: X, minY: Y, maxY: Y) {
 
   val xPortionable = implicitly[Portionable[X]]
   val yPortionable = implicitly[Portionable[Y]]
-  
-  val drawableWidth = width - (2 * pad)
 
+  val drawableWidth = width - (2 * pad)
   val drawableHeight = height - (2 * pad)
 
   def framePoint(sp: Point2D[X, Y]) = new Point(
@@ -37,10 +37,6 @@ class ScaledArea2D[X : Portionable, Y : Portionable](width: Int, height: Int, pa
     val fp = framePoint(p)
     g2d.drawOval(fp.x - width / 2, fp.y - height / 2, width, height)
   }
-
-  def horizontalLine(g2d: Graphics2D, y: Y): Unit = drawLine(g2d, Point2D(minX, y), Point2D(maxX, y))
-
-  def verticalLine(g2d: Graphics2D, x: X): Unit = drawLine(g2d, Point2D(x, minY), Point2D(x, maxY))
 
   def drawLine(g2d: Graphics2D, p0: Point2D[X, Y], p1: Point2D[X, Y]): Unit = {
     val fp0 = framePoint(p0)
@@ -74,41 +70,5 @@ class ScaledArea2D[X : Portionable, Y : Portionable](width: Int, height: Int, pa
     g2d.rotate(-1 * a)
     g2d.translate(-fp.x, -fp.y - fontMetrics.getHeight)
   }
-
-  val zeroDegrees = 0 *: °
-
-  def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: Angle.Q = zeroDegrees): Unit = {
-    val (x, label) = xTic
-    if (fDrawLine) {
-      g2d.setColor(Color.lightGray)
-      drawLine(g2d, Point2D(x, minY), Point2D(x, maxY))
-    }
-    val bottomScaled = Point2D(x, minY)
-    val bottomUnscaled = framePoint(bottomScaled)
-    g2d.setColor(Color.black)
-    // TODO: angle xtics?
-    if (angle === zeroDegrees)
-      g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
-    else
-      drawStringAtAngle(g2d, fontMetrics, label, bottomScaled, angle)
-    g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
-  }
-
-  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean = true, angle: Angle.Q = zeroDegrees): Unit =
-    xTics.map({
-      case (x, label) => drawXTic(g2d: Graphics2D, fontMetrics, (x, label), fDrawLines, angle)
-    })
-
-  def drawYTics(g2d: Graphics2D, fontMetrics: FontMetrics, yTics: Seq[(Y, String)]): Unit = yTics.map({
-    case (y, label) => {
-      val leftScaled = Point2D(minX, y)
-      val leftUnscaled = framePoint(leftScaled)
-      g2d.setColor(Color.lightGray)
-      drawLine(g2d, leftScaled, Point2D(maxX, y))
-      g2d.setColor(Color.black)
-      g2d.drawString(label, leftUnscaled.x - fontMetrics.stringWidth(label) - 5, leftUnscaled.y + fontMetrics.getHeight / 2)
-      g2d.drawLine(leftUnscaled.x - 2, leftUnscaled.y, leftUnscaled.x + 2, leftUnscaled.y)
-    }
-  })
 
 }

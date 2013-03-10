@@ -9,8 +9,10 @@ class HorizontalLine[X, Y](
   h: Y,
   color: Color = Color.black) extends Paintable {
 
+  import scaledArea._
+  
   def paint(g2d: Graphics2D): Unit = {
     g2d.setColor(color)
-    scaledArea.horizontalLine(g2d, h)
+    drawLine(g2d, Point2D(minX, h), Point2D(maxX, h))
   }
 }

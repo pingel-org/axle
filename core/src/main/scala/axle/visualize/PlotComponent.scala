@@ -19,7 +19,7 @@ import java.awt.Frame
 import scala.concurrent.Await
 import axle.visualize.element._
 
-class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])]) {
+class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])], normalFont: Font) {
 
   import plot._
 
@@ -29,7 +29,7 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
   val yPlottable = implicitly[Plottable[Y]]
 
   val keyOpt = if (drawKey)
-    Some(new Key(plot, colorStream, keyWidth, keyTopPadding, data))
+    Some(new Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))
   else
     None
 
@@ -48,8 +48,8 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
 
   val vLine = new VerticalLine(scaledArea, yAxis, black)
   val hLine = new HorizontalLine(scaledArea, xAxis, black)
-  val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), true, 0 *: °, black)
-  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), black)
+  val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), normalFont, true, 0 *: °, black)
+  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
 
   val dataLines = new DataLines(scaledArea, data, colorStream, pointDiameter, connect)
 
@@ -76,7 +76,7 @@ class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel
     // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
     Await.result(dataOptFuture, 1.seconds).map(data => {
 
-      val view = new PlotView(plot, data)
+      val view = new PlotView(plot, data, normalFont)
 
       import view._
 

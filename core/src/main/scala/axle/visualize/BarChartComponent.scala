@@ -18,7 +18,7 @@ import Angle._
 import Plottable._
 import axle.visualize.element._
 
-class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S), Y], colorStream: Stream[Color]) {
+class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S), Y], colorStream: Stream[Color], normalFont: Font) {
 
   import chart._
  
@@ -48,11 +48,12 @@ class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S
   val xTics = new XTics(
     scaledArea,
     xs.zipWithIndex.map({ case (x, i) => (padding + (i + 0.5) * widthPerX, xLabeller(x)) }).toList,
+    normalFont,
     false,
     36 *: °,
     black)
 
-  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), black)
+  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
 
   val barSliceWidth = (widthPerX - (whiteSpace / 2d)) / ss.size.toDouble
 
@@ -82,7 +83,7 @@ class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JP
   val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
 
   val keyOpt = if (drawKey)
-    Some(new BarChartKey(chart, colorStream))
+    Some(new BarChartKey(chart, normalFont, colorStream))
   else
     None
 
@@ -97,7 +98,7 @@ class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JP
     
     Await.result(dataOptFuture, 1.seconds).map(data => {
 
-      val view = new BarChartView(chart, data, colorStream)
+      val view = new BarChartView(chart, data, colorStream, normalFont)
 
       import view._
 

@@ -13,8 +13,11 @@ import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import java.awt.Font
 
+import axle.visualize.element._
 import axle.ml.KMeansModule
 import axle.matrix._
+import axle.quanta._
+import Angle._
 
 object KMeansVisualizationModule extends KMeansVisualizationModule
 
@@ -22,17 +25,25 @@ trait KMeansVisualizationModule {
 
   import KMeansModule._
 
-  def visualize[D](classifier: KMeansClassifier[D],
-    width: Int = 600, height: Int = 600,
-    border: Int = 50, pointDiameter: Int = 10) =
-    new KMeansVisualization[D](classifier, width, height, border, pointDiameter)
+  //  def visualize[D](classifier: KMeansClassifier[D],
+  //    width: Int = 600,
+  //    height: Int = 600,
+  //    border: Int = 50,
+  //    pointDiameter: Int = 10,
+  //    fontName: String = "Courier New",
+  //    fontSize: Int = 12) =
+  //    new KMeansVisualization[D](classifier, width, height, border, pointDiameter, fontName, fontSize)
 
-  class KMeansVisualization[D](
+  case class KMeansVisualization[D](
     classifier: KMeansClassifier[D],
-    width: Int = 600, height: Int = 600,
-    border: Int = 50, pointDiameter: Int = 10) extends JPanel {
+    w: Int = 600,
+    h: Int = 600,
+    border: Int = 50,
+    pointDiameter: Int = 10,
+    fontName: String = "Courier New",
+    fontSize: Int = 12) extends JPanel {
 
-    setMinimumSize(new Dimension(width + border, height + border))
+    setMinimumSize(new Dimension(w + border, h + border))
 
     val features = classifier.features
 
@@ -47,24 +58,19 @@ trait KMeansVisualizationModule {
     val maxY = maxs(0, 1)
 
     implicit val dp = axle.visualize.Plottable.DoublePlottable
-    val xTics = dp.tics(minX, maxX)
-    val yTics = dp.tics(minY, maxY)
+    val scaledArea = new ScaledArea2D(w, h, border, minX, maxX, minY, maxY)
 
-    val scaledArea = new ScaledArea2D(width, height, border, minX, maxX, minY, maxY)
+    val normalFont = new Font(fontName, Font.BOLD, fontSize)
+    
+    val xTics = new XTics(scaledArea, dp.tics(minX, maxX), normalFont, true, 0 *: °, black)
+    val yTics = new YTics(scaledArea, dp.tics(minY, maxY), normalFont, black)
 
-    def boundingRectangle(g2d: Graphics2D): Unit = {
-      g2d.setColor(black)
-      scaledArea.drawRectangle(g2d, Point2D(minX, minY), Point2D(maxX, maxY))
-    }
+    val boundingRectangle = new Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), black)
 
-    def centroid(g2d: Graphics2D, i: Int): Unit = {
-      // TODO asInstanceOF
+    def centroidOval(i: Int) = {
       val denormalized = classifier.normalizer.denormalize(classifier.μ.row(i))
       val center = Point2D(denormalized(0), denormalized(1))
-      g2d.setColor(darkGray)
-      scaledArea.fillOval(g2d, center, 3 * pointDiameter, 3 * pointDiameter)
-      g2d.setColor(colors(i % colors.length))
-      scaledArea.drawOval(g2d, center, 3 * pointDiameter, 3 * pointDiameter)
+      Oval(scaledArea, center, 3 * pointDiameter, 3 * pointDiameter, colors(i % colors.length), darkGray)
     }
 
     def cluster(g2d: Graphics2D, i: Int): Unit = {
@@ -79,27 +85,18 @@ trait KMeansVisualizationModule {
       }
     }
 
-    // TODO: paintComponent is executed for many kinds of events that will not change the image
-
-    val normalFont = new Font("Courier New", Font.BOLD, 12)
+    val centroidOvals = (0 until classifier.K).map(centroidOval(_))
 
     override def paintComponent(g: Graphics): Unit = {
-      // super.paintComponent(g)
-      val size = getSize()
-      // val insets = getInsets()
-      // val w = size.width - (insets.left + insets.right)
-      // val h = size.height - (insets.top + insets.bottom)
+
       val g2d = g.asInstanceOf[Graphics2D]
       val fontMetrics = g2d.getFontMetrics
-      g2d.setFont(normalFont)
-      boundingRectangle(g2d)
-      scaledArea.drawXTics(g2d, fontMetrics, xTics)
-      scaledArea.drawYTics(g2d, fontMetrics, yTics)
+
+      boundingRectangle.paint(g2d)
+      xTics.paint(g2d)
+      yTics.paint(g2d)
+      centroidOvals.map(_.paint(g2d))
       for (i <- 0 until classifier.K) {
-        centroid(g2d, i)
-      }
-      for (i <- 0 until classifier.K) {
-        // TODO: inefficient loop
         cluster(g2d, i)
       }
     }

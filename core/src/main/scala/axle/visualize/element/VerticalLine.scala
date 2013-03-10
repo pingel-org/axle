@@ -9,9 +9,11 @@ class VerticalLine[X, Y](
   v: X,
   color: Color = Color.black) extends Paintable {
 
+  import scaledArea._
+  
   def paint(g2d: Graphics2D): Unit = {
     g2d.setColor(color)
-    scaledArea.verticalLine(g2d, v)
+    drawLine(g2d, Point2D(v, minY), Point2D(v, maxY))
   }
 
 }
