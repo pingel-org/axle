@@ -1,6 +1,6 @@
 package axle.nlp.language
 
-import axle.akka.Defaults._
+import axle.actor.Defaults._
 import concurrent.duration._
 import akka.actor._
 import akka.pattern.ask
