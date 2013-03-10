@@ -25,7 +25,6 @@ class Text(
     val fontMetrics = g2d.getFontMetrics
 
     if (angleRadOpt.isDefined) {
-      // TODO: handle centered, angled text
       val twist = angleRadOpt.get
       g2d.translate(x, y)
       g2d.rotate(-1 * twist)
