@@ -1,4 +1,4 @@
-package org.pingel.bayes
+package axle.stats
 
 import axle.matrix._
 import math.{ pow, sqrt }
