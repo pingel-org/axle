@@ -3,6 +3,7 @@ package axle.visualize
 import akka.actor.{ Actor, ActorLogging, ActorRef }
 import concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import axle.quanta.Time
 import System.currentTimeMillis
 
 object DataFeed {
@@ -10,18 +11,23 @@ object DataFeed {
   case class Fetch()
 }
 
-class DataFeedActor[T](f: () => T) extends Actor with ActorLogging {
+class DataFeedActor[T](f: () => T, refreshInterval: Option[Time.Q]) extends Actor with ActorLogging {
 
   import DataFeed._
 
-  val feedPump = context.system.scheduler.schedule(0.millis, 200.millis, self, Update())  
-  
+  refreshInterval.map(interval =>
+    context.system.scheduler.schedule(
+      0.millis,
+      ((interval in Time.millisecond).magnitude.doubleValue).millis,
+      self,
+      Update()))
+
   var newestVersion = currentTimeMillis
   var data = f()
 
   // Tracking this client -> version map here is not optimal, but is short-term solution
   val clientVersions = collection.mutable.Map[ActorRef, Long]().withDefaultValue(0L)
-  
+
   def receive = {
 
     case Update() => {

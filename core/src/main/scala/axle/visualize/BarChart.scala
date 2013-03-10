@@ -3,6 +3,7 @@ package axle.visualize
 import collection._
 import axle.akka.Defaults._
 import akka.actor.Props
+import axle.quanta.Time
 
 case class BarChart[X, S, Y: Plottable](
   xs: Seq[X],
@@ -25,7 +26,8 @@ case class BarChart[X, S, Y: Plottable](
   titleFontSize: Int = 20,
   xAxis: Y,
   xAxisLabel: Option[String] = None,
-  yAxisLabel: Option[String] = None) {
+  yAxisLabel: Option[String] = None,
+  refreshInterval: Option[Time.Q] = None) {
 
   // TODO: should be atomic (lock y)
   val dataFunction = () => (
@@ -35,7 +37,7 @@ case class BarChart[X, S, Y: Plottable](
     } yield (x, s) -> y(x, s)
   ).toMap
 
-  val dataFeedActor = system.actorOf(Props(new DataFeedActor(dataFunction)))
+  val dataFeedActor = system.actorOf(Props(new DataFeedActor(dataFunction, refreshInterval)))
   
 
 }

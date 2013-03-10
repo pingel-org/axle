@@ -21,7 +21,7 @@ import axle.visualize.element._
 class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S), Y], colorStream: Stream[Color]) {
 
   import chart._
-
+ 
   val minX = 0.0
   val maxX = 1.0
   val yAxis = minX
