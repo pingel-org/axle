@@ -4,7 +4,7 @@ import java.awt.Color
 import Color._
 import scala.collection.immutable.TreeMap
 import akka.actor.Props
-import axle.akka.Defaults._
+import axle.actor.Defaults._
 import axle.quanta.Time
 
 case class Plot[X: Plottable, Y: Plottable](

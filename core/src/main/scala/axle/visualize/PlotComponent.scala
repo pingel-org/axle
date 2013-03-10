@@ -4,7 +4,7 @@ import javax.swing.JPanel
 import java.awt.{ Color, Font, FontMetrics, Graphics, Graphics2D, Dimension }
 import scala.concurrent.duration._
 import axle.quanta._
-import axle.akka.Defaults._
+import axle.actor.Defaults._
 import Angle._
 import Color._
 import collection._
@@ -14,7 +14,6 @@ import akka.actor.{ Props, Actor, ActorRef, ActorSystem, ActorLogging }
 import akka.util.Timeout
 import collection.immutable.TreeMap
 import scala.concurrent.duration._
-import DataFeed._
 import java.awt.Frame
 import scala.concurrent.Await
 import axle.visualize.element._
@@ -55,12 +54,14 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
 
 }
 
-class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel {
+class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel with Fed {
 
   import plot._
 
   setMinimumSize(new Dimension(width, height))
 
+  def feeder() = dataFeedActor
+  
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
   val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
@@ -69,25 +70,26 @@ class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel
 
   override def paintComponent(g: Graphics): Unit = {
 
+    import DataFeedProtocol._
+
     val g2d = g.asInstanceOf[Graphics2D]
 
-    val dataOptFuture = (dataFeedActor ? Fetch()).mapTo[Option[List[(String, TreeMap[X, Y])]]]
+    val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(String, TreeMap[X, Y])]]
 
     // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-    Await.result(dataOptFuture, 1.seconds).map(data => {
+    val data = Await.result(dataFuture, 1.seconds)
 
-      val view = new PlotView(plot, data, normalFont)
+    val view = new PlotView(plot, data, normalFont)
 
-      import view._
+    import view._
 
-      val paintables =
-        Vector(vLine, hLine, xTics, yTics, dataLines) ++
-          Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
+    val paintables =
+      Vector(vLine, hLine, xTics, yTics, dataLines) ++
+        Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
 
-      for (paintable <- paintables) {
-        paintable.paint(g2d)
-      }
-    })
+    for (paintable <- paintables) {
+      paintable.paint(g2d)
+    }
 
   }
 

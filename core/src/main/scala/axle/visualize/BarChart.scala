@@ -1,7 +1,7 @@
 package axle.visualize
 
 import collection._
-import axle.akka.Defaults._
+import axle.actor.Defaults._
 import akka.actor.Props
 import axle.quanta.Time
 

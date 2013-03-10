@@ -9,9 +9,9 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import DataFeed._
+import DataFeedProtocol._
 import akka.pattern.ask
-import axle.akka.Defaults._
+import axle.actor.Defaults._
 import Stream.continually
 import axle.quanta._
 import Angle._
@@ -21,7 +21,7 @@ import axle.visualize.element._
 class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S), Y], colorStream: Stream[Color], normalFont: Font) {
 
   import chart._
- 
+
   val minX = 0.0
   val maxX = 1.0
   val yAxis = minX
@@ -68,11 +68,13 @@ class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S
 
 }
 
-class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JPanel {
+class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JPanel with Fed {
 
   import chart._
 
   setMinimumSize(new java.awt.Dimension(width, height))
+
+  def feeder() = dataFeedActor
 
   val colors = List(blue, red, green, orange, pink, yellow)
   val colorStream = continually(colors.toStream).flatten
@@ -92,26 +94,24 @@ class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JP
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    val dataOptFuture = (dataFeedActor ? Fetch()).mapTo[Option[Map[(X, S), Y]]]
+    val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[(X, S), Y]]
 
     // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-    
-    Await.result(dataOptFuture, 1.seconds).map(data => {
+    val data = Await.result(dataFuture, 1.seconds)
 
-      val view = new BarChartView(chart, data, colorStream, normalFont)
+    val view = new BarChartView(chart, data, colorStream, normalFont)
 
-      import view._
+    import view._
 
-      titleText.map(_.paint(g2d))
-      hLine.paint(g2d)
-      vLine.paint(g2d)
-      xAxisLabelText.map(_.paint(g2d))
-      yAxisLabelText.map(_.paint(g2d))
-      xTics.paint(g2d)
-      yTics.paint(g2d)
-      keyOpt.map(_.paint(g2d))
-      bars.map(_.paint(g2d))
-    })
+    titleText.map(_.paint(g2d))
+    hLine.paint(g2d)
+    vLine.paint(g2d)
+    xAxisLabelText.map(_.paint(g2d))
+    yAxisLabelText.map(_.paint(g2d))
+    xTics.paint(g2d)
+    yTics.paint(g2d)
+    keyOpt.map(_.paint(g2d))
+    bars.map(_.paint(g2d))
 
   }
 

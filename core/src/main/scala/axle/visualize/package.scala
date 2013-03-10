@@ -1,28 +1,35 @@
+
 package axle
 
 import java.awt.Color
 import java.awt.Component
-import java.io.File
-import axle.graph._
-import axle.visualize._
-import axle.ml._
-import axle.stats._
-import axle.pgm._
 import java.awt.Font
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
+import java.io.File
+import akka.actor.ActorRef
+import axle.graph._
+import axle.visualize._
+import axle.ml._
+import axle.stats._
+import axle.pgm._
 
 package object visualize {
 
   // default width/height was 1100/800
 
-  def newFrame(width: Int, height: Int) = new AxleFrame(width, height, bgColor = Color.white, title = "αχλε")
+  def newFrame(width: Int, height: Int, dataFeedActorOpt: Option[ActorRef]) =
+    new AxleFrame(width, height, Color.white, "αχλε", dataFeedActorOpt)
 
   def show(component: Component) = {
     val minSize = component.getMinimumSize
-    val frame = newFrame(minSize.width, minSize.height)
+    val dataFeedActorOpt = component match {
+      case f: Fed => Some(f.feeder)
+      case _ => None
+    }
+    val frame = newFrame(minSize.width, minSize.height, dataFeedActorOpt)
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
@@ -59,7 +66,7 @@ package object visualize {
   def component2file(component: Component, filename: String, encoding: String): Unit = {
 
     val minSize = component.getMinimumSize
-    val frame = newFrame(minSize.width, minSize.height)
+    val frame = newFrame(minSize.width, minSize.height, None)
     frame.setUndecorated(true)
     frame.initialize()
     val rc = frame.add(component)
