@@ -18,7 +18,7 @@ import Angle._
 import Plottable._
 import axle.visualize.element._
 
-class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S), Y], colorStream: Stream[Color], normalFont: Font) {
+class BarChartView[G, S, Y: Plottable](chart: BarChart[G, S, Y], data: Map[(G, S), Y], colorStream: Stream[Color], normalFont: Font) {
 
   import chart._
 
@@ -27,13 +27,13 @@ class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S
   val yAxis = minX
 
   val padding = 0.05 // on each side
-  val widthPerX = (1.0 - (2 * padding)) / xs.size
-  val whiteSpace = widthPerX * (1.0 - barWidthPercent)
+  val widthPerGroup = (1.0 - (2 * padding)) / groups.size
+  val whiteSpace = widthPerGroup * (1.0 - barWidthPercent)
 
   val yPlottable = implicitly[Plottable[Y]]
 
-  val minY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
-  val maxY = List(xAxis, ss.map(s => (xs.map(y(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
+  val minY = List(xAxis, slices.map(s => (groups.map(data(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
+  val maxY = List(xAxis, slices.map(s => (groups.map(data(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
@@ -45,9 +45,9 @@ class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S
   val vLine = new VerticalLine(scaledArea, yAxis, black)
   val hLine = new HorizontalLine(scaledArea, xAxis, black)
 
-  val xTics = new XTics(
+  val gTics = new XTics(
     scaledArea,
-    xs.zipWithIndex.map({ case (x, i) => (padding + (i + 0.5) * widthPerX, xLabeller(x)) }).toList,
+    groups.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, gLabeller(g)) }).toList,
     normalFont,
     false,
     36 *: °,
@@ -55,20 +55,20 @@ class BarChartView[X, S, Y: Plottable](chart: BarChart[X, S, Y], data: Map[(X, S
 
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
 
-  val barSliceWidth = (widthPerX - (whiteSpace / 2d)) / ss.size.toDouble
+  val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
 
   val bars = for {
-    ((s, j), color) <- ss.zipWithIndex.zip(colorStream)
-    (x, i) <- xs.zipWithIndex
+    ((s, j), color) <- slices.zipWithIndex.zip(colorStream)
+    (g, i) <- groups.zipWithIndex
   } yield {
-    val leftX = padding + (whiteSpace / 2d) + i * widthPerX + j * barSliceWidth
+    val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth
     val rightX = leftX + barSliceWidth
-    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y(x, s)), color)
+    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(g, s)), color)
   }
 
 }
 
-class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JPanel with Fed {
+class BarChartComponent[G, S, Y: Plottable](chart: BarChart[G, S, Y]) extends JPanel with Fed {
 
   import chart._
 
@@ -94,7 +94,7 @@ class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JP
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[(X, S), Y]]
+    val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[(G, S), Y]]
 
     // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
     val data = Await.result(dataFuture, 1.seconds)
@@ -108,7 +108,7 @@ class BarChartComponent[X, S, Y: Plottable](chart: BarChart[X, S, Y]) extends JP
     vLine.paint(g2d)
     xAxisLabelText.map(_.paint(g2d))
     yAxisLabelText.map(_.paint(g2d))
-    xTics.paint(g2d)
+    gTics.paint(g2d)
     yTics.paint(g2d)
     keyOpt.map(_.paint(g2d))
     bars.map(_.paint(g2d))

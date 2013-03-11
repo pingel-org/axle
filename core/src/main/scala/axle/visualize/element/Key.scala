@@ -6,14 +6,14 @@ import java.awt.Graphics2D
 import java.awt.Color
 import java.awt.Font
 
-class BarChartKey[X, S, Y: Plottable](chart: BarChart[X, S, Y], font: Font, colorStream: Stream[Color]) extends Paintable {
+class BarChartKey[G, S, Y: Plottable](chart: BarChart[G, S, Y], font: Font, colorStream: Stream[Color]) extends Paintable {
 
   import chart._
   
   def paint(g2d: Graphics2D): Unit = {
     g2d.setFont(font)
     val lineHeight = g2d.getFontMetrics.getHeight
-    for (((s, j), color) <- ss.zipWithIndex.zip(colorStream)) {
+    for (((s, j), color) <- slices.zipWithIndex.zip(colorStream)) {
       g2d.setColor(color)
       g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
     }

@@ -16,18 +16,21 @@ object DataFeedProtocol {
   case class Fetch()
 }
 
-class DataFeedActor[T](f: () => T, refreshInterval: Option[Time.Q]) extends Actor with ActorLogging {
+class DataFeedActor[T](initialValue: T, refresher: Option[(T => T, Time.Q)]) extends Actor with ActorLogging {
 
   import DataFeedProtocol._
 
-  refreshInterval.map(interval =>
-    context.system.scheduler.schedule(
-      0.millis,
-      ((interval in Time.millisecond).magnitude.doubleValue).millis,
-      self,
-      Recompute()))
+  refresher.map({
+    case (_, interval) =>
+      context.system.scheduler.schedule(
+        0.millis,
+        ((interval in Time.millisecond).magnitude.doubleValue).millis,
+        self,
+        Recompute())
+  })
 
-  var data = f()
+  var data = initialValue
+
   val viewers = collection.mutable.Set[ActorRef]()
 
   def receive = {
@@ -37,8 +40,11 @@ class DataFeedActor[T](f: () => T, refreshInterval: Option[Time.Q]) extends Acto
     }
 
     case Recompute() => {
-      data = f()
-      viewers.map(_ ! FrameProtocol.Soil())
+      refresher.map({
+        case (f, _) =>
+          data = f(data)
+          viewers.map(_ ! FrameProtocol.Soil())
+      })
       // log info (s"Updated data behind feed at $lastUpdate")
     }
 

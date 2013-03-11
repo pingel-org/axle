@@ -4,7 +4,11 @@ import collection._
 import axle.stats._
 import axle.graph._
 
-trait EliminationTreeModule extends FactorModule {
+object EliminationTreeModule extends EliminationTreeModule
+
+trait EliminationTreeModule {
+  
+  import FactorModule._
   
   case class EliminationTree(
     vps: Seq[Factor],

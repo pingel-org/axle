@@ -5,11 +5,11 @@ import axle.actor.Defaults._
 import akka.actor.Props
 import axle.quanta.Time
 
-case class BarChart[X, S, Y: Plottable](
-  xs: Seq[X],
-  ss: Seq[S],
-  y: (X, S) => Y,
-  xLabeller: X => String = (x: X) => x.toString,
+case class BarChart[G, S, Y: Plottable](
+  groups: Seq[G],
+  slices: Seq[S],
+  initialValue: Map[(G, S), Y],
+  gLabeller: G => String = (g: G) => g.toString,
   sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -27,17 +27,8 @@ case class BarChart[X, S, Y: Plottable](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  refreshInterval: Option[Time.Q] = None) {
+  refresher: Option[(Map[(G, S), Y] => Map[(G, S), Y], Time.Q)] = None) {
 
-  // TODO: should be atomic (lock y)
-  val dataFunction = () => (
-    for {
-      x <- xs
-      s <- ss
-    } yield (x, s) -> y(x, s)
-  ).toMap
-
-  val dataFeedActor = system.actorOf(Props(new DataFeedActor(dataFunction, refreshInterval)))
-  
+  val dataFeedActor = system.actorOf(Props(new DataFeedActor(initialValue, refresher)))
 
 }

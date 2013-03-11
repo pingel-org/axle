@@ -4,12 +4,16 @@ import axle.matrix._
 import axle.IndexedCrossProduct
 import collection._
 
-trait FactorModule extends JblasMatrixModule {
+object FactorModule extends FactorModule
+
+trait FactorModule {
 
   /* Technically a "Distribution" is probably a table that sums to 1, which is not
- * always true in a Factor.  They should be siblings rather than parent/child.
- */
+   * always true in a Factor.  They should be siblings rather than parent/child.
+   */
 
+  import JblasMatrixModule._
+  
   object Factor {
 
     def apply(varList: Seq[RandomVariable[_]], values: Map[Seq[CaseIs[_]], Double]): Factor =

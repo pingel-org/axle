@@ -110,8 +110,11 @@ import Stream.{ cons, empty }
 
 object BayesianNetworkModule extends BayesianNetworkModule
 
-trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
+trait BayesianNetworkModule {
 
+  import FactorModule._
+  import EliminationTreeModule._
+  
   class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, String])
     extends Model(_graph) {
 

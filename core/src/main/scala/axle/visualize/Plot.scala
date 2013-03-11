@@ -8,7 +8,7 @@ import axle.actor.Defaults._
 import axle.quanta.Time
 
 case class Plot[X: Plottable, Y: Plottable](
-  dataFunction: () => List[(String, TreeMap[X, Y])],
+  initialValue: List[(String, TreeMap[X, Y])],
   connect: Boolean = true,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -28,8 +28,8 @@ case class Plot[X: Plottable, Y: Plottable](
   xAxisLabel: Option[String] = None,
   yAxis: X,
   yAxisLabel: Option[String] = None,
-  refreshInterval: Option[Time.Q] = None) {
+  refresher: Option[(List[(String, TreeMap[X, Y])] => List[(String, TreeMap[X, Y])], Time.Q)] = None) {
 
-  val dataFeedActor = system.actorOf(Props(new DataFeedActor(dataFunction, refreshInterval)))
+  val dataFeedActor = system.actorOf(Props(new DataFeedActor(initialValue, refresher)))
 
 }
