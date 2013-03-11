@@ -9,11 +9,9 @@ import org.specs2.mutable._
 
 class ScalaFigures extends Specification {
 
-  val bnm = BayesianNetworkModule
-
-  import bnm._
-  import bnm.Factor
-  import bnm.EliminationTree
+  import BayesianNetworkModule.{BayesianNetwork, BayesianNetworkNode}
+  import EliminationTreeModule.EliminationTree
+  import FactorModule.Factor
 
   val bools = Some(Vector(true, false))
 

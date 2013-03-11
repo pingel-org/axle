@@ -8,6 +8,7 @@ import org.specs2.mutable._
 class ConditionalProbabilityTableSpecification extends Specification {
 
   import BayesianNetworkModule._
+  import FactorModule._
   
   val bools = Some(Vector(true, false))
 
