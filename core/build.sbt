@@ -1,9 +1,9 @@
 
 name := "axle"
 
-// version := "0.1-SNAPSHOT"
+version := "0.1-SNAPSHOT"
 
-version := "0.1-M8"
+// version := "0.1-M8"
 
 organization := "org.pingel"
 
