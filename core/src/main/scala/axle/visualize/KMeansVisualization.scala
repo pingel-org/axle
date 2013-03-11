@@ -65,7 +65,7 @@ trait KMeansVisualizationModule {
     val xTics = new XTics(scaledArea, dp.tics(minX, maxX), normalFont, true, 0 *: °, black)
     val yTics = new YTics(scaledArea, dp.tics(minY, maxY), normalFont, black)
 
-    val boundingRectangle = new Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), black)
+    val boundingRectangle = new Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black))
 
     def centroidOval(i: Int) = {
       val denormalized = classifier.normalizer.denormalize(classifier.μ.row(i))

@@ -63,7 +63,7 @@ class BarChartView[G, S, Y: Plottable](chart: BarChart[G, S, Y], data: Map[(G, S
   } yield {
     val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth
     val rightX = leftX + barSliceWidth
-    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(g, s)), color)
+    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(g, s)), fillColor = Some(color))
   }
 
 }
