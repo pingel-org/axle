@@ -166,20 +166,10 @@ trait KMeansModule {
       (distances.divColumnVector(counts), unassignedClusterIds)
     }
 
-    def distanceTreeMap(centroidId: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
+    def distanceTreeMap(centroidId: Int) = new immutable.TreeMap[Int, Double]() ++
       distanceLog.zipWithIndex.map({ case (dl, i) => i -> dl(centroidId, 0) }).toMap
 
-    //    def countTreeMap(centroidId: Int): SortedMap[Int, Int] = new immutable.TreeMap[Int, Int]() ++
-    //      countLog.zipWithIndex.map({ case (cl, i) => i -> cl(centroidId, 0) }).toMap
-    //
-    //    def averageDistanceTreeMap(centroidId: Int): SortedMap[Int, Double] = new immutable.TreeMap[Int, Double]() ++
-    //      distanceLog.zip(countLog).zipWithIndex.map({ case ((dl, cl), i) => i -> dl(centroidId, 0) / cl(centroidId, 0) }).toMap
-
-    def distanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K).map(i =>
-      ("centroid " + i, distanceTreeMap(i))).toList
-
-    //    def averageDistanceLogSeries(): Seq[(String, SortedMap[Int, Double])] = (0 until K).map(i =>
-    //      ("centroid " + i, averageDistanceTreeMap(i))).toList
+    def distanceLogSeries() = (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList
 
     def confusionMatrix[L](data: Seq[T], labelExtractor: T => L) = new ConfusionMatrix(this, data, labelExtractor)
   }

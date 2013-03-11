@@ -1,6 +1,7 @@
 package axle.ml
 
 import collection._
+import collection.immutable.TreeMap
 
 trait Species[G] {
 
@@ -14,9 +15,9 @@ trait Species[G] {
 
 case class GeneticAlgorithmLog[G](
   popLog: IndexedSeq[(G, Double)],
-  mins: SortedMap[Int, Double],
-  maxs: SortedMap[Int, Double],
-  aves: SortedMap[Int, Double])
+  mins: TreeMap[Int, Double],
+  maxs: TreeMap[Int, Double],
+  aves: TreeMap[Int, Double])
 
 object GeneticAlgorithm {
 
