@@ -129,8 +129,10 @@ object Plottable {
         (_.plusHours(2), "dd hh:mm")
       } else if (duration.isLongerThan(Hours.ONE.toStandardDuration)) {
         (_.plusHours(1), "dd hh:mm")
-      } else if (duration.isLongerThan(Minutes.THREE.toStandardDuration)) {
+      } else if (duration.isLongerThan(Minutes.TWO.toStandardDuration)) {
         (_.plusMinutes(1), "hh:mm")
+      } else if (duration.isLongerThan(Seconds.ONE.multipliedBy(10).toStandardDuration())) {
+        (_.plusSeconds(10), "mm:ss")
       } else {
         (_.plusSeconds(1), "mm:ss")
       }
