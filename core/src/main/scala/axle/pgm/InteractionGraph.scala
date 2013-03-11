@@ -1,4 +1,4 @@
-package axle.stats
+package axle.pgm
 
 import axle._
 import axle.stats._
