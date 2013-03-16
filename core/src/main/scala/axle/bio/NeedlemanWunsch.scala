@@ -42,7 +42,7 @@ object NeedlemanWunsch {
     assert(A.length == B.length)
     (0 until A.length).map(i =>
       if (A(i) == gap || B(i) == gap)
-        -gapPenalty
+        gapPenalty
       else
         S(A(i), B(i))
     ).sum
