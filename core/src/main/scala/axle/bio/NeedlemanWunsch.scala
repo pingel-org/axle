@@ -14,6 +14,7 @@ object NeedlemanWunsch {
   /**
    * S is "similarity", computed by a fixed Int matrix
    *
+   * S(a, b) == S(b, a)
    */
 
   def S(x: Char, y: Char): Int = (x, y) match {
@@ -37,7 +38,7 @@ object NeedlemanWunsch {
 
   val gap = '-'
 
-  def alignmentScore(A: String, B: String, gapPenalty: Int = 5): Int = {
+  def alignmentScore(A: String, B: String, gapPenalty: Int): Int = {
     assert(A.length == B.length)
     (0 until A.length).map(i =>
       if (A(i) == gap || B(i) == gap)
@@ -63,33 +64,34 @@ object NeedlemanWunsch {
     (i: Int) => gapPenalty * i,
     (j: Int) => gapPenalty * j,
     (i: Int, j: Int, aboveleft: Int, left: Int, above: Int) =>
-      Vector(aboveleft + S(A(i), B(j)), above + gapPenalty, left + gapPenalty).max
+      Vector(aboveleft + S(A(i - 1), B(j - 1)), above + gapPenalty, left + gapPenalty).max
   )
 
   def optimalAlignment(A: String, B: String, gapPenalty: Int): (String, String) = {
-    var AlignmentA = ""
-    var AlignmentB = ""
+    val F = computeF(A, B, gapPenalty)
+    var alignmentA = List[Char]()
+    var alignmentB = List[Char]()
     var i = A.length
     var j = B.length
-    val F = computeF(A, B, gapPenalty)
     while (i > 0 || j > 0) {
-      if (i > 0 && j > 0 && F(i, j) == F(i - 1, j - 1) + S(A(i), B(j))) {
-        AlignmentA = A(i) + AlignmentA
-        AlignmentB = B(j) + AlignmentB
+      if (i > 0 && j > 0 && F(i, j) == F(i - 1, j - 1) + S(A(i - 1), B(j - 1))) {
+        alignmentA = A(i - 1) :: alignmentA
+        alignmentB = B(j - 1) :: alignmentB
         i = i - 1
         j = j - 1
       } else if (i > 0 && F(i, j) == F(i - 1, j) + gapPenalty) {
-        AlignmentA = A(i) + AlignmentA
-        AlignmentB = gap + AlignmentB
+        alignmentA = A(i - 1) :: alignmentA
+        alignmentB = gap :: alignmentB
         i = i - 1
-      } else {
-        assert(j > 0 && F(i, j) == F(i, j - 1) + gapPenalty)
-        AlignmentA = gap + AlignmentA
-        AlignmentB = B(j) + AlignmentB
+      } else if (j > 0 && F(i, j) == F(i, j - 1) + gapPenalty) {
+        alignmentA = gap :: alignmentA
+        alignmentB = B(j - 1) :: alignmentB
         j = j - 1
+      } else {
+        println("no matching case")
       }
     }
-    (AlignmentA, AlignmentB)
+    (alignmentA.mkString(""), alignmentB.mkString(""))
   }
 
 }
