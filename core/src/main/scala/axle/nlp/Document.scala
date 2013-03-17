@@ -5,8 +5,8 @@ import axle.ScalaMapReduce._
 class Document(text: String) {
 
   lazy val tokens = language.English.tokenize(text)
-  
-  lazy val bigrams = tokens.zip(tokens.tail)
+
+  lazy val bigrams = tokens.sliding(2).toVector
 
   lazy val wordCounts = count(List(this).iterator, (d: Document) => d.tokens)
   lazy val bigramCounts = count(List(this).iterator, (d: Document) => d.bigrams)
