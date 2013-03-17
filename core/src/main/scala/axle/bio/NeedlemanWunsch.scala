@@ -1,6 +1,7 @@
 package axle.bio
 
 import math.max
+import Stream.{ cons, empty }
 import axle.matrix.JblasMatrixModule._
 
 /**
@@ -67,31 +68,40 @@ object NeedlemanWunsch {
       Vector(aboveleft + S(A(i - 1), B(j - 1)), above + gapPenalty, left + gapPenalty).max
   )
 
+  def alignStep(i: Int, j: Int, A: String, B: String, F: Matrix[Int], gapPenalty: Int): (Char, Char, Int, Int) =
+    if (i > 0 && j > 0 && F(i, j) == F(i - 1, j - 1) + S(A(i - 1), B(j - 1))) {
+      (A(i - 1), B(j - 1), i - 1, j - 1)
+    } else if (i > 0 && F(i, j) == F(i - 1, j) + gapPenalty) {
+      (A(i - 1), gap, i - 1, j)
+    } else {
+      assert(j > 0 && F(i, j) == F(i, j - 1) + gapPenalty)
+      (gap, B(j - 1), i, j - 1)
+    }
+
+  def _optimalAlignment(i: Int, j: Int, A: String, B: String, gapPenalty: Int, F: Matrix[Int]): Stream[(Char, Char)] =
+    if (i > 0 || j > 0) {
+      val (preA, preB, newI, newJ) = alignStep(i, j, A, B, F, gapPenalty)
+      cons((preA, preB), _optimalAlignment(newI, newJ, A, B, gapPenalty, F))
+    } else {
+      empty
+    }
+
   def optimalAlignment(A: String, B: String, gapPenalty: Int): (String, String) = {
     val F = computeF(A, B, gapPenalty)
-    var alignmentA = List[Char]()
-    var alignmentB = List[Char]()
-    var i = A.length
-    var j = B.length
-    while (i > 0 || j > 0) {
-      if (i > 0 && j > 0 && F(i, j) == F(i - 1, j - 1) + S(A(i - 1), B(j - 1))) {
-        alignmentA = A(i - 1) :: alignmentA
-        alignmentB = B(j - 1) :: alignmentB
-        i = i - 1
-        j = j - 1
-      } else if (i > 0 && F(i, j) == F(i - 1, j) + gapPenalty) {
-        alignmentA = A(i - 1) :: alignmentA
-        alignmentB = gap :: alignmentB
-        i = i - 1
-      } else if (j > 0 && F(i, j) == F(i, j - 1) + gapPenalty) {
-        alignmentA = gap :: alignmentA
-        alignmentB = B(j - 1) :: alignmentB
-        j = j - 1
-      } else {
-        println("no matching case")
-      }
-    }
+    val (alignmentA, alignmentB) = _optimalAlignment(A.length, B.length, A, B, gapPenalty, F).unzip
     (alignmentA.mkString(""), alignmentB.mkString(""))
   }
+
+  //    val alignmentA = List[Char]()
+  //    val alignmentB = List[Char]()
+  //    val i = A.length
+  //    val j = B.length
+  //    while (i > 0 || j > 0) {
+  //      val (preA, preB, newI, newJ) = alignStep(i, j, A, B, F, gapPenalty)
+  //      alignmentA = preA :: alignmentA
+  //      alignmentB = preB :: alignmentB
+  //      i = newI
+  //      j = newJ
+  //    }
 
 }
