@@ -69,7 +69,7 @@ object SmithWaterman {
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
-  def metricSpace(mismatchPenalty: Int) = new SmithWatermanMetricSpace(mismatchPenalty)
+  def metricSpace(mismatchPenalty: Int = defaultMismatchPenalty) = new SmithWatermanMetricSpace(mismatchPenalty)
 
   class SmithWatermanMetricSpace(mismatchPenalty: Int) extends MetricSpace[String, Int] {
 
@@ -77,6 +77,5 @@ object SmithWaterman {
       computeH(s1, s2, mismatchPenalty)(s1.length, s2.length)
 
   }
-  
-  
+
 }

@@ -94,7 +94,7 @@ object NeedlemanWunsch {
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
-  def metricSpace(gapPenalty: Int) = new NeedlemanWunschMetricSpace(gapPenalty)
+  def metricSpace(gapPenalty: Int = defaultGapPenalty) = new NeedlemanWunschMetricSpace(gapPenalty)
 
   class NeedlemanWunschMetricSpace(gapPenalty: Int) extends MetricSpace[String, Int] {
 
