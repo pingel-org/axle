@@ -1,5 +1,6 @@
 package axle.bio
 
+import spire.algebra.MetricSpace
 import Stream.{ cons, empty }
 import axle.matrix.JblasMatrixModule._
 
@@ -68,4 +69,14 @@ object SmithWaterman {
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
+  def metricSpace(mismatchPenalty: Int) = new SmithWatermanMetricSpace(mismatchPenalty)
+
+  class SmithWatermanMetricSpace(mismatchPenalty: Int) extends MetricSpace[String, Int] {
+
+    def distance(s1: String, s2: String): Int =
+      computeH(s1, s2, mismatchPenalty)(s1.length, s2.length)
+
+  }
+  
+  
 }

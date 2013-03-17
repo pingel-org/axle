@@ -2,6 +2,7 @@ package axle.bio
 
 import math.max
 import Stream.{ cons, empty }
+import spire.algebra.MetricSpace
 import axle.matrix.JblasMatrixModule._
 
 /**
@@ -39,7 +40,7 @@ object NeedlemanWunsch {
 
   val gap = '-'
   val defaultGapPenalty = -5
-  
+
   def alignmentScore(A: String, B: String, gapPenalty: Int = defaultGapPenalty): Int = {
     assert(A.length == B.length)
     (0 until A.length).map(i =>
@@ -91,6 +92,15 @@ object NeedlemanWunsch {
     val F = computeF(A, B, gapPenalty)
     val (alignmentA, alignmentB) = _optimalAlignment(A.length, B.length, A, B, gapPenalty, F).unzip
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
+  }
+
+  def metricSpace(gapPenalty: Int) = new NeedlemanWunschMetricSpace(gapPenalty)
+
+  class NeedlemanWunschMetricSpace(gapPenalty: Int) extends MetricSpace[String, Int] {
+
+    def distance(s1: String, s2: String): Int =
+      computeF(s1, s2, gapPenalty)(s1.length, s2.length)
+
   }
 
 }
