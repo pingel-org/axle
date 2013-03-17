@@ -38,8 +38,9 @@ object NeedlemanWunsch {
   }
 
   val gap = '-'
-
-  def alignmentScore(A: String, B: String, gapPenalty: Int): Int = {
+  val defaultGapPenalty = -5
+  
+  def alignmentScore(A: String, B: String, gapPenalty: Int = defaultGapPenalty): Int = {
     assert(A.length == B.length)
     (0 until A.length).map(i =>
       if (A(i) == gap || B(i) == gap)
@@ -86,10 +87,10 @@ object NeedlemanWunsch {
       empty
     }
 
-  def optimalAlignment(A: String, B: String, gapPenalty: Int): (String, String) = {
+  def optimalAlignment(A: String, B: String, gapPenalty: Int = defaultGapPenalty): (String, String) = {
     val F = computeF(A, B, gapPenalty)
     val (alignmentA, alignmentB) = _optimalAlignment(A.length, B.length, A, B, gapPenalty, F).unzip
-    (alignmentA.mkString(""), alignmentB.mkString(""))
+    (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
 }
