@@ -92,16 +92,4 @@ object NeedlemanWunsch {
     (alignmentA.mkString(""), alignmentB.mkString(""))
   }
 
-  //    val alignmentA = List[Char]()
-  //    val alignmentB = List[Char]()
-  //    val i = A.length
-  //    val j = B.length
-  //    while (i > 0 || j > 0) {
-  //      val (preA, preB, newI, newJ) = alignStep(i, j, A, B, F, gapPenalty)
-  //      alignmentA = preA :: alignmentA
-  //      alignmentB = preB :: alignmentB
-  //      i = newI
-  //      j = newJ
-  //    }
-
 }
