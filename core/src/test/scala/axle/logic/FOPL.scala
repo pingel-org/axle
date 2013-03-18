@@ -1,30 +1,12 @@
 
+package axle.logic
+
 import org.specs2.mutable._
 
 class StatementSPecification extends Specification {
 
   import FOPL._
-
-  case class A(s: Symbol) extends Statement
-  case class B(s: Symbol) extends Statement
-  case class C(s: Symbol) extends Statement
-  case class D(s: Symbol, t: Symbol) extends Statement
-  case class E(s: Symbol) extends Statement
-  case class F(s: Symbol) extends Statement
-  case class G(s: Symbol) extends Statement
-  case class H(s: Symbol) extends Statement
-  case class M(s: Symbol) extends Statement
-  case class N(s: Symbol) extends Statement
-  case class P(s: Symbol) extends Statement
-  case class Q(s: Symbol) extends Statement
-  case class R(s: Symbol) extends Statement
-  case class S(s: Symbol) extends Statement
-  case class T(s: Symbol) extends Statement
-  case class U(s: Symbol) extends Statement
-  case class W(s: Symbol) extends Statement
-  case class X(s: Symbol) extends Statement
-  case class Y(s: Symbol, t: Symbol) extends Statement
-  case class Z(s: Symbol, t: Symbol, u: Symbol) extends Statement
+  import SamplePredicates._
 
   "eliminate equivalence" should {
     "work" in {
@@ -74,25 +56,26 @@ class StatementSPecification extends Specification {
 
   "skolemize" should {
     "work" in {
-      skolemize(∃('d, ∀('e, Y('d, 'e)))) should be equalTo Y('NEWFCN1, 'E)
+      skolemize(∃('d, ∀('e, Y('d, 'e)))) should be equalTo Y(skolemFor(1, 'd), 'e)
     }
   }
 
   "skolemize 2" should {
     "work" in {
-      skolemize(∀('d, ∃('e, Y('d, 'e)))) should be equalTo Y('d, skolemFor(1, 'd))
+      skolemize(∀('d, ∃('e, Y('d, 'e)))) should be equalTo Y('d, skolemFor(1, 'e))
     }
   }
 
   "skolemize 3" should {
     "work" in {
-      skolemize(∀('d, ∃('e, ∃('f, Z('d, 'e, 'f))))) should be equalTo Z('d, skolemFor(1, 'd), skolemFor(2, 'd))
+      skolemize(∀('d, ∃('e, ∃('f, Z('d, 'e, 'f))))) should be equalTo Z('d, skolemFor(1, 'e), skolemFor(1, 'f))
     }
   }
 
   "skolemize 4" should {
     "work" in {
-      skolemize(P('x)) should be equalTo ∀('c, ∀('d, ∃('e, Y('d, 'e))))
+      // TODO: skolem fn should be sfE('c, 'd)
+      skolemize(∀('c, ∀('d, ∃('e, Y('d, 'e))))) should be equalTo Y('d, skolemFor(1, 'e))
     }
   }
 
@@ -102,6 +85,7 @@ class StatementSPecification extends Specification {
       distribute(P('x) ∨ (Q('x) ∧ R('x))) should be equalTo (P('x) ∨ Q('x)) ∧ (P('x) ∨ R('x))
     }
   }
+  
   "distribute 2" should {
     "work" in {
       distribute(E('x) ∨ (F('x) ∧ G('x)) ∨ H('x)) should be equalTo
@@ -172,7 +156,7 @@ class StatementSPecification extends Specification {
   "cnf 4" should {
     "work" in {
       conjunctiveNormalForm(¬(∀('x, ∃('x, P('x) ∧ Q('x)) ⊃ ∃('x, D('x, 'x) ∨ F('x))))) must be equalTo
-        P('NEWFCN1) ∧ Q('NEWFCN1) ∧ ¬(D('x, 'x)) ∧ ¬(F('x))
+        P(skolemFor(1, 'x)) ∧ Q(skolemFor(1, 'x)) ∧ ¬(D('x, 'x)) ∧ ¬(F('x))
     }
   }
 
