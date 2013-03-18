@@ -120,6 +120,8 @@ object FOPL {
 
   def distribute(s: Statement): Statement = s match {
     case And(left, right) => And(distribute(left), distribute(right))
+    case Or(a, And(b, c)) => (distribute(a) ∨ distribute(b)) ∧ (distribute(a) ∨ distribute(c))
+    case Or(And(x, y), z) => (distribute(x) ∨ distribute(z)) ∧ (distribute(y) ∨ distribute(z))
     case Or(left, right) => Or(distribute(left), distribute(right))
     case Iff(left, right) => ??? // Iff(distribute(left), distribute(right))
     case Implies(left, right) => ??? // Implies(distribute(left), distribute(right))
