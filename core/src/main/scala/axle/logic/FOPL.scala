@@ -6,10 +6,16 @@ object FOPL {
   trait Statement {
 
     def ∧(right: Statement) = And(this, right)
+    def and(right: Statement) = And(this, right)
+    
     def ∨(right: Statement) = Or(this, right)
+    def or(right: Statement) = Or(this, right)
+    
     def ⇔(right: Statement) = Iff(this, right)
+    def iff(right: Statement) = Iff(this, right)
+    
     def ⊃(right: Statement) = Implies(this, right)
-
+    def implies(right: Statement) = Implies(this, right)
   }
 
   case class And(left: Statement, right: Statement) extends Statement
@@ -17,10 +23,14 @@ object FOPL {
   case class Iff(left: Statement, right: Statement) extends Statement
   case class Implies(left: Statement, right: Statement) extends Statement
 
-  case class ¬(e: Statement) extends Statement
-  case class ∃(s: Symbol, e: Statement) extends Statement
-  case class ∀(s: Symbol, e: Statement) extends Statement
+  case class ¬(statement: Statement) extends Statement
+  case class ∃(symbol: Symbol, statement: Statement) extends Statement
+  case class ∀(symbol: Symbol, statement: Statement) extends Statement
 
+  def not(statement: Statement) = ¬(statement)
+  def exists(symbol: Symbol, statement: Statement) = ∃(symbol, statement)
+  def forall(symbol: Symbol, statement: Statement) = ∀(symbol, statement)
+  
   case class Constant(b: Boolean) extends Statement
 
   abstract class Predicate(args: Symbol*) extends Statement {
