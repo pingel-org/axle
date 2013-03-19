@@ -65,11 +65,12 @@ class StatementSPecification extends Specification {
     }
     "work 2" in {
       distribute(E('x) ∨ (F('x) ∧ G('x)) ∨ H('x)) should be equalTo
-        ((F('x) ∨ E('x) ∨ H('x)) ∧ (G('x) ∨ E('x) ∨ H('x)))
+        ((E('x) ∨ F('x) ∨ H('x)) ∧ (E('x) ∨ G('x) ∨ H('x)))
     }
     "work 3" in {
+      // TODO probably want to have the result parenthesized otherwise
       distribute(A('x) ∨ ((C('x) ∧ G('x)) ∨ B('x))) should be equalTo
-        ((C('x) ∨ A('x) ∨ B('x)) ∧ (G('x) ∨ A('x) ∨ B('x)))
+        ((A('x) ∨ (C('x) ∨ B('x))) ∧ (A('x) ∨ (G('x) ∨ B('x))))
     }
     "work 4" in {
       distribute(A('x) ∧ (((E('x) ∨ F('x)) ∧ G('x)) ∨ B('x))) should be equalTo

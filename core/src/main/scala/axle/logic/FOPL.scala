@@ -7,13 +7,13 @@ object FOPL {
 
     def ∧(right: Statement) = And(this, right)
     def and(right: Statement) = And(this, right)
-    
+
     def ∨(right: Statement) = Or(this, right)
     def or(right: Statement) = Or(this, right)
-    
+
     def ⇔(right: Statement) = Iff(this, right)
     def iff(right: Statement) = Iff(this, right)
-    
+
     def ⊃(right: Statement) = Implies(this, right)
     def implies(right: Statement) = Implies(this, right)
   }
@@ -30,7 +30,7 @@ object FOPL {
   def not(statement: Statement) = ¬(statement)
   def exists(symbol: Symbol, statement: Statement) = ∃(symbol, statement)
   def forall(symbol: Symbol, statement: Statement) = ∀(symbol, statement)
-  
+
   case class Constant(b: Boolean) extends Statement
 
   abstract class Predicate(args: Symbol*) extends Statement {
@@ -128,17 +128,46 @@ object FOPL {
     case p: Predicate => p.map(s => if (m.contains(s)) skolemFor(1, s) else s) // TODO replace "1"
   }
 
-  def distribute(s: Statement): Statement = s match {
-    case And(left, right) => And(distribute(left), distribute(right))
-    case Or(a, And(b, c)) => (distribute(a) ∨ distribute(b)) ∧ (distribute(a) ∨ distribute(c))
-    case Or(And(x, y), z) => (distribute(x) ∨ distribute(z)) ∧ (distribute(y) ∨ distribute(z))
-    case Or(left, right) => Or(distribute(left), distribute(right))
+  def distribute(s: Statement) = _distribute(s)._1
+
+  def _distribute(s: Statement): (Statement, Boolean) = s match {
+    case And(l, r) => {
+      val (ld, lc) = _distribute(l)
+      val (rd, rc) = _distribute(r)
+      (And(ld, rd), lc || rc)
+    }
+    case Or(l, And(rl, rr)) => {
+      val (ld, lc) = _distribute(l)
+      val (rld, rlc) = _distribute(rl)
+      val (rrd, rrc) = _distribute(rr)
+      (And(Or(ld, rld), Or(ld, rrd)), true)
+    }
+    case Or(And(ll, lr), r) => {
+      val (lld, llc) = _distribute(ll)
+      val (rd, rc) = _distribute(r)
+      val (lrd, lrc) = _distribute(lr)
+      (And(Or(lld, rd), Or(lrd, rd)), true)
+    }
+    case Or(l, r) => {
+      val (ld, lc) = _distribute(l)
+      val (rd, rc) = _distribute(r)
+      if (lc || rc) _distribute(Or(ld, rd)) else (Or(ld, rd), false)
+    }
     case Iff(left, right) => ??? // Iff(distribute(left), distribute(right))
     case Implies(left, right) => ??? // Implies(distribute(left), distribute(right))
-    case ¬(inner) => ¬(distribute(inner))
-    case ∃(sym, e) => ∃(sym, distribute(e))
-    case ∀(sym, e) => ∀(sym, distribute(e))
-    case _ => s
+    case ¬(inner) => {
+      val (id, ic) = _distribute(inner)
+      (¬(id), ic)
+    }
+    case ∃(sym, e) => {
+      val (ed, ec) = _distribute(e)
+      (∃(sym, ed), ec)
+    }
+    case ∀(sym, e) => {
+      val (ed, ec) = _distribute(e)
+      (∀(sym, ed), ec)
+    }
+    case _ => (s, false)
   }
 
   def flatten(s: Statement): Statement = s match {
