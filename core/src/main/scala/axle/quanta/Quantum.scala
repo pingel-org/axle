@@ -128,6 +128,8 @@ trait Quantum extends QuantumExpression {
         .map(n => quantity((magnitude * n) / other.magnitude, other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
 
+    def plottable() = quantum.UnitPlottable(this)
+        
   }
 
   def newQuantity(magnitude: Number, unit: Q): Q
