@@ -73,8 +73,9 @@ class StatementSPecification extends Specification {
         ((A('x) ∨ (C('x) ∨ B('x))) ∧ (A('x) ∨ (G('x) ∨ B('x))))
     }
     "work 4" in {
+      // TODO probably want to have the result parenthesized otherwise
       distribute(A('x) ∧ (((E('x) ∨ F('x)) ∧ G('x)) ∨ B('x))) should be equalTo
-        (A('x) ∧ (E('x) ∨ F('x) ∨ B('x)) ∧ (G('x) ∨ B('x)))
+        (A('x) ∧ ((E('x) ∨ F('x) ∨ B('x)) ∧ (G('x) ∨ B('x))))
     }
   }
 
@@ -115,11 +116,11 @@ class StatementSPecification extends Specification {
 
   //  "inf" should {
   //    "work" in {
-  //      implicativeNormalForm((P('y) ∨ Q('y)) ∧ (¬(R('z))) ∨ (¬(S('v))) ∧ (T('f)) ∨ (¬(U('g)))) must be equalTo
+  //      implicativeNormalForm((P('y) ∨ Q('y)) ∧ ¬(R('z)) ∨ ¬(S('v)) ∧ T('f) ∨ ¬(U('g))) must be equalTo
   //        List(true ⊃ (P('y) ∨ Q('y)), (R('z) ∧ S('v)) ⊃ false, U('g) ⊃ T('f))
   //    }
   //    "work" in {
-  //      implicativeNormalForm((P('x) ∨ R('x) ∨ (¬(Q('x)))) ∧ R('x) ∧ (¬(M('x)))) must be equalTo
+  //      implicativeNormalForm((P('x) ∨ R('x) ∨ ¬(Q('x))) ∧ R('x) ∧ ¬(M('x))) must be equalTo
   //        List(Q('x) ⊃ (P('x) ∨ R('x)), true ⊃ R('x), M('x) ⊃ false)
   //    }
   //    "work" in {
