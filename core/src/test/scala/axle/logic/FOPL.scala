@@ -3,7 +3,7 @@ package axle.logic
 
 import org.specs2.mutable._
 
-class StatementSPecification extends Specification {
+class StatementSpecification extends Specification {
 
   import FOPL._
   import SamplePredicates._
@@ -109,24 +109,25 @@ class StatementSPecification extends Specification {
         (¬(F('m)) ∨ G('m)) ∧ (¬(G('m)) ∨ F('m))
     }
     "work 4" in {
+      // TODO probably want to have the result parenthesized otherwise
       conjunctiveNormalForm(¬(∀('x, ∃('x, P('x) ∧ Q('x)) ⊃ ∃('x, D('x, 'x) ∨ F('x))))) must be equalTo
-        P(skolemFor(1, 'x)) ∧ Q(skolemFor(1, 'x)) ∧ ¬(D('x, 'x)) ∧ ¬(F('x))
+        P(skolemFor(1, 'x)) ∧ Q(skolemFor(1, 'x)) ∧ (¬(D('x, 'x)) ∧ ¬(F('x)))
     }
   }
 
-  //  "inf" should {
-  //    "work" in {
-  //      implicativeNormalForm((P('y) ∨ Q('y)) ∧ ¬(R('z)) ∨ ¬(S('v)) ∧ T('f) ∨ ¬(U('g))) must be equalTo
-  //        List(true ⊃ (P('y) ∨ Q('y)), (R('z) ∧ S('v)) ⊃ false, U('g) ⊃ T('f))
-  //    }
-  //    "work" in {
-  //      implicativeNormalForm((P('x) ∨ R('x) ∨ ¬(Q('x))) ∧ R('x) ∧ ¬(M('x))) must be equalTo
-  //        List(Q('x) ⊃ (P('x) ∨ R('x)), true ⊃ R('x), M('x) ⊃ false)
-  //    }
-  //    "work" in {
-  //      implicativeNormalForm(conjunctiveNormalForm(∀('x, ¬((P('x) ∨ F('x)) ⊃ X('x))))) must be equalTo
-  //        List(true ⊃ (P('x) ∨ F('x)), X('x) ⊃ false)
-  //    }
-  //  }
+  "inf" should {
+    "work 1" in {
+      implicativeNormalForm( (P('y) ∨ Q('y)) ∧ ((¬(R('z)) ∨ ¬(S('v))) ∧ (T('f) ∨ ¬(U('g))))) must be equalTo
+        List(true ⊃ (P('y) ∨ Q('y)), (R('z) ∧ S('v)) ⊃ false, U('g) ⊃ T('f))
+    }
+    "work 2" in {
+      implicativeNormalForm((P('x) ∨ R('x) ∨ ¬(Q('x))) ∧ (R('x) ∧ ¬(M('x)))) must be equalTo
+        List(Q('x) ⊃ (P('x) ∨ R('x)), true ⊃ R('x), M('x) ⊃ false)
+    }
+    "work 3" in {
+      implicativeNormalForm(conjunctiveNormalForm(∀('x, ¬((P('x) ∨ F('x)) ⊃ X('x))))) must be equalTo
+        List(true ⊃ (P('x) ∨ F('x)), X('x) ⊃ false)
+    }
+  }
 
 }

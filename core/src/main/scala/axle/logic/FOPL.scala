@@ -18,10 +18,18 @@ object FOPL {
     def implies(right: Statement) = Implies(this, right)
   }
 
-  case class And(left: Statement, right: Statement) extends Statement
-  case class Or(left: Statement, right: Statement) extends Statement
-  case class Iff(left: Statement, right: Statement) extends Statement
-  case class Implies(left: Statement, right: Statement) extends Statement
+  case class And(left: Statement, right: Statement) extends Statement {
+    override def toString() = "(" + left + " ∧ " + right + ")"
+  }
+  case class Or(left: Statement, right: Statement) extends Statement {
+    override def toString() = "(" + left + " ∨ " + right + ")"
+  }
+  case class Iff(left: Statement, right: Statement) extends Statement {
+    override def toString() = "(" + left + " ⇔ " + right + ")"
+  }
+  case class Implies(left: Statement, right: Statement) extends Statement {
+    override def toString() = "(" + left + " ⊃ " + right + ")"
+  }
 
   case class ¬(statement: Statement) extends Statement
   case class ∃(symbol: Symbol, statement: Statement) extends Statement
@@ -31,7 +39,9 @@ object FOPL {
   def exists(symbol: Symbol, statement: Statement) = ∃(symbol, statement)
   def forall(symbol: Symbol, statement: Statement) = ∀(symbol, statement)
 
-  case class Constant(b: Boolean) extends Statement
+  case class Constant(b: Boolean) extends Statement {
+    override def toString() = b.toString
+  }
 
   abstract class Predicate(args: Symbol*) extends Statement {
     def apply(args: Symbol*): Predicate
@@ -184,7 +194,29 @@ object FOPL {
   def conjunctiveNormalForm(s: Statement): Statement =
     flatten(distribute(skolemize(moveNegation(eliminateImplication(eliminateIff(s))))))
 
-  def implicativeNormalForm(s: Statement): List[Statement] = ???
+  def disjunctList(s: Statement): List[Statement] = s match {
+    case Or(head, tail) => head :: disjunctList(tail)
+    case _ => List(s)
+  }
+
+  def disjoin(cs: List[Statement]): Statement = cs.reduceOption(Or(_, _)).getOrElse(false)
+
+  def conjunctList(s: Statement): List[Statement] = s match {
+    case And(head, tail) => head :: conjunctList(tail)
+    case _ => List(s)
+  }
+
+  def conjoin(cs: List[Statement]): Statement = cs.reduceOption(And(_, _)).getOrElse(true)
+
+  def atomicDisjunctsToImplication(s: Statement): Statement =
+    disjunctList(s)
+      .partition(a => a match { case ¬(_) => true case _ => false }) match {
+        case (negatives, positives) =>
+          conjoin(negatives.map({ case ¬(x) => x })) ⊃ disjoin(positives)
+      }
+
+  def implicativeNormalForm(s: Statement): List[Statement] =
+    conjunctList(s).map(atomicDisjunctsToImplication(_))
 
   object SamplePredicates {
 
