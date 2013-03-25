@@ -60,7 +60,6 @@ class StatementSpecification extends Specification {
 
   "distribute" should {
     "work 1" in {
-      // Note: other orders are valid
       distribute(P('x) ∨ (Q('x) ∧ R('x))) should be equalTo (P('x) ∨ Q('x)) ∧ (P('x) ∨ R('x))
     }
     "work 2" in {
@@ -81,18 +80,18 @@ class StatementSpecification extends Specification {
 
   "flatten" should {
     "work 1" in {
-      flatten((P('x) ∧ (Q('x) ∧ (R('x) ∨ S('x))))) must be equalTo
-        ((P('x) ∧ Q('x)) ∧ (R('x) ∨ S('x)))
+      flatten((P('x) ∧ Q('x) ∧ (R('x) ∨ S('x)))) must be equalTo
+        (P('x) ∧ (Q('x) ∧ (R('x) ∨ S('x))))
     }
     "work 2" in {
-      flatten(A('x) ∨ (B('x) ∨ C('x))) must be equalTo (A('x) ∨ B('x) ∨ C('x))
+      flatten(A('x) ∨ B('x) ∨ C('x)) must be equalTo (A('x) ∨ (B('x) ∨ C('x)))
     }
     "work 3" in {
-      flatten(((P('x) ∨ Q('x)) ∧ (R('x) ∧ S('x)))) must be equalTo ((P('X) ∨ Q('X)) ∧ R('X) ∧ S('X))
+      flatten((P('x) ∨ Q('x)) ∧ R('x) ∧ S('x)) must be equalTo (((P('x) ∨ Q('x)) ∧ (R('x) ∧ S('x))))
     }
     "work 4" in {
-      flatten(((P('x) ∨ (Q('x) ∨ M('x))) ∧ ((R('x) ∨ W('x)) ∧ S('x)))) must be equalTo
-        ((P('x) ∨ Q('X) ∨ M('X)) ∧ (R('X) ∨ W('X)) ∧ S('X))
+      flatten(((P('x) ∨ Q('x) ∨ M('x)) ∧ (R('x) ∨ W('x)) ∧ S('x))) must be equalTo
+        ((P('x) ∨ (Q('x) ∨ M('x))) ∧ ((R('x) ∨ W('x)) ∧ S('x)))
     }
   }
 
@@ -109,9 +108,8 @@ class StatementSpecification extends Specification {
         (¬(F('m)) ∨ G('m)) ∧ (¬(G('m)) ∨ F('m))
     }
     "work 4" in {
-      // TODO probably want to have the result parenthesized otherwise
       conjunctiveNormalForm(¬(∀('x, ∃('x, P('x) ∧ Q('x)) ⊃ ∃('x, D('x, 'x) ∨ F('x))))) must be equalTo
-        P(skolemFor(1, 'x)) ∧ Q(skolemFor(1, 'x)) ∧ (¬(D('x, 'x)) ∧ ¬(F('x)))
+        P(skolemFor(1, 'x)) ∧ (Q(skolemFor(1, 'x)) ∧ (¬(D('x, 'x)) ∧ ¬(F('x))))
     }
   }
 

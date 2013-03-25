@@ -180,16 +180,41 @@ object FOPL {
     case _ => (s, false)
   }
 
-  def flatten(s: Statement): Statement = s match {
-    case And(left, right) => And(flatten(left), flatten(right))
-    case Or(left, right) => Or(flatten(left), flatten(right))
-    case Iff(left, right) => ??? // Iff(flatten(left), flatten(right))
-    case Implies(left, right) => ??? // Implies(flatten(left), flatten(right))
-    case ¬(inner) => ¬(flatten(inner))
-    case ∃(sym, e) => ∃(sym, flatten(e))
-    case ∀(sym, e) => ∀(sym, flatten(e))
-    case _ => s
+  def _flatten(s: Statement): (Statement, Boolean) = s match {
+
+    case And(And(ll, lr), r) =>
+      (And(_flatten(ll)._1, _flatten(And(_flatten(lr)._1, _flatten(r)._1))._1), true)
+
+    case And(left, right) => {
+      val (lf, lc) = _flatten(left)
+      val (rf, rc) = _flatten(right)
+      (And(lf, rf), lc || rc)
+    }
+
+    case Or(Or(ll, lr), r) =>
+      (Or(_flatten(ll)._1, _flatten(Or(_flatten(lr)._1, _flatten(r)._1))._1), true)
+
+    case Or(left, right) => {
+      val (lf, lc) = _flatten(left)
+      val (rf, rc) = _flatten(right)
+      (Or(lf, rf), lc || rc)
+    }
+
+    case Iff(left, right) => ???
+    case Implies(left, right) => ???
+
+    case ¬(inner) => {
+      // Note: only makes sense when inner is an atom
+      val (innerFlat, innerChanged) = _flatten(inner)
+      (¬(innerFlat), innerChanged)
+    }
+    
+    case ∃(sym, e) => ???
+    case ∀(sym, e) => ???
+    case _ => (s, false)
   }
+
+  def flatten(s: Statement): Statement = _flatten(s)._1
 
   def conjunctiveNormalForm(s: Statement): Statement =
     flatten(distribute(skolemize(moveNegation(eliminateImplication(eliminateIff(s))))))
