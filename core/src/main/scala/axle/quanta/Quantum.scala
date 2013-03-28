@@ -165,14 +165,14 @@ trait Quantum extends QuantumExpression {
 
     def isPlottable(t: quantum.Q): Boolean = true
 
-    def zero() = Number(1) *: base
+    def zero() = Number(0) *: base
 
     def compare(u1: quantum.Q, u2: quantum.Q) = {
       val m1 = (u1 in base).magnitude
       val m2 = (u2 in base).magnitude
       if (m1 == m2) 0
-      else if (m1 < m2) 1
-      else -1
+      else if (m1 < m2) -1
+      else 1
     }
 
     def portion(left: quantum.Q, v: quantum.Q, right: quantum.Q): Double =
