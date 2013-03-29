@@ -64,14 +64,14 @@ trait Quantum extends QuantumExpression {
       (trip._2, trip._1, x => x / trip._3)
     )
 
-  val one = Number.one
+  val one = Number(1.0) // .one
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
   def is(qe: QuantumExpression) = 4
 
   class Quantity(
-    magnitude: Number = Number(1),
+    magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -123,13 +123,13 @@ trait Quantum extends QuantumExpression {
     def in(other: Q): Q =
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex)
         .map(
-          _.map(_.payload).foldLeft(Number(1))((n, convert) => convert(n))
+          _.map(_.payload).foldLeft(one)((n, convert) => convert(n))
         )
         .map(n => quantity((magnitude * n) / other.magnitude, other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
 
     def plottable() = quantum.UnitPlottable(this)
-        
+
   }
 
   def newQuantity(magnitude: Number, unit: Q): Q
@@ -162,6 +162,7 @@ trait Quantum extends QuantumExpression {
   case class UnitPlottable(base: quantum.Q) extends Plottable[quantum.Q] {
 
     import math.{ pow, ceil, floor, log10 }
+    import Stream.{ empty, cons }
 
     def isPlottable(t: quantum.Q): Boolean = true
 
@@ -179,9 +180,7 @@ trait Quantum extends QuantumExpression {
       (((v in base).magnitude - (left in base).magnitude) / ((right in base).magnitude - (left in base).magnitude)).toDouble
 
     def step(from: Number, to: Number): Number =
-      Number(10) ** ((log10((to - from).abs.toDouble)).floor)
-
-    import Stream.{ empty, cons }
+      Number(new java.math.BigDecimal("1E" + (log10((to - from).abs.toDouble) - 0.5).floor.toInt))
 
     def ticValueStream(v: Number, to: Number, step: Number): Stream[Number] =
       if (v > to) empty else cons(v, ticValueStream(v + step, to, step))
@@ -191,11 +190,9 @@ trait Quantum extends QuantumExpression {
       val toD = (to in base).magnitude
       val s = step(fromD, toD)
       val n = ((toD - fromD) / s).ceil.toInt
-      val start = s * ((fromD / s).floor)
-      (0 to n).map(i => {
-        val v = start + (s * i)
-        (v *: base, v.toString)
-      }) // TODO filter(vs => (vs._1 >= fromD && vs._1 <= toD))
+      (0 to n)
+      .scanLeft(s * ((fromD / s).floor))({ case (v, i) => v + s })
+      .map(v => (v *: base, v.toString))
     }
 
   }
