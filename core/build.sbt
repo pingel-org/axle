@@ -11,7 +11,18 @@ scalaVersion := "2.10.0"
 
 crossScalaVersions := Seq("2.10.0")
 
-initialCommands in console := "import axle._; import axle.algebra._; import axle.stats._; import axle.quanta._; import axle.graph._; import axle.matrix._; import axle.ml._; import axle.visualize._; import axle.ast._; import collection._"
+initialCommands in console := """
+import axle._
+import axle.algebra._
+import axle.stats._
+import axle.quanta._
+import axle.graph._
+import axle.matrix._
+import axle.ml._
+import axle.visualize._
+import axle.ast._
+import collection._
+"""
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:higherKinds", "-language:implicitConversions", "-language:existentials", "-language:postfixOps")
 
@@ -27,6 +38,7 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.2",
   "org.jblas" % "jblas" % "1.2.3",
   "org.spire-math" %% "spire" % "0.3.0",
+  //"org.spire-math" %% "spire" % "0.4.0-M3",
   "com.typesafe.akka" %% "akka-actor" % "2.2-M1",
   // "com.typesafe.akka" %% "akka-agent" % "2.2-M1",
   "org.specs2" %% "specs2" % "1.13" % "test"
