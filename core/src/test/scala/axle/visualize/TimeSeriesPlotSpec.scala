@@ -1,6 +1,29 @@
 package axle.visualize
 
-class TimeSeriesPlotSpec {
+import org.specs2.mutable._
+
+class TimeSeriesPlotSpec extends Specification {
+
+  "Tics for units" should {
+    "work" in {
+
+      import axle.quanta._
+      import Information._
+
+      bit.plottable.tics(0 *: bit, 1 *: bit) must be equalTo Vector(
+        (0.1 *: bit, "0.1"),
+        (0.2 *: bit, "0.2"),
+        (0.3 *: bit, "0.3"),
+        (0.4 *: bit, "0.4"),
+        (0.5 *: bit, "0.5"),
+        (0.6 *: bit, "0.6"),
+        (0.7 *: bit, "0.7"),
+        (0.8 *: bit, "0.8"),
+        (0.9 *: bit, "0.9"),
+        (1.0 *: bit, "1.0")
+      )
+    }
+  }
 
   def t1(): Unit = {
 
