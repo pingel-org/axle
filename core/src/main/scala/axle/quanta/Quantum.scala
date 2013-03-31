@@ -179,8 +179,13 @@ trait Quantum extends QuantumExpression {
     def portion(left: quantum.Q, v: quantum.Q, right: quantum.Q): Double =
       (((v in base).magnitude - (left in base).magnitude) / ((right in base).magnitude - (left in base).magnitude)).toDouble
 
-    def step(from: Number, to: Number): Number =
-      Number(new java.math.BigDecimal("1E" + (log10((to - from).abs.toDouble) - 0.5).floor.toInt))
+    def step(from: Number, to: Number): Rational = {
+      val p = (log10((to - from).abs.toDouble) - 0.5).floor.toInt
+      if (p > 0)
+        10 ** p
+      else
+        Rational(1, 10 ** math.abs(p))
+    }
 
     def ticValueStream(v: Number, to: Number, step: Number): Stream[Number] =
       if (v > to) empty else cons(v, ticValueStream(v + step, to, step))
@@ -189,10 +194,9 @@ trait Quantum extends QuantumExpression {
       val fromD = (from in base).magnitude
       val toD = (to in base).magnitude
       val s = step(fromD, toD)
-      val n = ((toD - fromD) / s).ceil.toInt
-      (0 to n)
-      .scanLeft(s * ((fromD / s).floor))({ case (v, i) => v + s })
-      .map(v => (v *: base, v.toString))
+      val n = ((toD.toRational - fromD.toRational) / s).ceil.toInt
+      val start = s * ((fromD.toRational / s).floor)
+      (0 to n).map(s * _).map(_ + start).map(v => (v.toDouble *: base, v.toDouble.toString))
     }
 
   }
