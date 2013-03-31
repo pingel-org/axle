@@ -11,6 +11,7 @@ class TimeSeriesPlotSpec extends Specification {
       import Information._
 
       bit.plottable.tics(0 *: bit, 1 *: bit) must be equalTo Vector(
+        (0.0 *: bit, "0.0"),
         (0.1 *: bit, "0.1"),
         (0.2 *: bit, "0.2"),
         (0.3 *: bit, "0.3"),
