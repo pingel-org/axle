@@ -121,4 +121,14 @@ import collection._
     )
   ).dependsOn(axleCore)
 
+  lazy val axleAggregate = Project(
+    id = "axle-aggregate",
+    base = file("."),
+    settings = sharedSettings
+  ).settings(
+    test := { },
+    publish := { },
+    publishLocal := { }
+  ).aggregate(axleCore, axleScalding, axleLanguages)
+
 }

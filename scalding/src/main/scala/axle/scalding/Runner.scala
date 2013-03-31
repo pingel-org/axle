@@ -25,7 +25,7 @@ class Runner extends hadoop.conf.Configured with hadoop.util.Tool {
     0
   }
 
-  @tailrec
+  // @tailrec //
   private[this] def start(j: Job, cnt: Int): Unit =
     if (j.run) {
       j.next.map(start(_, cnt + 1))
