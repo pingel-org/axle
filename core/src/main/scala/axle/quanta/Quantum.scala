@@ -64,12 +64,12 @@ trait Quantum extends QuantumExpression {
       (trip._2, trip._1, x => x / trip._3)
     )
 
-  val one = Number(1.0) // .one
-
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
-  def is(qe: QuantumExpression) = 4
+  def is(qe: QuantumExpression) = 4 // TODO
 
+  val one = Number.one
+  
   class Quantity(
     magnitude: Number = one,
     _unit: Option[Q] = None,
@@ -79,7 +79,16 @@ trait Quantum extends QuantumExpression {
 
     self: Q =>
 
-    type QUA = quantum.type
+    override def equals(other: Any): Boolean = other match {
+      case otherQuantity: Quantity =>
+        (magnitude equals otherQuantity.magnitude) &&
+          (if (_unit.isDefined && otherQuantity.unitOption.isDefined) {
+            (_unit.get == otherQuantity.unitOption.get)
+          } else {
+            super.equals(otherQuantity)
+          })
+      case _ => false
+    }
 
     def +(right: Q): Q =
       quantity((this in right.unit).magnitude + right.magnitude, right.unit)
@@ -102,6 +111,7 @@ trait Quantum extends QuantumExpression {
     def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
 
     def magnitude(): Number = magnitude
+    def unitOption() = _unit
     def unit() = _unit.getOrElse(this)
     def name() = _name.getOrElse("")
     def label() = _name.getOrElse("")
