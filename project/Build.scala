@@ -79,7 +79,7 @@ import collection._
   )
 
   lazy val axleCore = Project(
-    id = "axle",
+    id = "axle-core",
     base = file("core"),
     settings = sharedSettings
   ).settings(
