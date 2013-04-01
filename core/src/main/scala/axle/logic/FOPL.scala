@@ -4,6 +4,7 @@ package axle.logic
 object FOPL {
 
   abstract class Predicate(symbols: Symbol*) extends Function1[Map[Symbol, Any], Boolean] with Statement {
+    def symbolSet() = symbols.toSet
     def name(): String
     override def toString(): String = name() + "(" + symbols.mkString(", ") + ")"
     // def apply(args: Symbol*): Predicate
@@ -92,6 +93,17 @@ object FOPL {
     case ∃(sym, e) => ∃(sym, noOp(e))
     case ∀(sym, e) => ∀(sym, noOp(e))
     case _ => s
+  }
+
+  def freeVariables(s: Statement, notFree: Set[Symbol] = Set()): Set[Symbol] = s match {
+    case And(left, right) => freeVariables(left, notFree).union(freeVariables(right, notFree))
+    case Or(left, right) => freeVariables(left, notFree).union(freeVariables(right, notFree))
+    case Iff(left, right) => freeVariables(left, notFree).union(freeVariables(right, notFree))
+    case Implies(left, right) => freeVariables(left, notFree).union(freeVariables(right, notFree))
+    case ¬(inner) => freeVariables(inner, notFree)
+    case ∃(symbolSet, e) => freeVariables(e, notFree + symbolSet.symbol)
+    case ∀(symbolSet, e) => freeVariables(e, notFree + symbolSet.symbol)
+    case pred: Predicate => pred.symbolSet -- notFree
   }
 
   def eliminateIff(s: Statement): Statement = s match {
