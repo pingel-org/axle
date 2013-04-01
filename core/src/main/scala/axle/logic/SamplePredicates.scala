@@ -4,6 +4,11 @@ import FOPL._
 
 object SamplePredicates {
 
+  val I = Set(10)
+  val X = Set(1, 2, 3)
+  val Y = Set(4, 5, 6)
+  val Z = Set(7, 8, 9)
+  
   case class A(symbols: Symbol*) extends Predicate(symbols: _*) {
     def name() = "A"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
@@ -70,18 +75,6 @@ object SamplePredicates {
   }
   case class W(symbols: Symbol*) extends Predicate(symbols: _*) {
     def name() = "W"
-    def apply(symbolTable: Map[Symbol, Any]): Boolean = true
-  }
-  case class X(symbols: Symbol*) extends Predicate(symbols: _*) {
-    def name() = "X"
-    def apply(symbolTable: Map[Symbol, Any]): Boolean = true
-  }
-  case class Y(symbols: Symbol*) extends Predicate(symbols: _*) {
-    def name() = "Y"
-    def apply(symbolTable: Map[Symbol, Any]): Boolean = true
-  }
-  case class Z(symbols: Symbol*) extends Predicate(symbols: _*) {
-    def name() = "Z"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
 

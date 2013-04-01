@@ -10,51 +10,50 @@ class StatementSpecification extends Specification {
 
   "eliminate equivalence" should {
     "work 1" in {
-      eliminateIff(∃('z, A('z) ⇔ B('z))) should be equalTo
-        ∃('z, (A('z) ⊃ B('z)) ∧ (B('z) ⊃ A('z)))
+      eliminateIff(∃('z ∈ Z, A('z) ⇔ B('z))) should be equalTo
+        ∃('z ∈ Z, (A('z) ⊃ B('z)) ∧ (B('z) ⊃ A('z)))
     }
     "work 2" in {
-      eliminateIff(∃('z, (A('z) ∧ G('z)) ⇔ (B('z) ∨ H('z)))) should be equalTo
-        ∃('z, ((A('z) ∧ G('z)) ⊃ (B('z) ∨ H('z))) ∧ ((B('z) ∨ H('z)) ⊃ (A('z) ∧ G('z))))
+      eliminateIff(∃('z ∈ Z, (A('z) ∧ G('z)) ⇔ (B('z) ∨ H('z)))) should be equalTo
+        ∃('z ∈ Z, ((A('z) ∧ G('z)) ⊃ (B('z) ∨ H('z))) ∧ ((B('z) ∨ H('z)) ⊃ (A('z) ∧ G('z))))
     }
   }
 
   "eliminate implication" should {
     "work 1" in {
-      eliminateImplication(∀('r, M('r) ⊃ N('r))) should be equalTo
-        ∀('r, ¬(M('r)) ∨ N('r))
+      eliminateImplication(∀('z ∈ Z, M('z) ⊃ N('z))) should be equalTo
+        ∀('z ∈ Z, ¬(M('z)) ∨ N('z))
     }
     "work 2" in {
-      eliminateImplication(∃('x, (P('x) ⊃ Q('x)) ⊃ R('x))) should be equalTo
-        ∃('x, ¬(¬(P('x)) ∨ Q('x)) ∨ R('x))
+      eliminateImplication(∃('x ∈ X, (P('x) ⊃ Q('x)) ⊃ R('x))) should be equalTo
+        ∃('x ∈ X, ¬(¬(P('x)) ∨ Q('x)) ∨ R('x))
     }
   }
 
   "moveNegation" should {
     "work 1" in {
-      moveNegation(∃('i, ¬(¬(M('i)) ∧ N('i)))) should be equalTo ∃('i, M('i) ∨ ¬(N('i)))
+      moveNegation(∃('i ∈ I, ¬(¬(M('i)) ∧ N('i)))) should be equalTo ∃('i ∈ I, M('i) ∨ ¬(N('i)))
     }
     "work 2" in {
-      moveNegation(¬(∃('i, (¬(M('i)) ∧ N('i))))) should be equalTo ∀('i, M('i) ∨ ¬(N('i)))
+      moveNegation(¬(∃('i ∈ I, (¬(M('i)) ∧ N('i))))) should be equalTo ∀('i ∈ I, M('i) ∨ ¬(N('i)))
     }
     "work 3" in {
-      moveNegation(∀('x, ¬(¬(P('x))))) should be equalTo ∀('x, P('x))
+      moveNegation(∀('x ∈ X, ¬(¬(P('x))))) should be equalTo ∀('x ∈ X, P('x))
     }
   }
 
   "skolemize" should {
     "work 1" in {
-      skolemize(∃('d, ∀('e, Y('d, 'e)))) should be equalTo Y(skolemFor(1, 'd), 'e)
+      skolemize(∃('x ∈ X, ∀('y ∈ Y, P('x, 'y)))) should be equalTo P(skolemFor(1, 'x), 'y)
     }
     "work 2" in {
-      skolemize(∀('d, ∃('e, Y('d, 'e)))) should be equalTo Y('d, skolemFor(1, 'e))
+      skolemize(∀('x ∈ X, ∃('y ∈ Y, Q('x, 'y)))) should be equalTo Q('x, skolemFor(1, 'y))
     }
     "work 3" in {
-      skolemize(∀('d, ∃('e, ∃('f, Z('d, 'e, 'f))))) should be equalTo Z('d, skolemFor(1, 'e), skolemFor(1, 'f))
+      skolemize(∀('x ∈ X, ∃('y ∈ Y, ∃('z ∈ Z, R('x, 'y, 'z))))) should be equalTo R('x, skolemFor(1, 'y), skolemFor(1, 'z))
     }
     "work 4" in {
-      // TODO: skolem fn should be sfE('c, 'd)
-      skolemize(∀('c, ∀('d, ∃('e, Y('d, 'e))))) should be equalTo Y('d, skolemFor(1, 'e))
+      skolemize(∀('z ∈ Z, ∀('y ∈ Y, ∃('z ∈ Z, P('y, 'z))))) should be equalTo P('y, skolemFor(1, 'z))
     }
   }
 
@@ -97,25 +96,25 @@ class StatementSpecification extends Specification {
 
   "cnf" should {
     "work 1" in {
-      conjunctiveNormalForm(∀('x, P('x))) must be equalTo P('x)
+      conjunctiveNormalForm(∀('x ∈ X, P('x))) must be equalTo P('x)
     }
     "work 2" in {
-      conjunctiveNormalForm(∀('x, ¬((P('x) ∨ F('x)) ⊃ X('x)))) must be equalTo
-        (P('x) ∨ F('x)) ∧ ¬(X('x))
+      conjunctiveNormalForm(∀('x ∈ X, ¬((P('x) ∨ F('x)) ⊃ Q('x)))) must be equalTo
+        (P('x) ∨ F('x)) ∧ ¬(Q('x))
     }
     "work 3" in {
-      conjunctiveNormalForm(∀('m, F('m) ⇔ G('m))) must be equalTo
-        (¬(F('m)) ∨ G('m)) ∧ (¬(G('m)) ∨ F('m))
+      conjunctiveNormalForm(∀('x ∈ X, F('x) ⇔ G('x))) must be equalTo
+        (¬(F('x)) ∨ G('x)) ∧ (¬(G('x)) ∨ F('x))
     }
     "work 4" in {
-      conjunctiveNormalForm(¬(∀('x, ∃('x, P('x) ∧ Q('x)) ⊃ ∃('x, D('x, 'x) ∨ F('x))))) must be equalTo
+      conjunctiveNormalForm(¬(∀('x ∈ X, ∃('x ∈ X, P('x) ∧ Q('x)) ⊃ ∃('x ∈ X, D('x, 'x) ∨ F('x))))) must be equalTo
         P(skolemFor(1, 'x)) ∧ (Q(skolemFor(1, 'x)) ∧ (¬(D('x, 'x)) ∧ ¬(F('x))))
     }
   }
 
   "inf" should {
     "work 1" in {
-      implicativeNormalForm( (P('y) ∨ Q('y)) ∧ ((¬(R('z)) ∨ ¬(S('v))) ∧ (T('f) ∨ ¬(U('g))))) must be equalTo
+      implicativeNormalForm((P('y) ∨ Q('y)) ∧ ((¬(R('z)) ∨ ¬(S('v))) ∧ (T('f) ∨ ¬(U('g))))) must be equalTo
         List(true ⊃ (P('y) ∨ Q('y)), (R('z) ∧ S('v)) ⊃ false, U('g) ⊃ T('f))
     }
     "work 2" in {
@@ -123,8 +122,8 @@ class StatementSpecification extends Specification {
         List(Q('x) ⊃ (P('x) ∨ R('x)), true ⊃ R('x), M('x) ⊃ false)
     }
     "work 3" in {
-      implicativeNormalForm(conjunctiveNormalForm(∀('x, ¬((P('x) ∨ F('x)) ⊃ X('x))))) must be equalTo
-        List(true ⊃ (P('x) ∨ F('x)), X('x) ⊃ false)
+      implicativeNormalForm(conjunctiveNormalForm(∀('x ∈ X, ¬((P('x) ∨ F('x)) ⊃ Q('x))))) must be equalTo
+        List(true ⊃ (P('x) ∨ F('x)), Q('x) ⊃ false)
     }
   }
 

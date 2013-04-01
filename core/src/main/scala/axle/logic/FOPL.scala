@@ -12,6 +12,8 @@ object FOPL {
 
   trait Statement {
 
+    def apply(symbolTable: Map[Symbol, Any]): Boolean
+
     def ∧(right: Statement) = And(this, right)
     def and(right: Statement) = And(this, right)
 
@@ -26,27 +28,54 @@ object FOPL {
   }
 
   case class And(left: Statement, right: Statement) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) && right(symbolTable)
     override def toString() = "(" + left + " ∧ " + right + ")"
   }
   case class Or(left: Statement, right: Statement) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) || right(symbolTable)
     override def toString() = "(" + left + " ∨ " + right + ")"
   }
   case class Iff(left: Statement, right: Statement) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean = {
+      val lv = left(symbolTable)
+      val rv = right(symbolTable)
+      (!lv && !rv) || (lv && rv)
+    }
     override def toString() = "(" + left + " ⇔ " + right + ")"
   }
   case class Implies(left: Statement, right: Statement) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean = (!left(symbolTable)) || right(symbolTable)
     override def toString() = "(" + left + " ⊃ " + right + ")"
   }
 
-  case class ¬(statement: Statement) extends Statement
-  case class ∃(symbol: Symbol, statement: Statement) extends Statement
-  case class ∀(symbol: Symbol, statement: Statement) extends Statement
+  case class ¬(statement: Statement) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean = !statement(symbolTable)
+  }
+
+  case class ElementOf[T](symbol: Symbol, set: Set[T])
+
+  class EnrichedSymbol(symbol: Symbol) {
+    def in[T](set: Set[T]) = ElementOf(symbol, set)
+    def ∈[T](set: Set[T]) = ElementOf(symbol, set)
+  }
+
+  implicit val enrichSymbol = (symbol: Symbol) => new EnrichedSymbol(symbol)
+
+  case class ∃[T](symbolSet: ElementOf[T], statement: Statement) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean =
+      symbolSet.set.exists(v => statement(symbolTable + (symbolSet.symbol -> v)))
+  }
+  case class ∀[T](symbolSet: ElementOf[T], statement: Statement) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean =
+      symbolSet.set.forall(v => statement(symbolTable + (symbolSet.symbol -> v)))
+  }
 
   def not(statement: Statement) = ¬(statement)
-  def exists(symbol: Symbol, statement: Statement) = ∃(symbol, statement)
-  def forall(symbol: Symbol, statement: Statement) = ∀(symbol, statement)
+  def exists[T](symbolSet: ElementOf[T], statement: Statement) = ∃(symbolSet, statement)
+  def forall[T](symbolSet: ElementOf[T], statement: Statement) = ∀(symbolSet, statement)
 
   case class Constant(b: Boolean) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean = b
     override def toString() = b.toString
   }
 
@@ -111,17 +140,17 @@ object FOPL {
 
     case ¬(inner) => if (incoming) moveNegation(inner) else moveNegation(inner, true)
 
-    case ∃(sym, e) =>
+    case ∃(symbolSet, e) =>
       if (incoming)
-        ∀(sym, moveNegation(e, true))
+        ∀(symbolSet, moveNegation(e, true))
       else
-        ∃(sym, moveNegation(e))
+        ∃(symbolSet, moveNegation(e))
 
-    case ∀(sym, e) =>
+    case ∀(symbolSet, e) =>
       if (incoming)
-        ∃(sym, moveNegation(e, true))
+        ∃(symbolSet, moveNegation(e, true))
       else
-        ∀(sym, moveNegation(e))
+        ∀(symbolSet, moveNegation(e))
 
     case _ => if (incoming) ¬(s) else s
   }
@@ -135,8 +164,8 @@ object FOPL {
     case Iff(left, right) => ??? // Iff(skolemize(left, m), skolemize(right, m))
     case Implies(left, right) => ??? // Implies(skolemize(left, m), skolemize(right, m))
     case ¬(inner) => ¬(skolemize(inner, m))
-    case ∃(sym, e) => skolemize(e, m + (sym -> 1))
-    case ∀(sym, e) => skolemize(e, m)
+    case ∃(symbolSet, e) => skolemize(e, m) //  + (sym -> 1)
+    case ∀(symbolSet, e) => skolemize(e, m)
     case p: Predicate => p // .map(s => if (m.contains(s)) skolemFor(1, s) else s) // TODO replace "1"
   }
 
