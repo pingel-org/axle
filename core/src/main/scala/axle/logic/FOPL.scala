@@ -3,6 +3,13 @@ package axle.logic
 
 object FOPL {
 
+  abstract class Predicate(symbols: Symbol*) extends Function1[Map[Symbol, Any], Boolean] with Statement {
+    def name(): String
+    override def toString(): String = name() + "(" + symbols.mkString(", ") + ")"
+    // def apply(args: Symbol*): Predicate
+    // def map(f: Symbol => Symbol): Predicate = apply(args.map(f): _*)
+  }
+
   trait Statement {
 
     def ∧(right: Statement) = And(this, right)
@@ -41,11 +48,6 @@ object FOPL {
 
   case class Constant(b: Boolean) extends Statement {
     override def toString() = b.toString
-  }
-
-  abstract class Predicate(args: Symbol*) extends Statement {
-    def apply(args: Symbol*): Predicate
-    def map(f: Symbol => Symbol): Predicate = apply(args.map(f): _*)
   }
 
   implicit def foplBoolean(b: Boolean) = Constant(b)
@@ -135,7 +137,7 @@ object FOPL {
     case ¬(inner) => ¬(skolemize(inner, m))
     case ∃(sym, e) => skolemize(e, m + (sym -> 1))
     case ∀(sym, e) => skolemize(e, m)
-    case p: Predicate => p.map(s => if (m.contains(s)) skolemFor(1, s) else s) // TODO replace "1"
+    case p: Predicate => p // .map(s => if (m.contains(s)) skolemFor(1, s) else s) // TODO replace "1"
   }
 
   def distribute(s: Statement) = _distribute(s)._1
@@ -208,7 +210,7 @@ object FOPL {
       val (innerFlat, innerChanged) = _flatten(inner)
       (¬(innerFlat), innerChanged)
     }
-    
+
     case ∃(sym, e) => ???
     case ∀(sym, e) => ???
     case _ => (s, false)
@@ -242,70 +244,5 @@ object FOPL {
 
   def implicativeNormalForm(s: Statement): List[Statement] =
     conjunctList(s).map(atomicDisjunctsToImplication(_))
-
-  object SamplePredicates {
-
-    case class A(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = A(args(0))
-    }
-    case class B(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = B(args(0))
-    }
-    case class C(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = C(args(0))
-    }
-    case class D(s: Symbol, t: Symbol) extends Predicate(s, t) {
-      def apply(args: Symbol*) = D(args(0), args(1))
-    }
-    case class E(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = E(args(0))
-    }
-    case class F(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = F(args(0))
-    }
-    case class G(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = G(args(0))
-    }
-    case class H(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = H(args(0))
-    }
-    case class M(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = M(args(0))
-    }
-    case class N(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = N(args(0))
-    }
-    case class P(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = P(args(0))
-    }
-    case class Q(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = Q(args(0))
-    }
-    case class R(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = R(args(0))
-    }
-    case class S(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = S(args(0))
-    }
-    case class T(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = T(args(0))
-    }
-    case class U(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = U(args(0))
-    }
-    case class W(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = W(args(0))
-    }
-    case class X(s: Symbol) extends Predicate(s) {
-      def apply(args: Symbol*) = X(args(0))
-    }
-    case class Y(s: Symbol, t: Symbol) extends Predicate(s, t) {
-      def apply(args: Symbol*) = Y(args(0), args(1))
-    }
-    case class Z(s: Symbol, t: Symbol, u: Symbol) extends Predicate(s, t, u) {
-      def apply(args: Symbol*) = Z(args(0), args(1), args(2))
-    }
-
-  }
 
 }
