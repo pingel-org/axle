@@ -44,16 +44,17 @@ class StatementSpecification extends Specification {
 
   "skolemize" should {
     "work 1" in {
-      skolemize(∃('x ∈ X, ∀('y ∈ Y, P('x, 'y)))) should be equalTo P(skolemFor(1, 'x), 'y)
+      skolemize(∃('x ∈ X, ∀('y ∈ Y, P('x, 'y)))) should be equalTo (P('sk0, 'y), Map('sk0 -> Set('y)))
     }
     "work 2" in {
-      skolemize(∀('x ∈ X, ∃('y ∈ Y, Q('x, 'y)))) should be equalTo Q('x, skolemFor(1, 'y))
+      skolemize(∀('x ∈ X, ∃('y ∈ Y, Q('x, 'y)))) should be equalTo (Q('x, 'sk0), Map('sk0 -> Set('x)))
     }
     "work 3" in {
-      skolemize(∀('x ∈ X, ∃('y ∈ Y, ∃('z ∈ Z, R('x, 'y, 'z))))) should be equalTo R('x, skolemFor(1, 'y), skolemFor(1, 'z))
+      skolemize(∀('x ∈ X, ∃('y ∈ Y, ∃('z ∈ Z, R('x, 'y, 'z))))) should be equalTo (R('x, 'sk0, 'sk1), Map('sk0 -> Set('x), 'sk1 -> Set('x)))
     }
     "work 4" in {
-      skolemize(∀('z ∈ Z, ∀('y ∈ Y, ∃('z ∈ Z, P('y, 'z))))) should be equalTo P('y, skolemFor(1, 'z))
+      // TODO: all variable names should be uniqued prior to skolemization
+      skolemize(∀('z ∈ Z, ∀('y ∈ Y, ∃('z ∈ Z, P('y, 'z))))) should be equalTo (P('y, 'sk0), Map('sk0 -> Set('z, 'y)))
     }
   }
 
@@ -96,19 +97,22 @@ class StatementSpecification extends Specification {
 
   "cnf" should {
     "work 1" in {
-      conjunctiveNormalForm(∀('x ∈ X, P('x))) must be equalTo P('x)
+      conjunctiveNormalForm(∀('x ∈ X, P('x))) must be equalTo (P('x), Map())
     }
     "work 2" in {
       conjunctiveNormalForm(∀('x ∈ X, ¬((P('x) ∨ F('x)) ⊃ Q('x)))) must be equalTo
-        (P('x) ∨ F('x)) ∧ ¬(Q('x))
+        ((P('x) ∨ F('x)) ∧ ¬(Q('x)), Map())
     }
     "work 3" in {
       conjunctiveNormalForm(∀('x ∈ X, F('x) ⇔ G('x))) must be equalTo
-        (¬(F('x)) ∨ G('x)) ∧ (¬(G('x)) ∨ F('x))
+        ((¬(F('x)) ∨ G('x)) ∧ (¬(G('x)) ∨ F('x)), Map())
     }
     "work 4" in {
+      // TODO: unique variable names
       conjunctiveNormalForm(¬(∀('x ∈ X, ∃('x ∈ X, P('x) ∧ Q('x)) ⊃ ∃('x ∈ X, D('x, 'x) ∨ F('x))))) must be equalTo
-        P(skolemFor(1, 'x)) ∧ (Q(skolemFor(1, 'x)) ∧ (¬(D('x, 'x)) ∧ ¬(F('x))))
+        (P('sk0) ∧ (Q('sk1) ∧ (¬(D('sk2, 'sk3)) ∧ ¬(F('sk4)))),
+          Map('sk2 -> Set('x), 'sk3 -> Set('x), 'sk4 -> Set('x), 'sk1 -> Set(), 'sk0 -> Set())
+        )
     }
   }
 
@@ -122,7 +126,8 @@ class StatementSpecification extends Specification {
         List(Q('x) ⊃ (P('x) ∨ R('x)), true ⊃ R('x), M('x) ⊃ false)
     }
     "work 3" in {
-      implicativeNormalForm(conjunctiveNormalForm(∀('x ∈ X, ¬((P('x) ∨ F('x)) ⊃ Q('x))))) must be equalTo
+      val (cnf, skolems) = conjunctiveNormalForm(∀('x ∈ X, ¬((P('x) ∨ F('x)) ⊃ Q('x))))
+      implicativeNormalForm(cnf) must be equalTo
         List(true ⊃ (P('x) ∨ F('x)), Q('x) ⊃ false)
     }
   }

@@ -3,12 +3,41 @@ package axle.logic
 
 object FOPL {
 
+  def skolemFor(skolems: Map[Symbol, Set[Symbol]], s: Symbol, universally: Set[Symbol]) = {
+    val newSym = Symbol("sk" + skolems.size)
+    (newSym, skolems + (newSym -> universally))
+  }
+
   abstract class Predicate(symbols: Symbol*) extends Function1[Map[Symbol, Any], Boolean] with Statement {
+
+    outer =>
+
+    def getSymbols() = symbols
     def symbolSet() = symbols.toSet
     def name(): String
+    
     override def toString(): String = name() + "(" + symbols.mkString(", ") + ")"
-    // def apply(args: Symbol*): Predicate
-    // def map(f: Symbol => Symbol): Predicate = apply(args.map(f): _*)
+
+    override def equals(other: Any): Boolean = other match {
+      case otherPredicate: Predicate => (name equals otherPredicate.name) && (symbols equals otherPredicate.getSymbols)
+      case _ => false
+    }
+    
+    def skolemize(universally: Set[Symbol], existentially: Set[Symbol], skolems: Map[Symbol, Set[Symbol]]): (Predicate, Map[Symbol, Set[Symbol]]) = {
+      
+      val symbolsSkolems = symbols.scanLeft((null.asInstanceOf[Symbol], skolems))({
+        case (previous, s) =>
+          if (existentially.contains(s)) skolemFor(previous._2, s, universally)
+          else (s, previous._2)
+      })
+
+      val newPredicate = new Predicate(symbolsSkolems.tail.map(_._1): _*) {
+        def name() = outer.name
+        def apply(symbolTable: Map[Symbol, Any]): Boolean = outer.apply(symbolTable)
+      }
+      
+      (newPredicate, symbolsSkolems.last._2)
+    }
   }
 
   trait Statement {
@@ -53,7 +82,9 @@ object FOPL {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = !statement(symbolTable)
   }
 
-  case class ElementOf[T](symbol: Symbol, set: Set[T])
+  case class ElementOf[T](symbol: Symbol, set: Set[T]) {
+    override def toString(): String = symbol + " ∈ " + set
+  }
 
   class EnrichedSymbol(symbol: Symbol) {
     def in[T](set: Set[T]) = ElementOf(symbol, set)
@@ -81,8 +112,6 @@ object FOPL {
   }
 
   implicit def foplBoolean(b: Boolean) = Constant(b)
-
-  def skolemFor(i: Int, s: Symbol) = Symbol(s.name + i)
 
   def noOp(s: Statement): Statement = s match {
     case And(left, right) => And(noOp(left), noOp(right))
@@ -170,16 +199,28 @@ object FOPL {
   // TODO: the skolem constants should actually be functions of the universally quantified vars
   // TODO: create a monadic context for skolem count
 
-  def skolemize(s: Statement, m: Map[Symbol, Int] = Map()): Statement = s match {
-    case And(left, right) => And(skolemize(left, m), skolemize(right, m))
-    case Or(left, right) => Or(skolemize(left, m), skolemize(right, m))
-    case Iff(left, right) => ??? // Iff(skolemize(left, m), skolemize(right, m))
-    case Implies(left, right) => ??? // Implies(skolemize(left, m), skolemize(right, m))
-    case ¬(inner) => ¬(skolemize(inner, m))
-    case ∃(symbolSet, e) => skolemize(e, m) //  + (sym -> 1)
-    case ∀(symbolSet, e) => skolemize(e, m)
-    case p: Predicate => p // .map(s => if (m.contains(s)) skolemFor(1, s) else s) // TODO replace "1"
+  def _skolemize(s: Statement, universally: Set[Symbol], existentially: Set[Symbol], skolems: Map[Symbol, Set[Symbol]]): (Statement, Map[Symbol, Set[Symbol]]) = s match {
+    case And(left, right) => {
+      val (leftSkolemized, leftSkolems) = _skolemize(left, universally, existentially, skolems)
+      val (rightSkolemized, rightSkolems) = _skolemize(right, universally, existentially, leftSkolems)
+      (And(leftSkolemized, rightSkolemized), rightSkolems)
+    }
+    case Or(left, right) => {
+      val (leftSkolemized, leftSkolems) = _skolemize(left, universally, existentially, skolems)
+      val (rightSkolemized, rightSkolems) = _skolemize(right, universally, existentially, leftSkolems)
+      (Or(leftSkolemized, rightSkolemized), rightSkolems)
+    }
+    case ∃(symbolSet, e) => _skolemize(e, universally, existentially + symbolSet.symbol, skolems)
+    case ∀(symbolSet, e) => _skolemize(e, universally + symbolSet.symbol, existentially, skolems)
+    case ¬(p: Predicate) => {
+      val (innerSkolemized, innerSkolems) = p.skolemize(universally, existentially, skolems)
+      (¬(innerSkolemized), innerSkolems)
+    }
+    case p: Predicate => p.skolemize(universally, existentially, skolems)
+    case _ => ???
   }
+
+  def skolemize(s: Statement): (Statement, Map[Symbol, Set[Symbol]]) = _skolemize(s, Set(), Set(), Map())
 
   def distribute(s: Statement) = _distribute(s)._1
 
@@ -259,8 +300,10 @@ object FOPL {
 
   def flatten(s: Statement): Statement = _flatten(s)._1
 
-  def conjunctiveNormalForm(s: Statement): Statement =
-    flatten(distribute(skolemize(moveNegation(eliminateImplication(eliminateIff(s))))))
+  def conjunctiveNormalForm(s: Statement): (Statement, Map[Symbol, Set[Symbol]]) = {
+    val (skolemized, skolems) = skolemize(moveNegation(eliminateImplication(eliminateIff(s))))
+    (flatten(distribute(skolemized)), skolems)
+  }
 
   def disjunctList(s: Statement): List[Statement] = s match {
     case Or(head, tail) => head :: disjunctList(tail)
