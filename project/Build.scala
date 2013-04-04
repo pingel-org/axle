@@ -80,7 +80,7 @@ import collection._
 
   lazy val axleCore = Project(
     id = "axle-core",
-    base = file("core"),
+    base = file("axle-core"),
     settings = sharedSettings
   ).settings(
     name := "axle",
@@ -100,7 +100,7 @@ import collection._
 
   lazy val axleScalding = Project(
     id = "axle-scalding",
-    base = file("scalding"),
+    base = file("axle-scalding"),
     settings = sharedSettings
   ).settings(
     name := "axle-scalding",
@@ -111,7 +111,7 @@ import collection._
 
   lazy val axleLanguages = Project(
     id = "axle-languages",
-    base = file("languages"),
+    base = file("axle-languages"),
     settings = sharedSettings
   ).settings(
     name := "axle-languages",
