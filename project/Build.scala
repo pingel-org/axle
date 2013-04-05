@@ -121,6 +121,18 @@ import collection._
     )
   ).dependsOn(axleCore)
 
+  lazy val axleHBase = Project(
+    id = "axle-hbase",
+    base = file("axle-hbase"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-hbase",
+    libraryDependencies ++= Seq(
+      "org.apache.hadoop" % "hadoop-core" % "1.1.2",
+      "org.apache.hbase" % "hbase" % "0.94.5"
+    )
+  ).dependsOn(axleCore)
+
   lazy val axleAggregate = Project(
     id = "axle-aggregate",
     base = file("."),
@@ -129,6 +141,6 @@ import collection._
     test := { },
     publish := { },
     publishLocal := { }
-  ).aggregate(axleCore, axleScalding, axleLanguages)
+  ).aggregate(axleCore, axleScalding, axleHBase, axleLanguages)
 
 }
