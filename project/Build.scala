@@ -78,6 +78,8 @@ import collection._
 
   )
 
+  lazy val jungVersion = "2.0.1"
+
   lazy val axleCore = Project(
     id = "axle-core",
     base = file("axle-core"),
@@ -85,11 +87,10 @@ import collection._
   ).settings(
     name := "axle-core",
     libraryDependencies ++= Seq(
-      "net.sf.jung" % "jung-algorithms" % "2.0.1",
-      "net.sf.jung" % "jung-api" % "2.0.1",
-      "net.sf.jung" % "jung-graph-impl" % "2.0.1",
-      "net.sf.jung" % "jung-io" % "2.0.1",
-      "net.sf.jung" % "jung-visualization" % "2.0.1",
+      "net.sf.jung" % "jung-algorithms" % jungVersion,
+      "net.sf.jung" % "jung-api" % jungVersion,
+      "net.sf.jung" % "jung-graph-impl" % jungVersion,
+      "net.sf.jung" % "jung-io" % jungVersion,
       "joda-time" % "joda-time" % "2.1",
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
@@ -133,6 +134,17 @@ import collection._
     )
   ).dependsOn(axleCore)
 
+  lazy val axleVisualize = Project(
+    id = "axle-visualize",
+    base = file("axle-visualize"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-visualize",
+    libraryDependencies ++= Seq(
+      "net.sf.jung" % "jung-visualization" % jungVersion
+    )
+  ).dependsOn(axleCore)
+
   lazy val axleAggregate = Project(
     id = "axle-aggregate",
     base = file("."),
@@ -141,6 +153,6 @@ import collection._
     test := { },
     publish := { },
     publishLocal := { }
-  ).aggregate(axleCore, axleScalding, axleHBase, axleLanguages)
+  ).aggregate(axleCore, axleVisualize, axleScalding, axleHBase, axleLanguages)
 
 }

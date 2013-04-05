@@ -17,6 +17,7 @@ import scala.concurrent.duration._
 import java.awt.Frame
 import scala.concurrent.Await
 import axle.visualize.element._
+import axle.algebra.Plottable
 
 class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])], normalFont: Font) {
 

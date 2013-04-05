@@ -13,6 +13,7 @@ import javax.swing.JPanel
 import java.awt.event.MouseEvent
 import java.awt.Font
 
+import axle.algebra.Plottable
 import axle.visualize.element._
 import axle.ml.KMeansModule
 import axle.matrix._
@@ -57,7 +58,7 @@ trait KMeansVisualizationModule {
     val minY = mins(0, 1)
     val maxY = maxs(0, 1)
 
-    implicit val dp = axle.visualize.Plottable.DoublePlottable
+    implicit val dp = Plottable.DoublePlottable
     val scaledArea = new ScaledArea2D(w, h, border, minX, maxX, minY, maxY)
 
     val normalFont = new Font(fontName, Font.BOLD, fontSize)

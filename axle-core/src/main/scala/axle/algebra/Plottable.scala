@@ -1,7 +1,6 @@
-package axle.visualize
+package axle.algebra
 
 import spire.math._
-import axle.algebra.Portionable
 import math.{ pow, abs, log10, floor, ceil }
 
 trait Plottable[T] extends Ordering[T] with Portionable[T] {

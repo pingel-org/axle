@@ -15,6 +15,7 @@ import axle.actor.Defaults._
 import Stream.continually
 import axle.quanta._
 import Angle._
+import axle.algebra.Plottable
 import Plottable._
 import axle.visualize.element._
 

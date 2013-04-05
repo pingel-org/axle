@@ -6,6 +6,7 @@ import scala.collection.immutable.TreeMap
 import akka.actor.Props
 import axle.actor.Defaults._
 import axle.quanta.Time
+import axle.algebra.Plottable
 
 case class Plot[X: Plottable, Y: Plottable](
   initialValue: List[(String, TreeMap[X, Y])],

@@ -167,7 +167,7 @@ trait Quantum extends QuantumExpression {
 
   override def toString() = getClass().getSimpleName()
 
-  import axle.visualize.Plottable
+  import axle.algebra.Plottable
 
   case class UnitPlottable(base: quantum.Q) extends Plottable[quantum.Q] {
 

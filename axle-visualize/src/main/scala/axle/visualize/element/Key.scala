@@ -6,6 +6,8 @@ import java.awt.Graphics2D
 import java.awt.Color
 import java.awt.Font
 
+import axle.algebra.Plottable
+
 class BarChartKey[G, S, Y: Plottable](chart: BarChart[G, S, Y], font: Font, colorStream: Stream[Color]) extends Paintable {
 
   import chart._

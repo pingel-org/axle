@@ -15,6 +15,7 @@ import axle.visualize._
 import axle.ml._
 import axle.stats._
 import axle.pgm._
+import axle.algebra.Plottable
 
 package object visualize {
 
