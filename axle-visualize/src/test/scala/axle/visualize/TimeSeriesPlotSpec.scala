@@ -32,7 +32,7 @@ class TimeSeriesPlotSpec extends Specification {
     import collection._
     import math.{ Pi, cos, sin }
     import axle.visualize._
-    import axle.visualize.Plottable._
+    import axle.algebra.Plottable._
     import org.joda.time.DateTime
 
     val now = new DateTime()
@@ -56,7 +56,8 @@ class TimeSeriesPlotSpec extends Specification {
   def t2(): Unit = {
 
     import collection._
-    import axle.visualize.{ Plot, Plottable }
+    import axle.visualize.Plot
+    import axle.algebra.Plottable
     import Plottable._
     import axle.quanta._
     import Information._

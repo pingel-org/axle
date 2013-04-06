@@ -10,8 +10,8 @@ class LinearRegressionSpecification extends Specification {
 
       val lr = new axle.ml.LinearRegressionModule {}
 
-      import axle.visualize._
-      import axle.visualize.Plottable._
+      //import axle.visualize._
+      import axle.algebra.Plottable._
 
       case class RealtyListing(size: Double, bedrooms: Int, floors: Int, age: Int, price: Double)
 

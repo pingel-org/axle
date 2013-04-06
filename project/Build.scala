@@ -12,9 +12,9 @@ object AxleBuild extends Build {
 
     version := "0.1-SNAPSHOT", // M8 was last milestone
 
-    scalaVersion := "2.10.0",
+    scalaVersion := "2.10.1",
 
-    crossScalaVersions := Seq("2.10.0"),
+    crossScalaVersions := Seq("2.10.1"),
 
     libraryDependencies += "org.specs2" %% "specs2" % "1.13" % "test",
 
@@ -35,7 +35,7 @@ import axle.quanta._
 import axle.graph._
 import axle.matrix._
 import axle.ml._
-import axle.visualize._
+//import axle.visualize._
 import axle.ast._
 import collection._
 """,
@@ -78,6 +78,7 @@ import collection._
 
   )
 
+  lazy val hadoopVersion = "1.1.2"
   lazy val jungVersion = "2.0.1"
 
   lazy val axleCore = Project(
@@ -106,7 +107,8 @@ import collection._
   ).settings(
     name := "axle-scalding",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "scalding" % "0.8.3-SNAPSHOT"
+      "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
+      "com.twitter" %% "scalding-core" % "0.9.0-SNAPSHOT"
     )
   ).dependsOn(axleCore)
 
@@ -117,8 +119,9 @@ import collection._
   ).settings(
     name := "axle-languages",
     libraryDependencies ++= Seq(
-      "net.liftweb" % "lift-json_2.9.0-1" % "2.4",
-      "net.liftweb" % "lift-common_2.9.0-1" % "2.4"
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.1.3"
+      //"net.liftweb" % "lift-json_2.9.0-1" % "2.4",
+      //"net.liftweb" % "lift-common_2.9.0-1" % "2.4"
     )
   ).dependsOn(axleCore)
 
@@ -129,7 +132,7 @@ import collection._
   ).settings(
     name := "axle-hbase",
     libraryDependencies ++= Seq(
-      "org.apache.hadoop" % "hadoop-core" % "1.1.2",
+      "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
       "org.apache.hbase" % "hbase" % "0.94.5"
     )
   ).dependsOn(axleCore)

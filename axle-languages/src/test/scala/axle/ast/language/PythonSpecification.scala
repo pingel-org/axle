@@ -6,9 +6,6 @@ import axle.ast._
 import axle.ast.view.ViewString
 import org.specs2.mutable._
 
-import net.liftweb.common.Full
-import net.liftweb.json.JsonParser
-
 object PythonSpecification extends Specification {
   "conversion from JSON to AstNode" should {
 
