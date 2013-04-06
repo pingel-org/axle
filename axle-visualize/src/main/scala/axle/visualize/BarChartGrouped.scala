@@ -6,9 +6,11 @@ import axle.algebra.Plottable
 import akka.actor.Props
 import axle.quanta.Time
 
-case class BarChart[S, Y: Plottable](
+case class BarChartGrouped[G, S, Y: Plottable](
+  groups: Seq[G],
   slices: Seq[S],
-  initialValue: Map[S, Y],
+  initialValue: Map[(G, S), Y],
+  gLabeller: G => String = (g: G) => g.toString,
   sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -26,7 +28,7 @@ case class BarChart[S, Y: Plottable](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  refresher: Option[(Map[S, Y] => Map[S, Y], Time.Q)] = None) {
+  refresher: Option[(Map[(G, S), Y] => Map[(G, S), Y], Time.Q)] = None) {
 
   val dataFeedActor = system.actorOf(Props(new DataFeedActor(initialValue, refresher)))
 

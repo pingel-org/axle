@@ -8,7 +8,7 @@ import java.awt.Font
 
 import axle.algebra.Plottable
 
-class BarChartKey[G, S, Y: Plottable](chart: BarChart[G, S, Y], font: Font, colorStream: Stream[Color]) extends Paintable {
+class BarChartKey[S, Y: Plottable](chart: BarChart[S, Y], font: Font, colorStream: Stream[Color]) extends Paintable {
 
   import chart._
   
@@ -22,6 +22,22 @@ class BarChartKey[G, S, Y: Plottable](chart: BarChart[G, S, Y], font: Font, colo
   }
   
 }
+
+class BarChartGroupedKey[G, S, Y: Plottable](chart: BarChartGrouped[G, S, Y], font: Font, colorStream: Stream[Color]) extends Paintable {
+
+  import chart._
+  
+  def paint(g2d: Graphics2D): Unit = {
+    g2d.setFont(font)
+    val lineHeight = g2d.getFontMetrics.getHeight
+    for (((s, j), color) <- slices.zipWithIndex.zip(colorStream)) {
+      g2d.setColor(color)
+      g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+    }
+  }
+  
+}
+
 
 class Key[X, Y](
   plot: Plot[X, Y],

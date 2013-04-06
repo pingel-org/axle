@@ -19,7 +19,7 @@ import axle.algebra.Plottable
 import Plottable._
 import axle.visualize.element._
 
-class BarChartView[S, Y: Plottable](chart: BarChart[S, Y], data: Map[S, Y], colorStream: Stream[Color], normalFont: Font) {
+class BarChartGroupedView[G, S, Y: Plottable](chart: BarChartGrouped[G, S, Y], data: Map[(G, S), Y], colorStream: Stream[Color], normalFont: Font) {
 
   import chart._
 
@@ -28,13 +28,13 @@ class BarChartView[S, Y: Plottable](chart: BarChart[S, Y], data: Map[S, Y], colo
   val yAxis = minX
 
   val padding = 0.05 // on each side
-  val widthPerSlice = (1.0 - (2 * padding)) / slices.size
-  val whiteSpace = widthPerSlice * (1.0 - barWidthPercent)
+  val widthPerGroup = (1.0 - (2 * padding)) / groups.size
+  val whiteSpace = widthPerGroup * (1.0 - barWidthPercent)
 
   val yPlottable = implicitly[Plottable[Y]]
 
-  val minY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
-  val maxY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
+  val minY = List(xAxis, slices.map(s => (groups.map(data(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
+  val maxY = List(xAxis, slices.map(s => (groups.map(data(_, s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
@@ -48,7 +48,7 @@ class BarChartView[S, Y: Plottable](chart: BarChart[S, Y], data: Map[S, Y], colo
 
   val gTics = new XTics(
     scaledArea,
-    slices.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, sLabeller(s)) }).toList,
+    groups.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, gLabeller(g)) }).toList,
     normalFont,
     false,
     36 *: °,
@@ -56,17 +56,20 @@ class BarChartView[S, Y: Plottable](chart: BarChart[S, Y], data: Map[S, Y], colo
 
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
 
-  val bars = slices.zipWithIndex.zip(colorStream).map({
-    case ((s, i), color) => {
-      val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
-      val rightX = leftX + widthPerSlice
-      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(s)), fillColor = Some(color))
-    }
-  })
+  val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
+
+  val bars = for {
+    ((s, j), color) <- slices.zipWithIndex.zip(colorStream)
+    (g, i) <- groups.zipWithIndex
+  } yield {
+    val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth
+    val rightX = leftX + barSliceWidth
+    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(g, s)), fillColor = Some(color))
+  }
 
 }
 
-class BarChartComponent[S, Y: Plottable](chart: BarChart[S, Y]) extends JPanel with Fed {
+class BarChartGroupedComponent[G, S, Y: Plottable](chart: BarChartGrouped[G, S, Y]) extends JPanel with Fed {
 
   import chart._
 
@@ -83,7 +86,7 @@ class BarChartComponent[S, Y: Plottable](chart: BarChart[S, Y]) extends JPanel w
   val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
 
   val keyOpt = if (drawKey)
-    Some(new BarChartKey(chart, normalFont, colorStream))
+    Some(new BarChartGroupedKey(chart, normalFont, colorStream))
   else
     None
 
@@ -92,12 +95,12 @@ class BarChartComponent[S, Y: Plottable](chart: BarChart[S, Y]) extends JPanel w
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[S, Y]]
+    val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[(G, S), Y]]
 
     // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
     val data = Await.result(dataFuture, 1.seconds)
 
-    val view = new BarChartView(chart, data, colorStream, normalFont)
+    val view = new BarChartGroupedView(chart, data, colorStream, normalFont)
 
     import view._
 
