@@ -95,8 +95,7 @@ import collection._
       "joda-time" % "joda-time" % "2.1",
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
-      "org.spire-math" %% "spire" % "0.3.0",
-      "com.typesafe.akka" %% "akka-actor" % "2.2-M1"
+      "org.spire-math" %% "spire" % "0.3.0"
     )
   )
 
@@ -144,7 +143,8 @@ import collection._
   ).settings(
     name := "axle-visualize",
     libraryDependencies ++= Seq(
-      "net.sf.jung" % "jung-visualization" % jungVersion
+      "net.sf.jung" % "jung-visualization" % jungVersion,
+      "com.typesafe.akka" %% "akka-actor" % "2.2-M2"
     )
   ).dependsOn(axleCore)
 

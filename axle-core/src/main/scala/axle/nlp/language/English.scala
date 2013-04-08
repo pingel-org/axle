@@ -1,12 +1,14 @@
 package axle.nlp.language
 
-import axle.actor.Defaults._
 import concurrent.duration._
-import akka.actor._
-import akka.pattern.ask
 import concurrent.Await
 import org.tartarus.snowball.SnowballStemmer
 import org.tartarus.snowball.ext.englishStemmer
+
+/*
+import axle.actor.Defaults._
+import akka.actor._
+import akka.pattern.ask
 
 object StemmerProtocol {
   
@@ -27,6 +29,7 @@ class StemmerActor(stemmer: SnowballStemmer) extends Actor {
 
 }
 
+*/
 
 object English {
 
@@ -46,11 +49,19 @@ object English {
     .split("\\s+")
     .toIndexedSeq
 
-  import StemmerProtocol._
-  
-  lazy val englishStemmerActor = system.actorOf(Props(new StemmerActor(new englishStemmer())))
- 
-  def stem(word: String): String =
-    Await.result((englishStemmerActor ? Stem(word)).mapTo[String], 1.second)
+  val stemmer = new englishStemmer()
+
+  def stem(word: String): String = {
+    stemmer.setCurrent(word)
+    stemmer.stem
+    stemmer.getCurrent
+  }
+
+  // import StemmerProtocol._
+  //
+  // lazy val englishStemmerActor = system.actorOf(Props(new StemmerActor(new englishStemmer())))
+  //
+  // def stem(word: String): String =
+  //   Await.result((englishStemmerActor ? Stem(word)).mapTo[String], 1.second)
 
 }
