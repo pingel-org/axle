@@ -55,3 +55,5 @@ class Frequency extends Quantum {
   lazy val GHz = gigahertz
 
 }
+
+object Frequency extends Frequency()
