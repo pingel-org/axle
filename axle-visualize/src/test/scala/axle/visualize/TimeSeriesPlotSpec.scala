@@ -48,7 +48,7 @@ class TimeSeriesPlotSpec extends Specification {
 
     val lfs = (0 until 20).map(i => randomTimeSeries(i)).toList
 
-    val plot = new Plot(lfs, connect = true, drawKey = true, xAxis = 0.0, yAxis = now)
+    val plot = new Plot(lfs, connect = true, drawKey = true, xAxis = Some(0.0), yAxis = Some(now))
 
     // show(plot)
   }
@@ -67,8 +67,8 @@ class TimeSeriesPlotSpec extends Specification {
 
     val plot = new Plot(List(("h", hm)),
       connect = true, drawKey = false,
-      xAxis = 0.0 *: bit, xAxisLabel = Some("p(x='HEAD)"),
-      yAxis = 0.0, yAxisLabel = Some("H"),
+      xAxis = Some(0.0 *: bit), xAxisLabel = Some("p(x='HEAD)"),
+      yAxis = Some(0.0), yAxisLabel = Some("H"),
       title = Some("Entropy"))(DoublePlottable, Information.UnitPlottable(bit))
 
     // show(plot)

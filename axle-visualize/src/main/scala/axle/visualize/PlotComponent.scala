@@ -33,10 +33,10 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
   else
     None
 
-  val minX = List(yAxis, data.map(_._2.firstKey).min(xPlottable)).min(xPlottable)
-  val maxX = List(yAxis, data.map(_._2.lastKey).max(xPlottable)).max(xPlottable)
-  val minY = List(xAxis, data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
-  val maxY = List(xAxis, data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
+  val minX = (List(data.map(_._2.firstKey).min) ++ yAxis.toList).min
+  val maxX = (List(data.map(_._2.lastKey).max) ++ yAxis.toList).max
+  val minY = (List(data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min).min) ++ xAxis.toList).min
+  val maxY = (List(data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max).max) ++ xAxis.toList).max
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
 
@@ -46,8 +46,8 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
     minPoint.x, maxPoint.x, minPoint.y, maxPoint.y
   )
 
-  val vLine = new VerticalLine(scaledArea, yAxis, black)
-  val hLine = new HorizontalLine(scaledArea, xAxis, black)
+  val vLine = new VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
+  val hLine = new HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
   val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), normalFont, true, 0 *: °, black)
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
 
@@ -62,7 +62,7 @@ class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel
   setMinimumSize(new Dimension(width, height))
 
   def feeder() = dataFeedActor
-  
+
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
   val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))

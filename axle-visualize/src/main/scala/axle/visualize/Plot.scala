@@ -25,9 +25,9 @@ case class Plot[X: Plottable, Y: Plottable](
   titleFontSize: Int = 20,
   colors: Seq[Color] = List(blue, red, green, orange, pink, yellow),
   title: Option[String] = None,
-  xAxis: Y,
+  xAxis: Option[Y] = None,
   xAxisLabel: Option[String] = None,
-  yAxis: X,
+  yAxis: Option[X] = None,
   yAxisLabel: Option[String] = None,
   refresher: Option[(List[(String, TreeMap[X, Y])] => List[(String, TreeMap[X, Y])], Time.Q)] = None) {
 
