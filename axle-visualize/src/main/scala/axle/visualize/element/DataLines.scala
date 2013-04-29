@@ -22,8 +22,10 @@ class DataLines[X, Y](
           scaledArea.drawLine(g2d, Point2D(x0, f(x0)), Point2D(x1, f(x1)))
         }
       }
-      for (x <- f.keys) {
-        scaledArea.fillOval(g2d, Point2D(x, f(x)), pointDiameter, pointDiameter)
+      if (pointDiameter > 0) {
+        for (x <- f.keys) {
+          scaledArea.fillOval(g2d, Point2D(x, f(x)), pointDiameter, pointDiameter)
+        }
       }
     }
   }
