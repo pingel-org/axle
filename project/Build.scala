@@ -136,7 +136,7 @@ import collection._
     )
   ).dependsOn(axleCore)
 
-  lazy val axlegames = Project(
+  lazy val axleGames = Project(
     id = "axle-games",
     base = file("axle-games"),
     settings = sharedSettings
