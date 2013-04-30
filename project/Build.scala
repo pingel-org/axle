@@ -136,6 +136,15 @@ import collection._
     )
   ).dependsOn(axleCore)
 
+  lazy val axlegames = Project(
+    id = "axle-games",
+    base = file("axle-games"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-games",
+    libraryDependencies ++= Seq()
+  ).dependsOn(axleCore)
+
   lazy val axleVisualize = Project(
     id = "axle-visualize",
     base = file("axle-visualize"),
@@ -156,6 +165,6 @@ import collection._
     test := { },
     publish := { },
     publishLocal := { }
-  ).aggregate(axleCore, axleVisualize, axleScalding, axleHBase, axleLanguages)
+  ).aggregate(axleCore, axleGames, axleVisualize, axleScalding, axleHBase, axleLanguages)
 
 }
