@@ -33,10 +33,11 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
   else
     None
 
-  val minX = (List(data.map(_._2.firstKey).min) ++ yAxis.toList).min
-  val maxX = (List(data.map(_._2.lastKey).max) ++ yAxis.toList).max
-  val minY = (List(data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min).min) ++ xAxis.toList).min
-  val maxY = (List(data.map(lf => (lf._2.values ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max).max) ++ xAxis.toList).max
+  val minX = (List(data map { case (_, m) => m.firstKey } min) ++ yAxis.toList) min
+  val maxX = (List(data map { case (_, m) => m.lastKey } max) ++ yAxis.toList) max
+  val minY = (List(data map { case (_, m) => (m.values ++ List(yPlottable.zero)) filter { yPlottable.isPlottable(_) } min } min) ++ xAxis.toList) min
+  val maxY = (List(data map { case (_, m) => (m.values ++ List(yPlottable.zero)) filter { yPlottable.isPlottable(_) } max } max) ++ xAxis.toList) max
+
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
 
