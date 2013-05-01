@@ -33,8 +33,8 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
   else
     None
 
-  val minX = (List(data map { case (_, m) => m.firstKey } min) ++ yAxis.toList) min
-  val maxX = (List(data map { case (_, m) => m.lastKey } max) ++ yAxis.toList) max
+  val minX = (List(data collect { case (_, m) if m.size > 0 => m.firstKey } min) ++ yAxis.toList) min
+  val maxX = (List(data collect { case (_, m) if m.size > 0 => m.lastKey } max) ++ yAxis.toList) max
   val minY = (List(data map { case (_, m) => (m.values ++ List(yPlottable.zero)) filter { yPlottable.isPlottable(_) } min } min) ++ xAxis.toList) min
   val maxY = (List(data map { case (_, m) => (m.values ++ List(yPlottable.zero)) filter { yPlottable.isPlottable(_) } max } max) ++ xAxis.toList) max
 
