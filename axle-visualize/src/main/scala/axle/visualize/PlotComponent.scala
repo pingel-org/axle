@@ -33,31 +33,17 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
   else
     None
 
-  val minX = (
-    (data collect { case (_, m) if m.size > 0 => m.firstKey }) ++
-    yAxis.toList ++
-    List(xPlottable.zero)
-  ).min
+  val minXCandidates = (data collect { case (_, m) if m.size > 0 => m.firstKey }) ++ yAxis.toList
+  val minX = if (minXCandidates.size > 0) minXCandidates.min else xPlottable.zero
 
-  val maxX = (
-    (data collect { case (_, m) if m.size > 0 => m.lastKey }) ++
-    yAxis.toList ++
-    List(xPlottable.zero)
-  ).max
+  val maxXCandidates = (data collect { case (_, m) if m.size > 0 => m.lastKey }) ++ yAxis.toList
+  val maxX = if (maxXCandidates.size > 0) maxXCandidates.max else xPlottable.zero
 
-  val minY = (
-    ((data collect { case (_, m) if m.size > 0 => m.values min }) ++
-      xAxis.toList ++
-      List(yPlottable.zero)
-    ) filter { yPlottable.isPlottable(_) }
-  ).min
+  val minYCandidates = ((data collect { case (_, m) if m.size > 0 => m.values min }) ++ xAxis.toList) filter { yPlottable.isPlottable(_) }
+  val minY = if (minYCandidates.size > 0) minYCandidates.min else yPlottable.zero
 
-  val maxY = (
-    ((data collect { case (_, m) if m.size > 0 => m.values max }) ++
-      xAxis.toList ++
-      List(yPlottable.zero)
-    ) filter { yPlottable.isPlottable(_) }
-  ).max
+  val maxYCandidates = ((data collect { case (_, m) if m.size > 0 => m.values max }) ++ xAxis.toList) filter { yPlottable.isPlottable(_) }
+  val maxY = if (maxYCandidates.size > 0) maxYCandidates.max else yPlottable.zero
 
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
