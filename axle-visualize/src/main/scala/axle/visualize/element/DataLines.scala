@@ -16,7 +16,7 @@ class DataLines[X, Y](
 
     for (((label, f), color) <- data.zip(colorStream)) {
       g2d.setColor(color)
-      if (connect) {
+      if (connect && f.size > 1) {
         val xsStream = f.keysIterator.toStream
         for ((x0, x1) <- xsStream.zip(xsStream.tail)) {
           scaledArea.drawLine(g2d, Point2D(x0, f(x0)), Point2D(x1, f(x1)))

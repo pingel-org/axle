@@ -69,7 +69,7 @@ trait Quantum extends QuantumExpression {
   def is(qe: QuantumExpression) = 4 // TODO
 
   val one = Number.one
-  
+
   class Quantity(
     magnitude: Number = one,
     _unit: Option[Q] = None,
@@ -200,14 +200,17 @@ trait Quantum extends QuantumExpression {
     def ticValueStream(v: Number, to: Number, step: Number): Stream[Number] =
       if (v > to) empty else cons(v, ticValueStream(v + step, to, step))
 
-    def tics(from: quantum.Q, to: quantum.Q): Seq[(quantum.Q, String)] = {
-      val fromD = (from in base).magnitude
-      val toD = (to in base).magnitude
-      val s = step(fromD, toD)
-      val n = ((toD.toRational - fromD.toRational) / s).ceil.toInt
-      val start = s * ((fromD.toRational / s).floor)
-      (0 to n).map(s * _).map(_ + start).map(v => (v.toDouble *: base, v.toDouble.toString))
-    }
+    def tics(from: quantum.Q, to: quantum.Q): Seq[(quantum.Q, String)] =
+      if (from equals to) {
+        Nil
+      } else {
+        val fromD = (from in base).magnitude
+        val toD = (to in base).magnitude
+        val s = step(fromD, toD)
+        val n = ((toD.toRational - fromD.toRational) / s).ceil.toInt
+        val start = s * ((fromD.toRational / s).floor)
+        (0 to n).map(s * _).map(_ + start).map(v => (v.toDouble *: base, v.toDouble.toString))
+      }
 
   }
 
