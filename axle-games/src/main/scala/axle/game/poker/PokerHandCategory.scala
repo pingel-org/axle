@@ -84,6 +84,18 @@ object TwoPair extends PokerHandCategory {
   def specifics(hand: PokerHand) = high(hand) + " and " + low(hand)
   def high(hand: PokerHand) = hand.groups(0)._2
   def low(hand: PokerHand) = hand.groups(1)._2
+  def remaining(hand: PokerHand) = hand.groups(2)._2
+
+  override def compareAlike(a: PokerHand, b: PokerHand): Int = {
+    val cmpH = rankOrdering.compare(high(a), high(b))
+    if (cmpH == 0) {
+      val cmpL = rankOrdering.compare(low(a), low(b))
+      if( cmpL == 0 ) {
+        rankOrdering.compare(remaining(a), remaining(b))
+      } else cmpL
+    } else cmpH
+  }
+
 }
 
 object Pair extends PokerHandCategory {
