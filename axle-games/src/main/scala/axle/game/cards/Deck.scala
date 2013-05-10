@@ -15,8 +15,6 @@ object Deck {
   val cards = for {
     suit <- suits
     rank <- ranks
-  } yield {
-    Card(rank, suit)
-  }
+  } yield Card(rank, suit)
 
 }

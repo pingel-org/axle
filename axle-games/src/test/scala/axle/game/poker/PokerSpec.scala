@@ -30,10 +30,22 @@ class PokerSpec extends Specification {
 
   "poker hand comparison" should {
 
-    "work" in {
-
+    "work for 2 pair" in {
       string2hand("6♡,6♢,T♠,T♡,A♡") must be lessThan string2hand("6♡,6♢,T♠,J♠,J♡")
     }
+
+    "work for pair" in {
+      string2hand("6♡,6♢,8♠,9♡,K♡") must be lessThan string2hand("K♡,K♢,2♠,3♠,5♡")
+    }
+
+    "work for three-of-a-kind" in {
+      string2hand("6♡,6♢,6♠,Q♡,K♡") must be lessThan string2hand("7♡,7♢,7♠,3♠,4♡")
+    }
+
+    "work for four-of-a-kind" in {
+      string2hand("6♡,6♢,6♠,6♣,Q♡") must be lessThan string2hand("7♡,7♢,7♠,7♣,2♡")
+    }
+    
   }
 
 }
