@@ -11,7 +11,7 @@ case class Card(rank: Rank, suit: Suit) {
 
   override def toString() = rank.toString + suit.toString
 
-  def serialize(card: Card): String = "" + card.rank.serialize + card.suit.serialize
+  def serialize(): String = "" + rank.serialize + suit.serialize
 }
 
 class CardOrdering extends Ordering[Card] {
