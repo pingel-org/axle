@@ -39,6 +39,11 @@ case class PokerHand(cards: IndexedSeq[Card]) {
 
   override def toString() = sortedHand.reverse.map(_.toString).mkString(" ")
 
+  override def equals(other: Any): Boolean = other match {
+    case otherHand : PokerHand => sortedHand equals otherHand.sortedHand
+    case _ => false
+  }
+
   def description() = category.describe(this)
   
 }
