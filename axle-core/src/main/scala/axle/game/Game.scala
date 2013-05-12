@@ -103,7 +103,6 @@ abstract class Game[G <: Game[G]] {
     moveStateStream(start).lastOption.map({
       case (lastMove, s0) => {
         val s1 = s0.outcome.map(o => s0.broadcast(players, o)).getOrElse(s0)
-        // println("moveStateStream.last defines move. players = " + players)
         val s2 = s1.displayEvents(players)
         for (player <- players()) {
           player.endGame(s2)
