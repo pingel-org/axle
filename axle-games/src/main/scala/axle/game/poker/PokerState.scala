@@ -15,8 +15,8 @@ case class PokerState(
   stillIn: Set[PokerPlayer],
   inFors: Map[PokerPlayer, Int],
   piles: Map[PokerPlayer, Int],
-  _outcome: Option[PokerOutcome] = None,
-  _eventQueues: Map[PokerPlayer, List[Event[Poker]]] = Map())(implicit game: Poker)
+  _outcome: Option[PokerOutcome],
+  _eventQueues: Map[PokerPlayer, List[Event[Poker]]])(implicit game: Poker)
   extends State[Poker]() {
 
   implicit val pokerHandOrdering = new PokerHandOrdering()
@@ -102,7 +102,9 @@ case class PokerState(
         bigBlind,
         stillIn,
         Map(smallBlindPlayer -> smallBlind, bigBlindPlayer -> bigBlind),
-        piles + (smallBlindPlayer -> (piles(smallBlindPlayer) - smallBlind)) + (bigBlindPlayer -> (piles(bigBlindPlayer) - bigBlind))
+        piles + (smallBlindPlayer -> (piles(smallBlindPlayer) - smallBlind)) + (bigBlindPlayer -> (piles(bigBlindPlayer) - bigBlind)),
+        None,
+        _eventQueues
       ))
     }
 
@@ -119,7 +121,9 @@ case class PokerState(
           currentBet + amount,
           stillIn,
           inFors + (player -> (currentBet + amount)),
-          piles + (player -> (piles(player) - diff))
+          piles + (player -> (piles(player) - diff)),
+          None,
+          _eventQueues
         ))
       } else {
         None
@@ -139,7 +143,9 @@ case class PokerState(
           currentBet,
           stillIn,
           inFors + (player -> currentBet),
-          piles + (player -> (piles(player) - diff))
+          piles + (player -> (piles(player) - diff)),
+          None,
+          _eventQueues
         ))
       } else {
         None
@@ -149,22 +155,34 @@ case class PokerState(
     case Fold(player) =>
       Some(PokerState(
         _.betterAfter(player).getOrElse(game.dealer),
-        deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles))
+        deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles,
+        None,
+        _eventQueues
+      ))
 
     case Flop() =>
       Some(PokerState(
         _.firstBetter,
-        deck, shared, 3, hands, pot, 0, stillIn, Map(), piles))
+        deck, shared, 3, hands, pot, 0, stillIn, Map(), piles,
+        None,
+        _eventQueues
+      ))
 
     case Turn() =>
       Some(PokerState(
         _.firstBetter,
-        deck, shared, 4, hands, pot, 0, stillIn, Map(), piles))
+        deck, shared, 4, hands, pot, 0, stillIn, Map(), piles,
+        None,
+        _eventQueues
+      ))
 
     case River() =>
       Some(PokerState(
         _.firstBetter,
-        deck, shared, 5, hands, pot, 0, stillIn, Map(), piles))
+        deck, shared, 5, hands, pot, 0, stillIn, Map(), piles,
+        None,
+        _eventQueues
+      ))
 
     case Payout() => {
 
@@ -186,7 +204,17 @@ case class PokerState(
 
       Some(PokerState(
         s => game.dealer,
-        deck, shared, 5, hands, 0, 0, newStillIn, Map(), newPiles, Some(PokerOutcome(winner, handOpt))
+        deck,
+        shared,
+        5,
+        hands,
+        0,
+        0,
+        newStillIn,
+        Map(),
+        newPiles,
+        Some(PokerOutcome(winner, handOpt)),
+        _eventQueues
       ))
     }
 

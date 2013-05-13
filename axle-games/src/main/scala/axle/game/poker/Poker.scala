@@ -39,7 +39,9 @@ class Poker(numPlayers: Int) extends Game[Poker] {
       0, // current bet
       _players.toSet, // stillIn
       immutable.Map(), // inFors
-      players.map(player => (player, 100)).toMap // piles
+      players.map(player => (player, 100)).toMap, // piles
+      None,
+      immutable.Map()
     )
 
   def startFrom(s: PokerState) = {
@@ -55,7 +57,9 @@ class Poker(numPlayers: Int) extends Game[Poker] {
         0,
         s.stillIn,
         immutable.Map(),
-        s.piles
+        s.piles,
+        None,
+        immutable.Map()
       ))
     else
       None
