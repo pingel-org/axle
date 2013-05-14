@@ -26,7 +26,7 @@ case class Euclidian(n: Int) extends NormedVectorSpace[Matrix[Double], Double] {
 
   def timesl(r: Double, v: Matrix[Double]) = v * r
 
-  implicit def scalar = Field.DoubleIsField
+  def scalar() = DoubleAlgebra
 
   def norm(r: Matrix[Double]) = sqrt(r.mulPointwise(r).rowSums().scalar)
 

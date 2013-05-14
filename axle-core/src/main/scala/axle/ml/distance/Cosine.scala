@@ -19,7 +19,7 @@ import axle.matrix.JblasMatrixModule._
 
 case class Cosine(n: Int) extends NormedInnerProductSpace[Matrix[Double], Double] {
 
-  def nroot = NRoot.DoubleIsNRoot
+  def nroot = DoubleAlgebra
 
   val _space = new InnerProductSpace[Matrix[Double], Double] {
 
@@ -31,7 +31,7 @@ case class Cosine(n: Int) extends NormedInnerProductSpace[Matrix[Double], Double
 
     def timesl(r: Double, v: Matrix[Double]) = v * r
 
-    implicit def scalar = Field.DoubleIsField
+    def scalar = DoubleAlgebra
 
     def dot(v: Matrix[Double], w: Matrix[Double]) = v.mulPointwise(w).rowSums().scalar
   }

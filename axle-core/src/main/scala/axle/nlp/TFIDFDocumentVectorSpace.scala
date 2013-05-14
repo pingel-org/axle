@@ -34,7 +34,7 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
 
   val _space = new NormedInnerProductSpace[TermVector, Double] {
 
-    def nroot = NRoot.DoubleIsNRoot
+    def nroot = DoubleAlgebra
 
     val _innerProductSpace = new InnerProductSpace[TermVector, Double] {
 
@@ -47,7 +47,7 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
 
       def timesl(r: Double, v: TermVector) = v.map(kv => (kv._1, (kv._2 * r).toInt))
 
-      implicit def scalar = Field.DoubleIsField
+      def scalar = DoubleAlgebra
 
       def termWeight(term: String, doc: TermVector) =
         doc(term) * math.log(numDocs / documentFrequency(term).toDouble)

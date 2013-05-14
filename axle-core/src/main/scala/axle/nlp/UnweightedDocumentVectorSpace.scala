@@ -21,7 +21,7 @@ class UnweightedDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () 
 
   val _space = new NormedInnerProductSpace[TermVector, Double] {
 
-    def nroot = NRoot.DoubleIsNRoot
+    def nroot = DoubleAlgebra
 
     val _innerProductSpace = new InnerProductSpace[TermVector, Double] {
 
@@ -34,7 +34,7 @@ class UnweightedDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () 
 
       def timesl(r: Double, v: TermVector) = v.map(kv => (kv._1, (kv._2 * r).toInt))
 
-      implicit def scalar = Field.DoubleIsField
+      def scalar = DoubleAlgebra
 
       def dot(v1: TermVector, v2: TermVector) =
         (v1.keySet intersect v2.keySet).toList.map(w => v1(w) * v2(w)).sum
