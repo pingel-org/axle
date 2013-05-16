@@ -34,15 +34,15 @@ package object axle {
 
   implicit def enrichGenSet[T](s: GenSet[T]) = EnrichedGenSet(s)
 
-  implicit def enrichGenTraversable[T : Manifest](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
+  implicit def enrichGenTraversable[T: Manifest](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
 
-  implicit def enrichIndexedSeq[T : Manifest](is: IndexedSeq[T]) = EnrichedIndexedSeq(is)
+  implicit def enrichIndexedSeq[T: Manifest](is: IndexedSeq[T]) = EnrichedIndexedSeq(is)
 
   implicit def enrichByteArray(barr: Array[Byte]) = EnrichedByteArray(barr)
 
   implicit def enrichMutableBuffer[T](buffer: mutable.Buffer[T]) = EnrichedMutableBuffer(buffer)
 
-  implicit def enrichArray[T : Manifest](arr: Array[T]) = EnrichedArray(arr)
+  implicit def enrichArray[T: Manifest](arr: Array[T]) = EnrichedArray(arr)
 
   implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
 
@@ -51,6 +51,15 @@ package object axle {
   def fib(n: Int) = (1 to n).foldLeft((1, 1))((pre, i) => (pre._2, pre._1 + pre._2))._1
 
   def recfib(n: Int): Int = n match { case 0 | 1 => 1 case _ => recfib(n - 2) + recfib(n - 1) }
+
+  /**
+   * http://en.wikipedia.org/wiki/Ackermann_function
+   */
+  
+  def ackermann(m: Long, n: Long): Long =
+    if (m == 0) n + 1
+    else if (m > 0 && n == 0) ackermann(m - 1, 1)
+    else ackermann(m - 1, ackermann(m, n - 1))
 
   // Fundamental:
 
