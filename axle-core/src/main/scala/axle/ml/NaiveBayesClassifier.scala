@@ -82,31 +82,16 @@ class NaiveBayesClassifier[D, TF, TC](
     }
   }).reduce(_ |+| _)
 
-  /**
-   * "performance" returns four measures of classification performance
-   * for the given class.
-   *
-   * They are:
-   *
-   * 1. Precision
-   * 2. Recall
-   * 3. Specificity
-   * 4. Accuracy
-   *
-   * See http://en.wikipedia.org/wiki/Precision_and_recall for more information.
-   *
-   */
-
-  def performance(dit: Iterator[D], k: TC): (Double, Double, Double, Double) = {
+  def performance(dit: Iterator[D], k: TC) = {
 
     val (tp, fp, fn, tn) = predictedVsActual(dit, k)
 
-    val precision = tp.toDouble / (tp + fp)
-    val recall = tp.toDouble / (tp + fn)
-    val specificity = tn.toDouble / (tn + fp) // aka "true negative rate"
-    val accuracy = (tp + tn).toDouble / (tp + tn + fp + fn)
-
-    (precision, recall, specificity, accuracy)
+    ClassifierPerformance(
+      tp.toDouble / (tp + fp), // precision
+      tp.toDouble / (tp + fn), // recall
+      tn.toDouble / (tn + fp), // specificity aka "true negative rate"
+      (tp + tn).toDouble / (tp + tn + fp + fn) // accuracy
+    )
   }
 
 }
