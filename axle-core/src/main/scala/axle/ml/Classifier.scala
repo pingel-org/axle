@@ -1,6 +1,6 @@
 package axle.ml
 
-abstract class Classifier[D, TF, TC](
+abstract class Classifier[D, TC](
   classExtractor: D => TC) {
 
   def predict(d: D): TC

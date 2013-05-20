@@ -14,7 +14,7 @@ class NaiveBayesClassifier[D, TF, TC](
   pFs: List[RandomVariable[TF]],
   pC: RandomVariable[TC],
   featureExtractor: D => List[TF],
-  classExtractor: D => TC) extends Classifier[D, TF, TC](classExtractor) {
+  classExtractor: D => TC) extends Classifier(classExtractor) {
 
   import axle.ScalaMapReduce._
   import axle._
