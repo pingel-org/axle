@@ -23,14 +23,14 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS](
 
   val N = featureNames.size
 
-  def argmax[K](ks: Iterable[K], f: K => Double): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
+  def argmax[K](ks: IndexedSeq[K], f: K => Double): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
 
   // TODO no probability should ever be 0
 
   // TODO: rephrase tallies as aggregations (vs. folds)
 
   val featureTally =
-    data.iterator.foldLeft(immutable.Map.empty[(CLASS, String, FEATURE), Int].withDefaultValue(0))({
+    data.foldLeft(immutable.Map.empty[(CLASS, String, FEATURE), Int].withDefaultValue(0))({
       case (tally, d) => {
         val fs = featureExtractor(d)
         val c = classExtractor(d)
@@ -44,7 +44,7 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS](
     })
 
   val classTally =
-    data.iterator.foldLeft(immutable.Map.empty[CLASS, Int].withDefaultValue(0))({
+    data.foldLeft(immutable.Map.empty[CLASS, Int].withDefaultValue(0))({
       case (tally, d) => {
         val c = classExtractor(d)
         tally + (c -> (tally(c) + 1))
