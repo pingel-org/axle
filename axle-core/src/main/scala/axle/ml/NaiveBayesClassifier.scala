@@ -4,23 +4,22 @@ import axle.stats._
 
 object NaiveBayesClassifier {
 
-  def apply[D, TF, TC](data: Seq[D], pFs: List[RandomVariable[TF]], pC: RandomVariable[TC], featureExtractor: D => List[TF], classExtractor: D => TC) =
+  def apply[DATA, FEATURE, CLASS](data: Seq[DATA], pFs: List[RandomVariable[FEATURE]], pC: RandomVariable[CLASS], featureExtractor: DATA => List[FEATURE], classExtractor: DATA => CLASS) =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
 }
 
-class NaiveBayesClassifier[D, TF, TC](
-  data: Seq[D],
-  pFs: List[RandomVariable[TF]],
-  pC: RandomVariable[TC],
-  featureExtractor: D => List[TF],
-  classExtractor: D => TC) extends Classifier(classExtractor) {
+class NaiveBayesClassifier[DATA, FEATURE, CLASS](
+  data: Seq[DATA],
+  featureRandomVariables: List[RandomVariable[FEATURE]],
+  classRandomVariable: RandomVariable[CLASS],
+  featureExtractor: DATA => List[FEATURE],
+  classExtractor: DATA => CLASS) extends Classifier(classExtractor) {
 
-  import axle.ScalaMapReduce._
   import axle._
   import collection._
 
-  val featureNames = pFs.map(_.name)
+  val featureNames = featureRandomVariables.map(_.name)
 
   val N = featureNames.size
 
@@ -28,35 +27,48 @@ class NaiveBayesClassifier[D, TF, TC](
 
   // TODO no probability should ever be 0
 
-  val featureTally: immutable.Map[(TC, String, TF), Int] = mapReduce(data.iterator,
-    mapper = (d: D) => {
-      val fs = featureExtractor(d)
-      (0 until fs.length).map(i => ((classExtractor(d), featureNames(i), fs(i)), 1))
-    },
-    reducer = (x: Int, y: Int) => x + y
-  ).withDefaultValue(0)
+  // TODO: rephrase tallies as aggregations (vs. folds)
 
-  val classTally: immutable.Map[TC, Int] = mapReduce(data.iterator,
-    mapper = (d: D) => List((classExtractor(d), 1)),
-    reducer = (x: Int, y: Int) => x + y
-  ).withDefaultValue(1) // to avoid division by zero
+  val featureTally =
+    data.iterator.foldLeft(immutable.Map.empty[(CLASS, String, FEATURE), Int].withDefaultValue(0))({
+      case (tally, d) => {
+        val fs = featureExtractor(d)
+        val c = classExtractor(d)
+        (0 until fs.length).foldLeft(tally)({
+          case (tally, i) => {
+            val k = (c, featureNames(i), fs(i))
+            tally + (k -> (tally(k) + 1))
+          }
+        })
+      }
+    })
 
-  val C = new RandomVariable0(pC.name, pC.values,
+  val classTally =
+    data.iterator.foldLeft(immutable.Map.empty[CLASS, Int].withDefaultValue(0))({
+      case (tally, d) => {
+        val c = classExtractor(d)
+        tally + (c -> (tally(c) + 1))
+      }
+    }).withDefaultValue(1) // to avoid division by zero
+
+  val C = new RandomVariable0(classRandomVariable.name, classRandomVariable.values,
     distribution = Some(new TallyDistribution0(classTally)))
 
-  val Fs = pFs.map(pF => new RandomVariable1(
-    pF.name,
-    pF.values,
+  val Fs = featureRandomVariables.map(featureRandomVariable => new RandomVariable1(
+    featureRandomVariable.name,
+    featureRandomVariable.values,
     grv = C,
     distribution = Some(new TallyDistribution1(
-      featureTally
-        .filter(_._1._2 == pF.name)
-        .map(kv => ((kv._1._3, kv._1._1), kv._2))
-        .withDefaultValue(0)))))
+      featureTally.filter {
+        case (k, v) => k._2 == featureRandomVariable.name
+      }.map {
+        case (k, v) => ((k._3, k._1), v)
+      }.withDefaultValue(0))
+    )))
 
-  def predict(d: D): TC = {
+  def apply(d: DATA): CLASS = {
     val fs = featureExtractor(d)
-    argmax(C, (c: TC) => P(C is c) * (0 until N).Π(i => P((Fs(i) is fs(i)) | (C is c))))
+    argmax(C, (c: CLASS) => P(C is c) * (0 until N).Π(i => P((Fs(i) is fs(i)) | (C is c))))
   }
 
 }
