@@ -4,17 +4,17 @@ import axle.stats._
 
 object NaiveBayesClassifier {
 
-  def apply[DATA, FEATURE, CLASS](data: Seq[DATA], pFs: List[RandomVariable[FEATURE]], pC: RandomVariable[CLASS], featureExtractor: DATA => List[FEATURE], classExtractor: DATA => CLASS) =
+  def apply[DATA, FEATURE, CLASS: Ordering](data: Seq[DATA], pFs: List[RandomVariable[FEATURE]], pC: RandomVariable[CLASS], featureExtractor: DATA => List[FEATURE], classExtractor: DATA => CLASS) =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
 }
 
-class NaiveBayesClassifier[DATA, FEATURE, CLASS](
+class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
   data: Seq[DATA],
   featureRandomVariables: List[RandomVariable[FEATURE]],
   classRandomVariable: RandomVariable[CLASS],
   featureExtractor: DATA => List[FEATURE],
-  classExtractor: DATA => CLASS) extends Classifier(classExtractor) {
+  classExtractor: DATA => CLASS) extends Classifier[DATA, CLASS]() {
 
   import axle._
   import collection._
@@ -65,6 +65,8 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS](
         case (k, v) => ((k._3, k._1), v)
       }.withDefaultValue(0))
     )))
+
+  def classes(): IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
   def apply(d: DATA): CLASS = {
     val fs = featureExtractor(d)

@@ -1,9 +1,11 @@
 package axle.ml
 
-abstract class Classifier[DATA, CLASS](classExtractor: DATA => CLASS) extends Function1[DATA, CLASS] {
+abstract class Classifier[DATA, CLASS: Ordering] extends Function1[DATA, CLASS] {
 
   def apply(d: DATA): CLASS
 
+  def classes(): IndexedSeq[CLASS]
+  
   /**
    * For a given class (label value), predictedVsActual returns a tally of 4 cases:
    *
@@ -17,7 +19,7 @@ abstract class Classifier[DATA, CLASS](classExtractor: DATA => CLASS) extends Fu
   import axle.algebra._
   import Semigroups._
 
-  private[this] def predictedVsActual(dit: Iterator[DATA], k: CLASS): (Int, Int, Int, Int) = dit.map(d => {
+  private[this] def predictedVsActual(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): (Int, Int, Int, Int) = data.map(d => {
     val actual = classExtractor(d)
     val predicted = this(d)
     (actual === k, predicted === k) match {
@@ -28,9 +30,9 @@ abstract class Classifier[DATA, CLASS](classExtractor: DATA => CLASS) extends Fu
     }
   }).reduce(_ |+| _)
 
-  def performance(dit: Iterator[DATA], k: CLASS) = {
+  def performance(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS) = {
 
-    val (tp, fp, fn, tn) = predictedVsActual(dit, k)
+    val (tp, fp, fn, tn) = predictedVsActual(data, classExtractor, k)
 
     ClassifierPerformance(
       tp.toDouble / (tp + fp), // precision
@@ -40,4 +42,7 @@ abstract class Classifier[DATA, CLASS](classExtractor: DATA => CLASS) extends Fu
     )
   }
 
+  def confusionMatrix[L: Ordering](data: Seq[DATA], labelExtractor: DATA => L) = new ConfusionMatrix(this, data, labelExtractor)
+  
+  
 }

@@ -30,7 +30,7 @@ trait KMeansModule {
    *
    */
 
-  def Classifier[T](
+  def classifier[T](
     data: Seq[T],
     N: Int,
     featureExtractor: T => Seq[Double],
@@ -63,7 +63,7 @@ trait KMeansModule {
     constructor: Seq[Double] => T,
     space: MetricSpace[Matrix[Double], Double],
     K: Int,
-    iterations: Int) {
+    iterations: Int) extends Classifier[T, Int] {
 
     val features = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
 
@@ -80,7 +80,9 @@ trait KMeansModule {
 
     def exemplar(i: Int): T = exemplars(i)
 
-    def classify(observation: T): Int = {
+    def classes() = 0 until K
+    
+    def apply(observation: T): Int = {
       val (i, d) = centroidIndexAndDistanceClosestTo(space, μ, normalizer.normalize(featureExtractor(observation)))
       i
     }
@@ -170,40 +172,7 @@ trait KMeansModule {
       distanceLog.zipWithIndex.map({ case (dl, i) => i -> dl(centroidId, 0) }).toMap
 
     def distanceLogSeries() = (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList
-
-    def confusionMatrix[L](data: Seq[T], labelExtractor: T => L) = new ConfusionMatrix(this, data, labelExtractor)
-  }
-
-  class ConfusionMatrix[T, L](classifier: KMeansClassifier[T], data: Seq[T], labelExtractor: T => L) {
-
-    import math.{ ceil, log10 }
-
-    val label2clusterId = data.map(datum => (labelExtractor(datum), classifier.classify(datum)))
-
-    val labelList = label2clusterId.map(_._1).toSet.toList
-    val labelIndices = labelList.zipWithIndex.toMap
-
-    val labelIdClusterId2count = label2clusterId
-      .map({ case (label, clusterId) => ((labelIndices(label), clusterId), 1) })
-      .groupBy(_._1)
-      .map({ case (k, v) => (k, v.map(_._2).sum) })
-      .withDefaultValue(0)
-
-    val counts = matrix[Int](labelList.length, classifier.K, (r: Int, c: Int) => labelIdClusterId2count((r, c)))
-
-    val width = ceil(log10(data.length)).toInt
-
-    val formatNumber = (i: Int) => ("%" + width + "d").format(i)
-
-    lazy val rowSums = counts.rowSums()
-    lazy val columnSums = counts.columnSums()
-
-    lazy val asString = (labelList.zipWithIndex.map({
-      case (label, r) => ((0 until counts.columns).map(c => formatNumber(counts(r, c))).mkString(" ") + " : " + formatNumber(rowSums(r, 0)) + " " + label + "\n")
-    }).mkString("")) + "\n" +
-      (0 until counts.columns).map(c => formatNumber(columnSums(0, c))).mkString(" ") + "\n"
-
-    override def toString() = asString
+    
   }
 
 }
