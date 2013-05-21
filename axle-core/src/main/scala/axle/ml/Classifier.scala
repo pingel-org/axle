@@ -1,9 +1,8 @@
 package axle.ml
 
-abstract class Classifier[D, TC](
-  classExtractor: D => TC) {
+abstract class Classifier[DATA, CLASS](classExtractor: DATA => CLASS) extends Function1[DATA, CLASS] {
 
-  def predict(d: D): TC
+  def apply(d: DATA): CLASS
 
   /**
    * For a given class (label value), predictedVsActual returns a tally of 4 cases:
@@ -18,9 +17,9 @@ abstract class Classifier[D, TC](
   import axle.algebra._
   import Semigroups._
 
-  private[this] def predictedVsActual(dit: Iterator[D], k: TC): (Int, Int, Int, Int) = dit.map(d => {
+  private[this] def predictedVsActual(dit: Iterator[DATA], k: CLASS): (Int, Int, Int, Int) = dit.map(d => {
     val actual = classExtractor(d)
-    val predicted = predict(d)
+    val predicted = this(d)
     (actual === k, predicted === k) match {
       case (true, true) => (1, 0, 0, 0) // true positive
       case (false, true) => (0, 1, 0, 0) // false positive
@@ -29,7 +28,7 @@ abstract class Classifier[D, TC](
     }
   }).reduce(_ |+| _)
 
-  def performance(dit: Iterator[D], k: TC) = {
+  def performance(dit: Iterator[DATA], k: CLASS) = {
 
     val (tp, fp, fn, tn) = predictedVsActual(dit, k)
 
