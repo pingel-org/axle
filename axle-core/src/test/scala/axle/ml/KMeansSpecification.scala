@@ -28,7 +28,7 @@ class KMeansSpecification extends Specification {
           (0 until 30).map(i => randomPoint(Foo(5, 15), 1.0)) ++
           (0 until 25).map(i => randomPoint(Foo(15, 5), 1.0)))
 
-      val classifier = Classifier(
+      val km = classifier(
         data,
         N = 2,
         (p: Foo) => List(p.x, p.y),
@@ -37,7 +37,7 @@ class KMeansSpecification extends Specification {
         K = 3,
         iterations = 100)
 
-      val exemplar = classifier.exemplar(classifier.classify(Foo(14.5, 14.5)))
+      val exemplar = km.exemplar(km(Foo(14.5, 14.5)))
 
       fooSimilarity(exemplar, Foo(15, 15)) must be lessThan 1.0
     }
