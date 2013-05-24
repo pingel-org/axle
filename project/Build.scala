@@ -10,7 +10,7 @@ object AxleBuild extends Build {
 
     organization := "org.pingel",
 
-    version := "0.1-M10",
+    version := "0.1-SNAPSHOT", // last milestone was M10
 
     scalaVersion := "2.10.1",
 
@@ -37,7 +37,7 @@ import axle.matrix._
 import axle.ml._
 //import axle.visualize._
 import axle.ast._
-import collection._
+//import collection._
 """,
 
     // http://www.scala-sbt.org/using_sonatype.html
