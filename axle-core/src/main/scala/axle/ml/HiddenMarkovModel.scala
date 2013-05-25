@@ -44,3 +44,27 @@ class HiddenMarkovModel(
   )
 
 }
+
+/**
+ * http://en.wikipedia.org/wiki/Baum%E2%80%93Welch_algorithm
+ *
+ * The Baum–Welch algorithm is a particular case of a generalized expectation-maximization (GEM) algorithm.
+ * It can compute maximum likelihood estimates and posterior mode estimates for the parameters (transition
+ * and emission probabilities) of an HMM, when given only emissions as training data.
+ *
+ */
+
+object BaumWelch {
+
+  // For a given cell Si in the transition matrix, all paths to that cell are summed.
+  // There is a link (transition from that cell to a cell Sj).
+  val χ = 3d // the joint probability of Si, the link, and Sj can be calculated and normalized by the probability of the entire string.
+
+  val σ = 0d // probability of all paths with all links emanating from Si, Normalize this by the probability of the entire string.
+
+  val foo = χ / σ
+  // This is dividing the expected transition from Si to Sj by the expected transitions from Si.
+  // As the corpus grows, and particular transitions are reinforced, they will increase in value, reaching a local maximum.
+  // No way to ascertain a global maximum is known.  
+
+}
