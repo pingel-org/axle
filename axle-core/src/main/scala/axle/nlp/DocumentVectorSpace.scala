@@ -16,7 +16,6 @@ package axle.nlp
 import axle._
 import spire.math._
 import spire.algebra.MetricSpace
-import collection._
 
 trait DocumentVectorSpace {
 
@@ -28,8 +27,8 @@ trait DocumentVectorSpace {
 
   def stopwords(): Set[String]
 
-  def mrWordCount(is: Seq[String]): Map[String, Int] =
-    is.foldLeft(immutable.Map.empty[String, Int].withDefaultValue(0))({
+  def wordCount(is: Seq[String]): Map[String, Int] =
+    is.foldLeft(Map.empty[String, Int].withDefaultValue(0))({
       case (tally, doc) =>
         whitespace
           .split(doc.toLowerCase)
@@ -37,8 +36,8 @@ trait DocumentVectorSpace {
           .foldLeft(tally)({ case (tally, word) => tally + (word -> (tally(word) + 1)) })
     })
 
-  def mrWordExistsCount(is: Seq[String]): Map[String, Int] =
-    is.foldLeft(immutable.Map.empty[String, Int].withDefaultValue(0))({
+  def wordExistsCount(is: Seq[String]): Map[String, Int] =
+    is.foldLeft(Map.empty[String, Int].withDefaultValue(0))({
       case (tally, doc) =>
         whitespace
           .split(doc.toLowerCase)
@@ -47,7 +46,7 @@ trait DocumentVectorSpace {
           .foldLeft(tally)({ case (tally, word) => tally + (word -> (tally(word) + 1)) })
     })
 
-  def doc2vector(doc: String): TermVector = mrWordCount(List(doc))
+  def doc2vector(doc: String): TermVector = wordCount(List(doc))
 
   def space(): MetricSpace[TermVector, Double]
 

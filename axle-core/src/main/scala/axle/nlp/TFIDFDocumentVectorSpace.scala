@@ -19,7 +19,7 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
 
   lazy val numDocs = corpusIterator().size // TODO expensive
   lazy val _vectors = corpusIterator().map(doc2vector(_)).toIndexedSeq
-  lazy val documentFrequency = mrWordExistsCount(corpusIterator().toList) //.withDefaultValue(1)
+  lazy val documentFrequency = wordExistsCount(corpusIterator().toList).withDefaultValue(1)
 
   def vectors() = _vectors
 
