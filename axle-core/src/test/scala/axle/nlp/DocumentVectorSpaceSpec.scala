@@ -25,6 +25,15 @@ class DocumentVectorSpaceSpec extends Specification {
 
       1 must be equalTo (1)
     }
+
+    "work again" in {
+
+      val lines = Vector("foo bar baz", "foo fu", "fu fu fu bar")
+      val dvs = new UnweightedDocumentVectorSpace(Set("this", "the"), () => lines.iterator)
+
+      dvs.wordCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 4)
+      dvs.wordExistsCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 2)
+    }
   }
 
 }

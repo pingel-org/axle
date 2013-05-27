@@ -24,14 +24,18 @@ object Semigroups {
     def op(x: List[A], y: List[A]) = x ++ y
   }
 
-  //  implicit def MapSemigroup[K, V: Semigroup]: Semigroup[Map[K, V]] = new Semigroup[Map[K, V]] {
-  //    def op(x: Map[K, V], y: Map[K, V]) = {
-  //      val onlyX = x.keySet -- y.keySet
-  //      val onlyY = y.keySet -- x.keySet
-  //      val both = x.keySet.intersect(y.keySet)
-  //      ???
-  //    }
-  //  }
+  implicit def MapSemigroup[K, V: Semigroup]: Semigroup[Map[K, V]] = new Semigroup[Map[K, V]] {
+
+    def op(x: Map[K, V], y: Map[K, V]): Map[K, V] =
+      (x.keySet ++ y.keySet).map(k => {
+        if (x.contains(k))
+          if (y.contains(k)) (k, x(k) |+| y(k))
+          else (k, x(k))
+        else
+          (k, y(k))
+      }).toMap
+
+  }
 
   implicit def Tuple2Semigroup[R: Semigroup, S: Semigroup]: Semigroup[(R, S)] = new Semigroup[(R, S)] {
     def op(x: (R, S), y: (R, S)) = (x._1 |+| y._1, x._2 |+| y._2)
