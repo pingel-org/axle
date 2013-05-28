@@ -14,7 +14,6 @@ package axle.nlp
 // TODO stemming
 
 import axle._
-import spire.algebra.MetricSpace
 import spire.implicits._
 import spire.algebra._
 import spire.math._
@@ -29,26 +28,27 @@ trait DocumentVectorSpace {
 
   def stopwords(): Set[String]
 
+  implicit val intsemi = axle.algebra.Semigroups.IntSemigroup // TODO remove this
+
+  val emptyCount = Map.empty[String, Int].withDefaultValue(0)
+
   def countWordsInLine(line: String): Map[String, Int] =
     whitespace.split(line.toLowerCase)
       .filter(!stopwords.contains(_))
-      .foldLeft(Map.empty[String, Int].withDefaultValue(0))({ case (m, w) => m + (w -> (m(w) + 1)) })
+      .aggregate(emptyCount)((m, w) => m + (w -> (m(w) + 1)), _ |+| _)
 
   def uniqueWordsInLine(line: String): Map[String, Int] =
     whitespace.split(line.toLowerCase)
       .filter(!stopwords.contains(_))
       .toSet
-      .foldLeft(Map.empty[String, Int].withDefaultValue(0))({ case (m, w) => m + (w -> (m(w) + 1)) })
+      .map((w: String) => (w, 1))
+      .toMap
 
-  implicit val intsemi = axle.algebra.Semigroups.IntSemigroup
-      
   def wordCount(is: Seq[String]): Map[String, Int] =
-    is.aggregate(Map.empty[String, Int].withDefaultValue(0)
-    )((m, line) => m |+| countWordsInLine(line), _ |+| _)
+    is.aggregate(emptyCount)((m, line) => m |+| countWordsInLine(line), _ |+| _)
 
   def wordExistsCount(is: Seq[String]): Map[String, Int] =
-    is.aggregate(Map.empty[String, Int].withDefaultValue(0)
-    )((m, line) => m |+| uniqueWordsInLine(line), _ |+| _)
+    is.aggregate(emptyCount)((m, line) => m |+| uniqueWordsInLine(line), _ |+| _)
 
   def doc2vector(doc: String): TermVector = wordCount(List(doc))
 
