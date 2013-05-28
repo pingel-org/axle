@@ -1,6 +1,8 @@
 package axle.ml
 
 import axle.stats._
+import spire.implicits._
+import spire.algebra._
 
 object NaiveBayesClassifier {
 
@@ -17,7 +19,6 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
   classExtractor: DATA => CLASS) extends Classifier[DATA, CLASS]() {
 
   import axle._
-  import collection._
 
   val featureNames = featureRandomVariables.map(_.name)
 
@@ -27,29 +28,23 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
 
   // TODO no probability should ever be 0
 
-  // TODO: rephrase tallies as aggregations (vs. folds)
+  implicit val intsemi = axle.algebra.Semigroups.IntSemigroup // TODO remove this
 
   val featureTally =
-    data.foldLeft(immutable.Map.empty[(CLASS, String, FEATURE), Int].withDefaultValue(0))({
-      case (tally, d) => {
+    data.aggregate(Map.empty[(CLASS, String, FEATURE), Int].withDefaultValue(0))(
+      (tally, d) => {
         val fs = featureExtractor(d)
         val c = classExtractor(d)
-        (0 until fs.length).foldLeft(tally)({
-          case (tally, i) => {
-            val k = (c, featureNames(i), fs(i))
-            tally + (k -> (tally(k) + 1))
-          }
-        })
-      }
-    })
+        tally |+| featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> 1) }).toMap
+      },
+      _ |+| _
+    )
 
   val classTally =
-    data.foldLeft(immutable.Map.empty[CLASS, Int].withDefaultValue(0))({
-      case (tally, d) => {
-        val c = classExtractor(d)
-        tally + (c -> (tally(c) + 1))
-      }
-    }).withDefaultValue(1) // to avoid division by zero
+    data.aggregate(Map.empty[CLASS, Int].withDefaultValue(0))(
+      (tally, d) => tally + (classExtractor(d) -> 1),
+      _ |+| _
+    ).withDefaultValue(1) // to avoid division by zero
 
   val C = new RandomVariable0(classRandomVariable.name, classRandomVariable.values,
     distribution = Some(new TallyDistribution0(classTally)))
