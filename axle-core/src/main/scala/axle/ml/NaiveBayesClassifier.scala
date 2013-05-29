@@ -6,13 +6,13 @@ import spire.algebra._
 
 object NaiveBayesClassifier {
 
-  def apply[DATA, FEATURE, CLASS: Ordering](data: Seq[DATA], pFs: List[RandomVariable[FEATURE]], pC: RandomVariable[CLASS], featureExtractor: DATA => List[FEATURE], classExtractor: DATA => CLASS) =
+  def apply[DATA, FEATURE, CLASS: Ordering](data: collection.GenSeq[DATA], pFs: List[RandomVariable[FEATURE]], pC: RandomVariable[CLASS], featureExtractor: DATA => List[FEATURE], classExtractor: DATA => CLASS) =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
 }
 
 class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
-  data: Seq[DATA],
+  data: collection.GenSeq[DATA],
   featureRandomVariables: List[RandomVariable[FEATURE]],
   classRandomVariable: RandomVariable[CLASS],
   featureExtractor: DATA => List[FEATURE],
