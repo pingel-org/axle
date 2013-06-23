@@ -130,7 +130,7 @@ import axle.ast._
     name := "axle-hbase",
     libraryDependencies ++= Seq(
       "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
-      "org.apache.hbase" % "hbase" % "0.95.0"
+      "org.apache.hbase" % "hbase" % "0.94.5"
     )
   ).dependsOn(axleCore)
 
