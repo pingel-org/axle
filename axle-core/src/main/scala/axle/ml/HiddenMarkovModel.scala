@@ -58,7 +58,7 @@ object BaumWelch {
 
   // For a given cell Si in the transition matrix, all paths to that cell are summed.
   // There is a link (transition from that cell to a cell Sj).
-  val χ = 3d // the joint probability of Si, the link, and Sj can be calculated and normalized by the probability of the entire string.
+  val χ = 0d // the joint probability of Si, the link, and Sj can be calculated and normalized by the probability of the entire string.
 
   val σ = 0d // probability of all paths with all links emanating from Si, Normalize this by the probability of the entire string.
 

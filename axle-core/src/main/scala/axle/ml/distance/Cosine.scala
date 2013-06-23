@@ -17,24 +17,18 @@ import axle.matrix.JblasMatrixModule._
  *
  */
 
-case class Cosine(n: Int) extends NormedInnerProductSpace[Matrix[Double], Double] {
+case class Cosine(n: Int) extends InnerProductSpace[Matrix[Double], Double] {
 
-  def nroot = DoubleAlgebra
+  def negate(x: Matrix[Double]) = x.negate
 
-  val _space = new InnerProductSpace[Matrix[Double], Double] {
+  def zero = zeros[Double](1, n)
 
-    def negate(x: Matrix[Double]) = x.negate
+  def plus(x: Matrix[Double], y: Matrix[Double]) = x + y
 
-    def zero = zeros[Double](1, n)
+  def timesl(r: Double, v: Matrix[Double]) = v * r
 
-    def plus(x: Matrix[Double], y: Matrix[Double]) = x + y
+  def scalar = DoubleAlgebra
 
-    def timesl(r: Double, v: Matrix[Double]) = v * r
+  def dot(v: Matrix[Double], w: Matrix[Double]) = v.mulPointwise(w).rowSums().scalar
 
-    def scalar = DoubleAlgebra
-
-    def dot(v: Matrix[Double], w: Matrix[Double]) = v.mulPointwise(w).rowSums().scalar
-  }
-
-  def space = _space
 }

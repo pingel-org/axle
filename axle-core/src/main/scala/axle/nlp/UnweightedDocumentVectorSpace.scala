@@ -10,7 +10,7 @@ class UnweightedDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () 
   lazy val _vectors = corpusIterator().map(doc2vector(_)).toIndexedSeq
 
   def vectors() = _vectors
-  
+
   def stopwords() = _stopwords
 
   /**
@@ -19,29 +19,23 @@ class UnweightedDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () 
    *
    */
 
-  val _space = new NormedInnerProductSpace[TermVector, Double] {
+  val _space = (new InnerProductSpace[TermVector, Double] {
 
-    def nroot = DoubleAlgebra
+    def negate(x: TermVector) = x.map(kv => (kv._1, -1 * kv._2)) // Not sure this makes much sense
 
-    val _innerProductSpace = new InnerProductSpace[TermVector, Double] {
+    def zero = Map()
 
-      def negate(x: TermVector) = x.map(kv => (kv._1, -1 * kv._2)) // Not sure this makes much sense
+    def plus(x: TermVector, y: TermVector) =
+      (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
 
-      def zero = Map()
+    def timesl(r: Double, v: TermVector) = v.map(kv => (kv._1, (kv._2 * r).toInt))
 
-      def plus(x: TermVector, y: TermVector) =
-        (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
+    def scalar = DoubleAlgebra
 
-      def timesl(r: Double, v: TermVector) = v.map(kv => (kv._1, (kv._2 * r).toInt))
+    def dot(v1: TermVector, v2: TermVector) =
+      (v1.keySet intersect v2.keySet).toList.map(w => v1(w) * v2(w)).sum
 
-      def scalar = DoubleAlgebra
-
-      def dot(v1: TermVector, v2: TermVector) =
-        (v1.keySet intersect v2.keySet).toList.map(w => v1(w) * v2(w)).sum
-    }
-
-    def space() = _innerProductSpace
-  }
+  }).normed
 
   def space() = _space
 

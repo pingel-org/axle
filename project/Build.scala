@@ -95,7 +95,7 @@ import axle.ast._
       "joda-time" % "joda-time" % "2.1",
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
-      "org.spire-math" %% "spire" % "0.4.0"
+      "org.spire-math" %% "spire" % "0.5.0"
     )
   )
 

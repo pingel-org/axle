@@ -32,33 +32,26 @@ class TFIDFDocumentVectorSpace(_stopwords: Set[String], corpusIterator: () => It
    *
    */
 
-  val _space = new NormedInnerProductSpace[TermVector, Double] {
+  val _space = (new InnerProductSpace[TermVector, Double] {
 
-    def nroot = DoubleAlgebra
+    def negate(x: TermVector) = x.map(kv => (kv._1, -1 * kv._2)) // Not sure this makes much sense
 
-    val _innerProductSpace = new InnerProductSpace[TermVector, Double] {
+    def zero = Map()
 
-      def negate(x: TermVector) = x.map(kv => (kv._1, -1 * kv._2)) // Not sure this makes much sense
+    def plus(x: TermVector, y: TermVector) =
+      (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
 
-      def zero = Map()
+    def timesl(r: Double, v: TermVector) = v.map(kv => (kv._1, (kv._2 * r).toInt))
 
-      def plus(x: TermVector, y: TermVector) =
-        (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
+    def scalar = DoubleAlgebra
 
-      def timesl(r: Double, v: TermVector) = v.map(kv => (kv._1, (kv._2 * r).toInt))
+    def termWeight(term: String, doc: TermVector) =
+      doc(term) * math.log(numDocs / documentFrequency(term).toDouble)
 
-      def scalar = DoubleAlgebra
+    def dot(v1: TermVector, v2: TermVector) =
+      (v1.keySet intersect v2.keySet).toList.map(term => termWeight(term, v1) * termWeight(term, v2)).sum
 
-      def termWeight(term: String, doc: TermVector) =
-        doc(term) * math.log(numDocs / documentFrequency(term).toDouble)
-
-      def dot(v1: TermVector, v2: TermVector) =
-        (v1.keySet intersect v2.keySet).toList.map(term => termWeight(term, v1) * termWeight(term, v2)).sum
-
-    }
-
-    def space() = _innerProductSpace
-  }
+  }).normed
 
   def space() = _space
 
