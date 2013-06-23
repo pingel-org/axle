@@ -12,7 +12,7 @@ object AxleBuild extends Build {
 
     version := "0.1-SNAPSHOT", // last milestone was M10
 
-    scalaVersion := "2.10.1",
+    scalaVersion := "2.10.2",
 
     crossScalaVersions := Seq("2.10.1"),
 
@@ -153,7 +153,7 @@ import axle.ast._
     name := "axle-visualize",
     libraryDependencies ++= Seq(
       "net.sf.jung" % "jung-visualization" % jungVersion,
-      "com.typesafe.akka" %% "akka-actor" % "2.2-M3"
+      "com.typesafe.akka" %% "akka-actor" % "2.2.0-RC1"
     )
   ).dependsOn(axleCore)
 
