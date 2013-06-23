@@ -92,7 +92,7 @@ import axle.ast._
       "net.sf.jung" % "jung-api" % jungVersion,
       "net.sf.jung" % "jung-graph-impl" % jungVersion,
       "net.sf.jung" % "jung-io" % jungVersion,
-      "joda-time" % "joda-time" % "2.1",
+      "joda-time" % "joda-time" % "2.2",
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
       "org.spire-math" %% "spire" % "0.5.0"
@@ -118,9 +118,7 @@ import axle.ast._
   ).settings(
     name := "axle-languages",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.1.3"
-      //"net.liftweb" % "lift-json_2.9.0-1" % "2.4",
-      //"net.liftweb" % "lift-common_2.9.0-1" % "2.4"
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.2.1"
     )
   ).dependsOn(axleCore)
 
@@ -132,7 +130,7 @@ import axle.ast._
     name := "axle-hbase",
     libraryDependencies ++= Seq(
       "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
-      "org.apache.hbase" % "hbase" % "0.94.5"
+      "org.apache.hbase" % "hbase" % "0.95.0"
     )
   ).dependsOn(axleCore)
 
