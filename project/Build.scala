@@ -14,7 +14,7 @@ object AxleBuild extends Build {
 
     scalaVersion := "2.10.2",
 
-    crossScalaVersions := Seq("2.10.1"),
+    crossScalaVersions := Seq("2.10.2"),
 
     libraryDependencies += "org.specs2" %% "specs2" % "1.13" % "test",
 
@@ -130,7 +130,7 @@ import axle.ast._
     name := "axle-hbase",
     libraryDependencies ++= Seq(
       "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
-      "org.apache.hbase" % "hbase" % "0.94.5"
+      "org.apache.hbase" % "hbase" % "0.94.7"
     )
   ).dependsOn(axleCore)
 
