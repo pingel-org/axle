@@ -8,6 +8,10 @@ object Semigroups {
     def op(x: Int, y: Int) = x + y
   }
 
+  implicit def LongSemigroup: Semigroup[Long] = new Semigroup[Long] {
+    def op(x: Long, y: Long) = x + y
+  }
+  
   def IntMultSemigroup: Semigroup[Int] = new Semigroup[Int] {
     def op(x: Int, y: Int) = x * y
   }

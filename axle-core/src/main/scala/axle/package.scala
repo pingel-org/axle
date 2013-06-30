@@ -34,6 +34,8 @@ package object axle {
 
   implicit def enrichGenSet[T](s: GenSet[T]) = EnrichedGenSet(s)
 
+  implicit def enrichGenSeq[T](genSeq: GenSeq[T]) = EnrichedGenSeq(genSeq)
+  
   implicit def enrichGenTraversable[T: Manifest](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
 
   implicit def enrichIndexedSeq[T: Manifest](is: IndexedSeq[T]) = EnrichedIndexedSeq(is)

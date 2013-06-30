@@ -20,8 +20,6 @@ import spire.math._
 
 trait DocumentVectorSpace {
 
-  import ScalaMapReduce.mapReduce
-
   type TermVector = Map[String, Int]
 
   val whitespace = """\s+""".r

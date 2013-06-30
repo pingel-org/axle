@@ -1,16 +1,17 @@
 package axle.nlp
 
-import axle.ScalaMapReduce._
+import axle._
+import spire.implicits._
 
 trait Corpus[D <: Document] {
 
-  def documents(): IndexedSeq[D]
+  def documents(): collection.GenSeq[D]
 
   val wordCutoff = 20
   val maxBigrams = 200
 
   val topWordCounts =
-    count(documents.iterator, (d: D) => d.tokens)
+    documents.flatMap(_.tokens).countMap()
       .toList.sortBy(_._2).reverse
       .filter(_._2 > wordCutoff)
   // .take(maxWords)
@@ -25,7 +26,7 @@ trait Corpus[D <: Document] {
   }
 
   lazy val topBigramCounts =
-    count(documents.iterator, (d: D) => d.tokens.zip(d.tokens.tail))
+    documents.flatMap((d: D) => d.tokens.zip(d.tokens.tail)).countMap()
       .toList.sortBy(_._2).reverse
       .filter(_._2 > 1)
       .take(maxBigrams)
