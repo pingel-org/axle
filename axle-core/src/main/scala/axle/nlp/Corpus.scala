@@ -2,13 +2,16 @@ package axle.nlp
 
 import axle._
 import spire.implicits._
+import collection.GenSeq
 
-trait Corpus[D <: Document] {
+class Corpus[T: Document](documents: GenSeq[T]) {
 
-  def documents(): collection.GenSeq[D]
+  val doc = implicitly[Document[T]]
 
-  lazy val wordCountMap = documents flatMap (_.tokens) countMap
+  lazy val wordCountMap: Map[String, Long] = documents flatMap (doc.tokens(_)) countMap
 
+  def wordCount(word: String) = wordCountMap.get(word).getOrElse(0l)
+  
   def topWordCounts(cutoff: Long) =
     wordCountMap
       .filter { case (_, n: Long) => n > cutoff }
@@ -20,7 +23,7 @@ trait Corpus[D <: Document] {
 
   override def toString(): String = {
 
-    val wordCutoff: Long = 20
+    val wordCutoff = 20L
 
     s"""
 Corpus of ${documents.length} documents.
@@ -30,7 +33,10 @@ Top 10 bigrams: ${topBigrams(10).mkString(", ")}
 """
   }
 
-  lazy val bigramCounts = documents.flatMap((d: D) => d.tokens.zip(d.tokens.tail)).countMap
+  lazy val bigramCounts = documents.flatMap((d: T) => {
+    val tokens = doc.tokens(d)
+    tokens.zip(tokens.tail)
+  }).countMap
 
   def sortedBigramCounts() =
     bigramCounts
@@ -39,6 +45,7 @@ Top 10 bigrams: ${topBigrams(10).mkString(", ")}
       .sortBy { case (bg: (String, String), n: Long) => n }
       .reverse
 
-  def topBigrams(maxBigrams: Int) = sortedBigramCounts.take(maxBigrams).map(_._1)
+  def topBigrams(maxBigrams: Int) =
+    sortedBigramCounts take (maxBigrams) map { case (bigram: (String, String), _) => bigram }
 
 }

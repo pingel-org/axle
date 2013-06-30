@@ -35,10 +35,9 @@ trait KMeansModule {
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
-    space: MetricSpace[Matrix[Double], Double],
     K: Int,
-    iterations: Int): KMeansClassifier[T] =
-    KMeansClassifier(data, N, featureExtractor, constructor, space, K, iterations)
+    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double]): KMeansClassifier[T] =
+    KMeansClassifier(data, N, featureExtractor, constructor, K, iterations)
 
   // TODO: default distance = distance.euclidean
 
@@ -61,9 +60,8 @@ trait KMeansModule {
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
-    space: MetricSpace[Matrix[Double], Double],
     K: Int,
-    iterations: Int) extends Classifier[T, Int] {
+    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double]) extends Classifier[T, Int] {
 
     val features = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
 

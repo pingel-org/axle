@@ -28,14 +28,15 @@ class KMeansSpecification extends Specification {
           (0 until 30).map(i => randomPoint(Foo(5, 15), 1.0)) ++
           (0 until 25).map(i => randomPoint(Foo(15, 5), 1.0)))
 
+      implicit val space = Euclidian(2)
+
       val km = classifier(
         data,
-        N = 2,
+        2,
         (p: Foo) => List(p.x, p.y),
         (features: Seq[Double]) => Foo(features(0), features(1)),
-        Euclidian(2),
-        K = 3,
-        iterations = 100)
+        3,
+        100)(space)
 
       val exemplar = km.exemplar(km(Foo(14.5, 14.5)))
 

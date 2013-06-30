@@ -2,17 +2,39 @@ package axle.nlp
 
 import axle._
 import spire.implicits._
+import collection.GenSeq
 
-class Document(text: String) {
+object Document {
 
-  lazy val tokens = language.English.tokenize(text)
+  implicit object textDocument extends Document[String] {
+    
+    def tokens(text: String) = language.English.tokenize(text)
 
-  lazy val bigrams = tokens.sliding(2).toVector
-  
-  lazy val wordCounts = tokens.countMap
-  
-  lazy val bigramCounts = bigrams.countMap
+    def bigrams(text: String) = tokens(text).sliding(2).toVector
 
-  lazy val averageWordLength = tokens.map(_.length).sum / tokens.length.toDouble
+    def wordCounts(text: String) = tokens(text).countMap
+
+    def bigramCounts(text: String) = bigrams(text).countMap
+
+    def averageWordLength(text: String) = {
+      val ts = tokens(text)
+      ts.map(_.length).sum / ts.length.toDouble
+    }
+
+  }
+
+}
+
+trait Document[T] {
+
+  def tokens(text: T): GenSeq[String]
+
+  def bigrams(text: T): GenSeq[IndexedSeq[String]]
+
+  def wordCounts(text: T): Map[String, Long]
+
+  def bigramCounts(text: T): Map[IndexedSeq[String], Long]
+
+  def averageWordLength(text: T): Double
 
 }
