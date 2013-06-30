@@ -7,30 +7,38 @@ trait Corpus[D <: Document] {
 
   def documents(): collection.GenSeq[D]
 
-  val wordCutoff = 20
-  val maxBigrams = 200
+  lazy val wordCountMap = documents flatMap (_.tokens) countMap
 
-  val topWordCounts =
-    documents.flatMap(_.tokens).countMap()
-      .toList.sortBy(_._2).reverse
-      .filter(_._2 > wordCutoff)
-  // .take(maxWords)
+  def topWordCounts(cutoff: Long) =
+    wordCountMap
+      .filter { case (_, n: Long) => n > cutoff }
+      .toList
+      .sortBy { case (_, n: Long) => n }
+      .reverse
 
-  val topWords = topWordCounts.map(_._1)
+  def topWords(cutoff: Long) = topWordCounts(cutoff) map { case (word: String, _) => word }
 
   override def toString(): String = {
-    "Corpus of " + documents.length + " documents.\n" +
-      "There are " + topWords.length + " unique words used more than " + wordCutoff + " time(s).\n" +
-      "Top 10 words: " + topWords.take(10).mkString(", ") + "\n" +
-      "Top 10 bigrams: " + topBigrams.take(10).mkString(", ")
+
+    val wordCutoff: Long = 20
+
+    s"""
+Corpus of ${documents.length} documents.
+There are ${topWords(wordCutoff).length} unique words used more than $wordCutoff time(s).
+Top 10 words: ${topWords(wordCutoff).take(10).mkString(", ")}
+Top 10 bigrams: ${topBigrams(10).mkString(", ")}
+"""
   }
 
-  lazy val topBigramCounts =
-    documents.flatMap((d: D) => d.tokens.zip(d.tokens.tail)).countMap()
-      .toList.sortBy(_._2).reverse
-      .filter(_._2 > 1)
-      .take(maxBigrams)
+  lazy val bigramCounts = documents.flatMap((d: D) => d.tokens.zip(d.tokens.tail)).countMap
 
-  lazy val topBigrams = topBigramCounts.map(_._1)
+  def sortedBigramCounts() =
+    bigramCounts
+      .filter { case (_, n: Long) => n > 1 }
+      .toList
+      .sortBy { case (bg: (String, String), n: Long) => n }
+      .reverse
+
+  def topBigrams(maxBigrams: Int) = sortedBigramCounts.take(maxBigrams).map(_._1)
 
 }
