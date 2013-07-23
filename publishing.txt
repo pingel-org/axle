@@ -1,0 +1,13 @@
+
+
+
+
+https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-8.ReleaseIt
+
+http://www.cakesolutions.net/teamblogs/2012/01/28/publishing-sbt-projects-to-nexus/
+
+http://www.scala-sbt.org/0.12.3/docs/Community/Using-Sonatype.html
+
+http://www.scala-sbt.org/sbt-pgp/
+
+http://www.scala-sbt.org/release/docs/Detailed-Topics/Global-Settings
