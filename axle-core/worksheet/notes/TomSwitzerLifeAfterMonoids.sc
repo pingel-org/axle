@@ -1,12 +1,13 @@
+
 object TomSwitzerLifeAfterMonoids {
 
-  println("Welcome to the Scala worksheet")       //> Welcome to the Scala worksheet
+  println("Welcome to the Scala worksheet")
 
   // http://www.youtube.com/watch?v=xO9AoZNSOH4
 
   // Monoids
 
-  trait Monoid[A] {
+  trait MonoidX[A] {
     def id: A
     def op(x: A, y: A): A
   }
@@ -24,7 +25,7 @@ object TomSwitzerLifeAfterMonoids {
 
   // A monoid with symmetry!
 
-  trait Group[A] extends Monoid[A] {
+  trait Group[A] extends MonoidX[A] {
     def inverse(a: A): A
   }
 
@@ -39,7 +40,34 @@ object TomSwitzerLifeAfterMonoids {
   // log example
   // * We want a "catalogue" (add and remove items; stored in append-only db)
   // * The goal: summarize the items in the catalogue
-  // * Can groups help
+  // * Can groups help?
+
+  //trait Catalogue[A] {
+  //  def reduce0[B: MonoidX](f: Event[A] => B): B
+  //}
+
+  sealed trait Event[A]
+  case class Add[A](item: A) extends Event[A]
+  case class Remove[A](item: A) extends Event[A]
+
+  //def count[A](cat: Catalogue[A]): Long =
+  //  cat.reduce0[Long]({
+  //    case Add(_) => 1L
+  //    case Remove(_) => -1L
+  //  })
+
+  // abstract over the symmetry
+
+  trait Catalogue[A] {
+
+    def reduce0[B: MonoidX](f: Event[A] => B): B
+
+    def reduce[A, B: Group](f: A => B): B = reduce0({
+      case Add(a) => f(a)
+      case Remove(a) => f(a).inverse
+    })(Group[B])
+
+  }
 
 
   // Rings
