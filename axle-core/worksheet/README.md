@@ -9,11 +9,11 @@ Scala
 
 Nick Partridge "Scalaz" [video](http://vimeo.com/10482466)
 
-Dan Rosen "Typeclasses" [notes](notes/TomSwitzerLifeAfterMonoids.sc) [video](http://www.youtube.com/watch?v=sVMES4RZF-8)
+Dan Rosen "Typeclasses" [video](http://www.youtube.com/watch?v=sVMES4RZF-8)
 
 Bill Venners "Implicit Conversions => Implicit Parameters"
 
-Tom Switzer on Life After Monoids [video](http://www.youtube.com/watch?v=xO9AoZNSOH4)
+Tom Switzer "Life After Monoids" [notes](TomSwitzerLifeAfterMonoids.sc) [video](http://www.youtube.com/watch?v=xO9AoZNSOH4)
 
 type lambda
 
