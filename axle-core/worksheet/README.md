@@ -7,7 +7,7 @@ are in this directory
 Scala
 =====
 
-Nick Partridge "Scalaz" [video](http://vimeo.com/10482466)
+Nick Partridge "Scalaz" [notes](NickPartridgeScalaz) [video](http://vimeo.com/10482466)
 
 Dan Rosen "Typeclasses" [video](http://www.youtube.com/watch?v=sVMES4RZF-8)
 
