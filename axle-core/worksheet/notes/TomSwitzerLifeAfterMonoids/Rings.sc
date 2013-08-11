@@ -1,14 +1,14 @@
 object Rings {
 
-  println("Welcome to the Scala worksheet")
+  println("Welcome to the Scala worksheet")       //> Welcome to the Scala worksheet
 
   object lib {
-  
+
     // A ring is an abelian group (+) (commutative addition)
-    
+
     // with multiplication (*) that distributes:
     //   x * (y + z) == x * y + x * z
-  
+
     trait Ring[A] {
       def zero: A
       def plus(x: A, y: A): A
@@ -18,9 +18,14 @@ object Rings {
       def times(x: A, y: A): A
     }
 
-    def turn[R: Ring](p: (R, R), q: (R, R), r: (R, R)): R =
-      (q._1 - p._1) * (r._2 - p._2) - (r._1 - p._1) * (q._2 - p._2)
-  
+    def turn[R: Ring](p: (R, R), q: (R, R), r: (R, R)): R = {
+      val ring = implicitly[Ring[R]]
+      import ring._
+      minus(
+        times((minus(q._1, p._1)), minus(r._2, p._2)),
+        times((minus(r._1, p._1)), minus(q._2, p._2)))
+    }
+
   }
 
 }
