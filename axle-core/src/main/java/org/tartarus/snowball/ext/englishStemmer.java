@@ -11,7 +11,7 @@ import org.tartarus.snowball.Among;
 
 public class englishStemmer extends org.tartarus.snowball.SnowballStemmer {
 
-private static final long serialVersionUID = 1L;
+//private static final long serialVersionUID = 1L;
 
         private final static englishStemmer methodObject = new englishStemmer ();
 
@@ -168,12 +168,12 @@ private static final long serialVersionUID = 1L;
         private int I_p2;
         private int I_p1;
 
-                private void copy_from(englishStemmer other) {
-                    B_Y_found = other.B_Y_found;
-                    I_p2 = other.I_p2;
-                    I_p1 = other.I_p1;
-                    super.copy_from(other);
-                }
+//                private void copy_from(englishStemmer other) {
+//                    B_Y_found = other.B_Y_found;
+//                    I_p2 = other.I_p2;
+//                    I_p1 = other.I_p1;
+//                    super.copy_from(other);
+//                }
 
                 private boolean r_prelude() {
             int v_1;
