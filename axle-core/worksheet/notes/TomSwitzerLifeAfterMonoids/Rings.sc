@@ -4,9 +4,9 @@ object Rings {
 
   object lib {
 
-    // A ring is an abelian group (+) (commutative addition)
+    // A ring is an abelian group (group with commutative addition)
 
-    // with multiplication (*) that distributes:
+    // with multiplication that distributes over addition:
     //   x * (y + z) == x * y + x * z
 
     trait Ring[A] {
@@ -18,6 +18,22 @@ object Rings {
       def times(x: A, y: A): A
     }
 
+    object Ring {
+
+      implicit object DoubleRing extends Ring[Double] {
+
+        def zero = 0D
+
+        def plus(x: Double, y: Double): Double = x + y
+
+        def negate(x: Double): Double = -x
+
+        def one: Double = 1D
+
+        def times(x: Double, y: Double): Double = x * y
+      }
+    }
+
     def turn[R: Ring](p: (R, R), q: (R, R), r: (R, R)): R = {
       val ring = implicitly[Ring[R]]
       import ring._
@@ -27,5 +43,28 @@ object Rings {
     }
 
   }
+
+  import lib._
+
+  object GrahamScan {
+
+    def genPoints[R](n: Int)(gen: () => R): Seq[(R, R)] =
+      (0 until n) map { i => (gen(), gen()) }
+
+    // scan from left to right through 'sorted'
+    // three at a time (p, q, r) throwing out any q if p->q->r forms a right turn
+    def halfHull[R: Ring: Ordering](sorted: Seq[(R, R)]): Seq[(R, R)] = {
+      Nil
+    }
+
+    def hull[R: Ring: Ordering](points: Seq[(R, R)]): Seq[(R, R)] = {
+      val sorted = points.toList.sorted
+      halfHull(sorted).drop(1) ++ halfHull(sorted.reverse).drop(1)
+    }
+  }
+
+  import GrahamScan._
+
+  hull(genPoints(1000)(util.Random.nextGaussian)) //> res0: Seq[(Double, Double)] = List()
 
 }
