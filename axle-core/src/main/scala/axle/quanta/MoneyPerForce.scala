@@ -32,7 +32,7 @@ class MoneyPerForce extends Quantum {
 
   lazy val _conversionGraph = conversions(
     List(
-      derive(USD.by[Force.type, this.type](pound, this), Some("$/lb"))),
+      derive(USD.by[Force.type, this.type](pound, this), Some("$/lb"), Some("$/lb"))),
     (vs: Seq[Vertex[MoneyPerForceQuantity]]) => vs match {
       case _ => trips2fns(List())
     })

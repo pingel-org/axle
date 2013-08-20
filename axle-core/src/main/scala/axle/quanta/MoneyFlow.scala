@@ -32,7 +32,7 @@ class MoneyFlow extends Quantum {
 
   lazy val _conversionGraph = conversions(
     List(
-      derive(USD.by[Time.type, this.type](hour, this), Some("$/hr"))),
+      derive(USD.by[Time.type, this.type](hour, this), Some("$/hr"), Some("$/hr"))),
     (vs: Seq[Vertex[MoneyFlowQuantity]]) => vs match {
       case _ => trips2fns(List())
     })
