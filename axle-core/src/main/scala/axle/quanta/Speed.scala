@@ -32,9 +32,9 @@ class Speed extends Quantum {
 
   lazy val _conversionGraph = conversions(
     List(
-      derive(meter.over[Time.type, this.type](second, this)),
-      derive(ft.over[Time.type, this.type](second, this)),
-      derive(mile.over[Time.type, this.type](hour, this)),
+      derive(meter.over[Time.type, this.type](second, this), Some("mps")),
+      derive(ft.over[Time.type, this.type](second, this), Some("fps")),
+      derive(mile.over[Time.type, this.type](hour, this), Some("mph")),
       unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light")),
       unit("Speed limit", "speed limit")
     ),
