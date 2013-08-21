@@ -212,6 +212,11 @@ trait MatrixModule {
 
   def matrix[T: C](m: Int, n: Int, f: (Int, Int) => T): Matrix[T]
 
+  /**
+   * Hilbert matrix
+   */
+  def hilb(n: Int) = matrix[Double](n, n, (r: Int, c: Int) => 1D / (r + c + 1))
+
   def median(m: Matrix[Double]): Matrix[Double] = {
     val sorted = m.sortColumns
     if (m.rows % 2 == 0) {
