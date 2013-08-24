@@ -6,8 +6,6 @@ import scala.tools.nsc.interpreter.ILoop
 
 object AxleRepl extends App {
 
-  // System.setProperty("file.encoding", "UTF-8")
-  
   val settings = new Settings
 
   settings.usejavacp.value = true
@@ -19,7 +17,11 @@ object AxleRepl extends App {
 
 class AxleILoop extends ILoop {
 
-  override def prompt = "αχλε ↦ "
+  override def prompt =
+    if (System.getProperty("file.encoding").toLowerCase() equals "utf-8")
+      "αχλε ↦ "
+    else
+      "axle > "
 
   addThunk {
     intp.beQuietDuring {
@@ -33,16 +35,17 @@ class AxleILoop extends ILoop {
         "axle.ml._",
         "axle.visualize._",
         "axle.ast._",
-        "scala.collection._"
-      )
+        "scala.collection._")
     }
   }
 
   override def printWelcome() {
     echo("""
         
-Welcome to αχλε
+Welcome to axle
 
+  axle-lang.org
+        
 """)
   }
 }
