@@ -176,7 +176,10 @@ import axle.ast._
     name := "axle-repl",
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-compiler" % "2.10.2"
+      // "org.scala-lang" % "scala-library" % "2.10.2",
+      // "org.scala-lang" % "scala-reflect" % "2.10.2",
+      // "org.scala-lang" % "jline" % "2.10.2"
     )
-  ).dependsOn()
+  ).dependsOn(axleCore, axleVisualize, axleGames, axleLanguages)
 
 }
