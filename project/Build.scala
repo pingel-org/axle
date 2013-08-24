@@ -31,15 +31,6 @@ object AxleBuild extends Build {
 
     initialCommands in console := """
 import axle._
-import axle.algebra._
-import axle.stats._
-import axle.quanta._
-import axle.graph._
-import axle.matrix._
-import axle.ml._
-//import axle.visualize._
-import axle.ast._
-//import collection._
 """,
 
     // http://www.scala-sbt.org/using_sonatype.html
@@ -172,14 +163,22 @@ import axle.ast._
     id = "axle-repl",
     base = file("axle-repl"),
     settings = sharedSettings ++ assemblySettings
-  ).settings(
+  ).settings(net.virtualvoid.sbt.graph.Plugin.graphSettings: _*).settings(
+
     name := "axle-repl",
+
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-compiler" % "2.10.2"
-      // "org.scala-lang" % "scala-library" % "2.10.2",
-      // "org.scala-lang" % "scala-reflect" % "2.10.2",
-      // "org.scala-lang" % "jline" % "2.10.2"
-    )
+      "org.scala-lang" % "scala-compiler" % "2.10.2",
+      "org.scala-lang" % "jline" % "2.10.2"
+    ),
+
+    mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
+      case PathList("org", "fusesource", "jansi", xs @ _*) => MergeStrategy.first
+      case PathList("META-INF", "native", "osx", "ibjansi.jnilib") => MergeStrategy.first
+      case x => old(x)
+    }
+  }
+
   ).dependsOn(axleCore, axleVisualize, axleGames, axleLanguages)
 
 }
