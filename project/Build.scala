@@ -3,6 +3,8 @@ package axle
 
 import sbt._
 import Keys._
+import sbtassembly.Plugin._
+import AssemblyKeys._
 
 object AxleBuild extends Build {
 
@@ -98,7 +100,7 @@ import axle.ast._
       "org.spire-math" %% "spire" % "0.5.0"
     )
   )
-
+/*
   lazy val axleScalding = Project(
     id = "axle-scalding",
     base = file("axle-scalding"),
@@ -110,6 +112,7 @@ import axle.ast._
       "com.twitter" %% "scalding-core" % "0.9.0-SNAPSHOT"
     )
   ).dependsOn(axleCore)
+*/
 
   lazy val axleLanguages = Project(
     id = "axle-languages",
@@ -163,6 +166,17 @@ import axle.ast._
     test := { },
     publish := { },
     publishLocal := { }
-  ).aggregate(axleCore, axleGames, axleVisualize, axleScalding, axleHBase, axleLanguages)
+  ).aggregate(axleCore, axleGames, axleVisualize, /*axleScalding,*/ axleHBase, axleLanguages)
+
+  lazy val axleRepl = Project(
+    id = "axle-repl",
+    base = file("axle-repl"),
+    settings = sharedSettings ++ assemblySettings
+  ).settings(
+    name := "axle-repl",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-compiler" % "2.10.2"
+    )
+  ).dependsOn()
 
 }
