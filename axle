@@ -1,0 +1,3 @@
+#!/bin/bash
+
+java -Dfile.encoding=UTF-8 -Xmx1G -jar axle-repl/target/scala-2.10/axle-repl-assembly-0.1-SNAPSHOT.jar
