@@ -23,7 +23,18 @@ class AxleILoop extends ILoop {
 
   addThunk {
     intp.beQuietDuring {
-      intp.addImports("axle._")
+      intp.addImports(
+        "axle._",
+        "axle.algebra._",
+        "axle.stats._",
+        "axle.quanta._",
+        "axle.graph._",
+        "axle.matrix._",
+        "axle.ml._",
+        "axle.visualize._",
+        "axle.ast._",
+        "scala.collection._"
+      )
     }
   }
 
