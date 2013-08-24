@@ -145,7 +145,7 @@ import axle._
     name := "axle-visualize",
     libraryDependencies ++= Seq(
       "net.sf.jung" % "jung-visualization" % jungVersion,
-      "com.typesafe.akka" %% "akka-actor" % "2.2.0-RC1"
+      "com.typesafe.akka" %% "akka-actor" % "2.2.0"
     )
   ).dependsOn(axleCore)
 
