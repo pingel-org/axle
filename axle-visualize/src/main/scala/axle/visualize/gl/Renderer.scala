@@ -51,13 +51,12 @@ object Render {
     def render(sphere: TexturedSphere, scene: Scene, gl: GL2, glu: GLU): Unit = {
 
       import sphere._
-      gl.glColor3f(1f, 1f, 1f)
+      gl.glColor3f(reflectionColor.red, reflectionColor.green, reflectionColor.blue)
       gl.glMaterialfv(GL_FRONT, GL_AMBIENT, rgba, 0)
       gl.glMaterialfv(GL_FRONT, GL_SPECULAR, rgba, 0)
       gl.glMaterialf(GL_FRONT, GL_SHININESS, 0.5f)
 
       val texture = scene.textureFor(textureUrl)
-
       texture.enable(gl)
       texture.bind(gl)
 
@@ -66,8 +65,6 @@ object Render {
       glu.gluQuadricDrawStyle(earth, GLU.GLU_FILL)
       glu.gluQuadricNormals(earth, GLU.GLU_FLAT)
       glu.gluQuadricOrientation(earth, GLU.GLU_OUTSIDE)
-      val slices = 96
-      val stacks = 64
       glu.gluSphere(earth, radius, slices, stacks)
       glu.gluDeleteQuadric(earth)
     }
@@ -77,18 +74,29 @@ object Render {
     def render(triangle: Triangle, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import triangle._
       gl.glBegin(GL_TRIANGLES)
-
-      //      gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, colorRed)
-      //      gl.glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, colorRed)
-      //      gl.glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, colorRed)
-      //      gl.glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, 4)
-      //      gl.glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, colorBlack)
-
-      gl.glColor3f(1.0f, 0.0f, 0.0f)
+      gl.glColor3f(color.red, color.green, color.blue)
       gl.glVertex3f(0.0f, length, 0.0f)
-      gl.glColor3f(0.0f, 1.0f, 0.0f)
       gl.glVertex3f(-length, -length, 0.0f)
-      gl.glColor3f(0.0f, 0.0f, 1.0f)
+      gl.glVertex3f(length, -length, 0.0f)
+      gl.glEnd()
+    }
+  }
+
+  // gl.glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, colorRed)
+  // gl.glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, colorRed)
+  // gl.glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, colorRed)
+  // gl.glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, 4)
+  // gl.glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, colorBlack)
+  
+  implicit val triColorTriangleRenderer = new Render[TriColorTriangle] {
+    def render(triangle: TriColorTriangle, scene: Scene, gl: GL2, glu: GLU): Unit = {
+      import triangle._
+      gl.glBegin(GL_TRIANGLES)
+      gl.glColor3f(c1.red, c1.green, c1.blue)
+      gl.glVertex3f(0.0f, length, 0.0f)
+      gl.glColor3f(c2.red, c2.green, c2.blue)
+      gl.glVertex3f(-length, -length, 0.0f)
+      gl.glColor3f(c3.red, c3.green, c3.blue)
       gl.glVertex3f(length, -length, 0.0f)
       gl.glEnd()
     }
@@ -99,43 +107,78 @@ object Render {
       import cube._
       gl.glBegin(GL_QUADS)
 
-      // Top-face
-      gl.glColor3f(0.0f, 1.0f, 0.0f) // green
+      gl.glColor3f(color.red, color.green, color.blue)
+      
       gl.glVertex3f(length, length, -length)
       gl.glVertex3f(-length, length, -length)
       gl.glVertex3f(-length, length, length)
       gl.glVertex3f(length, length, length)
 
-      // Bottom-face
-      gl.glColor3f(1.0f, 0.5f, 0.0f) // orange
       gl.glVertex3f(length, -length, length)
       gl.glVertex3f(-length, -length, length)
       gl.glVertex3f(-length, -length, -length)
       gl.glVertex3f(length, -length, -length)
 
-      // Front-face
-      gl.glColor3f(1.0f, 0.0f, 0.0f) // red
       gl.glVertex3f(length, length, length)
       gl.glVertex3f(-length, length, length)
       gl.glVertex3f(-length, -length, length)
       gl.glVertex3f(length, -length, length)
 
-      // Back-face
-      gl.glColor3f(1.0f, 1.0f, 0.0f) // yellow
       gl.glVertex3f(length, -length, -length)
       gl.glVertex3f(-length, -length, -length)
       gl.glVertex3f(-length, length, -length)
       gl.glVertex3f(length, length, -length)
 
-      // Left-face
-      gl.glColor3f(0.0f, 0.0f, 1.0f) // blue
       gl.glVertex3f(-length, length, length)
       gl.glVertex3f(-length, length, -length)
       gl.glVertex3f(-length, -length, -length)
       gl.glVertex3f(-length, -length, length)
 
-      // Right-face
-      gl.glColor3f(1.0f, 0.0f, 1.0f) // violet
+      gl.glVertex3f(length, length, -length)
+      gl.glVertex3f(length, length, length)
+      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(length, -length, -length)
+
+      gl.glEnd()
+    }
+  }
+
+  implicit val multiColorCubeRenderer = new Render[MultiColorCube] {
+    def render(cube: MultiColorCube, scene: Scene, gl: GL2, glu: GLU): Unit = {
+      import cube._
+      gl.glBegin(GL_QUADS)
+
+      gl.glColor3f(topColor.red, topColor.green, topColor.blue)
+      gl.glVertex3f(length, length, -length)
+      gl.glVertex3f(-length, length, -length)
+      gl.glVertex3f(-length, length, length)
+      gl.glVertex3f(length, length, length)
+
+      gl.glColor3f(bottomColor.red, bottomColor.green, bottomColor.blue)
+      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(length, -length, -length)
+
+      gl.glColor3f(frontColor.red, frontColor.green, frontColor.blue)
+      gl.glVertex3f(length, length, length)
+      gl.glVertex3f(-length, length, length)
+      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(length, -length, length)
+
+      gl.glColor3f(backColor.red, backColor.green, backColor.blue)
+      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(-length, length, -length)
+      gl.glVertex3f(length, length, -length)
+
+      gl.glColor3f(leftColor.red, leftColor.green, leftColor.blue)
+      gl.glVertex3f(-length, length, length)
+      gl.glVertex3f(-length, length, -length)
+      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(-length, -length, length)
+
+      gl.glColor3f(rightColor.red, rightColor.green, rightColor.blue)
       gl.glVertex3f(length, length, -length)
       gl.glVertex3f(length, length, length)
       gl.glVertex3f(length, -length, length)
@@ -151,36 +194,63 @@ object Render {
       import pyramid._
       gl.glBegin(GL_TRIANGLES)
 
-      // Font-face triangle
-      gl.glColor3f(1f, 0f, 0f)
+      gl.glColor3f(color.red, color.green, color.blue)
+      
       gl.glVertex3f(0f, length, 0f)
-      gl.glColor3f(0f, 1f, 0f)
       gl.glVertex3f(-length, -length, length)
-      gl.glColor3f(0f, 0f, 1f)
       gl.glVertex3f(length, -length, length)
 
-      // Right-face triangle                                                                                                                                                        
-      gl.glColor3f(1f, 0f, 0f)
       gl.glVertex3f(0f, length, 0f)
-      gl.glColor3f(0f, 0f, 1f)
       gl.glVertex3f(length, -length, length)
-      gl.glColor3f(0f, 1f, 0f)
       gl.glVertex3f(length, -length, -length)
 
-      // Back-face triangle
-      gl.glColor3f(1f, 0f, 0f)
       gl.glVertex3f(0f, length, 0f)
-      gl.glColor3f(0f, 1f, 0f)
       gl.glVertex3f(length, -length, -length)
-      gl.glColor3f(0f, 0f, 1f)
       gl.glVertex3f(-length, -length, -length)
 
-      // Left-face triangle
-      gl.glColor3f(1f, 0f, 0f)
       gl.glVertex3f(0f, length, 0f)
-      gl.glColor3f(0f, 0f, 1f)
       gl.glVertex3f(-length, -length, -length)
-      gl.glColor3f(0f, 1f, 0f)
+      gl.glVertex3f(-length, -length, length)
+
+      gl.glEnd()
+    }
+  }
+
+  implicit val multiColorPyramidRenderer = new Render[MultiColorPyramid] {
+    def render(pyramid: MultiColorPyramid, scene: Scene, gl: GL2, glu: GLU): Unit = {
+      import pyramid._
+      gl.glBegin(GL_TRIANGLES)
+
+      // front
+      gl.glColor3f(c1.red, c1.green, c1.blue)
+      gl.glVertex3f(0f, length, 0f)
+      gl.glColor3f(c2.red, c2.green, c2.blue)
+      gl.glVertex3f(-length, -length, length)
+      gl.glColor3f(c3.red, c3.green, c3.blue)
+      gl.glVertex3f(length, -length, length)
+
+      // right
+      gl.glColor3f(c1.red, c1.green, c1.blue)
+      gl.glVertex3f(0f, length, 0f)
+      gl.glColor3f(c3.red, c3.green, c3.blue)
+      gl.glVertex3f(length, -length, length)
+      gl.glColor3f(c2.red, c2.green, c2.blue)
+      gl.glVertex3f(length, -length, -length)
+
+      // back
+      gl.glColor3f(c1.red, c1.green, c1.blue)
+      gl.glVertex3f(0f, length, 0f)
+      gl.glColor3f(c2.red, c2.green, c2.blue)
+      gl.glVertex3f(length, -length, -length)
+      gl.glColor3f(c3.red, c3.green, c3.blue)
+      gl.glVertex3f(-length, -length, -length)
+
+      // left
+      gl.glColor3f(c1.red, c1.green, c1.blue)
+      gl.glVertex3f(0f, length, 0f)
+      gl.glColor3f(c3.red, c3.green, c3.blue)
+      gl.glVertex3f(-length, -length, -length)
+      gl.glColor3f(c2.red, c2.green, c2.blue)
       gl.glVertex3f(-length, -length, length)
 
       gl.glEnd()
