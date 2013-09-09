@@ -24,12 +24,14 @@ object Render {
   implicit val quadRenderer = new Render[Quad] {
     def render(quad: Quad, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import quad._
+      val w = width.magnitude.toFloat / 2
+      val h = height.magnitude.toFloat / 2
       gl.glColor3f(color.red, color.green, color.blue)
       gl.glBegin(GL_QUADS)
-      gl.glVertex3f(-width / 2, height / 2, 0.0f)
-      gl.glVertex3f(width / 2, height / 2, 0.0f)
-      gl.glVertex3f(width / 2, -height / 2, 0.0f)
-      gl.glVertex3f(-width / 2, -height / 2, 0.0f)
+      gl.glVertex3f(-w, h, 0f)
+      gl.glVertex3f(w, h, 0f)
+      gl.glVertex3f(w, -h, 0f)
+      gl.glVertex3f(-w, -h, 0f)
       gl.glEnd()
     }
   }
@@ -38,7 +40,7 @@ object Render {
     def render(sphere: Sphere, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import sphere._
       gl.glColor3f(color.red, color.green, color.blue)
-      glu.gluSphere(glu.gluNewQuadric(), radius, 24, 20)
+      glu.gluSphere(glu.gluNewQuadric(), radius.magnitude.toFloat, slices, stacks)
     }
   }
 
@@ -65,7 +67,7 @@ object Render {
       glu.gluQuadricDrawStyle(earth, GLU.GLU_FILL)
       glu.gluQuadricNormals(earth, GLU.GLU_FLAT)
       glu.gluQuadricOrientation(earth, GLU.GLU_OUTSIDE)
-      glu.gluSphere(earth, radius, slices, stacks)
+      glu.gluSphere(earth, radius.magnitude.toFloat, slices, stacks)
       glu.gluDeleteQuadric(earth)
     }
   }
@@ -73,11 +75,12 @@ object Render {
   implicit val triangleRenderer = new Render[Triangle] {
     def render(triangle: Triangle, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import triangle._
+      val l = length.magnitude.toFloat
       gl.glBegin(GL_TRIANGLES)
       gl.glColor3f(color.red, color.green, color.blue)
-      gl.glVertex3f(0.0f, length, 0.0f)
-      gl.glVertex3f(-length, -length, 0.0f)
-      gl.glVertex3f(length, -length, 0.0f)
+      gl.glVertex3f(0f, l, 0f)
+      gl.glVertex3f(-l, -l, 0f)
+      gl.glVertex3f(l, -l, 0f)
       gl.glEnd()
     }
   }
@@ -87,17 +90,18 @@ object Render {
   // gl.glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, colorRed)
   // gl.glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, 4)
   // gl.glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, colorBlack)
-  
+
   implicit val triColorTriangleRenderer = new Render[TriColorTriangle] {
     def render(triangle: TriColorTriangle, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import triangle._
+      val l = length.magnitude.toFloat
       gl.glBegin(GL_TRIANGLES)
       gl.glColor3f(c1.red, c1.green, c1.blue)
-      gl.glVertex3f(0.0f, length, 0.0f)
+      gl.glVertex3f(0f, l, 0f)
       gl.glColor3f(c2.red, c2.green, c2.blue)
-      gl.glVertex3f(-length, -length, 0.0f)
+      gl.glVertex3f(-l, -l, 0f)
       gl.glColor3f(c3.red, c3.green, c3.blue)
-      gl.glVertex3f(length, -length, 0.0f)
+      gl.glVertex3f(l, -l, 0f)
       gl.glEnd()
     }
   }
@@ -105,39 +109,40 @@ object Render {
   implicit val cubeRenderer = new Render[Cube] {
     def render(cube: Cube, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import cube._
+      val l = length.magnitude.toFloat
       gl.glBegin(GL_QUADS)
 
       gl.glColor3f(color.red, color.green, color.blue)
-      
-      gl.glVertex3f(length, length, -length)
-      gl.glVertex3f(-length, length, -length)
-      gl.glVertex3f(-length, length, length)
-      gl.glVertex3f(length, length, length)
 
-      gl.glVertex3f(length, -length, length)
-      gl.glVertex3f(-length, -length, length)
-      gl.glVertex3f(-length, -length, -length)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(l, l, -l)
+      gl.glVertex3f(-l, l, -l)
+      gl.glVertex3f(-l, l, l)
+      gl.glVertex3f(l, l, l)
 
-      gl.glVertex3f(length, length, length)
-      gl.glVertex3f(-length, length, length)
-      gl.glVertex3f(-length, -length, length)
-      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(l, -l, l)
+      gl.glVertex3f(-l, -l, l)
+      gl.glVertex3f(-l, -l, -l)
+      gl.glVertex3f(l, -l, -l)
 
-      gl.glVertex3f(length, -length, -length)
-      gl.glVertex3f(-length, -length, -length)
-      gl.glVertex3f(-length, length, -length)
-      gl.glVertex3f(length, length, -length)
+      gl.glVertex3f(l, l, l)
+      gl.glVertex3f(-l, l, l)
+      gl.glVertex3f(-l, -l, l)
+      gl.glVertex3f(l, -l, l)
 
-      gl.glVertex3f(-length, length, length)
-      gl.glVertex3f(-length, length, -length)
-      gl.glVertex3f(-length, -length, -length)
-      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(l, -l, -l)
+      gl.glVertex3f(-l, -l, -l)
+      gl.glVertex3f(-l, l, -l)
+      gl.glVertex3f(l, l, -l)
 
-      gl.glVertex3f(length, length, -length)
-      gl.glVertex3f(length, length, length)
-      gl.glVertex3f(length, -length, length)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(-l, l, l)
+      gl.glVertex3f(-l, l, -l)
+      gl.glVertex3f(-l, -l, -l)
+      gl.glVertex3f(-l, -l, l)
+
+      gl.glVertex3f(l, l, -l)
+      gl.glVertex3f(l, l, l)
+      gl.glVertex3f(l, -l, l)
+      gl.glVertex3f(l, -l, -l)
 
       gl.glEnd()
     }
@@ -146,43 +151,44 @@ object Render {
   implicit val multiColorCubeRenderer = new Render[MultiColorCube] {
     def render(cube: MultiColorCube, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import cube._
+      val l = length.magnitude.toFloat
       gl.glBegin(GL_QUADS)
 
       gl.glColor3f(topColor.red, topColor.green, topColor.blue)
-      gl.glVertex3f(length, length, -length)
-      gl.glVertex3f(-length, length, -length)
-      gl.glVertex3f(-length, length, length)
-      gl.glVertex3f(length, length, length)
+      gl.glVertex3f(l, l, -l)
+      gl.glVertex3f(-l, l, -l)
+      gl.glVertex3f(-l, l, l)
+      gl.glVertex3f(l, l, l)
 
       gl.glColor3f(bottomColor.red, bottomColor.green, bottomColor.blue)
-      gl.glVertex3f(length, -length, length)
-      gl.glVertex3f(-length, -length, length)
-      gl.glVertex3f(-length, -length, -length)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(l, -l, l)
+      gl.glVertex3f(-l, -l, l)
+      gl.glVertex3f(-l, -l, -l)
+      gl.glVertex3f(l, -l, -l)
 
       gl.glColor3f(frontColor.red, frontColor.green, frontColor.blue)
-      gl.glVertex3f(length, length, length)
-      gl.glVertex3f(-length, length, length)
-      gl.glVertex3f(-length, -length, length)
-      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(l, l, l)
+      gl.glVertex3f(-l, l, l)
+      gl.glVertex3f(-l, -l, l)
+      gl.glVertex3f(l, -l, l)
 
       gl.glColor3f(backColor.red, backColor.green, backColor.blue)
-      gl.glVertex3f(length, -length, -length)
-      gl.glVertex3f(-length, -length, -length)
-      gl.glVertex3f(-length, length, -length)
-      gl.glVertex3f(length, length, -length)
+      gl.glVertex3f(l, -l, -l)
+      gl.glVertex3f(-l, -l, -l)
+      gl.glVertex3f(-l, l, -l)
+      gl.glVertex3f(l, l, -l)
 
       gl.glColor3f(leftColor.red, leftColor.green, leftColor.blue)
-      gl.glVertex3f(-length, length, length)
-      gl.glVertex3f(-length, length, -length)
-      gl.glVertex3f(-length, -length, -length)
-      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(-l, l, l)
+      gl.glVertex3f(-l, l, -l)
+      gl.glVertex3f(-l, -l, -l)
+      gl.glVertex3f(-l, -l, l)
 
       gl.glColor3f(rightColor.red, rightColor.green, rightColor.blue)
-      gl.glVertex3f(length, length, -length)
-      gl.glVertex3f(length, length, length)
-      gl.glVertex3f(length, -length, length)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(l, l, -l)
+      gl.glVertex3f(l, l, l)
+      gl.glVertex3f(l, -l, l)
+      gl.glVertex3f(l, -l, -l)
 
       gl.glEnd()
     }
@@ -192,25 +198,26 @@ object Render {
   implicit val pyramidRenderer = new Render[Pyramid] {
     def render(pyramid: Pyramid, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import pyramid._
+      val l = length.magnitude.toFloat
       gl.glBegin(GL_TRIANGLES)
 
       gl.glColor3f(color.red, color.green, color.blue)
-      
-      gl.glVertex3f(0f, length, 0f)
-      gl.glVertex3f(-length, -length, length)
-      gl.glVertex3f(length, -length, length)
 
-      gl.glVertex3f(0f, length, 0f)
-      gl.glVertex3f(length, -length, length)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(0f, l, 0f)
+      gl.glVertex3f(-l, -l, l)
+      gl.glVertex3f(l, -l, l)
 
-      gl.glVertex3f(0f, length, 0f)
-      gl.glVertex3f(length, -length, -length)
-      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(0f, l, 0f)
+      gl.glVertex3f(l, -l, l)
+      gl.glVertex3f(l, -l, -l)
 
-      gl.glVertex3f(0f, length, 0f)
-      gl.glVertex3f(-length, -length, -length)
-      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(0f, l, 0f)
+      gl.glVertex3f(l, -l, -l)
+      gl.glVertex3f(-l, -l, -l)
+
+      gl.glVertex3f(0f, l, 0f)
+      gl.glVertex3f(-l, -l, -l)
+      gl.glVertex3f(-l, -l, l)
 
       gl.glEnd()
     }
@@ -219,39 +226,40 @@ object Render {
   implicit val multiColorPyramidRenderer = new Render[MultiColorPyramid] {
     def render(pyramid: MultiColorPyramid, scene: Scene, gl: GL2, glu: GLU): Unit = {
       import pyramid._
+      val l = length.magnitude.toFloat
       gl.glBegin(GL_TRIANGLES)
 
       // front
       gl.glColor3f(c1.red, c1.green, c1.blue)
-      gl.glVertex3f(0f, length, 0f)
+      gl.glVertex3f(0f, l, 0f)
       gl.glColor3f(c2.red, c2.green, c2.blue)
-      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(-l, -l, l)
       gl.glColor3f(c3.red, c3.green, c3.blue)
-      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(l, -l, l)
 
       // right
       gl.glColor3f(c1.red, c1.green, c1.blue)
-      gl.glVertex3f(0f, length, 0f)
+      gl.glVertex3f(0f, l, 0f)
       gl.glColor3f(c3.red, c3.green, c3.blue)
-      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(l, -l, l)
       gl.glColor3f(c2.red, c2.green, c2.blue)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(l, -l, -l)
 
       // back
       gl.glColor3f(c1.red, c1.green, c1.blue)
-      gl.glVertex3f(0f, length, 0f)
+      gl.glVertex3f(0f, l, 0f)
       gl.glColor3f(c2.red, c2.green, c2.blue)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(l, -l, -l)
       gl.glColor3f(c3.red, c3.green, c3.blue)
-      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(-l, -l, -l)
 
       // left
       gl.glColor3f(c1.red, c1.green, c1.blue)
-      gl.glVertex3f(0f, length, 0f)
+      gl.glVertex3f(0f, l, 0f)
       gl.glColor3f(c3.red, c3.green, c3.blue)
-      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(-l, -l, -l)
       gl.glColor3f(c2.red, c2.green, c2.blue)
-      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(-l, -l, l)
 
       gl.glEnd()
     }
@@ -262,6 +270,8 @@ object Render {
     def render(cube: TexturedCube, scene: Scene, gl: GL2, glu: GLU): Unit = {
 
       import cube._
+      
+      val l = length.magnitude.toFloat
 
       val texture = scene.textureFor(textureUrl)
 
@@ -272,7 +282,7 @@ object Render {
       val textureRight = textureCoords.right()
 
       gl.glColor3f(1f, 1f, 1f)
-      
+
       texture.enable(gl)
       // gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE)
       texture.bind(gl)
@@ -281,63 +291,63 @@ object Render {
 
       // Front Face
       gl.glTexCoord2f(textureLeft, textureBottom)
-      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(-l, -l, l)
       gl.glTexCoord2f(textureRight, textureBottom)
-      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(l, -l, l)
       gl.glTexCoord2f(textureRight, textureTop)
-      gl.glVertex3f(length, length, length)
+      gl.glVertex3f(l, l, l)
       gl.glTexCoord2f(textureLeft, textureTop)
-      gl.glVertex3f(-length, length, length)
+      gl.glVertex3f(-l, l, l)
 
       // Back Face
       gl.glTexCoord2f(textureRight, textureBottom)
-      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(-l, -l, -l)
       gl.glTexCoord2f(textureRight, textureTop)
-      gl.glVertex3f(-length, length, -length)
+      gl.glVertex3f(-l, l, -l)
       gl.glTexCoord2f(textureLeft, textureTop)
-      gl.glVertex3f(length, length, -length)
+      gl.glVertex3f(l, l, -l)
       gl.glTexCoord2f(textureLeft, textureBottom)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(l, -l, -l)
 
       // Top Face
       gl.glTexCoord2f(textureLeft, textureTop)
-      gl.glVertex3f(-length, length, -length)
+      gl.glVertex3f(-l, l, -l)
       gl.glTexCoord2f(textureLeft, textureBottom)
-      gl.glVertex3f(-length, length, length)
+      gl.glVertex3f(-l, l, l)
       gl.glTexCoord2f(textureRight, textureBottom)
-      gl.glVertex3f(length, length, length)
+      gl.glVertex3f(l, l, l)
       gl.glTexCoord2f(textureRight, textureTop)
-      gl.glVertex3f(length, length, -length)
+      gl.glVertex3f(l, l, -l)
 
       // Bottom Face
       gl.glTexCoord2f(textureRight, textureTop)
-      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(-l, -l, -l)
       gl.glTexCoord2f(textureLeft, textureTop)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(l, -l, -l)
       gl.glTexCoord2f(textureLeft, textureBottom)
-      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(l, -l, l)
       gl.glTexCoord2f(textureRight, textureBottom)
-      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(-l, -l, l)
 
       // Right face
       gl.glTexCoord2f(textureRight, textureBottom)
-      gl.glVertex3f(length, -length, -length)
+      gl.glVertex3f(l, -l, -l)
       gl.glTexCoord2f(textureRight, textureTop)
-      gl.glVertex3f(length, length, -length)
+      gl.glVertex3f(l, l, -l)
       gl.glTexCoord2f(textureLeft, textureTop)
-      gl.glVertex3f(length, length, length)
+      gl.glVertex3f(l, l, l)
       gl.glTexCoord2f(textureLeft, textureBottom)
-      gl.glVertex3f(length, -length, length)
+      gl.glVertex3f(l, -l, l)
 
       // Left Face
       gl.glTexCoord2f(textureLeft, textureBottom)
-      gl.glVertex3f(-length, -length, -length)
+      gl.glVertex3f(-l, -l, -l)
       gl.glTexCoord2f(textureRight, textureBottom)
-      gl.glVertex3f(-length, -length, length)
+      gl.glVertex3f(-l, -l, l)
       gl.glTexCoord2f(textureRight, textureTop)
-      gl.glVertex3f(-length, length, length)
+      gl.glVertex3f(-l, l, l)
       gl.glTexCoord2f(textureLeft, textureTop)
-      gl.glVertex3f(-length, length, -length)
+      gl.glVertex3f(-l, l, -l)
 
       gl.glEnd()
 

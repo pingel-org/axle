@@ -1,5 +1,6 @@
 package axle.visualize.gl
 
+import axle.quanta._
 import java.io.IOException
 import com.jogamp.opengl.util.texture.TextureIO
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT
@@ -30,10 +31,13 @@ import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import com.jogamp.opengl.util.texture.Texture
 
-class AxleGLCanvas(scene: Scene, fovy: Double, zNear: Double, zFar: Double) extends GLCanvas with GLEventListener {
+class AxleGLCanvas(scene: Scene, fovy: Angle.Q, zNear: Distance.Q, zFar: Distance.Q, distanceUnit: Distance.Q) extends GLCanvas with GLEventListener {
 
+  import Distance._
+  import Angle._
+  
   this.addGLEventListener(this)
-
+  
   var glu: GLU = null
   
   override def init(drawable: GLAutoDrawable): Unit = {
@@ -74,7 +78,7 @@ class AxleGLCanvas(scene: Scene, fovy: Double, zNear: Double, zFar: Double) exte
     gl.glViewport(0, 0, width, height)
     gl.glMatrixMode(GL_PROJECTION)
     gl.glLoadIdentity()
-    glu.gluPerspective(fovy, aspect, zNear, zFar)
+    glu.gluPerspective((fovy in degree).magnitude.toDouble, aspect, (zNear in distanceUnit).magnitude.toDouble, (zFar in distanceUnit).magnitude.toDouble)
     gl.glMatrixMode(GL_MODELVIEW)
     gl.glLoadIdentity()
   }

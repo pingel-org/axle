@@ -1,5 +1,8 @@
 package axle.visualize.gl
 
+import axle.quanta._
+import Distance._
+import Angle._
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
@@ -9,7 +12,7 @@ import com.jogamp.opengl.util.FPSAnimator
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 
-class SceneFrame(scene: Scene, width: Int, height: Int, fps: Int) {
+class SceneFrame(scene: Scene, width: Int, height: Int, zNear: Distance.Q, zFar: Distance.Q, fps: Int) {
 
   def run() = {
 
@@ -17,7 +20,7 @@ class SceneFrame(scene: Scene, width: Int, height: Int, fps: Int) {
 
       def run() = {
 
-        val canvas = new AxleGLCanvas(scene, 45.0, 0.1, 100.0)
+        val canvas = new AxleGLCanvas(scene, 45.0 *: degree, zNear, zFar, scene.distanceUnit)
         canvas.setPreferredSize(new Dimension(width, height))
 
         val animator = new FPSAnimator(canvas, fps, true)
