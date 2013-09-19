@@ -100,6 +100,10 @@ trait Quantum extends QuantumExpression {
 
     def /(n: Number): Q = quantity(magnitude / n, unit)
 
+    def <(other: Q): Boolean = (other - this).magnitude > 0
+
+    def >(other: Q): Boolean = (other - this).magnitude < 0
+    
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#Q, resultQuantum: QRES): QRES#Q =
       resultQuantum.quantity(magnitude * right.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
 
