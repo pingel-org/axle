@@ -37,9 +37,9 @@ object FederalistPapers {
 
     def bigrams(paper: FederalistPaper) = tokens(paper).sliding(2).toVector
 
-    def wordCounts(paper: FederalistPaper) = tokens(paper).countMap
+    def wordCounts(paper: FederalistPaper) = tokens(paper) tally
 
-    def bigramCounts(paper: FederalistPaper) = bigrams(paper).countMap
+    def bigramCounts(paper: FederalistPaper) = bigrams(paper) tally
 
     def averageWordLength(paper: FederalistPaper) = {
       val ts = tokens(paper)

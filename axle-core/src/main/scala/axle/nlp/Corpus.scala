@@ -8,9 +8,9 @@ class Corpus[T: Document](documents: GenSeq[T]) {
 
   val doc = implicitly[Document[T]]
 
-  lazy val wordCountMap: Map[String, Long] = documents flatMap (doc.tokens(_)) countMap
+  lazy val wordCountMap: Map[String, Long] = documents flatMap (doc.tokens(_)) tally
 
-  def wordCount(word: String) = wordCountMap.get(word).getOrElse(0l)
+  def wordCount(word: String) = wordCountMap.get(word)
   
   def topWordCounts(cutoff: Long) =
     wordCountMap
@@ -36,7 +36,7 @@ Top 10 bigrams: ${topBigrams(10).mkString(", ")}
   lazy val bigramCounts = documents.flatMap((d: T) => {
     val tokens = doc.tokens(d)
     tokens.zip(tokens.tail)
-  }).countMap
+  }) tally
 
   def sortedBigramCounts() =
     bigramCounts

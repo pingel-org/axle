@@ -12,9 +12,9 @@ object Document {
 
     def bigrams(text: String) = tokens(text).sliding(2).toVector
 
-    def wordCounts(text: String) = tokens(text).countMap
+    def wordCounts(text: String) = tokens(text) tally
 
-    def bigramCounts(text: String) = bigrams(text).countMap
+    def bigramCounts(text: String) = bigrams(text) tally
 
     def averageWordLength(text: String) = {
       val ts = tokens(text)
