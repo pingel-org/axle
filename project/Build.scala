@@ -14,9 +14,9 @@ object AxleBuild extends Build {
 
     version := "0.1-SNAPSHOT", // last milestone was M10
 
-    scalaVersion := "2.10.2",
+    scalaVersion := "2.10.3",
 
-    crossScalaVersions := Seq("2.10.2"),
+    crossScalaVersions := Seq("2.10.3"),
 
     libraryDependencies += "org.specs2" %% "specs2" % "1.13" % "test",
 
@@ -88,7 +88,7 @@ import axle._
       "joda-time" % "joda-time" % "2.2",
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
-      "org.spire-math" %% "spire" % "0.5.0"
+      "org.spire-math" %% "spire" % "0.6.0"
     )
   )
 /*
@@ -170,8 +170,8 @@ import axle._
     name := "axle-repl",
 
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-compiler" % "2.10.2",
-      "org.scala-lang" % "jline" % "2.10.2"
+      "org.scala-lang" % "scala-compiler" % "2.10.3",
+      "org.scala-lang" % "jline" % "2.10.3"
     ),
 
     mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {

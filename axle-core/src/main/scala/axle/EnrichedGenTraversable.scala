@@ -16,12 +16,12 @@ case class EnrichedGenTraversable[+T: Manifest](gt: GenTraversable[T]) {
 
   def Sigma[N: Ring](f: T => N) = Σ(f)
 
-  def Π[N: Ring](f: T => (() => N)): N = {
+  def Π[N: Ring](f: T => N): N = {
     val ring = implicitly[Ring[N]]
-    gt.aggregate(ring.one)({ case (a, b) => ring.times(a, f(b)()) }, { case (x, y) => ring.times(x, y) })
+    gt.aggregate(ring.one)({ case (a, b) => ring.times(a, f(b)) }, { case (x, y) => ring.times(x, y) })
   }
 
-  def Pi[N: Ring](f: T => (() => N)) = Π(f)
+  def Pi[N: Ring](f: T => N) = Π(f)
 
   // def Πx(f: T => Double): Double = exp(gt.map(x => log(f(x))).sum) // TODO: use aggregate for sum?
   //  def Π(f: T => (() => Double)): Double = gt.aggregate(1.0)((a, b) => a * f(b)(), (x, y) => x * y)
