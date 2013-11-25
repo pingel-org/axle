@@ -4,6 +4,7 @@ import axle._
 import collection._
 import axle.quanta.Information
 import math.{ log, sqrt }
+import spire.implicits._
 
 package object stats {
 

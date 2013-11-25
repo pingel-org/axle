@@ -1,31 +1,35 @@
 package axle
 
-import collection._
-import math.{ exp, log }
+import scala.collection.GenTraversable
+import scala.collection.Seq
+import scala.math.exp
+import scala.math.log
+import spire.math.Number
+import spire.algebra._
 
-case class EnrichedGenTraversable[+T : Manifest](gt: GenTraversable[T]) {
+case class EnrichedGenTraversable[+T: Manifest](gt: GenTraversable[T]) {
 
-  def Σ(f: T => Double) = gt.aggregate(0.0)(_ + f(_), _ + _)
+  def Σ[N: Ring](f: T => N): N = {
+    val ring = implicitly[Ring[N]]
+    gt.aggregate(ring.zero)({ case (x, y) => ring.plus(x, f(y)) }, ring.plus(_, _))
+  }
 
-  def Sigma(f: T => Double) = Σ(f)
+  def Sigma[N: Ring](f: T => N) = Σ(f)
 
-  def Πx(f: T => Double): Double = exp(gt.map(x => log(f(x))).sum) // TODO: use aggregate for sum?
+  def Π[N: Ring](f: T => (() => N)): N = {
+    val ring = implicitly[Ring[N]]
+    gt.aggregate(ring.one)({ case (a, b) => ring.times(a, f(b)()) }, { case (x, y) => ring.times(x, y) })
+  }
 
-  def Π(f: T => (() => Double)): Double = gt.aggregate(1.0)((a, b) => a * f(b)(), (x, y) => x * y)
+  def Pi[N: Ring](f: T => (() => N)) = Π(f)
 
-  def Pi(f: T => (() => Double)) = Π(f)
-
+  // def Πx(f: T => Double): Double = exp(gt.map(x => log(f(x))).sum) // TODO: use aggregate for sum?
   //  def Π(f: T => (() => Double)): Double = gt.aggregate(1.0)((a, b) => a * f(b)(), (x, y) => x * y)
-  //
   //  def Pi(f: T => (() => Double)) = Π(f)
 
   def ∀(p: T => Boolean) = gt.forall(p)
 
   def ∃(p: T => Boolean) = gt.exists(p)
-
-  //  def doubles(): GenTraversable[(T, T)] = for (x <- gt; y <- gt) yield (x, y)
-  //  
-  //  def triples(): GenTraversable[(T, T, T)] = for (x <- gt; y <- gt; z <- gt) yield (x, y, z)
 
   def doubles(): Seq[(T, T)] = gt.toIndexedSeq.permutations(2).map(d => (d(0), d(1))).toSeq
 
