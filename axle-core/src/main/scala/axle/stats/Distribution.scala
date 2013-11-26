@@ -1,22 +1,24 @@
 package axle.stats
 
-import math.sqrt
+import axle._
+import spire.math._
+import spire.implicits._
 
 trait Distribution[A] {
 
-  def probabilityOf(a: A): Double
+  def probabilityOf(a: A): Real
 
-  val square: (Double => Double) = (x: Double) => x * x
+  val square: (Real => Real) = (x: Real) => x ** 2
 
   /**
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
   
-  def σ(): Double = {
-    val p: (Double => Double) = (x: Double) => 0.0 // TODO
-    val Xs: List[Double] = Nil // TODO
-    val μ = Xs.map(xi => p(xi) * xi).sum
-    sqrt(Xs.map(xi => p(xi) * square(xi - μ)).sum)
+  def σ(): Real = {
+    val p: (Real => Real) = (x: Real) => Real(0) // TODO
+    val Xs: List[Real] = Nil // TODO
+    val μ = Xs.map(xi => p(xi) * xi).Σ(identity)
+    (Xs.map(xi => p(xi) * square(xi - μ)).Σ(identity)).sqrt
   }
   
 }
@@ -27,10 +29,10 @@ trait Distribution0[A] extends Distribution[A] {
 
 trait Distribution1[A, G1] {
   def observe(gv: G1): A
-  def probabilityOf(a: A, given: Case[G1]): Double
+  def probabilityOf(a: A, given: Case[G1]): Real
 }
 
 trait Distribution2[A, G1, G2] {
   def observe(gv1: G1, gv2: G2): A
-  def probabilityOf(a: A, given1: Case[G1], given2: Case[G2]): Double
+  def probabilityOf(a: A, given1: Case[G1], given2: Case[G2]): Real
 }

@@ -29,6 +29,9 @@
 
 import collection._
 import math.{ exp, log }
+import spire.math._
+import spire.implicits._
+import spire.algebra._
 
 package object axle {
 
@@ -82,8 +85,8 @@ package object axle {
 
   // more math
 
-  def square(x: Double): Double = x * x
+  def square[N: Field](x: N): N = x ** 2
 
-  def √(x: Double): Double = math.sqrt(x)
+  def √[N: NRoot](x: N): N = x.sqrt
 
 }

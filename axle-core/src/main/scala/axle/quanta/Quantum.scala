@@ -66,7 +66,7 @@ trait Quantum extends QuantumExpression {
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
-  def is(qe: QuantumExpression) = 4 // TODO
+  def is(qe: QuantumExpression) = ??? // TODO
 
   val one = Number.one
 

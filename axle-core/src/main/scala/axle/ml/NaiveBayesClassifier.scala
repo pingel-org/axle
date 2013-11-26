@@ -24,7 +24,7 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
 
   val N = featureNames.size
 
-  def argmax[K](ks: IndexedSeq[K], f: K => Double): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
+  def argmax[K, N: Ordering](ks: IndexedSeq[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
 
   // TODO no probability should ever be 0
 
@@ -37,14 +37,12 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
         val c = classExtractor(d)
         tally |+| featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> 1) }).toMap
       },
-      _ |+| _
-    )
+      _ |+| _)
 
   val classTally =
     data.aggregate(Map.empty[CLASS, Int].withDefaultValue(0))(
       (tally, d) => tally + (classExtractor(d) -> 1),
-      _ |+| _
-    ).withDefaultValue(1) // to avoid division by zero
+      _ |+| _).withDefaultValue(1) // to avoid division by zero
 
   val C = new RandomVariable0(classRandomVariable.name, classRandomVariable.values,
     distribution = Some(new TallyDistribution0(classTally)))
@@ -58,14 +56,13 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
         case (k, v) => k._2 == featureRandomVariable.name
       }.map {
         case (k, v) => ((k._3, k._1), v)
-      }.withDefaultValue(0))
-    )))
+      }.withDefaultValue(0)))))
 
   def classes(): IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
   def apply(d: DATA): CLASS = {
     val fs = featureExtractor(d)
-    argmax(C, (c: CLASS) => P(C is c) * (0 until N).Π(i => P((Fs(i) is fs(i)) | (C is c))))
+    argmax(C, (c: CLASS) => (P(C is c) * (0 until N).Π(i => P((Fs(i) is fs(i)) | (C is c))))())
   }
 
 }

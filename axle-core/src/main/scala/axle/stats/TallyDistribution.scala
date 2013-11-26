@@ -2,6 +2,8 @@ package axle.stats
 
 import axle._
 import util.Random
+import spire.math._
+import spire.implicits._
 
 class TallyDistribution0[A](tally: Map[A, Int])
   extends Distribution0[A] {
@@ -15,7 +17,7 @@ class TallyDistribution0[A](tally: Map[A, Int])
     bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
   }
 
-  def probabilityOf(a: A): Double = tally(a).toDouble / totalCount
+  def probabilityOf(a: A): Real = tally(a).toDouble / totalCount
 }
 
 class TallyDistribution1[A, G](tally: Map[(A, G), Int])
@@ -31,9 +33,9 @@ class TallyDistribution1[A, G](tally: Map[(A, G), Int])
 
   def probabilityOf(a: A): Double = gvs.map(gv => tally((a, gv))).sum / totalCount
 
-  def probabilityOf(a: A, given: Case[G]): Double = given match {
-    case CaseIs(argGrv, gv) => tally((a, gv)).toDouble / tally.filter(_._1._2 == gv).map(_._2).sum
-    case CaseIsnt(argGrv, gv) => 1.0 - (tally((a, gv)).toDouble / tally.filter(_._1._2 == gv).map(_._2).sum)
+  def probabilityOf(a: A, given: Case[G]): Real = given match {
+    case CaseIs(argGrv, gv) => tally((a, gv)) / tally.filter(_._1._2 == gv).map(_._2).sum
+    case CaseIsnt(argGrv, gv) => 1d - (tally((a, gv)) / tally.filter(_._1._2 == gv).map(_._2).sum)
     case _ => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
   }
 

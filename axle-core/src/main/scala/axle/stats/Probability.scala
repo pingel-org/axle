@@ -1,14 +1,16 @@
 package axle.stats
 
 import axle.stats._
+import spire.math._
+import spire.implicits._
 
-trait Probability extends (() => Double) {
-  def *(right: => Double) = PMultiply(this, right)
-  def bayes(): () => Double
+trait Probability extends (() => Real) {
+  def *(right: => Real) = PMultiply(this, right)
+  def bayes(): () => Real
 }
 
 case class P[A](c: Case[A]) extends Probability {
-  def apply(): Double = c.probability()
+  def apply(): Real = c.probability()
   def bayes() = c.bayes()
 }
 

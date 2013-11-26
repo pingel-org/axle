@@ -2,6 +2,7 @@ package axle.stats
 
 import collection._
 import axle._
+import spire.math._
 import spire.implicits._
 
 trait Case[A] {
@@ -12,13 +13,13 @@ trait Case[A] {
   def ∨[B](right: Case[B]): Case[(A, B)] = CaseOr[A, B](this, right)
   def ∪[B](right: Case[B]): Case[(A, B)] = CaseOr[A, B](this, right)
   def |[B](given: Case[B]): Case[(A, B)] = CaseGiven[A, B](this, given)
-  def probability[B](given: Option[Case[B]] = None): Double
-  def bayes(): () => Double // perhaps bayes should return a Seq[Case] or similar
+  def probability[B](given: Option[Case[B]] = None): Real
+  def bayes(): () => Real // perhaps bayes should return a Seq[Case] or similar
 }
 
 case class CaseAndGT[A: Manifest](conjuncts: GenTraversable[Case[A]]) extends Case[List[A]] {
 
-  def probability[B](given: Option[Case[B]] = None): Double =
+  def probability[B](given: Option[Case[B]] = None): Real =
     given
       .map(g => conjuncts.Π((c: Case[A]) => P(c | g)()))
       .getOrElse(conjuncts.Π((c: Case[A]) => P(c)))
@@ -28,7 +29,7 @@ case class CaseAndGT[A: Manifest](conjuncts: GenTraversable[Case[A]]) extends Ca
 
 case class CaseAnd[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
 
-  def probability[C](given: Option[Case[C]] = None): Double =
+  def probability[C](given: Option[Case[C]] = None): Real =
     (given.map(g => P(left | g) * P(right | g)).getOrElse(P(left) * P(right))).apply()
 
   def bayes() = P(left | right) * P(right).bayes()() // TODO: also check that "left" and "right" have no "given"
@@ -37,7 +38,7 @@ case class CaseAnd[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
 
 case class CaseOr[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
 
-  def probability[C](given: Option[Case[C]] = None): Double =
+  def probability[C](given: Option[Case[C]] = None): Real =
     given
       .map(g => P(left | g) + P(right | g) - P((left ∧ right) | g))
       .getOrElse(P(left) + P(right) - P(left ∧ right))
@@ -49,7 +50,7 @@ case class CaseOr[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
 // TODO: use phantom types to ensure that only one "given" clause is specified
 case class CaseGiven[A, B](c: Case[A], given: Case[B]) extends Case[(A, B)] {
 
-  def probability[C](givenArg: Option[Case[C]] = None): Double = {
+  def probability[C](givenArg: Option[Case[C]] = None): Real = {
     assert(givenArg.isEmpty)
     c.probability(Some(given))
   }
@@ -61,7 +62,7 @@ case class CaseGiven[A, B](c: Case[A], given: Case[B]) extends Case[(A, B)] {
 // TODO: may want CaseIs{With, No] classes to avoid the run-time type-checking below
 case class CaseIs[A](rv: RandomVariable[A], v: A) extends Case[A] {
 
-  def probability[B](given: Option[Case[B]]): Double = rv match {
+  def probability[B](given: Option[Case[B]]): Real = rv match {
     case rvNo: RandomVariable0[A] => rvNo.probability(v)
     case rvWith: RandomVariable1[A, B] => given
       .map(g => rvWith.probability(v, g))
@@ -75,7 +76,7 @@ case class CaseIs[A](rv: RandomVariable[A], v: A) extends Case[A] {
 
 case class CaseIsnt[A](rv: RandomVariable[A], v: A) extends Case[A] {
 
-  def probability[B](given: Option[Case[B]] = None): Double = 1.0 - P(rv is v)
+  def probability[B](given: Option[Case[B]] = None): Real = 1 - P(rv is v)
 
   def bayes() = () => this.probability()
 
