@@ -5,6 +5,7 @@ import sbt._
 import Keys._
 import sbtassembly.Plugin._
 import AssemblyKeys._
+import org.scalastyle.sbt.ScalastylePlugin
 
 object AxleBuild extends Build {
 
@@ -69,7 +70,8 @@ import axle._
     </developer>
   </developers>)
 
-  )
+  ) ++ ScalastylePlugin.Settings
+
 
   lazy val hadoopVersion = "1.1.2"
   lazy val jungVersion = "2.0.1"
