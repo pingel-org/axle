@@ -32,40 +32,40 @@ import math.{ exp, log }
 
 package object axle {
 
-  implicit def enrichGenSet[T](s: GenSet[T]) = EnrichedGenSet(s)
+  implicit def enrichGenSet[T](s: GenSet[T]): EnrichedGenSet[T] = EnrichedGenSet(s)
 
-  implicit def enrichGenSeq[T](genSeq: GenSeq[T]) = EnrichedGenSeq(genSeq)
-  
-  implicit def enrichGenTraversable[T: Manifest](gt: GenTraversable[T]) = EnrichedGenTraversable(gt)
+  implicit def enrichGenSeq[T](genSeq: GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
 
-  implicit def enrichIndexedSeq[T: Manifest](is: IndexedSeq[T]) = EnrichedIndexedSeq(is)
+  implicit def enrichGenTraversable[T: Manifest](gt: GenTraversable[T]): EnrichedGenTraversable[T] = EnrichedGenTraversable(gt)
 
-  implicit def enrichByteArray(barr: Array[Byte]) = EnrichedByteArray(barr)
+  implicit def enrichIndexedSeq[T: Manifest](is: IndexedSeq[T]): EnrichedIndexedSeq[T] = EnrichedIndexedSeq(is)
 
-  implicit def enrichMutableBuffer[T](buffer: mutable.Buffer[T]) = EnrichedMutableBuffer(buffer)
+  implicit def enrichByteArray(barr: Array[Byte]): EnrichedByteArray = EnrichedByteArray(barr)
 
-  implicit def enrichArray[T: Manifest](arr: Array[T]) = EnrichedArray(arr)
+  implicit def enrichMutableBuffer[T](buffer: mutable.Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
 
-  implicit def enrichBoolean(b: Boolean) = EnrichedBoolean(b)
+  implicit def enrichArray[T: Manifest](arr: Array[T]): EnrichedArray[T] = EnrichedArray(arr)
 
-  implicit def enrichInt(n: Int) = EnrichedInt(n)
+  implicit def enrichBoolean(b: Boolean): EnrichedBoolean = EnrichedBoolean(b)
 
-  def fib(n: Int) = (1 to n).foldLeft((1, 1))((pre, i) => (pre._2, pre._1 + pre._2))._1
+  implicit def enrichInt(n: Int): EnrichedInt = EnrichedInt(n)
+
+  def fib(n: Int): Int = (1 to n).foldLeft((1, 1))((pre, i) => (pre._2, pre._1 + pre._2))._1
 
   def recfib(n: Int): Int = n match { case 0 | 1 => 1 case _ => recfib(n - 2) + recfib(n - 1) }
 
   /**
    * http://en.wikipedia.org/wiki/Ackermann_function
    */
-  
+
   def ackermann(m: Long, n: Long): Long =
-    if (m == 0) n + 1
-    else if (m > 0 && n == 0) ackermann(m - 1, 1)
+    if (m == 0) { n + 1 }
+    else if (m > 0 && n == 0) { ackermann(m - 1, 1) }
     else ackermann(m - 1, ackermann(m, n - 1))
 
   // Fundamental:
 
-  def id[A](x: A) = x
+  def id[A](x: A): A = x
 
   // IO
 
@@ -73,15 +73,17 @@ package object axle {
 
   // List enrichments:
 
-  def replicate[T](n: Int)(v: T) = (0 until n).map(i => v).toList
+  def replicate[T](n: Int)(v: T): List[T] = (0 until n).map(i => v).toList
 
-  def reverse[T](l: List[T]) = l.reverse
+  def reverse[T](l: List[T]): List[T] = l.reverse
 
-  def intersperse[T](d: T)(l: List[T]) = (0 until (2 * l.size - 1)).map(i => i % 2 match { case 0 => l(i / 2) case 1 => d }).toList
+  def intersperse[T](d: T)(l: List[T]): List[T] =
+    (0 until (2 * l.size - 1)).map(i => i % 2 match { case 0 => l(i / 2) case 1 => d }).toList
 
-  def square(x: Double) = x * x
+  // more math
 
-  def √(x: Double) = math.sqrt(x)
+  def square(x: Double): Double = x * x
 
-  def ??? : Nothing = throw new UnsupportedOperationException("not implemented")
+  def √(x: Double): Double = math.sqrt(x)
+
 }
