@@ -94,7 +94,7 @@ trait FactorModule {
       varList.map(rv => rv.name.padTo(rv.charWidth, " ").mkString("")).mkString(" ") + "\n" +
         cases.map(kase =>
           kase.map(ci => ci.v.toString.padTo(ci.rv.charWidth, " ").mkString("")).mkString(" ") +
-            " " + "%f".format(this(kase))).mkString("\n")
+            " " + this(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
 
     def toHtml(): xml.Node =
       <table border={ "1" }>
