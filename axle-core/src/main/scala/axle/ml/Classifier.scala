@@ -33,7 +33,7 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
       case (false, false) => (0, 0, 1, 0) // false negative
       case (true, false) => (0, 0, 0, 1) // true negative
     }
-  }).reduce(_ + _)
+  }).Σ(identity)
 
   def performance(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS) = {
 
