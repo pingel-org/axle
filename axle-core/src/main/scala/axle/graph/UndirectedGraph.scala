@@ -2,6 +2,8 @@ package axle.graph
 
 import axle._
 
+import spire.algebra._
+
 trait UndirectedGraph[VP, EP] {
 
   type G[VP, EP] <: UndirectedGraph[VP, EP]
@@ -15,8 +17,8 @@ trait UndirectedGraph[VP, EP] {
   def allEdges(): Set[Edge[ES, EP]]
 
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]]
-  def unlink(e: Edge[ES, EP]): G[VP, EP]
-  def unlink(v1: Vertex[VP], v2: Vertex[VP]): G[VP, EP]
+//  def unlink(e: Edge[ES, EP]): G[VP, EP]
+//  def unlink(v1: Vertex[VP], v2: Vertex[VP]): G[VP, EP]
   def areNeighbors(v1: Vertex[VP], v2: Vertex[VP]): Boolean
 
   def isClique(vs: collection.GenTraversable[Vertex[VP]]): Boolean = (for {
@@ -73,6 +75,6 @@ trait UndirectedGraph[VP, EP] {
     (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
   }
 
-  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
+  def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
 
 }

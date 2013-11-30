@@ -6,7 +6,7 @@ class AITicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "minim
   extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
 
   val heuristic = (state: TicTacToeState) => ttt.players.map(p => {
-    (p, state.outcome.map(out => if (out.winner === Some(p)) 1.0 else -1.0).getOrElse(0.0))
+    (p, state.outcome.map(out => if (out.winner == Some(p)) 1d else -1d).getOrElse(0d))
   }).toMap
 
   def move(state: TicTacToeState): (TicTacToeMove, TicTacToeState) = {

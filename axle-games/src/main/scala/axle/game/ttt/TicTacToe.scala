@@ -65,6 +65,6 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
   def players(): Set[TicTacToePlayer] = Set(x, o)
 
   def playerAfter(player: TicTacToePlayer): TicTacToePlayer =
-    if (player === x) o else x
+    if (player == x) o else x
 
 }

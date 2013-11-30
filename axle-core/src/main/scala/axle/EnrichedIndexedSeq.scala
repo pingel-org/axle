@@ -25,9 +25,9 @@ class EnrichedIndexedSeq[T : Manifest](is: IndexedSeq[T]) {
         if (i == i0) is(i1) else (if (i == i1) is(i0) else v)
     })
 
-  def random(): T = is(nextInt(is.size))
+  def random: T = is(nextInt(is.size))
 
-  def powerset(): IndexedPowerSet[T] = IndexedPowerSet(is)
+  def powerset: IndexedPowerSet[T] = IndexedPowerSet(is)
 
   def ℘(): IndexedPowerSet[T] = IndexedPowerSet(is)
 

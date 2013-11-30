@@ -1,5 +1,6 @@
 package axle.ml
 
+import axle._
 import axle.stats._
 import spire.implicits._
 import spire.algebra._
@@ -30,16 +31,17 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
 
   val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Long].withDefaultValue(0L)
 
-  val featureTally =
-    data.aggregate(emptyFeatureTally)(
-      (tally, d) => {
-        val fs = featureExtractor(d)
-        val c = classExtractor(d)
-        tally + featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> 1L) }).toMap
-      },
-      _ + _)
+  val featureTally: Map[(CLASS, String, FEATURE), Long] = null
+  data.aggregate(emptyFeatureTally)(
+    (acc, d) => {
+      val fs = featureExtractor(d)
+      val c = classExtractor(d)
+      val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> 1L) }).toMap
+      acc + dContrib
+    },
+    _ + _)
 
-  val classTally = data.map(d => classExtractor(d)).tally
+  val classTally: Map[CLASS, Long] = data.map(d => classExtractor(d)).tally
 
   val C = new RandomVariable0(classRandomVariable.name, classRandomVariable.values,
     distribution = Some(new TallyDistribution0(classTally)))
@@ -59,7 +61,7 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
 
   def apply(d: DATA): CLASS = {
     val fs = featureExtractor(d)
-    argmax(C, (c: CLASS) => (P(C is c) * (0 until N).Π(i => P((Fs(i) is fs(i)) | (C is c))))())
+    argmax(C, (c: CLASS) => (P(C is c) * (0 until N).toVector.Π(i => P((Fs(i) is fs(i)) | (C is c))))())
   }
 
 }

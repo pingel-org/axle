@@ -9,6 +9,7 @@ import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
 import java.io.File
+import spire.algebra._
 import akka.actor.ActorRef
 import axle.graph._
 import axle.visualize._
@@ -43,17 +44,20 @@ package object visualize {
 
   implicit def enComponentBarChartGrouped[G, S, Y: Plottable](barChart: BarChartGrouped[G, S, Y]): Component = new BarChartGroupedComponent(barChart)
   
-  implicit def enComponentUndirectedGraph[VP: Manifest, EP](ug: UndirectedGraph[VP, EP]): Component = ug match {
+  implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {
     case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
-    case _ => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads(), ug.edgeFunction()))
+    case _ => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads, ug.edgeFunction()))
   }
 
-  implicit def enComponentDirectedGraph[VP: Manifest, EP](dg: DirectedGraph[VP, EP]): Component = dg match {
+  implicit def enComponentDirectedGraph[VP: Manifest: Eq, EP: Eq](dg: DirectedGraph[VP, EP]): Component = dg match {
     case jdg: JungDirectedGraph[VP, EP] => new JungDirectedGraphVisualization().component(jdg)
-    case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads(), dg.edgeFunction()))
+    case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads, dg.edgeFunction()))
   }
 
-  implicit def enComponentBayesianNetwork(bn: BayesianNetworkModule.BayesianNetwork): Component = bn.graph
+  import BayesianNetworkModule._
+  
+  implicit def enComponentBayesianNetwork[T: Manifest: Eq](bn: BayesianNetworkModule.BayesianNetwork[T]): Component =
+    enComponentDirectedGraph(bn.graph)
 
   implicit def enComponentKMeansClassifier[T](classifier: KMeansModule.KMeansClassifier[T]): Component =
     new KMeansVisualizationModule.KMeansVisualization[T](classifier)

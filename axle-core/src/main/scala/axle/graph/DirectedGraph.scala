@@ -1,5 +1,7 @@
 package axle.graph
 
+import spire.algebra._
+
 trait DirectedGraph[VP, EP] {
 
   type G[VP, EP] <: DirectedGraph[VP, EP]
@@ -63,6 +65,6 @@ trait DirectedGraph[VP, EP] {
   //  def removeInputs(vs: Set[V]): GenDirectedGraph[VP, EP]
   //  def removeOutputs(vs: Set[V]): GenDirectedGraph[VP, EP]
 
-  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
+  def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
 
 }

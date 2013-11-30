@@ -38,14 +38,14 @@ case class TicTacToeState(
   //      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
   def hasWonRow(player: TicTacToePlayer) =
-    (0 until boardSize).exists(board.row(_).toList.forall(_ === Some(player)))
+    (0 until boardSize).exists(board.row(_).toList.forall(_ == Some(player)))
 
   def hasWonColumn(player: TicTacToePlayer) =
-    (0 until boardSize).exists(board.column(_).toList.forall(_ === Some(player)))
+    (0 until boardSize).exists(board.column(_).toList.forall(_ == Some(player)))
 
   def hasWonDiagonal(player: TicTacToePlayer) =
-    (0 until boardSize).forall(i => board(i, i) === Some(player)) ||
-      (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) === Some(player))
+    (0 until boardSize).forall(i => board(i, i) == Some(player)) ||
+      (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player))
 
   def hasWon(player: TicTacToePlayer) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 

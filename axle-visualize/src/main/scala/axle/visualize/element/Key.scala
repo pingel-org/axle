@@ -4,6 +4,7 @@ import axle.visualize._
 import java.awt.Graphics2D
 import java.awt.Color
 import java.awt.Font
+import collection.immutable.SortedMap
 
 import axle.algebra.Plottable
 

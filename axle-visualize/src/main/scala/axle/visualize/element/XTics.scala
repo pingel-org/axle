@@ -40,7 +40,7 @@ class XTics[X, Y](
     g2d.setColor(Color.black)
     
     // TODO: angle xtics?
-    if (angle === zeroDegrees)
+    if (angle == zeroDegrees)
       g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
     else
       drawStringAtAngle(g2d, fontMetrics, label, bottomScaled, angle)

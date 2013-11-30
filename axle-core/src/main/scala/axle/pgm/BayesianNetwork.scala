@@ -156,9 +156,9 @@ trait BayesianNetworkModule {
     }
 
     def cpt(variable: RandomVariable[T]): Factor[T] =
-      graph.findVertex(_.payload.rv == variable).map(_.payload.cpt).get
+      graph.findVertex(_.payload.rv === variable).map(_.payload.cpt).get
 
-    def probabilityOf(cs: Seq[CaseIs[T]]) = cs.map(c => cpt(c.rv)(cs)).Π(identity)
+    def probabilityOf(cs: Seq[CaseIs[T]]) = cs.map(c => cpt(c.rv)(cs)).toVector.Π(identity)
 
     def markovAssumptionsFor(rv: RandomVariable[T]): Independence[T] = {
       val rvVertex = graph.findVertex(_.payload.rv == rv).get
@@ -286,12 +286,12 @@ trait BayesianNetworkModule {
       val vars = eOpt.map(Q ++ _.map(_.rv)).getOrElse(Q)
 
       def nodePruneStream(g: BayesianNetwork[T]): Stream[BayesianNetwork[T]] = {
-        val xVertices = g.graph.leaves().toSet -- vars.map(rv => g.graph.findVertex(_.payload.rv == rv).get)
+        val xVertices = g.graph.leaves().toSet -- vars.map(rv => g.graph.findVertex(_.payload.rv === rv).get)
         xVertices.size match {
           case 0 => empty
           case _ => {
             val result = xVertices.foldLeft(g)(
-              (bn, xV) => new BayesianNetwork(bn.name + " - " + xV, bn.graph.deleteVertex(xV)))
+              (bn, xV) => new BayesianNetwork(bn.name + " - " + xV, bn.graph /* TODO filterVertices(v => ! v === xV) */))
             cons(result, nodePruneStream(result))
           }
         }
