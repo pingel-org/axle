@@ -139,13 +139,15 @@ trait FactorModule {
     def sumOut(gone: RandomVariable[T]): Factor[T] = {
       val position = varList.indexOf(gone)
       val newVars = varList.filter(!_.equals(gone))
-      new Factor(newVars,
-        Factor.spaceFor(newVars)
-          .map(kase => (kase,
-            gone.values.getOrElse(Nil).map(gv => {
-              val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[T]], gv)) // TODO cast
-              this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
-            }).reduce(_ + _))).toMap)
+      new Factor(
+        newVars,
+        Factor.spaceFor(newVars).map(kase => {
+          val reals = gone.values.getOrElse(Nil).map(gv => {
+            val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[T]], gv)) // TODO cast
+            this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
+          })
+          (kase, reals.Σ(identity))
+        }).toMap)
     }
 
     def Σ(varsToSumOut: Set[RandomVariable[T]]): Factor[T] = sumOut(varsToSumOut)
