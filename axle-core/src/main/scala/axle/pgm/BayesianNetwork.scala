@@ -214,8 +214,8 @@ trait BayesianNetworkModule {
       π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
         (S, rv) => {
           val allMentions = S.filter(_.mentions(rv))
-          (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv) // TODO Π(identity)
-        }).reduce(_ * _) // TODO Π(identity)
+          (S -- allMentions) + allMentions.Π(identity).sumOut(rv)
+        }).Π(identity)
 
     def interactsWith(v1: RandomVariable[T], v2: RandomVariable[T]): Boolean =
       graph.vertices.map(_.payload.cpt).exists(f => f.mentions(v1) && f.mentions(v2))

@@ -70,7 +70,7 @@ trait FactorModule {
         } else {
           (Real(0), Real(0))
         }
-      }).reduce(_ + _)
+      }).toVector.Σ(identity)
 
       pw._1 / pw._2
     }
