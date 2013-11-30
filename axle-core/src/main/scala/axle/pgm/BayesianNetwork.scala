@@ -104,6 +104,7 @@ import axle._
 import axle.XmlAble
 import axle.graph._
 import axle.stats._
+import spire.math._
 import spire.algebra._
 import spire.implicits._
 import math.max

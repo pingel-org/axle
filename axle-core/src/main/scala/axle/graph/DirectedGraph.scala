@@ -16,7 +16,7 @@ trait DirectedGraph[VP, EP] {
   def source(edge: Edge[ES, EP]): Vertex[VP]
   def dest(edge: Edge[ES, EP]): Vertex[VP]
 
-  def deleteVertex(v: Vertex[VP]): G[VP, EP]
+  //def deleteVertex(v: Vertex[VP]): G[VP, EP]
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]]
   def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[ES, EP]]
   def leaves(): Set[Vertex[VP]]

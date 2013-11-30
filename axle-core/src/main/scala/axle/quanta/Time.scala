@@ -1,5 +1,6 @@
 package axle.quanta
 
+import spire.algebra._
 import spire.math._
 import axle.graph._
 
@@ -14,6 +15,10 @@ class Time extends Quantum {
 
   type Q = TimeQuantity
 
+  implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
+    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+  }
+  
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
