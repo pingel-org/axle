@@ -1,6 +1,5 @@
 package axle.ast.view
 
-import collection._
 import axle.ast._
 
 case class XhtmlLinesAstNodeFormatterState(

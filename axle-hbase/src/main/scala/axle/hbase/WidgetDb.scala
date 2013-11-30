@@ -1,7 +1,6 @@
 
 package axle.hbase
 
-import collection._
 import Implicits._
 import scala.concurrent.duration.FiniteDuration
 import org.apache.hadoop.hbase.HBaseConfiguration
@@ -30,7 +29,7 @@ class WidgetDb {
     widgetTable.put(key, family, qualifier, value)
   }
 
-  def queryWidgets(name: String): immutable.Map[Long, Widget] =
+  def queryWidgets(name: String): Map[Long, Widget] =
     widgetTable
       .scan(family, qualifier)
       .map({ case (row, t, value) => (t, Widget(name, Bytes.toString(value))) })

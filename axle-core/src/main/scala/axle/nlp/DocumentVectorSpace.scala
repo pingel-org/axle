@@ -26,14 +26,12 @@ trait DocumentVectorSpace {
 
   def stopwords(): Set[String]
 
-  implicit val intsemi = axle.algebra.Semigroups.IntSemigroup // TODO remove this
-
   val emptyCount = Map.empty[String, Int].withDefaultValue(0)
 
   def countWordsInLine(line: String): Map[String, Int] =
     whitespace.split(line.toLowerCase)
       .filter(!stopwords.contains(_))
-      .aggregate(emptyCount)((m, w) => m + (w -> (m(w) + 1)), _ |+| _)
+      .aggregate(emptyCount)((m, w) => m + (w -> (m(w) + 1)), _ + _)
 
   def uniqueWordsInLine(line: String): Map[String, Int] =
     whitespace.split(line.toLowerCase)
@@ -43,10 +41,10 @@ trait DocumentVectorSpace {
       .toMap
 
   def wordCount(is: Seq[String]): Map[String, Int] =
-    is.aggregate(emptyCount)((m, line) => m |+| countWordsInLine(line), _ |+| _)
+    is.aggregate(emptyCount)((m, line) => m + countWordsInLine(line), _ + _)
 
   def wordExistsCount(is: Seq[String]): Map[String, Int] =
-    is.aggregate(emptyCount)((m, line) => m |+| uniqueWordsInLine(line), _ |+| _)
+    is.aggregate(emptyCount)((m, line) => m + uniqueWordsInLine(line), _ + _)
 
   def doc2vector(doc: String): TermVector = wordCount(List(doc))
 

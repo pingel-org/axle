@@ -1,12 +1,17 @@
 
 package axle.lx
 
-import collection._
 import axle._
 import axle.graph._
+import spire.math._
+import spire.algebra._
+import spire.implicits._
 
 class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
 
+  import Angluin._
+  implicit val se = Symbol.symbolEq // TODO get rid of this
+  
   val graph = JungDirectedGraph[String, Symbol](vps, vs => Nil)
 
   import graph._
@@ -74,8 +79,6 @@ object Angluin {
 
   case class Language(sequences: Iterable[Iterable[Symbol]] = Nil) {
 
-    def equals(other: Language): Boolean = sequences.equals(other.sequences)
-
     def prefixes(): Language = ???
 
     def goodFinals(w: List[Symbol]): Language = ???
@@ -84,6 +87,12 @@ object Angluin {
 
   }
 
+  object Language {
+    implicit val languageEq = new Eq[Language] {
+      def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
+    }
+  }
+  
   trait Learner[S] {
 
     def initialState(): S
@@ -158,11 +167,18 @@ object Angluin {
   case class Alphabet(symbols: Set[Symbol])
 
   case class Symbol(s: String) {
-
     override def toString() = s
+  }
 
-    def equals(other: Symbol): Boolean = s.equals(other.s)
-
+  object Symbol {
+    implicit val symbolEq = new Eq[Symbol] {
+      def eqv(x: Symbol, y: Symbol): Boolean = x equals y
+    }
+    
+  }
+  
+  implicit val symbolEq = new Eq[Symbol] {
+    def eqv(x: Symbol, y: Symbol): Boolean = x equals y
   }
 
   // implicit def enText(expressions: Iterable[Iterable[Symbol]]): Text = Text(expressions)
@@ -173,9 +189,9 @@ object Angluin {
 
     def length() = expressions.size
 
-    def isFor(ℒ: Language) = content().equals(ℒ)
+    def isFor(ℒ: Language) = content === ℒ
 
-    def content(): Language = new Language(expressions.filter(_ != ♯))
+    def content: Language = new Language(expressions.filter(_ != ♯))
 
     override def toString() = "<" + expressions.mkString(", ") + ">"
 

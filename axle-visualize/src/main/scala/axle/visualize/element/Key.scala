@@ -1,7 +1,6 @@
 package axle.visualize.element
 
 import axle.visualize._
-import collection._
 import java.awt.Graphics2D
 import java.awt.Color
 import java.awt.Font
@@ -15,7 +14,7 @@ class BarChartKey[S, Y: Plottable](chart: BarChart[S, Y], font: Font, colorStrea
   def paint(g2d: Graphics2D): Unit = {
     g2d.setFont(font)
     val lineHeight = g2d.getFontMetrics.getHeight
-    for (((s, j), color) <- slices.zipWithIndex.zip(colorStream)) {
+    slices.zipWithIndex.zip(colorStream) foreach { case ((s, j), color) =>
       g2d.setColor(color)
       g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
     }

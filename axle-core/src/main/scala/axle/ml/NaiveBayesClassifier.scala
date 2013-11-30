@@ -6,12 +6,12 @@ import spire.algebra._
 
 object NaiveBayesClassifier {
 
-  def apply[DATA, FEATURE, CLASS: Ordering](data: collection.GenSeq[DATA], pFs: List[RandomVariable[FEATURE]], pC: RandomVariable[CLASS], featureExtractor: DATA => List[FEATURE], classExtractor: DATA => CLASS) =
+  def apply[DATA, FEATURE, CLASS: Ordering: Eq](data: collection.GenSeq[DATA], pFs: List[RandomVariable[FEATURE]], pC: RandomVariable[CLASS], featureExtractor: DATA => List[FEATURE], classExtractor: DATA => CLASS) =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
 }
 
-class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
+class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
   data: collection.GenSeq[DATA],
   featureRandomVariables: List[RandomVariable[FEATURE]],
   classRandomVariable: RandomVariable[CLASS],
@@ -28,21 +28,18 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
 
   // TODO no probability should ever be 0
 
-  implicit val intsemi = axle.algebra.Semigroups.IntSemigroup // TODO remove this
+  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Long].withDefaultValue(0L)
 
   val featureTally =
-    data.aggregate(Map.empty[(CLASS, String, FEATURE), Int].withDefaultValue(0))(
+    data.aggregate(emptyFeatureTally)(
       (tally, d) => {
         val fs = featureExtractor(d)
         val c = classExtractor(d)
-        tally |+| featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> 1) }).toMap
+        tally + featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> 1L) }).toMap
       },
-      _ |+| _)
+      _ + _)
 
-  val classTally =
-    data.aggregate(Map.empty[CLASS, Int].withDefaultValue(0))(
-      (tally, d) => tally + (classExtractor(d) -> 1),
-      _ |+| _).withDefaultValue(1) // to avoid division by zero
+  val classTally = data.map(d => classExtractor(d)).tally
 
   val C = new RandomVariable0(classRandomVariable.name, classRandomVariable.values,
     distribution = Some(new TallyDistribution0(classTally)))
@@ -56,7 +53,7 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering](
         case (k, v) => k._2 == featureRandomVariable.name
       }.map {
         case (k, v) => ((k._3, k._1), v)
-      }.withDefaultValue(0)))))
+      }.withDefaultValue(0L)))))
 
   def classes(): IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 

@@ -1,7 +1,6 @@
 
 package axle.ast.language
 
-import collection._
 import axle.ast._
 import axle.ast.view.ViewString
 import org.specs2.mutable._

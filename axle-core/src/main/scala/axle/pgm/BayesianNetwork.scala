@@ -100,11 +100,12 @@ package axle.pgm
  *
  */
 
-import collection._
 import axle._
 import axle.XmlAble
 import axle.graph._
 import axle.stats._
+import spire.algebra._
+import spire.implicits._
 import math.max
 import Stream.{ cons, empty }
 
@@ -114,42 +115,60 @@ trait BayesianNetworkModule {
 
   import FactorModule._
   import EliminationTreeModule._
-  
-  class BayesianNetwork(_name: String, _graph: DirectedGraph[BayesianNetworkNode, String])
-    extends Model(_graph) {
 
-    import _graph._
+  case class BayesianNetworkNode[T: Eq](rv: RandomVariable[T], cpt: Factor[T]) extends XmlAble {
 
-    override def name() = _name
-    def graph() = _graph
+    override def toString(): String = rv.name + "\n\n" + cpt
 
-    override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode): RandomVariable[_] = mvp.rv
+    def toXml(): xml.Node =
+      <html>
+        <div>
+          <center><h2>{ rv.name }</h2></center>
+          { cpt.toHtml() }
+        </div>
+      </html>
 
-    // def duplicate(): BayesianNetwork = new BayesianNetwork(name) // TODO graphFrom(g)(v => v, e => e)
+  }
 
-    def jointProbabilityTable(): Factor = {
-      val newVars = randomVariables()
+  object BayesianNetworkNode {
+
+    implicit def bnnEq[T: Eq] = new Eq[BayesianNetworkNode[T]] {
+      def eqv(x: BayesianNetworkNode[T], y: BayesianNetworkNode[T]): Boolean = x equals y
+    }
+  }
+
+  case class BayesianNetwork[T: Manifest: Eq](name: String, graph: DirectedGraph[BayesianNetworkNode[T], String]) {
+
+    def duplicate: BayesianNetwork[T] = BayesianNetwork(name, graph)
+
+    def numVariables = graph.size
+
+    def randomVariables: Vector[RandomVariable[T]] =
+      graph.vertices.map(_.payload.rv).toVector
+
+    def jointProbabilityTable: Factor[T] = {
+      val newVars = randomVariables
       new Factor(newVars,
         Factor.spaceFor(newVars)
           .map(kase => (kase, probabilityOf(kase)))
-          .toMap
-      )
+          .toMap)
     }
 
-    def cpt(variable: RandomVariable[_]): Factor = findVertex(_.payload.rv == variable).map(_.payload.cpt).get
+    def cpt(variable: RandomVariable[T]): Factor[T] =
+      graph.findVertex(_.payload.rv == variable).map(_.payload.cpt).get
 
-    def probabilityOf(cs: Seq[CaseIs[_]]) = cs.map(c => cpt(c.rv)(cs)).reduce(_ * _)
+    def probabilityOf(cs: Seq[CaseIs[T]]) = cs.map(c => cpt(c.rv)(cs)).Π(identity)
 
-    def markovAssumptionsFor(rv: RandomVariable[_]): Independence = {
-      val rvVertex = findVertex(_.payload.rv == rv).get
-      val X: immutable.Set[RandomVariable[_]] = immutable.Set(rv)
-      val Z: immutable.Set[RandomVariable[_]] = predecessors(rvVertex).map(_.payload.rv).toSet
-      val D = descendants(rvVertex) ++ predecessors(rvVertex) + rvVertex
+    def markovAssumptionsFor(rv: RandomVariable[T]): Independence[T] = {
+      val rvVertex = graph.findVertex(_.payload.rv == rv).get
+      val X: Set[RandomVariable[T]] = Set(rv)
+      val Z: Set[RandomVariable[T]] = graph.predecessors(rvVertex).map(_.payload.rv).toSet
+      val D = graph.descendants(rvVertex) ++ graph.predecessors(rvVertex) + rvVertex
       val Dvars = D.map(_.payload.rv)
       new Independence(X, Z, randomVariables.filter(!Dvars.contains(_)).toSet)
     }
 
-    def computeFullCase(c: List[CaseIs[_]]): Double = {
+    def computeFullCase(c: List[CaseIs[T]]): Double = {
 
       // not an airtight check
       assert(numVariables == c.size)
@@ -173,11 +192,11 @@ trait BayesianNetworkModule {
      * The cost is the cost of the Tk multiplication. This is highly dependent on π
      */
 
-    def variableEliminationPriorMarginalI(Q: Set[RandomVariable[_]], π: List[RandomVariable[_]]): Factor =
-      π.foldLeft(randomVariables().map(cpt(_)).toSet)((S, rv) => {
+    def variableEliminationPriorMarginalI(Q: Set[RandomVariable[T]], π: List[RandomVariable[T]]): Factor[T] =
+      π.foldLeft(randomVariables.map(cpt(_)).toSet)((S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
-      }).reduce(_ * _)
+        (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv) // Π(identity)
+      }).reduce(_ * _) // Π(identity)
 
     /**
      *
@@ -189,15 +208,15 @@ trait BayesianNetworkModule {
      *
      */
 
-    def variableEliminationPriorMarginalII[A](Q: Set[RandomVariable[_]], π: List[RandomVariable[_]], e: CaseIs[A]): Factor =
-      π.foldLeft(randomVariables().map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
+    def variableEliminationPriorMarginalII(Q: Set[RandomVariable[T]], π: List[RandomVariable[T]], e: CaseIs[T]): Factor[T] =
+      π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
         (S, rv) => {
           val allMentions = S.filter(_.mentions(rv))
-          (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
-        }).reduce(_ * _)
+          (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv) // TODO Π(identity)
+        }).reduce(_ * _) // TODO Π(identity)
 
-    def interactsWith(v1: RandomVariable[_], v2: RandomVariable[_]): Boolean =
-      vertices().map(_.payload.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
+    def interactsWith(v1: RandomVariable[T], v2: RandomVariable[T]): Boolean =
+      graph.vertices.map(_.payload.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
 
     /**
      * interactionGraph
@@ -205,9 +224,9 @@ trait BayesianNetworkModule {
      * Also called the "moral graph"
      */
 
-    def interactionGraph(): InteractionGraph =
+    def interactionGraph(): InteractionGraph[T] =
       InteractionGraph(randomVariables,
-        (vs: Seq[Vertex[RandomVariable[_]]]) =>
+        (vs: Seq[Vertex[RandomVariable[T]]]) =>
           (for {
             vi <- vs // TODO "doubles"
             vj <- vs
@@ -222,13 +241,12 @@ trait BayesianNetworkModule {
      * Chapter 6 Algorithm 2 (page 13)
      */
 
-    def orderWidth(order: List[RandomVariable[_]]): Int =
-      randomVariables().scanLeft((interactionGraph(), 0))(
+    def orderWidth(order: List[RandomVariable[T]]): Int =
+      randomVariables.scanLeft((interactionGraph(), 0))(
         (gi, rv) => {
           val ig = gi._1
           (ig.eliminate(rv), ig.graph.neighbors(ig.graph.findVertex(_.payload == rv).get).size)
-        }
-      ).map(_._2).max
+        }).map(_._2).max
 
     //  def makeFactorFor(rv: RandomVariable[_]): Factor =
     //    Factor(randomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
@@ -239,8 +257,8 @@ trait BayesianNetworkModule {
      * 6.8.2
      */
 
-    def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[_]]]): BayesianNetwork = {
-      val result = BayesianNetwork(resultName, ???)
+    def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[T]]]): BayesianNetwork[T] = {
+      val result = BayesianNetwork[T](resultName, ???)
       eOpt.map(e => {
         for (U <- e.map(_.rv)) {
           val uVertex = result.graph.findVertex(_.payload.rv == U).get
@@ -262,18 +280,17 @@ trait BayesianNetworkModule {
       }).getOrElse(result)
     }
 
-    def pruneNodes(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]], g: BayesianNetwork): BayesianNetwork = {
+    def pruneNodes(Q: Set[RandomVariable[T]], eOpt: Option[List[CaseIs[T]]], g: BayesianNetwork[T]): BayesianNetwork[T] = {
 
       val vars = eOpt.map(Q ++ _.map(_.rv)).getOrElse(Q)
 
-      def nodePruneStream(g: BayesianNetwork): Stream[BayesianNetwork] = {
+      def nodePruneStream(g: BayesianNetwork[T]): Stream[BayesianNetwork[T]] = {
         val xVertices = g.graph.leaves().toSet -- vars.map(rv => g.graph.findVertex(_.payload.rv == rv).get)
         xVertices.size match {
           case 0 => empty
           case _ => {
             val result = xVertices.foldLeft(g)(
-              (bn, xV) => new BayesianNetwork(bn.name + " - " + xV, bn.graph.deleteVertex(xV))
-            )
+              (bn, xV) => new BayesianNetwork(bn.name + " - " + xV, bn.graph.deleteVertex(xV)))
             cons(result, nodePruneStream(result))
           }
         }
@@ -287,7 +304,7 @@ trait BayesianNetworkModule {
      * 6.8.3
      */
 
-    def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): BayesianNetwork =
+    def pruneNetworkVarsAndEdges(Q: Set[RandomVariable[T]], eOpt: Option[List[CaseIs[T]]]): BayesianNetwork[T] =
       BayesianNetwork(this.name, ???) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
     //
     //  def variableEliminationPR(Q: Set[RandomVariable[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
@@ -308,7 +325,7 @@ trait BayesianNetworkModule {
     //  def variableEliminationMPE(e: List[CaseIs[_]]): (Double, BayesianNetwork) = {
     //
     //    val pruned = pruneEdges("pruned", Some(e))
-    //    val Q = pruned.randomVariables()
+    //    val Q = pruned.randomVariables
     //    val π = pruned.minDegreeOrder(Q.toSet)
     //
     //    val S = π.foldLeft(Q.map(rv => pruned.cpt(rv).projectRowsConsistentWith(Some(e))).toSet)(
@@ -338,7 +355,7 @@ trait BayesianNetworkModule {
      * see ch 6 page 31: Algorithm 8
      */
 
-    def variableEliminationMAP(Q: Set[RandomVariable[_]], e: List[RandomVariable[_]]): List[CaseIs[_]] = {
+    def variableEliminationMAP(Q: Set[RandomVariable[T]], e: List[RandomVariable[T]]): List[CaseIs[T]] = {
       // TODO
       Nil
     }
@@ -369,29 +386,28 @@ trait BayesianNetworkModule {
     //    }
     //  }
 
-    def _factorElimination1(Q: Set[RandomVariable[_]], S: List[Factor]): Factor = S match {
+    def _factorElimination1(Q: Set[RandomVariable[T]], S: List[Factor[T]]): Factor[T] = S match {
 
       case Nil => throw new Exception("S is empty")
 
-      case fi :: Nil => fi.projectToOnly(Q.toList)
+      case fi :: Nil => fi.projectToOnly(Q.toVector)
 
       case fi :: fj :: rest =>
         _factorElimination1(Q,
           rest ++ List(fj * fi.sumOut(fi.variables
             .filter(!Q.contains(_))
             .filter(v => !S.exists(_.mentions(v)))
-            .toSet))
-        )
+            .toSet)))
 
     }
 
-    def factorElimination1(Q: Set[RandomVariable[_]]): Factor =
-      _factorElimination1(Q, randomVariables().map(cpt(_)).toList)
+    def factorElimination1(Q: Set[RandomVariable[T]]): Factor[T] =
+      _factorElimination1(Q, randomVariables.map(cpt(_)).toList)
 
     // TODO: Make immutable: this should not be calling delete or setPayload
     // the variables Q appear on the CPT for the product of Factors assigned to node r
-    def factorElimination2(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): (BayesianNetwork, Factor) = {
-      while (τ.graph.vertices().size > 1) {
+    def factorElimination2(Q: Set[RandomVariable[T]], τ: EliminationTree[T], f: Factor[T]): (BayesianNetwork[T], Factor[T]) = {
+      while (τ.graph.vertices.size > 1) {
         // remove node i (other than r) that has single neighbor j in τ
         val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_.payload == f).get)
         fl.map(i => {
@@ -401,7 +417,7 @@ trait BayesianNetworkModule {
           // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
         })
       }
-      (???, f.projectToOnly(Q.toList))
+      (???, f.projectToOnly(Q.toVector))
     }
 
     //  def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): Factor = {
@@ -421,9 +437,9 @@ trait BayesianNetworkModule {
     //  }
 
     // Note: not sure about this return type:
-    def factorElimination(τ: EliminationTree, e: List[CaseIs[_]]): Map[Factor, Factor] =
+    def factorElimination(τ: EliminationTree[T], e: List[CaseIs[T]]): Map[Factor[T], Factor[T]] =
       {
-        for (i <- τ.graph.vertices()) {
+        for (i <- τ.graph.vertices) {
           for (ci <- e) {
             // val lambdaE = new Factor(ci.rv, Map())
             // assign lambdaE.E to e.get(E)
@@ -432,7 +448,7 @@ trait BayesianNetworkModule {
         // TODO val root = chooseRoot(τ)
         // TODO pullMessagesTowardsRoot()
         // TODO pushMessagesFromRoot()
-        for (i <- τ.graph.vertices()) {
+        for (i <- τ.graph.vertices) {
 
         }
         ???
@@ -440,29 +456,20 @@ trait BayesianNetworkModule {
 
   }
 
-  case class BayesianNetworkNode(rv: RandomVariable[_], cpt: Factor) extends XmlAble {
-
-    override def toString(): String = rv.name + "\n\n" + cpt
-
-    def toXml(): xml.Node =
-      <html>
-        <div>
-          <center><h2>{ rv.name }</h2></center>
-          { cpt.toHtml() }
-        </div>
-      </html>
-  }
-
   object BayesianNetwork {
 
-    def apply(name: String, graph: DirectedGraph[BayesianNetworkNode, String]) =
-      new BayesianNetwork(name, graph)
-
-    def apply(
+    def apply[T: Manifest: Eq](
       name: String,
-      vps: Seq[BayesianNetworkNode],
-      ef: Seq[Vertex[BayesianNetworkNode]] => Seq[(Vertex[BayesianNetworkNode], Vertex[BayesianNetworkNode], String)]): BayesianNetwork =
-      new BayesianNetwork(name, JungDirectedGraph(vps, ef))
+      vps: Seq[BayesianNetworkNode[T]],
+      ef: Seq[Vertex[BayesianNetworkNode[T]]] => Seq[(Vertex[BayesianNetworkNode[T]], Vertex[BayesianNetworkNode[T]], String)]): BayesianNetwork[T] =
+      apply(name, new JungDirectedGraph(vps, ef))
+
+    //    implicit def bnnAsModel[BT: Manifest: Eq] = new Model[BayesianNetwork[BT]] {
+    //      type T = BT
+    //      override def name(bnn: Model[BT]) = bnn.name
+    //      def graph(bnn: Model[BT]) = bnn.graph
+    //      override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode[T]): RandomVariable[T] = mvp.rv
+    //    }
 
   }
 

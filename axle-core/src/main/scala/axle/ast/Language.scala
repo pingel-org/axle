@@ -1,8 +1,6 @@
 
 package axle.ast
 
-import collection._
-
 class Language(
   name: String,
   rules: List[Rule],

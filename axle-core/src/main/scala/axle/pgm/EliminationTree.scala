@@ -1,8 +1,9 @@
 package axle.pgm
 
-import collection._
 import axle.stats._
 import axle.graph._
+import spire.algebra._
+import spire.implicits._
 
 object EliminationTreeModule extends EliminationTreeModule
 
@@ -10,31 +11,32 @@ trait EliminationTreeModule {
   
   import FactorModule._
   
-  case class EliminationTree(
-    vps: Seq[Factor],
-    ef: Seq[Vertex[Factor]] => Seq[(Vertex[Factor], Vertex[Factor], String)]) {
+  case class EliminationTree[T: Eq: Manifest](
+    vps: Seq[Factor[T]],
+    ef: Seq[Vertex[Factor[T]]] => Seq[(Vertex[Factor[T]], Vertex[Factor[T]], String)]) {
 
     lazy val graph = JungUndirectedGraph(vps, ef)
 
     def gatherVars(
-      stop: Vertex[Factor],
-      node: Vertex[Factor],
-      accumulated: Set[RandomVariable[_]]): Set[RandomVariable[_]] =
+      stop: Vertex[Factor[T]],
+      node: Vertex[Factor[T]],
+      accumulated: Set[RandomVariable[T]]): Set[RandomVariable[T]] =
       graph
         .neighbors(node)
         .filter(!_.equals(stop))
         .foldLeft(accumulated ++ node.payload.variables)((a, y) => gatherVars(node, y, a))
 
-    def cluster(i: Vertex[Factor]): Set[RandomVariable[_]] =
+    def cluster(i: Vertex[Factor[T]]): Set[RandomVariable[T]] =
       graph.neighbors(i).flatMap(separate(i, _)) ++ i.payload.variables
 
-    def separate(i: Vertex[Factor], j: Vertex[Factor]): Set[RandomVariable[_]] =
-      gatherVars(j, i, Set[RandomVariable[_]]()).intersect(gatherVars(i, j, Set[RandomVariable[_]]()))
+    def separate(i: Vertex[Factor[T]], j: Vertex[Factor[T]]): Set[RandomVariable[T]] =
+      gatherVars(j, i, Set.empty[RandomVariable[T]]).intersect(gatherVars(i, j, Set[RandomVariable[T]]()))
 
     // def constructEdge(v1: GV, v2: GV): GE = g += ((v1, v2), "")
     // def delete(node: GV): Unit = g.delete(node)
 
-    def allVariables(): Set[RandomVariable[_]] = graph.vertices.flatMap(_.payload.variables)
+    def allVariables(): Set[RandomVariable[T]] =
+      graph.vertices.flatMap(_.payload.variables)
 
     // Note: previous version also handled case where 'node' wasn't in the graph
     // def addFactor(node: GV, f: Factor): Unit = node.setPayload(node.getPayload.multiply(f))

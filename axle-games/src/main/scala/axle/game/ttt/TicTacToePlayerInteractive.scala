@@ -1,7 +1,6 @@
 package axle.game.ttt
 
 import axle.game._
-import collection._
 import Stream.cons
 
 class InteractiveTicTacToePlayer(itttPlayerId: String, itttDescription: String = "human")(implicit ttt: TicTacToe)

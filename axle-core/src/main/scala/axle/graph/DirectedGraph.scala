@@ -1,7 +1,5 @@
 package axle.graph
 
-import collection._
-
 trait DirectedGraph[VP, EP] {
 
   type G[VP, EP] <: DirectedGraph[VP, EP]
@@ -10,10 +8,10 @@ trait DirectedGraph[VP, EP] {
   def vertexPayloads(): Seq[VP]
   def edgeFunction(): Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]
 
-  def vertices(): Set[Vertex[VP]]
-  def allEdges(): Set[Edge[ES, EP]]
+  def vertices: Set[Vertex[VP]]
+  def allEdges: Set[Edge[ES, EP]]
 
-  def size(): Int
+  def size: Int
 
   def source(edge: Edge[ES, EP]): Vertex[VP]
   def dest(edge: Edge[ES, EP]): Vertex[VP]

@@ -1,5 +1,8 @@
 package axle.algebra
 
+import spire.implicits._
+import spire.algebra._
+
 trait Functor[F[_]] {
 
   def fmap[A, B](xs: F[A], f: A => B): F[B]
@@ -8,13 +11,11 @@ trait Functor[F[_]] {
 
 object Functor {
 
-  def id[T](x: T) = x
-
-  def checkIdentity[F[_]: Functor, A](xs: F[A]): Boolean =
-    xs.fmap(id) === id(xs)
-
-  def checkComposition[F[_]: Functor, A, B, C](xs: F[A], f: A => B, g: B => C): Boolean =
-    xs.fmap(f).fmap(g) === xs.fmap(g compose f)
+//  def checkIdentity[F[_]: Functor, A: Eq](xs: F[A]): Boolean =
+//    xs.fmap(identity) === id(xs)
+//
+//  def checkComposition[F[_]: Functor, A, B, C](xs: F[A], f: A => B, g: B => C): Boolean =
+//    xs.fmap(f).fmap(g) === xs.fmap(g compose f)
 
   implicit def ListFunctor: Functor[List] = new Functor[List] {
     def fmap[A, B](list: List[A], f: A => B) = list.map(f)

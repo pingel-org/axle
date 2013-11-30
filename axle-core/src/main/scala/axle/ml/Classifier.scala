@@ -1,6 +1,11 @@
 package axle.ml
 
-abstract class Classifier[DATA, CLASS: Ordering] extends Function1[DATA, CLASS] {
+import axle._
+import spire.math._
+import spire.implicits._
+import spire.algebra._
+
+abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLASS] {
 
   def apply(d: DATA): CLASS
 
@@ -20,25 +25,25 @@ abstract class Classifier[DATA, CLASS: Ordering] extends Function1[DATA, CLASS] 
   import Semigroups._
 
   private[this] def predictedVsActual(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): (Int, Int, Int, Int) = data.map(d => {
-    val actual = classExtractor(d)
-    val predicted = this(d)
+    val actual: CLASS = classExtractor(d)
+    val predicted: CLASS = this(d)
     (actual === k, predicted === k) match {
       case (true, true) => (1, 0, 0, 0) // true positive
       case (false, true) => (0, 1, 0, 0) // false positive
       case (false, false) => (0, 0, 1, 0) // false negative
       case (true, false) => (0, 0, 0, 1) // true negative
     }
-  }).reduce(_ |+| _)
+  }).reduce(_ + _)
 
   def performance(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS) = {
 
     val (tp, fp, fn, tn) = predictedVsActual(data, classExtractor, k)
 
-    ClassifierPerformance(
-      tp.toDouble / (tp + fp), // precision
-      tp.toDouble / (tp + fn), // recall
-      tn.toDouble / (tn + fp), // specificity aka "true negative rate"
-      (tp + tn).toDouble / (tp + tn + fp + fn) // accuracy
+    ClassifierPerformance[Rational](
+      Rational(tp, tp + fp), // precision
+      Rational(tp, tp + fn), // recall
+      Rational(tn, tn + fp), // specificity aka "true negative rate"
+      Rational(tp + tn, tp + tn + fp + fn) // accuracy
     )
   }
 

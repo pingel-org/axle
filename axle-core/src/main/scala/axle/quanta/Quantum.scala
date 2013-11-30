@@ -4,8 +4,8 @@ import axle.quanta._
 import axle.graph._
 import spire.math._
 import spire.implicits._
+import spire.algebra._
 import math.{ max, abs }
-import collection._
 
 /**
  * Quantum
@@ -51,6 +51,13 @@ trait Quantum extends QuantumExpression {
 
   type Q <: Quantity
 
+  implicit def eqTypeclass: Eq[Q]
+
+// Note: this is need for "def conversions"
+  implicit val edgeEq: Eq[Number => Number] = new Eq[Number => Number] {
+    def eqv(x: Number => Number, y: Number => Number): Boolean = ???
+  }
+  
   def conversionGraph(): DirectedGraph[Q, Number => Number]
 
   def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], Number => Number)]): DirectedGraph[Q, Number => Number] =

@@ -1,6 +1,5 @@
 package axle.graph
 
-import collection._
 import axle._
 
 trait UndirectedGraph[VP, EP] {
@@ -20,14 +19,14 @@ trait UndirectedGraph[VP, EP] {
   def unlink(v1: Vertex[VP], v2: Vertex[VP]): G[VP, EP]
   def areNeighbors(v1: Vertex[VP], v2: Vertex[VP]): Boolean
 
-  def isClique(vs: GenTraversable[Vertex[VP]]): Boolean = (for {
+  def isClique(vs: collection.GenTraversable[Vertex[VP]]): Boolean = (for {
     vi <- vs
     vj <- vs
   } yield {
     (vi == vj) || areNeighbors(vi, vj)
   }).forall(b => b)
 
-  def numEdgesToForceClique(vs: GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP) = (for {
+  def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP) = (for {
     vi <- vs
     vj <- vs
   } yield { if (areNeighbors(vi, vj)) 1 else 0 }

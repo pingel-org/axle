@@ -17,11 +17,15 @@ package axle.ml
  *
  */
 
-case class ClassifierPerformance(
-  precision: Double,
-  recall: Double,
-  specificity: Double,
-  accuracy: Double) {
+import spire.math._
+import spire.implicits._
+import spire.algebra._
+
+case class ClassifierPerformance[N: Field](
+  precision: N,
+  recall: N,
+  specificity: N,
+  accuracy: N) {
 
   def f1Score() = 2 * (precision * recall) / (precision + recall)
 

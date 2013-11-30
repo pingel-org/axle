@@ -1,7 +1,6 @@
 package axle.game
 
 import axle.stats._
-import collection._
 import spire.math._
 import spire.implicits._
 
@@ -14,7 +13,7 @@ object Dice {
   
   def utfD6() = RandomVariable0("UTF d6",
     Some(List('⚀, '⚁, '⚂, '⚃, '⚄, '⚅).toIndexedSeq),
-    distribution = Some(new ConditionalProbabilityTable0(immutable.Map(
+    distribution = Some(new ConditionalProbabilityTable0(Map(
       '⚀ -> sixth,
       '⚁ -> sixth,
       '⚂ -> sixth,

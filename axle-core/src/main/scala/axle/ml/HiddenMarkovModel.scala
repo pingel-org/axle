@@ -1,6 +1,9 @@
 package axle.ml
 
 import axle.graph._
+import spire.math._
+import spire.algebra._
+import spire.implicits._
 
 /**
  *
@@ -9,6 +12,13 @@ import axle.graph._
  */
 
 sealed trait MarkovModelState
+
+object MarkovModelState {
+
+  implicit val mmsEq = new Eq[MarkovModelState] {
+    def eqv(x: MarkovModelState, y: MarkovModelState): Boolean = x equals y
+  }
+}
 
 case object MarkovModelStartState extends MarkovModelState {
   override def toString() = "start"

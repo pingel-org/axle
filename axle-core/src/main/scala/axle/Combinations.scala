@@ -10,7 +10,6 @@ package axle
  */
 
 import annotation.tailrec
-import collection._
 import Stream.{ cons, empty }
 
 object Combinations {

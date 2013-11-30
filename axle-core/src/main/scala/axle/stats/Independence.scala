@@ -1,18 +1,18 @@
 package axle.stats
 
-import collection._
+import spire.algebra._
 
 /**
  *
  * Read: "X is independent of Y given Z"
  */
 
-case class Independence(
-  X: immutable.Set[RandomVariable[_]],
-  Z: immutable.Set[RandomVariable[_]],
-  Y: immutable.Set[RandomVariable[_]]) {
+case class Independence[T: Eq](
+  X: Set[RandomVariable[T]],
+  Z: Set[RandomVariable[T]],
+  Y: Set[RandomVariable[T]]) {
 
-  def variablesToString(s: Set[RandomVariable[_]]): String = "{" + (for (v <- s) yield v.name).mkString(", ") + "}"
+  def variablesToString(s: Set[RandomVariable[T]]): String = "{" + (for (v <- s) yield v.name).mkString(", ") + "}"
 
   override def toString(): String =
     "I(" + variablesToString(X) + ", " + variablesToString(Z) + ", " + variablesToString(Y) + ")"

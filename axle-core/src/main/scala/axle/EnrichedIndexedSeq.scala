@@ -1,6 +1,6 @@
 package axle
 
-import collection._
+import collection.IndexedSeq
 import util.Random.nextInt
 
 object EnrichedIndexedSeq {

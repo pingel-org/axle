@@ -2,11 +2,12 @@ package axle.pgm.docalculus
 
 import axle._
 import axle.stats._
+import spire.algebra._
 
-class VariableNamer {
+class VariableNamer[T: Eq] {
 
-  def duplicate(): VariableNamer = this
+  def duplicate: VariableNamer[T] = ???
   
-  def nextVariable(rv: RandomVariable[_]): RandomVariable[_] = ???
+  def nextVariable(rv: RandomVariable[T]): RandomVariable[T] = ???
   
 }

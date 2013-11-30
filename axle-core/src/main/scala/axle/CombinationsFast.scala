@@ -9,7 +9,7 @@ package axle
  * CombionationsFast(0 until 4, 3)
  */
 
-import collection._
+import collection.mutable.ListBuffer
 
 object CombinationsFast {
 
@@ -29,7 +29,7 @@ class CombinationsFast[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[Inde
 
   override def size(): Int = syze
 
-  val yeeld = new mutable.ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
+  val yeeld = new ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
 
   def iterator() = yeeld.iterator
 

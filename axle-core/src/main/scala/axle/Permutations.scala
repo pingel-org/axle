@@ -1,6 +1,5 @@
 package axle
 
-import collection._
 import Stream.{ empty, cons }
 
 /**

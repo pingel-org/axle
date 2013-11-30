@@ -1,6 +1,5 @@
 package axle.ml
 
-import collection._
 import collection.immutable.TreeMap
 
 trait Species[G] {
@@ -68,9 +67,9 @@ class GeneticAlgorithm[G](species: Species[G], populationSize: Int = 1000, numGe
         (pl: (IndexedSeq[(G, Double)], List[(Double, Double, Double)]), i: Int) => live(pl._1, pl._2)
       )
     val logs = popLog._2.reverse
-    val mins = new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._1))
-    val maxs = new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._2))
-    val aves = new immutable.TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._3))
+    val mins = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._1))
+    val maxs = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._2))
+    val aves = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._3))
     GeneticAlgorithmLog[G](popLog._1, mins, maxs, aves)
   }
 

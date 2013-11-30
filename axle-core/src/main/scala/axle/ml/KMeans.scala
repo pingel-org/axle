@@ -3,8 +3,9 @@ package axle.ml
 import axle._
 import axle.matrix._
 import util.Random.shuffle
-import collection._
 import spire.algebra._
+import spire.implicits._
+import collection.immutable.TreeMap
 
 /**
  * KMeans
@@ -30,7 +31,7 @@ trait KMeansModule {
    *
    */
 
-  def classifier[T](
+  def classifier[T: Eq](
     data: Seq[T],
     N: Int,
     featureExtractor: T => Seq[Double],
@@ -55,7 +56,7 @@ trait KMeansModule {
    * @param distanceLog      K x iterations
    */
 
-  case class KMeansClassifier[T](
+  case class KMeansClassifier[T: Eq](
     data: Seq[T],
     N: Int,
     featureExtractor: T => Seq[Double],
@@ -166,7 +167,7 @@ trait KMeansModule {
       (distances.divColumnVector(counts), unassignedClusterIds)
     }
 
-    def distanceTreeMap(centroidId: Int) = new immutable.TreeMap[Int, Double]() ++
+    def distanceTreeMap(centroidId: Int) = new TreeMap[Int, Double]() ++
       distanceLog.zipWithIndex.map({ case (dl, i) => i -> dl(centroidId, 0) }).toMap
 
     def distanceLogSeries() = (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList

@@ -1,7 +1,7 @@
 package axle
 
+import collection.GenTraversable
 import axle._
-import collection._
 import axle.quanta.Information
 import math.{ log, sqrt }
 import spire.algebra._
@@ -18,7 +18,7 @@ package object stats {
 
   def coin(pHead: Real = 0.5) = RandomVariable0("coin",
     Some(List('HEAD, 'TAIL).toIndexedSeq),
-    distribution = Some(new ConditionalProbabilityTable0(immutable.Map('HEAD -> pHead, 'TAIL -> (1d - pHead)))))
+    distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1d - pHead)))))
 
   def log2(x: Real): Real = log(x.toDouble) / log(2)
 

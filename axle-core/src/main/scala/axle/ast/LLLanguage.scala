@@ -3,8 +3,8 @@ package axle.ast
 
 import axle._
 import axle.algebra._
+import spire.implicits._
 import util.matching.Regex
-import collection._
 import Stream.{ cons, empty }
 
 /**
@@ -100,6 +100,8 @@ case class LLLanguage(
 
   def follow(symbol: NonTerminal, followMemo: Map[Symbol, Set[Symbol]]): (Set[Symbol], Map[Symbol, Set[Symbol]]) = {
 
+    // import NonTerminal._
+
     if (followMemo.contains(symbol)) {
       (followMemo(symbol), followMemo)
     } else {
@@ -167,7 +169,7 @@ case class LLLanguage(
     parseStateStream(startState(input)).toList
       .map({
         case (action, state) =>
-          action + "\n" +
+          action.toString + "\n" +
             "  " + state.inputBufferWithMarker + "\n" +
             "  " + state.stack.mkString("")
       }).mkString("\n\n")

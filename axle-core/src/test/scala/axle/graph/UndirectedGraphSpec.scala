@@ -1,7 +1,9 @@
 package axle.graph
 
+import axle._
 import org.specs2.mutable._
 import axle.graph.JungUndirectedGraph._
+import spire.math._
 
 class UndirectedGraphSpec extends Specification {
 
@@ -21,7 +23,7 @@ class UndirectedGraphSpec extends Specification {
   "REPL Demo" should {
     "work" in {
 
-      val g = JungUndirectedGraph[String, Double](
+      val g = JungUndirectedGraph[String, Real](
         List("a"),
         (vs: Seq[Vertex[String]]) => Nil)
 

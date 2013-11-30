@@ -7,7 +7,6 @@ import axle.quanta._
 import axle.actor.Defaults._
 import Angle._
 import Color._
-import collection._
 import Stream.continually
 import akka.pattern.ask
 import akka.actor.{ Props, Actor, ActorRef, ActorSystem, ActorLogging }

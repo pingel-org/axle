@@ -15,6 +15,12 @@ trait RandomVariable[A] {
   lazy val charWidth: Int = (name.length :: values.map(vs => vs.map(_.toString.length).toList).getOrElse(Nil)).reduce(math.max)
 }
 
+object RandomVariable {
+  implicit def rvEq[A: Eq] = new Eq[RandomVariable[A]] {
+    def eqv(x: RandomVariable[A], y: RandomVariable[A]): Boolean = x equals y // TODO
+  }
+}
+
 case class RandomVariable0[A](_name: String, _values: Option[IndexedSeq[A]] = None, distribution: Option[Distribution0[A]] = None)
   extends RandomVariable[A] {
 

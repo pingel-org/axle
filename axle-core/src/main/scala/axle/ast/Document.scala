@@ -1,7 +1,6 @@
 
 package axle.ast
 
-import collection._
 import java.io.File
 import java.io.FileWriter
 

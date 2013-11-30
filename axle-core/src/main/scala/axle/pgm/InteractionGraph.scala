@@ -3,17 +3,18 @@ package axle.pgm
 import axle._
 import axle.stats._
 import axle.graph._
-import collection._
+import spire.implicits._
+import spire.algebra._
 
-case class InteractionGraph(
-  vps: Seq[RandomVariable[_]],
-  ef: Seq[Vertex[RandomVariable[_]]] => Seq[(Vertex[RandomVariable[_]], Vertex[RandomVariable[_]], String)]) {
+case class InteractionGraph[T: Manifest: Eq](
+  vps: Seq[RandomVariable[T]],
+  ef: Seq[Vertex[RandomVariable[T]]] => Seq[(Vertex[RandomVariable[T]], Vertex[RandomVariable[T]], String)]) {
 
   lazy val graph = JungUndirectedGraph(vps, ef)
 
-  def eliminate(rv: RandomVariable[_]): InteractionGraph = ???
+  def eliminate(rv: RandomVariable[T]): InteractionGraph[T] = ???
 
-  def eliminationSequence(π: List[RandomVariable[_]]): List[InteractionGraph] =
+  def eliminationSequence(π: List[RandomVariable[T]]): List[InteractionGraph[T]] =
     π.scanLeft(this)((G, rv) => G.eliminate(rv))
 
 }

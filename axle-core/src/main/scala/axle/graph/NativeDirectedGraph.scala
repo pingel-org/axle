@@ -1,10 +1,11 @@
 package axle.graph
 
-import collection._
 import axle._
 import axle.algebra._
+import spire.implicits._
+import spire.algebra._
 
-case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
+case class NativeDirectedGraph[VP: Eq, EP: Eq](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends DirectedGraph[VP, EP] {
 
   type G[VP, EP] = NativeDirectedGraph[VP, EP]
@@ -47,11 +48,11 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
   // TODO findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = _vertices.find(f(_))
 
-  def deleteEdge(e: Edge[ES, EP]): NativeDirectedGraph[VP, EP] =
-    filterEdges(t => !((source(e), dest(e), e.payload) === t))
-
-  def deleteVertex(v: Vertex[VP]): NativeDirectedGraph[VP, EP] =
-    NativeDirectedGraph(_vertices.filter(_ != v).map(_.payload), ef)
+//  def deleteEdge(e: Edge[ES, EP]): NativeDirectedGraph[VP, EP] =
+//    filterEdges(t => !((source(e), dest(e), e.payload) === t))
+//
+//  def deleteVertex(v: Vertex[VP]): NativeDirectedGraph[VP, EP] =
+//    NativeDirectedGraph(_vertices.filter(_ != v).map(_.payload), ef)
 
   def leaves(): Set[Vertex[VP]] = vertices().filter(isLeaf(_))
 
@@ -99,7 +100,7 @@ case class NativeDirectedGraph[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[
 
   def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[ES, EP]]] = _shortestPath(source, goal, Set())
 
-  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
+  def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP) =
     NativeDirectedGraph(vps.map(vpf(_)),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(_vertices).map({

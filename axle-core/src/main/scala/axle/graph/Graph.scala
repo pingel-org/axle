@@ -1,10 +1,25 @@
 package axle.graph
 
-case class Edge[S, EP](storage: S, payloadF: S => EP) {
-  def payload(): EP = payloadF(storage)
+import spire.algebra._
+import spire.implicits._
+
+case class Edge[S, EP: Eq](storage: S, payloadF: S => EP) {
+  def payload: EP = payloadF(storage)
+}
+
+object Edge {
+  implicit def edgeEq[S, EP]() = new Eq[Edge[S, EP]] {
+    def eqv(x: Edge[S, EP], y: Edge[S, EP]): Boolean = x equals y // TODO
+  }
 }
 
 case class Vertex[VP](payload: VP)
+
+object Vertex {
+  implicit def vertexEq[VP: Eq]() = new Eq[Vertex[VP]] {
+    def eqv(x: Vertex[VP], y: Vertex[VP]): Boolean = x.payload === y.payload
+  }
+}
 
 /*
 

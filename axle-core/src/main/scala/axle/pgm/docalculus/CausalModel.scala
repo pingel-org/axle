@@ -4,37 +4,50 @@ import axle._
 import axle.pgm._
 import axle.stats._
 import axle.graph._
+import axle.graph.JungDirectedGraph
+import spire.algebra._
+import spire.implicits._
 
-case class CausalModelNode(rv: RandomVariable[_], observable: Boolean = true)
+case class CausalModelNode[T: Eq](rv: RandomVariable[T], observable: Boolean = true)
 
-case class PFunction(rv: RandomVariable[_], inputs: Seq[RandomVariable[_]])
+object CausalModelNode {
+  implicit def cmnEq[T: Eq] = new Eq[CausalModelNode[T]] {
+    def eqv(x: CausalModelNode[T], y: CausalModelNode[T]): Boolean =
+      (x.rv equals y.rv) && (x.observable equals y.observable)
+  }
+}
 
-class CausalModel(_name: String, graph: DirectedGraph[CausalModelNode, String])
-  extends Model[CausalModelNode](graph) {
+case class PFunction[T: Eq](rv: RandomVariable[T], inputs: Seq[RandomVariable[T]])
 
+class CausalModel[T: Eq](_name: String, graph: DirectedGraph[CausalModelNode[T], String]) 
+{
   import graph._
 
-  override def name() = _name
+  def name = _name
   
-  def duplicate(): CausalModel = ???
+  def duplicate: CausalModel[T] = ???
 
+  def randomVariables: Vector[RandomVariable[T]] =
+    graph.vertices.map(_.payload.rv).toVector
+  
   // TODO: this should probably be Option[Boolean] ?
-  def observes(rv: RandomVariable[_]): Boolean = findVertex((n: Vertex[CausalModelNode]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
+  def observes(rv: RandomVariable[T]): Boolean = findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
 
-  def nodesFor(rvs: Set[RandomVariable[_]]) = rvs.flatMap(rv => findVertex((n: Vertex[CausalModelNode]) => n.payload.rv == rv))
+  def nodesFor(rvs: Set[RandomVariable[T]]) = rvs.flatMap(rv => findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv == rv))
 
-  def nodeFor(rv: RandomVariable[_]) = findVertex((n: Vertex[CausalModelNode]) => n.payload.rv == rv)
+  def nodeFor(rv: RandomVariable[T]) = findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv == rv)
 
-  override def vertexPayloadToRandomVariable(cmn: CausalModelNode): RandomVariable[_] = cmn.rv
+  // def vertexPayloadToRandomVariable(cmn: CausalModelNode[T]): RandomVariable[T] = cmn.rv
 
-  def addFunctions(pf: Seq[PFunction]): CausalModel = ???
+  def addFunctions(pf: Seq[PFunction[T]]): CausalModel[T] = ???
 
-  def getVariable(name: String): Int = 1 // TODO
+  def getVariable(name: String): Int = ??? // TODO
 
 }
 
 object CausalModel {
 
-  def apply(name: String, vps: Seq[CausalModelNode]): CausalModel = new CausalModel(name, JungDirectedGraph(vps, vs => Nil))
+  def apply[T: Eq](name: String, vps: Seq[CausalModelNode[T]]): CausalModel[T] =
+    new CausalModel(name, JungDirectedGraph[CausalModelNode[T], String](vps, vs => Nil))
 
 }

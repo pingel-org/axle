@@ -2,9 +2,7 @@ package axle
 
 trait MapReduce {
 
-  import collection._
-
-  def mapReduce[D, K, V](data: Iterator[D], mapper: D => Seq[(K, V)], reducer: (V, V) => V): immutable.Map[K, V]
+  def mapReduce[D, K, V](data: Iterator[D], mapper: D => Seq[(K, V)], reducer: (V, V) => V): Map[K, V]
 
   def count[D, K](dit: Iterator[D], tokenizer: D => Seq[K]): Map[K, Int] =
     mapReduce(
@@ -16,9 +14,7 @@ trait MapReduce {
 
 object ScalaMapReduce extends MapReduce {
 
-  import collection._
-
-  def mapReduce[D, K, V](data: Iterator[D], mapper: D => Seq[(K, V)], reducer: (V, V) => V): immutable.Map[K, V] =
+  def mapReduce[D, K, V](data: Iterator[D], mapper: D => Seq[(K, V)], reducer: (V, V) => V): Map[K, V] =
     data
       .flatMap(mapper(_))
       .toList // TODO inefficient

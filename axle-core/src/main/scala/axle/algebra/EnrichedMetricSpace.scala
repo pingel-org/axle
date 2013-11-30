@@ -4,7 +4,6 @@ import spire.math._
 import spire.implicits._
 import spire.algebra.MetricSpace
 import axle._
-import collection._
 
 class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Double]) {
 
@@ -35,7 +34,7 @@ class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Double]) {
    * http://en.wikipedia.org/wiki/Triangle_inequality
    */
 
-  def triangleInequalityHolds(data: GenTraversable[T]): Boolean =
+  def triangleInequalityHolds(data: collection.GenTraversable[T]): Boolean =
     data.triples.forall({ case (a, b, c) => distance(a, b) + distance(b, c) >= distance(a, c) })
 
 }

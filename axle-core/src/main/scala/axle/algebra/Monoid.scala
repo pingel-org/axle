@@ -1,17 +1,18 @@
 package axle.algebra
 
+import spire.algebra._
+import spire.implicits._
+
 object MonoidLaws {
 
-  import spire.algebra.Monoid
-
-  def checkLeftZero[A: Monoid](x: A): Boolean = {
+  def checkLeftZero[A: Eq: Monoid](x: A): Boolean = {
     val m = implicitly[Monoid[A]]
-    m.op(∅[A], x) === x
+    m.op(m.id, x) === x
   }
 
-  def checkRightZero[A: Monoid](x: A): Boolean = {
+  def checkRightZero[A: Eq: Monoid](x: A): Boolean = {
     val m = implicitly[Monoid[A]]
-    m.op(x, ∅[A]) === x
+    m.op(x, m.id) === x
   }
 
   def checkAssociativity[A: Monoid](x: A, y: A, z: A): Boolean = {

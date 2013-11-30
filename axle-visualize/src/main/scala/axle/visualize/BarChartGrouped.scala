@@ -1,6 +1,5 @@
 package axle.visualize
 
-import collection._
 import axle.actor.Defaults._
 import axle.algebra.Plottable
 import akka.actor.Props

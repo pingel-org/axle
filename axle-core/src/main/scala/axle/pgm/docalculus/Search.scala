@@ -3,8 +3,8 @@ package axle.pgm.docalculus
 import axle._
 import axle.stats._
 import axle.pgm._
-import collection._
 import CausalModel._
+import spire.algebra._
 
 object Search {
 
@@ -20,20 +20,20 @@ object Search {
    * TODO try chain rule
    */
 
-  def expand(model: CausalModel, quantity: CausalityProbability, namer: VariableNamer) =
-    Some(DeleteObservation(quantity, model, namer.duplicate()) ++
-      InsertObservation(quantity, model, namer.duplicate()) ++
-      ActionToObservation(quantity, model, namer.duplicate()) ++
-      ObservationToAction(quantity, model, namer.duplicate()) ++
-      DeleteAction(quantity, model, namer.duplicate()) ++
-      InsertAction(quantity, model, namer.duplicate()))
+  def expand[T: Eq](model: CausalModel[T], quantity: CausalityProbability[T], namer: VariableNamer[T]) =
+    Some(DeleteObservation(quantity, model, namer.duplicate) ++
+      InsertObservation(quantity, model, namer.duplicate) ++
+      ActionToObservation(quantity, model, namer.duplicate) ++
+      ObservationToAction(quantity, model, namer.duplicate) ++
+      DeleteAction(quantity, model, namer.duplicate) ++
+      InsertAction(quantity, model, namer.duplicate))
 
   // TODO: figure out what the intent of the "probFactory" was here:
-  def reduce(model: CausalModel, quantity: CausalityProbability, namer: VariableNamer, depth: Int, maxDepth: Int): Option[List[Form]] =
+  def reduce[T: Eq](model: CausalModel[T], quantity: CausalityProbability[T], namer: VariableNamer[T], depth: Int, maxDepth: Int): Option[List[Form]] =
     if (depth <= maxDepth) {
       expand(model, quantity, namer).flatMap(es => {
         es.flatMap(e => {
-          val probFactory = CausalityProbability(immutable.Set(), immutable.Set(), immutable.Set())
+          val probFactory = CausalityProbability(Set.empty[RandomVariable[T]], Set.empty[RandomVariable[T]], Set.empty[RandomVariable[T]])
           if (probFactory.actions.size == 0) {
             Some(List(e))
           } else {

@@ -1,9 +1,10 @@
 package axle.pgm
 
-import collection._
 import axle._
 import axle.graph._
 import axle.stats._
+import spire.algebra._
+import spire.implicits._
 
 object Direction {
 
@@ -13,26 +14,23 @@ object Direction {
 
 }
 
-class Model[MVP](graph: DirectedGraph[MVP, String]) {
+case class GenModel[T: Eq](graph: DirectedGraph[RandomVariable[T], String]) {
 
-  import graph._
+  def vertexPayloadToRandomVariable(mvp: T): RandomVariable[T] = ???
 
-  def name(): String = "model name"
+  def randomVariables: Vector[RandomVariable[T]] =
+    graph.vertices.map(_.payload).toVector
 
-  def vertexPayloadToRandomVariable(mvp: MVP): RandomVariable[_] = ???
+  def variable(name: String): RandomVariable[T] = ??? // TODO name2variable(name)
 
-  def randomVariables(): List[RandomVariable[_]] = graph.vertices().map(v => vertexPayloadToRandomVariable(v.payload)).toList
-
-  def variable(name: String): RandomVariable[_] = ??? // TODO name2variable(name)
-
-  def numVariables(): Int = graph.size()
+  def numVariables: Int = graph.size
 
   def blocks(
-    from: Set[RandomVariable[_]],
-    to: Set[RandomVariable[_]],
-    given: Set[RandomVariable[_]]): Boolean =
+    from: Set[RandomVariable[T]],
+    to: Set[RandomVariable[T]],
+    given: Set[RandomVariable[T]]): Boolean =
     _findOpenPath(
-      Map[RandomVariable[_], Set[RandomVariable[_]]](),
+      Map[RandomVariable[T], Set[RandomVariable[T]]](),
       Direction.UNKNOWN,
       None,
       from,
@@ -44,12 +42,12 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
   //  }
 
   def _findOpenPath(
-    visited: Map[RandomVariable[_], Set[RandomVariable[_]]],
+    visited: Map[RandomVariable[T], Set[RandomVariable[T]]],
     priorDirection: Int,
-    priorOpt: Option[RandomVariable[_]],
-    current: Set[RandomVariable[_]], // Note: this used to be mutabl.  I may have introduced bugs.
-    to: Set[RandomVariable[_]],
-    given: Set[RandomVariable[_]]): Option[List[RandomVariable[_]]] = {
+    priorOpt: Option[RandomVariable[T]],
+    current: Set[RandomVariable[T]], // Note: this used to be mutabl.  I may have introduced bugs.
+    to: Set[RandomVariable[T]],
+    given: Set[RandomVariable[T]]): Option[List[RandomVariable[T]]] = {
 
     println("_fOP: " + priorDirection +
       ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
@@ -57,12 +55,12 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
       ", to = " + to.map(_.name).mkString(", ") +
       ", evidence = " + given.map(_.name).mkString(", "))
 
-    val priorVertexOpt = priorOpt.map(prior => graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == prior).get)
-    val givenVertices = given.map(v1 => graph.findVertex((v2: Vertex[MVP]) => vertexPayloadToRandomVariable(v2.payload) == v1).get)
+    val priorVertexOpt = priorOpt.map(prior => graph.findVertex(_.payload === prior).get)
+    val givenVertices = given.map(v1 => graph.findVertex(_.payload === v1).get)
 
     (current -- priorOpt.map(visited(_)).getOrElse(Set())).toList.flatMap(variable => {
 
-      val variableVertex = graph.findVertex((v: Vertex[MVP]) => vertexPayloadToRandomVariable(v.payload) == variable).get
+      val variableVertex = graph.findVertex(_.payload === variable).get
 
       val (directionPriorToVar, openToVar) = priorVertexOpt.map(priorVertex => {
         val d = if (graph.precedes(variableVertex, priorVertex)) {
@@ -70,14 +68,15 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
         } else {
           Direction.OUTWARD
         }
-        (d, if (priorDirection != Direction.UNKNOWN) {
+        val otv = if (priorDirection != Direction.UNKNOWN) {
           val priorGiven = given.contains(priorOpt.get)
-          (priorDirection == Direction.INWARD && !priorGiven && d == Direction.OUTWARD) ||
-            (priorDirection == Direction.OUTWARD && !priorGiven && d == Direction.OUTWARD) ||
-            (priorDirection == Direction.INWARD && graph.descendantsIntersectsSet(variableVertex, givenVertices) && d == Direction.INWARD)
+          (priorDirection === Direction.INWARD && !priorGiven && d === Direction.OUTWARD) ||
+            (priorDirection === Direction.OUTWARD && !priorGiven && d === Direction.OUTWARD) ||
+            (priorDirection === Direction.INWARD && graph.descendantsIntersectsSet(variableVertex, givenVertices) && d === Direction.INWARD)
         } else {
           true
-        })
+        }
+        (d, otv)
       }).getOrElse((Direction.UNKNOWN, true))
 
       if (openToVar) {
@@ -86,15 +85,14 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
         } else {
           _findOpenPath(
             priorOpt.map(prior => {
-              visited + (prior -> (visited.get(prior).getOrElse(Set[RandomVariable[_]]()) ++ Set(variable)))
+              visited + (prior -> (visited.get(prior).getOrElse(Set[RandomVariable[T]]()) ++ Set(variable)))
             }).getOrElse(visited),
             -1 * directionPriorToVar,
             Some(variable),
-            (graph.neighbors(variableVertex) - priorVertexOpt.get).map(_.payload).map(vertexPayloadToRandomVariable(_)),
+            (graph.neighbors(variableVertex) - priorVertexOpt.get).map(_.payload),
             to,
             given)
-            .map(_ ++ List(variable)
-            )
+            .map(_ ++ List(variable))
         }
       } else {
         None
@@ -105,13 +103,13 @@ class Model[MVP](graph: DirectedGraph[MVP, String]) {
 
 }
 
-object Model {
-
-  val newVarIndex = 0
-
-  def apply[A](
-    vps: Seq[A],
-    ef: Seq[Vertex[A]] => Seq[(Vertex[A], Vertex[A], String)]): Model[A] =
-    new Model(JungDirectedGraph(vps, ef))
-
-}
+//object Model {
+//
+//  val newVarIndex = 0
+//
+//  def apply[A: Eq](
+//    vps: Vector[A],
+//    ef: Seq[Vertex[A]] => Seq[(Vertex[A], Vertex[A], String)]): Model[A] =
+//    new Model(JungDirectedGraph(vps, ef))
+//
+//}

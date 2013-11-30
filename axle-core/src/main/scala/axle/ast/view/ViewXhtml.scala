@@ -2,7 +2,6 @@
 package axle.ast.view
 
 import axle.ast._
-import collection._
 import math.{ min, max }
 import Emission._
 

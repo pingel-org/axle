@@ -29,11 +29,11 @@ class TimeSeriesPlotSpec extends Specification {
   def t1(): Unit = {
 
     import util.Random
-    import collection._
     import math.{ Pi, cos, sin }
     import axle.visualize._
     import axle.algebra.Plottable._
     import org.joda.time.DateTime
+    import collection.immutable.TreeMap
 
     val now = new DateTime()
 
@@ -42,7 +42,7 @@ class TimeSeriesPlotSpec extends Specification {
       val amp = Random.nextDouble
       val f = Random.nextDouble
       ("series " + i,
-        new immutable.TreeMap[DateTime, Double]() ++
+        new TreeMap[DateTime, Double]() ++
         (0 to 100).map(j => (now.plusMinutes(2 * j) -> amp * sin(phase + (j / (10 * f))))).toMap)
     }
 
@@ -55,20 +55,23 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
-    import collection._
     import axle.visualize.Plot
     import axle.algebra.Plottable
     import Plottable._
     import axle.quanta._
     import Information._
     import axle.stats._
+    import collection.immutable.TreeMap
 
-    val hm = new immutable.TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(i / 100.0)))).toMap
+    val hm = new TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(i / 100.0)))).toMap
 
     val plot = new Plot(List(("h", hm)),
-      connect = true, drawKey = false,
-      xAxis = Some(0.0 *: bit), xAxisLabel = Some("p(x='HEAD)"),
-      yAxis = Some(0.0), yAxisLabel = Some("H"),
+      connect = true,
+      drawKey = false,
+      xAxis = Some(0.0 *: bit),
+      xAxisLabel = Some("p(x='HEAD)"),
+      yAxis = Some(0.0),
+      yAxisLabel = Some("H"),
       title = Some("Entropy"))(DoublePlottable, Information.UnitPlottable(bit))
 
     // show(plot)

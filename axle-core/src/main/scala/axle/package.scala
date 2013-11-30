@@ -27,25 +27,25 @@
  *
  */
 
-import collection._
 import math.{ exp, log }
 import spire.math._
 import spire.implicits._
 import spire.algebra._
+import collection.mutable.Buffer
 
 package object axle {
 
-  implicit def enrichGenSet[T](s: GenSet[T]): EnrichedGenSet[T] = EnrichedGenSet(s)
+  implicit def enrichGenSet[T](s: collection.GenSet[T]): EnrichedGenSet[T] = EnrichedGenSet(s)
 
-  implicit def enrichGenSeq[T](genSeq: GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
+  implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
 
-  implicit def enrichGenTraversable[T: Manifest](gt: GenTraversable[T]): EnrichedGenTraversable[T] = EnrichedGenTraversable(gt)
+  implicit def enrichGenTraversable[T: Manifest](gt: collection.GenTraversable[T]): EnrichedGenTraversable[T] = EnrichedGenTraversable(gt)
 
   implicit def enrichIndexedSeq[T: Manifest](is: IndexedSeq[T]): EnrichedIndexedSeq[T] = EnrichedIndexedSeq(is)
 
   implicit def enrichByteArray(barr: Array[Byte]): EnrichedByteArray = EnrichedByteArray(barr)
 
-  implicit def enrichMutableBuffer[T](buffer: mutable.Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
+  implicit def enrichMutableBuffer[T](buffer: Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
 
   implicit def enrichArray[T: Manifest](arr: Array[T]): EnrichedArray[T] = EnrichedArray(arr)
 
@@ -89,4 +89,17 @@ package object axle {
 
   def √[N: NRoot](x: N): N = x.sqrt
 
+  implicit val stringEq = new Eq[String] {
+    def eqv(x: String, y: String): Boolean = x equals y
+  }
+
+  implicit val boolEq = new Eq[Boolean] {
+    def eqv(x: Boolean, y: Boolean): Boolean = x equals y
+  }
+
+  implicit def eqSet[S: Eq] = new Eq[Set[S]] {
+    def eqv(x: Set[S], y: Set[S]): Boolean = x equals y
+      //(x.size == y.size) && x.intersect(y).size == x.size
+  }
+  
 }

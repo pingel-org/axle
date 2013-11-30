@@ -13,23 +13,37 @@ package axle.ast
  * TODO create AST
  */
 
-import collection._
 import axle.algebra._
+import spire.math._
+import spire.implicits._
+import spire.algebra._
 
 class Symbol(_label: String) {
   def label() = _label
   //override def toString() = "'" + label + "'"
   override def toString() = _label
 }
+object Symbol {
+  implicit val symbolEq = new Eq[Symbol] {
+    def eqv(x: Symbol, y: Symbol): Boolean = x equals y
+  }
+}
 
 case class Terminal(_label: String) extends Symbol(_label)
+
 case class NonTerminal(_label: String) extends Symbol(_label)
+
+object NonTerminal {
+  implicit val eqNT = new Eq[NonTerminal] {
+    def eqv(x: NonTerminal, y: NonTerminal): Boolean = x equals y
+  }
+}
 
 object ⊥ extends Terminal("⊥") // also known as '$'
 object ε extends Symbol("ε") // TODO terminal or non-terminal?
 
 case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol]) {
-  override def toString() = from + " " + "->" + " " + rhs.mkString("", " ", "")
+  override def toString() = from.toString + " -> " + rhs.mkString("", " ", "")
 }
 
 abstract class LLParserAction()
@@ -61,7 +75,7 @@ case class LLParserState(
       assert(stack.head == rule.from)
       LLParserState(grammar, input, rule.rhs ++ stack.tail, i)
     }
-    case ParseError(msg) => { sys.error(this + "\nparse error: " + msg) }
+    case ParseError(msg) => { sys.error(this.toString + "\nparse error: " + msg) }
   }
 
   def nextAction(): LLParserAction = stack.head match {

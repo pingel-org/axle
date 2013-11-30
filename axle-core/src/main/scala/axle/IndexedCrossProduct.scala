@@ -1,7 +1,5 @@
 package axle
 
-import collection._
-
 object IndexedCrossProduct {
 
   def apply[E](lists: Seq[IndexedSeq[E]]): IndexedCrossProduct[E] = new IndexedCrossProduct[E](lists)

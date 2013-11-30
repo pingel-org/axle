@@ -1,7 +1,6 @@
 package axle.ml
 
 import org.specs2.mutable._
-import collection._
 
 class LinearRegressionSpecification extends Specification {
 

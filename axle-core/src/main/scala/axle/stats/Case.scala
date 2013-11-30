@@ -1,6 +1,6 @@
 package axle.stats
 
-import collection._
+import collection.GenTraversable
 import axle._
 import spire.math._
 import spire.implicits._

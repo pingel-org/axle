@@ -3,8 +3,8 @@ package axle.pgm.docalculus
 
 import axle.stats._
 import axle.pgm._
-import collection._
 import CausalModel._
+import spire.algebra._
 
 case class Sigma[T](xs: Set[T], f: T => Form) extends Form {
 
@@ -17,7 +17,7 @@ object AdjustForDirectCauses extends Rule {
    *
    */
 
-//  def parentObservations(m: CausalModel, Xi: RandomVariable[_]): Option[immutable.Set[RandomVariable[_]]] = {
+//  def parentObservations(m: CausalModel, Xi: RandomVariable[_]): Option[Set[RandomVariable[_]]] = {
 //
 //    val parents = m.findVertex(_ == Xi).map(Xiv => m.predecessors(Xiv).map(_.payload)).getOrElse(Set())
 //
@@ -35,10 +35,10 @@ object AdjustForDirectCauses extends Rule {
 //  def adjustForDirectCauses(m: CausalModel, q: CausalityProbability, namer: VariableNamer, Xi: RandomVariable[_]): Option[Form] =
 //    Sigma(parentObservations(m, Xi), (pai: RandomVariable[_]) => {
 //      CausalityProbability(q.question, q.given ++ parentObservations, q.actions - ai) *
-//        CausalityProbability(parentObservations, immutable.Set(), immutable.Set())
+//        CausalityProbability(parentObservations, Set(), Set())
 //    })
 
-  def apply(q: CausalityProbability, m: CausalModel, namer: VariableNamer): List[Form] =
+  def apply[T: Eq](q: CausalityProbability[T], m: CausalModel[T], namer: VariableNamer[T]): List[Form] =
     Nil // TODO
 //    q.actions.flatMap(adjustForDirectCauses(m, q, namer, _)).toList
 

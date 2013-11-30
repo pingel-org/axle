@@ -1,8 +1,11 @@
 
 package axle.graph
 
+import axle._
 import org.specs2.mutable._
 import axle.graph.JungDirectedGraph._
+import spire.math._
+import spire.implicits._
 
 class DirectedGraphSpec extends Specification {
 

@@ -2,7 +2,6 @@
 package axle.game
 
 import axle._
-import collection._
 import Stream.{ empty, cons }
 import util.Random.{ shuffle, nextInt }
 
@@ -16,7 +15,7 @@ abstract class Game[G <: Game[G]] {
   type MOVE <: Move[G]
   type OUTCOME <: Outcome[G]
 
-  def players(): immutable.Set[G#PLAYER]
+  def players(): Set[G#PLAYER]
 
   def introMessage(): String
 
@@ -78,7 +77,7 @@ abstract class Game[G <: Game[G]] {
     if (s0.outcome.isDefined) {
       empty
     } else {
-      val s1 = s0.displayEvents(immutable.Set(s0.player))
+      val s1 = s0.displayEvents(Set(s0.player))
       val (move, _) = s1.player.move(s1) // TODO: figure out why in some cases the second argument (a State) wasn't modified (eg minimax)
       val s2 = s1(move).get // TODO .get
       val s3 = s2.broadcast(players, move)

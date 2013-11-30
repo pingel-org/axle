@@ -20,8 +20,6 @@ object IndexedPowerSet {
  * @param [E] The type of elements in the Collection passed to the constructor.
  */
 
-import collection._
-
 class IndexedPowerSet[E](all: IndexedSeq[E]) extends Iterable[Set[E]] {
 
   val steps = all.length.to(0, -1).map(0x01 << _)

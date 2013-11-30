@@ -1,24 +1,29 @@
 package axle.algebra
 
+import spire.algebra._
+
 trait Monad[M[_]] {
 
   def bind[A, B](xs: M[A], f: A => M[B]): M[B]
 
   // unit/apply/point
   def unit[A](a: A): M[A]
-
 }
 
 object Monad {
 
-  def checkLeftIdentity[M[_]: Monad, A, B](x: A, f: A => M[B]): Boolean =
-    implicitly[Monad[M]].unit(x).bind(f) === f(x)
+//  implicit def monadEq[M[_]]() = new Eq[Monad[M[_]]] {
+//    def eqv(x: Monad[A], y: Monad[A]): Boolean = false
+//  }
 
-  def checkRightIdentity[M[_]: Monad, A](ma: M[A]): Boolean =
-    ma.bind(implicitly[Monad[M]].unit) === ma
-
-  def checkAssociativity[M[_]: Monad, A, B, C](ma: M[A], f: A => M[B], g: B => M[C]): Boolean =
-    ma.bind(f).bind(g) === ma.bind(x => f(x).bind(g))
+//  def checkLeftIdentity[M[_]: Monad, A, B](x: A, f: A => M[B]): Boolean =
+//    implicitly[Monad[M]].unit(x).bind(f) === f(x)
+//
+//  def checkRightIdentity[M[_]: Monad, A](ma: M[A]): Boolean =
+//    ma.bind(implicitly[Monad[M]].unit) === ma
+//
+//  def checkAssociativity[M[_]: Monad, A, B, C](ma: M[A], f: A => M[B], g: B => M[C]): Boolean =
+//    ma.bind(f).bind(g) === ma.bind(x => f(x).bind(g))
 
   implicit val listMonad = new Monad[List] {
 

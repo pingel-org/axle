@@ -1,6 +1,5 @@
 package axle.game.poker
 
-import collection._
 import axle.game._
 import Stream.cons
 

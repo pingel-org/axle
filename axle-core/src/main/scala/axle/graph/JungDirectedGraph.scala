@@ -2,11 +2,13 @@ package axle.graph
 
 import axle._
 import axle.algebra._
+import spire.implicits._
+import spire.math._
+import spire.algebra._
 import collection.JavaConverters._
-import collection._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
-case class JungDirectedGraph[VP, EP](
+case class JungDirectedGraph[VP: Eq, EP: Eq](
   vps: Seq[VP],
   ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends DirectedGraph[VP, EP] {
@@ -58,9 +60,9 @@ case class JungDirectedGraph[VP, EP](
   // TODO: findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = vertexSeq.find(f(_))
 
-  def deleteEdge(e: Edge[ES, EP]) = filterEdges(t => !((source(e), dest(e), e.payload) === t))
-
-  def deleteVertex(v: Vertex[VP]) = JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
+//  def deleteEdge(e: Edge[ES, EP]) = filterEdges(t => !((source(e), dest(e), e.payload) === t))
+//
+//  def deleteVertex(v: Vertex[VP]) = JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
 
   def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean) =
     JungDirectedGraph(vps, ((es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))).compose(ef))
@@ -112,7 +114,7 @@ case class JungDirectedGraph[VP, EP](
     case _ => xml.Text(vp.toString)
   }
 
-  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
+  def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP) =
     JungDirectedGraph(vps.map(vpf(_)),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(vertexSeq).map({

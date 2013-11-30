@@ -1,11 +1,10 @@
 package axle
 
-import collection._
 import Stream.{ cons, empty }
 
 class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]]) extends Iterable[List[E]] {
 
-  def iterator() = result.toIterator
+  def iterator = result.toIterator
 
   lazy val result: Stream[List[E]] = tail(collections.map(c => -1), 0)
 

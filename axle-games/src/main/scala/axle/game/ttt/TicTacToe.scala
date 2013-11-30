@@ -5,7 +5,6 @@ import axle.game._
 import axle.matrix._
 import axle.algebra._
 import util.Random.{ nextInt }
-import collection._
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game
@@ -30,7 +29,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
 
   val playersSeq = Vector(x, o)
 
-  def state(player: TicTacToePlayer, board: Matrix[Option[TicTacToePlayer]], eventQueue: immutable.Map[TicTacToePlayer, List[Event[TicTacToe]]]) =
+  def state(player: TicTacToePlayer, board: Matrix[Option[TicTacToePlayer]], eventQueue: Map[TicTacToePlayer, List[Event[TicTacToe]]]) =
     Some(new TicTacToeState(player, board, eventQueue))
 
   def move(player: TicTacToePlayer, position: Int) = TicTacToeMove(player, position)
@@ -63,7 +62,7 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
 
   def startBoard() = tttmm.matrix[Option[TicTacToePlayer]](boardSize, boardSize, (r: Int, c: Int) => Option[TicTacToePlayer](null))(convertPlayerId)
 
-  def players(): immutable.Set[TicTacToePlayer] = immutable.Set(x, o)
+  def players(): Set[TicTacToePlayer] = Set(x, o)
 
   def playerAfter(player: TicTacToePlayer): TicTacToePlayer =
     if (player === x) o else x

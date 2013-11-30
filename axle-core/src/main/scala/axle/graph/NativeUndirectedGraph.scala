@@ -1,9 +1,9 @@
 package axle.graph
 
-import collection._
 import axle._
+import spire.algebra._
 
-case class NativeUndirectedGraph[VP: Manifest, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
+case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends UndirectedGraph[VP, EP] {
 
   type G[VP, EP] = NativeUndirectedGraph[VP, EP]
@@ -107,7 +107,7 @@ case class NativeUndirectedGraph[VP: Manifest, EP](vps: Seq[VP], ef: Seq[Vertex[
     ??? // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
   }
 
-  def map[NVP: Manifest, NEP](vpf: VP => NVP, epf: EP => NEP) =
+  def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP) =
     NativeUndirectedGraph(vps.map(vpf(_)),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(_vertices).map({

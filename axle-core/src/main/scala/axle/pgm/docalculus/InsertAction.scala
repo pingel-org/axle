@@ -2,12 +2,12 @@
 package axle.pgm.docalculus
 
 import axle.stats._
-import collection._
 import CausalModel._
+import spire.algebra._
 
 object InsertAction extends Rule {
 
-  def apply(q: CausalityProbability, m: CausalModel, namer: VariableNamer): List[Form] = {
+  def apply[T: Eq](q: CausalityProbability[T], m: CausalModel[T], namer: VariableNamer[T]): List[Form] = {
 
     val Y = q.question
     val X = q.actions
@@ -22,7 +22,7 @@ object InsertAction extends Rule {
 //    (m.randomVariables().toSet -- Y -- X -- W).flatMap(zRandomVariable => {
 //      if (m.observes(zRandomVariable)) {
 //        val zAction = namer.nextVariable(zRandomVariable)
-//        val Z = immutable.Set(zAction)
+//        val Z = Set(zAction)
 //
 //        val subModel = m.duplicate()
 //        subModel.removeInputs(subModel.nodesFor(X))

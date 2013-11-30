@@ -1,7 +1,6 @@
 package axle
 
 import axle._
-import collection._
 
 /**
  * Based on Python's itertools.permutations function
@@ -12,6 +11,8 @@ import collection._
  * PermutationsFast(0 until 3)
  *
  */
+
+import collection.mutable.ListBuffer
 
 object PermutationsFast {
 
@@ -25,7 +26,7 @@ class PermutationsFast[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[Ind
 
   override def size() = if (r >= 0 && r <= n) { n.factorial / (n - r).factorial } else { 0 }
 
-  val yeeld = new mutable.ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
+  val yeeld = new ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
 
   if (r <= n) {
     val indices = (0 until n).toBuffer

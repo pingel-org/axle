@@ -2,7 +2,6 @@
 package axle.ast.view
 
 import axle.ast._
-import collection._
 
 case class FormatterConfig(
   language: Language,

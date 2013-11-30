@@ -1,8 +1,6 @@
 
 package axle.lx
 
-import collection._
-
 object Gold {
 
   type Expression = Iterable[Morpheme]

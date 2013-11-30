@@ -1,8 +1,6 @@
 
 package axle.ast
 
-import collection._
-
 abstract class AstNode(_lineno: Int) {
   def lineNo: Int = _lineno
   def column: Int = -1

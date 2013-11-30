@@ -5,6 +5,7 @@ import util.Random.{ shuffle, nextGaussian, nextDouble }
 import math.{ Pi, cos, sin, sqrt }
 import axle.matrix.JblasMatrixModule
 import axle.ml.distance._
+import spire.algebra._
 
 class KMeansSpecification extends Specification {
 
@@ -28,15 +29,19 @@ class KMeansSpecification extends Specification {
           (0 until 30).map(i => randomPoint(Foo(5, 15), 1.0)) ++
           (0 until 25).map(i => randomPoint(Foo(15, 5), 1.0)))
 
-      implicit val space = Euclidian(2)
+      implicit val space = new axle.ml.distance.Euclidian(2)
 
+      implicit val fooEq = new Eq[Foo] {
+        def eqv(x: Foo, y: Foo): Boolean = x equals y
+      }
+      
       val km = classifier(
         data,
         2,
         (p: Foo) => List(p.x, p.y),
         (features: Seq[Double]) => Foo(features(0), features(1)),
         3,
-        100)(space)
+        100)
 
       val exemplar = km.exemplar(km(Foo(14.5, 14.5)))
 

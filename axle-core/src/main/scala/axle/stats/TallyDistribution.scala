@@ -5,7 +5,7 @@ import util.Random
 import spire.math._
 import spire.implicits._
 
-class TallyDistribution0[A](tally: Map[A, Int])
+class TallyDistribution0[A](tally: Map[A, Long])
   extends Distribution0[A] {
 
   val totalCount = tally.values.sum
@@ -13,14 +13,14 @@ class TallyDistribution0[A](tally: Map[A, Int])
   val bars = tally.scanLeft((null.asInstanceOf[A], 0.0))((x, y) => (y._1, x._2 + y._2))
 
   def observe(): A = {
-    val r = Random.nextInt(totalCount + 1)
+    val r = (Random.nextDouble() * (totalCount + 1L)).toLong
     bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
   }
 
   def probabilityOf(a: A): Real = tally(a).toDouble / totalCount
 }
 
-class TallyDistribution1[A, G](tally: Map[(A, G), Int])
+class TallyDistribution1[A, G](tally: Map[(A, G), Long])
   extends Distribution1[A, G] {
 
   val gvs = tally.keys.map(k => k._2).toSet

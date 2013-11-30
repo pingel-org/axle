@@ -1,6 +1,6 @@
 package axle
 
-import collection._
+import collection.GenSet
 
 case class EnrichedGenSet[T](s: GenSet[T]) {
 

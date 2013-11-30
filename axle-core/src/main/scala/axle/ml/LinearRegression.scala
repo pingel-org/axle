@@ -1,7 +1,7 @@
 package axle.ml
 
-import collection._
 import axle.matrix._
+import collection.immutable.TreeMap
 
 object LinearRegressionModule extends LinearRegressionModule
 
@@ -67,7 +67,7 @@ trait LinearRegressionModule {
     objectiveNormalizer: FeatureNormalizer,
     errLog: List[Double]) {
 
-    def errTree() = new immutable.TreeMap[Int, Double]() ++
+    def errTree() = new TreeMap[Int, Double]() ++
       (0 until errLog.length).map(j => j -> errLog(j)).toMap
 
     def estimate(observation: D): Double = {

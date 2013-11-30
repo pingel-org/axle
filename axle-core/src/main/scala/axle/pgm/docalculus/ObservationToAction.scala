@@ -3,19 +3,19 @@ package axle.pgm.docalculus
 
 import axle.stats._
 import axle.pgm._
-import collection._
 import CausalModel._
+import spire.algebra._
 
 object ObservationToAction extends Rule {
 
-  def apply(q: CausalityProbability, m: CausalModel, namer: VariableNamer): List[Form] = {
+  def apply[T: Eq](q: CausalityProbability[T], m: CausalModel[T], namer: VariableNamer[T]): List[Form] = {
 
     val Y = q.question
     val X = q.actions
 
 //    q.given.flatMap(z => {
 //
-//      val Z = immutable.Set(z)
+//      val Z = Set(z)
 //      val W = q.given - z
 //
 //      val subModel = m.duplicate()
