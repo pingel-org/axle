@@ -4,6 +4,7 @@ import org.specs2.mutable._
 
 import axle.stats._
 import axle.game.Dice._
+import spire.math._
 
 class ProbabilitySpec extends Specification {
 
@@ -23,9 +24,9 @@ class ProbabilitySpec extends Specification {
 
       val d6a = die(6)
       val d6b = die(6)
-      P(d6a is 1)() must be equalTo 0.16666666666666666
-      P((d6a is 1) and (d6b is 2))() must be equalTo 0.027777777777777776
-      P((d6a isnt 3))() must be equalTo 0.8333333333333334
+      P(d6a is 1)() must be equalTo Real(Rational(1, 6))
+      P((d6a is 1) and (d6b is 2))() must be equalTo Real(Rational(1, 36))
+      P((d6a isnt 3))() must be equalTo Real(Rational(5, 6))
     }
   }
 
