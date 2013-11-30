@@ -22,7 +22,15 @@ trait FactorModule {
     implicit def factorEq[T: Eq] = new Eq[Factor[T]] {
       def eqv(x: Factor[T], y: Factor[T]): Boolean = x equals y // TODO
     }
-    
+
+    implicit def factorMultMonoid[T: Eq] = new MultiplicativeMonoid[Factor[T]] {
+      def times(x: Factor[T], y: Factor[T]): Factor[T] = {
+        val newVars = (x.variables.toSet union y.variables.toSet).toVector
+        new Factor(newVars, Factor.spaceFor(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
+      }
+      def one: Factor[T] = new Factor(Vector.empty, Map.empty.withDefaultValue(1))
+    }
+
     def apply[T: Eq](varList: Vector[RandomVariable[T]], values: Map[Vector[CaseIs[T]], Real]): Factor[T] =
       new Factor(varList, values)
 
@@ -150,11 +158,6 @@ trait FactorModule {
       val e = eOpt.get
       new Factor(variables,
         Factor.spaceFor(e.map(_.rv).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else Real(0))).toMap)
-    }
-
-    def *(other: Factor[T]): Factor[T] = {
-      val newVars = (variables.toSet union other.variables.toSet).toVector
-      new Factor(newVars, Factor.spaceFor(newVars).map(kase => (kase, this(kase) * other(kase))).toMap)
     }
 
     def mentions(variable: RandomVariable[T]) = variables.exists(v => variable.name.equals(v.name))

@@ -196,8 +196,9 @@ trait BayesianNetworkModule {
     def variableEliminationPriorMarginalI(Q: Set[RandomVariable[T]], π: List[RandomVariable[T]]): Factor[T] =
       π.foldLeft(randomVariables.map(cpt(_)).toSet)((S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv) // Π(identity)
-      }).reduce(_ * _) // Π(identity)
+        val mentionsWithout = allMentions.Π(identity).sumOut(rv)
+        (S -- allMentions) + mentionsWithout
+      }).Π(identity)
 
     /**
      *

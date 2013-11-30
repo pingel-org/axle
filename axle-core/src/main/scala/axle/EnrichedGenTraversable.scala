@@ -9,19 +9,19 @@ import spire.algebra._
 
 case class EnrichedGenTraversable[+T: Manifest](gt: GenTraversable[T]) {
 
-  def Σ[N: Ring](f: T => N): N = {
-    val ring = implicitly[Ring[N]]
-    gt.aggregate(ring.zero)({ case (x, y) => ring.plus(x, f(y)) }, ring.plus(_, _))
+  def Σ[N: AdditiveMonoid](f: T => N): N = {
+    val monoid = implicitly[AdditiveMonoid[N]]
+    gt.aggregate(monoid.zero)({ case (x, y) => monoid.plus(x, f(y)) }, monoid.plus(_, _))
   }
 
-  def Sigma[N: Ring](f: T => N) = Σ(f)
+  def Sigma[N: AdditiveMonoid](f: T => N) = Σ(f)
 
-  def Π[N: Ring](f: T => N): N = {
-    val ring = implicitly[Ring[N]]
-    gt.aggregate(ring.one)({ case (a, b) => ring.times(a, f(b)) }, { case (x, y) => ring.times(x, y) })
+  def Π[N: MultiplicativeMonoid](f: T => N): N = {
+    val monoid = implicitly[MultiplicativeMonoid[N]]
+    gt.aggregate(monoid.one)({ case (x, y) => monoid.times(x, f(y)) }, monoid.times(_, _))
   }
 
-  def Pi[N: Ring](f: T => N) = Π(f)
+  def Pi[N: MultiplicativeMonoid](f: T => N) = Π(f)
 
   def ∀(p: T => Boolean) = gt.forall(p)
 
