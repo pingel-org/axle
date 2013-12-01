@@ -31,15 +31,15 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
 
   val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Long].withDefaultValue(0L)
 
-  val featureTally: Map[(CLASS, String, FEATURE), Long] = null
-  data.aggregate(emptyFeatureTally)(
-    (acc, d) => {
-      val fs = featureExtractor(d)
-      val c = classExtractor(d)
-      val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> 1L) }).toMap
-      acc + dContrib
-    },
-    _ + _)
+  val featureTally: Map[(CLASS, String, FEATURE), Long] =
+    data.aggregate(emptyFeatureTally)(
+      (acc, d) => {
+        val fs = featureExtractor(d)
+        val c = classExtractor(d)
+        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> 1L) }).toMap
+        acc + dContrib
+      },
+      _ + _)
 
   val classTally: Map[CLASS, Long] = data.map(d => classExtractor(d)).tally
 
