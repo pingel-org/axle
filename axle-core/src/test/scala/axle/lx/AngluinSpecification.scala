@@ -4,8 +4,8 @@ import org.specs2.mutable._
 
 class AngluinSpecification extends Specification {
 
-   import axle.lx.Angluin._
-  
+  import axle.lx.Angluin._
+
   "Angluin's Language Learner" should {
 
     "memorizing learner memorizes" in {
@@ -18,7 +18,7 @@ class AngluinSpecification extends Specification {
       val mUp = Symbol("up")
 
       val Σ = Alphabet(Set(mHi, mIm, mYour, mMother, mShut, mUp))
-      
+
       val s1 = mHi :: mIm :: mYour :: mMother :: Nil
       val s2 = mShut :: mUp :: Nil
       val ℒ = Language(s1 :: s2 :: Nil)
@@ -26,15 +26,10 @@ class AngluinSpecification extends Specification {
       val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner()
-      ɸ.guesses(T).find(_.ℒ === ℒ)
-        .map(finalGuess => println("well done, ɸ"))
-        .getOrElse(println("ɸ never made a correct guess"))
-
-      println("Text T = " + T)
-      println("Language ℒ = " + ℒ)
-      println()
-      println("T is for ℒ ?" + T.isFor(ℒ))
-      println()
+      ɸ.guesses(T)
+        .find(guess => Language.languageEq.eqv(guess.ℒ, ℒ))
+        .map(finalGuess => "well done, ɸ")
+        .getOrElse("ɸ never made a correct guess")
 
       1 must be equalTo (1)
     }
