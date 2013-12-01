@@ -25,7 +25,7 @@ class AngluinSpecification extends Specification {
       val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner()
-      ɸ.guesses(T).find(_.ℒ == ℒ)
+      ɸ.guesses(T).find(_.ℒ === ℒ)
         .map(finalGuess => println("well done, ɸ"))
         .getOrElse(println("ɸ never made a correct guess"))
 

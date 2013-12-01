@@ -16,7 +16,7 @@ class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
 
   import graph._
 
-  def Q() = vertices()
+  def Q() = vertices
 
   //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
   //      val (newG, v) = g + "" // TODO
