@@ -102,7 +102,7 @@ trait FactorModule {
         {
           cases.map(kase => <tr>
                               { kase.map(ci => <td>{ ci.v.toString }</td>) }
-                              <td>{ "%f".format(this(kase)) }</td>
+                              <td>{ this(kase) }</td>
                             </tr>)
         }
       </table>
