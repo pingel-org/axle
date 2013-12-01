@@ -2,6 +2,7 @@ package axle.lx
 
 import org.specs2.mutable._
 import Gold._
+import spire.implicits._
 
 class GoldSpecification extends Specification {
 
@@ -26,7 +27,7 @@ class GoldSpecification extends Specification {
       val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner()
-      ɸ.guesses(T).find(_.ℒ == ℒ)
+      ɸ.guesses(T).find(_.ℒ === ℒ)
         .map(finalGuess => println("well done, ɸ"))
         .getOrElse(println("ɸ never made a correct guess"))
 

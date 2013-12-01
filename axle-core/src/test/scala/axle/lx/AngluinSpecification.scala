@@ -1,10 +1,11 @@
 package axle.lx
 
 import org.specs2.mutable._
-import Angluin._
 
 class AngluinSpecification extends Specification {
 
+   import axle.lx.Angluin._
+  
   "Angluin's Language Learner" should {
 
     "memorizing learner memorizes" in {

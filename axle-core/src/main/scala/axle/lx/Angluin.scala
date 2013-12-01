@@ -7,46 +7,51 @@ import spire.math._
 import spire.algebra._
 import spire.implicits._
 
-class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
+object Angluin {
 
-  import Angluin._
-  implicit val se = Symbol.symbolEq // TODO get rid of this
-  
-  val graph = JungDirectedGraph[String, Symbol](vps, vs => Nil)
-
-  import graph._
-
-  def Q() = vertices
-
-  //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
-  //      val (newG, v) = g + "" // TODO
-  //      val newI = isInitial ? (I + v.payload) | I
-  //      val newF = isFinal ? (F + v.payload) | F
-  //      Acceptor(newG, newI, newF)
-  //    }
-
-  def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
-    allEdges().filter(e => source(e) == state && e.payload == symbol).map(dest(_))
-
-  def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
-    case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
-    case Nil => Set(state.payload)
+  case class Symbol(s: String) {
+    override def toString() = s
   }
 
-  // TODO: not sure if this should count edges or nodes:
-  //    def isForwardDeterministic(): Boolean = (I.size <= 1) && Q.∀(successors(_).size <= 1)
-  //    def isBackwardDeterministic(): Boolean = (F.size <= 1) && Q.∀(predecessors(_).size <= 1)
-  //    def isZeroReversible(): Boolean = isForwardDeterministic() && isBackwardDeterministic()
+  object Symbol {
+    implicit val symbolEq = new Eq[Symbol] {
+      def eqv(x: Symbol, y: Symbol): Boolean = x equals y
+    }
+  }
 
-  def isIsomorphicTo(other: AngluinAcceptor): Boolean = ???
+  class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
 
-  def isSubacceptorOf(other: AngluinAcceptor): Boolean = ???
+    val graph = JungDirectedGraph[String, Symbol](vps, vs => Nil)
 
-  def induce(P: Set[Vertex[String]]): AngluinAcceptor = ???
+    def Q() = graph.vertices()
 
-}
+    //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
+    //      val (newG, v) = g + "" // TODO
+    //      val newI = isInitial ? (I + v.payload) | I
+    //      val newF = isFinal ? (F + v.payload) | F
+    //      Acceptor(newG, newI, newF)
+    //    }
 
-object Angluin {
+    def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
+      graph.allEdges().filter(e => graph.source(e) == state && e.payload == symbol).map(graph.dest(_))
+
+    def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
+      case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
+      case Nil => Set(state.payload)
+    }
+
+    // TODO: not sure if this should count edges or nodes:
+    //    def isForwardDeterministic(): Boolean = (I.size <= 1) && Q.∀(successors(_).size <= 1)
+    //    def isBackwardDeterministic(): Boolean = (F.size <= 1) && Q.∀(predecessors(_).size <= 1)
+    //    def isZeroReversible(): Boolean = isForwardDeterministic() && isBackwardDeterministic()
+
+    def isIsomorphicTo(other: AngluinAcceptor): Boolean = ???
+
+    def isSubacceptorOf(other: AngluinAcceptor): Boolean = ???
+
+    def induce(P: Set[Vertex[String]]): AngluinAcceptor = ???
+
+  }
 
   // type Expression = List[Symbol]
 
@@ -92,7 +97,7 @@ object Angluin {
       def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
     }
   }
-  
+
   trait Learner[S] {
 
     def initialState(): S
@@ -166,21 +171,6 @@ object Angluin {
 
   case class Alphabet(symbols: Set[Symbol])
 
-  case class Symbol(s: String) {
-    override def toString() = s
-  }
-
-  object Symbol {
-    implicit val symbolEq = new Eq[Symbol] {
-      def eqv(x: Symbol, y: Symbol): Boolean = x equals y
-    }
-    
-  }
-  
-  implicit val symbolEq = new Eq[Symbol] {
-    def eqv(x: Symbol, y: Symbol): Boolean = x equals y
-  }
-
   // implicit def enText(expressions: Iterable[Iterable[Symbol]]): Text = Text(expressions)
 
   case class Text(expressions: Iterable[Iterable[Symbol]]) {
@@ -196,5 +186,4 @@ object Angluin {
     override def toString() = "<" + expressions.mkString(", ") + ">"
 
   }
-
 }

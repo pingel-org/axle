@@ -1,5 +1,6 @@
 
 package axle.lx
+import spire.algebra._
 
 object Gold {
 
@@ -23,9 +24,13 @@ object Gold {
 
   case class Language(sequences: Set[Expression]) {
 
-    def equals(other: Language) = sequences.equals(other.sequences)
-
     override def toString() = "{" + sequences.mkString(", ") + "}"
+  }
+
+  object Language {
+    implicit val languageEq = new Eq[Language] {
+      def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
+    }
   }
 
   trait Learner[S] {
@@ -52,7 +57,7 @@ object Gold {
   case class MemorizingLearner() extends Learner[Language] {
 
     def initialState() = Language(Set())
-    
+
     def processExpression(state: Language, expression: Expression) = {
       val newState = Language(state.sequences ++ List(expression))
       (newState, Some(new HardCodedGrammar(newState)))
