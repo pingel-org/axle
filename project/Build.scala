@@ -90,7 +90,8 @@ import axle._
       "joda-time" % "joda-time" % "2.2",
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
-      "org.spire-math" %% "spire" % "0.6.1"
+      "org.spire-math" %% "spire" % "0.6.1",
+      "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
     )
   )
 /*
