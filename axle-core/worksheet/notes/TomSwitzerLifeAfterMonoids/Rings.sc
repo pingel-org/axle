@@ -1,6 +1,6 @@
 object Rings {
 
-  println("Welcome to the Scala worksheet")       //> Welcome to the Scala worksheet
+  println("Welcome to the Scala worksheet")
 
   object lib {
 
@@ -53,8 +53,11 @@ object Rings {
 
     // scan from left to right through 'sorted'
     // three at a time (p, q, r) throwing out any q if p->q->r forms a right turn
-    def halfHull[R: Ring: Ordering](sorted: Seq[(R, R)]): Seq[(R, R)] = {
-      Nil
+    def halfHull[R: Ring: Ordering](sorted: List[(R, R)]): Seq[(R, R)] = sorted match {
+      case p :: q :: r :: rest => Nil
+      case p :: q :: Nil => List(p, q)
+      case p :: Nil => List(p)
+      case Nil => Nil
     }
 
     def hull[R: Ring: Ordering](points: Seq[(R, R)]): Seq[(R, R)] = {
@@ -65,6 +68,6 @@ object Rings {
 
   import GrahamScan._
 
-  hull(genPoints(1000)(util.Random.nextGaussian)) //> res0: Seq[(Double, Double)] = List()
+  hull(genPoints(1000)(util.Random.nextGaussian))
 
 }
