@@ -27,7 +27,8 @@ object GeneticAlgorithm {
   def apply[G <: HList, Z <: HList](populationSize: Int = 1000, numGenerations: Int = 100)(
     implicit species: Species[G],
     zipper: Zip.Aux[G :: G :: HNil, Z],
-    mapper: Mapper[mixer.type, Z]) =
+    mapper: Mapper[mixer.type, Z],
+    mapperMutate: Mapper[mutator.type, Z]) =
     new GeneticAlgorithmC(populationSize, numGenerations)
 
   object mixer extends Poly1 {
@@ -35,18 +36,23 @@ object GeneticAlgorithm {
       if (nextBoolean) t._2 else t._1)
   }
 
-  object mate extends Poly1 {
+  object mater extends Poly1 {
     implicit def caseTuple[T] = at[(T, T, T)](t =>
       if (nextDouble < 0.03) t._3
       else if (nextBoolean) t._2
       else t._1)
+  }
+
+  object mutator extends Poly1 {
+    implicit def caseTuple[T] = at[(T, T)](t => if (nextDouble < 0.03) t._2 else t._1)
   }
   
   class GeneticAlgorithmC[G <: HList, Z <: HList](
     populationSize: Int = 1000, numGenerations: Int = 100)(
       implicit species: Species[G],
       zipper: Zip.Aux[G :: G :: HNil, Z],
-      mapper: Mapper[mixer.type, Z]) {
+      mapperMix: Mapper[mixer.type, Z],
+      mapperMutate: Mapper[mutator.type, Z]) {
     
     def initialPopulation(): IndexedSeq[(G, Double)] =
       (0 until populationSize).map(i => {
@@ -64,19 +70,23 @@ object GeneticAlgorithm {
      *
      */
 
-    def zipAndMix[Z <: HList](h1: G, h2: G)(
+    def crossover[Z <: HList](h1: G, h2: G)(
       implicit zipper: Zip.Aux[G :: G :: HNil, Z],
       mapper: Mapper[mixer.type, Z]) = (h1 zip h2) map mixer
 
+    def mutate[Z <: HList](x: G, r: G)(
+      implicit zipper: Zip.Aux[G :: G :: HNil, Z],
+      mapper: Mapper[mutator.type, Z]) = (x zip r) map mutator
+      
     def live(population: IndexedSeq[(G, Double)], fitnessLog: List[(Double, Double, Double)]): (IndexedSeq[(G, Double)], List[(Double, Double, Double)]) = {
       val nextGen = (0 until populationSize).map(i => {
         val (m1, m1f) = population(nextInt(population.size))
         val (m2, m2f) = population(nextInt(population.size))
         val (f, _) = population(nextInt(population.size))
         val m = if (m1f > m2f) { m1 } else { m2 }
-        val r = species.random()
-        val child = zipAndMix(m, f).asInstanceOf[G] // TODO
-        (child, species.fitness(child))
+        val crossed = crossover(m, f).asInstanceOf[G]
+        val kid = mutate(crossed, species.random()).asInstanceOf[G] // TODO
+        (kid, species.fitness(kid))
       })
       (nextGen, minMaxAve(nextGen) :: fitnessLog)
     }
