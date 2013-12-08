@@ -8,7 +8,7 @@ import shapeless.ops.hlist._
 import syntax.std.tuple._
 import Zipper._
 
-trait Species[G <: HList] {
+trait Species[G] {
 
   def random(): G
 
@@ -24,28 +24,30 @@ case class GeneticAlgorithmLog[G](
 
 object GeneticAlgorithm {
 
-  def apply[G <: HList, Z <: HList](species: Species[G], populationSize: Int = 1000, numGenerations: Int = 100)(
-    implicit zipper: Zip.Aux[G :: G :: HNil, Z],
+  def apply[G <: HList, Z <: HList](populationSize: Int = 1000, numGenerations: Int = 100)(
+    implicit species: Species[G],
+    zipper: Zip.Aux[G :: G :: HNil, Z],
     mapper: Mapper[mixer.type, Z]) =
-    new GeneticAlgorithmInstance(species, populationSize, numGenerations)
+    new GeneticAlgorithmC(populationSize, numGenerations)
 
   object mixer extends Poly1 {
     implicit def caseTuple[T] = at[(T, T)](t =>
       if (nextBoolean) t._2 else t._1)
   }
 
-  class GeneticAlgorithmInstance[G <: HList, Z <: HList](
-    species: Species[G], populationSize: Int = 1000, numGenerations: Int = 100)(
-      implicit zipper: Zip.Aux[G :: G :: HNil, Z],
+  object mate extends Poly1 {
+    implicit def caseTuple[T] = at[(T, T, T)](t =>
+      if (nextDouble < 0.03) t._3
+      else if (nextBoolean) t._2
+      else t._1)
+  }
+  
+  class GeneticAlgorithmC[G <: HList, Z <: HList](
+    populationSize: Int = 1000, numGenerations: Int = 100)(
+      implicit species: Species[G],
+      zipper: Zip.Aux[G :: G :: HNil, Z],
       mapper: Mapper[mixer.type, Z]) {
-
-    object mate extends Poly1 {
-      implicit def caseTuple[T] = at[(T, T, T)](t =>
-        if (nextDouble < 0.03) t._3
-        else if (nextBoolean) t._2
-        else t._1)
-    }
-
+    
     def initialPopulation(): IndexedSeq[(G, Double)] =
       (0 until populationSize).map(i => {
         val r = species.random()
