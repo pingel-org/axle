@@ -49,6 +49,11 @@ import axle._
 
     pomIncludeRepository := { _ => false },
 
+    resolvers ++= Seq(
+      "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
+      "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+    ),
+
     pomExtra := (
   <url>http://axle-lang.org</url>
   <licenses>
@@ -91,7 +96,8 @@ import axle._
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
       "org.spire-math" %% "spire" % "0.6.1",
-      "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
+      "com.chuusai" % "shapeless_2.10.2" % "2.0.0-SNAPSHOT" changing()
+      // "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
     )
   )
 /*
