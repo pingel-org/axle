@@ -2,7 +2,8 @@ package axle.bio
 
 import math.max
 import Stream.{ cons, empty }
-import spire.algebra.MetricSpace
+import spire.algebra._
+import spire.implicits._
 import axle.matrix.JblasMatrixModule._
 
 /**
@@ -16,7 +17,8 @@ object NeedlemanWunsch {
   /**
    * S is "similarity", computed by a fixed Int matrix
    *
-   * S(a, b) == S(b, a)
+   * S(a, b) === S(b, a)
+   * 
    */
 
   def S(x: Char, y: Char): Int = (x, y) match {
@@ -42,9 +44,9 @@ object NeedlemanWunsch {
   val defaultGapPenalty = -5
 
   def alignmentScore(A: String, B: String, gapPenalty: Int = defaultGapPenalty): Int = {
-    assert(A.length == B.length)
+    assert(A.length === B.length)
     (0 until A.length).map(i =>
-      if (A(i) == gap || B(i) == gap)
+      if (A(i) === gap || B(i) === gap)
         gapPenalty
       else
         S(A(i), B(i))
@@ -71,12 +73,12 @@ object NeedlemanWunsch {
   )
 
   def alignStep(i: Int, j: Int, A: String, B: String, F: Matrix[Int], gapPenalty: Int): (Char, Char, Int, Int) =
-    if (i > 0 && j > 0 && F(i, j) == F(i - 1, j - 1) + S(A(i - 1), B(j - 1))) {
+    if (i > 0 && j > 0 && F(i, j) === F(i - 1, j - 1) + S(A(i - 1), B(j - 1))) {
       (A(i - 1), B(j - 1), i - 1, j - 1)
-    } else if (i > 0 && F(i, j) == F(i - 1, j) + gapPenalty) {
+    } else if (i > 0 && F(i, j) === F(i - 1, j) + gapPenalty) {
       (A(i - 1), gap, i - 1, j)
     } else {
-      assert(j > 0 && F(i, j) == F(i, j - 1) + gapPenalty)
+      assert(j > 0 && F(i, j) === F(i, j - 1) + gapPenalty)
       (gap, B(j - 1), i, j - 1)
     }
 

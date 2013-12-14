@@ -1,6 +1,7 @@
 package axle.bio
 
-import spire.algebra.MetricSpace
+import spire.algebra._
+import spire.implicits._
 import Stream.{ cons, empty }
 import axle.matrix.JblasMatrixModule._
 
@@ -46,12 +47,12 @@ object SmithWaterman {
   )
 
   def alignStep(i: Int, j: Int, A: String, B: String, H: Matrix[Int], mismatchPenalty: Int): (Char, Char, Int, Int) =
-    if (i > 0 && j > 0 && H(i, j) == H(i - 1, j - 1) + w(A(i - 1), B(j - 1), mismatchPenalty)) {
+    if (i > 0 && j > 0 && H(i, j) === H(i - 1, j - 1) + w(A(i - 1), B(j - 1), mismatchPenalty)) {
       (A(i - 1), B(j - 1), i - 1, j - 1)
-    } else if (i > 0 && H(i, j) == H(i - 1, j) + mismatchPenalty) {
+    } else if (i > 0 && H(i, j) === H(i - 1, j) + mismatchPenalty) {
       (A(i - 1), gap, i - 1, j)
     } else {
-      assert(j > 0 && H(i, j) == H(i, j - 1) + mismatchPenalty)
+      assert(j > 0 && H(i, j) === H(i, j - 1) + mismatchPenalty)
       (gap, B(j - 1), i, j - 1)
     }
 
