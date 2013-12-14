@@ -2,6 +2,7 @@ package axle.data
 
 import axle.nlp._
 import axle._
+import spire.math._
 
 object FederalistPapers {
 
@@ -43,7 +44,7 @@ object FederalistPapers {
 
     def averageWordLength(paper: FederalistPaper) = {
       val ts = tokens(paper)
-      ts.map(_.length).sum / ts.length.toDouble
+      Rational(ts.map(_.length).sum, ts.length)
     }
 
   }

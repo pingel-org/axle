@@ -2,6 +2,7 @@ package axle.nlp
 
 import axle._
 import spire.implicits._
+import spire.math._
 import collection.GenSeq
 
 object Document {
@@ -35,6 +36,6 @@ trait Document[T] {
 
   def bigramCounts(text: T): Map[IndexedSeq[String], Long]
 
-  def averageWordLength(text: T): Double
+  def averageWordLength(text: T): Number
 
 }
