@@ -86,8 +86,6 @@ trait FactorModule {
 
     def cases: Iterator[Seq[CaseIs[T]]] = (0 until elements.length).iterator.map(caseOf(_))
 
-    // def update(c: Seq[CaseIs[T]], d: Double): Unit = elements(indexOf(c)) = d
-
     def apply(c: Seq[CaseIs[T]]): Real = elements(indexOf(c))
 
     override def toString(): String =

@@ -4,6 +4,8 @@ import axle._
 import util.Random
 import spire.math._
 import spire.implicits._
+import spire.random._
+import spire.algebra._
 
 class TallyDistribution0[A](tally: Map[A, Long])
   extends Distribution0[A] {

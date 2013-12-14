@@ -3,14 +3,13 @@ package axle
 import collection.GenTraversable
 import axle._
 import axle.quanta.Information
-import math.{ log, sqrt }
 import spire.algebra._
 import spire.implicits._
 import spire.math._
 
 package object stats {
 
-  implicit def probability2double = (p: Probability) => p()
+  implicit def probability2real = (p: Probability) => p()
 
   implicit def rv2it[K](rv: RandomVariable[K]): IndexedSeq[K] = rv.values.getOrElse(Vector())
 
@@ -20,8 +19,8 @@ package object stats {
     Some(List('HEAD, 'TAIL).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1d - pHead)))))
 
-  def log2(x: Real): Real = log(x.toDouble) / log(2)
-
+  def log2(x: Real): Real = math.log(x.toDouble) / math.log(2)
+  
   def mean[N: Field: Manifest](xs: Vector[N]): N = xs.Σ(identity) / xs.size
 
   def square[N: Ring](x: N) = x ** 2
