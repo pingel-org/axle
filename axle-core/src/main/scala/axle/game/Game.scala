@@ -2,6 +2,8 @@
 package axle.game
 
 import axle._
+import spire.math._
+import spire.implicits._
 import Stream.{ empty, cons }
 import util.Random.{ shuffle, nextInt }
 
@@ -23,7 +25,7 @@ abstract class Game[G <: Game[G]] {
 
   def startFrom(s: G#STATE): Option[G#STATE]
 
-  def minimax(state: G#STATE, depth: Int, heuristic: G#STATE => Map[G#PLAYER, Double]): (G#MOVE, G#STATE, Map[G#PLAYER, Double]) =
+  def minimax(state: G#STATE, depth: Int, heuristic: G#STATE => Map[G#PLAYER, Real]): (G#MOVE, G#STATE, Map[G#PLAYER, Real]) =
     if (state.outcome.isDefined || depth <= 0) {
       (null.asInstanceOf[MOVE], null.asInstanceOf[G#STATE], heuristic(state)) // TODO null
     } else {
