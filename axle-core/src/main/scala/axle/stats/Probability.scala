@@ -11,7 +11,7 @@ trait Probability extends (() => Real) {
 
 case class P[A](c: Case[A]) extends Probability {
   def apply(): Real = c.probability()
-  def bayes() = c.bayes()
+  def bayes(): () => Real = c.bayes()
 }
 
 //case class P2[A, B](c: Case[(A, B)]) extends Probability {

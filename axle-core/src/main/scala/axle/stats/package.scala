@@ -15,13 +15,13 @@ package object stats {
 
   implicit def enrichCaseGenTraversable[A: Manifest](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
 
-  def coin(pHead: Real = 0.5) = RandomVariable0("coin",
+  def coin(pHead: Real = Real(0.5)) = RandomVariable0("coin",
     Some(List('HEAD, 'TAIL).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1d - pHead)))))
 
-  def log2(x: Real): Real = math.log(x.toDouble) / math.log(2)
+  def log2(x: Real): Real = Real(math.log(x.toDouble) / math.log(2))
   
-  def mean[N: Field: Manifest](xs: Vector[N]): N = xs.Σ(identity) / xs.size
+  def mean[N: Field: Manifest](xs: GenTraversable[N]): N = EnrichedGenTraversable(xs).Σ(identity) / xs.size
 
   def square[N: Ring](x: N) = x ** 2
 

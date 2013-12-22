@@ -6,6 +6,7 @@ import util.Random.shuffle
 import spire.algebra._
 import spire.implicits._
 import collection.immutable.TreeMap
+import scala.collection.SortedMap
 
 /**
  * KMeans
@@ -79,7 +80,7 @@ trait KMeansModule {
 
     def exemplar(i: Int): T = exemplars(i)
 
-    def classes() = 0 until K
+    def classes(): Range = 0 until K
     
     def apply(observation: T): Int = {
       val (i, d) = centroidIndexAndDistanceClosestTo(space, μ, normalizer.normalize(featureExtractor(observation)))
@@ -167,10 +168,11 @@ trait KMeansModule {
       (distances.divColumnVector(counts), unassignedClusterIds)
     }
 
-    def distanceTreeMap(centroidId: Int) = new TreeMap[Int, Double]() ++
+    def distanceTreeMap(centroidId: Int): SortedMap[Int, Double] = new TreeMap[Int, Double]() ++
       distanceLog.zipWithIndex.map({ case (dl, i) => i -> dl(centroidId, 0) }).toMap
 
-    def distanceLogSeries() = (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList
+    def distanceLogSeries(): List[(String, SortedMap[Int, Double])] =
+      (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList
     
   }
 

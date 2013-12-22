@@ -4,6 +4,7 @@ package axle.game
 import axle._
 import spire.math._
 import spire.implicits._
+import spire.compat._
 import Stream.{ empty, cons }
 import util.Random.{ shuffle, nextInt }
 

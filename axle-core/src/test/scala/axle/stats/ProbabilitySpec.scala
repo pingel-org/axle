@@ -13,9 +13,9 @@ class ProbabilitySpec extends Specification {
 
       val coin1 = coin()
       val coin2 = coin()
-      P(coin1 is 'HEAD)() must be equalTo 0.5
-      P((coin1 is 'HEAD) and (coin2 is 'HEAD))() must be equalTo 0.25
-      P((coin1 is 'HEAD) or (coin2 is 'HEAD))() must be equalTo 0.75
+      P(coin1 is 'HEAD)() must be equalTo Real(0.5)
+      P((coin1 is 'HEAD) and (coin2 is 'HEAD))() must be equalTo Real(0.25)
+      P((coin1 is 'HEAD) or (coin2 is 'HEAD))() must be equalTo Real(0.75)
     }
   }
 

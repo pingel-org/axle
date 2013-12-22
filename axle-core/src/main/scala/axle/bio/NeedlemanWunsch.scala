@@ -62,7 +62,7 @@ object NeedlemanWunsch {
    *
    */
 
-  def computeF(A: String, B: String, gapPenalty: Int) = matrix[Int](
+  def computeF(A: String, B: String, gapPenalty: Int): Matrix[Int] = matrix[Int](
     A.length + 1,
     B.length + 1,
     0,

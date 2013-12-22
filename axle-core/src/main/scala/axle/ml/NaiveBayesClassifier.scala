@@ -4,6 +4,7 @@ import axle._
 import axle.stats._
 import spire.implicits._
 import spire.algebra._
+import spire.compat._
 
 object NaiveBayesClassifier {
 

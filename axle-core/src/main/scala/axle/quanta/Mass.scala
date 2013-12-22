@@ -28,7 +28,7 @@ class Mass extends Quantum {
   def newQuantity(magnitude: Number, unit: MassQuantity): MassQuantity =
     new MassQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph() = _conversionGraph
+  def conversionGraph(): DirectedGraph[Q, Number => Number] = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"

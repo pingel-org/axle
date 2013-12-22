@@ -6,6 +6,7 @@ import axle.IndexedCrossProduct
 import spire.math._
 import spire.implicits._
 import spire.algebra._
+import spire.compat._
 
 object FactorModule extends FactorModule
 
@@ -28,7 +29,7 @@ trait FactorModule {
         val newVars = (x.variables.toSet union y.variables.toSet).toVector
         new Factor(newVars, Factor.spaceFor(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
       }
-      def one: Factor[T] = new Factor(Vector.empty, Map.empty.withDefaultValue(1))
+      def one: Factor[T] = new Factor(Vector.empty, Map.empty.withDefaultValue(Real(1)))
     }
 
     def apply[T: Eq](varList: Vector[RandomVariable[T]], values: Map[Vector[CaseIs[T]], Real]): Factor[T] =
