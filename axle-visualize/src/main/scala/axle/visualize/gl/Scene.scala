@@ -16,10 +16,10 @@ import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
 abstract class Scene(_distanceUnit: Distance.Q) {
 
   def distanceUnit = _distanceUnit
-  
+
   import Distance._
   import Angle._
-  
+
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU) = {
     gl.glLoadIdentity()
     orienter(gl)

@@ -31,7 +31,7 @@ class AxleSpecification extends Specification {
 
       f(getLine()).mkString("")
 
-      // getLine.map(intersperse "-" compose reverse compose map toUpper) 
+      // getLine.map(intersperse "-" compose reverse compose map toUpper)
       // getLine.map((cs: List[Char]) => f(cs))
 
       List(1, 2, 3).map(replicate[Int](3) _)
@@ -110,11 +110,11 @@ class AxleSpecification extends Specification {
     val somePlus3 = Some( { (x: Int) => x + 3 } )
 
     val a1 = somePlus3 <*> Some(9)
-    
+
     val a2 = pure2( { (x: Int) => x + 3 } ) <*> Some(10)
 
     val a3 = pure2( { (x: Int) => x + 3 } ) <*> Some(9)
-    
+
     val a4 = Some( { (s: String) => s ++ "hahah" } ) <*> None
 
     val a5 = None <*> Some("woot")

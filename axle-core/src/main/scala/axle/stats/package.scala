@@ -20,7 +20,7 @@ package object stats {
     distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1d - pHead)))))
 
   def log2(x: Real): Real = Real(math.log(x.toDouble) / math.log(2))
-  
+
   def mean[N: Field: Manifest](xs: GenTraversable[N]): N = EnrichedGenTraversable(xs).Σ(identity) / xs.size
 
   def square[N: Ring](x: N) = x ** 2
@@ -41,7 +41,7 @@ package object stats {
       if (px > 0) (-px * log2(px)) else Real(0)
     })).getOrElse(Real(0))
     Number(H.toDouble) *: bit // TODO Number(_.toDouble) should not be necessary
-  } 
+  }
 
   def H[A: Manifest](X: RandomVariable[A]): Information.Q = entropy(X)
 

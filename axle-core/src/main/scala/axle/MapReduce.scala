@@ -9,7 +9,7 @@ trait MapReduce {
       dit,
       mapper = (d: D) => tokenizer(d).map((_, 1)),
       reducer = (x: Int, y: Int) => x + y)
-  
+
 }
 
 object ScalaMapReduce extends MapReduce {

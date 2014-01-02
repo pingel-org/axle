@@ -7,7 +7,7 @@ class Bar {}
 object Foo {
 
   def doit(): Unit = {
-    
+
     val s = "bc fidaa abmn fidabb nuaaabi fidjab bkjkj"
 
     def transform(s: String, m: Regex.Match): String = "$" + s.substring(m.start(1), m.end(1))

@@ -10,7 +10,7 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
   def apply(d: DATA): CLASS
 
   def classes(): IndexedSeq[CLASS]
-  
+
   /**
    * For a given class (label value), predictedVsActual returns a tally of 4 cases:
    *
@@ -48,6 +48,6 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
   }
 
   def confusionMatrix[L: Ordering](data: Seq[DATA], labelExtractor: DATA => L) = new ConfusionMatrix(this, data, labelExtractor)
-  
-  
+
+
 }

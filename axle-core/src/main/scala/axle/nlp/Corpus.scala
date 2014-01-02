@@ -11,7 +11,7 @@ class Corpus[T: Document](documents: GenSeq[T]) {
   lazy val wordCountMap: Map[String, Long] = documents flatMap (doc.tokens(_)) tally
 
   def wordCount(word: String) = wordCountMap.get(word)
-  
+
   def topWordCounts(cutoff: Long) =
     wordCountMap
       .filter { case (_, n: Long) => n > cutoff }

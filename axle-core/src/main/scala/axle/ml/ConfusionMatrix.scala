@@ -2,7 +2,7 @@ package axle.ml
 
 import axle.matrix._
 import axle.matrix.JblasMatrixModule._
- 
+
 class ConfusionMatrix[T, C: Ordering, L: Ordering](classifier: Classifier[T, C], data: Seq[T], labelExtractor: T => L) {
 
   import math.{ ceil, log10 }
@@ -17,9 +17,9 @@ class ConfusionMatrix[T, C: Ordering, L: Ordering](classifier: Classifier[T, C],
     .groupBy(_._1)
     .map({ case (k, v) => (k, v.map(_._2).sum) })
     .withDefaultValue(0)
-    
+
   val classes = classifier.classes
-    
+
   val counts = matrix[Int](labelList.length, classes.size, (r: Int, c: Int) => labelIdClusterId2count((r, classes(c))))
 
   val width = ceil(log10(data.length)).toInt

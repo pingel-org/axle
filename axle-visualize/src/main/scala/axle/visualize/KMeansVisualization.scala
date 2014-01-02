@@ -62,7 +62,7 @@ trait KMeansVisualizationModule {
     val scaledArea = new ScaledArea2D(w, h, border, minX, maxX, minY, maxY)
 
     val normalFont = new Font(fontName, Font.BOLD, fontSize)
-    
+
     val xTics = new XTics(scaledArea, dp.tics(minX, maxX), normalFont, true, 0 *: °, black)
     val yTics = new YTics(scaledArea, dp.tics(minY, maxY), normalFont, black)
 

@@ -15,16 +15,16 @@ object FOPL {
     def getSymbols() = symbols
     def symbolSet() = symbols.toSet
     def name(): String
-    
+
     override def toString(): String = name() + "(" + symbols.mkString(", ") + ")"
 
     override def equals(other: Any): Boolean = other match {
       case otherPredicate: Predicate => (name equals otherPredicate.name) && (symbols equals otherPredicate.getSymbols)
       case _ => false
     }
-    
+
     def skolemize(universally: Set[Symbol], existentially: Set[Symbol], skolems: Map[Symbol, Set[Symbol]]): (Predicate, Map[Symbol, Set[Symbol]]) = {
-      
+
       val symbolsSkolems = symbols.scanLeft((null.asInstanceOf[Symbol], skolems))({
         case (previous, s) =>
           if (existentially.contains(s)) skolemFor(previous._2, s, universally)
@@ -35,7 +35,7 @@ object FOPL {
         def name() = outer.name
         def apply(symbolTable: Map[Symbol, Any]): Boolean = outer.apply(symbolTable)
       }
-      
+
       (newPredicate, symbolsSkolems.last._2)
     }
   }

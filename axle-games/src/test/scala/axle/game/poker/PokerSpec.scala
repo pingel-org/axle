@@ -23,7 +23,7 @@ class PokerSpec extends Specification {
         yield (personal ++ shared).combinations(5).map(PokerHand(_)).max
 
       val jacksAndSixes = string2hand("6♡,6♢,T♠,J♠,J♡")
-          
+
       hands.max must be equalTo jacksAndSixes
     }
   }
@@ -45,7 +45,7 @@ class PokerSpec extends Specification {
     "work for four-of-a-kind" in {
       string2hand("6♡,6♢,6♠,6♣,Q♡") must be lessThan string2hand("7♡,7♢,7♠,7♣,2♡")
     }
-    
+
   }
 
 }

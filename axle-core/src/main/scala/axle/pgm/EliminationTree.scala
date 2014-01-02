@@ -8,9 +8,9 @@ import spire.implicits._
 object EliminationTreeModule extends EliminationTreeModule
 
 trait EliminationTreeModule {
-  
+
   import FactorModule._
-  
+
   case class EliminationTree[T: Eq: Manifest](
     vps: Seq[Factor[T]],
     ef: Seq[Vertex[Factor[T]]] => Seq[(Vertex[Factor[T]], Vertex[Factor[T]], String)]) {

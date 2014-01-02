@@ -14,9 +14,9 @@ object HBaseConfig {
   conf.set("hbase.zookeeper.property.clientPort", "2181")
 
   val admin = new HBaseAdmin(conf)
-  
+
   def tables(): List[HTableDescriptor] = admin.listTables.toList
 
   def table(name: String): EnrichedHTable = new HTable(conf, name)
-  
+
 }

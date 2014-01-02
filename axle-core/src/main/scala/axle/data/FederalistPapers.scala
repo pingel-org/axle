@@ -31,9 +31,9 @@ object FederalistPapers {
         FederalistPaper(id, lines(authorIndex), text, metadata)
     }
   }
-  
+
   implicit object articleAsDocument extends Document[FederalistPaper] {
-    
+
     def tokens(paper: FederalistPaper) = language.English.tokenize(paper.text)
 
     def bigrams(paper: FederalistPaper) = tokens(paper).sliding(2).toVector
@@ -48,6 +48,6 @@ object FederalistPapers {
     }
 
   }
-  
+
 
 }

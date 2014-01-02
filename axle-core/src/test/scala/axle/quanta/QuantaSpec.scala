@@ -52,7 +52,7 @@ class QuantaSpec extends Specification {
 
       import Volume._
       import Flow._
-      
+
       greatLakes.over(niagaraFalls, Time).magnitude must be equalTo 1.0 // TODO convert that to years
     }
   }

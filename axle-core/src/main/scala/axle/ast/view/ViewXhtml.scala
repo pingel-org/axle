@@ -37,7 +37,7 @@ object ViewXhtml extends View[xml.NodeSeq] {
 
   }
 
-  // def contextHtmlLines(): Option[LinkedHashMap[Int, NodeSeq]] = contextHtml(doc, docNode) 
+  // def contextHtmlLines(): Option[LinkedHashMap[Int, NodeSeq]] = contextHtml(doc, docNode)
   override def docNodeInContext(doc: Document, docNode: AstNode): xml.NodeSeq =
     doc.ast().map(ast => nodeContext(doc.grammar(), docNode, "/document/" + doc.name))
       .getOrElse(<span>Oh no</span>)

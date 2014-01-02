@@ -11,7 +11,7 @@ import akka.actor._
 import akka.pattern.ask
 
 object StemmerProtocol {
-  
+
   case class Stem(word: String)
 }
 

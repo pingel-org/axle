@@ -41,11 +41,11 @@ class AxleILoop extends ILoop {
 
   override def printWelcome() {
     echo("""
-        
+
 Welcome to axle
 
   axle-lang.org
-        
+
 """)
   }
 }

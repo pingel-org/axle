@@ -46,14 +46,14 @@ object GeneticAlgorithm {
   object mutator extends Poly1 {
     implicit def caseTuple[T] = at[(T, T)](t => if (nextDouble < 0.03) t._2 else t._1)
   }
-  
+
   class GeneticAlgorithmC[G <: HList, Z <: HList](
     populationSize: Int = 1000, numGenerations: Int = 100)(
       implicit species: Species[G],
       zipper: Zip.Aux[G :: G :: HNil, Z],
       mapperMix: Mapper[mixer.type, Z],
       mapperMutate: Mapper[mutator.type, Z]) {
-    
+
     def initialPopulation(): IndexedSeq[(G, Double)] =
       (0 until populationSize).map(i => {
         val r = species.random()
@@ -77,7 +77,7 @@ object GeneticAlgorithm {
     def mutate[Z <: HList](x: G, r: G)(
       implicit zipper: Zip.Aux[G :: G :: HNil, Z],
       mapper: Mapper[mutator.type, Z]) = (x zip r) map mutator
-      
+
     def live(population: IndexedSeq[(G, Double)], fitnessLog: List[(Double, Double, Double)]): (IndexedSeq[(G, Double)], List[(Double, Double, Double)]) = {
       val nextGen = (0 until populationSize).map(i => {
         val (m1, m1f) = population(nextInt(population.size))

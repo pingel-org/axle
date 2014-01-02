@@ -9,7 +9,7 @@ trait LinearRegressionModule {
 
   import axle.matrix.JblasMatrixModule._
   import FeatureNormalizerModule._
-  
+
   def normalEquation(X: Matrix[Double], y: Matrix[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 
   def h(xi: Matrix[Double], θ: Matrix[Double]) = xi ⨯ θ

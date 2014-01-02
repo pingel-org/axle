@@ -29,7 +29,7 @@ class CrossProductSpec extends Specification {
       val cp = new IndexedCrossProduct(Vector(v1, v2, v3, v2))
 
       cp(0) must be equalTo (List("a", "0", "X", "0"))
-      
+
       cp.size must be equalTo (8)
     }
   }

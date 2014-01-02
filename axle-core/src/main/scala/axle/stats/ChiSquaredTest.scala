@@ -6,7 +6,7 @@ import math.{ pow, sqrt }
 trait ChiSquaredTestModule {
 
   import JblasMatrixModule._
-  
+
   def χ2(tally: Matrix[Double]): Double = {
     val rowTotals = tally.rowSums()
     val columnTotals = tally.columnSums()

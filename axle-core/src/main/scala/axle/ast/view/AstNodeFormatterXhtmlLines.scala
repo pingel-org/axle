@@ -7,8 +7,8 @@ case class XhtmlLinesAstNodeFormatterState(
   currentLine: Option[List[xml.Node]], // = Some(List[xml.Node]())
   _lines: Map[Int, xml.NodeSeq])
 
-/*  
-  
+/*
+
 class XhtmlLinesAstNodeFormatter(
   config: FormatterConfig,
   state: FormatterState,
@@ -117,7 +117,7 @@ class XhtmlLinesAstNodeFormatter(
 
   // TODO: assert stack.size > 1
   def accPopAndWrapStack(label: String): XhtmlLinesAstNodeFormatter = tokens.top.absorb(label, tokens.pop)
-  
+
 }
 
 */

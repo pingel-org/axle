@@ -10,7 +10,7 @@ class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]]) extends Iterable[L
 
   def current(indices: IndexedSeq[Int]) = collections.zip(indices).map({ case (c, i) => c(i) }).toList
 
-  def tail(indices0: IndexedSeq[Int], i0: Int): Stream[List[E]] = 
+  def tail(indices0: IndexedSeq[Int], i0: Int): Stream[List[E]] =
     if (i0 == collections.size) empty
     else {
       if( indices0(i0) == -1 ) {

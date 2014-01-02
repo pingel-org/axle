@@ -75,6 +75,6 @@ object BaumWelch {
   val foo = χ / σ
   // This is dividing the expected transition from Si to Sj by the expected transitions from Si.
   // As the corpus grows, and particular transitions are reinforced, they will increase in value, reaching a local maximum.
-  // No way to ascertain a global maximum is known.  
+  // No way to ascertain a global maximum is known.
 
 }

@@ -270,7 +270,7 @@ object Render {
     def render(cube: TexturedCube, scene: Scene, gl: GL2, glu: GLU): Unit = {
 
       import cube._
-      
+
       val l = length.magnitude.toFloat
 
       val texture = scene.textureFor(textureUrl)

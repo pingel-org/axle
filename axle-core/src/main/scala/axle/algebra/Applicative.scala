@@ -11,7 +11,7 @@ trait Applicative[F[_]] {
 object Applicative {
 
   def id[T](x: T) = x
-  
+
   // pure id <*> v = v
 
   def checkAxiom1[F[_] : Applicative, T](v: T): Boolean = {
@@ -30,7 +30,7 @@ object Applicative {
   def checkAxiom3[F[_]: Applicative, T, U](x: T, f: T => U): Boolean =
     true
 
-  // u <*> pure y = pure ($ y) <*> u  
+  // u <*> pure y = pure ($ y) <*> u
 
   def checkAxiom4[F[_]: Applicative, T](v: T): Boolean =
     true

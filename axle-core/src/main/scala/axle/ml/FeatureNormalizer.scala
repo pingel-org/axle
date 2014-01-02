@@ -10,7 +10,7 @@ trait FeatureNormalizerModule {
 
   // DistanceFunctionModule
   import axle.matrix.JblasMatrixModule._
-  
+
   trait FeatureNormalizer {
 
     def normalizedData(): Matrix[Double]
@@ -92,7 +92,7 @@ trait FeatureNormalizerModule {
     // val truncatedSigmas = σ2s ⨯ Uk
     // val truncatedMeans = μs ⨯ Uk
     // ns = (fs - μs) .* σ2s ⨯ Uk
-    // (ns ⨯ Uk') ./ σ2s + μs  = fs 
+    // (ns ⨯ Uk') ./ σ2s + μs  = fs
   }
 
 }

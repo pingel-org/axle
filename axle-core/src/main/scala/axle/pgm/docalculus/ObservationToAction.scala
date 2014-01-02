@@ -32,7 +32,7 @@ object ObservationToAction extends Rule {
 //    }).toList
 
     Nil // TODO
-    
+
   }
 
 }

@@ -266,7 +266,7 @@ trait JblasMatrixModule extends MatrixModule {
   def eye[T: C](n: Int): Matrix[T] = matrix(DoubleMatrix.eye(n))
   def I[T: C](n: Int): Matrix[T] = eye(n)
   def rand[T: C](m: Int, n: Int): Matrix[T] = matrix(DoubleMatrix.rand(m, n)) // evenly distributed from 0.0 to 1.0
-  def randn[T: C](m: Int, n: Int): Matrix[T] = matrix(DoubleMatrix.randn(m, n)) // normal distribution 
+  def randn[T: C](m: Int, n: Int): Matrix[T] = matrix(DoubleMatrix.randn(m, n)) // normal distribution
   def falses(m: Int, n: Int): Matrix[Boolean] = matrix(DoubleMatrix.zeros(m, n))
   def trues(m: Int, n: Int): Matrix[Boolean] = matrix(DoubleMatrix.ones(m, n))
 

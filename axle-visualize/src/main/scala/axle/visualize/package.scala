@@ -43,7 +43,7 @@ package object visualize {
   implicit def enComponentBarChart[S, Y: Plottable](barChart: BarChart[S, Y]): Component = new BarChartComponent(barChart)
 
   implicit def enComponentBarChartGrouped[G, S, Y: Plottable](barChart: BarChartGrouped[G, S, Y]): Component = new BarChartGroupedComponent(barChart)
-  
+
   implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {
     case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
     case _ => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads, ug.edgeFunction()))
@@ -55,7 +55,7 @@ package object visualize {
   }
 
   import BayesianNetworkModule._
-  
+
   implicit def enComponentBayesianNetwork[T: Manifest: Eq](bn: BayesianNetworkModule.BayesianNetwork[T]): Component =
     enComponentDirectedGraph(bn.graph)
 

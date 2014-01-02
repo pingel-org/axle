@@ -30,7 +30,7 @@ class AstNodeFormatterString(
     new AstNodeFormatterString(config, state, subState ++ List(s))
 
   def accPushStack() = this
-  
+
   def accPopAndWrapStack(label: String) = this
 
 }

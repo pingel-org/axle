@@ -12,7 +12,7 @@ class ABE extends Specification {
 
   import BayesianNetworkModule._
   import FactorModule._
-  
+
   val bools = Some(Vector(true, false))
 
   val B = new RandomVariable0[Boolean]("Burglary", bools, None)
@@ -58,7 +58,7 @@ class ABE extends Specification {
       case _ => Nil
     })
 
-  // val (bn, es): (BayesianNetwork, Seq[BayesianNetwork#E]) = 
+  // val (bn, es): (BayesianNetwork, Seq[BayesianNetwork#E]) =
 
   "bayesian networks" should {
     "work" in {

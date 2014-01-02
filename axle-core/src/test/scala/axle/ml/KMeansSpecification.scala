@@ -34,7 +34,7 @@ class KMeansSpecification extends Specification {
       implicit val fooEq = new Eq[Foo] {
         def eqv(x: Foo, y: Foo): Boolean = x equals y
       }
-      
+
       val km = classifier(
         data,
         2,

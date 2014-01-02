@@ -13,14 +13,14 @@ trait Distribution[A] {
   /**
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
-  
+
   def σ(): Real = {
     val p: (Real => Real) = (x: Real) => Real(0) // TODO
     val Xs: List[Real] = Nil // TODO
     val μ = Xs.map(xi => p(xi) * xi).Σ(identity)
     (Xs.map(xi => p(xi) * square(xi - μ)).Σ(identity)).sqrt
   }
-  
+
 }
 
 trait Distribution0[A] extends Distribution[A] {

@@ -8,7 +8,7 @@ class AlignDNA extends Specification {
     "work" in {
 
       import NeedlemanWunsch._
-      
+
       optimalAlignment("ATGCGGCC", "ATCGCCGG") must be equalTo ("ATGCGGCC--", "AT-C-GCCGG")
     }
   }
@@ -17,10 +17,10 @@ class AlignDNA extends Specification {
     "work" in {
 
       import SmithWaterman._
-      
+
       optimalAlignment("ACACACTA", "AGCACACA") must be equalTo ("A-CACACTA", "AGCACAC-A")
     }
   }
-  
-  
+
+
 }

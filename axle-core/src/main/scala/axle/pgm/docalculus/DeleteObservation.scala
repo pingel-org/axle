@@ -22,7 +22,7 @@ object DeleteObservation extends Rule {
 //        None
 //      }
 //    }).toList
-    
+
     Nil // TODO
   }
 

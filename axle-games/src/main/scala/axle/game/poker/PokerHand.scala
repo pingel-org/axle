@@ -45,7 +45,7 @@ case class PokerHand(cards: IndexedSeq[Card]) {
   }
 
   def description() = category.describe(this)
-  
+
 }
 
 class PokerHandOrdering extends Ordering[PokerHand] {

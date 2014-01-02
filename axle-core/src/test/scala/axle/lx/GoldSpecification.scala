@@ -23,7 +23,7 @@ class GoldSpecification extends Specification {
       val s2 = mShut :: mUp :: Nil
 
       val ℒ = Language(Set(s1, s2))
-      
+
       val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner()

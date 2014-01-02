@@ -10,7 +10,7 @@ import axle.pgm._
 import BayesianNetworkModule._
 
 object JoinTree {
-  
+
   def apply[T: Eq: Manifest](
     vps: Vector[Set[RandomVariable[T]]],
     ef: Seq[Vertex[Set[RandomVariable[T]]]] => Seq[(Vertex[Set[RandomVariable[T]]], Vertex[Set[RandomVariable[T]]], String)]): JoinTree[T] =

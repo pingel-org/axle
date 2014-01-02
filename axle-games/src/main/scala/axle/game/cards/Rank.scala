@@ -1,7 +1,7 @@
 package axle.game.cards
 
 object Rank {
-  
+
   def apply(c: Char) = c match {
     case '2' => R2
     case '3' => R3

@@ -8,7 +8,7 @@ import collection.GenSeq
 object Document {
 
   implicit object textDocument extends Document[String] {
-    
+
     def tokens(text: String) = language.English.tokenize(text)
 
     def bigrams(text: String) = tokens(text).sliding(2).toVector

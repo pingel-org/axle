@@ -8,7 +8,7 @@ object SamplePredicates {
   val X = Set(1, 2, 3)
   val Y = Set(4, 5, 6)
   val Z = Set(7, 8, 9)
-  
+
   case class A(symbols: Symbol*) extends Predicate(symbols: _*) {
     def name() = "A"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true

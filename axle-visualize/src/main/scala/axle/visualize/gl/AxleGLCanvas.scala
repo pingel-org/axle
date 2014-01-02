@@ -35,11 +35,11 @@ class AxleGLCanvas(scene: Scene, fovy: Angle.Q, zNear: Distance.Q, zFar: Distanc
 
   import Distance._
   import Angle._
-  
+
   this.addGLEventListener(this)
-  
+
   var glu: GLU = null
-  
+
   override def init(drawable: GLAutoDrawable): Unit = {
     val gl = drawable.getGL.getGL2
     glu = new GLU()

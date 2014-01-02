@@ -19,17 +19,17 @@ object CausalModelNode {
 
 case class PFunction[T: Eq](rv: RandomVariable[T], inputs: Seq[RandomVariable[T]])
 
-class CausalModel[T: Eq](_name: String, graph: DirectedGraph[CausalModelNode[T], String]) 
+class CausalModel[T: Eq](_name: String, graph: DirectedGraph[CausalModelNode[T], String])
 {
   import graph._
 
   def name = _name
-  
+
   def duplicate: CausalModel[T] = ???
 
   def randomVariables: Vector[RandomVariable[T]] =
     graph.vertices.map(_.payload.rv).toVector
-  
+
   // TODO: this should probably be Option[Boolean] ?
   def observes(rv: RandomVariable[T]): Boolean = findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
 

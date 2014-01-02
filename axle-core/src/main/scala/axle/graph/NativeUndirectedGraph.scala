@@ -168,7 +168,7 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](vps: Seq[VP], ef: Seq
 //  extends UndirectedGraphEdge[VP, EP] {
 //
 //  type V[VP] = Vertex[VP]
-//  
+//
 //  def vertices(): (Vertex[VP], Vertex[VP]) = (v1, v2)
 //
 //  def payload(): EP = ep

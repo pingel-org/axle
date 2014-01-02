@@ -12,7 +12,7 @@ import axle.matrix._
 object Levenshtein extends MetricSpace[String, Int] {
 
   import JblasMatrixModule.{matrix, Matrix, convertInt}
-  
+
   def distance(s1: String, s2: String): Int = {
 
     val lenStr1 = s1.length

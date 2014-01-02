@@ -12,7 +12,7 @@ class EnrichedHTable(table: HTable) {
   import Implicits._
 
   def size() = 0l
-  
+
   def put(row: Array[Byte], family: Array[Byte], qual: Array[Byte], value: Array[Byte]): Unit = {
     val theput = new Put(row)
     theput.add(family, qual, value)
@@ -42,7 +42,7 @@ class EnrichedHTable(table: HTable) {
       scanner.close()
     }
   }
-  
+
   def close() = table.close()
-  
+
 }

@@ -52,7 +52,7 @@ object Monad {
   //  class Reader[A, B] extends Function1[A, B]
   //
   //  implicit val readerMonad = new Monad[Reader] {
-  //    
+  //
   //  }
 
   // Writer

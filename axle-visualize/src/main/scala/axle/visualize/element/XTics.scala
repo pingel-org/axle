@@ -29,7 +29,7 @@ class XTics[X, Y](
   val zeroDegrees = 0 *: °
 
   def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: Angle.Q = zeroDegrees): Unit = {
-    
+
     val (x, label) = xTic
     if (fDrawLine) {
       g2d.setColor(Color.lightGray)
@@ -38,13 +38,13 @@ class XTics[X, Y](
     val bottomScaled = Point2D(x, minY)
     val bottomUnscaled = framePoint(bottomScaled)
     g2d.setColor(Color.black)
-    
+
     // TODO: angle xtics?
     if (angle == zeroDegrees)
       g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
     else
       drawStringAtAngle(g2d, fontMetrics, label, bottomScaled, angle)
-      
+
     g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
   }
 

@@ -7,7 +7,7 @@ import spire.algebra._
 class VariableNamer[T: Eq] {
 
   def duplicate: VariableNamer[T] = ???
-  
+
   def nextVariable(rv: RandomVariable[T]): RandomVariable[T] = ???
-  
+
 }

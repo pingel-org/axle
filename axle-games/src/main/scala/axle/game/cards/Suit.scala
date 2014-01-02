@@ -12,7 +12,7 @@ object Suit {
 }
 
 sealed trait Suit {
-  
+
   def serialize(): Char
 }
 

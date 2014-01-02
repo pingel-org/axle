@@ -11,12 +11,12 @@ class PokerPlayerInteractive(id: String, description: String = "human")(implicit
 Texas Hold Em Poker
 
 Example moves:
-        
+
   check
   raise 1.0
   call
   fold
-        
+
 """
     println(intro)
   }
