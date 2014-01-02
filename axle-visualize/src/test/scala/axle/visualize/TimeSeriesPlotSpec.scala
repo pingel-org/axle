@@ -55,15 +55,16 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
+    import collection.immutable.TreeMap
     import axle.visualize.Plot
     import axle.algebra.Plottable
     import Plottable._
     import axle.quanta._
     import Information._
     import axle.stats._
-    import collection.immutable.TreeMap
+    import spire.math._
 
-    val hm = new TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(i / 100.0)))).toMap
+    val hm = new TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(Real(Rational(i, 100)))))).toMap
 
     val plot = new Plot(List(("h", hm)),
       connect = true,
