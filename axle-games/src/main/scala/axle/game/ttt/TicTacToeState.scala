@@ -15,7 +15,7 @@ case class TicTacToeState(
 
   def displayTo(viewer: TicTacToePlayer): String = {
 
-    val keyWidth = numPositions.toString().length
+    val keyWidth = numPositions.toString.length
 
     "Board:         Movement Key:\n" +
       0.until(boardSize).map(r => {
@@ -27,34 +27,34 @@ case class TicTacToeState(
 
   }
 
-  def positionToRow(position: Int) = (position - 1) / boardSize
+  def positionToRow(position: Int): Int = (position - 1) / boardSize
 
-  def positionToColumn(position: Int) = (position - 1) % boardSize
+  def positionToColumn(position: Int): Int = (position - 1) % boardSize
 
-  def apply(position: Int) = board(positionToRow(position), positionToColumn(position))
+  def apply(position: Int): Option[TicTacToePlayer] = board(positionToRow(position), positionToColumn(position))
 
   // The validation in InteractiveTicTacToePlayer.chooseMove might be better placed here
   //    def updat(position: Int, player: TicTacToePlayer) =
   //      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
-  def hasWonRow(player: TicTacToePlayer) =
+  def hasWonRow(player: TicTacToePlayer): Boolean =
     (0 until boardSize).exists(board.row(_).toList.forall(_ == Some(player)))
 
-  def hasWonColumn(player: TicTacToePlayer) =
+  def hasWonColumn(player: TicTacToePlayer): Boolean =
     (0 until boardSize).exists(board.column(_).toList.forall(_ == Some(player)))
 
-  def hasWonDiagonal(player: TicTacToePlayer) =
+  def hasWonDiagonal(player: TicTacToePlayer): Boolean =
     (0 until boardSize).forall(i => board(i, i) == Some(player)) ||
       (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player))
 
-  def hasWon(player: TicTacToePlayer) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
+  def hasWon(player: TicTacToePlayer): Boolean = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
   def openPositions: IndexedSeq[Int] = (1 to numPositions).filter(this(_).isEmpty)
 
   def moves: Seq[TicTacToeMove] = openPositions.map(TicTacToeMove(player, _))
 
   def outcome: Option[TicTacToeOutcome] = {
-    val winner = ttt.players.find(hasWon(_))
+    val winner = ttt.players.find(hasWon)
     if (winner.isDefined) { Some(TicTacToeOutcome(winner)) }
     else if (openPositions.length == 0) { Some(TicTacToeOutcome(None)) }
     else { None }
@@ -68,7 +68,7 @@ case class TicTacToeState(
       _eventQueues
     )
 
-  def eventQueues = _eventQueues
+  def eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = _eventQueues
 
   def setEventQueues(qs: Map[TicTacToePlayer, List[Event[TicTacToe]]]): TicTacToeState =
     TicTacToeState(player, board, qs)

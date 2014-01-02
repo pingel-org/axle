@@ -4,7 +4,7 @@ import util.Random.shuffle
 
 case class Deck(cards: IndexedSeq[Card] = shuffle(Deck.cards)) {
 
-  override def toString() = cards.map(_.toString()).mkString(" ")
+  override def toString: String = cards.map(_.toString).mkString(" ")
 }
 
 object Deck {

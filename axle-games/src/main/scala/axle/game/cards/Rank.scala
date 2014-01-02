@@ -2,7 +2,7 @@ package axle.game.cards
 
 object Rank {
 
-  def apply(c: Char) = c match {
+  def apply(c: Char): Rank = c match {
     case '2' => R2
     case '3' => R3
     case '4' => R4
@@ -21,90 +21,90 @@ object Rank {
 
 sealed trait Rank {
 
-  def asInt(): Int
+  def asInt: Int
 
-  def serialize(): Char
+  def serialize: Char
 
 }
 
 class RankOrdering extends Ordering[Rank] {
-  def compare(a: Rank, b: Rank) = a.asInt.compare(b.asInt)
+  def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
 }
 
 object R2 extends Rank {
-  def asInt() = 2
-  override def toString() = "2"
-  def serialize() = '2'
+  def asInt: Int = 2
+  override def toString: String = "2"
+  def serialize: Char = '2'
 }
 
 object R3 extends Rank {
-  def asInt() = 3
-  override def toString() = "3"
-  def serialize() = '3'
+  def asInt: Int = 3
+  override def toString: String = "3"
+  def serialize: Char = '3'
 }
 
 object R4 extends Rank {
-  def asInt() = 4
-  override def toString() = "4"
-  def serialize() = '4'
+  def asInt: Int = 4
+  override def toString: String = "4"
+  def serialize: Char = '4'
 }
 
 object R5 extends Rank {
-  def asInt() = 5
-  override def toString() = "5"
-  def serialize() = '5'
+  def asInt: Int = 5
+  override def toString: String = "5"
+  def serialize: Char = '5'
 }
 
 object R6 extends Rank {
-  def asInt() = 6
-  override def toString() = "6"
-  def serialize() = '6'
+  def asInt: Int = 6
+  override def toString: String = "6"
+  def serialize: Char = '6'
 }
 
 object R7 extends Rank {
-  def asInt() = 7
-  override def toString() = "7"
-  def serialize() = '7'
+  def asInt: Int = 7
+  override def toString: String = "7"
+  def serialize: Char = '7'
 }
 
 object R8 extends Rank {
-  def asInt() = 8
-  override def toString() = "8"
-  def serialize() = '8'
+  def asInt: Int = 8
+  override def toString: String = "8"
+  def serialize: Char = '8'
 }
 
 object R9 extends Rank {
-  def asInt() = 9
-  override def toString() = "9"
-  def serialize() = '9'
+  def asInt: Int = 9
+  override def toString: String = "9"
+  def serialize: Char = '9'
 }
 
 object R10 extends Rank {
-  def asInt() = 10
-  override def toString() = "10"
-  def serialize() = 'T'
+  def asInt: Int = 10
+  override def toString: String = "10"
+  def serialize: Char = 'T'
 }
 
 object Jack extends Rank {
-  def asInt() = 11
-  override def toString() = "J"
-  def serialize() = 'J'
+  def asInt: Int = 11
+  override def toString: String = "J"
+  def serialize: Char = 'J'
 }
 
 object Queen extends Rank {
-  def asInt() = 12
-  override def toString() = "Q"
-  def serialize() = 'Q'
+  def asInt: Int = 12
+  override def toString: String = "Q"
+  def serialize: Char = 'Q'
 }
 
 object King extends Rank {
-  def asInt() = 13
-  override def toString() = "K"
-  def serialize() = 'K'
+  def asInt: Int = 13
+  override def toString: String = "K"
+  def serialize: Char = 'K'
 }
 
 object Ace extends Rank {
-  def asInt() = 14
-  override def toString() = "A"
-  def serialize() = 'A'
+  def asInt: Int = 14
+  override def toString: String = "A"
+  def serialize: Char = 'A'
 }

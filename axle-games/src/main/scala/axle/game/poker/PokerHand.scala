@@ -39,6 +39,8 @@ case class PokerHand(cards: IndexedSeq[Card]) {
       High
     }
 
+  override def hashCode: Int = cards.##
+
   override def toString: String = sortedHand.reverse.map(_.toString).mkString(" ")
 
   override def equals(other: Any): Boolean = other match {
@@ -55,7 +57,7 @@ class PokerHandOrdering extends Ordering[PokerHand] {
   import math.Ordering
   import math.Ordering.Implicits._
 
-  def compare(a: PokerHand, b: PokerHand) = {
+  def compare(a: PokerHand, b: PokerHand): Int = {
     val ac = a.category
     val bc = b.category
 

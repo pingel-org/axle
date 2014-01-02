@@ -29,24 +29,24 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
 
   val playersSeq = Vector(x, o)
 
-  def state(player: TicTacToePlayer, board: Matrix[Option[TicTacToePlayer]], eventQueue: Map[TicTacToePlayer, List[Event[TicTacToe]]]) =
+  def state(player: TicTacToePlayer, board: Matrix[Option[TicTacToePlayer]], eventQueue: Map[TicTacToePlayer, List[Event[TicTacToe]]]): Option[TicTacToeState] =
     Some(new TicTacToeState(player, board, eventQueue))
 
-  def move(player: TicTacToePlayer, position: Int) = TicTacToeMove(player, position)
+  def move(player: TicTacToePlayer, position: Int): TicTacToeMove = TicTacToeMove(player, position)
 
-  def player(id: String, description: String, which: String) = which match {
+  def player(id: String, description: String, which: String): TicTacToePlayer = which match {
     case "random" => new RandomTicTacToePlayer(id, description)
     case "ai" => new AITicTacToePlayer(id, description)
     case _ => new InteractiveTicTacToePlayer(id, description)
   }
 
-  def startState() = new TicTacToeState(x, startBoard())
+  def startState: TicTacToeState = new TicTacToeState(x, startBoard)
 
-  def startFrom(s: TicTacToeState) = Some(startState())
+  def startFrom(s: TicTacToeState): Option[TicTacToeState] = Some(startState)
 
-  def numPositions() = boardSize * boardSize
+  def numPositions: Int = boardSize * boardSize
 
-  def introMessage(): String = "Intro message to Tic Tac Toe"
+  def introMessage: String = "Intro message to Tic Tac Toe"
 
   // tttmm.C[Option[String]]
   implicit val convertPlayerId = new FunctionPair[Double, Option[TicTacToePlayer]] {
@@ -60,9 +60,13 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
     }
   }
 
-  def startBoard() = tttmm.matrix[Option[TicTacToePlayer]](boardSize, boardSize, (r: Int, c: Int) => Option[TicTacToePlayer](null))(convertPlayerId)
+  def startBoard: Matrix[Option[TicTacToePlayer]] =
+    tttmm.matrix[Option[TicTacToePlayer]](
+        boardSize,
+        boardSize,
+        (r: Int, c: Int) => Option[TicTacToePlayer](null))(convertPlayerId)
 
-  def players(): Set[TicTacToePlayer] = Set(x, o)
+  def players: Set[TicTacToePlayer] = Set(x, o)
 
   def playerAfter(player: TicTacToePlayer): TicTacToePlayer =
     if (player == x) o else x

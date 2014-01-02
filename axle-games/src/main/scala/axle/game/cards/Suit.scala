@@ -13,25 +13,25 @@ object Suit {
 
 sealed trait Suit {
 
-  def serialize(): Char
+  def serialize: Char
 }
 
 object Spades extends Suit {
-  override def toString() = "♠"
-  def serialize() = '♠'
+  override def toString: String = "♠"
+  def serialize: Char = '♠'
 }
 
 object Diamonds extends Suit {
-  override def toString() = "♢"
-  def serialize() = '♢'
+  override def toString: String = "♢"
+  def serialize: Char = '♢'
 }
 
 object Clubs extends Suit {
-  override def toString() = "♣"
-  def serialize() = '♣'
+  override def toString: String = "♣"
+  def serialize: Char = '♣'
 }
 
 object Hearts extends Suit {
-  override def toString() = "♡"
-  def serialize() = '♡'
+  override def toString: String = "♡"
+  def serialize: Char = '♡'
 }

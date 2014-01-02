@@ -20,7 +20,7 @@ class Poker(numPlayers: Int) extends Game[Poker] {
 
   val _players = (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
 
-  def player(id: String, description: String, which: String) = which match {
+  def player(id: String, description: String, which: String): PokerPlayer = which match {
     case "random" => new RandomPokerPlayer(id, description)
     case "ai" => new PokerPlayerAI(id, description)
     case "dealer" => new PokerPlayerDealer(id, description)
@@ -43,7 +43,7 @@ class Poker(numPlayers: Int) extends Game[Poker] {
       Map()
     )
 
-  def startFrom(s: PokerState) = {
+  def startFrom(s: PokerState): Option[PokerState] = {
 
     if (s.stillIn.size > 0) {
       Some(PokerState(

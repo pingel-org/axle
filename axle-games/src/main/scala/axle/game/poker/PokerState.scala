@@ -27,9 +27,9 @@ case class PokerState(
 
   lazy val _player = playerFn(this)
 
-  def player() = _player
+  def player: PokerPlayer = _player
 
-  def firstBetter() = game._players.find(stillIn.contains(_)).get
+  def firstBetter: PokerPlayer = game._players.find(stillIn.contains).get
 
   def betterAfter(before: PokerPlayer): Option[PokerPlayer] = {
     if (stillIn.forall(p => inFors.get(p).map(_ == currentBet).getOrElse(false))) {
@@ -83,7 +83,7 @@ case class PokerState(
       val unused = cards((game._players.size * 2 + 5) until cards.length)
 
       // TODO: should blinds be a part of the "deal" or are they minimums during first round of betting?
-      val orderedStillIn = game._players.filter(stillIn.contains(_))
+      val orderedStillIn = game._players.filter(stillIn.contains)
       val smallBlindPlayer = orderedStillIn(0)
       val bigBlindPlayer = orderedStillIn(1) // list should be at least this long
 
@@ -212,9 +212,9 @@ case class PokerState(
 
   }
 
-  def eventQueues() = _eventQueues
+  def eventQueues: Map[PokerPlayer, List[Event[Poker]]] = _eventQueues
 
-  def setEventQueues(qs: Map[PokerPlayer, List[Event[Poker]]]) = PokerState(
+  def setEventQueues(qs: Map[PokerPlayer, List[Event[Poker]]]): PokerState = PokerState(
     playerFn,
     deck,
     shared,

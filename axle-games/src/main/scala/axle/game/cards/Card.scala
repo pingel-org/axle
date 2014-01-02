@@ -9,14 +9,14 @@ object Card {
 
 case class Card(rank: Rank, suit: Suit) {
 
-  override def toString() = rank.toString + suit.toString
+  override def toString: String = rank.toString + suit.toString
 
-  def serialize(): String = "" + rank.serialize + suit.serialize
+  def serialize: String = "" + rank.serialize + suit.serialize
 }
 
 class CardOrdering extends Ordering[Card] {
 
-  def compare(a: Card, b: Card) =
+  def compare(a: Card, b: Card): Int =
     Implicits.rankOrdering.compare(a.rank, b.rank)
 
 }
