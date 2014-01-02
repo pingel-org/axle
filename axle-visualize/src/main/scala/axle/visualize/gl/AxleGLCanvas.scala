@@ -43,8 +43,8 @@ class AxleGLCanvas(scene: Scene, fovy: Angle.Q, zNear: Distance.Q, zFar: Distanc
   override def init(drawable: GLAutoDrawable): Unit = {
     val gl = drawable.getGL.getGL2
     glu = new GLU()
-    gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
-    gl.glClearDepth(1.0f)
+    gl.glClearColor(0f, 0f, 0f, 0f)
+    gl.glClearDepth(1f)
     gl.glEnable(GL_DEPTH_TEST)
     gl.glDepthFunc(GL_LEQUAL)
     gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
