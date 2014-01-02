@@ -245,7 +245,7 @@ object Python {
     trim
   )
 
-  def language = lang
+  def language: Language = lang
 
 }
 
