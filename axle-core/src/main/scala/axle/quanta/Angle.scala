@@ -19,7 +19,7 @@ class Angle extends Quantum {
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
     def eqv(x: Q, y: Q): Boolean = x equals y // TODO
   }
-  
+
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
@@ -29,7 +29,7 @@ class Angle extends Quantum {
   def newQuantity(magnitude: Number, unit: AngleQuantity): AngleQuantity =
     new AngleQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph() = _conversionGraph
+  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
   // "http://en.wikipedia.org/wiki/Distance"
@@ -57,10 +57,10 @@ class Angle extends Quantum {
   lazy val ° = degree
   lazy val circleDegrees = byName("circleDegrees")
   lazy val circleRadians = byName("circleRadians")
-  
+
   lazy val clockwise90 = -90.0 *: °
   lazy val counterClockwise90 = 90.0 *: °
-  
+
 }
 
 object Angle extends Angle()

@@ -18,7 +18,7 @@ object NeedlemanWunsch {
    * S is "similarity", computed by a fixed Int matrix
    *
    * S(a, b) === S(b, a)
-   * 
+   *
    */
 
   def S(x: Char, y: Char): Int = (x, y) match {
@@ -46,10 +46,11 @@ object NeedlemanWunsch {
   def alignmentScore(A: String, B: String, gapPenalty: Int = defaultGapPenalty): Int = {
     assert(A.length === B.length)
     (0 until A.length).map(i =>
-      if (A(i) === gap || B(i) === gap)
+      if (A(i) === gap || B(i) === gap) {
         gapPenalty
-      else
+      } else {
         S(A(i), B(i))
+      }
     ).sum
   }
 
@@ -96,7 +97,7 @@ object NeedlemanWunsch {
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
-  def metricSpace(gapPenalty: Int = defaultGapPenalty) = new NeedlemanWunschMetricSpace(gapPenalty)
+  def metricSpace(gapPenalty: Int = defaultGapPenalty): NeedlemanWunschMetricSpace = new NeedlemanWunschMetricSpace(gapPenalty)
 
   class NeedlemanWunschMetricSpace(gapPenalty: Int) extends MetricSpace[String, Int] {
 

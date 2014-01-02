@@ -81,7 +81,7 @@ trait KMeansModule {
     def exemplar(i: Int): T = exemplars(i)
 
     def classes(): Range = 0 until K
-    
+
     def apply(observation: T): Int = {
       val (i, d) = centroidIndexAndDistanceClosestTo(space, μ, normalizer.normalize(featureExtractor(observation)))
       i
@@ -173,7 +173,7 @@ trait KMeansModule {
 
     def distanceLogSeries(): List[(String, SortedMap[Int, Double])] =
       (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList
-    
+
   }
 
 }

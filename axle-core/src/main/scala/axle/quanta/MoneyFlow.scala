@@ -18,7 +18,7 @@ class MoneyFlow extends Quantum {
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
     def eqv(x: Q, y: Q): Boolean = x equals y // TODO
   }
-  
+
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
@@ -28,7 +28,7 @@ class MoneyFlow extends Quantum {
   def newQuantity(magnitude: Number, unit: MoneyFlowQuantity): MoneyFlowQuantity =
     new MoneyFlowQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph() = _conversionGraph
+  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/" // TODO
 

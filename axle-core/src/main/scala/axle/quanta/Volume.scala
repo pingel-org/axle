@@ -18,7 +18,7 @@ class Volume extends Quantum {
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
     def eqv(x: Q, y: Q): Boolean = x equals y // TODO
   }
-  
+
   def newUnitOfMeasurement(
     name: Option[String] = None,
     symbol: Option[String] = None,
@@ -28,7 +28,7 @@ class Volume extends Quantum {
   def newQuantity(magnitude: Number, unit: VolumeQuantity): VolumeQuantity =
     new VolumeQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph() = _conversionGraph
+  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
 
   import Distance.{ meter, km }
   import Area.{ m2, km2 }

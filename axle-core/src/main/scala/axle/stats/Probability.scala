@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 
 trait Probability extends (() => Real) {
-  def *(right: => Real) = PMultiply(this, right)
+  def *(right: => Real): () => Real = PMultiply(this, right)
   def bayes(): () => Real
 }
 

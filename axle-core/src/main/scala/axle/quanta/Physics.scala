@@ -32,7 +32,7 @@ object Physics {
 //  {
 //    import Distance._
 //    import Area._
-//    
+//
 //    val x: Area.Q = (1 *: meter) by (1 *: meter)
 //  }
 

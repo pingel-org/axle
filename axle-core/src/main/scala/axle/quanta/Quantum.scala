@@ -57,15 +57,15 @@ trait Quantum extends QuantumExpression {
   implicit val edgeEq: Eq[Number => Number] = new Eq[Number => Number] {
     def eqv(x: Number => Number, y: Number => Number): Boolean = ???
   }
-  
-  def conversionGraph(): DirectedGraph[Q, Number => Number]
+
+  def conversionGraph: DirectedGraph[Q, Number => Number]
 
   def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], Number => Number)]): DirectedGraph[Q, Number => Number] =
     JungDirectedGraph(vps, ef)
 
-  def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], Number)]) = trips.flatMap(trip2fns(_))
+  private[quanta] def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], Number)]) = trips.flatMap(trip2fns(_))
 
-  def trip2fns(trip: (Vertex[Q], Vertex[Q], Number)): Seq[(Vertex[Q], Vertex[Q], Number => Number)] =
+  private[quanta] def trip2fns(trip: (Vertex[Q], Vertex[Q], Number)): Seq[(Vertex[Q], Vertex[Q], Number => Number)] =
     Vector(
       (trip._1, trip._2, x => x * trip._3),
       (trip._2, trip._1, x => x / trip._3)
@@ -73,12 +73,12 @@ trait Quantum extends QuantumExpression {
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
 
-  def is(qe: QuantumExpression) = ??? // TODO
+  def is(qe: QuantumExpression): Boolean = ??? // TODO
 
   val one = Number.one
 
   class Quantity(
-    magnitude: Number = one,
+    _magnitude: Number = one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -97,49 +97,52 @@ trait Quantum extends QuantumExpression {
       case _ => false
     }
 
+    override def hashCode: Int = this._magnitude.## + this._unit.##
+
     def +(right: Q): Q =
       quantity((this in right.unit).magnitude + right.magnitude, right.unit)
 
     def -(right: Q): Q =
       quantity((this in right.unit).magnitude - right.magnitude, right.unit)
 
-    def *(n: Number): Q = quantity(magnitude * n, unit)
+    def *(n: Number): Q = quantity(_magnitude * n, unit)
 
-    def /(n: Number): Q = quantity(magnitude / n, unit)
+    def /(n: Number): Q = quantity(_magnitude / n, unit)
 
     def <(other: Q): Boolean = (other - this).magnitude > 0
 
     def >(other: Q): Boolean = (other - this).magnitude < 0
-    
+
     def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#Q, resultQuantum: QRES): QRES#Q =
-      resultQuantum.quantity(magnitude * right.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
+      resultQuantum.quantity(_magnitude * right.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
 
     def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q =
-      resultQuantum.quantity(magnitude / bottom.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
+      resultQuantum.quantity(_magnitude / bottom.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
 
     def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
 
     def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
 
-    def magnitude(): Number = magnitude
-    def unitOption() = _unit
-    def unit() = _unit.getOrElse(this)
-    def name() = _name.getOrElse("")
-    def label() = _name.getOrElse("")
-    def symbol() = _symbol
-    def link() = _link
+    def magnitude: Number = _magnitude
+    def unitOption: Option[Q] = _unit
+    def unit: Q = _unit.getOrElse(this)
+    def name: String = _name.getOrElse("")
+    def label: String = _name.getOrElse("")
+    def symbol: Option[String] = _symbol
+    def link: Option[String] = _link
 
-    def vertex() = quantum.conversionGraph.findVertex(_.payload == this).get
+    def vertex: Vertex[Q] = quantum.conversionGraph.findVertex(_.payload == this).get
 
-    override def toString() =
-      if (_unit.isDefined)
+    override def toString: String =
+      if (_unit.isDefined) {
         magnitude.toString + unit.symbol.map(" " + _).getOrElse("")
-      else
-        _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + getClass().getSimpleName()
+      } else {
+        _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + getClass.getSimpleName
+      }
 
-    def *:(n: Number) = quantity(magnitude * n, this)
+    def *:(n: Number): Q = quantity(magnitude * n, this)
 
-    def in_:(n: Number) = quantity(n, this)
+    def in_:(n: Number): Q = quantity(n, this)
 
     def in(other: Q): Q =
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex)
@@ -149,7 +152,7 @@ trait Quantum extends QuantumExpression {
         .map(n => quantity((magnitude * n) / other.magnitude, other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
 
-    def plottable() = quantum.UnitPlottable(this)
+    def plottable: UnitPlottable = quantum.UnitPlottable(this)
 
   }
 
@@ -176,7 +179,7 @@ trait Quantum extends QuantumExpression {
 
   val wikipediaUrl: String
 
-  override def toString() = getClass().getSimpleName()
+  override def toString: String = getClass.getSimpleName
 
   import axle.algebra.Plottable
 
@@ -187,14 +190,14 @@ trait Quantum extends QuantumExpression {
 
     def isPlottable(t: quantum.Q): Boolean = true
 
-    def zero() = Number(0) *: base
+    def zero: Q = Number(0) *: base
 
-    def compare(u1: quantum.Q, u2: quantum.Q) = {
+    def compare(u1: quantum.Q, u2: quantum.Q): Int = {
       val m1 = (u1 in base).magnitude
       val m2 = (u2 in base).magnitude
-      if (m1 == m2) 0
-      else if (m1 < m2) -1
-      else 1
+      if (m1 == m2) { 0 }
+      else if (m1 < m2) { -1 }
+      else { 1 }
     }
 
     def portion(left: quantum.Q, v: quantum.Q, right: quantum.Q): Double =
@@ -202,10 +205,11 @@ trait Quantum extends QuantumExpression {
 
     def step(from: Number, to: Number): Rational = {
       val p = (log10((to - from).abs.toDouble) - 0.5).floor.toInt
-      if (p > 0)
+      if (p > 0) {
         10 ** p
-      else
+      } else {
         Rational(1, 10 ** math.abs(p))
+      }
     }
 
     def ticValueStream(v: Number, to: Number, step: Number): Stream[Number] =
