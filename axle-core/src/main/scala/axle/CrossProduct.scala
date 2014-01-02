@@ -14,7 +14,7 @@ class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]]) extends Iterable[L
     if (i0 == collections.size) empty
     else {
       if( indices0(i0) == -1 ) {
-	if( collections(i0).size > 0 ) {
+        if( collections(i0).size > 0 ) {
           val indices1 = indices0.updated(i0, 0)
           if(i0 < collections.size - 1) tail(indices1, i0 + 1)
           else cons(current(indices1), tail(indices1, 0))
