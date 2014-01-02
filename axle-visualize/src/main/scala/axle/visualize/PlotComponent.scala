@@ -28,10 +28,11 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
   val xPlottable = implicitly[Plottable[X]]
   val yPlottable = implicitly[Plottable[Y]]
 
-  val keyOpt = if (drawKey)
+  val keyOpt = if (drawKey) {
     Some(new Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))
-  else
+  } else {
     None
+  }
 
   val minXCandidates = (data collect { case (_, m) if m.size > 0 => m.firstKey }) ++ yAxis.toList
   val minX = if (minXCandidates.size > 0) minXCandidates.min else xPlottable.zero
@@ -69,7 +70,7 @@ class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel
 
   setMinimumSize(new Dimension(width, height))
 
-  def feeder() = dataFeedActor
+  def feeder: ActorRef = dataFeedActor
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))

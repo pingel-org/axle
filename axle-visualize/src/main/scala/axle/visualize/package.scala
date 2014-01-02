@@ -22,10 +22,10 @@ package object visualize {
 
   // default width/height was 1100/800
 
-  def newFrame(width: Int, height: Int, dataFeedActorOpt: Option[ActorRef]) =
+  def newFrame(width: Int, height: Int, dataFeedActorOpt: Option[ActorRef]): AxleFrame =
     new AxleFrame(width, height, Color.white, "αχλε", dataFeedActorOpt)
 
-  def show(component: Component) = {
+  def show(component: Component): Unit = {
     val minSize = component.getMinimumSize
     val dataFeedActorOpt = component match {
       case f: Fed => Some(f.feeder)
@@ -89,12 +89,12 @@ package object visualize {
     g.dispose()
   }
 
-  def png(component: Component, filename: String) = component2file(component, filename, "PNG")
+  def png(component: Component, filename: String): Unit = component2file(component, filename, "PNG")
 
-  def jpeg(component: Component, filename: String) = component2file(component, filename, "JPEG")
+  def jpeg(component: Component, filename: String): Unit = component2file(component, filename, "JPEG")
 
-  def gif(component: Component, filename: String) = component2file(component, filename, "gif")
+  def gif(component: Component, filename: String): Unit = component2file(component, filename, "gif")
 
-  def bmp(component: Component, filename: String) = component2file(component, filename, "BMP")
+  def bmp(component: Component, filename: String): Unit = component2file(component, filename, "BMP")
 
 }

@@ -14,11 +14,11 @@ import javax.swing.SwingUtilities
 
 class SceneFrame(scene: Scene, width: Int, height: Int, zNear: Distance.Q, zFar: Distance.Q, fps: Int) {
 
-  def run() = {
+  def run(): Unit = {
 
     SwingUtilities.invokeLater(new Runnable() {
 
-      def run() = {
+      def run(): Unit = {
 
         val canvas = new AxleGLCanvas(scene, 45.0 *: degree, zNear, zFar, scene.distanceUnit)
         canvas.setPreferredSize(new Dimension(width, height))

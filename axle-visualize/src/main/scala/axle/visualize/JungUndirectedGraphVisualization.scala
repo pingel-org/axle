@@ -37,22 +37,22 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
     val edgeStrokeTransformer = new Transformer[Edge[jug.ES, EP], Stroke]() {
-      def transform(edge: Edge[jug.ES, EP]) = edgeStroke
+      def transform(edge: Edge[jug.ES, EP]): BasicStroke = edgeStroke
     }
 
     val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
-      def transform(vertex: Vertex[VP]) = vertex.payload.toString
+      def transform(vertex: Vertex[VP]): String = vertex.payload.toString
     }
 
     val edgeLabelTransformer = new Transformer[Edge[jug.ES, EP], String]() {
-      def transform(edge: Edge[jug.ES, EP]) = edge.payload.toString
+      def transform(edge: Edge[jug.ES, EP]): String = edge.payload.toString
     }
 
-    vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint)
-    vv.getRenderContext().setEdgeStrokeTransformer(edgeStrokeTransformer)
-    vv.getRenderContext().setVertexLabelTransformer(vertexLabelTransformer)
-    vv.getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer)
-    vv.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR)
+    vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)
+    vv.getRenderContext.setEdgeStrokeTransformer(edgeStrokeTransformer)
+    vv.getRenderContext.setVertexLabelTransformer(vertexLabelTransformer)
+    vv.getRenderContext.setEdgeLabelTransformer(edgeLabelTransformer)
+    vv.getRenderer.getVertexLabelRenderer.setPosition(Position.CNTR)
 
     val gm = new PluggableGraphMouse()
     gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1))

@@ -68,7 +68,7 @@ trait KMeansVisualizationModule {
 
     val boundingRectangle = new Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black))
 
-    def centroidOval(i: Int) = {
+    def centroidOval(i: Int): Oval[Double, Double] = {
       val denormalized = classifier.normalizer.denormalize(classifier.μ.row(i))
       val center = Point2D(denormalized(0), denormalized(1))
       Oval(scaledArea, center, 3 * pointDiameter, 3 * pointDiameter, colors(i % colors.length), darkGray)
@@ -86,7 +86,7 @@ trait KMeansVisualizationModule {
       }
     }
 
-    val centroidOvals = (0 until classifier.K).map(centroidOval(_))
+    val centroidOvals = (0 until classifier.K).map(centroidOval)
 
     override def paintComponent(g: Graphics): Unit = {
 
@@ -97,7 +97,7 @@ trait KMeansVisualizationModule {
       xTics.paint(g2d)
       yTics.paint(g2d)
       centroidOvals.map(_.paint(g2d))
-      for (i <- 0 until classifier.K) {
+      (0 until classifier.K) foreach { i =>
         cluster(g2d, i)
       }
     }

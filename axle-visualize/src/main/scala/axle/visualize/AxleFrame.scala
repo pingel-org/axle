@@ -24,7 +24,7 @@ class FrameRepaintingActor(frame: JFrame, dataFeedActorOpt: Option[ActorRef]) ex
 
   var dirty = true
 
-  def receive = {
+  def receive: Receive = {
     case RepaintIfDirty() => {
       // log info ("component painter received paint message")
       if (dirty) {

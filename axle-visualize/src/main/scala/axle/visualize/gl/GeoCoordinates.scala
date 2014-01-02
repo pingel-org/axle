@@ -6,6 +6,6 @@ case class GeoCoordinates(
   latitude: Angle.Q,
   longitude: Angle.Q) {
 
-  def φ = latitude
-  def λ = longitude
+  def φ: Angle.Q = latitude
+  def λ: Angle.Q = longitude
 }

@@ -25,7 +25,7 @@ case class ScaledArea2D[X: Portionable, Y: Portionable](
   val drawableWidth = width - (2 * pad)
   val drawableHeight = height - (2 * pad)
 
-  def framePoint(sp: Point2D[X, Y]) = new Point(
+  def framePoint(sp: Point2D[X, Y]): Point = new Point(
     pad + (drawableWidth * xPortionable.portion(minX, sp.x, maxX)).toInt,
     height - pad - (drawableHeight * yPortionable.portion(minY, sp.y, maxY)).toInt
   )

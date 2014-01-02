@@ -7,7 +7,7 @@ import axle.quanta.Time
 import System.currentTimeMillis
 
 trait Fed {
-  def feeder(): ActorRef
+  def feeder: ActorRef
 }
 
 object DataFeedProtocol {
@@ -33,7 +33,7 @@ class DataFeedActor[T](initialValue: T, refresher: Option[(T => T, Time.Q)]) ext
 
   val viewers = collection.mutable.Set[ActorRef]()
 
-  def receive = {
+  def receive: Receive = {
 
     case RegisterViewer() => {
       viewers += sender

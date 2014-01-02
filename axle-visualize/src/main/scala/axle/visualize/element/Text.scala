@@ -28,17 +28,19 @@ class Text(
       val twist = angleRadOpt.get
       g2d.translate(x, y)
       g2d.rotate(-1 * twist)
-      if (centered)
+      if (centered) {
         g2d.drawString(text, -fontMetrics.stringWidth(text) / 2, 0)
-      else
+      } else {
         g2d.drawString(text, 0, 0)
+      }
       g2d.rotate(twist)
       g2d.translate(-x, -y)
     } else {
-      if (centered)
+      if (centered) {
         g2d.drawString(text, x - fontMetrics.stringWidth(text) / 2, y)
-      else
+      } else {
         g2d.drawString(text, x, y)
+      }
     }
 
   }

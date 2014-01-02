@@ -11,6 +11,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import DataFeedProtocol._
 import akka.pattern.ask
+import akka.actor.ActorRef
 import axle.actor.Defaults._
 import Stream.continually
 import axle.quanta._
@@ -33,15 +34,14 @@ class BarChartView[S, Y: Plottable](chart: BarChart[S, Y], data: Map[S, Y], colo
 
   val yPlottable = implicitly[Plottable[Y]]
 
-  val minY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).min(yPlottable)).min(yPlottable)).min(yPlottable)
-  val maxY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero())).filter(yPlottable.isPlottable(_)).max(yPlottable)).max(yPlottable)).max(yPlottable)
+  val minY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
+  val maxY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height,
     border,
-    minX, maxX, minY, maxY
-  )
+    minX, maxX, minY, maxY)
 
   val vLine = new VerticalLine(scaledArea, yAxis, black)
   val hLine = new HorizontalLine(scaledArea, xAxis, black)
@@ -72,7 +72,7 @@ class BarChartComponent[S, Y: Plottable](chart: BarChart[S, Y]) extends JPanel w
 
   setMinimumSize(new java.awt.Dimension(width, height))
 
-  def feeder() = dataFeedActor
+  def feeder: ActorRef = dataFeedActor
 
   val colors = List(blue, red, green, orange, pink, yellow)
   val colorStream = continually(colors.toStream).flatten
@@ -82,10 +82,11 @@ class BarChartComponent[S, Y: Plottable](chart: BarChart[S, Y]) extends JPanel w
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
   val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
 
-  val keyOpt = if (drawKey)
+  val keyOpt = if (drawKey) {
     Some(new BarChartKey(chart, normalFont, colorStream))
-  else
+  } else {
     None
+  }
 
   override def paintComponent(g: Graphics): Unit = {
 
