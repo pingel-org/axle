@@ -62,9 +62,13 @@ package object axle {
    */
 
   def ackermann(m: Long, n: Long): Long =
-    if (m == 0) { n + 1 }
-    else if (m > 0 && n == 0) { ackermann(m - 1, 1) }
-    else ackermann(m - 1, ackermann(m, n - 1))
+    if (m == 0) {
+      n + 1
+    } else if (m > 0 && n == 0) {
+      ackermann(m - 1, 1)
+    } else {
+      ackermann(m - 1, ackermann(m, n - 1))
+    }
 
   // Fundamental:
 
@@ -99,7 +103,7 @@ package object axle {
 
   implicit def eqSet[S: Eq] = new Eq[Set[S]] {
     def eqv(x: Set[S], y: Set[S]): Boolean = x equals y
-      //(x.size == y.size) && x.intersect(y).size == x.size
+    //(x.size == y.size) && x.intersect(y).size == x.size
   }
 
 }

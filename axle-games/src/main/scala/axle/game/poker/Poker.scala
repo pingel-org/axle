@@ -27,7 +27,7 @@ class Poker(numPlayers: Int) extends Game[Poker] {
     case _ => new PokerPlayerInteractive(id, description)
   }
 
-  def startState() =
+  def startState: PokerState =
     PokerState(
       state => dealer,
       Deck(),
@@ -45,7 +45,7 @@ class Poker(numPlayers: Int) extends Game[Poker] {
 
   def startFrom(s: PokerState) = {
 
-    if (s.stillIn.size > 0)
+    if (s.stillIn.size > 0) {
       Some(PokerState(
         state => dealer,
         Deck(),
@@ -60,12 +60,13 @@ class Poker(numPlayers: Int) extends Game[Poker] {
         None,
         Map()
       ))
-    else
+    } else {
       None
+    }
   }
 
-  def introMessage(): String = "Welcome to Axle Texas Hold Em Poker"
+  def introMessage: String = "Welcome to Axle Texas Hold Em Poker"
 
-  def players() = _players.toSet
+  def players: Set[PokerPlayer] = _players.toSet
 
 }

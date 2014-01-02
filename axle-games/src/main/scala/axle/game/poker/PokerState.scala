@@ -53,16 +53,16 @@ case class PokerState(
         p.id + ": " +
           " hand " + (
             hands.get(p).map(_.map(c =>
-              if (viewer == p || (_outcome.isDefined && stillIn.size > 1))
+              if (viewer == p || (_outcome.isDefined && stillIn.size > 1)) {
                 c.toString
-              else
+              } else {
                 "??"
-            ).mkString(" ")).getOrElse("--")
-          ) + " " +
-            (if (stillIn.contains(p))
+              }).mkString(" ")).getOrElse("--")) + " " +
+            (if (stillIn.contains(p)) {
               "in for $" + inFors.get(p).map(_.toString).getOrElse("--")
-            else
-              "out") +
+            } else {
+              "out"
+            }) +
             ", $" + piles.get(p).map(_.toString).getOrElse("--") + " remaining"
       }).mkString("\n")
 
@@ -104,8 +104,7 @@ case class PokerState(
         Map(smallBlindPlayer -> smallBlind, bigBlindPlayer -> bigBlind),
         piles + (smallBlindPlayer -> (piles(smallBlindPlayer) - smallBlind)) + (bigBlindPlayer -> (piles(bigBlindPlayer) - bigBlind)),
         None,
-        _eventQueues
-      ))
+        _eventQueues))
     }
 
     case Raise(player, amount) => {
@@ -123,8 +122,7 @@ case class PokerState(
           inFors + (player -> (currentBet + amount)),
           piles + (player -> (piles(player) - diff)),
           None,
-          _eventQueues
-        ))
+          _eventQueues))
       } else {
         None
       }
@@ -145,8 +143,7 @@ case class PokerState(
           inFors + (player -> currentBet),
           piles + (player -> (piles(player) - diff)),
           None,
-          _eventQueues
-        ))
+          _eventQueues))
       } else {
         None
       }
@@ -157,32 +154,28 @@ case class PokerState(
         _.betterAfter(player).getOrElse(game.dealer),
         deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles,
         None,
-        _eventQueues
-      ))
+        _eventQueues))
 
     case Flop() =>
       Some(PokerState(
         _.firstBetter,
         deck, shared, 3, hands, pot, 0, stillIn, Map(), piles,
         None,
-        _eventQueues
-      ))
+        _eventQueues))
 
     case Turn() =>
       Some(PokerState(
         _.firstBetter,
         deck, shared, 4, hands, pot, 0, stillIn, Map(), piles,
         None,
-        _eventQueues
-      ))
+        _eventQueues))
 
     case River() =>
       Some(PokerState(
         _.firstBetter,
         deck, shared, 5, hands, pot, 0, stillIn, Map(), piles,
         None,
-        _eventQueues
-      ))
+        _eventQueues))
 
     case Payout() => {
 
@@ -214,8 +207,7 @@ case class PokerState(
         Map(),
         newPiles,
         Some(PokerOutcome(winner, handOpt)),
-        _eventQueues
-      ))
+        _eventQueues))
     }
 
   }
@@ -234,7 +226,6 @@ case class PokerState(
     inFors,
     piles,
     _outcome,
-    qs
-  )
+    qs)
 
 }

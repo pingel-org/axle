@@ -49,15 +49,15 @@ case class TicTacToeState(
 
   def hasWon(player: TicTacToePlayer) = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
-  def openPositions() = (1 to numPositions).filter(this(_).isEmpty)
+  def openPositions: IndexedSeq[Int] = (1 to numPositions).filter(this(_).isEmpty)
 
-  def moves(): Seq[TicTacToeMove] = openPositions().map(TicTacToeMove(player, _))
+  def moves: Seq[TicTacToeMove] = openPositions.map(TicTacToeMove(player, _))
 
-  def outcome(): Option[TicTacToeOutcome] = {
+  def outcome: Option[TicTacToeOutcome] = {
     val winner = ttt.players.find(hasWon(_))
-    if (winner.isDefined) Some(TicTacToeOutcome(winner))
-    else if (openPositions().length == 0) Some(TicTacToeOutcome(None))
-    else None
+    if (winner.isDefined) { Some(TicTacToeOutcome(winner)) }
+    else if (openPositions.length == 0) { Some(TicTacToeOutcome(None)) }
+    else { None }
   }
 
   def apply(move: TicTacToeMove): Option[TicTacToeState] =
@@ -68,7 +68,7 @@ case class TicTacToeState(
       _eventQueues
     )
 
-  def eventQueues() = _eventQueues
+  def eventQueues = _eventQueues
 
   def setEventQueues(qs: Map[TicTacToePlayer, List[Event[TicTacToe]]]): TicTacToeState =
     TicTacToeState(player, board, qs)

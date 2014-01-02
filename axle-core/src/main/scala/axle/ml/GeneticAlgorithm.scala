@@ -38,9 +38,13 @@ object GeneticAlgorithm {
 
   object mater extends Poly1 {
     implicit def caseTuple[T] = at[(T, T, T)](t =>
-      if (nextDouble < 0.03) t._3
-      else if (nextBoolean) t._2
-      else t._1)
+      if (nextDouble < 0.03) {
+        t._3
+      } else if (nextBoolean) {
+        t._2
+      } else {
+        t._1
+      })
   }
 
   object mutator extends Poly1 {

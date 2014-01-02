@@ -35,11 +35,12 @@ object Semigroups {
 
     def op(x: Map[K, V], y: Map[K, V]): Map[K, V] =
       (x.keySet ++ y.keySet).map(k => {
-        if (x.contains(k))
-          if (y.contains(k)) (k, vSemi.op(x(k), y(k)))
-          else (k, x(k))
-        else
+        if (x.contains(k)) {
+          if (y.contains(k)) { (k, vSemi.op(x(k), y(k))) }
+          else { (k, x(k)) }
+        } else {
           (k, y(k))
+        }
       }).toMap
 
   }

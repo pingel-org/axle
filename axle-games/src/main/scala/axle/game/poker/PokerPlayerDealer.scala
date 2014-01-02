@@ -6,10 +6,11 @@ class PokerPlayerDealer(id: String, description: String = "dealer")(implicit gam
   def move(state: PokerState): (PokerMove, PokerState) = {
     val move = state.numShown match {
       case 0 =>
-        if (state.inFors.size == 0)
+        if (state.inFors.size == 0) {
           Deal()
-        else
+        } else {
           Flop()
+        }
       case 3 => Turn()
       case 4 => River()
       case 5 => Payout()

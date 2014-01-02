@@ -14,10 +14,11 @@ import axle.matrix.JblasMatrixModule._
 object SmithWaterman {
 
   def w(x: Char, y: Char, mismatchPenalty: Int): Int =
-    if (x != y)
+    if (x != y) {
       mismatchPenalty
-    else
+    } else {
       2 // also see NeedlemanWunsch.S(x, y)
+    }
 
   val defaultMismatchPenalty = -1
 
