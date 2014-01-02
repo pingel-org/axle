@@ -21,7 +21,7 @@ class WidgetDb {
 
   val widgetTable = table("widget")
 
-  def size() = widgetTable.size
+  def size: Long = widgetTable.size
 
   def insert(widget: Widget): Unit = {
     val key = widget.name

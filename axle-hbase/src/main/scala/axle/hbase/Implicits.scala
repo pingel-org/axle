@@ -5,9 +5,9 @@ import org.apache.hadoop.hbase.util.Bytes
 
 object Implicits {
 
-  implicit def string2array(s: String) = Bytes.toBytes(s)
+  implicit def string2array(s: String): Array[Byte] = Bytes.toBytes(s)
   // Bytes.toString
 
-  implicit def enrichHTable(table: HTable) = new EnrichedHTable(table)
+  implicit def enrichHTable(table: HTable): EnrichedHTable = new EnrichedHTable(table)
 
 }
