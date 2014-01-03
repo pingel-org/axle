@@ -47,11 +47,12 @@ trait JblasMatrixModule extends MatrixModule {
     def apply(rs: Seq[Int], cs: Seq[Int]): Matrix[T] = {
       val jblas = DoubleMatrix.zeros(rs.length, cs.length)
       import fp._
-      for {
-        (fromRow, toRow) <- rs.zipWithIndex
-        (fromCol, toCol) <- cs.zipWithIndex
-      } yield {
-        jblas.put(toRow, toCol, backward(this(fromRow, fromCol)))
+      rs.zipWithIndex foreach {
+        case (fromRow, toRow) =>
+          cs.zipWithIndex foreach {
+            case (fromCol, toCol) =>
+              jblas.put(toRow, toCol, backward(this(fromRow, fromCol)))
+          }
       }
       matrix[T](jblas)
     }
@@ -182,11 +183,10 @@ trait JblasMatrixModule extends MatrixModule {
     def map[B: C](f: T => B): Matrix[B] = {
       val fpB = implicitly[C[B]]
       val jblas = DoubleMatrix.zeros(rows, columns)
-      for {
-        r <- 0 until rows
-        c <- 0 until columns
-      } yield {
-        jblas.put(r, c, fpB.backward(f(this(r, c))))
+      (0 until rows) foreach { r =>
+        (0 until columns) foreach { c =>
+          jblas.put(r, c, fpB.backward(f(this(r, c))))
+        }
       }
       matrix[B](jblas)
     }
@@ -194,13 +194,10 @@ trait JblasMatrixModule extends MatrixModule {
     def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = {
       val fpA = implicitly[C[A]]
       val jblas = DoubleMatrix.zeros(rows, columns)
-      for {
-        c <- 0 until columns
-      } yield {
+      (0 until columns) foreach { c =>
         val fc = f(column(c))
-        for {
-          r <- (0 until rows) // assumes fc.rows == this.rows
-        } yield {
+        (0 until rows) foreach { r =>
+          // assumes fc.rows == this.rows
           jblas.put(r, c, fpA.backward(fc(r, 0)))
         }
       }
@@ -231,14 +228,13 @@ trait JblasMatrixModule extends MatrixModule {
     jblas.put(0, 0, backward(topleft))
     (0 until m).map(r => jblas.put(r, 0, backward(left(r))))
     (0 until n).map(c => jblas.put(0, c, backward(top(c))))
-    for {
-      r <- 1 until m
-      c <- 1 until n
-    } yield {
-      val diag = forward(jblas.get(r - 1, c - 1))
-      val left = forward(jblas.get(r, c - 1))
-      val right = forward(jblas.get(r - 1, c))
-      jblas.put(r, c, backward(fill(r, c, diag, left, right)))
+    (1 until m) foreach { r =>
+      (1 until n) foreach { c =>
+        val diag = forward(jblas.get(r - 1, c - 1))
+        val left = forward(jblas.get(r, c - 1))
+        val right = forward(jblas.get(r - 1, c))
+        jblas.put(r, c, backward(fill(r, c, diag, left, right)))
+      }
     }
     matrix(jblas)
   }
@@ -247,11 +243,10 @@ trait JblasMatrixModule extends MatrixModule {
     val fp = implicitly[C[T]]
     import fp._
     val jblas = DoubleMatrix.zeros(m, n)
-    for {
-      r <- 0 until m
-      c <- 0 until n
-    } yield {
-      jblas.put(r, c, backward(f(r, c)))
+    (0 until m) foreach { r =>
+      (0 until n) foreach { c =>
+        jblas.put(r, c, backward(f(r, c)))
+      }
     }
     matrix(jblas)
   }
