@@ -7,7 +7,7 @@ trait Plottable[T] extends Ordering[T] with Portionable[T] {
 
   def isPlottable(t: T): Boolean
 
-  def zero(): T
+  def zero: T
 }
 
 object Plottable {
@@ -18,21 +18,21 @@ object Plottable {
 
     def isPlottable(t: Double): Boolean = (!t.isInfinite) && (!t.isNaN)
 
-    def zero() = 0.0
+    def zero: Double = 0d
 
-    def compare(d1: Double, d2: Double) = (d1 - d2) match {
-      case 0.0 => 0
-      case r @ _ if r > 0.0 => 1
+    def compare(d1: Double, d2: Double): Int = (d1 - d2) match {
+      case 0d => 0
+      case r @ _ if r > 0d => 1
       case _ => -1
     }
 
-    def portion(left: Double, v: Double, right: Double) = (v - left) / (right - left)
+    def portion(left: Double, v: Double, right: Double): Double = (v - left) / (right - left)
 
     def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
 
     def tics(from: Double, to: Double): Seq[(Double, String)] = {
       if (from.isNaN || from.isInfinity || to.isNaN || to.isInfinity) {
-        List((0.0, "0.0"), (1.0, "1.0"))
+        List((0d, "0.0"), (1d, "1.0"))
       } else {
         val s = step(from, to)
         val n = ceil((to - from) / s).toInt
@@ -49,15 +49,15 @@ object Plottable {
 
     def isPlottable(t: Long): Boolean = true
 
-    def zero() = 0L
+    def zero: Long = 0L
 
-    def compare(l1: Long, l2: Long) = (l1 - l2) match {
+    def compare(l1: Long, l2: Long): Int = (l1 - l2) match {
       case 0L => 0
       case r @ _ if r > 0L => 1
       case _ => -1
     }
 
-    def portion(left: Long, v: Long, right: Long) = (v - left).toDouble / (right - left)
+    def portion(left: Long, v: Long, right: Long): Double = (v - left).toDouble / (right - left)
 
     def step(from: Long, to: Long): Long = max(1, pow(10, ceil(log10(abs(to - from))) - 1).toLong)
 
@@ -77,15 +77,15 @@ object Plottable {
 
     def isPlottable(t: Int): Boolean = true
 
-    def zero() = 0
+    def zero: Int = 0
 
-    def compare(i1: Int, i2: Int) = (i1 - i2) match {
+    def compare(i1: Int, i2: Int): Int = (i1 - i2) match {
       case 0 => 0
       case r @ _ if r > 0 => 1
       case _ => -1
     }
 
-    def portion(left: Int, v: Int, right: Int) = (v - left).toDouble / (right - left)
+    def portion(left: Int, v: Int, right: Int): Double = (v - left).toDouble / (right - left)
 
     def step(from: Int, to: Int): Int = max(1, pow(10, ceil(log10(abs(to - from))) - 1).toInt)
 
@@ -108,11 +108,11 @@ object Plottable {
 
     lazy val now = new DateTime()
 
-    def zero() = now
+    def zero: DateTime = now
 
-    def compare(dt1: DateTime, dt2: DateTime) = dt1.compareTo(dt2)
+    def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
 
-    def portion(left: DateTime, v: DateTime, right: DateTime) = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
+    def portion(left: DateTime, v: DateTime, right: DateTime): Double = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
 
     // TODO: bigger and smaller time-scales
     def step(duration: Duration): (DateTime => DateTime, String) =
