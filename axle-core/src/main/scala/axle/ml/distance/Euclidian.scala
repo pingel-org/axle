@@ -4,8 +4,8 @@ import spire.algebra._
 import spire.math._
 import spire.implicits._
 import axle.matrix.JblasMatrixModule._
-
 import math.sqrt
+import cern.colt.matrix.linalg.Algebra
 
 /**
  * Euclidean space
@@ -18,16 +18,16 @@ import math.sqrt
 
 case class Euclidian(n: Int) extends NormedVectorSpace[Matrix[Double], Double] {
 
-  def negate(x: Matrix[Double]) = x.negate
+  def negate(x: Matrix[Double]): Matrix[Double] = x.negate
 
-  def zero = zeros[Double](1, n)
+  def zero: Matrix[Double] = zeros[Double](1, n)
 
-  def plus(x: Matrix[Double], y: Matrix[Double]) = x + y
+  def plus(x: Matrix[Double], y: Matrix[Double]): Matrix[Double] = x + y
 
-  def timesl(r: Double, v: Matrix[Double]) = v * r
+  def timesl(r: Double, v: Matrix[Double]): Matrix[Double] = v * r
 
-  def scalar() = DoubleAlgebra
+  def scalar: Field[Double] = DoubleAlgebra
 
-  def norm(r: Matrix[Double]) = sqrt(r.mulPointwise(r).rowSums().scalar)
+  def norm(r: Matrix[Double]): Double = sqrt(r.mulPointwise(r).rowSums.scalar)
 
 }

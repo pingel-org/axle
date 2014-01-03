@@ -8,5 +8,5 @@ import math.abs
 
 object Manhattan extends MetricSpace[Matrix[Double], Double] {
 
-  def distance(r1: Matrix[Double], r2: Matrix[Double]) = (r1 - r2).map(abs(_)).toList.sum
+  def distance(r1: Matrix[Double], r2: Matrix[Double]): Double = (r1 - r2).map(abs).toList.sum
 }

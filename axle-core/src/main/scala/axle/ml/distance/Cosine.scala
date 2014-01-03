@@ -19,16 +19,16 @@ import axle.matrix.JblasMatrixModule._
 
 case class Cosine(n: Int) extends InnerProductSpace[Matrix[Double], Double] {
 
-  def negate(x: Matrix[Double]) = x.negate
+  def negate(x: Matrix[Double]): Matrix[Double] = x.negate
 
-  def zero = zeros[Double](1, n)
+  def zero: Matrix[Double] = zeros[Double](1, n)
 
-  def plus(x: Matrix[Double], y: Matrix[Double]) = x + y
+  def plus(x: Matrix[Double], y: Matrix[Double]): Matrix[Double] = x + y
 
-  def timesl(r: Double, v: Matrix[Double]) = v * r
+  def timesl(r: Double, v: Matrix[Double]): Matrix[Double] = v * r
 
-  def scalar = DoubleAlgebra
+  def scalar: Field[Double] = DoubleAlgebra
 
-  def dot(v: Matrix[Double], w: Matrix[Double]) = v.mulPointwise(w).rowSums().scalar
+  def dot(v: Matrix[Double], w: Matrix[Double]): Double = v.mulPointwise(w).rowSums.scalar
 
 }
