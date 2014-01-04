@@ -10,7 +10,7 @@ import spire.implicits._
 object Angluin {
 
   case class Symbol(s: String) {
-    override def toString() = s
+    override def toString: String = s
   }
 
   object Symbol {
@@ -23,7 +23,7 @@ object Angluin {
 
     val graph = JungDirectedGraph[String, Symbol](vps, vs => Nil)
 
-    def Q() = graph.vertices()
+    def Q: Set[Vertex[String]] = graph.vertices
 
     //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
     //      val (newG, v) = g + "" // TODO
@@ -33,7 +33,7 @@ object Angluin {
     //    }
 
     def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
-      graph.allEdges().filter(e => graph.source(e) == state && e.payload == symbol).map(graph.dest(_))
+      graph.allEdges.filter(e => graph.source(e) == state && e.payload == symbol).map(graph.dest(_))
 
     def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
@@ -71,7 +71,7 @@ object Angluin {
   }
 
   trait Grammar {
-    def ℒ(): Language
+    def ℒ: Language
   }
 
   case class HardCodedGrammar(_ℒ: Language) extends Grammar {
@@ -79,16 +79,16 @@ object Angluin {
     // figure out how to write the extractor (or whatever)
     // to grab this
 
-    def ℒ() = _ℒ
+    def ℒ = _ℒ
   }
 
   case class Language(sequences: Iterable[Iterable[Symbol]] = Nil) {
 
-    def prefixes(): Language = ???
+    def prefixes: Language = ???
 
     def goodFinals(w: List[Symbol]): Language = ???
 
-    override def toString() = "{" + sequences.mkString(", ") + "}"
+    override def toString: String = "{" + sequences.mkString(", ") + "}"
 
   }
 
@@ -100,7 +100,7 @@ object Angluin {
 
   trait Learner[S] {
 
-    def initialState(): S
+    def initialState: S
 
     def processExpression(state: S, expression: Iterable[Symbol]): (S, Option[Grammar])
 
@@ -108,7 +108,7 @@ object Angluin {
 
     def guesses(T: Text): Iterator[Grammar] =
       T.expressions.iterator
-        .scanLeft((initialState(), noGuess))((sg, e) => processExpression(sg._1, e))
+        .scanLeft((initialState, noGuess))((sg, e) => processExpression(sg._1, e))
         .flatMap(_._2)
   }
 
@@ -120,7 +120,7 @@ object Angluin {
 
     def initialState() = null.asInstanceOf[Nothing]
 
-    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (initialState(), None)
+    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (initialState, None)
   }
 
   /**
@@ -129,9 +129,10 @@ object Angluin {
 
   case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
 
-    def initialState() = null.asInstanceOf[Nothing]
+    def initialState: Nothing = null.asInstanceOf[Nothing]
 
-    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (initialState(), Some(G))
+    def processExpression(state: Nothing, expression: Iterable[Symbol]): (Nothing, Option[Grammar]) =
+      (initialState, Some(G))
   }
 
   /**
@@ -140,7 +141,7 @@ object Angluin {
 
   case class MemorizingLearner() extends Learner[Language] {
 
-    def initialState() = Language(Nil)
+    def initialState: Language = Language(Nil)
 
     def processExpression(state: Language, expression: Iterable[Symbol]): (Language, Option[Grammar]) =
       expression match {
@@ -164,7 +165,7 @@ object Angluin {
   }
 
   case class Quotient(A: AngluinAcceptor, π: Partition) {
-    def evaluate(): AngluinAcceptor = ???
+    def evaluate: AngluinAcceptor = ???
   }
 
   // implicit def enAlphabet(symbols: Set[Symbol]): Alphabet = Alphabet(symbols)
@@ -177,13 +178,13 @@ object Angluin {
 
     // def addExpression(s: List[Symbol]): Unit = expressions = expressions ::: List(s)
 
-    def length() = expressions.size
+    def length: Int = expressions.size
 
     def isFor(ℒ: Language) = content === ℒ
 
     def content: Language = new Language(expressions.filter(_ != ♯))
 
-    override def toString() = "<" + expressions.mkString(", ") + ">"
+    override def toString: String = "<" + expressions.mkString(", ") + ">"
 
   }
 }

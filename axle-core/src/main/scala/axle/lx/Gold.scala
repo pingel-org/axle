@@ -13,18 +13,18 @@ object Gold {
   }
 
   trait Grammar {
-    def ℒ(): Language
+    def ℒ: Language
   }
 
-  class HardCodedGrammar(ℒ: Language) extends Grammar {
-    def ℒ() = ℒ
+  class HardCodedGrammar(_ℒ: Language) extends Grammar {
+    def ℒ: Language = _ℒ
   }
 
   implicit def enLanguage(sequences: Set[Expression]): Language = Language(sequences)
 
   case class Language(sequences: Set[Expression]) {
 
-    override def toString() = "{" + sequences.mkString(", ") + "}"
+    override def toString: String = "{" + sequences.mkString(", ") + "}"
   }
 
   object Language {
@@ -35,7 +35,7 @@ object Gold {
 
   trait Learner[S] {
 
-    def initialState(): S
+    def initialState: S
 
     def processExpression(state: S, expression: Expression): (S, Option[Grammar])
 
@@ -43,22 +43,23 @@ object Gold {
 
     def guesses(T: Text): Iterator[Grammar] =
       T.expressions.iterator
-        .scanLeft((initialState(), noGuess))((sg, e) => processExpression(sg._1, e))
+        .scanLeft((initialState, noGuess))((sg, e) => processExpression(sg._1, e))
         .flatMap(_._2)
   }
 
   case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
 
-    def initialState() = null.asInstanceOf[Nothing]
+    def initialState: Nothing = null.asInstanceOf[Nothing]
 
-    def processExpression(state: Nothing, e: Expression) = (initialState(), Some(G))
+    def processExpression(state: Nothing, e: Expression): (Nothing, Option[Grammar]) =
+      (initialState, Some(G))
   }
 
   case class MemorizingLearner() extends Learner[Language] {
 
-    def initialState() = Language(Set())
+    def initialState: Language = Language(Set())
 
-    def processExpression(state: Language, expression: Expression) = {
+    def processExpression(state: Language, expression: Expression): (Language, Option[Grammar]) = {
       val newState = Language(state.sequences ++ List(expression))
       (newState, Some(new HardCodedGrammar(newState)))
     }
@@ -66,25 +67,25 @@ object Gold {
   }
 
   case class Morpheme(s: String) {
-    override def toString() = s
+    override def toString: String = s
   }
 
   case class Text(expressions: List[Expression]) {
 
-    def length() = expressions.size
+    def length: Int = expressions.size
 
-    def isFor(ℒ: Language) = content().equals(ℒ) // TODO equals
+    def isFor(ℒ: Language) = content.equals(ℒ) // TODO equals
 
-    def content() = new Language(expressions.filter(_ != ♯).toSet)
+    def content: Language = new Language(expressions.filter(_ != ♯).toSet)
 
-    override def toString() = "<" + expressions.mkString(", ") + ">"
+    override def toString: String = "<" + expressions.mkString(", ") + ">"
   }
 
   implicit def enVocabulary(morphemes: Set[Morpheme]): Vocabulary = Vocabulary(morphemes)
 
   case class Vocabulary(morphemes: Set[Morpheme]) {
 
-    def iterator() = morphemes.iterator
+    def iterator: Iterator[Morpheme] = morphemes.iterator
   }
 
 }
