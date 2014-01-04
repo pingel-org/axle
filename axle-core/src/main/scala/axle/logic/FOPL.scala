@@ -12,11 +12,11 @@ object FOPL {
 
     outer =>
 
-    def getSymbols() = symbols
-    def symbolSet() = symbols.toSet
-    def name(): String
+    def getSymbols: Seq[Symbol] = symbols
+    def symbolSet: Set[Symbol] = symbols.toSet
+    def name: String
 
-    override def toString(): String = name() + "(" + symbols.mkString(", ") + ")"
+    override def toString: String = name + "(" + symbols.mkString(", ") + ")"
 
     override def equals(other: Any): Boolean = other match {
       case otherPredicate: Predicate => (name equals otherPredicate.name) && (symbols equals otherPredicate.getSymbols)
@@ -32,7 +32,7 @@ object FOPL {
       })
 
       val newPredicate = new Predicate(symbolsSkolems.tail.map(_._1): _*) {
-        def name() = outer.name
+        def name: String = outer.name
         def apply(symbolTable: Map[Symbol, Any]): Boolean = outer.apply(symbolTable)
       }
 
@@ -59,11 +59,11 @@ object FOPL {
 
   case class And(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) && right(symbolTable)
-    override def toString() = "(" + left + " ∧ " + right + ")"
+    override def toString: String = "(" + left + " ∧ " + right + ")"
   }
   case class Or(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) || right(symbolTable)
-    override def toString() = "(" + left + " ∨ " + right + ")"
+    override def toString: String = "(" + left + " ∨ " + right + ")"
   }
   case class Iff(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = {
@@ -71,11 +71,11 @@ object FOPL {
       val rv = right(symbolTable)
       (!lv && !rv) || (lv && rv)
     }
-    override def toString() = "(" + left + " ⇔ " + right + ")"
+    override def toString: String = "(" + left + " ⇔ " + right + ")"
   }
   case class Implies(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = (!left(symbolTable)) || right(symbolTable)
-    override def toString() = "(" + left + " ⊃ " + right + ")"
+    override def toString: String = "(" + left + " ⊃ " + right + ")"
   }
 
   case class ¬(statement: Statement) extends Statement {
@@ -83,7 +83,7 @@ object FOPL {
   }
 
   case class ElementOf[T](symbol: Symbol, set: Set[T]) {
-    override def toString(): String = symbol + " ∈ " + set
+    override def toString: String = symbol + " ∈ " + set
   }
 
   class EnrichedSymbol(symbol: Symbol) {
