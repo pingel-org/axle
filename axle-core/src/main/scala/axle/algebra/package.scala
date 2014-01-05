@@ -17,6 +17,7 @@ package object algebra {
 //    val value = ma
 //  }
 
-  implicit def enrichMetricSpace[T: Manifest](space: MetricSpace[T, Double]) = new EnrichedMetricSpace(space)
+  implicit def enrichMetricSpace[T: Manifest](space: MetricSpace[T, Double]): EnrichedMetricSpace[T] =
+    new EnrichedMetricSpace(space)
 
 }

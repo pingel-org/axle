@@ -10,7 +10,7 @@ trait Applicative[F[_]] {
 
 object Applicative {
 
-  def id[T](x: T) = x
+  def id[T](x: T): T = x
 
   // pure id <*> v = v
 
