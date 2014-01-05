@@ -7,7 +7,7 @@ import spire.implicits._
 import spire.algebra._
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
-case class JungUndirectedGraph[VP: Manifest : Eq, EP: Eq](
+case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   vps: Seq[VP],
   ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)])
   extends UndirectedGraph[VP, EP] {
@@ -24,52 +24,51 @@ case class JungUndirectedGraph[VP: Manifest : Eq, EP: Eq](
 
   lazy val vertexSeq = vps.map(Vertex(_))
 
-  vertexSeq.map(v => jungGraph.addVertex(v)) // TODO check return value
+  vertexSeq foreach { jungGraph.addVertex(_) } // TODO check return value
 
   lazy val vertexSet = vertexSeq.toSet
 
-  ef(vertexSeq).map({
-    case (vi, vj, ep) => {
+  ef(vertexSeq) foreach {
+    case (vi, vj, ep) =>
       jungGraph.addEdge(Edge((vi, vj, ep), edgePayloadFunction), vi, vj) // TODO check return value
-    }
-  })
-
-  def storage(): UndirectedSparseGraph[Vertex[VP], Edge[ES, EP]] = jungGraph
-
-  def vertexPayloads() = vps
-
-  def edgeFunction() = ef
-
-  def vertices() = vertexSet
-
-  def allEdges() = jungGraph.getEdges().asScala.toSet
-
-  def size(): Int = jungGraph.getVertexCount()
-
-  def vertices(edge: Edge[ES, EP]) = (edge.storage._1, edge.storage._2)
-
-  // TODO findVertex needs an index
-  def findVertex(f: Vertex[VP] => Boolean) = vertexSeq.find(f(_))
-
-  def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean) =
-    JungUndirectedGraph(vps, ((es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f(_))).compose(ef))
-
-//  def unlink(e: Edge[ES, EP]): JungUndirectedGraph[VP, EP] =
-//    filterEdges(t => {
-//      val v1 = e.storage._1
-//      val v2 = e.storage._2
-//      !((v1, v2, e.payload) === t || (v2, v1, e.payload) === t)
-//    })
-//
-//  // JungUndirectedGraph[VP, EP]
-//  def unlink(v1: Vertex[VP], v2: Vertex[VP]) =
-//    filterEdges(e => (e._1 == v1 && e._2 == v2) || (e._2 == v1 && e._1 == v2))
-
-  def areNeighbors(v1: Vertex[VP], v2: Vertex[VP]): Boolean = {
-    edgesTouching(v1).exists(edge => connects(edge, v1, v2))
   }
 
-  def forceClique(among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP) = {
+  def storage: UndirectedSparseGraph[Vertex[VP], Edge[ES, EP]] = jungGraph
+
+  def vertexPayloads: Seq[VP] = vps
+
+  def edgeFunction: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)] = ef
+
+  def vertices: Set[Vertex[VP]] = vertexSet
+
+  // TODO: simplify type
+  def allEdges: Set[Edge[(Vertex[VP], Vertex[VP], EP), EP]] = jungGraph.getEdges.asScala.toSet
+
+  def size: Int = jungGraph.getVertexCount
+
+  def vertices(edge: Edge[ES, EP]): (Vertex[VP], Vertex[VP]) = (edge.storage._1, edge.storage._2)
+
+  // TODO findVertex needs an index
+  def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = vertexSeq.find(f)
+
+  def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean): JungUndirectedGraph[VP, EP] =
+    JungUndirectedGraph(vps, ((es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f)).compose(ef))
+
+  //  def unlink(e: Edge[ES, EP]): JungUndirectedGraph[VP, EP] =
+  //    filterEdges(t => {
+  //      val v1 = e.storage._1
+  //      val v2 = e.storage._2
+  //      !((v1, v2, e.payload) === t || (v2, v1, e.payload) === t)
+  //    })
+  //
+  //  // JungUndirectedGraph[VP, EP]
+  //  def unlink(v1: Vertex[VP], v2: Vertex[VP]) =
+  //    filterEdges(e => (e._1 == v1 && e._2 == v2) || (e._2 == v1 && e._1 == v2))
+
+  def areNeighbors(v1: Vertex[VP], v2: Vertex[VP]): Boolean =
+    edgesTouching(v1).exists(edge => connects(edge, v1, v2))
+
+  def forceClique(among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): JungUndirectedGraph[VP, EP] = {
 
     val cliqued = (newVs: Seq[Vertex[VP]]) => {
 
@@ -89,21 +88,21 @@ case class JungUndirectedGraph[VP: Manifest : Eq, EP: Eq](
       ef(newVs) ++ newEdges
     }
 
-    JungUndirectedGraph(vps, cliqued(_))
+    JungUndirectedGraph(vps, cliqued)
   }
 
   def degree(v: Vertex[VP]): Int = edgesTouching(v).size
 
-  def edgesTouching(v: Vertex[VP]) =
+  def edgesTouching(v: Vertex[VP]): Set[Edge[(Vertex[VP], Vertex[VP], EP), EP]] =
     jungGraph.getIncidentEdges(v).asScala.toSet
 
-  def neighbors(v: Vertex[VP]) =
+  def neighbors(v: Vertex[VP]): Set[Vertex[VP]] =
     jungGraph.getNeighbors(v).asScala.toSet
 
-  def delete(v: Vertex[VP]) = JungUndirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
+  def delete(v: Vertex[VP]): JungUndirectedGraph[VP, EP] = JungUndirectedGraph(vertices.toSeq.filter(_ != v).map(_.payload), ef)
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan(r: Vertex[VP]) = vertices().find(v => neighbors(v).size == 1 && !v.equals(r))
+  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find(v => neighbors(v).size == 1 && !v.equals(r))
 
   /**
    * "decompositions" page 3 (Definition 3, Section 9.3)
@@ -119,8 +118,8 @@ case class JungUndirectedGraph[VP: Manifest : Eq, EP: Eq](
     ???
   }
 
-  def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP) =
-    JungUndirectedGraph(vps.map(vpf(_)),
+  def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): JungUndirectedGraph[NVP, NEP] =
+    JungUndirectedGraph(vps.map(vpf),
       (newVs: Seq[Vertex[NVP]]) =>
         ef(vertexSeq).map({
           case (vi, vj, ep) => (Vertex(vpf(vi.payload)), Vertex(vpf(vj.payload)), epf(ep))

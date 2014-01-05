@@ -26,9 +26,9 @@ trait UndirectedGraph[VP, EP] {
     vj <- vs
   } yield {
     (vi == vj) || areNeighbors(vi, vj)
-  }).forall(b => b)
+  }).forall(identity)
 
-  def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP) = (for {
+  def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): Int = (for {
     vi <- vs
     vj <- vs
   } yield { if (areNeighbors(vi, vj)) 1 else 0 }
@@ -70,7 +70,7 @@ trait UndirectedGraph[VP, EP] {
     }
   }
 
-  def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]) = {
+  def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean = {
     val (v1, v2) = vertices(edge)
     (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
   }

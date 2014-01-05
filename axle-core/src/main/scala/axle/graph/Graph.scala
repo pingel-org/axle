@@ -8,7 +8,7 @@ case class Edge[S, EP: Eq](storage: S, payloadF: S => EP) {
 }
 
 object Edge {
-  implicit def edgeEq[S, EP]() = new Eq[Edge[S, EP]] {
+  implicit def edgeEq[S, EP](): Eq[Edge[S, EP]] = new Eq[Edge[S, EP]] {
     def eqv(x: Edge[S, EP], y: Edge[S, EP]): Boolean = x equals y // TODO
   }
 }
@@ -16,7 +16,7 @@ object Edge {
 case class Vertex[VP](payload: VP)
 
 object Vertex {
-  implicit def vertexEq[VP: Eq]() = new Eq[Vertex[VP]] {
+  implicit def vertexEq[VP: Eq](): Eq[Vertex[VP]] = new Eq[Vertex[VP]] {
     def eqv(x: Vertex[VP], y: Vertex[VP]): Boolean = x.payload === y.payload
   }
 }
