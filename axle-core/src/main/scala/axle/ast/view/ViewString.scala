@@ -6,7 +6,7 @@ import Emission._
 
 object ViewString extends View[String] {
 
-  def makeFormatter(language: Language, node: AstNode) =
+  def makeFormatter(language: Language, node: AstNode): AstNodeFormatterString =
     new AstNodeFormatterString(
       FormatterConfig(language, true, Set(node)),
       FormatterState(0, 0, false, 0, Nil, Map()),

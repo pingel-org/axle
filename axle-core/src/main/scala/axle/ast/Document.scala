@@ -6,29 +6,29 @@ import java.io.FileWriter
 
 class DocumentFromString(_grammar: Language, _label: String, content: String) extends Document {
 
-  def grammar = _grammar
+  def grammar: Language = _grammar
 
-  def ast() = _grammar.parseString(content)
+  def ast: Option[AstNode] = _grammar.parseString(content)
 
-  def name() = _label
+  def name: String = _label
 }
 
 class DocumentFromFile(_grammar: Language, shortFilename: String, filename: String) extends Document {
 
-  def grammar = _grammar
+  def grammar: Language = _grammar
 
-  def ast() = _grammar.parseFile(filename)
+  def ast: Option[AstNode] = _grammar.parseFile(filename)
 
-  def name() = shortFilename
+  def name: String = shortFilename
 }
 
 trait Document {
 
-  def ast(): Option[AstNode]
+  def ast: Option[AstNode]
 
-  def grammar(): Language
+  def grammar: Language
 
-  def name(): String
+  def name: String
 
   //  def makeHtml = {
   //    val htmlFilename = Config.htmlDirectory + File.separator + shortFilename + ".html"

@@ -8,7 +8,7 @@ import Emission._
 object ViewXhtml extends View[xml.NodeSeq] {
   // <html><head><link ref=... /></head><body>...</body><html>
 
-  def makeFormatter(language: Language, node: AstNode) =
+  def makeFormatter(language: Language, node: AstNode): XhtmlAstNodeFormatter =
     new XhtmlAstNodeFormatter(
       FormatterConfig(language, true, Set(node)),
       FormatterState(0, 0, false, 0, Nil, Map()),
@@ -39,7 +39,7 @@ object ViewXhtml extends View[xml.NodeSeq] {
 
   // def contextHtmlLines(): Option[LinkedHashMap[Int, NodeSeq]] = contextHtml(doc, docNode)
   override def docNodeInContext(doc: Document, docNode: AstNode): xml.NodeSeq =
-    doc.ast().map(ast => nodeContext(doc.grammar(), docNode, "/document/" + doc.name))
+    doc.ast.map(ast => nodeContext(doc.grammar, docNode, "/document/" + doc.name))
       .getOrElse(<span>Oh no</span>)
 
   def llRules(g: LLLanguage): xml.NodeSeq =
@@ -91,7 +91,7 @@ object ViewXhtml extends View[xml.NodeSeq] {
       </table>
     </div>
 
-  def llLanguage(g: LLLanguage) =
+  def llLanguage(g: LLLanguage): xml.NodeSeq =
     <h2>{ g.name }</h2>
     <div>
       { llRules(g) }

@@ -23,33 +23,33 @@ abstract class AstNodeFormatter[R, S](
 
   def apply(fs: FormatterState, ss: S): AstNodeFormatter[R, S]
 
-  def config() = _config
+  def config: FormatterConfig = _config
 
-  def state() = _state
+  def state: FormatterState = _state
 
-  def subState() = _subState
+  def subState: S = _subState
 
   def accRaw(s: String, n: Int): AstNodeFormatter[R, S]
 
-  def accNewline(): AstNodeFormatter[R, S]
+  def accNewline: AstNodeFormatter[R, S]
 
-  def accSpace(): AstNodeFormatter[R, S]
+  def accSpace: AstNodeFormatter[R, S]
 
-  def accSpaces(): AstNodeFormatter[R, S]
+  def accSpaces: AstNodeFormatter[R, S]
 
   def accSpan(spanclass: String, s: String, n: Int): AstNodeFormatter[R, S]
 
-  def accPushStack(): AstNodeFormatter[R, S]
+  def accPushStack: AstNodeFormatter[R, S]
 
   def accPopAndWrapStack(label: String): AstNodeFormatter[R, S]
 
-  def result(): R
+  def result: R
 
-  def isConforming() = config.conform
+  def isConforming: Boolean = config.conform
 
-  def shouldHighlight(node: AstNode) = config.highlight.contains(node)
+  def shouldHighlight(node: AstNode): Boolean = config.highlight.contains(node)
 
-  def node2lineno() = state._node2lineno
+  def node2lineno: Map[AstNode, Int] = state._node2lineno
 
   def markLine(node: AstNode, lineNo: Int): AstNodeFormatter[R, S] =
     this(FormatterState(
@@ -147,7 +147,7 @@ abstract class AstNodeFormatter[R, S](
         state._node2lineno),
         subState)
     })
-    f2.accSpace()
+    f2.accSpace
   }
 
   def indent(): AstNodeFormatter[R, S] =
@@ -176,10 +176,6 @@ abstract class AstNodeFormatter[R, S](
 
   def conformTo(node: AstNode): AstNodeFormatter[R, S] = this
 
-  // println("AstNodeFormatter.newline(hard="+hard+", node="+node+", indent="+indent+")")
-  // println("   column = " + column)
-  // println("   conform = " + conform)
-
   def newline(hard: Boolean, nodeOpt: Option[AstNode], indent: Boolean = true): AstNodeFormatter[R, S] = {
     // && node.getLineNo.isDefined && ( node.getLineNo.get < lineno )
     if (nodeOpt.isDefined && config.conform) {
@@ -191,7 +187,7 @@ abstract class AstNodeFormatter[R, S](
           state.lineno + 1,
           state.stack,
           state._node2lineno),
-          subState).accNewline()
+          subState).accNewline
       } else {
         this
       }
@@ -203,7 +199,7 @@ abstract class AstNodeFormatter[R, S](
         state.lineno + 1,
         state.stack,
         state._node2lineno),
-        subState).accNewline()
+        subState).accNewline
     } else {
       this
     }

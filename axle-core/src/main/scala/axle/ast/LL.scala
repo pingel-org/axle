@@ -19,9 +19,9 @@ import spire.implicits._
 import spire.algebra._
 
 class Symbol(_label: String) {
-  def label() = _label
+  def label: String = _label
   //override def toString() = "'" + label + "'"
-  override def toString() = _label
+  override def toString: String = _label
 }
 object Symbol {
   implicit val symbolEq = new Eq[Symbol] {
@@ -43,13 +43,13 @@ object ⊥ extends Terminal("⊥") // also known as '$'
 object ε extends Symbol("ε") // TODO terminal or non-terminal?
 
 case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol]) {
-  override def toString() = from.toString + " -> " + rhs.mkString("", " ", "")
+  override def toString: String = from.toString + " -> " + rhs.mkString("", " ", "")
 }
 
-abstract class LLParserAction()
-case class Shift() extends LLParserAction()
-case class Reduce(rule: LLRule) extends LLParserAction()
-case class ParseError(msg: String) extends LLParserAction()
+sealed trait LLParserAction
+case class Shift() extends LLParserAction
+case class Reduce(rule: LLRule) extends LLParserAction
+case class ParseError(msg: String) extends LLParserAction
 
 case class LLParserState(
   grammar: LLLanguage,
@@ -60,7 +60,7 @@ case class LLParserState(
 
   lazy val inputBufferWithMarker = input.substring(0, i) + "|" + input.substring(i, input.length)
 
-  override def toString =
+  override def toString: String =
     inputBufferWithMarker + "\n" +
       stack.mkString("", " ", "")
 

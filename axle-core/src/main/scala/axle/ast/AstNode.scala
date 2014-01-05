@@ -12,10 +12,10 @@ case class AstNodeValue(value: Option[String], _lineno: Int)
 
 case class AstNodeList(list: List[AstNode], _lineno: Int)
   extends AstNode(_lineno) {
-  def children = list
+  def children: List[AstNode] = list
 }
 
 case class AstNodeRule(val ruleName: String, mm: Map[String, AstNode], _lineno: Int)
   extends AstNode(_lineno) {
-  def children = mm.values.toList
+  def children: List[AstNode] = mm.values.toList
 }

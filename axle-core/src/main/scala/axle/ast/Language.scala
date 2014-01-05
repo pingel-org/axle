@@ -18,11 +18,11 @@ class Language(
     case (names, assoc) => names.map((_, assoc))
   }).toMap
 
-  def trim(ast: AstNode) = trimmer(ast)
+  def trim(ast: AstNode): AstNode = trimmer(ast)
 
-  def parseFile(filename: String) = parser(io.Source.fromFile(filename).mkString)
+  def parseFile(filename: String): Option[AstNode] = parser(io.Source.fromFile(filename).mkString)
 
-  def parseString(code: String) = parser(code)
+  def parseString(code: String): Option[AstNode] = parser(code)
 
   def precedenceOf(rule: Rule): Option[Int] = rulename2precedence.get(rule.name)
 

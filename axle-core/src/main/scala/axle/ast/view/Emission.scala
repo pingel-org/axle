@@ -183,13 +183,11 @@ object Emission {
     node: AstNode,
     formatter: AstNodeFormatter[R, S]): AstNodeFormatter[R, S] = {
 
-    // println("emit(grammar, node = " + node + ", formatter)")
-
     val fLn = formatter.markLine(node, node.lineNo)
 
     node match {
 
-      case AstNodeValue(v, _) => v.map(fLn.raw(_)).getOrElse(formatter)
+      case AstNodeValue(v, _) => v.map(fLn.raw).getOrElse(formatter)
 
       case AstNodeList(l, _) => (0 until l.length)
         .foldLeft(fLn)({ (f, i) =>

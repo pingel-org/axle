@@ -22,7 +22,7 @@ case class LLLanguage(
 
   val _nonTerminals = (_llRuleDescriptions.map(desc => NonTerminal(desc._1)).toSet).toList
 
-  def nonTerminals = _nonTerminals
+  def nonTerminals: List[NonTerminal] = _nonTerminals
 
   val nonTerminalsByName = _nonTerminals.map(nt => (nt.label, nt)).toMap
 
@@ -30,7 +30,7 @@ case class LLLanguage(
 
   val _terminals = (_llRuleDescriptions.flatMap(_._2).toSet -- _llRuleDescriptions.map(_._1)).map(Terminal(_)).toList.sortBy(_.label) ++ List(⊥)
 
-  def terminals = _terminals
+  def terminals: List[Terminal] = _terminals
 
   val terminalsByName = _terminals.map(t => (t.label, t)).toMap
 
@@ -38,11 +38,11 @@ case class LLLanguage(
     _llRuleDescriptions.zipWithIndex
       .map({ case (desc, i) => LLRule(i + 1, nonTerminalsByName(desc._1), desc._2.map(symbol(_).get)) })
 
-  def llRules = _llRules
+  def llRules: List[LLRule] = _llRules
 
-  override def toString(): String = view.ViewString.llLanguage(this)
+  override def toString: String = view.ViewString.llLanguage(this)
 
-  def symbol(label: String) =
+  def symbol(label: String): Option[Symbol] =
     (if (terminalsByName.contains(label)) terminalsByName else nonTerminalsByName).get(label)
 
   /**
@@ -147,7 +147,7 @@ case class LLLanguage(
     }).toMap
   }
 
-  def parseTable = _parseTable
+  def parseTable: Map[(NonTerminal, Symbol), LLRule] = _parseTable
 
   def parseStateStream(state: LLParserState): Stream[(LLParserAction, LLParserState)] =
     if (state.finished) {
@@ -163,7 +163,7 @@ case class LLLanguage(
       }
     }
 
-  def startState(input: String) = LLParserState(this, input, List(startSymbol, ⊥), 0)
+  def startState(input: String): LLParserState = LLParserState(this, input, List(startSymbol, ⊥), 0)
 
   def parseDebug(input: String): String =
     parseStateStream(startState(input)).toList
