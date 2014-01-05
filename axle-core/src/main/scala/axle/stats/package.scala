@@ -15,7 +15,7 @@ package object stats {
 
   implicit def enrichCaseGenTraversable[A: Manifest](cgt: GenTraversable[Case[A]]): EnrichedCaseGenTraversable[A] = EnrichedCaseGenTraversable(cgt)
 
-  def coin(pHead: Real = Real(Rational(1, 2))) = RandomVariable0("coin",
+  def coin(pHead: Real = Real(Rational(1, 2))): RandomVariable[Symbol] = RandomVariable0("coin",
     Some(List('HEAD, 'TAIL).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1d - pHead)))))
 
