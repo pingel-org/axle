@@ -9,13 +9,13 @@ import spire.math._
 
 package object stats {
 
-  implicit def probability2real = (p: Probability) => p()
+  implicit def probability2real: Probability => Real = (p: Probability) => p()
 
   implicit def rv2it[K](rv: RandomVariable[K]): IndexedSeq[K] = rv.values.getOrElse(Vector())
 
-  implicit def enrichCaseGenTraversable[A: Manifest](cgt: GenTraversable[Case[A]]) = EnrichedCaseGenTraversable(cgt)
+  implicit def enrichCaseGenTraversable[A: Manifest](cgt: GenTraversable[Case[A]]): EnrichedCaseGenTraversable[A] = EnrichedCaseGenTraversable(cgt)
 
-  def coin(pHead: Real = Real(0.5)) = RandomVariable0("coin",
+  def coin(pHead: Real = Real(Rational(1, 2))) = RandomVariable0("coin",
     Some(List('HEAD, 'TAIL).toIndexedSeq),
     distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1d - pHead)))))
 
@@ -23,7 +23,7 @@ package object stats {
 
   def mean[N: Field: Manifest](xs: GenTraversable[N]): N = EnrichedGenTraversable(xs).Σ(identity) / xs.size
 
-  def square[N: Ring](x: N) = x ** 2
+  def square[N: Ring](x: N): N = x ** 2
 
   // http://en.wikipedia.org/wiki/Standard_deviation
 

@@ -20,11 +20,11 @@ trait FactorModule {
 
   object Factor {
 
-    implicit def factorEq[T: Eq] = new Eq[Factor[T]] {
+    implicit def factorEq[T: Eq]: Eq[Factor[T]] = new Eq[Factor[T]] {
       def eqv(x: Factor[T], y: Factor[T]): Boolean = x equals y // TODO
     }
 
-    implicit def factorMultMonoid[T: Eq] = new MultiplicativeMonoid[Factor[T]] {
+    implicit def factorMultMonoid[T: Eq]: MultiplicativeMonoid[Factor[T]] = new MultiplicativeMonoid[Factor[T]] {
       def times(x: Factor[T], y: Factor[T]): Factor[T] = {
         val newVars = (x.variables.toSet union y.variables.toSet).toVector
         new Factor(newVars, Factor.spaceFor(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
@@ -55,7 +55,7 @@ trait FactorModule {
 
     lazy val elements = (0 until cp.size).map(i => values.get(caseOf(i)).getOrElse(Real(0))).toArray
 
-    def variables = varList
+    def variables: Vector[RandomVariable[T]] = varList
 
     // assume prior and condition are disjoint, and that they are
     // each compatible with this table
@@ -161,7 +161,8 @@ trait FactorModule {
         Factor.spaceFor(e.map(_.rv).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else Real(0))).toMap)
     }
 
-    def mentions(variable: RandomVariable[T]) = variables.exists(v => variable.name.equals(v.name))
+    def mentions(variable: RandomVariable[T]): Boolean =
+      variables.exists(v => variable.name.equals(v.name))
 
     def isSupersetOf(left: Seq[CaseIs[T]], right: Seq[CaseIs[T]]): Boolean = {
       val ll: Seq[(RandomVariable[T], T)] = left.map(ci => (ci.rv, ci.v))

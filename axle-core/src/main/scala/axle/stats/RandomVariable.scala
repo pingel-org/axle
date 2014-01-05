@@ -16,7 +16,7 @@ trait RandomVariable[A] {
 }
 
 object RandomVariable {
-  implicit def rvEq[A: Eq] = new Eq[RandomVariable[A]] {
+  implicit def rvEq[A: Eq]: Eq[RandomVariable[A]] = new Eq[RandomVariable[A]] {
     def eqv(x: RandomVariable[A], y: RandomVariable[A]): Boolean = x equals y // TODO
   }
 }
