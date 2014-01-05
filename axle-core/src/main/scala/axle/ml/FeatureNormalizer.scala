@@ -13,7 +13,7 @@ trait FeatureNormalizerModule {
 
   trait FeatureNormalizer {
 
-    def normalizedData(): Matrix[Double]
+    def normalizedData: Matrix[Double]
 
     def normalize(featureList: Seq[Double]): Matrix[Double]
 
@@ -24,7 +24,7 @@ trait FeatureNormalizerModule {
 
   class IdentityFeatureNormalizer(X: Matrix[Double]) extends FeatureNormalizer {
 
-    def normalizedData(): Matrix[Double] = X
+    def normalizedData: Matrix[Double] = X
 
     def normalize(featureList: Seq[Double]): Matrix[Double] =
       matrix(1, featureList.length, featureList.toArray)
@@ -41,7 +41,7 @@ trait FeatureNormalizerModule {
     val colRanges = X.columnMaxs - colMins
     val nd = X.subRowVector(colMins).divRowVector(colRanges)
 
-    def normalizedData(): Matrix[Double] = nd
+    def normalizedData: Matrix[Double] = nd
 
     def normalize(features: Seq[Double]): Matrix[Double] =
       matrix(1, features.length, features.toArray).subRowVector(colMins).divPointwise(colRanges)
@@ -58,7 +58,7 @@ trait FeatureNormalizerModule {
     lazy val σ2s = std(X)
     val nd = zscore(X)
 
-    def normalizedData(): Matrix[Double] = nd
+    def normalizedData: Matrix[Double] = nd
 
     def normalize(features: Seq[Double]): Matrix[Double] =
       (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
@@ -78,7 +78,7 @@ trait FeatureNormalizerModule {
     val k = numComponentsForCutoff(s, cutoff)
     val Uk = u(0 until u.rows, 0 until k)
 
-    def normalizedData(): Matrix[Double] = zd ⨯ Uk
+    def normalizedData: Matrix[Double] = zd ⨯ Uk
 
     def normalize(features: Seq[Double]): Matrix[Double] =
       (matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) ⨯ Uk

@@ -44,18 +44,18 @@ trait LinearRegressionModule {
     val inputX = matrix(
       examples.length,
       numFeatures,
-      examples.flatMap(featureExtractor(_)).toArray).t
+      examples.flatMap(featureExtractor).toArray).t
 
     val featureNormalizer = new LinearFeatureNormalizer(inputX)
 
-    val X = ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData()
+    val X = ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData
 
-    val y = matrix(examples.length, 1, examples.map(objectiveExtractor(_)).toArray)
+    val y = matrix(examples.length, 1, examples.map(objectiveExtractor).toArray)
 
     val objectiveNormalizer = new LinearFeatureNormalizer(y)
 
     val θ0 = ones[Double](X.columns, 1)
-    val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData(), θ0, α, iterations)
+    val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData, θ0, α, iterations)
 
     LinearEstimator(featureExtractor, featureNormalizer, θ, objectiveNormalizer, errLog.reverse)
   }

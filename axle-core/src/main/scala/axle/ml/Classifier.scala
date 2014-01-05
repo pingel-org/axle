@@ -9,7 +9,7 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
 
   def apply(d: DATA): CLASS
 
-  def classes(): IndexedSeq[CLASS]
+  def classes: IndexedSeq[CLASS]
 
   /**
    * For a given class (label value), predictedVsActual returns a tally of 4 cases:
@@ -35,7 +35,7 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
     }
   }).Σ(identity)
 
-  def performance(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS) = {
+  def performance(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): ClassifierPerformance[Rational] = {
 
     val (tp, fp, fn, tn) = predictedVsActual(data, classExtractor, k)
 
@@ -47,7 +47,8 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
     )
   }
 
-  def confusionMatrix[L: Ordering](data: Seq[DATA], labelExtractor: DATA => L) = new ConfusionMatrix(this, data, labelExtractor)
+  def confusionMatrix[L: Ordering](data: Seq[DATA], labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L] =
+    new ConfusionMatrix(this, data, labelExtractor)
 
 
 }

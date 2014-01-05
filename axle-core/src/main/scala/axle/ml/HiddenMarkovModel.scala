@@ -21,15 +21,15 @@ object MarkovModelState {
 }
 
 case object MarkovModelStartState extends MarkovModelState {
-  override def toString() = "start"
+  override def toString: String = "start"
 }
 
 case class UnobservableMarkovModelState(label: String) extends MarkovModelState {
-  override def toString() = label
+  override def toString: String = label
 }
 
 case class ObservableMarkovModelState(label: String) extends MarkovModelState {
-  override def toString() = label
+  override def toString: String = label
 }
 
 class HiddenMarkovModel(

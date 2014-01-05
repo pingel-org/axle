@@ -68,7 +68,7 @@ trait KMeansModule {
     val features = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
 
     val normalizer = new PCAFeatureNormalizer(features, 0.95)
-    val X = normalizer.normalizedData()
+    val X = normalizer.normalizedData
     val μads = clusterLA(X, space, K, iterations)
 
     val (μ, a, d) = μads.last

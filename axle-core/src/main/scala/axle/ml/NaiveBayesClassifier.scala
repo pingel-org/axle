@@ -8,7 +8,12 @@ import spire.compat._
 
 object NaiveBayesClassifier {
 
-  def apply[DATA, FEATURE, CLASS: Ordering: Eq](data: collection.GenSeq[DATA], pFs: List[RandomVariable[FEATURE]], pC: RandomVariable[CLASS], featureExtractor: DATA => List[FEATURE], classExtractor: DATA => CLASS) =
+  def apply[DATA, FEATURE, CLASS: Ordering: Eq](
+    data: collection.GenSeq[DATA],
+    pFs: List[RandomVariable[FEATURE]],
+    pC: RandomVariable[CLASS],
+    featureExtractor: DATA => List[FEATURE],
+    classExtractor: DATA => CLASS): NaiveBayesClassifier[DATA, FEATURE, CLASS] =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
 }
@@ -58,7 +63,7 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
         case (k, v) => ((k._3, k._1), v)
       }.withDefaultValue(0L)))))
 
-  def classes(): IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
+  def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
   def apply(d: DATA): CLASS = {
     val fs = featureExtractor(d)

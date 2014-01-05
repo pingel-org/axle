@@ -27,16 +27,16 @@ object GeneticAlgorithm {
   def apply[G <: HList, Z <: HList](populationSize: Int = 1000, numGenerations: Int = 100)(
     implicit species: Species[G],
     zipper: Zip.Aux[G :: G :: HNil, Z],
-    mapper: Mapper[mixer.type, Z],
-    mapperMutate: Mapper[mutator.type, Z]) =
+    mapper: Mapper[Mixer.type, Z],
+    mapperMutate: Mapper[Mutator.type, Z]): GeneticAlgorithmC[G, Z] =
     new GeneticAlgorithmC(populationSize, numGenerations)
 
-  object mixer extends Poly1 {
+  object Mixer extends Poly1 {
     implicit def caseTuple[T] = at[(T, T)](t =>
       if (nextBoolean) t._2 else t._1)
   }
 
-  object mater extends Poly1 {
+  object Mater extends Poly1 {
     implicit def caseTuple[T] = at[(T, T, T)](t =>
       if (nextDouble < 0.03) {
         t._3
@@ -47,7 +47,7 @@ object GeneticAlgorithm {
       })
   }
 
-  object mutator extends Poly1 {
+  object Mutator extends Poly1 {
     implicit def caseTuple[T] = at[(T, T)](t => if (nextDouble < 0.03) t._2 else t._1)
   }
 
@@ -55,8 +55,8 @@ object GeneticAlgorithm {
     populationSize: Int = 1000, numGenerations: Int = 100)(
       implicit species: Species[G],
       zipper: Zip.Aux[G :: G :: HNil, Z],
-      mapperMix: Mapper[mixer.type, Z],
-      mapperMutate: Mapper[mutator.type, Z]) {
+      mapperMix: Mapper[Mixer.type, Z],
+      mapperMutate: Mapper[Mutator.type, Z]) {
 
     def initialPopulation(): IndexedSeq[(G, Double)] =
       (0 until populationSize).map(i => {
@@ -76,11 +76,11 @@ object GeneticAlgorithm {
 
     def crossover[Z <: HList](h1: G, h2: G)(
       implicit zipper: Zip.Aux[G :: G :: HNil, Z],
-      mapper: Mapper[mixer.type, Z]) = (h1 zip h2) map mixer
+      mapper: Mapper[Mixer.type, Z]) = (h1 zip h2) map Mixer
 
     def mutate[Z <: HList](x: G, r: G)(
       implicit zipper: Zip.Aux[G :: G :: HNil, Z],
-      mapper: Mapper[mutator.type, Z]) = (x zip r) map mutator
+      mapper: Mapper[Mutator.type, Z]) = (x zip r) map Mutator
 
     def live(population: IndexedSeq[(G, Double)], fitnessLog: List[(Double, Double, Double)]): (IndexedSeq[(G, Double)], List[(Double, Double, Double)]) = {
       val nextGen = (0 until populationSize).map(i => {
