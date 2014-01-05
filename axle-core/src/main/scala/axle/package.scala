@@ -101,7 +101,7 @@ package object axle {
     def eqv(x: Boolean, y: Boolean): Boolean = x equals y
   }
 
-  implicit def eqSet[S: Eq] = new Eq[Set[S]] {
+  implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
     def eqv(x: Set[S], y: Set[S]): Boolean = x equals y
     //(x.size == y.size) && x.intersect(y).size == x.size
   }

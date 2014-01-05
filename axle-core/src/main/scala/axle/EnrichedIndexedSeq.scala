@@ -5,7 +5,8 @@ import util.Random.nextInt
 
 object EnrichedIndexedSeq {
 
-  def apply[T : Manifest](is: IndexedSeq[T]) = new EnrichedIndexedSeq(is)
+  def apply[T : Manifest](is: IndexedSeq[T]): EnrichedIndexedSeq[T] =
+    new EnrichedIndexedSeq(is)
 }
 
 class EnrichedIndexedSeq[T : Manifest](is: IndexedSeq[T]) {

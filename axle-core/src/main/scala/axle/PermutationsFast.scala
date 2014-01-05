@@ -24,7 +24,7 @@ class PermutationsFast[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[Ind
   val pool = _pool.toArray
   val n = pool.length
 
-  override def size() = if (r >= 0 && r <= n) { n.factorial / (n - r).factorial } else { 0 }
+  override def size: Int = if (r >= 0 && r <= n) { n.factorial / (n - r).factorial } else { 0 }
 
   val yeeld = new ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
 
@@ -59,6 +59,6 @@ class PermutationsFast[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[Ind
     }
   }
 
-  def iterator() = yeeld.iterator
+  def iterator: Iterator[IndexedSeq[E]] = yeeld.iterator
 
 }

@@ -24,7 +24,7 @@ class Permutations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedS
   val untilN = (0 until n).toArray
   val untilR = (0 until r).toArray
 
-  override def size() = if (r >= 0 && r <= n) (n.factorial / (n - r).factorial) else 0
+  override def size: Int = if (r >= 0 && r <= n) (n.factorial / (n - r).factorial) else 0
 
   private[this] def loop2branchTrue(
     indices0: Array[Int],
@@ -82,6 +82,6 @@ class Permutations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedS
     empty
   }
 
-  def iterator() = result.iterator
+  def iterator: Iterator[IndexedSeq[E]] = result.iterator
 
 }

@@ -27,8 +27,8 @@ class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]]) extends Iterable[Seq[E]]
       (cr, lm) => (cr._1 % lm._2, lm._1(cr._1 / lm._2) :: cr._2)
     )._2.reverse
 
-  override def size() = syze
+  override def size: Int = syze
 
-  def iterator() = (0.until(size)).iterator.map(this(_))
+  def iterator: Iterator[Seq[E]] = (0.until(size)).iterator.map(this(_))
 
 }

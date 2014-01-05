@@ -34,6 +34,6 @@ class ConfusionMatrix[T, C: Ordering, L: Ordering](classifier: Classifier[T, C],
   }).mkString("")) + "\n" +
     (0 until counts.columns).map(c => formatNumber(columnSums(0, c))).mkString(" ") + "\n"
 
-  override def toString() = asString
+  override def toString: String = asString
 }
 

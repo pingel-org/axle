@@ -27,14 +27,14 @@ class CombinationsFast[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[Inde
 
   lazy val syze = if (0 <= r && r <= n) { n.factorial / r.factorial / (n - r).factorial } else { 0 }
 
-  override def size(): Int = syze
+  override def size: Int = syze
 
   val yeeld = new ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
 
-  def iterator() = yeeld.iterator
+  def iterator: Iterator[IndexedSeq[E]] = yeeld.iterator
 
   val indices = (0 until r).toBuffer
-  yeeld += indices.map(pool(_)).toIndexedSeq
+  yeeld += indices.map(pool).toIndexedSeq
   var done = false
 
   while (!done) {
@@ -55,7 +55,7 @@ class CombinationsFast[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[Inde
       for (j <- (i + 1 until r)) {
         indices(j) = indices(j - 1) + 1
       }
-      yeeld += indices.map(pool(_)).toIndexedSeq
+      yeeld += indices.map(pool).toIndexedSeq
     }
   }
 
