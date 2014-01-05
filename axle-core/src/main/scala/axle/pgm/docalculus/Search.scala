@@ -20,7 +20,7 @@ object Search {
    * TODO try chain rule
    */
 
-  def expand[T: Eq](model: CausalModel[T], quantity: CausalityProbability[T], namer: VariableNamer[T]) =
+  def expand[T: Eq](model: CausalModel[T], quantity: CausalityProbability[T], namer: VariableNamer[T]): Some[List[Form]] =
     Some(DeleteObservation(quantity, model, namer.duplicate) ++
       InsertObservation(quantity, model, namer.duplicate) ++
       ActionToObservation(quantity, model, namer.duplicate) ++

@@ -49,16 +49,16 @@ case class GenModel[T: Eq](graph: DirectedGraph[RandomVariable[T], String]) {
     to: Set[RandomVariable[T]],
     given: Set[RandomVariable[T]]): Option[List[RandomVariable[T]]] = {
 
-    println("_fOP: " + priorDirection +
+    lazy val logMessage = "_fOP: " + priorDirection +
       ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
       ", current = " + current.map(_.name).mkString(", ") +
       ", to = " + to.map(_.name).mkString(", ") +
-      ", evidence = " + given.map(_.name).mkString(", "))
+      ", evidence = " + given.map(_.name).mkString(", ")
 
     val priorVertexOpt = priorOpt.map(prior => graph.findVertex(_.payload === prior).get)
     val givenVertices = given.map(v1 => graph.findVertex(_.payload === v1).get)
 
-    (current -- priorOpt.map(visited(_)).getOrElse(Set())).toList.flatMap(variable => {
+    (current -- priorOpt.map(visited).getOrElse(Set())).toList.flatMap(variable => {
 
       val variableVertex = graph.findVertex(_.payload === variable).get
 
