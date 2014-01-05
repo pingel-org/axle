@@ -74,7 +74,7 @@ object SmithWaterman {
   def metricSpace(mismatchPenalty: Int = defaultMismatchPenalty): MetricSpace[String, Int] = new SmithWatermanMetricSpace(mismatchPenalty)
 
   class SmithWatermanMetricSpace(mismatchPenalty: Int) extends MetricSpace[String, Int] {
-    
+
     def distance(s1: String, s2: String): Int = {
       val H = computeH(s1, s2, mismatchPenalty)
       H(s1.length, s2.length)
