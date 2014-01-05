@@ -33,7 +33,7 @@ object SmithWaterman {
    *
    */
 
-  def computeH(A: String, B: String, mismatchPenalty: Int) = matrix[Int](
+  def computeH(A: String, B: String, mismatchPenalty: Int): Matrix[Int] = matrix[Int](
     A.length + 1,
     B.length + 1,
     0,
@@ -71,12 +71,14 @@ object SmithWaterman {
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
-  def metricSpace(mismatchPenalty: Int = defaultMismatchPenalty) = new SmithWatermanMetricSpace(mismatchPenalty)
+  def metricSpace(mismatchPenalty: Int = defaultMismatchPenalty): MetricSpace[String, Int] = new SmithWatermanMetricSpace(mismatchPenalty)
 
   class SmithWatermanMetricSpace(mismatchPenalty: Int) extends MetricSpace[String, Int] {
-
-    def distance(s1: String, s2: String): Int =
-      computeH(s1, s2, mismatchPenalty)(s1.length, s2.length)
+    
+    def distance(s1: String, s2: String): Int = {
+      val H = computeH(s1, s2, mismatchPenalty)
+      H(s1.length, s2.length)
+    }
 
   }
 

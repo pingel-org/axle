@@ -18,10 +18,10 @@ class DocumentVectorSpaceSpec extends Specification {
         "foo bar dog")
 
       val un = new UnweightedDocumentVectorSpace(stopwords, () => corpus.iterator)
-      un.space().distanceMatrix(corpus.map(un.doc2vector(_)))
+      un.space.distanceMatrix(corpus.map(un.doc2vector))
 
       val tfidf = new TFIDFDocumentVectorSpace(stopwords, () => corpus.iterator)
-      tfidf.space().distanceMatrix(corpus.map(tfidf.doc2vector(_)))
+      tfidf.space.distanceMatrix(corpus.map(tfidf.doc2vector))
 
       1 must be equalTo (1)
     }

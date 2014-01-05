@@ -12,7 +12,7 @@ object FederalistPapers {
 
   case class FederalistPaper(id: Int, author: String, text: String, metadata: String)
 
-  def parseArticles(filename: String) = {
+  def parseArticles(filename: String): List[FederalistPaper] = {
 
     val lines = io.Source.fromFile(filename).getLines.toList
 
@@ -34,15 +34,15 @@ object FederalistPapers {
 
   implicit object articleAsDocument extends Document[FederalistPaper] {
 
-    def tokens(paper: FederalistPaper) = language.English.tokenize(paper.text)
+    def tokens(paper: FederalistPaper): IndexedSeq[String] = language.English.tokenize(paper.text)
 
-    def bigrams(paper: FederalistPaper) = tokens(paper).sliding(2).toVector
+    def bigrams(paper: FederalistPaper): Vector[IndexedSeq[String]] = tokens(paper).sliding(2).toVector
 
-    def wordCounts(paper: FederalistPaper) = tokens(paper) tally
+    def wordCounts(paper: FederalistPaper): Map[String, Long] = tokens(paper) tally
 
-    def bigramCounts(paper: FederalistPaper) = bigrams(paper) tally
+    def bigramCounts(paper: FederalistPaper): Map[IndexedSeq[String], Long] = bigrams(paper) tally
 
-    def averageWordLength(paper: FederalistPaper) = {
+    def averageWordLength(paper: FederalistPaper): Number = {
       val ts = tokens(paper)
       Rational(ts.map(_.length).sum, ts.length)
     }
