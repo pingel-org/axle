@@ -4,16 +4,7 @@ import spire.math._
 import spire.implicits._
 import spire.algebra._
 
-class UnweightedDocumentVectorSpace(
-  _stopwords: Set[String],
-  corpusIterator: () => Iterator[String])
-  extends DocumentVectorSpace {
-
-  lazy val _vectors = corpusIterator().map(doc2vector).toIndexedSeq
-
-  def vectors: IndexedSeq[TermVector] = _vectors
-
-  def stopwords: Set[String] = _stopwords
+object UnweightedDocumentVectorSpace {
 
   /**
    *
@@ -21,25 +12,35 @@ class UnweightedDocumentVectorSpace(
    *
    */
 
-  val _space = (new InnerProductSpace[TermVector, Double] {
+  def apply(_stopwords: Set[String],
+    corpusIterable: Iterable[String]): DocumentVectorSpace =
+    new DocumentVectorSpace {
 
-    def negate(x: TermVector): TermVector = x.map(kv => (kv._1, -1 * kv._2)) // Not sure this makes much sense
+      val _vectors = corpusIterable.iterator.map(doc2vector).toIndexedSeq
 
-    def zero: TermVector = Map()
+      def stopwords: Set[String] = _stopwords
 
-    def plus(x: TermVector, y: TermVector): TermVector =
-      (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
+      val innerProductSpace = new InnerProductSpace[TermVector, Double] {
 
-    def timesl(r: Double, v: TermVector): TermVector = v.map(kv => (kv._1, (kv._2 * r).toInt))
+        def negate(x: TermVector): TermVector = x.map(kv => (kv._1, -1 * kv._2)) // Not sure this makes much sense
 
-    def scalar: Field[Double] = DoubleAlgebra
+        def zero: TermVector = Map()
 
-    def dot(v1: TermVector, v2: TermVector): Double =
-      (v1.keySet intersect v2.keySet).toList.map(w => v1(w) * v2(w)).sum
+        def plus(x: TermVector, y: TermVector): TermVector =
+          (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
 
-  }).normed
+        def timesl(r: Double, v: TermVector): TermVector = v.map(kv => (kv._1, (kv._2 * r).toInt))
 
-  def space: MetricSpace[TermVector, Double] = _space
+        def scalar: Field[Double] = DoubleAlgebra
+
+        def dot(v1: TermVector, v2: TermVector): Double =
+          (v1.keySet intersect v2.keySet).toList.map(w => v1(w) * v2(w)).sum
+
+      }
+
+      def space: MetricSpace[TermVector, Double] = innerProductSpace.normed
+
+    }
 
 }
 

@@ -17,10 +17,10 @@ class DocumentVectorSpaceSpec extends Specification {
         "quick lazy word",
         "foo bar dog")
 
-      val un = new UnweightedDocumentVectorSpace(stopwords, () => corpus.iterator)
-      un.space.distanceMatrix(corpus.map(un.doc2vector))
+      val unweighted = UnweightedDocumentVectorSpace(stopwords, corpus)
+      unweighted.space.distanceMatrix(corpus.map(unweighted.doc2vector))
 
-      val tfidf = new TFIDFDocumentVectorSpace(stopwords, () => corpus.iterator)
+      val tfidf = TFIDFDocumentVectorSpace(stopwords, corpus)
       tfidf.space.distanceMatrix(corpus.map(tfidf.doc2vector))
 
       1 must be equalTo (1)
@@ -29,7 +29,7 @@ class DocumentVectorSpaceSpec extends Specification {
     "work again" in {
 
       val lines = Vector("foo bar baz", "foo fu", "fu fu fu bar")
-      val dvs = new UnweightedDocumentVectorSpace(Set("this", "the"), () => lines.iterator)
+      val dvs = UnweightedDocumentVectorSpace(Set("this", "the"), lines)
 
       dvs.wordCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 4)
       dvs.wordExistsCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 2)
