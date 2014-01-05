@@ -24,7 +24,7 @@ trait DocumentVectorSpace {
 
   val whitespace = """\s+""".r
 
-  def stopwords(): Set[String]
+  def stopwords: Set[String]
 
   val emptyCount = Map.empty[String, Int].withDefaultValue(0)
 
@@ -48,6 +48,6 @@ trait DocumentVectorSpace {
 
   def doc2vector(doc: String): TermVector = wordCount(List(doc))
 
-  def space(): MetricSpace[TermVector, Double]
+  def space: MetricSpace[TermVector, Double]
 
 }

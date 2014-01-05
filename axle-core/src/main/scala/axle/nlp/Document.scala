@@ -9,15 +9,16 @@ object Document {
 
   implicit object textDocument extends Document[String] {
 
-    def tokens(text: String) = language.English.tokenize(text)
+    def tokens(text: String): IndexedSeq[String] = language.English.tokenize(text)
 
-    def bigrams(text: String) = tokens(text).sliding(2).toVector
+    // TODO: Vector[(String, String)] would be better
+    def bigrams(text: String): Vector[IndexedSeq[String]] = tokens(text).sliding(2).toVector
 
-    def wordCounts(text: String) = tokens(text) tally
+    def wordCounts(text: String): Map[String, Long] = tokens(text) tally
 
-    def bigramCounts(text: String) = bigrams(text) tally
+    def bigramCounts(text: String): Map[IndexedSeq[String], Long] = bigrams(text) tally
 
-    def averageWordLength(text: String) = {
+    def averageWordLength(text: String): Number = {
       val ts = tokens(text)
       ts.map(_.length).sum / ts.length.toDouble
     }
