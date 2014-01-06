@@ -148,7 +148,7 @@ trait ArrayMatrixModule extends MatrixModule {
     // higher order fuctions
 
     def map[B: C](f: T => B): Matrix[B] = ???
-    // matrix(rows, columns, storage.map(f(_)))
+    // matrix(rows, columns, storage.map(f))
 
     def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = ???
 

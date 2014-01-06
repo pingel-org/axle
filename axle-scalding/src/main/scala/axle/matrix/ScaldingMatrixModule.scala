@@ -58,12 +58,12 @@ trait ScaldingMatrixModule extends MatrixModule {
     def isScalar() = rows == 1 && columns == 1
 
     def dup() = ???
-    def negate() = matrix(scalding.mapValues(field.negate(_)))
+    def negate() = matrix(scalding.mapValues(field.negate))
     def transpose() = matrix(scalding.transpose)
     def diag() = matrix(scalding.diagonal)
     def invert() = ??? // matrix(scalding.inverse)
     def ceil() = ???
-    def floor() = ??? // matrix(scalding.mapValues(v => math.floor(v)))
+    def floor() = ??? // matrix(scalding.mapValues(math.floor))
     def log() = ???
     def log10() = ???
 

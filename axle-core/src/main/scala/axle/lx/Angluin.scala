@@ -33,7 +33,7 @@ object Angluin {
     //    }
 
     def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
-      graph.allEdges.filter(e => graph.source(e) == state && e.payload == symbol).map(graph.dest(_))
+      graph.allEdges.filter(e => graph.source(e) == state && e.payload == symbol).map(graph.dest)
 
     def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)

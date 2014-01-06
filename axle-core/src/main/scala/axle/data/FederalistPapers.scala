@@ -26,8 +26,8 @@ object FederalistPapers {
       case (first, last) =>
         val id = idPattern.findFirstMatchIn(lines(first)).map(_.group(1).toInt).getOrElse(0)
         val authorIndex = ((first + 1) to last).find(i => allCaps.unapplySeq(lines(i)).isDefined).getOrElse(0)
-        val metadata = ((first + 1) to authorIndex - 1).map(lines(_)).mkString("\n")
-        val text = ((authorIndex + 1) to last).map(lines(_)).mkString("\n")
+        val metadata = ((first + 1) to authorIndex - 1).map(lines).mkString("\n")
+        val text = ((authorIndex + 1) to last).map(lines).mkString("\n")
         FederalistPaper(id, lines(authorIndex), text, metadata)
     }
   }

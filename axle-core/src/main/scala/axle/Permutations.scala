@@ -40,7 +40,7 @@ class Permutations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedS
     cycles0: Array[Int],
     i0: Int): (Array[E], Array[Int]) = {
     val indices1 = indices0.swap(indices0((n - cycles0(i0)) % n), indices0(i0))
-    (untilR.map(indices1(_)).map(pool(_)), indices1)
+    (untilR.map(indices1).map(pool), indices1)
   }
 
   private[this] def loop2branch(

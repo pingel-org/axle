@@ -51,7 +51,7 @@ object Emission {
 
       // TODO !!! replace toString() with the equiv of repr()
       case (Some(AstNodeRule(_, m, _)), Repr(name)) =>
-        m(name).asInstanceOf[AstNodeValue].value.map(formatter.repr(_)).getOrElse(formatter)
+        m(name).asInstanceOf[AstNodeValue].value.map(formatter.repr).getOrElse(formatter)
 
       case (_, Emb(left, stmt, right)) =>
         emit(stmt, nodeOpt, grammar, formatter.raw(left)).raw(right)
@@ -127,7 +127,7 @@ object Emission {
         m(subtree).asInstanceOf[AstNodeList].list.foldLeft(formatter)({
           case (f, c) => {
             val f = emit(grammar, c, formatter.raw(prefix))
-            postfix.map(f.raw(_)).getOrElse(f)
+            postfix.map(f.raw).getOrElse(f)
           }
         })
 

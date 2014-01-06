@@ -194,7 +194,7 @@ trait BayesianNetworkModule {
      */
 
     def variableEliminationPriorMarginalI(Q: Set[RandomVariable[T]], π: List[RandomVariable[T]]): Factor[T] =
-      π.foldLeft(randomVariables.map(cpt(_)).toSet)((S, rv) => {
+      π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
         val mentionsWithout = allMentions.Π(identity).sumOut(rv)
         (S -- allMentions) + mentionsWithout
@@ -251,7 +251,7 @@ trait BayesianNetworkModule {
         }).map(_._2).max
 
     //  def makeFactorFor(rv: RandomVariable[_]): Factor =
-    //    Factor(randomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains(_)) ++ List(rv))
+    //    Factor(randomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains) ++ List(rv))
 
     /**
      * pruneEdges
@@ -404,7 +404,7 @@ trait BayesianNetworkModule {
     }
 
     def factorElimination1(Q: Set[RandomVariable[T]]): Factor[T] =
-      _factorElimination1(Q, randomVariables.map(cpt(_)).toList)
+      _factorElimination1(Q, randomVariables.map(cpt).toList)
 
     // TODO: Make immutable: this should not be calling delete or setPayload
     // the variables Q appear on the CPT for the product of Factors assigned to node r

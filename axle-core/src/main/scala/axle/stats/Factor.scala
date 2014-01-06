@@ -79,13 +79,13 @@ trait FactorModule {
     def indexOf(cs: Seq[CaseIs[T]]): Int = {
       val rvvs: Seq[(RandomVariable[T], T)] = cs.map(ci => (ci.rv, ci.v))
       val rvvm = rvvs.toMap
-      cp.indexOf(varList.map(rvvm(_)))
+      cp.indexOf(varList.map(rvvm))
     }
 
     private def caseOf(i: Int): Vector[CaseIs[T]] =
       varList.zip(cp(i)).map({ case (variable: RandomVariable[T], value) => CaseIs(variable, value) })
 
-    def cases: Iterator[Seq[CaseIs[T]]] = (0 until elements.length).iterator.map(caseOf(_))
+    def cases: Iterator[Seq[CaseIs[T]]] = (0 until elements.length).iterator.map(caseOf)
 
     def apply(c: Seq[CaseIs[T]]): Real = elements(indexOf(c))
 

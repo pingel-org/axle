@@ -31,7 +31,7 @@ class PermutationsFast[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[Ind
   if (r <= n) {
     val indices = (0 until n).toBuffer
     val cycles = n.until(n - r, -1).toArray
-    yeeld += indices(0 until r).map(pool(_)).toIndexedSeq
+    yeeld += indices(0 until r).map(pool).toIndexedSeq
     var done = false
     while (n > 0 && !done) {
       var i = r - 1
@@ -46,7 +46,7 @@ class PermutationsFast[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[Ind
           val (v1, v2) = (indices((n - j) % n), indices(i))
           indices(i) = v1
           indices((n - j) % n) = v2
-          yeeld += indices(0 until r).map(pool(_)).toIndexedSeq
+          yeeld += indices(0 until r).map(pool).toIndexedSeq
           broken = true
         }
         if (!broken) {
