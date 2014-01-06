@@ -156,7 +156,7 @@ class ScalaFigures extends Specification {
     val f61 = figure6_1
 
     val τ = EliminationTree[Boolean](
-      Vector(A, B, C, D, E).map(f61.cpt(_)),
+      Vector(A, B, C, D, E).map(f61.cpt),
       (vs: Seq[Vertex[Factor[Boolean]]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List(
           (a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
