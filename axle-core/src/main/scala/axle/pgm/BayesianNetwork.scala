@@ -119,7 +119,7 @@ trait BayesianNetworkModule {
 
   case class BayesianNetworkNode[T: Eq](rv: RandomVariable[T], cpt: Factor[T]) extends XmlAble {
 
-    override def toString(): String = rv.name + "\n\n" + cpt
+    override def toString: String = rv.name + "\n\n" + cpt
 
     def toXml(): xml.Node =
       <html>
@@ -161,7 +161,7 @@ trait BayesianNetworkModule {
     def probabilityOf(cs: Seq[CaseIs[T]]) = cs.map(c => cpt(c.rv)(cs)).toVector.Π(identity)
 
     def markovAssumptionsFor(rv: RandomVariable[T]): Independence[T] = {
-      val rvVertex = graph.findVertex(_.payload.rv == rv).get
+      val rvVertex = graph.findVertex(_.payload.rv === rv).get
       val X: Set[RandomVariable[T]] = Set(rv)
       val Z: Set[RandomVariable[T]] = graph.predecessors(rvVertex).map(_.payload.rv).toSet
       val D = graph.descendants(rvVertex) ++ graph.predecessors(rvVertex) + rvVertex
@@ -172,7 +172,7 @@ trait BayesianNetworkModule {
     def computeFullCase(c: List[CaseIs[T]]): Double = {
 
       // not an airtight check
-      assert(numVariables == c.size)
+      assert(numVariables === c.size)
 
       // order variables such that all nodes appear before their ancestors
       // rewrite using chain rule
@@ -226,7 +226,7 @@ trait BayesianNetworkModule {
      * Also called the "moral graph"
      */
 
-    def interactionGraph(): InteractionGraph[T] =
+    def interactionGraph: InteractionGraph[T] =
       InteractionGraph(randomVariables,
         (vs: Seq[Vertex[RandomVariable[T]]]) =>
           (for {
@@ -244,14 +244,14 @@ trait BayesianNetworkModule {
      */
 
     def orderWidth(order: List[RandomVariable[T]]): Int =
-      randomVariables.scanLeft((interactionGraph(), 0))(
+      randomVariables.scanLeft((interactionGraph, 0))(
         (gi, rv) => {
           val ig = gi._1
-          (ig.eliminate(rv), ig.graph.neighbors(ig.graph.findVertex(_.payload == rv).get).size)
+          (ig.eliminate(rv), ig.graph.neighbors(ig.graph.findVertex(_.payload === rv).get).size)
         }).map(_._2).max
 
     //  def makeFactorFor(rv: RandomVariable[_]): Factor =
-    //    Factor(randomVariables.filter(getPredecessors(findVertex(_.rv == rv).get).map(_.getPayload.rv).contains) ++ List(rv))
+    //    Factor(randomVariables.filter(getPredecessors(findVertex(_.rv === rv).get).map(_.getPayload.rv).contains) ++ List(rv))
 
     /**
      * pruneEdges
@@ -263,10 +263,10 @@ trait BayesianNetworkModule {
       val result = BayesianNetwork[T](resultName, ???)
       eOpt.map(e => {
         for (U <- e.map(_.rv)) {
-          val uVertex = result.graph.findVertex(_.payload.rv == U).get
+          val uVertex = result.graph.findVertex(_.payload.rv === U).get
           for (edge <- result.graph.outputEdgesOf(uVertex)) { // ModelEdge
             // TODO !!!
-            //          val X = edge.dest().payload.rv
+            //          val X = edge.dest.payload.rv
             //          val oldF = result.cpt(X)
             //          result.deleteEdge(edge) // TODO: not functional
             //          val smallerF: Factor = makeFactorFor(X)
@@ -275,7 +275,7 @@ trait BayesianNetworkModule {
             //            // TODO c(U) = e.valueOf(U)
             //            // TODO smallerF(c) = oldF(c)
             //          }
-            // TODO result.setCPT(edge.getDest().getPayload, smallerF) // TODO should be setting on the return value
+            // TODO result.setCPT(edge.getDest.getPayload, smallerF) // TODO should be setting on the return value
           }
         }
         result
@@ -315,7 +315,7 @@ trait BayesianNetworkModule {
     //    val R = randomVariables.filter(!Q.contains(_)).toSet
     //    val π = pruned.minDegreeOrder(R)
     //
-    //    val S = π.foldLeft(pruned.randomVariables().map(rv => pruned.cpt(rv).projectRowsConsistentWith(eOpt)).toSet)(
+    //    val S = π.foldLeft(pruned.randomVariables.map(rv => pruned.cpt(rv).projectRowsConsistentWith(eOpt)).toSet)(
     //      (S, rv) => {
     //        val allMentions = S.filter(_.mentions(rv))
     //        (S -- allMentions) + allMentions.reduce(_ * _).sumOut(rv)
@@ -339,12 +339,12 @@ trait BayesianNetworkModule {
     //    // at this point (since we're iterating over *all* variables in Q)
     //    // S will contain exactly one trivial Factor
     //
-    //    assert(S.size == 1)
+    //    assert(S.size === 1)
     //
     //    val sl = S.toList
     //    val result = sl(0)
     //
-    //    // assert(result.numCases() == 1)
+    //    // assert(result.numCases === 1)
     //
     //    (result(List()), pruned)
     //  }
@@ -364,7 +364,7 @@ trait BayesianNetworkModule {
 
     //  def minDegreeOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
     //    val X = Set[RandomVariable[_]]() ++ pX
-    //    val ig = interactionGraph()
+    //    val ig = interactionGraph
     //    while (X.size > 0) {
     //      val xVertices = X.map(ig.findVertex(_).get)
     //      val rv = ig.vertexWithFewestNeighborsAmong(xVertices).payload
@@ -377,7 +377,7 @@ trait BayesianNetworkModule {
     //  def minFillOrder(pX: Set[RandomVariable[_]]): List[RandomVariable[_]] = {
     //
     //    val X = Set[RandomVariable[_]]() ++ pX
-    //    val ig = interactionGraph()
+    //    val ig = interactionGraph
     //
     //    while (X.size > 0) {
     //      val xVertices = X.map(ig.findVertex(_).get)
@@ -411,7 +411,7 @@ trait BayesianNetworkModule {
     def factorElimination2(Q: Set[RandomVariable[T]], τ: EliminationTree[T], f: Factor[T]): (BayesianNetwork[T], Factor[T]) = {
       while (τ.graph.vertices.size > 1) {
         // remove node i (other than r) that has single neighbor j in τ
-        val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_.payload == f).get)
+        val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_.payload === f).get)
         fl.map(i => {
           val j = τ.graph.neighbors(i).iterator.next()
           val ɸ_i = i.payload
@@ -424,7 +424,7 @@ trait BayesianNetworkModule {
 
     //  def factorElimination3(Q: Set[RandomVariable[_]], τ: EliminationTree, f: Factor): Factor = {
     //    // Q is a subset of C_r
-    //    while (τ.vertices().size > 1) {
+    //    while (τ.vertices.size > 1) {
     //      // remove node i (other than r) that has single neighbor j in tau
     //      val fl = τ.firstLeafOtherThan(τ.findVertex(f).get)
     //      fl.map(i => {
@@ -450,7 +450,7 @@ trait BayesianNetworkModule {
         // TODO val root = chooseRoot(τ)
         // TODO pullMessagesTowardsRoot()
         // TODO pushMessagesFromRoot()
-        for (i <- τ.graph.vertices) {
+        τ.graph.vertices foreach { v =>
 
         }
         ???

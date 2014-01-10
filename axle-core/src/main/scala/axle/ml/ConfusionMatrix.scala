@@ -26,8 +26,8 @@ class ConfusionMatrix[T, C: Ordering, L: Ordering](classifier: Classifier[T, C],
 
   val formatNumber = (i: Int) => ("%" + width + "d").format(i)
 
-  lazy val rowSums = counts.rowSums()
-  lazy val columnSums = counts.columnSums()
+  lazy val rowSums = counts.rowSums
+  lazy val columnSums = counts.columnSums
 
   lazy val asString = (labelList.zipWithIndex.map({
     case (label, r) => ((0 until counts.columns).map(c => formatNumber(counts(r, c))).mkString(" ") + " : " + formatNumber(rowSums(r, 0)) + " " + label + "\n")

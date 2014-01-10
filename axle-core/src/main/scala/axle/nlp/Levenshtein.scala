@@ -2,6 +2,7 @@ package axle.nlp
 
 import spire.algebra.MetricSpace
 import axle.matrix._
+import spire.implicits._
 
 /**
  * Based on the Scala implementation of
@@ -22,7 +23,7 @@ object Levenshtein extends MetricSpace[String, Int] {
       0,
       (r: Int) => r,
       (c: Int) => c,
-      (r: Int, c: Int, diag: Int, left: Int, top: Int) => min(left + 1, top + 1, diag + (if (s1(r - 1) == s2(c - 1)) 0 else 1)))
+      (r: Int, c: Int, diag: Int, left: Int, top: Int) => min(left + 1, top + 1, diag + (if (s1(r - 1) === s2(c - 1)) 0 else 1)))
 
     d(lenStr1, lenStr2)
   }

@@ -3,6 +3,7 @@ package axle.matrix
 import math.sqrt
 import axle.algebra.FunctionPair
 import org.jblas.DoubleMatrix
+import spire.implicits._
 
 object JblasMatrixModule extends JblasMatrixModule
 
@@ -197,7 +198,7 @@ trait JblasMatrixModule extends MatrixModule {
       (0 until columns) foreach { c =>
         val fc = f(column(c))
         (0 until rows) foreach { r =>
-          // assumes fc.rows == this.rows
+          // assumes fc.rows === this.rows
           jblas.put(r, c, fpA.backward(fc(r, 0)))
         }
       }
@@ -269,7 +270,7 @@ trait JblasMatrixModule extends MatrixModule {
 
   override def median(m: Matrix[Double]): Matrix[Double] = {
     val sorted = m.sortColumns
-    if (m.rows % 2 == 0) {
+    if (m.rows % 2 === 0) {
       (sorted.row(m.rows / 2 - 1) + sorted.row(m.rows / 2)) / 2.0
     } else {
       sorted.row(m.rows / 2)
@@ -294,8 +295,8 @@ trait JblasMatrixModule extends MatrixModule {
    * Principal Component Analysis (PCA)
    *
    * assumes that the input matrix, Xnorm, has been normalized, in other words:
-   *   mean of each column == 0.0
-   *   stddev of each column == 1.0 (I'm not clear if this is a strict requirement)
+   *   mean of each column === 0.0
+   *   stddev of each column === 1.0 (I'm not clear if this is a strict requirement)
    *
    * http://folk.uio.no/henninri/pca_module/
    * http://public.lanl.gov/mewall/kluwer2002.html

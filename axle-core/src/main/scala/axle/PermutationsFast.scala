@@ -1,6 +1,7 @@
 package axle
 
 import axle._
+import spire.implicits._
 
 /**
  * Based on Python's itertools.permutations function
@@ -38,7 +39,7 @@ class PermutationsFast[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[Ind
       var broken = false
       while (i >= 0 && !broken) {
         cycles(i) -= 1
-        if (cycles(i) == 0) {
+        if (cycles(i) === 0) {
           indices(i until n) = indices(i + 1 until n) ++ indices(i until i + 1)
           cycles(i) = n - i
         } else {

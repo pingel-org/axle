@@ -33,29 +33,29 @@ trait ArrayMatrixModule extends MatrixModule {
 
     // def updat(r: Int, c: Int, v: T) = _storage(r * nColumns + c) = v
 
-    def toList(): List[T] = _storage.toList
+    def toList: List[T] = _storage.toList
 
     def column(c: Int) = matrix((0 until nRows).map(this(_, c)).toArray, nRows, 1)
 
     def row(r: Int) = matrix((0 until nColumns).map(this(r, _)).toArray, 1, nColumns)
 
-    def isEmpty(): Boolean = ???
-    def isRowVector(): Boolean = columns == 1
-    def isColumnVector(): Boolean = rows == 1
-    def isVector(): Boolean = isRowVector || isColumnVector
-    def isSquare(): Boolean = columns == rows
-    def isScalar(): Boolean = isRowVector && isColumnVector
+    def isEmpty: Boolean = ???
+    def isRowVector: Boolean = columns === 1
+    def isColumnVector: Boolean = rows === 1
+    def isVector: Boolean = isRowVector || isColumnVector
+    def isSquare: Boolean = columns === rows
+    def isScalar: Boolean = isRowVector && isColumnVector
 
-    def dup(): Matrix[T] = matrix(_storage.clone, nRows, nColumns)
-    def negate(): Matrix[T] = ???
-    def transpose(): Matrix[T] = ???
-    def diag(): Matrix[T] = ???
-    def invert(): Matrix[T] = ???
-    def ceil(): Matrix[Int] = ???
-    def floor(): Matrix[Int] = ???
-    def log(): Matrix[Double] = ???
-    def log10(): Matrix[Double] = ???
-    def fullSVD(): (Matrix[T], Matrix[T], Matrix[T]) = ???
+    def dup: Matrix[T] = matrix(_storage.clone, nRows, nColumns)
+    def negate: Matrix[T] = ???
+    def transpose: Matrix[T] = ???
+    def diag: Matrix[T] = ???
+    def invert: Matrix[T] = ???
+    def ceil: Matrix[Int] = ???
+    def floor: Matrix[Int] = ???
+    def log: Matrix[Double] = ???
+    def log10: Matrix[Double] = ???
+    def fullSVD: (Matrix[T], Matrix[T], Matrix[T]) = ???
 
     def pow(p: Double): Matrix[T] = ???
 
@@ -81,7 +81,7 @@ trait ArrayMatrixModule extends MatrixModule {
     def divPointwise(other: Matrix[T]) = ???
     def concatenateHorizontally(right: Matrix[T]): Matrix[T] = ???
     def concatenateVertically(under: Matrix[T]): Matrix[T] = ???
-    def solve(B: Matrix[T]): Matrix[T] = ??? // returns X, where this == A and A x X = B
+    def solve(B: Matrix[T]): Matrix[T] = ??? // returns X, where this === A and A x X = B
 
     // Operations on a matrix and a column/row vector
 
@@ -102,21 +102,21 @@ trait ArrayMatrixModule extends MatrixModule {
     def and(other: Matrix[T]): Matrix[Boolean] = ???
     def or(other: Matrix[T]): Matrix[Boolean] = ???
     def xor(other: Matrix[T]): Matrix[Boolean] = ???
-    def not(): Matrix[Boolean] = ???
+    def not: Matrix[Boolean] = ???
 
     // various mins and maxs
 
-    def max(): T = ???
-    def argmax(): (Int, Int) = ???
-    def min(): T = ???
-    def argmin(): (Int, Int) = ???
-    def columnMins(): Matrix[T] = ???
-    def columnMaxs(): Matrix[T] = ???
+    def max: T = ???
+    def argmax: (Int, Int) = ???
+    def min: T = ???
+    def argmin: (Int, Int) = ???
+    def columnMins: Matrix[T] = ???
+    def columnMaxs: Matrix[T] = ???
 
     // In-place versions
 
-    def ceili(): Unit = ???
-    def floori(): Unit = ???
+    def ceili: Unit = ???
+    def floori: Unit = ???
     def powi(p: Double): Unit = ???
 
     def addi(x: T): Unit = ???
@@ -131,19 +131,19 @@ trait ArrayMatrixModule extends MatrixModule {
     def subiRowVector(row: Matrix[T]): Unit = ???
     def subiColumnVector(column: Matrix[T]): Unit = ???
 
-    def rowSums(): Matrix[T] = ???
-    def columnSums(): Matrix[T] = ???
+    def rowSums: Matrix[T] = ???
+    def columnSums: Matrix[T] = ???
 
     // def columnArgmins
     // def columnArgmaxs
 
-    def columnMeans(): Matrix[T] = ???
-    def sortColumns(): Matrix[T] = ???
+    def columnMeans: Matrix[T] = ???
+    def sortColumns: Matrix[T] = ???
 
-    def rowMins(): Matrix[T] = ???
-    def rowMaxs(): Matrix[T] = ???
-    def rowMeans(): Matrix[T] = ???
-    def sortRows(): Matrix[T] = ???
+    def rowMins: Matrix[T] = ???
+    def rowMaxs: Matrix[T] = ???
+    def rowMeans: Matrix[T] = ???
+    def sortRows: Matrix[T] = ???
 
     // higher order fuctions
 

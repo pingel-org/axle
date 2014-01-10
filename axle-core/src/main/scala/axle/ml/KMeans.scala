@@ -161,10 +161,10 @@ trait KMeansModule {
      */
 
     def centroids(X: Matrix[Double], K: Int, assignments: Matrix[Int]): (Matrix[Double], Seq[Int]) = {
-      val A = matrix(X.rows, K, (r: Int, c: Int) => if (c == assignments(r, 0)) 1.0 else 0.0)
+      val A = matrix(X.rows, K, (r: Int, c: Int) => if (c === assignments(r, 0)) 1d else 0d)
       val distances = A.t ⨯ X // K x N
-      val counts = A.columnSums().t // K x 1
-      val unassignedClusterIds = (0 until K).filter(counts(_, 0) == 0.0)
+      val counts = A.columnSums.t // K x 1
+      val unassignedClusterIds = (0 until K).filter(counts(_, 0) === 0d)
       (distances.divColumnVector(counts), unassignedClusterIds)
     }
 

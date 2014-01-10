@@ -8,9 +8,9 @@ trait ChiSquaredTestModule {
   import JblasMatrixModule._
 
   def χ2(tally: Matrix[Double]): Double = {
-    val rowTotals = tally.rowSums()
-    val columnTotals = tally.columnSums()
-    val total = rowTotals.columnSums()(0, 0)
+    val rowTotals = tally.rowSums
+    val columnTotals = tally.columnSums
+    val total = rowTotals.columnSums(0, 0)
     (for (r <- 0 until tally.rows; c <- 0 until tally.columns) yield {
       val observed = tally(r, c)
       val expected = rowTotals(r, 0) * columnTotals(0, c) / total

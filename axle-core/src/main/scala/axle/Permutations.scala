@@ -1,6 +1,7 @@
 package axle
 
 import Stream.{ empty, cons }
+import spire.implicits._
 
 /**
  * Based on Python's itertools.permutations function
@@ -47,7 +48,7 @@ class Permutations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedS
     indices0: Array[Int],
     cycles0: Array[Int],
     i0: Int): (Option[IndexedSeq[E]], Array[Int], Array[Int], Int, Boolean) =
-    if (cycles0(i0) == 0) {
+    if (cycles0(i0) === 0) {
       val (indices1, cycles1) = loop2branchTrue(indices0, cycles0, i0)
       (None, indices1, cycles1, i0 - 1, false)
     } else {

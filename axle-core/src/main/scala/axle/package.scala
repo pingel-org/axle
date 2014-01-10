@@ -1,6 +1,6 @@
 
 /**
- * Copyright (c) 2012 Adam Pingel
+ * Copyright (c) 2011-2013 Adam Pingel
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -62,9 +62,9 @@ package object axle {
    */
 
   def ackermann(m: Long, n: Long): Long =
-    if (m == 0) {
+    if (m === 0) {
       n + 1
-    } else if (m > 0 && n == 0) {
+    } else if (m > 0 && n === 0) {
       ackermann(m - 1, 1)
     } else {
       ackermann(m - 1, ackermann(m, n - 1))
@@ -102,8 +102,7 @@ package object axle {
   }
 
   implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
-    def eqv(x: Set[S], y: Set[S]): Boolean = x equals y
-    //(x.size == y.size) && x.intersect(y).size == x.size
+    def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
   }
 
 }

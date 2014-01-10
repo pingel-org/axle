@@ -1,6 +1,7 @@
 package axle.matrix
 
 import axle.algebra._
+import spire.implicits._
 
 trait MatrixModule {
 
@@ -43,26 +44,26 @@ trait MatrixModule {
     def column(j: Int): Matrix[T]
     def row(i: Int): Matrix[T]
 
-    def isEmpty(): Boolean
-    def isRowVector(): Boolean
-    def isColumnVector(): Boolean
-    def isVector(): Boolean
-    def isSquare(): Boolean
-    def isScalar(): Boolean
+    def isEmpty: Boolean
+    def isRowVector: Boolean
+    def isColumnVector: Boolean
+    def isVector: Boolean
+    def isSquare: Boolean
+    def isScalar: Boolean
     // resize
     // reshape
 
-    def dup(): Matrix[T]
-    def negate(): Matrix[T]
-    def transpose(): Matrix[T]
-    def diag(): Matrix[T]
-    def invert(): Matrix[T]
-    def ceil(): Matrix[Int]
-    def floor(): Matrix[Int]
-    def log(): Matrix[Double]
-    def log10(): Matrix[Double]
-    def fullSVD(): (Matrix[T], Matrix[T], Matrix[T]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
-    // def truth(): M[Boolean]
+    def dup: Matrix[T]
+    def negate: Matrix[T]
+    def transpose: Matrix[T]
+    def diag: Matrix[T]
+    def invert: Matrix[T]
+    def ceil: Matrix[Int]
+    def floor: Matrix[Int]
+    def log: Matrix[Double]
+    def log10: Matrix[Double]
+    def fullSVD: (Matrix[T], Matrix[T], Matrix[T]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
+    // def truth: M[Boolean]
 
     def pow(p: Double): Matrix[T]
 
@@ -83,7 +84,7 @@ trait MatrixModule {
     def divPointwise(other: Matrix[T]): Matrix[T]
     def concatenateHorizontally(right: Matrix[T]): Matrix[T]
     def concatenateVertically(under: Matrix[T]): Matrix[T]
-    def solve(B: Matrix[T]): Matrix[T] // returns X, where this == A and A x X = B
+    def solve(B: Matrix[T]): Matrix[T] // returns X, where this === A and A x X = B
 
     // Operations on a matrix and a column/row vector
 
@@ -108,29 +109,29 @@ trait MatrixModule {
     def and(other: Matrix[T]): Matrix[Boolean]
     def or(other: Matrix[T]): Matrix[Boolean]
     def xor(other: Matrix[T]): Matrix[Boolean]
-    def not(): Matrix[Boolean]
+    def not: Matrix[Boolean]
 
     // various mins and maxs
 
-    def max(): T
-    def argmax(): (Int, Int)
-    def min(): T
-    def argmin(): (Int, Int)
+    def max: T
+    def argmax: (Int, Int)
+    def min: T
+    def argmin: (Int, Int)
 
-    def rowSums(): Matrix[T]
-    def columnSums(): Matrix[T]
-    def columnMins(): Matrix[T]
-    def columnMaxs(): Matrix[T]
+    def rowSums: Matrix[T]
+    def columnSums: Matrix[T]
+    def columnMins: Matrix[T]
+    def columnMaxs: Matrix[T]
     // def columnArgmins
     // def columnArgmaxs
 
-    def columnMeans(): Matrix[T]
-    def sortColumns(): Matrix[T]
+    def columnMeans: Matrix[T]
+    def sortColumns: Matrix[T]
 
-    def rowMins(): Matrix[T]
-    def rowMaxs(): Matrix[T]
-    def rowMeans(): Matrix[T]
-    def sortRows(): Matrix[T]
+    def rowMins: Matrix[T]
+    def rowMaxs: Matrix[T]
+    def rowMeans: Matrix[T]
+    def sortRows: Matrix[T]
 
     // Higher-order methods
 
@@ -146,11 +147,11 @@ trait MatrixModule {
 
     // aliases
 
-    def t() = transpose()
-    def tr() = transpose()
-    def inv() = invert()
+    def t = transpose
+    def tr = transpose
+    def inv = invert
 
-    def scalar() = {
+    def scalar = {
       assert(isScalar)
       this(0, 0)
     }
@@ -194,9 +195,9 @@ trait MatrixModule {
     def ∨(other: Matrix[T]) = or(other)
     def ⊕(other: Matrix[T]) = xor(other)
     def ⊻(other: Matrix[T]) = xor(other)
-    def !() = not()
-    def ~() = not()
-    def ¬() = not()
+    def ! = not
+    def ~ = not
+    def ¬ = not
 
   }
 
@@ -219,7 +220,7 @@ trait MatrixModule {
 
   def median(m: Matrix[Double]): Matrix[Double] = {
     val sorted = m.sortColumns
-    if (m.rows % 2 == 0) {
+    if (m.rows % 2 === 0) {
       (sorted.row(m.rows / 2 - 1) + sorted.row(m.rows / 2)) / 2.0
     } else {
       sorted.row(m.rows / 2)

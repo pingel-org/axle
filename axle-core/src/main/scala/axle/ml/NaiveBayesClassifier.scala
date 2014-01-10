@@ -58,7 +58,7 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
     grv = C,
     distribution = Some(new TallyDistribution1(
       featureTally.filter {
-        case (k, v) => k._2 == featureRandomVariable.name
+        case (k, v) => k._2 === featureRandomVariable.name
       }.map {
         case (k, v) => ((k._3, k._1), v)
       }.withDefaultValue(0L)))))
