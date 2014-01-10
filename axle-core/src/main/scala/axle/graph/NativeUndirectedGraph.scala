@@ -121,6 +121,11 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
     ??? // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
   }
 
+  def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean = {
+    val (v1, v2) = vertices(edge)
+    (v1 === a1 && v2 === a2) || (v2 === a1 && v1 === a2)
+  }
+  
   def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): NativeUndirectedGraph[NVP, NEP] =
     NativeUndirectedGraph(vps.map(vpf),
       (newVs: Seq[Vertex[NVP]]) =>

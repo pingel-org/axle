@@ -287,7 +287,7 @@ trait BayesianNetworkModule {
       val vars = eOpt.map(Q ++ _.map(_.rv)).getOrElse(Q)
 
       def nodePruneStream(g: BayesianNetwork[T]): Stream[BayesianNetwork[T]] = {
-        val xVertices = g.graph.leaves().toSet -- vars.map(rv => g.graph.findVertex(_.payload.rv === rv).get)
+        val xVertices = g.graph.leaves.toSet -- vars.map(rv => g.graph.findVertex(_.payload.rv === rv).get)
         xVertices.size match {
           case 0 => empty
           case _ => {
