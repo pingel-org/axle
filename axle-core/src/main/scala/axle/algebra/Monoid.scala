@@ -15,9 +15,9 @@ object MonoidLaws {
     m.op(x, m.id) === x
   }
 
-  def checkAssociativity[A: Monoid](x: A, y: A, z: A): Boolean = {
+  def checkAssociativity[A: Monoid: Eq](x: A, y: A, z: A): Boolean = {
     val m = implicitly[Monoid[A]]
-    m.op(m.op(x, y), z) == m.op(x, m.op(y, z))
+    m.op(m.op(x, y), z) === m.op(x, m.op(y, z))
   }
 
   // hyper log log, etc

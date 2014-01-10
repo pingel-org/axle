@@ -2,6 +2,7 @@
 package axle.ast.view
 
 import axle.ast._
+import spire.implicits._
 
 case class FormatterConfig(
   language: Language,
@@ -61,8 +62,8 @@ abstract class AstNodeFormatter[R, S](
       state._node2lineno ++ List(node -> lineNo)),
       subState)
 
-  def _indent(): AstNodeFormatter[R, S] = {
-    if (state.column == 0 && state.needsIndent) {
+  def _indent: AstNodeFormatter[R, S] = {
+    if (state.column === 0 && state.needsIndent) {
       val newF = (1 to state.indentationLevel).foldLeft(this)({ case (f, x) => f.accSpaces })
       this(FormatterState(
         newF.state.indentationLevel,
@@ -93,8 +94,8 @@ abstract class AstNodeFormatter[R, S](
           case Some(true) => true
           case Some(false) => attr_name match {
             // TODO assumptions about the names of "left" and "right" should be externalized
-            case "left" => grammar.precedenceOf(subtreeRule) == grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) == "right" // (2 ** 3) ** 4
-            case "right" => grammar.precedenceOf(subtreeRule) == grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) == "left"
+            case "left" => grammar.precedenceOf(subtreeRule) === grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) === "right" // (2 ** 3) ** 4
+            case "right" => grammar.precedenceOf(subtreeRule) === grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) === "left"
             case _ => false
           }
           case None => false // is this right?
@@ -104,7 +105,7 @@ abstract class AstNodeFormatter[R, S](
     }
 
   def raw(element: String): AstNodeFormatter[R, S] = {
-    val f1 = this._indent()
+    val f1 = this._indent
     val lines = element.split("\n")
     val f2 = lines.size match {
       case 0 | 1 =>
@@ -133,8 +134,8 @@ abstract class AstNodeFormatter[R, S](
   def wrap(indent: Boolean = false): AstNodeFormatter[R, S] =
     newline(true, None, indent)
 
-  def space(): AstNodeFormatter[R, S] = {
-    val f1 = this._indent()
+  def space: AstNodeFormatter[R, S] = {
+    val f1 = this._indent
     val f2 = (if (state.column > 80) {
       f1.wrap()
     } else {
@@ -150,7 +151,7 @@ abstract class AstNodeFormatter[R, S](
     f2.accSpace
   }
 
-  def indent(): AstNodeFormatter[R, S] =
+  def indent: AstNodeFormatter[R, S] =
     this(FormatterState(
       state.indentationLevel + 1,
       state.column,
@@ -160,7 +161,7 @@ abstract class AstNodeFormatter[R, S](
       state._node2lineno),
       subState)
 
-  def dedent(): AstNodeFormatter[R, S] =
+  def dedent: AstNodeFormatter[R, S] =
     this(FormatterState(
       state.indentationLevel - 1,
       state.column,
@@ -170,7 +171,7 @@ abstract class AstNodeFormatter[R, S](
       state._node2lineno),
       subState)
 
-  def beginSpan(): AstNodeFormatter[R, S] = accPushStack
+  def beginSpan: AstNodeFormatter[R, S] = accPushStack
 
   def endSpan(spanType: String): AstNodeFormatter[R, S] = accPopAndWrapStack(spanType)
 
@@ -206,17 +207,17 @@ abstract class AstNodeFormatter[R, S](
   }
 
   def keyword(kw: String): AstNodeFormatter[R, S] =
-    _indent().accSpan("keyword", kw, kw.length)
+    _indent.accSpan("keyword", kw, kw.length)
 
   def operator(op: String): AstNodeFormatter[R, S] =
-    _indent().accSpan("operator", op, op.length)
+    _indent.accSpan("operator", op, op.length)
 
   // NOTE: may not need to escape non-html
   def repr(r: String): AstNodeFormatter[R, S] =
-    _indent().accSpan("repr", xml.Utility.escape(r), r.length)
+    _indent.accSpan("repr", xml.Utility.escape(r), r.length)
 
   def name(n: String): AstNodeFormatter[R, S] = {
-    _indent()
+    _indent // TODO !!! side effect ???
     val special = false // TODO
     special match {
       case true => {
@@ -228,7 +229,7 @@ abstract class AstNodeFormatter[R, S](
     }
   }
 
-  def enterFor(): AstNodeFormatter[R, S] =
+  def enterFor: AstNodeFormatter[R, S] =
     this(FormatterState(
       state.indentationLevel,
       state.column,
@@ -253,7 +254,7 @@ abstract class AstNodeFormatter[R, S](
       subState)
   }
 
-  def leaveFor(): AstNodeFormatter[R, S] =
+  def leaveFor: AstNodeFormatter[R, S] =
     this(FormatterState(
       state.indentationLevel,
       state.column,
@@ -263,6 +264,6 @@ abstract class AstNodeFormatter[R, S](
       state._node2lineno),
       subState)
 
-  // def result(): String = toka.toString()
+  // def result: String = toka.toString
 
 }

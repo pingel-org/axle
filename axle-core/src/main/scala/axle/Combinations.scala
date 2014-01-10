@@ -11,6 +11,7 @@ package axle
 
 import annotation.tailrec
 import Stream.{ cons, empty }
+import spire.implicits._
 
 object Combinations {
 
@@ -46,7 +47,7 @@ class Combinations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedS
     } else {
       val indices1 = indices0.zipWithIndex.map({
         case (v, j) =>
-          if (j == i0) {
+          if (j === i0) {
             v + 1
           } else if (j >= (i0 + 1) && j < r) {
             (indices0(j - 1) + 1)

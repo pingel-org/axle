@@ -36,7 +36,7 @@ abstract class Game[G <: Game[G]] {
         (move, state, minimax(newState, depth - 1, heuristic)._3)
       })
       val bestValue = moveValue.map(mcr => (mcr._3)(state.player)).max
-      val matches = moveValue.filter(mcr => (mcr._3)(state.player) == bestValue).toIndexedSeq
+      val matches = moveValue.filter(mcr => (mcr._3)(state.player) === bestValue).toIndexedSeq
       matches(nextInt(matches.length))
     }
 

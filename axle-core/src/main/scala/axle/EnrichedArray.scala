@@ -1,9 +1,11 @@
 package axle
 
+import spire.implicits._
+
 case class EnrichedArray[T: Manifest](arr: Array[T]) {
 
   def apply(range: Range): Array[T] = {
-    assert(range.step == 1)
+    assert(range.step === 1)
     if (range.isEmpty) {
       List[T]().toArray
     } else {

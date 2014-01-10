@@ -3,6 +3,7 @@ package axle.graph
 import axle._
 
 import spire.algebra._
+import spire.implicits._
 
 trait UndirectedGraph[VP, EP] {
 
@@ -10,29 +11,23 @@ trait UndirectedGraph[VP, EP] {
 
   type ES
 
-  def vertexPayloads(): Seq[VP]
-  def edgeFunction(): Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]
+  def vertexPayloads: Seq[VP]
+  def edgeFunction: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]
 
-  def vertices(): Set[Vertex[VP]]
-  def allEdges(): Set[Edge[ES, EP]]
+  def vertices: Set[Vertex[VP]]
+  def allEdges: Set[Edge[ES, EP]]
 
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]]
-//  def unlink(e: Edge[ES, EP]): G[VP, EP]
-//  def unlink(v1: Vertex[VP], v2: Vertex[VP]): G[VP, EP]
+  //  def unlink(e: Edge[ES, EP]): G[VP, EP]
+  //  def unlink(v1: Vertex[VP], v2: Vertex[VP]): G[VP, EP]
   def areNeighbors(v1: Vertex[VP], v2: Vertex[VP]): Boolean
 
-  def isClique(vs: collection.GenTraversable[Vertex[VP]]): Boolean = (for {
-    vi <- vs
-    vj <- vs
-  } yield {
-    (vi == vj) || areNeighbors(vi, vj)
-  }).forall(identity)
-
+  def isClique(vs: collection.GenTraversable[Vertex[VP]]): Boolean
+    
   def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): Int = (for {
     vi <- vs
     vj <- vs
-  } yield { if (areNeighbors(vi, vj)) 1 else 0 }
-  ).sum
+  } yield { if (areNeighbors(vi, vj)) 1 else 0 }).sum
 
   def forceClique(vs: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): G[VP, EP]
 
@@ -70,10 +65,7 @@ trait UndirectedGraph[VP, EP] {
     }
   }
 
-  def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean = {
-    val (v1, v2) = vertices(edge)
-    (v1 == a1 && v2 == a2) || (v2 == a1 && v1 == a2)
-  }
+  def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean
 
   def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): G[NVP, NEP]
 

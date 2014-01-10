@@ -72,7 +72,7 @@ case class LLParserState(
       LLParserState(grammar, input, stack.tail, i + 1)
     }
     case Reduce(rule) => {
-      assert(stack.head == rule.from)
+      assert(stack.head === rule.from)
       LLParserState(grammar, input, rule.rhs ++ stack.tail, i)
     }
     case ParseError(msg) => { sys.error(this.toString + "\nparse error: " + msg) }
@@ -93,6 +93,6 @@ case class LLParserState(
 
   }
 
-  def finished(): Boolean = input.length === i && stack.head === ⊥
+  def finished: Boolean = input.length === i && stack.head === ⊥
 
 }

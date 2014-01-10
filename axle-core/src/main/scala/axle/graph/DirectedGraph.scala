@@ -1,14 +1,15 @@
 package axle.graph
 
 import spire.algebra._
+import spire.implicits._
 
 trait DirectedGraph[VP, EP] {
 
   type G[VP, EP] <: DirectedGraph[VP, EP]
   type ES
 
-  def vertexPayloads(): Seq[VP]
-  def edgeFunction(): Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]
+  def vertexPayloads: Seq[VP]
+  def edgeFunction: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]
 
   def vertices: Set[Vertex[VP]]
   def allEdges: Set[Edge[ES, EP]]
@@ -21,7 +22,7 @@ trait DirectedGraph[VP, EP] {
   //def deleteVertex(v: Vertex[VP]): G[VP, EP]
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]]
   def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[ES, EP]]
-  def leaves(): Set[Vertex[VP]]
+  def leaves: Set[Vertex[VP]]
   def neighbors(v: Vertex[VP]): Set[Vertex[VP]]
   def precedes(v1: Vertex[VP], v2: Vertex[VP]): Boolean
   def predecessors(v: Vertex[VP]): Set[Vertex[VP]]
@@ -53,7 +54,7 @@ trait DirectedGraph[VP, EP] {
   def ancestors(vs: Set[Vertex[VP]]): Set[Vertex[VP]] =
     vs.foldLeft(Set[Vertex[VP]]())((a, v) => _ancestors(v, a))
 
-  def isAcyclic(): Boolean
+  def isAcyclic: Boolean
 
   def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[ES, EP]]]
   // def moralGraph(): UndirectedGraph[_, _] = ???

@@ -1,6 +1,7 @@
 package axle.ast.view
 
 import axle.ast._
+import spire.implicits._
 
 object Emission {
 
@@ -63,23 +64,23 @@ object Emission {
         case _ => formatter.keyword(rest)
       }).getOrElse(formatter)
 
-      case (_, Sp()) => formatter.space()
+      case (_, Sp()) => formatter.space
 
       case (_, Op(value)) => formatter.operator(value)
 
       case (Some(AstNodeRule(_, m, _)), For(subtree, body)) => {
-        formatter.enterFor()
+        formatter.enterFor
         val elems = m(subtree).asInstanceOf[AstNodeList]
         for (i <- 0 until elems.list.length) {
           val c = elems.list(i)
           formatter.updateFor("TODO c")
           emit(body, Some(c), grammar, formatter)
         }
-        formatter.leaveFor()
+        formatter.leaveFor
       }
 
       case (Some(AstNodeRule(_, m, _)), ForDel(subtree, body, delimiter)) => {
-        formatter.enterFor()
+        formatter.enterFor
         val elems = m(subtree).asInstanceOf[AstNodeList]
         for (i <- 0 until elems.list.length) {
           val c = elems.list(i)
@@ -89,7 +90,7 @@ object Emission {
             formatter.raw(delimiter)
           }
         }
-        formatter.leaveFor()
+        formatter.leaveFor
       }
 
       case (Some(AstNodeRule(_, m, _)), J(subtree, delimiter)) => {
@@ -153,9 +154,9 @@ object Emission {
         (0 until argnames.list.length).foldLeft(formatter)({
           case (f, i) => {
             val flags = m("flags").asInstanceOf[AstNodeValue].value
-            val f1 = if ((((flags.equals("4")) && i == arity - 1) || ((flags.equals("12")) && i == arity - 2))) {
+            val f1 = if ((((flags.get === "4") && i === arity - 1) || ((flags.get === "12") && i == arity - 2))) {
               f.raw("*")
-            } else if ((flags.equals("8") || flags.equals("12")) && i == arity - 1) {
+            } else if ((flags.get === "8" || flags.get === "12") && i === arity - 1) {
               f.raw("**")
             } else {
               f
@@ -167,7 +168,7 @@ object Emission {
               f2
             }
             if (i < arity - 1) {
-              f3.raw(",").space()
+              f3.raw(",").space
             } else {
               f2
             }
@@ -193,7 +194,7 @@ object Emission {
         .foldLeft(fLn)({ (f, i) =>
           {
             if (i < (l.length - 1)) {
-              emit(grammar, l(i), f).space()
+              emit(grammar, l(i), f).space
             } else {
               f
             }
@@ -203,7 +204,7 @@ object Emission {
       case AstNodeRule(r, m, lineno) => {
         val f = formatter.conformTo(node)
         if (f.shouldHighlight(node)) {
-          emit(grammar.name2rule(r).statement, Some(node), grammar, f.beginSpan()).endSpan("highlight")
+          emit(grammar.name2rule(r).statement, Some(node), grammar, f.beginSpan).endSpan("highlight")
         } else {
           emit(grammar.name2rule(r).statement, Some(node), grammar, f)
         }

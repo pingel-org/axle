@@ -48,7 +48,7 @@ case class NativeDirectedGraph[VP: Eq, EP: Eq](
 
   def dest(edge: Edge[ES, EP]): Vertex[VP] = edge.storage._2
 
-  def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[ES, EP]] = vertex2outedges(from).find(dest(_) == to)
+  def findEdge(from: Vertex[VP], to: Vertex[VP]): Option[Edge[ES, EP]] = vertex2outedges(from).find(dest(_) === to)
 
   // TODO findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = _vertices.find(f)
@@ -61,7 +61,7 @@ case class NativeDirectedGraph[VP: Eq, EP: Eq](
 
   def predecessors(v: Vertex[VP]): Set[Vertex[VP]] = vertex2inedges(v).map(source)
 
-  def isLeaf(v: Vertex[VP]): Boolean = vertex2outedges(v).size == 0
+  def isLeaf(v: Vertex[VP]): Boolean = vertex2outedges(v).size === 0
 
   def successors(v: Vertex[VP]): Set[Vertex[VP]] = vertex2outedges(v).map(dest)
 
@@ -89,7 +89,7 @@ case class NativeDirectedGraph[VP: Eq, EP: Eq](
    * TODO: This is just a quick, dirty, slow, and naive algorithm.
    */
 
-  def _shortestPath(source: Vertex[VP], goal: Vertex[VP], visited: Set[Vertex[VP]]): Option[List[Edge[ES, EP]]] = if (source == goal) {
+  def _shortestPath(source: Vertex[VP], goal: Vertex[VP], visited: Set[Vertex[VP]]): Option[List[Edge[ES, EP]]] = if (source === goal) {
     Some(List())
   } else {
     ???

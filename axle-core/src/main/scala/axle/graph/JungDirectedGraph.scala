@@ -7,6 +7,7 @@ import spire.math._
 import spire.algebra._
 import collection.JavaConverters._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
 
 case class JungDirectedGraph[VP: Eq, EP: Eq](
   vps: Seq[VP],
@@ -29,13 +30,12 @@ case class JungDirectedGraph[VP: Eq, EP: Eq](
 
   lazy val vertexSet = verticesSeq.toSet
 
-  vertexSeq.map(jungGraph.addVertex(_)) // TODO check return value
+  vertexSeq foreach { jungGraph.addVertex(_) } // TODO check return value
 
-  ef(vertexSeq).map({
-    case (vi, vj, ep) => {
+  ef(vertexSeq) foreach {
+    case (vi, vj, ep) =>
       jungGraph.addEdge(Edge((vi, vj, ep), edgePayloadFunction), vi, vj) // TODO check return value
-    }
-  })
+  }
 
   def storage: DirectedSparseGraph[Vertex[VP], Edge[ES, EP]] = jungGraph
 
@@ -61,9 +61,9 @@ case class JungDirectedGraph[VP: Eq, EP: Eq](
   // TODO: findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = vertexSeq.find(f)
 
-//  def deleteEdge(e: Edge[ES, EP]) = filterEdges(t => !((source(e), dest(e), e.payload) === t))
-//
-//  def deleteVertex(v: Vertex[VP]) = JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
+  //  def deleteEdge(e: Edge[ES, EP]) = filterEdges(t => !((source(e), dest(e), e.payload) === t))
+  //
+  //  def deleteVertex(v: Vertex[VP]) = JungDirectedGraph(vertices().toSeq.filter(_ != v).map(_.payload), ef)
 
   def filterEdges(f: ((Vertex[VP], Vertex[VP], EP)) => Boolean): JungDirectedGraph[VP, EP] =
     JungDirectedGraph(vps, ((es: Seq[(Vertex[VP], Vertex[VP], EP)]) => es.filter(f)).compose(ef))
@@ -76,7 +76,7 @@ case class JungDirectedGraph[VP: Eq, EP: Eq](
 
   def predecessors(v: Vertex[VP]): Set[Vertex[VP]] = jungGraph.getPredecessors(v).asScala.toSet
 
-  def isLeaf(v: Vertex[VP]): Boolean = jungGraph.getSuccessorCount(v) == 0
+  def isLeaf(v: Vertex[VP]): Boolean = jungGraph.getSuccessorCount(v) === 0
 
   def successors(v: Vertex[VP]): Set[Vertex[VP]] = jungGraph.getSuccessors(v).asScala.toSet
 
@@ -94,18 +94,14 @@ case class JungDirectedGraph[VP: Eq, EP: Eq](
   def isAcyclic: Boolean = ???
 
   def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[Edge[ES, EP]]] = {
-    if (source == goal) {
+    if (source === goal) {
       Some(Nil)
     } else {
-      import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
-      val path = (new DijkstraShortestPath(jungGraph)).getPath(source, goal)
-      if (path == null) {
-        None
-      } else {
-        path.size match {
-          case 0 => None
-          case _ => Some(path.asScala.toList)
-        }
+      Option((new DijkstraShortestPath(jungGraph)).getPath(source, goal)) flatMap { path =>
+        if (path.size === 0)
+          None
+        else
+          Some(path.asScala.toList)
       }
     }
   }

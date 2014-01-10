@@ -1,6 +1,7 @@
 package axle
 
 import Stream.{ cons, empty }
+import spire.implicits._
 
 class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]]) extends Iterable[List[E]] {
 
@@ -11,10 +12,10 @@ class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]]) extends Iterable[L
   def current(indices: IndexedSeq[Int]): List[E] = collections.zip(indices).map({ case (c, i) => c(i) }).toList
 
   def tail(indices0: IndexedSeq[Int], i0: Int): Stream[List[E]] =
-    if (i0 == collections.size) {
+    if (i0 === collections.size) {
       empty
     } else {
-      if (indices0(i0) == -1) {
+      if (indices0(i0) === -1) {
         if (collections(i0).size > 0) {
           val indices1 = indices0.updated(i0, 0)
           if (i0 < collections.size - 1) {

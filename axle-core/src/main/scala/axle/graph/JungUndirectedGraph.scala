@@ -63,10 +63,18 @@ case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   //
   //  // JungUndirectedGraph[VP, EP]
   //  def unlink(v1: Vertex[VP], v2: Vertex[VP]) =
-  //    filterEdges(e => (e._1 == v1 && e._2 == v2) || (e._2 == v1 && e._1 == v2))
+  //    filterEdges(e => (e._1 === v1 && e._2 === v2) || (e._2 === v1 && e._1 === v2))
 
   def areNeighbors(v1: Vertex[VP], v2: Vertex[VP]): Boolean =
     edgesTouching(v1).exists(edge => connects(edge, v1, v2))
+
+  def isClique(vs: collection.GenTraversable[Vertex[VP]]): Boolean =
+    (for {
+      vi <- vs
+      vj <- vs
+    } yield {
+      (vi === vj) || areNeighbors(vi, vj)
+    }).forall(identity)
 
   def forceClique(among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): JungUndirectedGraph[VP, EP] = {
 
@@ -102,7 +110,7 @@ case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   def delete(v: Vertex[VP]): JungUndirectedGraph[VP, EP] = JungUndirectedGraph(vertices.toSeq.filter(_ != v).map(_.payload), ef)
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find(v => neighbors(v).size == 1 && !v.equals(r))
+  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find(v => neighbors(v).size === 1 && !v.equals(r))
 
   /**
    * "decompositions" page 3 (Definition 3, Section 9.3)
@@ -118,6 +126,11 @@ case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
     ???
   }
 
+  def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean = {
+    val (v1, v2) = vertices(edge)
+    (v1 === a1 && v2 === a2) || (v2 === a1 && v1 === a2)
+  }
+ 
   def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): JungUndirectedGraph[NVP, NEP] =
     JungUndirectedGraph(vps.map(vpf),
       (newVs: Seq[Vertex[NVP]]) =>

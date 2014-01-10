@@ -2,6 +2,7 @@ package axle.graph
 
 import axle._
 import spire.algebra._
+import spire.implicits._
 
 case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   vps: Seq[VP],
@@ -48,7 +49,7 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   def vertices(edge: Edge[ES, EP]): (Vertex[VP], Vertex[VP]) = (edge.storage._1, edge.storage._2)
 
   def findEdge(vi: Vertex[VP], vj: Vertex[VP]): Option[Edge[ES, EP]] =
-    _edges.find(e => (vertices(e) == (vi, vj)) || (vertices(e) == (vj, vi))) // Note: no matching on payload
+    _edges.find(e => (vertices(e) === (vi, vj)) || (vertices(e) === (vj, vi))) // Note: no matching on payload
 
   // TODO findVertex needs an index
   def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] = _vertices.find(f)
@@ -66,6 +67,14 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   def unlink(vi: Vertex[VP], vj: Vertex[VP]): NativeUndirectedGraph[VP, EP] = findEdge(vi, vj).map(unlink).getOrElse(this)
 
   def areNeighbors(vi: Vertex[VP], vj: Vertex[VP]): Boolean = edgesTouching(vi).exists(connects(_, vi, vj))
+
+  def isClique(vs: collection.GenTraversable[Vertex[VP]]): Boolean =
+    (for {
+      vi <- vs
+      vj <- vs
+    } yield {
+      (vi === vj) || areNeighbors(vi, vj)
+    }).forall(identity)
 
   def forceClique(among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
 
@@ -104,7 +113,7 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   def delete(v: Vertex[VP]): NativeUndirectedGraph[VP, EP] = NativeUndirectedGraph(vps.filter(_ != v), ef)
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find({ v => neighbors(v).size == 1 && !v.equals(r) })
+  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find({ v => neighbors(v).size === 1 && !v.equals(r) })
 
   def eliminate(v: Vertex[VP], payload: (Vertex[VP], Vertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
     // "decompositions" page 3 (Definition 3, Section 9.3)
@@ -143,7 +152,7 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   //    while (Q.size > 0 && !broken) {
   //      val u = Q.minBy(dist(_)) // Start node in first case
   //      Q -= u
-  //      if (u == target) {
+  //      if (u === target) {
   //        val S = List[V]()
   //        val u = target
   //        while (previous.contains(u)) {
@@ -151,7 +160,7 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   //          u = previous(u)
   //        }
   //      }
-  //      if (dist(u) == Int.MaxValue) {
+  //      if (dist(u) === Int.MaxValue) {
   //        broken = true // all remaining vertices are inaccessible from source
   //      } else {
   //        for (v <- neighbors(u)) { // where v has not yet been removed from Q

@@ -2,11 +2,12 @@ package axle
 
 import collection.mutable.ListBuffer
 import collection.mutable.Buffer
+import spire.implicits._
 
 case class EnrichedMutableBuffer[T](buffer: Buffer[T]) {
 
   def apply(range: Range): Buffer[T] = {
-    assert(range.step == 1)
+    assert(range.step === 1)
     if (range.isEmpty) {
       new ListBuffer[T]()
     } else {
@@ -15,9 +16,9 @@ case class EnrichedMutableBuffer[T](buffer: Buffer[T]) {
   }
 
   def update(r: Range, newvals: Buffer[T]): Unit = {
-    assert(r.step == 1)
-    assert(r.length == newvals.length)
-    for ((i, v) <- r.zip(newvals)) {
+    assert(r.step === 1)
+    assert(r.length === newvals.length)
+    r.zip(newvals) foreach { case (i, v) =>
       buffer(i) = v
     }
   }
