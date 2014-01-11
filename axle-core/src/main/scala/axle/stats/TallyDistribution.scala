@@ -25,10 +25,10 @@ class TallyDistribution0[A](tally: Map[A, Long])
   def probabilityOf(a: A): Real = Real(Rational(tally.get(a).getOrElse(0L), totalCount))
 }
 
-class TallyDistribution1[A, G](tally: Map[(A, G), Long])
+class TallyDistribution1[A, G: Eq](tally: Map[(A, G), Long])
   extends Distribution1[A, G] {
 
-  val gvs = tally.keys.map(k => k._2).toSet
+  val gvs = tally.keys.map(_._2).toSet
 
   val totalCount = tally.values.sum
 
@@ -39,8 +39,8 @@ class TallyDistribution1[A, G](tally: Map[(A, G), Long])
   def probabilityOf(a: A): Real = Real(Rational(gvs.map(gv => tally((a, gv))).sum, totalCount))
 
   def probabilityOf(a: A, given: Case[G]): Real = given match {
-    case CaseIs(argGrv, gv) => Real(Rational(tally((a, gv)), tally.filter(_._1._2 == gv).map(_._2).sum))
-    case CaseIsnt(argGrv, gv) => Real(1) - Real(Rational(tally((a, gv)), tally.filter(_._1._2 == gv).map(_._2).sum))
+    case CaseIs(argGrv, gv) => Real(Rational(tally((a, gv)), tally.filter(_._1._2 === gv).map(_._2).sum))
+    case CaseIsnt(argGrv, gv) => Real(1) - Real(Rational(tally((a, gv)), tally.filter(_._1._2 === gv).map(_._2).sum))
     case _ => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
   }
 

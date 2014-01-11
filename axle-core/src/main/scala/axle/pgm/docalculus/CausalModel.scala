@@ -31,12 +31,12 @@ class CausalModel[T: Eq](_name: String, graph: DirectedGraph[CausalModelNode[T],
     graph.vertices.map(_.payload.rv).toVector
 
   // TODO: this should probably be Option[Boolean] ?
-  def observes(rv: RandomVariable[T]): Boolean = findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv == rv).map(_.payload.observable).getOrElse(false)
+  def observes(rv: RandomVariable[T]): Boolean = findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv === rv).map(_.payload.observable).getOrElse(false)
 
   def nodesFor(rvs: Set[RandomVariable[T]]): Set[Vertex[CausalModelNode[T]]] =
-    rvs.flatMap(rv => findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv == rv))
+    rvs.flatMap(rv => findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv === rv))
 
-  def nodeFor(rv: RandomVariable[T]): Option[Vertex[CausalModelNode[T]]] = findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv == rv)
+  def nodeFor(rv: RandomVariable[T]): Option[Vertex[CausalModelNode[T]]] = findVertex((n: Vertex[CausalModelNode[T]]) => n.payload.rv === rv)
 
   // def vertexPayloadToRandomVariable(cmn: CausalModelNode[T]): RandomVariable[T] = cmn.rv
 

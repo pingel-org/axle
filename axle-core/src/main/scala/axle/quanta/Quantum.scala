@@ -71,7 +71,7 @@ trait Quantum extends QuantumExpression {
       (trip._2, trip._1, x => x / trip._3)
     )
 
-  def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name == unitName).get.payload
+  def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name === unitName).get.payload
 
   def is(qe: QuantumExpression): Boolean = ??? // TODO
 
@@ -90,7 +90,7 @@ trait Quantum extends QuantumExpression {
       case otherQuantity: Quantity =>
         (magnitude equals otherQuantity.magnitude) &&
           (if (_unit.isDefined && otherQuantity.unitOption.isDefined) {
-            (_unit.get == otherQuantity.unitOption.get)
+            (_unit.get === otherQuantity.unitOption.get)
           } else {
             super.equals(otherQuantity)
           })
@@ -131,7 +131,7 @@ trait Quantum extends QuantumExpression {
     def symbol: Option[String] = _symbol
     def link: Option[String] = _link
 
-    def vertex: Vertex[Q] = quantum.conversionGraph.findVertex(_.payload == this).get
+    def vertex: Vertex[Q] = quantum.conversionGraph.findVertex(_.payload === this).get
 
     override def toString: String =
       if (_unit.isDefined) {
@@ -195,7 +195,7 @@ trait Quantum extends QuantumExpression {
     def compare(u1: quantum.Q, u2: quantum.Q): Int = {
       val m1 = (u1 in base).magnitude
       val m2 = (u2 in base).magnitude
-      if (m1 == m2) { 0 }
+      if (m1 === m2) { 0 }
       else if (m1 < m2) { -1 }
       else { 1 }
     }

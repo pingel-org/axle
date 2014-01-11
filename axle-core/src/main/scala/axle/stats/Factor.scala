@@ -167,7 +167,7 @@ trait FactorModule {
     def isSupersetOf(left: Seq[CaseIs[T]], right: Seq[CaseIs[T]]): Boolean = {
       val ll: Seq[(RandomVariable[T], T)] = left.map(ci => (ci.rv, ci.v))
       val lm = ll.toMap
-      right.forall((rightCaseIs: CaseIs[T]) => lm.contains(rightCaseIs.rv) && (rightCaseIs.v == lm(rightCaseIs.rv)))
+      right.forall((rightCaseIs: CaseIs[T]) => lm.contains(rightCaseIs.rv) && (rightCaseIs.v === lm(rightCaseIs.rv)))
     }
 
     def projectToVars(cs: Seq[CaseIs[T]], pVars: Set[RandomVariable[T]]): Seq[CaseIs[T]] =

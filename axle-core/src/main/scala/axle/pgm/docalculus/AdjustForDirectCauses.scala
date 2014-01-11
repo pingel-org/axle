@@ -19,7 +19,7 @@ object AdjustForDirectCauses extends Rule {
 
 //  def parentObservations(m: CausalModel, Xi: RandomVariable[_]): Option[Set[RandomVariable[_]]] = {
 //
-//    val parents = m.findVertex(_ == Xi).map(Xiv => m.predecessors(Xiv).map(_.payload)).getOrElse(Set())
+//    val parents = m.findVertex(_ === Xi).map(Xiv => m.predecessors(Xiv).map(_.payload)).getOrElse(Set())
 //
 //    parents.flatMap(parent => {
 //      if (!parent.observable) {

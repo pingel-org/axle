@@ -5,6 +5,7 @@ import axle.stats._
 import axle.pgm._
 import CausalModel._
 import spire.algebra._
+import spire.implicits._
 
 object Search {
 
@@ -34,7 +35,7 @@ object Search {
       expand(model, quantity, namer).flatMap(es => {
         es.flatMap(e => {
           val probFactory = CausalityProbability(Set.empty[RandomVariable[T]], Set.empty[RandomVariable[T]], Set.empty[RandomVariable[T]])
-          if (probFactory.actions.size == 0) {
+          if (probFactory.actions.size === 0) {
             Some(List(e))
           } else {
             reduce(model, ??? /* e */ , namer, depth + 1, maxDepth).map(_ ++ List(e))
