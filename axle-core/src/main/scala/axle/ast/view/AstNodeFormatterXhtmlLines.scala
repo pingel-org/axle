@@ -17,7 +17,7 @@ class XhtmlLinesAstNodeFormatter(
 
   type A = XhtmlAstNodeFormatter
 
-  def lines(): Map[Int, xml.NodeSeq] = {
+  def lines: Map[Int, xml.NodeSeq] = {
     if (currentLine.isDefined) {
       _lines += currentLineNo -> currentLine.get.toList
       currentLine = None // mark as "finished"
@@ -28,22 +28,22 @@ class XhtmlLinesAstNodeFormatter(
 
   def raw(s: String): XhtmlAstNodeFormatter = currentLine.get.append(xml.Text(s))
 
-  def newline(): XhtmlAstNodeFormatter = {
+  def newline: XhtmlAstNodeFormatter = {
     _lines += currentLineNo -> currentLine.get.toList
     advanceLine()
     currentLine = Some(List[xml.Node]())
   }
 
-  def space(): XhtmlAstNodeFormatter = currentLine.get.append(xml.Text(" "))
+  def space: XhtmlAstNodeFormatter = currentLine.get.append(xml.Text(" "))
 
-  def spaces(): XhtmlAstNodeFormatter = currentLine.get.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
+  def spaces: XhtmlAstNodeFormatter = currentLine.get.append(<span>&nbsp;&nbsp;&nbsp;</span>) // TODO
 
   // xml.Utility.escape(word)
   def span(spanclass: String, s: String): XhtmlAstNodeFormatter = currentLine.get += <span class={ spanclass }>{ s }</span>
 
   def absorb(label: String): XhtmlAstNodeFormatter = {
 
-    for ((lineno, line) <- lines) {
+    lines foreach { case (lineno, line) =>
       if (currentLine.get.size > 0) {
         val unfinishedLine: xml.NodeSeq = currentLine.get.toList
         _lines += lineno -> <span>{ unfinishedLine }</span><span class={ label }>{ line }</span>;

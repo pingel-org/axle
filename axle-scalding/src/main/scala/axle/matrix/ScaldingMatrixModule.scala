@@ -6,6 +6,8 @@ import com.twitter.scalding._
 import com.twitter.scalding.mathematics.{ Matrix => ScaldingMatrix, MatrixProduct }
 import axle._
 import axle.algebra.FunctionPair
+import spire.implicits._
+import spire.algebra.Eq
 
 object ScaldingMatrixModule extends ScaldingMatrixModule
 
@@ -25,7 +27,7 @@ trait ScaldingMatrixModule extends MatrixModule {
   implicit val convertDouble = Field.doubleField
   implicit val convertInt = ???
 
-  class Matrix[T: C](_storage: ScaldingMatrix[RowT, ColT, T]) extends MatrixLike[T] {
+  class Matrix[T: C: Eq](_storage: ScaldingMatrix[RowT, ColT, T]) extends MatrixLike[T] {
 
     // implicit val prod: MatrixProduct[ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T]] = ???
 
@@ -37,35 +39,35 @@ trait ScaldingMatrixModule extends MatrixModule {
 
     implicit val format = (t: T) => t.toString // TODO !!!
 
-    def rows() = ??? // scalding.sizeHint.rows
-    def columns() = ???
-    def length() = ???
+    def rows: RowT = ??? // scalding.sizeHint.rows
+    def columns: ColT = ???
+    def length: RowT = ??? // TODO: actualy RowT x ColT
 
     def apply(i: Int, j: Int): T = ??? //scalding.elementAt(i, j)
 
     def apply(rs: Seq[Int], cs: Seq[Int]): Matrix[T] = ???
 
-    def toList(): List[T] = ???
+    def toList: List[T] = ???
 
     def column(j: Int) = matrix(scalding.getCol(j).toMatrix(0))
     def row(i: Int) = ??? // ??? //scalding.getRow(i)
 
-    def isEmpty() = ???
-    def isRowVector() = rows == 1
-    def isColumnVector() = columns == 1
-    def isVector() = rows == 1 || columns == 1
-    def isSquare() = rows == columns
-    def isScalar() = rows == 1 && columns == 1
+    def isEmpty: Boolean = ???
+    def isRowVector: Boolean = rows === 1
+    def isColumnVector: Boolean = columns === 1
+    def isVector: Boolean = rows === 1 || columns === 1
+    def isSquare: Boolean = rows === columns
+    def isScalar: Boolean = rows === 1 && columns === 1
 
-    def dup() = ???
-    def negate() = matrix(scalding.mapValues(field.negate))
-    def transpose() = matrix(scalding.transpose)
-    def diag() = matrix(scalding.diagonal)
-    def invert() = ??? // matrix(scalding.inverse)
-    def ceil() = ???
-    def floor() = ??? // matrix(scalding.mapValues(math.floor))
-    def log() = ???
-    def log10() = ???
+    def dup: MatrixLike[T] = ???
+    def negate: MatrixLike[T] = matrix(scalding.mapValues(field.negate))
+    def transpose: MatrixLike[T] = matrix(scalding.transpose)
+    def diag: MatrixLike[T] = matrix(scalding.diagonal)
+    def invert: MatrixLike[T] = ??? // matrix(scalding.inverse)
+    def ceil: MatrixLike[T] = ???
+    def floor: MatrixLike[T] = ??? // matrix(scalding.mapValues(math.floor))
+    def log: MatrixLike[Double] = ???
+    def log10: MatrixLike[Double] = ???
 
     def fullSVD() = ???
 
@@ -109,12 +111,12 @@ trait ScaldingMatrixModule extends MatrixModule {
     def and(other: Matrix[T]) = ???
     def or(other: Matrix[T]) = ???
     def xor(other: Matrix[T]) = ???
-    def not() = ???
+    def not: MatrixLike[Boolean] = ???
 
-    def max() = ???
-    def argmax() = ???
-    def min() = ???
-    def argmin() = ???
+    def max: MatrixLike[T] = ???
+    def argmax = ???
+    def min: MatrixLike[T] = ???
+    def argmin = ???
 
     def rowSums() = matrix(scalding.sumRowVectors.toMatrix(0))
 
@@ -158,7 +160,7 @@ trait ScaldingMatrixModule extends MatrixModule {
     assert(row.isRowVector)
     val field = implicitly[C[T]]
     val n = row.columns
-    matrix(n, n, (r, c) => if (r == c) row(0, r) else field.zero)
+    matrix(n, n, (r, c) => if (r === c) row(0, r) else field.zero)
   }
 
   def zeros[T: C](m: Int, n: Int): Matrix[T] = {
@@ -173,7 +175,7 @@ trait ScaldingMatrixModule extends MatrixModule {
 
   def eye[T: C](n: Int): Matrix[T] = {
     val field = implicitly[C[T]]
-    matrix(n, n, (r, c) => if (r == c) field.one else field.zero)
+    matrix(n, n, (r, c) => if (r === c) field.one else field.zero)
   }
 
   def I[T: C](n: Int): Matrix[T] = eye(n)

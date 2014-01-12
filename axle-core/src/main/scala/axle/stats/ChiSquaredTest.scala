@@ -11,11 +11,13 @@ trait ChiSquaredTestModule {
     val rowTotals = tally.rowSums
     val columnTotals = tally.columnSums
     val total = rowTotals.columnSums(0, 0)
-    (for (r <- 0 until tally.rows; c <- 0 until tally.columns) yield {
-      val observed = tally(r, c)
-      val expected = rowTotals(r, 0) * columnTotals(0, c) / total
-      (observed - expected) * (observed - expected) / expected
-    }).sum
+    (0 until tally.rows) map { r =>
+      (0 until tally.columns) map { c =>
+        val observed = tally(r, c)
+        val expected = rowTotals(r, 0) * columnTotals(0, c) / total
+        (observed - expected) * (observed - expected) / expected
+      } sum
+    } sum
   }
 
   /**

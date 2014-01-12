@@ -52,7 +52,7 @@ class CombinationsFast[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[Inde
       done = true
     } else {
       indices(i) += 1
-      for (j <- (i + 1 until r)) {
+      (i + 1 until r) foreach { j =>
         indices(j) = indices(j - 1) + 1
       }
       yeeld += indices.map(pool).toIndexedSeq

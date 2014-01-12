@@ -3,6 +3,7 @@ package axle.repl
 
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.ILoop
+import spire.implicits._
 
 object AxleRepl extends App {
 
@@ -18,7 +19,7 @@ object AxleRepl extends App {
 class AxleILoop extends ILoop {
 
   override def prompt =
-    if (System.getProperty("file.encoding").toLowerCase() equals "utf-8")
+    if (System.getProperty("file.encoding").toLowerCase === "utf-8")
       "αχλε ↦ "
     else
       "axle > "

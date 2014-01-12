@@ -113,7 +113,7 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   def delete(v: Vertex[VP]): NativeUndirectedGraph[VP, EP] = NativeUndirectedGraph(vps.filter(_ != v), ef)
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find({ v => neighbors(v).size === 1 && !v.equals(r) })
+  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find({ v => neighbors(v).size === 1 && (!(v === r)) })
 
   def eliminate(v: Vertex[VP], payload: (Vertex[VP], Vertex[VP]) => EP): NativeUndirectedGraph[VP, EP] = {
     // "decompositions" page 3 (Definition 3, Section 9.3)
@@ -121,11 +121,20 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
     ??? // TODO: remove v and all edges it touches, then force clique of all of v's neighbors
   }
 
+  def other(edge: Edge[ES, EP], u: Vertex[VP]): Vertex[VP] = {
+    val (v1, v2) = vertices(edge)
+    u match {
+      case _ if (u === v1) => v2
+      case _ if (u === v2) => v1
+      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+    }
+  }
+  
   def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean = {
     val (v1, v2) = vertices(edge)
     (v1 === a1 && v2 === a2) || (v2 === a1 && v1 === a2)
   }
-  
+
   def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): NativeUndirectedGraph[NVP, NEP] =
     NativeUndirectedGraph(vps.map(vpf),
       (newVs: Seq[Vertex[NVP]]) =>
@@ -147,7 +156,7 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   //    val undefined = -1
   //    val dist = Map[V, Int]()
   //    val previous = Map[V, V]()
-  //    for (v <- vertices) {
+  //    vertices foreach { v =>
   //      dist(v) = Int.MaxValue // Unknown distance function from source to v
   //    }
   //
@@ -168,7 +177,7 @@ case class NativeUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   //      if (dist(u) === Int.MaxValue) {
   //        broken = true // all remaining vertices are inaccessible from source
   //      } else {
-  //        for (v <- neighbors(u)) { // where v has not yet been removed from Q
+  //        neighbors(u) foreach { v => // where v has not yet been removed from Q
   //          val alt = dist(u) + edgeCost(u, v)
   //          if (alt < dist(v)) { // Relax (u,v,a)
   //            dist(v) = alt

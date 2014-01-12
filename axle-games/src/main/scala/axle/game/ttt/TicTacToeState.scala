@@ -3,6 +3,7 @@ package axle.game.ttt
 import axle.game._
 import axle.matrix._
 import axle.algebra._
+import spire.implicits._
 
 case class TicTacToeState(
   player: TicTacToePlayer,
@@ -38,14 +39,14 @@ case class TicTacToeState(
   //      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
 
   def hasWonRow(player: TicTacToePlayer): Boolean =
-    (0 until boardSize).exists(board.row(_).toList.forall(_ == Some(player)))
+    (0 until boardSize).exists(board.row(_).toList.forall(_ === Some(player)))
 
   def hasWonColumn(player: TicTacToePlayer): Boolean =
-    (0 until boardSize).exists(board.column(_).toList.forall(_ == Some(player)))
+    (0 until boardSize).exists(board.column(_).toList.forall(_ === Some(player)))
 
   def hasWonDiagonal(player: TicTacToePlayer): Boolean =
-    (0 until boardSize).forall(i => board(i, i) == Some(player)) ||
-      (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) == Some(player))
+    (0 until boardSize).forall(i => board(i, i) === Some(player)) ||
+      (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) === Some(player))
 
   def hasWon(player: TicTacToePlayer): Boolean = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
@@ -56,7 +57,7 @@ case class TicTacToeState(
   def outcome: Option[TicTacToeOutcome] = {
     val winner = ttt.players.find(hasWon)
     if (winner.isDefined) { Some(TicTacToeOutcome(winner)) }
-    else if (openPositions.length == 0) { Some(TicTacToeOutcome(None)) }
+    else if (openPositions.length === 0) { Some(TicTacToeOutcome(None)) }
     else { None }
   }
 

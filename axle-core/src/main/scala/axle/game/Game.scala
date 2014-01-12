@@ -98,7 +98,7 @@ abstract class Game[G <: Game[G]] {
 
   def play(start: G#STATE = startState(), intro: Boolean = true): Option[G#STATE] = {
     if (intro) {
-      for (player <- players()) {
+      players foreach { player =>
         player.introduceGame()
       }
     }
@@ -106,7 +106,7 @@ abstract class Game[G <: Game[G]] {
       case (lastMove, s0) => {
         val s1 = s0.outcome.map(o => s0.broadcast(players, o)).getOrElse(s0)
         val s2 = s1.displayEvents(players)
-        for (player <- players()) {
+        players foreach { player =>
           player.endGame(s2)
         }
         s2

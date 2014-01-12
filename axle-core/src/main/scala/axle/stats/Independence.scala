@@ -12,7 +12,7 @@ case class Independence[T: Eq](
   Z: Set[RandomVariable[T]],
   Y: Set[RandomVariable[T]]) {
 
-  def variablesToString(s: Set[RandomVariable[T]]): String = "{" + (for (v <- s) yield v.name).mkString(", ") + "}"
+  def variablesToString(s: Set[RandomVariable[T]]): String = "{" + (s map { _.name }).mkString(", ") + "}"
 
   override def toString(): String =
     "I(" + variablesToString(X) + ", " + variablesToString(Z) + ", " + variablesToString(Y) + ")"

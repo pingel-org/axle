@@ -21,7 +21,7 @@ object ViewString extends View[String] {
       val fN = emit(doc.grammar, ast, makeFormatter(doc.grammar, docNode))
       val highlightedString = fN.result
       val highlightedLines = highlightedString.split("\n") // NOTE: python version used to cache highlightedLines
-      // info("vs %s".format((for ((_, v) <- fN.node2lineno) yield v).mkString))
+      // info("vs %s".format((fN.node2lineno map { case (_, v) => v }).mkString))
 
       // // TODO rjust(5) the second i+1
 

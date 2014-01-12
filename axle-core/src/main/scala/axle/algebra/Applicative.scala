@@ -16,7 +16,7 @@ object Applicative {
 
   def checkAxiom1[F[_] : Applicative, T](v: T): Boolean = {
     //val applicative = implicitly[Applicative[F]]
-    //applicative.pure(id <*> v) == v
+    //applicative.pure(id <*> v) === v
     true
   }
 

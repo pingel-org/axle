@@ -64,12 +64,12 @@ class CausalitySpec extends Specification {
           //          result += CausalModelNode(yi)
           //          result.addFunction(new PFunction(ei, p))
           //          result.addFunction(new PFunction(epi, p))
-          //          if (i == 0) {
+          //          if (i === 0) {
           //            result.addFunction(new RandomBooleanFunction(xi, 0.25))
           //          } else {
           //            result.addFunction(new XorOrFunction(xi, oldE.get, oldX.get, oldY.get))
           //          }
-          //          if (i == 0) {
+          //          if (i === 0) {
           //            result.addFunction(new RandomBooleanFunction(yi, 0.25))
           //          } else {
           //            result.addFunction(new XorOrFunction(yi, oldEp.get, oldX.get, oldY.get))

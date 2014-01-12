@@ -15,7 +15,7 @@ object AxleBuild extends Build {
 
     version := "0.1-SNAPSHOT", // last milestone was M10
 
-    scalaVersion := "2.10.3",
+    scalaVersion := "2.10.4-RC1",
 
     crossScalaVersions := Seq("2.10.3"),
 
@@ -51,7 +51,8 @@ import axle._
 
     resolvers ++= Seq(
       "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
-      "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+      "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
+      "Concurrent Maven Repo" at "http://conjars.org/repo"
     ),
 
     pomExtra := (
@@ -95,11 +96,12 @@ import axle._
       "joda-time" % "joda-time" % "2.2",
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
-      "org.spire-math" %% "spire" % "0.6.1",
+      "org.spire-math" %% "spire" % "0.7.1",
       "com.chuusai" % "shapeless_2.10.2" % "2.0.0-SNAPSHOT" changing()
       // "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
     )
   )
+
 /*
   lazy val axleScalding = Project(
     id = "axle-scalding",
@@ -109,7 +111,7 @@ import axle._
     name := "axle-scalding",
     libraryDependencies ++= Seq(
       "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
-      "com.twitter" %% "scalding-core" % "0.9.0-SNAPSHOT"
+      "com.twitter" %% "scalding-core" % "0.8.11"
     )
   ).dependsOn(axleCore)
 */

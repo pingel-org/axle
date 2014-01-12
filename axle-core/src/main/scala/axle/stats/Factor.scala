@@ -137,7 +137,7 @@ trait FactorModule {
     // depending on assumptions, this may not be the best way to remove the vars
     def sumOut(gone: RandomVariable[T]): Factor[T] = {
       val position = varList.indexOf(gone)
-      val newVars = varList.filter(!_.equals(gone))
+      val newVars = varList.filter(v => !(v === gone))
       new Factor(
         newVars,
         Factor.spaceFor(newVars).map(kase => {
@@ -162,7 +162,7 @@ trait FactorModule {
     }
 
     def mentions(variable: RandomVariable[T]): Boolean =
-      variables.exists(v => variable.name.equals(v.name))
+      variables.exists(v => variable.name === v.name)
 
     def isSupersetOf(left: Seq[CaseIs[T]], right: Seq[CaseIs[T]]): Boolean = {
       val ll: Seq[(RandomVariable[T], T)] = left.map(ci => (ci.rv, ci.v))

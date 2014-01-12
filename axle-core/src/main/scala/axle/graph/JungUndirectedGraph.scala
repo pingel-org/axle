@@ -110,7 +110,7 @@ case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   def delete(v: Vertex[VP]): JungUndirectedGraph[VP, EP] = JungUndirectedGraph(vertices.toSeq.filter(_ != v).map(_.payload), ef)
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find(v => neighbors(v).size === 1 && !v.equals(r))
+  def firstLeafOtherThan(r: Vertex[VP]): Option[Vertex[VP]] = vertices.find(v => neighbors(v).size === 1 && (!(v === r)))
 
   /**
    * "decompositions" page 3 (Definition 3, Section 9.3)
@@ -126,11 +126,20 @@ case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
     ???
   }
 
+  def other(edge: Edge[ES, EP], u: Vertex[VP]): Vertex[VP] = {
+    val (v1, v2) = vertices(edge)
+    u match {
+      case _ if (u === v1) => v2
+      case _ if (u === v2) => v1
+      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
+    }
+  }
+  
   def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean = {
     val (v1, v2) = vertices(edge)
     (v1 === a1 && v2 === a2) || (v2 === a1 && v1 === a2)
   }
- 
+
   def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): JungUndirectedGraph[NVP, NEP] =
     JungUndirectedGraph(vps.map(vpf),
       (newVs: Seq[Vertex[NVP]]) =>

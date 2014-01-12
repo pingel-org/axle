@@ -71,7 +71,7 @@ object Emission {
       case (Some(AstNodeRule(_, m, _)), For(subtree, body)) => {
         formatter.enterFor
         val elems = m(subtree).asInstanceOf[AstNodeList]
-        for (i <- 0 until elems.list.length) {
+        (0 until elems.list.length) foreach { i =>
           val c = elems.list(i)
           formatter.updateFor("TODO c")
           emit(body, Some(c), grammar, formatter)
@@ -82,7 +82,7 @@ object Emission {
       case (Some(AstNodeRule(_, m, _)), ForDel(subtree, body, delimiter)) => {
         formatter.enterFor
         val elems = m(subtree).asInstanceOf[AstNodeList]
-        for (i <- 0 until elems.list.length) {
+        (0 until elems.list.length) foreach { i =>
           val c = elems.list(i)
           formatter.updateFor("TODO c")
           emit(body, Some(c), grammar, formatter)

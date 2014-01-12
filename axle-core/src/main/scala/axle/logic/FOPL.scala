@@ -1,6 +1,9 @@
 
 package axle.logic
 
+import spire.implicits._
+import spire.algebra._
+
 object FOPL {
 
   def skolemFor(skolems: Map[Symbol, Set[Symbol]], s: Symbol, universally: Set[Symbol]) = {
@@ -8,20 +11,22 @@ object FOPL {
     (newSym, skolems + (newSym -> universally))
   }
 
-  abstract class Predicate(symbols: Symbol*) extends Function1[Map[Symbol, Any], Boolean] with Statement {
+  object Predicate {
+    implicit def predicateEq = new Eq[Predicate] {
+      def eqv(x: Predicate, y: Predicate): Boolean =
+        (x.name === y.name) && (x.symbols === y.symbols)
+    }
+  }
+
+  abstract class Predicate(_symbols: Symbol*) extends Function1[Map[Symbol, Any], Boolean] with Statement {
 
     outer =>
 
-    def getSymbols: Seq[Symbol] = symbols
-    def symbolSet: Set[Symbol] = symbols.toSet
+    def symbols: List[Symbol] = _symbols.toList
+    def symbolSet: Set[Symbol] = _symbols.toSet
     def name: String
 
     override def toString: String = name + "(" + symbols.mkString(", ") + ")"
-
-    override def equals(other: Any): Boolean = other match {
-      case otherPredicate: Predicate => (name equals otherPredicate.name) && (symbols equals otherPredicate.getSymbols)
-      case _ => false
-    }
 
     def skolemize(universally: Set[Symbol], existentially: Set[Symbol], skolems: Map[Symbol, Set[Symbol]]): (Predicate, Map[Symbol, Set[Symbol]]) = {
 
@@ -59,11 +64,11 @@ object FOPL {
 
   case class And(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) && right(symbolTable)
-    override def toString: String = "(" + left + " ∧ " + right + ")"
+    override def toString: String = s"($left ∧ $right)"
   }
   case class Or(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) || right(symbolTable)
-    override def toString: String = "(" + left + " ∨ " + right + ")"
+    override def toString: String = s"($left ∨ $right)"
   }
   case class Iff(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = {
@@ -71,11 +76,11 @@ object FOPL {
       val rv = right(symbolTable)
       (!lv && !rv) || (lv && rv)
     }
-    override def toString: String = "(" + left + " ⇔ " + right + ")"
+    override def toString: String = s"($left ⇔ $right)"
   }
   case class Implies(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = (!left(symbolTable)) || right(symbolTable)
-    override def toString: String = "(" + left + " ⊃ " + right + ")"
+    override def toString: String = s"($left ⊃ $right)"
   }
 
   case class ¬(statement: Statement) extends Statement {
@@ -83,7 +88,7 @@ object FOPL {
   }
 
   case class ElementOf[T](symbol: Symbol, set: Set[T]) {
-    override def toString: String = symbol + " ∈ " + set
+    override def toString: String = s"$symbol ∈ $set"
   }
 
   class EnrichedSymbol(symbol: Symbol) {

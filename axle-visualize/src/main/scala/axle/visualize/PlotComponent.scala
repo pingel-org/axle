@@ -97,7 +97,7 @@ class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel
       Vector(vLine, hLine, xTics, yTics, dataLines) ++
         Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
 
-    for (paintable <- paintables) {
+    paintables foreach { paintable =>
       paintable.paint(g2d)
     }
 

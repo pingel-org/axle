@@ -80,7 +80,7 @@ case class LLLanguage(
   def first(X: Symbol): Set[Symbol] = X match {
     case Terminal(_) => Set(X)
     case NonTerminal(_) => {
-      llRules.filter(_.from equals X).flatMap({ rule =>
+      llRules.filter(_.from === X).flatMap({ rule =>
         rule.rhs match {
           case List(ε) => Set(ε) // Case 2
           case _ => first(rule.rhs) // Case 3
@@ -113,7 +113,7 @@ case class LLLanguage(
             val (accSet, followMemo): (Set[Symbol], Map[Symbol, Set[Symbol]]) = v
             val x: Set[Symbol] = (rule.rhs match {
               // TODO?: enforce that rest is composed of only terminals (maybe not the case)
-              case Terminal(_) :: symbol :: rest => first(rest).filter(x => !(x equals ε))
+              case Terminal(_) :: symbol :: rest => first(rest).filter(x => !(x === ε))
               case _ => Set()
             })
             val y: (Set[Symbol], Map[Symbol, Set[Symbol]]) = (rule.rhs match {
@@ -129,7 +129,7 @@ case class LLLanguage(
   }
 
   lazy val _parseTable: Map[(NonTerminal, Symbol), LLRule] = {
-    for (nt <- nonTerminals) {
+    nonTerminals foreach { nt =>
       first(nt) // TODO: where is this written?
     }
     llRules.flatMap({ rule =>

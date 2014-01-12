@@ -13,7 +13,7 @@ case class CausalModelNode[T: Eq](rv: RandomVariable[T], observable: Boolean = t
 object CausalModelNode {
   implicit def cmnEq[T: Eq]: Eq[CausalModelNode[T]] = new Eq[CausalModelNode[T]] {
     def eqv(x: CausalModelNode[T], y: CausalModelNode[T]): Boolean =
-      (x.rv equals y.rv) && (x.observable equals y.observable)
+      (x.rv === y.rv) && (x.observable === y.observable)
   }
 }
 

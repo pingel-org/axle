@@ -13,7 +13,7 @@ import axle.matrix.JblasMatrixModule._
  *
  * distance(r1, r2) = 1.0 - abs(rvDot(r1, r2) / (norm(r1) * norm(r2)))
  *
- * TODO: distance calcs could assert(r1.isRowVector && r2.isRowVector && r1.length == r2.length)
+ * TODO: distance calcs could assert(r1.isRowVector && r2.isRowVector && r1.length === r2.length)
  *
  */
 

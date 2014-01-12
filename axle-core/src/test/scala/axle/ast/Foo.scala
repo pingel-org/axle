@@ -24,7 +24,7 @@ object Foo {
      */
 
     //(ss: List[String]): Int => ss.length
-    // (for (s <- ss) yield s.length()).foldLeft(0)(_+_)
+    // ss map { _.length } foldLeft(0)(_+_)
 
     /*
      val element: String = "abc"
@@ -48,7 +48,7 @@ object Foo {
 
     // val indentation_level: Int = 5
     // val x: String = ( List.range(0, indentation_level) map (i => "| -") ).mkString("")
-    // val y: String = ( for ( x <- List.range(0, indentation_level)) yield "   " ).mkString("")
+    // val y: String = ( List.range(0, indentation_level) map { x => "   "}).mkString("")
     // val tokens = List("efoo", "ebar")
 
     // val node2lineno = Map("x" -> 5)

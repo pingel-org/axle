@@ -262,15 +262,15 @@ trait BayesianNetworkModule {
     def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[T]]]): BayesianNetwork[T] = {
       val result = BayesianNetwork[T](resultName, ???)
       eOpt.map(e => {
-        for (U <- e.map(_.rv)) {
+        e.map(_.rv) foreach { U =>
           val uVertex = result.graph.findVertex(_.payload.rv === U).get
-          for (edge <- result.graph.outputEdgesOf(uVertex)) { // ModelEdge
+          result.graph.outputEdgesOf(uVertex) foreach { edge => // ModelEdge
             // TODO !!!
             //          val X = edge.dest.payload.rv
             //          val oldF = result.cpt(X)
             //          result.deleteEdge(edge) // TODO: not functional
             //          val smallerF: Factor = makeFactorFor(X)
-            //          for (c <- smallerF.cases) {
+            //          smallerF.cases foreach { c =>
             //            // set its value to what e sets it to
             //            // TODO c(U) = e.valueOf(U)
             //            // TODO smallerF(c) = oldF(c)
@@ -441,8 +441,8 @@ trait BayesianNetworkModule {
     // Note: not sure about this return type:
     def factorElimination(τ: EliminationTree[T], e: List[CaseIs[T]]): Map[Factor[T], Factor[T]] =
       {
-        for (i <- τ.graph.vertices) {
-          for (ci <- e) {
+        τ.graph.vertices foreach { i =>
+          e foreach { ci =>
             // val lambdaE = new Factor(ci.rv, Map())
             // assign lambdaE.E to e.get(E)
           }

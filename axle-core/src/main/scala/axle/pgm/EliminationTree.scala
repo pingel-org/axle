@@ -23,7 +23,7 @@ trait EliminationTreeModule {
       accumulated: Set[RandomVariable[T]]): Set[RandomVariable[T]] =
       graph
         .neighbors(node)
-        .filter(!_.equals(stop))
+        .filter(n => !(n === stop))
         .foldLeft(accumulated ++ node.payload.variables)((a, y) => gatherVars(node, y, a))
 
     def cluster(i: Vertex[Factor[T]]): Set[RandomVariable[T]] =

@@ -19,8 +19,9 @@ class PokerSpec extends Specification {
       val shared = string2cards("J♡,T♠,6♡,6♢,8♡")
       val personals = Vector("J♠,4♠","A♠,T♢","K♠,Q♢").map(string2cards)
 
-      val hands = for (personal <- personals)
-        yield (personal ++ shared).combinations(5).map(PokerHand(_)).max
+      val hands = personals map { personal =>
+        (personal ++ shared).combinations(5).map(PokerHand(_)).max
+      }
 
       val jacksAndSixes = string2hand("6♡,6♢,T♠,J♠,J♡")
 

@@ -9,14 +9,14 @@ class AxleSpecification extends Specification {
   // This file isn't so much an "Axle" spec as it is a list of expressions found
   // in "Learn You a Haskell For Great Good" translated to Scala w/Scalaz
 
-//  def functorLaw1a[M[_]: Functor, A](functor: M[A]): Boolean = functor.map(id[A]) == id[M[A]](functor)
+//  def functorLaw1a[M[_]: Functor, A](functor: M[A]): Boolean = functor.map(id[A]) === id[M[A]](functor)
 
   //  def functorLaw1b[M[_, _]: Functor, A, B](functor: M[A, B]): Boolean = {
   //    val lhs = functor.map(id[B])
   //    val rhs = id[M[A, B]](functor)
   //    println("lhs = " + lhs)
   //    println("rhs = " + rhs)
-  //    val ok = lhs == rhs
+  //    val ok = lhs === rhs
   //    println("equal? " + ok)
   //    ok
   //  }

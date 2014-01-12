@@ -19,6 +19,7 @@ import axle.ml.KMeansModule
 import axle.matrix._
 import axle.quanta._
 import Angle._
+import spire.implicits._
 
 object KMeansVisualizationModule extends KMeansVisualizationModule
 
@@ -76,8 +77,8 @@ trait KMeansVisualizationModule {
 
     def cluster(g2d: Graphics2D, i: Int): Unit = {
       g2d.setColor(colors(i % colors.length))
-      for (r <- 0 until features.rows) {
-        if (classifier.a(r, 0) == i) {
+      (0 until features.rows) foreach { r =>
+        if (classifier.a(r, 0) === i) {
           // TODO figure out what to do when N > 2
           val center = Point2D(features(r, 0), features(r, 1))
           scaledArea.fillOval(g2d, center, pointDiameter, pointDiameter)

@@ -53,7 +53,7 @@ trait Quantum extends QuantumExpression {
 
   implicit def eqTypeclass: Eq[Q]
 
-// Note: this is need for "def conversions"
+  // Note: this is need for "def conversions"
   implicit val edgeEq: Eq[Number => Number] = new Eq[Number => Number] {
     def eqv(x: Number => Number, y: Number => Number): Boolean = ???
   }
@@ -68,14 +68,40 @@ trait Quantum extends QuantumExpression {
   private[quanta] def trip2fns(trip: (Vertex[Q], Vertex[Q], Number)): Seq[(Vertex[Q], Vertex[Q], Number => Number)] =
     Vector(
       (trip._1, trip._2, x => x * trip._3),
-      (trip._2, trip._1, x => x / trip._3)
-    )
+      (trip._2, trip._1, x => x / trip._3))
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name === unitName).get.payload
 
   def is(qe: QuantumExpression): Boolean = ??? // TODO
 
   val one = Number.one
+
+  object Quantity {
+
+    implicit def eqQuantity: Eq[Quantity] = new Eq[Quantity] {
+      def eqv(x: Quantity, y: Quantity): Boolean =
+        (x.magnitude === y.magnitude) &&
+          (if (x.unitOption.isDefined && y.unitOption.isDefined) {
+            (x.unitOption.get === y.unitOption.get)
+          } else {
+            false // was super.equals(otherQuantity)
+          })
+    }
+
+    //    override def equals(other: Any): Boolean = other match {
+    //      case otherQuantity: Quantity =>
+    //        (magnitude === otherQuantity.magnitude) &&
+    //          (if (_unit.isDefined && otherQuantity.unitOption.isDefined) {
+    //            (_unit.get === otherQuantity.unitOption.get)
+    //          } else {
+    //            super.equals(otherQuantity)
+    //          })
+    //      case _ => false
+    //    }
+
+    // override def hashCode: Int = this._magnitude.## + this._unit.##
+
+  }
 
   class Quantity(
     _magnitude: Number = one,
@@ -85,19 +111,6 @@ trait Quantum extends QuantumExpression {
     _link: Option[String] = None) {
 
     self: Q =>
-
-    override def equals(other: Any): Boolean = other match {
-      case otherQuantity: Quantity =>
-        (magnitude equals otherQuantity.magnitude) &&
-          (if (_unit.isDefined && otherQuantity.unitOption.isDefined) {
-            (_unit.get === otherQuantity.unitOption.get)
-          } else {
-            super.equals(otherQuantity)
-          })
-      case _ => false
-    }
-
-    override def hashCode: Int = this._magnitude.## + this._unit.##
 
     def +(right: Q): Q =
       quantity((this in right.unit).magnitude + right.magnitude, right.unit)
@@ -147,8 +160,7 @@ trait Quantum extends QuantumExpression {
     def in(other: Q): Q =
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex)
         .map(
-          _.map(_.payload).foldLeft(one)((n, convert) => convert(n))
-        )
+          _.map(_.payload).foldLeft(one)((n, convert) => convert(n)))
         .map(n => quantity((magnitude * n) / other.magnitude, other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
 
@@ -216,7 +228,7 @@ trait Quantum extends QuantumExpression {
       if (v > to) empty else cons(v, ticValueStream(v + step, to, step))
 
     def tics(from: quantum.Q, to: quantum.Q): Seq[(quantum.Q, String)] =
-      if (from equals to) {
+      if (from === to) {
         Nil
       } else {
         val fromD = (from in base).magnitude

@@ -2,6 +2,7 @@ package axle.ast.language
 
 import axle.ast._
 import util.matching.Regex
+import spire.implicits._
 
 object Python {
 
@@ -222,7 +223,7 @@ object Python {
       topmap("node").asInstanceOf[AstNodeRule] match {
         case AstNodeRule("Stmt", stmtmap, _) => {
           val mnl = stmtmap("spread").asInstanceOf[AstNodeList]
-          if (mnl.list.length == 1) {
+          if (mnl.list.length === 1) {
             mnl.list.head match {
               case AstNodeRule("Discard", cm, _) => cm("expr")
               case _ => mnl.list.head

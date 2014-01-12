@@ -3,6 +3,7 @@ package axle.game.poker
 import axle._
 import axle.game.cards._
 import axle.game._
+import spire.implicits._
 
 case class PokerState(
   playerFn: PokerState => PokerPlayer,
@@ -32,11 +33,11 @@ case class PokerState(
   def firstBetter: PokerPlayer = game._players.find(stillIn.contains).get
 
   def betterAfter(before: PokerPlayer): Option[PokerPlayer] = {
-    if (stillIn.forall(p => inFors.get(p).map(_ == currentBet).getOrElse(false))) {
+    if (stillIn.forall(p => inFors.get(p).map(_ === currentBet).getOrElse(false))) {
       None
     } else {
       // 'psi' !stillIn.contains(p) after a fold
-      val psi = game._players.filter(p => stillIn.contains(p) || p == before)
+      val psi = game._players.filter(p => stillIn.contains(p) || p === before)
       Some(psi((psi.indexOf(before) + 1) % psi.length))
     }
   }
@@ -53,7 +54,7 @@ case class PokerState(
         p.id + ": " +
           " hand " + (
             hands.get(p).map(_.map(c =>
-              if (viewer == p || (_outcome.isDefined && stillIn.size > 1)) {
+              if (viewer === p || (_outcome.isDefined && stillIn.size > 1)) {
                 c.toString
               } else {
                 "??"
@@ -180,7 +181,7 @@ case class PokerState(
     case Payout() => {
 
       val (winner, handOpt) =
-        if (stillIn.size == 1) {
+        if (stillIn.size === 1) {
           (stillIn.toIndexedSeq.head, None)
         } else {
           // TODO: handle tie

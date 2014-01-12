@@ -124,7 +124,7 @@ class ScalaFigures extends Specification {
   }
 
   def figure6_5: List[InteractionGraph[Boolean]] =
-    figure6_1.interactionGraph().eliminationSequence(List(B, C, A, D))
+    figure6_1.interactionGraph.eliminationSequence(List(B, C, A, D))
 
   def figure6_7 = {
 

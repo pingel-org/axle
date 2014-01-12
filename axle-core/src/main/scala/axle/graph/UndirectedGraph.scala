@@ -23,11 +23,12 @@ trait UndirectedGraph[VP, EP] {
   def areNeighbors(v1: Vertex[VP], v2: Vertex[VP]): Boolean
 
   def isClique(vs: collection.GenTraversable[Vertex[VP]]): Boolean
-    
-  def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): Int = (for {
-    vi <- vs
-    vj <- vs
-  } yield { if (areNeighbors(vi, vj)) 1 else 0 }).sum
+
+  def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): Int =
+    (for {
+      vi <- vs
+      vj <- vs
+    } yield { if (areNeighbors(vi, vj)) 1 else 0 }).sum
 
   def forceClique(vs: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): G[VP, EP]
 
@@ -56,14 +57,7 @@ trait UndirectedGraph[VP, EP] {
 
   def vertices(edge: Edge[ES, EP]): (Vertex[VP], Vertex[VP])
 
-  def other(edge: Edge[ES, EP], u: Vertex[VP]): Vertex[VP] = {
-    val (v1, v2) = vertices(edge)
-    u match {
-      case _ if u.equals(v1) => v2
-      case _ if u.equals(v2) => v1
-      case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
-    }
-  }
+  def other(edge: Edge[ES, EP], u: Vertex[VP]): Vertex[VP]
 
   def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean
 

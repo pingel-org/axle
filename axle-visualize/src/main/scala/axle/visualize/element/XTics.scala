@@ -8,6 +8,7 @@ import java.awt.Graphics2D
 import java.awt.Font
 import java.awt.FontMetrics
 import Angle._
+import spire.implicits._
 
 class XTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],
@@ -40,7 +41,7 @@ class XTics[X, Y](
     g2d.setColor(Color.black)
 
     // TODO: angle xtics?
-    if (angle == zeroDegrees) {
+    if (angle === zeroDegrees) {
       g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
     } else {
       drawStringAtAngle(g2d, fontMetrics, label, bottomScaled, angle)

@@ -27,7 +27,7 @@ object ViewXhtml extends View[xml.NodeSeq] {
     val lineNos = max(1, node.lineNo - CONTEXT_PAD) to min(highlightedHtml.size, node.lineNo + CONTEXT_PAD)
 
     <div>{
-      for { lineno <- lineNos } yield {
+      lineNos map { lineno =>
         <span class={ "lineno" }>
           <a href={ uri + '#' + lineno }>{ "%5d".format(lineno) }</a>
         </span>
@@ -63,17 +63,17 @@ object ViewXhtml extends View[xml.NodeSeq] {
         <tr>
           <td></td>
           {
-            for (term <- g.terminals) yield {
+            g.terminals map { term =>
               <td>{ term.label }</td>
             }
           }
         </tr>
         {
-          for (nterm <- g.nonTerminals) yield {
+          g.nonTerminals map { nterm =>
             <tr>
               <td>{ nterm }:</td>
               {
-                for (term <- g.terminals) yield {
+                g.terminals map { term =>
                   <td>
                     {
                       if (g.parseTable.contains((nterm, term))) {

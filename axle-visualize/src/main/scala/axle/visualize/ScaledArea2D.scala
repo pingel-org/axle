@@ -8,16 +8,18 @@ import math.{ min, abs }
 import axle.algebra._ //Portionable
 import axle.quanta._
 import Angle._
+import spire.implicits._
+import spire.algebra._
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
 case class Point2D[X, Y](x: X, y: Y)
 
-case class ScaledArea2D[X: Portionable, Y: Portionable](
+case class ScaledArea2D[X: Portionable: Eq, Y: Portionable: Eq](
   width: Int, height: Int, pad: Int,
   minX: X, maxX: X, minY: Y, maxY: Y) {
 
-  val nonZeroArea = (!(minX equals maxX)) && (!(minY equals maxY))
+  val nonZeroArea = (!(minX === maxX)) && (!(minY === maxY))
 
   val xPortionable = implicitly[Portionable[X]]
   val yPortionable = implicitly[Portionable[Y]]
