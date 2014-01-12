@@ -38,11 +38,11 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  implicit def enComponentPlot[X: Plottable, Y: Plottable](plot: Plot[X, Y]): Component = new PlotComponent(plot)
+  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y]): Component = new PlotComponent(plot)
 
-  implicit def enComponentBarChart[S, Y: Plottable](barChart: BarChart[S, Y]): Component = new BarChartComponent(barChart)
+  implicit def enComponentBarChart[S, Y: Plottable: Eq](barChart: BarChart[S, Y]): Component = new BarChartComponent(barChart)
 
-  implicit def enComponentBarChartGrouped[G, S, Y: Plottable](barChart: BarChartGrouped[G, S, Y]): Component = new BarChartGroupedComponent(barChart)
+  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq](barChart: BarChartGrouped[G, S, Y]): Component = new BarChartGroupedComponent(barChart)
 
   implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {
     case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)

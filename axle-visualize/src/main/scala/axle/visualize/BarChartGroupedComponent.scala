@@ -19,18 +19,20 @@ import Angle._
 import axle.algebra.Plottable
 import Plottable._
 import axle.visualize.element._
+import spire.algebra._
+import spire.implicits._
 
-class BarChartGroupedView[G, S, Y: Plottable](chart: BarChartGrouped[G, S, Y], data: Map[(G, S), Y], colorStream: Stream[Color], normalFont: Font) {
+class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y], data: Map[(G, S), Y], colorStream: Stream[Color], normalFont: Font) {
 
   import chart._
 
-  val minX = 0.0
-  val maxX = 1.0
+  val minX = 0d
+  val maxX = 1d
   val yAxis = minX
 
   val padding = 0.05 // on each side
-  val widthPerGroup = (1.0 - (2 * padding)) / groups.size
-  val whiteSpace = widthPerGroup * (1.0 - barWidthPercent)
+  val widthPerGroup = (1d - (2 * padding)) / groups.size
+  val whiteSpace = widthPerGroup * (1d - barWidthPercent)
 
   val yPlottable = implicitly[Plottable[Y]]
 
@@ -70,7 +72,7 @@ class BarChartGroupedView[G, S, Y: Plottable](chart: BarChartGrouped[G, S, Y], d
 
 }
 
-class BarChartGroupedComponent[G, S, Y: Plottable](chart: BarChartGrouped[G, S, Y]) extends JPanel with Fed {
+class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y]) extends JPanel with Fed {
 
   import chart._
 

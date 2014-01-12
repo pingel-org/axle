@@ -18,8 +18,9 @@ import java.awt.Frame
 import scala.concurrent.Await
 import axle.visualize.element._
 import axle.algebra.Plottable
+import spire.algebra.Eq
 
-class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])], normalFont: Font) {
+class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])], normalFont: Font) {
 
   import plot._
 
@@ -64,7 +65,7 @@ class PlotView[X: Plottable, Y: Plottable](plot: Plot[X, Y], data: Seq[(String, 
 
 }
 
-class PlotComponent[X: Plottable, Y: Plottable](plot: Plot[X, Y]) extends JPanel with Fed {
+class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y]) extends JPanel with Fed {
 
   import plot._
 

@@ -1,6 +1,17 @@
 package axle.game.cards
 
+import spire.algebra._
+import spire.implicits._
+
 object Rank {
+
+  implicit def rankEq: Eq[Rank] = new Eq[Rank] {
+    def eqv(x: Rank, y: Rank): Boolean = x.asInt === y.asInt
+  }
+  
+  implicit object RankOrdering extends Ordering[Rank] {
+    def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
+  }
 
   def apply(c: Char): Rank = c match {
     case '2' => R2
@@ -25,10 +36,6 @@ sealed trait Rank {
 
   def serialize: Char
 
-}
-
-class RankOrdering extends Ordering[Rank] {
-  def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
 }
 
 object R2 extends Rank {

@@ -79,8 +79,8 @@ case class LLLanguage(
 
   def first(X: Symbol): Set[Symbol] = X match {
     case Terminal(_) => Set(X)
-    case NonTerminal(_) => {
-      llRules.filter(_.from === X).flatMap({ rule =>
+    case nt @ NonTerminal(_) => {
+      llRules.filter(_.from === nt).flatMap({ rule =>
         rule.rhs match {
           case List(ε) => Set(ε) // Case 2
           case _ => first(rule.rhs) // Case 3

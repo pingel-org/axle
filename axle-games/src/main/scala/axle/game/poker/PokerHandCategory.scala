@@ -1,7 +1,6 @@
 package axle.game.poker
 
 import axle.game.cards._
-import axle.game.cards.Implicits.{ rankOrdering, cardOrdering }
 import math.Ordering
 import math.Ordering.Implicits._
 
@@ -14,7 +13,7 @@ sealed trait PokerHandCategory {
 
   def compareAlike(a: PokerHand, b: PokerHand): Int =
     a.groups.map(_._2).zip(b.groups.map(_._2))
-      .map({ case (ar, br) => rankOrdering.compare(ar, br) })
+      .map({ case (ar, br) => implicitly[Ordering[Rank]].compare(ar, br) })
       .find(_ != 0)
       .getOrElse(0)
 

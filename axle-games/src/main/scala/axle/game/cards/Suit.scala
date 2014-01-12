@@ -1,7 +1,14 @@
 package axle.game.cards
 
+import spire.algebra._
+import spire.implicits._
+
 object Suit {
 
+  implicit def suitEq: Eq[Suit] = new Eq[Suit] {
+    def eqv(x: Suit, y: Suit): Boolean = x.equals(y)
+  }
+  
   def apply(c: Char): Suit = c match {
     case '♠' => Spades
     case '♢' => Diamonds

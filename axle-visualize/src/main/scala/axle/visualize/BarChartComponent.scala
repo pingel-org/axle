@@ -19,18 +19,20 @@ import Angle._
 import axle.algebra.Plottable
 import Plottable._
 import axle.visualize.element._
+import spire.algebra._
+import spire.implicits._
 
-class BarChartView[S, Y: Plottable](chart: BarChart[S, Y], data: Map[S, Y], colorStream: Stream[Color], normalFont: Font) {
+class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], colorStream: Stream[Color], normalFont: Font) {
 
   import chart._
 
-  val minX = 0.0
-  val maxX = 1.0
+  val minX = 0d
+  val maxX = 1d
   val yAxis = minX
 
   val padding = 0.05 // on each side
-  val widthPerSlice = (1.0 - (2 * padding)) / slices.size
-  val whiteSpace = widthPerSlice * (1.0 - barWidthPercent)
+  val widthPerSlice = (1d - (2 * padding)) / slices.size
+  val whiteSpace = widthPerSlice * (1d - barWidthPercent)
 
   val yPlottable = implicitly[Plottable[Y]]
 
@@ -66,7 +68,7 @@ class BarChartView[S, Y: Plottable](chart: BarChart[S, Y], data: Map[S, Y], colo
 
 }
 
-class BarChartComponent[S, Y: Plottable](chart: BarChart[S, Y]) extends JPanel with Fed {
+class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y]) extends JPanel with Fed {
 
   import chart._
 

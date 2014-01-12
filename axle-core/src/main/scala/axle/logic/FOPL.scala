@@ -11,6 +11,10 @@ object FOPL {
     (newSym, skolems + (newSym -> universally))
   }
 
+  implicit def symbolEq: Eq[Symbol] = new Eq[Symbol] {
+    def eqv(x: Symbol, y: Symbol): Boolean = x.equals(y)
+  }
+  
   object Predicate {
     implicit def predicateEq = new Eq[Predicate] {
       def eqv(x: Predicate, y: Predicate): Boolean =
