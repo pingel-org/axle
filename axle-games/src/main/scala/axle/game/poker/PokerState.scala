@@ -20,9 +20,6 @@ case class PokerState(
   _eventQueues: Map[PokerPlayer, List[Event[Poker]]])(implicit game: Poker)
   extends State[Poker]() {
 
-  implicit val pokerHandOrdering = new PokerHandOrdering()
-  implicit val pokerHandCategoryOrdering = new PokerHandCategoryOrdering()
-
   val bigBlind = 2 // the "minimum bet"
   val smallBlind = bigBlind / 2
 
@@ -67,9 +64,9 @@ case class PokerState(
             ", $" + piles.get(p).map(_.toString).getOrElse("--") + " remaining"
       }).mkString("\n")
 
-  def moves(): Seq[PokerMove] = List()
+  def moves: Seq[PokerMove] = List()
 
-  def outcome(): Option[PokerOutcome] = _outcome
+  def outcome: Option[PokerOutcome] = _outcome
 
   // TODO: is there a limit to the number of raises that can occur?
   // TODO: how to handle player exhausting pile during game?

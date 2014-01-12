@@ -4,6 +4,15 @@ import axle.game.cards._
 import math.Ordering
 import math.Ordering.Implicits._
 
+object PokerHandCategory {
+
+  implicit object PokerHandCategoryOrdering extends Ordering[PokerHandCategory] {
+    def compare(a: PokerHandCategory, b: PokerHandCategory): Int =
+      a.asInt.compare(b.asInt)
+  }
+
+}
+
 sealed trait PokerHandCategory {
 
   def asInt: Int
@@ -103,12 +112,5 @@ object High extends PokerHandCategory {
   override def describe(hand: PokerHand): String = rank(hand) + " " + name
   def specifics(hand: PokerHand): String = "" + rank(hand)
   def rank(hand: PokerHand): Rank = hand.sortedHand(0).rank
-
-}
-
-class PokerHandCategoryOrdering extends Ordering[PokerHandCategory] {
-
-  def compare(a: PokerHandCategory, b: PokerHandCategory): Int =
-    a.asInt.compare(b.asInt)
 
 }

@@ -4,7 +4,7 @@ import org.specs2.mutable._
 
 import axle._
 import axle.game.cards._
-import axle.game.poker.Implicits.pokerHandOrdering
+import spire.algebra.Eq
 
 class PokerSpec extends Specification {
 
@@ -25,7 +25,7 @@ class PokerSpec extends Specification {
 
       val jacksAndSixes = string2hand("6♡,6♢,T♠,J♠,J♡")
 
-      hands.max must be equalTo jacksAndSixes
+      true must be equalTo implicitly[Eq[PokerHand]].eqv(hands.max, jacksAndSixes)
     }
   }
 

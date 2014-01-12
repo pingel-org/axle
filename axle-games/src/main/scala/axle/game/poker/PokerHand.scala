@@ -3,18 +3,30 @@ package axle.game.poker
 import spire.implicits._
 import spire.algebra._
 import axle.game.cards._
-import axle.game.cards.Implicits._
-import axle.game.poker.Implicits._
 
 object PokerHand {
-  
-//  override def hashCode: Int = cards.##
+
+  //  override def hashCode: Int = cards.##
 
   implicit def pokerHandEq: Eq[PokerHand] = new Eq[PokerHand] {
-    def eqv(x: PokerHand, y: PokerHand): Boolean = 
+    def eqv(x: PokerHand, y: PokerHand): Boolean =
       x.sortedHand === y.sortedHand
   }
-  
+
+  implicit object PokerHandOrdering extends Ordering[PokerHand] {
+
+    import math.Ordering
+    import math.Ordering.Implicits._
+
+    def compare(a: PokerHand, b: PokerHand): Int = {
+      val ac = a.category
+      val bc = b.category
+      val cmpCat = implicitly[Ordering[PokerHandCategory]].compare(ac, bc)
+      if (cmpCat === 0) ac.compareAlike(a, b) else cmpCat
+    }
+
+  }
+
 }
 
 case class PokerHand(cards: IndexedSeq[Card]) {
@@ -55,21 +67,5 @@ case class PokerHand(cards: IndexedSeq[Card]) {
   override def toString: String = sortedHand.reverse.map(_.toString).mkString(" ")
 
   def description: String = category.describe(this)
-
-}
-
-class PokerHandOrdering extends Ordering[PokerHand] {
-
-  import math.Ordering
-  import math.Ordering.Implicits._
-
-  def compare(a: PokerHand, b: PokerHand): Int = {
-    val ac = a.category
-    val bc = b.category
-
-    val cmpCat = pokerHandCategoryOrdering.compare(ac, bc)
-    if (cmpCat === 0) ac.compareAlike(a, b) else cmpCat
-
-  }
 
 }
