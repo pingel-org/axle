@@ -2,6 +2,7 @@ package axle.quanta
 
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 import axle.graph._
 
 class Information extends Quantum {
@@ -16,7 +17,10 @@ class Information extends Quantum {
   type Q = InformationQuantity
 
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
-    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+    def eqv(x: Q, y: Q): Boolean =
+      (x.magnitude === y.magnitude) &&
+        ((x.unitOption.isDefined && y.unitOption.isDefined && (x.unitOption.get === y.unitOption.get)) ||
+            (x.unitOption.isEmpty && y.unitOption.isEmpty && x.equals(y)))
   }
 
   def newUnitOfMeasurement(
@@ -39,8 +43,7 @@ class Information extends Quantum {
       unit("megabyte", "MB"),
       unit("gigabyte", "GB"),
       unit("terabyte", "TB"),
-      unit("petabyte", "PB")
-    ),
+      unit("petabyte", "PB")),
     (vs: Seq[Vertex[InformationQuantity]]) => vs match {
       case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil => trips2fns(List(
         (bit, nibble, 4),
@@ -49,11 +52,9 @@ class Information extends Quantum {
         (kilobyte, megabyte, 1024),
         (megabyte, gigabyte, 1024),
         (gigabyte, terabyte, 1024),
-        (terabyte, petabyte, 1024)
-      ))
+        (terabyte, petabyte, 1024)))
       case _ => Nil
-    }
-  )
+    })
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Information"
 

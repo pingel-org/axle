@@ -2,6 +2,7 @@ package axle.quanta
 
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 import axle.graph._
 
 class Frequency extends Quantum {
@@ -16,7 +17,10 @@ class Frequency extends Quantum {
   type Q = FrequencyQuantity
 
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
-    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+    def eqv(x: Q, y: Q): Boolean =
+      (x.magnitude === y.magnitude) &&
+        ((x.unitOption.isDefined && y.unitOption.isDefined && (x.unitOption.get === y.unitOption.get)) ||
+          (x.unitOption.isEmpty && y.unitOption.isEmpty && x.equals(y)))
   }
 
   def newUnitOfMeasurement(
@@ -37,17 +41,14 @@ class Frequency extends Quantum {
       unit("Hertz", "Hz", Some("http://en.wikipedia.org/wiki/Hertz")),
       unit("Kilohertz", "KHz"),
       unit("Megahertz", "MHz"),
-      unit("Gigahertz", "GHz")
-    ),
+      unit("Gigahertz", "GHz")),
     (vs: Seq[Vertex[FrequencyQuantity]]) => vs match {
       case hz :: khz :: mhz :: ghz :: Nil => trips2fns(List(
         (hz, khz, 1E3),
         (hz, mhz, 1E9),
-        (hz, ghz, 1E12)
-      ))
+        (hz, ghz, 1E12)))
       case _ => Nil
-    }
-  )
+    })
 
   lazy val hertz = byName("Hertz")
   lazy val kilohertz = byName("Kilohertz")

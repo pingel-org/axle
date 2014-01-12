@@ -2,6 +2,7 @@ package axle.quanta
 
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 import axle.graph._
 
 class Mass extends Quantum {
@@ -16,7 +17,10 @@ class Mass extends Quantum {
   type Q = MassQuantity
 
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
-    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+    def eqv(x: Q, y: Q): Boolean =
+      (x.magnitude === y.magnitude) &&
+        ((x.unitOption.isDefined && y.unitOption.isDefined && (x.unitOption.get === y.unitOption.get)) ||
+          (x.unitOption.isEmpty && y.unitOption.isEmpty && x.equals(y)))
   }
 
   def newUnitOfMeasurement(
@@ -59,8 +63,7 @@ class Mass extends Quantum {
       unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars")),
       unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)")),
       unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto")),
-      unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
-    ),
+      unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))),
     (vs: Seq[Vertex[MassQuantity]]) => vs match {
       case g :: t :: mg :: kg :: meg :: kt :: mt :: gt :: tt :: pt :: et :: zt :: yt ::
         man :: earth :: sun :: jupiter :: saturn :: neptune :: uranus ::
@@ -89,11 +92,9 @@ class Mass extends Quantum {
           (et, mars, 641.85),
           (et, mercury, 330.22),
           (et, pluto, 13.05),
-          (et, moon, 73.477)
-        ))
+          (et, moon, 73.477)))
       case _ => Nil
-    }
-  )
+    })
 
   lazy val gram = byName("gram")
   lazy val g = gram

@@ -2,6 +2,7 @@ package axle.quanta
 
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 import axle.graph._
 
 class Acceleration extends Quantum {
@@ -16,7 +17,10 @@ class Acceleration extends Quantum {
   type Q = AccelerationQuantity
 
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
-    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+    def eqv(x: Q, y: Q): Boolean =
+      (x.magnitude === y.magnitude) &&
+        ((x.unitOption.isDefined && y.unitOption.isDefined && (x.unitOption.get === y.unitOption.get)) ||
+            (x.unitOption.isEmpty && y.unitOption.isEmpty && x.equals(y)))
   }
 
   def newUnitOfMeasurement(

@@ -1,6 +1,6 @@
 package axle.visualize
 
-import org.specs2.mutable._
+import org.specs2.mutable.Specification
 
 class TimeSeriesPlotSpec extends Specification {
 
@@ -9,8 +9,12 @@ class TimeSeriesPlotSpec extends Specification {
 
       import axle.quanta._
       import Information._
+      import spire.algebra._
+      import spire.implicits._
 
-      bit.plottable.tics(0 *: bit, 1 *: bit) must be equalTo Vector(
+      val tics = bit.plottable.tics(0 *: bit, 1 *: bit).toVector
+      
+      val expected = Vector(
         (0.0 *: bit, "0.0"),
         (0.1 *: bit, "0.1"),
         (0.2 *: bit, "0.2"),
@@ -23,6 +27,11 @@ class TimeSeriesPlotSpec extends Specification {
         (0.9 *: bit, "0.9"),
         (1.0 *: bit, "1.0")
       )
+     
+      implicit val ieq = implicitly[Eq[Information.Q]]
+      implicit val vieq = implicitly[Eq[Vector[(Information.Q, String)]]]
+
+      true must be equalTo (vieq.eqv(tics, expected))
     }
   }
 

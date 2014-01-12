@@ -2,6 +2,7 @@ package axle.quanta
 
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 import axle.graph._
 
 class Volume extends Quantum {
@@ -16,7 +17,10 @@ class Volume extends Quantum {
   type Q = VolumeQuantity
 
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
-    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+    def eqv(x: Q, y: Q): Boolean =
+      (x.magnitude === y.magnitude) &&
+        ((x.unitOption.isDefined && y.unitOption.isDefined && (x.unitOption.get === y.unitOption.get)) ||
+          (x.unitOption.isEmpty && y.unitOption.isEmpty && x.equals(y)))
   }
 
   def newUnitOfMeasurement(
@@ -39,15 +43,12 @@ class Volume extends Quantum {
     List(
       derive(m2.by[Distance.type, this.type](meter, this), Some("m3"), Some("m3")),
       derive(km2.by[Distance.type, this.type](km, this), Some("km3"), Some("km3")),
-      unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
-    ),
+      unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))),
     (vs: Seq[Vertex[VolumeQuantity]]) => vs match {
       case m3 :: km3 :: greatLakes :: Nil => trips2fns(List(
-        (km3, greatLakes, 22671)
-      ))
+        (km3, greatLakes, 22671)))
       case _ => Nil
-    }
-  )
+    })
 
   lazy val m3 = byName("m3")
   lazy val km3 = byName("km3")

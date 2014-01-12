@@ -2,6 +2,7 @@ package axle.quanta
 
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 import axle.graph._
 
 class Power extends Quantum {
@@ -16,7 +17,10 @@ class Power extends Quantum {
   type Q = PowerQuantity
 
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
-    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+    def eqv(x: Q, y: Q): Boolean =
+      (x.magnitude === y.magnitude) &&
+        ((x.unitOption.isDefined && y.unitOption.isDefined && (x.unitOption.get === y.unitOption.get)) ||
+          (x.unitOption.isEmpty && y.unitOption.isEmpty && x.equals(y)))
   }
 
   def newUnitOfMeasurement(
@@ -42,8 +46,7 @@ class Power extends Quantum {
       unit("horsepower", "hp"),
       unit("light bulb", "light bulb"),
       unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam")),
-      unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
-    ),
+      unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))),
     (vs: Seq[Vertex[PowerQuantity]]) => vs match {
       case w :: kw :: mw :: gw :: miw :: hp :: lightBulb :: hooverDam :: mustangGT :: Nil => trips2fns(List(
         (w, kw, 1E3),
@@ -52,11 +55,9 @@ class Power extends Quantum {
         (miw, w, 1E3),
         (w, lightBulb, 60),
         (mw, hooverDam, 2080),
-        (hp, mustangGT, 420)
-      ))
+        (hp, mustangGT, 420)))
       case _ => Nil
-    }
-  )
+    })
 
   lazy val watt = byName("watt")
   lazy val kilowatt = byName("kilowatt")

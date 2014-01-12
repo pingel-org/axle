@@ -2,6 +2,7 @@ package axle.quanta
 
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 import axle.graph._
 
 class Time extends Quantum {
@@ -16,7 +17,10 @@ class Time extends Quantum {
   type Q = TimeQuantity
 
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
-    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+    def eqv(x: Q, y: Q): Boolean =
+      (x.magnitude === y.magnitude) &&
+        ((x.unitOption.isDefined && y.unitOption.isDefined && (x.unitOption.get === y.unitOption.get)) ||
+          (x.unitOption.isEmpty && y.unitOption.isEmpty && x.equals(y)))
   }
 
   def newUnitOfMeasurement(
@@ -46,8 +50,7 @@ class Time extends Quantum {
       unit("century", "century", Some("http://en.wikipedia.org/wiki/Century")),
       unit("millenium", "ky", Some("http://en.wikipedia.org/wiki/Millenium")),
       unit("megayear", "my"),
-      unit("gigayear", "gy")
-    ),
+      unit("gigayear", "gy")),
     (vs: Seq[Vertex[TimeQuantity]]) => vs match {
       case s :: ms :: μs :: ns :: m :: hr :: d :: y :: c :: ky :: my :: gy :: Nil => trips2fns(List(
         (ms, s, 1E3),
@@ -60,11 +63,9 @@ class Time extends Quantum {
         (y, c, 1E2),
         (y, ky, 1E3),
         (y, my, 1E6),
-        (y, gy, 1E9)
-      ))
+        (y, gy, 1E9)))
       case _ => Nil
-    }
-  )
+    })
 
   lazy val second = byName("second")
   lazy val millisecond = byName("millisecond")

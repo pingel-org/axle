@@ -2,6 +2,7 @@ package axle.quanta
 
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 import axle.graph._
 
 class Distance extends Quantum {
@@ -16,7 +17,10 @@ class Distance extends Quantum {
   type Q = DistanceQuantity
 
   implicit def eqTypeclass: Eq[Q] = new Eq[Q] {
-    def eqv(x: Q, y: Q): Boolean = x equals y // TODO
+    def eqv(x: Q, y: Q): Boolean =
+      (x.magnitude === y.magnitude) &&
+        ((x.unitOption.isDefined && y.unitOption.isDefined && (x.unitOption.get === y.unitOption.get)) ||
+          (x.unitOption.isEmpty && y.unitOption.isEmpty && x.equals(y)))
   }
 
   def newUnitOfMeasurement(
@@ -46,8 +50,7 @@ class Distance extends Quantum {
       unit("Astronomical Unit", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit")),
       unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit")),
       unit("light year", "ly", Some("http://en.wikipedia.org/wiki/Light-year")),
-      unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
-    ),
+      unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))),
     (vs: Seq[Vertex[DistanceQuantity]]) => vs match {
       case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => trips2fns(List(
         (ft, mile, 5280),
@@ -60,11 +63,9 @@ class Distance extends Quantum {
         (mile, au, 92955807.3),
         (km, ausi, 149597870.7),
         (km, ly, 9460730472580.8),
-        (ly, pc, 3.26)
-      ))
+        (ly, pc, 3.26)))
       case _ => Nil
-    }
-  )
+    })
 
   lazy val foot = byName("foot")
   lazy val ft = foot
