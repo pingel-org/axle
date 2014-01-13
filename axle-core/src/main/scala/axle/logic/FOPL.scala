@@ -52,15 +52,16 @@ object FOPL {
   object Statement {
 
     implicit def statementEq: Eq[Statement] = new Eq[Statement] {
+      // TODO: How can I avoid this pattern match ?
       def eqv(x: Statement, y: Statement): Boolean = (x, y) match {
-        case (And(a, b), And(x, y)) => (a === x && b === y)
-        case (Or(a, b), Or(x, y)) => (a === x && b === y)
-        case (Iff(a, b), Iff(x, y)) => (a === x && b === y)
-        case (Implies(a, b), Implies(x, y)) => (a === x && b === y)
-        case (¬(a), ¬(x)) => a === x
-        case (∃(a, b), ∃(x, y)) => (a === x && b === y)
-        case (∀(a, b), ∀(x, y)) => (a === x && b === y)
-        case (Constant(a), Constant(b)) => (a === b)
+        case (l @ And(_, _), r @ And(_, _)) => l === r
+        case (l @ Or(_, _), r @ Or(_, _)) => l === r
+        case (l @ Iff(_, _), r @ Iff(_, _)) => l === r
+        case (l @ Implies(_, _), r @ Implies(_, _)) => l === r
+        case (l @ ¬(_), r @ ¬(_)) => l === r
+        case (l @ ∃(_, _), r @ ∃(_, _)) => l === r
+        case (l @ ∀(_, _), r @ ∀(_, _)) => l === r
+        case (l @ Constant(_), r @ Constant(_)) => l === r
         case _ => false
       }
     }
@@ -84,13 +85,30 @@ object FOPL {
     def implies(right: Statement) = Implies(this, right)
   }
 
+  object And {
+    implicit def eqAnd: Eq[And] = new Eq[And] {
+      def eqv(x: And, y: And): Boolean = (x.left === y.left && x.right === y.right)
+    }
+  }
   case class And(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) && right(symbolTable)
     override def toString: String = s"($left ∧ $right)"
   }
+
+  object Or {
+    implicit def eqOr: Eq[Or] = new Eq[Or] {
+      def eqv(x: Or, y: Or): Boolean = (x.left === y.left && x.right === y.right)
+    }
+  }
   case class Or(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) || right(symbolTable)
     override def toString: String = s"($left ∨ $right)"
+  }
+
+  object Iff {
+    implicit def eqIff: Eq[Iff] = new Eq[Iff] {
+      def eqv(x: Iff, y: Iff): Boolean = (x.left === y.left && x.right === y.right)
+    }
   }
   case class Iff(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = {
@@ -100,22 +118,32 @@ object FOPL {
     }
     override def toString: String = s"($left ⇔ $right)"
   }
+
+  object Implies {
+    implicit def eqImplies: Eq[Implies] = new Eq[Implies] {
+      def eqv(x: Implies, y: Implies): Boolean = (x.left === y.left && x.right === y.right)
+    }
+  }
   case class Implies(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = (!left(symbolTable)) || right(symbolTable)
     override def toString: String = s"($left ⊃ $right)"
   }
 
+  object ¬ {
+    implicit def eqNeg: Eq[¬] = new Eq[¬] {
+      def eqv(x: ¬, y: ¬): Boolean = (x.statement === y.statement)
+    }
+  }
   case class ¬(statement: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = !statement(symbolTable)
   }
 
   object ElementOf {
     implicit def eqEO: Eq[ElementOf] = new Eq[ElementOf] {
-      def eqv(x: ElementOf, y: ElementOf): Boolean = 
+      def eqv(x: ElementOf, y: ElementOf): Boolean =
         x.symbol === y.symbol && (x.set.intersect(y.set).size === x.set.size)
     }
   }
-  
   case class ElementOf(symbol: Symbol, set: Set[Any]) {
     override def toString: String = s"$symbol ∈ $set"
   }
@@ -127,9 +155,22 @@ object FOPL {
 
   implicit val enrichSymbol = (symbol: Symbol) => new EnrichedSymbol(symbol)
 
+  object ∃ {
+    implicit def eqExists: Eq[∃] = new Eq[∃] {
+      def eqv(x: ∃, y: ∃): Boolean =
+        (x.symbolSet === y.symbolSet) && (x.statement === y.statement)
+    }
+  }
   case class ∃(symbolSet: ElementOf, statement: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean =
       symbolSet.set.exists(v => statement(symbolTable + (symbolSet.symbol -> v)))
+  }
+  
+  object ∀ {
+    implicit def eqAll: Eq[∀] = new Eq[∀] {
+      def eqv(x: ∀, y: ∀): Boolean =
+        (x.symbolSet === y.symbolSet) && (x.statement === y.statement)
+    }
   }
   case class ∀(symbolSet: ElementOf, statement: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean =
@@ -140,6 +181,12 @@ object FOPL {
   def exists(symbolSet: ElementOf, statement: Statement) = ∃(symbolSet, statement)
   def forall(symbolSet: ElementOf, statement: Statement) = ∀(symbolSet, statement)
 
+  object Constant {
+    implicit def eqConstant: Eq[Constant] = new Eq[Constant] {
+      def eqv(x: Constant, y: Constant): Boolean =
+        x.b === y.b
+    }
+  }
   case class Constant(b: Boolean) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = b
     override def toString() = b.toString
