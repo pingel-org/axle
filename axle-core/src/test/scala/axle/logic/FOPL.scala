@@ -4,11 +4,10 @@ package axle.logic
 import org.specs2.mutable._
 import spire.algebra._
 import spire.implicits._
+import FOPL._
+import SamplePredicates._
 
 class StatementSpecification extends Specification {
-
-  import FOPL._
-  import SamplePredicates._
 
   "eliminate equivalence" should {
     "work 1" in {

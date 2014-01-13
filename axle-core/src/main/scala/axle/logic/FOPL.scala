@@ -54,6 +54,7 @@ object FOPL {
     implicit def statementEq: Eq[Statement] = new Eq[Statement] {
       // TODO: How can I avoid this pattern match ?
       def eqv(x: Statement, y: Statement): Boolean = (x, y) match {
+        case (l: Predicate, r: Predicate) => l === r
         case (l @ And(_, _), r @ And(_, _)) => l === r
         case (l @ Or(_, _), r @ Or(_, _)) => l === r
         case (l @ Iff(_, _), r @ Iff(_, _)) => l === r
@@ -141,7 +142,7 @@ object FOPL {
   object ElementOf {
     implicit def eqEO: Eq[ElementOf] = new Eq[ElementOf] {
       def eqv(x: ElementOf, y: ElementOf): Boolean =
-        x.symbol === y.symbol && (x.set.intersect(y.set).size === x.set.size)
+        (x.symbol === y.symbol) && (x.set.intersect(y.set).size === x.set.size)
     }
   }
   case class ElementOf(symbol: Symbol, set: Set[Any]) {
@@ -165,7 +166,7 @@ object FOPL {
     def apply(symbolTable: Map[Symbol, Any]): Boolean =
       symbolSet.set.exists(v => statement(symbolTable + (symbolSet.symbol -> v)))
   }
-  
+
   object ∀ {
     implicit def eqAll: Eq[∀] = new Eq[∀] {
       def eqv(x: ∀, y: ∀): Boolean =
@@ -189,7 +190,7 @@ object FOPL {
   }
   case class Constant(b: Boolean) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = b
-    override def toString() = b.toString
+    override def toString: String = b.toString
   }
 
   implicit def foplBoolean(b: Boolean) = Constant(b)
