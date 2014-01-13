@@ -2,6 +2,8 @@
 package axle.logic
 
 import org.specs2.mutable._
+import spire.algebra._
+import spire.implicits._
 
 class StatementSpecification extends Specification {
 

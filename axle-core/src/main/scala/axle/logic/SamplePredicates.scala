@@ -4,10 +4,10 @@ import FOPL._
 
 object SamplePredicates {
 
-  val I = Set(10)
-  val X = Set(1, 2, 3)
-  val Y = Set(4, 5, 6)
-  val Z = Set(7, 8, 9)
+  val I: Set[Any] = Set(10)
+  val X: Set[Any] = Set(1, 2, 3)
+  val Y: Set[Any] = Set(4, 5, 6)
+  val Z: Set[Any] = Set(7, 8, 9)
 
   case class A(_symbols: Symbol*) extends Predicate(_symbols: _*) {
     def name: String = "A"

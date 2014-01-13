@@ -14,7 +14,7 @@ object FOPL {
   implicit def symbolEq: Eq[Symbol] = new Eq[Symbol] {
     def eqv(x: Symbol, y: Symbol): Boolean = x.equals(y)
   }
-  
+
   object Predicate {
     implicit def predicateEq = new Eq[Predicate] {
       def eqv(x: Predicate, y: Predicate): Boolean =
@@ -47,6 +47,24 @@ object FOPL {
 
       (newPredicate, symbolsSkolems.last._2)
     }
+  }
+
+  object Statement {
+
+    implicit def statementEq: Eq[Statement] = new Eq[Statement] {
+      def eqv(x: Statement, y: Statement): Boolean = (x, y) match {
+        case (And(a, b), And(x, y)) => (a === x && b === y)
+        case (Or(a, b), Or(x, y)) => (a === x && b === y)
+        case (Iff(a, b), Iff(x, y)) => (a === x && b === y)
+        case (Implies(a, b), Implies(x, y)) => (a === x && b === y)
+        case (¬(a), ¬(x)) => a === x
+        case (∃(a, b), ∃(x, y)) => (a === x && b === y)
+        case (∀(a, b), ∀(x, y)) => (a === x && b === y)
+        case (Constant(a), Constant(b)) => (a === b)
+        case _ => false
+      }
+    }
+
   }
 
   trait Statement {
@@ -91,29 +109,36 @@ object FOPL {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = !statement(symbolTable)
   }
 
-  case class ElementOf[T](symbol: Symbol, set: Set[T]) {
+  object ElementOf {
+    implicit def eqEO: Eq[ElementOf] = new Eq[ElementOf] {
+      def eqv(x: ElementOf, y: ElementOf): Boolean = 
+        x.symbol === y.symbol && (x.set.intersect(y.set).size === x.set.size)
+    }
+  }
+  
+  case class ElementOf(symbol: Symbol, set: Set[Any]) {
     override def toString: String = s"$symbol ∈ $set"
   }
 
   class EnrichedSymbol(symbol: Symbol) {
-    def in[T](set: Set[T]) = ElementOf(symbol, set)
-    def ∈[T](set: Set[T]) = ElementOf(symbol, set)
+    def in(set: Set[Any]) = ElementOf(symbol, set)
+    def ∈(set: Set[Any]) = ElementOf(symbol, set)
   }
 
   implicit val enrichSymbol = (symbol: Symbol) => new EnrichedSymbol(symbol)
 
-  case class ∃[T](symbolSet: ElementOf[T], statement: Statement) extends Statement {
+  case class ∃(symbolSet: ElementOf, statement: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean =
       symbolSet.set.exists(v => statement(symbolTable + (symbolSet.symbol -> v)))
   }
-  case class ∀[T](symbolSet: ElementOf[T], statement: Statement) extends Statement {
+  case class ∀(symbolSet: ElementOf, statement: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean =
       symbolSet.set.forall(v => statement(symbolTable + (symbolSet.symbol -> v)))
   }
 
   def not(statement: Statement) = ¬(statement)
-  def exists[T](symbolSet: ElementOf[T], statement: Statement) = ∃(symbolSet, statement)
-  def forall[T](symbolSet: ElementOf[T], statement: Statement) = ∀(symbolSet, statement)
+  def exists(symbolSet: ElementOf, statement: Statement) = ∃(symbolSet, statement)
+  def forall(symbolSet: ElementOf, statement: Statement) = ∀(symbolSet, statement)
 
   case class Constant(b: Boolean) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = b
