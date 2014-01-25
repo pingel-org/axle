@@ -16,11 +16,17 @@ abstract class MonoidLawsSpec[A: Eq: Arbitrary](name: String, monoids: Seq[Monoi
 
   implicit lazy val arbMonoid: Arbitrary[Monoid[A]] = Arbitrary(genMonoid)
 
-  s"$name obey left zero" ! prop { (m: Monoid[A], x: A) => m.op(m.id, x) === x }
+  s"$name obey left zero" ! prop { (m: Monoid[A], x: A) =>
+    m.op(m.id, x) === x
+  }
 
-  s"$name obey right zero" ! prop { (m: Monoid[A], x: A) => m.op(x, m.id) === x }
+  s"$name obey right zero" ! prop { (m: Monoid[A], x: A) =>
+    m.op(x, m.id) === x
+  }
 
-  s"$name obey associativity" ! prop { (m: Monoid[A], x: A, y: A, z: A) => m.op(m.op(x, y), z) === m.op(x, m.op(y, z)) }
+  s"$name obey associativity" ! prop { (m: Monoid[A], x: A, y: A, z: A) =>
+    m.op(m.op(x, y), z) === m.op(x, m.op(y, z))
+  }
 
 }
 
