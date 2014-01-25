@@ -2,7 +2,6 @@ package axle.algebra
 
 import spire.algebra._
 import spire.implicits._
-
 import org.specs2.ScalaCheck
 import org.specs2.mutable._
 import org.scalacheck._
@@ -10,32 +9,21 @@ import Arbitrary._
 import Gen._
 import Prop._
 
-class MonoidLaws[A: Eq](monoids: Seq[Monoid[A]]) {
+abstract class MonoidLawsSpec[A: Eq: Arbitrary](name: String, monoids: Seq[Monoid[A]])
+  extends Specification with ScalaCheck {
 
-  val leftZero = (m: Monoid[A], x: A) => m.op(m.id, x) === x
+  lazy val genMonoid: Gen[Monoid[A]] = Gen.oneOf(monoids)
 
-  val rightZero = (m: Monoid[A], x: A) => m.op(x, m.id) === x
+  implicit lazy val arbMonoid: Arbitrary[Monoid[A]] = Arbitrary(genMonoid)
 
-  val associativity = (m: Monoid[A], x: A, y: A, z: A) => m.op(m.op(x, y), z) === m.op(x, m.op(y, z))
+  s"$name obey left zero" ! prop { (m: Monoid[A], x: A) => m.op(m.id, x) === x }
 
-  lazy val genMonoid = oneOf(monoids)
+  s"$name obey right zero" ! prop { (m: Monoid[A], x: A) => m.op(x, m.id) === x }
 
-  implicit lazy val arbMonoid = Arbitrary(genMonoid)
-
-}
-
-class IntMonoidLawsSpec extends Specification with ScalaCheck {
-
-  val intMonoids = List(
-    implicitly[AdditiveMonoid[Int]].additive,
-    implicitly[MultiplicativeMonoid[Int]].multiplicative)
-
-  val laws = new MonoidLaws(intMonoids)
-
-  import laws._
-
-  "Int monoids obey left zero" ! prop { leftZero }
-  "Int monoids obey right zero" ! prop { rightZero }
-  "Int monoids obey associativity" ! prop { associativity }
+  s"$name obey associativity" ! prop { (m: Monoid[A], x: A, y: A, z: A) => m.op(m.op(x, y), z) === m.op(x, m.op(y, z)) }
 
 }
+
+class IntMonoidLawsSpec extends MonoidLawsSpec("Int monoids", List(
+  implicitly[AdditiveMonoid[Int]].additive,
+  implicitly[MultiplicativeMonoid[Int]].multiplicative))
