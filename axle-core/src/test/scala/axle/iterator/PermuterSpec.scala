@@ -16,21 +16,21 @@ class PermuterSpec extends Specification {
     "Permute (a) 1" in {
       val pA1 = Permutations(Vector("a"), 1).toList
       pA1 must have size (1)
-      pA1 must contain(List("a"))
+      pA1.contains(List("a")) must be equalTo true
     }
 
     "Permute (a, b) 1" in {
       val pAB2 = Permutations(Vector("a", "b"), 1).toList
       pAB2 must have size (2)
-      pAB2 must contain(List("a"))
-      pAB2 must contain(List("b"))
+      pAB2.contains(List("a")) must be equalTo true
+      pAB2.contains(List("b")) must be equalTo true
     }
 
     "Permute (a, b) 2" in {
       val pAB2 = Permutations(Vector("a", "b"), 2).toList
       pAB2 must have size (2)
-      pAB2 must contain(List("a", "b"))
-      pAB2 must contain(List("b", "a"))
+      pAB2.contains(List("a", "b")) must be equalTo true
+      pAB2.contains(List("b", "a")) must be equalTo true
     }
 
     "Permute (a, b, c) 1" in {

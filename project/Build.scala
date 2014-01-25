@@ -19,7 +19,10 @@ object AxleBuild extends Build {
 
     crossScalaVersions := Seq("2.10.3"),
 
-    libraryDependencies += "org.specs2" %% "specs2" % "1.13" % "test",
+    libraryDependencies ++= Seq(
+      "org.specs2" %% "specs2" % "2.3.7" % "test"
+      //"org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
+    ),
 
     scalacOptions ++= Seq(
       "-unchecked",
@@ -97,7 +100,7 @@ import axle._
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
       "org.spire-math" %% "spire" % "0.7.1",
-      "com.chuusai" % "shapeless_2.10.2" % "2.0.0-SNAPSHOT" changing()
+      "com.chuusai" % "shapeless_2.10.3" % "2.0.0-SNAPSHOT" changing()
       // "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
     )
   )
