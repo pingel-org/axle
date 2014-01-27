@@ -11,22 +11,16 @@ trait Functor[F[_]] {
 
 object Functor {
 
-//  def checkIdentity[F[_]: Functor, A: Eq](xs: F[A]): Boolean =
-//    xs.fmap(identity) === id(xs)
-//
-//  def checkComposition[F[_]: Functor, A, B, C](xs: F[A], f: A => B, g: B => C): Boolean =
-//    xs.fmap(f).fmap(g) === xs.fmap(g compose f)
-
   implicit def ListFunctor: Functor[List] = new Functor[List] {
-    def fmap[A, B](list: List[A], f: A => B) = list.map(f)
+    def fmap[A, B](list: List[A], f: A => B) = list map f
   }
 
   implicit def OptFunctor: Functor[Option] = new Functor[Option] {
-    def fmap[A, B](opt: Option[A], f: A => B) = opt.map(f)
+    def fmap[A, B](opt: Option[A], f: A => B) = opt map f
   }
 
   implicit def Function1Functor[A]: Functor[({ type λ[α] = (A) => α })#λ] = new Functor[({ type λ[α] = (A) => α })#λ] {
-    def fmap[B, C](fn: A => B, f: B => C) = f.compose(fn)
+    def fmap[B, C](fn: A => B, f: B => C) = f compose fn
   }
 
 }
