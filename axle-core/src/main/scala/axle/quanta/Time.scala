@@ -81,6 +81,12 @@ class Time extends Quantum {
   lazy val millisecond = byName("millisecond")
   lazy val microsecond = byName("microsecond")
   lazy val nanosecond = byName("nanosecond")
+  lazy val picosecond = byName("picosecond")
+  lazy val femtosecond = byName("femtosecond")
+  lazy val attosecond = byName("attosecond")
+  lazy val zeptosecond = byName("zeptosecond")
+  lazy val yoctosecond = byName("yoctosecond")
+  
   lazy val minute = byName("minute")
   lazy val hour = byName("hour")
   lazy val day = byName("day")
@@ -96,6 +102,11 @@ class Time extends Quantum {
   lazy val ms = millisecond
   lazy val μs = microsecond
   lazy val ns = nanosecond
+  lazy val ps = picosecond
+  lazy val fs = femtosecond
+  lazy val as = attosecond
+  lazy val zs = zeptosecond
+  lazy val ys = yoctosecond
 
   lazy val globalLifeExpectancy = 67.2 *: year // Some("2010 global average life expectancy"), None, Some("http://en.wikipedia.org/wiki/Life_expectancy"))
 
