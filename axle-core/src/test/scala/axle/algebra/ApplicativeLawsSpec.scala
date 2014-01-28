@@ -1,13 +1,25 @@
 package axle.algebra
 
-class ApplicativeLawsSpec {
+import spire.algebra._
+import spire.implicits._
+import org.specs2.ScalaCheck
+import org.specs2.mutable._
+import org.scalacheck._
+import Arbitrary._
+import Gen._
+import Prop._
+
+abstract class ApplicativeLawsSpec[F[_]: Applicative, A: Eq: Arbitrary, B: Eq: Arbitrary, C: Eq: Arbitrary](name: String)(
+  implicit eqfa: Eq[F[A]],
+  arbfa: Arbitrary[F[A]])
+  extends Specification
+  with ScalaCheck {
 
   // pure id <*> v = v
-
-  def checkAxiom1[F[_]: Applicative, T](v: T): Boolean = {
-    //val applicative = implicitly[Applicative[F]]
-    //applicative.pure(id <*> v) === v
-    true
+  s"$name obey left identity" ! prop { (v: F[A]) =>
+    val applicative = implicitly[Applicative[F]]
+    val lhs: F[A] = applicative.<*>(applicative.pure(identity[A] _)).apply(v)
+    lhs === v
   }
 
   // pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
