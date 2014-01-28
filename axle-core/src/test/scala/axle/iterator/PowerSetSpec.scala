@@ -9,12 +9,12 @@ class PowerSetSpec extends Specification {
   "Indexed Power Set" should {
     "Enumerate subsets of {a, b}" in {
       val elems = Vector("a", "b")
-      val psAB = ℘(elems)
+      val psAB = ℘(elems).toList
       psAB must have size (4)
-      psAB must contain(Set())
-      psAB must contain(Set("a"))
-      psAB must contain(Set("b"))
-      psAB must contain(Set("a", "b"))
+      psAB.contains(Set()) must be equalTo true
+      psAB.contains(Set("a")) must be equalTo true
+      psAB.contains(Set("b")) must be equalTo true
+      psAB.contains(Set("a", "b")) must be equalTo true
     }
   }
 

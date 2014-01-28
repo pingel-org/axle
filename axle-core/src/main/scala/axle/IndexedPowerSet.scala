@@ -36,7 +36,7 @@ class IndexedPowerSet[E](all: IndexedSeq[E]) extends Iterable[Set[E]] {
     mask(i).zip(all).filter(_._1).map(_._2).toSet
   }
 
-  override def size(): Int = 0x01 << all.length
+  override def size: Int = 0x01 << all.length
 
   def iterator(): Iterator[Set[E]] = (0 until size).iterator.map(this(_))
 
