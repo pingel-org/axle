@@ -34,12 +34,28 @@ object ArbitraryStuff {
   // TODO
   //implicit val arbListInt: Arbitrary[List[Int]] = Arbitrary(Gen.oneOf(List(List(1, 2, 3), List(4, 5, 6))))
 
+  implicit val eqInt2Int: Eq[Int => Int] = new Eq[Int => Int] {
+    // TODO: Is it possible to include this stochastic equality check in ScalaCheck?
+    def eqv(f: Int => Int, g: Int => Int): Boolean = {
+      (1 to 10) forall { i =>
+        val r = scala.util.Random.nextInt
+        f(r) === g(r)
+      }
+    }
+  }
 }
 
 import ArbitraryStuff._
 
 class ListIntFunctorLawsSpec extends FunctorLawsSpec[List, Int, Int, Int]("List[Int] Functor")
 
+class ListStringFunctorLawsSpec extends FunctorLawsSpec[List, String, String, String]("List[String] Functor")
+
+class OptionIntFunctorLawsSpec extends FunctorLawsSpec[Option, Int, Int, Int]("Option[Int] Functor")
+
+class OptionStringFunctorLawsSpec extends FunctorLawsSpec[Option, String, String, String]("Option[String] Functor")
+
+class Function1IntFunctorLawsSpec extends FunctorLawsSpec[({ type λ[α] = Int => α })#λ, Int, Int, Int]("Function1[Int, Int] Functor")
 
 //      val getLine = () => "test data".toList // override the real getLine
 //      val doit = ((xs: () => List[Char]) => intersperse('-')(xs().map(_.toUpper).reverse))
