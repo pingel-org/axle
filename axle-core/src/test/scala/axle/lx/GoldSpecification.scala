@@ -28,14 +28,10 @@ class GoldSpecification extends Specification {
 
       val ɸ = MemorizingLearner()
       ɸ.guesses(T).find(_.ℒ === ℒ)
-        .map(finalGuess => println("well done, ɸ"))
-        .getOrElse(println("ɸ never made a correct guess"))
+        .map(finalGuess => "well done, ɸ")
+        .getOrElse("ɸ never made a correct guess")
 
-      println("Language ℒ = " + ℒ)
-      println("Text T = " + T)
-      println()
-      println("T is for ℒ? " + T.isFor(ℒ))
-      println()
+      // T.isFor(ℒ)
 
       1 must be equalTo (1)
 
