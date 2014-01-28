@@ -35,3 +35,25 @@ abstract class MonadLawsSpec[M[_]: Monad, A: Eq: Arbitrary, B: Eq: Arbitrary, C:
   }
 
 }
+
+object Implicits {
+
+  implicit def eqEitherIntInt[L: Eq, R: Eq]: Eq[Either[L, R]] = new Eq[Either[L, R]] {
+    def eqv(x: Either[L, R], y: Either[L, R]): Boolean = (x, y) match {
+      case (Left(xl), Left(yl)) if xl === yl => true
+      case (Right(xr), Right(yr)) if xr === yr => true
+      case _ => false
+    }
+  }
+
+}
+
+import Implicits._
+
+class ListIntMonadLawsSpec extends MonadLawsSpec[List, Int, Int, Int]("List[Int] Monad")
+
+class ListStringMonadLawsSpec extends MonadLawsSpec[List, String, String, String]("List[String] Monad")
+
+class OptionIntMonadLawsSpec extends MonadLawsSpec[Option, Int, Int, Int]("Option[Int] Monad")
+
+class EitherIntMonadLawsSpec extends MonadLawsSpec[({ type λ[α] = Either[Int, α] })#λ, Int, Int, Int]("Either[Int, Int] Monad")
