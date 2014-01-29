@@ -24,31 +24,29 @@ abstract class ApplicativeLawsSpec[F[_]: Applicative, A: Eq: Arbitrary, B: Eq: A
   }
 
   // pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
-  s"$name obey axiom 2" ! prop { (u: A, v: A, w: A) =>
-    val applicative = implicitly[Applicative[F]]
-    // TODO
-    val lhs = 4
-    val rhs = 4
-    lhs === rhs
-  }
+//  s"$name obey axiom 2" ! prop { (u: A, v: A, w: A) =>
+//    val applicative = implicitly[Applicative[F]]
+//    // TODO
+//    val lhs = 4
+//    val rhs = 4
+//    lhs === rhs
+//  }
 
   // pure f <*> pure x = pure (f x)
   s"$name obey axiom 3" ! prop { (x: A, f: A => B) =>
     val applicative = implicitly[Applicative[F]]
-    val lhs: F[B] = ((applicative.<*>(applicative.pure(f))) compose applicative.pure[F, A]).apply(x)
+    val lhs: F[B] = ((applicative <*> applicative.pure(f)) compose applicative.pure[F, A]).apply(x)
     val rhs: F[B] = applicative.pure(f(x))
     lhs === rhs
   }
 
   // u <*> pure y = pure ($ y) <*> u
-  // def checkAxiom4[F[_]: Applicative, T](v: T): Boolean
-  s"$name obey axiom 4" ! prop { (u: F[A], v: F[A], y: A) =>
-    val applicative = implicitly[Applicative[F]]
-    // TODO
-    val lhs = 4
-    val rhs = 4
-    lhs === rhs
-  }
+//  s"$name obey axiom 4" ! prop { (u: A => B, y: A => B) =>
+//    val applicative = implicitly[Applicative[F]]
+//    val lhs = (applicative pure (applicative <*> u))(y)
+//    val rhs = (applicative <*> (applicative pure y))(u)
+//    lhs === rhs
+//  }
 
 }
 
