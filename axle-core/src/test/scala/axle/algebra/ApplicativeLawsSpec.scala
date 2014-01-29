@@ -35,10 +35,7 @@ abstract class ApplicativeLawsSpec[F[_]: Applicative, A: Eq: Arbitrary, B: Eq: A
   // pure f <*> pure x = pure (f x)
   s"$name obey axiom 3" ! prop { (x: A, f: A => B) =>
     val applicative = implicitly[Applicative[F]]
-    val lhs1: F[A => B] = applicative.pure(f)
-    val lhs2: F[A] => F[B] = applicative.<*>(lhs1)
-    val lhs3: A => F[B] = lhs2 compose applicative.pure[F, A]
-    val lhs: F[B] = lhs3(x)
+    val lhs: F[B] = ((applicative.<*>(applicative.pure(f))) compose applicative.pure[F, A]).apply(x)
     val rhs: F[B] = applicative.pure(f(x))
     lhs === rhs
   }
