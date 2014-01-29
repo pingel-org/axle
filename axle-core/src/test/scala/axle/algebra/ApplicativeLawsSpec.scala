@@ -11,7 +11,8 @@ import Prop._
 
 abstract class ApplicativeLawsSpec[F[_]: Applicative, A: Eq: Arbitrary, B: Eq: Arbitrary, C: Eq: Arbitrary](name: String)(
   implicit eqfa: Eq[F[A]],
-  arbfa: Arbitrary[F[A]])
+  arbfa: Arbitrary[F[A]],
+  eqfb: Eq[F[B]])
   extends Specification
   with ScalaCheck {
 
@@ -23,19 +24,34 @@ abstract class ApplicativeLawsSpec[F[_]: Applicative, A: Eq: Arbitrary, B: Eq: A
   }
 
   // pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
-
-  def checkAxiom2[F[_]: Applicative, T](u: T, v: T, w: T): Boolean =
-    true
+  s"$name obey axiom 2" ! prop { (u: A, v: A, w: A) =>
+    val applicative = implicitly[Applicative[F]]
+    // TODO
+    val lhs = 4
+    val rhs = 4
+    lhs === rhs
+  }
 
   // pure f <*> pure x = pure (f x)
-
-  def checkAxiom3[F[_]: Applicative, T, U](x: T, f: T => U): Boolean =
-    true
+  s"$name obey axiom 3" ! prop { (x: A, f: A => B) =>
+    val applicative = implicitly[Applicative[F]]
+    val lhs1: F[A => B] = applicative.pure(f)
+    val lhs2: F[A] => F[B] = applicative.<*>(lhs1)
+    val lhs3: A => F[B] = lhs2 compose applicative.pure[F, A]
+    val lhs: F[B] = lhs3(x)
+    val rhs: F[B] = applicative.pure(f(x))
+    lhs === rhs
+  }
 
   // u <*> pure y = pure ($ y) <*> u
-
-  def checkAxiom4[F[_]: Applicative, T](v: T): Boolean =
-    true
+  // def checkAxiom4[F[_]: Applicative, T](v: T): Boolean
+  s"$name obey axiom 4" ! prop { (u: F[A], v: F[A], y: A) =>
+    val applicative = implicitly[Applicative[F]]
+    // TODO
+    val lhs = 4
+    val rhs = 4
+    lhs === rhs
+  }
 
 }
 
