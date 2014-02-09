@@ -89,19 +89,19 @@ trait FactorModule {
 
     def apply(c: Seq[CaseIs[T]]): Real = elements(indexOf(c))
 
-    override def toString(): String =
+    override def toString: String =
       varList.map(rv => rv.name.padTo(rv.charWidth, " ").mkString("")).mkString(" ") + "\n" +
         cases.map(kase =>
           kase.map(ci => ci.v.toString.padTo(ci.rv.charWidth, " ").mkString("")).mkString(" ") +
-            " " + this(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
+            " " + this(kase).toDouble.toString).mkString("\n") // Note: was "%f".format() prior to spire.math
 
-    def toHtml(): xml.Node =
+    def toHtml: xml.Node =
       <table border={ "1" }>
         <tr>{ varList.map(rv => <td>{ rv.name }</td>): xml.NodeSeq }<td>P</td></tr>
         {
           cases.map(kase => <tr>
                               { kase.map(ci => <td>{ ci.v.toString }</td>) }
-                              <td>{ this(kase) }</td>
+                              <td>{ this(kase).toDouble }</td>
                             </tr>)
         }
       </table>

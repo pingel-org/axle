@@ -125,7 +125,7 @@ trait BayesianNetworkModule {
       <html>
         <div>
           <center><h2>{ rv.name }</h2></center>
-          { cpt.toHtml() }
+          { cpt.toHtml }
         </div>
       </html>
 
