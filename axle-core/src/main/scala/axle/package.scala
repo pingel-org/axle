@@ -32,9 +32,14 @@ import spire.math._
 import spire.implicits._
 import spire.algebra._
 import collection.mutable.Buffer
+import org.joda.time.DateTime
 
 package object axle {
 
+  implicit val jodaDateTimeEq = new Eq[DateTime] {
+    def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
+  }
+  
   implicit def enrichGenSet[T](s: collection.GenSet[T]): EnrichedGenSet[T] = EnrichedGenSet(s)
 
   implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
