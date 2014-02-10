@@ -189,8 +189,21 @@ import axle._
     ),
 
     mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
-      case PathList("org", "fusesource", "jansi", xs @ _*) => MergeStrategy.first
-      case PathList("META-INF", "native", "osx", "ibjansi.jnilib") => MergeStrategy.first
+      case PathList("org", "fusesource", xs @ _*) => MergeStrategy.first
+      case PathList("META-INF", "native", xs @ _*) => MergeStrategy.first
+      case PathList("scala", "reflect", "api", xs @ _*) => MergeStrategy.first
+      case PathList("libnativewindow_x11.so") => MergeStrategy.first   // jogl
+      case PathList("libnewt.so") => MergeStrategy.first               // jogl
+      case PathList("newt.dll") => MergeStrategy.first                 // jogl
+      case PathList("libgluegen-rt.so") => MergeStrategy.first         // jogl
+      case PathList("nativewindow_awt.dll") => MergeStrategy.first
+      case PathList("nativewindow_win32.dll") => MergeStrategy.first
+      case PathList("libnativewindow_awt.so") => MergeStrategy.first
+      case PathList("libjogl_mobile.so") => MergeStrategy.first        // jogl
+      case PathList("jogl_mobile.dll") => MergeStrategy.first
+      case PathList("jogl_desktop.dll") => MergeStrategy.first
+      case PathList("libjogl_desktop.so") => MergeStrategy.first
+      case PathList("gluegen-rt.dll") => MergeStrategy.first
       case x => old(x)
     }
   }
