@@ -16,7 +16,7 @@ class EnrichmentsSpec extends Specification {
 
   "∀ in EnrichedGenTraversable" should {
     "work" in {
-      Set(2, 4, 6).∀(_ % 2 == 0) must be equalTo true
+      ∀(Set(2, 4, 6)) { _ % 2 == 0 } must be equalTo true
     }
   }
 

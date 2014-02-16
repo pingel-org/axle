@@ -24,7 +24,7 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
   import axle.algebra._
   import Semigroups._
 
-  private[this] def predictedVsActual(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): (Int, Int, Int, Int) = data.map(d => {
+  private[this] def predictedVsActual(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): (Int, Int, Int, Int) = Σ(data.map(d => {
     val actual: CLASS = classExtractor(d)
     val predicted: CLASS = this(d)
     (actual === k, predicted === k) match {
@@ -33,7 +33,7 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
       case (false, false) => (0, 0, 1, 0) // false negative
       case (true, false) => (0, 0, 0, 1) // true negative
     }
-  }).Σ(identity)
+  }))(identity)
 
   def performance(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): ClassifierPerformance[Rational] = {
 

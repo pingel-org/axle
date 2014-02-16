@@ -21,8 +21,8 @@ case class CaseAndGT[A: Manifest](conjuncts: GenTraversable[Case[A]]) extends Ca
 
   def probability[B](given: Option[Case[B]] = None): Real =
     given
-      .map(g => conjuncts.Π((c: Case[A]) => P(c | g)()))
-      .getOrElse(conjuncts.Π((c: Case[A]) => P(c)))
+      .map(g => Π(conjuncts)({ (c: Case[A]) => P(c | g)() }))
+      .getOrElse(Π(conjuncts)({ P(_) }))
 
   def bayes() = ???
 }

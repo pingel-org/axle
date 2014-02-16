@@ -158,7 +158,7 @@ trait BayesianNetworkModule {
     def cpt(variable: RandomVariable[T]): Factor[T] =
       graph.findVertex(_.payload.rv === variable).map(_.payload.cpt).get
 
-    def probabilityOf(cs: Seq[CaseIs[T]]) = cs.map(c => cpt(c.rv)(cs)).toVector.Π(identity)
+    def probabilityOf(cs: Seq[CaseIs[T]]) = Π(cs.map(c => cpt(c.rv)(cs)).toVector)(identity)
 
     def markovAssumptionsFor(rv: RandomVariable[T]): Independence[T] = {
       val rvVertex = graph.findVertex(_.payload.rv === rv).get
@@ -194,11 +194,11 @@ trait BayesianNetworkModule {
      */
 
     def variableEliminationPriorMarginalI(Q: Set[RandomVariable[T]], π: List[RandomVariable[T]]): Factor[T] =
-      π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
+      Π(π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        val mentionsWithout = allMentions.Π(identity).sumOut(rv)
+        val mentionsWithout = Π(allMentions)(identity).sumOut(rv)
         (S -- allMentions) + mentionsWithout
-      }).Π(identity)
+      }))(identity)
 
     /**
      *
@@ -211,11 +211,11 @@ trait BayesianNetworkModule {
      */
 
     def variableEliminationPriorMarginalII(Q: Set[RandomVariable[T]], π: List[RandomVariable[T]], e: CaseIs[T]): Factor[T] =
-      π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
+      Π(π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
         (S, rv) => {
           val allMentions = S.filter(_.mentions(rv))
-          (S -- allMentions) + allMentions.Π(identity).sumOut(rv)
-        }).Π(identity)
+          (S -- allMentions) + Π(allMentions)(identity).sumOut(rv)
+        }))(identity)
 
     def interactsWith(v1: RandomVariable[T], v2: RandomVariable[T]): Boolean =
       graph.vertices.map(_.payload.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
@@ -292,7 +292,7 @@ trait BayesianNetworkModule {
           case 0 => empty
           case _ => {
             val result = xVertices.foldLeft(g)(
-              (bn, xV) => new BayesianNetwork(bn.name + " - " + xV, bn.graph /* TODO filterVertices(v => ! v === xV) */))
+              (bn, xV) => new BayesianNetwork(bn.name + " - " + xV, bn.graph /* TODO filterVertices(v => ! v === xV) */ ))
             cons(result, nodePruneStream(result))
           }
         }

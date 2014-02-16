@@ -21,7 +21,7 @@ package object stats {
 
   def log2(x: Real): Real = Real(math.log(x.toDouble) / math.log(2))
 
-  def mean[N: Field: Manifest](xs: GenTraversable[N]): N = EnrichedGenTraversable(xs).Σ(identity) / xs.size
+  def mean[N: Field: Manifest](xs: GenTraversable[N]): N = Σ(xs)(identity) / xs.size
 
   def square[N: Ring](x: N): N = x ** 2
 
@@ -29,14 +29,14 @@ package object stats {
 
   def stddev[N: NRoot: Field: Manifest](xs: Vector[N]): N = {
     val μ = mean(xs)
-    (xs.map(x => square(x - μ)).Σ(identity) / xs.size).sqrt
+    (Σ(xs.map(x => square(x - μ)))(identity) / xs.size).sqrt
   }
 
   import Information._
   import axle.quanta._
 
   def entropy[A: Manifest](X: RandomVariable[A]): Information.Q = {
-    val H = X.values.map(_.Σ(x => {
+    val H = X.values.map(Σ(_)(x => {
       val px = P(X is x)()
       if (px > 0) (-px * log2(px)) else Real(0)
     })).getOrElse(Real(0))

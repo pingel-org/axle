@@ -61,7 +61,7 @@ trait FactorModule {
     // each compatible with this table
 
     def evaluate(prior: Seq[CaseIs[T]], condition: Seq[CaseIs[T]]): Real = {
-      val pw = cases.map(c => {
+      val pw = axle.Σ(cases.map(c => {
         if (isSupersetOf(c, prior)) {
           if (isSupersetOf(c, condition)) {
             (this(c), this(c))
@@ -71,7 +71,7 @@ trait FactorModule {
         } else {
           (Real(0), Real(0))
         }
-      }).toVector.Σ(identity)
+      }).toVector)(identity)
 
       pw._1 / pw._2
     }
@@ -120,7 +120,7 @@ trait FactorModule {
         Factor.spaceFor[T](remainingVars).toVector
           .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
           .groupBy(_._1)
-          .map({ case (k, v) => (k.toVector, v.map(_._2).Σ(identity)) })
+          .map({ case (k, v) => (k.toVector, axle.Σ(v.map(_._2))(identity)) })
           .toMap)
 
     def tally(a: RandomVariable[T], b: RandomVariable[T]): Matrix[Double] = {
@@ -129,7 +129,7 @@ trait FactorModule {
       matrix[Double](
         aValues.size,
         bValues.size,
-        (r: Int, c: Int) => cases.filter(isSupersetOf(_, Vector(a is aValues(r), b is bValues(c)))).map(this(_)).toVector.Σ(identity).toDouble)
+        (r: Int, c: Int) => axle.Σ(cases.filter(isSupersetOf(_, Vector(a is aValues(r), b is bValues(c)))).map(this(_)).toVector)(identity).toDouble)
     }
 
     def Σ(varToSumOut: RandomVariable[T]): Factor[T] = this.sumOut(varToSumOut)
@@ -145,7 +145,7 @@ trait FactorModule {
             val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[T]], gv)) // TODO cast
             this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
           })
-          (kase, reals.Σ(identity))
+          (kase, axle.Σ(reals)(identity))
         }).toMap)
     }
 

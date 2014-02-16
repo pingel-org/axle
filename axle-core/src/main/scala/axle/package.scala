@@ -27,15 +27,35 @@
  *
  */
 
-import math.{ exp, log }
-import spire.math._
-import spire.implicits._
-import spire.algebra._
-import collection.mutable.Buffer
+import scala.collection.mutable.Buffer
+
 import org.joda.time.DateTime
+
+import axle.EnrichedArray
+import axle.EnrichedBoolean
+import axle.EnrichedByteArray
+import axle.EnrichedGenSeq
+import axle.EnrichedGenSet
+import axle.EnrichedGenTraversable
+import axle.EnrichedIndexedSeq
+import axle.EnrichedInt
+import axle.EnrichedMutableBuffer
+import axle.forall
+import axle.thereexists
+import axle.Π
+import axle.Σ
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.algebra.NRoot
+import spire.implicits._
 
 package object axle {
 
+  val Sigma = Σ
+  val Pi = Π
+  val ∀ = forall
+  val ∃ = thereexists
+  
   implicit val jodaDateTimeEq = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }

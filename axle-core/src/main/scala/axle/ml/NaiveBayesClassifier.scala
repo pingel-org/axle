@@ -67,7 +67,7 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
 
   def apply(d: DATA): CLASS = {
     val fs = featureExtractor(d)
-    argmax(C, (c: CLASS) => (P(C is c) * (0 until N).toVector.Π(i => P((Fs(i) is fs(i)) | (C is c))))())
+    argmax(C, (c: CLASS) => (P(C is c) * Π((0 until N).toVector)(i => P((Fs(i) is fs(i)) | (C is c))))())
   }
 
 }
