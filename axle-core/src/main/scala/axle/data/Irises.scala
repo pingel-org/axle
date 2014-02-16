@@ -1,12 +1,20 @@
 package axle.data
 
 import java.io.File
+
 import scala.Option.option2Iterable
-import scala.util.Try
-import dispatch._
-import Defaults._
 import scala.concurrent.Await
-import scala.concurrent.duration._
+import scala.concurrent.duration.DurationInt
+import scala.reflect.io.Path.string2path
+import scala.util.Try
+
+import spire.algebra.Eq
+
+import dispatch.Defaults.executor
+import dispatch.Http
+import dispatch.as
+import dispatch.implyRequestHandlerTuple
+import dispatch.url
 
 /**
  *
@@ -34,7 +42,11 @@ import scala.concurrent.duration._
 
 object Irises {
 
-  case class Iris(sepalLength: Double, sepalWidth: Double, petalLength: Double, petalWidth: Double, clazz: String)
+  case class Iris(sepalLength: Double, sepalWidth: Double, petalLength: Double, petalWidth: Double, species: String)
+
+  object Iris {
+    implicit val irisEq = new Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }
+  }
 
   val dataUrl = "http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
 
