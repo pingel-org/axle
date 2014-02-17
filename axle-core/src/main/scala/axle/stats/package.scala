@@ -1,6 +1,6 @@
 package axle
 
-import collection.GenTraversable
+import scala.collection.GenTraversable
 import axle._
 import axle.quanta.Information
 import spire.algebra._
@@ -27,7 +27,7 @@ package object stats {
 
   // http://en.wikipedia.org/wiki/Standard_deviation
 
-  def stddev[N: NRoot: Field: Manifest](xs: Vector[N]): N = {
+  def stddev[N: NRoot: Field: Manifest](xs: GenTraversable[N]): N = {
     val μ = mean(xs)
     (Σ(xs.map(x => square(x - μ)))(identity) / xs.size).sqrt
   }
