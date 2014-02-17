@@ -100,7 +100,6 @@ import axle._
       "org.joda" % "joda-convert" % "1.2",
       "org.jblas" % "jblas" % "1.2.3",
       "org.spire-math" %% "spire" % "0.7.1",
-      "net.databinder.dispatch" %% "dispatch-core" % "0.11.0", // for data downloads
       "com.chuusai" % "shapeless_2.10.3" % "2.0.0-SNAPSHOT" changing()
       // "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
     )

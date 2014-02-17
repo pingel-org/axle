@@ -1,10 +1,10 @@
 package axle.data
 
-import axle.nlp._
-import axle._
-import spire.math._
-import spire.algebra._
 import java.io.File
+
+import scala.sys.process.stringSeqToProcess
+
+import spire.algebra.Eq
 
 /**
  *
@@ -31,15 +31,7 @@ object FederalistPapers {
   val file = new File(filename)
 
   if (!file.exists) {
-    import dispatch._
-    import Defaults._
-    import scala.concurrent.Await
-    import scala.concurrent.duration.DurationInt
-    val svc = url(dataUrl)
-    val requestFuture = Http(svc OK as.String) map { content =>
-      scala.tools.nsc.io.File(filename).writeAll(content)
-    }
-    Await.result(requestFuture, 60 minute)
+    Seq("wget", "-q", dataUrl, "-O", filename)!!
   }
 
   lazy val articles: List[Article] = {

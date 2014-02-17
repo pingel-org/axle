@@ -10,6 +10,8 @@ import spire.implicits._
 import spire.math._
 import spire.algebra._
 
+import sys.process.stringSeqToProcess
+
 import scala.Option.option2Iterable
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
@@ -17,12 +19,6 @@ import scala.reflect.io.Path.string2path
 import scala.util.Try
 
 import spire.algebra.Eq
-
-import dispatch.Defaults.executor
-import dispatch.Http
-import dispatch.as
-import dispatch.implyRequestHandlerTuple
-import dispatch.url
 
 /**
  *
@@ -68,11 +64,7 @@ object Irises {
   val file = new File(filename)
 
   if (!file.exists) {
-    val svc = url(dataUrl)
-    val requestFuture = Http(svc OK as.String) map { content =>
-      scala.tools.nsc.io.File(filename).writeAll(content)
-    }
-    Await.result(requestFuture, 1 minute)
+    Seq("wget", "-q", dataUrl, "-O", filename)!!
   }
 
   val irises = io.Source.fromFile(file).getLines().toList flatMap { line =>
