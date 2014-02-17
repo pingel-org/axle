@@ -17,13 +17,13 @@ object FederalistPapers {
 
   val allCaps = """[A-Z ]+""".r
 
-  case class FederalistPaper(id: Int, author: String, text: String, metadata: String)
+  case class Article(id: Int, author: String, text: String, metadata: String)
 
-  implicit val fpEq = new Eq[FederalistPaper] {
-    def eqv(x: FederalistPaper, y: FederalistPaper): Boolean = x equals y
+  implicit val fpEq = new Eq[Article] {
+    def eqv(x: Article, y: Article): Boolean = x equals y
   }
 
-  def parseArticles(filename: String): List[FederalistPaper] = {
+  def parseArticles(filename: String): List[Article] = {
 
     val lines = io.Source.fromFile(filename).getLines.toList
 
@@ -39,7 +39,7 @@ object FederalistPapers {
         val authorIndex = ((first + 1) to last).find(i => allCaps.unapplySeq(lines(i)).isDefined).getOrElse(0)
         val metadata = ((first + 1) to authorIndex - 1).map(lines).mkString("\n")
         val text = ((authorIndex + 1) to last).map(lines).mkString("\n")
-        FederalistPaper(id, lines(authorIndex), text, metadata)
+        Article(id, lines(authorIndex), text, metadata)
     }
   }
 
