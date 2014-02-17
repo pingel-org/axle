@@ -4,19 +4,17 @@ import axle._
 import spire.implicits._
 import collection.GenSeq
 
-class Corpus[T: Document](documents: GenSeq[T]) {
+class Corpus(documents: GenSeq[String], language: Language) {
 
-  val doc = implicitly[Document[T]]
-
-  lazy val wordCountMap: Map[String, Long] = documents flatMap (doc.tokens) tally
+  lazy val wordCountMap: Map[String, Long] = documents flatMap (language.tokenize) tally
 
   def wordCount(word: String): Option[Long] = wordCountMap.get(word)
 
   def topWordCounts(cutoff: Long): List[(String, Long)] =
     wordCountMap
-      .filter { case (_, n: Long) => n > cutoff }
+      .filter { _._2 > cutoff }
       .toList
-      .sortBy { case (_, n: Long) => n }
+      .sortBy { _._2 }
       .reverse
 
   def topWords(cutoff: Long): List[String] = topWordCounts(cutoff) map { case (word: String, _) => word }
@@ -33,19 +31,21 @@ Top 10 bigrams: ${topBigrams(10).mkString(", ")}
 """
   }
 
-  lazy val bigramCounts = documents.flatMap((d: T) => {
-    val tokens = doc.tokens(d)
-    tokens.zip(tokens.tail)
-  }) tally
+  def bigrams[T](xs: GenSeq[T]): GenSeq[(T, T)] =
+    xs.zip(xs.tail)
+
+  lazy val bigramCounts = documents flatMap { d =>
+    bigrams(language.tokenize(d))
+  } tally
 
   def sortedBigramCounts: List[((String, String), Long)] =
     bigramCounts
-      .filter { case (_, n: Long) => n > 1 }
+      .filter { _._2 > 1 }
       .toList
-      .sortBy { case (bg: (String, String), n: Long) => n }
+      .sortBy { _._2 }
       .reverse
 
   def topBigrams(maxBigrams: Int): List[(String, String)] =
-    sortedBigramCounts take (maxBigrams) map { case (bigram: (String, String), _) => bigram }
+    sortedBigramCounts take (maxBigrams) map { _._1 }
 
 }

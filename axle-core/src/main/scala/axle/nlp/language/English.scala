@@ -4,6 +4,7 @@ import concurrent.duration._
 import concurrent.Await
 import org.tartarus.snowball.SnowballStemmer
 import org.tartarus.snowball.ext.englishStemmer
+import axle.nlp.Language
 
 /*
 import axle.actor.Defaults._
@@ -31,11 +32,11 @@ class StemmerActor(stemmer: SnowballStemmer) extends Actor {
 
 */
 
-object English {
+object English extends Language {
 
   // From Lucene's list of stopwords:
 
-  val stopWords = Set(
+  def stopWords = Set(
     "a", "an", "and", "are", "as", "at", "be", "but", "by",
     "for", "if", "in", "into", "is", "it",
     "no", "not", "of", "on", "or", "such",

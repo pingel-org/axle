@@ -4,6 +4,12 @@ import axle.nlp._
 import axle._
 import spire.math._
 
+/**
+ * 
+ * http://www.gutenberg.org/files/18/18.txt
+ * 
+ */
+
 object FederalistPapers {
 
   val idPattern = """FEDERALIST.? No. (\d+)""".r
@@ -31,23 +37,5 @@ object FederalistPapers {
         FederalistPaper(id, lines(authorIndex), text, metadata)
     }
   }
-
-  implicit object articleAsDocument extends Document[FederalistPaper] {
-
-    def tokens(paper: FederalistPaper): IndexedSeq[String] = language.English.tokenize(paper.text)
-
-    def bigrams(paper: FederalistPaper): Vector[IndexedSeq[String]] = tokens(paper).sliding(2).toVector
-
-    def wordCounts(paper: FederalistPaper): Map[String, Long] = tokens(paper) tally
-
-    def bigramCounts(paper: FederalistPaper): Map[IndexedSeq[String], Long] = bigrams(paper) tally
-
-    def averageWordLength(paper: FederalistPaper): Number = {
-      val ts = tokens(paper)
-      Rational(ts.map(_.length).sum, ts.length)
-    }
-
-  }
-
-
+  
 }
