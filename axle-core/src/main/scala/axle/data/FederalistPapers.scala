@@ -3,11 +3,12 @@ package axle.data
 import axle.nlp._
 import axle._
 import spire.math._
+import spire.algebra._
 
 /**
- * 
+ *
  * http://www.gutenberg.org/files/18/18.txt
- * 
+ *
  */
 
 object FederalistPapers {
@@ -17,6 +18,10 @@ object FederalistPapers {
   val allCaps = """[A-Z ]+""".r
 
   case class FederalistPaper(id: Int, author: String, text: String, metadata: String)
+
+  implicit val fpEq = new Eq[FederalistPaper] {
+    def eqv(x: FederalistPaper, y: FederalistPaper): Boolean = x equals y
+  }
 
   def parseArticles(filename: String): List[FederalistPaper] = {
 
@@ -37,5 +42,5 @@ object FederalistPapers {
         FederalistPaper(id, lines(authorIndex), text, metadata)
     }
   }
-  
+
 }
