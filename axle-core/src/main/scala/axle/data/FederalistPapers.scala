@@ -4,6 +4,7 @@ import axle.nlp._
 import axle._
 import spire.math._
 import spire.algebra._
+import java.io.File
 
 /**
  *
@@ -23,7 +24,25 @@ object FederalistPapers {
     def eqv(x: Article, y: Article): Boolean = x equals y
   }
 
-  def parseArticles(filename: String): List[Article] = {
+  val dataUrl = "http://www.gutenberg.org/files/18/18.txt"
+
+  val filename = "gutenberg18.txt"
+
+  val file = new File(filename)
+
+  if (!file.exists) {
+    import dispatch._
+    import Defaults._
+    import scala.concurrent.Await
+    import scala.concurrent.duration.DurationInt
+    val svc = url(dataUrl)
+    val requestFuture = Http(svc OK as.String) map { content =>
+      scala.tools.nsc.io.File(filename).writeAll(content)
+    }
+    Await.result(requestFuture, 60 minute)
+  }
+
+  lazy val articles: List[Article] = {
 
     val lines = io.Source.fromFile(filename).getLines.toList
 
