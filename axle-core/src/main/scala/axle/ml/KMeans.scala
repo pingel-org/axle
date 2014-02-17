@@ -65,9 +65,10 @@ trait KMeansModule {
     K: Int,
     iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double]) extends Classifier[T, Int] {
 
-    val features = matrix(N, data.length, data.flatMap(featureExtractor(_)).toArray).t
+    val features = matrix(N, data.length, data.flatMap(featureExtractor).toArray).t
 
-    val normalizer = new PCAFeatureNormalizer(features, 0.95)
+    val normalizer = new PCAFeatureNormalizer(features, 0.98)
+    //val normalizer = new ZScoreFeatureNormalizer(features)
     val X = normalizer.normalizedData
     val μads = clusterLA(X, space, K, iterations)
 
