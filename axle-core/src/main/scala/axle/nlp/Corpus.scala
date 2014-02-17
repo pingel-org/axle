@@ -6,7 +6,8 @@ import collection.GenSeq
 
 class Corpus(documents: GenSeq[String], language: Language) {
 
-  lazy val wordCountMap: Map[String, Long] = documents flatMap (language.tokenize) tally
+  lazy val wordCountMap: Map[String, Long] =
+    documents flatMap (doc => language.tokenize(doc.toLowerCase)) tally
 
   def wordCount(word: String): Option[Long] = wordCountMap.get(word)
 
@@ -17,7 +18,8 @@ class Corpus(documents: GenSeq[String], language: Language) {
       .sortBy { _._2 }
       .reverse
 
-  def topWords(cutoff: Long): List[String] = topWordCounts(cutoff) map { case (word: String, _) => word }
+  def topWords(cutoff: Long): List[String] =
+    topWordCounts(cutoff) map { _._1 }
 
   override def toString: String = {
 
@@ -31,11 +33,8 @@ Top 10 bigrams: ${topBigrams(10).mkString(", ")}
 """
   }
 
-  def bigrams[T](xs: GenSeq[T]): GenSeq[(T, T)] =
-    xs.zip(xs.tail)
-
   lazy val bigramCounts = documents flatMap { d =>
-    bigrams(language.tokenize(d))
+    bigrams(language.tokenize(d.toLowerCase))
   } tally
 
   def sortedBigramCounts: List[((String, String), Long)] =
