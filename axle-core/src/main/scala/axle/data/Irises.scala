@@ -2,6 +2,14 @@ package axle.data
 
 import java.io.File
 
+import axle.quanta._
+import axle.quanta.Distance
+import Distance._
+
+import spire.implicits._
+import spire.math._
+import spire.algebra._
+
 import scala.Option.option2Iterable
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
@@ -42,7 +50,12 @@ import dispatch.url
 
 object Irises {
 
-  case class Iris(sepalLength: Double, sepalWidth: Double, petalLength: Double, petalWidth: Double, species: String)
+  case class Iris(
+    sepalLength: Distance.Q,
+    sepalWidth: Distance.Q,
+    petalLength: Distance.Q,
+    petalWidth: Distance.Q,
+    species: String)
 
   object Iris {
     implicit val irisEq = new Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }
@@ -65,7 +78,12 @@ object Irises {
   val irises = io.Source.fromFile(file).getLines().toList flatMap { line =>
     Try {
       val fields = line.split(",")
-      Iris(fields(0).toDouble, fields(1).toDouble, fields(2).toDouble, fields(3).toDouble, fields(4))
+      Iris(
+        fields(0).toDouble *: cm,
+        fields(1).toDouble *: cm,
+        fields(2).toDouble *: cm,
+        fields(3).toDouble *: cm,
+        fields(4))
     } toOption
   }
 
