@@ -13,8 +13,7 @@ object AxleBuild extends Build {
 
     organization := "org.pingel",
 
-    //version := "0.1-SNAPSHOT", // last milestone was M10
-    version := "0.1-M11",
+    version := "0.1-SNAPSHOT", // last milestone was M11
 
     scalaVersion := "2.10.4-RC1",
 
