@@ -34,22 +34,25 @@ class Area extends Quantum {
 
   def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
 
-  import Distance.{ meter, km }
+  import Distance.{ meter, km, cm }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Area"
 
   lazy val _conversionGraph = conversions(
     List(
       derive(meter.by[Distance.type, this.type](meter, this), Some("m2"), Some("m2")),
-      derive(km.by[Distance.type, this.type](km, this), Some("km2"), Some("km2"))),
+      derive(km.by[Distance.type, this.type](km, this), Some("km2"), Some("km2")),
+      derive(cm.by[Distance.type, this.type](cm, this), Some("cm2"), Some("cm2"))),
     (vs: Seq[Vertex[AreaQuantity]]) => vs match {
-      case m2 :: km2 :: Nil => trips2fns(List(
-        (m2, km2, 1E6)))
+      case m2 :: km2 :: cm2 :: Nil => trips2fns(List(
+        (m2, km2, 1E6),
+        (cm2, m2, 1E6)))
       case _ => Nil
     })
 
   lazy val m2 = byName("m2")
   lazy val km2 = byName("km2")
+  lazy val cm2 = byName("cm2")
 
 }
 

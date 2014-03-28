@@ -34,8 +34,8 @@ class Volume extends Quantum {
 
   def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
 
-  import Distance.{ meter, km }
-  import Area.{ m2, km2 }
+  import Distance.{ meter, km, cm }
+  import Area.{ m2, km2, cm2 }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
 
@@ -43,16 +43,24 @@ class Volume extends Quantum {
     List(
       derive(m2.by[Distance.type, this.type](meter, this), Some("m3"), Some("m3")),
       derive(km2.by[Distance.type, this.type](km, this), Some("km3"), Some("km3")),
-      unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))),
+      derive(cm2.by[Distance.type, this.type](cm, this), Some("cm3"), Some("cm3")),
+      unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes")),
+      unit("liter", "L", Some("http://en.wikipedia.org/wiki/Liter")), // TOOD: also symbol ℓ
+      unit("milliliter", "mL")),
     (vs: Seq[Vertex[VolumeQuantity]]) => vs match {
-      case m3 :: km3 :: greatLakes :: Nil => trips2fns(List(
-        (km3, greatLakes, 22671)))
+      case m3 :: km3 :: cm3 :: greatLakes :: liter :: milliliter :: Nil => trips2fns(List(
+        (km3, greatLakes, 22671),
+        (milliliter, liter, 1000),
+        (cm3, milliliter, 1)))
       case _ => Nil
     })
 
   lazy val m3 = byName("m3")
   lazy val km3 = byName("km3")
+  lazy val cm3 = byName("cm3")
   lazy val greatLakes = byName("Great Lakes Volume")
+  lazy val L = byName("liter")
+  lazy val mL = byName("milliliter")
 
 }
 
