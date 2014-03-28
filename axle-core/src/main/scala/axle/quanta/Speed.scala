@@ -67,4 +67,4 @@ class Speed extends Quantum {
 
 }
 
-object Speed extends Speed()
+object Speed extends Speed

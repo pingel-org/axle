@@ -123,4 +123,4 @@ class Time extends Quantum {
 
 }
 
-object Time extends Time()
+object Time extends Time

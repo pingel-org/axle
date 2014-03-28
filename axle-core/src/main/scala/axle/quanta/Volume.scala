@@ -56,4 +56,4 @@ class Volume extends Quantum {
 
 }
 
-object Volume extends Volume()
+object Volume extends Volume

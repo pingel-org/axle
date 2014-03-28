@@ -75,4 +75,4 @@ class Information extends Quantum {
 
 }
 
-object Information extends Information()
+object Information extends Information

@@ -150,4 +150,4 @@ class Mass extends Quantum {
 
 }
 
-object Mass extends Mass()
+object Mass extends Mass

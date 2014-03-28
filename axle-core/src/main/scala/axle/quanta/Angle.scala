@@ -67,4 +67,4 @@ class Angle extends Quantum {
 
 }
 
-object Angle extends Angle()
+object Angle extends Angle

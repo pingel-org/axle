@@ -63,4 +63,4 @@ class Force extends Quantum {
 
 }
 
-object Force extends Force()
+object Force extends Force

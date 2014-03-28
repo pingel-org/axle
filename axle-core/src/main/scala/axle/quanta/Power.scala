@@ -71,4 +71,4 @@ class Power extends Quantum {
 
 }
 
-object Power extends Power()
+object Power extends Power

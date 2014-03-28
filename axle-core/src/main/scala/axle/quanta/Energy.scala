@@ -76,4 +76,4 @@ class Energy extends Quantum {
 
 }
 
-object Energy extends Energy()
+object Energy extends Energy

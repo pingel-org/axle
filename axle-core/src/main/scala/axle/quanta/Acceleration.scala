@@ -59,4 +59,4 @@ class Acceleration extends Quantum {
 
 }
 
-object Acceleration extends Acceleration()
+object Acceleration extends Acceleration

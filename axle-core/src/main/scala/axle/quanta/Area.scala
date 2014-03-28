@@ -53,4 +53,4 @@ class Area extends Quantum {
 
 }
 
-object Area extends Area()
+object Area extends Area

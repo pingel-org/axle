@@ -47,4 +47,4 @@ class Money extends Quantum {
 
 }
 
-object Money extends Money()
+object Money extends Money

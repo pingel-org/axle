@@ -50,4 +50,4 @@ class MoneyFlow extends Quantum {
 
 }
 
-object MoneyFlow extends MoneyFlow()
+object MoneyFlow extends MoneyFlow

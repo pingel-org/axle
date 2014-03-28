@@ -54,4 +54,4 @@ class Flow extends Quantum {
 
 }
 
-object Flow extends Flow()
+object Flow extends Flow

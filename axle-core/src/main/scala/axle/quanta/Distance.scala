@@ -92,4 +92,4 @@ class Distance extends Quantum {
 
 }
 
-object Distance extends Distance()
+object Distance extends Distance

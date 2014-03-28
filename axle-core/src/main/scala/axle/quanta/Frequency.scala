@@ -62,4 +62,4 @@ class Frequency extends Quantum {
 
 }
 
-object Frequency extends Frequency()
+object Frequency extends Frequency
