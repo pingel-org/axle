@@ -15,9 +15,9 @@ object AxleBuild extends Build {
 
     version := "0.1-SNAPSHOT", // last milestone was M11
 
-    scalaVersion := "2.10.4-RC1",
+    scalaVersion := "2.10.4",
 
-    crossScalaVersions := Seq("2.10.3"),
+    crossScalaVersions := Seq("2.10.4"),
 
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2" % "2.3.7" % "test"
