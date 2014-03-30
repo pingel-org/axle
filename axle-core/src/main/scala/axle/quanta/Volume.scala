@@ -45,13 +45,31 @@ class Volume extends Quantum {
       derive(km2.by[Distance.type, this.type](km, this), Some("km3"), Some("km3")),
       derive(cm2.by[Distance.type, this.type](cm, this), Some("cm3"), Some("cm3")),
       unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes")),
-      unit("liter", "L", Some("http://en.wikipedia.org/wiki/Liter")), // TOOD: also symbol ℓ
-      unit("milliliter", "mL")),
+      unit("liter", "L", Some("http://en.wikipedia.org/wiki/Liter")), // TODO: also symbol ℓ
+      unit("milliliter", "mL"),
+      unit("wine bottle", "wineBottle", Some("http://en.wikipedia.org/wiki/Wine_bottle")),
+      unit("magnum", "magnum"),
+      unit("jeroboam", "jeroboam"),
+      unit("rehoboam", "rehoboam"),
+      unit("methuselah", "methuselah"),
+      unit("salmanazar", "salmanazar"),
+      unit("balthazar", "balthazar"),
+      unit("nebuchadnezzar", "nebuchadnezzar")),
     (vs: Seq[Vertex[VolumeQuantity]]) => vs match {
-      case m3 :: km3 :: cm3 :: greatLakes :: liter :: milliliter :: Nil => trips2fns(List(
+      case m3 :: km3 :: cm3 :: greatLakes :: liter :: milliliter ::
+        wineBottle :: magnum :: jeroboam :: rehoboam :: methuselah ::
+        salmanazar :: balthazar :: nebuchadnezzar :: Nil => trips2fns(List(
         (km3, greatLakes, 22671),
         (milliliter, liter, 1000),
-        (cm3, milliliter, 1)))
+        (cm3, milliliter, 1),
+        (milliliter, wineBottle, 750),
+        (wineBottle, magnum, 2),
+        (wineBottle, jeroboam, 4),
+        (wineBottle, rehoboam, 6),
+        (wineBottle, methuselah, 8),
+        (wineBottle, salmanazar, 12),
+        (wineBottle, balthazar, 16),
+        (wineBottle, nebuchadnezzar, 20)))
       case _ => Nil
     })
 
@@ -61,6 +79,14 @@ class Volume extends Quantum {
   lazy val greatLakes = byName("Great Lakes Volume")
   lazy val L = byName("liter")
   lazy val mL = byName("milliliter")
+  lazy val wineBottle = byName("wine bottle")
+  lazy val magnum = byName("magnum")
+  lazy val jeroboam = byName("jeroboam")
+  lazy val rehoboam = byName("rehoboam")
+  lazy val methuselah = byName("methuselah")
+  lazy val salmanazar = byName("salmanazar")
+  lazy val balthazar = byName("balthazar")
+  lazy val nebuchadnezzar = byName("nebuchadnezzar")
 
 }
 
