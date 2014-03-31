@@ -6,7 +6,7 @@ import Stream.cons
 class PokerPlayerInteractive(id: String, description: String = "human")(implicit game: Poker)
   extends PokerPlayer(id, description) {
 
-  override def introduceGame: Unit = {
+  override def introduceGame(): Unit = {
     val intro = """
 Texas Hold Em Poker
 

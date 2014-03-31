@@ -2,7 +2,7 @@ package axle.game.poker
 
 import util.parsing.combinator._
 
-class MoveParser() extends RegexParsers {
+class MoveParser extends RegexParsers {
 
   override val skipWhitespace = true
 

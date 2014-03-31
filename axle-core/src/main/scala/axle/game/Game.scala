@@ -18,11 +18,11 @@ abstract class Game[G <: Game[G]] {
   type MOVE <: Move[G]
   type OUTCOME <: Outcome[G]
 
-  def players(): Set[G#PLAYER]
+  def players: Set[G#PLAYER]
 
-  def introMessage(): String
+  def introMessage: String
 
-  def startState(): G#STATE
+  def startState: G#STATE
 
   def startFrom(s: G#STATE): Option[G#STATE]
 
@@ -96,7 +96,7 @@ abstract class Game[G <: Game[G]] {
       cons((move, nextState), scriptedMoveStateStream(nextState, moveIt))
     }
 
-  def play(start: G#STATE = startState(), intro: Boolean = true): Option[G#STATE] = {
+  def play(start: G#STATE = startState, intro: Boolean = true): Option[G#STATE] = {
     if (intro) {
       players foreach { player =>
         player.introduceGame()
@@ -121,7 +121,7 @@ abstract class Game[G <: Game[G]] {
       )
     }).getOrElse(empty)
 
-  def playContinuously(start: G#STATE = startState()): G#STATE =
+  def playContinuously(start: G#STATE = startState): G#STATE =
     gameStream(start).last
 
 }
