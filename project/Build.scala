@@ -20,7 +20,7 @@ object AxleBuild extends Build {
     crossScalaVersions := Seq("2.10.4"),
 
     libraryDependencies ++= Seq(
-      "org.specs2" %% "specs2" % "2.3.7" % "test"
+      "org.specs2" %% "specs2" % "2.3.10" % "test"
       //"org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
     ),
 
@@ -96,10 +96,10 @@ import axle._
       "net.sf.jung" % "jung-api" % jungVersion,
       "net.sf.jung" % "jung-graph-impl" % jungVersion,
       "net.sf.jung" % "jung-io" % jungVersion,
-      "joda-time" % "joda-time" % "2.2",
-      "org.joda" % "joda-convert" % "1.2",
+      "joda-time" % "joda-time" % "2.3",
+      "org.joda" % "joda-convert" % "1.6",
       "org.jblas" % "jblas" % "1.2.3",
-      "org.spire-math" %% "spire" % "0.7.1",
+      "org.spire-math" %% "spire" % "0.7.3",
       "com.chuusai" % "shapeless_2.10.3" % "2.0.0-SNAPSHOT" changing()
       // "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
     )
@@ -159,7 +159,7 @@ import axle._
     name := "axle-visualize",
     libraryDependencies ++= Seq(
       "net.sf.jung" % "jung-visualization" % jungVersion,
-      "com.typesafe.akka" %% "akka-actor" % "2.2.1",
+      "com.typesafe.akka" %% "akka-actor" % "2.3.0",
       "org.jogamp.gluegen" % "gluegen-rt-main" % "2.0.2", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.jogl" % "jogl-all-main" % "2.0.2"
     )
@@ -184,8 +184,8 @@ import axle._
     name := "axle-repl",
 
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-compiler" % "2.10.3",
-      "org.scala-lang" % "jline" % "2.10.3"
+      "org.scala-lang" % "scala-compiler" % "2.10.4",
+      "org.scala-lang" % "jline" % "2.10.4"
     ),
 
     mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {

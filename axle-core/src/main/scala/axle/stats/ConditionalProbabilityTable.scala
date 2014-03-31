@@ -2,11 +2,16 @@ package axle.stats
 
 // TODO: division by zero
 import axle._
+import spire.implicits._
 import spire.algebra._
 import spire.math._
-import spire.implicits._
 
 class ConditionalProbabilityTable0[A](p: Map[A, Real]) extends Distribution0[A] {
+
+  //  N: Order: Monoid
+  //  import spire.random._
+  //  val rng = Cmwc5()
+  //  val monoid = implicitly[Monoid[N]]
 
   // def randomStream(): Stream[Double] = Stream.cons(math.random, randomStream())
 
@@ -15,7 +20,7 @@ class ConditionalProbabilityTable0[A](p: Map[A, Real]) extends Distribution0[A] 
   val bars = p.scanLeft((null.asInstanceOf[A], Real(0)))((x, y) => (y._1, x._2 + y._2))
 
   def observe(): A = {
-    val r = math.random
+    val r = Real(math.random)
     bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
   }
 

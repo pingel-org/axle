@@ -38,7 +38,7 @@ package object stats {
   def entropy[A: Manifest](X: RandomVariable[A]): Information.Q = {
     val H = X.values.map(Σ(_)(x => {
       val px = P(X is x)()
-      if (px > 0) (-px * log2(px)) else Real(0)
+      if (px > Real(0)) (-px * log2(px)) else Real(0)
     })).getOrElse(Real(0))
     Number(H.toDouble) *: bit // TODO Number(_.toDouble) should not be necessary
   }
