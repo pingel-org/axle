@@ -63,12 +63,14 @@ trait Quantum extends QuantumExpression {
   def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], Number => Number)]): DirectedGraph[Q, Number => Number] =
     JungDirectedGraph(vps, ef)
 
-  private[quanta] def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], Number)]) = trips.flatMap(trip2fns(_))
+  private[quanta] def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], Rational)]) = trips.flatMap(trip2fns)
 
-  private[quanta] def trip2fns(trip: (Vertex[Q], Vertex[Q], Number)): Seq[(Vertex[Q], Vertex[Q], Number => Number)] =
+  private[quanta] def trip2fns(trip: (Vertex[Q], Vertex[Q], Rational)): Seq[(Vertex[Q], Vertex[Q], Number => Number)] = {
+    val (from, to, multiplier) = trip
     Vector(
-      (trip._1, trip._2, x => x * trip._3),
-      (trip._2, trip._1, x => x / trip._3))
+      (from, to, _ * multiplier),
+      (to, from, _ / multiplier))
+  }
 
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name === unitName).get.payload
 
