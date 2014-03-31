@@ -32,6 +32,11 @@ class QuantaSpec extends Specification {
       (mile in ft).magnitude.doubleValue must be equalTo 5280.0 // TODO precision
 
     }
+    
+    "use Rational" in {
+      import Volume._
+      ((24 *: wineBottle) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
+    }
   }
 
   "addition" should {
