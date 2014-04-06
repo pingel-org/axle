@@ -6,15 +6,15 @@ import axle.graph._
 import spire.implicits._
 import spire.algebra._
 
-case class InteractionGraph[T: Manifest: Eq](
-  vps: Seq[RandomVariable[T]],
-  ef: Seq[Vertex[RandomVariable[T]]] => Seq[(Vertex[RandomVariable[T]], Vertex[RandomVariable[T]], String)]) {
+case class InteractionGraph[T: Manifest: Eq, N: Field: Manifest](
+  vps: Seq[RandomVariable[T, N]],
+  ef: Seq[Vertex[RandomVariable[T, N]]] => Seq[(Vertex[RandomVariable[T, N]], Vertex[RandomVariable[T, N]], String)]) {
 
   lazy val graph = JungUndirectedGraph(vps, ef)
 
-  def eliminate(rv: RandomVariable[T]): InteractionGraph[T] = ???
+  def eliminate(rv: RandomVariable[T, N]): InteractionGraph[T, N] = ???
 
-  def eliminationSequence(π: List[RandomVariable[T]]): List[InteractionGraph[T]] =
-    π.scanLeft(this)((G, rv) => G.eliminate(rv))
+  def eliminationSequence(π: List[RandomVariable[T, N]]): List[InteractionGraph[T, N]] =
+    π.scanLeft(this)(_ eliminate _)
 
 }

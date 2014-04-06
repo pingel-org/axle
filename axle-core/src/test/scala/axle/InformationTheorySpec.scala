@@ -2,6 +2,7 @@ package axle
 
 import org.specs2.mutable._
 import spire.math._
+import spire.algebra._
 import axle.quanta._
 import Information._
 import axle.stats._
@@ -13,7 +14,10 @@ class InformationTheorySpec extends Specification {
     "work" in {
 
       val d = new RandomVariable0("d", Some(List("A", "B", "C").toIndexedSeq),
-        distribution = Some(new ConditionalProbabilityTable0(Map("A" -> Real(0.2), "B" -> Real(0.1), "C" -> Real(0.7)))))
+        distribution = Some(new ConditionalProbabilityTable0(Map(
+          "A" -> Rational(2, 10),
+          "B" -> Rational(1, 10),
+          "C" -> Rational(7, 10)))))
 
       entropy(d).magnitude must be equalTo (1.1567796494470395)
     }
@@ -22,16 +26,19 @@ class InformationTheorySpec extends Specification {
   "cpt" should {
     "work" in {
 
-      val X = RandomVariable0("X", distribution = Some(new ConditionalProbabilityTable0(Map("foo" -> Real(0.1), "food" -> Real(0.9)))))
+      val X = RandomVariable0("X", distribution = Some(new ConditionalProbabilityTable0(Map(
+        "foo" -> Rational(1, 10),
+        "food" -> Rational(9, 10)))))
 
-      val Y = RandomVariable0("Y", distribution = Some(new ConditionalProbabilityTable0(Map("bar" -> Real(0.9), "bard" -> Real(0.1)))))
+      val Y = RandomVariable0("Y", distribution = Some(new ConditionalProbabilityTable0(Map(
+          "bar" -> Rational(9, 10),
+          "bard" -> Rational(1, 10)))))
 
-      val cpt = new ConditionalProbabilityTable2[String, String, String](Map(
-        ("foo", "bar") -> Map("a" -> Real(0.3), "b" -> Real(0.7)),
-        ("foo", "bard") -> Map("a" -> Real(0.2), "b" -> Real(0.8)),
-        ("food", "bar") -> Map("a" -> Real(0.9), "b" -> Real(0.1)),
-        ("food", "bard") -> Map("a" -> Real(0.5), "b" -> Real(0.5))
-      ))
+      val cpt = new ConditionalProbabilityTable2[String, String, String, Rational](Map(
+        ("foo", "bar") -> Map("a" -> Rational(0.3), "b" -> Rational(0.7)),
+        ("foo", "bard") -> Map("a" -> Rational(0.2), "b" -> Rational(0.8)),
+        ("food", "bar") -> Map("a" -> Rational(0.9), "b" -> Rational(0.1)),
+        ("food", "bard") -> Map("a" -> Rational(0.5), "b" -> Rational(0.5))))
 
       val A = RandomVariable2("A", grv1 = X, grv2 = Y,
         distribution = Some(cpt))
@@ -52,7 +59,7 @@ class InformationTheorySpec extends Specification {
   "coins" should {
     "work" in {
 
-      val biasedCoin = coin(Real(0.9))
+      val biasedCoin = coin(Rational(9, 10))
       val fairCoin = coin()
 
       // TODO: figure out why equalTo isn't working here

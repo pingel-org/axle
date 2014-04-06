@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import spire.algebra._
 
-abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLASS] {
+abstract class Classifier[DATA, CLASS: Order: Eq] extends Function1[DATA, CLASS] {
 
   def apply(d: DATA): CLASS
 
@@ -47,7 +47,7 @@ abstract class Classifier[DATA, CLASS: Ordering: Eq] extends Function1[DATA, CLA
     )
   }
 
-  def confusionMatrix[L: Ordering](data: Seq[DATA], labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L] =
+  def confusionMatrix[L: Order](data: Seq[DATA], labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L] =
     new ConfusionMatrix(this, data, labelExtractor)
 
 

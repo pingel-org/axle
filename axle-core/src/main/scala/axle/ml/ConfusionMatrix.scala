@@ -2,8 +2,9 @@ package axle.ml
 
 import axle.matrix._
 import axle.matrix.JblasMatrixModule._
+import spire.algebra._
 
-class ConfusionMatrix[T, C: Ordering, L: Ordering](classifier: Classifier[T, C], data: Seq[T], labelExtractor: T => L) {
+class ConfusionMatrix[T, C: Order, L: Order](classifier: Classifier[T, C], data: Seq[T], labelExtractor: T => L) {
 
   import math.{ ceil, log10 }
 

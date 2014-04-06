@@ -100,7 +100,7 @@ import axle._
       "org.joda" % "joda-convert" % "1.6",
       "org.jblas" % "jblas" % "1.2.3",
       "org.spire-math" %% "spire" % "0.7.3",
-      "com.chuusai" % "shapeless_2.10.3" % "2.0.0-SNAPSHOT" changing()
+      "com.chuusai" % "shapeless_2.10.3" % "2.0.0-SNAPSHOT" //changing()
       // "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
     )
   )

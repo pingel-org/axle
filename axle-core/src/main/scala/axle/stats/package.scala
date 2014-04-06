@@ -6,20 +6,27 @@ import axle.quanta.Information
 import spire.algebra._
 import spire.implicits._
 import spire.math._
+import spire.random.Dist
 
 package object stats {
 
-  implicit def probability2real: Probability => Real = (p: Probability) => p()
+  implicit val rationalProbabilityDist: Dist[Rational] = {
+    val biggishInt = 1000000
+    Dist(Rational(_: Int, biggishInt))(Dist.intrange(0, biggishInt))
+  }
 
-  implicit def rv2it[K](rv: RandomVariable[K]): IndexedSeq[K] = rv.values.getOrElse(Vector())
+  implicit def evalProbability[N]: Probability[N] => N = _()
 
-  implicit def enrichCaseGenTraversable[A: Manifest](cgt: GenTraversable[Case[A]]): EnrichedCaseGenTraversable[A] = EnrichedCaseGenTraversable(cgt)
+  implicit def rv2it[K, N: Field](rv: RandomVariable[K, N]): IndexedSeq[K] = rv.values.getOrElse(Vector())
 
-  def coin(pHead: Real = Real(Rational(1, 2))): RandomVariable[Symbol] = RandomVariable0("coin",
-    Some(List('HEAD, 'TAIL).toIndexedSeq),
-    distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1d - pHead)))))
+  implicit def enrichCaseGenTraversable[A: Manifest, N: Field](cgt: GenTraversable[Case[A, N]]): EnrichedCaseGenTraversable[A, N] = EnrichedCaseGenTraversable(cgt)
 
-  def log2(x: Real): Real = Real(math.log(x.toDouble) / math.log(2))
+  def coin(pHead: Rational = Rational(1, 2)): RandomVariable[Symbol, Rational] =
+    RandomVariable0("coin",
+      Some(List('HEAD, 'TAIL).toIndexedSeq),
+      distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1 - pHead)))))
+
+  def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)
 
   def mean[N: Field: Manifest](xs: GenTraversable[N]): N = Σ(xs)(identity) / xs.size
 
@@ -35,15 +42,17 @@ package object stats {
   import Information._
   import axle.quanta._
 
-  def entropy[A: Manifest](X: RandomVariable[A]): Information.Q = {
+  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: RandomVariable[A, N]): Information.Q = {
+    val field = implicitly[Field[N]]
+    val cf = implicitly[ConvertableFrom[N]]
     val H = X.values.map(Σ(_)(x => {
-      val px = P(X is x)()
-      if (px > Real(0)) (-px * log2(px)) else Real(0)
+      val px = P(X is x).apply()
+      if (px > field.zero) Real(cf.toDouble(-px * log2(px))) else Real(0)
     })).getOrElse(Real(0))
     Number(H.toDouble) *: bit // TODO Number(_.toDouble) should not be necessary
   }
 
-  def H[A: Manifest](X: RandomVariable[A]): Information.Q = entropy(X)
+  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: RandomVariable[A, N]): Information.Q = entropy(X)
 
   def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
     // TODO

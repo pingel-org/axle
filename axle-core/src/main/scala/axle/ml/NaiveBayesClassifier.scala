@@ -2,26 +2,27 @@ package axle.ml
 
 import axle._
 import axle.stats._
+import spire.math._
 import spire.implicits._
 import spire.algebra._
 import spire.compat._
 
 object NaiveBayesClassifier {
 
-  def apply[DATA, FEATURE, CLASS: Ordering: Eq](
+  def apply[DATA, FEATURE, CLASS: Order: Eq](
     data: collection.GenSeq[DATA],
-    pFs: List[RandomVariable[FEATURE]],
-    pC: RandomVariable[CLASS],
+    pFs: List[RandomVariable[FEATURE, Rational]],
+    pC: RandomVariable[CLASS, Rational],
     featureExtractor: DATA => List[FEATURE],
     classExtractor: DATA => CLASS): NaiveBayesClassifier[DATA, FEATURE, CLASS] =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
 }
 
-class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
+class NaiveBayesClassifier[DATA, FEATURE, CLASS: Order: Eq](
   data: collection.GenSeq[DATA],
-  featureRandomVariables: List[RandomVariable[FEATURE]],
-  classRandomVariable: RandomVariable[CLASS],
+  featureRandomVariables: List[RandomVariable[FEATURE, Rational]],
+  classRandomVariable: RandomVariable[CLASS, Rational],
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS) extends Classifier[DATA, CLASS]() {
 
@@ -29,9 +30,9 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
 
   val featureNames = featureRandomVariables.map(_.name)
 
-  val N = featureNames.size
+  val numFeatures = featureNames.size
 
-  def argmax[K, N: Ordering](ks: IndexedSeq[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
+  def argmax[K, N: Order](ks: IndexedSeq[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
 
   // TODO no probability should ever be 0
 
@@ -47,12 +48,12 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
       },
       _ + _)
 
-  val classTally: Map[CLASS, Long] = data.map(d => classExtractor(d)).tally
+  val classTally: Map[CLASS, Long] = data.map(classExtractor).tally
 
-  val C = new RandomVariable0(classRandomVariable.name, classRandomVariable.values,
+  val C = RandomVariable0(classRandomVariable.name, classRandomVariable.values,
     distribution = Some(new TallyDistribution0(classTally)))
 
-  val Fs = featureRandomVariables.map(featureRandomVariable => new RandomVariable1(
+  val Fs = featureRandomVariables.map(featureRandomVariable => RandomVariable1(
     featureRandomVariable.name,
     featureRandomVariable.values,
     grv = C,
@@ -67,7 +68,12 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Ordering: Eq](
 
   def apply(d: DATA): CLASS = {
     val fs = featureExtractor(d)
-    argmax(C, (c: CLASS) => (P(C is c) * Π((0 until N).toVector)(i => P((Fs(i) is fs(i)) | (C is c))))())
+    
+    val foo: Int => CLASS => () => Rational = (i: Int) => (c: CLASS) => P((Fs(i) is fs(i)) | (C is c))
+    
+    argmax(C,
+      (c: CLASS) => (P(C is c) *
+        ((c: CLASS) => Π(0 until numFeatures)(i => foo(i)(c)()))(c)))
   }
 
 }

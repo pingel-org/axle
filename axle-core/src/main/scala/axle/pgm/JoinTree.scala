@@ -11,13 +11,13 @@ import BayesianNetworkModule._
 
 object JoinTree {
 
-  def apply[T: Eq: Manifest](
-    vps: Vector[Set[RandomVariable[T]]],
-    ef: Seq[Vertex[Set[RandomVariable[T]]]] => Seq[(Vertex[Set[RandomVariable[T]]], Vertex[Set[RandomVariable[T]]], String)]): JoinTree[T] =
-    JoinTree[T](JungUndirectedGraph(vps, ef))
+  def apply[T: Eq: Manifest, N: Field: Manifest](
+    vps: Vector[Set[RandomVariable[T, N]]],
+    ef: Seq[Vertex[Set[RandomVariable[T, N]]]] => Seq[(Vertex[Set[RandomVariable[T, N]]], Vertex[Set[RandomVariable[T, N]]], String)]): JoinTree[T, N] =
+    JoinTree[T, N](JungUndirectedGraph(vps, ef))
 
   // returns a jointree for DAG G with width equal to width(π, G)
-  def fromEliminationOrder[T](m: BayesianNetwork[T], π: List[RandomVariable[T]]): JoinTree[T] = {
+  def fromEliminationOrder[T, N: Field](m: BayesianNetwork[T, N], π: List[RandomVariable[T, N]]): JoinTree[T, N] = {
     // val Gm = Gv.moralGraph()
     // val clusterSequence: List[Set[RandomVariable[_]]] = Gm.induceClusterSequence(pi)
     ???
@@ -25,7 +25,7 @@ object JoinTree {
 
 }
 
-case class JoinTree[T: Eq](graph: UndirectedGraph[Set[RandomVariable[T]], String]) {
+case class JoinTree[T: Eq, N: Field](graph: UndirectedGraph[Set[RandomVariable[T, N]], String]) {
 
   //  def addToCluster(n: GV, v: RandomVariable[_]): Unit = n.getPayload += v
   //

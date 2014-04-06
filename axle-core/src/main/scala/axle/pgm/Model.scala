@@ -14,23 +14,23 @@ object Direction {
 
 }
 
-case class GenModel[T: Eq](graph: DirectedGraph[RandomVariable[T], String]) {
+case class GenModel[T: Eq, N: Field](graph: DirectedGraph[RandomVariable[T, N], String]) {
 
-  def vertexPayloadToRandomVariable(mvp: T): RandomVariable[T] = ???
+  def vertexPayloadToRandomVariable(mvp: T): RandomVariable[T, N] = ???
 
-  def randomVariables: Vector[RandomVariable[T]] =
+  def randomVariables: Vector[RandomVariable[T, N]] =
     graph.vertices.map(_.payload).toVector
 
-  def variable(name: String): RandomVariable[T] = ??? // TODO name2variable(name)
+  def variable(name: String): RandomVariable[T, N] = ??? // TODO name2variable(name)
 
   def numVariables: Int = graph.size
 
   def blocks(
-    from: Set[RandomVariable[T]],
-    to: Set[RandomVariable[T]],
-    given: Set[RandomVariable[T]]): Boolean =
+    from: Set[RandomVariable[T, N]],
+    to: Set[RandomVariable[T, N]],
+    given: Set[RandomVariable[T, N]]): Boolean =
     _findOpenPath(
-      Map[RandomVariable[T], Set[RandomVariable[T]]](),
+      Map.empty[RandomVariable[T, N], Set[RandomVariable[T, N]]],
       Direction.UNKNOWN,
       None,
       from,
@@ -42,12 +42,12 @@ case class GenModel[T: Eq](graph: DirectedGraph[RandomVariable[T], String]) {
   //  }
 
   def _findOpenPath(
-    visited: Map[RandomVariable[T], Set[RandomVariable[T]]],
+    visited: Map[RandomVariable[T, N], Set[RandomVariable[T, N]]],
     priorDirection: Int,
-    priorOpt: Option[RandomVariable[T]],
-    current: Set[RandomVariable[T]], // Note: this used to be mutabl.  I may have introduced bugs.
-    to: Set[RandomVariable[T]],
-    given: Set[RandomVariable[T]]): Option[List[RandomVariable[T]]] = {
+    priorOpt: Option[RandomVariable[T, N]],
+    current: Set[RandomVariable[T, N]], // Note: this used to be mutabl.  I may have introduced bugs.
+    to: Set[RandomVariable[T, N]],
+    given: Set[RandomVariable[T, N]]): Option[List[RandomVariable[T, N]]] = {
 
     lazy val logMessage = "_fOP: " + priorDirection +
       ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
@@ -85,7 +85,7 @@ case class GenModel[T: Eq](graph: DirectedGraph[RandomVariable[T], String]) {
         } else {
           _findOpenPath(
             priorOpt.map(prior => {
-              visited + (prior -> (visited.get(prior).getOrElse(Set[RandomVariable[T]]()) ++ Set(variable)))
+              visited + (prior -> (visited.get(prior).getOrElse(Set[RandomVariable[T, N]]()) ++ Set(variable)))
             }).getOrElse(visited),
             -1 * directionPriorToVar,
             Some(variable),

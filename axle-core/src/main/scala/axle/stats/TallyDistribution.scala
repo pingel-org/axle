@@ -8,7 +8,7 @@ import spire.random._
 import spire.algebra._
 
 class TallyDistribution0[A](tally: Map[A, Long])
-  extends Distribution0[A] {
+  extends Distribution0[A, Rational] {
 
   val totalCount = tally.values.sum
 
@@ -22,11 +22,11 @@ class TallyDistribution0[A](tally: Map[A, Long])
     bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
   }
 
-  def probabilityOf(a: A): Real = Real(Rational(tally.get(a).getOrElse(0L), totalCount))
+  def probabilityOf(a: A) = Rational(tally.get(a).getOrElse(0L), totalCount)
 }
 
 class TallyDistribution1[A, G: Eq](tally: Map[(A, G), Long])
-  extends Distribution1[A, G] {
+  extends Distribution1[A, G, Rational] {
 
   val gvs = tally.keys.map(_._2).toSet
 
@@ -36,11 +36,11 @@ class TallyDistribution1[A, G: Eq](tally: Map[(A, G), Long])
 
   def observe(gv: G): A = ???
 
-  def probabilityOf(a: A): Real = Real(Rational(gvs.map(gv => tally((a, gv))).sum, totalCount))
+  def probabilityOf(a: A) = Rational(gvs.map(gv => tally((a, gv))).sum, totalCount)
 
-  def probabilityOf(a: A, given: Case[G]): Real = given match {
-    case CaseIs(argGrv, gv) => Real(Rational(tally((a, gv)), tally.filter(_._1._2 === gv).map(_._2).sum))
-    case CaseIsnt(argGrv, gv) => Real(1) - Real(Rational(tally((a, gv)), tally.filter(_._1._2 === gv).map(_._2).sum))
+  def probabilityOf(a: A, given: Case[G, Rational]): Rational = given match {
+    case CaseIs(argGrv, gv) => Rational(tally((a, gv)), tally.filter(_._1._2 === gv).map(_._2).sum)
+    case CaseIsnt(argGrv, gv) => Rational(1) - Rational(tally((a, gv)), tally.filter(_._1._2 === gv).map(_._2).sum)
     case _ => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
   }
 

@@ -14,51 +14,51 @@ class ConditionalProbabilityTableSpecification extends Specification {
 
   val bools = Some(Vector(true, false))
 
-  val A = new RandomVariable0("A", bools, None)
-  val B = new RandomVariable0("B", bools, None)
-  val C = new RandomVariable0("C", bools, None)
-  val D = new RandomVariable0("D", bools, None)
-  val E = new RandomVariable0("E", bools, None)
+  val A = new RandomVariable0[Boolean, Rational]("A", bools, None)
+  val B = new RandomVariable0[Boolean, Rational]("B", bools, None)
+  val C = new RandomVariable0[Boolean, Rational]("C", bools, None)
+  val D = new RandomVariable0[Boolean, Rational]("D", bools, None)
+  val E = new RandomVariable0[Boolean, Rational]("E", bools, None)
 
   val bn = BayesianNetwork("6.1", Vector(
     BayesianNetworkNode(A,
       Factor(Vector(A), Map(
-        Vector(A is true) -> Real(0.6),
-        Vector(A is false) -> Real(0.4)
+        Vector(A is true) -> Rational(6, 10),
+        Vector(A is false) -> Rational(4, 10)
       ))),
     BayesianNetworkNode(B, // B | A
       Factor(Vector(B), Map(
-        Vector(B is true, A is true) -> Real(0.2),
-        Vector(B is true, A is false) -> Real(0.8),
-        Vector(B is false, A is true) -> Real(0.75),
-        Vector(B is false, A is false) -> Real(0.25)
+        Vector(B is true, A is true) -> Rational(2, 10),
+        Vector(B is true, A is false) -> Rational(8, 10),
+        Vector(B is false, A is true) -> Rational(3, 4),
+        Vector(B is false, A is false) -> Rational(1, 4)
       ))),
     BayesianNetworkNode(C, // C | A
       Factor(Vector(C), Map(
-        Vector(C is true, A is true) -> Real(0.8),
-        Vector(C is true, A is false) -> Real(0.2),
-        Vector(C is false, A is true) -> Real(0.1),
-        Vector(C is false, A is false) -> Real(0.9)
+        Vector(C is true, A is true) -> Rational(8, 10),
+        Vector(C is true, A is false) -> Rational(2, 10),
+        Vector(C is false, A is true) -> Rational(1, 10),
+        Vector(C is false, A is false) -> Rational(9, 10)
       ))),
     BayesianNetworkNode(D, // D | BC
       Factor(Vector(D), Map(
-        Vector(D is true, B is true, C is true) -> Real(0.95),
-        Vector(D is true, B is true, C is false) -> Real(0.05),
-        Vector(D is true, B is false, C is true) -> Real(0.9),
-        Vector(D is true, B is false, C is false) -> Real(0.1),
-        Vector(D is false, B is true, C is true) -> Real(0.8),
-        Vector(D is false, B is true, C is false) -> Real(0.2),
-        Vector(D is false, B is false, C is true) -> Real(0.0),
-        Vector(D is false, B is false, C is false) -> Real(1.0)
+        Vector(D is true, B is true, C is true) -> Rational(95, 100),
+        Vector(D is true, B is true, C is false) -> Rational(5, 100),
+        Vector(D is true, B is false, C is true) -> Rational(9, 10),
+        Vector(D is true, B is false, C is false) -> Rational(1, 10),
+        Vector(D is false, B is true, C is true) -> Rational(8, 10),
+        Vector(D is false, B is true, C is false) -> Rational(2, 10),
+        Vector(D is false, B is false, C is true) -> Rational(0),
+        Vector(D is false, B is false, C is false) -> Rational(1)
       ))),
     BayesianNetworkNode(E, // E | C
       Factor(Vector(E), Map(
-        Vector(E is true, C is true) -> Real(0.7),
-        Vector(E is true, C is false) -> Real(0.3),
-        Vector(E is false, C is true) -> Real(0.0),
-        Vector(E is false, C is false) -> Real(1.0)
+        Vector(E is true, C is true) -> Rational(7, 10),
+        Vector(E is true, C is false) -> Rational(3, 10),
+        Vector(E is false, C is true) -> Rational(0),
+        Vector(E is false, C is false) -> Rational(1)
       )))),
-    (vs: Seq[Vertex[BayesianNetworkNode[Boolean]]]) => vs match {
+    (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
       case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
       case _ => Nil
     })

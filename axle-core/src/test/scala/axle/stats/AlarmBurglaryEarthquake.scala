@@ -15,45 +15,45 @@ class ABE extends Specification {
 
   val bools = Some(Vector(true, false))
 
-  val B = new RandomVariable0[Boolean]("Burglary", bools, None)
-  val E = new RandomVariable0[Boolean]("Earthquake", bools, None)
-  val A = new RandomVariable0[Boolean]("Alarm", bools, None)
-  val J = new RandomVariable0[Boolean]("John Calls", bools, None)
-  val M = new RandomVariable0[Boolean]("Mary Calls", bools, None)
+  val B = new RandomVariable0[Boolean, Rational]("Burglary", bools, None)
+  val E = new RandomVariable0[Boolean, Rational]("Earthquake", bools, None)
+  val A = new RandomVariable0[Boolean, Rational]("Alarm", bools, None)
+  val J = new RandomVariable0[Boolean, Rational]("John Calls", bools, None)
+  val M = new RandomVariable0[Boolean, Rational]("Mary Calls", bools, None)
 
-  val bn = BayesianNetwork[Boolean](
+  val bn = BayesianNetwork[Boolean, Rational](
     "A sounds (due to Burglary or Earthquake) and John or Mary Call",
-    List(BayesianNetworkNode[Boolean](B,
+    List(BayesianNetworkNode[Boolean, Rational](B,
       Factor(Vector(B), Map(
-        Vector(B is true) -> Real(0.001),
-        Vector(B is false) -> Real(0.999)))),
+        Vector(B is true) -> Rational(0.001),
+        Vector(B is false) -> Rational(0.999)))),
       BayesianNetworkNode(E,
         Factor(Vector(E), Map(
-          Vector(E is true) -> Real(0.002),
-          Vector(E is false) -> Real(0.998)))),
+          Vector(E is true) -> Rational(0.002),
+          Vector(E is false) -> Rational(0.998)))),
       BayesianNetworkNode(A,
         Factor(Vector(B, E, A), Map(
-          Vector(B is false, E is false, A is true) -> Real(0.001),
-          Vector(B is false, E is false, A is false) -> Real(0.999),
-          Vector(B is true, E is false, A is true) -> Real(0.94),
-          Vector(B is true, E is false, A is false) -> Real(0.06),
-          Vector(B is false, E is true, A is true) -> Real(0.29),
-          Vector(B is false, E is true, A is false) -> Real(0.71),
-          Vector(B is true, E is true, A is true) -> Real(0.95),
-          Vector(B is true, E is true, A is false) -> Real(0.05)))),
+          Vector(B is false, E is false, A is true) -> Rational(0.001),
+          Vector(B is false, E is false, A is false) -> Rational(0.999),
+          Vector(B is true, E is false, A is true) -> Rational(0.94),
+          Vector(B is true, E is false, A is false) -> Rational(0.06),
+          Vector(B is false, E is true, A is true) -> Rational(0.29),
+          Vector(B is false, E is true, A is false) -> Rational(0.71),
+          Vector(B is true, E is true, A is true) -> Rational(0.95),
+          Vector(B is true, E is true, A is false) -> Rational(0.05)))),
       BayesianNetworkNode(J,
         Factor(Vector(A, J), Map(
-          Vector(A is true, J is true) -> Real(0.9),
-          Vector(A is true, J is false) -> Real(0.1),
-          Vector(A is false, J is true) -> Real(0.05),
-          Vector(A is false, J is false) -> Real(0.95)))),
+          Vector(A is true, J is true) -> Rational(0.9),
+          Vector(A is true, J is false) -> Rational(0.1),
+          Vector(A is false, J is true) -> Rational(0.05),
+          Vector(A is false, J is false) -> Rational(0.95)))),
       BayesianNetworkNode(M,
         Factor(Vector(A, M), Map(
-          Vector(A is true, M is true) -> Real(0.7),
-          Vector(A is true, M is false) -> Real(0.3),
-          Vector(A is false, M is true) -> Real(0.01),
-          Vector(A is false, M is false) -> Real(0.99))))),
-    (vs: Seq[Vertex[BayesianNetworkNode[Boolean]]]) => vs match {
+          Vector(A is true, M is true) -> Rational(0.7),
+          Vector(A is true, M is false) -> Rational(0.3),
+          Vector(A is false, M is true) -> Rational(0.01),
+          Vector(A is false, M is false) -> Rational(0.99))))),
+    (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
       case b :: e :: a :: j :: m :: Nil => List((b, a, ""), (e, a, ""), (a, j, ""), (a, m, ""))
       case _ => Nil
     })
@@ -69,7 +69,7 @@ class ABE extends Specification {
 
       val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
 
-      val Q: Set[RandomVariable[_]] = Set(E, B, A)
+      val Q: Set[RandomVariable[Boolean, Rational]] = Set(E, B, A)
       val order = List(J, M)
 
       // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)

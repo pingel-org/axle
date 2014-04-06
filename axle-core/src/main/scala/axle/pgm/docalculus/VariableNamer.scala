@@ -4,10 +4,10 @@ import axle._
 import axle.stats._
 import spire.algebra._
 
-class VariableNamer[T: Eq] {
+class VariableNamer[T: Eq, N: Field] {
 
-  def duplicate: VariableNamer[T] = ???
+  def duplicate: VariableNamer[T, N] = ???
 
-  def nextVariable(rv: RandomVariable[T]): RandomVariable[T] = ???
+  def nextVariable(rv: RandomVariable[T, N]): RandomVariable[T, N] = ???
 
 }

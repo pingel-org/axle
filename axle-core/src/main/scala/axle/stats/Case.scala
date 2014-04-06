@@ -4,80 +4,99 @@ import collection.GenTraversable
 import axle._
 import spire.math._
 import spire.implicits._
+import spire.algebra._
 
-trait Case[A] {
-  def and[B](right: Case[B]): Case[(A, B)] = CaseAnd[A, B](this, right)
-  def ∧[B](right: Case[B]): Case[(A, B)] = CaseAnd[A, B](this, right)
-  def ∩[B](right: Case[B]): Case[(A, B)] = CaseAnd[A, B](this, right)
-  def or[B](right: Case[B]): Case[(A, B)] = CaseOr[A, B](this, right)
-  def ∨[B](right: Case[B]): Case[(A, B)] = CaseOr[A, B](this, right)
-  def ∪[B](right: Case[B]): Case[(A, B)] = CaseOr[A, B](this, right)
-  def |[B](given: Case[B]): Case[(A, B)] = CaseGiven[A, B](this, given)
-  def probability[B](given: Option[Case[B]] = None): Real
-  def bayes(): () => Real // perhaps bayes should return a Seq[Case] or similar
+abstract class Case[A, N: Field] {
+  
+  def and[B](right: Case[B, N]): Case[(A, B), N] = CaseAnd(this, right)
+  def ∧[B](right: Case[B, N]): Case[(A, B), N] = CaseAnd(this, right)
+  def ∩[B](right: Case[B, N]): Case[(A, B), N] = CaseAnd(this, right)
+  def or[B](right: Case[B, N]): Case[(A, B), N] = CaseOr(this, right)
+  def ∨[B](right: Case[B, N]): Case[(A, B), N] = CaseOr(this, right)
+  def ∪[B](right: Case[B, N]): Case[(A, B), N] = CaseOr(this, right)
+  def |[B](given: Case[B, N]): Case[(A, B), N] = CaseGiven(this, given)
+  def probability[B](given: Option[Case[B, N]] = None): N
+  def bayes: () => N // perhaps bayes should return a Seq[Case] or similar
 }
 
-case class CaseAndGT[A: Manifest](conjuncts: GenTraversable[Case[A]]) extends Case[List[A]] {
+case class CaseAndGT[A: Manifest, N: Field](conjuncts: GenTraversable[Case[A, N]])
+  extends Case[List[A], N] {
 
-  def probability[B](given: Option[Case[B]] = None): Real =
+  def probability[B](given: Option[Case[B, N]] = None): N =
     given
-      .map(g => Π(conjuncts)({ (c: Case[A]) => P(c | g)() }))
+      .map(g => Π(conjuncts)({ (c: Case[A, N]) => P(c | g).apply() }))
       .getOrElse(Π(conjuncts)({ P(_) }))
 
-  def bayes() = ???
+  def bayes = ???
 }
 
-case class CaseAnd[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
-
-  def probability[C](given: Option[Case[C]] = None): Real =
+case class CaseAnd[A, B, N: Field](left: Case[A, N], right: Case[B, N])
+  extends Case[(A, B), N] {
+  
+  def probability[C](given: Option[Case[C, N]] = None): N =
     (given.map(g => P(left | g) * P(right | g)).getOrElse(P(left) * P(right))).apply()
 
-  def bayes() = P(left | right) * P(right).bayes()() // TODO: also check that "left" and "right" have no "given"
+  def bayes = {
+    // TODO: also check that "left" and "right" have no "given"
+    P(left | right) * P(right).bayes
+  }
 
 }
 
-case class CaseOr[A, B](left: Case[A], right: Case[B]) extends Case[(A, B)] {
+case class CaseOr[A, B, N: Field](left: Case[A, N], right: Case[B, N])
+  extends Case[(A, B), N] {
 
-  def probability[C](given: Option[Case[C]] = None): Real =
+  val field = implicitly[Field[N]]
+
+  def probability[C](given: Option[Case[C, N]] = None): N =
     given
-      .map(g => P(left | g) + P(right | g) - P((left ∧ right) | g))
-      .getOrElse(P(left) + P(right) - P(left ∧ right))
+      .map { g =>
+        // P(left | g) + P(right | g) - P((left ∧ right) | g)
+        field.plus(P(left | g), P(right | g)) - P((left ∧ right) | g)
+      }
+      .getOrElse(
+        field.plus(P(left), P(right)) - P(left ∧ right))
 
-  def bayes() = () => this.probability()
+  def bayes = () => this.probability()
 
 }
 
 // TODO: use phantom types to ensure that only one "given" clause is specified
-case class CaseGiven[A, B](c: Case[A], given: Case[B]) extends Case[(A, B)] {
+case class CaseGiven[A, B, N: Field](c: Case[A, N], given: Case[B, N])
+  extends Case[(A, B), N] {
 
-  def probability[C](givenArg: Option[Case[C]] = None): Real = {
+  def probability[C](givenArg: Option[Case[C, N]] = None): N = {
     assert(givenArg.isEmpty)
     c.probability(Some(given))
   }
 
-  def bayes() = () => this.probability()
+  def bayes = () => this.probability()
 
 }
 
 // TODO: may want CaseIs{With, No] classes to avoid the run-time type-checking below
-case class CaseIs[A](rv: RandomVariable[A], v: A) extends Case[A] {
+case class CaseIs[A, N: Field](rv: RandomVariable[A, N], v: A)
+  extends Case[A, N] {
 
-  def probability[B](given: Option[Case[B]]): Real = rv match {
-    case rvNo: RandomVariable0[A] => rvNo.probability(v)
-    case rvWith: RandomVariable1[A, B] => given
+  def probability[B](given: Option[Case[B, N]]): N = rv match {
+    case rvNo: RandomVariable0[A, N] => rvNo.probability(v)
+    case rvWith: RandomVariable1[A, B, N] => given
       .map(g => rvWith.probability(v, g))
       .getOrElse(rvWith.probability(v))
   }
 
-  def bayes() = () => this.probability()
+  def bayes = () => this.probability()
 
-  override def toString(): String = rv.name + " = " + v
+  override def toString: String = rv.name + " = " + v
 }
 
-case class CaseIsnt[A](rv: RandomVariable[A], v: A) extends Case[A] {
+case class CaseIsnt[A, N: Field](rv: RandomVariable[A, N], v: A)
+  extends Case[A, N] {
 
-  def probability[B](given: Option[Case[B]] = None): Real = 1 - P(rv is v)
+  val field = implicitly[Field[N]]
 
-  def bayes() = () => this.probability()
+  def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(rv is v))
+
+  def bayes = () => this.probability()
 
 }

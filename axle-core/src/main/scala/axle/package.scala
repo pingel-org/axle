@@ -1,6 +1,6 @@
 
 /**
- * Copyright (c) 2011-2013 Adam Pingel
+ * Copyright (c) 2011-2014 Adam Pingel
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,10 +44,12 @@ import axle.forall
 import axle.thereexists
 import axle.Π
 import axle.Σ
+import spire.random.Dist
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.implicits._
+import spire.math.Rational
 
 package object axle {
 
@@ -55,11 +57,11 @@ package object axle {
   val Pi = Π
   val ∀ = forall
   val ∃ = thereexists
-  
+
   implicit val jodaDateTimeEq = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }
-  
+
   implicit def enrichGenSet[T](s: collection.GenSet[T]): EnrichedGenSet[T] = EnrichedGenSet(s)
 
   implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)

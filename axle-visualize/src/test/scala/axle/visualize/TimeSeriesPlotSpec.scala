@@ -73,7 +73,7 @@ class TimeSeriesPlotSpec extends Specification {
     import axle.stats._
     import spire.math._
 
-    val hm = new TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(Real(Rational(i, 100)))))).toMap
+    val hm = new TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(Rational(i, 100))))).toMap
 
     val plot = new Plot(List(("h", hm)),
       connect = true,

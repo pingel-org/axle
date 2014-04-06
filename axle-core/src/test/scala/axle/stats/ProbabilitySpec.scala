@@ -5,6 +5,8 @@ import org.specs2.mutable._
 import axle.stats._
 import axle.game.Dice._
 import spire.math._
+import spire.algebra._
+import spire.implicits._
 
 class ProbabilitySpec extends Specification {
 
@@ -13,9 +15,9 @@ class ProbabilitySpec extends Specification {
 
       val coin1 = coin()
       val coin2 = coin()
-      P(coin1 is 'HEAD)() must be equalTo Real(0.5)
-      P((coin1 is 'HEAD) and (coin2 is 'HEAD))() must be equalTo Real(0.25)
-      P((coin1 is 'HEAD) or (coin2 is 'HEAD))() must be equalTo Real(0.75)
+      P(coin1 is 'HEAD).apply() must be equalTo Rational(1, 2)
+      P((coin1 is 'HEAD) and (coin2 is 'HEAD)).apply() must be equalTo Rational(1, 4)
+      P((coin1 is 'HEAD) or (coin2 is 'HEAD)).apply() must be equalTo Rational(3, 4)
     }
   }
 
@@ -24,9 +26,9 @@ class ProbabilitySpec extends Specification {
 
       val d6a = die(6)
       val d6b = die(6)
-      P(d6a is 1)() must be equalTo Real(Rational(1, 6))
-      P((d6a is 1) and (d6b is 2))() must be equalTo Real(Rational(1, 36))
-      P((d6a isnt 3))() must be equalTo Real(Rational(5, 6))
+      P(d6a is 1).apply() must be equalTo Rational(1, 6)
+      P((d6a is 1) and (d6b is 2)).apply() must be equalTo Rational(1, 36)
+      P(d6a isnt 3).apply() must be equalTo Rational(5, 6)
     }
   }
 

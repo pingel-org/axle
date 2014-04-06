@@ -7,6 +7,6 @@ import spire.algebra._
 
 abstract class Rule extends Form {
 
-  def apply[T: Eq](q: CausalityProbability[T], m: CausalModel[T], namer: VariableNamer[T]): List[Form]
+  def apply[T: Eq, N: Field](q: CausalityProbability[T, N], m: CausalModel[T, N], namer: VariableNamer[T, N]): List[Form]
 
 }

@@ -3,6 +3,7 @@ package axle.stats
 import axle._
 import axle.matrix._
 import axle.IndexedCrossProduct
+import scala.reflect.ClassTag
 import spire.math._
 import spire.implicits._
 import spire.algebra._
@@ -20,27 +21,30 @@ trait FactorModule {
 
   object Factor {
 
-    implicit def factorEq[T: Eq]: Eq[Factor[T]] = new Eq[Factor[T]] {
-      def eqv(x: Factor[T], y: Factor[T]): Boolean = x equals y // TODO
+    implicit def factorEq[T: Eq, N: Field]: Eq[Factor[T, N]] = new Eq[Factor[T, N]] {
+      def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
     }
 
-    implicit def factorMultMonoid[T: Eq]: MultiplicativeMonoid[Factor[T]] = new MultiplicativeMonoid[Factor[T]] {
-      def times(x: Factor[T], y: Factor[T]): Factor[T] = {
+    implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] = new MultiplicativeMonoid[Factor[T, N]] {
+
+      lazy val field = implicitly[Field[N]]
+
+      def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
         val newVars = (x.variables.toSet union y.variables.toSet).toVector
         new Factor(newVars, Factor.spaceFor(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
       }
-      def one: Factor[T] = new Factor(Vector.empty, Map.empty.withDefaultValue(Real(1)))
+      def one: Factor[T, N] = new Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
-    def apply[T: Eq](varList: Vector[RandomVariable[T]], values: Map[Vector[CaseIs[T]], Real]): Factor[T] =
+    def apply[T: Eq, N: Field: ConvertableFrom: Order: ClassTag](varList: Vector[RandomVariable[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
       new Factor(varList, values)
 
-    def spaceFor[T: Eq](varSeq: Vector[RandomVariable[T]]): Iterator[Vector[CaseIs[T]]] = {
+    def spaceFor[T: Eq, N: Field](varSeq: Vector[RandomVariable[T, N]]): Iterator[Vector[CaseIs[T, N]]] = {
       val x = varSeq.map(_.values.getOrElse(Nil).toIndexedSeq)
       val kaseIt = IndexedCrossProduct(x).iterator
       kaseIt.map(kase => kase.zipWithIndex.map({
         case (v, i: Int) => {
-          val rv = varSeq(i) // .asInstanceOf[RandomVariable[Any]] // TODO: remove cast
+          val rv = varSeq(i)
           CaseIs(rv, v)
         }
       }).toVector)
@@ -48,66 +52,69 @@ trait FactorModule {
 
   }
 
-  class Factor[T: Eq](varList: Vector[RandomVariable[T]], values: Map[Vector[CaseIs[T]], Real]) {
+  class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](varList: Vector[RandomVariable[T, N]], values: Map[Vector[CaseIs[T, N]], N]) {
+
+    val field = implicitly[Field[N]]
 
     lazy val cp = new IndexedCrossProduct(varList.map(
       _.values.getOrElse(Nil.toIndexedSeq)))
 
-    lazy val elements = (0 until cp.size).map(i => values.get(caseOf(i)).getOrElse(Real(0))).toArray
+    lazy val elements: Array[N] = (0 until cp.size).map(i => values.get(caseOf(i)).getOrElse(field.zero)).toArray
 
-    def variables: Vector[RandomVariable[T]] = varList
+    def variables: Vector[RandomVariable[T, N]] = varList
 
     // assume prior and condition are disjoint, and that they are
     // each compatible with this table
 
-    def evaluate(prior: Seq[CaseIs[T]], condition: Seq[CaseIs[T]]): Real = {
+    def evaluate(prior: Seq[CaseIs[T, N]], condition: Seq[CaseIs[T, N]]): N = {
       val pw = axle.Σ(cases.map(c => {
         if (isSupersetOf(c, prior)) {
           if (isSupersetOf(c, condition)) {
             (this(c), this(c))
           } else {
-            (this(c), Real(0))
+            (this(c), field.zero)
           }
         } else {
-          (Real(0), Real(0))
+          (field.zero, field.zero)
         }
       }).toVector)(identity)
 
       pw._1 / pw._2
     }
 
-    def indexOf(cs: Seq[CaseIs[T]]): Int = {
-      val rvvs: Seq[(RandomVariable[T], T)] = cs.map(ci => (ci.rv, ci.v))
+    def indexOf(cs: Seq[CaseIs[T, N]]): Int = {
+      val rvvs: Seq[(RandomVariable[T, N], T)] = cs.map(ci => (ci.rv, ci.v))
       val rvvm = rvvs.toMap
       cp.indexOf(varList.map(rvvm))
     }
 
-    private def caseOf(i: Int): Vector[CaseIs[T]] =
-      varList.zip(cp(i)).map({ case (variable: RandomVariable[T], value) => CaseIs(variable, value) })
+    private def caseOf(i: Int): Vector[CaseIs[T, N]] =
+      varList.zip(cp(i)).map({ case (variable: RandomVariable[T, N], value) => CaseIs(variable, value) })
 
-    def cases: Iterator[Seq[CaseIs[T]]] = (0 until elements.length).iterator.map(caseOf)
+    def cases: Iterator[Seq[CaseIs[T, N]]] = (0 until elements.length).iterator.map(caseOf)
 
-    def apply(c: Seq[CaseIs[T]]): Real = elements(indexOf(c))
+    def apply(c: Seq[CaseIs[T, N]]): N = elements(indexOf(c))
 
     override def toString: String =
       varList.map(rv => rv.name.padTo(rv.charWidth, " ").mkString("")).mkString(" ") + "\n" +
         cases.map(kase =>
           kase.map(ci => ci.v.toString.padTo(ci.rv.charWidth, " ").mkString("")).mkString(" ") +
-            " " + this(kase).toDouble.toString).mkString("\n") // Note: was "%f".format() prior to spire.math
+            " " + this(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
 
     def toHtml: xml.Node =
       <table border={ "1" }>
         <tr>{ varList.map(rv => <td>{ rv.name }</td>): xml.NodeSeq }<td>P</td></tr>
         {
-          cases.map(kase => <tr>
-                              { kase.map(ci => <td>{ ci.v.toString }</td>) }
-                              <td>{ this(kase).toDouble }</td>
-                            </tr>)
+          cases.map(kase =>
+            <tr>
+              { kase.map(ci => <td>{ ci.v.toString }</td>) }
+              <td>{ this(kase) }</td>
+            </tr>)
         }
       </table>
 
     // Chapter 6 definition 6
-    def maxOut(variable: RandomVariable[T]): Factor[T] = {
+    def maxOut(variable: RandomVariable[T, N]): Factor[T, N] = {
       val newVars = variables.filter(v => !(variable === v))
       new Factor(newVars,
         Factor.spaceFor(newVars)
@@ -115,15 +122,15 @@ trait FactorModule {
           .toMap)
     }
 
-    def projectToOnly(remainingVars: Vector[RandomVariable[T]]): Factor[T] =
+    def projectToOnly(remainingVars: Vector[RandomVariable[T, N]]): Factor[T, N] =
       new Factor(remainingVars,
-        Factor.spaceFor[T](remainingVars).toVector
+        Factor.spaceFor[T, N](remainingVars).toVector
           .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
           .groupBy(_._1)
           .map({ case (k, v) => (k.toVector, axle.Σ(v.map(_._2))(identity)) })
           .toMap)
 
-    def tally(a: RandomVariable[T], b: RandomVariable[T]): Matrix[Double] = {
+    def tally(a: RandomVariable[T, N], b: RandomVariable[T, N]): Matrix[Double] = {
       val aValues = a.values.getOrElse(Nil).toIndexedSeq
       val bValues = b.values.getOrElse(Nil).toIndexedSeq
       matrix[Double](
@@ -132,45 +139,45 @@ trait FactorModule {
         (r: Int, c: Int) => axle.Σ(cases.filter(isSupersetOf(_, Vector(a is aValues(r), b is bValues(c)))).map(this(_)).toVector)(identity).toDouble)
     }
 
-    def Σ(varToSumOut: RandomVariable[T]): Factor[T] = this.sumOut(varToSumOut)
+    def Σ(varToSumOut: RandomVariable[T, N]): Factor[T, N] = this.sumOut(varToSumOut)
 
     // depending on assumptions, this may not be the best way to remove the vars
-    def sumOut(gone: RandomVariable[T]): Factor[T] = {
+    def sumOut(gone: RandomVariable[T, N]): Factor[T, N] = {
       val position = varList.indexOf(gone)
       val newVars = varList.filter(v => !(v === gone))
       new Factor(
         newVars,
         Factor.spaceFor(newVars).map(kase => {
           val reals = gone.values.getOrElse(Nil).map(gv => {
-            val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[T]], gv)) // TODO cast
+            val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[T, N]], gv)) // TODO cast
             this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
           })
           (kase, axle.Σ(reals)(identity))
         }).toMap)
     }
 
-    def Σ(varsToSumOut: Set[RandomVariable[T]]): Factor[T] = sumOut(varsToSumOut)
+    def Σ(varsToSumOut: Set[RandomVariable[T, N]]): Factor[T, N] = sumOut(varsToSumOut)
 
-    def sumOut(varsToSumOut: Set[RandomVariable[T]]): Factor[T] =
+    def sumOut(varsToSumOut: Set[RandomVariable[T, N]]): Factor[T, N] =
       varsToSumOut.foldLeft(this)((result, v) => result.sumOut(v))
 
     // as defined on chapter 6 page 15
-    def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T]]]): Factor[T] = {
+    def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T, N]]]): Factor[T, N] = {
       val e = eOpt.get
       new Factor(variables,
-        Factor.spaceFor(e.map(_.rv).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else Real(0))).toMap)
+        Factor.spaceFor(e.map(_.rv).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
     }
 
-    def mentions(variable: RandomVariable[T]): Boolean =
+    def mentions(variable: RandomVariable[T, N]): Boolean =
       variables.exists(v => variable.name === v.name)
 
-    def isSupersetOf(left: Seq[CaseIs[T]], right: Seq[CaseIs[T]]): Boolean = {
-      val ll: Seq[(RandomVariable[T], T)] = left.map(ci => (ci.rv, ci.v))
+    def isSupersetOf(left: Seq[CaseIs[T, N]], right: Seq[CaseIs[T, N]]): Boolean = {
+      val ll: Seq[(RandomVariable[T, N], T)] = left.map(ci => (ci.rv, ci.v))
       val lm = ll.toMap
-      right.forall((rightCaseIs: CaseIs[T]) => lm.contains(rightCaseIs.rv) && (rightCaseIs.v === lm(rightCaseIs.rv)))
+      right.forall((rightCaseIs: CaseIs[T, N]) => lm.contains(rightCaseIs.rv) && (rightCaseIs.v === lm(rightCaseIs.rv)))
     }
 
-    def projectToVars(cs: Seq[CaseIs[T]], pVars: Set[RandomVariable[T]]): Seq[CaseIs[T]] =
+    def projectToVars(cs: Seq[CaseIs[T, N]], pVars: Set[RandomVariable[T, N]]): Seq[CaseIs[T, N]] =
       cs.filter(ci => pVars.contains(ci.rv))
 
   }

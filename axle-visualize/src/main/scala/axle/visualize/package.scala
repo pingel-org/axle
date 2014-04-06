@@ -55,8 +55,8 @@ package object visualize {
   }
 
   import BayesianNetworkModule._
-
-  implicit def enComponentBayesianNetwork[T: Manifest: Eq](bn: BayesianNetworkModule.BayesianNetwork[T]): Component =
+  
+  implicit def enComponentBayesianNetwork[T: Manifest: Eq, N: Field: Manifest](bn: BayesianNetworkModule.BayesianNetwork[T, N]): Component =
     enComponentDirectedGraph(bn.graph)
 
   implicit def enComponentKMeansClassifier[T](classifier: KMeansModule.KMeansClassifier[T]): Component =
