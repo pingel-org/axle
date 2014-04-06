@@ -100,7 +100,7 @@ import axle._
       "org.joda" % "joda-convert" % "1.6",
       "org.jblas" % "jblas" % "1.2.3",
       "org.spire-math" %% "spire" % "0.7.3",
-      "com.chuusai" % "shapeless_2.10.3" % "2.0.0-SNAPSHOT" //changing()
+      "com.chuusai" % "shapeless_2.10.3" % "2.0.0-SNAPSHOT" changing()
       // "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
     )
   )
@@ -159,7 +159,7 @@ import axle._
     name := "axle-visualize",
     libraryDependencies ++= Seq(
       "net.sf.jung" % "jung-visualization" % jungVersion,
-      "com.typesafe.akka" %% "akka-actor" % "2.3.0",
+      "com.typesafe.akka" %% "akka-actor" % "2.2.1",
       "org.jogamp.gluegen" % "gluegen-rt-main" % "2.0.2", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.jogl" % "jogl-all-main" % "2.0.2"
     )
