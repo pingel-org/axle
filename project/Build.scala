@@ -23,7 +23,8 @@ object AxleBuild extends Build {
 
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2" % "2.3.11" % "test",
-      "org.scala-lang.modules" %% "scala-xml" % "1.0.1"
+      "org.scala-lang.modules" %% "scala-xml" % "1.0.1",
+      "org.scala-lang" % "scala-parser-combinators" % "2.11.0-M4"
       //"org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
     ),
 
@@ -187,7 +188,7 @@ import axle._
 
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-compiler" % "2.11.0",
-      "org.scala-lang" % "jline" % "2.11.0"
+      "org.scala-lang" % "jline" % "2.11.0-M3"
     ),
 
     mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
