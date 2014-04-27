@@ -35,9 +35,9 @@ Top 10 bigrams: ${topBigrams(10).mkString(", ")}
 """
   }
 
-  lazy val bigramCounts = documents flatMap { d =>
+  lazy val bigramCounts = documents.flatMap({ d =>
     bigrams(language.tokenize(d.toLowerCase))
-  } tally
+  }).tally[Long]
 
   def sortedBigramCounts: List[((String, String), Long)] =
     bigramCounts
