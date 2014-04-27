@@ -2,17 +2,21 @@ package axle
 
 import spire.math._
 import spire.implicits._
+import spire.algebra._
 
 import collection.GenSeq
 import collection.immutable.TreeMap
 
 case class EnrichedGenSeq[T](genSeq: GenSeq[T]) {
 
-  def tally: Map[T, Long] =
-    genSeq.aggregate(Map.empty[T, Long].withDefaultValue(0L))(
-      (m, x) => m + (x -> (m(x) + 1L)), _ + _)
+  def tally[N: Ring]: Map[T, N] = {
+    val ring = implicitly[Ring[N]]
+    genSeq.aggregate(Map.empty[T, N].withDefaultValue(ring.zero))(
+      (m, x) => m + (x -> ring.plus(m(x), ring.one)),
+      _ + _)
+  }
 
-  def orderedTally(implicit o: Ordering[T]): TreeMap[T, Long] =
-    new TreeMap[T, Long]() ++ tally
+  def orderedTally[N: Ring](implicit o: Ordering[T]): TreeMap[T, N] =
+    new TreeMap[T, N]() ++ tally[N]
 
 }

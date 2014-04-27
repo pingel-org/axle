@@ -34,21 +34,25 @@ package object stats {
 
   // http://en.wikipedia.org/wiki/Standard_deviation
 
-  def stddev[N: NRoot: Field: Manifest](xs: GenTraversable[N]): N = {
+  def stddev[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = {
+    val adder = implicitly[AdditiveMonoid[N]]
     val μ = mean(xs)
-    (Σ(xs.map(x => square(x - μ)))(identity) / xs.size).sqrt
+    (Σ(xs.map(x => square(x - μ)))(identity)(adder) / xs.size).sqrt
   }
 
   import Information._
   import axle.quanta._
 
   def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: RandomVariable[A, N]): Information.Q = {
+    val adder = implicitly[AdditiveMonoid[Real]]
     val field = implicitly[Field[N]]
     val cf = implicitly[ConvertableFrom[N]]
-    val H = X.values.map(Σ(_)(x => {
-      val px = P(X is x).apply()
-      if (px > field.zero) Real(cf.toDouble(-px * log2(px))) else Real(0)
-    })).getOrElse(Real(0))
+    val H = X.values.map { xs =>
+      Σ(xs)({ x =>
+        val px = P(X is x).apply()
+        if (px > field.zero) Real(cf.toDouble(-px * log2(px))) else adder.zero
+      })(adder)
+    }.getOrElse(adder.zero)
     Number(H.toDouble) *: bit // TODO Number(_.toDouble) should not be necessary
   }
 

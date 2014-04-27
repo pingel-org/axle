@@ -7,7 +7,7 @@ import scala.reflect.ClassTag
 import spire.math._
 import spire.implicits._
 import spire.algebra._
-import spire.compat._
+// import spire.compat._
 
 object FactorModule extends FactorModule
 
@@ -25,41 +25,41 @@ trait FactorModule {
       def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
     }
 
-    implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] = new MultiplicativeMonoid[Factor[T, N]] {
+    implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order: Ordering: ClassTag]: MultiplicativeMonoid[Factor[T, N]] = new MultiplicativeMonoid[Factor[T, N]] {
 
       lazy val field = implicitly[Field[N]]
 
       def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
         val newVars = (x.variables.toSet union y.variables.toSet).toVector
-        new Factor(newVars, Factor.spaceFor(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
+        new Factor(newVars, Factor.cases(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
       }
       def one: Factor[T, N] = new Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
-    def apply[T: Eq, N: Field: ConvertableFrom: Order: ClassTag](varList: Vector[RandomVariable[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
+    def apply[T: Eq, N: Field: ConvertableFrom: Order: Ordering: ClassTag](varList: Vector[RandomVariable[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
       new Factor(varList, values)
 
-    def spaceFor[T: Eq, N: Field](varSeq: Vector[RandomVariable[T, N]]): Iterator[Vector[CaseIs[T, N]]] = {
-      val x = varSeq.map(_.values.getOrElse(Nil).toIndexedSeq)
-      val kaseIt = IndexedCrossProduct(x).iterator
-      kaseIt.map(kase => kase.zipWithIndex.map({
-        case (v, i: Int) => {
-          val rv = varSeq(i)
-          CaseIs(rv, v)
-        }
-      }).toVector)
-    }
+    def cases[T: Eq, N: Field](varSeq: Vector[RandomVariable[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
+      IndexedCrossProduct(varSeq.map(_.values.getOrElse(Nil).toIndexedSeq)) map { kase =>
+        varSeq.zip(kase) map {
+          case (rv, v) =>
+            CaseIs(rv, v)
+        } toVector
+      }
 
   }
 
-  class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](varList: Vector[RandomVariable[T, N]], values: Map[Vector[CaseIs[T, N]], N]) {
+  class Factor[T: Eq, N: Field: Order: Ordering: ClassTag: ConvertableFrom](varList: Vector[RandomVariable[T, N]], values: Map[Vector[CaseIs[T, N]], N]) {
 
     val field = implicitly[Field[N]]
 
-    lazy val cp = new IndexedCrossProduct(varList.map(
+    lazy val crossProduct = new IndexedCrossProduct(varList.map(
       _.values.getOrElse(Nil.toIndexedSeq)))
 
-    lazy val elements: Array[N] = (0 until cp.size).map(i => values.get(caseOf(i)).getOrElse(field.zero)).toArray
+    lazy val elements: Array[N] =
+      (0 until crossProduct.size) map { i =>
+        values.get(caseOf(i)).getOrElse(field.zero)
+      } toArray
 
     def variables: Vector[RandomVariable[T, N]] = varList
 
@@ -85,13 +85,13 @@ trait FactorModule {
     def indexOf(cs: Seq[CaseIs[T, N]]): Int = {
       val rvvs: Seq[(RandomVariable[T, N], T)] = cs.map(ci => (ci.rv, ci.v))
       val rvvm = rvvs.toMap
-      cp.indexOf(varList.map(rvvm))
+      crossProduct.indexOf(varList.map(rvvm))
     }
 
-    private def caseOf(i: Int): Vector[CaseIs[T, N]] =
-      varList.zip(cp(i)).map({ case (variable: RandomVariable[T, N], value) => CaseIs(variable, value) })
+    private[this] def caseOf(i: Int): Vector[CaseIs[T, N]] =
+      varList.zip(crossProduct(i)) map { case (variable, value) => CaseIs(variable, value) }
 
-    def cases: Iterator[Seq[CaseIs[T, N]]] = (0 until elements.length).iterator.map(caseOf)
+    def cases: Iterable[Seq[CaseIs[T, N]]] = (0 until elements.length) map { caseOf }
 
     def apply(c: Seq[CaseIs[T, N]]): N = elements(indexOf(c))
 
@@ -117,14 +117,14 @@ trait FactorModule {
     def maxOut(variable: RandomVariable[T, N]): Factor[T, N] = {
       val newVars = variables.filter(v => !(variable === v))
       new Factor(newVars,
-        Factor.spaceFor(newVars)
+        Factor.cases(newVars)
           .map(kase => (kase, variable.values.getOrElse(Nil).map(value => this(kase)).max))
           .toMap)
     }
 
     def projectToOnly(remainingVars: Vector[RandomVariable[T, N]]): Factor[T, N] =
       new Factor(remainingVars,
-        Factor.spaceFor[T, N](remainingVars).toVector
+        Factor.cases[T, N](remainingVars).toVector
           .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
           .groupBy(_._1)
           .map({ case (k, v) => (k.toVector, axle.Σ(v.map(_._2))(identity)) })
@@ -147,7 +147,7 @@ trait FactorModule {
       val newVars = varList.filter(v => !(v === gone))
       new Factor(
         newVars,
-        Factor.spaceFor(newVars).map(kase => {
+        Factor.cases(newVars).map(kase => {
           val reals = gone.values.getOrElse(Nil).map(gv => {
             val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[T, N]], gv)) // TODO cast
             this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
@@ -165,7 +165,7 @@ trait FactorModule {
     def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T, N]]]): Factor[T, N] = {
       val e = eOpt.get
       new Factor(variables,
-        Factor.spaceFor(e.map(_.rv).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
+        Factor.cases(e.map(_.rv).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
     }
 
     def mentions(variable: RandomVariable[T, N]): Boolean =

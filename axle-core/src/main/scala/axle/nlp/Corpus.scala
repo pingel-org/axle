@@ -2,12 +2,14 @@ package axle.nlp
 
 import axle._
 import spire.implicits._
+import spire.algebra._
+import spire.math._
 import collection.GenSeq
 
 class Corpus(documents: GenSeq[String], language: Language) {
 
   lazy val wordCountMap: Map[String, Long] =
-    documents flatMap (doc => language.tokenize(doc.toLowerCase)) tally
+    documents.flatMap(doc => language.tokenize(doc.toLowerCase)).tally[Long]
 
   def wordCount(word: String): Option[Long] = wordCountMap.get(word)
 

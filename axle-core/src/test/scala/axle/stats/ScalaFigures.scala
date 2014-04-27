@@ -151,7 +151,7 @@ class ScalaFigures extends Specification {
   // Result of fe-i on a->b->c with Q={C}
   def figure7_2 = figure6_4.factorElimination1(Set(C))
 
-  def figure7_4 = {
+  def figure7_4: (BayesianNetwork[Boolean, Rational], EliminationTree[Boolean, Rational], Factor[Boolean, Rational]) = {
 
     val f61 = figure6_1
 

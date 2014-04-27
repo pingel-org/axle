@@ -17,7 +17,7 @@ object CausalModelNode {
   }
 }
 
-case class PFunction[T: Eq, N: Field](rv: RandomVariable[T, N], inputs: Seq[RandomVariable[T, N]])
+abstract class PFunction[T: Eq, N: Field](rv: RandomVariable[T, N], inputs: Seq[RandomVariable[T, N]])
 
 class CausalModel[T: Eq, N: Field](_name: String, graph: DirectedGraph[CausalModelNode[T, N], String])
 {
@@ -31,10 +31,10 @@ class CausalModel[T: Eq, N: Field](_name: String, graph: DirectedGraph[CausalMod
     graph.vertices.map(_.payload.rv).toVector
 
   // TODO: this should probably be Option[Boolean] ?
-  def observes(rv: RandomVariable[T, N]): Boolean = findVertex((n: Vertex[CausalModelNode[T, N]]) => n.payload.rv === rv).map(_.payload.observable).getOrElse(false)
+  def observes(rv: RandomVariable[T, N]): Boolean = findVertex(_.payload.rv === rv).map(_.payload.observable).getOrElse(false)
 
   def nodesFor(rvs: Set[RandomVariable[T, N]]): Set[Vertex[CausalModelNode[T, N]]] =
-    rvs.flatMap(rv => findVertex((n: Vertex[CausalModelNode[T, N]]) => n.payload.rv === rv))
+    rvs.flatMap(rv => findVertex(_.payload.rv === rv))
 
   def nodeFor(rv: RandomVariable[T, N]): Option[Vertex[CausalModelNode[T, N]]] = findVertex((n: Vertex[CausalModelNode[T, N]]) => n.payload.rv === rv)
 
