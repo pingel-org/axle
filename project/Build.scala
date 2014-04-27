@@ -15,12 +15,15 @@ object AxleBuild extends Build {
 
     version := "0.1-SNAPSHOT", // last milestone was M11
 
-    scalaVersion := "2.10.4",
+    scalaVersion := "2.11.0",
 
-    crossScalaVersions := Seq("2.10.4"),
+    //crossScalaVersions := Seq("2.10.4", "2.11.0"),
+
+    crossScalaVersions := Seq("2.11.0"),
 
     libraryDependencies ++= Seq(
-      "org.specs2" %% "specs2" % "2.3.10" % "test"
+      "org.specs2" %% "specs2" % "2.3.11" % "test",
+      "org.scala-lang.modules" %% "scala-xml" % "1.0.1"
       //"org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
     ),
 
@@ -99,9 +102,8 @@ import axle._
       "joda-time" % "joda-time" % "2.3",
       "org.joda" % "joda-convert" % "1.6",
       "org.jblas" % "jblas" % "1.2.3",
-      "org.spire-math" %% "spire" % "0.7.3",
-      "com.chuusai" % "shapeless_2.10.3" % "2.0.0-SNAPSHOT" changing()
-      // "com.chuusai" % "shapeless" % "2.0.0-M1" cross CrossVersion.full
+      "org.spire-math" %% "spire" % "0.7.4",
+      "com.chuusai" %% "shapeless" % "2.0.0"
     )
   )
 
@@ -126,7 +128,7 @@ import axle._
   ).settings(
     name := "axle-languages",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.1.3"
+      "com.fasterxml.jackson.module" % "jackson-module-scala_2.11.0-RC3" % "2.4.0-SNAPSHOT"
     )
   ).dependsOn(axleCore)
 
@@ -159,7 +161,7 @@ import axle._
     name := "axle-visualize",
     libraryDependencies ++= Seq(
       "net.sf.jung" % "jung-visualization" % jungVersion,
-      "com.typesafe.akka" %% "akka-actor" % "2.2.1",
+      "com.typesafe.akka" %% "akka-actor" % "2.3.2",
       "org.jogamp.gluegen" % "gluegen-rt-main" % "2.0.2", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.jogl" % "jogl-all-main" % "2.0.2"
     )
@@ -184,8 +186,8 @@ import axle._
     name := "axle-repl",
 
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-compiler" % "2.10.4",
-      "org.scala-lang" % "jline" % "2.10.4"
+      "org.scala-lang" % "scala-compiler" % "2.11.0",
+      "org.scala-lang" % "jline" % "2.11.0"
     ),
 
     mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
