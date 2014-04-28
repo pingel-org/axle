@@ -24,20 +24,20 @@ class AxleILoop extends ILoop {
     else
       "axle > "
 
-  addThunk {
-    intp.beQuietDuring {
-      intp.addImports(
-        "axle._",
-        "axle.algebra._",
-        "axle.stats._",
-        "axle.quanta._",
-        "axle.graph._",
-        "axle.matrix._",
-        "axle.ml._",
-        "axle.visualize._",
-        "axle.ast._",
-        "scala.collection._")
-    }
+//  addThunk {
+//    intp.beQuietDuring {
+  List(
+    "axle._",
+    "axle.algebra._",
+    "axle.stats._",
+    "axle.quanta._",
+    "axle.graph._",
+    "axle.matrix._",
+    "axle.ml._",
+    "axle.visualize._",
+    "axle.ast._",
+    "scala.collection._") foreach { (imp: String) =>
+      intp.interpret(s"import $imp")
   }
 
   override def printWelcome() {
