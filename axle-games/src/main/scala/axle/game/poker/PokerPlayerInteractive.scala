@@ -34,7 +34,7 @@ Example moves:
 
   def userInputStream(): Stream[String] = {
     print("Enter move: ")
-    val command = readLine() // TODO echo characters as typed (shouldn't have to use jline for this)
+    val command = scala.io.StdIn.readLine() // TODO echo characters as typed (shouldn't have to use jline for this)
     println(command)
     cons(command, userInputStream)
   }
