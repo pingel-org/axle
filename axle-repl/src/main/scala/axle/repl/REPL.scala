@@ -12,7 +12,8 @@ object AxleRepl extends App {
   settings.usejavacp.value = true
   settings.deprecation.value = true
 
-  val axleILoop = new AxleILoop().process(settings)
+  val axleILoop = new AxleILoop()
+  axleILoop.process(settings)
 
   List(
     "axle._",
@@ -25,7 +26,7 @@ object AxleRepl extends App {
     "axle.visualize._",
     "axle.ast._",
     "scala.collection._") foreach { imp =>
-      //axleILoop.interpret(s"import $imp")
+      axleILoop.interpreter.interpret(s"import $imp")
   }
   
 }

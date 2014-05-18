@@ -189,7 +189,7 @@ import axle._
 
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-compiler" % "2.11.0",
-      "org.scala-lang" % "jline" % "2.11.0-M3"
+      "jline" % "jline" % "2.11" // http://grokbase.com/t/gg/scala-internals/1433gjdg5h/missing-jline-for-scala-2-11-0-rc1
     ),
 
     mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => {
