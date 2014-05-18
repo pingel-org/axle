@@ -12,20 +12,8 @@ object AxleRepl extends App {
   settings.usejavacp.value = true
   settings.deprecation.value = true
 
-  new AxleILoop().process(settings)
+  val axleILoop = new AxleILoop().process(settings)
 
-}
-
-class AxleILoop extends ILoop {
-
-  override def prompt =
-    if (System.getProperty("file.encoding").toLowerCase === "utf-8")
-      "αχλε ↦ "
-    else
-      "axle > "
-
-//  addThunk {
-//    intp.beQuietDuring {
   List(
     "axle._",
     "axle.algebra._",
@@ -36,11 +24,21 @@ class AxleILoop extends ILoop {
     "axle.ml._",
     "axle.visualize._",
     "axle.ast._",
-    "scala.collection._") foreach { (imp: String) =>
-      intp.interpret(s"import $imp")
+    "scala.collection._") foreach { imp =>
+      //axleILoop.interpret(s"import $imp")
   }
+  
+}
 
-  override def printWelcome() {
+class AxleILoop extends ILoop {
+
+  override def prompt =
+    if (System.getProperty("file.encoding").toLowerCase === "utf-8")
+      "αχλε ↦ "
+    else
+      "axle > "
+  
+  override def printWelcome(): Unit = {
     echo("""
 
 Welcome to axle
