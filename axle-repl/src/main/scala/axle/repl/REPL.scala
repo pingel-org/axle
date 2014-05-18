@@ -3,6 +3,11 @@ package axle.repl
 
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter.ILoop
+import scala.tools.nsc.interpreter.JLineReader
+import scala.tools.nsc.interpreter.JLineCompletion
+import scala.tools.nsc.interpreter.InteractiveReader
+import scala.tools.nsc.interpreter.NoCompletion
+import scala.tools.nsc.interpreter.SimpleReader
 import scala.util.Properties.{ jdkHome, javaVersion, javaVmName }
 import scala.collection.JavaConverters._
 import java.io.{ BufferedReader, StringReader, PrintWriter }
@@ -29,14 +34,14 @@ object AxleRepl extends App {
     "scala.collection._") map { imp => s"import $imp; " } mkString
 
   val output = new PrintWriter(Console.out, true)
-    
+
   val initialInput = new BufferedReader(new StringReader(code.trim + "\n"))
-    
+
   val input = new BufferedReader(Console.in) {
     var initialized = false
-    
+
     override def readLine() = {
-      if(initialized) {
+      if (initialized) {
         super.readLine()
       } else {
         initialized = true
@@ -45,18 +50,28 @@ object AxleRepl extends App {
     }
   }
 
-  val axleILoop = new AxleILoop(Some(input), output)
+  val axleILoop = new AxleILoop() // Some(input), output)
   axleILoop.process(settings)
 
 }
 
-class AxleILoop(in0: Option[BufferedReader], override protected val out: PrintWriter)
-  extends ILoop(in0, out) {
+class AxleILoop // (override protected val out: PrintWriter)
+  extends ILoop { // (None, out) {
 
   override def prompt =
     System.getProperty("file.encoding").toLowerCase match {
       case "utf-8" | "utf8" => "αχλε ↦ "
       case _ => "axle > "
+    }
+
+  override def chooseReader(settings: Settings): InteractiveReader =
+    try new JLineReader(
+      if (settings.noCompletion) NoCompletion
+      else new JLineCompletion(intp))
+    catch {
+      case ex @ (_: Exception | _: NoClassDefFoundError) =>
+        echo("Failed to created JLineReader: " + ex + "\nFalling back to SimpleReader.")
+        SimpleReader()
     }
 
   val versionString = "0.1"
