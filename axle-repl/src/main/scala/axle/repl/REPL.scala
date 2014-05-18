@@ -14,6 +14,7 @@ object AxleRepl extends App {
 
   settings.usejavacp.value = true
   settings.deprecation.value = true
+  settings.Xnojline.value = false
 
   val code = List(
     "axle._",
@@ -65,7 +66,7 @@ class AxleILoop(in0: Option[BufferedReader], override protected val out: PrintWr
       |Welcome to Axle $versionString ($javaVmName, Java $javaVersion).
       |axle-lang.org
       |Type in expressions to have them evaluated.
-      |Type :help for more information.""".trim.stripMargin)
+      |Type :help for more information, or :quit to quit.""".trim.stripMargin)
     echo("[info] started at " + new java.util.Date)
   }
 }
