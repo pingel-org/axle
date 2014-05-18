@@ -21,36 +21,7 @@ object AxleRepl extends App {
   settings.deprecation.value = true
   settings.Xnojline.value = false
 
-  val code = List(
-    "axle._",
-    "axle.algebra._",
-    "axle.stats._",
-    "axle.quanta._",
-    "axle.graph._",
-    "axle.matrix._",
-    "axle.ml._",
-    "axle.visualize._",
-    "axle.ast._",
-    "scala.collection._") map { imp => s"import $imp; " } mkString
-
-  val output = new PrintWriter(Console.out, true)
-
-  val initialInput = new BufferedReader(new StringReader(code.trim + "\n"))
-
-  val input = new BufferedReader(Console.in) {
-    var initialized = false
-
-    override def readLine() = {
-      if (initialized) {
-        super.readLine()
-      } else {
-        initialized = true
-        initialInput.readLine()
-      }
-    }
-  }
-
-  val axleILoop = new AxleILoop() // Some(input), output)
+  val axleILoop = new AxleILoop()
   axleILoop.process(settings)
 
 }
@@ -66,8 +37,40 @@ class AxleILoop // (override protected val out: PrintWriter)
 
   override def chooseReader(settings: Settings): InteractiveReader =
     try new JLineReader(
-      if (settings.noCompletion) NoCompletion
-      else new JLineCompletion(intp))
+      if (settings.noCompletion)
+        NoCompletion
+      else
+        new JLineCompletion(intp)) {
+      override val consoleReader = new JLineConsoleReader() {
+        override lazy val postInit: Unit = {
+          //super.postInit
+          println("in AxleILoop postInit !!!!!!!!!!!!!!!!!")
+        }
+      }
+      var initialized = false
+      override def readOneLine(prompt: String) =
+        if (initialized) {
+          consoleReader readLine prompt
+        } else {
+          initialized = true
+          println("in AxleILoop readOneLine with initialized = false !!!!!!!!!!!!!!!!!")
+          //          List(
+          //            "axle._",
+          //            "axle.algebra._",
+          //            "axle.stats._",
+          //            "axle.quanta._",
+          //            "axle.graph._",
+          //            "axle.matrix._",
+          //            "axle.ml._",
+          //            "axle.visualize._",
+          //            "axle.ast._",
+          //            "scala.collection._") foreach { pkgExpr =>
+          //              intp.interpret(s"import pkgExpr")
+          //            }
+          intp.interpret("4 + 4")
+          consoleReader readLine prompt
+        }
+    }
     catch {
       case ex @ (_: Exception | _: NoClassDefFoundError) =>
         echo("Failed to created JLineReader: " + ex + "\nFalling back to SimpleReader.")
