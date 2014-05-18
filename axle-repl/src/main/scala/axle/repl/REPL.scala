@@ -26,8 +26,7 @@ object AxleRepl extends App {
 
 }
 
-class AxleILoop // (override protected val out: PrintWriter)
-  extends ILoop { // (None, out) {
+class AxleILoop extends ILoop {
 
   override def prompt =
     System.getProperty("file.encoding").toLowerCase match {
@@ -35,41 +34,33 @@ class AxleILoop // (override protected val out: PrintWriter)
       case _ => "axle > "
     }
 
+//    "axle._",
+//    "axle.algebra._",
+//    "axle.stats._",
+//    "axle.quanta._",
+//    "axle.graph._",
+//    "axle.matrix._",
+//    "axle.ml._",
+//    "axle.visualize._",
+//    "axle.ast._",
+//    "scala.collection._"
+
   override def chooseReader(settings: Settings): InteractiveReader =
     try new JLineReader(
-      if (settings.noCompletion)
-        NoCompletion
-      else
-        new JLineCompletion(intp)) {
-      override val consoleReader = new JLineConsoleReader() {
-        override lazy val postInit: Unit = {
-          //super.postInit
-          println("in AxleILoop postInit !!!!!!!!!!!!!!!!!")
-        }
-      }
-      var initialized = false
-      override def readOneLine(prompt: String) =
-        if (initialized) {
-          consoleReader readLine prompt
-        } else {
-          initialized = true
-          println("in AxleILoop readOneLine with initialized = false !!!!!!!!!!!!!!!!!")
-          //          List(
-          //            "axle._",
-          //            "axle.algebra._",
-          //            "axle.stats._",
-          //            "axle.quanta._",
-          //            "axle.graph._",
-          //            "axle.matrix._",
-          //            "axle.ml._",
-          //            "axle.visualize._",
-          //            "axle.ast._",
-          //            "scala.collection._") foreach { pkgExpr =>
-          //              intp.interpret(s"import pkgExpr")
-          //            }
-          intp.interpret("4 + 4")
-          consoleReader readLine prompt
-        }
+      new JLineCompletion(intp)) {
+//      override val consoleReader = new JLineConsoleReader() {
+//        override lazy val postInit: Unit = {
+//        }
+//      }
+//      var initialized = false
+//      override def readOneLine(prompt: String) =
+//        if (initialized) {
+//          consoleReader readLine prompt
+//        } else {
+//          initialized = true
+//          //intp.interpret("import axle._")
+//          consoleReader readLine prompt
+//        }
     }
     catch {
       case ex @ (_: Exception | _: NoClassDefFoundError) =>
