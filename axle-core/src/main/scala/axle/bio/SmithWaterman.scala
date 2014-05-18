@@ -2,7 +2,8 @@ package axle.bio
 
 import spire.algebra._
 import spire.implicits._
-import Stream.{ cons, empty }
+import scala.collection.immutable.Stream
+import Stream.{cons, empty}
 import axle.matrix.JblasMatrixModule._
 
 /**
@@ -57,7 +58,7 @@ object SmithWaterman {
       (gap, B(j - 1), i, j - 1)
     }
 
-  def _optimalAlignment(i: Int, j: Int, A: String, B: String, mismatchPenalty: Int, H: Matrix[Int]): Stream[(Char, Char)] =
+  def _optimalAlignment(i: Int, j: Int, A: String, B: String, mismatchPenalty: Int, H: Matrix[Int]): scala.collection.immutable.Stream[(Char, Char)] =
     if (i > 0 || j > 0) {
       val (preA, preB, newI, newJ) = alignStep(i, j, A, B, H, mismatchPenalty)
       cons((preA, preB), _optimalAlignment(newI, newJ, A, B, mismatchPenalty, H))
