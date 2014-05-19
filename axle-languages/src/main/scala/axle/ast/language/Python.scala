@@ -196,7 +196,7 @@ object Python {
 
     (code: String) => {
 
-      val ast2json = "python2json.py"
+      val ast2json = "./axle-languages/src/main/python/python2json.py"
 
       val pb = new ProcessBuilder(ast2json)
       val p = pb.start()
