@@ -69,6 +69,8 @@ object JsonAST {
 
     case arr: Array[_] => AstNodeList(arr.map(obj2ast(_, parentLineNo)).toList, parentLineNo)
 
+    case list: List[_] => AstNodeList(list.map(obj2ast(_, parentLineNo)), parentLineNo)
+    
     case buff: Buffer[_] => AstNodeList(buff.map(obj2ast(_, parentLineNo)).toList, parentLineNo)
 
     case i: Int => AstNodeValue(Some(i.toString), parentLineNo)
