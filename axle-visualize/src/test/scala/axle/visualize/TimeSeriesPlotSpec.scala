@@ -1,9 +1,19 @@
 package axle.visualize
 
 import org.specs2.mutable.Specification
+import spire.implicits._
+import spire.algebra._
 
 class TimeSeriesPlotSpec extends Specification {
 
+//  implicit def eqVector[T: Eq] = new Eq[Vector[T]] {
+//    def eqv(x: Vector[T], y: Vector[T]): Boolean = x.length == y.length && (x.zip(y).forall({ case (a, b) => a === b}))
+//  }
+  
+  implicit def eqTuple2[T: Eq, U: Eq] = new Eq[(T, U)] {
+    def eqv(x: (T, U), y: (T, U)): Boolean = x._1 === y._1 && x._2 === y._2
+  }
+  
   "Tics for units" should {
     "work" in {
 
@@ -28,9 +38,11 @@ class TimeSeriesPlotSpec extends Specification {
         (1.0 *: bit, "1.0")
       )
      
-      implicit val ieq = implicitly[Eq[Information.Q]]
+      // implicit val ieq = implicitly[Eq[Information.Q]]
+      implicit val ieqx = implicitly[Eq[(Information.Q, String)]](eqTuple2[Information.Q, String])
       implicit val vieq = implicitly[Eq[Vector[(Information.Q, String)]]]
 
+//      tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))
     }
   }
