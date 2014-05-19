@@ -18,10 +18,8 @@ object PythonSpecification extends Specification {
       // TODO add some assertions about how Python.trim should work
 
       JsonAST.fromJson(
-        """{"type": "Const", "value": 3}"""
-      ) must be equalTo (
-          AstNodeRule("Const", Map("value" -> AstNodeValue(Some("3"), 1)), 1)
-        )
+        """{"type": "Const", "value": 3}""") must be equalTo (
+          AstNodeRule("Const", Map("value" -> AstNodeValue(Some("3"), 1)), 1))
 
       JsonAST.fromJson(
         """
@@ -42,8 +40,7 @@ object PythonSpecification extends Specification {
    "_lineno": null,
    "type": "Module"
 }
-"""
-      ) must be equalTo (
+""") must be equalTo (
           AstNodeRule("Module", Map(
             "node" -> AstNodeRule("Stmt", Map(
               "spread" -> AstNodeList(List(AstNodeRule("Discard", Map(
@@ -51,22 +48,46 @@ object PythonSpecification extends Specification {
                   "right" -> AstNodeRule("Const", Map(
                     "value" -> AstNodeValue(Some("3"), 1)), 1),
                   "left" -> AstNodeRule("Const", Map(
-                    "value" -> AstNodeValue(Some("3"), 1)), 1)), 1)), 1)), 1)), 1)), 1)
-        )
+                    "value" -> AstNodeValue(Some("3"), 1)), 1)), 1)), 1)), 1)), 1)), 1))
     }
   }
 
   val language = Python.language
+
+  "function call emit" should {
+    "work" in {
+
+      val ast = AstNodeRule("CallFunc", //stmt = Sq(WrappedArray(Sub(node), Emb((,J(args,Sq(WrappedArray(Lit(,), Sp()))),)))), nodeOpt = Some(AstNodeRule(CallFunc,Map(node -> AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1), args -> AstNodeList(List(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1)),1)),1))
+        Map("node" -> //stmt = Sub(node), nodeOpt = Some(AstNodeRule(CallFunc,Map(node -> AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1), args -> AstNodeList(List(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1)),1)),1))
+          AstNodeRule("Name",
+            Map("name" -> //stmt = Attr(name), nodeOpt = Some(AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1))
+              AstNodeValue(Some("f"), 1)), 1),
+          "args" -> //stmt = J(args,Sq(WrappedArray(Lit(,), Sp()))), nodeOpt = Some(AstNodeRule(CallFunc,Map(node -> AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1), args -> AstNodeList(List(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1)),1)),1))
+            AstNodeList(List(
+              AstNodeRule("Name",
+                Map("name" -> //stmt = Attr(name), nodeOpt = Some(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1))
+                  AstNodeValue(Some("a"), 1)),
+                1) // AstNodeRule("Name"
+                ), // List(
+              1) // (List
+              ), // Map("node"...
+        1)
+
+      val actual = ViewString.AstNode(ast, language)
+      actual must be equalTo ("f(a)")
+    }
+  }
 
   "signature extraction" should {
 
     "emit correct python" in {
 
       def parseTests =
-        "a\n" ::
-          "3\n" ::
-          "3.0\n" ::
-          "a = 'a'\n" ::
+        "a" ::
+          "3" ::
+          "3.0" ::
+          "a = 'a'\n" :: // TODO spaces
+          "f(a, b)\n" ::
           "x = f(a, b)\n" ::
           "a = [f(x) for x in range(3, 4)]\n" ::
           "a = [f(x) for x in range(3, 4) if False]\n" ::
@@ -133,15 +154,15 @@ def f(a, b, x=True, y=False):
       // indentation following else (see BaseHTTPServer.py.html)
       // if's condition not showing up sometimes
 
-      parseTests
-        .map(expectedText => {
-          language
-            .parseString(expectedText)
-            .map(ViewString.AstNode(_, language))
-            .getOrElse("") must be equalTo (expectedText)
-        })
-
-      "todo" must be equalTo ("todo")
+      parseTests foreach { input =>
+        //s"input = $input".pp
+        val parsed = language.parseString(input)
+        //s"parsed = $parsed".pp
+        val actual = parsed.map(ViewString.AstNode(_, language)).getOrElse("")
+        //s"actual = $actual".pp
+        actual must be equalTo (input)
+      }
+      1 must be equalTo 1
     }
 
   }
