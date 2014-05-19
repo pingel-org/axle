@@ -11,7 +11,7 @@ object Emission {
     grammar: Language,
     formatter: AstNodeFormatter[R, S]): AstNodeFormatter[R, S] = {
 
-    // info("emit(stmt = " + stmt + ", nodeOpt = " + nodeOpt + ", grammar, formatter)")
+    // println("emit(stmt = " + stmt + ", nodeOpt = " + nodeOpt + ", grammar, formatter)")
 
     (nodeOpt, stmt) match {
       case (Some(node @ AstNodeRule(_, m, _)), Sub(name)) => {
@@ -40,7 +40,7 @@ object Emission {
       case (_, Lit(value: String)) => formatter.raw(value)
 
       case (_, Sq(stmts @ _*)) =>
-        stmts.foldLeft(formatter)({ case (f, s) => emit(s, nodeOpt, grammar, formatter) })
+        stmts.foldLeft(formatter)({ case (f, s) => emit(s, nodeOpt, grammar, f) })
 
       // stmts.filter( ! Existence.exists(_, node, grammar) ).map( s => formatter.raw("") )
       case (Some(node), SqT(stmts @ _*)) =>
