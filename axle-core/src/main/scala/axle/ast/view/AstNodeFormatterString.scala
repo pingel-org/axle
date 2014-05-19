@@ -25,7 +25,7 @@ class AstNodeFormatterString(
     new AstNodeFormatterString(config, state, subState ++ List(" "))
 
   def accSpaces: AstNodeFormatterString =
-    new AstNodeFormatterString(config, state, subState ++ List("  "))
+    new AstNodeFormatterString(config, state, subState ++ List("   "))
 
   def accSpan(spanclass: String, s: String, n: Int): AstNodeFormatterString =
     new AstNodeFormatterString(config, state, subState ++ List(s))
