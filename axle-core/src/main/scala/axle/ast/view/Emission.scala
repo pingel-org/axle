@@ -2,6 +2,7 @@ package axle.ast.view
 
 import axle.ast._
 import spire.implicits._
+import scala.collection.mutable.WrappedArray
 
 object Emission {
 
@@ -11,9 +12,8 @@ object Emission {
     grammar: Language,
     formatter: AstNodeFormatter[R, S]): AstNodeFormatter[R, S] = {
 
-    // println("emit(stmt = " + stmt + ", nodeOpt = " + nodeOpt + ", grammar, formatter)")
-
     (nodeOpt, stmt) match {
+
       case (Some(node @ AstNodeRule(_, m, _)), Sub(name)) => {
         val subtree = m(name)
         if (formatter.needsParens(name, node, subtree, grammar)) {
@@ -22,6 +22,7 @@ object Emission {
           emit(grammar, subtree, formatter)
         }
       }
+
       case (Some(AstNodeRule(_, m, _)), Spread()) => {
         m("spread") match {
           case AstNodeList(l, _) => l.foldLeft(formatter)({
@@ -69,28 +70,26 @@ object Emission {
       case (_, Op(value)) => formatter.operator(value)
 
       case (Some(AstNodeRule(_, m, _)), For(subtree, body)) => {
-        formatter.enterFor
         val elems = m(subtree).asInstanceOf[AstNodeList]
-        (0 until elems.list.length) foreach { i =>
-          val c = elems.list(i)
-          formatter.updateFor("TODO c")
-          emit(body, Some(c), grammar, formatter)
-        }
-        formatter.leaveFor
+        ((0 until elems.list.length).foldLeft(formatter.enterFor)({
+          case (f, i) =>
+            val c = elems.list(i)
+            emit(body, Some(c), grammar, f.updateFor("TODO c"))
+        })).leaveFor
       }
 
       case (Some(AstNodeRule(_, m, _)), ForDel(subtree, body, delimiter)) => {
-        formatter.enterFor
         val elems = m(subtree).asInstanceOf[AstNodeList]
-        (0 until elems.list.length) foreach { i =>
-          val c = elems.list(i)
-          formatter.updateFor("TODO c")
-          emit(body, Some(c), grammar, formatter)
-          if (i < elems.list.length - 1) {
-            formatter.raw(delimiter)
-          }
-        }
-        formatter.leaveFor
+        ((0 until elems.list.length).foldLeft(formatter.enterFor)({
+          case (f, i) =>
+            val c = elems.list(i)
+            val f2 = emit(body, Some(c), grammar, f.updateFor("TODO c"))
+            if (i < elems.list.length - 1) {
+              f2.raw(delimiter)
+            } else {
+              f2
+            }
+        })).leaveFor
       }
 
       case (Some(AstNodeRule(_, m, _)), J(subtree, delimiter)) => {
@@ -170,7 +169,7 @@ object Emission {
             if (i < arity - 1) {
               f3.raw(",").space
             } else {
-              f2
+              f3
             }
           }
         })
@@ -188,17 +187,17 @@ object Emission {
 
     node match {
 
-      case AstNodeValue(v, _) => v.map(fLn.raw).getOrElse(formatter)
+      case AstNodeValue(v, _) => v.map(fLn.raw).getOrElse(fLn)
 
       case AstNodeList(l, _) => (0 until l.length)
-        .foldLeft(fLn)({ (f, i) =>
-          {
+        .foldLeft(fLn)({
+          case (f, i) =>
+            val f1 = emit(grammar, l(i), f)
             if (i < (l.length - 1)) {
-              emit(grammar, l(i), f).space
+              f1.space
             } else {
-              f
+              f1
             }
-          }
         })
 
       case AstNodeRule(r, m, lineno) => {

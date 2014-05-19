@@ -117,7 +117,7 @@ object PythonSpecification extends Specification {
           "import bar as b\n" ::
           "import bar as b, baz as c\n" ::
           "from foo import x\n" ::
-          "raise\n" ::
+          "raise" ::
           "raise Exception(a)\n" ::
           """try:
    foo()
@@ -155,11 +155,8 @@ def f(a, b, x=True, y=False):
       // if's condition not showing up sometimes
 
       parseTests foreach { input =>
-        //s"input = $input".pp
         val parsed = language.parseString(input)
-        //s"parsed = $parsed".pp
         val actual = parsed.map(ViewString.AstNode(_, language)).getOrElse("")
-        //s"actual = $actual".pp
         actual must be equalTo (input)
       }
       1 must be equalTo 1

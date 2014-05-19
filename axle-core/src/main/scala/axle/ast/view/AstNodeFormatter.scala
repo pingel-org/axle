@@ -24,6 +24,8 @@ abstract class AstNodeFormatter[R, S](
 
   def apply(fs: FormatterState, ss: S): AstNodeFormatter[R, S]
 
+  //def flatMap(fsf: FormatterState => AstNodeFormatter[R, S]): AstNodeFormatter[R, S]
+  
   def config: FormatterConfig = _config
 
   def state: FormatterState = _state
@@ -217,15 +219,14 @@ abstract class AstNodeFormatter[R, S](
     _indent.accSpan("repr", xml.Utility.escape(r), r.length)
 
   def name(n: String): AstNodeFormatter[R, S] = {
-    _indent // TODO !!! side effect ???
+    val f0 = _indent // TODO !!! side effect ???
     val special = false // TODO
     special match {
       case true => {
         val (s, span) = (n, "special") // TODO
-        accSpan(span, s, s.length)
+        f0.accSpan(span, s, s.length)
       }
-      case false => accRaw(n, n.length)
-
+      case false => f0.accRaw(n, n.length)
     }
   }
 
