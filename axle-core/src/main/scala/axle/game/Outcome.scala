@@ -9,7 +9,7 @@ class Outcome[G <: Game[G]](winner: Option[G#PLAYER])(implicit game: G)
   def displayTo(player: G#PLAYER)(implicit eqp: Eq[G#PLAYER]): String =
     winner map { wp =>
       if (wp === player) {
-        "You have beaten " + game.players.filter(p => !(p === player)).map(_.toString).toList.mkString(" and ") + "!"
+        "You have beaten " + game.players.collect({ case p if !(p === player) => p.toString }).toList.mkString(" and ") + "!"
       } else {
         "%s beat you!".format(wp)
       }

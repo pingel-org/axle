@@ -24,7 +24,8 @@ abstract class AstNodeFormatter[R, S](
 
   def apply(fs: FormatterState, ss: S): AstNodeFormatter[R, S]
 
-  //def flatMap(fsf: FormatterState => AstNodeFormatter[R, S]): AstNodeFormatter[R, S]
+  def mop(fsf: AstNodeFormatter[R, S] => AstNodeFormatter[R, S]): AstNodeFormatter[R, S] =
+    fsf.apply(this)
   
   def config: FormatterConfig = _config
 

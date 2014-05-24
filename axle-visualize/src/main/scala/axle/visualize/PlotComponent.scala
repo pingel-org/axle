@@ -38,13 +38,13 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(
   val minXCandidates = (data collect { case (_, m) if m.size > 0 => m.firstKey }) ++ yAxis.toList
   val minX = if (minXCandidates.size > 0) minXCandidates.min else xPlottable.zero
 
-  val minYCandidates = ((data collect { case (_, m) if m.size > 0 => m.values min }) ++ xAxis.toList) filter { yPlottable.isPlottable(_) }
+  val minYCandidates = ((data collect { case (_, m) if m.size > 0 => m.values min }) ++ xAxis.toList) filter { yPlottable.isPlottable }
   val minY = if (minYCandidates.size > 0) minYCandidates.min else yPlottable.zero
 
   val maxXCandidates = (data collect { case (_, m) if m.size > 0 => m.lastKey }) ++ yAxis.toList
   val maxX = if (maxXCandidates.size > 0) maxXCandidates.max else xPlottable.zero
 
-  val maxYCandidates = ((data collect { case (_, m) if m.size > 0 => m.values max }) ++ xAxis.toList) filter { yPlottable.isPlottable(_) }
+  val maxYCandidates = ((data collect { case (_, m) if m.size > 0 => m.values max }) ++ xAxis.toList) filter { yPlottable.isPlottable }
   val maxY = if (maxYCandidates.size > 0) maxYCandidates.max else yPlottable.zero
 
   val minPoint = Point2D(minX, minY)

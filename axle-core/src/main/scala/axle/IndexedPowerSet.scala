@@ -33,11 +33,11 @@ class IndexedPowerSet[E](all: IndexedSeq[E]) extends Iterable[Set[E]] {
 
   def apply(i: Int): Set[E] = {
     if (i < 0 || i >= size) { throw new java.lang.IndexOutOfBoundsException }
-    mask(i).zip(all).filter(_._1).map(_._2).toSet
+    mask(i).zip(all).collect({ case (b, v) if b => v }).toSet
   }
 
   override def size: Int = 0x01 << all.length
 
-  def iterator(): Iterator[Set[E]] = (0 until size).iterator.map(this(_))
+  def iterator: Iterator[Set[E]] = (0 until size).iterator.map(this.apply)
 
 }

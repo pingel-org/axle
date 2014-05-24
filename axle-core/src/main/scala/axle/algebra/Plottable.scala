@@ -40,7 +40,7 @@ object Plottable {
         (0 to n).map(i => {
           val v = start + BigDecimal(s) * i
           (v.toDouble, v.toString)
-        }).filter(vs => (vs._1 >= from && vs._1 <= to))
+        }).filter({ case (d, _) => (d >= from && d <= to) })
       }
     }
   }

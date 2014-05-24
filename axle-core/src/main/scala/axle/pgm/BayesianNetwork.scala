@@ -397,8 +397,7 @@ trait BayesianNetworkModule {
       case fi :: fj :: rest =>
         _factorElimination1(Q,
           rest ++ List(fj * fi.sumOut(fi.variables
-            .filter(!Q.contains(_))
-            .filter(v => !S.exists(_.mentions(v)))
+            .filter(v => !Q.contains(v) && !S.exists(_.mentions(v)))
             .toSet)))
 
     }

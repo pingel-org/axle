@@ -84,13 +84,11 @@ case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
 
       val newEdges = among.toVector.permutations(2)
         .map({ a => (a(0), a(1)) })
-        .filter({ case (vi, vj) => !areNeighbors(vi, vj) })
-        .map({
-          case (vi: Vertex[VP], vj: Vertex[VP]) => {
+        .collect({
+          case (vi: Vertex[VP], vj: Vertex[VP]) if !areNeighbors(vi, vj) =>
             val newVi = old2new(vi)
             val newVj = old2new(vj)
             (newVi, newVj, payload(newVi, newVj))
-          }
         })
 
       ef(newVs) ++ newEdges
@@ -134,7 +132,7 @@ case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
       case _ => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
     }
   }
-  
+
   def connects(edge: Edge[ES, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean = {
     val (v1, v2) = vertices(edge)
     (v1 === a1 && v2 === a2) || (v2 === a1 && v1 === a2)

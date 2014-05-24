@@ -38,7 +38,7 @@ object FederalistPapers {
 
     val lines = io.Source.fromFile(filename).getLines.toList
 
-    val starts = lines.zipWithIndex.filter({ case (line, i) => line.startsWith("FEDERALIST") }).map(_._2)
+    val starts = lines.zipWithIndex.collect({ case (line, i) if line.startsWith("FEDERALIST") => i })
 
     val last = lines.zipWithIndex.find(_._1.startsWith("End of the Project Gutenberg EBook")).get._2 - 1
 
