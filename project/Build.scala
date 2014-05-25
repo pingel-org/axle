@@ -15,18 +15,16 @@ object AxleBuild extends Build {
 
     version := "0.1-SNAPSHOT", // last milestone was M11
 
-    scalaVersion := "2.11.0",
+    scalaVersion := "2.11.1",
 
-    //crossScalaVersions := Seq("2.10.4", "2.11.0"),
+    //crossScalaVersions := Seq("2.10.4", "2.11.1"),
 
-    crossScalaVersions := Seq("2.11.0"),
+    crossScalaVersions := Seq("2.11.1"),
 
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2" % "2.3.11" % "test",
       "org.scala-lang.modules" %% "scala-xml" % "1.0.1",
       "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1"
-      //"org.scala-lang" % "scala-parser-combinators" % "2.11.0-M4"
-      //"org.scalacheck" %% "scalacheck" % "1.11.3" % "test"
     ),
 
     scalacOptions ++= Seq(
@@ -188,7 +186,7 @@ import axle._
     name := "axle-repl",
 
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-compiler" % "2.11.0",
+      "org.scala-lang" % "scala-compiler" % "2.11.1",
       "jline" % "jline" % "2.11" // http://grokbase.com/t/gg/scala-internals/1433gjdg5h/missing-jline-for-scala-2-11-0-rc1
     ),
 
