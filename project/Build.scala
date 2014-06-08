@@ -128,7 +128,7 @@ import axle._
   ).settings(
     name := "axle-languages",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.module" % "jackson-module-scala_2.11.0-RC3" % "2.4.0-SNAPSHOT"
+      "com.fasterxml.jackson.module" % "jackson-module-scala_2.11" % "2.4.0-rc2"
     )
   ).dependsOn(axleCore)
 
