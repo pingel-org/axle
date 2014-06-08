@@ -18,16 +18,16 @@ object Physics {
     Force, Energy, Power
   )
 
-  val derivations = Vector(
-    Area is Distance * Distance,
-    Volume is Distance * Distance * Distance,
-    Speed is Distance / Time,
-    Acceleration is Speed / Time,
-    Force is Mass * Acceleration,
-    Energy is Power * Time,
-    Power is Energy / Time,
-    Flow is Volume / Time
-  )
+//  val derivations = Vector(
+//    Area is Distance * Distance,
+//    Volume is Distance * Distance * Distance,
+//    Speed is Distance / Time,
+//    Acceleration is Speed / Time,
+//    Force is Mass * Acceleration,
+//    Energy is Power * Time,
+//    Power is Energy / Time,
+//    Flow is Volume / Time
+//  )
 
 //  {
 //    import Distance._
