@@ -18,7 +18,7 @@ class FrameRepaintingActor(frame: JFrame, dataFeedActorOpt: Option[ActorRef]) ex
   import FrameProtocol._
   import DataFeedProtocol._
 
-  dataFeedActorOpt.map(_ ! RegisterViewer())
+  dataFeedActorOpt.foreach(_ ! RegisterViewer())
 
   context.system.scheduler.schedule(0.millis, 42.millis, self, RepaintIfDirty())
 
@@ -58,7 +58,8 @@ class AxleFrame(
   dataFeedActorOpt: Option[ActorRef])
   extends JFrame(title) {
 
-  val frameRepaintingActor = system.actorOf(Props(new FrameRepaintingActor(this, dataFeedActorOpt)))
+  //val frameRepaintingActor = system.actorOf(Props(new FrameRepaintingActor(this, dataFeedActorOpt)))
+  val frameRepaintingActor = system.actorOf(Props(classOf[FrameRepaintingActor], this, dataFeedActorOpt))
 
   def initialize(): Unit = {
     setBackground(bgColor)
