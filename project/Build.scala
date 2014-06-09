@@ -84,7 +84,6 @@ import axle._
 
   ) ++ ScalastylePlugin.Settings
 
-
   lazy val hadoopVersion = "1.1.2"
   lazy val jungVersion = "2.0.1"
 
@@ -161,7 +160,7 @@ import axle._
     name := "axle-visualize",
     libraryDependencies ++= Seq(
       "net.sf.jung" % "jung-visualization" % jungVersion,
-      "com.typesafe.akka" %% "akka-actor" % "2.3.2",
+      "com.typesafe.akka" %% "akka-actor" % "2.3.3",
       "org.jogamp.gluegen" % "gluegen-rt-main" % "2.0.2", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.jogl" % "jogl-all-main" % "2.0.2"
     )
