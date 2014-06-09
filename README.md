@@ -1,4 +1,3 @@
-
 [![Build Status](https://secure.travis-ci.org/adampingel/axle.png)](http://travis-ci.org/adampingel/axle)
 
 See [axle-lang.org](http://axle-lang.org/)
