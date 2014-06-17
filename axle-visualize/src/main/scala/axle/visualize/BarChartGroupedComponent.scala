@@ -1,30 +1,40 @@
 package axle.visualize
 
-import javax.swing.JPanel
 import java.awt.Color
-import Color._
+import java.awt.Color.black
+import java.awt.Color.blue
+import java.awt.Color.green
+import java.awt.Color.orange
+import java.awt.Color.pink
+import java.awt.Color.red
+import java.awt.Color.yellow
 import java.awt.Font
-import java.awt.FontMetrics
 import java.awt.Graphics
 import java.awt.Graphics2D
+
+import scala.Stream.continually
 import scala.concurrent.Await
-import scala.concurrent.duration._
-import akka.pattern.ask
+import scala.concurrent.duration.DurationInt
+
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
-import axle.actor.Defaults._
-import Stream.continually
-import axle.quanta._
-import Angle._
+import akka.pattern.ask
+import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import Plottable._
-import axle.visualize.element._
-import spire.algebra._
-import spire.implicits._
-import akka.actor.Props
+import axle.algebra.Plottable.DoublePlottable
+import axle.quanta.Angle._
+import axle.visualize.element.BarChartGroupedKey
+import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
-import axle.visualize.element.Rectangle
+import axle.visualize.element.Text
+import axle.visualize.element.VerticalLine
+import axle.visualize.element.XTics
+import axle.visualize.element.YTics
+import javax.swing.JPanel
+import spire.algebra.Eq
+import spire.implicits.DoubleAlgebra
+import spire.math.Number.apply
 
 class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y], data: Map[(G, S), Y], colorStream: Stream[Color], normalFont: Font) {
 
@@ -77,17 +87,19 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y
 
 class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y], system: ActorSystem)
   extends JPanel
-  with Fed
-  with DataFeedProtocol {
+  with Fed {
 
+  import DataFeedProtocol._
   import chart._
 
   setMinimumSize(new java.awt.Dimension(width, height))
 
-  def feeder: Option[ActorRef] = chart.refresher.map {
+  val dataFeedActorOpt: Option[ActorRef] = chart.refresher.map {
     case (fn, interval) =>
       system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
   }
+  
+  def feeder: Option[ActorRef] = dataFeedActorOpt
 
   val colors = List(blue, red, green, orange, pink, yellow)
   val colorStream = continually(colors.toStream).flatten

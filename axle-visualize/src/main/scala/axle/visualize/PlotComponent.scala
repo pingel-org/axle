@@ -66,17 +66,19 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(
 
 class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])
   extends JPanel
-  with Fed
-  with DataFeedProtocol {
+  with Fed {
 
+  import DataFeedProtocol._
   import plot._
 
   setMinimumSize(new Dimension(width, height))
 
-  def feeder: Option[ActorRef] = plot.refresher.map {
+  val dataFeedActorOpt: Option[ActorRef] = plot.refresher.map {
     case (fn, interval) =>
       system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
   }
+  
+  def feeder: Option[ActorRef] = dataFeedActorOpt
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
@@ -86,15 +88,23 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])
 
   override def paintComponent(g: Graphics): Unit = {
 
+    // println("+++ PlotComponent.paintComponent")
+
     feeder foreach { dataFeedActor =>
+
+      // println(s"+++ PlotComponent.paintComponent with dataFeedActor = $dataFeedActor")
 
       val g2d = g.asInstanceOf[Graphics2D]
 
       val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(String, TreeMap[X, Y])]]
 
+      //println(s"+++ sent Fetch to dataFeedActor")
+      
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
       val data = Await.result(dataFuture, 1.seconds)
 
+      //println(s"+++ Await of Fetch is done")
+      
       val view = new PlotView(plot, data, normalFont)
 
       import view._

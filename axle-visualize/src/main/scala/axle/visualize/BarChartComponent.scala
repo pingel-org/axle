@@ -1,87 +1,46 @@
 package axle.visualize
 
-import javax.swing.JPanel
-import java.awt.Color
-import Color._
+import java.awt.Color.blue
+import java.awt.Color.green
+import java.awt.Color.orange
+import java.awt.Color.pink
+import java.awt.Color.red
+import java.awt.Color.yellow
 import java.awt.Font
-import java.awt.FontMetrics
 import java.awt.Graphics
 import java.awt.Graphics2D
+
+import scala.Stream.continually
 import scala.concurrent.Await
-import scala.concurrent.duration._
-import akka.pattern.ask
+import scala.concurrent.duration.DurationInt
+
 import akka.actor.ActorRef
 import akka.actor.Props
-import axle.actor.Defaults._
-import Stream.continually
-import axle.quanta._
-import Angle._
+import akka.pattern.ask
+import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import Plottable._
-import axle.visualize.element._
-import spire.algebra._
-import spire.implicits._
-import akka.actor.Props
-
-class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], colorStream: Stream[Color], normalFont: Font) {
-
-  import chart._
-
-  val minX = 0d
-  val maxX = 1d
-  val yAxis = minX
-
-  val padding = 0.05 // on each side
-  val widthPerSlice = (1d - (2 * padding)) / slices.size
-  val whiteSpace = widthPerSlice * (1d - barWidthPercent)
-
-  val yPlottable = implicitly[Plottable[Y]]
-
-  val minY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
-  val maxY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
-
-  val scaledArea = new ScaledArea2D(
-    width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
-    height,
-    border,
-    minX, maxX, minY, maxY)
-
-  val vLine = new VerticalLine(scaledArea, yAxis, black)
-  val hLine = new HorizontalLine(scaledArea, xAxis, black)
-
-  val gTics = new XTics(
-    scaledArea,
-    slices.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, sLabeller(s)) }).toList,
-    normalFont,
-    false,
-    36 *: °,
-    black)
-
-  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
-
-  val bars = slices.zipWithIndex.zip(colorStream).map({
-    case ((s, i), color) => {
-      val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
-      val rightX = leftX + widthPerSlice
-      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(s)), fillColor = Some(color))
-    }
-  })
-
-}
+import axle.quanta.Angle._
+import axle.visualize.element.BarChartKey
+import axle.visualize.element.Text
+import javax.swing.JPanel
+import spire.algebra.Eq
+import spire.math.Number.apply
 
 class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])
   extends JPanel
-  with Fed
-  with DataFeedProtocol {
+  with Fed {
 
+  import DataFeedProtocol._
   import chart._
 
   setMinimumSize(new java.awt.Dimension(width, height))
 
-  def feeder: Option[ActorRef] = chart.refresher.map {
+  val dataFeedActorOpt: Option[ActorRef] = chart.refresher.map {
     case (fn, interval) =>
       system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
   }
+  
+  def feeder: Option[ActorRef] = dataFeedActorOpt
 
   val colors = List(blue, red, green, orange, pink, yellow)
   val colorStream = continually(colors.toStream).flatten
