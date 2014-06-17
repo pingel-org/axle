@@ -5,6 +5,7 @@ import Color._
 import scala.collection.immutable.TreeMap
 import akka.actor.Props
 import axle.actor.Defaults._
+import akka.actor.ActorSystem
 import axle.quanta.Time
 import axle.algebra.Plottable
 
@@ -29,8 +30,4 @@ case class Plot[X: Plottable, Y: Plottable](
   xAxisLabel: Option[String] = None,
   yAxis: Option[X] = None,
   yAxisLabel: Option[String] = None,
-  refresher: Option[(List[(String, TreeMap[X, Y])] => List[(String, TreeMap[X, Y])], Time.Q)] = None) {
-
-  val dataFeedActor = system.actorOf(Props(new DataFeedActor(initialValue, refresher)))
-
-}
+  refresher: Option[(List[(String, TreeMap[X, Y])] => List[(String, TreeMap[X, Y])], Time.Q)] = None)

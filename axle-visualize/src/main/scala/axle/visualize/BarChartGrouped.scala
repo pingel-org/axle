@@ -1,8 +1,8 @@
 package axle.visualize
 
-import axle.actor.Defaults._
 import axle.algebra.Plottable
 import akka.actor.Props
+import akka.actor.ActorSystem
 import axle.quanta.Time
 
 case class BarChartGrouped[G, S, Y: Plottable](
@@ -27,8 +27,4 @@ case class BarChartGrouped[G, S, Y: Plottable](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  refresher: Option[(Map[(G, S), Y] => Map[(G, S), Y], Time.Q)] = None) {
-
-  val dataFeedActor = system.actorOf(Props(new DataFeedActor(initialValue, refresher)))
-
-}
+  refresher: Option[(Map[(G, S), Y] => Map[(G, S), Y], Time.Q)] = None)

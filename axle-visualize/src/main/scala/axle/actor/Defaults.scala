@@ -6,7 +6,7 @@ import scala.concurrent.duration._
 
 object Defaults {
 
-  val system = ActorSystem("AxleAkkaActorSystem")
+  //val system = ActorSystem("AxleAkkaActorSystem")
 
   implicit val askTimeout = Timeout(1.second)
 

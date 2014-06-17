@@ -3,6 +3,7 @@ package axle.visualize
 import axle.actor.Defaults._
 import axle.algebra.Plottable
 import akka.actor.Props
+import akka.actor.ActorSystem
 import axle.quanta.Time
 
 case class BarChart[S, Y: Plottable](
@@ -25,8 +26,4 @@ case class BarChart[S, Y: Plottable](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  refresher: Option[(Map[S, Y] => Map[S, Y], Time.Q)] = None) {
-
-  val dataFeedActor = system.actorOf(Props(new DataFeedActor(initialValue, refresher)))
-
-}
+  refresher: Option[(Map[S, Y] => Map[S, Y], Time.Q)] = None)

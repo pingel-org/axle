@@ -1,33 +1,32 @@
 package axle.visualize
 
-import akka.actor.{ Actor, ActorLogging, ActorRef }
+import akka.actor.{ Actor, ActorLogging, ActorRef, ActorSystem }
 import concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import axle.quanta.Time
 import System.currentTimeMillis
 
 trait Fed {
-  def feeder: ActorRef
+  def feeder: Option[ActorRef]
 }
 
-object DataFeedProtocol {
+trait DataFeedProtocol {
   case class RegisterViewer()
   case class Recompute()
   case class Fetch()
 }
 
-class DataFeedActor[T](initialValue: T, refresher: Option[(T => T, Time.Q)]) extends Actor with ActorLogging {
+class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Time.Q)
+  extends Actor
+  with ActorLogging
+  with DataFeedProtocol
+  with FrameProtocol {
 
-  import DataFeedProtocol._
-
-  refresher.map({
-    case (_, interval) =>
-      context.system.scheduler.schedule(
-        0.millis,
-        ((interval in Time.millisecond).magnitude.doubleValue).millis,
-        self,
-        Recompute())
-  })
+  context.system.scheduler.schedule(
+    0.millis,
+    ((interval in Time.millisecond).magnitude.doubleValue).millis,
+    self,
+    Recompute())
 
   var data = initialValue
 
@@ -40,11 +39,8 @@ class DataFeedActor[T](initialValue: T, refresher: Option[(T => T, Time.Q)]) ext
     }
 
     case Recompute() => {
-      refresher.map({
-        case (f, _) =>
-          data = f(data)
-          viewers.map(_ ! FrameProtocol.Soil())
-      })
+      data = refreshFn(data)
+      viewers.foreach(_ ! Soil())
       // log info (s"Updated data behind feed at $lastUpdate")
     }
 

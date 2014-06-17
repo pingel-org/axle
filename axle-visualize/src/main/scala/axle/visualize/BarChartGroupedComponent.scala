@@ -9,9 +9,10 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import DataFeedProtocol._
 import akka.pattern.ask
 import akka.actor.ActorRef
+import akka.actor.ActorSystem
+import akka.actor.Props
 import axle.actor.Defaults._
 import Stream.continually
 import axle.quanta._
@@ -21,6 +22,9 @@ import Plottable._
 import axle.visualize.element._
 import spire.algebra._
 import spire.implicits._
+import akka.actor.Props
+import axle.visualize.element.Rectangle
+import axle.visualize.element.Rectangle
 
 class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y], data: Map[(G, S), Y], colorStream: Stream[Color], normalFont: Font) {
 
@@ -43,8 +47,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height,
     border,
-    minX, maxX, minY, maxY
-  )
+    minX, maxX, minY, maxY)
 
   val vLine = new VerticalLine(scaledArea, yAxis, black)
   val hLine = new HorizontalLine(scaledArea, xAxis, black)
@@ -72,13 +75,19 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y
 
 }
 
-class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y]) extends JPanel with Fed {
+class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y], system: ActorSystem)
+  extends JPanel
+  with Fed
+  with DataFeedProtocol {
 
   import chart._
 
   setMinimumSize(new java.awt.Dimension(width, height))
 
-  def feeder: ActorRef = dataFeedActor
+  def feeder: Option[ActorRef] = chart.refresher.map {
+    case (fn, interval) =>
+      system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+  }
 
   val colors = List(blue, red, green, orange, pink, yellow)
   val colorStream = continually(colors.toStream).flatten
@@ -96,28 +105,31 @@ class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G,
 
   override def paintComponent(g: Graphics): Unit = {
 
-    val g2d = g.asInstanceOf[Graphics2D]
-    val fontMetrics = g2d.getFontMetrics
+    feeder foreach { dataFeedActor =>
 
-    val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[(G, S), Y]]
+      val g2d = g.asInstanceOf[Graphics2D]
+      val fontMetrics = g2d.getFontMetrics
 
-    // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-    val data = Await.result(dataFuture, 1.seconds)
+      val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[(G, S), Y]]
 
-    val view = new BarChartGroupedView(chart, data, colorStream, normalFont)
+      // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
+      val data = Await.result(dataFuture, 1.seconds)
 
-    import view._
+      val view = new BarChartGroupedView(chart, data, colorStream, normalFont)
 
-    titleText.map(_.paint(g2d))
-    hLine.paint(g2d)
-    vLine.paint(g2d)
-    xAxisLabelText.map(_.paint(g2d))
-    yAxisLabelText.map(_.paint(g2d))
-    gTics.paint(g2d)
-    yTics.paint(g2d)
-    keyOpt.map(_.paint(g2d))
-    bars.map(_.paint(g2d))
+      import view._
 
+      titleText.map(_.paint(g2d))
+      hLine.paint(g2d)
+      vLine.paint(g2d)
+      xAxisLabelText.map(_.paint(g2d))
+      yAxisLabelText.map(_.paint(g2d))
+      gTics.paint(g2d)
+      yTics.paint(g2d)
+      keyOpt.map(_.paint(g2d))
+      bars.map(_.paint(g2d))
+
+    }
   }
 
 }

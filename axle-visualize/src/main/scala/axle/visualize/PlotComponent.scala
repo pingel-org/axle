@@ -53,8 +53,7 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height, border,
-    minPoint.x, maxPoint.x, minPoint.y, maxPoint.y
-  )
+    minPoint.x, maxPoint.x, minPoint.y, maxPoint.y)
 
   val vLine = new VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = new HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
@@ -65,13 +64,19 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(
 
 }
 
-class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y]) extends JPanel with Fed {
+class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])
+  extends JPanel
+  with Fed
+  with DataFeedProtocol {
 
   import plot._
 
   setMinimumSize(new Dimension(width, height))
 
-  def feeder: ActorRef = dataFeedActor
+  def feeder: Option[ActorRef] = plot.refresher.map {
+    case (fn, interval) =>
+      system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+  }
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
@@ -81,25 +86,27 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y]) extend
 
   override def paintComponent(g: Graphics): Unit = {
 
-    import DataFeedProtocol._
+    feeder foreach { dataFeedActor =>
 
-    val g2d = g.asInstanceOf[Graphics2D]
+      val g2d = g.asInstanceOf[Graphics2D]
 
-    val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(String, TreeMap[X, Y])]]
+      val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(String, TreeMap[X, Y])]]
 
-    // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-    val data = Await.result(dataFuture, 1.seconds)
+      // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
+      val data = Await.result(dataFuture, 1.seconds)
 
-    val view = new PlotView(plot, data, normalFont)
+      val view = new PlotView(plot, data, normalFont)
 
-    import view._
+      import view._
 
-    val paintables =
-      Vector(vLine, hLine, xTics, yTics, dataLines) ++
-        Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
+      val paintables =
+        Vector(vLine, hLine, xTics, yTics, dataLines) ++
+          Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
 
-    paintables foreach { paintable =>
-      paintable.paint(g2d)
+      paintables foreach { paintable =>
+        paintable.paint(g2d)
+      }
+
     }
 
   }

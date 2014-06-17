@@ -2,23 +2,24 @@ package axle.visualize
 
 import javax.swing.{ JFrame, JPanel }
 import java.awt.{ Dimension, Component, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point }
-import akka.actor.{ Props, Actor, ActorRef, ActorLogging }
+import akka.actor.{ Props, Actor, ActorRef, ActorLogging, ActorSystem }
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
-import axle.actor.Defaults._
+//import axle.actor.Defaults._
 
-object FrameProtocol {
+trait FrameProtocol {
 
   case class RepaintIfDirty()
   case class Soil()
 }
 
-class FrameRepaintingActor(frame: JFrame, dataFeedActorOpt: Option[ActorRef]) extends Actor with ActorLogging {
+class FrameRepaintingActor(frame: JFrame, dataFeedActor: ActorRef)
+  extends Actor
+  with ActorLogging
+  with FrameProtocol
+  with DataFeedProtocol {
 
-  import FrameProtocol._
-  import DataFeedProtocol._
-
-  dataFeedActorOpt.foreach(_ ! RegisterViewer())
+  dataFeedActor ! RegisterViewer()
 
   context.system.scheduler.schedule(0.millis, 42.millis, self, RepaintIfDirty())
 
@@ -54,12 +55,8 @@ class AxleFrame(
   width: Int,
   height: Int,
   bgColor: Color,
-  title: String,
-  dataFeedActorOpt: Option[ActorRef])
+  title: String)
   extends JFrame(title) {
-
-  //val frameRepaintingActor = system.actorOf(Props(new FrameRepaintingActor(this, dataFeedActorOpt)))
-  val frameRepaintingActor = system.actorOf(Props(classOf[FrameRepaintingActor], this, dataFeedActorOpt))
 
   def initialize(): Unit = {
     setBackground(bgColor)

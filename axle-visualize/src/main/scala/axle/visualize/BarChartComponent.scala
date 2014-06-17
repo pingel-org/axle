@@ -9,9 +9,9 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import DataFeedProtocol._
 import akka.pattern.ask
 import akka.actor.ActorRef
+import akka.actor.Props
 import axle.actor.Defaults._
 import Stream.continually
 import axle.quanta._
@@ -21,6 +21,7 @@ import Plottable._
 import axle.visualize.element._
 import spire.algebra._
 import spire.implicits._
+import akka.actor.Props
 
 class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], colorStream: Stream[Color], normalFont: Font) {
 
@@ -68,13 +69,19 @@ class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], 
 
 }
 
-class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y]) extends JPanel with Fed {
+class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])
+  extends JPanel
+  with Fed
+  with DataFeedProtocol {
 
   import chart._
 
   setMinimumSize(new java.awt.Dimension(width, height))
 
-  def feeder: ActorRef = dataFeedActor
+  def feeder: Option[ActorRef] = chart.refresher.map {
+    case (fn, interval) =>
+      system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+  }
 
   val colors = List(blue, red, green, orange, pink, yellow)
   val colorStream = continually(colors.toStream).flatten
@@ -92,28 +99,31 @@ class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y]) extends JPan
 
   override def paintComponent(g: Graphics): Unit = {
 
-    val g2d = g.asInstanceOf[Graphics2D]
-    val fontMetrics = g2d.getFontMetrics
+    feeder foreach { dataFeedActor =>
 
-    val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[S, Y]]
+      val g2d = g.asInstanceOf[Graphics2D]
+      val fontMetrics = g2d.getFontMetrics
 
-    // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-    val data = Await.result(dataFuture, 1.seconds)
+      val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[S, Y]]
 
-    val view = new BarChartView(chart, data, colorStream, normalFont)
+      // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
+      val data = Await.result(dataFuture, 1.seconds)
 
-    import view._
+      val view = new BarChartView(chart, data, colorStream, normalFont)
 
-    titleText.map(_.paint(g2d))
-    hLine.paint(g2d)
-    vLine.paint(g2d)
-    xAxisLabelText.map(_.paint(g2d))
-    yAxisLabelText.map(_.paint(g2d))
-    gTics.paint(g2d)
-    yTics.paint(g2d)
-    keyOpt.map(_.paint(g2d))
-    bars.map(_.paint(g2d))
+      import view._
 
+      titleText.map(_.paint(g2d))
+      hLine.paint(g2d)
+      vLine.paint(g2d)
+      xAxisLabelText.map(_.paint(g2d))
+      yAxisLabelText.map(_.paint(g2d))
+      gTics.paint(g2d)
+      yTics.paint(g2d)
+      keyOpt.map(_.paint(g2d))
+      bars.map(_.paint(g2d))
+
+    }
   }
 
 }

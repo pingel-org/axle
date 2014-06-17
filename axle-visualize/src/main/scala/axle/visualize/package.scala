@@ -5,12 +5,17 @@ import java.awt.Color
 import java.awt.Component
 import java.awt.Font
 import java.awt.image.BufferedImage
+import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
-import java.io.File
+
 import spire.algebra._
+
 import akka.actor.ActorRef
+import akka.actor.ActorSystem
+import akka.actor.Props
+
 import axle.graph._
 import axle.visualize._
 import axle.ml._
@@ -20,18 +25,22 @@ import axle.algebra.Plottable
 
 package object visualize {
 
+  val system = ActorSystem("AxleAkkaActorSystem")
+
   // default width/height was 1100/800
 
-  def newFrame(width: Int, height: Int, dataFeedActorOpt: Option[ActorRef]): AxleFrame =
-    new AxleFrame(width, height, Color.white, "αχλε", dataFeedActorOpt)
+  def newFrame(width: Int, height: Int): AxleFrame =
+    new AxleFrame(width, height, Color.white, "αχλε")
 
   def show(component: Component): Unit = {
     val minSize = component.getMinimumSize
-    val dataFeedActorOpt = component match {
-      case f: Fed => Some(f.feeder)
+    val frame = newFrame(minSize.width, minSize.height)
+    component match {
+      case f: Fed => f.feeder foreach { dataFeedActor =>
+        system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
+      }
       case _ => None
     }
-    val frame = newFrame(minSize.width, minSize.height, dataFeedActorOpt)
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
@@ -42,7 +51,8 @@ package object visualize {
 
   implicit def enComponentBarChart[S, Y: Plottable: Eq](barChart: BarChart[S, Y]): Component = new BarChartComponent(barChart)
 
-  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq](barChart: BarChartGrouped[G, S, Y]): Component = new BarChartGroupedComponent(barChart)
+  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq](barChart: BarChartGrouped[G, S, Y]): Component =
+    new BarChartGroupedComponent(barChart, system)
 
   implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {
     case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
@@ -55,7 +65,7 @@ package object visualize {
   }
 
   import BayesianNetworkModule._
-  
+
   implicit def enComponentBayesianNetwork[T: Manifest: Eq, N: Field: Manifest](bn: BayesianNetworkModule.BayesianNetwork[T, N]): Component =
     enComponentDirectedGraph(bn.graph)
 
@@ -73,7 +83,7 @@ package object visualize {
   def component2file(component: Component, filename: String, encoding: String): Unit = {
 
     val minSize = component.getMinimumSize
-    val frame = newFrame(minSize.width, minSize.height, None)
+    val frame = newFrame(minSize.width, minSize.height)
     frame.setUndecorated(true)
     frame.initialize()
     val rc = frame.add(component)
