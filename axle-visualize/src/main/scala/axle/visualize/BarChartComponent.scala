@@ -39,7 +39,7 @@ class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])
     case (fn, interval) =>
       system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
   }
-  
+
   def feeder: Option[ActorRef] = dataFeedActorOpt
 
   val colors = List(blue, red, green, orange, pink, yellow)
@@ -58,31 +58,28 @@ class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])
 
   override def paintComponent(g: Graphics): Unit = {
 
-    feeder foreach { dataFeedActor =>
-
-      val g2d = g.asInstanceOf[Graphics2D]
-      val fontMetrics = g2d.getFontMetrics
-
+    val data = feeder map { dataFeedActor =>
       val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[S, Y]]
-
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-      val data = Await.result(dataFuture, 1.seconds)
+      Await.result(dataFuture, 1.seconds)
+    } getOrElse(chart.initialValue)
 
-      val view = new BarChartView(chart, data, colorStream, normalFont)
+    val view = new BarChartView(chart, data, colorStream, normalFont)
 
-      import view._
+    import view._
 
-      titleText.map(_.paint(g2d))
-      hLine.paint(g2d)
-      vLine.paint(g2d)
-      xAxisLabelText.map(_.paint(g2d))
-      yAxisLabelText.map(_.paint(g2d))
-      gTics.paint(g2d)
-      yTics.paint(g2d)
-      keyOpt.map(_.paint(g2d))
-      bars.map(_.paint(g2d))
+    val g2d = g.asInstanceOf[Graphics2D]
+    val fontMetrics = g2d.getFontMetrics
+    titleText.map(_.paint(g2d))
+    hLine.paint(g2d)
+    vLine.paint(g2d)
+    xAxisLabelText.map(_.paint(g2d))
+    yAxisLabelText.map(_.paint(g2d))
+    gTics.paint(g2d)
+    yTics.paint(g2d)
+    keyOpt.map(_.paint(g2d))
+    bars.map(_.paint(g2d))
 
-    }
   }
 
 }

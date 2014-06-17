@@ -77,7 +77,7 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])
     case (fn, interval) =>
       system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
   }
-  
+
   def feeder: Option[ActorRef] = dataFeedActorOpt
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
@@ -88,36 +88,20 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])
 
   override def paintComponent(g: Graphics): Unit = {
 
-    // println("+++ PlotComponent.paintComponent")
-
-    feeder foreach { dataFeedActor =>
-
-      // println(s"+++ PlotComponent.paintComponent with dataFeedActor = $dataFeedActor")
-
-      val g2d = g.asInstanceOf[Graphics2D]
-
+    val data = feeder map { dataFeedActor =>
       val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(String, TreeMap[X, Y])]]
-
-      //println(s"+++ sent Fetch to dataFeedActor")
-      
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-      val data = Await.result(dataFuture, 1.seconds)
+      Await.result(dataFuture, 1.seconds)
+    } getOrElse (plot.initialValue)
 
-      //println(s"+++ Await of Fetch is done")
-      
-      val view = new PlotView(plot, data, normalFont)
+    val view = new PlotView(plot, data, normalFont)
+    import view._
+    val paintables =
+      Vector(vLine, hLine, xTics, yTics, dataLines) ++
+        Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
 
-      import view._
-
-      val paintables =
-        Vector(vLine, hLine, xTics, yTics, dataLines) ++
-          Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
-
-      paintables foreach { paintable =>
-        paintable.paint(g2d)
-      }
-
-    }
+    val g2d = g.asInstanceOf[Graphics2D]
+    paintables foreach { _.paint(g2d) }
 
   }
 
