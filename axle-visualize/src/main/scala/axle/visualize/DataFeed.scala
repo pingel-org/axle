@@ -26,14 +26,11 @@ case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Time.Q
   def receive: Receive = {
 
     case RegisterViewer() => {
-      //println("+++ DataFeedActor got RegisterViewer")
       viewers = viewers + sender
     }
 
     case Recompute() => {
-      //println(s"+++ DataFeedActor got Recompute, prior = $data")
       data = refreshFn(data)
-      //println(s"+++ DataFeedActor got Recompute, post = $data")
       viewers.foreach(_ ! Soil())
       // log info (s"Updated data behind feed at $lastUpdate")
     }
@@ -41,7 +38,6 @@ case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Time.Q
     case Fetch() => {
       // log info (s"Checking for new feed updates since $t")
       // log info ("sender.path.name: " + sender.path.name)
-      // println(s"+++ DataFeedActor got Fetch")
       sender ! data
     }
 
