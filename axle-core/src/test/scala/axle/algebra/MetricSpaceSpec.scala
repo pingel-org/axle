@@ -44,7 +44,7 @@ object RealTuple2Space extends MetricSpace[(Real, Real), Real] {
     ((v._1 - w._1) ** 2 + (v._2 - w._2) ** 2).sqrt
 }
 
-object ScalarSeqRealSpace extends MetricSpace[Seq[Real], Real] {
+object SeqRealSpace extends MetricSpace[Seq[Real], Real] {
 
   def distance(v: Seq[Real], w: Seq[Real]): Real = {
     assert(v.length == w.length)
@@ -58,19 +58,21 @@ object ArbitrarySpaceStuff {
 
   lazy val genReal: Gen[Real] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d).map(d => Real(d))
 
+  implicit val arbReal: Arbitrary[Real] = Arbitrary(genReal)
+
   lazy val genReal2: Gen[(Real, Real)] =
     for {
       lr <- genReal
       rr <- genReal
     } yield (lr, rr)
 
-  def genRealListLengthN(n: Int): Gen[Traversable[Real]] =
-    Gen.sequence((1 to n).map(i => genReal)).map(_.asScala)
-
-  implicit val arbReal: Arbitrary[Real] = Arbitrary(genReal)
-
   implicit val arbReal2: Arbitrary[(Real, Real)] = Arbitrary(genReal2)
 
+  def genRealSeqLengthN(n: Int): Gen[Seq[Real]] =
+    Gen.sequence((1 to n).map(i => genReal)).map(_.asScala)
+
+  def arbitraryRealSeqLengthN(n: Int): Arbitrary[Seq[Real]] =
+    Arbitrary(genRealSeqLengthN(n))
 }
 
 import ArbitrarySpaceStuff._
@@ -81,5 +83,10 @@ class RealMetricSpaceSpec
 class RealTuple2MetricSpaceSpec
   extends MetricSpaceSpec("(Real, Real) distance", List(RealTuple2Space))
 
-//class RealListMetricSpaceSpec
-//  extends MetricSpaceSpec("List[Real] distance", List(ScalarSeqRealSpace))
+class RealSeqMetricSpaceSpec
+  extends MetricSpaceSpec("Seq[Real] distance", List(SeqRealSpace))(
+    implicitly[Eq[Seq[Real]]],
+    arbitraryRealSeqLengthN(4),
+    implicitly[AdditiveMonoid[Real]],
+    implicitly[Order[Real]])
+
