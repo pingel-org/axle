@@ -39,7 +39,6 @@ class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])(implicit sys
   val dataFeedActorOpt: Option[ActorRef] = chart.refresher.flatMap {
     case (fn, interval) => {
       systemOpt map { system =>
-        println(s"creating dataFeedActor for BarChartComponent")
         system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
       }
     }

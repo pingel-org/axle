@@ -37,8 +37,6 @@ package object visualize {
     val frame = newFrame(minSize.width, minSize.height)
     component match {
       case f: Fed => f.feeder foreach { dataFeedActor =>
-        //println(s"+++ creating FrameRepaintingActor with dataFeedActor $dataFeedActor")
-        println(s"creating FrameRepaintingActor for a.v.show")
         system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
       }
       case _ => None

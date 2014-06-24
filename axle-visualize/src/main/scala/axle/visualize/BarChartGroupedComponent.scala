@@ -96,7 +96,6 @@ class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G,
 
   val dataFeedActorOpt: Option[ActorRef] = chart.refresher.flatMap {
     case (fn, interval) => {
-      println(s"creating dataFeedActor for BarChartComponent")
       systemOpt map { system =>
         system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
       }

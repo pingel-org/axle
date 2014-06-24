@@ -76,7 +76,6 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])(implic
   val dataFeedActorOpt: Option[ActorRef] = plot.refresher.flatMap {
     case (fn, interval) => {
       systemOpt map { system =>
-        println(s"creating dataFeedActor for PlotComponent")
         system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
       }
     }
