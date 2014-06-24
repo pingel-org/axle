@@ -85,7 +85,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y
 
 }
 
-class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y], system: ActorSystem)
+class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y])(implicit systemOpt: Option[ActorSystem])
   extends JPanel
   with Fed {
 
@@ -94,9 +94,13 @@ class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G,
 
   setMinimumSize(new java.awt.Dimension(width, height))
 
-  val dataFeedActorOpt: Option[ActorRef] = chart.refresher.map {
-    case (fn, interval) =>
-      system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+  val dataFeedActorOpt: Option[ActorRef] = chart.refresher.flatMap {
+    case (fn, interval) => {
+      println(s"creating dataFeedActor for BarChartComponent")
+      systemOpt map { system =>
+        system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+      }
+    }
   }
 
   def feeder: Option[ActorRef] = dataFeedActorOpt

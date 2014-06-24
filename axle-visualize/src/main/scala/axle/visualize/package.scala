@@ -25,19 +25,20 @@ import axle.algebra.Plottable
 
 package object visualize {
 
-  val system = ActorSystem("AxleAkkaActorSystem")
+  //val system = ActorSystem("AxleAkkaActorSystem")
 
   // default width/height was 1100/800
 
   def newFrame(width: Int, height: Int): AxleFrame =
     new AxleFrame(width, height, Color.white, "αχλε")
 
-  def show(component: Component): Unit = {
+  def show(component: Component)(implicit system: ActorSystem): Unit = {
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
     component match {
       case f: Fed => f.feeder foreach { dataFeedActor =>
         //println(s"+++ creating FrameRepaintingActor with dataFeedActor $dataFeedActor")
+        println(s"creating FrameRepaintingActor for a.v.show")
         system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
       }
       case _ => None
@@ -48,12 +49,12 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y]): Component = new PlotComponent(plot)
+  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])(implicit system: Option[ActorSystem]): Component = new PlotComponent(plot)
 
-  implicit def enComponentBarChart[S, Y: Plottable: Eq](barChart: BarChart[S, Y]): Component = new BarChartComponent(barChart)
+  implicit def enComponentBarChart[S, Y: Plottable: Eq](barChart: BarChart[S, Y])(implicit system: Option[ActorSystem]): Component = new BarChartComponent(barChart)
 
-  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq](barChart: BarChartGrouped[G, S, Y]): Component =
-    new BarChartGroupedComponent(barChart, system)
+  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq](barChart: BarChartGrouped[G, S, Y])(implicit system: Option[ActorSystem]): Component =
+    new BarChartGroupedComponent(barChart)
 
   implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {
     case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
@@ -91,7 +92,7 @@ package object visualize {
     // rc.setVisible(true)
     frame.setVisible(true)
 
-    val img = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_RGB) // ARGB
+    val img = new BufferedImage(frame.getWidth, frame.getHeight, BufferedImage.TYPE_INT_RGB) // ARGB
     val g = img.createGraphics()
     frame.paintAll(g)
 

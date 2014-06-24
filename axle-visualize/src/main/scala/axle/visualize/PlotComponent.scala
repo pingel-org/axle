@@ -20,7 +20,7 @@ import axle.visualize.element._
 import axle.algebra.Plottable
 import spire.algebra.Eq
 
-class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])], normalFont: Font) {
+class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])], normalFont: Font)(implicit systemOpt: Option[ActorSystem]) {
 
   import plot._
 
@@ -64,7 +64,7 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(
 
 }
 
-class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])
+class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])(implicit systemOpt: Option[ActorSystem])
   extends JPanel
   with Fed {
 
@@ -73,9 +73,13 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])
 
   setMinimumSize(new Dimension(width, height))
 
-  val dataFeedActorOpt: Option[ActorRef] = plot.refresher.map {
-    case (fn, interval) =>
-      system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+  val dataFeedActorOpt: Option[ActorRef] = plot.refresher.flatMap {
+    case (fn, interval) => {
+      systemOpt map { system =>
+        println(s"creating dataFeedActor for PlotComponent")
+        system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+      }
+    }
   }
 
   def feeder: Option[ActorRef] = dataFeedActorOpt

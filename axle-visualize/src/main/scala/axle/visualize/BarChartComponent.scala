@@ -16,6 +16,7 @@ import scala.concurrent.duration.DurationInt
 
 import akka.actor.ActorRef
 import akka.actor.Props
+import akka.actor.ActorSystem
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
@@ -26,7 +27,7 @@ import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
 
-class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])
+class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])(implicit systemOpt: Option[ActorSystem])
   extends JPanel
   with Fed {
 
@@ -35,9 +36,13 @@ class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])
 
   setMinimumSize(new java.awt.Dimension(width, height))
 
-  val dataFeedActorOpt: Option[ActorRef] = chart.refresher.map {
-    case (fn, interval) =>
-      system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+  val dataFeedActorOpt: Option[ActorRef] = chart.refresher.flatMap {
+    case (fn, interval) => {
+      systemOpt map { system =>
+        println(s"creating dataFeedActor for BarChartComponent")
+        system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+      }
+    }
   }
 
   def feeder: Option[ActorRef] = dataFeedActorOpt
@@ -62,7 +67,7 @@ class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])
       val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[S, Y]]
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
       Await.result(dataFuture, 1.seconds)
-    } getOrElse(chart.initialValue)
+    } getOrElse (chart.initialValue)
 
     val view = new BarChartView(chart, data, colorStream, normalFont)
 
