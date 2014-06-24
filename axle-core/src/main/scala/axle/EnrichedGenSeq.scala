@@ -16,7 +16,9 @@ case class EnrichedGenSeq[T](genSeq: GenSeq[T]) {
       _ + _)
   }
 
-  def orderedTally[N: Ring](implicit o: Ordering[T]): TreeMap[T, N] =
+  def orderedTally[N: Ring](implicit o: Order[T]): TreeMap[T, N] = {
+    implicit val ordering = Order.ordering
     new TreeMap[T, N]() ++ tally[N]
+  }
 
 }
