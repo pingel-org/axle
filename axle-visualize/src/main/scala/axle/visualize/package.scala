@@ -25,7 +25,10 @@ import axle.algebra.Plottable
 
 package object visualize {
 
-  //val system = ActorSystem("AxleAkkaActorSystem")
+  object VisDefaults {
+
+    implicit val actorSystemOpt: Option[ActorSystem] = None
+  }
 
   // default width/height was 1100/800
 
