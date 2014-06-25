@@ -1,11 +1,5 @@
 package axle.visualize
 
-import java.awt.Color.blue
-import java.awt.Color.green
-import java.awt.Color.orange
-import java.awt.Color.pink
-import java.awt.Color.red
-import java.awt.Color.yellow
 import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -46,7 +40,6 @@ class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])(implicit sys
 
   def feeder: Option[ActorRef] = dataFeedActorOpt
 
-  val colors = List(blue, red, green, orange, pink, yellow)
   val colorStream = continually(colors.toStream).flatten
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)

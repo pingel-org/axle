@@ -1,9 +1,14 @@
 package axle.visualize
 
-import axle.actor.Defaults._
+import java.awt.Color
+import java.awt.Color.blue
+import java.awt.Color.green
+import java.awt.Color.orange
+import java.awt.Color.pink
+import java.awt.Color.red
+import java.awt.Color.yellow
+
 import axle.algebra.Plottable
-import akka.actor.Props
-import akka.actor.ActorSystem
 import axle.quanta.Time
 
 case class BarChart[S, Y: Plottable](
@@ -26,4 +31,5 @@ case class BarChart[S, Y: Plottable](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
+  colors: List[Color] = List(blue, red, green, orange, pink, yellow),
   refresher: Option[(Map[S, Y] => Map[S, Y], Time.Q)] = None)
