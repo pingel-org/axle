@@ -27,7 +27,7 @@ class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], 
   val padding = 0.05 // on each side
   val widthPerSlice = (1d - (2 * padding)) / slices.size
   val whiteSpace = widthPerSlice * (1d - barWidthPercent)
-
+  
   val yPlottable = implicitly[Plottable[Y]]
 
   val minY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
@@ -55,7 +55,7 @@ class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], 
   val bars = slices.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
-      val rightX = leftX + widthPerSlice
+      val rightX = leftX + (widthPerSlice * barWidthPercent)
       Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(s)), fillColor = Some(color))
     }
   })
