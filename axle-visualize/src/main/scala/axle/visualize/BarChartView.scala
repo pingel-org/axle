@@ -47,7 +47,7 @@ class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], 
     slices.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, sLabeller(s)) }).toList,
     normalFont,
     false,
-    36 *: °,
+    labelAngle,
     black)
 
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)

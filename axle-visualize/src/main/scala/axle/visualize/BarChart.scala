@@ -10,6 +10,8 @@ import java.awt.Color.yellow
 
 import axle.algebra.Plottable
 import axle.quanta.Time
+import axle.quanta.Angle
+import Angle._
 
 case class BarChart[S, Y: Plottable](
   slices: Seq[S],
@@ -31,5 +33,6 @@ case class BarChart[S, Y: Plottable](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
+  labelAngle: Angle.Q = 36 *: °,
   colors: List[Color] = List(blue, red, green, orange, pink, yellow),
   refresher: Option[(Map[S, Y] => Map[S, Y], Time.Q)] = None)
