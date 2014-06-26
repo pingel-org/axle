@@ -14,10 +14,10 @@ class InformationTheorySpec extends Specification {
     "work" in {
 
       val d = new RandomVariable0("d", Some(List("A", "B", "C").toIndexedSeq),
-        distribution = Some(new ConditionalProbabilityTable0(Map(
+        distribution = new ConditionalProbabilityTable0(Map(
           "A" -> Rational(2, 10),
           "B" -> Rational(1, 10),
-          "C" -> Rational(7, 10)))))
+          "C" -> Rational(7, 10))))
 
       entropy(d).magnitude must be equalTo (1.1567796494470395)
     }
@@ -26,22 +26,21 @@ class InformationTheorySpec extends Specification {
   "cpt" should {
     "work" in {
 
-      val X = RandomVariable0("X", distribution = Some(new ConditionalProbabilityTable0(Map(
+      val X = RandomVariable0("X", distribution = new ConditionalProbabilityTable0(Map(
         "foo" -> Rational(1, 10),
-        "food" -> Rational(9, 10)))))
+        "food" -> Rational(9, 10))))
 
-      val Y = RandomVariable0("Y", distribution = Some(new ConditionalProbabilityTable0(Map(
+      val Y = RandomVariable0("Y", distribution = new ConditionalProbabilityTable0(Map(
           "bar" -> Rational(9, 10),
-          "bard" -> Rational(1, 10)))))
+          "bard" -> Rational(1, 10))))
 
       val cpt = new ConditionalProbabilityTable2[String, String, String, Rational](Map(
-        ("foo", "bar") -> Map("a" -> Rational(0.3), "b" -> Rational(0.7)),
-        ("foo", "bard") -> Map("a" -> Rational(0.2), "b" -> Rational(0.8)),
-        ("food", "bar") -> Map("a" -> Rational(0.9), "b" -> Rational(0.1)),
-        ("food", "bard") -> Map("a" -> Rational(0.5), "b" -> Rational(0.5))))
+        ("foo", "bar") -> Map("a" -> Rational(3, 10), "b" -> Rational(7, 10)),
+        ("foo", "bard") -> Map("a" -> Rational(2, 10), "b" -> Rational(8, 10)),
+        ("food", "bar") -> Map("a" -> Rational(9, 10), "b" -> Rational(1, 10)),
+        ("food", "bard") -> Map("a" -> Rational(5, 10), "b" -> Rational(5, 10))))
 
-      val A = RandomVariable2("A", grv1 = X, grv2 = Y,
-        distribution = Some(cpt))
+      val A = RandomVariable2("A", grv1 = X, grv2 = Y, distribution = cpt)
 
       val p = P((A is "a") | (X is "foo") ∧ (Y isnt "bar"))
       val b = P((A is "a") ∧ (X is "foo")).bayes

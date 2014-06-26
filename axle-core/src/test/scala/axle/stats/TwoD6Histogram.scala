@@ -14,7 +14,7 @@ object TwoD6Histogram extends Specification {
       val d6a = die(6)
       val d6b = die(6)
 
-      val rolls = (0 until 1000).map(i => d6a.observe.get + d6b.observe.get)
+      val rolls = (0 until 1000).map(i => d6a.observe + d6b.observe)
 
       val hist = rolls.orderedTally
 

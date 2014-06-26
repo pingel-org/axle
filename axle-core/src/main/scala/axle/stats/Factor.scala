@@ -1,13 +1,23 @@
 package axle.stats
 
-import axle._
-import axle.matrix._
-import axle.IndexedCrossProduct
 import scala.reflect.ClassTag
-import spire.math._
-import spire.implicits._
-import spire.algebra._
-// import spire.compat._
+import scala.xml.NodeSeq.seqToNodeSeq
+
+import axle.IndexedCrossProduct
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertDouble
+import axle.matrix.JblasMatrixModule.matrix
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.algebra.MultiplicativeMonoid
+import spire.algebra.Order
+import spire.implicits.RingProduct2
+import spire.implicits.StringOrder
+import spire.implicits.convertableOps
+import spire.implicits.eqOps
+import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.math.ConvertableFrom
 
 object FactorModule extends FactorModule
 
@@ -16,8 +26,6 @@ trait FactorModule {
   /* Technically a "Distribution" is probably a table that sums to 1, which is not
    * always true in a Factor.  They should be siblings rather than parent/child.
    */
-
-  import JblasMatrixModule._
 
   object Factor {
 

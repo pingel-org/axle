@@ -17,11 +17,13 @@ class ScalaFigures extends Specification {
 
   val bools = Some(Vector(true, false))
 
-  val A = new RandomVariable0[Boolean, Rational]("A", bools, None)
-  val B = new RandomVariable0[Boolean, Rational]("B", bools, None)
-  val C = new RandomVariable0[Boolean, Rational]("C", bools, None)
-  val D = new RandomVariable0[Boolean, Rational]("D", bools, None)
-  val E = new RandomVariable0[Boolean, Rational]("E", bools, None)
+  val unknownBooleanDistribution = new UnknownDistribution0[Boolean, Rational]()
+  
+  val A = new RandomVariable0[Boolean, Rational]("A", bools, unknownBooleanDistribution)
+  val B = new RandomVariable0[Boolean, Rational]("B", bools, unknownBooleanDistribution)
+  val C = new RandomVariable0[Boolean, Rational]("C", bools, unknownBooleanDistribution)
+  val D = new RandomVariable0[Boolean, Rational]("D", bools, unknownBooleanDistribution)
+  val E = new RandomVariable0[Boolean, Rational]("E", bools, unknownBooleanDistribution)
 
   def figure6_1: BayesianNetwork[Boolean, Rational] = {
 
@@ -30,30 +32,30 @@ class ScalaFigures extends Specification {
       List(
         BayesianNetworkNode(A,
           Factor(Vector(A), Map(
-            Vector(A is true) -> Rational(0.6),
-            Vector(A is false) -> Rational(0.4)))),
+            Vector(A is true) -> Rational(6, 10),
+            Vector(A is false) -> Rational(4, 10)))),
         BayesianNetworkNode(B, // B | A
           Factor(Vector(B), Map(
-            Vector(B is true, A is true) -> Rational(0.2),
-            Vector(B is true, A is false) -> Rational(0.8),
-            Vector(B is false, A is true) -> Rational(0.75),
-            Vector(B is false, A is false) -> Rational(0.25)))),
+            Vector(B is true, A is true) -> Rational(2, 10),
+            Vector(B is true, A is false) -> Rational(8, 10),
+            Vector(B is false, A is true) -> Rational(3, 4),
+            Vector(B is false, A is false) -> Rational(1, 4)))),
         BayesianNetworkNode(C, // C | A
           Factor(Vector(C), Map(
-            Vector(C is true, A is true) -> Rational(0.8),
-            Vector(C is true, A is false) -> Rational(0.2),
-            Vector(C is false, A is true) -> Rational(0.1),
-            Vector(C is false, A is false) -> Rational(0.9)))),
+            Vector(C is true, A is true) -> Rational(4, 5),
+            Vector(C is true, A is false) -> Rational(1, 5),
+            Vector(C is false, A is true) -> Rational(1, 10),
+            Vector(C is false, A is false) -> Rational(9, 10)))),
         BayesianNetworkNode(D, // D | BC
           Factor(Vector(D), Map(
-            Vector(D is true, B is true, C is true) -> Rational(0.95),
-            Vector(D is true, B is true, C is false) -> Rational(0.05),
-            Vector(D is true, B is false, C is true) -> Rational(0.9),
-            Vector(D is true, B is false, C is false) -> Rational(0.1),
-            Vector(D is false, B is true, C is true) -> Rational(0.8),
-            Vector(D is false, B is true, C is false) -> Rational(0.2),
-            Vector(D is false, B is false, C is true) -> Rational(0.0),
-            Vector(D is false, B is false, C is false) -> Rational(1.0)))),
+            Vector(D is true, B is true, C is true) -> Rational(19, 20),
+            Vector(D is true, B is true, C is false) -> Rational(1, 20),
+            Vector(D is true, B is false, C is true) -> Rational(9, 10),
+            Vector(D is true, B is false, C is false) -> Rational(1, 10),
+            Vector(D is false, B is true, C is true) -> Rational(4, 5),
+            Vector(D is false, B is true, C is false) -> Rational(1, 5),
+            Vector(D is false, B is false, C is true) -> Rational(0, 1),
+            Vector(D is false, B is false, C is false) -> Rational(1, 1)))),
         BayesianNetworkNode(E, // E | C
           Factor(Vector(E), Map(
             Vector(E is true, C is true) -> Rational(7, 10),
@@ -101,18 +103,18 @@ class ScalaFigures extends Specification {
     val bn = BayesianNetwork("6.4",
       Vector(
         BayesianNetworkNode(A, Factor(Vector(A), Map(
-          Vector(A is true) -> Rational(0.6),
-          Vector(A is false) -> Rational(0.4)))),
+          Vector(A is true) -> Rational(6, 10),
+          Vector(A is false) -> Rational(4, 10)))),
         BayesianNetworkNode(B, Factor(Vector(B), Map( // B | A
-          Vector(B is true, A is true) -> Rational(0.9),
-          Vector(B is true, A is false) -> Rational(0.1),
-          Vector(B is false, A is true) -> Rational(0.2),
-          Vector(B is false, A is false) -> Rational(0.8)))),
+          Vector(B is true, A is true) -> Rational(9, 10),
+          Vector(B is true, A is false) -> Rational(1, 10),
+          Vector(B is false, A is true) -> Rational(2, 10),
+          Vector(B is false, A is false) -> Rational(8, 10)))),
         BayesianNetworkNode(C, Factor(Vector(C), Map( // C | B
-          Vector(C is true, B is true) -> Rational(0.3),
-          Vector(C is true, B is false) -> Rational(0.7),
-          Vector(C is false, B is true) -> Rational(0.5),
-          Vector(C is false, B is false) -> Rational(0.5))))),
+          Vector(C is true, B is true) -> Rational(3, 10),
+          Vector(C is true, B is false) -> Rational(7, 10),
+          Vector(C is false, B is true) -> Rational(1, 2),
+          Vector(C is false, B is false) -> Rational(1, 2))))),
       (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
         case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
         case _ => Nil

@@ -20,11 +20,13 @@ package object stats {
   implicit def rv2it[K, N: Field](rv: RandomVariable[K, N]): IndexedSeq[K] = rv.values.getOrElse(Vector())
 
   implicit def enrichCaseGenTraversable[A: Manifest, N: Field](cgt: GenTraversable[Case[A, N]]): EnrichedCaseGenTraversable[A, N] = EnrichedCaseGenTraversable(cgt)
-
+  
+  val sides = Vector('HEAD, 'TAIL)
+  
   def coin(pHead: Rational = Rational(1, 2)): RandomVariable[Symbol, Rational] =
     RandomVariable0("coin",
-      Some(List('HEAD, 'TAIL).toIndexedSeq),
-      distribution = Some(new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1 - pHead)))))
+      Some(sides),
+      distribution = new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1 - pHead))))
 
   def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)
 

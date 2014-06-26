@@ -14,16 +14,17 @@ class ABE extends Specification {
   import FactorModule._
 
   val bools = Some(Vector(true, false))
+  val unknownBooleanDistribution = new UnknownDistribution0[Boolean, Rational]()
 
-  val B = new RandomVariable0[Boolean, Rational]("Burglary", bools, None)
-  val E = new RandomVariable0[Boolean, Rational]("Earthquake", bools, None)
-  val A = new RandomVariable0[Boolean, Rational]("Alarm", bools, None)
-  val J = new RandomVariable0[Boolean, Rational]("John Calls", bools, None)
-  val M = new RandomVariable0[Boolean, Rational]("Mary Calls", bools, None)
+  val B = new RandomVariable0("Burglary", bools, unknownBooleanDistribution)
+  val E = new RandomVariable0("Earthquake", bools, unknownBooleanDistribution)
+  val A = new RandomVariable0("Alarm", bools, unknownBooleanDistribution)
+  val J = new RandomVariable0("John Calls", bools, unknownBooleanDistribution)
+  val M = new RandomVariable0("Mary Calls", bools, unknownBooleanDistribution)
 
-  val bn = BayesianNetwork[Boolean, Rational](
+  val bn = BayesianNetwork(
     "A sounds (due to Burglary or Earthquake) and John or Mary Call",
-    List(BayesianNetworkNode[Boolean, Rational](B,
+    List(BayesianNetworkNode(B,
       Factor(Vector(B), Map(
         Vector(B is true) -> Rational(1, 1000),
         Vector(B is false) -> Rational(999, 1000)))),

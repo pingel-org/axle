@@ -1,11 +1,24 @@
 package axle.ml
 
-import axle._
-import axle.stats._
-import spire.math._
-import spire.implicits._
-import spire.algebra._
-import spire.compat._
+import axle.enrichGenSeq
+import axle.stats.P
+import axle.stats.RandomVariable
+import axle.stats.RandomVariable0
+import axle.stats.RandomVariable1
+import axle.stats.TallyDistribution0
+import axle.stats.TallyDistribution1
+import axle.stats.evalProbability
+import axle.stats.rv2it
+import axle.Π
+import spire.algebra.Eq
+import spire.algebra.Order
+import spire.compat.ordering
+import spire.implicits.LongAlgebra
+import spire.implicits.MapRng
+import spire.implicits.StringOrder
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.eqOps
+import spire.math.Rational
 
 object NaiveBayesClassifier {
 
@@ -51,18 +64,18 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Order: Eq](
   val classTally: Map[CLASS, Long] = data.map(classExtractor).tally
 
   val C = RandomVariable0(classRandomVariable.name, classRandomVariable.values,
-    distribution = Some(new TallyDistribution0(classTally)))
+    distribution = new TallyDistribution0(classTally))
 
   val Fs = featureRandomVariables.map(featureRandomVariable => RandomVariable1(
     featureRandomVariable.name,
     featureRandomVariable.values,
     grv = C,
-    distribution = Some(new TallyDistribution1(
+    distribution = new TallyDistribution1(
       featureTally.filter {
         case (k, v) => k._2 === featureRandomVariable.name
       }.map {
         case (k, v) => ((k._3, k._1), v)
-      }.withDefaultValue(0L)))))
+      }.withDefaultValue(0L))))
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 

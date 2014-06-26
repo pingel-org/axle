@@ -1,11 +1,10 @@
 package axle.stats
 
-import axle._
-import util.Random
-import spire.math._
-import spire.implicits._
-import spire.random._
-import spire.algebra._
+import scala.util.Random
+
+import spire.algebra.Eq
+import spire.implicits.eqOps
+import spire.math.Rational
 
 class TallyDistribution0[A](tally: Map[A, Long])
   extends Distribution0[A, Rational] {

@@ -1,9 +1,7 @@
 package axle.stats
 
-import axle._
-import spire.math._
-import spire.algebra._
-import spire.implicits._
+import axle.Σ
+import spire.math.Real
 
 trait Distribution[A, N] {
   

@@ -13,6 +13,8 @@ class CausalitySpec extends Specification {
 
   val bools = Some(Vector(true, false))
 
+  val unknownBooleanDistribution = new UnknownDistribution0[Boolean, Rational]()
+  
   //    def getStandardQuantity(m: CausalModel) = {
   //      val namer = new VariableNamer()
   //      val question = Set(m.getVariable("Y").nextVariable(namer))
@@ -52,14 +54,14 @@ class CausalitySpec extends Specification {
 
         val result = CausalModel[String, Rational]("Homework 4 model with k " + k + ", p = " + p, Nil)
 
-        val zero = Option(null.asInstanceOf[(RandomVariable[Boolean, Rational], RandomVariable[Boolean, Rational], RandomVariable[Boolean, Rational], RandomVariable[Boolean, Rational])])
+        val zero = Option.empty[(RandomVariable[Boolean, Rational], RandomVariable[Boolean, Rational], RandomVariable[Boolean, Rational], RandomVariable[Boolean, Rational])]
 
         (0 to k).foldLeft(zero)((previous, i) => {
 
-          val ei = RandomVariable0[Boolean, Rational]("E" + i, bools)
-          val epi = RandomVariable0[Boolean, Rational]("E'" + i, bools)
-          val xi = RandomVariable0[Boolean, Rational]("X" + i, bools)
-          val yi = RandomVariable0[Boolean, Rational]("Y" + i, bools)
+          val ei = RandomVariable0("E" + i, bools, unknownBooleanDistribution)
+          val epi = RandomVariable0("E'" + i, bools, unknownBooleanDistribution)
+          val xi = RandomVariable0("X" + i, bools, unknownBooleanDistribution)
+          val yi = RandomVariable0("Y" + i, bools, unknownBooleanDistribution)
 
           // TODO
           //          result += CausalModelNode(ei, false)
@@ -108,14 +110,14 @@ class CausalitySpec extends Specification {
 
     "work" in {
 
-      val U1 = RandomVariable0[Boolean, Rational]("U1", bools)
-      val U2 = RandomVariable0[Boolean, Rational]("U2", bools)
-      val U3 = RandomVariable0[Boolean, Rational]("U3", bools)
-      val X1 = RandomVariable0[Boolean, Rational]("X1", bools)
-      val X2 = RandomVariable0[Boolean, Rational]("X2", bools)
-      val X3 = RandomVariable0[Boolean, Rational]("X3", bools)
-      val X4 = RandomVariable0[Boolean, Rational]("X4", bools)
-      val Y = RandomVariable0[Boolean, Rational]("Y", bools)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
+      val U2 = RandomVariable0("U2", bools, unknownBooleanDistribution)
+      val U3 = RandomVariable0("U3", bools, unknownBooleanDistribution)
+      val X1 = RandomVariable0("X1", bools, unknownBooleanDistribution)
+      val X2 = RandomVariable0("X2", bools, unknownBooleanDistribution)
+      val X3 = RandomVariable0("X3", bools, unknownBooleanDistribution)
+      val X4 = RandomVariable0("X4", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
 
       val model = CausalModel("Midterm Model 1", List(
         CausalModelNode(U1, false),
@@ -165,12 +167,12 @@ class CausalitySpec extends Specification {
   "Midterm Model 2" should {
     "work" in {
 
-      val a = RandomVariable0[Boolean, Rational]("A", bools)
-      val b = RandomVariable0[Boolean, Rational]("B", bools)
-      val c = RandomVariable0[Boolean, Rational]("C", bools)
-      val f = RandomVariable0[Boolean, Rational]("F", bools)
-      val d = RandomVariable0[Boolean, Rational]("D", bools)
-      val e = RandomVariable0[Boolean, Rational]("E", bools)
+      val a = RandomVariable0("A", bools, unknownBooleanDistribution)
+      val b = RandomVariable0("B", bools, unknownBooleanDistribution)
+      val c = RandomVariable0("C", bools, unknownBooleanDistribution)
+      val f = RandomVariable0("F", bools, unknownBooleanDistribution)
+      val d = RandomVariable0("D", bools, unknownBooleanDistribution)
+      val e = RandomVariable0("E", bools, unknownBooleanDistribution)
 
       val model0 = CausalModel("Midterm Model 2", List(
         CausalModelNode(a), CausalModelNode(b), CausalModelNode(c),
@@ -194,8 +196,8 @@ class CausalitySpec extends Specification {
   "3.8a" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
 
       val model0 = CausalModel("3.8a", List(CausalModelNode(X), CausalModelNode(Y)))
       val model = model0 /* TODO addFunctions List(
@@ -209,10 +211,10 @@ class CausalitySpec extends Specification {
   "3.8b" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U = RandomVariable0[Boolean, Rational]("U")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U = RandomVariable0("U", bools, unknownBooleanDistribution)
 
       val model0 = CausalModel("3.8b", List(CausalModelNode(X), CausalModelNode(Y), CausalModelNode(Z), CausalModelNode(U)))
 
@@ -228,10 +230,10 @@ class CausalitySpec extends Specification {
   "3.8c" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U = RandomVariable0[Boolean, Rational]("U")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U = RandomVariable0("U", bools, unknownBooleanDistribution)
 
       val model0 = CausalModel("3.8c", List(
         CausalModelNode(X),
@@ -252,10 +254,10 @@ class CausalitySpec extends Specification {
   "3.8d" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U = RandomVariable0[Boolean, Rational]("U")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U = RandomVariable0("U", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.8d", List(
         CausalModelNode(X),
@@ -274,10 +276,10 @@ class CausalitySpec extends Specification {
   "3.8e" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U = RandomVariable0[Boolean, Rational]("U")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U = RandomVariable0("U", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.8e", List(
         CausalModelNode(X),
@@ -296,12 +298,12 @@ class CausalitySpec extends Specification {
   "3.8f" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z1 = RandomVariable0[Boolean, Rational]("Z1")
-      val Z2 = RandomVariable0[Boolean, Rational]("Z2")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
-      val U2 = RandomVariable0[Boolean, Rational]("U2")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z1 = RandomVariable0("Z1", bools, unknownBooleanDistribution)
+      val Z2 = RandomVariable0("Z2", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
+      val U2 = RandomVariable0("U2", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.8f", List(
         CausalModelNode(X),
@@ -323,15 +325,15 @@ class CausalitySpec extends Specification {
   "3.8g" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z1 = RandomVariable0[Boolean, Rational]("Z1")
-      val Z2 = RandomVariable0[Boolean, Rational]("Z2")
-      val Z3 = RandomVariable0[Boolean, Rational]("Z3")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
-      val U2 = RandomVariable0[Boolean, Rational]("U2")
-      val U3 = RandomVariable0[Boolean, Rational]("U3")
-      val U4 = RandomVariable0[Boolean, Rational]("U4")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z1 = RandomVariable0("Z1", bools, unknownBooleanDistribution)
+      val Z2 = RandomVariable0("Z2", bools, unknownBooleanDistribution)
+      val Z3 = RandomVariable0("Z3", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
+      val U2 = RandomVariable0("U2", bools, unknownBooleanDistribution)
+      val U3 = RandomVariable0("U3", bools, unknownBooleanDistribution)
+      val U4 = RandomVariable0("U4", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.8g", List(
         CausalModelNode(X),
@@ -357,9 +359,9 @@ class CausalitySpec extends Specification {
   "3.9a" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.9a", List(
         CausalModelNode(X),
@@ -376,10 +378,10 @@ class CausalitySpec extends Specification {
   "3.9b" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.9b", List(
         CausalModelNode(X),
@@ -398,10 +400,10 @@ class CausalitySpec extends Specification {
   "3.9c" should {
     "work" in {
 
-      val X = RandomVariable0[String, Rational]("X")
-      val Y = RandomVariable0[String, Rational]("Y")
-      val Z = RandomVariable0[String, Rational]("Z")
-      val U1 = RandomVariable0[String, Rational]("U1")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.9c", List(
         CausalModelNode(X),
@@ -420,11 +422,11 @@ class CausalitySpec extends Specification {
   "3.9d" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
-      val U2 = RandomVariable0[Boolean, Rational]("U2")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
+      val U2 = RandomVariable0("U2", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.9d", List(
         CausalModelNode(X),
@@ -444,11 +446,11 @@ class CausalitySpec extends Specification {
   "3.9e" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
-      val U2 = RandomVariable0[Boolean, Rational]("U2")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
+      val U2 = RandomVariable0("U2", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.9e", List(
         CausalModelNode(X),
@@ -468,11 +470,11 @@ class CausalitySpec extends Specification {
   "3.9f" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
-      val U2 = RandomVariable0[Boolean, Rational]("U2")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
+      val U2 = RandomVariable0("U2", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.9f", List(
         CausalModelNode(X),
@@ -492,12 +494,12 @@ class CausalitySpec extends Specification {
   "3.9g" should {
     "work" in {
 
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z1 = RandomVariable0[Boolean, Rational]("Z1")
-      val Z2 = RandomVariable0[Boolean, Rational]("Z2")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
-      val U2 = RandomVariable0[Boolean, Rational]("U2")
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z1 = RandomVariable0("Z1", bools, unknownBooleanDistribution)
+      val Z2 = RandomVariable0("Z2", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
+      val U2 = RandomVariable0("U2", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.9g", List(
         CausalModelNode(X),
@@ -518,14 +520,14 @@ class CausalitySpec extends Specification {
 
   "3.9h" should {
     "work" in {
-      val W = RandomVariable0[Boolean, Rational]("W")
-      val X = RandomVariable0[Boolean, Rational]("X")
-      val Y = RandomVariable0[Boolean, Rational]("Y")
-      val Z = RandomVariable0[Boolean, Rational]("Z")
-      val U1 = RandomVariable0[Boolean, Rational]("U1")
-      val U2 = RandomVariable0[Boolean, Rational]("U2")
-      val U3 = RandomVariable0[Boolean, Rational]("U3")
-      val U4 = RandomVariable0[Boolean, Rational]("U4")
+      val W = RandomVariable0("W", bools, unknownBooleanDistribution)
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution)
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution)
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution)
+      val U1 = RandomVariable0("U1", bools, unknownBooleanDistribution)
+      val U2 = RandomVariable0("U2", bools, unknownBooleanDistribution)
+      val U3 = RandomVariable0("U3", bools, unknownBooleanDistribution)
+      val U4 = RandomVariable0("U4", bools, unknownBooleanDistribution)
 
       val model = CausalModel("3.9h", List(
         CausalModelNode(W),
@@ -549,10 +551,10 @@ class CausalitySpec extends Specification {
   "smoking model" should {
     "work" in {
 
-      val U = RandomVariable0[Boolean, Rational]("U")
-      val X = RandomVariable0[Boolean, Rational]("X") // smoke
-      val Z = RandomVariable0[Boolean, Rational]("Z") // tar
-      val Y = RandomVariable0[Boolean, Rational]("Y") // cancer
+      val U = RandomVariable0("U", bools, unknownBooleanDistribution)
+      val X = RandomVariable0("X", bools, unknownBooleanDistribution) // smoke
+      val Z = RandomVariable0("Z", bools, unknownBooleanDistribution) // tar
+      val Y = RandomVariable0("Y", bools, unknownBooleanDistribution) // cancer
 
       val model = CausalModel("Smoking Model", List(
         CausalModelNode(U, false),

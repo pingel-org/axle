@@ -1,12 +1,11 @@
 package axle.stats
 
-// TODO: division by zero
-import axle._
-import spire.implicits._
-import spire.algebra._
-import spire.math._
-import spire.random._
-import spire.random.mutable._
+import spire.algebra.Field
+import spire.algebra.Order
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.orderOps
+import spire.random.Dist
+import spire.random.mutable.Cmwc5
 
 class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N]) extends Distribution0[A, N] {
 

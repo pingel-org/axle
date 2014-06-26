@@ -1,6 +1,7 @@
 package axle.stats
 
-import spire.algebra._
+import spire.algebra.Eq
+import spire.algebra.Field
 
 /**
  *

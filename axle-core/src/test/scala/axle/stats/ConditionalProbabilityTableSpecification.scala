@@ -13,12 +13,13 @@ class ConditionalProbabilityTableSpecification extends Specification {
   import FactorModule._
 
   val bools = Some(Vector(true, false))
+  val unknownBooleanDistribution = new UnknownDistribution0[Boolean, Rational]()
 
-  val A = new RandomVariable0[Boolean, Rational]("A", bools, None)
-  val B = new RandomVariable0[Boolean, Rational]("B", bools, None)
-  val C = new RandomVariable0[Boolean, Rational]("C", bools, None)
-  val D = new RandomVariable0[Boolean, Rational]("D", bools, None)
-  val E = new RandomVariable0[Boolean, Rational]("E", bools, None)
+  val A = new RandomVariable0("A", bools, unknownBooleanDistribution)
+  val B = new RandomVariable0("B", bools, unknownBooleanDistribution)
+  val C = new RandomVariable0("C", bools, unknownBooleanDistribution)
+  val D = new RandomVariable0("D", bools, unknownBooleanDistribution)
+  val E = new RandomVariable0("E", bools, unknownBooleanDistribution)
 
   val bn = BayesianNetwork("6.1", Vector(
     BayesianNetworkNode(A,
