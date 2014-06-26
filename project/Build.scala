@@ -15,7 +15,7 @@ object AxleBuild extends Build {
 
     // version := "0.1-SNAPSHOT", // last milestone was ...
 
-    version := "0.1-M12"
+    version := "0.1-M12",
 
     scalaVersion := "2.11.1",
 
