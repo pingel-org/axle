@@ -22,7 +22,7 @@ import spire.math.Rational
 
 object NaiveBayesClassifier {
 
-  def apply[DATA, FEATURE, CLASS: Order: Eq](
+  def apply[DATA, FEATURE: Order, CLASS: Order: Eq](
     data: collection.GenSeq[DATA],
     pFs: List[RandomVariable[FEATURE, Rational]],
     pC: RandomVariable[CLASS, Rational],
@@ -32,7 +32,7 @@ object NaiveBayesClassifier {
 
 }
 
-class NaiveBayesClassifier[DATA, FEATURE, CLASS: Order: Eq](
+class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq](
   data: collection.GenSeq[DATA],
   featureRandomVariables: List[RandomVariable[FEATURE, Rational]],
   classRandomVariable: RandomVariable[CLASS, Rational],
@@ -63,14 +63,12 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Order: Eq](
 
   val classTally: Map[CLASS, Long] = data.map(classExtractor).tally
 
-  val C = RandomVariable0(classRandomVariable.name, classRandomVariable.values,
-    distribution = new TallyDistribution0(classTally))
+  val C = RandomVariable0(classRandomVariable.name, new TallyDistribution0(classTally))
 
   val Fs = featureRandomVariables.map(featureRandomVariable => RandomVariable1(
     featureRandomVariable.name,
-    featureRandomVariable.values,
-    grv = C,
-    distribution = new TallyDistribution1(
+    C,
+    new TallyDistribution1(
       featureTally.filter {
         case (k, v) => k._2 === featureRandomVariable.name
       }.map {
@@ -81,9 +79,9 @@ class NaiveBayesClassifier[DATA, FEATURE, CLASS: Order: Eq](
 
   def apply(d: DATA): CLASS = {
     val fs = featureExtractor(d)
-    
+
     val foo: Int => CLASS => () => Rational = (i: Int) => (c: CLASS) => P((Fs(i) is fs(i)) | (C is c))
-    
+
     argmax(C,
       (c: CLASS) => (P(C is c) *
         ((c: CLASS) => Π(0 until numFeatures)(i => foo(i)(c)()))(c)))

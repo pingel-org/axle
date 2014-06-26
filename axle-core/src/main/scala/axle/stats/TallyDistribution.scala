@@ -1,19 +1,21 @@
 package axle.stats
 
 import scala.util.Random
-
 import spire.algebra.Eq
 import spire.implicits.eqOps
 import spire.math.Rational
+import spire.algebra.Order
 
-class TallyDistribution0[A](tally: Map[A, Long])
+class TallyDistribution0[A: Order](tally: Map[A, Long])
   extends Distribution0[A, Rational] {
+
+  def values: IndexedSeq[A] = tally.keys.toVector.sortWith(implicitly[Order[A]].lt)
 
   val totalCount = tally.values.sum
 
   val bars: Map[A, Long] =
     tally
-    .scanLeft((null.asInstanceOf[A], 0L))(
+      .scanLeft((null.asInstanceOf[A], 0L))(
         (x, y) => (y._1, x._2 + y._2))
 
   def observe(): A = {
@@ -24,8 +26,13 @@ class TallyDistribution0[A](tally: Map[A, Long])
   def probabilityOf(a: A) = Rational(tally.get(a).getOrElse(0L), totalCount)
 }
 
-class TallyDistribution1[A, G: Eq](tally: Map[(A, G), Long])
+class TallyDistribution1[A: Order, G: Eq](tally: Map[(A, G), Long])
   extends Distribution1[A, G, Rational] {
+
+  lazy val _values: IndexedSeq[A] =
+    tally.keys.map(_._1).toSet.toVector.sortWith(implicitly[Order[A]].lt)
+
+  def values: IndexedSeq[A] = _values
 
   val gvs = tally.keys.map(_._2).toSet
 

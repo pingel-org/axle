@@ -17,16 +17,14 @@ package object stats {
 
   implicit def evalProbability[N]: Probability[N] => N = _()
 
-  implicit def rv2it[K, N: Field](rv: RandomVariable[K, N]): IndexedSeq[K] = rv.values.getOrElse(Vector())
+  implicit def rv2it[K, N: Field](rv: RandomVariable[K, N]): IndexedSeq[K] = rv.values
 
   implicit def enrichCaseGenTraversable[A: Manifest, N: Field](cgt: GenTraversable[Case[A, N]]): EnrichedCaseGenTraversable[A, N] = EnrichedCaseGenTraversable(cgt)
-  
+
   val sides = Vector('HEAD, 'TAIL)
-  
+
   def coin(pHead: Rational = Rational(1, 2)): RandomVariable[Symbol, Rational] =
-    RandomVariable0("coin",
-      Some(sides),
-      distribution = new ConditionalProbabilityTable0(Map('HEAD -> pHead, 'TAIL -> (1 - pHead))))
+    RandomVariable0("coin", new ConditionalProbabilityTable0[Symbol, Rational](Map('HEAD -> pHead, 'TAIL -> (1 - pHead))))
 
   def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)
 
@@ -34,7 +32,9 @@ package object stats {
 
   def square[N: Ring](x: N): N = x ** 2
 
-  // http://en.wikipedia.org/wiki/Standard_deviation
+  /**
+   * http://en.wikipedia.org/wiki/Standard_deviation
+   */
 
   def stddev[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = {
     val adder = implicitly[AdditiveMonoid[N]]
@@ -42,6 +42,8 @@ package object stats {
     (Σ(xs.map(x => square(x - μ)))(identity)(adder) / xs.size).sqrt
   }
 
+  def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = stddev(xs)
+  
   import Information._
   import axle.quanta._
 
@@ -49,12 +51,10 @@ package object stats {
     val adder = implicitly[AdditiveMonoid[Real]]
     val field = implicitly[Field[N]]
     val cf = implicitly[ConvertableFrom[N]]
-    val H = X.values.map { xs =>
-      Σ(xs)({ x =>
-        val px = P(X is x).apply()
-        if (px > field.zero) Real(cf.toDouble(-px * log2(px))) else adder.zero
-      })(adder)
-    }.getOrElse(adder.zero)
+    val H = Σ(X.values)({ x =>
+      val px = P(X is x).apply()
+      if (px > field.zero) Real(cf.toDouble(-px * log2(px))) else adder.zero
+    })(adder)
     Number(H.toDouble) *: bit // TODO Number(_.toDouble) should not be necessary
   }
 

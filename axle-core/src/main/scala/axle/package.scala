@@ -28,9 +28,7 @@
  */
 
 import scala.collection.mutable.Buffer
-
 import org.joda.time.DateTime
-
 import axle.EnrichedArray
 import axle.EnrichedBoolean
 import axle.EnrichedByteArray
@@ -50,6 +48,7 @@ import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.implicits._
 import spire.math.Rational
+import spire.algebra.Order
 
 package object axle {
 
@@ -57,6 +56,11 @@ package object axle {
   val Pi = Π
   val ∀ = forall
   val ∃ = thereexists
+
+  implicit val orderSymbols: Order[Symbol] = new Order[Symbol] {
+    val stringCompare = implicitly[Ordering[String]]
+    def compare(x: Symbol, y: Symbol): Int = stringCompare.compare(x.toString, y.toString)
+  }
 
   implicit val jodaDateTimeEq = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)

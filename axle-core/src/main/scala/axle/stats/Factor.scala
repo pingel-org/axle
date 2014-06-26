@@ -48,7 +48,7 @@ trait FactorModule {
       new Factor(varList, values)
 
     def cases[T: Eq, N: Field](varSeq: Vector[RandomVariable[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
-      IndexedCrossProduct(varSeq.map(_.values.getOrElse(Nil).toIndexedSeq)) map { kase =>
+      IndexedCrossProduct(varSeq.map(_.values)) map { kase =>
         varSeq.zip(kase) map {
           case (rv, v) =>
             CaseIs(rv, v)
@@ -61,8 +61,7 @@ trait FactorModule {
 
     val field = implicitly[Field[N]]
 
-    lazy val crossProduct = new IndexedCrossProduct(varList.map(
-      _.values.getOrElse(Nil.toIndexedSeq)))
+    lazy val crossProduct = new IndexedCrossProduct(varList.map(_.values))
 
     lazy val elements: Array[N] =
       (0 until crossProduct.size) map { i =>
@@ -126,7 +125,7 @@ trait FactorModule {
       val newVars = variables.filter(v => !(variable === v))
       new Factor(newVars,
         Factor.cases(newVars)
-          .map(kase => (kase, variable.values.getOrElse(Nil).map(value => this(kase)).max))
+          .map(kase => (kase, variable.values.map(value => this(kase)).max))
           .toMap)
     }
 
@@ -139,12 +138,10 @@ trait FactorModule {
           .toMap)
 
     def tally(a: RandomVariable[T, N], b: RandomVariable[T, N]): Matrix[Double] = {
-      val aValues = a.values.getOrElse(Nil).toIndexedSeq
-      val bValues = b.values.getOrElse(Nil).toIndexedSeq
       matrix[Double](
-        aValues.size,
-        bValues.size,
-        (r: Int, c: Int) => axle.Σ(cases.filter(isSupersetOf(_, Vector(a is aValues(r), b is bValues(c)))).map(this(_)).toVector)(identity).toDouble)
+        a.values.size,
+        b.values.size,
+        (r: Int, c: Int) => axle.Σ(cases.filter(isSupersetOf(_, Vector(a is a.values(r), b is b.values(c)))).map(this(_)).toVector)(identity).toDouble)
     }
 
     def Σ(varToSumOut: RandomVariable[T, N]): Factor[T, N] = this.sumOut(varToSumOut)
@@ -156,7 +153,7 @@ trait FactorModule {
       new Factor(
         newVars,
         Factor.cases(newVars).map(kase => {
-          val reals = gone.values.getOrElse(Nil).map(gv => {
+          val reals = gone.values.map(gv => {
             val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[T, N]], gv)) // TODO cast
             this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
           })

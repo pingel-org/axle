@@ -7,7 +7,7 @@ import spire.implicits.orderOps
 import spire.random.Dist
 import spire.random.mutable.Cmwc5
 
-class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N]) extends Distribution0[A, N] {
+class ConditionalProbabilityTable0[A: Order, N: Field: Order: Dist](p: Map[A, N]) extends Distribution0[A, N] {
 
   val field = implicitly[Field[N]]
 
@@ -24,10 +24,17 @@ class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N]) exten
     bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
   }
 
+  def values: IndexedSeq[A] = p.keys.toIndexedSeq.sortWith(implicitly[Order[A]].lt)
+
   def probabilityOf(a: A): N = p(a)
 }
 
-class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]]) extends Distribution2[A, G1, G2, N] {
+class ConditionalProbabilityTable2[A: Order, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]])
+  extends Distribution2[A, G1, G2, N] {
+
+  lazy val _values = p.values.map(_.keySet).reduce(_ union _).toVector.sortWith(implicitly[Order[A]].lt)
+
+  def values: IndexedSeq[A] = _values
 
   def observe(): A = ???
 

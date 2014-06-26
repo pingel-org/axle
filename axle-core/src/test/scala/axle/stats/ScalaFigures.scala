@@ -15,15 +15,13 @@ import FactorModule.Factor
 
 class ScalaFigures extends Specification {
 
-  val bools = Some(Vector(true, false))
-
-  val unknownBooleanDistribution = new UnknownDistribution0[Boolean, Rational]()
+  val unknownBooleanDistribution = new UnknownDistribution0[Boolean, Rational](Vector(true, false))
   
-  val A = new RandomVariable0[Boolean, Rational]("A", bools, unknownBooleanDistribution)
-  val B = new RandomVariable0[Boolean, Rational]("B", bools, unknownBooleanDistribution)
-  val C = new RandomVariable0[Boolean, Rational]("C", bools, unknownBooleanDistribution)
-  val D = new RandomVariable0[Boolean, Rational]("D", bools, unknownBooleanDistribution)
-  val E = new RandomVariable0[Boolean, Rational]("E", bools, unknownBooleanDistribution)
+  val A = new RandomVariable0("A", unknownBooleanDistribution)
+  val B = new RandomVariable0("B", unknownBooleanDistribution)
+  val C = new RandomVariable0("C", unknownBooleanDistribution)
+  val D = new RandomVariable0("D", unknownBooleanDistribution)
+  val E = new RandomVariable0("E", unknownBooleanDistribution)
 
   def figure6_1: BayesianNetwork[Boolean, Rational] = {
 
