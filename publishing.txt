@@ -1,6 +1,35 @@
 
+After `sbt publish`
 
 
+In order:
+ edit project/Build.scala (change version)
+ git tag
+ git tag v0.1-M12
+ git add project/Build.scala
+ sbt publish-signed
+ git commit -m "tagged v0.1-M12"
+ git push --tags
+ https://oss.sonatype.org/
+ Staging Repositories
+ find org.pingel repository
+ close
+ "closing axle 0.1-M12"
+ wait
+ find org.pingel repository
+ release
+ "releasing axle 0.1-M12"
+ confirm at https://oss.sonatype.org/content/repositories/releases/org/pingel/
+ edit project/Build.scala (change version)
+ git add project/Build.scala
+ git commit -m "back to 0.1-SNAPSHOT"
+
+Latest detailed guide: http://central.sonatype.org/pages/releasing-the-deployment.html
+
+Other
+-----
+
+New overview: http://central.sonatype.org/pages/ossrh-guide.html
 
 https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-8.ReleaseIt
 
