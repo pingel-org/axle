@@ -11,5 +11,9 @@ extends Distribution0[A, N] {
   
   def probabilityOf(a: A): N = ???
 
+  def map[B](f: A => B): Distribution[B, N] = ???
+
+  def flatMap[B](f: A => Distribution[B, N]): Distribution[B, N] = ???
+  
   def observe(): A = ???
 }

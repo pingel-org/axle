@@ -1,9 +1,7 @@
 package axle.stats
 
-import axle._
-import spire.math._
-import spire.implicits._
-import spire.algebra._
+import spire.algebra.Eq
+import spire.algebra.Field
 
 trait RandomVariable[A, N] {
   
@@ -94,12 +92,12 @@ case class RandomVariable2[A, G1, G2, N: Field](
   
   def probability(a: A, given1: Case[G1, N], given2: Case[G2, N]): N = distribution.probabilityOf(a, given1, given2)
 
-//  def observe(): A = for {
+  def observe(): A = observe(grv1.observe, grv2.observe)
+
+//  def map[B](): A = for {
 //    g1 <- grv1.observe
 //    g2 <- grv2.observe
 //  } yield observe(g1, g2)
-
-  def observe(): A = observe(grv1.observe, grv2.observe)
 
   def observe(gv1: G1, gv2: G2): A = distribution.observe(gv1, gv2)
 

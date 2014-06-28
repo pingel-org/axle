@@ -25,7 +25,7 @@ case class CaseAndGT[A: Manifest, N: Field](conjuncts: GenTraversable[Case[A, N]
   def probability[B](given: Option[Case[B, N]] = None): N =
     given
       .map(g => Π(conjuncts)({ (c: Case[A, N]) => P(c | g).apply() }))
-      .getOrElse(Π(conjuncts)({ P(_) }))
+      .getOrElse(Π(conjuncts)({ P(_).apply() }))
 
   def bayes = ???
 }
@@ -52,10 +52,10 @@ case class CaseOr[A, B, N: Field](left: Case[A, N], right: Case[B, N])
     given
       .map { g =>
         // P(left | g) + P(right | g) - P((left ∧ right) | g)
-        field.plus(P(left | g), P(right | g)) - P((left ∧ right) | g)
+        field.plus(P(left | g).apply(), P(right | g).apply()) - P((left ∧ right) | g).apply()
       }
       .getOrElse(
-        field.plus(P(left), P(right)) - P(left ∧ right))
+        field.plus(P(left).apply(), P(right).apply()) - P(left ∧ right).apply())
 
   def bayes = () => this.probability()
 
@@ -95,7 +95,7 @@ case class CaseIsnt[A, N: Field](rv: RandomVariable[A, N], v: A)
 
   val field = implicitly[Field[N]]
 
-  def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(rv is v))
+  def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(rv is v).apply())
 
   def bayes = () => this.probability()
 

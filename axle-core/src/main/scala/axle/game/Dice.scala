@@ -1,15 +1,18 @@
 package axle.game
 
-import axle.orderSymbols 
-import axle.stats._
-import spire.math._
-import spire.algebra._
-import spire.random._
-import spire.implicits._
+import scala.Vector
+
+import axle.orderSymbols
+import axle.stats.ConditionalProbabilityTable0
+import axle.stats.RandomVariable
+import axle.stats.RandomVariable0
+import axle.stats.rationalProbabilityDist
+import spire.implicits.IntAlgebra
+import spire.math.Rational
 
 object Dice {
 
-  def die(n: Int): RandomVariable[Int, Rational] =
+  def die(n: Int): RandomVariable0[Int, Rational] =
     RandomVariable0(
       "d" + n,
       new ConditionalProbabilityTable0((1 to n).map(i => (i, Rational(1, n))).toMap))

@@ -1,11 +1,31 @@
 package axle
 
+import scala.Vector
 import scala.collection.GenTraversable
-import axle._
+
 import axle.quanta.Information
-import spire.algebra._
-import spire.implicits._
-import spire.math._
+import axle.quanta.Information.bit
+import axle.stats.Case
+import axle.stats.ConditionalProbabilityTable0
+import axle.stats.EnrichedCaseGenTraversable
+import axle.stats.RandomVariable
+import spire.algebra.AdditiveMonoid
+import spire.algebra.Field
+import spire.algebra.NRoot
+import spire.algebra.Order
+import spire.algebra.Ring
+import spire.implicits.additiveGroupOps
+import spire.implicits.convertableOps
+import spire.implicits.literalIntAdditiveGroupOps
+import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.nrootOps
+import spire.implicits.orderOps
+import spire.implicits.semiringOps
+import spire.math.ConvertableFrom
+import spire.math.Number
+import spire.math.Rational
+import spire.math.Real
 import spire.random.Dist
 
 package object stats {
@@ -15,9 +35,7 @@ package object stats {
     Dist(Rational(_: Int, biggishInt))(Dist.intrange(0, biggishInt))
   }
 
-  implicit def evalProbability[N]: Probability[N] => N = _()
-
-  implicit def rv2it[K, N: Field](rv: RandomVariable[K, N]): IndexedSeq[K] = rv.values
+  //implicit def evalProbability[N]: Probability[N] => N = _()
 
   implicit def enrichCaseGenTraversable[A: Manifest, N: Field](cgt: GenTraversable[Case[A, N]]): EnrichedCaseGenTraversable[A, N] = EnrichedCaseGenTraversable(cgt)
 
