@@ -1,29 +1,46 @@
 package axle.stats
 
-import axle.Σ
 import scala.util.Random
+
+import axle.Σ
+import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
-import spire.implicits._
-import spire.syntax._
-import spire.math.Rational
+import spire.algebra.Field
 import spire.algebra.Order
 import spire.algebra.Ring
-import spire.algebra.AdditiveMonoid
-import spire.random.mutable.Cmwc5
-import spire.algebra.Field
-import spire.compat.ordering
+import spire.implicits.eqOps
+import spire.implicits.literalIntAdditiveGroupOps
+import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.orderOps
 
-class TallyDistribution0[A: Order, N: Field: Order](tally: Map[A, N])
+class TallyDistribution0[A, N: Field: Order](tally: Map[A, N])
   extends Distribution0[A, N] {
 
   val ring = implicitly[Ring[N]]
   val addition = implicitly[AdditiveMonoid[N]]
 
-  def values: IndexedSeq[A] = tally.keys.toVector.sorted
+  def values: IndexedSeq[A] = tally.keys.toVector
 
-//  def map[B](f: A => B): Distribution[B, N] = 42
-//
-//  def flatMap[B](f: A => Distribution[B, N]): Distribution[B, N] = 42
+  def map[B](f: A => B): Distribution0[B, N] =
+    new TallyDistribution0(
+      values
+        .map({ v => f(v) -> probabilityOf(v) })
+        .groupBy(_._1)
+        .mapValues(_.map(_._2).reduce(addition.plus)))
+
+  def flatMap[B](f: A => Distribution0[B, N]): Distribution0[B, N] =
+    new TallyDistribution0(
+      values
+        .flatMap(a => {
+          val p = probabilityOf(a)
+          val subDistribution = f(a)
+          subDistribution.values.map(b => {
+            b -> (p * subDistribution.probabilityOf(b))
+          })
+        })
+        .groupBy(_._1)
+        .mapValues(_.map(_._2).reduce(addition.plus)))
 
   val totalCount: N = Σ(tally.values)(identity)
 
@@ -38,11 +55,11 @@ class TallyDistribution0[A: Order, N: Field: Order](tally: Map[A, N])
   def probabilityOf(a: A): N = tally.get(a).getOrElse(ring.zero) / totalCount
 }
 
-class TallyDistribution1[A: Order, G: Eq, N: Field: Order](tally: Map[(A, G), N])
+class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N])
   extends Distribution1[A, G, N] {
 
   lazy val _values: IndexedSeq[A] =
-    tally.keys.map(_._1).toSet.toVector.sortWith(implicitly[Order[A]].lt)
+    tally.keys.map(_._1).toSet.toVector
 
   def values: IndexedSeq[A] = _values
 
