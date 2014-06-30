@@ -176,8 +176,17 @@ object Plottable {
     def portion(left: Rational, v: Rational, right: Rational): Double =
       ((v - left) / (right - left)).toDouble
 
-    def step(from: Rational, to: Rational): Rational =
-      Rational(pow(10, ceil(log10(abs((to - from).toDouble))) - 1).toString)
+    import spire.implicits._
+
+    def step(from: Rational, to: Rational): Rational = {
+      val power = (ceil(log10((to - from).abs.toDouble)) - 1).toInt
+      if (power >= 0) {
+        Rational(10 ** power, 1)
+      } else {
+        // spire doesn't like negative arguments to **
+        Rational(1, 10 ** power.abs)
+      }
+    }
 
     def tics(from: Rational, to: Rational): Seq[(Rational, String)] = {
       val fromDouble = from.toDouble
