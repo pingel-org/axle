@@ -58,9 +58,8 @@ class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], _name
 
   def probabilityOf(a: A): N = p.get(a).getOrElse(field.zero)
 
-  lazy val charWidth: Int = values.map(_.toString.length).reduce(math.max)
-
   def show(implicit order: Order[A]): String =
+    s"$name\n" + 
     values.sorted.map(a => {
       val aString = a.toString
       (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + probabilityOf(a).toString)

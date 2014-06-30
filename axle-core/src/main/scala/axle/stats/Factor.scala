@@ -102,11 +102,11 @@ trait FactorModule {
 
     def apply(c: Seq[CaseIs[T, N]]): N = elements(indexOf(c))
 
-    override def toString: String = "TODO"
-//      varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
-//        cases.map(kase =>
-//          kase.map(ci => ci.v.toString.padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
-//            " " + this(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
+    override def toString: String =
+      varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
+        cases.map(kase =>
+          kase.map(ci => ci.v.toString.padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
+            " " + this(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
 
     def toHtml: xml.Node =
       <table border={ "1" }>

@@ -61,9 +61,8 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], _name: String = "
 
   def probabilityOf(a: A): N = tally.get(a).getOrElse(ring.zero) / totalCount
 
-  lazy val charWidth: Int = values.map(_.toString.length).reduce(math.max)
-
   def show(implicit order: Order[A]): String =
+    s"$name\n" +
     values.sorted.map(a => {
       val aString = a.toString
       (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + probabilityOf(a).toString)

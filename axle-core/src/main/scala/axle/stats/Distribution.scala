@@ -28,7 +28,8 @@ trait Distribution[A, N] {
   def observe(): A
 
   def probabilityOf(a: A): N
-  
+
+  lazy val charWidth: Int = (name.length :: values.map(_.toString.length).toList).reduce(math.max)
 }
 
 trait Distribution0[A, N] extends Distribution[A, N] {
