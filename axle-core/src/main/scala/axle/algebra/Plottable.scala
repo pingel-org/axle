@@ -208,7 +208,8 @@ object Plottable {
     }
   }
 
-  implicit def abstractAlgebraPlottable[N: Field: Order](implicit space: MetricSpace[N, Double]) = new Plottable[N] {
+  // TODO make "implicit" when this is ready
+  def abstractAlgebraPlottable[N: Field: Order](implicit space: MetricSpace[N, Double]) = new Plottable[N] {
 
     import spire.algebra._
     import spire.implicits._
