@@ -5,12 +5,14 @@ import math.Ordering
 import math.Ordering.Implicits._
 
 object PokerHandCategory {
-
+  
   implicit object PokerHandCategoryOrdering extends Ordering[PokerHandCategory] {
     def compare(a: PokerHandCategory, b: PokerHandCategory): Int =
       a.asInt.compare(b.asInt)
   }
 
+  val categories = Vector(High, Pair, TwoPair, ThreeOfAKind, Straight, Flush, FullHouse, FourOfAKind, StraightFlush, RoyalFlush).sorted
+  
 }
 
 sealed trait PokerHandCategory {
