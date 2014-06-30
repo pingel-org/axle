@@ -20,22 +20,22 @@ trait EliminationTreeModule {
     def gatherVars(
       stop: Vertex[Factor[T, N]],
       node: Vertex[Factor[T, N]],
-      accumulated: Set[RandomVariable[T, N]]): Set[RandomVariable[T, N]] =
+      accumulated: Set[Distribution[T, N]]): Set[Distribution[T, N]] =
       graph
         .neighbors(node)
         .filter(n => !(n === stop))
         .foldLeft(accumulated ++ node.payload.variables)((a, y) => gatherVars(node, y, a))
 
-    def cluster(i: Vertex[Factor[T, N]]): Set[RandomVariable[T, N]] =
+    def cluster(i: Vertex[Factor[T, N]]): Set[Distribution[T, N]] =
       graph.neighbors(i).flatMap(separate(i, _)) ++ i.payload.variables
 
-    def separate(i: Vertex[Factor[T, N]], j: Vertex[Factor[T, N]]): Set[RandomVariable[T, N]] =
-      gatherVars(j, i, Set.empty[RandomVariable[T, N]]).intersect(gatherVars(i, j, Set[RandomVariable[T, N]]()))
+    def separate(i: Vertex[Factor[T, N]], j: Vertex[Factor[T, N]]): Set[Distribution[T, N]] =
+      gatherVars(j, i, Set.empty[Distribution[T, N]]).intersect(gatherVars(i, j, Set[Distribution[T, N]]()))
 
     // def constructEdge(v1: GV, v2: GV): GE = g += ((v1, v2), "")
     // def delete(node: GV): Unit = g.delete(node)
 
-    def allVariables: Set[RandomVariable[T, N]] =
+    def allVariables: Set[Distribution[T, N]] =
       graph.vertices.flatMap(_.payload.variables)
 
     // Note: previous version also handled case where 'node' wasn't in the graph

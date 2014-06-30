@@ -8,7 +8,7 @@ import axle.graph.JungDirectedGraph
 import spire.algebra._
 import spire.implicits._
 
-case class CausalModelNode[T: Eq, N: Field](rv: RandomVariable[T, N], observable: Boolean = true)
+case class CausalModelNode[T: Eq, N: Field](rv: Distribution[T, N], observable: Boolean = true)
 
 object CausalModelNode {
   implicit def cmnEq[T: Eq, N: Field]: Eq[CausalModelNode[T, N]] = new Eq[CausalModelNode[T, N]] {
@@ -17,7 +17,7 @@ object CausalModelNode {
   }
 }
 
-abstract class PFunction[T: Eq, N: Field](rv: RandomVariable[T, N], inputs: Seq[RandomVariable[T, N]])
+abstract class PFunction[T: Eq, N: Field](rv: Distribution[T, N], inputs: Seq[Distribution[T, N]])
 
 class CausalModel[T: Eq, N: Field](_name: String, graph: DirectedGraph[CausalModelNode[T, N], String])
 {
@@ -27,18 +27,18 @@ class CausalModel[T: Eq, N: Field](_name: String, graph: DirectedGraph[CausalMod
 
   def duplicate: CausalModel[T, N] = ???
 
-  def randomVariables: Vector[RandomVariable[T, N]] =
+  def randomVariables: Vector[Distribution[T, N]] =
     graph.vertices.map(_.payload.rv).toVector
 
   // TODO: this should probably be Option[Boolean] ?
-  def observes(rv: RandomVariable[T, N]): Boolean = findVertex(_.payload.rv === rv).map(_.payload.observable).getOrElse(false)
+  def observes(rv: Distribution[T, N]): Boolean = findVertex(_.payload.rv === rv).map(_.payload.observable).getOrElse(false)
 
-  def nodesFor(rvs: Set[RandomVariable[T, N]]): Set[Vertex[CausalModelNode[T, N]]] =
+  def nodesFor(rvs: Set[Distribution[T, N]]): Set[Vertex[CausalModelNode[T, N]]] =
     rvs.flatMap(rv => findVertex(_.payload.rv === rv))
 
-  def nodeFor(rv: RandomVariable[T, N]): Option[Vertex[CausalModelNode[T, N]]] = findVertex((n: Vertex[CausalModelNode[T, N]]) => n.payload.rv === rv)
+  def nodeFor(rv: Distribution[T, N]): Option[Vertex[CausalModelNode[T, N]]] = findVertex((n: Vertex[CausalModelNode[T, N]]) => n.payload.rv === rv)
 
-  // def vertexPayloadToRandomVariable(cmn: CausalModelNode[T]): RandomVariable[T] = cmn.rv
+  // def vertexPayloadToDistribution(cmn: CausalModelNode[T]): Distribution[T] = cmn.rv
 
   def addFunctions(pf: Seq[PFunction[T, N]]): CausalModel[T, N] = ???
 

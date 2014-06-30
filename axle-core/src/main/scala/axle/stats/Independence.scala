@@ -9,11 +9,11 @@ import spire.algebra.Field
  */
 
 case class Independence[T: Eq, N: Field](
-  X: Set[RandomVariable[T, N]],
-  Z: Set[RandomVariable[T, N]],
-  Y: Set[RandomVariable[T, N]]) {
+  X: Set[Distribution[T, N]],
+  Z: Set[Distribution[T, N]],
+  Y: Set[Distribution[T, N]]) {
 
-  def variablesToString(s: Set[RandomVariable[T, N]]): String = "{" + (s map { _.name }).mkString(", ") + "}"
+  def variablesToString(s: Set[Distribution[T, N]]): String = "{" + (s map { _.name }).mkString(", ") + "}"
 
   override def toString: String =
     "I(" + variablesToString(X) + ", " + variablesToString(Z) + ", " + variablesToString(Y) + ")"

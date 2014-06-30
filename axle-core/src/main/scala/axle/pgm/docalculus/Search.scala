@@ -34,7 +34,7 @@ object Search {
     if (depth <= maxDepth) {
       expand(model, quantity, namer).flatMap(es => {
         es.flatMap(e => {
-          val probFactory = CausalityProbability(Set.empty[RandomVariable[T, N]], Set.empty[RandomVariable[T, N]], Set.empty[RandomVariable[T, N]])
+          val probFactory = CausalityProbability(Set.empty[Distribution[T, N]], Set.empty[Distribution[T, N]], Set.empty[Distribution[T, N]])
           if (probFactory.actions.size === 0) {
             Some(List(e))
           } else {

@@ -25,8 +25,8 @@ object TwoD6Histogram extends Specification {
     "combined 2 D6 correctly" in {
 
       val twoD6 = for {
-        a <- die(6).distribution
-        b <- die(6).distribution
+        a <- die(6)
+        b <- die(6)
       } yield a + b
 
       twoD6.probabilityOf(2) must be equalTo Rational(1, 36)

@@ -13,13 +13,13 @@ class ABE extends Specification {
   import BayesianNetworkModule._
   import FactorModule._
 
-  val unknownBooleanDistribution = new UnknownDistribution0[Boolean, Rational](Vector(true, false))
+  val bools = Vector(true, false)
 
-  val B = new RandomVariable0("Burglary", unknownBooleanDistribution)
-  val E = new RandomVariable0("Earthquake", unknownBooleanDistribution)
-  val A = new RandomVariable0("Alarm", unknownBooleanDistribution)
-  val J = new RandomVariable0("John Calls", unknownBooleanDistribution)
-  val M = new RandomVariable0("Mary Calls", unknownBooleanDistribution)
+  val B = new UnknownDistribution0[Boolean, Rational](bools, "Burglary")
+  val E = new UnknownDistribution0[Boolean, Rational](bools, "Earthquake")
+  val A = new UnknownDistribution0[Boolean, Rational](bools, "Alarm")
+  val J = new UnknownDistribution0[Boolean, Rational](bools, "John Calls")
+  val M = new UnknownDistribution0[Boolean, Rational](bools, "Mary Calls")
 
   val bn = BayesianNetwork(
     "A sounds (due to Burglary or Earthquake) and John or Mary Call",
@@ -69,12 +69,12 @@ class ABE extends Specification {
 
       val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
 
-      val Q: Set[RandomVariable[Boolean, Rational]] = Set(E, B, A)
+      val Q: Set[Distribution[Boolean, Rational]] = Set(E, B, A)
       val order = List(J, M)
 
       // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
       // val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E is true)
-      // bn.getRandomVariables.map(rv => println(bn.getMarkovAssumptionsFor(rv)))
+      // bn.getDistributions.map(rv => println(bn.getMarkovAssumptionsFor(rv)))
       // println("P(B) = " + ans1) // 0.001
       // println("P(A| B, -E) = " + ans2) // 0.94
       // println("eliminating variables other than A, B, and E; and then finding those consistent with E = true")

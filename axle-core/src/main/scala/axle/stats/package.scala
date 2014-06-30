@@ -8,7 +8,7 @@ import axle.quanta.Information.bit
 import axle.stats.Case
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.EnrichedCaseGenTraversable
-import axle.stats.RandomVariable
+import axle.stats.Distribution
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.NRoot
@@ -41,8 +41,9 @@ package object stats {
 
   val sides = Vector('HEAD, 'TAIL)
 
-  def coin(pHead: Rational = Rational(1, 2)): RandomVariable[Symbol, Rational] =
-    RandomVariable0("coin", new ConditionalProbabilityTable0[Symbol, Rational](Map('HEAD -> pHead, 'TAIL -> (1 - pHead))))
+  def coin(pHead: Rational = Rational(1, 2)): Distribution[Symbol, Rational] =
+    new ConditionalProbabilityTable0[Symbol, Rational](
+      Map('HEAD -> pHead, 'TAIL -> (1 - pHead)), "coin")
 
   def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)
 
@@ -61,11 +62,11 @@ package object stats {
   }
 
   def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = stddev(xs)
-  
+
   import Information._
   import axle.quanta._
 
-  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: RandomVariable[A, N]): Information.Q = {
+  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = {
     val adder = implicitly[AdditiveMonoid[Real]]
     val field = implicitly[Field[N]]
     val cf = implicitly[ConvertableFrom[N]]
@@ -76,7 +77,7 @@ package object stats {
     Number(H.toDouble) *: bit // TODO Number(_.toDouble) should not be necessary
   }
 
-  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: RandomVariable[A, N]): Information.Q = entropy(X)
+  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = entropy(X)
 
   def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
     // TODO

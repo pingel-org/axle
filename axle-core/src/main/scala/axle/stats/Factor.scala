@@ -44,10 +44,10 @@ trait FactorModule {
       def one: Factor[T, N] = new Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
-    def apply[T: Eq, N: Field: ConvertableFrom: Order: Ordering: ClassTag](varList: Vector[RandomVariable[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
+    def apply[T: Eq, N: Field: ConvertableFrom: Order: Ordering: ClassTag](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
       new Factor(varList, values)
 
-    def cases[T: Eq, N: Field](varSeq: Vector[RandomVariable[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
+    def cases[T: Eq, N: Field](varSeq: Vector[Distribution[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
       IndexedCrossProduct(varSeq.map(_.values)) map { kase =>
         varSeq.zip(kase) map {
           case (rv, v) =>
@@ -57,7 +57,7 @@ trait FactorModule {
 
   }
 
-  class Factor[T: Eq, N: Field: Order: Ordering: ClassTag: ConvertableFrom](varList: Vector[RandomVariable[T, N]], values: Map[Vector[CaseIs[T, N]], N]) {
+  class Factor[T: Eq, N: Field: Order: Ordering: ClassTag: ConvertableFrom](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]) {
 
     val field = implicitly[Field[N]]
 
@@ -68,7 +68,7 @@ trait FactorModule {
         values.get(caseOf(i)).getOrElse(field.zero)
       } toArray
 
-    def variables: Vector[RandomVariable[T, N]] = varList
+    def variables: Vector[Distribution[T, N]] = varList
 
     // assume prior and condition are disjoint, and that they are
     // each compatible with this table
@@ -90,7 +90,7 @@ trait FactorModule {
     }
 
     def indexOf(cs: Seq[CaseIs[T, N]]): Int = {
-      val rvvs: Seq[(RandomVariable[T, N], T)] = cs.map(ci => (ci.rv, ci.v))
+      val rvvs: Seq[(Distribution[T, N], T)] = cs.map(ci => (ci.distribution, ci.v))
       val rvvm = rvvs.toMap
       crossProduct.indexOf(varList.map(rvvm))
     }
@@ -102,11 +102,11 @@ trait FactorModule {
 
     def apply(c: Seq[CaseIs[T, N]]): N = elements(indexOf(c))
 
-    override def toString: String =
-      varList.map(rv => rv.name.padTo(rv.charWidth, " ").mkString("")).mkString(" ") + "\n" +
-        cases.map(kase =>
-          kase.map(ci => ci.v.toString.padTo(ci.rv.charWidth, " ").mkString("")).mkString(" ") +
-            " " + this(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
+    override def toString: String = "TODO"
+//      varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
+//        cases.map(kase =>
+//          kase.map(ci => ci.v.toString.padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
+//            " " + this(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
 
     def toHtml: xml.Node =
       <table border={ "1" }>
@@ -121,7 +121,7 @@ trait FactorModule {
       </table>
 
     // Chapter 6 definition 6
-    def maxOut(variable: RandomVariable[T, N]): Factor[T, N] = {
+    def maxOut(variable: Distribution[T, N]): Factor[T, N] = {
       val newVars = variables.filter(v => !(variable === v))
       new Factor(newVars,
         Factor.cases(newVars)
@@ -129,7 +129,7 @@ trait FactorModule {
           .toMap)
     }
 
-    def projectToOnly(remainingVars: Vector[RandomVariable[T, N]]): Factor[T, N] =
+    def projectToOnly(remainingVars: Vector[Distribution[T, N]]): Factor[T, N] =
       new Factor(remainingVars,
         Factor.cases[T, N](remainingVars).toVector
           .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
@@ -137,53 +137,52 @@ trait FactorModule {
           .map({ case (k, v) => (k.toVector, axle.Σ(v.map(_._2))(identity)) })
           .toMap)
 
-    def tally(a: RandomVariable[T, N], b: RandomVariable[T, N]): Matrix[Double] = {
+    def tally(a: Distribution[T, N], b: Distribution[T, N]): Matrix[Double] =
       matrix[Double](
         a.values.size,
         b.values.size,
         (r: Int, c: Int) => axle.Σ(cases.filter(isSupersetOf(_, Vector(a is a.values(r), b is b.values(c)))).map(this(_)).toVector)(identity).toDouble)
-    }
 
-    def Σ(varToSumOut: RandomVariable[T, N]): Factor[T, N] = this.sumOut(varToSumOut)
+    def Σ(varToSumOut: Distribution[T, N]): Factor[T, N] = this.sumOut(varToSumOut)
 
     // depending on assumptions, this may not be the best way to remove the vars
-    def sumOut(gone: RandomVariable[T, N]): Factor[T, N] = {
+    def sumOut(gone: Distribution[T, N]): Factor[T, N] = {
       val position = varList.indexOf(gone)
       val newVars = varList.filter(v => !(v === gone))
       new Factor(
         newVars,
         Factor.cases(newVars).map(kase => {
           val reals = gone.values.map(gv => {
-            val ciGone = List(CaseIs(gone.asInstanceOf[RandomVariable[T, N]], gv)) // TODO cast
+            val ciGone = List(CaseIs(gone.asInstanceOf[Distribution[T, N]], gv)) // TODO cast
             this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
           })
           (kase, axle.Σ(reals)(identity))
         }).toMap)
     }
 
-    def Σ(varsToSumOut: Set[RandomVariable[T, N]]): Factor[T, N] = sumOut(varsToSumOut)
+    def Σ(varsToSumOut: Set[Distribution[T, N]]): Factor[T, N] = sumOut(varsToSumOut)
 
-    def sumOut(varsToSumOut: Set[RandomVariable[T, N]]): Factor[T, N] =
+    def sumOut(varsToSumOut: Set[Distribution[T, N]]): Factor[T, N] =
       varsToSumOut.foldLeft(this)((result, v) => result.sumOut(v))
 
     // as defined on chapter 6 page 15
     def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T, N]]]): Factor[T, N] = {
       val e = eOpt.get
       new Factor(variables,
-        Factor.cases(e.map(_.rv).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
+        Factor.cases(e.map(_.distribution).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
     }
 
-    def mentions(variable: RandomVariable[T, N]): Boolean =
+    def mentions(variable: Distribution[T, N]): Boolean =
       variables.exists(v => variable.name === v.name)
 
     def isSupersetOf(left: Seq[CaseIs[T, N]], right: Seq[CaseIs[T, N]]): Boolean = {
-      val ll: Seq[(RandomVariable[T, N], T)] = left.map(ci => (ci.rv, ci.v))
+      val ll: Seq[(Distribution[T, N], T)] = left.map(ci => (ci.distribution, ci.v))
       val lm = ll.toMap
-      right.forall((rightCaseIs: CaseIs[T, N]) => lm.contains(rightCaseIs.rv) && (rightCaseIs.v === lm(rightCaseIs.rv)))
+      right.forall((rightCaseIs: CaseIs[T, N]) => lm.contains(rightCaseIs.distribution) && (rightCaseIs.v === lm(rightCaseIs.distribution)))
     }
 
-    def projectToVars(cs: Seq[CaseIs[T, N]], pVars: Set[RandomVariable[T, N]]): Seq[CaseIs[T, N]] =
-      cs.filter(ci => pVars.contains(ci.rv))
+    def projectToVars(cs: Seq[CaseIs[T, N]], pVars: Set[Distribution[T, N]]): Seq[CaseIs[T, N]] =
+      cs.filter(ci => pVars.contains(ci.distribution))
 
   }
 

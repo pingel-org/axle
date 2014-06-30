@@ -4,6 +4,6 @@ import axle.stats._
 import spire.algebra._
 
 case class CausalityProbability[T: Eq, N: Field](
-  question: Set[RandomVariable[T, N]],
-  given: Set[RandomVariable[T, N]],
-  actions: Set[RandomVariable[T, N]]) extends Form
+  question: Set[Distribution[T, N]],
+  given: Set[Distribution[T, N]],
+  actions: Set[Distribution[T, N]]) extends Form

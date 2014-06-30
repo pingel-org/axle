@@ -8,6 +8,6 @@ class VariableNamer[T: Eq, N: Field] {
 
   def duplicate: VariableNamer[T, N] = ???
 
-  def nextVariable(rv: RandomVariable[T, N]): RandomVariable[T, N] = ???
+  def nextVariable(rv: Distribution[T, N]): Distribution[T, N] = ???
 
 }

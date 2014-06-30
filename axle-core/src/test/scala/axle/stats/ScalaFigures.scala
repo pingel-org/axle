@@ -15,13 +15,15 @@ import FactorModule.Factor
 
 class ScalaFigures extends Specification {
 
-  val unknownBooleanDistribution = new UnknownDistribution0[Boolean, Rational](Vector(true, false))
-  
-  val A = new RandomVariable0("A", unknownBooleanDistribution)
-  val B = new RandomVariable0("B", unknownBooleanDistribution)
-  val C = new RandomVariable0("C", unknownBooleanDistribution)
-  val D = new RandomVariable0("D", unknownBooleanDistribution)
-  val E = new RandomVariable0("E", unknownBooleanDistribution)
+  val bools = Vector(true, false)
+
+  def ubd(name: String) = new UnknownDistribution0[Boolean, Rational](bools, name)
+
+  val A = ubd("A")
+  val B = ubd("B")
+  val C = ubd("C")
+  val D = ubd("D")
+  val E = ubd("E")
 
   def figure6_1: BayesianNetwork[Boolean, Rational] = {
 
@@ -131,11 +133,11 @@ class ScalaFigures extends Specification {
     val f61 = figure6_1
 
     // Figure 6.1 pruned towards B & E
-    val Q1: Set[RandomVariable[Boolean, Rational]] = Set(B, E)
+    val Q1: Set[Distribution[Boolean, Rational]] = Set(B, E)
     val f67pBE = f61.pruneNetworkVarsAndEdges(Q1, None)
 
     // Figure 6.2 pruned towards B
-    val Q2: Set[RandomVariable[Boolean, Rational]] = Set(B)
+    val Q2: Set[Distribution[Boolean, Rational]] = Set(B)
     val f67pB = f61.pruneNetworkVarsAndEdges(Q2, None)
 
     (f67pBE, f67pB)
@@ -178,8 +180,8 @@ class ScalaFigures extends Specification {
   }
 
   def figure7_12 = JoinTree(
-    Vector[Set[RandomVariable[Boolean, Rational]]](Set(A, B, C), Set(B, C, D), Set(C, E)),
-    (vs: Seq[Vertex[Set[RandomVariable[Boolean, Rational]]]]) => vs match {
+    Vector[Set[Distribution[Boolean, Rational]]](Set(A, B, C), Set(B, C, D), Set(C, E)),
+    (vs: Seq[Vertex[Set[Distribution[Boolean, Rational]]]]) => vs match {
       case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))
       case _ => Nil
     })

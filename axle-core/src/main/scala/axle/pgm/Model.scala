@@ -14,40 +14,40 @@ object Direction {
 
 }
 
-case class GenModel[T: Eq, N: Field](graph: DirectedGraph[RandomVariable[T, N], String]) {
+case class GenModel[T: Eq, N: Field](graph: DirectedGraph[Distribution[T, N], String]) {
 
-  def vertexPayloadToRandomVariable(mvp: T): RandomVariable[T, N] = ???
+  def vertexPayloadToDistribution(mvp: T): Distribution[T, N] = ???
 
-  def randomVariables: Vector[RandomVariable[T, N]] =
+  def randomVariables: Vector[Distribution[T, N]] =
     graph.vertices.map(_.payload).toVector
 
-  def variable(name: String): RandomVariable[T, N] = ??? // TODO name2variable(name)
+  def variable(name: String): Distribution[T, N] = ??? // TODO name2variable(name)
 
   def numVariables: Int = graph.size
 
   def blocks(
-    from: Set[RandomVariable[T, N]],
-    to: Set[RandomVariable[T, N]],
-    given: Set[RandomVariable[T, N]]): Boolean =
+    from: Set[Distribution[T, N]],
+    to: Set[Distribution[T, N]],
+    given: Set[Distribution[T, N]]): Boolean =
     _findOpenPath(
-      Map.empty[RandomVariable[T, N], Set[RandomVariable[T, N]]],
+      Map.empty[Distribution[T, N], Set[Distribution[T, N]]],
       Direction.UNKNOWN,
       None,
       from,
       to,
       given).isEmpty
 
-  //  val rvNameGetter = new Lister[RandomVariable, String]() {
-  //    def function(rv: RandomVariable): String = rv.getName
+  //  val rvNameGetter = new Lister[Distribution, String]() {
+  //    def function(rv: Distribution): String = rv.getName
   //  }
 
   def _findOpenPath(
-    visited: Map[RandomVariable[T, N], Set[RandomVariable[T, N]]],
+    visited: Map[Distribution[T, N], Set[Distribution[T, N]]],
     priorDirection: Int,
-    priorOpt: Option[RandomVariable[T, N]],
-    current: Set[RandomVariable[T, N]], // Note: this used to be mutabl.  I may have introduced bugs.
-    to: Set[RandomVariable[T, N]],
-    given: Set[RandomVariable[T, N]]): Option[List[RandomVariable[T, N]]] = {
+    priorOpt: Option[Distribution[T, N]],
+    current: Set[Distribution[T, N]], // Note: this used to be mutabl.  I may have introduced bugs.
+    to: Set[Distribution[T, N]],
+    given: Set[Distribution[T, N]]): Option[List[Distribution[T, N]]] = {
 
     lazy val logMessage = "_fOP: " + priorDirection +
       ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
@@ -85,7 +85,7 @@ case class GenModel[T: Eq, N: Field](graph: DirectedGraph[RandomVariable[T, N], 
         } else {
           _findOpenPath(
             priorOpt.map(prior => {
-              visited + (prior -> (visited.get(prior).getOrElse(Set[RandomVariable[T, N]]()) ++ Set(variable)))
+              visited + (prior -> (visited.get(prior).getOrElse(Set[Distribution[T, N]]()) ++ Set(variable)))
             }).getOrElse(visited),
             -1 * directionPriorToVar,
             Some(variable),

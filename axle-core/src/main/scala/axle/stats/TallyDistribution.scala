@@ -15,12 +15,14 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.orderOps
 import spire.compat.ordering
 
-class TallyDistribution0[A, N: Field: Order](tally: Map[A, N])
+class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], _name: String = "unnamed")
   extends Distribution0[A, N] {
 
   val ring = implicitly[Ring[N]]
   val addition = implicitly[AdditiveMonoid[N]]
 
+  def name: String = _name
+  
   def values: IndexedSeq[A] = tally.keys.toVector
 
   def map[B](f: A => B): TallyDistribution0[B, N] =
@@ -43,8 +45,12 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N])
         .groupBy(_._1)
         .mapValues(_.map(_._2).reduce(addition.plus)))
 
-  val totalCount: N = Σ(tally.values)(identity)
+  def is(v: A): CaseIs[A, N] = CaseIs(this, v)
 
+  def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
+  
+  val totalCount: N = Σ(tally.values)(identity)
+  
   val bars: Map[A, N] =
     tally.scanLeft((null.asInstanceOf[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2)))
 
@@ -65,9 +71,11 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N])
     
 }
 
-class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N])
+class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N], _name: String = "unnamed")
   extends Distribution1[A, G, N] {
 
+  def name: String = _name
+  
   lazy val _values: IndexedSeq[A] =
     tally.keys.map(_._1).toSet.toVector
 
@@ -75,6 +83,10 @@ class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N])
 
   val gvs = tally.keys.map(_._2).toSet
 
+  def is(v: A): CaseIs[A, N] = CaseIs(this, v)
+
+  def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
+  
   val totalCount = Σ(tally.values)(identity)
 
   def observe(): A = ???

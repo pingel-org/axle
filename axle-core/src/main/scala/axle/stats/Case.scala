@@ -7,7 +7,7 @@ import spire.implicits._
 import spire.algebra._
 
 abstract class Case[A, N: Field] {
-  
+
   def and[B](right: Case[B, N]): Case[(A, B), N] = CaseAnd(this, right)
   def ∧[B](right: Case[B, N]): Case[(A, B), N] = CaseAnd(this, right)
   def ∩[B](right: Case[B, N]): Case[(A, B), N] = CaseAnd(this, right)
@@ -32,7 +32,7 @@ case class CaseAndGT[A: Manifest, N: Field](conjuncts: GenTraversable[Case[A, N]
 
 case class CaseAnd[A, B, N: Field](left: Case[A, N], right: Case[B, N])
   extends Case[(A, B), N] {
-  
+
   def probability[C](given: Option[Case[C, N]] = None): N =
     (given.map(g => P(left | g) * P(right | g)).getOrElse(P(left) * P(right))).apply()
 
@@ -75,27 +75,28 @@ case class CaseGiven[A, B, N: Field](c: Case[A, N], given: Case[B, N])
 }
 
 // TODO: may want CaseIs{With, No] classes to avoid the run-time type-checking below
-case class CaseIs[A, N: Field](rv: RandomVariable[A, N], v: A)
+case class CaseIs[A, N: Field](distribution: Distribution[A, N], v: A)
   extends Case[A, N] {
 
-  def probability[B](given: Option[Case[B, N]]): N = rv match {
-    case rvNo: RandomVariable0[A, N] => rvNo.probability(v)
-    case rvWith: RandomVariable1[A, B, N] => given
-      .map(g => rvWith.probability(v, g))
-      .getOrElse(rvWith.probability(v))
-  }
+  def probability[G](given: Option[Case[G, N]]): N =
+    distribution match {
+      case d0: Distribution0[A, N] => d0.probabilityOf(v)
+      case d1: Distribution1[A, G, N] => given
+        .map(g => d1.probabilityOf(v, g))
+        .getOrElse(d1.probabilityOf(v))
+    }
 
   def bayes = () => this.probability()
 
-  override def toString: String = rv.name + " = " + v
+  override def toString: String = distribution.name + " = " + v
 }
 
-case class CaseIsnt[A, N: Field](rv: RandomVariable[A, N], v: A)
+case class CaseIsnt[A, N: Field](distribution: Distribution[A, N], v: A)
   extends Case[A, N] {
 
   val field = implicitly[Field[N]]
 
-  def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(rv is v).apply())
+  def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(distribution is v).apply())
 
   def bayes = () => this.probability()
 

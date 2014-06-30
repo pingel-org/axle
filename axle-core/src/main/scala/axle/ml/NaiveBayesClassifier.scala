@@ -4,9 +4,9 @@ import scala.BigDecimal
 
 import axle.enrichGenSeq
 import axle.stats.P
-import axle.stats.RandomVariable
-import axle.stats.RandomVariable0
-import axle.stats.RandomVariable1
+import axle.stats.Distribution
+import axle.stats.Distribution0
+import axle.stats.Distribution1
 import axle.stats.TallyDistribution0
 import axle.stats.TallyDistribution1
 import axle.Π
@@ -25,8 +25,8 @@ object NaiveBayesClassifier {
 
   def apply[DATA, FEATURE: Order, CLASS: Order: Eq](
     data: collection.GenSeq[DATA],
-    pFs: List[RandomVariable[FEATURE, BigDecimal]],
-    pC: RandomVariable[CLASS, BigDecimal],
+    pFs: List[Distribution[FEATURE, BigDecimal]],
+    pC: Distribution[CLASS, BigDecimal],
     featureExtractor: DATA => List[FEATURE],
     classExtractor: DATA => CLASS): NaiveBayesClassifier[DATA, FEATURE, CLASS] =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
@@ -35,8 +35,8 @@ object NaiveBayesClassifier {
 
 class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq](
   data: collection.GenSeq[DATA],
-  featureRandomVariables: List[RandomVariable[FEATURE, BigDecimal]],
-  classRandomVariable: RandomVariable[CLASS, BigDecimal],
+  featureRandomVariables: List[Distribution[FEATURE, BigDecimal]],
+  classRandomVariable: Distribution[CLASS, BigDecimal],
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS) extends Classifier[DATA, CLASS]() {
 
@@ -64,30 +64,28 @@ class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq](
 
   val classTally: Map[CLASS, BigDecimal] = data.map(classExtractor).tally[BigDecimal]
 
-  val C = RandomVariable0(classRandomVariable.name, new TallyDistribution0(classTally))
+  val C = new TallyDistribution0(classTally, classRandomVariable.name)
 
-  def tallyFor(featureRandomVariable: RandomVariable[FEATURE, BigDecimal]): Map[(FEATURE, CLASS), BigDecimal] =
+  def tallyFor(featureRandomVariable: Distribution[FEATURE, BigDecimal]): Map[(FEATURE, CLASS), BigDecimal] =
     featureTally.filter {
       case (k, v) => k._2 === featureRandomVariable.name
     }.map {
       case (k, v) => ((k._3, k._1), v)
     }.withDefaultValue(BigDecimal(0))
 
-  val Fs = featureRandomVariables.map(featureRandomVariable => RandomVariable1(
-    featureRandomVariable.name,
-    C,
-    new TallyDistribution1(tallyFor(featureRandomVariable))))
+  // Note: The "parent" (or "gien") of these feature variables is C
+  val Fs = featureRandomVariables.map(featureRandomVariable =>
+    new TallyDistribution1(tallyFor(featureRandomVariable), featureRandomVariable.name))
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
   def apply(d: DATA): CLASS = {
+      
     val fs = featureExtractor(d)
-
-    val foo: Int => CLASS => Real = (i: Int) => (c: CLASS) => P((Fs(i) is fs(i)) | (C is c)).apply()
 
     argmax(C.values,
       (c: CLASS) => (P(C is c).apply() *
-        ((c: CLASS) => Π(0 until numFeatures)(i => foo(i)(c)))(c)))
+        ((c: CLASS) => Π(0 until numFeatures)(i => P((Fs(i) is fs(i)) | (C is c)).apply()))(c)))
   }
 
 }

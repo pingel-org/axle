@@ -5,8 +5,6 @@ import org.specs2.mutable.Specification
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.ConditionalProbabilityTable2
 import axle.stats.P
-import axle.stats.RandomVariable0
-import axle.stats.RandomVariable2
 import axle.stats.coin
 import axle.stats.entropy
 import axle.stats.rationalProbabilityDist
@@ -22,11 +20,11 @@ class InformationTheorySpec extends Specification {
 
     "work" in {
 
-      val d = new RandomVariable0("d",
+      val d =
         new ConditionalProbabilityTable0(Map(
           "A" -> Rational(2, 10),
           "B" -> Rational(1, 10),
-          "C" -> Rational(7, 10))))
+          "C" -> Rational(7, 10)), "d")
 
       entropy(d).magnitude must be equalTo (1.1567796494470395)
     }
@@ -35,29 +33,24 @@ class InformationTheorySpec extends Specification {
   "cpt" should {
     "work" in {
 
-      val X = RandomVariable0("X", new ConditionalProbabilityTable0(Map(
+      val X = new ConditionalProbabilityTable0(Map(
         "foo" -> Rational(1, 10),
-        "food" -> Rational(9, 10))))
+        "food" -> Rational(9, 10)), "X")
 
-      val Y = RandomVariable0("Y", new ConditionalProbabilityTable0(Map(
+      val Y = new ConditionalProbabilityTable0(Map(
         "bar" -> Rational(9, 10),
-        "bard" -> Rational(1, 10))))
+        "bard" -> Rational(1, 10)), "Y")
 
-      val cpt = new ConditionalProbabilityTable2(Map(
+      // Note: A is given X and Y
+      val A = new ConditionalProbabilityTable2(Map(
         ("foo", "bar") -> Map("a" -> Rational(3, 10), "b" -> Rational(7, 10)),
         ("foo", "bard") -> Map("a" -> Rational(2, 10), "b" -> Rational(8, 10)),
         ("food", "bar") -> Map("a" -> Rational(9, 10), "b" -> Rational(1, 10)),
-        ("food", "bard") -> Map("a" -> Rational(5, 10), "b" -> Rational(5, 10))))
-
-      val A = RandomVariable2("A", X, Y, cpt)
+        ("food", "bard") -> Map("a" -> Rational(5, 10), "b" -> Rational(5, 10))),
+        "A")
 
       val p = P((A is "a") | (X is "foo") ∧ (Y isnt "bar"))
       val b = P((A is "a") ∧ (X is "foo")).bayes
-
-      // println("p = " + p)
-      // println("p() = " + p())
-      // println("b = " + b)
-      // println("b() = " + b())
 
       // TODO
       1 should be equalTo (1)

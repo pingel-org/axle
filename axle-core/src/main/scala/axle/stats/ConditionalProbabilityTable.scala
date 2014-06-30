@@ -12,9 +12,11 @@ import spire.random.Dist
 import spire.random.mutable.Cmwc5
 import spire.compat.ordering
 
-class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N])
+class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], _name: String = "unnamed")
   extends Distribution0[A, N] {
 
+  def name: String = _name
+  
   val field = implicitly[Field[N]]
 
   def map[B](f: A => B): ConditionalProbabilityTable0[B, N] =
@@ -43,6 +45,10 @@ class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N])
 
   val rng = Cmwc5()
 
+  def is(v: A): CaseIs[A, N] = CaseIs(this, v)
+
+  def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
+  
   def observe(): A = {
     val r = rng.next[N]
     bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
@@ -62,13 +68,19 @@ class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N])
 
 }
 
-class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]])
+class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]], _name: String = "unnamed")
   extends Distribution2[A, G1, G2, N] {
 
+  def name: String = _name
+  
   lazy val _values = p.values.map(_.keySet).reduce(_ union _).toVector
 
   def values: IndexedSeq[A] = _values
 
+  def is(v: A): CaseIs[A, N] = CaseIs(this, v)
+
+  def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
+  
   def observe(): A = ???
 
   def observe(gv1: G1, gv2: G2): A = ???
