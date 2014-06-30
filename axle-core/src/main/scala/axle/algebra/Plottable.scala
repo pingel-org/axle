@@ -1,6 +1,9 @@
 package axle.algebra
 
 import spire.math._
+import spire.algebra.Field
+import spire.algebra.Order
+import spire.algebra.MetricSpace
 import java.lang.Double.{ isInfinite, isNaN }
 import math.{ pow, abs, log10, floor, ceil }
 
@@ -203,6 +206,29 @@ object Plottable {
         }).filter({ case (d, _) => (d >= from && d <= to) })
       }
     }
+  }
+
+  implicit def abstractAlgebraPlottable[N: Field: Order](implicit space: MetricSpace[N, Double]) = new Plottable[N] {
+
+    import spire.algebra._
+    import spire.implicits._
+
+    val field = implicitly[Field[N]]
+    val order = implicitly[Order[N]]
+
+    def isPlottable(t: N): Boolean = true
+
+    def zero: N = field.zero
+
+    def compare(d1: N, d2: N): Int = order.compare(d1, d2)
+
+    def portion(left: N, v: N, right: N): Double =
+      space.distance(v, right) / space.distance(right, left)
+
+    // TODO
+    def tics(from: N, to: N): Seq[(N, String)] =
+      Vector((from, from.toString), (to, to.toString))
+
   }
 
 }
