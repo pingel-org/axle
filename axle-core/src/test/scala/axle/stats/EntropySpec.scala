@@ -1,12 +1,9 @@
 package axle.stats
 
-import axle.quanta.Information._
-import org.specs2.mutable._
-import axle._
-import axle.game.Dice._
-import spire.math._
-import spire.implicits._
-import spire.algebra._
+import org.specs2.mutable.Specification
+
+import axle.quanta.Information.Q
+import spire.math.Rational
 
 class EntropySpec extends Specification {
 
@@ -16,12 +13,12 @@ class EntropySpec extends Specification {
       val biasToEntropy = new collection.immutable.TreeMap[Rational, Q]() ++
         (0 to 100).map(i => (Rational(i, 100), entropy(coin(Rational(i, 100))))).toMap
 
-      // implicit val bitp = bit.plottable
-      //
-      //  val plot = Plot(List(("h", biasToEntropy)),
-      //    drawKey = false,
-      //    xAxisLabel = Some("p(x='HEAD)"),
-      //    title = Some("Entropy"))
+//      implicit val bitp = bit.plottable
+//
+//      val plot = Plot(List(("h", biasToEntropy)),
+//        drawKey = false,
+//        xAxisLabel = Some("p(x='HEAD)"),
+//        title = Some("Entropy"))
 
       biasToEntropy(Rational(1, 100)) < biasToEntropy(Rational(1, 2))
     }
