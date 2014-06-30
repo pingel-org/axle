@@ -1,6 +1,7 @@
 package axle.algebra
 
 import spire.math._
+import java.lang.Double.{ isInfinite, isNaN }
 import math.{ pow, abs, log10, floor, ceil }
 
 trait Plottable[T] extends Ordering[T] with Portionable[T] {
@@ -151,6 +152,48 @@ object Plottable {
       ticStream(from, to, stepFn, fmt).toList
     }
 
+  }
+
+  implicit object RationalPlottable extends Plottable[Rational] {
+
+    //    import spire.math._
+    //    import spire.implicits._
+    //    import spire.algebra._
+
+    def isPlottable(t: Rational): Boolean = {
+      val d = t.toDouble
+      !isInfinite(d) && !isNaN(d)
+    }
+
+    def zero: Rational = Rational.zero
+
+    def compare(d1: Rational, d2: Rational): Int = (d1 - d2) match {
+      case Rational.zero => 0
+      case r @ _ if r > Rational.zero => 1
+      case _ => -1
+    }
+
+    def portion(left: Rational, v: Rational, right: Rational): Double =
+      ((v - left) / (right - left)).toDouble
+
+    def step(from: Rational, to: Rational): Rational =
+      Rational(pow(10, ceil(log10(abs((to - from).toDouble))) - 1).toString)
+
+    def tics(from: Rational, to: Rational): Seq[(Rational, String)] = {
+      val fromDouble = from.toDouble
+      val toDouble = to.toDouble
+      if (isNaN(fromDouble) || isInfinite(fromDouble) || isNaN(toDouble) || isInfinite(toDouble)) {
+        List((Rational.zero, "0"), (Rational(1), "1"))
+      } else {
+        val s = step(from, to)
+        val start = (from / s).floor * s
+        val n = ((to - from) / s).ceil.toInt
+        (0 to n).map(i => {
+          val v = start + s * i
+          (v, v.toString)
+        }).filter({ case (d, _) => (d >= from && d <= to) })
+      }
+    }
   }
 
 }
