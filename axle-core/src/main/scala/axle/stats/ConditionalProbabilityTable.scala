@@ -17,14 +17,14 @@ class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N])
 
   val field = implicitly[Field[N]]
 
-  def map[B](f: A => B): Distribution0[B, N] =
+  def map[B](f: A => B): ConditionalProbabilityTable0[B, N] =
     new ConditionalProbabilityTable0[B, N](
       values
         .map({ v => f(v) -> probabilityOf(v) })
         .groupBy(_._1)
         .mapValues(_.map(_._2).reduce(field.plus)))
 
-  def flatMap[B](f: A => Distribution0[B, N]): Distribution0[B, N] =
+  def flatMap[B](f: A => Distribution0[B, N]): ConditionalProbabilityTable0[B, N] =
     new ConditionalProbabilityTable0[B, N](
       values
         .flatMap(a => {
@@ -51,6 +51,15 @@ class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N])
   def values: IndexedSeq[A] = p.keys.toVector
 
   def probabilityOf(a: A): N = p.get(a).getOrElse(field.zero)
+
+  lazy val charWidth: Int = values.map(_.toString.length).reduce(math.max)
+
+  def show(implicit order: Order[A]): String =
+    values.sorted.map(a => {
+      val aString = a.toString
+      (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + probabilityOf(a).toString)
+    }).mkString("\n")
+
 }
 
 class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]])

@@ -94,11 +94,6 @@ case class RandomVariable2[A, G1, G2, N: Field](
 
   def observe(): A = observe(grv1.observe, grv2.observe)
 
-//  def map[B](): A = for {
-//    g1 <- grv1.observe
-//    g2 <- grv2.observe
-//  } yield observe(g1, g2)
-
   def observe(gv1: G1, gv2: G2): A = distribution.observe(gv1, gv2)
 
 }

@@ -2,6 +2,7 @@ package axle.stats
 
 import axle.Σ
 import spire.math.Real
+import spire.algebra.Order
 
 trait Distribution[A, N] {
 
@@ -23,6 +24,9 @@ trait Distribution0[A, N] {
   def observe(): A
 
   def probabilityOf(a: A): N
+
+  def show(implicit order: Order[A]): String
+  
 }
 
 trait Distribution1[A, G1, N] {

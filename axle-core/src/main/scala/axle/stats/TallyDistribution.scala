@@ -13,6 +13,7 @@ import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.orderOps
+import spire.compat.ordering
 
 class TallyDistribution0[A, N: Field: Order](tally: Map[A, N])
   extends Distribution0[A, N] {
@@ -22,14 +23,14 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N])
 
   def values: IndexedSeq[A] = tally.keys.toVector
 
-  def map[B](f: A => B): Distribution0[B, N] =
+  def map[B](f: A => B): TallyDistribution0[B, N] =
     new TallyDistribution0(
       values
         .map({ v => f(v) -> probabilityOf(v) })
         .groupBy(_._1)
         .mapValues(_.map(_._2).reduce(addition.plus)))
 
-  def flatMap[B](f: A => Distribution0[B, N]): Distribution0[B, N] =
+  def flatMap[B](f: A => Distribution0[B, N]): TallyDistribution0[B, N] =
     new TallyDistribution0(
       values
         .flatMap(a => {
@@ -53,6 +54,15 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N])
   }
 
   def probabilityOf(a: A): N = tally.get(a).getOrElse(ring.zero) / totalCount
+
+  lazy val charWidth: Int = values.map(_.toString.length).reduce(math.max)
+
+  def show(implicit order: Order[A]): String =
+    values.sorted.map(a => {
+      val aString = a.toString
+      (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + probabilityOf(a).toString)
+    }).mkString("\n")
+    
 }
 
 class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N])

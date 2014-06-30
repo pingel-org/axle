@@ -16,4 +16,7 @@ extends Distribution0[A, N] {
   def flatMap[B](f: A => Distribution0[B, N]): Distribution0[B, N] = ???
   
   def observe(): A = ???
+
+  def show(implicit order: Order[A]): String = "unknown"
+  
 }
