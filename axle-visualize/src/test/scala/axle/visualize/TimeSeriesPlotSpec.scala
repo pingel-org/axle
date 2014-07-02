@@ -73,7 +73,7 @@ class TimeSeriesPlotSpec extends Specification {
         (0 to 100).map(j => (now.plusMinutes(2 * j) -> amp * sin(phase + (j / (10 * f))))).toMap)
     }
 
-    val lfs = (0 until 20).map(i => randomTimeSeries(i)).toList
+    val lfs = (0 until 20).map(randomTimeSeries).toList
 
     val plot = new Plot(
       lfs,
@@ -89,7 +89,7 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
-    val hm = new TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100.0, H(coin(Rational(i, 100))))).toMap
+    val hm = new TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100d, H(coin(Rational(i, 100))))).toMap
 
     val plot = new Plot(
       List(("h", hm)),
