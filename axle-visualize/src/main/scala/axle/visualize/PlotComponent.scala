@@ -23,7 +23,7 @@ import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
 
-class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])(implicit systemOpt: Option[ActorSystem])
+class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])(implicit systemOpt: Option[ActorSystem])
   extends JPanel
   with Fed {
 
@@ -50,7 +50,7 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])(implic
   override def paintComponent(g: Graphics): Unit = {
 
     val data = feeder map { dataFeedActor =>
-      val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(String, TreeMap[X, Y])]]
+      val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(String, D)]]
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
       Await.result(dataFuture, 1.seconds)
     } getOrElse (plot.initialValue)

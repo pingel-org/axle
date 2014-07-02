@@ -18,7 +18,7 @@ import axle.visualize.element.YTics
 import spire.algebra.Eq
 import spire.math.Number.apply
 
-class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(String, SortedMap[X, Y])], normalFont: Font)(implicit systemOpt: Option[ActorSystem]) {
+class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(implicit systemOpt: Option[ActorSystem]) {
 
   import plot._
 
@@ -33,17 +33,17 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(
     None
   }
 
-  val minXCandidates = (data collect { case (_, m) if m.size > 0 => m.firstKey }) ++ yAxis.toList
+  val minXCandidates = yAxis.toList ++ data flatMap { case (label, d: D) => orderedXs(d).headOption }
   val minX = if (minXCandidates.size > 0) minXCandidates.min else xPlottable.zero
 
-  val minYCandidates = ((data collect { case (_, m) if m.size > 0 => m.values min }) ++ xAxis.toList) filter { yPlottable.isPlottable }
-  val minY = if (minYCandidates.size > 0) minYCandidates.min else yPlottable.zero
+  val minYCandidates = xAxis.toList ++ data flatMap { case (label, d: D) => orderedXs(d).map(x => x2y(d, x)).headOption } filter { yPlottable.isPlottable }
+  val minY = if (minYCandidates.size > 0) minYCandidates.min(yPlottable) else yPlottable.zero
 
-  val maxXCandidates = (data collect { case (_, m) if m.size > 0 => m.lastKey }) ++ yAxis.toList
-  val maxX = if (maxXCandidates.size > 0) maxXCandidates.max else xPlottable.zero
+  val maxXCandidates = yAxis.toList ++ data flatMap { case (label, d: D) => orderedXs(d).headOption }
+  val maxX = if (minXCandidates.size > 0) maxXCandidates.max else xPlottable.zero
 
-  val maxYCandidates = ((data collect { case (_, m) if m.size > 0 => m.values max }) ++ xAxis.toList) filter { yPlottable.isPlottable }
-  val maxY = if (maxYCandidates.size > 0) maxYCandidates.max else yPlottable.zero
+  val maxYCandidates = xAxis.toList ++ data flatMap { case (label, d: D) => orderedXs(d).map(x => x2y(d, x)).headOption } filter { yPlottable.isPlottable }
+  val maxY = if (minYCandidates.size > 0) maxYCandidates.max(yPlottable) else yPlottable.zero
 
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
@@ -58,6 +58,6 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y], data: Seq[(
   val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), normalFont, true, 0 *: °, black)
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
 
-  val dataLines = new DataLines(scaledArea, data, colorStream, pointDiameter, connect)
+  val dataLines = new DataLines(scaledArea, data, orderedXs, x2y, colorStream, pointDiameter, connect)
 
 }

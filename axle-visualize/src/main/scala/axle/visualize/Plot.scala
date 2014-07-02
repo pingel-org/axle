@@ -8,13 +8,13 @@ import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
 
-import scala.collection.immutable.SortedMap
-
 import axle.algebra.Plottable
 import axle.quanta.Time
 
-case class Plot[X: Plottable, Y: Plottable](
-  initialValue: List[(String, SortedMap[X, Y])],
+case class Plot[X: Plottable, Y: Plottable, D](
+  initialValue: List[(String, D)],
+  orderedXs: D => IndexedSeq[X],
+  x2y: (D, X) => Y,
   connect: Boolean = true,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -34,4 +34,4 @@ case class Plot[X: Plottable, Y: Plottable](
   xAxisLabel: Option[String] = None,
   yAxis: Option[X] = None,
   yAxisLabel: Option[String] = None,
-  refresher: Option[(List[(String, SortedMap[X, Y])] => List[(String, SortedMap[X, Y])], Time.Q)] = None)
+  refresher: Option[(List[(String, D)] => List[(String, D)], Time.Q)] = None)

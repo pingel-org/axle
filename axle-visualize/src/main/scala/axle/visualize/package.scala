@@ -52,7 +52,7 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])(implicit system: Option[ActorSystem]): Component = new PlotComponent(plot)
+  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])(implicit system: Option[ActorSystem]): Component = new PlotComponent(plot)
 
   implicit def enComponentBarChart[S, Y: Plottable: Eq](barChart: BarChart[S, Y])(implicit system: Option[ActorSystem]): Component = new BarChartComponent(barChart)
 
