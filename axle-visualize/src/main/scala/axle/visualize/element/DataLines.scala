@@ -3,10 +3,11 @@ package axle.visualize.element
 import axle.visualize._
 import java.awt.Color
 import java.awt.Graphics2D
+import collection.immutable.SortedMap
 
 class DataLines[X, Y](
   scaledArea: ScaledArea2D[X, Y],
-  data: Seq[(String, collection.immutable.SortedMap[X, Y])],
+  data: Seq[(String, SortedMap[X, Y])],
   colorStream: Stream[Color],
   pointDiameter: Int,
   connect: Boolean = true) extends Paintable {

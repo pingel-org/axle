@@ -17,7 +17,7 @@ import akka.actor.Props
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Angle.{ ° => ° }
 import axle.visualize._
 import axle.visualize.element.Text
 import javax.swing.JPanel
@@ -34,8 +34,8 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq](plot: Plot[X, Y])(implic
 
   val dataFeedActorOpt: Option[ActorRef] = plot.refresher.flatMap {
     case (fn, interval) => {
-      systemOpt map { system =>
-        system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
+      systemOpt map {
+        _.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
       }
     }
   }

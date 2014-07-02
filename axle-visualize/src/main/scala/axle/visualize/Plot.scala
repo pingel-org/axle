@@ -2,15 +2,12 @@ package axle.visualize
 
 import java.awt.Color
 import Color._
-import scala.collection.immutable.TreeMap
-import akka.actor.Props
-import axle.actor.Defaults._
-import akka.actor.ActorSystem
-import axle.quanta.Time
+import scala.collection.immutable.SortedMap
 import axle.algebra.Plottable
+import axle.quanta.Time
 
 case class Plot[X: Plottable, Y: Plottable](
-  initialValue: List[(String, TreeMap[X, Y])],
+  initialValue: List[(String, SortedMap[X, Y])],
   connect: Boolean = true,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -30,4 +27,4 @@ case class Plot[X: Plottable, Y: Plottable](
   xAxisLabel: Option[String] = None,
   yAxis: Option[X] = None,
   yAxisLabel: Option[String] = None,
-  refresher: Option[(List[(String, TreeMap[X, Y])] => List[(String, TreeMap[X, Y])], Time.Q)] = None)
+  refresher: Option[(List[(String, SortedMap[X, Y])] => List[(String, SortedMap[X, Y])], Time.Q)] = None)
