@@ -49,6 +49,7 @@ import spire.algebra.NRoot
 import spire.implicits._
 import spire.math.Rational
 import spire.algebra.Order
+import spire.compat.ordering
 
 package object axle {
 
@@ -105,6 +106,8 @@ package object axle {
 
   def id[A](x: A): A = x
 
+  def argmax[K, N: Order](ks: Iterable[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
+  
   // IO
 
   def getLine(): String = scala.io.Source.stdin.getLines().next

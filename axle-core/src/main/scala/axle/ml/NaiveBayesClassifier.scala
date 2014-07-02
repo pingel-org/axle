@@ -46,8 +46,6 @@ class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq](
 
   val numFeatures = featureNames.size
 
-  def argmax[K, N: Order](ks: IndexedSeq[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
-
   // TODO no probability should ever be 0
 
   val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), BigDecimal].withDefaultValue(BigDecimal(0))
