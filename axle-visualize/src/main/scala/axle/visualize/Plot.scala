@@ -1,8 +1,15 @@
 package axle.visualize
 
 import java.awt.Color
-import Color._
+import java.awt.Color.blue
+import java.awt.Color.green
+import java.awt.Color.orange
+import java.awt.Color.pink
+import java.awt.Color.red
+import java.awt.Color.yellow
+
 import scala.collection.immutable.SortedMap
+
 import axle.algebra.Plottable
 import axle.quanta.Time
 

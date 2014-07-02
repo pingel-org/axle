@@ -1,8 +1,27 @@
 package axle.visualize
 
+import scala.Vector
+import scala.collection.immutable.TreeMap
+import scala.math.sin
+import scala.util.Random
+
+import org.joda.time.DateTime
 import org.specs2.mutable.Specification
-import spire.implicits._
-import spire.algebra._
+
+import axle.algebra.Plottable.DateTimePlottable
+import axle.algebra.Plottable.DoublePlottable
+import axle.quanta.Information
+import axle.quanta.Information.Q
+import axle.quanta.Information.bit
+import axle.quanta.Information.eqTypeclass
+import axle.stats.H
+import axle.stats.coin
+import spire.algebra.Eq
+import spire.implicits.SeqEq
+import spire.implicits.StringOrder
+import spire.implicits.eqOps
+import spire.math.Number.apply
+import spire.math.Rational
 
 class TimeSeriesPlotSpec extends Specification {
 
@@ -16,11 +35,6 @@ class TimeSeriesPlotSpec extends Specification {
   
   "Tics for units" should {
     "work" in {
-
-      import axle.quanta._
-      import Information._
-      import spire.algebra._
-      import spire.implicits._
 
       val tics = bit.plottable.tics(0 *: bit, 1 *: bit).toVector
       
@@ -48,13 +62,6 @@ class TimeSeriesPlotSpec extends Specification {
   }
 
   def t1(): Unit = {
-
-    import util.Random
-    import math.{ Pi, cos, sin }
-    import axle.visualize._
-    import axle.algebra.Plottable._
-    import org.joda.time.DateTime
-    import collection.immutable.TreeMap
 
     val now = new DateTime()
 

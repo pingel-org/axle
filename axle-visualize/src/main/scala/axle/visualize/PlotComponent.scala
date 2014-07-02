@@ -17,8 +17,7 @@ import akka.actor.Props
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{ ° => ° }
-import axle.visualize._
+import axle.quanta.Angle.{° => °}
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq

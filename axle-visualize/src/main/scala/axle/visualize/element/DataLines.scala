@@ -1,9 +1,13 @@
 package axle.visualize.element
 
-import axle.visualize._
 import java.awt.Color
 import java.awt.Graphics2D
-import collection.immutable.SortedMap
+
+import scala.collection.immutable.SortedMap
+
+import axle.visualize.Paintable
+import axle.visualize.Point2D
+import axle.visualize.ScaledArea2D
 
 class DataLines[X, Y](
   scaledArea: ScaledArea2D[X, Y],
