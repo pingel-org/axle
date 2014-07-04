@@ -24,6 +24,8 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
   val maxX = 1d
   val yAxis = minX
 
+  val slices = slicesFn(data)
+  
   val padding = 0.05 // on each side
   val widthPerSlice = (1d - (2 * padding)) / slices.size
   val whiteSpace = widthPerSlice * (1d - barWidthPercent)

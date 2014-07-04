@@ -14,11 +14,10 @@ import axle.quanta.Angle
 import Angle._
 
 case class BarChart[S, Y: Plottable, D](
-  slices: Seq[S],
   initialValue: D,
-  orderedSlices: D => IndexedSeq[S],
-  sLabeller: S => String = (s: S) => s.toString,
+  slicesFn: D => IndexedSeq[S],
   s2y: (D, S) => Y,
+  sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
   width: Int = 700,
   height: Int = 600,

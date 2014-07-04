@@ -8,16 +8,20 @@ import collection.immutable.SortedMap
 
 import axle.algebra.Plottable
 
-class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colorStream: Stream[Color]) extends Paintable {
+class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colorStream: Stream[Color])
+  extends Paintable {
 
   import chart._
+
+  val slices = slicesFn(initialValue)
 
   def paint(g2d: Graphics2D): Unit = {
     g2d.setFont(font)
     val lineHeight = g2d.getFontMetrics.getHeight
-    slices.zipWithIndex.zip(colorStream) foreach { case ((s, j), color) =>
-      g2d.setColor(color)
-      g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+    slices.zipWithIndex.zip(colorStream) foreach {
+      case ((s, j), color) =>
+        g2d.setColor(color)
+        g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
     }
   }
 
@@ -27,17 +31,19 @@ class BarChartGroupedKey[G, S, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, 
 
   import chart._
 
+  val slices = slicesFn(initialValue)
+  
   def paint(g2d: Graphics2D): Unit = {
     g2d.setFont(font)
     val lineHeight = g2d.getFontMetrics.getHeight
-    slices.zipWithIndex.zip(colorStream) foreach { case ((s, j), color) =>
-      g2d.setColor(color)
-      g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+    slices.zipWithIndex.zip(colorStream) foreach {
+      case ((s, j), color) =>
+        g2d.setColor(color)
+        g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
     }
   }
 
 }
-
 
 class Key[X, Y, D](
   plot: Plot[X, Y, D],
@@ -53,9 +59,10 @@ class Key[X, Y, D](
     val fontMetrics = g2d.getFontMetrics
 
     val lineHeight = g2d.getFontMetrics.getHeight
-    data.zip(colorStream).zipWithIndex foreach { case (((label, _), color), i) =>
-      g2d.setColor(color)
-      g2d.drawString(label, plot.width - width, topPadding + lineHeight * (i + 1))
+    data.zip(colorStream).zipWithIndex foreach {
+      case (((label, _), color), i) =>
+        g2d.setColor(color)
+        g2d.drawString(label, plot.width - width, topPadding + lineHeight * (i + 1))
     }
   }
 

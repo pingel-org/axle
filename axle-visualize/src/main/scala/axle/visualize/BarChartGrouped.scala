@@ -12,13 +12,12 @@ import axle.algebra.Plottable
 import axle.quanta.Time
 
 case class BarChartGrouped[G, S, Y: Plottable, D](
-  groups: Seq[G],
-  slices: Seq[S],
-  initialValue: D, // Map[(G, S), Y]
-  orderdGSs: D => IndexedSeq[(G, S)],
+  initialValue: D,
+  groupsFn: D => Seq[G],
+  slicesFn: D => Seq[S],
+  gs2y: (D, (G, S)) => Y,
   gLabeller: G => String = (g: G) => g.toString,
   sLabeller: S => String = (s: S) => s.toString,
-  gs2y: (D, (G, S)) => Y,
   drawKey: Boolean = true,
   width: Int = 700,
   height: Int = 600,
