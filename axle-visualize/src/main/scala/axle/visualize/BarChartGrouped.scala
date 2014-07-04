@@ -34,5 +34,5 @@ case class BarChartGrouped[G, S, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  colors: List[Color] = List(blue, red, green, orange, pink, yellow),
+  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow),
   refresher: Option[(D => D, Time.Q)] = None)

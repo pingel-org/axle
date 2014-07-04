@@ -35,5 +35,5 @@ case class BarChart[S, Y: Plottable, D](
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
   labelAngle: Angle.Q = 36 *: °,
-  colors: List[Color] = List(blue, red, green, orange, pink, yellow),
+  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow),
   refresher: Option[(D => D, Time.Q)] = None)
