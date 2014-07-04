@@ -159,9 +159,7 @@ object Plottable {
 
   implicit object RationalPlottable extends Plottable[Rational] {
 
-    //    import spire.math._
-    //    import spire.implicits._
-    //    import spire.algebra._
+    val order = implicitly[Order[Rational]]
 
     def isPlottable(t: Rational): Boolean = {
       val d = t.toDouble
@@ -170,11 +168,7 @@ object Plottable {
 
     def zero: Rational = Rational.zero
 
-    def compare(d1: Rational, d2: Rational): Int = (d1 - d2) match {
-      case Rational.zero => 0
-      case r @ _ if r > Rational.zero => 1
-      case _ => -1
-    }
+    def compare(d1: Rational, d2: Rational): Int = order.compare(d1, d2)
 
     def portion(left: Rational, v: Rational, right: Rational): Double =
       ((v - left) / (right - left)).toDouble
