@@ -23,7 +23,7 @@ class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colo
 
 }
 
-class BarChartGroupedKey[G, S, Y: Plottable](chart: BarChartGrouped[G, S, Y], font: Font, colorStream: Stream[Color]) extends Paintable {
+class BarChartGroupedKey[G, S, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, D], font: Font, colorStream: Stream[Color]) extends Paintable {
 
   import chart._
 

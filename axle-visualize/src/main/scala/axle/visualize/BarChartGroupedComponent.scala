@@ -8,6 +8,7 @@ import java.awt.Graphics2D
 import scala.Stream.continually
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
+import scala.reflect.ClassTag
 
 import DataFeedProtocol.Fetch
 import akka.actor.ActorRef
@@ -23,11 +24,10 @@ import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
 
-class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y])(implicit systemOpt: Option[ActorSystem])
+class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])(implicit systemOpt: Option[ActorSystem])
   extends JPanel
   with Fed {
 
-  import DataFeedProtocol._
   import chart._
 
   setMinimumSize(new Dimension(width, height))
@@ -58,7 +58,7 @@ class BarChartGroupedComponent[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G,
   override def paintComponent(g: Graphics): Unit = {
 
     val data = feeder map { dataFeedActor =>
-      val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[(G, S), Y]]
+      val dataFuture = (dataFeedActor ? Fetch()).mapTo[D]
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
       Await.result(dataFuture, 1.seconds)
     } getOrElse (chart.initialValue)

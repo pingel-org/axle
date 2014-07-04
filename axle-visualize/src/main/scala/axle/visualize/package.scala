@@ -58,7 +58,7 @@ package object visualize {
 
   implicit def enComponentBarChart[S, Y: Plottable: Eq, D: ClassTag](barChart: BarChart[S, Y, D])(implicit system: Option[ActorSystem]): Component = new BarChartComponent(barChart)
 
-  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq](barChart: BarChartGrouped[G, S, Y])(implicit system: Option[ActorSystem]): Component =
+  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq, D: ClassTag](barChart: BarChartGrouped[G, S, Y, D])(implicit system: Option[ActorSystem]): Component =
     new BarChartGroupedComponent(barChart)
 
   implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {

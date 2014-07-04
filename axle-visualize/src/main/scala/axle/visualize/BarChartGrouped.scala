@@ -11,12 +11,14 @@ import java.awt.Color.yellow
 import axle.algebra.Plottable
 import axle.quanta.Time
 
-case class BarChartGrouped[G, S, Y: Plottable](
+case class BarChartGrouped[G, S, Y: Plottable, D](
   groups: Seq[G],
   slices: Seq[S],
-  initialValue: Map[(G, S), Y],
+  initialValue: D, // Map[(G, S), Y]
+  orderdGSs: D => IndexedSeq[(G, S)],
   gLabeller: G => String = (g: G) => g.toString,
   sLabeller: S => String = (s: S) => s.toString,
+  gs2y: (D, (G, S)) => Y,
   drawKey: Boolean = true,
   width: Int = 700,
   height: Int = 600,
@@ -34,4 +36,4 @@ case class BarChartGrouped[G, S, Y: Plottable](
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
   colors: List[Color] = List(blue, red, green, orange, pink, yellow),
-  refresher: Option[(Map[(G, S), Y] => Map[(G, S), Y], Time.Q)] = None)
+  refresher: Option[(D => D, Time.Q)] = None)

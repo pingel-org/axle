@@ -4,9 +4,11 @@ import java.awt.Color
 import java.awt.Color.black
 import java.awt.Font
 
+import scala.reflect.ClassTag
+
 import axle.algebra.Plottable
 import axle.algebra.Plottable.DoublePlottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Angle.{ ° => ° }
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
@@ -16,7 +18,7 @@ import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.math.Number.apply
 
-class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y], data: Map[(G, S), Y], colorStream: Stream[Color], normalFont: Font) {
+class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font) {
 
   import chart._
 
@@ -30,8 +32,8 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y
 
   val yPlottable = implicitly[Plottable[Y]]
 
-  val minY = List(xAxis, slices.map(s => (groups.map(data(_, s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
-  val maxY = List(xAxis, slices.map(s => (groups.map(data(_, s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
+  val minY = List(xAxis, slices.map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
+  val maxY = List(xAxis, slices.map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
@@ -60,7 +62,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq](chart: BarChartGrouped[G, S, Y
   } yield {
     val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth
     val rightX = leftX + barSliceWidth
-    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(g, s)), fillColor = Some(color))
+    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, gs2y(data, (g, s))), fillColor = Some(color))
   }
 
 }
