@@ -16,7 +16,7 @@ import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.math.Number.apply
 
-class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], colorStream: Stream[Color], normalFont: Font) {
+class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font) {
 
   import chart._
 
@@ -30,8 +30,8 @@ class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], 
   
   val yPlottable = implicitly[Plottable[Y]]
 
-  val minY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
-  val maxY = List(xAxis, slices.map(s => (List(data(s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
+  val minY = List(xAxis, slices.map(s => (List(s2y(data, s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
+  val maxY = List(xAxis, slices.map(s => (List(s2y(data, s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
@@ -56,7 +56,7 @@ class BarChartView[S, Y: Plottable: Eq](chart: BarChart[S, Y], data: Map[S, Y], 
     case ((s, i), color) => {
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
       val rightX = leftX + (widthPerSlice * barWidthPercent)
-      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, data(s)), fillColor = Some(color))
+      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, s2y(data, s)), fillColor = Some(color))
     }
   })
 

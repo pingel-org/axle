@@ -8,7 +8,7 @@ import collection.immutable.SortedMap
 
 import axle.algebra.Plottable
 
-class BarChartKey[S, Y: Plottable](chart: BarChart[S, Y], font: Font, colorStream: Stream[Color]) extends Paintable {
+class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colorStream: Stream[Color]) extends Paintable {
 
   import chart._
 

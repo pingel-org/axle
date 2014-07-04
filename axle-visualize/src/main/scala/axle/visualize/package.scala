@@ -1,6 +1,8 @@
 
 package axle
 
+import scala.reflect.ClassTag
+
 import java.awt.Color
 import java.awt.Component
 import java.awt.Font
@@ -54,7 +56,7 @@ package object visualize {
 
   implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])(implicit system: Option[ActorSystem]): Component = new PlotComponent(plot)
 
-  implicit def enComponentBarChart[S, Y: Plottable: Eq](barChart: BarChart[S, Y])(implicit system: Option[ActorSystem]): Component = new BarChartComponent(barChart)
+  implicit def enComponentBarChart[S, Y: Plottable: Eq, D: ClassTag](barChart: BarChart[S, Y, D])(implicit system: Option[ActorSystem]): Component = new BarChartComponent(barChart)
 
   implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq](barChart: BarChartGrouped[G, S, Y])(implicit system: Option[ActorSystem]): Component =
     new BarChartGroupedComponent(barChart)

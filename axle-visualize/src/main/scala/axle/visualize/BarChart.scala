@@ -13,10 +13,12 @@ import axle.quanta.Time
 import axle.quanta.Angle
 import Angle._
 
-case class BarChart[S, Y: Plottable](
+case class BarChart[S, Y: Plottable, D](
   slices: Seq[S],
-  initialValue: Map[S, Y],
+  initialValue: D,
+  orderedSlices: D => IndexedSeq[S],
   sLabeller: S => String = (s: S) => s.toString,
+  s2y: (D, S) => Y,
   drawKey: Boolean = true,
   width: Int = 700,
   height: Int = 600,
@@ -35,4 +37,4 @@ case class BarChart[S, Y: Plottable](
   yAxisLabel: Option[String] = None,
   labelAngle: Angle.Q = 36 *: °,
   colors: List[Color] = List(blue, red, green, orange, pink, yellow),
-  refresher: Option[(Map[S, Y] => Map[S, Y], Time.Q)] = None)
+  refresher: Option[(D => D, Time.Q)] = None)

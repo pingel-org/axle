@@ -4,6 +4,7 @@ import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
 
+import scala.reflect.ClassTag
 import scala.Stream.continually
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
@@ -21,7 +22,7 @@ import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
 
-class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])(implicit systemOpt: Option[ActorSystem])
+class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, D])(implicit systemOpt: Option[ActorSystem])
   extends JPanel
   with Fed {
 
@@ -56,7 +57,7 @@ class BarChartComponent[S, Y: Plottable: Eq](chart: BarChart[S, Y])(implicit sys
   override def paintComponent(g: Graphics): Unit = {
 
     val data = feeder map { dataFeedActor =>
-      val dataFuture = (dataFeedActor ? Fetch()).mapTo[Map[S, Y]]
+      val dataFuture = (dataFeedActor ? Fetch()).mapTo[D]
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
       Await.result(dataFuture, 1.seconds)
     } getOrElse (chart.initialValue)
