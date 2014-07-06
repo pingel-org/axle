@@ -1,24 +1,23 @@
 
-After `sbt publish`
+After `sbt publish` (for snapshot)
 
-
-In order:
+To publish version $v (for example 0.1-M12):
  edit project/Build.scala (change version)
  git tag
- git tag v0.1-M12
+ git tag v$v
  git add project/Build.scala
  sbt publish-signed
- git commit -m "tagged v0.1-M12"
+ git commit -m "tagged v$v"
  git push --tags
  https://oss.sonatype.org/
  Staging Repositories
  find org.pingel repository
  close
- "closing axle 0.1-M12"
+ "closing axle $v"
  wait
  find org.pingel repository
  release
- "releasing axle 0.1-M12"
+ "releasing axle $v"
  confirm at https://oss.sonatype.org/content/repositories/releases/org/pingel/
  edit project/Build.scala (change version)
  git add project/Build.scala
