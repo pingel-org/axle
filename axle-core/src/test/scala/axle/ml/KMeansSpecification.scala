@@ -26,8 +26,8 @@ class KMeansSpecification extends Specification {
 
       val data = shuffle(
         (0 until 20).map(i => randomPoint(Foo(100, 100), 0.1)) ++
-          (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)) ++
-          (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
+          (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
+      //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
       implicit val space = new axle.ml.distance.Euclidian(2)
 
@@ -40,12 +40,12 @@ class KMeansSpecification extends Specification {
         2,
         (p: Foo) => List(p.x, p.y),
         (features: Seq[Double]) => Foo(features(0), features(1)),
-        3,
+        K = 2,
         100)
 
       val exemplar = km.exemplar(km(Foo(99.9, 99.9)))
 
-      fooSimilarity(exemplar, Foo(100, 100)) must be lessThan 5.0
+      fooSimilarity(exemplar, Foo(100, 100)) must be lessThan 5d
     }
   }
 
