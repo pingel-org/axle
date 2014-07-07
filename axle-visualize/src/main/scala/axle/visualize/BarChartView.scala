@@ -24,7 +24,7 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
   val maxX = 1d
   val yAxis = minX
 
-  val slices = slicesFn(data).toVector
+  val slices = slicesFn(data)
   
   val padding = 0.05 // on each side
   val widthPerSlice = (1d - (2 * padding)) / slices.size
@@ -46,15 +46,15 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
 
   val gTics = new XTics(
     scaledArea,
-    slices.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, sLabeller(s)) }).toList,
+    slices.toStream.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, sLabeller(s)) }).toList,
     normalFont,
     false,
     labelAngle,
     black)
 
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
-
-  val bars = slices.zipWithIndex.zip(colorStream).map({
+  
+  val bars = slices.toStream.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
       val rightX = leftX + (widthPerSlice * barWidthPercent)

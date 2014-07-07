@@ -26,8 +26,8 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
   val maxX = 1d
   val yAxis = minX
 
-  val groups = groupsFn(data).toVector
-  val slices = slicesFn(data).toVector
+  val groups = groupsFn(data)
+  val slices = slicesFn(data)
   
   val padding = 0.05 // on each side
   val widthPerGroup = (1d - (2 * padding)) / groups.size
@@ -49,7 +49,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
 
   val gTics = new XTics(
     scaledArea,
-    groups.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, gLabeller(g)) }).toList,
+    groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, gLabeller(g)) }).toList,
     normalFont,
     false,
     36 *: °,
@@ -61,7 +61,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
 
   val bars = for {
     ((s, j), color) <- slices.toVector.zipWithIndex.zip(colorStream)
-    (g, i) <- groups.zipWithIndex
+    (g, i) <- groups.toStream.zipWithIndex
   } yield {
     val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth
     val rightX = leftX + barSliceWidth

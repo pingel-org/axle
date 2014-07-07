@@ -12,7 +12,7 @@ import axle.visualize.ScaledArea2D
 class DataLines[X, Y, D](
   scaledArea: ScaledArea2D[X, Y],
   data: Seq[(String, D)],
-  orderedXs: D => Iterator[X],
+  orderedXs: D => Traversable[X],
   x2y: (D, X) => Y,
   colorStream: Stream[Color],
   pointDiameter: Int,
