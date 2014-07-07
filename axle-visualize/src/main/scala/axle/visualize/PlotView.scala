@@ -40,7 +40,7 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
 
   val minYCandidates = xAxis.toList ++ (data flatMap {
     case (label, d: D) =>
-      val xs = orderedXs(d)
+      val xs = orderedXs(d).toVector
       if (xs.size == 0)
         None
       else
@@ -55,7 +55,7 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
 
   val maxYCandidates = xAxis.toList ++ (data flatMap {
     case (label, d: D) => {
-      val xs = orderedXs(d)
+      val xs = orderedXs(d).toVector
       if (xs.size == 0)
         None
       else

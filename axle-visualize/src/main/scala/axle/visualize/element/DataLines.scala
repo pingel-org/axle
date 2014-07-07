@@ -23,7 +23,7 @@ class DataLines[X, Y, D](
     data.zip(colorStream) foreach {
       case (((label, d), color)) =>
         g2d.setColor(color)
-        val xs = orderedXs(d)
+        val xs = orderedXs(d).toVector
         if (connect && xs.size > 1) {
           val xsStream = xs.toStream
           xsStream.zip(xsStream.tail) foreach {

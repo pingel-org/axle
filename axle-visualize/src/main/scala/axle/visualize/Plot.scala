@@ -12,7 +12,7 @@ import axle.algebra.Plottable
 import axle.quanta.Time
 
 case class Plot[X: Plottable, Y: Plottable, D](
-  initialValue: Seq[(String, D)],
+  initialValue: List[(String, D)],
   orderedXs: D => Iterator[X],
   x2y: (D, X) => Y,
   connect: Boolean = true,
@@ -34,4 +34,4 @@ case class Plot[X: Plottable, Y: Plottable, D](
   xAxisLabel: Option[String] = None,
   yAxis: Option[X] = None,
   yAxisLabel: Option[String] = None,
-  refresher: Option[(Seq[(String, D)] => Seq[(String, D)], Time.Q)] = None)
+  refresher: Option[(List[(String, D)] => List[(String, D)], Time.Q)] = None)

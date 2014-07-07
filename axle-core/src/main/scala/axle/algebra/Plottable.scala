@@ -1,6 +1,7 @@
 package axle.algebra
 
 import spire.math._
+import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.algebra.MetricSpace
@@ -35,7 +36,8 @@ object Plottable {
     def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
 
     def tics(from: Double, to: Double): Seq[(Double, String)] = {
-      if (from.isNaN || from.isInfinity || to.isNaN || to.isInfinity) {
+      import spire.implicits._
+      if ((from === to) || from.isNaN || from.isInfinity || to.isNaN || to.isInfinity) {
         List((0d, "0.0"), (1d, "1.0"))
       } else {
         val s = step(from, to)
