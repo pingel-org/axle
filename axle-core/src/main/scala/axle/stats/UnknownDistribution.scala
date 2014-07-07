@@ -4,7 +4,7 @@ import spire.algebra.Field
 import spire.algebra.Order
 import spire.random.Dist
 
-class UnknownDistribution0[A, N: Field: Order: Dist](_values: IndexedSeq[A], _name: String)
+case class UnknownDistribution0[A, N: Field: Order: Dist](_values: IndexedSeq[A], _name: String)
 extends Distribution0[A, N] {
 
   def name: String = _name
