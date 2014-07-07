@@ -1,7 +1,5 @@
 package axle.ml
 
-import scala.BigDecimal
-
 import axle.enrichGenSeq
 import axle.stats.P
 import axle.stats.Distribution
@@ -12,64 +10,66 @@ import axle.stats.TallyDistribution1
 import axle.Π
 import spire.algebra.Eq
 import spire.algebra.Order
+import spire.algebra.Field
 import spire.compat.ordering
-import spire.implicits.BigDecimalAlgebra
 import spire.implicits.MapInnerProductSpace
 import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.eqOps
 import spire.math.Real
 import spire.math.Real.apply
+import spire.implicits._
+import spire.syntax._
 
 object NaiveBayesClassifier {
 
-  def apply[DATA, FEATURE: Order, CLASS: Order: Eq](
+  def apply[DATA, FEATURE: Order, CLASS: Order: Eq, N: Field: Order](
     data: collection.GenSeq[DATA],
-    pFs: List[Distribution[FEATURE, BigDecimal]],
-    pC: Distribution[CLASS, BigDecimal],
+    pFs: List[Distribution[FEATURE, N]],
+    pC: Distribution[CLASS, N],
     featureExtractor: DATA => List[FEATURE],
-    classExtractor: DATA => CLASS): NaiveBayesClassifier[DATA, FEATURE, CLASS] =
+    classExtractor: DATA => CLASS): NaiveBayesClassifier[DATA, FEATURE, CLASS, N] =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
 }
 
-class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq](
+class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, N: Field: Order](
   data: collection.GenSeq[DATA],
-  featureRandomVariables: List[Distribution[FEATURE, BigDecimal]],
-  classRandomVariable: Distribution[CLASS, BigDecimal],
+  featureRandomVariables: List[Distribution[FEATURE, N]],
+  classRandomVariable: Distribution[CLASS, N],
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS) extends Classifier[DATA, CLASS]() {
 
   import axle._
 
-  val featureNames = featureRandomVariables.map(_.name)
+  val featureNames = featureRandomVariables map { _.name }
 
   val numFeatures = featureNames.size
 
   // TODO no probability should ever be 0
 
-  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), BigDecimal].withDefaultValue(BigDecimal(0))
+  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), N].withDefaultValue(implicitly[Field[N]].zero)
 
-  val featureTally: Map[(CLASS, String, FEATURE), BigDecimal] =
+  val featureTally: Map[(CLASS, String, FEATURE), N] =
     data.aggregate(emptyFeatureTally)(
       (acc, d) => {
         val fs = featureExtractor(d)
         val c = classExtractor(d)
-        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> BigDecimal(1)) }).toMap
+        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> implicitly[Field[N]].one) }).toMap
         acc + dContrib
       },
       _ + _)
 
-  val classTally: Map[CLASS, BigDecimal] = data.map(classExtractor).tally[BigDecimal]
+  val classTally: Map[CLASS, N] = data.map(classExtractor).tally[N]
 
   val C = new TallyDistribution0(classTally, classRandomVariable.name)
 
-  def tallyFor(featureRandomVariable: Distribution[FEATURE, BigDecimal]): Map[(FEATURE, CLASS), BigDecimal] =
+  def tallyFor(featureRandomVariable: Distribution[FEATURE, N]): Map[(FEATURE, CLASS), N] =
     featureTally.filter {
       case (k, v) => k._2 === featureRandomVariable.name
     }.map {
       case (k, v) => ((k._3, k._1), v)
-    }.withDefaultValue(BigDecimal(0))
+    }.withDefaultValue(implicitly[Field[N]].zero)
 
   // Note: The "parent" (or "gien") of these feature variables is C
   val Fs = featureRandomVariables.map(featureRandomVariable =>
@@ -78,7 +78,7 @@ class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq](
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
   def apply(d: DATA): CLASS = {
-      
+
     val fs = featureExtractor(d)
 
     argmax(C.values,
