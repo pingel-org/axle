@@ -13,8 +13,8 @@ import axle.quanta.Time
 
 case class BarChartGrouped[G, S, Y: Plottable, D](
   initialValue: D,
-  groupsFn: D => Seq[G],
-  slicesFn: D => Seq[S],
+  groupsFn: D => Iterator[G],
+  slicesFn: D => Iterator[S],
   gs2y: (D, (G, S)) => Y,
   gLabeller: G => String = (g: G) => g.toString,
   sLabeller: S => String = (s: S) => s.toString,

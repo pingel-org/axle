@@ -60,7 +60,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
   val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
 
   val bars = for {
-    ((s, j), color) <- slices.zipWithIndex.zip(colorStream)
+    ((s, j), color) <- slices.toVector.zipWithIndex.zip(colorStream)
     (g, i) <- groups.zipWithIndex
   } yield {
     val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth

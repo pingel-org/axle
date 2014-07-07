@@ -18,7 +18,7 @@ class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colo
   def paint(g2d: Graphics2D): Unit = {
     g2d.setFont(font)
     val lineHeight = g2d.getFontMetrics.getHeight
-    slices.zipWithIndex.zip(colorStream) foreach {
+    slices.toVector.zipWithIndex.zip(colorStream) foreach {
       case ((s, j), color) =>
         g2d.setColor(color)
         g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
@@ -36,7 +36,7 @@ class BarChartGroupedKey[G, S, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, 
   def paint(g2d: Graphics2D): Unit = {
     g2d.setFont(font)
     val lineHeight = g2d.getFontMetrics.getHeight
-    slices.zipWithIndex.zip(colorStream) foreach {
+    slices.toVector.zipWithIndex.zip(colorStream) foreach {
       case ((s, j), color) =>
         g2d.setColor(color)
         g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))

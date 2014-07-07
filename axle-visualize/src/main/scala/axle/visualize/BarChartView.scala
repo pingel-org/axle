@@ -54,7 +54,7 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
 
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
 
-  val bars = slices.zipWithIndex.zip(colorStream).map({
+  val bars = slices.toVector.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
       val rightX = leftX + (widthPerSlice * barWidthPercent)

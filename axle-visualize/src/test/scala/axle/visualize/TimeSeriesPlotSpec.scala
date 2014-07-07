@@ -77,7 +77,7 @@ class TimeSeriesPlotSpec extends Specification {
 
     val plot = new Plot(
       lfs,
-      (d: TreeMap[DateTime, Double]) => d.keysIterator.toVector,
+      (d: TreeMap[DateTime, Double]) => d.keysIterator,
       (d: TreeMap[DateTime, Double], dt: DateTime) => d(dt),
       connect = true,
       drawKey = true,
@@ -93,7 +93,7 @@ class TimeSeriesPlotSpec extends Specification {
 
     val plot = new Plot(
       List(("h", hm)),
-      (d: TreeMap[Double, Q]) => d.keysIterator.toVector,
+      (d: TreeMap[Double, Q]) => d.keysIterator,
       (d: TreeMap[Double, Q], x: Double) => d(x),
       connect = true,
       drawKey = false,

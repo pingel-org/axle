@@ -13,7 +13,7 @@ import axle.quanta.Time
 
 case class Plot[X: Plottable, Y: Plottable, D](
   initialValue: Seq[(String, D)],
-  orderedXs: D => Seq[X],
+  orderedXs: D => Iterator[X],
   x2y: (D, X) => Y,
   connect: Boolean = true,
   drawKey: Boolean = true,

@@ -15,7 +15,7 @@ import Angle._
 
 case class BarChart[S, Y: Plottable, D](
   initialValue: D,
-  slicesFn: D => IndexedSeq[S],
+  slicesFn: D => Iterator[S],
   s2y: (D, S) => Y,
   sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
