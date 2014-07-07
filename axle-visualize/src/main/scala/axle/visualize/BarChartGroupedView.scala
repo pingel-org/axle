@@ -26,8 +26,8 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
   val maxX = 1d
   val yAxis = minX
 
-  val groups = groupsFn(data)
-  val slices = slicesFn(data)
+  val groups = groupsFn(data).toVector
+  val slices = slicesFn(data).toVector
   
   val padding = 0.05 // on each side
   val widthPerGroup = (1d - (2 * padding)) / groups.size
@@ -35,8 +35,8 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
 
   val yPlottable = implicitly[Plottable[Y]]
   
-  val minY = List(xAxis, slicesFn(data).map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
-  val maxY = List(xAxis, slicesFn(data).map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
+  val minY = List(xAxis, slices.map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
+  val maxY = List(xAxis, slices.map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,

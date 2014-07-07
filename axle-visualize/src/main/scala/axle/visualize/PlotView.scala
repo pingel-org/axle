@@ -4,11 +4,10 @@ import java.awt.Color.black
 import java.awt.Font
 
 import scala.Stream.continually
-import scala.collection.immutable.SortedMap
 
 import akka.actor.ActorSystem
 import axle.algebra.Plottable
-import axle.quanta.Angle._
+import axle.quanta.Angle.{° => °}
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -16,6 +15,8 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 import spire.math.Number.apply
 
 class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(implicit systemOpt: Option[ActorSystem]) {
@@ -41,7 +42,7 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
   val minYCandidates = xAxis.toList ++ (data flatMap {
     case (label, d: D) =>
       val xs = orderedXs(d).toVector
-      if (xs.size == 0)
+      if (xs.size === 0)
         None
       else
         Some(xs map { x2y(d, _) } min (yPlottable))
