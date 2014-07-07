@@ -63,6 +63,10 @@ package object axle {
     def compare(x: Symbol, y: Symbol): Int = stringCompare.compare(x.toString, y.toString)
   }
 
+  implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
+  
+  implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))  
+  
   implicit val jodaDateTimeEq = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }
