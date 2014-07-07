@@ -107,7 +107,7 @@ package object axle {
   def id[A](x: A): A = x
 
   def argmax[K, N: Order](ks: Iterable[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
-  
+
   // IO
 
   def getLine(): String = scala.io.Source.stdin.getLines().next
@@ -138,5 +138,8 @@ package object axle {
   implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
     def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
   }
+
+  def smoosh[K1, K2, V](data: Map[K1, Map[K2, V]]): Map[(K2, K1), V] =
+    data flatMap { case (k1, inner) => inner.map({ case (k2, v) => (k2, k1) -> v }) } toMap
 
 }
