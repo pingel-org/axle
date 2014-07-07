@@ -23,7 +23,7 @@ object AxleBuild extends Build {
 
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2" % "2.3.11" % "test",
-      "org.scala-lang.modules" %% "scala-xml" % "1.0.1",
+      "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
       "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1"
     ),
 
