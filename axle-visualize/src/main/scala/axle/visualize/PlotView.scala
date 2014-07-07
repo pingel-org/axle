@@ -33,9 +33,9 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
     None
   }
 
-  val minXCandidates = yAxis.toList ++ data flatMap {
+  val minXCandidates = yAxis.toList ++ (data flatMap {
     case (label, d: D) => orderedXs(d).headOption
-  }
+  })
   val minX = if (minXCandidates.size > 0) minXCandidates.min else xPlottable.zero
 
   val minYCandidates = xAxis.toList ++ (data flatMap {
@@ -48,9 +48,9 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
   }) filter { yPlottable.isPlottable _ }
   val minY = if (minYCandidates.size > 0) minYCandidates.min(yPlottable) else yPlottable.zero
 
-  val maxXCandidates = yAxis.toList ++ data flatMap {
+  val maxXCandidates = yAxis.toList ++ (data flatMap {
     case (label, d: D) => orderedXs(d).lastOption
-  }
+  })
   val maxX = if (minXCandidates.size > 0) maxXCandidates.max else xPlottable.zero
 
   val maxYCandidates = xAxis.toList ++ (data flatMap {
