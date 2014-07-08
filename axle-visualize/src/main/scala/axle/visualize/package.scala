@@ -47,6 +47,7 @@ package object visualize {
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
     component.setFeeder(refreshFn, interval, system)
+    system.actorOf(Props(classOf[FrameRepaintingActor], frame, component.feeder.get))
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
