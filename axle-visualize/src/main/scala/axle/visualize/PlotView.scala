@@ -19,7 +19,7 @@ import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import spire.math.Number.apply
 
-class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(implicit systemOpt: Option[ActorSystem]) {
+class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font) {
 
   import plot._
 

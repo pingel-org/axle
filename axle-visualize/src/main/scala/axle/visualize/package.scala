@@ -11,6 +11,7 @@ import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
+import axle.quanta.Time
 
 import spire.algebra._
 
@@ -27,10 +28,10 @@ import axle.algebra.Plottable
 
 package object visualize {
 
-  object VisDefaults {
-
-    implicit val actorSystemOpt: Option[ActorSystem] = None
-  }
+  //  object VisDefaults {
+  //
+  //    implicit val actorSystemOpt: Option[ActorSystem] = None
+  //  }
 
   // default width/height was 1100/800
 
@@ -45,6 +46,21 @@ package object visualize {
         systemOpt foreach { system =>
           system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
         }
+      }
+      case _ => {}
+    }
+    frame.initialize()
+    val rc = frame.add(component)
+    rc.setVisible(true)
+    frame.setVisible(true)
+  }
+
+  def play[T](component: Component, refreshFn: T => T, interval: Time.Q, system: ActorSystem): Unit = {
+    val minSize = component.getMinimumSize
+    val frame = newFrame(minSize.width, minSize.height)
+    component match {
+      case f: Fed => f.feeder foreach { dataFeedActor =>
+        system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
       }
       case _ => {}
     }

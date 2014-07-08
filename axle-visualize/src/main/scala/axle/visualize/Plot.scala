@@ -33,5 +33,4 @@ case class Plot[X: Plottable, Y: Plottable, D](
   xAxis: Option[Y] = None,
   xAxisLabel: Option[String] = None,
   yAxis: Option[X] = None,
-  yAxisLabel: Option[String] = None,
-  refresher: Option[(List[(String, D)] => List[(String, D)], Time.Q)] = None)
+  yAxisLabel: Option[String] = None)

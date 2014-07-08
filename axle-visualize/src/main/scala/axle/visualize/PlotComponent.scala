@@ -17,13 +17,14 @@ import akka.actor.Props
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Time
+import axle.quanta.Angle.{ ° => ° }
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
 
-class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])(implicit systemOpt: Option[ActorSystem])
+class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])
   extends JPanel
   with Fed {
 
@@ -31,12 +32,10 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])(
 
   setMinimumSize(new Dimension(width, height))
 
-  val dataFeedActorOpt: Option[ActorRef] = plot.refresher.flatMap {
-    case (fn, interval) => {
-      systemOpt map {
-        _.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
-      }
-    }
+  var dataFeedActorOpt: Option[ActorRef] = None
+  
+  def setFeeder(fn: List[(String, D)] => List[(String, D)], interval: Time.Q, system: ActorSystem): Unit = {
+    dataFeedActorOpt = Some(system.actorOf(Props(new DataFeedActor(initialValue, fn, interval))))
   }
 
   def feeder: Option[ActorRef] = dataFeedActorOpt

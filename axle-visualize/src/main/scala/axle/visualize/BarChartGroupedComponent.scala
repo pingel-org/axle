@@ -17,14 +17,15 @@ import akka.actor.Props
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Time
+import axle.quanta.Angle.{ ° => ° }
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
 
-class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])(implicit systemOpt: Option[ActorSystem])
+class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])
   extends JPanel
   with Fed {
 
@@ -32,12 +33,10 @@ class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarCh
 
   setMinimumSize(new Dimension(width, height))
 
-  val dataFeedActorOpt: Option[ActorRef] = chart.refresher.flatMap {
-    case (fn, interval) => {
-      systemOpt map { system =>
-        system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
-      }
-    }
+  var dataFeedActorOpt: Option[ActorRef] = None
+
+  def setFeeder(fn: D => D, interval: Time.Q, system: ActorSystem): Unit = {
+    dataFeedActorOpt = Some(system.actorOf(Props(new DataFeedActor(initialValue, fn, interval))))
   }
 
   def feeder: Option[ActorRef] = dataFeedActorOpt

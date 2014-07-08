@@ -15,6 +15,7 @@ import akka.actor.ActorSystem
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
+import axle.quanta.Time
 import axle.quanta.Angle._
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.Text
@@ -22,7 +23,7 @@ import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
 
-class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, D])(implicit systemOpt: Option[ActorSystem])
+class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, D])
   extends JPanel
   with Fed {
 
@@ -31,12 +32,10 @@ class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, 
 
   setMinimumSize(new java.awt.Dimension(width, height))
 
-  val dataFeedActorOpt: Option[ActorRef] = chart.refresher.flatMap {
-    case (fn, interval) => {
-      systemOpt map { system =>
-        system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
-      }
-    }
+  var dataFeedActorOpt: Option[ActorRef] = None
+
+  def setFeeder(fn: D => D, interval: Time.Q, system: ActorSystem): Unit = {
+    dataFeedActorOpt = Some(system.actorOf(Props(new DataFeedActor(initialValue, fn, interval))))
   }
 
   def feeder: Option[ActorRef] = dataFeedActorOpt
