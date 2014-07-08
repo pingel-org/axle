@@ -3,6 +3,8 @@ package axle
 
 import scala.reflect.ClassTag
 
+import akka.actor.ActorSystem
+
 import java.awt.Color
 import java.awt.Component
 import java.awt.Font
@@ -16,7 +18,6 @@ import axle.quanta.Time
 import spire.algebra._
 
 import akka.actor.ActorRef
-import akka.actor.ActorSystem
 import akka.actor.Props
 
 import axle.graph._
@@ -27,11 +28,6 @@ import axle.pgm._
 import axle.algebra.Plottable
 
 package object visualize {
-
-  //  object VisDefaults {
-  //
-  //    implicit val actorSystemOpt: Option[ActorSystem] = None
-  //  }
 
   // default width/height was 1100/800
 
@@ -63,11 +59,11 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])(implicit system: Option[ActorSystem]): Component = new PlotComponent(plot)
+  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D]): Component = new PlotComponent(plot)
 
-  implicit def enComponentBarChart[S, Y: Plottable: Eq, D: ClassTag](barChart: BarChart[S, Y, D])(implicit system: Option[ActorSystem]): Component = new BarChartComponent(barChart)
+  implicit def enComponentBarChart[S, Y: Plottable: Eq, D: ClassTag](barChart: BarChart[S, Y, D]): Component = new BarChartComponent(barChart)
 
-  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq, D: ClassTag](barChart: BarChartGrouped[G, S, Y, D])(implicit system: Option[ActorSystem]): Component =
+  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq, D: ClassTag](barChart: BarChartGrouped[G, S, Y, D]): Component =
     new BarChartGroupedComponent(barChart)
 
   implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {
