@@ -1,13 +1,13 @@
 package axle.graph
 
-import axle._
-import axle.algebra._
-import spire.implicits._
-import spire.math._
-import spire.algebra._
-import collection.JavaConverters._
-import edu.uci.ics.jung.graph.DirectedSparseGraph
+import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.collection.JavaConverters.collectionAsScalaIterableConverter
+
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import spire.algebra.Eq
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 case class JungDirectedGraph[VP: Eq, EP: Eq](
   vps: Seq[VP],

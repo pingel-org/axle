@@ -1,10 +1,16 @@
 package axle.bio
 
-import math.max
-import Stream.{ cons, empty }
-import spire.algebra._
-import spire.implicits._
-import axle.matrix.JblasMatrixModule._
+import scala.Stream.cons
+import scala.Stream.empty
+import scala.Vector
+
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertInt
+import axle.matrix.JblasMatrixModule.matrix
+import spire.algebra.MetricSpace
+import spire.implicits.CharAlgebra
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 /**
  *

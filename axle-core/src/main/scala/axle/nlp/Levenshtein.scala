@@ -1,8 +1,10 @@
 package axle.nlp
 
+import axle.matrix.JblasMatrixModule.convertInt
+import axle.matrix.JblasMatrixModule.matrix
 import spire.algebra.MetricSpace
-import axle.matrix._
-import spire.implicits._
+import spire.implicits.CharAlgebra
+import spire.implicits.eqOps
 
 /**
  * Based on the Scala implementation of
@@ -11,8 +13,6 @@ import spire.implicits._
  */
 
 object Levenshtein extends MetricSpace[String, Int] {
-
-  import JblasMatrixModule.{matrix, Matrix, convertInt}
 
   def distance(s1: String, s2: String): Int = {
 

@@ -2,15 +2,12 @@ package axle.stats
 
 import spire.algebra.Field
 import spire.algebra.Order
+import spire.compat.ordering
 import spire.implicits.additiveSemigroupOps
-import spire.implicits.eqOps
-import spire.implicits.literalIntAdditiveGroupOps
-import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.orderOps
 import spire.random.Dist
 import spire.random.mutable.Cmwc5
-import spire.compat.ordering
 
 class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], _name: String = "unnamed")
   extends Distribution0[A, N] {

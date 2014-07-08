@@ -1,15 +1,16 @@
 package axle.ml
 
-import math.sqrt
-
-import axle.matrix._
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertDouble
+import axle.matrix.JblasMatrixModule.matrix
+import axle.matrix.JblasMatrixModule.numComponentsForCutoff
+import axle.matrix.JblasMatrixModule.pca
+import axle.matrix.JblasMatrixModule.std
+import axle.matrix.JblasMatrixModule.zscore
 
 object FeatureNormalizerModule extends FeatureNormalizerModule
 
 trait FeatureNormalizerModule {
-
-  // DistanceFunctionModule
-  import axle.matrix.JblasMatrixModule._
 
   trait FeatureNormalizer {
 

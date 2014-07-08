@@ -1,10 +1,15 @@
 package axle.bio
 
-import spire.algebra._
-import spire.implicits._
-import scala.collection.immutable.Stream
-import Stream.{cons, empty}
-import axle.matrix.JblasMatrixModule._
+import scala.Vector
+import scala.collection.immutable.Stream.cons
+import scala.collection.immutable.Stream.empty
+
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertInt
+import axle.matrix.JblasMatrixModule.matrix
+import spire.algebra.MetricSpace
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 /**
  *

@@ -1,10 +1,10 @@
 package axle.ml.distance
 
-import spire.algebra._
-import spire.math._
-import spire.implicits._
-import axle.matrix.JblasMatrixModule._
-import math.abs
+import scala.math.abs
+
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertDouble
+import spire.algebra.MetricSpace
 
 object Manhattan extends MetricSpace[Matrix[Double], Double] {
 

@@ -1,11 +1,12 @@
 package axle.graph
 
-import collection.JavaConverters._
-import axle._
-import axle.algebra._
-import spire.implicits._
-import spire.algebra._
+import scala.collection.JavaConverters.collectionAsScalaIterableConverter
+
+import axle.enrichIndexedSeq
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
+import spire.algebra.Eq
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 case class JungUndirectedGraph[VP: Manifest: Eq, EP: Eq](
   vps: Seq[VP],

@@ -1,7 +1,8 @@
 package axle
 
-import spire.algebra.AdditiveMonoid
 import scala.collection.GenTraversable
+
+import spire.algebra.AdditiveMonoid
 
 object Σ {
 

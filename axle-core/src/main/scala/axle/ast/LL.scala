@@ -1,22 +1,9 @@
 
 package axle.ast
 
-/**
- *
- * http://en.wikipedia.org/wiki/LL_parser
- * http://www.jambe.co.nz/UNI/FirstAndFollowSets.html
- * http://www.cs.pitt.edu/~mock/cs1622/lectures/lecture10.pdf
- * see http://blog.rafaelferreira.net/2008/07/type-safe-builder-pattern-in-scala.html
- *
- * TODO test first and follow (including scribd example)
- * TODO model input buffer
- * TODO create AST
- */
-
-import axle.algebra._
-import spire.math._
-import spire.implicits._
-import spire.algebra._
+import spire.algebra.Eq
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 class Symbol(_label: String) {
   def label: String = _label

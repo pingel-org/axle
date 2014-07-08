@@ -1,8 +1,5 @@
 package axle.algebra
 
-import spire.implicits._
-import spire.algebra._
-
 trait Functor[F[_]] {
 
   def fmap[A, B](xs: F[A], f: A => B): F[B]

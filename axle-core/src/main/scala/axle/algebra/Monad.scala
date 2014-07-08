@@ -1,6 +1,7 @@
 package axle.algebra
 
-import spire.algebra._
+import scala.Left
+import scala.Right
 
 // Writer
 // State

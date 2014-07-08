@@ -1,8 +1,8 @@
 package axle.pgm.docalculus
 
-import axle._
-import axle.stats._
-import spire.algebra._
+import axle.stats.Distribution
+import spire.algebra.Eq
+import spire.algebra.Field
 
 class VariableNamer[T: Eq, N: Field] {
 

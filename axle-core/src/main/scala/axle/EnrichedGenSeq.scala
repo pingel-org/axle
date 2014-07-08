@@ -1,11 +1,11 @@
 package axle
 
-import spire.math._
-import spire.implicits._
-import spire.algebra._
+import scala.collection.GenSeq
+import scala.collection.immutable.TreeMap
 
-import collection.GenSeq
-import collection.immutable.TreeMap
+import spire.algebra.Ring
+import spire.implicits.MapRng
+import spire.implicits.additiveSemigroupOps
 
 case class EnrichedGenSeq[T](genSeq: GenSeq[T]) {
 

@@ -1,22 +1,8 @@
 package axle.nlp
 
-/**
- * Vector Space Model
- *
- * For calculating document similarity.
- *
- * Note that distance and similarity are inverses
- *
- * http://en.wikipedia.org/wiki/Vector_space_model
- */
-
-// TODO edit distance tolerance
-// TODO stemming
-
-import axle._
-import spire.implicits._
 import spire.algebra._
 import spire.math._
+import spire.implicits._
 
 trait DocumentVectorSpace {
 

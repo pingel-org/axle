@@ -1,8 +1,10 @@
 package axle
 
-import collection.IndexedSeq
-import util.Random.nextInt
-import spire.implicits._
+import scala.collection.IndexedSeq
+import scala.util.Random.nextInt
+
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 object EnrichedIndexedSeq {
 

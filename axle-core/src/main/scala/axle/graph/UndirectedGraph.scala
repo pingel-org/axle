@@ -1,9 +1,6 @@
 package axle.graph
 
-import axle._
-
-import spire.algebra._
-import spire.implicits._
+import spire.algebra.Eq
 
 trait UndirectedGraph[VP, EP] {
 

@@ -1,9 +1,9 @@
 package axle.nlp
 
-import math.{ sqrt, log }
-import spire.algebra._
-import spire.math._
-import spire.implicits._
+import spire.algebra.Field
+import spire.algebra.InnerProductSpace
+import spire.algebra.MetricSpace
+import spire.implicits.DoubleAlgebra
 
 /**
  *

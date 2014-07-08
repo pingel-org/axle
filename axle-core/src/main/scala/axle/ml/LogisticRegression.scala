@@ -1,7 +1,14 @@
 package axle.ml
 
-import axle.matrix._
-import math.{ exp, log }
+import scala.math.exp
+import scala.math.log
+
+import FeatureNormalizerModule.LinearFeatureNormalizer
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertBoolean
+import axle.matrix.JblasMatrixModule.convertDouble
+import axle.matrix.JblasMatrixModule.matrix
+import axle.matrix.JblasMatrixModule.ones
 
 object LogisticRegressionModule extends LogisticRegressionModule
 

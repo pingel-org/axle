@@ -1,7 +1,7 @@
 package axle.graph
 
-import spire.algebra._
-import spire.implicits._
+import spire.algebra.Eq
+import spire.implicits.eqOps
 
 case class Edge[S, EP: Eq](storage: S, payloadF: S => EP) {
   def payload: EP = payloadF(storage)

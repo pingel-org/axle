@@ -1,10 +1,11 @@
 package axle.pgm
 
-import axle._
-import axle.stats._
-import axle.graph._
-import spire.implicits._
-import spire.algebra._
+import axle.graph.JungUndirectedGraph
+import axle.graph.Vertex
+import axle.stats.Distribution
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.implicits.StringOrder
 
 case class InteractionGraph[T: Manifest: Eq, N: Field: Manifest](
   vps: Seq[Distribution[T, N]],

@@ -1,12 +1,14 @@
 package axle.pgm.docalculus
 
-import axle._
-import axle.pgm._
-import axle.stats._
-import axle.graph._
+import axle.graph.DirectedGraph
 import axle.graph.JungDirectedGraph
-import spire.algebra._
-import spire.implicits._
+import axle.graph.Vertex
+import axle.stats.Distribution
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.implicits.BooleanStructure
+import spire.implicits.StringOrder
+import spire.implicits.eqOps
 
 case class CausalModelNode[T: Eq, N: Field](rv: Distribution[T, N], observable: Boolean = true)
 

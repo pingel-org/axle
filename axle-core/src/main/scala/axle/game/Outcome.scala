@@ -1,7 +1,7 @@
 package axle.game
 
-import spire.algebra._
-import spire.implicits._
+import spire.algebra.Eq
+import spire.implicits.eqOps
 
 class Outcome[G <: Game[G]](winner: Option[G#PLAYER])(implicit game: G)
   extends Event[G] {

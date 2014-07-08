@@ -1,11 +1,13 @@
 package axle.ml.distance
 
-import spire.algebra._
-import spire.math._
-import spire.implicits._
-import axle.matrix.JblasMatrixModule._
-import math.sqrt
-import cern.colt.matrix.linalg.Algebra
+import scala.math.sqrt
+
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertDouble
+import axle.matrix.JblasMatrixModule.zeros
+import spire.algebra.Field
+import spire.algebra.NormedVectorSpace
+import spire.implicits.DoubleAlgebra
 
 /**
  * Euclidean space

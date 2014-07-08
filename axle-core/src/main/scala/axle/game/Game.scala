@@ -1,12 +1,13 @@
 
 package axle.game
 
-import axle._
-import spire.math._
-import spire.implicits._
-import spire.compat._
-import Stream.{ empty, cons }
-import util.Random.{ shuffle, nextInt }
+import scala.Stream.cons
+import scala.Stream.empty
+import scala.util.Random.nextInt
+
+import spire.compat.integral
+import spire.implicits.eqOps
+import spire.math.Real
 
 abstract class Game[G <: Game[G]] {
 

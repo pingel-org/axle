@@ -1,7 +1,5 @@
 package axle.ast.view
 
-import axle.ast._
-
 class XhtmlAstNodeFormatter(
   config: FormatterConfig,
   state: FormatterState,

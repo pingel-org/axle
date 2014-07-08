@@ -1,7 +1,7 @@
 package axle.matrix
 
-import axle.algebra._
-import spire.implicits._
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 trait MatrixModule {
 

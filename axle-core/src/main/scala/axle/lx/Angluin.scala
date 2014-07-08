@@ -1,11 +1,11 @@
 
 package axle.lx
 
-import axle._
-import axle.graph._
-import spire.math._
-import spire.algebra._
-import spire.implicits._
+import axle.graph.JungDirectedGraph
+import axle.graph.Vertex
+import spire.algebra.Eq
+import spire.implicits.StringOrder
+import spire.implicits.eqOps
 
 object Angluin {
 

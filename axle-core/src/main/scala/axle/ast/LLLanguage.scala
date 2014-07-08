@@ -1,11 +1,10 @@
 
 package axle.ast
 
-import axle._
-import axle.algebra._
-import spire.implicits._
-import util.matching.Regex
-import Stream.{ cons, empty }
+import scala.Stream.cons
+import scala.Stream.empty
+
+import spire.implicits.eqOps
 
 /**
  *

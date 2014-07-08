@@ -1,10 +1,8 @@
 
 package axle.pgm.docalculus
 
-import axle.stats._
-import axle.pgm._
-import spire.algebra._
-import CausalModel._
+import spire.algebra.Eq
+import spire.algebra.Field
 
 object ActionToObservation extends Rule {
 

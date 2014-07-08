@@ -1,8 +1,8 @@
 
 package axle
 
-import spire.math._
-import spire.algebra.{ Monoid, MetricSpace }
+import axle.algebra.EnrichedMetricSpace
+import spire.algebra.MetricSpace
 // http://en.wikipedia.org/wiki/Algebraic_structure
 
 package object algebra {

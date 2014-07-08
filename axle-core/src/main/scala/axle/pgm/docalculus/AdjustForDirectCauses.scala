@@ -1,14 +1,10 @@
 
 package axle.pgm.docalculus
 
-import axle.stats._
-import axle.pgm._
-import CausalModel._
-import spire.algebra._
+import spire.algebra.Eq
+import spire.algebra.Field
 
-case class Sigma[T](xs: Set[T], f: T => Form) extends Form {
-
-}
+case class Sigma[T](xs: Set[T], f: T => Form) extends Form
 
 object AdjustForDirectCauses extends Rule {
 

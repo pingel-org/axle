@@ -1,7 +1,6 @@
 package axle.graph
 
-import spire.algebra._
-import spire.implicits._
+import spire.algebra.Eq
 
 trait DirectedGraph[VP, EP] {
 

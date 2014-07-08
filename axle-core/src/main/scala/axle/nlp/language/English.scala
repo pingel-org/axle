@@ -1,9 +1,7 @@
 package axle.nlp.language
 
-import concurrent.duration._
-import concurrent.Await
-import org.tartarus.snowball.SnowballStemmer
 import org.tartarus.snowball.ext.englishStemmer
+
 import axle.nlp.Language
 
 /*

@@ -1,8 +1,12 @@
 
 package axle.logic
 
-import spire.implicits._
-import spire.algebra._
+import spire.algebra.Eq
+import spire.implicits.BooleanStructure
+import spire.implicits.IntAlgebra
+import spire.implicits.SeqEq
+import spire.implicits.StringOrder
+import spire.implicits.eqOps
 
 object FOPL {
 

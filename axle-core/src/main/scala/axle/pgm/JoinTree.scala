@@ -1,13 +1,14 @@
 package axle.pgm
 
-import axle._
-import axle.graph._
-import axle.stats._
-import spire.implicits._
-import spire.algebra._
-import axle.pgm._
-
-import BayesianNetworkModule._
+import BayesianNetworkModule.BayesianNetwork
+import axle.eqSet
+import axle.graph.JungUndirectedGraph
+import axle.graph.UndirectedGraph
+import axle.graph.Vertex
+import axle.stats.Distribution
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.implicits.StringOrder
 
 object JoinTree {
 

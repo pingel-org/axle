@@ -1,12 +1,19 @@
 package axle.ml
 
-import collection.immutable.TreeMap
-import util.Random.{ nextDouble, nextInt, nextBoolean }
-import shapeless._
-import poly._
-import shapeless.ops.hlist._
-import syntax.std.tuple._
-import Zipper._
+import scala.collection.immutable.TreeMap
+import scala.util.Random.nextBoolean
+import scala.util.Random.nextDouble
+import scala.util.Random.nextInt
+
+import axle.ml.GeneticAlgorithm.Mixer
+import axle.ml.GeneticAlgorithm.Mutator
+import shapeless.{:: => ::}
+import shapeless.HList
+import shapeless.HNil
+import shapeless.Poly1
+import shapeless.ops.hlist.Mapper
+import shapeless.ops.hlist.Zip
+import shapeless.syntax.std.tuple.hlistOps
 
 trait Species[G] {
 

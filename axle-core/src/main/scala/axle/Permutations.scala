@@ -1,7 +1,12 @@
 package axle
 
-import Stream.{ empty, cons }
-import spire.implicits._
+import scala.Stream.cons
+import scala.Stream.empty
+
+import axle.enrichArray
+import axle.enrichInt
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 /**
  * Based on Python's itertools.permutations function

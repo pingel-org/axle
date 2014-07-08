@@ -1,7 +1,8 @@
 package axle
 
-import spire.algebra.MultiplicativeMonoid
 import scala.collection.GenTraversable
+
+import spire.algebra.MultiplicativeMonoid
 
 object Π {
 

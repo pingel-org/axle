@@ -1,9 +1,8 @@
 
 package axle.pgm.docalculus
 
-import axle.stats._
-import CausalModel._
-import spire.algebra._
+import spire.algebra.Eq
+import spire.algebra.Field
 
 abstract class Rule extends Form {
 

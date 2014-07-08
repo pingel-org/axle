@@ -1,8 +1,39 @@
 package axle.ast.view
 
-import axle.ast._
-import spire.implicits._
-import scala.collection.mutable.WrappedArray
+import axle.ast.Affix
+import axle.ast.Arglist
+import axle.ast.AstNode
+import axle.ast.AstNodeList
+import axle.ast.AstNodeRule
+import axle.ast.AstNodeValue
+import axle.ast.Attr
+import axle.ast.CR
+import axle.ast.CRH
+import axle.ast.Dedent
+import axle.ast.Emb
+import axle.ast.For
+import axle.ast.ForDel
+import axle.ast.Indent
+import axle.ast.J
+import axle.ast.JItems
+import axle.ast.Kw
+import axle.ast.Language
+import axle.ast.Lit
+import axle.ast.Nop
+import axle.ast.Op
+import axle.ast.PosKw
+import axle.ast.Repr
+import axle.ast.Sp
+import axle.ast.Spread
+import axle.ast.Sq
+import axle.ast.SqT
+import axle.ast.Statement
+import axle.ast.Sub
+import axle.ast.Var
+import axle.ast.VarN
+import spire.implicits.IntAlgebra
+import spire.implicits.StringOrder
+import spire.implicits.eqOps
 
 object Emission {
 

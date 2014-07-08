@@ -1,8 +1,9 @@
 package axle.nlp
 
-import spire.math._
-import spire.implicits._
-import spire.algebra._
+import spire.algebra.Field
+import spire.algebra.InnerProductSpace
+import spire.algebra.MetricSpace
+import spire.implicits.DoubleAlgebra
 
 object UnweightedDocumentVectorSpace {
 

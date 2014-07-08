@@ -1,9 +1,6 @@
 
 package axle.ast
 
-import java.io.File
-import java.io.FileWriter
-
 class DocumentFromString(_grammar: Language, _label: String, content: String) extends Document {
 
   def grammar: Language = _grammar

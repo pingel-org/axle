@@ -1,9 +1,10 @@
 package axle.algebra
 
-import spire.math._
-import spire.implicits._
+import axle.enrichGenTraversable
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertDouble
+import axle.matrix.JblasMatrixModule.matrix
 import spire.algebra.MetricSpace
-import axle._
 
 class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Double]) {
 

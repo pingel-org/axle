@@ -1,9 +1,12 @@
 package axle.matrix
 
-import math.sqrt
-import axle.algebra.FunctionPair
+import scala.math.sqrt
+
 import org.jblas.DoubleMatrix
-import spire.implicits._
+
+import axle.algebra.FunctionPair
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 object JblasMatrixModule extends JblasMatrixModule
 

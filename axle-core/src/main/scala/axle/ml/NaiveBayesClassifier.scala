@@ -20,6 +20,7 @@ import spire.math.Real
 import spire.math.Real.apply
 import spire.implicits._
 import spire.syntax._
+import axle.stats.P
 
 object NaiveBayesClassifier {
 

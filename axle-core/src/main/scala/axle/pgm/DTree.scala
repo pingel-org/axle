@@ -1,8 +1,8 @@
 package axle.pgm
 
-import axle._
-import axle.stats._
-import spire.algebra._
+import axle.stats.Distribution
+import spire.algebra.Eq
+import spire.algebra.Field
 
 class DTreeEdge {}
 

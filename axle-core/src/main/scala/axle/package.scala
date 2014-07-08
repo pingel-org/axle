@@ -28,7 +28,9 @@
  */
 
 import scala.collection.mutable.Buffer
+
 import org.joda.time.DateTime
+
 import axle.EnrichedArray
 import axle.EnrichedBoolean
 import axle.EnrichedByteArray
@@ -42,14 +44,16 @@ import axle.forall
 import axle.thereexists
 import axle.Π
 import axle.Σ
-import spire.random.Dist
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
-import spire.implicits._
-import spire.math.Rational
 import spire.algebra.Order
 import spire.compat.ordering
+import spire.implicits.IntAlgebra
+import spire.implicits.LongAlgebra
+import spire.implicits.eqOps
+import spire.implicits.nrootOps
+import spire.implicits.semiringOps
 
 package object axle {
 

@@ -1,12 +1,20 @@
 package axle.ml
 
-import axle._
-import axle.matrix._
-import util.Random.shuffle
-import spire.algebra._
-import spire.implicits._
-import collection.immutable.TreeMap
-import scala.collection.SortedMap
+import scala.Vector
+import scala.collection.immutable.TreeMap
+import scala.util.Random.shuffle
+
+import FeatureNormalizerModule.PCAFeatureNormalizer
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertDouble
+import axle.matrix.JblasMatrixModule.convertInt
+import axle.matrix.JblasMatrixModule.matrix
+import axle.matrix.JblasMatrixModule.zeros
+import spire.algebra.Eq
+import spire.algebra.MetricSpace
+import spire.implicits.DoubleAlgebra
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 /**
  * KMeans
@@ -16,9 +24,6 @@ import scala.collection.SortedMap
 object KMeansModule extends KMeansModule
 
 trait KMeansModule {
-
-  import axle.matrix.JblasMatrixModule._
-  import FeatureNormalizerModule._
 
   /**
    * cluster[T]

@@ -1,17 +1,11 @@
 package axle
 
-/**
- * Based on Python's itertools.permutations function
- *
- * http://docs.python.org/library/itertools.html#itertools.combinations
- *
- * Combinations("ABCD".toIndexedSeq, 2)
- * Combinations(0 until 4, 3)
- */
+import scala.Stream.cons
+import scala.Stream.empty
+import scala.annotation.tailrec
 
-import annotation.tailrec
-import Stream.{ cons, empty }
-import spire.implicits._
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 object Combinations {
 

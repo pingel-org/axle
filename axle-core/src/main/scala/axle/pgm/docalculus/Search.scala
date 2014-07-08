@@ -1,11 +1,10 @@
 package axle.pgm.docalculus
 
-import axle._
-import axle.stats._
-import axle.pgm._
-import CausalModel._
-import spire.algebra._
-import spire.implicits._
+import axle.stats.Distribution
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 object Search {
 

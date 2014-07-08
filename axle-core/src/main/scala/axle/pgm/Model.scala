@@ -1,10 +1,11 @@
 package axle.pgm
 
-import axle._
-import axle.graph._
-import axle.stats._
-import spire.algebra._
-import spire.implicits._
+import axle.graph.DirectedGraph
+import axle.stats.Distribution
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 object Direction {
 

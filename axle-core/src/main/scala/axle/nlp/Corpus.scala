@@ -1,10 +1,9 @@
 package axle.nlp
 
-import axle._
-import spire.implicits._
-import spire.algebra._
-import spire.math._
-import collection.GenSeq
+import scala.collection.GenSeq
+
+import axle.enrichGenSeq
+import spire.implicits.LongAlgebra
 
 class Corpus(documents: GenSeq[String], language: Language) {
 

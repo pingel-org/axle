@@ -1,19 +1,11 @@
 package axle
 
-import axle._
-import spire.implicits._
+import scala.collection.mutable.ListBuffer
 
-/**
- * Based on Python's itertools.permutations function
- *
- * http://docs.python.org/library/itertools.html#itertools.permutations
- *
- * PermutationsFast("ABCD".toIndexedSeq, 2)
- * PermutationsFast(0 until 3)
- *
- */
-
-import collection.mutable.ListBuffer
+import axle.enrichInt
+import axle.enrichMutableBuffer
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 object PermutationsFast {
 

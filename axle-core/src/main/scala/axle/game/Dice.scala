@@ -2,12 +2,9 @@ package axle.game
 
 import scala.Vector
 
-import axle.orderSymbols
 import axle.stats.ConditionalProbabilityTable0
-import axle.stats.Distribution
 import axle.stats.Distribution0
 import axle.stats.rationalProbabilityDist
-import spire.implicits.IntAlgebra
 import spire.math.Rational
 
 object Dice {

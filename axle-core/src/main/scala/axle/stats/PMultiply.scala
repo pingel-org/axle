@@ -1,8 +1,6 @@
 package axle.stats
 
-import axle._
-import spire.math._
-import spire.algebra._
+import spire.algebra.Field
 
 case class PMultiply[N: Field](left: Probability[N], right: () => N) extends Probability[N] {
 

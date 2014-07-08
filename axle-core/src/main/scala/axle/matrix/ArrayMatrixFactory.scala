@@ -1,7 +1,5 @@
 package axle.matrix
 
-import axle._
-
 /**
  *
  * Discussion of ClassManifest here:

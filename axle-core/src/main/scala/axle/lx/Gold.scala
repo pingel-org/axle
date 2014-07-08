@@ -1,6 +1,7 @@
 
 package axle.lx
-import spire.algebra._
+
+import spire.algebra.Eq
 
 object Gold {
 

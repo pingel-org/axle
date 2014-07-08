@@ -1,121 +1,31 @@
 package axle.pgm
 
-/**
- * Notes on unimplemented aspects of Bayesian networks:
- *
- * Bayes Rule
- *
- * P(A=a|B=b) = P(B=b|A=a)P(A=a)/P(B=b)
- *
- * Case analysis
- *
- * P(A=a) = P(A=a, B=b1) + ... + P(A=a, B=bN)
- *
- * Chain Rule
- *
- * P(X1=x1, ..., XN = xN) = P(X1=x1 | X2=x2, ..., XN=xN) * ... * P(XN=xN)
- *
- * Jeffrey's Rule
- *
- * ???
- *
- * markov independence: a variable is independent of its non-descendents given its parents
- *
- * d-separation cases:
- *
- * x: given variable (it appears in Z)
- * o: not given
- *
- * Sequence:
- *
- * -> o ->   open
- * -> x ->   closed
- *
- * Divergent:
- *
- * <- o ->   open
- * <- x ->   closed
- *
- * Convergent:
- *
- * -> o <-   closed (and none of the descendants of the node are in Z)
- * -> x <-   open (or if any of the descendants of the node are in Z)
- *
- *
- * A path is blocked (independent) if any valve in the path is blocked.
- *
- * Two variables are separated if all paths are blocked.
- *
- * Independence
- *
- * I(X, Z, Y) is read "X is independent of Y given Z"
- *
- * Symmetry (ch 3 stuff)
- *
- * I(X, Z, Y) <=> I(Y, Z, X)
- *
- * Decomposition
- *
- * I(X, Z, Y or W) <=> I(X, Z, Y) and I(X, Z, W)
- *
- * Weak Union
- *
- * I(X, Z, Y or W) => I(X, Z or Y, W)
- *
- * Contraction
- *
- * I(X, Z, Y) and I(X, Z or Y, W) => I(X, Z, Y or W)
- *
- * Intersection
- *
- * I(X, Z or W, Y) and I(X, Z or Y, W) => I(X, Z, Y or W)
- *
- * independence closure
- *
- * ???  used for what ???
- *
- * MPE: most probable explanation
- *
- * find {x1, ..., xN} such that P(X1=x1, ..., XN=xN | e) is maximized
- *
- * MPE is much easier to compute algorithmically
- *
- * MAP: maximum a posteriori hypothesis
- *
- * Let M be a subset of network variables X
- *
- * Let e be some evidence
- *
- * Find an instantiation m over variables M such that pr(M=m|e) is maximized
- *
- * Tree networks (ch5 p20)
- *
- * are the ones where each node has at most one parent
- * treewidth <= 1
- *
- * A polytree is:
- *
- * there is at most one (undirected) path between any two nodes
- * treewidth = maximum number of parents
- *
- */
+import scala.Stream.cons
+import scala.Stream.empty
 
-import axle._
+import EliminationTreeModule.EliminationTree
 import axle.XmlAble
-import axle.graph._
-import axle.stats._
-import spire.math._
-import spire.algebra._
-import spire.implicits._
-import math.max
-import Stream.{ cons, empty }
+import axle.graph.DirectedGraph
+import axle.graph.JungDirectedGraph
+import axle.graph.Vertex
+import axle.stats.CaseIs
+import axle.stats.Distribution
+import axle.stats.FactorModule.Factor
+import axle.stats.FactorModule.Factor.factorEq
+import axle.stats.Independence
+import axle.Π
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.algebra.Order
+import spire.implicits.IntAlgebra
+import spire.implicits.StringOrder
+import spire.implicits.eqOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.math.ConvertableFrom
 
 object BayesianNetworkModule extends BayesianNetworkModule
 
 trait BayesianNetworkModule {
-
-  import FactorModule._
-  import EliminationTreeModule._
 
   case class BayesianNetworkNode[T: Eq, N: Field](rv: Distribution[T, N], cpt: Factor[T, N])
   extends XmlAble {

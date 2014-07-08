@@ -1,9 +1,6 @@
 package axle.stats
 
-import axle.stats._
-import spire.math._
-import spire.implicits._
-import spire.algebra._
+import spire.algebra.Field
 
 trait Probability[N] extends (() => N) {
 

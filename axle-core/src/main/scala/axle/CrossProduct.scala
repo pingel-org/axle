@@ -1,7 +1,10 @@
 package axle
 
-import Stream.{ cons, empty }
-import spire.implicits._
+import scala.Stream.cons
+import scala.Stream.empty
+
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]]) extends Iterable[List[E]] {
 

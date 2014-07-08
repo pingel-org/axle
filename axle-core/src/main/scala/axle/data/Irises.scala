@@ -2,23 +2,14 @@ package axle.data
 
 import java.io.File
 
-import axle.quanta._
-import axle.quanta.Distance
-import Distance._
-
-import spire.implicits._
-import spire.math._
-import spire.algebra._
-
-import sys.process.stringSeqToProcess
-
 import scala.Option.option2Iterable
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
-import scala.reflect.io.Path.string2path
+import scala.sys.process.stringSeqToProcess
 import scala.util.Try
 
+import axle.quanta.Distance
+import axle.quanta.Distance.cm
 import spire.algebra.Eq
+import spire.math.Number.apply
 
 /**
  *

@@ -1,14 +1,18 @@
 package axle.ml
 
-import axle.matrix._
-import collection.immutable.TreeMap
+import scala.collection.immutable.TreeMap
+
+import FeatureNormalizerModule.FeatureNormalizer
+import FeatureNormalizerModule.LinearFeatureNormalizer
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertDouble
+import axle.matrix.JblasMatrixModule.matrix
+import axle.matrix.JblasMatrixModule.ones
+import axle.matrix.JblasMatrixModule.zeros
 
 object LinearRegressionModule extends LinearRegressionModule
 
 trait LinearRegressionModule {
-
-  import axle.matrix.JblasMatrixModule._
-  import FeatureNormalizerModule._
 
   def normalEquation(X: Matrix[Double], y: Matrix[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
 

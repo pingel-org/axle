@@ -1,6 +1,5 @@
 package axle.algebra
 
-import spire.implicits._
 import spire.algebra.Semigroup
 
 object Semigroups {

@@ -1,10 +1,10 @@
 package axle.stats
 
-import collection.GenTraversable
-import axle._
-import spire.math._
-import spire.implicits._
-import spire.algebra._
+import scala.collection.GenTraversable
+
+import axle.Π
+import spire.algebra.Field
+import spire.implicits.additiveGroupOps
 
 abstract class Case[A, N: Field] {
 

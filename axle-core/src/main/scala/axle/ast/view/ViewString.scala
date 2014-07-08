@@ -1,8 +1,13 @@
 package axle.ast.view
 
-import axle.ast._
-import math.{ min, max }
-import Emission._
+import scala.math.max
+import scala.math.min
+
+import Emission.emit
+import axle.ast.AstNode
+import axle.ast.Document
+import axle.ast.LLLanguage
+import axle.ast.Language
 
 object ViewString extends View[String] {
 

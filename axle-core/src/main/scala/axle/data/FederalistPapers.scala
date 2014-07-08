@@ -2,6 +2,7 @@ package axle.data
 
 import java.io.File
 
+import scala.Vector
 import scala.sys.process.stringSeqToProcess
 
 import spire.algebra.Eq

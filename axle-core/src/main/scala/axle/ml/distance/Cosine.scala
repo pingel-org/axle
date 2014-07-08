@@ -1,9 +1,11 @@
 package axle.ml.distance
 
-import spire.algebra._
-import spire.math._
-import spire.implicits._
-import axle.matrix.JblasMatrixModule._
+import axle.matrix.JblasMatrixModule.Matrix
+import axle.matrix.JblasMatrixModule.convertDouble
+import axle.matrix.JblasMatrixModule.zeros
+import spire.algebra.Field
+import spire.algebra.InnerProductSpace
+import spire.implicits.DoubleAlgebra
 
 /**
  *

@@ -1,6 +1,9 @@
 package axle.ast.view
 
-import axle.ast._
+import axle.ast.AstNode
+import axle.ast.Document
+import axle.ast.LLLanguage
+import axle.ast.Language
 
 trait View[T] {
 

@@ -7,8 +7,8 @@ import axle.quanta.Information
 import axle.quanta.Information.bit
 import axle.stats.Case
 import axle.stats.ConditionalProbabilityTable0
-import axle.stats.EnrichedCaseGenTraversable
 import axle.stats.Distribution
+import axle.stats.EnrichedCaseGenTraversable
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.NRoot

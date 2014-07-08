@@ -1,7 +1,5 @@
 package axle.ast.view
 
-import axle.ast._
-
 case class XhtmlLinesAstNodeFormatterState(
   tokens: List[xml.Node],
   currentLine: Option[List[xml.Node]], // = Some(List[xml.Node]())
