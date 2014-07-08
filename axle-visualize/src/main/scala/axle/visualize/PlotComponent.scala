@@ -26,20 +26,14 @@ import spire.math.Number.apply
 
 class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])
   extends JPanel
-  with Fed {
+  with Fed[List[(String, D)]] {
 
   import plot._
 
   setMinimumSize(new Dimension(width, height))
 
-  var dataFeedActorOpt: Option[ActorRef] = None
+  def initialValue = plot.initialValue
   
-  def setFeeder(fn: List[(String, D)] => List[(String, D)], interval: Time.Q, system: ActorSystem): Unit = {
-    dataFeedActorOpt = Some(system.actorOf(Props(new DataFeedActor(initialValue, fn, interval))))
-  }
-
-  def feeder: Option[ActorRef] = dataFeedActorOpt
-
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
   val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))

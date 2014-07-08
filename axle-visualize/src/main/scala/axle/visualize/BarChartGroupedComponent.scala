@@ -27,20 +27,14 @@ import spire.math.Number.apply
 
 class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])
   extends JPanel
-  with Fed {
+  with Fed[D] {
 
   import chart._
 
   setMinimumSize(new Dimension(width, height))
 
-  var dataFeedActorOpt: Option[ActorRef] = None
-
-  def setFeeder(fn: D => D, interval: Time.Q, system: ActorSystem): Unit = {
-    dataFeedActorOpt = Some(system.actorOf(Props(new DataFeedActor(initialValue, fn, interval))))
-  }
-
-  def feeder: Option[ActorRef] = dataFeedActorOpt
-
+  def initialValue = chart.initialValue
+  
   val colorStream = continually(colors.toStream).flatten
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)

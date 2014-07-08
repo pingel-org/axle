@@ -38,17 +38,9 @@ package object visualize {
   def newFrame(width: Int, height: Int): AxleFrame =
     new AxleFrame(width, height, Color.white, "αχλε")
 
-  def show(component: Component)(implicit systemOpt: Option[ActorSystem]): Unit = {
+  def show(component: Component): Unit = {
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
-    component match {
-      case f: Fed => f.feeder foreach { dataFeedActor =>
-        systemOpt foreach { system =>
-          system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
-        }
-      }
-      case _ => {}
-    }
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
@@ -59,8 +51,9 @@ package object visualize {
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
     component match {
-      case f: Fed => f.feeder foreach { dataFeedActor =>
-        system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
+      case f: Fed[T] => {
+        // system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
+        f.setFeeder(refreshFn, interval, system)
       }
       case _ => {}
     }
