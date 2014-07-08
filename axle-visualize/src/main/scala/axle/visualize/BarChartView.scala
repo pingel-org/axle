@@ -6,7 +6,6 @@ import java.awt.Font
 
 import axle.algebra.Plottable
 import axle.algebra.Plottable.DoublePlottable
-import axle.quanta.Angle._
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
@@ -14,7 +13,6 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
-import spire.math.Number.apply
 
 class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font) {
 

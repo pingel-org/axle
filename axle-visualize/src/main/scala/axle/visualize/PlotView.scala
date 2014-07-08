@@ -5,7 +5,6 @@ import java.awt.Font
 
 import scala.Stream.continually
 
-import akka.actor.ActorSystem
 import axle.algebra.Plottable
 import axle.quanta.Angle.{° => °}
 import axle.visualize.element.DataLines

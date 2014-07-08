@@ -8,7 +8,7 @@ import scala.reflect.ClassTag
 
 import axle.algebra.Plottable
 import axle.algebra.Plottable.DoublePlottable
-import axle.quanta.Angle.{ ° => ° }
+import axle.quanta.Angle.{° => °}
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine

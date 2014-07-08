@@ -9,7 +9,6 @@ import java.awt.Color.red
 import java.awt.Color.yellow
 
 import axle.algebra.Plottable
-import axle.quanta.Time
 
 case class BarChartGrouped[G, S, Y: Plottable, D](
   initialValue: D,

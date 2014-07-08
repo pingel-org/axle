@@ -4,19 +4,16 @@ import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import scala.reflect.ClassTag
 import scala.Stream.continually
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
+import scala.reflect.ClassTag
 
-import akka.actor.ActorRef
-import akka.actor.Props
-import akka.actor.ActorSystem
+import DataFeedProtocol.Fetch
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Time
-import axle.quanta.Angle._
+import axle.quanta.Angle.{° => °}
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
@@ -48,7 +45,7 @@ class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, 
   }
 
   override def paintComponent(g: Graphics): Unit = {
-
+    
     val data = feeder map { dataFeedActor =>
       val dataFuture = (dataFeedActor ? Fetch()).mapTo[D]
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka

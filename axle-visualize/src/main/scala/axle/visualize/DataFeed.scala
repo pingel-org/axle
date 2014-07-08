@@ -12,7 +12,7 @@ case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Time.Q
 
   import DataFeedProtocol._
   import FrameProtocol._
-  
+
   context.system.scheduler.schedule(
     0.millis,
     ((interval in Time.millisecond).magnitude.doubleValue).millis,
@@ -26,16 +26,19 @@ case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Time.Q
   def receive: Receive = {
 
     case RegisterViewer() => {
+      //println("DataFeed got RegisterViewer")
       viewers = viewers + sender
     }
 
     case Recompute() => {
+      //println("DataFeed got Recompute")
       data = refreshFn(data)
       viewers.foreach(_ ! Soil())
       // log info (s"Updated data behind feed at $lastUpdate")
     }
 
     case Fetch() => {
+      //println("DataFeed got Fetch")
       // log info (s"Checking for new feed updates since $t")
       // log info ("sender.path.name: " + sender.path.name)
       sender ! data

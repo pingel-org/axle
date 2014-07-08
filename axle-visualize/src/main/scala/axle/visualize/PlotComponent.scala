@@ -6,19 +6,14 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 
 import scala.Vector
-import scala.collection.immutable.TreeMap
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
 import DataFeedProtocol.Fetch
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.Props
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Time
-import axle.quanta.Angle.{ ° => ° }
+import axle.quanta.Angle.{° => °}
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq

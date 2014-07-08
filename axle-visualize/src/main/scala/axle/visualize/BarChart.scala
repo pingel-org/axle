@@ -9,9 +9,9 @@ import java.awt.Color.red
 import java.awt.Color.yellow
 
 import axle.algebra.Plottable
-import axle.quanta.Time
 import axle.quanta.Angle
-import Angle._
+import axle.quanta.Angle.{° => °}
+import spire.math.Number.apply
 
 case class BarChart[S, Y: Plottable, D](
   initialValue: D,

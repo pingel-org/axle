@@ -11,14 +11,10 @@ import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
 
 import DataFeedProtocol.Fetch
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.Props
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Time
-import axle.quanta.Angle.{ ° => ° }
+import axle.quanta.Angle.{° => °}
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
