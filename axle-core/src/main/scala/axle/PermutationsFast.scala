@@ -2,8 +2,6 @@ package axle
 
 import scala.collection.mutable.ListBuffer
 
-import axle.enrichInt
-import axle.enrichMutableBuffer
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 

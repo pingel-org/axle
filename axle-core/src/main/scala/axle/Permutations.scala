@@ -3,8 +3,6 @@ package axle
 import scala.Stream.cons
 import scala.Stream.empty
 
-import axle.enrichArray
-import axle.enrichInt
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
