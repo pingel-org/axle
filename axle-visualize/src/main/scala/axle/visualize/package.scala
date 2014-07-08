@@ -43,27 +43,23 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T](component: Component, refreshFn: T => T, interval: Time.Q, system: ActorSystem): Unit = {
+  def play[T](component: Component with Fed[T], refreshFn: T => T, interval: Time.Q, system: ActorSystem): Unit = {
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
-    component match {
-      case f: Fed[T] => {
-        // system.actorOf(Props(classOf[FrameRepaintingActor], frame, dataFeedActor))
-        f.setFeeder(refreshFn, interval, system)
-      }
-      case _ => {}
-    }
+    component.setFeeder(refreshFn, interval, system)
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
   }
 
-  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D]): Component = new PlotComponent(plot)
+  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D]): PlotComponent[X, Y, D] =
+    new PlotComponent(plot)
 
-  implicit def enComponentBarChart[S, Y: Plottable: Eq, D: ClassTag](barChart: BarChart[S, Y, D]): Component = new BarChartComponent(barChart)
+  implicit def enComponentBarChart[S, Y: Plottable: Eq, D: ClassTag](barChart: BarChart[S, Y, D]): BarChartComponent[S, Y, D] =
+    new BarChartComponent(barChart)
 
-  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq, D: ClassTag](barChart: BarChartGrouped[G, S, Y, D]): Component =
+  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq, D: ClassTag](barChart: BarChartGrouped[G, S, Y, D]): BarChartGroupedComponent[G, S, Y, D] =
     new BarChartGroupedComponent(barChart)
 
   implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {
