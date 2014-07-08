@@ -68,15 +68,15 @@ class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, 
 
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
-    titleText.map(_.paint(g2d))
+    titleText.foreach(_.paint(g2d))
     hLine.paint(g2d)
     vLine.paint(g2d)
-    xAxisLabelText.map(_.paint(g2d))
-    yAxisLabelText.map(_.paint(g2d))
+    xAxisLabelText.foreach(_.paint(g2d))
+    yAxisLabelText.foreach(_.paint(g2d))
     gTics.paint(g2d)
     yTics.paint(g2d)
-    keyOpt.map(_.paint(g2d))
-    bars.map(_.paint(g2d))
+    keyOpt.foreach(_.paint(g2d))
+    bars.foreach(_.paint(g2d))
 
   }
 
