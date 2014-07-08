@@ -1,15 +1,17 @@
 package axle.visualize
 
-import java.awt.{ Dimension, BasicStroke, Color, Paint, Stroke, Insets, Graphics, Graphics2D, Point }
-import javax.swing.JPanel
-import java.awt.event.MouseEvent
 import java.awt.FontMetrics
-import math.{ min, abs }
-import axle.algebra._ //Portionable
-import axle.quanta._
-import Angle._
-import spire.implicits._
-import spire.algebra._
+import java.awt.Graphics2D
+import java.awt.Point
+
+import scala.math.abs
+import scala.math.min
+
+import axle.algebra.Portionable
+import axle.quanta.Angle
+import axle.quanta.Angle.rad
+import spire.algebra.Eq
+import spire.implicits.eqOps
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 

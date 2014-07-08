@@ -1,11 +1,12 @@
 package axle.visualize.element
 
-import axle.visualize._
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
-import axle.quanta._
-import Angle._
+
+import axle.quanta.Angle
+import axle.quanta.Angle.rad
+import axle.visualize.Paintable
 
 class Text(
   text: String,

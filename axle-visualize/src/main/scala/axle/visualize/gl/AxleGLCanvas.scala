@@ -1,8 +1,10 @@
 package axle.visualize.gl
 
-import axle.quanta._
-import java.io.IOException
-import com.jogamp.opengl.util.texture.TextureIO
+import scala.Vector
+
+import axle.quanta.Angle
+import axle.quanta.Angle.degree
+import axle.quanta.Distance
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_TEST
@@ -15,26 +17,20 @@ import javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER
 import javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT
 import javax.media.opengl.GLAutoDrawable
 import javax.media.opengl.GLEventListener
-import javax.media.opengl.GLException
 import javax.media.opengl.awt.GLCanvas
+import javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT
+import javax.media.opengl.fixedfunc.GLLightingFunc.GL_COLOR_MATERIAL
+import javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE
+import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
+import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING
+import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH
+import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW
 import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import javax.media.opengl.glu.GLU
-import java.net.URL
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_COLOR_MATERIAL
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
-import com.jogamp.opengl.util.texture.Texture
 
 class AxleGLCanvas(scene: Scene, fovy: Angle.Q, zNear: Distance.Q, zFar: Distance.Q, distanceUnit: Distance.Q) extends GLCanvas with GLEventListener {
-
-  import Distance._
-  import Angle._
 
   this.addGLEventListener(this)
 

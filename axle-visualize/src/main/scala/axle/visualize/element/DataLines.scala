@@ -3,8 +3,6 @@ package axle.visualize.element
 import java.awt.Color
 import java.awt.Graphics2D
 
-import scala.collection.immutable.SortedMap
-
 import axle.visualize.Paintable
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D

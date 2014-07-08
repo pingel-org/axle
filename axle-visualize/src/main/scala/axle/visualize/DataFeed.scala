@@ -1,10 +1,18 @@
 package axle.visualize
 
-import akka.actor.{ Actor, ActorLogging, ActorRef, ActorSystem }
-import concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.DurationDouble
+import scala.concurrent.duration.DurationInt
+
+import DataFeedProtocol.Fetch
+import DataFeedProtocol.Recompute
+import DataFeedProtocol.RegisterViewer
+import FrameProtocol.Soil
+import akka.actor.Actor
+import akka.actor.ActorLogging
+import akka.actor.ActorRef
+import akka.actor.actorRef2Scala
 import axle.quanta.Time
-import System.currentTimeMillis
 
 case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Time.Q)
   extends Actor

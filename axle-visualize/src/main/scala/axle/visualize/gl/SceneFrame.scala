@@ -1,16 +1,16 @@
 package axle.visualize.gl
 
-import axle.quanta._
-import Distance._
-import Angle._
 import java.awt.Dimension
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 
 import com.jogamp.opengl.util.FPSAnimator
 
+import axle.quanta.Angle.degree
+import axle.quanta.Distance
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
+import spire.math.Number.apply
 
 class SceneFrame(scene: Scene, width: Int, height: Int, zNear: Distance.Q, zFar: Distance.Q, fps: Int) {
 

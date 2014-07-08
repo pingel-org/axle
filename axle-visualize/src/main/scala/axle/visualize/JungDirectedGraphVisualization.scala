@@ -1,22 +1,24 @@
 package axle.visualize
 
-import java.awt.event.MouseEvent
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Component
 import java.awt.Dimension
 import java.awt.Paint
 import java.awt.Stroke
+import java.awt.event.MouseEvent
+
 import org.apache.commons.collections15.Transformer
-import axle.graph._
+
+import axle.graph.Edge
+import axle.graph.JungDirectedGraph
+import axle.graph.Vertex
 import edu.uci.ics.jung.algorithms.layout.FRLayout
+import edu.uci.ics.jung.visualization.VisualizationViewer
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
-import edu.uci.ics.jung.visualization.VisualizationViewer
-import org.apache.commons.collections15.functors.ChainedTransformer
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller
 
 class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 

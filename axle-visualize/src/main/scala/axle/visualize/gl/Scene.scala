@@ -2,24 +2,27 @@ package axle.visualize.gl
 
 import java.net.URL
 
-import axle.quanta._
-import scala.math._
+import scala.Vector
+import scala.math.cos
+import scala.math.sin
 
 import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
 
+import axle.quanta.Angle
+import axle.quanta.Angle.degree
+import axle.quanta.Angle.radian
+import axle.quanta.Distance
 import javax.media.opengl.GL2
-import javax.media.opengl.glu.GLU
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
+import javax.media.opengl.glu.GLU
+import spire.math.Number.apply
 
 abstract class Scene(_distanceUnit: Distance.Q) {
 
   def distanceUnit: Distance.Q = _distanceUnit
-
-  import Distance._
-  import Angle._
-
+  
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
     orienter(gl)

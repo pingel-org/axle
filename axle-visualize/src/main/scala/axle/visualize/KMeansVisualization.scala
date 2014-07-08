@@ -1,31 +1,34 @@
 package axle.visualize
 
+import java.awt.Color.black
+import java.awt.Color.blue
+import java.awt.Color.darkGray
+import java.awt.Color.green
+import java.awt.Color.orange
+import java.awt.Color.pink
+import java.awt.Color.red
+import java.awt.Color.yellow
 import java.awt.Dimension
-import java.awt.BasicStroke
-import java.awt.Color._
-import java.awt.Paint
-import java.awt.Stroke
-import java.awt.Insets
+import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
-import java.awt.Point
-import javax.swing.JPanel
-import java.awt.event.MouseEvent
-import java.awt.Font
 
 import axle.algebra.Plottable
-import axle.visualize.element._
-import axle.ml.KMeansModule
-import axle.matrix._
-import axle.quanta._
-import Angle._
-import spire.implicits._
+import axle.ml.KMeansModule.KMeansClassifier
+import axle.quanta.Angle.{° => °}
+import axle.visualize.element.Oval
+import axle.visualize.element.Rectangle
+import axle.visualize.element.XTics
+import axle.visualize.element.YTics
+import javax.swing.JPanel
+import spire.implicits.DoubleAlgebra
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
+import spire.math.Number.apply
 
 object KMeansVisualizationModule extends KMeansVisualizationModule
 
 trait KMeansVisualizationModule {
-
-  import KMeansModule._
 
   //  def visualize[D](classifier: KMeansClassifier[D],
   //    width: Int = 600,

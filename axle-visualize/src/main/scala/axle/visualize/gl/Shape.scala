@@ -2,7 +2,7 @@ package axle.visualize.gl
 
 import java.net.URL
 
-import axle.quanta._
+import axle.quanta.Distance
 
 sealed trait Shape
 

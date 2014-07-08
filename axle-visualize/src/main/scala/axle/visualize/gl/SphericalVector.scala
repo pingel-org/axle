@@ -1,6 +1,7 @@
 package axle.visualize.gl
 
-import axle.quanta._
+import axle.quanta.Angle
+import axle.quanta.Distance
 
 /**
  *

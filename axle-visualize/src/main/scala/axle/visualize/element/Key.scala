@@ -1,12 +1,14 @@
 package axle.visualize.element
 
-import axle.visualize._
-import java.awt.Graphics2D
 import java.awt.Color
 import java.awt.Font
-import collection.immutable.SortedMap
+import java.awt.Graphics2D
 
 import axle.algebra.Plottable
+import axle.visualize.BarChart
+import axle.visualize.BarChartGrouped
+import axle.visualize.Paintable
+import axle.visualize.Plot
 
 class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colorStream: Stream[Color])
   extends Paintable {

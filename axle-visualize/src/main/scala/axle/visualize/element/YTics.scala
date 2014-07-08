@@ -1,9 +1,12 @@
 package axle.visualize.element
 
-import axle.visualize._
 import java.awt.Color
-import java.awt.Graphics2D
 import java.awt.Font
+import java.awt.Graphics2D
+
+import axle.visualize.Paintable
+import axle.visualize.Point2D
+import axle.visualize.ScaledArea2D
 
 class YTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],

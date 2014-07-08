@@ -1,14 +1,18 @@
 package axle.visualize.element
 
-import axle.visualize._
-import axle.quanta._
-import axle.algebra._
 import java.awt.Color
-import java.awt.Graphics2D
 import java.awt.Font
 import java.awt.FontMetrics
-import Angle._
-import spire.implicits._
+import java.awt.Graphics2D
+
+import axle.quanta.Angle
+import axle.quanta.Angle.eqTypeclass
+import axle.quanta.Angle.{° => °}
+import axle.visualize.Paintable
+import axle.visualize.Point2D
+import axle.visualize.ScaledArea2D
+import spire.implicits.eqOps
+import spire.math.Number.apply
 
 class XTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],
