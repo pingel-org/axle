@@ -43,7 +43,7 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T](component: Component with Fed[T], refreshFn: T => T, interval: Time.Q, system: ActorSystem): Unit = {
+  def play[T](component: Component with Fed[T], refreshFn: T => T, interval: Time.Q)(implicit system: ActorSystem): Unit = {
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
     component.setFeeder(refreshFn, interval, system)
