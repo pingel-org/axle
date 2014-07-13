@@ -43,15 +43,16 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T](component: Component with Fed[T], refreshFn: T => T, interval: Time.Q)(implicit system: ActorSystem): Unit = {
+  def play[T](component: Component with Fed[T], refreshFn: T => T, interval: Time.Q)(implicit system: ActorSystem): ActorRef = {
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
-    component.setFeeder(refreshFn, interval, system)
+    val feeder = component.setFeeder(refreshFn, interval, system)
     system.actorOf(Props(classOf[FrameRepaintingActor], frame, component.feeder.get))
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
+    feeder
   }
 
   implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D]): PlotComponent[X, Y, D] =
