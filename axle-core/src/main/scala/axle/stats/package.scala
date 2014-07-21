@@ -56,9 +56,16 @@ package object stats {
    */
 
   def stddev[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = {
-    val adder = implicitly[AdditiveMonoid[N]]
     val μ = mean(xs)
-    (Σ(xs.map(x => square(x - μ)))(identity)(adder) / xs.size).sqrt
+    (Σ(xs)(x => square(x - μ)) / xs.size).sqrt
+  }
+
+  // A: NRoot: Field: Manifest: AdditiveMonoid
+  // TODO Distribution should have type [A, N]
+  def standardDeviation[N: NRoot: Field: Manifest: AdditiveMonoid](distribution: Distribution[N, N]): N = {
+    val xs = distribution.values
+    val μ = Σ(xs)(x => distribution.probabilityOf(x) * x)
+    (Σ(xs)(x => distribution.probabilityOf(x) * square(x - μ))).sqrt
   }
 
   def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = stddev(xs)
