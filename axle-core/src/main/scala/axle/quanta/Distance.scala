@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class Distance[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Distance[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
  
   class DistanceQuantity(
     magnitude: N = field.one,
@@ -37,7 +37,7 @@ abstract class Distance[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Distance extends Distance[Rational] {
+object Distance extends Distance[Rational](rationalDoubleMetricSpace) {
 
   lazy val _conversionGraph = conversions(
     List(

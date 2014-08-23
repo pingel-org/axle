@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class Energy[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Energy[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
   
   class EnergyQuantity(
     magnitude: N = field.one,
@@ -36,7 +36,7 @@ abstract class Energy[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Energy extends Energy[Rational] {
+object Energy extends Energy[Rational](rationalDoubleMetricSpace) {
 
   import Power.{ kilowatt }
   import Time.{ hour }

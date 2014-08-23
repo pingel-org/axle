@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class Volume[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Volume[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
  
   class VolumeQuantity(
     magnitude: N = field.one,
@@ -36,7 +36,7 @@ abstract class Volume[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Volume extends Volume[Rational] {
+object Volume extends Volume[Rational](rationalDoubleMetricSpace) {
 
   import Distance.{ meter, km, cm }
   import Area.{ m2, km2, cm2 }

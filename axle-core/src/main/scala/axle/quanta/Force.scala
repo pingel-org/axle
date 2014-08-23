@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class Force[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Force[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
   
   class ForceQuantity(
     magnitude: N = field.one,
@@ -36,7 +36,7 @@ abstract class Force[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Force extends Force[Rational] {
+object Force extends Force[Rational](rationalDoubleMetricSpace) {
 
 //  def vps() = List(
 //    unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force")),

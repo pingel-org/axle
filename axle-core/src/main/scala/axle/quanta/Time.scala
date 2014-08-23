@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class Time[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Time[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
  
   class TimeQuantity(
     magnitude: N = field.one,
@@ -37,7 +37,7 @@ abstract class Time[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Time extends Time[Rational] {
+object Time extends Time[Rational](rationalDoubleMetricSpace) {
 
   lazy val _conversionGraph = conversions(
     List(

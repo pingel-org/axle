@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class Mass[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Mass[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
 
   class MassQuantity(
     magnitude: N = field.one,
@@ -37,7 +37,7 @@ abstract class Mass[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Mass extends Mass[Rational] {
+object Mass extends Mass[Rational](rationalDoubleMetricSpace) {
 
   lazy val _conversionGraph = conversions(
     List(

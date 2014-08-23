@@ -6,7 +6,7 @@ import spire.implicits._
 import axle.graph._
 import math.{Pi => π}
 
-abstract class Angle[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Angle[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
 
   class AngleQuantity(
     magnitude: N = field.one,
@@ -37,7 +37,7 @@ abstract class Angle[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Angle extends Angle[Rational] {
+object Angle extends Angle[Rational](rationalDoubleMetricSpace) {
   
   lazy val _conversionGraph = conversions(
     List(

@@ -74,8 +74,6 @@ package object stats {
   import Information._
   import axle.quanta._
 
-  
-  
   def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = {
     val order = implicitly[Order[N]]
     val field = implicitly[Field[N]]
@@ -83,8 +81,7 @@ package object stats {
       val px = P(X is x).apply()
       if (order.gt(px, field.zero)) (-px * log2(px)) else field.zero
     }
-    // H *: bit
-    ???
+    ??? // H *: bit
   }
 
   def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = entropy(X)

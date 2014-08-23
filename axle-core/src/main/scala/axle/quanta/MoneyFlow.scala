@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class MoneyFlow[N: Field: Order: Eq] extends Quantum[N] {
+abstract class MoneyFlow[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
 
   class MoneyFlowQuantity(
     magnitude: N = field.one,
@@ -36,7 +36,7 @@ abstract class MoneyFlow[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object MoneyFlow extends MoneyFlow[Rational] {
+object MoneyFlow extends MoneyFlow[Rational](rationalDoubleMetricSpace) {
 
   import Money.{ USD }
   import Time.{ hour }

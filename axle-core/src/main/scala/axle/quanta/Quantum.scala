@@ -47,7 +47,7 @@ case class QuantumDivision(left: QuantumExpression, right: QuantumExpression) ex
  * case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
  */
 
-abstract class Quantum[N: Field: Order: Eq] extends QuantumExpression {
+abstract class Quantum[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends QuantumExpression {
 
   quantum =>
 
@@ -175,7 +175,7 @@ abstract class Quantum[N: Field: Order: Eq] extends QuantumExpression {
         .map(n => quantity((magnitude * n) / other.magnitude, other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
 
-    def plottable: UnitPlottable = quantum.UnitPlottable(this)
+    def plottable: UnitPlottable = quantum.UnitPlottable(this)(space)
 
   }
 
@@ -206,7 +206,7 @@ abstract class Quantum[N: Field: Order: Eq] extends QuantumExpression {
 
   import axle.algebra.Plottable
 
-  case class UnitPlottable(base: quantum.Q) extends Plottable[quantum.Q] {
+  case class UnitPlottable(base: quantum.Q)(implicit space: MetricSpace[N, Double]) extends Plottable[quantum.Q] {
 
     val underlying = Plottable.abstractAlgebraPlottable[N]
 

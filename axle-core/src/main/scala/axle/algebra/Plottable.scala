@@ -204,8 +204,7 @@ object Plottable {
     }
   }
 
-  // (implicit space: MetricSpace[N, Double])
-  implicit def abstractAlgebraPlottable[N: Field: Order] = new Plottable[N] {
+  implicit def abstractAlgebraPlottable[N: Field: Order](implicit space: MetricSpace[N, Double]) = new Plottable[N] {
 
     import spire.algebra._
     import spire.implicits._
@@ -219,8 +218,8 @@ object Plottable {
 
     def compare(d1: N, d2: N): Int = order.compare(d1, d2)
 
-    def portion(left: N, v: N, right: N): Double = ???
-//      space.distance(v, right) / space.distance(right, left)
+    def portion(left: N, v: N, right: N): Double =
+      space.distance(v, right) / space.distance(right, left)
 
     // TODO
     def tics(from: N, to: N): Seq[(N, String)] =

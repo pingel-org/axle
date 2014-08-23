@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class MoneyPerForce[N: Field: Order: Eq] extends Quantum[N] {
+abstract class MoneyPerForce[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
   
   class MoneyPerForceQuantity(
     magnitude: N = field.one,
@@ -36,7 +36,7 @@ abstract class MoneyPerForce[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object MoneyPerForce extends MoneyPerForce[Rational] {
+object MoneyPerForce extends MoneyPerForce[Rational](rationalDoubleMetricSpace) {
 
   import Money.{ USD }
   import Force.{ pound }

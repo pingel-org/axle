@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class Acceleration[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Acceleration[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
   
   class AccelerationQuantity(
     magnitude: N = field.one,
@@ -36,7 +36,7 @@ abstract class Acceleration[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Acceleration extends Acceleration[Rational] {
+object Acceleration extends Acceleration[Rational](rationalDoubleMetricSpace) {
   
   import Speed.{ mps, fps }
   import Time.{ second }

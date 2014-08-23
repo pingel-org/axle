@@ -5,7 +5,7 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-abstract class Flow[N: Field: Order: Eq] extends Quantum[N] {
+abstract class Flow[N: Field: Order: Eq](space: MetricSpace[N, Double]) extends Quantum[N](space) {
   
   class FlowQuantity(
     magnitude: N = field.one,
@@ -36,7 +36,7 @@ abstract class Flow[N: Field: Order: Eq] extends Quantum[N] {
 
 }
 
-object Flow extends Flow[Rational] {
+object Flow extends Flow[Rational](rationalDoubleMetricSpace) {
 
 
   import Volume.{ m3 }
