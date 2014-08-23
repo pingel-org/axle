@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class MoneyPerForce extends Quantum {
-
+abstract class MoneyPerForce[N: Field: Order: Eq] extends Quantum[N] {
+  
   class MoneyPerForceQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,14 +27,16 @@ class MoneyPerForce extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): MoneyPerForceQuantity =
-    new MoneyPerForceQuantity(one, None, name, symbol, link)
+    new MoneyPerForceQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: MoneyPerForceQuantity): MoneyPerForceQuantity =
+  def newQuantity(magnitude: N, unit: MoneyPerForceQuantity): MoneyPerForceQuantity =
     new MoneyPerForceQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
-
   val wikipediaUrl = "http://en.wikipedia.org/wiki/" // TODO
+
+}
+
+object MoneyPerForce extends MoneyPerForce[Rational] {
 
   import Money.{ USD }
   import Force.{ pound }
@@ -48,6 +50,7 @@ class MoneyPerForce extends Quantum {
 
   lazy val USDperPound = byName("$/lb")
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+
 }
 
-object MoneyPerForce extends MoneyPerForce

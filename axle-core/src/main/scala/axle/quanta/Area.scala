@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Area extends Quantum {
-
+abstract class Area[N: Field: Order: Eq] extends Quantum[N] {
+  
   class AreaQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,17 +27,19 @@ class Area extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): AreaQuantity =
-    new AreaQuantity(one, None, name, symbol, link)
+    new AreaQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: AreaQuantity): AreaQuantity =
+  def newQuantity(magnitude: N, unit: AreaQuantity): AreaQuantity =
     new AreaQuantity(magnitude, Some(unit), None, None, None)
-
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
-
-  import Distance.{ meter, km, cm }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Area"
 
+}
+
+object Area extends Area[Rational] {
+
+  import Distance.{ meter, km, cm }
+  
   lazy val _conversionGraph = conversions(
     List(
       derive(meter.by[Distance.type, this.type](meter, this), Some("m2"), Some("m2")),
@@ -54,6 +56,6 @@ class Area extends Quantum {
   lazy val km2 = byName("km2")
   lazy val cm2 = byName("cm2")
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+  
 }
-
-object Area extends Area

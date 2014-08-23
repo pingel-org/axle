@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Time extends Quantum {
-
+abstract class Time[N: Field: Order: Eq] extends Quantum[N] {
+ 
   class TimeQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,15 +27,17 @@ class Time extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): TimeQuantity =
-    new TimeQuantity(one, None, name, symbol, link)
+    new TimeQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: TimeQuantity): TimeQuantity =
+  def newQuantity(magnitude: N, unit: TimeQuantity): TimeQuantity =
     new TimeQuantity(magnitude, Some(unit), None, None, None)
-
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
   // "http://en.wikipedia.org/wiki/Time"
+
+}
+
+object Time extends Time[Rational] {
 
   lazy val _conversionGraph = conversions(
     List(
@@ -121,6 +123,6 @@ class Time extends Quantum {
   lazy val australopithecusAge = 4 *: my // Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
   lazy val modernHumanAge = 200 *: ky // Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
 
-}
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
 
-object Time extends Time
+}

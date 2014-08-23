@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Mass extends Quantum {
+abstract class Mass[N: Field: Order: Eq] extends Quantum[N] {
 
   class MassQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,15 +27,17 @@ class Mass extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): MassQuantity =
-    new MassQuantity(one, None, name, symbol, link)
+    new MassQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: MassQuantity): MassQuantity =
+  def newQuantity(magnitude: N, unit: MassQuantity): MassQuantity =
     new MassQuantity(magnitude, Some(unit), None, None, None)
-
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"
+
+}
+
+object Mass extends Mass[Rational] {
 
   lazy val _conversionGraph = conversions(
     List(
@@ -148,6 +150,7 @@ class Mass extends Quantum {
   lazy val ♇ = pluto
   lazy val ☽ = moon
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+
 }
 
-object Mass extends Mass

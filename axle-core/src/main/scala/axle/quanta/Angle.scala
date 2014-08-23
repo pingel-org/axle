@@ -6,10 +6,10 @@ import spire.implicits._
 import axle.graph._
 import math.{Pi => π}
 
-class Angle extends Quantum {
+abstract class Angle[N: Field: Order: Eq] extends Quantum[N] {
 
   class AngleQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -28,16 +28,17 @@ class Angle extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): AngleQuantity =
-    new AngleQuantity(one, None, name, symbol, link)
+    new AngleQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: AngleQuantity): AngleQuantity =
+  def newQuantity(magnitude: N, unit: AngleQuantity): AngleQuantity =
     new AngleQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
+  val wikipediaUrl = "http://en.wikipedia.org/wiki/Degree_(angle)"
 
-  val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
-  // "http://en.wikipedia.org/wiki/Distance"
+}
 
+object Angle extends Angle[Rational] {
+  
   lazy val _conversionGraph = conversions(
     List(
       unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(angle)")),
@@ -47,9 +48,9 @@ class Angle extends Quantum {
     ),
     (vs: Seq[Vertex[AngleQuantity]]) => vs match {
       case degree :: radian :: circleDegrees :: circleRadians :: Nil => trips2fns(List(
-        (degree, circleDegrees, 360.0), // TODO: precision
-        (radian, circleRadians, 2.0 * π),
-        (circleDegrees, circleRadians, 1.0)
+        (degree, circleDegrees, 360), // TODO: precision
+        (radian, circleRadians, 2 * π),
+        (circleDegrees, circleRadians, 1)
       ))
       case _ => Nil
     }
@@ -62,9 +63,9 @@ class Angle extends Quantum {
   lazy val circleDegrees = byName("circleDegrees")
   lazy val circleRadians = byName("circleRadians")
 
-  lazy val clockwise90 = -90.0 *: °
-  lazy val counterClockwise90 = 90.0 *: °
+  lazy val clockwise90 = -90 *: °
+  lazy val counterClockwise90 = 90 *: °
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+  
 }
-
-object Angle extends Angle

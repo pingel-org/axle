@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Information extends Quantum {
-
+abstract class Information[N: Field: Order: Eq] extends Quantum[N] {
+  
   class InformationQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,12 +27,16 @@ class Information extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): InformationQuantity =
-    new InformationQuantity(one, None, name, symbol, link)
+    new InformationQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: InformationQuantity): InformationQuantity =
+  def newQuantity(magnitude: N, unit: InformationQuantity): InformationQuantity =
     new InformationQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
+  val wikipediaUrl = "http://en.wikipedia.org/wiki/Information"
+
+}
+
+object Information extends Information[Rational] {
 
   lazy val _conversionGraph = conversions(
     List(
@@ -56,8 +60,6 @@ class Information extends Quantum {
       case _ => Nil
     })
 
-  val wikipediaUrl = "http://en.wikipedia.org/wiki/Information"
-
   lazy val bit = byName("bit")
   lazy val nibble = byName("nibble")
   lazy val byte = byName("byte")
@@ -73,6 +75,7 @@ class Information extends Quantum {
   lazy val TB = terabyte
   lazy val PB = petabyte
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+
 }
 
-object Information extends Information

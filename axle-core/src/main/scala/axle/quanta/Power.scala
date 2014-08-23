@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Power extends Quantum {
-
+abstract class Power[N: Field: Order: Eq] extends Quantum[N] {
+  
   class PowerQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,14 +27,16 @@ class Power extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): PowerQuantity =
-    new PowerQuantity(one, None, name, symbol, link)
+    new PowerQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: PowerQuantity): PowerQuantity =
+  def newQuantity(magnitude: N, unit: PowerQuantity): PowerQuantity =
     new PowerQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
-
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
+
+}
+
+object Power extends Power[Rational] {
 
   lazy val _conversionGraph = conversions(
     List(
@@ -69,6 +71,7 @@ class Power extends Quantum {
   lazy val hooverDam = byName("Hoover Dam")
   lazy val mustangGT = byName("2012 Mustang GT")
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+
 }
 
-object Power extends Power

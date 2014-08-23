@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Frequency extends Quantum {
-
+abstract class Frequency[N: Field: Order: Eq] extends Quantum[N] {
+  
   class FrequencyQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,14 +27,16 @@ class Frequency extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): FrequencyQuantity =
-    new FrequencyQuantity(one, None, name, symbol, link)
+    new FrequencyQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: FrequencyQuantity): FrequencyQuantity =
+  def newQuantity(magnitude: N, unit: FrequencyQuantity): FrequencyQuantity =
     new FrequencyQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
-
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Frequency"
+
+}
+
+object Frequency extends Frequency[Rational] {
 
   lazy val _conversionGraph = conversions(
     List(
@@ -60,6 +62,6 @@ class Frequency extends Quantum {
   lazy val MHz = megahertz
   lazy val GHz = gigahertz
 
-}
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
 
-object Frequency extends Frequency
+}

@@ -9,6 +9,7 @@ import axle.stats.Case
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Distribution
 import axle.stats.EnrichedCaseGenTraversable
+import axle.stats.P
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.NRoot
@@ -74,14 +75,15 @@ package object stats {
   import axle.quanta._
 
   def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = {
-    val adder = implicitly[AdditiveMonoid[Real]]
     val field = implicitly[Field[N]]
-    val cf = implicitly[ConvertableFrom[N]]
-    val H = Σ(X.values)({ x =>
+    val H = Σ(X.values) { x =>
       val px = P(X is x).apply()
-      if (px > field.zero) Real(cf.toDouble(-px * log2(px))) else adder.zero
-    })(adder)
-    Number(H.toDouble) *: bit // TODO Number(_.toDouble) should not be necessary
+      if (px > field.zero) (-px * log2(px)) else field.zero
+    }
+    // H *: bit
+    //val hr: Rational = Rational(H)
+    //hr *: bit
+    Rational(1) *: bit // !!!
   }
 
   def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = entropy(X)

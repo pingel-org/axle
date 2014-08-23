@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Energy extends Quantum {
-
+abstract class Energy[N: Field: Order: Eq] extends Quantum[N] {
+  
   class EnergyQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,17 +27,19 @@ class Energy extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): EnergyQuantity =
-    new EnergyQuantity(one, None, name, symbol, link)
+    new EnergyQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: EnergyQuantity): EnergyQuantity =
+  def newQuantity(magnitude: N, unit: EnergyQuantity): EnergyQuantity =
     new EnergyQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
+  val wikipediaUrl = "http://en.wikipedia.org/wiki/Energy"
+
+}
+
+object Energy extends Energy[Rational] {
 
   import Power.{ kilowatt }
   import Time.{ hour }
-
-  val wikipediaUrl = "http://en.wikipedia.org/wiki/Energy"
 
   lazy val _conversionGraph = conversions(
     List(
@@ -74,6 +76,7 @@ class Energy extends Quantum {
 
   lazy val castleBravo = 15 *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+
 }
 
-object Energy extends Energy

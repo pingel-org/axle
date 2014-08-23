@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Speed extends Quantum {
-
+abstract class Speed[N: Field: Order: Eq] extends Quantum[N] {
+ 
   class SpeedQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,17 +27,19 @@ class Speed extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): SpeedQuantity =
-    new SpeedQuantity(one, None, name, symbol, link)
+    new SpeedQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: SpeedQuantity): SpeedQuantity =
+  def newQuantity(magnitude: N, unit: SpeedQuantity): SpeedQuantity =
     new SpeedQuantity(magnitude, Some(unit), None, None, None)
-
-  import Distance.{ meter, mile, ft, km }
-  import Time.{ second, hour }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Speed"
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
+}
+
+object Speed extends Speed[Rational] {
+
+  import Distance.{ meter, mile, ft, km }
+  import Time.{ second, hour }
 
   lazy val _conversionGraph = conversions(
     List(
@@ -65,6 +67,6 @@ class Speed extends Quantum {
   lazy val c = byName("Light Speed")
   lazy val speedLimit = byName("Speed limit")
 
-}
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
 
-object Speed extends Speed
+}

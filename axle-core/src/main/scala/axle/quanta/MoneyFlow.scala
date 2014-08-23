@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class MoneyFlow extends Quantum {
+abstract class MoneyFlow[N: Field: Order: Eq] extends Quantum[N] {
 
   class MoneyFlowQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,14 +27,16 @@ class MoneyFlow extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): MoneyFlowQuantity =
-    new MoneyFlowQuantity(one, None, name, symbol, link)
+    new MoneyFlowQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: MoneyFlowQuantity): MoneyFlowQuantity =
+  def newQuantity(magnitude: N, unit: MoneyFlowQuantity): MoneyFlowQuantity =
     new MoneyFlowQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
-
   val wikipediaUrl = "http://en.wikipedia.org/wiki/" // TODO
+
+}
+
+object MoneyFlow extends MoneyFlow[Rational] {
 
   import Money.{ USD }
   import Time.{ hour }
@@ -48,6 +50,7 @@ class MoneyFlow extends Quantum {
 
   lazy val USDperHour = byName("$/hr")
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+
 }
 
-object MoneyFlow extends MoneyFlow

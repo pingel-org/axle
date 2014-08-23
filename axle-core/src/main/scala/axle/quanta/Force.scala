@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Force extends Quantum {
-
+abstract class Force[N: Field: Order: Eq] extends Quantum[N] {
+  
   class ForceQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,14 +27,16 @@ class Force extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): ForceQuantity =
-    new ForceQuantity(one, None, name, symbol, link)
+    new ForceQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: ForceQuantity): ForceQuantity =
+  def newQuantity(magnitude: N, unit: ForceQuantity): ForceQuantity =
     new ForceQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
-
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
+
+}
+
+object Force extends Force[Rational] {
 
 //  def vps() = List(
 //    unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force")),
@@ -61,6 +63,7 @@ class Force extends Quantum {
   lazy val newton = byName("newton")
   lazy val dyne = byName("dyne")
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+  
 }
 
-object Force extends Force

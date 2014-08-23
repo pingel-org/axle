@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Flow extends Quantum {
-
+abstract class Flow[N: Field: Order: Eq] extends Quantum[N] {
+  
   class FlowQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,14 +27,17 @@ class Flow extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): FlowQuantity =
-    new FlowQuantity(one, None, name, symbol, link)
+    new FlowQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: FlowQuantity): FlowQuantity =
+  def newQuantity(magnitude: N, unit: FlowQuantity): FlowQuantity =
     new FlowQuantity(magnitude, Some(unit), None, None, None)
-
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
-
+  
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
+
+}
+
+object Flow extends Flow[Rational] {
+
 
   import Volume.{ m3 }
   import Time.{ second }
@@ -52,6 +55,6 @@ class Flow extends Quantum {
   lazy val m3s = byName("cubic meters per second")
   lazy val niagaraFalls = byName("Niagara Falls Flow")
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+  
 }
-
-object Flow extends Flow

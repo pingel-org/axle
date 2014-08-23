@@ -3,9 +3,10 @@ package axle.quanta
 import axle.quanta._
 import axle.graph._
 import spire.math._
-import spire.implicits._
 import spire.algebra._
+import spire.implicits._
 import math.{ max, abs }
+import axle.graph.JungDirectedGraph
 
 /**
  * Quantum
@@ -37,6 +38,7 @@ trait QuantumExpression {
 }
 
 case class QuantumMultiplication(left: QuantumExpression, right: QuantumExpression) extends QuantumExpression
+
 case class QuantumDivision(left: QuantumExpression, right: QuantumExpression) extends QuantumExpression
 
 // case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
@@ -45,27 +47,29 @@ case class QuantumDivision(left: QuantumExpression, right: QuantumExpression) ex
  * case class QuantumMultiplication[QLEFT <: Quantum, QRIGHT <: Quantum, QRESULT <: Quantum](left: QLEFT, right: QRIGHT, resultQuantum: QRESULT) extends Quantum
  */
 
-trait Quantum extends QuantumExpression {
+abstract class Quantum[N: Field: Order: Eq] extends QuantumExpression {
 
   quantum =>
 
   type Q <: Quantity
 
+  def field = implicitly[Field[N]]
+
   implicit def eqTypeclass: Eq[Q]
 
   // Note: this is need for "def conversions"
-  implicit val edgeEq: Eq[Number => Number] = new Eq[Number => Number] {
-    def eqv(x: Number => Number, y: Number => Number): Boolean = ???
+  implicit def edgeEq: Eq[N => N] = new Eq[N => N] {
+    def eqv(x: N => N, y: N => N): Boolean = ???
   }
 
-  def conversionGraph: DirectedGraph[Q, Number => Number]
+  def conversionGraph: DirectedGraph[Q, N => N]
 
-  def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], Number => Number)]): DirectedGraph[Q, Number => Number] =
+  def conversions(vps: Seq[Q], ef: Seq[Vertex[Q]] => Seq[(Vertex[Q], Vertex[Q], N => N)]): DirectedGraph[Q, N => N] =
     JungDirectedGraph(vps, ef)
 
-  private[quanta] def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], Rational)]) = trips.flatMap(trip2fns)
+  private[quanta] def trips2fns(trips: Seq[(Vertex[Q], Vertex[Q], N)]) = trips.flatMap(trip2fns)
 
-  private[quanta] def trip2fns(trip: (Vertex[Q], Vertex[Q], Rational)): Seq[(Vertex[Q], Vertex[Q], Number => Number)] = {
+  private[quanta] def trip2fns(trip: (Vertex[Q], Vertex[Q], N)): Seq[(Vertex[Q], Vertex[Q], N => N)] = {
     val (from, to, multiplier) = trip
     Vector(
       (from, to, _ * multiplier),
@@ -75,8 +79,6 @@ trait Quantum extends QuantumExpression {
   def byName(unitName: String): Q = conversionGraph.findVertex(_.payload.name === unitName).get.payload
 
   def is(qe: QuantumExpression): Boolean = ??? // TODO
-
-  val one = Number.one
 
   object Quantity {
 
@@ -106,7 +108,7 @@ trait Quantum extends QuantumExpression {
   }
 
   class Quantity(
-    _magnitude: Number = one,
+    _magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -120,30 +122,36 @@ trait Quantum extends QuantumExpression {
     def -(right: Q): Q =
       quantity((this in right.unit).magnitude - right.magnitude, right.unit)
 
-    def *(n: Number): Q = quantity(_magnitude * n, unit)
+    def *(n: N): Q = quantity(_magnitude * n, unit)
 
-    def /(n: Number): Q = quantity(_magnitude / n, unit)
+    def /(n: N): Q = quantity(_magnitude / n, unit)
 
     def <(other: Q): Boolean = (other - this).magnitude > 0
 
     def >(other: Q): Boolean = (other - this).magnitude < 0
 
-    def by[QRGT <: Quantum, QRES <: Quantum](right: QRGT#Q, resultQuantum: QRES): QRES#Q =
+    def by[QRGT <: Quantum[N], QRES <: Quantum[N]](right: QRGT#Q, resultQuantum: QRES): QRES#Q =
       resultQuantum.quantity(_magnitude * right.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
 
-    def over[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q =
+    def over[QBOT <: Quantum[N], QRES <: Quantum[N]](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q =
       resultQuantum.quantity(_magnitude / bottom.magnitude, resultQuantum.newUnitOfMeasurement(None, None, None))
 
-    def through[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
+    def through[QBOT <: Quantum[N], QRES <: Quantum[N]](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
 
-    def per[QBOT <: Quantum, QRES <: Quantum](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
+    def per[QBOT <: Quantum[N], QRES <: Quantum[N]](bottom: QBOT#Q, resultQuantum: QRES): QRES#Q = over(bottom, resultQuantum)
 
-    def magnitude: Number = _magnitude
+    def magnitude: N = _magnitude
+
     def unitOption: Option[Q] = _unit
+
     def unit: Q = _unit.getOrElse(this)
+
     def name: String = _name.getOrElse("")
+
     def label: String = _name.getOrElse("")
+
     def symbol: Option[String] = _symbol
+
     def link: Option[String] = _link
 
     def vertex: Vertex[Q] = quantum.conversionGraph.findVertex(_.payload === this).get
@@ -155,14 +163,15 @@ trait Quantum extends QuantumExpression {
         _name.getOrElse("") + " (" + symbol.getOrElse("") + "): a measure of " + getClass.getSimpleName
       }
 
-    def *:(n: Number): Q = quantity(magnitude * n, this)
-
-    def in_:(n: Number): Q = quantity(n, this)
+    // (implicit module: Module[N, Rational])
+    def *:(n: N): Q = quantity(magnitude * n, this)
+    
+    def in_:(n: N): Q = quantity(n, this)
 
     def in(other: Q): Q =
       conversionGraph.shortestPath(other.unit.vertex, unit.vertex)
         .map(
-          _.map(_.payload).foldLeft(one)((n, convert) => convert(n)))
+          _.map(_.payload).foldLeft(field.one)((n, convert) => convert(n)))
         .map(n => quantity((magnitude * n) / other.magnitude, other))
         .getOrElse(throw new Exception("no conversion path from " + this + " to " + other))
 
@@ -170,9 +179,9 @@ trait Quantum extends QuantumExpression {
 
   }
 
-  def newQuantity(magnitude: Number, unit: Q): Q
+  def newQuantity(magnitude: N, unit: Q): Q
 
-  def quantity(magnitude: Number, unit: Q): Q = newQuantity(magnitude, unit)
+  def quantity(magnitude: N, unit: Q): Q = newQuantity(magnitude, unit)
 
   def newUnitOfMeasurement(
     name: Option[String] = None,
@@ -182,7 +191,7 @@ trait Quantum extends QuantumExpression {
   def unit(name: String, symbol: String, linkOpt: Option[String] = None): Q =
     newUnitOfMeasurement(Some(name), Some(symbol), linkOpt)
 
-  def derive(compoundUnit: Q,
+  def derive[N](compoundUnit: Q,
     nameOpt: Option[String] = None,
     symbolOpt: Option[String] = None,
     linkOpt: Option[String] = None): Q =
@@ -199,46 +208,24 @@ trait Quantum extends QuantumExpression {
 
   case class UnitPlottable(base: quantum.Q) extends Plottable[quantum.Q] {
 
+    val underlying = Plottable.abstractAlgebraPlottable[N]
+
     import math.{ pow, ceil, floor, log10 }
     import Stream.{ empty, cons }
 
-    def isPlottable(t: quantum.Q): Boolean = true
+    def isPlottable(t: quantum.Q): Boolean = underlying.isPlottable(t.magnitude)
 
-    def zero: Q = Number(0) *: base
+    def zero: Q = field.zero *: base
 
-    def compare(u1: quantum.Q, u2: quantum.Q): Int = {
-      val m1 = (u1 in base).magnitude
-      val m2 = (u2 in base).magnitude
-      if (m1 === m2) { 0 }
-      else if (m1 < m2) { -1 }
-      else { 1 }
-    }
+    def compare(u1: quantum.Q, u2: quantum.Q): Int = underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
 
     def portion(left: quantum.Q, v: quantum.Q, right: quantum.Q): Double =
-      (((v in base).magnitude - (left in base).magnitude) / ((right in base).magnitude - (left in base).magnitude)).toDouble
-
-    def step(from: Number, to: Number): Rational = {
-      val p = (log10((to - from).abs.toDouble) - 0.5).floor.toInt
-      if (p > 0) {
-        10 ** p
-      } else {
-        Rational(1, 10 ** math.abs(p))
-      }
-    }
-
-    def ticValueStream(v: Number, to: Number, step: Number): Stream[Number] =
-      if (v > to) empty else cons(v, ticValueStream(v + step, to, step))
+      underlying.portion((left in base).magnitude, (v in base).magnitude, (right in base).magnitude)
 
     def tics(from: quantum.Q, to: quantum.Q): Seq[(quantum.Q, String)] =
-      if (from === to) {
-        Nil
-      } else {
-        val fromD = (from in base).magnitude
-        val toD = (to in base).magnitude
-        val s = step(fromD, toD)
-        val n = ((toD.toRational - fromD.toRational) / s).ceil.toInt
-        val start = s * ((fromD.toRational / s).floor)
-        (0 to n).map(s * _).map(_ + start).map(v => (v.toDouble *: base, v.toDouble.toString))
+      underlying.tics((from in base).magnitude, (to in base).magnitude) map {
+        case (v, label) =>
+          (v *: base, v.toString)
       }
 
   }

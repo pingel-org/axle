@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Distance extends Quantum {
-
+abstract class Distance[N: Field: Order: Eq] extends Quantum[N] {
+ 
   class DistanceQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,15 +27,17 @@ class Distance extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): DistanceQuantity =
-    new DistanceQuantity(one, None, name, symbol, link)
+    new DistanceQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: DistanceQuantity): DistanceQuantity =
+  def newQuantity(magnitude: N, unit: DistanceQuantity): DistanceQuantity =
     new DistanceQuantity(magnitude, Some(unit), None, None, None)
-
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
   // "http://en.wikipedia.org/wiki/Distance"
+
+}
+
+object Distance extends Distance[Rational] {
 
   lazy val _conversionGraph = conversions(
     List(
@@ -90,6 +92,7 @@ class Distance extends Quantum {
   lazy val milkyWayDiameter = 100000 *: lightyear // Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
   lazy val toAndromeda = 2.6E6 *: lightyear // Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+
 }
 
-object Distance extends Distance

@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Volume extends Quantum {
-
+abstract class Volume[N: Field: Order: Eq] extends Quantum[N] {
+ 
   class VolumeQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,17 +27,19 @@ class Volume extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): VolumeQuantity =
-    new VolumeQuantity(one, None, name, symbol, link)
+    new VolumeQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: VolumeQuantity): VolumeQuantity =
+  def newQuantity(magnitude: N, unit: VolumeQuantity): VolumeQuantity =
     new VolumeQuantity(magnitude, Some(unit), None, None, None)
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
+  val wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
+
+}
+
+object Volume extends Volume[Rational] {
 
   import Distance.{ meter, km, cm }
   import Area.{ m2, km2, cm2 }
-
-  val wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
 
   lazy val _conversionGraph = conversions(
     List(
@@ -88,6 +90,7 @@ class Volume extends Quantum {
   lazy val balthazar = byName("balthazar")
   lazy val nebuchadnezzar = byName("nebuchadnezzar")
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+
 }
 
-object Volume extends Volume

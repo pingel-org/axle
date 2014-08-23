@@ -5,10 +5,10 @@ import spire.math._
 import spire.implicits._
 import axle.graph._
 
-class Acceleration extends Quantum {
-
+abstract class Acceleration[N: Field: Order: Eq] extends Quantum[N] {
+  
   class AccelerationQuantity(
-    magnitude: Number = one,
+    magnitude: N = field.one,
     _unit: Option[Q] = None,
     _name: Option[String] = None,
     _symbol: Option[String] = None,
@@ -27,17 +27,19 @@ class Acceleration extends Quantum {
     name: Option[String] = None,
     symbol: Option[String] = None,
     link: Option[String] = None): AccelerationQuantity =
-    new AccelerationQuantity(one, None, name, symbol, link)
+    new AccelerationQuantity(field.one, None, name, symbol, link)
 
-  def newQuantity(magnitude: Number, unit: AccelerationQuantity): AccelerationQuantity =
+  def newQuantity(magnitude: N, unit: AccelerationQuantity): AccelerationQuantity =
     new AccelerationQuantity(magnitude, Some(unit), None, None, None)
-
-  import Speed.{ mps, fps }
-  import Time.{ second }
 
   val wikipediaUrl = "http://en.wikipedia.org/wiki/Acceleration"
 
-  def conversionGraph: DirectedGraph[Q, Number => Number] = _conversionGraph
+}
+
+object Acceleration extends Acceleration[Rational] {
+  
+  import Speed.{ mps, fps }
+  import Time.{ second }
 
   lazy val _conversionGraph = conversions(
     List(
@@ -57,6 +59,6 @@ class Acceleration extends Quantum {
   lazy val fpsps = byName("fpsps")
   lazy val g = byName("g")
 
+  def conversionGraph: DirectedGraph[Q, Rational => Rational] = _conversionGraph
+  
 }
-
-object Acceleration extends Acceleration
