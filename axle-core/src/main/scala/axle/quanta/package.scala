@@ -7,7 +7,7 @@ import spire.algebra.MetricSpace
 
 package object quanta {
   
-  val rationalDoubleMetricSpace: MetricSpace[Rational, Double] = new MetricSpace[Rational, Double] {
+  implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] = new MetricSpace[Rational, Double] {
 
     def distance(v: Rational, w: Rational): Double = (v.toDouble - w.toDouble).abs
 

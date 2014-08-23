@@ -14,6 +14,7 @@ import axle.quanta.Information
 import axle.quanta.Information.Q
 import axle.quanta.Information.bit
 import axle.quanta.Information.eqTypeclass
+import axle.quanta.rationalDoubleMetricSpace 
 import axle.stats.H
 import axle.stats.coin
 import spire.algebra.Eq
