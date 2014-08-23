@@ -54,9 +54,11 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], _name: String = "
   val bars: Map[A, N] =
     tally.scanLeft((null.asInstanceOf[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2)))
 
+  val order = implicitly[Order[N]]
+    
   def observe(): A = {
     val r: N = totalCount * Random.nextDouble()
-    bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
+    bars.find({ case (_, v) => order.gt(v, r) }).getOrElse(throw new Exception("malformed distribution"))._1
   }
 
   def probabilityOf(a: A): N = tally.get(a).getOrElse(ring.zero) / totalCount

@@ -101,7 +101,7 @@ import axle._
       "joda-time" % "joda-time" % "2.3",
       "org.joda" % "joda-convert" % "1.6",
       "org.jblas" % "jblas" % "1.2.3",
-      "org.spire-math" %% "spire" % "0.7.5",
+      "org.spire-math" %% "spire" % "0.8.2",
       "com.chuusai" %% "shapeless" % "2.0.0"
     )
   )

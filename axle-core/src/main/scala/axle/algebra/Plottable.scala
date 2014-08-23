@@ -219,7 +219,7 @@ object Plottable {
 
     def compare(d1: N, d2: N): Int = order.compare(d1, d2)
 
-    def portion(left: N, v: N, right: N): Double = 0d
+    def portion(left: N, v: N, right: N): Double = ???
 //      space.distance(v, right) / space.distance(right, left)
 
     // TODO
