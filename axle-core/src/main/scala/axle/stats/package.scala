@@ -81,7 +81,9 @@ package object stats {
       val px = P(X is x).apply()
       if (order.gt(px, field.zero)) (-px * log2(px)) else field.zero
     }
-    ??? // H *: bit
+    //H *: bit
+    //Rational((H * 1000000).toInt, 1000000) *: bit
+    ???
   }
 
   def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = entropy(X)
