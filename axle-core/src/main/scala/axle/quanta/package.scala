@@ -28,39 +28,39 @@ package object quanta {
     class Distance extends Quantum
     class Time extends Quantum
 
-    trait QT[Q <: Quantum] { self =>
+    // implicit def modulizeQ = modulize[Q, N](self, implicitly[Field[N]], implicitly[Eq[N]])
 
-      implicit def modulizeQ[N: Field: Eq] = modulize[Q, N](self, implicitly[Field[N]], implicitly[Eq[N]])
+    trait QT[Q <: Quantum, N] { self =>
 
-      def vertex[N: Field: Eq](quantity: Quantity[Q, N]): Vertex[Quantity[Q, N]] =
-        conversionGraph[N].findVertex(_.payload === quantity).get
+      implicit def fieldN: Field[N]
 
-      def canonicalBase[N: Field: Eq]: Quantity[Q, N]
+      implicit def eqN: Eq[N]
 
-      def conversionGraph[N: Field: Eq]: DirectedGraph[Quantity[Q, N], N => N]
+      //      def vertex(quantity: Quantity[Q, N]): Vertex[Quantity[Q, N]] =
+      //        conversionGraph.findVertex(_.payload === quantity).get
+      //
+      //      def canonicalBase: Quantity[Q, N]
+      //
+      //      def conversionGraph: DirectedGraph[Quantity[Q, N], N => N]
     }
 
     object Quantity {
 
       implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[Quantity[Q, N]] = new Eq[Quantity[Q, N]] {
-        // TODO: should a conversion be done when checking equality?
+        // TODO: perform conversion when checking equality
         def eqv(x: Quantity[Q, N], y: Quantity[Q, N]): Boolean = (x.magnitude === y.magnitude) && (x.unit === y.unit)
       }
     }
 
-    case class Quantity[Q <: Quantum, N: Field: Eq](magnitude: N, unitOpt: Option[Quantity[Q, N]] = None)(implicit qt: QT[Q]) {
-
-      implicit val module = modulize[Q, N]
+    case class Quantity[Q <: Quantum, N](magnitude: N, unitOpt: Option[Quantity[Q, N]] = None)(implicit qt: QT[Q, N], fieldN: Field[N], eqN: Eq[N]) {
 
       def unit: Quantity[Q, N] = unitOpt.getOrElse(this)
 
-      // TODO: avoid having to re-define syntax for + and *
-      def *(that: N): Quantity[Q, N] = module.timesr(this, that)
+      private[this] def vertex(cg: DirectedGraph[Quantity[Q, N], N => N], quantity: Quantity[Q, N]): Vertex[Quantity[Q, N]] =
+        cg.findVertex(_.payload === quantity).get
 
-      def +(that: Quantity[Q, N]): Quantity[Q, N] = module.plus(this, that)
-
-      def in(newUnit: Quantity[Q, N]): Quantity[Q, N] =
-        qt.conversionGraph[N].shortestPath(qt.vertex(newUnit.unit), qt.vertex(unit))
+      def in(newUnit: Quantity[Q, N])(implicit cg: DirectedGraph[Quantity[Q, N], N => N]): Quantity[Q, N] =
+        cg.shortestPath(vertex(cg, newUnit.unit), vertex(cg, unit))
           .map(
             _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
           .map(n => new Quantity((magnitude * n) / newUnit.magnitude, Some(newUnit)))
@@ -74,59 +74,55 @@ package object quanta {
         }
     }
 
-    implicit def modulize[Q <: Quantum, N](implicit qt: QT[Q], field: Field[N], eqn: Eq[N]) = new Module[Quantity[Q, N], N] {
+    implicit def modulize[Q <: Quantum, N](implicit qt: QT[Q, N], fieldn: Field[N], eqn: Eq[N], cg: DirectedGraph[Quantity[Q, N], N => N]) = new Module[Quantity[Q, N], N] {
 
       def negate(x: Quantity[Q, N]): Quantity[Q, N] = new Quantity(-x.magnitude, x.unitOpt) // AdditiveGroup
 
-      def zero: Quantity[Q, N] = new Quantity(field.zero, Some(qt.canonicalBase)) // AdditiveMonoid
+      def zero: Quantity[Q, N] = new Quantity(fieldn.zero, None) // AdditiveMonoid
 
       def plus(x: Quantity[Q, N], y: Quantity[Q, N]): Quantity[Q, N] =
         new Quantity((x in y.unit).magnitude + y.magnitude, y.unitOpt) // AdditiveSemigroup
 
-      implicit def scalar: Rng[N] = field // Module
+      implicit def scalar: Rng[N] = fieldn // Module
 
       def timesl(r: N, v: Quantity[Q, N]): Quantity[Q, N] = new Quantity(v.magnitude * r, v.unitOpt)
     }
 
-    object QT {
+    implicit def qt[Q <: Quantum, N](implicit _fieldN: Field[N], _eqN: Eq[N]): QT[Q, N] = new QT[Q, N] {
 
-      implicit val distance = new QT[Distance] { qtd: QT[Distance] =>
+      implicit def eqN: Eq[N] = _eqN
 
-        def meter[N: Field: Eq]: Quantity[Distance, N] = new Quantity[Distance, N](implicitly[Field[N]].one, None)(implicitly[Field[N]], implicitly[Eq[N]], qtd)
-
-        def canonicalBase[N: Field: Eq]: Quantity[Distance, N] = meter[N]
-
-        def conversionGraph[N: Field: Eq]: DirectedGraph[Quantity[Distance, N], N => N] = ???
-      }
-
-      implicit val time = new QT[Time] { qtt: QT[Time] =>
-
-        def second[N: Field: Eq]: Quantity[Time, N] = new Quantity(implicitly[Field[N]].one, None)(implicitly[Field[N]], implicitly[Eq[N]], qtt)
-
-        def minute[N: Field: Eq]: Quantity[Time, N] = 60 *: second[N]
-
-        def canonicalBase[N: Field: Eq]: Quantity[Time, N] = second[N]
-
-        def conversionGraph[N: Field: Eq]: DirectedGraph[Quantity[Time, N], N => N] = ???
-      }
+      implicit def fieldN: Field[N] = _fieldN
     }
 
-    import QT._
+    val meter = Quantity[Distance, Rational](1)
+    val second = Quantity[Time, Rational](1)
+    val minute = 60 *: second
+
+    implicit val cgDR: DirectedGraph[Quantity[Distance, Rational], Rational => Rational] = ???
+    implicit val cgTR: DirectedGraph[Quantity[Time, Rational], Rational => Rational] = ???
 
     // TODO: meter, second, etc should be importable
 
-    val d1: Quantity[Distance, Rational] = Rational(3, 4) *: distance.meter[Rational]
-    val d2: Quantity[Distance, Rational] = Rational(7, 2) *: distance.meter[Rational]
-    val t1: Quantity[Time, Rational] = Rational(4) *: time.second[Rational]
-    val t2: Quantity[Time, Rational] = Rational(9, 88) *: time.second[Rational]
+    val d1 = Rational(3, 4) *: meter
+    val d2 = Rational(7, 2) *: meter
+    val t1 = Rational(4) *: second
+    val t2 = Rational(9, 88) *: second
+    val t3 = 5d *: second
 
-    val d3 = d2 + d2
-    val t3 = t2 in time.minute[Rational]
+    implicit val mdr = modulize[Distance, Rational]
+    implicit val mtr = modulize[Time, Rational]
 
-    implicit val m = modulize[Time, Rational](QT.time, implicitly[Field[Rational]], implicitly[Eq[Rational]])
-    m.timesr(t1, Rational(5, 3))
-
-    val t4 = t1 * 60
+    val d3 = d1 + d2
+    val d4 = d2 - d2
+    //val d5 = d2 + t2 // shouldn't compile
+    val t4 = t2 in minute
+    val t5 = mtr.timesr(t1, Rational(5, 3))
+    // TODO val t6 = t1 * Rational(5, 3)
+    val t7 = mtr.timesl(Rational(5, 3), t1)
+    // TODO val t8 = Rational(5, 3) * t1
+    // TODO val t9 = t1 * 60
+    // TODO val t5 = t1 / 2
 
   }
 
