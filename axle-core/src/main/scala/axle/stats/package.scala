@@ -3,8 +3,9 @@ package axle
 import scala.Vector
 import scala.collection.GenTraversable
 
-import axle.quanta.Information
-import axle.quanta.Information.bit
+import axle.quanta2.Quantity
+import axle.quanta2.Information
+import axle.quanta2.Information.bit
 import axle.stats.Case
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Distribution
@@ -18,6 +19,7 @@ import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
 import spire.implicits.convertableOps
 import spire.implicits.literalIntAdditiveGroupOps
+import spire.implicits.moduleOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.nrootOps
@@ -71,22 +73,21 @@ package object stats {
 
   def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = stddev(xs)
 
-  import Information._
-  import axle.quanta._
-
-  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = {
-    val order = implicitly[Order[N]]
-    val field = implicitly[Field[N]]
+  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Quantity[Information, Real] = {
+    import axle.quanta2.Information._
+    val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values) { x =>
-      val px = P(X is x).apply()
-      if (order.gt(px, field.zero)) (-px * log2(px)) else field.zero
+      val px: N = P(X is x).apply()
+      if (implicitly[Order[N]].gt(px, implicitly[Field[N]].zero)) {
+        convertN.toReal(-px) * log2(px)
+      } else {
+        implicitly[Field[Real]].zero
+      }
     }
-    //H *: bit
-    //Rational((H * 1000000).toInt, 1000000) *: bit
-    ???
+    Quantity(H, Some(bit))
   }
 
-  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Information.Q = entropy(X)
+  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Quantity[Information, Real] = entropy(X)
 
   def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
     // TODO

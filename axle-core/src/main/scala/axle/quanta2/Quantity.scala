@@ -4,11 +4,18 @@ import axle.graph.DirectedGraph
 import axle.graph.Vertex
 import spire.algebra.Field
 import spire.algebra.Eq
+import spire.algebra.Order
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.multiplicativeGroupOps
 
 object Quantity {
+
+  implicit def orderQuantity[Q <: Quantum, N: Order](implicit cg: axle.graph.DirectedGraph[axle.quanta2.Quantity[Q,N],N => N]) = new Order[Quantity[Q, N]] {
+    val orderN = implicitly[Order[N]]
+    def compare(x: Quantity[Q, N], y: Quantity[Q, N]): Int =
+      orderN.compare((x in y.unit).magnitude, y.magnitude)
+  }
 
   implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[Quantity[Q, N]] = new Eq[Quantity[Q, N]] {
     // TODO: perform conversion when checking equality

@@ -2,25 +2,34 @@ package axle.stats
 
 import org.specs2.mutable.Specification
 
-import axle.quanta.Information.Q
+import axle.quanta2.Information
+import axle.quanta2.Quantity
+import axle.quanta2.Quantum
 import spire.math.Rational
+import spire.math.Real
+import spire.algebra.Order
 
 class EntropySpec extends Specification {
 
   "entropy of coin" should {
     "work" in {
 
-      val biasToEntropy = new collection.immutable.TreeMap[Rational, Q]() ++
-        (0 to 100).map(i => (Rational(i, 100), entropy(coin(Rational(i, 100))))).toMap
+      val biasToEntropy = new collection.immutable.TreeMap[Rational, Quantity[Information, Real]]() ++
+        (0 to 100).map(i => (Rational(i, 100), entropy[Symbol, Rational](coin(Rational(i, 100))))).toMap
 
-//      implicit val bitp = bit.plottable
-//
-//      val plot = Plot(List(("h", biasToEntropy)),
-//        drawKey = false,
-//        xAxisLabel = Some("p(x='HEAD)"),
-//        title = Some("Entropy"))
+      // implicit val bitp = bit.plottable
+      //
+      // val plot = Plot(List(("h", biasToEntropy)),
+      //   drawKey = false,
+      //   xAxisLabel = Some("p(x='HEAD)"),
+      //   title = Some("Entropy"))
 
-      biasToEntropy(Rational(1, 100)) < biasToEntropy(Rational(1, 2))
+      import spire.implicits.orderOps
+      val lhs: Quantity[Information, Real] = biasToEntropy(Rational(1, 100))
+      val rhs: Quantity[Information, Real] = biasToEntropy(Rational(1, 2))
+      val or = implicitly[Order[Quantity[Information, Real]]]
+      // lhs < rhs
+      orderOps(lhs).compare(rhs) == -1
     }
   }
 }

@@ -62,9 +62,11 @@ package object quanta2 {
       (to, from, _ / multiplier))
   }
 
-  private[quanta2] def trips2fns[Q <: Quantum, N: Field: Eq](trips: Seq[(Vertex[Quantity[Q, N]], Vertex[Quantity[Q, N]], N)]) = trips.flatMap(trip2fns(_))
+  private[quanta2] def trips2fns[Q <: Quantum, N: Field: Eq](trips: Seq[(Vertex[Quantity[Q, N]], Vertex[Quantity[Q, N]], N)]) =
+    trips.flatMap(trip2fns(_))
 
-  private[quanta2] def byName[Q <: Quantum, N: Field: Eq](cg: DirectedGraph[Quantity[Q, N], N => N], unitName: String): Quantity[Q, N] = cg.findVertex(_.payload.name === unitName).get.payload
+  private[quanta2] def byName[Q <: Quantum, N: Field: Eq](cg: DirectedGraph[Quantity[Q, N], N => N], unitName: String): Quantity[Q, N] =
+    cg.findVertex(_.payload.name === unitName).get.payload
 
     
 }

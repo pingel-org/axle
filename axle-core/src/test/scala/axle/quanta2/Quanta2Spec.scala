@@ -19,11 +19,12 @@ class Quanta2Spec extends Specification {
       val t1 = Rational(4) *: second
       val t2 = Rational(9, 88) *: second
       val t3 = Rational(5d) *: second
+      val t4 = 10 *: second
 
       val d3 = d1 + d2
       val d4 = d2 - d2
       //val d5 = d2 + t2 // shouldn't compile
-      val t4 = t2 in minute
+      val t5 = t2 in minute
       val t6 = t1 :* Rational(5, 2)
       val t8 = Rational(5, 3) *: t1
       val t9 = t1 :* 60
