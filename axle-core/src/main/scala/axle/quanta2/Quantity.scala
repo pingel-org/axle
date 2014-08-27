@@ -34,4 +34,11 @@ case class Quantity[Q <: Quantum, N](
         _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
       .map(n => Quantity((magnitude * n) / newUnit.magnitude, Some(newUnit)))
       .getOrElse(throw new Exception("no conversion path from " + this + " to " + newUnit))
+
+  // TODO
+  def over[QR <: Quantum, Q2 <: Quantum, N](
+    denominator: Quantity[QR, N])(
+      implicit unittedD: Unitted[QR, N], qt2: Unitted[Q2, N], fieldN: Field[N], eqN: Eq[N]): Quantity[Q2, N] =
+    newUnit[Q2, N]
+
 }

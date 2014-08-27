@@ -10,18 +10,18 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
-class Time extends Quantum {
-  def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
+class Flow extends Quantum {
+  def wikipediaUrl = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
 }
 
-object Time extends Time {
+object Flow extends Flow {
 
-  val second = newUnit[Time, Rational]
+  val second = newUnit[Flow, Rational]
   
-  implicit val cgTR: DirectedGraph[Quantity[Time, Rational], Rational => Rational] = ???
+  implicit val cgTR: DirectedGraph[Quantity[Flow, Rational], Rational => Rational] = ???
 
-  implicit val mtr = modulize[Time, Rational]
+  implicit val mtr = modulize[Flow, Rational]
 
-  val minute = Rational(60) *: second
+  val niagaraFalls = Rational(60) *: second
   
 }

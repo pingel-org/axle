@@ -10,17 +10,17 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
-class Time extends Quantum {
-  def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
+class Money extends Quantum {
+  def wikipediaUrl = "TODO"
 }
 
-object Time extends Time {
+object Money extends Money {
 
-  val second = newUnit[Time, Rational]
+  val second = newUnit[Money, Rational]
   
-  implicit val cgTR: DirectedGraph[Quantity[Time, Rational], Rational => Rational] = ???
+  implicit val cgTR: DirectedGraph[Quantity[Money, Rational], Rational => Rational] = ???
 
-  implicit val mtr = modulize[Time, Rational]
+  implicit val mtr = modulize[Money, Rational]
 
   val minute = Rational(60) *: second
   
