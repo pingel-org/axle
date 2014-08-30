@@ -11,7 +11,7 @@ import spire.implicits.multiplicativeGroupOps
 
 object Quantity {
 
-  implicit def orderQuantity[Q <: Quantum, N: Order](implicit cg: axle.graph.DirectedGraph[axle.quanta2.Quantity[Q,N],N => N]) = new Order[Quantity[Q, N]] {
+  implicit def orderQuantity[Q <: Quantum, N: Order](implicit cg: DirectedGraph[Quantity[Q,N],N => N]) = new Order[Quantity[Q, N]] {
     val orderN = implicitly[Order[N]]
     def compare(x: Quantity[Q, N], y: Quantity[Q, N]): Int =
       orderN.compare((x in y.unit).magnitude, y.magnitude)
@@ -24,7 +24,7 @@ object Quantity {
 }
 
 case class Quantity[Q <: Quantum, N](
-  magnitude: N, unitOpt: Option[Quantity[Q, N]] = None, nameOpt: Option[String] = None, symbol: Option[String] = None, _link: Option[String] = None)(implicit unitted: Unitted[Q, N], fieldN: Field[N], eqN: Eq[N]) {
+  magnitude: N, unitOpt: Option[Quantity[Q, N]] = None, nameOpt: Option[String] = None, symbol: Option[String] = None, _link: Option[String] = None)(implicit fieldN: Field[N], eqN: Eq[N]) {
 
   def unit: Quantity[Q, N] = unitOpt.getOrElse(this)
 
@@ -43,9 +43,7 @@ case class Quantity[Q <: Quantum, N](
       .getOrElse(throw new Exception("no conversion path from " + this + " to " + newUnit))
 
   // TODO
-  def over[QR <: Quantum, Q2 <: Quantum, N](
-    denominator: Quantity[QR, N])(
-      implicit unittedD: Unitted[QR, N], qt2: Unitted[Q2, N], fieldN: Field[N], eqN: Eq[N]): Quantity[Q2, N] =
+  def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: Quantity[QR, N]): Quantity[Q2, N] =
     newUnit[Q2, N]
 
 }

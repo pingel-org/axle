@@ -21,7 +21,7 @@ package object quanta2 {
     def eqv(x: N => N, y: N => N): Boolean = ???
   }
 
-  implicit def modulize[Q <: Quantum, N](implicit unitted: Unitted[Q, N], fieldn: Field[N], eqn: Eq[N], cg: DirectedGraph[Quantity[Q, N], N => N]): Module[Quantity[Q, N], N] = new Module[Quantity[Q, N], N] {
+  implicit def modulize[Q <: Quantum, N](implicit fieldn: Field[N], eqn: Eq[N], cg: DirectedGraph[Quantity[Q, N], N => N]): Module[Quantity[Q, N], N] = new Module[Quantity[Q, N], N] {
 
     def negate(x: Quantity[Q, N]): Quantity[Q, N] = Quantity(-x.magnitude, x.unitOpt) // AdditiveGroup
 
@@ -33,13 +33,6 @@ package object quanta2 {
     implicit def scalar: Rng[N] = fieldn // Module
 
     def timesl(r: N, v: Quantity[Q, N]): Quantity[Q, N] = Quantity(v.magnitude * r, v.unitOpt)
-  }
-
-  implicit def unitted[Q <: Quantum, N](implicit _fieldN: Field[N], _eqN: Eq[N]): Unitted[Q, N] = new Unitted[Q, N] {
-
-    implicit def eqN: Eq[N] = _eqN
-
-    implicit def fieldN: Field[N] = _fieldN
   }
 
   def newUnit[Q <: Quantum, N: Field: Eq]: Quantity[Q, N] = Quantity(implicitly[Field[N]].one, None)

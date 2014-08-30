@@ -51,9 +51,11 @@ object Information extends Information {
 
   implicit val cgIRational: DirectedGraph[Quantity[Information, Rational], Rational => Rational] = cgin[Rational]
   implicit val cgIReal: DirectedGraph[Quantity[Information, Real], Real => Real] = cgin[Real]
+  implicit val cgIDouble: DirectedGraph[Quantity[Information, Double], Double => Double] = cgin[Double]
 
   implicit val mtRational = modulize[Information, Rational]
   implicit val mtReal = modulize[Information, Real]
+  implicit val mtDouble = modulize[Information, Double]
 
   def bit[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Information, N], N => N]) = byName(cg, "bit")
 

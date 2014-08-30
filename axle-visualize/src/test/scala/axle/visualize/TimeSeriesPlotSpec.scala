@@ -10,17 +10,18 @@ import org.specs2.mutable.Specification
 
 import axle.algebra.Plottable.DateTimePlottable
 import axle.algebra.Plottable.DoublePlottable
-import axle.quanta.Information
-import axle.quanta.Information.Q
-import axle.quanta.Information.bit
-import axle.quanta.Information.eqTypeclass
-import axle.quanta.rationalDoubleMetricSpace 
+import axle.quanta2._
+import axle.quanta2.Information.bit
 import axle.stats.H
 import axle.stats.coin
+import axle.algebra.Plottable
+import spire.math._
+import axle.graph.DirectedGraph
 import spire.algebra.Eq
 import spire.implicits.SeqEq
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
+import spire.implicits._
 import spire.math.Number.apply
 import spire.math.Rational
 
@@ -37,26 +38,32 @@ class TimeSeriesPlotSpec extends Specification {
   "Tics for units" should {
     "work" in {
 
-      val tics = bit.plottable.tics(0 *: bit, 1 *: bit).toVector
+      import spire.algebra._
+      import Information.cgIDouble
+
+      implicit val ieqx = implicitly[Eq[(Quantity[Information, Double], String)]] // (eqTuple2[Quantity[Information, Double], String])
+      implicit val vieq = implicitly[Eq[Vector[(Quantity[Information, Double], String)]]]
+      implicit val field = implicitly[Field[Double]]
+      implicit val order = implicitly[Order[Double]]
+      implicit val space: MetricSpace[Double, Double] = ???
+      val plottable = UnitPlottable(bit[Double])(field, order, space, cgIDouble)
+
+      val tics = plottable.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
 
       val expected = Vector(
-        (0.0 *: bit, "0.0"),
-        (0.1 *: bit, "0.1"),
-        (0.2 *: bit, "0.2"),
-        (0.3 *: bit, "0.3"),
-        (0.4 *: bit, "0.4"),
-        (0.5 *: bit, "0.5"),
-        (0.6 *: bit, "0.6"),
-        (0.7 *: bit, "0.7"),
-        (0.8 *: bit, "0.8"),
-        (0.9 *: bit, "0.9"),
-        (1.0 *: bit, "1.0"))
+        (0.0 *: bit[Double], "0.0"),
+        (0.1 *: bit[Double], "0.1"),
+        (0.2 *: bit[Double], "0.2"),
+        (0.3 *: bit[Double], "0.3"),
+        (0.4 *: bit[Double], "0.4"),
+        (0.5 *: bit[Double], "0.5"),
+        (0.6 *: bit[Double], "0.6"),
+        (0.7 *: bit[Double], "0.7"),
+        (0.8 *: bit[Double], "0.8"),
+        (0.9 *: bit[Double], "0.9"),
+        (1.0 *: bit[Double], "1.0"))
 
-      // implicit val ieq = implicitly[Eq[Information.Q]]
-      implicit val ieqx = implicitly[Eq[(Information.Q, String)]](eqTuple2[Information.Q, String])
-      implicit val vieq = implicitly[Eq[Vector[(Information.Q, String)]]]
-
-      //      tics must be equalTo expected
+      // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))
     }
   }
@@ -90,19 +97,29 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
-    val hm = new TreeMap[Double, Q]() ++ (0 to 100).map(i => (i / 100d, H(coin(Rational(i, 100))))).toMap
+    import spire.algebra._
+    import Information.cgIReal
+    import spire.compat.ordering
 
-    val plot = new Plot(
+    implicit val space: MetricSpace[Real, Double] = ???
+    implicit val field = implicitly[Field[Real]]
+    implicit val order = implicitly[Order[Real]]
+    implicit val plottable = UnitPlottable(bit[Real])(field, order, space, cgIReal)
+
+    type D = TreeMap[Real, Quantity[Information, Real]]
+    val hm: D = new TreeMap[Real, Quantity[Information, Real]]() ++ (0 to 100).map(i => (Real(i / 100d), H(coin(Rational(i, 100))))).toMap
+
+    val plot = new Plot[Real, Quantity[Information, Real], D](
       List(("h", hm)),
-      (d: TreeMap[Double, Q]) => d.keys,
-      (d: TreeMap[Double, Q], x: Double) => d(x),
+      (d: TreeMap[Real, Quantity[Information, Real]]) => d.keys,
+      (d: TreeMap[Real, Quantity[Information, Real]], x: Real) => d(x),
       connect = true,
       drawKey = false,
-      xAxis = Some(0.0 *: bit),
+      xAxis = Some(Real(0) *: bit[Real]),
       xAxisLabel = Some("p(x='HEAD)"),
-      yAxis = Some(0.0),
+      yAxis = Some(Real(0)),
       yAxisLabel = Some("H"),
-      title = Some("Entropy"))(DoublePlottable, Information.UnitPlottable(bit))
+      title = Some("Entropy")) // (DoublePlottable, plottable)
 
     // show(plot)
 
