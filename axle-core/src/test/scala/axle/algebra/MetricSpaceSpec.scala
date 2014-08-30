@@ -21,7 +21,7 @@ abstract class MetricSpaceSpec[A: Eq: Arbitrary, B: AdditiveMonoid: Order](
   implicit lazy val arbitraryMetricSpace: Arbitrary[MetricSpace[A, B]] =
     Arbitrary(genMetricSpace)
 
-  s"$name obeys Cauchy-Schwartz (aka Triangle Inequality)" ! prop { (ms: MetricSpace[A, B], x: A, y: A, z: A) =>
+  s"$name obeys Cauchy-Schwarz (aka Triangle Inequality)" ! prop { (ms: MetricSpace[A, B], x: A, y: A, z: A) =>
     implicit val ims = ms
     (x distance z) <= (x distance y) + (y distance z)
   }
