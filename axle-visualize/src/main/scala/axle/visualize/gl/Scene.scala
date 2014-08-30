@@ -9,20 +9,23 @@ import scala.math.sin
 import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
 
-import axle.quanta.Angle
-import axle.quanta.Angle.degree
-import axle.quanta.Angle.radian
-import axle.quanta.Distance
+import axle.quanta2.Angle
+import axle.quanta2.Angle.degree
+import axle.quanta2.Angle.radian
+import axle.quanta2.Distance
+import axle.quanta2.Quantity
 import javax.media.opengl.GL2
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
 import javax.media.opengl.glu.GLU
-import spire.math.Number.apply
+import spire.implicits.DoubleAlgebra
+import spire.implicits.FloatAlgebra
+import spire.implicits.moduleOps
 
-abstract class Scene(_distanceUnit: Distance.Q) {
+abstract class Scene(_distanceUnit: Quantity[Distance, Float]) {
 
-  def distanceUnit: Distance.Q = _distanceUnit
-  
+  def distanceUnit: Quantity[Distance, Float] = _distanceUnit
+
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
     orienter(gl)
@@ -41,30 +44,30 @@ abstract class Scene(_distanceUnit: Distance.Q) {
         url2texture += url -> TextureIO.newTexture(url, false, extension)
     }
 
-  def sphericalToCartesian(spherical: SphericalVector): Position = {
+  def sphericalToCartesian(spherical: SphericalVector[Double]): Position[Double] = {
     import spherical._
     Position(
-      ρ * sin((θ in radian).magnitude.toDouble) * cos((φ in radian).magnitude.toDouble),
-      ρ * sin((θ in radian).magnitude.toDouble) * sin((φ in radian).magnitude.toDouble),
-      ρ * cos((θ in radian).magnitude.toDouble))
+      ρ :* sin((θ in radian[Double]).magnitude) * cos((φ in radian[Double]).magnitude),
+      ρ :* sin((θ in radian[Double]).magnitude) * sin((φ in radian[Double]).magnitude),
+      ρ :* cos((θ in radian[Double]).magnitude))
   }
 
-  def positionLight(position: Position, gl: GL2): Unit = {
+  def positionLight(position: Position[Float], gl: GL2): Unit = {
     import position._
     gl.glLightfv(GL_LIGHT0, GL_POSITION, Vector(
-      (x in distanceUnit).magnitude.toFloat,
-      (y in distanceUnit).magnitude.toFloat,
-      (z in distanceUnit).magnitude.toFloat).toArray, 0)
+      (x in distanceUnit).magnitude,
+      (y in distanceUnit).magnitude,
+      (z in distanceUnit).magnitude).toArray, 0)
   }
 
-  def translate(gl: GL2, x: Distance.Q, y: Distance.Q, z: Distance.Q): Unit =
+  def translate(gl: GL2, x: Quantity[Distance, Float], y: Quantity[Distance, Float], z: Quantity[Distance, Float]): Unit =
     gl.glTranslatef(
-      (x in distanceUnit).magnitude.toFloat,
-      (y in distanceUnit).magnitude.toFloat,
-      (z in distanceUnit).magnitude.toFloat)
+      (x in distanceUnit).magnitude,
+      (y in distanceUnit).magnitude,
+      (z in distanceUnit).magnitude)
 
-  def rotate(gl: GL2, a: Angle.Q, x: Float, y: Float, z: Float): Unit =
-    gl.glRotatef((a in degree).magnitude.toFloat, x, y, z)
+  def rotate(gl: GL2, a: Quantity[Angle, Float], x: Float, y: Float, z: Float): Unit =
+    gl.glRotatef((a in degree[Float]).magnitude, x, y, z)
 
   def textureUrls: Seq[(URL, String)]
 

@@ -16,10 +16,11 @@ object Time extends Time {
 
   implicit def cgn[N: Field: Eq]: DirectedGraph[Quantity[Time, N], N => N] = conversions(
     List(
+      unit("millisecond", "ms"),
       unit("second", "s"),
       unit("minute", "min")),
     (vs: Seq[Vertex[Quantity[Time, N]]]) => vs match {
-      case s :: Nil => trips2fns[Time, N](List())
+      case ms :: s :: min :: Nil => trips2fns[Time, N](List())
       case _ => Nil
     })
 
@@ -31,6 +32,7 @@ object Time extends Time {
   implicit val mtReal = modulize[Time, Real]
   implicit val mtDouble = modulize[Time, Double]
 
+  def millisecond[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Time, N], N => N]) = byName(cg, "millisecond")
   def second[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Time, N], N => N]) = byName(cg, "second")
   def minute[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Time, N], N => N]) = byName(cg, "minute")
 

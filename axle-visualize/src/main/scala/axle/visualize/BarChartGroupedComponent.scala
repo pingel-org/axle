@@ -14,12 +14,14 @@ import DataFeedProtocol.Fetch
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta2.Angle.{° => °}
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
+import spire.implicits.moduleOps
+import spire.implicits.DoubleAlgebra 
 
 class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])
   extends JPanel
@@ -36,7 +38,7 @@ class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarCh
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
   val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
+  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90d *: °[Double])))
 
   val keyOpt = if (drawKey) {
     Some(new BarChartGroupedKey(chart, normalFont, colorStream))

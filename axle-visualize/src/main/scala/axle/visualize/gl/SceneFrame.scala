@@ -6,13 +6,17 @@ import java.awt.event.WindowEvent
 
 import com.jogamp.opengl.util.FPSAnimator
 
-import axle.quanta.Angle.degree
-import axle.quanta.Distance
+import axle.quanta2.Angle.degree
+import axle.quanta2.Distance
+import axle.quanta2.Quantity
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import spire.math.Number.apply
+import spire.implicits.DoubleAlgebra
+import spire.implicits.FloatAlgebra
+import spire.implicits.moduleOps
 
-class SceneFrame(scene: Scene, width: Int, height: Int, zNear: Distance.Q, zFar: Distance.Q, fps: Int) {
+class SceneFrame(scene: Scene, width: Int, height: Int, zNear: Quantity[Distance, Float], zFar: Quantity[Distance, Float], fps: Int) {
 
   def run(): Unit = {
 
@@ -20,7 +24,7 @@ class SceneFrame(scene: Scene, width: Int, height: Int, zNear: Distance.Q, zFar:
 
       def run(): Unit = {
 
-        val canvas = new AxleGLCanvas(scene, 45.0 *: degree, zNear, zFar, scene.distanceUnit)
+        val canvas = new AxleGLCanvas(scene, 45f *: degree[Float], zNear, zFar, scene.distanceUnit)
         canvas.setPreferredSize(new Dimension(width, height))
 
         val animator = new FPSAnimator(canvas, fps, true)

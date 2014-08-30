@@ -6,7 +6,8 @@ import java.awt.Font
 import scala.Stream.continually
 
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta2.Angle.{° => °}
+import axle.quanta2.Quantity
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -17,6 +18,8 @@ import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import spire.math.Number.apply
+import spire.implicits.DoubleAlgebra 
+import spire.implicits.moduleOps
 
 class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font) {
 
@@ -74,7 +77,7 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
 
   val vLine = new VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = new HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), normalFont, true, 0 *: °, black)
+  val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), normalFont, true, 0 *: °[Double], black)
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
 
   val dataLines = new DataLines(scaledArea, data, orderedXs, x2y, colorStream, pointDiameter, connect)

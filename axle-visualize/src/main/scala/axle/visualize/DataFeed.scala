@@ -12,9 +12,12 @@ import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.ActorRef
 import akka.actor.actorRef2Scala
-import axle.quanta.Time
+import axle.quanta2.Time
+import axle.quanta2.Time.millisecond
+import axle.quanta2.Quantity
+import spire.implicits.DoubleAlgebra 
 
-case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Time.Q)
+case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Quantity[Time, Double])
   extends Actor
   with ActorLogging {
 
@@ -23,7 +26,7 @@ case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: Time.Q
 
   context.system.scheduler.schedule(
     0.millis,
-    ((interval in Time.millisecond).magnitude.doubleValue).millis,
+    ((interval in millisecond[Double]).magnitude).millis,
     self,
     Recompute())
 

@@ -9,9 +9,12 @@ import java.awt.Color.red
 import java.awt.Color.yellow
 
 import axle.algebra.Plottable
-import axle.quanta.Angle
-import axle.quanta.Angle.{° => °}
+import axle.quanta2.Quantity
+import axle.quanta2.Angle
+import axle.quanta2.Angle.{° => °}
 import spire.math.Number.apply
+import spire.implicits.DoubleAlgebra 
+import spire.implicits.moduleOps
 
 case class BarChart[S, Y: Plottable, D](
   initialValue: D,
@@ -34,5 +37,5 @@ case class BarChart[S, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  labelAngle: Angle.Q = 36 *: °,
+  labelAngle: Quantity[Angle, Double] = 36d *: °[Double],
   colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))

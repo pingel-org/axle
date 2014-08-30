@@ -1,10 +1,13 @@
 package axle.visualize.gl
 
-import axle.quanta.Angle
+import spire.algebra.Field
+import spire.algebra.Order
+import axle.quanta2.Quantity
+import axle.quanta2.Angle
 
-case class GeoCoordinates(latitude: Angle.Q, longitude: Angle.Q) {
+case class GeoCoordinates[N: Field: Order](latitude: Quantity[Angle, N], longitude: Quantity[Angle, N]) {
 
-  def φ: Angle.Q = latitude
+  def φ: Quantity[Angle, N] = latitude
   
-  def λ: Angle.Q = longitude
+  def λ: Quantity[Angle, N] = longitude
 }

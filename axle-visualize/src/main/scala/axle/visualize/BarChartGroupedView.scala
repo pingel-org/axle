@@ -8,7 +8,7 @@ import scala.reflect.ClassTag
 
 import axle.algebra.Plottable
 import axle.algebra.Plottable.DoublePlottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta2.Angle.{° => °}
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
@@ -17,6 +17,7 @@ import axle.visualize.element.YTics
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.math.Number.apply
+import spire.implicits.moduleOps
 
 class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font) {
 

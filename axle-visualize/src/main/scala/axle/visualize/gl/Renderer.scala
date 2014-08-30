@@ -21,11 +21,11 @@ trait Render[A] {
 
 object Render {
 
-  implicit val quadRenderer = new Render[Quad] {
-    def render(quad: Quad, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val quadRenderer = new Render[Quad[Float]] {
+    def render(quad: Quad[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import quad._
-      val w = width.magnitude.toFloat / 2
-      val h = height.magnitude.toFloat / 2
+      val w = width.magnitude / 2
+      val h = height.magnitude / 2
       gl.glColor3f(color.red, color.green, color.blue)
       gl.glBegin(GL_QUADS)
       gl.glVertex3f(-w, h, 0f)
@@ -36,11 +36,11 @@ object Render {
     }
   }
 
-  implicit val coloredSphereRenderer = new Render[Sphere] {
-    def render(sphere: Sphere, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val coloredSphereRenderer = new Render[Sphere[Float]] {
+    def render(sphere: Sphere[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import sphere._
       gl.glColor3f(color.red, color.green, color.blue)
-      glu.gluSphere(glu.gluNewQuadric(), radius.magnitude.toFloat, slices, stacks)
+      glu.gluSphere(glu.gluNewQuadric(), radius.magnitude, slices, stacks)
     }
   }
 
@@ -49,8 +49,8 @@ object Render {
   //  val colorRed = java.nio.FloatBuffer.wrap(Vector(1f, 0f, 0f, 1f).toArray)
   val rgba = Vector(1f, 1f, 1f).toArray
 
-  implicit val sphereRenderer = new Render[TexturedSphere] {
-    def render(sphere: TexturedSphere, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val sphereRenderer = new Render[TexturedSphere[Float]] {
+    def render(sphere: TexturedSphere[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
 
       import sphere._
       gl.glColor3f(reflectionColor.red, reflectionColor.green, reflectionColor.blue)
@@ -67,15 +67,15 @@ object Render {
       glu.gluQuadricDrawStyle(earth, GLU.GLU_FILL)
       glu.gluQuadricNormals(earth, GLU.GLU_FLAT)
       glu.gluQuadricOrientation(earth, GLU.GLU_OUTSIDE)
-      glu.gluSphere(earth, radius.magnitude.toFloat, slices, stacks)
+      glu.gluSphere(earth, radius.magnitude, slices, stacks)
       glu.gluDeleteQuadric(earth)
     }
   }
 
-  implicit val triangleRenderer = new Render[Triangle] {
-    def render(triangle: Triangle, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val triangleRenderer = new Render[Triangle[Float]] {
+    def render(triangle: Triangle[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import triangle._
-      val l = length.magnitude.toFloat
+      val l = length.magnitude
       gl.glBegin(GL_TRIANGLES)
       gl.glColor3f(color.red, color.green, color.blue)
       gl.glVertex3f(0f, l, 0f)
@@ -91,10 +91,10 @@ object Render {
   // gl.glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, 4)
   // gl.glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, colorBlack)
 
-  implicit val triColorTriangleRenderer = new Render[TriColorTriangle] {
-    def render(triangle: TriColorTriangle, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val triColorTriangleRenderer = new Render[TriColorTriangle[Float]] {
+    def render(triangle: TriColorTriangle[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import triangle._
-      val l = length.magnitude.toFloat
+      val l = length.magnitude
       gl.glBegin(GL_TRIANGLES)
       gl.glColor3f(c1.red, c1.green, c1.blue)
       gl.glVertex3f(0f, l, 0f)
@@ -106,10 +106,10 @@ object Render {
     }
   }
 
-  implicit val cubeRenderer = new Render[Cube] {
-    def render(cube: Cube, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val cubeRenderer = new Render[Cube[Float]] {
+    def render(cube: Cube[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import cube._
-      val l = length.magnitude.toFloat
+      val l = length.magnitude
       gl.glBegin(GL_QUADS)
 
       gl.glColor3f(color.red, color.green, color.blue)
@@ -148,10 +148,10 @@ object Render {
     }
   }
 
-  implicit val multiColorCubeRenderer = new Render[MultiColorCube] {
-    def render(cube: MultiColorCube, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val multiColorCubeRenderer = new Render[MultiColorCube[Float]] {
+    def render(cube: MultiColorCube[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import cube._
-      val l = length.magnitude.toFloat
+      val l = length.magnitude
       gl.glBegin(GL_QUADS)
 
       gl.glColor3f(topColor.red, topColor.green, topColor.blue)
@@ -195,10 +195,10 @@ object Render {
 
   }
 
-  implicit val pyramidRenderer = new Render[Pyramid] {
-    def render(pyramid: Pyramid, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val pyramidRenderer = new Render[Pyramid[Float]] {
+    def render(pyramid: Pyramid[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import pyramid._
-      val l = length.magnitude.toFloat
+      val l = length.magnitude
       gl.glBegin(GL_TRIANGLES)
 
       gl.glColor3f(color.red, color.green, color.blue)
@@ -223,10 +223,10 @@ object Render {
     }
   }
 
-  implicit val multiColorPyramidRenderer = new Render[MultiColorPyramid] {
-    def render(pyramid: MultiColorPyramid, scene: Scene, gl: GL2, glu: GLU): Unit = {
+  implicit val multiColorPyramidRenderer = new Render[MultiColorPyramid[Float]] {
+    def render(pyramid: MultiColorPyramid[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import pyramid._
-      val l = length.magnitude.toFloat
+      val l = length.magnitude
       gl.glBegin(GL_TRIANGLES)
 
       // front
@@ -265,13 +265,13 @@ object Render {
     }
   }
 
-  implicit val texturedCubeRenderer = new Render[TexturedCube] {
+  implicit val texturedCubeRenderer = new Render[TexturedCube[Float]] {
 
-    def render(cube: TexturedCube, scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(cube: TexturedCube[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
 
       import cube._
 
-      val l = length.magnitude.toFloat
+      val l = length.magnitude
 
       val texture = scene.textureFor(textureUrl)
 

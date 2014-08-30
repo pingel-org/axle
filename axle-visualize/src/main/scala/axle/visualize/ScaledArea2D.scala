@@ -8,10 +8,12 @@ import scala.math.abs
 import scala.math.min
 
 import axle.algebra.Portionable
-import axle.quanta.Angle
-import axle.quanta.Angle.rad
+import axle.quanta2.Angle
+import axle.quanta2.Angle.rad
+import axle.quanta2.Quantity
 import spire.algebra.Eq
 import spire.implicits.eqOps
+import spire.implicits.DoubleAlgebra 
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
@@ -79,10 +81,10 @@ case class ScaledArea2D[X: Portionable: Eq, Y: Portionable: Eq](
     }
   }
 
-  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: Angle.Q): Unit = {
+  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: Quantity[Angle, Double]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
-      val a = (angle in rad).magnitude.doubleValue
+      val a = (angle in rad[Double]).magnitude
       g2d.translate(fp.x, fp.y + fontMetrics.getHeight)
       g2d.rotate(a)
       g2d.drawString(s, 0, 0)

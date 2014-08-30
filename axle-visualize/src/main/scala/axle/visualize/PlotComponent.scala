@@ -13,11 +13,14 @@ import DataFeedProtocol.Fetch
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta2.Angle.{° => °}
+import axle.quanta2.Quantity
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
+import spire.implicits.DoubleAlgebra 
+import spire.implicits.moduleOps
 
 class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])
   extends JPanel
@@ -31,7 +34,7 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])
   
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90 *: °)))
+  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90d *: °[Double])))
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
 

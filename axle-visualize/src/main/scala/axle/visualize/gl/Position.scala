@@ -1,5 +1,8 @@
 package axle.visualize.gl
 
-import axle.quanta.Distance
+import axle.quanta2.Distance
+import axle.quanta2.Quantity
+import spire.algebra.Field
+import spire.algebra.Order
 
-case class Position(x: Distance.Q, y: Distance.Q, z: Distance.Q)
+case class Position[N: Field: Order](x: Quantity[Distance, N], y: Quantity[Distance, N], z: Quantity[Distance, N])

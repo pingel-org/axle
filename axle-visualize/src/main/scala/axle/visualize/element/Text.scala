@@ -4,9 +4,11 @@ import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
 
-import axle.quanta.Angle
-import axle.quanta.Angle.rad
+import axle.quanta2.Angle
+import axle.quanta2.Angle.rad
+import axle.quanta2.Quantity
 import axle.visualize.Paintable
+import spire.implicits.DoubleAlgebra 
 
 class Text(
   text: String,
@@ -15,9 +17,9 @@ class Text(
   y: Int,
   centered: Boolean = true,
   color: Color = Color.black,
-  angle: Option[Angle.Q] = None) extends Paintable {
+  angle: Option[Quantity[Angle, Double]] = None) extends Paintable {
 
-  val angleRadOpt = angle.map(a => (a in rad).magnitude.doubleValue)
+  val angleRadOpt = angle.map(a => (a in rad[Double]).magnitude)
 
   def paint(g2d: Graphics2D): Unit = {
 

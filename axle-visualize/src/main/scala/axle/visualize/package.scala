@@ -13,7 +13,8 @@ import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
-import axle.quanta.Time
+import axle.quanta2.Time
+import axle.quanta2.Quantity
 
 import spire.algebra._
 
@@ -43,7 +44,7 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T](component: Component with Fed[T], refreshFn: T => T, interval: Time.Q)(implicit system: ActorSystem): ActorRef = {
+  def play[T](component: Component with Fed[T], refreshFn: T => T, interval: Quantity[Time, Double])(implicit system: ActorSystem): ActorRef = {
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
     val feeder = component.setFeeder(refreshFn, interval, system)
