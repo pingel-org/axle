@@ -10,20 +10,24 @@ import org.specs2.mutable.Specification
 
 import axle.algebra.Plottable.DateTimePlottable
 import axle.algebra.Plottable.DoublePlottable
-import axle.quanta2._
+import axle.quanta2.Information
 import axle.quanta2.Information.bit
+import axle.quanta2.Information.cgIDouble
+import axle.quanta2.Information.cgIReal
+import axle.quanta2.Quantity
+import axle.quanta2.UnitPlottable
+import axle.quanta2.doubleDoubleMetricSpace
+import axle.quanta2.modulize
+import axle.quanta2.realDoubleMetricSpace
 import axle.stats.H
 import axle.stats.coin
-import axle.algebra.Plottable
-import spire.math._
-import axle.graph.DirectedGraph
 import spire.algebra.Eq
-import spire.implicits.SeqEq
-import spire.implicits.StringOrder
+import spire.compat.ordering
+import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
-import spire.implicits._
-import spire.math.Number.apply
+import spire.implicits.moduleOps
 import spire.math.Rational
+import spire.math.Real
 
 class TimeSeriesPlotSpec extends Specification {
 
@@ -38,15 +42,7 @@ class TimeSeriesPlotSpec extends Specification {
   "Tics for units" should {
     "work" in {
 
-      import spire.algebra._
-      import Information.cgIDouble
-
-      implicit val ieqx = implicitly[Eq[(Quantity[Information, Double], String)]] // (eqTuple2[Quantity[Information, Double], String])
-      implicit val vieq = implicitly[Eq[Vector[(Quantity[Information, Double], String)]]]
-      implicit val field = implicitly[Field[Double]]
-      implicit val order = implicitly[Order[Double]]
-      implicit val space: MetricSpace[Double, Double] = ???
-      val plottable = UnitPlottable(bit[Double])(field, order, space, cgIDouble)
+      val plottable = UnitPlottable(bit[Double])
 
       val tics = plottable.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
 
@@ -62,6 +58,9 @@ class TimeSeriesPlotSpec extends Specification {
         (0.8 *: bit[Double], "0.8"),
         (0.9 *: bit[Double], "0.9"),
         (1.0 *: bit[Double], "1.0"))
+
+      implicit val ieqx: Eq[(Quantity[Information, Double], String)] = ??? //implicitly[Eq[(Quantity[Information, Double], String)]]
+      implicit val vieq: Eq[Vector[(Quantity[Information, Double], String)]] = ??? //implicitly[Eq[Vector[(Quantity[Information, Double], String)]]]
 
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))
@@ -83,7 +82,7 @@ class TimeSeriesPlotSpec extends Specification {
 
     val lfs = (0 until 20).map(randomTimeSeries).toList
 
-    val plot = new Plot(
+    val plot = new Plot[DateTime, Double, TreeMap[DateTime, Double]](
       lfs,
       (d: TreeMap[DateTime, Double]) => d.keys,
       (d: TreeMap[DateTime, Double], dt: DateTime) => d(dt),
@@ -97,14 +96,7 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
-    import spire.algebra._
-    import Information.cgIReal
-    import spire.compat.ordering
-
-    implicit val space: MetricSpace[Real, Double] = ???
-    implicit val field = implicitly[Field[Real]]
-    implicit val order = implicitly[Order[Real]]
-    implicit val plottable = UnitPlottable(bit[Real])(field, order, space, cgIReal)
+    implicit val plottable = UnitPlottable(bit[Real])
 
     type D = TreeMap[Real, Quantity[Information, Real]]
     val hm: D = new TreeMap[Real, Quantity[Information, Real]]() ++ (0 to 100).map(i => (Real(i / 100d), H(coin(Rational(i, 100))))).toMap
@@ -119,7 +111,7 @@ class TimeSeriesPlotSpec extends Specification {
       xAxisLabel = Some("p(x='HEAD)"),
       yAxis = Some(Real(0)),
       yAxisLabel = Some("H"),
-      title = Some("Entropy")) // (DoublePlottable, plottable)
+      title = Some("Entropy"))
 
     // show(plot)
 

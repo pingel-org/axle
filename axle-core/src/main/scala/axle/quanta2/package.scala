@@ -5,7 +5,8 @@ import axle.graph.DirectedGraph
 import axle.graph.JungDirectedGraph
 import scala.language.reflectiveCalls
 import spire.math.Rational
-import spire.algebra.{ Module, Field, Rng, Eq }
+import spire.math.Real
+import spire.algebra.{ Module, Field, Rng, Eq, MetricSpace }
 import spire.implicits.eqOps
 import spire.implicits.moduleOps
 import spire.implicits.groupOps
@@ -15,6 +16,24 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
 package object quanta2 {
+
+  implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] = new MetricSpace[Rational, Double] {
+
+    def distance(v: Rational, w: Rational): Double = (v.toDouble - w.toDouble).abs
+
+  }
+
+  implicit val realDoubleMetricSpace: MetricSpace[Real, Double] = new MetricSpace[Real, Double] {
+
+    def distance(v: Real, w: Real): Double = (v.toDouble - w.toDouble).abs
+
+  }
+
+  implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] = new MetricSpace[Double, Double] {
+
+    def distance(v: Double, w: Double): Double = (v - w).abs
+
+  }
 
   // Note: this is need for "def conversions"
   implicit def edgeEq[N: Eq]: Eq[N => N] = new Eq[N => N] {
@@ -61,5 +80,4 @@ package object quanta2 {
   private[quanta2] def byName[Q <: Quantum, N: Field: Eq](cg: DirectedGraph[Quantity[Q, N], N => N], unitName: String): Quantity[Q, N] =
     cg.findVertex(_.payload.name === unitName).get.payload
 
-    
 }
