@@ -6,10 +6,13 @@ import scala.Option.option2Iterable
 import scala.sys.process.stringSeqToProcess
 import scala.util.Try
 
-import axle.quanta.Distance
-import axle.quanta.Distance.cm
+import axle.quanta2.Distance
+import axle.quanta2.Distance.cm
+import axle.quanta2.Quantity
+import axle.quanta2.modulize
 import spire.algebra.Eq
-import spire.math.Number.apply
+import spire.implicits.DoubleAlgebra
+import spire.implicits.moduleOps
 
 /**
  *
@@ -38,10 +41,10 @@ import spire.math.Number.apply
 object Irises {
 
   case class Iris(
-    sepalLength: Distance.Q,
-    sepalWidth: Distance.Q,
-    petalLength: Distance.Q,
-    petalWidth: Distance.Q,
+    sepalLength: Quantity[Distance, Double],
+    sepalWidth: Quantity[Distance, Double],
+    petalLength: Quantity[Distance, Double],
+    petalWidth: Quantity[Distance, Double],
     species: String)
 
   object Iris {
@@ -62,10 +65,10 @@ object Irises {
     Try {
       val fields = line.split(",")
       Iris(
-        fields(0).toDouble *: cm,
-        fields(1).toDouble *: cm,
-        fields(2).toDouble *: cm,
-        fields(3).toDouble *: cm,
+        fields(0).toDouble *: cm[Double],
+        fields(1).toDouble *: cm[Double],
+        fields(2).toDouble *: cm[Double],
+        fields(3).toDouble *: cm[Double],
         fields(4))
     } toOption
   }

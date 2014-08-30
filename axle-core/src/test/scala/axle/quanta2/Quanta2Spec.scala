@@ -14,17 +14,17 @@ class Quanta2Spec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      val d1 = Rational(3, 4) *: meter
-      val d2 = Rational(7, 2) *: meter
-      val t1 = Rational(4) *: second
-      val t2 = Rational(9, 88) *: second
-      val t3 = Rational(5d) *: second
-      val t4 = 10 *: second
+      val d1 = Rational(3, 4) *: meter[Rational]
+      val d2 = Rational(7, 2) *: meter[Rational]
+      val t1 = Rational(4) *: second[Rational]
+      val t2 = Rational(9, 88) *: second[Rational]
+      val t3 = Rational(5d) *: second[Rational]
+      val t4 = 10 *: second[Rational]
 
       val d3 = d1 + d2
       val d4 = d2 - d2
       //val d5 = d2 + t2 // shouldn't compile
-      val t5 = t2 in minute
+      val t5 = t2 in minute[Rational]
       val t6 = t1 :* Rational(5, 2)
       val t8 = Rational(5, 3) *: t1
       val t9 = t1 :* 60
@@ -40,10 +40,11 @@ class Quanta2Spec extends Specification {
 
       import Mass._
       import Distance._
+      import spire.implicits.DoubleAlgebra 
 
-      (5 *: gram).magnitude must be equalTo 5
-      (1 *: parsec + 4 *: lightyear).magnitude must be equalTo 7.260
-      (4 *: lightyear + 1 *: parsec).magnitude must be equalTo 2.226993865030675 // TODO what precision do I want here?
+      (5 *: gram[Double]).magnitude must be equalTo 5
+      (1 *: parsec[Double] + 4 *: lightyear[Double]).magnitude must be equalTo 7.260
+      (4 *: lightyear[Double] + 1 *: parsec[Double]).magnitude must be equalTo 2.226993865030675 // TODO what precision do I want here?
     }
   }
 
@@ -53,16 +54,17 @@ class Quanta2Spec extends Specification {
 
       import Distance._
       import Mass._
+      import spire.implicits.DoubleAlgebra 
 
-      (kilogram in gram).magnitude.doubleValue must be equalTo 1000.0 // TODO precision
-      (megagram in milligram).magnitude.doubleValue must be equalTo 1000000000.0 // TODO precision
-      (mile in ft).magnitude.doubleValue must be equalTo 5280.0 // TODO precision
+      (kilogram[Double] in gram[Double]).magnitude must be equalTo 1000d // TODO precision
+      (megagram[Double] in milligram[Double]).magnitude must be equalTo 1000000000d // TODO precision
+      (mile[Double] in ft[Double]).magnitude must be equalTo 5280d // TODO precision
 
     }
 
     "use Rational" in {
       import Volume._
-      ((24 *: wineBottle) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
+      ((Rational(24) *: wineBottle) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
     }
   }
 
@@ -71,11 +73,12 @@ class Quanta2Spec extends Specification {
 
       import Mass._
       import Distance._
+      import spire.implicits.DoubleAlgebra 
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-      (meter + foot).magnitude must be equalTo 4.2808398950131235 // TODO what precision do I want here?
-      (gram + kilogram).magnitude must be equalTo 1.001
+      (meter[Double] + foot[Double]).magnitude must be equalTo 4.2808398950131235 // TODO what precision do I want here?
+      (gram[Double] + kilogram[Double]).magnitude must be equalTo 1.001
     }
   }
 

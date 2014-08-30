@@ -1,14 +1,12 @@
 package axle.quanta2
 
 import axle.graph.DirectedGraph
+import axle.graph.Vertex
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.implicits.DoubleAlgebra
 import spire.math.Rational
-import spire.implicits.eqOps
-import spire.implicits.moduleOps
-import spire.implicits.groupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
+import spire.math.Real
 
 class Mass extends Quantum {
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
@@ -17,14 +15,28 @@ class Mass extends Quantum {
 
 object Mass extends Mass {
 
-  val gram = newUnit[Mass, Rational]
-  
-  implicit val cgMR: DirectedGraph[Quantity[Mass, Rational], Rational => Rational] = ???
+  implicit def cgn[N: Field: Eq]: DirectedGraph[Quantity[Mass, N], N => N] = conversions(
+    List(
+      unit("milligram", "mg"),
+      unit("gram", "g"),
+      unit("kilogram", "Kg"),
+      unit("megagram", "Mg")),
+    (vs: Seq[Vertex[Quantity[Mass, N]]]) => vs match {
+      case s :: Nil => trips2fns[Mass, N](List())
+      case _ => Nil
+    })
 
-  implicit val mtm = modulize[Mass, Rational]
+  implicit val cgMassRational: DirectedGraph[Quantity[Mass, Rational], Rational => Rational] = cgn[Rational]
+  implicit val cgMassReal: DirectedGraph[Quantity[Mass, Real], Real => Real] = cgn[Real]
+  implicit val cgMassDouble: DirectedGraph[Quantity[Mass, Double], Double => Double] = cgn[Double]
 
-  val kilogram = Rational(1000) *: gram
-  val megagram = Rational(1000) *: kilogram
-  val milligram = Rational(1, 1000) *: gram
-  
+  implicit val mtRational = modulize[Mass, Rational]
+  implicit val mtReal = modulize[Mass, Real]
+  implicit val mtDouble = modulize[Mass, Double]
+
+  def milligram[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Mass, N], N => N]) = byName(cg, "milligram")
+  def gram[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Mass, N], N => N]) = byName(cg, "gram")
+  def kilogram[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Mass, N], N => N]) = byName(cg, "kilogram")
+  def megagram[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Mass, N], N => N]) = byName(cg, "megagram")
+
 }
