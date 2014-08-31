@@ -11,15 +11,16 @@ import spire.implicits.multiplicativeGroupOps
 
 object Quantity {
 
-  implicit def orderQuantity[Q <: Quantum, N: Order](implicit cg: DirectedGraph[Quantity[Q,N],N => N]) = new Order[Quantity[Q, N]] {
+  implicit def orderQuantity[Q <: Quantum, N: Order](implicit cg: DirectedGraph[Quantity[Q, N], N => N]) = new Order[Quantity[Q, N]] {
     val orderN = implicitly[Order[N]]
     def compare(x: Quantity[Q, N], y: Quantity[Q, N]): Int =
       orderN.compare((x in y.unit).magnitude, y.magnitude)
   }
 
+  // Note: This Eq performs no conversion
   implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[Quantity[Q, N]] = new Eq[Quantity[Q, N]] {
-    // TODO: perform conversion when checking equality
-    def eqv(x: Quantity[Q, N], y: Quantity[Q, N]): Boolean = (x.magnitude === y.magnitude) && (x.unit === y.unit)
+    def eqv(x: Quantity[Q, N], y: Quantity[Q, N]): Boolean =
+      (x.magnitude === y.magnitude) && (x.unit == y.unit) 
   }
 }
 
@@ -32,8 +33,9 @@ case class Quantity[Q <: Quantum, N](
 
   def label: String = nameOpt.getOrElse("")
 
-  private[this] def vertex(cg: DirectedGraph[Quantity[Q, N], N => N], quantity: Quantity[Q, N]): Vertex[Quantity[Q, N]] =
+  private[this] def vertex(cg: DirectedGraph[Quantity[Q, N], N => N], quantity: Quantity[Q, N]): Vertex[Quantity[Q, N]] = {
     cg.findVertex(_.payload === quantity).get
+  }
 
   def in(newUnit: Quantity[Q, N])(implicit cg: DirectedGraph[Quantity[Q, N], N => N]): Quantity[Q, N] =
     cg.shortestPath(vertex(cg, newUnit.unit), vertex(cg, unit))
