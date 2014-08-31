@@ -28,6 +28,8 @@ import spire.implicits.eqOps
 import spire.implicits.moduleOps
 import spire.math.Rational
 import spire.math.Real
+import spire.implicits.StringAlgebra 
+import spire.implicits._
 
 class TimeSeriesPlotSpec extends Specification {
 
@@ -59,8 +61,8 @@ class TimeSeriesPlotSpec extends Specification {
         (0.9 *: bit[Double], "0.9"),
         (1.0 *: bit[Double], "1.0"))
 
-      implicit val ieqx: Eq[(Quantity[Information, Double], String)] = ??? //implicitly[Eq[(Quantity[Information, Double], String)]]
-      implicit val vieq: Eq[Vector[(Quantity[Information, Double], String)]] = ??? //implicitly[Eq[Vector[(Quantity[Information, Double], String)]]]
+      //implicit val eqqid = axle.quanta2.Quantity.eqqqn[Information, Double]
+      val vieq = implicitly[Eq[Vector[(Quantity[Information, Double], String)]]]
 
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))
