@@ -24,22 +24,14 @@ import axle.stats.coin
 import spire.algebra.Eq
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
-import spire.implicits.eqOps
+import spire.implicits.SeqOrder
 import spire.implicits.moduleOps
+import spire.implicits.StringAlgebra
+import spire.implicits._
 import spire.math.Rational
 import spire.math.Real
-import spire.implicits.StringAlgebra 
-import spire.implicits._
 
 class TimeSeriesPlotSpec extends Specification {
-
-  //  implicit def eqVector[T: Eq] = new Eq[Vector[T]] {
-  //    def eqv(x: Vector[T], y: Vector[T]): Boolean = x.length == y.length && (x.zip(y).forall({ case (a, b) => a === b}))
-  //  }
-
-  implicit def eqTuple2[T: Eq, U: Eq] = new Eq[(T, U)] {
-    def eqv(x: (T, U), y: (T, U)): Boolean = x._1 === y._1 && x._2 === y._2
-  }
 
   "Tics for units" should {
     "work" in {
@@ -61,7 +53,6 @@ class TimeSeriesPlotSpec extends Specification {
         (0.9 *: bit[Double], "0.9"),
         (1.0 *: bit[Double], "1.0"))
 
-      //implicit val eqqid = axle.quanta2.Quantity.eqqqn[Information, Double]
       val vieq = implicitly[Eq[Vector[(Quantity[Information, Double], String)]]]
 
       // tics must be equalTo expected
@@ -86,8 +77,8 @@ class TimeSeriesPlotSpec extends Specification {
 
     val plot = new Plot[DateTime, Double, TreeMap[DateTime, Double]](
       lfs,
-      (d: TreeMap[DateTime, Double]) => d.keys,
-      (d: TreeMap[DateTime, Double], dt: DateTime) => d(dt),
+      _.keys,
+      (d, t) => d(t),
       connect = true,
       drawKey = true,
       xAxis = Some(0d),
