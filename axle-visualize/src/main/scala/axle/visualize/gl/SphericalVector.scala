@@ -2,7 +2,7 @@ package axle.visualize.gl
 
 import axle.quanta2.Angle
 import axle.quanta2.Distance
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import spire.algebra.Field
 import spire.algebra.Order
 
@@ -14,7 +14,7 @@ import spire.algebra.Order
  *
  */
 case class SphericalVector[N: Field: Order](
-  ρ: Quantity[Distance, N], // radius
-  θ: Quantity[Angle, N], // 90 - latitude N, aka "co-latitude"
-  φ: Quantity[Angle, N] // longitude E
+  ρ: UnittedQuantity[Distance, N], // radius
+  θ: UnittedQuantity[Angle, N], // 90 - latitude N, aka "co-latitude"
+  φ: UnittedQuantity[Angle, N] // longitude E
   )

@@ -16,12 +16,5 @@ class Power extends Quantum {
 
 object Power extends Power {
 
-  val second = newUnit[Power, Rational]
-  
-  implicit val cgTR: DirectedGraph[Quantity[Power, Rational], Rational => Rational] = ???
-
-  implicit val mtr = modulize[Power, Rational]
-
-  val minute = Rational(60) *: second
   
 }

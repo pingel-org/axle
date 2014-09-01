@@ -22,7 +22,7 @@ object Information extends Information {
 
   import spire.implicits._
 
-  implicit def cgin[N: Field: Eq]: DirectedGraph[Quantity[Information, N], N => N] = conversions(
+  def cgin[N: Field: Eq]: DirectedGraph[UnitOfMeasurement[Information, N], N => N] = conversions(
     List(
       unit("bit", "b"),
       unit("nibble", "nibble"),
@@ -32,11 +32,11 @@ object Information extends Information {
       unit("gigabyte", "GB"),
       unit("terabyte", "TB"),
       unit("petabyte", "PB")),
-    (vs: Seq[Vertex[Quantity[Information, N]]]) => vs match {
+    (vs: Seq[Vertex[UnitOfMeasurement[Information, N]]]) => vs match {
       case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil =>
         (bit, nibble, (b: N) => b * 4) ::
-        (nibble, bit, (n: N) => n / 4) ::
-        Nil
+          (nibble, bit, (n: N) => n / 4) ::
+          Nil
       case _ => Nil
     })
 
@@ -49,15 +49,15 @@ object Information extends Information {
   //          (terabyte, petabyte, 1024))
   //          )
 
-  implicit val cgIRational: DirectedGraph[Quantity[Information, Rational], Rational => Rational] = cgin[Rational]
-  implicit val cgIReal: DirectedGraph[Quantity[Information, Real], Real => Real] = cgin[Real]
-  implicit val cgIDouble: DirectedGraph[Quantity[Information, Double], Double => Double] = cgin[Double]
+  implicit val cgIRational: DirectedGraph[UnitOfMeasurement[Information, Rational], Rational => Rational] = cgin[Rational]
+  implicit val cgIReal: DirectedGraph[UnitOfMeasurement[Information, Real], Real => Real] = cgin[Real]
+  implicit val cgIDouble: DirectedGraph[UnitOfMeasurement[Information, Double], Double => Double] = cgin[Double]
 
   implicit val mtRational = modulize[Information, Rational]
   implicit val mtReal = modulize[Information, Real]
   implicit val mtDouble = modulize[Information, Double]
 
-  def bit[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Information, N], N => N]) = byName(cg, "bit")
+  def bit[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Information, N], N => N]) = byName(cg, "bit")
 
   //  lazy val bit = byName(cgIR, "bit")
   //  lazy val nibble = byName(cgIR, "nibble")

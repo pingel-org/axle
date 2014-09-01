@@ -8,44 +8,64 @@ import spire.algebra.Order
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.multiplicativeGroupOps
+import spire.implicits._
 
-object Quantity {
+abstract class Quantity[Q <: Quantum, N: Field: Eq] {
 
-  implicit def orderQuantity[Q <: Quantum, N: Order](implicit cg: DirectedGraph[Quantity[Q, N], N => N]) = new Order[Quantity[Q, N]] {
-    val orderN = implicitly[Order[N]]
-    def compare(x: Quantity[Q, N], y: Quantity[Q, N]): Int =
-      orderN.compare((x in y.unit).magnitude, y.magnitude)
+  def magnitude: N
+
+  def unit: UnitOfMeasurement[Q, N]
+
+  private[this] def vertex(cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N], query: UnitOfMeasurement[Q, N]): Vertex[UnitOfMeasurement[Q, N]] = {
+    cg.findVertex(_.payload.name === query.name).get
   }
 
-  // Note: This Eq performs no conversion
-  implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[Quantity[Q, N]] = new Eq[Quantity[Q, N]] {
-    def eqv(x: Quantity[Q, N], y: Quantity[Q, N]): Boolean =
-      (x.magnitude === y.magnitude) && (x.unit == y.unit) 
-  }
-}
-
-case class Quantity[Q <: Quantum, N](
-  magnitude: N, unitOpt: Option[Quantity[Q, N]] = None, nameOpt: Option[String] = None, symbol: Option[String] = None, _link: Option[String] = None)(implicit fieldN: Field[N], eqN: Eq[N]) {
-
-  def unit: Quantity[Q, N] = unitOpt.getOrElse(this)
-
-  def name: String = nameOpt.getOrElse("")
-
-  def label: String = nameOpt.getOrElse("")
-
-  private[this] def vertex(cg: DirectedGraph[Quantity[Q, N], N => N], quantity: Quantity[Q, N]): Vertex[Quantity[Q, N]] = {
-    cg.findVertex(_.payload === quantity).get
-  }
-
-  def in(newUnit: Quantity[Q, N])(implicit cg: DirectedGraph[Quantity[Q, N], N => N]): Quantity[Q, N] =
-    cg.shortestPath(vertex(cg, newUnit.unit), vertex(cg, unit))
+  def in(newUnit: UnitOfMeasurement[Q, N])(implicit cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N]): UnittedQuantity[Q, N] =
+    cg.shortestPath(vertex(cg, newUnit), vertex(cg, unit))
       .map(
         _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
-      .map(n => Quantity((magnitude * n) / newUnit.magnitude, Some(newUnit)))
+      .map(n => UnittedQuantity((magnitude * n), newUnit))
       .getOrElse(throw new Exception("no conversion path from " + this + " to " + newUnit))
 
   // TODO
-  def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: Quantity[QR, N]): Quantity[Q2, N] =
-    newUnit[Q2, N]
+  def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: Quantity[QR, N]): UnitOfMeasurement[Q2, N] =
+    UnitOfMeasurement[Q2, N](???, ???, None)
 
 }
+
+object UnitOfMeasurement {
+
+  implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[UnitOfMeasurement[Q, N]] = new Eq[UnitOfMeasurement[Q, N]] {
+    def eqv(x: UnitOfMeasurement[Q, N], y: UnitOfMeasurement[Q, N]): Boolean = x.name === y.name
+  }
+
+}
+
+case class UnitOfMeasurement[Q <: Quantum, N: Field: Eq](name: String, symbol: String, wikipediaUrl: Option[String]) extends Quantity[Q, N] {
+
+  def magnitude: N = implicitly[Field[N]].one
+
+  def unit: UnitOfMeasurement[Q, N] = this
+  
+  def *:(n: N) = UnittedQuantity(n, this)
+}
+
+object UnittedQuantity {
+
+  // Note: This Eq performs no conversion
+  implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[UnittedQuantity[Q, N]] = new Eq[UnittedQuantity[Q, N]] {
+    def eqv(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): Boolean =
+      (x.magnitude === y.magnitude) && (x.unit == y.unit)
+  }
+
+  implicit def orderUQ[Q <: Quantum, N: Order](implicit cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N]) = new Order[UnittedQuantity[Q, N]] {
+
+    val orderN = implicitly[Order[N]]
+
+    def compare(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): Int =
+      orderN.compare((x.in(y.unit)).magnitude, y.magnitude)
+  }
+
+}
+
+case class UnittedQuantity[Q <: Quantum, N: Field: Eq](magnitude: N, unit: UnitOfMeasurement[Q, N]) extends Quantity[Q, N]

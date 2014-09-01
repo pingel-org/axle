@@ -15,13 +15,5 @@ class Area extends Quantum {
 }
 
 object Area extends Area {
-
-  val second = newUnit[Area, Rational]
-  
-  implicit val cgTR: DirectedGraph[Quantity[Area, Rational], Rational => Rational] = ???
-
-  implicit val mtr = modulize[Area, Rational]
-
-  val minute = Rational(60) *: second
   
 }

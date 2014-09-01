@@ -13,7 +13,9 @@ import axle.quanta2.Angle
 import axle.quanta2.Angle.degree
 import axle.quanta2.Angle.radian
 import axle.quanta2.Distance
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
+import axle.quanta2.UnitOfMeasurement
+import axle.quanta2.Distance._
 import javax.media.opengl.GL2
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
@@ -22,9 +24,9 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 
-abstract class Scene(_distanceUnit: Quantity[Distance, Float]) {
+abstract class Scene(_distanceUnit: UnitOfMeasurement[Distance, Float]) {
 
-  def distanceUnit: Quantity[Distance, Float] = _distanceUnit
+  def distanceUnit: UnitOfMeasurement[Distance, Float] = _distanceUnit
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
@@ -60,13 +62,13 @@ abstract class Scene(_distanceUnit: Quantity[Distance, Float]) {
       (z in distanceUnit).magnitude).toArray, 0)
   }
 
-  def translate(gl: GL2, x: Quantity[Distance, Float], y: Quantity[Distance, Float], z: Quantity[Distance, Float]): Unit =
+  def translate(gl: GL2, x: UnittedQuantity[Distance, Float], y: UnittedQuantity[Distance, Float], z: UnittedQuantity[Distance, Float]): Unit =
     gl.glTranslatef(
       (x in distanceUnit).magnitude,
       (y in distanceUnit).magnitude,
       (z in distanceUnit).magnitude)
 
-  def rotate(gl: GL2, a: Quantity[Angle, Float], x: Float, y: Float, z: Float): Unit =
+  def rotate(gl: GL2, a: UnittedQuantity[Angle, Float], x: Float, y: Float, z: Float): Unit =
     gl.glRotatef((a in degree[Float]).magnitude, x, y, z)
 
   def textureUrls: Seq[(URL, String)]

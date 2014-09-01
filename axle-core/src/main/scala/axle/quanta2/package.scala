@@ -40,44 +40,37 @@ package object quanta2 {
     def eqv(x: N => N, y: N => N): Boolean = ???
   }
 
-  implicit def modulize[Q <: Quantum, N](implicit fieldn: Field[N], eqn: Eq[N], cg: DirectedGraph[Quantity[Q, N], N => N]): Module[Quantity[Q, N], N] = new Module[Quantity[Q, N], N] {
+  implicit def modulize[Q <: Quantum, N](implicit fieldn: Field[N], eqn: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] = new Module[UnittedQuantity[Q, N], N] {
 
-    def negate(x: Quantity[Q, N]): Quantity[Q, N] = Quantity(-x.magnitude, x.unitOpt) // AdditiveGroup
+    def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
 
-    def zero: Quantity[Q, N] = Quantity(fieldn.zero, None) // AdditiveMonoid
+    def zero: UnittedQuantity[Q, N] = ??? // UnittedQuantity("zero", "zero", None) // AdditiveMonoid
 
-    def plus(x: Quantity[Q, N], y: Quantity[Q, N]): Quantity[Q, N] =
-      Quantity((x in y.unit).magnitude + y.magnitude, y.unitOpt) // AdditiveSemigroup
+    def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
+      UnittedQuantity((x in y.unit).magnitude + y.magnitude, y.unit) // AdditiveSemigroup
 
     implicit def scalar: Rng[N] = fieldn // Module
 
-    def timesl(r: N, v: Quantity[Q, N]): Quantity[Q, N] = Quantity(v.magnitude * r, v.unitOpt)
+    def timesl(r: N, v: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(v.magnitude * r, v.unit)
   }
 
-  def newUnit[Q <: Quantum, N: Field: Eq]: Quantity[Q, N] = Quantity(implicitly[Field[N]].one, None)
+  def unit[Q <: Quantum, N: Field: Eq](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
+    UnitOfMeasurement(name, symbol, linkOpt)
 
-  def newUnitOfMeasurement[Q <: Quantum, N: Field: Eq](
-    name: Option[String] = None,
-    symbol: Option[String] = None,
-    link: Option[String] = None): Quantity[Q, N] = Quantity[Q, N](implicitly[Field[N]].one, None, name, symbol, link)
-
-  def unit[Q <: Quantum, N: Field: Eq](name: String, symbol: String, linkOpt: Option[String] = None): Quantity[Q, N] =
-    newUnitOfMeasurement(Some(name), Some(symbol), linkOpt)
-
-  private[quanta2] def conversions[Q <: Quantum, N: Field: Eq](vps: Seq[Quantity[Q, N]], ef: Seq[Vertex[Quantity[Q, N]]] => Seq[(Vertex[Quantity[Q, N]], Vertex[Quantity[Q, N]], N => N)]): DirectedGraph[Quantity[Q, N], N => N] =
+  private[quanta2] def conversions[Q <: Quantum, N: Field: Eq](vps: Seq[UnitOfMeasurement[Q, N]], ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)]): DirectedGraph[UnitOfMeasurement[Q, N], N => N] =
     JungDirectedGraph(vps, ef)
 
-  private[quanta2] def trip2fns[Q <: Quantum, N: Field: Eq](trip: (Vertex[Quantity[Q, N]], Vertex[Quantity[Q, N]], N)): Seq[(Vertex[Quantity[Q, N]], Vertex[Quantity[Q, N]], N => N)] = {
+  private[quanta2] def trip2fns[Q <: Quantum, N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
     val (from, to, multiplier) = trip
     Vector(
       (from, to, _ * multiplier),
       (to, from, _ / multiplier))
   }
 
-  private[quanta2] def trips2fns[Q <: Quantum, N: Field: Eq](trips: Seq[(Vertex[Quantity[Q, N]], Vertex[Quantity[Q, N]], N)]) =
+  private[quanta2] def trips2fns[Q <: Quantum, N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
     trips.flatMap(trip2fns(_))
 
-  private[quanta2] def byName[Q <: Quantum, N: Field: Eq](cg: DirectedGraph[Quantity[Q, N], N => N], unitName: String): Quantity[Q, N] =
+  private[quanta2] def byName[Q <: Quantum, N: Field: Eq](cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N], unitName: String): UnitOfMeasurement[Q, N] =
     cg.findVertex(_.payload.name === unitName).get.payload
 
 }

@@ -1,18 +1,20 @@
 package axle.quanta2
 
 import org.specs2.mutable._
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
-import spire.implicits.moduleOps
+//import spire.implicits.additiveGroupOps
+//import spire.implicits.additiveSemigroupOps
+//import spire.implicits.moduleOps
 import spire.math.Rational
-
-import Distance._
-import Time._
+import spire.algebra.Module
+import spire.implicits._
 
 class Quanta2Spec extends Specification {
 
   "Scalar conversion" should {
     "work" in {
+
+      import Distance._
+      import Time._
 
       val d1 = Rational(3, 4) *: meter[Rational]
       val d2 = Rational(7, 2) *: meter[Rational]
@@ -40,11 +42,11 @@ class Quanta2Spec extends Specification {
 
       import Mass._
       import Distance._
-      import spire.implicits.DoubleAlgebra 
+      import spire.implicits.DoubleAlgebra
 
       (5 *: gram[Double]).magnitude must be equalTo 5
-      (1 *: parsec[Double] + 4 *: lightyear[Double]).magnitude must be equalTo 7.260
-      (4 *: lightyear[Double] + 1 *: parsec[Double]).magnitude must be equalTo 2.226993865030675 // TODO what precision do I want here?
+      ((1 *: parsec[Double]) + (4 *: lightyear[Double])).magnitude must be equalTo 7.260
+      ((4 *: lightyear[Double]) + (1 *: parsec[Double])).magnitude must be equalTo 2.226993865030675 // TODO what precision do I want here?
     }
   }
 
@@ -54,7 +56,7 @@ class Quanta2Spec extends Specification {
 
       import Distance._
       import Mass._
-      import spire.implicits.DoubleAlgebra 
+      import spire.implicits.DoubleAlgebra
 
       (kilogram[Double] in gram[Double]).magnitude must be equalTo 1000d // TODO precision
       (megagram[Double] in milligram[Double]).magnitude must be equalTo 1000000000d // TODO precision
@@ -64,7 +66,7 @@ class Quanta2Spec extends Specification {
 
     "use Rational" in {
       import Volume._
-      ((Rational(24) *: wineBottle) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
+      ((Rational(24) *: wineBottle[Rational]) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
     }
   }
 
@@ -73,12 +75,19 @@ class Quanta2Spec extends Specification {
 
       import Mass._
       import Distance._
-      import spire.implicits.DoubleAlgebra 
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-      (meter[Double] + foot[Double]).magnitude must be equalTo 4.2808398950131235 // TODO what precision do I want here?
-      (gram[Double] + kilogram[Double]).magnitude must be equalTo 1.001
+
+      val module = implicitly[Module[UnittedQuantity[Distance, Double], Double]]
+      val md = meter[Double]
+      val fd = foot[Double]
+      val d1 = 1 *: md
+      val d2 = 1 *: fd
+      module.plus(d1, d2)
+
+      ((1 *: meter[Double]) + (1 *: foot[Double])).magnitude must be equalTo 4.2808398950131235 // TODO what precision do I want here?
+      ((1 *: gram[Double]) + (1 *: kilogram[Double])).magnitude must be equalTo 1.001
     }
   }
 
@@ -88,7 +97,7 @@ class Quanta2Spec extends Specification {
       import Volume._
       import Flow._
 
-      greatLakes.over[Flow, Time, Rational](niagaraFalls).magnitude must be equalTo Rational(1) // TODO convert that to years
+      greatLakes[Rational].over[Flow, Time, Rational](niagaraFalls[Rational]).magnitude must be equalTo Rational(1) // TODO convert that to years
     }
   }
 

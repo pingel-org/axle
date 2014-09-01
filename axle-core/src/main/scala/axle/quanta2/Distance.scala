@@ -29,7 +29,7 @@ class Distance extends Quantum {
 
 object Distance extends Distance {
 
-  implicit def cgdn[N: Field: Eq]: DirectedGraph[Quantity[Distance, N], N => N] = conversions(
+  def cgdn[N: Field: Eq]: DirectedGraph[UnitOfMeasurement[Distance, N], N => N] = conversions(
     List(
       unit("foot", "ft"),
       unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile")),
@@ -43,8 +43,8 @@ object Distance extends Distance {
       unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit")),
       unit("light year", "ly", Some("http://en.wikipedia.org/wiki/Light-year")),
       unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))),
-    (vs: Seq[Vertex[Quantity[Distance, N]]]) => vs match {
-      case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => trips2fns[Distance, N](List( //        (ft, mile, 5280),
+    (vs: Seq[Vertex[UnitOfMeasurement[Distance, N]]]) => vs match {
+      case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => List( //        (ft, mile, 5280),
       //        (km, mile, 1.609344),
       //        (meter, km, 1E3),
       //        (cm, meter, 1E2),
@@ -55,25 +55,27 @@ object Distance extends Distance {
       //        (km, ausi, 149597870.7),
       //        (km, ly, 9460730472580.8),
       //        (ly, pc, 3.26)
-      ))
+      )
       case _ => Nil
     })
 
-  implicit val cgIRational: DirectedGraph[Quantity[Distance, Rational], Rational => Rational] = cgdn[Rational]
-  implicit val cgIReal: DirectedGraph[Quantity[Distance, Real], Real => Real] = cgdn[Real]
-  implicit val cgIDouble: DirectedGraph[Quantity[Distance, Double], Double => Double] = cgdn[Double]
+  implicit val cgDRational: DirectedGraph[UnitOfMeasurement[Distance, Rational], Rational => Rational] = cgdn[Rational]
+  implicit val cgDReal: DirectedGraph[UnitOfMeasurement[Distance, Real], Real => Real] = cgdn[Real]
+  implicit val cgDDouble: DirectedGraph[UnitOfMeasurement[Distance, Double], Double => Double] = cgdn[Double]
+  implicit val cgDFloat: DirectedGraph[UnitOfMeasurement[Distance, Float], Float => Float] = cgdn[Float]
 
   implicit val mtRational = modulize[Distance, Rational]
   implicit val mtReal = modulize[Distance, Real]
   implicit val mtDouble = modulize[Distance, Double]
+  implicit val mtFloat = modulize[Distance, Float]
 
-  def cm[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Distance, N], N => N]) = byName(cg, "cm")
-  def meter[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Distance, N], N => N]) = byName(cg, "meter")
-  def foot[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Distance, N], N => N]) = byName(cg, "foot")
-  def ft[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Distance, N], N => N]) = byName(cg, "foot")
-  def mile[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Distance, N], N => N]) = byName(cg, "mile")
-  def parsec[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Distance, N], N => N]) = byName(cg, "parsec")
-  def lightyear[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[Quantity[Distance, N], N => N]) = byName(cg, "lightyear")
+  def cm[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "cm")
+  def meter[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "meter")
+  def foot[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "foot")
+  def ft[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "foot")
+  def mile[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "mile")
+  def parsec[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "parsec")
+  def lightyear[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "lightyear")
 
   //  lazy val foot = byName(cgDR, "foot")
   //  lazy val ft = foot

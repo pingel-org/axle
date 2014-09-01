@@ -9,7 +9,7 @@ import java.awt.Color.red
 import java.awt.Color.yellow
 
 import axle.algebra.Plottable
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import axle.quanta2.Angle
 import axle.quanta2.Angle.{° => °}
 import spire.math.Number.apply
@@ -37,5 +37,5 @@ case class BarChart[S, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  labelAngle: Quantity[Angle, Double] = 36d *: °[Double],
+  labelAngle: UnittedQuantity[Angle, Double] = 36d *: °[Double],
   colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))

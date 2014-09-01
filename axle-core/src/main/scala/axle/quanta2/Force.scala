@@ -16,12 +16,5 @@ class Force extends Quantum {
 
 object Force extends Force {
 
-  val second = newUnit[Force, Rational]
-  
-  implicit val cgTR: DirectedGraph[Quantity[Force, Rational], Rational => Rational] = ???
-
-  implicit val mtr = modulize[Force, Rational]
-
-  val minute = Rational(60) *: second
-  
+ 
 }

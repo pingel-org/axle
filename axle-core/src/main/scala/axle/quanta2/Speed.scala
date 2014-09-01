@@ -15,13 +15,5 @@ class Speed extends Quantum {
 }
 
 object Speed extends Speed {
-
-  val second = newUnit[Speed, Rational]
-  
-  implicit val cgTR: DirectedGraph[Quantity[Speed, Rational], Rational => Rational] = ???
-
-  implicit val mtr = modulize[Speed, Rational]
-
-  val minute = Rational(60) *: second
   
 }

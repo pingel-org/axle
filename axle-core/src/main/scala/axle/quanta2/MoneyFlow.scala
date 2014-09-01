@@ -15,13 +15,5 @@ class MoneyFlow extends Quantum {
 }
 
 object MoneyFlow extends MoneyFlow {
-
-  val second = newUnit[MoneyFlow, Rational]
-  
-  implicit val cgTR: DirectedGraph[Quantity[MoneyFlow, Rational], Rational => Rational] = ???
-
-  implicit val mtr = modulize[MoneyFlow, Rational]
-
-  val minute = Rational(60) *: second
   
 }

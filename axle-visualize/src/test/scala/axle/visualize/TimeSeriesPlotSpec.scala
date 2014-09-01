@@ -14,7 +14,7 @@ import axle.quanta2.Information
 import axle.quanta2.Information.bit
 import axle.quanta2.Information.cgIDouble
 import axle.quanta2.Information.cgIReal
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import axle.quanta2.UnitPlottable
 import axle.quanta2.doubleDoubleMetricSpace
 import axle.quanta2.modulize
@@ -30,13 +30,16 @@ import spire.implicits.StringAlgebra
 import spire.implicits._
 import spire.math.Rational
 import spire.math.Real
+import spire.implicits._
 
 class TimeSeriesPlotSpec extends Specification {
 
   "Tics for units" should {
     "work" in {
 
-      val plottable = UnitPlottable(bit[Double])
+      import axle.quanta2.Information._
+      
+      val plottable = UnitPlottable[Information, Double](bit[Double])
 
       val tics = plottable.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
 
@@ -53,7 +56,7 @@ class TimeSeriesPlotSpec extends Specification {
         (0.9 *: bit[Double], "0.9"),
         (1.0 *: bit[Double], "1.0"))
 
-      val vieq = implicitly[Eq[Vector[(Quantity[Information, Double], String)]]]
+      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information, Double], String)]]]
 
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))
@@ -89,15 +92,17 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
-    implicit val plottable = UnitPlottable(bit[Real])
+    import axle.quanta2.Information.mtReal
+    
+    implicit val plottable = UnitPlottable[Information, Real](bit[Real])
 
-    type D = TreeMap[Real, Quantity[Information, Real]]
-    val hm: D = new TreeMap[Real, Quantity[Information, Real]]() ++ (0 to 100).map(i => (Real(i / 100d), H(coin(Rational(i, 100))))).toMap
+    type D = TreeMap[Real, UnittedQuantity[Information, Real]]
+    val hm: D = new TreeMap[Real, UnittedQuantity[Information, Real]]() ++ (0 to 100).map(i => (Real(i / 100d), H(coin(Rational(i, 100))))).toMap
 
-    val plot = new Plot[Real, Quantity[Information, Real], D](
+    val plot = new Plot[Real, UnittedQuantity[Information, Real], D](
       List(("h", hm)),
-      (d: TreeMap[Real, Quantity[Information, Real]]) => d.keys,
-      (d: TreeMap[Real, Quantity[Information, Real]], x: Real) => d(x),
+      (d: TreeMap[Real, UnittedQuantity[Information, Real]]) => d.keys,
+      (d: TreeMap[Real, UnittedQuantity[Information, Real]], x: Real) => d(x),
       connect = true,
       drawKey = false,
       xAxis = Some(Real(0) *: bit[Real]),

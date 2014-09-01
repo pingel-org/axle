@@ -6,7 +6,7 @@ import axle.quanta2.Angle
 import axle.quanta2.Angle.degree
 import axle.quanta2.Distance
 import axle.quanta2.Quantity
-import spire.implicits.DoubleAlgebra 
+import spire.implicits.DoubleAlgebra
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_TEST
@@ -31,10 +31,10 @@ import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW
 import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import javax.media.opengl.glu.GLU
-import spire.implicits.FloatAlgebra 
+import spire.implicits.FloatAlgebra
 
 class AxleGLCanvas(scene: Scene, fovy: Quantity[Angle, Float], zNear: Quantity[Distance, Float], zFar: Quantity[Distance, Float], distanceUnit: Quantity[Distance, Float])
-extends GLCanvas with GLEventListener {
+  extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)
 
@@ -78,7 +78,11 @@ extends GLCanvas with GLEventListener {
     gl.glViewport(0, 0, width, height)
     gl.glMatrixMode(GL_PROJECTION)
     gl.glLoadIdentity()
-    glu.gluPerspective((fovy in degree[Float]).magnitude, aspect, (zNear in distanceUnit).magnitude, (zFar in distanceUnit).magnitude)
+    glu.gluPerspective(
+      (fovy in degree[Float]).magnitude,
+      aspect,
+      (zNear in scene.distanceUnit).magnitude,
+      (zFar in scene.distanceUnit).magnitude)
     gl.glMatrixMode(GL_MODELVIEW)
     gl.glLoadIdentity()
   }

@@ -3,7 +3,7 @@ package axle
 import scala.Vector
 import scala.collection.GenTraversable
 
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import axle.quanta2.Information
 import axle.quanta2.Information.bit
 import axle.stats.Case
@@ -73,7 +73,7 @@ package object stats {
 
   def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = stddev(xs)
 
-  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Quantity[Information, Real] = {
+  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Real] = {
     import axle.quanta2.Information._
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values) { x =>
@@ -84,10 +84,10 @@ package object stats {
         implicitly[Field[Real]].zero
       }
     }
-    Quantity(H, Some(bit))
+    UnittedQuantity(H, bit[Real])
   }
 
-  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): Quantity[Information, Real] = entropy(X)
+  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Real] = entropy(X)
 
   def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
     // TODO

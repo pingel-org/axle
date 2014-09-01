@@ -16,12 +16,5 @@ class Acceleration extends Quantum {
 
 object Acceleration extends Acceleration {
 
-  val second = newUnit[Acceleration, Rational]
-  
-  implicit val cgTR: DirectedGraph[Quantity[Acceleration, Rational], Rational => Rational] = ???
-
-  implicit val mtr = modulize[Acceleration, Rational]
-
-  val minute = Rational(60) *: second
   
 }
