@@ -43,6 +43,6 @@ case class UnittedQuantity[Q <: Quantum, N: Field: Eq](magnitude: N, unit: UnitO
 
   // TODO
   def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
-    UnitOfMeasurement[Q2, N](???, ???, None)
+    UnitOfMeasurement[Q2, N]("TODO", "TODO", None)
 
 }
