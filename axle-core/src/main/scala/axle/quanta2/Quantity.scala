@@ -39,7 +39,7 @@ case class UnittedQuantity[Q <: Quantum, N: Field: Eq](magnitude: N, unit: UnitO
       .map(
         _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
       .map(n => UnittedQuantity((magnitude * n), newUnit))
-      .getOrElse(throw new Exception("no conversion path from " + this + " to " + newUnit))
+      .getOrElse(throw new Exception("no conversion path from " + unit + " to " + newUnit))
 
   // TODO
   def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
