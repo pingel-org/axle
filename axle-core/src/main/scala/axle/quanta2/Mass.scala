@@ -4,9 +4,9 @@ import axle.graph.DirectedGraph
 import axle.graph.Vertex
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.implicits.DoubleAlgebra
 import spire.math.Rational
 import spire.math.Real
+import spire.implicits._
 
 class Mass extends Quantum {
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
@@ -15,6 +15,8 @@ class Mass extends Quantum {
 
 object Mass extends Mass {
 
+  import spire.implicits._
+  
   def cgn[N: Field: Eq]: DirectedGraph[UnitOfMeasurement[Mass, N], N => N] = conversions(
     List(
       unit("milligram", "mg"),
@@ -22,7 +24,10 @@ object Mass extends Mass {
       unit("kilogram", "Kg"),
       unit("megagram", "Mg")),
     (vs: Seq[Vertex[UnitOfMeasurement[Mass, N]]]) => vs match {
-      case s :: Nil => List()
+      case mg :: g :: kg :: megag :: Nil => List(
+        (g, kg, (n: N) => n * 1000),
+        (kg, g, (n: N) => n / 1000)
+        )
       case _ => Nil
     })
 
