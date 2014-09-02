@@ -11,6 +11,7 @@ import axle.stats.rationalProbabilityDist
 import spire.algebra.Order
 import spire.math.Number.apply
 import spire.math.Rational
+import spire.math.Real
 import spire.implicits._
 
 class InformationTheorySpec extends Specification {
@@ -27,7 +28,7 @@ class InformationTheorySpec extends Specification {
           "B" -> Rational(1, 10),
           "C" -> Rational(7, 10)), "d")
 
-      entropy[String, Rational](d).magnitude must be equalTo (1.1567796494470395)
+      entropy[String, Rational](d).magnitude.toDouble must be equalTo (1.1567796494470395)
     }
   }
 
@@ -65,8 +66,8 @@ class InformationTheorySpec extends Specification {
       val fairCoin = coin()
 
       // TODO: figure out why equalTo isn't working here
-      entropy(biasedCoin).magnitude should be equalTo (0.46899559358928117)
-      entropy(fairCoin).magnitude should be equalTo (1.0)
+      entropy(biasedCoin).magnitude.toDouble should be equalTo (0.4689955935892812)
+      entropy(fairCoin).magnitude.toDouble should be equalTo (1.0)
     }
   }
 

@@ -20,13 +20,13 @@ object Volume extends Volume {
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("greatLakes", "greatLakes"),
     unit("wineBottle", "wineBottle"),
-    unit("nebuchadnezzar", "nebuchadnezzar") // 5 bottles of wine
+    unit("nebuchadnezzar", "nebuchadnezzar")
     )
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (wineBottle, nebuchadnezzar, _ * 5, _ / 5))
+      (wineBottle, nebuchadnezzar, _ * 20, _ / 20))
   }
 
   implicit val cgVolumeRational = cgn[Rational]
