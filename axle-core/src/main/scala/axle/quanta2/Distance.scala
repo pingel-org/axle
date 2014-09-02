@@ -41,7 +41,7 @@ object Distance extends Distance {
       unit("nanometer", "nm"),
       unit("Astronomical Unit", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit")),
       unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit")),
-      unit("light year", "ly", Some("http://en.wikipedia.org/wiki/Light-year")),
+      unit("lightyear", "ly", Some("http://en.wikipedia.org/wiki/Light-year")),
       unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))),
     (vs: Seq[Vertex[UnitOfMeasurement[Distance, N]]]) => vs match {
       case ft :: mile :: meter :: km :: cm :: mm :: μm :: nm :: au :: ausi :: ly :: pc :: Nil => List( //        (ft, mile, 5280),
