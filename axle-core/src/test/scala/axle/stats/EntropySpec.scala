@@ -3,7 +3,6 @@ package axle.stats
 import org.specs2.mutable.Specification
 
 import axle.quanta2.Information
-import axle.quanta2.Quantity
 import axle.quanta2.UnittedQuantity
 import axle.quanta2.Quantum
 import spire.math.Rational

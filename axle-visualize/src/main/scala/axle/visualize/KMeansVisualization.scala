@@ -16,7 +16,7 @@ import java.awt.Graphics2D
 import axle.algebra.Plottable
 import axle.ml.KMeansModule.KMeansClassifier
 import axle.quanta2.Angle.{° => °}
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics

@@ -58,9 +58,9 @@ class Quanta2Spec extends Specification {
       import Mass._
       import spire.implicits.DoubleAlgebra
 
-      (kilogram[Double] in gram[Double]).magnitude must be equalTo 1000d // TODO precision
-      (megagram[Double] in milligram[Double]).magnitude must be equalTo 1000000000d // TODO precision
-      (mile[Double] in ft[Double]).magnitude must be equalTo 5280d // TODO precision
+      ((1 *: kilogram[Double]) in gram[Double]).magnitude must be equalTo 1000d // TODO precision
+      ((1 *: megagram[Double]) in milligram[Double]).magnitude must be equalTo 1000000000d // TODO precision
+      ((1 *: mile[Double]) in ft[Double]).magnitude must be equalTo 5280d // TODO precision
 
     }
 
@@ -97,7 +97,7 @@ class Quanta2Spec extends Specification {
       import Volume._
       import Flow._
 
-      greatLakes[Rational].over[Flow, Time, Rational](niagaraFalls[Rational]).magnitude must be equalTo Rational(1) // TODO convert that to years
+      (1 *: greatLakes[Rational]).over[Flow, Time, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1) // TODO convert that to years
     }
   }
 

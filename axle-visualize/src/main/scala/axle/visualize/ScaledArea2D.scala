@@ -10,7 +10,7 @@ import scala.math.min
 import axle.algebra.Portionable
 import axle.quanta2.Angle
 import axle.quanta2.Angle.rad
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import spire.algebra.Eq
 import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra 
@@ -81,7 +81,7 @@ case class ScaledArea2D[X: Portionable: Eq, Y: Portionable: Eq](
     }
   }
 
-  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: Quantity[Angle, Double]): Unit = {
+  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: UnittedQuantity[Angle, Double]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
       val a = (angle in rad[Double]).magnitude

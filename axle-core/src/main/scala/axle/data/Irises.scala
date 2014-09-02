@@ -8,7 +8,7 @@ import scala.util.Try
 
 import axle.quanta2.Distance
 import axle.quanta2.Distance.cm
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import axle.quanta2.modulize
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
@@ -41,10 +41,10 @@ import spire.implicits.moduleOps
 object Irises {
 
   case class Iris(
-    sepalLength: Quantity[Distance, Double],
-    sepalWidth: Quantity[Distance, Double],
-    petalLength: Quantity[Distance, Double],
-    petalWidth: Quantity[Distance, Double],
+    sepalLength: UnittedQuantity[Distance, Double],
+    sepalWidth: UnittedQuantity[Distance, Double],
+    petalLength: UnittedQuantity[Distance, Double],
+    petalWidth: UnittedQuantity[Distance, Double],
     species: String)
 
   object Iris {

@@ -6,7 +6,7 @@ import java.awt.Graphics2D
 
 import axle.quanta2.Angle
 import axle.quanta2.Angle.rad
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra 
 
@@ -17,7 +17,7 @@ class Text(
   y: Int,
   centered: Boolean = true,
   color: Color = Color.black,
-  angle: Option[Quantity[Angle, Double]] = None) extends Paintable {
+  angle: Option[UnittedQuantity[Angle, Double]] = None) extends Paintable {
 
   val angleRadOpt = angle.map(a => (a in rad[Double]).magnitude)
 

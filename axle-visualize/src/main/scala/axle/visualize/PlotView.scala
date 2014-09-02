@@ -7,7 +7,7 @@ import scala.Stream.continually
 
 import axle.algebra.Plottable
 import axle.quanta2.Angle.{° => °}
-import axle.quanta2.Quantity
+import axle.quanta2.UnittedQuantity
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key

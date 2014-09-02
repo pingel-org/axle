@@ -5,7 +5,8 @@ import scala.Vector
 import axle.quanta2.Angle
 import axle.quanta2.Angle.degree
 import axle.quanta2.Distance
-import axle.quanta2.Quantity
+import axle.quanta2.UnitOfMeasurement
+import axle.quanta2.UnittedQuantity
 import spire.implicits.DoubleAlgebra
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT
@@ -33,7 +34,7 @@ import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import javax.media.opengl.glu.GLU
 import spire.implicits.FloatAlgebra
 
-class AxleGLCanvas(scene: Scene, fovy: Quantity[Angle, Float], zNear: Quantity[Distance, Float], zFar: Quantity[Distance, Float], distanceUnit: Quantity[Distance, Float])
+class AxleGLCanvas(scene: Scene, fovy: UnittedQuantity[Angle, Float], zNear: UnittedQuantity[Distance, Float], zFar: UnittedQuantity[Distance, Float], distanceUnit: UnitOfMeasurement[Distance, Float])
   extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)

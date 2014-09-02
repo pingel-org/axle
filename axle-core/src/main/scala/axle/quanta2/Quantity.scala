@@ -2,53 +2,12 @@ package axle.quanta2
 
 import axle.graph.DirectedGraph
 import axle.graph.Vertex
-import spire.algebra.Field
 import spire.algebra.Eq
+import spire.algebra.Field
 import spire.algebra.Order
+import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits._
-
-abstract class Quantity[Q <: Quantum, N: Field: Eq] {
-
-  def magnitude: N
-
-  def unit: UnitOfMeasurement[Q, N]
-
-  private[this] def vertex(cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N], query: UnitOfMeasurement[Q, N]): Vertex[UnitOfMeasurement[Q, N]] = {
-    cg.findVertex(_.payload.name === query.name).get
-  }
-
-  def in(newUnit: UnitOfMeasurement[Q, N])(implicit cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N]): UnittedQuantity[Q, N] =
-    cg.shortestPath(vertex(cg, newUnit), vertex(cg, unit))
-      .map(
-        _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
-      .map(n => UnittedQuantity((magnitude * n), newUnit))
-      .getOrElse(throw new Exception("no conversion path from " + this + " to " + newUnit))
-
-  // TODO
-  def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: Quantity[QR, N]): UnitOfMeasurement[Q2, N] =
-    UnitOfMeasurement[Q2, N](???, ???, None)
-
-}
-
-object UnitOfMeasurement {
-
-  implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[UnitOfMeasurement[Q, N]] = new Eq[UnitOfMeasurement[Q, N]] {
-    def eqv(x: UnitOfMeasurement[Q, N], y: UnitOfMeasurement[Q, N]): Boolean = x.name === y.name
-  }
-
-}
-
-case class UnitOfMeasurement[Q <: Quantum, N: Field: Eq](name: String, symbol: String, wikipediaUrl: Option[String]) extends Quantity[Q, N] {
-
-  def magnitude: N = implicitly[Field[N]].one
-
-  def unit: UnitOfMeasurement[Q, N] = this
-  
-  def *:(n: N) = UnittedQuantity(n, this)
-}
 
 object UnittedQuantity {
 
@@ -68,4 +27,22 @@ object UnittedQuantity {
 
 }
 
-case class UnittedQuantity[Q <: Quantum, N: Field: Eq](magnitude: N, unit: UnitOfMeasurement[Q, N]) extends Quantity[Q, N]
+case class UnittedQuantity[Q <: Quantum, N: Field: Eq](magnitude: N, unit: UnitOfMeasurement[Q, N])
+{
+
+  private[this] def vertex(cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N], query: UnitOfMeasurement[Q, N]): Vertex[UnitOfMeasurement[Q, N]] = {
+    cg.findVertex(_.payload.name === query.name).get
+  }
+
+  def in(newUnit: UnitOfMeasurement[Q, N])(implicit cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N]): UnittedQuantity[Q, N] =
+    cg.shortestPath(vertex(cg, newUnit), vertex(cg, unit))
+      .map(
+        _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
+      .map(n => UnittedQuantity((magnitude * n), newUnit))
+      .getOrElse(throw new Exception("no conversion path from " + this + " to " + newUnit))
+
+  // TODO
+  def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
+    UnitOfMeasurement[Q2, N](???, ???, None)
+
+}
