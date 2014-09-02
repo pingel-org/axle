@@ -16,7 +16,7 @@ import spire.implicits._
 import spire.math.Rational
 import spire.math.Real
 
-class Time extends Quantum {
+abstract class Time extends Quantum {
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
 }
 
@@ -24,24 +24,23 @@ object Time extends Time {
 
   import spire.implicits._
 
-  def cgn[N: Field: Eq]: DirectedGraph[UnitOfMeasurement[Time, N], N => N] = conversions(
-    List(
-      unit("millisecond", "ms"),
-      unit("second", "s"),
-      unit("minute", "min")),
-    (vs: Seq[Vertex[UnitOfMeasurement[Time, N]]]) => vs match {
-      case ms :: s :: min :: Nil =>
-        (ms, s, (ms: N) => ms / 1000) ::
-          (s, ms, (s: N) => s * 1000) ::
-          (s, min, (s: N) => s / 60) ::
-          (min, s, (min: N) => min * 60) ::
-          Nil
-      case _ => Nil
-    })
+  type Q = Time
 
-  implicit val cgTimeRational: DirectedGraph[UnitOfMeasurement[Time, Rational], Rational => Rational] = cgn[Rational]
-  implicit val cgTimeReal: DirectedGraph[UnitOfMeasurement[Time, Real], Real => Real] = cgn[Real]
-  implicit val cgTimeDouble: DirectedGraph[UnitOfMeasurement[Time, Double], Double => Double] = cgn[Double]
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    unit("millisecond", "ms"),
+    unit("second", "s"),
+    unit("minute", "min"))
+
+  def links[N: Field: Eq] = {
+    implicit val baseCG = cgnDisconnected[N]
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
+      (millisecond, second, _ * 1000, _ / 1000),
+      (second, minute, _ * 60, _ / 60))
+  }
+
+  implicit val cgTimeRational = cgn[Rational]
+  implicit val cgTimeReal = cgn[Real]
+  implicit val cgTimeDouble = cgn[Double]
 
   implicit val mtRational = modulize[Time, Rational]
   implicit val mtReal = modulize[Time, Real]

@@ -5,30 +5,33 @@ import axle.graph.Vertex
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
+import spire.implicits._
 import spire.math.Rational
 import spire.math.Real
 
-class Volume extends Quantum {
+abstract class Volume extends Quantum {
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
 }
 
 object Volume extends Volume {
 
-  def cgn[N: Field: Eq]: DirectedGraph[UnitOfMeasurement[Volume, N], N => N] = conversions(
-    List(
-      unit("greatLakes", "greatLakes"),
-      unit("wineBottle", "wineBottle"),
-      unit("nebuchadnezzar", "nebuchadnezzar")), // 5 bottles of wine
-    (vs: Seq[Vertex[UnitOfMeasurement[Volume, N]]]) => vs match {
-      case greatLakes :: wineBottle :: nebuchadnezzar :: Nil => List(
-          // TODO
-          )
-      case _ => Nil
-    })
+  type Q = Volume
 
-  implicit val cgVolumeRational: DirectedGraph[UnitOfMeasurement[Volume, Rational], Rational => Rational] = cgn[Rational]
-  implicit val cgVolumeReal: DirectedGraph[UnitOfMeasurement[Volume, Real], Real => Real] = cgn[Real]
-  implicit val cgVolumeDouble: DirectedGraph[UnitOfMeasurement[Volume, Double], Double => Double] = cgn[Double]
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    unit("greatLakes", "greatLakes"),
+    unit("wineBottle", "wineBottle"),
+    unit("nebuchadnezzar", "nebuchadnezzar") // 5 bottles of wine
+    )
+
+  def links[N: Field: Eq] = {
+    implicit val baseCG = cgnDisconnected[N]
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
+      (wineBottle, nebuchadnezzar, _ * 5, _ / 5))
+  }
+
+  implicit val cgVolumeRational = cgn[Rational]
+  implicit val cgVolumeReal = cgn[Real]
+  implicit val cgVolumeDouble = cgn[Double]
 
   implicit val mtRational = modulize[Volume, Rational]
   implicit val mtReal = modulize[Volume, Real]

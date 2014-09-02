@@ -8,21 +8,18 @@ import spire.implicits.DoubleAlgebra
 import spire.math.Rational
 import spire.math.Real
 
-class Flow extends Quantum {
+abstract class Flow extends Quantum {
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Flowtric_flow_rate"
 }
 
 object Flow extends Flow {
 
-  def cgn[N: Field: Eq]: DirectedGraph[UnitOfMeasurement[Flow, N], N => N] = conversions(
-    List(
-      unit("niagaraFalls", "niagaraFalls")), // 5 bottles of wine
-    (vs: Seq[Vertex[UnitOfMeasurement[Flow, N]]]) => vs match {
-      case niagaraFalls :: Nil => List(
-          // TODO
-          )
-      case _ => Nil
-    })
+  type Q = Flow
+
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    unit("niagaraFalls", "niagaraFalls"))
+
+  def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
 
   implicit val cgFlowRational: DirectedGraph[UnitOfMeasurement[Flow, Rational], Rational => Rational] = cgn[Rational]
   implicit val cgFlowReal: DirectedGraph[UnitOfMeasurement[Flow, Real], Real => Real] = cgn[Real]
@@ -33,6 +30,5 @@ object Flow extends Flow {
   implicit val mtDouble = modulize[Flow, Double]
 
   def niagaraFalls[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Flow, N], N => N]) = byName(cg, "niagaraFalls")
-  
-  
+
 }

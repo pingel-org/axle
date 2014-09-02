@@ -57,20 +57,4 @@ package object quanta2 {
   def unit[Q <: Quantum, N: Field: Eq](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
     UnitOfMeasurement(name, symbol, linkOpt)
 
-  private[quanta2] def conversions[Q <: Quantum, N: Field: Eq](vps: Seq[UnitOfMeasurement[Q, N]], ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)]): DirectedGraph[UnitOfMeasurement[Q, N], N => N] =
-    JungDirectedGraph(vps, ef)
-
-  private[quanta2] def trip2fns[Q <: Quantum, N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
-    val (from, to, multiplier) = trip
-    Vector(
-      (from, to, _ * multiplier),
-      (to, from, _ / multiplier))
-  }
-
-  private[quanta2] def trips2fns[Q <: Quantum, N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
-    trips.flatMap(trip2fns(_))
-
-  private[quanta2] def byName[Q <: Quantum, N: Field: Eq](cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N], unitName: String): UnitOfMeasurement[Q, N] =
-    cg.findVertex(_.payload.name === unitName).get.payload
-
 }

@@ -52,7 +52,7 @@ abstract class Quantum[N: Field: Order: Eq](space: MetricSpace[N, Double]) exten
   quantum =>
 
   type Q <: Quantity
-
+  
   def field = implicitly[Field[N]]
 
   implicit def eqTypeclass: Eq[Q]

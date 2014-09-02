@@ -94,7 +94,7 @@ object Mass extends Mass[Rational](rationalDoubleMetricSpace) {
           (et, mars, 641.85),
           (et, mercury, 330.22),
           (et, pluto, 13.05),
-          (et, moon, 73.477)))
+          (et, moon, 73.477) ) )
       case _ => Nil
     })
 

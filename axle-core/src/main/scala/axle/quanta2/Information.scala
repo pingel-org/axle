@@ -14,7 +14,7 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
-class Information extends Quantum {
+abstract class Information extends Quantum {
   def wikipediaUrl = "TODO"
 }
 
@@ -22,24 +22,19 @@ object Information extends Information {
 
   import spire.implicits._
 
-  def cgin[N: Field: Eq]: DirectedGraph[UnitOfMeasurement[Information, N], N => N] = conversions(
-    List(
-      unit("bit", "b"),
-      unit("nibble", "nibble"),
-      unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte")),
-      unit("kilobyte", "KB"),
-      unit("megabyte", "MB"),
-      unit("gigabyte", "GB"),
-      unit("terabyte", "TB"),
-      unit("petabyte", "PB")),
-    (vs: Seq[Vertex[UnitOfMeasurement[Information, N]]]) => vs match {
-      case bit :: nibble :: byte :: kilobyte :: megabyte :: gigabyte :: terabyte :: petabyte :: Nil =>
-        (bit, nibble, (b: N) => b * 4) ::
-          (nibble, bit, (n: N) => n / 4) ::
-          Nil
-      case _ => Nil
-    })
+  type Q = Information
 
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    unit("bit", "b"),
+    unit("nibble", "nibble"),
+    unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte")),
+    unit("kilobyte", "KB"),
+    unit("megabyte", "MB"),
+    unit("gigabyte", "GB"),
+    unit("terabyte", "TB"),
+    unit("petabyte", "PB"))
+
+  def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
   //trips2fns(List(
   //          (bit, byte, 8),
   //          (byte, kilobyte, 1024),
@@ -49,9 +44,9 @@ object Information extends Information {
   //          (terabyte, petabyte, 1024))
   //          )
 
-  implicit val cgIRational: DirectedGraph[UnitOfMeasurement[Information, Rational], Rational => Rational] = cgin[Rational]
-  implicit val cgIReal: DirectedGraph[UnitOfMeasurement[Information, Real], Real => Real] = cgin[Real]
-  implicit val cgIDouble: DirectedGraph[UnitOfMeasurement[Information, Double], Double => Double] = cgin[Double]
+  implicit val cgIRational = cgn[Rational]
+  implicit val cgIReal = cgn[Real]
+  implicit val cgIDouble = cgn[Double]
 
   implicit val mtRational = modulize[Information, Rational]
   implicit val mtReal = modulize[Information, Real]
