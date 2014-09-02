@@ -31,8 +31,6 @@ class Quanta2Spec extends Specification {
       val t8 = Rational(5, 3) *: t1
       val t9 = t1 :* 60
 
-      // TODO: show other number types, N
-
       1 must be equalTo 1
     }
   }
@@ -46,7 +44,7 @@ class Quanta2Spec extends Specification {
 
       (5 *: gram[Double]).magnitude must be equalTo 5
       ((1 *: parsec[Double]) + (4 *: lightyear[Double])).magnitude must be equalTo 7.260
-      ((4 *: lightyear[Double]) + (1 *: parsec[Double])).magnitude must be equalTo 2.226993865030675 // TODO what precision do I want here?
+      ((4 *: lightyear[Double]) + (1 *: parsec[Double])).magnitude must be equalTo 2.226993865030675
     }
   }
 
@@ -58,9 +56,9 @@ class Quanta2Spec extends Specification {
       import Mass._
       import spire.implicits.DoubleAlgebra
 
-      ((1 *: kilogram[Double]) in gram[Double]).magnitude must be equalTo 1000d // TODO precision
-      ((1 *: megagram[Double]) in milligram[Double]).magnitude must be equalTo 1000000000d // TODO precision
-      ((1 *: mile[Double]) in ft[Double]).magnitude must be equalTo 5280d // TODO precision
+      ((1 *: kilogram[Double]) in gram[Double]).magnitude must be equalTo 1000d
+      ((1 *: megagram[Double]) in milligram[Double]).magnitude must be equalTo 1000000000d
+      ((1 *: mile[Double]) in ft[Double]).magnitude must be equalTo 5280d
 
     }
 
@@ -86,7 +84,7 @@ class Quanta2Spec extends Specification {
       val d2 = 1 *: fd
       module.plus(d1, d2)
 
-      ((1 *: meter[Double]) + (1 *: foot[Double])).magnitude must be equalTo 4.2808398950131235 // TODO what precision do I want here?
+      ((1 *: meter[Double]) + (1 *: foot[Double])).magnitude must be equalTo 4.2808398950131235
       ((1 *: gram[Double]) + (1 *: kilogram[Double])).magnitude must be equalTo 1.001
     }
   }
@@ -97,7 +95,8 @@ class Quanta2Spec extends Specification {
       import Volume._
       import Flow._
 
-      (1 *: greatLakes[Rational]).over[Flow, Time, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1) // TODO convert that to years
+      // TODO convert that to years
+      (1 *: greatLakes[Rational]).over[Flow, Time, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1)
     }
   }
 
