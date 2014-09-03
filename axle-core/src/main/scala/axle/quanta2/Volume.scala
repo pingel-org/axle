@@ -37,8 +37,8 @@ object Volume extends Volume {
   implicit val mtReal = modulize[Volume, Real]
   implicit val mtDouble = modulize[Volume, Double]
 
-  def greatLakes[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Volume, N], N => N]) = byName(cg, "greatLakes")
-  def wineBottle[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Volume, N], N => N]) = byName(cg, "wineBottle")
-  def nebuchadnezzar[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Volume, N], N => N]) = byName(cg, "nebuchadnezzar")
+  def greatLakes[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "greatLakes")
+  def wineBottle[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "wineBottle")
+  def nebuchadnezzar[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nebuchadnezzar")
 
 }

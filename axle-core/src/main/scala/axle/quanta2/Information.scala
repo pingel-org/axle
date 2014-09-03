@@ -52,7 +52,7 @@ object Information extends Information {
   implicit val mtReal = modulize[Information, Real]
   implicit val mtDouble = modulize[Information, Double]
 
-  def bit[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Information, N], N => N]) = byName(cg, "bit")
+  def bit[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "bit")
 
   //  lazy val bit = byName(cgIR, "bit")
   //  lazy val nibble = byName(cgIR, "nibble")

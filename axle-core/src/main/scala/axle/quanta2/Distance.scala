@@ -71,16 +71,16 @@ object Distance extends Distance {
   implicit val mtDouble = modulize[Distance, Double]
   implicit val mtFloat = modulize[Distance, Float]
 
-  def centimeter[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "centimeter")
-  def cm[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "centimeter")
-  def meter[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "meter")
-  def kilometer[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "kilometer")
-  def km[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "kilometer")
-  def foot[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "foot")
-  def ft[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "foot")
-  def mile[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "mile")
-  def parsec[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "parsec")
-  def lightyear[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Distance, N], N => N]) = byName(cg, "lightyear")
+  def centimeter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "centimeter")
+  def cm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "centimeter")
+  def meter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "meter")
+  def kilometer[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilometer")
+  def km[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilometer")
+  def foot[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "foot")
+  def ft[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "foot")
+  def mile[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mile")
+  def parsec[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "parsec")
+  def lightyear[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "lightyear")
 
   //  lazy val millimeter = byName(cgDR, "millimeter")
   //  lazy val mm = millimeter

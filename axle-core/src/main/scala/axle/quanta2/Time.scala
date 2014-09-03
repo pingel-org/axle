@@ -46,8 +46,8 @@ object Time extends Time {
   implicit val mtReal = modulize[Time, Real]
   implicit val mtDouble = modulize[Time, Double]
 
-  def millisecond[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Time, N], N => N]) = byName(cg, "millisecond")
-  def second[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Time, N], N => N]) = byName(cg, "second")
-  def minute[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Time, N], N => N]) = byName(cg, "minute")
+  def millisecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millisecond")
+  def second[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "second")
+  def minute[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "minute")
 
 }

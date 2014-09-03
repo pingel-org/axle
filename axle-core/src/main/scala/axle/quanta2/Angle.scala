@@ -33,9 +33,9 @@ object Angle extends Angle {
   implicit val mtDouble = modulize[Angle, Double]
   implicit val mtFloat = modulize[Angle, Float]
 
-  def degree[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Angle, N], N => N]) = byName(cg, "degree")
-  def °[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Angle, N], N => N]) = byName(cg, "degree")
-  def radian[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Angle, N], N => N]) = byName(cg, "radian")
-  def rad[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Angle, N], N => N]) = byName(cg, "radian")
+  def degree[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "degree")
+  def °[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "degree")
+  def radian[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "radian")
+  def rad[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "radian")
 
 }
