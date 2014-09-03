@@ -21,13 +21,8 @@ object Flow extends Flow {
 
   def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
 
-  implicit val cgFlowRational: DirectedGraph[UnitOfMeasurement[Flow, Rational], Rational => Rational] = cgn[Rational]
-  implicit val cgFlowReal: DirectedGraph[UnitOfMeasurement[Flow, Real], Real => Real] = cgn[Real]
-  implicit val cgFlowDouble: DirectedGraph[UnitOfMeasurement[Flow, Double], Double => Double] = cgn[Double]
-
-  implicit val mtRational = modulize[Flow, Rational]
-  implicit val mtReal = modulize[Flow, Real]
-  implicit val mtDouble = modulize[Flow, Double]
+//  implicit val cgFlowRational: DirectedGraph[UnitOfMeasurement[Flow, Rational], Rational => Rational] = cgn[Rational]
+//  implicit val mtRational = modulize[Flow, Rational]
 
   def niagaraFalls[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Flow, N], N => N]) = byName(cg, "niagaraFalls")
 

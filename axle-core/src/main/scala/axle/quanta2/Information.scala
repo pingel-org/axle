@@ -44,13 +44,8 @@ object Information extends Information {
   //          (terabyte, petabyte, 1024))
   //          )
 
-  implicit val cgIRational = cgn[Rational]
-  implicit val cgIReal = cgn[Real]
-  implicit val cgIDouble = cgn[Double]
-
-  implicit val mtRational = modulize[Information, Rational]
-  implicit val mtReal = modulize[Information, Real]
-  implicit val mtDouble = modulize[Information, Double]
+//  implicit val cgIRational = cgn[Rational]
+//  implicit val mtRational = modulize[Information, Rational]
 
   def bit[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "bit")
 

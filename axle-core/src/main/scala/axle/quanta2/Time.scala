@@ -38,14 +38,6 @@ object Time extends Time {
       (second, minute, _ * 60, _ / 60))
   }
 
-  implicit val cgTimeRational = cgn[Rational]
-  implicit val cgTimeReal = cgn[Real]
-  implicit val cgTimeDouble = cgn[Double]
-
-  implicit val mtRational = modulize[Time, Rational]
-  implicit val mtReal = modulize[Time, Real]
-  implicit val mtDouble = modulize[Time, Double]
-
   def millisecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millisecond")
   def second[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "second")
   def minute[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "minute")

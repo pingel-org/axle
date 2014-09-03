@@ -19,25 +19,25 @@ trait Quantum {
 
   def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
   
-  private[quanta2] def conversions[Q <: Quantum, N: Field: Eq](vps: Seq[UnitOfMeasurement[Q, N]], ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)]): DirectedGraph[UnitOfMeasurement[Q, N], N => N] =
+  private[quanta2] def conversions[N: Field: Eq](vps: Seq[UnitOfMeasurement[Q, N]], ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)]): DirectedGraph[UnitOfMeasurement[Q, N], N => N] =
     JungDirectedGraph(vps, ef)
 
-  private[quanta2] def trip2fns[Q <: Quantum, N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
+  private[quanta2] def trip2fns[N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
     val (from, to, multiplier) = trip
     Vector(
       (from, to, _ * multiplier),
       (to, from, _ / multiplier))
   }
 
-  private[quanta2] def trips2fns[Q <: Quantum, N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
+  private[quanta2] def trips2fns[N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
     trips.flatMap(trip2fns(_))
 
-  private[quanta2] def byName[Q <: Quantum, N: Field: Eq](cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N], unitName: String): UnitOfMeasurement[Q, N] =
+  private[quanta2] def byName[N: Field: Eq](cg: CG[N], unitName: String): UnitOfMeasurement[Q, N] =
     cg.findVertex(_.payload.name === unitName).get.payload
   
   def cgnDisconnected[N: Field: Eq]: CG[N] = conversions(units, (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => Nil)
   
-  def cgn[N: Field: Eq]: CG[N] = conversions(
+  implicit def cgn[N: Field: Eq]: CG[N] = conversions(
     units,
     (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => {
       val name2vertex = vs.map(v => (v.payload.name, v)).toMap

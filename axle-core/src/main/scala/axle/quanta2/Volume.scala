@@ -29,14 +29,6 @@ object Volume extends Volume {
       (wineBottle, nebuchadnezzar, _ * 20, _ / 20))
   }
 
-  implicit val cgVolumeRational = cgn[Rational]
-  implicit val cgVolumeReal = cgn[Real]
-  implicit val cgVolumeDouble = cgn[Double]
-
-  implicit val mtRational = modulize[Volume, Rational]
-  implicit val mtReal = modulize[Volume, Real]
-  implicit val mtDouble = modulize[Volume, Double]
-
   def greatLakes[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "greatLakes")
   def wineBottle[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "wineBottle")
   def nebuchadnezzar[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nebuchadnezzar")

@@ -23,16 +23,6 @@ object Angle extends Angle {
 
   def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
 
-  implicit val cgAngleRational = cgn[Rational]
-  implicit val cgAngleReal = cgn[Real]
-  implicit val cgAngleDouble = cgn[Double]
-  implicit val cgAngleFloat = cgn[Float]
-
-  implicit val mtRational = modulize[Angle, Rational]
-  implicit val mtReal = modulize[Angle, Real]
-  implicit val mtDouble = modulize[Angle, Double]
-  implicit val mtFloat = modulize[Angle, Float]
-
   def degree[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "degree")
   def °[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "degree")
   def radian[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "radian")

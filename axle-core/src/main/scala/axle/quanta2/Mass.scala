@@ -79,14 +79,6 @@ object Mass extends Mass {
       (exatonne, moon, _ * 73.477, _ / 73.477))
   }
 
-  implicit val cgMassRational = cgn[Rational]
-  implicit val cgMassReal = cgn[Real]
-  implicit val cgMassDouble = cgn[Double]
-
-  implicit val mtRational = modulize[Mass, Rational]
-  implicit val mtReal = modulize[Mass, Real]
-  implicit val mtDouble = modulize[Mass, Double]
-
   def milligram[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "milligram")
   def mg[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "milligram")
   def gram[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gram")

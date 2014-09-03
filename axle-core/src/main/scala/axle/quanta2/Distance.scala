@@ -51,26 +51,16 @@ object Distance extends Distance {
       (foot, mile, _ * 5280, _ / 5280),
       (kilometer, mile, _ * 1.609344, _ / 1.609344),
       (meter, kilometer, _ * 1E3, _ / 1E3),
-      (lightyear, parsec, _ * 3.26, _ / 3.26))
-    //        (cm, meter, 1E2),
-    //        (mm, meter, 1E3),
-    //        (μm, meter, 1E6),
-    //        (nm, meter, 1E9),
-    //        (mile, au, 92955807.3),
-    //        (km, ausi, 149597870.7),
-    //        (km, ly, 9460730472580.8),
+      (lightyear, parsec, _ * 3.26, _ / 3.26),
+      (centimeter, meter, _ * 1E2, _ / 1E2),
+      (millimeter, meter, _ * 1E3, _ / 1E3),
+      (μm, meter, _ * 1E6, _ / 1E6),
+      (nm, meter, _ * 1E9, _ / 1E9),
+      (mile, au, _ * 92955807.3, _ / 92955807.3),
+      (km, auSI, _ * 149597870.7, _ / 149597870.7),
+      (km, ly, _ * 9460730472580.8, _ / 9460730472580.8))
   }
-
-  implicit val cgDRational = cgn[Rational]
-  implicit val cgDReal = cgn[Real]
-  implicit val cgDDouble = cgn[Double]
-  implicit val cgDFloat = cgn[Float]
-
-  implicit val mtRational = modulize[Distance, Rational]
-  implicit val mtReal = modulize[Distance, Real]
-  implicit val mtDouble = modulize[Distance, Double]
-  implicit val mtFloat = modulize[Distance, Float]
-
+  
   def centimeter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "centimeter")
   def cm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "centimeter")
   def meter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "meter")
@@ -81,17 +71,17 @@ object Distance extends Distance {
   def mile[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mile")
   def parsec[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "parsec")
   def lightyear[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "lightyear")
+  def ly[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "lightyear")
+  def millimeter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millimeter")
+  def mm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millimeter")
+  def micrometer[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "micrometer")
+  def μm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "micrometer")
+  def nanometer[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nanometer")
+  def nm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nanometer")
+  def au[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Astronomical Unit")
+  def auSI[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Astronomical Unit (SI)")
 
-  //  lazy val millimeter = byName(cgDR, "millimeter")
-  //  lazy val mm = millimeter
-  //  lazy val micrometer = byName(cgDR, "micrometer")
-  //  lazy val μm = micrometer
-  //  lazy val nanometer = byName(cgDR, "nanometer")
-  //  lazy val nm = nanometer
-  //  lazy val au = byName(cgDR, "Astronomical Unit")
-  //  lazy val auSI = byName(cgDR, "Astronomical Unit (SI)")
-  //  
-  //  lazy val ny2LA = Rational("2443.79") *: mile // Some("NY to LA"), None, Some("http://www.mapcrow.info/Distance_between_New_York_US_and_Los_Angeles_US.html"))
+  //  def ny2LA = Rational("2443.79") *: mile // Some("NY to LA"), None, Some("http://www.mapcrow.info/Distance_between_New_York_US_and_Los_Angeles_US.html"))
   //  lazy val milkyWayDiameter = Rational(100000) *: lightyear // Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
   //  lazy val toAndromeda = Rational(2.6E6) *: lightyear // Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy")))))))))))))
 
