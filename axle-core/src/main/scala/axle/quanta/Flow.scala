@@ -9,7 +9,7 @@ import spire.math.Rational
 import spire.math.Real
 
 abstract class Flow extends Quantum {
-  def wikipediaUrl = "http://en.wikipedia.org/wiki/Flowtric_flow_rate"
+  def wikipediaUrl = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
 }
 
 object Flow extends Flow {
@@ -19,7 +19,10 @@ object Flow extends Flow {
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("niagaraFalls", "niagaraFalls"))
 
-  def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
+  def links[N: Field: Eq] = {
+    implicit val baseCG = cgnDisconnected[N]
+    List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
+  }
 
 //  implicit val cgFlowRational: DirectedGraph[UnitOfMeasurement[Flow, Rational], Rational => Rational] = cgn[Rational]
 //  implicit val mtRational = modulize[Flow, Rational]

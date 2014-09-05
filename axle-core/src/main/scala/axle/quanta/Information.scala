@@ -15,7 +15,7 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
 abstract class Information extends Quantum {
-  def wikipediaUrl = "TODO"
+  def wikipediaUrl = "http://en.wikipedia.org/wiki/Information"
 }
 
 object Information extends Information {
@@ -34,7 +34,10 @@ object Information extends Information {
     unit("terabyte", "TB"),
     unit("petabyte", "PB"))
 
-  def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
+  def links[N: Field: Eq] = {
+    implicit val baseCG = cgnDisconnected[N]
+    List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
+  }
   //trips2fns(List(
   //          (bit, byte, 8),
   //          (byte, kilobyte, 1024),
@@ -44,8 +47,8 @@ object Information extends Information {
   //          (terabyte, petabyte, 1024))
   //          )
 
-//  implicit val cgIRational = cgn[Rational]
-//  implicit val mtRational = modulize[Information, Rational]
+  //  implicit val cgIRational = cgn[Rational]
+  //  implicit val mtRational = modulize[Information, Rational]
 
   def bit[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "bit")
 

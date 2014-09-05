@@ -10,7 +10,7 @@ import spire.math.Rational
 import spire.math.Real
 
 abstract class Volume extends Quantum {
-  def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
+  def wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
 }
 
 object Volume extends Volume {

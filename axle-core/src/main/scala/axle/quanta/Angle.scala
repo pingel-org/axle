@@ -21,7 +21,10 @@ object Angle extends Angle {
     unit("degree", "°"),
     unit("radian", "rad"))
 
-  def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
+  def links[N: Field: Eq] = {
+    implicit val baseCG = cgnDisconnected[N]
+    List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
+  }
 
   def degree[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "degree")
   def °[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "degree")

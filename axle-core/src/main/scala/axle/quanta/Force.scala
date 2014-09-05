@@ -13,7 +13,7 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
 abstract class Force extends Quantum {
-  def wikipediaUrl = "TODO"
+  def wikipediaUrl = "http://en.wikipedia.org/wiki/Force"
 }
 
 object Force extends Force {
@@ -22,6 +22,11 @@ object Force extends Force {
   
   def units[N: Field: Eq] = List.empty[UnitOfMeasurement[Q, N]]
   
-  def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]  
+  def links[N: Field: Eq] = {
+    implicit val baseCG = cgnDisconnected[N]
+    List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]  
+  }
  
+  def x[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "x")
+  
 }

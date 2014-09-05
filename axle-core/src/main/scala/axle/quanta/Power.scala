@@ -12,16 +12,20 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
 abstract class Power extends Quantum {
-  def wikipediaUrl = "TODO"
+  def wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
 }
 
 object Power extends Power {
 
   type Q = Power
   
-  def units[N: Field: Eq] = List.empty[UnitOfMeasurement[Q, N]]
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]]()
   
-  def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]  
+  def links[N: Field: Eq] = {
+    implicit val baseCG = cgnDisconnected[N]
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()
+  }
 
+  def x[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "x")
   
 }

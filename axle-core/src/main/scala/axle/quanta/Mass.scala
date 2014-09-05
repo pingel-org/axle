@@ -50,7 +50,6 @@ object Mass extends Mass {
   def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)] = {
 
     implicit val baseCG = cgnDisconnected[N]
-    //implicit val m = modulize[Q, N]
 
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
       (tonne, megagram, identity, identity),
