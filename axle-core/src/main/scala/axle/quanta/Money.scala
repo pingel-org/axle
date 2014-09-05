@@ -19,11 +19,11 @@ object Money extends Money {
 
   type Q = Money
   
-  def units[N: Field: Eq] = List.empty[UnitOfMeasurement[Q, N]]
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]]()
   
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]  
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()  
   }
   
   def x[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "x")
