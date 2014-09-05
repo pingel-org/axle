@@ -1,4 +1,4 @@
-package axle.quanta2
+package axle.quanta
 
 import axle.graph.DirectedGraph
 import spire.algebra._
@@ -11,16 +11,17 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
-abstract class MoneyPerForce extends Quantum {
+abstract class Power extends Quantum {
   def wikipediaUrl = "TODO"
 }
 
-object MoneyPerForce extends MoneyPerForce {
+object Power extends Power {
 
-  type Q = MoneyPerForce
+  type Q = Power
   
   def units[N: Field: Eq] = List.empty[UnitOfMeasurement[Q, N]]
   
   def links[N: Field: Eq] = List.empty[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]  
+
   
 }

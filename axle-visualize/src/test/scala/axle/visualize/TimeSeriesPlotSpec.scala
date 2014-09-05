@@ -10,13 +10,13 @@ import org.specs2.mutable.Specification
 
 import axle.algebra.Plottable.DateTimePlottable
 import axle.algebra.Plottable.DoublePlottable
-import axle.quanta2.Information
-import axle.quanta2.Information.bit
-import axle.quanta2.UnittedQuantity
-import axle.quanta2.UnitPlottable
-import axle.quanta2.doubleDoubleMetricSpace
-import axle.quanta2.modulize
-import axle.quanta2.realDoubleMetricSpace
+import axle.quanta.Information
+import axle.quanta.Information.bit
+import axle.quanta.UnittedQuantity
+import axle.quanta.UnitPlottable
+import axle.quanta.doubleDoubleMetricSpace
+import axle.quanta.modulize
+import axle.quanta.realDoubleMetricSpace
 import axle.stats.H
 import axle.stats.coin
 import spire.algebra.Eq
@@ -35,7 +35,7 @@ class TimeSeriesPlotSpec extends Specification {
   "Tics for units" should {
     "work" in {
 
-      import axle.quanta2.Information._
+      import axle.quanta.Information._
       
       val plottable = UnitPlottable[Information, Double](bit[Double])
 

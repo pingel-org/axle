@@ -1,4 +1,4 @@
-package axle.quanta2
+package axle.quanta
 
 import axle.graph.DirectedGraph
 import spire.algebra.Field
@@ -19,20 +19,20 @@ trait Quantum {
 
   def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]
   
-  private[quanta2] def conversions[N: Field: Eq](vps: Seq[UnitOfMeasurement[Q, N]], ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)]): DirectedGraph[UnitOfMeasurement[Q, N], N => N] =
+  private[quanta] def conversions[N: Field: Eq](vps: Seq[UnitOfMeasurement[Q, N]], ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)]): DirectedGraph[UnitOfMeasurement[Q, N], N => N] =
     JungDirectedGraph(vps, ef)
 
-  private[quanta2] def trip2fns[N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
+  private[quanta] def trip2fns[N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
     val (from, to, multiplier) = trip
     Vector(
       (from, to, _ * multiplier),
       (to, from, _ / multiplier))
   }
 
-  private[quanta2] def trips2fns[N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
+  private[quanta] def trips2fns[N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
     trips.flatMap(trip2fns(_))
 
-  private[quanta2] def byName[N: Field: Eq](cg: CG[N], unitName: String): UnitOfMeasurement[Q, N] =
+  private[quanta] def byName[N: Field: Eq](cg: CG[N], unitName: String): UnitOfMeasurement[Q, N] =
     cg.findVertex(_.payload.name === unitName).get.payload
   
   def cgnDisconnected[N: Field: Eq]: CG[N] = conversions(units, (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => Nil)

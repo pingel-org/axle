@@ -2,9 +2,9 @@ package axle.stats
 
 import org.specs2.mutable.Specification
 
-import axle.quanta2.Information
-import axle.quanta2.UnittedQuantity
-import axle.quanta2.Quantum
+import axle.quanta.Information
+import axle.quanta.UnittedQuantity
+import axle.quanta.Quantum
 import spire.math.Rational
 import spire.math.Real
 import spire.algebra.Order

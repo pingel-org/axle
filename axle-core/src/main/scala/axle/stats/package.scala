@@ -3,9 +3,9 @@ package axle
 import scala.Vector
 import scala.collection.GenTraversable
 
-import axle.quanta2.UnittedQuantity
-import axle.quanta2.Information
-import axle.quanta2.Information.bit
+import axle.quanta.UnittedQuantity
+import axle.quanta.Information
+import axle.quanta.Information.bit
 import axle.stats.Case
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Distribution
@@ -74,7 +74,7 @@ package object stats {
   def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = stddev(xs)
 
   def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Real] = {
-    import axle.quanta2.Information._
+    import Information._
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values) { x =>
       val px: N = P(X is x).apply()

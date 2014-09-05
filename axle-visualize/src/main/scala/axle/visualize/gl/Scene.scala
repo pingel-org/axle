@@ -9,13 +9,13 @@ import scala.math.sin
 import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
 
-import axle.quanta2.Angle
-import axle.quanta2.Angle.degree
-import axle.quanta2.Angle.radian
-import axle.quanta2.Distance
-import axle.quanta2.UnittedQuantity
-import axle.quanta2.UnitOfMeasurement
-import axle.quanta2.Distance._
+import axle.quanta.Angle
+import axle.quanta.Angle.degree
+import axle.quanta.Angle.radian
+import axle.quanta.Distance
+import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
+import axle.quanta.Distance._
 import javax.media.opengl.GL2
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION

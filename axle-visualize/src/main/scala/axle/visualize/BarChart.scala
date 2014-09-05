@@ -9,9 +9,9 @@ import java.awt.Color.red
 import java.awt.Color.yellow
 
 import axle.algebra.Plottable
-import axle.quanta2.UnittedQuantity
-import axle.quanta2.Angle
-import axle.quanta2.Angle.{° => °}
+import axle.quanta.UnittedQuantity
+import axle.quanta.Angle
+import axle.quanta.Angle.{° => °}
 import spire.math.Number.apply
 import spire.implicits.DoubleAlgebra 
 import spire.implicits.moduleOps

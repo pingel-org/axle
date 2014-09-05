@@ -13,8 +13,8 @@ import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
-import axle.quanta2.Time
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Time
+import axle.quanta.UnittedQuantity
 
 import spire.algebra._
 

@@ -6,10 +6,10 @@ import java.awt.FontMetrics
 import java.awt.Graphics2D
 
 import spire.implicits.DoubleAlgebra 
-import axle.quanta2.Angle
-//import axle.quanta2.Angle.eqTypeclass
-import axle.quanta2.Angle.{° => °}
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Angle
+//import axle.quanta.Angle.eqTypeclass
+import axle.quanta.Angle.{° => °}
+import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D

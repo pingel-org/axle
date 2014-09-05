@@ -2,11 +2,11 @@ package axle.visualize.gl
 
 import scala.Vector
 
-import axle.quanta2.Angle
-import axle.quanta2.Angle.degree
-import axle.quanta2.Distance
-import axle.quanta2.UnitOfMeasurement
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Angle
+import axle.quanta.Angle.degree
+import axle.quanta.Distance
+import axle.quanta.UnitOfMeasurement
+import axle.quanta.UnittedQuantity
 import spire.implicits.DoubleAlgebra
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT

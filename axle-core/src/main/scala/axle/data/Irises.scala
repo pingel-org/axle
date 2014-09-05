@@ -6,10 +6,10 @@ import scala.Option.option2Iterable
 import scala.sys.process.stringSeqToProcess
 import scala.util.Try
 
-import axle.quanta2.Distance
-import axle.quanta2.Distance.cm
-import axle.quanta2.UnittedQuantity
-import axle.quanta2.modulize
+import axle.quanta.Distance
+import axle.quanta.Distance.cm
+import axle.quanta.UnittedQuantity
+import axle.quanta.modulize
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps

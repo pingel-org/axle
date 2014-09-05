@@ -2,8 +2,8 @@ package axle.visualize.gl
 
 import java.net.URL
 
-import axle.quanta2.Distance
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Distance
+import axle.quanta.UnittedQuantity
 import spire.algebra.Field
 import spire.algebra.Order
 

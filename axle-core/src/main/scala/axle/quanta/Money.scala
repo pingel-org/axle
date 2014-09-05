@@ -1,8 +1,8 @@
-package axle.quanta2
+package axle.quanta
 
 import axle.graph.DirectedGraph
-import spire.algebra._
 import spire.math.Rational
+import spire.algebra._
 import spire.implicits.eqOps
 import spire.implicits.moduleOps
 import spire.implicits.groupOps
@@ -11,13 +11,13 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
-abstract class MoneyFlow extends Quantum {
+abstract class Money extends Quantum {
   def wikipediaUrl = "TODO"
 }
 
-object MoneyFlow extends MoneyFlow {
+object Money extends Money {
 
-  type Q = MoneyFlow
+  type Q = Money
   
   def units[N: Field: Eq] = List.empty[UnitOfMeasurement[Q, N]]
   

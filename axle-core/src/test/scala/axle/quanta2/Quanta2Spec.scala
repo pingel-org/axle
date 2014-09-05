@@ -1,4 +1,4 @@
-package axle.quanta2
+package axle.quanta
 
 import org.specs2.mutable._
 //import spire.implicits.additiveGroupOps

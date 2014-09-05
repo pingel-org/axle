@@ -1,8 +1,8 @@
 package axle.visualize.gl
 
-import axle.quanta2.Angle
-import axle.quanta2.Distance
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Angle
+import axle.quanta.Distance
+import axle.quanta.UnittedQuantity
 import spire.algebra.Field
 import spire.algebra.Order
 

@@ -8,9 +8,9 @@ import scala.math.abs
 import scala.math.min
 
 import axle.algebra.Portionable
-import axle.quanta2.Angle
-import axle.quanta2.Angle.rad
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Angle
+import axle.quanta.Angle.rad
+import axle.quanta.UnittedQuantity
 import spire.algebra.Eq
 import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra 

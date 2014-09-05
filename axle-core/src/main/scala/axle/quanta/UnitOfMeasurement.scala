@@ -1,4 +1,4 @@
-package axle.quanta2
+package axle.quanta
 
 import spire.algebra.Eq
 import spire.algebra.Field

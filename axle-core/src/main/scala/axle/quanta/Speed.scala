@@ -1,4 +1,4 @@
-package axle.quanta2
+package axle.quanta
 
 import axle.graph.DirectedGraph
 import spire.algebra._

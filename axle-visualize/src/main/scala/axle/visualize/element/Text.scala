@@ -4,9 +4,9 @@ import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
 
-import axle.quanta2.Angle
-import axle.quanta2.Angle.rad
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Angle
+import axle.quanta.Angle.rad
+import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra 
 

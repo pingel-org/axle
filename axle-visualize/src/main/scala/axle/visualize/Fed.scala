@@ -3,8 +3,8 @@ package axle.visualize
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
-import axle.quanta2.Time
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Time
+import axle.quanta.UnittedQuantity
 
 trait Fed[T] {
 

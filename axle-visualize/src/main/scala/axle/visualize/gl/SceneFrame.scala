@@ -6,9 +6,9 @@ import java.awt.event.WindowEvent
 
 import com.jogamp.opengl.util.FPSAnimator
 
-import axle.quanta2.Angle.degree
-import axle.quanta2.Distance
-import axle.quanta2.UnittedQuantity
+import axle.quanta.Angle.degree
+import axle.quanta.Distance
+import axle.quanta.UnittedQuantity
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import spire.math.Number.apply
