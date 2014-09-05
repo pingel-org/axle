@@ -12,8 +12,6 @@ import axle.algebra.Plottable.DateTimePlottable
 import axle.algebra.Plottable.DoublePlottable
 import axle.quanta2.Information
 import axle.quanta2.Information.bit
-import axle.quanta2.Information.cgIDouble
-import axle.quanta2.Information.cgIReal
 import axle.quanta2.UnittedQuantity
 import axle.quanta2.UnitPlottable
 import axle.quanta2.doubleDoubleMetricSpace
@@ -91,8 +89,6 @@ class TimeSeriesPlotSpec extends Specification {
   }
 
   def t2(): Unit = {
-
-    import axle.quanta2.Information.mtReal
     
     implicit val plottable = UnitPlottable[Information, Real](bit[Real])
 
