@@ -21,7 +21,7 @@ object Energy extends Energy {
   type Q = Energy
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-    //derive(kilowatt.by[Time.type, this.type](hour, this)),
+    unit("kwh", "kwh"), // derive
     unit("joule", "J"),
     unit("kilojoule", "KJ"),
     unit("megajoule", "MJ"),

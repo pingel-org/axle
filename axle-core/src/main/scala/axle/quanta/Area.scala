@@ -21,9 +21,10 @@ object Area extends Area {
 
   type Q = Area
 
-  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]]( //    derive(meter.by[Distance.type, this.type](meter, this), Some("m2"), Some("m2")),
-  //    derive(km.by[Distance.type, this.type](km, this), Some("km2"), Some("km2")),
-  //    derive(cm.by[Distance.type, this.type](cm, this), Some("cm2"), Some("cm2"))
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    unit("m2", "m2"),   // derive
+    unit("km2", "km2"), // derive
+    unit("cm2", "cm2")  // derive
   )
 
   def links[N: Field: Eq] = {

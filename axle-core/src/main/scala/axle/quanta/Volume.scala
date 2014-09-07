@@ -18,9 +18,9 @@ object Volume extends Volume {
   type Q = Volume
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-    //      derive(m2.by[Distance.type, this.type](meter, this), Some("m3"), Some("m3")),
-    //      derive(km2.by[Distance.type, this.type](km, this), Some("km3"), Some("km3")),
-    //      derive(cm2.by[Distance.type, this.type](cm, this), Some("cm3"), Some("cm3")),
+    unit("m3", "m3"), // derive
+    unit("km3", "km3"), // derive
+    unit("cm3", "cm3"), // derive
     unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes")),
     unit("liter", "L", Some("http://en.wikipedia.org/wiki/Liter")), // TODO: also symbol ℓ
     unit("milliliter", "mL"),
@@ -58,7 +58,7 @@ object Volume extends Volume {
   def L[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "liter")
   def mL[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "milliter")
 
-  def wineBottle[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "wineBottle")
+  def wineBottle[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "wine bottle")
   def magnum[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "magnum")
   def jeroboam[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "jeroboam")
   def rehoboam[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "rehoboam")

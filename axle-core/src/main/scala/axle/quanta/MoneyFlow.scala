@@ -19,13 +19,13 @@ object MoneyFlow extends MoneyFlow {
 
   type Q = MoneyFlow
 
-  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]]()
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    unit("$/hr", "$/hr") // derive
+    )
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      // derive(USD.by[Time.type, this.type](hour, this), Some("$/hr"), Some("$/hr"))
-    )
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()
   }
 
   def USDperHour[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "$/hr")

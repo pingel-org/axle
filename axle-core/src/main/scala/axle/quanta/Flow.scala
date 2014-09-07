@@ -20,7 +20,7 @@ object Flow extends Flow {
   import Time._
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-    // derive(m3.over[Time.type, this.type](second, this), Some("cubic meters per second"), Some("m^3/s")),
+    unit("m3s", "m3s"), // derive
     unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls")))
 
   def links[N: Field: Eq] = {
@@ -32,7 +32,7 @@ object Flow extends Flow {
   //  implicit val cgFlowRational: DirectedGraph[UnitOfMeasurement[Flow, Rational], Rational => Rational] = cgn[Rational]
   //  implicit val mtRational = modulize[Flow, Rational]
 
-  def niagaraFalls[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Flow, N], N => N]) = byName(cg, "niagaraFalls")
+  def niagaraFalls[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Flow, N], N => N]) = byName(cg, "Niagara Falls Flow")
   def m3s[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Flow, N], N => N]) = byName(cg, "m3s")
 
 }

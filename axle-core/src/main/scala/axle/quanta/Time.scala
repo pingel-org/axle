@@ -92,8 +92,8 @@ object Time extends Time {
   def century[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "century")
   def millenium[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millenium")
   def ky[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millenium")
-  def my[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "my")
-  def gy[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gy")
+  def my[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "megayear")
+  def gy[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gigayear")
 
 //  lazy val globalLifeExpectancy = 67.2 *: year // Some("2010 global average life expectancy"), None, Some("http://en.wikipedia.org/wiki/Life_expectancy"))
 //

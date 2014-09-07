@@ -21,8 +21,8 @@ object Acceleration extends Acceleration {
   type Q = Acceleration
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-    //     derive(mps.over[Time.type, this.type](second, this)),
-    //      derive(fps.over[Time.type, this.type](second, this)),
+    unit("mps", "mps"), // derive
+    unit("fps", "fps"), // derive
     unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity")))
 
   def links[N: Field: Eq] = {

@@ -20,10 +20,10 @@ object Speed extends Speed {
   type Q = Speed
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-    //    derive(meter.over[Time.type, this.type](second, this), Some("mps")),
-    //    derive(ft.over[Time.type, this.type](second, this), Some("fps")),
-    //    derive(mile.over[Time.type, this.type](hour, this), Some("mph")),
-    //    derive(km.over[Time.type, this.type](hour, this), Some("kph")),
+    unit("mps", "mps"), // derive
+    unit("fps", "fps"), // derive
+    unit("mph", "mph"), // derive
+    unit("kph", "kph"), // derive
     unit("knot", "kn", Some("http://en.wikipedia.org/wiki/Knot_(unit)")),
     unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light")),
     unit("Speed limit", "speed limit"))

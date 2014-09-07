@@ -20,7 +20,7 @@ object MoneyPerForce extends MoneyPerForce {
   type Q = MoneyPerForce
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-    // derive(USD.by[Force.type, this.type](pound, this), Some("$/lb"), Some("$/lb")))
+    unit("$/lb", "$/lb") // derive
   )
 
   def links[N: Field: Eq] = {
