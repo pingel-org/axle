@@ -9,6 +9,8 @@ import scala.math.sin
 import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
 
+import axle.algebra.Position
+import axle.algebra.SphericalVector
 import axle.quanta.Angle
 import axle.quanta.Angle.degree
 import axle.quanta.Angle.radian
