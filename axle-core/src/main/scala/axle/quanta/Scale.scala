@@ -10,11 +10,17 @@ case class BijectiveIdentity[N]() extends Bijection[N, N] {
 }
 
 case class Scale10s[N: Field](exp: Int) extends Bijection[N, N] {
-  def apply(n: N): N = n * (10 ** exp)
-  def unapply(n: N): N = n * (10 ** -exp)
+  
+  require(exp > 0)
+  
+  def apply(n: N): N = n * (10d ** exp)
+  def unapply(n: N): N = n * (10d ** -exp)
 }
 
 case class Scale2s[N: Field](exp: Int) extends Bijection[N, N] {
+  
+  require(exp > 0)
+  
   def apply(n: N): N = n * (1 << exp)
   def unapply(n: N): N = n / (1 << exp)
 }
