@@ -50,6 +50,7 @@ object Distance extends Distance {
     implicit val baseCG = cgnDisconnected[N]
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (foot, mile, ScaleInt(5280)),
+      (foot, meter, ScaleDouble(3.2808398950131235)),
       (kilometer, mile, ScaleDouble(1.609344)),
       (lightyear, parsec, ScaleDouble(3.26)),
       (nm, meter, Scale10s(9)),
