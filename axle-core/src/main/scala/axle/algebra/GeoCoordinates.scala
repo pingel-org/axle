@@ -1,4 +1,4 @@
-package axle.visualize.gl
+package axle.algebra
 
 import spire.algebra.Field
 import spire.algebra.Order

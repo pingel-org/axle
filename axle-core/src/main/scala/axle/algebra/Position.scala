@@ -1,4 +1,4 @@
-package axle.visualize.gl
+package axle.algebra
 
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
