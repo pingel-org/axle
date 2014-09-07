@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.graph.DirectedGraph
 import axle.graph.Vertex
+import axle.algebra.Bijection
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.math.Rational
@@ -18,7 +19,7 @@ object Mass extends Mass {
   import spire.implicits._
 
   type Q = Mass
-  
+
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("gram", "g"),
     unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne")),
@@ -46,36 +47,35 @@ object Mass extends Mass {
     unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto")),
     unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon")))
 
-
-  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)] = {
+  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] = {
 
     implicit val baseCG = cgnDisconnected[N]
 
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (tonne, megagram, identity, identity),
-      (milligram, gram, _ * 1E3, _ / 1E3),
-      (gram, kilogram, _ * 1E3, _ / 1E3),
-      (gram, megagram, _ * 1E6, _ / 1E6),
-      (tonne, kilotonne, _ * 1E3, _ / 1E3),
-      (tonne, megatonne, _ * 1E6, _ / 1E3),
-      (tonne, gigatonne, _ * 1E9, _ / 1E9),
-      (tonne, teratonne, _ * 1E12, _ / 1E12),
-      (tonne, petatonne, _ * 1E15, _ / 1E15),
-      (tonne, exatonne, _ * 1E18, _ / 1E18),
-      (tonne, zettatonne, _ * 1E21, _ / 1E21),
-      (tonne, yottatonne, _ * 1E24, _ / 1E24),
-      (kilogram, man, _ * 86.6, _ / 86.6),
-      (zettatonne, earth, _ * 5.9736, _ / 5.9736),
-      (kilogram, sun, _ * 1.9891E30, _ / 1.9891E30),
-      (yottatonne, jupiter, _ * 1.8986, _ / 1.8986),
-      (zettatonne, saturn, _ * 568.46, _ / 568.46),
-      (zettatonne, neptune, _ * 102.43, _ / 102.43),
-      (zettatonne, uranus, _ * 86.810, _ / 86.810),
-      (zettatonne, venus, _ * 4.868, _ / 4.868),
-      (exatonne, mars, _ * 641.85, _ / 641.85),
-      (exatonne, mercury, _ * 330.22, _ / 330.22),
-      (exatonne, pluto, _ * 13.05, _ / 13.05),
-      (exatonne, moon, _ * 73.477, _ / 73.477))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (tonne, megagram, BijectiveIdentity[N]),
+      (milligram, gram, Scale10s(3)),
+      (gram, kilogram, Scale10s(3)),
+      (gram, megagram, Scale10s(6)),
+      (tonne, kilotonne, Scale10s(3)),
+      (tonne, megatonne, Scale10s(6)),
+      (tonne, gigatonne, Scale10s(9)),
+      (tonne, teratonne, Scale10s(12)),
+      (tonne, petatonne, Scale10s(15)),
+      (tonne, exatonne, Scale10s(18)),
+      (tonne, zettatonne, Scale10s(21)),
+      (tonne, yottatonne, Scale10s(24)),
+      (kilogram, man, ScaleDouble(86.6)),
+      (zettatonne, earth, ScaleDouble(5.9736)),
+      (kilogram, sun, ScaleDouble(1.9891E30)),
+      (yottatonne, jupiter, ScaleDouble(1.8986)),
+      (zettatonne, saturn, ScaleDouble(568.46)),
+      (zettatonne, neptune, ScaleDouble(102.43)),
+      (zettatonne, uranus, ScaleDouble(86.810)),
+      (zettatonne, venus, ScaleDouble(4.868)),
+      (exatonne, mars, ScaleDouble(641.85)),
+      (exatonne, mercury, ScaleDouble(330.22)),
+      (exatonne, pluto, ScaleDouble(13.05)),
+      (exatonne, moon, ScaleDouble(73.477)))
   }
 
   def milligram[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "milligram")

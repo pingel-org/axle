@@ -1,6 +1,7 @@
 package axle.quanta
 
 import axle.graph.DirectedGraph
+import axle.algebra.Bijection
 import spire.algebra._
 import spire.math.Rational
 import spire.implicits.eqOps
@@ -30,10 +31,10 @@ object Speed extends Speed {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (knot, kph, _ * 1.852, _ / 1.852),
-      (mps, c, _ * 299792458, _ / 299792458),
-      (mph, speedLimit, _ * 65, _ / 65))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (knot, kph, ScaleDouble(1.852)),
+      (mps, c, ScaleInt(299792458)),
+      (mph, speedLimit, ScaleInt(65)))
   }
 
   def mps[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mps")

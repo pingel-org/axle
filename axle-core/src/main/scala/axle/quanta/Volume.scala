@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.graph.DirectedGraph
 import axle.graph.Vertex
+import axle.algebra.Bijection
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
@@ -35,18 +36,18 @@ object Volume extends Volume {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (km3, greatLakes, _ * 22671, _ / 22671),
-      (milliliter, liter, _ * 1000, _ / 1000),
-      (cm3, milliliter, identity, identity),
-      (milliliter, wineBottle, _ * 750, _ / 750),
-      (wineBottle, magnum, _ * 2, _ / 2),
-      (wineBottle, jeroboam, _ * 4, _ / 4),
-      (wineBottle, rehoboam, _ * 6, _ / 6),
-      (wineBottle, methuselah, _ * 8, _ / 8),
-      (wineBottle, salmanazar, _ * 12, _ / 12),
-      (wineBottle, balthazar, _ * 16, _ / 16),
-      (wineBottle, nebuchadnezzar, _ * 20, _ / 20))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (km3, greatLakes, ScaleInt(22671)),
+      (milliliter, liter, Scale10s(3)),
+      (cm3, milliliter, BijectiveIdentity[N]),
+      (milliliter, wineBottle, ScaleInt(750)),
+      (wineBottle, magnum, ScaleInt(2)),
+      (wineBottle, jeroboam, ScaleInt(4)),
+      (wineBottle, rehoboam, ScaleInt(6)),
+      (wineBottle, methuselah, ScaleInt(8)),
+      (wineBottle, salmanazar, ScaleInt(12)),
+      (wineBottle, balthazar, ScaleInt(16)),
+      (wineBottle, nebuchadnezzar, ScaleInt(20)))
   }
 
   def m3[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "m3")

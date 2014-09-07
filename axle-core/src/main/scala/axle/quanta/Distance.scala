@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.graph.DirectedGraph
 import axle.graph.Vertex
+import axle.algebra.Bijection
 import spire.algebra.Field
 import spire.algebra.Eq
 import spire.implicits.moduleOps
@@ -47,20 +48,20 @@ object Distance extends Distance {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (foot, mile, _ * 5280, _ / 5280),
-      (kilometer, mile, _ * 1.609344, _ / 1.609344),
-      (meter, kilometer, _ * 1E3, _ / 1E3),
-      (lightyear, parsec, _ * 3.26, _ / 3.26),
-      (centimeter, meter, _ * 1E2, _ / 1E2),
-      (millimeter, meter, _ * 1E3, _ / 1E3),
-      (μm, meter, _ * 1E6, _ / 1E6),
-      (nm, meter, _ * 1E9, _ / 1E9),
-      (mile, au, _ * 92955807.3, _ / 92955807.3),
-      (km, auSI, _ * 149597870.7, _ / 149597870.7),
-      (km, ly, _ * 9460730472580.8, _ / 9460730472580.8))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (foot, mile, ScaleInt(5280)),
+      (kilometer, mile, ScaleDouble(1.609344)),
+      (lightyear, parsec, ScaleDouble(3.26)),
+      (nm, meter, Scale10s(9)),
+      (μm, meter, Scale10s(6)),
+      (millimeter, meter, Scale10s(3)),
+      (centimeter, meter, Scale10s(2)),
+      (meter, kilometer, Scale10s(3)),
+      (mile, au, ScaleDouble(92955807.3)),
+      (km, auSI, ScaleDouble(149597870.7)),
+      (km, ly, ScaleDouble(9460730472580.8)))
   }
-  
+
   def centimeter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "centimeter")
   def cm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "centimeter")
   def meter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "meter")

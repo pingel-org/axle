@@ -1,6 +1,7 @@
 package axle.quanta
 
 import axle.graph.DirectedGraph
+import axle.algebra.Bijection
 import spire.math.Rational
 import spire.algebra.Field
 import spire.algebra.Eq
@@ -27,8 +28,8 @@ object Acceleration extends Acceleration {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (mpsps, g, _ * 9.80665, _ / 9.80665))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (mpsps, g, ScaleDouble(9.80665)))
   }
 
   def mpsps[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mpsps")

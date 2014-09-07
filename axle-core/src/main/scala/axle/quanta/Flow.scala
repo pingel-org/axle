@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.graph.DirectedGraph
 import axle.graph.Vertex
+import axle.algebra.Bijection
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
@@ -25,8 +26,8 @@ object Flow extends Flow {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (m3s, niagaraFalls, _ * 1834, _ / 1834))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (m3s, niagaraFalls, ScaleInt(1834)))
   }
 
   //  implicit val cgFlowRational: DirectedGraph[UnitOfMeasurement[Flow, Rational], Rational => Rational] = cgn[Rational]

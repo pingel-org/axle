@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.graph.DirectedGraph
 import axle.graph.Vertex
+import axle.algebra.Bijection
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
@@ -47,23 +48,23 @@ object Time extends Time {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (ms, s, _ * 1E3, _ / 1E3),
-      (μs, s, _ * 1E6, _ / 1E6),
-      (ns, s, _ * 1E9, _ / 1E9),
-      (ps, s, _ * 1E12, _ / 1E12),
-      (fs, s, _ * 1E15, _ / 1E15),
-      (as, s, _ * 1E18, _ / 1E18),
-      (zs, s, _ * 1E21, _ / 1E21),
-      (ys, s, _ * 1E24, _ / 1E24),
-      (s, m, _ * 60, _ / 60),
-      (m, hour, _ * 60, _ / 60),
-      (hour, day, _ * 24, _ / 24),
-      (day, year, _ * 365.25, _ / 365.25),
-      (year, century, _ * 1E2, _ / 1E2),
-      (year, ky, _ * 1E3, _ / 1E3),
-      (year, my, _ * 1E6, _ / 1E6),
-      (year, gy, _ * 1E9, _ / 1E9))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (ms, s, Scale10s(3)),
+      (μs, s, Scale10s(6)),
+      (ns, s, Scale10s(9)),
+      (ps, s, Scale10s(12)),
+      (fs, s, Scale10s(15)),
+      (as, s, Scale10s(18)),
+      (zs, s, Scale10s(21)),
+      (ys, s, Scale10s(24)),
+      (s, m, ScaleInt(60)),
+      (m, hour, ScaleInt(60)),
+      (hour, day, ScaleInt(24)),
+      (day, year, ScaleDouble(365.25)),
+      (year, century, Scale10s(2)),
+      (year, ky, Scale10s(3)),
+      (year, my, Scale10s(6)),
+      (year, gy, Scale10s(9)))
   }
 
   def yoctosecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "yoctosecond")
@@ -95,17 +96,17 @@ object Time extends Time {
   def my[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "megayear")
   def gy[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gigayear")
 
-//  lazy val globalLifeExpectancy = 67.2 *: year // Some("2010 global average life expectancy"), None, Some("http://en.wikipedia.org/wiki/Life_expectancy"))
-//
-//  // Distant Past:
-//  lazy val universeAge = 13.7 *: gy // Some("universe age"), None, Some("http://en.wikipedia.org/wiki/Age_of_the_Universe"))
-//  lazy val earthAge = 4.54 *: gy // Some("earth age"), None, Some("http://en.wikipedia.org/wiki/Age_of_the_Earth"))
-//  lazy val simpleCellsAge = 3.8 *: gy // Some("simple cells evolve"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-//  lazy val multiCellularLifeAge = 1 *: gy // Some("multi-cellular life evolves"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-//  lazy val fungiAge = 560 *: my // Some("kingdom Fungi age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-//  lazy val classMammalAge = 215 *: my // Some("class Mammalia age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-//  lazy val primateAge = 60 *: my // Some("order Primate age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-//  lazy val australopithecusAge = 4 *: my // Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
-//  lazy val modernHumanAge = 200 *: ky // Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
- 
+  //  lazy val globalLifeExpectancy = 67.2 *: year // Some("2010 global average life expectancy"), None, Some("http://en.wikipedia.org/wiki/Life_expectancy"))
+  //
+  //  // Distant Past:
+  //  lazy val universeAge = 13.7 *: gy // Some("universe age"), None, Some("http://en.wikipedia.org/wiki/Age_of_the_Universe"))
+  //  lazy val earthAge = 4.54 *: gy // Some("earth age"), None, Some("http://en.wikipedia.org/wiki/Age_of_the_Earth"))
+  //  lazy val simpleCellsAge = 3.8 *: gy // Some("simple cells evolve"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
+  //  lazy val multiCellularLifeAge = 1 *: gy // Some("multi-cellular life evolves"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
+  //  lazy val fungiAge = 560 *: my // Some("kingdom Fungi age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
+  //  lazy val classMammalAge = 215 *: my // Some("class Mammalia age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
+  //  lazy val primateAge = 60 *: my // Some("order Primate age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
+  //  lazy val australopithecusAge = 4 *: my // Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
+  //  lazy val modernHumanAge = 200 *: ky // Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
+
 }

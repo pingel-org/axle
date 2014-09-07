@@ -1,6 +1,7 @@
 package axle.quanta
 
 import axle.graph.DirectedGraph
+import axle.algebra.Bijection
 import spire.math.Rational
 import spire.algebra.Field
 import spire.algebra.Eq
@@ -32,13 +33,13 @@ object Energy extends Energy {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (megajoule, t, _ * 4.184, _ / 4.184),
-      (joule, kilojoule, _ * 1E3, _ / 1E3),
-      (joule, megajoule, _ * 1E6, _ / 1E6),
-      (t, kt, _ * 1E3, _ / 1E3),
-      (t, mt, _ * 1E6, _ / 1E6),
-      (t, gt, _ * 1E9, _ / 1E6))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (megajoule, t, ScaleDouble(4.184)),
+      (joule, kilojoule, Scale10s(3)),
+      (joule, megajoule, Scale10s(6)),
+      (t, kt, Scale10s(3)),
+      (t, mt, Scale10s(6)),
+      (t, gt, Scale10s(9)))
   }
 
   def kwh[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kwh")

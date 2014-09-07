@@ -1,6 +1,7 @@
 package axle.quanta
 
 import axle.graph.DirectedGraph
+import axle.algebra.Bijection
 import spire.algebra._
 import spire.math.Rational
 import spire.implicits.eqOps
@@ -32,14 +33,14 @@ object Power extends Power {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (watt, kilowatt, _ * 1E3, _ / 1E3),
-      (kilowatt, megawatt, _ * 1E3, _ / 1E3),
-      (megawatt, gigawatt, _ * 1E3, _ / 1E3),
-      (milliwatt, watt, _ * 1E3, _ / 1E3),
-      (watt, lightBulb, _ * 60, _ / 60),
-      (megawatt, hooverDam, _ * 2080, _ / 2080),
-      (horsepower, mustangGT, _ * 420, _ / 420))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (watt, kilowatt, Scale10s(3)),
+      (kilowatt, megawatt, Scale10s(3)),
+      (megawatt, gigawatt, Scale10s(3)),
+      (milliwatt, watt, Scale10s(3)),
+      (watt, lightBulb, ScaleInt(60)),
+      (megawatt, hooverDam, ScaleInt(2080)),
+      (horsepower, mustangGT, ScaleInt(420)))
   }
 
   def milliwatt[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "milliwatt")

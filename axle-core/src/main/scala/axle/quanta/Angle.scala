@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.graph.DirectedGraph
 import axle.graph.Vertex
+import axle.algebra.Bijection
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
@@ -33,10 +34,10 @@ object Angle extends Angle {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (degree, circleDegrees, _ * 360, _ / 360),
-      (radian, circleRadians, _ * 2 * π, _ / (2 * π)),
-      (circleDegrees, circleRadians, identity, identity))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (degree, circleDegrees, ScaleInt(360)),
+      (radian, circleRadians, ScaleDouble(2 * π)),
+      (circleDegrees, circleRadians, BijectiveIdentity[N]))
   }
 
   def degree[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "degree")

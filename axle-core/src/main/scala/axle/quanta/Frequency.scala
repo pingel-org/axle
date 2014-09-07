@@ -1,6 +1,7 @@
 package axle.quanta
 
 import axle.graph.DirectedGraph
+import axle.algebra.Bijection
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.math.Rational
@@ -28,10 +29,10 @@ object Frequency extends Frequency {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (Hz, KHz, _ * 1E3, _ / 1E3),
-      (Hz, MHz, _ * 1E9, _ / 1E9),
-      (Hz, GHz, _ * 1E12, _ / 1E12))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (Hz, KHz, Scale10s(3)),
+      (Hz, MHz, Scale10s(9)),
+      (Hz, GHz, Scale10s(12)))
   }
 
   def hertz[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "hertz")

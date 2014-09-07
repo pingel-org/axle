@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.graph.DirectedGraph
 import axle.graph.Vertex
+import axle.algebra.Bijection
 import spire.algebra.Field
 import spire.algebra.Eq
 import spire.math.Rational
@@ -36,13 +37,13 @@ object Information extends Information {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
-      (bit, byte, _ * 8, _ / 8),
-      (byte, kilobyte, _ * 1024, _ / 1024),
-      (kilobyte, megabyte, _ * 1024, _ / 1024),
-      (megabyte, gigabyte, _ * 1024, _ / 1024),
-      (gigabyte, terabyte, _ * 1024, _ / 1024),
-      (terabyte, petabyte, _ * 1024, _ / 1024))
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (bit, byte, Scale2s(3)),
+      (byte, kilobyte, Scale2s(10)),
+      (kilobyte, megabyte, Scale2s(10)),
+      (megabyte, gigabyte, Scale2s(10)),
+      (gigabyte, terabyte, Scale2s(10)),
+      (terabyte, petabyte, Scale2s(10)))
   }
 
   //  implicit val cgIRational = cgn[Rational]

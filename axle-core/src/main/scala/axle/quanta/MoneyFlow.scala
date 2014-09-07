@@ -1,6 +1,7 @@
 package axle.quanta
 
 import axle.graph.DirectedGraph
+import axle.algebra.Bijection
 import spire.algebra._
 import spire.math.Rational
 import spire.implicits.eqOps
@@ -25,7 +26,7 @@ object MoneyFlow extends MoneyFlow {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]()
   }
 
   def USDperHour[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "$/hr")
