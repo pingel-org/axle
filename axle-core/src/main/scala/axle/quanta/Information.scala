@@ -36,35 +36,30 @@ object Information extends Information {
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
+      (bit, byte, _ * 8, _ / 8),
+      (byte, kilobyte, _ * 1024, _ / 1024),
+      (kilobyte, megabyte, _ * 1024, _ / 1024),
+      (megabyte, gigabyte, _ * 1024, _ / 1024),
+      (gigabyte, terabyte, _ * 1024, _ / 1024),
+      (terabyte, petabyte, _ * 1024, _ / 1024))
   }
-  //trips2fns(List(
-  //          (bit, byte, 8),
-  //          (byte, kilobyte, 1024),
-  //          (kilobyte, megabyte, 1024),
-  //          (megabyte, gigabyte, 1024),
-  //          (gigabyte, terabyte, 1024),
-  //          (terabyte, petabyte, 1024))
-  //          )
 
   //  implicit val cgIRational = cgn[Rational]
   //  implicit val mtRational = modulize[Information, Rational]
 
   def bit[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "bit")
-
-  //  lazy val bit = byName(cgIR, "bit")
-  //  lazy val nibble = byName(cgIR, "nibble")
-  //  lazy val byte = byName(cgIR, "byte")
-  //  lazy val kilobyte = byName(cgIR, "kilobyte")
-  //  lazy val megabyte = byName(cgIR, "megabyte")
-  //  lazy val gigabyte = byName(cgIR, "gigabyte")
-  //  lazy val terabyte = byName(cgIR, "terabyte")
-  //  lazy val petabyte = byName(cgIR, "petabyte")
-  //
-  //  lazy val KB = kilobyte
-  //  lazy val MB = megabyte
-  //  lazy val GB = gigabyte
-  //  lazy val TB = terabyte
-  //  lazy val PB = petabyte
+  def nibble[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nibble")
+  def byte[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "byte")
+  def kilobyte[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilobyte")
+  def KB[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "KB")
+  def megabyte[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "megabyte")
+  def MB[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "MB")
+  def gigabyte[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gigabyte")
+  def GB[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "GB")
+  def terabyte[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "terabyte")
+  def TB[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "TB")
+  def petabyte[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "petabyte")
+  def PB[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "PB")
 
 }

@@ -19,14 +19,19 @@ abstract class Force extends Quantum {
 object Force extends Force {
 
   type Q = Force
-  
-  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]]()
-  
+
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force")),
+    unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)")),
+    unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne")))
+
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()  
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()
   }
- 
-  def x[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "x")
-  
+
+  def pound[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "pound")
+  def newton[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "newton")
+  def dyne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "dyne")
+
 }

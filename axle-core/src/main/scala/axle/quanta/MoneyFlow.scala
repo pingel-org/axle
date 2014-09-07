@@ -18,14 +18,16 @@ abstract class MoneyFlow extends Quantum {
 object MoneyFlow extends MoneyFlow {
 
   type Q = MoneyFlow
-  
+
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]]()
-  
+
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()  
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
+      // derive(USD.by[Time.type, this.type](hour, this), Some("$/hr"), Some("$/hr"))
+    )
   }
- 
-  def x[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "x")
-  
+
+  def USDperHour[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "$/hr")
+
 }

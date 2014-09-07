@@ -7,6 +7,7 @@ import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import spire.math.Rational
 import spire.math.Real
+import spire.implicits._
 
 abstract class Flow extends Quantum {
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
@@ -16,17 +17,22 @@ object Flow extends Flow {
 
   type Q = Flow
 
+  import Time._
+
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-    unit("niagaraFalls", "niagaraFalls"))
+    // derive(m3.over[Time.type, this.type](second, this), Some("cubic meters per second"), Some("m^3/s")),
+    unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls")))
 
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
+      (m3s, niagaraFalls, _ * 1834, _ / 1834))
   }
 
-//  implicit val cgFlowRational: DirectedGraph[UnitOfMeasurement[Flow, Rational], Rational => Rational] = cgn[Rational]
-//  implicit val mtRational = modulize[Flow, Rational]
+  //  implicit val cgFlowRational: DirectedGraph[UnitOfMeasurement[Flow, Rational], Rational => Rational] = cgn[Rational]
+  //  implicit val mtRational = modulize[Flow, Rational]
 
   def niagaraFalls[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Flow, N], N => N]) = byName(cg, "niagaraFalls")
+  def m3s[N](implicit fieldN: Field[N], eqN: Eq[N], cg: DirectedGraph[UnitOfMeasurement[Flow, N], N => N]) = byName(cg, "m3s")
 
 }

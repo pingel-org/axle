@@ -18,14 +18,16 @@ abstract class MoneyPerForce extends Quantum {
 object MoneyPerForce extends MoneyPerForce {
 
   type Q = MoneyPerForce
-  
-  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]]()
-  
+
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    // derive(USD.by[Force.type, this.type](pound, this), Some("$/lb"), Some("$/lb")))
+  )
+
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()  
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()
   }
-  
-  def x[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "x")
-  
+
+  def USDperPound[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "$/lb")
+
 }

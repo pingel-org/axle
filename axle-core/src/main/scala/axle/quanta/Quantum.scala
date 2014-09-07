@@ -7,6 +7,17 @@ import axle.graph.Vertex
 import axle.graph.JungDirectedGraph
 import spire.implicits._
 
+/**
+ * Quantum
+ *
+ * Used in the sense of the World English Dictionary's 4th definition:
+ *
+ * 4. something that can be quantified or measured
+ *
+ * [[http://dictionary.reference.com/browse/quantum]]
+ *
+ */
+
 trait Quantum {
 
   def wikipediaUrl: String

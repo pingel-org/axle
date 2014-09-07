@@ -16,16 +16,33 @@ abstract class Speed extends Quantum {
 }
 
 object Speed extends Speed {
-  
+
   type Q = Speed
-  
-  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]]()
-  
+
+  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
+    //    derive(meter.over[Time.type, this.type](second, this), Some("mps")),
+    //    derive(ft.over[Time.type, this.type](second, this), Some("fps")),
+    //    derive(mile.over[Time.type, this.type](hour, this), Some("mph")),
+    //    derive(km.over[Time.type, this.type](hour, this), Some("kph")),
+    unit("knot", "kn", Some("http://en.wikipedia.org/wiki/Knot_(unit)")),
+    unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light")),
+    unit("Speed limit", "speed limit"))
+
   def links[N: Field: Eq] = {
     implicit val baseCG = cgnDisconnected[N]
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)]()  
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], N => N, N => N)](
+      (knot, kph, _ * 1.852, _ / 1.852),
+      (mps, c, _ * 299792458, _ / 299792458),
+      (mph, speedLimit, _ * 65, _ / 65))
   }
 
-  def x[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "x")
-  
+  def mps[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mps")
+  def fps[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "fps")
+  def mph[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mph")
+  def kph[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kph")
+  def knot[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "knot")
+  def kn[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "knot")
+  def c[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Light Speed")
+  def speedLimit[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Speed Limit")
+
 }
