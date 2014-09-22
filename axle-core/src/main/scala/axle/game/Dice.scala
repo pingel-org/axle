@@ -24,5 +24,5 @@ object Dice {
 
   def utfD6: Distribution0[Symbol, Rational] =
     new ConditionalProbabilityTable0(faces.map(_ -> sixth).toMap, "UTF d6")
-
+  
 }

@@ -12,6 +12,7 @@ import axle.stats.Distribution
 import axle.stats.EnrichedCaseGenTraversable
 import axle.stats.P
 import spire.algebra.AdditiveMonoid
+import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.algebra.Order
@@ -47,6 +48,28 @@ package object stats {
   def coin(pHead: Rational = Rational(1, 2)): Distribution[Symbol, Rational] =
     new ConditionalProbabilityTable0[Symbol, Rational](
       Map('HEAD -> pHead, 'TAIL -> (1 - pHead)), "coin")
+
+  def binaryDecision(yes: Rational): Distribution0[Boolean, Rational] =
+    new ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), s"binaryDecision $yes")
+
+  def iffy[C: Eq, N: Field: Order: Dist](
+    decision: Distribution0[Boolean, N],
+    trueBranch: Distribution[C, N],
+    falseBranch: Distribution[C, N]): Distribution0[C, N] = {
+
+    import spire.implicits._
+
+    val addN = implicitly[AdditiveMonoid[N]]
+    val pTrue = decision.probabilityOf(true)
+    val pFalse = decision.probabilityOf(false)
+
+    val parts = (trueBranch.values.map(v => (v, trueBranch.probabilityOf(v) * pTrue)) ++
+      falseBranch.values.map(v => (v, falseBranch.probabilityOf(v) * pFalse)))
+
+    val newDist = parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(addN.plus)).toMap
+      
+    new ConditionalProbabilityTable0(newDist, "todo")
+  }
 
   def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)
 
