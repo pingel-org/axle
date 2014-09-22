@@ -67,7 +67,7 @@ package object stats {
       falseBranch.values.map(v => (v, falseBranch.probabilityOf(v) * pFalse)))
 
     val newDist = parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(addN.plus)).toMap
-      
+
     new ConditionalProbabilityTable0(newDist, "todo")
   }
 
