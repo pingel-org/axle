@@ -2,10 +2,9 @@ package axle.matrix
 
 import org.specs2.mutable._
 
-class MatrixSpecification extends Specification {
 
-  val jblasMatrixFactory = new JblasMatrixModule {}
-  import jblasMatrixFactory._
+class MatrixSpecification extends Specification with JblasMatrixModule {
+
 
   "DoubleJblasMatrix" should {
     "work" in {

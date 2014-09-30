@@ -4,9 +4,7 @@ import scala.Stream.cons
 import scala.Stream.empty
 import scala.Vector
 
-import axle.matrix.JblasMatrixModule.Matrix
-import axle.matrix.JblasMatrixModule.convertInt
-import axle.matrix.JblasMatrixModule.matrix
+import axle.matrix.MatrixModule
 import spire.algebra.MetricSpace
 import spire.implicits.CharAlgebra
 import spire.implicits.IntAlgebra
@@ -18,7 +16,7 @@ import spire.implicits.eqOps
  *
  */
 
-object NeedlemanWunsch {
+abstract class NeedlemanWunsch extends MatrixModule {
 
   /**
    * S is "similarity", computed by a fixed Int matrix

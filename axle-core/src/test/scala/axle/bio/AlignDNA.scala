@@ -1,24 +1,25 @@
 package axle.bio
 
 import org.specs2.mutable._
+import axle.matrix.JblasMatrixModule
 
 class AlignDNA extends Specification {
 
   "Needleman-Wunsch" should {
     "work" in {
 
-      import NeedlemanWunsch._
+      val nw = new NeedlemanWunsch with JblasMatrixModule
 
-      optimalAlignment("ATGCGGCC", "ATCGCCGG") must be equalTo ("ATGCGGCC--", "AT-C-GCCGG")
+      nw.optimalAlignment("ATGCGGCC", "ATCGCCGG") must be equalTo ("ATGCGGCC--", "AT-C-GCCGG")
     }
   }
 
   "Smith-Waterman" should {
     "work" in {
 
-      import SmithWaterman._
+      val sw = new SmithWaterman with JblasMatrixModule
 
-      optimalAlignment("ACACACTA", "AGCACACA") must be equalTo ("A-CACACTA", "AGCACAC-A")
+      sw.optimalAlignment("ACACACTA", "AGCACACA") must be equalTo ("A-CACACTA", "AGCACAC-A")
     }
   }
 

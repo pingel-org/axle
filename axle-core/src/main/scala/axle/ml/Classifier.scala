@@ -1,9 +1,12 @@
 package axle.ml
 
-import axle._
 import spire.math._
 import spire.implicits._
 import spire.algebra._
+import axle._
+import axle.matrix.JblasMatrixModule
+import axle.algebra._
+import Semigroups._
 
 abstract class Classifier[DATA, CLASS: Order: Eq] extends Function1[DATA, CLASS] {
 
@@ -20,9 +23,6 @@ abstract class Classifier[DATA, CLASS: Order: Eq] extends Function1[DATA, CLASS]
    * 4. true negative
    *
    */
-
-  import axle.algebra._
-  import Semigroups._
 
   private[this] def predictedVsActual(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): (Int, Int, Int, Int) = Σ(data.map(d => {
     val actual: CLASS = classExtractor(d)
@@ -44,11 +44,10 @@ abstract class Classifier[DATA, CLASS: Order: Eq] extends Function1[DATA, CLASS]
       Rational(tp, tp + fn), // recall
       Rational(tn, tn + fp), // specificity aka "true negative rate"
       Rational(tp + tn, tp + tn + fp + fn) // accuracy
-    )
+      )
   }
 
   def confusionMatrix[L: Order](data: Seq[DATA], labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L] =
-    new ConfusionMatrix(this, data, labelExtractor)
-
+    new ConfusionMatrix(this, data, labelExtractor) with JblasMatrixModule
 
 }

@@ -3,15 +3,15 @@ package axle.pgm
 import scala.Stream.cons
 import scala.Stream.empty
 
-import EliminationTreeModule.EliminationTree
 import axle.XmlAble
 import axle.graph.DirectedGraph
 import axle.graph.JungDirectedGraph
 import axle.graph.Vertex
 import axle.stats.CaseIs
 import axle.stats.Distribution
-import axle.stats.FactorModule.Factor
-import axle.stats.FactorModule.Factor.factorEq
+import axle.stats.FactorModule
+// .Factor
+//import axle.stats.FactorModule.Factor.factorEq
 import axle.stats.Independence
 import axle.Π
 import spire.algebra.Eq
@@ -23,9 +23,7 @@ import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 
-object BayesianNetworkModule extends BayesianNetworkModule
-
-trait BayesianNetworkModule {
+trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
 
   case class BayesianNetworkNode[T: Eq, N: Field](rv: Distribution[T, N], cpt: Factor[T, N])
   extends XmlAble {

@@ -4,12 +4,8 @@ import scala.Vector
 import scala.collection.immutable.TreeMap
 import scala.util.Random.shuffle
 
-import FeatureNormalizerModule.PCAFeatureNormalizer
-import axle.matrix.JblasMatrixModule.Matrix
-import axle.matrix.JblasMatrixModule.convertDouble
-import axle.matrix.JblasMatrixModule.convertInt
-import axle.matrix.JblasMatrixModule.matrix
-import axle.matrix.JblasMatrixModule.zeros
+//import FeatureNormalizerModule.PCAFeatureNormalizer
+import axle.matrix.MatrixModule
 import spire.algebra.Eq
 import spire.algebra.MetricSpace
 import spire.implicits.DoubleAlgebra
@@ -21,9 +17,7 @@ import spire.implicits.eqOps
  *
  */
 
-object KMeansModule extends KMeansModule
-
-trait KMeansModule {
+trait KMeansModule extends MatrixModule with FeatureNormalizerModule {
 
   /**
    * cluster[T]

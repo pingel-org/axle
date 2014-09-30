@@ -4,6 +4,7 @@ import axle.graph.DirectedGraph
 import axle.graph.Vertex
 import axle.algebra.Bijection
 import spire.algebra.Field
+import spire.algebra.Module
 import spire.algebra.Eq
 import spire.implicits.moduleOps
 import spire.math.Real
@@ -25,13 +26,15 @@ import spire.implicits.additiveSemigroupOps
 import spire.implicits._
 
 abstract class Distance extends Quantum {
+  
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
+    
 }
 
 object Distance extends Distance {
 
   type Q = Distance
-
+  
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("foot", "ft"),
     unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile")),
@@ -83,8 +86,13 @@ object Distance extends Distance {
   def au[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Astronomical Unit")
   def auSI[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Astronomical Unit (SI)")
 
-  //  def ny2LA = Rational("2443.79") *: mile // Some("NY to LA"), None, Some("http://www.mapcrow.info/Distance_between_New_York_US_and_Los_Angeles_US.html"))
-  //  lazy val milkyWayDiameter = Rational(100000) *: lightyear // Some("Milky Way Diameter"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
-  //  lazy val toAndromeda = Rational(2.6E6) *: lightyear // Some("Distance to Andromeda"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy")))))))))))))
+//  // http://www.mapcrow.info/Distance_between_New_York_US_and_Los_Angeles_US.html
+//  def ny2LA[N: Field: Eq](implicit cg: CG[N], module: Module[UnittedQuantity[Distance, N], N]) = Rational("2443.79") *: mile[N]
+//
+//  // http://en.wikipedia.org/wiki/Milky_Way
+//  def milkyWayDiameter[N: Field: Eq](implicit cg: CG[N], module: Module[UnittedQuantity[Distance, N], N]) = Rational(100000) *: lightyear[N]
+//
+//  // http://en.wikipedia.org/wiki/Andromeda_Galaxy
+//  def toAndromeda[N: Field: Eq](implicit cg: CG[N], module: Module[UnittedQuantity[Distance, N], N]) = Rational(2.6E6) *: lightyear[N]
 
 }

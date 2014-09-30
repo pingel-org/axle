@@ -1,10 +1,11 @@
 package axle.ml
 
 import axle.matrix._
-import axle.matrix.JblasMatrixModule._
+import axle.matrix.MatrixModule
 import spire.algebra._
 
-class ConfusionMatrix[T, C: Order, L: Order](classifier: Classifier[T, C], data: Seq[T], labelExtractor: T => L) {
+abstract class ConfusionMatrix[T, C: Order, L: Order](classifier: Classifier[T, C], data: Seq[T], labelExtractor: T => L)
+extends MatrixModule {
 
   import math.{ ceil, log10 }
 

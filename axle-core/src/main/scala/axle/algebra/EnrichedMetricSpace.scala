@@ -1,14 +1,11 @@
 package axle.algebra
 
 import axle.enrichGenTraversable
-import axle.matrix.JblasMatrixModule.Matrix
-import axle.matrix.JblasMatrixModule.convertDouble
-import axle.matrix.JblasMatrixModule.matrix
+import axle.matrix.MatrixModule
 import spire.algebra.MetricSpace
 
-class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Double]) {
+abstract class EnrichedMetricSpace[T: Manifest](space: MetricSpace[T, Double]) extends MatrixModule {
 
-  import axle.matrix.JblasMatrixModule._
   import space._
 
   def distanceMatrix(vectors: IndexedSeq[T]): Matrix[Double] = {

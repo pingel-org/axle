@@ -47,7 +47,8 @@ object Angle extends Angle {
   def circleDegrees[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "circleDegrees")
   def circleRadians[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "circleRadians")
 
-  // def clockwise90[N: Field: Eq](implicit cg: CG[N]) = -90 *: °
-  // def counterClockwise90[N: Field: Eq](implicit cg: CG[N]) = 90 *: °
+//  def clockwise90[N: Field: Eq] = -90 *: °[N]
+//
+//  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
 
 }

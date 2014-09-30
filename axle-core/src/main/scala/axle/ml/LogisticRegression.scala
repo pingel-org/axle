@@ -3,19 +3,9 @@ package axle.ml
 import scala.math.exp
 import scala.math.log
 
-import FeatureNormalizerModule.LinearFeatureNormalizer
-import axle.matrix.JblasMatrixModule.Matrix
-import axle.matrix.JblasMatrixModule.convertBoolean
-import axle.matrix.JblasMatrixModule.convertDouble
-import axle.matrix.JblasMatrixModule.matrix
-import axle.matrix.JblasMatrixModule.ones
+import axle.matrix.MatrixModule
 
-object LogisticRegressionModule extends LogisticRegressionModule
-
-trait LogisticRegressionModule {
-
-  import FeatureNormalizerModule._
-  import axle.matrix.JblasMatrixModule._
+trait LogisticRegressionModule extends MatrixModule with FeatureNormalizerModule {
 
   // h is essentially P(y=1 | X;θ)
   def h(xi: Matrix[Double], θ: Matrix[Double]): Double = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
@@ -23,10 +13,12 @@ trait LogisticRegressionModule {
   def cost(xi: Matrix[Double], θ: Matrix[Double], yi: Boolean) =
     -1 * log(if (yi) h(θ, xi) else 1 - h(θ, xi))
 
-  def predictedY(xi: Matrix[Double], θ: Matrix[Double]): Boolean = h(xi, θ) >= 0.5
+  def predictedY(xi: Matrix[Double], θ: Matrix[Double]): Boolean =
+    h(xi, θ) >= 0.5
 
-  def Jθ(X: Matrix[Double], θ: Matrix[Double], y: Matrix[Boolean]) = (0 until X.rows)
-    .foldLeft(0d)((r: Double, i: Int) => r + cost(X.row(i), θ, y(i, 0))) / X.rows
+  def Jθ(X: Matrix[Double], θ: Matrix[Double], y: Matrix[Boolean]) =
+    (0 until X.rows)
+      .foldLeft(0d)((r: Double, i: Int) => r + cost(X.row(i), θ, y(i, 0))) / X.rows
 
   def dθ(X: Matrix[Double], y: Matrix[Boolean], θ: Matrix[Double]): Matrix[Double] = {
     val yd = y.map(_ match { case true => 1d case false => 0d })

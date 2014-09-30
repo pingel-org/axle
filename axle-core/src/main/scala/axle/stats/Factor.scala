@@ -4,9 +4,7 @@ import scala.reflect.ClassTag
 import scala.xml.NodeSeq.seqToNodeSeq
 
 import axle.IndexedCrossProduct
-import axle.matrix.JblasMatrixModule.Matrix
-import axle.matrix.JblasMatrixModule.convertDouble
-import axle.matrix.JblasMatrixModule.matrix
+import axle.matrix.MatrixModule
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.MultiplicativeMonoid
@@ -19,9 +17,7 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 
-object FactorModule extends FactorModule
-
-trait FactorModule {
+trait FactorModule extends MatrixModule {
 
   /* Technically a "Distribution" is probably a table that sums to 1, which is not
    * always true in a Factor.  They should be siblings rather than parent/child.

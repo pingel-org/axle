@@ -3,6 +3,8 @@ package axle
 
 import axle.algebra.EnrichedMetricSpace
 import spire.algebra.MetricSpace
+import axle.matrix.JblasMatrixModule
+
 // http://en.wikipedia.org/wiki/Algebraic_structure
 
 package object algebra {
@@ -18,6 +20,6 @@ package object algebra {
 //  }
 
   implicit def enrichMetricSpace[T: Manifest](space: MetricSpace[T, Double]): EnrichedMetricSpace[T] =
-    new EnrichedMetricSpace(space)
+    new EnrichedMetricSpace(space) with JblasMatrixModule
 
 }

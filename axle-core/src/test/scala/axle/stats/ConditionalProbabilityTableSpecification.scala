@@ -3,14 +3,16 @@ package axle.pgm
 import axle._
 import axle.graph._
 import axle.stats._
+import axle.matrix.JblasMatrixModule
 import spire.implicits._
 import spire.math._
 import org.specs2.mutable._
 
-class ConditionalProbabilityTableSpecification extends Specification {
-
-  import BayesianNetworkModule._
-  import FactorModule._
+class ConditionalProbabilityTableSpecification
+extends Specification
+with BayesianNetworkModule
+with FactorModule
+with JblasMatrixModule {
 
   val bools = Vector(true, false)
 

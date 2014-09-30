@@ -2,10 +2,9 @@ package axle.stats
 
 import scala.math.pow
 import scala.math.sqrt
+import axle.matrix.MatrixModule
 
-import axle.matrix.JblasMatrixModule.Matrix
-
-trait ChiSquaredTestModule {
+trait ChiSquaredTestModule extends MatrixModule {
 
   def χ2(tally: Matrix[Double]): Double = {
     val rowTotals = tally.rowSums

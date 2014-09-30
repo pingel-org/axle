@@ -4,9 +4,7 @@ import scala.Vector
 import scala.collection.immutable.Stream.cons
 import scala.collection.immutable.Stream.empty
 
-import axle.matrix.JblasMatrixModule.Matrix
-import axle.matrix.JblasMatrixModule.convertInt
-import axle.matrix.JblasMatrixModule.matrix
+import axle.matrix.MatrixModule
 import spire.algebra.MetricSpace
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
@@ -17,7 +15,7 @@ import spire.implicits.eqOps
  *
  */
 
-object SmithWaterman {
+abstract class SmithWaterman extends MatrixModule {
 
   def w(x: Char, y: Char, mismatchPenalty: Int): Int =
     if (x != y) {

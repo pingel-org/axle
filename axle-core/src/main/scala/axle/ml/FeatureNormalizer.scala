@@ -1,16 +1,8 @@
 package axle.ml
 
-import axle.matrix.JblasMatrixModule.Matrix
-import axle.matrix.JblasMatrixModule.convertDouble
-import axle.matrix.JblasMatrixModule.matrix
-import axle.matrix.JblasMatrixModule.numComponentsForCutoff
-import axle.matrix.JblasMatrixModule.pca
-import axle.matrix.JblasMatrixModule.std
-import axle.matrix.JblasMatrixModule.zscore
+import axle.matrix.MatrixModule
 
-object FeatureNormalizerModule extends FeatureNormalizerModule
-
-trait FeatureNormalizerModule {
+trait FeatureNormalizerModule extends MatrixModule {
 
   trait FeatureNormalizer {
 

@@ -1,6 +1,5 @@
 package axle.pgm
 
-import BayesianNetworkModule.BayesianNetwork
 import axle.eqSet
 import axle.graph.JungUndirectedGraph
 import axle.graph.UndirectedGraph
@@ -10,9 +9,9 @@ import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.StringOrder
 
-object JoinTree {
+trait JoinTreeModule extends BayesianNetworkModule {
 
-  def apply[T: Eq: Manifest, N: Field: Manifest](
+  def makeJoinTree[T: Eq: Manifest, N: Field: Manifest](
     vps: Vector[Set[Distribution[T, N]]],
     ef: Seq[Vertex[Set[Distribution[T, N]]]] => Seq[(Vertex[Set[Distribution[T, N]]], Vertex[Set[Distribution[T, N]]], String)]): JoinTree[T, N] =
     JoinTree[T, N](JungUndirectedGraph(vps, ef))
@@ -24,28 +23,28 @@ object JoinTree {
     ???
   }
 
-}
+  case class JoinTree[T: Eq, N: Field](graph: UndirectedGraph[Set[Distribution[T, N]], String]) {
 
-case class JoinTree[T: Eq, N: Field](graph: UndirectedGraph[Set[Distribution[T, N]], String]) {
+    //  def addToCluster(n: GV, v: Distribution[_]): Unit = n.getPayload += v
+    //
+    //  def constructEdge(n1: GV, n2: GV): JoinTree.G#E = g += ((n1, n2), "")
+    //
+    //  def separate(n1: GV, n2: GV): Set[Distribution[_]] = n1.getPayload.intersect(n2.getPayload)
 
-  //  def addToCluster(n: GV, v: Distribution[_]): Unit = n.getPayload += v
-  //
-  //  def constructEdge(n1: GV, n2: GV): JoinTree.G#E = g += ((n1, n2), "")
-  //
-  //  def separate(n1: GV, n2: GV): Set[Distribution[_]] = n1.getPayload.intersect(n2.getPayload)
+    //  def toEliminationOrder(r: GV): List[Distribution[_]] = {
+    //    val T: JoinTree = new JoinTree(graphFrom(getGraph())(v => v, e => e))
+    //    while (T.getGraph.size > 1) {
+    //      val i = T.getGraph.firstLeafOtherThan(r)
+    //      val j = theNeighbor() a JoinTreeNode
+    //      result ++= i.getPayload - j.getPayload
+    //    }
+    //    result ++= r.getPayload
+    //  }
 
-  //  def toEliminationOrder(r: GV): List[Distribution[_]] = {
-  //    val T: JoinTree = new JoinTree(graphFrom(getGraph())(v => v, e => e))
-  //    while (T.getGraph.size > 1) {
-  //      val i = T.getGraph.firstLeafOtherThan(r)
-  //      val j = theNeighbor() a JoinTreeNode
-  //      result ++= i.getPayload - j.getPayload
-  //    }
-  //    result ++= r.getPayload
-  //  }
+    //  def embeds(eTree: EliminationTree, embedding: Map[JoinTree.G#V, EliminationTree#GV]): Boolean =
+    //    g.getVertices().forall(jtn =>
+    //      eTree.getFactor(embedding(jtn)).getVariables.forall(ev => jtn.getPayload.contains(ev)))
 
-  //  def embeds(eTree: EliminationTree, embedding: Map[JoinTree.G#V, EliminationTree#GV]): Boolean =
-  //    g.getVertices().forall(jtn =>
-  //      eTree.getFactor(embedding(jtn)).getVariables.forall(ev => jtn.getPayload.contains(ev)))
+  }
 
 }

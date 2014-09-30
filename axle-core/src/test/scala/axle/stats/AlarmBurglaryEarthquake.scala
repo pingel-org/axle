@@ -7,11 +7,13 @@ import axle.pgm._
 import spire.math._
 import spire.implicits._
 import org.specs2.mutable._
+import axle.matrix.JblasMatrixModule
 
-class ABE extends Specification {
-
-  import BayesianNetworkModule._
-  import FactorModule._
+class ABE
+  extends Specification
+  with BayesianNetworkModule
+  with FactorModule
+  with JblasMatrixModule {
 
   val bools = Vector(true, false)
 

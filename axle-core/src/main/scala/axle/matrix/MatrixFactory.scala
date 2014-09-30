@@ -5,23 +5,11 @@ import spire.implicits.eqOps
 
 trait MatrixModule {
 
-  /**
-   * Type Parameters:
-   *
-   * T element type
-   * S storage type
-   * M subtype of Matrix that is backed by storage S and has elements of type T
-   */
-
   type C[T]
 
   implicit val convertDouble: C[Double]
   implicit val convertInt: C[Int]
   implicit val convertBoolean: C[Boolean]
-
-  //  implicit val formatDouble = (d: Double) => "%.6f".format(d)
-  //  implicit val formatInt = (i: Int) => i.toString
-  //  implicit val formatBoolean = (b: Boolean) => b.toString
 
   type Matrix[T] <: MatrixLike[T]
 
@@ -29,7 +17,7 @@ trait MatrixModule {
 
     type S
 
-    def storage: S
+    def underlying: S
 
     def rows: Int
     def columns: Int
@@ -39,7 +27,7 @@ trait MatrixModule {
     def apply(rs: Seq[Int], cs: Seq[Int]): Matrix[T]
 
     // def update(i: Int, j: Int, v: T): Unit
-    def toList(): List[T]
+    def toList: List[T]
 
     def column(j: Int): Matrix[T]
     def row(i: Int): Matrix[T]
@@ -200,6 +188,16 @@ trait MatrixModule {
     def ¬ = not
 
   }
+
+  //   * Type Parameters:
+  //   *
+  //   * T element type
+  //   * S storage type
+  //   * M subtype of Matrix that is backed by storage S and has elements of type T
+
+  //  implicit val formatDouble = (d: Double) => "%.6f".format(d)
+  //  implicit val formatInt = (i: Int) => i.toString
+  //  implicit val formatBoolean = (b: Boolean) => b.toString
 
   def zeros[T: C](m: Int, n: Int): Matrix[T]
 

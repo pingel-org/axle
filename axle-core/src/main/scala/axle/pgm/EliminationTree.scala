@@ -3,15 +3,14 @@ package axle.pgm
 import axle.graph.JungUndirectedGraph
 import axle.graph.Vertex
 import axle.stats.Distribution
-import axle.stats.FactorModule.Factor
+import axle.stats.FactorModule
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
 
-object EliminationTreeModule extends EliminationTreeModule
 
-trait EliminationTreeModule {
+trait EliminationTreeModule extends FactorModule {
 
   case class EliminationTree[T: Eq: Manifest, N: Field: Manifest](
     vps: Seq[Factor[T, N]],

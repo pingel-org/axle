@@ -1,18 +1,27 @@
 package axle.ml
 
-import org.specs2.mutable._
-import util.Random.{ shuffle, nextGaussian, nextDouble }
-import math.{ Pi, cos, sin, sqrt }
-import axle.matrix.JblasMatrixModule
-import axle.ml.distance._
-import spire.algebra._
+import scala.math.Pi
+import scala.math.cos
+import scala.math.sin
+import scala.math.sqrt
+import scala.util.Random.nextDouble
+import scala.util.Random.nextGaussian
+import scala.util.Random.shuffle
 
-class KMeansSpecification extends Specification {
+import org.specs2.mutable.Specification
+
+import axle.matrix.JblasMatrixModule
+import axle.ml.distance.MatrixDistance
+import spire.algebra.Eq
+
+class KMeansSpecification
+  extends Specification
+  with MatrixDistance
+  with KMeansModule 
+  with JblasMatrixModule {
 
   "K-Means Clustering" should {
     "work" in {
-
-      import KMeansModule._
 
       case class Foo(x: Double, y: Double)
 
@@ -29,7 +38,7 @@ class KMeansSpecification extends Specification {
           (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
       //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
-      implicit val space = new axle.ml.distance.Euclidian(2)
+      implicit val space = new Euclidian(2)
 
       implicit val fooEq = new Eq[Foo] {
         def eqv(x: Foo, y: Foo): Boolean = x equals y

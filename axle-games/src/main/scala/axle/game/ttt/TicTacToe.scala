@@ -51,11 +51,11 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
 
   // tttmm.C[Option[String]]
   implicit val convertPlayerId = new FunctionPair[Double, Option[TicTacToePlayer]] {
-    val forward = (v: Double) => v match {
+    def apply(v: Double): Option[TicTacToePlayer] = v match {
       case -1D => None
       case _ => Some(playersSeq(v.toInt))
     }
-    val backward = (v: Option[TicTacToePlayer]) => v match {
+    def unapply(v: Option[TicTacToePlayer]): Double = v match {
       case None => -1D
       case Some(player) => playersSeq.indexOf(player).toDouble
     }
