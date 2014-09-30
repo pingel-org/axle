@@ -14,7 +14,7 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Angle.{ ° => ° }
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
@@ -22,6 +22,7 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import axle.ml.KMeansModule
 import javax.swing.JPanel
+import java.awt.Component
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
@@ -29,6 +30,9 @@ import spire.math.Number.apply
 import spire.implicits.moduleOps
 
 trait KMeansVisualizationModule extends KMeansModule {
+
+  implicit def enComponentKMeansClassifier[T](classifier: KMeansClassifier[T]): Component =
+    new KMeansVisualization[T](classifier)
 
   //  def visualize[D](classifier: KMeansClassifier[D],
   //    width: Int = 600,

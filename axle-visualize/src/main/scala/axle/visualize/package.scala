@@ -75,11 +75,10 @@ package object visualize {
     case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads, dg.edgeFunction))
   }
 
-//  implicit def enComponentBayesianNetwork[T: Manifest: Eq, N: Field: Manifest](bn: BayesianNetworkModule.BayesianNetwork[T, N]): Component =
-//    enComponentDirectedGraph(bn.graph)
-//
-//  implicit def enComponentKMeansClassifier[T](classifier: KMeansModule.KMeansClassifier[T]): Component =
-//    new KMeansVisualizationModule.KMeansVisualization[T](classifier)
+  trait BayesianNetworkVisualizationModule extends BayesianNetworkModule {
+    implicit def enComponentBayesianNetwork[T: Manifest: Eq, N: Field: Manifest](bn: BayesianNetwork[T, N]): Component =
+      enComponentDirectedGraph(bn.graph)
+  }
 
   /**
    * component2file
