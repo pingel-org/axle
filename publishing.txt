@@ -1,14 +1,9 @@
 
 After `sbt publish` (for snapshot)
 
-To publish version $v (for example 0.1-M12):
- edit project/Build.scala (change version)
- git tag
- git tag v$v
- git add project/Build.scala
- sbt publish-signed
- git commit -m "tagged v$v"
- git push --tags
+`sbt "release with-defaults"`
+
+Then:
  https://oss.sonatype.org/
  Staging Repositories
  find org.pingel repository
@@ -19,9 +14,6 @@ To publish version $v (for example 0.1-M12):
  release
  "releasing axle $v"
  confirm at https://oss.sonatype.org/content/repositories/releases/org/pingel/
- edit project/Build.scala (change version)
- git add project/Build.scala
- git commit -m "back to 0.1-SNAPSHOT"
 
 Latest detailed guide: http://central.sonatype.org/pages/releasing-the-deployment.html
 

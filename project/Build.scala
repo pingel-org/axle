@@ -7,6 +7,8 @@ import sbtassembly.Plugin._
 import AssemblyKeys._
 import org.scalastyle.sbt.ScalastylePlugin
 import sbtrelease.ReleasePlugin._
+import com.typesafe.sbt.pgp.PgpKeys
+import PgpKeys._
 
 object AxleBuild extends Build {
 
