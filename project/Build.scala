@@ -20,6 +20,8 @@ object AxleBuild extends Build {
 
     crossScalaVersions := Seq("2.11.2"),
 
+    publishArtifactsAction := PgpKeys.publishSigned.value,
+
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2" % "2.3.11" % "test",
       "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
