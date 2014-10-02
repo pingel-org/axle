@@ -6,10 +6,11 @@ import Keys._
 import sbtassembly.Plugin._
 import AssemblyKeys._
 import org.scalastyle.sbt.ScalastylePlugin
+import sbtrelease.ReleasePlugin._
 
 object AxleBuild extends Build {
 
-  val sharedSettings = Project.defaultSettings ++ Seq(
+  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
 
     organization := "org.pingel",
 
