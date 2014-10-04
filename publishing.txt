@@ -1,7 +1,11 @@
 
-After `sbt publish` (for snapshot)
+Snapshot: `sbt publish`
+
+Release:
 
 `sbt "release with-defaults"`
+
+(May also need to edit version.sbt and run `sbt publish-signed`)
 
 Then:
  https://oss.sonatype.org/
