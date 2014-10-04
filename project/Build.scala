@@ -6,9 +6,13 @@ import Keys._
 import sbtassembly.Plugin._
 import AssemblyKeys._
 import org.scalastyle.sbt.ScalastylePlugin
+import sbtrelease._
 import sbtrelease.ReleasePlugin._
+import sbtrelease.ReleasePlugin.ReleaseKeys._
+import sbtrelease.ReleaseStateTransformations._
+import sbtrelease.Utilities._
 import com.typesafe.sbt.pgp.PgpKeys
-import PgpKeys._
+import com.typesafe.sbt.pgp.PgpKeys._
 
 object AxleBuild extends Build {
 
@@ -21,8 +25,6 @@ object AxleBuild extends Build {
     //crossScalaVersions := Seq("2.10.4", "2.11.2"),
 
     crossScalaVersions := Seq("2.11.2"),
-
-    publishArtifactsAction := PgpKeys.publishSigned.value,
 
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2" % "2.3.11" % "test",
@@ -86,6 +88,35 @@ import axle._
   </developers>)
 
   ) ++ ScalastylePlugin.Settings
+
+  lazy val publishSignedArtifacts = ReleaseStep(
+    action = st => {
+      val extracted = st.extract
+      val ref = extracted.get(thisProjectRef)
+      extracted.runAggregated(publishSigned in Global in ref, st)
+    },
+    check = st => {
+      // getPublishTo fails if no publish repository is set up.
+      val ex = st.extract
+      val ref = ex.get(thisProjectRef)
+      Classpaths.getPublishTo(ex.get(publishTo in Global in ref))
+      st
+    },
+    enableCrossBuild = true
+  )
+
+  releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      publishSignedArtifacts,
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
+    )
 
   lazy val hadoopVersion = "1.1.2"
   lazy val jungVersion = "2.0.1"
