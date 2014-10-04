@@ -40,26 +40,29 @@ object StochasticLambdaCalculus extends Specification {
         if (p == c) uniformDistribution((1 to numDoors).filter(_ == p), "reveal")
         else uniformDistribution((1 to numDoors).filter(d => d == p || d == c), "reveal")
 
-      def switch(probabilityOfSwitching: Rational, c: Int, r: Int): Distribution0[Int, Rational] =
+      def switch(probabilityOfSwitching: Rational, c: Int, r: Int) =
         iffy(
           binaryDecision(probabilityOfSwitching),
           uniformDistribution((1 to numDoors).filter(d => d == r || d == c), "switch"), // switch
           uniformDistribution(Seq(c), "switch") // stay
           )
 
-      def win(probabilityOfSwitching: Rational) = for {
+      // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
+      val outcome = (probabilityOfSwitching: Rational) => for {
         p <- prizeDoor
         c <- chosenDoor
         r <- reveal(p, c)
         c2 <- switch(probabilityOfSwitching, c, r)
       } yield c2 == p
 
-      win(Rational(1)).probabilityOf(true) must be equalTo (Rational(1, 2))
+      val chanceOfWinning = (probabilityOfSwitching: Rational) => outcome(probabilityOfSwitching).probabilityOf(true)
 
-      win(Rational(0)).probabilityOf(true) must be equalTo (Rational(1, 3))
+      chanceOfWinning(Rational(1)) must be equalTo (Rational(1, 2))
 
-      // TODO: for any two probabilities p1 and p2, 
-      // p1 > p2 implies win(p1).probabilityOf(true) > win(p2).probabilityOf(true)
+      chanceOfWinning(Rational(0)) must be equalTo (Rational(1, 3))
+
+      // TODO: p1 > p2 <=> chanceOfWinning(p1) > chanceOfWinning(p2)
+      //        aka "is monotonically increasing"
     }
   }
 
