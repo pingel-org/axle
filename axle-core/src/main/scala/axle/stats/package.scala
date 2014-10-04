@@ -26,6 +26,7 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.nrootOps
 import spire.implicits.orderOps
 import spire.implicits.semiringOps
+import spire.implicits._
 import spire.math.ConvertableFrom
 import spire.math.Number
 import spire.math.Rational
@@ -52,12 +53,13 @@ package object stats {
   def binaryDecision(yes: Rational): Distribution0[Boolean, Rational] =
     new ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), s"binaryDecision $yes")
 
+  def uniformDistribution[T](values: Seq[T], name: String): Distribution0[T, Rational] =
+    new ConditionalProbabilityTable0(values.map(v => (v, Rational(1, values.size))).toMap, name)
+
   def iffy[C: Eq, N: Field: Order: Dist](
     decision: Distribution0[Boolean, N],
     trueBranch: Distribution[C, N],
     falseBranch: Distribution[C, N]): Distribution0[C, N] = {
-
-    import spire.implicits._
 
     val addN = implicitly[AdditiveMonoid[N]]
     val pTrue = decision.probabilityOf(true)
