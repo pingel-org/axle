@@ -37,8 +37,7 @@ object StochasticLambdaCalculus extends Specification {
       val chosenDoor = uniformDistribution(1 to numDoors, "chosen")
 
       def reveal(p: Int, c: Int) =
-        if (p == c) uniformDistribution((1 to numDoors).filter(_ == p), "reveal")
-        else uniformDistribution((1 to numDoors).filter(d => d == p || d == c), "reveal")
+        uniformDistribution((1 to numDoors).filter(d => d == p || d == c), "reveal")
 
       def switch(probabilityOfSwitching: Rational, c: Int, r: Int) =
         iffy(
