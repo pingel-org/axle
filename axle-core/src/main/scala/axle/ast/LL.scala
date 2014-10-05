@@ -5,10 +5,9 @@ import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
-class Symbol(_label: String) {
-  def label: String = _label
+class Symbol(val label: String) {
   //override def toString() = "'" + label + "'"
-  override def toString: String = _label
+  override def toString: String = label
 }
 object Symbol {
   implicit val symbolEq = new Eq[Symbol] {

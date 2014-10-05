@@ -1,8 +1,6 @@
 package axle.game
 
-abstract class Player[G <: Game[G]](_id: String, description: String) {
-
-  def id: String = _id
+abstract class Player[G <: Game[G]](val id: String, description: String) {
 
   def move(state: G#STATE): (G#MOVE, G#STATE)
 

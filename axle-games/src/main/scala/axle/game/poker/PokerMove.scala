@@ -5,8 +5,9 @@ import spire.algebra.Eq
 
 abstract class PokerMove(_pokerPlayer: PokerPlayer)(implicit game: Poker)
 extends Move[Poker](_pokerPlayer) {
-  def player: PokerPlayer = _pokerPlayer
+
   def description: String
+  
   def displayTo(p: PokerPlayer)(implicit eqp: Eq[PokerPlayer]): String =
     (if (_pokerPlayer != p) _pokerPlayer.description else "You") + " " + description + "."
 }

@@ -16,22 +16,17 @@ case class LLLanguage(
   name: String,
   _llRuleDescriptions: List[(String, List[String])],
   startSymbolString: String = "S") extends Language(
-  name, Nil, Nil, (text: String) => None, ast => ast
-) {
+  name, Nil, Nil, (text: String) => None, ast => ast) {
 
-  val _nonTerminals = (_llRuleDescriptions.map(desc => NonTerminal(desc._1)).toSet).toList
+  val nonTerminals: List[NonTerminal] = (_llRuleDescriptions.map(desc => NonTerminal(desc._1)).toSet).toList
 
-  def nonTerminals: List[NonTerminal] = _nonTerminals
-
-  val nonTerminalsByName = _nonTerminals.map(nt => (nt.label, nt)).toMap
+  val nonTerminalsByName = nonTerminals.map(nt => (nt.label, nt)).toMap
 
   val startSymbol = nonTerminalsByName(startSymbolString)
 
-  val _terminals = (_llRuleDescriptions.flatMap(_._2).toSet -- _llRuleDescriptions.map(_._1)).map(Terminal(_)).toList.sortBy(_.label) ++ List(⊥)
+  val terminals: List[Terminal] = (_llRuleDescriptions.flatMap(_._2).toSet -- _llRuleDescriptions.map(_._1)).map(Terminal(_)).toList.sortBy(_.label) ++ List(⊥)
 
-  def terminals: List[Terminal] = _terminals
-
-  val terminalsByName = _terminals.map(t => (t.label, t)).toMap
+  val terminalsByName = terminals.map(t => (t.label, t)).toMap
 
   val _llRules: List[LLRule] =
     _llRuleDescriptions.zipWithIndex

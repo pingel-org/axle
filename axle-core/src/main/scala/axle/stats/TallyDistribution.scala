@@ -15,13 +15,11 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.orderOps
 
-class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], _name: String = "unnamed")
+class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], val name: String = "unnamed")
   extends Distribution0[A, N] {
 
   val ring = implicitly[Ring[N]]
   val addition = implicitly[AdditiveMonoid[N]]
-
-  def name: String = _name
   
   def values: IndexedSeq[A] = tally.keys.toVector
 

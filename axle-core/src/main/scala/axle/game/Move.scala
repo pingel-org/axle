@@ -1,4 +1,4 @@
 package axle.game
 
-abstract class Move[G <: Game[G]](player: G#PLAYER)
+abstract class Move[G <: Game[G]](val player: G#PLAYER)
   extends Event[G]

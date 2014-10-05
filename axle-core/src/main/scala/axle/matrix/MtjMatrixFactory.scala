@@ -31,15 +31,13 @@ trait MtjMatrixModule extends MatrixModule {
     def unapply(t: Boolean) = t match { case true => 0d case false => 1d }
   }
 
-  class Matrix[T: C](_mtj: MtjMatrix) extends MatrixLike[T] {
+  class Matrix[T: C](val mtj: MtjMatrix) extends MatrixLike[T] {
 
     val converter = implicitly[C[T]]
 
     type S = MtjMatrix
 
-    def underlying: MtjMatrix = _mtj
-
-    def mtj: MtjMatrix = _mtj
+    def underlying: MtjMatrix = mtj
 
     implicit val format = (t: T) => t match {
       case d: Double => """%.6f""".format(d)

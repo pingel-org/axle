@@ -27,15 +27,13 @@ trait JblasMatrixModule extends MatrixModule {
     def unapply(t: Boolean) = t match { case true => 0d case false => 1d }
   }
 
-  class Matrix[T: C](_jblas: DoubleMatrix) extends MatrixLike[T] {
+  class Matrix[T: C](val jblas: DoubleMatrix) extends MatrixLike[T] {
 
     val converter = implicitly[C[T]]
 
     type S = DoubleMatrix
 
-    def underlying: DoubleMatrix = _jblas
-
-    def jblas: DoubleMatrix = _jblas
+    def underlying: DoubleMatrix = jblas
 
     implicit val format = (t: T) => t match {
       case d: Double => """%.6f""".format(d)

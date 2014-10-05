@@ -23,20 +23,14 @@ case class FormatterState(
   _node2lineno: Map[AstNode, Int])
 
 abstract class AstNodeFormatter[R, S](
-  _config: FormatterConfig,
-  _state: FormatterState,
-  _subState: S) {
+  val config: FormatterConfig,
+  val state: FormatterState,
+  val subState: S) {
 
   def apply(fs: FormatterState, ss: S): AstNodeFormatter[R, S]
 
   def mop(fsf: AstNodeFormatter[R, S] => AstNodeFormatter[R, S]): AstNodeFormatter[R, S] =
     fsf.apply(this)
-  
-  def config: FormatterConfig = _config
-
-  def state: FormatterState = _state
-
-  def subState: S = _subState
 
   def accRaw(s: String, n: Int): AstNodeFormatter[R, S]
 

@@ -26,9 +26,7 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 
-abstract class Scene(_distanceUnit: UnitOfMeasurement[Distance, Float]) {
-
-  def distanceUnit: UnitOfMeasurement[Distance, Float] = _distanceUnit
+abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance, Float]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()

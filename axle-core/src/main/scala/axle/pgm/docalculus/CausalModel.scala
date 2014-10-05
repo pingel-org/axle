@@ -21,11 +21,9 @@ object CausalModelNode {
 
 abstract class PFunction[T: Eq, N: Field](rv: Distribution[T, N], inputs: Seq[Distribution[T, N]])
 
-class CausalModel[T: Eq, N: Field](_name: String, graph: DirectedGraph[CausalModelNode[T, N], String])
+class CausalModel[T: Eq, N: Field](val name: String, graph: DirectedGraph[CausalModelNode[T, N], String])
 {
   import graph._
-
-  def name: String = _name
 
   def duplicate: CausalModel[T, N] = ???
 

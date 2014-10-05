@@ -4,12 +4,8 @@ import spire.algebra.Field
 import spire.algebra.Order
 import spire.random.Dist
 
-case class UnknownDistribution0[A, N: Field: Order: Dist](_values: IndexedSeq[A], _name: String)
+case class UnknownDistribution0[A, N: Field: Order: Dist](values: IndexedSeq[A], name: String)
 extends Distribution0[A, N] {
-
-  def name: String = _name
-  
-  def values: IndexedSeq[A] = _values
   
   def probabilityOf(a: A): N = ???
 

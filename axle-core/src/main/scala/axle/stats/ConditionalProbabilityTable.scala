@@ -9,10 +9,8 @@ import spire.implicits.orderOps
 import spire.random.Dist
 import spire.random.rng.Cmwc5
 
-class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], _name: String = "unnamed")
+class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], val name: String = "unnamed")
   extends Distribution0[A, N] {
-
-  def name: String = _name
 
   val field = implicitly[Field[N]]
 

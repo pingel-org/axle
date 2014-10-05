@@ -1,20 +1,14 @@
 
 package axle.ast
 
-class DocumentFromString(_grammar: Language, _label: String, content: String) extends Document {
+class DocumentFromString(val grammar: Language, val name: String, content: String) extends Document {
 
-  def grammar: Language = _grammar
-
-  def ast: Option[AstNode] = _grammar.parseString(content)
-
-  def name: String = _label
+  def ast: Option[AstNode] = grammar.parseString(content)
 }
 
-class DocumentFromFile(_grammar: Language, shortFilename: String, filename: String) extends Document {
+class DocumentFromFile(val grammar: Language, shortFilename: String, filename: String) extends Document {
 
-  def grammar: Language = _grammar
-
-  def ast: Option[AstNode] = _grammar.parseFile(filename)
+  def ast: Option[AstNode] = grammar.parseFile(filename)
 
   def name: String = shortFilename
 }
