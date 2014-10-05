@@ -7,7 +7,7 @@ import axle.stats.Distribution0
 import axle.stats.Distribution1
 import axle.stats.TallyDistribution0
 import axle.stats.TallyDistribution1
-import axle.Π
+import spire.optional.unicode.Π
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.algebra.Field
@@ -84,7 +84,7 @@ class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, N: Field: Ord
 
     argmax(C.values,
       (c: CLASS) => (P(C is c).apply() *
-        ((c: CLASS) => Π(0 until numFeatures)(i => P((Fs(i) is fs(i)) | (C is c)).apply()))(c)))
+        ((c: CLASS) => Π((0 until numFeatures) map { i => P((Fs(i) is fs(i)) | (C is c)).apply() }))(c)))
   }
 
 }

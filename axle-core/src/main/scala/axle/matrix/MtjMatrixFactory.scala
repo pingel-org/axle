@@ -8,12 +8,18 @@ import scala.util.Random.nextGaussian
 
 import axle.algebra.FunctionPair
 import no.uib.cipr.matrix.DenseMatrix
-import no.uib.cipr.matrix.{Matrix => MtjMatrix}
+import no.uib.cipr.matrix.{ Matrix => MtjMatrix }
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
+/**
+ *
+ * See https://github.com/fommil/matrix-toolkits-java
+ *
+ */
+
 trait MtjMatrixModule extends MatrixModule {
-  
+
   type C[T] = FunctionPair[Double, T]
 
   implicit val convertDouble: FunctionPair[Double, Double] = new FunctionPair[Double, Double] {
@@ -85,7 +91,7 @@ trait MtjMatrixModule extends MatrixModule {
     def transpose: Matrix[T] = matrix(mtj.copy.transpose)
 
     def diag: Matrix[T] = ???
-    
+
     def invert: Matrix[T] = ??? //matrix(org.mtj.Solve.solve(mtj, DenseMatrix.eye(mtj.rows)))
 
     def ceil: Matrix[Int] = ??? //matrix(org.mtj.MatrixFunctions.ceil(mtj))(convertInt)

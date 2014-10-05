@@ -2,7 +2,7 @@ package axle.stats
 
 import scala.collection.GenTraversable
 
-import axle.Π
+import spire.optional.unicode.Π
 import spire.algebra.Field
 import spire.implicits.additiveGroupOps
 
@@ -19,13 +19,13 @@ abstract class Case[A, N: Field] {
   def bayes: () => N // perhaps bayes should return a Seq[Case] or similar
 }
 
-case class CaseAndGT[A: Manifest, N: Field](conjuncts: GenTraversable[Case[A, N]])
+case class CaseAndGT[A: Manifest, N: Field](conjuncts: Iterable[Case[A, N]])
   extends Case[List[A], N] {
 
   def probability[B](given: Option[Case[B, N]] = None): N =
     given
-      .map(g => Π(conjuncts)({ (c: Case[A, N]) => P(c | g).apply() }))
-      .getOrElse(Π(conjuncts)({ P(_).apply() }))
+      .map(g => Π(conjuncts map { (c: Case[A, N]) => P(c | g).apply() }))
+      .getOrElse(Π(conjuncts map { P(_).apply() }))
 
   def bayes = ???
 }

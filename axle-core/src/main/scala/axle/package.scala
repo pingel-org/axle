@@ -42,12 +42,13 @@ import axle.EnrichedInt
 import axle.EnrichedMutableBuffer
 import axle.forall
 import axle.thereexists
-import axle.Π
+import spire.optional.unicode.Π
 import axle.Σ
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.algebra.Order
+import spire.algebra.MultiplicativeMonoid
 import spire.compat.ordering
 import spire.implicits.IntAlgebra
 import spire.implicits.LongAlgebra
@@ -58,7 +59,7 @@ import spire.implicits.semiringOps
 package object axle {
 
   val Sigma = Σ
-  val Pi = Π
+  def Pi[N: MultiplicativeMonoid] = Π[N] _
   val ∀ = forall
   val ∃ = thereexists
 

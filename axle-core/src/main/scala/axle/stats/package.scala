@@ -42,7 +42,7 @@ package object stats {
 
   //implicit def evalProbability[N]: Probability[N] => N = _()
 
-  implicit def enrichCaseGenTraversable[A: Manifest, N: Field](cgt: GenTraversable[Case[A, N]]): EnrichedCaseGenTraversable[A, N] = EnrichedCaseGenTraversable(cgt)
+  implicit def enrichCaseGenTraversable[A: Manifest, N: Field](cgt: Iterable[Case[A, N]]): EnrichedCaseGenTraversable[A, N] = EnrichedCaseGenTraversable(cgt)
 
   val sides = Vector('HEAD, 'TAIL)
 

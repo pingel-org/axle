@@ -13,7 +13,7 @@ import axle.stats.FactorModule
 // .Factor
 //import axle.stats.FactorModule.Factor.factorEq
 import axle.stats.Independence
-import axle.Π
+import spire.optional.unicode.Π
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Order
@@ -26,7 +26,7 @@ import spire.math.ConvertableFrom
 trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
 
   case class BayesianNetworkNode[T: Eq, N: Field](rv: Distribution[T, N], cpt: Factor[T, N])
-  extends XmlAble {
+    extends XmlAble {
 
     override def toString: String = rv.name + "\n\n" + cpt
 
@@ -67,7 +67,7 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
     def cpt(variable: Distribution[T, N]): Factor[T, N] =
       graph.findVertex(_.payload.rv === variable).map(_.payload.cpt).get
 
-    def probabilityOf(cs: Seq[CaseIs[T, N]]) = Π(cs.map(c => cpt(c.distribution)(cs)).toVector)(identity)
+    def probabilityOf(cs: Seq[CaseIs[T, N]]) = Π(cs.map(c => cpt(c.distribution)(cs)).toVector)
 
     def markovAssumptionsFor(rv: Distribution[T, N]): Independence[T, N] = {
       val rvVertex = graph.findVertex(_.payload.rv === rv).get
@@ -105,9 +105,9 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
     def variableEliminationPriorMarginalI(Q: Set[Distribution[T, N]], π: List[Distribution[T, N]]): Factor[T, N] =
       Π(π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        val mentionsWithout = Π(allMentions)(identity).sumOut(rv)
+        val mentionsWithout = Π(allMentions).sumOut(rv)
         (S -- allMentions) + mentionsWithout
-      }))(identity)
+      }))
 
     /**
      *
@@ -123,8 +123,8 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
       Π(π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
         (S, rv) => {
           val allMentions = S.filter(_.mentions(rv))
-          (S -- allMentions) + Π(allMentions)(identity).sumOut(rv)
-        }))(identity)
+          (S -- allMentions) + Π(allMentions).sumOut(rv)
+        }))
 
     def interactsWith(v1: Distribution[T, N], v2: Distribution[T, N]): Boolean =
       graph.vertices.map(_.payload.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
