@@ -18,6 +18,7 @@ import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.math.Number.apply
 import spire.implicits.moduleOps
+import spire.compat.ordering
 
 class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font) {
 
@@ -35,6 +36,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
   val whiteSpace = widthPerGroup * (1d - barWidthPercent)
 
   val yPlottable = implicitly[Plottable[Y]]
+  implicit val yOrder = yPlottable.order
   
   val minY = List(xAxis, slices.map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
   val maxY = List(xAxis, slices.map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max

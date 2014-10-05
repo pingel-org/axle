@@ -1,27 +1,27 @@
 package axle.game.poker
 
-import spire.implicits._
-import spire.algebra._
-import axle.game.cards._
+import axle.game.cards.Ace
+import axle.game.cards.Card
+import spire.algebra.Eq
+import spire.algebra.Order
+import spire.compat.ordering
+import spire.implicits.IntAlgebra
+import spire.implicits.SeqOrder
+import spire.implicits.eqOps
 
 object PokerHand {
-
-  //  override def hashCode: Int = cards.##
 
   implicit def pokerHandEq: Eq[PokerHand] = new Eq[PokerHand] {
     def eqv(x: PokerHand, y: PokerHand): Boolean =
       x.sortedHand === y.sortedHand
   }
 
-  implicit object PokerHandOrdering extends Ordering[PokerHand] {
-
-    import math.Ordering
-    import math.Ordering.Implicits._
+  implicit object PokerHandOrder extends Order[PokerHand] {
 
     def compare(a: PokerHand, b: PokerHand): Int = {
       val ac = a.category
       val bc = b.category
-      val cmpCat = implicitly[Ordering[PokerHandCategory]].compare(ac, bc)
+      val cmpCat = implicitly[Order[PokerHandCategory]].compare(ac, bc)
       if (cmpCat === 0) ac.compareAlike(a, b) else cmpCat
     }
 

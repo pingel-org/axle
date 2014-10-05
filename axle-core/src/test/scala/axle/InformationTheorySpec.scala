@@ -16,8 +16,6 @@ import spire.implicits._
 
 class InformationTheorySpec extends Specification {
 
-  implicit val orderStrings = Order.from(implicitly[Ordering[String]].compare)
-
   "hard-coded distributions" should {
 
     "work" in {

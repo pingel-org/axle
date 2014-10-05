@@ -8,6 +8,7 @@ import scala.util.Random
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
+import axle.jodaDateTimeOrder 
 import axle.algebra.Plottable.DateTimePlottable
 import axle.algebra.Plottable.DoublePlottable
 import axle.quanta.Information
@@ -28,7 +29,7 @@ import spire.implicits.StringAlgebra
 import spire.implicits._
 import spire.math.Rational
 import spire.math.Real
-import spire.implicits._
+import spire.compat.ordering
 
 class TimeSeriesPlotSpec extends Specification {
 

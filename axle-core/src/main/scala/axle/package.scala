@@ -65,13 +65,21 @@ package object axle {
   val ∃ = thereexists
 
   implicit val orderSymbols: Order[Symbol] = new Order[Symbol] {
-    val stringCompare = implicitly[Ordering[String]]
+    val stringCompare = implicitly[Order[String]]
     def compare(x: Symbol, y: Symbol): Int = stringCompare.compare(x.toString, y.toString)
   }
 
   implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
 
   implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
+
+  // See spire.syntax.Syntax DoubleOrder
+  implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
+
+  implicit val jodaDateTimeOrder: Order[DateTime] = new Order[DateTime] {
+
+    def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
+  }
 
   implicit val jodaDateTimeEq = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)

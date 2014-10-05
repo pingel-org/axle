@@ -5,6 +5,7 @@ import org.specs2.mutable._
 import axle._
 import axle.game.cards._
 import spire.algebra.Eq
+import spire.compat.ordering
 
 class PokerSpec extends Specification {
 

@@ -1,18 +1,26 @@
 package axle.algebra
 
 import spire.math._
+import spire.implicits._
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.algebra.MetricSpace
+import spire.algebra.AdditiveMonoid
 import java.lang.Double.{ isInfinite, isNaN }
 import math.{ pow, abs, log10, floor, ceil }
 
-trait Plottable[T] extends Ordering[T] with Portionable[T] {
+trait Plottable[T] {
 
-  def isPlottable(t: T): Boolean
+  def order: Order[T]
 
   def zero: T
+
+  def portion(left: T, v: T, right: T): Double
+
+  def tics(from: T, to: T): Seq[(T, String)]
+
+  def isPlottable(t: T): Boolean
 }
 
 object Plottable {
@@ -23,20 +31,15 @@ object Plottable {
 
     def isPlottable(t: Double): Boolean = (!t.isInfinite) && (!t.isNaN)
 
-    def zero: Double = 0d
+    def order = implicitly[Order[Double]]
 
-    def compare(d1: Double, d2: Double): Int = (d1 - d2) match {
-      case 0d => 0
-      case r @ _ if r > 0d => 1
-      case _ => -1
-    }
+    def zero: Double = 0d
 
     def portion(left: Double, v: Double, right: Double): Double = (v - left) / (right - left)
 
     def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
 
     def tics(from: Double, to: Double): Seq[(Double, String)] = {
-      import spire.implicits._
       if ((from === to) || from.isNaN || from.isInfinity || to.isNaN || to.isInfinity) {
         List((0d, "0.0"), (1d, "1.0"))
       } else {
@@ -55,13 +58,9 @@ object Plottable {
 
     def isPlottable(t: Long): Boolean = true
 
-    def zero: Long = 0L
+    def order = implicitly[Order[Long]]
 
-    def compare(l1: Long, l2: Long): Int = (l1 - l2) match {
-      case 0L => 0
-      case r @ _ if r > 0L => 1
-      case _ => -1
-    }
+    def zero: Long = 0L
 
     def portion(left: Long, v: Long, right: Long): Double = (v - left).toDouble / (right - left)
 
@@ -83,13 +82,9 @@ object Plottable {
 
     def isPlottable(t: Int): Boolean = true
 
-    def zero: Int = 0
+    def order = implicitly[Order[Int]]
 
-    def compare(i1: Int, i2: Int): Int = (i1 - i2) match {
-      case 0 => 0
-      case r @ _ if r > 0 => 1
-      case _ => -1
-    }
+    def zero = 0
 
     def portion(left: Int, v: Int, right: Int): Double = (v - left).toDouble / (right - left)
 
@@ -112,11 +107,11 @@ object Plottable {
 
     def isPlottable(t: DateTime): Boolean = true
 
+    def order = axle.jodaDateTimeOrder
+
     lazy val now = new DateTime()
 
     def zero: DateTime = now
-
-    def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
 
     def portion(left: DateTime, v: DateTime, right: DateTime): Double = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
 
@@ -161,16 +156,14 @@ object Plottable {
 
   implicit object RationalPlottable extends Plottable[Rational] {
 
-    val order = implicitly[Order[Rational]]
+    def order = implicitly[Order[Rational]]
+
+    def zero: Rational = Rational(0)
 
     def isPlottable(t: Rational): Boolean = {
       val d = t.toDouble
       !isInfinite(d) && !isNaN(d)
     }
-
-    def zero: Rational = Rational.zero
-
-    def compare(d1: Rational, d2: Rational): Int = order.compare(d1, d2)
 
     def portion(left: Rational, v: Rational, right: Rational): Double =
       ((v - left) / (right - left)).toDouble
@@ -209,14 +202,13 @@ object Plottable {
     import spire.algebra._
     import spire.implicits._
 
-    val field = implicitly[Field[N]]
-    val order = implicitly[Order[N]]
+    def order = implicitly[Order[N]]
+
+    def additiveMonoid = implicitly[AdditiveMonoid[N]]
 
     def isPlottable(t: N): Boolean = true
 
-    def zero: N = field.zero
-
-    def compare(d1: N, d2: N): Int = order.compare(d1, d2)
+    def zero: N = additiveMonoid.zero
 
     def portion(left: N, v: N, right: N): Double =
       space.distance(v, right) / space.distance(right, left)

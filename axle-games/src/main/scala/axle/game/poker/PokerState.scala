@@ -4,6 +4,7 @@ import axle._
 import axle.game.cards._
 import axle.game._
 import spire.implicits._
+import spire.compat.ordering
 
 case class PokerState(
   playerFn: PokerState => PokerPlayer,

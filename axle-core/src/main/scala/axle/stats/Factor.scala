@@ -17,6 +17,7 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 import spire.optional.unicode.Σ
+import spire.compat.ordering
 
 trait FactorModule extends MatrixModule {
 
@@ -30,7 +31,7 @@ trait FactorModule extends MatrixModule {
       def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
     }
 
-    implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order: Ordering: ClassTag]: MultiplicativeMonoid[Factor[T, N]] = new MultiplicativeMonoid[Factor[T, N]] {
+    implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] = new MultiplicativeMonoid[Factor[T, N]] {
 
       lazy val field = implicitly[Field[N]]
 
@@ -41,7 +42,7 @@ trait FactorModule extends MatrixModule {
       def one: Factor[T, N] = new Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
-    def apply[T: Eq, N: Field: ConvertableFrom: Order: Ordering: ClassTag](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
+    def apply[T: Eq, N: Field: ConvertableFrom: Order: ClassTag](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
       new Factor(varList, values)
 
     def cases[T: Eq, N: Field](varSeq: Vector[Distribution[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
@@ -54,7 +55,7 @@ trait FactorModule extends MatrixModule {
 
   }
 
-  class Factor[T: Eq, N: Field: Order: Ordering: ClassTag: ConvertableFrom](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]) {
+  class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]) {
 
     val field = implicitly[Field[N]]
 

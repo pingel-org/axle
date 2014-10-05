@@ -1,18 +1,18 @@
 package axle.game.poker
 
 import axle.game.cards._
-import math.Ordering
-import math.Ordering.Implicits._
+import spire.algebra.Order
+import spire.compat.ordering
 
 object PokerHandCategory {
-  
-  implicit object PokerHandCategoryOrdering extends Ordering[PokerHandCategory] {
+
+  implicit object PokerHandCategoryOrder extends Order[PokerHandCategory] {
     def compare(a: PokerHandCategory, b: PokerHandCategory): Int =
       a.asInt.compare(b.asInt)
   }
 
   val categories = Vector(High, Pair, TwoPair, ThreeOfAKind, Straight, Flush, FullHouse, FourOfAKind, StraightFlush, RoyalFlush).sorted
-  
+
 }
 
 sealed trait PokerHandCategory {
@@ -24,7 +24,7 @@ sealed trait PokerHandCategory {
 
   def compareAlike(a: PokerHand, b: PokerHand): Int =
     a.groups.map(_._2).zip(b.groups.map(_._2))
-      .map({ case (ar, br) => implicitly[Ordering[Rank]].compare(ar, br) })
+      .map({ case (ar, br) => implicitly[Order[Rank]].compare(ar, br) })
       .find(_ != 0)
       .getOrElse(0)
 

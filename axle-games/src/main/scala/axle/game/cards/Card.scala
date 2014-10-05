@@ -9,8 +9,8 @@ object Card {
     def eqv(x: Card, y: Card): Boolean = x.rank === y.rank && x.suit === y.suit
   }
 
-  implicit object CardOrdering extends Ordering[Card] {
-    def compare(a: Card, b: Card): Int = implicitly[Ordering[Rank]].compare(a.rank, b.rank)
+  implicit object CardOrder extends Order[Card] {
+    def compare(a: Card, b: Card): Int = implicitly[Order[Rank]].compare(a.rank, b.rank)
   }
 
   def apply(s: String): Card = Card(Rank(s.charAt(0)), Suit(s.charAt(1)))

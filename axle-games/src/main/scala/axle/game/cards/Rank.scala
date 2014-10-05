@@ -1,7 +1,9 @@
 package axle.game.cards
 
-import spire.algebra._
-import spire.implicits._
+import spire.algebra.Eq
+import spire.algebra.Order
+import spire.implicits.IntAlgebra
+import spire.implicits.eqOps
 
 object Rank {
 
@@ -9,7 +11,7 @@ object Rank {
     def eqv(x: Rank, y: Rank): Boolean = x.asInt === y.asInt
   }
   
-  implicit object RankOrdering extends Ordering[Rank] {
+  implicit object RankOrder extends Order[Rank] {
     def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
   }
 

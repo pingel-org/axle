@@ -13,6 +13,9 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
+import spire.implicits._
+import spire.syntax._
+import spire.compat.ordering
 
 class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font) {
 
@@ -23,12 +26,13 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
   val yAxis = minX
 
   val slices = slicesFn(data)
-  
+
   val padding = 0.05 // on each side
   val widthPerSlice = (1d - (2 * padding)) / slices.size
   val whiteSpace = widthPerSlice * (1d - barWidthPercent)
-  
+
   val yPlottable = implicitly[Plottable[Y]]
+  implicit val yOrder = yPlottable.order
 
   val minY = List(xAxis, slices.map(s => (List(s2y(data, s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
   val maxY = List(xAxis, slices.map(s => (List(s2y(data, s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
@@ -51,7 +55,7 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
     black)
 
   val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
-  
+
   val bars = slices.toStream.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice

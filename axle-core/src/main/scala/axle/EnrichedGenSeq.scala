@@ -4,8 +4,10 @@ import scala.collection.GenSeq
 import scala.collection.immutable.TreeMap
 
 import spire.algebra.Ring
+import spire.algebra.Order
 import spire.implicits.MapRng
 import spire.implicits.additiveSemigroupOps
+import spire.compat.ordering
 
 case class EnrichedGenSeq[T](genSeq: GenSeq[T]) {
 
@@ -16,7 +18,7 @@ case class EnrichedGenSeq[T](genSeq: GenSeq[T]) {
       _ + _)
   }
 
-  def orderedTally[N: Ring](implicit o: Ordering[T]): TreeMap[T, N] = {
+  def orderedTally[N: Ring](implicit o: Order[T]): TreeMap[T, N] = {
     new TreeMap[T, N]() ++ tally[N]
   }
 

@@ -6,7 +6,7 @@ import java.awt.Font
 import scala.Stream.continually
 
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Angle.{ ° => ° }
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
@@ -18,8 +18,9 @@ import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import spire.math.Number.apply
-import spire.implicits.DoubleAlgebra 
+import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps
+import spire.compat.ordering
 
 class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font) {
 
@@ -28,7 +29,9 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
   val colorStream = continually(colors.toStream).flatten
 
   val xPlottable = implicitly[Plottable[X]]
+  implicit val xOrder = xPlottable.order
   val yPlottable = implicitly[Plottable[Y]]
+  implicit val yOrder = yPlottable.order
 
   val keyOpt = if (drawKey) {
     Some(new Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))
@@ -47,13 +50,15 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
       if (xs.size === 0)
         None
       else
-        Some(xs map { x2y(d, _) } min (yPlottable))
+        Some(xs map { x2y(d, _) } min)
   }) filter { yPlottable.isPlottable _ }
-  val minY = if (minYCandidates.size > 0) minYCandidates.min(yPlottable) else yPlottable.zero
+
+  val minY = if (minYCandidates.size > 0) minYCandidates.min else yPlottable.zero
 
   val maxXCandidates = yAxis.toList ++ (data flatMap {
     case (label, d: D) => orderedXs(d).lastOption
   })
+
   val maxX = if (minXCandidates.size > 0) maxXCandidates.max else xPlottable.zero
 
   val maxYCandidates = xAxis.toList ++ (data flatMap {
@@ -62,10 +67,11 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
       if (xs.size === 0)
         None
       else
-        Some(xs map { x2y(d, _) } max (yPlottable))
+        Some(xs map { x2y(d, _) } max)
     }
   }) filter { yPlottable.isPlottable _ }
-  val maxY = if (minYCandidates.size > 0) maxYCandidates.max(yPlottable) else yPlottable.zero
+
+  val maxY = if (minYCandidates.size > 0) maxYCandidates.max else yPlottable.zero
 
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
