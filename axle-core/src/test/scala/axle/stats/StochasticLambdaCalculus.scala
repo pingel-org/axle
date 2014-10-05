@@ -6,6 +6,7 @@ import axle.game.Dice.die
 import axle.Σ
 import spire.implicits.IntAlgebra
 import spire.math.Rational
+import spire.syntax.literals._
 
 object StochasticLambdaCalculus extends Specification {
 
@@ -53,6 +54,12 @@ object StochasticLambdaCalculus extends Specification {
         r <- reveal(p, c)
         c2 <- switch(probabilityOfSwitching, c, r)
       } yield c2 == p
+
+      // val pos = uniformRealDistribution(Range(r"0", r"1"))
+      // pos.probabilityOf(Range(r"3/10", r"4/10")) // should be r"1/10"
+      // pos.range
+      // val chanceOfWinning = pos map { outcome }
+      // cow should also now have a value at pos.min and pos.max
 
       val chanceOfWinning = (probabilityOfSwitching: Rational) => outcome(probabilityOfSwitching).probabilityOf(true)
 
