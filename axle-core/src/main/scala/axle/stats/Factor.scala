@@ -16,6 +16,7 @@ import spire.implicits.eqOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
+import spire.optional.unicode.Σ
 
 trait FactorModule extends MatrixModule {
 
@@ -70,7 +71,7 @@ trait FactorModule extends MatrixModule {
     // each compatible with this table
 
     def evaluate(prior: Seq[CaseIs[T, N]], condition: Seq[CaseIs[T, N]]): N = {
-      val pw = axle.Σ(cases.map(c => {
+      val pw = spire.optional.unicode.Σ(cases.map(c => {
         if (isSupersetOf(c, prior)) {
           if (isSupersetOf(c, condition)) {
             (this(c), this(c))
@@ -80,7 +81,7 @@ trait FactorModule extends MatrixModule {
         } else {
           (field.zero, field.zero)
         }
-      }).toVector)(identity)
+      }).toVector)
 
       pw._1 / pw._2
     }
@@ -130,14 +131,14 @@ trait FactorModule extends MatrixModule {
         Factor.cases[T, N](remainingVars).toVector
           .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
           .groupBy(_._1)
-          .map({ case (k, v) => (k.toVector, axle.Σ(v.map(_._2))(identity)) })
+          .map({ case (k, v) => (k.toVector, spire.optional.unicode.Σ(v.map(_._2))) })
           .toMap)
 
     def tally(a: Distribution[T, N], b: Distribution[T, N]): Matrix[Double] =
       matrix[Double](
         a.values.size,
         b.values.size,
-        (r: Int, c: Int) => axle.Σ(cases.filter(isSupersetOf(_, Vector(a is a.values(r), b is b.values(c)))).map(this(_)).toVector)(identity).toDouble)
+        (r: Int, c: Int) => spire.optional.unicode.Σ(cases.filter(isSupersetOf(_, Vector(a is a.values(r), b is b.values(c)))).map(this(_)).toVector).toDouble)
 
     def Σ(varToSumOut: Distribution[T, N]): Factor[T, N] = this.sumOut(varToSumOut)
 
@@ -152,7 +153,7 @@ trait FactorModule extends MatrixModule {
             val ciGone = List(CaseIs(gone.asInstanceOf[Distribution[T, N]], gv)) // TODO cast
             this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
           })
-          (kase, axle.Σ(reals)(identity))
+          (kase, spire.optional.unicode.Σ(reals))
         }).toMap)
     }
 

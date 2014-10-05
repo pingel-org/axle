@@ -2,7 +2,7 @@ package axle.stats
 
 import scala.util.Random
 
-import axle.Σ
+import spire.optional.unicode.Σ
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -20,7 +20,7 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], val name: String 
 
   val ring = implicitly[Ring[N]]
   val addition = implicitly[AdditiveMonoid[N]]
-  
+
   def values: IndexedSeq[A] = tally.keys.toVector
 
   def map[B](f: A => B): TallyDistribution0[B, N] =
@@ -46,14 +46,14 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], val name: String 
   def is(v: A): CaseIs[A, N] = CaseIs(this, v)
 
   def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
-  
-  val totalCount: N = Σ(tally.values)(identity)
-  
+
+  val totalCount: N = Σ(tally.values)
+
   val bars: Map[A, N] =
     tally.scanLeft((null.asInstanceOf[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2)))
 
   val order = implicitly[Order[N]]
-    
+
   def observe(): A = {
     val r: N = totalCount * Random.nextDouble()
     bars.find({ case (_, v) => order.gt(v, r) }).getOrElse(throw new Exception("malformed distribution"))._1
@@ -63,18 +63,18 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], val name: String 
 
   def show(implicit order: Order[A]): String =
     s"$name\n" +
-    values.sorted.map(a => {
-      val aString = a.toString
-      (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + probabilityOf(a).toString)
-    }).mkString("\n")
-    
+      values.sorted.map(a => {
+        val aString = a.toString
+        (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + probabilityOf(a).toString)
+      }).mkString("\n")
+
 }
 
 class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N], _name: String = "unnamed")
   extends Distribution1[A, G, N] {
 
   def name: String = _name
-  
+
   lazy val _values: IndexedSeq[A] =
     tally.keys.map(_._1).toSet.toVector
 
@@ -85,18 +85,18 @@ class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N], _name
   def is(v: A): CaseIs[A, N] = CaseIs(this, v)
 
   def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
-  
-  val totalCount = Σ(tally.values)(identity)
+
+  val totalCount = Σ(tally.values)
 
   def observe(): A = ???
 
   def observe(gv: G): A = ???
 
-  def probabilityOf(a: A): N = Σ(gvs.map(gv => tally((a, gv))))(identity) / totalCount
+  def probabilityOf(a: A): N = Σ(gvs.map(gv => tally((a, gv)))) / totalCount
 
   def probabilityOf(a: A, given: Case[G, N]): N = given match {
-    case CaseIs(argGrv, gv) => tally((a, gv)) / Σ(tally.filter(_._1._2 === gv).map(_._2))(identity)
-    case CaseIsnt(argGrv, gv) => 1 - (tally((a, gv)) / Σ(tally.filter(_._1._2 === gv).map(_._2))(identity))
+    case CaseIs(argGrv, gv) => tally((a, gv)) / Σ(tally.filter(_._1._2 === gv).map(_._2))
+    case CaseIsnt(argGrv, gv) => 1 - (tally((a, gv)) / Σ(tally.filter(_._1._2 === gv).map(_._2)))
     case _ => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
   }
 

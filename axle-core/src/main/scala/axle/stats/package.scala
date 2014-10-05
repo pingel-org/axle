@@ -32,6 +32,7 @@ import spire.math.Number
 import spire.math.Rational
 import spire.math.Real
 import spire.random.Dist
+import spire.optional.unicode.Σ
 
 package object stats {
 
@@ -75,7 +76,7 @@ package object stats {
 
   def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)
 
-  def mean[N: Field: Manifest](xs: GenTraversable[N]): N = Σ(xs)(identity) / xs.size
+  def mean[N: Field: Manifest](xs: Iterable[N]): N = Σ(xs) / xs.size
 
   def square[N: Ring](x: N): N = x ** 2
 
@@ -83,32 +84,32 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def stddev[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = {
+  def stddev[N: NRoot: Field: Manifest: AdditiveMonoid](xs: Iterable[N]): N = {
     val μ = mean(xs)
-    (Σ(xs)(x => square(x - μ)) / xs.size).sqrt
+    (Σ(xs map { x => square(x - μ) }) / xs.size).sqrt
   }
 
   // A: NRoot: Field: Manifest: AdditiveMonoid
   // TODO Distribution should have type [A, N]
   def standardDeviation[N: NRoot: Field: Manifest: AdditiveMonoid](distribution: Distribution[N, N]): N = {
     val xs = distribution.values
-    val μ = Σ(xs)(x => distribution.probabilityOf(x) * x)
-    (Σ(xs)(x => distribution.probabilityOf(x) * square(x - μ))).sqrt
+    val μ = Σ(xs map { x => distribution.probabilityOf(x) * x })
+    Σ(xs map { x => distribution.probabilityOf(x) * square(x - μ) }).sqrt
   }
 
-  def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: GenTraversable[N]): N = stddev(xs)
+  def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: Iterable[N]): N = stddev(xs)
 
   def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Real] = {
     import Information._
     val convertN = implicitly[ConvertableFrom[N]]
-    val H = Σ(X.values) { x =>
+    val H = Σ(X.values map { x =>
       val px: N = P(X is x).apply()
       if (implicitly[Order[N]].gt(px, implicitly[Field[N]].zero)) {
         convertN.toReal(-px) * log2(px)
       } else {
         implicitly[Field[Real]].zero
       }
-    }
+    })
     UnittedQuantity(H, bit[Real])
   }
 

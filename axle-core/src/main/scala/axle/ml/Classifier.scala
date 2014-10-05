@@ -1,5 +1,6 @@
 package axle.ml
 
+import spire.optional.unicode.Σ
 import spire.math._
 import spire.implicits._
 import spire.algebra._
@@ -33,7 +34,7 @@ abstract class Classifier[DATA, CLASS: Order: Eq] extends Function1[DATA, CLASS]
       case (false, false) => (0, 0, 1, 0) // false negative
       case (true, false) => (0, 0, 0, 1) // true negative
     }
-  }))(identity)
+  }))
 
   def performance(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): ClassifierPerformance[Rational] = {
 

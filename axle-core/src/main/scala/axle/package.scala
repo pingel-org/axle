@@ -43,11 +43,12 @@ import axle.EnrichedMutableBuffer
 import axle.forall
 import axle.thereexists
 import spire.optional.unicode.Π
-import axle.Σ
+import spire.optional.unicode.Σ
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.algebra.Order
+import spire.algebra.AdditiveMonoid
 import spire.algebra.MultiplicativeMonoid
 import spire.compat.ordering
 import spire.implicits.IntAlgebra
@@ -58,7 +59,7 @@ import spire.implicits.semiringOps
 
 package object axle {
 
-  val Sigma = Σ
+  def Sigma[N: AdditiveMonoid] = Σ[N] _
   def Pi[N: MultiplicativeMonoid] = Π[N] _
   val ∀ = forall
   val ∃ = thereexists
@@ -69,9 +70,9 @@ package object axle {
   }
 
   implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
-  
-  implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))  
-  
+
+  implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
+
   implicit val jodaDateTimeEq = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }
