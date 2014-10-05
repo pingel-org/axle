@@ -135,6 +135,8 @@ import axle._
       "joda-time" % "joda-time" % "2.3",
       "org.joda" % "joda-convert" % "1.6",
       "org.jblas" % "jblas" % "1.2.3",
+      "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly(),
+      "com.googlecode.matrix-toolkits-java" % "mtj" % "1.0.1",
       "org.spire-math" %% "spire" % "0.8.2",
       "com.chuusai" %% "shapeless" % "2.0.0"
     )
