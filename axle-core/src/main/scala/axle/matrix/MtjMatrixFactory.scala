@@ -1,19 +1,19 @@
 package axle.matrix
 
+import scala.annotation.elidable
+import scala.annotation.elidable.ASSERTION
 import scala.math.sqrt
-
-//import com.github.fommil.netlib
-//import no.uib.cipr.matrix
-
-import no.uib.cipr.matrix.DenseMatrix
-import no.uib.cipr.matrix.{ Matrix => MtjMatrix }
+import scala.util.Random.nextDouble
+import scala.util.Random.nextGaussian
 
 import axle.algebra.FunctionPair
+import no.uib.cipr.matrix.DenseMatrix
+import no.uib.cipr.matrix.{Matrix => MtjMatrix}
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
 trait MtjMatrixModule extends MatrixModule {
-
+  
   type C[T] = FunctionPair[Double, T]
 
   implicit val convertDouble: FunctionPair[Double, Double] = new FunctionPair[Double, Double] {
@@ -86,8 +86,8 @@ trait MtjMatrixModule extends MatrixModule {
 
     def transpose: Matrix[T] = matrix(mtj.copy.transpose)
 
-    def diag: Matrix[T] = ??? //matrix(mtj.diag)
-
+    def diag: Matrix[T] = ???
+    
     def invert: Matrix[T] = ??? //matrix(org.mtj.Solve.solve(mtj, DenseMatrix.eye(mtj.rows)))
 
     def ceil: Matrix[Int] = ??? //matrix(org.mtj.MatrixFunctions.ceil(mtj))(convertInt)
@@ -104,9 +104,9 @@ trait MtjMatrixModule extends MatrixModule {
     def addScalar(x: T): Matrix[T] = ??? //matrix(mtj.add(converter.unapply(x)))
 
     def addAssignment(r: Int, c: Int, v: T): Matrix[T] = {
-      val newmtj = mtj.copy()
-      newmtj.set(r, c, converter.unapply(v))
-      matrix(newmtj)(converter)
+      val result = mtj.copy
+      result.set(r, c, converter.unapply(v))
+      matrix(result)(converter)
     }
 
     def subtractScalar(x: T): Matrix[T] = ??? //matrix(mtj.sub(converter.unapply(x)))
@@ -117,8 +117,20 @@ trait MtjMatrixModule extends MatrixModule {
 
     def pow(p: Double): Matrix[T] = ??? //matrix(org.mtj.MatrixFunctions.pow(mtj, p))
 
-    def addMatrix(other: Matrix[T]): Matrix[T] = ??? //matrix(mtj.add(other.mtj))
-    def subtractMatrix(other: Matrix[T]): Matrix[T] = ??? //matrix(mtj.sub(other.mtj))
+    def addMatrix(other: Matrix[T]): Matrix[T] = {
+      val result = mtj.copy
+      result.add(other.mtj)
+      matrix(result)(converter)
+    }
+
+    def subtractMatrix(other: Matrix[T]): Matrix[T] = {
+      val result = mtj.copy
+      val otherCopy = other.mtj.copy
+      otherCopy.scale(-1d)
+      result.add(otherCopy)
+      matrix(result)(converter)
+    }
+
     def multiplyMatrix(other: Matrix[T]): Matrix[T] = ??? //matrix(mtj.mmul(other.mtj))
 
     def mulPointwise(other: Matrix[T]): Matrix[T] = ??? //matrix(mtj.mul(other.mtj))
@@ -149,20 +161,64 @@ trait MtjMatrixModule extends MatrixModule {
 
     def not: Matrix[Boolean] = ??? //matrix(mtj.not)(convertBoolean)
 
-    def max: T = ??? //converter(mtj.max)
-
-    def argmax: (Int, Int) = {
-      //      val i = mtj.argmax
-      //      (i % columns, i / columns)
-      ???
+    def max: T = {
+      var result = Double.MinValue
+      (0 to rows) foreach { r =>
+        (0 to columns) foreach { c =>
+          val v = mtj.get(r, c)
+          if (v > result) {
+            result = v
+          }
+        }
+      }
+      converter(result)
     }
 
-    def min: T = ??? //converter(mtj.min)
+    /**
+     * argmin: location (r, c) of the lowest value
+     *
+     */
+    def argmax: (Int, Int) = {
+      var (result, resultR, resultC) = (Double.MinValue, -1, -1)
+      (0 to rows) foreach { r =>
+        (0 to columns) foreach { c =>
+          val v = mtj.get(r, c)
+          if (v > result) {
+            result = v
+            resultR = r
+            resultC = c
+          }
+        }
+      }
+      (resultR, resultC)
+    }
+
+    def min: T = {
+      var result = Double.MaxValue
+      (0 to rows) foreach { r =>
+        (0 to columns) foreach { c =>
+          val v = mtj.get(r, c)
+          if (v < result) {
+            result = v
+          }
+        }
+      }
+      converter(result)
+    }
 
     def argmin: (Int, Int) = {
-      //      val i = mtj.argmin
-      //      (i % columns, i / columns)
-      ???
+      var (result, resultR, resultC) = (Double.MaxValue, -1, -1)
+      (0 to rows) foreach { r =>
+        (0 to columns) foreach { c =>
+          val v = mtj.get(r, c)
+          if (v < result) {
+            result = v
+            resultR = r
+            resultC = c
+          }
+        }
+      }
+      (resultR, resultC)
     }
 
     def rowSums: Matrix[T] = ??? //matrix(mtj.rowSums)
@@ -249,7 +305,7 @@ trait MtjMatrixModule extends MatrixModule {
   }
 
   def diag[T: C](row: Matrix[T]): Matrix[T] = {
-    //    assert(row.isRowVector)
+    assert(row.isRowVector)
     //    matrix(DenseMatrix.diag(row.mtj))
     ???
   }
@@ -260,13 +316,37 @@ trait MtjMatrixModule extends MatrixModule {
     matrix(mtj)
   }
 
-  def ones[T: C](m: Int, n: Int): Matrix[T] = ??? //matrix(DenseMatrix.ones(m, n))
-  def eye[T: C](n: Int): Matrix[T] = ??? //matrix(DenseMatrix.eye(n))
+  def ones[T: C](m: Int, n: Int): Matrix[T] = {
+    val convert = implicitly[C[T]]
+    matrix(m, n, (r, c) => convert(1d))
+  }
+
+  def eye[T: C](n: Int): Matrix[T] = {
+    val convert = implicitly[C[T]]
+    val one = convert(1d)
+    val zero = convert(0d)
+    matrix(n, n, (r, c) => if (r == c) one else zero)
+  }
+
   def I[T: C](n: Int): Matrix[T] = eye(n)
-  def rand[T: C](m: Int, n: Int): Matrix[T] = ??? //matrix(DenseMatrix.rand(m, n)) // evenly distributed from 0.0 to 1.0
-  def randn[T: C](m: Int, n: Int): Matrix[T] = ??? //matrix(DenseMatrix.randn(m, n)) // normal distribution
-  def falses(m: Int, n: Int): Matrix[Boolean] = ??? //matrix(DenseMatrix.zeros(m, n))
-  def trues(m: Int, n: Int): Matrix[Boolean] = ??? //matrix(DenseMatrix.ones(m, n))
+
+  // evenly distributed from 0.0 to 1.0
+  def rand[T: C](m: Int, n: Int): Matrix[T] = {
+    import scala.util.Random.nextDouble
+    val convert = implicitly[C[T]]
+    matrix(m, n, (r, c) => convert(nextDouble))
+  }
+
+  // normal distribution
+  def randn[T: C](m: Int, n: Int): Matrix[T] = {
+    import scala.util.Random.nextGaussian
+    val convert = implicitly[C[T]]
+    matrix(m, n, (r, c) => convert(nextGaussian))
+  }
+
+  def falses(m: Int, n: Int): Matrix[Boolean] = matrix(m, n, (r, c) => false)
+
+  def trues(m: Int, n: Int): Matrix[Boolean] = matrix(m, n, (r, c) => true)
 
   // TODO: Int mtj' rand and randn should probably floor the result
 

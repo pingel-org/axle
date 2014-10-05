@@ -64,6 +64,7 @@ trait MatrixModule {
     def mulColumn(i: Int, x: T): Matrix[T]
 
     // Operations on pairs of matrices
+    // TODO: add and subtract don't make sense for T = Boolean
 
     def addMatrix(other: Matrix[T]): Matrix[T]
     def subtractMatrix(other: Matrix[T]): Matrix[T]
