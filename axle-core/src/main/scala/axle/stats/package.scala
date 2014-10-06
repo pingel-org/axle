@@ -28,6 +28,7 @@ import spire.implicits.orderOps
 import spire.implicits.semiringOps
 import spire.implicits._
 import spire.math.ConvertableFrom
+import spire.math.ConvertableTo
 import spire.math.Number
 import spire.math.Rational
 import spire.math.Real
@@ -54,8 +55,12 @@ package object stats {
   def binaryDecision(yes: Rational): Distribution0[Boolean, Rational] =
     new ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), s"binaryDecision $yes")
 
-  def uniformDistribution[T](values: Seq[T], name: String): Distribution0[T, Rational] =
-    new ConditionalProbabilityTable0(values.map(v => (v, Rational(1, values.size))).toMap, name)
+  def uniformDistribution[T](values: Seq[T], name: String): Distribution0[T, Rational] = {
+
+    val dist = values.groupBy(identity).mapValues({ ks => Rational(ks.size, values.size) }).toMap
+
+    new ConditionalProbabilityTable0(dist, name)
+  }
 
   def iffy[C: Eq, N: Field: Order: Dist](
     decision: Distribution0[Boolean, N],
@@ -84,20 +89,20 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def stddev[N: NRoot: Field: Manifest: AdditiveMonoid](xs: Iterable[N]): N = {
-    val μ = mean(xs)
-    (Σ(xs map { x => square(x - μ) }) / xs.size).sqrt
+  def standardDeviation[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A = {
+
+    def n2a(n: N): A = implicitly[ConvertableFrom[N]].toType[A](n)(implicitly[ConvertableTo[A]])
+
+    val μ: A = Σ(distribution.values map { x => n2a(distribution.probabilityOf(x)) * x })
+
+    Σ(distribution.values map { x => n2a(distribution.probabilityOf(x)) * square(x - μ) }).sqrt
   }
 
-  // A: NRoot: Field: Manifest: AdditiveMonoid
-  // TODO Distribution should have type [A, N]
-  def standardDeviation[N: NRoot: Field: Manifest: AdditiveMonoid](distribution: Distribution[N, N]): N = {
-    val xs = distribution.values
-    val μ = Σ(xs map { x => distribution.probabilityOf(x) * x })
-    Σ(xs map { x => distribution.probabilityOf(x) * square(x - μ) }).sqrt
-  }
+  def σ[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
+    standardDeviation(distribution)
 
-  def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: Iterable[N]): N = stddev(xs)
+  def stddev[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
+    standardDeviation(distribution)
 
   def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Double] = {
     import Information._
