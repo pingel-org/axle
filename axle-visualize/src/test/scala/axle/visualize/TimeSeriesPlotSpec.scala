@@ -8,7 +8,7 @@ import scala.util.Random
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
-import axle.jodaDateTimeOrder 
+import axle.jodaDateTimeOrder
 import axle.algebra.Plottable.DateTimePlottable
 import axle.algebra.Plottable.DoublePlottable
 import axle.quanta.Information
@@ -37,24 +37,24 @@ class TimeSeriesPlotSpec extends Specification {
     "work" in {
 
       import axle.quanta.Information._
-      
+
       val plottable = UnitPlottable[Information, Double](bit[Double])
 
       val tics = plottable.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
 
       val expected = Vector(
         (0.0 *: bit[Double], "0.0"),
-//        (0.1 *: bit[Double], "0.1"),
-//        (0.2 *: bit[Double], "0.2"),
-//        (0.3 *: bit[Double], "0.3"),
-//        (0.4 *: bit[Double], "0.4"),
-//        (0.5 *: bit[Double], "0.5"),
-//        (0.6 *: bit[Double], "0.6"),
-//        (0.7 *: bit[Double], "0.7"),
-//        (0.8 *: bit[Double], "0.8"),
-//        (0.9 *: bit[Double], "0.9"),
+        //        (0.1 *: bit[Double], "0.1"),
+        //        (0.2 *: bit[Double], "0.2"),
+        //        (0.3 *: bit[Double], "0.3"),
+        //        (0.4 *: bit[Double], "0.4"),
+        //        (0.5 *: bit[Double], "0.5"),
+        //        (0.6 *: bit[Double], "0.6"),
+        //        (0.7 *: bit[Double], "0.7"),
+        //        (0.8 *: bit[Double], "0.8"),
+        //        (0.9 *: bit[Double], "0.9"),
         (1.0 *: bit[Double], "1.0"))
-        
+
       val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information, Double], String)]]]
 
       // tics must be equalTo expected
@@ -90,21 +90,21 @@ class TimeSeriesPlotSpec extends Specification {
   }
 
   def t2(): Unit = {
-    
-    implicit val plottable = UnitPlottable[Information, Real](bit[Real])
 
-    type D = TreeMap[Real, UnittedQuantity[Information, Real]]
-    val hm: D = new TreeMap[Real, UnittedQuantity[Information, Real]]() ++ (0 to 100).map(i => (Real(i / 100d), H(coin(Rational(i, 100))))).toMap
+    implicit val plottable = UnitPlottable[Information, Double](bit[Double])
 
-    val plot = new Plot[Real, UnittedQuantity[Information, Real], D](
+    type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
+    val hm: D = new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
+
+    val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
       List(("h", hm)),
-      (d: TreeMap[Real, UnittedQuantity[Information, Real]]) => d.keys,
-      (d: TreeMap[Real, UnittedQuantity[Information, Real]], x: Real) => d(x),
+      (d: TreeMap[Rational, UnittedQuantity[Information, Double]]) => d.keys,
+      (d: TreeMap[Rational, UnittedQuantity[Information, Double]], x: Rational) => d(x),
       connect = true,
       drawKey = false,
-      xAxis = Some(Real(0) *: bit[Real]),
+      xAxis = Some(0d *: bit[Double]),
       xAxisLabel = Some("p(x='HEAD)"),
-      yAxis = Some(Real(0)),
+      yAxis = Some(Rational(0)),
       yAxisLabel = Some("H"),
       title = Some("Entropy"))
 
