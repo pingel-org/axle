@@ -1,6 +1,9 @@
 package axle
 
 import org.specs2.mutable._
+import spire.implicits._
+import spire.math._
+import spire.algebra._
 
 class EnrichmentsSpec extends Specification {
 
@@ -14,9 +17,9 @@ class EnrichmentsSpec extends Specification {
     }
   }
 
-  "∀ in EnrichedGenTraversable" should {
+  "forall in axle._" should {
     "work" in {
-      ∀(Set(2, 4, 6)) { _ % 2 == 0 } must be equalTo true
+      forall(List(2, 4, 6))(_ % 2 == 0) must be
     }
   }
 

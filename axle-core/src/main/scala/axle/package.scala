@@ -32,7 +32,6 @@ import scala.collection.mutable.Buffer
 import org.joda.time.DateTime
 
 import axle.EnrichedArray
-import axle.EnrichedBoolean
 import axle.EnrichedByteArray
 import axle.EnrichedGenSeq
 import axle.EnrichedGenTraversable
@@ -43,6 +42,7 @@ import axle.forall
 import axle.thereexists
 import spire.optional.unicode.Π
 import spire.optional.unicode.Σ
+import spire.algebra.BooleanAlgebra
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
@@ -57,20 +57,20 @@ import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 
 /**
- * 
+ *
  * See spire.optional.unicode.SymbolicSetOps for ∩ ∪ etc
- * 
+ *
  */
 
 package object axle {
 
   def Sigma[N: AdditiveMonoid] = Σ[N] _
-  
+
   def Pi[N: MultiplicativeMonoid] = Π[N] _
-  
-  val ∀ = forall
-  
-  val ∃ = thereexists
+
+  def ∀[T, A: BooleanAlgebra] = forall[T, A] _
+
+  def ∃[T, A: BooleanAlgebra] = thereexists[T, A] _
 
   implicit val orderSymbols: Order[Symbol] = new Order[Symbol] {
     val stringCompare = implicitly[Order[String]]
@@ -104,8 +104,6 @@ package object axle {
   implicit def enrichMutableBuffer[T](buffer: Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
 
   implicit def enrichArray[T: Manifest](arr: Array[T]): EnrichedArray[T] = EnrichedArray(arr)
-
-  implicit def enrichBoolean(b: Boolean): EnrichedBoolean = EnrichedBoolean(b)
 
   implicit def enrichInt(n: Int): EnrichedInt = EnrichedInt(n)
 

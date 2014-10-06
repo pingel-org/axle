@@ -1,8 +1,10 @@
 package axle
 
-import scala.collection.GenTraversable
+import spire.algebra.BooleanAlgebra
 
 object thereexists {
 
-  def apply[T](gt: GenTraversable[T])(predicate: T => Boolean): Boolean = gt.exists(predicate)
+  def apply[T, A](as: Iterable[T])(predicate: T => A)(implicit ev: BooleanAlgebra[A]): A =
+    as.map(predicate).reduce(ev.or) // TODO short-circuit
+
 }
