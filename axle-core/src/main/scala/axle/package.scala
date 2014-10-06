@@ -35,7 +35,6 @@ import axle.EnrichedArray
 import axle.EnrichedBoolean
 import axle.EnrichedByteArray
 import axle.EnrichedGenSeq
-import axle.EnrichedGenSet
 import axle.EnrichedGenTraversable
 import axle.EnrichedIndexedSeq
 import axle.EnrichedInt
@@ -57,11 +56,20 @@ import spire.implicits.eqOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 
+/**
+ * 
+ * See spire.optional.unicode.SymbolicSetOps for ∩ ∪ etc
+ * 
+ */
+
 package object axle {
 
   def Sigma[N: AdditiveMonoid] = Σ[N] _
+  
   def Pi[N: MultiplicativeMonoid] = Π[N] _
+  
   val ∀ = forall
+  
   val ∃ = thereexists
 
   implicit val orderSymbols: Order[Symbol] = new Order[Symbol] {
@@ -84,8 +92,6 @@ package object axle {
   implicit val jodaDateTimeEq = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }
-
-  implicit def enrichGenSet[T](s: collection.GenSet[T]): EnrichedGenSet[T] = EnrichedGenSet(s)
 
   implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
 
