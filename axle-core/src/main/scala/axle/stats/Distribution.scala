@@ -4,6 +4,7 @@ import spire.algebra.Eq
 import spire.algebra.Order
 
 object Distribution {
+  
   implicit def rvEq[A: Eq, N]: Eq[Distribution[A, N]] = new Eq[Distribution[A, N]] {
     def eqv(x: Distribution[A, N], y: Distribution[A, N]): Boolean = x equals y // TODO
   }

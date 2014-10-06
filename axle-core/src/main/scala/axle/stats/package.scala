@@ -99,26 +99,21 @@ package object stats {
 
   def σ[N: NRoot: Field: Manifest: AdditiveMonoid](xs: Iterable[N]): N = stddev(xs)
 
-  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Real] = {
+  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Double] = {
     import Information._
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values map { x =>
       val px: N = P(X is x).apply()
       if (implicitly[Order[N]].gt(px, implicitly[Field[N]].zero)) {
-        convertN.toReal(-px) * log2(px)
+        convertN.toDouble(-px) * log2(px)
       } else {
-        implicitly[Field[Real]].zero
+        0d
       }
     })
-    UnittedQuantity(H, bit[Real])
+    UnittedQuantity(H, bit[Double])
   }
 
-  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Real] = entropy(X)
-
-  def huffmanCode[A, S](alphabet: Set[S]): Map[A, Seq[S]] = {
-    // TODO
-    // http://en.wikipedia.org/wiki/Huffman_coding
-    Map()
-  }
+  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Double] =
+    entropy(X)
 
 }
