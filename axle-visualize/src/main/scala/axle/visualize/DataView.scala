@@ -27,7 +27,7 @@ object DataView {
       def valueOf(d: Map[X, Y], x: X): Y = d.apply(x)
 
       def yRange(d: Map[X, Y], plottable: Plottable[Y]): (Y, Y) = {
-        implicit val order = plottable.order
+        implicit val order = plottable
 
         val yMin = (keys(d).map { x => valueOf(d, x) } ++ List(plottable.zero)).filter(plottable.isPlottable).min
         val yMax = (keys(d).map { x => valueOf(d, x) } ++ List(plottable.zero)).filter(plottable.isPlottable).max

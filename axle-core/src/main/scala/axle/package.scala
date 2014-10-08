@@ -84,12 +84,12 @@ package object axle {
   // See spire.syntax.Syntax DoubleOrder
   implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
 
-  implicit val jodaDateTimeOrder: Order[DateTime] = new Order[DateTime] {
+  trait JodaDateTimeOrder extends Order[DateTime] {
 
     def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
   }
 
-  implicit val jodaDateTimeEq = new Eq[DateTime] {
+  trait JodaDateTimeEq extends Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }
 

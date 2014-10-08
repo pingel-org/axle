@@ -21,7 +21,7 @@ trait GroupedDataView[G, S, Y, D] {
 
   def yRange(d: D, plottable: Plottable[Y]): (Y, Y) = {
 
-    implicit val order = plottable.order
+    implicit val order = plottable
 
     val minY = slices(d).map { s =>
       (groups(d).map { g => valueOf(d, (g, s)) } ++ List(plottable.zero))

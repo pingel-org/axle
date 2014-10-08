@@ -29,9 +29,7 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
   val colorStream = continually(colors.toStream).flatten
 
   val xPlottable = implicitly[Plottable[X]]
-  implicit val xOrder = xPlottable.order
   val yPlottable = implicitly[Plottable[Y]]
-  implicit val yOrder = yPlottable.order
 
   val keyOpt = if (drawKey) {
     Some(new Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))

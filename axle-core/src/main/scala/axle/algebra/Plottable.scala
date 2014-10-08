@@ -6,13 +6,12 @@ import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.algebra.MetricSpace
+import spire.algebra.Monoid
 import spire.algebra.AdditiveMonoid
 import java.lang.Double.{ isInfinite, isNaN }
 import math.{ pow, abs, log10, floor, ceil }
 
-trait Plottable[T] {
-
-  def order: Order[T]
+trait Plottable[T] extends Order[T] {
 
   def zero: T
 
@@ -27,17 +26,13 @@ object Plottable {
 
   import org.joda.time.DateTime
 
-  implicit object DoublePlottable extends Plottable[Double] {
+  implicit object DoublePlottable extends spire.std.DoubleAlgebra with Plottable[Double] {
 
     def isPlottable(t: Double): Boolean = (!t.isInfinite) && (!t.isNaN)
 
-    def order = implicitly[Order[Double]]
-
-    def zero: Double = 0d
-
     def portion(left: Double, v: Double, right: Double): Double = (v - left) / (right - left)
 
-    def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
+    def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))).toInt - 1)
 
     def tics(from: Double, to: Double): Seq[(Double, String)] = {
       if ((from === to) || from.isNaN || from.isInfinity || to.isNaN || to.isInfinity) {
@@ -54,17 +49,18 @@ object Plottable {
     }
   }
 
-  implicit object LongPlottable extends Plottable[Long] {
+  val asdf = implicitly[Order[Long]]
+
+  implicit object LongPlottable extends spire.std.LongAlgebra with Plottable[Long] {
 
     def isPlottable(t: Long): Boolean = true
 
-    def order = implicitly[Order[Long]]
-
-    def zero: Long = 0L
-
     def portion(left: Long, v: Long, right: Long): Double = (v - left).toDouble / (right - left)
 
-    def step(from: Long, to: Long): Long = max(1, pow(10, ceil(log10(abs(to - from))) - 1).toLong)
+    def step(from: Long, to: Long): Long = {
+      val n = (scala.math.ceil(scala.math.log10(abs(to - from))) - 1).toInt
+      max(1, pow(10, n).toLong)
+    }
 
     def tics(from: Long, to: Long): Seq[(Long, String)] = {
       val s = step(from, to)
@@ -78,17 +74,16 @@ object Plottable {
 
   }
 
-  implicit object IntPlottable extends Plottable[Int] {
+  implicit object IntPlottable extends spire.std.IntAlgebra with Plottable[Int] {
 
     def isPlottable(t: Int): Boolean = true
 
-    def order = implicitly[Order[Int]]
-
-    def zero = 0
-
     def portion(left: Int, v: Int, right: Int): Double = (v - left).toDouble / (right - left)
 
-    def step(from: Int, to: Int): Int = max(1, pow(10, ceil(log10(abs(to - from))) - 1).toInt)
+    def step(from: Int, to: Int): Int = {
+      val n = (scala.math.ceil(scala.math.log10(abs(to - from))) - 1).toInt
+      max(1, pow(10, n).toInt)
+    }
 
     def tics(from: Int, to: Int): Seq[(Int, String)] = {
       val s = step(from, to)
@@ -101,13 +96,11 @@ object Plottable {
     }
   }
 
-  implicit object DateTimePlottable extends Plottable[DateTime] {
+  implicit object DateTimePlottable extends axle.JodaDateTimeOrder with Plottable[DateTime] {
 
     import org.joda.time._
 
     def isPlottable(t: DateTime): Boolean = true
-
-    def order = axle.jodaDateTimeOrder
 
     lazy val now = new DateTime()
 
@@ -156,10 +149,12 @@ object Plottable {
 
   implicit object RationalPlottable extends Plottable[Rational] {
 
-    def order = implicitly[Order[Rational]]
+    val ratOrd = implicitly[Order[Rational]]
 
     def zero: Rational = Rational(0)
-
+    
+    def compare(x: Rational, y: Rational): Int = ratOrd.compare(x, y) 
+    
     def isPlottable(t: Rational): Boolean = {
       val d = t.toDouble
       !isInfinite(d) && !isNaN(d)
@@ -202,13 +197,14 @@ object Plottable {
     import spire.algebra._
     import spire.implicits._
 
-    def order = implicitly[Order[N]]
+    val ord = implicitly[Order[N]]
+    val field = implicitly[Field[N]]
 
-    def additiveMonoid = implicitly[AdditiveMonoid[N]]
+    def zero: N = field.zero
+    
+    def compare(x: N, y: N): Int = ord.compare(x, y)
 
     def isPlottable(t: N): Boolean = true
-
-    def zero: N = additiveMonoid.zero
 
     def portion(left: N, v: N, right: N): Double =
       space.distance(v, right) / space.distance(right, left)

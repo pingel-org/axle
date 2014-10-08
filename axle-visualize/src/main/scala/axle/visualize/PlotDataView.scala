@@ -28,8 +28,8 @@ object PlotDataView {
       def valueOf(d: TreeMap[X, Y], x: X): Y = d.apply(x)
 
       def xRange(data: Seq[(String, TreeMap[X, Y])], xPlottable: Plottable[X], include: Option[X]): (X, X) = {
-
-        implicit val order = xPlottable.order
+        
+        implicit val ord = xPlottable 
         
         val minXCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) => xsOf(d).headOption
@@ -48,7 +48,7 @@ object PlotDataView {
 
       def yRange(data: Seq[(String, TreeMap[X, Y])], yPlottable: Plottable[Y], include: Option[Y]): (Y, Y) = {
 
-        implicit val order = yPlottable.order
+        implicit val order = yPlottable
         
         val minYCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) =>

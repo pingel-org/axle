@@ -8,7 +8,6 @@ import scala.util.Random
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
-import axle.jodaDateTimeOrder
 import axle.algebra.Plottable.DateTimePlottable
 import axle.algebra.Plottable.DoublePlottable
 import axle.quanta.Information

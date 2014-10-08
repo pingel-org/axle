@@ -32,7 +32,6 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
   val whiteSpace = widthPerSlice * (1d - barWidthPercent)
 
   val yPlottable = implicitly[Plottable[Y]]
-  implicit val yOrder = yPlottable.order
 
   val (dataMinY, dataMaxY) = dataView.yRange(data, yPlottable)
   val minY = List(xAxis, dataMinY).min

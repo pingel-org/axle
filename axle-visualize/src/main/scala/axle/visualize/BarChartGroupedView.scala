@@ -37,7 +37,6 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
   val whiteSpace = widthPerGroup * (1d - barWidthPercent)
 
   val yPlottable = implicitly[Plottable[Y]]
-  implicit val yOrder = yPlottable.order
 
   val (dataMinY, dataMaxY) = groupedDataView.yRange(data, yPlottable)
   val minY = List(xAxis, dataMinY).min
