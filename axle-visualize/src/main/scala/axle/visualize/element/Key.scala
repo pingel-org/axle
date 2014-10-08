@@ -15,7 +15,7 @@ class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colo
 
   import chart._
 
-  val slices = slicesFn(initialValue)
+  val slices = dataView.keys(initialValue)
 
   def paint(g2d: Graphics2D): Unit = {
     g2d.setFont(font)
@@ -33,8 +33,8 @@ class BarChartGroupedKey[G, S, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, 
 
   import chart._
 
-  val slices = slicesFn(initialValue)
-  
+  val slices = groupedDataView.slices(initialValue)
+
   def paint(g2d: Graphics2D): Unit = {
     g2d.setFont(font)
     val lineHeight = g2d.getFontMetrics.getHeight

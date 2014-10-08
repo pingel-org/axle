@@ -12,8 +12,6 @@ import axle.algebra.Plottable
 
 case class Plot[X: Plottable, Y: Plottable, D](
   initialValue: List[(String, D)],
-  orderedXs: D => Traversable[X],
-  x2y: (D, X) => Y,
   connect: Boolean = true,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -32,4 +30,7 @@ case class Plot[X: Plottable, Y: Plottable, D](
   xAxis: Option[Y] = None,
   xAxisLabel: Option[String] = None,
   yAxis: Option[X] = None,
-  yAxisLabel: Option[String] = None)
+  yAxisLabel: Option[String] = None)(
+    implicit val plotDataView: PlotDataView[X, Y, D])
+    
+    

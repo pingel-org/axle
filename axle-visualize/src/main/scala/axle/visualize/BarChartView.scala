@@ -25,7 +25,7 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
   val maxX = 1d
   val yAxis = minX
 
-  val slices = slicesFn(data)
+  val slices = chart.dataView.keys(data)
 
   val padding = 0.05 // on each side
   val widthPerSlice = (1d - (2 * padding)) / slices.size
@@ -34,8 +34,9 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
   val yPlottable = implicitly[Plottable[Y]]
   implicit val yOrder = yPlottable.order
 
-  val minY = List(xAxis, slices.map(s => (List(s2y(data, s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
-  val maxY = List(xAxis, slices.map(s => (List(s2y(data, s)) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
+  val (dataMinY, dataMaxY) = dataView.yRange(data, yPlottable)
+  val minY = List(xAxis, dataMinY).min
+  val maxY = List(xAxis, dataMaxY).max
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
@@ -60,7 +61,7 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
     case ((s, i), color) => {
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
       val rightX = leftX + (widthPerSlice * barWidthPercent)
-      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, s2y(data, s)), fillColor = Some(color))
+      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, dataView.valueOf(data, s)), fillColor = Some(color))
     }
   })
 

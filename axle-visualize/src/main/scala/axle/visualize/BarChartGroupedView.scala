@@ -8,13 +8,14 @@ import scala.reflect.ClassTag
 
 import axle.algebra.Plottable
 import axle.algebra.Plottable.DoublePlottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Angle.{ ° => ° }
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
+import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
 import spire.math.Number.apply
 import spire.implicits.moduleOps
@@ -28,18 +29,19 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
   val maxX = 1d
   val yAxis = minX
 
-  val groups = groupsFn(data)
-  val slices = slicesFn(data)
-  
+  val groups = groupedDataView.groups(data)
+  val slices = groupedDataView.slices(data)
+
   val padding = 0.05 // on each side
   val widthPerGroup = (1d - (2 * padding)) / groups.size
   val whiteSpace = widthPerGroup * (1d - barWidthPercent)
 
   val yPlottable = implicitly[Plottable[Y]]
   implicit val yOrder = yPlottable.order
-  
-  val minY = List(xAxis, slices.map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).min).min).min
-  val maxY = List(xAxis, slices.map(s => (groups.map(g => gs2y(data, (g, s))) ++ List(yPlottable.zero)).filter(yPlottable.isPlottable).max).max).max
+
+  val (dataMinY, dataMaxY) = groupedDataView.yRange(data, yPlottable)
+  val minY = List(xAxis, dataMinY).min
+  val maxY = List(xAxis, dataMaxY).max
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
@@ -68,7 +70,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
   } yield {
     val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth
     val rightX = leftX + barSliceWidth
-    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, gs2y(data, (g, s))), fillColor = Some(color))
+    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, groupedDataView.valueOf(data, (g, s))), fillColor = Some(color))
   }
 
 }

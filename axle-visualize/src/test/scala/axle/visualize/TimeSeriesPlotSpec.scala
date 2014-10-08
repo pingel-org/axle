@@ -79,8 +79,6 @@ class TimeSeriesPlotSpec extends Specification {
 
     val plot = new Plot[DateTime, Double, TreeMap[DateTime, Double]](
       lfs,
-      _.keys,
-      (d, t) => d(t),
       connect = true,
       drawKey = true,
       xAxis = Some(0d),
@@ -96,10 +94,10 @@ class TimeSeriesPlotSpec extends Specification {
     type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
     val hm: D = new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
+    import Plot._ // TODO find implicits without this
+
     val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
       List(("h", hm)),
-      (d: TreeMap[Rational, UnittedQuantity[Information, Double]]) => d.keys,
-      (d: TreeMap[Rational, UnittedQuantity[Information, Double]], x: Rational) => d(x),
       connect = true,
       drawKey = false,
       xAxis = Some(0d *: bit[Double]),

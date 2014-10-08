@@ -11,15 +11,13 @@ import java.awt.Color.yellow
 import axle.algebra.Plottable
 import axle.quanta.UnittedQuantity
 import axle.quanta.Angle
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Angle.{ ° => ° }
 import spire.math.Number.apply
-import spire.implicits.DoubleAlgebra 
+import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps
 
 case class BarChart[S, Y: Plottable, D](
   initialValue: D,
-  slicesFn: D => Traversable[S],
-  s2y: (D, S) => Y,
   sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -38,4 +36,5 @@ case class BarChart[S, Y: Plottable, D](
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
   labelAngle: UnittedQuantity[Angle, Double] = 36d *: °[Double],
-  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))
+  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
+    implicit val dataView: DataView[S, Y, D])

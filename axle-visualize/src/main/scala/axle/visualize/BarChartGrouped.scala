@@ -12,9 +12,6 @@ import axle.algebra.Plottable
 
 case class BarChartGrouped[G, S, Y: Plottable, D](
   initialValue: D,
-  groupsFn: D => Traversable[G],
-  slicesFn: D => Traversable[S],
-  gs2y: (D, (G, S)) => Y,
   gLabeller: G => String = (g: G) => g.toString,
   sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
@@ -33,4 +30,5 @@ case class BarChartGrouped[G, S, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))
+  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
+    implicit val groupedDataView: GroupedDataView[G, S, Y, D])
