@@ -2,6 +2,10 @@ package axle.visualize
 
 import org.specs2.mutable.Specification
 
+import spire.algebra._
+import spire.implicits._
+import axle.algebra._
+
 class BarChartSpec extends Specification {
 
   "BarChart" should {
@@ -11,8 +15,6 @@ class BarChartSpec extends Specification {
         "apple" -> 83.8,
         "banana" -> 77.9,
         "coconut" -> 10.1)
-
-      // implicit val pv = mapDataView[String, Double]
 
       val chart = BarChart[String, Double, Map[String, Double]](
         sales,

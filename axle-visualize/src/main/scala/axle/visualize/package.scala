@@ -27,6 +27,9 @@ import axle.ml._
 import axle.stats._
 import axle.pgm._
 import axle.algebra.Plottable
+import axle.algebra.Tics
+import axle.algebra.LengthSpace
+import axle.algebra.Zero
 
 package object visualize {
 
@@ -56,13 +59,15 @@ package object visualize {
     feeder
   }
 
-  implicit def enComponentPlot[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D]): PlotComponent[X, Y, D] =
+  implicit def enComponentPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](plot: Plot[X, Y, D])(
+    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _]): PlotComponent[X, Y, D] =
     new PlotComponent(plot)
 
-  implicit def enComponentBarChart[S, Y: Plottable: Eq, D: ClassTag](barChart: BarChart[S, Y, D]): BarChartComponent[S, Y, D] =
+  implicit def enComponentBarChart[S, Y: Plottable: Order: Tics: Eq, D: ClassTag](barChart: BarChart[S, Y, D])(implicit yls: LengthSpace[Y, _]): BarChartComponent[S, Y, D] =
     new BarChartComponent(barChart)
 
-  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Eq, D: ClassTag](barChart: BarChartGrouped[G, S, Y, D]): BarChartGroupedComponent[G, S, Y, D] =
+  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Tics: Order: Eq, D: ClassTag](barChart: BarChartGrouped[G, S, Y, D])(
+    implicit yls: LengthSpace[Y, _]): BarChartGroupedComponent[G, S, Y, D] =
     new BarChartGroupedComponent(barChart)
 
   implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {

@@ -85,10 +85,13 @@ package object axle {
   implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
 
   trait JodaDateTimeOrder extends Order[DateTime] {
-
     def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
   }
-
+  
+  implicit val dateTimeOrder: Order[DateTime] = new JodaDateTimeOrder {}
+  
+  implicit val dateTimeOrdering = spire.compat.ordering(dateTimeOrder)
+  
   trait JodaDateTimeEq extends Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }

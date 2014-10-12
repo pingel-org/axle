@@ -14,6 +14,7 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 
 import axle.algebra.Plottable
+import axle.algebra.DoubleTics
 import axle.quanta.Angle.{ ° => ° }
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.Oval
@@ -66,13 +67,14 @@ trait KMeansVisualizationModule extends KMeansModule {
     val minY = mins(0, 1)
     val maxY = maxs(0, 1)
 
-    implicit val dp = Plottable.DoublePlottable
+    implicit val ddls = new axle.algebra.DoubleDoubleLengthSpace {}
     val scaledArea = new ScaledArea2D(w, h, border, minX, maxX, minY, maxY)
 
     val normalFont = new Font(fontName, Font.BOLD, fontSize)
 
-    val xTics = new XTics(scaledArea, dp.tics(minX, maxX), normalFont, true, 0 *: °, black)
-    val yTics = new YTics(scaledArea, dp.tics(minY, maxY), normalFont, black)
+    implicit val doubleTics = new DoubleTics {}
+    val xTics = new XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0 *: °, black)
+    val yTics = new YTics(scaledArea, doubleTics.tics(minY, maxY), normalFont, black)
 
     val boundingRectangle = new Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black))
 

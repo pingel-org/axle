@@ -3,9 +3,11 @@ package axle.visualize
 import scala.collection.immutable.TreeMap
 
 import axle.algebra.Plottable
-import spire.compat.ordering
+import spire.algebra.Order
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
+import axle.algebra._
+import spire.compat.ordering
 
 trait PlotDataView[X, Y, D] {
 
@@ -13,43 +15,44 @@ trait PlotDataView[X, Y, D] {
 
   def valueOf(d: D, x: X): Y
 
-  def xRange(data: Seq[(String, D)], xPlottable: Plottable[X], include: Option[X]): (X, X)
+  def xRange(data: Seq[(String, D)], include: Option[X]): (X, X)
 
-  def yRange(data: Seq[(String, D)], yPlottable: Plottable[Y], include: Option[Y]): (Y, Y)
+  def yRange(data: Seq[(String, D)], include: Option[Y]): (Y, Y)
 }
 
 object PlotDataView {
 
-  implicit def treeMapDataView[X, Y]: PlotDataView[X, Y, TreeMap[X, Y]] =
+  implicit def treeMapDataView[X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[X, Y, TreeMap[X, Y]] =
     new PlotDataView[X, Y, TreeMap[X, Y]] {
+
+      implicit val xZero = implicitly[Zero[X]]
+      implicit val yZero = implicitly[Zero[Y]]
+      implicit val xPlottable = implicitly[Plottable[X]]
+      implicit val yPlottable = implicitly[Plottable[Y]]
 
       def xsOf(d: TreeMap[X, Y]): Traversable[X] = d.keys
 
       def valueOf(d: TreeMap[X, Y], x: X): Y = d.apply(x)
 
-      def xRange(data: Seq[(String, TreeMap[X, Y])], xPlottable: Plottable[X], include: Option[X]): (X, X) = {
-        
-        implicit val ord = xPlottable 
-        
+      def xRange(data: Seq[(String, TreeMap[X, Y])], include: Option[X]): (X, X) = {
+
         val minXCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) => xsOf(d).headOption
         })
-        val minX = if (minXCandidates.size > 0) minXCandidates.min else xPlottable.zero
+        val minX = if (minXCandidates.size > 0) minXCandidates.min else xZero.zero
 
         val maxXCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) => xsOf(d).lastOption
         })
 
-        val maxX = if (minXCandidates.size > 0) maxXCandidates.max else xPlottable.zero
+        val maxX = if (minXCandidates.size > 0) maxXCandidates.max else xZero.zero
 
         (minX, maxX)
 
       }
 
-      def yRange(data: Seq[(String, TreeMap[X, Y])], yPlottable: Plottable[Y], include: Option[Y]): (Y, Y) = {
+      def yRange(data: Seq[(String, TreeMap[X, Y])], include: Option[Y]): (Y, Y) = {
 
-        implicit val order = yPlottable
-        
         val minYCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) =>
             val xs = xsOf(d)
@@ -59,7 +62,7 @@ object PlotDataView {
               Some(xs map { valueOf(d, _) } min)
         }) filter { yPlottable.isPlottable _ }
 
-        val minY = if (minYCandidates.size > 0) minYCandidates.min else yPlottable.zero
+        val minY = if (minYCandidates.size > 0) minYCandidates.min else yZero.zero
 
         val maxYCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) => {
@@ -71,7 +74,7 @@ object PlotDataView {
           }
         }) filter { yPlottable.isPlottable _ }
 
-        val maxY = if (minYCandidates.size > 0) maxYCandidates.max else yPlottable.zero
+        val maxY = if (minYCandidates.size > 0) maxYCandidates.max else yZero.zero
 
         (minY, maxY)
       }

@@ -7,7 +7,9 @@ import java.awt.Font
 import scala.reflect.ClassTag
 
 import axle.algebra.Plottable
-import axle.algebra.Plottable.DoublePlottable
+import axle.algebra.LengthSpace
+import axle.algebra.DoubleDoubleLengthSpace
+import axle.algebra.Tics
 import axle.quanta.Angle.{ ° => ° }
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
@@ -21,7 +23,8 @@ import spire.math.Number.apply
 import spire.implicits.moduleOps
 import spire.compat.ordering
 
-class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font) {
+class BarChartGroupedView[G, S, Y: Order: Tics: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
+  implicit yls: LengthSpace[Y, _]) {
 
   import chart._
 
@@ -36,12 +39,12 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
   val widthPerGroup = (1d - (2 * padding)) / groups.size
   val whiteSpace = widthPerGroup * (1d - barWidthPercent)
 
-  val yPlottable = implicitly[Plottable[Y]]
-
-  val (dataMinY, dataMaxY) = groupedDataView.yRange(data, yPlottable)
+  val (dataMinY, dataMaxY) = groupedDataView.yRange(data)
   val minY = List(xAxis, dataMinY).min
   val maxY = List(xAxis, dataMaxY).max
 
+  implicit val llds = new DoubleDoubleLengthSpace {}
+  
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height,
@@ -59,7 +62,7 @@ class BarChartGroupedView[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGr
     36 *: °,
     black)
 
-  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
+  val yTics = new YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)
 
   val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
 

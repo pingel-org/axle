@@ -6,6 +6,9 @@ import java.awt.Font
 import scala.Stream.continually
 
 import axle.algebra.Plottable
+import axle.algebra.Tics
+import axle.algebra.Zero
+import axle.algebra.LengthSpace
 import axle.quanta.Angle.{ ° => ° }
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.DataLines
@@ -22,14 +25,13 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps
 import spire.compat.ordering
 
-class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font) {
+class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
+  implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],
+  yZero: Zero[Y], yts: Tics[Y], yEq: Eq[Y], yLength: LengthSpace[Y, _]) {
 
   import plot._
 
   val colorStream = continually(colors.toStream).flatten
-
-  val xPlottable = implicitly[Plottable[X]]
-  val yPlottable = implicitly[Plottable[Y]]
 
   val keyOpt = if (drawKey) {
     Some(new Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))
@@ -37,9 +39,9 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
     None
   }
 
-  val (minX, maxX) = plotDataView.xRange(data, xPlottable, yAxis)
-  val (minY, maxY) = plotDataView.yRange(data, yPlottable, xAxis)
-  
+  val (minX, maxX) = plotDataView.xRange(data, yAxis)
+  val (minY, maxY) = plotDataView.yRange(data, xAxis)
+
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
 
@@ -50,8 +52,8 @@ class PlotView[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D], data:
 
   val vLine = new VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = new HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = new XTics(scaledArea, xPlottable.tics(minX, maxX), normalFont, true, 0 *: °[Double], black)
-  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
+  val xTics = new XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0 *: °[Double], black)
+  val yTics = new YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
 
   val dataLines = new DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorStream, pointDiameter, connect)
 

@@ -12,18 +12,23 @@ import scala.reflect.ClassTag
 
 import DataFeedProtocol.Fetch
 import akka.pattern.ask
+import axle.algebra.Tics
+import axle.algebra.LengthSpace
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Angle.{ ° => ° }
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
+import spire.algebra.Order
 import spire.math.Number.apply
 import spire.implicits.moduleOps
-import spire.implicits.DoubleAlgebra 
+import spire.implicits.DoubleAlgebra
 
-class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])
+class BarChartGroupedComponent[G, S, Y: Plottable: Tics: Order: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])(
+    implicit yls: LengthSpace[Y, _]
+    )
   extends JPanel
   with Fed[D] {
 
@@ -32,7 +37,7 @@ class BarChartGroupedComponent[G, S, Y: Plottable: Eq, D: ClassTag](chart: BarCh
   setMinimumSize(new Dimension(width, height))
 
   def initialValue = chart.initialValue
-  
+
   val colorStream = continually(colors.toStream).flatten
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)

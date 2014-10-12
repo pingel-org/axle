@@ -4,20 +4,21 @@ import java.awt.Color
 import java.awt.Color.black
 import java.awt.Font
 
+import axle.algebra.DoubleDoubleLengthSpace
+import axle.algebra.LengthSpace
 import axle.algebra.Plottable
-import axle.algebra.Plottable.DoublePlottable
+import axle.algebra.Tics
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
-import spire.implicits.DoubleAlgebra
-import spire.implicits._
-import spire.syntax._
+import spire.algebra.Order
 import spire.compat.ordering
 
-class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font) {
+class BarChartView[S, Y, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
+  implicit yPlottable: Plottable[Y], yOrder: Order[Y], yEq: Eq[Y], yts: Tics[Y], yLength: LengthSpace[Y, _]) {
 
   import chart._
 
@@ -31,11 +32,11 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
   val widthPerSlice = (1d - (2 * padding)) / slices.size
   val whiteSpace = widthPerSlice * (1d - barWidthPercent)
 
-  val yPlottable = implicitly[Plottable[Y]]
-
-  val (dataMinY, dataMaxY) = dataView.yRange(data, yPlottable)
+  val (dataMinY, dataMaxY) = dataView.yRange(data)
   val minY = List(xAxis, dataMinY).min
   val maxY = List(xAxis, dataMaxY).max
+
+  implicit val ddls = new DoubleDoubleLengthSpace {}
 
   val scaledArea = new ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
@@ -54,7 +55,7 @@ class BarChartView[S, Y: Plottable: Eq, D](chart: BarChart[S, Y, D], data: D, co
     labelAngle,
     black)
 
-  val yTics = new YTics(scaledArea, yPlottable.tics(minY, maxY), normalFont, black)
+  val yTics = new YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
 
   val bars = slices.toStream.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {

@@ -12,17 +12,22 @@ import scala.reflect.ClassTag
 import DataFeedProtocol.Fetch
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
+import axle.algebra.LengthSpace
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.algebra.Tics
+import axle.quanta.Angle.{ ° => ° }
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
+import spire.algebra.Order
 import spire.math.Number.apply
-import spire.implicits.DoubleAlgebra 
+import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps
 
-class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, D])
+class BarChartComponent[S, Y, D: ClassTag](chart: BarChart[S, Y, D])(
+    implicit yPlottable: Plottable[Y], yOrder: Order[Y], yts: Tics[Y], yEq: Eq[Y], yls: LengthSpace[Y, _]
+    )
   extends JPanel
   with Fed[D] {
 
@@ -32,7 +37,7 @@ class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, 
   setMinimumSize(new java.awt.Dimension(width, height))
 
   def initialValue = chart.initialValue
-  
+
   val colorStream = continually(colors.toStream).flatten
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
@@ -47,7 +52,7 @@ class BarChartComponent[S, Y: Plottable: Eq, D: ClassTag](chart: BarChart[S, Y, 
   }
 
   override def paintComponent(g: Graphics): Unit = {
-    
+
     val data = feeder map { dataFeedActor =>
       val dataFuture = (dataFeedActor ? Fetch()).mapTo[D]
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka

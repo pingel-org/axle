@@ -4,6 +4,7 @@ import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits._
 import axle.algebra.Plottable
+import axle.algebra.Zero
 
 /**
  *
@@ -19,34 +20,39 @@ trait GroupedDataView[G, S, Y, D] {
 
   def valueOf(d: D, gs: (G, S)): Y
 
-  def yRange(d: D, plottable: Plottable[Y]): (Y, Y) = {
+  def yRange(d: D): (Y, Y)
 
-    implicit val order = plottable
-
-    val minY = slices(d).map { s =>
-      (groups(d).map { g => valueOf(d, (g, s)) } ++ List(plottable.zero))
-        .filter(plottable.isPlottable).min
-    }.min
-
-    val maxY = slices(d).map { s =>
-      (groups(d).map { g => valueOf(d, (g, s)) } ++ List(plottable.zero))
-        .filter(plottable.isPlottable).max
-    }.max
-
-    (minY, maxY)
-  }
 }
 
 object GroupedDataView {
 
-  implicit def mapGroupedDataView[G, S, Y]: GroupedDataView[G, S, Y, Map[(G, S), Y]] =
+  implicit def mapGroupedDataView[G, S, Y: Plottable: Zero: Order]: GroupedDataView[G, S, Y, Map[(G, S), Y]] =
     new GroupedDataView[G, S, Y, Map[(G, S), Y]] {
+
+      val yZero = implicitly[Zero[Y]]
+      val yPlottable = implicitly[Plottable[Y]]
 
       def groups(d: Map[(G, S), Y]): Traversable[G] = d.keys.toList.map(_._1) // TODO: .sorted. cache
 
       def slices(d: Map[(G, S), Y]): Traversable[S] = d.keys.toList.map(_._2) // TODO: .sorted. cache
 
       def valueOf(d: Map[(G, S), Y], gs: (G, S)): Y = d.apply(gs)
+
+      def yRange(d: Map[(G, S), Y]): (Y, Y) = {
+
+        val minY = slices(d).map { s =>
+          (groups(d).map { g => valueOf(d, (g, s)) } ++ List(yZero.zero))
+            .filter(yPlottable.isPlottable _).min
+        }.min
+
+        val maxY = slices(d).map { s =>
+          (groups(d).map { g => valueOf(d, (g, s)) } ++ List(yZero.zero))
+            .filter(yPlottable.isPlottable _).max
+        }.max
+
+        (minY, maxY)
+      }
+
     }
 
 }

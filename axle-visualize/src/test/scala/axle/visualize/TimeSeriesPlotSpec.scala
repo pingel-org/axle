@@ -8,18 +8,20 @@ import scala.util.Random
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
-import axle.algebra.Plottable.DateTimePlottable
-import axle.algebra.Plottable.DoublePlottable
+import axle.algebra._
+import axle.dateTimeOrder
+import axle.quanta.UnittedPlottable
 import axle.quanta.Information
 import axle.quanta.Information.bit
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitPlottable
+import axle.quanta.UnittedTics
 import axle.quanta.doubleDoubleMetricSpace
 import axle.quanta.modulize
 import axle.quanta.realDoubleMetricSpace
 import axle.stats.H
 import axle.stats.coin
 import spire.algebra.Eq
+import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 import spire.implicits.SeqOrder
@@ -36,22 +38,25 @@ class TimeSeriesPlotSpec extends Specification {
     "work" in {
 
       import axle.quanta.Information._
+      import axle.algebra.DoubleTics
 
-      val plottable = UnitPlottable[Information, Double](bit[Double])
+      implicit val dt = new DoubleTics {}
 
-      val tics = plottable.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
+      val ticker = new UnittedTics[Information, Double](bit[Double])
+
+      val tics = ticker.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
 
       val expected = Vector(
         (0.0 *: bit[Double], "0.0"),
-        //        (0.1 *: bit[Double], "0.1"),
-        //        (0.2 *: bit[Double], "0.2"),
-        //        (0.3 *: bit[Double], "0.3"),
-        //        (0.4 *: bit[Double], "0.4"),
-        //        (0.5 *: bit[Double], "0.5"),
-        //        (0.6 *: bit[Double], "0.6"),
-        //        (0.7 *: bit[Double], "0.7"),
-        //        (0.8 *: bit[Double], "0.8"),
-        //        (0.9 *: bit[Double], "0.9"),
+        (0.1 *: bit[Double], "0.1"),
+        (0.2 *: bit[Double], "0.2"),
+        (0.3 *: bit[Double], "0.3"),
+        (0.4 *: bit[Double], "0.4"),
+        (0.5 *: bit[Double], "0.5"),
+        (0.6 *: bit[Double], "0.6"),
+        (0.7 *: bit[Double], "0.7"),
+        (0.8 *: bit[Double], "0.8"),
+        (0.9 *: bit[Double], "0.9"),
         (1.0 *: bit[Double], "1.0"))
 
       val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information, Double], String)]]]
@@ -65,6 +70,8 @@ class TimeSeriesPlotSpec extends Specification {
 
     val now = new DateTime()
 
+    import axle.dateTimeOrdering
+
     def randomTimeSeries(i: Int) = {
       val phase = Random.nextDouble
       val amp = Random.nextDouble
@@ -75,6 +82,9 @@ class TimeSeriesPlotSpec extends Specification {
     }
 
     val lfs = (0 until 20).map(randomTimeSeries).toList
+
+    //    implicit val pdv: PlotDataView[DateTime, Double, TreeMap[DateTime, Double]] =
+    //      PlotDataView.treeMapDataView[DateTime, Double]
 
     val plot = new Plot[DateTime, Double, TreeMap[DateTime, Double]](
       lfs,
@@ -88,12 +98,16 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
-    implicit val plottable = UnitPlottable[Information, Double](bit[Double])
-
     type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
     val hm: D = new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
-    import Plot._ // TODO find implicits without this
+    //    implicit val pr: Plottable[Rational] = Plottable.rationalPlottable
+
+    implicit val puid: Plottable[UnittedQuantity[Information, Double]] =
+      new UnittedPlottable[Information, Double]()
+
+    implicit val pdv: PlotDataView[Rational, UnittedQuantity[Information, Double], D] =
+      PlotDataView.treeMapDataView[Rational, UnittedQuantity[Information, Double]]
 
     val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
       List(("h", hm)),

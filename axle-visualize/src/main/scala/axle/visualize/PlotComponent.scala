@@ -11,18 +11,22 @@ import scala.concurrent.duration.DurationInt
 
 import DataFeedProtocol.Fetch
 import akka.pattern.ask
+import axle.algebra.Tics
+import axle.algebra.Zero
+import axle.algebra.LengthSpace
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{° => °}
+import axle.quanta.Angle.{ ° => ° }
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.math.Number.apply
-import spire.implicits.DoubleAlgebra 
+import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps
 
-class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])
+class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](plot: Plot[X, Y, D])(
+  implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _])
   extends JPanel
   with Fed[List[(String, D)]] {
 
@@ -31,7 +35,7 @@ class PlotComponent[X: Plottable: Eq, Y: Plottable: Eq, D](plot: Plot[X, Y, D])
   setMinimumSize(new Dimension(width, height))
 
   def initialValue = plot.initialValue
-  
+
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
   val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90d *: °[Double])))

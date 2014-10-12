@@ -7,34 +7,30 @@ import java.awt.Point
 import scala.math.abs
 import scala.math.min
 
-import axle.algebra.Plottable
+import axle.algebra.LengthSpace
 import axle.quanta.Angle
 import axle.quanta.Angle.rad
 import axle.quanta.UnittedQuantity
 import spire.algebra.Eq
 import spire.implicits.eqOps
-import spire.implicits.DoubleAlgebra 
+import spire.implicits.DoubleAlgebra
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
 case class Point2D[X, Y](x: X, y: Y)
 
-case class ScaledArea2D[X: Plottable: Eq, Y: Plottable: Eq](
+case class ScaledArea2D[X, Y](
   width: Int, height: Int, pad: Int,
-  minX: X, maxX: X, minY: Y, maxY: Y) {
+  minX: X, maxX: X, minY: Y, maxY: Y)(implicit eqX: Eq[X], eqY: Eq[Y], lengthX: LengthSpace[X, _], lengthY: LengthSpace[Y, _]) {
 
   val nonZeroArea = (!(minX === maxX)) && (!(minY === maxY))
-
-  val xPlottable = implicitly[Plottable[X]]
-  val yPlottable = implicitly[Plottable[Y]]
 
   val drawableWidth = width - (2 * pad)
   val drawableHeight = height - (2 * pad)
 
   def framePoint(sp: Point2D[X, Y]): Point = new Point(
-    pad + (drawableWidth * xPlottable.portion(minX, sp.x, maxX)).toInt,
-    height - pad - (drawableHeight * yPlottable.portion(minY, sp.y, maxY)).toInt
-  )
+    pad + (drawableWidth * lengthX.portion(minX, sp.x, maxX)).toInt,
+    height - pad - (drawableHeight * lengthY.portion(minY, sp.y, maxY)).toInt)
 
   def fillOval(g2d: Graphics2D, p: Point2D[X, Y], width: Int, height: Int): Unit = {
     if (nonZeroArea) {
