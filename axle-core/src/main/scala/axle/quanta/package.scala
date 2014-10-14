@@ -17,24 +17,6 @@ import spire.implicits.additiveSemigroupOps
 
 package object quanta {
 
-  implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] = new MetricSpace[Rational, Double] {
-
-    def distance(v: Rational, w: Rational): Double = (v.toDouble - w.toDouble).abs
-
-  }
-
-  implicit val realDoubleMetricSpace: MetricSpace[Real, Double] = new MetricSpace[Real, Double] {
-
-    def distance(v: Real, w: Real): Double = (v.toDouble - w.toDouble).abs
-
-  }
-
-  implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] = new MetricSpace[Double, Double] {
-
-    def distance(v: Double, w: Double): Double = (v - w).abs
-
-  }
-
   // Note: this is need for "def conversions"
   implicit def edgeEq[N: Eq]: Eq[N => N] = new Eq[N => N] {
     def eqv(x: N => N, y: N => N): Boolean = ???

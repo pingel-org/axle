@@ -9,11 +9,7 @@ import org.joda.time.Duration
 import spire.algebra.Order
 import spire.math.Rational
 
-//trait Plottable[T, R] extends Order[T] with LengthSpace[T, R] with Tics[T] {
-
 trait Plottable[T] {
-
-  //  def zero: T
 
   def isPlottable(t: T): Boolean = true
 }
