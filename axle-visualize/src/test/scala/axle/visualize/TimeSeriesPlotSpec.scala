@@ -52,9 +52,6 @@ class TimeSeriesPlotSpec extends Specification {
     type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
     val hm: D = new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
-    implicit val puid: Plottable[UnittedQuantity[Information, Double]] =
-      new UnittedPlottable[Information, Double]()
-
     val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
       List(("h", hm)),
       connect = true,
