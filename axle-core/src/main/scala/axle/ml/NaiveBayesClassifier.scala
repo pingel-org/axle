@@ -16,6 +16,7 @@ import spire.implicits.MapInnerProductSpace
 import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.eqOps
+import spire.math.Rational
 import spire.math.Real
 import spire.math.Real.apply
 import spire.implicits._
@@ -24,20 +25,20 @@ import axle.stats.P
 
 object NaiveBayesClassifier {
 
-  def apply[DATA, FEATURE: Order, CLASS: Order: Eq, N: Field: Order](
+  def apply[DATA, FEATURE: Order, CLASS: Order: Eq](
     data: collection.GenSeq[DATA],
-    pFs: List[Distribution[FEATURE, N]],
-    pC: Distribution[CLASS, N],
+    pFs: List[Distribution[FEATURE, Rational]],
+    pC: Distribution[CLASS, Rational],
     featureExtractor: DATA => List[FEATURE],
-    classExtractor: DATA => CLASS): NaiveBayesClassifier[DATA, FEATURE, CLASS, N] =
+    classExtractor: DATA => CLASS): NaiveBayesClassifier[DATA, FEATURE, CLASS] =
     new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
 
 }
 
-class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, N: Field: Order](
+class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq](
   data: collection.GenSeq[DATA],
-  featureRandomVariables: List[Distribution[FEATURE, N]],
-  classRandomVariable: Distribution[CLASS, N],
+  featureRandomVariables: List[Distribution[FEATURE, Rational]],
+  classRandomVariable: Distribution[CLASS, Rational],
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS) extends Classifier[DATA, CLASS]() {
 
@@ -49,28 +50,28 @@ class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, N: Field: Ord
 
   // TODO no probability should ever be 0
 
-  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), N].withDefaultValue(implicitly[Field[N]].zero)
+  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Rational].withDefaultValue(implicitly[Field[Rational]].zero)
 
-  val featureTally: Map[(CLASS, String, FEATURE), N] =
+  val featureTally: Map[(CLASS, String, FEATURE), Rational] =
     data.aggregate(emptyFeatureTally)(
       (acc, d) => {
         val fs = featureExtractor(d)
         val c = classExtractor(d)
-        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> implicitly[Field[N]].one) }).toMap
+        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> implicitly[Field[Rational]].one) }).toMap
         acc + dContrib
       },
       _ + _)
 
-  val classTally: Map[CLASS, N] = data.map(classExtractor).tally[N]
+  val classTally: Map[CLASS, Rational] = data.map(classExtractor).tally[Rational]
 
   val C = new TallyDistribution0(classTally, classRandomVariable.name)
 
-  def tallyFor(featureRandomVariable: Distribution[FEATURE, N]): Map[(FEATURE, CLASS), N] =
+  def tallyFor(featureRandomVariable: Distribution[FEATURE, Rational]): Map[(FEATURE, CLASS), Rational] =
     featureTally.filter {
       case (k, v) => k._2 === featureRandomVariable.name
     }.map {
       case (k, v) => ((k._3, k._1), v)
-    }.withDefaultValue(implicitly[Field[N]].zero)
+    }.withDefaultValue(implicitly[Field[Rational]].zero)
 
   // Note: The "parent" (or "gien") of these feature variables is C
   val Fs = featureRandomVariables.map(featureRandomVariable =>
