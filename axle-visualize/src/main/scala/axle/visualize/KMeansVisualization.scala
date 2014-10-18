@@ -79,7 +79,7 @@ trait KMeansVisualizationModule extends KMeansModule {
     val boundingRectangle = new Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black))
 
     def centroidOval(i: Int): Oval[Double, Double] = {
-      val denormalized = classifier.normalizer.denormalize(classifier.μ.row(i))
+      val denormalized = classifier.normalizer.unapply(classifier.μ.row(i))
       val center = Point2D(denormalized(0), denormalized(1))
       Oval(scaledArea, center, 3 * pointDiameter, 3 * pointDiameter, colors(i % colors.length), darkGray)
     }

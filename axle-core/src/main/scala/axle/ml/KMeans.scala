@@ -17,7 +17,9 @@ import spire.implicits.eqOps
  *
  */
 
-trait KMeansModule extends MatrixModule with FeatureNormalizerModule {
+trait KMeansModule
+  extends MatrixModule
+  with FeatureNormalizerModule {
 
   /**
    * cluster[T]
@@ -37,7 +39,7 @@ trait KMeansModule extends MatrixModule with FeatureNormalizerModule {
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
     K: Int,
-    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double]): KMeansClassifier[T] =
+    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double], normalizer: FeatureNormalizer): KMeansClassifier[T] =
     KMeansClassifier(data, N, featureExtractor, constructor, K, iterations)
 
   // TODO: default distance = distance.euclidean
@@ -62,12 +64,13 @@ trait KMeansModule extends MatrixModule with FeatureNormalizerModule {
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
     K: Int,
-    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double]) extends Classifier[T, Int] {
+    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double], featureNormalizer: FeatureNormalizer)
+    extends Classifier[T, Int] {
 
     val features = matrix(N, data.length, data.flatMap(featureExtractor).toArray).t
 
-    val normalizer = new PCAFeatureNormalizer(features, 0.98)
-    //val normalizer = new ZScoreFeatureNormalizer(features)
+    val normalizer = featureNormalizer.normalizer(features)
+    
     val X = normalizer.normalizedData
     val μads = clusterLA(X, space, K, iterations)
 
@@ -76,14 +79,14 @@ trait KMeansModule extends MatrixModule with FeatureNormalizerModule {
     val assignmentLog = μads.map(_._2)
     val distanceLog = μads.map(_._3)
 
-    val exemplars = (0 until K).map(i => constructor(normalizer.denormalize(μ.row(i)))).toList
+    val exemplars = (0 until K).map(i => constructor(normalizer.unapply(μ.row(i)))).toList
 
     def exemplar(i: Int): T = exemplars(i)
 
     def classes(): Range = 0 until K
 
     def apply(observation: T): Int = {
-      val (i, d) = centroidIndexAndDistanceClosestTo(space, μ, normalizer.normalize(featureExtractor(observation)))
+      val (i, d) = centroidIndexAndDistanceClosestTo(space, μ, normalizer(featureExtractor(observation)))
       i
     }
 

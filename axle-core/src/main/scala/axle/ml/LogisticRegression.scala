@@ -42,11 +42,12 @@ trait LogisticRegressionModule extends MatrixModule with FeatureNormalizerModule
 
     val inputX = matrix(examples.length, numObservations, examples.flatMap(observationExtractor).toArray).t
     val y = matrix[Boolean](examples.length, 1, examples.map(objectiveExtractor).toArray)
-    val normalizer = new LinearFeatureNormalizer(inputX)
-    val X = ones[Double](examples.length, 1) +|+ normalizer.normalizedData
+    val featureNormalizer = new LinearFeatureNormalizer()
+    val normalize = featureNormalizer.normalizer(inputX)
+    val X = ones[Double](examples.length, 1) +|+ normalize.normalizedData
     val θ0 = ones[Double](X.columns, 1)
     val θ = gradientDescent(X, y, θ0, α, numIterations)
-    (θ, normalizer)
+    (θ, normalize)
   }
 
 }

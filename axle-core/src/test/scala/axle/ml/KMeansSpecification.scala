@@ -17,7 +17,7 @@ import spire.algebra.Eq
 class KMeansSpecification
   extends Specification
   with MatrixDistance
-  with KMeansModule 
+  with KMeansModule
   with JblasMatrixModule {
 
   "K-Means Clustering" should {
@@ -43,6 +43,9 @@ class KMeansSpecification
       implicit val fooEq = new Eq[Foo] {
         def eqv(x: Foo, y: Foo): Boolean = x equals y
       }
+
+      implicit val normalizer = new PCAFeatureNormalizer(0.98)
+      //implicit val normalizer = new ZScoreFeatureNormalizer
 
       val km = classifier(
         data,

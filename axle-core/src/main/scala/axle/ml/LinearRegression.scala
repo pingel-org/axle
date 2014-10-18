@@ -42,33 +42,35 @@ trait LinearRegressionModule extends MatrixModule with FeatureNormalizerModule {
       numFeatures,
       examples.flatMap(featureExtractor).toArray).t
 
-    val featureNormalizer = new LinearFeatureNormalizer(inputX)
+    val featureNormalizer = new LinearFeatureNormalizer()
+    
+    val inputNormalizer = featureNormalizer.normalizer(inputX)
 
-    val X = ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData
+    val X = ones[Double](inputX.rows, 1) +|+ inputNormalizer.normalizedData
 
     val y = matrix(examples.length, 1, examples.map(objectiveExtractor).toArray)
 
-    val objectiveNormalizer = new LinearFeatureNormalizer(y)
+    val objectiveNormalizer = featureNormalizer.normalizer(y)
 
     val θ0 = ones[Double](X.columns, 1)
     val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData, θ0, α, iterations)
 
-    LinearEstimator(featureExtractor, featureNormalizer, θ, objectiveNormalizer, errLog.reverse)
+    LinearEstimator(featureExtractor, inputNormalizer, θ, objectiveNormalizer, errLog.reverse)
   }
 
   case class LinearEstimator[D](
     featureExtractor: D => List[Double],
-    featureNormalizer: FeatureNormalizer,
+    inputNormalizer: Normalize,
     θ: Matrix[Double],
-    objectiveNormalizer: FeatureNormalizer,
+    objectiveNormalizer: Normalize,
     errLog: List[Double]) {
 
     def errTree() = new TreeMap[Int, Double]() ++
       (0 until errLog.length).map(j => j -> errLog(j)).toMap
 
     def estimate(observation: D): Double = {
-      val scaledX = ones[Double](1, 1) +|+ featureNormalizer.normalize(featureExtractor(observation))
-      objectiveNormalizer.denormalize((scaledX ⨯ θ)).head
+      val scaledX = ones[Double](1, 1) +|+ inputNormalizer(featureExtractor(observation))
+      objectiveNormalizer.unapply((scaledX ⨯ θ)).head
     }
 
   }
