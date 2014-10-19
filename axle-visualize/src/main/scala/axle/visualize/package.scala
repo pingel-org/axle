@@ -38,7 +38,9 @@ package object visualize {
   def newFrame(width: Int, height: Int): AxleFrame =
     new AxleFrame(width, height, Color.white, "αχλε")
 
-  def show(component: Component): Unit = {
+  def draw[T: Draw](t: T): Unit = {
+    val draw = implicitly[Draw[T]]
+    val component = draw.component(t)
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
     frame.initialize()
@@ -47,42 +49,48 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T](component: Component with Fed[T], refreshFn: T => T, interval: UnittedQuantity[Time, Double])(implicit system: ActorSystem): ActorRef = {
+  def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity[Time, Double])(implicit system: ActorSystem): ActorRef = {
+    val draw = implicitly[Draw[T]]
+
+    val component = draw.component(t)
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
-    val feeder = component.setFeeder(refreshFn, interval, system)
-    system.actorOf(Props(classOf[FrameRepaintingActor], frame, component.feeder.get))
+    //    val feeder = component.setFeeder(refreshFn, interval, system)
+    //    system.actorOf(Props(classOf[FrameRepaintingActor], frame, component.feeder.get))
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
-    feeder
+    //    feeder
+    ???
   }
 
-  implicit def enComponentPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](plot: Plot[X, Y, D])(
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _]): PlotComponent[X, Y, D] =
-    new PlotComponent(plot)
+  implicit def drawUndirectedGraph[VP: Manifest: Eq, EP: Eq]: Draw[UndirectedGraph[VP, EP]] =
+    new Draw[UndirectedGraph[VP, EP]] {
 
-  implicit def enComponentBarChart[S, Y: Plottable: Order: Tics: Eq, D: ClassTag](barChart: BarChart[S, Y, D])(implicit yls: LengthSpace[Y, _]): BarChartComponent[S, Y, D] =
-    new BarChartComponent(barChart)
+      def component(ug: UndirectedGraph[VP, EP]) = ug match {
+        case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
+        case _ => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads, ug.edgeFunction))
+      }
+    }
 
-  implicit def enComponentBarChartGrouped[G, S, Y: Plottable: Tics: Order: Eq, D: ClassTag](barChart: BarChartGrouped[G, S, Y, D])(
-    implicit yls: LengthSpace[Y, _]): BarChartGroupedComponent[G, S, Y, D] =
-    new BarChartGroupedComponent(barChart)
+  implicit def drawDirectedGraph[VP: Manifest: Eq, EP: Eq]: Draw[DirectedGraph[VP, EP]] =
+    new Draw[DirectedGraph[VP, EP]] {
 
-  implicit def enComponentUndirectedGraph[VP: Manifest: Eq, EP: Eq](ug: UndirectedGraph[VP, EP]): Component = ug match {
-    case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
-    case _ => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads, ug.edgeFunction))
-  }
-
-  implicit def enComponentDirectedGraph[VP: Manifest: Eq, EP: Eq](dg: DirectedGraph[VP, EP]): Component = dg match {
-    case jdg: JungDirectedGraph[VP, EP] => new JungDirectedGraphVisualization().component(jdg)
-    case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads, dg.edgeFunction))
-  }
+      def component(dg: DirectedGraph[VP, EP]) = dg match {
+        case jdg: JungDirectedGraph[VP, EP] => new JungDirectedGraphVisualization().component(jdg)
+        case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads, dg.edgeFunction))
+      }
+    }
 
   trait BayesianNetworkVisualizationModule extends BayesianNetworkModule {
-    implicit def enComponentBayesianNetwork[T: Manifest: Eq, N: Field: Manifest](bn: BayesianNetwork[T, N]): Component =
-      enComponentDirectedGraph(bn.graph)
+
+    implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq]: Draw[BayesianNetwork[T, N]] = {
+      new Draw[BayesianNetwork[T, N]] {
+        def component(bn: BayesianNetwork[T, N]) =
+          drawDirectedGraph[BayesianNetworkNode[T, N], String].component(bn.graph)
+      }
+    }
   }
 
   /**
@@ -93,7 +101,9 @@ package object visualize {
    * http://stackoverflow.com/questions/4028898/create-an-image-from-a-non-visible-awt-component
    */
 
-  def component2file(component: Component, filename: String, encoding: String): Unit = {
+  def draw2file[T: Draw](t: T, filename: String, encoding: String): Unit = {
+
+    val component = implicitly[Draw[T]].component(t)
 
     val minSize = component.getMinimumSize
     val frame = newFrame(minSize.width, minSize.height)
@@ -112,12 +122,12 @@ package object visualize {
     g.dispose()
   }
 
-  def png(component: Component, filename: String): Unit = component2file(component, filename, "PNG")
+  def png[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "PNG")
 
-  def jpeg(component: Component, filename: String): Unit = component2file(component, filename, "JPEG")
+  def jpeg[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "JPEG")
 
-  def gif(component: Component, filename: String): Unit = component2file(component, filename, "gif")
+  def gif[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "gif")
 
-  def bmp(component: Component, filename: String): Unit = component2file(component, filename, "BMP")
+  def bmp[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "BMP")
 
 }

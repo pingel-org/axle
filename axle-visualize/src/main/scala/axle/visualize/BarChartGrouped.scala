@@ -8,7 +8,22 @@ import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
 
+import scala.reflect.ClassTag
+
+import axle.algebra.LengthSpace
 import axle.algebra.Plottable
+import axle.algebra.Tics
+import spire.algebra.Eq
+import spire.algebra.Order
+
+object BarChartGrouped {
+
+  implicit def drawBarChartGrouped[G, S, Y: Plottable: Tics: Order: Eq, D: ClassTag](
+    implicit yls: LengthSpace[Y, _]): Draw[BarChartGrouped[G, S, Y, D]] = new Draw[BarChartGrouped[G, S, Y, D]] {
+    def component(barChart: BarChartGrouped[G, S, Y, D]) = new BarChartGroupedComponent(barChart)
+  }
+
+}
 
 case class BarChartGrouped[G, S, Y: Plottable, D](
   initialValue: D,

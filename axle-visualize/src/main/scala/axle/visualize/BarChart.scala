@@ -8,13 +8,26 @@ import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
 
+import scala.reflect.ClassTag
+
+import axle.algebra.LengthSpace
 import axle.algebra.Plottable
-import axle.quanta.UnittedQuantity
+import axle.algebra.Tics
 import axle.quanta.Angle
-import axle.quanta.Angle.{ ° => ° }
-import spire.math.Number.apply
+import axle.quanta.Angle.{° => °}
+import axle.quanta.UnittedQuantity
+import spire.algebra.Eq
+import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
-import spire.implicits.moduleOps
+
+object BarChart {
+
+  implicit def drawBarChart[S, Y: Plottable: Order: Tics: Eq, D: ClassTag](implicit yls: LengthSpace[Y, _]): Draw[BarChart[S, Y, D]] =
+    new Draw[BarChart[S, Y, D]] {
+      def component(barChart: BarChart[S, Y, D]) = new BarChartComponent(barChart)
+    }
+
+}
 
 case class BarChart[S, Y: Plottable, D](
   initialValue: D,
