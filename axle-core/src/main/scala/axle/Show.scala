@@ -1,6 +1,6 @@
 package axle
 
-trait Text[T] {
+trait Show[T] {
 
   def text(t: T): String
 }

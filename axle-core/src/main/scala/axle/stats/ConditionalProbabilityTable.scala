@@ -1,6 +1,6 @@
 package axle.stats
 
-import axle.Text
+import axle.Show
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.compat.ordering
@@ -12,8 +12,8 @@ import spire.random.rng.Cmwc5
 
 object ConditionalProbabilityTable0 {
 
-  implicit def textCPT[A: Order, N: Field: Order: Dist](cpt0: ConditionalProbabilityTable0[A, N]): Text[ConditionalProbabilityTable0[A, N]] =
-    new Text[ConditionalProbabilityTable0[A, N]] {
+  implicit def showCPT[A: Order, N: Field: Order: Dist](cpt0: ConditionalProbabilityTable0[A, N]): Show[ConditionalProbabilityTable0[A, N]] =
+    new Show[ConditionalProbabilityTable0[A, N]] {
 
       def text(cpt: ConditionalProbabilityTable0[A, N]): String =
         cpt.name + "\n" +
