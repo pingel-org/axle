@@ -15,6 +15,17 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.orderOps
 
+object TallyDistribution0 {
+
+  implicit def textTallyDistribution0[A: Order, N: Field: Order](td: TallyDistribution0[A, N]): String =
+    td.name + "\n" +
+      td.values.sorted.map(a => {
+        val aString = a.toString
+        (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + td.probabilityOf(a).toString)
+      }).mkString("\n")
+
+}
+
 class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], val name: String = "unnamed")
   extends Distribution0[A, N] {
 
@@ -60,13 +71,6 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], val name: String 
   }
 
   def probabilityOf(a: A): N = tally.get(a).getOrElse(ring.zero) / totalCount
-
-  def show(implicit order: Order[A]): String =
-    s"$name\n" +
-      values.sorted.map(a => {
-        val aString = a.toString
-        (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + probabilityOf(a).toString)
-      }).mkString("\n")
 
 }
 

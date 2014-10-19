@@ -1,5 +1,6 @@
 package axle.stats
 
+import axle.Text
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.compat.ordering
@@ -8,6 +9,21 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.orderOps
 import spire.random.Dist
 import spire.random.rng.Cmwc5
+
+object ConditionalProbabilityTable0 {
+
+  implicit def textCPT[A: Order, N: Field: Order: Dist](cpt0: ConditionalProbabilityTable0[A, N]): Text[ConditionalProbabilityTable0[A, N]] =
+    new Text[ConditionalProbabilityTable0[A, N]] {
+
+      def text(cpt: ConditionalProbabilityTable0[A, N]): String =
+        cpt.name + "\n" +
+          cpt.values.sorted.map(a => {
+            val aString = a.toString
+            (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + cpt.probabilityOf(a).toString)
+          }).mkString("\n")
+    }
+
+}
 
 class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], val name: String = "unnamed")
   extends Distribution0[A, N] {
@@ -56,19 +72,10 @@ class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], val n
 
   def probabilityOf(a: A): N = p.get(a).getOrElse(field.zero)
 
-  def show(implicit order: Order[A]): String =
-    s"$name\n" +
-      values.sorted.map(a => {
-        val aString = a.toString
-        (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + probabilityOf(a).toString)
-      }).mkString("\n")
-
 }
 
-class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]], _name: String = "unnamed")
+class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]], val name: String = "unnamed")
   extends Distribution2[A, G1, G2, N] {
-
-  def name: String = _name
 
   lazy val _values = p.values.map(_.keySet).reduce(_ union _).toVector
 

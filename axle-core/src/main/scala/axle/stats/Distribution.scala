@@ -34,8 +34,6 @@ trait Distribution0[A, N] extends Distribution[A, N] {
   def flatMap[B](f: A => Distribution0[B, N]): Distribution0[B, N]
 
   def toMap: Map[A, N] = values map { v => (v, probabilityOf(v)) } toMap
-  
-  def show(implicit order: Order[A]): String
 
   //  def σ: Real = {
   //    val μ = Σ(values.map(xi => probabilityOf(xi) * xi))(identity)
