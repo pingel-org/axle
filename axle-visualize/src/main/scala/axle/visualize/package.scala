@@ -50,19 +50,27 @@ package object visualize {
   }
 
   def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity[Time, Double])(implicit system: ActorSystem): ActorRef = {
-    val draw = implicitly[Draw[T]]
 
-    val component = draw.component(t)
-    val minSize = component.getMinimumSize
-    val frame = newFrame(minSize.width, minSize.height)
-    //    val feeder = component.setFeeder(refreshFn, interval, system)
-    //    system.actorOf(Props(classOf[FrameRepaintingActor], frame, component.feeder.get))
-    frame.initialize()
-    val rc = frame.add(component)
-    rc.setVisible(true)
-    frame.setVisible(true)
-    //    feeder
-    ???
+    val drawer = implicitly[Draw[T]]
+
+    drawer.component(t) match {
+      // TODO reorganize this
+      case fedComponent: Component with Fed[T] => {
+        val minSize = fedComponent.getMinimumSize
+        val frame = newFrame(minSize.width, minSize.height)
+        val feeder = fedComponent.setFeeder(refreshFn, interval, system)
+        //system.actorOf(Props(classOf[FrameRepaintingActor], frame, component.feeder.get))
+        frame.initialize()
+        val rc = frame.add(fedComponent)
+        rc.setVisible(true)
+        frame.setVisible(true)
+        feeder
+      }
+      case _ => {
+        draw(t)
+        null // TODO re-org
+      }
+    }
   }
 
   implicit def drawUndirectedGraph[VP: Manifest: Eq, EP: Eq]: Draw[UndirectedGraph[VP, EP]] =
