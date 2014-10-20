@@ -12,6 +12,15 @@ import spire.implicits.eqOps
  *
  */
 
+import axle.Show
+
+object LLLanguage {
+
+  implicit def showLLLanguage: Show[LLLanguage] = new Show[LLLanguage] {
+    def text(lll: LLLanguage): String = view.ViewString.llLanguage(lll)
+  }
+}
+
 case class LLLanguage(
   name: String,
   _llRuleDescriptions: List[(String, List[String])],
@@ -33,8 +42,6 @@ case class LLLanguage(
       .map({ case (desc, i) => LLRule(i + 1, nonTerminalsByName(desc._1), desc._2.map(symbol(_).get)) })
 
   def llRules: List[LLRule] = _llRules
-
-  override def toString: String = view.ViewString.llLanguage(this)
 
   def symbol(label: String): Option[Symbol] =
     (if (terminalsByName.contains(label)) terminalsByName else nonTerminalsByName).get(label)

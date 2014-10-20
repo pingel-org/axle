@@ -1,17 +1,21 @@
 
 package axle.ast
 
+import axle.Show
 import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
-class Symbol(val label: String) {
-  //override def toString() = "'" + label + "'"
-  override def toString: String = label
-}
+class Symbol(val label: String)
+
 object Symbol {
+
   implicit val symbolEq = new Eq[Symbol] {
     def eqv(x: Symbol, y: Symbol): Boolean = x equals y
+  }
+
+  implicit def showSymbol: Show[Symbol] = new Show[Symbol] {
+    def text(s: Symbol): String = s.label
   }
 }
 
@@ -28,14 +32,30 @@ object NonTerminal {
 object ⊥ extends Terminal("⊥") // also known as '$'
 object ε extends Symbol("ε") // TODO terminal or non-terminal?
 
-case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol]) {
-  override def toString: String = from.toString + " -> " + rhs.mkString("", " ", "")
+case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol])
+
+object LLRule {
+  implicit def showLLRule: Show[LLRule] = new Show[LLRule] {
+    def text(llr: LLRule) = llr.from.toString + " -> " + llr.rhs.mkString("", " ", "")
+  }
 }
 
 sealed trait LLParserAction
 case class Shift() extends LLParserAction
 case class Reduce(rule: LLRule) extends LLParserAction
 case class ParseError(msg: String) extends LLParserAction
+
+object LLParserState {
+
+  implicit def showLLParserState: Show[LLParserState] = new Show[LLParserState] {
+
+    def text(llps: LLParserState): String = {
+      import llps._
+      inputBufferWithMarker + "\n" + stack.mkString("", " ", "")
+    }
+  }
+
+}
 
 case class LLParserState(
   grammar: LLLanguage,
@@ -45,10 +65,6 @@ case class LLParserState(
   i: Int) {
 
   lazy val inputBufferWithMarker = input.substring(0, i) + "|" + input.substring(i, input.length)
-
-  override def toString: String =
-    inputBufferWithMarker + "\n" +
-      stack.mkString("", " ", "")
 
   def inputSymbol: Terminal = grammar.terminalsByName(input(i).toString)
 

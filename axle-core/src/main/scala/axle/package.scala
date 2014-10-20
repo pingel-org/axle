@@ -167,6 +167,8 @@ package object axle {
   def smoosh[K1, K2, V](data: Map[K1, Map[K2, V]]): Map[(K2, K1), V] =
     data flatMap { case (k1, inner) => inner.map({ case (k2, v) => (k2, k1) -> v }) } toMap
 
-  def show[T: Show](t: T): Unit = println(implicitly[Show[T]].text(t))
-
+  def string[T: Show](t: T): String = implicitly[Show[T]].text(t)
+  
+  def show[T: Show](t: T): Unit = println(string(t))
+  
 }

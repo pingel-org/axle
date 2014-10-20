@@ -7,6 +7,8 @@ import spire.implicits.IntAlgebra
 import spire.implicits.SeqEq
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
+import axle.Show
+import axle.string
 
 object FOPL {
 
@@ -20,21 +22,28 @@ object FOPL {
   }
 
   object Predicate {
+
     implicit def predicateEq = new Eq[Predicate] {
       def eqv(x: Predicate, y: Predicate): Boolean =
         (x.name === y.name) && (x.symbols === y.symbols)
     }
+
+    implicit def showPredicate: Show[Predicate] = new Show[Predicate] {
+
+      def text(predicate: Predicate): String = {
+        import predicate._
+        name + "(" + symbols.mkString(", ") + ")"
+      }
+    }
   }
 
-  abstract class Predicate(_symbols: Symbol*) extends Function1[Map[Symbol, Any], Boolean] with Statement {
+  abstract class Predicate(val symbols: Symbol*) extends Function1[Map[Symbol, Any], Boolean] with Statement {
 
     outer =>
 
-    def symbols: List[Symbol] = _symbols.toList
-    def symbolSet: Set[Symbol] = _symbols.toSet
-    def name: String
+    def symbolSet: Set[Symbol] = symbols.toSet
 
-    override def toString: String = name + "(" + symbols.mkString(", ") + ")"
+    def name: String
 
     def skolemize(universally: Set[Symbol], existentially: Set[Symbol], skolems: Map[Symbol, Set[Symbol]]): (Predicate, Map[Symbol, Set[Symbol]]) = {
 
@@ -71,6 +80,21 @@ object FOPL {
       }
     }
 
+    implicit def showStatement: Show[Statement] = new Show[Statement] {
+      // TODO: How can I avoid this pattern match ?
+      def text(s: Statement): String = s match {
+        case p: Predicate => string(p)
+        case a: And => string(a)
+        case o: Or => string(o)
+        case i: Iff => string(i)
+        case i: Implies => string(i)
+        case n @ ¬(_) => string(n)
+        case e @ ∃(_, _) => string(e)
+        case a @ ∀(_, _) => string(a)
+        case c @ Constant(_) => string(c)
+      }
+    }
+
   }
 
   trait Statement {
@@ -94,25 +118,32 @@ object FOPL {
     implicit def eqAnd: Eq[And] = new Eq[And] {
       def eqv(x: And, y: And): Boolean = (x.left === y.left && x.right === y.right)
     }
+    implicit def showAnd: Show[And] = new Show[And] {
+      def text(a: And): String = "(" + string(a.left) + " ∧ " + string(a.right) + ")"
+    }
   }
   case class And(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) && right(symbolTable)
-    override def toString: String = s"($left ∧ $right)"
   }
 
   object Or {
     implicit def eqOr: Eq[Or] = new Eq[Or] {
       def eqv(x: Or, y: Or): Boolean = (x.left === y.left && x.right === y.right)
     }
+    implicit def showOr: Show[Or] = new Show[Or] {
+      def text(o: Or): String = "(" + string(o.left) + " ∨ " + string(o.right) + ")"
+    }
   }
   case class Or(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) || right(symbolTable)
-    override def toString: String = s"($left ∨ $right)"
   }
 
   object Iff {
     implicit def eqIff: Eq[Iff] = new Eq[Iff] {
       def eqv(x: Iff, y: Iff): Boolean = (x.left === y.left && x.right === y.right)
+    }
+    implicit def showIff: Show[Iff] = new Show[Iff] {
+      def text(i: Iff): String = "(" + string(i.left) + " ⇔ " + string(i.right) + ")"
     }
   }
   case class Iff(left: Statement, right: Statement) extends Statement {
@@ -121,22 +152,26 @@ object FOPL {
       val rv = right(symbolTable)
       (!lv && !rv) || (lv && rv)
     }
-    override def toString: String = s"($left ⇔ $right)"
   }
 
   object Implies {
     implicit def eqImplies: Eq[Implies] = new Eq[Implies] {
       def eqv(x: Implies, y: Implies): Boolean = (x.left === y.left && x.right === y.right)
     }
+    implicit def showImplies: Show[Implies] = new Show[Implies] {
+      def text(i: Implies): String = "(" + string(i.left) + " ⊃ " + string(i.right) + ")"
+    }
   }
   case class Implies(left: Statement, right: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = (!left(symbolTable)) || right(symbolTable)
-    override def toString: String = s"($left ⊃ $right)"
   }
 
   object ¬ {
     implicit def eqNeg: Eq[¬] = new Eq[¬] {
       def eqv(x: ¬, y: ¬): Boolean = (x.statement === y.statement)
+    }
+    implicit def showNeg: Show[¬] = new Show[¬] {
+      def text(n: ¬): String = "¬" + string(n.statement)
     }
   }
   case class ¬(statement: Statement) extends Statement {
@@ -148,10 +183,11 @@ object FOPL {
       def eqv(x: ElementOf, y: ElementOf): Boolean =
         (x.symbol === y.symbol) && (x.set.intersect(y.set).size === x.set.size)
     }
+    implicit def showEO: Show[ElementOf] = new Show[ElementOf] {
+      def text(eo: ElementOf): String = eo.symbol + " ∈ " + eo.set
+    }
   }
-  case class ElementOf(symbol: Symbol, set: Set[Any]) {
-    override def toString: String = s"$symbol ∈ $set"
-  }
+  case class ElementOf(symbol: Symbol, set: Set[Any])
 
   class EnrichedSymbol(symbol: Symbol) {
     def in(set: Set[Any]) = ElementOf(symbol, set)
@@ -165,6 +201,9 @@ object FOPL {
       def eqv(x: ∃, y: ∃): Boolean =
         (x.symbolSet === y.symbolSet) && (x.statement === y.statement)
     }
+    implicit def showExists: Show[∃] = new Show[∃] {
+      def text(e: ∃): String = "∃" + e.symbolSet + " " + string(e.statement)
+    }
   }
   case class ∃(symbolSet: ElementOf, statement: Statement) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean =
@@ -175,6 +214,9 @@ object FOPL {
     implicit def eqAll: Eq[∀] = new Eq[∀] {
       def eqv(x: ∀, y: ∀): Boolean =
         (x.symbolSet === y.symbolSet) && (x.statement === y.statement)
+    }
+    implicit def showForall: Show[∀] = new Show[∀] {
+      def text(a: ∀): String = "∀" + a.symbolSet + " " + string(a.statement)
     }
   }
   case class ∀(symbolSet: ElementOf, statement: Statement) extends Statement {
@@ -191,10 +233,12 @@ object FOPL {
       def eqv(x: Constant, y: Constant): Boolean =
         x.b === y.b
     }
+    implicit def showConstant: Show[Constant] = new Show[Constant] {
+      def text(c: Constant): String = c.toString
+    }
   }
   case class Constant(b: Boolean) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = b
-    override def toString: String = b.toString
   }
 
   implicit def foplBoolean(b: Boolean) = Constant(b)
