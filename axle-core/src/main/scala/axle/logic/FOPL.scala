@@ -114,6 +114,9 @@ object FOPL {
     def implies(right: Statement) = Implies(this, right)
   }
 
+  case class And(left: Statement, right: Statement) extends Statement {
+    def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) && right(symbolTable)
+  }
   object And {
     implicit def eqAnd: Eq[And] = new Eq[And] {
       def eqv(x: And, y: And): Boolean = (x.left === y.left && x.right === y.right)
@@ -121,9 +124,6 @@ object FOPL {
     implicit def showAnd: Show[And] = new Show[And] {
       def text(a: And): String = "(" + string(a.left) + " ∧ " + string(a.right) + ")"
     }
-  }
-  case class And(left: Statement, right: Statement) extends Statement {
-    def apply(symbolTable: Map[Symbol, Any]): Boolean = left(symbolTable) && right(symbolTable)
   }
 
   object Or {

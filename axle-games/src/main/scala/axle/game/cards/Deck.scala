@@ -1,11 +1,10 @@
 package axle.game.cards
 
 import util.Random.shuffle
+import axle.Show
+import axle.string
 
-case class Deck(cards: IndexedSeq[Card] = shuffle(Deck.cards)) {
-
-  override def toString: String = cards.map(_.toString).mkString(" ")
-}
+case class Deck(cards: IndexedSeq[Card] = shuffle(Deck.cards))
 
 object Deck {
 
@@ -16,5 +15,9 @@ object Deck {
     suit <- suits
     rank <- ranks
   } yield Card(rank, suit)
+
+  implicit def showDeck: Show[Deck] = new Show[Deck] {
+    def text(deck: Deck): String = cards.map(string(_)).mkString(" ")
+  }
 
 }

@@ -1,7 +1,9 @@
 package axle.game.poker
 
+import axle.Show
 import axle.game.cards.Ace
 import axle.game.cards.Card
+import axle.string
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.compat.ordering
@@ -11,6 +13,10 @@ import spire.implicits.eqOps
 
 object PokerHand {
 
+  implicit def showPokerHand: Show[PokerHand] = new Show[PokerHand] {
+    def text(hand: PokerHand): String = hand.sortedHand.reverse.map(string(_)).mkString(" ")
+  }
+  
   implicit def pokerHandEq: Eq[PokerHand] = new Eq[PokerHand] {
     def eqv(x: PokerHand, y: PokerHand): Boolean =
       x.sortedHand === y.sortedHand
@@ -63,8 +69,6 @@ case class PokerHand(cards: IndexedSeq[Card]) {
     } else {
       High
     }
-
-  override def toString: String = sortedHand.reverse.map(_.toString).mkString(" ")
 
   def description: String = category.describe(this)
 
