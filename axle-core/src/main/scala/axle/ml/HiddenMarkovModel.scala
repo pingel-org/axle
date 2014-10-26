@@ -5,6 +5,8 @@ import axle.graph.Vertex
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 
+import axle.Show
+
 /**
  *
  * http://en.wikipedia.org/wiki/Hidden_Markov_model
@@ -14,22 +16,33 @@ import spire.implicits.DoubleAlgebra
 sealed trait MarkovModelState
 
 object MarkovModelState {
-
   implicit val mmsEq = new Eq[MarkovModelState] {
     def eqv(x: MarkovModelState, y: MarkovModelState): Boolean = x equals y
   }
 }
 
-case object MarkovModelStartState extends MarkovModelState {
-  override def toString: String = "start"
+case class MarkovModelStartState() extends MarkovModelState
+object MarkovModelStartState {
+  implicit def showStart: Show[MarkovModelStartState] =
+    new Show[MarkovModelStartState] {
+      def text(s: MarkovModelStartState): String = "start"
+    }
 }
 
-case class UnobservableMarkovModelState(label: String) extends MarkovModelState {
-  override def toString: String = label
+case class UnobservableMarkovModelState(label: String) extends MarkovModelState
+object UnobservableMarkovModelState {
+  implicit def showStart: Show[UnobservableMarkovModelState] =
+    new Show[UnobservableMarkovModelState] {
+      def text(s: UnobservableMarkovModelState): String = s.label
+    }
 }
 
-case class ObservableMarkovModelState(label: String) extends MarkovModelState {
-  override def toString: String = label
+case class ObservableMarkovModelState(label: String) extends MarkovModelState
+object ObservableMarkovModelState {
+  implicit def showStart: Show[ObservableMarkovModelState] =
+    new Show[ObservableMarkovModelState] {
+      def text(s: ObservableMarkovModelState): String = s.label
+    }
 }
 
 class HiddenMarkovModel(
@@ -40,7 +53,7 @@ class HiddenMarkovModel(
   emissionProbability: Map[UnobservableMarkovModelState, Map[ObservableMarkovModelState, Double]] // arrows from un-observables to observables
   ) {
 
-  val startState = MarkovModelStartState
+  val startState = MarkovModelStartState()
 
   val graph = JungDirectedGraph[MarkovModelState, Double](
     states ++ observations ++ List(startState),
@@ -50,8 +63,7 @@ class HiddenMarkovModel(
       val stateEdges = transitionProbability.flatMap({ case (from, toMap) => toMap.map({ case (to, p) => (state2vertex(from), state2vertex(to), p) }) })
       val emissionEdges = emissionProbability.flatMap({ case (from, toMap) => toMap.map({ case (to, p) => (state2vertex(from), state2vertex(to), p) }) })
       startEdges.toList ++ stateEdges.toList ++ emissionEdges.toList
-    }
-  )
+    })
 
 }
 

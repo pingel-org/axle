@@ -2,6 +2,7 @@
 package axle.lx
 
 import spire.algebra.Eq
+import axle.Show
 
 object Gold {
 
@@ -23,12 +24,12 @@ object Gold {
 
   implicit def enLanguage(sequences: Set[Expression]): Language = Language(sequences)
 
-  case class Language(sequences: Set[Expression]) {
-
-    override def toString: String = "{" + sequences.mkString(", ") + "}"
-  }
+  case class Language(sequences: Set[Expression])
 
   object Language {
+    implicit def showLanguage: Show[Language] = new Show[Language] {
+      def text(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
+    }
     implicit val languageEq = new Eq[Language] {
       def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
     }
@@ -67,8 +68,11 @@ object Gold {
 
   }
 
-  case class Morpheme(s: String) {
-    override def toString: String = s
+  case class Morpheme(s: String)
+  object Morpheme {
+    implicit def showMorpheme: Show[Morpheme] = new Show[Morpheme] {
+      def text(m: Morpheme): String = m.s
+    }
   }
 
   case class Text(expressions: List[Expression]) {
@@ -78,8 +82,11 @@ object Gold {
     def isFor(ℒ: Language) = content.equals(ℒ) // TODO equals
 
     def content: Language = new Language(expressions.filter(_ != ♯).toSet)
-
-    override def toString: String = "<" + expressions.mkString(", ") + ">"
+  }
+  object Text {
+    implicit def showText: Show[Text] = new Show[Text] {
+      def text(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
+    }
   }
 
   implicit def enVocabulary(morphemes: Set[Morpheme]): Vocabulary = Vocabulary(morphemes)

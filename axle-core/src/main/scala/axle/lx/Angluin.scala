@@ -7,15 +7,18 @@ import spire.algebra.Eq
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
 
+import axle.Show
+
 object Angluin {
 
-  case class Symbol(s: String) {
-    override def toString: String = s
-  }
+  case class Symbol(s: String)
 
   object Symbol {
     implicit val symbolEq = new Eq[Symbol] {
       def eqv(x: Symbol, y: Symbol): Boolean = x equals y
+    }
+    implicit def showSymbol: Show[Symbol] = new Show[Symbol] {
+      def text(s: Symbol): String = s.s
     }
   }
 
@@ -87,14 +90,14 @@ object Angluin {
     def prefixes: Language = ???
 
     def goodFinals(w: List[Symbol]): Language = ???
-
-    override def toString: String = "{" + sequences.mkString(", ") + "}"
-
   }
 
   object Language {
     implicit val languageEq = new Eq[Language] {
       def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
+    }
+    implicit def showLanguage: Show[Language] = new Show[Language] {
+      def text(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
     }
   }
 
@@ -183,8 +186,12 @@ object Angluin {
     def isFor(ℒ: Language) = content === ℒ
 
     def content: Language = new Language(expressions.filter(_ != ♯))
-
-    override def toString: String = "<" + expressions.mkString(", ") + ">"
-
   }
+
+  object Text {
+    implicit def showText: Show[Text] = new Show[Text] {
+      def text(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
+    }
+  }
+  
 }
