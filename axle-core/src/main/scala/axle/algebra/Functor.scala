@@ -1,6 +1,7 @@
 package axle.algebra
 
 import scala.reflect.ClassTag
+import scala.collection.parallel.immutable.ParSeq
 
 trait Functor[F[_]] {
   def map[A, B: ClassTag](xs: F[A])(f: A => B): F[B]
@@ -31,5 +32,17 @@ object Functor {
       def map[B, C: ClassTag](fn: A => B)(f: B => C) =
         f compose fn
     }
+
+  implicit def functorParSeq: Functor[ParSeq] = new Functor[ParSeq] {
+
+    def map[A, B: ClassTag](ps: ParSeq[A])(f: A => B): ParSeq[B] =
+      ps.map(f)
+  }
+
+  implicit def functorIndexedSeq: Functor[scala.collection.immutable.IndexedSeq] = new Functor[scala.collection.immutable.IndexedSeq] {
+
+    def map[A, B: ClassTag](is: scala.collection.immutable.IndexedSeq[A])(f: A => B): scala.collection.immutable.IndexedSeq[B] =
+      is.map(f)
+  }
 
 }

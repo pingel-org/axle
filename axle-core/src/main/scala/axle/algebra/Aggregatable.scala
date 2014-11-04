@@ -1,6 +1,7 @@
 package axle.algebra
 
 import scala.reflect.ClassTag
+import scala.collection.parallel.immutable.ParSeq
 
 import spire.algebra.Eq
 import spire.algebra.Ring
@@ -30,6 +31,16 @@ object Aggregatable {
   implicit def aggregatableList = new Aggregatable[List] {
     def aggregate[A, B: ClassTag](as: List[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
       as.aggregate(zeroValue)(seqOp, combOp)
+  }
+
+  implicit def aggregatableParSeq = new Aggregatable[ParSeq] {
+    def aggregate[A, B: ClassTag](ps: ParSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+      ps.aggregate(zeroValue)(seqOp, combOp)
+  }
+
+  implicit def aggregatableIndexedSeq = new Aggregatable[scala.collection.immutable.IndexedSeq] {
+    def aggregate[A, B: ClassTag](is: scala.collection.immutable.IndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+      is.aggregate(zeroValue)(seqOp, combOp)
   }
   
 }
