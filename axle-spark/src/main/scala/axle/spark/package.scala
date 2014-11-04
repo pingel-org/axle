@@ -1,49 +1,64 @@
 package axle
 
-import org.apache.spark.rdd.RDD
-import org.apache.spark.Partition
-import org.apache.spark.TaskContext
 import scala.collection.GenTraversableOnce
 import scala.reflect.ClassTag
 
+import axle.algebra.Aggregatable
+import axle.algebra.Finite
+import axle.algebra.Functor
+import axle.algebra.MapFrom
+import axle.algebra.MapReducible
+import axle.algebra.SetFrom
+
+import org.apache.spark.Partition
+import org.apache.spark.TaskContext
+import org.apache.spark.rdd.RDD
+
 package object spark {
 
-  implicit class RDDAsSeq[A](rdd: RDD[A])(implicit split: Partition, context: TaskContext)
-    extends Seq[A] {
+  implicit def finiteRDD: Finite[RDD] = new Finite[RDD] {
 
-    def iterator: Iterator[A] =
-      rdd.iterator(split, context)
+    def size[A: ClassTag](rdd: RDD[A]): Long =
+      rdd.count
+  }
 
-    def apply(idx: Int): A =
-      rdd.apply(idx)
+  implicit def aggregatableRDD = new Aggregatable[RDD] {
+    def aggregate[A, B: ClassTag](rdd: RDD[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+      rdd.aggregate(zeroValue)(seqOp, combOp)
+  }
 
-    def length: Int =
-      rdd.length
-
-    def map[B: ClassTag](f: A ⇒ B): RDD[B] =
+  implicit def functorRDD = new Functor[RDD] {
+    def map[A, B: ClassTag](rdd: RDD[A])(f: A => B): RDD[B] =
       rdd.map(f)
+  }
 
-    def flatMap[B: ClassTag](f: (A) ⇒ TraversableOnce[B]): RDD[B] =
-      rdd.flatMap { f }
+  implicit def mapFromRDD: MapFrom[RDD] = new MapFrom[RDD] {
 
-    override def filter(p: (A) ⇒ Boolean): Seq[A] =
-      rdd.filter { p }
+    def toMap[K: ClassTag, V: ClassTag](rdd: RDD[(K, V)]): Map[K, V] =
+      rdd.collect().toMap
+  }
 
-    def collect[B: ClassTag](pf: PartialFunction[A, B]): Seq[B] =
-      rdd.collect { pf }
+  implicit def mapReduceRDD: MapReducible[RDD] = new MapReducible[RDD] {
 
-    //def reduce[A1 >: A](op: (A1, A1) => A1): A1 =
-    //  rdd.reduce { op }
+    def mapReduce[A: ClassTag, B: ClassTag, K: ClassTag](
+      input: RDD[A],
+      mapper: A => (K, B),
+      zero: B,
+      reduce: (B, B) => B): RDD[(K, B)] =
+      input
+        .map(mapper)
+        .groupBy(_._1)
+        .map({
+          case (k, kbs) => {
+            (k, kbs.map(_._2).aggregate(zero)(reduce, reduce))
+          }
+        })
+  }
 
-    //    override def foldLeft[B: ClassTag](z: B)(op: (B, A) ⇒ B): B =
-    //      rdd.foldLeft(z)(op)
+  implicit def settableRDD: SetFrom[RDD] = new SetFrom[RDD] {
 
-    def aggregate[B: ClassTag](z: ⇒ B)(seqOp: (B, A) ⇒ B, combOp: (B, B) ⇒ B): B =
-      rdd.aggregate(z)(seqOp, combOp)
-
-    def groupBy[B: ClassTag](f: A => B) =
-      rdd.groupBy { f }
-
+    def toSet[A: ClassTag](rdd: RDD[A]): Set[A] =
+      rdd.collect.toSet
   }
 
 }
