@@ -20,11 +20,11 @@ object AxleBuild extends Build {
 
     organization := "org.pingel",
 
-    scalaVersion := "2.11.2",
+    scalaVersion := "2.11.4",
 
-    //crossScalaVersions := Seq("2.10.4", "2.11.2"),
+    //crossScalaVersions := Seq("2.10.4", "2.11.4"),
 
-    crossScalaVersions := Seq("2.11.2"),
+    crossScalaVersions := Seq("2.11.4"),
 
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2" % "2.3.11" % "test",
