@@ -3,9 +3,14 @@ package axle.ml
 import scala.Vector
 import scala.collection.immutable.TreeMap
 import scala.util.Random.shuffle
+import scala.reflect.ClassTag
 
 //import FeatureNormalizerModule.PCAFeatureNormalizer
 import axle.matrix.MatrixModule
+import axle.algebra.Functor
+import axle.algebra.Aggregatable
+import axle.algebra.Finite
+import axle.algebra.Monad
 import spire.algebra.Eq
 import spire.algebra.MetricSpace
 import spire.implicits.DoubleAlgebra
@@ -33,19 +38,19 @@ trait KMeansModule
    *
    */
 
-  def classifier[T: Eq](
-    data: Seq[T],
+  def classifier[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Monad](
+    data: F[T],
     N: Int,
-    featureExtractor: T => Seq[Double],
+    featureExtractor: T => F[Double],
     constructor: Seq[Double] => T,
     K: Int,
-    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double], normalizer: FeatureNormalizer): KMeansClassifier[T] =
+    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double], normalizer: FeatureNormalizer): KMeansClassifier[T, F] =
     KMeansClassifier(data, N, featureExtractor, constructor, K, iterations)
 
   // TODO: default distance = distance.euclidean
 
   /**
-   * KMeansClassifier[T]
+   * KMeansClassifier[T, F]
    *
    * @tparam T       type of the objects being classified
    *
@@ -58,19 +63,22 @@ trait KMeansModule
    * @param distanceLog      K x iterations
    */
 
-  case class KMeansClassifier[T: Eq](
-    data: Seq[T],
+  case class KMeansClassifier[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Monad](
+    data: F[T],
     N: Int,
-    featureExtractor: T => Seq[Double],
+    featureExtractor: T => F[Double], // TODO: may not be exactly F
     constructor: Seq[Double] => T,
     K: Int,
     iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double], featureNormalizer: FeatureNormalizer)
     extends Classifier[T, Int] {
 
-    val features = matrix(N, data.length, data.flatMap(featureExtractor).toArray).t
+    val finite = implicitly[Finite[F]]
+    val monad = implicitly[Monad[F]]
+
+    val features = matrix(N, finite.size(data), monad.bind(data)(featureExtractor).toArray).t
 
     val normalizer = featureNormalizer.normalizer(features)
-    
+
     val X = normalizer.normalizedData
     val μads = clusterLA(X, space, K, iterations)
 
@@ -83,7 +91,7 @@ trait KMeansModule
 
     def exemplar(i: Int): T = exemplars(i)
 
-    def classes(): Range = 0 until K
+    def classes: Range = 0 until K
 
     def apply(observation: T): Int = {
       val (i, d) = centroidIndexAndDistanceClosestTo(space, μ, normalizer(featureExtractor(observation)))

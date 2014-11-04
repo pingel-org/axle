@@ -1,15 +1,15 @@
 package axle.ml
 
-import spire.optional.unicode.Σ
 import spire.math._
 import spire.implicits._
 import spire.algebra._
 import axle._
 import axle.matrix.JblasMatrixModule
 import axle.algebra._
-import Semigroups._
+import axle.algebra.Semigroups._
+import scala.reflect.ClassTag
 
-abstract class Classifier[DATA, CLASS: Order: Eq] extends Function1[DATA, CLASS] {
+abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Function1[DATA, CLASS] {
 
   def apply(d: DATA): CLASS
 
@@ -25,18 +25,32 @@ abstract class Classifier[DATA, CLASS: Order: Eq] extends Function1[DATA, CLASS]
    *
    */
 
-  private[this] def predictedVsActual(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): (Int, Int, Int, Int) = Σ(data.map(d => {
-    val actual: CLASS = classExtractor(d)
-    val predicted: CLASS = this(d)
-    (actual === k, predicted === k) match {
-      case (true, true) => (1, 0, 0, 0) // true positive
-      case (false, true) => (0, 1, 0, 0) // false positive
-      case (false, false) => (0, 0, 1, 0) // false negative
-      case (true, false) => (0, 0, 0, 1) // true negative
-    }
-  }))
+  private[this] def predictedVsActual[F[_]: Aggregatable: Functor](
+    data: F[DATA],
+    classExtractor: DATA => CLASS,
+    k: CLASS): (Int, Int, Int, Int) = {
 
-  def performance(data: Seq[DATA], classExtractor: DATA => CLASS, k: CLASS): ClassifierPerformance[Rational] = {
+    val func = implicitly[Functor[F]]
+    val agg = implicitly[Aggregatable[F]]
+
+    val scores = func.map(data)(d => {
+      val actual: CLASS = classExtractor(d)
+      val predicted: CLASS = this(d)
+      (actual === k, predicted === k) match {
+        case (true, true)   => (1, 0, 0, 0) // true positive
+        case (false, true)  => (0, 1, 0, 0) // false positive
+        case (false, false) => (0, 0, 1, 0) // false negative
+        case (true, false)  => (0, 0, 0, 1) // true negative
+      }
+    })
+
+    Σ(scores)
+  }
+
+  def performance[F[_]: Aggregatable: Functor](
+    data: F[DATA],
+    classExtractor: DATA => CLASS,
+    k: CLASS): ClassifierPerformance[Rational] = {
 
     val (tp, fp, fn, tn) = predictedVsActual(data, classExtractor, k)
 
@@ -48,7 +62,9 @@ abstract class Classifier[DATA, CLASS: Order: Eq] extends Function1[DATA, CLASS]
       )
   }
 
-  def confusionMatrix[L: Order](data: Seq[DATA], labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L] =
+  def confusionMatrix[L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom](
+    data: F[DATA],
+    labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L, F] =
     new ConfusionMatrix(this, data, labelExtractor) with JblasMatrixModule
 
 }
