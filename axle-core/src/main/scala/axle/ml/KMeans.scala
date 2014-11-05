@@ -3,9 +3,16 @@ package axle.ml
 import scala.Vector
 import scala.collection.immutable.TreeMap
 import scala.util.Random.shuffle
+import scala.reflect.ClassTag
 
 //import FeatureNormalizerModule.PCAFeatureNormalizer
 import axle.matrix.MatrixModule
+import axle.algebra.Aggregatable
+import axle.algebra.Finite
+import axle.algebra.Functor
+import axle.algebra.Indexed
+import axle.algebra.Monad
+
 import spire.algebra.Eq
 import spire.algebra.MetricSpace
 import spire.implicits.DoubleAlgebra
@@ -33,19 +40,19 @@ trait KMeansModule
    *
    */
 
-  def classifier[T: Eq](
-    data: Seq[T],
+  def classifier[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed](
+    data: F[T],
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
     K: Int,
-    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double], normalizer: FeatureNormalizer): KMeansClassifier[T] =
+    iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double], normalizer: FeatureNormalizer): KMeansClassifier[T, F] =
     KMeansClassifier(data, N, featureExtractor, constructor, K, iterations)
 
   // TODO: default distance = distance.euclidean
 
   /**
-   * KMeansClassifier[T]
+   * KMeansClassifier[T, F]
    *
    * @tparam T       type of the objects being classified
    *
@@ -58,8 +65,8 @@ trait KMeansModule
    * @param distanceLog      K x iterations
    */
 
-  case class KMeansClassifier[T: Eq](
-    data: Seq[T],
+  case class KMeansClassifier[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed](
+    data: F[T],
     N: Int,
     featureExtractor: T => Seq[Double],
     constructor: Seq[Double] => T,
@@ -67,10 +74,16 @@ trait KMeansModule
     iterations: Int)(implicit space: MetricSpace[Matrix[Double], Double], featureNormalizer: FeatureNormalizer)
     extends Classifier[T, Int] {
 
-    val features = matrix(N, data.length, data.flatMap(featureExtractor).toArray).t
+    val finite = implicitly[Finite[F]]
+    val functor = implicitly[Functor[F]]
+    val indexed = implicitly[Indexed[F]]
 
-    val normalizer = featureNormalizer.normalizer(features)
-    
+    // TODO: This is not at all what we should be doing when F is a large RDD
+    val features: F[Seq[Double]] = functor.map(data)(featureExtractor)
+    val featureMatrix = matrix[Double](finite.size(data).toInt, N, (r: Int, c: Int) => indexed.at(features)(r).apply(c))
+
+    val normalizer = featureNormalizer.normalizer(featureMatrix)
+
     val X = normalizer.normalizedData
     val μads = clusterLA(X, space, K, iterations)
 
@@ -83,7 +96,7 @@ trait KMeansModule
 
     def exemplar(i: Int): T = exemplars(i)
 
-    def classes(): Range = 0 until K
+    def classes: Range = 0 until K
 
     def apply(observation: T): Int = {
       val (i, d) = centroidIndexAndDistanceClosestTo(space, μ, normalizer(featureExtractor(observation)))
@@ -142,10 +155,13 @@ trait KMeansModule
       space: MetricSpace[Matrix[Double], Double],
       K: Int,
       iterations: Int): Seq[(Matrix[Double], Matrix[Int], Matrix[Double])] = {
+      
       assert(K < X.rows)
+      
       val μ0 = X(shuffle((0 until X.rows).toList).take(K), 0 until X.columns)
       val a0 = zeros[Int](X.rows, 1)
       val d0 = zeros[Double](X.rows, 1)
+      
       (0 until iterations).scanLeft((μ0, a0, d0))((μad: (Matrix[Double], Matrix[Int], Matrix[Double]), i: Int) => {
         val (a, d) = assignmentsAndDistances(space, X, μad._1)
         val (μ, unassignedClusterIds) = centroids(X, K, a)
@@ -164,17 +180,19 @@ trait KMeansModule
      */
 
     def centroids(X: Matrix[Double], K: Int, assignments: Matrix[Int]): (Matrix[Double], Seq[Int]) = {
+      
       val A = matrix(X.rows, K, (r: Int, c: Int) => if (c === assignments(r, 0)) 1d else 0d)
       val distances = A.t ⨯ X // K x N
       val counts = A.columnSums.t // K x 1
       val unassignedClusterIds = (0 until K).filter(counts(_, 0) === 0d)
+      
       (distances.divColumnVector(counts), unassignedClusterIds)
     }
 
     def distanceTreeMap(centroidId: Int): TreeMap[Int, Double] = new TreeMap[Int, Double]() ++
       distanceLog.zipWithIndex.map({ case (dl, i) => i -> dl(centroidId, 0) }).toMap
 
-    def distanceLogSeries(): List[(String, TreeMap[Int, Double])] =
+    def distanceLogSeries: List[(String, TreeMap[Int, Double])] =
       (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList
 
   }

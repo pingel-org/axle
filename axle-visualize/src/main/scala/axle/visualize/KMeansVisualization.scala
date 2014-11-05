@@ -32,8 +32,8 @@ import spire.implicits.moduleOps
 
 trait KMeansVisualizationModule extends KMeansModule {
 
-  implicit def enComponentKMeansClassifier[T](classifier: KMeansClassifier[T]): Component =
-    new KMeansVisualization[T](classifier)
+  implicit def enComponentKMeansClassifier[T, F[_]](classifier: KMeansClassifier[T, F]): Component =
+    new KMeansVisualization[T, F](classifier)
 
   //  def visualize[D](classifier: KMeansClassifier[D],
   //    width: Int = 600,
@@ -44,8 +44,8 @@ trait KMeansVisualizationModule extends KMeansModule {
   //    fontSize: Int = 12) =
   //    new KMeansVisualization[D](classifier, width, height, border, pointDiameter, fontName, fontSize)
 
-  case class KMeansVisualization[D](
-    classifier: KMeansClassifier[D],
+  case class KMeansVisualization[D, F[_]](
+    classifier: KMeansClassifier[D, F],
     w: Int = 600,
     h: Int = 600,
     border: Int = 50,
@@ -55,12 +55,12 @@ trait KMeansVisualizationModule extends KMeansModule {
 
     setMinimumSize(new Dimension(w + border, h + border))
 
-    val features = classifier.features
+    import classifier.featureMatrix
 
     val colors = List(blue, red, green, orange, pink, yellow)
 
-    val maxs = features.columnMaxs
-    val mins = features.columnMins
+    val maxs = featureMatrix.columnMaxs
+    val mins = featureMatrix.columnMins
 
     val minX = mins(0, 0)
     val maxX = maxs(0, 0)
@@ -86,10 +86,10 @@ trait KMeansVisualizationModule extends KMeansModule {
 
     def cluster(g2d: Graphics2D, i: Int): Unit = {
       g2d.setColor(colors(i % colors.length))
-      (0 until features.rows) foreach { r =>
+      (0 until featureMatrix.rows) foreach { r =>
         if (classifier.a(r, 0) === i) {
           // TODO figure out what to do when N > 2
-          val center = Point2D(features(r, 0), features(r, 1))
+          val center = Point2D(featureMatrix(r, 0), featureMatrix(r, 1))
           scaledArea.fillOval(g2d, center, pointDiameter, pointDiameter)
           // scaledArea.drawString(g2d, r.toString + "(%.2f,%.2f)".format(center.x, center.y), center)
         }
