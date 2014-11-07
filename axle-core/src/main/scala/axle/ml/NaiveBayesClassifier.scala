@@ -57,7 +57,7 @@ class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: Cla
   val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Rational].withDefaultValue(implicitly[Field[Rational]].zero)
 
   val agg = implicitly[Aggregatable[F]]
-  
+
   val featureTally: Map[(CLASS, String, FEATURE), Rational] =
     agg.aggregate(data)(emptyFeatureTally)(
       (acc, d) => {
@@ -69,7 +69,10 @@ class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: Cla
       _ + _)
 
   val func = implicitly[Functor[F]]
-  val classTally: Map[CLASS, Rational] = agg.tally[CLASS, Rational](func.map(data)(classExtractor))
+  val classTally: Map[CLASS, Rational] =
+    agg
+      .tally[CLASS, Rational](func.map(data)(classExtractor))
+      .withDefaultValue(implicitly[Field[Rational]].zero)
 
   val C = new TallyDistribution0(classTally, classRandomVariable.name)
 
@@ -82,7 +85,9 @@ class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: Cla
 
   // Note: The "parent" (or "given") of these feature variables is C
   val Fs = featureRandomVariables.map(featureRandomVariable =>
-    new TallyDistribution1(tallyFor(featureRandomVariable), featureRandomVariable.name))
+    new TallyDistribution1(
+      tallyFor(featureRandomVariable).withDefaultValue(implicitly[Field[Rational]].zero),
+      featureRandomVariable.name))
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
@@ -92,7 +97,9 @@ class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: Cla
 
     def f(c: CLASS): Rational =
       Π(Fs.zip(fs).map({
-        case (fVar, fVal) => P((fVar is fVal) | (C is c)).apply()
+        case (fVar, fVal) => {
+          P((fVar is fVal) | (C is c)).apply()
+        }
       }))
 
     def g(c: CLASS) = P(C is c).apply() * f(c)
