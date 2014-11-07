@@ -29,7 +29,7 @@ object TallyDistribution0 {
 
 }
 
-class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], val name: String = "unnamed")
+class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name: String = "unnamed")
   extends Distribution0[A, N] {
 
   val ring = implicitly[Ring[N]]
@@ -77,7 +77,7 @@ class TallyDistribution0[A, N: Field: Order](tally: Map[A, N], val name: String 
 
 }
 
-class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N], _name: String = "unnamed")
+class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), N], _name: String = "unnamed")
   extends Distribution1[A, G, N] {
 
   def name: String = _name
@@ -102,9 +102,9 @@ class TallyDistribution1[A, G: Eq, N: Field: Order](tally: Map[(A, G), N], _name
   def probabilityOf(a: A): N = Σ(gvs.map(gv => tally((a, gv)))) / totalCount
 
   def probabilityOf(a: A, given: Case[G, N]): N = given match {
-    case CaseIs(argGrv, gv) => tally((a, gv)) / Σ(tally.filter(_._1._2 === gv).map(_._2))
-    case CaseIsnt(argGrv, gv) => 1 - (tally((a, gv)) / Σ(tally.filter(_._1._2 === gv).map(_._2)))
-    case _ => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
+    case CaseIs(argGrv, gv)   => tally.get((a, gv)).getOrElse(implicitly[Field[N]].zero) / Σ(tally.filter(_._1._2 === gv).map(_._2))
+    case CaseIsnt(argGrv, gv) => 1 - (tally.get((a, gv)).getOrElse(implicitly[Field[N]].zero) / Σ(tally.filter(_._1._2 === gv).map(_._2)))
+    case _                    => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
   }
 
 }
