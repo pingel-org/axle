@@ -20,11 +20,11 @@ object AxleBuild extends Build {
 
     organization := "org.pingel",
 
-    scalaVersion := "2.10.4",
+    scalaVersion := "2.11.4",
 
     //crossScalaVersions := Seq("2.10.4", "2.11.4"),
 
-    crossScalaVersions := Seq("2.10.4"), // Seq("2.11.4"),
+    crossScalaVersions := Seq("2.11.4"),
 
     libraryDependencies ++= Seq(
       "org.specs2" %% "specs2" % "2.3.11" % "test"
@@ -138,10 +138,11 @@ import axle._
       "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly(),
       "com.googlecode.matrix-toolkits-java" % "mtj" % "1.0.1",
       "org.spire-math" %% "spire" % "0.8.2",
-      "com.chuusai" % "shapeless_2.10.4" % "2.0.0"
+      "com.chuusai" %% "shapeless" % "2.0.0"
     )
   )
 
+/*
   lazy val axleSpark = Project(
     id = "axle-spark",
     base = file("axle-spark"),
@@ -152,6 +153,7 @@ import axle._
       "org.apache.spark" %% "spark-core" % "1.1.0"
     )
   ).dependsOn(axleCore)
+*/
 
 /*
   lazy val axleScalding = Project(
@@ -225,7 +227,7 @@ import axle._
     axleCore,
     axleGames,
     axleVisualize,
-    axleSpark,
+    /*axleSpark,*/
     /*axleScalding,*/
     axleHBase,
     axleLanguages)
