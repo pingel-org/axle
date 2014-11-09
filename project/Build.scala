@@ -169,6 +169,16 @@ import axle._
   ).dependsOn(axleCore)
 */
 
+  lazy val axleAlgorithms = Project(
+    id = "axle-algorithms",
+    base = file("axle-algorithms"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-algorithms",
+    libraryDependencies ++= Seq(
+    )
+  ).dependsOn(axleCore)
+
   lazy val axleLanguages = Project(
     id = "axle-languages",
     base = file("axle-languages"),
@@ -213,7 +223,7 @@ import axle._
       "org.jogamp.gluegen" % "gluegen-rt-main" % "2.0.2", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.jogl" % "jogl-all-main" % "2.0.2"
     )
-  ).dependsOn(axleCore)
+  ).dependsOn(axleCore, axleAlgorithms)
 
   lazy val axleAggregate = Project(
     id = "axle-aggregate",
@@ -225,6 +235,7 @@ import axle._
     publishLocal := { }
   ).aggregate(
     axleCore,
+    axleAlgorithms,
     axleGames,
     axleVisualize,
     /*axleSpark,*/
