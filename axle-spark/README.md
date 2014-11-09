@@ -16,6 +16,7 @@ import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.Functor
 import axle.algebra.Σ
+import axle.spark._
 import spire.implicits.IntAlgebra
 
 object DemoPi extends App {
