@@ -20,6 +20,7 @@ package axle.ml
 import spire.math._
 import spire.implicits._
 import spire.algebra._
+import axle.Show
 
 case class ClassifierPerformance[N: Field](
   precision: N,
@@ -27,17 +28,28 @@ case class ClassifierPerformance[N: Field](
   specificity: N,
   accuracy: N) {
 
-  def f1Score() = 2 * (precision * recall) / (precision + recall)
+  def f1Score: N = 2 * (precision * recall) / (precision + recall)
 
-  def fScore(β: Int = 1) =
+  def fScore(β: Int = 1): N =
     (1 + (β * β)) * (precision * recall) / ((β * β * precision) + recall)
 
-  override def toString() = s"""
-Precision   $precision
+}
+
+object ClassifierPerformance {
+
+  implicit def showCP[N: Field]: Show[ClassifierPerformance[N]] =
+    new Show[ClassifierPerformance[N]] {
+
+      def text(cp: ClassifierPerformance[N]): String = {
+        import cp._
+        s"""Precision   $precision
 Recall      $recall
 Specificity $specificity
 Accuracy    $accuracy
 F1 Score    $f1Score
 """
+      }
+
+    }
 
 }

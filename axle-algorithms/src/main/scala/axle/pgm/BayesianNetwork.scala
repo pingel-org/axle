@@ -4,6 +4,7 @@ import scala.Stream.cons
 import scala.Stream.empty
 
 import axle.XmlAble
+import axle.Show
 import axle.graph.DirectedGraph
 import axle.graph.JungDirectedGraph
 import axle.graph.Vertex
@@ -28,8 +29,6 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
   case class BayesianNetworkNode[T: Eq, N: Field](rv: Distribution[T, N], cpt: Factor[T, N])
     extends XmlAble {
 
-    override def toString: String = rv.name + "\n\n" + cpt
-
     def toXml: xml.Node =
       <html>
         <div>
@@ -41,6 +40,15 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
   }
 
   object BayesianNetworkNode {
+
+    implicit def bnnShow[T, N]: Show[BayesianNetworkNode[T, N]] = new Show[BayesianNetworkNode[T, N]] {
+
+      def text(bnn: BayesianNetworkNode[T, N]): String = {
+        import bnn._
+        rv.name + "\n\n" + cpt
+      }
+
+    }
 
     implicit def bnnEq[T: Eq, N: Field] = new Eq[BayesianNetworkNode[T, N]] {
       def eqv(x: BayesianNetworkNode[T, N], y: BayesianNetworkNode[T, N]): Boolean = x equals y
@@ -299,7 +307,7 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
 
     def _factorElimination1(Q: Set[Distribution[T, N]], S: List[Factor[T, N]]): Factor[T, N] = S match {
 
-      case Nil => throw new Exception("S is empty")
+      case Nil       => throw new Exception("S is empty")
 
       case fi :: Nil => fi.projectToOnly(Q.toVector)
 

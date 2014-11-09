@@ -1,5 +1,6 @@
 package axle.ml
 
+import axle.Show
 import axle.matrix._
 import axle.matrix.MatrixModule
 import spire.algebra._
@@ -46,10 +47,21 @@ abstract class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[
   lazy val rowSums = counts.rowSums
   lazy val columnSums = counts.columnSums
 
-  lazy val asString = (labelList.zipWithIndex.map({
-    case (label, r) => ((0 until counts.columns).map(c => formatNumber(counts(r, c))).mkString(" ") + " : " + formatNumber(rowSums(r, 0)) + " " + label + "\n")
-  }).mkString("")) + "\n" +
-    (0 until counts.columns).map(c => formatNumber(columnSums(0, c))).mkString(" ") + "\n"
+}
 
-  override def toString: String = asString
+object ConfusionMatrix {
+
+  implicit def showCM[T, CLASS, L, F[_]]: Show[ConfusionMatrix[T, CLASS, L, F]] =
+    new Show[ConfusionMatrix[T, CLASS, L, F]] {
+
+      def text(cm: ConfusionMatrix[T, CLASS, L, F]): String = {
+        import cm._
+        (labelList.zipWithIndex.map({
+          case (label, r) => ((0 until counts.columns).map(c => formatNumber(counts(r, c))).mkString(" ") + " : " + formatNumber(rowSums(r, 0)) + " " + label + "\n")
+        }).mkString("")) + "\n" +
+          (0 until counts.columns).map(c => formatNumber(columnSums(0, c))).mkString(" ") + "\n"
+      }
+
+    }
+
 }
