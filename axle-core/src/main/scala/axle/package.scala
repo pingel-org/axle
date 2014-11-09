@@ -131,7 +131,7 @@ package object axle {
 
   def id[A](x: A): A = x
 
-  def argmax[K, N: Order](ks: Iterable[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
+  // def argmax[K, N: Order](ks: Iterable[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
 
   // IO
 

@@ -20,17 +20,31 @@ import spire.math.Real
  *
  */
 
+import spire.implicits._
+
 package object algebra {
 
-  def argmaxx[K, N: Order](ks: Iterable[K], f: K => N): K =
-    ks.map(k => (k, f(k))).maxBy(_._2)._1
+  def argmax[R[_]: Functor: Reducible, K, N: Order](ks: R[K], f: K => N): Option[K] = {
 
+    val functor = implicitly[Functor[R]]
+    val reducer = implicitly[Reducible[R]]
+    val mapped = functor.map(ks)(k => (k, f(k)))
+    // TODO: This could be extracted as Reducible.maxBy
+
+    reducer.reduceOption(mapped)({
+      case (kv1, kv2) =>
+        if (kv1._2 > kv2._2) kv1 else kv2
+    }).map(_._1)
+  }
+
+  //.maxBy(_._2)._1
+  
   def Σ[A: ClassTag, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
 
   def sum[A: ClassTag, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
-    
+
   def Π[A: ClassTag, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
@@ -49,7 +63,7 @@ package object algebra {
 
     def distance(v: Real, w: Real): Double = (v.toDouble - w.toDouble).abs
   }
-  
+
   implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] = new MetricSpace[Double, Double] {
 
     def distance(v: Double, w: Double): Double = (v - w).abs

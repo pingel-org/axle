@@ -21,6 +21,12 @@ object Functor {
         list map f
     }
 
+  implicit def IndexedSeqFunctor: Functor[IndexedSeq] =
+    new Functor[IndexedSeq] {
+      def map[A, B: ClassTag](is: IndexedSeq[A])(f: A => B) =
+        is map f
+    }
+  
   implicit def OptFunctor: Functor[Option] =
     new Functor[Option] {
       def map[A, B: ClassTag](opt: Option[A])(f: A => B) =

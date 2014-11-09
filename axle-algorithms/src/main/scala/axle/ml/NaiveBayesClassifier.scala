@@ -1,6 +1,8 @@
 package axle.ml
 
-import axle.argmax
+import axle.algebra.argmax
+import axle.algebra.Functor
+import axle.algebra.Reducible
 import axle.enrichGenSeq
 import axle.stats.P
 import axle.stats.Distribution
@@ -104,7 +106,7 @@ class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: Cla
 
     def g(c: CLASS) = P(C is c).apply() * f(c)
 
-    argmaxx(C.values, g)
+    argmax(C.values, g).get // TODO: will be None if C.values is empty
   }
 
 }
