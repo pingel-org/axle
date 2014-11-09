@@ -18,7 +18,7 @@ import axle.algebra.Functor
 import axle.algebra.Σ
 import spire.implicits.IntAlgebra
 
-object DemoPi extends App with java.io.Serializable {
+object DemoPi extends App {
 
   val randomPointInCircle: () => Int = () => {
     val x = random * 2 - 1
