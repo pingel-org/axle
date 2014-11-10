@@ -4,8 +4,9 @@ import scala.collection.GenSeq
 
 import axle.enrichGenSeq
 import spire.implicits.LongAlgebra
+import axle.Show
 
-class Corpus(documents: GenSeq[String], language: Language) {
+class Corpus(val documents: GenSeq[String], language: Language) {
 
   lazy val wordCountMap: Map[String, Long] =
     documents.flatMap(doc => language.tokenize(doc.toLowerCase)).tally[Long]
@@ -22,18 +23,6 @@ class Corpus(documents: GenSeq[String], language: Language) {
   def topWords(cutoff: Long): List[String] =
     topWordCounts(cutoff) map { _._1 }
 
-  override def toString: String = {
-
-    val wordCutoff = 20L
-
-    s"""
-Corpus of ${documents.length} documents.
-There are ${topWords(wordCutoff).length} unique words used more than $wordCutoff time(s).
-Top 10 words: ${topWords(wordCutoff).take(10).mkString(", ")}
-Top 10 bigrams: ${topBigrams(10).mkString(", ")}
-"""
-  }
-
   lazy val bigramCounts = documents.flatMap({ d =>
     bigrams(language.tokenize(d.toLowerCase))
   }).tally[Long]
@@ -47,5 +36,26 @@ Top 10 bigrams: ${topBigrams(10).mkString(", ")}
 
   def topBigrams(maxBigrams: Int): List[(String, String)] =
     sortedBigramCounts take (maxBigrams) map { _._1 }
+
+}
+
+object Corpus {
+
+  implicit val showCorpus: Show[Corpus] = new Show[Corpus] {
+
+    def text(corpus: Corpus): String = {
+
+      import corpus._
+
+      val wordCutoff = 20L
+
+      s"""
+Corpus of ${documents.length} documents.
+There are ${topWords(wordCutoff).length} unique words used more than $wordCutoff time(s).
+Top 10 words: ${topWords(wordCutoff).take(10).mkString(", ")}
+Top 10 bigrams: ${topBigrams(10).mkString(", ")}
+"""
+    }
+  }
 
 }
