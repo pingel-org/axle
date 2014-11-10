@@ -1,14 +1,23 @@
 package axle.game
 
-abstract class Player[G <: Game[G]](val id: String, description: String) {
+import axle.Show
+
+abstract class Player[G <: Game[G]](val id: String, val description: String) {
 
   def move(state: G#STATE): (G#MOVE, G#STATE)
-
-  override def toString: String = description
 
   def introduceGame(): Unit = {}
 
   def displayEvents(events: List[Event[G]]): Unit = {}
 
   def endGame(state: G#STATE): Unit = {}
+}
+
+object Player {
+  
+  implicit def showPlayer[G <: Game[G]]: Show[Player[G]] = new Show[Player[G]] {
+    
+    def text(player: Player[G]): String = player.description
+  }
+  
 }

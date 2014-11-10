@@ -1,5 +1,7 @@
 package axle.ast.view
 
+import axle.Show
+
 class AstNodeFormatterString(
   config: FormatterConfig,
   state: FormatterState,
@@ -10,8 +12,6 @@ class AstNodeFormatterString(
     new AstNodeFormatterString(config, s, ss)
 
   override def result: String = subState.mkString("")
-
-  override def toString: String = subState.toList.mkString("")
 
   def accRaw(s: String, n: Int): AstNodeFormatterString =
     new AstNodeFormatterString(config, state, subState ++ List(s))
@@ -31,5 +31,15 @@ class AstNodeFormatterString(
   def accPushStack: AstNodeFormatter[String, List[String]] = this
 
   def accPopAndWrapStack(label: String): AstNodeFormatter[String, List[String]] = this
+
+}
+
+object AstNodeFormatterString {
+
+  implicit val showAstNodeFormatterString: Show[AstNodeFormatterString] =
+    new Show[AstNodeFormatterString] {
+
+      def text(anfs: AstNodeFormatterString): String = anfs.subState.toList.mkString("")
+    }
 
 }

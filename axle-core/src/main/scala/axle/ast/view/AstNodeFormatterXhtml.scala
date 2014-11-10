@@ -1,5 +1,7 @@
 package axle.ast.view
 
+import axle.Show
+
 class XhtmlAstNodeFormatter(
   config: FormatterConfig,
   state: FormatterState,
@@ -9,8 +11,6 @@ class XhtmlAstNodeFormatter(
   def apply(s: FormatterState, ss: List[xml.Node]): XhtmlAstNodeFormatter = new XhtmlAstNodeFormatter(config, s, ss)
 
   def result: List[xml.Node] = subState.toList
-
-  override def toString: String = subState.toList.mkString("")
 
   def accRaw(s: String, n: Int): XhtmlAstNodeFormatter =
     new XhtmlAstNodeFormatter(config, state, subState ++ List(xml.Text(s)))
@@ -31,5 +31,15 @@ class XhtmlAstNodeFormatter(
   def accPushStack: AstNodeFormatter[List[xml.Node], List[xml.Node]] = this
 
   def accPopAndWrapStack(label: String): AstNodeFormatter[List[xml.Node], List[xml.Node]] = this
+
+}
+
+object XhtmlAstNodeFormatter {
+
+  implicit val showXhtmlAstNodeFormatter: Show[XhtmlAstNodeFormatter] =
+    new Show[XhtmlAstNodeFormatter] {
+
+      def text(anfx: XhtmlAstNodeFormatter): String = anfx.subState.toList.mkString("")
+    }
 
 }

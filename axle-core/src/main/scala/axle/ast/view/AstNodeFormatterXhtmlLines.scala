@@ -75,8 +75,6 @@ class XhtmlLinesAstNodeFormatter(
 
   def lines(): Map[Int, xml.NodeSeq] = tokens.head.lines
 
-  override def toString() = "XhtmlLinesAccumulator.toString not implemented"
-
   // override def append(t: String) { tokens += t }
 
   // delegate to the top of the stack for all of these
