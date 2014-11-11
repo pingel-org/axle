@@ -88,7 +88,20 @@ case class CaseIs[A, N: Field](distribution: Distribution[A, N], v: A)
 
   def bayes = () => this.probability()
 
-  override def toString: String = distribution.name + " = " + v
+}
+
+object CaseIs {
+
+  import axle.Show
+
+  implicit def showCaseIs[A, N: Field]: Show[CaseIs[A, N]] = new Show[CaseIs[A, N]] {
+
+    def text(c: CaseIs[A, N]): String = {
+      import c._
+      distribution.name + " = " + v
+    }
+  }
+
 }
 
 case class CaseIsnt[A, N: Field](distribution: Distribution[A, N], v: A)

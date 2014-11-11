@@ -19,6 +19,8 @@ import spire.math.ConvertableFrom
 import spire.optional.unicode.Σ
 import spire.compat.ordering
 
+import axle.Show
+
 trait FactorModule extends MatrixModule {
 
   /* Technically a "Distribution" is probably a table that sums to 1, which is not
@@ -26,6 +28,18 @@ trait FactorModule extends MatrixModule {
    */
 
   object Factor {
+
+    implicit def showFactor[T, N]: Show[Factor[T, N]] = new Show[Factor[T, N]] {
+
+      def text(factor: Factor[T, N]): String = {
+        import factor._
+        varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
+          factor.cases.map(kase =>
+            kase.map(ci => ci.v.toString.padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
+              " " + factor(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
+      }
+
+    }
 
     implicit def factorEq[T: Eq, N: Field]: Eq[Factor[T, N]] = new Eq[Factor[T, N]] {
       def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
@@ -55,7 +69,7 @@ trait FactorModule extends MatrixModule {
 
   }
 
-  class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]) {
+  class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](val varList: Vector[Distribution[T, N]], val values: Map[Vector[CaseIs[T, N]], N]) {
 
     val field = implicitly[Field[N]]
 
@@ -99,12 +113,6 @@ trait FactorModule extends MatrixModule {
     def cases: Iterable[Seq[CaseIs[T, N]]] = (0 until elements.length) map { caseOf }
 
     def apply(c: Seq[CaseIs[T, N]]): N = elements(indexOf(c))
-
-    override def toString: String =
-      varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
-        cases.map(kase =>
-          kase.map(ci => ci.v.toString.padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
-            " " + this(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
 
     def toHtml: xml.Node =
       <table border={ "1" }>

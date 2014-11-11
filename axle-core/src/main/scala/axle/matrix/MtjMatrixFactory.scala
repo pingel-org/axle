@@ -47,7 +47,7 @@ trait MtjMatrixModule extends MatrixModule {
 
     implicit val format = (t: T) => t match {
       case d: Double => """%.6f""".format(d)
-      case _ => t.toString
+      case _         => t.toString
     }
 
     def rows: Int = mtj.numRows
@@ -71,7 +71,7 @@ trait MtjMatrixModule extends MatrixModule {
 
     def toList: List[T] = mtj match {
       case dm: DenseMatrix => dm.getData.toList.map(converter.apply _)
-      case _ => ???
+      case _               => ???
     }
 
     def column(j: Int): Matrix[T] = ??? //matrix(mtj.getColumn(j))
@@ -264,8 +264,19 @@ trait MtjMatrixModule extends MatrixModule {
       matrix[A](mtj)
     }
 
-    override def toString: String =
-      (0 until rows).map(i => (0 until columns).map(j => format(converter(mtj.get(i, j)))).mkString(" ")).mkString("\n")
+  }
+
+  object Matrix {
+
+    import axle.Show
+
+    implicit def showMatrix[T: C]: Show[Matrix[T]] = new Show[Matrix[T]] {
+
+      def text(m: Matrix[T]): String = {
+        import m._
+        (0 until rows).map(i => (0 until columns).map(j => format(converter(mtj.get(i, j)))).mkString(" ")).mkString("\n")
+      }
+    }
 
   }
 

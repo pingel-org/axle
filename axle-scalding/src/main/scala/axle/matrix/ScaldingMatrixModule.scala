@@ -140,9 +140,21 @@ trait ScaldingMatrixModule extends MatrixModule {
 
     def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = ???
 
-    override def toString() = scalding.toString // TODO ?
-
     def scalding() = storage
+  }
+
+  object Matrix {
+
+    import axle.Show
+
+    implicit def showMatrix[T: C]: Show[Matrix[T]] = new Show[Matrix[T]] {
+
+      def text(m: Matrix[T]): String = {
+        import m._
+        (0 until rows).map(i => (0 until columns).map(j => format(converter(mtj.get(i, j)))).mkString(" ")).mkString("\n")
+      }
+    }
+
   }
 
   // methods for creating matrices
