@@ -14,20 +14,27 @@ import org.apache.spark.Partition
 import org.apache.spark.TaskContext
 import org.apache.spark.rdd.RDD
 
+import com.twitter.chill.MeatLocker
+
 package object spark {
 
-  def freezeAB[A, B](f: A => B): A => B = {
-    val locker = com.twitter.chill.MeatLocker(f)
+  def freezeAtoB[A, B](f: A => B): A => B = {
+    val locker = MeatLocker(f)
     x => locker.get.apply(x)
   }
 
-  def freezeBAB[A, B](f: (B, A) => B): (B, A) => B = {
-    val locker = com.twitter.chill.MeatLocker(f)
+  def freezeAtoBC[A, B, C](f: A => (B, C)): A => (B, C) = {
+    val locker = MeatLocker(f)
+    x => locker.get.apply(x)
+  }
+  
+  def freezeBAtoB[A, B](f: (B, A) => B): (B, A) => B = {
+    val locker = MeatLocker(f)
     (b, a) => locker.get.apply(b, a)
   }
 
-  def freezeBBB[B](f: (B, B) => B): (B, B) => B = {
-    val locker = com.twitter.chill.MeatLocker(f)
+  def freezeBBtoB[B](f: (B, B) => B): (B, B) => B = {
+    val locker = MeatLocker(f)
     (b1, b2) => locker.get.apply(b1, b2)
   }
 
@@ -39,15 +46,15 @@ package object spark {
 
   implicit def aggregatableRDD = new Aggregatable[RDD] {
     def aggregate[A, B: ClassTag](rdd: RDD[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-      rdd.aggregate(zeroValue)(freezeBAB(seqOp), freezeBBB(combOp))
+      rdd.aggregate(zeroValue)(freezeBAtoB(seqOp), freezeBBtoB(combOp))
   }
 
   implicit def functorRDD = new Functor[RDD] {
     def map[A, B: ClassTag](rdd: RDD[A])(f: A => B): RDD[B] =
-      rdd.map(freezeAB(f))
+      rdd.map(freezeAtoB(f))
   }
 
-  implicit def mapFromRDD: MapFrom[RDD] = new MapFrom[RDD] {
+  implicit def toMapRDD: MapFrom[RDD] = new MapFrom[RDD] {
 
     def toMap[K: ClassTag, V: ClassTag](rdd: RDD[(K, V)]): Map[K, V] =
       rdd.collect().toMap
@@ -61,16 +68,16 @@ package object spark {
       zero: B,
       reduce: (B, B) => B): RDD[(K, B)] =
       input
-        .map(mapper)
+        .map(freezeAtoBC(mapper))
         .groupBy(_._1)
         .map({
           case (k, kbs) => {
-            (k, kbs.map(_._2).aggregate(zero)(reduce, reduce))
+            (k, kbs.map(_._2).aggregate(zero)(freezeBBtoB(reduce), freezeBBtoB(reduce)))
           }
         })
   }
 
-  implicit def settableRDD: SetFrom[RDD] = new SetFrom[RDD] {
+  implicit def toSetRDD: SetFrom[RDD] = new SetFrom[RDD] {
 
     def toSet[A: ClassTag](rdd: RDD[A]): Set[A] =
       rdd.collect.toSet
