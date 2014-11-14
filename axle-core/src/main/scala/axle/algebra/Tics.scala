@@ -3,6 +3,8 @@ package axle.algebra
 import spire.math._
 import spire.algebra._
 import spire.implicits._
+import axle.string
+import axle.Show.showDouble
 import org.joda.time.DateTime
 import org.joda.time._
 import java.lang.Double.{ isInfinite, isNaN }
@@ -24,11 +26,10 @@ trait DoubleTics extends Tics[Double] {
       val s = step(from, to)
       val n = ceil((to - from) / s).toInt
       val w = s * floor(from / s)
-      println(s"DoubleTics: s = $s, n = $n, w = $w")
       val start = BigDecimal.valueOf(w)
       (0 to n).map(i => {
         val v = start + BigDecimal(s) * i
-        (v.toDouble, v.toString)
+        (v.toDouble, string(v))
       }).filter({ case (d, _) => (d >= from && d <= to) })
     }
   }
@@ -48,7 +49,7 @@ trait LongTics extends Tics[Long] {
     val start = (s * (from / s))
     (0L to n).map(i => {
       val v = start + s * i
-      (v, v.toString)
+      (v, string(v))
     }).filter(vs => (vs._1 >= from && vs._1 <= to))
   }
 }
@@ -66,7 +67,7 @@ trait IntTics extends Tics[Int] {
     val start = (s * (from / s))
     (0 to n).map(i => {
       val v = start + s * i
-      (v, v.toString)
+      (v, string(v))
     }).filter(vs => (vs._1 >= from && vs._1 <= to))
   }
 
@@ -136,7 +137,7 @@ trait RationalTics extends Tics[Rational] {
       val n = ((to - from) / s).ceil.toInt
       (0 to n).map(i => {
         val v = start + s * i
-        (v, v.toString)
+        (v, string(v))
       }).filter({ case (d, _) => (d >= from && d <= to) })
     }
   }
