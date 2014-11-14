@@ -1,25 +1,33 @@
 
 package axle.lx
 
+import axle.Show
 import axle.graph.JungDirectedGraph
 import axle.graph.Vertex
+import axle.string
 import spire.algebra.Eq
+import spire.algebra.Order
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
-
-import axle.Show
 
 object Angluin {
 
   case class Symbol(s: String)
 
   object Symbol {
+
     implicit val symbolEq = new Eq[Symbol] {
       def eqv(x: Symbol, y: Symbol): Boolean = x equals y
     }
+
     implicit def showSymbol: Show[Symbol] = new Show[Symbol] {
       def text(s: Symbol): String = s.s
     }
+
+    implicit val orderSymbol: Order[Symbol] = new Order[Symbol] {
+      def compare(x: Symbol, y: Symbol): Int = string(x).compareTo(string(y))
+    }
+
   }
 
   class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
@@ -40,7 +48,7 @@ object Angluin {
 
     def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
-      case Nil => Set(state.payload)
+      case Nil          => Set(state.payload)
     }
 
     // TODO: not sure if this should count edges or nodes:
@@ -66,11 +74,6 @@ object Angluin {
 
     def makeCanonicalAcceptor(ℒ: Language): AngluinAcceptor = ???
 
-  }
-
-  class ExpressionComparator extends Comparable[List[Symbol]] {
-    def compareTo(other: List[Symbol]) = (this.toString()).compareTo(other.toString)
-    // def compare(o1: Expression, o2: Expression): Int = (o1.toString()).compareTo(o2.toString())
   }
 
   trait Grammar {
@@ -193,5 +196,5 @@ object Angluin {
       def text(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
     }
   }
-  
+
 }

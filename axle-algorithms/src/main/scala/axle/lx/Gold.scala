@@ -1,18 +1,28 @@
 
 package axle.lx
 
-import spire.algebra.Eq
 import axle.Show
+import axle.string
+import spire.algebra.Eq
+import spire.algebra.Order
 
 object Gold {
 
   type Expression = Iterable[Morpheme]
 
-  val ♯ = List[Morpheme]()
+  object Expression {
 
-  class ExpressionComparator extends Comparable[Expression] {
-    def compareTo(other: Expression): Int = this.toString().compareTo(other.toString())
+    implicit val showExpression: Show[Expression] = new Show[Expression] {
+      def text(expr: Expression): String = expr.mkString(" ")
+    }
+
+    implicit val orderExpression: Order[Expression] = new Order[Expression] {
+      def compare(x: Expression, y: Expression): Int = string(x).compareTo(string(y))
+    }
+   
   }
+
+  val ♯ = List[Morpheme]()
 
   trait Grammar {
     def ℒ: Language
@@ -27,9 +37,11 @@ object Gold {
   case class Language(sequences: Set[Expression])
 
   object Language {
+    
     implicit def showLanguage: Show[Language] = new Show[Language] {
       def text(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
     }
+    
     implicit val languageEq = new Eq[Language] {
       def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
     }
