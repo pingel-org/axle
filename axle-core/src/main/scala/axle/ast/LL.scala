@@ -2,6 +2,7 @@
 package axle.ast
 
 import axle.Show
+import axle.string
 import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
@@ -66,7 +67,7 @@ case class LLParserState(
 
   lazy val inputBufferWithMarker = input.substring(0, i) + "|" + input.substring(i, input.length)
 
-  def inputSymbol: Terminal = grammar.terminalsByName(input(i).toString)
+  def inputSymbol: Terminal = grammar.terminalsByName(string(input(i)))
 
   def apply(action: LLParserAction): LLParserState = action match {
     case Shift() => {
@@ -77,7 +78,7 @@ case class LLParserState(
       assert(stack.head === rule.from)
       LLParserState(grammar, input, rule.rhs ++ stack.tail, i)
     }
-    case ParseError(msg) => { sys.error(this.toString + "\nparse error: " + msg) }
+    case ParseError(msg) => { sys.error(string(this) + "\nparse error: " + msg) }
   }
 
   def nextAction(): LLParserAction = stack.head match {

@@ -12,6 +12,10 @@ object Show {
   implicit val showDouble: Show[Double] = new Show[Double] {
     def text(d: Double): String = d.toString
   }
+
+  implicit val showBoolean: Show[Boolean] = new Show[Boolean] {
+    def text(b: Boolean): String = b.toString
+  }
   
   implicit val showBD: Show[BigDecimal] = new Show[BigDecimal] {
     def text(bd: BigDecimal): String = bd.toString
@@ -21,6 +25,10 @@ object Show {
     def text(l: Long): String = l.toString
   }
 
+  implicit val showChar: Show[Char] = new Show[Char] {
+    def text(c: Char): String = c.toString
+  }
+  
   implicit val showInt: Show[Int] = new Show[Int] {
     def text(i: Int): String = i.toString
   }
