@@ -55,7 +55,7 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
     }
   }
 
-  case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest](name: String, graph: DirectedGraph[BayesianNetworkNode[T, N], String]) {
+  case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show](name: String, graph: DirectedGraph[BayesianNetworkNode[T, N], String]) {
 
     def duplicate: BayesianNetwork[T, N] = BayesianNetwork(name, graph)
 
@@ -376,7 +376,7 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
 
   object BayesianNetwork {
 
-    def apply[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest](
+    def apply[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show](
       name: String,
       vps: Seq[BayesianNetworkNode[T, N]],
       ef: Seq[Vertex[BayesianNetworkNode[T, N]]] => Seq[(Vertex[BayesianNetworkNode[T, N]], Vertex[BayesianNetworkNode[T, N]], String)]): BayesianNetwork[T, N] =
