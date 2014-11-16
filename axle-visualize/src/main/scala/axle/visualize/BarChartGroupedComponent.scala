@@ -17,6 +17,7 @@ import axle.algebra.LengthSpace
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
 import axle.quanta.Angle.{ ° => ° }
+import axle.Show
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
@@ -26,7 +27,7 @@ import spire.math.Number.apply
 import spire.implicits.moduleOps
 import spire.implicits.DoubleAlgebra
 
-class BarChartGroupedComponent[G, S, Y: Plottable: Tics: Order: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])(
+class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D])(
     implicit yls: LengthSpace[Y, _]
     )
   extends JPanel

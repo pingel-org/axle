@@ -33,6 +33,10 @@ object Show {
     def text(i: Int): String = i.toString
   }
 
+  implicit val showString: Show[String] = new Show[String] {
+    def text(s: String): String = s
+  }
+  
   implicit val showRational: Show[Rational] = new Show[Rational] {
     def text(r: Rational): String = r.toString
   }

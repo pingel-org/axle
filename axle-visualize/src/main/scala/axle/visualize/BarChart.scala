@@ -16,22 +16,23 @@ import axle.algebra.Tics
 import axle.quanta.Angle
 import axle.quanta.Angle.{° => °}
 import axle.quanta.UnittedQuantity
+import axle.Show
+import axle.string
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
 
 object BarChart {
 
-  implicit def drawBarChart[S, Y: Plottable: Order: Tics: Eq, D: ClassTag](implicit yls: LengthSpace[Y, _]): Draw[BarChart[S, Y, D]] =
+  implicit def drawBarChart[S: Show, Y: Plottable: Order: Tics: Eq, D: ClassTag](implicit yls: LengthSpace[Y, _]): Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
       def component(barChart: BarChart[S, Y, D]) = new BarChartComponent(barChart)
     }
 
 }
 
-case class BarChart[S, Y: Plottable, D](
+case class BarChart[S: Show, Y: Plottable, D](
   initialValue: D,
-  sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
   width: Int = 700,
   height: Int = 600,

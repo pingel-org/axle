@@ -8,6 +8,8 @@ import axle.algebra.DoubleDoubleLengthSpace
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
+import axle.Show
+import axle.string
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
@@ -17,7 +19,7 @@ import spire.algebra.Eq
 import spire.algebra.Order
 import spire.compat.ordering
 
-class BarChartView[S, Y, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
+class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
   implicit yPlottable: Plottable[Y], yOrder: Order[Y], yEq: Eq[Y], yts: Tics[Y], yLength: LengthSpace[Y, _]) {
 
   import chart._
@@ -49,7 +51,7 @@ class BarChartView[S, Y, D](chart: BarChart[S, Y, D], data: D, colorStream: Stre
 
   val gTics = new XTics(
     scaledArea,
-    slices.toStream.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, sLabeller(s)) }).toList,
+    slices.toStream.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, string(s)) }).toList,
     normalFont,
     false,
     labelAngle,

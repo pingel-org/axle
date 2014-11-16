@@ -5,12 +5,14 @@ import java.awt.Font
 import java.awt.Graphics2D
 
 import axle.algebra.Plottable
+import axle.Show
+import axle.string
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
 import axle.visualize.Paintable
 import axle.visualize.Plot
 
-class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colorStream: Stream[Color])
+class BarChartKey[S: Show, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colorStream: Stream[Color])
   extends Paintable {
 
   import chart._
@@ -23,13 +25,13 @@ class BarChartKey[S, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colo
     slices.toVector.zipWithIndex.zip(colorStream) foreach {
       case ((s, j), color) =>
         g2d.setColor(color)
-        g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+        g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
     }
   }
 
 }
 
-class BarChartGroupedKey[G, S, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, D], font: Font, colorStream: Stream[Color]) extends Paintable {
+class BarChartGroupedKey[G: Show, S: Show, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, D], font: Font, colorStream: Stream[Color]) extends Paintable {
 
   import chart._
 
@@ -41,7 +43,7 @@ class BarChartGroupedKey[G, S, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, 
     slices.toVector.zipWithIndex.zip(colorStream) foreach {
       case ((s, j), color) =>
         g2d.setColor(color)
-        g2d.drawString(sLabeller(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+        g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
     }
   }
 

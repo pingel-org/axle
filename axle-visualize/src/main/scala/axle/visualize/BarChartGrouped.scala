@@ -13,22 +13,21 @@ import scala.reflect.ClassTag
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
+import axle.Show
 import spire.algebra.Eq
 import spire.algebra.Order
 
 object BarChartGrouped {
 
-  implicit def drawBarChartGrouped[G, S, Y: Plottable: Tics: Order: Eq, D: ClassTag](
+  implicit def drawBarChartGrouped[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
     implicit yls: LengthSpace[Y, _]): Draw[BarChartGrouped[G, S, Y, D]] = new Draw[BarChartGrouped[G, S, Y, D]] {
     def component(barChart: BarChartGrouped[G, S, Y, D]) = new BarChartGroupedComponent(barChart)
   }
 
 }
 
-case class BarChartGrouped[G, S, Y: Plottable, D](
+case class BarChartGrouped[G: Show, S: Show, Y: Plottable, D](
   initialValue: D,
-  gLabeller: G => String = (g: G) => g.toString,
-  sLabeller: S => String = (s: S) => s.toString,
   drawKey: Boolean = true,
   width: Int = 700,
   height: Int = 600,

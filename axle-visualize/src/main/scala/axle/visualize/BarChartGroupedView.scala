@@ -11,6 +11,8 @@ import axle.algebra.LengthSpace
 import axle.algebra.DoubleDoubleLengthSpace
 import axle.algebra.Tics
 import axle.quanta.Angle.{ ° => ° }
+import axle.Show
+import axle.string
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
@@ -23,7 +25,7 @@ import spire.math.Number.apply
 import spire.implicits.moduleOps
 import spire.compat.ordering
 
-class BarChartGroupedView[G, S, Y: Order: Tics: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
+class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
   implicit yls: LengthSpace[Y, _]) {
 
   import chart._
@@ -56,7 +58,7 @@ class BarChartGroupedView[G, S, Y: Order: Tics: Eq, D: ClassTag](chart: BarChart
 
   val gTics = new XTics(
     scaledArea,
-    groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, gLabeller(g)) }).toList,
+    groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
     normalFont,
     false,
     36 *: °,
