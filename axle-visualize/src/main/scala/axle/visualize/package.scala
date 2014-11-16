@@ -73,21 +73,21 @@ package object visualize {
     }
   }
 
-  implicit def drawUndirectedGraph[VP: Manifest: Eq, EP: Eq]: Draw[UndirectedGraph[VP, EP]] =
+  implicit def drawUndirectedGraph[VP: Show: Manifest: Eq, EP: Show: Eq]: Draw[UndirectedGraph[VP, EP]] =
     new Draw[UndirectedGraph[VP, EP]] {
 
       def component(ug: UndirectedGraph[VP, EP]) = ug match {
         case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
-        case _ => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads, ug.edgeFunction))
+        case _                                => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads, ug.edgeFunction))
       }
     }
 
-  implicit def drawDirectedGraph[VP: Manifest: Eq, EP: Eq]: Draw[DirectedGraph[VP, EP]] =
+  implicit def drawDirectedGraph[VP: Show: Manifest: Eq, EP: Show: Eq]: Draw[DirectedGraph[VP, EP]] =
     new Draw[DirectedGraph[VP, EP]] {
 
       def component(dg: DirectedGraph[VP, EP]) = dg match {
         case jdg: JungDirectedGraph[VP, EP] => new JungDirectedGraphVisualization().component(jdg)
-        case _ => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads, dg.edgeFunction))
+        case _                              => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads, dg.edgeFunction))
       }
     }
 

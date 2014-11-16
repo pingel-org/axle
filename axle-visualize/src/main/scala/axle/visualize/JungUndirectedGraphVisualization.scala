@@ -13,6 +13,8 @@ import org.apache.commons.collections15.Transformer
 import axle.graph.Edge
 import axle.graph.JungUndirectedGraph
 import axle.graph.Vertex
+import axle.Show
+import axle.string
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
@@ -22,7 +24,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 
 class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
-  def component[VP, EP](jug: JungUndirectedGraph[VP, EP]): Component = {
+  def component[VP: Show, EP: Show](jug: JungUndirectedGraph[VP, EP]): Component = {
 
     val layout = new FRLayout(jug.storage)
     layout.setSize(new Dimension(width, height))
@@ -43,11 +45,11 @@ class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, bord
     }
 
     val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
-      def transform(vertex: Vertex[VP]): String = vertex.payload.toString
+      def transform(vertex: Vertex[VP]): String = string(vertex.payload)
     }
 
     val edgeLabelTransformer = new Transformer[Edge[jug.ES, EP], String]() {
-      def transform(edge: Edge[jug.ES, EP]): String = edge.payload.toString
+      def transform(edge: Edge[jug.ES, EP]): String = string(edge.payload)
     }
 
     vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)

@@ -13,6 +13,8 @@ import org.apache.commons.collections15.Transformer
 import axle.graph.Edge
 import axle.graph.JungDirectedGraph
 import axle.graph.Vertex
+import axle.Show
+import axle.string
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
@@ -22,7 +24,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 
 class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
-  def component[VP, EP](jdg: JungDirectedGraph[VP, EP]): Component = {
+  def component[VP, EP: Show](jdg: JungDirectedGraph[VP, EP]): Component = {
 
     // see
     // http://www.grotto-networking.com/JUNG/
@@ -48,11 +50,11 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     }
 
     val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
-      def transform(v: Vertex[VP]): String = jdg.vertexToVisualizationHtml(v.payload).toString
+      def transform(v: Vertex[VP]): String = string(jdg.vertexToVisualizationHtml(v.payload))
     }
 
     val edgeLabelTransformer = new Transformer[Edge[jdg.ES, EP], String]() {
-      def transform(e: Edge[jdg.ES, EP]): String = e.payload.toString
+      def transform(e: Edge[jdg.ES, EP]): String = string(e.payload)
     }
 
     vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)

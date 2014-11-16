@@ -40,5 +40,9 @@ object Show {
   implicit val showRational: Show[Rational] = new Show[Rational] {
     def text(r: Rational): String = r.toString
   }
+
+  implicit val showNode: Show[xml.Node] = new Show[xml.Node] {
+    def text(n: xml.Node): String = n.toString
+  }
   
 }
