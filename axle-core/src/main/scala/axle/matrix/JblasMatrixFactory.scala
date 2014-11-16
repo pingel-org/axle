@@ -5,6 +5,8 @@ import scala.math.sqrt
 import org.jblas.DoubleMatrix
 
 import axle.algebra.FunctionPair
+import axle.Show
+import axle.string
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
@@ -34,11 +36,6 @@ trait JblasMatrixModule extends MatrixModule {
     type S = DoubleMatrix
 
     def underlying: DoubleMatrix = jblas
-
-    implicit val format = (t: T) => t match {
-      case d: Double => """%.6f""".format(d)
-      case _         => t.toString
-    }
 
     def rows: Int = jblas.rows
     def columns: Int = jblas.columns
@@ -210,11 +207,11 @@ trait JblasMatrixModule extends MatrixModule {
 
     import axle.Show
 
-    implicit def showMatrix[T: C]: Show[Matrix[T]] = new Show[Matrix[T]] {
+    implicit def showMatrix[T: C: Show]: Show[Matrix[T]] = new Show[Matrix[T]] {
 
       def text(m: Matrix[T]): String = {
         import m._
-        (0 until rows).map(i => (0 until columns).map(j => format(converter(jblas.get(i, j)))).mkString(" ")).mkString("\n")
+        (0 until rows).map(i => (0 until columns).map(j => string(converter(jblas.get(i, j)))).mkString(" ")).mkString("\n")
       }
     }
 

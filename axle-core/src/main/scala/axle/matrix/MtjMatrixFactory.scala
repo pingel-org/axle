@@ -7,6 +7,8 @@ import scala.util.Random.nextDouble
 import scala.util.Random.nextGaussian
 
 import axle.algebra.FunctionPair
+import axle.Show
+import axle.string
 import no.uib.cipr.matrix.DenseMatrix
 import no.uib.cipr.matrix.{ Matrix => MtjMatrix }
 import spire.implicits.IntAlgebra
@@ -44,11 +46,6 @@ trait MtjMatrixModule extends MatrixModule {
     type S = MtjMatrix
 
     def underlying: MtjMatrix = mtj
-
-    implicit val format = (t: T) => t match {
-      case d: Double => """%.6f""".format(d)
-      case _         => t.toString
-    }
 
     def rows: Int = mtj.numRows
     def columns: Int = mtj.numColumns
@@ -268,13 +265,11 @@ trait MtjMatrixModule extends MatrixModule {
 
   object Matrix {
 
-    import axle.Show
-
-    implicit def showMatrix[T: C]: Show[Matrix[T]] = new Show[Matrix[T]] {
+    implicit def showMatrix[T: C: Show]: Show[Matrix[T]] = new Show[Matrix[T]] {
 
       def text(m: Matrix[T]): String = {
         import m._
-        (0 until rows).map(i => (0 until columns).map(j => format(converter(mtj.get(i, j)))).mkString(" ")).mkString("\n")
+        (0 until rows).map(i => (0 until columns).map(j => string(converter(mtj.get(i, j)))).mkString(" ")).mkString("\n")
       }
     }
 

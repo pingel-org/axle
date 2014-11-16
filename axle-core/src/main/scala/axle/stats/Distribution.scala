@@ -1,5 +1,7 @@
 package axle.stats
 
+import axle.Show
+import axle.string
 import spire.algebra.Eq
 import spire.algebra.Order
 
@@ -24,7 +26,7 @@ trait Distribution[A, N] {
 
   def probabilityOf(a: A): N
 
-  lazy val charWidth: Int = (name.length :: values.map(_.toString.length).toList).reduce(math.max)
+  def charWidth(implicit sa: Show[A]): Int = (name.length :: values.map(a => string(a).length).toList).reduce(math.max)
 }
 
 trait Distribution0[A, N] extends Distribution[A, N] {

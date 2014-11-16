@@ -69,7 +69,7 @@ package object spark {
       reduce: (B, B) => B): RDD[(K, B)] =
       input
         .map(freezeAtoBC(mapper))
-        .groupBy(_._1)
+        .groupBy(_._1) // TODO: groupByKey
         .map({
           case (k, kbs) => {
             (k, kbs.map(_._2).aggregate(zero)(freezeBBtoB(reduce), freezeBBtoB(reduce)))

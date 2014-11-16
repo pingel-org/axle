@@ -1,6 +1,7 @@
 package axle.stats
 
 import axle.Show
+import axle.string
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.compat.ordering
@@ -12,14 +13,14 @@ import spire.random.rng.Cmwc5
 
 object ConditionalProbabilityTable0 {
 
-  implicit def showCPT[A: Order, N: Field: Order: Dist](cpt0: ConditionalProbabilityTable0[A, N]): Show[ConditionalProbabilityTable0[A, N]] =
+  implicit def showCPT[A: Show: Order, N: Field: Order: Dist: Show](cpt0: ConditionalProbabilityTable0[A, N]): Show[ConditionalProbabilityTable0[A, N]] =
     new Show[ConditionalProbabilityTable0[A, N]] {
 
       def text(cpt: ConditionalProbabilityTable0[A, N]): String =
         cpt.name + "\n" +
           cpt.values.sorted.map(a => {
-            val aString = a.toString
-            (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + cpt.probabilityOf(a).toString)
+            val aString = string(a)
+            (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(cpt.probabilityOf(a)))
           }).mkString("\n")
     }
 

@@ -8,6 +8,7 @@ import axle.ast.AstNode
 import axle.ast.Document
 import axle.ast.LLLanguage
 import axle.ast.Language
+import axle.string
 
 object ViewString extends View[String] {
 
@@ -41,7 +42,7 @@ object ViewString extends View[String] {
 
   override def llRules(g: LLLanguage): String =
     "Rules:\n\n" +
-      g._llRules.map(rule => (rule.id + ". " + rule.toString)).mkString("\n")
+      g._llRules.map(rule => (rule.id + ". " + string(rule))).mkString("\n")
 
   override def llParseTable(g: LLLanguage): String =
     "Parse Table:\n\n" +

@@ -74,7 +74,7 @@ package object axle {
 
   implicit val orderSymbols: Order[Symbol] = new Order[Symbol] {
     val stringCompare = implicitly[Order[String]]
-    def compare(x: Symbol, y: Symbol): Int = stringCompare.compare(x.toString, y.toString)
+    def compare(x: Symbol, y: Symbol): Int = stringCompare.compare(string(x), string(y))
   }
 
   implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))

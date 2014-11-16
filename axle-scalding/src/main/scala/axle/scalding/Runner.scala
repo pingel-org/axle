@@ -5,6 +5,7 @@ import cascading.tuple.Tuple
 import annotation.tailrec
 import com.twitter.scalding.{ Args, Job, Mode }
 import com.twitter.scalding.TextLine
+import axle.string
 
 class Runner extends hadoop.conf.Configured with hadoop.util.Tool {
 
@@ -31,7 +32,7 @@ class Runner extends hadoop.conf.Configured with hadoop.util.Tool {
       j.next.map(start(_, cnt + 1))
     } else {
       throw new RuntimeException("Job failed to run: " + j.getClass.getName +
-        (if (cnt > 0) (" child: " + cnt.toString + ", class: " + j.getClass.getName) else "")
+        (if (cnt > 0) (" child: " + string(cnt) + ", class: " + j.getClass.getName) else "")
       )
     }
 

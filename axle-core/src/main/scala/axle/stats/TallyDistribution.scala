@@ -15,15 +15,16 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.orderOps
 import axle.Show
+import axle.string
 
 object TallyDistribution0 {
 
-  implicit def show[A: Order, N]: Show[TallyDistribution0[A, N]] = new Show[TallyDistribution0[A, N]] {
+  implicit def show[A: Order: Show, N: Show]: Show[TallyDistribution0[A, N]] = new Show[TallyDistribution0[A, N]] {
     def text(td: TallyDistribution0[A, N]): String =
       td.name + "\n" +
         td.values.sorted.map(a => {
-          val aString = a.toString
-          (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + td.probabilityOf(a).toString)
+          val aString = string(a)
+          (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
         }).mkString("\n")
   }
 

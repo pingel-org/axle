@@ -5,6 +5,8 @@ import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.graph.DirectedGraph
+import axle.Show
+import axle.string
 import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.Order
@@ -35,7 +37,9 @@ class UnittedZero[Q <: Quantum, N: Field](base: UnitOfMeasurement[Q, N])(implici
 
 }
 
-class UnittedTics[Q <: Quantum, N: Tics](base: UnitOfMeasurement[Q, N])(implicit cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N])
+class UnittedTics[Q <: Quantum, N: Tics: Show](
+  base: UnitOfMeasurement[Q, N])(
+    implicit cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N])
   extends Tics[UnittedQuantity[Q, N]] {
 
   val underlying = implicitly[Tics[N]]
@@ -43,11 +47,15 @@ class UnittedTics[Q <: Quantum, N: Tics](base: UnitOfMeasurement[Q, N])(implicit
   def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =
     underlying.tics((from in base).magnitude, (to in base).magnitude) map {
       case (v, label) =>
-        (v *: base, v.toString)
+        (v *: base, string(v))
     }
 }
 
-class UnittedLengthSpace[Q <: Quantum, N: Field: Order](base: UnitOfMeasurement[Q, N])(implicit space: LengthSpace[N, Double], cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N], module: Module[UnittedQuantity[Q, N], N])
+class UnittedLengthSpace[Q <: Quantum, N: Field: Order](
+  base: UnitOfMeasurement[Q, N])(
+    implicit space: LengthSpace[N, Double],
+    cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N],
+    module: Module[UnittedQuantity[Q, N], N])
   extends LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N]] {
 
   val field = implicitly[Field[N]]

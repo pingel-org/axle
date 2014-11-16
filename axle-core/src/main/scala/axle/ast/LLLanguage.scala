@@ -1,6 +1,8 @@
 
 package axle.ast
 
+import axle.Show
+import axle.string
 import scala.Stream.cons
 import scala.Stream.empty
 
@@ -170,7 +172,7 @@ case class LLLanguage(
     parseStateStream(startState(input)).toList
       .map({
         case (action, state) =>
-          action.toString + "\n" +
+          string(action) + "\n" +
             "  " + state.inputBufferWithMarker + "\n" +
             "  " + state.stack.mkString("")
       }).mkString("\n\n")

@@ -46,6 +46,15 @@ case class Shift() extends LLParserAction
 case class Reduce(rule: LLRule) extends LLParserAction
 case class ParseError(msg: String) extends LLParserAction
 
+object LLParserAction {
+
+  implicit def showLLParserAction: Show[LLParserAction] = new Show[LLParserAction] {
+
+    def text(action: LLParserAction): String = action.toString
+  }
+
+}
+
 object LLParserState {
 
   implicit def showLLParserState: Show[LLParserState] = new Show[LLParserState] {

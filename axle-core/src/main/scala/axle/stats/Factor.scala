@@ -20,6 +20,7 @@ import spire.optional.unicode.Σ
 import spire.compat.ordering
 
 import axle.Show
+import axle.string
 
 trait FactorModule extends MatrixModule {
 
@@ -29,14 +30,14 @@ trait FactorModule extends MatrixModule {
 
   object Factor {
 
-    implicit def showFactor[T, N]: Show[Factor[T, N]] = new Show[Factor[T, N]] {
+    implicit def showFactor[T: Show, N: Show]: Show[Factor[T, N]] = new Show[Factor[T, N]] {
 
       def text(factor: Factor[T, N]): String = {
         import factor._
         varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
           factor.cases.map(kase =>
-            kase.map(ci => ci.v.toString.padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
-              " " + factor(kase).toString).mkString("\n") // Note: was "%f".format() prior to spire.math
+            kase.map(ci => string(ci.v).padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
+              " " + string(factor(kase))).mkString("\n") // Note: was "%f".format() prior to spire.math
       }
 
     }
@@ -45,18 +46,19 @@ trait FactorModule extends MatrixModule {
       def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
     }
 
-    implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] = new MultiplicativeMonoid[Factor[T, N]] {
+    implicit def factorMultMonoid[T: Eq: Show, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] =
+      new MultiplicativeMonoid[Factor[T, N]] {
 
-      lazy val field = implicitly[Field[N]]
+        lazy val field = implicitly[Field[N]]
 
-      def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
-        val newVars = (x.variables.toSet union y.variables.toSet).toVector
-        new Factor(newVars, Factor.cases(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
+        def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
+          val newVars = (x.variables.toSet union y.variables.toSet).toVector
+          new Factor(newVars, Factor.cases(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
+        }
+        def one: Factor[T, N] = new Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
       }
-      def one: Factor[T, N] = new Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
-    }
 
-    def apply[T: Eq, N: Field: ConvertableFrom: Order: ClassTag](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
+    def apply[T: Eq: Show, N: Field: ConvertableFrom: Order: ClassTag](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
       new Factor(varList, values)
 
     def cases[T: Eq, N: Field](varSeq: Vector[Distribution[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
@@ -69,7 +71,7 @@ trait FactorModule extends MatrixModule {
 
   }
 
-  class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](val varList: Vector[Distribution[T, N]], val values: Map[Vector[CaseIs[T, N]], N]) {
+  class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](val varList: Vector[Distribution[T, N]], val values: Map[Vector[CaseIs[T, N]], N]) {
 
     val field = implicitly[Field[N]]
 
@@ -120,7 +122,7 @@ trait FactorModule extends MatrixModule {
         {
           cases.map(kase =>
             <tr>
-              { kase.map(ci => <td>{ ci.v.toString }</td>) }
+              { kase.map(ci => <td>{ string(ci.v) }</td>) }
               <td>{ this(kase) }</td>
             </tr>)
         }
