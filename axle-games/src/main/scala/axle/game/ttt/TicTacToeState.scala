@@ -1,5 +1,6 @@
 package axle.game.ttt
 
+import axle.string
 import axle.game._
 import axle.matrix._
 import axle.algebra._
@@ -16,7 +17,7 @@ case class TicTacToeState(
 
   def displayTo(viewer: TicTacToePlayer): String = {
 
-    val keyWidth = numPositions.toString.length
+    val keyWidth = string(numPositions).length
 
     "Board:         Movement Key:\n" +
       0.until(boardSize).map(r => {

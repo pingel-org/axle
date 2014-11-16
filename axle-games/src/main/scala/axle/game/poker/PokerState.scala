@@ -40,12 +40,13 @@ case class PokerState(
     }
   }
 
+  // TODO: displayTo could be phrased in terms of Show
   def displayTo(viewer: PokerPlayer): String =
     "To: " + player + "\n" +
       "Current bet: " + currentBet + "\n" +
       "Pot: " + pot + "\n" +
       "Shared: " + shared.zipWithIndex.map({
-        case (card, i) => if (i < numShown) card.toString else "??"
+        case (card, i) => if (i < numShown) string(card) else "??"
       }).mkString(" ") + "\n" +
       "\n" +
       game.players.map(p => {
@@ -53,16 +54,16 @@ case class PokerState(
           " hand " + (
             hands.get(p).map(_.map(c =>
               if (viewer === p || (_outcome.isDefined && stillIn.size > 1)) {
-                c.toString
+                string(c)
               } else {
                 "??"
               }).mkString(" ")).getOrElse("--")) + " " +
             (if (stillIn.contains(p)) {
-              "in for $" + inFors.get(p).map(_.toString).getOrElse("--")
+              "in for $" + inFors.get(p).map(amt => string(amt)).getOrElse("--")
             } else {
               "out"
             }) +
-            ", $" + piles.get(p).map(_.toString).getOrElse("--") + " remaining"
+            ", $" + piles.get(p).map(amt => string(amt)).getOrElse("--") + " remaining"
       }).mkString("\n")
 
   def moves: Seq[PokerMove] = List()

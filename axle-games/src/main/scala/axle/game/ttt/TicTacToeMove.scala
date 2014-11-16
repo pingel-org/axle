@@ -1,6 +1,7 @@
 package axle.game.ttt
 
 import axle.game._
+import axle.string
 import spire.algebra.Eq
 
 case class TicTacToeMove(tttPlayer: TicTacToePlayer, position: Int)(implicit ttt: TicTacToe)
@@ -18,7 +19,7 @@ case class TicTacToeMove(tttPlayer: TicTacToePlayer, position: Int)(implicit ttt
       case 8 => "lower middle"
       case 9 => "lower right"
     }
-    case _ => position.toString
+    case _ => string(position)
   }
 
   def displayTo(p: TicTacToePlayer)(implicit eqp: Eq[TicTacToePlayer]): String =
