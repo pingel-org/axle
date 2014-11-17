@@ -42,9 +42,6 @@ class TicsSpec extends Specification {
 
       val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information, Double], String)]]]
 
-      println(s"actual  : $tics")
-      println(s"expected: $expected")
-      
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))
     }

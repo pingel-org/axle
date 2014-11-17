@@ -3,16 +3,14 @@ package axle.pgm
 import scala.Stream.cons
 import scala.Stream.empty
 
-import axle.XmlAble
 import axle.Show
+import axle.HtmlFrom
 import axle.graph.DirectedGraph
 import axle.graph.JungDirectedGraph
 import axle.graph.Vertex
 import axle.stats.CaseIs
 import axle.stats.Distribution
 import axle.stats.FactorModule
-// .Factor
-//import axle.stats.FactorModule.Factor.factorEq
 import axle.stats.Independence
 import spire.optional.unicode.Π
 import spire.algebra.Eq
@@ -27,17 +25,6 @@ import spire.math.ConvertableFrom
 trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
 
   case class BayesianNetworkNode[T: Eq, N: Field](rv: Distribution[T, N], cpt: Factor[T, N])
-    extends XmlAble {
-
-    def toXml: xml.Node =
-      <html>
-        <div>
-          <center><h2>{ rv.name }</h2></center>
-          { cpt.toHtml }
-        </div>
-      </html>
-
-  }
 
   object BayesianNetworkNode {
 
@@ -47,6 +34,18 @@ trait BayesianNetworkModule extends FactorModule with EliminationTreeModule {
         import bnn._
         rv.name + "\n\n" + cpt
       }
+
+    }
+
+    implicit def bnnHtmlFrom[T, N]: HtmlFrom[BayesianNetworkNode[T, N]] = new HtmlFrom[BayesianNetworkNode[T, N]] {
+
+      def toHtml(bnn: BayesianNetworkNode[T, N]): xml.Node =
+        <html>
+          <div>
+            <center><h2>{ bnn.rv.name }</h2></center>
+            { bnn.cpt.toHtml }
+          </div>
+        </html>
 
     }
 

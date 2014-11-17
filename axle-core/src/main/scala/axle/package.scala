@@ -170,5 +170,6 @@ package object axle {
   def string[T: Show](t: T): String = implicitly[Show[T]].text(t)
   
   def show[T: Show](t: T): Unit = println(string(t))
-  
+
+  def html[T: HtmlFrom](t: T): xml.Node = implicitly[HtmlFrom[T]].toHtml(t)
 }

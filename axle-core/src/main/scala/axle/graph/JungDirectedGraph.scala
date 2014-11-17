@@ -106,11 +106,6 @@ case class JungDirectedGraph[VP: Eq, EP: Eq](
     }
   }
 
-  def vertexToVisualizationHtml(vp: VP): xml.Node = vp match {
-    case x: axle.XmlAble => x.toXml
-    case _ => xml.Text(vp.toString) // TODO
-  }
-
   def map[NVP: Manifest: Eq, NEP: Eq](vpf: VP => NVP, epf: EP => NEP): JungDirectedGraph[NVP, NEP] =
     JungDirectedGraph(vps.map(vpf),
       (newVs: Seq[Vertex[NVP]]) =>

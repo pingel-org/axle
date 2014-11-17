@@ -73,30 +73,27 @@ package object visualize {
     }
   }
 
-  implicit def drawUndirectedGraph[VP: Show: Manifest: Eq, EP: Show: Eq]: Draw[UndirectedGraph[VP, EP]] =
-    new Draw[UndirectedGraph[VP, EP]] {
-
-      def component(ug: UndirectedGraph[VP, EP]) = ug match {
-        case jug: JungUndirectedGraph[VP, EP] => new JungUndirectedGraphVisualization().component(jug)
-        case _                                => new JungUndirectedGraphVisualization().component(JungUndirectedGraph(ug.vertexPayloads, ug.edgeFunction))
-      }
+  implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[JungUndirectedGraph[VP, EP]] =
+    new Draw[JungUndirectedGraph[VP, EP]] {
+      def component(jug: JungUndirectedGraph[VP, EP]) =
+        new JungUndirectedGraphVisualization().component(jug)
     }
 
-  implicit def drawDirectedGraph[VP: Show: Manifest: Eq, EP: Show: Eq]: Draw[DirectedGraph[VP, EP]] =
-    new Draw[DirectedGraph[VP, EP]] {
-
-      def component(dg: DirectedGraph[VP, EP]) = dg match {
-        case jdg: JungDirectedGraph[VP, EP] => new JungDirectedGraphVisualization().component(jdg)
-        case _                              => new JungDirectedGraphVisualization().component(JungDirectedGraph(dg.vertexPayloads, dg.edgeFunction))
-      }
+  implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[JungDirectedGraph[VP, EP]] =
+    new Draw[JungDirectedGraph[VP, EP]] {
+      def component(jdg: JungDirectedGraph[VP, EP]) =
+        new JungDirectedGraphVisualization().component(jdg)
     }
 
   trait BayesianNetworkVisualizationModule extends BayesianNetworkModule {
 
     implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq]: Draw[BayesianNetwork[T, N]] = {
       new Draw[BayesianNetwork[T, N]] {
-        def component(bn: BayesianNetwork[T, N]) =
-          drawDirectedGraph[BayesianNetworkNode[T, N], String].component(bn.graph)
+        def component(bn: BayesianNetwork[T, N]) = {
+          // TODO this should be easier
+          val jdg = JungDirectedGraph(bn.graph.vertexPayloads, bn.graph.edgeFunction)
+          drawJungDirectedGraph[BayesianNetworkNode[T, N], String].component(jdg)
+        }
       }
     }
   }

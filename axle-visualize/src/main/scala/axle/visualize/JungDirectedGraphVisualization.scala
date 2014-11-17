@@ -15,6 +15,8 @@ import axle.graph.JungDirectedGraph
 import axle.graph.Vertex
 import axle.Show
 import axle.string
+import axle.HtmlFrom
+import axle.html
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
@@ -24,7 +26,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 
 class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
-  def component[VP, EP: Show](jdg: JungDirectedGraph[VP, EP]): Component = {
+  def component[VP: HtmlFrom, EP: Show](jdg: JungDirectedGraph[VP, EP]): Component = {
 
     // see
     // http://www.grotto-networking.com/JUNG/
@@ -50,7 +52,7 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     }
 
     val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
-      def transform(v: Vertex[VP]): String = string(jdg.vertexToVisualizationHtml(v.payload))
+      def transform(v: Vertex[VP]): String = string(html(v.payload))
     }
 
     val edgeLabelTransformer = new Transformer[Edge[jdg.ES, EP], String]() {
