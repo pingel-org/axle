@@ -137,8 +137,7 @@ import axle._
       "org.jblas" % "jblas" % "1.2.3",
       "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly(),
       "com.googlecode.matrix-toolkits-java" % "mtj" % "1.0.1",
-      "org.spire-math" %% "spire" % "0.8.2",
-      "com.chuusai" %% "shapeless" % "2.0.0"
+      "org.spire-math" %% "spire" % "0.8.2"
     )
   )
 
@@ -176,6 +175,7 @@ import axle._
   ).settings(
     name := "axle-algorithms",
     libraryDependencies ++= Seq(
+      "com.chuusai" %% "shapeless" % "2.0.0"
     )
   ).dependsOn(axleCore)
 
