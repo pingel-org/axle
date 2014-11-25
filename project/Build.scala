@@ -118,9 +118,6 @@ import axle._
       pushChanges
     )
 
-  lazy val hadoopVersion = "1.1.2"
-  lazy val jungVersion = "2.0.1"
-
   lazy val axleCore = Project(
     id = "axle-core",
     base = file("axle-core"),
@@ -128,18 +125,72 @@ import axle._
   ).settings(
     name := "axle-core",
     libraryDependencies ++= Seq(
-      "net.sf.jung" % "jung-algorithms" % jungVersion,
-      "net.sf.jung" % "jung-api" % jungVersion,
-      "net.sf.jung" % "jung-graph-impl" % jungVersion,
-      "net.sf.jung" % "jung-io" % jungVersion,
-      "joda-time" % "joda-time" % "2.3",
-      "org.joda" % "joda-convert" % "1.6",
-      "org.jblas" % "jblas" % "1.2.3",
-      "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly(),
-      "com.googlecode.matrix-toolkits-java" % "mtj" % "1.0.1",
       "org.spire-math" %% "spire" % "0.8.2"
     )
   )
+
+  lazy val axleJoda = Project(
+    id = "axle-joda",
+    base = file("axle-joda"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-joda",
+    libraryDependencies ++= Seq(
+      "joda-time" % "joda-time" % "2.3",
+      "org.joda" % "joda-convert" % "1.6"
+    )
+  ).dependsOn(axleCore)
+
+  lazy val axleJblas = Project(
+    id = "axle-jblas",
+    base = file("axle-jblas"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-jblas",
+    libraryDependencies ++= Seq(
+      "org.jblas" % "jblas" % "1.2.3"
+    )
+  ).dependsOn(axleCore)
+
+  lazy val axleMtj = Project(
+    id = "axle-mtj",
+    base = file("axle-mtj"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-mtj",
+    libraryDependencies ++= Seq(
+      "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly(),
+      "com.googlecode.matrix-toolkits-java" % "mtj" % "1.0.1"
+    )
+  ).dependsOn(axleCore)
+
+  lazy val jungVersion = "2.0.1"
+
+  lazy val axleJung = Project(
+    id = "axle-jung",
+    base = file("axle-jung"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-jung",
+    libraryDependencies ++= Seq(
+      "net.sf.jung" % "jung-algorithms" % jungVersion,
+      "net.sf.jung" % "jung-api" % jungVersion,
+      "net.sf.jung" % "jung-graph-impl" % jungVersion,
+      "net.sf.jung" % "jung-io" % jungVersion
+    )
+  ).dependsOn(axleCore)
+
+  lazy val axleHBase = Project(
+    id = "axle-hbase",
+    base = file("axle-hbase"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-hbase",
+    libraryDependencies ++= Seq(
+      "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
+      "org.apache.hbase" % "hbase" % "0.94.7"
+    )
+  ).dependsOn(axleCore)
 
 /*
   lazy val axleSpark = Project(
@@ -155,6 +206,8 @@ import axle._
 */
 
 /*
+  lazy val hadoopVersion = "1.1.2"
+
   lazy val axleScalding = Project(
     id = "axle-scalding",
     base = file("axle-scalding"),
@@ -177,7 +230,7 @@ import axle._
     libraryDependencies ++= Seq(
       "com.chuusai" %% "shapeless" % "2.0.0"
     )
-  ).dependsOn(axleCore)
+  ).dependsOn(axleCore, axleJung, axleMtj, axleJblas)
 
   lazy val axleLanguages = Project(
     id = "axle-languages",
@@ -187,18 +240,6 @@ import axle._
     name := "axle-languages",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.4.3"
-    )
-  ).dependsOn(axleCore)
-
-  lazy val axleHBase = Project(
-    id = "axle-hbase",
-    base = file("axle-hbase"),
-    settings = sharedSettings
-  ).settings(
-    name := "axle-hbase",
-    libraryDependencies ++= Seq(
-      "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
-      "org.apache.hbase" % "hbase" % "0.94.7"
     )
   ).dependsOn(axleCore)
 
