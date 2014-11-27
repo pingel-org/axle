@@ -4,11 +4,14 @@ package axle
 import spire.algebra.Order
 import spire.algebra.Eq
 
+import axle.algebra.Zero
+import axle.algebra.Tics
 import axle.algebra.Plottable
 import axle.algebra.LengthSpace
 
 import org.joda.time.DateTime
 import org.joda.time.Duration
+import org.joda.time.{Seconds, Minutes, Hours, Days, Weeks}
 
 package object joda {
 

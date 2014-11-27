@@ -1,4 +1,4 @@
-package axle.matrix
+package axle.jblas
 
 import scala.math.sqrt
 
@@ -7,6 +7,7 @@ import org.jblas.DoubleMatrix
 import axle.algebra.FunctionPair
 import axle.Show
 import axle.string
+import axle.matrix.MatrixModule
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 

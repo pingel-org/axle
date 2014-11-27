@@ -1,7 +1,6 @@
-package axle.matrix
+package axle.jblas
 
 import org.specs2.mutable._
-
 
 class MatrixSpecification extends Specification with JblasMatrixModule {
 
