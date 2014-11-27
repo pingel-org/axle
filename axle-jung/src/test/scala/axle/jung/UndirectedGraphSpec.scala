@@ -1,8 +1,8 @@
-package axle.graph
+package axle.jung
 
-import axle._
+import axle.graph.Vertex
+import axle.graph.Edge
 import org.specs2.mutable._
-import axle.graph.JungUndirectedGraph._
 import spire.math._
 
 class UndirectedGraphSpec extends Specification {

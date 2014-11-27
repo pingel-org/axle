@@ -4,7 +4,6 @@ import scala.reflect.ClassTag
 
 import axle.algebra.EnrichedMetricSpace
 import axle.algebra.Aggregatable
-import axle.matrix.JblasMatrixModule
 
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace

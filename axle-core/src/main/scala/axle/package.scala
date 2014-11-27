@@ -29,8 +29,6 @@
 
 import scala.collection.mutable.Buffer
 
-import org.joda.time.DateTime
-
 import axle.EnrichedArray
 import axle.EnrichedByteArray
 import axle.EnrichedGenSeq
@@ -83,18 +81,6 @@ package object axle {
 
   // See spire.syntax.Syntax DoubleOrder
   implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
-
-  trait JodaDateTimeOrder extends Order[DateTime] {
-    def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
-  }
-
-  implicit val dateTimeOrder: Order[DateTime] = new JodaDateTimeOrder {}
-
-  implicit val dateTimeOrdering = spire.compat.ordering(dateTimeOrder)
-
-  trait JodaDateTimeEq extends Eq[DateTime] {
-    def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
-  }
 
   implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
 

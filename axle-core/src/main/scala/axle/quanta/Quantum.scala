@@ -5,7 +5,6 @@ import spire.algebra.Field
 import spire.algebra.Eq
 import axle.algebra.Bijection
 import axle.graph.Vertex
-import axle.graph.JungDirectedGraph
 import spire.implicits._
 
 /**

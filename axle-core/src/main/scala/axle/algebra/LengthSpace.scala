@@ -1,8 +1,5 @@
 package axle.algebra
 
-import org.joda.time.DateTime
-import org.joda.time.Duration
-
 import spire.algebra.MetricSpace
 import spire.algebra.Order
 import spire.implicits.LongAlgebra
@@ -68,16 +65,6 @@ trait IntIntLengthSpace extends IntAlgebra with LengthSpace[Int, Int] {
   def onPath(left: Int, right: Int, p: Double): Int = ((right - left) * p + left).toInt
 
   def portion(left: Int, v: Int, right: Int): Double = (v - left).toDouble / (right - left)
-}
-
-trait DateTimeDurationLengthSpace extends LengthSpace[DateTime, Duration] {
-
-  def distance(v: DateTime, w: DateTime): Duration = new Duration(v, w)
-
-  def onPath(left: DateTime, right: DateTime, p: Double): DateTime = left.plusMillis(((right.getMillis - left.getMillis).toDouble * p).toInt)
-
-  def portion(left: DateTime, v: DateTime, right: DateTime): Double = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
-
 }
 
 trait RationalRationalLengthSpace extends LengthSpace[Rational, Rational] {

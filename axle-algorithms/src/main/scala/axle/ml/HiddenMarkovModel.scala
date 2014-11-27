@@ -1,6 +1,6 @@
 package axle.ml
 
-import axle.graph.JungDirectedGraph
+import axle.jung.JungDirectedGraph
 import axle.graph.Vertex
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra

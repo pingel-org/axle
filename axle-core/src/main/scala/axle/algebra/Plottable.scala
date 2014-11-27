@@ -3,9 +3,6 @@ package axle.algebra
 import java.lang.Double.isInfinite
 import java.lang.Double.isNaN
 
-import org.joda.time.DateTime
-import org.joda.time.Duration
-
 import spire.algebra.Order
 import spire.algebra.Field
 import spire.algebra.Eq
@@ -30,8 +27,6 @@ object Plottable {
   implicit val longPlottable: Plottable[Long] = new Plottable[Long] {}
 
   implicit val intPlottable: Plottable[Int] = new Plottable[Int] {}
-
-  implicit val dateTimePlottable: Plottable[DateTime] = new Plottable[DateTime] {}
 
   implicit val rationalPlottable: Plottable[Rational] =
     new Plottable[Rational] {

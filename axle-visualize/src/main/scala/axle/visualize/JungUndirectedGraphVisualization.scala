@@ -11,10 +11,11 @@ import java.awt.event.MouseEvent
 import org.apache.commons.collections15.Transformer
 
 import axle.graph.Edge
-import axle.graph.JungUndirectedGraph
+import axle.graph.UndirectedGraph
 import axle.graph.Vertex
 import axle.Show
 import axle.string
+import axle.jung.JungUndirectedGraph
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin

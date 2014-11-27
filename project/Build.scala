@@ -180,6 +180,8 @@ import axle._
     )
   ).dependsOn(axleCore)
 
+  lazy val hadoopVersion = "1.1.2"
+
   lazy val axleHBase = Project(
     id = "axle-hbase",
     base = file("axle-hbase"),
@@ -206,7 +208,6 @@ import axle._
 */
 
 /*
-  lazy val hadoopVersion = "1.1.2"
 
   lazy val axleScalding = Project(
     id = "axle-scalding",
@@ -250,7 +251,7 @@ import axle._
   ).settings(
     name := "axle-games",
     libraryDependencies ++= Seq()
-  ).dependsOn(axleCore)
+  ).dependsOn(axleCore, axleJblas)
 
   lazy val axleVisualize = Project(
     id = "axle-visualize",
@@ -264,7 +265,7 @@ import axle._
       "org.jogamp.gluegen" % "gluegen-rt-main" % "2.0.2", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.jogl" % "jogl-all-main" % "2.0.2"
     )
-  ).dependsOn(axleCore, axleAlgorithms)
+  ).dependsOn(axleCore, axleJung, axleAlgorithms, axleJoda)
 
   lazy val axleAggregate = Project(
     id = "axle-aggregate",

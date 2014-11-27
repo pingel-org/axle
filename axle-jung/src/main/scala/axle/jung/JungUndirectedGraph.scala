@@ -1,8 +1,11 @@
-package axle.graph
+package axle.jung
 
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
 import axle.enrichIndexedSeq
+import axle.graph.UndirectedGraph
+import axle.graph.Vertex
+import axle.graph.Edge
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import spire.algebra.Eq
 import spire.implicits.IntAlgebra

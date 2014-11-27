@@ -1,6 +1,6 @@
 package axle.pgm
 
-import axle.graph.JungUndirectedGraph
+import axle.jung.JungUndirectedGraph
 import axle.graph.Vertex
 import axle.stats.Distribution
 import spire.algebra.Eq

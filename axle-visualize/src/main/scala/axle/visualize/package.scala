@@ -26,6 +26,7 @@ import axle.visualize._
 import axle.ml._
 import axle.stats._
 import axle.pgm._
+import axle.jung._
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.LengthSpace

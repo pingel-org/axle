@@ -1,7 +1,7 @@
 package axle.pgm
 
 import axle.eqSet
-import axle.graph.JungUndirectedGraph
+import axle.jung.JungUndirectedGraph
 import axle.graph.UndirectedGraph
 import axle.graph.Vertex
 import axle.stats.Distribution

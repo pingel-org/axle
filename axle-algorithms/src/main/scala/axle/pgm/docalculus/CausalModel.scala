@@ -1,7 +1,7 @@
 package axle.pgm.docalculus
 
 import axle.graph.DirectedGraph
-import axle.graph.JungDirectedGraph
+import axle.jung.JungDirectedGraph
 import axle.graph.Vertex
 import axle.stats.Distribution
 import spire.algebra.Eq

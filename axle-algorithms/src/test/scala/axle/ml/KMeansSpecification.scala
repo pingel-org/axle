@@ -10,7 +10,7 @@ import scala.util.Random.shuffle
 
 import org.specs2.mutable.Specification
 
-import axle.matrix.JblasMatrixModule
+import axle.jblas.JblasMatrixModule
 import axle.ml.distance.MatrixDistance
 import spire.algebra.Eq
 

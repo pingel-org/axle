@@ -6,7 +6,7 @@ import scala.Stream.empty
 import axle.Show
 import axle.HtmlFrom
 import axle.graph.DirectedGraph
-import axle.graph.JungDirectedGraph
+import axle.jung.JungDirectedGraph
 import axle.graph.Vertex
 import axle.stats.CaseIs
 import axle.stats.Distribution

@@ -1,4 +1,4 @@
-package axle.matrix
+package axle.mtj
 
 import scala.annotation.elidable
 import scala.annotation.elidable.ASSERTION
@@ -7,6 +7,7 @@ import scala.util.Random.nextDouble
 import scala.util.Random.nextGaussian
 
 import axle.algebra.FunctionPair
+import axle.matrix.MatrixModule
 import axle.Show
 import axle.string
 import no.uib.cipr.matrix.DenseMatrix

@@ -3,7 +3,7 @@ package axle.pgm
 import axle._
 import axle.graph._
 import axle.stats._
-import axle.matrix.JblasMatrixModule
+import axle.jblas.JblasMatrixModule
 import spire.implicits._
 import spire.math._
 import org.specs2.mutable._

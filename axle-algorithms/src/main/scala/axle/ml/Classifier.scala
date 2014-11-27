@@ -4,7 +4,7 @@ import spire.math._
 import spire.implicits._
 import spire.algebra._
 import axle._
-import axle.matrix.JblasMatrixModule
+import axle.jblas.JblasMatrixModule
 import axle.algebra._
 import axle.algebra.Semigroups._
 import scala.reflect.ClassTag

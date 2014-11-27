@@ -7,7 +7,7 @@ import axle.pgm._
 import spire.math._
 import spire.implicits._
 import org.specs2.mutable._
-import axle.matrix.JblasMatrixModule
+import axle.jblas.JblasMatrixModule
 
 class ABE
   extends Specification

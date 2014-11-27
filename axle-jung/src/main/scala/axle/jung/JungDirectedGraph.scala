@@ -1,10 +1,15 @@
-package axle.graph
+package axle.jung
+
+import axle.graph.Vertex
+import axle.graph.Edge
+import axle.graph.DirectedGraph
 
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+
 import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps

@@ -1,7 +1,7 @@
 package axle.ml
 
 import org.specs2.mutable._
-import axle.matrix.JblasMatrixModule
+import axle.jblas.JblasMatrixModule
 import axle.algebra.Plottable._
 
 class LinearRegressionSpecification

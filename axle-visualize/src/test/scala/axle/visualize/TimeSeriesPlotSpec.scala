@@ -8,8 +8,7 @@ import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
 import axle.algebra.Plottable
-import axle.dateTimeOrder
-import axle.dateTimeOrdering
+import axle.joda._
 import axle.quanta.Information
 import axle.quanta.Information.bit
 import axle.quanta.UnittedPlottable

@@ -2,7 +2,6 @@ package axle
 
 import axle.graph.Vertex
 import axle.graph.DirectedGraph
-import axle.graph.JungDirectedGraph
 import scala.language.reflectiveCalls
 import spire.math.Rational
 import spire.math.Real

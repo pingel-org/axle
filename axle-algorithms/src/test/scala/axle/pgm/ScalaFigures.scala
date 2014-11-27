@@ -9,7 +9,7 @@ import axle.graph._
 import axle.pgm._
 import spire.implicits._
 import spire.math._
-import axle.matrix.JblasMatrixModule
+import axle.jblas.JblasMatrixModule
 
 class ScalaFigures
   extends Specification

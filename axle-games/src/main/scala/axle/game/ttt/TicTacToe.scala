@@ -6,6 +6,7 @@ import axle.matrix._
 import axle.algebra._
 import util.Random.{ nextInt }
 import spire.implicits._
+import axle.jblas.JblasMatrixModule
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game

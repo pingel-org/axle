@@ -2,7 +2,7 @@
 package axle.lx
 
 import axle.Show
-import axle.graph.JungDirectedGraph
+import axle.jung.JungDirectedGraph
 import axle.graph.Vertex
 import axle.string
 import spire.algebra.Eq

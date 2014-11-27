@@ -1,9 +1,10 @@
 
-package axle.graph
+package axle.jung
 
-import axle._
+import axle.graph.Vertex
+import axle.graph.Edge
 import org.specs2.mutable._
-import axle.graph.JungDirectedGraph._
+import axle.jung.JungDirectedGraph._
 import spire.math._
 import spire.implicits._
 

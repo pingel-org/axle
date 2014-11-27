@@ -5,8 +5,6 @@ import spire.algebra._
 import spire.implicits._
 import axle.string
 import axle.Show.showDouble
-import org.joda.time.DateTime
-import org.joda.time._
 import java.lang.Double.{ isInfinite, isNaN }
 
 trait Tics[T] {
@@ -73,46 +71,6 @@ trait IntTics extends Tics[Int] {
 
 }
 
-trait DateTimeTics extends Tics[DateTime] {
-
-  // TODO: bigger and smaller time-scales
-  def step(duration: Duration): (DateTime => DateTime, String) =
-    if (duration.isLongerThan(Weeks.ONE.multipliedBy(104).toStandardDuration)) {
-      (_.plusMonths(6), "MM/dd YY")
-    } else if (duration.isLongerThan(Weeks.ONE.multipliedBy(20).toStandardDuration)) {
-      (_.plusMonths(1), "MM/dd YY")
-    } else if (duration.isLongerThan(Weeks.THREE.toStandardDuration)) {
-      (_.plusWeeks(1), "MM/dd")
-    } else if (duration.isLongerThan(Days.ONE.toStandardDuration)) {
-      (_.plusDays(1), "MM/dd hh")
-    } else if (duration.isLongerThan(Hours.SEVEN.toStandardDuration)) {
-      (_.plusHours(2), "dd hh:mm")
-    } else if (duration.isLongerThan(Hours.ONE.toStandardDuration)) {
-      (_.plusHours(1), "dd hh:mm")
-    } else if (duration.isLongerThan(Minutes.TWO.toStandardDuration)) {
-      (_.plusMinutes(1), "hh:mm")
-    } else if (duration.isLongerThan(Seconds.ONE.multipliedBy(10).toStandardDuration())) {
-      (_.plusSeconds(10), "mm:ss")
-    } else {
-      (_.plusSeconds(1), "mm:ss")
-    }
-
-  def ticStream(from: DateTime, to: DateTime, stepFn: DateTime => DateTime, fmt: String): Stream[(DateTime, String)] = {
-    val nextTic = stepFn(from)
-    if (nextTic.isAfter(to)) {
-      Stream.empty
-    } else {
-      Stream.cons((nextTic, nextTic.toString(fmt)), ticStream(nextTic, to, stepFn, fmt))
-    }
-  }
-
-  def tics(from: DateTime, to: DateTime): Seq[(DateTime, String)] = {
-    val dur = new org.joda.time.Interval(from, to).toDuration
-    val (stepFn, fmt) = step(dur)
-    ticStream(from, to, stepFn, fmt).toList
-  }
-
-}
 
 trait RationalTics extends Tics[Rational] {
 

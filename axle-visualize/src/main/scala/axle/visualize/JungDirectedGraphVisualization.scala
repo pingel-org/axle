@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent
 import org.apache.commons.collections15.Transformer
 
 import axle.graph.Edge
-import axle.graph.JungDirectedGraph
+import axle.jung.JungDirectedGraph
 import axle.graph.Vertex
 import axle.Show
 import axle.string
