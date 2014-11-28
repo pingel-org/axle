@@ -16,8 +16,8 @@ trait Matrix[M[_]] {
 
   def plus[T](x: M[T])(y: M[T]): M[T]
 
-  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): M[T]
+  def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit fp: FunctionPair[Double, T]): M[T]
 
-  def matrix[T](m: Int, n: Int, f: (Int, Int) => T): M[T]
+  def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit fp: FunctionPair[Double, T]): M[T]
 
 }
