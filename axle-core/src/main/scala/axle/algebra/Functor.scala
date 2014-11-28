@@ -12,7 +12,7 @@ object Functor {
   implicit def functorSeq =
     new Functor[Seq] {
       def map[A, B: ClassTag](seq: Seq[A])(f: A => B): Seq[B] =
-        seq.map(f)
+        seq map f
     }
 
   implicit def ListFunctor: Functor[List] =
@@ -26,7 +26,7 @@ object Functor {
       def map[A, B: ClassTag](is: IndexedSeq[A])(f: A => B) =
         is map f
     }
-  
+
   implicit def OptFunctor: Functor[Option] =
     new Functor[Option] {
       def map[A, B: ClassTag](opt: Option[A])(f: A => B) =
@@ -42,13 +42,13 @@ object Functor {
   implicit def functorParSeq: Functor[ParSeq] = new Functor[ParSeq] {
 
     def map[A, B: ClassTag](ps: ParSeq[A])(f: A => B): ParSeq[B] =
-      ps.map(f)
+      ps map f
   }
 
   implicit def functorIndexedSeq: Functor[scala.collection.immutable.IndexedSeq] = new Functor[scala.collection.immutable.IndexedSeq] {
 
     def map[A, B: ClassTag](is: scala.collection.immutable.IndexedSeq[A])(f: A => B): scala.collection.immutable.IndexedSeq[B] =
-      is.map(f)
+      is map f
   }
 
 }

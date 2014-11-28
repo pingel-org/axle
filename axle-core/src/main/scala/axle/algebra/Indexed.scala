@@ -20,6 +20,11 @@ object Indexed {
     def at[A: ClassTag](list: List[A])(i: Int): A = list(i)
   }
 
+  implicit def vectorIndexed: Indexed[Vector] = new Indexed[Vector] {
+
+    def at[A: ClassTag](vector: Vector[A])(i: Int): A = vector(i)
+  }
+
   implicit def indexedParSeq: Indexed[ParSeq] = new Indexed[ParSeq] {
 
     def at[A: ClassTag](ps: ParSeq[A])(i: Int): A = ps(i)

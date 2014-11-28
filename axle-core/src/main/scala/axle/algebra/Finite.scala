@@ -21,6 +21,12 @@ object Finite {
       list.length
   }
 
+  implicit def finiteVector: Finite[Vector] = new Finite[Vector] {
+
+    def size[A: ClassTag](vector: Vector[A]): Long =
+      vector.length
+  }
+
   implicit def finiteParSeq: Finite[ParSeq] = new Finite[ParSeq] {
 
     def size[A: ClassTag](ps: ParSeq[A]): Long =

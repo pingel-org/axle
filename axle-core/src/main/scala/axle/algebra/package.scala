@@ -2,7 +2,6 @@ package axle
 
 import scala.reflect.ClassTag
 
-import axle.algebra.EnrichedMetricSpace
 import axle.algebra.Aggregatable
 
 import spire.algebra.AdditiveMonoid
@@ -37,7 +36,7 @@ package object algebra {
   }
 
   //.maxBy(_._2)._1
-  
+
   def Σ[A: ClassTag, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
 
@@ -49,9 +48,6 @@ package object algebra {
 
   def product[A: ClassTag, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
-
-  implicit def enrichMetricSpace[T: Manifest](space: MetricSpace[T, Double]): EnrichedMetricSpace[T] =
-    new EnrichedMetricSpace(space) with JblasMatrixModule
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] = new MetricSpace[Rational, Double] {
 
@@ -67,5 +63,5 @@ package object algebra {
 
     def distance(v: Double, w: Double): Double = (v - w).abs
   }
-
+  
 }

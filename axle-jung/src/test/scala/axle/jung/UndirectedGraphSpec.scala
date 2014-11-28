@@ -2,6 +2,7 @@ package axle.jung
 
 import axle.graph.Vertex
 import axle.graph.Edge
+import axle.stringEq
 import org.specs2.mutable._
 import spire.math._
 
