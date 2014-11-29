@@ -24,3 +24,12 @@ trait FunctionPair[A, B] {
     def unapply(c: C): A = ufog(c)
   }
 }
+
+object FunctionPair {
+
+  implicit val doubleIdentity: FunctionPair[Double, Double] = new FunctionPair[Double, Double] {
+    def apply(d: Double) = d
+    def unapply(t: Double) = t
+  }
+  
+}

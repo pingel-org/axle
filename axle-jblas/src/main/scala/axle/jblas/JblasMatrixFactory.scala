@@ -157,25 +157,6 @@ trait JblasMatrixModule extends MatrixModule {
     def rowMeans: Matrix[T] = matrix(jblas.rowMeans)
     def sortRows: Matrix[T] = matrix(jblas.sortRows)
 
-    // in-place operations
-
-    //    def addi(x: T) = jblas.addi(elementAdapter.converter.unapply(x))
-    //    def subtracti(x: T) = jblas.subi(elementAdapter.converter.unapply(x))
-    //    def multiplyi(x: T) = jblas.muli(elementAdapter.converter.unapply(x))
-    //    def matrixMultiplyi(x: T) = jblas.mmuli(elementAdapter.converter.unapply(x))
-    //    def dividei(x: T) = jblas.divi(elementAdapter.converter.unapply(x))
-    //    def ceili() = org.jblas.MatrixFunctions.ceili(jblas)
-    //    def floori() = org.jblas.MatrixFunctions.floori(jblas)
-    //    def logi() = org.jblas.MatrixFunctions.logi(jblas)
-    //    def log10i() = org.jblas.MatrixFunctions.log10i(jblas)
-    //    def powi(p: Double) = org.jblas.MatrixFunctions.powi(jblas, p)
-    //    def addMatrixi(other: JblasMatrix[T]) = jblas.addi(other.jblas)
-    //    def subtractMatrixi(other: JblasMatrix[T]) = jblas.subi(other.jblas)
-    //    def addiRowVector(row: JblasMatrix[T]) = jblas.addiRowVector(row.jblas)
-    //    def addiColumnVector(column: JblasMatrix[T]) = jblas.addiColumnVector(column.jblas)
-    //    def subiRowVector(row: JblasMatrix[T]) = jblas.subiRowVector(row.jblas)
-    //    def subiColumnVector(column: JblasMatrix[T]) = jblas.subiColumnVector(column.jblas)
-
     // higher order methods
 
     def map[B: C](f: T => B): Matrix[B] = {

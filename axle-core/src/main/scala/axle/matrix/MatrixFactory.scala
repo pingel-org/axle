@@ -50,6 +50,7 @@ trait MatrixModule {
     def floor: Matrix[Int]
     def log: Matrix[Double]
     def log10: Matrix[Double]
+    
     def fullSVD: (Matrix[T], Matrix[T], Matrix[T]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
     // def truth: M[Boolean]
 
