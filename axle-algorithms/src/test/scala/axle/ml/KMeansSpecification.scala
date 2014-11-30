@@ -10,15 +10,13 @@ import scala.util.Random.shuffle
 
 import org.specs2.mutable.Specification
 
-import axle.jblas.JblasMatrixModule
-import axle.ml.distance.MatrixDistance
+import axle.jblas.ConvertedJblasDoubleMatrix
+import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
+import axle.ml.distance.Euclidian
 import spire.algebra.Eq
 
 class KMeansSpecification
-  extends Specification
-  with MatrixDistance
-  with KMeansModule
-  with JblasMatrixModule {
+  extends Specification {
 
   "K-Means Clustering" should {
     "work" in {
@@ -38,19 +36,17 @@ class KMeansSpecification
           (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
       //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
-      implicit val space = new Euclidian(2)
+      implicit val space = Euclidian(2)
 
       implicit val fooEq = new Eq[Foo] {
         def eqv(x: Foo, y: Foo): Boolean = x equals y
       }
 
-      implicit val normalizer = new PCAFeatureNormalizer(0.98)
-      //implicit val normalizer = new ZScoreFeatureNormalizer
-
-      val km = classifier(
+      val km = KMeans(
         data,
         2,
-        (p: Foo) => List(p.x, p.y),
+        (p: Foo) => Seq(p.x, p.y),
+        (PCAFeatureNormalizer[ConvertedJblasDoubleMatrix] _).curried.apply(0.98),
         (features: Seq[Double]) => Foo(features(0), features(1)),
         K = 2,
         100)

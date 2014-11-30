@@ -1,9 +1,12 @@
 package axle.jblas
 
 import org.specs2.mutable._
+import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
 
-class MatrixSpecification extends Specification with JblasMatrixModule {
+class MatrixSpecification extends Specification {
 
+  val witness = jblasConvertedMatrix
+  import witness._
 
   "DoubleJblasMatrix" should {
     "work" in {
@@ -14,8 +17,8 @@ class MatrixSpecification extends Specification with JblasMatrixModule {
       val rn = randn[Double](2, 2)
 
       val dm = rand[Double](3, 3)
-      val c2 = dm.column(2)
-      val r2 = dm.row(2)
+      val c2 = witness.column(dm)(2)
+      val r2 = witness.row(dm)(2)
 
       1 must be equalTo (1)
     }

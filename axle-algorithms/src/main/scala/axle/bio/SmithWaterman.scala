@@ -4,7 +4,7 @@ import scala.Vector
 import scala.collection.immutable.Stream.cons
 import scala.collection.immutable.Stream.empty
 
-import axle.matrix.MatrixModule
+import axle.algebra.Matrix
 import spire.algebra.MetricSpace
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
@@ -15,7 +15,7 @@ import spire.implicits.eqOps
  *
  */
 
-abstract class SmithWaterman extends MatrixModule {
+object SmithWaterman {
 
   def w(x: Char, y: Char, mismatchPenalty: Int): Int =
     if (x != y) {
@@ -37,31 +37,32 @@ abstract class SmithWaterman extends MatrixModule {
    *
    */
 
-  def computeH(A: String, B: String, mismatchPenalty: Int): Matrix[Int] = matrix[Int](
-    A.length + 1,
-    B.length + 1,
-    0,
-    (i: Int) => 0,
-    (j: Int) => 0,
-    (i: Int, j: Int, aboveleft: Int, left: Int, above: Int) => Vector(
+  def computeH[M[_]: Matrix](A: String, B: String, mismatchPenalty: Int): M[Int] =
+    implicitly[Matrix[M]].matrix[Int](
+      A.length + 1,
+      B.length + 1,
       0,
-      aboveleft + w(A(i - 1), B(j - 1), mismatchPenalty),
-      above + mismatchPenalty,
-      left + mismatchPenalty
-    ).max
-  )
+      (i: Int) => 0,
+      (j: Int) => 0,
+      (i: Int, j: Int, aboveleft: Int, left: Int, above: Int) => Vector(
+        0,
+        aboveleft + w(A(i - 1), B(j - 1), mismatchPenalty),
+        above + mismatchPenalty,
+        left + mismatchPenalty).max)
 
-  def alignStep(i: Int, j: Int, A: String, B: String, H: Matrix[Int], mismatchPenalty: Int): (Char, Char, Int, Int) =
-    if (i > 0 && j > 0 && H(i, j) === H(i - 1, j - 1) + w(A(i - 1), B(j - 1), mismatchPenalty)) {
+  def alignStep[M[_]: Matrix](i: Int, j: Int, A: String, B: String, H: M[Int], mismatchPenalty: Int): (Char, Char, Int, Int) = {
+    val matrix = implicitly[Matrix[M]]
+    if (i > 0 && j > 0 && matrix.get(H)(i, j) === matrix.get(H)(i - 1, j - 1) + w(A(i - 1), B(j - 1), mismatchPenalty)) {
       (A(i - 1), B(j - 1), i - 1, j - 1)
-    } else if (i > 0 && H(i, j) === H(i - 1, j) + mismatchPenalty) {
+    } else if (i > 0 && matrix.get(H)(i, j) === matrix.get(H)(i - 1, j) + mismatchPenalty) {
       (A(i - 1), gap, i - 1, j)
     } else {
-      assert(j > 0 && H(i, j) === H(i, j - 1) + mismatchPenalty)
+      assert(j > 0 && matrix.get(H)(i, j) === matrix.get(H)(i, j - 1) + mismatchPenalty)
       (gap, B(j - 1), i, j - 1)
     }
+  }
 
-  def _optimalAlignment(i: Int, j: Int, A: String, B: String, mismatchPenalty: Int, H: Matrix[Int]): scala.collection.immutable.Stream[(Char, Char)] =
+  def _optimalAlignment[M[_]: Matrix](i: Int, j: Int, A: String, B: String, mismatchPenalty: Int, H: M[Int]): scala.collection.immutable.Stream[(Char, Char)] =
     if (i > 0 || j > 0) {
       val (preA, preB, newI, newJ) = alignStep(i, j, A, B, H, mismatchPenalty)
       cons((preA, preB), _optimalAlignment(newI, newJ, A, B, mismatchPenalty, H))
@@ -69,19 +70,20 @@ abstract class SmithWaterman extends MatrixModule {
       empty
     }
 
-  def optimalAlignment(A: String, B: String, mismatchPenalty: Int = defaultMismatchPenalty): (String, String) = {
+  def optimalAlignment[M[_]: Matrix](A: String, B: String, mismatchPenalty: Int = defaultMismatchPenalty): (String, String) = {
     val H = computeH(A, B, mismatchPenalty)
     val (alignmentA, alignmentB) = _optimalAlignment(A.length, B.length, A, B, mismatchPenalty, H).unzip
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
-  def metricSpace(mismatchPenalty: Int = defaultMismatchPenalty): MetricSpace[String, Int] = new SmithWatermanMetricSpace(mismatchPenalty)
+  def metricSpace[M[_]: Matrix](mismatchPenalty: Int = defaultMismatchPenalty): MetricSpace[String, Int] =
+    SmithWatermanMetricSpace(mismatchPenalty)
 
-  class SmithWatermanMetricSpace(mismatchPenalty: Int) extends MetricSpace[String, Int] {
+  case class SmithWatermanMetricSpace[M[_]: Matrix](mismatchPenalty: Int) extends MetricSpace[String, Int] {
 
     def distance(s1: String, s2: String): Int = {
       val H = computeH(s1, s2, mismatchPenalty)
-      H(s1.length, s2.length)
+      implicitly[Matrix[M]].get(H)(s1.length, s2.length)
     }
 
   }

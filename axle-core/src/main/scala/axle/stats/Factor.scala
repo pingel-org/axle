@@ -4,7 +4,7 @@ import scala.reflect.ClassTag
 import scala.xml.NodeSeq.seqToNodeSeq
 
 import axle.IndexedCrossProduct
-import axle.matrix.MatrixModule
+import axle.algebra.Matrix
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.MultiplicativeMonoid
@@ -22,7 +22,7 @@ import spire.compat.ordering
 import axle.Show
 import axle.string
 
-trait FactorModule extends MatrixModule {
+trait FactorModule {
 
   /* Technically a "Distribution" is probably a table that sums to 1, which is not
    * always true in a Factor.  They should be siblings rather than parent/child.
@@ -145,11 +145,13 @@ trait FactorModule extends MatrixModule {
           .map({ case (k, v) => (k.toVector, spire.optional.unicode.Σ(v.map(_._2))) })
           .toMap)
 
-    def tally(a: Distribution[T, N], b: Distribution[T, N]): Matrix[Double] =
-      matrix[Double](
+    def tally[M[_]: Matrix](a: Distribution[T, N], b: Distribution[T, N]): M[Double] = {
+      val witness = implicitly[Matrix[M]]
+      witness.matrix[Double](
         a.values.size,
         b.values.size,
         (r: Int, c: Int) => spire.optional.unicode.Σ(cases.filter(isSupersetOf(_, Vector(a is a.values(r), b is b.values(c)))).map(this(_)).toVector).toDouble)
+    }
 
     def Σ(varToSumOut: Distribution[T, N]): Factor[T, N] = this.sumOut(varToSumOut)
 

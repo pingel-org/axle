@@ -1,13 +1,11 @@
 package axle.ml
 
 import org.specs2.mutable._
-import axle.jblas.JblasMatrixModule
+import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
 import axle.algebra.Plottable._
 
 class LinearRegressionSpecification
-  extends Specification
-  with LinearRegressionModule
-  with JblasMatrixModule {
+  extends Specification {
 
   "Linear Regression" should {
     "work" in {
@@ -21,7 +19,7 @@ class LinearRegressionSpecification
           RealtyListing(852, 2, 1, 36, 178.0) ::
           Nil
 
-      val estimator = regression(
+      val estimator = LinearRegression(
         data,
         4,
         (rl: RealtyListing) => (rl.size :: rl.bedrooms.toDouble :: rl.floors.toDouble :: rl.age.toDouble :: Nil),

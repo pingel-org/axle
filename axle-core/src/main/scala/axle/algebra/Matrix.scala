@@ -18,7 +18,7 @@ trait Matrix[M[_]] {
 
   def slice[T](m: M[T])(rs: Seq[Int], cs: Seq[Int]): M[T]
 
-  //    def toList: List[T] = jblas.toArray.toList.map(converter.apply _)
+  def toList[T](m: M[T]): List[T]
 
   def column[T](m: M[T])(j: Int): M[T]
   def row[T](m: M[T])(i: Int): M[T]
@@ -46,6 +46,7 @@ trait Matrix[M[_]] {
   def pow[T](m: M[T])(p: Double): M[Double]
 
   def addScalar[T](m: M[T])(x: T): M[T]
+  def addAssignment[T](m: M[T])(r: Int, c: Int, v: T): M[T]
   def subtractScalar[T](m: M[T])(x: T): M[T]
   def multiplyScalar[T](m: M[T])(x: T): M[T]
   def divideScalar[T](m: M[T])(x: T): M[T]
@@ -113,6 +114,8 @@ trait Matrix[M[_]] {
 
   def plus[T](x: M[T])(y: M[T]): M[T]
 
+  def matrix[T](r: Int, c: Int, values: Array[T])(implicit fp: FunctionPair[Double, T]): M[T]
+
   def matrix[T](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T)(implicit fp: FunctionPair[Double, T]): M[T]
 
   def matrix[T](m: Int, n: Int, f: (Int, Int) => T)(implicit fp: FunctionPair[Double, T]): M[T]
@@ -152,69 +155,26 @@ trait Matrix[M[_]] {
   def rowRange(m: M[Double]): M[Double]
   def columnRange(m: M[Double]): M[Double]
 
-  def sumsq(m: M[Double]): M[Double]
+  def sumsq[T](m: M[T]): M[Double]
 
-  def cov(m: M[Double]): M[Double]
+  def cov[T](m: M[T]): M[Double]
 
-  def std(m: M[Double]): M[Double]
+  def std[T](m: M[T]): M[Double]
 
-  def zscore(m: M[Double]): M[Double]
+  def zscore[T](m: M[T]): M[Double]
 
-  def pca(Xnorm: M[Double], cutoff: Double = 0.95): (M[Double], M[Double])
+  def pca[T](Xnorm: M[T], cutoff: Double): (M[Double], M[Double])
 
-  def numComponentsForCutoff(s: M[Double], cutoff: Double): Int
+  def numComponentsForCutoff[T](s: M[T], cutoff: Double): Int
 
-  // aliases
-
-  //  def t[T](m: M[T]) = transpose
-  //  def tr[T](m: M[T]) = transpose
-  //  def inv[T](m: M[T]) = invert
-  //
-  //  def scalar[T, M[_]: Matrix](m: M[T]) = {
-  //    assert(implicitly[Matrix[M]].isScalar(m))
-  //    implicitly[Matrix[M]].get(m)(0, 0)
-  //  }
-  //
-  //  def +(x: T) = addScalar(x)
-  //
-  //  def +(other: M[T]) = addMatrix(other)
-  //
-  //  def +(rc2v: ((Int, Int), T)) = addAssignment(rc2v._1._1, rc2v._1._2, rc2v._2)
-  //
-  //  def -(x: T) = subtractScalar(x)
-  //
-  //  def -(other: M[T]) = subtractMatrix(other)
-  //
-  //  def *(x: T) = multiplyScalar(x)
-  //
-  //  def ⨯(other: M[T]) = multiplyMatrix(other)
-  //  def mm(other: M[T]) = multiplyMatrix(other)
-  //
-  //  def /(x: T) = divideScalar(x)
-  //
-  //  def +|+(right: M[T]) = concatenateHorizontally(right)
-  //  def +/+(under: M[T]) = concatenateVertically(under)
-  //  def aside(right: M[T]) = concatenateHorizontally(right)
-  //  def atop(under: M[T]) = concatenateVertically(under)
-  //
-  //  def <(other: M[T]) = lt(other)
-  //  def <=(other: M[T]) = le(other)
-  //  def ≤(other: M[T]) = le(other)
-  //  def >(other: M[T]) = gt(other)
-  //  def >=(other: M[T]) = ge(other)
-  //  def ≥(other: M[T]) = ge(other)
-  //  def ==(other: M[T]) = eq(other)
-  //  def !=(other: M[T]) = ne(other)
-  //  def ≠(other: M[T]) = ne(other)
-  //  def &(other: M[T]) = and(other)
-  //  def ∧(other: M[T]) = and(other)
-  //  def |(other: M[T]) = or(other)
-  //  def ∨(other: M[T]) = or(other)
-  //  def ⊕(other: M[T]) = xor(other)
-  //  def ⊻(other: M[T]) = xor(other)
-  //  def ! = not
-  //  def ~ = not
-  //  def ¬ = not
+  def zeros[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): M[T]
+  def ones[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): M[T]
+  def eye[T](n: Int)(implicit fp: FunctionPair[Double, T]): M[T]
+  def I[T](n: Int)(implicit fp: FunctionPair[Double, T]): M[T]
+  def rand[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): M[T]
+  def randn[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): M[T]
+  def falses(m: Int, n: Int): M[Boolean]
+  def trues(m: Int, n: Int): M[Boolean]
 
 }
 

@@ -2,13 +2,15 @@ package axle.game.ttt
 
 import axle.string
 import axle.game._
-import axle.matrix._
 import axle.algebra._
+import axle.syntax.matrix._
 import spire.implicits._
+import axle.jblas.ConvertedJblasDoubleMatrix
+import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
 
 case class TicTacToeState(
   player: TicTacToePlayer,
-  board: TicTacToe#Matrix[Option[TicTacToePlayer]],
+  board: ConvertedJblasDoubleMatrix[Option[TicTacToePlayer]],
   _eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = Map())(implicit ttt: TicTacToe)
   extends State[TicTacToe]() {
 
@@ -33,7 +35,7 @@ case class TicTacToeState(
 
   def positionToColumn(position: Int): Int = (position - 1) % boardSize
 
-  def apply(position: Int): Option[TicTacToePlayer] = board(positionToRow(position), positionToColumn(position))
+  def apply(position: Int): Option[TicTacToePlayer] = board.get(positionToRow(position), positionToColumn(position))
 
   // The validation in InteractiveTicTacToePlayer.chooseMove might be better placed here
   //    def updat(position: Int, player: TicTacToePlayer) =
@@ -46,8 +48,8 @@ case class TicTacToeState(
     (0 until boardSize).exists(board.column(_).toList.forall(_ === Some(player)))
 
   def hasWonDiagonal(player: TicTacToePlayer): Boolean =
-    (0 until boardSize).forall(i => board(i, i) === Some(player)) ||
-      (0 until boardSize).forall(i => board(i, (boardSize - 1) - i) === Some(player))
+    (0 until boardSize).forall(i => board.get(i, i) === Some(player)) ||
+      (0 until boardSize).forall(i => board.get(i, (boardSize - 1) - i) === Some(player))
 
   def hasWon(player: TicTacToePlayer): Boolean = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
@@ -57,18 +59,20 @@ case class TicTacToeState(
 
   def outcome: Option[TicTacToeOutcome] = {
     val winner = ttt.players.find(hasWon)
-    if (winner.isDefined) { Some(TicTacToeOutcome(winner)) }
-    else if (openPositions.length === 0) { Some(TicTacToeOutcome(None)) }
-    else { None }
+    if (winner.isDefined) {
+      Some(TicTacToeOutcome(winner))
+    } else if (openPositions.length === 0) {
+      Some(TicTacToeOutcome(None))
+    } else {
+      None
+    }
   }
 
   def apply(move: TicTacToeMove): Option[TicTacToeState] =
     ttt.state(
       ttt.playerAfter(move.tttPlayer),
-      board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player))
-        .asInstanceOf[ttt.Matrix[Option[TicTacToePlayer]]],
-      _eventQueues
-    )
+      board.addAssignment(positionToRow(move.position), positionToColumn(move.position), Some(player)),
+      _eventQueues)
 
   def eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = _eventQueues
 

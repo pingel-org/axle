@@ -7,14 +7,13 @@ import axle.pgm._
 import spire.math._
 import spire.implicits._
 import org.specs2.mutable._
-import axle.jblas.JblasMatrixModule
+import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
 
 class ABE
   extends Specification
   with BayesianNetworkModule
-  with FactorModule
-  with JblasMatrixModule {
-
+  with FactorModule {
+  
   val bools = Vector(true, false)
 
   val B = new UnknownDistribution0[Boolean, Rational](bools, "Burglary")

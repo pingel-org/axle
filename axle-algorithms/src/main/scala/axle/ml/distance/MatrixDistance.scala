@@ -3,71 +3,73 @@ package axle.ml.distance
 import scala.math.abs
 import scala.math.sqrt
 
-import axle.matrix.MatrixModule
+import axle.algebra.Matrix
+import axle.syntax.matrix._
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
 import spire.algebra.MetricSpace
 import spire.algebra.NormedVectorSpace
 import spire.implicits.DoubleAlgebra
 
-trait MatrixDistance extends MatrixModule {
+case class Manhattan[M[_]: Matrix]() extends MetricSpace[M[Double], Double] {
 
-  class Manhattan extends MetricSpace[Matrix[Double], Double] {
+  def distance(r1: M[Double], r2: M[Double]): Double = (r1 - r2).map(abs).toList.sum
+}
 
-    def distance(r1: Matrix[Double], r2: Matrix[Double]): Double = (r1 - r2).map(abs).toList.sum
-  }
+/**
+ *
+ * Cosine space
+ *
+ * @param n = num columns in row vectors
+ *
+ * distance(r1, r2) = 1.0 - abs(rvDot(r1, r2) / (norm(r1) * norm(r2)))
+ *
+ * TODO: distance calcs could assert(r1.isRowVector && r2.isRowVector && r1.length === r2.length)
+ *
+ */
 
-  /**
-   *
-   * Cosine space
-   *
-   * @param n = num columns in row vectors
-   *
-   * distance(r1, r2) = 1.0 - abs(rvDot(r1, r2) / (norm(r1) * norm(r2)))
-   *
-   * TODO: distance calcs could assert(r1.isRowVector && r2.isRowVector && r1.length === r2.length)
-   *
-   */
+case class Cosine[M[_]: Matrix](n: Int) extends InnerProductSpace[M[Double], Double] {
 
-  case class Cosine(n: Int) extends InnerProductSpace[Matrix[Double], Double] {
+  val witness = implicitly[Matrix[M]]
 
-    def negate(x: Matrix[Double]): Matrix[Double] = x.negate
+  def negate(x: M[Double]): M[Double] = x.negate
 
-    def zero: Matrix[Double] = zeros[Double](1, n)
+  def zero: M[Double] = witness.zeros[Double](1, n)
 
-    def plus(x: Matrix[Double], y: Matrix[Double]): Matrix[Double] = x + y
+  def plus(x: M[Double], y: M[Double]): M[Double] = x + y
 
-    def timesl(r: Double, v: Matrix[Double]): Matrix[Double] = v * r
+  def timesl(r: Double, v: M[Double]): M[Double] = v * r
 
-    def scalar: Field[Double] = DoubleAlgebra
+  def scalar: Field[Double] = DoubleAlgebra
 
-    def dot(v: Matrix[Double], w: Matrix[Double]): Double = v.mulPointwise(w).rowSums.scalar
-
-  }
-
-  /**
-   * Euclidean space
-   *
-   *   n = num columns in row vectors
-   *
-   *   distance(r1, r2) = norm(r1 - r2)
-   *
-   */
-
-  case class Euclidian(n: Int) extends NormedVectorSpace[Matrix[Double], Double] {
-
-    def negate(x: Matrix[Double]): Matrix[Double] = x.negate
-
-    def zero: Matrix[Double] = zeros[Double](1, n)
-
-    def plus(x: Matrix[Double], y: Matrix[Double]): Matrix[Double] = x + y
-
-    def timesl(r: Double, v: Matrix[Double]): Matrix[Double] = v * r
-
-    def scalar: Field[Double] = DoubleAlgebra
-
-    def norm(r: Matrix[Double]): Double = sqrt(r.mulPointwise(r).rowSums.scalar)
-
-  }
+  def dot(v: M[Double], w: M[Double]): Double = v.mulPointwise(w).rowSums.scalar
 
 }
+
+/**
+ * Euclidean space
+ *
+ *   n = num columns in row vectors
+ *
+ *   distance(r1, r2) = norm(r1 - r2)
+ *
+ */
+
+case class Euclidian[M[_]: Matrix](n: Int) extends NormedVectorSpace[M[Double], Double] {
+
+  val witness = implicitly[Matrix[M]]
+
+  def negate(x: M[Double]): M[Double] = x.negate
+
+  def zero: M[Double] = witness.zeros[Double](1, n)
+
+  def plus(x: M[Double], y: M[Double]): M[Double] = x + y
+
+  def timesl(r: Double, v: M[Double]): M[Double] = v * r
+
+  def scalar: Field[Double] = DoubleAlgebra
+
+  def norm(r: M[Double]): Double = sqrt(r.mulPointwise(r).rowSums.scalar)
+
+}
+

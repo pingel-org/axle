@@ -2,18 +2,19 @@ package axle.stats
 
 import scala.math.pow
 import scala.math.sqrt
-import axle.matrix.MatrixModule
+import axle.algebra.Matrix
 
-trait ChiSquaredTestModule extends MatrixModule {
+trait ChiSquaredTestModule {
 
-  def χ2(tally: Matrix[Double]): Double = {
-    val rowTotals = tally.rowSums
-    val columnTotals = tally.columnSums
-    val total = rowTotals.columnSums(0, 0)
-    (0 until tally.rows) map { r =>
-      (0 until tally.columns) map { c =>
-        val observed = tally(r, c)
-        val expected = rowTotals(r, 0) * columnTotals(0, c) / total
+  def χ2[M[_]: Matrix](tally: M[Double]): Double = {
+    val witness = implicitly[Matrix[M]]
+    val rowTotals = witness.rowSums(tally)
+    val columnTotals = witness.columnSums(tally)
+    val total = witness.get(witness.columnSums(rowTotals))(0, 0)
+    (0 until witness.rows(tally)) map { r =>
+      (0 until witness.columns(tally)) map { c =>
+        val observed = witness.get(tally)(r, c)
+        val expected = witness.get(rowTotals)(r, 0) * witness.get(columnTotals)(0, c) / total
         (observed - expected) * (observed - expected) / expected
       } sum
     } sum
@@ -42,6 +43,6 @@ trait ChiSquaredTestModule extends MatrixModule {
    *    val dof = (table.height - 1) * (table.width - 1)
    */
 
-  def independent(table: Matrix[Double]): Boolean = χ2(table) < 0.004
+  def independent[M[_]: Matrix](table: M[Double]): Boolean = χ2(table) < 0.004
 
 }

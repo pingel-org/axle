@@ -1,24 +1,28 @@
 package axle.ml
 
 import axle.Show
-import axle.matrix._
-import axle.matrix.MatrixModule
+import axle.algebra.Matrix
+import axle.algebra.Functor
+import axle.algebra.Finite
+import axle.algebra.SetFrom
+import axle.algebra.MapReducible
+import axle.algebra.MapFrom
+import axle.algebra.FunctionPair
 import spire.algebra._
-import axle.algebra._
 import scala.reflect.ClassTag
 import math.{ ceil, log10 }
 
-abstract class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom](
+case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M[_]: Matrix](
   classifier: Classifier[T, CLASS],
   data: F[T],
-  labelExtractor: T => L)
-  extends MatrixModule {
+  labelExtractor: T => L) {
 
   val func = implicitly[Functor[F]]
   val sz = implicitly[Finite[F]]
   val settable = implicitly[SetFrom[F]]
   val mr = implicitly[MapReducible[F]]
   val mf = implicitly[MapFrom[F]]
+  val matrix = implicitly[Matrix[M]]
 
   val label2clusterId = func.map(data)(datum => (labelExtractor(datum), classifier(datum)))
 
@@ -35,7 +39,7 @@ abstract class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[
 
   val classes = classifier.classes
 
-  val counts = matrix[Int](
+  val counts = matrix.matrix[Int](
     labelList.length,
     classes.size,
     (r: Int, c: Int) => labelIdClusterId2count((r, classes(c))))
@@ -44,22 +48,22 @@ abstract class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[
 
   val formatNumber = (i: Int) => ("%" + width + "d").format(i)
 
-  lazy val rowSums = counts.rowSums
-  lazy val columnSums = counts.columnSums
+  lazy val rowSums = matrix.rowSums(counts)
+  lazy val columnSums = matrix.columnSums(counts)
 
 }
 
 object ConfusionMatrix {
 
-  implicit def showCM[T, CLASS, L, F[_]]: Show[ConfusionMatrix[T, CLASS, L, F]] =
-    new Show[ConfusionMatrix[T, CLASS, L, F]] {
+  implicit def showCM[T, CLASS, L, F[_], M[_]]: Show[ConfusionMatrix[T, CLASS, L, F, M]] =
+    new Show[ConfusionMatrix[T, CLASS, L, F, M]] {
 
-      def text(cm: ConfusionMatrix[T, CLASS, L, F]): String = {
-        import cm._
-        (labelList.zipWithIndex.map({
-          case (label, r) => ((0 until counts.columns).map(c => formatNumber(counts(r, c))).mkString(" ") + " : " + formatNumber(rowSums(r, 0)) + " " + label + "\n")
+      def text(cm: ConfusionMatrix[T, CLASS, L, F, M]): String = {
+        val matrix = cm.matrix
+        (cm.labelList.zipWithIndex.map({
+          case (label, r) => ((0 until matrix.columns(cm.counts)).map(c => cm.formatNumber(matrix.get(cm.counts)(r, c))).mkString(" ") + " : " + cm.formatNumber(matrix.get(cm.rowSums)(r, 0)) + " " + label + "\n")
         }).mkString("")) + "\n" +
-          (0 until counts.columns).map(c => formatNumber(columnSums(0, c))).mkString(" ") + "\n"
+          (0 until matrix.columns(cm.counts)).map(c => cm.formatNumber(matrix.get(cm.columnSums)(0, c))).mkString(" ") + "\n"
       }
 
     }

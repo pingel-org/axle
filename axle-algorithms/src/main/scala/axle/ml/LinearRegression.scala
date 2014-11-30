@@ -1,78 +1,62 @@
 package axle.ml
 
 import scala.collection.immutable.TreeMap
-import axle.matrix.MatrixModule
+import axle.algebra.Matrix
+import axle.syntax.matrix._
 
+case class LinearRegression[D, M[_]: Matrix](
+  examples: Seq[D],
+  numFeatures: Int,
+  featureExtractor: D => List[Double],
+  objectiveExtractor: D => Double,
+  α: Double = 0.1,
+  iterations: Int = 100) {
 
-trait LinearRegressionModule extends MatrixModule with FeatureNormalizerModule {
+  val witness = implicitly[Matrix[M]]
 
-  def normalEquation(X: Matrix[Double], y: Matrix[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
+  val inputX = witness.matrix(
+    examples.length,
+    numFeatures,
+    examples.flatMap(featureExtractor).toArray).t
 
-  def h(xi: Matrix[Double], θ: Matrix[Double]) = xi ⨯ θ
+  val featureNormalizer = LinearFeatureNormalizer(inputX)
 
-  def cost(xi: Matrix[Double], θ: Matrix[Double], yi: Double) = h(xi, θ) - yi
+  val X = witness.ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData
 
-  def dθ(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double]) = (0 until X.rows)
-    .foldLeft(zeros[Double](1, X.columns))(
-      (m: Matrix[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ) - y(i, 0)))
-    ) / X.rows
+  val y = witness.matrix(examples.length, 1, examples.map(objectiveExtractor).toArray)
 
-  def dTheta(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double]) = dθ(X, y, θ)
+  val objectiveNormalizer = LinearFeatureNormalizer(y)
 
-  def gradientDescent(X: Matrix[Double], y: Matrix[Double], θ: Matrix[Double], α: Double, iterations: Int) =
+  val θ0 = witness.ones[Double](X.columns, 1)
+  val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData, θ0, α, iterations)
+
+  def normalEquation(X: M[Double], y: M[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
+
+  def h(xi: M[Double], θ: M[Double]): M[Double] = xi ⨯ θ
+
+  def cost(xi: M[Double], θ: M[Double], yi: Double): Double = h(xi, θ).scalar - yi
+
+  def dθ(X: M[Double], y: M[Double], θ: M[Double]): M[Double] =
+    (0 until X.rows)
+      .foldLeft(witness.zeros[Double](1, X.columns))(
+        (m: M[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ).subtractScalar(y.get(i, 0))))) / X.rows
+
+  def dTheta(X: M[Double], y: M[Double], θ: M[Double]): M[Double] = dθ(X, y, θ)
+
+  def gradientDescent(X: M[Double], y: M[Double], θ: M[Double], α: Double, iterations: Int) =
     (0 until iterations).foldLeft((θ, List[Double]()))(
-      (θiErrLog: (Matrix[Double], List[Double]), i: Int) => {
+      (θiErrLog: (M[Double], List[Double]), i: Int) => {
         val (θi, errLog) = θiErrLog
         val errMatrix = dθ(X, y, θi)
-        val errTotal = (0 until errMatrix.rows).map(errMatrix(_, 0)).reduce(_ + _)
+        val errTotal = (0 until errMatrix.rows).map(errMatrix.get(_, 0)).sum
         (θi - (errMatrix * α), errTotal :: errLog)
-      }
-    )
+      })
 
-  def regression[D](
-    examples: Seq[D],
-    numFeatures: Int,
-    featureExtractor: D => List[Double],
-    objectiveExtractor: D => Double,
-    α: Double = 0.1,
-    iterations: Int = 100) = {
+  def errTree = new TreeMap[Int, Double]() ++
+    (0 until errLog.reverse.length).map(j => j -> errLog(j)).toMap
 
-    val inputX = matrix(
-      examples.length,
-      numFeatures,
-      examples.flatMap(featureExtractor).toArray).t
-
-    val featureNormalizer = new LinearFeatureNormalizer()
-    
-    val inputNormalizer = featureNormalizer.normalizer(inputX)
-
-    val X = ones[Double](inputX.rows, 1) +|+ inputNormalizer.normalizedData
-
-    val y = matrix(examples.length, 1, examples.map(objectiveExtractor).toArray)
-
-    val objectiveNormalizer = featureNormalizer.normalizer(y)
-
-    val θ0 = ones[Double](X.columns, 1)
-    val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData, θ0, α, iterations)
-
-    LinearEstimator(featureExtractor, inputNormalizer, θ, objectiveNormalizer, errLog.reverse)
+  def estimate(observation: D): Double = {
+    val scaledX = witness.ones[Double](1, 1) +|+ featureNormalizer(featureExtractor(observation))
+    objectiveNormalizer.unapply((scaledX ⨯ θ)).head
   }
-
-  case class LinearEstimator[D](
-    featureExtractor: D => List[Double],
-    inputNormalizer: Normalize,
-    θ: Matrix[Double],
-    objectiveNormalizer: Normalize,
-    errLog: List[Double]) {
-
-    def errTree() = new TreeMap[Int, Double]() ++
-      (0 until errLog.length).map(j => j -> errLog(j)).toMap
-
-    def estimate(observation: D): Double = {
-      val scaledX = ones[Double](1, 1) +|+ inputNormalizer(featureExtractor(observation))
-      objectiveNormalizer.unapply((scaledX ⨯ θ)).head
-    }
-
-  }
-
 }

@@ -9,15 +9,13 @@ import axle.graph._
 import axle.pgm._
 import spire.implicits._
 import spire.math._
-import axle.jblas.JblasMatrixModule
 
 class ScalaFigures
   extends Specification
   with BayesianNetworkModule
   with EliminationTreeModule
   with JoinTreeModule
-  with FactorModule
-  with JblasMatrixModule {
+  with FactorModule {
 
   val bools = Vector(true, false)
 

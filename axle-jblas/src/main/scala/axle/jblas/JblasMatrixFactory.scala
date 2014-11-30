@@ -1,17 +1,7 @@
 package axle.jblas
 
-import scala.math.sqrt
-
-import org.jblas.DoubleMatrix
-
-import axle.algebra.FunctionPair
-import axle.Show
-import axle.string
-import axle.matrix.MatrixModule
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
-
-trait JblasMatrixModule extends MatrixModule {
+/*
+trait JblasMatrixModule {
 
   type C[T] = FunctionPair[Double, T]
 
@@ -277,21 +267,6 @@ trait JblasMatrixModule extends MatrixModule {
 
   def zscore(m: Matrix[Double]): Matrix[Double] = centerColumns(m).divRowVector(std(m))
 
-  /**
-   * Principal Component Analysis (PCA)
-   *
-   * assumes that the input matrix, Xnorm, has been normalized, in other words:
-   *   mean of each column === 0.0
-   *   stddev of each column === 1.0 (I'm not clear if this is a strict requirement)
-   *
-   * http://folk.uio.no/henninri/pca_module/
-   * http://public.lanl.gov/mewall/kluwer2002.html
-   * https://mailman.cae.wisc.edu/pipermail/help-octave/2004-May/012772.html
-   *
-   * @return (U, S) where U = eigenvectors and S = eigenvalues (truncated to requested cutoff)
-   *
-   */
-
   def pca(Xnorm: Matrix[Double], cutoff: Double = 0.95): (Matrix[Double], Matrix[Double]) = {
     val (u, s, v) = cov(Xnorm).fullSVD
     (u, s)
@@ -307,3 +282,4 @@ trait JblasMatrixModule extends MatrixModule {
 
 }
 
+*/

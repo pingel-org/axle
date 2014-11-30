@@ -10,21 +10,6 @@ case class ConvertedJblasDoubleMatrix[T](jdm: DoubleMatrix)(implicit val fp: Fun
 
 object ConvertedJblasDoubleMatrix {
 
-  implicit val convertDouble: FunctionPair[Double, Double] = new FunctionPair[Double, Double] {
-    def apply(d: Double) = d
-    def unapply(t: Double) = t
-  }
-
-  implicit val convertInt: FunctionPair[Double, Int] = new FunctionPair[Double, Int] {
-    def apply(d: Double) = d.toInt
-    def unapply(t: Int) = t.toDouble
-  }
-
-  implicit val convertBoolean: FunctionPair[Double, Boolean] = new FunctionPair[Double, Boolean] {
-    def apply(d: Double) = d != 0d
-    def unapply(t: Boolean) = t match { case true => 0d case false => 1d }
-  }
-
   implicit val jblasConvertedMatrix: Matrix[ConvertedJblasDoubleMatrix] =
     new Matrix[ConvertedJblasDoubleMatrix] {
 
@@ -46,12 +31,14 @@ object ConvertedJblasDoubleMatrix {
                 jblas.put(toRow, toCol, m.fp.unapply(this.get(m)(fromRow, fromCol)))
             }
         }
-        this.matrix[T](jblas)
+        matrix[T](jblas)
       }
+
+      def toList[T](m: ConvertedJblasDoubleMatrix[T]): List[T] = m.jdm.toArray.toList.map(m.fp.apply _)
 
       def column[T](m: ConvertedJblasDoubleMatrix[T])(j: Int): ConvertedJblasDoubleMatrix[T] =
         matrix(m.jdm.getColumn(j))(m.fp)
-        
+
       def row[T](m: ConvertedJblasDoubleMatrix[T])(i: Int): ConvertedJblasDoubleMatrix[T] =
         matrix(m.jdm.getRow(i))(m.fp)
 
@@ -79,6 +66,13 @@ object ConvertedJblasDoubleMatrix {
         matrix(org.jblas.MatrixFunctions.pow(m.jdm, p))
 
       def addScalar[T](m: ConvertedJblasDoubleMatrix[T])(x: T): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.add(m.fp.unapply(x)))(m.fp)
+
+      def addAssignment[T](m: ConvertedJblasDoubleMatrix[T])(r: Int, c: Int, v: T): ConvertedJblasDoubleMatrix[T] = {
+        val newJblas = m.jdm.dup
+        newJblas.put(r, c, m.fp.unapply(v))
+        matrix(newJblas)(m.fp)
+      }
+
       def subtractScalar[T](m: ConvertedJblasDoubleMatrix[T])(x: T): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.sub(m.fp.unapply(x)))(m.fp)
       def multiplyScalar[T](m: ConvertedJblasDoubleMatrix[T])(x: T): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.mul(m.fp.unapply(x)))(m.fp)
       def divideScalar[T](m: ConvertedJblasDoubleMatrix[T])(x: T): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.div(m.fp.unapply(x)))(m.fp)
@@ -99,7 +93,7 @@ object ConvertedJblasDoubleMatrix {
 
       // Operations on a matrix and a column/row vector
 
-      def addRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
+      def addRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.addRowVector(row.jdm))(m.fp)
       def addColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
       def subRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
       def subColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
@@ -149,6 +143,12 @@ object ConvertedJblasDoubleMatrix {
 
       def matrix[T](jblas: DoubleMatrix)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] =
         ConvertedJblasDoubleMatrix[T](jblas)
+
+      def matrix[T](r: Int, c: Int, values: Array[T])(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = {
+        val jblas = new org.jblas.DoubleMatrix(values.map(fp.unapply))
+        jblas.reshape(r, c)
+        matrix(jblas)
+      }
 
       def matrix[T](
         m: Int,
@@ -212,23 +212,49 @@ object ConvertedJblasDoubleMatrix {
       def columnRange(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
         ???
 
-      def sumsq(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
+      def sumsq[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] =
         ???
 
-      def cov(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
+      def cov[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] =
         ???
 
-      def std(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
+      def std[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] =
         ???
 
-      def zscore(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
+      def zscore[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] =
         ???
 
-      def pca(Xnorm: ConvertedJblasDoubleMatrix[Double], cutoff: Double = 0.95): (ConvertedJblasDoubleMatrix[Double], ConvertedJblasDoubleMatrix[Double]) =
+      /**
+       * Principal Component Analysis (PCA)
+       *
+       * assumes that the input matrix, Xnorm, has been normalized, in other words:
+       *   mean of each column === 0.0
+       *   stddev of each column === 1.0 (I'm not clear if this is a strict requirement)
+       *
+       * http://folk.uio.no/henninri/pca_module/
+       * http://public.lanl.gov/mewall/kluwer2002.html
+       * https://mailman.cae.wisc.edu/pipermail/help-octave/2004-May/012772.html
+       *
+       * @return (U, S) where U = eigenvectors and S = eigenvalues (truncated to requested cutoff)
+       *
+       */
+
+      def pca[T](Xnorm: ConvertedJblasDoubleMatrix[T], cutoff: Double = 0.95): (ConvertedJblasDoubleMatrix[Double], ConvertedJblasDoubleMatrix[Double]) = {
+        val (u, s, v) = fullSVD(cov(Xnorm))
+        (u, s)
+      }
+
+      def numComponentsForCutoff[T](s: ConvertedJblasDoubleMatrix[T], cutoff: Double): Int =
         ???
 
-      def numComponentsForCutoff(s: ConvertedJblasDoubleMatrix[Double], cutoff: Double): Int =
-        ???
+      def zeros[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.zeros(m, n))(fp)
+      def ones[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.ones(m, n))(fp)
+      def eye[T](n: Int)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.eye(n))(fp)
+      def I[T](n: Int)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = eye(n)(fp)
+      def rand[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.rand(m, n))(fp) // evenly distributed from 0.0 to 1.0
+      def randn[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.randn(m, n))(fp) // normal distribution
+      def falses(m: Int, n: Int): ConvertedJblasDoubleMatrix[Boolean] = matrix(DoubleMatrix.zeros(m, n))
+      def trues(m: Int, n: Int): ConvertedJblasDoubleMatrix[Boolean] = matrix(DoubleMatrix.ones(m, n))
 
     }
 

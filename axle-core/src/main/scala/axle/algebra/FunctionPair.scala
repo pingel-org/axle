@@ -27,9 +27,19 @@ trait FunctionPair[A, B] {
 
 object FunctionPair {
 
-  implicit val doubleIdentity: FunctionPair[Double, Double] = new FunctionPair[Double, Double] {
+  implicit val convertDouble: FunctionPair[Double, Double] = new FunctionPair[Double, Double] {
     def apply(d: Double) = d
     def unapply(t: Double) = t
   }
-  
+
+  implicit val convertInt: FunctionPair[Double, Int] = new FunctionPair[Double, Int] {
+    def apply(d: Double) = d.toInt
+    def unapply(t: Int) = t.toDouble
+  }
+
+  implicit val convertBoolean: FunctionPair[Double, Boolean] = new FunctionPair[Double, Boolean] {
+    def apply(d: Double) = d != 0d
+    def unapply(t: Boolean) = t match { case true => 0d case false => 1d }
+  }
+
 }

@@ -3,7 +3,7 @@ package axle.pgm
 import axle._
 import axle.graph._
 import axle.stats._
-import axle.jblas.JblasMatrixModule
+import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
 import spire.implicits._
 import spire.math._
 import org.specs2.mutable._
@@ -11,8 +11,7 @@ import org.specs2.mutable._
 class ConditionalProbabilityTableSpecification
 extends Specification
 with BayesianNetworkModule
-with FactorModule
-with JblasMatrixModule {
+with FactorModule {
 
   val bools = Vector(true, false)
 

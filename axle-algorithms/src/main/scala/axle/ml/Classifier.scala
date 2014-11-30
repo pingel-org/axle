@@ -1,13 +1,22 @@
 package axle.ml
 
+import scala.reflect.ClassTag
+
+import axle._
+import axle.algebra.Σ
+import axle.algebra.Aggregatable
+import axle.algebra.Matrix
+import axle.algebra.Functor
+import axle.algebra.Finite
+import axle.algebra.SetFrom
+import axle.algebra.MapReducible
+import axle.algebra.MapFrom
+import axle.algebra.FunctionPair
+import axle.algebra.Semigroups._
+
 import spire.math._
 import spire.implicits._
 import spire.algebra._
-import axle._
-import axle.jblas.JblasMatrixModule
-import axle.algebra._
-import axle.algebra.Semigroups._
-import scala.reflect.ClassTag
 
 abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Function1[DATA, CLASS] {
 
@@ -62,9 +71,9 @@ abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Fu
       )
   }
 
-  def confusionMatrix[L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom](
+  def confusionMatrix[L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M[_]: Matrix](
     data: F[DATA],
-    labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L, F] =
-    new ConfusionMatrix(this, data, labelExtractor) with JblasMatrixModule
+    labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L, F, M] =
+    ConfusionMatrix(this, data, labelExtractor)
 
 }
