@@ -7,7 +7,7 @@ final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
 
   val ev = implicitly[Matrix[M]]
 
-  def get(i: Int, j: Int): A = ev.get(lhs)(i, j)
+  def get(i: Int, j: Int) = ev.get(lhs)(i, j)
 
   def slice(rs: Seq[Int], cs: Seq[Int]) = ev.slice(lhs)(rs, cs)
 
@@ -25,9 +25,9 @@ final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
 
   def negate = ev.negate(lhs)
 
-  //def fullSVD[T](m: M[A]): (M[A], M[A], M[A]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
+  //def fullSVD[T](m: M[A]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
 
-  def pow(p: Double): M[Double] = ev.pow(lhs)(p)
+  def pow(p: Double) = ev.pow(lhs)(p)
 
   def addScalar(x: A) = ev.addScalar(lhs)(x)
   def addAssignment(r: Int, c: Int, v: A) = ev.addAssignment(lhs)(r, c, v)
@@ -84,25 +84,25 @@ final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
 
   // higher order methods
 
-  def map[B](f: A => B)(implicit fpB: FunctionPair[Double, B]): M[B] = ev.map(lhs)(f)
+  def map[B](f: A => B)(implicit fpB: FunctionPair[Double, B]) = ev.map(lhs)(f)
 
-  def flatMapColumns[B](f: M[A] => M[B])(implicit fpB: FunctionPair[B, Double]): M[B] = ev.flatMapColumns(lhs)(f)
+  def flatMapColumns[B](f: M[A] => M[B])(implicit fpB: FunctionPair[B, Double]) = ev.flatMapColumns(lhs)(f)
 
-  def foldLeft[B](zero: M[B])(f: (M[B], M[A]) => M[B]): M[B] = ev.foldLeft(lhs)(zero)(f)
+  def foldLeft[B](zero: M[B])(f: (M[B], M[A]) => M[B]) = ev.foldLeft(lhs)(zero)(f)
 
-  def foldTop[B](zero: M[B])(f: (M[B], M[A]) => M[B]): M[B] = ev.foldTop(lhs)(zero)(f)
+  def foldTop[B](zero: M[B])(f: (M[B], M[A]) => M[B]) = ev.foldTop(lhs)(zero)(f)
 
-  def sumsq: M[Double] = ev.sumsq(lhs)
+  def sumsq = ev.sumsq(lhs)
 
-  def cov: M[Double] = ev.cov(lhs)
+  def cov = ev.cov(lhs)
 
-  def std: M[Double] = ev.std(lhs)
+  def std = ev.std(lhs)
 
-  def zscore: M[Double] = ev.zscore(lhs)
+  def zscore = ev.zscore(lhs)
 
-  def pca(cutoff: Double = 0.95): (M[Double], M[Double]) = ev.pca(lhs, cutoff)
+  def pca(cutoff: Double = 0.95) = ev.pca(lhs, cutoff)
 
-  def numComponentsForCutoff(cutoff: Double): Int = ev.numComponentsForCutoff(lhs, cutoff)
+  def numComponentsForCutoff(cutoff: Double) = ev.numComponentsForCutoff(lhs, cutoff)
 
   // Aliases
 

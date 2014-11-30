@@ -59,8 +59,13 @@ object ConvertedJblasDoubleMatrix {
       def log[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] = matrix(org.jblas.MatrixFunctions.log(m.jdm))
       def log10[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] = matrix(org.jblas.MatrixFunctions.log10(m.jdm))
 
-      def fullSVD[T](m: ConvertedJblasDoubleMatrix[T]): (ConvertedJblasDoubleMatrix[T], ConvertedJblasDoubleMatrix[T], ConvertedJblasDoubleMatrix[T]) =
-        ??? // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
+      /**
+       *  (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
+       */
+      def fullSVD[T](m: ConvertedJblasDoubleMatrix[T]): (ConvertedJblasDoubleMatrix[T], ConvertedJblasDoubleMatrix[T], ConvertedJblasDoubleMatrix[T]) = {
+        val usv = org.jblas.Singular.fullSVD(m.jdm).map(matrix(_)(m.fp))
+        (usv(0), usv(1), usv(2))
+      }
 
       def pow[T](m: ConvertedJblasDoubleMatrix[T])(p: Double): ConvertedJblasDoubleMatrix[Double] =
         matrix(org.jblas.MatrixFunctions.pow(m.jdm, p))
@@ -94,13 +99,13 @@ object ConvertedJblasDoubleMatrix {
       // Operations on a matrix and a column/row vector
 
       def addRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.addRowVector(row.jdm))(m.fp)
-      def addColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def subRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def subColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def mulRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def mulColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def divRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def divColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
+      def addColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.addColumnVector(column.jdm))(m.fp)
+      def subRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.subRowVector(row.jdm))(m.fp)
+      def subColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.subColumnVector(column.jdm))(m.fp)
+      def mulRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.mulRowVector(row.jdm))(m.fp)
+      def mulColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.mulColumnVector(column.jdm))(m.fp)
+      def divRowVector[T](m: ConvertedJblasDoubleMatrix[T])(row: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.divRowVector(row.jdm))(m.fp)
+      def divColumnVector[T](m: ConvertedJblasDoubleMatrix[T])(column: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.divColumnVector(column.jdm))(m.fp)
 
       // Operations on pair of matrices that return M[Boolean]
 
@@ -123,14 +128,14 @@ object ConvertedJblasDoubleMatrix {
       def min[T](m: ConvertedJblasDoubleMatrix[T]): T = ???
       def argmin[T](m: ConvertedJblasDoubleMatrix[T]): (Int, Int) = ???
 
-      def rowSums[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def columnSums[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def columnMins[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
-      def columnMaxs[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
+      def rowSums[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ConvertedJblasDoubleMatrix(m.jdm.rowSums)(m.fp)
+      def columnSums[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ConvertedJblasDoubleMatrix(m.jdm.columnSums)(m.fp)
+      def columnMins[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ConvertedJblasDoubleMatrix(m.jdm.columnMins)(m.fp)
+      def columnMaxs[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ConvertedJblasDoubleMatrix(m.jdm.columnMaxs)(m.fp)
       // def columnArgmins
       // def columnArgmaxs
 
-      def columnMeans[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
+      def columnMeans[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ConvertedJblasDoubleMatrix(m.jdm.columnMeans)(m.fp)
       def sortColumns[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
 
       def rowMins[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ???
@@ -200,29 +205,32 @@ object ConvertedJblasDoubleMatrix {
       def flatMapColumns[A, T](m: ConvertedJblasDoubleMatrix[T])(f: ConvertedJblasDoubleMatrix[T] => ConvertedJblasDoubleMatrix[A])(implicit fpA: FunctionPair[A, Double]): ConvertedJblasDoubleMatrix[A] =
         ???
 
-      def centerRows(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
+      def centerRows[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
         ???
 
-      def centerColumns(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
+      def centerColumns[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
+        subRowVector(m)(columnMeans(m))
+
+      def rowRange[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
         ???
 
-      def rowRange(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
+      def columnRange[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
         ???
 
-      def columnRange(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
-        ???
+      def sumsq[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
+        columnSums(mulPointwise(m)(m))
 
-      def sumsq[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] =
-        ???
+      def cov[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
+        ConvertedJblasDoubleMatrix(centerColumns(m).jdm.transpose.mul(centerColumns(m).jdm).div(m.jdm.getColumns))(m.fp)
 
-      def cov[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] =
-        ???
+      def std[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = {
+        val centered = ConvertedJblasDoubleMatrix[Double](sumsq(centerColumns(m)).jdm.div(m.jdm.getColumns))
+        val sqrt = (m.fp.apply _) compose (scala.math.sqrt _)
+        map(centered)(sqrt)(m.fp)
+      }
 
-      def std[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] =
-        ???
-
-      def zscore[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] =
-        ???
+      def zscore[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
+        divRowVector(centerColumns(m))(std(m))
 
       /**
        * Principal Component Analysis (PCA)
@@ -239,13 +247,17 @@ object ConvertedJblasDoubleMatrix {
        *
        */
 
-      def pca[T](Xnorm: ConvertedJblasDoubleMatrix[T], cutoff: Double = 0.95): (ConvertedJblasDoubleMatrix[Double], ConvertedJblasDoubleMatrix[Double]) = {
+      def pca[T](Xnorm: ConvertedJblasDoubleMatrix[T], cutoff: Double = 0.95): (ConvertedJblasDoubleMatrix[T], ConvertedJblasDoubleMatrix[T]) = {
         val (u, s, v) = fullSVD(cov(Xnorm))
         (u, s)
       }
 
-      def numComponentsForCutoff[T](s: ConvertedJblasDoubleMatrix[T], cutoff: Double): Int =
-        ???
+      def numComponentsForCutoff[T](s: ConvertedJblasDoubleMatrix[T], cutoff: Double): Int = {
+        val eigenValuesSquared = toList(mulPointwise(s)(s)).map(s.fp.unapply _)
+        val eigenTotal = eigenValuesSquared.sum
+        val numComponents = eigenValuesSquared.map(_ / eigenTotal).scan(0d)(_ + _).indexWhere(cutoff<)
+        numComponents
+      }
 
       def zeros[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.zeros(m, n))(fp)
       def ones[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.ones(m, n))(fp)

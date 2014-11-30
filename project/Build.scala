@@ -118,6 +118,8 @@ import axle._
       pushChanges
     )
 
+  lazy val jungVersion = "2.0.1"
+
   lazy val axleCore = Project(
     id = "axle-core",
     base = file("axle-core"),
@@ -125,7 +127,11 @@ import axle._
   ).settings(
     name := "axle-core",
     libraryDependencies ++= Seq(
-      "org.spire-math" %% "spire" % "0.8.2"
+      "org.spire-math" %% "spire" % "0.8.2",
+      "net.sf.jung" % "jung-algorithms" % jungVersion,
+      "net.sf.jung" % "jung-api" % jungVersion,
+      "net.sf.jung" % "jung-graph-impl" % jungVersion,
+      "net.sf.jung" % "jung-io" % jungVersion
     )
   )
 
@@ -164,8 +170,6 @@ import axle._
     )
   ).dependsOn(axleCore)
 
-  lazy val jungVersion = "2.0.1"
-
   lazy val axleJung = Project(
     id = "axle-jung",
     base = file("axle-jung"),
@@ -173,10 +177,6 @@ import axle._
   ).settings(
     name := "axle-jung",
     libraryDependencies ++= Seq(
-      "net.sf.jung" % "jung-algorithms" % jungVersion,
-      "net.sf.jung" % "jung-api" % jungVersion,
-      "net.sf.jung" % "jung-graph-impl" % jungVersion,
-      "net.sf.jung" % "jung-io" % jungVersion
     )
   ).dependsOn(axleCore)
 

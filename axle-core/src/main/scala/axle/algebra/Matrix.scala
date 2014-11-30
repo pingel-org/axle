@@ -149,21 +149,21 @@ trait Matrix[M[_]] {
     }
   }
 
-  def centerRows(m: M[Double]): M[Double]
-  def centerColumns(m: M[Double]): M[Double]
+  def centerRows[T](m: M[T]): M[T]
+  def centerColumns[T](m: M[T]): M[T]
 
-  def rowRange(m: M[Double]): M[Double]
-  def columnRange(m: M[Double]): M[Double]
+  def rowRange[T](m: M[T]): M[T]
+  def columnRange[T](m: M[T]): M[T]
 
-  def sumsq[T](m: M[T]): M[Double]
+  def sumsq[T](m: M[T]): M[T]
 
-  def cov[T](m: M[T]): M[Double]
+  def cov[T](m: M[T]): M[T]
 
-  def std[T](m: M[T]): M[Double]
+  def std[T](m: M[T]): M[T]
 
-  def zscore[T](m: M[T]): M[Double]
+  def zscore[T](m: M[T]): M[T]
 
-  def pca[T](Xnorm: M[T], cutoff: Double): (M[Double], M[Double])
+  def pca[T](Xnorm: M[T], cutoff: Double): (M[T], M[T])
 
   def numComponentsForCutoff[T](s: M[T], cutoff: Double): Int
 
