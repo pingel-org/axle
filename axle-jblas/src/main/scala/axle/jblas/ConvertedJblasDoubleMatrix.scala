@@ -87,11 +87,11 @@ object ConvertedJblasDoubleMatrix {
       // Operations on pairs of matrices
       // TODO: add and subtract don't make sense for T = Boolean
 
-      def addMatrix[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.add(other.jdm))(m.fp)
-      def subtractMatrix[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.sub(other.jdm))(m.fp)
-      def multiplyMatrix[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.mmul(other.jdm))(m.fp)
-      def mulPointwise[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.mul(other.jdm))(m.fp)
-      def divPointwise[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.div(other.jdm))(m.fp)
+      def addMatrix[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.add(rhs.jdm))(m.fp)
+      def subtractMatrix[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.sub(rhs.jdm))(m.fp)
+      def multiplyMatrix[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.mmul(rhs.jdm))(m.fp)
+      def mulPointwise[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.mul(rhs.jdm))(m.fp)
+      def divPointwise[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.div(rhs.jdm))(m.fp)
       def concatenateHorizontally[T](m: ConvertedJblasDoubleMatrix[T])(right: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.concatHorizontally(m.jdm, right.jdm))(m.fp)
       def concatenateVertically[T](m: ConvertedJblasDoubleMatrix[T])(under: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(DoubleMatrix.concatVertically(m.jdm, under.jdm))(m.fp)
       def solve[T](m: ConvertedJblasDoubleMatrix[T])(B: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = ??? // returns X, where this === A and A x X = B
@@ -109,17 +109,27 @@ object ConvertedJblasDoubleMatrix {
 
       // Operations on pair of matrices that return M[Boolean]
 
-      def lt[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
-      def le[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
-      def gt[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
-      def ge[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
-      def eq[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
-      def ne[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
+      def lt[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.lt(rhs.jdm))
+      def le[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.le(rhs.jdm))
+      def gt[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.gt(rhs.jdm))
+      def ge[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.ge(rhs.jdm))
+      def eq[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.eq(rhs.jdm))
+      def ne[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.ne(rhs.jdm))
 
-      def and[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
-      def or[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
-      def xor[T](m: ConvertedJblasDoubleMatrix[T])(other: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
-      def not[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] = ???
+      def and[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.and(rhs.jdm))
+      def or[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.or(rhs.jdm))
+      def xor[T](m: ConvertedJblasDoubleMatrix[T])(rhs: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.xor(rhs.jdm))
+      def not[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Boolean] =
+        matrix[Boolean](m.jdm.not)
 
       // various mins and maxs
 
