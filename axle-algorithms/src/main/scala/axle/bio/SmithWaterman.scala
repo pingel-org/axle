@@ -8,6 +8,7 @@ import axle.algebra.Matrix
 import spire.algebra.MetricSpace
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
+import axle.syntax.matrix._
 
 /**
  *
@@ -37,8 +38,8 @@ object SmithWaterman {
    *
    */
 
-  def computeH[M[_]: Matrix](A: String, B: String, mismatchPenalty: Int): M[Int] =
-    implicitly[Matrix[M]].matrix[Int](
+  def computeH[M[_]](A: String, B: String, mismatchPenalty: Int)(implicit ev: Matrix[M]): M[Int] =
+    ev.matrix[Int](
       A.length + 1,
       B.length + 1,
       0,
@@ -51,13 +52,12 @@ object SmithWaterman {
         left + mismatchPenalty).max)
 
   def alignStep[M[_]: Matrix](i: Int, j: Int, A: String, B: String, H: M[Int], mismatchPenalty: Int): (Char, Char, Int, Int) = {
-    val matrix = implicitly[Matrix[M]]
-    if (i > 0 && j > 0 && matrix.get(H)(i, j) === matrix.get(H)(i - 1, j - 1) + w(A(i - 1), B(j - 1), mismatchPenalty)) {
+    if (i > 0 && j > 0 && H.get(i, j) === H.get(i - 1, j - 1) + w(A(i - 1), B(j - 1), mismatchPenalty)) {
       (A(i - 1), B(j - 1), i - 1, j - 1)
-    } else if (i > 0 && matrix.get(H)(i, j) === matrix.get(H)(i - 1, j) + mismatchPenalty) {
+    } else if (i > 0 && H.get(i, j) === H.get(i - 1, j) + mismatchPenalty) {
       (A(i - 1), gap, i - 1, j)
     } else {
-      assert(j > 0 && matrix.get(H)(i, j) === matrix.get(H)(i, j - 1) + mismatchPenalty)
+      assert(j > 0 && H.get(i, j) === H.get(i, j - 1) + mismatchPenalty)
       (gap, B(j - 1), i, j - 1)
     }
   }
@@ -83,7 +83,7 @@ object SmithWaterman {
 
     def distance(s1: String, s2: String): Int = {
       val H = computeH(s1, s2, mismatchPenalty)
-      implicitly[Matrix[M]].get(H)(s1.length, s2.length)
+      H.get(s1.length, s2.length)
     }
 
   }
