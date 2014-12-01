@@ -3,48 +3,43 @@ package axle.pgm
 import axle.jung.JungUndirectedGraph
 import axle.graph.Vertex
 import axle.stats.Distribution
-import axle.stats.FactorModule
+import axle.stats.Factor
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
 
+case class EliminationTree[T: Eq: Manifest, N: Field: Manifest](
+  vps: Seq[Factor[T, N]],
+  ef: Seq[Vertex[Factor[T, N]]] => Seq[(Vertex[Factor[T, N]], Vertex[Factor[T, N]], String)]) {
 
-trait EliminationTreeModule extends FactorModule {
+  lazy val graph = JungUndirectedGraph(vps, ef)
 
-  case class EliminationTree[T: Eq: Manifest, N: Field: Manifest](
-    vps: Seq[Factor[T, N]],
-    ef: Seq[Vertex[Factor[T, N]]] => Seq[(Vertex[Factor[T, N]], Vertex[Factor[T, N]], String)]) {
+  def gatherVars(
+    stop: Vertex[Factor[T, N]],
+    node: Vertex[Factor[T, N]],
+    accumulated: Set[Distribution[T, N]]): Set[Distribution[T, N]] =
+    graph
+      .neighbors(node)
+      .filter(n => !(n === stop))
+      .foldLeft(accumulated ++ node.payload.variables)((a, y) => gatherVars(node, y, a))
 
-    lazy val graph = JungUndirectedGraph(vps, ef)
+  def cluster(i: Vertex[Factor[T, N]]): Set[Distribution[T, N]] =
+    graph.neighbors(i).flatMap(separate(i, _)) ++ i.payload.variables
 
-    def gatherVars(
-      stop: Vertex[Factor[T, N]],
-      node: Vertex[Factor[T, N]],
-      accumulated: Set[Distribution[T, N]]): Set[Distribution[T, N]] =
-      graph
-        .neighbors(node)
-        .filter(n => !(n === stop))
-        .foldLeft(accumulated ++ node.payload.variables)((a, y) => gatherVars(node, y, a))
+  def separate(i: Vertex[Factor[T, N]], j: Vertex[Factor[T, N]]): Set[Distribution[T, N]] =
+    gatherVars(j, i, Set.empty[Distribution[T, N]]).intersect(gatherVars(i, j, Set[Distribution[T, N]]()))
 
-    def cluster(i: Vertex[Factor[T, N]]): Set[Distribution[T, N]] =
-      graph.neighbors(i).flatMap(separate(i, _)) ++ i.payload.variables
+  // def constructEdge(v1: GV, v2: GV): GE = g += ((v1, v2), "")
+  // def delete(node: GV): Unit = g.delete(node)
 
-    def separate(i: Vertex[Factor[T, N]], j: Vertex[Factor[T, N]]): Set[Distribution[T, N]] =
-      gatherVars(j, i, Set.empty[Distribution[T, N]]).intersect(gatherVars(i, j, Set[Distribution[T, N]]()))
+  def allVariables: Set[Distribution[T, N]] =
+    graph.vertices.flatMap(_.payload.variables)
 
-    // def constructEdge(v1: GV, v2: GV): GE = g += ((v1, v2), "")
-    // def delete(node: GV): Unit = g.delete(node)
+  // Note: previous version also handled case where 'node' wasn't in the graph
+  // def addFactor(node: GV, f: Factor): Unit = node.setPayload(node.getPayload.multiply(f))
 
-    def allVariables: Set[Distribution[T, N]] =
-      graph.vertices.flatMap(_.payload.variables)
-
-    // Note: previous version also handled case where 'node' wasn't in the graph
-    // def addFactor(node: GV, f: Factor): Unit = node.setPayload(node.getPayload.multiply(f))
-
-    // def factor(node: GV): Factor = node.getPayload
-    // def update(node: GV, f: Factor): Unit = node.setPayload(f)
-
-  }
+  // def factor(node: GV): Factor = node.getPayload
+  // def update(node: GV, f: Factor): Unit = node.setPayload(f)
 
 }

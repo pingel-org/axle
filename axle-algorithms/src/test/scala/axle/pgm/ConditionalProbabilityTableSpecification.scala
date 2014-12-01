@@ -9,9 +9,7 @@ import spire.math._
 import org.specs2.mutable._
 
 class ConditionalProbabilityTableSpecification
-extends Specification
-with BayesianNetworkModule
-with FactorModule {
+extends Specification {
 
   val bools = Vector(true, false)
 

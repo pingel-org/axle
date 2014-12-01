@@ -10,12 +10,7 @@ import axle.pgm._
 import spire.implicits._
 import spire.math._
 
-class ScalaFigures
-  extends Specification
-  with BayesianNetworkModule
-  with EliminationTreeModule
-  with JoinTreeModule
-  with FactorModule {
+class ScalaFigures extends Specification {
 
   val bools = Vector(true, false)
 
@@ -181,7 +176,7 @@ class ScalaFigures
     f75
   }
 
-  def figure7_12 = makeJoinTree(
+  def figure7_12 = JoinTree.makeJoinTree(
     Vector[Set[Distribution[Boolean, Rational]]](Set(A, B, C), Set(B, C, D), Set(C, E)),
     (vs: Seq[Vertex[Set[Distribution[Boolean, Rational]]]]) => vs match {
       case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))

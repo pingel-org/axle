@@ -86,15 +86,12 @@ package object visualize {
         new JungDirectedGraphVisualization().component(jdg)
     }
 
-  trait BayesianNetworkVisualizationModule extends BayesianNetworkModule {
-
-    implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq]: Draw[BayesianNetwork[T, N]] = {
-      new Draw[BayesianNetwork[T, N]] {
-        def component(bn: BayesianNetwork[T, N]) = {
-          // TODO this should be easier
-          val jdg = JungDirectedGraph(bn.graph.vertexPayloads, bn.graph.edgeFunction)
-          drawJungDirectedGraph[BayesianNetworkNode[T, N], String].component(jdg)
-        }
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq]: Draw[BayesianNetwork[T, N]] = {
+    new Draw[BayesianNetwork[T, N]] {
+      def component(bn: BayesianNetwork[T, N]) = {
+        // TODO this should be easier
+        val jdg = JungDirectedGraph(bn.graph.vertexPayloads, bn.graph.edgeFunction)
+        drawJungDirectedGraph[BayesianNetworkNode[T, N], String].component(jdg)
       }
     }
   }

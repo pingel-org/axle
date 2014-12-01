@@ -10,9 +10,7 @@ import org.specs2.mutable._
 import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
 
 class ABE
-  extends Specification
-  with BayesianNetworkModule
-  with FactorModule {
+  extends Specification {
   
   val bools = Vector(true, false)
 
