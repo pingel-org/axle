@@ -8,21 +8,21 @@ import axle.algebra.SetFrom
 import axle.algebra.MapReducible
 import axle.algebra.MapFrom
 import axle.algebra.FunctionPair
+import axle.syntax.matrix._
 import spire.algebra._
 import scala.reflect.ClassTag
 import math.{ ceil, log10 }
 
-case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M[_]: Matrix](
+case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M[_]](
   classifier: Classifier[T, CLASS],
   data: F[T],
-  labelExtractor: T => L) {
+  labelExtractor: T => L)(implicit val evMatrix: Matrix[M]) {
 
   val func = implicitly[Functor[F]]
   val sz = implicitly[Finite[F]]
   val settable = implicitly[SetFrom[F]]
   val mr = implicitly[MapReducible[F]]
   val mf = implicitly[MapFrom[F]]
-  val matrix = implicitly[Matrix[M]]
 
   val label2clusterId = func.map(data)(datum => (labelExtractor(datum), classifier(datum)))
 
@@ -39,7 +39,7 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
 
   val classes = classifier.classes
 
-  val counts = matrix.matrix[Int](
+  val counts = evMatrix.matrix[Int](
     labelList.length,
     classes.size,
     (r: Int, c: Int) => labelIdClusterId2count((r, classes(c))))
@@ -48,8 +48,8 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
 
   val formatNumber = (i: Int) => ("%" + width + "d").format(i)
 
-  lazy val rowSums = matrix.rowSums(counts)
-  lazy val columnSums = matrix.columnSums(counts)
+  lazy val rowSums = counts.rowSums
+  lazy val columnSums = counts.columnSums
 
 }
 
@@ -59,7 +59,7 @@ object ConfusionMatrix {
     new Show[ConfusionMatrix[T, CLASS, L, F, M]] {
 
       def text(cm: ConfusionMatrix[T, CLASS, L, F, M]): String = {
-        val matrix = cm.matrix
+        val matrix = cm.evMatrix
         (cm.labelList.zipWithIndex.map({
           case (label, r) => ((0 until matrix.columns(cm.counts)).map(c => cm.formatNumber(matrix.get(cm.counts)(r, c))).mkString(" ") + " : " + cm.formatNumber(matrix.get(cm.rowSums)(r, 0)) + " " + label + "\n")
         }).mkString("")) + "\n" +

@@ -14,24 +14,20 @@ abstract class Normalize[M[_]: Matrix] extends (Seq[Double] => M[Double]) {
   def random(): M[Double]
 }
 
-case class IdentityFeatureNormalizer[M[_]: Matrix](X: M[Double]) extends Normalize[M] {
-
-  val ma = implicitly[Matrix[M]]
+case class IdentityFeatureNormalizer[M[_]](X: M[Double])(implicit ev: Matrix[M]) extends Normalize[M] {
 
   def normalizedData: M[Double] = X
 
   def apply(featureList: Seq[Double]): M[Double] =
-    ma.matrix(1, featureList.length, featureList.toArray)
+    ev.matrix(1, featureList.length, featureList.toArray)
 
   def unapply(featureRow: M[Double]): Seq[Double] =
     featureRow.toList
 
-  def random(): M[Double] = ma.matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
+  def random(): M[Double] = ev.matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
 }
 
-case class LinearFeatureNormalizer[M[_]: Matrix](X: M[Double]) extends Normalize[M] {
-
-  val ma = implicitly[Matrix[M]]
+case class LinearFeatureNormalizer[M[_]](X: M[Double])(implicit ev: Matrix[M]) extends Normalize[M] {
 
   val colMins = X.columnMins
   val colRanges = X.columnMaxs - colMins
@@ -40,19 +36,17 @@ case class LinearFeatureNormalizer[M[_]: Matrix](X: M[Double]) extends Normalize
   def normalizedData: M[Double] = nd
 
   def apply(features: Seq[Double]): M[Double] =
-    ma.matrix(1, features.length, features.toArray).subRowVector(colMins).divPointwise(colRanges)
+    ev.matrix(1, features.length, features.toArray).subRowVector(colMins).divPointwise(colRanges)
 
   def unapply(featureRow: M[Double]): Seq[Double] =
     (featureRow.mulPointwise(colRanges) + colMins).toList
 
   def random(): M[Double] =
-    ma.matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray).mulPointwise(colRanges) + colMins
+    ev.matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray).mulPointwise(colRanges) + colMins
 
 }
 
-case class ZScoreFeatureNormalizer[M[_]: Matrix](X: M[Double]) extends Normalize[M] {
-
-  val ma = implicitly[Matrix[M]]
+case class ZScoreFeatureNormalizer[M[_]](X: M[Double])(implicit ev: Matrix[M]) extends Normalize[M] {
 
   lazy val μs = X.columnMeans
   lazy val σ2s = X.std
@@ -61,19 +55,17 @@ case class ZScoreFeatureNormalizer[M[_]: Matrix](X: M[Double]) extends Normalize
   def normalizedData: M[Double] = nd
 
   def apply(features: Seq[Double]): M[Double] =
-    (ma.matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
+    (ev.matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
 
   def unapply(featureRow: M[Double]): Seq[Double] =
     (featureRow.mulPointwise(σ2s) + μs).toList
 
   def random(): M[Double] =
-    ma.matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
+    ev.matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
 
 }
 
-case class PCAFeatureNormalizer[M[_]: Matrix](cutoff: Double, X: M[Double]) extends Normalize[M] {
-
-  val ma = implicitly[Matrix[M]]
+case class PCAFeatureNormalizer[M[_]](cutoff: Double, X: M[Double])(implicit ev: Matrix[M]) extends Normalize[M] {
 
   lazy val μs = X.columnMeans
   lazy val σ2s = X.std
@@ -85,13 +77,13 @@ case class PCAFeatureNormalizer[M[_]: Matrix](cutoff: Double, X: M[Double]) exte
   def normalizedData: M[Double] = zd ⨯ Uk
 
   def apply(features: Seq[Double]): M[Double] =
-    (ma.matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) ⨯ Uk
+    (ev.matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) ⨯ Uk
 
   def unapply(featureRow: M[Double]): Seq[Double] =
     ((featureRow ⨯ Uk.t).mulPointwise(σ2s) + μs).toList
 
   def random(): M[Double] =
-    ma.matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ Uk
+    ev.matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) ⨯ Uk
 
   // (truncatedSigmas.mulPointwise(featureRow) + truncatedMeans).toList
   // val truncatedSigmas = σ2s ⨯ Uk

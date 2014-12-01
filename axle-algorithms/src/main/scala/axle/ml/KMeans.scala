@@ -35,14 +35,14 @@ import spire.implicits.eqOps
  *
  */
 
-case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed, M[_]: Matrix](
+case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed, M[_]](
   data: F[T],
   N: Int,
   featureExtractor: T => Seq[Double],
   normalizerMaker: M[Double] => Normalize[M],
   constructor: Seq[Double] => T,
   K: Int,
-  iterations: Int)(implicit space: MetricSpace[M[Double], Double])
+  iterations: Int)(implicit space: MetricSpace[M[Double], Double], ev: Matrix[M])
   extends Classifier[T, Int] {
 
   // TODO: default distance = distance.euclidean
@@ -50,11 +50,10 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
   val finite = implicitly[Finite[F]]
   val functor = implicitly[Functor[F]]
   val indexed = implicitly[Indexed[F]]
-  val ma = implicitly[Matrix[M]]
 
   // TODO: This is not at all what we should be doing when F is a large RDD
   val features: F[Seq[Double]] = functor.map(data)(featureExtractor)
-  val featureMatrix = ma.matrix[Double](finite.size(data).toInt, N, (r: Int, c: Int) => indexed.at(features)(r).apply(c))
+  val featureMatrix = ev.matrix[Double](finite.size(data).toInt, N, (r: Int, c: Int) => indexed.at(features)(r).apply(c))
 
   val normalizer = normalizerMaker(featureMatrix)
 
@@ -111,7 +110,7 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
       Vector(a, d)
     }).transpose
     // TODO: remove the map(_.toInt)
-    (ma.matrix(X.rows, 1, AD(0).map(_.toInt).toArray), ma.matrix(X.rows, 1, AD(1).toArray))
+    (ev.matrix(X.rows, 1, AD(0).map(_.toInt).toArray), ev.matrix(X.rows, 1, AD(1).toArray))
   }
 
   /**
@@ -133,8 +132,8 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
     assert(K < X.rows)
 
     val μ0 = X.slice(shuffle((0 until X.rows).toList).take(K), 0 until X.columns)
-    val a0 = ma.zeros[Int](X.rows, 1)
-    val d0 = ma.zeros[Double](X.rows, 1)
+    val a0 = ev.zeros[Int](X.rows, 1)
+    val d0 = ev.zeros[Double](X.rows, 1)
 
     (0 until iterations).scanLeft((μ0, a0, d0))((μad: (M[Double], M[Int], M[Double]), i: Int) => {
       val (a, d) = assignmentsAndDistances(space, X, μad._1)
@@ -155,7 +154,7 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
 
   def centroids(X: M[Double], K: Int, assignments: M[Int]): (M[Double], Seq[Int]) = {
 
-    val A = ma.matrix(X.rows, K, (r: Int, c: Int) => if (c === assignments.get(r, 0)) 1d else 0d)
+    val A = ev.matrix(X.rows, K, (r: Int, c: Int) => if (c === assignments.get(r, 0)) 1d else 0d)
     val distances = A.t ⨯ X // K x N
     val counts = A.columnSums.t // K x 1
     val unassignedClusterIds = (0 until K).filter(counts.get(_, 0) === 0d)

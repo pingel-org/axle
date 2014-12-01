@@ -28,13 +28,11 @@ case class Manhattan[M[_]: Matrix]() extends MetricSpace[M[Double], Double] {
  *
  */
 
-case class Cosine[M[_]: Matrix](n: Int) extends InnerProductSpace[M[Double], Double] {
-
-  val witness = implicitly[Matrix[M]]
+case class Cosine[M[_]](n: Int)(implicit ev: Matrix[M]) extends InnerProductSpace[M[Double], Double] {
 
   def negate(x: M[Double]): M[Double] = x.negate
 
-  def zero: M[Double] = witness.zeros[Double](1, n)
+  def zero: M[Double] = ev.zeros[Double](1, n)
 
   def plus(x: M[Double], y: M[Double]): M[Double] = x + y
 
@@ -55,13 +53,11 @@ case class Cosine[M[_]: Matrix](n: Int) extends InnerProductSpace[M[Double], Dou
  *
  */
 
-case class Euclidian[M[_]: Matrix](n: Int) extends NormedVectorSpace[M[Double], Double] {
-
-  val witness = implicitly[Matrix[M]]
+case class Euclidian[M[_]](n: Int)(implicit ev: Matrix[M]) extends NormedVectorSpace[M[Double], Double] {
 
   def negate(x: M[Double]): M[Double] = x.negate
 
-  def zero: M[Double] = witness.zeros[Double](1, n)
+  def zero: M[Double] = ev.zeros[Double](1, n)
 
   def plus(x: M[Double], y: M[Double]): M[Double] = x + y
 

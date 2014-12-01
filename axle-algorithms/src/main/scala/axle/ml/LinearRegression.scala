@@ -4,30 +4,28 @@ import scala.collection.immutable.TreeMap
 import axle.algebra.Matrix
 import axle.syntax.matrix._
 
-case class LinearRegression[D, M[_]: Matrix](
+case class LinearRegression[D, M[_]](
   examples: Seq[D],
   numFeatures: Int,
   featureExtractor: D => List[Double],
   objectiveExtractor: D => Double,
   α: Double = 0.1,
-  iterations: Int = 100) {
+  iterations: Int = 100)(implicit ev: Matrix[M]) {
 
-  val witness = implicitly[Matrix[M]]
-
-  val inputX = witness.matrix(
+  val inputX = ev.matrix(
     examples.length,
     numFeatures,
     examples.flatMap(featureExtractor).toArray).t
 
   val featureNormalizer = LinearFeatureNormalizer(inputX)
 
-  val X = witness.ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData
+  val X = ev.ones[Double](inputX.rows, 1) +|+ featureNormalizer.normalizedData
 
-  val y = witness.matrix(examples.length, 1, examples.map(objectiveExtractor).toArray)
+  val y = ev.matrix(examples.length, 1, examples.map(objectiveExtractor).toArray)
 
   val objectiveNormalizer = LinearFeatureNormalizer(y)
 
-  val θ0 = witness.ones[Double](X.columns, 1)
+  val θ0 = ev.ones[Double](X.columns, 1)
   val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData, θ0, α, iterations)
 
   def normalEquation(X: M[Double], y: M[Double]) = (X.t ⨯ X).inv ⨯ X.t ⨯ y
@@ -38,7 +36,7 @@ case class LinearRegression[D, M[_]: Matrix](
 
   def dθ(X: M[Double], y: M[Double], θ: M[Double]): M[Double] =
     (0 until X.rows)
-      .foldLeft(witness.zeros[Double](1, X.columns))(
+      .foldLeft(ev.zeros[Double](1, X.columns))(
         (m: M[Double], i: Int) => m + (X.row(i) ⨯ (h(X.row(i), θ).subtractScalar(y.get(i, 0))))) / X.rows
 
   def dTheta(X: M[Double], y: M[Double], θ: M[Double]): M[Double] = dθ(X, y, θ)
@@ -56,7 +54,7 @@ case class LinearRegression[D, M[_]: Matrix](
     (0 until errLog.reverse.length).map(j => j -> errLog(j)).toMap
 
   def estimate(observation: D): Double = {
-    val scaledX = witness.ones[Double](1, 1) +|+ featureNormalizer(featureExtractor(observation))
+    val scaledX = ev.ones[Double](1, 1) +|+ featureNormalizer(featureExtractor(observation))
     objectiveNormalizer.unapply((scaledX ⨯ θ)).head
   }
 }
