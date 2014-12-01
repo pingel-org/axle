@@ -86,7 +86,7 @@ final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
 
   def map[B](f: A => B)(implicit fpB: FunctionPair[Double, B]) = ev.map(lhs)(f)
 
-  def flatMapColumns[B](f: M[A] => M[B])(implicit fpB: FunctionPair[B, Double]) = ev.flatMapColumns(lhs)(f)
+  def flatMapColumns[B](f: M[A] => M[B])(implicit fpB: FunctionPair[Double, B]) = ev.flatMapColumns(lhs)(f)
 
   def foldLeft[B](zero: M[B])(f: (M[B], M[A]) => M[B]) = ev.foldLeft(lhs)(zero)(f)
 

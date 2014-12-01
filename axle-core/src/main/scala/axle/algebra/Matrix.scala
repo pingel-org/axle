@@ -124,11 +124,10 @@ trait Matrix[M[_]] {
 
   def map[B, T](m: M[T])(f: T => B)(implicit fpB: FunctionPair[Double, B]): M[B]
 
-  def flatMapColumns[A, T](m: M[T])(f: M[T] => M[A])(implicit fpA: FunctionPair[A, Double]): M[A]
+  def flatMapColumns[T, A](m: M[T])(f: M[T] => M[A])(implicit fpA: FunctionPair[Double, A]): M[A]
 
-  def foldLeft[A, T](m: M[T])(zero: M[A])(f: (M[A], M[T]) => M[A]): M[A] = {
+  def foldLeft[A, T](m: M[T])(zero: M[A])(f: (M[A], M[T]) => M[A]): M[A] =
     (0 until columns(m)).foldLeft(zero)((x: M[A], c: Int) => f(x, column(m)(c)))
-  }
 
   def foldTop[A, T](m: M[T])(zero: M[A])(f: (M[A], M[T]) => M[A]): M[A] =
     (0 until rows(m)).foldLeft(zero)((x: M[A], r: Int) => f(x, row(m)(r)))
