@@ -1,7 +1,7 @@
 package axle.ml
 
-import axle.jung.JungDirectedGraph
-import axle.graph.Vertex
+import axle.algebra.DirectedGraph
+import axle.algebra.Vertex
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 
@@ -22,6 +22,7 @@ object MarkovModelState {
 }
 
 case class MarkovModelStartState() extends MarkovModelState
+
 object MarkovModelStartState {
   implicit def showStart: Show[MarkovModelStartState] =
     new Show[MarkovModelStartState] {
@@ -30,6 +31,7 @@ object MarkovModelStartState {
 }
 
 case class UnobservableMarkovModelState(label: String) extends MarkovModelState
+
 object UnobservableMarkovModelState {
   implicit def showStart: Show[UnobservableMarkovModelState] =
     new Show[UnobservableMarkovModelState] {
@@ -45,7 +47,7 @@ object ObservableMarkovModelState {
     }
 }
 
-class HiddenMarkovModel(
+case class HiddenMarkovModel[DG[_, _]: DirectedGraph](
   states: IndexedSeq[UnobservableMarkovModelState],
   observations: IndexedSeq[ObservableMarkovModelState],
   startProbability: Map[UnobservableMarkovModelState, Double],
@@ -55,7 +57,7 @@ class HiddenMarkovModel(
 
   val startState = MarkovModelStartState()
 
-  val graph = JungDirectedGraph[MarkovModelState, Double](
+  val graph = implicitly[DirectedGraph[DG]].make[MarkovModelState, Double](
     states ++ observations ++ List(startState),
     (vs: Seq[Vertex[MarkovModelState]]) => {
       val state2vertex = vs.map(v => (v.payload, v)).toMap

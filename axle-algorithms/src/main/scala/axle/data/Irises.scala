@@ -7,12 +7,12 @@ import scala.sys.process.stringSeqToProcess
 import scala.util.Try
 
 import axle.quanta.Distance
-import axle.quanta.Distance.cm
 import axle.quanta.UnittedQuantity
 import axle.quanta.modulize
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps
+import axle.jung.JungDirectedGraph
 
 /**
  *
@@ -40,11 +40,15 @@ import spire.implicits.moduleOps
 
 object Irises {
 
+  val distance = new Distance[JungDirectedGraph]()
+  
+  import distance.cm
+  
   case class Iris(
-    sepalLength: UnittedQuantity[Distance, Double],
-    sepalWidth: UnittedQuantity[Distance, Double],
-    petalLength: UnittedQuantity[Distance, Double],
-    petalWidth: UnittedQuantity[Distance, Double],
+    sepalLength: UnittedQuantity[Distance[JungDirectedGraph], Double],
+    sepalWidth: UnittedQuantity[Distance[JungDirectedGraph], Double],
+    petalLength: UnittedQuantity[Distance[JungDirectedGraph], Double],
+    petalWidth: UnittedQuantity[Distance[JungDirectedGraph], Double],
     species: String)
 
   object Iris {

@@ -20,7 +20,7 @@ object Search {
    * TODO try chain rule
    */
 
-  def expand[T: Eq, N: Field](model: CausalModel[T, N], quantity: CausalityProbability[T, N], namer: VariableNamer[T, N]): Some[List[Form]] =
+  def expand[T: Eq, N: Field, DG[_, _]](model: CausalModel[T, N, DG], quantity: CausalityProbability[T, N], namer: VariableNamer[T, N]): Some[List[Form]] =
     Some(DeleteObservation(quantity, model, namer.duplicate) ++
       InsertObservation(quantity, model, namer.duplicate) ++
       ActionToObservation(quantity, model, namer.duplicate) ++
@@ -29,7 +29,7 @@ object Search {
       InsertAction(quantity, model, namer.duplicate))
 
   // TODO: figure out what the intent of the "probFactory" was here:
-  def reduce[T: Eq, N: Field](model: CausalModel[T, N], quantity: CausalityProbability[T, N], namer: VariableNamer[T, N], depth: Int, maxDepth: Int): Option[List[Form]] =
+  def reduce[T: Eq, N: Field, DG[_, _]](model: CausalModel[T, N, DG], quantity: CausalityProbability[T, N], namer: VariableNamer[T, N], depth: Int, maxDepth: Int): Option[List[Form]] =
     if (depth <= maxDepth) {
       expand(model, quantity, namer).flatMap(es => {
         es.flatMap(e => {

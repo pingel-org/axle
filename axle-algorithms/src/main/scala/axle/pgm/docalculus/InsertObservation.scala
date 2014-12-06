@@ -10,19 +10,19 @@ object InsertObservation extends Rule {
   // is possible to have relevant actions that are not in q?
   // I assume not.
 
-  def apply[T: Eq, N: Field](q: CausalityProbability[T, N], m: CausalModel[T, N], namer: VariableNamer[T, N]): List[Form] = {
+  def apply[T: Eq, N: Field, DG[_, _]](q: CausalityProbability[T, N], m: CausalModel[T, N, DG], namer: VariableNamer[T, N]): List[Form] = {
 
     val Y = q.question
     val X = q.actions
     val W = q.given
     val subModel = m.duplicate
-//    subModel.graph.removeInputs(subModel.nodesFor(X))
+    //    subModel.graph.removeInputs(subModel.nodesFor(X))
     val XW = X ++ W
 
     (m.randomVariables.toSet -- Y -- X -- W).flatMap(zRandomVariable => {
       if (m.observes(zRandomVariable)) {
         val z = namer.nextVariable(zRandomVariable)
-//        if (subModel.blocks(Y, Set(z), XW)) {
+        //        if (subModel.blocks(Y, Set(z), XW)) {
         if (false) {
           Some(CausalityProbability(Y, W + z, X))
         } else {

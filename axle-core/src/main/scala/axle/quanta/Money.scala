@@ -1,33 +1,28 @@
 package axle.quanta
 
-import axle.graph.DirectedGraph
+import axle.algebra.Vertex
 import axle.algebra.Bijection
+import axle.algebra.DirectedGraph
+import spire.algebra.Eq
+import spire.algebra.Field
 import spire.math.Rational
-import spire.algebra._
-import spire.implicits.eqOps
-import spire.implicits.moduleOps
-import spire.implicits.groupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
+import spire.math.Real
+import spire.implicits._
 
-abstract class Money extends Quantum {
+class Money[DG[_, _]: DirectedGraph] extends Quantum {
+  
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Money"
-}
 
-object Money extends Money {
-
-  type Q = Money
+  type Q = this.type
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("US Dollar", "USD"))
 
   def links[N: Field: Eq] = {
-    implicit val baseCG = cgnDisconnected[N]
+    implicit val baseCG = cgnDisconnected[N, DG]
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]()
   }
 
-  // def x[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "x")
+  // def x[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "x")
 
 }

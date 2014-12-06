@@ -1,24 +1,19 @@
 package axle.quanta
 
-import axle.graph.DirectedGraph
+import axle.algebra.Vertex
 import axle.algebra.Bijection
-import spire.algebra._
+import axle.algebra.DirectedGraph
+import spire.algebra.Eq
+import spire.algebra.Field
 import spire.math.Rational
-import spire.implicits.eqOps
-import spire.implicits.moduleOps
-import spire.implicits.groupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
+import spire.math.Real
+import spire.implicits._
 
-abstract class Power extends Quantum {
+class Power[DG[_, _]: DirectedGraph] extends Quantum {
+
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
-}
 
-object Power extends Power {
-
-  type Q = Power
+  type Q = this.type
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("watt", "W"),
@@ -32,7 +27,7 @@ object Power extends Power {
     unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang")))
 
   def links[N: Field: Eq] = {
-    implicit val baseCG = cgnDisconnected[N]
+    implicit val baseCG = cgnDisconnected[N, DG]
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (watt, kilowatt, Scale10s(3)),
       (kilowatt, megawatt, Scale10s(3)),
@@ -43,18 +38,18 @@ object Power extends Power {
       (horsepower, mustangGT, ScaleInt(420)))
   }
 
-  def milliwatt[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "milliwatt")
-  def watt[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "watt")
-  def W[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "watt")
-  def kilowatt[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilowatt")
-  def kW[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilowatt")
-  def megawatt[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "megawatt")
-  def MW[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "megawatt")
-  def gigawatt[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gigawatt")
-  def GW[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gigawatt")
-  def lightBulb[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "lightBulb")
-  def hooverDam[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "hooverDam")
-  def horsepower[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "horsepower")
-  def mustangGT[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mustangGT")
+  def milliwatt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "milliwatt")
+  def watt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "watt")
+  def W[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "watt")
+  def kilowatt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilowatt")
+  def kW[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilowatt")
+  def megawatt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megawatt")
+  def MW[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megawatt")
+  def gigawatt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gigawatt")
+  def GW[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gigawatt")
+  def lightBulb[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "lightBulb")
+  def hooverDam[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "hooverDam")
+  def horsepower[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "horsepower")
+  def mustangGT[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mustangGT")
 
 }

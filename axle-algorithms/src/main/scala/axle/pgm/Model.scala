@@ -1,11 +1,12 @@
 package axle.pgm
 
-import axle.graph.DirectedGraph
+import axle.algebra.DirectedGraph
 import axle.stats.Distribution
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
+import axle.syntax.directedgraph._
 
 object Direction {
 
@@ -15,7 +16,7 @@ object Direction {
 
 }
 
-case class GenModel[T: Eq, N: Field](graph: DirectedGraph[Distribution[T, N], String]) {
+case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](graph: DG[Distribution[T, N], String]) {
 
   def vertexPayloadToDistribution(mvp: T): Distribution[T, N] = ???
 
@@ -108,9 +109,9 @@ case class GenModel[T: Eq, N: Field](graph: DirectedGraph[Distribution[T, N], St
 //
 //  val newVarIndex = 0
 //
-//  def apply[A: Eq](
+//  def apply[A: Eq, DG[_, _]: DirectedGraph](
 //    vps: Vector[A],
 //    ef: Seq[Vertex[A]] => Seq[(Vertex[A], Vertex[A], String)]): Model[A] =
-//    new Model(JungDirectedGraph(vps, ef))
+//    new Model(dg.make(vps, ef))
 //
 //}

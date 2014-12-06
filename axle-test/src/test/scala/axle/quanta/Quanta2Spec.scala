@@ -9,7 +9,7 @@ import spire.algebra.Module
 import spire.implicits._
 
 class Quanta2Spec extends Specification {
-
+  
   "Scalar conversion" should {
     "work" in {
 

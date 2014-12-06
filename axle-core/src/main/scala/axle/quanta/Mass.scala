@@ -1,24 +1,20 @@
 package axle.quanta
 
-import axle.graph.DirectedGraph
-import axle.graph.Vertex
+import axle.algebra.Vertex
 import axle.algebra.Bijection
+import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.math.Rational
 import spire.math.Real
 import spire.implicits._
 
-abstract class Mass extends Quantum {
+class Mass[DG[_, _]: DirectedGraph] extends Quantum {
+
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"
-}
-
-object Mass extends Mass {
-
-  import spire.implicits._
-
-  type Q = Mass
+  
+  type Q = this.type
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("gram", "g"),
@@ -49,7 +45,7 @@ object Mass extends Mass {
 
   def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] = {
 
-    implicit val baseCG = cgnDisconnected[N]
+    implicit val baseCG = cgnDisconnected[N, DG]
 
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (tonne, megagram, BijectiveIdentity[N]),
@@ -78,51 +74,51 @@ object Mass extends Mass {
       (exatonne, moon, ScaleDouble(73.477)))
   }
 
-  def milligram[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "milligram")
-  def mg[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "milligram")
-  def gram[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gram")
-  def g[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gram")
-  def kilogram[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilogram")
-  def kg[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilogram")
-  def megagram[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "megagram")
+  def milligram[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "milligram")
+  def mg[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "milligram")
+  def gram[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gram")
+  def g[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gram")
+  def kilogram[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilogram")
+  def kg[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilogram")
+  def megagram[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megagram")
 
-  def tonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "tonne")
-  def kilotonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilotonne")
-  def megatonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "megatonne")
-  def gigatonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gigatonne")
-  def teratonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "teratonne")
-  def petatonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "petatonne")
-  def exatonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "exatonne")
-  def zettatonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "zettatonne")
-  def yottatonne[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "yottatonne")
+  def tonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "tonne")
+  def kilotonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilotonne")
+  def megatonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megatonne")
+  def gigatonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gigatonne")
+  def teratonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "teratonne")
+  def petatonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "petatonne")
+  def exatonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "exatonne")
+  def zettatonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "zettatonne")
+  def yottatonne[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "yottatonne")
 
-  def man[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "man")
+  def man[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "man")
 
-  def earth[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "earth")
-  def sun[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "sun")
-  def jupiter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "jupiter")
-  def saturn[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "saturn")
-  def neptune[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "neptune")
-  def uranus[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "uranus")
-  def venus[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "venus")
-  def mars[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mars")
-  def mercury[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mercury")
-  def pluto[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "pluto")
-  def moon[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "moon")
+  def earth[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "earth")
+  def sun[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "sun")
+  def jupiter[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "jupiter")
+  def saturn[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "saturn")
+  def neptune[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "neptune")
+  def uranus[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "uranus")
+  def venus[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "venus")
+  def mars[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mars")
+  def mercury[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mercury")
+  def pluto[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "pluto")
+  def moon[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "moon")
 
   // http://en.wikipedia.org/wiki/Astronomical_symbols
-  def ⊕[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "earth")
-  def ☼[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "sun")
-  def ☉[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "sun")
-  def ♃[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "jupiter")
-  def ♄[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "saturn")
-  def ♆[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "neptune")
-  def ♅[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "uranus")
-  def ♀[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "venus")
-  def ♂[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mars")
-  def ☿[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mercury")
-  def ♇[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "pluto")
-  def ☽[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "moon")
+  def ⊕[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "earth")
+  def ☼[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "sun")
+  def ☉[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "sun")
+  def ♃[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "jupiter")
+  def ♄[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "saturn")
+  def ♆[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "neptune")
+  def ♅[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "uranus")
+  def ♀[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "venus")
+  def ♂[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mars")
+  def ☿[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mercury")
+  def ♇[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "pluto")
+  def ☽[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "moon")
 
   // sun also = "332950" *: earth
   // TODO lazy val milkyWayMass = 5.8E11 *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))

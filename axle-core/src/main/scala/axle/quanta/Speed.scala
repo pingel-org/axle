@@ -1,24 +1,19 @@
 package axle.quanta
 
-import axle.graph.DirectedGraph
+import axle.algebra.Vertex
 import axle.algebra.Bijection
-import spire.algebra._
+import axle.algebra.DirectedGraph
+import spire.algebra.Eq
+import spire.algebra.Field
 import spire.math.Rational
-import spire.implicits.eqOps
-import spire.implicits.moduleOps
-import spire.implicits.groupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
+import spire.math.Real
+import spire.implicits._
 
-abstract class Speed extends Quantum {
+class Speed[DG[_, _]: DirectedGraph] extends Quantum {
+
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Speed"
-}
 
-object Speed extends Speed {
-
-  type Q = Speed
+  type Q = this.type
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("mps", "mps"), // derive
@@ -30,20 +25,20 @@ object Speed extends Speed {
     unit("Speed limit", "speed limit"))
 
   def links[N: Field: Eq] = {
-    implicit val baseCG = cgnDisconnected[N]
+    implicit val baseCG = cgnDisconnected[N, DG]
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (knot, kph, ScaleDouble(1.852)),
       (mps, c, ScaleInt(299792458)),
       (mph, speedLimit, ScaleInt(65)))
   }
 
-  def mps[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mps")
-  def fps[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "fps")
-  def mph[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mph")
-  def kph[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kph")
-  def knot[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "knot")
-  def kn[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "knot")
-  def c[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Light Speed")
-  def speedLimit[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Speed Limit")
+  def mps[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mps")
+  def fps[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "fps")
+  def mph[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mph")
+  def kph[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kph")
+  def knot[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "knot")
+  def kn[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "knot")
+  def c[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "Light Speed")
+  def speedLimit[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "Speed Limit")
 
 }

@@ -6,6 +6,6 @@ import spire.algebra.Field
 
 abstract class Rule extends Form {
 
-  def apply[T: Eq, N: Field](q: CausalityProbability[T, N], m: CausalModel[T, N], namer: VariableNamer[T, N]): List[Form]
+  def apply[T: Eq, N: Field, DG[_, _]](q: CausalityProbability[T, N], m: CausalModel[T, N, DG], namer: VariableNamer[T, N]): List[Form]
 
 }

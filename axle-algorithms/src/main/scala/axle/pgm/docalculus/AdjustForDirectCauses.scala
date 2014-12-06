@@ -13,29 +13,29 @@ object AdjustForDirectCauses extends Rule {
    *
    */
 
-//  def parentObservations(m: CausalModel, Xi: RandomVariable[_]): Option[Set[RandomVariable[_]]] = {
-//
-//    val parents = m.findVertex(_ === Xi).map(Xiv => m.predecessors(Xiv).map(_.payload)).getOrElse(Set())
-//
-//    parents.flatMap(parent => {
-//      if (!parent.observable) {
-//        None
-//      } else if (q.question.contains(parent)) {
-//        None
-//      } else {
-//        Some(namer.nextVariable(parent))
-//      }
-//    })
-//  }
-//
-//  def adjustForDirectCauses(m: CausalModel, q: CausalityProbability, namer: VariableNamer, Xi: RandomVariable[_]): Option[Form] =
-//    Sigma(parentObservations(m, Xi), (pai: RandomVariable[_]) => {
-//      CausalityProbability(q.question, q.given ++ parentObservations, q.actions - ai) *
-//        CausalityProbability(parentObservations, Set(), Set())
-//    })
+  //  def parentObservations(m: CausalModel, Xi: RandomVariable[_]): Option[Set[RandomVariable[_]]] = {
+  //
+  //    val parents = m.findVertex(_ === Xi).map(Xiv => m.predecessors(Xiv).map(_.payload)).getOrElse(Set())
+  //
+  //    parents.flatMap(parent => {
+  //      if (!parent.observable) {
+  //        None
+  //      } else if (q.question.contains(parent)) {
+  //        None
+  //      } else {
+  //        Some(namer.nextVariable(parent))
+  //      }
+  //    })
+  //  }
+  //
+  //  def adjustForDirectCauses(m: CausalModel, q: CausalityProbability, namer: VariableNamer, Xi: RandomVariable[_]): Option[Form] =
+  //    Sigma(parentObservations(m, Xi), (pai: RandomVariable[_]) => {
+  //      CausalityProbability(q.question, q.given ++ parentObservations, q.actions - ai) *
+  //        CausalityProbability(parentObservations, Set(), Set())
+  //    })
 
-  def apply[T: Eq, N: Field](q: CausalityProbability[T, N], m: CausalModel[T, N], namer: VariableNamer[T, N]): List[Form] =
+  def apply[T: Eq, N: Field, DG[_, _]](q: CausalityProbability[T, N], m: CausalModel[T, N, DG], namer: VariableNamer[T, N]): List[Form] =
     Nil // TODO
-//    q.actions.flatMap(adjustForDirectCauses(m, q, namer, _)).toList
+  //    q.actions.flatMap(adjustForDirectCauses(m, q, namer, _)).toList
 
 }

@@ -1,13 +1,14 @@
 package axle.quanta
 
-import axle.graph.DirectedGraph
-import axle.graph.Vertex
+import axle.algebra.Vertex
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
+import axle.algebra.DirectedGraph
+import axle.syntax.directedgraph._
 
 object UnittedQuantity {
 
@@ -17,7 +18,7 @@ object UnittedQuantity {
       (x.magnitude === y.magnitude) && (x.unit == y.unit)
   }
 
-  implicit def orderUQ[Q <: Quantum, N: Order](implicit cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N]) = new Order[UnittedQuantity[Q, N]] {
+  implicit def orderUQ[Q <: Quantum, N: Order, DG[_, _]: DirectedGraph](implicit cg: DG[UnitOfMeasurement[Q, N], N => N]) = new Order[UnittedQuantity[Q, N]] {
 
     val orderN = implicitly[Order[N]]
 
@@ -30,11 +31,10 @@ object UnittedQuantity {
 case class UnittedQuantity[Q <: Quantum, N: Field: Eq](magnitude: N, unit: UnitOfMeasurement[Q, N])
 {
 
-  private[this] def vertex(cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N], query: UnitOfMeasurement[Q, N]): Vertex[UnitOfMeasurement[Q, N]] = {
+  private[this] def vertex[DG[_, _]: DirectedGraph](cg: DG[UnitOfMeasurement[Q, N], N => N], query: UnitOfMeasurement[Q, N]): Vertex[UnitOfMeasurement[Q, N]] =
     cg.findVertex(_.payload.name === query.name).get
-  }
 
-  def in(newUnit: UnitOfMeasurement[Q, N])(implicit cg: DirectedGraph[UnitOfMeasurement[Q, N], N => N]): UnittedQuantity[Q, N] =
+  def in[DG[_, _]: DirectedGraph](newUnit: UnitOfMeasurement[Q, N])(implicit cg: DG[UnitOfMeasurement[Q, N], N => N]): UnittedQuantity[Q, N] =
     cg.shortestPath(vertex(cg, newUnit), vertex(cg, unit))
       .map(
         _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))

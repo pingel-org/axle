@@ -3,9 +3,9 @@ package axle
 import scala.Vector
 import scala.collection.GenTraversable
 
+import axle.algebra.DirectedGraph
 import axle.quanta.UnittedQuantity
 import axle.quanta.Information
-import axle.quanta.Information.bit
 import axle.stats.Case
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Distribution
@@ -104,8 +104,11 @@ package object stats {
   def stddev[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
     standardDeviation(distribution)
 
-  def entropy[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Double] = {
-    import Information._
+  def entropy[A: Manifest, N: Field: Order: ConvertableFrom, DG[_, _]: DirectedGraph](X: Distribution[A, N]): UnittedQuantity[Information[DG], Double] = {
+
+    val information = new Information[DG]()
+    import information._
+    
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values map { x =>
       val px: N = P(X is x).apply()
@@ -115,10 +118,11 @@ package object stats {
         0d
       }
     })
-    UnittedQuantity(H, bit[Double])
+    val u = bit[Double]
+    UnittedQuantity(H, ???)
   }
 
-  def H[A: Manifest, N: Field: Order: ConvertableFrom](X: Distribution[A, N]): UnittedQuantity[Information, Double] =
+  def H[A: Manifest, N: Field: Order: ConvertableFrom, DG[_, _]: DirectedGraph](X: Distribution[A, N]): UnittedQuantity[Information[DG], Double] =
     entropy(X)
 
 }

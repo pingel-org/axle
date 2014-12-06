@@ -1,31 +1,19 @@
 package axle.quanta
 
-import axle.graph.DirectedGraph
-import axle.graph.Vertex
+import axle.algebra.Vertex
 import axle.algebra.Bijection
+import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.implicits.DoubleAlgebra
-import spire.implicits.eqOps
-import spire.implicits.moduleOps
-import spire.implicits.groupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
-import spire.implicits._
 import spire.math.Rational
 import spire.math.Real
+import spire.implicits._
 
-abstract class Time extends Quantum {
+class Time[DG[_, _]: DirectedGraph] extends Quantum {
+  
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
-}
 
-object Time extends Time {
-
-  import spire.implicits._
-
-  type Q = Time
+  type Q = this.type
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("second", "s", Some("http://en.wikipedia.org/wiki/Second")),
@@ -47,7 +35,7 @@ object Time extends Time {
     unit("gigayear", "gy"))
 
   def links[N: Field: Eq] = {
-    implicit val baseCG = cgnDisconnected[N]
+    implicit val baseCG = cgnDisconnected[N, DG]
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (ms, s, Scale10s(3)),
       (μs, s, Scale10s(6)),
@@ -67,34 +55,34 @@ object Time extends Time {
       (year, gy, Scale10s(9)))
   }
 
-  def yoctosecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "yoctosecond")
-  def ys[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "yoctosecond")
-  def zeptosecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "zeptosecond")
-  def zs[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "zeptosecond")
-  def attosecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "attosecond")
-  def as[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "attosecond")
-  def femtosecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "femtosecond")
-  def fs[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "femtosecond")
-  def picosecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "picosecond")
-  def ps[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "picosecond")
-  def nanosecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nanosecond")
-  def ns[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nanosecond")
-  def microsecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "microsecond")
-  def μs[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "microsecond")
-  def millisecond[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millisecond")
-  def ms[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millisecond")
-  def second[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "second")
-  def s[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "second")
-  def minute[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "minute")
-  def m[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "minute")
-  def hour[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "hour")
-  def day[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "day")
-  def year[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "year")
-  def century[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "century")
-  def millenium[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millenium")
-  def ky[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millenium")
-  def my[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "megayear")
-  def gy[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "gigayear")
+  def yoctosecond[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "yoctosecond")
+  def ys[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "yoctosecond")
+  def zeptosecond[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "zeptosecond")
+  def zs[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "zeptosecond")
+  def attosecond[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "attosecond")
+  def as[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "attosecond")
+  def femtosecond[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "femtosecond")
+  def fs[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "femtosecond")
+  def picosecond[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "picosecond")
+  def ps[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "picosecond")
+  def nanosecond[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "nanosecond")
+  def ns[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "nanosecond")
+  def microsecond[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "microsecond")
+  def μs[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "microsecond")
+  def millisecond[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "millisecond")
+  def ms[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "millisecond")
+  def second[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "second")
+  def s[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "second")
+  def minute[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "minute")
+  def m[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "minute")
+  def hour[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "hour")
+  def day[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "day")
+  def year[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "year")
+  def century[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "century")
+  def millenium[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "millenium")
+  def ky[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "millenium")
+  def my[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megayear")
+  def gy[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gigayear")
 
   //  lazy val globalLifeExpectancy = 67.2 *: year // Some("2010 global average life expectancy"), None, Some("http://en.wikipedia.org/wiki/Life_expectancy"))
   //

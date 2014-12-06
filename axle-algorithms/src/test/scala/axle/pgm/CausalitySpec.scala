@@ -4,10 +4,13 @@ package axle.pgm
 import axle._
 import axle.stats._
 import axle.pgm.docalculus._
+import axle.algebra.DirectedGraph
 import org.specs2.mutable._
 import spire.algebra._
 import spire.implicits._
 import spire.math._
+import axle.jung.JungDirectedGraph
+import axle.jung.JungDirectedGraph.directedGraphJung
 
 class CausalitySpec extends Specification {
 
@@ -52,7 +55,7 @@ class CausalitySpec extends Specification {
 
       def homework4Model(k: Int, p: Double) = {
 
-        val result = CausalModel[String, Rational]("Homework 4 model with k " + k + ", p = " + p, Nil)
+        val result = CausalModel[String, Rational, JungDirectedGraph]("Homework 4 model with k " + k + ", p = " + p, Nil)
 
         val zero = Option.empty[(Distribution[Boolean, Rational], Distribution[Boolean, Rational], Distribution[Boolean, Rational], Distribution[Boolean, Rational])]
 

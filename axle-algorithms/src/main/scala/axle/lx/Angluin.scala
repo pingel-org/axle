@@ -2,9 +2,10 @@
 package axle.lx
 
 import axle.Show
-import axle.jung.JungDirectedGraph
-import axle.graph.Vertex
+import axle.algebra.DirectedGraph
+import axle.algebra.Vertex
 import axle.string
+import axle.syntax.directedgraph._
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.implicits.StringOrder
@@ -30,11 +31,13 @@ object Angluin {
 
   }
 
-  class AngluinAcceptor(vps: Seq[String], I: Set[String], F: Set[String]) {
+  case class AngluinAcceptor[DG[_, _]: DirectedGraph](vps: Seq[String], I: Set[String], F: Set[String]) {
 
-    val graph = JungDirectedGraph[String, Symbol](vps, vs => Nil)
+    val dg = implicitly[DirectedGraph[DG]]
 
-    def Q: Set[Vertex[String]] = graph.vertices
+    val graph = dg.make[String, Symbol](vps, vs => Nil)
+
+    def Q: Set[Vertex[String]] = graph.vertices.toSet
 
     //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
     //      val (newG, v) = g + "" // TODO
@@ -44,7 +47,7 @@ object Angluin {
     //    }
 
     def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
-      graph.allEdges.collect({ case e if graph.source(e) === state && e.payload === symbol => graph.dest(e) })
+      graph.edges.collect({ case e if e.from === state && e.payload === symbol => e.to }).toSet
 
     def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
@@ -56,11 +59,11 @@ object Angluin {
     //    def isBackwardDeterministic(): Boolean = (F.size <= 1) && Q.∀(predecessors(_).size <= 1)
     //    def isZeroReversible(): Boolean = isForwardDeterministic() && isBackwardDeterministic()
 
-    def isIsomorphicTo(other: AngluinAcceptor): Boolean = ???
+    def isIsomorphicTo(other: AngluinAcceptor[DG]): Boolean = ???
 
-    def isSubacceptorOf(other: AngluinAcceptor): Boolean = ???
+    def isSubacceptorOf(other: AngluinAcceptor[DG]): Boolean = ???
 
-    def induce(P: Set[Vertex[String]]): AngluinAcceptor = ???
+    def induce(P: Set[Vertex[String]]): AngluinAcceptor[DG] = ???
 
   }
 
@@ -72,7 +75,7 @@ object Angluin {
 
   case class CanonicalAcceptorFactory() {
 
-    def makeCanonicalAcceptor(ℒ: Language): AngluinAcceptor = ???
+    def makeCanonicalAcceptor[DG[_, _]: DirectedGraph](ℒ: Language): AngluinAcceptor[DG] = ???
 
   }
 
@@ -167,11 +170,11 @@ object Angluin {
   class PartitionBlock {}
 
   class PrefixTreeFactory {
-    def makePrefixTree(ℒ: Language): AngluinAcceptor = ???
+    def makePrefixTree[DG[_, _]: DirectedGraph](ℒ: Language): AngluinAcceptor[DG] = ???
   }
 
-  case class Quotient(A: AngluinAcceptor, π: Partition) {
-    def evaluate: AngluinAcceptor = ???
+  case class Quotient[DG[_, _]: DirectedGraph](A: AngluinAcceptor[DG], π: Partition) {
+    def evaluate: AngluinAcceptor[DG] = ???
   }
 
   // implicit def enAlphabet(symbols: Set[Symbol]): Alphabet = Alphabet(symbols)

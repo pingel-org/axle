@@ -4,11 +4,19 @@ package axle.pgm
 import org.specs2.mutable._
 
 import axle._
+import axle.algebra.Vertex
+import axle.algebra.DirectedGraph
+import axle.algebra.UndirectedGraph
 import axle.stats._
 import axle.graph._
 import axle.pgm._
 import spire.implicits._
 import spire.math._
+
+import axle.jung.JungDirectedGraph
+import axle.jung.JungUndirectedGraph
+import axle.jung.JungDirectedGraph.directedGraphJung
+import axle.jung.JungUndirectedGraph.uJung
 
 class ScalaFigures extends Specification {
 
@@ -22,7 +30,7 @@ class ScalaFigures extends Specification {
   val D = ubd("D")
   val E = ubd("E")
 
-  def figure6_1: BayesianNetwork[Boolean, Rational] = {
+  def figure6_1: BayesianNetwork[Boolean, Rational, JungDirectedGraph] = {
 
     val bn = BayesianNetwork(
       "6.1",
@@ -61,7 +69,7 @@ class ScalaFigures extends Specification {
             Vector(E is false, C is false) -> Rational(1))))),
       (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
-        case _ => Nil
+        case _                            => Nil
       })
 
     bn
@@ -95,7 +103,7 @@ class ScalaFigures extends Specification {
     (cptB, cptD)
   }
 
-  def figure6_4: BayesianNetwork[Boolean, Rational] = {
+  def figure6_4: BayesianNetwork[Boolean, Rational, JungDirectedGraph] = {
 
     val bn = BayesianNetwork("6.4",
       Vector(
@@ -114,7 +122,7 @@ class ScalaFigures extends Specification {
           Vector(C is false, B is false) -> Rational(1, 2))))),
       (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
         case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
-        case _ => Nil
+        case _                  => Nil
       })
 
     val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)
@@ -122,7 +130,7 @@ class ScalaFigures extends Specification {
     bn
   }
 
-  def figure6_5: List[InteractionGraph[Boolean, Rational]] =
+  def figure6_5: List[InteractionGraph[Boolean, Rational, JungUndirectedGraph]] =
     figure6_1.interactionGraph.eliminationSequence(List(B, C, A, D))
 
   def figure6_7 = {
@@ -150,11 +158,11 @@ class ScalaFigures extends Specification {
   // Result of fe-i on a->b->c with Q={C}
   def figure7_2 = figure6_4.factorElimination1(Set(C))
 
-  def figure7_4: (BayesianNetwork[Boolean, Rational], EliminationTree[Boolean, Rational], Factor[Boolean, Rational]) = {
+  def figure7_4: (BayesianNetwork[Boolean, Rational, JungDirectedGraph], EliminationTree[Boolean, Rational, JungUndirectedGraph], Factor[Boolean, Rational]) = {
 
     val f61 = figure6_1
 
-    val τ = EliminationTree[Boolean, Rational](
+    val τ = EliminationTree[Boolean, Rational, JungUndirectedGraph](
       Vector(A, B, C, D, E).map(f61.cpt),
       (vs: Seq[Vertex[Factor[Boolean, Rational]]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List(
@@ -180,7 +188,7 @@ class ScalaFigures extends Specification {
     Vector[Set[Distribution[Boolean, Rational]]](Set(A, B, C), Set(B, C, D), Set(C, E)),
     (vs: Seq[Vertex[Set[Distribution[Boolean, Rational]]]]) => vs match {
       case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))
-      case _ => Nil
+      case _                       => Nil
     })
 
   "bayesian networks" should {

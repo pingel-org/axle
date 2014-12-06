@@ -1,19 +1,22 @@
 package axle.pgm
 
-import axle.jung.JungUndirectedGraph
-import axle.graph.Vertex
+import axle.algebra.Vertex
+import axle.algebra.UndirectedGraph
 import axle.stats.Distribution
 import axle.stats.Factor
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
+import axle.syntax.undirectedgraph._
 
-case class EliminationTree[T: Eq: Manifest, N: Field: Manifest](
+case class EliminationTree[T: Eq: Manifest, N: Field: Manifest, UG[_, _]: UndirectedGraph](
   vps: Seq[Factor[T, N]],
   ef: Seq[Vertex[Factor[T, N]]] => Seq[(Vertex[Factor[T, N]], Vertex[Factor[T, N]], String)]) {
 
-  lazy val graph = JungUndirectedGraph(vps, ef)
+  val ug = implicitly[UndirectedGraph[UG]]
+
+  lazy val graph = ug.make(vps, ef)
 
   def gatherVars(
     stop: Vertex[Factor[T, N]],
@@ -34,7 +37,7 @@ case class EliminationTree[T: Eq: Manifest, N: Field: Manifest](
   // def delete(node: GV): Unit = g.delete(node)
 
   def allVariables: Set[Distribution[T, N]] =
-    graph.vertices.flatMap(_.payload.variables)
+    graph.vertices.flatMap(_.payload.variables).toSet
 
   // Note: previous version also handled case where 'node' wasn't in the graph
   // def addFactor(node: GV, f: Factor): Unit = node.setPayload(node.getPayload.multiply(f))

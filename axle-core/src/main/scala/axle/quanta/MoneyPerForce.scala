@@ -1,34 +1,29 @@
 package axle.quanta
 
-import axle.graph.DirectedGraph
+import axle.algebra.Vertex
 import axle.algebra.Bijection
-import spire.algebra._
+import axle.algebra.DirectedGraph
+import spire.algebra.Eq
+import spire.algebra.Field
 import spire.math.Rational
-import spire.implicits.eqOps
-import spire.implicits.moduleOps
-import spire.implicits.groupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
+import spire.math.Real
+import spire.implicits._
 
-abstract class MoneyPerForce extends Quantum {
+class MoneyPerForce[DG[_, _]: DirectedGraph] extends Quantum {
+  
   def wikipediaUrl = "TODO"
-}
 
-object MoneyPerForce extends MoneyPerForce {
-
-  type Q = MoneyPerForce
+  type Q = this.type
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("$/lb", "$/lb") // derive
     )
 
   def links[N: Field: Eq] = {
-    implicit val baseCG = cgnDisconnected[N]
+    implicit val baseCG = cgnDisconnected[N, DG]
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]()
   }
 
-  def USDperPound[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "$/lb")
+  def USDperPound[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "$/lb")
 
 }

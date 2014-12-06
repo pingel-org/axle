@@ -3,13 +3,16 @@ package axle.pgm
 import axle._
 import axle.graph._
 import axle.stats._
+import axle.algebra.Vertex
+import axle.algebra.DirectedGraph
 import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
+import axle.jung.JungDirectedGraph.directedGraphJung
 import spire.implicits._
 import spire.math._
 import org.specs2.mutable._
 
 class ConditionalProbabilityTableSpecification
-extends Specification {
+  extends Specification {
 
   val bools = Vector(true, false)
 
@@ -56,7 +59,7 @@ extends Specification {
         Vector(E is false, C is false) -> Rational(1))))),
     (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
       case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
-      case _ => Nil
+      case _                            => Nil
     })
 
   "CPT" should {

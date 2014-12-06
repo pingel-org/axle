@@ -1,9 +1,9 @@
 package axle.pgm
 
 import axle.eqSet
-import axle.jung.JungUndirectedGraph
-import axle.graph.UndirectedGraph
-import axle.graph.Vertex
+import axle.algebra.UndirectedGraph
+import axle.algebra.DirectedGraph
+import axle.algebra.Vertex
 import axle.stats.Distribution
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -11,20 +11,20 @@ import spire.implicits.StringOrder
 
 object JoinTree {
 
-  def makeJoinTree[T: Eq: Manifest, N: Field: Manifest](
+  def makeJoinTree[T: Eq: Manifest, N: Field: Manifest, UG[_, _]: UndirectedGraph](
     vps: Vector[Set[Distribution[T, N]]],
-    ef: Seq[Vertex[Set[Distribution[T, N]]]] => Seq[(Vertex[Set[Distribution[T, N]]], Vertex[Set[Distribution[T, N]]], String)]): JoinTree[T, N] =
-    JoinTree[T, N](JungUndirectedGraph(vps, ef))
+    ef: Seq[Vertex[Set[Distribution[T, N]]]] => Seq[(Vertex[Set[Distribution[T, N]]], Vertex[Set[Distribution[T, N]]], String)]): JoinTree[T, N, UG] =
+    JoinTree[T, N, UG](implicitly[UndirectedGraph[UG]].make(vps, ef))
 
   // returns a jointree for DAG G with width equal to width(π, G)
-  def fromEliminationOrder[T, N: Field](m: BayesianNetwork[T, N], π: List[Distribution[T, N]]): JoinTree[T, N] = {
+  def fromEliminationOrder[T, N: Field, UG[_, _], UndirectedGraph, DG[_, _]: DirectedGraph](m: BayesianNetwork[T, N, DG], π: List[Distribution[T, N]]): JoinTree[T, N, UG] = {
     // val Gm = Gv.moralGraph()
     // val clusterSequence: List[Set[Distribution[_]]] = Gm.induceClusterSequence(pi)
     ???
   }
 }
 
-case class JoinTree[T: Eq, N: Field](graph: UndirectedGraph[Set[Distribution[T, N]], String]) {
+case class JoinTree[T: Eq, N: Field, UG[_, _]: UndirectedGraph](graph: UG[Set[Distribution[T, N]], String]) {
 
   //  def addToCluster(n: GV, v: Distribution[_]): Unit = n.getPayload += v
   //

@@ -5,9 +5,9 @@ import scala.Stream.empty
 
 import axle.Show
 import axle.HtmlFrom
-import axle.graph.DirectedGraph
-import axle.jung.JungDirectedGraph
-import axle.graph.Vertex
+import axle.algebra.DirectedGraph
+import axle.algebra.UndirectedGraph
+import axle.algebra.Vertex
 import axle.stats.CaseIs
 import axle.stats.Distribution
 import axle.stats.Independence
@@ -21,6 +21,8 @@ import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
+import axle.syntax.directedgraph._
+import axle.syntax.undirectedgraph._
 
 case class BayesianNetworkNode[T: Eq, N: Field](rv: Distribution[T, N], cpt: Factor[T, N])
 
@@ -52,9 +54,11 @@ object BayesianNetworkNode {
   }
 }
 
-case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show](name: String, graph: DirectedGraph[BayesianNetworkNode[T, N], String]) {
+case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show, DG[_, _]: DirectedGraph](
+  name: String,
+  graph: DG[BayesianNetworkNode[T, N], String]) {
 
-  def duplicate: BayesianNetwork[T, N] = BayesianNetwork(name, graph)
+  def duplicate: BayesianNetwork[T, N, DG] = BayesianNetwork(name, graph)
 
   def numVariables = graph.size
 
@@ -140,7 +144,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
    * Also called the "moral graph"
    */
 
-  def interactionGraph: InteractionGraph[T, N] =
+  def interactionGraph[UG[_, _]: UndirectedGraph]: InteractionGraph[T, N, UG] =
     InteractionGraph(randomVariables,
       (vs: Seq[Vertex[Distribution[T, N]]]) =>
         (for {
@@ -157,7 +161,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
    * Chapter 6 Algorithm 2 (page 13)
    */
 
-  def orderWidth(order: List[Distribution[T, N]]): Int =
+  def orderWidth[UG[_, _]: UndirectedGraph](order: List[Distribution[T, N]]): Int =
     randomVariables.scanLeft((interactionGraph, 0))(
       (gi, rv) => {
         val ig = gi._1
@@ -173,8 +177,8 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
    * 6.8.2
    */
 
-  def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N] = {
-    val result = BayesianNetwork[T, N](resultName, ???)
+  def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N, DG] = {
+    val result = BayesianNetwork[T, N, DG](resultName, ???)
     eOpt.map(e => {
       e.map(_.distribution) foreach { U =>
         val uVertex = result.graph.findVertex(_.payload.rv === U).get
@@ -196,11 +200,11 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
     }).getOrElse(result)
   }
 
-  def pruneNodes(Q: Set[Distribution[T, N]], eOpt: Option[List[CaseIs[T, N]]], g: BayesianNetwork[T, N]): BayesianNetwork[T, N] = {
+  def pruneNodes(Q: Set[Distribution[T, N]], eOpt: Option[List[CaseIs[T, N]]], g: BayesianNetwork[T, N, DG]): BayesianNetwork[T, N, DG] = {
 
     val vars = eOpt.map(Q ++ _.map(_.distribution)).getOrElse(Q)
 
-    def nodePruneStream(g: BayesianNetwork[T, N]): Stream[BayesianNetwork[T, N]] = {
+    def nodePruneStream(g: BayesianNetwork[T, N, DG]): Stream[BayesianNetwork[T, N, DG]] = {
       val xVertices = g.graph.leaves.toSet -- vars.map(rv => g.graph.findVertex(_.payload.rv === rv).get)
       xVertices.size match {
         case 0 => empty
@@ -220,7 +224,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
    * 6.8.3
    */
 
-  def pruneNetworkVarsAndEdges(Q: Set[Distribution[T, N]], eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N] =
+  def pruneNetworkVarsAndEdges(Q: Set[Distribution[T, N]], eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N, DG] =
     BayesianNetwork(this.name, ???) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
   //
   //  def variableEliminationPR(Q: Set[Distribution[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
@@ -321,14 +325,14 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
 
   // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
-  def factorElimination2(Q: Set[Distribution[T, N]], τ: EliminationTree[T, N], f: Factor[T, N]): (BayesianNetwork[T, N], Factor[T, N]) = {
+  def factorElimination2[UG[_, _]: UndirectedGraph](Q: Set[Distribution[T, N]], τ: EliminationTree[T, N, UG], f: Factor[T, N]): (BayesianNetwork[T, N, DG], Factor[T, N]) = {
     while (τ.graph.vertices.size > 1) {
       // remove node i (other than r) that has single neighbor j in τ
       val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_.payload === f).get)
       fl.map(i => {
         val j = τ.graph.neighbors(i).iterator.next()
         val ɸ_i = i.payload
-        τ.graph.delete(i)
+        //τ.graph.delete(i)
         // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
       })
     }
@@ -352,7 +356,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
   //  }
 
   // Note: not sure about this return type:
-  def factorElimination(τ: EliminationTree[T, N], e: List[CaseIs[T, N]]): Map[Factor[T, N], Factor[T, N]] =
+  def factorElimination[UG[_, _]: UndirectedGraph](τ: EliminationTree[T, N, UG], e: List[CaseIs[T, N]]): Map[Factor[T, N], Factor[T, N]] =
     {
       τ.graph.vertices foreach { i =>
         e foreach { ci =>
@@ -373,11 +377,11 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
 
 object BayesianNetwork {
 
-  def apply[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show](
+  def apply[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show, DG[_, _]: DirectedGraph](
     name: String,
     vps: Seq[BayesianNetworkNode[T, N]],
-    ef: Seq[Vertex[BayesianNetworkNode[T, N]]] => Seq[(Vertex[BayesianNetworkNode[T, N]], Vertex[BayesianNetworkNode[T, N]], String)]): BayesianNetwork[T, N] =
-    apply(name, new JungDirectedGraph(vps, ef))
+    ef: Seq[Vertex[BayesianNetworkNode[T, N]]] => Seq[(Vertex[BayesianNetworkNode[T, N]], Vertex[BayesianNetworkNode[T, N]], String)]): BayesianNetwork[T, N, DG] =
+    apply(name, implicitly[DirectedGraph[DG]].make(vps, ef))
 
   //    implicit def bnnAsModel[BT: Manifest: Eq] = new Model[BayesianNetwork[BT]] {
   //      type T = BT

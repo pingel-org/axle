@@ -9,7 +9,6 @@ import spire.algebra.Eq
 import spire.math.Rational
 
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnittedPlottable
 import axle.quanta.Quantum
 
 trait Plottable[T] {
@@ -35,8 +34,5 @@ object Plottable {
         !isInfinite(d) && !isNaN(d)
       }
     }
-
-  implicit def uqPlottable[Q <: Quantum, N: Field: Eq: Plottable]: Plottable[UnittedQuantity[Q, N]] =
-    new UnittedPlottable[Q, N]()
 
 }

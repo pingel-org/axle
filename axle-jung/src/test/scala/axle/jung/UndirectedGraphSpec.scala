@@ -1,30 +1,33 @@
 package axle.jung
 
-import axle.graph.Vertex
-import axle.graph.Edge
+import axle.algebra.UndirectedGraph
+import axle.algebra.Vertex
+import axle.algebra.Edge
 import axle.stringEq
 import org.specs2.mutable._
 import spire.math._
 
 class UndirectedGraphSpec extends Specification {
 
+  val jug = implicitly[UndirectedGraph[JungUndirectedGraph]]
+
   "Undirected Graph" should {
     "work" in {
 
-      val g = JungUndirectedGraph(List("a", "b", "c", "d"),
+      val g = jug.make(List("a", "b", "c", "d"),
         (vs: Seq[Vertex[String]]) => vs match {
           case a :: b :: c :: d :: Nil => List((a, b, ""), (b, c, ""), (c, d, ""), (d, a, ""), (a, c, ""), (b, d, ""))
-          case _ => Nil
+          case _                       => Nil
         })
 
-      g.size must be equalTo (4)
+      jug.size(g) must be equalTo (4)
     }
   }
 
   "REPL Demo" should {
     "work" in {
 
-      val g = JungUndirectedGraph[String, Real](
+      val g = jug.make[String, Real](
         List("a"),
         (vs: Seq[Vertex[String]]) => Nil)
 

@@ -1,6 +1,7 @@
 package axle.stats
 
 import axle._
+import axle.algebra.DirectedGraph
 import axle.stats._
 import axle.graph._
 import axle.pgm._
@@ -8,10 +9,11 @@ import spire.math._
 import spire.implicits._
 import org.specs2.mutable._
 import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
+import axle.jung.JungDirectedGraph.directedGraphJung
+import axle.algebra.Vertex
 
-class ABE
-  extends Specification {
-  
+class ABE extends Specification {
+
   val bools = Vector(true, false)
 
   val B = new UnknownDistribution0[Boolean, Rational](bools, "Burglary")
@@ -54,7 +56,7 @@ class ABE
           Vector(A is false, M is false) -> Rational(99, 100))))),
     (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
       case b :: e :: a :: j :: m :: Nil => List((b, a, ""), (e, a, ""), (a, j, ""), (a, m, ""))
-      case _ => Nil
+      case _                            => Nil
     })
 
   // val (bn, es): (BayesianNetwork, Seq[BayesianNetwork#E]) =

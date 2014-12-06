@@ -13,7 +13,6 @@ object UnitOfMeasurement {
 }
 
 case class UnitOfMeasurement[Q <: Quantum, N: Field: Eq](name: String, symbol: String, wikipediaUrl: Option[String])
-//extends Quantity[Q, N]
 {
 
   def magnitude: N = implicitly[Field[N]].one

@@ -2,6 +2,12 @@ package axle.syntax
 
 import axle.algebra.Matrix
 import axle.algebra.FunctionPair
+import axle.algebra.Vertex
+import axle.algebra.DirectedGraph
+import axle.algebra.DirectedEdge
+import axle.algebra.UndirectedGraph
+import axle.algebra.UndirectedEdge
+import spire.algebra.Eq
 
 final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
 
@@ -18,7 +24,7 @@ final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
   def column(j: Int) = ev.column(lhs)(j)
 
   def length = ev.length(lhs)
-  
+
   def rows: Int = ev.rows(lhs)
 
   def columns: Int = ev.columns(lhs)
@@ -158,4 +164,52 @@ final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
   //  def ~ = not
   //  def ¬ = not
 
+}
+
+final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP, EP]) {
+
+  val ev = implicitly[DirectedGraph[DG]]
+
+  def size = ev.size(dg)
+
+  def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] =
+    ev.findVertex(dg, f)
+
+  def vertices = ev.vertices(dg)
+
+  def edges = ev.edges(dg)
+
+  def precedes(v1: Vertex[VP], v2: Vertex[VP]) = ev.precedes(dg, v1, v2)
+  
+  def neighbors(v: Vertex[VP]) = ev.neighbors(dg, v)
+
+  def predecessors(v: Vertex[VP]) = ev.predecessors(dg, v)
+  
+  def descendants(v: Vertex[VP]) = ev.descendants(dg, v)
+
+  def descendantsIntersectsSet(v: Vertex[VP], s: Set[Vertex[VP]]) = ev.descendantsIntersectsSet(dg, v, s)
+  
+  // TODO: change first Edge type param:
+  def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[DirectedEdge[VP, EP]]] =
+    ev.shortestPath(dg, source, goal)
+    
+  def leaves = ev.leaves(dg)
+  
+  def outputEdgesOf(v: Vertex[VP]) = ev.outputEdgesOf(dg, v)
+}
+
+final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG[VP, EP]) {
+
+  val ev = implicitly[UndirectedGraph[UG]]
+
+  def size = ev.size(ug)
+
+  def findVertex(f: Vertex[VP] => Boolean) =
+    ev.findVertex(ug, f)
+
+  def vertices = ev.vertices(ug)
+
+  def neighbors(v: Vertex[VP]) = ev.neighbors(ug, v)
+
+  def firstLeafOtherThan(r: Vertex[VP]) = ev.firstLeafOtherThan(ug, r)
 }

@@ -1,39 +1,19 @@
 package axle.quanta
 
-import axle.graph.DirectedGraph
-import axle.graph.Vertex
+import axle.algebra.Vertex
 import axle.algebra.Bijection
-import spire.algebra.Field
-import spire.algebra.Module
+import axle.algebra.DirectedGraph
 import spire.algebra.Eq
-import spire.implicits.moduleOps
-import spire.math.Real
-import spire.math.Rational
-import spire.math.Rational.apply
-import axle.graph.DirectedGraph
-import axle.graph.Vertex
 import spire.algebra.Field
-import spire.algebra.Eq
 import spire.math.Rational
 import spire.math.Real
-import spire.implicits.eqOps
-import spire.implicits.moduleOps
-import spire.implicits.groupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
 import spire.implicits._
 
-abstract class Distance extends Quantum {
+class Distance[DG[_, _]: DirectedGraph] extends Quantum {
   
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
-    
-}
 
-object Distance extends Distance {
-
-  type Q = Distance
+  type Q = this.type
   
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
     unit("foot", "ft"),
@@ -50,7 +30,7 @@ object Distance extends Distance {
     unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec")))
 
   def links[N: Field: Eq] = {
-    implicit val baseCG = cgnDisconnected[N]
+    implicit val baseCG = cgnDisconnected[N, DG]
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (foot, mile, ScaleInt(5280)),
       (foot, meter, ScaleDouble(3.2808398950131235)),
@@ -66,25 +46,25 @@ object Distance extends Distance {
       (km, ly, ScaleDouble(9460730472580.8)))
   }
 
-  def centimeter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "centimeter")
-  def cm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "centimeter")
-  def meter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "meter")
-  def kilometer[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilometer")
-  def km[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "kilometer")
-  def foot[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "foot")
-  def ft[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "foot")
-  def mile[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "mile")
-  def parsec[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "parsec")
-  def lightyear[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "lightyear")
-  def ly[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "lightyear")
-  def millimeter[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millimeter")
-  def mm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "millimeter")
-  def micrometer[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "micrometer")
-  def μm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "micrometer")
-  def nanometer[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nanometer")
-  def nm[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "nanometer")
-  def au[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Astronomical Unit")
-  def auSI[N: Field: Eq](implicit cg: CG[N]) = byName(cg, "Astronomical Unit (SI)")
+  def centimeter[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "centimeter")
+  def cm[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "centimeter")
+  def meter[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "meter")
+  def kilometer[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilometer")
+  def km[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilometer")
+  def foot[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "foot")
+  def ft[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "foot")
+  def mile[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mile")
+  def parsec[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "parsec")
+  def lightyear[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "lightyear")
+  def ly[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "lightyear")
+  def millimeter[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "millimeter")
+  def mm[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "millimeter")
+  def micrometer[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "micrometer")
+  def μm[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "micrometer")
+  def nanometer[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "nanometer")
+  def nm[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "nanometer")
+  def au[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "Astronomical Unit")
+  def auSI[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "Astronomical Unit (SI)")
 
 //  // http://www.mapcrow.info/Distance_between_New_York_US_and_Los_Angeles_US.html
 //  def ny2LA[N: Field: Eq](implicit cg: CG[N], module: Module[UnittedQuantity[Distance, N], N]) = Rational("2443.79") *: mile[N]
