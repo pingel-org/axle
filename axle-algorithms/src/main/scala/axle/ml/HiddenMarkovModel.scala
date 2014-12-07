@@ -2,6 +2,7 @@ package axle.ml
 
 import axle.algebra.DirectedGraph
 import axle.algebra.Vertex
+import axle.syntax.directedgraph._
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 
@@ -57,7 +58,7 @@ case class HiddenMarkovModel[DG[_, _]: DirectedGraph](
 
   val startState = MarkovModelStartState()
 
-  val graph = implicitly[DirectedGraph[DG]].make[MarkovModelState, Double](
+  val graph = directedGraph[DG, MarkovModelState, Double](
     states ++ observations ++ List(startState),
     (vs: Seq[Vertex[MarkovModelState]]) => {
       val state2vertex = vs.map(v => (v.payload, v)).toMap

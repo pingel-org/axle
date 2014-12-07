@@ -14,7 +14,7 @@ case class EliminationTree[T: Eq: Manifest, N: Field: Manifest, UG[_, _]: Undire
   vps: Seq[Factor[T, N]],
   ef: Seq[Vertex[Factor[T, N]]] => Seq[(Vertex[Factor[T, N]], Vertex[Factor[T, N]], String)]) {
 
-  lazy val graph = implicitly[UndirectedGraph[UG]].make(vps, ef)
+  lazy val graph = undirectedGraph(vps, ef)
 
   def gatherVars(
     stop: Vertex[Factor[T, N]],

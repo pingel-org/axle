@@ -33,7 +33,7 @@ object Angluin {
 
   case class AngluinAcceptor[DG[_, _]: DirectedGraph](vps: Seq[String], I: Set[String], F: Set[String]) {
 
-    val graph = implicitly[DirectedGraph[DG]].make[String, Symbol](vps, vs => Nil)
+    val graph = directedGraph[DG, String, Symbol](vps, vs => Nil)
 
     def Q: Set[Vertex[String]] = graph.vertices.toSet
 
@@ -49,7 +49,7 @@ object Angluin {
 
     def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
-      case Nil          => Set(state.payload)
+      case Nil => Set(state.payload)
     }
 
     // TODO: not sure if this should count edges or nodes:

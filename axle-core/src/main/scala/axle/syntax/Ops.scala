@@ -21,7 +21,7 @@ import spire.algebra.Ring
 final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
 
   val ev = implicitly[Matrix[M]]
-
+  
   def get(i: Int, j: Int) = ev.get(lhs)(i, j)
 
   def slice(rs: Seq[Int], cs: Seq[Int]) = ev.slice(lhs)(rs, cs)

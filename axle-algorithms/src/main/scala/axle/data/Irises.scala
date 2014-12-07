@@ -68,13 +68,12 @@ object Irises {
   val irises = io.Source.fromFile(file).getLines().toList flatMap { line =>
     Try {
       val fields = line.split(",")
-//      Iris(
-//        fields(0).toDouble *: cm[Double],
-//        fields(1).toDouble *: cm[Double],
-//        fields(2).toDouble *: cm[Double],
-//        fields(3).toDouble *: cm[Double],
-//        fields(4))
-      ???
+      Iris(
+        fields(0).toDouble *: cm[Double],
+        fields(1).toDouble *: cm[Double],
+        fields(2).toDouble *: cm[Double],
+        fields(3).toDouble *: cm[Double],
+        fields(4))
     } toOption
   }
 
