@@ -49,11 +49,12 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
   extends Classifier[T, Int] {
 
   // TODO: default distance = distance.euclidean
-  
+
   // TODO: This is not at all what we should be doing when F is a large RDD
-  val features: F[Seq[Double]] = data.map(featureExtractor)
+  val features = data.map(featureExtractor)
+
   val featureMatrix = ev.matrix[Double](data.size.toInt, N, (r: Int, c: Int) => features.at(r).apply(c))
-  
+
   val normalizer = normalizerMaker(featureMatrix)
 
   val X = normalizer.normalizedData
