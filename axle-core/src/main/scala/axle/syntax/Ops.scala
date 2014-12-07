@@ -1,13 +1,22 @@
 package axle.syntax
 
-import axle.algebra.Matrix
-import axle.algebra.FunctionPair
-import axle.algebra.Vertex
+import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
 import axle.algebra.DirectedEdge
+import axle.algebra.Finite
+import axle.algebra.FunctionPair
+import axle.algebra.Functor
+import axle.algebra.Indexed
+import axle.algebra.MapFrom
+import axle.algebra.MapReducible
+import axle.algebra.Matrix
+import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
 import axle.algebra.UndirectedEdge
+import axle.algebra.Vertex
+import scala.reflect.ClassTag
 import spire.algebra.Eq
+import spire.algebra.Ring
 
 final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
 
@@ -180,21 +189,21 @@ final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP,
   def edges = ev.edges(dg)
 
   def precedes(v1: Vertex[VP], v2: Vertex[VP]) = ev.precedes(dg, v1, v2)
-  
+
   def neighbors(v: Vertex[VP]) = ev.neighbors(dg, v)
 
   def predecessors(v: Vertex[VP]) = ev.predecessors(dg, v)
-  
+
   def descendants(v: Vertex[VP]) = ev.descendants(dg, v)
 
   def descendantsIntersectsSet(v: Vertex[VP], s: Set[Vertex[VP]]) = ev.descendantsIntersectsSet(dg, v, s)
-  
+
   // TODO: change first Edge type param:
   def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[DirectedEdge[VP, EP]]] =
     ev.shortestPath(dg, source, goal)
-    
+
   def leaves = ev.leaves(dg)
-  
+
   def outputEdgesOf(v: Vertex[VP]) = ev.outputEdgesOf(dg, v)
 }
 
@@ -212,4 +221,58 @@ final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG
   def neighbors(v: Vertex[VP]) = ev.neighbors(ug, v)
 
   def firstLeafOtherThan(r: Vertex[VP]) = ev.firstLeafOtherThan(ug, r)
+}
+
+final class FunctorOps[F[_]: Functor, A](val as: F[A]) {
+
+  val ev = implicitly[Functor[F]]
+
+  def map[B: ClassTag](f: A => B) = ev.map(as)(f)
+
+}
+
+final class AggregatableOps[G[_]: Aggregatable, A](val ts: G[A]) {
+
+  val ev = implicitly[Aggregatable[G]]
+
+  def aggregate[B: ClassTag](zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B) =
+    ev.aggregate(ts)(zeroValue)(seqOp, combOp)
+
+  def tally[N: Ring](implicit aEq: Eq[A]) = ev.tally(ts)
+}
+
+final class FiniteOps[F[_]: Finite, A: ClassTag](val as: F[A]) {
+
+  val ev = implicitly[Finite[F]]
+
+  def size = ev.size(as)
+}
+
+final class IndexedOps[F[_]: Indexed, A: ClassTag](val as: F[A]) {
+
+  val ev = implicitly[Indexed[F]]
+
+  def at(i: Int) = ev.at(as)(i)
+}
+
+final class MapReducibleOps[M[_]: MapReducible, A: ClassTag](val as: M[A]) {
+
+  val ev = implicitly[MapReducible[M]]
+
+  def mapReduce[B: ClassTag, K: ClassTag](mapper: A => (K, B), zero: B, op: (B, B) => B) =
+    ev.mapReduce[A, B, K](as, mapper, zero, op)
+}
+
+final class SetFromOps[F[_]: SetFrom, A: ClassTag](val as: F[A]) {
+
+  val ev = implicitly[SetFrom[F]]
+
+  def toSet = ev.toSet(as)
+}
+
+final class MapFromOps[F[_]: MapFrom, K: ClassTag, V: ClassTag](val fkv: F[(K, V)]) {
+
+  val ev = implicitly[MapFrom[F]]
+
+  def toMap = ev.toMap(fkv)
 }

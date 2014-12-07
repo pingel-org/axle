@@ -11,6 +11,9 @@ import axle.algebra.Finite
 import axle.algebra.Functor
 import axle.algebra.Indexed
 import axle.algebra.Monad
+import axle.syntax.finite._
+import axle.syntax.indexed._
+import axle.syntax.functor._
 import axle.syntax.matrix._
 
 import spire.algebra.Eq
@@ -46,15 +49,11 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
   extends Classifier[T, Int] {
 
   // TODO: default distance = distance.euclidean
-
-  val finite = implicitly[Finite[F]]
-  val functor = implicitly[Functor[F]]
-  val indexed = implicitly[Indexed[F]]
-
+  
   // TODO: This is not at all what we should be doing when F is a large RDD
-  val features: F[Seq[Double]] = functor.map(data)(featureExtractor)
-  val featureMatrix = ev.matrix[Double](finite.size(data).toInt, N, (r: Int, c: Int) => indexed.at(features)(r).apply(c))
-
+  val features: F[Seq[Double]] = data.map(featureExtractor)
+  val featureMatrix = ev.matrix[Double](data.size.toInt, N, (r: Int, c: Int) => features.at(r).apply(c))
+  
   val normalizer = normalizerMaker(featureMatrix)
 
   val X = normalizer.normalizedData

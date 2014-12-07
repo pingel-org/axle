@@ -9,6 +9,11 @@ import axle.algebra.MapReducible
 import axle.algebra.MapFrom
 import axle.algebra.FunctionPair
 import axle.syntax.matrix._
+import axle.syntax.functor._
+import axle.syntax.finite._
+import axle.syntax.mapfrom._
+import axle.syntax.mapreducible._
+import axle.syntax.setfrom._
 import spire.algebra._
 import scala.reflect.ClassTag
 import math.{ ceil, log10 }
@@ -18,24 +23,17 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
   data: F[T],
   labelExtractor: T => L)(implicit val evMatrix: Matrix[M]) {
 
-  val func = implicitly[Functor[F]]
-  val sz = implicitly[Finite[F]]
-  val settable = implicitly[SetFrom[F]]
-  val mr = implicitly[MapReducible[F]]
-  val mf = implicitly[MapFrom[F]]
+  val label2clusterId = data.map(datum => (labelExtractor(datum), classifier(datum)))
 
-  val label2clusterId = func.map(data)(datum => (labelExtractor(datum), classifier(datum)))
+  val labelList = label2clusterId.map(_._1).toSet.toList
 
-  val labelList: List[L] = settable.toSet(func.map(label2clusterId)(_._1)).toList
-  val labelIndices: Map[L, Int] = labelList.zipWithIndex.toMap
+  val labelIndices = labelList.zipWithIndex.toMap
 
   val labelIdClusterId2count =
-    mf.toMap(
-      mr.mapReduce[(L, CLASS), Int, (Int, CLASS)](
-        label2clusterId,
-        (lc: (L, CLASS)) => ((labelIndices(lc._1), lc._2), 1),
-        0,
-        _ + _)).withDefaultValue(0)
+    label2clusterId.mapReduce[Int, (Int, CLASS)](
+      (lc: (L, CLASS)) => ((labelIndices(lc._1), lc._2), 1),
+      0,
+      _ + _).toMap.withDefaultValue(0)
 
   val classes = classifier.classes
 
@@ -44,7 +42,7 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
     classes.size,
     (r: Int, c: Int) => labelIdClusterId2count((r, classes(c))))
 
-  val width = ceil(log10(sz.size(data))).toInt
+  val width = ceil(log10(data.size)).toInt
 
   val formatNumber = (i: Int) => ("%" + width + "d").format(i)
 

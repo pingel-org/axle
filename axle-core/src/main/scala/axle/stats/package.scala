@@ -119,7 +119,8 @@ package object stats {
       }
     })
     val u = bit[Double]
-    UnittedQuantity(H, ???)
+    // UnittedQuantity(H, u)
+    ???
   }
 
   def H[A: Manifest, N: Field: Order: ConvertableFrom, DG[_, _]: DirectedGraph](X: Distribution[A, N]): UnittedQuantity[Information[DG], Double] =

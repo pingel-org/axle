@@ -10,6 +10,8 @@ import axle.stats.Distribution0
 import axle.stats.Distribution1
 import axle.stats.TallyDistribution0
 import axle.stats.TallyDistribution1
+import axle.syntax.aggregatable._
+import axle.syntax.functor._
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.algebra.Field
@@ -58,10 +60,8 @@ class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: Cla
 
   val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Rational].withDefaultValue(implicitly[Field[Rational]].zero)
 
-  val agg = implicitly[Aggregatable[F]]
-
   val featureTally: Map[(CLASS, String, FEATURE), Rational] =
-    agg.aggregate(data)(emptyFeatureTally)(
+    data.aggregate(emptyFeatureTally)(
       (acc, d) => {
         val fs = featureExtractor(d)
         val c = classExtractor(d)
@@ -70,11 +70,8 @@ class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: Cla
       },
       _ + _)
 
-  val func = implicitly[Functor[F]]
   val classTally: Map[CLASS, Rational] =
-    agg
-      .tally[CLASS, Rational](func.map(data)(classExtractor))
-      .withDefaultValue(implicitly[Field[Rational]].zero)
+    data.map(classExtractor).tally[Rational].withDefaultValue(implicitly[Field[Rational]].zero)
 
   val C = new TallyDistribution0(classTally, classRandomVariable.name)
 

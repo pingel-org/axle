@@ -13,6 +13,7 @@ import axle.algebra.MapReducible
 import axle.algebra.MapFrom
 import axle.algebra.FunctionPair
 import axle.algebra.Semigroups._
+import axle.syntax.functor._
 
 import spire.math._
 import spire.implicits._
@@ -38,11 +39,8 @@ abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Fu
     data: F[DATA],
     classExtractor: DATA => CLASS,
     k: CLASS): (Int, Int, Int, Int) = {
-
-    val func = implicitly[Functor[F]]
-    val agg = implicitly[Aggregatable[F]]
-
-    val scores = func.map(data)(d => {
+    
+    val scores = data.map(d => {
       val actual: CLASS = classExtractor(d)
       val predicted: CLASS = this(d)
       (actual === k, predicted === k) match {
