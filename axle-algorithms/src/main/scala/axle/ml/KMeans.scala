@@ -36,6 +36,8 @@ import spire.implicits.eqOps
  * @param A                M x 1
  * @param distanceLog      K x iterations
  *
+ * Try  distance (MetricSpace) distance.euclidean
+ * 
  */
 
 case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed, M[_]](
@@ -48,9 +50,6 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
   iterations: Int)(implicit space: MetricSpace[M[Double], Double], ev: Matrix[M])
   extends Classifier[T, Int] {
 
-  // TODO: default distance = distance.euclidean
-
-  // TODO: This is not at all what we should be doing when F is a large RDD
   val features = data.map(featureExtractor)
 
   val featureMatrix = ev.matrix(data.size.toInt, N, (r: Int, c: Int) => features.at(r).apply(c))
@@ -58,6 +57,7 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
   val normalizer = normalizerMaker(featureMatrix)
 
   val X = normalizer.normalizedData
+  
   val μads = clusterLA(X, space, K, iterations)
 
   val (μ, a, d) = μads.last
