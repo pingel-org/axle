@@ -7,7 +7,6 @@ import spire.algebra.Eq
 import spire.algebra.Field
 import spire.math.Rational
 import spire.math.Real
-import spire.implicits._
 
 class Mass[DG[_, _]: DirectedGraph] extends Quantum {
 
@@ -131,4 +130,72 @@ class Mass[DG[_, _]: DirectedGraph] extends Quantum {
 
 }
 
-case object Mass3 extends Quantum3
+case class Mass3() extends Quantum3
+
+object Mass3 extends Quantum3 {
+
+  def unit[N: Field: Eq](name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement3[Mass3, N](name, symbol, wiki)
+
+  def gram[N: Field: Eq] = unit("gram", "g")
+  def tonne[N: Field: Eq] = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
+  def milligram[N: Field: Eq] = unit("milligram", "mg")
+  def kilogram[N: Field: Eq] = unit("kilogram", "Kg")
+  def megagram[N: Field: Eq] = unit("megagram", "Mg")
+  def kilotonne[N: Field: Eq] = unit("kilotonne", "KT")
+  def megatonne[N: Field: Eq] = unit("megatonne", "MT")
+  def gigatonne[N: Field: Eq] = unit("gigatonne", "GT")
+  def teratonne[N: Field: Eq] = unit("teratonne", "TT")
+  def petatonne[N: Field: Eq] = unit("petatonne", "PT")
+  def exatonne[N: Field: Eq] = unit("exatonne", "ET")
+  def zettatonne[N: Field: Eq] = unit("zettatonne", "ZT")
+  def yottatonne[N: Field: Eq] = unit("yottatonne", "YT")
+  def man[N: Field: Eq] = unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight"))
+  def earth[N: Field: Eq] = unit("earth", "M⊕", Some("http://en.wikipedia.org/wiki/Earth"))
+  def sun[N: Field: Eq] = unit("sun", "M☉", Some("http://en.wikipedia.org/wiki/Solar_mass"))
+  def jupiter[N: Field: Eq] = unit("jupiter", "M♃", Some("http://en.wikipedia.org/wiki/Jupiter"))
+  def saturn[N: Field: Eq] = unit("saturn", "M♄", Some("http://en.wikipedia.org/wiki/Saturn"))
+  def neptune[N: Field: Eq] = unit("neptune", "M♆", Some("http://en.wikipedia.org/wiki/Neptune"))
+  def uranus[N: Field: Eq] = unit("uranus", "M♅", Some("http://en.wikipedia.org/wiki/Uranus"))
+  def venus[N: Field: Eq] = unit("venus", "M♀", Some("http://en.wikipedia.org/wiki/Venus"))
+  def mars[N: Field: Eq] = unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars"))
+  def mercury[N: Field: Eq] = unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
+  def pluto[N: Field: Eq] = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
+  def moon[N: Field: Eq] = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
+
+  def units[N: Field: Eq]: List[UnitOfMeasurement3[Mass3, N]] =
+    List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,
+      petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
+      uranus, venus, mars, mercury, pluto, moon)
+
+  def links[N: Field: Eq]: Seq[(UnitOfMeasurement3[Mass3, N], UnitOfMeasurement3[Mass3, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement3[Mass3, N], UnitOfMeasurement3[Mass3, N], Bijection[N, N])](
+      (tonne, megagram, BijectiveIdentity[N]),
+      (milligram, gram, Scale10s(3)),
+      (gram, kilogram, Scale10s(3)),
+      (gram, megagram, Scale10s(6)),
+      (tonne, kilotonne, Scale10s(3)),
+      (tonne, megatonne, Scale10s(6)),
+      (tonne, gigatonne, Scale10s(9)),
+      (tonne, teratonne, Scale10s(12)),
+      (tonne, petatonne, Scale10s(15)),
+      (tonne, exatonne, Scale10s(18)),
+      (tonne, zettatonne, Scale10s(21)),
+      (tonne, yottatonne, Scale10s(24)),
+      (kilogram, man, ScaleDouble(86.6)),
+      (zettatonne, earth, ScaleDouble(5.9736)),
+      (kilogram, sun, ScaleDouble(1.9891E30)),
+      (yottatonne, jupiter, ScaleDouble(1.8986)),
+      (zettatonne, saturn, ScaleDouble(568.46)),
+      (zettatonne, neptune, ScaleDouble(102.43)),
+      (zettatonne, uranus, ScaleDouble(86.810)),
+      (zettatonne, venus, ScaleDouble(4.868)),
+      (exatonne, mars, ScaleDouble(641.85)),
+      (exatonne, mercury, ScaleDouble(330.22)),
+      (exatonne, pluto, ScaleDouble(13.05)),
+      (exatonne, moon, ScaleDouble(73.477)))
+
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    Quantum3.cgn(units, links)
+
+}

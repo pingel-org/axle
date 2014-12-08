@@ -83,4 +83,7 @@ object Information3 extends Quantum3 {
       (gigabyte, terabyte, Scale2s(10)),
       (terabyte, petabyte, Scale2s(10)))
 
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    Quantum3.cgn(units, links)
+      
 }

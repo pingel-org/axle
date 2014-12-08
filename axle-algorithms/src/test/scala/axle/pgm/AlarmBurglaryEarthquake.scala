@@ -3,7 +3,6 @@ package axle.stats
 import axle._
 import axle.algebra.DirectedGraph
 import axle.stats._
-import axle.graph._
 import axle.pgm._
 import spire.math._
 import spire.implicits._

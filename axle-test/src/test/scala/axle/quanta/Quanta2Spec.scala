@@ -1,20 +1,21 @@
 package axle.quanta
 
 import org.specs2.mutable._
-//import spire.implicits.additiveGroupOps
-//import spire.implicits.additiveSemigroupOps
-//import spire.implicits.moduleOps
+import spire.implicits.additiveGroupOps
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.moduleOps
 import spire.math.Rational
 import spire.algebra.Module
 import spire.implicits._
+import axle.jung.JungDirectedGraph.directedGraphJung
 
-class Quanta2Spec extends Specification {
-  
+class QuantaSpec extends Specification {
+
   "Scalar conversion" should {
     "work" in {
 
-      import Distance._
-      import Time._
+      import Distance3._
+      import Time3._
 
       val d1 = Rational(3, 4) *: meter[Rational]
       val d2 = Rational(7, 2) *: meter[Rational]
@@ -38,8 +39,8 @@ class Quanta2Spec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      import Mass._
-      import Distance._
+      import Mass3._
+      import Distance3._
       import spire.implicits.DoubleAlgebra
 
       (5 *: gram[Double]).magnitude must be equalTo 5
@@ -52,8 +53,8 @@ class Quanta2Spec extends Specification {
 
     "work" in {
 
-      import Distance._
-      import Mass._
+      import Distance3._
+      import Mass3._
       import spire.implicits.DoubleAlgebra
 
       ((1 *: kilogram[Double]) in gram[Double]).magnitude must be equalTo 1000d
@@ -63,7 +64,7 @@ class Quanta2Spec extends Specification {
     }
 
     "use Rational" in {
-      import Volume._
+      import Volume3._
       ((Rational(24) *: wineBottle[Rational]) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
     }
   }
@@ -71,13 +72,13 @@ class Quanta2Spec extends Specification {
   "addition" should {
     "work" in {
 
-      import Mass._
-      import Distance._
+      import Mass3._
+      import Distance3._
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
 
-      val module = implicitly[Module[UnittedQuantity[Distance, Double], Double]]
+      val module = implicitly[Module[UnittedQuantity3[Distance3, Double], Double]]
       val md = meter[Double]
       val fd = foot[Double]
       val d1 = 1 *: md
@@ -92,11 +93,11 @@ class Quanta2Spec extends Specification {
   "over" should {
     "work" in {
 
-      import Volume._
-      import Flow._
+      import Volume3._
+      import Flow3._
 
       // TODO convert that to years
-      (1 *: greatLakes[Rational]).over[Flow, Time, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1)
+      (1 *: greatLakes[Rational]).over[Flow3, Time3, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1)
     }
   }
 

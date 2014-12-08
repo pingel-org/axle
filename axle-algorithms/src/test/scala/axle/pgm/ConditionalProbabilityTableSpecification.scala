@@ -1,7 +1,6 @@
 package axle.pgm
 
 import axle._
-import axle.graph._
 import axle.stats._
 import axle.algebra.Vertex
 import axle.algebra.DirectedGraph

@@ -159,7 +159,7 @@ object Time3 extends Quantum3 {
       (year, my, Scale10s(6)),
       (year, gy, Scale10s(9)))
 
-  implicit def conversionGraph[Q <: Quantum3, N: Field: Eq, DG[_, _]: DirectedGraph] =
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
     Quantum3.cgn(units, links)
 
 }

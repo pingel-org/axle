@@ -84,6 +84,7 @@ object Distance3 extends Quantum3 {
     UnitOfMeasurement3[Distance3, N](name, symbol, wiki)
 
   def foot[N: Field: Eq] = unit("foot", "ft")
+  def ft[N: Field: Eq] = foot[N]
   def mile[N: Field: Eq] = unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile"))
   def meter[N: Field: Eq] = unit("meter", "m")
   def kilometer[N: Field: Eq] = unit("kilometer", "km")
@@ -123,7 +124,7 @@ object Distance3 extends Quantum3 {
       (km, auSI, ScaleDouble(149597870.7)),
       (km, ly, ScaleDouble(9460730472580.8)))
 
-  implicit def conversionGraph[Q <: Quantum3, N: Field: Eq, DG[_, _]: DirectedGraph] =
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
     Quantum3.cgn(units, links)
 
 }

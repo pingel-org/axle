@@ -8,7 +8,6 @@ import axle.algebra.Vertex
 import axle.algebra.DirectedGraph
 import axle.algebra.UndirectedGraph
 import axle.stats._
-import axle.graph._
 import axle.pgm._
 import spire.implicits._
 import spire.math._

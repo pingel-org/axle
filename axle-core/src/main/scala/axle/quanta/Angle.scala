@@ -65,7 +65,7 @@ object Angle3 extends Quantum3 {
       (radian, circleRadians, ScaleDouble(2 * π)),
       (circleDegrees, circleRadians, BijectiveIdentity[N]))
 
-  implicit def conversionGraph[Q <: Quantum3, N: Field: Eq, DG[_, _]: DirectedGraph] =
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
     Quantum3.cgn(units, links)
 
 }

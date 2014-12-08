@@ -8,6 +8,7 @@ import axle.stats.P
 import axle.stats.coin
 import axle.stats.entropy
 import axle.stats.rationalProbabilityDist
+import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 import spire.algebra.Order
 import spire.math.Number.apply
 import spire.math.Rational
@@ -26,7 +27,7 @@ class InformationTheorySpec extends Specification {
           "B" -> Rational(1, 10),
           "C" -> Rational(7, 10)), "d")
 
-      entropy[String, Rational](d).magnitude.toDouble must be equalTo (1.1567796494470395)
+      entropy(d).magnitude.toDouble must be equalTo (1.1567796494470395)
     }
   }
 

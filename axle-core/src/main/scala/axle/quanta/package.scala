@@ -10,6 +10,9 @@ import axle.algebra.Zero
 import axle.quanta.Quantum
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
+import axle.quanta.Quantum3
+import axle.quanta.UnitOfMeasurement3
+import axle.quanta.UnittedQuantity3
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Module
@@ -67,6 +70,12 @@ package object quanta {
       override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
     }
 
+  implicit def uq3Plottable[Q <: Quantum3, N: Field: Eq: Plottable]: Plottable[UnittedQuantity3[Q, N]] =
+    new Plottable[UnittedQuantity3[Q, N]] {
+
+      override def isPlottable(t: UnittedQuantity3[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
+    }
+
   implicit def unitOrder[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Order[UnittedQuantity[Q, N]] {
 
@@ -76,12 +85,30 @@ package object quanta {
         underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
     }
 
+  implicit def unit3Order[Q <: Quantum3, N: Field: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement3[Q, N], cg: DG[UnitOfMeasurement3[Q, N], N => N]) =
+    new Order[UnittedQuantity3[Q, N]] {
+
+      val underlying = implicitly[Order[N]]
+
+      def compare(u1: UnittedQuantity3[Q, N], u2: UnittedQuantity3[Q, N]): Int =
+        underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
+    }
+
   implicit def unittedZero[Q <: Quantum, N: Field, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Zero[UnittedQuantity[Q, N]] {
 
       val field = implicitly[Field[N]]
 
       def zero: UnittedQuantity[Q, N] = field.zero *: base
+
+    }
+
+  implicit def unitted3Zero[Q <: Quantum3, N: Field, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement3[Q, N], cg: DG[UnitOfMeasurement3[Q, N], N => N]) =
+    new Zero[UnittedQuantity3[Q, N]] {
+
+      val field = implicitly[Field[N]]
+
+      def zero: UnittedQuantity3[Q, N] = field.zero *: base
 
     }
 
@@ -97,6 +124,18 @@ package object quanta {
         }
     }
 
+  implicit def unitted3Tics[Q <: Quantum3, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement3[Q, N], cg: DG[UnitOfMeasurement3[Q, N], N => N]) =
+    new Tics[UnittedQuantity3[Q, N]] {
+
+      def tics(from: UnittedQuantity3[Q, N], to: UnittedQuantity3[Q, N]): Seq[(UnittedQuantity3[Q, N], String)] =
+        implicitly[Tics[N]].tics((from in base).magnitude, (to in base).magnitude) map {
+          case (v, label) => {
+            val vu = UnittedQuantity3[Q, N](v, base)
+            (vu, string(v))
+          }
+        }
+    }
+
   implicit def unittedLengthSpace[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](
     implicit base: UnitOfMeasurement[Q, N], space: LengthSpace[N, Double],
     cg: DG[UnitOfMeasurement[Q, N], N => N],
@@ -105,13 +144,32 @@ package object quanta {
 
       val field = implicitly[Field[N]]
 
-      def distance(v: UnittedQuantity[Q, N], w: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
+      def distance(v: UnittedQuantity[Q, N], w: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = ???
+      //(field.minus((v in base).magnitude, (w in base).magnitude).abs) *: base
+
+      def onPath(left: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N], p: Double): UnittedQuantity[Q, N] = ???
+      //((field.minus((right in base).magnitude, (left in base).magnitude)) * p + (left in base).magnitude) *: base
+
+      def portion(left: UnittedQuantity[Q, N], v: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N]): Double = ???
+      // space.portion((left in base).magnitude, (v in base).magnitude, (right in base).magnitude)
+
+    }
+
+  implicit def unitted3LengthSpace[Q <: Quantum3, N: Field: Order, DG[_, _]: DirectedGraph](
+    implicit base: UnitOfMeasurement3[Q, N], space: LengthSpace[N, Double],
+    cg: DG[UnitOfMeasurement3[Q, N], N => N],
+    module: Module[UnittedQuantity3[Q, N], N]) =
+    new LengthSpace[UnittedQuantity3[Q, N], UnittedQuantity3[Q, N]] {
+
+      val field = implicitly[Field[N]]
+
+      def distance(v: UnittedQuantity3[Q, N], w: UnittedQuantity3[Q, N]): UnittedQuantity3[Q, N] =
         (field.minus((v in base).magnitude, (w in base).magnitude).abs) *: base
 
-      def onPath(left: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N], p: Double): UnittedQuantity[Q, N] =
+      def onPath(left: UnittedQuantity3[Q, N], right: UnittedQuantity3[Q, N], p: Double): UnittedQuantity3[Q, N] =
         ((field.minus((right in base).magnitude, (left in base).magnitude)) * p + (left in base).magnitude) *: base
 
-      def portion(left: UnittedQuantity[Q, N], v: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N]): Double =
+      def portion(left: UnittedQuantity3[Q, N], v: UnittedQuantity3[Q, N], right: UnittedQuantity3[Q, N]): Double =
         space.portion((left in base).magnitude, (v in base).magnitude, (right in base).magnitude)
 
     }
