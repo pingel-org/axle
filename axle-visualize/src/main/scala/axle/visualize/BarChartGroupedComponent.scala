@@ -16,7 +16,7 @@ import axle.algebra.Tics
 import axle.algebra.LengthSpace
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle.{ ° => ° }
+import axle.quanta.Angle3.{ ° => ° }
 import axle.Show
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
@@ -75,7 +75,6 @@ class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, 
     yTics.paint(g2d)
     keyOpt.foreach(_.paint(g2d))
     bars.foreach(_.paint(g2d))
-
   }
 
 }

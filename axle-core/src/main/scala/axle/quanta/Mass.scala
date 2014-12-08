@@ -13,7 +13,7 @@ class Mass[DG[_, _]: DirectedGraph] extends Quantum {
 
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"
-  
+
   type Q = this.type
 
   def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
@@ -130,3 +130,5 @@ class Mass[DG[_, _]: DirectedGraph] extends Quantum {
   // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
 
 }
+
+case object Mass3 extends Quantum3

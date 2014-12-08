@@ -5,31 +5,27 @@ import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import scala.Vector
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
 import DataFeedProtocol.Fetch
 import akka.pattern.ask
+import axle.actor.Defaults.askTimeout
+import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.algebra.LengthSpace
-import axle.actor.Defaults.askTimeout
-import axle.algebra.Plottable
-import axle.quanta.Angle.{ ° => ° }
-import axle.quanta.UnittedQuantity
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
-import spire.math.Number.apply
-import spire.implicits.DoubleAlgebra
-import spire.implicits.moduleOps
+import axle.quanta.Angle3.°
+import spire.implicits._
 
 class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](plot: Plot[X, Y, D])(
   implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _])
   extends JPanel
   with Fed[List[(String, D)]] {
 
+  import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
   import plot._
 
   setMinimumSize(new Dimension(width, height))

@@ -4,11 +4,11 @@ import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
 
-import axle.quanta.Angle
-import axle.quanta.Angle.rad
-import axle.quanta.UnittedQuantity
+import axle.quanta.Angle3
+import axle.quanta.Angle3.rad
+import axle.quanta.UnittedQuantity3
 import axle.visualize.Paintable
-import spire.implicits.DoubleAlgebra 
+import spire.implicits.DoubleAlgebra
 
 class Text(
   text: String,
@@ -17,7 +17,9 @@ class Text(
   y: Int,
   centered: Boolean = true,
   color: Color = Color.black,
-  angle: Option[UnittedQuantity[Angle, Double]] = None) extends Paintable {
+  angle: Option[UnittedQuantity3[Angle3, Double]] = None) extends Paintable {
+
+  import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 
   val angleRadOpt = angle.map(a => (a in rad[Double]).magnitude)
 

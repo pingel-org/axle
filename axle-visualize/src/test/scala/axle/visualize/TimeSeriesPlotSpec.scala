@@ -9,10 +9,9 @@ import org.specs2.mutable.Specification
 
 import axle.algebra.Plottable
 import axle.joda._
-import axle.quanta.Information
-import axle.quanta.Information.bit
-import axle.quanta.UnittedPlottable
-import axle.quanta.UnittedQuantity
+import axle.quanta.Information3
+import axle.quanta.Information3.bit
+import axle.quanta.UnittedQuantity3
 import axle.quanta.modulize
 import axle.stats.H
 import axle.stats.coin
@@ -48,10 +47,12 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
-    type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
-    val hm: D = new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
+    import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 
-    val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
+    type D = TreeMap[Rational, UnittedQuantity3[Information3, Double]]
+    val hm: D = new TreeMap[Rational, UnittedQuantity3[Information3, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
+
+    val plot = new Plot[Rational, UnittedQuantity3[Information3, Double], D](
       List(("h", hm)),
       connect = true,
       drawKey = false,

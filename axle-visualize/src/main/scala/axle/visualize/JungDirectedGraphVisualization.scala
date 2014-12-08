@@ -10,9 +10,10 @@ import java.awt.event.MouseEvent
 
 import org.apache.commons.collections15.Transformer
 
-import axle.graph.Edge
+import axle.algebra.Edge
+import axle.algebra.Vertex
 import axle.jung.JungDirectedGraph
-import axle.graph.Vertex
+import axle.jung.JungDirectedGraphEdge
 import axle.Show
 import axle.string
 import axle.HtmlFrom
@@ -32,7 +33,7 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
     // http://www.grotto-networking.com/JUNG/
     // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf
 
-    val layout = new FRLayout(jdg.storage)
+    val layout = new FRLayout(jdg.jdsg)
     layout.setSize(new Dimension(width, height))
     // val vv = new BasicVisualizationServer[ug.type#V, ug.type#E](layout) // non-interactive
     val vv = new VisualizationViewer(layout) // interactive
@@ -47,16 +48,16 @@ class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border
 
     val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
 
-    val edgeStrokeTransformer = new Transformer[Edge[jdg.ES, EP], Stroke]() {
-      def transform(e: Edge[jdg.ES, EP]): BasicStroke = edgeStroke
+    val edgeStrokeTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], Stroke]() {
+      def transform(e: JungDirectedGraphEdge[VP, EP]): BasicStroke = edgeStroke
     }
 
     val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
       def transform(v: Vertex[VP]): String = string(html(v.payload))
     }
 
-    val edgeLabelTransformer = new Transformer[Edge[jdg.ES, EP], String]() {
-      def transform(e: Edge[jdg.ES, EP]): String = string(e.payload)
+    val edgeLabelTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], String]() {
+      def transform(e: JungDirectedGraphEdge[VP, EP]): String = string(e.payload)
     }
 
     vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)

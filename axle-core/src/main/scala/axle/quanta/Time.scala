@@ -7,10 +7,9 @@ import spire.algebra.Eq
 import spire.algebra.Field
 import spire.math.Rational
 import spire.math.Real
-import spire.implicits._
 
 class Time[DG[_, _]: DirectedGraph] extends Quantum {
-  
+
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
 
   type Q = this.type
@@ -96,5 +95,71 @@ class Time[DG[_, _]: DirectedGraph] extends Quantum {
   //  lazy val primateAge = 60 *: my // Some("order Primate age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
   //  lazy val australopithecusAge = 4 *: my // Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
   //  lazy val modernHumanAge = 200 *: ky // Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
+
+}
+
+case class Time3() extends Quantum3
+
+object Time3 extends Quantum3 {
+
+  def unit[N: Field: Eq](name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement3[Time3, N](name, symbol, wiki)
+
+  def second[N: Field: Eq] = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
+  def s[N: Field: Eq] = second[N]
+  def millisecond[N: Field: Eq] = unit("millisecond", "ms", Some("http://en.wikipedia.org/wiki/Millisecond"))
+  def ms[N: Field: Eq] = millisecond[N]
+  def microsecond[N: Field: Eq] = unit("microsecond", "μs", Some("http://en.wikipedia.org/wiki/Microsecond"))
+  def μs[N: Field: Eq] = microsecond[N]
+  def nanosecond[N: Field: Eq] = unit("nanosecond", "ns", Some("http://en.wikipedia.org/wiki/Nanosecond"))
+  def ns[N: Field: Eq] = nanosecond[N]
+  def picosecond[N: Field: Eq] = unit("picosecond", "ps", Some("http://en.wikipedia.org/wiki/Picosecond"))
+  def ps[N: Field: Eq] = picosecond[N]
+  def femtosecond[N: Field: Eq] = unit("femtosecond", "fs", Some("http://en.wikipedia.org/wiki/Femtosecond"))
+  def fs[N: Field: Eq] = femtosecond[N]
+  def attosecond[N: Field: Eq] = unit("attosecond", "as", Some("http://en.wikipedia.org/wiki/Attosecond"))
+  def as[N: Field: Eq] = attosecond[N]
+  def zeptosecond[N: Field: Eq] = unit("zeptosecond", "zs", Some("http://en.wikipedia.org/wiki/Zeptosecond"))
+  def zs[N: Field: Eq] = zeptosecond[N]
+  def yoctosecond[N: Field: Eq] = unit("yoctosecond", "ys", Some("http://en.wikipedia.org/wiki/Yoctosecond"))
+  def ys[N: Field: Eq] = yoctosecond[N]
+  def minute[N: Field: Eq] = unit("minute", "m", Some("http://en.wikipedia.org/wiki/Minute"))
+  def m[N: Field: Eq] = minute[N]
+  def hour[N: Field: Eq] = unit("hour", "hr", Some("http://en.wikipedia.org/wiki/Hour"))
+  def day[N: Field: Eq] = unit("day", "d", Some("http://en.wikipedia.org/wiki/Day"))
+  def year[N: Field: Eq] = unit("year", "yr", Some("http://en.wikipedia.org/wiki/Year"))
+  def century[N: Field: Eq] = unit("century", "century", Some("http://en.wikipedia.org/wiki/Century"))
+  def millenium[N: Field: Eq] = unit("millenium", "ky", Some("http://en.wikipedia.org/wiki/Millenium"))
+  def ky[N: Field: Eq] = millenium[N]
+  def megayear[N: Field: Eq] = unit("megayear", "my")
+  def my[N: Field: Eq] = megayear[N]
+  def gigayear[N: Field: Eq] = unit("gigayear", "gy")
+  def gy[N: Field: Eq] = gigayear[N]
+
+  def units[N: Field: Eq]: List[UnitOfMeasurement3[Time3, N]] =
+    List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
+      zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
+
+  def links[N: Field: Eq]: Seq[(UnitOfMeasurement3[Time3, N], UnitOfMeasurement3[Time3, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement3[Time3, N], UnitOfMeasurement3[Time3, N], Bijection[N, N])](
+      (ms, s, Scale10s(3)),
+      (μs, s, Scale10s(6)),
+      (ns, s, Scale10s(9)),
+      (ps, s, Scale10s(12)),
+      (fs, s, Scale10s(15)),
+      (as, s, Scale10s(18)),
+      (zs, s, Scale10s(21)),
+      (ys, s, Scale10s(24)),
+      (s, m, ScaleInt(60)),
+      (m, hour, ScaleInt(60)),
+      (hour, day, ScaleInt(24)),
+      (day, year, ScaleDouble(365.25)),
+      (year, century, Scale10s(2)),
+      (year, ky, Scale10s(3)),
+      (year, my, Scale10s(6)),
+      (year, gy, Scale10s(9)))
+
+  implicit def conversionGraph[Q <: Quantum3, N: Field: Eq, DG[_, _]: DirectedGraph] =
+    Quantum3.cgn(units, links)
 
 }

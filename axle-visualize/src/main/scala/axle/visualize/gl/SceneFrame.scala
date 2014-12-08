@@ -6,9 +6,9 @@ import java.awt.event.WindowEvent
 
 import com.jogamp.opengl.util.FPSAnimator
 
-import axle.quanta.Angle.degree
-import axle.quanta.Distance
-import axle.quanta.UnittedQuantity
+import axle.quanta.Angle3.degree
+import axle.quanta.Distance3
+import axle.quanta.UnittedQuantity3
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import spire.math.Number.apply
@@ -16,7 +16,7 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 
-class SceneFrame(scene: Scene, width: Int, height: Int, zNear: UnittedQuantity[Distance, Float], zFar: UnittedQuantity[Distance, Float], fps: Int) {
+class SceneFrame(scene: Scene, width: Int, height: Int, zNear: UnittedQuantity3[Distance3, Float], zFar: UnittedQuantity3[Distance3, Float], fps: Int) {
 
   def run(): Unit = {
 

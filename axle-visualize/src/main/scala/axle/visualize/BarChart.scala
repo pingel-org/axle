@@ -13,9 +13,9 @@ import scala.reflect.ClassTag
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.quanta.Angle
-import axle.quanta.Angle.{° => °}
-import axle.quanta.UnittedQuantity
+import axle.quanta.Angle3
+import axle.quanta.Angle3.{° => °}
+import axle.quanta.UnittedQuantity3
 import axle.Show
 import axle.string
 import spire.algebra.Eq
@@ -49,6 +49,6 @@ case class BarChart[S: Show, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  labelAngle: UnittedQuantity[Angle, Double] = 36d *: °[Double],
+  labelAngle: UnittedQuantity3[Angle3, Double] = 36d *: °[Double],
   colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
     implicit val dataView: DataView[S, Y, D])

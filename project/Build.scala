@@ -313,7 +313,7 @@ import axle._
     name := "axle-repl",
 
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-compiler" % "2.10.4",
+      "org.scala-lang" % "scala-compiler" % "2.11.4",
       "jline" % "jline" % "2.11" // http://grokbase.com/t/gg/scala-internals/1433gjdg5h/missing-jline-for-scala-2-11-0-rc1
     ),
 

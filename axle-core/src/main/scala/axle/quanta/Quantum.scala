@@ -61,3 +61,33 @@ trait Quantum {
     })
 
 }
+
+trait Quantum3
+
+object Quantum3 {
+
+  type CG[Q <: Quantum3, DG[_, _], N] = DG[UnitOfMeasurement3[Q, N], N => N]
+
+  private def conversions[Q <: Quantum3, N: Field: Eq, DG[_, _]](
+    vps: Seq[UnitOfMeasurement3[Q, N]],
+    ef: Seq[Vertex[UnitOfMeasurement3[Q, N]]] => Seq[(Vertex[UnitOfMeasurement3[Q, N]], Vertex[UnitOfMeasurement3[Q, N]], N => N)])(implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement3[Q, N], N => N] =
+    evDG.make[UnitOfMeasurement3[Q, N], N => N](vps, ef)
+
+  private[quanta] def cgn[Q <: Quantum3, N: Field: Eq, DG[_, _]: DirectedGraph](
+    units: List[UnitOfMeasurement3[Q, N]],
+    links: Seq[(UnitOfMeasurement3[Q, N], UnitOfMeasurement3[Q, N], Bijection[N, N])]): CG[Q, DG, N] =
+    conversions[Q, N, DG](
+      units,
+      (vs: Seq[Vertex[UnitOfMeasurement3[Q, N]]]) => {
+        val name2vertex = vs.map(v => (v.payload.name, v)).toMap
+        links.flatMap({
+          case (x, y, bijection) => {
+            val xv = name2vertex(x.name)
+            val yv = name2vertex(y.name)
+            List((xv, yv, bijection.apply _), (yv, xv, bijection.unapply _))
+          }
+        })
+      })
+
+      
+}

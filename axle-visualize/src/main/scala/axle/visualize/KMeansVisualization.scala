@@ -14,14 +14,14 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 
 import axle.algebra.Plottable
-import axle.algebra.DoubleTics
-import axle.quanta.Angle.{ ° => ° }
+import axle.quanta.Angle3.{ ° => ° }
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import axle.algebra.Matrix
+import axle.algebra.Tics
 import axle.ml.KMeans
 import javax.swing.JPanel
 import java.awt.Component
@@ -63,7 +63,7 @@ case class KMeansVisualization[D, F[_], M[_]: Matrix](
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
 
-  implicit val doubleTics = new DoubleTics {}
+  implicit val doubleTics = implicitly[Tics[Double]]
   val xTics = new XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0 *: °, black)
   val yTics = new YTics(scaledArea, doubleTics.tics(minY, maxY), normalFont, black)
 

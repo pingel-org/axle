@@ -11,6 +11,9 @@ import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Distribution
 import axle.stats.EnrichedCaseGenTraversable
 import axle.stats.P
+import axle.quanta.UnittedQuantity3
+import axle.quanta.Information3
+import axle.quanta.Information3.bit
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -104,10 +107,7 @@ package object stats {
   def stddev[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
     standardDeviation(distribution)
 
-  def entropy[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](X: Distribution[A, N]): UnittedQuantity[Information[DG], Double] = {
-
-    val information = new Information[DG]()
-    import information._
+  def entropy[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](X: Distribution[A, N]): UnittedQuantity3[Information3, Double] = {
 
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values map { x =>
@@ -118,12 +118,11 @@ package object stats {
         convertN.toDouble(-px) * log2(px)
       }
     })
-    val u = bit[Double]
-    // UnittedQuantity(H, u)
-    ???
+    UnittedQuantity3(H, bit)
   }
 
-  def H[A: Manifest, N: Field: Order: ConvertableFrom, DG[_, _]: DirectedGraph](X: Distribution[A, N]): UnittedQuantity[Information[DG], Double] =
+  def H[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
+    X: Distribution[A, N]): UnittedQuantity3[Information3, Double] =
     entropy(X)
 
 }

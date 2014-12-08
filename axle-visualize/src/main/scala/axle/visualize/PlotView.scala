@@ -9,8 +9,8 @@ import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.algebra.LengthSpace
-import axle.quanta.Angle.{ ° => ° }
-import axle.quanta.UnittedQuantity
+import axle.quanta.Angle3.{ ° => ° }
+import axle.quanta.UnittedQuantity3
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key

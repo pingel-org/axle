@@ -13,15 +13,14 @@ import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
-import axle.quanta.Time
-import axle.quanta.UnittedQuantity
+import axle.quanta.Time3
+import axle.quanta.UnittedQuantity3
 
 import spire.algebra._
 
 import akka.actor.ActorRef
 import akka.actor.Props
 
-import axle.graph._
 import axle.visualize._
 import axle.ml._
 import axle.stats._
@@ -31,6 +30,7 @@ import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.LengthSpace
 import axle.algebra.Zero
+import axle.algebra.DirectedGraph
 
 package object visualize {
 
@@ -50,7 +50,7 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity[Time, Double])(implicit system: ActorSystem): ActorRef = {
+  def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity3[Time3, Double])(implicit system: ActorSystem): ActorRef = {
 
     val drawer = implicitly[Draw[T]]
 
@@ -86,11 +86,11 @@ package object visualize {
         new JungDirectedGraphVisualization().component(jdg)
     }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq]: Draw[BayesianNetwork[T, N]] = {
-    new Draw[BayesianNetwork[T, N]] {
-      def component(bn: BayesianNetwork[T, N]) = {
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph]: Draw[BayesianNetwork[T, N, DG]] = {
+    new Draw[BayesianNetwork[T, N, DG]] {
+      def component(bn: BayesianNetwork[T, N, DG]) = {
         // TODO this should be easier
-        val jdg = JungDirectedGraph(bn.graph.vertexPayloads, bn.graph.edgeFunction)
+        val jdg = implicitly[DirectedGraph[JungDirectedGraph]].make[BayesianNetworkNode[T, N], String](???, ???) // bn.graph.v.vertexPayloads, bn.graph.edgeFunction)
         drawJungDirectedGraph[BayesianNetworkNode[T, N], String].component(jdg)
       }
     }
