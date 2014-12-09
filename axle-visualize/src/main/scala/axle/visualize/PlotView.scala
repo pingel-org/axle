@@ -5,12 +5,10 @@ import java.awt.Font
 
 import scala.Stream.continually
 
-import axle.algebra.Plottable
+import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.algebra.LengthSpace
-import axle.quanta.Angle3.{ ° => ° }
-import axle.quanta.UnittedQuantity3
+import axle.quanta.Angle3.{° => °}
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -18,12 +16,7 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
-import spire.math.Number.apply
 import spire.implicits.DoubleAlgebra
-import spire.implicits.moduleOps
-import spire.compat.ordering
 
 class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
   implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],

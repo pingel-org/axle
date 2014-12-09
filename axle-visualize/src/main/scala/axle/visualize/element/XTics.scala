@@ -9,7 +9,7 @@ import spire.implicits.DoubleAlgebra
 import axle.quanta.Angle3
 //import axle.quanta.Angle.eqTypeclass
 import axle.quanta.Angle3.{ ° => ° }
-import axle.quanta.UnittedQuantity3
+import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D
@@ -22,7 +22,7 @@ class XTics[X, Y](
   tics: Seq[(X, String)],
   font: Font,
   fDrawLines: Boolean = true,
-  angle: UnittedQuantity3[Angle3, Double],
+  angle: UnittedQuantity[Angle3, Double],
   color: Color = Color.black) extends Paintable {
 
   def paint(g2d: Graphics2D): Unit = {
@@ -36,7 +36,7 @@ class XTics[X, Y](
 
   val zeroDegrees = 0d *: °[Double]
 
-  def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: UnittedQuantity3[Angle3, Double] = zeroDegrees): Unit = {
+  def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: UnittedQuantity[Angle3, Double] = zeroDegrees): Unit = {
 
     val (x, label) = xTic
     if (fDrawLine) {
@@ -57,7 +57,7 @@ class XTics[X, Y](
     g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
   }
 
-  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean = true, angle: UnittedQuantity3[Angle3, Double] = zeroDegrees): Unit =
+  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean = true, angle: UnittedQuantity[Angle3, Double] = zeroDegrees): Unit =
     xTics.map({
       case (x, label) => drawXTic(g2d: Graphics2D, fontMetrics, (x, label), fDrawLines, angle)
     })

@@ -78,7 +78,7 @@ class QuantaSpec extends Specification {
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
 
-      val module = implicitly[Module[UnittedQuantity3[Distance3, Double], Double]]
+      val module = implicitly[Module[UnittedQuantity[Distance3, Double], Double]]
       val md = meter[Double]
       val fd = foot[Double]
       val d1 = 1 *: md

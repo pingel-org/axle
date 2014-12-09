@@ -6,8 +6,8 @@ import axle.quanta.Angle3
 import axle.quanta.Angle3.degree
 import axle.quanta.Angle3.conversionGraph
 import axle.quanta.Distance3
-import axle.quanta.UnitOfMeasurement3
-import axle.quanta.UnittedQuantity3
+import axle.quanta.UnitOfMeasurement
+import axle.quanta.UnittedQuantity
 import spire.implicits.DoubleAlgebra
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT
@@ -35,7 +35,7 @@ import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import javax.media.opengl.glu.GLU
 import spire.implicits.FloatAlgebra
 
-class AxleGLCanvas(scene: Scene, fovy: UnittedQuantity3[Angle3, Float], zNear: UnittedQuantity3[Distance3, Float], zFar: UnittedQuantity3[Distance3, Float], distanceUnit: UnitOfMeasurement3[Distance3, Float])
+class AxleGLCanvas(scene: Scene, fovy: UnittedQuantity[Angle3, Float], zNear: UnittedQuantity[Distance3, Float], zFar: UnittedQuantity[Distance3, Float], distanceUnit: UnitOfMeasurement[Distance3, Float])
   extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)

@@ -6,7 +6,7 @@ import java.awt.Graphics2D
 
 import axle.quanta.Angle3
 import axle.quanta.Angle3.rad
-import axle.quanta.UnittedQuantity3
+import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra
 
@@ -17,7 +17,7 @@ class Text(
   y: Int,
   centered: Boolean = true,
   color: Color = Color.black,
-  angle: Option[UnittedQuantity3[Angle3, Double]] = None) extends Paintable {
+  angle: Option[UnittedQuantity[Angle3, Double]] = None) extends Paintable {
 
   import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 

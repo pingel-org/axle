@@ -10,7 +10,7 @@ import scala.math.min
 import axle.algebra.LengthSpace
 import axle.quanta.Angle3
 import axle.quanta.Angle3.rad
-import axle.quanta.UnittedQuantity3
+import axle.quanta.UnittedQuantity
 import spire.algebra.Eq
 import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra
@@ -77,7 +77,7 @@ case class ScaledArea2D[X, Y](
     }
   }
 
-  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: UnittedQuantity3[Angle3, Double]): Unit = {
+  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: UnittedQuantity[Angle3, Double]): Unit = {
     import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
     if (nonZeroArea) {
       val fp = framePoint(p)
