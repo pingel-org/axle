@@ -1,6 +1,5 @@
 package axle.algebra
 
-import axle.quanta.Distance
 import axle.quanta.UnittedQuantity3
 import axle.quanta.Distance3
 import spire.algebra.Field

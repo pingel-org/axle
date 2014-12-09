@@ -2,14 +2,14 @@ package axle.algebra
 
 import spire.algebra.Field
 import spire.algebra.Order
-import axle.quanta.UnittedQuantity
-import axle.quanta.Angle
+import axle.quanta.UnittedQuantity3
+import axle.quanta.Angle3
 
-case class GeoCoordinates[N: Field: Order, DG[_, _]: DirectedGraph](
-  latitude: UnittedQuantity[Angle[DG], N],
-  longitude: UnittedQuantity[Angle[DG], N]) {
+case class GeoCoordinates[N: Field: Order](
+  latitude: UnittedQuantity3[Angle3, N],
+  longitude: UnittedQuantity3[Angle3, N]) {
 
-  def φ: UnittedQuantity[Angle[DG], N] = latitude
+  def φ: UnittedQuantity3[Angle3, N] = latitude
 
-  def λ: UnittedQuantity[Angle[DG], N] = longitude
+  def λ: UnittedQuantity3[Angle3, N] = longitude
 }

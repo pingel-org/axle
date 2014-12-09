@@ -13,7 +13,7 @@ import axle.quanta.Information3
 import axle.quanta.Information3.bit
 import axle.quanta.UnittedQuantity3
 import axle.quanta.UnitOfMeasurement3
-import axle.quanta.modulize
+import axle.quanta.modulize3
 import axle.stats.H
 import axle.stats.coin
 import spire.compat.ordering

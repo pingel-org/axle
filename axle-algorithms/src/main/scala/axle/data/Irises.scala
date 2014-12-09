@@ -9,7 +9,7 @@ import scala.util.Try
 import axle.quanta.Distance3
 import axle.quanta.Distance3.cm
 import axle.quanta.UnittedQuantity3
-import axle.quanta.modulize
+import axle.quanta.modulize3
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps

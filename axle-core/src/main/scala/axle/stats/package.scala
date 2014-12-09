@@ -4,8 +4,6 @@ import scala.Vector
 import scala.collection.GenTraversable
 
 import axle.algebra.DirectedGraph
-import axle.quanta.UnittedQuantity
-import axle.quanta.Information
 import axle.stats.Case
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Distribution
