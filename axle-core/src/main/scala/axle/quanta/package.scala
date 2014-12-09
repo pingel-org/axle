@@ -28,7 +28,7 @@ package object quanta {
     def eqv(x: N => N, y: N => N): Boolean = ???
   }
 
-  implicit def modulize3[Q <: Quantum, N, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
+  implicit def modulize[Q <: Quantum, N, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
 
       def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
@@ -46,13 +46,13 @@ package object quanta {
   def unit[Q <: Quantum, N: Field: Eq](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
     UnitOfMeasurement(name, symbol, linkOpt)
 
-  implicit def uq3Plottable[Q <: Quantum, N: Field: Eq: Plottable]: Plottable[UnittedQuantity[Q, N]] =
+  implicit def uqPlottable[Q <: Quantum, N: Field: Eq: Plottable]: Plottable[UnittedQuantity[Q, N]] =
     new Plottable[UnittedQuantity[Q, N]] {
 
       override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
     }
 
-  implicit def unit3Order[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unitOrder[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val underlying = implicitly[Order[N]]
@@ -61,7 +61,7 @@ package object quanta {
         underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
     }
 
-  implicit def unitted3Zero[Q <: Quantum, N: Field, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unittedZero[Q <: Quantum, N: Field, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Zero[UnittedQuantity[Q, N]] {
 
       val field = implicitly[Field[N]]
@@ -70,7 +70,7 @@ package object quanta {
 
     }
 
-  implicit def unitted3Tics[Q <: Quantum, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unittedTics[Q <: Quantum, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Tics[UnittedQuantity[Q, N]] {
 
       def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =
@@ -82,7 +82,7 @@ package object quanta {
         }
     }
 
-  implicit def unitted3LengthSpace[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](
+  implicit def unittedLengthSpace[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](
     implicit base: UnitOfMeasurement[Q, N], space: LengthSpace[N, Double],
     cg: DG[UnitOfMeasurement[Q, N], N => N],
     module: Module[UnittedQuantity[Q, N], N]) =

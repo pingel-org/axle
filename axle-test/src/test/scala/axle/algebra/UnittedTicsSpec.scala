@@ -21,7 +21,7 @@ class UnittedTicsSpec extends Specification {
 
       implicit val base = bit[Double]
       implicit val cg = axle.quanta.Information.conversionGraph[Double, JungDirectedGraph]
-      val ticker = axle.quanta.unitted3Tics[Information, Double, JungDirectedGraph]
+      val ticker = axle.quanta.unittedTics[Information, Double, JungDirectedGraph]
 
       val tics = ticker.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
 

@@ -13,7 +13,7 @@ import axle.quanta.Information
 import axle.quanta.Information.bit
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
-import axle.quanta.modulize3
+import axle.quanta.modulize
 import axle.stats.H
 import axle.stats.coin
 import spire.compat.ordering
@@ -56,7 +56,7 @@ class TimeSeriesPlotSpec extends Specification {
 
     implicit val base = bit[Double]
     //implicit val cg = axle.quanta.Information.conversionGraph[Double, JungDirectedGraph]
-    implicit val orderThem = axle.quanta.unit3Order[Information, Double, JungDirectedGraph]
+    implicit val orderThem = axle.quanta.unitOrder[Information, Double, JungDirectedGraph]
     //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity3[Information, Double]]
 
     val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
