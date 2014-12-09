@@ -9,9 +9,9 @@ import spire.math.Rational
 import spire.math.Real
 import math.{ Pi => π }
 
-case class Angle3() extends Quantum3
+case class Angle3() extends Quantum
 
-object Angle3 extends Quantum3 {
+object Angle3 extends Quantum {
 
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Degree_(angle)"
 
@@ -19,7 +19,7 @@ object Angle3 extends Quantum3 {
   //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
 
   def unit[N: Field: Eq](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement3[Angle3, N](name, symbol, wiki)
+    UnitOfMeasurement[Angle3, N](name, symbol, wiki)
 
   def degree[N: Field: Eq] = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(angle)"))
   def °[N: Field: Eq] = degree[N]
@@ -28,16 +28,16 @@ object Angle3 extends Quantum3 {
   def circleDegrees[N: Field: Eq] = unit("circleDegrees", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
   def circleRadians[N: Field: Eq] = unit("circleRadians", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
 
-  def units[N: Field: Eq]: List[UnitOfMeasurement3[Angle3, N]] =
+  def units[N: Field: Eq]: List[UnitOfMeasurement[Angle3, N]] =
     List(degree, radian, circleDegrees, circleRadians)
 
-  def links[N: Field: Eq]: Seq[(UnitOfMeasurement3[Angle3, N], UnitOfMeasurement3[Angle3, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement3[Angle3, N], UnitOfMeasurement3[Angle3, N], Bijection[N, N])](
+  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Angle3, N], UnitOfMeasurement[Angle3, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Angle3, N], UnitOfMeasurement[Angle3, N], Bijection[N, N])](
       (degree, circleDegrees, ScaleInt(360)),
       (radian, circleRadians, ScaleDouble(2 * π)),
       (circleDegrees, circleRadians, BijectiveIdentity[N]))
 
   implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum3.cgn(units, links)
+    Quantum.cgn(units, links)
 
 }

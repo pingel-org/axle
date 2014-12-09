@@ -5,7 +5,7 @@ import org.specs2.mutable.Specification
 import axle.quanta.Information3
 import axle.quanta.Information3.bit
 import axle.quanta.UnittedQuantity3
-import axle.quanta.Quantum
+import axle.quanta.Quantum3
 import spire.math.Rational
 import spire.math.Real
 import spire.algebra.Order

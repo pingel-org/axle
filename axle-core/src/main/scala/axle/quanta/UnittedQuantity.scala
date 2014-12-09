@@ -10,38 +10,39 @@ import spire.implicits.multiplicativeSemigroupOps
 import axle.algebra.DirectedGraph
 import axle.syntax.directedgraph._
 
-case class UnittedQuantity3[Q <: Quantum3, N: Field: Eq](magnitude: N, unit: UnitOfMeasurement3[Q, N]) {
+case class UnittedQuantity[Q <: Quantum, N: Field: Eq](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
 
   private[this] def vertex[DG[_, _]: DirectedGraph](
-    cg: DG[UnitOfMeasurement3[Q, N], N => N], query: UnitOfMeasurement3[Q, N]): Vertex[UnitOfMeasurement3[Q, N]] =
+    cg: DG[UnitOfMeasurement[Q, N], N => N], query: UnitOfMeasurement[Q, N]): Vertex[UnitOfMeasurement[Q, N]] =
     axle.syntax.directedgraph.directedGraphOps(cg).findVertex(_.payload.name === query.name).get
 
-  def in[DG[_, _]: DirectedGraph](newUnit: UnitOfMeasurement3[Q, N])(implicit cg: DG[UnitOfMeasurement3[Q, N], N => N]): UnittedQuantity3[Q, N] =
+  def in[DG[_, _]: DirectedGraph](newUnit: UnitOfMeasurement[Q, N])(implicit cg: DG[UnitOfMeasurement[Q, N], N => N]): UnittedQuantity[Q, N] =
     cg.shortestPath(vertex(cg, newUnit), vertex(cg, unit))
       .map(
         _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
-      .map(n => UnittedQuantity3((magnitude * n), newUnit))
+      .map(n => UnittedQuantity((magnitude * n), newUnit))
       .getOrElse(throw new Exception("no conversion path from " + unit + " to " + newUnit))
 
   // TODO
-  def over[QR <: Quantum3, Q2 <: Quantum3, N: Field: Eq](denominator: UnittedQuantity3[QR, N]): UnitOfMeasurement3[Q2, N] =
-    UnitOfMeasurement3[Q2, N]("TODO", "TODO", None)
+  def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
+    UnitOfMeasurement[Q2, N]("TODO", "TODO", None)
 
 }
 
-object UnittedQuantity3 {
+object UnittedQuantity {
 
-  implicit def eqqqn[Q <: Quantum3, N: Field: Eq]: Eq[UnittedQuantity3[Q, N]] = new Eq[UnittedQuantity3[Q, N]] {
-    def eqv(x: UnittedQuantity3[Q, N], y: UnittedQuantity3[Q, N]): Boolean =
-      (x.magnitude === y.magnitude) && (x.unit == y.unit)
-  }
+  implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[UnittedQuantity[Q, N]] =
+    new Eq[UnittedQuantity[Q, N]] {
+      def eqv(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): Boolean =
+        (x.magnitude === y.magnitude) && (x.unit == y.unit)
+    }
 
-  implicit def orderUQ[Q <: Quantum3, N: Order, DG[_, _]: DirectedGraph](implicit cg: DG[UnitOfMeasurement3[Q, N], N => N]) =
-    new Order[UnittedQuantity3[Q, N]] {
+  implicit def orderUQ[Q <: Quantum, N: Order, DG[_, _]: DirectedGraph](implicit cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+    new Order[UnittedQuantity[Q, N]] {
 
       val orderN = implicitly[Order[N]]
 
-      def compare(x: UnittedQuantity3[Q, N], y: UnittedQuantity3[Q, N]): Int =
+      def compare(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): Int =
         orderN.compare((x.in(y.unit)).magnitude, y.magnitude)
     }
 

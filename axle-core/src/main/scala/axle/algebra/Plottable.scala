@@ -8,8 +8,8 @@ import spire.algebra.Field
 import spire.algebra.Eq
 import spire.math.Rational
 
-import axle.quanta.UnittedQuantity3
-import axle.quanta.Quantum3
+import axle.quanta.UnittedQuantity
+import axle.quanta.Quantum
 
 trait Plottable[T] {
 
