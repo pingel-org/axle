@@ -14,7 +14,7 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 
 import axle.algebra.Plottable
-import axle.quanta.Angle3.{ ° => ° }
+import axle.quanta.Angle.{ ° => ° }
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle

@@ -16,7 +16,7 @@ import axle.algebra.Tics
 import axle.algebra.LengthSpace
 import axle.actor.Defaults.askTimeout
 import axle.algebra.Plottable
-import axle.quanta.Angle3.{ ° => ° }
+import axle.quanta.Angle.{ ° => ° }
 import axle.Show
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text

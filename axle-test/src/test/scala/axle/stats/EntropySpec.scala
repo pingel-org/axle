@@ -2,8 +2,8 @@ package axle.stats
 
 import org.specs2.mutable.Specification
 
-import axle.quanta.Information3
-import axle.quanta.Information3.bit
+import axle.quanta.Information
+import axle.quanta.Information.bit
 import axle.quanta.UnittedQuantity
 import axle.quanta.Quantum
 import spire.math.Rational
@@ -17,7 +17,7 @@ class EntropySpec extends Specification {
   "entropy of coin" should {
     "work" in {
 
-      val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information3, Double]]() ++
+      val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map(i => (Rational(i, 100), entropy(coin(Rational(i, 100))))).toMap
 
       // implicit val bitp = bit.plottable
@@ -28,10 +28,10 @@ class EntropySpec extends Specification {
       //   title = Some("Entropy"))
 
       import spire.implicits._
-      val lhs: UnittedQuantity[Information3, Double] = biasToEntropy(Rational(1, 100))
-      val rhs: UnittedQuantity[Information3, Double] = biasToEntropy(Rational(1, 2))
+      val lhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 100))
+      val rhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 2))
       implicit val base = bit[Double]
-      implicit val ord = axle.quanta.unit3Order[Information3, Double, JungDirectedGraph]
+      implicit val ord = axle.quanta.unit3Order[Information, Double, JungDirectedGraph]
       // lhs < rhs
       orderOps(lhs).compare(rhs) == -1
     }

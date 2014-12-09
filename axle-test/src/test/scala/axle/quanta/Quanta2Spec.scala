@@ -14,8 +14,8 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      import Distance3._
-      import Time3._
+      import Distance._
+      import Time._
 
       val d1 = Rational(3, 4) *: meter[Rational]
       val d2 = Rational(7, 2) *: meter[Rational]
@@ -39,8 +39,8 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      import Mass3._
-      import Distance3._
+      import Mass._
+      import Distance._
       import spire.implicits.DoubleAlgebra
 
       (5 *: gram[Double]).magnitude must be equalTo 5
@@ -53,8 +53,8 @@ class QuantaSpec extends Specification {
 
     "work" in {
 
-      import Distance3._
-      import Mass3._
+      import Distance._
+      import Mass._
       import spire.implicits.DoubleAlgebra
 
       ((1 *: kilogram[Double]) in gram[Double]).magnitude must be equalTo 1000d
@@ -64,7 +64,7 @@ class QuantaSpec extends Specification {
     }
 
     "use Rational" in {
-      import Volume3._
+      import Volume._
       ((Rational(24) *: wineBottle[Rational]) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
     }
   }
@@ -72,13 +72,13 @@ class QuantaSpec extends Specification {
   "addition" should {
     "work" in {
 
-      import Mass3._
-      import Distance3._
+      import Mass._
+      import Distance._
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
 
-      val module = implicitly[Module[UnittedQuantity[Distance3, Double], Double]]
+      val module = implicitly[Module[UnittedQuantity[Distance, Double], Double]]
       val md = meter[Double]
       val fd = foot[Double]
       val d1 = 1 *: md
@@ -93,11 +93,11 @@ class QuantaSpec extends Specification {
   "over" should {
     "work" in {
 
-      import Volume3._
-      import Flow3._
+      import Volume._
+      import Flow._
 
       // TODO convert that to years
-      (1 *: greatLakes[Rational]).over[Flow3, Time3, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1)
+      (1 *: greatLakes[Rational]).over[Flow, Time, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1)
     }
   }
 

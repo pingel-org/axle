@@ -4,9 +4,9 @@ import scala.Vector
 
 import org.specs2.mutable.Specification
 
-import axle.quanta.Information3
-import axle.quanta.Information3.bit
-import axle.quanta.Information3.conversionGraph
+import axle.quanta.Information
+import axle.quanta.Information.bit
+import axle.quanta.Information.conversionGraph
 import axle.quanta.UnittedQuantity
 import axle.jung.JungDirectedGraph
 import spire.algebra.Eq
@@ -20,8 +20,8 @@ class UnittedTicsSpec extends Specification {
     "work" in {
 
       implicit val base = bit[Double]
-      implicit val cg = axle.quanta.Information3.conversionGraph[Double, JungDirectedGraph]
-      val ticker = axle.quanta.unitted3Tics[Information3, Double, JungDirectedGraph]
+      implicit val cg = axle.quanta.Information.conversionGraph[Double, JungDirectedGraph]
+      val ticker = axle.quanta.unitted3Tics[Information, Double, JungDirectedGraph]
 
       val tics = ticker.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
 
@@ -39,7 +39,7 @@ class UnittedTicsSpec extends Specification {
         (0.9 *: bit[Double], "0.900000"),
         (1.0 *: bit[Double], "1.000000"))
 
-      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information3, Double], String)]]]
+      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information, Double], String)]]]
 
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))

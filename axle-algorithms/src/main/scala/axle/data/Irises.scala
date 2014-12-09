@@ -6,8 +6,8 @@ import scala.Option.option2Iterable
 import scala.sys.process.stringSeqToProcess
 import scala.util.Try
 
-import axle.quanta.Distance3
-import axle.quanta.Distance3.cm
+import axle.quanta.Distance
+import axle.quanta.Distance.cm
 import axle.quanta.UnittedQuantity
 import axle.quanta.modulize3
 import spire.algebra.Eq
@@ -42,10 +42,10 @@ import axle.jung.JungDirectedGraph
 object Irises {
 
   case class Iris(
-    sepalLength: UnittedQuantity[Distance3, Double],
-    sepalWidth: UnittedQuantity[Distance3, Double],
-    petalLength: UnittedQuantity[Distance3, Double],
-    petalWidth: UnittedQuantity[Distance3, Double],
+    sepalLength: UnittedQuantity[Distance, Double],
+    sepalWidth: UnittedQuantity[Distance, Double],
+    petalLength: UnittedQuantity[Distance, Double],
+    petalWidth: UnittedQuantity[Distance, Double],
     species: String)
 
   object Iris {

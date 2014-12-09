@@ -127,15 +127,15 @@ import spire.math.Real
 //
 //}
 
-case class Mass3() extends Quantum
+case class Mass() extends Quantum
 
-object Mass3 extends Quantum {
+object Mass extends Quantum {
 
   def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"
   
   def unit[N: Field: Eq](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Mass3, N](name, symbol, wiki)
+    UnitOfMeasurement[Mass, N](name, symbol, wiki)
 
   def gram[N: Field: Eq] = unit("gram", "g")
   def tonne[N: Field: Eq] = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
@@ -163,13 +163,13 @@ object Mass3 extends Quantum {
   def pluto[N: Field: Eq] = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
   def moon[N: Field: Eq] = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
 
-  def units[N: Field: Eq]: List[UnitOfMeasurement[Mass3, N]] =
+  def units[N: Field: Eq]: List[UnitOfMeasurement[Mass, N]] =
     List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,
       petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
       uranus, venus, mars, mercury, pluto, moon)
 
-  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Mass3, N], UnitOfMeasurement[Mass3, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Mass3, N], UnitOfMeasurement[Mass3, N], Bijection[N, N])](
+  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])](
       (tonne, megagram, BijectiveIdentity[N]),
       (milligram, gram, Scale10s(3)),
       (gram, kilogram, Scale10s(3)),

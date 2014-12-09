@@ -17,7 +17,7 @@ import axle.algebra.Zero
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
-import axle.quanta.Angle3.°
+import axle.quanta.Angle.°
 import spire.implicits._
 
 class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](plot: Plot[X, Y, D])(

@@ -13,7 +13,7 @@ import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
-import axle.quanta.Time3
+import axle.quanta.Time
 import axle.quanta.UnittedQuantity
 
 import spire.algebra._
@@ -50,7 +50,7 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity[Time3, Double])(implicit system: ActorSystem): ActorRef = {
+  def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity[Time, Double])(implicit system: ActorSystem): ActorRef = {
 
     val drawer = implicitly[Draw[T]]
 

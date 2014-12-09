@@ -8,7 +8,7 @@ import scala.Stream.continually
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.quanta.Angle3.{° => °}
+import axle.quanta.Angle.{° => °}
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key

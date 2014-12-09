@@ -10,7 +10,7 @@ import axle.algebra.Plottable
 import axle.algebra.LengthSpace
 import axle.algebra.DoubleDoubleLengthSpace
 import axle.algebra.Tics
-import axle.quanta.Angle3.{ ° => ° }
+import axle.quanta.Angle.{ ° => ° }
 import axle.Show
 import axle.string
 import axle.visualize.element.HorizontalLine

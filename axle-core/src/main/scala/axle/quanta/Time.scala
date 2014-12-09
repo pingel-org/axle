@@ -98,12 +98,12 @@ import spire.math.Real
 //
 //}
 
-case class Time3() extends Quantum
+case class Time() extends Quantum
 
-object Time3 extends Quantum {
+object Time extends Quantum {
 
   def unit[N: Field: Eq](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Time3, N](name, symbol, wiki)
+    UnitOfMeasurement[Time, N](name, symbol, wiki)
 
   def second[N: Field: Eq] = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
   def s[N: Field: Eq] = second[N]
@@ -136,12 +136,12 @@ object Time3 extends Quantum {
   def gigayear[N: Field: Eq] = unit("gigayear", "gy")
   def gy[N: Field: Eq] = gigayear[N]
 
-  def units[N: Field: Eq]: List[UnitOfMeasurement[Time3, N]] =
+  def units[N: Field: Eq]: List[UnitOfMeasurement[Time, N]] =
     List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
       zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
 
-  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Time3, N], UnitOfMeasurement[Time3, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Time3, N], UnitOfMeasurement[Time3, N], Bijection[N, N])](
+  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Time, N], UnitOfMeasurement[Time, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Time, N], UnitOfMeasurement[Time, N], Bijection[N, N])](
       (ms, s, Scale10s(3)),
       (μs, s, Scale10s(6)),
       (ns, s, Scale10s(9)),

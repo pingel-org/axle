@@ -12,12 +12,12 @@ import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.ActorRef
 import akka.actor.actorRef2Scala
-import axle.quanta.Time3
-import axle.quanta.Time3.millisecond
+import axle.quanta.Time
+import axle.quanta.Time.millisecond
 import axle.quanta.UnittedQuantity
 import spire.implicits.DoubleAlgebra
 
-case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: UnittedQuantity[Time3, Double])
+case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: UnittedQuantity[Time, Double])
   extends Actor
   with ActorLogging {
 
