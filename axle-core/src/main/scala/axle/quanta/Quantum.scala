@@ -37,12 +37,12 @@ object Quantum {
 //
 //  def cgnDisconnected[N: Field: Eq, DG[_, _]: DirectedGraph]: CG[DG, N] = conversions(units, (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => Nil)
   
-  private def conversions[Q <: Quantum, N: Field: Eq, DG[_, _]](
+  private def conversions[Q <: Quantum, N, DG[_, _]](
     vps: Seq[UnitOfMeasurement[Q, N]],
     ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)])(implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q, N], N => N] =
     evDG.make[UnitOfMeasurement[Q, N], N => N](vps, ef)
 
-  private[quanta] def cgn[Q <: Quantum, N: Field: Eq, DG[_, _]: DirectedGraph](
+  private[quanta] def cgn[Q <: Quantum, N, DG[_, _]: DirectedGraph](
     units: List[UnitOfMeasurement[Q, N]],
     links: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]): CG[Q, DG, N] =
     conversions[Q, N, DG](
