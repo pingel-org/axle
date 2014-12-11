@@ -1,43 +1,47 @@
 package axle.quanta
 
+import axle.algebra.DirectedGraph
 import axle.algebra.Vertex
+import axle.syntax.directedgraph.directedGraphOps
 import spire.algebra.Eq
-import spire.algebra.Field
+import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
-import axle.algebra.DirectedGraph
-import axle.syntax.directedgraph._
 
-case class UnittedQuantity[Q <: Quantum, N: Field: Eq](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
+case class UnittedQuantity[Q <: Quantum, N](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
 
   private[this] def vertex[DG[_, _]: DirectedGraph](
-    cg: DG[UnitOfMeasurement[Q, N], N => N], query: UnitOfMeasurement[Q, N]): Vertex[UnitOfMeasurement[Q, N]] =
+    cg: DG[UnitOfMeasurement[Q, N], N => N],
+    query: UnitOfMeasurement[Q, N])(
+      implicit ev: Eq[N]): Vertex[UnitOfMeasurement[Q, N]] =
     axle.syntax.directedgraph.directedGraphOps(cg).findVertex(_.payload.name === query.name).get
 
-  def in[DG[_, _]: DirectedGraph](newUnit: UnitOfMeasurement[Q, N])(implicit cg: DG[UnitOfMeasurement[Q, N], N => N]): UnittedQuantity[Q, N] =
-    cg.shortestPath(vertex(cg, newUnit), vertex(cg, unit))
+  def in[DG[_, _]: DirectedGraph](
+    newUnit: UnitOfMeasurement[Q, N])(
+      implicit cg: DG[UnitOfMeasurement[Q, N], N => N], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
+    directedGraphOps(cg).shortestPath(vertex(cg, newUnit), vertex(cg, unit))
       .map(
-        _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
+        _.map(_.payload).foldLeft(ev.one)((n, convert) => convert(n)))
       .map(n => UnittedQuantity((magnitude * n), newUnit))
       .getOrElse(throw new Exception("no conversion path from " + unit + " to " + newUnit))
 
   // TODO
-  def over[QR <: Quantum, Q2 <: Quantum, N: Field: Eq](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
+  def over[QR <: Quantum, Q2 <: Quantum, N](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
     UnitOfMeasurement[Q2, N]("TODO", "TODO", None)
 
 }
 
 object UnittedQuantity {
 
-  implicit def eqqqn[Q <: Quantum, N: Field: Eq]: Eq[UnittedQuantity[Q, N]] =
+  implicit def eqqqn[Q <: Quantum, N: Eq]: Eq[UnittedQuantity[Q, N]] =
     new Eq[UnittedQuantity[Q, N]] {
       def eqv(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): Boolean =
         (x.magnitude === y.magnitude) && (x.unit == y.unit)
     }
 
-  implicit def orderUQ[Q <: Quantum, N: Order, DG[_, _]: DirectedGraph](implicit cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def orderUQ[Q <: Quantum, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val orderN = implicitly[Order[N]]
