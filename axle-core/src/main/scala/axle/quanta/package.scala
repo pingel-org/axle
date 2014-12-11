@@ -10,9 +10,11 @@ import axle.algebra.Zero
 import axle.quanta.Quantum
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
+import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Module
+import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
 import spire.algebra.Rng
 import spire.implicits.additiveGroupOps
@@ -43,16 +45,16 @@ package object quanta {
       def timesl(r: N, v: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(v.magnitude * r, v.unit)
     }
 
-  def unit[Q <: Quantum, N: Field: Eq](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
-    UnitOfMeasurement(name, symbol, linkOpt)
+//  def unit[Q <: Quantum, N](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
+//    UnitOfMeasurement(name, symbol, linkOpt)
 
-  implicit def uqPlottable[Q <: Quantum, N: Field: Eq: Plottable]: Plottable[UnittedQuantity[Q, N]] =
+  implicit def uqPlottable[Q <: Quantum, N: Plottable]: Plottable[UnittedQuantity[Q, N]] =
     new Plottable[UnittedQuantity[Q, N]] {
 
       override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
     }
 
-  implicit def unitOrder[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unitOrder[Q <: Quantum, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val underlying = implicitly[Order[N]]
@@ -61,12 +63,12 @@ package object quanta {
         underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
     }
 
-  implicit def unittedZero[Q <: Quantum, N: Field, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unittedZero[Q <: Quantum, N: AdditiveMonoid, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Zero[UnittedQuantity[Q, N]] {
 
-      val field = implicitly[Field[N]]
+      val am = implicitly[AdditiveMonoid[N]]
 
-      def zero: UnittedQuantity[Q, N] = field.zero *: base
+      def zero: UnittedQuantity[Q, N] = am.zero *: base
 
     }
 
