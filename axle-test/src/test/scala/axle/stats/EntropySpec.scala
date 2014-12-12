@@ -17,7 +17,7 @@ class EntropySpec extends Specification {
   "entropy of coin" should {
     "work" in {
 
-      val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
+      val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information.type, Double]]() ++
         (0 to 100).map(i => (Rational(i, 100), entropy(coin(Rational(i, 100))))).toMap
 
       // implicit val bitp = bit.plottable
@@ -28,10 +28,10 @@ class EntropySpec extends Specification {
       //   title = Some("Entropy"))
 
       import spire.implicits._
-      val lhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 100))
-      val rhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 2))
+      val lhs: UnittedQuantity[Information.type, Double] = biasToEntropy(Rational(1, 100))
+      val rhs: UnittedQuantity[Information.type, Double] = biasToEntropy(Rational(1, 2))
       implicit val base = bit[Double]
-      implicit val ord = axle.quanta.unitOrder[Information, Double, JungDirectedGraph]
+      implicit val ord = axle.quanta.unitOrder[Information.type, Double, JungDirectedGraph]
       // lhs < rhs
       orderOps(lhs).compare(rhs) == -1
     }

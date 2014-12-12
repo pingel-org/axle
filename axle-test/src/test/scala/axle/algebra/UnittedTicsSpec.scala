@@ -21,7 +21,7 @@ class UnittedTicsSpec extends Specification {
 
       implicit val base = bit[Double]
       implicit val cg = axle.quanta.Information.conversionGraph[Double, JungDirectedGraph]
-      val ticker = axle.quanta.unittedTics[Information, Double, JungDirectedGraph]
+      val ticker = axle.quanta.unittedTics[Information.type, Double, JungDirectedGraph]
 
       val tics = ticker.tics(0d *: bit[Double], 1d *: bit[Double]).toVector
 
@@ -39,7 +39,7 @@ class UnittedTicsSpec extends Specification {
         (0.9 *: bit[Double], "0.900000"),
         (1.0 *: bit[Double], "1.000000"))
 
-      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information, Double], String)]]]
+      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information.type, Double], String)]]]
 
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))

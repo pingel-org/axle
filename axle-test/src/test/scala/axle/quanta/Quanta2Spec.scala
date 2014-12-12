@@ -78,7 +78,7 @@ class QuantaSpec extends Specification {
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
 
-      val module = implicitly[Module[UnittedQuantity[Distance, Double], Double]]
+      val module = implicitly[Module[UnittedQuantity[Distance.type, Double], Double]]
       val md = meter[Double]
       val fd = foot[Double]
       val d1 = 1 *: md
@@ -97,7 +97,7 @@ class QuantaSpec extends Specification {
       import Flow._
 
       // TODO convert that to years
-      (1 *: greatLakes[Rational]).over[Flow, Time, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1)
+      (1 *: greatLakes[Rational]).over[Flow.type, Time.type, Rational](1 *: niagaraFalls[Rational]).magnitude must be equalTo Rational(1)
     }
   }
 
