@@ -42,10 +42,10 @@ import axle.jung.JungDirectedGraph
 object Irises {
 
   case class Iris(
-    sepalLength: UnittedQuantity[Distance, Double],
-    sepalWidth: UnittedQuantity[Distance, Double],
-    petalLength: UnittedQuantity[Distance, Double],
-    petalWidth: UnittedQuantity[Distance, Double],
+    sepalLength: UnittedQuantity[Distance.type, Double],
+    sepalWidth: UnittedQuantity[Distance.type, Double],
+    petalLength: UnittedQuantity[Distance.type, Double],
+    petalWidth: UnittedQuantity[Distance.type, Double],
     species: String)
 
   object Iris {
