@@ -182,7 +182,4 @@ case object Mass extends Quantum {
       (exatonne, pluto, ScaleDouble(13.05)),
       (exatonne, moon, ScaleDouble(73.477)))
 
-  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-  //    cgn(units[N], links)
-
 }

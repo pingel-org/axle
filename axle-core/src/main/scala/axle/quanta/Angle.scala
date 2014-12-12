@@ -35,7 +35,4 @@ case object Angle extends Quantum {
       (radian, circleRadians, ScaleDouble(2 * π)),
       (circleDegrees, circleRadians, BijectiveIdentity[N]))
 
-  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-  //    cgn(units[N], links)
-
 }

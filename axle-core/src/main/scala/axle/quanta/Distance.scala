@@ -55,9 +55,6 @@ case object Distance extends Quantum {
       (km, auSI, ScaleDouble(149597870.7)),
       (km, ly, ScaleDouble(9460730472580.8)))
 
-//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-//    cgn(units[N], links)
-
   //  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
   //    unit("foot", "ft"),
   //    unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile")),

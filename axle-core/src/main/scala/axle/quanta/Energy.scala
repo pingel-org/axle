@@ -41,7 +41,4 @@ case object Energy extends Quantum {
       (t, mt, Scale10s(6)),
       (t, gt, Scale10s(9)))
 
-//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-//    cgn(units[N], links[N])
-
 }

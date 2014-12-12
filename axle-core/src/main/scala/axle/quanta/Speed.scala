@@ -32,7 +32,4 @@ case object Speed extends Quantum {
       (mps, c, ScaleInt(299792458)),
       (mph, speedLimit, ScaleInt(65)))
 
-  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-  //    cgn(units[N], links)
-
 }

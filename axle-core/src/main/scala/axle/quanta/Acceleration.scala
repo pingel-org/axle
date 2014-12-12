@@ -25,7 +25,4 @@ case object Acceleration extends Quantum {
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (mpsps, g, ScaleDouble(9.80665)))
 
-  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-  //    cgn(units[N], links[N])
-
 }

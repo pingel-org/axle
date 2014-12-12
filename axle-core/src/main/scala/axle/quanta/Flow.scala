@@ -24,7 +24,4 @@ case object Flow extends Quantum {
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (m3s, niagaraFalls, ScaleInt(1834)))
 
-//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-//    cgn(units[N], links)
-
 }

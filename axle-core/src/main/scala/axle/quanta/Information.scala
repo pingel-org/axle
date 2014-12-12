@@ -40,7 +40,4 @@ case object Information extends Quantum {
       (gigabyte, terabyte, Scale2s(10)),
       (terabyte, petabyte, Scale2s(10)))
 
-//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-//    cgn(units[N], links)
-
 }

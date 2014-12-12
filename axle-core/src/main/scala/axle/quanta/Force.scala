@@ -24,7 +24,4 @@ case object Force extends Quantum {
   def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
     List.empty
 
-//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-//    cgn(units[N], links)
-
 }

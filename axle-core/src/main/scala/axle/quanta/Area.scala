@@ -26,7 +26,4 @@ case object Area extends Quantum {
       (m2, km2, Scale10s(6)),
       (cm2, m2, Scale10s(6)))
 
-  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-  //    cgn(units[N], links[N])
-
 }

@@ -100,7 +100,4 @@ case object Time extends Quantum {
       (year, my, Scale10s(6)),
       (year, gy, Scale10s(9)))
 
-//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-//    cgn(units[N], links)
-
 }

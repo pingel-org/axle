@@ -96,7 +96,4 @@ case object Volume extends Quantum {
       (wineBottle, balthazar, ScaleInt(16)),
       (wineBottle, nebuchadnezzar, ScaleInt(20)))
 
-  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-  //    cgn(units[N], links)
-
 }

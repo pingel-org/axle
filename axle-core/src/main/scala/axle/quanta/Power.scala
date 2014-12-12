@@ -41,7 +41,4 @@ case object Power extends Quantum {
       (megawatt, hooverDam, ScaleInt(2080)),
       (horsepower, mustangGT, ScaleInt(420)))
 
-//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-//    cgn(units[N], links)
-
 }

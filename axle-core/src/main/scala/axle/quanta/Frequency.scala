@@ -33,7 +33,4 @@ case object Frequency extends Quantum {
       (Hz, MHz, Scale10s(9)),
       (Hz, GHz, Scale10s(12)))
 
-//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-//    cgn(units[N], links)
-
 }
