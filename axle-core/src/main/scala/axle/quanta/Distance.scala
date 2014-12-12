@@ -5,12 +5,12 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Distance() extends Quantum("http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)")
+case object Distance extends Quantum {
 
-object Distance {
+  type Q = Distance.type
 
-  type Q = Distance
-
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
+  
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
 
@@ -55,8 +55,8 @@ object Distance {
       (km, auSI, ScaleDouble(149597870.7)),
       (km, ly, ScaleDouble(9460730472580.8)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+//    cgn(units[N], links)
 
   //  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
   //    unit("foot", "ft"),

@@ -51,15 +51,15 @@ class TimeSeriesPlotSpec extends Specification {
     import axle.jung.JungDirectedGraph
     import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 
-    type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
-    val hm: D = new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
+    type D = TreeMap[Rational, UnittedQuantity[Information.type, Double]]
+    val hm: D = new TreeMap[Rational, UnittedQuantity[Information.type, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
     implicit val base = bit[Double]
     //implicit val cg = axle.quanta.Information.conversionGraph[Double, JungDirectedGraph]
-    implicit val orderThem = axle.quanta.unitOrder[Information, Double, JungDirectedGraph]
+    implicit val orderThem = axle.quanta.unitOrder[Information.type, Double, JungDirectedGraph]
     //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity3[Information, Double]]
 
-    val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
+    val plot = new Plot[Rational, UnittedQuantity[Information.type, Double], D](
       List(("h", hm)),
       connect = true,
       drawKey = false,

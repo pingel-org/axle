@@ -22,7 +22,7 @@ class XTics[X, Y](
   tics: Seq[(X, String)],
   font: Font,
   fDrawLines: Boolean = true,
-  angle: UnittedQuantity[Angle, Double],
+  angle: UnittedQuantity[Angle.type, Double],
   color: Color = Color.black) extends Paintable {
 
   def paint(g2d: Graphics2D): Unit = {
@@ -36,7 +36,7 @@ class XTics[X, Y](
 
   val zeroDegrees = 0d *: °[Double]
 
-  def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: UnittedQuantity[Angle, Double] = zeroDegrees): Unit = {
+  def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: UnittedQuantity[Angle.type, Double] = zeroDegrees): Unit = {
 
     val (x, label) = xTic
     if (fDrawLine) {
@@ -57,7 +57,7 @@ class XTics[X, Y](
     g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
   }
 
-  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean = true, angle: UnittedQuantity[Angle, Double] = zeroDegrees): Unit =
+  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean = true, angle: UnittedQuantity[Angle.type, Double] = zeroDegrees): Unit =
     xTics.map({
       case (x, label) => drawXTic(g2d: Graphics2D, fontMetrics, (x, label), fDrawLines, angle)
     })

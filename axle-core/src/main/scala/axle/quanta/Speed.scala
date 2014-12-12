@@ -5,11 +5,11 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Speed() extends Quantum("http://en.wikipedia.org/wiki/Speed")
+case object Speed extends Quantum {
 
-object Speed {
+  type Q = Speed.type
 
-  type Q = Speed
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Speed"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -32,7 +32,7 @@ object Speed {
       (mps, c, ScaleInt(299792458)),
       (mph, speedLimit, ScaleInt(65)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  //    cgn(units[N], links)
 
 }

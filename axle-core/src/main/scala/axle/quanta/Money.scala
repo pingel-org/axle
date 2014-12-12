@@ -5,11 +5,11 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Money() extends Quantum("http://en.wikipedia.org/wiki/Money")
+case object Money extends Quantum {
 
-object Money {
+  type Q = Money.type
 
-  type Q = Money
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Money"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -22,7 +22,7 @@ object Money {
   def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
     List.empty
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  //    cgn(units[N], links)
 
 }

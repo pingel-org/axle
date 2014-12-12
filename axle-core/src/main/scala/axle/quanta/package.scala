@@ -7,9 +7,11 @@ import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
+import axle.algebra.Vertex
 import axle.quanta.Quantum
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
+import axle.algebra.Bijection
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -25,10 +27,12 @@ import spire.implicits._
 
 package object quanta {
 
-//  // Note: this is need for "def conversions"
-//  implicit def edgeEq[N: Eq]: Eq[N => N] = new Eq[N => N] {
-//    def eqv(x: N => N, y: N => N): Boolean = ???
-//  }
+  type CG[Q <: Quantum, DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
+
+  //  // Note: this is need for "def conversions"
+  //  implicit def edgeEq[N: Eq]: Eq[N => N] = new Eq[N => N] {
+  //    def eqv(x: N => N, y: N => N): Boolean = ???
+  //  }
 
   implicit def modulize[Q <: Quantum, N, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
@@ -45,8 +49,8 @@ package object quanta {
       def timesl(r: N, v: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(v.magnitude * r, v.unit)
     }
 
-//  def unit[Q <: Quantum, N](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
-//    UnitOfMeasurement(name, symbol, linkOpt)
+  //  def unit[Q <: Quantum, N](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
+  //    UnitOfMeasurement(name, symbol, linkOpt)
 
   implicit def uqPlottable[Q <: Quantum, N: Plottable]: Plottable[UnittedQuantity[Q, N]] =
     new Plottable[UnittedQuantity[Q, N]] {

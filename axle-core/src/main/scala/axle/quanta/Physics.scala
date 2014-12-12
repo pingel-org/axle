@@ -11,24 +11,24 @@ import axle.algebra._
 
 object Physics {
 
-//  val qs = Vector(
-//    Acceleration,
-//    Angle,
-//    Area,
-//    Distance,
-//    Energy,
-//    Flow,
-//    Force,
-//    Frequency,
-//    Information,
-//    Mass,
-//    Money,
-//    MoneyFlow,
-//    MoneyPerForce,
-//    Power,
-//    Speed,
-//    Time,
-//    Volume)
+  val qs = Vector(
+    Acceleration,
+    Angle,
+    Area,
+    Distance,
+    Energy,
+    Flow,
+    Force,
+    Frequency,
+    Information,
+    Mass,
+    Money,
+    MoneyFlow,
+    MoneyPerForce,
+    Power,
+    Speed,
+    Time,
+    Volume)
 
   // TODO derived units
   //      derive(mps.over[Time.type, this.type](second, this)),

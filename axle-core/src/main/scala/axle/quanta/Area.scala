@@ -5,11 +5,11 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Area() extends Quantum("http://en.wikipedia.org/wiki/Area")
+case object Area extends Quantum {
 
-object Area {
+  type Q = Area.type
 
-  type Q = Area
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Area"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -26,8 +26,7 @@ object Area {
       (m2, km2, Scale10s(6)),
       (cm2, m2, Scale10s(6)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links[N])
+  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  //    cgn(units[N], links[N])
 
 }
-

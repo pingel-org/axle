@@ -5,12 +5,12 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Frequency() extends Quantum("http://en.wikipedia.org/wiki/Frequency")
+case object Frequency extends Quantum {
 
-object Frequency {
+  type Q = Frequency.type
 
-  type Q = Frequency
-
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Frequency"
+  
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
 
@@ -33,7 +33,7 @@ object Frequency {
       (Hz, MHz, Scale10s(9)),
       (Hz, GHz, Scale10s(12)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+//    cgn(units[N], links)
 
 }

@@ -7,11 +7,11 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Angle() extends Quantum("http://en.wikipedia.org/wiki/Degree_(angle)")
+case object Angle extends Quantum {
 
-object Angle {
+  type Q = Angle.type
 
-  type Q = Angle
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Degree_(angle)"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -35,7 +35,7 @@ object Angle {
       (radian, circleRadians, ScaleDouble(2 * π)),
       (circleDegrees, circleRadians, BijectiveIdentity[N]))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  //    cgn(units[N], links)
 
 }

@@ -4,7 +4,6 @@ import scala.Vector
 
 import axle.quanta.Angle
 import axle.quanta.Angle.degree
-import axle.quanta.Angle.conversionGraph
 import axle.quanta.Distance
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
@@ -37,10 +36,10 @@ import spire.implicits.FloatAlgebra
 
 class AxleGLCanvas(
   scene: Scene,
-  fovy: UnittedQuantity[Angle, Float],
-  zNear: UnittedQuantity[Distance, Float],
-  zFar: UnittedQuantity[Distance, Float],
-  distanceUnit: UnitOfMeasurement[Distance, Float])
+  fovy: UnittedQuantity[Angle.type, Float],
+  zNear: UnittedQuantity[Distance.type, Float],
+  zFar: UnittedQuantity[Distance.type, Float],
+  distanceUnit: UnitOfMeasurement[Distance.type, Float])
   extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)

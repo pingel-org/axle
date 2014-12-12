@@ -17,7 +17,7 @@ class Text(
   y: Int,
   centered: Boolean = true,
   color: Color = Color.black,
-  angle: Option[UnittedQuantity[Angle, Double]] = None) extends Paintable {
+  angle: Option[UnittedQuantity[Angle.type, Double]] = None) extends Paintable {
 
   import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 

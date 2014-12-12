@@ -5,11 +5,11 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Acceleration() extends Quantum("http://en.wikipedia.org/wiki/Acceleration")
+case object Acceleration extends Quantum {
 
-object Acceleration {
+  type Q = Acceleration.type
 
-  type Q = Acceleration
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Degree_(angle)"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -25,7 +25,7 @@ object Acceleration {
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (mpsps, g, ScaleDouble(9.80665)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links[N])
+  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  //    cgn(units[N], links[N])
 
 }

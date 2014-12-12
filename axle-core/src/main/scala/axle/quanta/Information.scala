@@ -8,11 +8,11 @@ import spire.algebra.Field
 import spire.math.Rational
 import spire.math.Real
 
-case class Information() extends Quantum("http://en.wikipedia.org/wiki/Information")
+case object Information extends Quantum {
 
-object Information {
-
-  type Q = Information
+  type Q = Information.type
+  
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Information"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -40,7 +40,7 @@ object Information {
       (gigabyte, terabyte, Scale2s(10)),
       (terabyte, petabyte, Scale2s(10)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+//    cgn(units[N], links)
 
 }

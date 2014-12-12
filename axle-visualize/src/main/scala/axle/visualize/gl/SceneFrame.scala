@@ -16,7 +16,7 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 
-class SceneFrame(scene: Scene, width: Int, height: Int, zNear: UnittedQuantity[Distance, Float], zFar: UnittedQuantity[Distance, Float], fps: Int) {
+class SceneFrame(scene: Scene, width: Int, height: Int, zNear: UnittedQuantity[Distance.type, Float], zFar: UnittedQuantity[Distance.type, Float], fps: Int) {
 
   def run(): Unit = {
 

@@ -5,12 +5,12 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Flow() extends Quantum("http://en.wikipedia.org/wiki/Volumetric_flow_rate")
+case object Flow extends Quantum {
 
-object Flow {
+  type Q = Flow.type
 
-  type Q = Flow
-
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
+  
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
 
@@ -24,7 +24,7 @@ object Flow {
     List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (m3s, niagaraFalls, ScaleInt(1834)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+//    cgn(units[N], links)
 
 }

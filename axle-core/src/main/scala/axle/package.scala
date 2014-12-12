@@ -38,6 +38,7 @@ import axle.EnrichedInt
 import axle.EnrichedMutableBuffer
 import axle.forall
 import axle.thereexists
+import axle.algebra.DirectedGraph
 import spire.optional.unicode.Π
 import spire.optional.unicode.Σ
 import spire.algebra.BooleanAlgebra
@@ -154,8 +155,9 @@ package object axle {
     data flatMap { case (k1, inner) => inner.map({ case (k2, v) => (k2, k1) -> v }) } toMap
 
   def string[T: Show](t: T): String = implicitly[Show[T]].text(t)
-  
+
   def show[T: Show](t: T): Unit = println(string(t))
 
   def html[T: HtmlFrom](t: T): xml.Node = implicitly[HtmlFrom[T]].toHtml(t)
+
 }

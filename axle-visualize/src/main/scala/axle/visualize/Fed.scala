@@ -12,7 +12,7 @@ trait Fed[T] {
 
   var dataFeedActorOpt: Option[ActorRef] = None
 
-  def setFeeder(fn: T => T, interval: UnittedQuantity[Time, Double], system: ActorSystem): ActorRef = {
+  def setFeeder(fn: T => T, interval: UnittedQuantity[Time.type, Double], system: ActorSystem): ActorRef = {
     val feederActorRef = system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
     dataFeedActorOpt = Some(feederActorRef)
     feederActorRef

@@ -6,6 +6,6 @@ import spire.algebra.Field
 import spire.algebra.Order
 
 case class Position[N: Field: Order](
-  x: UnittedQuantity[Distance, N],
-  y: UnittedQuantity[Distance, N],
-  z: UnittedQuantity[Distance, N])
+  x: UnittedQuantity[Distance.type, N],
+  y: UnittedQuantity[Distance.type, N],
+  z: UnittedQuantity[Distance.type, N])

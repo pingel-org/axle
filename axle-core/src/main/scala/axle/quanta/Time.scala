@@ -5,11 +5,11 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Time() extends Quantum("http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)")
+case object Time extends Quantum {
 
-object Time {
+  type Q = Time.type
 
-  type Q = Time
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -100,7 +100,7 @@ object Time {
       (year, my, Scale10s(6)),
       (year, gy, Scale10s(9)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+//    cgn(units[N], links)
 
 }

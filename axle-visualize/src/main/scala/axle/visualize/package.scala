@@ -50,7 +50,7 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity[Time, Double])(implicit system: ActorSystem): ActorRef = {
+  def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity[Time.type, Double])(implicit system: ActorSystem): ActorRef = {
 
     val drawer = implicitly[Draw[T]]
 

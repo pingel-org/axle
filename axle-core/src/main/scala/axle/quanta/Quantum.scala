@@ -16,14 +16,16 @@ import spire.algebra.Eq
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Vertex
-import spire.implicits._
-import axle.syntax.directedgraph._
 
-abstract class Quantum(val wikipediaUrl: String)
+trait Quantum {
 
-object Quantum {
+  type Q <: Quantum
 
-  type CG[Q <: Quantum, DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
+  def wikipediaUrl: String
+
+  def units[N]: List[UnitOfMeasurement[Q, N]]
+
+  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]
 
   //  private[quanta] def trip2fns[N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
   //    val (from, to, multiplier) = trip
@@ -42,7 +44,7 @@ object Quantum {
     ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)])(implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q, N], N => N] =
     evDG.make[UnitOfMeasurement[Q, N], N => N](vps, ef)
 
-  private[quanta] def cgn[Q <: Quantum, N, DG[_, _]: DirectedGraph](
+  private def cgn[N, DG[_, _]: DirectedGraph](
     units: List[UnitOfMeasurement[Q, N]],
     links: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]): CG[Q, DG, N] =
     conversions[Q, N, DG](
@@ -57,5 +59,8 @@ object Quantum {
           }
         })
       })
+
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    cgn[N, DG](units[N], links[N])
 
 }

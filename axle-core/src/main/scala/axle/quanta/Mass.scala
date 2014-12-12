@@ -5,11 +5,6 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-//class Mass[DG[_, _]: DirectedGraph] extends Quantum {
-//
-//  type Q = this.type
-//
-//  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
 //    unit("gram", "g"),
 //    unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne")),
 //    unit("milligram", "mg"),
@@ -35,11 +30,7 @@ import spire.algebra.Field
 //    unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)")),
 //    unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto")),
 //    unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon")))
-//
-//  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] = {
-//
-//    implicit val baseCG = cgnDisconnected[N, DG]
-//
+
 //    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
 //      (tonne, megagram, BijectiveIdentity[N]),
 //      (milligram, gram, Scale10s(3)),
@@ -65,8 +56,7 @@ import spire.algebra.Field
 //      (exatonne, mercury, ScaleDouble(330.22)),
 //      (exatonne, pluto, ScaleDouble(13.05)),
 //      (exatonne, moon, ScaleDouble(73.477)))
-//  }
-//
+
 //  def milligram[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "milligram")
 //  def mg[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "milligram")
 //  def gram[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gram")
@@ -125,11 +115,11 @@ import spire.algebra.Field
 //}
 
 // "http://en.wikipedia.org/wiki/Mass"
-case class Mass() extends Quantum("http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)")
+case object Mass extends Quantum {
 
-object Mass {
+  type Q = Mass.type
 
-  type Q = Mass
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -160,13 +150,13 @@ object Mass {
   def pluto[N]: UnitOfMeasurement[Q, N] = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
   def moon[N]: UnitOfMeasurement[Q, N] = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
 
-  def units[N]: List[UnitOfMeasurement[Mass, N]] =
+  def units[N]: List[UnitOfMeasurement[Q, N]] =
     List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,
       petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
       uranus, venus, mars, mercury, pluto, moon)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])](
+  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (tonne, megagram, BijectiveIdentity[N]),
       (milligram, gram, Scale10s(3)),
       (gram, kilogram, Scale10s(3)),
@@ -192,7 +182,7 @@ object Mass {
       (exatonne, pluto, ScaleDouble(13.05)),
       (exatonne, moon, ScaleDouble(73.477)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  //    cgn(units[N], links)
 
 }

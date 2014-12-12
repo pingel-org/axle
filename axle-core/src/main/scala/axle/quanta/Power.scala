@@ -5,11 +5,11 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Power() extends Quantum("http://en.wikipedia.org/wiki/Power_(physics)")
+case object Power extends Quantum {
 
-object Power {
+  type Q = Power.type
 
-  type Q = Power
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Power_(physics)"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -41,7 +41,7 @@ object Power {
       (megawatt, hooverDam, ScaleInt(2080)),
       (horsepower, mustangGT, ScaleInt(420)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+//    cgn(units[N], links)
 
 }

@@ -14,6 +14,8 @@ import axle.quanta.UnittedQuantity
 import spire.algebra.Eq
 import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra
+import axle.jung.JungDirectedGraph
+import axle.jung.JungDirectedGraph.directedGraphJung
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
@@ -27,6 +29,8 @@ case class ScaledArea2D[X, Y](
 
   val drawableWidth = width - (2 * pad)
   val drawableHeight = height - (2 * pad)
+
+  implicit val cgAngle = Angle.conversionGraph[Double, JungDirectedGraph]
 
   def framePoint(sp: Point2D[X, Y]): Point = new Point(
     pad + (drawableWidth * lengthX.portion(minX, sp.x, maxX)).toInt,
@@ -77,8 +81,7 @@ case class ScaledArea2D[X, Y](
     }
   }
 
-  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: UnittedQuantity[Angle, Double]): Unit = {
-    import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
+  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: UnittedQuantity[Angle.type, Double]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
       val a = (angle in rad[Double]).magnitude

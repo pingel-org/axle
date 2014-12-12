@@ -5,12 +5,6 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-//class Volume[DG[_, _]: DirectedGraph] extends Quantum {
-//
-//  def wikipediaUrl = "http://en.wikipedia.org/wiki/Volume"
-//
-//  type Q = this.type
-//
 //  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
 //    unit("m3", "m3"), // derive
 //    unit("km3", "km3"), // derive
@@ -41,8 +35,7 @@ import spire.algebra.Field
 //      (wineBottle, salmanazar, ScaleInt(12)),
 //      (wineBottle, balthazar, ScaleInt(16)),
 //      (wineBottle, nebuchadnezzar, ScaleInt(20)))
-//  }
-//
+
 //  def m3[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "m3")
 //  def km3[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "km3")
 //  def cm3[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "cm3")
@@ -60,14 +53,12 @@ import spire.algebra.Field
 //  def salmanazar[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "salmanazar")
 //  def balthazar[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "balthazar")
 //  def nebuchadnezzar[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "nebuchadnezzar")
-//
-//}
 
-case class Volume() extends Quantum("http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)")
+case object Volume extends Quantum {
 
-object Volume {
+  type Q = Volume.type
 
-  type Q = Volume
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Volume"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -105,7 +96,7 @@ object Volume {
       (wineBottle, balthazar, ScaleInt(16)),
       (wineBottle, nebuchadnezzar, ScaleInt(20)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links)
+  //  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  //    cgn(units[N], links)
 
 }

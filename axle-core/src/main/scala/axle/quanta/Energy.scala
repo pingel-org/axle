@@ -5,11 +5,11 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Energy() extends Quantum("http://en.wikipedia.org/wiki/Energy")
+case object Energy extends Quantum {
 
-object Energy {
+  type Q = Energy.type
 
-  type Q = Energy
+  def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Energy"
 
   def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement[Q, N](name, symbol, wiki)
@@ -41,7 +41,7 @@ object Energy {
       (t, mt, Scale10s(6)),
       (t, gt, Scale10s(9)))
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units[N], links[N])
+//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+//    cgn(units[N], links[N])
 
 }

@@ -27,7 +27,7 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 
-abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance, Float]) {
+abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance.type, Float]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
@@ -63,13 +63,13 @@ abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance, Float]) {
       (z in distanceUnit).magnitude).toArray, 0)
   }
 
-  def translate(gl: GL2, x: UnittedQuantity[Distance, Float], y: UnittedQuantity[Distance, Float], z: UnittedQuantity[Distance, Float]): Unit =
+  def translate(gl: GL2, x: UnittedQuantity[Distance.type, Float], y: UnittedQuantity[Distance.type, Float], z: UnittedQuantity[Distance.type, Float]): Unit =
     gl.glTranslatef(
       (x in distanceUnit).magnitude,
       (y in distanceUnit).magnitude,
       (z in distanceUnit).magnitude)
 
-  def rotate(gl: GL2, a: UnittedQuantity[Angle, Float], x: Float, y: Float, z: Float): Unit =
+  def rotate(gl: GL2, a: UnittedQuantity[Angle.type, Float], x: Float, y: Float, z: Float): Unit =
     gl.glRotatef((a in degree[Float]).magnitude, x, y, z)
 
   def textureUrls: Seq[(URL, String)]
