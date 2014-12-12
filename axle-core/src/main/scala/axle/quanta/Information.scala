@@ -8,31 +8,31 @@ import spire.algebra.Field
 import spire.math.Rational
 import spire.math.Real
 
-case class Information() extends Quantum
+case class Information() extends Quantum("http://en.wikipedia.org/wiki/Information")
 
-object Information extends Quantum {
+object Information {
 
-  def wikipediaUrl = "http://en.wikipedia.org/wiki/Information"
+  type Q = Information
 
-  def unit[N: Field: Eq](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Information, N](name, symbol, wiki)
+  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Q, N](name, symbol, wiki)
 
-  def bit[N: Field: Eq] = unit("bit", "b")
-  def nibble[N: Field: Eq] = unit("nibble", "nibble")
-  def byte[N: Field: Eq] = unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte"))
-  def kilobyte[N: Field: Eq] = unit("kilobyte", "KB")
-  def megabyte[N: Field: Eq] = unit("megabyte", "MB")
-  def gigabyte[N: Field: Eq] = unit("gigabyte", "GB")
-  def terabyte[N: Field: Eq] = unit("terabyte", "TB")
-  def petabyte[N: Field: Eq] = unit("petabyte", "PB")
+  def bit[N]: UnitOfMeasurement[Q, N] = unit("bit", "b")
+  def nibble[N]: UnitOfMeasurement[Q, N] = unit("nibble", "nibble")
+  def byte[N]: UnitOfMeasurement[Q, N] = unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte"))
+  def kilobyte[N]: UnitOfMeasurement[Q, N] = unit("kilobyte", "KB")
+  def megabyte[N]: UnitOfMeasurement[Q, N] = unit("megabyte", "MB")
+  def gigabyte[N]: UnitOfMeasurement[Q, N] = unit("gigabyte", "GB")
+  def terabyte[N]: UnitOfMeasurement[Q, N] = unit("terabyte", "TB")
+  def petabyte[N]: UnitOfMeasurement[Q, N] = unit("petabyte", "PB")
 
   // TODO PB TB GB MB KB
 
-  def units[N: Field: Eq]: List[UnitOfMeasurement[Information, N]] =
+  def units[N]: List[UnitOfMeasurement[Q, N]] =
     List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
 
-  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])](
+  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (bit, byte, Scale2s(3)),
       (byte, kilobyte, Scale2s(10)),
       (kilobyte, megabyte, Scale2s(10)),
@@ -41,6 +41,6 @@ object Information extends Quantum {
       (terabyte, petabyte, Scale2s(10)))
 
   implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units, links)
+    Quantum.cgn(units[N], links)
 
 }

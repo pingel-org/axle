@@ -25,10 +25,10 @@ import spire.implicits._
 
 package object quanta {
 
-  // Note: this is need for "def conversions"
-  implicit def edgeEq[N: Eq]: Eq[N => N] = new Eq[N => N] {
-    def eqv(x: N => N, y: N => N): Boolean = ???
-  }
+//  // Note: this is need for "def conversions"
+//  implicit def edgeEq[N: Eq]: Eq[N => N] = new Eq[N => N] {
+//    def eqv(x: N => N, y: N => N): Boolean = ???
+//  }
 
   implicit def modulize[Q <: Quantum, N, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {

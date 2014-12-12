@@ -1,53 +1,47 @@
 package axle.quanta
 
-import axle.algebra.Vertex
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.math.Rational
-import spire.math.Real
-import spire.implicits._
 
-//class Energy[DG[_, _]: DirectedGraph] extends Quantum {
-//  
-//  def wikipediaUrl = "http://en.wikipedia.org/wiki/Energy"
-//
-//  type Q = this.type
-//
-//  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-//    unit("kwh", "kwh"), // derive
-//    unit("joule", "J"),
-//    unit("kilojoule", "KJ"),
-//    unit("megajoule", "MJ"),
-//    unit("ton TNT", "T", Some("http://en.wikipedia.org/wiki/TNT_equivalent")),
-//    unit("kiloton", "KT"),
-//    unit("megaton", "MT"),
-//    unit("gigaton", "GT"))
-//
-//  def links[N: Field: Eq] = {
-//    implicit val baseCG = cgnDisconnected[N, DG]
-//    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
-//      (megajoule, t, ScaleDouble(4.184)),
-//      (joule, kilojoule, Scale10s(3)),
-//      (joule, megajoule, Scale10s(6)),
-//      (t, kt, Scale10s(3)),
-//      (t, mt, Scale10s(6)),
-//      (t, gt, Scale10s(9)))
-//  }
-//
-//  def kwh[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kwh")
-//  def joule[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "joule")
-//  def kilojoule[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilojoule")
-//  def megajoule[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megajoule")
-//  def tonTNT[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "tonTNT")
-//  def t[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "tonTNT")
-//  def kiloton[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kiloton")
-//  def kt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kiloton")
-//  def megaton[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megaton")
-//  def mt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megaton")
-//  def gt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gigaton")
-//
-//  // TODO lazy val castleBravo = 15 *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
-//
-//}
+case class Energy() extends Quantum("http://en.wikipedia.org/wiki/Energy")
+
+object Energy {
+
+  type Q = Energy
+
+  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Q, N](name, symbol, wiki)
+
+  def kwh[N]: UnitOfMeasurement[Q, N] = unit("kwh", "kwh") // derive
+  def joule[N]: UnitOfMeasurement[Q, N] = unit("joule", "J")
+  def kilojoule[N]: UnitOfMeasurement[Q, N] = unit("kilojoule", "KJ")
+  def megajoule[N]: UnitOfMeasurement[Q, N] = unit("megajoule", "MJ")
+  def tonTNT[N]: UnitOfMeasurement[Q, N] = unit("ton TNT", "T", Some("http://en.wikipedia.org/wiki/TNT_equivalent"))
+  def t[N]: UnitOfMeasurement[Q, N] = tonTNT[N]
+  def kiloton[N]: UnitOfMeasurement[Q, N] = unit("kiloton", "KT")
+  def kt[N] = kiloton[N]
+  def megaton[N]: UnitOfMeasurement[Q, N] = unit("megaton", "MT")
+  def mt[N] = megaton[N]
+  def gigaton[N]: UnitOfMeasurement[Q, N] = unit("gigaton", "GT")
+  def gt[N] = gigaton[N]
+
+  // TODO lazy val castleBravo = 15 *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
+
+  def units[N]: List[UnitOfMeasurement[Q, N]] =
+    List(kwh, joule, kilojoule, megajoule, tonTNT, kiloton, megaton, gigaton)
+
+  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (megajoule, t, ScaleDouble(4.184)),
+      (joule, kilojoule, Scale10s(3)),
+      (joule, megajoule, Scale10s(6)),
+      (t, kt, Scale10s(3)),
+      (t, mt, Scale10s(6)),
+      (t, gt, Scale10s(9)))
+
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    Quantum.cgn(units[N], links[N])
+
+}

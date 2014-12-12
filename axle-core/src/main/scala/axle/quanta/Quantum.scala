@@ -19,24 +19,24 @@ import axle.algebra.Vertex
 import spire.implicits._
 import axle.syntax.directedgraph._
 
-trait Quantum
+abstract class Quantum(val wikipediaUrl: String)
 
 object Quantum {
 
   type CG[Q <: Quantum, DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
 
-//  private[quanta] def trip2fns[N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
-//    val (from, to, multiplier) = trip
-//    Vector(
-//      (from, to, _ * multiplier),
-//      (to, from, _ / multiplier))
-//  }
-//  
-//  private[quanta] def trips2fns[N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
-//    trips.flatMap(trip2fns(_))
-//
-//  def cgnDisconnected[N: Field: Eq, DG[_, _]: DirectedGraph]: CG[DG, N] = conversions(units, (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => Nil)
-  
+  //  private[quanta] def trip2fns[N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
+  //    val (from, to, multiplier) = trip
+  //    Vector(
+  //      (from, to, _ * multiplier),
+  //      (to, from, _ / multiplier))
+  //  }
+  //  
+  //  private[quanta] def trips2fns[N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
+  //    trips.flatMap(trip2fns(_))
+  //
+  //  def cgnDisconnected[N: Field: Eq, DG[_, _]: DirectedGraph]: CG[DG, N] = conversions(units, (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => Nil)
+
   private def conversions[Q <: Quantum, N, DG[_, _]](
     vps: Seq[UnitOfMeasurement[Q, N]],
     ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)])(implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q, N], N => N] =
@@ -58,5 +58,4 @@ object Quantum {
         })
       })
 
-      
 }

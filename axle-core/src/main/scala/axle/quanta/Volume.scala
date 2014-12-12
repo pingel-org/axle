@@ -1,12 +1,9 @@
 package axle.quanta
 
-import axle.algebra.Vertex
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.math.Rational
-import spire.math.Real
 
 //class Volume[DG[_, _]: DirectedGraph] extends Quantum {
 //
@@ -66,34 +63,36 @@ import spire.math.Real
 //
 //}
 
-case class Volume() extends Quantum
+case class Volume() extends Quantum("http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)")
 
-object Volume extends Quantum {
+object Volume {
 
-  def unit[N: Field: Eq](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Volume, N](name, symbol, wiki)
+  type Q = Volume
 
-  def m3[N: Field: Eq] = unit("m3", "m3") // derive
-  def km3[N: Field: Eq] = unit("km3", "km3") // derive
-  def cm3[N: Field: Eq] = unit("cm3", "cm3") // derive
-  def greatLakes[N: Field: Eq] = unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
-  def liter[N: Field: Eq] = unit("liter", "L", Some("http://en.wikipedia.org/wiki/Liter")) // TODO: also symbol ℓ
-  def milliliter[N: Field: Eq] = unit("milliliter", "mL")
-  def wineBottle[N: Field: Eq] = unit("wine bottle", "wineBottle", Some("http://en.wikipedia.org/wiki/Wine_bottle"))
-  def magnum[N: Field: Eq] = unit("magnum", "magnum")
-  def jeroboam[N: Field: Eq] = unit("jeroboam", "jeroboam")
-  def rehoboam[N: Field: Eq] = unit("rehoboam", "rehoboam")
-  def methuselah[N: Field: Eq] = unit("methuselah", "methuselah")
-  def salmanazar[N: Field: Eq] = unit("salmanazar", "salmanazar")
-  def balthazar[N: Field: Eq] = unit("balthazar", "balthazar")
-  def nebuchadnezzar[N: Field: Eq] = unit("nebuchadnezzar", "nebuchadnezzar")
+  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Q, N](name, symbol, wiki)
 
-  def units[N: Field: Eq]: List[UnitOfMeasurement[Volume, N]] =
+  def m3[N]: UnitOfMeasurement[Q, N] = unit("m3", "m3") // derive
+  def km3[N]: UnitOfMeasurement[Q, N] = unit("km3", "km3") // derive
+  def cm3[N]: UnitOfMeasurement[Q, N] = unit("cm3", "cm3") // derive
+  def greatLakes[N]: UnitOfMeasurement[Q, N] = unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
+  def liter[N]: UnitOfMeasurement[Q, N] = unit("liter", "L", Some("http://en.wikipedia.org/wiki/Liter")) // TODO: also symbol ℓ
+  def milliliter[N]: UnitOfMeasurement[Q, N] = unit("milliliter", "mL")
+  def wineBottle[N]: UnitOfMeasurement[Q, N] = unit("wine bottle", "wineBottle", Some("http://en.wikipedia.org/wiki/Wine_bottle"))
+  def magnum[N]: UnitOfMeasurement[Q, N] = unit("magnum", "magnum")
+  def jeroboam[N]: UnitOfMeasurement[Q, N] = unit("jeroboam", "jeroboam")
+  def rehoboam[N]: UnitOfMeasurement[Q, N] = unit("rehoboam", "rehoboam")
+  def methuselah[N]: UnitOfMeasurement[Q, N] = unit("methuselah", "methuselah")
+  def salmanazar[N]: UnitOfMeasurement[Q, N] = unit("salmanazar", "salmanazar")
+  def balthazar[N]: UnitOfMeasurement[Q, N] = unit("balthazar", "balthazar")
+  def nebuchadnezzar[N]: UnitOfMeasurement[Q, N] = unit("nebuchadnezzar", "nebuchadnezzar")
+
+  def units[N]: List[UnitOfMeasurement[Q, N]] =
     List(m3, km3, cm3, greatLakes, liter, milliliter, wineBottle, magnum, jeroboam, rehoboam,
       methuselah, salmanazar, balthazar, nebuchadnezzar)
 
-  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Volume, N], UnitOfMeasurement[Volume, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Volume, N], UnitOfMeasurement[Volume, N], Bijection[N, N])](
+  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
       (km3, greatLakes, ScaleInt(22671)),
       (milliliter, liter, Scale10s(3)),
       (cm3, milliliter, BijectiveIdentity[N]),
@@ -107,6 +106,6 @@ object Volume extends Quantum {
       (wineBottle, nebuchadnezzar, ScaleInt(20)))
 
   implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units, links)
+    Quantum.cgn(units[N], links)
 
 }

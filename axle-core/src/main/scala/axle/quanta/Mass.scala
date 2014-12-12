@@ -1,12 +1,9 @@
 package axle.quanta
 
-import axle.algebra.Vertex
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.math.Rational
-import spire.math.Real
 
 //class Mass[DG[_, _]: DirectedGraph] extends Quantum {
 //
@@ -127,48 +124,48 @@ import spire.math.Real
 //
 //}
 
-case class Mass() extends Quantum
+// "http://en.wikipedia.org/wiki/Mass"
+case class Mass() extends Quantum("http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)")
 
-object Mass extends Quantum {
+object Mass {
 
-  def wikipediaUrl = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
-  // "http://en.wikipedia.org/wiki/Mass"
-  
-  def unit[N: Field: Eq](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Mass, N](name, symbol, wiki)
+  type Q = Mass
 
-  def gram[N: Field: Eq] = unit("gram", "g")
-  def tonne[N: Field: Eq] = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
-  def milligram[N: Field: Eq] = unit("milligram", "mg")
-  def kilogram[N: Field: Eq] = unit("kilogram", "Kg")
-  def megagram[N: Field: Eq] = unit("megagram", "Mg")
-  def kilotonne[N: Field: Eq] = unit("kilotonne", "KT")
-  def megatonne[N: Field: Eq] = unit("megatonne", "MT")
-  def gigatonne[N: Field: Eq] = unit("gigatonne", "GT")
-  def teratonne[N: Field: Eq] = unit("teratonne", "TT")
-  def petatonne[N: Field: Eq] = unit("petatonne", "PT")
-  def exatonne[N: Field: Eq] = unit("exatonne", "ET")
-  def zettatonne[N: Field: Eq] = unit("zettatonne", "ZT")
-  def yottatonne[N: Field: Eq] = unit("yottatonne", "YT")
-  def man[N: Field: Eq] = unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight"))
-  def earth[N: Field: Eq] = unit("earth", "M⊕", Some("http://en.wikipedia.org/wiki/Earth"))
-  def sun[N: Field: Eq] = unit("sun", "M☉", Some("http://en.wikipedia.org/wiki/Solar_mass"))
-  def jupiter[N: Field: Eq] = unit("jupiter", "M♃", Some("http://en.wikipedia.org/wiki/Jupiter"))
-  def saturn[N: Field: Eq] = unit("saturn", "M♄", Some("http://en.wikipedia.org/wiki/Saturn"))
-  def neptune[N: Field: Eq] = unit("neptune", "M♆", Some("http://en.wikipedia.org/wiki/Neptune"))
-  def uranus[N: Field: Eq] = unit("uranus", "M♅", Some("http://en.wikipedia.org/wiki/Uranus"))
-  def venus[N: Field: Eq] = unit("venus", "M♀", Some("http://en.wikipedia.org/wiki/Venus"))
-  def mars[N: Field: Eq] = unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars"))
-  def mercury[N: Field: Eq] = unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
-  def pluto[N: Field: Eq] = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
-  def moon[N: Field: Eq] = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
+  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Q, N](name, symbol, wiki)
 
-  def units[N: Field: Eq]: List[UnitOfMeasurement[Mass, N]] =
+  def gram[N]: UnitOfMeasurement[Q, N] = unit("gram", "g")
+  def tonne[N]: UnitOfMeasurement[Q, N] = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
+  def milligram[N]: UnitOfMeasurement[Q, N] = unit("milligram", "mg")
+  def kilogram[N]: UnitOfMeasurement[Q, N] = unit("kilogram", "Kg")
+  def megagram[N]: UnitOfMeasurement[Q, N] = unit("megagram", "Mg")
+  def kilotonne[N]: UnitOfMeasurement[Q, N] = unit("kilotonne", "KT")
+  def megatonne[N]: UnitOfMeasurement[Q, N] = unit("megatonne", "MT")
+  def gigatonne[N]: UnitOfMeasurement[Q, N] = unit("gigatonne", "GT")
+  def teratonne[N]: UnitOfMeasurement[Q, N] = unit("teratonne", "TT")
+  def petatonne[N]: UnitOfMeasurement[Q, N] = unit("petatonne", "PT")
+  def exatonne[N]: UnitOfMeasurement[Q, N] = unit("exatonne", "ET")
+  def zettatonne[N]: UnitOfMeasurement[Q, N] = unit("zettatonne", "ZT")
+  def yottatonne[N]: UnitOfMeasurement[Q, N] = unit("yottatonne", "YT")
+  def man[N]: UnitOfMeasurement[Q, N] = unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight"))
+  def earth[N]: UnitOfMeasurement[Q, N] = unit("earth", "M⊕", Some("http://en.wikipedia.org/wiki/Earth"))
+  def sun[N]: UnitOfMeasurement[Q, N] = unit("sun", "M☉", Some("http://en.wikipedia.org/wiki/Solar_mass"))
+  def jupiter[N]: UnitOfMeasurement[Q, N] = unit("jupiter", "M♃", Some("http://en.wikipedia.org/wiki/Jupiter"))
+  def saturn[N]: UnitOfMeasurement[Q, N] = unit("saturn", "M♄", Some("http://en.wikipedia.org/wiki/Saturn"))
+  def neptune[N]: UnitOfMeasurement[Q, N] = unit("neptune", "M♆", Some("http://en.wikipedia.org/wiki/Neptune"))
+  def uranus[N]: UnitOfMeasurement[Q, N] = unit("uranus", "M♅", Some("http://en.wikipedia.org/wiki/Uranus"))
+  def venus[N]: UnitOfMeasurement[Q, N] = unit("venus", "M♀", Some("http://en.wikipedia.org/wiki/Venus"))
+  def mars[N]: UnitOfMeasurement[Q, N] = unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars"))
+  def mercury[N]: UnitOfMeasurement[Q, N] = unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
+  def pluto[N]: UnitOfMeasurement[Q, N] = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
+  def moon[N]: UnitOfMeasurement[Q, N] = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
+
+  def units[N]: List[UnitOfMeasurement[Mass, N]] =
     List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,
       petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
       uranus, venus, mars, mercury, pluto, moon)
 
-  def links[N: Field: Eq]: Seq[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])] =
+  def links[N: Field]: Seq[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])] =
     List[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])](
       (tonne, megagram, BijectiveIdentity[N]),
       (milligram, gram, Scale10s(3)),
@@ -196,6 +193,6 @@ object Mass extends Quantum {
       (exatonne, moon, ScaleDouble(73.477)))
 
   implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    Quantum.cgn(units, links)
+    Quantum.cgn(units[N], links)
 
 }

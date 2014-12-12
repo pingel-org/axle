@@ -1,55 +1,47 @@
 package axle.quanta
 
-import axle.algebra.Vertex
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.math.Rational
-import spire.math.Real
-import spire.implicits._
 
-//class Power[DG[_, _]: DirectedGraph] extends Quantum {
-//
-//  def wikipediaUrl = "http://en.wikipedia.org/wiki/Power_(physics)"
-//
-//  type Q = this.type
-//
-//  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-//    unit("watt", "W"),
-//    unit("kilowatt", "KW"),
-//    unit("megawatt", "MW"),
-//    unit("gigawatt", "GW"),
-//    unit("milliwatt", "mW"),
-//    unit("horsepower", "hp"),
-//    unit("light bulb", "light bulb"),
-//    unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam")),
-//    unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang")))
-//
-//  def links[N: Field: Eq] = {
-//    implicit val baseCG = cgnDisconnected[N, DG]
-//    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
-//      (watt, kilowatt, Scale10s(3)),
-//      (kilowatt, megawatt, Scale10s(3)),
-//      (megawatt, gigawatt, Scale10s(3)),
-//      (milliwatt, watt, Scale10s(3)),
-//      (watt, lightBulb, ScaleInt(60)),
-//      (megawatt, hooverDam, ScaleInt(2080)),
-//      (horsepower, mustangGT, ScaleInt(420)))
-//  }
-//
-//  def milliwatt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "milliwatt")
-//  def watt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "watt")
-//  def W[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "watt")
-//  def kilowatt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilowatt")
-//  def kW[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilowatt")
-//  def megawatt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megawatt")
-//  def MW[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megawatt")
-//  def gigawatt[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gigawatt")
-//  def GW[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gigawatt")
-//  def lightBulb[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "lightBulb")
-//  def hooverDam[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "hooverDam")
-//  def horsepower[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "horsepower")
-//  def mustangGT[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "mustangGT")
-//
-//}
+case class Power() extends Quantum("http://en.wikipedia.org/wiki/Power_(physics)")
+
+object Power {
+
+  type Q = Power
+
+  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Q, N](name, symbol, wiki)
+
+  def watt[N]: UnitOfMeasurement[Q, N] = unit("watt", "W")
+  def W[N] = watt[N]
+  def kilowatt[N]: UnitOfMeasurement[Q, N] = unit("kilowatt", "KW")
+  def kW[N] = kilowatt[N]
+  def megawatt[N]: UnitOfMeasurement[Q, N] = unit("megawatt", "MW")
+  def MW[N] = megawatt[N]
+  def gigawatt[N]: UnitOfMeasurement[Q, N] = unit("gigawatt", "GW")
+  def GW[N] = gigawatt[N]
+  def milliwatt[N]: UnitOfMeasurement[Q, N] = unit("milliwatt", "mW")
+  def horsepower[N]: UnitOfMeasurement[Q, N] = unit("horsepower", "hp")
+  def lightBulb[N]: UnitOfMeasurement[Q, N] = unit("light bulb", "light bulb")
+  def hooverDam[N]: UnitOfMeasurement[Q, N] = unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
+  def mustangGT[N]: UnitOfMeasurement[Q, N] = unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
+
+  def units[N]: List[UnitOfMeasurement[Q, N]] =
+    List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
+
+  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (watt, kilowatt, Scale10s(3)),
+      (kilowatt, megawatt, Scale10s(3)),
+      (megawatt, gigawatt, Scale10s(3)),
+      (milliwatt, watt, Scale10s(3)),
+      (watt, lightBulb, ScaleInt(60)),
+      (megawatt, hooverDam, ScaleInt(2080)),
+      (horsepower, mustangGT, ScaleInt(420)))
+
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    Quantum.cgn(units[N], links)
+
+}

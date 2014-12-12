@@ -1,41 +1,39 @@
 package axle.quanta
 
-import axle.algebra.Vertex
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.math.Rational
-import spire.math.Real
-import spire.implicits._
 
-//class Frequency[DG[_, _]: DirectedGraph] extends Quantum {
-//  
-//  def wikipediaUrl = "http://en.wikipedia.org/wiki/Frequency"
-//
-//  type Q = this.type
-//
-//  def units[N: Field: Eq] = List[UnitOfMeasurement[Q, N]](
-//    unit("Hertz", "Hz", Some("http://en.wikipedia.org/wiki/Hertz")),
-//    unit("Kilohertz", "KHz"),
-//    unit("Megahertz", "MHz"),
-//    unit("Gigahertz", "GHz"))
-//
-//  def links[N: Field: Eq] = {
-//    implicit val baseCG = cgnDisconnected[N, DG]
-//    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
-//      (Hz, KHz, Scale10s(3)),
-//      (Hz, MHz, Scale10s(9)),
-//      (Hz, GHz, Scale10s(12)))
-//  }
-//
-//  def hertz[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "hertz")
-//  def Hz[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "Hz")
-//  def kilohertz[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "kilohertz")
-//  def KHz[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "KHz")
-//  def megahertz[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "megahertz")
-//  def MHz[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "MHz")
-//  def gigahertz[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "gigahertz")
-//  def GHz[N: Field: Eq](implicit cg: CG[DG, N]) = byName(cg, "GHz")
-//
-//}
+case class Frequency() extends Quantum("http://en.wikipedia.org/wiki/Frequency")
+
+object Frequency {
+
+  type Q = Frequency
+
+  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Q, N](name, symbol, wiki)
+
+  def degree[N]: UnitOfMeasurement[Q, N] = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(Frequency)"))
+  def hertz[N]: UnitOfMeasurement[Q, N] = unit("Hertz", "Hz", Some("http://en.wikipedia.org/wiki/Hertz"))
+  def Hz[N] = hertz[N]
+  def kilohertz[N]: UnitOfMeasurement[Q, N] = unit("Kilohertz", "KHz")
+  def KHz[N] = kilohertz[N]
+  def megahertz[N]: UnitOfMeasurement[Q, N] = unit("Megahertz", "MHz")
+  def MHz[N] = megahertz[N]
+  def gigahertz[N]: UnitOfMeasurement[Q, N] = unit("Gigahertz", "GHz")
+  def GHz[N] = gigahertz[N]
+
+  def units[N]: List[UnitOfMeasurement[Q, N]] =
+    List(degree)
+
+  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+      (Hz, KHz, Scale10s(3)),
+      (Hz, MHz, Scale10s(9)),
+      (Hz, GHz, Scale10s(12)))
+
+  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    Quantum.cgn(units[N], links)
+
+}
