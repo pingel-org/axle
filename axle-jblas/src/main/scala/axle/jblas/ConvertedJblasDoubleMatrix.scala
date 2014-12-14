@@ -2,9 +2,20 @@ package axle.jblas
 
 import org.jblas.DoubleMatrix
 import axle.algebra.FunctionPair
+import axle.algebra.Functor
 import axle.algebra.Matrix
+import spire.algebra.AdditiveMonoid
+import spire.algebra.AdditiveCMonoid
+import spire.algebra.AdditiveSemigroup
+import spire.algebra.AdditiveCSemigroup
+import spire.algebra.AdditiveGroup
+import spire.algebra.AdditiveAbGroup
+import spire.algebra.MultiplicativeMonoid
+import spire.algebra.MultiplicativeSemigroup
+import spire.algebra.Ring
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
+import scala.reflect.ClassTag
 
 case class ConvertedJblasDoubleMatrix[T](jdm: DoubleMatrix)(implicit val fp: FunctionPair[Double, T])
 
@@ -34,7 +45,8 @@ object ConvertedJblasDoubleMatrix {
         matrix[T](jblas)
       }
 
-      def toList[T](m: ConvertedJblasDoubleMatrix[T]): List[T] = m.jdm.toArray.toList.map(m.fp.apply _)
+      def toList[T](m: ConvertedJblasDoubleMatrix[T]): List[T] =
+        m.jdm.toArray.toList.map(m.fp.apply _)
 
       def column[T](m: ConvertedJblasDoubleMatrix[T])(j: Int): ConvertedJblasDoubleMatrix[T] =
         matrix(m.jdm.getColumn(j))(m.fp)
@@ -50,7 +62,9 @@ object ConvertedJblasDoubleMatrix {
       def isScalar[T](m: ConvertedJblasDoubleMatrix[T]): Boolean = m.jdm.isScalar
 
       def dup[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.dup)(m.fp)
+      
       def negate[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.neg)(m.fp)
+      
       def transpose[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.transpose)(m.fp)
       def diag[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = matrix(m.jdm.diag)(m.fp)
       def invert[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[Double] = matrix(org.jblas.Solve.solve(m.jdm, DoubleMatrix.eye(m.jdm.rows)))
