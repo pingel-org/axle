@@ -49,8 +49,8 @@ case class LinearFeatureNormalizer[M[_]](X: M[Double])(implicit ev: Matrix[M]) e
 case class ZScoreFeatureNormalizer[M[_]](X: M[Double])(implicit ev: Matrix[M]) extends Normalize[M] {
 
   lazy val μs = X.columnMeans
-  lazy val σ2s = X.std
-  val nd = X.zscore
+  lazy val σ2s = std(X)
+  val nd = zscore(X)
 
   def normalizedData: M[Double] = nd
 
@@ -68,10 +68,10 @@ case class ZScoreFeatureNormalizer[M[_]](X: M[Double])(implicit ev: Matrix[M]) e
 case class PCAFeatureNormalizer[M[_]](cutoff: Double, X: M[Double])(implicit ev: Matrix[M]) extends Normalize[M] {
 
   lazy val μs = X.columnMeans
-  lazy val σ2s = X.std
-  val zd = X.zscore
-  val (u, s) = zd.pca(0.95)
-  val k = s.numComponentsForCutoff(cutoff)
+  lazy val σ2s = std(X)
+  val zd = zscore(X)
+  val (u, s) = pca(zd, 0.95)
+  val k = numComponentsForCutoff(s, cutoff)
   val Uk = u.slice(0 until u.rows, 0 until k)
 
   def normalizedData: M[Double] = zd ⨯ Uk

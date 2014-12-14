@@ -109,16 +109,6 @@ final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
 
   def sumsq = ev.sumsq(lhs)
 
-  def cov = ev.cov(lhs)
-
-  def std = ev.std(lhs)
-
-  def zscore = ev.zscore(lhs)
-
-  def pca(cutoff: Double = 0.95) = ev.pca(lhs, cutoff)
-
-  def numComponentsForCutoff(cutoff: Double) = ev.numComponentsForCutoff(lhs, cutoff)
-
   // Aliases
 
   def t = ev.transpose(lhs)

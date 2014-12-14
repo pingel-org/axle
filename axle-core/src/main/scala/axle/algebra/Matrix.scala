@@ -156,15 +156,15 @@ trait Matrix[M[_]] {
 
   def sumsq[T](m: M[T]): M[T]
 
-  def cov[T](m: M[T]): M[T]
+  def cov(m: M[Double]): M[Double]
 
-  def std[T](m: M[T]): M[T]
+  def std(m: M[Double]): M[Double]
 
-  def zscore[T](m: M[T]): M[T]
+  def zscore(m: M[Double]): M[Double]
 
-  def pca[T](Xnorm: M[T], cutoff: Double): (M[T], M[T])
+  def pca(Xnorm: M[Double], cutoff: Double): (M[Double], M[Double])
 
-  def numComponentsForCutoff[T](s: M[T], cutoff: Double): Int
+  def numComponentsForCutoff(s: M[Double], cutoff: Double): Int
 
   def zeros[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): M[T]
   def ones[T](m: Int, n: Int)(implicit fp: FunctionPair[Double, T]): M[T]

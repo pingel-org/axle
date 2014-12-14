@@ -19,7 +19,17 @@ trait MatrixSyntax {
 
   def matrix[M[_]: Matrix, A](m: Int, n: Int, f: (Int, Int) => A)(implicit fp: FunctionPair[Double, A]) =
     implicitly[Matrix[M]].matrix(m, n, f)
-  
+
+  def cov[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].cov(m)
+
+  def std[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].std(m)
+
+  def zscore[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].zscore(m)
+
+  def pca[M[_]: Matrix](m: M[Double], cutoff: Double = 0.95) = implicitly[Matrix[M]].pca(m, cutoff)
+
+  def numComponentsForCutoff[M[_]: Matrix](m: M[Double], cutoff: Double) = implicitly[Matrix[M]].numComponentsForCutoff(m, cutoff)
+
   implicit def matrixOps[M[_]: Matrix, A](ma: M[A]) = new MatrixOps(ma)
 }
 
@@ -27,7 +37,7 @@ trait DirectedGraphSyntax {
 
   def directedGraph[DG[_, _]: DirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) =
     implicitly[DirectedGraph[DG]].make(vps, ef)
-  
+
   implicit def directedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](dg: DG[VP, EP]) =
     new DirectedGraphOps(dg)
 }
@@ -36,7 +46,7 @@ trait UndirectedGraphSyntax {
 
   def undirectedGraph[UG[_, _]: UndirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) =
     implicitly[UndirectedGraph[UG]].make(vps, ef)
-  
+
   implicit def undirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](ug: UG[VP, EP]) =
     new UndirectedGraphOps(ug)
 }
@@ -72,13 +82,13 @@ trait MapReducibleSyntax {
 }
 
 trait SetFromSyntax {
-  
+
   implicit def setFromOps[F[_]: SetFrom, A: ClassTag](fa: F[A]) =
     new SetFromOps(fa)
 }
 
 trait MapFromSyntax {
-  
+
   implicit def mapFromOps[F[_]: MapFrom, K: ClassTag, V: ClassTag](fkv: F[(K, V)]) =
     new MapFromOps(fkv)
 }

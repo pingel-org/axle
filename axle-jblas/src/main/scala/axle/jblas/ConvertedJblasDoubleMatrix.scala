@@ -249,16 +249,15 @@ object ConvertedJblasDoubleMatrix {
       def sumsq[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
         columnSums(mulPointwise(m)(m))
 
-      def cov[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
+      def cov(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
         ConvertedJblasDoubleMatrix(centerColumns(m).jdm.transpose.mul(centerColumns(m).jdm).div(m.jdm.getColumns))(m.fp)
 
-      def std[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] = {
+      def std(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] = {
         val centered = ConvertedJblasDoubleMatrix[Double](sumsq(centerColumns(m)).jdm.div(m.jdm.getColumns))
-        val sqrt = (m.fp.apply _) compose (scala.math.sqrt _)
-        map(centered)(sqrt)(m.fp)
+        map(centered)(scala.math.sqrt)(m.fp)
       }
 
-      def zscore[T](m: ConvertedJblasDoubleMatrix[T]): ConvertedJblasDoubleMatrix[T] =
+      def zscore(m: ConvertedJblasDoubleMatrix[Double]): ConvertedJblasDoubleMatrix[Double] =
         divRowVector(centerColumns(m))(std(m))
 
       /**
@@ -276,12 +275,12 @@ object ConvertedJblasDoubleMatrix {
        *
        */
 
-      def pca[T](Xnorm: ConvertedJblasDoubleMatrix[T], cutoff: Double = 0.95): (ConvertedJblasDoubleMatrix[T], ConvertedJblasDoubleMatrix[T]) = {
+      def pca(Xnorm: ConvertedJblasDoubleMatrix[Double], cutoff: Double = 0.95): (ConvertedJblasDoubleMatrix[Double], ConvertedJblasDoubleMatrix[Double]) = {
         val (u, s, v) = fullSVD(cov(Xnorm))
         (u, s)
       }
 
-      def numComponentsForCutoff[T](s: ConvertedJblasDoubleMatrix[T], cutoff: Double): Int = {
+      def numComponentsForCutoff(s: ConvertedJblasDoubleMatrix[Double], cutoff: Double): Int = {
         val eigenValuesSquared = toList(mulPointwise(s)(s)).map(s.fp.unapply _)
         val eigenTotal = eigenValuesSquared.sum
         val numComponents = eigenValuesSquared.map(_ / eigenTotal).scan(0d)(_ + _).indexWhere(cutoff<)
