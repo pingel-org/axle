@@ -172,8 +172,6 @@ object DoubleMatrixWitnesses {
 
       def dup(m: DoubleMatrix): DoubleMatrix = m.dup
 
-      def negate(m: DoubleMatrix): DoubleMatrix = m.neg
-
       def transpose(m: DoubleMatrix): DoubleMatrix = m.transpose
       def diag(m: DoubleMatrix): DoubleMatrix = m.diag
       def invert(m: DoubleMatrix): DoubleMatrix = org.jblas.Solve.solve(m, DoubleMatrix.eye(m.rows))
@@ -193,28 +191,25 @@ object DoubleMatrixWitnesses {
       def pow(m: DoubleMatrix)(p: Double): DoubleMatrix =
         org.jblas.MatrixFunctions.pow(m, p)
 
-      def addScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.add(x)
-
       def addAssignment(m: DoubleMatrix)(r: Int, c: Int, v: Double): DoubleMatrix = {
         val newJblas = m.dup
         newJblas.put(r, c, v)
         newJblas
       }
 
+      def addScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.add(x)
       def subtractScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.sub(x)
       def multiplyScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.mul(x)
       def divideScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.div(x)
+
       def mulRow(m: DoubleMatrix)(i: Int, x: Double): DoubleMatrix = m.mulRow(i, x)
       def mulColumn(m: DoubleMatrix)(i: Int, x: Double): DoubleMatrix = m.mulColumn(i, x)
 
       // Operations on pairs of matrices
-      // TODO: add and subtract don't make sense for T = Boolean
 
-      def addMatrix(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.add(rhs)
-      def subtractMatrix(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.sub(rhs)
-      def multiplyMatrix(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.mmul(rhs)
       def mulPointwise(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.mul(rhs)
       def divPointwise(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.div(rhs)
+
       def concatenateHorizontally(m: DoubleMatrix)(right: DoubleMatrix): DoubleMatrix = DoubleMatrix.concatHorizontally(m, right)
       def concatenateVertically(m: DoubleMatrix)(under: DoubleMatrix): DoubleMatrix = DoubleMatrix.concatVertically(m, under)
       def solve(m: DoubleMatrix)(B: DoubleMatrix): DoubleMatrix = org.jblas.Solve.solve(m, B) // returns X, where this === A and A x X = B
@@ -339,7 +334,7 @@ object DoubleMatrixWitnesses {
 
       //def flatMapColumns[B](f: M[A] => M[B])(implicit fpB: FunctionPair[Double, B])
       def flatMapColumns(m: DoubleMatrix)(f: DoubleMatrix => DoubleMatrix): DoubleMatrix = {
-        val jblas = zeros(m.getRows, m.getColumns)
+        val jblas = DoubleMatrix.zeros(m.getRows, m.getColumns)
         (0 until m.getColumns) foreach { c =>
           val fc = f(column(m)(c))
           (0 until m.getRows) foreach { r =>
@@ -403,10 +398,11 @@ object DoubleMatrixWitnesses {
         numComponents
       }
 
-      def zeros(m: Int, n: Int): DoubleMatrix = DoubleMatrix.zeros(m, n)
+      //      def zeros(m: Int, n: Int): DoubleMatrix = DoubleMatrix.zeros(m, n)
+      //      def eye(n: Int): DoubleMatrix = DoubleMatrix.eye(n)
+      //      def I(n: Int): DoubleMatrix = eye(n)
+
       def ones(m: Int, n: Int): DoubleMatrix = DoubleMatrix.ones(m, n)
-      def eye(n: Int): DoubleMatrix = DoubleMatrix.eye(n)
-      def I(n: Int): DoubleMatrix = eye(n)
       def rand(m: Int, n: Int): DoubleMatrix = DoubleMatrix.rand(m, n) // evenly distributed from 0.0 to 1.0
       def randn(m: Int, n: Int): DoubleMatrix = DoubleMatrix.randn(m, n) // normal distribution
       def falses(m: Int, n: Int): DoubleMatrix = DoubleMatrix.zeros(m, n)

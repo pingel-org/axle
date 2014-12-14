@@ -33,7 +33,7 @@ trait LinearAlgebra[M, T] {
   def isScalar(m: M): Boolean
 
   def dup(m: M): M
-  def negate(m: M): M
+
   def transpose(m: M): M
   def diag(m: M): M
   def invert(m: M): M
@@ -47,20 +47,21 @@ trait LinearAlgebra[M, T] {
 
   def pow(m: M)(p: Double): M
 
+  // TODO: from Module:
   def addScalar(m: M)(x: T): M
-  def addAssignment(m: M)(r: Int, c: Int, v: T): M
   def subtractScalar(m: M)(x: T): M
   def multiplyScalar(m: M)(x: T): M
   def divideScalar(m: M)(x: T): M
+
+  def addAssignment(m: M)(r: Int, c: Int, v: T): M
   def mulRow(m: M)(i: Int, x: T): M
   def mulColumn(m: M)(i: Int, x: T): M
 
   // Operations on pairs of matrices
-  // TODO: add and subtract don't make sense for T = Boolean
 
-  def addMatrix(m: M)(other: M): M
-  def subtractMatrix(m: M)(other: M): M
-  def multiplyMatrix(m: M)(other: M): M
+//  def addMatrix(m: M)(other: M): M
+//  def subtractMatrix(m: M)(other: M): M
+//  def multiplyMatrix(m: M)(other: M): M
   def mulPointwise(m: M)(other: M): M
   def divPointwise(m: M)(other: M): M
   def concatenateHorizontally(m: M)(right: M): M
@@ -167,10 +168,10 @@ trait LinearAlgebra[M, T] {
 
   def numComponentsForCutoff(s: M, cutoff: Double): Int
 
-  def zeros(m: Int, n: Int): M
+//  def zeros(m: Int, n: Int): M
+//  def eye(n: Int): M
+//  def I(n: Int): M
   def ones(m: Int, n: Int): M
-  def eye(n: Int): M
-  def I(n: Int): M
   def rand(m: Int, n: Int): M
   def randn(m: Int, n: Int): M
   def falses(m: Int, n: Int): M
