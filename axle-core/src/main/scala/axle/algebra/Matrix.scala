@@ -4,6 +4,7 @@ import axle.string
 import spire.algebra._
 import spire.implicits._
 
+/*
 trait Matrix[M[_]] {
 
   // TODO: T should be convertable to/from Double
@@ -191,3 +192,4 @@ object Matrix {
   }
 
 }
+*/

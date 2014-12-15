@@ -2,10 +2,13 @@ package axle.stats
 
 import scala.math.pow
 import scala.math.sqrt
-import axle.algebra.Matrix
-import axle.syntax.matrix._
+import axle.algebra.LinearAlgebra
+import axle.syntax.linearalgebra._
 
-case class ChiSquaredTest[M[_]: Matrix](tally: M[Double], threshold: Double = 0.004) {
+case class ChiSquaredTest[M](
+  tally: M,
+  threshold: Double = 0.004)(
+    implicit ev: LinearAlgebra[M, Double]) {
 
   val rowTotals = tally.rowSums
   val columnTotals = tally.columnSums
@@ -28,7 +31,7 @@ case class ChiSquaredTest[M[_]: Matrix](tally: M[Double], threshold: Double = 0.
    *    val dof = (table.height - 1) * (table.width - 1)
    */
 
-  def independent[M[_]: Matrix]: Boolean = χ2 < threshold
+  def independent[M](implicit ev: LinearAlgebra[M, Double]): Boolean = χ2 < threshold
 
 }
 

@@ -5,7 +5,7 @@ import scala.reflect.ClassTag
 import axle._
 import axle.algebra.Σ
 import axle.algebra.Aggregatable
-import axle.algebra.Matrix
+import axle.algebra.LinearAlgebra
 import axle.algebra.Functor
 import axle.algebra.Finite
 import axle.algebra.SetFrom
@@ -39,7 +39,7 @@ abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Fu
     data: F[DATA],
     classExtractor: DATA => CLASS,
     k: CLASS): (Int, Int, Int, Int) = {
-    
+
     val scores = data.map(d => {
       val actual: CLASS = classExtractor(d)
       val predicted: CLASS = this(d)
@@ -69,9 +69,9 @@ abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Fu
       )
   }
 
-  def confusionMatrix[L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M[_]: Matrix](
+  def confusionMatrix[L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M](
     data: F[DATA],
-    labelExtractor: DATA => L): ConfusionMatrix[DATA, CLASS, L, F, M] =
+    labelExtractor: DATA => L)(implicit la: LinearAlgebra[M, Double]): ConfusionMatrix[DATA, CLASS, L, F, M] =
     ConfusionMatrix(this, data, labelExtractor)
 
 }

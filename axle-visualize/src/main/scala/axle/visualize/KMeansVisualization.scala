@@ -20,7 +20,7 @@ import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import axle.algebra.Matrix
+import axle.algebra.LinearAlgebra
 import axle.algebra.Tics
 import axle.ml.KMeans
 import javax.swing.JPanel
@@ -30,19 +30,16 @@ import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import spire.math.Number.apply
 import spire.implicits.moduleOps
-import axle.syntax.matrix._
+import axle.syntax.linearalgebra._
 
-//  implicit def enComponentKMeansClassifier[T, F[_], M[_]](classifier: KMeans[T, F, M]): Component =
-//    new KMeansVisualization[T, F, M](classifier)
-
-case class KMeansVisualization[D, F[_], M[_]: Matrix](
+case class KMeansVisualization[D, F[_], M](
   classifier: KMeans[D, F, M],
   w: Int = 600,
   h: Int = 600,
   border: Int = 50,
   pointDiameter: Int = 10,
   fontName: String = "Courier New",
-  fontSize: Int = 12) extends JPanel {
+  fontSize: Int = 12)(implicit la: LinearAlgebra[M, Double]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 

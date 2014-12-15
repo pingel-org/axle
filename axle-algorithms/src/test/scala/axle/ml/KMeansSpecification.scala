@@ -10,8 +10,7 @@ import scala.util.Random.shuffle
 
 import org.specs2.mutable.Specification
 
-import axle.jblas.ConvertedJblasDoubleMatrix
-import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
+import axle.jblas.DoubleMatrixWitnesses._
 import axle.ml.distance.Euclidian
 import spire.algebra.Eq
 
@@ -46,7 +45,7 @@ class KMeansSpecification
         data,
         2,
         (p: Foo) => Seq(p.x, p.y),
-        (PCAFeatureNormalizer[ConvertedJblasDoubleMatrix] _).curried.apply(0.98),
+        (PCAFeatureNormalizer[org.jblas.DoubleMatrix] _).curried.apply(0.98),
         (features: Seq[Double]) => Foo(features(0), features(1)),
         K = 2,
         100)

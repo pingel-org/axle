@@ -8,29 +8,47 @@ import axle.algebra.Finite
 import axle.algebra.Indexed
 import axle.algebra.MapFrom
 import axle.algebra.MapReducible
-import axle.algebra.Matrix
+import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
 import axle.algebra.Vertex
 import spire.algebra.Eq
 import scala.reflect.ClassTag
 
-trait MatrixSyntax {
+//trait MatrixSyntax {
+//
+//  def matrix[M[_]: Matrix, A](m: Int, n: Int, f: (Int, Int) => A)(implicit fp: FunctionPair[Double, A]) =
+//    implicitly[Matrix[M]].matrix(m, n, f)
+//
+//  def cov[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].cov(m)
+//
+//  def std[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].std(m)
+//
+//  def zscore[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].zscore(m)
+//
+//  def pca[M[_]: Matrix](m: M[Double], cutoff: Double = 0.95) = implicitly[Matrix[M]].pca(m, cutoff)
+//
+//  def numComponentsForCutoff[M[_]: Matrix](m: M[Double], cutoff: Double) = implicitly[Matrix[M]].numComponentsForCutoff(m, cutoff)
+//
+//  implicit def matrixOps[M[_]: Matrix, A](ma: M[A]) = new MatrixOps(ma)
+//}
 
-  def matrix[M[_]: Matrix, A](m: Int, n: Int, f: (Int, Int) => A)(implicit fp: FunctionPair[Double, A]) =
-    implicitly[Matrix[M]].matrix(m, n, f)
+trait LinearAlgebraSyntax {
 
-  def cov[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].cov(m)
+  def matrix[M, T](m: Int, n: Int, f: (Int, Int) => T)(implicit la: LinearAlgebra[M, T]) =
+    la.matrix(m, n, f)
 
-  def std[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].std(m)
+  def cov[M, T](m: M)(implicit la: LinearAlgebra[M, T]) = la.cov(m)
 
-  def zscore[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].zscore(m)
+  def std[M, T](m: M)(implicit la: LinearAlgebra[M, T]) = la.std(m)
 
-  def pca[M[_]: Matrix](m: M[Double], cutoff: Double = 0.95) = implicitly[Matrix[M]].pca(m, cutoff)
+  def zscore[M, T](m: M)(implicit la: LinearAlgebra[M, T]) = la.zscore(m)
 
-  def numComponentsForCutoff[M[_]: Matrix](m: M[Double], cutoff: Double) = implicitly[Matrix[M]].numComponentsForCutoff(m, cutoff)
+  def pca[M, T](m: M, cutoff: Double = 0.95)(implicit la: LinearAlgebra[M, T]) = la.pca(m, cutoff)
 
-  implicit def matrixOps[M[_]: Matrix, A](ma: M[A]) = new MatrixOps(ma)
+  def numComponentsForCutoff[M, T](m: M, cutoff: Double)(implicit la: LinearAlgebra[M, T]) = la.numComponentsForCutoff(m, cutoff)
+
+  implicit def matrixOps[M, T](m: M)(implicit la: LinearAlgebra[M, T]) = new LinearAlgebraOps(m)
 }
 
 trait DirectedGraphSyntax {

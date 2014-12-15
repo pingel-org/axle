@@ -9,7 +9,7 @@ import axle.algebra.Functor
 import axle.algebra.Indexed
 import axle.algebra.MapFrom
 import axle.algebra.MapReducible
-import axle.algebra.Matrix
+import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
 import axle.algebra.UndirectedEdge
@@ -18,146 +18,141 @@ import scala.reflect.ClassTag
 import spire.algebra.Eq
 import spire.algebra.Ring
 
-final class MatrixOps[M[_]: Matrix, A](val lhs: M[A]) {
+final class LinearAlgebraOps[M, T](val lhs: M)(implicit la: LinearAlgebra[M, T]) {
 
-  val ev = implicitly[Matrix[M]]
-  
-  def get(i: Int, j: Int) = ev.get(lhs)(i, j)
+  def get(i: Int, j: Int) = la.get(lhs)(i, j)
 
-  def slice(rs: Seq[Int], cs: Seq[Int]) = ev.slice(lhs)(rs, cs)
+  def slice(rs: Seq[Int], cs: Seq[Int]) = la.slice(lhs)(rs, cs)
 
-  def toList = ev.toList(lhs)
+  def toList = la.toList(lhs)
 
-  def row(i: Int) = ev.row(lhs)(i)
+  def row(i: Int) = la.row(lhs)(i)
 
-  def column(j: Int) = ev.column(lhs)(j)
+  def column(j: Int) = la.column(lhs)(j)
 
-  def length = ev.length(lhs)
+  def length = la.length(lhs)
 
-  def rows: Int = ev.rows(lhs)
+  def rows = la.rows(lhs)
 
-  def columns: Int = ev.columns(lhs)
+  def columns = la.columns(lhs)
 
-  def negate = ev.negate(lhs)
+  def negate = la.negate(lhs)
 
   //def fullSVD[T](m: M[A]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
 
-  def pow(p: Double) = ev.pow(lhs)(p)
+  def pow(p: Double) = la.pow(lhs)(p)
 
-  def addScalar(x: A) = ev.addScalar(lhs)(x)
-  def addAssignment(r: Int, c: Int, v: A) = ev.addAssignment(lhs)(r, c, v)
-  def subtractScalar(x: A) = ev.subtractScalar(lhs)(x)
-  def multiplyScalar(x: A) = ev.multiplyScalar(lhs)(x)
-  def divideScalar(x: A) = ev.divideScalar(lhs)(x)
-  def mulRow(i: Int, x: A) = ev.mulRow(lhs)(i, x)
-  def mulColumn(i: Int, x: A) = ev.mulColumn(lhs)(i, x)
+  def addScalar(x: T) = la.addScalar(lhs)(x)
+  def subtractScalar(x: T) = la.subtractScalar(lhs)(x)
+  def multiplyScalar(x: T) = la.multiplyScalar(lhs)(x)
+  def divideScalar(x: T) = la.divideScalar(lhs)(x)
+
+  def addAssignment(r: Int, c: Int, v: T) = la.addAssignment(lhs)(r, c, v)
+  def mulRow(i: Int, x: T) = la.mulRow(lhs)(i, x)
+  def mulColumn(i: Int, x: T) = la.mulColumn(lhs)(i, x)
 
   // Operations on pairs of matrices
   // TODO: add and subtract don't make sense for T = Boolean
 
-  def addMatrix(rhs: M[A]) = ev.addMatrix(lhs)(rhs)
-  def subtractMatrix(rhs: M[A]) = ev.subtractMatrix(lhs)(rhs)
-  def multiplyMatrix(rhs: M[A]) = ev.multiplyMatrix(lhs)(rhs)
-  def mulPointwise(rhs: M[A]) = ev.mulPointwise(lhs)(rhs)
-  def divPointwise(rhs: M[A]) = ev.divPointwise(lhs)(rhs)
-  def concatenateHorizontally(rhs: M[A]) = ev.concatenateHorizontally(lhs)(rhs)
-  def concatenateVertically(under: M[A]) = ev.concatenateVertically(lhs)(under)
-  def solve(B: M[A]) = ev.solve(lhs)(B)
+  def plus(rhs: M) = la.plus(lhs, rhs)
+  def +(rhs: M) = la.plus(lhs, rhs)
+  def minus(rhs: M) = la.minus(lhs, rhs)
+  def -(rhs: M) = la.minus(lhs, rhs)
+  def times(rhs: M) = la.times(lhs, rhs)
+  def ⨯(rhs: M) = la.times(lhs, rhs)
+
+  def mulPointwise(rhs: M) = la.mulPointwise(lhs)(rhs)
+  def divPointwise(rhs: M) = la.divPointwise(lhs)(rhs)
+  def concatenateHorizontally(rhs: M) = la.concatenateHorizontally(lhs)(rhs)
+  def concatenateVertically(under: M) = la.concatenateVertically(lhs)(under)
+  def solve(B: M) = la.solve(lhs)(B)
 
   // Operations on a matrix and a column/row vector
 
-  def addRowVector(row: M[A]) = ev.addRowVector(lhs)(row)
-  def addColumnVector(column: M[A]) = ev.addColumnVector(lhs)(column)
-  def subRowVector(row: M[A]) = ev.subRowVector(lhs)(row)
-  def subColumnVector(column: M[A]) = ev.subColumnVector(lhs)(column)
-  def mulRowVector(row: M[A]) = ev.mulRowVector(lhs)(row)
-  def mulColumnVector(column: M[A]) = ev.mulColumnVector(lhs)(column)
-  def divRowVector(row: M[A]) = ev.divRowVector(lhs)(row)
-  def divColumnVector(column: M[A]) = ev.divColumnVector(lhs)(column)
+  def addRowVector(row: M) = la.addRowVector(lhs)(row)
+  def addColumnVector(column: M) = la.addColumnVector(lhs)(column)
+  def subRowVector(row: M) = la.subRowVector(lhs)(row)
+  def subColumnVector(column: M) = la.subColumnVector(lhs)(column)
+  def mulRowVector(row: M) = la.mulRowVector(lhs)(row)
+  def mulColumnVector(column: M) = la.mulColumnVector(lhs)(column)
+  def divRowVector(row: M) = la.divRowVector(lhs)(row)
+  def divColumnVector(column: M) = la.divColumnVector(lhs)(column)
 
   // various mins and maxs
 
-  def max = ev.max(lhs)
-  def argmax = ev.argmax(lhs)
-  def min = ev.min(lhs)
-  def argmin = ev.argmin(lhs)
+  def max = la.max(lhs)
+  def argmax = la.argmax(lhs)
+  def min = la.min(lhs)
+  def argmin = la.argmin(lhs)
 
-  def rowSums = ev.rowSums(lhs)
-  def columnSums = ev.columnSums(lhs)
-  def columnMins = ev.columnMins(lhs)
-  def columnMaxs = ev.columnMaxs(lhs)
+  def rowSums = la.rowSums(lhs)
+  def columnSums = la.columnSums(lhs)
+  def columnMins = la.columnMins(lhs)
+  def columnMaxs = la.columnMaxs(lhs)
   // def columnArgmins
   // def columnArgmaxs
 
-  def columnMeans = ev.columnMeans(lhs)
-  def sortColumns = ev.sortColumns(lhs)
+  def columnMeans = la.columnMeans(lhs)
+  def sortColumns = la.sortColumns(lhs)
 
-  def rowMins = ev.rowMins(lhs)
-  def rowMaxs = ev.rowMaxs(lhs)
-  def rowMeans = ev.rowMeans(lhs)
-  def sortRows = ev.sortRows(lhs)
+  def rowMins = la.rowMins(lhs)
+  def rowMaxs = la.rowMaxs(lhs)
+  def rowMeans = la.rowMeans(lhs)
+  def sortRows = la.sortRows(lhs)
 
   // higher order methods
 
-  def map[B](f: A => B)(implicit fpB: FunctionPair[Double, B]) = ev.map(lhs)(f)
+  def map(f: T => T) = la.map(lhs)(f)
 
-  def flatMapColumns[B](f: M[A] => M[B])(implicit fpB: FunctionPair[Double, B]) = ev.flatMapColumns(lhs)(f)
+  def flatMapColumns(f: M => M) = la.flatMapColumns(lhs)(f)
 
-  def foldLeft[B](zero: M[B])(f: (M[B], M[A]) => M[B]) = ev.foldLeft(lhs)(zero)(f)
+  def foldLeft(zero: M)(f: (M, M) => M) = la.foldLeft(lhs)(zero)(f)
 
-  def foldTop[B](zero: M[B])(f: (M[B], M[A]) => M[B]) = ev.foldTop(lhs)(zero)(f)
+  def foldTop(zero: M)(f: (M, M) => M) = la.foldTop(lhs)(zero)(f)
 
-  def sumsq = ev.sumsq(lhs)
+  def sumsq = la.sumsq(lhs)
 
   // Aliases
 
-  def t = ev.transpose(lhs)
-  def tr = ev.transpose(lhs)
-  def inv = ev.invert(lhs)
+  def t = la.transpose(lhs)
+  def tr = la.transpose(lhs)
+  def inv = la.invert(lhs)
 
-  def scalar: A = {
-    assert(ev.isScalar(lhs))
-    ev.get(lhs)(0, 0)
+  def scalar: T = {
+    assert(la.isScalar(lhs))
+    la.get(lhs)(0, 0)
   }
 
-  //def +(x: A) = ev.addScalar(lhs)(x)
+  //def +(x: A) = la.addScalar(lhs)(x)
+  def *(x: T) = la.multiplyScalar(lhs)(x)
 
-  def +(rhs: M[A]) = ev.addMatrix(lhs)(rhs)
+  // def ⨯(rhs: M) = la.multiplyMatrix(lhs)(rhs)
 
-  //def -(x: A) = ev.subtractScalar(lhs)(x)
+  def /(x: T) = la.divideScalar(lhs)(x)
 
-  def -(rhs: M[A]) = ev.subtractMatrix(lhs)(rhs)
+  def +|+(right: M) = la.concatenateHorizontally(lhs)(right)
 
-  def *(x: A) = ev.multiplyScalar(lhs)(x)
+  def +/+(under: M) = la.concatenateVertically(lhs)(under)
 
-  def ⨯(rhs: M[A]) = ev.multiplyMatrix(lhs)(rhs)
-  def mm(rhs: M[A]) = ev.multiplyMatrix(lhs)(rhs)
+  def aside(right: M) = la.concatenateHorizontally(lhs)(right)
 
-  def /(x: A) = ev.divideScalar(lhs)(x)
+  def atop(under: M) = la.concatenateVertically(lhs)(under)
 
-  def +|+(right: M[A]) = ev.concatenateHorizontally(lhs)(right)
-
-  def +/+(under: M[A]) = ev.concatenateVertically(lhs)(under)
-
-  def aside(right: M[A]) = ev.concatenateHorizontally(lhs)(right)
-
-  def atop(under: M[A]) = ev.concatenateVertically(lhs)(under)
-
-  def <(rhs: M[A]) = ev.lt(lhs)(rhs)
-  def <=(rhs: M[A]) = ev.le(lhs)(rhs)
-  def ≤(rhs: M[A]) = ev.le(lhs)(rhs)
-  def >(rhs: M[A]) = ev.gt(lhs)(rhs)
-  def >=(rhs: M[A]) = ev.ge(lhs)(rhs)
-  def ≥(rhs: M[A]) = ev.ge(lhs)(rhs)
-  def ==(rhs: M[A]) = ev.eq(lhs)(rhs)
-  def !=(rhs: M[A]) = ev.ne(lhs)(rhs)
-  def ≠(rhs: M[A]) = ev.ne(lhs)(rhs)
-  def &(rhs: M[A]) = ev.and(lhs)(rhs)
-  def ∧(rhs: M[A]) = ev.and(lhs)(rhs)
-  def |(rhs: M[A]) = ev.or(lhs)(rhs)
-  def ∨(rhs: M[A]) = ev.or(lhs)(rhs)
-  def ⊕(rhs: M[A]) = ev.xor(lhs)(rhs)
-  def ⊻(rhs: M[A]) = ev.xor(lhs)(rhs)
+  def <(rhs: M) = la.lt(lhs)(rhs)
+  def <=(rhs: M) = la.le(lhs)(rhs)
+  def ≤(rhs: M) = la.le(lhs)(rhs)
+  def >(rhs: M) = la.gt(lhs)(rhs)
+  def >=(rhs: M) = la.ge(lhs)(rhs)
+  def ≥(rhs: M) = la.ge(lhs)(rhs)
+  def ==(rhs: M) = la.eq(lhs)(rhs)
+  def !=(rhs: M) = la.ne(lhs)(rhs)
+  def ≠(rhs: M) = la.ne(lhs)(rhs)
+  def &(rhs: M) = la.and(lhs)(rhs)
+  def ∧(rhs: M) = la.and(lhs)(rhs)
+  def |(rhs: M) = la.or(lhs)(rhs)
+  def ∨(rhs: M) = la.or(lhs)(rhs)
+  def ⊕(rhs: M) = la.xor(lhs)(rhs)
+  def ⊻(rhs: M) = la.xor(lhs)(rhs)
 
   //  def ! = not
   //  def ~ = not

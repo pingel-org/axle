@@ -2,11 +2,12 @@ package axle.ml.distance
 
 import scala.math.abs
 
-import axle.algebra.Matrix
-import axle.syntax.matrix.matrixOps
+import axle.algebra.LinearAlgebra
+import axle.syntax.linearalgebra._
 import spire.algebra.MetricSpace
 
-case class Manhattan[M[_]: Matrix]() extends MetricSpace[M[Double], Double] {
+case class Manhattan[M](implicit la: LinearAlgebra[M, Double])
+  extends MetricSpace[M, Double] {
 
-  def distance(r1: M[Double], r2: M[Double]): Double = (r1 - r2).map(abs).toList.sum
+  def distance(r1: M, r2: M): Double = (r1 - r2).map(abs _).toList.sum
 }

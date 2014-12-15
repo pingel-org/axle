@@ -7,7 +7,7 @@ import scala.util.Random.nextDouble
 import scala.util.Random.nextGaussian
 
 import axle.algebra.FunctionPair
-import axle.algebra.Matrix
+import axle.algebra.LinearAlgebra
 import axle.Show
 import axle.string
 import no.uib.cipr.matrix.DenseMatrix
@@ -25,8 +25,8 @@ case class ConvertedMtjDenseMatrix[T](mtj: DenseMatrix)(implicit val fp: Functio
 
 object ConvertedMtjDenseMatrix {
 
-  implicit val jblasConvertedMatrix: Matrix[ConvertedMtjDenseMatrix] =
-    ???
+//  implicit val jblasConvertedMatrix: Matrix[ConvertedMtjDenseMatrix] =
+//    ???
   //new Matrix[ConvertedMtjDenseMatrix] {  }
 }
     

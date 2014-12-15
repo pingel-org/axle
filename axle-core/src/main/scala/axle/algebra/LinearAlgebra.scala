@@ -34,6 +34,8 @@ trait LinearAlgebra[M, T] {
 
   def dup(m: M): M
 
+  def negate(m: M): M
+
   def transpose(m: M): M
   def diag(m: M): M
   def invert(m: M): M
@@ -59,9 +61,10 @@ trait LinearAlgebra[M, T] {
 
   // Operations on pairs of matrices
 
-//  def addMatrix(m: M)(other: M): M
-//  def subtractMatrix(m: M)(other: M): M
-//  def multiplyMatrix(m: M)(other: M): M
+  def plus(x: M, y: M): M = ring.plus(x, y)
+  def minus(x: M, y: M): M = ring.minus(x, y)
+  def times(x: M, y: M): M = ring.times(x, y)
+
   def mulPointwise(m: M)(other: M): M
   def divPointwise(m: M)(other: M): M
   def concatenateHorizontally(m: M)(right: M): M
@@ -168,13 +171,13 @@ trait LinearAlgebra[M, T] {
 
   def numComponentsForCutoff(s: M, cutoff: Double): Int
 
-//  def zeros(m: Int, n: Int): M
-//  def eye(n: Int): M
-//  def I(n: Int): M
-  def ones(m: Int, n: Int): M
-  def rand(m: Int, n: Int): M
-  def randn(m: Int, n: Int): M
-  def falses(m: Int, n: Int): M
-  def trues(m: Int, n: Int): M
+  // TODO:
+  def zero(laRows: Int, laColumns: Int): M = ring.zero
+  def zeros(laRows: Int, laColumns: Int): M = ring.zero
+  def eye(laRows: Int): M = ring.one
+  def I(laRows: Int): M = ring.one
+  def ones(laRows: Int, laColumns: Int): M
+  def rand(laRows: Int, laColumns: Int): M
+  def randn(laRows: Int, laColumns: Int): M
 
 }

@@ -3,7 +3,6 @@ package axle.jblas
 import org.jblas.DoubleMatrix
 import axle.algebra.FunctionPair
 import axle.algebra.Functor
-import axle.algebra.Matrix
 import spire.algebra.AdditiveMonoid
 import spire.algebra.AdditiveCMonoid
 import spire.algebra.AdditiveSemigroup
@@ -19,6 +18,7 @@ import scala.reflect.ClassTag
 
 case class ConvertedJblasDoubleMatrix[T](jdm: DoubleMatrix)(implicit val fp: FunctionPair[Double, T])
 
+/*
 object ConvertedJblasDoubleMatrix {
 
   implicit val jblasConvertedMatrix: Matrix[ConvertedJblasDoubleMatrix] =
@@ -313,3 +313,4 @@ object ConvertedJblasDoubleMatrix {
     }
 
 }
+*/

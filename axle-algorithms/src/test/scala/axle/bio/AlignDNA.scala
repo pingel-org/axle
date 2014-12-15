@@ -1,7 +1,7 @@
 package axle.bio
 
 import org.specs2.mutable._
-import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
+import axle.jblas.DoubleMatrixWitnesses._
 
 class AlignDNA extends Specification {
 

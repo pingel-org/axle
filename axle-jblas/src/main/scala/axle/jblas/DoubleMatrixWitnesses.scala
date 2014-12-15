@@ -3,7 +3,6 @@ package axle.jblas
 import org.jblas.DoubleMatrix
 import axle.algebra.FunctionPair
 import axle.algebra.Functor
-import axle.algebra.Matrix
 import axle.algebra.LinearAlgebra
 import spire.algebra.AdditiveMonoid
 import spire.algebra.AdditiveCMonoid
@@ -28,7 +27,8 @@ object DoubleMatrixWitnesses {
         x.add(y)
     }
 
-  implicit def additiveCMonoidDoubleMatrix(m: Int, n: Int): AdditiveMonoid[DoubleMatrix] =
+  // TODO dimension (m: Int, n: Int)
+  implicit def additiveCMonoidDoubleMatrix: AdditiveMonoid[DoubleMatrix] =
     new AdditiveMonoid[DoubleMatrix] {
 
       lazy val semigroup = additiveCSemigroupDoubleMatrix
@@ -37,7 +37,7 @@ object DoubleMatrixWitnesses {
         semigroup.plus(x, y)
 
       def zero: DoubleMatrix =
-        DoubleMatrix.zeros(m, n)
+        DoubleMatrix.zeros(???, ???)
     }
 
   implicit def multiplicativeSemigroupDoubleMatrix: MultiplicativeSemigroup[DoubleMatrix] =
@@ -47,7 +47,7 @@ object DoubleMatrixWitnesses {
         x.add(y)
     }
 
-  implicit def multiplicativeMonoidDoubleMatrix(m: Int): MultiplicativeMonoid[DoubleMatrix] =
+  implicit def multiplicativeMonoidDoubleMatrix: MultiplicativeMonoid[DoubleMatrix] =
     new MultiplicativeMonoid[DoubleMatrix] {
 
       lazy val semigroup = multiplicativeSemigroupDoubleMatrix
@@ -56,13 +56,13 @@ object DoubleMatrixWitnesses {
         semigroup.times(x, y)
 
       def one: DoubleMatrix =
-        DoubleMatrix.eye(m)
+        DoubleMatrix.eye(???) // TODO: dimension m
     }
 
-  implicit def additiveAbGroupDoubleMatrix(m: Int, n: Int): AdditiveAbGroup[DoubleMatrix] =
+  implicit def additiveAbGroupDoubleMatrix: AdditiveAbGroup[DoubleMatrix] =
     new AdditiveAbGroup[DoubleMatrix] {
 
-      lazy val additiveCMonoid = additiveCMonoidDoubleMatrix(m, n)
+      lazy val additiveCMonoid = additiveCMonoidDoubleMatrix
 
       def zero: DoubleMatrix =
         additiveCMonoid.zero
@@ -74,10 +74,10 @@ object DoubleMatrixWitnesses {
         x.neg
     }
 
-  implicit def ringDoubleMatrix(m: Int, n: Int): Ring[DoubleMatrix] =
+  implicit def ringDoubleMatrix: Ring[DoubleMatrix] =
     new Ring[DoubleMatrix] {
 
-      lazy val additiveAbGroup = additiveAbGroupDoubleMatrix(m, n)
+      lazy val additiveAbGroup = additiveAbGroupDoubleMatrix
 
       def negate(x: DoubleMatrix): DoubleMatrix =
         additiveAbGroup.negate(x)
@@ -88,7 +88,7 @@ object DoubleMatrixWitnesses {
       def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
         additiveAbGroup.plus(x, y)
 
-      lazy val multiplicativeMonoid = multiplicativeMonoidDoubleMatrix(n)
+      lazy val multiplicativeMonoid = multiplicativeMonoidDoubleMatrix
 
       def one: DoubleMatrix =
         multiplicativeMonoid.one
@@ -127,12 +127,13 @@ object DoubleMatrixWitnesses {
         }).mkString("\n")
     }
 
-  implicit def linearAlrebraDoubleMatrix(laRows: Int, laColumns: Int): LinearAlgebra[DoubleMatrix, Double] =
+  // TODO dimension (laRows: Int, laColumns: Int)
+  implicit def linearAlrebraDoubleMatrix: LinearAlgebra[DoubleMatrix, Double] =
     new LinearAlgebra[DoubleMatrix, Double] {
 
-      def elementField = spire.implicits.DoubleAlgebra
+      lazy val elementField = spire.implicits.DoubleAlgebra
 
-      def ring = ringDoubleMatrix(laRows, laColumns)
+      lazy val ring = ringDoubleMatrix
 
       def rows(m: DoubleMatrix): Int = m.getRows
 
@@ -172,6 +173,8 @@ object DoubleMatrixWitnesses {
 
       def dup(m: DoubleMatrix): DoubleMatrix = m.dup
 
+      def negate(m: DoubleMatrix): DoubleMatrix = ring.negate(m)
+
       def transpose(m: DoubleMatrix): DoubleMatrix = m.transpose
       def diag(m: DoubleMatrix): DoubleMatrix = m.diag
       def invert(m: DoubleMatrix): DoubleMatrix = org.jblas.Solve.solve(m, DoubleMatrix.eye(m.rows))
@@ -197,6 +200,7 @@ object DoubleMatrixWitnesses {
         newJblas
       }
 
+      // TODO: from Module
       def addScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.add(x)
       def subtractScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.sub(x)
       def multiplyScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.mul(x)
@@ -206,6 +210,10 @@ object DoubleMatrixWitnesses {
       def mulColumn(m: DoubleMatrix)(i: Int, x: Double): DoubleMatrix = m.mulColumn(i, x)
 
       // Operations on pairs of matrices
+
+      //      def addMatrix(lhs: DoubleMatrix, rhs: DoubleMatrix): DoubleMatrix = ring.plus(lhs, rhs)
+      //      def subtractMatrix(lhs: DoubleMatrix, rhs: DoubleMatrix): DoubleMatrix = ring.minus(lhs, rhs)
+      //      def multiplyMatrix(lhs: DoubleMatrix, rhs: DoubleMatrix): DoubleMatrix = ring.times(lhs, rhs)
 
       def mulPointwise(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.mul(rhs)
       def divPointwise(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.div(rhs)
@@ -398,15 +406,9 @@ object DoubleMatrixWitnesses {
         numComponents
       }
 
-      //      def zeros(m: Int, n: Int): DoubleMatrix = DoubleMatrix.zeros(m, n)
-      //      def eye(n: Int): DoubleMatrix = DoubleMatrix.eye(n)
-      //      def I(n: Int): DoubleMatrix = eye(n)
-
-      def ones(m: Int, n: Int): DoubleMatrix = DoubleMatrix.ones(m, n)
-      def rand(m: Int, n: Int): DoubleMatrix = DoubleMatrix.rand(m, n) // evenly distributed from 0.0 to 1.0
-      def randn(m: Int, n: Int): DoubleMatrix = DoubleMatrix.randn(m, n) // normal distribution
-      def falses(m: Int, n: Int): DoubleMatrix = DoubleMatrix.zeros(m, n)
-      def trues(m: Int, n: Int): DoubleMatrix = DoubleMatrix.ones(m, n)
+      def ones(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.ones(laRows, laColumns)
+      def rand(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.rand(laRows, laColumns) // evenly distributed from 0.0 to 1.0
+      def randn(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.randn(laRows, laColumns) // normal distribution
 
     }
 

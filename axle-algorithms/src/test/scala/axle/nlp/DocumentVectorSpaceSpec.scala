@@ -2,8 +2,8 @@ package axle.nlp
 
 import org.specs2.mutable._
 import spire.algebra.MetricSpace
-import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
 import axle.algebra._
+import axle.jblas.DoubleMatrixWitnesses._
 
 class DocumentVectorSpaceSpec extends Specification {
 

@@ -2,8 +2,8 @@ package axle.ml.distance
 
 import scala.math.sqrt
 
-import axle.algebra.Matrix
-import axle.syntax.matrix.matrixOps
+import axle.algebra.LinearAlgebra
+import axle.syntax.linearalgebra._
 import spire.algebra.Field
 import spire.algebra.NormedVectorSpace
 import spire.implicits.DoubleAlgebra
@@ -17,18 +17,19 @@ import spire.implicits.DoubleAlgebra
  *
  */
 
-case class Euclidian[M[_]](n: Int)(implicit ev: Matrix[M]) extends NormedVectorSpace[M[Double], Double] {
+case class Euclidian[M](n: Int)(implicit la: LinearAlgebra[M, Double])
+  extends NormedVectorSpace[M, Double] {
 
-  def negate(x: M[Double]): M[Double] = x.negate
+  def negate(x: M): M = la.negate(x)
 
-  def zero: M[Double] = ev.zeros[Double](1, n)
+  def zero: M = la.zeros(1, n)
 
-  def plus(x: M[Double], y: M[Double]): M[Double] = x + y
+  def plus(x: M, y: M): M = la.plus(x, y)
 
-  def timesl(r: Double, v: M[Double]): M[Double] = v * r
+  def timesl(r: Double, v: M): M = v * r
 
   def scalar: Field[Double] = DoubleAlgebra
 
-  def norm(r: M[Double]): Double = sqrt(r.mulPointwise(r).rowSums.scalar)
+  def norm(r: M): Double = sqrt(r.mulPointwise(r).rowSums.scalar)
 
 }

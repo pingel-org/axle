@@ -5,14 +5,15 @@ import axle.game._
 import axle.algebra._
 import util.Random.{ nextInt }
 import spire.implicits._
-import axle.jblas.ConvertedJblasDoubleMatrix
-import axle.jblas.ConvertedJblasDoubleMatrix.jblasConvertedMatrix
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game
  */
 
-case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: String = "ai")
+case class TicTacToe(
+  boardSize: Int = 3,
+  xClass: String = "human",
+  oClass: String = "ai")
   extends Game[TicTacToe] {
 
   implicit val ttt = this
@@ -27,7 +28,10 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
 
   val playersSeq = Vector(x, o)
 
-  def state(player: TicTacToePlayer, board: ConvertedJblasDoubleMatrix[Option[TicTacToePlayer]], eventQueue: Map[TicTacToePlayer, List[Event[TicTacToe]]]): Option[TicTacToeState] =
+  def state(
+    player: TicTacToePlayer,
+    board: TicTacToeBoard,
+    eventQueue: Map[TicTacToePlayer, List[Event[TicTacToe]]]): Option[TicTacToeState] =
     Some(new TicTacToeState(player, board, eventQueue))
 
   def move(player: TicTacToePlayer, position: Int): TicTacToeMove = TicTacToeMove(player, position)
@@ -58,11 +62,10 @@ case class TicTacToe(boardSize: Int = 3, xClass: String = "human", oClass: Strin
     }
   }
 
-  def startBoard: ConvertedJblasDoubleMatrix[Option[TicTacToePlayer]] =
-    jblasConvertedMatrix.matrix[Option[TicTacToePlayer]](
+  def startBoard: TicTacToeBoard =
+    TicTacToeBoard(
       boardSize,
-      boardSize,
-      (r: Int, c: Int) => Option[TicTacToePlayer](null))(convertPlayerId)
+      (0 until (boardSize * boardSize)).map(i => None).toArray)
 
   def players: Set[TicTacToePlayer] = Set(x, o)
 

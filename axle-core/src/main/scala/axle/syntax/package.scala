@@ -2,8 +2,6 @@ package axle
 
 package object syntax {
 
-  object matrix extends MatrixSyntax
-
   object directedgraph extends DirectedGraphSyntax
 
   object undirectedgraph extends UndirectedGraphSyntax
@@ -21,4 +19,6 @@ package object syntax {
   object setfrom extends SetFromSyntax
   
   object mapfrom extends MapFromSyntax
+  
+  object linearalgebra extends LinearAlgebraSyntax
 }

@@ -4,7 +4,7 @@ import scala.reflect.ClassTag
 import scala.xml.NodeSeq.seqToNodeSeq
 
 import axle.IndexedCrossProduct
-import axle.algebra.Matrix
+import axle.algebra.LinearAlgebra
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.MultiplicativeMonoid
@@ -143,8 +143,8 @@ class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](val varLis
         .map({ case (k, v) => (k.toVector, spire.optional.unicode.Σ(v.map(_._2))) })
         .toMap)
 
-  def tally[M[_]](a: Distribution[T, N], b: Distribution[T, N])(implicit ev: Matrix[M]): M[Double] =
-    ev.matrix[Double](
+  def tally[M](a: Distribution[T, N], b: Distribution[T, N])(implicit la: LinearAlgebra[M, Double]): M =
+    la.matrix(
       a.values.size,
       b.values.size,
       (r: Int, c: Int) => spire.optional.unicode.Σ(cases.filter(isSupersetOf(_, Vector(a is a.values(r), b is b.values(c)))).map(this(_)).toVector).toDouble)
