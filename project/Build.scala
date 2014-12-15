@@ -194,7 +194,7 @@ import axle._
     )
   ).dependsOn(axleCore)
 
-/*
+  /*
   lazy val axleSpark = Project(
     id = "axle-spark",
     base = file("axle-spark"),
@@ -202,10 +202,10 @@ import axle._
   ).settings(
     name := "axle-spark",
     libraryDependencies ++= Seq(
-      "org.apache.spark" %% "spark-core" % "1.1.0"
+      "org.apache.spark" %% "spark-core" % "1.2.0"
     )
   ).dependsOn(axleCore)
-*/
+  */
 
 /*
 
@@ -251,7 +251,7 @@ import axle._
   ).settings(
     name := "axle-games",
     libraryDependencies ++= Seq()
-  ).dependsOn(axleCore, axleJblas)
+  ).dependsOn(axleCore)
 
   lazy val axleVisualize = Project(
     id = "axle-visualize",
@@ -280,7 +280,10 @@ import axle._
     axleJung,
     axleAlgorithms,
     axleJoda,
-    axleJblas, axleJung, axleGames, axleLanguages)
+    axleJblas,
+    axleJung,
+    axleGames,
+    axleLanguages)
 
   lazy val axleAggregate = Project(
     id = "axle-aggregate",

@@ -5,73 +5,52 @@ import axle.game._
 import axle.algebra._
 import spire.implicits._
 
-case class TicTacToeBoard(
-  size: Int,
-  positions: Array[Option[TicTacToePlayer]]) {
-
-  // assumes r and c are numbered from 0 to size-1
-
-  def indexOf(r: Int, c: Int): Int = (r * c) + r
-
-  def row(r: Int) = (0 until size) map { c => playerAt(r, c) }
-
-  def column(c: Int) = (0 until size) map { r => playerAt(r, c) }
-
-  def playerAt(r: Int, c: Int): Option[TicTacToePlayer] = positions(indexOf(r, c))
-
-  def playerAt(i: Int) = positions(i)
-
-  def place(r: Int, c: Int, player: Option[TicTacToePlayer]): TicTacToeBoard = {
-    val i = indexOf(r, c)
-    val updated = positions.clone()
-    updated.update(i, player)
-    TicTacToeBoard(size, updated)
-  }
-
-  def length = size * size
-}
-
 case class TicTacToeState(
   player: TicTacToePlayer,
-  board: TicTacToeBoard,
+  board: Array[Option[TicTacToePlayer]],
   _eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = Map())(implicit ttt: TicTacToe)
   extends State[TicTacToe]() {
 
   val numPositions = board.length
+
+  def row(r: Int) = (0 until ttt.boardSize) map { c => playerAt(r, c) }
+
+  def column(c: Int) = (0 until ttt.boardSize) map { r => playerAt(r, c) }
+
+  def playerAt(r: Int, c: Int): Option[TicTacToePlayer] = board(c + r * ttt.boardSize)
+
+  def playerAt(i: Int) = board(i - 1)
+
+  def place(position: Int, player: Option[TicTacToePlayer]): Array[Option[TicTacToePlayer]] = {
+    val updated = board.clone()
+    updated.update(position - 1, player)
+    updated
+  }
 
   def displayTo(viewer: TicTacToePlayer): String = {
 
     val keyWidth = string(numPositions).length
 
     "Board:         Movement Key:\n" +
-      0.until(board.size).map(r => {
-        val rowlist = board.row(r).toList
-        rowlist.map(_.getOrElse(" ")).mkString("|") +
+      0.until(ttt.boardSize).map(r => {
+        row(r).map(playerOpt => playerOpt.map(string(_)).getOrElse(" ")).mkString("|") +
           "          " +
-          (1 + r * board.size).until(1 + (r + 1) * board.size).mkString("|") // TODO rjust(keyWidth)
+          (1 + r * ttt.boardSize).until(1 + (r + 1) * ttt.boardSize).mkString("|") // TODO rjust(keyWidth)
       }).mkString("\n")
 
   }
 
-  def positionToRow(position: Int): Int = (position - 1) / board.size
-
-  def positionToColumn(position: Int): Int = (position - 1) % board.size
-
-  def apply(position: Int): Option[TicTacToePlayer] = board.playerAt(position)
-
-  // The validation in InteractiveTicTacToePlayer.chooseMove might be better placed here
-  //    def updat(position: Int, player: TicTacToePlayer) =
-  //      board(positionToRow(position), positionToColumn(position)) = Some(player.id)
+  def apply(position: Int): Option[TicTacToePlayer] = playerAt(position)
 
   def hasWonRow(player: TicTacToePlayer): Boolean =
-    (0 until board.size).exists(board.row(_).toList.forall(_ === Some(player)))
+    (0 until ttt.boardSize).exists(row(_).toList.forall(_ === Some(player)))
 
   def hasWonColumn(player: TicTacToePlayer): Boolean =
-    (0 until board.size).exists(board.column(_).toList.forall(_ === Some(player)))
+    (0 until ttt.boardSize).exists(column(_).toList.forall(_ === Some(player)))
 
   def hasWonDiagonal(player: TicTacToePlayer): Boolean =
-    (0 until board.size).forall(i => board.playerAt(i, i) === Some(player)) ||
-      (0 until board.size).forall(i => board.playerAt(i, (board.size - 1) - i) === Some(player))
+    (0 until ttt.boardSize).forall(i => playerAt(i, i) === Some(player)) ||
+      (0 until ttt.boardSize).forall(i => playerAt(i, (ttt.boardSize - 1) - i) === Some(player))
 
   def hasWon(player: TicTacToePlayer): Boolean = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
@@ -93,7 +72,7 @@ case class TicTacToeState(
   def apply(move: TicTacToeMove): Option[TicTacToeState] =
     ttt.state(
       ttt.playerAfter(move.tttPlayer),
-      board.place(positionToRow(move.position), positionToColumn(move.position), Some(player)),
+      place(move.position, Some(player)),
       _eventQueues)
 
   def eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = _eventQueues

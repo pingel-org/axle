@@ -30,19 +30,21 @@ case class TicTacToe(
 
   def state(
     player: TicTacToePlayer,
-    board: TicTacToeBoard,
+    board: Array[Option[TicTacToePlayer]],
     eventQueue: Map[TicTacToePlayer, List[Event[TicTacToe]]]): Option[TicTacToeState] =
-    Some(new TicTacToeState(player, board, eventQueue))
+    Some(TicTacToeState(player, board, eventQueue))
 
-  def move(player: TicTacToePlayer, position: Int): TicTacToeMove = TicTacToeMove(player, position)
+  def move(player: TicTacToePlayer, position: Int): TicTacToeMove =
+    TicTacToeMove(player, position)
 
-  def player(id: String, description: String, which: String): TicTacToePlayer = which match {
-    case "random" => new RandomTicTacToePlayer(id, description)
-    case "ai"     => new AITicTacToePlayer(id, description)
-    case _        => new InteractiveTicTacToePlayer(id, description)
-  }
+  def player(id: String, description: String, which: String): TicTacToePlayer =
+    which match {
+      case "random" => new RandomTicTacToePlayer(id, description)
+      case "ai"     => new AITicTacToePlayer(id, description)
+      case _        => new InteractiveTicTacToePlayer(id, description)
+    }
 
-  def startState: TicTacToeState = new TicTacToeState(x, startBoard)
+  def startState: TicTacToeState = TicTacToeState(x, startBoard)
 
   def startFrom(s: TicTacToeState): Option[TicTacToeState] = Some(startState)
 
@@ -50,22 +52,8 @@ case class TicTacToe(
 
   def introMessage: String = "Intro message to Tic Tac Toe"
 
-  // tttmm.C[Option[String]]
-  implicit val convertPlayerId = new FunctionPair[Double, Option[TicTacToePlayer]] {
-    def apply(v: Double): Option[TicTacToePlayer] = v match {
-      case -1D => None
-      case _   => Some(playersSeq(v.toInt))
-    }
-    def unapply(v: Option[TicTacToePlayer]): Double = v match {
-      case None         => -1D
-      case Some(player) => playersSeq.indexOf(player).toDouble
-    }
-  }
-
-  def startBoard: TicTacToeBoard =
-    TicTacToeBoard(
-      boardSize,
-      (0 until (boardSize * boardSize)).map(i => None).toArray)
+  def startBoard: Array[Option[TicTacToePlayer]] =
+    (0 until (boardSize * boardSize)).map(i => None).toArray
 
   def players: Set[TicTacToePlayer] = Set(x, o)
 
