@@ -1,6 +1,8 @@
 package axle.jblas
 
 import org.jblas.DoubleMatrix
+import axle.Show
+import axle.string
 import axle.algebra.Endofunctor
 import axle.algebra.FunctionPair
 import axle.algebra.Functor
@@ -41,7 +43,6 @@ object DoubleMatrixWitnesses {
         x.add(y)
     }
 
-  // TODO dimension (m: Int, n: Int)
   implicit val additiveCMonoidDoubleMatrix: AdditiveMonoid[DoubleMatrix] =
     new AdditiveMonoid[DoubleMatrix] {
 
@@ -111,21 +112,17 @@ object DoubleMatrixWitnesses {
         multiplicativeMonoid.times(x, y)
     }
 
-  import axle.Show
-  import axle.string
-
   implicit val showDoubleMatrix: Show[DoubleMatrix] =
     new Show[DoubleMatrix] {
 
       def text(m: DoubleMatrix): String =
-        ((0 until m.getRows) map { i =>
-          ((0 until m.getColumns) map { j =>
+        (0 until m.getRows) map { i =>
+          (0 until m.getColumns) map { j =>
             string(m.get(i, j))
-          }).mkString(" ")
-        }).mkString("\n")
+          } mkString (" ")
+        } mkString ("\n")
     }
 
-  // TODO dimension (laRows: Int, laColumns: Int)
   implicit def linearAlrebraDoubleMatrix: LinearAlgebra[DoubleMatrix, Double] =
     new LinearAlgebra[DoubleMatrix, Double] {
 
@@ -134,7 +131,7 @@ object DoubleMatrixWitnesses {
       lazy val ring = ringDoubleMatrix
 
       lazy val endofunctor = endoFunctorDoubleMatrix
-      
+
       def rows(m: DoubleMatrix): Int = m.getRows
 
       def columns(m: DoubleMatrix): Int = m.getColumns
