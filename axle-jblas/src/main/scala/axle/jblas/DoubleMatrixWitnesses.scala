@@ -20,7 +20,7 @@ import scala.reflect.ClassTag
 
 object DoubleMatrixWitnesses {
 
-  implicit def additiveCSemigroupDoubleMatrix: AdditiveCSemigroup[DoubleMatrix] =
+  implicit val additiveCSemigroupDoubleMatrix: AdditiveCSemigroup[DoubleMatrix] =
     new AdditiveCSemigroup[DoubleMatrix] {
 
       def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
@@ -28,7 +28,7 @@ object DoubleMatrixWitnesses {
     }
 
   // TODO dimension (m: Int, n: Int)
-  implicit def additiveCMonoidDoubleMatrix: AdditiveMonoid[DoubleMatrix] =
+  implicit val additiveCMonoidDoubleMatrix: AdditiveMonoid[DoubleMatrix] =
     new AdditiveMonoid[DoubleMatrix] {
 
       lazy val semigroup = additiveCSemigroupDoubleMatrix
@@ -40,14 +40,14 @@ object DoubleMatrixWitnesses {
         DoubleMatrix.zeros(???, ???)
     }
 
-  implicit def multiplicativeSemigroupDoubleMatrix: MultiplicativeSemigroup[DoubleMatrix] =
+  implicit val multiplicativeSemigroupDoubleMatrix: MultiplicativeSemigroup[DoubleMatrix] =
     new MultiplicativeSemigroup[DoubleMatrix] {
 
       def times(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
-        x.add(y)
+        x.mmul(y)
     }
 
-  implicit def multiplicativeMonoidDoubleMatrix: MultiplicativeMonoid[DoubleMatrix] =
+  implicit val multiplicativeMonoidDoubleMatrix: MultiplicativeMonoid[DoubleMatrix] =
     new MultiplicativeMonoid[DoubleMatrix] {
 
       lazy val semigroup = multiplicativeSemigroupDoubleMatrix
@@ -59,7 +59,7 @@ object DoubleMatrixWitnesses {
         DoubleMatrix.eye(???) // TODO: dimension m
     }
 
-  implicit def additiveAbGroupDoubleMatrix: AdditiveAbGroup[DoubleMatrix] =
+  implicit val additiveAbGroupDoubleMatrix: AdditiveAbGroup[DoubleMatrix] =
     new AdditiveAbGroup[DoubleMatrix] {
 
       lazy val additiveCMonoid = additiveCMonoidDoubleMatrix
@@ -74,7 +74,7 @@ object DoubleMatrixWitnesses {
         x.neg
     }
 
-  implicit def ringDoubleMatrix: Ring[DoubleMatrix] =
+  implicit val ringDoubleMatrix: Ring[DoubleMatrix] =
     new Ring[DoubleMatrix] {
 
       lazy val additiveAbGroup = additiveAbGroupDoubleMatrix
