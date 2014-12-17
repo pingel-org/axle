@@ -1,6 +1,7 @@
 package axle.jblas
 
 import org.jblas.DoubleMatrix
+import axle.algebra.Endofunctor
 import axle.algebra.FunctionPair
 import axle.algebra.Functor
 import axle.algebra.LinearAlgebra
@@ -19,6 +20,19 @@ import spire.implicits.eqOps
 import scala.reflect.ClassTag
 
 object DoubleMatrixWitnesses {
+
+  implicit val endoFunctorDoubleMatrix: Endofunctor[DoubleMatrix, Double] =
+    new Endofunctor[DoubleMatrix, Double] {
+      def map(m: DoubleMatrix)(f: Double => Double): DoubleMatrix = {
+        val jblas = DoubleMatrix.zeros(m.getRows, m.getColumns)
+        (0 until m.getRows) foreach { r =>
+          (0 until m.getColumns) foreach { c =>
+            jblas.put(r, c, f(m.get(r, c)))
+          }
+        }
+        jblas
+      }
+    }
 
   implicit val additiveCSemigroupDoubleMatrix: AdditiveCSemigroup[DoubleMatrix] =
     new AdditiveCSemigroup[DoubleMatrix] {
@@ -97,22 +111,6 @@ object DoubleMatrixWitnesses {
         multiplicativeMonoid.times(x, y)
     }
 
-  //  implicit def endoFunctorDoubleMatrix: EndoFunctor[DoubleMatrix, Double] =
-  //    new EndoFunctor[DoubleMatrix, Double] {
-  //
-  //      def map(m: DoubleMatrix)(f: Double => Double): DoubleMatrix = {
-  //        val jdm = DoubleMatrix.zeros(ev.rows(m), ev.columns(m))
-  //        (0 until ev.rows(m)) foreach { r =>
-  //          (0 until ev.columns(m)) foreach { c =>
-  //            val t = ev.get(m)(r, c)
-  //            jdm.put(r, c, f(t))
-  //          }
-  //        }
-  //        jdm
-  //      }
-  //
-  //    }
-
   import axle.Show
   import axle.string
 
@@ -135,6 +133,8 @@ object DoubleMatrixWitnesses {
 
       lazy val ring = ringDoubleMatrix
 
+      lazy val endofunctor = endoFunctorDoubleMatrix
+      
       def rows(m: DoubleMatrix): Int = m.getRows
 
       def columns(m: DoubleMatrix): Int = m.getColumns
@@ -322,19 +322,6 @@ object DoubleMatrixWitnesses {
         (0 until m) foreach { r =>
           (0 until n) foreach { c =>
             jblas.put(r, c, f(r, c))
-          }
-        }
-        jblas
-      }
-
-      // Higher-order methods
-
-      def map(m: DoubleMatrix)(f: Double => Double): DoubleMatrix = {
-        val jblas = DoubleMatrix.zeros(rows(m), columns(m))
-        (0 until rows(m)) foreach { r =>
-          (0 until columns(m)) foreach { c =>
-            val t = this.get(m)(r, c)
-            jblas.put(r, c, f(t))
           }
         }
         jblas

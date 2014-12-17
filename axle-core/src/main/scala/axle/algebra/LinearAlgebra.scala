@@ -10,6 +10,8 @@ trait LinearAlgebra[M, T] {
 
   def elementField: Field[T]
 
+  def endofunctor: Endofunctor[M, T]
+
   def rows(m: M): Int
 
   def columns(m: M): Int
@@ -126,7 +128,7 @@ trait LinearAlgebra[M, T] {
 
   // Higher-order methods
 
-  def map(m: M)(f: T => T): M
+  def map(m: M)(f: T => T): M = endofunctor.map(m)(f)
 
   def flatMapColumns(m: M)(f: M => M): M
 
