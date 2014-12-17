@@ -174,8 +174,8 @@ trait LinearAlgebra[M, T] {
   def numComponentsForCutoff(s: M, cutoff: Double): Int
 
   // TODO:
-  def zero(laRows: Int, laColumns: Int): M = ring.zero
-  def zeros(laRows: Int, laColumns: Int): M = ring.zero
+  def zero: M = ring.zero
+  def zeros(laRows: Int, laColumns: Int): M
   def eye(laRows: Int): M = ring.one
   def I(laRows: Int): M = ring.one
   def ones(laRows: Int, laColumns: Int): M

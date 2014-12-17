@@ -393,6 +393,7 @@ object DoubleMatrixWitnesses {
         numComponents
       }
 
+      def zeros(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.zeros(laRows, laColumns)
       def ones(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.ones(laRows, laColumns)
       def rand(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.rand(laRows, laColumns) // evenly distributed from 0.0 to 1.0
       def randn(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.randn(laRows, laColumns) // normal distribution
