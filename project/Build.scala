@@ -194,7 +194,6 @@ import axle._
     )
   ).dependsOn(axleCore)
 
-  /*
   lazy val axleSpark = Project(
     id = "axle-spark",
     base = file("axle-spark"),
@@ -205,7 +204,6 @@ import axle._
       "org.apache.spark" %% "spark-core" % "1.2.0"
     )
   ).dependsOn(axleCore)
-  */
 
 /*
 
