@@ -2,6 +2,7 @@ package axle.syntax
 
 import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
+import axle.algebra.Endofunctor
 import axle.algebra.FunctionPair
 import axle.algebra.Functor
 import axle.algebra.Finite
@@ -14,24 +15,6 @@ import axle.algebra.UndirectedGraph
 import axle.algebra.Vertex
 import spire.algebra.Eq
 import scala.reflect.ClassTag
-
-//trait MatrixSyntax {
-//
-//  def matrix[M[_]: Matrix, A](m: Int, n: Int, f: (Int, Int) => A)(implicit fp: FunctionPair[Double, A]) =
-//    implicitly[Matrix[M]].matrix(m, n, f)
-//
-//  def cov[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].cov(m)
-//
-//  def std[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].std(m)
-//
-//  def zscore[M[_]: Matrix](m: M[Double]) = implicitly[Matrix[M]].zscore(m)
-//
-//  def pca[M[_]: Matrix](m: M[Double], cutoff: Double = 0.95) = implicitly[Matrix[M]].pca(m, cutoff)
-//
-//  def numComponentsForCutoff[M[_]: Matrix](m: M[Double], cutoff: Double) = implicitly[Matrix[M]].numComponentsForCutoff(m, cutoff)
-//
-//  implicit def matrixOps[M[_]: Matrix, A](ma: M[A]) = new MatrixOps(ma)
-//}
 
 trait LinearAlgebraSyntax {
 
@@ -73,6 +56,12 @@ trait FunctorSyntax {
 
   implicit def functorOps[F[_]: Functor, A](fa: F[A]) =
     new FunctorOps(fa)
+}
+
+trait EndofunctorSyntax {
+
+  implicit def endofunctorOps[E, A](e: E)(implicit ev: Endofunctor[E, A]) =
+    new EndofunctorOps(e)
 }
 
 trait AggregatableSyntax {

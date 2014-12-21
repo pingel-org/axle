@@ -3,6 +3,7 @@ package axle.syntax
 import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
 import axle.algebra.DirectedEdge
+import axle.algebra.Endofunctor
 import axle.algebra.Finite
 import axle.algebra.FunctionPair
 import axle.algebra.Functor
@@ -101,8 +102,6 @@ final class LinearAlgebraOps[M, T](val lhs: M)(implicit la: LinearAlgebra[M, T])
   def sortRows = la.sortRows(lhs)
 
   // higher order methods
-
-  def map(f: T => T) = la.map(lhs)(f)
 
   def flatMapColumns(f: M => M) = la.flatMapColumns(lhs)(f)
 
@@ -213,6 +212,12 @@ final class FunctorOps[F[_]: Functor, A](val as: F[A]) {
   val ev = implicitly[Functor[F]]
 
   def map[B: ClassTag](f: A => B) = ev.map(as)(f)
+
+}
+
+final class EndofunctorOps[E, A](val e: E)(implicit ev: Endofunctor[E, A]) {
+
+  def map(f: A => A) = ev.map(e)(f)
 
 }
 

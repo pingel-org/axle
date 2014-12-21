@@ -357,7 +357,7 @@ object DoubleMatrixWitnesses {
 
       def std(m: DoubleMatrix): DoubleMatrix = {
         val centered = sumsq(centerColumns(m)).div(m.getColumns)
-        map(centered)(scala.math.sqrt)
+        endofunctor.map(centered)(scala.math.sqrt)
       }
 
       def zscore(m: DoubleMatrix): DoubleMatrix =

@@ -6,6 +6,8 @@ package object syntax {
 
   object undirectedgraph extends UndirectedGraphSyntax
 
+  object endofunctor extends EndofunctorSyntax
+  
   object functor extends FunctorSyntax
 
   object finite extends FiniteSyntax
