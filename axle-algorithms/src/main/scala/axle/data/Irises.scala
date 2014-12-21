@@ -10,10 +10,10 @@ import axle.quanta.Distance
 import axle.quanta.Distance.cm
 import axle.quanta.UnittedQuantity
 import axle.quanta.modulize
+import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.moduleOps
-import axle.jung.JungDirectedGraph
 
 /**
  *

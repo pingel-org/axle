@@ -229,7 +229,7 @@ import axle._
     libraryDependencies ++= Seq(
       "com.chuusai" %% "shapeless" % "2.0.0"
     )
-  ).dependsOn(axleCore, axleJung, axleJblas)
+  ).dependsOn(axleCore)
 
   lazy val axleLanguages = Project(
     id = "axle-languages",
