@@ -29,7 +29,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
 
   def userInputStream(): Stream[String] = {
     print("Enter move: ")
-    val num = Console.readLine() // scala.io.StdIn.readLine()
+    val num = scala.io.StdIn.readLine()
     println
     cons(num, userInputStream)
   }
