@@ -5,6 +5,7 @@ import scala.math.log
 
 import axle.syntax.linearalgebra._
 import axle.algebra.LinearAlgebra
+import spire.implicits._
 
 case class LogisticRegression[D, M](
   examples: List[D],
@@ -14,8 +15,11 @@ case class LogisticRegression[D, M](
   α: Double = 0.1,
   numIterations: Int = 100)(implicit la: LinearAlgebra[M, Double]) {
 
+  implicit val module = la.module
+  implicit val ring = la.ring
+
   // h is essentially P(y=1 | X;θ)
-  def h(xi: M, θ: M): Double = 1 / (1 + exp(-1 * (θ.t ⨯ xi).scalar))
+  def h(xi: M, θ: M): Double = 1 / (1 + exp(-1 * (θ.t * xi).scalar))
 
   // yi is boolean (1d or 0d)
   def cost(xi: M, θ: M, yi: Double) =
@@ -36,8 +40,8 @@ case class LogisticRegression[D, M](
 
   // objective: minimize (over θ) the value of Jθ
 
-  def gradientDescent(X: M, y: M, θ: M, α: Double, iterations: Int) =
-    (0 until iterations).foldLeft(θ)((θi: M, i: Int) => θi - (dθ(X, y, θi) * α))
+  def gradientDescent(X: M, y: M, θ: M, α: Double, iterations: Int): M =
+    (0 until iterations).foldLeft(θ)((θi: M, i: Int) => la.ring.minus(θi, (dθ(X, y, θi) :* α)))
 
   val inputX = la.matrix(examples.length, numObservations, examples.flatMap(observationExtractor).toArray).t
 

@@ -21,6 +21,7 @@ import spire.algebra.MetricSpace
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
+import spire.implicits._
 
 /**
  * KMeans
@@ -155,7 +156,7 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
   def centroids(X: M, K: Int, assignments: M): (M, Seq[Int]) = {
 
     val A = la.matrix(X.rows, K, (r: Int, c: Int) => if (c === assignments.get(r, 0).toInt) 1d else 0d)
-    val distances = A.t ⨯ X // K x N
+    val distances = la.ring.times(A.t, X) // K x N
     val counts = A.columnSums.t // K x 1
     val unassignedClusterIds = (0 until K).filter(counts.get(_, 0) === 0d)
 

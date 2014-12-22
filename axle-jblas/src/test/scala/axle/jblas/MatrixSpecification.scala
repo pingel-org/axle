@@ -4,20 +4,18 @@ import org.specs2.mutable._
 import axle.jblas.DoubleMatrixWitnesses._
 import axle.syntax.linearalgebra._
 import axle.syntax.endofunctor._
-import axle.syntax.LinearAlgebraOps
+import spire.implicits._
 
 class MatrixSpecification extends Specification {
-
-  //implicit val la = axle.jblas.DoubleMatrixWitnesses.linearAlrebraDoubleMatrix
 
   "DoubleJblasMatrix" should {
     "work" in {
 
-      val z = linearAlrebraDoubleMatrix.zeros(3, 4) // .zero
-      val o = linearAlrebraDoubleMatrix.ones(2, 3)
-      val r = linearAlrebraDoubleMatrix.rand(1, 2)
+      val z = linearAlgebraDoubleMatrix.zeros(3, 4) // .zero
+      val o = linearAlgebraDoubleMatrix.ones(2, 3)
+      val r = linearAlgebraDoubleMatrix.rand(1, 2)
 
-      val dm = linearAlrebraDoubleMatrix.rand(3, 3)
+      val dm = linearAlgebraDoubleMatrix.rand(3, 3)
       val c2 = dm.column(2)
       val r2 = dm.row(2)
 
@@ -27,9 +25,12 @@ class MatrixSpecification extends Specification {
 
   "x+x === x.map(*2)" should {
     "work" in {
-      val x = linearAlrebraDoubleMatrix.randn(2, 2)
+      
+      implicit val ring = linearAlgebraDoubleMatrix.ring
+      
+      val x = linearAlgebraDoubleMatrix.randn(2, 2)
 
-      val xx = x + x
+      val xx = ring.plus(x, x)
       val mapped = x.map(_ * 2)
       
       xx must be equalTo mapped

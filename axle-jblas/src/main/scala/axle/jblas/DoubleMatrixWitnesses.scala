@@ -14,9 +14,11 @@ import spire.algebra.AdditiveCSemigroup
 import spire.algebra.AdditiveGroup
 import spire.algebra.AdditiveAbGroup
 import spire.algebra.Field
+import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.Ring
+import spire.algebra.Rng
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import scala.reflect.ClassTag
@@ -35,6 +37,26 @@ object DoubleMatrixWitnesses {
         jblas
       }
     }
+
+  implicit val moduleDoubleMatrix: Module[DoubleMatrix, Double] = new Module[DoubleMatrix, Double] {
+
+    // Members declared in spire.algebra.AdditiveGroup
+    def negate(x: DoubleMatrix): DoubleMatrix =
+      additiveAbGroupDoubleMatrix.negate(x)
+
+    def zero: DoubleMatrix =
+      additiveCMonoidDoubleMatrix.zero
+
+    // Members declared in spire.algebra.AdditiveSemigroup
+    def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
+      additiveCSemigroupDoubleMatrix.plus(x, y)
+
+    // Members declared in spire.algebra.Module
+    implicit def scalar: Rng[Double] = spire.implicits.DoubleAlgebra
+
+    def timesl(r: Double, v: DoubleMatrix): DoubleMatrix = v.mul(r)
+
+  }
 
   implicit val additiveCSemigroupDoubleMatrix: AdditiveCSemigroup[DoubleMatrix] =
     new AdditiveCSemigroup[DoubleMatrix] {
@@ -123,14 +145,16 @@ object DoubleMatrixWitnesses {
         } mkString ("\n")
     }
 
-  implicit def linearAlrebraDoubleMatrix: LinearAlgebra[DoubleMatrix, Double] =
+  implicit val linearAlgebraDoubleMatrix: LinearAlgebra[DoubleMatrix, Double] =
     new LinearAlgebra[DoubleMatrix, Double] {
 
-      lazy val elementField = spire.implicits.DoubleAlgebra
+      def elementField = spire.implicits.DoubleAlgebra
 
-      lazy val ring = ringDoubleMatrix
+      def ring = ringDoubleMatrix
 
-      lazy val endofunctor = endoFunctorDoubleMatrix
+      def module = moduleDoubleMatrix
+
+      def endofunctor = endoFunctorDoubleMatrix
 
       def rows(m: DoubleMatrix): Int = m.getRows
 
@@ -170,6 +194,11 @@ object DoubleMatrixWitnesses {
 
       def dup(m: DoubleMatrix): DoubleMatrix = m.dup
 
+      def addScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.add(x)
+      def subtractScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.sub(x)
+      // def multiplyScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.mul(x)
+      def divideScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.div(x)
+
       def negate(m: DoubleMatrix): DoubleMatrix = ring.negate(m)
 
       def transpose(m: DoubleMatrix): DoubleMatrix = m.transpose
@@ -196,12 +225,6 @@ object DoubleMatrixWitnesses {
         newJblas.put(r, c, v)
         newJblas
       }
-
-      // TODO: from Module
-      def addScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.add(x)
-      def subtractScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.sub(x)
-      def multiplyScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.mul(x)
-      def divideScalar(m: DoubleMatrix)(x: Double): DoubleMatrix = m.div(x)
 
       def mulRow(m: DoubleMatrix)(i: Int, x: Double): DoubleMatrix = m.mulRow(i, x)
       def mulColumn(m: DoubleMatrix)(i: Int, x: Double): DoubleMatrix = m.mulColumn(i, x)

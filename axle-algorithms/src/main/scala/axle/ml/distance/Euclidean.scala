@@ -24,9 +24,9 @@ case class Euclidian[M](n: Int)(implicit la: LinearAlgebra[M, Double])
 
   def zero: M = la.zeros(1, n)
 
-  def plus(x: M, y: M): M = la.plus(x, y)
+  def plus(x: M, y: M): M = la.ring.plus(x, y)
 
-  def timesl(r: Double, v: M): M = v * r
+  def timesl(r: Double, v: M): M = la.module.timesl(r, v)
 
   def scalar: Field[Double] = DoubleAlgebra
 

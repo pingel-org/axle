@@ -12,6 +12,8 @@ trait LinearAlgebra[M, T] {
 
   def endofunctor: Endofunctor[M, T]
 
+  def module: Module[M, T]
+
   def rows(m: M): Int
 
   def columns(m: M): Int
@@ -51,10 +53,11 @@ trait LinearAlgebra[M, T] {
 
   def pow(m: M)(p: Double): M
 
-  // TODO: from Module:
   def addScalar(m: M)(x: T): M
   def subtractScalar(m: M)(x: T): M
-  def multiplyScalar(m: M)(x: T): M
+
+  // TODO: from Module:
+  //  def multiplyScalar(m: M)(x: T): M
   def divideScalar(m: M)(x: T): M
 
   def addAssignment(m: M)(r: Int, c: Int, v: T): M
@@ -62,10 +65,6 @@ trait LinearAlgebra[M, T] {
   def mulColumn(m: M)(i: Int, x: T): M
 
   // Operations on pairs of matrices
-
-  def plus(x: M, y: M): M = ring.plus(x, y)
-  def minus(x: M, y: M): M = ring.minus(x, y)
-  def times(x: M, y: M): M = ring.times(x, y)
 
   def mulPointwise(m: M)(other: M): M
   def divPointwise(m: M)(other: M): M

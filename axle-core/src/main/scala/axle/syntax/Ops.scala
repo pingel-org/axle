@@ -45,7 +45,8 @@ final class LinearAlgebraOps[M, T](val lhs: M)(implicit la: LinearAlgebra[M, T])
 
   def addScalar(x: T) = la.addScalar(lhs)(x)
   def subtractScalar(x: T) = la.subtractScalar(lhs)(x)
-  def multiplyScalar(x: T) = la.multiplyScalar(lhs)(x)
+
+  //  def multiplyScalar(x: T) = la.multiplyScalar(lhs)(x)
   def divideScalar(x: T) = la.divideScalar(lhs)(x)
 
   def addAssignment(r: Int, c: Int, v: T) = la.addAssignment(lhs)(r, c, v)
@@ -55,12 +56,13 @@ final class LinearAlgebraOps[M, T](val lhs: M)(implicit la: LinearAlgebra[M, T])
   // Operations on pairs of matrices
   // TODO: add and subtract don't make sense for T = Boolean
 
-  def plus(rhs: M) = la.plus(lhs, rhs)
-  def +(rhs: M) = la.plus(lhs, rhs)
-  def minus(rhs: M) = la.minus(lhs, rhs)
-  def -(rhs: M) = la.minus(lhs, rhs)
-  def times(rhs: M) = la.times(lhs, rhs)
-  def ⨯(rhs: M) = la.times(lhs, rhs)
+  //def plus(rhs: M) = la.plus(lhs, rhs)
+  //def +(rhs: M) = la.plus(lhs, rhs)
+  //def minus(rhs: M) = la.minus(lhs, rhs)
+  //def -(rhs: M) = la.minus(lhs, rhs)
+  //def times(rhs: M) = la.times(lhs, rhs)
+  //def ⨯(rhs: M) = la.times(lhs, rhs)
+  //def *(rhs: M) = la.times(lhs, rhs)
 
   def mulPointwise(rhs: M) = la.mulPointwise(lhs)(rhs)
   def divPointwise(rhs: M) = la.divPointwise(lhs)(rhs)
@@ -123,11 +125,11 @@ final class LinearAlgebraOps[M, T](val lhs: M)(implicit la: LinearAlgebra[M, T])
   }
 
   //def +(x: A) = la.addScalar(lhs)(x)
-  def *(x: T) = la.multiplyScalar(lhs)(x)
+  //def *(x: T) = la.multiplyScalar(lhs)(x)
 
   // def ⨯(rhs: M) = la.multiplyMatrix(lhs)(rhs)
 
-  def /(x: T) = la.divideScalar(lhs)(x)
+  //def /(x: T) = la.divideScalar(lhs)(x)
 
   def +|+(right: M) = la.concatenateHorizontally(lhs)(right)
 
