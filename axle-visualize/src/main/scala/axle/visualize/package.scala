@@ -79,7 +79,7 @@ package object visualize {
       def component(jug: JungUndirectedGraph[VP, EP]) =
         new JungUndirectedGraphVisualization().component(jug)
     }
-
+  
   implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[JungDirectedGraph[VP, EP]] =
     new Draw[JungDirectedGraph[VP, EP]] {
       def component(jdg: JungDirectedGraph[VP, EP]) =

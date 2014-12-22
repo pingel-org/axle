@@ -28,21 +28,23 @@ import axle.string
 
 object Factor {
 
-  implicit def showFactor[T: Show, N: Show]: Show[Factor[T, N]] = new Show[Factor[T, N]] {
+  implicit def showFactor[T: Show, N: Show]: Show[Factor[T, N]] =
+    new Show[Factor[T, N]] {
 
-    def text(factor: Factor[T, N]): String = {
-      import factor._
-      varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
-        factor.cases.map(kase =>
-          kase.map(ci => string(ci.v).padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
-            " " + string(factor(kase))).mkString("\n") // Note: was "%f".format() prior to spire.math
+      def text(factor: Factor[T, N]): String = {
+        import factor._
+        varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
+          factor.cases.map(kase =>
+            kase.map(ci => string(ci.v).padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
+              " " + string(factor(kase))).mkString("\n") // Note: was "%f".format() prior to spire.math
+      }
+
     }
 
-  }
-
-  implicit def factorEq[T: Eq, N: Field]: Eq[Factor[T, N]] = new Eq[Factor[T, N]] {
-    def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
-  }
+  implicit def factorEq[T: Eq, N: Field]: Eq[Factor[T, N]] =
+    new Eq[Factor[T, N]] {
+      def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
+    }
 
   implicit def factorMultMonoid[T: Eq: Show, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] =
     new MultiplicativeMonoid[Factor[T, N]] {
@@ -69,7 +71,7 @@ object Factor {
 
 }
 
-class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](val varList: Vector[Distribution[T, N]], val values: Map[Vector[CaseIs[T, N]], N]) {
+case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](val varList: Vector[Distribution[T, N]], val values: Map[Vector[CaseIs[T, N]], N]) {
 
   val field = implicitly[Field[N]]
 
