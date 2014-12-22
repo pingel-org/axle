@@ -275,8 +275,8 @@ import axle._
     )
   ).dependsOn(
     axleCore,
-    axleJung,
     axleAlgorithms,
+    axleVisualize,
     axleJoda,
     axleJblas,
     axleJung,
