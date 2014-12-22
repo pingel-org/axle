@@ -58,9 +58,6 @@ object Factor {
       def one: Factor[T, N] = new Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
-  def apply[T: Eq: Show, N: Field: ConvertableFrom: Order: ClassTag](varList: Vector[Distribution[T, N]], values: Map[Vector[CaseIs[T, N]], N]): Factor[T, N] =
-    new Factor(varList, values)
-
   def cases[T: Eq, N: Field](varSeq: Vector[Distribution[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
     IndexedCrossProduct(varSeq.map(_.values)) map { kase =>
       varSeq.zip(kase) map {
@@ -71,7 +68,9 @@ object Factor {
 
 }
 
-case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](val varList: Vector[Distribution[T, N]], val values: Map[Vector[CaseIs[T, N]], N]) {
+case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
+    val varList: Vector[Distribution[T, N]],
+    val values: Map[Vector[CaseIs[T, N]], N]) {
 
   val field = implicitly[Field[N]]
 
