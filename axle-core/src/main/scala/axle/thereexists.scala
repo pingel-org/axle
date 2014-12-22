@@ -1,10 +1,15 @@
 package axle
 
 import spire.algebra.BooleanAlgebra
+import scala.reflect.ClassTag
+import axle.algebra.Functor
+import axle.algebra.Aggregatable
+import axle.syntax.functor._
+import axle.syntax.aggregatable._
 
 object thereexists {
 
-  def apply[T, A](as: Iterable[T])(predicate: T => A)(implicit ev: BooleanAlgebra[A]): A =
-    as.map(predicate).reduce(ev.or) // TODO short-circuit
+  def apply[A, B: ClassTag, F[_]: Functor: Aggregatable](as: F[A])(predicate: A => B)(implicit ev: BooleanAlgebra[B]): B =
+    as.map(predicate).aggregate(ev.zero)(ev.or, ev.or) //TODO short-circuit
 
 }

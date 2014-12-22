@@ -38,7 +38,10 @@ import axle.EnrichedInt
 import axle.EnrichedMutableBuffer
 import axle.forall
 import axle.thereexists
+import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
+import axle.algebra.Functor
+import scala.reflect.ClassTag
 import spire.optional.unicode.Π
 import spire.optional.unicode.Σ
 import spire.algebra.BooleanAlgebra
@@ -67,9 +70,9 @@ package object axle {
 
   def Pi[N: MultiplicativeMonoid] = Π[N] _
 
-  def ∀[T, A: BooleanAlgebra] = forall[T, A] _
+  def ∀[A, B: BooleanAlgebra: ClassTag, F[_]: Functor: Aggregatable] = forall[A, B, F] _
 
-  def ∃[T, A: BooleanAlgebra] = thereexists[T, A] _
+  def ∃[A, B: BooleanAlgebra: ClassTag, F[_]: Functor: Aggregatable] = thereexists[A, B, F] _
 
   implicit val orderSymbols: Order[Symbol] = new Order[Symbol] {
     val stringCompare = implicitly[Order[String]]
