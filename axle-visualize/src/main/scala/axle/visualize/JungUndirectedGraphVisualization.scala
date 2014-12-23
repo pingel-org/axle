@@ -10,13 +10,11 @@ import java.awt.event.MouseEvent
 
 import org.apache.commons.collections15.Transformer
 
-import axle.algebra.Edge
-import axle.algebra.UndirectedGraph
-import axle.algebra.Vertex
 import axle.Show
-import axle.string
+import axle.algebra.Vertex
 import axle.jung.JungUndirectedGraph
 import axle.jung.JungUndirectedGraphEdge
+import axle.string
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
@@ -24,7 +22,7 @@ import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 
-class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
+case class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
   def component[VP: Show, EP: Show](jug: JungUndirectedGraph[VP, EP]): Component = {
 

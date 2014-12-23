@@ -10,14 +10,13 @@ import java.awt.event.MouseEvent
 
 import org.apache.commons.collections15.Transformer
 
-import axle.algebra.Edge
+import axle.HtmlFrom
+import axle.Show
 import axle.algebra.Vertex
+import axle.html
 import axle.jung.JungDirectedGraph
 import axle.jung.JungDirectedGraphEdge
-import axle.Show
 import axle.string
-import axle.HtmlFrom
-import axle.html
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
@@ -25,7 +24,7 @@ import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 
-class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
+case class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
   def component[VP: HtmlFrom, EP: Show](jdg: JungDirectedGraph[VP, EP]): Component = {
 

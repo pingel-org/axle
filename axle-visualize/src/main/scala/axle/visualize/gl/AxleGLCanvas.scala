@@ -34,7 +34,7 @@ import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import javax.media.opengl.glu.GLU
 import spire.implicits.FloatAlgebra
 
-class AxleGLCanvas(
+case class AxleGLCanvas(
   scene: Scene,
   fovy: UnittedQuantity[Angle.type, Float],
   zNear: UnittedQuantity[Distance.type, Float],

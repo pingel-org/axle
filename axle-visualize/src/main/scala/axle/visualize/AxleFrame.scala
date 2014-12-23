@@ -4,18 +4,18 @@ import java.awt.Color
 
 import javax.swing.JFrame
 
-class AxleFrame(
-  width: Int,
-  height: Int,
+case class AxleFrame(
+  pWidth: Int,
+  pHeight: Int,
   bgColor: Color,
-  title: String)
-  extends JFrame(title) {
+  pTitle: String)
+  extends JFrame(pTitle) {
 
   def initialize(): Unit = {
     setBackground(bgColor)
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    setSize(width, height)
-    val bg = add(new BackgroundPanel(title))
+    setSize(pWidth, pHeight)
+    val bg = add(new BackgroundPanel(pTitle))
     bg.setVisible(true)
   }
 

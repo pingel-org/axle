@@ -1,11 +1,12 @@
 package axle.visualize
 
-import java.awt.Graphics2D
-import java.awt.Graphics
-import javax.swing.JPanel
 import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
 
-class BackgroundPanel(title: String) extends JPanel {
+import javax.swing.JPanel
+
+case class BackgroundPanel(title: String) extends JPanel {
 
   override def paintComponent(g: Graphics): Unit = {
     super.paintComponent(g)

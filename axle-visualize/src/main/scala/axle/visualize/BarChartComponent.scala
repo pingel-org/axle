@@ -11,24 +11,21 @@ import scala.reflect.ClassTag
 
 import DataFeedProtocol.Fetch
 import akka.pattern.ask
+import axle.Show
 import axle.actor.Defaults.askTimeout
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.quanta.Angle.{ ° => ° }
-import axle.Show
-import axle.string
+import axle.quanta.Angle.{° => °}
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.algebra.Order
-import spire.math.Number.apply
-import spire.implicits.DoubleAlgebra
-import spire.implicits.moduleOps
 
-class BarChartComponent[S: Show, Y, D: ClassTag](chart: BarChart[S, Y, D])(
-  implicit yPlottable: Plottable[Y], yOrder: Order[Y], yts: Tics[Y], yEq: Eq[Y], yls: LengthSpace[Y, _])
+case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag](
+  chart: BarChart[S, Y, D])(
+    implicit yls: LengthSpace[Y, _])
   extends JPanel
   with Fed[D] {
 
