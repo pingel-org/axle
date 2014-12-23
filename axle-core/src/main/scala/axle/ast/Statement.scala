@@ -1,7 +1,7 @@
 
 package axle.ast
 
-abstract class Statement
+trait Statement
 
 case class Sub(name: String) extends Statement
 

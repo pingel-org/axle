@@ -5,7 +5,7 @@ import axle.string
 import spire.algebra.Eq
 import spire.implicits.eqOps
 
-class Outcome[G <: Game[G]](winner: Option[G#PLAYER])(implicit game: G, sp: Show[G#PLAYER])
+case class Outcome[G <: Game[G]](winner: Option[G#PLAYER])(implicit game: G, sp: Show[G#PLAYER])
   extends Event[G] {
 
   def displayTo(player: G#PLAYER)(implicit eqp: Eq[G#PLAYER]): String =

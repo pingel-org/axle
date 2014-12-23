@@ -1,3 +1,3 @@
 package axle.pgm.docalculus
 
-class RuleBindings {}
+case class RuleBindings() {}

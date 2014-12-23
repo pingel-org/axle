@@ -6,13 +6,7 @@ import scala.util.Random.nextInt
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
-object EnrichedIndexedSeq {
-
-  def apply[T : Manifest](is: IndexedSeq[T]): EnrichedIndexedSeq[T] =
-    new EnrichedIndexedSeq(is)
-}
-
-class EnrichedIndexedSeq[T : Manifest](is: IndexedSeq[T]) {
+case class EnrichedIndexedSeq[T: Manifest](is: IndexedSeq[T]) {
 
   def apply(range: Range): IndexedSeq[T] = {
     assert(range.step === 1)

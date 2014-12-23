@@ -7,7 +7,9 @@ import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
-class Symbol(val label: String)
+trait Symbol {
+  def label: String
+}
 
 object Symbol {
 
@@ -20,9 +22,9 @@ object Symbol {
   }
 }
 
-case class Terminal(_label: String) extends Symbol(_label)
+case class Terminal(label: String) extends Symbol
 
-case class NonTerminal(_label: String) extends Symbol(_label)
+case class NonTerminal(label: String) extends Symbol
 
 object NonTerminal {
   implicit val eqNT = new Eq[NonTerminal] {
@@ -31,7 +33,11 @@ object NonTerminal {
 }
 
 object ⊥ extends Terminal("⊥") // also known as '$'
-object ε extends Symbol("ε") // TODO terminal or non-terminal?
+
+object ε extends Symbol {
+  def label = "ε"
+ // TODO terminal or non-terminal?
+}
 
 case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol])
 

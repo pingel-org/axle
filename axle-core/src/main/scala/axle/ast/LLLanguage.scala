@@ -26,8 +26,15 @@ object LLLanguage {
 case class LLLanguage(
   name: String,
   _llRuleDescriptions: List[(String, List[String])],
-  startSymbolString: String = "S") extends Language(
-  name, Nil, Nil, (text: String) => None, ast => ast) {
+  startSymbolString: String = "S") extends Language {
+
+  def rules = Nil
+
+  def precedenceGroups = Nil
+
+  def parser = (text: String) => None
+
+  def trimmer = ast => ast
 
   val nonTerminals: List[NonTerminal] = (_llRuleDescriptions.map(desc => NonTerminal(desc._1)).toSet).toList
 
@@ -66,7 +73,7 @@ case class LLLanguage(
       } else {
         rest match {
           case Nil => result
-          case _ => first(rest) ++ Set(ε)
+          case _   => first(rest) ++ Set(ε)
         }
       }
     }
@@ -86,7 +93,7 @@ case class LLLanguage(
       llRules.filter(_.from === nt).flatMap({ rule =>
         rule.rhs match {
           case List(ε) => Set(ε) // Case 2
-          case _ => first(rule.rhs) // Case 3
+          case _       => first(rule.rhs) // Case 3
         }
       }).toSet
     }
@@ -117,7 +124,7 @@ case class LLLanguage(
             val x: Set[Symbol] = (rule.rhs match {
               // TODO?: enforce that rest is composed of only terminals (maybe not the case)
               case Terminal(_) :: symbol :: rest => first(rest).filter(x => !(x === ε))
-              case _ => Set()
+              case _                             => Set()
             })
             val y: (Set[Symbol], Map[Symbol, Set[Symbol]]) = (rule.rhs match {
               case Terminal(_) :: symbol :: Nil => follow(rule.from, followMemo)
@@ -182,7 +189,7 @@ case class LLLanguage(
     if (record.last._2.finished) {
       Some(record.map(_._1).flatMap({
         case Reduce(rule) => List(rule)
-        case _ => Nil
+        case _            => Nil
       }))
     } else {
       None

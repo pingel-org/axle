@@ -1,6 +1,6 @@
 package axle.pgm.docalculus
 
-class Unifier {
+case class Unifier() {
 
   def put(k: Any, v: Any): Unit = {}
 

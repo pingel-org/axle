@@ -7,7 +7,7 @@ import scala.util.Random.nextInt
 
 import axle.ml.GeneticAlgorithm.Mixer
 import axle.ml.GeneticAlgorithm.Mutator
-import shapeless.{:: => ::}
+import shapeless.{ :: => :: }
 import shapeless.HList
 import shapeless.HNil
 import shapeless.Poly1
@@ -58,8 +58,9 @@ object GeneticAlgorithm {
     implicit def caseTuple[T] = at[(T, T)](t => if (nextDouble < 0.03) t._2 else t._1)
   }
 
-  class GeneticAlgorithmC[G <: HList, Z <: HList](
-    populationSize: Int = 1000, numGenerations: Int = 100)(
+  case class GeneticAlgorithmC[G <: HList, Z <: HList](
+    populationSize: Int = 1000,
+    numGenerations: Int = 100)(
       implicit species: Species[G],
       zipper: Zip.Aux[G :: G :: HNil, Z],
       mapperMix: Mapper[Mixer.type, Z],

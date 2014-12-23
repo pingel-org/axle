@@ -2,11 +2,11 @@ package axle.ast.view
 
 import axle.Show
 
-class XhtmlAstNodeFormatter(
+case class XhtmlAstNodeFormatter(
   config: FormatterConfig,
   state: FormatterState,
   subState: List[xml.Node])
-  extends AstNodeFormatter[List[xml.Node], List[xml.Node]](config, state, subState) {
+  extends AstNodeFormatter[List[xml.Node], List[xml.Node]] {
 
   def apply(s: FormatterState, ss: List[xml.Node]): XhtmlAstNodeFormatter = new XhtmlAstNodeFormatter(config, s, ss)
 

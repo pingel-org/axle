@@ -30,7 +30,7 @@ object TallyDistribution0 {
 
 }
 
-class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name: String = "unnamed")
+case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name: String = "unnamed")
   extends Distribution0[A, N] {
 
   val ring = implicitly[Ring[N]]
@@ -78,7 +78,7 @@ class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name: Str
 
 }
 
-class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), N], _name: String = "unnamed")
+case class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), N], _name: String = "unnamed")
   extends Distribution1[A, G, N] {
 
   def name: String = _name

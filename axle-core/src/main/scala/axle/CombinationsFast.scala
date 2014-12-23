@@ -1,24 +1,10 @@
 package axle
 
-/**
- * Based on Python's itertools.permutations function
- *
- * http://docs.python.org/library/itertools.html#itertools.combinations
- *
- * CombionationsFast("ABCD".toIndexedSeq, 2)
- * CombionationsFast(0 until 4, 3)
- */
+import scala.collection.mutable.ListBuffer
 
-import collection.mutable.ListBuffer
+case class CombinationsFast[E: Manifest](pool: IndexedSeq[E], r: Int)
+  extends Iterable[IndexedSeq[E]] {
 
-object CombinationsFast {
-
-  def apply[E: Manifest](pool: Seq[E], r: Int): CombinationsFast[E] = new CombinationsFast[E](pool, r)
-}
-
-class CombinationsFast[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
-
-  val pool = _pool.toArray
   val n = pool.size
 
   if (r > n) {

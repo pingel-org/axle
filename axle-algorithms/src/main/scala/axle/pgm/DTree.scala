@@ -4,11 +4,11 @@ import axle.stats.Distribution
 import spire.algebra.Eq
 import spire.algebra.Field
 
-class DTreeEdge {}
+case class DTreeEdge() {}
 
-class DTreeNode {}
+case class DTreeNode() {}
 
-class DTree[T: Eq, N: Field] {
+case class DTree[T: Eq, N: Field]() {
 
   def cluster(n: DTreeNode): Set[Distribution[T, N]] = ???
 

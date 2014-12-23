@@ -3,12 +3,8 @@ package axle
 import spire.implicits._
 import spire.algebra.BooleanAlgebra
 
-object IndexedCrossProduct {
-
-  def apply[E](lists: Seq[IndexedSeq[E]]): IndexedCrossProduct[E] = new IndexedCrossProduct[E](lists)
-}
-
-class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]]) extends Iterable[Seq[E]] {
+case class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]])
+  extends Iterable[Seq[E]] {
 
   val mults = lists.reverse.map(_.size).scanLeft(1)(_ * _).reverse
 

@@ -189,12 +189,12 @@ object FOPL {
   }
   case class ElementOf(symbol: Symbol, set: Set[Any])
 
-  class EnrichedSymbol(symbol: Symbol) {
+  case class EnrichedSymbol(symbol: Symbol) {
     def in(set: Set[Any]) = ElementOf(symbol, set)
     def ∈(set: Set[Any]) = ElementOf(symbol, set)
   }
 
-  implicit val enrichSymbol = (symbol: Symbol) => new EnrichedSymbol(symbol)
+  implicit val enrichSymbol = (symbol: Symbol) => EnrichedSymbol(symbol)
 
   object ∃ {
     implicit def eqExists: Eq[∃] = new Eq[∃] {

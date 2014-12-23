@@ -28,9 +28,7 @@ object Gold {
     def ℒ: Language
   }
 
-  class HardCodedGrammar(_ℒ: Language) extends Grammar {
-    def ℒ: Language = _ℒ
-  }
+  case class HardCodedGrammar(ℒ: Language) extends Grammar
 
   implicit def enLanguage(sequences: Set[Expression]): Language = Language(sequences)
 

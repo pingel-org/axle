@@ -7,14 +7,8 @@ import scala.annotation.tailrec
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
-object Combinations {
+case class Combinations[E: Manifest](pool: IndexedSeq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
-  def apply[E: Manifest](pool: Seq[E], r: Int): Combinations[E] = new Combinations(pool, r)
-}
-
-class Combinations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
-
-  val pool: Array[E] = _pool.toList.toArray
   val n = pool.size
 
   if (r > n) {

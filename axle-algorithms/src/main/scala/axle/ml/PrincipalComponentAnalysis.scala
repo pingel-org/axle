@@ -1,6 +1,6 @@
 package axle.ml
 
-class PrincipalComponentAnalysis {
+case class PrincipalComponentAnalysis() {
 
   // data preparation:
 

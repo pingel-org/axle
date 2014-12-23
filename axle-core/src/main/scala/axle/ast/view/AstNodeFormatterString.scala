@@ -2,11 +2,11 @@ package axle.ast.view
 
 import axle.Show
 
-class AstNodeFormatterString(
+case class AstNodeFormatterString(
   config: FormatterConfig,
   state: FormatterState,
   subState: List[String]) // was "tokens"
-  extends AstNodeFormatter[String, List[String]](config, state, subState) {
+  extends AstNodeFormatter[String, List[String]] {
 
   def apply(s: FormatterState, ss: List[String]): AstNodeFormatterString =
     new AstNodeFormatterString(config, s, ss)

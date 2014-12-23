@@ -7,7 +7,7 @@ case class XhtmlLinesAstNodeFormatterState(
 
 /*
 
-class XhtmlLinesAstNodeFormatter(
+case class XhtmlLinesAstNodeFormatter(
   config: FormatterConfig,
   state: FormatterState,
   subState: XhtmlLinesAstNodeFormatterState)

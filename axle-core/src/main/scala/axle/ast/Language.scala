@@ -1,12 +1,13 @@
 
 package axle.ast
 
-class Language(
-  name: String,
-  rules: List[Rule],
-  precedenceGroups: List[(List[String], String)],
-  parser: String => Option[AstNode],
-  trimmer: AstNode => AstNode) {
+trait Language {
+
+  def name: String
+  def rules: List[Rule]
+  def precedenceGroups: List[(List[String], String)]
+  def parser: String => Option[AstNode]
+  def trimmer: AstNode => AstNode
 
   val name2rule = rules.map(r => r.name -> r).toMap
 

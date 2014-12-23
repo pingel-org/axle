@@ -16,14 +16,9 @@ import spire.implicits.eqOps
  *
  */
 
-object Permutations {
+case class Permutations[E: Manifest](pool: IndexedSeq[E], r: Int)
+  extends Iterable[IndexedSeq[E]] {
 
-  def apply[E: Manifest](pool: Seq[E], r: Int): Permutations[E] = new Permutations(pool, r)
-}
-
-class Permutations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
-
-  val pool = _pool.toArray
   val n = pool.length
   val untilN = (0 until n).toArray
   val untilR = (0 until r).toArray
@@ -35,8 +30,7 @@ class Permutations[E: Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedS
     cycles0: Array[Int],
     i0: Int): (Array[Int], Array[Int]) = {
     (indices0(0 until i0) ++ indices0(i0 + 1 until n) ++ indices0(i0 until i0 + 1),
-      cycles0.updated(i0, n - i0)
-    )
+      cycles0.updated(i0, n - i0))
   }
 
   private[this] def loop2branchFalse(

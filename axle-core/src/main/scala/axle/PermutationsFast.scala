@@ -5,14 +5,9 @@ import scala.collection.mutable.ListBuffer
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
-object PermutationsFast {
+case class PermutationsFast[E: Manifest](pool: IndexedSeq[E], r: Int)
+  extends Iterable[IndexedSeq[E]] {
 
-  def apply[E: Manifest](pool: Seq[E], r: Int): PermutationsFast[E] = new PermutationsFast[E](pool, r)
-}
-
-class PermutationsFast[E : Manifest](_pool: Seq[E], r: Int) extends Iterable[IndexedSeq[E]] {
-
-  val pool = _pool.toArray
   val n = pool.length
 
   override def size: Int = if (r >= 0 && r <= n) { n.factorial / (n - r).factorial } else { 0 }

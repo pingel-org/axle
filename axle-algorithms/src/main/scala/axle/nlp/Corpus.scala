@@ -6,7 +6,7 @@ import axle.enrichGenSeq
 import spire.implicits.LongAlgebra
 import axle.Show
 
-class Corpus(val documents: GenSeq[String], language: Language) {
+case class Corpus(val documents: GenSeq[String], language: Language) {
 
   lazy val wordCountMap: Map[String, Long] =
     documents.flatMap(doc => language.tokenize(doc.toLowerCase)).tally[Long]

@@ -161,13 +161,13 @@ object Angluin {
 
   }
 
-  class Partition {
+  case class Partition() {
     def restrictTo(subset: Set[Any]): Partition = ???
   }
 
-  class PartitionBlock {}
+  case class PartitionBlock() {}
 
-  class PrefixTreeFactory {
+  case class PrefixTreeFactory() {
     def makePrefixTree[DG[_, _]: DirectedGraph](ℒ: Language): AngluinAcceptor[DG] = ???
   }
 

@@ -7,7 +7,7 @@ import util.Random.nextInt
 import axle.game.cards._
 import Stream.cons
 
-class Poker(numPlayers: Int) extends Game[Poker] {
+case class Poker(numPlayers: Int) extends Game[Poker] {
 
   implicit val poker = this
 

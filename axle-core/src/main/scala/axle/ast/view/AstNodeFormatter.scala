@@ -22,10 +22,13 @@ case class FormatterState(
   stack: List[Option[(Int, String)]],
   _node2lineno: Map[AstNode, Int])
 
-abstract class AstNodeFormatter[R, S](
-  val config: FormatterConfig,
-  val state: FormatterState,
-  val subState: S) {
+trait AstNodeFormatter[R, S] {
+
+  def config: FormatterConfig
+  
+  def state: FormatterState
+  
+  def subState: S
 
   def apply(fs: FormatterState, ss: S): AstNodeFormatter[R, S]
 
@@ -96,9 +99,9 @@ abstract class AstNodeFormatter[R, S](
           case Some(true) => true
           case Some(false) => attr_name match {
             // TODO assumptions about the names of "left" and "right" should be externalized
-            case "left" => grammar.precedenceOf(subtreeRule) === grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) === "right" // (2 ** 3) ** 4
+            case "left"  => grammar.precedenceOf(subtreeRule) === grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) === "right" // (2 ** 3) ** 4
             case "right" => grammar.precedenceOf(subtreeRule) === grammar.precedenceOf(nodeRule) && grammar.associativityOf(nodeRule) === "left"
-            case _ => false
+            case _       => false
           }
           case None => false // is this right?
         }
@@ -243,8 +246,7 @@ abstract class AstNodeFormatter[R, S](
   def updateFor(varName: String): AstNodeFormatter[R, S] = {
     val frame = Some(state.stack.head
       .map(frame => (frame._1 + 1, varName))
-      .getOrElse((0, varName))
-    )
+      .getOrElse((0, varName)))
     this(FormatterState(
       state.indentationLevel,
       state.column,
