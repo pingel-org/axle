@@ -206,7 +206,7 @@ case class PokerState(
         newStillIn,
         Map(),
         newPiles,
-        Some(PokerOutcome(winner, handOpt)),
+        Some(PokerOutcome(Some(winner), handOpt)),
         _eventQueues))
     }
 

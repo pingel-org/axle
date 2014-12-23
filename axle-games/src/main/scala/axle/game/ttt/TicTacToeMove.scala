@@ -1,6 +1,7 @@
 package axle.game.ttt
 
-import axle.game._
+import axle.Show
+import axle.game.Move
 import axle.string
 import spire.algebra.Eq
 
@@ -22,7 +23,7 @@ case class TicTacToeMove(tttPlayer: TicTacToePlayer, position: Int)(implicit ttt
     case _ => string(position)
   }
 
-  def displayTo(p: TicTacToePlayer)(implicit eqp: Eq[TicTacToePlayer]): String =
+  def displayTo(p: TicTacToePlayer)(implicit eqp: Eq[TicTacToePlayer], sp: Show[TicTacToePlayer]): String =
     (if (tttPlayer != p) "I will" else "You have") +
       " put an " + tttPlayer.id +
       " in the " + description + "."

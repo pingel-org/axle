@@ -1,6 +1,9 @@
 package axle.game.ttt
 
-import axle.game._
+import axle.game.Outcome
 
-case class TicTacToeOutcome(winner: Option[TicTacToe#PLAYER])(implicit ttt: TicTacToe)
-extends Outcome[TicTacToe](winner)
+case class TicTacToeOutcome(winner: Option[TicTacToe#PLAYER])(implicit ev: TicTacToe)
+  extends Outcome[TicTacToe] {
+
+  implicit def game = ev
+}

@@ -2,13 +2,14 @@ package axle.game.poker
 
 import axle.game._
 import spire.algebra.Eq
+import axle.Show
 
 abstract class PokerMove(_pokerPlayer: PokerPlayer)(implicit game: Poker)
-extends Move[Poker](_pokerPlayer) {
+  extends Move[Poker](_pokerPlayer) {
 
   def description: String
-  
-  def displayTo(p: PokerPlayer)(implicit eqp: Eq[PokerPlayer]): String =
+
+  def displayTo(p: PokerPlayer)(implicit eqp: Eq[PokerPlayer], sp: Show[PokerPlayer]): String =
     (if (_pokerPlayer != p) _pokerPlayer.description else "You") + " " + description + "."
 }
 

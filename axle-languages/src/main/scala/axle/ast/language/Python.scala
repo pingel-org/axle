@@ -57,8 +57,7 @@ object Python {
     "Sub" := Sq(Sub("left"), Sp(), Op("-"), Sp(), Sub("right")),
     "Bitand" := J("nodes", Sq(Sp(), Op("&"), Sp())),
     "Bitor" := J("nodes", Sq(Sp(), Op("|"), Sp())),
-    "Bitxor" := J("nodes", Sq(Sp(), Op("^"), Sp()))
-  )
+    "Bitxor" := J("nodes", Sq(Sp(), Op("^"), Sp())))
 
   val simpleStatements: List[Rule] = List(
     "Expression" := Nop(),
@@ -99,8 +98,7 @@ object Python {
     Sq(Kw("else"), Lit(":"), CR(),
       Indent(),
       Sub("else_"),
-      Dedent())
-  )
+      Dedent()))
 
   val ifexp_rule = "IfExp" := Sq(Kw("if"), Sub("test"), Lit(":"), CR(),
     Indent(),
@@ -118,8 +116,7 @@ object Python {
     SqT(Kw("else"), Lit(":"), CR(),
       Indent(),
       Sub("else_"),
-      Dedent())
-  )
+      Dedent()))
 
   val with_rule = "With" := Sq(Kw("with"), Sp(), Sub("expr"), Sp(), Kw("as"), SqT(Sp(), Sub("vars")), Lit(":"), CR(),
     Indent(),
@@ -139,8 +136,7 @@ object Python {
     SqT(Kw("else"), Lit(":"), CR(),
       Indent(),
       Sub("else_"),
-      Dedent())
-  )
+      Dedent()))
 
   val tryfinally_rule = "TryFinally" := Sq(Kw("try"), Lit(":"), CR(),
     Indent(),
@@ -149,16 +145,14 @@ object Python {
     Kw("finally"), Lit(":"), CR(),
     Indent(),
     Sub("final"),
-    Dedent()
-  )
+    Dedent())
 
   val class_rule = "Class" := Sq(Kw("class"), Sp(), Attr("name"), Emb("(", J("bases", Sq(Lit(","), Sp())), ")"), Lit(":"), CR(),
     CRH(),
     Indent(),
     SqT(Repr("doc"), CR()),
     Sub("code"),
-    Dedent(), CRH()
-  )
+    Dedent(), CRH())
 
   val function_rule = "Function" := Sq(
     Sub("decorators"), // CR()), J decorators with CR?
@@ -166,8 +160,7 @@ object Python {
     Indent(),
     SqT(Repr("doc"), CR()),
     Sub("code"),
-    Dedent(), CRH()
-  )
+    Dedent(), CRH())
 
   val decorators_rule = "Decorators" := For("nodes", Sq(Lit("@"), Var(), CR()))
 
@@ -189,8 +182,7 @@ object Python {
     (List("UnaryAdd", "UnarySub", "Invert"), "left"),
     (List("Power"), "right"),
     (List("Subscript", "Slice", "CallFunc", "Getattr"), "left"),
-    (List("Tuple", "List", "Dict", "Backquote"), "left")
-  )
+    (List("Tuple", "List", "Dict", "Backquote"), "left"))
 
   val parse: String => Option[AstNode] =
 
@@ -226,7 +218,7 @@ object Python {
           if (mnl.list.length === 1) {
             mnl.list.head match {
               case AstNodeRule("Discard", cm, _) => cm("expr")
-              case _ => mnl.list.head
+              case _                             => mnl.list.head
             }
           } else {
             mnl
@@ -238,13 +230,19 @@ object Python {
     case _ => throw new Exception("expected to find a Module at the top of the ast")
   }
 
-  val lang = new Language(
-    "python",
-    expressions ++ simpleStatements ++ compoundStatements,
-    precedence,
-    parse,
-    trim
-  )
+  val lang = new Language {
+
+    def name: String = "python"
+
+    def rules: List[Rule] = expressions ++ simpleStatements ++ compoundStatements
+
+    def precedenceGroups: List[(List[String], String)] = precedence
+
+    def parser: String => Option[AstNode] = parse
+
+    def trimmer: AstNode => AstNode = trim
+
+  }
 
   def language: Language = lang
 
