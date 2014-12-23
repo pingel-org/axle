@@ -3,7 +3,7 @@ package axle.game.poker
 import axle.game._
 import Stream.cons
 
-class PokerPlayerInteractive(id: String, description: String = "human")(implicit game: Poker)
+case class PokerPlayerInteractive(id: String, description: String = "human")(implicit game: Poker)
   extends PokerPlayer(id, description) {
 
   override def introduceGame(): Unit = {

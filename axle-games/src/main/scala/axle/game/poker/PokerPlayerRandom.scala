@@ -2,7 +2,7 @@ package axle.game.poker
 
 import util.Random.nextInt
 
-class RandomPokerPlayer(id: String, description: String = "random")(implicit game: Poker)
+case class RandomPokerPlayer(id: String, description: String = "random")(implicit game: Poker)
   extends PokerPlayer(id, description) {
 
   def move(state: PokerState): (PokerMove, PokerState) = {

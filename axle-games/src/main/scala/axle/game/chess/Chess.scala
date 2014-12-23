@@ -1,6 +1,6 @@
 package axle.game.chess
 
-class Chess {
+case class Chess() {
 
   val s0 =
     "♜♞♝♛♚♝♞♜" +

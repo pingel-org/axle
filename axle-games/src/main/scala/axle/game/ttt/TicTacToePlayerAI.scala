@@ -4,7 +4,7 @@ import axle.algebra._
 import spire.math._
 import spire.implicits._
 
-class AITicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "minimax")(implicit ttt: TicTacToe)
+case class AITicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "minimax")(implicit ttt: TicTacToe)
   extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
 
   val heuristic = (state: TicTacToeState) => ttt.players.map(p => {

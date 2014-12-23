@@ -12,7 +12,7 @@ import axle.visualize.BarChartGrouped
 import axle.visualize.Paintable
 import axle.visualize.Plot
 
-class BarChartKey[S: Show, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colorStream: Stream[Color])
+case class BarChartKey[S: Show, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font, colorStream: Stream[Color])
   extends Paintable {
 
   import chart._
@@ -31,7 +31,7 @@ class BarChartKey[S: Show, Y: Plottable, D](chart: BarChart[S, Y, D], font: Font
 
 }
 
-class BarChartGroupedKey[G: Show, S: Show, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, D], font: Font, colorStream: Stream[Color]) extends Paintable {
+case class BarChartGroupedKey[G: Show, S: Show, Y: Plottable, D](chart: BarChartGrouped[G, S, Y, D], font: Font, colorStream: Stream[Color]) extends Paintable {
 
   import chart._
 
@@ -49,7 +49,7 @@ class BarChartGroupedKey[G: Show, S: Show, Y: Plottable, D](chart: BarChartGroup
 
 }
 
-class Key[X, Y, D](
+case class Key[X, Y, D](
   plot: Plot[X, Y, D],
   font: Font,
   colorStream: Stream[Color],

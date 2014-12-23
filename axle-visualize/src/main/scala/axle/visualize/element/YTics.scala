@@ -8,7 +8,7 @@ import axle.visualize.Paintable
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D
 
-class YTics[X, Y](
+case class YTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],
   tics: Seq[(Y, String)],
   font: Font,

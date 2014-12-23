@@ -2,7 +2,7 @@ package axle.game.ttt
 
 import util.Random.nextInt
 
-class RandomTicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "random")(implicit ttt: TicTacToe)
+case class RandomTicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "random")(implicit ttt: TicTacToe)
   extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
 
   def move(state: TicTacToeState): (TicTacToeMove, TicTacToeState) = {

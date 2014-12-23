@@ -7,7 +7,7 @@ import axle.visualize.Paintable
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D
 
-class HorizontalLine[X, Y](
+case class HorizontalLine[X, Y](
   scaledArea: ScaledArea2D[X, Y],
   h: Y,
   color: Color = Color.black) extends Paintable {

@@ -7,7 +7,6 @@ import java.awt.Graphics2D
 
 import spire.implicits.DoubleAlgebra
 import axle.quanta.Angle
-//import axle.quanta.Angle.eqTypeclass
 import axle.quanta.Angle.{ ° => ° }
 import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
@@ -17,7 +16,7 @@ import spire.implicits.eqOps
 import spire.math.Number.apply
 import spire.implicits.moduleOps
 
-class XTics[X, Y](
+case class XTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],
   tics: Seq[(X, String)],
   font: Font,

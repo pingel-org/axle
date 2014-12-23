@@ -7,7 +7,7 @@ import axle.visualize.Paintable
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D
 
-class DataLines[X, Y, D](
+case class DataLines[X, Y, D](
   scaledArea: ScaledArea2D[X, Y],
   data: Seq[(String, D)],
   orderedXs: D => Traversable[X],

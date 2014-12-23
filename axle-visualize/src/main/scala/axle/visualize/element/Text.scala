@@ -10,7 +10,7 @@ import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra
 
-class Text(
+case class Text(
   text: String,
   font: Font,
   x: Int,
