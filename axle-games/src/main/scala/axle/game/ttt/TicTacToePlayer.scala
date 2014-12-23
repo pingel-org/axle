@@ -18,5 +18,5 @@ object TicTacToePlayer {
   
 }
 
-abstract class TicTacToePlayer(id: String, description: String)(implicit ttt: TicTacToe)
-  extends Player[TicTacToe](id, description)
+abstract class TicTacToePlayer(implicit ttt: TicTacToe)
+  extends Player[TicTacToe]

@@ -3,7 +3,7 @@ package axle.game.poker
 import spire.implicits._
 
 case class PokerPlayerDealer(id: String, description: String = "dealer")(implicit game: Poker)
-  extends PokerPlayer(id, description) {
+  extends PokerPlayer() {
 
   def move(state: PokerState): (PokerMove, PokerState) = {
     val move = state.numShown match {

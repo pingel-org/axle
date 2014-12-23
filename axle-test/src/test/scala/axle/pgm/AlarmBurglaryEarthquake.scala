@@ -71,7 +71,7 @@ class ABE extends Specification {
 
       val Q: Set[Distribution[Boolean, Rational]] = Set(E, B, A)
       val order = List(J, M)
-
+      
       // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
       // val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E is true)
       // bn.getDistributions.map(rv => println(bn.getMarkovAssumptionsFor(rv)))

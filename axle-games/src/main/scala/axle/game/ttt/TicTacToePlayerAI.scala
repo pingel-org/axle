@@ -4,8 +4,8 @@ import axle.algebra._
 import spire.math._
 import spire.implicits._
 
-case class AITicTacToePlayer(aitttPlayerId: String, aitttDescription: String = "minimax")(implicit ttt: TicTacToe)
-  extends TicTacToePlayer(aitttPlayerId, aitttDescription) {
+case class AITicTacToePlayer(id: String, description: String = "minimax")(implicit ttt: TicTacToe)
+  extends TicTacToePlayer() {
 
   val heuristic = (state: TicTacToeState) => ttt.players.map(p => {
     (p, state.outcome.map(out => if (out.winner === Some(p)) Real(1) else Real(-1)).getOrElse(Real(0)))

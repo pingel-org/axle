@@ -17,5 +17,4 @@ object PokerPlayer {
 
 }
 
-abstract class PokerPlayer(id: String, description: String)(implicit game: Poker)
-  extends Player[Poker](id, description)
+abstract class PokerPlayer(implicit game: Poker) extends Player[Poker]

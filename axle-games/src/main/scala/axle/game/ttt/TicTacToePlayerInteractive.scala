@@ -3,8 +3,8 @@ package axle.game.ttt
 import axle.game._
 import Stream.cons
 
-case class InteractiveTicTacToePlayer(itttPlayerId: String, itttDescription: String = "human")(implicit ttt: TicTacToe)
-  extends TicTacToePlayer(itttPlayerId, itttDescription) {
+case class InteractiveTicTacToePlayer(id: String, description: String = "human")(implicit ttt: TicTacToe)
+  extends TicTacToePlayer() {
 
   override def introduceGame(): Unit = {
     val intro = """

@@ -4,7 +4,7 @@ import axle.game._
 import Stream.cons
 
 case class PokerPlayerInteractive(id: String, description: String = "human")(implicit game: Poker)
-  extends PokerPlayer(id, description) {
+  extends PokerPlayer() {
 
   override def introduceGame(): Unit = {
     val intro = """

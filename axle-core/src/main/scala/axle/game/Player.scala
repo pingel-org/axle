@@ -2,8 +2,12 @@ package axle.game
 
 import axle.Show
 
-abstract class Player[G <: Game[G]](val id: String, val description: String) {
+abstract class Player[G <: Game[G]] {
 
+  def id: String
+  
+  def description: String
+  
   def move(state: G#STATE): (G#MOVE, G#STATE)
 
   def introduceGame(): Unit = {}
