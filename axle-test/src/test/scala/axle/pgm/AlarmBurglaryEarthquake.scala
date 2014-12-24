@@ -15,11 +15,11 @@ class ABE extends Specification {
 
   val bools = Vector(true, false)
 
-  val B = new UnknownDistribution0[Boolean, Rational](bools, "Burglary")
-  val E = new UnknownDistribution0[Boolean, Rational](bools, "Earthquake")
-  val A = new UnknownDistribution0[Boolean, Rational](bools, "Alarm")
-  val J = new UnknownDistribution0[Boolean, Rational](bools, "John Calls")
-  val M = new UnknownDistribution0[Boolean, Rational](bools, "Mary Calls")
+  val B = UnknownDistribution0[Boolean, Rational](bools, "Burglary")
+  val E = UnknownDistribution0[Boolean, Rational](bools, "Earthquake")
+  val A = UnknownDistribution0[Boolean, Rational](bools, "Alarm")
+  val J = UnknownDistribution0[Boolean, Rational](bools, "John Calls")
+  val M = UnknownDistribution0[Boolean, Rational](bools, "Mary Calls")
 
   val bn = BayesianNetwork(
     "A sounds (due to Burglary or Earthquake) and John or Mary Call",

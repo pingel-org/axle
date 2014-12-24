@@ -9,24 +9,24 @@ case class AstNodeFormatterString(
   extends AstNodeFormatter[String, List[String]] {
 
   def apply(s: FormatterState, ss: List[String]): AstNodeFormatterString =
-    new AstNodeFormatterString(config, s, ss)
+    AstNodeFormatterString(config, s, ss)
 
   override def result: String = subState.mkString("")
 
   def accRaw(s: String, n: Int): AstNodeFormatterString =
-    new AstNodeFormatterString(config, state, subState ++ List(s))
+    AstNodeFormatterString(config, state, subState ++ List(s))
 
   def accNewline: AstNodeFormatterString =
-    new AstNodeFormatterString(config, state, subState ++ List("\n"))
+    AstNodeFormatterString(config, state, subState ++ List("\n"))
 
   def accSpace: AstNodeFormatterString =
-    new AstNodeFormatterString(config, state, subState ++ List(" "))
+    AstNodeFormatterString(config, state, subState ++ List(" "))
 
   def accSpaces: AstNodeFormatterString =
-    new AstNodeFormatterString(config, state, subState ++ List("   "))
+    AstNodeFormatterString(config, state, subState ++ List("   "))
 
   def accSpan(spanclass: String, s: String, n: Int): AstNodeFormatterString =
-    new AstNodeFormatterString(config, state, subState ++ List(s))
+    AstNodeFormatterString(config, state, subState ++ List(s))
 
   def accPushStack: AstNodeFormatter[String, List[String]] = this
 

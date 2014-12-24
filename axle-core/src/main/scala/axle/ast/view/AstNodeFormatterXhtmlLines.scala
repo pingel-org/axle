@@ -71,7 +71,7 @@ case class XhtmlLinesAstNodeFormatter(
 
   override val tokens = List[XhtmlLinesAstNodeAccumulator]()
 
-  tokens.push(new XhtmlLinesAstNodeAccumulator(this))
+  tokens.push(XhtmlLinesAstNodeAccumulator(this))
 
   def lines(): Map[Int, xml.NodeSeq] = tokens.head.lines
 
@@ -109,7 +109,7 @@ case class XhtmlLinesAstNodeFormatter(
 
   def accSpan(spanclass: String, s: String): XhtmlLinesAstNodeFormatter = tokens.top.span(spanclass, s)
 
-  def accPushStack(): XhtmlLinesAstNodeFormatter = tokens.push(new XhtmlLinesAstNodeAccumulatorState(this))
+  def accPushStack(): XhtmlLinesAstNodeFormatter = tokens.push(XhtmlLinesAstNodeAccumulatorState(this))
 
   // TODO: assert stack.size > 1
   def accPopAndWrapStack(label: String): XhtmlLinesAstNodeFormatter = tokens.top.absorb(label, tokens.pop)

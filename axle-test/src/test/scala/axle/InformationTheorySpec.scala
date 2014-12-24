@@ -22,7 +22,7 @@ class InformationTheorySpec extends Specification {
     "work" in {
 
       val d =
-        new ConditionalProbabilityTable0(Map(
+        ConditionalProbabilityTable0(Map(
           "A" -> Rational(2, 10),
           "B" -> Rational(1, 10),
           "C" -> Rational(7, 10)), "d")
@@ -34,16 +34,16 @@ class InformationTheorySpec extends Specification {
   "cpt" should {
     "work" in {
 
-      val X = new ConditionalProbabilityTable0(Map(
+      val X = ConditionalProbabilityTable0(Map(
         "foo" -> Rational(1, 10),
         "food" -> Rational(9, 10)), "X")
 
-      val Y = new ConditionalProbabilityTable0(Map(
+      val Y = ConditionalProbabilityTable0(Map(
         "bar" -> Rational(9, 10),
         "bard" -> Rational(1, 10)), "Y")
 
       // Note: A is given X and Y
-      val A = new ConditionalProbabilityTable2(Map(
+      val A = ConditionalProbabilityTable2(Map(
         ("foo", "bar") -> Map("a" -> Rational(3, 10), "b" -> Rational(7, 10)),
         ("foo", "bard") -> Map("a" -> Rational(2, 10), "b" -> Rational(8, 10)),
         ("food", "bar") -> Map("a" -> Rational(9, 10), "b" -> Rational(1, 10)),

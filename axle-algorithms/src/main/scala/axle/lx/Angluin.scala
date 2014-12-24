@@ -189,7 +189,7 @@ object Angluin {
 
     def isFor(ℒ: Language) = content === ℒ
 
-    def content: Language = new Language(expressions.filter(_ != ♯))
+    def content: Language = Language(expressions.filter(_ != ♯))
   }
 
   object Text {

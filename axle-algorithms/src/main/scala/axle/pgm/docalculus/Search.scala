@@ -9,10 +9,10 @@ import spire.implicits.eqOps
 object Search {
 
   // val model = MidtermModel1
-  // val namer = new VariableNamer()
+  // val namer = VariableNamer()
   //
   // val quantity = model.getQuantity(namer) // Probability
-  // val search = new Search()
+  // val search = Search()
   // search.reduce(model, quantity, namer, 0, 2)
 
   /**

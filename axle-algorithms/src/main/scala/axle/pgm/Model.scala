@@ -104,14 +104,3 @@ case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](graph: DG[Distribu
   }
 
 }
-
-//object Model {
-//
-//  val newVarIndex = 0
-//
-//  def apply[A: Eq, DG[_, _]: DirectedGraph](
-//    vps: Vector[A],
-//    ef: Seq[Vertex[A]] => Seq[(Vertex[A], Vertex[A], String)]): Model[A] =
-//    new Model(dg.make(vps, ef))
-//
-//}

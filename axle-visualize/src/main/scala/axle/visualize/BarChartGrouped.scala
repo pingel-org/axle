@@ -21,7 +21,7 @@ object BarChartGrouped {
 
   implicit def drawBarChartGrouped[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
     implicit yls: LengthSpace[Y, _]): Draw[BarChartGrouped[G, S, Y, D]] = new Draw[BarChartGrouped[G, S, Y, D]] {
-    def component(barChart: BarChartGrouped[G, S, Y, D]) = new BarChartGroupedComponent(barChart)
+    def component(barChart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(barChart)
   }
 
 }

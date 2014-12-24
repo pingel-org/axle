@@ -50,17 +50,17 @@ package object stats {
   val sides = Vector('HEAD, 'TAIL)
 
   def coin(pHead: Rational = Rational(1, 2)): Distribution[Symbol, Rational] =
-    new ConditionalProbabilityTable0[Symbol, Rational](
+    ConditionalProbabilityTable0[Symbol, Rational](
       Map('HEAD -> pHead, 'TAIL -> (1 - pHead)), "coin")
 
   def binaryDecision(yes: Rational): Distribution0[Boolean, Rational] =
-    new ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), s"binaryDecision $yes")
+    ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), s"binaryDecision $yes")
 
   def uniformDistribution[T](values: Seq[T], name: String): Distribution0[T, Rational] = {
 
     val dist = values.groupBy(identity).mapValues({ ks => Rational(ks.size, values.size) }).toMap
 
-    new ConditionalProbabilityTable0(dist, name)
+    ConditionalProbabilityTable0(dist, name)
   }
 
   def iffy[C: Eq, N: Field: Order: Dist](
@@ -77,7 +77,7 @@ package object stats {
 
     val newDist = parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(addN.plus)).toMap
 
-    new ConditionalProbabilityTable0(newDist, "todo")
+    ConditionalProbabilityTable0(newDist, "todo")
   }
 
   def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)

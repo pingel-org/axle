@@ -15,7 +15,7 @@ object ViewXhtml extends View[xml.NodeSeq] {
   // <html><head><link ref=... /></head><body>...</body><html>
 
   def makeFormatter(language: Language, node: AstNode): XhtmlAstNodeFormatter =
-    new XhtmlAstNodeFormatter(
+    XhtmlAstNodeFormatter(
       FormatterConfig(language, true, Set(node)),
       FormatterState(0, 0, false, 0, Nil, Map()),
       Nil)

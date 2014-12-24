@@ -26,7 +26,7 @@ object BarChart {
 
   implicit def drawBarChart[S: Show, Y: Plottable: Order: Tics: Eq, D: ClassTag](implicit yls: LengthSpace[Y, _]): Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
-      def component(barChart: BarChart[S, Y, D]) = new BarChartComponent(barChart)
+      def component(barChart: BarChart[S, Y, D]) = BarChartComponent(barChart)
     }
 
 }

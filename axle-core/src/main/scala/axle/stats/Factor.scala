@@ -53,9 +53,9 @@ object Factor {
 
       def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
         val newVars = (x.variables.toSet union y.variables.toSet).toVector
-        new Factor(newVars, Factor.cases(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
+        Factor(newVars, Factor.cases(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
       }
-      def one: Factor[T, N] = new Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
+      def one: Factor[T, N] = Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
   def cases[T: Eq, N: Field](varSeq: Vector[Distribution[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
@@ -69,12 +69,12 @@ object Factor {
 }
 
 case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
-    val varList: Vector[Distribution[T, N]],
-    val values: Map[Vector[CaseIs[T, N]], N]) {
+  val varList: Vector[Distribution[T, N]],
+  val values: Map[Vector[CaseIs[T, N]], N]) {
 
   val field = implicitly[Field[N]]
 
-  lazy val crossProduct = new IndexedCrossProduct(varList.map(_.values))
+  lazy val crossProduct = IndexedCrossProduct(varList.map(_.values))
 
   lazy val elements: Array[N] =
     (0 until crossProduct.size) map { i =>
@@ -130,14 +130,14 @@ case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
   // Chapter 6 definition 6
   def maxOut(variable: Distribution[T, N]): Factor[T, N] = {
     val newVars = variables.filter(v => !(variable === v))
-    new Factor(newVars,
+    Factor(newVars,
       Factor.cases(newVars)
         .map(kase => (kase, variable.values.map(value => this(kase)).max))
         .toMap)
   }
 
   def projectToOnly(remainingVars: Vector[Distribution[T, N]]): Factor[T, N] =
-    new Factor(remainingVars,
+    Factor(remainingVars,
       Factor.cases[T, N](remainingVars).toVector
         .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
         .groupBy(_._1)
@@ -156,7 +156,7 @@ case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
   def sumOut(gone: Distribution[T, N]): Factor[T, N] = {
     val position = varList.indexOf(gone)
     val newVars = varList.filter(v => !(v === gone))
-    new Factor(
+    Factor(
       newVars,
       Factor.cases(newVars).map(kase => {
         val reals = gone.values.map(gv => {
@@ -175,7 +175,7 @@ case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
   // as defined on chapter 6 page 15
   def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T, N]]]): Factor[T, N] = {
     val e = eOpt.get
-    new Factor(variables,
+    Factor(variables,
       Factor.cases(e.map(_.distribution).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
   }
 

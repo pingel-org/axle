@@ -16,14 +16,14 @@ class CausalitySpec extends Specification {
 
   val bools = Vector(true, false)
 
-  def ubd(name: String) = new UnknownDistribution0[Boolean, Rational](bools, name)
+  def ubd(name: String) = UnknownDistribution0[Boolean, Rational](bools, name)
 
   //    def getStandardQuantity(m: CausalModel) = {
-  //      val namer = new VariableNamer()
+  //      val namer = VariableNamer()
   //      val question = Set(m.getVariable("Y").nextVariable(namer))
   //      val given = Set[Variable]()
   //      val actions = Set(m.getVariable("X").nextVariable(namer))
-  //      new CausalityProbability(question, given, actions)
+  //      CausalityProbability(question, given, actions)
   //    }
   //
   //    for (model <- getModels()) {
@@ -74,17 +74,17 @@ class CausalitySpec extends Specification {
           //          result += CausalModelNode(epi, false)
           //          result += CausalModelNode(xi)
           //          result += CausalModelNode(yi)
-          //          result.addFunction(new PFunction(ei, p))
-          //          result.addFunction(new PFunction(epi, p))
+          //          result.addFunction(PFunction(ei, p))
+          //          result.addFunction(PFunction(epi, p))
           //          if (i === 0) {
-          //            result.addFunction(new RandomBooleanFunction(xi, 0.25))
+          //            result.addFunction(RandomBooleanFunction(xi, 0.25))
           //          } else {
-          //            result.addFunction(new XorOrFunction(xi, oldE.get, oldX.get, oldY.get))
+          //            result.addFunction(XorOrFunction(xi, oldE.get, oldX.get, oldY.get))
           //          }
           //          if (i === 0) {
-          //            result.addFunction(new RandomBooleanFunction(yi, 0.25))
+          //            result.addFunction(RandomBooleanFunction(yi, 0.25))
           //          } else {
-          //            result.addFunction(new XorOrFunction(yi, oldEp.get, oldX.get, oldY.get))
+          //            result.addFunction(XorOrFunction(yi, oldEp.get, oldX.get, oldY.get))
           //          }
           Some((ei, epi, xi, yi))
         })
@@ -101,7 +101,7 @@ class CausalitySpec extends Specification {
       //      val x5 = m.getVariable("X5")
       //      val S = table.separate(x0, x5)
       //
-      //      val search = new InductiveCausation(table)
+      //      val search = InductiveCausation(table)
       //      if (true) {
       //        println(search.ic())
       //      } else {
@@ -134,11 +134,11 @@ class CausalitySpec extends Specification {
         CausalModelNode(X3),
         CausalModelNode(X4),
         CausalModelNode(Y))) /* TODO addFunctions List(
-        new PFunction(X1, List(U1)),
-        new PFunction(X2, List(X1, U2)),
-        new PFunction(X3, List(X2, U1, U3)),
-        new PFunction(X4, List(X3, U2)),
-        new PFunction(Y, List(X4, U3))
+        PFunction(X1, List(U1)),
+        PFunction(X2, List(X1, U2)),
+        PFunction(X3, List(X2, U1, U3)),
+        PFunction(X4, List(X3, U2)),
+        PFunction(Y, List(X4, U3))
       ) */
 
       // TODO
@@ -153,7 +153,7 @@ class CausalitySpec extends Specification {
       //          getVariable("X3").nextVariable(namer),
       //          getVariable("X4").nextVariable(namer)
       //        )
-      //        new Probability(question, given, actions)
+      //        Probability(question, given, actions)
       //      }
       //
       //      def getClose(namer: VariableNamer) = {
@@ -163,7 +163,7 @@ class CausalitySpec extends Specification {
       //          getVariable("X3").nextVariable(namer),
       //          getVariable("X4").nextVariable(namer)
       //        )
-      //        new Probability(question, given, actions)
+      //        Probability(question, given, actions)
       //      }
 
       1 must be equalTo (1)
@@ -185,14 +185,14 @@ class CausalitySpec extends Specification {
         CausalModelNode(d), CausalModelNode(e), CausalModelNode(f, false)))
 
       val model = model0 /* TODO addFunctions List(
-        new PFunction(c, List(a, b)),
-        new PFunction(d, List(c, f)),
-        new PFunction(e, List(d, f))
+        PFunction(c, List(a, b)),
+        PFunction(d, List(c, f)),
+        PFunction(e, List(d, f))
       ) */
 
       // TODO
-      //      val distribution = new PerfectDistribution(this)
-      //      val search = new InductiveCausation(distribution)
+      //      val distribution = PerfectDistribution(this)
+      //      val search = InductiveCausation(distribution)
       //      val pdg = search.ic()
 
       1 must be equalTo (1)
@@ -207,7 +207,7 @@ class CausalitySpec extends Specification {
 
       val model0 = CausalModel("3.8a", List(CausalModelNode(X), CausalModelNode(Y)))
       val model = model0 /* TODO addFunctions List(
-        new PFunction(Y, List(X))
+        PFunction(Y, List(X))
       ) */
 
       1 must be equalTo (1)
@@ -225,8 +225,8 @@ class CausalitySpec extends Specification {
       val model0 = CausalModel("3.8b", List(CausalModelNode(X), CausalModelNode(Y), CausalModelNode(Z), CausalModelNode(U)))
 
       val model = model0 /* TODO addFunctions List(
-        new PFunction(Y, List(X, Z, U)),
-        new PFunction(Z, List(X, U))
+        PFunction(Y, List(X, Z, U)),
+        PFunction(Z, List(X, U))
       ) */
 
       1 must be equalTo (1)
@@ -248,9 +248,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(U, false)))
 
       val model = model0 /* TODO addFunctions List(
-        new PFunction(X, List(Z)),
-        new PFunction(Y, List(X, Z, U)),
-        new PFunction(Z, List(U))
+        PFunction(X, List(Z)),
+        PFunction(Y, List(X, Z, U)),
+        PFunction(Z, List(U))
       ) */
 
       1 must be equalTo (1)
@@ -270,9 +270,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U, false))) /* TODO addFunctions List(
-        new PFunction(X, List(Z, U)),
-        new PFunction(Y, List(X, Z)),
-        new PFunction(Z, List(U))
+        PFunction(X, List(Z, U)),
+        PFunction(Y, List(X, Z)),
+        PFunction(Z, List(U))
       ) */
 
       1 must be equalTo (1)
@@ -292,9 +292,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U, false))) /* TODO addFunctions List(
-        new PFunction(X, List(U)),
-        new PFunction(Y, List(Z, U)),
-        new PFunction(Z, List(X))
+        PFunction(X, List(U)),
+        PFunction(Y, List(Z, U)),
+        PFunction(Z, List(X))
       ) */
 
       1 must be equalTo (1)
@@ -318,10 +318,10 @@ class CausalitySpec extends Specification {
         CausalModelNode(Z2),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false))) /* addFunctions List(
-        new PFunction(X, List(U1)),
-        new PFunction(Y, List(X, Z1, Z2, U2)),
-        new PFunction(Z1, List(X, U2)),
-        new PFunction(Z2, List(Z1, U1))
+        PFunction(X, List(U1)),
+        PFunction(Y, List(X, Z1, Z2, U2)),
+        PFunction(Z1, List(X, U2)),
+        PFunction(Z2, List(Z1, U1))
       ) */
 
       1 must be equalTo (1)
@@ -351,11 +351,11 @@ class CausalitySpec extends Specification {
         CausalModelNode(U2, false),
         CausalModelNode(U3, false),
         CausalModelNode(U4, false))) /* TODO addFunctions List(
-        new PFunction(X, List(Z2, U1, U2, U3)),
-        new PFunction(Y, List(Z1, Z3, U1, U4)),
-        new PFunction(Z1, List(X, Z2)),
-        new PFunction(Z2, List(U3, U4)),
-        new PFunction(Z3, List(Z2, U2))
+        PFunction(X, List(Z2, U1, U2, U3)),
+        PFunction(Y, List(Z1, Z3, U1, U4)),
+        PFunction(Z1, List(X, Z2)),
+        PFunction(Z2, List(U3, U4)),
+        PFunction(Z3, List(Z2, U2))
       ) */
 
       1 must be equalTo (1)
@@ -373,8 +373,8 @@ class CausalitySpec extends Specification {
         CausalModelNode(X),
         CausalModelNode(Y),
         CausalModelNode(U1, false))) /* TODO addFunctions List(
-        new PFunction(X, List(U1)),
-        new PFunction(Y, List(X, U1))
+        PFunction(X, List(U1)),
+        PFunction(Y, List(X, U1))
       ) */
 
       1 must be equalTo (1)
@@ -394,9 +394,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U1, false))) /* TODO addFunctions List(
-        new PFunction(X, List(U1)),
-        new PFunction(Z, List(X, U1)),
-        new PFunction(Y, List(Z))
+        PFunction(X, List(U1)),
+        PFunction(Z, List(X, U1)),
+        PFunction(Y, List(Z))
       ) */
 
       1 must be equalTo (1)
@@ -416,9 +416,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(Y),
         CausalModelNode(Z),
         CausalModelNode(U1, false))) /* TODO addFunctions List(
-        new PFunction(X, List(U1)),
-        new PFunction(Y, List(X, Z)),
-        new PFunction(Z, List(X, U1))
+        PFunction(X, List(U1)),
+        PFunction(Y, List(X, Z)),
+        PFunction(Z, List(X, U1))
       ) */
 
       1 must be equalTo (1)
@@ -440,9 +440,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(Z),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false))) /* TODO addFunctions List(
-        new PFunction(X, List(U1)),
-        new PFunction(Y, List(X, Z, U2)),
-        new PFunction(Z, List(U1, U2))
+        PFunction(X, List(U1)),
+        PFunction(Y, List(X, Z, U2)),
+        PFunction(Z, List(U1, U2))
       ) */
 
       1 must be equalTo (1)
@@ -464,9 +464,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(Z),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false))) /* TODO addFunctions List(
-        new PFunction(X, List(Z, U1)),
-        new PFunction(Y, List(X, Z, U2)),
-        new PFunction(Z, List(U1, U2))
+        PFunction(X, List(Z, U1)),
+        PFunction(Y, List(X, Z, U2)),
+        PFunction(Z, List(U1, U2))
       ) */
 
       1 must be equalTo (1)
@@ -488,9 +488,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(Z),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false))) /* TODO addFunctions List(
-        new PFunction(X, List(U1)),
-        new PFunction(Z, List(X, U2)),
-        new PFunction(Y, List(Z, U1, U2))
+        PFunction(X, List(U1)),
+        PFunction(Z, List(X, U2)),
+        PFunction(Y, List(Z, U1, U2))
       ) */
 
       1 must be equalTo (1)
@@ -514,10 +514,10 @@ class CausalitySpec extends Specification {
         CausalModelNode(Z2),
         CausalModelNode(U1, false),
         CausalModelNode(U2, false))) /* TODO addFunctions List(
-        new PFunction(X, List(U1)),
-        new PFunction(Z1, List(X, U2)),
-        new PFunction(Z2, List(U1, U2)),
-        new PFunction(Y, List(Z1, Z2))
+        PFunction(X, List(U1)),
+        PFunction(Z1, List(X, U2)),
+        PFunction(Z2, List(U1, U2)),
+        PFunction(Y, List(Z1, Z2))
       ) */
 
       1 must be equalTo (1)
@@ -544,10 +544,10 @@ class CausalitySpec extends Specification {
         CausalModelNode(U2, false),
         CausalModelNode(U3, false),
         CausalModelNode(U4, false))) /* TODO addFunctions List(
-        new PFunction(W, List(X, U3)),
-        new PFunction(X, List(Z, U1, U2)),
-        new PFunction(Y, List(W, U2, U4)),
-        new PFunction(Z, List(U1, U3, U4))
+        PFunction(W, List(X, U3)),
+        PFunction(X, List(Z, U1, U2)),
+        PFunction(Y, List(W, U2, U4)),
+        PFunction(Z, List(U1, U3, U4))
       ) */
 
       1 must be equalTo (1)
@@ -567,9 +567,9 @@ class CausalitySpec extends Specification {
         CausalModelNode(X),
         CausalModelNode(Z),
         CausalModelNode(Y))) /* TODO addFunctions List(
-        new PFunction(Z, List(X)),
-        new PFunction(X, List(U)),
-        new PFunction(Y, List(Z, U))
+        PFunction(Z, List(X)),
+        PFunction(X, List(U)),
+        PFunction(Y, List(Z, U))
       ) */
 
       // TODO
@@ -577,7 +577,7 @@ class CausalitySpec extends Specification {
       //        val question = Set(model.getVariable("Z").nextVariable(namer))
       //        val given = Set[Variable]()
       //        val actions = Set(model.getVariable("X").nextVariable(namer))
-      //        val task1 = new Probability(question, given, actions)
+      //        val task1 = Probability(question, given, actions)
       //        println("task1: " + task1.toString())
       //        for (q <- ActionToObservation(task1, model, namer)) {
       //          println("after rule 2 application: " + q)
@@ -590,7 +590,7 @@ class CausalitySpec extends Specification {
       //        val given = Set[Variable]()
       //        val actions = Set(model.getVariable("Z").nextVariable(namer))
       //
-      //        val task2 = new Probability(question, given, actions)
+      //        val task2 = Probability(question, given, actions)
       //        println("task2: " + task2.toString())
       //
       //        println("Trying ActionToObservation")
@@ -627,7 +627,7 @@ class CausalitySpec extends Specification {
       //
       //        val actions = Set(model.getVariable("X").nextVariable(namer))
       //
-      //        val task3 = new Probability(question, given, actions)
+      //        val task3 = Probability(question, given, actions)
       //        println("task3: " + task3.toString())
       //
       //        val s = task3.caseAnalysis(model.getVariable("Z"), namer)
@@ -657,7 +657,7 @@ class CausalitySpec extends Specification {
 
       // doTask1(this)
       // doTask2(this)
-      // doTask3(this, new VariableNamer())
+      // doTask3(this, VariableNamer())
 
       1 must be equalTo (1)
 

@@ -67,7 +67,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
 
   def jointProbabilityTable: Factor[T, N] = {
     val newVars = randomVariables
-    new Factor(newVars,
+    Factor(newVars,
       Factor.cases(newVars)
         .map(kase => (kase, probabilityOf(kase)))
         .toMap)
@@ -84,7 +84,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
     val Z: Set[Distribution[T, N]] = graph.predecessors(rvVertex).map(_.payload.rv).toSet
     val D = graph.descendants(rvVertex) ++ graph.predecessors(rvVertex) + rvVertex
     val Dvars = D.map(_.payload.rv)
-    new Independence(X, Z, randomVariables.filter(!Dvars.contains(_)).toSet)
+    Independence(X, Z, randomVariables.filter(!Dvars.contains(_)).toSet)
   }
 
   def computeFullCase(c: List[CaseIs[T, N]]): Double = {
@@ -210,7 +210,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
         case 0 => empty
         case _ => {
           val result = xVertices.foldLeft(g)(
-            (bn, xV) => new BayesianNetwork(bn.name + " - " + xV, bn.graph /* TODO filterVertices(v => ! v === xV) */ ))
+            (bn, xV) => BayesianNetwork(bn.name + " - " + xV, bn.graph /* TODO filterVertices(v => ! v === xV) */ ))
           cons(result, nodePruneStream(result))
         }
       }
@@ -360,7 +360,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
     {
       τ.graph.vertices foreach { i =>
         e foreach { ci =>
-          // val lambdaE = new Factor(ci.rv, Map())
+          // val lambdaE = Factor(ci.rv, Map())
           // assign lambdaE.E to e.get(E)
         }
       }

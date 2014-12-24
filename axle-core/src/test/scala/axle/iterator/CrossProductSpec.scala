@@ -13,7 +13,7 @@ class CrossProductSpec extends Specification {
       val v2 = Vector("0", "1")
       val v3 = Vector("X")
 
-      val cp = new CrossProduct(Vector(v1, v2, v3, v2))
+      val cp = CrossProduct(Vector(v1, v2, v3, v2))
 
       cp.size must be equalTo (8)
     }
@@ -26,7 +26,7 @@ class CrossProductSpec extends Specification {
       val v2 = Vector("0", "1")
       val v3 = Vector("X")
 
-      val cp = new IndexedCrossProduct(Vector(v1, v2, v3, v2))
+      val cp = IndexedCrossProduct(Vector(v1, v2, v3, v2))
 
       cp(0) must be equalTo (List("a", "0", "X", "0"))
 

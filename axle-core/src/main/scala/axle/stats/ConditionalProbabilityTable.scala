@@ -32,14 +32,14 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
   val field = implicitly[Field[N]]
 
   def map[B](f: A => B): ConditionalProbabilityTable0[B, N] =
-    new ConditionalProbabilityTable0[B, N](
+    ConditionalProbabilityTable0[B, N](
       values
         .map({ v => f(v) -> probabilityOf(v) })
         .groupBy(_._1)
         .mapValues(_.map(_._2).reduce(field.plus)))
 
   def flatMap[B](f: A => Distribution0[B, N]): ConditionalProbabilityTable0[B, N] =
-    new ConditionalProbabilityTable0[B, N](
+    ConditionalProbabilityTable0[B, N](
       values
         .flatMap(a => {
           val p = probabilityOf(a)

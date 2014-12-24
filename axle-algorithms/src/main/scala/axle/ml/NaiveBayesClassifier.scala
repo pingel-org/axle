@@ -61,7 +61,7 @@ case class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq
   val classTally: Map[CLASS, Rational] =
     data.map(classExtractor).tally[Rational].withDefaultValue(implicitly[Field[Rational]].zero)
 
-  val C = new TallyDistribution0(classTally, classRandomVariable.name)
+  val C = TallyDistribution0(classTally, classRandomVariable.name)
 
   def tallyFor(featureRandomVariable: Distribution[FEATURE, Rational]): Map[(FEATURE, CLASS), Rational] =
     featureTally.filter {
@@ -72,7 +72,7 @@ case class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq
 
   // Note: The "parent" (or "given") of these feature variables is C
   val Fs = featureRandomVariables.map(featureRandomVariable =>
-    new TallyDistribution1(
+    TallyDistribution1(
       tallyFor(featureRandomVariable).withDefaultValue(implicitly[Field[Rational]].zero),
       featureRandomVariable.name))
 

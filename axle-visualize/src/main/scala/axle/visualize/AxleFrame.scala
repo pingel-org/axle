@@ -15,7 +15,7 @@ case class AxleFrame(
     setBackground(bgColor)
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     setSize(pWidth, pHeight)
-    val bg = add(new BackgroundPanel(pTitle))
+    val bg = add(BackgroundPanel(pTitle))
     bg.setVisible(true)
   }
 

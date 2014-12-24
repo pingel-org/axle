@@ -26,7 +26,7 @@ case class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normal
   val colorStream = continually(colors.toStream).flatten
 
   val keyOpt = if (drawKey) {
-    Some(new Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))
+    Some(Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))
   } else {
     None
   }
@@ -37,16 +37,16 @@ case class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normal
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
 
-  val scaledArea = new ScaledArea2D(
+  val scaledArea = ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height, border,
     minPoint.x, maxPoint.x, minPoint.y, maxPoint.y)
 
-  val vLine = new VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
-  val hLine = new HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = new XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0 *: °[Double], black)
-  val yTics = new YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
+  val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
+  val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
+  val xTics = XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0 *: °[Double], black)
+  val yTics = YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
 
-  val dataLines = new DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorStream, pointDiameter, connect)
+  val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorStream, pointDiameter, connect)
 
 }

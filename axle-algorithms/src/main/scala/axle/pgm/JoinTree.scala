@@ -33,7 +33,7 @@ case class JoinTree[T: Eq, N: Field, UG[_, _]: UndirectedGraph](graph: UG[Set[Di
   //  def separate(n1: GV, n2: GV): Set[Distribution[_]] = n1.getPayload.intersect(n2.getPayload)
 
   //  def toEliminationOrder(r: GV): List[Distribution[_]] = {
-  //    val T: JoinTree = new JoinTree(graphFrom(getGraph())(v => v, e => e))
+  //    val T: JoinTree = JoinTree(graphFrom(getGraph())(v => v, e => e))
   //    while (T.getGraph.size > 1) {
   //      val i = T.getGraph.firstLeafOtherThan(r)
   //      val j = theNeighbor() a JoinTreeNode

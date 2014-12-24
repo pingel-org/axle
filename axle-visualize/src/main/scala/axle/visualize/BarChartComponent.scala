@@ -39,12 +39,12 @@ case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag
   val colorStream = continually(colors.toStream).flatten
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
-  val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
-  val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90d *: °[Double])))
+  val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
+  val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
+  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: °[Double])))
 
   val keyOpt = if (drawKey) {
-    Some(new BarChartKey(chart, normalFont, colorStream))
+    Some(BarChartKey(chart, normalFont, colorStream))
   } else {
     None
   }
@@ -57,7 +57,7 @@ case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag
       Await.result(dataFuture, 1.seconds)
     } getOrElse (chart.initialValue)
 
-    val view = new BarChartView(chart, data, colorStream, normalFont)
+    val view = BarChartView(chart, data, colorStream, normalFont)
 
     import view._
 

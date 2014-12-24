@@ -31,8 +31,8 @@ class LinearRegressionSpecification
 
       val priceGuess = estimator.estimate(unknown)
 
-      //      val frame = new AxleFrame()
-      //      val vis = new Plot(List(estimator.errTree), true)
+      //      val frame = AxleFrame()
+      //      val vis = Plot(List(estimator.errTree), true)
       //      frame.add(vis)
 
       priceGuess must be equalTo (412.6509523494042)

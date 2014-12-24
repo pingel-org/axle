@@ -34,10 +34,10 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
   def initialValue = plot.initialValue
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
-  val xAxisLabelText = xAxisLabel.map(new Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(new Text(_, normalFont, 20, height / 2, angle = Some(90d *: °[Double])))
+  val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
+  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: °[Double])))
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
-  val titleText = title.map(new Text(_, titleFont, width / 2, titleFontSize))
+  val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
 
   override def paintComponent(g: Graphics): Unit = {
 
@@ -47,7 +47,7 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
       Await.result(dataFuture, 1.seconds)
     } getOrElse (plot.initialValue)
 
-    val view = new PlotView(plot, data, normalFont)
+    val view = PlotView(plot, data, normalFont)
     import view._
     val paintables =
       Vector(vLine, hLine, xTics, yTics, dataLines) ++

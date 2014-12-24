@@ -25,7 +25,7 @@ import spire.math.Number.apply
 import spire.implicits.moduleOps
 import spire.compat.ordering
 
-class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
+case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
   implicit yls: LengthSpace[Y, _]) {
 
   import chart._
@@ -46,17 +46,17 @@ class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](cha
   val maxY = List(xAxis, dataMaxY).max
 
   implicit val llds = new DoubleDoubleLengthSpace {}
-  
-  val scaledArea = new ScaledArea2D(
+
+  val scaledArea = ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height,
     border,
     minX, maxX, minY, maxY)
 
-  val vLine = new VerticalLine(scaledArea, yAxis, black)
-  val hLine = new HorizontalLine(scaledArea, xAxis, black)
+  val vLine = VerticalLine(scaledArea, yAxis, black)
+  val hLine = HorizontalLine(scaledArea, xAxis, black)
 
-  val gTics = new XTics(
+  val gTics = XTics(
     scaledArea,
     groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
     normalFont,
@@ -64,7 +64,7 @@ class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](cha
     36 *: °,
     black)
 
-  val yTics = new YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)
+  val yTics = YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)
 
   val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
 

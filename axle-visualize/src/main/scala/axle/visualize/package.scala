@@ -37,7 +37,7 @@ package object visualize {
   // default width/height was 1100/800
 
   def newFrame(width: Int, height: Int): AxleFrame =
-    new AxleFrame(width, height, Color.white, "αχλε")
+    AxleFrame(width, height, Color.white, "αχλε")
 
   def draw[T: Draw](t: T): Unit = {
     val draw = implicitly[Draw[T]]
@@ -77,13 +77,13 @@ package object visualize {
   implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[JungUndirectedGraph[VP, EP]] =
     new Draw[JungUndirectedGraph[VP, EP]] {
       def component(jug: JungUndirectedGraph[VP, EP]) =
-        new JungUndirectedGraphVisualization().component(jug)
+        JungUndirectedGraphVisualization().component(jug)
     }
   
   implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[JungDirectedGraph[VP, EP]] =
     new Draw[JungDirectedGraph[VP, EP]] {
       def component(jdg: JungDirectedGraph[VP, EP]) =
-        new JungDirectedGraphVisualization().component(jdg)
+        JungDirectedGraphVisualization().component(jdg)
     }
 
   implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph]: Draw[BayesianNetwork[T, N, DG]] = {

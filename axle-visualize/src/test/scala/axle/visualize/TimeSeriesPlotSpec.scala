@@ -37,7 +37,7 @@ class TimeSeriesPlotSpec extends Specification {
 
     val lfs = (0 until 20).map(randomTimeSeries).toList
 
-    val plot = new Plot[DateTime, Double, TreeMap[DateTime, Double]](
+    val plot = Plot[DateTime, Double, TreeMap[DateTime, Double]](
       lfs,
       connect = true,
       drawKey = true,

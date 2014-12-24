@@ -7,7 +7,7 @@ import spire.implicits._
 object Python {
 
   case class RuleBuilder(name: String) {
-    def :=(statement: Statement): Rule = new Rule(name, statement)
+    def :=(statement: Statement): Rule = Rule(name, statement)
   }
 
   implicit val enrichRuleName = (name: String) => RuleBuilder(name)

@@ -30,7 +30,7 @@ case class SceneFrame(
 
       def run(): Unit = {
 
-        val canvas = new AxleGLCanvas(scene, 45f *: degree[Float], zNear, zFar, scene.distanceUnit)
+        val canvas = AxleGLCanvas(scene, 45f *: degree[Float], zNear, zFar, scene.distanceUnit)
         canvas.setPreferredSize(new Dimension(width, height))
 
         val animator = new FPSAnimator(canvas, fps, true)

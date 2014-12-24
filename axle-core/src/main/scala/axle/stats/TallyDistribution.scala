@@ -39,14 +39,14 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name
   def values: IndexedSeq[A] = tally.keys.toVector
 
   def map[B](f: A => B): TallyDistribution0[B, N] =
-    new TallyDistribution0(
+    TallyDistribution0(
       values
         .map({ v => f(v) -> probabilityOf(v) })
         .groupBy(_._1)
         .mapValues(_.map(_._2).reduce(addition.plus)))
 
   def flatMap[B](f: A => Distribution0[B, N]): TallyDistribution0[B, N] =
-    new TallyDistribution0(
+    TallyDistribution0(
       values
         .flatMap(a => {
           val p = probabilityOf(a)

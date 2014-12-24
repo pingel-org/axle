@@ -19,7 +19,7 @@ import spire.algebra.Eq
 import spire.algebra.Order
 import spire.compat.ordering
 
-class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
+case class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
   implicit yPlottable: Plottable[Y], yOrder: Order[Y], yEq: Eq[Y], yts: Tics[Y], yLength: LengthSpace[Y, _]) {
 
   import chart._
@@ -40,16 +40,16 @@ class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorStream
 
   implicit val ddls = new DoubleDoubleLengthSpace {}
 
-  val scaledArea = new ScaledArea2D(
+  val scaledArea = ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
     height,
     border,
     minX, maxX, minY, maxY)
 
-  val vLine = new VerticalLine(scaledArea, yAxis, black)
-  val hLine = new HorizontalLine(scaledArea, xAxis, black)
+  val vLine = VerticalLine(scaledArea, yAxis, black)
+  val hLine = HorizontalLine(scaledArea, xAxis, black)
 
-  val gTics = new XTics(
+  val gTics = XTics(
     scaledArea,
     slices.toStream.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, string(s)) }).toList,
     normalFont,
@@ -57,7 +57,7 @@ class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorStream
     labelAngle,
     black)
 
-  val yTics = new YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
+  val yTics = YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
 
   val bars = slices.toStream.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {

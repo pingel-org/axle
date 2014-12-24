@@ -20,7 +20,7 @@ object Plot {
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _]): Draw[Plot[X, Y, D]] =
     new Draw[Plot[X, Y, D]] {
 
-      def component(plot: Plot[X, Y, D]) = new PlotComponent(plot)
+      def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
     }
 
 }

@@ -13,7 +13,7 @@ import axle.string
 object ViewString extends View[String] {
 
   def makeFormatter(language: Language, node: AstNode): AstNodeFormatterString =
-    new AstNodeFormatterString(
+    AstNodeFormatterString(
       FormatterConfig(language, true, Set(node)),
       FormatterState(0, 0, false, 0, Nil, Map()),
       Nil)
@@ -36,8 +36,7 @@ object ViewString extends View[String] {
         .map({ i => "<span class=lineno><a href='/view?filename=%s#%d'>%s</a></span> %s".format(doc.name, i + 1, i + 1, highlightedLines(i)) })
         .mkString("\n")
 
-    }
-    ).getOrElse("no ast defined")
+    }).getOrElse("no ast defined")
   }
 
   override def llRules(g: LLLanguage): String =
@@ -49,9 +48,7 @@ object ViewString extends View[String] {
       "   " + g.terminals.map(_.label).mkString("  ") + "\n" +
       g.nonTerminals.map(nt =>
         nt.label + "  " + g.terminals.map(t =>
-          g.parseTable.get((nt, t)).map(_.id).getOrElse("-")
-        ).mkString("  ")
-      ).mkString("\n")
+          g.parseTable.get((nt, t)).map(_.id).getOrElse("-")).mkString("  ")).mkString("\n")
 
   override def llLanguage(g: LLLanguage): String =
     llRules(g) + "\n" + llParseTable(g)

@@ -21,7 +21,7 @@ class ScalaFigures extends Specification {
 
   val bools = Vector(true, false)
 
-  def ubd(name: String) = new UnknownDistribution0[Boolean, Rational](bools, name)
+  def ubd(name: String) = UnknownDistribution0[Boolean, Rational](bools, name)
 
   val A = ubd("A")
   val B = ubd("B")

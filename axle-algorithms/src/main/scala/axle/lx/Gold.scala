@@ -73,7 +73,7 @@ object Gold {
 
     def processExpression(state: Language, expression: Expression): (Language, Option[Grammar]) = {
       val newState = Language(state.sequences ++ List(expression))
-      (newState, Some(new HardCodedGrammar(newState)))
+      (newState, Some(HardCodedGrammar(newState)))
     }
 
   }
@@ -91,7 +91,7 @@ object Gold {
 
     def isFor(ℒ: Language) = content.equals(ℒ) // TODO equals
 
-    def content: Language = new Language(expressions.filter(_ != ♯).toSet)
+    def content: Language = Language(expressions.filter(_ != ♯).toSet)
   }
   object Text {
     implicit def showText: Show[Text] = new Show[Text] {
