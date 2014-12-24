@@ -36,16 +36,14 @@ import spire.algebra._
 
 case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor, CLASS: Eq](
   data: F[DATA],
-  classifier: DATA => CLASS,
-  classExtractor: DATA => CLASS,
+  predict: DATA => CLASS,
+  actual: DATA => CLASS,
   k: CLASS) {
 
   val field = implicitly[Field[N]]
 
   val scores = data.map(d => {
-    val actual = classExtractor(d)
-    val predicted = classifier(d)
-    (actual === k, predicted === k) match {
+    (actual(d) === k, predict(d) === k) match {
       case (true, true)   => (1, 0, 0, 0) // true positive
       case (false, true)  => (0, 1, 0, 0) // false positive
       case (false, false) => (0, 0, 1, 0) // false negative
