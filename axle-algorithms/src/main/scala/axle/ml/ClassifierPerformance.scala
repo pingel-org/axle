@@ -28,11 +28,10 @@ import spire.algebra._
  *   * Accuracy
  *   * F1
  *
- * The "classification task" is defined by three arguments:
+ * The (boolean) "classification task" is defined by two arguments:
  *
- * 1) predict   : given a datum computes a value
- * 2) isIn      : given the value, determines whether the value is "in" the retrieved set
- * 3) shouldBeIn: given the value, determines whether the value is *actually* "in" the retrieved set
+ * 1) predict: given a datum, determines whether the value is "in" the retrieved set
+ * 2) actual : given a datum, determines whether the value is *actually* "in" the retrieved set
  *
  * See http://en.wikipedia.org/wiki/Precision_and_recall for more information.
  *
@@ -42,24 +41,22 @@ import spire.algebra._
 
 case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor, CLASS](
   data: F[DATA],
-  predict: DATA => CLASS,
-  isIn: CLASS => Boolean,
-  shouldBeIn: CLASS => Boolean) {
+  predict: DATA => Boolean,
+  actual: DATA => Boolean) {
 
   val field = implicitly[Field[N]]
+  import field._
 
   val scores = data.map { d =>
-    val prediction = predict(d)
-    (shouldBeIn(prediction), isIn(prediction)) match {
-      case (true, true)   => (1, 0, 0, 0) // true positive
-      case (false, true)  => (0, 1, 0, 0) // false positive
-      case (false, false) => (0, 0, 1, 0) // false negative
-      case (true, false)  => (0, 0, 0, 1) // true negative
+    (actual(d), predict(d)) match {
+      case (true, true)   => (one, zero, zero, zero) // true positive
+      case (false, true)  => (zero, one, zero, zero) // false positive
+      case (false, false) => (zero, zero, one, zero) // false negative
+      case (true, false)  => (zero, zero, zero, one) // true negative
     }
   }
 
-  val (tpInt, fpInt, fnInt, tnInt) = Σ(scores)
-  val (tp, fp, fn, tn) = (field.fromInt(tpInt), field.fromInt(fpInt), field.fromInt(fnInt), field.fromInt(tnInt))
+  val (tp, fp, fn, tn) = Σ(scores)
 
   val precision: N = tp / (tp + fp)
 
