@@ -19,7 +19,7 @@ import spire.math._
 import spire.implicits._
 import spire.algebra._
 
-abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Function1[DATA, CLASS] {
+trait Classifier[DATA, CLASS] extends Function1[DATA, CLASS] {
 
   def apply(d: DATA): CLASS
 
@@ -38,7 +38,7 @@ abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Fu
   private[this] def predictedVsActual[F[_]: Aggregatable: Functor](
     data: F[DATA],
     classExtractor: DATA => CLASS,
-    k: CLASS): (Int, Int, Int, Int) = {
+    k: CLASS)(implicit eqClass: Eq[CLASS]): (Int, Int, Int, Int) = {
 
     val scores = data.map(d => {
       val actual: CLASS = classExtractor(d)
@@ -57,7 +57,7 @@ abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Fu
   def performance[F[_]: Aggregatable: Functor](
     data: F[DATA],
     classExtractor: DATA => CLASS,
-    k: CLASS): ClassifierPerformance[Rational] = {
+    k: CLASS)(implicit classEq: Eq[CLASS]): ClassifierPerformance[Rational] = {
 
     val (tp, fp, fn, tn) = predictedVsActual(data, classExtractor, k)
 
@@ -71,7 +71,7 @@ abstract class Classifier[DATA: ClassTag, CLASS: Order: Eq: ClassTag] extends Fu
 
   def confusionMatrix[L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M](
     data: F[DATA],
-    labelExtractor: DATA => L)(implicit la: LinearAlgebra[M, Double]): ConfusionMatrix[DATA, CLASS, L, F, M] =
+    labelExtractor: DATA => L)(implicit la: LinearAlgebra[M, Double], dataClassTag: ClassTag[DATA], classOrder: Order[CLASS]): ConfusionMatrix[DATA, CLASS, L, F, M] =
     ConfusionMatrix(this, data, labelExtractor)
 
 }

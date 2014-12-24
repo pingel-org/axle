@@ -37,9 +37,11 @@ object FOPL {
     }
   }
 
-  abstract class Predicate(val symbols: Symbol*) extends Function1[Map[Symbol, Any], Boolean] with Statement {
+  trait Predicate extends Function1[Map[Symbol, Any], Boolean] with Statement {
 
     outer =>
+
+    def symbols: Seq[Symbol]
 
     def symbolSet: Set[Symbol] = symbols.toSet
 
@@ -53,7 +55,8 @@ object FOPL {
           else (s, previous._2)
       })
 
-      val newPredicate = new Predicate(symbolsSkolems.tail.map(_._1): _*) {
+      val newPredicate = new Predicate {
+        def symbols = symbolsSkolems.tail.map(_._1)
         def name: String = outer.name
         def apply(symbolTable: Map[Symbol, Any]): Boolean = outer.apply(symbolTable)
       }
@@ -67,30 +70,30 @@ object FOPL {
     implicit def statementEq: Eq[Statement] = new Eq[Statement] {
       // TODO: How can I avoid this pattern match ?
       def eqv(x: Statement, y: Statement): Boolean = (x, y) match {
-        case (l: Predicate, r: Predicate) => l === r
-        case (l @ And(_, _), r @ And(_, _)) => l === r
-        case (l @ Or(_, _), r @ Or(_, _)) => l === r
-        case (l @ Iff(_, _), r @ Iff(_, _)) => l === r
+        case (l: Predicate, r: Predicate)           => l === r
+        case (l @ And(_, _), r @ And(_, _))         => l === r
+        case (l @ Or(_, _), r @ Or(_, _))           => l === r
+        case (l @ Iff(_, _), r @ Iff(_, _))         => l === r
         case (l @ Implies(_, _), r @ Implies(_, _)) => l === r
-        case (l @ ¬(_), r @ ¬(_)) => l === r
-        case (l @ ∃(_, _), r @ ∃(_, _)) => l === r
-        case (l @ ∀(_, _), r @ ∀(_, _)) => l === r
-        case (l @ Constant(_), r @ Constant(_)) => l === r
-        case _ => false
+        case (l @ ¬(_), r @ ¬(_))                   => l === r
+        case (l @ ∃(_, _), r @ ∃(_, _))             => l === r
+        case (l @ ∀(_, _), r @ ∀(_, _))             => l === r
+        case (l @ Constant(_), r @ Constant(_))     => l === r
+        case _                                      => false
       }
     }
 
     implicit def showStatement: Show[Statement] = new Show[Statement] {
       // TODO: How can I avoid this pattern match ?
       def text(s: Statement): String = s match {
-        case p: Predicate => string(p)
-        case a: And => string(a)
-        case o: Or => string(o)
-        case i: Iff => string(i)
-        case i: Implies => string(i)
-        case n @ ¬(_) => string(n)
-        case e @ ∃(_, _) => string(e)
-        case a @ ∀(_, _) => string(a)
+        case p: Predicate    => string(p)
+        case a: And          => string(a)
+        case o: Or           => string(o)
+        case i: Iff          => string(i)
+        case i: Implies      => string(i)
+        case n @ ¬(_)        => string(n)
+        case e @ ∃(_, _)     => string(e)
+        case a @ ∀(_, _)     => string(a)
         case c @ Constant(_) => string(c)
       }
     }
@@ -244,51 +247,51 @@ object FOPL {
   implicit def foplBoolean(b: Boolean) = Constant(b)
 
   def noOp(s: Statement): Statement = s match {
-    case And(left, right) => And(noOp(left), noOp(right))
-    case Or(left, right) => Or(noOp(left), noOp(right))
-    case Iff(left, right) => Iff(noOp(left), noOp(right))
+    case And(left, right)     => And(noOp(left), noOp(right))
+    case Or(left, right)      => Or(noOp(left), noOp(right))
+    case Iff(left, right)     => Iff(noOp(left), noOp(right))
     case Implies(left, right) => Implies(noOp(left), noOp(right))
-    case ¬(inner) => ¬(noOp(inner))
-    case ∃(sym, e) => ∃(sym, noOp(e))
-    case ∀(sym, e) => ∀(sym, noOp(e))
-    case _ => s
+    case ¬(inner)             => ¬(noOp(inner))
+    case ∃(sym, e)            => ∃(sym, noOp(e))
+    case ∀(sym, e)            => ∀(sym, noOp(e))
+    case _                    => s
   }
 
   def freeVariables(s: Statement, notFree: Set[Symbol] = Set()): Set[Symbol] = s match {
-    case And(left, right) => freeVariables(left, notFree).union(freeVariables(right, notFree))
-    case Or(left, right) => freeVariables(left, notFree).union(freeVariables(right, notFree))
-    case Iff(left, right) => freeVariables(left, notFree).union(freeVariables(right, notFree))
+    case And(left, right)     => freeVariables(left, notFree).union(freeVariables(right, notFree))
+    case Or(left, right)      => freeVariables(left, notFree).union(freeVariables(right, notFree))
+    case Iff(left, right)     => freeVariables(left, notFree).union(freeVariables(right, notFree))
     case Implies(left, right) => freeVariables(left, notFree).union(freeVariables(right, notFree))
-    case ¬(inner) => freeVariables(inner, notFree)
-    case ∃(symbolSet, e) => freeVariables(e, notFree + symbolSet.symbol)
-    case ∀(symbolSet, e) => freeVariables(e, notFree + symbolSet.symbol)
-    case pred: Predicate => pred.symbolSet -- notFree
+    case ¬(inner)             => freeVariables(inner, notFree)
+    case ∃(symbolSet, e)      => freeVariables(e, notFree + symbolSet.symbol)
+    case ∀(symbolSet, e)      => freeVariables(e, notFree + symbolSet.symbol)
+    case pred: Predicate      => pred.symbolSet -- notFree
   }
 
   def eliminateIff(s: Statement): Statement = s match {
     case And(left, right) => And(eliminateIff(left), eliminateIff(right))
-    case Or(left, right) => Or(eliminateIff(left), eliminateIff(right))
+    case Or(left, right)  => Or(eliminateIff(left), eliminateIff(right))
     case Iff(left, right) => {
       val leftResult = eliminateIff(left)
       val rightResult = eliminateIff(right)
       (leftResult ⊃ rightResult) ∧ (rightResult ⊃ leftResult)
     }
     case Implies(left, right) => Implies(eliminateIff(left), eliminateIff(right))
-    case ¬(inner) => ¬(eliminateIff(inner))
-    case ∃(sym, e) => ∃(sym, eliminateIff(e))
-    case ∀(sym, e) => ∀(sym, eliminateIff(e))
-    case _ => s
+    case ¬(inner)             => ¬(eliminateIff(inner))
+    case ∃(sym, e)            => ∃(sym, eliminateIff(e))
+    case ∀(sym, e)            => ∀(sym, eliminateIff(e))
+    case _                    => s
   }
 
   def eliminateImplication(s: Statement): Statement = s match {
-    case And(left, right) => And(eliminateImplication(left), eliminateImplication(right))
-    case Or(left, right) => Or(eliminateImplication(left), eliminateImplication(right))
-    case Iff(left, right) => ??? //Iff(eliminateImplication(left), eliminateImplication(right))
+    case And(left, right)     => And(eliminateImplication(left), eliminateImplication(right))
+    case Or(left, right)      => Or(eliminateImplication(left), eliminateImplication(right))
+    case Iff(left, right)     => ??? //Iff(eliminateImplication(left), eliminateImplication(right))
     case Implies(left, right) => ¬(eliminateImplication(left)) ∨ eliminateImplication(right)
-    case ¬(inner) => ¬(eliminateImplication(inner))
-    case ∃(sym, e) => ∃(sym, eliminateImplication(e))
-    case ∀(sym, e) => ∀(sym, eliminateImplication(e))
-    case _ => s
+    case ¬(inner)             => ¬(eliminateImplication(inner))
+    case ∃(sym, e)            => ∃(sym, eliminateImplication(e))
+    case ∀(sym, e)            => ∀(sym, eliminateImplication(e))
+    case _                    => s
   }
 
   def moveNegation(s: Statement, incoming: Boolean = false): Statement = s match {
@@ -305,11 +308,11 @@ object FOPL {
       else
         Or(moveNegation(left), moveNegation(right))
 
-    case Iff(left, right) => ??? // Iff(moveNegation(left), moveNegation(right))
+    case Iff(left, right)     => ??? // Iff(moveNegation(left), moveNegation(right))
 
     case Implies(left, right) => ??? //Implies(moveNegation(left), moveNegation(right))
 
-    case ¬(inner) => if (incoming) moveNegation(inner) else moveNegation(inner, true)
+    case ¬(inner)             => if (incoming) moveNegation(inner) else moveNegation(inner, true)
 
     case ∃(symbolSet, e) =>
       if (incoming)
@@ -347,7 +350,7 @@ object FOPL {
       (¬(innerSkolemized), innerSkolems)
     }
     case p: Predicate => p.skolemize(universally, existentially, skolems)
-    case _ => ???
+    case _            => ???
   }
 
   def skolemize(s: Statement): (Statement, Map[Symbol, Set[Symbol]]) = _skolemize(s, Set(), Set(), Map())
@@ -377,7 +380,7 @@ object FOPL {
       val (rd, rc) = _distribute(r)
       if (lc || rc) _distribute(Or(ld, rd)) else (Or(ld, rd), false)
     }
-    case Iff(left, right) => ??? // Iff(distribute(left), distribute(right))
+    case Iff(left, right)     => ??? // Iff(distribute(left), distribute(right))
     case Implies(left, right) => ??? // Implies(distribute(left), distribute(right))
     case ¬(inner) => {
       val (id, ic) = _distribute(inner)
@@ -414,7 +417,7 @@ object FOPL {
       (Or(lf, rf), lc || rc)
     }
 
-    case Iff(left, right) => ???
+    case Iff(left, right)     => ???
     case Implies(left, right) => ???
 
     case ¬(inner) => {
@@ -425,7 +428,7 @@ object FOPL {
 
     case ∃(sym, e) => ???
     case ∀(sym, e) => ???
-    case _ => (s, false)
+    case _         => (s, false)
   }
 
   def flatten(s: Statement): Statement = _flatten(s)._1
@@ -437,14 +440,14 @@ object FOPL {
 
   def disjunctList(s: Statement): List[Statement] = s match {
     case Or(head, tail) => head :: disjunctList(tail)
-    case _ => List(s)
+    case _              => List(s)
   }
 
   def disjoin(cs: List[Statement]): Statement = cs.reduceOption(Or(_, _)).getOrElse(false)
 
   def conjunctList(s: Statement): List[Statement] = s match {
     case And(head, tail) => head :: conjunctList(tail)
-    case _ => List(s)
+    case _               => List(s)
   }
 
   def conjoin(cs: List[Statement]): Statement = cs.reduceOption(And(_, _)).getOrElse(true)

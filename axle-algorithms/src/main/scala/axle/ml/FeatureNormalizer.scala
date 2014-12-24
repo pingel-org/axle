@@ -4,8 +4,7 @@ import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 import spire.implicits._
 
-abstract class Normalize[M](implicit la: LinearAlgebra[M, Double])
-  extends (Seq[Double] => M) {
+trait Normalize[M] extends (Seq[Double] => M) {
 
   def normalizedData: M
 

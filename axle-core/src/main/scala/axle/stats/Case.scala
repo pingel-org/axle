@@ -6,7 +6,9 @@ import spire.optional.unicode.Π
 import spire.algebra.Field
 import spire.implicits.additiveGroupOps
 
-abstract class Case[A, N: Field] {
+trait Case[A, N] {
+
+  implicit def field: Field[N]
 
   def and[B](right: Case[B, N]): Case[(A, B), N] = CaseAnd(this, right)
   def ∧[B](right: Case[B, N]): Case[(A, B), N] = CaseAnd(this, right)
@@ -19,7 +21,7 @@ abstract class Case[A, N: Field] {
   def bayes: () => N // perhaps bayes should return a Seq[Case] or similar
 }
 
-case class CaseAndGT[A: Manifest, N: Field](conjuncts: Iterable[Case[A, N]])
+case class CaseAndGT[A: Manifest, N](conjuncts: Iterable[Case[A, N]])(implicit val field: Field[N])
   extends Case[List[A], N] {
 
   def probability[B](given: Option[Case[B, N]] = None): N =
@@ -30,7 +32,7 @@ case class CaseAndGT[A: Manifest, N: Field](conjuncts: Iterable[Case[A, N]])
   def bayes = ???
 }
 
-case class CaseAnd[A, B, N: Field](left: Case[A, N], right: Case[B, N])
+case class CaseAnd[A, B, N](left: Case[A, N], right: Case[B, N])(implicit val field: Field[N])
   extends Case[(A, B), N] {
 
   def probability[C](given: Option[Case[C, N]] = None): N =
@@ -43,10 +45,8 @@ case class CaseAnd[A, B, N: Field](left: Case[A, N], right: Case[B, N])
 
 }
 
-case class CaseOr[A, B, N: Field](left: Case[A, N], right: Case[B, N])
+case class CaseOr[A, B, N](left: Case[A, N], right: Case[B, N])(implicit val field: Field[N])
   extends Case[(A, B), N] {
-
-  val field = implicitly[Field[N]]
 
   def probability[C](given: Option[Case[C, N]] = None): N =
     given
@@ -62,7 +62,7 @@ case class CaseOr[A, B, N: Field](left: Case[A, N], right: Case[B, N])
 }
 
 // TODO: use phantom types to ensure that only one "given" clause is specified
-case class CaseGiven[A, B, N: Field](c: Case[A, N], given: Case[B, N])
+case class CaseGiven[A, B, N](c: Case[A, N], given: Case[B, N])(implicit val field: Field[N])
   extends Case[(A, B), N] {
 
   def probability[C](givenArg: Option[Case[C, N]] = None): N = {
@@ -75,7 +75,7 @@ case class CaseGiven[A, B, N: Field](c: Case[A, N], given: Case[B, N])
 }
 
 // TODO: may want CaseIs{With, No] classes to avoid the run-time type-checking below
-case class CaseIs[A, N: Field](distribution: Distribution[A, N], v: A)
+case class CaseIs[A, N](distribution: Distribution[A, N], v: A)(implicit val field: Field[N])
   extends Case[A, N] {
 
   def probability[G](given: Option[Case[G, N]]): N =
@@ -94,7 +94,7 @@ object CaseIs {
 
   import axle.Show
 
-  implicit def showCaseIs[A, N: Field]: Show[CaseIs[A, N]] = new Show[CaseIs[A, N]] {
+  implicit def showCaseIs[A, N]: Show[CaseIs[A, N]] = new Show[CaseIs[A, N]] {
 
     def text(c: CaseIs[A, N]): String = {
       import c._
@@ -104,10 +104,8 @@ object CaseIs {
 
 }
 
-case class CaseIsnt[A, N: Field](distribution: Distribution[A, N], v: A)
+case class CaseIsnt[A, N](distribution: Distribution[A, N], v: A)(implicit val field: Field[N])
   extends Case[A, N] {
-
-  val field = implicitly[Field[N]]
 
   def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(distribution is v).apply())
 

@@ -19,9 +19,15 @@ object CausalModelNode {
   }
 }
 
-abstract class PFunction[T: Eq, N: Field](rv: Distribution[T, N], inputs: Seq[Distribution[T, N]])
+trait PFunction[T, N] {
 
-case class CausalModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](val name: String, graph: DG[CausalModelNode[T, N], String]) {
+  def rv: Distribution[T, N]
+
+  def inputs: Seq[Distribution[T, N]]
+}
+
+case class CausalModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](
+  val name: String, graph: DG[CausalModelNode[T, N], String]) {
   import graph._
 
   def duplicate: CausalModel[T, N, DG] = ???
