@@ -30,25 +30,13 @@ import axle.stats.P
 import scala.reflect.ClassTag
 import axle.algebra._
 
-object NaiveBayesClassifier {
-
-  def apply[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: ClassTag, F[_]: Aggregatable: Functor](
-    data: F[DATA],
-    pFs: List[Distribution[FEATURE, Rational]],
-    pC: Distribution[CLASS, Rational],
-    featureExtractor: DATA => List[FEATURE],
-    classExtractor: DATA => CLASS): NaiveBayesClassifier[DATA, FEATURE, CLASS, F] =
-    new NaiveBayesClassifier(data, pFs, pC, featureExtractor, classExtractor)
-
-}
-
-class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: ClassTag, F[_]: Aggregatable: Functor](
+case class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: ClassTag, F[_]: Aggregatable: Functor](
   data: F[DATA],
   featureRandomVariables: List[Distribution[FEATURE, Rational]],
   classRandomVariable: Distribution[CLASS, Rational],
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS)
-  extends Classifier[DATA, CLASS]() {
+  extends Function1[DATA, CLASS] {
 
   import axle._
 

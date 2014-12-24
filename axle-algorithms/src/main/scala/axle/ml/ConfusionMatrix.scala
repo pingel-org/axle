@@ -19,9 +19,10 @@ import scala.reflect.ClassTag
 import math.{ ceil, log10 }
 
 case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M](
-  classifier: Classifier[T, CLASS],
+  classifier: Function1[T, CLASS],
   data: F[T],
-  labelExtractor: T => L)(implicit val la: LinearAlgebra[M, Double]) {
+  labelExtractor: T => L,
+  classes: IndexedSeq[CLASS])(implicit val la: LinearAlgebra[M, Double]) {
 
   val label2clusterId = data.map(datum => (labelExtractor(datum), classifier(datum)))
 
@@ -34,8 +35,6 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
       (lc: (L, CLASS)) => ((labelIndices(lc._1), lc._2), 1),
       0,
       _ + _).toMap.withDefaultValue(0)
-
-  val classes = classifier.classes
 
   val counts = la.matrix(
     labelList.length,

@@ -49,7 +49,7 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor: Finite: Indexed,
   constructor: Seq[Double] => T,
   K: Int,
   iterations: Int)(implicit space: MetricSpace[M, Double], la: LinearAlgebra[M, Double])
-  extends Classifier[T, Int] {
+  extends Function1[T, Int] {
 
   val features = data.map(featureExtractor)
 

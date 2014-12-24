@@ -17,16 +17,49 @@ package axle.ml
  *
  */
 
+import axle.Show
+import axle._
+import axle.algebra.Σ
+import axle.algebra.Aggregatable
+import axle.algebra.LinearAlgebra
+import axle.algebra.Functor
+import axle.algebra.Finite
+import axle.algebra.SetFrom
+import axle.algebra.MapReducible
+import axle.algebra.MapFrom
+import axle.algebra.FunctionPair
+import axle.algebra.Semigroups._
+import axle.syntax.functor._
 import spire.math._
 import spire.implicits._
 import spire.algebra._
-import axle.Show
 
-case class ClassifierPerformance[N: Field](
-  precision: N,
-  recall: N,
-  specificity: N,
-  accuracy: N) {
+case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor, CLASS: Eq](
+  data: F[DATA],
+  classifier: DATA => CLASS,
+  classExtractor: DATA => CLASS,
+  k: CLASS) {
+
+  val field = implicitly[Field[N]]
+
+  val scores = data.map(d => {
+    val actual = classExtractor(d)
+    val predicted = classifier(d)
+    (actual === k, predicted === k) match {
+      case (true, true)   => (1, 0, 0, 0) // true positive
+      case (false, true)  => (0, 1, 0, 0) // false positive
+      case (false, false) => (0, 0, 1, 0) // false negative
+      case (true, false)  => (0, 0, 0, 1) // true negative
+    }
+  })
+
+  val (tpInt, fpInt, fnInt, tnInt) = Σ(scores)
+  val (tp, fp, fn, tn) = (field.fromInt(tpInt), field.fromInt(fpInt), field.fromInt(fnInt), field.fromInt(tnInt))
+
+  val precision: N = tp / (tp + fp)
+  val recall: N = tp / (tp + fn)
+  val specificity: N = tn / (tn + fp)
+  val accuracy: N = (tp + tn) / (tp + tn + fp + fn)
 
   def f1Score: N = 2 * (precision * recall) / (precision + recall)
 
@@ -37,10 +70,10 @@ case class ClassifierPerformance[N: Field](
 
 object ClassifierPerformance {
 
-  implicit def showCP[N: Field]: Show[ClassifierPerformance[N]] =
-    new Show[ClassifierPerformance[N]] {
+  implicit def showCP[N, DATA, F[_], CLASS]: Show[ClassifierPerformance[N, DATA, F, CLASS]] =
+    new Show[ClassifierPerformance[N, DATA, F, CLASS]] {
 
-      def text(cp: ClassifierPerformance[N]): String = {
+      def text(cp: ClassifierPerformance[N, DATA, F, CLASS]): String = {
         import cp._
         s"""Precision   $precision
 Recall      $recall

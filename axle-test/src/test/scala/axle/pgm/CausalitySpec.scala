@@ -37,8 +37,11 @@ class CausalitySpec extends Specification {
     in1: Distribution[T, N],
     in2: Distribution[T, N],
     in3: Distribution[T, N])
-    extends PFunction(variable, List(in1, in2, in3)) {
+    extends PFunction[T, N] {
 
+    def rv = variable
+    def inputs = List(in1, in2, in3)
+    
     // TODO
     //    def apply(m: CausalModel, memo: Case) = {
     //      val val1 = new java.lang.Boolean(memo.valueOf(in1).toString()).booleanValue()
