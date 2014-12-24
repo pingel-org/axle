@@ -39,9 +39,9 @@ case class TicTacToe(
 
   def player(id: String, description: String, which: String): TicTacToePlayer =
     which match {
-      case "random" => new RandomTicTacToePlayer(id, description)
-      case "ai"     => new AITicTacToePlayer(id, description)
-      case _        => new InteractiveTicTacToePlayer(id, description)
+      case "random" => RandomTicTacToePlayer(id, description)
+      case "ai"     => AITicTacToePlayer(id, description)
+      case _        => InteractiveTicTacToePlayer(id, description)
     }
 
   def startState: TicTacToeState = TicTacToeState(x, startBoard)

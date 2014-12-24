@@ -8,7 +8,6 @@ import scala.reflect.ClassTag
 
 import axle.algebra.Plottable
 import axle.algebra.LengthSpace
-import axle.algebra.DoubleDoubleLengthSpace
 import axle.algebra.Tics
 import axle.quanta.Angle.{ ° => ° }
 import axle.Show
@@ -45,7 +44,7 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
   val minY = List(xAxis, dataMinY).min
   val maxY = List(xAxis, dataMaxY).max
 
-  implicit val llds = new DoubleDoubleLengthSpace {}
+  implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
 
   val scaledArea = ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,

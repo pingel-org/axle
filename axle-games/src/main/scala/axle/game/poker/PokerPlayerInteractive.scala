@@ -39,7 +39,7 @@ Example moves:
     cons(command, userInputStream)
   }
 
-  val moveParser = new MoveParser()
+  val moveParser = MoveParser()
 
   def move(state: PokerState): (PokerMove, PokerState) = {
     // displayEvents()

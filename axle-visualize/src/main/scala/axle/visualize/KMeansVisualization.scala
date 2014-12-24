@@ -55,7 +55,7 @@ case class KMeansVisualization[D, F[_], M](
   val minY = mins.get(0, 1)
   val maxY = maxs.get(0, 1)
 
-  implicit val ddls = new axle.algebra.DoubleDoubleLengthSpace {}
+  implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
   val scaledArea = ScaledArea2D(w, h, border, minX, maxX, minY, maxY)
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)

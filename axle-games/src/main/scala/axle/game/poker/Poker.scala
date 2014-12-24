@@ -21,10 +21,10 @@ case class Poker(numPlayers: Int) extends Game[Poker] {
   val _players = (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
 
   def player(id: String, description: String, which: String): PokerPlayer = which match {
-    case "random" => new RandomPokerPlayer(id, description)
-    case "ai" => new PokerPlayerAI(id, description)
-    case "dealer" => new PokerPlayerDealer(id, description)
-    case _ => new PokerPlayerInteractive(id, description)
+    case "random" => RandomPokerPlayer(id, description)
+    case "ai"     => PokerPlayerAI(id, description)
+    case "dealer" => PokerPlayerDealer(id, description)
+    case _        => PokerPlayerInteractive(id, description)
   }
 
   def startState: PokerState =
@@ -40,8 +40,7 @@ case class Poker(numPlayers: Int) extends Game[Poker] {
       Map(), // inFors
       players.map(player => (player, 100)).toMap, // piles
       None,
-      Map()
-    )
+      Map())
 
   def startFrom(s: PokerState): Option[PokerState] = {
 
@@ -58,8 +57,7 @@ case class Poker(numPlayers: Int) extends Game[Poker] {
         Map(),
         s.piles,
         None,
-        Map()
-      ))
+        Map()))
     } else {
       None
     }

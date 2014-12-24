@@ -4,7 +4,6 @@ import java.awt.Color
 import java.awt.Color.black
 import java.awt.Font
 
-import axle.algebra.DoubleDoubleLengthSpace
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
@@ -17,6 +16,7 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
 import spire.algebra.Order
+import spire.implicits.DoubleAlgebra
 import spire.compat.ordering
 
 case class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
@@ -38,7 +38,7 @@ case class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorS
   val minY = List(xAxis, dataMinY).min
   val maxY = List(xAxis, dataMaxY).max
 
-  implicit val ddls = new DoubleDoubleLengthSpace {}
+  implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
 
   val scaledArea = ScaledArea2D(
     width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,

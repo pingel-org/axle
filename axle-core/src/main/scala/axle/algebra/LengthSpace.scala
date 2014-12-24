@@ -40,39 +40,47 @@ trait LengthSpace[V, R] extends MetricSpace[V, R] {
 
 }
 
-trait DoubleDoubleLengthSpace extends DoubleAlgebra with LengthSpace[Double, Double] {
+object LengthSpace {
 
-  def distance(v: Double, w: Double): Double = math.abs(v - w)
+  implicit val doubleDoubleLengthSpace: LengthSpace[Double, Double] =
+    new DoubleAlgebra with LengthSpace[Double, Double] {
 
-  def onPath(left: Double, right: Double, p: Double): Double = (right - left) * p + left
+      def distance(v: Double, w: Double): Double = math.abs(v - w)
 
-  def portion(left: Double, v: Double, right: Double): Double = (v - left) / (right - left)
-}
+      def onPath(left: Double, right: Double, p: Double): Double = (right - left) * p + left
 
-trait LongLongLengthSpace extends LongAlgebra with LengthSpace[Long, Long] {
+      def portion(left: Double, v: Double, right: Double): Double = (v - left) / (right - left)
+    }
 
-  def distance(v: Long, w: Long): Long = math.abs(v - w)
+  implicit val longLongLengthSpace: LengthSpace[Long, Long] =
+    new LongAlgebra with LengthSpace[Long, Long] {
 
-  def onPath(left: Long, right: Long, p: Double): Long = ((right - left) * p + left).toLong
+      def distance(v: Long, w: Long): Long = math.abs(v - w)
 
-  def portion(left: Long, v: Long, right: Long): Double = (v - left).toDouble / (right - left)
-}
+      def onPath(left: Long, right: Long, p: Double): Long = ((right - left) * p + left).toLong
 
-trait IntIntLengthSpace extends IntAlgebra with LengthSpace[Int, Int] {
+      def portion(left: Long, v: Long, right: Long): Double = (v - left).toDouble / (right - left)
+    }
 
-  def distance(v: Int, w: Int): Int = math.abs(v - w)
+  implicit val intIntLengthSpace: LengthSpace[Int, Int] =
+    new IntAlgebra with LengthSpace[Int, Int] {
 
-  def onPath(left: Int, right: Int, p: Double): Int = ((right - left) * p + left).toInt
+      def distance(v: Int, w: Int): Int = math.abs(v - w)
 
-  def portion(left: Int, v: Int, right: Int): Double = (v - left).toDouble / (right - left)
-}
+      def onPath(left: Int, right: Int, p: Double): Int = ((right - left) * p + left).toInt
 
-trait RationalRationalLengthSpace extends LengthSpace[Rational, Rational] {
+      def portion(left: Int, v: Int, right: Int): Double = (v - left).toDouble / (right - left)
+    }
 
-  def distance(v: Rational, w: Rational): Rational = (v - w).abs
+  implicit val rationalRationalLengthSpace: LengthSpace[Rational, Rational] =
+    new LengthSpace[Rational, Rational] {
 
-  def onPath(left: Rational, right: Rational, p: Double): Rational = (right - left) * p + left
+      def distance(v: Rational, w: Rational): Rational = (v - w).abs
 
-  def portion(left: Rational, v: Rational, right: Rational): Double =
-    ((v - left) / (right - left)).toDouble
+      def onPath(left: Rational, right: Rational, p: Double): Rational = (right - left) * p + left
+
+      def portion(left: Rational, v: Rational, right: Rational): Double =
+        ((v - left) / (right - left)).toDouble
+    }
+
 }
