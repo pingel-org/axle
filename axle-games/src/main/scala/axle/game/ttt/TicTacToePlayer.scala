@@ -7,16 +7,16 @@ import axle.string
 
 object TicTacToePlayer {
 
-  implicit def tttpEq: Eq[TicTacToePlayer] = new Eq[TicTacToePlayer] {
-    def eqv(x: TicTacToePlayer, y: TicTacToePlayer): Boolean = x.equals(y)
-  }
+  implicit def tttpEq: Eq[TicTacToePlayer] =
+    new Eq[TicTacToePlayer] {
+      def eqv(x: TicTacToePlayer, y: TicTacToePlayer): Boolean = x.equals(y)
+    }
 
-  implicit def showTTTPlayer: Show[TicTacToePlayer] = new Show[TicTacToePlayer] {
-    
-    def text(p: TicTacToePlayer): String = p.id
-  }
-  
+  implicit def showTTTPlayer: Show[TicTacToePlayer] =
+    new Show[TicTacToePlayer] {
+      def text(p: TicTacToePlayer): String = p.id
+    }
+
 }
 
-abstract class TicTacToePlayer(implicit ttt: TicTacToe)
-  extends Player[TicTacToe]
+trait TicTacToePlayer extends Player[TicTacToe]

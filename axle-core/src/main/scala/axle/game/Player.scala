@@ -2,7 +2,7 @@ package axle.game
 
 import axle.Show
 
-abstract class Player[G <: Game[G]] {
+trait Player[G <: Game[G]] {
 
   def id: String
   

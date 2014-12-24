@@ -9,7 +9,7 @@ import spire.compat.integral
 import spire.implicits.eqOps
 import spire.math.Real
 
-abstract class Game[G <: Game[G]] {
+trait Game[G <: Game[G]] {
 
   self: G =>
 
@@ -72,8 +72,7 @@ abstract class Game[G <: Game[G]] {
       (null.asInstanceOf[G#MOVE], heuristic(state)) // TODO null
     } else {
       val result = state.moves.foldLeft(AlphaBetaFold(null.asInstanceOf[G#MOVE], cutoff, false))(
-        (in: AlphaBetaFold, move: G#MOVE) => in.process(move, state, heuristic)
-      )
+        (in: AlphaBetaFold, move: G#MOVE) => in.process(move, state, heuristic))
       (result.move, result.cutoff)
     }
 
@@ -118,8 +117,7 @@ abstract class Game[G <: Game[G]] {
   def gameStream(start: G#STATE, intro: Boolean = true): Stream[G#STATE] =
     play(start, intro).flatMap(end => {
       startFrom(end).map(newStart =>
-        cons(end, gameStream(newStart, false))
-      )
+        cons(end, gameStream(newStart, false)))
     }).getOrElse(empty)
 
   def playContinuously(start: G#STATE = startState): G#STATE =

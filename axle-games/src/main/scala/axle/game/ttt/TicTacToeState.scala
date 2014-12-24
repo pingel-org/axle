@@ -71,7 +71,7 @@ case class TicTacToeState(
 
   def apply(move: TicTacToeMove): Option[TicTacToeState] =
     ttt.state(
-      ttt.playerAfter(move.tttPlayer),
+      ttt.playerAfter(move.player),
       place(move.position, Some(player)),
       _eventQueues)
 

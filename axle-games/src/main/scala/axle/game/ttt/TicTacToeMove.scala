@@ -5,8 +5,8 @@ import axle.game.Move
 import axle.string
 import spire.algebra.Eq
 
-case class TicTacToeMove(tttPlayer: TicTacToePlayer, position: Int)(implicit ttt: TicTacToe)
-  extends Move[TicTacToe](tttPlayer) {
+case class TicTacToeMove(player: TicTacToePlayer, position: Int)(implicit ttt: TicTacToe)
+  extends Move[TicTacToe] {
 
   def description: String = ttt.boardSize match {
     case 3 => position match {
@@ -24,8 +24,8 @@ case class TicTacToeMove(tttPlayer: TicTacToePlayer, position: Int)(implicit ttt
   }
 
   def displayTo(p: TicTacToePlayer)(implicit eqp: Eq[TicTacToePlayer], sp: Show[TicTacToePlayer]): String =
-    (if (tttPlayer != p) "I will" else "You have") +
-      " put an " + tttPlayer.id +
+    (if (player != p) "I will" else "You have") +
+      " put an " + player.id +
       " in the " + description + "."
 
 }
