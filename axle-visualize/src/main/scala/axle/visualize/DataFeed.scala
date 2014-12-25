@@ -17,9 +17,11 @@ import axle.quanta.Time.millisecond
 import axle.quanta.UnittedQuantity
 import spire.implicits.DoubleAlgebra
 
-case class DataFeedActor[T](initialValue: T, refreshFn: T => T, interval: UnittedQuantity[Time.type, Double])
-  extends Actor
-  with ActorLogging {
+case class DataFeedActor[T](
+  initialValue: T,
+  refreshFn: T => T,
+  interval: UnittedQuantity[Time.type, Double])
+  extends Actor with ActorLogging {
 
   import DataFeedProtocol._
   import FrameProtocol._

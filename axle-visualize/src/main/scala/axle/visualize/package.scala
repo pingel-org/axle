@@ -50,27 +50,25 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T: Draw: Fed](t: T, refreshFn: T => T, interval: UnittedQuantity[Time.type, Double])(implicit system: ActorSystem): ActorRef = {
+  def play[T: Draw, D](
+    t: T,
+    f: D => D,
+    interval: UnittedQuantity[Time.type, Double])(implicit system: ActorSystem): ActorRef = {
 
-    val drawer = implicitly[Draw[T]]
-
-    drawer.component(t) match {
-      // TODO reorganize this
-      case fedComponent: Component with Fed[T] => {
-        val minSize = fedComponent.getMinimumSize
+    val draw = implicitly[Draw[T]]
+    draw.component(t) match {
+      case fed: Component with Fed[D] => {
+        val minSize = fed.getMinimumSize
         val frame = newFrame(minSize.width, minSize.height)
-        val feeder = fedComponent.setFeeder(refreshFn, interval, system)
-        //system.actorOf(Props(classOf[FrameRepaintingActor], frame, component.feeder.get))
+        val feeder = fed.setFeeder(f, interval, system)
+        system.actorOf(Props(classOf[FrameRepaintingActor], frame, fed.feeder.get))
         frame.initialize()
-        val rc = frame.add(fedComponent)
+        val rc = frame.add(fed)
         rc.setVisible(true)
         frame.setVisible(true)
         feeder
       }
-      case _ => {
-        draw(t)
-        null // TODO re-org
-      }
+      case _ => null
     }
   }
 
@@ -79,7 +77,7 @@ package object visualize {
       def component(jug: JungUndirectedGraph[VP, EP]) =
         JungUndirectedGraphVisualization().component(jug)
     }
-  
+
   implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[JungDirectedGraph[VP, EP]] =
     new Draw[JungDirectedGraph[VP, EP]] {
       def component(jdg: JungDirectedGraph[VP, EP]) =

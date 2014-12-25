@@ -1,12 +1,13 @@
 package axle.visualize
 
+import java.awt.Component
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
 import axle.quanta.Time
 import axle.quanta.UnittedQuantity
 
-trait Fed[T] {
+trait Fed[T] extends Component {
 
   def initialValue: T
 

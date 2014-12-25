@@ -19,8 +19,8 @@ import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
 import spire.compat.ordering
 
-case class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
-  implicit yPlottable: Plottable[Y], yOrder: Order[Y], yEq: Eq[Y], yts: Tics[Y], yLength: LengthSpace[Y, _]) {
+case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
+  implicit yLength: LengthSpace[Y, _]) {
 
   import chart._
 
@@ -57,7 +57,7 @@ case class BarChartView[S: Show, Y, D](chart: BarChart[S, Y, D], data: D, colorS
     labelAngle,
     black)
 
-  val yTics = YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
+  val yTics = YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)
 
   val bars = slices.toStream.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {

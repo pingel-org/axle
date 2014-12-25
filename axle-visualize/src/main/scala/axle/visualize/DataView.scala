@@ -28,7 +28,7 @@ object DataView {
 
       def keys(d: Map[X, Y]): Traversable[X] = d.keys
 
-      def valueOf(d: Map[X, Y], x: X): Y = d.apply(x)
+      def valueOf(d: Map[X, Y], x: X): Y = d(x)
 
       def yRange(d: Map[X, Y]): (Y, Y) = {
 
