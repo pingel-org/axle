@@ -84,13 +84,10 @@ package object visualize {
         JungDirectedGraphVisualization().component(jdg)
     }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph]: Draw[BayesianNetwork[T, N, DG]] = {
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](implicit drawDG: Draw[DG[_, _]]): Draw[BayesianNetwork[T, N, DG]] = {
     new Draw[BayesianNetwork[T, N, DG]] {
-      def component(bn: BayesianNetwork[T, N, DG]) = {
-        // TODO this should be easier
-        val jdg = implicitly[DirectedGraph[JungDirectedGraph]].make[BayesianNetworkNode[T, N], String](???, ???) // bn.graph.v.vertexPayloads, bn.graph.edgeFunction)
-        drawJungDirectedGraph[BayesianNetworkNode[T, N], String].component(jdg)
-      }
+      def component(bn: BayesianNetwork[T, N, DG]) =
+        drawDG.component(bn.graph)
     }
   }
 
