@@ -34,16 +34,11 @@ import axle.algebra.DirectedGraph
 
 package object visualize {
 
-  // default width/height was 1100/800
-
-  def newFrame(width: Int, height: Int): AxleFrame =
-    AxleFrame(width, height, Color.white, "αχλε")
-
   def draw[T: Draw](t: T): Unit = {
     val draw = implicitly[Draw[T]]
     val component = draw.component(t)
     val minSize = component.getMinimumSize
-    val frame = newFrame(minSize.width, minSize.height)
+    val frame = AxleFrame(minSize.width, minSize.height)
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
@@ -59,7 +54,7 @@ package object visualize {
     draw.component(t) match {
       case fed: Component with Fed[D] => {
         val minSize = fed.getMinimumSize
-        val frame = newFrame(minSize.width, minSize.height)
+        val frame = AxleFrame(minSize.width, minSize.height)
         val feeder = fed.setFeeder(f, interval, system)
         system.actorOf(Props(classOf[FrameRepaintingActor], frame, fed.feeder.get))
         frame.initialize()
@@ -84,7 +79,7 @@ package object visualize {
         JungDirectedGraphVisualization().component(jdg)
     }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](implicit drawDG: Draw[DG[_, _]]): Draw[BayesianNetwork[T, N, DG]] = {
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](implicit drawDG: Draw[DG[BayesianNetworkNode[T, N], String]]): Draw[BayesianNetwork[T, N, DG]] = {
     new Draw[BayesianNetwork[T, N, DG]] {
       def component(bn: BayesianNetwork[T, N, DG]) =
         drawDG.component(bn.graph)
@@ -104,7 +99,7 @@ package object visualize {
     val component = implicitly[Draw[T]].component(t)
 
     val minSize = component.getMinimumSize
-    val frame = newFrame(minSize.width, minSize.height)
+    val frame = AxleFrame(minSize.width, minSize.height)
     frame.setUndecorated(true)
     frame.initialize()
     val rc = frame.add(component)
