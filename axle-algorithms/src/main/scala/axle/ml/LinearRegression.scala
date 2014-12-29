@@ -14,6 +14,7 @@ case class LinearRegression[D, M](
   iterations: Int = 100)(implicit la: LinearAlgebra[M, Double]) {
 
   implicit val ring = la.ring
+  
   implicit val module = la.module
 
   val inputX = la.matrix(
@@ -30,6 +31,7 @@ case class LinearRegression[D, M](
   val objectiveNormalizer = LinearFeatureNormalizer(y)
 
   val θ0 = la.ones(X.columns, 1)
+  
   val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData, θ0, α, iterations)
 
   def normalEquation(X: M, y: M) = (X.t * X).inv * X.t * y
