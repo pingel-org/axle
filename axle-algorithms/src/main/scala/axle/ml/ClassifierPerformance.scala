@@ -37,6 +37,8 @@ import spire.algebra._
  *
  * http://en.wikipedia.org/wiki/F1_score
  *
+ * 
+ * 
  */
 
 case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor, CLASS](
@@ -68,7 +70,7 @@ case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor, CL
 
   def f1Score: N = 2 * (precision * recall) / (precision + recall)
 
-  def fScore(β: Int = 1): N =
+  def fScore(β: Double = 1d): N =
     (1 + (β * β)) * (precision * recall) / ((β * β * precision) + recall)
 
 }
