@@ -13,9 +13,11 @@ import axle.algebra.MapFrom
 import axle.algebra.FunctionPair
 import axle.algebra.Semigroups._
 import axle.syntax.functor._
+import axle.syntax.finite._
 import spire.math._
 import spire.implicits._
 import spire.algebra._
+import spire.compat.ordering
 
 /**
  * ClassifierPerformance computes measures of classification performance
@@ -37,20 +39,20 @@ import spire.algebra._
  *
  * http://en.wikipedia.org/wiki/F1_score
  *
- * 
- * 
+ *
+ *
  */
 
-case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor, CLASS](
+case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor](
   data: F[DATA],
-  predict: DATA => Boolean,
-  actual: DATA => Boolean) {
+  retrieve: DATA => Boolean,
+  relevant: DATA => Boolean) {
 
   val field = implicitly[Field[N]]
   import field._
 
   val scores = data.map { d =>
-    (actual(d), predict(d)) match {
+    (relevant(d), retrieve(d)) match {
       case (true, true)   => (one, zero, zero, zero) // true positive
       case (false, true)  => (zero, one, zero, zero) // false positive
       case (false, false) => (zero, zero, one, zero) // false negative
@@ -77,10 +79,10 @@ case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor, CL
 
 object ClassifierPerformance {
 
-  implicit def showCP[N, DATA, F[_], CLASS]: Show[ClassifierPerformance[N, DATA, F, CLASS]] =
-    new Show[ClassifierPerformance[N, DATA, F, CLASS]] {
+  implicit def showCP[N, DATA, F[_]]: Show[ClassifierPerformance[N, DATA, F]] =
+    new Show[ClassifierPerformance[N, DATA, F]] {
 
-      def text(cp: ClassifierPerformance[N, DATA, F, CLASS]): String = {
+      def text(cp: ClassifierPerformance[N, DATA, F]): String = {
         import cp._
         s"""Precision   $precision
 Recall      $recall
