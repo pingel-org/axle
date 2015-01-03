@@ -5,6 +5,7 @@ import scala.reflect.ClassTag
 import axle.algebra.Aggregatable
 
 import spire.algebra.AdditiveMonoid
+import spire.algebra.Field
 import spire.algebra.MetricSpace
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
@@ -43,6 +44,9 @@ package object algebra {
   def sum[A: ClassTag, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
 
+  def mean[A: ClassTag, F[_]](fa: F[A])(implicit ev: Field[A], agg: Aggregatable[F], fin: Finite[F]): A =
+    sum(fa) / fin.size(fa)
+
   def Π[A: ClassTag, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
@@ -63,5 +67,5 @@ package object algebra {
 
     def distance(v: Double, w: Double): Double = (v - w).abs
   }
-  
+
 }
