@@ -30,7 +30,7 @@ class RankedClassifierPerformanceSpec extends Specification {
 
       meanAveragePrecisionAtK(List(1 until 6, 1 until 6), List(List(6, 4, 7, 1, 2), List(1, 1, 1, 1, 1)), 5) must be equalTo 0.26
 
-      meanAveragePrecisionAtK(List(List(1, 3), List(1, 2, 3), List(1, 2, 3)), List(1 until 6, List(1, 1, 1), List(1, 2, 1)), 3) must be equalTo (11d / 18)
+      meanAveragePrecisionAtK(List(List(1, 3), List(1, 2, 3), List(1, 2, 3)), List(1 until 6, List(1, 1, 1), List(1, 2, 1)), 3) must be equalTo 0.611111111111111
     }
   }
 
