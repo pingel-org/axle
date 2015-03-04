@@ -9,28 +9,36 @@ import scala.math.min
 
 import axle.algebra.LengthSpace
 import axle.quanta.Angle
-import axle.quanta.Angle.rad
-import axle.quanta.UnittedQuantity
+import axle.quanta.AngleDouble
+import axle.quanta.UnittedQuantity4
+import axle.quanta.UnitOfMeasurement4
 import spire.algebra.Eq
 import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra
-import axle.jung.JungDirectedGraph
-import axle.jung.JungDirectedGraph.directedGraphJung
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
 case class Point2D[X, Y](x: X, y: Y)
 
 case class ScaledArea2D[X, Y](
-  width: Int, height: Int, pad: Int,
-  minX: X, maxX: X, minY: Y, maxY: Y)(implicit eqX: Eq[X], eqY: Eq[Y], lengthX: LengthSpace[X, _], lengthY: LengthSpace[Y, _]) {
+  width: Int,
+  height: Int,
+  pad: Int,
+  minX: X,
+  maxX: X,
+  minY: Y,
+  maxY: Y)(
+    implicit eqX: Eq[X],
+    eqY: Eq[Y],
+    lengthX: LengthSpace[X, _],
+    lengthY: LengthSpace[Y, _]) {
+
+  // cg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]
 
   val nonZeroArea = (!(minX === maxX)) && (!(minY === maxY))
 
   val drawableWidth = width - (2 * pad)
   val drawableHeight = height - (2 * pad)
-
-  implicit val cgAngle = Angle.conversionGraph[Double, JungDirectedGraph]
 
   def framePoint(sp: Point2D[X, Y]): Point = new Point(
     pad + (drawableWidth * lengthX.portion(minX, sp.x, maxX)).toInt,
@@ -81,10 +89,18 @@ case class ScaledArea2D[X, Y](
     }
   }
 
-  def drawStringAtAngle(g2d: Graphics2D, fontMetrics: FontMetrics, s: String, p: Point2D[X, Y], angle: UnittedQuantity[Angle.type, Double]): Unit = {
+  import axle.algebra.DirectedGraph
+
+  def drawStringAtAngle[DG[_, _]: DirectedGraph](
+    g2d: Graphics2D,
+    fontMetrics: FontMetrics,
+    s: String,
+    p: Point2D[X, Y],
+    angle: UnittedQuantity4[Angle[Double], Double])(
+      implicit angleCg: DG[UnitOfMeasurement4[axle.quanta.Angle[Double], Double], Double => Double]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
-      val a = (angle in rad[Double]).magnitude
+      val a = (angle in AngleDouble.radian).magnitude
       g2d.translate(fp.x, fp.y + fontMetrics.getHeight)
       g2d.rotate(a)
       g2d.drawString(s, 0, 0)

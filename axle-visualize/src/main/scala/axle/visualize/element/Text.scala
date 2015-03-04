@@ -5,23 +5,24 @@ import java.awt.Font
 import java.awt.Graphics2D
 
 import axle.quanta.Angle
-import axle.quanta.Angle.rad
-import axle.quanta.UnittedQuantity
+import axle.quanta.AngleDouble
+import axle.quanta.UnittedQuantity4
+import axle.quanta.UnitOfMeasurement4
+import axle.algebra.DirectedGraph
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra
 
-case class Text(
+case class Text[DG[_, _]: DirectedGraph](
   text: String,
   font: Font,
   x: Int,
   y: Int,
   centered: Boolean = true,
   color: Color = Color.black,
-  angle: Option[UnittedQuantity[Angle.type, Double]] = None) extends Paintable {
+  angle: Option[UnittedQuantity4[Angle[Double], Double]] = None)(
+    implicit angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) extends Paintable {
 
-  import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
-
-  val angleRadOpt = angle.map(a => (a in rad[Double]).magnitude)
+  val angleRadOpt = angle.map(a => (a in AngleDouble.radian).magnitude)
 
   def paint(g2d: Graphics2D): Unit = {
 
@@ -32,7 +33,7 @@ case class Text(
     if (angleRadOpt.isDefined) {
       val twist = angleRadOpt.get
       g2d.translate(x, y)
-      g2d.rotate(-1 * twist)
+      g2d.rotate(twist * -1)
       if (centered) {
         g2d.drawString(text, -fontMetrics.stringWidth(text) / 2, 0)
       } else {

@@ -17,6 +17,18 @@ import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Vertex
 
+trait Quantum4[N] {
+
+  type Q <: Quantum4[N]
+
+  def wikipediaUrl: String
+
+  def units: List[UnitOfMeasurement4[Q, N]]
+
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])]
+
+}
+
 trait Quantum {
 
   type Q <: Quantum

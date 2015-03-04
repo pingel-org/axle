@@ -15,7 +15,7 @@ import axle.actor.Defaults.askTimeout
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.quanta.Angle.{° => °}
+import axle.quanta.AngleDouble
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
@@ -35,7 +35,7 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: °[Double])))
+  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: AngleDouble.°)))
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
 

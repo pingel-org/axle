@@ -57,6 +57,7 @@ import spire.implicits.LongAlgebra
 import spire.implicits.eqOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
+import spire.math.Rational
 
 /**
  *
@@ -74,10 +75,18 @@ package object axle {
 
   def ∃[A, B: BooleanAlgebra: ClassTag, F[_]: Functor: Aggregatable] = thereexists[A, B, F] _
 
-  implicit val orderSymbols: Order[Symbol] = new Order[Symbol] {
-    val stringCompare = implicitly[Order[String]]
-    def compare(x: Symbol, y: Symbol): Int = stringCompare.compare(string(x), string(y))
-  }
+  /**
+   * Englishman John Wallis (1616 - 1703) approximation of π in 1655
+   *
+   */
+  def wallisΠ(iterations: Int = 10000) =
+    2 * Π((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
+
+  implicit val orderSymbols: Order[Symbol] =
+    new Order[Symbol] {
+      val stringCompare = implicitly[Order[String]]
+      def compare(x: Symbol, y: Symbol): Int = stringCompare.compare(string(x), string(y))
+    }
 
   implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
 

@@ -7,8 +7,8 @@ import scala.sys.process.stringSeqToProcess
 import scala.util.Try
 
 import axle.quanta.Distance
-import axle.quanta.Distance.cm
-import axle.quanta.UnittedQuantity
+import axle.quanta.DistanceDouble
+import axle.quanta.UnittedQuantity4
 import axle.quanta.modulize
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
@@ -41,11 +41,13 @@ import spire.implicits.moduleOps
 
 object Irises {
 
+  import DistanceDouble._
+
   case class Iris(
-    sepalLength: UnittedQuantity[Distance.type, Double],
-    sepalWidth: UnittedQuantity[Distance.type, Double],
-    petalLength: UnittedQuantity[Distance.type, Double],
-    petalWidth: UnittedQuantity[Distance.type, Double],
+    sepalLength: UnittedQuantity4[Distance[Double], Double],
+    sepalWidth: UnittedQuantity4[Distance[Double], Double],
+    petalLength: UnittedQuantity4[Distance[Double], Double],
+    petalWidth: UnittedQuantity4[Distance[Double], Double],
     species: String)
 
   object Iris {
@@ -66,10 +68,10 @@ object Irises {
     Try {
       val fields = line.split(",")
       Iris(
-        fields(0).toDouble *: cm[Double],
-        fields(1).toDouble *: cm[Double],
-        fields(2).toDouble *: cm[Double],
-        fields(3).toDouble *: cm[Double],
+        fields(0).toDouble *: cm,
+        fields(1).toDouble *: cm,
+        fields(2).toDouble *: cm,
+        fields(3).toDouble *: cm,
         fields(4))
     } toOption
   }

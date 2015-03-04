@@ -14,11 +14,11 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      import Distance._
+      import DistanceRational._
       import Time._
 
-      val d1 = Rational(3, 4) *: meter[Rational]
-      val d2 = Rational(7, 2) *: meter[Rational]
+      val d1 = Rational(3, 4) *: meter
+      val d2 = Rational(7, 2) *: meter
       val t1 = Rational(4) *: second[Rational]
       val t2 = Rational(9, 88) *: second[Rational]
       val t3 = Rational(5d) *: second[Rational]
