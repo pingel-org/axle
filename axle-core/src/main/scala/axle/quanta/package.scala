@@ -29,6 +29,9 @@ package object quanta {
 
   type CG[Q <: Quantum, DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
 
+  implicit def conversionGraph[N, Q <: Quantum4[N], DG[_, _]: DirectedGraph]: DG[UnitOfMeasurement4[Q, N], N => N] =
+    ???
+
   implicit def modulize[Q <: Quantum, N, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
 

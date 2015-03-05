@@ -27,10 +27,12 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 import axle.algebra.DirectedGraph
+import axle.quanta.Angle
+import axle.quanta.Distance
 
 abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement4[Distance[Float], Float])(
-  implicit angleCg: DG[UnitOfMeasurement4[axle.quanta.Angle[Double], Double], Double => Double],
-  distanceCg: DG[UnitOfMeasurement4[axle.quanta.Distance[Float], Float], Float => Float]) {
+  implicit angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double],
+  distanceCg: DG[UnitOfMeasurement4[Distance[Float], Float], Float => Float]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()

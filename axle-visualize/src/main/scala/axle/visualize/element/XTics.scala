@@ -15,14 +15,17 @@ import axle.visualize.ScaledArea2D
 import spire.implicits.eqOps
 import spire.math.Number.apply
 import spire.implicits.moduleOps
+import axle.algebra.DirectedGraph
+import axle.quanta.UnitOfMeasurement4
 
-case class XTics[X, Y](
+case class XTics[X, Y, DG[_, _]: DirectedGraph](
   scaledArea: ScaledArea2D[X, Y],
   tics: Seq[(X, String)],
   font: Font,
   fDrawLines: Boolean = true,
   angle: UnittedQuantity4[Angle[Double], Double],
-  color: Color = Color.black) extends Paintable {
+  color: Color = Color.black)(
+    implicit angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) extends Paintable {
 
   def paint(g2d: Graphics2D): Unit = {
     g2d.setColor(color)
@@ -56,9 +59,15 @@ case class XTics[X, Y](
     g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
   }
 
-  def drawXTics(g2d: Graphics2D, fontMetrics: FontMetrics, xTics: Seq[(X, String)], fDrawLines: Boolean = true, angle: UnittedQuantity4[Angle[Double], Double] = zeroDegrees): Unit =
-    xTics.map({
-      case (x, label) => drawXTic(g2d: Graphics2D, fontMetrics, (x, label), fDrawLines, angle)
-    })
+  def drawXTics(
+    g2d: Graphics2D,
+    fontMetrics: FontMetrics,
+    xTics: Seq[(X, String)],
+    fDrawLines: Boolean = true,
+    angle: UnittedQuantity4[Angle[Double], Double] = zeroDegrees): Unit =
+    xTics map {
+      case (x, label) =>
+        drawXTic(g2d: Graphics2D, fontMetrics, (x, label), fDrawLines, angle)
+    }
 
 }

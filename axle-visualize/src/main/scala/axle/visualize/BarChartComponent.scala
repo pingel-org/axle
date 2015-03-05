@@ -22,10 +22,14 @@ import axle.quanta.AngleDouble
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.algebra.Order
+import axle.algebra.DirectedGraph
+import axle.quanta.UnitOfMeasurement4
+import axle.quanta.Angle
 
-case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag](
+case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag, DG[_, _]: DirectedGraph](
   chart: BarChart[S, Y, D])(
-    implicit yls: LengthSpace[Y, _])
+    implicit yls: LengthSpace[Y, _],
+    angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double])
   extends JPanel
   with Fed[D] {
 
