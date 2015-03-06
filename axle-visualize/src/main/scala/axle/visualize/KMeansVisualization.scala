@@ -30,16 +30,20 @@ import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import spire.math.Number.apply
 import spire.implicits.moduleOps
+import axle.quanta.UnitOfMeasurement4
+import axle.quanta.Angle
+import axle.algebra.DirectedGraph
 import axle.syntax.linearalgebra._
 
-case class KMeansVisualization[D, F[_], M](
+case class KMeansVisualization[D, F[_], M, DG[_, _]: DirectedGraph](
   classifier: KMeans[D, F, M],
   w: Int = 600,
   h: Int = 600,
   border: Int = 50,
   pointDiameter: Int = 10,
   fontName: String = "Courier New",
-  fontSize: Int = 12)(implicit la: LinearAlgebra[M, Double]) extends JPanel {
+  fontSize: Int = 12)(
+    implicit la: LinearAlgebra[M, Double], angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 

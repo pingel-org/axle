@@ -12,6 +12,7 @@ import com.jogamp.opengl.util.texture.TextureIO
 import axle.algebra.Position
 import axle.algebra.SphericalVector
 import axle.quanta.Angle
+import axle.quanta.modulize4
 import axle.quanta.AngleDouble
 import axle.quanta.AngleFloat
 import axle.quanta.Distance
@@ -26,13 +27,16 @@ import javax.media.opengl.glu.GLU
 import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
+import spire.implicits._
 import axle.algebra.DirectedGraph
 import axle.quanta.Angle
 import axle.quanta.Distance
 
 abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement4[Distance[Float], Float])(
-  implicit angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double],
-  distanceCg: DG[UnitOfMeasurement4[Distance[Float], Float], Float => Float]) {
+  implicit angleCgFloat: DG[UnitOfMeasurement4[Angle[Float], Float], Float => Float],
+  angleCgDouble: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double],
+  distanceCg: DG[UnitOfMeasurement4[Distance[Float], Float], Float => Float],
+  distanceCgDouble: DG[UnitOfMeasurement4[Distance[Double], Double], Double => Double]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()

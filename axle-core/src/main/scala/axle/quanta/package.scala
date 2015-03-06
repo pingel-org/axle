@@ -47,6 +47,21 @@ package object quanta {
       def timesl(r: N, v: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(v.magnitude * r, v.unit)
     }
 
+  implicit def modulize4[N, Q <: Quantum4[N], DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement4[Q, N], N => N]): Module[UnittedQuantity4[Q, N], N] =
+    new Module[UnittedQuantity4[Q, N], N] {
+
+      def negate(x: UnittedQuantity4[Q, N]): UnittedQuantity4[Q, N] = UnittedQuantity4(-x.magnitude, x.unit) // AdditiveGroup
+
+      def zero: UnittedQuantity4[Q, N] = ??? // UnittedQuantity("zero", "zero", None) // AdditiveMonoid
+
+      def plus(x: UnittedQuantity4[Q, N], y: UnittedQuantity4[Q, N]): UnittedQuantity4[Q, N] =
+        UnittedQuantity4((x in y.unit).magnitude + y.magnitude, y.unit) // AdditiveSemigroup
+
+      implicit def scalar: Rng[N] = fieldn // Module
+
+      def timesl(r: N, v: UnittedQuantity4[Q, N]): UnittedQuantity4[Q, N] = UnittedQuantity4(v.magnitude * r, v.unit)
+    }
+
   //  def unit[Q <: Quantum, N](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
   //    UnitOfMeasurement(name, symbol, linkOpt)
 

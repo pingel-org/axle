@@ -23,13 +23,16 @@ import spire.implicits.DoubleAlgebra
 import spire.math.Number.apply
 import spire.implicits.moduleOps
 import spire.compat.ordering
+import axle.algebra.DirectedGraph
+import axle.quanta.Angle
+import axle.quanta.UnitOfMeasurement4
 
-case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](
+case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
   chart: BarChartGrouped[G, S, Y, D],
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yls: LengthSpace[Y, _]) {
+    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) {
 
   import chart._
 

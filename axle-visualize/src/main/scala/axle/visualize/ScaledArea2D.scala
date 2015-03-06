@@ -33,8 +33,6 @@ case class ScaledArea2D[X, Y](
     lengthX: LengthSpace[X, _],
     lengthY: LengthSpace[Y, _]) {
 
-  // cg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]
-
   val nonZeroArea = (!(minX === maxX)) && (!(minY === maxY))
 
   val drawableWidth = width - (2 * pad)

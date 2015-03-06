@@ -18,9 +18,16 @@ import spire.algebra.Eq
 import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
 import spire.compat.ordering
+import axle.algebra.DirectedGraph
+import axle.quanta.UnitOfMeasurement4
+import axle.quanta.Angle
 
-case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](chart: BarChart[S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
-  implicit yLength: LengthSpace[Y, _]) {
+case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D, DG[_, _]: DirectedGraph](
+  chart: BarChart[S, Y, D],
+  data: D,
+  colorStream: Stream[Color],
+  normalFont: Font)(
+    implicit yLength: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) {
 
   import chart._
 
