@@ -2,7 +2,6 @@ package axle.algebra
 
 import axle.quanta.Angle
 import axle.quanta.Distance
-import axle.quanta.UnittedQuantity
 import axle.quanta.UnittedQuantity4
 import spire.algebra.Field
 import spire.algebra.Order

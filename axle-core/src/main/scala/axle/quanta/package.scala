@@ -8,9 +8,6 @@ import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.algebra.Vertex
-import axle.quanta.Quantum
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.UnittedQuantity
 import axle.algebra.Bijection
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
@@ -27,25 +24,7 @@ import spire.implicits._
 
 package object quanta {
 
-  type CG[Q <: Quantum, DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
-
-  implicit def conversionGraph[N, Q <: Quantum4[N], DG[_, _]: DirectedGraph]: DG[UnitOfMeasurement4[Q, N], N => N] =
-    ???
-
-  implicit def modulize[Q <: Quantum, N, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
-    new Module[UnittedQuantity[Q, N], N] {
-
-      def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
-
-      def zero: UnittedQuantity[Q, N] = ??? // UnittedQuantity("zero", "zero", None) // AdditiveMonoid
-
-      def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
-        UnittedQuantity((x in y.unit).magnitude + y.magnitude, y.unit) // AdditiveSemigroup
-
-      implicit def scalar: Rng[N] = fieldn // Module
-
-      def timesl(r: N, v: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(v.magnitude * r, v.unit)
-    }
+  type CG[Q <: Quantum4[N], DG[_, _], N] = DG[UnitOfMeasurement4[Q, N], N => N]
 
   implicit def modulize4[N, Q <: Quantum4[N], DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement4[Q, N], N => N]): Module[UnittedQuantity4[Q, N], N] =
     new Module[UnittedQuantity4[Q, N], N] {
@@ -65,57 +44,61 @@ package object quanta {
   //  def unit[Q <: Quantum, N](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
   //    UnitOfMeasurement(name, symbol, linkOpt)
 
-  implicit def uqPlottable[Q <: Quantum, N: Plottable]: Plottable[UnittedQuantity[Q, N]] =
-    new Plottable[UnittedQuantity[Q, N]] {
+  implicit def uqPlottable[Q <: Quantum4[N], N: Plottable]: Plottable[UnittedQuantity4[Q, N]] =
+    new Plottable[UnittedQuantity4[Q, N]] {
 
-      override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
+      override def isPlottable(t: UnittedQuantity4[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
     }
 
-  implicit def unitOrder[Q <: Quantum, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
-    new Order[UnittedQuantity[Q, N]] {
+  implicit def unitOrder[Q <: Quantum4[N], N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement4[Q, N], cg: DG[UnitOfMeasurement4[Q, N], N => N]) =
+    new Order[UnittedQuantity4[Q, N]] {
 
       val underlying = implicitly[Order[N]]
 
-      def compare(u1: UnittedQuantity[Q, N], u2: UnittedQuantity[Q, N]): Int =
+      def compare(u1: UnittedQuantity4[Q, N], u2: UnittedQuantity4[Q, N]): Int =
         underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
     }
 
-  implicit def unittedZero[Q <: Quantum, N: AdditiveMonoid, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
-    new Zero[UnittedQuantity[Q, N]] {
+  implicit def unittedZero[Q <: Quantum4[N], N: AdditiveMonoid, DG[_, _]: DirectedGraph](
+    implicit base: UnitOfMeasurement4[Q, N],
+    cg: DG[UnitOfMeasurement4[Q, N], N => N]): Zero[UnittedQuantity4[Q, N]] =
+    new Zero[UnittedQuantity4[Q, N]] {
 
       val am = implicitly[AdditiveMonoid[N]]
 
-      def zero: UnittedQuantity[Q, N] = am.zero *: base
+      def zero: UnittedQuantity4[Q, N] = am.zero *: base
 
     }
 
-  implicit def unittedTics[Q <: Quantum, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
-    new Tics[UnittedQuantity[Q, N]] {
+  implicit def unittedTics[Q <: Quantum4[N], N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](
+    implicit base: UnitOfMeasurement4[Q, N],
+    cg: DG[UnitOfMeasurement4[Q, N], N => N]): Tics[UnittedQuantity4[Q, N]] =
+    new Tics[UnittedQuantity4[Q, N]] {
 
-      def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =
+      def tics(from: UnittedQuantity4[Q, N], to: UnittedQuantity4[Q, N]): Seq[(UnittedQuantity4[Q, N], String)] =
         implicitly[Tics[N]].tics((from in base).magnitude, (to in base).magnitude) map {
           case (v, label) => {
-            val vu = UnittedQuantity[Q, N](v, base)
+            val vu = UnittedQuantity4[Q, N](v, base)
             (vu, string(v))
           }
         }
     }
 
-  implicit def unittedLengthSpace[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](
-    implicit base: UnitOfMeasurement[Q, N], space: LengthSpace[N, Double],
-    cg: DG[UnitOfMeasurement[Q, N], N => N],
-    module: Module[UnittedQuantity[Q, N], N]) =
-    new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N]] {
+  implicit def unittedLengthSpace[Q <: Quantum4[N], N: Field: Order, DG[_, _]: DirectedGraph](
+    implicit base: UnitOfMeasurement4[Q, N], space: LengthSpace[N, Double],
+    cg: DG[UnitOfMeasurement4[Q, N], N => N],
+    module: Module[UnittedQuantity4[Q, N], N]) =
+    new LengthSpace[UnittedQuantity4[Q, N], UnittedQuantity4[Q, N]] {
 
       val field = implicitly[Field[N]]
 
-      def distance(v: UnittedQuantity[Q, N], w: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
+      def distance(v: UnittedQuantity4[Q, N], w: UnittedQuantity4[Q, N]): UnittedQuantity4[Q, N] =
         (field.minus((v in base).magnitude, (w in base).magnitude).abs) *: base
 
-      def onPath(left: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N], p: Double): UnittedQuantity[Q, N] =
+      def onPath(left: UnittedQuantity4[Q, N], right: UnittedQuantity4[Q, N], p: Double): UnittedQuantity4[Q, N] =
         ((field.minus((right in base).magnitude, (left in base).magnitude)) * p + (left in base).magnitude) *: base
 
-      def portion(left: UnittedQuantity[Q, N], v: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N]): Double =
+      def portion(left: UnittedQuantity4[Q, N], v: UnittedQuantity4[Q, N], right: UnittedQuantity4[Q, N]): Double =
         space.portion((left in base).magnitude, (v in base).magnitude, (right in base).magnitude)
 
     }
