@@ -29,16 +29,6 @@ trait Quantum4[N] {
 
 }
 
-trait Quantum {
-
-  type Q <: Quantum
-
-  def wikipediaUrl: String
-
-  def units[N]: List[UnitOfMeasurement[Q, N]]
-
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]
-
   //  private[quanta] def trip2fns[N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
   //    val (from, to, multiplier) = trip
   //    Vector(
@@ -51,28 +41,26 @@ trait Quantum {
   //
   //  def cgnDisconnected[N: Field: Eq, DG[_, _]: DirectedGraph]: CG[DG, N] = conversions(units, (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => Nil)
 
-  private def conversions[Q <: Quantum, N, DG[_, _]](
-    vps: Seq[UnitOfMeasurement[Q, N]],
-    ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)])(implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q, N], N => N] =
-    evDG.make[UnitOfMeasurement[Q, N], N => N](vps, ef)
+//  private def conversions[Q <: Quantum, N, DG[_, _]](
+//    vps: Seq[UnitOfMeasurement[Q, N]],
+//    ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)])(implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q, N], N => N] =
+//    evDG.make[UnitOfMeasurement[Q, N], N => N](vps, ef)
 
-  private def cgn[N, DG[_, _]: DirectedGraph](
-    units: List[UnitOfMeasurement[Q, N]],
-    links: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]): CG[Q, DG, N] =
-    conversions[Q, N, DG](
-      units,
-      (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => {
-        val name2vertex = vs.map(v => (v.payload.name, v)).toMap
-        links.flatMap({
-          case (x, y, bijection) => {
-            val xv = name2vertex(x.name)
-            val yv = name2vertex(y.name)
-            List((xv, yv, bijection.apply _), (yv, xv, bijection.unapply _))
-          }
-        })
-      })
+//  private def cgn[N, DG[_, _]: DirectedGraph](
+//    units: List[UnitOfMeasurement[Q, N]],
+//    links: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]): CG[Q, DG, N] =
+//    conversions[Q, N, DG](
+//      units,
+//      (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => {
+//        val name2vertex = vs.map(v => (v.payload.name, v)).toMap
+//        links.flatMap({
+//          case (x, y, bijection) => {
+//            val xv = name2vertex(x.name)
+//            val yv = name2vertex(y.name)
+//            List((xv, yv, bijection.apply _), (yv, xv, bijection.unapply _))
+//          }
+//        })
+//      })
 
-  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    cgn[N, DG](units[N], links[N])
-
-}
+//  implicit def conversionGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+//    cgn[N, DG](units[N], links[N])
