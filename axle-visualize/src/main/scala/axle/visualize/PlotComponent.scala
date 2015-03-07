@@ -12,6 +12,7 @@ import scala.concurrent.duration.DurationInt
 import DataFeedProtocol.Fetch
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
+import axle.algebra.DirectedGraph
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
@@ -19,14 +20,17 @@ import axle.quanta.AngleDouble
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
+import axle.quanta.UnitOfMeasurement4
+import axle.quanta.Angle
 
-case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
+case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D, DG[_, _]: DirectedGraph](
   plot: Plot[X, Y, D])(
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _])
+    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
+    angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double])
   extends JPanel
   with Fed[List[(String, D)]] {
 
-  import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
+  //import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
   import plot._
 
   setMinimumSize(new Dimension(width, height))

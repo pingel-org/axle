@@ -14,7 +14,8 @@ import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
 import axle.quanta.Time
-import axle.quanta.UnittedQuantity
+import axle.quanta.UnittedQuantity4
+import axle.quanta.UnitOfMeasurement4
 
 import spire.algebra._
 
@@ -45,10 +46,13 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T: Draw, D](
+  def play[T: Draw, D, DG[_, _]: DirectedGraph](
     t: T,
     f: D => D,
-    interval: UnittedQuantity[Time.type, Double])(implicit system: ActorSystem): ActorRef = {
+    interval: UnittedQuantity4[Time[Double], Double])(
+      implicit system: ActorSystem,
+      time: Time[Double],
+      timeCg: DG[UnitOfMeasurement4[Time[Double], Double], Double => Double]): ActorRef = {
 
     val draw = implicitly[Draw[T]]
     draw.component(t) match {
