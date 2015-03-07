@@ -12,14 +12,14 @@ case class Money[N]() extends Quantum4[N] {
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Money"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Q, N](name, symbol, wiki)
+    UnitOfMeasurement4[Money[N], N](name, symbol, wiki)
 
-  def USD: UnitOfMeasurement4[Q, N] = unit("US Dollar", "USD")
+  lazy val USD = unit("US Dollar", "USD")
 
-  def units: List[UnitOfMeasurement4[Q, N]] =
+  def units: List[UnitOfMeasurement4[Money[N], N]] =
     List(USD)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])] =
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Money[N], N], UnitOfMeasurement4[Money[N], N], Bijection[N, N])] =
     List.empty
 
 }

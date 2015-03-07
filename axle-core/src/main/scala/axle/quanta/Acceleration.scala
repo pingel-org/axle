@@ -14,15 +14,15 @@ case class Acceleration[N]() extends Quantum4[N] {
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
     UnitOfMeasurement4[Acceleration[N], N](name, symbol, wiki)
 
-  def mpsps: UnitOfMeasurement4[Q, N] = unit("mps", "mps") // derive
-  def fpsps: UnitOfMeasurement4[Q, N] = unit("fps", "fps") // derive
-  def g: UnitOfMeasurement4[Q, N] = unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
+  lazy val mpsps = unit("mps", "mps") // derive
+  lazy val fpsps = unit("fps", "fps") // derive
+  lazy val g = unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
 
-  def units: List[UnitOfMeasurement4[Q, N]] =
+  def units: List[UnitOfMeasurement4[Acceleration[N], N]] =
     List(mpsps, fpsps, g)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Acceleration[N], N], UnitOfMeasurement4[Acceleration[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement4[Acceleration[N], N], UnitOfMeasurement4[Acceleration[N], N], Bijection[N, N])](
       (mpsps, g, ScaleDouble(9.80665)))
 
 }

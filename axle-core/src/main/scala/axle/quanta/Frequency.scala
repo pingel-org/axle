@@ -12,23 +12,23 @@ case class Frequency[N]() extends Quantum4[N] {
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Frequency"
   
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Q, N](name, symbol, wiki)
+    UnitOfMeasurement4[Frequency[N], N](name, symbol, wiki)
 
-  def degree: UnitOfMeasurement4[Q, N] = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(Frequency)"))
-  def hertz: UnitOfMeasurement4[Q, N] = unit("Hertz", "Hz", Some("http://en.wikipedia.org/wiki/Hertz"))
-  def Hz = hertz
-  def kilohertz: UnitOfMeasurement4[Q, N] = unit("Kilohertz", "KHz")
-  def KHz = kilohertz
-  def megahertz: UnitOfMeasurement4[Q, N] = unit("Megahertz", "MHz")
-  def MHz = megahertz
-  def gigahertz: UnitOfMeasurement4[Q, N] = unit("Gigahertz", "GHz")
-  def GHz = gigahertz
+  lazy val degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(Frequency)"))
+  lazy val hertz = unit("Hertz", "Hz", Some("http://en.wikipedia.org/wiki/Hertz"))
+  lazy val Hz = hertz
+  lazy val kilohertz = unit("Kilohertz", "KHz")
+  lazy val KHz = kilohertz
+  lazy val megahertz = unit("Megahertz", "MHz")
+  lazy val MHz = megahertz
+  lazy val gigahertz = unit("Gigahertz", "GHz")
+  lazy val GHz = gigahertz
 
-  def units: List[UnitOfMeasurement4[Q, N]] =
+  def units: List[UnitOfMeasurement4[Frequency[N], N]] =
     List(degree)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Frequency[N], N], UnitOfMeasurement4[Frequency[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement4[Frequency[N], N], UnitOfMeasurement4[Frequency[N], N], Bijection[N, N])](
       (Hz, KHz, Scale10s(3)),
       (Hz, MHz, Scale10s(9)),
       (Hz, GHz, Scale10s(12)))

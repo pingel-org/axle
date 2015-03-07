@@ -44,8 +44,8 @@ case class Distance[N]() extends Quantum4[N] {
     List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
       astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Distance[N], N], UnitOfMeasurement4[Distance[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement4[Distance[N], N], UnitOfMeasurement4[Distance[N], N], Bijection[N, N])](
       (foot, mile, ScaleInt(5280)),
       (foot, meter, ScaleDouble(3.2808398950131235)),
       (kilometer, mile, ScaleDouble(1.609344)),

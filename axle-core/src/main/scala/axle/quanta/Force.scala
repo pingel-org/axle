@@ -12,16 +12,16 @@ case class Force[N]() extends Quantum4[N] {
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Force"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Q, N](name, symbol, wiki)
+    UnitOfMeasurement4[Force[N], N](name, symbol, wiki)
 
-  def pound: UnitOfMeasurement4[Q, N] = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
-  def newton: UnitOfMeasurement4[Q, N] = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
-  def dyne: UnitOfMeasurement4[Q, N] = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
+  lazy val pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
+  lazy val newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
+  lazy val dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
 
-  def units: List[UnitOfMeasurement4[Q, N]] =
+  def units: List[UnitOfMeasurement4[Force[N], N]] =
     List(pound, newton, dyne)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])] =
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Force[N], N], UnitOfMeasurement4[Force[N], N], Bijection[N, N])] =
     List.empty
 
 }

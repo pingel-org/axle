@@ -12,14 +12,14 @@ case class MoneyPerForce[N]() extends Quantum4[N] {
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Degree_(MoneyPerForce)"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Q, N](name, symbol, wiki)
+    UnitOfMeasurement4[MoneyPerForce[N], N](name, symbol, wiki)
 
-  def USDperPound: UnitOfMeasurement4[Q, N] = unit("$/lb", "$/lb") // derive
+  lazy val USDperPound = unit("$/lb", "$/lb") // derive
 
-  def units: List[UnitOfMeasurement4[Q, N]] =
+  def units: List[UnitOfMeasurement4[MoneyPerForce[N], N]] =
     List(USDperPound)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])] =
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[MoneyPerForce[N], N], UnitOfMeasurement4[MoneyPerForce[N], N], Bijection[N, N])] =
     List.empty
 
 }
