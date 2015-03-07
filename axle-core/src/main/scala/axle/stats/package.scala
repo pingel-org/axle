@@ -11,7 +11,6 @@ import axle.stats.EnrichedCaseGenTraversable
 import axle.stats.P
 import axle.quanta.UnittedQuantity4
 import axle.quanta.Information
-import axle.quanta.Information.bit
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -105,22 +104,24 @@ package object stats {
   def stddev[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
     standardDeviation(distribution)
 
-  def entropy[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](X: Distribution[A, N]): UnittedQuantity4[Information[N], Double] = {
+  def entropy[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
+    X: Distribution[A, N])(
+      implicit info: Information[Double]): UnittedQuantity4[Information[Double], Double] = {
 
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values map { x =>
-      val px: N = P(X is x).apply()
+      val px: N = axle.stats.P(X is x).apply()
       if (px === implicitly[Field[N]].zero) {
         0d
       } else {
         convertN.toDouble(-px) * log2(px)
       }
     })
-    UnittedQuantity4(H, bit)
+    UnittedQuantity4(H, info.bit)
   }
 
   def H[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
-    X: Distribution[A, N]): UnittedQuantity4[Information[N], Double] =
+    X: Distribution[A, N])(implicit info: Information[Double]): UnittedQuantity4[Information[Double], Double] =
     entropy(X)
 
 }
