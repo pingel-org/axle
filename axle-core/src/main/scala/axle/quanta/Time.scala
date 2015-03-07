@@ -5,45 +5,45 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case object Time extends Quantum {
+case class Time[N]() extends Quantum4[N] {
 
-  type Q = Time.type
+  type Q = Time[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
 
-  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Q, N](name, symbol, wiki)
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement4[Q, N](name, symbol, wiki)
 
-  def second[N]: UnitOfMeasurement[Q, N] = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
-  def s[N] = second[N]
-  def millisecond[N]: UnitOfMeasurement[Q, N] = unit("millisecond", "ms", Some("http://en.wikipedia.org/wiki/Millisecond"))
-  def ms[N] = millisecond[N]
-  def microsecond[N]: UnitOfMeasurement[Q, N] = unit("microsecond", "μs", Some("http://en.wikipedia.org/wiki/Microsecond"))
-  def μs[N] = microsecond[N]
-  def nanosecond[N]: UnitOfMeasurement[Q, N] = unit("nanosecond", "ns", Some("http://en.wikipedia.org/wiki/Nanosecond"))
-  def ns[N] = nanosecond[N]
-  def picosecond[N]: UnitOfMeasurement[Q, N] = unit("picosecond", "ps", Some("http://en.wikipedia.org/wiki/Picosecond"))
-  def ps[N] = picosecond[N]
-  def femtosecond[N]: UnitOfMeasurement[Q, N] = unit("femtosecond", "fs", Some("http://en.wikipedia.org/wiki/Femtosecond"))
-  def fs[N] = femtosecond[N]
-  def attosecond[N]: UnitOfMeasurement[Q, N] = unit("attosecond", "as", Some("http://en.wikipedia.org/wiki/Attosecond"))
-  def as[N] = attosecond[N]
-  def zeptosecond[N]: UnitOfMeasurement[Q, N] = unit("zeptosecond", "zs", Some("http://en.wikipedia.org/wiki/Zeptosecond"))
-  def zs[N] = zeptosecond[N]
-  def yoctosecond[N]: UnitOfMeasurement[Q, N] = unit("yoctosecond", "ys", Some("http://en.wikipedia.org/wiki/Yoctosecond"))
-  def ys[N] = yoctosecond[N]
-  def minute[N]: UnitOfMeasurement[Q, N] = unit("minute", "m", Some("http://en.wikipedia.org/wiki/Minute"))
-  def m[N] = minute[N]
-  def hour[N]: UnitOfMeasurement[Q, N] = unit("hour", "hr", Some("http://en.wikipedia.org/wiki/Hour"))
-  def day[N]: UnitOfMeasurement[Q, N] = unit("day", "d", Some("http://en.wikipedia.org/wiki/Day"))
-  def year[N]: UnitOfMeasurement[Q, N] = unit("year", "yr", Some("http://en.wikipedia.org/wiki/Year"))
-  def century[N]: UnitOfMeasurement[Q, N] = unit("century", "century", Some("http://en.wikipedia.org/wiki/Century"))
-  def millenium[N]: UnitOfMeasurement[Q, N] = unit("millenium", "ky", Some("http://en.wikipedia.org/wiki/Millenium"))
-  def ky[N] = millenium[N]
-  def megayear[N]: UnitOfMeasurement[Q, N] = unit("megayear", "my")
-  def my[N] = megayear[N]
-  def gigayear[N]: UnitOfMeasurement[Q, N] = unit("gigayear", "gy")
-  def gy[N] = gigayear[N]
+  def second: UnitOfMeasurement4[Q, N] = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
+  def s = second
+  def millisecond: UnitOfMeasurement4[Q, N] = unit("millisecond", "ms", Some("http://en.wikipedia.org/wiki/Millisecond"))
+  def ms = millisecond
+  def microsecond: UnitOfMeasurement4[Q, N] = unit("microsecond", "μs", Some("http://en.wikipedia.org/wiki/Microsecond"))
+  def μs = microsecond
+  def nanosecond: UnitOfMeasurement4[Q, N] = unit("nanosecond", "ns", Some("http://en.wikipedia.org/wiki/Nanosecond"))
+  def ns = nanosecond
+  def picosecond: UnitOfMeasurement4[Q, N] = unit("picosecond", "ps", Some("http://en.wikipedia.org/wiki/Picosecond"))
+  def ps = picosecond
+  def femtosecond: UnitOfMeasurement4[Q, N] = unit("femtosecond", "fs", Some("http://en.wikipedia.org/wiki/Femtosecond"))
+  def fs = femtosecond
+  def attosecond: UnitOfMeasurement4[Q, N] = unit("attosecond", "as", Some("http://en.wikipedia.org/wiki/Attosecond"))
+  def as = attosecond
+  def zeptosecond: UnitOfMeasurement4[Q, N] = unit("zeptosecond", "zs", Some("http://en.wikipedia.org/wiki/Zeptosecond"))
+  def zs = zeptosecond
+  def yoctosecond: UnitOfMeasurement4[Q, N] = unit("yoctosecond", "ys", Some("http://en.wikipedia.org/wiki/Yoctosecond"))
+  def ys = yoctosecond
+  def minute: UnitOfMeasurement4[Q, N] = unit("minute", "m", Some("http://en.wikipedia.org/wiki/Minute"))
+  def m = minute
+  def hour: UnitOfMeasurement4[Q, N] = unit("hour", "hr", Some("http://en.wikipedia.org/wiki/Hour"))
+  def day: UnitOfMeasurement4[Q, N] = unit("day", "d", Some("http://en.wikipedia.org/wiki/Day"))
+  def year: UnitOfMeasurement4[Q, N] = unit("year", "yr", Some("http://en.wikipedia.org/wiki/Year"))
+  def century: UnitOfMeasurement4[Q, N] = unit("century", "century", Some("http://en.wikipedia.org/wiki/Century"))
+  def millenium: UnitOfMeasurement4[Q, N] = unit("millenium", "ky", Some("http://en.wikipedia.org/wiki/Millenium"))
+  def ky = millenium
+  def megayear: UnitOfMeasurement4[Q, N] = unit("megayear", "my")
+  def my = megayear
+  def gigayear: UnitOfMeasurement4[Q, N] = unit("gigayear", "gy")
+  def gy = gigayear
 
   //  def units[N] = List[UnitOfMeasurement[Q, N]](
   //    unit("second", "s", Some("http://en.wikipedia.org/wiki/Second")),
@@ -77,12 +77,12 @@ case object Time extends Quantum {
   //  //  lazy val australopithecusAge = 4 *: my // Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
   //  //  lazy val modernHumanAge = 200 *: ky // Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
 
-  def units[N]: List[UnitOfMeasurement[Q, N]] =
+  def units: List[UnitOfMeasurement4[Q, N]] =
     List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
       zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])] =
+    List[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])](
       (ms, s, Scale10s(3)),
       (μs, s, Scale10s(6)),
       (ns, s, Scale10s(9)),
