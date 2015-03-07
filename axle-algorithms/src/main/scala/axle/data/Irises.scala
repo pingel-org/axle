@@ -9,7 +9,6 @@ import scala.util.Try
 import axle.quanta.Distance
 import axle.quanta.DistanceDouble
 import axle.quanta.UnittedQuantity4
-import axle.quanta.modulize
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
