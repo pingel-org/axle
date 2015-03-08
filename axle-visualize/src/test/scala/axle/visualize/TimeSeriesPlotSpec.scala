@@ -11,8 +11,8 @@ import axle.algebra.Plottable
 import axle.joda._
 import axle.quanta.Information
 import axle.quanta.InformationDouble
-import axle.quanta.UnittedQuantity4
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
 import axle.stats.H
 import axle.stats.coin
 import spire.compat.ordering
@@ -53,10 +53,10 @@ class TimeSeriesPlotSpec extends Specification {
 
     implicit val id = InformationDouble
 
-    type D = TreeMap[Rational, UnittedQuantity4[Information[Double], Double]]
+    type D = TreeMap[Rational, UnittedQuantity[Information[Double], Double]]
 
     val hm: D =
-      new TreeMap[Rational, UnittedQuantity4[Information[Double], Double]]() ++
+      new TreeMap[Rational, UnittedQuantity[Information[Double], Double]]() ++
         (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
     implicit val base = InformationDouble.bit
@@ -64,7 +64,7 @@ class TimeSeriesPlotSpec extends Specification {
     implicit val orderThem = axle.quanta.unitOrder[Information[Double], Double, JungDirectedGraph]
     //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
 
-    val plot = new Plot[Rational, UnittedQuantity4[Information[Double], Double], D](
+    val plot = new Plot[Rational, UnittedQuantity[Information[Double], Double], D](
       List(("h", hm)),
       connect = true,
       drawKey = false,

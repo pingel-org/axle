@@ -10,23 +10,24 @@ object FlowDouble extends Flow[Double]()
 
 object FlowRational extends Flow[Rational]()
 
-case class Flow[N]() extends Quantum4[N] {
+case class Flow[N]() extends Quantum[N] {
 
   type Q = Flow[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Volumetric_flow_rate"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Flow[N], N](name, symbol, wiki)
+    UnitOfMeasurement[Flow[N], N](name, symbol, wiki)
 
   lazy val m3s = unit("m3s", "m3s") // derive
+
   lazy val niagaraFalls = unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
 
-  def units: List[UnitOfMeasurement4[Flow[N], N]] =
+  def units: List[UnitOfMeasurement[Flow[N], N]] =
     List(m3s, niagaraFalls)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Flow[N], N], UnitOfMeasurement4[Flow[N], N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Flow[N], N], UnitOfMeasurement4[Flow[N], N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Flow[N], N], UnitOfMeasurement[Flow[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Flow[N], N], UnitOfMeasurement[Flow[N], N], Bijection[N, N])](
       (m3s, niagaraFalls, ScaleInt(1834)))
 
 }

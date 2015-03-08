@@ -12,12 +12,12 @@ import com.jogamp.opengl.util.texture.TextureIO
 import axle.algebra.Position
 import axle.algebra.SphericalVector
 import axle.quanta.Angle
-import axle.quanta.modulize4
+import axle.quanta.modulize
 import axle.quanta.AngleDouble
 import axle.quanta.AngleFloat
 import axle.quanta.Distance
-import axle.quanta.UnittedQuantity4
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
 import axle.quanta.Distance._
 //import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 import javax.media.opengl.GL2
@@ -32,11 +32,11 @@ import axle.algebra.DirectedGraph
 import axle.quanta.Angle
 import axle.quanta.Distance
 
-abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement4[Distance[Float], Float])(
-  implicit angleCgFloat: DG[UnitOfMeasurement4[Angle[Float], Float], Float => Float],
-  angleCgDouble: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double],
-  distanceCg: DG[UnitOfMeasurement4[Distance[Float], Float], Float => Float],
-  distanceCgDouble: DG[UnitOfMeasurement4[Distance[Double], Double], Double => Double]) {
+abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement[Distance[Float], Float])(
+  implicit angleCgFloat: DG[UnitOfMeasurement[Angle[Float], Float], Float => Float],
+  angleCgDouble: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double],
+  distanceCg: DG[UnitOfMeasurement[Distance[Float], Float], Float => Float],
+  distanceCgDouble: DG[UnitOfMeasurement[Distance[Double], Double], Double => Double]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
@@ -75,15 +75,15 @@ abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasuremen
 
   def translate(
     gl: GL2,
-    x: UnittedQuantity4[Distance[Float], Float],
-    y: UnittedQuantity4[Distance[Float], Float],
-    z: UnittedQuantity4[Distance[Float], Float]): Unit =
+    x: UnittedQuantity[Distance[Float], Float],
+    y: UnittedQuantity[Distance[Float], Float],
+    z: UnittedQuantity[Distance[Float], Float]): Unit =
     gl.glTranslatef(
       (x in distanceUnit).magnitude,
       (y in distanceUnit).magnitude,
       (z in distanceUnit).magnitude)
 
-  def rotate(gl: GL2, a: UnittedQuantity4[Angle[Float], Float], x: Float, y: Float, z: Float): Unit =
+  def rotate(gl: GL2, a: UnittedQuantity[Angle[Float], Float], x: Float, y: Float, z: Float): Unit =
     gl.glRotatef((a in AngleFloat.degree).magnitude, x, y, z)
 
   def textureUrls: Seq[(URL, String)]

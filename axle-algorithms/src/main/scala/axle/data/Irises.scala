@@ -8,7 +8,7 @@ import scala.util.Try
 
 import axle.quanta.Distance
 import axle.quanta.DistanceDouble
-import axle.quanta.UnittedQuantity4
+import axle.quanta.UnittedQuantity
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
@@ -43,10 +43,10 @@ object Irises {
   import DistanceDouble._
 
   case class Iris(
-    sepalLength: UnittedQuantity4[Distance[Double], Double],
-    sepalWidth: UnittedQuantity4[Distance[Double], Double],
-    petalLength: UnittedQuantity4[Distance[Double], Double],
-    petalWidth: UnittedQuantity4[Distance[Double], Double],
+    sepalLength: UnittedQuantity[Distance[Double], Double],
+    sepalWidth: UnittedQuantity[Distance[Double], Double],
+    petalLength: UnittedQuantity[Distance[Double], Double],
+    petalWidth: UnittedQuantity[Distance[Double], Double],
     species: String)
 
   object Iris {

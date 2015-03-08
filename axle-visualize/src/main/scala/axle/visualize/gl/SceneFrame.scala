@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent
 import com.jogamp.opengl.util.FPSAnimator
 
 import axle.quanta.Distance
-import axle.quanta.UnittedQuantity4
+import axle.quanta.UnittedQuantity
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import spire.math.Number.apply
@@ -15,18 +15,18 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnitOfMeasurement
 import axle.quanta.AngleFloat
 
 case class SceneFrame[DG[_, _]: DirectedGraph](
   scene: Scene[DG],
   width: Int,
   height: Int,
-  zNear: UnittedQuantity4[Distance[Float], Float],
-  zFar: UnittedQuantity4[Distance[Float], Float],
+  zNear: UnittedQuantity[Distance[Float], Float],
+  zFar: UnittedQuantity[Distance[Float], Float],
   fps: Int)(
-    implicit angleCg: DG[UnitOfMeasurement4[axle.quanta.Angle[Float], Float], Float => Float],
-    distanceCg: DG[UnitOfMeasurement4[axle.quanta.Distance[Float], Float], Float => Float]) {
+    implicit angleCg: DG[UnitOfMeasurement[axle.quanta.Angle[Float], Float], Float => Float],
+    distanceCg: DG[UnitOfMeasurement[axle.quanta.Distance[Float], Float], Float => Float]) {
 
   def run(): Unit = {
 

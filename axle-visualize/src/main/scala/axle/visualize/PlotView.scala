@@ -17,13 +17,13 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
 import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 
 case class PlotView[X, Y, D, DG[_, _]: DirectedGraph](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
   implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],
   yZero: Zero[Y], yts: Tics[Y], yEq: Eq[Y], yLength: LengthSpace[Y, _],
-  angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) {
+  angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]) {
 
   import plot._
 

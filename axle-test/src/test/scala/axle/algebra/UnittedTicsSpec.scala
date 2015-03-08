@@ -6,7 +6,7 @@ import org.specs2.mutable.Specification
 
 import axle.quanta.Information
 import axle.quanta.InformationDouble
-import axle.quanta.UnittedQuantity4
+import axle.quanta.UnittedQuantity
 import axle.jung.JungDirectedGraph
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
@@ -41,7 +41,7 @@ class UnittedTicsSpec extends Specification {
         (0.9 *: bit, "0.900000"),
         (1.0 *: bit, "1.000000"))
 
-      val vieq = implicitly[Eq[Vector[(UnittedQuantity4[Information[Double], Double], String)]]]
+      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information[Double], Double], String)]]]
 
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))

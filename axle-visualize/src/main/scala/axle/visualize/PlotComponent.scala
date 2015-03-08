@@ -20,13 +20,13 @@ import axle.quanta.AngleDouble
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 
 case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D, DG[_, _]: DirectedGraph](
   plot: Plot[X, Y, D])(
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double])
+    angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double])
   extends JPanel
   with Fed[List[(String, D)]] {
 

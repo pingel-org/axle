@@ -15,7 +15,7 @@ import java.awt.Graphics2D
 
 import axle.algebra.Plottable
 import axle.quanta.AngleDouble
-import axle.quanta.UnittedQuantity4
+import axle.quanta.UnittedQuantity
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
@@ -30,7 +30,7 @@ import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import spire.math.Number.apply
 import spire.implicits.moduleOps
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 import axle.algebra.DirectedGraph
 import axle.syntax.linearalgebra._
@@ -43,7 +43,7 @@ case class KMeansVisualization[D, F[_], M, DG[_, _]: DirectedGraph](
   pointDiameter: Int = 10,
   fontName: String = "Courier New",
   fontSize: Int = 12)(
-    implicit la: LinearAlgebra[M, Double], angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) extends JPanel {
+    implicit la: LinearAlgebra[M, Double], angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 

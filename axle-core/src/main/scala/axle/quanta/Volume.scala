@@ -10,14 +10,14 @@ object VolumeDouble extends Volume[Double]()
 
 object VolumeRational extends Volume[Rational]()
 
-case class Volume[N]() extends Quantum4[N] {
+case class Volume[N]() extends Quantum[N] {
 
   type Q = Volume[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Volume"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Volume[N], N](name, symbol, wiki)
+    UnitOfMeasurement[Volume[N], N](name, symbol, wiki)
 
   lazy val m3 = unit("m3", "m3") // derive
   lazy val km3 = unit("km3", "km3") // derive
@@ -36,12 +36,12 @@ case class Volume[N]() extends Quantum4[N] {
   lazy val balthazar = unit("balthazar", "balthazar")
   lazy val nebuchadnezzar = unit("nebuchadnezzar", "nebuchadnezzar")
 
-  def units: List[UnitOfMeasurement4[Volume[N], N]] =
+  def units: List[UnitOfMeasurement[Volume[N], N]] =
     List(m3, km3, cm3, greatLakes, liter, milliliter, wineBottle, magnum, jeroboam, rehoboam,
       methuselah, salmanazar, balthazar, nebuchadnezzar)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Volume[N], N], UnitOfMeasurement4[Volume[N], N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Volume[N], N], UnitOfMeasurement4[Volume[N], N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Volume[N], N], UnitOfMeasurement[Volume[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Volume[N], N], UnitOfMeasurement[Volume[N], N], Bijection[N, N])](
       (km3, greatLakes, ScaleInt(22671)),
       (milliliter, liter, Scale10s(3)),
       (cm3, milliliter, BijectiveIdentity[N]),

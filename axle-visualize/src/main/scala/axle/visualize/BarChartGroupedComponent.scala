@@ -24,12 +24,12 @@ import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.algebra.Order
 import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 
 case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
   chart: BarChartGrouped[G, S, Y, D])(
-    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double])
+    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double])
   extends JPanel
   with Fed[D] {
 

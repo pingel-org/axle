@@ -10,14 +10,14 @@ import spire.math.Real
 
 object InformationDouble extends Information[Double]()
 
-case class Information[N]() extends Quantum4[N] {
+case class Information[N]() extends Quantum[N] {
 
   type Q = Information[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Information"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Information[N], N](name, symbol, wiki)
+    UnitOfMeasurement[Information[N], N](name, symbol, wiki)
 
   lazy val bit = unit("bit", "b")
   lazy val nibble = unit("nibble", "nibble")
@@ -30,11 +30,11 @@ case class Information[N]() extends Quantum4[N] {
 
   // TODO PB TB GB MB KB
 
-  def units: List[UnitOfMeasurement4[Information[N], N]] =
+  def units: List[UnitOfMeasurement[Information[N], N]] =
     List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Information[N], N], UnitOfMeasurement4[Information[N], N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Information[N], N], UnitOfMeasurement4[Information[N], N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Information[N], N], UnitOfMeasurement[Information[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Information[N], N], UnitOfMeasurement[Information[N], N], Bijection[N, N])](
       (bit, byte, Scale2s(3)),
       (byte, kilobyte, Scale2s(10)),
       (kilobyte, megabyte, Scale2s(10)),

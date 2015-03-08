@@ -14,14 +14,14 @@ import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 
 object Plot {
 
   implicit def drawPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D, DG[_, _]: DirectedGraph](
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]): Draw[Plot[X, Y, D]] =
+    angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]): Draw[Plot[X, Y, D]] =
     new Draw[Plot[X, Y, D]] {
 
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)

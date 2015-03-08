@@ -6,8 +6,8 @@ import java.awt.Graphics2D
 
 import axle.quanta.Angle
 import axle.quanta.AngleDouble
-import axle.quanta.UnittedQuantity4
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
 import axle.algebra.DirectedGraph
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra
@@ -19,8 +19,8 @@ case class Text[DG[_, _]: DirectedGraph](
   y: Int,
   centered: Boolean = true,
   color: Color = Color.black,
-  angle: Option[UnittedQuantity4[Angle[Double], Double]] = None)(
-    implicit angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) extends Paintable {
+  angle: Option[UnittedQuantity[Angle[Double], Double]] = None)(
+    implicit angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]) extends Paintable {
 
   val angleRadOpt = angle.map(a => (a in AngleDouble.radian).magnitude)
 

@@ -5,21 +5,21 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class MoneyPerForce[N]() extends Quantum4[N] {
+case class MoneyPerForce[N]() extends Quantum[N] {
 
   type Q = MoneyPerForce[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Degree_(MoneyPerForce)"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[MoneyPerForce[N], N](name, symbol, wiki)
+    UnitOfMeasurement[MoneyPerForce[N], N](name, symbol, wiki)
 
   lazy val USDperPound = unit("$/lb", "$/lb") // derive
 
-  def units: List[UnitOfMeasurement4[MoneyPerForce[N], N]] =
+  def units: List[UnitOfMeasurement[MoneyPerForce[N], N]] =
     List(USDperPound)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[MoneyPerForce[N], N], UnitOfMeasurement4[MoneyPerForce[N], N], Bijection[N, N])] =
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[MoneyPerForce[N], N], UnitOfMeasurement[MoneyPerForce[N], N], Bijection[N, N])] =
     List.empty
 
 }

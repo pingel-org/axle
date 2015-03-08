@@ -9,14 +9,14 @@ import spire.math.Rational
 
 object TimeRational extends Time[Rational]()
 
-case class Time[N]() extends Quantum4[N] {
+case class Time[N]() extends Quantum[N] {
 
   type Q = Time[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Time[N], N](name, symbol, wiki)
+    UnitOfMeasurement[Time[N], N](name, symbol, wiki)
 
   lazy val second = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
   lazy val s = second
@@ -81,12 +81,12 @@ case class Time[N]() extends Quantum4[N] {
   //  //  lazy val australopithecusAge = 4 *: my // Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
   //  //  lazy val modernHumanAge = 200 *: ky // Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
 
-  def units: List[UnitOfMeasurement4[Time[N], N]] =
+  def units: List[UnitOfMeasurement[Time[N], N]] =
     List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
       zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Time[N], N], UnitOfMeasurement4[Time[N], N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Time[N], N], UnitOfMeasurement4[Time[N], N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Time[N], N], UnitOfMeasurement[Time[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Time[N], N], UnitOfMeasurement[Time[N], N], Bijection[N, N])](
       (ms, s, Scale10s(3)),
       (μs, s, Scale10s(6)),
       (ns, s, Scale10s(9)),

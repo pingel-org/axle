@@ -10,8 +10,8 @@ import scala.math.min
 import axle.algebra.LengthSpace
 import axle.quanta.Angle
 import axle.quanta.AngleDouble
-import axle.quanta.UnittedQuantity4
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
 import spire.algebra.Eq
 import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra
@@ -94,8 +94,8 @@ case class ScaledArea2D[X, Y](
     fontMetrics: FontMetrics,
     s: String,
     p: Point2D[X, Y],
-    angle: UnittedQuantity4[Angle[Double], Double])(
-      implicit angleCg: DG[UnitOfMeasurement4[axle.quanta.Angle[Double], Double], Double => Double]): Unit = {
+    angle: UnittedQuantity[Angle[Double], Double])(
+      implicit angleCg: DG[UnitOfMeasurement[axle.quanta.Angle[Double], Double], Double => Double]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
       val a = (angle in AngleDouble.radian).magnitude

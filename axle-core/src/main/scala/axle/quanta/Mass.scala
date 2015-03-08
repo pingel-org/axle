@@ -7,7 +7,7 @@ import spire.algebra.Field
 
 object MassDouble extends Mass[Double]()
 
-case class Mass[N]() extends Quantum4[N] {
+case class Mass[N]() extends Quantum[N] {
 
   type Q = Mass[N]
 
@@ -15,7 +15,7 @@ case class Mass[N]() extends Quantum4[N] {
   // "http://en.wikipedia.org/wiki/Mass"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Mass[N], N](name, symbol, wiki)
+    UnitOfMeasurement[Mass[N], N](name, symbol, wiki)
 
   lazy val gram = unit("gram", "g")
   lazy val tonne = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
@@ -68,13 +68,13 @@ case class Mass[N]() extends Quantum4[N] {
   //  // earthunit = 5.9 x 10^24 kg
   //  // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
 
-  def units: List[UnitOfMeasurement4[Mass[N], N]] =
+  def units: List[UnitOfMeasurement[Mass[N], N]] =
     List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,
       petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
       uranus, venus, mars, mercury, pluto, moon)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Mass[N], N], UnitOfMeasurement4[Mass[N], N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Mass[N], N], UnitOfMeasurement4[Mass[N], N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Mass[N], N], UnitOfMeasurement[Mass[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Mass[N], N], UnitOfMeasurement[Mass[N], N], Bijection[N, N])](
       (tonne, megagram, BijectiveIdentity[N]),
       (milligram, gram, Scale10s(3)),
       (gram, kilogram, Scale10s(3)),

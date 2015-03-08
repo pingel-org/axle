@@ -9,14 +9,14 @@ object DistanceDouble extends Distance[Double]()
 
 object DistanceRational extends Distance[Rational]()
 
-case class Distance[N]() extends Quantum4[N] {
+case class Distance[N]() extends Quantum[N] {
 
   type Q = Distance[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Distance[N], N](name, symbol, wiki)
+    UnitOfMeasurement[Distance[N], N](name, symbol, wiki)
 
   lazy val foot = unit("foot", "ft")
   lazy val ft = foot
@@ -40,12 +40,12 @@ case class Distance[N]() extends Quantum4[N] {
   lazy val ly = lightyear
   lazy val parsec = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
 
-  def units: List[UnitOfMeasurement4[Distance[N], N]] =
+  def units: List[UnitOfMeasurement[Distance[N], N]] =
     List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
       astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Distance[N], N], UnitOfMeasurement4[Distance[N], N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Distance[N], N], UnitOfMeasurement4[Distance[N], N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Distance[N], N], UnitOfMeasurement[Distance[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Distance[N], N], UnitOfMeasurement[Distance[N], N], Bijection[N, N])](
       (foot, mile, ScaleInt(5280)),
       (foot, meter, ScaleDouble(3.2808398950131235)),
       (kilometer, mile, ScaleDouble(1.609344)),

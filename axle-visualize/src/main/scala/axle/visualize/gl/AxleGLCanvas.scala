@@ -5,8 +5,8 @@ import scala.Vector
 import axle.quanta.Angle
 import axle.quanta.AngleFloat
 import axle.quanta.Distance
-import axle.quanta.UnitOfMeasurement4
-import axle.quanta.UnittedQuantity4
+import axle.quanta.UnitOfMeasurement
+import axle.quanta.UnittedQuantity
 import spire.implicits.DoubleAlgebra
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT
@@ -37,12 +37,12 @@ import axle.algebra.DirectedGraph
 
 case class AxleGLCanvas[DG[_, _]: DirectedGraph](
   scene: Scene[DG],
-  fovy: UnittedQuantity4[Angle[Float], Float],
-  zNear: UnittedQuantity4[Distance[Float], Float],
-  zFar: UnittedQuantity4[Distance[Float], Float],
-  distanceUnit: UnitOfMeasurement4[Distance[Float], Float])(
-    implicit angleCg: DG[UnitOfMeasurement4[axle.quanta.Angle[Float], Float], Float => Float],
-    distanceCg: DG[UnitOfMeasurement4[axle.quanta.Distance[Float], Float], Float => Float])
+  fovy: UnittedQuantity[Angle[Float], Float],
+  zNear: UnittedQuantity[Distance[Float], Float],
+  zFar: UnittedQuantity[Distance[Float], Float],
+  distanceUnit: UnitOfMeasurement[Distance[Float], Float])(
+    implicit angleCg: DG[UnitOfMeasurement[axle.quanta.Angle[Float], Float], Float => Float],
+    distanceCg: DG[UnitOfMeasurement[axle.quanta.Distance[Float], Float], Float => Float])
   extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)

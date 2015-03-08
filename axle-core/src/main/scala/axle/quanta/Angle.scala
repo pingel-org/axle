@@ -14,14 +14,14 @@ object AngleFloat extends Angle[Float]()
 
 object AngleRational extends Angle[Rational]()
 
-case class Angle[N]() extends Quantum4[N] {
+case class Angle[N]() extends Quantum[N] {
 
   type Q = Angle[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Degree_(angle)"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Angle[N], N](name, symbol, wiki)
+    UnitOfMeasurement[Angle[N], N](name, symbol, wiki)
 
   lazy val degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(angle)"))
   lazy val ° = degree
@@ -33,11 +33,11 @@ case class Angle[N]() extends Quantum4[N] {
   //  def clockwise90[N: Field: Eq] = -90 *: °[N]
   //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
 
-  def units: List[UnitOfMeasurement4[Angle[N], N]] =
+  def units: List[UnitOfMeasurement[Angle[N], N]] =
     List(degree, radian, circleDegrees, circleRadians)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Angle[N], N], UnitOfMeasurement4[Angle[N], N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Angle[N], N], UnitOfMeasurement4[Angle[N], N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Angle[N], N], UnitOfMeasurement[Angle[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Angle[N], N], UnitOfMeasurement[Angle[N], N], Bijection[N, N])](
       (degree, circleDegrees, ScaleInt(360)),
       (radian, circleRadians, ScaleDouble(2 * π)),
       (circleDegrees, circleRadians, BijectiveIdentity[N]))

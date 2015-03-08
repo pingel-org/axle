@@ -13,16 +13,16 @@ import akka.actor.ActorLogging
 import akka.actor.ActorRef
 import akka.actor.actorRef2Scala
 import axle.quanta.Time
-import axle.quanta.UnittedQuantity4
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
 import spire.implicits.DoubleAlgebra
 import axle.algebra.DirectedGraph
 
 case class DataFeedActor[T, DG[_, _]: DirectedGraph](
   initialValue: T,
   refreshFn: T => T,
-  interval: UnittedQuantity4[Time[Double], Double])(
-    implicit time: Time[Double], timeCg: DG[UnitOfMeasurement4[Time[Double], Double], Double => Double])
+  interval: UnittedQuantity[Time[Double], Double])(
+    implicit time: Time[Double], timeCg: DG[UnitOfMeasurement[Time[Double], Double], Double => Double])
   extends Actor with ActorLogging {
 
   import DataFeedProtocol._

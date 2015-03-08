@@ -5,14 +5,14 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class Speed[N]() extends Quantum4[N] {
+case class Speed[N]() extends Quantum[N] {
 
   type Q = Speed[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Speed"
 
   def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement4[Speed[N], N](name, symbol, wiki)
+    UnitOfMeasurement[Speed[N], N](name, symbol, wiki)
 
   lazy val mps = unit("mps", "mps") // derive
   lazy val fps = unit("fps", "fps") // derive
@@ -23,11 +23,11 @@ case class Speed[N]() extends Quantum4[N] {
   lazy val c = unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light"))
   lazy val speedLimit = unit("Speed limit", "speed limit")
 
-  def units: List[UnitOfMeasurement4[Speed[N], N]] =
+  def units: List[UnitOfMeasurement[Speed[N], N]] =
     List(mps, fps, mph, kph, knot, c, speedLimit)
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Speed[N], N], UnitOfMeasurement4[Speed[N], N], Bijection[N, N])] =
-    List[(UnitOfMeasurement4[Speed[N], N], UnitOfMeasurement4[Speed[N], N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Speed[N], N], UnitOfMeasurement[Speed[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Speed[N], N], UnitOfMeasurement[Speed[N], N], Bijection[N, N])](
       (knot, kph, ScaleDouble(1.852)),
       (mps, c, ScaleInt(299792458)),
       (mph, speedLimit, ScaleInt(65)))

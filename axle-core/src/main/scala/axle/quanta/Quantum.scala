@@ -3,9 +3,9 @@ package axle.quanta
 /**
  * Quantum
  *
- * Used in the sense of the World English Dictionary's 4th definition:
+ * Used in the sense of the World English Dictionary's th definition:
  *
- * 4. something that can be quantified or measured
+ * . something that can be quantified or measured
  *
  * [[http://dictionary.reference.com/browse/quantum]]
  *
@@ -17,14 +17,14 @@ import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Vertex
 
-trait Quantum4[N] {
+trait Quantum[N] {
 
-  type Q <: Quantum4[N]
+  type Q <: Quantum[N]
 
   def wikipediaUrl: String
 
-  def units: List[UnitOfMeasurement4[Q, N]]
+  def units: List[UnitOfMeasurement[Q, N]]
 
-  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement4[Q, N], UnitOfMeasurement4[Q, N], Bijection[N, N])]
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]
 
 }

@@ -19,7 +19,7 @@ import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
 import spire.compat.ordering
 import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement4
+import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 
 case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D, DG[_, _]: DirectedGraph](
@@ -27,7 +27,7 @@ case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D, DG[_, _]: Dir
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yLength: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement4[Angle[Double], Double], Double => Double]) {
+    implicit yLength: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]) {
 
   import chart._
 
