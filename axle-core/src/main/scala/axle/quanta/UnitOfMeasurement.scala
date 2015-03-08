@@ -7,13 +7,13 @@ import spire.implicits.eqOps
 
 object UnitOfMeasurement {
 
-  implicit def eqqqn[Q <: Quantum[N], N: Eq]: Eq[UnitOfMeasurement[Q, N]] =
+  implicit def eqqqn[Q, N: Eq]: Eq[UnitOfMeasurement[Q, N]] =
     new Eq[UnitOfMeasurement[Q, N]] {
       def eqv(x: UnitOfMeasurement[Q, N], y: UnitOfMeasurement[Q, N]): Boolean = x.name === y.name
     }
 }
 
-case class UnitOfMeasurement[Q <: Quantum[N], N](name: String, symbol: String, wikipediaUrl: Option[String]) {
+case class UnitOfMeasurement[Q, N](name: String, symbol: String, wikipediaUrl: Option[String]) {
 
   def magnitude(implicit ev: MultiplicativeMonoid[N]): N = ev.one
 

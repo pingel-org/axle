@@ -12,13 +12,13 @@ import spire.implicits.multiplicativeSemigroupOps
 
 object UnittedQuantity {
 
-  implicit def eqqqn[Q <: Quantum[N], N: Eq]: Eq[UnittedQuantity[Q, N]] =
+  implicit def eqqqn[Q <: Quantum, N: Eq]: Eq[UnittedQuantity[Q, N]] =
     new Eq[UnittedQuantity[Q, N]] {
       def eqv(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): Boolean =
         (x.magnitude === y.magnitude) && (x.unit == y.unit)
     }
 
-  implicit def orderUQ[Q <: Quantum[N], N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def orderUQ[Q <: Quantum, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val orderN = implicitly[Order[N]]
@@ -29,7 +29,7 @@ object UnittedQuantity {
 
 }
 
-case class UnittedQuantity[Q <: Quantum[N], N](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
+case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
 
   def map[B](f: N => B) = ??? //: UnittedQuantity[Q, B] = ??? //UnittedQuantity(f(magnitude), unit)
 
@@ -49,7 +49,7 @@ case class UnittedQuantity[Q <: Quantum[N], N](magnitude: N, unit: UnitOfMeasure
       .getOrElse(throw new Exception("no conversion path from " + unit + " to " + newUnit))
 
   // TODO
-  def over[QR <: Quantum[N], Q2 <: Quantum[N], N](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
+  def over[QR, Q2, N](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
     UnitOfMeasurement[Q2, N]("TODO", "TODO", None)
 
 }
