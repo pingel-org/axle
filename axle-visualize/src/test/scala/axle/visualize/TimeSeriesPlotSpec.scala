@@ -10,6 +10,7 @@ import org.specs2.mutable.Specification
 import axle.algebra.Plottable
 import axle.joda._
 import axle.quanta.Information
+import axle.quanta.InformationDouble
 import axle.quanta.UnittedQuantity4
 import axle.quanta.UnitOfMeasurement4
 import axle.stats.H
@@ -17,6 +18,7 @@ import axle.stats.coin
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 import spire.math.Rational
+import spire.implicits._
 
 class TimeSeriesPlotSpec extends Specification {
 
@@ -49,19 +51,24 @@ class TimeSeriesPlotSpec extends Specification {
     import axle.jung.JungDirectedGraph
     import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 
-    type D = TreeMap[Rational, UnittedQuantity4[Information[Double], Double]]
-    val hm: D = new TreeMap[Rational, UnittedQuantity4[Information[Double], Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
+    implicit val id = InformationDouble
 
-    implicit val base = bit[Double]
-    //implicit val cg = axle.quanta.Information.conversionGraph[Double, JungDirectedGraph]
+    type D = TreeMap[Rational, UnittedQuantity4[Information[Double], Double]]
+
+    val hm: D =
+      new TreeMap[Rational, UnittedQuantity4[Information[Double], Double]]() ++
+        (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
+
+    implicit val base = InformationDouble.bit
+    implicit val cg = axle.quanta.conversionGraph[Information[Double], Double, JungDirectedGraph](InformationDouble)
     implicit val orderThem = axle.quanta.unitOrder[Information[Double], Double, JungDirectedGraph]
-    //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity3[Information, Double]]
+    //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
 
     val plot = new Plot[Rational, UnittedQuantity4[Information[Double], Double], D](
       List(("h", hm)),
       connect = true,
       drawKey = false,
-      xAxis = Some(0d *: bit[Double]),
+      xAxis = Some(0d *: InformationDouble.bit),
       xAxisLabel = Some("p(x='HEAD)"),
       yAxis = Some(Rational(0)),
       yAxisLabel = Some("H"),
