@@ -8,9 +8,6 @@ import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.algebra.Vertex
-import axle.quanta.Quantum
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.UnittedQuantity
 import axle.algebra.Bijection
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
@@ -27,9 +24,9 @@ import spire.implicits._
 
 package object quanta {
 
-  type CG[Q <: Quantum, DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
+  type CG[Q <: Quantum[N], DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
 
-  implicit def modulize[Q <: Quantum, N, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
+  implicit def modulize[N, Q <: Quantum[N], DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
 
       def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
@@ -47,13 +44,13 @@ package object quanta {
   //  def unit[Q <: Quantum, N](name: String, symbol: String, linkOpt: Option[String] = None): UnitOfMeasurement[Q, N] =
   //    UnitOfMeasurement(name, symbol, linkOpt)
 
-  implicit def uqPlottable[Q <: Quantum, N: Plottable]: Plottable[UnittedQuantity[Q, N]] =
+  implicit def uqPlottable[Q <: Quantum[N], N: Plottable]: Plottable[UnittedQuantity[Q, N]] =
     new Plottable[UnittedQuantity[Q, N]] {
 
       override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
     }
 
-  implicit def unitOrder[Q <: Quantum, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unitOrder[Q <: Quantum[N], N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val underlying = implicitly[Order[N]]
@@ -62,7 +59,9 @@ package object quanta {
         underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
     }
 
-  implicit def unittedZero[Q <: Quantum, N: AdditiveMonoid, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unittedZero[Q <: Quantum[N], N: AdditiveMonoid, DG[_, _]: DirectedGraph](
+    implicit base: UnitOfMeasurement[Q, N],
+    cg: DG[UnitOfMeasurement[Q, N], N => N]): Zero[UnittedQuantity[Q, N]] =
     new Zero[UnittedQuantity[Q, N]] {
 
       val am = implicitly[AdditiveMonoid[N]]
@@ -71,7 +70,9 @@ package object quanta {
 
     }
 
-  implicit def unittedTics[Q <: Quantum, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unittedTics[Q <: Quantum[N], N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](
+    implicit base: UnitOfMeasurement[Q, N],
+    cg: DG[UnitOfMeasurement[Q, N], N => N]): Tics[UnittedQuantity[Q, N]] =
     new Tics[UnittedQuantity[Q, N]] {
 
       def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =
@@ -83,7 +84,7 @@ package object quanta {
         }
     }
 
-  implicit def unittedLengthSpace[Q <: Quantum, N: Field: Order, DG[_, _]: DirectedGraph](
+  implicit def unittedLengthSpace[Q <: Quantum[N], N: Field: Order, DG[_, _]: DirectedGraph](
     implicit base: UnitOfMeasurement[Q, N], space: LengthSpace[N, Double],
     cg: DG[UnitOfMeasurement[Q, N], N => N],
     module: Module[UnittedQuantity[Q, N], N]) =
@@ -101,5 +102,42 @@ package object quanta {
         space.portion((left in base).magnitude, (v in base).magnitude, (right in base).magnitude)
 
     }
+
+  //  private[quanta] def trip2fns[N: Field: Eq](trip: (Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)): Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)] = {
+  //    val (from, to, multiplier) = trip
+  //    Vector(
+  //      (from, to, _ * multiplier),
+  //      (to, from, _ / multiplier))
+  //  }
+  //
+  //  private[quanta] def trips2fns[N: Field: Eq](trips: Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N)]) =
+  //    trips.flatMap(trip2fns(_))
+
+  //  def cgnDisconnected[N: Field: Eq, DG[_, _]: DirectedGraph]: CG[DG, N] = conversions(units, (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => Nil)
+
+  private def conversions[Q <: Quantum[N], N, DG[_, _]](
+    vps: Seq[UnitOfMeasurement[Q, N]],
+    ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)])(
+      implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q, N], N => N] =
+    evDG.make[UnitOfMeasurement[Q, N], N => N](vps, ef)
+
+  private def cgn[Q <: Quantum[N], N, DG[_, _]: DirectedGraph](
+    units: List[UnitOfMeasurement[Q, N]],
+    links: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]): CG[Q, DG, N] =
+    conversions[Q, N, DG](
+      units,
+      (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => {
+        val name2vertex = vs.map(v => (v.payload.name, v)).toMap
+        links.flatMap({
+          case (x, y, bijection) => {
+            val xv = name2vertex(x.name)
+            val yv = name2vertex(y.name)
+            List((xv, yv, bijection.apply _), (yv, xv, bijection.unapply _))
+          }
+        })
+      })
+
+  implicit def conversionGraph[Q <: Quantum[N], N: Field: Eq, DG[_, _]: DirectedGraph](q: Q) =
+    cgn(q.units, q.links)
 
 }

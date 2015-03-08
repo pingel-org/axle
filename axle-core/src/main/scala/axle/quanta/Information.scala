@@ -8,31 +8,33 @@ import spire.algebra.Field
 import spire.math.Rational
 import spire.math.Real
 
-case object Information extends Quantum {
+object InformationDouble extends Information[Double]()
 
-  type Q = Information.type
-  
+case class Information[N]() extends Quantum[N] {
+
+  type Q = Information[N]
+
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Information"
 
-  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Q, N](name, symbol, wiki)
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Information[N], N](name, symbol, wiki)
 
-  def bit[N]: UnitOfMeasurement[Q, N] = unit("bit", "b")
-  def nibble[N]: UnitOfMeasurement[Q, N] = unit("nibble", "nibble")
-  def byte[N]: UnitOfMeasurement[Q, N] = unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte"))
-  def kilobyte[N]: UnitOfMeasurement[Q, N] = unit("kilobyte", "KB")
-  def megabyte[N]: UnitOfMeasurement[Q, N] = unit("megabyte", "MB")
-  def gigabyte[N]: UnitOfMeasurement[Q, N] = unit("gigabyte", "GB")
-  def terabyte[N]: UnitOfMeasurement[Q, N] = unit("terabyte", "TB")
-  def petabyte[N]: UnitOfMeasurement[Q, N] = unit("petabyte", "PB")
+  lazy val bit = unit("bit", "b")
+  lazy val nibble = unit("nibble", "nibble")
+  lazy val byte = unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte"))
+  lazy val kilobyte = unit("kilobyte", "KB")
+  lazy val megabyte = unit("megabyte", "MB")
+  lazy val gigabyte = unit("gigabyte", "GB")
+  lazy val terabyte = unit("terabyte", "TB")
+  lazy val petabyte = unit("petabyte", "PB")
 
   // TODO PB TB GB MB KB
 
-  def units[N]: List[UnitOfMeasurement[Q, N]] =
+  def units: List[UnitOfMeasurement[Information[N], N]] =
     List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Information[N], N], UnitOfMeasurement[Information[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Information[N], N], UnitOfMeasurement[Information[N], N], Bijection[N, N])](
       (bit, byte, Scale2s(3)),
       (byte, kilobyte, Scale2s(10)),
       (kilobyte, megabyte, Scale2s(10)),

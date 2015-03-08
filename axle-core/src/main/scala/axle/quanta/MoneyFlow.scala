@@ -5,21 +5,21 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case object MoneyFlow extends Quantum {
+case class MoneyFlow[N]() extends Quantum[N] {
 
-  type Q = MoneyFlow.type
+  type Q = MoneyFlow[N]
 
   def wikipediaUrl: String = ""
 
-  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Q, N](name, symbol, wiki)
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[MoneyFlow[N], N](name, symbol, wiki)
 
-  def USDperHour[N]: UnitOfMeasurement[Q, N] = unit("$/hr", "$/hr") // derive
+  lazy val USDperHour = unit("$/hr", "$/hr") // derive
 
-  def units[N]: List[UnitOfMeasurement[Q, N]] =
+  def units: List[UnitOfMeasurement[MoneyFlow[N], N]] =
     List(USDperHour)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[MoneyFlow[N], N], UnitOfMeasurement[MoneyFlow[N], N], Bijection[N, N])] =
     List.empty
 
 }

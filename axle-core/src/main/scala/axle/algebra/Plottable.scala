@@ -8,9 +8,6 @@ import spire.algebra.Field
 import spire.algebra.Eq
 import spire.math.Rational
 
-import axle.quanta.UnittedQuantity
-import axle.quanta.Quantum
-
 trait Plottable[T] {
 
   def isPlottable(t: T): Boolean = true

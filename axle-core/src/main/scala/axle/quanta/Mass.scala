@@ -5,57 +5,59 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case object Mass extends Quantum {
+object MassDouble extends Mass[Double]()
 
-  type Q = Mass.type
+case class Mass[N]() extends Quantum[N] {
+
+  type Q = Mass[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(mass)"
   // "http://en.wikipedia.org/wiki/Mass"
 
-  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Q, N](name, symbol, wiki)
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Mass[N], N](name, symbol, wiki)
 
-  def gram[N]: UnitOfMeasurement[Q, N] = unit("gram", "g")
-  def tonne[N]: UnitOfMeasurement[Q, N] = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
-  def milligram[N]: UnitOfMeasurement[Q, N] = unit("milligram", "mg")
-  def kilogram[N]: UnitOfMeasurement[Q, N] = unit("kilogram", "Kg")
-  def megagram[N]: UnitOfMeasurement[Q, N] = unit("megagram", "Mg")
-  def kilotonne[N]: UnitOfMeasurement[Q, N] = unit("kilotonne", "KT")
-  def megatonne[N]: UnitOfMeasurement[Q, N] = unit("megatonne", "MT")
-  def gigatonne[N]: UnitOfMeasurement[Q, N] = unit("gigatonne", "GT")
-  def teratonne[N]: UnitOfMeasurement[Q, N] = unit("teratonne", "TT")
-  def petatonne[N]: UnitOfMeasurement[Q, N] = unit("petatonne", "PT")
-  def exatonne[N]: UnitOfMeasurement[Q, N] = unit("exatonne", "ET")
-  def zettatonne[N]: UnitOfMeasurement[Q, N] = unit("zettatonne", "ZT")
-  def yottatonne[N]: UnitOfMeasurement[Q, N] = unit("yottatonne", "YT")
+  lazy val gram = unit("gram", "g")
+  lazy val tonne = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
+  lazy val milligram = unit("milligram", "mg")
+  lazy val kilogram = unit("kilogram", "Kg")
+  lazy val megagram = unit("megagram", "Mg")
+  lazy val kilotonne = unit("kilotonne", "KT")
+  lazy val megatonne = unit("megatonne", "MT")
+  lazy val gigatonne = unit("gigatonne", "GT")
+  lazy val teratonne = unit("teratonne", "TT")
+  lazy val petatonne = unit("petatonne", "PT")
+  lazy val exatonne = unit("exatonne", "ET")
+  lazy val zettatonne = unit("zettatonne", "ZT")
+  lazy val yottatonne = unit("yottatonne", "YT")
 
-  def man[N]: UnitOfMeasurement[Q, N] = unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight"))
+  lazy val man = unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight"))
 
-  def earth[N]: UnitOfMeasurement[Q, N] = unit("earth", "M⊕", Some("http://en.wikipedia.org/wiki/Earth"))
-  def sun[N]: UnitOfMeasurement[Q, N] = unit("sun", "M☉", Some("http://en.wikipedia.org/wiki/Solar_mass"))
-  def jupiter[N]: UnitOfMeasurement[Q, N] = unit("jupiter", "M♃", Some("http://en.wikipedia.org/wiki/Jupiter"))
-  def saturn[N]: UnitOfMeasurement[Q, N] = unit("saturn", "M♄", Some("http://en.wikipedia.org/wiki/Saturn"))
-  def neptune[N]: UnitOfMeasurement[Q, N] = unit("neptune", "M♆", Some("http://en.wikipedia.org/wiki/Neptune"))
-  def uranus[N]: UnitOfMeasurement[Q, N] = unit("uranus", "M♅", Some("http://en.wikipedia.org/wiki/Uranus"))
-  def venus[N]: UnitOfMeasurement[Q, N] = unit("venus", "M♀", Some("http://en.wikipedia.org/wiki/Venus"))
-  def mars[N]: UnitOfMeasurement[Q, N] = unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars"))
-  def mercury[N]: UnitOfMeasurement[Q, N] = unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
-  def pluto[N]: UnitOfMeasurement[Q, N] = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
-  def moon[N]: UnitOfMeasurement[Q, N] = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
+  lazy val earth = unit("earth", "M⊕", Some("http://en.wikipedia.org/wiki/Earth"))
+  lazy val sun = unit("sun", "M☉", Some("http://en.wikipedia.org/wiki/Solar_mass"))
+  lazy val jupiter = unit("jupiter", "M♃", Some("http://en.wikipedia.org/wiki/Jupiter"))
+  lazy val saturn = unit("saturn", "M♄", Some("http://en.wikipedia.org/wiki/Saturn"))
+  lazy val neptune = unit("neptune", "M♆", Some("http://en.wikipedia.org/wiki/Neptune"))
+  lazy val uranus = unit("uranus", "M♅", Some("http://en.wikipedia.org/wiki/Uranus"))
+  lazy val venus = unit("venus", "M♀", Some("http://en.wikipedia.org/wiki/Venus"))
+  lazy val mars = unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars"))
+  lazy val mercury = unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
+  lazy val pluto = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
+  lazy val moon = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
 
   // http://en.wikipedia.org/wiki/Astronomical_symbols
-  def ⊕[N] = earth[N]
-  def ☼[N] = sun[N]
-  def ☉[N] = sun[N]
-  def ♃[N] = jupiter[N]
-  def ♄[N] = saturn[N]
-  def ♆[N] = neptune[N]
-  def ♅[N] = uranus[N]
-  def ♀[N] = venus[N]
-  def ♂[N] = mars[N]
-  def ☿[N] = mercury[N]
-  def ♇[N] = pluto[N]
-  def ☽[N] = moon[N]
+  lazy val ⊕ = earth
+  lazy val ☼ = sun
+  lazy val ☉ = sun
+  lazy val ♃ = jupiter
+  lazy val ♄ = saturn
+  lazy val ♆ = neptune
+  lazy val ♅ = uranus
+  lazy val ♀ = venus
+  lazy val ♂ = mars
+  lazy val ☿ = mercury
+  lazy val ♇ = pluto
+  lazy val ☽ = moon
 
   //  // sun also = "332950" *: earth
   //  // TODO lazy val milkyWayMass = 5.8E11 *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
@@ -66,13 +68,13 @@ case object Mass extends Quantum {
   //  // earthunit = 5.9 x 10^24 kg
   //  // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
 
-  def units[N]: List[UnitOfMeasurement[Q, N]] =
+  def units: List[UnitOfMeasurement[Mass[N], N]] =
     List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,
       petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
       uranus, venus, mars, mercury, pluto, moon)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Mass[N], N], UnitOfMeasurement[Mass[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Mass[N], N], UnitOfMeasurement[Mass[N], N], Bijection[N, N])](
       (tonne, megagram, BijectiveIdentity[N]),
       (milligram, gram, Scale10s(3)),
       (gram, kilogram, Scale10s(3)),

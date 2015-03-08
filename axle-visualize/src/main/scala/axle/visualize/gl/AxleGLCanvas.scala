@@ -3,7 +3,7 @@ package axle.visualize.gl
 import scala.Vector
 
 import axle.quanta.Angle
-import axle.quanta.Angle.degree
+import axle.quanta.AngleFloat
 import axle.quanta.Distance
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
@@ -33,13 +33,16 @@ import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW
 import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import javax.media.opengl.glu.GLU
 import spire.implicits.FloatAlgebra
+import axle.algebra.DirectedGraph
 
-case class AxleGLCanvas(
-  scene: Scene,
-  fovy: UnittedQuantity[Angle.type, Float],
-  zNear: UnittedQuantity[Distance.type, Float],
-  zFar: UnittedQuantity[Distance.type, Float],
-  distanceUnit: UnitOfMeasurement[Distance.type, Float])
+case class AxleGLCanvas[DG[_, _]: DirectedGraph](
+  scene: Scene[DG],
+  fovy: UnittedQuantity[Angle[Float], Float],
+  zNear: UnittedQuantity[Distance[Float], Float],
+  zFar: UnittedQuantity[Distance[Float], Float],
+  distanceUnit: UnitOfMeasurement[Distance[Float], Float])(
+    implicit angleCg: DG[UnitOfMeasurement[axle.quanta.Angle[Float], Float], Float => Float],
+    distanceCg: DG[UnitOfMeasurement[axle.quanta.Distance[Float], Float], Float => Float])
   extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)
@@ -79,16 +82,16 @@ case class AxleGLCanvas(
   override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = {
     val gl = drawable.getGL.getGL2
 
-    import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
+    // import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 
     assert(height > 0)
     val aspect = width.toFloat / height
     gl.glViewport(0, 0, width, height)
     gl.glMatrixMode(GL_PROJECTION)
     gl.glLoadIdentity()
-    fovy.in(degree[Float])
+    fovy.in(AngleFloat.degree)
     glu.gluPerspective(
-      (fovy in degree[Float]).magnitude,
+      (fovy in AngleFloat.degree).magnitude,
       aspect,
       (zNear in scene.distanceUnit).magnitude,
       (zFar in scene.distanceUnit).magnitude)

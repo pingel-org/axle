@@ -4,38 +4,44 @@ import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-case object Volume extends Quantum {
+import spire.math.Rational
 
-  type Q = Volume.type
+object VolumeDouble extends Volume[Double]()
+
+object VolumeRational extends Volume[Rational]()
+
+case class Volume[N]() extends Quantum[N] {
+
+  type Q = Volume[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Volume"
 
-  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Q, N](name, symbol, wiki)
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Volume[N], N](name, symbol, wiki)
 
-  def m3[N]: UnitOfMeasurement[Q, N] = unit("m3", "m3") // derive
-  def km3[N]: UnitOfMeasurement[Q, N] = unit("km3", "km3") // derive
-  def cm3[N]: UnitOfMeasurement[Q, N] = unit("cm3", "cm3") // derive
-  def greatLakes[N]: UnitOfMeasurement[Q, N] = unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
-  def liter[N]: UnitOfMeasurement[Q, N] = unit("liter", "L", Some("http://en.wikipedia.org/wiki/Liter")) // TODO: also symbol ℓ
-  def L[N] = liter[N]
-  def milliliter[N]: UnitOfMeasurement[Q, N] = unit("milliliter", "mL")
+  lazy val m3 = unit("m3", "m3") // derive
+  lazy val km3 = unit("km3", "km3") // derive
+  lazy val cm3 = unit("cm3", "cm3") // derive
+  lazy val greatLakes = unit("Great Lakes Volume", "Great Lakes Volume", Some("http://en.wikipedia.org/wiki/Great_Lakes"))
+  lazy val liter = unit("liter", "L", Some("http://en.wikipedia.org/wiki/Liter")) // TODO: also symbol ℓ
+  lazy val L = liter
+  lazy val milliliter = unit("milliliter", "mL")
 
-  def wineBottle[N]: UnitOfMeasurement[Q, N] = unit("wine bottle", "wineBottle", Some("http://en.wikipedia.org/wiki/Wine_bottle"))
-  def magnum[N]: UnitOfMeasurement[Q, N] = unit("magnum", "magnum")
-  def jeroboam[N]: UnitOfMeasurement[Q, N] = unit("jeroboam", "jeroboam")
-  def rehoboam[N]: UnitOfMeasurement[Q, N] = unit("rehoboam", "rehoboam")
-  def methuselah[N]: UnitOfMeasurement[Q, N] = unit("methuselah", "methuselah")
-  def salmanazar[N]: UnitOfMeasurement[Q, N] = unit("salmanazar", "salmanazar")
-  def balthazar[N]: UnitOfMeasurement[Q, N] = unit("balthazar", "balthazar")
-  def nebuchadnezzar[N]: UnitOfMeasurement[Q, N] = unit("nebuchadnezzar", "nebuchadnezzar")
+  lazy val wineBottle = unit("wine bottle", "wineBottle", Some("http://en.wikipedia.org/wiki/Wine_bottle"))
+  lazy val magnum = unit("magnum", "magnum")
+  lazy val jeroboam = unit("jeroboam", "jeroboam")
+  lazy val rehoboam = unit("rehoboam", "rehoboam")
+  lazy val methuselah = unit("methuselah", "methuselah")
+  lazy val salmanazar = unit("salmanazar", "salmanazar")
+  lazy val balthazar = unit("balthazar", "balthazar")
+  lazy val nebuchadnezzar = unit("nebuchadnezzar", "nebuchadnezzar")
 
-  def units[N]: List[UnitOfMeasurement[Q, N]] =
+  def units: List[UnitOfMeasurement[Volume[N], N]] =
     List(m3, km3, cm3, greatLakes, liter, milliliter, wineBottle, magnum, jeroboam, rehoboam,
       methuselah, salmanazar, balthazar, nebuchadnezzar)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Volume[N], N], UnitOfMeasurement[Volume[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Volume[N], N], UnitOfMeasurement[Volume[N], N], Bijection[N, N])](
       (km3, greatLakes, ScaleInt(22671)),
       (milliliter, liter, Scale10s(3)),
       (cm3, milliliter, BijectiveIdentity[N]),

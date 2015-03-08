@@ -15,11 +15,17 @@ import spire.math.Rational
 import spire.math.Real
 import spire.implicits._
 
+import axle.jung.JungDirectedGraph
+import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
+import axle.quanta.InformationDouble
+
 class InformationTheorySpec extends Specification {
 
   "hard-coded distributions" should {
 
     "work" in {
+
+      implicit val id = InformationDouble
 
       val d =
         ConditionalProbabilityTable0(Map(
@@ -27,7 +33,7 @@ class InformationTheorySpec extends Specification {
           "B" -> Rational(1, 10),
           "C" -> Rational(7, 10)), "d")
 
-      entropy(d).magnitude.toDouble must be equalTo (1.1567796494470395)
+      entropy(d).magnitude must be equalTo (1.1567796494470395)
     }
   }
 
@@ -64,9 +70,11 @@ class InformationTheorySpec extends Specification {
       val biasedCoin = coin(Rational(9, 10))
       val fairCoin = coin()
 
-      // TODO: figure out why equalTo isn't working here
-      entropy(biasedCoin).magnitude.toDouble should be equalTo (0.4689955935892812)
-      entropy(fairCoin).magnitude.toDouble should be equalTo (1.0)
+      implicit val id = InformationDouble
+
+      // assumes entropy is in bits
+      entropy(biasedCoin).magnitude should be equalTo (0.4689955935892812)
+      entropy(fairCoin).magnitude should be equalTo (1d)
     }
   }
 

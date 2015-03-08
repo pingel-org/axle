@@ -5,23 +5,23 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case object Force extends Quantum {
+case class Force[N]() extends Quantum[N] {
 
-  type Q = Force.type
+  type Q = Force[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Force"
-  
-  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Q, N](name, symbol, wiki)
 
-  def pound[N]: UnitOfMeasurement[Q, N] = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
-  def newton[N]: UnitOfMeasurement[Q, N] = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
-  def dyne[N]: UnitOfMeasurement[Q, N] = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Force[N], N](name, symbol, wiki)
 
-  def units[N]: List[UnitOfMeasurement[Q, N]] =
+  lazy val pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
+  lazy val newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
+  lazy val dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
+
+  def units: List[UnitOfMeasurement[Force[N], N]] =
     List(pound, newton, dyne)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Force[N], N], UnitOfMeasurement[Force[N], N], Bijection[N, N])] =
     List.empty
 
 }

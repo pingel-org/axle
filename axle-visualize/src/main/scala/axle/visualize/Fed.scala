@@ -6,6 +6,8 @@ import akka.actor.ActorSystem
 import akka.actor.Props
 import axle.quanta.Time
 import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
+import axle.algebra.DirectedGraph
 
 trait Fed[T] extends Component {
 
@@ -13,7 +15,12 @@ trait Fed[T] extends Component {
 
   var dataFeedActorOpt: Option[ActorRef] = None
 
-  def setFeeder(fn: T => T, interval: UnittedQuantity[Time.type, Double], system: ActorSystem): ActorRef = {
+  def setFeeder[DG[_, _]: DirectedGraph](
+    fn: T => T,
+    interval: UnittedQuantity[Time[Double], Double],
+    system: ActorSystem)(
+      implicit time: Time[Double],
+      timeCg: DG[UnitOfMeasurement[Time[Double], Double], Double => Double]): ActorRef = {
     val feederActorRef = system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
     dataFeedActorOpt = Some(feederActorRef)
     feederActorRef

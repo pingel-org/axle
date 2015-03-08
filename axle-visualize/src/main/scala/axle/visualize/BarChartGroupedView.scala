@@ -9,9 +9,9 @@ import scala.reflect.ClassTag
 import axle.algebra.Plottable
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
-import axle.quanta.Angle.{ ° => ° }
 import axle.Show
 import axle.string
+import axle.quanta.AngleDouble
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
@@ -23,9 +23,16 @@ import spire.implicits.DoubleAlgebra
 import spire.math.Number.apply
 import spire.implicits.moduleOps
 import spire.compat.ordering
+import axle.algebra.DirectedGraph
+import axle.quanta.Angle
+import axle.quanta.UnitOfMeasurement
 
-case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](chart: BarChartGrouped[G, S, Y, D], data: D, colorStream: Stream[Color], normalFont: Font)(
-  implicit yls: LengthSpace[Y, _]) {
+case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
+  chart: BarChartGrouped[G, S, Y, D],
+  data: D,
+  colorStream: Stream[Color],
+  normalFont: Font)(
+    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]) {
 
   import chart._
 
@@ -60,7 +67,7 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
     groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
     normalFont,
     false,
-    36 *: °,
+    36d *: AngleDouble.°,
     black)
 
   val yTics = YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)

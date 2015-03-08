@@ -16,11 +16,14 @@ import axle.algebra.Tics
 import axle.Show
 import spire.algebra.Eq
 import spire.algebra.Order
+import axle.algebra.DirectedGraph
+import axle.quanta.UnitOfMeasurement
+import axle.quanta.Angle
 
 object BarChartGrouped {
 
-  implicit def drawBarChartGrouped[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
-    implicit yls: LengthSpace[Y, _]): Draw[BarChartGrouped[G, S, Y, D]] = new Draw[BarChartGrouped[G, S, Y, D]] {
+  implicit def drawBarChartGrouped[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
+    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]): Draw[BarChartGrouped[G, S, Y, D]] = new Draw[BarChartGrouped[G, S, Y, D]] {
     def component(barChart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(barChart)
   }
 

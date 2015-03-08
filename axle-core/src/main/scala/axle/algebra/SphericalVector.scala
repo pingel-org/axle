@@ -14,7 +14,7 @@ import spire.algebra.Order
  *
  */
 case class SphericalVector[N: Field: Order](
-  ρ: UnittedQuantity[Distance.type, N], // radius
-  θ: UnittedQuantity[Angle.type, N], // 90 - latitude N, aka "co-latitude"
-  φ: UnittedQuantity[Angle.type, N] // longitude E
+  ρ: UnittedQuantity[Distance[N], N], // radius
+  θ: UnittedQuantity[Angle[N], N], // 90 - latitude N, aka "co-latitude"
+  φ: UnittedQuantity[Angle[N], N] // longitude E
   )

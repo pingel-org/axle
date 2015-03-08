@@ -5,45 +5,49 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case object Time extends Quantum {
+import spire.math.Rational
 
-  type Q = Time.type
+object TimeRational extends Time[Rational]()
+
+case class Time[N]() extends Quantum[N] {
+
+  type Q = Time[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(time)"
 
-  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Q, N](name, symbol, wiki)
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Time[N], N](name, symbol, wiki)
 
-  def second[N]: UnitOfMeasurement[Q, N] = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
-  def s[N] = second[N]
-  def millisecond[N]: UnitOfMeasurement[Q, N] = unit("millisecond", "ms", Some("http://en.wikipedia.org/wiki/Millisecond"))
-  def ms[N] = millisecond[N]
-  def microsecond[N]: UnitOfMeasurement[Q, N] = unit("microsecond", "μs", Some("http://en.wikipedia.org/wiki/Microsecond"))
-  def μs[N] = microsecond[N]
-  def nanosecond[N]: UnitOfMeasurement[Q, N] = unit("nanosecond", "ns", Some("http://en.wikipedia.org/wiki/Nanosecond"))
-  def ns[N] = nanosecond[N]
-  def picosecond[N]: UnitOfMeasurement[Q, N] = unit("picosecond", "ps", Some("http://en.wikipedia.org/wiki/Picosecond"))
-  def ps[N] = picosecond[N]
-  def femtosecond[N]: UnitOfMeasurement[Q, N] = unit("femtosecond", "fs", Some("http://en.wikipedia.org/wiki/Femtosecond"))
-  def fs[N] = femtosecond[N]
-  def attosecond[N]: UnitOfMeasurement[Q, N] = unit("attosecond", "as", Some("http://en.wikipedia.org/wiki/Attosecond"))
-  def as[N] = attosecond[N]
-  def zeptosecond[N]: UnitOfMeasurement[Q, N] = unit("zeptosecond", "zs", Some("http://en.wikipedia.org/wiki/Zeptosecond"))
-  def zs[N] = zeptosecond[N]
-  def yoctosecond[N]: UnitOfMeasurement[Q, N] = unit("yoctosecond", "ys", Some("http://en.wikipedia.org/wiki/Yoctosecond"))
-  def ys[N] = yoctosecond[N]
-  def minute[N]: UnitOfMeasurement[Q, N] = unit("minute", "m", Some("http://en.wikipedia.org/wiki/Minute"))
-  def m[N] = minute[N]
-  def hour[N]: UnitOfMeasurement[Q, N] = unit("hour", "hr", Some("http://en.wikipedia.org/wiki/Hour"))
-  def day[N]: UnitOfMeasurement[Q, N] = unit("day", "d", Some("http://en.wikipedia.org/wiki/Day"))
-  def year[N]: UnitOfMeasurement[Q, N] = unit("year", "yr", Some("http://en.wikipedia.org/wiki/Year"))
-  def century[N]: UnitOfMeasurement[Q, N] = unit("century", "century", Some("http://en.wikipedia.org/wiki/Century"))
-  def millenium[N]: UnitOfMeasurement[Q, N] = unit("millenium", "ky", Some("http://en.wikipedia.org/wiki/Millenium"))
-  def ky[N] = millenium[N]
-  def megayear[N]: UnitOfMeasurement[Q, N] = unit("megayear", "my")
-  def my[N] = megayear[N]
-  def gigayear[N]: UnitOfMeasurement[Q, N] = unit("gigayear", "gy")
-  def gy[N] = gigayear[N]
+  lazy val second = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
+  lazy val s = second
+  lazy val millisecond = unit("millisecond", "ms", Some("http://en.wikipedia.org/wiki/Millisecond"))
+  lazy val ms = millisecond
+  lazy val microsecond = unit("microsecond", "μs", Some("http://en.wikipedia.org/wiki/Microsecond"))
+  lazy val μs = microsecond
+  lazy val nanosecond = unit("nanosecond", "ns", Some("http://en.wikipedia.org/wiki/Nanosecond"))
+  lazy val ns = nanosecond
+  lazy val picosecond = unit("picosecond", "ps", Some("http://en.wikipedia.org/wiki/Picosecond"))
+  lazy val ps = picosecond
+  lazy val femtosecond = unit("femtosecond", "fs", Some("http://en.wikipedia.org/wiki/Femtosecond"))
+  lazy val fs = femtosecond
+  lazy val attosecond = unit("attosecond", "as", Some("http://en.wikipedia.org/wiki/Attosecond"))
+  lazy val as = attosecond
+  lazy val zeptosecond = unit("zeptosecond", "zs", Some("http://en.wikipedia.org/wiki/Zeptosecond"))
+  lazy val zs = zeptosecond
+  lazy val yoctosecond = unit("yoctosecond", "ys", Some("http://en.wikipedia.org/wiki/Yoctosecond"))
+  lazy val ys = yoctosecond
+  lazy val minute = unit("minute", "m", Some("http://en.wikipedia.org/wiki/Minute"))
+  lazy val m = minute
+  lazy val hour = unit("hour", "hr", Some("http://en.wikipedia.org/wiki/Hour"))
+  lazy val day = unit("day", "d", Some("http://en.wikipedia.org/wiki/Day"))
+  lazy val year = unit("year", "yr", Some("http://en.wikipedia.org/wiki/Year"))
+  lazy val century = unit("century", "century", Some("http://en.wikipedia.org/wiki/Century"))
+  lazy val millenium = unit("millenium", "ky", Some("http://en.wikipedia.org/wiki/Millenium"))
+  lazy val ky = millenium
+  lazy val megayear = unit("megayear", "my")
+  lazy val my = megayear
+  lazy val gigayear = unit("gigayear", "gy")
+  lazy val gy = gigayear
 
   //  def units[N] = List[UnitOfMeasurement[Q, N]](
   //    unit("second", "s", Some("http://en.wikipedia.org/wiki/Second")),
@@ -77,12 +81,12 @@ case object Time extends Quantum {
   //  //  lazy val australopithecusAge = 4 *: my // Some("genus Australopithecus age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
   //  //  lazy val modernHumanAge = 200 *: ky // Some("anatomically modern human age"), None, Some("http://en.wikipedia.org/wiki/Timeline_of_evolution"))
 
-  def units[N]: List[UnitOfMeasurement[Q, N]] =
+  def units: List[UnitOfMeasurement[Time[N], N]] =
     List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
       zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Time[N], N], UnitOfMeasurement[Time[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Time[N], N], UnitOfMeasurement[Time[N], N], Bijection[N, N])](
       (ms, s, Scale10s(3)),
       (μs, s, Scale10s(6)),
       (ns, s, Scale10s(9)),

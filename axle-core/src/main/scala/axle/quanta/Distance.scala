@@ -1,47 +1,51 @@
 package axle.quanta
 
 import axle.algebra.Bijection
-import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
+import spire.math.Rational
 
-case object Distance extends Quantum {
+object DistanceDouble extends Distance[Double]()
 
-  type Q = Distance.type
+object DistanceRational extends Distance[Rational]()
+
+case class Distance[N]() extends Quantum[N] {
+
+  type Q = Distance[N]
 
   def wikipediaUrl: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
-  
-  def unit[N](name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Q, N](name, symbol, wiki)
 
-  def foot[N]: UnitOfMeasurement[Q, N] = unit("foot", "ft")
-  def ft[N] = foot[N]
-  def mile[N]: UnitOfMeasurement[Q, N] = unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile"))
-  def meter[N]: UnitOfMeasurement[Q, N] = unit("meter", "m")
-  def kilometer[N]: UnitOfMeasurement[Q, N] = unit("kilometer", "km")
-  def km[N] = kilometer[N]
-  def centimeter[N]: UnitOfMeasurement[Q, N] = unit("centimeter", "cm")
-  def cm[N] = centimeter[N]
-  def millimeter[N]: UnitOfMeasurement[Q, N] = unit("millimeter", "mm")
-  def mm[N] = millimeter[N]
-  def micrometer[N]: UnitOfMeasurement[Q, N] = unit("micrometer", "μm")
-  def μm[N] = micrometer[N]
-  def nanometer[N]: UnitOfMeasurement[Q, N] = unit("nanometer", "nm")
-  def nm[N] = nanometer[N]
-  def astronomicalUnit[N]: UnitOfMeasurement[Q, N] = unit("Astronomical Unit", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
-  def au[N] = astronomicalUnit[N]
-  def astronomicalUnitSI[N]: UnitOfMeasurement[Q, N] = unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
-  def auSI[N] = astronomicalUnitSI[N]
-  def lightyear[N]: UnitOfMeasurement[Q, N] = unit("lightyear", "ly", Some("http://en.wikipedia.org/wiki/Light-year"))
-  def ly[N] = lightyear[N]
-  def parsec[N]: UnitOfMeasurement[Q, N] = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Distance[N], N](name, symbol, wiki)
 
-  def units[N]: List[UnitOfMeasurement[Q, N]] =
+  lazy val foot = unit("foot", "ft")
+  lazy val ft = foot
+  lazy val mile = unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile"))
+  lazy val meter = unit("meter", "m")
+  lazy val kilometer = unit("kilometer", "km")
+  lazy val km = kilometer
+  lazy val centimeter = unit("centimeter", "cm")
+  lazy val cm = centimeter
+  lazy val millimeter = unit("millimeter", "mm")
+  lazy val mm = millimeter
+  lazy val micrometer = unit("micrometer", "μm")
+  lazy val μm = micrometer
+  lazy val nanometer = unit("nanometer", "nm")
+  lazy val nm = nanometer
+  lazy val astronomicalUnit = unit("Astronomical Unit", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
+  lazy val au = astronomicalUnit
+  lazy val astronomicalUnitSI = unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
+  lazy val auSI = astronomicalUnitSI
+  lazy val lightyear = unit("lightyear", "ly", Some("http://en.wikipedia.org/wiki/Light-year"))
+  lazy val ly = lightyear
+  lazy val parsec = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
+
+  def units: List[UnitOfMeasurement[Distance[N], N]] =
     List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
       astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
 
-  def links[N: Field]: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])] =
-    List[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])](
+  def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Distance[N], N], UnitOfMeasurement[Distance[N], N], Bijection[N, N])] =
+    List[(UnitOfMeasurement[Distance[N], N], UnitOfMeasurement[Distance[N], N], Bijection[N, N])](
       (foot, mile, ScaleInt(5280)),
       (foot, meter, ScaleDouble(3.2808398950131235)),
       (kilometer, mile, ScaleDouble(1.609344)),
