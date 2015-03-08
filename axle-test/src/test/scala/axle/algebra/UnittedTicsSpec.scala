@@ -20,9 +20,9 @@ class UnittedTicsSpec extends Specification {
 
       import InformationDouble.bit
       implicit val base = bit
-      
+
       implicit val cg = axle.quanta.conversionGraph[Information[Double], Double, JungDirectedGraph](InformationDouble)
-      
+
       val ticker = axle.quanta.unittedTics[Information[Double], Double, JungDirectedGraph]
 
       val tics = ticker.tics(0d *: bit, 1d *: bit).toVector

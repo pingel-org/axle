@@ -5,6 +5,8 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
+object MassDouble extends Mass[Double]()
+
 case class Mass[N]() extends Quantum4[N] {
 
   type Q = Mass[N]

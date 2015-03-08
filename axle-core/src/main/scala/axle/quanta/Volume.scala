@@ -4,6 +4,11 @@ import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
+import spire.math.Rational
+
+object VolumeDouble extends Volume[Double]()
+
+object VolumeRational extends Volume[Rational]()
 
 case class Volume[N]() extends Quantum4[N] {
 

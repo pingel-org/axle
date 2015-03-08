@@ -5,6 +5,10 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
+import spire.math.Rational
+
+object TimeRational extends Time[Rational]()
+
 case class Time[N]() extends Quantum4[N] {
 
   type Q = Time[N]

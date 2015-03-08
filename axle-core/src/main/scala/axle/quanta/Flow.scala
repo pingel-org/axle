@@ -4,6 +4,11 @@ import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
+import spire.math.Rational
+
+object FlowDouble extends Flow[Double]()
+
+object FlowRational extends Flow[Rational]()
 
 case class Flow[N]() extends Quantum4[N] {
 
