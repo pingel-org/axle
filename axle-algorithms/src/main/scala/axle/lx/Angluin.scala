@@ -10,6 +10,7 @@ import spire.algebra.Eq
 import spire.algebra.Order
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
+import spire.implicits._
 
 object Angluin {
 
@@ -45,11 +46,11 @@ object Angluin {
     //    }
 
     def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
-      graph.edges.collect({ case e if e.from === state && e.payload === symbol => e.to }).toSet
+      graph.edges.collect({ case e if (e.from === state && Symbol.symbolEq.eqv(e.payload, symbol)) => e.to }).toSet
 
     def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
-      case Nil => Set(state.payload)
+      case Nil          => Set(state.payload)
     }
 
     // TODO: not sure if this should count edges or nodes:
