@@ -45,18 +45,18 @@ trait MassMetadata[N] extends QuantumMetadata[Mass, N] {
   def moon: U
 
   // http://en.wikipedia.org/wiki/Astronomical_symbols
-  //  def ⊕: U
-  //  def ☼: U
-  //  def ☉: U
-  //  def ♃: U
-  //  def ♄: U
-  //  def ♆: U
-  //  def ♅: U
-  //  def ♀: U
-  //  def ♂: U
-  //  def ☿: U
-  //  def ♇: U
-  //  def ☽: U
+  def ⊕ : U
+  def ☼ : U
+  def ☉ : U
+  def ♃ : U
+  def ♄ : U
+  def ♆ : U
+  def ♅ : U
+  def ♀ : U
+  def ♂ : U
+  def ☿ : U
+  def ♇ : U
+  def ☽ : U
 
 }
 
@@ -96,18 +96,18 @@ object Mass {
     lazy val _moon = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
 
     // http://en.wikipedia.org/wiki/Astronomical_symbols
-    //    def ⊕ = earth
-    //    def ☼ = sun
-    //    def ☉ = sun
-    //    def ♃ = jupiter
-    //    def ♄ = saturn
-    //    def ♆ = neptune
-    //    def ♅ = uranus
-    //    def ♀ = venus
-    //    def ♂ = mars
-    //    def ☿ = mercury
-    //    def ♇ = pluto
-    //    def ☽ = moon
+    def ⊕ = earth
+    def ☼ = sun
+    def ☉ = sun
+    def ♃ = jupiter
+    def ♄ = saturn
+    def ♆ = neptune
+    def ♅ = uranus
+    def ♀ = venus
+    def ♂ = mars
+    def ☿ = mercury
+    def ♇ = pluto
+    def ☽ = moon
 
     def gram = _gram
     def tonne = _tonne
