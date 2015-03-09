@@ -11,9 +11,15 @@ case class Energy() extends Quantum {
 
 }
 
+trait EnergyMetadata[N] extends QuantumMetadata[Energy, N] {
+
+  type U = UnitOfMeasurement[Energy, N]
+
+}
+
 object Energy {
 
-  def metadata[N] = new QuantumMetadata[Energy, N] {
+  def metadata[N] = new EnergyMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Energy, N](name, symbol, wiki)

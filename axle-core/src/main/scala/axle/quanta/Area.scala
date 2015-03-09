@@ -11,9 +11,15 @@ case class Area() extends Quantum {
 
 }
 
+trait AreaMetadata[N] extends QuantumMetadata[Area, N] {
+
+  type U = UnitOfMeasurement[Area, N]
+
+}
+
 object Area {
 
-  def metadata[N] = new QuantumMetadata[Area, N] {
+  def metadata[N] = new AreaMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Area, N](name, symbol, wiki)

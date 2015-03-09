@@ -11,9 +11,15 @@ case class Acceleration() extends Quantum {
 
 }
 
+trait AccelerationMetadata[N] extends QuantumMetadata[Acceleration, N] {
+
+  type U = UnitOfMeasurement[Acceleration, N]
+
+}
+
 object Acceleration {
 
-  def metadata[N] = new QuantumMetadata[Acceleration, N] {
+  def metadata[N] = new AccelerationMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Acceleration, N](name, symbol, wiki)

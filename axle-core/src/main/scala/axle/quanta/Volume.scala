@@ -12,9 +12,15 @@ case class Volume() extends Quantum {
 
 }
 
+trait VolumeMetadata[N] extends QuantumMetadata[Volume, N] {
+
+  type U = UnitOfMeasurement[Volume, N]
+
+}
+
 object Volume {
 
-  def metadata[N] = new QuantumMetadata[Volume, N] {
+  def metadata[N] = new VolumeMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Volume, N](name, symbol, wiki)

@@ -13,9 +13,15 @@ case class Time() extends Quantum {
 
 }
 
+trait TimeMetadata[N] extends QuantumMetadata[Time, N] {
+
+  type U = UnitOfMeasurement[Time, N]
+
+}
+
 object Time {
 
-  def metadata[N] = new QuantumMetadata[Time, N] {
+  def metadata[N] = new TimeMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Time, N](name, symbol, wiki)

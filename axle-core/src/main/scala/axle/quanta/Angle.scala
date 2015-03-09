@@ -16,11 +16,11 @@ case class Angle() extends Quantum {
 
 trait AngleMetadata[N] extends QuantumMetadata[Angle, N] {
 
-  def radian: UnitOfMeasurement[Angle, N]
+  type U = UnitOfMeasurement[Angle, N]
 
-  def rad: UnitOfMeasurement[Angle, N]
-
-  def degree: UnitOfMeasurement[Angle, N]
+  def radian: U
+  def rad: U
+  def degree: U
 
   //def °: UnitOfMeasurement[Angle, N]
 

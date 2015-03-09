@@ -11,9 +11,15 @@ case class Frequency() extends Quantum {
 
 }
 
+trait FrequencyMetadata[N] extends QuantumMetadata[Frequency, N] {
+
+  type U = UnitOfMeasurement[Frequency, N]
+
+}
+
 object Frequency {
 
-  def metadata[N] = new QuantumMetadata[Frequency, N] {
+  def metadata[N] = new FrequencyMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Frequency, N](name, symbol, wiki)

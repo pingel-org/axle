@@ -1,12 +1,7 @@
 package axle.quanta
 
-import axle.algebra.Vertex
 import axle.algebra.Bijection
-import axle.algebra.DirectedGraph
-import spire.algebra.Eq
 import spire.algebra.Field
-import spire.math.Rational
-import spire.math.Real
 
 case class Information() extends Quantum {
 
@@ -16,11 +11,16 @@ case class Information() extends Quantum {
 
 trait InformationMetadata[N] extends QuantumMetadata[Information, N] {
 
-  def bit: UnitOfMeasurement[Information, N]
+  type U = UnitOfMeasurement[Information, N]
 
-  def nibble: UnitOfMeasurement[Information, N]
-
-  def byte: UnitOfMeasurement[Information, N]
+  def bit: U
+  def nibble: U
+  def byte: U
+  def kilobyte: U
+  def megabyte: U
+  def gigabyte: U
+  def terabyte: U
+  def petabyte: U
 
 }
 
@@ -34,25 +34,30 @@ object Information {
     lazy val _bit = unit("bit", "b")
     lazy val _nibble = unit("nibble", "nibble")
     lazy val _byte = unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte"))
-    lazy val kilobyte = unit("kilobyte", "KB")
-    lazy val megabyte = unit("megabyte", "MB")
-    lazy val gigabyte = unit("gigabyte", "GB")
-    lazy val terabyte = unit("terabyte", "TB")
-    lazy val petabyte = unit("petabyte", "PB")
+    lazy val _kilobyte = unit("kilobyte", "KB")
+    lazy val _megabyte = unit("megabyte", "MB")
+    lazy val _gigabyte = unit("gigabyte", "GB")
+    lazy val _terabyte = unit("terabyte", "TB")
+    lazy val _petabyte = unit("petabyte", "PB")
 
     // TODO PB TB GB MB KB
 
     def bit = _bit
     def nibble = _nibble
     def byte = _byte
+    def kilobyte = _kilobyte
+    def megabyte = _megabyte
+    def gigabyte = _gigabyte
+    def terabyte = _terabyte
+    def petabyte = _petabyte
 
     def units: List[UnitOfMeasurement[Information, N]] =
-      List(_bit, _nibble, _byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
+      List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
 
     def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])](
-        (_bit, _byte, Scale2s(3)),
-        (_byte, kilobyte, Scale2s(10)),
+        (bit, byte, Scale2s(3)),
+        (byte, kilobyte, Scale2s(10)),
         (kilobyte, megabyte, Scale2s(10)),
         (megabyte, gigabyte, Scale2s(10)),
         (gigabyte, terabyte, Scale2s(10)),

@@ -12,9 +12,15 @@ case class Mass() extends Quantum {
 
 }
 
+trait MassMetadata[N] extends QuantumMetadata[Mass, N] {
+
+  type U = UnitOfMeasurement[Mass, N]
+
+}
+
 object Mass {
 
-  def metadata[N] = new QuantumMetadata[Mass, N] {
+  def metadata[N] = new MassMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Mass, N](name, symbol, wiki)

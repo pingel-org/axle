@@ -11,9 +11,16 @@ case class MoneyPerForce() extends Quantum {
 
 }
 
+trait MoneyPerForceMetadata[N] extends QuantumMetadata[MoneyPerForce, N] {
+
+  type U = UnitOfMeasurement[MoneyPerForce, N]
+
+}
+
+
 object MoneyPerForce {
 
-  def metadata[N] = new QuantumMetadata[MoneyPerForce, N] {
+  def metadata[N] = new MoneyPerForceMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[MoneyPerForce, N](name, symbol, wiki)
