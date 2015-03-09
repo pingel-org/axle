@@ -27,7 +27,7 @@ object AxleBuild extends Build {
     crossScalaVersions := Seq("2.11.6"),
 
     libraryDependencies ++= Seq(
-      "org.specs2" %% "specs2" % "2.3.11" % "test",
+      "org.specs2" %% "specs2" % "2.4.17" % "test",
       "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
       "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1"
     ),
@@ -63,6 +63,7 @@ import axle._
     resolvers ++= Seq(
       "Sonatype OSS Releases"  at "http://oss.sonatype.org/content/repositories/releases/",
       "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/",
+      "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases", // needed transitively by specs2
       "Concurrent Maven Repo" at "http://conjars.org/repo"
     ),
 
