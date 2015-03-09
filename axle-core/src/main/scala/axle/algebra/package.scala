@@ -12,6 +12,8 @@ import spire.algebra.Order
 import spire.compat.ordering
 import spire.math.Rational
 import spire.math.Real
+import spire.math.ConvertableFrom
+import spire.math.ConvertableTo
 
 /**
  *
@@ -44,14 +46,22 @@ package object algebra {
   def sum[A: ClassTag, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
 
-  def mean[A: ClassTag, F[_]](fa: F[A])(implicit ev: Field[A], agg: Aggregatable[F], fin: Finite[F]): A =
-    sum(fa) / fin.size(fa)
-
   def Π[A: ClassTag, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
   def product[A: ClassTag, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
+
+  def mean[A: ClassTag, F[_]](fa: F[A])(implicit ev: Field[A], agg: Aggregatable[F], fin: Finite[F]): A =
+    sum(fa) / fin.size(fa)
+
+  def harmonicMean[A: ClassTag, F[_]](xs: F[A])(
+    implicit ct: ConvertableTo[A],
+    field: Field[A],
+    fun: Functor[F],
+    agg: Aggregatable[F],
+    fin: Finite[F]): A =
+    field.div(ct.fromLong(fin.size(xs)), sum(fun.map(xs)(field.reciprocal)))
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] = new MetricSpace[Rational, Double] {
 
