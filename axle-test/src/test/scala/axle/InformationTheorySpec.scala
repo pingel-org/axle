@@ -17,7 +17,7 @@ import spire.implicits._
 
 import axle.jung.JungDirectedGraph
 import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
-import axle.quanta.InformationDouble
+import axle.quanta.Information
 
 class InformationTheorySpec extends Specification {
 
@@ -25,7 +25,7 @@ class InformationTheorySpec extends Specification {
 
     "work" in {
 
-      implicit val id = InformationDouble
+      implicit val id = Information.metadata[Double]
 
       val d =
         ConditionalProbabilityTable0(Map(
@@ -70,7 +70,7 @@ class InformationTheorySpec extends Specification {
       val biasedCoin = coin(Rational(9, 10))
       val fairCoin = coin()
 
-      implicit val id = InformationDouble
+      implicit val id = Information.metadata[Double]
 
       // assumes entropy is in bits
       entropy(biasedCoin).magnitude should be equalTo (0.4689955935892812)

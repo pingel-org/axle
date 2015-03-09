@@ -5,7 +5,6 @@ import scala.Vector
 import org.specs2.mutable.Specification
 
 import axle.quanta.Information
-import axle.quanta.InformationDouble
 import axle.quanta.UnittedQuantity
 import axle.jung.JungDirectedGraph
 import spire.algebra.Eq
@@ -18,12 +17,13 @@ class UnittedTicsSpec extends Specification {
   "Tics for UnittedQuantity" should {
     "work" in {
 
-      import InformationDouble.bit
+      implicit val id = Information.metadata[Double]
+      import id.bit
       implicit val base = bit
 
-      implicit val cg = axle.quanta.conversionGraph[Information[Double], Double, JungDirectedGraph](InformationDouble)
+      implicit val cg = axle.quanta.conversionGraph[Information, Double, JungDirectedGraph]
 
-      val ticker = axle.quanta.unittedTics[Information[Double], Double, JungDirectedGraph]
+      val ticker = axle.quanta.unittedTics[Information, Double, JungDirectedGraph]
 
       val tics = ticker.tics(0d *: bit, 1d *: bit).toVector
 
@@ -41,7 +41,7 @@ class UnittedTicsSpec extends Specification {
         (0.9 *: bit, "0.900000"),
         (1.0 *: bit, "1.000000"))
 
-      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information[Double], Double], String)]]]
+      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information, Double], String)]]]
 
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))
