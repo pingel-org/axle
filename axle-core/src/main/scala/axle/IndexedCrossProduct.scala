@@ -1,7 +1,7 @@
 package axle
 
 import spire.implicits._
-import spire.algebra.BooleanAlgebra
+import spire.algebra.Bool
 
 case class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]])
   extends Iterable[Seq[E]] {

@@ -44,7 +44,7 @@ import axle.algebra.Functor
 import scala.reflect.ClassTag
 import spire.optional.unicode.Π
 import spire.optional.unicode.Σ
-import spire.algebra.BooleanAlgebra
+import spire.algebra.Bool
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
@@ -71,9 +71,9 @@ package object axle {
 
   def Pi[N: MultiplicativeMonoid] = Π[N] _
 
-  def ∀[A, B: BooleanAlgebra: ClassTag, F[_]: Functor: Aggregatable] = forall[A, B, F] _
+  def ∀[A, B: Bool: ClassTag, F[_]: Functor: Aggregatable] = forall[A, B, F] _
 
-  def ∃[A, B: BooleanAlgebra: ClassTag, F[_]: Functor: Aggregatable] = thereexists[A, B, F] _
+  def ∃[A, B: Bool: ClassTag, F[_]: Functor: Aggregatable] = thereexists[A, B, F] _
 
   /**
    * Englishman John Wallis (1616 - 1703) approximation of π in 1655
