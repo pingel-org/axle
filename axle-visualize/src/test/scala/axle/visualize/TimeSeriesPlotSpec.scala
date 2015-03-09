@@ -59,7 +59,7 @@ class TimeSeriesPlotSpec extends Specification {
         (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
     implicit val bitDouble = id.bit
-    implicit val cg = axle.quanta.conversionGraph[Information, Double, JungDirectedGraph](id)
+    //implicit val cg = axle.quanta.conversionGraph[Information, Double, JungDirectedGraph]
     implicit val orderThem = axle.quanta.unitOrder[Information, Double, JungDirectedGraph]
     //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
 
