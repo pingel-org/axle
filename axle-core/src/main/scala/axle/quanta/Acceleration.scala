@@ -15,6 +15,9 @@ trait AccelerationMetadata[N] extends QuantumMetadata[Acceleration, N] {
 
   type U = UnitOfMeasurement[Acceleration, N]
 
+  def mpsps: U
+  def fpsps: U
+  def g: U
 }
 
 object Acceleration {
@@ -24,9 +27,13 @@ object Acceleration {
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Acceleration, N](name, symbol, wiki)
 
-    lazy val mpsps = unit("mps", "mps") // derive
-    lazy val fpsps = unit("fps", "fps") // derive
-    lazy val g = unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
+    lazy val _mpsps = unit("mps", "mps") // derive
+    lazy val _fpsps = unit("fps", "fps") // derive
+    lazy val _g = unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
+
+    def mpsps = _mpsps
+    def fpsps = _fpsps
+    def g = _g
 
     def units: List[UnitOfMeasurement[Acceleration, N]] =
       List(mpsps, fpsps, g)

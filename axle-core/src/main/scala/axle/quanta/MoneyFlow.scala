@@ -15,6 +15,8 @@ trait MoneyFlowMetadata[N] extends QuantumMetadata[MoneyFlow, N] {
 
   type U = UnitOfMeasurement[MoneyFlow, N]
 
+  def USDperHour: U
+
 }
 
 object MoneyFlow {
@@ -24,7 +26,9 @@ object MoneyFlow {
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[MoneyFlow, N](name, symbol, wiki)
 
-    lazy val USDperHour = unit("$/hr", "$/hr") // derive
+    lazy val _USDperHour = unit("$/hr", "$/hr") // derive
+
+    def USDperHour = _USDperHour
 
     def units: List[UnitOfMeasurement[MoneyFlow, N]] =
       List(USDperHour)

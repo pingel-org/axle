@@ -15,6 +15,7 @@ trait MoneyPerForceMetadata[N] extends QuantumMetadata[MoneyPerForce, N] {
 
   type U = UnitOfMeasurement[MoneyPerForce, N]
 
+  def USDperPound: U
 }
 
 
@@ -25,8 +26,10 @@ object MoneyPerForce {
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[MoneyPerForce, N](name, symbol, wiki)
 
-    lazy val USDperPound = unit("$/lb", "$/lb") // derive
+    lazy val _USDperPound = unit("$/lb", "$/lb") // derive
 
+    def USDperPound = _USDperPound
+    
     def units: List[UnitOfMeasurement[MoneyPerForce, N]] =
       List(USDperPound)
 

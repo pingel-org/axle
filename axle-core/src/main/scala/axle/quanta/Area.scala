@@ -15,6 +15,9 @@ trait AreaMetadata[N] extends QuantumMetadata[Area, N] {
 
   type U = UnitOfMeasurement[Area, N]
 
+  def m2: U
+  def km2: U
+  def cm2: U
 }
 
 object Area {
@@ -24,10 +27,14 @@ object Area {
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Area, N](name, symbol, wiki)
 
-    lazy val m2 = unit("m2", "m2") // derive
-    lazy val km2 = unit("km2", "km2") // derive
-    lazy val cm2 = unit("cm2", "cm2") // derive
+    lazy val _m2 = unit("m2", "m2") // derive
+    lazy val _km2 = unit("km2", "km2") // derive
+    lazy val _cm2 = unit("cm2", "cm2") // derive
 
+    def m2 = _m2
+    def km2 = _km2
+    def cm2 = _cm2
+    
     def units: List[UnitOfMeasurement[Area, N]] =
       List(m2, km2, cm2)
 

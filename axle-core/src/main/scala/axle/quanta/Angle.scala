@@ -21,6 +21,8 @@ trait AngleMetadata[N] extends QuantumMetadata[Angle, N] {
   def radian: U
   def rad: U
   def degree: U
+  def circleDegrees: U
+  def circleRadians: U
 
   //def °: UnitOfMeasurement[Angle, N]
 
@@ -39,10 +41,10 @@ object Angle {
     lazy val _circleRadians = unit("circleRadians", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
 
     def radian = _radian
-
     def rad = _radian
-
     def degree = _degree
+    def circleDegrees = _circleDegrees
+    def circleRadians = _circleRadians
 
     //  def clockwise90[N: Field: Eq] = -90 *: °[N]
     //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]

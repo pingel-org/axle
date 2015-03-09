@@ -15,6 +15,19 @@ trait PowerMetadata[N] extends QuantumMetadata[Power, N] {
 
   type U = UnitOfMeasurement[Power, N]
 
+  def watt: U
+  def W: U
+  def kilowatt: U
+  def kW: U
+  def megawatt: U
+  def MW: U
+  def gigawatt: U
+  def GW: U
+  def milliwatt: U
+  def horsepower: U
+  def lightBulb: U
+  def hooverDam: U
+  def mustangGT: U
 }
 
 object Power {
@@ -24,19 +37,29 @@ object Power {
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Power, N](name, symbol, wiki)
 
-    lazy val watt = unit("watt", "W")
-    lazy val W = watt
-    lazy val kilowatt = unit("kilowatt", "KW")
-    lazy val kW = kilowatt
-    lazy val megawatt = unit("megawatt", "MW")
-    lazy val MW = megawatt
-    lazy val gigawatt = unit("gigawatt", "GW")
-    lazy val GW = gigawatt
-    lazy val milliwatt = unit("milliwatt", "mW")
-    lazy val horsepower = unit("horsepower", "hp")
-    lazy val lightBulb = unit("light bulb", "light bulb")
-    lazy val hooverDam = unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
-    lazy val mustangGT = unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
+    lazy val _watt = unit("watt", "W")
+    lazy val _kilowatt = unit("kilowatt", "KW")
+    lazy val _megawatt = unit("megawatt", "MW")
+    lazy val _gigawatt = unit("gigawatt", "GW")
+    lazy val _milliwatt = unit("milliwatt", "mW")
+    lazy val _horsepower = unit("horsepower", "hp")
+    lazy val _lightBulb = unit("light bulb", "light bulb")
+    lazy val _hooverDam = unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
+    lazy val _mustangGT = unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
+
+    def watt = _watt
+    def W = _watt
+    def kilowatt = _kilowatt
+    def kW = _kilowatt
+    def megawatt = _megawatt
+    def MW = _megawatt
+    def gigawatt = _gigawatt
+    def GW = _gigawatt
+    def milliwatt = _milliwatt
+    def horsepower = _horsepower
+    def lightBulb = _lightBulb
+    def hooverDam = _hooverDam
+    def mustangGT = _mustangGT
 
     def units: List[UnitOfMeasurement[Power, N]] =
       List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
