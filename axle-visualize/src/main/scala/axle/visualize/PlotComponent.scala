@@ -16,7 +16,6 @@ import axle.algebra.DirectedGraph
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.quanta.AngleDouble
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
@@ -26,7 +25,7 @@ import axle.quanta.Angle
 case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D, DG[_, _]: DirectedGraph](
   plot: Plot[X, Y, D])(
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double])
+    angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double])
   extends JPanel
   with Fed[List[(String, D)]] {
 
@@ -37,9 +36,11 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D, DG[_, _]: Dire
 
   def initialValue = plot.initialValue
 
+  val degreeDouble = Angle.metadata[Double].degree
+
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: AngleDouble.°)))
+  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: degreeDouble)))
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
 

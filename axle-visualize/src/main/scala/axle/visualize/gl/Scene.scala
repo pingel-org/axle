@@ -13,8 +13,6 @@ import axle.algebra.Position
 import axle.algebra.SphericalVector
 import axle.quanta.Angle
 import axle.quanta.modulize
-import axle.quanta.AngleDouble
-import axle.quanta.AngleFloat
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
@@ -32,11 +30,11 @@ import axle.algebra.DirectedGraph
 import axle.quanta.Angle
 import axle.quanta.Distance
 
-abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement[Distance[Float], Float])(
-  implicit angleCgFloat: DG[UnitOfMeasurement[Angle[Float], Float], Float => Float],
-  angleCgDouble: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double],
-  distanceCg: DG[UnitOfMeasurement[Distance[Float], Float], Float => Float],
-  distanceCgDouble: DG[UnitOfMeasurement[Distance[Double], Double], Double => Double]) {
+abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement[Distance, Float])(
+  implicit angleCgFloat: DG[UnitOfMeasurement[Angle, Float], Float => Float],
+  angleCgDouble: DG[UnitOfMeasurement[Angle, Double], Double => Double],
+  distanceCg: DG[UnitOfMeasurement[Distance, Float], Float => Float],
+  distanceCgDouble: DG[UnitOfMeasurement[Distance, Double], Double => Double]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
@@ -56,13 +54,15 @@ abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasuremen
         url2texture += url -> TextureIO.newTexture(url, false, extension)
     }
 
+  val radianDouble = Angle.metadata[Double].radian
+
   def sphericalToCartesian(spherical: SphericalVector[Double]): Position[Double] = {
     import spherical._
-    import AngleDouble.radian
+
     Position(
-      ρ :* sin((θ in radian).magnitude) * cos((φ in radian).magnitude),
-      ρ :* sin((θ in radian).magnitude) * sin((φ in radian).magnitude),
-      ρ :* cos((θ in radian).magnitude))
+      ρ :* sin((θ in radianDouble).magnitude) * cos((φ in radianDouble).magnitude),
+      ρ :* sin((θ in radianDouble).magnitude) * sin((φ in radianDouble).magnitude),
+      ρ :* cos((θ in radianDouble).magnitude))
   }
 
   def positionLight(position: Position[Float], gl: GL2): Unit = {
@@ -75,16 +75,18 @@ abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasuremen
 
   def translate(
     gl: GL2,
-    x: UnittedQuantity[Distance[Float], Float],
-    y: UnittedQuantity[Distance[Float], Float],
-    z: UnittedQuantity[Distance[Float], Float]): Unit =
+    x: UnittedQuantity[Distance, Float],
+    y: UnittedQuantity[Distance, Float],
+    z: UnittedQuantity[Distance, Float]): Unit =
     gl.glTranslatef(
       (x in distanceUnit).magnitude,
       (y in distanceUnit).magnitude,
       (z in distanceUnit).magnitude)
 
-  def rotate(gl: GL2, a: UnittedQuantity[Angle[Float], Float], x: Float, y: Float, z: Float): Unit =
-    gl.glRotatef((a in AngleFloat.degree).magnitude, x, y, z)
+  val degreeFloat = Angle.metadata[Float].degree
+
+  def rotate(gl: GL2, a: UnittedQuantity[Angle, Float], x: Float, y: Float, z: Float): Unit =
+    gl.glRotatef((a in degreeFloat).magnitude, x, y, z)
 
   def textureUrls: Seq[(URL, String)]
 

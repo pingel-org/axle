@@ -21,7 +21,7 @@ object Plot {
 
   implicit def drawPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D, DG[_, _]: DirectedGraph](
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]): Draw[Plot[X, Y, D]] =
+    angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]): Draw[Plot[X, Y, D]] =
     new Draw[Plot[X, Y, D]] {
 
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)

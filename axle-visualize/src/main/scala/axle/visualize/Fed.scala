@@ -17,10 +17,9 @@ trait Fed[T] extends Component {
 
   def setFeeder[DG[_, _]: DirectedGraph](
     fn: T => T,
-    interval: UnittedQuantity[Time[Double], Double],
+    interval: UnittedQuantity[Time, Double],
     system: ActorSystem)(
-      implicit time: Time[Double],
-      timeCg: DG[UnitOfMeasurement[Time[Double], Double], Double => Double]): ActorRef = {
+      implicit timeCg: DG[UnitOfMeasurement[Time, Double], Double => Double]): ActorRef = {
     val feederActorRef = system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
     dataFeedActorOpt = Some(feederActorRef)
     feederActorRef

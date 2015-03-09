@@ -21,16 +21,18 @@ import axle.algebra.DirectedGraph
 case class DataFeedActor[T, DG[_, _]: DirectedGraph](
   initialValue: T,
   refreshFn: T => T,
-  interval: UnittedQuantity[Time[Double], Double])(
-    implicit time: Time[Double], timeCg: DG[UnitOfMeasurement[Time[Double], Double], Double => Double])
+  interval: UnittedQuantity[Time, Double])(
+    implicit timeCg: DG[UnitOfMeasurement[Time, Double], Double => Double])
   extends Actor with ActorLogging {
 
   import DataFeedProtocol._
   import FrameProtocol._
 
+  val msDouble = Time.metadata[Double].millisecond
+
   context.system.scheduler.schedule(
     0.millis,
-    ((interval in time.millisecond).magnitude).millis,
+    ((interval in msDouble).magnitude).millis,
     self,
     Recompute())
 

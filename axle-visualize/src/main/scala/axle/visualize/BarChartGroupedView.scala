@@ -11,7 +11,6 @@ import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.Show
 import axle.string
-import axle.quanta.AngleDouble
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
@@ -32,7 +31,7 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]) {
+    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]) {
 
   import chart._
 
@@ -62,12 +61,14 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
   val vLine = VerticalLine(scaledArea, yAxis, black)
   val hLine = HorizontalLine(scaledArea, xAxis, black)
 
+  val degreeDouble = Angle.metadata[Double].degree
+
   val gTics = XTics(
     scaledArea,
     groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
     normalFont,
     false,
-    36d *: AngleDouble.°,
+    36d *: degreeDouble,
     black)
 
   val yTics = YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)

@@ -11,21 +11,27 @@ case class Distance() extends Quantum {
 
 }
 
+trait DistanceMetadata[N] extends QuantumMetadata[Distance, N] {
+
+  def foot: UnitOfMeasurement[Distance, N]
+  
+  def centimeter: UnitOfMeasurement[Distance, N]
+
+}
+
 object Distance {
 
-  def metadata[N] = new QuantumMetadata[Distance, N] {
+  def metadata[N] = new DistanceMetadata[N] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Distance, N](name, symbol, wiki)
 
-    lazy val foot = unit("foot", "ft")
-    lazy val ft = foot
+    lazy val _foot = unit("foot", "ft")
     lazy val mile = unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile"))
     lazy val meter = unit("meter", "m")
     lazy val kilometer = unit("kilometer", "km")
     lazy val km = kilometer
-    lazy val centimeter = unit("centimeter", "cm")
-    lazy val cm = centimeter
+    lazy val _centimeter = unit("centimeter", "cm")
     lazy val millimeter = unit("millimeter", "mm")
     lazy val mm = millimeter
     lazy val micrometer = unit("micrometer", "μm")
@@ -40,6 +46,11 @@ object Distance {
     lazy val ly = lightyear
     lazy val parsec = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
 
+    def foot = _foot
+    def ft = _foot
+    def centimeter = _centimeter
+    def cm = _centimeter
+    
     def units: List[UnitOfMeasurement[Distance, N]] =
       List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
         astronomicalUnit, astronomicalUnitSI, lightyear, parsec)

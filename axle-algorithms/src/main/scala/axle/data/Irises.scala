@@ -7,7 +7,6 @@ import scala.sys.process.stringSeqToProcess
 import scala.util.Try
 
 import axle.quanta.Distance
-import axle.quanta.DistanceDouble
 import axle.quanta.UnittedQuantity
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
@@ -40,13 +39,11 @@ import spire.implicits.moduleOps
 
 object Irises {
 
-  import DistanceDouble._
-
   case class Iris(
-    sepalLength: UnittedQuantity[Distance[Double], Double],
-    sepalWidth: UnittedQuantity[Distance[Double], Double],
-    petalLength: UnittedQuantity[Distance[Double], Double],
-    petalWidth: UnittedQuantity[Distance[Double], Double],
+    sepalLength: UnittedQuantity[Distance, Double],
+    sepalWidth: UnittedQuantity[Distance, Double],
+    petalLength: UnittedQuantity[Distance, Double],
+    petalWidth: UnittedQuantity[Distance, Double],
     species: String)
 
   object Iris {
@@ -59,6 +56,10 @@ object Irises {
 
   val file = new File(filename)
 
+  val dmd = Distance.metadata[Double]
+
+  import dmd.cm
+  
   if (!file.exists) {
     Seq("wget", "-q", dataUrl, "-O", filename)!!
   }

@@ -16,17 +16,19 @@ import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
-import axle.quanta.AngleFloat
+import axle.quanta.Angle
 
 case class SceneFrame[DG[_, _]: DirectedGraph](
   scene: Scene[DG],
   width: Int,
   height: Int,
-  zNear: UnittedQuantity[Distance[Float], Float],
-  zFar: UnittedQuantity[Distance[Float], Float],
+  zNear: UnittedQuantity[Distance, Float],
+  zFar: UnittedQuantity[Distance, Float],
   fps: Int)(
-    implicit angleCg: DG[UnitOfMeasurement[axle.quanta.Angle[Float], Float], Float => Float],
-    distanceCg: DG[UnitOfMeasurement[axle.quanta.Distance[Float], Float], Float => Float]) {
+    implicit angleCg: DG[UnitOfMeasurement[Angle, Float], Float => Float],
+    distanceCg: DG[UnitOfMeasurement[Distance, Float], Float => Float]) {
+
+  val fortyFiveDegreeFloat = 45f *: Angle.metadata[Float].degree
 
   def run(): Unit = {
 
@@ -34,7 +36,7 @@ case class SceneFrame[DG[_, _]: DirectedGraph](
 
       def run(): Unit = {
 
-        val canvas = AxleGLCanvas(scene, 45f *: AngleFloat.degree, zNear, zFar, scene.distanceUnit)
+        val canvas = AxleGLCanvas(scene, fortyFiveDegreeFloat, zNear, zFar, scene.distanceUnit)
         canvas.setPreferredSize(new Dimension(width, height))
 
         val animator = new FPSAnimator(canvas, fps, true)

@@ -8,7 +8,6 @@ import scala.Stream.continually
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.quanta.AngleDouble
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -23,7 +22,7 @@ import axle.quanta.Angle
 case class PlotView[X, Y, D, DG[_, _]: DirectedGraph](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
   implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],
   yZero: Zero[Y], yts: Tics[Y], yEq: Eq[Y], yLength: LengthSpace[Y, _],
-  angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]) {
+  angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]) {
 
   import plot._
 
@@ -48,7 +47,7 @@ case class PlotView[X, Y, D, DG[_, _]: DirectedGraph](plot: Plot[X, Y, D], data:
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0 *: AngleDouble.°, black)
+  val xTics = XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0 *: Angle.metadata[Double].degree, black)
   val yTics = YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
 
   val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorStream, pointDiameter, connect)

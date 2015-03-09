@@ -10,7 +10,6 @@ import org.specs2.mutable.Specification
 import axle.algebra.Plottable
 import axle.joda._
 import axle.quanta.Information
-import axle.quanta.InformationDouble
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import axle.stats.H
@@ -51,24 +50,24 @@ class TimeSeriesPlotSpec extends Specification {
     import axle.jung.JungDirectedGraph
     import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 
-    implicit val id = InformationDouble
+    type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
 
-    type D = TreeMap[Rational, UnittedQuantity[Information[Double], Double]]
+    implicit val id = Information.metadata[Double]
 
     val hm: D =
-      new TreeMap[Rational, UnittedQuantity[Information[Double], Double]]() ++
+      new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
-    implicit val base = InformationDouble.bit
-    implicit val cg = axle.quanta.conversionGraph[Information[Double], Double, JungDirectedGraph](InformationDouble)
-    implicit val orderThem = axle.quanta.unitOrder[Information[Double], Double, JungDirectedGraph]
+    implicit val bitDouble = id.bit
+    implicit val cg = axle.quanta.conversionGraph[Information, Double, JungDirectedGraph](id)
+    implicit val orderThem = axle.quanta.unitOrder[Information, Double, JungDirectedGraph]
     //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
 
-    val plot = new Plot[Rational, UnittedQuantity[Information[Double], Double], D](
+    val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
       List(("h", hm)),
       connect = true,
       drawKey = false,
-      xAxis = Some(0d *: InformationDouble.bit),
+      xAxis = Some(0d *: bitDouble),
       xAxisLabel = Some("p(x='HEAD)"),
       yAxis = Some(Rational(0)),
       yAxisLabel = Some("H"),

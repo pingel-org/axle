@@ -49,10 +49,9 @@ package object visualize {
   def play[T: Draw, D, DG[_, _]: DirectedGraph](
     t: T,
     f: D => D,
-    interval: UnittedQuantity[Time[Double], Double])(
+    interval: UnittedQuantity[Time, Double])(
       implicit system: ActorSystem,
-      time: Time[Double],
-      timeCg: DG[UnitOfMeasurement[Time[Double], Double], Double => Double]): ActorRef = {
+      timeCg: DG[UnitOfMeasurement[Time, Double], Double => Double]): ActorRef = {
 
     val draw = implicitly[Draw[T]]
     draw.component(t) match {

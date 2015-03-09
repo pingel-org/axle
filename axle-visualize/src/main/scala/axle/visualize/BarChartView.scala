@@ -27,7 +27,7 @@ case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D, DG[_, _]: Dir
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yLength: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]) {
+    implicit yLength: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]) {
 
   import chart._
 

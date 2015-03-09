@@ -16,7 +16,6 @@ import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.quanta.Angle
-import axle.quanta.AngleDouble
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
 import spire.algebra.Eq
@@ -25,7 +24,7 @@ import spire.algebra.Order
 object BarChart {
 
   implicit def drawBarChart[S: Show, Y: Plottable: Order: Tics: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
-    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle[Double], Double], Double => Double]): Draw[BarChart[S, Y, D]] =
+    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]): Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
       def component(barChart: BarChart[S, Y, D]) = BarChartComponent(barChart)
     }
@@ -50,6 +49,6 @@ case class BarChart[S: Show, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  labelAngle: UnittedQuantity[Angle[Double], Double] = 36d *: AngleDouble.°,
+  labelAngle: UnittedQuantity[Angle, Double] = 36d *: Angle.metadata[Double].degree,
   colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
     implicit val dataView: DataView[S, Y, D])
