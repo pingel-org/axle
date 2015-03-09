@@ -18,7 +18,7 @@ object AxleBuild extends Build {
 
   val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
 
-    organization := "org.pingel",
+    organization := "org.axle-lang",
 
     scalaVersion := "2.11.6",
 
@@ -84,7 +84,7 @@ import axle._
     <developer>
       <id>pingel</id>
       <name>Adam Pingel</name>
-      <url>http://pingel.org</url>
+      <url>https://github.com/adampingel</url>
     </developer>
   </developers>)
 
