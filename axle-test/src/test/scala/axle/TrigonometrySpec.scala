@@ -33,4 +33,15 @@ class TrigonometrySpec extends Specification {
     }
   }
 
+  "tangent(angle)" should {
+
+    "work" in {
+
+      implicit val amd = Angle.metadata[Double]
+
+      axle.tangent(UnittedQuantity(2d, amd.radian)) must be equalTo math.tan(2d)
+
+    }
+  }
+
 }
