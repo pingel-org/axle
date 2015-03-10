@@ -61,6 +61,7 @@ import spire.math.Rational
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
+import axle.quanta.AngleMetadata
 import spire.math.ConvertableFrom
 import spire.implicits._
 
@@ -89,21 +90,18 @@ package object axle {
 
   def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
     a: UnittedQuantity[Angle, N])(
-      implicit angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double = {
+      implicit angleMetadata: AngleMetadata[N], angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double =
     scala.math.sin((a in Angle.metadata[N].radian).magnitude.toDouble)
-  }
 
   def cosine[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
     a: UnittedQuantity[Angle, N])(
-      implicit angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double = {
+      implicit angleMetadata: AngleMetadata[N], angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double =
     scala.math.cos((a in Angle.metadata[N].radian).magnitude.toDouble)
-  }
 
   def tangent[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
     a: UnittedQuantity[Angle, N])(
-      implicit angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double = {
+      implicit angleMetadata: AngleMetadata[N], angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double =
     scala.math.tan((a in Angle.metadata[N].radian).magnitude.toDouble)
-  }
 
   implicit val orderSymbols: Order[Symbol] =
     new Order[Symbol] {
