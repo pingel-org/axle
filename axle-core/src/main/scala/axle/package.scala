@@ -93,6 +93,12 @@ package object axle {
     scala.math.sin((a in Angle.metadata[N].radian).magnitude.toDouble)
   }
 
+  def cosine[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
+    a: UnittedQuantity[Angle, N])(
+      implicit angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double = {
+    scala.math.cos((a in Angle.metadata[N].radian).magnitude.toDouble)
+  }
+  
   implicit val orderSymbols: Order[Symbol] =
     new Order[Symbol] {
       val stringCompare = implicitly[Order[String]]

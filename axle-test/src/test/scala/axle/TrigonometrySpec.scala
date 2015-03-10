@@ -16,10 +16,21 @@ class TrigonometrySpec extends Specification {
     "work" in {
 
       implicit val amd = Angle.metadata[Double]
-      //implicit val angleCG = conversionGraph[Angle, Double, JungDirectedGraph]
 
-      axle.sine(UnittedQuantity(2d, Angle.metadata[Double].radian)) must be equalTo math.sin(2d)
+      axle.sine(UnittedQuantity(2d, amd.radian)) must be equalTo math.sin(2d)
 
     }
   }
+
+  "cosine(angle)" should {
+
+    "work" in {
+
+      implicit val amd = Angle.metadata[Double]
+
+      axle.cosine(UnittedQuantity(2d, amd.radian)) must be equalTo math.cos(2d)
+
+    }
+  }
+
 }
