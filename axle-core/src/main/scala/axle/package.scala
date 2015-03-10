@@ -58,6 +58,11 @@ import spire.implicits.eqOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 import spire.math.Rational
+import axle.quanta.Angle
+import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
+import spire.math.ConvertableFrom
+import spire.implicits._
 
 /**
  *
@@ -81,6 +86,12 @@ package object axle {
    */
   def wallisΠ(iterations: Int = 10000) =
     2 * Π((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
+
+  def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
+    a: UnittedQuantity[Angle, N])(
+      implicit angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double = {
+    scala.math.sin((a in Angle.metadata[N].radian).magnitude.toDouble)
+  }
 
   implicit val orderSymbols: Order[Symbol] =
     new Order[Symbol] {
