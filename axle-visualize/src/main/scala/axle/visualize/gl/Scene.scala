@@ -17,7 +17,6 @@ import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Distance._
-//import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 import javax.media.opengl.GL2
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
@@ -27,8 +26,8 @@ import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
 import spire.implicits._
 import axle.algebra.DirectedGraph
-import axle.quanta.Angle
-import axle.quanta.Distance
+import axle.sine
+import axle.cosine
 
 abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement[Distance, Float])(
   implicit angleCgFloat: DG[UnitOfMeasurement[Angle, Float], Float => Float],
@@ -54,15 +53,16 @@ abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasuremen
         url2texture += url -> TextureIO.newTexture(url, false, extension)
     }
 
-  val radianDouble = Angle.metadata[Double].radian
+  implicit val angleMetadata = Angle.metadata[Double]
 
-  def sphericalToCartesian(spherical: SphericalVector[Double]): Position[Double] = {
+  def sphericalToCartesian(
+    spherical: SphericalVector[Double]): Position[Double] = {
     import spherical._
 
     Position(
-      ρ :* sin((θ in radianDouble).magnitude) * cos((φ in radianDouble).magnitude),
-      ρ :* sin((θ in radianDouble).magnitude) * sin((φ in radianDouble).magnitude),
-      ρ :* cos((θ in radianDouble).magnitude))
+      ρ :* (sine(θ) * cosine(φ)),
+      ρ :* (sine(θ) * sine(φ)),
+      ρ :* cosine(θ))
   }
 
   def positionLight(position: Position[Float], gl: GL2): Unit = {
