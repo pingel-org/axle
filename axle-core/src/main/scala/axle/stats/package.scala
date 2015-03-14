@@ -108,7 +108,7 @@ package object stats {
 
   def entropy[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
     X: Distribution[A, N])(
-      implicit info: InformationMetadata[Double]): UnittedQuantity[Information, Double] = {
+      implicit meta: InformationMetadata[Double, DG]): UnittedQuantity[Information, Double] = {
 
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values map { x =>
@@ -119,11 +119,11 @@ package object stats {
         convertN.toDouble(-px) * log2(px)
       }
     })
-    UnittedQuantity(H, info.bit)
+    UnittedQuantity(H, meta.bit)
   }
 
   def H[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
-    X: Distribution[A, N])(implicit info: InformationMetadata[Double]): UnittedQuantity[Information, Double] =
+    X: Distribution[A, N])(implicit meta: InformationMetadata[Double, DG]): UnittedQuantity[Information, Double] =
     entropy(X)
 
 }

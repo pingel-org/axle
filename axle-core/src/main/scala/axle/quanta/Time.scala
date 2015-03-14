@@ -26,7 +26,8 @@ case class Time() extends Quantum {
 
 }
 
-trait TimeMetadata[N] extends QuantumMetadata[Time, N] {
+abstract class TimeMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Time, N, DG] {
 
   type U = UnitOfMeasurement[Time, N]
 
@@ -65,7 +66,7 @@ trait TimeMetadata[N] extends QuantumMetadata[Time, N] {
 
 object Time {
 
-  def metadata[N] = new TimeMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new TimeMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Time, N](name, symbol, wiki)
@@ -123,7 +124,7 @@ object Time {
       List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
         zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Time, N], UnitOfMeasurement[Time, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Time, N], UnitOfMeasurement[Time, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Time, N], UnitOfMeasurement[Time, N], Bijection[N, N])](
         (ms, s, Scale10s(3)),
         (μs, s, Scale10s(6)),

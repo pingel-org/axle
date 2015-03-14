@@ -11,7 +11,8 @@ case class Speed() extends Quantum {
 
 }
 
-trait SpeedMetadata[N] extends QuantumMetadata[Speed, N] {
+abstract class SpeedMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Speed, N, DG] {
 
   type U = UnitOfMeasurement[Speed, N]
 
@@ -27,7 +28,7 @@ trait SpeedMetadata[N] extends QuantumMetadata[Speed, N] {
 
 object Speed {
 
-  def metadata[N] = new SpeedMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new SpeedMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Speed, N](name, symbol, wiki)
@@ -52,7 +53,7 @@ object Speed {
     def units: List[UnitOfMeasurement[Speed, N]] =
       List(mps, fps, mph, kph, knot, c, speedLimit)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Speed, N], UnitOfMeasurement[Speed, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Speed, N], UnitOfMeasurement[Speed, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Speed, N], UnitOfMeasurement[Speed, N], Bijection[N, N])](
         (knot, kph, ScaleDouble(1.852)),
         (mps, c, ScaleInt(299792458)),

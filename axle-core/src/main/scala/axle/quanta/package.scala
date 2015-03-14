@@ -26,7 +26,7 @@ package object quanta {
 
   type CG[Q, DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
 
-  implicit def modulize[N, Q, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement[Q, N], N => N]): Module[UnittedQuantity[Q, N], N] =
+  implicit def modulize[N, Q, DG[_, _]: DirectedGraph](implicit fieldn: Field[N], eqn: Eq[N], meta: QuantumMetadata[Q, N, DG]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
 
       def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
@@ -47,7 +47,7 @@ package object quanta {
       override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
     }
 
-  implicit def unitOrder[Q, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+  implicit def unitOrder[Q, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](implicit base: UnitOfMeasurement[Q, N], meta: QuantumMetadata[Q, N, DG]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val underlying = implicitly[Order[N]]
@@ -69,7 +69,7 @@ package object quanta {
 
   implicit def unittedTics[Q, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](
     implicit base: UnitOfMeasurement[Q, N],
-    cg: DG[UnitOfMeasurement[Q, N], N => N]): Tics[UnittedQuantity[Q, N]] =
+    meta: QuantumMetadata[Q, N, DG]): Tics[UnittedQuantity[Q, N]] =
     new Tics[UnittedQuantity[Q, N]] {
 
       def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =
@@ -83,7 +83,7 @@ package object quanta {
 
   implicit def unittedLengthSpace[Q, N: Field: Order, DG[_, _]: DirectedGraph](
     implicit base: UnitOfMeasurement[Q, N], space: LengthSpace[N, Double],
-    cg: DG[UnitOfMeasurement[Q, N], N => N],
+    meta: QuantumMetadata[Q, N, DG],
     module: Module[UnittedQuantity[Q, N], N]) =
     new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N]] {
 
@@ -99,30 +99,5 @@ package object quanta {
         space.portion((left in base).magnitude, (v in base).magnitude, (right in base).magnitude)
 
     }
-
-  private def conversions[Q, N, DG[_, _]](
-    vps: Seq[UnitOfMeasurement[Q, N]],
-    ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)])(
-      implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q, N], N => N] =
-    evDG.make[UnitOfMeasurement[Q, N], N => N](vps, ef)
-
-  private def cgn[Q, N, DG[_, _]: DirectedGraph](
-    units: List[UnitOfMeasurement[Q, N]],
-    links: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]): CG[Q, DG, N] =
-    conversions[Q, N, DG](
-      units,
-      (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => {
-        val name2vertex = vs.map(v => (v.payload.name, v)).toMap
-        links.flatMap({
-          case (x, y, bijection) => {
-            val xv = name2vertex(x.name)
-            val yv = name2vertex(y.name)
-            List((xv, yv, bijection.apply _), (yv, xv, bijection.unapply _))
-          }
-        })
-      })
-
-  implicit def conversionGraph[Q, N: Field: Eq, DG[_, _]: DirectedGraph](implicit meta: QuantumMetadata[Q, N]) =
-    cgn(meta.units, meta.links(implicitly[Field[N]]))
 
 }

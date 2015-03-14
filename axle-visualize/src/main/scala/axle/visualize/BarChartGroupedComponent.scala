@@ -25,10 +25,11 @@ import spire.algebra.Order
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 
 case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
   chart: BarChartGrouped[G, S, Y, D])(
-    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double])
+    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double, DG])
   extends JPanel
   with Fed[D] {
 
@@ -38,14 +39,12 @@ case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order:
 
   def initialValue = chart.initialValue
 
-  val degreeDouble = Angle.metadata[Double].degree
-  
   val colorStream = continually(colors.toStream).flatten
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
   val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
   val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: degreeDouble)))
+  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleMeta.degree)))
 
   val keyOpt = if (drawKey) {
     Some(BarChartGroupedKey(chart, normalFont, colorStream))

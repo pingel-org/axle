@@ -11,7 +11,8 @@ case class Area() extends Quantum {
 
 }
 
-trait AreaMetadata[N] extends QuantumMetadata[Area, N] {
+abstract class AreaMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Area, N, DG] {
 
   type U = UnitOfMeasurement[Area, N]
 
@@ -22,7 +23,7 @@ trait AreaMetadata[N] extends QuantumMetadata[Area, N] {
 
 object Area {
 
-  def metadata[N] = new AreaMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new AreaMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Area, N](name, symbol, wiki)
@@ -38,7 +39,7 @@ object Area {
     def units: List[UnitOfMeasurement[Area, N]] =
       List(m2, km2, cm2)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Area, N], UnitOfMeasurement[Area, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Area, N], UnitOfMeasurement[Area, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Area, N], UnitOfMeasurement[Area, N], Bijection[N, N])](
         (m2, km2, Scale10s(6)),
         (cm2, m2, Scale10s(6)))

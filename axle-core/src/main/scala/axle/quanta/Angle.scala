@@ -14,7 +14,8 @@ case class Angle() extends Quantum {
 
 }
 
-trait AngleMetadata[N] extends QuantumMetadata[Angle, N] {
+abstract class AngleMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Angle, N, DG] {
 
   type U = UnitOfMeasurement[Angle, N]
 
@@ -30,7 +31,7 @@ trait AngleMetadata[N] extends QuantumMetadata[Angle, N] {
 
 object Angle {
 
-  def metadata[N] = new AngleMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new AngleMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Angle, N](name, symbol, wiki)
@@ -52,7 +53,7 @@ object Angle {
     def units: List[UnitOfMeasurement[Angle, N]] =
       List(_degree, _radian, _circleDegrees, _circleRadians)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Angle, N], UnitOfMeasurement[Angle, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Angle, N], UnitOfMeasurement[Angle, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Angle, N], UnitOfMeasurement[Angle, N], Bijection[N, N])](
         (_degree, _circleDegrees, ScaleInt(360)),
         (_radian, _circleRadians, ScaleDouble(2 * π)),

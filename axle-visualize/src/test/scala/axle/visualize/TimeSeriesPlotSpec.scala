@@ -48,18 +48,16 @@ class TimeSeriesPlotSpec extends Specification {
   def t2(): Unit = {
 
     import axle.jung.JungDirectedGraph
-    import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 
     type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
 
-    implicit val id = Information.metadata[Double]
+    implicit val id = Information.metadata[Double, JungDirectedGraph]
 
     val hm: D =
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
     implicit val bitDouble = id.bit
-    //implicit val cg = axle.quanta.conversionGraph[Information, Double, JungDirectedGraph]
     implicit val orderThem = axle.quanta.unitOrder[Information, Double, JungDirectedGraph]
     //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
 

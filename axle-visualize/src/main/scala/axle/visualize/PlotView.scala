@@ -18,11 +18,12 @@ import spire.algebra.Eq
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 
 case class PlotView[X, Y, D, DG[_, _]: DirectedGraph](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
   implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],
   yZero: Zero[Y], yts: Tics[Y], yEq: Eq[Y], yLength: LengthSpace[Y, _],
-  angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]) {
+  angleMeta: AngleMetadata[Double, DG]) {
 
   import plot._
 
@@ -47,7 +48,7 @@ case class PlotView[X, Y, D, DG[_, _]: DirectedGraph](plot: Plot[X, Y, D], data:
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0 *: Angle.metadata[Double].degree, black)
+  val xTics = XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0 *: angleMeta.degree, black)
   val yTics = YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
 
   val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorStream, pointDiameter, connect)

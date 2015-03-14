@@ -12,7 +12,8 @@ case class Flow() extends Quantum {
 
 }
 
-trait FlowMetadata[N] extends QuantumMetadata[Flow, N] {
+abstract class FlowMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Flow, N, DG] {
 
   type U = UnitOfMeasurement[Flow, N]
 
@@ -23,7 +24,7 @@ trait FlowMetadata[N] extends QuantumMetadata[Flow, N] {
 
 object Flow {
 
-  def metadata[N] = new FlowMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new FlowMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Flow, N](name, symbol, wiki)
@@ -38,7 +39,7 @@ object Flow {
     def units: List[UnitOfMeasurement[Flow, N]] =
       List(m3s, niagaraFalls)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Flow, N], UnitOfMeasurement[Flow, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Flow, N], UnitOfMeasurement[Flow, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Flow, N], UnitOfMeasurement[Flow, N], Bijection[N, N])](
         (m3s, niagaraFalls, ScaleInt(1834)))
 

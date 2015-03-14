@@ -11,7 +11,8 @@ case class Frequency() extends Quantum {
 
 }
 
-trait FrequencyMetadata[N] extends QuantumMetadata[Frequency, N] {
+abstract class FrequencyMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Frequency, N, DG] {
 
   type U = UnitOfMeasurement[Frequency, N]
 
@@ -28,7 +29,7 @@ trait FrequencyMetadata[N] extends QuantumMetadata[Frequency, N] {
 
 object Frequency {
 
-  def metadata[N] = new FrequencyMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new FrequencyMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Frequency, N](name, symbol, wiki)
@@ -52,7 +53,7 @@ object Frequency {
     def units: List[UnitOfMeasurement[Frequency, N]] =
       List(degree)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Frequency, N], UnitOfMeasurement[Frequency, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Frequency, N], UnitOfMeasurement[Frequency, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Frequency, N], UnitOfMeasurement[Frequency, N], Bijection[N, N])](
         (Hz, KHz, Scale10s(3)),
         (Hz, MHz, Scale10s(9)),

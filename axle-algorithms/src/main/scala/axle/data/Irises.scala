@@ -7,6 +7,7 @@ import scala.sys.process.stringSeqToProcess
 import scala.util.Try
 
 import axle.quanta.Distance
+import axle.quanta.DistanceMetadata
 import axle.quanta.UnittedQuantity
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
@@ -37,7 +38,7 @@ import spire.implicits.moduleOps
  *
  */
 
-object Irises {
+class Irises[DG[_, _]: DirectedGraph](dmd: DistanceMetadata[Double, DG]) {
 
   case class Iris(
     sepalLength: UnittedQuantity[Distance, Double],
@@ -56,10 +57,8 @@ object Irises {
 
   val file = new File(filename)
 
-  val dmd = Distance.metadata[Double]
+  import dmd.centimeter
 
-  import dmd.cm
-  
   if (!file.exists) {
     Seq("wget", "-q", dataUrl, "-O", filename)!!
   }
@@ -68,10 +67,10 @@ object Irises {
     Try {
       val fields = line.split(",")
       Iris(
-        fields(0).toDouble *: cm,
-        fields(1).toDouble *: cm,
-        fields(2).toDouble *: cm,
-        fields(3).toDouble *: cm,
+        fields(0).toDouble *: centimeter,
+        fields(1).toDouble *: centimeter,
+        fields(2).toDouble *: centimeter,
+        fields(3).toDouble *: centimeter,
         fields(4))
     } toOption
   }

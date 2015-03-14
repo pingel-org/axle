@@ -11,7 +11,8 @@ case class Force() extends Quantum {
 
 }
 
-trait ForceMetadata[N] extends QuantumMetadata[Force, N] {
+abstract class ForceMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Force, N, DG] {
 
   type U = UnitOfMeasurement[Force, N]
 
@@ -22,7 +23,7 @@ trait ForceMetadata[N] extends QuantumMetadata[Force, N] {
 
 object Force {
 
-  def metadata[N] = new ForceMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new ForceMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Force, N](name, symbol, wiki)
@@ -38,7 +39,7 @@ object Force {
     def units: List[UnitOfMeasurement[Force, N]] =
       List(pound, newton, dyne)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Force, N], UnitOfMeasurement[Force, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Force, N], UnitOfMeasurement[Force, N], Bijection[N, N])] =
       List.empty
 
   }

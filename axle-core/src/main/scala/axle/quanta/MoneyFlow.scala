@@ -11,7 +11,8 @@ case class MoneyFlow() extends Quantum {
 
 }
 
-trait MoneyFlowMetadata[N] extends QuantumMetadata[MoneyFlow, N] {
+abstract class MoneyFlowMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[MoneyFlow, N, DG] {
 
   type U = UnitOfMeasurement[MoneyFlow, N]
 
@@ -21,7 +22,7 @@ trait MoneyFlowMetadata[N] extends QuantumMetadata[MoneyFlow, N] {
 
 object MoneyFlow {
 
-  def metadata[N] = new MoneyFlowMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new MoneyFlowMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[MoneyFlow, N](name, symbol, wiki)
@@ -33,7 +34,7 @@ object MoneyFlow {
     def units: List[UnitOfMeasurement[MoneyFlow, N]] =
       List(USDperHour)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[MoneyFlow, N], UnitOfMeasurement[MoneyFlow, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[MoneyFlow, N], UnitOfMeasurement[MoneyFlow, N], Bijection[N, N])] =
       List.empty
 
   }

@@ -14,6 +14,7 @@ import javax.imageio.ImageIO
 import javax.swing.JPanel
 import javax.swing.CellRendererPane
 import axle.quanta.Time
+import axle.quanta.TimeMetadata
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 
@@ -51,7 +52,7 @@ package object visualize {
     f: D => D,
     interval: UnittedQuantity[Time, Double])(
       implicit system: ActorSystem,
-      timeCg: DG[UnitOfMeasurement[Time, Double], Double => Double]): ActorRef = {
+      timemeta: TimeMetadata[Double, DG]): ActorRef = {
 
     val draw = implicitly[Draw[T]]
     draw.component(t) match {

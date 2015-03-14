@@ -1,6 +1,7 @@
 package axle.quanta
 
 import axle.algebra.Bijection
+import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.math.Rational
@@ -11,17 +12,18 @@ case class Distance() extends Quantum {
 
 }
 
-trait DistanceMetadata[N] extends QuantumMetadata[Distance, N] {
+abstract class DistanceMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Distance, N, DG] {
 
   def foot: UnitOfMeasurement[Distance, N]
-  
+
   def centimeter: UnitOfMeasurement[Distance, N]
 
 }
 
 object Distance {
 
-  def metadata[N] = new DistanceMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new DistanceMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Distance, N](name, symbol, wiki)
@@ -50,12 +52,12 @@ object Distance {
     def ft = _foot
     def centimeter = _centimeter
     def cm = _centimeter
-    
+
     def units: List[UnitOfMeasurement[Distance, N]] =
       List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
         astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Distance, N], UnitOfMeasurement[Distance, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Distance, N], UnitOfMeasurement[Distance, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Distance, N], UnitOfMeasurement[Distance, N], Bijection[N, N])](
         (foot, mile, ScaleInt(5280)),
         (foot, meter, ScaleDouble(3.2808398950131235)),
