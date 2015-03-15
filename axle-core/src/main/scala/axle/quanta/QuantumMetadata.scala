@@ -5,13 +5,12 @@ import axle.algebra.DirectedGraph
 import axle.algebra.Vertex
 import axle.syntax.directedgraph.directedGraphOps
 import spire.algebra.Eq
-import spire.algebra.Field
+import spire.algebra.MultiplicativeMonoid
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 
-// TODO: determine whether Field and Eq are actually needed in constructor
-abstract class QuantumMetadata[Q, N: Field: Eq, DG[_, _]: DirectedGraph]() {
+abstract class QuantumMetadata[Q, N, DG[_, _]: DirectedGraph]() {
 
   def units: List[UnitOfMeasurement[Q, N]]
 
@@ -41,18 +40,15 @@ abstract class QuantumMetadata[Q, N: Field: Eq, DG[_, _]: DirectedGraph]() {
 
   private[this] val conversionGraph = cgn(units, links)
 
-  import axle.syntax.directedgraph.directedGraphOps
-
   private[this] def vertex[DG[_, _]: DirectedGraph](
     cg: DG[UnitOfMeasurement[Q, N], N => N],
-    query: UnitOfMeasurement[Q, N]): Vertex[UnitOfMeasurement[Q, N]] =
+    query: UnitOfMeasurement[Q, N])(implicit ev: Eq[N]): Vertex[UnitOfMeasurement[Q, N]] =
     directedGraphOps(cg).findVertex(_.payload.name === query.name).get
 
-  // implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]
-  def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q, N]): UnittedQuantity[Q, N] =
+  def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q, N])(implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
     directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
       .map(
-        _.map(_.payload).foldLeft(implicitly[Field[N]].one)((n, convert) => convert(n)))
+        _.map(_.payload).foldLeft(ev.one)((n, convert) => convert(n)))
       .map(n => UnittedQuantity((orig.magnitude * n), newUnit))
       .getOrElse(throw new Exception("no conversion path from " + orig.unit + " to " + newUnit))
 
