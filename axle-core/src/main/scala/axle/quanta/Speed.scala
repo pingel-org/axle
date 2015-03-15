@@ -11,10 +11,7 @@ case class Speed() extends Quantum {
 
 }
 
-trait SpeedUnits {
-
-  def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Speed](name, symbol, wiki)
+trait SpeedUnits extends QuantumUnits[Speed] {
 
   lazy val mps = unit("mps", "mps") // derive
   lazy val fps = unit("fps", "fps") // derive
@@ -25,6 +22,9 @@ trait SpeedUnits {
   lazy val c = unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light"))
   lazy val speedLimit = unit("Speed limit", "speed limit")
 
+  def units: List[UnitOfMeasurement[Speed]] =
+    List(mps, fps, mph, kph, knot, c, speedLimit)
+
 }
 
 trait SpeedMetadata[N] extends QuantumMetadata[Speed, N] with SpeedUnits
@@ -33,9 +33,6 @@ object Speed {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Speed, N, DG] with SpeedMetadata[N] {
-
-      def units: List[UnitOfMeasurement[Speed]] =
-        List(mps, fps, mph, kph, knot, c, speedLimit)
 
       def links: Seq[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])] =
         List[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])](

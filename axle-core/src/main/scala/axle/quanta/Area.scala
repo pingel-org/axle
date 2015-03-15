@@ -11,14 +11,14 @@ case class Area() extends Quantum {
 
 }
 
-trait AreaUnits {
-
-  def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Area](name, symbol, wiki)
+trait AreaUnits extends QuantumUnits[Area] {
 
   lazy val m2 = unit("m2", "m2") // derive
   lazy val km2 = unit("km2", "km2") // derive
   lazy val cm2 = unit("cm2", "cm2") // derive
+
+  def units: List[UnitOfMeasurement[Area]] =
+    List(m2, km2, cm2)
 
 }
 
@@ -28,9 +28,6 @@ object Area {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Area, N, DG] with AreaMetadata[N] {
-
-      def units: List[UnitOfMeasurement[Area]] =
-        List(m2, km2, cm2)
 
       def links: Seq[(UnitOfMeasurement[Area], UnitOfMeasurement[Area], Bijection[N, N])] =
         List[(UnitOfMeasurement[Area], UnitOfMeasurement[Area], Bijection[N, N])](

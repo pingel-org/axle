@@ -12,14 +12,14 @@ case class Flow() extends Quantum {
 
 }
 
-trait FlowUnits {
-
-  def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Flow](name, symbol, wiki)
+trait FlowUnits extends QuantumUnits[Flow] {
 
   lazy val m3s = unit("m3s", "m3s") // derive
 
   lazy val niagaraFalls = unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
+
+  def units: List[UnitOfMeasurement[Flow]] =
+    List(m3s, niagaraFalls)
 
 }
 
@@ -29,9 +29,6 @@ object Flow {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Flow, N, DG] with FlowMetadata[N] {
-
-      def units: List[UnitOfMeasurement[Flow]] =
-        List(m3s, niagaraFalls)
 
       def links: Seq[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])] =
         List[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])](

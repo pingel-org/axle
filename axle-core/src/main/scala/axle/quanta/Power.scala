@@ -11,10 +11,7 @@ case class Power() extends Quantum {
 
 }
 
-trait PowerUnits {
-
-  def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Power](name, symbol, wiki)
+trait PowerUnits extends QuantumUnits[Power] {
 
   lazy val watt = unit("watt", "W")
   lazy val kilowatt = unit("kilowatt", "KW")
@@ -30,6 +27,10 @@ trait PowerUnits {
   lazy val kW = kilowatt
   lazy val MW = megawatt
   lazy val GW = gigawatt
+
+  def units: List[UnitOfMeasurement[Power]] =
+    List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
+
 }
 
 trait PowerMetadata[N] extends QuantumMetadata[Power, N] with PowerUnits
@@ -38,9 +39,6 @@ object Power {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Power, N, DG] with PowerMetadata[N] {
-
-      def units: List[UnitOfMeasurement[Power]] =
-        List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
 
       def links: Seq[(UnitOfMeasurement[Power], UnitOfMeasurement[Power], Bijection[N, N])] =
         List[(UnitOfMeasurement[Power], UnitOfMeasurement[Power], Bijection[N, N])](

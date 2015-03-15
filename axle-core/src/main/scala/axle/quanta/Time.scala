@@ -26,10 +26,7 @@ case class Time() extends Quantum {
 
 }
 
-trait TimeUnits {
-
-  def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Time](name, symbol, wiki)
+trait TimeUnits extends QuantumUnits[Time] {
 
   lazy val second = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
   lazy val s = second
@@ -62,6 +59,10 @@ trait TimeUnits {
   lazy val gigayear = unit("gigayear", "gy")
   lazy val gy = gigayear
 
+  def units: List[UnitOfMeasurement[Time]] =
+    List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
+      zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
+
 }
 
 trait TimeMetadata[N] extends QuantumMetadata[Time, N] with TimeUnits
@@ -70,10 +71,6 @@ object Time {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Time, N, DG] with TimeMetadata[N] {
-
-      def units: List[UnitOfMeasurement[Time]] =
-        List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
-          zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
 
       def links: Seq[(UnitOfMeasurement[Time], UnitOfMeasurement[Time], Bijection[N, N])] =
         List[(UnitOfMeasurement[Time], UnitOfMeasurement[Time], Bijection[N, N])](

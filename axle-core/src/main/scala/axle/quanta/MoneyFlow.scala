@@ -11,12 +11,12 @@ case class MoneyFlow() extends Quantum {
 
 }
 
-trait MoneyFlowUnits {
-
-  def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[MoneyFlow](name, symbol, wiki)
+trait MoneyFlowUnits extends QuantumUnits[MoneyFlow] {
 
   lazy val USDperHour = unit("$/hr", "$/hr") // derive
+
+  def units: List[UnitOfMeasurement[MoneyFlow]] =
+    List(USDperHour)
 
 }
 
@@ -26,9 +26,6 @@ object MoneyFlow {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[MoneyFlow, N, DG] with MoneyFlowMetadata[N] {
-
-      def units: List[UnitOfMeasurement[MoneyFlow]] =
-        List(USDperHour)
 
       def links: Seq[(UnitOfMeasurement[MoneyFlow], UnitOfMeasurement[MoneyFlow], Bijection[N, N])] =
         List.empty

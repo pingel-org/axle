@@ -11,16 +11,16 @@ case class Acceleration() extends Quantum {
 
 }
 
-trait AccelerationUnits {
-
-  def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Acceleration](name, symbol, wiki)
+trait AccelerationUnits extends QuantumUnits[Acceleration] {
 
   lazy val mpsps = unit("mps", "mps") // derive
 
   lazy val fpsps = unit("fps", "fps") // derive
 
   lazy val g = unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
+
+  def units: List[UnitOfMeasurement[Acceleration]] =
+    List(mpsps, fpsps, g)
 
 }
 
@@ -30,9 +30,6 @@ object Acceleration {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Acceleration, N, DG] with AccelerationMetadata[N] {
-
-      def units: List[UnitOfMeasurement[Acceleration]] =
-        List(mpsps, fpsps, g)
 
       def links: Seq[(UnitOfMeasurement[Acceleration], UnitOfMeasurement[Acceleration], Bijection[N, N])] =
         List[(UnitOfMeasurement[Acceleration], UnitOfMeasurement[Acceleration], Bijection[N, N])](

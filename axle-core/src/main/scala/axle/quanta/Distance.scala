@@ -12,10 +12,7 @@ case class Distance() extends Quantum {
 
 }
 
-trait DistanceUnits {
-
-  def unit(name: String, symbol: String, wiki: Option[String] = None) =
-    UnitOfMeasurement[Distance](name, symbol, wiki)
+trait DistanceUnits extends QuantumUnits[Distance] {
 
   lazy val foot = unit("foot", "ft")
   lazy val ft = foot
@@ -39,6 +36,10 @@ trait DistanceUnits {
   lazy val ly = lightyear
   lazy val parsec = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
 
+  def units: List[UnitOfMeasurement[Distance]] =
+    List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
+      astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
+
 }
 
 trait DistanceMetadata[N] extends QuantumMetadata[Distance, N] with DistanceUnits
@@ -47,10 +48,6 @@ object Distance {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Distance, N, DG] with DistanceMetadata[N] {
-
-      def units: List[UnitOfMeasurement[Distance]] =
-        List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
-          astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
 
       def links: Seq[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])] =
         List[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])](
