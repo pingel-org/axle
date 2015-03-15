@@ -36,20 +36,10 @@ case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
   def map[B, DG[_, _]: DirectedGraph](f: N => B)(implicit meta: QuantumMetadata[Q, B, DG]): UnittedQuantity[Q, B] =
     UnittedQuantity(f(magnitude), ???)
 
-  private[this] def vertex[DG[_, _]: DirectedGraph](
-    cg: DG[UnitOfMeasurement[Q, N], N => N],
-    query: UnitOfMeasurement[Q, N])(
-      implicit ev: Eq[N]): Vertex[UnitOfMeasurement[Q, N]] =
-    axle.syntax.directedgraph.directedGraphOps(cg).findVertex(_.payload.name === query.name).get
-
   def in[DG[_, _]: DirectedGraph](
     newUnit: UnitOfMeasurement[Q, N])(
       implicit meta: QuantumMetadata[Q, N, DG], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
-    directedGraphOps(meta.conversionGraph).shortestPath(vertex(meta.conversionGraph, newUnit), vertex(meta.conversionGraph, unit))
-      .map(
-        _.map(_.payload).foldLeft(ev.one)((n, convert) => convert(n)))
-      .map(n => UnittedQuantity((magnitude * n), newUnit))
-      .getOrElse(throw new Exception("no conversion path from " + unit + " to " + newUnit))
+        meta.convert(this, newUnit)
 
   // TODO
   def over[QR, Q2, N](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =
