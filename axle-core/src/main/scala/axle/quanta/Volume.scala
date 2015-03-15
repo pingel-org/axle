@@ -12,7 +12,8 @@ case class Volume() extends Quantum {
 
 }
 
-trait VolumeMetadata[N] extends QuantumMetadata[Volume, N] {
+abstract class VolumeMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Volume, N, DG] {
 
   type U = UnitOfMeasurement[Volume, N]
 
@@ -37,7 +38,7 @@ trait VolumeMetadata[N] extends QuantumMetadata[Volume, N] {
 
 object Volume {
 
-  def metadata[N] = new VolumeMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new VolumeMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Volume, N](name, symbol, wiki)
@@ -79,7 +80,7 @@ object Volume {
       List(m3, km3, cm3, greatLakes, liter, milliliter, wineBottle, magnum, jeroboam, rehoboam,
         methuselah, salmanazar, balthazar, nebuchadnezzar)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Volume, N], UnitOfMeasurement[Volume, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Volume, N], UnitOfMeasurement[Volume, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Volume, N], UnitOfMeasurement[Volume, N], Bijection[N, N])](
         (km3, greatLakes, ScaleInt(22671)),
         (milliliter, liter, Scale10s(3)),

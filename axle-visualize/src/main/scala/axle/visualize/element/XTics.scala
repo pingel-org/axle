@@ -7,6 +7,7 @@ import java.awt.Graphics2D
 
 import spire.implicits.DoubleAlgebra
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import axle.visualize.Point2D
@@ -24,7 +25,7 @@ case class XTics[X, Y, DG[_, _]: DirectedGraph](
   fDrawLines: Boolean = true,
   angle: UnittedQuantity[Angle, Double],
   color: Color = Color.black)(
-    implicit angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]) extends Paintable {
+    implicit angleMeta: AngleMetadata[Double, DG]) extends Paintable {
 
   def paint(g2d: Graphics2D): Unit = {
     g2d.setColor(color)
@@ -35,7 +36,7 @@ case class XTics[X, Y, DG[_, _]: DirectedGraph](
 
   import scaledArea._
 
-  val zeroDegrees = 0d *: Angle.metadata[Double].degree
+  val zeroDegrees = 0d *: angleMeta.degree
 
   def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: UnittedQuantity[Angle, Double] = zeroDegrees): Unit = {
 

@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent
 import com.jogamp.opengl.util.FPSAnimator
 
 import axle.quanta.Distance
+import axle.quanta.DistanceMetadata
 import axle.quanta.UnittedQuantity
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
@@ -17,6 +18,7 @@ import spire.implicits.moduleOps
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 
 case class SceneFrame[DG[_, _]: DirectedGraph](
   scene: Scene[DG],
@@ -25,10 +27,10 @@ case class SceneFrame[DG[_, _]: DirectedGraph](
   zNear: UnittedQuantity[Distance, Float],
   zFar: UnittedQuantity[Distance, Float],
   fps: Int)(
-    implicit angleCg: DG[UnitOfMeasurement[Angle, Float], Float => Float],
-    distanceCg: DG[UnitOfMeasurement[Distance, Float], Float => Float]) {
+    implicit angleMeta: AngleMetadata[Float, DG],
+    distanceMeta: DistanceMetadata[Float, DG]) {
 
-  val fortyFiveDegreeFloat = 45f *: Angle.metadata[Float].degree
+  val fortyFiveDegreeFloat = 45f *: angleMeta.degree
 
   def run(): Unit = {
 

@@ -11,7 +11,8 @@ case class Energy() extends Quantum {
 
 }
 
-trait EnergyMetadata[N] extends QuantumMetadata[Energy, N] {
+abstract class EnergyMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Energy, N, DG] {
 
   type U = UnitOfMeasurement[Energy, N]
 
@@ -31,7 +32,7 @@ trait EnergyMetadata[N] extends QuantumMetadata[Energy, N] {
 
 object Energy {
 
-  def metadata[N] = new EnergyMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new EnergyMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Energy, N](name, symbol, wiki)
@@ -63,7 +64,7 @@ object Energy {
     def units: List[UnitOfMeasurement[Energy, N]] =
       List(kwh, joule, kilojoule, megajoule, tonTNT, kiloton, megaton, gigaton)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Energy, N], UnitOfMeasurement[Energy, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Energy, N], UnitOfMeasurement[Energy, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Energy, N], UnitOfMeasurement[Energy, N], Bijection[N, N])](
         (megajoule, t, ScaleDouble(4.184)),
         (joule, kilojoule, Scale10s(3)),

@@ -19,7 +19,7 @@ object UnittedQuantity {
     }
 
   implicit def orderUQ[Q <: Quantum, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](
-    implicit cg: DG[UnitOfMeasurement[Q, N], N => N]) =
+    implicit meta: QuantumMetadata[Q, N, DG]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val orderN = implicitly[Order[N]]
@@ -33,7 +33,7 @@ object UnittedQuantity {
 case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
 
   // TODO: create a Functor witness for UnittedQuantity
-  def map[B](f: N => B)(implicit meta: QuantumMetadata[Q, B]): UnittedQuantity[Q, B] =
+  def map[B, DG[_, _]: DirectedGraph](f: N => B)(implicit meta: QuantumMetadata[Q, B, DG]): UnittedQuantity[Q, B] =
     UnittedQuantity(f(magnitude), ???)
 
   private[this] def vertex[DG[_, _]: DirectedGraph](
@@ -44,8 +44,8 @@ case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
 
   def in[DG[_, _]: DirectedGraph](
     newUnit: UnitOfMeasurement[Q, N])(
-      implicit cg: DG[UnitOfMeasurement[Q, N], N => N], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
-    directedGraphOps(cg).shortestPath(vertex(cg, newUnit), vertex(cg, unit))
+      implicit meta: QuantumMetadata[Q, N, DG], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
+    directedGraphOps(meta.conversionGraph).shortestPath(vertex(meta.conversionGraph, newUnit), vertex(meta.conversionGraph, unit))
       .map(
         _.map(_.payload).foldLeft(ev.one)((n, convert) => convert(n)))
       .map(n => UnittedQuantity((magnitude * n), newUnit))

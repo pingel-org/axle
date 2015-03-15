@@ -90,17 +90,17 @@ package object axle {
 
   def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N], angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double =
+      implicit angleMetadata: AngleMetadata[N, DG]): Double =
     scala.math.sin((a in angleMetadata.radian).magnitude.toDouble)
 
   def cosine[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N], angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double =
+      implicit angleMetadata: AngleMetadata[N, DG]): Double =
     scala.math.cos((a in angleMetadata.radian).magnitude.toDouble)
 
   def tangent[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N], angleCg: DG[UnitOfMeasurement[Angle, N], N => N]): Double =
+      implicit angleMetadata: AngleMetadata[N, DG]): Double =
     scala.math.tan((a in angleMetadata.radian).magnitude.toDouble)
 
   implicit val orderSymbols: Order[Symbol] =

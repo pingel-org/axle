@@ -5,6 +5,7 @@ import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
 import axle.quanta.Time
+import axle.quanta.TimeMetadata
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import axle.algebra.DirectedGraph
@@ -19,7 +20,7 @@ trait Fed[T] extends Component {
     fn: T => T,
     interval: UnittedQuantity[Time, Double],
     system: ActorSystem)(
-      implicit timeCg: DG[UnitOfMeasurement[Time, Double], Double => Double]): ActorRef = {
+      implicit timeMeta: TimeMetadata[Double, DG]): ActorRef = {
     val feederActorRef = system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
     dataFeedActorOpt = Some(feederActorRef)
     feederActorRef

@@ -24,6 +24,7 @@ import spire.implicits.moduleOps
 import spire.compat.ordering
 import axle.algebra.DirectedGraph
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 import axle.quanta.UnitOfMeasurement
 
 case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
@@ -31,7 +32,7 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yls: LengthSpace[Y, _], angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]) {
+    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double, DG]) {
 
   import chart._
 
@@ -61,14 +62,12 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
   val vLine = VerticalLine(scaledArea, yAxis, black)
   val hLine = HorizontalLine(scaledArea, xAxis, black)
 
-  val degreeDouble = Angle.metadata[Double].degree
-
   val gTics = XTics(
     scaledArea,
     groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
     normalFont,
     false,
-    36d *: degreeDouble,
+    36d *: angleMeta.degree,
     black)
 
   val yTics = YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)

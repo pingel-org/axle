@@ -11,7 +11,8 @@ case class MoneyPerForce() extends Quantum {
 
 }
 
-trait MoneyPerForceMetadata[N] extends QuantumMetadata[MoneyPerForce, N] {
+abstract class MoneyPerForceMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[MoneyPerForce, N, DG] {
 
   type U = UnitOfMeasurement[MoneyPerForce, N]
 
@@ -21,7 +22,7 @@ trait MoneyPerForceMetadata[N] extends QuantumMetadata[MoneyPerForce, N] {
 
 object MoneyPerForce {
 
-  def metadata[N] = new MoneyPerForceMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new MoneyPerForceMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[MoneyPerForce, N](name, symbol, wiki)
@@ -33,7 +34,7 @@ object MoneyPerForce {
     def units: List[UnitOfMeasurement[MoneyPerForce, N]] =
       List(USDperPound)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[MoneyPerForce, N], UnitOfMeasurement[MoneyPerForce, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[MoneyPerForce, N], UnitOfMeasurement[MoneyPerForce, N], Bijection[N, N])] =
       List.empty
 
   }

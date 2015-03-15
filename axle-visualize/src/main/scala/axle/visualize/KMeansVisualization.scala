@@ -15,6 +15,7 @@ import java.awt.Graphics2D
 
 import axle.algebra.Plottable
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
@@ -43,7 +44,7 @@ case class KMeansVisualization[D, F[_], M, DG[_, _]: DirectedGraph](
   pointDiameter: Int = 10,
   fontName: String = "Courier New",
   fontSize: Int = 12)(
-    implicit la: LinearAlgebra[M, Double], angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]) extends JPanel {
+    implicit la: LinearAlgebra[M, Double], angleMeta: AngleMetadata[Double, DG]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 
@@ -65,7 +66,7 @@ case class KMeansVisualization[D, F[_], M, DG[_, _]: DirectedGraph](
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
 
   implicit val doubleTics = implicitly[Tics[Double]]
-  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0 *: Angle.metadata[Double].degree, black)
+  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0d *: angleMeta.degree, black)
   val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), normalFont, black)
 
   val boundingRectangle = Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black))

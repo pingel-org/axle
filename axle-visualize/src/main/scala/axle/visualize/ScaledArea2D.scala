@@ -9,6 +9,7 @@ import scala.math.min
 
 import axle.algebra.LengthSpace
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import spire.algebra.Eq
@@ -88,18 +89,16 @@ case class ScaledArea2D[X, Y](
 
   import axle.algebra.DirectedGraph
 
-  val radianDouble = Angle.metadata[Double].radian
-
   def drawStringAtAngle[DG[_, _]: DirectedGraph](
     g2d: Graphics2D,
     fontMetrics: FontMetrics,
     s: String,
     p: Point2D[X, Y],
     angle: UnittedQuantity[Angle, Double])(
-      implicit angleCg: DG[UnitOfMeasurement[Angle, Double], Double => Double]): Unit = {
+      implicit angleMeta: AngleMetadata[Double, DG]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
-      val a = (angle in radianDouble).magnitude
+      val a = (angle in angleMeta.radian).magnitude
       g2d.translate(fp.x, fp.y + fontMetrics.getHeight)
       g2d.rotate(a)
       g2d.drawString(s, 0, 0)

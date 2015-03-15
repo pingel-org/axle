@@ -1,7 +1,9 @@
 package axle.quanta
 
 import axle.algebra.Bijection
+import axle.algebra.DirectedGraph
 import spire.algebra.Field
+import spire.algebra.Eq
 
 case class Information() extends Quantum {
 
@@ -9,7 +11,8 @@ case class Information() extends Quantum {
 
 }
 
-trait InformationMetadata[N] extends QuantumMetadata[Information, N] {
+abstract class InformationMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Information, N, DG] {
 
   type U = UnitOfMeasurement[Information, N]
 
@@ -26,7 +29,7 @@ trait InformationMetadata[N] extends QuantumMetadata[Information, N] {
 
 object Information {
 
-  def metadata[N] = new InformationMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new InformationMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Information, N](name, symbol, wiki)
@@ -54,7 +57,7 @@ object Information {
     def units: List[UnitOfMeasurement[Information, N]] =
       List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])](
         (bit, byte, Scale2s(3)),
         (byte, kilobyte, Scale2s(10)),

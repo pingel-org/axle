@@ -3,7 +3,9 @@ package axle.visualize.gl
 import scala.Vector
 
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 import axle.quanta.Distance
+import axle.quanta.DistanceMetadata
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
 import spire.implicits.DoubleAlgebra
@@ -40,8 +42,8 @@ case class AxleGLCanvas[DG[_, _]: DirectedGraph](
   zNear: UnittedQuantity[Distance, Float],
   zFar: UnittedQuantity[Distance, Float],
   distanceUnit: UnitOfMeasurement[Distance, Float])(
-    implicit angleCg: DG[UnitOfMeasurement[Angle, Float], Float => Float],
-    distanceCg: DG[UnitOfMeasurement[Distance, Float], Float => Float])
+    implicit angleMeta: AngleMetadata[Float, DG],
+    distanceMeta: DistanceMetadata[Float, DG])
   extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)
@@ -78,8 +80,6 @@ case class AxleGLCanvas[DG[_, _]: DirectedGraph](
     gl.glEnable(GL_COLOR_MATERIAL)
   }
 
-  val degreeFloat = Angle.metadata[Float].degree
-  
   override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = {
     val gl = drawable.getGL.getGL2
 
@@ -90,9 +90,9 @@ case class AxleGLCanvas[DG[_, _]: DirectedGraph](
     gl.glViewport(0, 0, width, height)
     gl.glMatrixMode(GL_PROJECTION)
     gl.glLoadIdentity()
-    fovy.in(degreeFloat)
+    fovy.in(angleMeta.degree)
     glu.gluPerspective(
-      (fovy in degreeFloat).magnitude,
+      (fovy in angleMeta.degree).magnitude,
       aspect,
       (zNear in scene.distanceUnit).magnitude,
       (zFar in scene.distanceUnit).magnitude)

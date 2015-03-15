@@ -12,8 +12,10 @@ import com.jogamp.opengl.util.texture.TextureIO
 import axle.algebra.Position
 import axle.algebra.SphericalVector
 import axle.quanta.Angle
+import axle.quanta.AngleMetadata
 import axle.quanta.modulize
 import axle.quanta.Distance
+import axle.quanta.DistanceMetadata
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Distance._
@@ -30,10 +32,10 @@ import axle.sine
 import axle.cosine
 
 abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement[Distance, Float])(
-  implicit angleCgFloat: DG[UnitOfMeasurement[Angle, Float], Float => Float],
-  angleCgDouble: DG[UnitOfMeasurement[Angle, Double], Double => Double],
-  distanceCg: DG[UnitOfMeasurement[Distance, Float], Float => Float],
-  distanceCgDouble: DG[UnitOfMeasurement[Distance, Double], Double => Double]) {
+  implicit angleMetaFloat: AngleMetadata[Float, DG],
+  angleMetaDouble: AngleMetadata[Double, DG],
+  distanceMetaFloat: DistanceMetadata[Float, DG],
+  distanceMetaDouble: DistanceMetadata[Double, DG]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
@@ -52,8 +54,6 @@ abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasuremen
       case (url, extension) =>
         url2texture += url -> TextureIO.newTexture(url, false, extension)
     }
-
-  implicit val angleMetadata = Angle.metadata[Double]
 
   def sphericalToCartesian(
     spherical: SphericalVector[Double]): Position[Double] = {
@@ -83,10 +83,8 @@ abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasuremen
       (y in distanceUnit).magnitude,
       (z in distanceUnit).magnitude)
 
-  val degreeFloat = Angle.metadata[Float].degree
-
   def rotate(gl: GL2, a: UnittedQuantity[Angle, Float], x: Float, y: Float, z: Float): Unit =
-    gl.glRotatef((a in degreeFloat).magnitude, x, y, z)
+    gl.glRotatef((a in angleMetaFloat.degree).magnitude, x, y, z)
 
   def textureUrls: Seq[(URL, String)]
 

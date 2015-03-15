@@ -12,7 +12,8 @@ case class Mass() extends Quantum {
 
 }
 
-trait MassMetadata[N] extends QuantumMetadata[Mass, N] {
+abstract class MassMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
+  extends QuantumMetadata[Mass, N, DG] {
 
   type U = UnitOfMeasurement[Mass, N]
 
@@ -62,7 +63,7 @@ trait MassMetadata[N] extends QuantumMetadata[Mass, N] {
 
 object Mass {
 
-  def metadata[N] = new MassMetadata[N] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new MassMetadata[N, DG] {
 
     def unit(name: String, symbol: String, wiki: Option[String] = None) =
       UnitOfMeasurement[Mass, N](name, symbol, wiki)
@@ -151,7 +152,7 @@ object Mass {
         petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
         uranus, venus, mars, mercury, pluto, moon)
 
-    def links(implicit fn: Field[N]): Seq[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])] =
+    def links: Seq[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])] =
       List[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])](
         (tonne, megagram, BijectiveIdentity[N]),
         (milligram, gram, Scale10s(3)),
