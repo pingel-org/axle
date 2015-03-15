@@ -23,10 +23,10 @@ import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 import axle.quanta.AngleMetadata
 
-case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D, DG[_, _]: DirectedGraph](
+case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
   plot: Plot[X, Y, D])(
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleMeta: AngleMetadata[Double, DG])
+    angleMeta: AngleMetadata[Double])
   extends JPanel
   with Fed[List[(String, D)]] {
 

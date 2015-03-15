@@ -27,12 +27,12 @@ import axle.quanta.Angle
 import axle.quanta.AngleMetadata
 import axle.quanta.UnitOfMeasurement
 
-case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
+case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](
   chart: BarChartGrouped[G, S, Y, D],
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double, DG]) {
+    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double]) {
 
   import chart._
 

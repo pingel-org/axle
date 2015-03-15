@@ -20,15 +20,15 @@ import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 import axle.quanta.AngleMetadata
 
-case class SceneFrame[DG[_, _]: DirectedGraph](
-  scene: Scene[DG],
+case class SceneFrame(
+  scene: Scene,
   width: Int,
   height: Int,
   zNear: UnittedQuantity[Distance, Float],
   zFar: UnittedQuantity[Distance, Float],
   fps: Int)(
-    implicit angleMeta: AngleMetadata[Float, DG],
-    distanceMeta: DistanceMetadata[Float, DG]) {
+    implicit angleMeta: AngleMetadata[Float],
+    distanceMeta: DistanceMetadata[Float]) {
 
   val fortyFiveDegreeFloat = 45f *: angleMeta.degree
 

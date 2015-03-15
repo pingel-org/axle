@@ -10,7 +10,7 @@ import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 
-abstract class QuantumMetadata[Q, N]() {
+trait QuantumMetadata[Q, N] {
 
   def units: List[UnitOfMeasurement[Q, N]]
 

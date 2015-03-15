@@ -38,7 +38,7 @@ import spire.implicits.moduleOps
  *
  */
 
-class Irises[DG[_, _]: DirectedGraph](dmd: DistanceMetadata[Double, DG]) {
+class Irises[DG[_, _]: DirectedGraph](dmd: DistanceMetadata[Double]) {
 
   case class Iris(
     sepalLength: UnittedQuantity[Distance, Double],

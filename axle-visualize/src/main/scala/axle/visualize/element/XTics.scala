@@ -18,14 +18,14 @@ import spire.implicits.moduleOps
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
 
-case class XTics[X, Y, DG[_, _]: DirectedGraph](
+case class XTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],
   tics: Seq[(X, String)],
   font: Font,
   fDrawLines: Boolean = true,
   angle: UnittedQuantity[Angle, Double],
   color: Color = Color.black)(
-    implicit angleMeta: AngleMetadata[Double, DG]) extends Paintable {
+    implicit angleMeta: AngleMetadata[Double]) extends Paintable {
 
   def paint(g2d: Graphics2D): Unit = {
     g2d.setColor(color)

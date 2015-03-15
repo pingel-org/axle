@@ -31,11 +31,11 @@ import axle.algebra.DirectedGraph
 import axle.sine
 import axle.cosine
 
-abstract class Scene[DG[_, _]: DirectedGraph](val distanceUnit: UnitOfMeasurement[Distance, Float])(
-  implicit angleMetaFloat: AngleMetadata[Float, DG],
-  angleMetaDouble: AngleMetadata[Double, DG],
-  distanceMetaFloat: DistanceMetadata[Float, DG],
-  distanceMetaDouble: DistanceMetadata[Double, DG]) {
+abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance, Float])(
+  implicit angleMetaFloat: AngleMetadata[Float],
+  angleMetaDouble: AngleMetadata[Double],
+  distanceMetaFloat: DistanceMetadata[Float],
+  distanceMetaDouble: DistanceMetadata[Double]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()

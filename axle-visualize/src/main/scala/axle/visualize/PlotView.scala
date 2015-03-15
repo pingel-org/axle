@@ -20,10 +20,10 @@ import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 import axle.quanta.AngleMetadata
 
-case class PlotView[X, Y, D, DG[_, _]: DirectedGraph](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
+case class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
   implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],
   yZero: Zero[Y], yts: Tics[Y], yEq: Eq[Y], yLength: LengthSpace[Y, _],
-  angleMeta: AngleMetadata[Double, DG]) {
+  angleMeta: AngleMetadata[Double]) {
 
   import plot._
 

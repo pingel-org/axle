@@ -36,7 +36,7 @@ import axle.quanta.Angle
 import axle.algebra.DirectedGraph
 import axle.syntax.linearalgebra._
 
-case class KMeansVisualization[D, F[_], M, DG[_, _]: DirectedGraph](
+case class KMeansVisualization[D, F[_], M](
   classifier: KMeans[D, F, M],
   w: Int = 600,
   h: Int = 600,
@@ -44,7 +44,7 @@ case class KMeansVisualization[D, F[_], M, DG[_, _]: DirectedGraph](
   pointDiameter: Int = 10,
   fontName: String = "Courier New",
   fontSize: Int = 12)(
-    implicit la: LinearAlgebra[M, Double], angleMeta: AngleMetadata[Double, DG]) extends JPanel {
+    implicit la: LinearAlgebra[M, Double], angleMeta: AngleMetadata[Double]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 

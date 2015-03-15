@@ -88,19 +88,19 @@ package object axle {
   def wallisΠ(iterations: Int = 10000) =
     2 * Π((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
 
-  def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
+  def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N, DG]): Double =
+      implicit angleMetadata: AngleMetadata[N]): Double =
     scala.math.sin((a in angleMetadata.radian).magnitude.toDouble)
 
-  def cosine[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
+  def cosine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N, DG]): Double =
+      implicit angleMetadata: AngleMetadata[N]): Double =
     scala.math.cos((a in angleMetadata.radian).magnitude.toDouble)
 
-  def tangent[N: MultiplicativeMonoid: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
+  def tangent[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N, DG]): Double =
+      implicit angleMetadata: AngleMetadata[N]): Double =
     scala.math.tan((a in angleMetadata.radian).magnitude.toDouble)
 
   implicit val orderSymbols: Order[Symbol] =

@@ -12,7 +12,7 @@ import axle.algebra.DirectedGraph
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra
 
-case class Text[DG[_, _]: DirectedGraph](
+case class Text(
   text: String,
   font: Font,
   x: Int,
@@ -20,7 +20,7 @@ case class Text[DG[_, _]: DirectedGraph](
   centered: Boolean = true,
   color: Color = Color.black,
   angle: Option[UnittedQuantity[Angle, Double]] = None)(
-    implicit angleMeta: AngleMetadata[Double, DG]) extends Paintable {
+    implicit angleMeta: AngleMetadata[Double]) extends Paintable {
 
   val angleRadOpt = angle.map(a => (a in angleMeta.radian).magnitude)
 

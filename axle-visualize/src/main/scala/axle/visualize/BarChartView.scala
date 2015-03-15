@@ -23,12 +23,12 @@ import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 import axle.quanta.AngleMetadata
 
-case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D, DG[_, _]: DirectedGraph](
+case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](
   chart: BarChart[S, Y, D],
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yLength: LengthSpace[Y, _], angleMeta: AngleMetadata[Double, DG]) {
+    implicit yLength: LengthSpace[Y, _], angleMeta: AngleMetadata[Double]) {
 
   import chart._
 

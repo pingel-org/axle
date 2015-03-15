@@ -24,8 +24,8 @@ import spire.algebra.Order
 
 object BarChart {
 
-  implicit def drawBarChart[S: Show, Y: Plottable: Order: Tics: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
-    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double, DG]): Draw[BarChart[S, Y, D]] =
+  implicit def drawBarChart[S: Show, Y: Plottable: Order: Tics: Eq, D: ClassTag](
+    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double]): Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
       def component(barChart: BarChart[S, Y, D]) = BarChartComponent(barChart)
     }

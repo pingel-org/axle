@@ -11,8 +11,7 @@ case class Acceleration() extends Quantum {
 
 }
 
-abstract class AccelerationMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadataGraph[Acceleration, N, DG] {
+trait AccelerationUnits[N] {
 
   type U = UnitOfMeasurement[Acceleration, N]
 
@@ -21,27 +20,30 @@ abstract class AccelerationMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
   def g: U
 }
 
+trait AccelerationMetadata[N] extends QuantumMetadata[Acceleration, N] with AccelerationUnits[N]
+
 object Acceleration {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new AccelerationMetadata[N, DG] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new QuantumMetadataGraph[Acceleration, N, DG] with AccelerationMetadata[N] {
 
-    def unit(name: String, symbol: String, wiki: Option[String] = None) =
-      UnitOfMeasurement[Acceleration, N](name, symbol, wiki)
+      def unit(name: String, symbol: String, wiki: Option[String] = None) =
+        UnitOfMeasurement[Acceleration, N](name, symbol, wiki)
 
-    lazy val _mpsps = unit("mps", "mps") // derive
-    lazy val _fpsps = unit("fps", "fps") // derive
-    lazy val _g = unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
+      lazy val _mpsps = unit("mps", "mps") // derive
+      lazy val _fpsps = unit("fps", "fps") // derive
+      lazy val _g = unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
 
-    def mpsps = _mpsps
-    def fpsps = _fpsps
-    def g = _g
+      def mpsps = _mpsps
+      def fpsps = _fpsps
+      def g = _g
 
-    def units: List[UnitOfMeasurement[Acceleration, N]] =
-      List(mpsps, fpsps, g)
+      def units: List[UnitOfMeasurement[Acceleration, N]] =
+        List(mpsps, fpsps, g)
 
-    def links: Seq[(UnitOfMeasurement[Acceleration, N], UnitOfMeasurement[Acceleration, N], Bijection[N, N])] =
-      List[(UnitOfMeasurement[Acceleration, N], UnitOfMeasurement[Acceleration, N], Bijection[N, N])](
-        (mpsps, g, ScaleDouble(9.80665)))
-  }
+      def links: Seq[(UnitOfMeasurement[Acceleration, N], UnitOfMeasurement[Acceleration, N], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Acceleration, N], UnitOfMeasurement[Acceleration, N], Bijection[N, N])](
+          (mpsps, g, ScaleDouble(9.80665)))
+    }
 
 }

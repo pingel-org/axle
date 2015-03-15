@@ -26,10 +26,10 @@ import spire.algebra.Order
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
 
-case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag, DG[_, _]: DirectedGraph](
+case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag](
   chart: BarChart[S, Y, D])(
     implicit yls: LengthSpace[Y, _],
-    angleMeta: AngleMetadata[Double, DG])
+    angleMeta: AngleMetadata[Double])
   extends JPanel
   with Fed[D] {
 

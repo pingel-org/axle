@@ -106,9 +106,9 @@ package object stats {
   def stddev[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
     standardDeviation(distribution)
 
-  def entropy[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
+  def entropy[A: Manifest, N: Field: Eq: ConvertableFrom](
     X: Distribution[A, N])(
-      implicit meta: InformationMetadata[Double, DG]): UnittedQuantity[Information, Double] = {
+      implicit meta: InformationMetadata[Double]): UnittedQuantity[Information, Double] = {
 
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values map { x =>
@@ -122,8 +122,8 @@ package object stats {
     UnittedQuantity(H, meta.bit)
   }
 
-  def H[A: Manifest, N: Field: Eq: ConvertableFrom, DG[_, _]: DirectedGraph](
-    X: Distribution[A, N])(implicit meta: InformationMetadata[Double, DG]): UnittedQuantity[Information, Double] =
+  def H[A: Manifest, N: Field: Eq: ConvertableFrom](
+    X: Distribution[A, N])(implicit meta: InformationMetadata[Double]): UnittedQuantity[Information, Double] =
     entropy(X)
 
 }

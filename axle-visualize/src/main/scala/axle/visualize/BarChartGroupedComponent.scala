@@ -27,9 +27,9 @@ import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
 import axle.quanta.AngleMetadata
 
-case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag, DG[_, _]: DirectedGraph](
+case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
   chart: BarChartGrouped[G, S, Y, D])(
-    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double, DG])
+    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double])
   extends JPanel
   with Fed[D] {
 

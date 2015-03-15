@@ -14,8 +14,7 @@ case class Angle() extends Quantum {
 
 }
 
-abstract class AngleMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadataGraph[Angle, N, DG] {
+trait AngleUnits[N] {
 
   type U = UnitOfMeasurement[Angle, N]
 
@@ -29,36 +28,39 @@ abstract class AngleMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
 
 }
 
+trait AngleMetadata[N] extends QuantumMetadata[Angle, N] with AngleUnits[N]
+
 object Angle {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new AngleMetadata[N, DG] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new QuantumMetadataGraph[Angle, N, DG] with AngleMetadata[N] {
 
-    def unit(name: String, symbol: String, wiki: Option[String] = None) =
-      UnitOfMeasurement[Angle, N](name, symbol, wiki)
+      def unit(name: String, symbol: String, wiki: Option[String] = None) =
+        UnitOfMeasurement[Angle, N](name, symbol, wiki)
 
-    lazy val _degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(angle)"))
-    lazy val _radian = unit("radian", "rad", Some("http://en.wikipedia.org/wiki/Radian"))
-    lazy val _circleDegrees = unit("circleDegrees", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
-    lazy val _circleRadians = unit("circleRadians", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
+      lazy val _degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(angle)"))
+      lazy val _radian = unit("radian", "rad", Some("http://en.wikipedia.org/wiki/Radian"))
+      lazy val _circleDegrees = unit("circleDegrees", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
+      lazy val _circleRadians = unit("circleRadians", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
 
-    def radian = _radian
-    def rad = _radian
-    def degree = _degree
-    def circleDegrees = _circleDegrees
-    def circleRadians = _circleRadians
+      def radian = _radian
+      def rad = _radian
+      def degree = _degree
+      def circleDegrees = _circleDegrees
+      def circleRadians = _circleRadians
 
-    //  def clockwise90[N: Field: Eq] = -90 *: °[N]
-    //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
+      //  def clockwise90[N: Field: Eq] = -90 *: °[N]
+      //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
 
-    def units: List[UnitOfMeasurement[Angle, N]] =
-      List(_degree, _radian, _circleDegrees, _circleRadians)
+      def units: List[UnitOfMeasurement[Angle, N]] =
+        List(_degree, _radian, _circleDegrees, _circleRadians)
 
-    def links: Seq[(UnitOfMeasurement[Angle, N], UnitOfMeasurement[Angle, N], Bijection[N, N])] =
-      List[(UnitOfMeasurement[Angle, N], UnitOfMeasurement[Angle, N], Bijection[N, N])](
-        (_degree, _circleDegrees, ScaleInt(360)),
-        (_radian, _circleRadians, ScaleDouble(2 * π)),
-        (_circleDegrees, _circleRadians, BijectiveIdentity[N]))
+      def links: Seq[(UnitOfMeasurement[Angle, N], UnitOfMeasurement[Angle, N], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Angle, N], UnitOfMeasurement[Angle, N], Bijection[N, N])](
+          (_degree, _circleDegrees, ScaleInt(360)),
+          (_radian, _circleRadians, ScaleDouble(2 * π)),
+          (_circleDegrees, _circleRadians, BijectiveIdentity[N]))
 
-  }
+    }
 
 }

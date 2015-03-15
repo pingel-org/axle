@@ -20,9 +20,9 @@ import axle.quanta.AngleMetadata
 
 object Plot {
 
-  implicit def drawPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D, DG[_, _]: DirectedGraph](
+  implicit def drawPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleMeta: AngleMetadata[Double, DG]): Draw[Plot[X, Y, D]] =
+    angleMeta: AngleMetadata[Double]): Draw[Plot[X, Y, D]] =
     new Draw[Plot[X, Y, D]] {
 
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)

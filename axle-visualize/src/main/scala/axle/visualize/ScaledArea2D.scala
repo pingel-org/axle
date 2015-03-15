@@ -89,13 +89,13 @@ case class ScaledArea2D[X, Y](
 
   import axle.algebra.DirectedGraph
 
-  def drawStringAtAngle[DG[_, _]: DirectedGraph](
+  def drawStringAtAngle(
     g2d: Graphics2D,
     fontMetrics: FontMetrics,
     s: String,
     p: Point2D[X, Y],
     angle: UnittedQuantity[Angle, Double])(
-      implicit angleMeta: AngleMetadata[Double, DG]): Unit = {
+      implicit angleMeta: AngleMetadata[Double]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
       val a = (angle in angleMeta.radian).magnitude

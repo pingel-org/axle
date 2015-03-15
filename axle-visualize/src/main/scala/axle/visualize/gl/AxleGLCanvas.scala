@@ -36,14 +36,14 @@ import javax.media.opengl.glu.GLU
 import spire.implicits.FloatAlgebra
 import axle.algebra.DirectedGraph
 
-case class AxleGLCanvas[DG[_, _]: DirectedGraph](
-  scene: Scene[DG],
+case class AxleGLCanvas(
+  scene: Scene,
   fovy: UnittedQuantity[Angle, Float],
   zNear: UnittedQuantity[Distance, Float],
   zFar: UnittedQuantity[Distance, Float],
   distanceUnit: UnitOfMeasurement[Distance, Float])(
-    implicit angleMeta: AngleMetadata[Float, DG],
-    distanceMeta: DistanceMetadata[Float, DG])
+    implicit angleMeta: AngleMetadata[Float],
+    distanceMeta: DistanceMetadata[Float])
   extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)
