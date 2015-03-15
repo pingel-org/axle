@@ -50,6 +50,6 @@ case class BarChart[S: Show, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  labelAngle: UnittedQuantity[Angle, Double] = 36d *: Angle.metadata[Double].degree,
+  labelAngle: UnittedQuantity[Angle, Double], //  = 36d *: Angle.metadata[Double, DG].degree // TODO default labelAngle
   colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
     implicit val dataView: DataView[S, Y, D])

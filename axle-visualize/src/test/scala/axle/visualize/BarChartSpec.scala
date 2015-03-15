@@ -6,6 +6,9 @@ import spire.algebra._
 import spire.implicits._
 import axle.algebra._
 
+import axle.quanta.Angle
+import axle.jung.JungDirectedGraph
+
 class BarChartSpec extends Specification {
 
   "BarChart" should {
@@ -16,9 +19,12 @@ class BarChartSpec extends Specification {
         "banana" -> 77.9,
         "coconut" -> 10.1)
 
+      val angleMeta = Angle.metadata[Double, JungDirectedGraph]
+
       val chart = BarChart[String, Double, Map[String, Double]](
         sales,
         xAxis = 0d,
+        labelAngle = 36d *: angleMeta.degree,
         title = Some("fruit sales"))
 
       1 must be equalTo 1

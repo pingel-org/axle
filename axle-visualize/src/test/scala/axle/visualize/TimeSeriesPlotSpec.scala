@@ -48,6 +48,7 @@ class TimeSeriesPlotSpec extends Specification {
   def t2(): Unit = {
 
     import axle.jung.JungDirectedGraph
+    import axle.jung.JungDirectedGraph.directedGraphJung
 
     type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
 

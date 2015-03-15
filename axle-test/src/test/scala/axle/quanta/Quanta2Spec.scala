@@ -15,9 +15,9 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      implicit val dr = Distance.metadata[Rational]
+      implicit val dr = Distance.metadata[Rational, JungDirectedGraph]
       import dr._
-      implicit val tr = Time.metadata[Rational]
+      implicit val tr = Time.metadata[Rational, JungDirectedGraph]
       import tr._
 
       val d1 = Rational(3, 4) *: meter
@@ -27,12 +27,8 @@ class QuantaSpec extends Specification {
       val t3 = Rational(5d) *: second
       val t4 = 10 *: second
 
-      implicit val cgDistance = axle.quanta.conversionGraph[Distance, Rational, JungDirectedGraph]
-
       val d3 = d1 + d2
       val d4 = d2 - d2
-
-      implicit val cgTime = axle.quanta.conversionGraph[Time, Rational, JungDirectedGraph]
 
       //val d5 = d2 + t2 // shouldn't compile
       val t5 = t2 in minute
@@ -47,16 +43,14 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      val md = Mass.metadata[Double]
+      val md = Mass.metadata[Double, JungDirectedGraph]
       import md._
 
       (5 *: gram).magnitude must be equalTo 5
 
-      implicit val dd = Distance.metadata[Double]
+      implicit val dd = Distance.metadata[Double, JungDirectedGraph]
       import dd._
       import spire.implicits.DoubleAlgebra
-
-      implicit val cgDistance = axle.quanta.conversionGraph[Distance, Double, JungDirectedGraph]
 
       ((1 *: parsec) + (4 *: lightyear)).magnitude must be equalTo 7.260
       ((4 *: lightyear) + (1 *: parsec)).magnitude must be equalTo 2.226993865030675
@@ -67,15 +61,11 @@ class QuantaSpec extends Specification {
 
     "work" in {
 
-      implicit val md = Mass.metadata[Double]
+      implicit val md = Mass.metadata[Double, JungDirectedGraph]
       import md._
-      implicit val dd = Distance.metadata[Double]
+      implicit val dd = Distance.metadata[Double, JungDirectedGraph]
       import dd._
       import spire.implicits.DoubleAlgebra
-
-      implicit val cgDistance = axle.quanta.conversionGraph[Distance, Double, JungDirectedGraph]
-
-      implicit val cgMass = axle.quanta.conversionGraph[Mass, Double, JungDirectedGraph]
 
       ((1 *: kilogram) in gram).magnitude must be equalTo 1000d
       ((1 *: megagram) in milligram).magnitude must be equalTo 1000000000d
@@ -85,10 +75,8 @@ class QuantaSpec extends Specification {
 
     "use Rational" in {
 
-      implicit val vr = Volume.metadata[Rational]
+      implicit val vr = Volume.metadata[Rational, JungDirectedGraph]
       import vr._
-
-      implicit val cgVolume = axle.quanta.conversionGraph[Volume, Rational, JungDirectedGraph]
 
       ((Rational(24) *: wineBottle) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
     }
@@ -97,17 +85,13 @@ class QuantaSpec extends Specification {
   "addition" should {
     "work" in {
 
-      implicit val md = Mass.metadata[Double]
+      implicit val md = Mass.metadata[Double, JungDirectedGraph]
       import md._
-      implicit val dd = Distance.metadata[Double]
+      implicit val dd = Distance.metadata[Double, JungDirectedGraph]
       import dd._
 
       // Shouldn't compile: gram + mile
       // Shouldn't compile: gram + kilogram + mile + gram
-
-      implicit val cgDistance = axle.quanta.conversionGraph[Distance, Double, JungDirectedGraph]
-
-      implicit val cgMass = axle.quanta.conversionGraph[Mass, Double, JungDirectedGraph]
 
       // val mx = axle.quanta.modulize4[Double, Distance[Double], JungDirectedGraph] // fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement4[Q, N], N => N]
 
@@ -124,9 +108,9 @@ class QuantaSpec extends Specification {
   "over" should {
     "work" in {
 
-      val vr = Volume.metadata[Rational]
+      val vr = Volume.metadata[Rational, JungDirectedGraph]
       import vr._
-      val fr = Flow.metadata[Rational]
+      val fr = Flow.metadata[Rational, JungDirectedGraph]
       import fr._
 
       // TODO convert that to years

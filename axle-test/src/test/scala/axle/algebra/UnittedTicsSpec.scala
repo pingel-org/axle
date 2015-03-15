@@ -17,11 +17,9 @@ class UnittedTicsSpec extends Specification {
   "Tics for UnittedQuantity" should {
     "work" in {
 
-      implicit val id = Information.metadata[Double]
+      implicit val id = Information.metadata[Double, JungDirectedGraph]
       import id.bit
       implicit val base = bit
-
-      implicit val cg = axle.quanta.conversionGraph[Information, Double, JungDirectedGraph]
 
       val ticker = axle.quanta.unittedTics[Information, Double, JungDirectedGraph]
 
