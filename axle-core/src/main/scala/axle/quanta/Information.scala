@@ -12,7 +12,7 @@ case class Information() extends Quantum {
 }
 
 abstract class InformationMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Information, N, DG] {
+  extends QuantumMetadataGraph[Information, N, DG] {
 
   type U = UnitOfMeasurement[Information, N]
 

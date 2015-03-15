@@ -27,7 +27,7 @@ case class Time() extends Quantum {
 }
 
 abstract class TimeMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Time, N, DG] {
+  extends QuantumMetadataGraph[Time, N, DG] {
 
   type U = UnitOfMeasurement[Time, N]
 

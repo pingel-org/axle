@@ -12,7 +12,7 @@ case class Money() extends Quantum {
 }
 
 abstract class MoneyMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Money, N, DG] {
+  extends QuantumMetadataGraph[Money, N, DG] {
 
   type U = UnitOfMeasurement[Money, N]
 

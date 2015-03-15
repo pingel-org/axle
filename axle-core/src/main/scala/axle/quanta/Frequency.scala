@@ -12,7 +12,7 @@ case class Frequency() extends Quantum {
 }
 
 abstract class FrequencyMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Frequency, N, DG] {
+  extends QuantumMetadataGraph[Frequency, N, DG] {
 
   type U = UnitOfMeasurement[Frequency, N]
 

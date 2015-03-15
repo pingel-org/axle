@@ -13,7 +13,7 @@ case class Distance() extends Quantum {
 }
 
 abstract class DistanceMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Distance, N, DG] {
+  extends QuantumMetadataGraph[Distance, N, DG] {
 
   def foot: UnitOfMeasurement[Distance, N]
 

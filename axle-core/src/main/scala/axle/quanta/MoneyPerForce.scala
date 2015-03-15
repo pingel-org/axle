@@ -12,7 +12,7 @@ case class MoneyPerForce() extends Quantum {
 }
 
 abstract class MoneyPerForceMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[MoneyPerForce, N, DG] {
+  extends QuantumMetadataGraph[MoneyPerForce, N, DG] {
 
   type U = UnitOfMeasurement[MoneyPerForce, N]
 

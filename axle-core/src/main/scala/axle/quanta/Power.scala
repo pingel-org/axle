@@ -12,7 +12,7 @@ case class Power() extends Quantum {
 }
 
 abstract class PowerMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Power, N, DG] {
+  extends QuantumMetadataGraph[Power, N, DG] {
 
   type U = UnitOfMeasurement[Power, N]
 

@@ -19,7 +19,7 @@ object UnittedQuantity {
     }
 
   implicit def orderUQ[Q <: Quantum, N: MultiplicativeMonoid: Order, DG[_, _]: DirectedGraph](
-    implicit meta: QuantumMetadata[Q, N, DG]) =
+    implicit meta: QuantumMetadata[Q, N]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val orderN = implicitly[Order[N]]
@@ -33,13 +33,12 @@ object UnittedQuantity {
 case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q, N]) {
 
   // TODO: create a Functor witness for UnittedQuantity
-  def map[B, DG[_, _]: DirectedGraph](f: N => B)(implicit meta: QuantumMetadata[Q, B, DG]): UnittedQuantity[Q, B] =
+  def map[B, DG[_, _]: DirectedGraph](f: N => B)(implicit meta: QuantumMetadata[Q, B]): UnittedQuantity[Q, B] =
     UnittedQuantity(f(magnitude), ???)
 
-  def in[DG[_, _]: DirectedGraph](
-    newUnit: UnitOfMeasurement[Q, N])(
-      implicit meta: QuantumMetadata[Q, N, DG], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
-        meta.convert(this, newUnit)
+  def in(newUnit: UnitOfMeasurement[Q, N])(
+    implicit meta: QuantumMetadata[Q, N], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
+    meta.convert(this, newUnit)
 
   // TODO
   def over[QR, Q2, N](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2, N] =

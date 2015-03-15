@@ -15,7 +15,7 @@ case class Angle() extends Quantum {
 }
 
 abstract class AngleMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Angle, N, DG] {
+  extends QuantumMetadataGraph[Angle, N, DG] {
 
   type U = UnitOfMeasurement[Angle, N]
 

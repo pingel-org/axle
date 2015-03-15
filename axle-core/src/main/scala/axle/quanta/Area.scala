@@ -12,7 +12,7 @@ case class Area() extends Quantum {
 }
 
 abstract class AreaMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Area, N, DG] {
+  extends QuantumMetadataGraph[Area, N, DG] {
 
   type U = UnitOfMeasurement[Area, N]
 

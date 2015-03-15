@@ -13,7 +13,7 @@ case class Volume() extends Quantum {
 }
 
 abstract class VolumeMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Volume, N, DG] {
+  extends QuantumMetadataGraph[Volume, N, DG] {
 
   type U = UnitOfMeasurement[Volume, N]
 

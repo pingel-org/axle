@@ -12,7 +12,7 @@ case class Speed() extends Quantum {
 }
 
 abstract class SpeedMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Speed, N, DG] {
+  extends QuantumMetadataGraph[Speed, N, DG] {
 
   type U = UnitOfMeasurement[Speed, N]
 

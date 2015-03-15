@@ -13,7 +13,7 @@ case class Mass() extends Quantum {
 }
 
 abstract class MassMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadata[Mass, N, DG] {
+  extends QuantumMetadataGraph[Mass, N, DG] {
 
   type U = UnitOfMeasurement[Mass, N]
 

@@ -10,22 +10,28 @@ import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 
-abstract class QuantumMetadata[Q, N, DG[_, _]: DirectedGraph]() {
+abstract class QuantumMetadata[Q, N]() {
 
   def units: List[UnitOfMeasurement[Q, N]]
 
   def links: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]
 
-  private def conversions[DG[_, _]](
+  def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q, N])(implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N]
+}
+
+abstract class QuantumMetadataGraph[Q, N, DG[_, _]: DirectedGraph]()
+  extends QuantumMetadata[Q, N] {
+
+  private def conversions(
     vps: Seq[UnitOfMeasurement[Q, N]],
     ef: Seq[Vertex[UnitOfMeasurement[Q, N]]] => Seq[(Vertex[UnitOfMeasurement[Q, N]], Vertex[UnitOfMeasurement[Q, N]], N => N)])(
       implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q, N], N => N] =
     evDG.make[UnitOfMeasurement[Q, N], N => N](vps, ef)
 
-  private def cgn[DG[_, _]: DirectedGraph](
+  private def cgn(
     units: List[UnitOfMeasurement[Q, N]],
     links: Seq[(UnitOfMeasurement[Q, N], UnitOfMeasurement[Q, N], Bijection[N, N])]): CG[Q, DG, N] =
-    conversions[DG](
+    conversions(
       units,
       (vs: Seq[Vertex[UnitOfMeasurement[Q, N]]]) => {
         val name2vertex = vs.map(v => (v.payload.name, v)).toMap
@@ -40,7 +46,7 @@ abstract class QuantumMetadata[Q, N, DG[_, _]: DirectedGraph]() {
 
   private[this] val conversionGraph = cgn(units, links)
 
-  private[this] def vertex[DG[_, _]: DirectedGraph](
+  private[this] def vertex(
     cg: DG[UnitOfMeasurement[Q, N], N => N],
     query: UnitOfMeasurement[Q, N])(implicit ev: Eq[N]): Vertex[UnitOfMeasurement[Q, N]] =
     directedGraphOps(cg).findVertex(_.payload.name === query.name).get
