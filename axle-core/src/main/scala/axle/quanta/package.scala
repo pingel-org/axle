@@ -47,15 +47,6 @@ package object quanta {
       override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
     }
 
-  //  implicit def unitOrder[Q, N: MultiplicativeMonoid: Order](implicit base: UnitOfMeasurement[Q], meta: QuantumMetadata[Q, N]) =
-  //    new Order[UnittedQuantity[Q, N]] {
-  //
-  //      val underlying = implicitly[Order[N]]
-  //
-  //      def compare(u1: UnittedQuantity[Q, N], u2: UnittedQuantity[Q, N]): Int =
-  //        underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
-  //    }
-
   implicit def unittedZero[Q, N: AdditiveMonoid](
     implicit base: UnitOfMeasurement[Q]): Zero[UnittedQuantity[Q, N]] =
     new Zero[UnittedQuantity[Q, N]] {

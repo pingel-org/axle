@@ -13,16 +13,18 @@ case class Speed() extends Quantum {
 
 trait SpeedUnits {
 
-  type U = UnitOfMeasurement[Speed]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Speed](name, symbol, wiki)
 
-  def mps: U
-  def fps: U
-  def mph: U
-  def kph: U
-  def knot: U
-  def kn: U
-  def c: U
-  def speedLimit: U
+  lazy val mps = unit("mps", "mps") // derive
+  lazy val fps = unit("fps", "fps") // derive
+  lazy val mph = unit("mph", "mph") // derive
+  lazy val kph = unit("kph", "kph") // derive
+  lazy val knot = unit("knot", "kn", Some("http://en.wikipedia.org/wiki/Knot_(unit)"))
+  lazy val kn = knot
+  lazy val c = unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light"))
+  lazy val speedLimit = unit("Speed limit", "speed limit")
+
 }
 
 trait SpeedMetadata[N] extends QuantumMetadata[Speed, N] with SpeedUnits
@@ -31,26 +33,6 @@ object Speed {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Speed, N, DG] with SpeedMetadata[N] {
-
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Speed](name, symbol, wiki)
-
-      lazy val _mps = unit("mps", "mps") // derive
-      lazy val _fps = unit("fps", "fps") // derive
-      lazy val _mph = unit("mph", "mph") // derive
-      lazy val _kph = unit("kph", "kph") // derive
-      lazy val _knot = unit("knot", "kn", Some("http://en.wikipedia.org/wiki/Knot_(unit)"))
-      lazy val _c = unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light"))
-      lazy val _speedLimit = unit("Speed limit", "speed limit")
-
-      def mps = _mps
-      def fps = _fps
-      def mph = _mph
-      def kph = _kph
-      def knot = _knot
-      def kn = _knot
-      def c = _c
-      def speedLimit = _speedLimit
 
       def units: List[UnitOfMeasurement[Speed]] =
         List(mps, fps, mph, kph, knot, c, speedLimit)

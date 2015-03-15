@@ -14,49 +14,59 @@ case class Mass() extends Quantum {
 
 trait MassUnits {
 
-  type U = UnitOfMeasurement[Mass]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Mass](name, symbol, wiki)
 
-  def gram: U
-  def tonne: U
-  def milligram: U
-  def kilogram: U
-  def megagram: U
-  def kilotonne: U
-  def megatonne: U
-  def gigatonne: U
-  def teratonne: U
-  def petatonne: U
-  def exatonne: U
-  def zettatonne: U
-  def yottatonne: U
+  lazy val gram = unit("gram", "g")
+  lazy val tonne = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
+  lazy val milligram = unit("milligram", "mg")
+  lazy val kilogram = unit("kilogram", "Kg")
+  lazy val megagram = unit("megagram", "Mg")
+  lazy val kilotonne = unit("kilotonne", "KT")
+  lazy val megatonne = unit("megatonne", "MT")
+  lazy val gigatonne = unit("gigatonne", "GT")
+  lazy val teratonne = unit("teratonne", "TT")
+  lazy val petatonne = unit("petatonne", "PT")
+  lazy val exatonne = unit("exatonne", "ET")
+  lazy val zettatonne = unit("zettatonne", "ZT")
+  lazy val yottatonne = unit("yottatonne", "YT")
 
-  def man: U
+  lazy val man = unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight"))
 
-  def earth: U
-  def sun: U
-  def jupiter: U
-  def saturn: U
-  def neptune: U
-  def uranus: U
-  def venus: U
-  def mars: U
-  def mercury: U
-  def pluto: U
-  def moon: U
+  lazy val earth = unit("earth", "M⊕", Some("http://en.wikipedia.org/wiki/Earth"))
+  lazy val sun = unit("sun", "M☉", Some("http://en.wikipedia.org/wiki/Solar_mass"))
+  lazy val jupiter = unit("jupiter", "M♃", Some("http://en.wikipedia.org/wiki/Jupiter"))
+  lazy val saturn = unit("saturn", "M♄", Some("http://en.wikipedia.org/wiki/Saturn"))
+  lazy val neptune = unit("neptune", "M♆", Some("http://en.wikipedia.org/wiki/Neptune"))
+  lazy val uranus = unit("uranus", "M♅", Some("http://en.wikipedia.org/wiki/Uranus"))
+  lazy val venus = unit("venus", "M♀", Some("http://en.wikipedia.org/wiki/Venus"))
+  lazy val mars = unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars"))
+  lazy val mercury = unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
+  lazy val pluto = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
+  lazy val moon = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
 
   // http://en.wikipedia.org/wiki/Astronomical_symbols
-  def ⊕ : U
-  def ☼ : U
-  def ☉ : U
-  def ♃ : U
-  def ♄ : U
-  def ♆ : U
-  def ♅ : U
-  def ♀ : U
-  def ♂ : U
-  def ☿ : U
-  def ♇ : U
-  def ☽ : U
+  def ⊕ = earth
+  def ☼ = sun
+  def ☉ = sun
+  def ♃ = jupiter
+  def ♄ = saturn
+  def ♆ = neptune
+  def ♅ = uranus
+  def ♀ = venus
+  def ♂ = mars
+  def ☿ = mercury
+  def ♇ = pluto
+  def ☽ = moon
+
+  //  // sun also = "332950" *: earth
+  //  // TODO lazy val milkyWayMass = 5.8E11 *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
+  //  // TODO lazy val andromedaMass = 7.1E11 *: sun // Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
+  //
+  //  // TODO hydrogen atom
+  //
+  //  // earthunit = 5.9 x 10^24 kg
+  //  // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
 
 }
 
@@ -66,88 +76,6 @@ object Mass {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Mass, N, DG] with MassMetadata[N] {
-
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Mass](name, symbol, wiki)
-
-      lazy val _gram = unit("gram", "g")
-      lazy val _tonne = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
-      lazy val _milligram = unit("milligram", "mg")
-      lazy val _kilogram = unit("kilogram", "Kg")
-      lazy val _megagram = unit("megagram", "Mg")
-      lazy val _kilotonne = unit("kilotonne", "KT")
-      lazy val _megatonne = unit("megatonne", "MT")
-      lazy val _gigatonne = unit("gigatonne", "GT")
-      lazy val _teratonne = unit("teratonne", "TT")
-      lazy val _petatonne = unit("petatonne", "PT")
-      lazy val _exatonne = unit("exatonne", "ET")
-      lazy val _zettatonne = unit("zettatonne", "ZT")
-      lazy val _yottatonne = unit("yottatonne", "YT")
-
-      lazy val _man = unit("man", "man", Some("http://en.wikipedia.org/wiki/Body_weight"))
-
-      lazy val _earth = unit("earth", "M⊕", Some("http://en.wikipedia.org/wiki/Earth"))
-      lazy val _sun = unit("sun", "M☉", Some("http://en.wikipedia.org/wiki/Solar_mass"))
-      lazy val _jupiter = unit("jupiter", "M♃", Some("http://en.wikipedia.org/wiki/Jupiter"))
-      lazy val _saturn = unit("saturn", "M♄", Some("http://en.wikipedia.org/wiki/Saturn"))
-      lazy val _neptune = unit("neptune", "M♆", Some("http://en.wikipedia.org/wiki/Neptune"))
-      lazy val _uranus = unit("uranus", "M♅", Some("http://en.wikipedia.org/wiki/Uranus"))
-      lazy val _venus = unit("venus", "M♀", Some("http://en.wikipedia.org/wiki/Venus"))
-      lazy val _mars = unit("mars", "M♂", Some("http://en.wikipedia.org/wiki/Mars"))
-      lazy val _mercury = unit("mercury", "M☿", Some("http://en.wikipedia.org/wiki/Mercury_(planet)"))
-      lazy val _pluto = unit("pluto", "M♇", Some("http://en.wikipedia.org/wiki/Pluto"))
-      lazy val _moon = unit("moon", "M☽", Some("http://en.wikipedia.org/wiki/Moon"))
-
-      // http://en.wikipedia.org/wiki/Astronomical_symbols
-      def ⊕ = earth
-      def ☼ = sun
-      def ☉ = sun
-      def ♃ = jupiter
-      def ♄ = saturn
-      def ♆ = neptune
-      def ♅ = uranus
-      def ♀ = venus
-      def ♂ = mars
-      def ☿ = mercury
-      def ♇ = pluto
-      def ☽ = moon
-
-      def gram = _gram
-      def tonne = _tonne
-      def milligram = _milligram
-      def kilogram = _kilogram
-      def megagram = _megagram
-      def kilotonne = _kilotonne
-      def megatonne = _megatonne
-      def gigatonne = _gigatonne
-      def teratonne = _teratonne
-      def petatonne = _petatonne
-      def exatonne = _exatonne
-      def zettatonne = _zettatonne
-      def yottatonne = _yottatonne
-
-      def man = _man
-
-      def earth = _earth
-      def sun = _sun
-      def jupiter = _jupiter
-      def saturn = _saturn
-      def neptune = _neptune
-      def uranus = _uranus
-      def venus = _venus
-      def mars = _mars
-      def mercury = _mercury
-      def pluto = _pluto
-      def moon = _moon
-
-      //  // sun also = "332950" *: earth
-      //  // TODO lazy val milkyWayMass = 5.8E11 *: sun // Some("Milky Way Mass"), None, Some("http://en.wikipedia.org/wiki/Milky_Way"))
-      //  // TODO lazy val andromedaMass = 7.1E11 *: sun // Some("Andromeda Mass"), None, Some("http://en.wikipedia.org/wiki/Andromeda_Galaxy"))
-      //
-      //  // TODO hydrogen atom
-      //
-      //  // earthunit = 5.9 x 10^24 kg
-      //  // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
 
       def units: List[UnitOfMeasurement[Mass]] =
         List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,

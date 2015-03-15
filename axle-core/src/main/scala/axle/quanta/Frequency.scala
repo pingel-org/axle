@@ -13,17 +13,18 @@ case class Frequency() extends Quantum {
 
 trait FrequencyUnits {
 
-  type U = UnitOfMeasurement[Frequency]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Frequency](name, symbol, wiki)
 
-  def degree: U
-  def hertz: U
-  def Hz: U
-  def kilohertz: U
-  def KHz: U
-  def megahertz: U
-  def MHz: U
-  def gigahertz: U
-  def GHz: U
+  lazy val degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(Frequency)"))
+  lazy val hertz = unit("Hertz", "Hz", Some("http://en.wikipedia.org/wiki/Hertz"))
+  lazy val Hz = hertz
+  lazy val kilohertz = unit("Kilohertz", "KHz")
+  lazy val KHz = kilohertz
+  lazy val megahertz = unit("Megahertz", "MHz")
+  lazy val MHz = megahertz
+  lazy val gigahertz = unit("Gigahertz", "GHz")
+  lazy val GHz = gigahertz
 }
 
 trait FrequencyMetadata[N] extends QuantumMetadata[Frequency, N] with FrequencyUnits
@@ -32,25 +33,6 @@ object Frequency {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Frequency, N, DG] with FrequencyMetadata[N] {
-
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Frequency](name, symbol, wiki)
-
-      lazy val _degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(Frequency)"))
-      lazy val _hertz = unit("Hertz", "Hz", Some("http://en.wikipedia.org/wiki/Hertz"))
-      lazy val _kilohertz = unit("Kilohertz", "KHz")
-      lazy val _megahertz = unit("Megahertz", "MHz")
-      lazy val _gigahertz = unit("Gigahertz", "GHz")
-
-      def degree = _degree
-      def hertz = _hertz
-      def Hz = _hertz
-      def kilohertz = _kilohertz
-      def KHz = _kilohertz
-      def megahertz = _megahertz
-      def MHz = _megahertz
-      def gigahertz = _gigahertz
-      def GHz = _gigahertz
 
       def units: List[UnitOfMeasurement[Frequency]] =
         List(degree)

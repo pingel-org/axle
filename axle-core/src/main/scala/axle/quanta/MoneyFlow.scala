@@ -13,9 +13,10 @@ case class MoneyFlow() extends Quantum {
 
 trait MoneyFlowUnits {
 
-  type U = UnitOfMeasurement[MoneyFlow]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[MoneyFlow](name, symbol, wiki)
 
-  def USDperHour: U
+  lazy val USDperHour = unit("$/hr", "$/hr") // derive
 
 }
 
@@ -25,13 +26,6 @@ object MoneyFlow {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[MoneyFlow, N, DG] with MoneyFlowMetadata[N] {
-
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[MoneyFlow](name, symbol, wiki)
-
-      lazy val _USDperHour = unit("$/hr", "$/hr") // derive
-
-      def USDperHour = _USDperHour
 
       def units: List[UnitOfMeasurement[MoneyFlow]] =
         List(USDperHour)

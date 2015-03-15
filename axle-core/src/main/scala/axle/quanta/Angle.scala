@@ -16,15 +16,19 @@ case class Angle() extends Quantum {
 
 trait AngleUnits {
 
-  type U = UnitOfMeasurement[Angle]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Angle](name, symbol, wiki)
 
-  def radian: U
-  def rad: U
-  def degree: U
-  def circleDegrees: U
-  def circleRadians: U
+  lazy val degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(angle)"))
+  lazy val radian = unit("radian", "rad", Some("http://en.wikipedia.org/wiki/Radian"))
+  lazy val circleDegrees = unit("circleDegrees", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
+  lazy val circleRadians = unit("circleRadians", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
 
-  //def °: UnitOfMeasurement[Angle, N]
+  lazy val ° = degree
+  lazy val rad = radian
+
+  //  def clockwise90[N: Field: Eq] = -90 *: °[N]
+  //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
 
 }
 
@@ -35,31 +39,14 @@ object Angle {
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Angle, N, DG] with AngleMetadata[N] {
 
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Angle](name, symbol, wiki)
-
-      lazy val _degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(angle)"))
-      lazy val _radian = unit("radian", "rad", Some("http://en.wikipedia.org/wiki/Radian"))
-      lazy val _circleDegrees = unit("circleDegrees", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
-      lazy val _circleRadians = unit("circleRadians", "circle", Some("http://en.wikipedia.org/wiki/Circle"))
-
-      def radian = _radian
-      def rad = _radian
-      def degree = _degree
-      def circleDegrees = _circleDegrees
-      def circleRadians = _circleRadians
-
-      //  def clockwise90[N: Field: Eq] = -90 *: °[N]
-      //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
-
       def units: List[UnitOfMeasurement[Angle]] =
-        List(_degree, _radian, _circleDegrees, _circleRadians)
+        List(degree, radian, circleDegrees, circleRadians)
 
       def links: Seq[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])] =
         List[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])](
-          (_degree, _circleDegrees, ScaleInt(360)),
-          (_radian, _circleRadians, ScaleDouble(2 * π)),
-          (_circleDegrees, _circleRadians, BijectiveIdentity[N]))
+          (degree, circleDegrees, ScaleInt(360)),
+          (radian, circleRadians, ScaleDouble(2 * π)),
+          (circleDegrees, circleRadians, BijectiveIdentity[N]))
 
     }
 

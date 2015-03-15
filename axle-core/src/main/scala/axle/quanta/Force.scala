@@ -13,11 +13,13 @@ case class Force() extends Quantum {
 
 trait ForceUnits {
 
-  type U = UnitOfMeasurement[Force]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Force](name, symbol, wiki)
 
-  def pound: U
-  def newton: U
-  def dyne: U
+  lazy val pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
+  lazy val newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
+  lazy val dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
+
 }
 
 trait ForceMetadata[N] extends QuantumMetadata[Force, N] with ForceUnits
@@ -26,17 +28,6 @@ object Force {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Force, N, DG] with ForceMetadata[N] {
-
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Force](name, symbol, wiki)
-
-      lazy val _pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
-      lazy val _newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
-      lazy val _dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
-
-      def pound = _pound
-      def newton = _newton
-      def dyne = _dyne
 
       def units: List[UnitOfMeasurement[Force]] =
         List(pound, newton, dyne)

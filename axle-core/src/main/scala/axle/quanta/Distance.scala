@@ -14,9 +14,30 @@ case class Distance() extends Quantum {
 
 trait DistanceUnits {
 
-  def foot: UnitOfMeasurement[Distance]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Distance](name, symbol, wiki)
 
-  def centimeter: UnitOfMeasurement[Distance]
+  lazy val foot = unit("foot", "ft")
+  lazy val ft = foot
+  lazy val mile = unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile"))
+  lazy val meter = unit("meter", "m")
+  lazy val kilometer = unit("kilometer", "km")
+  lazy val km = kilometer
+  lazy val centimeter = unit("centimeter", "cm")
+  lazy val cm = centimeter
+  lazy val millimeter = unit("millimeter", "mm")
+  lazy val mm = millimeter
+  lazy val micrometer = unit("micrometer", "μm")
+  lazy val μm = micrometer
+  lazy val nanometer = unit("nanometer", "nm")
+  lazy val nm = nanometer
+  lazy val astronomicalUnit = unit("Astronomical Unit", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
+  lazy val au = astronomicalUnit
+  lazy val astronomicalUnitSI = unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
+  lazy val auSI = astronomicalUnitSI
+  lazy val lightyear = unit("lightyear", "ly", Some("http://en.wikipedia.org/wiki/Light-year"))
+  lazy val ly = lightyear
+  lazy val parsec = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
 
 }
 
@@ -26,34 +47,6 @@ object Distance {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Distance, N, DG] with DistanceMetadata[N] {
-
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Distance](name, symbol, wiki)
-
-      lazy val _foot = unit("foot", "ft")
-      lazy val mile = unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile"))
-      lazy val meter = unit("meter", "m")
-      lazy val kilometer = unit("kilometer", "km")
-      lazy val km = kilometer
-      lazy val _centimeter = unit("centimeter", "cm")
-      lazy val millimeter = unit("millimeter", "mm")
-      lazy val mm = millimeter
-      lazy val micrometer = unit("micrometer", "μm")
-      lazy val μm = micrometer
-      lazy val nanometer = unit("nanometer", "nm")
-      lazy val nm = nanometer
-      lazy val astronomicalUnit = unit("Astronomical Unit", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
-      lazy val au = astronomicalUnit
-      lazy val astronomicalUnitSI = unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
-      lazy val auSI = astronomicalUnitSI
-      lazy val lightyear = unit("lightyear", "ly", Some("http://en.wikipedia.org/wiki/Light-year"))
-      lazy val ly = lightyear
-      lazy val parsec = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
-
-      def foot = _foot
-      def ft = _foot
-      def centimeter = _centimeter
-      def cm = _centimeter
 
       def units: List[UnitOfMeasurement[Distance]] =
         List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,

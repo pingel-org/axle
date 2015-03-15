@@ -13,9 +13,10 @@ case class Money() extends Quantum {
 
 trait MoneyUnits {
 
-  type U = UnitOfMeasurement[Money]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Money](name, symbol, wiki)
 
-  def USD: U
+  lazy val USD = unit("US Dollar", "USD")
 
 }
 
@@ -25,13 +26,6 @@ object Money {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Money, N, DG] with MoneyMetadata[N] {
-
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Money](name, symbol, wiki)
-
-      lazy val _USD = unit("US Dollar", "USD")
-
-      def USD = _USD
 
       def units: List[UnitOfMeasurement[Money]] =
         List(USD)

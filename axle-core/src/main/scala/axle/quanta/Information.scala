@@ -13,16 +13,19 @@ case class Information() extends Quantum {
 
 trait InformationUnits {
 
-  type U = UnitOfMeasurement[Information]
+  def unit(name: String, symbol: String, wiki: Option[String] = None) =
+    UnitOfMeasurement[Information](name, symbol, wiki)
 
-  def bit: U
-  def nibble: U
-  def byte: U
-  def kilobyte: U
-  def megabyte: U
-  def gigabyte: U
-  def terabyte: U
-  def petabyte: U
+  lazy val bit = unit("bit", "b")
+  lazy val nibble = unit("nibble", "nibble")
+  lazy val byte = unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte"))
+  lazy val kilobyte = unit("kilobyte", "KB")
+  lazy val megabyte = unit("megabyte", "MB")
+  lazy val gigabyte = unit("gigabyte", "GB")
+  lazy val terabyte = unit("terabyte", "TB")
+  lazy val petabyte = unit("petabyte", "PB")
+
+  // TODO PB TB GB MB KB
 
 }
 
@@ -32,29 +35,6 @@ object Information {
 
   def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
     new QuantumMetadataGraph[Information, N, DG] with InformationMetadata[N] {
-
-      def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Information](name, symbol, wiki)
-
-      lazy val _bit = unit("bit", "b")
-      lazy val _nibble = unit("nibble", "nibble")
-      lazy val _byte = unit("byte", "B", Some("http://en.wikipedia.org/wiki/Byte"))
-      lazy val _kilobyte = unit("kilobyte", "KB")
-      lazy val _megabyte = unit("megabyte", "MB")
-      lazy val _gigabyte = unit("gigabyte", "GB")
-      lazy val _terabyte = unit("terabyte", "TB")
-      lazy val _petabyte = unit("petabyte", "PB")
-
-      // TODO PB TB GB MB KB
-
-      def bit = _bit
-      def nibble = _nibble
-      def byte = _byte
-      def kilobyte = _kilobyte
-      def megabyte = _megabyte
-      def gigabyte = _gigabyte
-      def terabyte = _terabyte
-      def petabyte = _petabyte
 
       def units: List[UnitOfMeasurement[Information]] =
         List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
