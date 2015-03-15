@@ -41,7 +41,7 @@ case class AxleGLCanvas(
   fovy: UnittedQuantity[Angle, Float],
   zNear: UnittedQuantity[Distance, Float],
   zFar: UnittedQuantity[Distance, Float],
-  distanceUnit: UnitOfMeasurement[Distance, Float])(
+  distanceUnit: UnitOfMeasurement[Distance])(
     implicit angleMeta: AngleMetadata[Float],
     distanceMeta: DistanceMetadata[Float])
   extends GLCanvas with GLEventListener {

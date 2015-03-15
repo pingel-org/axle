@@ -24,7 +24,7 @@ import spire.implicits.signedOps
 
 package object quanta {
 
-  type CG[Q, DG[_, _], N] = DG[UnitOfMeasurement[Q, N], N => N]
+  type CG[Q, DG[_, _], N] = DG[UnitOfMeasurement[Q], N => N]
 
   implicit def modulize[N, Q](implicit fieldn: Field[N], eqn: Eq[N], meta: QuantumMetadata[Q, N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
@@ -47,17 +47,17 @@ package object quanta {
       override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
     }
 
-  implicit def unitOrder[Q, N: MultiplicativeMonoid: Order](implicit base: UnitOfMeasurement[Q, N], meta: QuantumMetadata[Q, N]) =
-    new Order[UnittedQuantity[Q, N]] {
-
-      val underlying = implicitly[Order[N]]
-
-      def compare(u1: UnittedQuantity[Q, N], u2: UnittedQuantity[Q, N]): Int =
-        underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
-    }
+  //  implicit def unitOrder[Q, N: MultiplicativeMonoid: Order](implicit base: UnitOfMeasurement[Q], meta: QuantumMetadata[Q, N]) =
+  //    new Order[UnittedQuantity[Q, N]] {
+  //
+  //      val underlying = implicitly[Order[N]]
+  //
+  //      def compare(u1: UnittedQuantity[Q, N], u2: UnittedQuantity[Q, N]): Int =
+  //        underlying.compare((u1 in base).magnitude, (u2 in base).magnitude)
+  //    }
 
   implicit def unittedZero[Q, N: AdditiveMonoid](
-    implicit base: UnitOfMeasurement[Q, N]): Zero[UnittedQuantity[Q, N]] =
+    implicit base: UnitOfMeasurement[Q]): Zero[UnittedQuantity[Q, N]] =
     new Zero[UnittedQuantity[Q, N]] {
 
       val am = implicitly[AdditiveMonoid[N]]
@@ -67,7 +67,7 @@ package object quanta {
     }
 
   implicit def unittedTics[Q, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](
-    implicit base: UnitOfMeasurement[Q, N],
+    implicit base: UnitOfMeasurement[Q],
     meta: QuantumMetadata[Q, N]): Tics[UnittedQuantity[Q, N]] =
     new Tics[UnittedQuantity[Q, N]] {
 
@@ -81,7 +81,7 @@ package object quanta {
     }
 
   implicit def unittedLengthSpace[Q, N: Field: Order](
-    implicit base: UnitOfMeasurement[Q, N], space: LengthSpace[N, Double],
+    implicit base: UnitOfMeasurement[Q], space: LengthSpace[N, Double],
     meta: QuantumMetadata[Q, N],
     module: Module[UnittedQuantity[Q, N], N]) =
     new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N]] {

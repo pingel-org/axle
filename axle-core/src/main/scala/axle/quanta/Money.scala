@@ -11,15 +11,15 @@ case class Money() extends Quantum {
 
 }
 
-trait MoneyUnits[N] {
+trait MoneyUnits {
 
-  type U = UnitOfMeasurement[Money, N]
+  type U = UnitOfMeasurement[Money]
 
   def USD: U
 
 }
 
-trait MoneyMetadata[N] extends QuantumMetadata[Money, N] with MoneyUnits[N]
+trait MoneyMetadata[N] extends QuantumMetadata[Money, N] with MoneyUnits
 
 object Money {
 
@@ -27,16 +27,16 @@ object Money {
     new QuantumMetadataGraph[Money, N, DG] with MoneyMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Money, N](name, symbol, wiki)
+        UnitOfMeasurement[Money](name, symbol, wiki)
 
       lazy val _USD = unit("US Dollar", "USD")
 
       def USD = _USD
 
-      def units: List[UnitOfMeasurement[Money, N]] =
+      def units: List[UnitOfMeasurement[Money]] =
         List(USD)
 
-      def links: Seq[(UnitOfMeasurement[Money, N], UnitOfMeasurement[Money, N], Bijection[N, N])] =
+      def links: Seq[(UnitOfMeasurement[Money], UnitOfMeasurement[Money], Bijection[N, N])] =
         List.empty
 
     }

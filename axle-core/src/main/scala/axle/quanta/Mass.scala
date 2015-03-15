@@ -12,9 +12,9 @@ case class Mass() extends Quantum {
 
 }
 
-trait MassUnits[N] {
+trait MassUnits {
 
-  type U = UnitOfMeasurement[Mass, N]
+  type U = UnitOfMeasurement[Mass]
 
   def gram: U
   def tonne: U
@@ -60,7 +60,7 @@ trait MassUnits[N] {
 
 }
 
-trait MassMetadata[N] extends QuantumMetadata[Mass, N] with MassUnits[N]
+trait MassMetadata[N] extends QuantumMetadata[Mass, N] with MassUnits
 
 object Mass {
 
@@ -68,7 +68,7 @@ object Mass {
     new QuantumMetadataGraph[Mass, N, DG] with MassMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Mass, N](name, symbol, wiki)
+        UnitOfMeasurement[Mass](name, symbol, wiki)
 
       lazy val _gram = unit("gram", "g")
       lazy val _tonne = unit("tonne", "T", Some("http://en.wikipedia.org/wiki/Tonne"))
@@ -149,13 +149,13 @@ object Mass {
       //  // earthunit = 5.9 x 10^24 kg
       //  // 10^24 kg = ^21 t = ^12 gt = ^9 tt = ^6 pt = ^3 et = ^0 zt
 
-      def units: List[UnitOfMeasurement[Mass, N]] =
+      def units: List[UnitOfMeasurement[Mass]] =
         List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,
           petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
           uranus, venus, mars, mercury, pluto, moon)
 
-      def links: Seq[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Mass, N], UnitOfMeasurement[Mass, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Mass], UnitOfMeasurement[Mass], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Mass], UnitOfMeasurement[Mass], Bijection[N, N])](
           (tonne, megagram, BijectiveIdentity[N]),
           (milligram, gram, Scale10s(3)),
           (gram, kilogram, Scale10s(3)),

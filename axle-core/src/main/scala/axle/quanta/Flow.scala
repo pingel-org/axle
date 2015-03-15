@@ -12,16 +12,16 @@ case class Flow() extends Quantum {
 
 }
 
-trait FlowUnits[N] {
+trait FlowUnits {
 
-  type U = UnitOfMeasurement[Flow, N]
+  type U = UnitOfMeasurement[Flow]
 
   def m3s: U
   def niagaraFalls: U
 
 }
 
-trait FlowMetadata[N] extends QuantumMetadata[Flow, N] with FlowUnits[N]
+trait FlowMetadata[N] extends QuantumMetadata[Flow, N] with FlowUnits
 
 object Flow {
 
@@ -29,7 +29,7 @@ object Flow {
     new QuantumMetadataGraph[Flow, N, DG] with FlowMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Flow, N](name, symbol, wiki)
+        UnitOfMeasurement[Flow](name, symbol, wiki)
 
       lazy val _m3s = unit("m3s", "m3s") // derive
 
@@ -38,11 +38,11 @@ object Flow {
       def m3s = _m3s
       def niagaraFalls = _niagaraFalls
 
-      def units: List[UnitOfMeasurement[Flow, N]] =
+      def units: List[UnitOfMeasurement[Flow]] =
         List(m3s, niagaraFalls)
 
-      def links: Seq[(UnitOfMeasurement[Flow, N], UnitOfMeasurement[Flow, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Flow, N], UnitOfMeasurement[Flow, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])](
           (m3s, niagaraFalls, ScaleInt(1834)))
 
     }

@@ -12,9 +12,9 @@ case class Volume() extends Quantum {
 
 }
 
-trait VolumeUnits[N] {
+trait VolumeUnits {
 
-  type U = UnitOfMeasurement[Volume, N]
+  type U = UnitOfMeasurement[Volume]
 
   def m3: U
   def km3: U
@@ -35,7 +35,7 @@ trait VolumeUnits[N] {
 
 }
 
-trait VolumeMetadata[N] extends QuantumMetadata[Volume, N] with VolumeUnits[N]
+trait VolumeMetadata[N] extends QuantumMetadata[Volume, N] with VolumeUnits
 
 object Volume {
 
@@ -43,7 +43,7 @@ object Volume {
     new QuantumMetadataGraph[Volume, N, DG] with VolumeMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Volume, N](name, symbol, wiki)
+        UnitOfMeasurement[Volume](name, symbol, wiki)
 
       lazy val _m3 = unit("m3", "m3") // derive
       lazy val _km3 = unit("km3", "km3") // derive
@@ -78,12 +78,12 @@ object Volume {
       def balthazar = _balthazar
       def nebuchadnezzar = _nebuchadnezzar
 
-      def units: List[UnitOfMeasurement[Volume, N]] =
+      def units: List[UnitOfMeasurement[Volume]] =
         List(m3, km3, cm3, greatLakes, liter, milliliter, wineBottle, magnum, jeroboam, rehoboam,
           methuselah, salmanazar, balthazar, nebuchadnezzar)
 
-      def links: Seq[(UnitOfMeasurement[Volume, N], UnitOfMeasurement[Volume, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Volume, N], UnitOfMeasurement[Volume, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Volume], UnitOfMeasurement[Volume], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Volume], UnitOfMeasurement[Volume], Bijection[N, N])](
           (km3, greatLakes, ScaleInt(22671)),
           (milliliter, liter, Scale10s(3)),
           (cm3, milliliter, BijectiveIdentity[N]),

@@ -11,9 +11,9 @@ case class Information() extends Quantum {
 
 }
 
-trait InformationUnits[N] {
+trait InformationUnits {
 
-  type U = UnitOfMeasurement[Information, N]
+  type U = UnitOfMeasurement[Information]
 
   def bit: U
   def nibble: U
@@ -26,7 +26,7 @@ trait InformationUnits[N] {
 
 }
 
-trait InformationMetadata[N] extends QuantumMetadata[Information, N] with InformationUnits[N]
+trait InformationMetadata[N] extends QuantumMetadata[Information, N] with InformationUnits
 
 object Information {
 
@@ -34,7 +34,7 @@ object Information {
     new QuantumMetadataGraph[Information, N, DG] with InformationMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Information, N](name, symbol, wiki)
+        UnitOfMeasurement[Information](name, symbol, wiki)
 
       lazy val _bit = unit("bit", "b")
       lazy val _nibble = unit("nibble", "nibble")
@@ -56,11 +56,11 @@ object Information {
       def terabyte = _terabyte
       def petabyte = _petabyte
 
-      def units: List[UnitOfMeasurement[Information, N]] =
+      def units: List[UnitOfMeasurement[Information]] =
         List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
 
-      def links: Seq[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Information, N], UnitOfMeasurement[Information, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Information], UnitOfMeasurement[Information], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Information], UnitOfMeasurement[Information], Bijection[N, N])](
           (bit, byte, Scale2s(3)),
           (byte, kilobyte, Scale2s(10)),
           (kilobyte, megabyte, Scale2s(10)),

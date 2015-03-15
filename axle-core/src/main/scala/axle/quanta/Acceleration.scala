@@ -11,16 +11,16 @@ case class Acceleration() extends Quantum {
 
 }
 
-trait AccelerationUnits[N] {
+trait AccelerationUnits {
 
-  type U = UnitOfMeasurement[Acceleration, N]
+  type U = UnitOfMeasurement[Acceleration]
 
   def mpsps: U
   def fpsps: U
   def g: U
 }
 
-trait AccelerationMetadata[N] extends QuantumMetadata[Acceleration, N] with AccelerationUnits[N]
+trait AccelerationMetadata[N] extends QuantumMetadata[Acceleration, N] with AccelerationUnits
 
 object Acceleration {
 
@@ -28,7 +28,7 @@ object Acceleration {
     new QuantumMetadataGraph[Acceleration, N, DG] with AccelerationMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Acceleration, N](name, symbol, wiki)
+        UnitOfMeasurement[Acceleration](name, symbol, wiki)
 
       lazy val _mpsps = unit("mps", "mps") // derive
       lazy val _fpsps = unit("fps", "fps") // derive
@@ -38,11 +38,11 @@ object Acceleration {
       def fpsps = _fpsps
       def g = _g
 
-      def units: List[UnitOfMeasurement[Acceleration, N]] =
+      def units: List[UnitOfMeasurement[Acceleration]] =
         List(mpsps, fpsps, g)
 
-      def links: Seq[(UnitOfMeasurement[Acceleration, N], UnitOfMeasurement[Acceleration, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Acceleration, N], UnitOfMeasurement[Acceleration, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Acceleration], UnitOfMeasurement[Acceleration], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Acceleration], UnitOfMeasurement[Acceleration], Bijection[N, N])](
           (mpsps, g, ScaleDouble(9.80665)))
     }
 

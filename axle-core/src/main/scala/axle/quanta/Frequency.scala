@@ -11,9 +11,9 @@ case class Frequency() extends Quantum {
 
 }
 
-trait FrequencyUnits[N] {
+trait FrequencyUnits {
 
-  type U = UnitOfMeasurement[Frequency, N]
+  type U = UnitOfMeasurement[Frequency]
 
   def degree: U
   def hertz: U
@@ -26,7 +26,7 @@ trait FrequencyUnits[N] {
   def GHz: U
 }
 
-trait FrequencyMetadata[N] extends QuantumMetadata[Frequency, N] with FrequencyUnits[N]
+trait FrequencyMetadata[N] extends QuantumMetadata[Frequency, N] with FrequencyUnits
 
 object Frequency {
 
@@ -34,7 +34,7 @@ object Frequency {
     new QuantumMetadataGraph[Frequency, N, DG] with FrequencyMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Frequency, N](name, symbol, wiki)
+        UnitOfMeasurement[Frequency](name, symbol, wiki)
 
       lazy val _degree = unit("degree", "°", Some("http://en.wikipedia.org/wiki/Degree_(Frequency)"))
       lazy val _hertz = unit("Hertz", "Hz", Some("http://en.wikipedia.org/wiki/Hertz"))
@@ -52,11 +52,11 @@ object Frequency {
       def gigahertz = _gigahertz
       def GHz = _gigahertz
 
-      def units: List[UnitOfMeasurement[Frequency, N]] =
+      def units: List[UnitOfMeasurement[Frequency]] =
         List(degree)
 
-      def links: Seq[(UnitOfMeasurement[Frequency, N], UnitOfMeasurement[Frequency, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Frequency, N], UnitOfMeasurement[Frequency, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Frequency], UnitOfMeasurement[Frequency], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Frequency], UnitOfMeasurement[Frequency], Bijection[N, N])](
           (Hz, KHz, Scale10s(3)),
           (Hz, MHz, Scale10s(9)),
           (Hz, GHz, Scale10s(12)))

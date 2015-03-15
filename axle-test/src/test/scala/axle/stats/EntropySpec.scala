@@ -35,7 +35,7 @@ class EntropySpec extends Specification {
       val lhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 100))
       val rhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 2))
       implicit val base = id.bit
-      implicit val ord = axle.quanta.unitOrder[Information, Double]
+      implicit val ord = implicitly[Order[UnittedQuantity[Information, Double]]]
       // lhs < rhs
       orderOps(lhs).compare(rhs) == -1
     }

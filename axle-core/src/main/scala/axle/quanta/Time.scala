@@ -26,9 +26,9 @@ case class Time() extends Quantum {
 
 }
 
-trait TimeUnits[N] {
+trait TimeUnits {
 
-  type U = UnitOfMeasurement[Time, N]
+  type U = UnitOfMeasurement[Time]
 
   def second: U
   def s: U
@@ -63,7 +63,7 @@ trait TimeUnits[N] {
 
 }
 
-trait TimeMetadata[N] extends QuantumMetadata[Time, N] with TimeUnits[N]
+trait TimeMetadata[N] extends QuantumMetadata[Time, N] with TimeUnits
 
 object Time {
 
@@ -71,7 +71,7 @@ object Time {
     new QuantumMetadataGraph[Time, N, DG] with TimeMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Time, N](name, symbol, wiki)
+        UnitOfMeasurement[Time](name, symbol, wiki)
 
       lazy val _second = unit("second", "s", Some("http://en.wikipedia.org/wiki/Second"))
       lazy val _millisecond = unit("millisecond", "ms", Some("http://en.wikipedia.org/wiki/Millisecond"))
@@ -122,12 +122,12 @@ object Time {
       def gigayear = _gigayear
       def gy = _gigayear
 
-      def units: List[UnitOfMeasurement[Time, N]] =
+      def units: List[UnitOfMeasurement[Time]] =
         List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
           zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
 
-      def links: Seq[(UnitOfMeasurement[Time, N], UnitOfMeasurement[Time, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Time, N], UnitOfMeasurement[Time, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Time], UnitOfMeasurement[Time], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Time], UnitOfMeasurement[Time], Bijection[N, N])](
           (ms, s, Scale10s(3)),
           (μs, s, Scale10s(6)),
           (ns, s, Scale10s(9)),

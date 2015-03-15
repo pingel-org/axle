@@ -11,9 +11,9 @@ case class Energy() extends Quantum {
 
 }
 
-trait EnergyUnits[N] {
+trait EnergyUnits {
 
-  type U = UnitOfMeasurement[Energy, N]
+  type U = UnitOfMeasurement[Energy]
 
   def kwh: U
   def joule: U
@@ -29,7 +29,7 @@ trait EnergyUnits[N] {
   def gt: U
 }
 
-trait EnergyMetadata[N] extends QuantumMetadata[Energy, N] with EnergyUnits[N]
+trait EnergyMetadata[N] extends QuantumMetadata[Energy, N] with EnergyUnits
 
 object Energy {
 
@@ -37,7 +37,7 @@ object Energy {
     new QuantumMetadataGraph[Energy, N, DG] with EnergyMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Energy, N](name, symbol, wiki)
+        UnitOfMeasurement[Energy](name, symbol, wiki)
 
       lazy val _kwh = unit("kwh", "kwh") // derive
       lazy val _joule = unit("joule", "J")
@@ -63,11 +63,11 @@ object Energy {
 
       // TODO lazy val castleBravo = 15 *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
 
-      def units: List[UnitOfMeasurement[Energy, N]] =
+      def units: List[UnitOfMeasurement[Energy]] =
         List(kwh, joule, kilojoule, megajoule, tonTNT, kiloton, megaton, gigaton)
 
-      def links: Seq[(UnitOfMeasurement[Energy, N], UnitOfMeasurement[Energy, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Energy, N], UnitOfMeasurement[Energy, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Energy], UnitOfMeasurement[Energy], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Energy], UnitOfMeasurement[Energy], Bijection[N, N])](
           (megajoule, t, ScaleDouble(4.184)),
           (joule, kilojoule, Scale10s(3)),
           (joule, megajoule, Scale10s(6)),

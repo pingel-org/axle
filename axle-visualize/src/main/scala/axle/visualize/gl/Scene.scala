@@ -31,7 +31,7 @@ import axle.algebra.DirectedGraph
 import axle.sine
 import axle.cosine
 
-abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance, Float])(
+abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance])(
   implicit angleMetaFloat: AngleMetadata[Float],
   angleMetaDouble: AngleMetadata[Double],
   distanceMetaFloat: DistanceMetadata[Float],

@@ -11,9 +11,9 @@ case class Power() extends Quantum {
 
 }
 
-trait PowerUnits[N] {
+trait PowerUnits {
 
-  type U = UnitOfMeasurement[Power, N]
+  type U = UnitOfMeasurement[Power]
 
   def watt: U
   def W: U
@@ -30,7 +30,7 @@ trait PowerUnits[N] {
   def mustangGT: U
 }
 
-trait PowerMetadata[N] extends QuantumMetadata[Power, N] with PowerUnits[N]
+trait PowerMetadata[N] extends QuantumMetadata[Power, N] with PowerUnits
 
 object Power {
 
@@ -38,7 +38,7 @@ object Power {
     new QuantumMetadataGraph[Power, N, DG] with PowerMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Power, N](name, symbol, wiki)
+        UnitOfMeasurement[Power](name, symbol, wiki)
 
       lazy val _watt = unit("watt", "W")
       lazy val _kilowatt = unit("kilowatt", "KW")
@@ -64,11 +64,11 @@ object Power {
       def hooverDam = _hooverDam
       def mustangGT = _mustangGT
 
-      def units: List[UnitOfMeasurement[Power, N]] =
+      def units: List[UnitOfMeasurement[Power]] =
         List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
 
-      def links: Seq[(UnitOfMeasurement[Power, N], UnitOfMeasurement[Power, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Power, N], UnitOfMeasurement[Power, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Power], UnitOfMeasurement[Power], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Power], UnitOfMeasurement[Power], Bijection[N, N])](
           (watt, kilowatt, Scale10s(3)),
           (kilowatt, megawatt, Scale10s(3)),
           (megawatt, gigawatt, Scale10s(3)),

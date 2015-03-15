@@ -11,16 +11,16 @@ case class Force() extends Quantum {
 
 }
 
-trait ForceUnits[N] {
+trait ForceUnits {
 
-  type U = UnitOfMeasurement[Force, N]
+  type U = UnitOfMeasurement[Force]
 
   def pound: U
   def newton: U
   def dyne: U
 }
 
-trait ForceMetadata[N] extends QuantumMetadata[Force, N] with ForceUnits[N]
+trait ForceMetadata[N] extends QuantumMetadata[Force, N] with ForceUnits
 
 object Force {
 
@@ -28,7 +28,7 @@ object Force {
     new QuantumMetadataGraph[Force, N, DG] with ForceMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Force, N](name, symbol, wiki)
+        UnitOfMeasurement[Force](name, symbol, wiki)
 
       lazy val _pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
       lazy val _newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
@@ -38,10 +38,10 @@ object Force {
       def newton = _newton
       def dyne = _dyne
 
-      def units: List[UnitOfMeasurement[Force, N]] =
+      def units: List[UnitOfMeasurement[Force]] =
         List(pound, newton, dyne)
 
-      def links: Seq[(UnitOfMeasurement[Force, N], UnitOfMeasurement[Force, N], Bijection[N, N])] =
+      def links: Seq[(UnitOfMeasurement[Force], UnitOfMeasurement[Force], Bijection[N, N])] =
         List.empty
 
     }

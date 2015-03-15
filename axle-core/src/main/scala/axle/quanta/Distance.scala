@@ -12,15 +12,15 @@ case class Distance() extends Quantum {
 
 }
 
-trait DistanceUnits[N] {
+trait DistanceUnits {
 
-  def foot: UnitOfMeasurement[Distance, N]
+  def foot: UnitOfMeasurement[Distance]
 
-  def centimeter: UnitOfMeasurement[Distance, N]
+  def centimeter: UnitOfMeasurement[Distance]
 
 }
 
-trait DistanceMetadata[N] extends QuantumMetadata[Distance, N] with DistanceUnits[N]
+trait DistanceMetadata[N] extends QuantumMetadata[Distance, N] with DistanceUnits
 
 object Distance {
 
@@ -28,7 +28,7 @@ object Distance {
     new QuantumMetadataGraph[Distance, N, DG] with DistanceMetadata[N] {
 
       def unit(name: String, symbol: String, wiki: Option[String] = None) =
-        UnitOfMeasurement[Distance, N](name, symbol, wiki)
+        UnitOfMeasurement[Distance](name, symbol, wiki)
 
       lazy val _foot = unit("foot", "ft")
       lazy val mile = unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile"))
@@ -55,12 +55,12 @@ object Distance {
       def centimeter = _centimeter
       def cm = _centimeter
 
-      def units: List[UnitOfMeasurement[Distance, N]] =
+      def units: List[UnitOfMeasurement[Distance]] =
         List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
           astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
 
-      def links: Seq[(UnitOfMeasurement[Distance, N], UnitOfMeasurement[Distance, N], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Distance, N], UnitOfMeasurement[Distance, N], Bijection[N, N])](
+      def links: Seq[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])](
           (foot, mile, ScaleInt(5280)),
           (foot, meter, ScaleDouble(3.2808398950131235)),
           (kilometer, mile, ScaleDouble(1.609344)),
