@@ -19,11 +19,11 @@ import axle.quanta.UnitOfMeasurement
 import spire.implicits.DoubleAlgebra
 import axle.algebra.DirectedGraph
 
-case class DataFeedActor[T, DG[_, _]: DirectedGraph](
+case class DataFeedActor[T](
   initialValue: T,
   refreshFn: T => T,
   interval: UnittedQuantity[Time, Double])(
-    implicit timeMeta: TimeMetadata[Double, DG])
+    implicit timeMeta: TimeMetadata[Double])
   extends Actor with ActorLogging {
 
   import DataFeedProtocol._

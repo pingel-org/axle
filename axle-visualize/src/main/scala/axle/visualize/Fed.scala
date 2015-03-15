@@ -16,11 +16,11 @@ trait Fed[T] extends Component {
 
   var dataFeedActorOpt: Option[ActorRef] = None
 
-  def setFeeder[DG[_, _]: DirectedGraph](
+  def setFeeder(
     fn: T => T,
     interval: UnittedQuantity[Time, Double],
     system: ActorSystem)(
-      implicit timeMeta: TimeMetadata[Double, DG]): ActorRef = {
+      implicit timeMeta: TimeMetadata[Double]): ActorRef = {
     val feederActorRef = system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
     dataFeedActorOpt = Some(feederActorRef)
     feederActorRef

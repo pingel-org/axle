@@ -11,8 +11,7 @@ case class Force() extends Quantum {
 
 }
 
-abstract class ForceMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadataGraph[Force, N, DG] {
+trait ForceUnits[N] {
 
   type U = UnitOfMeasurement[Force, N]
 
@@ -21,27 +20,30 @@ abstract class ForceMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
   def dyne: U
 }
 
+trait ForceMetadata[N] extends QuantumMetadata[Force, N] with ForceUnits[N]
+
 object Force {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new ForceMetadata[N, DG] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new QuantumMetadataGraph[Force, N, DG] with ForceMetadata[N] {
 
-    def unit(name: String, symbol: String, wiki: Option[String] = None) =
-      UnitOfMeasurement[Force, N](name, symbol, wiki)
+      def unit(name: String, symbol: String, wiki: Option[String] = None) =
+        UnitOfMeasurement[Force, N](name, symbol, wiki)
 
-    lazy val _pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
-    lazy val _newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
-    lazy val _dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
+      lazy val _pound = unit("pound", "lb", Some("http://en.wikipedia.org/wiki/Pound-force"))
+      lazy val _newton = unit("newton", "N", Some("http://en.wikipedia.org/wiki/Newton_(unit)"))
+      lazy val _dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
 
-    def pound = _pound
-    def newton = _newton
-    def dyne = _dyne
+      def pound = _pound
+      def newton = _newton
+      def dyne = _dyne
 
-    def units: List[UnitOfMeasurement[Force, N]] =
-      List(pound, newton, dyne)
+      def units: List[UnitOfMeasurement[Force, N]] =
+        List(pound, newton, dyne)
 
-    def links: Seq[(UnitOfMeasurement[Force, N], UnitOfMeasurement[Force, N], Bijection[N, N])] =
-      List.empty
+      def links: Seq[(UnitOfMeasurement[Force, N], UnitOfMeasurement[Force, N], Bijection[N, N])] =
+        List.empty
 
-  }
+    }
 
 }

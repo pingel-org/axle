@@ -11,32 +11,33 @@ case class MoneyPerForce() extends Quantum {
 
 }
 
-abstract class MoneyPerForceMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadataGraph[MoneyPerForce, N, DG] {
+trait MoneyPerForceUnits[N] {
 
   type U = UnitOfMeasurement[MoneyPerForce, N]
 
   def USDperPound: U
 }
 
+trait MoneyPerForceMetadata[N] extends QuantumMetadata[MoneyPerForce, N] with MoneyPerForceUnits[N]
 
 object MoneyPerForce {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new MoneyPerForceMetadata[N, DG] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new QuantumMetadataGraph[MoneyPerForce, N, DG] with MoneyPerForceMetadata[N] {
 
-    def unit(name: String, symbol: String, wiki: Option[String] = None) =
-      UnitOfMeasurement[MoneyPerForce, N](name, symbol, wiki)
+      def unit(name: String, symbol: String, wiki: Option[String] = None) =
+        UnitOfMeasurement[MoneyPerForce, N](name, symbol, wiki)
 
-    lazy val _USDperPound = unit("$/lb", "$/lb") // derive
+      lazy val _USDperPound = unit("$/lb", "$/lb") // derive
 
-    def USDperPound = _USDperPound
-    
-    def units: List[UnitOfMeasurement[MoneyPerForce, N]] =
-      List(USDperPound)
+      def USDperPound = _USDperPound
 
-    def links: Seq[(UnitOfMeasurement[MoneyPerForce, N], UnitOfMeasurement[MoneyPerForce, N], Bijection[N, N])] =
-      List.empty
+      def units: List[UnitOfMeasurement[MoneyPerForce, N]] =
+        List(USDperPound)
 
-  }
+      def links: Seq[(UnitOfMeasurement[MoneyPerForce, N], UnitOfMeasurement[MoneyPerForce, N], Bijection[N, N])] =
+        List.empty
+
+    }
 
 }

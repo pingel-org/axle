@@ -47,12 +47,12 @@ package object visualize {
     frame.setVisible(true)
   }
 
-  def play[T: Draw, D, DG[_, _]: DirectedGraph](
+  def play[T: Draw, D](
     t: T,
     f: D => D,
     interval: UnittedQuantity[Time, Double])(
       implicit system: ActorSystem,
-      timemeta: TimeMetadata[Double, DG]): ActorRef = {
+      timemeta: TimeMetadata[Double]): ActorRef = {
 
     val draw = implicitly[Draw[T]]
     draw.component(t) match {

@@ -11,8 +11,7 @@ case class Power() extends Quantum {
 
 }
 
-abstract class PowerMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadataGraph[Power, N, DG] {
+trait PowerUnits[N] {
 
   type U = UnitOfMeasurement[Power, N]
 
@@ -31,50 +30,53 @@ abstract class PowerMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
   def mustangGT: U
 }
 
+trait PowerMetadata[N] extends QuantumMetadata[Power, N] with PowerUnits[N]
+
 object Power {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new PowerMetadata[N, DG] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new QuantumMetadataGraph[Power, N, DG] with PowerMetadata[N] {
 
-    def unit(name: String, symbol: String, wiki: Option[String] = None) =
-      UnitOfMeasurement[Power, N](name, symbol, wiki)
+      def unit(name: String, symbol: String, wiki: Option[String] = None) =
+        UnitOfMeasurement[Power, N](name, symbol, wiki)
 
-    lazy val _watt = unit("watt", "W")
-    lazy val _kilowatt = unit("kilowatt", "KW")
-    lazy val _megawatt = unit("megawatt", "MW")
-    lazy val _gigawatt = unit("gigawatt", "GW")
-    lazy val _milliwatt = unit("milliwatt", "mW")
-    lazy val _horsepower = unit("horsepower", "hp")
-    lazy val _lightBulb = unit("light bulb", "light bulb")
-    lazy val _hooverDam = unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
-    lazy val _mustangGT = unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
+      lazy val _watt = unit("watt", "W")
+      lazy val _kilowatt = unit("kilowatt", "KW")
+      lazy val _megawatt = unit("megawatt", "MW")
+      lazy val _gigawatt = unit("gigawatt", "GW")
+      lazy val _milliwatt = unit("milliwatt", "mW")
+      lazy val _horsepower = unit("horsepower", "hp")
+      lazy val _lightBulb = unit("light bulb", "light bulb")
+      lazy val _hooverDam = unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
+      lazy val _mustangGT = unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
 
-    def watt = _watt
-    def W = _watt
-    def kilowatt = _kilowatt
-    def kW = _kilowatt
-    def megawatt = _megawatt
-    def MW = _megawatt
-    def gigawatt = _gigawatt
-    def GW = _gigawatt
-    def milliwatt = _milliwatt
-    def horsepower = _horsepower
-    def lightBulb = _lightBulb
-    def hooverDam = _hooverDam
-    def mustangGT = _mustangGT
+      def watt = _watt
+      def W = _watt
+      def kilowatt = _kilowatt
+      def kW = _kilowatt
+      def megawatt = _megawatt
+      def MW = _megawatt
+      def gigawatt = _gigawatt
+      def GW = _gigawatt
+      def milliwatt = _milliwatt
+      def horsepower = _horsepower
+      def lightBulb = _lightBulb
+      def hooverDam = _hooverDam
+      def mustangGT = _mustangGT
 
-    def units: List[UnitOfMeasurement[Power, N]] =
-      List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
+      def units: List[UnitOfMeasurement[Power, N]] =
+        List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
 
-    def links: Seq[(UnitOfMeasurement[Power, N], UnitOfMeasurement[Power, N], Bijection[N, N])] =
-      List[(UnitOfMeasurement[Power, N], UnitOfMeasurement[Power, N], Bijection[N, N])](
-        (watt, kilowatt, Scale10s(3)),
-        (kilowatt, megawatt, Scale10s(3)),
-        (megawatt, gigawatt, Scale10s(3)),
-        (milliwatt, watt, Scale10s(3)),
-        (watt, lightBulb, ScaleInt(60)),
-        (megawatt, hooverDam, ScaleInt(2080)),
-        (horsepower, mustangGT, ScaleInt(420)))
+      def links: Seq[(UnitOfMeasurement[Power, N], UnitOfMeasurement[Power, N], Bijection[N, N])] =
+        List[(UnitOfMeasurement[Power, N], UnitOfMeasurement[Power, N], Bijection[N, N])](
+          (watt, kilowatt, Scale10s(3)),
+          (kilowatt, megawatt, Scale10s(3)),
+          (megawatt, gigawatt, Scale10s(3)),
+          (milliwatt, watt, Scale10s(3)),
+          (watt, lightBulb, ScaleInt(60)),
+          (megawatt, hooverDam, ScaleInt(2080)),
+          (horsepower, mustangGT, ScaleInt(420)))
 
-  }
+    }
 
 }

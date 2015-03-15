@@ -11,8 +11,7 @@ case class Money() extends Quantum {
 
 }
 
-abstract class MoneyMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
-  extends QuantumMetadataGraph[Money, N, DG] {
+trait MoneyUnits[N] {
 
   type U = UnitOfMeasurement[Money, N]
 
@@ -20,23 +19,26 @@ abstract class MoneyMetadata[N: Field: Eq, DG[_, _]: DirectedGraph]
 
 }
 
+trait MoneyMetadata[N] extends QuantumMetadata[Money, N] with MoneyUnits[N]
+
 object Money {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] = new MoneyMetadata[N, DG] {
+  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new QuantumMetadataGraph[Money, N, DG] with MoneyMetadata[N] {
 
-    def unit(name: String, symbol: String, wiki: Option[String] = None) =
-      UnitOfMeasurement[Money, N](name, symbol, wiki)
+      def unit(name: String, symbol: String, wiki: Option[String] = None) =
+        UnitOfMeasurement[Money, N](name, symbol, wiki)
 
-    lazy val _USD = unit("US Dollar", "USD")
+      lazy val _USD = unit("US Dollar", "USD")
 
-    def USD = _USD
+      def USD = _USD
 
-    def units: List[UnitOfMeasurement[Money, N]] =
-      List(USD)
+      def units: List[UnitOfMeasurement[Money, N]] =
+        List(USD)
 
-    def links: Seq[(UnitOfMeasurement[Money, N], UnitOfMeasurement[Money, N], Bijection[N, N])] =
-      List.empty
+      def links: Seq[(UnitOfMeasurement[Money, N], UnitOfMeasurement[Money, N], Bijection[N, N])] =
+        List.empty
 
-  }
+    }
 
 }
