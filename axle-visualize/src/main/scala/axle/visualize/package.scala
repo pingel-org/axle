@@ -14,7 +14,7 @@ import axle.jung.JungUndirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.quanta.Time
-import axle.quanta.TimeMetadata
+import axle.quanta.TimeConverter
 import axle.quanta.UnittedQuantity
 import axle.visualize.Draw
 import axle.visualize.Fed
@@ -41,7 +41,7 @@ package object visualize {
     f: D => D,
     interval: UnittedQuantity[Time, Double])(
       implicit system: ActorSystem,
-      timemeta: TimeMetadata[Double]): ActorRef = {
+      tc: TimeConverter[Double]): ActorRef = {
 
     val draw = implicitly[Draw[T]]
     draw.component(t) match {

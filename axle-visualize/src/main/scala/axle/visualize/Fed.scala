@@ -6,7 +6,7 @@ import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
 import axle.quanta.Time
-import axle.quanta.TimeMetadata
+import axle.quanta.TimeConverter
 import axle.quanta.UnittedQuantity
 
 trait Fed[T] extends Component {
@@ -19,7 +19,7 @@ trait Fed[T] extends Component {
     fn: T => T,
     interval: UnittedQuantity[Time, Double],
     system: ActorSystem)(
-      implicit timeMeta: TimeMetadata[Double]): ActorRef = {
+      implicit tc: TimeConverter[Double]): ActorRef = {
     val feederActorRef = system.actorOf(Props(new DataFeedActor(initialValue, fn, interval)))
     dataFeedActorOpt = Some(feederActorRef)
     feederActorRef
