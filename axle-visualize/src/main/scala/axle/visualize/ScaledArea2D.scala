@@ -11,10 +11,9 @@ import axle.algebra.LengthSpace
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitOfMeasurement
 import spire.algebra.Eq
-import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra
+import spire.implicits.eqOps
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 

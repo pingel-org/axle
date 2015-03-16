@@ -8,7 +8,6 @@ import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
-import spire.implicits.DoubleAlgebra
 import javax.media.opengl.GL.GL_COLOR_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT
 import javax.media.opengl.GL.GL_DEPTH_TEST
@@ -34,7 +33,6 @@ import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW
 import javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import javax.media.opengl.glu.GLU
 import spire.implicits.FloatAlgebra
-import axle.algebra.DirectedGraph
 
 case class AxleGLCanvas(
   scene: Scene,

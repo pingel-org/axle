@@ -15,9 +15,7 @@ import akka.actor.actorRef2Scala
 import axle.quanta.Time
 import axle.quanta.TimeMetadata
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitOfMeasurement
 import spire.implicits.DoubleAlgebra
-import axle.algebra.DirectedGraph
 
 case class DataFeedActor[T](
   initialValue: T,

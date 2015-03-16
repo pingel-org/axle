@@ -13,28 +13,18 @@ import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import axle.algebra.Plottable
-import axle.quanta.Angle
+import axle.algebra.LinearAlgebra
+import axle.algebra.Tics
+import axle.ml.KMeans
 import axle.quanta.AngleConverter
-import axle.quanta.UnittedQuantity
+import axle.syntax.linearalgebra.matrixOps
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import axle.algebra.LinearAlgebra
-import axle.algebra.Tics
-import axle.ml.KMeans
 import javax.swing.JPanel
-import java.awt.Component
 import spire.implicits.DoubleAlgebra
-import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
-import spire.math.Number.apply
-import spire.implicits.moduleOps
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.Angle
-import axle.algebra.DirectedGraph
-import axle.syntax.linearalgebra._
 
 case class KMeansVisualization[D, F[_], M](
   classifier: KMeans[D, F, M],

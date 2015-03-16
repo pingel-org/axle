@@ -1,9 +1,9 @@
 package axle.visualize
 
-import spire.algebra.Order
-import spire.compat.ordering
 import axle.algebra.Plottable
 import axle.algebra.Zero
+import spire.algebra.Order
+import spire.compat.ordering
 
 /**
  * implicits for Plot and BarChart

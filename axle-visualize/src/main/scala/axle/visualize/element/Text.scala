@@ -7,8 +7,6 @@ import java.awt.Graphics2D
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitOfMeasurement
-import axle.algebra.DirectedGraph
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra
 

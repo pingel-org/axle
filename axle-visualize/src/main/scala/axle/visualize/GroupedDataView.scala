@@ -1,10 +1,9 @@
 package axle.visualize
 
-import spire.algebra.Order
-import spire.compat.ordering
-import spire.implicits._
 import axle.algebra.Plottable
 import axle.algebra.Zero
+import spire.algebra.Order
+import spire.compat.ordering
 
 /**
  *

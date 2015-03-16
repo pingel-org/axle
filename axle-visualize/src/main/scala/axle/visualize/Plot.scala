@@ -12,11 +12,8 @@ import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.algebra.DirectedGraph
-import spire.algebra.Eq
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.Angle
 import axle.quanta.AngleConverter
+import spire.algebra.Eq
 
 object Plot {
 

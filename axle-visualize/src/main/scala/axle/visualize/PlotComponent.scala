@@ -12,16 +12,13 @@ import scala.concurrent.duration.DurationInt
 import DataFeedProtocol.Fetch
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
-import axle.algebra.DirectedGraph
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
+import axle.quanta.AngleConverter
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
 
 case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
   plot: Plot[X, Y, D])(

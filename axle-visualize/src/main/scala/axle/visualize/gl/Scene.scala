@@ -3,22 +3,21 @@ package axle.visualize.gl
 import java.net.URL
 
 import scala.Vector
-import scala.math.cos
-import scala.math.sin
 
 import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
 
 import axle.algebra.Position
 import axle.algebra.SphericalVector
+import axle.cosine
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
-import axle.quanta.modulize
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
-import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
-import axle.quanta.Distance._
+import axle.quanta.UnittedQuantity
+import axle.quanta.modulize
+import axle.sine
 import javax.media.opengl.GL2
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
@@ -26,10 +25,6 @@ import javax.media.opengl.glu.GLU
 import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps
-import spire.implicits._
-import axle.algebra.DirectedGraph
-import axle.sine
-import axle.cosine
 
 abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance])(
   implicit angleMetaFloat: AngleConverter[Float],

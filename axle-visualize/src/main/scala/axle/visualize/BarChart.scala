@@ -11,13 +11,11 @@ import java.awt.Color.yellow
 import scala.reflect.ClassTag
 
 import axle.Show
-import axle.algebra.DirectedGraph
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
-import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
 import spire.algebra.Eq
 import spire.algebra.Order

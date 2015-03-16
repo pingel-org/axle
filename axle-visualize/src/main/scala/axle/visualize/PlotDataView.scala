@@ -3,11 +3,11 @@ package axle.visualize
 import scala.collection.immutable.TreeMap
 
 import axle.algebra.Plottable
+import axle.algebra.Zero
 import spire.algebra.Order
+import spire.compat.ordering
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
-import axle.algebra._
-import spire.compat.ordering
 
 trait PlotDataView[X, Y, D] {
 

@@ -5,18 +5,14 @@ import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Graphics2D
 
-import spire.implicits.DoubleAlgebra
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D
+import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
-import spire.math.Number.apply
-import spire.implicits.moduleOps
-import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement
 
 case class XTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],

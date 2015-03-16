@@ -6,19 +6,12 @@ import java.awt.event.WindowEvent
 
 import com.jogamp.opengl.util.FPSAnimator
 
+import axle.quanta.AngleConverter
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
-import spire.math.Number.apply
-import spire.implicits.DoubleAlgebra
-import spire.implicits.FloatAlgebra
-import spire.implicits.moduleOps
-import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
 
 case class SceneFrame(
   scene: Scene,

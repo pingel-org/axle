@@ -1,20 +1,15 @@
 package axle.visualize.gl
 
-import javax.media.opengl.GL.GL_TRIANGLES
-import javax.media.opengl.GL.GL_FRONT_AND_BACK
+import scala.Vector
+
 import javax.media.opengl.GL.GL_FRONT
+import javax.media.opengl.GL.GL_TRIANGLES
 import javax.media.opengl.GL2
 import javax.media.opengl.GL2GL3.GL_QUADS
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_EMISSION
-import com.jogamp.opengl.util.texture.Texture
+import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import javax.media.opengl.glu.GLU
-import axle.algebra.DirectedGraph
 
 trait Render[A] {
   def render(value: A, scene: Scene, gl: GL2, glu: GLU): Unit

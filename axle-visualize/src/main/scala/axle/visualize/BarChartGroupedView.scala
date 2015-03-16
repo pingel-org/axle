@@ -6,10 +6,10 @@ import java.awt.Font
 
 import scala.reflect.ClassTag
 
-import axle.algebra.Plottable
+import axle.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
-import axle.Show
+import axle.quanta.AngleConverter
 import axle.string
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
@@ -18,14 +18,8 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
 import spire.algebra.Order
-import spire.implicits.DoubleAlgebra
-import spire.math.Number.apply
-import spire.implicits.moduleOps
 import spire.compat.ordering
-import axle.algebra.DirectedGraph
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
-import axle.quanta.UnitOfMeasurement
+import spire.implicits.DoubleAlgebra
 
 case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](
   chart: BarChartGrouped[G, S, Y, D],

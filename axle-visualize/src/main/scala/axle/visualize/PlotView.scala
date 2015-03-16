@@ -8,6 +8,7 @@ import scala.Stream.continually
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
+import axle.quanta.AngleConverter
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -15,10 +16,6 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
-import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
 
 case class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
   implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],

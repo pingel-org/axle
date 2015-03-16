@@ -1,14 +1,13 @@
 package axle.visualize
 
 import java.awt.Component
+
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
 import axle.quanta.Time
 import axle.quanta.TimeMetadata
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitOfMeasurement
-import axle.algebra.DirectedGraph
 
 trait Fed[T] extends Component {
 

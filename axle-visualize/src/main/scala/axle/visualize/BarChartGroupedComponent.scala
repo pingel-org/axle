@@ -17,15 +17,12 @@ import axle.actor.Defaults.askTimeout
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
+import axle.quanta.AngleConverter
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.algebra.Order
-import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
 
 case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
   chart: BarChartGrouped[G, S, Y, D])(

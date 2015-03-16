@@ -16,15 +16,12 @@ import axle.actor.Defaults.askTimeout
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
+import axle.quanta.AngleConverter
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.Text
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.algebra.Order
-import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement
 
 case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag](
   chart: BarChart[S, Y, D])(

@@ -10,16 +10,13 @@ import java.awt.Color.yellow
 
 import scala.reflect.ClassTag
 
+import axle.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.Show
+import axle.quanta.AngleConverter
 import spire.algebra.Eq
 import spire.algebra.Order
-import axle.algebra.DirectedGraph
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
 
 object BarChartGrouped {
 

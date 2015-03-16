@@ -1,38 +1,27 @@
 
 package axle
 
-import scala.reflect.ClassTag
-
-import akka.actor.ActorSystem
-
-import java.awt.Color
 import java.awt.Component
-import java.awt.Font
 import java.awt.image.BufferedImage
 import java.io.File
-import javax.imageio.ImageIO
-import javax.swing.JPanel
-import javax.swing.CellRendererPane
+
+import akka.actor.ActorRef
+import akka.actor.ActorSystem
+import akka.actor.Props
+import axle.algebra.DirectedGraph
+import axle.jung.JungDirectedGraph
+import axle.jung.JungUndirectedGraph
+import axle.pgm.BayesianNetwork
+import axle.pgm.BayesianNetworkNode
 import axle.quanta.Time
 import axle.quanta.TimeMetadata
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitOfMeasurement
-
-import spire.algebra._
-
-import akka.actor.ActorRef
-import akka.actor.Props
-
-import axle.visualize._
-import axle.ml._
-import axle.stats._
-import axle.pgm._
-import axle.jung._
-import axle.algebra.Plottable
-import axle.algebra.Tics
-import axle.algebra.LengthSpace
-import axle.algebra.Zero
-import axle.algebra.DirectedGraph
+import axle.visualize.Draw
+import axle.visualize.Fed
+import axle.visualize.FrameRepaintingActor
+import javax.imageio.ImageIO
+import spire.algebra.Eq
+import spire.algebra.Field
 
 package object visualize {
 

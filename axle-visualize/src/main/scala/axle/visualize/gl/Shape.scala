@@ -4,8 +4,6 @@ import java.net.URL
 
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
-import spire.algebra.Field
-import spire.algebra.Order
 
 sealed trait Shape
 
