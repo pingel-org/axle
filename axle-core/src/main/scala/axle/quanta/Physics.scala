@@ -27,6 +27,7 @@ object Physics {
     MoneyPerForce,
     Power,
     Speed,
+    Temperature,
     Time,
     Volume)
 
