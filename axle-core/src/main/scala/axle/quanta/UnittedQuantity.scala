@@ -1,6 +1,7 @@
 package axle.quanta
 
 import axle.algebra.Vertex
+import axle.Show
 import axle.syntax.directedgraph.directedGraphOps
 import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
@@ -10,6 +11,11 @@ import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 
 object UnittedQuantity {
+
+  implicit def showEQ[Q, N]: Show[UnittedQuantity[Q, N]] =
+    new Show[UnittedQuantity[Q, N]] {
+      def text(uq: UnittedQuantity[Q, N]): String = uq.magnitude + " " + uq.unit.symbol
+    }
 
   implicit def eqqqn[Q, N: Eq]: Eq[UnittedQuantity[Q, N]] =
     new Eq[UnittedQuantity[Q, N]] {
