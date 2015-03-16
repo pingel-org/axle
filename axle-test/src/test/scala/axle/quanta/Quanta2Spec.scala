@@ -78,7 +78,7 @@ class QuantaSpec extends Specification {
       implicit val vr = Volume.converterGraph[Rational, JungDirectedGraph]
       import vr._
 
-      ((Rational(24) *: wineBottle) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
+      ((Rational(1, 10) *: liter) in milliliter).magnitude must be equalTo Rational(100)
     }
   }
 
@@ -114,7 +114,7 @@ class QuantaSpec extends Specification {
       import fr._
 
       // TODO convert that to years
-      (1d *: greatLakes).over[Flow, Time, Rational](1d *: niagaraFalls).name must be equalTo "TODO" // TODO
+      (1d *: m3).over[Flow, Time, Rational](1d *: m3s).name must be equalTo "TODO" // TODO
     }
   }
 
