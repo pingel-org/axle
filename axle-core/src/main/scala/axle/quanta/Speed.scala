@@ -27,12 +27,12 @@ trait SpeedUnits extends QuantumUnits[Speed] {
 
 }
 
-trait SpeedMetadata[N] extends QuantumMetadata[Speed, N] with SpeedUnits
+trait SpeedConverter[N] extends UnitConverter[Speed, N] with SpeedUnits
 
 object Speed {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Speed, N, DG] with SpeedMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Speed, N, DG] with SpeedConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])] =
         List[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])](

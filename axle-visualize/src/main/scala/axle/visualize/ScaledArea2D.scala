@@ -9,7 +9,7 @@ import scala.math.min
 
 import axle.algebra.LengthSpace
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import spire.algebra.Eq
@@ -95,7 +95,7 @@ case class ScaledArea2D[X, Y](
     s: String,
     p: Point2D[X, Y],
     angle: UnittedQuantity[Angle, Double])(
-      implicit angleMeta: AngleMetadata[Double]): Unit = {
+      implicit angleMeta: AngleConverter[Double]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
       val a = (angle in angleMeta.radian).magnitude

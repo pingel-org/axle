@@ -33,12 +33,12 @@ trait EnergyUnits extends QuantumUnits[Energy] {
 
 }
 
-trait EnergyMetadata[N] extends QuantumMetadata[Energy, N] with EnergyUnits
+trait EnergyConverter[N] extends UnitConverter[Energy, N] with EnergyUnits
 
 object Energy {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Energy, N, DG] with EnergyMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Energy, N, DG] with EnergyConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Energy], UnitOfMeasurement[Energy], Bijection[N, N])] =
         List[(UnitOfMeasurement[Energy], UnitOfMeasurement[Energy], Bijection[N, N])](

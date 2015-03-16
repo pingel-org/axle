@@ -15,9 +15,9 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      implicit val dr = Distance.metadata[Rational, JungDirectedGraph]
+      implicit val dr = Distance.converterGraph[Rational, JungDirectedGraph]
       import dr._
-      implicit val tr = Time.metadata[Rational, JungDirectedGraph]
+      implicit val tr = Time.converterGraph[Rational, JungDirectedGraph]
       import tr._
 
       val d1 = Rational(3, 4) *: meter
@@ -43,12 +43,12 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      val md = Mass.metadata[Double, JungDirectedGraph]
+      val md = Mass.converterGraph[Double, JungDirectedGraph]
       import md._
 
       (5 *: gram).magnitude must be equalTo 5
 
-      implicit val dd = Distance.metadata[Double, JungDirectedGraph]
+      implicit val dd = Distance.converterGraph[Double, JungDirectedGraph]
       import dd._
       import spire.implicits.DoubleAlgebra
 
@@ -61,9 +61,9 @@ class QuantaSpec extends Specification {
 
     "work" in {
 
-      implicit val md = Mass.metadata[Double, JungDirectedGraph]
+      implicit val md = Mass.converterGraph[Double, JungDirectedGraph]
       import md._
-      implicit val dd = Distance.metadata[Double, JungDirectedGraph]
+      implicit val dd = Distance.converterGraph[Double, JungDirectedGraph]
       import dd._
       import spire.implicits.DoubleAlgebra
 
@@ -75,7 +75,7 @@ class QuantaSpec extends Specification {
 
     "use Rational" in {
 
-      implicit val vr = Volume.metadata[Rational, JungDirectedGraph]
+      implicit val vr = Volume.converterGraph[Rational, JungDirectedGraph]
       import vr._
 
       ((Rational(24) *: wineBottle) in nebuchadnezzar).magnitude must be equalTo Rational(6, 5)
@@ -85,9 +85,9 @@ class QuantaSpec extends Specification {
   "addition" should {
     "work" in {
 
-      implicit val md = Mass.metadata[Double, JungDirectedGraph]
+      implicit val md = Mass.converterGraph[Double, JungDirectedGraph]
       import md._
-      implicit val dd = Distance.metadata[Double, JungDirectedGraph]
+      implicit val dd = Distance.converterGraph[Double, JungDirectedGraph]
       import dd._
 
       // Shouldn't compile: gram + mile
@@ -108,9 +108,9 @@ class QuantaSpec extends Specification {
   "over" should {
     "work" in {
 
-      val vr = Volume.metadata[Rational, JungDirectedGraph]
+      val vr = Volume.converterGraph[Rational, JungDirectedGraph]
       import vr._
-      val fr = Flow.metadata[Rational, JungDirectedGraph]
+      val fr = Flow.converterGraph[Rational, JungDirectedGraph]
       import fr._
 
       // TODO convert that to years

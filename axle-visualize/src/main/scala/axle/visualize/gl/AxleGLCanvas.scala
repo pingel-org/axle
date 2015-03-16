@@ -3,9 +3,9 @@ package axle.visualize.gl
 import scala.Vector
 
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 import axle.quanta.Distance
-import axle.quanta.DistanceMetadata
+import axle.quanta.DistanceConverter
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
 import spire.implicits.DoubleAlgebra
@@ -42,8 +42,8 @@ case class AxleGLCanvas(
   zNear: UnittedQuantity[Distance, Float],
   zFar: UnittedQuantity[Distance, Float],
   distanceUnit: UnitOfMeasurement[Distance])(
-    implicit angleMeta: AngleMetadata[Float],
-    distanceMeta: DistanceMetadata[Float])
+    implicit angleMeta: AngleConverter[Float],
+    distanceMeta: DistanceConverter[Float])
   extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)

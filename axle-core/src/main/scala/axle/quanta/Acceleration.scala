@@ -24,12 +24,12 @@ trait AccelerationUnits extends QuantumUnits[Acceleration] {
 
 }
 
-trait AccelerationMetadata[N] extends QuantumMetadata[Acceleration, N] with AccelerationUnits
+trait AccelerationConverter[N] extends UnitConverter[Acceleration, N] with AccelerationUnits
 
 object Acceleration {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Acceleration, N, DG] with AccelerationMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Acceleration, N, DG] with AccelerationConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Acceleration], UnitOfMeasurement[Acceleration], Bijection[N, N])] =
         List[(UnitOfMeasurement[Acceleration], UnitOfMeasurement[Acceleration], Bijection[N, N])](

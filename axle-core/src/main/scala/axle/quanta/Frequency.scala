@@ -28,12 +28,12 @@ trait FrequencyUnits extends QuantumUnits[Frequency] {
 
 }
 
-trait FrequencyMetadata[N] extends QuantumMetadata[Frequency, N] with FrequencyUnits
+trait FrequencyConverter[N] extends UnitConverter[Frequency, N] with FrequencyUnits
 
 object Frequency {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Frequency, N, DG] with FrequencyMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Frequency, N, DG] with FrequencyConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Frequency], UnitOfMeasurement[Frequency], Bijection[N, N])] =
         List[(UnitOfMeasurement[Frequency], UnitOfMeasurement[Frequency], Bijection[N, N])](

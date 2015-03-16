@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent
 import com.jogamp.opengl.util.FPSAnimator
 
 import axle.quanta.Distance
-import axle.quanta.DistanceMetadata
+import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
@@ -18,7 +18,7 @@ import spire.implicits.moduleOps
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 
 case class SceneFrame(
   scene: Scene,
@@ -27,8 +27,8 @@ case class SceneFrame(
   zNear: UnittedQuantity[Distance, Float],
   zFar: UnittedQuantity[Distance, Float],
   fps: Int)(
-    implicit angleMeta: AngleMetadata[Float],
-    distanceMeta: DistanceMetadata[Float]) {
+    implicit angleMeta: AngleConverter[Float],
+    distanceMeta: DistanceConverter[Float]) {
 
   val fortyFiveDegreeFloat = 45f *: angleMeta.degree
 

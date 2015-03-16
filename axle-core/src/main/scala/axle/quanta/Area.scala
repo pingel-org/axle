@@ -22,12 +22,12 @@ trait AreaUnits extends QuantumUnits[Area] {
 
 }
 
-trait AreaMetadata[N] extends QuantumMetadata[Area, N] with AreaUnits
+trait AreaConverter[N] extends UnitConverter[Area, N] with AreaUnits
 
 object Area {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Area, N, DG] with AreaMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Area, N, DG] with AreaConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Area], UnitOfMeasurement[Area], Bijection[N, N])] =
         List[(UnitOfMeasurement[Area], UnitOfMeasurement[Area], Bijection[N, N])](

@@ -61,7 +61,7 @@ import spire.math.Rational
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 import spire.math.ConvertableFrom
 import spire.implicits._
 
@@ -90,18 +90,18 @@ package object axle {
 
   def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N]): Double =
-    scala.math.sin((a in angleMetadata.radian).magnitude.toDouble)
+      implicit converter: AngleConverter[N]): Double =
+    scala.math.sin((a in converter.radian).magnitude.toDouble)
 
   def cosine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N]): Double =
-    scala.math.cos((a in angleMetadata.radian).magnitude.toDouble)
+      implicit converter: AngleConverter[N]): Double =
+    scala.math.cos((a in converter.radian).magnitude.toDouble)
 
   def tangent[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
-      implicit angleMetadata: AngleMetadata[N]): Double =
-    scala.math.tan((a in angleMetadata.radian).magnitude.toDouble)
+      implicit converter: AngleConverter[N]): Double =
+    scala.math.tan((a in converter.radian).magnitude.toDouble)
 
   implicit val orderSymbols: Order[Symbol] =
     new Order[Symbol] {

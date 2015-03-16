@@ -20,12 +20,12 @@ trait MoneyUnits extends QuantumUnits[Money] {
 
 }
 
-trait MoneyMetadata[N] extends QuantumMetadata[Money, N] with MoneyUnits
+trait MoneyConverter[N] extends UnitConverter[Money, N] with MoneyUnits
 
 object Money {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Money, N, DG] with MoneyMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Money, N, DG] with MoneyConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Money], UnitOfMeasurement[Money], Bijection[N, N])] =
         List.empty

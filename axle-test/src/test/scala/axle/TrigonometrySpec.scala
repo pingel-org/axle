@@ -14,7 +14,7 @@ class TrigonometrySpec extends Specification {
 
     "work" in {
 
-      implicit val amd = Angle.metadata[Double, JungDirectedGraph]
+      implicit val amd = Angle.converterGraph[Double, JungDirectedGraph]
 
       axle.sine(UnittedQuantity(2d, amd.radian)) must be equalTo math.sin(2d)
 
@@ -25,7 +25,7 @@ class TrigonometrySpec extends Specification {
 
     "work" in {
 
-      implicit val amd = Angle.metadata[Double, JungDirectedGraph]
+      implicit val amd = Angle.converterGraph[Double, JungDirectedGraph]
 
       axle.cosine(UnittedQuantity(2d, amd.radian)) must be equalTo math.cos(2d)
 
@@ -36,7 +36,7 @@ class TrigonometrySpec extends Specification {
 
     "work" in {
 
-      implicit val amd = Angle.metadata[Double, JungDirectedGraph]
+      implicit val amd = Angle.converterGraph[Double, JungDirectedGraph]
 
       axle.tangent(UnittedQuantity(2d, amd.radian)) must be equalTo math.tan(2d)
 

@@ -26,7 +26,7 @@ package object quanta {
 
   type CG[Q, DG[_, _], N] = DG[UnitOfMeasurement[Q], N => N]
 
-  implicit def modulize[N, Q](implicit fieldn: Field[N], eqn: Eq[N], meta: QuantumMetadata[Q, N]): Module[UnittedQuantity[Q, N], N] =
+  implicit def modulize[N, Q](implicit fieldn: Field[N], eqn: Eq[N], meta: UnitConverter[Q, N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
 
       def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
@@ -59,7 +59,7 @@ package object quanta {
 
   implicit def unittedTics[Q, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](
     implicit base: UnitOfMeasurement[Q],
-    meta: QuantumMetadata[Q, N]): Tics[UnittedQuantity[Q, N]] =
+    convert: UnitConverter[Q, N]): Tics[UnittedQuantity[Q, N]] =
     new Tics[UnittedQuantity[Q, N]] {
 
       def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =
@@ -73,7 +73,7 @@ package object quanta {
 
   implicit def unittedLengthSpace[Q, N: Field: Order](
     implicit base: UnitOfMeasurement[Q], space: LengthSpace[N, Double],
-    meta: QuantumMetadata[Q, N],
+    convert: UnitConverter[Q, N],
     module: Module[UnittedQuantity[Q, N], N]) =
     new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N]] {
 

@@ -15,7 +15,7 @@ import java.awt.Graphics2D
 
 import axle.algebra.Plottable
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
@@ -44,7 +44,7 @@ case class KMeansVisualization[D, F[_], M](
   pointDiameter: Int = 10,
   fontName: String = "Courier New",
   fontSize: Int = 12)(
-    implicit la: LinearAlgebra[M, Double], angleMeta: AngleMetadata[Double]) extends JPanel {
+    implicit la: LinearAlgebra[M, Double], angleMeta: AngleConverter[Double]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 

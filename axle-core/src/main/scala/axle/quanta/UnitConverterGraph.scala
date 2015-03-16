@@ -10,17 +10,8 @@ import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 
-trait QuantumMetadata[Q, N] {
-
-  def units: List[UnitOfMeasurement[Q]]
-
-  def links: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], Bijection[N, N])]
-
-  def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N]
-}
-
-abstract class QuantumMetadataGraph[Q, N, DG[_, _]: DirectedGraph]()
-  extends QuantumMetadata[Q, N] {
+abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
+  extends UnitConverter[Q, N] {
 
   private def conversions(
     vps: Seq[UnitOfMeasurement[Q]],

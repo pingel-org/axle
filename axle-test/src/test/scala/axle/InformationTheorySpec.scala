@@ -25,7 +25,7 @@ class InformationTheorySpec extends Specification {
 
     "work" in {
 
-      implicit val id = Information.metadata[Double, JungDirectedGraph]
+      implicit val id = Information.converterGraph[Double, JungDirectedGraph]
 
       val d =
         ConditionalProbabilityTable0(Map(
@@ -70,7 +70,7 @@ class InformationTheorySpec extends Specification {
       val biasedCoin = coin(Rational(9, 10))
       val fairCoin = coin()
 
-      implicit val id = Information.metadata[Double, JungDirectedGraph]
+      implicit val id = Information.converterGraph[Double, JungDirectedGraph]
 
       // assumes entropy is in bits
       entropy(biasedCoin).magnitude should be equalTo (0.4689955935892812)

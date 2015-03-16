@@ -42,12 +42,12 @@ trait DistanceUnits extends QuantumUnits[Distance] {
 
 }
 
-trait DistanceMetadata[N] extends QuantumMetadata[Distance, N] with DistanceUnits
+trait DistanceConverter[N] extends UnitConverter[Distance, N] with DistanceUnits
 
 object Distance {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Distance, N, DG] with DistanceMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Distance, N, DG] with DistanceConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])] =
         List[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])](

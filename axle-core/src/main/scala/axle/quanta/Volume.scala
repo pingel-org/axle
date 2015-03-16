@@ -37,12 +37,12 @@ trait VolumeUnits extends QuantumUnits[Volume] {
 
 }
 
-trait VolumeMetadata[N] extends QuantumMetadata[Volume, N] with VolumeUnits
+trait VolumeConverter[N] extends UnitConverter[Volume, N] with VolumeUnits
 
 object Volume {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Volume, N, DG] with VolumeMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Volume, N, DG] with VolumeConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Volume], UnitOfMeasurement[Volume], Bijection[N, N])] =
         List[(UnitOfMeasurement[Volume], UnitOfMeasurement[Volume], Bijection[N, N])](

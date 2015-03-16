@@ -17,7 +17,7 @@ object UnittedQuantity {
         (x.magnitude === y.magnitude) && (x.unit == y.unit)
     }
 
-  implicit def orderUQ[Q, N: MultiplicativeMonoid: Order](implicit meta: QuantumMetadata[Q, N]) =
+  implicit def orderUQ[Q, N: MultiplicativeMonoid: Order](implicit convert: UnitConverter[Q, N]) =
     new Order[UnittedQuantity[Q, N]] {
 
       val orderN = implicitly[Order[N]]
@@ -35,8 +35,8 @@ case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q]) {
     UnittedQuantity(f(magnitude), unit)
 
   def in(newUnit: UnitOfMeasurement[Q])(
-    implicit meta: QuantumMetadata[Q, N], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
-    meta.convert(this, newUnit)
+    implicit convert: UnitConverter[Q, N], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
+    convert.convert(this, newUnit)
 
   // TODO
   def over[QR, Q2, N](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2] =

@@ -20,12 +20,12 @@ trait MoneyPerForceUnits extends QuantumUnits[MoneyPerForce] {
 
 }
 
-trait MoneyPerForceMetadata[N] extends QuantumMetadata[MoneyPerForce, N] with MoneyPerForceUnits
+trait MoneyPerForceConverter[N] extends UnitConverter[MoneyPerForce, N] with MoneyPerForceUnits
 
 object MoneyPerForce {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[MoneyPerForce, N, DG] with MoneyPerForceMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[MoneyPerForce, N, DG] with MoneyPerForceConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[MoneyPerForce], UnitOfMeasurement[MoneyPerForce], Bijection[N, N])] =
         List.empty

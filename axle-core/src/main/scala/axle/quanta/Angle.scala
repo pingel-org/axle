@@ -32,12 +32,12 @@ trait AngleUnits extends QuantumUnits[Angle] {
 
 }
 
-trait AngleMetadata[N] extends QuantumMetadata[Angle, N] with AngleUnits
+trait AngleConverter[N] extends UnitConverter[Angle, N] with AngleUnits
 
 object Angle {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Angle, N, DG] with AngleMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Angle, N, DG] with AngleConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])] =
         List[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])](

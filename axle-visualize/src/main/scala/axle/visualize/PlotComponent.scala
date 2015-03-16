@@ -21,12 +21,12 @@ import javax.swing.JPanel
 import spire.algebra.Eq
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 
 case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
   plot: Plot[X, Y, D])(
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleMeta: AngleMetadata[Double])
+    angleMeta: AngleConverter[Double])
   extends JPanel
   with Fed[List[(String, D)]] {
 

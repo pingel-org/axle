@@ -52,7 +52,7 @@ class TimeSeriesPlotSpec extends Specification {
 
     type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
 
-    implicit val id = Information.metadata[Double, JungDirectedGraph]
+    implicit val id = Information.converterGraph[Double, JungDirectedGraph]
 
     val hm: D =
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++

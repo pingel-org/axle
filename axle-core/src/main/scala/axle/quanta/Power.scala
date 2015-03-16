@@ -33,12 +33,12 @@ trait PowerUnits extends QuantumUnits[Power] {
 
 }
 
-trait PowerMetadata[N] extends QuantumMetadata[Power, N] with PowerUnits
+trait PowerConverter[N] extends UnitConverter[Power, N] with PowerUnits
 
 object Power {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Power, N, DG] with PowerMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Power, N, DG] with PowerConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Power], UnitOfMeasurement[Power], Bijection[N, N])] =
         List[(UnitOfMeasurement[Power], UnitOfMeasurement[Power], Bijection[N, N])](

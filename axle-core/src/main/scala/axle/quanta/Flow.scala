@@ -23,12 +23,12 @@ trait FlowUnits extends QuantumUnits[Flow] {
 
 }
 
-trait FlowMetadata[N] extends QuantumMetadata[Flow, N] with FlowUnits
+trait FlowConverter[N] extends UnitConverter[Flow, N] with FlowUnits
 
 object Flow {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Flow, N, DG] with FlowMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Flow, N, DG] with FlowConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])] =
         List[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])](

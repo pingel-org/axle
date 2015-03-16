@@ -19,7 +19,7 @@ class BarChartSpec extends Specification {
         "banana" -> 77.9,
         "coconut" -> 10.1)
 
-      val angleMeta = Angle.metadata[Double, JungDirectedGraph]
+      val angleMeta = Angle.converterGraph[Double, JungDirectedGraph]
 
       val chart = BarChart[String, Double, Map[String, Double]](
         sales,

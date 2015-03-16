@@ -65,12 +65,12 @@ trait TimeUnits extends QuantumUnits[Time] {
 
 }
 
-trait TimeMetadata[N] extends QuantumMetadata[Time, N] with TimeUnits
+trait TimeMetadata[N] extends UnitConverter[Time, N] with TimeUnits
 
 object Time {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Time, N, DG] with TimeMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Time, N, DG] with TimeMetadata[N] {
 
       def links: Seq[(UnitOfMeasurement[Time], UnitOfMeasurement[Time], Bijection[N, N])] =
         List[(UnitOfMeasurement[Time], UnitOfMeasurement[Time], Bijection[N, N])](

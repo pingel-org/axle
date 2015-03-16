@@ -34,8 +34,8 @@ import spire.math.Rational
 import spire.math.Real
 import spire.random.Dist
 import spire.optional.unicode.Σ
-import axle.quanta.QuantumMetadata
-import axle.quanta.InformationMetadata
+import axle.quanta.UnitConverter
+import axle.quanta.InformationConverter
 
 package object stats {
 
@@ -108,7 +108,7 @@ package object stats {
 
   def entropy[A: Manifest, N: Field: Eq: ConvertableFrom](
     X: Distribution[A, N])(
-      implicit meta: InformationMetadata[Double]): UnittedQuantity[Information, Double] = {
+      implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     val convertN = implicitly[ConvertableFrom[N]]
     val H = Σ(X.values map { x =>
@@ -119,11 +119,11 @@ package object stats {
         convertN.toDouble(-px) * log2(px)
       }
     })
-    UnittedQuantity(H, meta.bit)
+    UnittedQuantity(H, convert.bit)
   }
 
   def H[A: Manifest, N: Field: Eq: ConvertableFrom](
-    X: Distribution[A, N])(implicit meta: InformationMetadata[Double]): UnittedQuantity[Information, Double] =
+    X: Distribution[A, N])(implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(X)
 
 }

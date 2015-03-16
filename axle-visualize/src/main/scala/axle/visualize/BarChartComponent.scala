@@ -19,7 +19,7 @@ import axle.algebra.Tics
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.Text
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.algebra.Order
@@ -29,7 +29,7 @@ import axle.quanta.UnitOfMeasurement
 case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag](
   chart: BarChart[S, Y, D])(
     implicit yls: LengthSpace[Y, _],
-    angleMeta: AngleMetadata[Double])
+    angleMeta: AngleConverter[Double])
   extends JPanel
   with Fed[D] {
 

@@ -72,12 +72,12 @@ trait MassUnits extends QuantumUnits[Mass] {
 
 }
 
-trait MassMetadata[N] extends QuantumMetadata[Mass, N] with MassUnits
+trait MassConverter[N] extends UnitConverter[Mass, N] with MassUnits
 
 object Mass {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Mass, N, DG] with MassMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Mass, N, DG] with MassConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Mass], UnitOfMeasurement[Mass], Bijection[N, N])] =
         List[(UnitOfMeasurement[Mass], UnitOfMeasurement[Mass], Bijection[N, N])](

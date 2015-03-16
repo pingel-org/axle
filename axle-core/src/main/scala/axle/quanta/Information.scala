@@ -29,12 +29,12 @@ trait InformationUnits extends QuantumUnits[Information] {
 
 }
 
-trait InformationMetadata[N] extends QuantumMetadata[Information, N] with InformationUnits
+trait InformationConverter[N] extends UnitConverter[Information, N] with InformationUnits
 
 object Information {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Information, N, DG] with InformationMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Information, N, DG] with InformationConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Information], UnitOfMeasurement[Information], Bijection[N, N])] =
         List[(UnitOfMeasurement[Information], UnitOfMeasurement[Information], Bijection[N, N])](

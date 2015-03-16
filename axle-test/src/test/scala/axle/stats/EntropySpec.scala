@@ -20,7 +20,7 @@ class EntropySpec extends Specification {
   "entropy of coin" should {
     "work" in {
 
-      implicit val id = Information.metadata[Double, JungDirectedGraph]
+      implicit val id = Information.converterGraph[Double, JungDirectedGraph]
 
       val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map(i => (Rational(i, 100), entropy(coin(Rational(i, 100))))).toMap

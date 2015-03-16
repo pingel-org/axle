@@ -22,12 +22,12 @@ trait ForceUnits extends QuantumUnits[Force] {
 
 }
 
-trait ForceMetadata[N] extends QuantumMetadata[Force, N] with ForceUnits
+trait ForceConverter[N] extends UnitConverter[Force, N] with ForceUnits
 
 object Force {
 
-  def metadata[N: Field: Eq, DG[_, _]: DirectedGraph] =
-    new QuantumMetadataGraph[Force, N, DG] with ForceMetadata[N] {
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+    new UnitConverterGraph[Force, N, DG] with ForceConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Force], UnitOfMeasurement[Force], Bijection[N, N])] =
         List.empty

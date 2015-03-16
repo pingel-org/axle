@@ -21,14 +21,14 @@ import spire.compat.ordering
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 
 case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](
   chart: BarChart[S, Y, D],
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yLength: LengthSpace[Y, _], angleMeta: AngleMetadata[Double]) {
+    implicit yLength: LengthSpace[Y, _], angleMeta: AngleConverter[Double]) {
 
   import chart._
 

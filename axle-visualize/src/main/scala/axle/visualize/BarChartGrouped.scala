@@ -19,12 +19,12 @@ import spire.algebra.Order
 import axle.algebra.DirectedGraph
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 
 object BarChartGrouped {
 
   implicit def drawBarChartGrouped[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
-    implicit yls: LengthSpace[Y, _], angleMeta: AngleMetadata[Double]): Draw[BarChartGrouped[G, S, Y, D]] =
+    implicit yls: LengthSpace[Y, _], angleMeta: AngleConverter[Double]): Draw[BarChartGrouped[G, S, Y, D]] =
     new Draw[BarChartGrouped[G, S, Y, D]] {
       def component(barChart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(barChart)
     }

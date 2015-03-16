@@ -12,10 +12,10 @@ import com.jogamp.opengl.util.texture.TextureIO
 import axle.algebra.Position
 import axle.algebra.SphericalVector
 import axle.quanta.Angle
-import axle.quanta.AngleMetadata
+import axle.quanta.AngleConverter
 import axle.quanta.modulize
 import axle.quanta.Distance
-import axle.quanta.DistanceMetadata
+import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.Distance._
@@ -32,10 +32,10 @@ import axle.sine
 import axle.cosine
 
 abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance])(
-  implicit angleMetaFloat: AngleMetadata[Float],
-  angleMetaDouble: AngleMetadata[Double],
-  distanceMetaFloat: DistanceMetadata[Float],
-  distanceMetaDouble: DistanceMetadata[Double]) {
+  implicit angleMetaFloat: AngleConverter[Float],
+  angleMetaDouble: AngleConverter[Double],
+  distanceMetaFloat: DistanceConverter[Float],
+  distanceMetaDouble: DistanceConverter[Double]) {
 
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
