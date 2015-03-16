@@ -42,11 +42,18 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
     query: UnitOfMeasurement[Q])(implicit ev: Eq[N]): Vertex[UnitOfMeasurement[Q]] =
     directedGraphOps(cg).findVertex(_.payload.name === query.name).get
 
-  def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
-    directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
-      .map(
-        _.map(_.payload).foldLeft(ev.one)((n, convert) => convert(n)))
-      .map(n => UnittedQuantity((orig.magnitude * n), newUnit))
-      .getOrElse(throw new Exception("no conversion path from " + orig.unit + " to " + newUnit))
+  def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(
+    implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] = {
 
+    val pathOpt = directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
+
+    if (pathOpt.isDefined) {
+      val path = pathOpt.get.map(_.payload)
+      val magnitude = path.foldLeft(orig.magnitude)((n, convert) => convert(n))
+      UnittedQuantity(magnitude, newUnit)
+    } else {
+      throw new Exception("no conversion path from " + orig.unit + " to " + newUnit)
+    }
+
+  }
 }
