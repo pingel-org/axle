@@ -18,7 +18,7 @@ trait ForceUnits extends QuantumUnits[Force] {
   lazy val dyne = unit("dyne", "dyn", Some("http://en.wikipedia.org/wiki/Dyne"))
 
   def units: List[UnitOfMeasurement[Force]] =
-    List(pound, newton, dyne)))))))
+    List(pound, newton, dyne)
 
 }
 

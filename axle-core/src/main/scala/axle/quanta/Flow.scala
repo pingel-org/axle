@@ -18,7 +18,7 @@ trait FlowUnits extends QuantumUnits[Flow] {
   lazy val niagaraFalls = unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
 
   def units: List[UnitOfMeasurement[Flow]] =
-    List(m3s, niagaraFalls)))
+    List(m3s, niagaraFalls)
 
 }
 

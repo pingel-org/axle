@@ -27,7 +27,7 @@ trait AngleUnits extends QuantumUnits[Angle] {
   //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
 
   def units: List[UnitOfMeasurement[Angle]] =
-    List(degree, radian, circleDegrees, circleRadians)))))))))
+    List(degree, radian, circleDegrees, circleRadians)
 
 }
 

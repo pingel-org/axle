@@ -37,7 +37,7 @@ trait DistanceUnits extends QuantumUnits[Distance] {
 
   def units: List[UnitOfMeasurement[Distance]] =
     List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
-      astronomicalUnit, astronomicalUnitSI, lightyear, parsec)))))))))))
+      astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
 
 }
 

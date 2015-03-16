@@ -59,7 +59,7 @@ trait TimeUnits extends QuantumUnits[Time] {
 
   def units: List[UnitOfMeasurement[Time]] =
     List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
-      zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)))))))))))))))))))))))))))))))
+      zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
 
 }
 

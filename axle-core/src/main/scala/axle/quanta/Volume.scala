@@ -32,7 +32,7 @@ trait VolumeUnits extends QuantumUnits[Volume] {
 
   def units: List[UnitOfMeasurement[Volume]] =
     List(m3, km3, cm3, greatLakes, liter, milliliter, wineBottle, magnum, jeroboam, rehoboam,
-      methuselah, salmanazar, balthazar, nebuchadnezzar)))))))
+      methuselah, salmanazar, balthazar, nebuchadnezzar)
 
 }
 

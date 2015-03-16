@@ -25,7 +25,7 @@ trait InformationUnits extends QuantumUnits[Information] {
   // TODO PB TB GB MB KB
 
   def units: List[UnitOfMeasurement[Information]] =
-    List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)))
+    List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
 
 }
 

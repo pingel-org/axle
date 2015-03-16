@@ -29,7 +29,7 @@ trait EnergyUnits extends QuantumUnits[Energy] {
   // TODO lazy val castleBravo = 15 *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
 
   def units: List[UnitOfMeasurement[Energy]] =
-    List(kwh, joule, kilojoule, megajoule, tonTNT, kiloton, megaton, gigaton)))
+    List(kwh, joule, kilojoule, megajoule, tonTNT, kiloton, megaton, gigaton)
 
 }
 
