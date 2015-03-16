@@ -15,10 +15,8 @@ trait FlowUnits extends QuantumUnits[Flow] {
 
   lazy val m3s = unit("m3s", "m3s") // derive
 
-  lazy val niagaraFalls = unit("Niagara Falls Flow", "Niagara Falls Flow", Some("http://en.wikipedia.org/wiki/Niagara_Falls"))
-
   def units: List[UnitOfMeasurement[Flow]] =
-    List(m3s, niagaraFalls)
+    List(m3s)
 
 }
 
@@ -30,8 +28,7 @@ object Flow {
     new UnitConverterGraph[Flow, N, DG] with FlowConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])] =
-        List[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])](
-          (m3s, niagaraFalls, ScaleInt(1834)))
+        List[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])]()
 
     }
 }

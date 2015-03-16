@@ -20,10 +20,9 @@ trait SpeedUnits extends QuantumUnits[Speed] {
   lazy val knot = unit("knot", "kn", Some("http://en.wikipedia.org/wiki/Knot_(unit)"))
   lazy val kn = knot
   lazy val c = unit("Light Speed", "c", Some("http://en.wikipedia.org/wiki/Speed_of_light"))
-  lazy val speedLimit = unit("Speed limit", "speed limit")
 
   def units: List[UnitOfMeasurement[Speed]] =
-    List(mps, fps, mph, kph, knot, c, speedLimit)
+    List(mps, fps, mph, kph, knot, c)
 
 }
 
@@ -37,8 +36,7 @@ object Speed {
       def links: Seq[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])] =
         List[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])](
           (knot, kph, ScaleDouble(1.852)),
-          (mps, c, ScaleInt(299792458)),
-          (mph, speedLimit, ScaleInt(65)))
+          (mps, c, ScaleInt(299792458)))
 
     }
 

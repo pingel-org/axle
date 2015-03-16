@@ -19,9 +19,6 @@ trait PowerUnits extends QuantumUnits[Power] {
   lazy val gigawatt = unit("gigawatt", "GW")
   lazy val milliwatt = unit("milliwatt", "mW")
   lazy val horsepower = unit("horsepower", "hp")
-  lazy val lightBulb = unit("light bulb", "light bulb")
-  lazy val hooverDam = unit("Hoover Dam", "Hoover Dam", Some("http://en.wikipedia.org/wiki/Hoover_Dam"))
-  lazy val mustangGT = unit("2012 Mustang GT", "2012 Mustang GT", Some("http://en.wikipedia.org/wiki/Ford_Mustang"))
 
   lazy val W = watt
   lazy val kW = kilowatt
@@ -29,7 +26,7 @@ trait PowerUnits extends QuantumUnits[Power] {
   lazy val GW = gigawatt
 
   def units: List[UnitOfMeasurement[Power]] =
-    List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
+    List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower)
 
 }
 
@@ -45,10 +42,7 @@ object Power {
           (watt, kilowatt, Scale10s(3)),
           (kilowatt, megawatt, Scale10s(3)),
           (megawatt, gigawatt, Scale10s(3)),
-          (milliwatt, watt, Scale10s(3)),
-          (watt, lightBulb, ScaleInt(60)),
-          (megawatt, hooverDam, ScaleInt(2080)),
-          (horsepower, mustangGT, ScaleInt(420)))
+          (milliwatt, watt, Scale10s(3)))
 
     }
 

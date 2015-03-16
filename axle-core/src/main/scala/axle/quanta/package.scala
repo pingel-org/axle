@@ -20,7 +20,6 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.signedOps
-//import spire.implicits._
 
 package object quanta {
 

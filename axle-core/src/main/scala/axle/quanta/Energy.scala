@@ -26,8 +26,6 @@ trait EnergyUnits extends QuantumUnits[Energy] {
   lazy val gigaton = unit("gigaton", "GT")
   lazy val gt = gigaton
 
-  // TODO lazy val castleBravo = 15 *: megaton // Some("Castle Bravo Thermonuclear Bomb"), None, Some("http://en.wikipedia.org/wiki/Castle_Bravo"))
-
   def units: List[UnitOfMeasurement[Energy]] =
     List(kwh, joule, kilojoule, megajoule, tonTNT, kiloton, megaton, gigaton)
 
