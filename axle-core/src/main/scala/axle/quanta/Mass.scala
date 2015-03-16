@@ -68,7 +68,7 @@ trait MassUnits extends QuantumUnits[Mass] {
   def units: List[UnitOfMeasurement[Mass]] =
     List(gram, tonne, milligram, kilogram, megagram, kilotonne, megatonne, gigatonne, teratonne,
       petatonne, exatonne, zettatonne, yottatonne, man, earth, sun, jupiter, saturn, neptune,
-      uranus, venus, mars, mercury, pluto, moon)
+      uranus, venus, mars, mercury, pluto, moon)))))))))))))))))))))))))))
 
 }
 

@@ -5,8 +5,6 @@ import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
 
-import spire.math.Rational
-
 //  //  lazy val globalLifeExpectancy = 67.2 *: year // Some("2010 global average life expectancy"), None, Some("http://en.wikipedia.org/wiki/Life_expectancy"))
 
 //  //  // Distant Past:
@@ -61,7 +59,7 @@ trait TimeUnits extends QuantumUnits[Time] {
 
   def units: List[UnitOfMeasurement[Time]] =
     List(second, millisecond, microsecond, nanosecond, picosecond, femtosecond, attosecond,
-      zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)
+      zeptosecond, yoctosecond, minute, hour, day, year, century, millenium, megayear, gigayear)))))))))))))))))))))))))))))))
 
 }
 

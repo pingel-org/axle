@@ -7,13 +7,13 @@ import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.algebra.Vertex
-import axle.algebra.Bijection
+import axle.quanta.UnitConverter
+import axle.quanta.UnitOfMeasurement
+import axle.quanta.UnittedQuantity
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Module
-import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
 import spire.algebra.Rng
 import spire.implicits.additiveGroupOps

@@ -1,6 +1,6 @@
 package axle.quanta
 
-import axle.algebra._
+import scala.Vector
 
 /**
  * The "Physics" objects models the graph of units

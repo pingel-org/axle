@@ -1,12 +1,11 @@
 package axle.quanta
 
-import scala.math.{ Pi => π }
+import scala.math.{Pi => π}
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.math.Rational
 
 case class Angle() extends Quantum {
 
@@ -28,7 +27,7 @@ trait AngleUnits extends QuantumUnits[Angle] {
   //  def counterClockwise90[N: Field: Eq] = 90 *: °[N]
 
   def units: List[UnitOfMeasurement[Angle]] =
-    List(degree, radian, circleDegrees, circleRadians)
+    List(degree, radian, circleDegrees, circleRadians)))))))))
 
 }
 

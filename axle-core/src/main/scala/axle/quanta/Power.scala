@@ -29,7 +29,7 @@ trait PowerUnits extends QuantumUnits[Power] {
   lazy val GW = gigawatt
 
   def units: List[UnitOfMeasurement[Power]] =
-    List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)
+    List(watt, kilowatt, megawatt, gigawatt, milliwatt, horsepower, lightBulb, hooverDam, mustangGT)))))
 
 }
 

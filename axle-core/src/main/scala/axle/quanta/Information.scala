@@ -2,8 +2,8 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import spire.algebra.Field
 import spire.algebra.Eq
+import spire.algebra.Field
 
 case class Information() extends Quantum {
 
@@ -25,7 +25,7 @@ trait InformationUnits extends QuantumUnits[Information] {
   // TODO PB TB GB MB KB
 
   def units: List[UnitOfMeasurement[Information]] =
-    List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)
+    List(bit, nibble, byte, kilobyte, megabyte, gigabyte, terabyte, petabyte)))
 
 }
 

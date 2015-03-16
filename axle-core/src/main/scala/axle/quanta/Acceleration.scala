@@ -20,7 +20,7 @@ trait AccelerationUnits extends QuantumUnits[Acceleration] {
   lazy val g = unit("g", "g", Some("http://en.wikipedia.org/wiki/Standard_gravity"))
 
   def units: List[UnitOfMeasurement[Acceleration]] =
-    List(mpsps, fpsps, g)
+    List(mpsps, fpsps, g)))
 
 }
 
