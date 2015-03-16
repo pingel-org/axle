@@ -35,9 +35,12 @@ trait DistanceUnits extends QuantumUnits[Distance] {
   lazy val ly = lightyear
   lazy val parsec = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
 
+  lazy val planck = unit("Planck length", "ℓP", Some("http://en.wikipedia.org/wiki/Planck_length"))
+  lazy val ℓP = planck
+
   def units: List[UnitOfMeasurement[Distance]] =
     List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
-      astronomicalUnit, astronomicalUnitSI, lightyear, parsec)
+      astronomicalUnit, astronomicalUnitSI, lightyear, parsec, planck)
 
 }
 
@@ -61,7 +64,8 @@ object Distance {
           (meter, kilometer, Scale10s(3)),
           (mile, au, ScaleDouble(92955807.3)),
           (km, auSI, ScaleDouble(149597870.7)),
-          (km, ly, ScaleDouble(9460730472580.8)))
+          (km, ly, ScaleDouble(9460730472580.8)),
+          (planck, nm, ScaleDouble(16.162e-27)))
 
     }
 
