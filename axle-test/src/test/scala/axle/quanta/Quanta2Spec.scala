@@ -105,6 +105,16 @@ class QuantaSpec extends Specification {
     }
   }
 
+  "temperature" should {
+    "work" in {
+      implicit val tc = Temperature.converterGraph[Double, JungDirectedGraph]
+      import tc._
+      ((0d *: celsius) in kelvin).magnitude must be equalTo 273.15d
+      ((0d *: celsius) in fahrenheit).magnitude must be equalTo 32d
+      ((212d *: fahrenheit) in celsius).magnitude must be equalTo 100d
+    }
+  }
+
   "over" should {
     "work" in {
 
