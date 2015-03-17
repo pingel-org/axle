@@ -35,12 +35,12 @@ object Temperature {
       def links: Seq[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])] =
         List[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])](
           (celsius, kelvin, new Bijection[N, N] {
-            def apply(c: N) = c + 273.15d
-            def unapply(k: N) = k - 273.15d
+            def apply(k: N) = k - 273.15d
+            def unapply(c: N) = c + 273.15d
           }),
           (celsius, fahrenheit, new Bijection[N, N] {
-            def apply(c: N) = (c * 9 / 5) + 32
-            def unapply(f: N) = (f - 32) * 5 / 9
+            def apply(f: N) = (f - 32) * 5 / 9
+            def unapply(c: N) = (c * 9 / 5) + 32
           }))
 
     }
