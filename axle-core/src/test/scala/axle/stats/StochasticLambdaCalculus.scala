@@ -200,7 +200,11 @@ object StochasticLambdaCalculus extends Specification {
       val n = 200
 
       // TODO: sample a subset of n for each of x and y
-      // to compute the distribution of estimates
+      // to compute the distribution of estimates.
+      // The naive appraoch is obviously intractable
+      // for all but the smallest subsets of n.
+      // However, there should be a way to utilize the "if" statement to
+      // reduce the complexity.
 
       val piDist = for {
         x <- uniformDistribution(0 to n, "x")
