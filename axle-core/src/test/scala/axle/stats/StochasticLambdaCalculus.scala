@@ -168,21 +168,25 @@ object StochasticLambdaCalculus extends Specification {
 
         import bowler._
 
-        val zero: Distribution0[(Int, Boolean, Boolean, Boolean), Rational] =
+        val startState: Distribution0[(Int, Boolean, Boolean, Boolean), Rational] =
           ConditionalProbabilityTable0(Map((0, false, false, false) -> Rational(1)))
 
-//        (1 to 10).foldLeft(zero)({
-//          case (incoming, _) => for {
-//            i <- incoming;
-//            f1 <- firstRoll;
-//            s <- spare;
-//            f2 <- firstRoll // TODO pass this on to next frame
-//          } yield (i + scoreFrame(f1, s, f2))
-//        })
-        ???
+        (1 to 10).foldLeft(startState)({
+          case (incoming, _) => for {
+            i <- incoming;
+            f <- firstRoll;
+            s <- spare
+          } yield {
+            val frame = scoreFrame(i._2, i._3, i._4, f, s)
+            (i._1 + frame._1, frame._2, frame._3, frame._4)
+          }
+        }) map { _._1 }
       }
 
       scoreDistribution2(goodBowler) // TODO the probabilities are summing to > 1
+
+      // val cpt = sd.asInstanceOf[ConditionalProbabilityTable0[Int, Rational]]
+      // cpt.p.toList.sortBy(_._1).map( vp => (vp._1, vp._2.toDouble)) foreach println
 
       1 must be equalTo 1
     }
