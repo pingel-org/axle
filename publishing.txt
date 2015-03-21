@@ -24,6 +24,8 @@ Latest detailed guide: http://central.sonatype.org/pages/releasing-the-deploymen
 Other
 -----
 
+Using Sonatype: http://www.scala-sbt.org/release/docs/Using-Sonatype.html
+
 New overview: http://central.sonatype.org/pages/ossrh-guide.html
 
 https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-8.ReleaseIt
