@@ -132,11 +132,23 @@ object StochasticLambdaCalculus extends Specification {
           10 -> Rational(3, 10))),
         spare = binaryDecision(Rational(8, 10)))
 
-      // TODO handle strikes
-      def scoreFrame(first: Int, spare: Boolean, nextFirst: Int): Int =
-        first + (if (first < 10 && spare) (10 - first + nextFirst) else 0)
+      def scoreFrame(
+        twoAgoStrike: Boolean,
+        oneAgoSpare: Boolean,
+        oneAgoStrike: Boolean,
+        first: Int,
+        makeSpare: Boolean): (Int, Boolean, Boolean, Boolean) = {
+        // TODO: break 'score' into contributions to current, one ago, and two ago frames
+        val score: Int = first +
+          (if (twoAgoStrike) first else 0) +
+          (if (oneAgoSpare) first else 0) +
+          (if (oneAgoStrike) first else 0) +
+          (if (first < 10 && makeSpare) (10 - first) else 0) +
+          (if (first < 10 && makeSpare && oneAgoStrike) (10 - first) else 0)
+        (score, oneAgoStrike, first == 10, first != 10 && makeSpare)
+      }
 
-      def scoreDistribution(bowler: Bowler): Distribution0[Int, Rational] = {
+      def scoreDistribution(bowler: Bowler): Distribution0[Int, Rational] =
         for {
           f1 <- bowler.firstRoll;
           s1 <- bowler.spare;
@@ -145,29 +157,40 @@ object StochasticLambdaCalculus extends Specification {
           f3 <- bowler.firstRoll;
           s3 <- bowler.spare;
           f4 <- bowler.firstRoll
-        } yield scoreFrame(f1, s1, f2) +
-          scoreFrame(f2, s2, f3) +
-          scoreFrame(f3, s3, f4)
-      }
+        } yield {
+          val frame1 = scoreFrame(false, false, false, f1, s1)
+          val frame2 = scoreFrame(frame1._2, frame1._3, frame1._4, f2, s2)
+          val frame3 = scoreFrame(frame2._2, frame2._3, frame2._4, f3, s3)
+          frame1._1 + frame2._1 + frame3._1
+        }
 
       def scoreDistribution2(bowler: Bowler): Distribution0[Int, Rational] = {
 
         import bowler._
 
-        val zero: Distribution0[Int, Rational] = ConditionalProbabilityTable0(Map(0 -> Rational(1)))
+        val zero: Distribution0[(Int, Boolean, Boolean, Boolean), Rational] =
+          ConditionalProbabilityTable0(Map((0, false, false, false) -> Rational(1)))
 
-        (1 to 10).foldLeft(zero)({
-          case (incoming, _) => for {
-            i <- incoming;
-            f1 <- firstRoll;
-            s <- spare;
-            f2 <- firstRoll // TODO pass this on to next frame
-          } yield (i + scoreFrame(f1, s, f2))
-        })
+//        (1 to 10).foldLeft(zero)({
+//          case (incoming, _) => for {
+//            i <- incoming;
+//            f1 <- firstRoll;
+//            s <- spare;
+//            f2 <- firstRoll // TODO pass this on to next frame
+//          } yield (i + scoreFrame(f1, s, f2))
+//        })
+        ???
       }
 
       scoreDistribution2(goodBowler) // TODO the probabilities are summing to > 1
 
+      1 must be equalTo 1
+    }
+  }
+
+  "π estimation" should {
+    "work" in {
+      // TODO
       1 must be equalTo 1
     }
   }
