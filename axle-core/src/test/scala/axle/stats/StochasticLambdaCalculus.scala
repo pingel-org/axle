@@ -194,7 +194,19 @@ object StochasticLambdaCalculus extends Specification {
 
   "π estimation" should {
     "work" in {
-      // TODO
+
+      import scala.math.sqrt
+
+      val n = 200
+
+      // TODO: sample a subset of n for each of x and y
+      // to compute the distribution of estimates
+
+      val piDist = for {
+        x <- uniformDistribution(0 to n, "x")
+        y <- uniformDistribution(0 to n, "y")
+      } yield if (sqrt(x * x + y * y) <= n) 1 else 0
+
       1 must be equalTo 1
     }
   }
