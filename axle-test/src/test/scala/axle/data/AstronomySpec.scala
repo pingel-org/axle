@@ -3,10 +3,14 @@ package axle.data
 import org.specs2.mutable._
 import spire.implicits._
 import spire.compat.ordering
+import spire.algebra.Module
+import spire.math.Rational
 import axle.quanta.Mass
 import axle.quanta.Distance
 
 class AstronomySpec extends Specification {
+
+  implicit val drModule: Module[Double, Rational] = ???
 
   "ordering celestial bodies by mass" should {
     "work" in {

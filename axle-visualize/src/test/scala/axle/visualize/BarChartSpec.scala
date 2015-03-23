@@ -5,11 +5,14 @@ import org.specs2.mutable.Specification
 import spire.algebra._
 import spire.implicits._
 import axle.algebra._
+import spire.math.Rational
 
 import axle.quanta.Angle
 import axle.jung.JungDirectedGraph
 
 class BarChartSpec extends Specification {
+
+  implicit val moduleDoubleRational: Module[Double, Rational] = ???
 
   "BarChart" should {
     "work" in {

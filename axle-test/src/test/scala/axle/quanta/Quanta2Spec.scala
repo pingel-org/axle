@@ -6,12 +6,19 @@ import spire.implicits.additiveSemigroupOps
 import spire.implicits.moduleOps
 import spire.math.Rational
 import spire.algebra.Module
+import spire.algebra.Group
 import spire.implicits._
 import axle.jung.JungDirectedGraph
 import axle.jung.JungDirectedGraph.directedGraphJung
 
 class QuantaSpec extends Specification {
 
+  implicit val dGroup: Group[Double] = ???
+  implicit val rrModule: Module[Rational,Rational] = ???
+  implicit val rdModule: Module[Rational,Double] = ???
+  implicit val drModule: Module[Double,Rational] = ???
+  implicit val ddModule: Module[Double,Double] = ???
+  
   "Scalar conversion" should {
     "work" in {
 
@@ -107,6 +114,8 @@ class QuantaSpec extends Specification {
 
   "temperature" should {
     "work" in {
+      import spire.implicits._
+      import spire.math._
       implicit val tc = Temperature.converterGraph[Double, JungDirectedGraph]
       import tc._
       ((0d *: celsius) in kelvin).magnitude must be equalTo 273.15d
