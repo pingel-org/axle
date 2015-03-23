@@ -8,13 +8,6 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveMonoidOps
 
-case class Transform[N](t: N)(implicit group: Group[N]) extends Bijection[N, N] {
-
-  def apply(n: N): N = group.op(t, n)
-
-  def unapply(n: N): N = group.opInverse(t, n)
-}
-
 case class Scale10s[N: Field](exp: Int) extends Bijection[N, N] {
 
   require(exp > 0)
