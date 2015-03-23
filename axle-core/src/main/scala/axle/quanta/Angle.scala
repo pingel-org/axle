@@ -1,11 +1,10 @@
 package axle.quanta
 
-import scala.math.{Pi => π}
+import scala.math.{ Pi => π }
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import axle.algebra.ScaleInt
-import axle.algebra.ScaleDouble
+import axle.algebra.Scale
 import axle.algebra.BijectiveIdentity
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -38,13 +37,17 @@ trait AngleConverter[N] extends UnitConverter[Angle, N] with AngleUnits
 
 object Angle {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  import spire.algebra.Module
+  import spire.math._
+  import spire.implicits._
+
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](implicit module: Module[N, Double], moduleRational: Module[N, Rational]) =
     new UnitConverterGraph[Angle, N, DG] with AngleConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])] =
         List[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])](
-          (degree, circleDegrees, ScaleInt(360)),
-          (radian, circleRadians, ScaleDouble(2 * π)),
+          (degree, circleDegrees, Scale(Rational(360))),
+          (radian, circleRadians, Scale(2 * π)),
           (circleDegrees, circleRadians, BijectiveIdentity[N]))
 
     }

@@ -2,8 +2,11 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
+import axle.algebra.Transform
+import axle.algebra.Scale
 import spire.algebra.Eq
 import spire.algebra.Field
+import spire.algebra.Group
 
 case class Temperature() extends Quantum {
 
@@ -26,22 +29,22 @@ trait TemperatureConverter[N] extends UnitConverter[Temperature, N] with Tempera
 
 object Temperature {
 
+  import spire.algebra.Module
   import spire.math._
   import spire.implicits._
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  def converterGraph[N: Field: Group: ConvertableTo: Eq, DG[_, _]: DirectedGraph](implicit module: Module[N, Rational]) =
     new UnitConverterGraph[Temperature, N, DG] with TemperatureConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])] =
         List[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])](
-          (celsius, kelvin, new Bijection[N, N] {
-            def apply(k: N) = k - 273.15d
-            def unapply(c: N) = c + 273.15d
-          }),
-          (celsius, fahrenheit, new Bijection[N, N] {
-            def apply(f: N) = (f - 32) * 5 / 9
-            def unapply(c: N) = (c * 9 / 5) + 32
-          }))
+          (celsius, kelvin, Transform[N](-273)), // TODO: -273.15
+          (celsius, fahrenheit, Transform[N](-32).bidirectionallyAndThen(Scale(Rational(5, 9)))
+          // new Bijection[N, N] {
+          //   def apply(f: N) = (f - 32) * 5 / 9
+          //   def unapply(c: N) = (c * 9 / 5) + 32
+          // }
+          ))
 
     }
 

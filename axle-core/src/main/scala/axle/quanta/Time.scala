@@ -2,8 +2,7 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import axle.algebra.ScaleInt
-import axle.algebra.ScaleDouble
+import axle.algebra.Scale
 import axle.algebra.Scale10s
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -57,7 +56,12 @@ trait TimeConverter[N] extends UnitConverter[Time, N] with TimeUnits
 
 object Time {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  import spire.algebra.Module
+  import spire.math._
+  import spire.implicits._
+
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](
+    implicit moduleDouble: Module[N, Double], moduleRational: Module[N, Rational]) =
     new UnitConverterGraph[Time, N, DG] with TimeConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Time], UnitOfMeasurement[Time], Bijection[N, N])] =
@@ -70,10 +74,10 @@ object Time {
           (as, s, Scale10s(18)),
           (zs, s, Scale10s(21)),
           (ys, s, Scale10s(24)),
-          (s, m, ScaleInt(60)),
-          (m, hour, ScaleInt(60)),
-          (hour, day, ScaleInt(24)),
-          (day, year, ScaleDouble(365.25)),
+          (s, m, Scale(Rational(60))),
+          (m, hour, Scale(Rational(60))),
+          (hour, day, Scale(Rational(24))),
+          (day, year, Scale(365.25)),
           (year, century, Scale10s(2)),
           (year, ky, Scale10s(3)),
           (year, my, Scale10s(6)),

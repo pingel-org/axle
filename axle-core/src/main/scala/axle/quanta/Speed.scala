@@ -2,8 +2,7 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import axle.algebra.ScaleInt
-import axle.algebra.ScaleDouble
+import axle.algebra.Scale
 import axle.algebra.Scale10s
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -33,13 +32,18 @@ trait SpeedConverter[N] extends UnitConverter[Speed, N] with SpeedUnits
 
 object Speed {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  import spire.algebra.Module
+  import spire.math._
+  import spire.implicits._
+
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](
+    implicit moduleDouble: Module[N, Double], moduleRational: Module[N, Rational]) =
     new UnitConverterGraph[Speed, N, DG] with SpeedConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])] =
         List[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])](
-          (knot, kph, ScaleDouble(1.852)),
-          (mps, c, ScaleInt(299792458)))
+          (knot, kph, Scale(1.852)),
+          (mps, c, Scale(Rational(299792458))))
 
     }
 

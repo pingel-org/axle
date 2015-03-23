@@ -2,8 +2,7 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import axle.algebra.ScaleInt
-import axle.algebra.ScaleDouble
+import axle.algebra.Scale
 import axle.algebra.Scale10s
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -51,24 +50,29 @@ trait DistanceConverter[N] extends UnitConverter[Distance, N] with DistanceUnits
 
 object Distance {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  import spire.algebra.Module
+  import spire.math._
+  import spire.implicits._
+
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](
+    implicit module: Module[N, Double], moduleRational: Module[N, Rational]) =
     new UnitConverterGraph[Distance, N, DG] with DistanceConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])] =
         List[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])](
-          (foot, mile, ScaleInt(5280)),
-          (foot, meter, ScaleDouble(3.2808398950131235)),
-          (kilometer, mile, ScaleDouble(1.609344)),
-          (lightyear, parsec, ScaleDouble(3.26)),
+          (foot, mile, Scale(Rational(5280))),
+          (foot, meter, Scale(3.2808398950131235)),
+          (kilometer, mile, Scale(1.609344)),
+          (lightyear, parsec, Scale(3.26)),
           (nm, meter, Scale10s(9)),
           (μm, meter, Scale10s(6)),
           (millimeter, meter, Scale10s(3)),
           (centimeter, meter, Scale10s(2)),
           (meter, kilometer, Scale10s(3)),
-          (mile, au, ScaleDouble(92955807.3)),
-          (km, auSI, ScaleDouble(149597870.7)),
-          (km, ly, ScaleDouble(9460730472580.8)),
-          (planck, nm, ScaleDouble(16.162e-27)))
+          (mile, au, Scale(92955807.3)),
+          (km, auSI, Scale(149597870.7)),
+          (km, ly, Scale(9460730472580.8)),
+          (planck, nm, Scale(16.162e-27)))
 
     }
 

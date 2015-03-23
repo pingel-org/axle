@@ -2,7 +2,7 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import axle.algebra.ScaleDouble
+import axle.algebra.Scale
 import axle.algebra.Scale10s
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -37,12 +37,16 @@ trait EnergyConverter[N] extends UnitConverter[Energy, N] with EnergyUnits
 
 object Energy {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  import spire.algebra.Module
+  import spire.math._
+  import spire.implicits._
+
+  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](implicit module: Module[N, Double]) =
     new UnitConverterGraph[Energy, N, DG] with EnergyConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Energy], UnitOfMeasurement[Energy], Bijection[N, N])] =
         List[(UnitOfMeasurement[Energy], UnitOfMeasurement[Energy], Bijection[N, N])](
-          (megajoule, t, ScaleDouble(4.184)),
+          (megajoule, t, Scale(4.184)),
           (joule, kilojoule, Scale10s(3)),
           (joule, megajoule, Scale10s(6)),
           (t, kt, Scale10s(3)),
