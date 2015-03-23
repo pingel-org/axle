@@ -148,30 +148,14 @@ object StochasticLambdaCalculus extends Specification {
         (score, oneAgoStrike, first == 10, first != 10 && makeSpare)
       }
 
-      def scoreDistribution(bowler: Bowler): Distribution0[Int, Rational] =
-        for {
-          f1 <- bowler.firstRoll;
-          s1 <- bowler.spare;
-          f2 <- bowler.firstRoll;
-          s2 <- bowler.spare;
-          f3 <- bowler.firstRoll;
-          s3 <- bowler.spare;
-          f4 <- bowler.firstRoll
-        } yield {
-          val frame1 = scoreFrame(false, false, false, f1, s1)
-          val frame2 = scoreFrame(frame1._2, frame1._3, frame1._4, f2, s2)
-          val frame3 = scoreFrame(frame2._2, frame2._3, frame2._4, f3, s3)
-          frame1._1 + frame2._1 + frame3._1
-        }
-
-      def scoreDistribution2(bowler: Bowler): Distribution0[Int, Rational] = {
+      def scoreDistribution(bowler: Bowler, numFrames: Int): Distribution0[Int, Rational] = {
 
         import bowler._
 
         val startState: Distribution0[(Int, Boolean, Boolean, Boolean), Rational] =
           ConditionalProbabilityTable0(Map((0, false, false, false) -> Rational(1)))
 
-        (1 to 10).foldLeft(startState)({
+        (1 to numFrames).foldLeft(startState)({
           case (incoming, _) => for {
             i <- incoming;
             f <- firstRoll;
@@ -183,7 +167,8 @@ object StochasticLambdaCalculus extends Specification {
         }) map { _._1 }
       }
 
-      scoreDistribution2(goodBowler) // TODO the probabilities are summing to > 1
+      // TODO the probabilities are summing to > 1
+      scoreDistribution(goodBowler, 10)
 
       // val cpt = sd.asInstanceOf[ConditionalProbabilityTable0[Int, Rational]]
       // cpt.p.toList.sortBy(_._1).map( vp => (vp._1, vp._2.toDouble)) foreach println
