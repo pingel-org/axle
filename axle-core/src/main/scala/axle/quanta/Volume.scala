@@ -4,6 +4,8 @@ import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
+import axle.algebra.Scale10s
+import axle.algebra.BijectiveIdentity
 
 case class Volume() extends Quantum {
 

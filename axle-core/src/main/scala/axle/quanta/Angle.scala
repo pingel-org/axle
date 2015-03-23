@@ -4,6 +4,9 @@ import scala.math.{Pi => π}
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
+import axle.algebra.ScaleInt
+import axle.algebra.ScaleDouble
+import axle.algebra.BijectiveIdentity
 import spire.algebra.Eq
 import spire.algebra.Field
 

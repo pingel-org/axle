@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
+import axle.algebra.Scale10s
 import spire.algebra.Eq
 import spire.algebra.Field
 
