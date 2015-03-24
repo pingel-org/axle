@@ -6,14 +6,13 @@ import axle.jung.JungDirectedGraph
 import axle.jung.JungDirectedGraph.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
+import axle.algebra.modules.doubleRationalModule
 import spire.implicits.DoubleAlgebra
 import spire.algebra.Module
 import spire.math.Rational
 
 class TrigonometrySpec extends Specification {
-
-  implicit val drModule: Module[Double, Rational] = ???
-
+ 
   "sine(angle)" should {
 
     "work" in {

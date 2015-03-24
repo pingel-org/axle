@@ -2,17 +2,18 @@ package axle.visualize
 
 import org.specs2.mutable.Specification
 
-import spire.algebra._
-import spire.implicits._
-import axle.algebra._
-import spire.math.Rational
-
+//import spire.algebra._
+//import spire.implicits._
+//import axle.algebra._
+import axle.algebra.DirectedGraph
 import axle.quanta.Angle
 import axle.jung.JungDirectedGraph
+import spire.algebra.Eq
+import spire.algebra.Field
+import spire.math.Rational
+import spire.implicits.DoubleAlgebra
 
 class BarChartSpec extends Specification {
-
-  implicit val moduleDoubleRational: Module[Double, Rational] = ???
 
   "BarChart" should {
     "work" in {
@@ -22,7 +23,14 @@ class BarChartSpec extends Specification {
         "banana" -> 77.9,
         "coconut" -> 10.1)
 
-      val angleMeta = Angle.converterGraph[Double, JungDirectedGraph]
+      // The Modules conflict with the Zero needed by the DataView, so we have to create the
+      // angleMeta with all arguments passed explicitly.
+      val angleMeta = Angle.converterGraph[Double, JungDirectedGraph](
+        implicitly[Field[Double]],
+        implicitly[Eq[Double]],
+        implicitly[DirectedGraph[JungDirectedGraph]],
+        axle.algebra.modules.doubleDoubleModule,
+        axle.algebra.modules.doubleRationalModule)
 
       val chart = BarChart[String, Double, Map[String, Double]](
         sales,

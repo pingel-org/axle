@@ -2,21 +2,26 @@ package axle.data
 
 import org.specs2.mutable._
 import spire.implicits._
+import spire.math._
 import spire.compat.ordering
 import spire.algebra.Module
 import spire.math.Rational
 import axle.quanta.Mass
 import axle.quanta.Distance
+import axle.jung.JungDirectedGraph
+import spire.algebra.Rng
+import spire.algebra.AdditiveGroup
+import spire.implicits.DoubleAlgebra
+import spire.algebra.MultiplicativeSemigroup
+import axle.algebra.modules.doubleRationalModule
 
 class AstronomySpec extends Specification {
-
-  implicit val drModule: Module[Double, Rational] = ???
 
   "ordering celestial bodies by mass" should {
     "work" in {
 
-      implicit val md = Mass.converterGraph[Double, axle.jung.JungDirectedGraph]
-      implicit val dd = Distance.converterGraph[Double, axle.jung.JungDirectedGraph]
+      implicit val md = Mass.converterGraph[Double, JungDirectedGraph]
+      implicit val dd = Distance.converterGraph[Double, JungDirectedGraph]
       val astro = axle.data.Astronomy()
       val sorted = astro.bodies.sortBy(_.mass)
 

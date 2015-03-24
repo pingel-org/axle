@@ -33,18 +33,13 @@ object Temperature {
   import spire.math._
   import spire.implicits._
 
-  def converterGraph[N: Field: Group: ConvertableTo: Eq, DG[_, _]: DirectedGraph](implicit module: Module[N, Rational]) =
+  def converterGraph[N: ConvertableTo: Eq, DG[_, _]: DirectedGraph](implicit module: Module[N, Rational], field: Field[N]) =
     new UnitConverterGraph[Temperature, N, DG] with TemperatureConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])] =
         List[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])](
-          (celsius, kelvin, Transform[N](-273)), // TODO: -273.15
-          (celsius, fahrenheit, Transform[N](-32).bidirectionallyAndThen(Scale(Rational(5, 9)))
-          // new Bijection[N, N] {
-          //   def apply(f: N) = (f - 32) * 5 / 9
-          //   def unapply(c: N) = (c * 9 / 5) + 32
-          // }
-          ))
+          (celsius, kelvin, Transform[N](-273)(field.additive)), // TODO: -273.15
+          (celsius, fahrenheit, Transform[N](-32)(field.additive).bidirectionallyAndThen(Scale(Rational(5, 9)))))
 
     }
 
