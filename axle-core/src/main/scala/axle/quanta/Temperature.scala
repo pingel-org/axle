@@ -38,8 +38,8 @@ object Temperature {
 
       def links: Seq[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])] =
         List[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])](
-          (celsius, kelvin, Transform[N](-273)(field.additive)), // TODO: -273.15
-          (celsius, fahrenheit, Transform[N](-32)(field.additive).bidirectionallyAndThen(Scale(Rational(5, 9)))))
+          (celsius, kelvin, Transform[N](implicitly[ConvertableTo[N]].fromDouble(-273.15))(field.additive)),
+          (celsius, fahrenheit, Transform[N](-32)(field.additive).bidirectionallyAndThen(Scale[N, Rational](Rational(5, 9)))))
 
     }
 
