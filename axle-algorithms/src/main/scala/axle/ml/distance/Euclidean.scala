@@ -17,7 +17,7 @@ import spire.implicits.DoubleAlgebra
  *
  */
 
-case class Euclidian[M](n: Int)(implicit la: LinearAlgebra[M, Double])
+case class Euclidian[M](n: Int)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends NormedVectorSpace[M, Double] {
 
   def negate(x: M): M = la.negate(x)
@@ -30,6 +30,6 @@ case class Euclidian[M](n: Int)(implicit la: LinearAlgebra[M, Double])
 
   def scalar: Field[Double] = DoubleAlgebra
 
-  def norm(r: M): Double = sqrt(r.mulPointwise(r).rowSums.scalar)
+  def norm(r: M): Double = sqrt(r.mulPointwise(r).rowSums.get(0, 0))
 
 }

@@ -206,7 +206,6 @@ import axle._
     )
   ).dependsOn(axleCore)
 
-/*
 
   lazy val axleScalding = Project(
     id = "axle-scalding",
@@ -216,10 +215,9 @@ import axle._
     name := "axle-scalding",
     libraryDependencies ++= Seq(
       "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
-      "com.twitter" %% "scalding-core" % "0.8.11"
+      "com.twitter" %% "scalding-core" % "0.13.1"
     )
   ).dependsOn(axleCore)
-*/
 
   lazy val axleAlgorithms = Project(
     id = "axle-algorithms",
@@ -301,8 +299,8 @@ import axle._
     axleJblas,
     axleJung,
     axleJoda,
-    /*axleSpark,*/
-    /*axleScalding,*/
+    axleSpark,
+    axleScalding,
     axleHBase,
     axleLanguages)
 

@@ -38,7 +38,7 @@ object SmithWaterman {
    *
    */
 
-  def computeH[M](A: String, B: String, mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Double]): M =
+  def computeH[M](A: String, B: String, mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Int, Int, Double]): M =
     la.matrix(
       A.length + 1,
       B.length + 1,
@@ -51,7 +51,7 @@ object SmithWaterman {
         above + mismatchPenalty,
         left + mismatchPenalty).max)
 
-  def alignStep[M](i: Int, j: Int, A: String, B: String, H: M, mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Double]): (Char, Char, Int, Int) = {
+  def alignStep[M](i: Int, j: Int, A: String, B: String, H: M, mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Int, Int, Double]): (Char, Char, Int, Int) = {
     if (i > 0 && j > 0 && H.get(i, j) === H.get(i - 1, j - 1) + w(A(i - 1), B(j - 1), mismatchPenalty)) {
       (A(i - 1), B(j - 1), i - 1, j - 1)
     } else if (i > 0 && H.get(i, j) === H.get(i - 1, j) + mismatchPenalty) {
@@ -62,7 +62,7 @@ object SmithWaterman {
     }
   }
 
-  def _optimalAlignment[M](i: Int, j: Int, A: String, B: String, mismatchPenalty: Int, H: M)(implicit la: LinearAlgebra[M, Double]): scala.collection.immutable.Stream[(Char, Char)] =
+  def _optimalAlignment[M](i: Int, j: Int, A: String, B: String, mismatchPenalty: Int, H: M)(implicit la: LinearAlgebra[M, Int, Int, Double]): scala.collection.immutable.Stream[(Char, Char)] =
     if (i > 0 || j > 0) {
       val (preA, preB, newI, newJ) = alignStep(i, j, A, B, H, mismatchPenalty)
       cons((preA, preB), _optimalAlignment(newI, newJ, A, B, mismatchPenalty, H))
@@ -70,16 +70,16 @@ object SmithWaterman {
       empty
     }
 
-  def optimalAlignment[M](A: String, B: String, mismatchPenalty: Int = defaultMismatchPenalty)(implicit la: LinearAlgebra[M, Double]): (String, String) = {
+  def optimalAlignment[M](A: String, B: String, mismatchPenalty: Int = defaultMismatchPenalty)(implicit la: LinearAlgebra[M, Int, Int, Double]): (String, String) = {
     val H = computeH(A, B, mismatchPenalty)
     val (alignmentA, alignmentB) = _optimalAlignment(A.length, B.length, A, B, mismatchPenalty, H).unzip
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
-  def metricSpace[M](mismatchPenalty: Int = defaultMismatchPenalty)(implicit la: LinearAlgebra[M, Double]): MetricSpace[String, Int] =
+  def metricSpace[M](mismatchPenalty: Int = defaultMismatchPenalty)(implicit la: LinearAlgebra[M, Int, Int, Double]): MetricSpace[String, Int] =
     SmithWatermanMetricSpace(mismatchPenalty)
 
-  case class SmithWatermanMetricSpace[M](mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Double]) extends MetricSpace[String, Int] {
+  case class SmithWatermanMetricSpace[M](mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Int, Int, Double]) extends MetricSpace[String, Int] {
 
     def distance(s1: String, s2: String): Int = {
       val H = computeH(s1, s2, mismatchPenalty)

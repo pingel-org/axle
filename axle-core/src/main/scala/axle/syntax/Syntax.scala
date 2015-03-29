@@ -18,20 +18,20 @@ import scala.reflect.ClassTag
 
 trait LinearAlgebraSyntax {
 
-  def matrix[M, T](m: Int, n: Int, f: (Int, Int) => T)(implicit la: LinearAlgebra[M, T]) =
+  def matrix[M, RowT, ColT, T](m: RowT, n: ColT, f: (RowT, ColT) => T)(implicit la: LinearAlgebra[M, RowT, ColT, T]) =
     la.matrix(m, n, f)
 
-  def cov[M, T](m: M)(implicit la: LinearAlgebra[M, T]) = la.cov(m)
+  def cov[M, RowT, ColT, T](m: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = la.cov(m)
 
-  def std[M, T](m: M)(implicit la: LinearAlgebra[M, T]) = la.std(m)
+  def std[M, RowT, ColT, T](m: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = la.std(m)
 
-  def zscore[M, T](m: M)(implicit la: LinearAlgebra[M, T]) = la.zscore(m)
+  def zscore[M, RowT, ColT, T](m: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = la.zscore(m)
 
-  def pca[M, T](m: M, cutoff: Double = 0.95)(implicit la: LinearAlgebra[M, T]) = la.pca(m, cutoff)
+  def pca[M, RowT, ColT, T](m: M, cutoff: Double = 0.95)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = la.pca(m, cutoff)
 
-  def numComponentsForCutoff[M, T](m: M, cutoff: Double)(implicit la: LinearAlgebra[M, T]) = la.numComponentsForCutoff(m, cutoff)
+  def numComponentsForCutoff[M, RowT, ColT, T](m: M, cutoff: Double)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = la.numComponentsForCutoff(m, cutoff)
 
-  implicit def matrixOps[M, T](m: M)(implicit la: LinearAlgebra[M, T]) = new LinearAlgebraOps(m)
+  implicit def matrixOps[M, RowT, ColT, T](m: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = new LinearAlgebraOps(m)
 }
 
 trait DirectedGraphSyntax {

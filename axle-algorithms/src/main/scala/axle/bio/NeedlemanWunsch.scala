@@ -68,7 +68,7 @@ object NeedlemanWunsch {
    *
    */
 
-  def computeF[M](A: String, B: String, gapPenalty: Double)(implicit la: LinearAlgebra[M, Double]): M =
+  def computeF[M](A: String, B: String, gapPenalty: Double)(implicit la: LinearAlgebra[M, Int, Int, Double]): M =
     la.matrix(
       A.length + 1,
       B.length + 1,
@@ -78,7 +78,7 @@ object NeedlemanWunsch {
       (i: Int, j: Int, aboveleft: Double, left: Double, above: Double) =>
         Vector(aboveleft + S(A(i - 1), B(j - 1)), above + gapPenalty, left + gapPenalty).max)
 
-  def alignStep[M](i: Int, j: Int, A: String, B: String, F: M, gapPenalty: Double)(implicit la: LinearAlgebra[M, Double]): (Char, Char, Int, Int) =
+  def alignStep[M](i: Int, j: Int, A: String, B: String, F: M, gapPenalty: Double)(implicit la: LinearAlgebra[M, Int, Int, Double]): (Char, Char, Int, Int) =
     if (i > 0 && j > 0 && F.get(i, j) === F.get(i - 1, j - 1) + S(A(i - 1), B(j - 1))) {
       (A(i - 1), B(j - 1), i - 1, j - 1)
     } else if (i > 0 && F.get(i, j) === F.get(i - 1, j) + gapPenalty) {
@@ -88,7 +88,7 @@ object NeedlemanWunsch {
       (gap, B(j - 1), i, j - 1)
     }
 
-  def _optimalAlignment[M](i: Int, j: Int, A: String, B: String, gapPenalty: Double, F: M)(implicit la: LinearAlgebra[M, Double]): Stream[(Char, Char)] =
+  def _optimalAlignment[M](i: Int, j: Int, A: String, B: String, gapPenalty: Double, F: M)(implicit la: LinearAlgebra[M, Int, Int, Double]): Stream[(Char, Char)] =
     if (i > 0 || j > 0) {
       val (preA, preB, newI, newJ) = alignStep(i, j, A, B, F, gapPenalty)
       cons((preA, preB), _optimalAlignment(newI, newJ, A, B, gapPenalty, F))
@@ -96,15 +96,15 @@ object NeedlemanWunsch {
       empty
     }
 
-  def optimalAlignment[M](A: String, B: String, gapPenalty: Double = defaultGapPenalty)(implicit la: LinearAlgebra[M, Double]): (String, String) = {
+  def optimalAlignment[M](A: String, B: String, gapPenalty: Double = defaultGapPenalty)(implicit la: LinearAlgebra[M, Int, Int, Double]): (String, String) = {
     val F = computeF(A, B, gapPenalty)
     val (alignmentA, alignmentB) = _optimalAlignment(A.length, B.length, A, B, gapPenalty, F).unzip
     (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
   }
 
-  def metricSpace[M](gapPenalty: Double = defaultGapPenalty)(implicit la: LinearAlgebra[M, Double]) = NeedlemanWunschMetricSpace(gapPenalty)
+  def metricSpace[M](gapPenalty: Double = defaultGapPenalty)(implicit la: LinearAlgebra[M, Int, Int, Double]) = NeedlemanWunschMetricSpace(gapPenalty)
 
-  case class NeedlemanWunschMetricSpace[M](gapPenalty: Double)(implicit la: LinearAlgebra[M, Double])
+  case class NeedlemanWunschMetricSpace[M](gapPenalty: Double)(implicit la: LinearAlgebra[M, Int, Int, Double])
     extends MetricSpace[String, Int] {
 
     def distance(s1: String, s2: String): Int =

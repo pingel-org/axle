@@ -13,7 +13,7 @@ class Runner extends hadoop.conf.Configured with hadoop.util.Tool {
 
   def run(args: Array[String]): Int = {
     val jobArgs = Args((new hadoop.util.GenericOptionsParser(getConf, args)).getRemainingArgs)
-    Mode.mode = Mode(jobArgs, getConf)
+    // TODO Mode.mode = Mode(jobArgs, getConf)
     val job = if (rootJob.isDefined) {
       rootJob.get.apply(jobArgs)
     } else {
@@ -32,22 +32,19 @@ class Runner extends hadoop.conf.Configured with hadoop.util.Tool {
       j.next.map(start(_, cnt + 1))
     } else {
       throw new RuntimeException("Job failed to run: " + j.getClass.getName +
-        (if (cnt > 0) (" child: " + string(cnt) + ", class: " + j.getClass.getName) else "")
-      )
+        (if (cnt > 0) (" child: " + string(cnt) + ", class: " + j.getClass.getName) else ""))
     }
 
 }
 
-object Runner {
-  def main(args: Array[String]) {
-
-    // val classNameToRun = "axle.scalding.Tutorial"
-    // val classNameToRun = "axle.scalding.TypedTutorial"
-    val classNameToRun = "axle.scalding.MatrixTutorial"
-
-    hadoop.util.ToolRunner.run(
-      new hadoop.conf.Configuration,
-      new Runner,
-      Vector(classNameToRun, "--local").toArray)
-  }
-}
+//object Runner extends App {
+//
+//  // val classNameToRun = "axle.scalding.Tutorial"
+//  // val classNameToRun = "axle.scalding.TypedTutorial"
+//  val classNameToRun = "axle.scalding.MatrixTutorial"
+//
+//  hadoop.util.ToolRunner.run(
+//    new hadoop.conf.Configuration,
+//    new Runner,
+//    Vector(classNameToRun, "--local").toArray)
+//}

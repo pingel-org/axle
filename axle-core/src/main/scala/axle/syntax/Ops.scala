@@ -19,17 +19,17 @@ import scala.reflect.ClassTag
 import spire.algebra.Eq
 import spire.algebra.Ring
 
-final class LinearAlgebraOps[M, T](val lhs: M)(implicit la: LinearAlgebra[M, T]) {
+final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) {
 
-  def get(i: Int, j: Int) = la.get(lhs)(i, j)
+  def get(i: RowT, j: ColT) = la.get(lhs)(i, j)
 
-  def slice(rs: Seq[Int], cs: Seq[Int]) = la.slice(lhs)(rs, cs)
+  def slice(rs: Seq[RowT], cs: Seq[ColT]) = la.slice(lhs)(rs, cs)
 
   def toList = la.toList(lhs)
 
-  def row(i: Int) = la.row(lhs)(i)
+  def row(i: RowT) = la.row(lhs)(i)
 
-  def column(j: Int) = la.column(lhs)(j)
+  def column(j: ColT) = la.column(lhs)(j)
 
   def length = la.length(lhs)
 
@@ -49,9 +49,9 @@ final class LinearAlgebraOps[M, T](val lhs: M)(implicit la: LinearAlgebra[M, T])
   //  def multiplyScalar(x: T) = la.multiplyScalar(lhs)(x)
   def divideScalar(x: T) = la.divideScalar(lhs)(x)
 
-  def addAssignment(r: Int, c: Int, v: T) = la.addAssignment(lhs)(r, c, v)
-  def mulRow(i: Int, x: T) = la.mulRow(lhs)(i, x)
-  def mulColumn(i: Int, x: T) = la.mulColumn(lhs)(i, x)
+  def addAssignment(r: RowT, c: ColT, v: T) = la.addAssignment(lhs)(r, c, v)
+  def mulRow(i: RowT, x: T) = la.mulRow(lhs)(i, x)
+  def mulColumn(i: ColT, x: T) = la.mulColumn(lhs)(i, x)
 
   // Operations on pairs of matrices
   // TODO: add and subtract don't make sense for T = Boolean
@@ -121,7 +121,8 @@ final class LinearAlgebraOps[M, T](val lhs: M)(implicit la: LinearAlgebra[M, T])
 
   def scalar: T = {
     assert(la.isScalar(lhs))
-    la.get(lhs)(0, 0)
+    //la.get(lhs)(0, 0)
+    ???
   }
 
   //def +(x: A) = la.addScalar(lhs)(x)

@@ -165,7 +165,7 @@ object ConvertedMtjDenseMatrix {
 //      }
 //      matrix[B](mtj)
 //    }
-//
+
 //    def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = {
 //      val fpA = implicitly[C[A]]
 //      val mtj = new DenseMatrix(rows, columns)
@@ -179,4 +179,10 @@ object ConvertedMtjDenseMatrix {
 //      matrix[A](mtj)
 //    }
 //
+//  def foldLeft(m: M)(zero: M)(f: (M, M) => M): M =
+//    (0 until columns(m)).foldLeft(zero)((x: M, c: ColT) => f(x, column(m)(c)))
+//
+//  def foldTop(m: M)(zero: M)(f: (M, M) => M): M =
+//    (0 until rows(m)).foldLeft(zero)((x: M, r: RowT) => f(x, row(m)(r)))
+    
 //  }

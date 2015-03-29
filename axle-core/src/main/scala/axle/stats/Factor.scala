@@ -144,7 +144,7 @@ case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
         .map({ case (k, v) => (k.toVector, spire.optional.unicode.Σ(v.map(_._2))) })
         .toMap)
 
-  def tally[M](a: Distribution[T, N], b: Distribution[T, N])(implicit la: LinearAlgebra[M, Double]): M =
+  def tally[M](a: Distribution[T, N], b: Distribution[T, N])(implicit la: LinearAlgebra[M, Int, Int, Double]): M =
     la.matrix(
       a.values.size,
       b.values.size,

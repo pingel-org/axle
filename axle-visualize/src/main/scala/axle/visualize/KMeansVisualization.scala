@@ -34,7 +34,7 @@ case class KMeansVisualization[D, F[_], M](
   pointDiameter: Int = 10,
   fontName: String = "Courier New",
   fontSize: Int = 12)(
-    implicit la: LinearAlgebra[M, Double], angleMeta: AngleConverter[Double]) extends JPanel {
+    implicit la: LinearAlgebra[M, Int, Int, Double], angleMeta: AngleConverter[Double]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 

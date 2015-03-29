@@ -11,7 +11,7 @@ case class LinearRegression[D, M](
   featureExtractor: D => List[Double],
   objectiveExtractor: D => Double,
   α: Double = 0.1,
-  iterations: Int = 100)(implicit la: LinearAlgebra[M, Double]) {
+  iterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double]) {
 
   implicit val ring = la.ring
   
@@ -38,7 +38,7 @@ case class LinearRegression[D, M](
 
   def h(xi: M, θ: M): M = xi * θ
 
-  def cost(xi: M, θ: M, yi: Double): Double = h(xi, θ).scalar - yi
+  def cost(xi: M, θ: M, yi: Double): Double = h(xi, θ).get(0, 0) - yi
 
   def dθ(X: M, y: M, θ: M): M =
     (0 until X.rows)

@@ -22,7 +22,7 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
   classifier: Function1[T, CLASS],
   data: F[T],
   labelExtractor: T => L,
-  classes: IndexedSeq[CLASS])(implicit val la: LinearAlgebra[M, Double]) {
+  classes: IndexedSeq[CLASS])(implicit val la: LinearAlgebra[M, Int, Int, Double]) {
 
   val label2clusterId = data.map(datum => (labelExtractor(datum), classifier(datum)))
 
@@ -52,7 +52,7 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
 
 object ConfusionMatrix {
 
-  implicit def showCM[T, CLASS, L, F[_], M](implicit la: LinearAlgebra[M, Double]): Show[ConfusionMatrix[T, CLASS, L, F, M]] =
+  implicit def showCM[T, CLASS, L, F[_], M](implicit la: LinearAlgebra[M, Int, Int, Double]): Show[ConfusionMatrix[T, CLASS, L, F, M]] =
     new Show[ConfusionMatrix[T, CLASS, L, F, M]] {
 
       def text(cm: ConfusionMatrix[T, CLASS, L, F, M]): String = {

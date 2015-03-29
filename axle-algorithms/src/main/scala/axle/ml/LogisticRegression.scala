@@ -13,13 +13,13 @@ case class LogisticRegression[D, M](
   observationExtractor: D => List[Double],
   objectiveExtractor: D => Boolean,
   α: Double = 0.1,
-  numIterations: Int = 100)(implicit la: LinearAlgebra[M, Double]) {
+  numIterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double]) {
 
   implicit val module = la.module
   implicit val ring = la.ring
 
   // h is essentially P(y=1 | X;θ)
-  def h(xi: M, θ: M): Double = 1 / (1 + exp(-1 * (θ.t * xi).scalar))
+  def h(xi: M, θ: M): Double = 1 / (1 + exp(-1 * (θ.t * xi).get(0, 0)))
 
   // yi is boolean (1d or 0d)
   def cost(xi: M, θ: M, yi: Double) =

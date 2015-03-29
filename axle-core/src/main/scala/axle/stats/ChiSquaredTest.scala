@@ -8,7 +8,7 @@ import axle.syntax.linearalgebra._
 case class ChiSquaredTest[M](
   tally: M,
   threshold: Double = 0.004)(
-    implicit ev: LinearAlgebra[M, Double]) {
+    implicit ev: LinearAlgebra[M, Int, Int, Double]) {
 
   val rowTotals = tally.rowSums
   val columnTotals = tally.columnSums
@@ -31,7 +31,7 @@ case class ChiSquaredTest[M](
    *    val dof = (table.height - 1) * (table.width - 1)
    */
 
-  def independent[M](implicit ev: LinearAlgebra[M, Double]): Boolean = χ2 < threshold
+  def independent[M]: Boolean = χ2 < threshold
 
 }
 

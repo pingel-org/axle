@@ -8,7 +8,7 @@ import axle.syntax.endofunctor._
 import spire.algebra.MetricSpace
 import spire.implicits._
 
-case class Manhattan[M](implicit la: LinearAlgebra[M, Double])
+case class Manhattan[M](implicit la: LinearAlgebra[M, Int, Int, Double])
   extends MetricSpace[M, Double] {
 
   implicit val ring = la.ring

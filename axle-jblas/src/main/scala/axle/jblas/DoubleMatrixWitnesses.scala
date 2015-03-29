@@ -145,8 +145,8 @@ object DoubleMatrixWitnesses {
         } mkString ("\n")
     }
 
-  implicit val linearAlgebraDoubleMatrix: LinearAlgebra[DoubleMatrix, Double] =
-    new LinearAlgebra[DoubleMatrix, Double] {
+  implicit val linearAlgebraDoubleMatrix: LinearAlgebra[DoubleMatrix, Int, Int, Double] =
+    new LinearAlgebra[DoubleMatrix, Int, Int, Double] {
 
       def elementField = spire.implicits.DoubleAlgebra
 
@@ -359,6 +359,12 @@ object DoubleMatrixWitnesses {
         }
         jblas
       }
+
+      def foldLeft(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix =
+        (0 until columns(m)).foldLeft(zero)((x: DoubleMatrix, c: Int) => f(x, column(m)(c)))
+
+      def foldTop(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix =
+        (0 until rows(m)).foldLeft(zero)((x: DoubleMatrix, r: Int) => f(x, row(m)(r)))
 
       def centerRows(m: DoubleMatrix): DoubleMatrix =
         subColumnVector(m)(rowMeans(m))

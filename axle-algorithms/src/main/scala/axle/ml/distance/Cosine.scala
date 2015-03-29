@@ -19,7 +19,7 @@ import spire.implicits._
  *
  */
 
-case class Cosine[M](n: Int)(implicit la: LinearAlgebra[M, Double])
+case class Cosine[M](n: Int)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends InnerProductSpace[M, Double] {
 
   implicit val ring = la.ring
@@ -35,6 +35,6 @@ case class Cosine[M](n: Int)(implicit la: LinearAlgebra[M, Double])
 
   def scalar: Field[Double] = DoubleAlgebra
 
-  def dot(v: M, w: M): Double = v.mulPointwise(w).rowSums.scalar
+  def dot(v: M, w: M): Double = v.mulPointwise(w).rowSums.get(0, 0) // .scalar
 
 }

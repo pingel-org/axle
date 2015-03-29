@@ -12,7 +12,7 @@ import axle.syntax.linearalgebra._
  * http://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance
  */
 
-case class Levenshtein[M]()(implicit la: LinearAlgebra[M, Double])
+case class Levenshtein[M]()(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends MetricSpace[String, Int] {
 
   def distance(s1: String, s2: String): Int = {

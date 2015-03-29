@@ -11,7 +11,7 @@ import scala.reflect.ClassTag
 case class DistanceMatrix[T: ClassTag, F[_]: Indexed: Finite, M](
   vectors: F[T])(
     implicit space: MetricSpace[T, Double],
-    la: LinearAlgebra[M, Double]) {
+    la: LinearAlgebra[M, Int, Int, Double]) {
 
   val n = implicitly[Finite[F]].size(vectors).toInt // TODO forcing Long to Int
   val index = implicitly[Indexed[F]]

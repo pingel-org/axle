@@ -1,15 +1,22 @@
 
 package axle.matrix
 
-import com.twitter.algebird.{ Group, Field, Monoid }
-import com.twitter.scalding._
-import com.twitter.scalding.mathematics.{ Matrix => ScaldingMatrix, MatrixProduct }
-import axle._
-import axle.algebra.FunctionPair
-import spire.implicits._
-import spire.algebra.Eq
+import com.twitter.algebird.{Field => AlgebirdField}
+import com.twitter.algebird.{Monoid => AlgebirdMonoid}
+import com.twitter.scalding.mathematics.Matrix
 
-object ScaldingMatrixModule extends ScaldingMatrixModule
+import axle.Show
+import axle.algebra.Endofunctor
+import axle.algebra.LinearAlgebra
+import spire.algebra.AdditiveAbGroup
+import spire.algebra.AdditiveCSemigroup
+import spire.algebra.AdditiveMonoid
+import spire.algebra.Field
+import spire.algebra.Module
+import spire.algebra.MultiplicativeMonoid
+import spire.algebra.MultiplicativeSemigroup
+import spire.algebra.Ring
+import spire.algebra.Rng
 
 /**
  *
@@ -17,216 +24,383 @@ object ScaldingMatrixModule extends ScaldingMatrixModule
  *
  */
 
-trait ScaldingMatrixModule extends MatrixModule {
+object MatrixWitnesses {
 
-  type RowT = Int
-  type ColT = Int
-  type C[T] = Field[T]
-
-  implicit val convertBoolean = Field.boolField
-  implicit val convertDouble = Field.doubleField
-  implicit val convertInt = ???
-
-  class Matrix[T: C: Eq](_storage: ScaldingMatrix[RowT, ColT, T]) extends MatrixLike[T] {
-
-    // implicit val prod: MatrixProduct[ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T], ScaldingMatrix[RowT, ColT, T]] = ???
-
-    val field = implicitly[Field[T]]
-
-    type S = ScaldingMatrix[RowT, ColT, T]
-
-    def storage = _storage
-
-    implicit val format = (t: T) => t.toString // TODO !!!
-
-    def rows: RowT = ??? // scalding.sizeHint.rows
-    def columns: ColT = ???
-    def length: RowT = ??? // TODO: actualy RowT x ColT
-
-    def apply(i: Int, j: Int): T = ??? //scalding.elementAt(i, j)
-
-    def apply(rs: Seq[Int], cs: Seq[Int]): Matrix[T] = ???
-
-    def toList: List[T] = ???
-
-    def column(j: Int) = matrix(scalding.getCol(j).toMatrix(0))
-    def row(i: Int) = ??? // ??? //scalding.getRow(i)
-
-    def isEmpty: Boolean = ???
-    def isRowVector: Boolean = rows === 1
-    def isColumnVector: Boolean = columns === 1
-    def isVector: Boolean = rows === 1 || columns === 1
-    def isSquare: Boolean = rows === columns
-    def isScalar: Boolean = rows === 1 && columns === 1
-
-    def dup: MatrixLike[T] = ???
-    def negate: MatrixLike[T] = matrix(scalding.mapValues(field.negate))
-    def transpose: MatrixLike[T] = matrix(scalding.transpose)
-    def diag: MatrixLike[T] = matrix(scalding.diagonal)
-    def invert: MatrixLike[T] = ??? // matrix(scalding.inverse)
-    def ceil: MatrixLike[T] = ???
-    def floor: MatrixLike[T] = ??? // matrix(scalding.mapValues(math.floor))
-    def log: MatrixLike[Double] = ???
-    def log10: MatrixLike[Double] = ???
-
-    def fullSVD() = ???
-
-    def addScalar(x: T) = matrix(scalding.mapValues(field.plus(_, x)))
-    def addAssignment(r: Int, c: Int, v: T): Matrix[T] = ???
-
-    def subtractScalar(x: T) = matrix(scalding.mapValues(field.minus(_, x)))
-    def multiplyScalar(x: T) = matrix(scalding.mapValues(field.times(_, x)))
-    def divideScalar(x: T) = matrix(scalding.mapValues(field.div(_, x)))
-    def mulRow(i: Int, x: T) = ???
-    def mulColumn(i: Int, x: T) = ???
-
-    def pow(p: Double) = ???
-
-    def addMatrix(other: Matrix[T]) = matrix(scalding + other.scalding)
-    def subtractMatrix(other: Matrix[T]) = matrix(scalding - other.scalding)
-    def multiplyMatrix(other: Matrix[T]) = matrix(scalding * other.scalding)
-
-    def mulPointwise(other: Matrix[T]) = ???
-    def divPointwise(other: Matrix[T]) = ???
-
-    def concatenateHorizontally(right: Matrix[T]) = ???
-    def concatenateVertically(under: Matrix[T]) = ???
-    def solve(B: Matrix[T]) = ???
-
-    def addRowVector(row: Matrix[T]) = ???
-    def addColumnVector(column: Matrix[T]) = ???
-    def subRowVector(row: Matrix[T]) = ???
-    def subColumnVector(column: Matrix[T]) = ???
-    def mulRowVector(row: Matrix[T]) = ???
-    def mulColumnVector(column: Matrix[T]) = ???
-    def divRowVector(row: Matrix[T]) = ???
-    def divColumnVector(column: Matrix[T]) = ???
-
-    def lt(other: Matrix[T]) = ???
-    def le(other: Matrix[T]) = ???
-    def gt(other: Matrix[T]) = ???
-    def ge(other: Matrix[T]) = ???
-    def eq(other: Matrix[T]) = ???
-    def ne(other: Matrix[T]) = ???
-    def and(other: Matrix[T]) = ???
-    def or(other: Matrix[T]) = ???
-    def xor(other: Matrix[T]) = ???
-    def not: MatrixLike[Boolean] = ???
-
-    def max: MatrixLike[T] = ???
-    def argmax = ???
-    def min: MatrixLike[T] = ???
-    def argmin = ???
-
-    def rowSums() = matrix(scalding.sumRowVectors.toMatrix(0))
-
-    def columnSums() = matrix(scalding.sumColVectors.toMatrix(0))
-
-    // def sum(): T = scalding.sum
-
-    def columnMins() = ???
-    def columnMaxs() = ???
-    def columnMeans() = ???
-    def sortColumns() = ???
-
-    def rowMins() = ???
-    def rowMaxs() = ???
-    def rowMeans() = ???
-    def sortRows() = ???
-
-    // higher order methods
-
-    def map[B: C](f: T => B): Matrix[B] = matrix(scalding.mapValues(f(_)))
-
-    def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = ???
-
-    def scalding() = storage
-  }
-
-  object Matrix {
-
-    import axle.Show
-
-    implicit def showMatrix[T: C]: Show[Matrix[T]] = new Show[Matrix[T]] {
-
-      def text(m: Matrix[T]): String = {
-        import m._
-        (0 until rows).map(i => (0 until columns).map(j => format(converter(mtj.get(i, j)))).mkString(" ")).mkString("\n")
+  implicit def endoFunctorMatrix[RowT, ColT, T: AlgebirdField]: Endofunctor[Matrix[RowT, ColT, T], T] =
+    new Endofunctor[Matrix[RowT, ColT, T], T] {
+      def map(m: Matrix[RowT, ColT, T])(f: T => T): Matrix[RowT, ColT, T] = {
+        m mapValues f
       }
     }
 
-  }
+  implicit def moduleMatrix[RowT, ColT, T: AlgebirdField]: Module[Matrix[RowT, ColT, T], T] =
+    new Module[Matrix[RowT, ColT, T], T] {
 
-  // methods for creating matrices
+      // Members declared in spire.algebra.AdditiveGroup
+      def negate(x: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        additiveAbGroupMatrix.negate(x)
 
-  def matrix[T: C](s: ScaldingMatrix[RowT, ColT, T]): Matrix[T] = new Matrix(s)
+      def zero: Matrix[RowT, ColT, T] =
+        additiveCMonoidMatrix.zero
 
-  def matrix[T: C](r: Int, c: Int, values: Array[T]): Matrix[T] =
-    matrix(r, c, (i, j) => values(i * c + j))
+      // Members declared in spire.algebra.AdditiveSemigroup
+      def plus(x: Matrix[RowT, ColT, T], y: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        additiveCSemigroupMatrix.plus(x, y)
 
-  def matrix[T: C](m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): Matrix[T] = ???
+      // Members declared in spire.algebra.Module
+      implicit def scalar: Rng[T] = ??? // TODO convert AlgebirdField to Rng
 
-  def matrix[T: C](m: Int, n: Int, f: (Int, Int) => T): Matrix[T] = ???
+      def timesl(r: T, v: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        ??? //v.mapValues(_ * r)
 
-  def diag[T: C](row: Matrix[T]): Matrix[T] = {
-    assert(row.isRowVector)
-    val field = implicitly[C[T]]
-    val n = row.columns
-    matrix(n, n, (r, c) => if (r === c) row(0, r) else field.zero)
-  }
+    }
 
-  def zeros[T: C](m: Int, n: Int): Matrix[T] = {
-    val field = implicitly[C[T]]
-    matrix(m, n, (r, c) => field.zero)
-  }
+  implicit def additiveCSemigroupMatrix[RowT, ColT, T: AlgebirdMonoid]: AdditiveCSemigroup[Matrix[RowT, ColT, T]] =
+    new AdditiveCSemigroup[Matrix[RowT, ColT, T]] {
 
-  def ones[T: C](m: Int, n: Int): Matrix[T] = {
-    val field = implicitly[C[T]]
-    matrix(m, n, (r, c) => field.one)
-  }
+      def plus(x: Matrix[RowT, ColT, T], y: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        ??? //x.+(y)
+    }
 
-  def eye[T: C](n: Int): Matrix[T] = {
-    val field = implicitly[C[T]]
-    matrix(n, n, (r, c) => if (r === c) field.one else field.zero)
-  }
+  implicit def additiveCMonoidMatrix[RowT, ColT, T: AlgebirdMonoid]: AdditiveMonoid[Matrix[RowT, ColT, T]] =
+    new AdditiveMonoid[Matrix[RowT, ColT, T]] {
 
-  def I[T: C](n: Int): Matrix[T] = eye(n)
+      lazy val semigroup = additiveCSemigroupMatrix[RowT, ColT, T]
 
-  def rand[T: C](m: Int, n: Int): Matrix[T] = {
-    val field = implicitly[C[T]]
-    matrix(m, n, (r, c) => ???)
-  }
+      def plus(x: Matrix[RowT, ColT, T], y: Matrix[RowT, ColT, T]) =
+        semigroup.plus(x, y)
 
-  def randn[T: C](m: Int, n: Int): Matrix[T] = ???
+      def zero: Matrix[RowT, ColT, T] =
+        ???
+    }
 
-  def falses(m: Int, n: Int): Matrix[Boolean] = {
-    val field = implicitly[C[Boolean]]
-    matrix(m, n, (r, c) => field.zero)
-  }
+  implicit def multiplicativeSemigroupMatrix[RowT, ColT, T]: MultiplicativeSemigroup[Matrix[RowT, ColT, T]] =
+    new MultiplicativeSemigroup[Matrix[RowT, ColT, T]] {
 
-  def trues(m: Int, n: Int): Matrix[Boolean] = {
-    val field = implicitly[C[Boolean]]
-    matrix(m, n, (r, c) => field.one)
-  }
+      def times(x: Matrix[RowT, ColT, T], y: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        ??? //x.*(y)
+    }
 
-  override def median(m: Matrix[Double]): Matrix[Double] = ???
+  implicit def multiplicativeMonoidMatrix[RowT, ColT, T: AlgebirdField]: MultiplicativeMonoid[Matrix[RowT, ColT, T]] =
+    new MultiplicativeMonoid[Matrix[RowT, ColT, T]] {
 
-  def centerRows(m: Matrix[Double]): Matrix[Double] = ???
-  def centerColumns(m: Matrix[Double]): Matrix[Double] = ???
+      lazy val semigroup = multiplicativeSemigroupMatrix[RowT, ColT, T]
 
-  def rowRange(m: Matrix[Double]): Matrix[Double] = ???
-  def columnRange(m: Matrix[Double]): Matrix[Double] = ???
+      def times(x: Matrix[RowT, ColT, T], y: Matrix[RowT, ColT, T]) =
+        semigroup.times(x, y)
 
-  def sumsq(m: Matrix[Double]): Matrix[Double] = ???
+      def one: Matrix[RowT, ColT, T] =
+        ??? // Matrix.eye(???) // TODO: dimension m
+    }
 
-  def cov(m: Matrix[Double]): Matrix[Double] = ???
+  implicit def additiveAbGroupMatrix[RowT, ColT, T: AlgebirdField]: AdditiveAbGroup[Matrix[RowT, ColT, T]] =
+    new AdditiveAbGroup[Matrix[RowT, ColT, T]] {
 
-  def std(m: Matrix[Double]): Matrix[Double] = ???
+      lazy val additiveCMonoid = additiveCMonoidMatrix[RowT, ColT, T]
 
-  def zscore(m: Matrix[Double]): Matrix[Double] = ???
+      def zero: Matrix[RowT, ColT, T] =
+        additiveCMonoid.zero
 
-  def pca(Xnorm: Matrix[Double], cutoff: Double = 0.95): (Matrix[Double], Matrix[Double]) = ???
+      def plus(x: Matrix[RowT, ColT, T], y: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        additiveCMonoid.plus(x, y)
 
-  def numComponentsForCutoff(s: Matrix[Double], cutoff: Double): Int = ???
+      def negate(x: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        ???
+    }
+
+  implicit def ringMatrix[RowT, ColT, T: AlgebirdField]: Ring[Matrix[RowT, ColT, T]] =
+    new Ring[Matrix[RowT, ColT, T]] {
+
+      lazy val additiveAbGroup = additiveAbGroupMatrix[RowT, ColT, T]
+
+      def negate(x: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        additiveAbGroup.negate(x)
+
+      def zero: Matrix[RowT, ColT, T] =
+        additiveAbGroup.zero
+
+      def plus(x: Matrix[RowT, ColT, T], y: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        additiveAbGroup.plus(x, y)
+
+      lazy val multiplicativeMonoid = multiplicativeMonoidMatrix[RowT, ColT, T]
+
+      def one: Matrix[RowT, ColT, T] =
+        multiplicativeMonoid.one
+
+      def times(x: Matrix[RowT, ColT, T], y: Matrix[RowT, ColT, T]): Matrix[RowT, ColT, T] =
+        multiplicativeMonoid.times(x, y)
+    }
+
+  implicit def showMatrix[RowT, ColT, T]: Show[Matrix[RowT, ColT, T]] =
+    new Show[Matrix[RowT, ColT, T]] {
+
+      def text(m: Matrix[RowT, ColT, T]): String =
+        ???
+    }
+
+  implicit def linearAlgebraMatrix[RowT, ColT, T: AlgebirdField]: LinearAlgebra[Matrix[RowT, ColT, T], RowT, ColT, T] =
+    new LinearAlgebra[Matrix[RowT, ColT, T], RowT, ColT, T] {
+
+      type M = Matrix[RowT, ColT, T]
+
+      def elementField: Field[T] = ??? //implicitly[AlgebirdField[T]] // TODO convert to Spire field
+
+      def ring = ringMatrix
+
+      def module = moduleMatrix[RowT, ColT, T]
+
+      def endofunctor = endoFunctorMatrix
+
+      def rows(m: M): RowT = ???
+
+      def columns(m: M): ColT = ???
+
+      def length(m: M): Int = ???
+
+      def get(m: M)(i: RowT, j: ColT): T = ???
+
+      def slice(m: M)(rs: Seq[RowT], cs: Seq[ColT]): M =
+        ???
+
+      def toList(m: M): List[T] =
+        ???
+
+      def column(m: M)(j: ColT): M =
+        ???
+
+      def row(m: M)(i: RowT): M =
+        ???
+
+      def isEmpty(m: M): Boolean = ???
+      def isRowVector(m: M): Boolean = ???
+      def isColumnVector(m: M): Boolean = ???
+      def isVector(m: M): Boolean = ???
+      def isSquare(m: M): Boolean = ???
+      def isScalar(m: M): Boolean = ???
+
+      def dup(m: M): M = ???
+
+      def addScalar(m: M)(x: T): M = ???
+
+      def subtractScalar(m: M)(x: T): M = ???
+
+      // def multiplyScalar(m: Matrix)(x: Double): Matrix = ???
+
+      def divideScalar(m: M)(x: T): M = ???
+
+      def negate(m: M): M = ring.negate(m)
+
+      def transpose(m: M): M = ???
+
+      def diag(m: M): M = ???
+
+      def invert(m: M): M = ??? // org.jblas.Solve.solve(m, Matrix.eye(m.rows))
+
+      def ceil(m: M): M = ???
+
+      def floor(m: M): M = ???
+
+      def log(m: M): M = ???
+
+      def log10(m: M): M = ???
+
+      /**
+       *  (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
+       */
+      def fullSVD(m: M): (M, M, M) =
+        ???
+
+      def pow(m: M)(p: Double): M =
+        ???
+
+      def addAssignment(m: M)(r: RowT, c: ColT, v: T): M =
+        ???
+
+      def mulRow(m: M)(i: RowT, x: T): M = ???
+
+      def mulColumn(m: M)(i: ColT, x: T): M = ???
+
+      // Operations on pairs of matrices
+
+      //      def addMatrix(lhs: Matrix, rhs: Matrix): Matrix = ring.plus(lhs, rhs)
+      //      def subtractMatrix(lhs: Matrix, rhs: Matrix): Matrix = ring.minus(lhs, rhs)
+      //      def multiplyMatrix(lhs: Matrix, rhs: Matrix): Matrix = ring.times(lhs, rhs)
+
+      def mulPointwise(m: M)(rhs: M): M =
+        ???
+
+      def divPointwise(m: M)(rhs: M): M =
+        ???
+
+      def concatenateHorizontally(m: M)(right: M): M =
+        ???
+
+      def concatenateVertically(m: M)(under: M): M =
+        ???
+
+      def solve(m: M)(B: M): M =
+        ??? //org.jblas.Solve.solve(m, B) // returns X, where this === A and A x X = B
+
+      // Operations on a matrix and a column/row vector
+
+      def addRowVector(m: M)(row: M): M =
+        ???
+
+      def addColumnVector(m: M)(column: M): M =
+        ???
+
+      def subRowVector(m: M)(row: M): M =
+        ???
+
+      def subColumnVector(m: M)(column: M): M =
+        ???
+
+      def mulRowVector(m: M)(row: M): M =
+        ???
+
+      def mulColumnVector(m: M)(column: M): M =
+        ???
+
+      def divRowVector(m: M)(row: M): M =
+        ???
+
+      def divColumnVector(m: M)(column: M): M =
+        ???
+
+      // Operations on pair of matrices that return M[Boolean]
+
+      def lt(m: M)(rhs: M): M =
+        ???
+
+      def le(m: M)(rhs: M): M =
+        ???
+
+      def gt(m: M)(rhs: M): M =
+        ???
+
+      def ge(m: M)(rhs: M): M =
+        ???
+
+      def eq(m: M)(rhs: M): M =
+        ???
+
+      def ne(m: M)(rhs: M): M =
+        ???
+
+      def and(m: M)(rhs: M): M =
+        ???
+
+      def or(m: M)(rhs: M): M =
+        ???
+
+      def xor(m: M)(rhs: M): M =
+        ???
+
+      def not(m: M): M =
+        ???
+
+      // various mins and maxs
+
+      def max(m: M): T = ???
+
+      def argmax(m: M): (RowT, ColT) = ???
+
+      def min(m: M): T = ???
+
+      def argmin(m: M): (RowT, ColT) =
+        ???
+
+      def rowSums(m: M): M = ???
+      def columnSums(m: M): M = ???
+      def columnMins(m: M): M = ???
+      def columnMaxs(m: M): M = ???
+      // def columnArgmins
+      // def columnArgmaxs
+
+      def columnMeans(m: M): M = ???
+      def sortColumns(m: M): M = ???
+
+      def rowMins(m: M): M = ???
+      def rowMaxs(m: M): M = ???
+      def rowMeans(m: M): M = ???
+      def sortRows(m: M): M = ???
+
+      def matrix(r: RowT, c: ColT, values: Array[T]): M =
+        ???
+
+      def matrix(
+        m: RowT,
+        n: ColT,
+        topleft: => T,
+        left: RowT => T,
+        top: ColT => T,
+        fill: (RowT, ColT, T, T, T) => T): M = ???
+
+      def matrix(m: RowT, n: ColT, f: (RowT, ColT) => T): M = ???
+
+      //def flatMapColumns[B](f: M[A] => M[B])(implicit fpB: FunctionPair[Double, B])
+      def flatMapColumns(m: M)(f: M => M): M = ???
+
+      def foldLeft(m: M)(zero: M)(f: (M, M) => M): M =
+        ??? //(0 until columns(m)).foldLeft(zero)((x: M, c: ColT) => f(x, column(m)(c)))
+
+      def foldTop(m: M)(zero: M)(f: (M, M) => M): M =
+        ??? //(0 until rows(m)).foldLeft(zero)((x: M, r: RowT) => f(x, row(m)(r)))
+
+      def centerRows(m: M): M =
+        subColumnVector(m)(rowMeans(m))
+
+      def centerColumns(m: M): M =
+        subRowVector(m)(columnMeans(m))
+
+      def rowRange(m: M): M =
+        ???
+
+      def columnRange(m: M): M =
+        ???
+
+      def sumsq(m: M): M =
+        columnSums(mulPointwise(m)(m))
+
+      def cov(m: M): M =
+        ???
+
+      def std(m: M): M =
+        ???
+
+      def zscore(m: M): M =
+        divRowVector(centerColumns(m))(std(m))
+
+      /**
+       * Principal Component Analysis (PCA)
+       *
+       * assumes that the input matrix, Xnorm, has been normalized, in other words:
+       *   mean of each column === 0.0
+       *   stddev of each column === 1.0 (I'm not clear if this is a strict requirement)
+       *
+       * http://folk.uio.no/henninri/pca_module/
+       * http://public.lanl.gov/mewall/kluwer2002.html
+       * https://mailman.cae.wisc.edu/pipermail/help-octave/2004-May/012772.html
+       *
+       * @return (U, S) where U = eigenvectors and S = eigenvalues (truncated to requested cutoff)
+       *
+       */
+
+      def pca(Xnorm: M, cutoff: Double = 0.95): (M, M) = {
+        val (u, s, v) = fullSVD(cov(Xnorm))
+        (u, s)
+      }
+
+      def numComponentsForCutoff(s: M, cutoff: Double): Int = ???
+
+      def zeros(laRows: RowT, laColumns: ColT): M = ???
+
+      def ones(laRows: RowT, laColumns: ColT): M = ???
+
+      def rand(laRows: RowT, laColumns: ColT): M = ??? // evenly distributed from 0.0 to 1.0
+
+      def randn(laRows: RowT, laColumns: ColT): M = ??? // normal distribution
+
+    }
 
 }

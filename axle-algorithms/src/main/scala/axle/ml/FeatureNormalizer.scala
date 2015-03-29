@@ -15,7 +15,7 @@ trait Normalize[M] extends (Seq[Double] => M) {
   def random(): M
 }
 
-case class IdentityFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Double])
+case class IdentityFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends Normalize[M] {
 
   def normalizedData: M = X
@@ -29,7 +29,7 @@ case class IdentityFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Doub
   def random(): M = la.matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
 }
 
-case class LinearFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Double])
+case class LinearFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends Normalize[M] {
 
   //implicit val module = la.module
@@ -52,7 +52,7 @@ case class LinearFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Double
 
 }
 
-case class ZScoreFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Double])
+case class ZScoreFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends Normalize[M] {
 
   //implicit val ring = la.ring
@@ -75,7 +75,7 @@ case class ZScoreFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Double
 
 }
 
-case class PCAFeatureNormalizer[M](cutoff: Double, X: M)(implicit la: LinearAlgebra[M, Double])
+case class PCAFeatureNormalizer[M](cutoff: Double, X: M)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends Normalize[M] {
 
   //implicit val module = la.module

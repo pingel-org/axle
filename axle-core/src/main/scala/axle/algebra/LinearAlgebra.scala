@@ -4,7 +4,7 @@ import axle.string
 import spire.algebra._
 import spire.implicits._
 
-trait LinearAlgebra[M, T] {
+trait LinearAlgebra[M, RowT, ColT, T] {
 
   def ring: Ring[M]
 
@@ -14,20 +14,20 @@ trait LinearAlgebra[M, T] {
 
   def module: Module[M, T]
 
-  def rows(m: M): Int
+  def rows(m: M): RowT
 
-  def columns(m: M): Int
+  def columns(m: M): ColT
 
-  def length(m: M): Int
+  def length(m: M): Int // TODO
 
-  def get(m: M)(i: Int, j: Int): T
+  def get(m: M)(i: RowT, j: ColT): T
 
-  def slice(m: M)(rs: Seq[Int], cs: Seq[Int]): M
+  def slice(m: M)(rs: Seq[RowT], cs: Seq[ColT]): M
 
   def toList(m: M): List[T]
 
-  def column(m: M)(j: Int): M
-  def row(m: M)(i: Int): M
+  def column(m: M)(j: ColT): M
+  def row(m: M)(i: RowT): M
 
   def isEmpty(m: M): Boolean
   def isRowVector(m: M): Boolean
@@ -60,9 +60,9 @@ trait LinearAlgebra[M, T] {
   //  def multiplyScalar(m: M)(x: T): M
   def divideScalar(m: M)(x: T): M
 
-  def addAssignment(m: M)(r: Int, c: Int, v: T): M
-  def mulRow(m: M)(i: Int, x: T): M
-  def mulColumn(m: M)(i: Int, x: T): M
+  def addAssignment(m: M)(r: RowT, c: ColT, v: T): M
+  def mulRow(m: M)(i: RowT, x: T): M
+  def mulColumn(m: M)(i: ColT, x: T): M
 
   // Operations on pairs of matrices
 
@@ -100,9 +100,9 @@ trait LinearAlgebra[M, T] {
   // various mins and maxs
 
   def max(m: M): T
-  def argmax(m: M): (Int, Int)
+  def argmax(m: M): (RowT, ColT)
   def min(m: M): T
-  def argmin(m: M): (Int, Int)
+  def argmin(m: M): (RowT, ColT)
 
   def rowSums(m: M): M
   def columnSums(m: M): M
@@ -119,21 +119,19 @@ trait LinearAlgebra[M, T] {
   def rowMeans(m: M): M
   def sortRows(m: M): M
 
-  def matrix(r: Int, c: Int, values: Array[T]): M
+  def matrix(r: RowT, c: ColT, values: Array[T]): M
 
-  def matrix(m: Int, n: Int, topleft: => T, left: Int => T, top: Int => T, fill: (Int, Int, T, T, T) => T): M
+  def matrix(m: RowT, n: ColT, topleft: => T, left: RowT => T, top: ColT => T, fill: (RowT, ColT, T, T, T) => T): M
 
-  def matrix(m: Int, n: Int, f: (Int, Int) => T): M
+  def matrix(m: RowT, n: ColT, f: (RowT, ColT) => T): M
 
   // Higher-order methods
 
   def flatMapColumns(m: M)(f: M => M): M
 
-  def foldLeft(m: M)(zero: M)(f: (M, M) => M): M =
-    (0 until columns(m)).foldLeft(zero)((x: M, c: Int) => f(x, column(m)(c)))
+  def foldLeft(m: M)(zero: M)(f: (M, M) => M): M
 
-  def foldTop(m: M)(zero: M)(f: (M, M) => M): M =
-    (0 until rows(m)).foldLeft(zero)((x: M, r: Int) => f(x, row(m)(r)))
+  def foldTop(m: M)(zero: M)(f: (M, M) => M): M
 
   /**
    * Hilbert matrix
@@ -172,11 +170,11 @@ trait LinearAlgebra[M, T] {
 
   // TODO:
   def zero: M = ring.zero
-  def zeros(laRows: Int, laColumns: Int): M
-  def eye(laRows: Int): M = ring.one
-  def I(laRows: Int): M = ring.one
-  def ones(laRows: Int, laColumns: Int): M
-  def rand(laRows: Int, laColumns: Int): M
-  def randn(laRows: Int, laColumns: Int): M
+  def zeros(laRows: RowT, laColumns: ColT): M
+  def eye(laRows: RowT): M = ring.one
+  def I(laRows: RowT): M = ring.one
+  def ones(laRows: RowT, laColumns: ColT): M
+  def rand(laRows: RowT, laColumns: ColT): M
+  def randn(laRows: RowT, laColumns: ColT): M
 
 }
