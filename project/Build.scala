@@ -202,7 +202,7 @@ import axle._
   ).settings(
     name := "axle-spark",
     libraryDependencies ++= Seq(
-      "org.apache.spark" %% "spark-core" % "1.2.0"
+      "org.apache.spark" %% "spark-core" % "1.3.0"
     )
   ).dependsOn(axleCore)
 
