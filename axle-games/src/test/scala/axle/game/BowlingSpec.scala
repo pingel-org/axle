@@ -8,6 +8,7 @@ class BowlingSpec extends Specification {
     "work" in {
 
       import Bowling._
+      import Bowlers._
 
       // TODO the probabilities are summing to > 1
       scoreDistribution(goodBowler, 10)

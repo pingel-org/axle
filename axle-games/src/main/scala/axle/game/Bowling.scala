@@ -7,60 +7,63 @@ object Bowling {
 
   case class Bowler(firstRoll: Distribution0[Int, Rational], spare: Distribution0[Boolean, Rational])
 
-  val randomBowler =
-    Bowler(
-      firstRoll = uniformDistribution(0 to 10, "uniform first roll"),
-      spare = binaryDecision(Rational(1, 2)))
+  object Bowlers {
+    val randomBowler =
+      Bowler(
+        firstRoll = uniformDistribution(0 to 10, "uniform first roll"),
+        spare = binaryDecision(Rational(1, 2)))
 
-  // bad bowler.  50% gutter-ball, even (5%) distribution of 1-10
-  val badBowler =
-    Bowler(
+    // bad bowler.  50% gutter-ball, even (5%) distribution of 1-10
+    val badBowler =
+      Bowler(
+        firstRoll = ConditionalProbabilityTable0(Map(
+          0 -> Rational(5, 10),
+          1 -> Rational(1, 20),
+          2 -> Rational(1, 20),
+          3 -> Rational(1, 20),
+          4 -> Rational(1, 20),
+          5 -> Rational(1, 20),
+          6 -> Rational(1, 20),
+          7 -> Rational(1, 20),
+          8 -> Rational(1, 20),
+          9 -> Rational(1, 20),
+          10 -> Rational(1, 20)), "bad first roll"),
+        spare = binaryDecision(Rational(1, 10)))
+
+    // decent bowler.  5%  over 0-5, 10% 6, 15% over 7-10
+    val decentBowler =
+      Bowler(
+        firstRoll = ConditionalProbabilityTable0(Map(
+          0 -> Rational(1, 20),
+          1 -> Rational(1, 20),
+          2 -> Rational(1, 20),
+          3 -> Rational(1, 20),
+          4 -> Rational(1, 20),
+          5 -> Rational(1, 20),
+          6 -> Rational(1, 10),
+          7 -> Rational(3, 20),
+          8 -> Rational(3, 20),
+          9 -> Rational(3, 20),
+          10 -> Rational(3, 20))),
+        spare = binaryDecision(Rational(1, 10)))
+
+    // 4%  over 0-6, 12% 7, 20% 8, 30% 9, 30% 10
+    val goodBowler = Bowler(
       firstRoll = ConditionalProbabilityTable0(Map(
-        0 -> Rational(5, 10),
-        1 -> Rational(1, 20),
-        2 -> Rational(1, 20),
-        3 -> Rational(1, 20),
-        4 -> Rational(1, 20),
-        5 -> Rational(1, 20),
-        6 -> Rational(1, 20),
-        7 -> Rational(1, 20),
-        8 -> Rational(1, 20),
-        9 -> Rational(1, 20),
-        10 -> Rational(1, 20)), "bad first roll"),
-      spare = binaryDecision(Rational(1, 10)))
+        0 -> Rational(1, 25),
+        1 -> Rational(1, 25),
+        2 -> Rational(1, 25),
+        3 -> Rational(1, 25),
+        4 -> Rational(1, 25),
+        5 -> Rational(1, 25),
+        6 -> Rational(1, 25),
+        7 -> Rational(3, 25),
+        8 -> Rational(1, 5),
+        9 -> Rational(3, 10),
+        10 -> Rational(3, 10))),
+      spare = binaryDecision(Rational(8, 10)))
 
-  // decent bowler.  5%  over 0-5, 10% 6, 15% over 7-10
-  val decentBowler =
-    Bowler(
-      firstRoll = ConditionalProbabilityTable0(Map(
-        0 -> Rational(1, 20),
-        1 -> Rational(1, 20),
-        2 -> Rational(1, 20),
-        3 -> Rational(1, 20),
-        4 -> Rational(1, 20),
-        5 -> Rational(1, 20),
-        6 -> Rational(1, 10),
-        7 -> Rational(3, 20),
-        8 -> Rational(3, 20),
-        9 -> Rational(3, 20),
-        10 -> Rational(3, 20))),
-      spare = binaryDecision(Rational(1, 10)))
-
-  // 4%  over 0-6, 12% 7, 20% 8, 30% 9, 30% 10
-  val goodBowler = Bowler(
-    firstRoll = ConditionalProbabilityTable0(Map(
-      0 -> Rational(1, 25),
-      1 -> Rational(1, 25),
-      2 -> Rational(1, 25),
-      3 -> Rational(1, 25),
-      4 -> Rational(1, 25),
-      5 -> Rational(1, 25),
-      6 -> Rational(1, 25),
-      7 -> Rational(3, 25),
-      8 -> Rational(1, 5),
-      9 -> Rational(3, 10),
-      10 -> Rational(3, 10))),
-    spare = binaryDecision(Rational(8, 10)))
+  }
 
   def scoreFrame(
     twoAgoStrike: Boolean,
@@ -87,8 +90,8 @@ object Bowling {
 
     (1 to numFrames).foldLeft(startState)({
       case (incoming, _) => for {
-        i <- incoming;
-        f <- firstRoll;
+        i <- incoming
+        f <- firstRoll
         s <- spare
       } yield {
         val frame = scoreFrame(i._2, i._3, i._4, f, s)
