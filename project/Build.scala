@@ -130,6 +130,37 @@ import axle._
     )
   )
 
+  lazy val axleAlgorithms = Project(
+    id = "axle-algorithms",
+    base = file("axle-algorithms"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-algorithms",
+    libraryDependencies ++= Seq(
+      "com.chuusai" %% "shapeless" % "2.1.0"
+    )
+  ).dependsOn(axleCore)
+
+  lazy val axleLanguages = Project(
+    id = "axle-languages",
+    base = file("axle-languages"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-languages",
+    libraryDependencies ++= Seq(
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.4.3"
+    )
+  ).dependsOn(axleCore)
+
+  lazy val axleGames = Project(
+    id = "axle-games",
+    base = file("axle-games"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-games",
+    libraryDependencies ++= Seq()
+  ).dependsOn(axleCore)
+
   lazy val axleJoda = Project(
     id = "axle-joda",
     base = file("axle-joda"),
@@ -150,6 +181,17 @@ import axle._
     name := "axle-jblas",
     libraryDependencies ++= Seq(
       "org.jblas" % "jblas" % "1.2.3"
+    )
+  ).dependsOn(axleCore)
+
+  lazy val axleJcublas = Project(
+    id = "axle-jcublas",
+    base = file("axle-jcublas"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-jcublas",
+    libraryDependencies ++= Seq(
+      "org.nd4j" % "jcublas" % "6.5"
     )
   ).dependsOn(axleCore)
 
@@ -219,37 +261,6 @@ import axle._
     )
   ).dependsOn(axleCore)
 
-  lazy val axleAlgorithms = Project(
-    id = "axle-algorithms",
-    base = file("axle-algorithms"),
-    settings = sharedSettings
-  ).settings(
-    name := "axle-algorithms",
-    libraryDependencies ++= Seq(
-      "com.chuusai" %% "shapeless" % "2.1.0"
-    )
-  ).dependsOn(axleCore)
-
-  lazy val axleLanguages = Project(
-    id = "axle-languages",
-    base = file("axle-languages"),
-    settings = sharedSettings
-  ).settings(
-    name := "axle-languages",
-    libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.4.3"
-    )
-  ).dependsOn(axleCore)
-
-  lazy val axleGames = Project(
-    id = "axle-games",
-    base = file("axle-games"),
-    settings = sharedSettings
-  ).settings(
-    name := "axle-games",
-    libraryDependencies ++= Seq()
-  ).dependsOn(axleCore)
-
   lazy val axleVisualize = Project(
     id = "axle-visualize",
     base = file("axle-visualize"),
@@ -278,6 +289,7 @@ import axle._
     axleVisualize,
     axleJoda,
     axleJblas,
+    axleJcublas,
     axleJung,
     axleGames,
     axleLanguages)
@@ -297,6 +309,7 @@ import axle._
     axleGames,
     axleVisualize,
     axleJblas,
+    axleJcublas,
     axleJung,
     axleJoda,
     axleSpark,
