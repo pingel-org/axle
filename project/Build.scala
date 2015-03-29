@@ -261,6 +261,17 @@ import axle._
     )
   ).dependsOn(axleCore)
 
+  lazy val axleFigaro = Project(
+    id = "axle-figaro",
+    base = file("axle-figaro"),
+    settings = sharedSettings
+  ).settings(
+    name := "axle-figaro",
+    libraryDependencies ++= Seq(
+      "com.cra.figaro" %% "figaro" % "3.0.0.0"
+    )
+  ).dependsOn(axleCore)
+
   lazy val axleVisualize = Project(
     id = "axle-visualize",
     base = file("axle-visualize"),
@@ -292,7 +303,8 @@ import axle._
     axleJcublas,
     axleJung,
     axleGames,
-    axleLanguages)
+    axleLanguages,
+    axleFigaro)
 
   lazy val axleAggregate = Project(
     id = "axle-aggregate",
@@ -307,7 +319,7 @@ import axle._
     axleCore,
     axleAlgorithms,
     axleGames,
-    axleVisualize,
+    axleLanguages,
     axleJblas,
     axleJcublas,
     axleJung,
@@ -315,7 +327,8 @@ import axle._
     axleSpark,
     axleScalding,
     axleHBase,
-    axleLanguages)
+    axleFigaro,
+    axleVisualize)
 
   lazy val axleRepl = Project(
     id = "axle-repl",
