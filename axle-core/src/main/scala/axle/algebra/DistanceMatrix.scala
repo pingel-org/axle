@@ -8,13 +8,14 @@ import scala.reflect.ClassTag
 // def triangleInequalityHolds(data: collection.GenTraversable[T]): Boolean =
 //   data.triples.forall({ case (a, b, c) => distance(a, b) + distance(b, c) >= distance(a, c) })
 
-case class DistanceMatrix[T: ClassTag, F[_]: Finite, M](
+case class DistanceMatrix[T: ClassTag, F[_], M](
   vectors: F[T])(
     implicit space: MetricSpace[T, Double],
     la: LinearAlgebra[M, Int, Int, Double],
-    index: Indexed[F, Int]) {
+    index: Indexed[F, Int],
+    finite: Finite[F, Int]) {
 
-  val n = implicitly[Finite[F]].size(vectors).toInt // TODO forcing Long to Int
+  val n = finite.size(vectors)
 
   val distanceMatrix: M =
     la.matrix(n, n, (r: Int, c: Int) => space.distance(index.at(vectors)(r), index.at(vectors)(c)).toDouble)

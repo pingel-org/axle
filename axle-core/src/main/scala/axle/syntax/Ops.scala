@@ -234,11 +234,10 @@ final class AggregatableOps[G[_]: Aggregatable, A](val ts: G[A]) {
   def tally[N: Ring](implicit aEq: Eq[A]) = ev.tally(ts)
 }
 
-final class FiniteOps[F[_]: Finite, A: ClassTag](val as: F[A]) {
+final class FiniteOps[F[_], S, A: ClassTag](val as: F[A])(
+  implicit finite: Finite[F, S]) {
 
-  val ev = implicitly[Finite[F]]
-
-  def size = ev.size(as)
+  def size = finite.size(as)
 }
 
 final class IndexedOps[F[_], IndexT, A: ClassTag](

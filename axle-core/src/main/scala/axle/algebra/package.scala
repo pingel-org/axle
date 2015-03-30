@@ -51,16 +51,18 @@ package object algebra {
   def product[A: ClassTag, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
-  def mean[A: ClassTag, F[_]](fa: F[A])(implicit ev: Field[A], agg: Aggregatable[F], fin: Finite[F]): A =
+  def mean[A: ClassTag, F[_]](fa: F[A])(
+    implicit ev: Field[A],
+    agg: Aggregatable[F],
+    fin: Finite[F, A]): A =
     sum(fa) / fin.size(fa)
 
   def harmonicMean[A: ClassTag, F[_]](xs: F[A])(
-    implicit ct: ConvertableTo[A],
-    field: Field[A],
+    implicit field: Field[A],
     fun: Functor[F],
     agg: Aggregatable[F],
-    fin: Finite[F]): A =
-    field.div(ct.fromLong(fin.size(xs)), sum(fun.map(xs)(field.reciprocal)))
+    fin: Finite[F, A]): A =
+    field.div(fin.size(xs), sum(fun.map(xs)(field.reciprocal)))
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] = new MetricSpace[Rational, Double] {
 

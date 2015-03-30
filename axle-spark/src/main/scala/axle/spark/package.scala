@@ -38,7 +38,7 @@ package object spark {
     (b1, b2) => locker.get.apply(b1, b2)
   }
 
-  implicit def finiteRDD: Finite[RDD] = new Finite[RDD] {
+  implicit def finiteRDD: Finite[RDD, Long] = new Finite[RDD, Long] {
 
     def size[A: ClassTag](rdd: RDD[A]): Long =
       rdd.count

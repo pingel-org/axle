@@ -72,7 +72,8 @@ trait AggregatableSyntax {
 
 trait FiniteSyntax {
 
-  implicit def finiteOps[F[_]: Finite, A: ClassTag](fa: F[A]) =
+  implicit def finiteOps[F[_], S, A: ClassTag](fa: F[A])(
+    implicit finite: Finite[F, S]) =
     new FiniteOps(fa)
 }
 

@@ -18,11 +18,13 @@ import spire.algebra._
 import scala.reflect.ClassTag
 import math.{ ceil, log10 }
 
-case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: Functor: Finite: SetFrom: MapReducible: MapFrom, M](
+case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: Functor: SetFrom: MapReducible: MapFrom, M](
   classifier: Function1[T, CLASS],
   data: F[T],
   labelExtractor: T => L,
-  classes: IndexedSeq[CLASS])(implicit val la: LinearAlgebra[M, Int, Int, Double]) {
+  classes: IndexedSeq[CLASS])(
+    implicit val la: LinearAlgebra[M, Int, Int, Double],
+    finite: Finite[F, Int]) {
 
   val label2clusterId = data.map(datum => (labelExtractor(datum), classifier(datum)))
 
