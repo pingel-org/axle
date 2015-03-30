@@ -241,11 +241,11 @@ final class FiniteOps[F[_]: Finite, A: ClassTag](val as: F[A]) {
   def size = ev.size(as)
 }
 
-final class IndexedOps[F[_]: Indexed, A: ClassTag](val as: F[A]) {
+final class IndexedOps[F[_], IndexT, A: ClassTag](
+  val as: F[A])(
+    implicit index: Indexed[F, IndexT]) {
 
-  val ev = implicitly[Indexed[F]]
-
-  def at(i: Int) = ev.at(as)(i)
+  def at(i: IndexT) = index.at(as)(i)
 }
 
 final class MapReducibleOps[M[_]: MapReducible, A: ClassTag](val as: M[A]) {

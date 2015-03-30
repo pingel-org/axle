@@ -78,7 +78,8 @@ trait FiniteSyntax {
 
 trait IndexedSyntax {
 
-  implicit def indexedOps[F[_]: Indexed, A: ClassTag](fa: F[A]) =
+  implicit def indexedOps[F[_], IndexT, A: ClassTag](fa: F[A])(
+    implicit index: Indexed[F, IndexT]) =
     new IndexedOps(fa)
 }
 
