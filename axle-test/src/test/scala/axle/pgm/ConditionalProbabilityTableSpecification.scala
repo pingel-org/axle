@@ -4,7 +4,7 @@ import axle._
 import axle.stats._
 import axle.algebra.Vertex
 import axle.algebra.DirectedGraph
-import axle.jblas.DoubleMatrixWitnesses._
+import axle.jblas._
 import axle.jung.JungDirectedGraph.directedGraphJung
 import spire.implicits._
 import spire.math._

@@ -1,7 +1,7 @@
 package axle.ml
 
 import org.specs2.mutable._
-import axle.jblas.DoubleMatrixWitnesses._
+import axle.jblas._
 import axle.algebra.Plottable._
 
 class LinearRegressionSpecification

@@ -1,7 +1,6 @@
 package axle.jblas
 
 import org.specs2.mutable._
-import axle.jblas.DoubleMatrixWitnesses._
 import axle.syntax.linearalgebra._
 import axle.syntax.endofunctor._
 import spire.implicits._

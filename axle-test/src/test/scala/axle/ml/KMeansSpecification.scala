@@ -10,7 +10,7 @@ import scala.util.Random.shuffle
 
 import org.specs2.mutable.Specification
 
-import axle.jblas.DoubleMatrixWitnesses._
+import axle.jblas._
 import axle.ml.distance.Euclidian
 import spire.algebra.Eq
 

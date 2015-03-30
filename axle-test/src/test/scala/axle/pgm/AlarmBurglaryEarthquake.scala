@@ -7,7 +7,7 @@ import axle.pgm._
 import spire.math._
 import spire.implicits._
 import org.specs2.mutable._
-import axle.jblas.DoubleMatrixWitnesses._
+import axle.jblas._
 import axle.jung.JungDirectedGraph.directedGraphJung
 import axle.algebra.Vertex
 

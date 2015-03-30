@@ -1,4 +1,4 @@
-package axle.scalding
+package axle
 
 import com.twitter.algebird.{Field => AlgebirdField}
 import com.twitter.algebird.{Monoid => AlgebirdMonoid}
@@ -23,7 +23,7 @@ import spire.algebra.Rng
  *
  */
 
-object ScaldingMatrixWitnesses {
+package object scalding {
 
   implicit def endoFunctorMatrix[RowT, ColT, T: AlgebirdField]: Endofunctor[Matrix[RowT, ColT, T], T] =
     new Endofunctor[Matrix[RowT, ColT, T], T] {

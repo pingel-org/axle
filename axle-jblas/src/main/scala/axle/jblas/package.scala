@@ -1,4 +1,4 @@
-package axle.jblas
+package axle
 
 import org.jblas.DoubleMatrix
 import axle.Show
@@ -23,7 +23,7 @@ import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import scala.reflect.ClassTag
 
-object DoubleMatrixWitnesses {
+package object jblas {
 
   implicit val endoFunctorDoubleMatrix: Endofunctor[DoubleMatrix, Double] =
     new Endofunctor[DoubleMatrix, Double] {
