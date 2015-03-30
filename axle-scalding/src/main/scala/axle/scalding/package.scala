@@ -4,7 +4,6 @@ import com.twitter.algebird.{Field => AlgebirdField}
 import com.twitter.algebird.{Monoid => AlgebirdMonoid}
 import com.twitter.scalding.mathematics.Matrix
 
-import axle.Show
 import axle.algebra.Endofunctor
 import axle.algebra.LinearAlgebra
 import spire.algebra.AdditiveAbGroup

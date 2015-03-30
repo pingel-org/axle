@@ -1,8 +1,6 @@
 package axle
 
 import org.jblas.DoubleMatrix
-import axle.Show
-import axle.string
 import axle.algebra.Endofunctor
 import axle.algebra.FunctionPair
 import axle.algebra.Functor
