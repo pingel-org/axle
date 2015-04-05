@@ -1,6 +1,6 @@
-[![Build Status](https://secure.travis-ci.org/adampingel/axle.png)](http://travis-ci.org/adampingel/axle)
-
 See [axle-lang.org](http://axle-lang.org/)
+
+[![Build Status](https://secure.travis-ci.org/adampingel/axle.png)](http://travis-ci.org/adampingel/axle)
 
 [![Stories in Ready](https://badge.waffle.io/adampingel/axle.png?label=ready&title=Ready)](http://waffle.io/adampingel/axle)
 
