@@ -1,18 +1,15 @@
 package axle.algebra
 
+import axle.cosine
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
-import axle.quanta._
-import axle.cosine
 import axle.sine
-import spire.implicits._
 import spire.algebra.Eq
-import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
-import spire.algebra.Order
+import spire.implicits.moduleOps
 import spire.math.ConvertableFrom
 
 /**
@@ -38,4 +35,8 @@ case class SphericalVector[N]( // Field: Order
       ρ :* (sine(θ) * cosine(φ)),
       ρ :* (sine(θ) * sine(φ)),
       ρ :* cosine(θ))
+
+  // TODO could also define a toCertesianVector method that would just call toPosition for the
+  // "to" half, and use a "zero" position for the "x"
+
 }
