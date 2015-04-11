@@ -7,9 +7,8 @@ import scala.Vector
 import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
 
-import axle.algebra.Position
+import axle.algebra.Position3D
 import axle.algebra.SphericalVector
-import axle.cosine
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.Distance
@@ -17,7 +16,6 @@ import axle.quanta.DistanceConverter
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
 import axle.quanta.modulize
-import axle.sine
 import javax.media.opengl.GL2
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
@@ -50,17 +48,7 @@ abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance])(
         url2texture += url -> TextureIO.newTexture(url, false, extension)
     }
 
-  def sphericalToCartesian(
-    spherical: SphericalVector[Double]): Position[Double] = {
-    import spherical._
-
-    Position(
-      ρ :* (sine(θ) * cosine(φ)),
-      ρ :* (sine(θ) * sine(φ)),
-      ρ :* cosine(θ))
-  }
-
-  def positionLight(position: Position[Float], gl: GL2): Unit = {
+  def positionLight(position: Position3D[Distance, Distance, Distance, Float], gl: GL2): Unit = {
     import position._
     gl.glLightfv(GL_LIGHT0, GL_POSITION, Vector(
       (x in distanceUnit).magnitude,
