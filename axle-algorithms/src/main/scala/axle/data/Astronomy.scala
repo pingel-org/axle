@@ -3,13 +3,18 @@ package axle.data
 import axle.quanta._
 import spire.implicits._
 
+case class CelestialBody(
+  name: String,
+  symbol: Option[String],
+  mass: UnittedQuantity[Mass, Double],
+  wikpediaUrl: String)
+
 case class Astronomy()(
-  implicit mc: MassConverter[Double], dc: DistanceConverter[Double]) {
+  implicit mc: MassConverter[Double], dc: DistanceConverter[Double], tc: TimeConverter[Double]) {
 
   import mc._
   import dc._
-
-  case class CelestialBody(name: String, symbol: Option[String], mass: UnittedQuantity[Mass, Double], wikpediaUrl: String)
+  import tc._
 
   lazy val earth = CelestialBody("earth", Some("⊕"), 5.9736 *: zettatonne, "http://en.wikipedia.org/wiki/Earth")
 
@@ -60,5 +65,13 @@ case class Astronomy()(
   lazy val bodies = List(
     earth, sun, jupiter, saturn, neptune, uranus, venus, mars,
     mercury, pluto, moon, milkyWay, andromeda)
+
+  /**
+   * http://en.wikipedia.org/wiki/Age_of_the_Universe
+   */
+
+  lazy val universeAge = 13.7 *: gigayear
+
+  lazy val earthAge = 4.54 *: gigayear // Some("earth age"), None, Some("http://en.wikipedia.org/wiki/Age_of_the_Earth"))
 
 }
