@@ -20,7 +20,10 @@ trait MoneyUnits extends QuantumUnits[Money] {
 
 }
 
-trait MoneyConverter[N] extends UnitConverter[Money, N] with MoneyUnits
+trait MoneyConverter[N] extends UnitConverter[Money, N] with MoneyUnits {
+
+  def defaultUnit = USD
+}
 
 object Money {
 

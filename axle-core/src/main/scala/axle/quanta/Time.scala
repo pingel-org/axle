@@ -52,7 +52,10 @@ trait TimeUnits extends QuantumUnits[Time] {
 
 }
 
-trait TimeConverter[N] extends UnitConverter[Time, N] with TimeUnits
+trait TimeConverter[N] extends UnitConverter[Time, N] with TimeUnits {
+
+  def defaultUnit = second
+}
 
 object Time {
 

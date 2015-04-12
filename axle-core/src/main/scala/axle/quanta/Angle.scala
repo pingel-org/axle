@@ -33,7 +33,10 @@ trait AngleUnits extends QuantumUnits[Angle] {
 
 }
 
-trait AngleConverter[N] extends UnitConverter[Angle, N] with AngleUnits
+trait AngleConverter[N] extends UnitConverter[Angle, N] with AngleUnits {
+
+  def defaultUnit = radian
+}
 
 object Angle {
 

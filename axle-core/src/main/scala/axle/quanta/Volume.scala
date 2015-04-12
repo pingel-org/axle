@@ -28,7 +28,10 @@ trait VolumeUnits extends QuantumUnits[Volume] {
 
 }
 
-trait VolumeConverter[N] extends UnitConverter[Volume, N] with VolumeUnits
+trait VolumeConverter[N] extends UnitConverter[Volume, N] with VolumeUnits {
+
+  def defaultUnit = liter
+}
 
 object Volume {
 

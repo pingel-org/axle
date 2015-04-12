@@ -29,7 +29,10 @@ trait FrequencyUnits extends QuantumUnits[Frequency] {
 
 }
 
-trait FrequencyConverter[N] extends UnitConverter[Frequency, N] with FrequencyUnits
+trait FrequencyConverter[N] extends UnitConverter[Frequency, N] with FrequencyUnits {
+
+  def defaultUnit = hertz
+}
 
 object Frequency {
 

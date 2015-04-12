@@ -20,7 +20,10 @@ trait FlowUnits extends QuantumUnits[Flow] {
 
 }
 
-trait FlowConverter[N] extends UnitConverter[Flow, N] with FlowUnits
+trait FlowConverter[N] extends UnitConverter[Flow, N] with FlowUnits {
+
+  def defaultUnit = m3s
+}
 
 object Flow {
 

@@ -6,6 +6,8 @@ import spire.algebra.MultiplicativeMonoid
 
 trait UnitConverter[Q, N] {
 
+  def defaultUnit: UnitOfMeasurement[Q]
+
   def units: List[UnitOfMeasurement[Q]]
 
   def links: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], Bijection[N, N])]

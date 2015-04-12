@@ -33,7 +33,7 @@ package object quanta {
 
       def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
 
-      def zero: UnittedQuantity[Q, N] = UnittedQuantity(implicitly[Field[N]].zero, ???)
+      def zero: UnittedQuantity[Q, N] = UnittedQuantity(implicitly[Field[N]].zero, converter.defaultUnit)
 
       def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
         UnittedQuantity((x in y.unit).magnitude + y.magnitude, y.unit) // AdditiveSemigroup

@@ -30,7 +30,10 @@ trait InformationUnits extends QuantumUnits[Information] {
 
 }
 
-trait InformationConverter[N] extends UnitConverter[Information, N] with InformationUnits
+trait InformationConverter[N] extends UnitConverter[Information, N] with InformationUnits {
+
+  def defaultUnit = byte
+}
 
 object Information {
 

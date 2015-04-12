@@ -20,7 +20,10 @@ trait MoneyFlowUnits extends QuantumUnits[MoneyFlow] {
 
 }
 
-trait MoneyFlowConverter[N] extends UnitConverter[MoneyFlow, N] with MoneyFlowUnits
+trait MoneyFlowConverter[N] extends UnitConverter[MoneyFlow, N] with MoneyFlowUnits {
+
+  def defaultUnit = USDperHour
+}
 
 object MoneyFlow {
 

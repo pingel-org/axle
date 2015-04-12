@@ -46,7 +46,10 @@ trait DistanceUnits extends QuantumUnits[Distance] {
 
 }
 
-trait DistanceConverter[N] extends UnitConverter[Distance, N] with DistanceUnits
+trait DistanceConverter[N] extends UnitConverter[Distance, N] with DistanceUnits {
+
+  def defaultUnit = meter
+}
 
 object Distance {
 

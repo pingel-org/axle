@@ -41,7 +41,10 @@ trait MassUnits extends QuantumUnits[Mass] {
 
 }
 
-trait MassConverter[N] extends UnitConverter[Mass, N] with MassUnits
+trait MassConverter[N] extends UnitConverter[Mass, N] with MassUnits {
+
+  def defaultUnit = gram
+}
 
 object Mass {
 

@@ -33,7 +33,10 @@ trait EnergyUnits extends QuantumUnits[Energy] {
 
 }
 
-trait EnergyConverter[N] extends UnitConverter[Energy, N] with EnergyUnits
+trait EnergyConverter[N] extends UnitConverter[Energy, N] with EnergyUnits {
+
+  def defaultUnit = joule
+}
 
 object Energy {
 

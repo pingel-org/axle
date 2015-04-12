@@ -25,7 +25,11 @@ trait AccelerationUnits extends QuantumUnits[Acceleration] {
 
 }
 
-trait AccelerationConverter[N] extends UnitConverter[Acceleration, N] with AccelerationUnits
+trait AccelerationConverter[N] extends UnitConverter[Acceleration, N] with AccelerationUnits {
+
+  def defaultUnit = mpsps
+
+}
 
 object Acceleration {
 

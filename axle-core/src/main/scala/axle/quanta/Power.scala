@@ -31,7 +31,10 @@ trait PowerUnits extends QuantumUnits[Power] {
 
 }
 
-trait PowerConverter[N] extends UnitConverter[Power, N] with PowerUnits
+trait PowerConverter[N] extends UnitConverter[Power, N] with PowerUnits {
+
+  def defaultUnit = watt
+}
 
 object Power {
 

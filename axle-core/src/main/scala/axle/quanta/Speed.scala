@@ -28,7 +28,10 @@ trait SpeedUnits extends QuantumUnits[Speed] {
 
 }
 
-trait SpeedConverter[N] extends UnitConverter[Speed, N] with SpeedUnits
+trait SpeedConverter[N] extends UnitConverter[Speed, N] with SpeedUnits {
+
+  def defaultUnit = mps
+}
 
 object Speed {
 

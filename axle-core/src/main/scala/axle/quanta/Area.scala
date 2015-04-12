@@ -23,7 +23,10 @@ trait AreaUnits extends QuantumUnits[Area] {
 
 }
 
-trait AreaConverter[N] extends UnitConverter[Area, N] with AreaUnits
+trait AreaConverter[N] extends UnitConverter[Area, N] with AreaUnits {
+
+  def defaultUnit = m2
+}
 
 object Area {
 

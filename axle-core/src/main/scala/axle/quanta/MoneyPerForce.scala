@@ -20,7 +20,11 @@ trait MoneyPerForceUnits extends QuantumUnits[MoneyPerForce] {
 
 }
 
-trait MoneyPerForceConverter[N] extends UnitConverter[MoneyPerForce, N] with MoneyPerForceUnits
+trait MoneyPerForceConverter[N] extends UnitConverter[MoneyPerForce, N] with MoneyPerForceUnits {
+
+  def defaultUnit = USDperPound
+
+}
 
 object MoneyPerForce {
 

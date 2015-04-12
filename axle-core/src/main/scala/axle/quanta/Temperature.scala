@@ -25,7 +25,10 @@ trait TemperatureUnits extends QuantumUnits[Temperature] {
 
 }
 
-trait TemperatureConverter[N] extends UnitConverter[Temperature, N] with TemperatureUnits
+trait TemperatureConverter[N] extends UnitConverter[Temperature, N] with TemperatureUnits {
+
+  def defaultUnit = celsius
+}
 
 object Temperature {
 

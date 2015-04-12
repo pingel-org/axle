@@ -22,7 +22,11 @@ trait ForceUnits extends QuantumUnits[Force] {
 
 }
 
-trait ForceConverter[N] extends UnitConverter[Force, N] with ForceUnits
+trait ForceConverter[N] extends UnitConverter[Force, N] with ForceUnits {
+
+  def defaultUnit = newton
+
+}
 
 object Force {
 
