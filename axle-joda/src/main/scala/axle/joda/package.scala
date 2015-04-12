@@ -15,8 +15,8 @@ import org.joda.time.{Seconds, Minutes, Hours, Days, Weeks}
 
 package object joda {
 
-  implicit def dateTimeZero: Zero[DateTime] = new Zero[DateTime] {
-    def zero: DateTime = new DateTime()
+  def dateTimeZero(t: DateTime): Zero[DateTime] = new Zero[DateTime] {
+    def zero: DateTime = t // new DateTime()
   }
 
   trait JodaDateTimeOrder extends Order[DateTime] {
