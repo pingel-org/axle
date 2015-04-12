@@ -39,16 +39,16 @@ object Functor {
         f compose fn
     }
 
-  implicit def functorParSeq: Functor[ParSeq] = new Functor[ParSeq] {
+  implicit def functorParSeq: Functor[ParSeq] =
+    new Functor[ParSeq] {
+      def map[A, B: ClassTag](ps: ParSeq[A])(f: A => B): ParSeq[B] =
+        ps map f
+    }
 
-    def map[A, B: ClassTag](ps: ParSeq[A])(f: A => B): ParSeq[B] =
-      ps map f
-  }
-
-  implicit def functorIndexedSeq: Functor[scala.collection.immutable.IndexedSeq] = new Functor[scala.collection.immutable.IndexedSeq] {
-
-    def map[A, B: ClassTag](is: scala.collection.immutable.IndexedSeq[A])(f: A => B): scala.collection.immutable.IndexedSeq[B] =
-      is map f
-  }
+  implicit def functorIndexedSeq: Functor[scala.collection.immutable.IndexedSeq] =
+    new Functor[scala.collection.immutable.IndexedSeq] {
+      def map[A, B: ClassTag](is: scala.collection.immutable.IndexedSeq[A])(f: A => B): scala.collection.immutable.IndexedSeq[B] =
+        is map f
+    }
 
 }

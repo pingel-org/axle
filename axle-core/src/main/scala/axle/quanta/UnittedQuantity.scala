@@ -2,7 +2,9 @@ package axle.quanta
 
 import axle.algebra.Vertex
 import axle.Show
+import axle.algebra.Functor
 import axle.syntax.directedgraph.directedGraphOps
+import scala.reflect.ClassTag
 import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
@@ -32,13 +34,15 @@ object UnittedQuantity {
         orderN.compare((x.in(y.unit)).magnitude, y.magnitude)
     }
 
+  implicit def functorUQ[Q]: Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] =
+    new Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] {
+      def map[N, B: ClassTag](uq: UnittedQuantity[Q, N])(f: N => B) =
+        UnittedQuantity(f(uq.magnitude), uq.unit)
+    }
+
 }
 
 case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q]) {
-
-  // TODO: create a Functor witness for UnittedQuantity
-  def map[B](f: N => B): UnittedQuantity[Q, B] =
-    UnittedQuantity(f(magnitude), unit)
 
   def in(newUnit: UnitOfMeasurement[Q])(
     implicit convert: UnitConverter[Q, N], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
