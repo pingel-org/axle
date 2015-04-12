@@ -2,6 +2,7 @@ package axle.algebra
 
 import scala.Left
 import scala.Right
+import scala.annotation.implicitNotFound
 
 // Writer
 // State
@@ -12,6 +13,7 @@ import scala.Right
 // Continuation
 // Giry
 
+@implicitNotFound("No member of typeclass Monad found for type ${M}")
 trait Monad[M[_]] {
 
   def bind[A, B](xs: M[A])(f: A => M[B]): M[B]

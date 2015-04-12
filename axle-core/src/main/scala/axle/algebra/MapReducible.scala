@@ -1,7 +1,9 @@
 package axle.algebra
 
 import scala.reflect.ClassTag
+import scala.annotation.implicitNotFound
 
+@implicitNotFound("No member of typeclass MapReducible found for type ${M}")
 trait MapReducible[M[_]] {
 
   def mapReduce[A: ClassTag, B: ClassTag, K: ClassTag](

@@ -1,10 +1,13 @@
 package axle.algebra
 
+import scala.annotation.implicitNotFound
+
 /**
  * A FunctionPair is not necessarily a bijection, but it could be.
  *
  */
 
+@implicitNotFound("No member of typeclass FunctionPair found for types ${A}, ${B}")
 trait FunctionPair[A, B] {
 
   f =>

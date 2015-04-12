@@ -1,9 +1,12 @@
 package axle.algebra
 
-import axle.string
-import spire.algebra._
-import spire.implicits._
+import scala.annotation.implicitNotFound
 
+import spire.algebra.Field
+import spire.algebra.Module
+import spire.algebra.Ring
+
+@implicitNotFound("No member of typeclass LinearAlgebra found for types ${M}, ${RowT}, ${ColT}, ${T}")
 trait LinearAlgebra[M, RowT, ColT, T] {
 
   def ring: Ring[M]

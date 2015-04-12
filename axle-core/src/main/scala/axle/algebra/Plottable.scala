@@ -2,12 +2,14 @@ package axle.algebra
 
 import java.lang.Double.isInfinite
 import java.lang.Double.isNaN
+import scala.annotation.implicitNotFound
 
 import spire.algebra.Order
 import spire.algebra.Field
 import spire.algebra.Eq
 import spire.math.Rational
 
+@implicitNotFound("No member of typeclass Plottable found for type ${T}")
 trait Plottable[T] {
 
   def isPlottable(t: T): Boolean = true

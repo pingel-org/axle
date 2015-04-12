@@ -1,7 +1,9 @@
 package axle.algebra
 
 import spire.algebra.Eq
+import scala.annotation.implicitNotFound
 
+@implicitNotFound("No member of typeclass UndirectedGraph found for type ${UG}")
 trait UndirectedGraph[UG[_, _]] {
 
   def make[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]): UG[VP, EP]

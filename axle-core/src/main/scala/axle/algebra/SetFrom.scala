@@ -1,7 +1,9 @@
 package axle.algebra
 
 import scala.reflect.ClassTag
+import scala.annotation.implicitNotFound
 
+@implicitNotFound("No member of typeclass SetFrom found for type ${C}")
 trait SetFrom[C[_]] {
 
   def toSet[A: ClassTag](t: C[A]): Set[A]

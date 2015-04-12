@@ -1,11 +1,13 @@
 package axle.algebra
 
+import scala.annotation.implicitNotFound
 import spire.algebra.Eq
 import spire.implicits.eqOps
 
 // Note: ES includes the vertices in order to provide uniquess for jung
 // This could also be accomplished by making Edge not a case class
 
+@implicitNotFound("No member of typeclass UndirectedEge found for types ${VP}, ${EP}")
 trait UndirectedEdge[VP, EP] {
 
   def vertices: (Vertex[VP], Vertex[VP])

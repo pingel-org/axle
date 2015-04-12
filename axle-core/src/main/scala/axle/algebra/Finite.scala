@@ -1,9 +1,11 @@
 package axle.algebra
 
+import scala.annotation.implicitNotFound
 import scala.reflect.ClassTag
 import scala.collection.parallel.immutable.ParSeq
 import spire.math.Rational
 
+@implicitNotFound("No member of typeclass Finite found for types ${C}, ${S}")
 trait Finite[C[_], S] {
 
   def size[A: ClassTag](t: C[A]): S

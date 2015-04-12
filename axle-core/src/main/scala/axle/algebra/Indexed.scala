@@ -1,8 +1,10 @@
 package axle.algebra
 
 import scala.reflect.ClassTag
+import scala.annotation.implicitNotFound
 import scala.collection.parallel.immutable.ParSeq
 
+@implicitNotFound("No member of typeclass Indexed found for type ${C} ${IndexT}")
 trait Indexed[C[_], IndexT] {
 
   def at[A: ClassTag](xs: C[A])(i: IndexT): A

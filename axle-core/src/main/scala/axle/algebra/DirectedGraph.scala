@@ -1,7 +1,9 @@
 package axle.algebra
 
 import spire.algebra.Eq
+import scala.annotation.implicitNotFound
 
+@implicitNotFound("No member of typeclass DirectedGraph found for type ${DG}")
 trait DirectedGraph[DG[_, _]] {
 
   def make[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]): DG[VP, EP]

@@ -1,5 +1,6 @@
 package axle.algebra
 
+import scala.annotation.implicitNotFound
 import spire.algebra.MetricSpace
 import spire.algebra.Order
 import spire.implicits.LongAlgebra
@@ -15,6 +16,7 @@ import spire.std.LongAlgebra
  *
  */
 
+@implicitNotFound("No member of typeclass LengthSpace found for types ${V}, ${R}")
 trait LengthSpace[V, R] extends MetricSpace[V, R] {
 
   // TODO: possibly make Double (below) a type-parameter

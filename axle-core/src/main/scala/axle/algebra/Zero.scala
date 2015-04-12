@@ -1,8 +1,10 @@
 package axle.algebra
 
-import spire.implicits._
-import spire.algebra._
+import scala.annotation.implicitNotFound
 
+import spire.algebra.AdditiveMonoid
+
+@implicitNotFound("No member of typeclass Zero found for type ${T}")
 trait Zero[T] {
 
   def zero: T
@@ -10,6 +12,8 @@ trait Zero[T] {
 }
 
 object Zero {
+
+  def apply[T: Zero]: Zero[T] = implicitly[Zero[T]]
 
   //  def ∅[T](implicit m: Monoid[T]): T = m.id
 
