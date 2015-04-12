@@ -12,18 +12,20 @@ case class Evolution()(implicit tc: TimeConverter[Double]) {
 
   import tc._
 
-  lazy val simpleCellsAge = 3.8 *: gy
+  def commonEra(t: Any): Unit = ???
 
-  lazy val multiCellularLifeAge = 1 *: gy
+  lazy val simpleCellsAge = commonEra(-3.8 *: gy)
 
-  lazy val fungiAge = 560 *: my
+  lazy val multiCellularLifeAge = commonEra(1d *: gy)
 
-  lazy val classMammalAge = 215 *: my
+  lazy val fungiAge = commonEra(560d *: my)
 
-  lazy val primateAge = 60 *: my
+  lazy val classMammalAge = commonEra(215d *: my)
 
-  lazy val australopithecusAge = 4 *: my
+  lazy val primateAge = commonEra(60d *: my)
 
-  lazy val modernHumanAge = 200 *: ky
+  lazy val australopithecusAge = commonEra(4d *: my)
+
+  lazy val modernHumanAge = commonEra(200d *: ky)
 
 }

@@ -25,13 +25,16 @@ case class SphericalVector[N]( // Field: Order
   φ: UnittedQuantity[Angle, N] // longitude E
   ) {
 
+  type P = (UnittedQuantity[Distance, N], UnittedQuantity[Distance, N], UnittedQuantity[Distance, N])
+
   def toPosition(
     implicit ac: AngleConverter[N],
     mmn: MultiplicativeMonoid[N],
     eqn: Eq[N],
     cfn: ConvertableFrom[N],
-    modn: Module[UnittedQuantity[Distance, N], Double]): Position3D[Distance, Distance, Distance, N] =
-    Position3D(
+    modn: Module[UnittedQuantity[Distance, N], Double],
+    pos: Position3DSpace[N, P]): P =
+    (
       ρ :* (sine(θ) * cosine(φ)),
       ρ :* (sine(θ) * sine(φ)),
       ρ :* cosine(θ))

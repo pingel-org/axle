@@ -7,7 +7,7 @@ import scala.Vector
 import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
 
-import axle.algebra.Position3D
+import axle.algebra.Position3DSpace
 import axle.algebra.SphericalVector
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
@@ -48,12 +48,12 @@ abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance])(
         url2texture += url -> TextureIO.newTexture(url, false, extension)
     }
 
-  def positionLight(position: Position3D[Distance, Distance, Distance, Float], gl: GL2): Unit = {
-    import position._
+  def positionLight[P](p: P, gl: GL2)(implicit position: Position3DSpace[Float, P]): Unit = {
+
     gl.glLightfv(GL_LIGHT0, GL_POSITION, Vector(
-      (x in distanceUnit).magnitude,
-      (y in distanceUnit).magnitude,
-      (z in distanceUnit).magnitude).toArray, 0)
+      (position.x(p) in distanceUnit).magnitude,
+      (position.y(p) in distanceUnit).magnitude,
+      (position.z(p) in distanceUnit).magnitude).toArray, 0)
   }
 
   def translate(

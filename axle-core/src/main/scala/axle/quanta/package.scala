@@ -25,12 +25,15 @@ package object quanta {
 
   type CG[Q, DG[_, _], N] = DG[UnitOfMeasurement[Q], N => N]
 
-  implicit def modulize[N, Q](implicit fieldn: Field[N], eqn: Eq[N], meta: UnitConverter[Q, N]): Module[UnittedQuantity[Q, N], N] =
+  implicit def modulize[N, Q](
+    implicit fieldn: Field[N],
+    eqn: Eq[N],
+    converter: UnitConverter[Q, N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
 
       def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
 
-      def zero: UnittedQuantity[Q, N] = ??? // UnittedQuantity("zero", "zero", None) // AdditiveMonoid
+      def zero: UnittedQuantity[Q, N] = UnittedQuantity(implicitly[Field[N]].zero, ???)
 
       def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
         UnittedQuantity((x in y.unit).magnitude + y.magnitude, y.unit) // AdditiveSemigroup
