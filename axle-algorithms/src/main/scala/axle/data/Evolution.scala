@@ -1,6 +1,8 @@
 package axle.data
 
 import axle.quanta._
+import spire.algebra.Module
+import spire.implicits._
 
 /**
  * http://en.wikipedia.org/wiki/Timeline_of_evolution
@@ -12,20 +14,23 @@ case class Evolution()(implicit tc: TimeConverter[Double]) {
 
   import tc._
 
-  def commonEra(t: Any): Unit = ???
+  val commonEra = frameOfReference
 
-  lazy val simpleCellsAge = commonEra(-3.8 *: gy)
+  private[this] def ce(t: UnittedQuantity[Time, Double]): (UnittedQuantity[Time, Double], UnittedQuantity[Time, Double]) =
+    (commonEra.zero, t)
 
-  lazy val multiCellularLifeAge = commonEra(1d *: gy)
+  lazy val simpleCellsAge = ce(-3.8 *: gy)
 
-  lazy val fungiAge = commonEra(560d *: my)
+  lazy val multiCellularLifeAge = ce(-1d *: gy)
 
-  lazy val classMammalAge = commonEra(215d *: my)
+  lazy val fungiAge = ce(-560d *: my)
 
-  lazy val primateAge = commonEra(60d *: my)
+  lazy val classMammalAge = ce(-215d *: my)
 
-  lazy val australopithecusAge = commonEra(4d *: my)
+  lazy val primateAge = ce(-60d *: my)
 
-  lazy val modernHumanAge = commonEra(200d *: ky)
+  lazy val australopithecusAge = ce(-4d *: my)
+
+  lazy val modernHumanAge = ce(-200d *: ky)
 
 }
