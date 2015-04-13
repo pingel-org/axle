@@ -16,7 +16,7 @@ import spire.std.LongAlgebra
  *
  */
 
-@implicitNotFound("No member of typeclass LengthSpace found for types ${V}, ${R}")
+@implicitNotFound("Witness not found for LengthSpace[${V}, ${R}]")
 trait LengthSpace[V, R] extends MetricSpace[V, R] {
 
   // TODO: possibly make Double (below) a type-parameter

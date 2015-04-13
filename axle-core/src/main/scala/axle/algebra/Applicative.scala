@@ -2,7 +2,7 @@ package axle.algebra
 
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("No member of typeclass Applicative found for type ${F}")
+@implicitNotFound("Witness not found for Applicative[${F}]")
 trait Applicative[F[_]] {
 
   def pure[F[_]: Applicative, T](x: T): F[T]

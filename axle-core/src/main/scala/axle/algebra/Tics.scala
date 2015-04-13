@@ -8,7 +8,7 @@ import axle.string
 import axle.Show.showDouble
 import java.lang.Double.{ isInfinite, isNaN }
 
-@implicitNotFound("No member of typeclass Tics found for type ${T}")
+@implicitNotFound("Witness not found for Tics[${T}]")
 trait Tics[T] {
 
   def tics(from: T, to: T): Seq[(T, String)]

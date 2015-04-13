@@ -7,7 +7,7 @@ import spire.implicits.eqOps
 // Note: ES includes the vertices in order to provide uniquess for jung
 // This could also be accomplished by making Edge not a case class
 
-@implicitNotFound("No member of typeclass UndirectedEge found for types ${VP}, ${EP}")
+@implicitNotFound("Witness not found for UndirectedEge[${VP}, ${EP}]")
 trait UndirectedEdge[VP, EP] {
 
   def vertices: (Vertex[VP], Vertex[VP])
@@ -15,7 +15,7 @@ trait UndirectedEdge[VP, EP] {
   def payload: EP
 }
 
-@implicitNotFound("No member of typeclass DirectedEdge found for types ${VP}, ${EP}")
+@implicitNotFound("Witness not found for DirectedEdge[${VP}, ${EP}]")
 trait DirectedEdge[VP, EP] {
 
   def from: Vertex[VP]

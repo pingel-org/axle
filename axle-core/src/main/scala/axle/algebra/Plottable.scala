@@ -9,7 +9,7 @@ import spire.algebra.Field
 import spire.algebra.Eq
 import spire.math.Rational
 
-@implicitNotFound("No member of typeclass Plottable found for type ${T}")
+@implicitNotFound("Witness not found for Plottable[${T}]")
 trait Plottable[T] {
 
   def isPlottable(t: T): Boolean = true

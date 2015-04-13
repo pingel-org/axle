@@ -11,7 +11,7 @@ import spire.algebra.AdditiveMonoid
  * 
  */
 
-@implicitNotFound("No member of typeclass Zero found for type ${T}")
+@implicitNotFound("Witness not found for Zero[${T}]")
 trait Zero[T] {
 
   def zero: T

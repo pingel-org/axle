@@ -7,7 +7,7 @@ import scala.annotation.implicitNotFound
  * Vec is the Vector typeclass
  */
 
-@implicitNotFound("No member of typeclass Vec found for type ${V}")
+@implicitNotFound("Witness not found for Vec[${V}]")
 trait Vec[V[_]] {
 
   def from[N](v: V[N]): N

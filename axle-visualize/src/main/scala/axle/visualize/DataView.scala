@@ -11,7 +11,7 @@ import spire.compat.ordering
  *
  */
 
-@implicitNotFound("No member of typeclass DataView found for types ${X}, ${Y}, ${D}")
+@implicitNotFound("Witness not found for DataView[${X}, ${Y}, ${D}]")
 trait DataView[X, Y, D] {
 
   def keys(d: D): Traversable[X]

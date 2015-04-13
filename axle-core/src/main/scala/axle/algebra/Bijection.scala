@@ -2,7 +2,7 @@ package axle.algebra
 
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("No member of typeclass Bijection found for types ${A}, ${B}")
+@implicitNotFound("Witness not found for Bijection[${A}, ${B}]")
 trait Bijection[A, B] extends Function1[A, B] {
 
   self =>

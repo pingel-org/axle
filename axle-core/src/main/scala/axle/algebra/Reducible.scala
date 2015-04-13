@@ -3,7 +3,7 @@ package axle.algebra
 import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("No member of typeclass Reducible found for type ${R}")
+@implicitNotFound("Witness not found for Reducible[${R}]")
 trait Reducible[R[_]] {
 
   def reduceOption[A: ClassTag](as: R[A])(op: (A, A) => A): Option[A]

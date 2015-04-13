@@ -6,7 +6,7 @@ import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.Ring
 
-@implicitNotFound("No member of typeclass LinearAlgebra found for types ${M}, ${RowT}, ${ColT}, ${T}")
+@implicitNotFound("Witness not found for LinearAlgebra[${M}, ${RowT}, ${ColT}, ${T}]")
 trait LinearAlgebra[M, RowT, ColT, T] {
 
   def ring: Ring[M]

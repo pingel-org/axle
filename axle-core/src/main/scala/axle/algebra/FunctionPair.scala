@@ -7,7 +7,7 @@ import scala.annotation.implicitNotFound
  *
  */
 
-@implicitNotFound("No member of typeclass FunctionPair found for types ${A}, ${B}")
+@implicitNotFound("Witness not found for FunctionPair[${A}, ${B}]")
 trait FunctionPair[A, B] {
 
   f =>

@@ -2,7 +2,7 @@ package axle
 
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("No member of typeclass HtmlFrom found for type ${T}")
+@implicitNotFound("Witness not found for HtmlFrom[${T}]")
 trait HtmlFrom[T] {
 
   def toHtml(a: T): xml.Node

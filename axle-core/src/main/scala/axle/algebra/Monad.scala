@@ -13,7 +13,7 @@ import scala.annotation.implicitNotFound
 // Continuation
 // Giry
 
-@implicitNotFound("No member of typeclass Monad found for type ${M}")
+@implicitNotFound("Witness not found for Monad[${M}]")
 trait Monad[M[_]] {
 
   def bind[A, B](xs: M[A])(f: A => M[B]): M[B]

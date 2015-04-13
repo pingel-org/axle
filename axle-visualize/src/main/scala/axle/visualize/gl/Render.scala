@@ -12,7 +12,7 @@ import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import javax.media.opengl.glu.GLU
 
-@implicitNotFound("No member of typeclass Render found for type ${A}")
+@implicitNotFound("Witness not found for Render[${A}]")
 trait Render[A] {
   def render(value: A, scene: Scene, gl: GL2, glu: GLU): Unit
 }

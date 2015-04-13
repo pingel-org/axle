@@ -4,7 +4,7 @@ import scala.annotation.implicitNotFound
 import scala.reflect.ClassTag
 import scala.collection.parallel.immutable.ParSeq
 
-@implicitNotFound("No member of typeclass Functor found for type ${F}")
+@implicitNotFound("Witness not found for Functor[${F}]")
 trait Functor[F[_]] {
   def map[A, B: ClassTag](xs: F[A])(f: A => B): F[B]
 }

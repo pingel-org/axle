@@ -3,7 +3,7 @@ package axle.algebra
 import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("No member of typeclass ArrayFrom found for type ${C}")
+@implicitNotFound("Witness not found for ArrayFrom[${C}]")
 trait ArrayFrom[C[_]] {
 
   def toArray[A: ClassTag](af: C[A]): Array[A]

@@ -3,7 +3,7 @@ package axle
 import spire.math.Rational
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("No member of typeclass Show found for type ${T}")
+@implicitNotFound("Witness not found for Show[${T}]")
 trait Show[T] {
 
   def text(t: T): String

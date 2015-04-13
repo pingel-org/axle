@@ -12,7 +12,7 @@ import spire.compat.ordering
  *
  */
 
-@implicitNotFound("No member of typeclass GroupedDataView found for types ${G}, ${S}, ${Y}, ${D}")
+@implicitNotFound("Witness not found for GroupedDataView[${G}, ${S}, ${Y}, ${D}]")
 trait GroupedDataView[G, S, Y, D] {
 
   def groups(d: D): Traversable[G]

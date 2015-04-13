@@ -10,7 +10,7 @@ import spire.compat.ordering
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
-@implicitNotFound("No member of typeclass PlotDataView found for types ${X}, ${Y}, ${D}")
+@implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[X, Y, D] {
 
   def xsOf(d: D): Traversable[X]
