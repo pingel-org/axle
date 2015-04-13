@@ -14,7 +14,7 @@ class TicsSpec extends Specification {
   "Tics for Double" should {
     "work" in {
 
-      val tics = implicitly[Tics[Double]].tics(0d, 1d).toVector
+      val tics = Tics[Double].tics(0d, 1d).toVector
 
       // TODO: configurable precision
       val expected = Vector(
@@ -30,8 +30,8 @@ class TicsSpec extends Specification {
         (0.9, "0.9"),
         (1.0, "1.0"))
 
-      val vieq = implicitly[Eq[Vector[(Double, String)]]]
-      
+      val vieq = Eq[Vector[(Double, String)]]
+
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))
     }

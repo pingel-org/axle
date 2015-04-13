@@ -11,7 +11,7 @@ case class InteractionGraph[T: Manifest: Eq, N: Field: Manifest, UG[_, _]: Undir
   vps: Seq[Distribution[T, N]],
   ef: Seq[Vertex[Distribution[T, N]]] => Seq[(Vertex[Distribution[T, N]], Vertex[Distribution[T, N]], String)]) {
 
-  lazy val graph = implicitly[UndirectedGraph[UG]].make(vps, ef)
+  lazy val graph = UndirectedGraph[UG].make(vps, ef)
 
   def eliminate(rv: Distribution[T, N]): InteractionGraph[T, N, UG] = ???
 

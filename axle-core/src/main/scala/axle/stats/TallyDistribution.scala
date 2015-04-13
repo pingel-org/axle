@@ -33,7 +33,7 @@ object TallyDistribution0 {
 case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name: String = "unnamed")
   extends Distribution0[A, N] {
 
-  val ring = implicitly[Ring[N]]
+  val ring = Ring[N]
   val addition = implicitly[AdditiveMonoid[N]]
 
   def values: IndexedSeq[A] = tally.keys.toVector
@@ -67,7 +67,7 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name
   val bars: Map[A, N] =
     tally.scanLeft((null.asInstanceOf[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2)))
 
-  val order = implicitly[Order[N]]
+  val order = Order[N]
 
   def observe(): A = {
     val r: N = totalCount * Random.nextDouble()
@@ -103,8 +103,8 @@ case class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), 
   def probabilityOf(a: A): N = Σ(gvs.map(gv => tally((a, gv)))) / totalCount
 
   def probabilityOf(a: A, given: Case[G, N]): N = given match {
-    case CaseIs(argGrv, gv)   => tally.get((a, gv)).getOrElse(implicitly[Field[N]].zero) / Σ(tally.filter(_._1._2 === gv).map(_._2))
-    case CaseIsnt(argGrv, gv) => 1 - (tally.get((a, gv)).getOrElse(implicitly[Field[N]].zero) / Σ(tally.filter(_._1._2 === gv).map(_._2)))
+    case CaseIs(argGrv, gv)   => tally.get((a, gv)).getOrElse(Field[N].zero) / Σ(tally.filter(_._1._2 === gv).map(_._2))
+    case CaseIsnt(argGrv, gv) => 1 - (tally.get((a, gv)).getOrElse(Field[N].zero) / Σ(tally.filter(_._1._2 === gv).map(_._2)))
     case _                    => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
   }
 

@@ -156,7 +156,7 @@ object ConvertedMtjDenseMatrix {
 //    // higher order methods
 //
 //    def map[B: C](f: T => B): Matrix[B] = {
-//      val fpB = implicitly[C[B]]
+//      val fpB = C[B]
 //      val mtj = new DenseMatrix(rows, columns)
 //      (0 until rows) foreach { r =>
 //        (0 until columns) foreach { c =>
@@ -167,7 +167,7 @@ object ConvertedMtjDenseMatrix {
 //    }
 
 //    def flatMapColumns[A: C](f: Matrix[T] => Matrix[A]): Matrix[A] = {
-//      val fpA = implicitly[C[A]]
+//      val fpA = C[A]
 //      val mtj = new DenseMatrix(rows, columns)
 //      (0 until columns) foreach { c =>
 //        val fc = f(column(c))

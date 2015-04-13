@@ -12,7 +12,7 @@ import spire.compat.ordering
 case class EnrichedGenSeq[T](genSeq: GenSeq[T]) {
 
   def tally[N: Ring]: Map[T, N] = {
-    val ring = implicitly[Ring[N]]
+    val ring = Ring[N]
     genSeq.aggregate(Map.empty[T, N].withDefaultValue(ring.zero))(
       (m, x) => m + (x -> ring.plus(m(x), ring.one)),
       _ + _)

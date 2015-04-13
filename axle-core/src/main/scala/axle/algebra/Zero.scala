@@ -4,6 +4,13 @@ import scala.annotation.implicitNotFound
 
 import spire.algebra.AdditiveMonoid
 
+/**
+ * Zero
+ * 
+ * ∅
+ * 
+ */
+
 @implicitNotFound("No member of typeclass Zero found for type ${T}")
 trait Zero[T] {
 
@@ -13,9 +20,7 @@ trait Zero[T] {
 
 object Zero {
 
-  def apply[T: Zero]: Zero[T] = implicitly[Zero[T]]
-
-  //  def ∅[T](implicit m: Monoid[T]): T = m.id
+  def apply[T: Zero]: Zero[T] = Zero[T]
 
   implicit def addemZero[T: AdditiveMonoid]: Zero[T] =
     new Zero[T] {

@@ -33,7 +33,7 @@ package object quanta {
 
       def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
 
-      def zero: UnittedQuantity[Q, N] = UnittedQuantity(implicitly[Field[N]].zero, converter.defaultUnit)
+      def zero: UnittedQuantity[Q, N] = UnittedQuantity(Field[N].zero, converter.defaultUnit)
 
       def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
         UnittedQuantity((x in y.unit).magnitude + y.magnitude, y.unit) // AdditiveSemigroup
@@ -46,7 +46,7 @@ package object quanta {
   implicit def uqPlottable[Q, N: Plottable]: Plottable[UnittedQuantity[Q, N]] =
     new Plottable[UnittedQuantity[Q, N]] {
 
-      override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = implicitly[Plottable[N]].isPlottable(t.magnitude)
+      override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = Plottable[N].isPlottable(t.magnitude)
     }
 
   implicit def unittedZero[Q, N: AdditiveMonoid](
@@ -65,7 +65,7 @@ package object quanta {
     new Tics[UnittedQuantity[Q, N]] {
 
       def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =
-        implicitly[Tics[N]].tics((from in base).magnitude, (to in base).magnitude) map {
+        Tics[N].tics((from in base).magnitude, (to in base).magnitude) map {
           case (v, label) => {
             val vu = UnittedQuantity[Q, N](v, base)
             (vu, string(v))
@@ -79,7 +79,7 @@ package object quanta {
     module: Module[UnittedQuantity[Q, N], N]) =
     new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N]] {
 
-      val field = implicitly[Field[N]]
+      val field = Field[N]
 
       def distance(v: UnittedQuantity[Q, N], w: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
         (field.minus((v in base).magnitude, (w in base).magnitude).abs) *: base

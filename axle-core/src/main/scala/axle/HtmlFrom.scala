@@ -1,10 +1,16 @@
 package axle
 
+import scala.annotation.implicitNotFound
+
+@implicitNotFound("No member of typeclass HtmlFrom found for type ${T}")
 trait HtmlFrom[T] {
+
   def toHtml(a: T): xml.Node
 }
 
 object HtmlFrom {
+
+  def apply[T: HtmlFrom]: HtmlFrom[T] = implicitly[HtmlFrom[T]]
 
   // default Html just embeds string (from Show) in Text node
   implicit def showToHtmlFrom[T: Show]: HtmlFrom[T] = new HtmlFrom[T] {

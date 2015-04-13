@@ -33,7 +33,7 @@ abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance])(
   def render[A: Render](value: A, orienter: GL2 => Unit, gl: GL2, glu: GLU): Unit = {
     gl.glLoadIdentity()
     orienter(gl)
-    implicitly[Render[A]].render(value, this, gl, glu)
+    Render[A].render(value, this, gl, glu)
   }
 
   var url2texture = Map.empty[URL, Texture]

@@ -64,7 +64,7 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
     36d *: angleMeta.degree,
     black)
 
-  val yTics = YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)
+  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFont, black)
 
   val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
 

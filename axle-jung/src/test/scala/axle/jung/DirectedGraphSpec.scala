@@ -10,7 +10,7 @@ import spire.implicits._
 
 class DirectedGraphSpec extends Specification {
 
-  val jdg = implicitly[DirectedGraph[JungDirectedGraph]]
+  val jdg = DirectedGraph[JungDirectedGraph]
 
   "Directed Graph" should {
     "work" in {

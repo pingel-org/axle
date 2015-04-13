@@ -9,7 +9,7 @@ import spire.implicits.multiplicativeSemigroupOps
 // TODO this needs less than a Field
 case class Scale[N, M: Field](factor: M)(implicit module: Module[N, M]) extends Bijection[N, N] {
 
-  val inverseFactor: M = implicitly[Field[M]].multiplicative.inverse(factor)
+  val inverseFactor: M = Field[M].multiplicative.inverse(factor)
 
   def apply(n: N): N = module.timesr(n, factor)
 

@@ -1,6 +1,7 @@
 package axle.visualize
 
 import scala.collection.immutable.TreeMap
+import scala.annotation.implicitNotFound
 
 import axle.algebra.Plottable
 import axle.algebra.Zero
@@ -9,6 +10,7 @@ import spire.compat.ordering
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
+@implicitNotFound("No member of typeclass PlotDataView found for types ${X}, ${Y}, ${D}")
 trait PlotDataView[X, Y, D] {
 
   def xsOf(d: D): Traversable[X]
@@ -22,13 +24,15 @@ trait PlotDataView[X, Y, D] {
 
 object PlotDataView {
 
+  def apply[X, Y, D](implicit ev: PlotDataView[X, Y, D]) = ev
+
   implicit def treeMapDataView[X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[X, Y, TreeMap[X, Y]] =
     new PlotDataView[X, Y, TreeMap[X, Y]] {
 
-      implicit val xZero = implicitly[Zero[X]]
-      implicit val yZero = implicitly[Zero[Y]]
-      implicit val xPlottable = implicitly[Plottable[X]]
-      implicit val yPlottable = implicitly[Plottable[Y]]
+      implicit val xZero = Zero[X]
+      implicit val yZero = Zero[Y]
+      implicit val xPlottable = Plottable[X]
+      implicit val yPlottable = Plottable[Y]
 
       def xsOf(d: TreeMap[X, Y]): Traversable[X] = d.keys
 

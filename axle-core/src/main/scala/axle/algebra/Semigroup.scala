@@ -14,7 +14,7 @@ object Semigroups {
 
   implicit def MapSemigroup[K, V: Semigroup]: Semigroup[Map[K, V]] = new Semigroup[Map[K, V]] {
 
-    val vSemi = implicitly[Semigroup[V]]
+    val vSemi = Semigroup[V]
 
     def op(x: Map[K, V], y: Map[K, V]): Map[K, V] =
       (x.keySet ++ y.keySet).map(k => {

@@ -141,7 +141,7 @@ package object scalding {
 
       type M = Matrix[RowT, ColT, T]
 
-      def elementField: Field[T] = ??? //implicitly[AlgebirdField[T]] // TODO convert to Spire field
+      def elementField: Field[T] = ??? //AlgebirdField[T] // TODO convert to Spire field
 
       def ring = ringMatrix
 

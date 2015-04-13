@@ -17,7 +17,7 @@ class StatementSpecification extends Specification {
   // This spec especially suffers from the conflicting specs "equalTo" and spire's ===
   // which results in this code being much less readable than it should be
 
-  val stmtEq = implicitly[Eq[Statement]]
+  val stmtEq = Eq[Statement]
 
   "eliminate equivalence" should {
     "work 1" in {

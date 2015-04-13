@@ -47,8 +47,8 @@ case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor](
   data: F[DATA],
   retrieve: DATA => Boolean,
   relevant: DATA => Boolean) {
-
-  val field = implicitly[Field[N]]
+  
+  val field = Field[N]
   import field._
 
   val scores = data.map { d =>

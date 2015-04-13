@@ -93,7 +93,7 @@ package object stats {
 
   def standardDeviation[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A = {
 
-    def n2a(n: N): A = implicitly[ConvertableFrom[N]].toType[A](n)(implicitly[ConvertableTo[A]])
+    def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
     val μ: A = Σ(distribution.values map { x => n2a(distribution.probabilityOf(x)) * x })
 
@@ -110,10 +110,10 @@ package object stats {
     X: Distribution[A, N])(
       implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
-    val convertN = implicitly[ConvertableFrom[N]]
+    val convertN = ConvertableFrom[N]
     val H = Σ(X.values map { x =>
       val px: N = axle.stats.P(X is x).apply()
-      if (px === implicitly[Field[N]].zero) {
+      if (px === Field[N].zero) {
         0d
       } else {
         convertN.toDouble(-px) * log2(px)

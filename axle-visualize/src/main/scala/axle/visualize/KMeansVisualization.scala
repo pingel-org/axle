@@ -55,7 +55,7 @@ case class KMeansVisualization[D, F[_], M](
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
 
-  implicit val doubleTics = implicitly[Tics[Double]]
+  implicit val doubleTics = Tics[Double]
   val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0d *: angleMeta.degree, black)
   val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), normalFont, black)
 

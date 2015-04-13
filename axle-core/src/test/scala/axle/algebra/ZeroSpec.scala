@@ -9,9 +9,7 @@ class ZeroSpec extends Specification {
   "Zero[Double]" should {
     "work" in {
 
-      val zd = implicitly[Zero[Double]]
-
-      zd.zero must be equalTo 0d
+      Zero[Double].zero must be equalTo 0d
     }
   }
 

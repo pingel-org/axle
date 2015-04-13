@@ -29,7 +29,7 @@ object ConditionalProbabilityTable0 {
 case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], val name: String = "unnamed")
   extends Distribution0[A, N] {
 
-  val field = implicitly[Field[N]]
+  val field = Field[N]
 
   def map[B](f: A => B): ConditionalProbabilityTable0[B, N] =
     ConditionalProbabilityTable0[B, N](
@@ -61,7 +61,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
 
   def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
 
-  val order = implicitly[Order[N]]
+  val order = Order[N]
 
   def observe(): A = {
     val r = rng.next[N]

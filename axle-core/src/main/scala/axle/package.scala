@@ -105,8 +105,7 @@ package object axle {
 
   implicit val orderSymbols: Order[Symbol] =
     new Order[Symbol] {
-      val stringCompare = implicitly[Order[String]]
-      def compare(x: Symbol, y: Symbol): Int = stringCompare.compare(string(x), string(y))
+      def compare(x: Symbol, y: Symbol): Int = Order[String].compare(string(x), string(y))
     }
 
   implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
@@ -187,10 +186,10 @@ package object axle {
   def smoosh[K1, K2, V](data: Map[K1, Map[K2, V]]): Map[(K2, K1), V] =
     data flatMap { case (k1, inner) => inner.map({ case (k2, v) => (k2, k1) -> v }) } toMap
 
-  def string[T: Show](t: T): String = implicitly[Show[T]].text(t)
+  def string[T: Show](t: T): String = Show[T].text(t)
 
   def show[T: Show](t: T): Unit = println(string(t))
 
-  def html[T: HtmlFrom](t: T): xml.Node = implicitly[HtmlFrom[T]].toHtml(t)
+  def html[T: HtmlFrom](t: T): xml.Node = HtmlFrom[T].toHtml(t)
 
 }

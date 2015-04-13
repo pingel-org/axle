@@ -381,7 +381,7 @@ object BayesianNetwork {
     name: String,
     vps: Seq[BayesianNetworkNode[T, N]],
     ef: Seq[Vertex[BayesianNetworkNode[T, N]]] => Seq[(Vertex[BayesianNetworkNode[T, N]], Vertex[BayesianNetworkNode[T, N]], String)]): BayesianNetwork[T, N, DG] =
-    apply(name, implicitly[DirectedGraph[DG]].make(vps, ef))
+    apply(name, DirectedGraph[DG].make(vps, ef))
 
   //    implicit def bnnAsModel[BT: Manifest: Eq] = new Model[BayesianNetwork[BT]] {
   //      type T = BT

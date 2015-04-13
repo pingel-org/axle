@@ -14,7 +14,7 @@ object JoinTree {
   def makeJoinTree[T: Eq: Manifest, N: Field: Manifest, UG[_, _]: UndirectedGraph](
     vps: Vector[Set[Distribution[T, N]]],
     ef: Seq[Vertex[Set[Distribution[T, N]]]] => Seq[(Vertex[Set[Distribution[T, N]]], Vertex[Set[Distribution[T, N]]], String)]): JoinTree[T, N, UG] =
-    JoinTree[T, N, UG](implicitly[UndirectedGraph[UG]].make(vps, ef))
+    JoinTree[T, N, UG](UndirectedGraph[UG].make(vps, ef))
 
   // returns a jointree for DAG G with width equal to width(π, G)
   def fromEliminationOrder[T, N: Field, UG[_, _], UndirectedGraph, DG[_, _]: DirectedGraph](m: BayesianNetwork[T, N, DG], π: List[Distribution[T, N]]): JoinTree[T, N, UG] = {

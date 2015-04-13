@@ -28,10 +28,8 @@ object UnittedQuantity {
   implicit def orderUQ[Q, N: MultiplicativeMonoid: Order](implicit convert: UnitConverter[Q, N]) =
     new Order[UnittedQuantity[Q, N]] {
 
-      val orderN = implicitly[Order[N]]
-
       def compare(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): Int =
-        orderN.compare((x.in(y.unit)).magnitude, y.magnitude)
+        Order[N].compare((x.in(y.unit)).magnitude, y.magnitude)
     }
 
   implicit def functorUQ[Q]: Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] =

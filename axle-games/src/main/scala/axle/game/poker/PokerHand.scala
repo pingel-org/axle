@@ -27,7 +27,7 @@ object PokerHand {
     def compare(a: PokerHand, b: PokerHand): Int = {
       val ac = a.category
       val bc = b.category
-      val cmpCat = implicitly[Order[PokerHandCategory]].compare(ac, bc)
+      val cmpCat = Order[PokerHandCategory].compare(ac, bc)
       if (cmpCat === 0) ac.compareAlike(a, b) else cmpCat
     }
 

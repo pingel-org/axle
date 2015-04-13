@@ -12,7 +12,7 @@ object Card {
   }
 
   implicit object CardOrder extends Order[Card] {
-    def compare(a: Card, b: Card): Int = implicitly[Order[Rank]].compare(a.rank, b.rank)
+    def compare(a: Card, b: Card): Int = Order[Rank].compare(a.rank, b.rank)
   }
 
   implicit def showCard: Show[Card] = new Show[Card] {

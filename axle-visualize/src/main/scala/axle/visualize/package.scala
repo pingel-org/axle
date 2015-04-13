@@ -26,7 +26,7 @@ import spire.algebra.Field
 package object visualize {
 
   def draw[T: Draw](t: T): Unit = {
-    val draw = implicitly[Draw[T]]
+    val draw = Draw[T]
     val component = draw.component(t)
     val minSize = component.getMinimumSize
     val frame = AxleFrame(minSize.width, minSize.height)
@@ -43,7 +43,7 @@ package object visualize {
       implicit system: ActorSystem,
       tc: TimeConverter[Double]): ActorRef = {
 
-    val draw = implicitly[Draw[T]]
+    val draw = Draw[T]
     draw.component(t) match {
       case fed: Component with Fed[D] => {
         val minSize = fed.getMinimumSize
@@ -89,7 +89,7 @@ package object visualize {
 
   def draw2file[T: Draw](t: T, filename: String, encoding: String): Unit = {
 
-    val component = implicitly[Draw[T]].component(t)
+    val component = Draw[T].component(t)
 
     val minSize = component.getMinimumSize
     val frame = AxleFrame(minSize.width, minSize.height)

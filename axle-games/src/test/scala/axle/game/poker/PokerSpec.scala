@@ -26,7 +26,7 @@ class PokerSpec extends Specification {
 
       val jacksAndSixes = string2hand("6♡,6♢,T♠,J♠,J♡")
 
-      true must be equalTo implicitly[Eq[PokerHand]].eqv(hands.max, jacksAndSixes)
+      true must be equalTo Eq[PokerHand].eqv(hands.max, jacksAndSixes)
     }
   }
 

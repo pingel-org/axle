@@ -26,9 +26,9 @@ class BarChartSpec extends Specification {
       // The Modules conflict with the Zero needed by the DataView, so we have to create the
       // angleMeta with all arguments passed explicitly.
       val angleMeta = Angle.converterGraph[Double, JungDirectedGraph](
-        implicitly[Field[Double]],
-        implicitly[Eq[Double]],
-        implicitly[DirectedGraph[JungDirectedGraph]],
+        Field[Double],
+        Eq[Double],
+        DirectedGraph[JungDirectedGraph],
         axle.algebra.modules.doubleDoubleModule,
         axle.algebra.modules.doubleRationalModule)
 

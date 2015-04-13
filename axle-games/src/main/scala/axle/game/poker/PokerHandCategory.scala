@@ -24,7 +24,7 @@ sealed trait PokerHandCategory {
 
   def compareAlike(a: PokerHand, b: PokerHand): Int =
     a.groups.map(_._2).zip(b.groups.map(_._2))
-      .map({ case (ar, br) => implicitly[Order[Rank]].compare(ar, br) })
+      .map({ case (ar, br) => Order[Rank].compare(ar, br) })
       .find(_ != 0)
       .getOrElse(0)
 

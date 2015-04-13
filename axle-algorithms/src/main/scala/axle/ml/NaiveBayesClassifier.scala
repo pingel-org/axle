@@ -46,20 +46,20 @@ case class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq
 
   // TODO no probability should ever be 0
 
-  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Rational].withDefaultValue(implicitly[Field[Rational]].zero)
+  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Rational].withDefaultValue(Field[Rational].zero)
 
   val featureTally: Map[(CLASS, String, FEATURE), Rational] =
     data.aggregate(emptyFeatureTally)(
       (acc, d) => {
         val fs = featureExtractor(d)
         val c = classExtractor(d)
-        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> implicitly[Field[Rational]].one) }).toMap
+        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> Field[Rational].one) }).toMap
         acc + dContrib
       },
       _ + _)
 
   val classTally: Map[CLASS, Rational] =
-    data.map(classExtractor).tally[Rational].withDefaultValue(implicitly[Field[Rational]].zero)
+    data.map(classExtractor).tally[Rational].withDefaultValue(Field[Rational].zero)
 
   val C = TallyDistribution0(classTally, classRandomVariable.name)
 
@@ -68,12 +68,12 @@ case class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq
       case (k, v) => k._2 === featureRandomVariable.name
     }.map {
       case (k, v) => ((k._3, k._1), v)
-    }.withDefaultValue(implicitly[Field[Rational]].zero)
+    }.withDefaultValue(Field[Rational].zero)
 
   // Note: The "parent" (or "given") of these feature variables is C
   val Fs = featureRandomVariables.map(featureRandomVariable =>
     TallyDistribution1(
-      tallyFor(featureRandomVariable).withDefaultValue(implicitly[Field[Rational]].zero),
+      tallyFor(featureRandomVariable).withDefaultValue(Field[Rational].zero),
       featureRandomVariable.name))
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted

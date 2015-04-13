@@ -2,6 +2,7 @@ package axle.visualize
 
 import axle.algebra.Plottable
 import axle.algebra.Zero
+import scala.annotation.implicitNotFound
 import spire.algebra.Order
 import spire.compat.ordering
 
@@ -11,6 +12,7 @@ import spire.compat.ordering
  *
  */
 
+@implicitNotFound("No member of typeclass GroupedDataView found for types ${G}, ${S}, ${Y}, ${D}")
 trait GroupedDataView[G, S, Y, D] {
 
   def groups(d: D): Traversable[G]
@@ -25,11 +27,13 @@ trait GroupedDataView[G, S, Y, D] {
 
 object GroupedDataView {
 
+  def apply[G, S, Y, D](implicit ev: GroupedDataView[G, S, Y, D]): GroupedDataView[G, S, Y, D] = ev
+  
   implicit def mapGroupedDataView[G, S, Y: Plottable: Zero: Order]: GroupedDataView[G, S, Y, Map[(G, S), Y]] =
     new GroupedDataView[G, S, Y, Map[(G, S), Y]] {
 
-      val yZero = implicitly[Zero[Y]]
-      val yPlottable = implicitly[Plottable[Y]]
+      val yZero = Zero[Y]
+      val yPlottable = Plottable[Y]
 
       def groups(d: Map[(G, S), Y]): Traversable[G] = d.keys.toList.map(_._1) // TODO: .sorted. cache
 

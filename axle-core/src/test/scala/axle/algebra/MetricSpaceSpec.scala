@@ -85,8 +85,8 @@ class RealTuple2MetricSpaceSpec
 
 class RealSeqMetricSpaceSpec
   extends MetricSpaceSpec("Seq[Real] distance", List(SeqRealSpace))(
-    implicitly[Eq[Seq[Real]]],
+    Eq[Seq[Real]],
     arbitraryRealSeqLengthN(4),
     implicitly[AdditiveMonoid[Real]],
-    implicitly[Order[Real]])
+    Order[Real])
 

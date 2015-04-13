@@ -26,8 +26,8 @@ package object algebra {
 
   def argmax[R[_]: Functor: Reducible, K, N: Order](ks: R[K], f: K => N): Option[K] = {
 
-    val functor = implicitly[Functor[R]]
-    val reducer = implicitly[Reducible[R]]
+    val functor = Functor[R]
+    val reducer = Reducible[R]
     val mapped = functor.map(ks)(k => (k, f(k)))
     // TODO: This could be extracted as Reducible.maxBy
 

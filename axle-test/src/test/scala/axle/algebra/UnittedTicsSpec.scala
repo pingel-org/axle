@@ -39,9 +39,9 @@ class UnittedTicsSpec extends Specification {
         (0.9 *: bit, "0.900000"),
         (1.0 *: bit, "1.000000"))
 
-      val foo = implicitly[Eq[UnittedQuantity[Information, Double]]]
+      val foo = Eq[UnittedQuantity[Information, Double]]
 
-      val vieq = implicitly[Eq[Vector[(UnittedQuantity[Information, Double], String)]]]
+      val vieq = Eq[Vector[(UnittedQuantity[Information, Double], String)]]
 
       // tics must be equalTo expected
       true must be equalTo (vieq.eqv(tics, expected))

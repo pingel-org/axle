@@ -62,7 +62,7 @@ case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](
     labelAngle,
     black)
 
-  val yTics = YTics(scaledArea, implicitly[Tics[Y]].tics(minY, maxY), normalFont, black)
+  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFont, black)
 
   val bars = slices.toStream.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {

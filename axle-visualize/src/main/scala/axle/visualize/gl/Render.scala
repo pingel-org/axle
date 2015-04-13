@@ -1,6 +1,7 @@
 package axle.visualize.gl
 
 import scala.Vector
+import scala.annotation.implicitNotFound
 
 import javax.media.opengl.GL.GL_FRONT
 import javax.media.opengl.GL.GL_TRIANGLES
@@ -11,11 +12,14 @@ import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS
 import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import javax.media.opengl.glu.GLU
 
+@implicitNotFound("No member of typeclass Render found for type ${A}")
 trait Render[A] {
   def render(value: A, scene: Scene, gl: GL2, glu: GLU): Unit
 }
 
 object Render {
+
+  def apply[A: Render]: Render[A] = implicitly[Render[A]]
 
   implicit val quadRenderer = new Render[Quad[Float]] {
     def render(quad: Quad[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {

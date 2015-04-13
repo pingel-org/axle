@@ -37,7 +37,7 @@ trait LinearAlgebraSyntax {
 trait DirectedGraphSyntax {
 
   def directedGraph[DG[_, _]: DirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) =
-    implicitly[DirectedGraph[DG]].make(vps, ef)
+    DirectedGraph[DG].make(vps, ef)
 
   implicit def directedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](dg: DG[VP, EP]) =
     new DirectedGraphOps(dg)
@@ -46,7 +46,7 @@ trait DirectedGraphSyntax {
 trait UndirectedGraphSyntax {
 
   def undirectedGraph[UG[_, _]: UndirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) =
-    implicitly[UndirectedGraph[UG]].make(vps, ef)
+    UndirectedGraph[UG].make(vps, ef)
 
   implicit def undirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](ug: UG[VP, EP]) =
     new UndirectedGraphOps(ug)

@@ -164,7 +164,7 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
 final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP, EP]) {
 
-  val ev = implicitly[DirectedGraph[DG]]
+  val ev = DirectedGraph[DG]
 
   def size = ev.size(dg)
 
@@ -196,7 +196,7 @@ final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP,
 
 final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG[VP, EP]) {
 
-  val ev = implicitly[UndirectedGraph[UG]]
+  val ev = UndirectedGraph[UG]
 
   def size = ev.size(ug)
 
@@ -212,7 +212,7 @@ final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG
 
 final class FunctorOps[F[_]: Functor, A](val as: F[A]) {
 
-  val ev = implicitly[Functor[F]]
+  val ev = Functor[F]
 
   def map[B: ClassTag](f: A => B) = ev.map(as)(f)
 
@@ -226,7 +226,7 @@ final class EndofunctorOps[E, A](val e: E)(implicit ev: Endofunctor[E, A]) {
 
 final class AggregatableOps[G[_]: Aggregatable, A](val ts: G[A]) {
 
-  val ev = implicitly[Aggregatable[G]]
+  val ev = Aggregatable[G]
 
   def aggregate[B: ClassTag](zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B) =
     ev.aggregate(ts)(zeroValue)(seqOp, combOp)
@@ -249,7 +249,7 @@ final class IndexedOps[F[_], IndexT, A: ClassTag](
 
 final class MapReducibleOps[M[_]: MapReducible, A: ClassTag](val as: M[A]) {
 
-  val ev = implicitly[MapReducible[M]]
+  val ev = MapReducible[M]
 
   def mapReduce[B: ClassTag, K: ClassTag](mapper: A => (K, B), zero: B, op: (B, B) => B) =
     ev.mapReduce[A, B, K](as, mapper, zero, op)
@@ -257,14 +257,14 @@ final class MapReducibleOps[M[_]: MapReducible, A: ClassTag](val as: M[A]) {
 
 final class SetFromOps[F[_]: SetFrom, A: ClassTag](val as: F[A]) {
 
-  val ev = implicitly[SetFrom[F]]
+  val ev = SetFrom[F]
 
   def toSet = ev.toSet(as)
 }
 
 final class MapFromOps[F[_]: MapFrom, K: ClassTag, V: ClassTag](val fkv: F[(K, V)]) {
 
-  val ev = implicitly[MapFrom[F]]
+  val ev = MapFrom[F]
 
   def toMap = ev.toMap(fkv)
 }

@@ -1,7 +1,9 @@
 package axle
 
 import spire.math.Rational
+import scala.annotation.implicitNotFound
 
+@implicitNotFound("No member of typeclass Show found for type ${T}")
 trait Show[T] {
 
   def text(t: T): String
@@ -9,6 +11,8 @@ trait Show[T] {
 
 object Show {
 
+  def apply[T: Show]: Show[T] = implicitly[Show[T]]
+  
   implicit val showDouble: Show[Double] = new Show[Double] {
     // TODO: configurable precision
     def text(d: Double): String = """%.6f""".format(d)

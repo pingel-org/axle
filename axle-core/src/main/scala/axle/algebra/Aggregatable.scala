@@ -14,7 +14,7 @@ trait Aggregatable[F[_]] {
   def aggregate[A, B: ClassTag](xs: F[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B
 
   def tally[A: Eq, N: Ring](xs: F[A]): Map[A, N] = {
-    val ring = implicitly[Ring[N]]
+    val ring = Ring[N]
     aggregate(xs)(Map.empty[A, N].withDefaultValue(ring.zero))(
       (m, x) => m + (x -> ring.plus(m(x), ring.one)),
       _ + _)

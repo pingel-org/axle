@@ -15,14 +15,14 @@ abstract class FunctorLawsSpec[F[_]: Functor, A: ClassTag: Eq: Arbitrary, B: Cla
   with ScalaCheck {
 
   s"$name obey identity" ! prop { (xs: F[A]) =>
-    val functor = implicitly[Functor[F]]
+    val functor = Functor[F]
     val lhs: F[A] = functor.map[A, A](xs)(identity)
     val rhs: F[A] = identity(xs)
     lhs === rhs
   }
 
   s"$name obey composition" ! prop { (xs: F[A], f: A => B, g: B => C) =>
-    val functor = implicitly[Functor[F]]
+    val functor = Functor[F]
     val lhs: F[C] = functor.map[B, C](functor.map[A, B](xs)(f))(g)
     val rhs: F[C] = functor.map[A, C](xs)(g compose f)
     lhs === rhs

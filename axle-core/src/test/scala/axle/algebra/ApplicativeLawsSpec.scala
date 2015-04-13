@@ -18,14 +18,14 @@ abstract class ApplicativeLawsSpec[F[_]: Applicative, A: Eq: Arbitrary, B: Eq: A
 
   // pure id <*> v = v
   s"$name obey left identity" ! prop { (v: F[A]) =>
-    val applicative = implicitly[Applicative[F]]
+    val applicative = Applicative[F]
     val lhs: F[A] = applicative.<*>(applicative.pure(identity[A] _)).apply(v)
     lhs === v
   }
 
   // pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
 //  s"$name obey axiom 2" ! prop { (u: A, v: A, w: A) =>
-//    val applicative = implicitly[Applicative[F]]
+//    val applicative = Applicative[F]
 //    // TODO
 //    val lhs = 4
 //    val rhs = 4
@@ -34,7 +34,7 @@ abstract class ApplicativeLawsSpec[F[_]: Applicative, A: Eq: Arbitrary, B: Eq: A
 
   // pure f <*> pure x = pure (f x)
   s"$name obey axiom 3" ! prop { (x: A, f: A => B) =>
-    val applicative = implicitly[Applicative[F]]
+    val applicative = Applicative[F]
     val lhs: F[B] = ((applicative <*> applicative.pure(f)) compose applicative.pure[F, A]).apply(x)
     val rhs: F[B] = applicative.pure(f(x))
     lhs === rhs
@@ -42,7 +42,7 @@ abstract class ApplicativeLawsSpec[F[_]: Applicative, A: Eq: Arbitrary, B: Eq: A
 
   // u <*> pure y = pure ($ y) <*> u
 //  s"$name obey axiom 4" ! prop { (u: A => B, y: A => B) =>
-//    val applicative = implicitly[Applicative[F]]
+//    val applicative = Applicative[F]
 //    val lhs = (applicative pure (applicative <*> u))(y)
 //    val rhs = (applicative <*> (applicative pure y))(u)
 //    lhs === rhs

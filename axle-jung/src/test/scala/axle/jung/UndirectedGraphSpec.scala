@@ -9,7 +9,7 @@ import spire.math._
 
 class UndirectedGraphSpec extends Specification {
 
-  val jug = implicitly[UndirectedGraph[JungUndirectedGraph]]
+  val jug = UndirectedGraph[JungUndirectedGraph]
 
   "Undirected Graph" should {
     "work" in {

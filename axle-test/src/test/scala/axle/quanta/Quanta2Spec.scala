@@ -103,7 +103,7 @@ class QuantaSpec extends Specification {
 
       // val mx = axle.quanta.modulize4[Double, Distance[Double], JungDirectedGraph] // fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement4[Q, N], N => N]
 
-      val module = implicitly[Module[UnittedQuantity[Distance, Double], Double]]
+      val module = Module[UnittedQuantity[Distance, Double], Double]
       val d1 = 1d *: meter
       val d2 = 1d *: foot
       module.plus(d1, d2)

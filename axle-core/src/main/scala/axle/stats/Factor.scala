@@ -49,7 +49,7 @@ object Factor {
   implicit def factorMultMonoid[T: Eq: Show, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] =
     new MultiplicativeMonoid[Factor[T, N]] {
 
-      lazy val field = implicitly[Field[N]]
+      val field = Field[N]
 
       def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
         val newVars = (x.variables.toSet union y.variables.toSet).toVector
@@ -72,7 +72,7 @@ case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
   val varList: Vector[Distribution[T, N]],
   val values: Map[Vector[CaseIs[T, N]], N]) {
 
-  val field = implicitly[Field[N]]
+  val field = Field[N]
 
   lazy val crossProduct = IndexedCrossProduct(varList.map(_.values))
 
