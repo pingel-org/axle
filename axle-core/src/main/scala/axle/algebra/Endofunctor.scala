@@ -10,6 +10,6 @@ trait Endofunctor[E, T] {
 
 object Endofunctor {
 
-  def apply[E, T](implicit ev: Endofunctor[E, T]): Endofunctor[E, T] = ev
+  @inline final def apply[E, T](implicit ev: Endofunctor[E, T]): Endofunctor[E, T] = ev
 
 }

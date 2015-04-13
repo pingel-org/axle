@@ -94,6 +94,6 @@ trait DirectedGraph[DG[_, _]] {
 
 object DirectedGraph {
 
-  def apply[DG[_, _]: DirectedGraph]: DirectedGraph[DG] = implicitly[DirectedGraph[DG]]
+  @inline final def apply[DG[_, _]: DirectedGraph]: DirectedGraph[DG] = implicitly[DirectedGraph[DG]]
 
 }

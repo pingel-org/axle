@@ -10,6 +10,6 @@ trait Draw[T] {
 }
 
 object Draw {
-  
-  def apply[T: Draw]: Draw[T] = implicitly[Draw[T]]
+
+  @inline final def apply[T: Draw]: Draw[T] = implicitly[Draw[T]]
 }

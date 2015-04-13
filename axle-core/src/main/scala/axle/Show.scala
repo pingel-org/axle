@@ -11,8 +11,8 @@ trait Show[T] {
 
 object Show {
 
-  def apply[T: Show]: Show[T] = implicitly[Show[T]]
-  
+  @inline final def apply[T: Show]: Show[T] = implicitly[Show[T]]
+
   implicit val showDouble: Show[Double] = new Show[Double] {
     // TODO: configurable precision
     def text(d: Double): String = """%.6f""".format(d)

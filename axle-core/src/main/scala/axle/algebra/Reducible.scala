@@ -11,7 +11,7 @@ trait Reducible[R[_]] {
 
 object Reducible {
 
-  def apply[R[_]: Reducible]: Reducible[R] = implicitly[Reducible[R]]
+  @inline final def apply[R[_]: Reducible]: Reducible[R] = implicitly[Reducible[R]]
 
   implicit def reduceSeq: Reducible[Seq] = new Reducible[Seq] {
 

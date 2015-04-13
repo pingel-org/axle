@@ -11,7 +11,7 @@ trait SetFrom[C[_]] {
 
 object SetFrom {
 
-  def apply[C[_]: SetFrom]: SetFrom[C] = implicitly[SetFrom[C]]
+  @inline final def apply[C[_]: SetFrom]: SetFrom[C] = implicitly[SetFrom[C]]
 
   implicit def sizedSeq: SetFrom[Seq] = new SetFrom[Seq] {
 

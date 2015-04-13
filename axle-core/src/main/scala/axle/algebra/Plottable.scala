@@ -17,7 +17,7 @@ trait Plottable[T] {
 
 object Plottable {
 
-  def apply[T: Plottable]: Plottable[T] = implicitly[Plottable[T]]
+  @inline final def apply[T: Plottable]: Plottable[T] = implicitly[Plottable[T]]
   
   implicit val doublePlottable: Plottable[Double] =
     new Plottable[Double] {

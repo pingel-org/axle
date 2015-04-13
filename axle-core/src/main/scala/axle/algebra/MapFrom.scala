@@ -11,7 +11,7 @@ trait MapFrom[C[_]] {
 
 object MapFrom {
 
-  def apply[C[_]: MapFrom]: MapFrom[C] = implicitly[MapFrom[C]]
+  @inline final def apply[C[_]: MapFrom]: MapFrom[C] = implicitly[MapFrom[C]]
 
   implicit def mapFromSeq: MapFrom[Seq] = new MapFrom[Seq] {
 

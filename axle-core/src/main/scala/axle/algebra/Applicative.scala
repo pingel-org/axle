@@ -13,6 +13,6 @@ trait Applicative[F[_]] {
 
 object Applicative {
 
-  def apply[F[_]: Applicative]: Applicative[F] = implicitly[Applicative[F]]
+  @inline final def apply[F[_]: Applicative]: Applicative[F] = implicitly[Applicative[F]]
 
 }

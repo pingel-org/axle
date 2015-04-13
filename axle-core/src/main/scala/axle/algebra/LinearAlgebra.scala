@@ -184,6 +184,6 @@ trait LinearAlgebra[M, RowT, ColT, T] {
 
 object LinearAlgebra {
 
-  def apply[M, RowT, ColT, T](implicit ev: LinearAlgebra[M, RowT, ColT, T]): LinearAlgebra[M, RowT, ColT, T] = ev
+  @inline final def apply[M, RowT, ColT, T](implicit ev: LinearAlgebra[M, RowT, ColT, T]): LinearAlgebra[M, RowT, ColT, T] = ev
 
 }

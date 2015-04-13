@@ -73,6 +73,6 @@ trait UndirectedGraph[UG[_, _]] {
 
 object UndirectedGraph {
 
-  def apply[UG[_, _]: UndirectedGraph]: UndirectedGraph[UG] = implicitly[UndirectedGraph[UG]]
+  @inline final def apply[UG[_, _]: UndirectedGraph]: UndirectedGraph[UG] = implicitly[UndirectedGraph[UG]]
 
 }

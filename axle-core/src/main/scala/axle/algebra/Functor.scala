@@ -11,7 +11,7 @@ trait Functor[F[_]] {
 
 object Functor {
 
-  def apply[F[_]: Functor]: Functor[F] = implicitly[Functor[F]]
+  @inline final def apply[F[_]: Functor]: Functor[F] = implicitly[Functor[F]]
 
   implicit def functorSeq =
     new Functor[Seq] {

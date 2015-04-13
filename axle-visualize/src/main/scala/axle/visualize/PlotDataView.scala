@@ -24,7 +24,7 @@ trait PlotDataView[X, Y, D] {
 
 object PlotDataView {
 
-  def apply[X, Y, D](implicit ev: PlotDataView[X, Y, D]) = ev
+  @inline final def apply[X, Y, D](implicit ev: PlotDataView[X, Y, D]) = ev
 
   implicit def treeMapDataView[X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[X, Y, TreeMap[X, Y]] =
     new PlotDataView[X, Y, TreeMap[X, Y]] {

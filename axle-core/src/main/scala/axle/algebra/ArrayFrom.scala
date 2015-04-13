@@ -11,7 +11,7 @@ trait ArrayFrom[C[_]] {
 
 object ArrayFrom {
 
-  def apply[C[_]: ArrayFrom]: ArrayFrom[C] = implicitly[ArrayFrom[C]]
+  @inline final def apply[C[_]: ArrayFrom]: ArrayFrom[C] = implicitly[ArrayFrom[C]]
 
   implicit def arrayFromSeq: ArrayFrom[Seq] = new ArrayFrom[Seq] {
 
