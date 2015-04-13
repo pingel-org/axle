@@ -7,6 +7,7 @@ import axle.syntax.linearalgebra._
 import spire.algebra.Field
 import spire.algebra.NormedVectorSpace
 import spire.implicits.DoubleAlgebra
+import spire.implicits.IntAlgebra
 
 /**
  * Euclidean space
@@ -30,6 +31,6 @@ case class Euclidian[M](n: Int)(implicit la: LinearAlgebra[M, Int, Int, Double])
 
   def scalar: Field[Double] = DoubleAlgebra
 
-  def norm(r: M): Double = sqrt(r.mulPointwise(r).rowSums.get(0, 0))
+  def norm(r: M): Double = sqrt(r.mulPointwise(r).rowSums.scalar)
 
 }

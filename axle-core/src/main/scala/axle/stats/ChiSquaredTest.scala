@@ -4,6 +4,7 @@ import scala.math.pow
 import scala.math.sqrt
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
+import spire.implicits.IntAlgebra
 
 case class ChiSquaredTest[M](
   tally: M,
@@ -12,7 +13,7 @@ case class ChiSquaredTest[M](
 
   val rowTotals = tally.rowSums
   val columnTotals = tally.columnSums
-  val total = (rowTotals.columnSums).get(0, 0)
+  val total = (rowTotals.columnSums).scalar
 
   val χ2 =
     (0 until tally.rows) map { r =>

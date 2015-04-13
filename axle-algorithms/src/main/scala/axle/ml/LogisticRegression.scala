@@ -19,7 +19,7 @@ case class LogisticRegression[D, M](
   implicit val ring = la.ring
 
   // h is essentially P(y=1 | X;θ)
-  def h(xi: M, θ: M): Double = 1 / (1 + exp(-1 * (θ.t * xi).get(0, 0)))
+  def h(xi: M, θ: M): Double = 1 / (1 + exp(-1 * (θ.t * xi).scalar))
 
   // yi is boolean (1d or 0d)
   def cost(xi: M, θ: M, yi: Double) =

@@ -1,11 +1,12 @@
 package axle.ml.distance
 
 import axle.algebra.LinearAlgebra
-import axle.syntax.linearalgebra._
+import axle.syntax.linearalgebra.matrixOps
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
-//import spire.implicits.DoubleAlgebra
-import spire.implicits._
+import spire.implicits.DoubleAlgebra
+import spire.implicits.IntAlgebra
+import spire.implicits.moduleOps
 
 /**
  *
@@ -35,6 +36,6 @@ case class Cosine[M](n: Int)(implicit la: LinearAlgebra[M, Int, Int, Double])
 
   def scalar: Field[Double] = DoubleAlgebra
 
-  def dot(v: M, w: M): Double = v.mulPointwise(w).rowSums.get(0, 0) // .scalar
+  def dot(v: M, w: M): Double = v.mulPointwise(w).rowSums.scalar
 
 }

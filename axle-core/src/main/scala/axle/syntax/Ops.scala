@@ -15,6 +15,7 @@ import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
 import axle.algebra.UndirectedEdge
 import axle.algebra.Vertex
+import axle.algebra.Zero
 import scala.reflect.ClassTag
 import spire.algebra.Eq
 import spire.algebra.Ring
@@ -119,10 +120,9 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
   def tr = la.transpose(lhs)
   def inv = la.invert(lhs)
 
-  def scalar: T = {
+  def scalar(implicit rz: Zero[RowT], cz: Zero[ColT]): T = {
     assert(la.isScalar(lhs))
-    //la.get(lhs)(0, 0)
-    ???
+    la.get(lhs)(rz.zero, cz.zero)
   }
 
   //def +(x: A) = la.addScalar(lhs)(x)

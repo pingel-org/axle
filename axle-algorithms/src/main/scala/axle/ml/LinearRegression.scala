@@ -38,7 +38,7 @@ case class LinearRegression[D, M](
 
   def h(xi: M, θ: M): M = xi * θ
 
-  def cost(xi: M, θ: M, yi: Double): Double = h(xi, θ).get(0, 0) - yi
+  def cost(xi: M, θ: M, yi: Double): Double = h(xi, θ).scalar - yi
 
   def dθ(X: M, y: M, θ: M): M =
     (0 until X.rows)
