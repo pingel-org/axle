@@ -24,6 +24,8 @@ trait Aggregatable[F[_]] {
 
 object Aggregatable {
 
+  def apply[F[_]: Aggregatable]: Aggregatable[F] = implicitly[Aggregatable[F]]
+
   implicit def aggregatableSeq = new Aggregatable[Seq] {
     def aggregate[A, B: ClassTag](as: Seq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
       as.aggregate(zeroValue)(seqOp, combOp)
@@ -43,5 +45,5 @@ object Aggregatable {
     def aggregate[A, B: ClassTag](is: scala.collection.immutable.IndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
       is.aggregate(zeroValue)(seqOp, combOp)
   }
-  
+
 }

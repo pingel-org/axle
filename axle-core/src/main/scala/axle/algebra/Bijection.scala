@@ -25,3 +25,9 @@ trait Bijection[A, B] extends Function1[A, B] {
     }
 
 }
+
+object Bijection {
+
+  def apply[A, B](implicit ev: Bijection[A, B]): Bijection[A, B] = ev
+
+}

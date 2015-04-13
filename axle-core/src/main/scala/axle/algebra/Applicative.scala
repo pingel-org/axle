@@ -10,3 +10,9 @@ trait Applicative[F[_]] {
   def <*>[F[_]: Applicative, A, B](f: F[A => B]): F[A] => F[B]
 
 }
+
+object Applicative {
+
+  def apply[F[_]: Applicative]: Applicative[F] = implicitly[Applicative[F]]
+
+}

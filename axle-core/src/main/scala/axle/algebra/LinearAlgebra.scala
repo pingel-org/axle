@@ -181,3 +181,9 @@ trait LinearAlgebra[M, RowT, ColT, T] {
   def randn(laRows: RowT, laColumns: ColT): M
 
 }
+
+object LinearAlgebra {
+
+  def apply[M, RowT, ColT, T](implicit ev: LinearAlgebra[M, RowT, ColT, T]): LinearAlgebra[M, RowT, ColT, T] = ev
+
+}

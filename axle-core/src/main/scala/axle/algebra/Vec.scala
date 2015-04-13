@@ -17,6 +17,8 @@ trait Vec[V[_]] {
 
 object Vec {
 
+  def apply[V[_]: Vec]: Vec[V] = implicitly[Vec[V]]
+  
   type TV[N] = (N, N)
 
   implicit def tuple2Vec: Vec[TV] =

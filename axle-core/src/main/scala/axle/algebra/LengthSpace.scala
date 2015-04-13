@@ -44,6 +44,8 @@ trait LengthSpace[V, R] extends MetricSpace[V, R] {
 
 object LengthSpace {
 
+  def apply[V, R](implicit ev: LengthSpace[V, R]): LengthSpace[V, R] = ev
+
   implicit val doubleDoubleLengthSpace: LengthSpace[Double, Double] =
     new DoubleAlgebra with LengthSpace[Double, Double] {
 

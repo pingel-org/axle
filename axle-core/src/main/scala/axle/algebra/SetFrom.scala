@@ -11,6 +11,8 @@ trait SetFrom[C[_]] {
 
 object SetFrom {
 
+  def apply[C[_]: SetFrom]: SetFrom[C] = implicitly[SetFrom[C]]
+
   implicit def sizedSeq: SetFrom[Seq] = new SetFrom[Seq] {
 
     def toSet[A: ClassTag](seq: Seq[A]): Set[A] = seq.toSet

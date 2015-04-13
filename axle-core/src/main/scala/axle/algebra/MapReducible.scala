@@ -15,6 +15,8 @@ trait MapReducible[M[_]] {
 
 object MapReducible {
 
+  def apply[M[_]: MapReducible]: MapReducible[M] = implicitly[MapReducible[M]]
+
   implicit def mapReduceSeq: MapReducible[Seq] = new MapReducible[Seq] {
 
     def mapReduce[A: ClassTag, B: ClassTag, K: ClassTag](

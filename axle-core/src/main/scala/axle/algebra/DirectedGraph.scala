@@ -91,3 +91,9 @@ trait DirectedGraph[DG[_, _]] {
   //    vs.foldLeft(Set[Vertex[VP]]())((a, v) => _ancestors(v, a))
 
 }
+
+object DirectedGraph {
+
+  def apply[DG[_, _]: DirectedGraph]: DirectedGraph[DG] = implicitly[DirectedGraph[DG]]
+
+}

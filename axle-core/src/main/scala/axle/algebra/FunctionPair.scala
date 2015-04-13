@@ -30,6 +30,8 @@ trait FunctionPair[A, B] {
 
 object FunctionPair {
 
+  def apply[A, B](implicit ev: FunctionPair[A, B]): FunctionPair[A, B] = ev
+
   implicit val convertDouble: FunctionPair[Double, Double] = new FunctionPair[Double, Double] {
     def apply(d: Double) = d
     def unapply(t: Double) = t

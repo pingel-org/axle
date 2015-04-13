@@ -12,6 +12,8 @@ trait Indexed[C[_], IndexT] {
 
 object Indexed {
 
+  def apply[C[_], IndexT](implicit ev: Indexed[C, IndexT]): Indexed[C, IndexT] = ev
+
   implicit def indexedSeq: Indexed[Seq, Int] =
     new Indexed[Seq, Int] {
       def at[A: ClassTag](seq: Seq[A])(i: Int): A = seq(i)

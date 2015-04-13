@@ -17,6 +17,8 @@ trait Tics[T] {
 
 object Tics {
 
+  def apply[T: Tics]: Tics[T] = implicitly[Tics[T]]
+  
   implicit def doubleTics: Tics[Double] = new Tics[Double] {
 
     def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)

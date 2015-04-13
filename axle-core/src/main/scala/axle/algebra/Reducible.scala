@@ -11,6 +11,8 @@ trait Reducible[R[_]] {
 
 object Reducible {
 
+  def apply[R[_]: Reducible]: Reducible[R] = implicitly[Reducible[R]]
+
   implicit def reduceSeq: Reducible[Seq] = new Reducible[Seq] {
 
     def reduceOption[A: ClassTag](as: Seq[A])(op: (A, A) => A): Option[A] =

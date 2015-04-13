@@ -70,3 +70,9 @@ trait UndirectedGraph[UG[_, _]] {
   //    among.map(v => (v, neighbors(v).size)).minBy(_._2)._1
 
 }
+
+object UndirectedGraph {
+
+  def apply[UG[_, _]: UndirectedGraph]: UndirectedGraph[UG] = implicitly[UndirectedGraph[UG]]
+
+}

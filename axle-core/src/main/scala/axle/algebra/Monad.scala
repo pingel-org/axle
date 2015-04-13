@@ -24,9 +24,11 @@ trait Monad[M[_]] {
 
 object Monad {
 
-//  implicit def monadEq[M[_]]() = new Eq[Monad[M[_]]] {
-//    def eqv(x: Monad[A], y: Monad[A]): Boolean = ???
-//  }
+  def apply[M[_]: Monad]: Monad[M] = implicitly[Monad[M]]
+
+  //  implicit def monadEq[M[_]]() = new Eq[Monad[M[_]]] {
+  //    def eqv(x: Monad[A], y: Monad[A]): Boolean = ???
+  //  }
 
   implicit val listMonad = new Monad[List] {
 
@@ -45,7 +47,7 @@ object Monad {
   implicit def eitherMonad[A] = new Monad[({ type λ[α] = Either[A, α] })#λ] {
 
     def bind[B, C](either: Either[A, B])(f: B => Either[A, C]): Either[A, C] = either match {
-      case Left(a) => Left(a)
+      case Left(a)  => Left(a)
       case Right(b) => f(b)
     }
 

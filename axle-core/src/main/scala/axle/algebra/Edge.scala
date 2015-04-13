@@ -15,6 +15,7 @@ trait UndirectedEdge[VP, EP] {
   def payload: EP
 }
 
+@implicitNotFound("No member of typeclass DirectedEdge found for types ${VP}, ${EP}")
 trait DirectedEdge[VP, EP] {
 
   def from: Vertex[VP]

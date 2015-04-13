@@ -11,6 +11,8 @@ trait Functor[F[_]] {
 
 object Functor {
 
+  def apply[F[_]: Functor]: Functor[F] = implicitly[Functor[F]]
+
   implicit def functorSeq =
     new Functor[Seq] {
       def map[A, B: ClassTag](seq: Seq[A])(f: A => B): Seq[B] =

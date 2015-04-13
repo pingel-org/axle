@@ -13,6 +13,8 @@ trait Finite[C[_], S] {
 
 object Finite {
 
+  def apply[C[_], S](implicit ev: Finite[C, S]): Finite[C, S] = ev
+
   implicit def finiteCIntRational[C[_]](implicit ev: Finite[C, Int]): Finite[C, Rational] =
     new Finite[C, Rational] {
       def size[A: ClassTag](xs: C[A]): Rational = ev.size(xs)

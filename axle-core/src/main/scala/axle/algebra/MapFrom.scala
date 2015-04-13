@@ -11,6 +11,8 @@ trait MapFrom[C[_]] {
 
 object MapFrom {
 
+  def apply[C[_]: MapFrom]: MapFrom[C] = implicitly[MapFrom[C]]
+
   implicit def mapFromSeq: MapFrom[Seq] = new MapFrom[Seq] {
 
     def toMap[K: ClassTag, V: ClassTag](seq: Seq[(K, V)]): Map[K, V] =
