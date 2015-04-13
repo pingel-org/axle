@@ -3,7 +3,6 @@ package axle.jung
 
 import axle.algebra.DirectedGraph
 import axle.algebra.Vertex
-import axle.algebra.Edge
 import org.specs2.mutable._
 import spire.math._
 import spire.implicits._
