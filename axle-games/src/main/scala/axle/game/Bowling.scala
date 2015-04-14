@@ -82,7 +82,7 @@ object Bowling {
 
   }
 
-  def scoreDistribution(bowler: Bowler, numFrames: Int): Distribution0[State, Rational] = {
+  def stateDistribution(bowler: Bowler, numFrames: Int): Distribution0[State, Rational] = {
 
     import bowler._
 
@@ -90,11 +90,12 @@ object Bowling {
       ConditionalProbabilityTable0(Map(State(0, false, false, false) -> Rational(1)))
 
     (1 to numFrames).foldLeft(startState)({
-      case (currentState, _) => for {
-        c <- currentState
-        f <- firstRoll
-        s <- spare
-      } yield next(c, f, s)
+      case (currentState, frameNumber) =>
+        for {
+          c <- currentState
+          f <- firstRoll
+          s <- spare
+        } yield next(c, f, s)
     })
   }
 

@@ -10,10 +10,12 @@ class BowlingSpec extends Specification {
       import Bowling._
       import Bowlers._
 
-      // TODO the probabilities are summing to > 1
-      scoreDistribution(goodBowler, 10)
+      val stateD = stateDistribution(goodBowler, 4)
 
-      1 must be equalTo 1
+      val scoreD = stateD.map(_.tallied)
+
+      scoreD.probabilityOf(0) must be greaterThan 0
+      // TODO: make same assertion about P(300) when last frame is handled correctly
     }
   }
 
