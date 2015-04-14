@@ -18,5 +18,5 @@ class BowlingSpec extends Specification {
       // TODO: make same assertion about P(300) when last frame is handled correctly
     }
   }
-
+  
 }

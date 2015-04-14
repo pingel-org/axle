@@ -2,6 +2,7 @@ package axle.game
 
 import axle.stats._
 import spire.math.Rational
+import spire.implicits._
 
 object Bowling {
 
@@ -9,10 +10,11 @@ object Bowling {
 
   case class State(tallied: Int, twoAgoStrike: Boolean, oneAgoSpare: Boolean, oneAgoStrike: Boolean)
 
-  def next(current: State, first: Int, makeSpare: Boolean): State = {
+  def next(current: State, isLast: Boolean, first: Int, makeSpare: Boolean): State = {
     import current._
 
     // TODO: break 'score' into contributions to current, one ago, and two ago frames
+    // TODO: handle last frame
 
     val score: Int = first +
       (if (twoAgoStrike) first else 0) +
@@ -95,7 +97,7 @@ object Bowling {
           c <- currentState
           f <- firstRoll
           s <- spare
-        } yield next(c, f, s)
+        } yield next(c, frameNumber === numFrames, f, s)
     })
   }
 

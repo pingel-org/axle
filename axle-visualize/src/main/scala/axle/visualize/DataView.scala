@@ -2,6 +2,7 @@ package axle.visualize
 
 import axle.algebra.Plottable
 import axle.algebra.Zero
+import axle.stats.Distribution0
 import scala.annotation.implicitNotFound
 import spire.algebra.Order
 import spire.compat.ordering
@@ -39,6 +40,28 @@ object DataView {
 
         val yMin = (keys(d).map { x => valueOf(d, x) } ++ List(yZero.zero)).filter(yPlottable.isPlottable _).min
         val yMax = (keys(d).map { x => valueOf(d, x) } ++ List(yZero.zero)).filter(yPlottable.isPlottable _).max
+
+        (yMin, yMax)
+      }
+
+    }
+
+  implicit def distribution0DataView[X, Y: Plottable: Zero: Order]: DataView[X, Y, Distribution0[X, Y]] =
+    new DataView[X, Y, Distribution0[X, Y]] {
+
+      val yPlottable = Plottable[Y]
+      val yZero = Zero[Y]
+
+      def keys(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys
+
+      def valueOf(d: Distribution0[X, Y], x: X): Y = d.probabilityOf(x)
+
+      def yRange(d: Distribution0[X, Y]): (Y, Y) = {
+
+        val ks = keys(d)
+
+        val yMin = (ks.map { x => valueOf(d, x) } ++ List(yZero.zero)).filter(yPlottable.isPlottable _).min
+        val yMax = (ks.map { x => valueOf(d, x) } ++ List(yZero.zero)).filter(yPlottable.isPlottable _).max
 
         (yMin, yMax)
       }
