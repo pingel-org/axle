@@ -7,6 +7,23 @@ object Bowling {
 
   case class Bowler(firstRoll: Distribution0[Int, Rational], spare: Distribution0[Boolean, Rational])
 
+  case class State(tallied: Int, twoAgoStrike: Boolean, oneAgoSpare: Boolean, oneAgoStrike: Boolean)
+
+  def next(current: State, first: Int, makeSpare: Boolean): State = {
+    import current._
+
+    // TODO: break 'score' into contributions to current, one ago, and two ago frames
+
+    val score: Int = first +
+      (if (twoAgoStrike) first else 0) +
+      (if (oneAgoSpare) first else 0) +
+      (if (oneAgoStrike) first else 0) +
+      (if (first < 10 && makeSpare) (10 - first) else 0) +
+      (if (first < 10 && makeSpare && oneAgoStrike) (10 - first) else 0)
+
+    State(tallied + score, oneAgoStrike, first == 10, first != 10 && makeSpare)
+  }
+
   object Bowlers {
     val randomBowler =
       Bowler(
@@ -47,17 +64,17 @@ object Bowling {
           10 -> Rational(3, 20))),
         spare = binaryDecision(Rational(1, 10)))
 
-    // 4%  over 0-6, 12% 7, 20% 8, 30% 9, 30% 10
+    // 1% over 0-6, 13% 7, 20% 8, 30% 9, 30% 10
     val goodBowler = Bowler(
       firstRoll = ConditionalProbabilityTable0(Map(
-        0 -> Rational(1, 25),
-        1 -> Rational(1, 25),
-        2 -> Rational(1, 25),
-        3 -> Rational(1, 25),
-        4 -> Rational(1, 25),
-        5 -> Rational(1, 25),
-        6 -> Rational(1, 25),
-        7 -> Rational(3, 25),
+        0 -> Rational(1, 100),
+        1 -> Rational(1, 100),
+        2 -> Rational(1, 100),
+        3 -> Rational(1, 100),
+        4 -> Rational(1, 100),
+        5 -> Rational(1, 100),
+        6 -> Rational(1, 100),
+        7 -> Rational(13, 100),
         8 -> Rational(1, 5),
         9 -> Rational(3, 10),
         10 -> Rational(3, 10))),
@@ -65,39 +82,20 @@ object Bowling {
 
   }
 
-  def scoreFrame(
-    twoAgoStrike: Boolean,
-    oneAgoSpare: Boolean,
-    oneAgoStrike: Boolean,
-    first: Int,
-    makeSpare: Boolean): (Int, Boolean, Boolean, Boolean) = {
-    // TODO: break 'score' into contributions to current, one ago, and two ago frames
-    val score: Int = first +
-      (if (twoAgoStrike) first else 0) +
-      (if (oneAgoSpare) first else 0) +
-      (if (oneAgoStrike) first else 0) +
-      (if (first < 10 && makeSpare) (10 - first) else 0) +
-      (if (first < 10 && makeSpare && oneAgoStrike) (10 - first) else 0)
-    (score, oneAgoStrike, first == 10, first != 10 && makeSpare)
-  }
-
-  def scoreDistribution(bowler: Bowler, numFrames: Int): Distribution0[Int, Rational] = {
+  def scoreDistribution(bowler: Bowler, numFrames: Int): Distribution0[State, Rational] = {
 
     import bowler._
 
-    val startState: Distribution0[(Int, Boolean, Boolean, Boolean), Rational] =
-      ConditionalProbabilityTable0(Map((0, false, false, false) -> Rational(1)))
+    val startState: Distribution0[State, Rational] =
+      ConditionalProbabilityTable0(Map(State(0, false, false, false) -> Rational(1)))
 
     (1 to numFrames).foldLeft(startState)({
-      case (incoming, _) => for {
-        i <- incoming
+      case (currentState, _) => for {
+        c <- currentState
         f <- firstRoll
         s <- spare
-      } yield {
-        val frame = scoreFrame(i._2, i._3, i._4, f, s)
-        (i._1 + frame._1, frame._2, frame._3, frame._4)
-      }
-    }) map { _._1 }
+      } yield next(c, f, s)
+    })
   }
 
   // val cpt = sd.asInstanceOf[ConditionalProbabilityTable0[Int, Rational]]
