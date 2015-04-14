@@ -71,8 +71,8 @@ import axle._
   <url>http://axle-lang.org</url>
   <licenses>
     <license>
-      <name>BSD-2-Clause</name>
-      <url>http://www.opensource.org/licenses/BSD-2-Clause</url>
+      <name>Apache-2.0</name>
+      <url>http://opensource.org/licenses/Apache-2.0</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
