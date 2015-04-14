@@ -23,16 +23,18 @@ class GameChartSpec extends Specification {
 
       val scoreD = stateD.map(_.tallied)
 
-      val ac = Angle.converterGraph[Double, JungDirectedGraph]
+      implicit val ac = Angle.converterGraph[Double, JungDirectedGraph]
       import ac.degree
 
       val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
         scoreD,
         xAxis = Rational(0),
-        title = Some("d6 + d6"),
+        title = Some("bowling scores"),
         labelAngle = 36d *: degree,
         colors = List(blue),
         drawKey = false)
+
+      implicit val dc = axle.visualize.BarChart.drawBarChart[Int, Rational, Distribution0[Int, Rational]]
 
       1 must be equalTo 1
     }
