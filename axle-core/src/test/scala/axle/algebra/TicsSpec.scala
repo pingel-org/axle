@@ -37,4 +37,15 @@ class TicsSpec extends Specification {
     }
   }
 
+  "Tics for Rational" should {
+    "work" in {
+
+      import spire.math.Rational
+
+      val ts = Tics[Rational].tics(Rational(0), Rational(BigInt("84118943325460019771"), BigInt("4768371582031250000000")))
+
+      ts must be equalTo Vector((Rational(0), "0"), (Rational(1, 100), "1/100"))
+    }
+  }
+
 }
