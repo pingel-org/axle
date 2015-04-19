@@ -8,7 +8,6 @@ import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
-import spire.implicits.multiplicativeSemigroupOps
 
 abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
   extends UnitConverter[Q, N] {
@@ -42,23 +41,22 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
     query: UnitOfMeasurement[Q])(implicit ev: Eq[N]): Vertex[UnitOfMeasurement[Q]] =
     directedGraphOps(cg).findVertex(_.payload.name === query.name).get
 
-  val memo = collection.mutable.Map.empty[(UnitOfMeasurement[Q], UnitOfMeasurement[Q]), List[N => N]]
+  val memo = collection.mutable.Map.empty[(UnitOfMeasurement[Q], UnitOfMeasurement[Q]), N => N]
 
   def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(
     implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] = {
 
-    val toFrom = (newUnit, orig.unit)
-    if (memo.contains(toFrom)) {
-      val path = memo(toFrom)
-      val magnitude = path.foldLeft(orig.magnitude)((n, convert) => convert(n))
-      UnittedQuantity(magnitude, newUnit)
+    val memoKey = (newUnit, orig.unit)
+    if (memo.contains(memoKey)) {
+      val convert = memo(memoKey)
+      UnittedQuantity(convert(orig.magnitude), newUnit)
     } else {
       val pathOpt = directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
       if (pathOpt.isDefined) {
         val path = pathOpt.get.map(_.payload)
-        memo += toFrom -> path
-        val magnitude = path.foldLeft(orig.magnitude)((n, convert) => convert(n))
-        UnittedQuantity(magnitude, newUnit)
+        val convert = (input: N) => path.foldLeft(input)((n, convert) => convert(n))
+        memo += memoKey -> convert
+        UnittedQuantity(convert(orig.magnitude), newUnit)
       } else {
         throw new Exception("no conversion path from " + orig.unit + " to " + newUnit)
       }
