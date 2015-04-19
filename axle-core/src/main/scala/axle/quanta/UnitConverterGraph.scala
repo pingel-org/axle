@@ -49,20 +49,20 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
     implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] = {
 
     val memoKey = (newUnit, orig.unit)
-    if (memo.contains(memoKey)) {
-      val convert = memo(memoKey)
-      UnittedQuantity(convert(orig.magnitude), newUnit)
-    } else {
-      val pathOpt = directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
-      if (pathOpt.isDefined) {
-        val path = pathOpt.get.map(_.payload)
-        val convert: N => N = path.reduceOption(combine).getOrElse(identity)
-        memo += memoKey -> convert
-        UnittedQuantity(convert(orig.magnitude), newUnit)
+    val convert: N => N =
+      if (memo.contains(memoKey)) {
+        memo(memoKey)
       } else {
-        throw new Exception("no conversion path from " + orig.unit + " to " + newUnit)
+        val pathOpt = directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
+        if (pathOpt.isDefined) {
+          val path = pathOpt.get.map(_.payload)
+          val convert: N => N = path.reduceOption(combine).getOrElse(identity)
+          memo += memoKey -> convert
+          convert
+        } else {
+          throw new Exception("no conversion path from " + orig.unit + " to " + newUnit)
+        }
       }
-    }
-
+    UnittedQuantity(convert(orig.magnitude), newUnit)
   }
 }
