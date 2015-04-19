@@ -43,6 +43,8 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
 
   val memo = collection.mutable.Map.empty[(UnitOfMeasurement[Q], UnitOfMeasurement[Q]), N => N]
 
+  val combine = (f: N => N, g: N => N) => f andThen g
+
   def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(
     implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] = {
 
@@ -54,7 +56,7 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
       val pathOpt = directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
       if (pathOpt.isDefined) {
         val path = pathOpt.get.map(_.payload)
-        val convert = (input: N) => path.foldLeft(input)((n, convert) => convert(n))
+        val convert: N => N = path.reduceOption(combine).getOrElse(identity)
         memo += memoKey -> convert
         UnittedQuantity(convert(orig.magnitude), newUnit)
       } else {
