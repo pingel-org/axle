@@ -1,6 +1,5 @@
 package axle.algebra.laws
 
-import scala.annotation.implicitNotFound
 import scala.reflect.ClassTag
 
 import org.scalacheck.Arbitrary
@@ -21,14 +20,18 @@ object FunctorLaws {
 
 trait FunctorLaws[F[_], A] extends Laws {
 
+  trait FunctorRuleSet extends RuleSet {
+
+    def name: String = "functor"
+
+    def bases: Seq[(String, Laws#RuleSet)] = Seq()
+
+    def parents: Seq[RuleSet] = Seq.empty
+
+  }
+
   def functorIdentity(implicit functor: Functor[F], arbFa: Arbitrary[F[A]], cta: ClassTag[A], eqFa: Eq[F[A]]) =
-    new RuleSet {
-
-      def name: String = "functor"
-
-      def bases: Seq[(String, Laws#RuleSet)] = Seq()
-
-      def parents: Seq[RuleSet] = Seq.empty
+    new FunctorRuleSet {
 
       def props: Seq[(String, Prop)] = Seq(
         "identity" → forAll { (xs: F[A]) =>
@@ -47,13 +50,7 @@ trait FunctorLaws[F[_], A] extends Laws {
     eqFa: Eq[F[A]],
     eqFb: Eq[F[B]],
     eqFc: Eq[F[C]]) =
-    new RuleSet {
-
-      def name: String = "functor"
-
-      def bases: Seq[(String, Laws#RuleSet)] = Seq.empty
-
-      def parents: Seq[RuleSet] = Seq.empty
+    new FunctorRuleSet {
 
       def props: Seq[(String, Prop)] = Seq(
         "composition" → forAll { (xs: F[A], f: A => B, g: B => C) =>

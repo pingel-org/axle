@@ -1,50 +1,37 @@
 package axle.algebra
 
-import org.specs2.ScalaCheck
-import org.specs2.mutable._
-import scala.collection.JavaConverters._
-import spire.math._
-import spire.implicits._
-import spire.algebra._
-import spire.syntax._
-import org.scalacheck._
-import Arbitrary._
-import Gen._
-import Prop._
+import scala.annotation.elidable
+import scala.annotation.elidable.ASSERTION
+import scala.collection.JavaConverters.asScalaBufferConverter
 
-abstract class MetricSpaceSpec[A: Eq: Arbitrary, B: AdditiveMonoid: Order](
-  name: String, spaces: Seq[MetricSpace[A, B]])
-  extends Specification with ScalaCheck {
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.specs2.mutable.Specification
+import org.typelevel.discipline.specs2.mutable.Discipline
 
-  lazy val genMetricSpace: Gen[MetricSpace[A, B]] = Gen.oneOf(spaces)
+import axle.algebra.laws.MetricSpaceLaws
+import spire.algebra.AdditiveMonoid
+import spire.algebra.MetricSpace
+import spire.implicits.SeqNormedVectorSpace
+import spire.math.Real
 
-  implicit lazy val arbitraryMetricSpace: Arbitrary[MetricSpace[A, B]] =
-    Arbitrary(genMetricSpace)
-
-  s"$name obeys Cauchy-Schwarz (aka Triangle Inequality)" ! prop { (ms: MetricSpace[A, B], x: A, y: A, z: A) =>
-    implicit val ims = ms
-    (x distance z) <= (x distance y) + (y distance z)
-  }
-
-}
-
-object ScalarDoubleSpace extends MetricSpace[Double, Double] {
+trait ScalarDoubleSpace extends MetricSpace[Double, Double] {
 
   def distance(v: Double, w: Double): Double = math.abs(v - w)
 }
 
-object ScalarRealSpace extends MetricSpace[Real, Real] {
+trait ScalarRealSpace extends MetricSpace[Real, Real] {
 
   def distance(v: Real, w: Real): Real = (v - w).abs
 }
 
-object RealTuple2Space extends MetricSpace[(Real, Real), Real] {
+trait RealTuple2Space extends MetricSpace[(Real, Real), Real] {
 
   def distance(v: (Real, Real), w: (Real, Real)): Real =
     ((v._1 - w._1) ** 2 + (v._2 - w._2) ** 2).sqrt
 }
 
-object SeqRealSpace extends MetricSpace[Seq[Real], Real] {
+trait SeqRealSpace extends MetricSpace[Seq[Real], Real] {
 
   def distance(v: Seq[Real], w: Seq[Real]): Real = {
     assert(v.length == w.length)
@@ -75,18 +62,25 @@ object ArbitrarySpaceStuff {
     Arbitrary(genRealSeqLengthN(n))
 }
 
-import ArbitrarySpaceStuff._
+class MetricSpaceSpec() extends Specification with Discipline {
 
-class RealMetricSpaceSpec
-  extends MetricSpaceSpec("Scalar Real distance", List(ScalarRealSpace))
+  //  lazy val genMetricSpace: Gen[MetricSpace[A, B]] = Gen.oneOf(spaces)
+  //
+  //  implicit lazy val arbitraryMetricSpace: Arbitrary[MetricSpace[A, B]] =
+  //    Arbitrary(genMetricSpace)
 
-class RealTuple2MetricSpaceSpec
-  extends MetricSpaceSpec("(Real, Real) distance", List(RealTuple2Space))
+  import ArbitrarySpaceStuff._
 
-class RealSeqMetricSpaceSpec
-  extends MetricSpaceSpec("Seq[Real] distance", List(SeqRealSpace))(
-    Eq[Seq[Real]],
-    arbitraryRealSeqLengthN(4),
-    implicitly[AdditiveMonoid[Real]],
-    Order[Real])
+  implicit val rrr = new RealTuple2Space {}
 
+  checkAll("MetricSpace[(Real, Real), Real", MetricSpaceLaws[(Real, Real), Real].cauchySchwarz)
+
+  implicit val rr = new ScalarRealSpace {}
+
+  checkAll("MetricSpace[Real, Real]", MetricSpaceLaws[Real, Real].cauchySchwarz)
+
+  implicit val r4 = arbitraryRealSeqLengthN(4)
+
+  checkAll("MetricSpace[Seq[Real], Real]", MetricSpaceLaws[Seq[Real], Real].cauchySchwarz)
+
+}
