@@ -9,6 +9,7 @@ import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import axle.Show
 import axle.string
+import scala.language.implicitConversions
 
 object FOPL {
 

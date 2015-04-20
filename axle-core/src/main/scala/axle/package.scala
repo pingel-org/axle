@@ -64,6 +64,7 @@ import axle.quanta.UnitOfMeasurement
 import axle.quanta.AngleConverter
 import spire.math.ConvertableFrom
 import spire.implicits._
+import scala.language.implicitConversions
 
 /**
  *

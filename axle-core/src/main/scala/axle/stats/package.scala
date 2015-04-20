@@ -36,6 +36,7 @@ import spire.random.Dist
 import spire.optional.unicode.Σ
 import axle.quanta.UnitConverter
 import axle.quanta.InformationConverter
+import scala.language.implicitConversions
 
 package object stats {
 
