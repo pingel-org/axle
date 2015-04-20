@@ -27,6 +27,7 @@ object AxleBuild extends Build {
     crossScalaVersions := Seq("2.11.6"),
 
     libraryDependencies ++= Seq(
+      "org.typelevel" %% "discipline" % "0.2.1" % "test",
       "org.specs2" %% "specs2" % "2.4.17" % "test",
       "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
       "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1"
