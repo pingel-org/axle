@@ -1,126 +1,38 @@
 package axle.algebra
 
-import scala.reflect.ClassTag
-import spire.algebra._
-import spire.implicits._
-import org.specs2.ScalaCheck
-import org.specs2.mutable._
-import org.scalacheck._
-import Arbitrary._
-import Gen._
-import Prop._
+import org.scalacheck.Arbitrary
+import org.specs2.mutable.Specification
+import org.typelevel.discipline.specs2.mutable.Discipline
 
-abstract class FunctorLawsSpec[F[_]: Functor, A: ClassTag: Eq: Arbitrary, B: ClassTag: Eq: Arbitrary, C: ClassTag: Eq: Arbitrary](name: String)(implicit eqFa: Eq[F[A]], arbFa: Arbitrary[F[A]], eqFc: Eq[F[C]])
+import spire.algebra.Eq
+import spire.implicits.eqOps
+
+class FunctorLawsSpec
   extends Specification
-  with ScalaCheck {
+  with Discipline {
 
-  s"$name obey identity" ! prop { (xs: F[A]) =>
-    val functor = Functor[F]
-    val lhs: F[A] = functor.map[A, A](xs)(identity)
-    val rhs: F[A] = identity(xs)
-    lhs === rhs
-  }
-
-  s"$name obey composition" ! prop { (xs: F[A], f: A => B, g: B => C) =>
-    val functor = Functor[F]
-    val lhs: F[C] = functor.map[B, C](functor.map[A, B](xs)(f))(g)
-    val rhs: F[C] = functor.map[A, C](xs)(g compose f)
-    lhs === rhs
-  }
-
-}
-
-object ArbitraryStuff {
-
-  // TODO
-  //implicit val arbListInt: Arbitrary[List[Int]] = Arbitrary(Gen.oneOf(List(List(1, 2, 3), List(4, 5, 6))))
-
-  implicit val eqInt2Int: Eq[Int => Int] = new Eq[Int => Int] {
-    // TODO: Is it possible to include this stochastic equality check in ScalaCheck?
-    def eqv(f: Int => Int, g: Int => Int): Boolean = {
-      (1 to 10) forall { i =>
-        val r = scala.util.Random.nextInt
-        f(r) === g(r)
+  implicit def eqF1AB[A: Arbitrary, B: Eq]: Eq[A => B] =
+    new Eq[A => B] {
+      val arbA = implicitly[Arbitrary[A]]
+      // TODO: Is this available in ScalaCheck?
+      def eqv(f: A => B, g: A => B): Boolean = {
+        (1 to 10) forall { i =>
+          val a = arbA.arbitrary.sample.get // TODO when does sample return None?
+          f(a) === g(a)
+        }
       }
     }
-  }
+
+  checkAll("List[Int]", FunctorLaws[List, Int].functorIdentity)
+  checkAll("List[String]", FunctorLaws[List, String].functorIdentity)
+  checkAll("Option[Int]", FunctorLaws[Option, Int].functorIdentity)
+  checkAll("List[String]", FunctorLaws[List, String].functorIdentity)
+  checkAll("Function1[Int, Int]", FunctorLaws[({ type λ[α] = Int => α })#λ, Int].functorIdentity)
+
+  checkAll("List[Int]", FunctorLaws[List, Int].functorComposition[Int, Int])
+  checkAll("List[String]", FunctorLaws[List, String].functorComposition[String, String])
+  checkAll("Option[Int]", FunctorLaws[Option, Int].functorComposition[Int, Int])
+  checkAll("List[String]", FunctorLaws[List, String].functorComposition[String, String])
+  checkAll("Function1[Int, Int]", FunctorLaws[({ type λ[α] = Int => α })#λ, Int].functorComposition[Int, Int])
+
 }
-
-import ArbitraryStuff._
-
-class ListIntFunctorLawsSpec extends FunctorLawsSpec[List, Int, Int, Int]("List[Int] Functor")
-
-class ListStringFunctorLawsSpec extends FunctorLawsSpec[List, String, String, String]("List[String] Functor")
-
-class OptionIntFunctorLawsSpec extends FunctorLawsSpec[Option, Int, Int, Int]("Option[Int] Functor")
-
-class OptionStringFunctorLawsSpec extends FunctorLawsSpec[Option, String, String, String]("Option[String] Functor")
-
-class Function1IntFunctorLawsSpec extends FunctorLawsSpec[({ type λ[α] = Int => α })#λ, Int, Int, Int]("Function1[Int, Int] Functor")
-
-//      val getLine = () => "test data".toList // override the real getLine
-//      val doit = ((xs: () => List[Char]) => intersperse('-')(xs().map(_.toUpper).reverse))
-//      val didit = doit(getLine).mkString("")
-//      val f: Function1[List[Char], List[Char]] = (intersperse('-') _) compose (reverse[Char] _) compose ((chars: List[Char]) => chars.map(_.toUpper))
-//
-//      f(getLine()).mkString("")
-//
-//      // getLine.map(intersperse "-" compose reverse compose map toUpper)
-//      // getLine.map((cs: List[Char]) => f(cs))
-//
-//      List(1, 2, 3).map(replicate[Int](3) _)
-//      Some(4).map(replicate[Int](3) _)
-//      //Right("blah").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
-//      //Left("foo").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
-//
-//      // Functions as Functors
-//      //{ (_: Int) + 100 } map { _ * 3 } apply (1)
-//
-//      { (_: Int) * 3 } compose { (_: Int) + 100 } apply (1)
-//
-//      List(1, 2, 3, 4).map(replicate[Int](3) _)
-//
-//      Some(4).map(replicate[Int](3) _)
-//
-//      // Right("blah").asInstanceOf[Either[Nothing, String]].map(replicate[String](3) _)
-//
-//      None.asInstanceOf[Option[Int]].map(replicate[Int](3) _)
-//
-//      // Left("foo").asInstanceOf[Either[String, String]].map(replicate[String](3) _)
-//
-//      List(1, 2, 3, 4).map({ (x: Int) => x + 1 })
-//
-//      "hello".toList.map({ (c: Char) => c.toUpper })
-//
-//      List(1, 2, 3, 4).map(replicate[Int](3) _)
-//
-//      Some(4).map(replicate[Int](3) _)
-//
-//      // { () => 1 }.map(replicate[Int](3) _)
-//
-//      // Left(5).asInstanceOf[Either[Int, Int]].map(replicate(3) _)
-//
-//      // Right(6).asInstanceOf[Either[Int, Int]].map(replicate[Any](3) _)
-//
-//      // { (_: Int) + 100 }.map({ (_: Int) * 3 }).apply(1)
-//
-//      // Law 1: fmap id = id
-//
-////      functorLaw1a(None.asInstanceOf[Option[Int]])
-////      functorLaw1a(Some(4).asInstanceOf[Option[Int]])
-////      functorLaw1a(List(1, 2, 3, 4))
-//      // functorLaw1b(Right("blah").asInstanceOf[Either[String, String]])
-//      // functorLaw1b(Left("foo").asInstanceOf[Either[String, String]])
-//      // functorLaw1a({ (_: Int) + 100 })
-//
-//      // Law 2: fmap (f . g) = fmap f . fmap g
-//      // Law 2 restated: forall x: fmap (f . g) x = fmap f (fmap g x)
-//
-//      val f = { (x: Int) => x + 1 }
-//      val g = { (x: Int) => x * 10 }
-//
-//      //      functorLaw2a(f, g, Some(4).asInstanceOf[Option[Int]])
-//      //      functorLaw2a(f, g, List(1, 2, 3, 4))
-//      //      functorLaw2b(f, g, Right(5).asInstanceOf[Either[Nothing, Int]])
-//      //      functorLaw2b(f, g, Left(6).asInstanceOf[Either[Int, Nothing]])
-//      //      functorLaw2b(f, g, { (_: Int) + 100 })
