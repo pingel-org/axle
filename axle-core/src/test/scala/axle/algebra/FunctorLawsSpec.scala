@@ -1,11 +1,21 @@
 package axle.algebra
 
-import org.scalacheck.Arbitrary
-import org.specs2.mutable.Specification
+import scala.reflect.ClassTag
+import spire.algebra._
+import spire.implicits._
+import org.specs2.ScalaCheck
+import org.specs2.mutable._
+import org.scalacheck._
+import Arbitrary._
+import Gen._
+import Prop._
+import org.typelevel.discipline.Laws
+import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
-
-import spire.algebra.Eq
-import spire.implicits.eqOps
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop
+import org.scalacheck.Prop._
+import axle.algebra.laws._
 
 class FunctorLawsSpec
   extends Specification
