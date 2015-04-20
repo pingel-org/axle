@@ -9,7 +9,13 @@ import Arbitrary._
 import Gen._
 import Prop._
 
-abstract class MonadLawsSpec[M[_]: Monad, A: Eq: Arbitrary, B: Eq: Arbitrary, C: Eq: Arbitrary](name: String)(implicit eqma: Eq[M[A]], arbma: Arbitrary[M[A]], arbamb: Arbitrary[A => M[B]], eqmb: Eq[M[B]], arbbmc: Arbitrary[B => M[C]], eqmc: Eq[M[C]])
+abstract class MonadLawsSpec[M[_]: Monad, A: Eq: Arbitrary, B: Eq: Arbitrary, C: Eq: Arbitrary](name: String)(
+  implicit eqma: Eq[M[A]],
+  arbma: Arbitrary[M[A]],
+  arbamb: Arbitrary[A => M[B]],
+  eqmb: Eq[M[B]],
+  arbbmc: Arbitrary[B => M[C]],
+  eqmc: Eq[M[C]])
   extends Specification
   with ScalaCheck {
 
@@ -40,9 +46,9 @@ object Implicits {
 
   implicit def eqEitherIntInt[L: Eq, R: Eq]: Eq[Either[L, R]] = new Eq[Either[L, R]] {
     def eqv(x: Either[L, R], y: Either[L, R]): Boolean = (x, y) match {
-      case (Left(xl), Left(yl)) if xl === yl => true
+      case (Left(xl), Left(yl)) if xl === yl   => true
       case (Right(xr), Right(yr)) if xr === yr => true
-      case _ => false
+      case _                                   => false
     }
   }
 

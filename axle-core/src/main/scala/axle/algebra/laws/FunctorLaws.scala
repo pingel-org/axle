@@ -14,8 +14,7 @@ import spire.implicits.eqOps
 
 object FunctorLaws {
 
-  def apply[F[_], A] =
-    new FunctorLaws[F, A] {}
+  def apply[F[_], A] = new FunctorLaws[F, A] {}
 }
 
 trait FunctorLaws[F[_], A] extends Laws {

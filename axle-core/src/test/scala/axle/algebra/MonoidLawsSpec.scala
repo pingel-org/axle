@@ -1,35 +1,22 @@
 package axle.algebra
 
-import spire.algebra._
-import spire.implicits._
-import org.specs2.ScalaCheck
-import org.specs2.mutable._
-import org.scalacheck._
-import Arbitrary._
-import Gen._
-import Prop._
+import org.scalacheck.Arbitrary.arbInt
+import org.specs2.mutable.Specification
+import org.typelevel.discipline.specs2.mutable.Discipline
 
-abstract class MonoidLawsSpec[A: Eq: Arbitrary](name: String, monoids: Seq[Monoid[A]])
-  extends Specification with ScalaCheck {
+import axle.algebra.laws.MonoidLaws
+import spire.algebra.AdditiveMonoid
+import spire.algebra.MultiplicativeMonoid
+import spire.implicits.IntAlgebra
 
-  lazy val genMonoid: Gen[Monoid[A]] = Gen.oneOf(monoids)
+class MonoidLawsSpec() extends Specification with Discipline {
 
-  implicit lazy val arbMonoid: Arbitrary[Monoid[A]] = Arbitrary(genMonoid)
+  //  lazy val genMonoid: Gen[Monoid[A]] = Gen.oneOf(monoids)
+  //
+  //  implicit lazy val arbMonoid: Arbitrary[Monoid[A]] = Arbitrary(genMonoid)
 
-  s"$name obey left zero" ! prop { (m: Monoid[A], x: A) =>
-    m.op(m.id, x) === x
-  }
+  checkAll("implicitly[AdditiveMonoid[Int]].additive", MonoidLaws[Int].monoidLaws(implicitly[AdditiveMonoid[Int]].additive))
 
-  s"$name obey right zero" ! prop { (m: Monoid[A], x: A) =>
-    m.op(x, m.id) === x
-  }
-
-  s"$name obey associativity" ! prop { (m: Monoid[A], x: A, y: A, z: A) =>
-    m.op(m.op(x, y), z) === m.op(x, m.op(y, z))
-  }
+  checkAll("implicitly[MultiplicativeMonoid[Int]].multiplicative", MonoidLaws[Int].monoidLaws(implicitly[MultiplicativeMonoid[Int]].multiplicative))
 
 }
-
-class IntMonoidLawsSpec extends MonoidLawsSpec("Int monoids", List(
-  implicitly[AdditiveMonoid[Int]].additive,
-  implicitly[MultiplicativeMonoid[Int]].multiplicative))
