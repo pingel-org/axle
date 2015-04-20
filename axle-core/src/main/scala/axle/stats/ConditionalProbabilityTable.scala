@@ -13,7 +13,7 @@ import spire.random.rng.Cmwc5
 
 object ConditionalProbabilityTable0 {
 
-  implicit def showCPT[A: Show: Order, N: Field: Order: Dist: Show](cpt0: ConditionalProbabilityTable0[A, N]): Show[ConditionalProbabilityTable0[A, N]] =
+  implicit def showCPT[A: Show: Order, N: Field: Order: Dist: Show]: Show[ConditionalProbabilityTable0[A, N]] =
     new Show[ConditionalProbabilityTable0[A, N]] {
 
       def text(cpt: ConditionalProbabilityTable0[A, N]): String =
