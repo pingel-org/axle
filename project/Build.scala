@@ -38,7 +38,6 @@ object AxleBuild extends Build {
       "-feature",
       "-language:higherKinds",
       "-language:implicitConversions",
-      "-language:existentials",
       "-language:postfixOps"),
 
     initialCommands in console := """
