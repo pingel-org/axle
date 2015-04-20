@@ -1,7 +1,6 @@
 
 package axle.hbase
 
-import Implicits._
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.HTable
 import org.apache.hadoop.hbase.client.HBaseAdmin

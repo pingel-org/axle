@@ -5,6 +5,7 @@ import axle.Show
 import axle.string
 import spire.algebra.Eq
 import spire.algebra.Order
+import scala.language.implicitConversions
 
 object Gold {
 

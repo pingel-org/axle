@@ -1,12 +1,10 @@
 
 package axle.hbase
 
-import Implicits._
 import scala.concurrent.duration.FiniteDuration
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.HBaseAdmin
 import org.apache.hadoop.hbase.client.HTable
-import Implicits.enrichHTable
 import org.apache.hadoop.hbase.util.Bytes
 
 case class Widget(name: String, description: String)
@@ -14,7 +12,6 @@ case class Widget(name: String, description: String)
 class WidgetDb {
 
   import HBaseConfig._
-  import Implicits._
 
   val family = "cf"
   val qualifier = "a"

@@ -9,8 +9,6 @@ import org.apache.hadoop.hbase.client.Delete
 
 class EnrichedHTable(table: HTable) {
 
-  import Implicits._
-
   def size: Long = 0L
 
   def put(row: Array[Byte], family: Array[Byte], qual: Array[Byte], value: Array[Byte]): Unit = {
