@@ -15,6 +15,7 @@ import axle.algebra.UndirectedGraph
 import axle.algebra.Vertex
 import spire.algebra.Eq
 import scala.reflect.ClassTag
+import scala.language.implicitConversions
 
 trait LinearAlgebraSyntax {
 
