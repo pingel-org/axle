@@ -236,6 +236,28 @@ package object jblas {
       def mulPointwise(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.mul(rhs)
       def divPointwise(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.div(rhs)
 
+      def zipWith(m: DoubleMatrix)(op: (Double, Double) => Double)(rhs: DoubleMatrix): DoubleMatrix = {
+        val numRows = m.getRows
+        val numColumns = m.getColumns
+        val jblas = DoubleMatrix.zeros(numRows, numColumns)
+        (0 until numRows) foreach { r =>
+          (0 until numColumns) foreach { c =>
+            jblas.put(r, c, op(m.get(r, c), rhs.get(r, c)))
+          }
+        }
+        jblas
+      }
+
+      def reduceToScalar(m: DoubleMatrix)(op: (Double, Double) => Double): Double = {
+        val numRows = m.getRows
+        val numColumns = m.getColumns
+        ((0 until numRows) flatMap { r =>
+          (0 until numColumns) map { c =>
+            m.get(r, c)
+          }
+        }).reduce(op)
+      }
+
       def concatenateHorizontally(m: DoubleMatrix)(right: DoubleMatrix): DoubleMatrix = DoubleMatrix.concatHorizontally(m, right)
       def concatenateVertically(m: DoubleMatrix)(under: DoubleMatrix): DoubleMatrix = DoubleMatrix.concatVertically(m, under)
       def solve(m: DoubleMatrix)(B: DoubleMatrix): DoubleMatrix = org.jblas.Solve.solve(m, B) // returns X, where this === A and A x X = B

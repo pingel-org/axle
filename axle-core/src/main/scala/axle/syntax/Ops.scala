@@ -67,6 +67,10 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   def mulPointwise(rhs: M) = la.mulPointwise(lhs)(rhs)
   def divPointwise(rhs: M) = la.divPointwise(lhs)(rhs)
+
+  def zipWith(op: (T, T) => T)(rhs: M): M = la.zipWith(lhs)(op)(rhs)
+  def reduceToScalar(op: (T, T) => T): T = la.reduceToScalar(lhs)(op)
+
   def concatenateHorizontally(rhs: M) = la.concatenateHorizontally(lhs)(rhs)
   def concatenateVertically(under: M) = la.concatenateVertically(lhs)(under)
   def solve(B: M) = la.solve(lhs)(B)

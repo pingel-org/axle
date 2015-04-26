@@ -1,7 +1,7 @@
 package axle
 
-import com.twitter.algebird.{Field => AlgebirdField}
-import com.twitter.algebird.{Monoid => AlgebirdMonoid}
+import com.twitter.algebird.{ Field => AlgebirdField }
+import com.twitter.algebird.{ Monoid => AlgebirdMonoid }
 import com.twitter.scalding.mathematics.Matrix
 
 import axle.algebra.Endofunctor
@@ -228,6 +228,12 @@ package object scalding {
         ???
 
       def divPointwise(m: M)(rhs: M): M =
+        ???
+
+      def reduceToScalar(m: M)(op: (T, T) => T): T =
+        ???
+
+      def zipWith(m: M)(op: (T, T) => T)(other: M): M =
         ???
 
       def concatenateHorizontally(m: M)(right: M): M =

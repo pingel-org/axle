@@ -71,6 +71,10 @@ trait LinearAlgebra[M, RowT, ColT, T] {
 
   def mulPointwise(m: M)(other: M): M
   def divPointwise(m: M)(other: M): M
+
+  def zipWith(m: M)(op: (T, T) => T)(other: M): M
+  def reduceToScalar(m: M)(op: (T, T) => T): T
+
   def concatenateHorizontally(m: M)(right: M): M
   def concatenateVertically(m: M)(under: M): M
   def solve(m: M)(B: M): M // returns X, where this === A and A x X = B

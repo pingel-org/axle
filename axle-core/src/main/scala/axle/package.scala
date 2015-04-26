@@ -74,13 +74,13 @@ import scala.language.implicitConversions
 
 package object axle {
 
-  def Sigma[N: AdditiveMonoid] = Σ[N] _
+//  val Sigma = Σ _
+//
+//  val Pi = Π _
 
-  def Pi[N: MultiplicativeMonoid] = Π[N] _
+  val ∀ = forall
 
-  def ∀[A, B: Bool: ClassTag, F[_]: Functor: Aggregatable] = forall[A, B, F] _
-
-  def ∃[A, B: Bool: ClassTag, F[_]: Functor: Aggregatable] = thereexists[A, B, F] _
+  val ∃ = thereexists
 
   /**
    * Englishman John Wallis (1616 - 1703) approximation of π in 1655

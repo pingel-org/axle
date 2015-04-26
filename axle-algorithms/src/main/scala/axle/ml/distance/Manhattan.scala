@@ -3,16 +3,22 @@ package axle.ml.distance
 import scala.math.abs
 
 import axle.algebra.LinearAlgebra
-import axle.syntax.linearalgebra._
-import axle.syntax.endofunctor._
+import axle.syntax.endofunctor.endofunctorOps
+import axle.syntax.linearalgebra.matrixOps
+import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
-import spire.implicits._
+import spire.implicits.additiveGroupOps
 
-case class Manhattan[M](implicit la: LinearAlgebra[M, Int, Int, Double])
-  extends MetricSpace[M, Double] {
+case class Manhattan[M, R, C, D](implicit la: LinearAlgebra[M, R, C, D], subSpace: MetricSpace[D, D], add: AdditiveMonoid[D])
+  extends MetricSpace[M, D] {
 
-  implicit val ring = la.ring
-  implicit val e = la.endofunctor // TODO resolve implicitly
-  
-  def distance(r1: M, r2: M): Double = (r1 - r2).map(abs _).toList.sum
+  //  implicit val ring = la.ring
+  //  implicit val e = la.endofunctor // TODO resolve implicitly
+
+  def distance(r1: M, r2: M): D = {
+    val subDistances = r1.zipWith(subSpace.distance)(r2)
+    subDistances.reduceToScalar(add.additive.op _)
+  }
+  // (r1 - r2).map(abs _).toList.sum
+
 }
