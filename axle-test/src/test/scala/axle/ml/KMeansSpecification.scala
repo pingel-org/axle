@@ -8,11 +8,14 @@ import scala.util.Random.nextDouble
 import scala.util.Random.nextGaussian
 import scala.util.Random.shuffle
 
+import org.jblas.DoubleMatrix
 import org.specs2.mutable.Specification
 
-import axle.jblas._
+import axle.jblas.linearAlgebraDoubleMatrix
 import axle.ml.distance.Euclidean
 import spire.algebra.Eq
+import spire.implicits.DoubleAlgebra
+import spire.implicits.IntAlgebra
 
 class KMeansSpecification
   extends Specification {
@@ -35,7 +38,7 @@ class KMeansSpecification
           (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
       //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
-      implicit val space = Euclidean(2)
+      implicit val space = Euclidean[DoubleMatrix, Int, Int, Double](2)
 
       implicit val fooEq = new Eq[Foo] {
         def eqv(x: Foo, y: Foo): Boolean = x equals y
@@ -45,7 +48,7 @@ class KMeansSpecification
         data,
         2,
         (p: Foo) => Seq(p.x, p.y),
-        (PCAFeatureNormalizer[org.jblas.DoubleMatrix] _).curried.apply(0.98),
+        (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98),
         (features: Seq[Double]) => Foo(features(0), features(1)),
         K = 2,
         100)
