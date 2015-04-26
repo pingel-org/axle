@@ -1,13 +1,13 @@
 package axle.ml.distance
 
-import scala.math.sqrt
-
 import axle.algebra.LinearAlgebra
-import axle.syntax.linearalgebra._
+import axle.algebra.Zero
+import axle.syntax.linearalgebra.matrixOps
 import spire.algebra.Field
+import spire.algebra.MultiplicativeMonoid
+import spire.algebra.NRoot
 import spire.algebra.NormedVectorSpace
-import spire.implicits.DoubleAlgebra
-import spire.implicits.IntAlgebra
+import spire.implicits.nrootOps
 
 /**
  * Euclidean space
@@ -18,19 +18,20 @@ import spire.implicits.IntAlgebra
  *
  */
 
-case class Euclidian[M](n: Int)(implicit la: LinearAlgebra[M, Int, Int, Double])
-  extends NormedVectorSpace[M, Double] {
+case class Euclidian[M, R: Zero: MultiplicativeMonoid, C: Zero, V: Field: NRoot](n: C)(
+  implicit la: LinearAlgebra[M, R, C, V])
+  extends NormedVectorSpace[M, V] {
 
   def negate(x: M): M = la.negate(x)
 
-  def zero: M = la.zeros(1, n)
+  def zero: M = la.zeros(implicitly[MultiplicativeMonoid[R]].one, n)
 
   def plus(x: M, y: M): M = la.ring.plus(x, y)
 
-  def timesl(r: Double, v: M): M = la.module.timesl(r, v)
+  def timesl(r: V, v: M): M = la.module.timesl(r, v)
 
-  def scalar: Field[Double] = DoubleAlgebra
+  def scalar: Field[V] = Field[V]
 
-  def norm(r: M): Double = sqrt(r.mulPointwise(r).rowSums.scalar)
+  def norm(r: M): V = r.mulPointwise(r).rowSums.scalar.sqrt
 
 }
