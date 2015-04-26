@@ -1,11 +1,11 @@
 package axle.ml.distance
 
 import axle.algebra.LinearAlgebra
+import axle.algebra.Zero
 import axle.syntax.linearalgebra.matrixOps
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
-import spire.implicits.DoubleAlgebra
-import spire.implicits.IntAlgebra
+import spire.algebra.MultiplicativeMonoid
 import spire.implicits.moduleOps
 
 /**
@@ -20,22 +20,23 @@ import spire.implicits.moduleOps
  *
  */
 
-case class Cosine[M](n: Int)(implicit la: LinearAlgebra[M, Int, Int, Double])
-  extends InnerProductSpace[M, Double] {
+case class Cosine[M, R: Zero: MultiplicativeMonoid, C: Zero, V: Field](n: C)(
+  implicit la: LinearAlgebra[M, R, C, V])
+  extends InnerProductSpace[M, V] {
 
   implicit val ring = la.ring
   implicit val module = la.module
 
   def negate(x: M): M = x.negate
 
-  def zero: M = la.zeros(1, n)
+  def zero: M = la.zeros(implicitly[MultiplicativeMonoid[R]].one, n)
 
   def plus(x: M, y: M): M = la.ring.plus(x, y)
 
-  def timesl(r: Double, v: M): M = v :* r
+  def timesl(r: V, v: M): M = v :* r
 
-  def scalar: Field[Double] = DoubleAlgebra
+  def scalar: Field[V] = Field[V]
 
-  def dot(v: M, w: M): Double = v.mulPointwise(w).rowSums.scalar
+  def dot(v: M, w: M): V = v.mulPointwise(w).rowSums.scalar
 
 }
