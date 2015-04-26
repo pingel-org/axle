@@ -2,7 +2,7 @@ package axle
 
 object ℘ {
 
-  def apply[E](all: IndexedSeq[E]): IndexedPowerSet[E] = new IndexedPowerSet[E](all)
+  def apply[E](all: IndexedSeq[E]): IndexedPowerSet[E] = IndexedPowerSet[E](all)
 }
 
 /**
