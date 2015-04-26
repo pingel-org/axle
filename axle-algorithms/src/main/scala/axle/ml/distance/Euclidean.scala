@@ -18,7 +18,7 @@ import spire.implicits.nrootOps
  *
  */
 
-case class Euclidian[M, R: Zero: MultiplicativeMonoid, C: Zero, V: Field: NRoot](n: C)(
+case class Euclidean[M, R: Zero: MultiplicativeMonoid, C: Zero, V: Field: NRoot](n: C)(
   implicit la: LinearAlgebra[M, R, C, V])
   extends NormedVectorSpace[M, V] {
 

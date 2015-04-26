@@ -11,7 +11,7 @@ import scala.util.Random.shuffle
 import org.specs2.mutable.Specification
 
 import axle.jblas._
-import axle.ml.distance.Euclidian
+import axle.ml.distance.Euclidean
 import spire.algebra.Eq
 
 class KMeansSpecification
@@ -35,7 +35,7 @@ class KMeansSpecification
           (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
       //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
-      implicit val space = Euclidian(2)
+      implicit val space = Euclidean(2)
 
       implicit val fooEq = new Eq[Foo] {
         def eqv(x: Foo, y: Foo): Boolean = x equals y
