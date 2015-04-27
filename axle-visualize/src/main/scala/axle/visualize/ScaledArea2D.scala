@@ -93,11 +93,10 @@ case class ScaledArea2D[X, Y](
     fontMetrics: FontMetrics,
     s: String,
     p: Point2D[X, Y],
-    angle: UnittedQuantity[Angle, Double])(
-      implicit angleMeta: AngleConverter[Double]): Unit = {
+    angle: UnittedQuantity[Angle, Double]): Unit = {
     if (nonZeroArea) {
       val fp = framePoint(p)
-      val a = (angle in angleMeta.radian).magnitude
+      val a = (angle in angleDouble.radian).magnitude
       g2d.translate(fp.x, fp.y + fontMetrics.getHeight)
       g2d.rotate(a)
       g2d.drawString(s, 0, 0)

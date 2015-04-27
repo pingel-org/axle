@@ -9,6 +9,7 @@ import axle.quanta.AngleConverter
 import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import spire.implicits.DoubleAlgebra
+import axle.visualize.angleDouble
 
 case class Text(
   text: String,
@@ -17,10 +18,9 @@ case class Text(
   y: Int,
   centered: Boolean = true,
   color: Color = Color.black,
-  angle: Option[UnittedQuantity[Angle, Double]] = None)(
-    implicit angleMeta: AngleConverter[Double]) extends Paintable {
+  angle: Option[UnittedQuantity[Angle, Double]] = None) extends Paintable {
 
-  val angleRadOpt = angle.map(a => (a in angleMeta.radian).magnitude)
+  val angleRadOpt = angle.map(a => (a in angleDouble.radian).magnitude)
 
   def paint(g2d: Graphics2D): Unit = {
 

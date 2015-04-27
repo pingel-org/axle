@@ -26,25 +26,12 @@ class BarChartSpec extends Specification {
         "banana" -> 77.9,
         "coconut" -> 10.1)
 
-      // The Modules conflict with the Zero needed by the DataView, so we have to create the
-      // angleMeta with all arguments passed explicitly.
-      val angleMeta = Angle.converterGraph[Double, JungDirectedGraph](
-        Field[Double],
-        Eq[Double],
-        DirectedGraph[JungDirectedGraph],
-        axle.algebra.modules.doubleDoubleModule,
-        axle.algebra.modules.doubleRationalModule)
-
-      //      Plottable[Double]
-      //      implicitly[AdditiveMonoid[Double]]
-      //      Zero.addemZero[Double] // (spire.implicits.DoubleAlgebra.additive)
-      //      Order[Double]
-      //      DataView[String, Double, Map[String, Double]]
+      import axle.orderStrings
 
       val chart = BarChart[String, Double, Map[String, Double]](
         sales,
         xAxis = 0d,
-        labelAngle = 36d *: angleMeta.degree,
+        labelAngle = 36d *: angleDouble.degree,
         title = Some("fruit sales"))
 
       1 must be equalTo 1
@@ -92,16 +79,12 @@ class BarChartSpec extends Specification {
       //      Module[Double, Double]
       //      Module[Double, Rational]
 
-      import axle.algebra.modules.doubleDoubleModule
-      import axle.algebra.modules.doubleRationalModule
-      val ac = Angle.converterGraph[Double, JungDirectedGraph]
-      import ac.degree
-
+      import spire.implicits.IntAlgebra
       val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
         distribution,
         xAxis = Rational(0),
         title = Some("d6 + d6"),
-        labelAngle = 36d *: degree,
+        labelAngle = 36d *: angleDouble.degree,
         colors = List(blue),
         drawKey = false)
 

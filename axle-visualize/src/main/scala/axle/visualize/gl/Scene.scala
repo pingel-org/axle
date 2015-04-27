@@ -26,7 +26,6 @@ import spire.implicits.moduleOps
 
 abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance])(
   implicit angleMetaFloat: AngleConverter[Float],
-  angleMetaDouble: AngleConverter[Double],
   distanceMetaFloat: DistanceConverter[Float],
   distanceMetaDouble: DistanceConverter[Double]) {
 

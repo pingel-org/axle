@@ -25,8 +25,7 @@ import spire.algebra.Order
 
 case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag](
   chart: BarChart[S, Y, D])(
-    implicit yls: LengthSpace[Y, _],
-    angleMeta: AngleConverter[Double])
+    implicit yls: LengthSpace[Y, _])
   extends JPanel
   with Fed[D] {
 
@@ -42,7 +41,7 @@ case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
   val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
   val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleMeta.degree)))
+  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
 
   val keyOpt = if (drawKey) {
     Some(BarChartKey(chart, normalFont, colorStream))

@@ -11,6 +11,7 @@ import axle.quanta.UnittedQuantity
 import axle.visualize.Paintable
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D
+import axle.visualize.angleDouble
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
 
@@ -20,8 +21,7 @@ case class XTics[X, Y](
   font: Font,
   fDrawLines: Boolean = true,
   angle: UnittedQuantity[Angle, Double],
-  color: Color = Color.black)(
-    implicit angleMeta: AngleConverter[Double]) extends Paintable {
+  color: Color = Color.black) extends Paintable {
 
   def paint(g2d: Graphics2D): Unit = {
     g2d.setColor(color)
@@ -32,7 +32,7 @@ case class XTics[X, Y](
 
   import scaledArea._
 
-  val zeroDegrees = 0d *: angleMeta.degree
+  val zeroDegrees = 0d *: angleDouble.degree
 
   def drawXTic(g2d: Graphics2D, fontMetrics: FontMetrics, xTic: (X, String), fDrawLine: Boolean, angle: UnittedQuantity[Angle, Double] = zeroDegrees): Unit = {
 

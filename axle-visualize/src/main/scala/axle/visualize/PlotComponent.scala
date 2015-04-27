@@ -22,8 +22,7 @@ import spire.algebra.Eq
 
 case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
   plot: Plot[X, Y, D])(
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleMeta: AngleConverter[Double])
+    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _])
   extends JPanel
   with Fed[List[(String, D)]] {
 
@@ -36,7 +35,7 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleMeta.degree)))
+  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
 

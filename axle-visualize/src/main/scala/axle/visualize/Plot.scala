@@ -12,14 +12,12 @@ import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.quanta.AngleConverter
 import spire.algebra.Eq
 
 object Plot {
 
   implicit def drawPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _],
-    angleMeta: AngleConverter[Double]): Draw[Plot[X, Y, D]] =
+    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _]): Draw[Plot[X, Y, D]] =
     new Draw[Plot[X, Y, D]] {
 
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)

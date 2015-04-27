@@ -34,7 +34,7 @@ case class KMeansVisualization[D, F[_], M](
   pointDiameter: Int = 10,
   fontName: String = "Courier New",
   fontSize: Int = 12)(
-    implicit la: LinearAlgebra[M, Int, Int, Double], angleMeta: AngleConverter[Double]) extends JPanel {
+    implicit la: LinearAlgebra[M, Int, Int, Double]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 
@@ -56,7 +56,7 @@ case class KMeansVisualization[D, F[_], M](
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
 
   implicit val doubleTics = Tics[Double]
-  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0d *: angleMeta.degree, black)
+  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0d *: angleDouble.degree, black)
   val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), normalFont, black)
 
   val boundingRectangle = Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black))

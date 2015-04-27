@@ -23,7 +23,7 @@ import spire.algebra.Order
 object BarChart {
 
   implicit def drawBarChart[S: Show, Y: Plottable: Order: Tics: Eq, D: ClassTag](
-    implicit yls: LengthSpace[Y, _], angleMeta: AngleConverter[Double]): Draw[BarChart[S, Y, D]] =
+    implicit yls: LengthSpace[Y, _]): Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
       def component(barChart: BarChart[S, Y, D]) = BarChartComponent(barChart)
     }
@@ -48,6 +48,6 @@ case class BarChart[S: Show, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  labelAngle: UnittedQuantity[Angle, Double], //  = 36d *: Angle.metadata[Double, DG].degree // TODO default labelAngle
+  labelAngle: UnittedQuantity[Angle, Double] = 36d *: angleDouble.degree,
   colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
     implicit val dataView: DataView[S, Y, D])

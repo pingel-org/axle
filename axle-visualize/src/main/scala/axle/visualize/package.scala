@@ -8,22 +8,35 @@ import java.io.File
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
+
 import axle.algebra.DirectedGraph
 import axle.jung.JungDirectedGraph
 import axle.jung.JungUndirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.quanta.Time
+import axle.quanta.Angle
 import axle.quanta.TimeConverter
 import axle.quanta.UnittedQuantity
 import axle.visualize.Draw
 import axle.visualize.Fed
 import axle.visualize.FrameRepaintingActor
+
 import javax.imageio.ImageIO
+
 import spire.algebra.Eq
 import spire.algebra.Field
+import spire.implicits.DoubleAlgebra
 
 package object visualize {
+
+  // angleDouble is here for visualizations that take an angle.  For example: BarChart's label angle
+  implicit val angleDouble = Angle.converterGraph[Double, JungDirectedGraph](
+    Field[Double],
+    Eq[Double],
+    DirectedGraph[JungDirectedGraph],
+    axle.algebra.modules.doubleDoubleModule,
+    axle.algebra.modules.doubleRationalModule)
 
   def draw[T: Draw](t: T): Unit = {
     val draw = Draw[T]

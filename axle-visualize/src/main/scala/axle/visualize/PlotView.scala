@@ -19,8 +19,7 @@ import spire.algebra.Eq
 
 case class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
   implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],
-  yZero: Zero[Y], yts: Tics[Y], yEq: Eq[Y], yLength: LengthSpace[Y, _],
-  angleMeta: AngleConverter[Double]) {
+  yZero: Zero[Y], yts: Tics[Y], yEq: Eq[Y], yLength: LengthSpace[Y, _]) {
 
   import plot._
 
@@ -45,7 +44,7 @@ case class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normal
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0 *: angleMeta.degree, black)
+  val xTics = XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0d *: angleDouble.degree, black)
   val yTics = YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
 
   val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorStream, pointDiameter, connect)

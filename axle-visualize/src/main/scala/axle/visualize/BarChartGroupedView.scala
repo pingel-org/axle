@@ -26,7 +26,7 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
   data: D,
   colorStream: Stream[Color],
   normalFont: Font)(
-    implicit yls: LengthSpace[Y, _], angleMeta: AngleConverter[Double]) {
+    implicit yls: LengthSpace[Y, _]) {
 
   import chart._
 
@@ -61,7 +61,7 @@ case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag
     groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
     normalFont,
     false,
-    36d *: angleMeta.degree,
+    36d *: angleDouble.degree,
     black)
 
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFont, black)
