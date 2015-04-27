@@ -26,13 +26,13 @@ object DataView {
 
   @inline final def apply[X, Y, D](implicit ev: DataView[X, Y, D]) = ev
 
-  implicit def mapDataView[X, Y: Plottable: Zero: Order]: DataView[X, Y, Map[X, Y]] =
+  implicit def mapDataView[X: Order, Y: Plottable: Zero: Order]: DataView[X, Y, Map[X, Y]] =
     new DataView[X, Y, Map[X, Y]] {
 
       val yPlottable = Plottable[Y]
       val yZero = Zero[Y]
 
-      def keys(d: Map[X, Y]): Traversable[X] = d.keys
+      def keys(d: Map[X, Y]): Traversable[X] = d.keys.toList.sorted
 
       def valueOf(d: Map[X, Y], x: X): Y = d(x)
 
@@ -46,13 +46,13 @@ object DataView {
 
     }
 
-  implicit def distribution0DataView[X, Y: Plottable: Zero: Order]: DataView[X, Y, Distribution0[X, Y]] =
+  implicit def distribution0DataView[X: Order, Y: Plottable: Zero: Order]: DataView[X, Y, Distribution0[X, Y]] =
     new DataView[X, Y, Distribution0[X, Y]] {
 
       val yPlottable = Plottable[Y]
       val yZero = Zero[Y]
 
-      def keys(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys
+      def keys(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys.toList.sorted
 
       def valueOf(d: Distribution0[X, Y], x: X): Y = d.probabilityOf(x)
 
