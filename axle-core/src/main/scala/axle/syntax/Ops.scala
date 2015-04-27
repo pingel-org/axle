@@ -185,6 +185,8 @@ final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP,
 
   def predecessors(v: Vertex[VP]) = ev.predecessors(dg, v)
 
+  def successors(v: Vertex[VP]) = ev.successors(dg, v)
+
   def descendants(v: Vertex[VP]) = ev.descendants(dg, v)
 
   def descendantsIntersectsSet(v: Vertex[VP], s: Set[Vertex[VP]]) = ev.descendantsIntersectsSet(dg, v, s)
