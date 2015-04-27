@@ -1,11 +1,12 @@
 
 package axle.jung
 
+import org.specs2.mutable.Specification
+
 import axle.algebra.DirectedGraph
 import axle.algebra.Vertex
-import org.specs2.mutable._
-import spire.math._
-import spire.implicits._
+import axle.syntax.directedgraph.directedGraphOps
+import spire.implicits.StringOrder
 
 class DirectedGraphSpec extends Specification {
 
@@ -20,7 +21,7 @@ class DirectedGraphSpec extends Specification {
           case _                       => Nil
         })
 
-      jdg.size(g) must be equalTo (4)
+      g.size must be equalTo 4
     }
   }
 
