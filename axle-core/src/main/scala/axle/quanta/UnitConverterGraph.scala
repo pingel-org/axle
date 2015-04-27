@@ -34,7 +34,7 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
         })
       })
 
-  private[this] val conversionGraph = cgn(units, links)
+  val conversionGraph = cgn(units, links)
 
   private[this] def vertex(
     cg: DG[UnitOfMeasurement[Q], N => N],
