@@ -74,9 +74,9 @@ import scala.language.implicitConversions
 
 package object axle {
 
-//  val Sigma = Σ _
-//
-//  val Pi = Π _
+  //  val Sigma = Σ _
+  //
+  //  val Pi = Π _
 
   val ∀ = forall
 
@@ -171,6 +171,10 @@ package object axle {
   def square[N: Field](x: N): N = x ** 2
 
   def √[N: NRoot](x: N): N = x.sqrt
+
+  implicit val charEq = new Eq[Char] {
+    def eqv(x: Char, y: Char): Boolean = x equals y
+  }
 
   implicit val stringEq = new Eq[String] {
     def eqv(x: String, y: String): Boolean = x equals y
