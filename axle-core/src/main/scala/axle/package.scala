@@ -111,6 +111,8 @@ package object axle {
 
   implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
 
+  implicit val orderChars = Order.from((c1: Char, c2: Char) => c1.compare(c2))
+  
   implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
 
   // See spire.syntax.Syntax DoubleOrder
@@ -172,17 +174,17 @@ package object axle {
 
   def √[N: NRoot](x: N): N = x.sqrt
 
-  implicit val charEq = new Eq[Char] {
-    def eqv(x: Char, y: Char): Boolean = x equals y
-  }
-
-  implicit val stringEq = new Eq[String] {
-    def eqv(x: String, y: String): Boolean = x equals y
-  }
-
-  implicit val boolEq = new Eq[Boolean] {
-    def eqv(x: Boolean, y: Boolean): Boolean = x equals y
-  }
+//  implicit val charEq = new Eq[Char] {
+//    def eqv(x: Char, y: Char): Boolean = x equals y
+//  }
+//
+//  implicit val stringEq = new Eq[String] {
+//    def eqv(x: String, y: String): Boolean = x equals y
+//  }
+//
+//  implicit val boolEq = new Eq[Boolean] {
+//    def eqv(x: Boolean, y: Boolean): Boolean = x equals y
+//  }
 
   implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
     def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size

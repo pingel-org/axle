@@ -12,6 +12,7 @@ import axle.syntax.linearalgebra._
 import axle.syntax.functor._
 import axle.syntax.finite._
 import axle.syntax.mapfrom._
+import axle.syntax.aggregatable._
 import axle.syntax.mapreducible._
 import axle.syntax.setfrom._
 import spire.algebra._
@@ -45,7 +46,7 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
 
   val width = ceil(log10(data.size)).toInt
 
-  val formatNumber = (n: Double) => ("%" + width + "d").format(n)
+  val formatNumber = (n: Int) => ("%" + width + "d").format(n)
 
   lazy val rowSums = counts.rowSums
   lazy val columnSums = counts.columnSums
@@ -59,9 +60,9 @@ object ConfusionMatrix {
 
       def text(cm: ConfusionMatrix[T, CLASS, L, F, M]): String = {
         (cm.labelList.zipWithIndex.map({
-          case (label, r) => ((0 until cm.counts.columns).map(c => cm.formatNumber(cm.counts.get(r, c))).mkString(" ") + " : " + cm.formatNumber(cm.rowSums.get(r, 0)) + " " + label + "\n")
+          case (label, r) => ((0 until cm.counts.columns).map(c => cm.formatNumber(cm.counts.get(r, c).toInt)).mkString(" ") + " : " + cm.formatNumber(cm.rowSums.get(r, 0).toInt) + " " + label + "\n")
         }).mkString("")) + "\n" +
-          (0 until cm.counts.columns).map(c => cm.formatNumber(cm.columnSums.get(0, c))).mkString(" ") + "\n"
+          (0 until cm.counts.columns).map(c => cm.formatNumber(cm.columnSums.get(0, c).toInt)).mkString(" ") + "\n"
       }
 
     }

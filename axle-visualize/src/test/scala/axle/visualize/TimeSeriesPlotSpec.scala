@@ -7,17 +7,20 @@ import scala.util.Random
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
-import axle.algebra.Plottable
-import axle.joda._
+import axle.joda.dateTimeOrder
+import axle.joda.dateTimeOrdering
+import axle.joda.dateTimePlottable
+import axle.joda.dateTimeZero
+import axle.jung.JungDirectedGraph
+import axle.jung.JungDirectedGraph.directedGraphJung
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitOfMeasurement
 import axle.stats.H
 import axle.stats.coin
+
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 import spire.math.Rational
-import spire.implicits._
 
 class TimeSeriesPlotSpec extends Specification {
 
@@ -49,11 +52,10 @@ class TimeSeriesPlotSpec extends Specification {
 
   def t2(): Unit = {
 
-    import axle.jung.JungDirectedGraph
-    import axle.jung.JungDirectedGraph.directedGraphJung
-
     type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
 
+    import axle.jung.JungDirectedGraph
+    //import axle.jung.JungDirectedGraph.directedGraphJung
     implicit val id = Information.converterGraph[Double, JungDirectedGraph]
 
     val hm: D =
@@ -63,7 +65,7 @@ class TimeSeriesPlotSpec extends Specification {
     implicit val bitDouble = id.bit
     //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
 
-    val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
+    val plot = Plot[Rational, UnittedQuantity[Information, Double], D](
       List(("h", hm)),
       connect = true,
       drawKey = false,
@@ -73,6 +75,9 @@ class TimeSeriesPlotSpec extends Specification {
       yAxisLabel = Some("H"),
       title = Some("Entropy"))
 
+    val d = Draw[Plot[Rational, UnittedQuantity[Information, Double], D]]
+
+    // png(plot, "")
   }
 
 }

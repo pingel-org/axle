@@ -36,6 +36,11 @@ object Aggregatable {
       as.aggregate(zeroValue)(seqOp, combOp)
   }
 
+  implicit def aggregatableVector = new Aggregatable[Vector] {
+    def aggregate[A, B: ClassTag](as: Vector[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+      as.aggregate(zeroValue)(seqOp, combOp)
+  }
+
   implicit def aggregatableParSeq = new Aggregatable[ParSeq] {
     def aggregate[A, B: ClassTag](ps: ParSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
       ps.aggregate(zeroValue)(seqOp, combOp)

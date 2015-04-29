@@ -47,7 +47,7 @@ object Mutator extends Poly1 {
   implicit def caseTuple[T] = at[(T, T)](t => if (nextDouble < 0.03) t._2 else t._1)
 }
 
-case class GeneticAlgorithmC[G <: HList, Z <: HList](
+case class GeneticAlgorithm[G <: HList, Z <: HList](
   populationSize: Int = 1000,
   numGenerations: Int = 100)(
     implicit species: Species[G],
