@@ -92,6 +92,15 @@ package object visualize {
     }
   }
 
+  import axle.ml.KMeans
+  import axle.algebra.LinearAlgebra
+
+  implicit def drawKMeansClasifier[T, F[_], M](implicit la: LinearAlgebra[M, Int, Int, Double]): Draw[KMeans[T, F, M]] =
+    new Draw[KMeans[T, F, M]] {
+      def component(kmc: KMeans[T, F, M]) = 
+        KMeansVisualization[T, F, M](kmc)
+    }
+
   /**
    * component2file
    *
