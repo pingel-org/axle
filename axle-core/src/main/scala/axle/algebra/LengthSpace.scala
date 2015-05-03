@@ -46,6 +46,26 @@ object LengthSpace {
 
   @inline final def apply[V, R](implicit ev: LengthSpace[V, R]): LengthSpace[V, R] = ev
 
+  // TODO move uqDoubleLengthSpace to UnittedQuantity.scala
+  // it also seems like this wrapped lengthspace could be generalized
+  import axle.quanta.UnittedQuantity
+  import axle.quanta.UnitConverter
+  import spire.algebra.MultiplicativeMonoid
+  import spire.algebra.Eq
+
+  implicit def uqDoubleLengthSpace[Q, V: MultiplicativeMonoid: Eq, R](implicit vrls: LengthSpace[V, R], uc: UnitConverter[Q, V]): LengthSpace[UnittedQuantity[Q, V], R] =
+    new DoubleAlgebra with LengthSpace[UnittedQuantity[Q, V], R] {
+
+      def onPath(left: UnittedQuantity[Q, V], right: UnittedQuantity[Q, V], p: Double): UnittedQuantity[Q, V] =
+        UnittedQuantity(vrls.onPath(left.magnitude, (right in left.unit).magnitude, p), left.unit)
+
+      def portion(left: UnittedQuantity[Q, V], v: UnittedQuantity[Q, V], right: UnittedQuantity[Q, V]): Double =
+        vrls.portion(left.magnitude, (v in left.unit).magnitude, (right in right.unit).magnitude)
+
+      def distance(v: UnittedQuantity[Q, V], w: UnittedQuantity[Q, V]): R =
+        vrls.distance(v.magnitude, (w in v.unit).magnitude)
+    }
+
   implicit val doubleDoubleLengthSpace: LengthSpace[Double, Double] =
     new DoubleAlgebra with LengthSpace[Double, Double] {
 
