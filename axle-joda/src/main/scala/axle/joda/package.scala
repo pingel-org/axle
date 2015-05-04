@@ -11,7 +11,7 @@ import axle.algebra.LengthSpace
 
 import org.joda.time.DateTime
 import org.joda.time.Duration
-import org.joda.time.{Seconds, Minutes, Hours, Days, Weeks}
+import org.joda.time.{ Seconds, Minutes, Hours, Days, Weeks }
 
 package object joda {
 
@@ -27,13 +27,13 @@ package object joda {
 
   implicit val dateTimeOrdering = spire.compat.ordering(dateTimeOrder)
 
-  trait JodaDateTimeEq extends Eq[DateTime] {
+  implicit def dateTimeEq: Eq[DateTime] = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }
 
   implicit val dateTimePlottable: Plottable[DateTime] = new Plottable[DateTime] {}
 
-  trait DateTimeTics extends Tics[DateTime] {
+  implicit def dateTimeTics: Tics[DateTime] = new Tics[DateTime] {
 
     // TODO: bigger and smaller time-scales
     def step(duration: Duration): (DateTime => DateTime, String) =
@@ -74,14 +74,15 @@ package object joda {
 
   }
 
-  trait DateTimeDurationLengthSpace extends LengthSpace[DateTime, Duration] {
+  implicit def dateTimeDurationLengthSpace: LengthSpace[DateTime, Duration] =
+    new LengthSpace[DateTime, Duration] {
 
-    def distance(v: DateTime, w: DateTime): Duration = new Duration(v, w)
+      def distance(v: DateTime, w: DateTime): Duration = new Duration(v, w)
 
-    def onPath(left: DateTime, right: DateTime, p: Double): DateTime = left.plusMillis(((right.getMillis - left.getMillis).toDouble * p).toInt)
+      def onPath(left: DateTime, right: DateTime, p: Double): DateTime = left.plusMillis(((right.getMillis - left.getMillis).toDouble * p).toInt)
 
-    def portion(left: DateTime, v: DateTime, right: DateTime): Double = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
+      def portion(left: DateTime, v: DateTime, right: DateTime): Double = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
 
-  }
+    }
 
 }
