@@ -112,7 +112,7 @@ package object axle {
   implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
 
   implicit val orderChars = Order.from((c1: Char, c2: Char) => c1.compare(c2))
-  
+
   implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
 
   // See spire.syntax.Syntax DoubleOrder
