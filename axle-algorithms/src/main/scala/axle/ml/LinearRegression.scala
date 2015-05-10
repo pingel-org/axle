@@ -14,7 +14,7 @@ case class LinearRegression[D, M](
   iterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double]) {
 
   implicit val ring = la.ring
-  
+
   implicit val module = la.module
 
   val inputX = la.matrix(
@@ -31,8 +31,8 @@ case class LinearRegression[D, M](
   val objectiveNormalizer = LinearFeatureNormalizer(y)
 
   val θ0 = la.ones(X.columns, 1)
-  
-  val (θ, errLog) = gradientDescent(X, objectiveNormalizer.normalizedData, θ0, α, iterations)
+
+  val (θ, errorLogReversed) = gradientDescent(X, objectiveNormalizer.normalizedData, θ0, α, iterations)
 
   def normalEquation(X: M, y: M) = (X.t * X).inv * X.t * y
 
@@ -52,12 +52,15 @@ case class LinearRegression[D, M](
       (θiErrLog: (M, List[Double]), i: Int) => {
         val (θi, errLog) = θiErrLog
         val errMatrix = dθ(X, y, θi)
-        val errTotal = (0 until errMatrix.rows).map(errMatrix.get(_, 0)).sum
-        (la.ring.minus(θi, (errMatrix :* α)), errTotal :: errLog)
+        val error = (0 until errMatrix.rows).map(errMatrix.get(_, 0)).sum
+        (la.ring.minus(θi, (errMatrix :* α)), error :: errLog)
       })
 
-  def errTree = new TreeMap[Int, Double]() ++
-    (0 until errLog.reverse.length).map(j => j -> errLog(j)).toMap
+  def errTree = {
+    val errorLog = errorLogReversed.reverse.toVector
+    new TreeMap[Int, Double]() ++
+      (0 until errorLog.length).map(j => j -> errorLog(j)).toMap
+  }
 
   def estimate(observation: D): Double = {
     val scaledX = la.ones(1, 1) +|+ featureNormalizer(featureExtractor(observation))
