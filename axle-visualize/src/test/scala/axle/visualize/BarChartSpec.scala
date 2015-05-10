@@ -53,6 +53,9 @@ class BarChartSpec extends Specification {
         ("coconut", 2011) -> 88.0,
         ("coconut", 2012) -> 10.1)
 
+      import axle.orderStrings
+      import spire.implicits.IntAlgebra
+
       val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
         sales,
         xAxis = 0d,

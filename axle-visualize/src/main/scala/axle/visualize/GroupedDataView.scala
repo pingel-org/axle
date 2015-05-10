@@ -28,18 +28,21 @@ trait GroupedDataView[G, S, Y, D] {
 object GroupedDataView {
 
   @inline final def apply[G, S, Y, D](implicit ev: GroupedDataView[G, S, Y, D]): GroupedDataView[G, S, Y, D] = ev
-  
-  implicit def mapGroupedDataView[G, S, Y: Plottable: Zero: Order]: GroupedDataView[G, S, Y, Map[(G, S), Y]] =
+
+  implicit def mapGroupedDataView[G: Order, S: Order, Y: Plottable: Zero: Order]: GroupedDataView[G, S, Y, Map[(G, S), Y]] =
     new GroupedDataView[G, S, Y, Map[(G, S), Y]] {
 
       val yZero = Zero[Y]
       val yPlottable = Plottable[Y]
 
-      def groups(d: Map[(G, S), Y]): Traversable[G] = d.keys.toList.map(_._1) // TODO: .sorted. cache
+      def groups(d: Map[(G, S), Y]): Traversable[G] =
+        d.keys.map(_._1).toSet.toList.sorted // TODO cache
 
-      def slices(d: Map[(G, S), Y]): Traversable[S] = d.keys.toList.map(_._2) // TODO: .sorted. cache
+      def slices(d: Map[(G, S), Y]): Traversable[S] =
+        d.keys.map(_._2).toSet.toList.sorted // TODO cache
 
-      def valueOf(d: Map[(G, S), Y], gs: (G, S)): Y = d.apply(gs)
+      def valueOf(d: Map[(G, S), Y], gs: (G, S)): Y =
+        d.get(gs).getOrElse(yZero.zero)
 
       def yRange(d: Map[(G, S), Y]): (Y, Y) = {
 
