@@ -25,17 +25,16 @@ import spire.implicits.eqOps
  *
  */
 
-case class Levenshtein[E: Eq: ClassTag, M, I: Ring, D: Order: Field, S[_]]()(
-  implicit la: LinearAlgebra[M, I, I, D],
+case class Levenshtein[E: Eq: ClassTag, M, I: Ring : Order: Field, S[_]]()(
+  implicit la: LinearAlgebra[M, I, I, I],
   idx: Indexed[S, I],
   finite: Finite[S, I])
-  extends MetricSpace[S[E], D] {
+  extends MetricSpace[S[E], I] {
 
-  def distance(s1: S[E], s2: S[E]): D = {
+  def distance(s1: S[E], s2: S[E]): I = {
 
+    val i0 = Ring[I].zero
     val i1 = Ring[I].one
-    val d0 = Field[D].zero
-    val d1 = Field[D].one
 
     val lenStr1: I = s1.size
     val lenStr2: I = s2.size
@@ -43,18 +42,18 @@ case class Levenshtein[E: Eq: ClassTag, M, I: Ring, D: Order: Field, S[_]]()(
     val d = la.matrix(
       lenStr1 + i1,
       lenStr2 + i1,
-      d1,
-      (r: I) => d1,
-      (c: I) => d1,
-      (r: I, c: I, diag: D, left: D, top: D) =>
+      i0,
+      (r: I) => r,
+      (c: I) => c,
+      (r: I, c: I, diag: I, left: I, top: I) =>
         min(
-          left + d1,
-          top + d1,
-          diag + (if (s1.at(r - i1) === s2.at(c - i1)) d0 else d1)))
+          left + i1,
+          top + i1,
+          diag + (if (s1.at(r - i1) === s2.at(c - i1)) i0 else i1)))
 
     d.get(lenStr1, lenStr2)
   }
 
-  def min(nums: D*): D = nums.min
+  def min(nums: I*): I = nums.min
 
 }
