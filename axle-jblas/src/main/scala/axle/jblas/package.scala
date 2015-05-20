@@ -344,8 +344,8 @@ package object jblas {
 
         val jblas = DoubleMatrix.zeros(m, n)
         jblas.put(0, 0, topleft)
-        (0 until m) foreach { r => jblas.put(r, 0, left(r)) }
-        (0 until n) foreach { c => jblas.put(0, c, top(c)) }
+        (1 until m) foreach { r => jblas.put(r, 0, left(r)) }
+        (1 until n) foreach { c => jblas.put(0, c, top(c)) }
         (1 until m) foreach { r =>
           (1 until n) foreach { c =>
             val diag = jblas.get(r - 1, c - 1)

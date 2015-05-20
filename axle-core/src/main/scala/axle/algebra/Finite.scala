@@ -20,6 +20,11 @@ object Finite {
       def size[A: ClassTag](xs: C[A]): Rational = ev.size(xs)
     }
 
+  implicit def finiteCIntLong[C[_]](implicit ev: Finite[C, Int]): Finite[C, Long] =
+    new Finite[C, Long] {
+      def size[A: ClassTag](xs: C[A]): Long = ev.size(xs).toLong
+    }
+
   implicit def finiteSeq: Finite[Seq, Int] =
     new Finite[Seq, Int] {
 
