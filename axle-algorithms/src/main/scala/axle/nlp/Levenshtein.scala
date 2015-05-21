@@ -25,7 +25,7 @@ import spire.implicits.eqOps
  *
  */
 
-case class Levenshtein[E: Eq: ClassTag, M, I: Ring : Order: Field, S[_]]()(
+case class Levenshtein[S[_], E: Eq: ClassTag, M, I: Ring : Order]()(
   implicit la: LinearAlgebra[M, I, I, I],
   idx: Indexed[S, I],
   finite: Finite[S, I])
