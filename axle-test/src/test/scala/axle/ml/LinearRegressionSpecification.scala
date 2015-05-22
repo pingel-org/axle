@@ -19,6 +19,9 @@ class LinearRegressionSpecification
           RealtyListing(852, 2, 1, 36, 178.0) ::
           Nil
 
+      import spire.implicits.DoubleAlgebra
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+
       val estimator = LinearRegression(
         data,
         4,

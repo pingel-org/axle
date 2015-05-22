@@ -2,6 +2,7 @@ package axle.jblas
 
 import org.jblas.DoubleMatrix
 import org.specs2.mutable.Specification
+import spire.algebra.Ring
 
 class MatrixSpecification extends Specification {
 
@@ -10,7 +11,10 @@ class MatrixSpecification extends Specification {
 
       import axle.syntax.endofunctor.endofunctorOps
       import axle.syntax.linearalgebra.matrixOps
-      import axle.jblas.linearAlgebraDoubleMatrix.{ ones, zeros, rand }
+      import spire.implicits.DoubleAlgebra
+
+      implicit val dm = linearAlgebraDoubleMatrix[Double]
+      import dm.{ ones, zeros, rand }
 
       val z = zeros(3, 4)
       val o = ones(2, 3)
@@ -27,15 +31,20 @@ class MatrixSpecification extends Specification {
   "x+x === x.map(_*2)" should {
     "work" in {
 
-      import linearAlgebraDoubleMatrix.{ randn }
       import axle.syntax.endofunctor.endofunctorOps
       import axle.syntax.linearalgebra.matrixOps
+      import spire.implicits.DoubleAlgebra
+
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+      import laJblasDouble.randn
 
       val x = randn(2, 2)
 
-      val xx = implicitly[spire.algebra.Ring[DoubleMatrix]].plus(x, x)
+      val xx = implicitly[Ring[DoubleMatrix]].plus(x, x) // TODO clean up
 
-      val mapped = x.map(_ * 2)
+      implicit val endo = endoFunctorDoubleMatrix[Double] // TODO remove
+
+      val mapped = x.map(_ * 2d)
 
       xx must be equalTo mapped
     }
@@ -44,8 +53,12 @@ class MatrixSpecification extends Specification {
   "aside, atop, transpose" should {
     "work" in {
 
-      import axle.jblas.linearAlgebraDoubleMatrix.rand
+      import axle.syntax.endofunctor.endofunctorOps
       import axle.syntax.linearalgebra.matrixOps
+      import spire.implicits.DoubleAlgebra
+
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+      import laJblasDouble.rand
 
       val r = 2
       val c = 3

@@ -22,6 +22,10 @@ class DocumentVectorSpaceSpec extends Specification {
       val unweightedSpace = UnweightedDocumentVectorSpace(stopwords, corpus)
       implicit val space = unweightedSpace.space
       val vectors = corpus.map(unweightedSpace.doc2vector)
+
+      import spire.implicits.DoubleAlgebra
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+
       val unweightedDistanceMatrix = DistanceMatrix(vectors)
 
       1 must be equalTo 1
@@ -42,6 +46,10 @@ class DocumentVectorSpaceSpec extends Specification {
       val tfidfSpace = TFIDFDocumentVectorSpace(stopwords, corpus)
       implicit val space = tfidfSpace.space
       val vectors = corpus.map(tfidfSpace.doc2vector)
+
+      import spire.implicits.DoubleAlgebra
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+
       val tfidfDistanceMatrix = DistanceMatrix(vectors)
 
       1 must be equalTo 1
