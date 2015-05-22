@@ -38,7 +38,7 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
 
   private[this] def vertex(
     cg: DG[UnitOfMeasurement[Q], N => N],
-    query: UnitOfMeasurement[Q])(implicit ev: Eq[N]): Vertex[UnitOfMeasurement[Q]] =
+    query: UnitOfMeasurement[Q]): Vertex[UnitOfMeasurement[Q]] =
     directedGraphOps(cg).findVertex(_.payload.name === query.name).get
 
   val memo = collection.mutable.Map.empty[(UnitOfMeasurement[Q], UnitOfMeasurement[Q]), N => N]
@@ -46,7 +46,7 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
   val combine = (f: N => N, g: N => N) => f andThen g
 
   def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(
-    implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] = {
+    implicit ev: MultiplicativeMonoid[N]): UnittedQuantity[Q, N] = {
 
     val memoKey = (newUnit, orig.unit)
     val convert: N => N =

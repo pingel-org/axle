@@ -2,6 +2,7 @@ package axle.quanta
 
 import axle.algebra.Vertex
 import axle.Show
+import axle.string
 import axle.algebra.Functor
 import axle.syntax.directedgraph.directedGraphOps
 import scala.reflect.ClassTag
@@ -14,9 +15,9 @@ import spire.implicits.multiplicativeSemigroupOps
 
 object UnittedQuantity {
 
-  implicit def showEQ[Q, N]: Show[UnittedQuantity[Q, N]] =
+  implicit def showUQ[Q, N: Show](): Show[UnittedQuantity[Q, N]] =
     new Show[UnittedQuantity[Q, N]] {
-      def text(uq: UnittedQuantity[Q, N]): String = uq.magnitude + " " + uq.unit.symbol
+      def text(uq: UnittedQuantity[Q, N]): String = string(uq.magnitude) + " " + uq.unit.symbol
     }
 
   implicit def eqqqn[Q, N: Eq]: Eq[UnittedQuantity[Q, N]] =
@@ -43,7 +44,7 @@ object UnittedQuantity {
 case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q]) {
 
   def in(newUnit: UnitOfMeasurement[Q])(
-    implicit convert: UnitConverter[Q, N], ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N] =
+    implicit convert: UnitConverter[Q, N], ev: MultiplicativeMonoid[N]): UnittedQuantity[Q, N] =
     convert.convert(this, newUnit)
 
   // TODO

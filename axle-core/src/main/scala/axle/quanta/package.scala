@@ -27,7 +27,6 @@ package object quanta {
 
   implicit def modulize[N, Q](
     implicit fieldn: Field[N],
-    eqn: Eq[N],
     converter: UnitConverter[Q, N]): Module[UnittedQuantity[Q, N], N] =
     new Module[UnittedQuantity[Q, N], N] {
 

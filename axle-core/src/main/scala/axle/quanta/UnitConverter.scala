@@ -7,8 +7,8 @@ import spire.algebra.MultiplicativeMonoid
 
 trait UnitConverter[Q, N] { self =>
 
-  def frameOfReference(implicit fieldN: Field[N], eqN: Eq[N]) =
-    modulize[N, Q](fieldN, eqN, self)
+  def frameOfReference(implicit fieldN: Field[N]) =
+    modulize[N, Q](fieldN, self)
 
   def defaultUnit: UnitOfMeasurement[Q]
 
@@ -16,5 +16,5 @@ trait UnitConverter[Q, N] { self =>
 
   def links: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], Bijection[N, N])]
 
-  def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(implicit ev: MultiplicativeMonoid[N], ev2: Eq[N]): UnittedQuantity[Q, N]
+  def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(implicit ev: MultiplicativeMonoid[N]): UnittedQuantity[Q, N]
 }
