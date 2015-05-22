@@ -15,7 +15,7 @@ import spire.implicits.multiplicativeSemigroupOps
 
 object UnittedQuantity {
 
-  implicit def showUQ[Q, N: Show](): Show[UnittedQuantity[Q, N]] =
+  implicit def showUQ[Q, N: Show]: Show[UnittedQuantity[Q, N]] =
     new Show[UnittedQuantity[Q, N]] {
       def text(uq: UnittedQuantity[Q, N]): String = string(uq.magnitude) + " " + uq.unit.symbol
     }
