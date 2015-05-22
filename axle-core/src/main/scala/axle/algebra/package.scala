@@ -24,6 +24,12 @@ import spire.math.Real
 
 package object algebra {
 
+  implicit def wrappedStringSpace[N](
+    implicit iscSpace: MetricSpace[IndexedSeq[Char], N]) =
+    new MetricSpace[String, N] {
+      def distance(s1: String, s2: String): N = iscSpace.distance(s1, s2)
+    }
+
   def argmax[R[_]: Functor: Reducible, K, N: Order](ks: R[K], f: K => N): Option[K] = {
 
     val functor = Functor[R]

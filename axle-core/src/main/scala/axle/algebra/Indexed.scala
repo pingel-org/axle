@@ -19,6 +19,11 @@ object Indexed {
       def at[A: ClassTag](seq: Seq[A])(i: Int): A = seq(i)
     }
 
+  implicit def indexedIndexedSeq: Indexed[IndexedSeq, Int] =
+    new Indexed[IndexedSeq, Int] {
+      def at[A: ClassTag](is: IndexedSeq[A])(i: Int): A = is(i)
+    }
+
   implicit def indexedList: Indexed[List, Int] =
     new Indexed[List, Int] {
       def at[A: ClassTag](list: List[A])(i: Int): A = list(i)
@@ -34,7 +39,7 @@ object Indexed {
       def at[A: ClassTag](ps: ParSeq[A])(i: Int): A = ps(i)
     }
 
-  implicit def indexedIndexedSeq: Indexed[scala.collection.immutable.IndexedSeq, Int] =
+  implicit def indexedImmutableIndexedSeq: Indexed[scala.collection.immutable.IndexedSeq, Int] =
     new Indexed[scala.collection.immutable.IndexedSeq, Int] {
       def at[A: ClassTag](is: scala.collection.immutable.IndexedSeq[A])(i: Int): A = is(i)
     }
