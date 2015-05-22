@@ -141,10 +141,10 @@ package object jblas {
         } mkString ("\n")
     }
 
-  implicit def linearAlgebraDoubleMatrix[N: Field: Order](implicit cfn: ConvertableFrom[N], ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
+  implicit def linearAlgebraDoubleMatrix[N: Rng](implicit cfn: ConvertableFrom[N], ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
     new LinearAlgebra[DoubleMatrix, Int, Int, N] {
-
-      def elementField: Field[N] = Field[N]
+    
+      def elementRng: Rng[N] = Rng[N]
 
       def ring = ringDoubleMatrix
 
@@ -430,9 +430,9 @@ package object jblas {
         (u, s)
       }
 
-      def numComponentsForCutoff(s: DoubleMatrix, cutoff: Double): Int = {
+      def numComponentsForCutoff(s: DoubleMatrix, cutoff: Double)(implicit field: Field[N]): Int = {
         val eigenValuesSquared = toList(mulPointwise(s)(s))
-        val eigenTotal = eigenValuesSquared.reduce(Field[N].plus)
+        val eigenTotal = eigenValuesSquared.reduce(Ring[N].plus)
         val numComponents =
           eigenValuesSquared
             .map(_ / eigenTotal)

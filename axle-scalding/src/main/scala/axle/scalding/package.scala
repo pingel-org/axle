@@ -141,7 +141,7 @@ package object scalding {
 
       type M = Matrix[RowT, ColT, T]
 
-      def elementField: Field[T] = ??? //AlgebirdField[T] // TODO convert to Spire field
+      def elementRng: Rng[T] = ??? //AlgebirdField[T] // TODO convert to Spire Rng
 
       def ring = ringMatrix
 
@@ -395,7 +395,7 @@ package object scalding {
         (u, s)
       }
 
-      def numComponentsForCutoff(s: M, cutoff: Double): Int = ???
+      def numComponentsForCutoff(s: M, cutoff: Double)(implicit fieldT: Field[T]): Int = ???
 
       def zeros(laRows: RowT, laColumns: ColT): M = ???
 
