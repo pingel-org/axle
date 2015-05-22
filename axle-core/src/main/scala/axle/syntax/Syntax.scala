@@ -14,6 +14,7 @@ import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
 import axle.algebra.Vertex
 import spire.algebra.Eq
+import spire.algebra.Field
 import scala.reflect.ClassTag
 import scala.language.implicitConversions
 
@@ -30,7 +31,8 @@ trait LinearAlgebraSyntax {
 
   def pca[M, RowT, ColT, T](m: M, cutoff: Double = 0.95)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = la.pca(m, cutoff)
 
-  def numComponentsForCutoff[M, RowT, ColT, T](m: M, cutoff: Double)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = la.numComponentsForCutoff(m, cutoff)
+  def numComponentsForCutoff[M, RowT, ColT, T](m: M, cutoff: Double)(implicit la: LinearAlgebra[M, RowT, ColT, T], fieldT: Field[T]) =
+    la.numComponentsForCutoff(m, cutoff)
 
   implicit def matrixOps[M, RowT, ColT, T](m: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = new LinearAlgebraOps(m)
 }

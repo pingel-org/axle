@@ -5,13 +5,14 @@ import scala.annotation.implicitNotFound
 import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.Ring
+import spire.algebra.Rng
 
 @implicitNotFound("Witness not found for LinearAlgebra[${M}, ${RowT}, ${ColT}, ${T}]")
 trait LinearAlgebra[M, RowT, ColT, T] {
 
   def ring: Ring[M]
 
-  def elementField: Field[T]
+  def elementRng: Rng[T]
 
   def endofunctor: Endofunctor[M, T]
 
@@ -173,7 +174,7 @@ trait LinearAlgebra[M, RowT, ColT, T] {
 
   def pca(Xnorm: M, cutoff: Double): (M, M)
 
-  def numComponentsForCutoff(s: M, cutoff: Double): Int
+  def numComponentsForCutoff(s: M, cutoff: Double)(implicit field: Field[T]): Int
 
   // TODO:
   def zero: M = ring.zero
