@@ -105,6 +105,20 @@ package object algebra {
 
     val rat = new spire.math.RationalAlgebra()
 
+    implicit val doubleIntModule: Module[Double, Int] = new Module[Double, Int] {
+
+      def negate(x: Double): Double = DoubleAlgebra.negate(x)
+
+      def zero: Double = DoubleAlgebra.zero
+
+      def plus(x: Double, y: Double): Double = DoubleAlgebra.plus(x, y)
+
+      implicit def scalar: Rng[Int] = IntAlgebra
+
+      def timesl(r: Int, v: Double): Double = r * v
+
+    }
+
     implicit val doubleDoubleModule: Module[Double, Double] = new Module[Double, Double] {
 
       def negate(x: Double): Double = DoubleAlgebra.negate(x)

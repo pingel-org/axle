@@ -46,7 +46,12 @@ object Aggregatable {
       ps.aggregate(zeroValue)(seqOp, combOp)
   }
 
-  implicit def aggregatableIndexedSeq = new Aggregatable[scala.collection.immutable.IndexedSeq] {
+  implicit def aggregatableIndexedSeq = new Aggregatable[IndexedSeq] {
+    def aggregate[A, B: ClassTag](is: IndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+      is.aggregate(zeroValue)(seqOp, combOp)
+  }
+
+  implicit def aggregatableImmutableIndexedSeq = new Aggregatable[scala.collection.immutable.IndexedSeq] {
     def aggregate[A, B: ClassTag](is: scala.collection.immutable.IndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
       is.aggregate(zeroValue)(seqOp, combOp)
   }
