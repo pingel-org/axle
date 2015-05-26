@@ -1,14 +1,15 @@
 package axle.bio
 
-import scala.Stream.cons
-import scala.Stream.empty
 import scala.Vector
 import scala.reflect.ClassTag
+import scala.Stream.cons
+import scala.Stream.empty
 
 import NeedlemanWunsch.computeF
 import axle.algebra.Σ
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
+import axle.algebra.FromStream
 import axle.algebra.Functor
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
@@ -39,6 +40,15 @@ import spire.implicits.partialOrderOps
 object NeedlemanWunsch {
 
   object Default {
+
+    // Default evidence for optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Double]
+
+    implicit val charEq: Eq[Char] = spire.implicits.CharAlgebra
+    implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+    implicit val orderRing: Order[Int] = spire.implicits.IntAlgebra
+    implicit val dim: Module[Double, Int] = axle.algebra.modules.doubleIntModule
+    implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
+    implicit val od: Order[Double] = spire.implicits.DoubleAlgebra
 
     /**
      * similarity function for nucleotides
@@ -93,7 +103,7 @@ object NeedlemanWunsch {
       agg: Aggregatable[S],
       finite: Finite[S, I],
       functor: Functor[S],
-      zipper: Zipper[S, N]): V = {
+      zipper: Zipper[S]): V = {
 
     assert(A.size === B.size)
 
@@ -197,13 +207,22 @@ object NeedlemanWunsch {
       implicit la: LinearAlgebra[M, I, I, V],
       indexed: Indexed[S, I],
       finite: Finite[S, I],
-      module: Module[V, I]): (Stream[N], Stream[N]) = {
+      fs: FromStream[S],
+      module: Module[V, I]): (S[N], S[N]) = {
 
-    val F = computeF[I, S, N, M, V](A, B, similarity, gapPenalty)
+    val F = computeF(A, B, similarity, gapPenalty)
 
-    val (alignmentA, alignmentB) = _optimalAlignment[S, N, M, I, V](A.size, B.size, A, B, similarity, gap, gapPenalty, F).unzip
+    val (alignA, alignB) = _optimalAlignment(
+      A.size,
+      B.size,
+      A,
+      B,
+      similarity,
+      gap,
+      gapPenalty,
+      F).reverse.unzip
 
-    (alignmentA.reverse, alignmentB.reverse)
+    (fs.fromStream(alignA), fs.fromStream(alignB))
   }
 
 }
