@@ -1,13 +1,7 @@
 package axle.bio
 
-import org.specs2.mutable._
-import axle.jblas._
 import org.jblas.DoubleMatrix
-import spire.algebra.AdditiveMonoid
-import spire.algebra.Eq
-import spire.algebra.Ring
-import spire.algebra.Module
-import spire.algebra.Order
+import org.specs2.mutable.Specification
 
 class AlignDNA extends Specification {
 
@@ -19,7 +13,7 @@ class AlignDNA extends Specification {
 
       implicit val laJblasDouble = {
         import spire.implicits.DoubleAlgebra
-        linearAlgebraDoubleMatrix[Double]
+        axle.jblas.linearAlgebraDoubleMatrix[Double]
       }
 
       val (a1, a2) =
@@ -35,7 +29,7 @@ class AlignDNA extends Specification {
     "work" in {
 
       import spire.implicits.DoubleAlgebra
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+      implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 
       SmithWaterman.optimalAlignment("ACACACTA", "AGCACACA") must be equalTo ("A-CACACTA", "AGCACAC-A")
     }

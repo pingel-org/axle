@@ -6,3 +6,5 @@ target
 .worksheet
 */*.iml
 .idea
+.cache-tests
+.cache-main

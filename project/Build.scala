@@ -38,6 +38,8 @@ object AxleBuild extends Build {
       "-unchecked",
       "-deprecation",
       "-feature",
+      "-optimize",
+      "-Yinline-warnings",
       "-language:higherKinds",
       "-language:postfixOps"),
 
@@ -183,7 +185,7 @@ import axle._
       "org.jblas" % "jblas" % "1.2.3"
     )
   ).dependsOn(axleCore)
-
+/*
   lazy val axleJcublas = Project(
     id = "axle-jcublas",
     base = file("axle-jcublas"),
@@ -194,7 +196,8 @@ import axle._
       "org.nd4j" % "jcublas" % "6.5"
     )
   ).dependsOn(axleCore)
-
+*/
+/*
   lazy val axleMtj = Project(
     id = "axle-mtj",
     base = file("axle-mtj"),
@@ -206,7 +209,7 @@ import axle._
       "com.googlecode.matrix-toolkits-java" % "mtj" % "1.0.1"
     )
   ).dependsOn(axleCore)
-
+*/
   lazy val jungVersion = "2.0.1"
 
   lazy val axleJung = Project(
@@ -225,6 +228,7 @@ import axle._
 
   lazy val hadoopVersion = "1.1.2"
 
+/*
   lazy val axleHBase = Project(
     id = "axle-hbase",
     base = file("axle-hbase"),
@@ -236,7 +240,7 @@ import axle._
       "org.apache.hbase" % "hbase" % "0.94.7"
     )
   ).dependsOn(axleCore)
-
+*/
   lazy val axleSpark = Project(
     id = "axle-spark",
     base = file("axle-spark"),
@@ -248,7 +252,7 @@ import axle._
     )
   ).dependsOn(axleCore)
 
-
+/*
   lazy val axleScalding = Project(
     id = "axle-scalding",
     base = file("axle-scalding"),
@@ -260,7 +264,8 @@ import axle._
       "com.twitter" %% "scalding-core" % "0.13.1"
     )
   ).dependsOn(axleCore)
-
+*/
+/*
   lazy val axleFigaro = Project(
     id = "axle-figaro",
     base = file("axle-figaro"),
@@ -271,7 +276,7 @@ import axle._
       "com.cra.figaro" %% "figaro" % "3.0.0.0"
     )
   ).dependsOn(axleCore)
-
+*/
   lazy val axleVisualize = Project(
     id = "axle-visualize",
     base = file("axle-visualize"),
@@ -300,11 +305,12 @@ import axle._
     axleVisualize,
     axleJoda,
     axleJblas,
-    axleJcublas,
+    //axleJcublas,
     axleJung,
     axleGames,
-    axleLanguages,
-    axleFigaro)
+    axleLanguages
+    //axleFigaro
+    )
 
   lazy val axleAggregate = Project(
     id = "axle-aggregate",
@@ -321,15 +327,15 @@ import axle._
     axleGames,
     axleLanguages,
     axleJblas,
-    axleJcublas,
+    //axleJcublas,
     axleJung,
     axleJoda,
     axleSpark,
-    axleScalding,
-    axleHBase,
-    axleFigaro,
+    //axleScalding,
+    //axleHBase,
+    //axleFigaro,
     axleVisualize)
-
+/*
   lazy val axleRepl = Project(
     id = "axle-repl",
     base = file("axle-repl"),
@@ -364,5 +370,5 @@ import axle._
   }
 
   ).dependsOn(axleCore, axleVisualize, axleGames, axleLanguages)
-
+*/
 }
