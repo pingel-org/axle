@@ -28,10 +28,16 @@ class AlignDNA extends Specification {
   "Smith-Waterman" should {
     "work" in {
 
+      import SmithWaterman.Default._
+      import SmithWaterman.optimalAlignment
+
       import spire.implicits.DoubleAlgebra
       implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 
-      SmithWaterman.optimalAlignment("ACACACTA", "AGCACACA") must be equalTo ("A-CACACTA", "AGCACAC-A")
+      val (alignA, alignB) = optimalAlignment("ACACACTA", "AGCACACA", w, mismatchPenalty, gap)
+
+      alignA must be equalTo "A-CACACTA"
+      alignB must be equalTo "AGCACAC-A"
     }
   }
 
