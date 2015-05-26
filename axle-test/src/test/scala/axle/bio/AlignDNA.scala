@@ -1,13 +1,10 @@
 package axle.bio
 
-import org.specs2.mutable._
-import axle.jblas._
 import org.jblas.DoubleMatrix
-import spire.algebra.AdditiveMonoid
-import spire.algebra.Eq
-import spire.algebra.Ring
-import spire.algebra.Module
-import spire.algebra.Order
+import org.specs2.mutable.Specification
+
+import axle.jblas.linearAlgebraDoubleMatrix
+import spire.implicits.DoubleAlgebra
 
 class AlignDNA extends Specification {
 
@@ -16,6 +13,15 @@ class AlignDNA extends Specification {
 
       import NeedlemanWunsch.optimalAlignment
       import NeedlemanWunsch.Default._
+      import NeedlemanWunsch.Default.charEq
+      import NeedlemanWunsch.Default.dim
+      import NeedlemanWunsch.Default.gap
+      import NeedlemanWunsch.Default.gapPenalty
+      import NeedlemanWunsch.Default.intRing
+      import NeedlemanWunsch.Default.od
+      import NeedlemanWunsch.Default.orderRing
+      import NeedlemanWunsch.Default.similarity
+      import NeedlemanWunsch.optimalAlignment
 
       implicit val laJblasDouble = {
         import spire.implicits.DoubleAlgebra
