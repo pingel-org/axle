@@ -3,9 +3,6 @@ package axle.bio
 import org.jblas.DoubleMatrix
 import org.specs2.mutable.Specification
 
-import axle.jblas.linearAlgebraDoubleMatrix
-import spire.implicits.DoubleAlgebra
-
 class AlignDNA extends Specification {
 
   "Needleman-Wunsch" should {
@@ -13,19 +10,10 @@ class AlignDNA extends Specification {
 
       import NeedlemanWunsch.optimalAlignment
       import NeedlemanWunsch.Default._
-      import NeedlemanWunsch.Default.charEq
-      import NeedlemanWunsch.Default.dim
-      import NeedlemanWunsch.Default.gap
-      import NeedlemanWunsch.Default.gapPenalty
-      import NeedlemanWunsch.Default.intRing
-      import NeedlemanWunsch.Default.od
-      import NeedlemanWunsch.Default.orderRing
-      import NeedlemanWunsch.Default.similarity
-      import NeedlemanWunsch.optimalAlignment
 
       implicit val laJblasDouble = {
         import spire.implicits.DoubleAlgebra
-        linearAlgebraDoubleMatrix[Double]
+        axle.jblas.linearAlgebraDoubleMatrix[Double]
       }
 
       val (a1, a2) =
@@ -41,7 +29,7 @@ class AlignDNA extends Specification {
     "work" in {
 
       import spire.implicits.DoubleAlgebra
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+      implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 
       SmithWaterman.optimalAlignment("ACACACTA", "AGCACACA") must be equalTo ("A-CACACTA", "AGCACAC-A")
     }
