@@ -31,13 +31,14 @@ class AlignDNA extends Specification {
       import SmithWaterman.Default._
       import SmithWaterman.optimalAlignment
 
-      import spire.implicits.DoubleAlgebra
-      implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
+      import spire.implicits.IntAlgebra
+      implicit val laJblasInt = axle.jblas.linearAlgebraDoubleMatrix[Int]
 
-      val (alignA, alignB) = optimalAlignment("ACACACTA", "AGCACACA", w, mismatchPenalty, gap)
+      val (alignA, alignB) = optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Int](
+        "ACACACTA", "AGCACACA", w, mismatchPenalty, gap)
 
-      alignA must be equalTo "A-CACACTA"
-      alignB must be equalTo "AGCACAC-A"
+      alignA.mkString("") must be equalTo "A-CACACTA"
+      alignB.mkString("") must be equalTo "AGCACAC-A"
     }
   }
 
