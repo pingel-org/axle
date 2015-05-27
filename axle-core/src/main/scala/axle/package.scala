@@ -40,6 +40,7 @@ import axle.forall
 import axle.thereexists
 import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
+import axle.algebra.Finite
 import axle.algebra.Functor
 import scala.reflect.ClassTag
 import spire.optional.unicode.Π
@@ -50,11 +51,13 @@ import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.AdditiveMonoid
+import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.compat.ordering
 import spire.implicits.IntAlgebra
 import spire.implicits.LongAlgebra
 import spire.implicits.eqOps
+import spire.implicits.moduleOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 import spire.math.Rational
@@ -63,6 +66,7 @@ import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.AngleConverter
 import spire.math.ConvertableFrom
+import spire.math.ConvertableTo
 import spire.implicits._
 import scala.language.implicitConversions
 
@@ -88,6 +92,35 @@ package object axle {
    */
   def wallisΠ(iterations: Int = 10000) =
     2 * Π((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
+
+  /**
+   * Monte Carlo approximation of pi http://en.wikipedia.org/wiki/Monte_Carlo_method
+   *
+   * TODO get n2v implicitly?
+   * 
+   */
+
+  def monteCarloPiEstimate[F[_]: Functor: Aggregatable, N: ClassTag, V: ClassTag: Field: ConvertableTo](
+    trials: F[N], n2v: N => V)(
+      implicit finite: Finite[F, N]): V = {
+
+    import scala.math.random
+    import axle.algebra.Σ
+    import axle.syntax.functor.functorOps
+
+    val vOne = Field[V].one
+    val vZero = Field[V].zero
+
+    val randomPointInCircle: () => V = () => {
+      val x = random * 2 - 1
+      val y = random * 2 - 1
+      if (x * x + y * y < 1) vOne else vZero
+    }
+
+    val vFour = ConvertableTo[V].fromDouble(4d)
+
+    (vFour * Σ(trials.map(i => randomPointInCircle()))) / n2v(finite.size(trials))
+  }
 
   def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
@@ -174,17 +207,17 @@ package object axle {
 
   def √[N: NRoot](x: N): N = x.sqrt
 
-//  implicit val charEq = new Eq[Char] {
-//    def eqv(x: Char, y: Char): Boolean = x equals y
-//  }
-//
-//  implicit val stringEq = new Eq[String] {
-//    def eqv(x: String, y: String): Boolean = x equals y
-//  }
-//
-//  implicit val boolEq = new Eq[Boolean] {
-//    def eqv(x: Boolean, y: Boolean): Boolean = x equals y
-//  }
+  //  implicit val charEq = new Eq[Char] {
+  //    def eqv(x: Char, y: Char): Boolean = x equals y
+  //  }
+  //
+  //  implicit val stringEq = new Eq[String] {
+  //    def eqv(x: String, y: String): Boolean = x equals y
+  //  }
+  //
+  //  implicit val boolEq = new Eq[Boolean] {
+  //    def eqv(x: Boolean, y: Boolean): Boolean = x equals y
+  //  }
 
   implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
     def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
