@@ -1,14 +1,34 @@
 package axle.bio
 
 import scala.Vector
+import scala.collection.immutable.Stream
 import scala.collection.immutable.Stream.cons
 import scala.collection.immutable.Stream.empty
+import scala.reflect.ClassTag
 
 import axle.algebra.LinearAlgebra
+import axle.algebra.Finite
+import axle.algebra.FromStream
+import axle.algebra.Indexed
+
+import spire.algebra.Eq
+import spire.algebra.Group
 import spire.algebra.MetricSpace
-import spire.implicits.DoubleAlgebra
+import spire.algebra.Order
+import spire.algebra.Ring
+
+import spire.compat.ordering
+import spire.implicits.additiveGroupOps
+import spire.implicits.additiveSemigroupOps
 import spire.implicits.eqOps
-import axle.syntax.linearalgebra._
+import spire.implicits.moduleOps
+import spire.implicits.partialOrderOps
+
+import axle.syntax.finite.finiteOps
+import axle.syntax.functor.functorOps
+import axle.syntax.indexed.indexedOps
+import axle.syntax.linearalgebra.matrix
+import axle.syntax.linearalgebra.matrixOps
 
 /**
  *
@@ -18,16 +38,20 @@ import axle.syntax.linearalgebra._
 
 object SmithWaterman {
 
-  def w(x: Char, y: Char, mismatchPenalty: Int): Int =
-    if (x != y) {
-      mismatchPenalty
-    } else {
-      2 // also see NeedlemanWunsch.S(x, y)
-    }
+  object Default {
 
-  val defaultMismatchPenalty = -1
+    def w(x: Char, y: Char, mismatchPenalty: Int): Int =
+      if (x != y) {
+        mismatchPenalty
+      } else {
+        2 // also see NeedlemanWunsch.Default.similarity
+      }
 
-  val gap = '-'
+    val mismatchPenalty = -1
+
+    val gap = '-'
+
+  }
 
   /**
    *
@@ -38,54 +62,106 @@ object SmithWaterman {
    *
    */
 
-  def computeH[M](A: String, B: String, mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Int, Int, Double]): M =
+  def computeH[S[_], C: ClassTag, M, I: Ring, V: Ring: Order](
+    A: S[C],
+    B: S[C],
+    w: (C, C, V) => V,
+    mismatchPenalty: V)(
+      implicit la: LinearAlgebra[M, I, I, V],
+      indexed: Indexed[S, I],
+      finite: Finite[S, I]): M = {
+
+    val iOne = Ring[I].one
+    val vZero = Ring[V].zero
+
     la.matrix(
-      A.length + 1,
-      B.length + 1,
-      0,
-      (i: Int) => 0,
-      (j: Int) => 0,
-      (i: Int, j: Int, aboveleft: Double, left: Double, above: Double) => Vector(
-        0,
-        aboveleft + w(A(i - 1), B(j - 1), mismatchPenalty),
+      A.size + iOne,
+      B.size + iOne,
+      vZero,
+      (i: I) => vZero,
+      (j: I) => vZero,
+      (i: I, j: I, aboveleft: V, left: V, above: V) => Vector(
+        vZero,
+        aboveleft + w(A.at(i - iOne), B.at(j - iOne), mismatchPenalty),
         above + mismatchPenalty,
         left + mismatchPenalty).max)
+  }
 
-  def alignStep[M](i: Int, j: Int, A: String, B: String, H: M, mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Int, Int, Double]): (Char, Char, Int, Int) = {
-    if (i > 0 && j > 0 && H.get(i, j) === H.get(i - 1, j - 1) + w(A(i - 1), B(j - 1), mismatchPenalty)) {
-      (A(i - 1), B(j - 1), i - 1, j - 1)
-    } else if (i > 0 && H.get(i, j) === H.get(i - 1, j) + mismatchPenalty) {
-      (A(i - 1), gap, i - 1, j)
+  def alignStep[S[_], C: ClassTag, M, I: Ring: Order, V: Ring: Order: Eq](
+    i: I,
+    j: I,
+    A: S[C],
+    B: S[C],
+    w: (C, C, V) => V,
+    H: M,
+    mismatchPenalty: V,
+    gap: C)(
+      implicit la: LinearAlgebra[M, I, I, V],
+      indexed: Indexed[S, I]): (C, C, I, I) = {
+
+    val iZero = Ring[I].zero
+    val iOne = Ring[I].one
+
+    if (i > iZero && j > iZero && (H.get(i, j) === H.get(i - iOne, j - iOne) + w(A.at(i - iOne), B.at(j - iOne), mismatchPenalty))) {
+      (A.at(i - iOne), B.at(j - iOne), i - iOne, j - iOne)
+    } else if (i > 0 && H.get(i, j) === H.get(i - iOne, j) + mismatchPenalty) {
+      (A.at(i - iOne), gap, i - iOne, j)
     } else {
-      assert(j > 0 && H.get(i, j) === H.get(i, j - 1) + mismatchPenalty)
-      (gap, B(j - 1), i, j - 1)
+      assert(j > 0 && H.get(i, j) === H.get(i, j - iOne) + mismatchPenalty)
+      (gap, B.at(j - iOne), i, j - iOne)
     }
   }
 
-  def _optimalAlignment[M](i: Int, j: Int, A: String, B: String, mismatchPenalty: Int, H: M)(implicit la: LinearAlgebra[M, Int, Int, Double]): scala.collection.immutable.Stream[(Char, Char)] =
+  def _optimalAlignment[S[_], C: ClassTag, M, I: Ring: Order, V: Ring: Order](
+    i: I,
+    j: I,
+    A: S[C],
+    B: S[C],
+    w: (C, C, V) => V,
+    mismatchPenalty: V,
+    gap: C,
+    H: M)(
+      implicit la: LinearAlgebra[M, I, I, V],
+      indexed: Indexed[S, I]): Stream[(C, C)] =
     if (i > 0 || j > 0) {
-      val (preA, preB, newI, newJ) = alignStep(i, j, A, B, H, mismatchPenalty)
-      cons((preA, preB), _optimalAlignment(newI, newJ, A, B, mismatchPenalty, H))
+      val (preA, preB, newI, newJ) = alignStep[S, C, M, I, V](i, j, A, B, w, H, mismatchPenalty, gap)
+      cons((preA, preB), _optimalAlignment[S, C, M, I, V](newI, newJ, A, B, w, mismatchPenalty, gap, H))
     } else {
       empty
     }
 
-  def optimalAlignment[M](A: String, B: String, mismatchPenalty: Int = defaultMismatchPenalty)(implicit la: LinearAlgebra[M, Int, Int, Double]): (String, String) = {
-    val H = computeH(A, B, mismatchPenalty)
-    val (alignmentA, alignmentB) = _optimalAlignment(A.length, B.length, A, B, mismatchPenalty, H).unzip
-    (alignmentA.reverse.mkString(""), alignmentB.reverse.mkString(""))
+  def optimalAlignment[S[_], C: ClassTag, M, I: Ring: Order, V: Ring: Order](
+    A: S[C],
+    B: S[C],
+    w: (C, C, V) => V,
+    mismatchPenalty: V,
+    gap: C)(
+      implicit la: LinearAlgebra[M, I, I, V],
+      indexed: Indexed[S, I],
+      finite: Finite[S, I],
+      fs: FromStream[S]): (S[C], S[C]) = {
+
+    val H = computeH[S, C, M, I, V](A, B, w, mismatchPenalty)
+
+    val (alignmentA, alignmentB) = _optimalAlignment[S, C, M, I, V](A.size, B.size, A, B, w, mismatchPenalty, gap, H).unzip
+
+    (fs.fromStream(alignmentA.reverse), fs.fromStream(alignmentB.reverse))
   }
 
-  def metricSpace[M](mismatchPenalty: Int = defaultMismatchPenalty)(implicit la: LinearAlgebra[M, Int, Int, Double]): MetricSpace[String, Int] =
-    SmithWatermanMetricSpace(mismatchPenalty)
+}
 
-  case class SmithWatermanMetricSpace[M](mismatchPenalty: Int)(implicit la: LinearAlgebra[M, Int, Int, Double]) extends MetricSpace[String, Int] {
+case class SmithWatermanMetricSpace[S[_], C: ClassTag, M, I: Ring, V: Ring: Order](
+    w: (C, C, V) => V,
+    mismatchPenalty: V)(
+        implicit la: LinearAlgebra[M, I, I, V],
+        finite: Finite[S, I],
+        indexed: Indexed[S, I]) extends MetricSpace[S[C], V] {
 
-    def distance(s1: String, s2: String): Int = {
-      val H = computeH(s1, s2, mismatchPenalty)
-      H.get(s1.length, s2.length).toInt
-    }
+  def distance(s1: S[C], s2: S[C]): V = {
 
+    val H = SmithWaterman.computeH[S, C, M, I, V](s1, s2, w, mismatchPenalty)
+
+    H.get(s1.size, s2.size)
   }
 
 }
