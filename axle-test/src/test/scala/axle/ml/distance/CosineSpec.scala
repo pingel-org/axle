@@ -20,13 +20,6 @@ class CosineSpec
 
   implicit val space = Cosine[DoubleMatrix, Int, Int, Double](n)
 
-  val genMatrix: Gen[DoubleMatrix] = for {
-    x <- Gen.choose(-100000d, 1000000d)
-    y <- Gen.choose(-100000d, 1000000d)
-  } yield laJblasDouble.matrix(1, 2, List(x, y).toArray)
-
-  implicit val arbMatrix: Arbitrary[DoubleMatrix] = Arbitrary(genMatrix)
-
   //  checkAll("Cosine space on 1x2 matrix",
   //    MetricSpaceLaws[DoubleMatrix, Double].cauchySchwarz)
 

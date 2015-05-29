@@ -11,7 +11,6 @@ import org.typelevel.discipline.specs2.mutable.Discipline
 import org.typelevel.discipline.Predicate
 
 import axle.algebra.LinearAlgebra
-import axle.algebra.laws.MetricSpaceLaws
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix
 import spire.implicits.DoubleAlgebra

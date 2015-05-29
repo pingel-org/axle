@@ -9,11 +9,13 @@ import org.scalacheck.Gen
 import org.scalacheck.Gen.Choose
 import org.specs2.mutable.Specification
 import org.typelevel.discipline.specs2.mutable.Discipline
+import org.typelevel.discipline.Predicate
 
 import axle.algebra.LinearAlgebra
-import axle.algebra.laws.MetricSpaceLaws
 import axle.jblas.linearAlgebraDoubleMatrix
+import axle.jblas.eqDoubleMatrix
 import spire.implicits.IntAlgebra
+import spire.laws.VectorSpaceLaws
 
 class ManhattanSpec
     extends Specification
@@ -29,7 +31,11 @@ class ManhattanSpec
   implicit val arbMatrix: Arbitrary[DoubleMatrix] =
     Arbitrary(LinearAlgebra.genMatrix[DoubleMatrix, Int](m, n, -10000, 10000))
 
+  implicit val pred: Predicate[Int] = new Predicate[Int] {
+    def apply(a: Int) = true
+  }
+
   checkAll(s"Manhattan space on ${m}x${n} matrix",
-    MetricSpaceLaws[DoubleMatrix, Int].laws)
+    VectorSpaceLaws[DoubleMatrix, Int].metricSpace)
 
 }
