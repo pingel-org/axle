@@ -1,11 +1,13 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-
 import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.Ring
 import spire.algebra.Rng
+import scala.reflect.ClassTag
+import org.scalacheck.Gen
+import org.scalacheck.Gen.Choose
 
 @implicitNotFound("Witness not found for LinearAlgebra[${M}, ${RowT}, ${ColT}, ${T}]")
 trait LinearAlgebra[M, RowT, ColT, T] {
@@ -190,5 +192,15 @@ trait LinearAlgebra[M, RowT, ColT, T] {
 object LinearAlgebra {
 
   @inline final def apply[M, RowT, ColT, T](implicit ev: LinearAlgebra[M, RowT, ColT, T]): LinearAlgebra[M, RowT, ColT, T] = ev
+
+  def genMatrix[M, T: Choose: ClassTag](
+    m: Int,
+    n: Int,
+    minimum: T,
+    maximum: T)(
+      implicit la: LinearAlgebra[M, Int, Int, T]): Gen[M] =
+    Gen.listOfN[T](m * n, Gen.choose[T](minimum, maximum)) map { numList =>
+      la.matrix(m, n, numList.toArray)
+    }
 
 }

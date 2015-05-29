@@ -1,31 +1,35 @@
 package axle.ml.distance
 
+import scala.annotation.implicitNotFound
+import scala.reflect.ClassTag
+
 import org.jblas.DoubleMatrix
-import org.specs2.mutable.Specification
-import org.typelevel.discipline.specs2.mutable.Discipline
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
+import org.scalacheck.Gen.Choose
+import org.specs2.mutable.Specification
+import org.typelevel.discipline.specs2.mutable.Discipline
+
+import axle.algebra.LinearAlgebra
+import axle.algebra.laws.MetricSpaceLaws
+import axle.jblas.linearAlgebraDoubleMatrix
+import spire.implicits.IntAlgebra
 
 class ManhattanSpec
     extends Specification
     with Discipline {
 
-  import axle.algebra.laws.MetricSpaceLaws
-  import spire.implicits.IntAlgebra
-  import axle.jblas._
+  implicit val space = Manhattan[DoubleMatrix, Int, Int, Int]()
+
+  val m = 1
+  val n = 2
 
   implicit val laJblasInt = linearAlgebraDoubleMatrix[Int]
 
-  implicit val space = Manhattan[DoubleMatrix, Int, Int, Int]()
+  implicit val arbMatrix: Arbitrary[DoubleMatrix] =
+    Arbitrary(LinearAlgebra.genMatrix[DoubleMatrix, Int](m, n, -10000, 10000))
 
-  val genMatrix: Gen[DoubleMatrix] = for {
-    x <- Gen.choose(-100000, 1000000)
-    y <- Gen.choose(-100000, 1000000)
-  } yield laJblasInt.matrix(1, 2, List(x, y).toArray)
-
-  implicit val arbMatrix: Arbitrary[DoubleMatrix] = Arbitrary(genMatrix)
-
-  checkAll("Manhattan space on 1x2 matrix",
-      MetricSpaceLaws[DoubleMatrix, Int].laws)
+  checkAll(s"Manhattan space on ${m}x${n} matrix",
+    MetricSpaceLaws[DoubleMatrix, Int].laws)
 
 }
