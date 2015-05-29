@@ -36,7 +36,7 @@ trait MetricSpaceLaws[A, B] extends Laws {
 
   }
 
-  def cauchySchwarz(
+  def laws(
     implicit ms: MetricSpace[A, B],
     cta: ClassTag[A],
     arbA: Arbitrary[A],
@@ -48,6 +48,12 @@ trait MetricSpaceLaws[A, B] extends Laws {
       def props: Seq[(String, Prop)] = Seq(
         "Cauchy-Schwarz (aka Triangle Inequality)" → forAll { (x: A, y: A, z: A) =>
           (x distance z) <= (x distance y) + (y distance z)
+        },
+        "Identity" → forAll { (x: A) =>
+          (x distance x) === (addB.zero)
+        },
+        "Symmetry" → forAll { (x: A, y: A) =>
+          (x distance y) === (y distance x)
         })
     }
 

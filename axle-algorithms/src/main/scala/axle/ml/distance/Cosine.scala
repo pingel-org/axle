@@ -22,7 +22,7 @@ import spire.implicits.moduleOps
 
 case class Cosine[M, R: Zero: MultiplicativeMonoid, C: Zero, V: Field](n: C)(
   implicit la: LinearAlgebra[M, R, C, V])
-  extends InnerProductSpace[M, V] {
+    extends InnerProductSpace[M, V] {
 
   implicit val ring = la.ring
   implicit val module = la.module
