@@ -18,6 +18,6 @@ class LevenshteinSpecification
 
   implicit val space = Levenshtein[IndexedSeq, Char, DoubleMatrix, Int]()
 
-  checkAll("Levenshtein space", MetricSpaceLaws[IndexedSeq[Char], Int].cauchySchwarz)
+  checkAll("Levenshtein space", MetricSpaceLaws[IndexedSeq[Char], Int].laws)
 
 }

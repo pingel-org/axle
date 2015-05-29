@@ -3,15 +3,13 @@ package axle.ml.distance
 import org.jblas.DoubleMatrix
 import org.specs2.mutable.Specification
 import org.typelevel.discipline.specs2.mutable.Discipline
-import axle.algebra.Zero
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
-class EuclideanSpec
+class CosineSpec
     extends Specification
     with Discipline {
 
-  import axle.algebra.laws.MetricSpaceLaws
   import spire.implicits.IntAlgebra
   import spire.implicits.DoubleAlgebra
   import axle.jblas._
@@ -20,9 +18,8 @@ class EuclideanSpec
 
   val n = 2
 
-  implicit val space = Euclidean[DoubleMatrix, Int, Int, Double](n)
+  implicit val space = Cosine[DoubleMatrix, Int, Int, Double](n)
 
-  // TODO put this elsewhere
   val genMatrix: Gen[DoubleMatrix] = for {
     x <- Gen.choose(-100000d, 1000000d)
     y <- Gen.choose(-100000d, 1000000d)
@@ -30,8 +27,7 @@ class EuclideanSpec
 
   implicit val arbMatrix: Arbitrary[DoubleMatrix] = Arbitrary(genMatrix)
 
-  checkAll("Euclidean space on 1x2 matrix",
-    MetricSpaceLaws[DoubleMatrix, Double].laws)
+  //  checkAll("Cosine space on 1x2 matrix",
+  //    MetricSpaceLaws[DoubleMatrix, Double].cauchySchwarz)
 
-  // TODO use laws from spire
 }

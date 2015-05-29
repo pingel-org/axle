@@ -73,14 +73,17 @@ class MetricSpaceSpec() extends Specification with Discipline {
 
   implicit val rrr = new RealTuple2Space {}
 
-  checkAll("MetricSpace[(Real, Real), Real", MetricSpaceLaws[(Real, Real), Real].cauchySchwarz)
+  checkAll("MetricSpace[(Real, Real), Real",
+    MetricSpaceLaws[(Real, Real), Real].laws)
 
   implicit val rr = new ScalarRealSpace {}
 
-  checkAll("MetricSpace[Real, Real]", MetricSpaceLaws[Real, Real].cauchySchwarz)
+  checkAll("MetricSpace[Real, Real]",
+    MetricSpaceLaws[Real, Real].laws)
 
   implicit val r4 = arbitraryRealSeqLengthN(4)
 
-  checkAll("MetricSpace[Seq[Real], Real]", MetricSpaceLaws[Seq[Real], Real].cauchySchwarz)
+  checkAll("MetricSpace[Seq[Real], Real]",
+    MetricSpaceLaws[Seq[Real], Real].laws)
 
 }
