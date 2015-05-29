@@ -9,6 +9,7 @@ import axle.algebra.LinearAlgebra
 import spire.algebra.AdditiveAbGroup
 import spire.algebra.AdditiveCSemigroup
 import spire.algebra.AdditiveMonoid
+import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
@@ -35,6 +36,12 @@ package object jblas {
         jblas
       }
     }
+
+  implicit def eqDoubleMatrix = new Eq[DoubleMatrix] {
+
+    def eqv(x: DoubleMatrix, y: DoubleMatrix): Boolean = 
+      x.equals(y)
+  }
 
   implicit def moduleDoubleMatrix[N](implicit rng: Rng[N], cfn: ConvertableFrom[N]): Module[DoubleMatrix, N] =
     new Module[DoubleMatrix, N] {
@@ -143,7 +150,7 @@ package object jblas {
 
   implicit def linearAlgebraDoubleMatrix[N: Rng](implicit cfn: ConvertableFrom[N], ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
     new LinearAlgebra[DoubleMatrix, Int, Int, N] {
-    
+
       def elementRng: Rng[N] = Rng[N]
 
       def ring = ringDoubleMatrix

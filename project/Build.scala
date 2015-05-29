@@ -128,7 +128,8 @@ import axle._
   ).settings(
     name := "axle-core",
     libraryDependencies ++= Seq(
-      "org.spire-math" %% "spire" % "0.9.1"
+      "org.spire-math" %% "spire" % "0.10.1",
+      "org.spire-math" %% "spire-scalacheck-binding" % "0.10.1"
     )
   )
 

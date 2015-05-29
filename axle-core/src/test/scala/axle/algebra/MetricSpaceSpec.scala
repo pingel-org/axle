@@ -7,13 +7,14 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.specs2.mutable.Specification
+import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
 
-import axle.algebra.laws.MetricSpaceLaws
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
 import spire.implicits.SeqNormedVectorSpace
 import spire.math.Real
+import spire.laws.VectorSpaceLaws
 
 trait ScalarDoubleSpace extends MetricSpace[Double, Double] {
 
@@ -64,26 +65,27 @@ object ArbitrarySpaceStuff {
 
 class MetricSpaceSpec() extends Specification with Discipline {
 
-  //  lazy val genMetricSpace: Gen[MetricSpace[A, B]] = Gen.oneOf(spaces)
-  //
-  //  implicit lazy val arbitraryMetricSpace: Arbitrary[MetricSpace[A, B]] =
-  //    Arbitrary(genMetricSpace)
-
   import ArbitrarySpaceStuff._
+
+  import spire.implicits._
+
+  implicit val pred: Predicate[Real] = new Predicate[Real] {
+    def apply(a: Real) = true
+  }
 
   implicit val rrr = new RealTuple2Space {}
 
   checkAll("MetricSpace[(Real, Real), Real",
-    MetricSpaceLaws[(Real, Real), Real].laws)
+    VectorSpaceLaws[(Real, Real), Real].metricSpace)
 
   implicit val rr = new ScalarRealSpace {}
 
   checkAll("MetricSpace[Real, Real]",
-    MetricSpaceLaws[Real, Real].laws)
+    VectorSpaceLaws[Real, Real].metricSpace)
 
   implicit val r4 = arbitraryRealSeqLengthN(4)
 
   checkAll("MetricSpace[Seq[Real], Real]",
-    MetricSpaceLaws[Seq[Real], Real].laws)
+    VectorSpaceLaws[Seq[Real], Real].metricSpace)
 
 }
