@@ -39,5 +39,5 @@ class EuclideanSpec
   }
 
   checkAll("Euclidean space on 1x2 matrix",
-    VectorSpaceLaws[DoubleMatrix, Double].metricSpace)
+    VectorSpaceLaws[DoubleMatrix, Double].normedVectorSpace)
 }
