@@ -30,6 +30,7 @@ import spire.math.ConvertableTo
 case class Cosine[M, R: Zero: MultiplicativeMonoid, C: Zero, D: Field: ConvertableFrom: ConvertableTo](n: C)(
   implicit la: LinearAlgebra[M, R, C, D])
     extends MetricSpace[M, D] {
+
   def dot(v: M, w: M): D =
     v.mulPointwise(w).rowSums.scalar
 
