@@ -23,7 +23,7 @@ class CosineSpec
   val n = 2
 
   implicit val arbMatrix: Arbitrary[DoubleMatrix] =
-    Arbitrary(LinearAlgebra.genMatrix[DoubleMatrix, Double](m, n, -100000d, 100000d))
+    Arbitrary(LinearAlgebra.genMatrix[DoubleMatrix, Double](m, n, -10d, 10d))
 
   implicit val space = Cosine[DoubleMatrix, Int, Int, Double](n)
 
@@ -32,6 +32,6 @@ class CosineSpec
   }
 
   checkAll("Cosine space on 1x2 matrix",
-    VectorSpaceLaws[DoubleMatrix, Double].innerProductSpace)
+    VectorSpaceLaws[DoubleMatrix, Double].metricSpace)
 
 }
