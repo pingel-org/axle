@@ -7,6 +7,19 @@ import axle.jblas._
 
 class DocumentVectorSpaceSpec extends Specification {
 
+  "TermVectorizer" should {
+    "create term vectors correctly" in {
+
+      val stopwords = Set("this", "the")
+      val vectorizer = TermVectorizer(stopwords)
+
+      val lines = Vector("foo bar baz", "foo fu", "fu fu fu bar")
+
+      vectorizer.wordCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 4)
+      vectorizer.wordExistsCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 2)
+    }
+  }
+
   val stopwords = Set("the", "a", "of", "for", "in").toSet // TODO extend this
 
   val corpus = Vector(
@@ -17,39 +30,35 @@ class DocumentVectorSpaceSpec extends Specification {
     "foo bar dog")
 
   "dvs" should {
-    "work" in {
+    "create a distance matrix on sample corpus" in {
 
-      val unweightedSpace = UnweightedDocumentVectorSpace(stopwords, corpus)
-      implicit val space = unweightedSpace.space
-      val vectors = corpus.map(unweightedSpace.doc2vector)
+      val vectorizer = TermVectorizer(stopwords)
+
+      val unweightedSpace = UnweightedDocumentVectorSpace(corpus, vectorizer)
+      val vectors = corpus.map(vectorizer)
 
       import spire.implicits.DoubleAlgebra
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
 
+      implicit val normedUnweightedSpace = unweightedSpace.normed
       val unweightedDistanceMatrix = DistanceMatrix(vectors)
 
       1 must be equalTo 1
     }
-
-    "work again" in {
-
-      val lines = Vector("foo bar baz", "foo fu", "fu fu fu bar")
-      val dvs = UnweightedDocumentVectorSpace(Set("this", "the"), lines)
-      dvs.wordCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 4)
-      dvs.wordExistsCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 2)
-    }
   }
 
   "tfidf" should {
-    "work" in {
+    "create a distance matrix on sample corpus" in {
 
-      val tfidfSpace = TFIDFDocumentVectorSpace(stopwords, corpus)
-      implicit val space = tfidfSpace.space
-      val vectors = corpus.map(tfidfSpace.doc2vector)
+      val vectorizer = TermVectorizer(stopwords)
+
+      implicit val tfidfSpace = TFIDFDocumentVectorSpace(corpus, vectorizer)
+      val vectors = corpus.map(vectorizer)
 
       import spire.implicits.DoubleAlgebra
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
 
+      implicit val normedTfidf = tfidfSpace.normed
       val tfidfDistanceMatrix = DistanceMatrix(vectors)
 
       1 must be equalTo 1
