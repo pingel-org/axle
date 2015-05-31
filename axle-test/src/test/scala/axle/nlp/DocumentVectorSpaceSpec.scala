@@ -1,9 +1,10 @@
 package axle.nlp
 
-import org.specs2.mutable._
-import spire.algebra.MetricSpace
-import axle.algebra._
-import axle.jblas._
+import scala.Vector
+
+import org.specs2.mutable.Specification
+
+import axle.algebra.DistanceMatrix
 
 class DocumentVectorSpaceSpec extends Specification {
 
@@ -11,16 +12,17 @@ class DocumentVectorSpaceSpec extends Specification {
     "create term vectors correctly" in {
 
       val stopwords = Set("this", "the")
-      val vectorizer = TermVectorizer(stopwords)
+      import spire.implicits.DoubleAlgebra
+      val vectorizer = TermVectorizer[Double](stopwords)
 
       val lines = Vector("foo bar baz", "foo fu", "fu fu fu bar")
 
-      vectorizer.wordCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 4)
-      vectorizer.wordExistsCount(lines) must be equalTo Map("foo" -> 2, "bar" -> 2, "baz" -> 1, "fu" -> 2)
+      vectorizer.wordCount(lines) must be equalTo Map("foo" -> 2d, "bar" -> 2d, "baz" -> 1d, "fu" -> 4d)
+      vectorizer.wordExistsCount(lines) must be equalTo Map("foo" -> 2d, "bar" -> 2d, "baz" -> 1d, "fu" -> 2d)
     }
   }
 
-  val stopwords = Set("the", "a", "of", "for", "in").toSet // TODO extend this
+  val stopwords = Set("the", "a", "of", "for", "in").toSet
 
   val corpus = Vector(
     "the quick brown fox jumps over the lazy dog",
@@ -32,16 +34,16 @@ class DocumentVectorSpaceSpec extends Specification {
   "dvs" should {
     "create a distance matrix on sample corpus" in {
 
-      val vectorizer = TermVectorizer(stopwords)
-
-      val unweightedSpace = UnweightedDocumentVectorSpace(corpus, vectorizer)
-      val vectors = corpus.map(vectorizer)
-
       import spire.implicits.DoubleAlgebra
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+      val vectorizer = TermVectorizer[Double](stopwords)
 
+      val unweightedSpace = UnweightedDocumentVectorSpace[Double]()
+
+      import axle.jblas.linearAlgebraDoubleMatrix
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
       implicit val normedUnweightedSpace = unweightedSpace.normed
-      val unweightedDistanceMatrix = DistanceMatrix(vectors)
+
+      val unweightedDistanceMatrix = DistanceMatrix(corpus.map(vectorizer))
 
       1 must be equalTo 1
     }
@@ -50,12 +52,13 @@ class DocumentVectorSpaceSpec extends Specification {
   "tfidf" should {
     "create a distance matrix on sample corpus" in {
 
-      val vectorizer = TermVectorizer(stopwords)
+      import spire.implicits.DoubleAlgebra
+      val vectorizer = TermVectorizer[Double](stopwords)
 
-      implicit val tfidfSpace = TFIDFDocumentVectorSpace(corpus, vectorizer)
+      implicit val tfidfSpace = TFIDFDocumentVectorSpace[Double](corpus, vectorizer)
       val vectors = corpus.map(vectorizer)
 
-      import spire.implicits.DoubleAlgebra
+      import axle.jblas.linearAlgebraDoubleMatrix
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
 
       implicit val normedTfidf = tfidfSpace.normed

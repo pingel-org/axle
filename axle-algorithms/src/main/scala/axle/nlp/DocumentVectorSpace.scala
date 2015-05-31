@@ -1,21 +1,24 @@
 package axle.nlp
 
-import spire.algebra._
-import spire.math._
-import spire.implicits._
+import spire.algebra.InnerProductSpace
+import spire.implicits.multiplicativeSemigroupOps
 
-trait DocumentVectorSpace
-    extends InnerProductSpace[Map[String, Int], Double] {
+trait DocumentVectorSpace[D]
+    extends InnerProductSpace[Map[String, D], D] {
 
-  def negate(x: Map[String, Int]): Map[String, Int] = x.map(kv => (kv._1, -1 * kv._2))
+  lazy val dZero = scalar.zero
 
-  def zero: Map[String, Int] = Map.empty
+  def negate(x: Map[String, D]): Map[String, D] =
+    x.map(kv => (kv._1, scalar.negate(kv._2)))
 
-  def plus(x: Map[String, Int], y: Map[String, Int]): Map[String, Int] =
-    (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
+  def zero: Map[String, D] =
+    Map.empty
 
-  def timesl(r: Double, v: Map[String, Int]): Map[String, Int] = v.map(kv => (kv._1, (kv._2 * r).toInt))
+  def plus(x: Map[String, D], y: Map[String, D]): Map[String, D] =
+    (x.keySet union y.keySet).toIterable.map(k =>
+      (k, scalar.plus(x.get(k).getOrElse(dZero), y.get(k).getOrElse(dZero)))).toMap
 
-  def scalar: Field[Double] = DoubleAlgebra
+  def timesl(r: D, v: Map[String, D]): Map[String, D] =
+    v.map(kv => (kv._1, kv._2 * r))
 
 }

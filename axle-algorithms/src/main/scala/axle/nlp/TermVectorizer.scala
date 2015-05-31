@@ -1,35 +1,38 @@
 package axle.nlp
 
-import spire.algebra._
-import spire.math._
-import spire.implicits._
+import spire.algebra.Ring
+import spire.implicits.MapRng
+import spire.implicits.additiveSemigroupOps
 
-case class TermVectorizer(stopwords: Set[String])
-    extends Function1[String, Map[String, Int]] {
+case class TermVectorizer[C: Ring](stopwords: Set[String])
+    extends Function1[String, Map[String, C]] {
+
+  val one = Ring[C].one
+  val zero = Ring[C].zero
 
   val whitespace = """\s+""".r
 
-  val emptyCount = Map.empty[String, Int].withDefaultValue(0)
+  val emptyCount = Map.empty[String, C].withDefaultValue(zero)
 
-  def countWordsInLine(line: String): Map[String, Int] =
+  def countWordsInLine(line: String): Map[String, C] =
     whitespace.split(line.toLowerCase)
-      .filter(!stopwords.contains(_))
-      .aggregate(emptyCount)((m, w) => m + (w -> (m(w) + 1)), _ + _)
+      .filterNot(stopwords.contains)
+      .aggregate(emptyCount)((m, w) => m + (w -> (m(w) + one)), _ + _)
 
-  def uniqueWordsInLine(line: String): Map[String, Int] =
+  def uniqueWordsInLine(line: String): Map[String, C] =
     whitespace.split(line.toLowerCase)
-      .filter(!stopwords.contains(_))
+      .filterNot(stopwords.contains)
       .toSet
-      .map((w: String) => (w, 1))
+      .map((w: String) => (w, one))
       .toMap
 
-  def wordCount(is: Seq[String]): Map[String, Int] =
+  def wordCount(is: Seq[String]): Map[String, C] =
     is.aggregate(emptyCount)((m, line) => m + countWordsInLine(line), _ + _)
 
-  def wordExistsCount(is: Seq[String]): Map[String, Int] =
+  def wordExistsCount(is: Seq[String]): Map[String, C] =
     is.aggregate(emptyCount)((m, line) => m + uniqueWordsInLine(line), _ + _)
 
-  def apply(doc: String): Map[String, Int] =
+  def apply(doc: String): Map[String, C] =
     wordCount(List(doc))
 
 }

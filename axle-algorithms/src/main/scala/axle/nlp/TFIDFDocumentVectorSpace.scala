@@ -1,29 +1,45 @@
 package axle.nlp
 
+import scala.math.log
+import scala.reflect.ClassTag
+
+import axle.algebra.Aggregatable
+import axle.algebra.Σ
 import spire.algebra.Field
-import spire.algebra.InnerProductSpace
-import spire.algebra.MetricSpace
-import spire.implicits.DoubleAlgebra
+import spire.algebra.Ring
+import spire.implicits.convertableOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.math.ConvertableFrom
+import spire.math.ConvertableTo
 
-/**
- *
- *
- */
+case class TFIDFDocumentVectorSpace[D: Field: ClassTag: ConvertableFrom: ConvertableTo](
+  corpus: Iterable[String],
+  termVectorizer: TermVectorizer[D])
+    extends DocumentVectorSpace[D] {
 
-case class TFIDFDocumentVectorSpace(
-  corpusIterable: Iterable[String], termVectorizer: TermVectorizer)
-    extends DocumentVectorSpace {
+  def scalar = Field[D]
 
-  val numDocs = corpusIterable.iterator.size
+  val dOne = Ring[D].one
 
-  val vectors = corpusIterable.iterator.map(termVectorizer).toIndexedSeq
+  val numDocs = corpus.size
 
-  val documentFrequency = termVectorizer.wordExistsCount(corpusIterable.iterator.toList).withDefaultValue(1)
+  val documentFrequency: Map[String, D] =
+    termVectorizer.wordExistsCount(corpus.toList).withDefaultValue(dOne)
 
-  private[this] def termWeight(term: String, doc: Map[String, Int]) =
-    doc(term) * math.log(numDocs / documentFrequency(term).toDouble)
+  private[this] def termWeight(term: String, tv: Map[String, D]): D = {
 
-  def dot(v1: Map[String, Int], v2: Map[String, Int]): Double =
-    (v1.keySet intersect v2.keySet).toList.map(term => termWeight(term, v1) * termWeight(term, v2)).sum
+    val weight = log(numDocs.toDouble / documentFrequency(term).toDouble)
+
+    ConvertableTo[D].fromDouble(weight) * tv(term)
+  }
+
+  def dot(v1: Map[String, D], v2: Map[String, D]): D = {
+
+    val commonTerms = (v1.keySet intersect v2.keySet).toList
+
+    val weights = commonTerms.map(term => scalar.times(termWeight(term, v1), termWeight(term, v2)))
+
+    Σ(weights)(implicitly[ClassTag[D]], scalar, Aggregatable[List])
+  }
 
 }
