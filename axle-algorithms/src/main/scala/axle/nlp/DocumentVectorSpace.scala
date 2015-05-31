@@ -4,36 +4,18 @@ import spire.algebra._
 import spire.math._
 import spire.implicits._
 
-trait DocumentVectorSpace {
+trait DocumentVectorSpace
+    extends InnerProductSpace[Map[String, Int], Double] {
 
-  type TermVector = Map[String, Int]
+  def negate(x: Map[String, Int]): Map[String, Int] = x.map(kv => (kv._1, -1 * kv._2))
 
-  val whitespace = """\s+""".r
+  def zero: Map[String, Int] = Map.empty
 
-  def stopwords: Set[String]
+  def plus(x: Map[String, Int], y: Map[String, Int]): Map[String, Int] =
+    (x.keySet union y.keySet).toIterable.map(k => (k, x.get(k).getOrElse(0) + y.get(k).getOrElse(0))).toMap
 
-  val emptyCount = Map.empty[String, Int].withDefaultValue(0)
+  def timesl(r: Double, v: Map[String, Int]): Map[String, Int] = v.map(kv => (kv._1, (kv._2 * r).toInt))
 
-  def countWordsInLine(line: String): Map[String, Int] =
-    whitespace.split(line.toLowerCase)
-      .filter(!stopwords.contains(_))
-      .aggregate(emptyCount)((m, w) => m + (w -> (m(w) + 1)), _ + _)
-
-  def uniqueWordsInLine(line: String): Map[String, Int] =
-    whitespace.split(line.toLowerCase)
-      .filter(!stopwords.contains(_))
-      .toSet
-      .map((w: String) => (w, 1))
-      .toMap
-
-  def wordCount(is: Seq[String]): Map[String, Int] =
-    is.aggregate(emptyCount)((m, line) => m + countWordsInLine(line), _ + _)
-
-  def wordExistsCount(is: Seq[String]): Map[String, Int] =
-    is.aggregate(emptyCount)((m, line) => m + uniqueWordsInLine(line), _ + _)
-
-  def doc2vector(doc: String): TermVector = wordCount(List(doc))
-
-  def space: MetricSpace[TermVector, Double]
+  def scalar: Field[Double] = DoubleAlgebra
 
 }
