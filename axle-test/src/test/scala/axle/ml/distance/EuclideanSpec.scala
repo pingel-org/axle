@@ -12,6 +12,7 @@ import org.typelevel.discipline.Predicate
 
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
+import axle.jblas.additiveAbGroupDoubleMatrix
 import axle.jblas.eqDoubleMatrix
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra

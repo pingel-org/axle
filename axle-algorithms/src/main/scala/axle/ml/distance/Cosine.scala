@@ -1,42 +1,49 @@
 package axle.ml.distance
 
-import axle.algebra.LinearAlgebra
-import axle.algebra.Zero
-import axle.syntax.linearalgebra.matrixOps
+import scala.math.Pi
+import scala.math.abs
+import scala.math.acos
+
+import spire.algebra.AdditiveAbGroup
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
-import spire.algebra.MultiplicativeMonoid
-import spire.implicits.moduleOps
+import spire.algebra.MetricSpace
+import spire.algebra.NRoot
+import spire.implicits.convertableOps
+import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.math.ConvertableFrom
+import spire.math.ConvertableTo
 
 /**
  *
- * Cosine space
+ * Cosine
+ *
+ * http://en.wikipedia.org/wiki/Cosine_similarity
  *
  * @param n = num columns in row vectors
  *
- * distance(r1, r2) = 1.0 - abs(rvDot(r1, r2) / (norm(r1) * norm(r2)))
- *
- * TODO: distance calcs could assert(r1.isRowVector && r2.isRowVector && r1.length === r2.length)
+ * http://math.stackexchange.com/questions/102924/cosine-similarity-distance-and-triangle-equation
  *
  */
 
-case class Cosine[M, R: Zero: MultiplicativeMonoid, C: Zero, V: Field](n: C)(
-  implicit la: LinearAlgebra[M, R, C, V])
-    extends InnerProductSpace[M, V] {
+case class Cosine[M, D: NRoot: Field: AdditiveAbGroup: ConvertableFrom: ConvertableTo](
+  implicit ips: InnerProductSpace[M, D])
+    extends MetricSpace[M, D] {
 
-  implicit val ring = la.ring
-  implicit val module = la.module
+  val normed = ips.normed
 
-  def negate(x: M): M = x.negate
+  val norm = normed.norm _
+  import ips.dot
 
-  def zero: M = la.zeros(implicitly[MultiplicativeMonoid[R]].one, n)
+  def similarity(v: M, w: M): D =
+    dot(v, w) / (norm(v) * norm(w))
 
-  def plus(x: M, y: M): M = la.ring.plus(x, y)
+  def distance(v: M, w: M): D = {
 
-  def timesl(r: V, v: M): M = v :* r
+    val d = 1d - abs(acos(similarity(v, w).toDouble) / Pi)
 
-  def scalar: Field[V] = Field[V]
-
-  def dot(v: M, w: M): V = v.mulPointwise(w).rowSums.scalar
+    ConvertableTo[D].fromDouble(d)
+  }
 
 }

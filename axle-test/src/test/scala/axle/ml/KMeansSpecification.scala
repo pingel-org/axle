@@ -12,6 +12,7 @@ import org.jblas.DoubleMatrix
 import org.specs2.mutable.Specification
 
 import axle.jblas.linearAlgebraDoubleMatrix
+import axle.jblas.additiveAbGroupDoubleMatrix
 import axle.ml.distance.Euclidean
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra

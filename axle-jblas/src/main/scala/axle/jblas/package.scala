@@ -11,6 +11,7 @@ import spire.algebra.AdditiveCSemigroup
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
+import spire.algebra.InnerProductSpace
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
@@ -39,9 +40,31 @@ package object jblas {
 
   implicit def eqDoubleMatrix = new Eq[DoubleMatrix] {
 
-    def eqv(x: DoubleMatrix, y: DoubleMatrix): Boolean = 
+    def eqv(x: DoubleMatrix, y: DoubleMatrix): Boolean =
       x.equals(y)
   }
+
+  // TODO this innerProductSpace is for row vectors
+  implicit def innerProductSpace[R: MultiplicativeMonoid, C](n: C)(
+    implicit la: LinearAlgebra[DoubleMatrix, R, C, Double],
+    module: Module[DoubleMatrix, Double]) =
+    new InnerProductSpace[DoubleMatrix, Double] {
+
+      def negate(x: DoubleMatrix): DoubleMatrix = la.negate(x)
+
+      def zero: DoubleMatrix = la.zeros(implicitly[MultiplicativeMonoid[R]].one, n)
+
+      def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
+        la.ring.plus(x, y)
+
+      def timesl(r: Double, v: DoubleMatrix): DoubleMatrix =
+        module.timesl(r, v)
+
+      def scalar: Field[Double] = spire.implicits.DoubleAlgebra
+
+      def dot(v: DoubleMatrix, w: DoubleMatrix): Double =
+        la.mulPointwise(v)(w).rowSums.scalar
+    }
 
   implicit def moduleDoubleMatrix[N](implicit rng: Rng[N], cfn: ConvertableFrom[N]): Module[DoubleMatrix, N] =
     new Module[DoubleMatrix, N] {
