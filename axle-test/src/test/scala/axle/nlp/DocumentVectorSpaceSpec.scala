@@ -1,9 +1,10 @@
 package axle.nlp
 
-import org.specs2.mutable._
-import spire.algebra.MetricSpace
-import axle.algebra._
-import axle.jblas._
+import scala.Vector
+
+import org.specs2.mutable.Specification
+
+import axle.algebra.DistanceMatrix
 
 class DocumentVectorSpaceSpec extends Specification {
 
@@ -21,7 +22,7 @@ class DocumentVectorSpaceSpec extends Specification {
     }
   }
 
-  val stopwords = Set("the", "a", "of", "for", "in").toSet // TODO extend this
+  val stopwords = Set("the", "a", "of", "for", "in").toSet
 
   val corpus = Vector(
     "the quick brown fox jumps over the lazy dog",
@@ -38,6 +39,7 @@ class DocumentVectorSpaceSpec extends Specification {
 
       val unweightedSpace = UnweightedDocumentVectorSpace[Double]()
 
+      import axle.jblas.linearAlgebraDoubleMatrix
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
       implicit val normedUnweightedSpace = unweightedSpace.normed
 
@@ -56,6 +58,7 @@ class DocumentVectorSpaceSpec extends Specification {
       implicit val tfidfSpace = TFIDFDocumentVectorSpace[Double](corpus, vectorizer)
       val vectors = corpus.map(vectorizer)
 
+      import axle.jblas.linearAlgebraDoubleMatrix
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
 
       implicit val normedTfidf = tfidfSpace.normed
