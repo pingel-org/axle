@@ -1,8 +1,8 @@
 package axle.nlp
 
-import spire.algebra._
-import spire.math._
-import spire.implicits._
+import spire.algebra.Ring
+import spire.implicits.MapRng
+import spire.implicits.additiveSemigroupOps
 
 case class TermVectorizer[C: Ring](stopwords: Set[String])
     extends Function1[String, Map[String, C]] {

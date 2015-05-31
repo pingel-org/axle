@@ -1,7 +1,6 @@
 package axle.nlp
 
 import spire.algebra.InnerProductSpace
-import spire.algebra.Ring
 import spire.implicits.multiplicativeSemigroupOps
 
 trait DocumentVectorSpace[D]
