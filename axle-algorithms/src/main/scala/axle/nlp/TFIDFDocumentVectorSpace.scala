@@ -5,6 +5,7 @@ import scala.reflect.ClassTag
 
 import axle.algebra.Aggregatable
 import axle.algebra.Σ
+import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Ring
 import spire.implicits.convertableOps
@@ -14,17 +15,23 @@ import spire.math.ConvertableTo
 
 case class TFIDFDocumentVectorSpace[D: Field: ClassTag: ConvertableFrom: ConvertableTo](
   corpus: Iterable[String],
-  termVectorizer: TermVectorizer[D])
+  termVectorizer: TermVectorizer[D])(implicit _eqD: Eq[D])
     extends DocumentVectorSpace[D] {
 
   def scalar = Field[D]
 
-  val dOne = Ring[D].one
+  implicit def eqD = _eqD
+
+  // val dZero = Ring[D].zero
 
   val numDocs = corpus.size
 
+  // TODO previously the default value was a "one",
+  // which prevents division by zero in the termWeight calculation
+  // but causes several axioms to fail
+
   val documentFrequency: Map[String, D] =
-    termVectorizer.wordExistsCount(corpus.toList).withDefaultValue(dOne)
+    termVectorizer.wordExistsCount(corpus.toList).withDefaultValue(dZero)
 
   private[this] def termWeight(term: String, tv: Map[String, D]): D = {
 

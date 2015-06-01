@@ -2,14 +2,18 @@ package axle.nlp
 
 import scala.Vector
 
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.specs2.mutable.Specification
-
-import axle.algebra.DistanceMatrix
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
+
+import axle.algebra.DistanceMatrix
+import axle.jblas.linearAlgebraDoubleMatrix
 import spire.algebra.Eq
-import spire.algebra.InnerProductSpace
+import spire.implicits.DoubleAlgebra
 import spire.laws.VectorSpaceLaws
+import spire.math.Real
 
 class DocumentVectorSpaceSpec
     extends Specification
@@ -75,44 +79,57 @@ class DocumentVectorSpaceSpec
     }
   }
 
-  implicit val pred: Predicate[Double] = new Predicate[Double] {
-    def apply(a: Double) = true
-  }
-
-  implicit def eqMapKV[K: Eq, V: Eq]: Eq[Map[K, V]] = new Eq[Map[K, V]] {
-    def eqv(x: Map[K, V], y: Map[K, V]): Boolean = {
-      x.equals(y)
-    }
-  }
-
-  implicit val stringEq = new Eq[String] {
-    def eqv(x: String, y: String): Boolean = x equals y
-  }
-
-  import spire.implicits.DoubleAlgebra
-
   {
-    /*
-    val vectorizer = TermVectorizer[Double](stopwords)
+    implicit val predDouble: Predicate[Double] = new Predicate[Double] {
+      def apply(a: Double) = true
+    }
 
-    implicit val unweightedSpace = UnweightedDocumentVectorSpace[Double]()
+    def tautology[T]: Predicate[T] = new Predicate[T] {
+      def apply(a: T) = true
+    }
 
-    import org.scalacheck.Gen
-    import org.scalacheck.Gen.Choose
+    implicit def eqMapKV[K: Eq, V: Eq]: Eq[Map[K, V]] = new Eq[Map[K, V]] {
+      def eqv(x: Map[K, V], y: Map[K, V]): Boolean = {
+        x.equals(y)
+      }
+    }
 
-    implicit val genWord = Gen.oneOf[String](
-      "the", "quick", "brown", "fox", "jumped", "over", "lazy", "dog")
+    implicit val stringEq = new Eq[String] {
+      def eqv(x: String, y: String): Boolean = x equals y
+    }
 
-    implicit val genDouble = Gen.choose[Double](1d, 10d)
+    implicit val eqDouble = new Eq[Double] {
+      def eqv(x: Double, y: Double): Boolean = x == y
+    }
 
-    checkAll("unweighted document vector space",
-      VectorSpaceLaws[Map[String, Double], Double].innerProductSpace)
+    implicit val eqInt = new Eq[Int] {
+      def eqv(x: Int, y: Int): Boolean = x == y
+    }
+
+    val vectorizer = TermVectorizer[Real](stopwords)
+
+    // TODO combine any 2 from corpus to generate longer sentence, squaring the number of possibilities
+    // TODO more possibilities for genReal
+    val genReal: Gen[Real] = Gen.oneOf[Real](Real(1), Real(2), Real(10))
+
+    val vsl = VectorSpaceLaws[Map[String, Real], Real](
+      eqMapKV[String, Real],
+      Arbitrary(Gen.oneOf(corpus.map(vectorizer))),
+      implicitly[Eq[Real]],
+      Arbitrary(genReal),
+      tautology)
+
+    implicit val unweightedSpace = UnweightedDocumentVectorSpace[Real]()
+
+    val ipsLaws = vsl.innerProductSpace
+
+    checkAll("unweighted document vector space", ipsLaws)
 
     implicit val normedUnweightedSpace = unweightedSpace.normed
 
-    checkAll("unweighted document vector space (normed)",
-      VectorSpaceLaws[Map[String, Double], Double].normedVectorSpace)
-    */
+    val nvsLaws = vsl.normedVectorSpace
+
+    checkAll("unweighted document vector space (normed)", nvsLaws)
   }
 
 }
