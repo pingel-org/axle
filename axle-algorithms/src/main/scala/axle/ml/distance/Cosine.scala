@@ -4,7 +4,6 @@ import scala.math.Pi
 import scala.math.abs
 import scala.math.acos
 
-import spire.algebra.AdditiveAbGroup
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
 import spire.algebra.MetricSpace
@@ -27,7 +26,7 @@ import spire.math.ConvertableTo
  *
  */
 
-case class Cosine[M, D: NRoot: Field: AdditiveAbGroup: ConvertableFrom: ConvertableTo](
+case class Cosine[M, D: NRoot: Field: ConvertableFrom: ConvertableTo](
   implicit ips: InnerProductSpace[M, D])
     extends MetricSpace[M, D] {
 
