@@ -174,7 +174,9 @@ package object jblas {
         } mkString ("\n")
     }
 
-  implicit def linearAlgebraDoubleMatrix[N: Rng](implicit cfn: ConvertableFrom[N], ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
+  implicit def linearAlgebraDoubleMatrix[N: Rng](
+      implicit cfn: ConvertableFrom[N],
+      ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
     new LinearAlgebra[DoubleMatrix, Int, Int, N] {
 
       def elementRng: Rng[N] = Rng[N]
