@@ -41,7 +41,7 @@ class KMeansSpecification
           (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
       //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
-      implicit val innerSpace = rowVectorInnerProductSpace[Int, Int](2)
+      implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](2)
 
       implicit val space = Euclidean[DoubleMatrix, Double]()
 

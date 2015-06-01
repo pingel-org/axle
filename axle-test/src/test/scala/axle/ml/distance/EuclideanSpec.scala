@@ -23,7 +23,7 @@ class EuclideanSpec
   val n = 2
 
   // TODO Double value type
-  implicit val innerSpace = rowVectorInnerProductSpace[Int, Int](n)
+  implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](n)
 
   implicit val space = Euclidean[DoubleMatrix, Double]()
 

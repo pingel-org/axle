@@ -45,11 +45,11 @@ package object jblas {
   }
 
   // TODO put column count in type and make this implicit
-  // TODO parameter for number type
-  def rowVectorInnerProductSpace[R: MultiplicativeMonoid, C](n: C)(
-    implicit la: LinearAlgebra[DoubleMatrix, R, C, Double],
-    module: Module[DoubleMatrix, Double]) =
-    new InnerProductSpace[DoubleMatrix, Double] {
+  def rowVectorInnerProductSpace[R: MultiplicativeMonoid, C, N: Field](n: C)(
+    implicit la: LinearAlgebra[DoubleMatrix, R, C, N],
+    module: Module[DoubleMatrix, N],
+    ctn: ConvertableTo[N]) =
+    new InnerProductSpace[DoubleMatrix, N] {
 
       def negate(x: DoubleMatrix): DoubleMatrix = la.negate(x)
 
@@ -58,16 +58,18 @@ package object jblas {
       def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
         la.ring.plus(x, y)
 
-      def timesl(r: Double, v: DoubleMatrix): DoubleMatrix =
+      def timesl(r: N, v: DoubleMatrix): DoubleMatrix =
         module.timesl(r, v)
 
-      def scalar: Field[Double] = spire.implicits.DoubleAlgebra
+      def scalar: Field[N] = Field[N]
 
-      def dot(v: DoubleMatrix, w: DoubleMatrix): Double =
-        la.mulPointwise(v)(w).rowSums.scalar
+      def dot(v: DoubleMatrix, w: DoubleMatrix): N =
+        ctn.fromDouble(la.mulPointwise(v)(w).rowSums.scalar)
     }
 
-  implicit def moduleDoubleMatrix[N](implicit rng: Rng[N], cfn: ConvertableFrom[N]): Module[DoubleMatrix, N] =
+  implicit def moduleDoubleMatrix[N](
+    implicit rng: Rng[N],
+    cfn: ConvertableFrom[N]): Module[DoubleMatrix, N] =
     new Module[DoubleMatrix, N] {
 
       def negate(x: DoubleMatrix): DoubleMatrix =
