@@ -44,9 +44,9 @@ package object jblas {
       x.equals(y)
   }
 
-  // TODO this innerProductSpace is for row vectors only
   // TODO put column count in type and make this implicit
-  def innerProductSpace[R: MultiplicativeMonoid, C](n: C)(
+  // TODO parameter for number type
+  def rowVectorInnerProductSpace[R: MultiplicativeMonoid, C](n: C)(
     implicit la: LinearAlgebra[DoubleMatrix, R, C, Double],
     module: Module[DoubleMatrix, Double]) =
     new InnerProductSpace[DoubleMatrix, Double] {
