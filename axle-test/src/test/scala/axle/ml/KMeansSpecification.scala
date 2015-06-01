@@ -13,13 +13,15 @@ import org.specs2.mutable.Specification
 
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.additiveAbGroupDoubleMatrix
+import axle.jblas.rowVectorInnerProductSpace
+import axle.jblas.moduleDoubleMatrix
 import axle.ml.distance.Euclidean
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 
 class KMeansSpecification
-  extends Specification {
+    extends Specification {
 
   "K-Means Clustering" should {
     "work" in {
@@ -39,7 +41,9 @@ class KMeansSpecification
           (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
       //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
-      implicit val space = Euclidean[DoubleMatrix, Int, Int, Double](2)
+      implicit val innerSpace = rowVectorInnerProductSpace[Int, Int](2)
+
+      implicit val space = Euclidean[DoubleMatrix, Double]()
 
       implicit val fooEq = new Eq[Foo] {
         def eqv(x: Foo, y: Foo): Boolean = x equals y
