@@ -2,14 +2,18 @@ package axle.nlp
 
 import scala.Vector
 
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.specs2.mutable.Specification
-
-import axle.algebra.DistanceMatrix
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
+
+import axle.algebra.DistanceMatrix
+import axle.jblas.linearAlgebraDoubleMatrix
 import spire.algebra.Eq
-import spire.algebra.InnerProductSpace
+import spire.implicits.DoubleAlgebra
 import spire.laws.VectorSpaceLaws
+import spire.math.Real
 
 class DocumentVectorSpaceSpec
     extends Specification
@@ -75,44 +79,51 @@ class DocumentVectorSpaceSpec
     }
   }
 
-  implicit val pred: Predicate[Double] = new Predicate[Double] {
-    def apply(a: Double) = true
+  def tautology[T]: Predicate[T] = new Predicate[T] {
+    def apply(a: T) = true
   }
 
-  implicit def eqMapKV[K: Eq, V: Eq]: Eq[Map[K, V]] = new Eq[Map[K, V]] {
+  implicit def eqMapKV[K, V]: Eq[Map[K, V]] = new Eq[Map[K, V]] {
     def eqv(x: Map[K, V], y: Map[K, V]): Boolean = {
       x.equals(y)
     }
   }
 
-  implicit val stringEq = new Eq[String] {
-    def eqv(x: String, y: String): Boolean = x equals y
-  }
+  val vectorizer = TermVectorizer[Real](stopwords)
 
-  import spire.implicits.DoubleAlgebra
+  // TODO combine any 2 from corpus to generate longer sentence, squaring the number of possibilities
+  val genTermVector = Gen.oneOf(corpus.map(vectorizer))
+
+  // TODO more possibilities for genReal
+  val genReal = Gen.oneOf[Real](1, 2, 3.9, 10)
+
+  val vsl = VectorSpaceLaws[Map[String, Real], Real](
+    eqMapKV[String, Real],
+    Arbitrary(genTermVector),
+    implicitly[Eq[Real]],
+    Arbitrary(genReal),
+    tautology)
 
   {
-    /*
-    val vectorizer = TermVectorizer[Double](stopwords)
+    implicit val unweightedSpace = UnweightedDocumentVectorSpace[Real]()
 
-    implicit val unweightedSpace = UnweightedDocumentVectorSpace[Double]()
-
-    import org.scalacheck.Gen
-    import org.scalacheck.Gen.Choose
-
-    implicit val genWord = Gen.oneOf[String](
-      "the", "quick", "brown", "fox", "jumped", "over", "lazy", "dog")
-
-    implicit val genDouble = Gen.choose[Double](1d, 10d)
-
-    checkAll("unweighted document vector space",
-      VectorSpaceLaws[Map[String, Double], Double].innerProductSpace)
+    // checkAll("unweighted document vector space", vsl.innerProductSpace)
 
     implicit val normedUnweightedSpace = unweightedSpace.normed
 
-    checkAll("unweighted document vector space (normed)",
-      VectorSpaceLaws[Map[String, Double], Double].normedVectorSpace)
-    */
+    checkAll("unweighted document vector space (normed)", vsl.normedVectorSpace)
+  }
+
+  {
+    implicit val tfIdfSpace = TFIDFDocumentVectorSpace[Real](corpus, vectorizer)
+
+    // checkAll("tfidf document vector space", vsl.innerProductSpace)
+
+    implicit val normedTfIdfSpace = tfIdfSpace.normed
+
+    checkAll("tfidf document vector space (normed)", vsl.normedVectorSpace)
+
+    // TODO cosine space
   }
 
 }
