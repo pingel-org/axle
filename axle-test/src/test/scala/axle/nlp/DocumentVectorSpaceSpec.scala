@@ -79,57 +79,51 @@ class DocumentVectorSpaceSpec
     }
   }
 
+  def tautology[T]: Predicate[T] = new Predicate[T] {
+    def apply(a: T) = true
+  }
+
+  implicit def eqMapKV[K, V]: Eq[Map[K, V]] = new Eq[Map[K, V]] {
+    def eqv(x: Map[K, V], y: Map[K, V]): Boolean = {
+      x.equals(y)
+    }
+  }
+
+  val vectorizer = TermVectorizer[Real](stopwords)
+
+  // TODO combine any 2 from corpus to generate longer sentence, squaring the number of possibilities
+  val genTermVector = Gen.oneOf(corpus.map(vectorizer))
+
+  // TODO more possibilities for genReal
+  val genReal = Gen.oneOf[Real](1, 2, 3.9, 10)
+
+  val vsl = VectorSpaceLaws[Map[String, Real], Real](
+    eqMapKV[String, Real],
+    Arbitrary(genTermVector),
+    implicitly[Eq[Real]],
+    Arbitrary(genReal),
+    tautology)
+
   {
-    implicit val predDouble: Predicate[Double] = new Predicate[Double] {
-      def apply(a: Double) = true
-    }
-
-    def tautology[T]: Predicate[T] = new Predicate[T] {
-      def apply(a: T) = true
-    }
-
-    implicit def eqMapKV[K: Eq, V: Eq]: Eq[Map[K, V]] = new Eq[Map[K, V]] {
-      def eqv(x: Map[K, V], y: Map[K, V]): Boolean = {
-        x.equals(y)
-      }
-    }
-
-    implicit val stringEq = new Eq[String] {
-      def eqv(x: String, y: String): Boolean = x equals y
-    }
-
-    implicit val eqDouble = new Eq[Double] {
-      def eqv(x: Double, y: Double): Boolean = x == y
-    }
-
-    implicit val eqInt = new Eq[Int] {
-      def eqv(x: Int, y: Int): Boolean = x == y
-    }
-
-    val vectorizer = TermVectorizer[Real](stopwords)
-
-    // TODO combine any 2 from corpus to generate longer sentence, squaring the number of possibilities
-    // TODO more possibilities for genReal
-    val genReal: Gen[Real] = Gen.oneOf[Real](Real(1), Real(2), Real(10))
-
-    val vsl = VectorSpaceLaws[Map[String, Real], Real](
-      eqMapKV[String, Real],
-      Arbitrary(Gen.oneOf(corpus.map(vectorizer))),
-      implicitly[Eq[Real]],
-      Arbitrary(genReal),
-      tautology)
-
     implicit val unweightedSpace = UnweightedDocumentVectorSpace[Real]()
 
-    val ipsLaws = vsl.innerProductSpace
-
-    checkAll("unweighted document vector space", ipsLaws)
+    // checkAll("unweighted document vector space", vsl.innerProductSpace)
 
     implicit val normedUnweightedSpace = unweightedSpace.normed
 
-    val nvsLaws = vsl.normedVectorSpace
+    checkAll("unweighted document vector space (normed)", vsl.normedVectorSpace)
+  }
 
-    checkAll("unweighted document vector space (normed)", nvsLaws)
+  {
+    implicit val tfIdfSpace = TFIDFDocumentVectorSpace[Real](corpus, vectorizer)
+
+    // checkAll("tfidf document vector space", vsl.innerProductSpace)
+
+    implicit val normedTfIdfSpace = tfIdfSpace.normed
+
+    checkAll("tfidf document vector space (normed)", vsl.normedVectorSpace)
+
+    // TODO cosine space
   }
 
 }
