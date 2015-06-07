@@ -29,8 +29,8 @@ object AxleBuild extends Build {
     libraryDependencies ++= Seq(
       "org.typelevel" %% "discipline" % "0.2.1",
       "org.specs2" %% "specs2" % "2.4.17" % "test",
-      "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
-      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.1"
+      "org.scala-lang.modules" %% "scala-xml" % "1.0.4",
+      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"
     ),
 
     scalacOptions ++= Seq(
@@ -139,7 +139,7 @@ import axle._
   ).settings(
     name := "axle-algorithms",
     libraryDependencies ++= Seq(
-      "com.chuusai" %% "shapeless" % "2.1.0"
+      "com.chuusai" %% "shapeless" % "2.2.1"
     )
   ).dependsOn(axleCore)
 
