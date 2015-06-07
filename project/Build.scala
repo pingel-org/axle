@@ -139,7 +139,7 @@ import axle._
   ).settings(
     name := "axle-algorithms",
     libraryDependencies ++= Seq(
-      "com.chuusai" %% "shapeless" % "2.1.0"
+      "com.chuusai" %% "shapeless" % "2.2.1"
     )
   ).dependsOn(axleCore)
 
