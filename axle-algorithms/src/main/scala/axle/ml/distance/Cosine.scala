@@ -24,25 +24,26 @@ import spire.math.ConvertableTo
  *
  * http://math.stackexchange.com/questions/102924/cosine-similarity-distance-and-triangle-equation
  *
+ * Also see:
+ *
+ *   "Metric Distances Derived from Cosine Similarity and Pearson and Spearman Correlations"
+ *   http://arxiv.org/pdf/1208.3145.pdf
+ *
+ * one distance in terms of similarity:
+ *
+ *   1d - 2d *abs(acos(similarity(u, v)) / Pi)
+ *
  */
 
 case class Cosine[M, D: NRoot: Field: ConvertableFrom: ConvertableTo](
-  implicit ips: InnerProductSpace[M, D])
-    extends MetricSpace[M, D] {
+  implicit ips: InnerProductSpace[M, D]) {
 
   val normed = ips.normed
 
   val norm = normed.norm _
   import ips.dot
 
-  def similarity(v: M, w: M): D =
+  def distance(v: M, w: M): D =
     dot(v, w) / (norm(v) * norm(w))
-
-  def distance(v: M, w: M): D = {
-
-    val d = 1d - abs(acos(similarity(v, w).toDouble) / Pi)
-
-    ConvertableTo[D].fromDouble(d)
-  }
 
 }

@@ -10,6 +10,7 @@ import org.typelevel.discipline.specs2.mutable.Discipline
 
 import axle.algebra.DistanceMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
+import axle.ml.distance.Cosine
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.laws.VectorSpaceLaws
@@ -107,8 +108,6 @@ class DocumentVectorSpaceSpec
   {
     implicit val unweightedSpace = UnweightedDocumentVectorSpace[Real]()
 
-    // checkAll("unweighted document vector space", vsl.innerProductSpace)
-
     implicit val normedUnweightedSpace = unweightedSpace.normed
 
     checkAll("unweighted document vector space (normed)", vsl.normedVectorSpace)
@@ -117,13 +116,9 @@ class DocumentVectorSpaceSpec
   {
     implicit val tfIdfSpace = TFIDFDocumentVectorSpace[Real](corpus, vectorizer)
 
-    // checkAll("tfidf document vector space", vsl.innerProductSpace)
-
     implicit val normedTfIdfSpace = tfIdfSpace.normed
 
     checkAll("tfidf document vector space (normed)", vsl.normedVectorSpace)
-
-    // TODO cosine space
   }
 
 }
