@@ -17,8 +17,6 @@ import spire.implicits.eqOps
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
-case class Point2D[X, Y](x: X, y: Y)
-
 case class ScaledArea2D[X, Y](
   width: Int,
   height: Int,

@@ -8,22 +8,7 @@ import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
 
-import axle.algebra.LengthSpace
 import axle.algebra.Plottable
-import axle.algebra.Tics
-import axle.algebra.Zero
-import spire.algebra.Eq
-
-object Plot {
-
-  implicit def drawPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _]): Draw[Plot[X, Y, D]] =
-    new Draw[Plot[X, Y, D]] {
-
-      def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
-    }
-
-}
 
 case class Plot[X: Plottable, Y: Plottable, D](
   initialValue: List[(String, D)],

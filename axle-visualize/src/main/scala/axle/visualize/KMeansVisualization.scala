@@ -27,14 +27,14 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
 
 case class KMeansVisualization[D, F[_], M](
-  classifier: KMeans[D, F, M],
-  w: Int = 600,
-  h: Int = 600,
-  border: Int = 50,
-  pointDiameter: Int = 10,
-  fontName: String = "Courier New",
-  fontSize: Int = 12)(
-    implicit la: LinearAlgebra[M, Int, Int, Double]) extends JPanel {
+    classifier: KMeans[D, F, M],
+    w: Int = 600,
+    h: Int = 600,
+    border: Int = 50,
+    pointDiameter: Int = 10,
+    fontName: String = "Courier New",
+    fontSize: Int = 12)(
+        implicit la: LinearAlgebra[M, Int, Int, Double]) extends JPanel {
 
   setMinimumSize(new Dimension(w + border, h + border))
 
@@ -86,13 +86,12 @@ case class KMeansVisualization[D, F[_], M](
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
 
-    boundingRectangle.paint(g2d)
-    xTics.paint(g2d)
-    yTics.paint(g2d)
-    centroidOvals.map(_.paint(g2d))
-    (0 until classifier.K) foreach { i =>
-      cluster(g2d, i)
-    }
+    import axle.awt.Paintable // TODO move this !!
+    Paintable[Rectangle[Double, Double]].paint(boundingRectangle, g2d)
+    Paintable[XTics[Double, Double]].paint(xTics, g2d)
+    Paintable[YTics[Double, Double]].paint(yTics, g2d)
+    centroidOvals foreach { Paintable[Oval[Double, Double]].paint(_, g2d) }
+    (0 until classifier.K) foreach { cluster(g2d, _) }
   }
 
 }

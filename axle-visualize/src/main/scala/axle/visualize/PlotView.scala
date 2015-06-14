@@ -17,9 +17,18 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Eq
 
-case class PlotView[X, Y, D](plot: Plot[X, Y, D], data: Seq[(String, D)], normalFont: Font)(
-  implicit xZero: Zero[X], xts: Tics[X], xEq: Eq[X], xLength: LengthSpace[X, _],
-  yZero: Zero[Y], yts: Tics[Y], yEq: Eq[Y], yLength: LengthSpace[Y, _]) {
+case class PlotView[X, Y, D](
+    plot: Plot[X, Y, D],
+    data: Seq[(String, D)],
+    normalFont: Font)(
+        implicit xZero: Zero[X],
+        xts: Tics[X],
+        xEq: Eq[X],
+        xLength: LengthSpace[X, _],
+        yZero: Zero[Y],
+        yts: Tics[Y],
+        yEq: Eq[Y],
+        yLength: LengthSpace[Y, _]) {
 
   import plot._
 

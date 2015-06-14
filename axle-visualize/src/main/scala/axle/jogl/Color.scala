@@ -1,4 +1,4 @@
-package axle.visualize.gl
+package axle.jogl
 
 case class Color(red: Float, green: Float, blue: Float)
 

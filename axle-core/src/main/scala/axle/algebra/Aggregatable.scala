@@ -9,6 +9,9 @@ import spire.algebra.Ring
 import spire.implicits.MapRng
 import spire.implicits.additiveSemigroupOps
 
+import scala.annotation.implicitNotFound
+
+@implicitNotFound("Witness not found for Aggregatable[${F}]")
 trait Aggregatable[F[_]] {
 
   def aggregate[A, B: ClassTag](xs: F[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B

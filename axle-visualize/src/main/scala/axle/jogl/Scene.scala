@@ -1,4 +1,4 @@
-package axle.visualize.gl
+package axle.jogl
 
 import java.net.URL
 

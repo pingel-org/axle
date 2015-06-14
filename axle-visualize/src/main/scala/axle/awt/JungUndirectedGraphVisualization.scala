@@ -1,4 +1,4 @@
-package axle.visualize
+package axle.awt
 
 import java.awt.BasicStroke
 import java.awt.Color

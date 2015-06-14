@@ -75,6 +75,7 @@ class TimeSeriesPlotSpec extends Specification {
       yAxisLabel = Some("H"),
       title = Some("Entropy"))
 
+    import axle.awt._
     val d = Draw[Plot[Rational, UnittedQuantity[Information, Double], D]]
 
     // png(plot, "")
