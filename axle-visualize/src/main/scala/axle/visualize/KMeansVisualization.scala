@@ -8,23 +8,17 @@ import java.awt.Color.orange
 import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
-import java.awt.Dimension
 import java.awt.Font
-import java.awt.Graphics
-import java.awt.Graphics2D
 
 import axle.algebra.LinearAlgebra
 import axle.algebra.Tics
 import axle.ml.KMeans
-import axle.quanta.AngleConverter
 import axle.syntax.linearalgebra.matrixOps
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import javax.swing.JPanel
 import spire.implicits.DoubleAlgebra
-import spire.implicits.eqOps
 
 case class KMeansVisualization[D, F[_], M](
     classifier: KMeans[D, F, M],
@@ -34,9 +28,7 @@ case class KMeansVisualization[D, F[_], M](
     pointDiameter: Int = 10,
     fontName: String = "Courier New",
     fontSize: Int = 12)(
-        implicit la: LinearAlgebra[M, Int, Int, Double]) extends JPanel {
-
-  setMinimumSize(new Dimension(w + border, h + border))
+        implicit la: LinearAlgebra[M, Int, Int, Double]) {
 
   import classifier.featureMatrix
 
@@ -67,31 +59,6 @@ case class KMeansVisualization[D, F[_], M](
     Oval(scaledArea, center, 3 * pointDiameter, 3 * pointDiameter, colors(i % colors.length), darkGray)
   }
 
-  def cluster(g2d: Graphics2D, i: Int): Unit = {
-    g2d.setColor(colors(i % colors.length))
-    (0 until featureMatrix.rows) foreach { r =>
-      if (classifier.a.get(r, 0) === i) {
-        // TODO figure out what to do when N > 2
-        val center = Point2D(featureMatrix.get(r, 0), featureMatrix.get(r, 1))
-        scaledArea.fillOval(g2d, center, pointDiameter, pointDiameter)
-        // scaledArea.drawString(g2d, r.toString + "(%.2f,%.2f)".format(center.x, center.y), center)
-      }
-    }
-  }
-
   val centroidOvals = (0 until classifier.K).map(centroidOval)
-
-  override def paintComponent(g: Graphics): Unit = {
-
-    val g2d = g.asInstanceOf[Graphics2D]
-    val fontMetrics = g2d.getFontMetrics
-
-    import axle.awt.Paintable // TODO move this !!
-    Paintable[Rectangle[Double, Double]].paint(boundingRectangle, g2d)
-    Paintable[XTics[Double, Double]].paint(xTics, g2d)
-    Paintable[YTics[Double, Double]].paint(yTics, g2d)
-    centroidOvals foreach { Paintable[Oval[Double, Double]].paint(_, g2d) }
-    (0 until classifier.K) foreach { cluster(g2d, _) }
-  }
 
 }
