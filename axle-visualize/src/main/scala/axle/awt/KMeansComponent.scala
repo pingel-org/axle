@@ -32,7 +32,7 @@ case class KMeansComponent[D, F[_], M](
       if (classifier.a.get(r, 0) === i) {
         // TODO figure out what to do when N > 2
         val center = Point2D(featureMatrix.get(r, 0), featureMatrix.get(r, 1))
-        scaledArea.fillOval(g2d, center, pointDiameter, pointDiameter)
+        fillOval(g2d, scaledArea, center, pointDiameter, pointDiameter)
         // scaledArea.drawString(g2d, r.toString + "(%.2f,%.2f)".format(center.x, center.y), center)
       }
     }

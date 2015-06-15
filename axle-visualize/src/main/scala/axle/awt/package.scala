@@ -1,11 +1,16 @@
 
 package axle
 
+import scala.math.abs
+import scala.math.min
+
+import java.awt.FontMetrics
 import java.awt.Color
 import java.awt.Component
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.io.File
+import axle.visualize.ScaledArea2D
 
 import scala.annotation.implicitNotFound
 import scala.reflect.ClassTag
@@ -20,17 +25,24 @@ import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.awt.Paintable
+import axle.awt.BarChartComponent
+import axle.awt.BarChartGroupedComponent
+import axle.awt.PlotComponent
+import axle.awt.JungUndirectedGraphVisualization
+import axle.awt.JungDirectedGraphVisualization
+import axle.awt.KMeansComponent
 import axle.jung.JungDirectedGraph
 import axle.jung.JungUndirectedGraph
 import axle.ml.KMeans
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
+import axle.quanta.Angle
 import axle.quanta.Time
 import axle.quanta.TimeConverter
 import axle.quanta.UnittedQuantity
+import axle.visualize.angleDouble
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
-import axle.visualize.Draw
 import axle.visualize.Fed
 import axle.visualize.FrameRepaintingActor
 import axle.visualize.KMeansVisualization
@@ -185,12 +197,12 @@ package object awt {
             val xsStream = xs.toStream
             xsStream.zip(xsStream.tail) foreach {
               case (x0, x1) =>
-                scaledArea.drawLine(g2d, Point2D(x0, x2y(d, x0)), Point2D(x1, x2y(d, x1)))
+                drawLine(g2d, scaledArea, Point2D(x0, x2y(d, x0)), Point2D(x1, x2y(d, x1)))
             }
           }
           if (pointDiameter > 0) {
             xs foreach { x =>
-              scaledArea.fillOval(g2d, Point2D(x, x2y(d, x)), pointDiameter, pointDiameter)
+              fillOval(g2d, scaledArea, Point2D(x, x2y(d, x)), pointDiameter, pointDiameter)
             }
           }
       }
@@ -206,7 +218,7 @@ package object awt {
       import scaledArea._
 
       g2d.setColor(color)
-      drawLine(g2d, Point2D(minX, h), Point2D(maxX, h))
+      drawLine(g2d, scaledArea, Point2D(minX, h), Point2D(maxX, h))
     }
 
   }
@@ -219,7 +231,7 @@ package object awt {
       import scaledArea._
 
       g2d.setColor(color)
-      drawLine(g2d, Point2D(v, minY), Point2D(v, maxY))
+      drawLine(g2d, scaledArea, Point2D(v, minY), Point2D(v, maxY))
     }
 
   }
@@ -265,10 +277,10 @@ package object awt {
       import oval._
 
       g2d.setColor(borderColor)
-      scaledArea.fillOval(g2d, center, width, height)
+      fillOval(g2d, scaledArea, center, width, height)
 
       g2d.setColor(color)
-      scaledArea.drawOval(g2d, center, width, height)
+      drawOval(g2d, scaledArea, center, width, height)
     }
 
   }
@@ -281,15 +293,17 @@ package object awt {
 
       fillColor.map(color => {
         g2d.setColor(color)
-        scaledArea.fillRectangle(
+        fillRectangle(
           g2d,
+          scaledArea,
           Point2D(lowerLeft.x, lowerLeft.y),
           Point2D(upperRight.x, upperRight.y))
       })
       borderColor.map(color => {
         g2d.setColor(color)
-        scaledArea.drawRectangle(
+        drawRectangle(
           g2d,
+          scaledArea,
           Point2D(lowerLeft.x, lowerLeft.y),
           Point2D(upperRight.x, upperRight.y))
       })
@@ -313,7 +327,7 @@ package object awt {
           val leftScaled = Point2D(minX, y)
           val leftUnscaled = framePoint(leftScaled)
           g2d.setColor(Color.lightGray)
-          drawLine(g2d, leftScaled, Point2D(maxX, y))
+          drawLine(g2d, scaledArea, leftScaled, Point2D(maxX, y))
           g2d.setColor(Color.black)
           g2d.drawString(label, leftUnscaled.x - fontMetrics.stringWidth(label) - 5, leftUnscaled.y + fontMetrics.getHeight / 2)
           g2d.drawLine(leftUnscaled.x - 2, leftUnscaled.y, leftUnscaled.x + 2, leftUnscaled.y)
@@ -339,7 +353,7 @@ package object awt {
         case (x, label) => {
           if (fDrawLines) {
             g2d.setColor(Color.lightGray)
-            drawLine(g2d, Point2D(x, minY), Point2D(x, maxY))
+            drawLine(g2d, scaledArea, Point2D(x, minY), Point2D(x, maxY))
           }
           val bottomScaled = Point2D(x, minY)
           val bottomUnscaled = framePoint(bottomScaled)
@@ -349,7 +363,7 @@ package object awt {
           if (angle === zeroDegrees) {
             g2d.drawString(label, bottomUnscaled.x - fontMetrics.stringWidth(label) / 2, bottomUnscaled.y + fontMetrics.getHeight)
           } else {
-            drawStringAtAngle(g2d, fontMetrics, label, bottomScaled, angle)
+            drawStringAtAngle(g2d, scaledArea, fontMetrics, label, bottomScaled, angle)
           }
 
           g2d.drawLine(bottomUnscaled.x, bottomUnscaled.y - 2, bottomUnscaled.x, bottomUnscaled.y + 2)
@@ -415,4 +429,67 @@ package object awt {
 
   }
 
+  def fillOval[X, Y](g2d: Graphics2D, scaledArea2D: ScaledArea2D[X, Y], p: Point2D[X, Y], width: Int, height: Int): Unit = {
+    if (scaledArea2D.nonZeroArea) {
+      val fp = scaledArea2D.framePoint(p)
+      g2d.fillOval(fp.x - width / 2, fp.y - height / 2, width, height)
+    }
+  }
+
+  def drawOval[X, Y](g2d: Graphics2D, scaledArea2D: ScaledArea2D[X, Y], p: Point2D[X, Y], width: Int, height: Int): Unit = {
+    if (scaledArea2D.nonZeroArea) {
+      val fp = scaledArea2D.framePoint(p)
+      g2d.drawOval(fp.x - width / 2, fp.y - height / 2, width, height)
+    }
+  }
+
+  def drawLine[X, Y](g2d: Graphics2D, scaledArea: ScaledArea2D[X, Y], p0: Point2D[X, Y], p1: Point2D[X, Y]): Unit = {
+    if (scaledArea.nonZeroArea) {
+      val fp0 = scaledArea.framePoint(p0)
+      val fp1 = scaledArea.framePoint(p1)
+      g2d.drawLine(fp0.x, fp0.y, fp1.x, fp1.y)
+    }
+  }
+
+  def fillRectangle[X, Y](g2d: Graphics2D, scaledArea: ScaledArea2D[X, Y], p0: Point2D[X, Y], p1: Point2D[X, Y]): Unit = {
+    if (scaledArea.nonZeroArea) {
+      val fp0 = scaledArea.framePoint(p0)
+      val fp1 = scaledArea.framePoint(p1)
+      g2d.fillRect(min(fp0.x, fp1.x), min(fp0.y, fp1.y), abs(fp0.x - fp1.x), abs(fp0.y - fp1.y))
+    }
+  }
+
+  def drawRectangle[X, Y](g2d: Graphics2D, scaledArea: ScaledArea2D[X, Y], p0: Point2D[X, Y], p1: Point2D[X, Y]): Unit = {
+    if (scaledArea.nonZeroArea) {
+      val fp0 = scaledArea.framePoint(p0)
+      val fp1 = scaledArea.framePoint(p1)
+      g2d.drawRect(min(fp0.x, fp1.x), min(fp0.y, fp1.y), abs(fp0.x - fp1.x), abs(fp0.y - fp1.y))
+    }
+  }
+
+  def drawString[X, Y](g2d: Graphics2D, scaledArea: ScaledArea2D[X, Y], s: String, p: Point2D[X, Y]): Unit = {
+    if (scaledArea.nonZeroArea) {
+      val fp = scaledArea.framePoint(p)
+      g2d.drawString(s, fp.x, fp.y)
+    }
+  }
+
+  def drawStringAtAngle[X, Y](
+    g2d: Graphics2D,
+    scaledArea: ScaledArea2D[X, Y],
+    fontMetrics: FontMetrics,
+    s: String,
+    p: Point2D[X, Y],
+    angle: UnittedQuantity[Angle, Double]): Unit = {
+    if (scaledArea.nonZeroArea) {
+      val fp = scaledArea.framePoint(p)
+      val a = (angle in angleDouble.radian).magnitude
+      g2d.translate(fp.x, fp.y + fontMetrics.getHeight)
+      g2d.rotate(a)
+      g2d.drawString(s, 0, 0)
+      g2d.rotate(-1 * a)
+      g2d.translate(-fp.x, -fp.y - fontMetrics.getHeight)
+    }
+  }
+  
 }
