@@ -1,7 +1,5 @@
 package axle.visualize
 
-import java.awt.Component
-
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
@@ -9,7 +7,7 @@ import axle.quanta.Time
 import axle.quanta.TimeConverter
 import axle.quanta.UnittedQuantity
 
-trait Fed[T] extends Component {
+trait Fed[T] {
 
   def initialValue: T
 
