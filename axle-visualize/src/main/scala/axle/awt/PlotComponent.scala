@@ -28,12 +28,11 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
     extends JPanel
     with Fed[List[(String, D)]] {
 
-  //import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
+  def initialValue = plot.initialValue
+
   import plot._
 
   setMinimumSize(new Dimension(width, height))
-
-  def initialValue = plot.initialValue
 
   val normalFont = new Font(fontName, Font.BOLD, fontSize)
   val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
