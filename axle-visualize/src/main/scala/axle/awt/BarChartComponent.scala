@@ -1,6 +1,5 @@
-package axle.visualize
+package axle.awt
 
-import java.awt.Dimension
 import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -10,29 +9,37 @@ import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.reflect.ClassTag
 
-import DataFeedProtocol.Fetch
 import akka.pattern.ask
 import axle.Show
 import axle.actor.Defaults.askTimeout
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.quanta.AngleConverter
-import axle.visualize.element.BarChartGroupedKey
+import axle.visualize.BarChart
+import axle.visualize.BarChartView
+import axle.visualize.DataFeedProtocol.Fetch
+import axle.visualize.Fed
+import axle.visualize.angleDouble
+import axle.visualize.element.BarChartKey
+import axle.visualize.element.HorizontalLine
+import axle.visualize.element.Rectangle
 import axle.visualize.element.Text
+import axle.visualize.element.VerticalLine
+import axle.visualize.element.XTics
+import axle.visualize.element.YTics
 import javax.swing.JPanel
 import spire.algebra.Eq
 import spire.algebra.Order
 
-case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
-  chart: BarChartGrouped[G, S, Y, D])(
+case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag](
+  chart: BarChart[S, Y, D])(
     implicit yls: LengthSpace[Y, _])
   extends JPanel
   with Fed[D] {
 
   import chart._
 
-  setMinimumSize(new Dimension(width, height))
+  setMinimumSize(new java.awt.Dimension(width, height))
 
   def initialValue = chart.initialValue
 
@@ -44,7 +51,7 @@ case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order:
   val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
 
   val keyOpt = if (drawKey) {
-    Some(BarChartGroupedKey(chart, normalFont, colorStream))
+    Some(BarChartKey(chart, normalFont, colorStream))
   } else {
     None
   }
@@ -57,21 +64,22 @@ case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order:
       Await.result(dataFuture, 1.seconds)
     } getOrElse (chart.initialValue)
 
-    val view = BarChartGroupedView(chart, data, colorStream, normalFont)
+    val view = BarChartView(chart, data, colorStream, normalFont)
 
     import view._
 
     val g2d = g.asInstanceOf[Graphics2D]
     val fontMetrics = g2d.getFontMetrics
-    titleText.foreach(_.paint(g2d))
-    hLine.paint(g2d)
-    vLine.paint(g2d)
-    xAxisLabelText.foreach(_.paint(g2d))
-    yAxisLabelText.foreach(_.paint(g2d))
-    gTics.paint(g2d)
-    yTics.paint(g2d)
-    keyOpt.foreach(_.paint(g2d))
-    bars.foreach(_.paint(g2d))
+    titleText.foreach(Paintable[Text].paint(_, g2d))
+    Paintable[HorizontalLine[Double, Y]].paint(hLine, g2d)
+    Paintable[VerticalLine[Double, Y]].paint(vLine, g2d)
+    xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+    yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+    Paintable[XTics[Double, Y]].paint(gTics, g2d)
+    Paintable[YTics[Double, Y]].paint(yTics, g2d)
+    keyOpt.foreach(Paintable[BarChartKey[S, Y, D]].paint(_, g2d))
+    bars.foreach(Paintable[Rectangle[Double, Y]].paint(_, g2d))
+
   }
 
 }

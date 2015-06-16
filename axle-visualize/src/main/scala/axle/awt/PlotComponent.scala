@@ -1,4 +1,4 @@
-package axle.visualize
+package axle.awt
 
 import java.awt.Dimension
 import java.awt.Font
@@ -9,6 +9,7 @@ import scala.Vector
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
+import axle.visualize._
 import DataFeedProtocol.Fetch
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
@@ -16,15 +17,16 @@ import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.quanta.AngleConverter
-import axle.visualize.element.Text
+import axle.visualize.PlotView
+import axle.visualize.element._
 import javax.swing.JPanel
 import spire.algebra.Eq
 
 case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
   plot: Plot[X, Y, D])(
     implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _])
-  extends JPanel
-  with Fed[List[(String, D)]] {
+    extends JPanel
+    with Fed[List[(String, D)]] {
 
   //import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
   import plot._
@@ -47,14 +49,21 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
       Await.result(dataFuture, 1.seconds)
     } getOrElse (plot.initialValue)
 
+    val g2d = g.asInstanceOf[Graphics2D]
+
     val view = PlotView(plot, data, normalFont)
     import view._
-    val paintables =
-      Vector(vLine, hLine, xTics, yTics, dataLines) ++
-        Vector(titleText, xAxisLabelText, yAxisLabelText, view.keyOpt).flatMap(i => i)
 
-    val g2d = g.asInstanceOf[Graphics2D]
-    paintables foreach { _.paint(g2d) }
+    Paintable[HorizontalLine[X, Y]].paint(hLine, g2d)
+    Paintable[VerticalLine[X, Y]].paint(vLine, g2d)
+    Paintable[XTics[X, Y]].paint(xTics, g2d)
+    Paintable[YTics[X, Y]].paint(yTics, g2d)
+    Paintable[DataLines[X, Y, D]].paint(dataLines, g2d)
+
+    titleText.foreach(Paintable[Text].paint(_, g2d))
+    xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+    yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+    view.keyOpt.foreach(Paintable[Key[X, Y, D]].paint(_, g2d))
 
   }
 
