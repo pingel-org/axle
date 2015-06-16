@@ -25,12 +25,32 @@ object SVG {
 
   @inline final def apply[S: SVG]: SVG[S] = implicitly[SVG[S]]
 
+  // <rect x={ s"${20 * i}" } y="20" width="20" height="100" style="fill:blue;stroke:pink;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9"/>
+
   implicit def svgDataLines[X, Y, D]: SVG[DataLines[X, Y, D]] =
     new SVG[DataLines[X, Y, D]] {
       def svg(dl: DataLines[X, Y, D]): NodeSeq = {
-        dl.data.toList.zipWithIndex.map {
-          case ((string, data), i) =>
-            <rect x={ s"${20 * i}" } y="20" width="20" height="100" style="fill:blue;stroke:pink;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9"/>
+        import dl._
+        dl.data.toList.zipWithIndex.flatMap {
+          case ((string, d), i) => {
+            val xs = orderedXs(d).toVector
+            val xsStream = xs.toStream
+            xsStream.zip(xsStream.tail) map {
+              case (x0, x1) => {
+                val p0 = Point2D(x0, x2y(d, x0))
+                val p1 = Point2D(x1, x2y(d, x1))
+                val fp0 = scaledArea.framePoint(p0)
+                val fp1 = scaledArea.framePoint(p1)
+                <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style="stroke:rgb(0,0,0);stroke-width:1"/>
+              }
+            }
+            //              if (pointDiameter > 0) {
+            //                xs foreach { x =>
+            //                  fillOval(g2d, scaledArea, Point2D(x, x2y(d, x)), pointDiameter, pointDiameter)
+            //                }
+            //              }
+          }
+
         }
       }
     }
