@@ -57,9 +57,14 @@ object SVG {
 
   implicit def svgKey[X, Y, D]: SVG[Key[X, Y, D]] =
     new SVG[Key[X, Y, D]] {
-
       def svg(key: Key[X, Y, D]): NodeSeq = {
-        <todo>{ "TODO" }</todo>
+        import key._
+        val lineHeight = 20 // TODO
+        data.zip(colorStream).zipWithIndex map {
+          case (((label, _), color), i) => {
+            <text x={ s"${plot.width - width}" } y={ s"${topPadding + lineHeight * (i + 1)}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ label }</text>
+          }
+        }
       }
     }
 
