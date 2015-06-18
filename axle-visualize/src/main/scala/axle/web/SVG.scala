@@ -83,17 +83,15 @@ object SVG {
           import spire.implicits._
           val twist = angle.get.in(angleDouble.degree).magnitude * -1d
           if (centered) {
-            // TODO center
-            <text x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" }>{ t.text }</text>
+            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" }>{ t.text }</text>
           } else {
-            <text x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" }>{ t.text }</text>
+            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" }>{ t.text }</text>
           }
         } else {
           if (centered) {
-            // TODO center
-            <text x={ s"$x" } y={ s"$y" }>{ t.text }</text>
+            <text text-anchor="middle" x={ s"$x" } y={ s"$y" }>{ t.text }</text>
           } else {
-            <text x={ s"$x" } y={ s"$y" }>{ t.text }</text>
+            <text text-anchor="left" x={ s"$x" } y={ s"$y" }>{ t.text }</text>
           }
         }
       }
@@ -151,7 +149,7 @@ object SVG {
             // TODO: if (angle === zeroDegrees)
             // TODO color and font
             pre ++ List(
-              <text x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" }>{ label }</text>,
+              <text text-anchor="middle" x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" }>{ label }</text>,
               <line x1={ s"${bottomUnscaled.x}" } y1={ s"${bottomUnscaled.y - 2}" } x2={ s"${bottomUnscaled.x}" } y2={ s"${bottomUnscaled.y + 2}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
           }
         }
@@ -176,7 +174,7 @@ object SVG {
 
             List(
               <line x1={ s"${leftUnscaled.x}" } y1={ s"${leftUnscaled.y}" } x2={ s"${rightUnscaled.x}" } y2={ s"${rightUnscaled.y}" } style="stroke:rgb(192,192,192);stroke-width:1"/>,
-              <text x={ s"${leftUnscaled.x}" } y={ s"${leftUnscaled.y}" }>{ label }</text>,
+              <text text-anchor="end" x={ s"${leftUnscaled.x}" } y={ s"${leftUnscaled.y}" }>{ label }</text>,
               <line x1={ s"${leftUnscaled.x - 2}" } y1={ s"${leftUnscaled.y}" } x2={ s"${leftUnscaled.x + 2}" } y2={ s"${leftUnscaled.y}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
           }
         })
