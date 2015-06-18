@@ -31,8 +31,8 @@ object SVG {
     new SVG[DataLines[X, Y, D]] {
       def svg(dl: DataLines[X, Y, D]): NodeSeq = {
         import dl._
-        dl.data.toList.zipWithIndex.flatMap {
-          case ((string, d), i) => {
+        data.zip(colorStream).flatMap {
+          case ((_, d), color) => {
             val xs = orderedXs(d).toVector
             val xsStream = xs.toStream
             xsStream.zip(xsStream.tail) map {
@@ -41,14 +41,14 @@ object SVG {
                 val p1 = Point2D(x1, x2y(d, x1))
                 val fp0 = scaledArea.framePoint(p0)
                 val fp1 = scaledArea.framePoint(p1)
-                <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style="stroke:rgb(0,0,0);stroke-width:1"/>
+                <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style={ s"stroke:rgb(${color.getRed},${color.getGreen},${color.getBlue});stroke-width:1" }/>
               }
             }
-            //              if (pointDiameter > 0) {
-            //                xs foreach { x =>
-            //                  fillOval(g2d, scaledArea, Point2D(x, x2y(d, x)), pointDiameter, pointDiameter)
-            //                }
-            //              }
+            // if (pointDiameter > 0) {
+            //   xs foreach { x =>
+            //     fillOval(g2d, scaledArea, Point2D(x, x2y(d, x)), pointDiameter, pointDiameter)
+            //   }
+            // }
           }
 
         }
@@ -125,13 +125,57 @@ object SVG {
   implicit def svgXTics[X, Y]: SVG[XTics[X, Y]] =
     new SVG[XTics[X, Y]] {
 
-      def svg(xt: XTics[X, Y]): NodeSeq = <todo>{ xt.color }</todo>
+      def svg(xt: XTics[X, Y]): NodeSeq = {
+
+        import xt._
+        import scaledArea._
+
+        tics flatMap {
+          case (x, label) => {
+            val pre = if (fDrawLines) {
+              val p0 = Point2D(x, minY)
+              val p1 = Point2D(x, maxY)
+              val fp0 = scaledArea.framePoint(p0)
+              val fp1 = scaledArea.framePoint(p1)
+              List(<line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style="stroke:rgb(192,192,192);stroke-width:1"/>)
+            } else {
+              Nil
+            }
+            val bottomScaled = Point2D(x, minY)
+            val bottomUnscaled = framePoint(bottomScaled)
+            // TODO: if (angle === zeroDegrees)
+            // TODO color and font
+            pre ++ List(
+              <text x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" }>{ label }</text>,
+              <line x1={ s"${bottomUnscaled.x}" } y1={ s"${bottomUnscaled.y - 2}" } x2={ s"${bottomUnscaled.x}" } y2={ s"${bottomUnscaled.y + 2}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
+          }
+        }
+      }
     }
 
   implicit def svgYTics[X, Y]: SVG[YTics[X, Y]] =
     new SVG[YTics[X, Y]] {
 
-      def svg(yt: YTics[X, Y]): NodeSeq = <todo>{ yt.color }</todo>
+      def svg(yt: YTics[X, Y]): NodeSeq = {
+
+        import yt._
+        import scaledArea._
+
+        tics.flatMap({
+          case (y, label) => {
+
+            val leftScaled = Point2D(minX, y)
+            val rightScaled = Point2D(maxX, y)
+            val leftUnscaled = framePoint(leftScaled)
+            val rightUnscaled = framePoint(rightScaled)
+
+            List(
+              <line x1={ s"${leftUnscaled.x}" } y1={ s"${leftUnscaled.y}" } x2={ s"${rightUnscaled.x}" } y2={ s"${rightUnscaled.y}" } style="stroke:rgb(192,192,192);stroke-width:1"/>,
+              <text x={ s"${leftUnscaled.x}" } y={ s"${leftUnscaled.y}" }>{ label }</text>,
+              <line x1={ s"${leftUnscaled.x - 2}" } y1={ s"${leftUnscaled.y}" } x2={ s"${leftUnscaled.x + 2}" } y2={ s"${leftUnscaled.y}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
+          }
+        })
+      }
     }
 
 }
