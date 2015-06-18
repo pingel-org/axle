@@ -75,7 +75,6 @@ object SVG {
 
         import t._
 
-        // TODO color
         // TODO font
 
         if (angle.isDefined) {
@@ -83,15 +82,15 @@ object SVG {
           import spire.implicits._
           val twist = angle.get.in(angleDouble.degree).magnitude * -1d
           if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" }>{ t.text }</text>
+            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ t.text }</text>
           } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" }>{ t.text }</text>
+            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ t.text }</text>
           }
         } else {
           if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" }>{ t.text }</text>
+            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ t.text }</text>
           } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" }>{ t.text }</text>
+            <text text-anchor="left" x={ s"$x" } y={ s"$y" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ t.text }</text>
           }
         }
       }
@@ -101,13 +100,12 @@ object SVG {
     new SVG[HorizontalLine[X, Y]] {
 
       def svg(hl: HorizontalLine[X, Y]): NodeSeq = {
-        // TODO color
         import hl._
         val p0 = Point2D(scaledArea.minX, h)
         val p1 = Point2D(scaledArea.maxX, h)
         val fp0 = scaledArea.framePoint(p0)
         val fp1 = scaledArea.framePoint(p1)
-        <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style="stroke:rgb(0,0,0);stroke-width:1"/>
+        <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style={ s"stroke:rgb(${color.getRed},${color.getGreen},${color.getBlue});stroke-width:1" }/>
       }
     }
 
@@ -115,13 +113,12 @@ object SVG {
     new SVG[VerticalLine[X, Y]] {
 
       def svg(vl: VerticalLine[X, Y]): NodeSeq = {
-        // TODO color
         import vl._
         val p0 = Point2D(v, scaledArea.minY)
         val p1 = Point2D(v, scaledArea.maxY)
         val fp0 = scaledArea.framePoint(p0)
         val fp1 = scaledArea.framePoint(p1)
-        <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style="stroke:rgb(0,0,0);stroke-width:1"/>
+        <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style={ s"stroke:rgb(${color.getRed},${color.getGreen},${color.getBlue});stroke-width:1" }/>
       }
     }
 
@@ -147,9 +144,9 @@ object SVG {
             val bottomScaled = Point2D(x, minY)
             val bottomUnscaled = framePoint(bottomScaled)
             // TODO: if (angle === zeroDegrees)
-            // TODO color and font
+            // TODO font
             pre ++ List(
-              <text text-anchor="middle" x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" }>{ label }</text>,
+              <text text-anchor="middle" x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ label }</text>,
               <line x1={ s"${bottomUnscaled.x}" } y1={ s"${bottomUnscaled.y - 2}" } x2={ s"${bottomUnscaled.x}" } y2={ s"${bottomUnscaled.y + 2}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
           }
         }
