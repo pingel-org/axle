@@ -34,8 +34,6 @@ object SVG {
 
   @inline final def apply[S: SVG]: SVG[S] = implicitly[SVG[S]]
 
-  // <rect x={ s"${20 * i}" } y="20" width="20" height="100" style="fill:blue;stroke:pink;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9"/>
-
   def rgb(color: java.awt.Color): String = s"rgb(${color.getRed},${color.getGreen},${color.getBlue})"
 
   implicit def svgDataLines[X, Y, D]: SVG[DataLines[X, Y, D]] =

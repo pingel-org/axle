@@ -16,16 +16,19 @@ package object web {
     </html>
 
   def svgFrame(inner: NodeSeq, width: Int, height: Int): Node =
-    <svg width={ s"$width" } height={ s"$height" }>{ inner }Sorry, your browser does not support inline SVG.</svg>
+    <svg viewBox={ s"0 0 ${width} ${height}" } version="1.1" xmlns="http://www.w3.org/2000/svg" width={ s"$width" } height={ s"$height" }>{ inner }Sorry, your browser does not support inline SVG.</svg>
 
   def svg[T: SVG](t: T, filename: String, width: Int, height: Int): Unit =
     XML.save(filename, svgFrame(SVG[T].svg(t), width, height), encoding, true, null)
 
-  def svg[T: SVG](t: T, filename: String): Unit =
-    SVG[T].svg(t) match {
-      case svg: Node      => XML.save(filename, svg, encoding, true, null)
-      case nodes: NodeSeq => XML.save(filename, svgFrame(nodes, 500, 500), encoding, true, null)
+  def svg[T: SVG](t: T, filename: String): Unit = {
+    val nodes = SVG[T].svg(t)
+    if (nodes.length == 1 && nodes.head.label == "svg") {
+      XML.save(filename, nodes.head, encoding, true, null)
+    } else {
+      XML.save(filename, svgFrame(nodes, 500, 500), encoding, true, null)
     }
+  }
 
   def html[T: SVG](t: T, filename: String): Unit =
     XML.save(filename, bodify(SVG[T].svg(t)), encoding, true, null)
