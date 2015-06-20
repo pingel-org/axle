@@ -50,6 +50,7 @@ object SVG {
             val xs = orderedXs(d).toList
             val centers = xs.map(x => scaledArea.framePoint(Point2D(x, x2y(d, x))))
             val points = (centers map { c => s"${c.x},${c.y}" }).mkString(" ")
+            val polyline = <polyline points={ s"$points" } fill="none" stroke={ s"${rgb(color)}" } stroke-width="1"/>
             val pointCircles =
               if (pointRadius > 0) {
                 centers map { c =>
@@ -58,7 +59,7 @@ object SVG {
               } else {
                 List.empty
               }
-            <polyline points={ s"$points" } fill="none" stroke={ s"${rgb(color)}" } stroke-width="1"/> :: pointCircles
+            polyline :: pointCircles
           }
         }
       }
