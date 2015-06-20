@@ -1,6 +1,5 @@
 package axle
 
-import scala.annotation.implicitNotFound
 import scala.xml.Node
 import scala.xml.NodeSeq
 import scala.xml.XML
