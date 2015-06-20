@@ -4,8 +4,16 @@ import scala.annotation.implicitNotFound
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 
-import axle.visualize.Point2D
+import java.awt.Font
 
+import axle.algebra.LengthSpace
+import axle.algebra.Tics
+import axle.algebra.Zero
+
+import axle.visualize.Point2D
+import axle.visualize.Plot
+import axle.visualize.PlotView
+import axle.visualize.angleDouble
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -13,6 +21,7 @@ import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
+import spire.algebra.Eq
 
 @implicitNotFound("Witness not found for SVG[${S}]")
 trait SVG[S] {
@@ -30,7 +39,9 @@ object SVG {
   implicit def svgDataLines[X, Y, D]: SVG[DataLines[X, Y, D]] =
     new SVG[DataLines[X, Y, D]] {
       def svg(dl: DataLines[X, Y, D]): NodeSeq = {
+
         import dl._
+
         data.zip(colorStream).flatMap {
           case ((_, d), color) => {
             val xs = orderedXs(d).toVector
@@ -59,10 +70,9 @@ object SVG {
     new SVG[Key[X, Y, D]] {
       def svg(key: Key[X, Y, D]): NodeSeq = {
         import key._
-        val lineHeight = 20 // TODO
         data.zip(colorStream).zipWithIndex map {
           case (((label, _), color), i) => {
-            <text x={ s"${plot.width - width}" } y={ s"${topPadding + lineHeight * (i + 1)}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ label }</text>
+            <text x={ s"${plot.width - width}" } y={ s"${topPadding + font.getSize * (i + 1)}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ label }</text>
           }
         }
       }
@@ -75,22 +85,20 @@ object SVG {
 
         import t._
 
-        // TODO font
-
         if (angle.isDefined) {
           import axle.visualize.angleDouble
           import spire.implicits._
           val twist = angle.get.in(angleDouble.degree).magnitude * -1d
           if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ t.text }</text>
+            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ t.text }</text>
           } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ t.text }</text>
+            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ t.text }</text>
           }
         } else {
           if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ t.text }</text>
+            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ t.text }</text>
           } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ t.text }</text>
+            <text text-anchor="left" x={ s"$x" } y={ s"$y" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ t.text }</text>
           }
         }
       }
@@ -122,6 +130,39 @@ object SVG {
       }
     }
 
+  implicit def svgPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
+    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _]): SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
+
+    def svg(plot: Plot[X, Y, D]): NodeSeq = {
+
+      import plot._
+
+      val normalFont = new Font(fontName, Font.BOLD, fontSize)
+      val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
+      val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
+      val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
+      val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
+
+      val view = PlotView(plot, plot.initialValue, normalFont)
+
+      import view._
+
+      val nodes =
+        SVG[HorizontalLine[X, Y]].svg(hLine) ::
+          SVG[VerticalLine[X, Y]].svg(vLine) ::
+          SVG[XTics[X, Y]].svg(xTics) ::
+          SVG[YTics[X, Y]].svg(yTics) ::
+          SVG[DataLines[X, Y, D]].svg(dataLines) ::
+          List(
+            titleText.map(SVG[Text].svg),
+            xAxisLabelText.map(SVG[Text].svg),
+            yAxisLabelText.map(SVG[Text].svg),
+            view.keyOpt.map(SVG[Key[X, Y, D]].svg)).flatten
+
+      svgFrame(nodes.reduce(_ ++ _), width, height)
+    }
+  }
+
   implicit def svgXTics[X, Y]: SVG[XTics[X, Y]] =
     new SVG[XTics[X, Y]] {
 
@@ -144,9 +185,8 @@ object SVG {
             val bottomScaled = Point2D(x, minY)
             val bottomUnscaled = framePoint(bottomScaled)
             // TODO: if (angle === zeroDegrees)
-            // TODO font
             pre ++ List(
-              <text text-anchor="middle" x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" }>{ label }</text>,
+              <text text-anchor="middle" x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ label }</text>,
               <line x1={ s"${bottomUnscaled.x}" } y1={ s"${bottomUnscaled.y - 2}" } x2={ s"${bottomUnscaled.x}" } y2={ s"${bottomUnscaled.y + 2}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
           }
         }
@@ -171,7 +211,7 @@ object SVG {
 
             List(
               <line x1={ s"${leftUnscaled.x}" } y1={ s"${leftUnscaled.y}" } x2={ s"${rightUnscaled.x}" } y2={ s"${rightUnscaled.y}" } style="stroke:rgb(192,192,192);stroke-width:1"/>,
-              <text text-anchor="end" x={ s"${leftUnscaled.x}" } y={ s"${leftUnscaled.y}" }>{ label }</text>,
+              <text text-anchor="end" x={ s"${leftUnscaled.x}" } y={ s"${leftUnscaled.y}" } font-size={ s"${font.getSize}" }>{ label }</text>,
               <line x1={ s"${leftUnscaled.x - 2}" } y1={ s"${leftUnscaled.y}" } x2={ s"${leftUnscaled.x + 2}" } y2={ s"${leftUnscaled.y}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
           }
         })
