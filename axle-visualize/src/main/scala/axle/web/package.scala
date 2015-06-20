@@ -23,8 +23,8 @@ package object web {
 
   def svg[T: SVG](t: T, filename: String): Unit =
     SVG[T].svg(t) match {
-      case svg: Node   => XML.save(filename, svg, encoding, true, null)
-      case nodes: Node => XML.save(filename, svgFrame(nodes, 500, 500), encoding, true, null)
+      case svg: Node      => XML.save(filename, svg, encoding, true, null)
+      case nodes: NodeSeq => XML.save(filename, svgFrame(nodes, 500, 500), encoding, true, null)
     }
 
   def html[T: SVG](t: T, filename: String): Unit =
