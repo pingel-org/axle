@@ -47,27 +47,18 @@ object SVG {
 
         data.zip(colorStream).flatMap {
           case ((_, d), color) => {
-            val xs = orderedXs(d).toVector
-            val xsStream = xs.toStream
-            val lines = xsStream.zip(xsStream.tail) map {
-              case (x0, x1) => {
-                val p0 = Point2D(x0, x2y(d, x0))
-                val p1 = Point2D(x1, x2y(d, x1))
-                val fp0 = scaledArea.framePoint(p0)
-                val fp1 = scaledArea.framePoint(p1)
-                <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } stroke={ s"${rgb(color)}" } stroke-width="1"/>
-              }
-            }
-            val points =
+            val xs = orderedXs(d).toList
+            val centers = xs.map(x => scaledArea.framePoint(Point2D(x, x2y(d, x))))
+            val points = (centers map { c => s"${c.x},${c.y}" }).mkString(" ")
+            val pointCircles =
               if (pointRadius > 0) {
-                xs map { x =>
-                  val center = scaledArea.framePoint(Point2D(x, x2y(d, x)))
-                  <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+                centers map { c =>
+                  <circle cx={ s"${c.x}" } cy={ s"${c.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
                 }
               } else {
                 List.empty
               }
-            lines ++ points
+            <polyline points={ s"$points" } fill="none" stroke={ s"${rgb(color)}" } stroke-width="1"/> :: pointCircles
           }
         }
       }
