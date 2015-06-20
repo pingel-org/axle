@@ -193,7 +193,7 @@ object SVG {
             val bottomUnscaled = framePoint(bottomScaled)
             // TODO: if (angle === zeroDegrees)
             pre ++ List(
-              <text text-anchor="middle" x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ label }</text>,
+              <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ label }</text>,
               <line x1={ s"${bottomUnscaled.x}" } y1={ s"${bottomUnscaled.y - 2}" } x2={ s"${bottomUnscaled.x}" } y2={ s"${bottomUnscaled.y + 2}" } stroke={ s"${rgb(Color.lightGray)}" } stroke-width="1"/>)
           }
         }
@@ -218,7 +218,7 @@ object SVG {
 
             List(
               <line x1={ s"${leftUnscaled.x}" } y1={ s"${leftUnscaled.y}" } x2={ s"${rightUnscaled.x}" } y2={ s"${rightUnscaled.y}" } stroke={ s"${rgb(Color.lightGray)}" } stroke-width="1"/>,
-              <text text-anchor="end" x={ s"${leftUnscaled.x}" } y={ s"${leftUnscaled.y}" } font-size={ s"${font.getSize}" }>{ label }</text>,
+              <text text-anchor="end" alignment-baseline="middle" x={ s"${leftUnscaled.x - 5}" } y={ s"${leftUnscaled.y}" } font-size={ s"${font.getSize}" }>{ label }</text>,
               <line x1={ s"${leftUnscaled.x - 2}" } y1={ s"${leftUnscaled.y}" } x2={ s"${leftUnscaled.x + 2}" } y2={ s"${leftUnscaled.y}" } stroke={ s"${rgb(Color.lightGray)}" } stroke-width="1"/>)
           }
         })
