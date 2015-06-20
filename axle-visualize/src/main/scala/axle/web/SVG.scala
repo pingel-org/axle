@@ -36,32 +36,40 @@ object SVG {
 
   // <rect x={ s"${20 * i}" } y="20" width="20" height="100" style="fill:blue;stroke:pink;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9"/>
 
+  def rgb(color: java.awt.Color): String = s"rgb(${color.getRed},${color.getGreen},${color.getBlue})"
+
   implicit def svgDataLines[X, Y, D]: SVG[DataLines[X, Y, D]] =
     new SVG[DataLines[X, Y, D]] {
       def svg(dl: DataLines[X, Y, D]): NodeSeq = {
 
         import dl._
 
+        val pointRadius = pointDiameter / 2
+
         data.zip(colorStream).flatMap {
           case ((_, d), color) => {
             val xs = orderedXs(d).toVector
             val xsStream = xs.toStream
-            xsStream.zip(xsStream.tail) map {
+            val lines = xsStream.zip(xsStream.tail) map {
               case (x0, x1) => {
                 val p0 = Point2D(x0, x2y(d, x0))
                 val p1 = Point2D(x1, x2y(d, x1))
                 val fp0 = scaledArea.framePoint(p0)
                 val fp1 = scaledArea.framePoint(p1)
-                <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style={ s"stroke:rgb(${color.getRed},${color.getGreen},${color.getBlue});stroke-width:1" }/>
+                <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } stroke={ s"${rgb(color)}" } stroke-width="1"/>
               }
             }
-            // if (pointDiameter > 0) {
-            //   xs foreach { x =>
-            //     fillOval(g2d, scaledArea, Point2D(x, x2y(d, x)), pointDiameter, pointDiameter)
-            //   }
-            // }
+            val points =
+              if (pointRadius > 0) {
+                xs map { x =>
+                  val center = scaledArea.framePoint(Point2D(x, x2y(d, x)))
+                  <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+                }
+              } else {
+                List.empty
+              }
+            lines ++ points
           }
-
         }
       }
     }
