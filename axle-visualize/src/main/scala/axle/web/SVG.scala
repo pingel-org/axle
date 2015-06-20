@@ -5,6 +5,7 @@ import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 
 import java.awt.Font
+import java.awt.Color
 
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
@@ -34,7 +35,7 @@ object SVG {
 
   @inline final def apply[S: SVG]: SVG[S] = implicitly[SVG[S]]
 
-  def rgb(color: java.awt.Color): String = s"rgb(${color.getRed},${color.getGreen},${color.getBlue})"
+  def rgb(color: Color): String = s"rgb(${color.getRed},${color.getGreen},${color.getBlue})"
 
   implicit def svgDataLines[X, Y, D]: SVG[DataLines[X, Y, D]] =
     new SVG[DataLines[X, Y, D]] {
@@ -119,7 +120,7 @@ object SVG {
         val p1 = Point2D(scaledArea.maxX, h)
         val fp0 = scaledArea.framePoint(p0)
         val fp1 = scaledArea.framePoint(p1)
-        <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style={ s"stroke:rgb(${color.getRed},${color.getGreen},${color.getBlue});stroke-width:1" }/>
+        <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } stroke={ s"${rgb(color)}" } stroke-width="1"/>
       }
     }
 
@@ -132,7 +133,7 @@ object SVG {
         val p1 = Point2D(v, scaledArea.maxY)
         val fp0 = scaledArea.framePoint(p0)
         val fp1 = scaledArea.framePoint(p1)
-        <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style={ s"stroke:rgb(${color.getRed},${color.getGreen},${color.getBlue});stroke-width:1" }/>
+        <line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } stroke={ s"${rgb(color)}" } stroke-width="1"/>
       }
     }
 
@@ -184,7 +185,7 @@ object SVG {
               val p1 = Point2D(x, maxY)
               val fp0 = scaledArea.framePoint(p0)
               val fp1 = scaledArea.framePoint(p1)
-              List(<line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } style="stroke:rgb(192,192,192);stroke-width:1"/>)
+              List(<line x1={ s"${fp0.x}" } y1={ s"${fp0.y}" } x2={ s"${fp1.x}" } y2={ s"${fp1.y}" } stroke={ s"${rgb(Color.lightGray)}" } stroke-width="1"/>)
             } else {
               Nil
             }
@@ -193,7 +194,7 @@ object SVG {
             // TODO: if (angle === zeroDegrees)
             pre ++ List(
               <text text-anchor="middle" x={ s"${bottomUnscaled.x}" } y={ s"${bottomUnscaled.y}" } fill={ s"rgb(${color.getRed},${color.getGreen},${color.getBlue})" } font-size={ s"${font.getSize}" }>{ label }</text>,
-              <line x1={ s"${bottomUnscaled.x}" } y1={ s"${bottomUnscaled.y - 2}" } x2={ s"${bottomUnscaled.x}" } y2={ s"${bottomUnscaled.y + 2}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
+              <line x1={ s"${bottomUnscaled.x}" } y1={ s"${bottomUnscaled.y - 2}" } x2={ s"${bottomUnscaled.x}" } y2={ s"${bottomUnscaled.y + 2}" } stroke={ s"${rgb(Color.lightGray)}" } stroke-width="1"/>)
           }
         }
       }
@@ -216,9 +217,9 @@ object SVG {
             val rightUnscaled = framePoint(rightScaled)
 
             List(
-              <line x1={ s"${leftUnscaled.x}" } y1={ s"${leftUnscaled.y}" } x2={ s"${rightUnscaled.x}" } y2={ s"${rightUnscaled.y}" } style="stroke:rgb(192,192,192);stroke-width:1"/>,
+              <line x1={ s"${leftUnscaled.x}" } y1={ s"${leftUnscaled.y}" } x2={ s"${rightUnscaled.x}" } y2={ s"${rightUnscaled.y}" } stroke={ s"${rgb(Color.lightGray)}" } stroke-width="1"/>,
               <text text-anchor="end" x={ s"${leftUnscaled.x}" } y={ s"${leftUnscaled.y}" } font-size={ s"${font.getSize}" }>{ label }</text>,
-              <line x1={ s"${leftUnscaled.x - 2}" } y1={ s"${leftUnscaled.y}" } x2={ s"${leftUnscaled.x + 2}" } y2={ s"${leftUnscaled.y}" } style="stroke:rgb(232,232,232);stroke-width:1"/>)
+              <line x1={ s"${leftUnscaled.x - 2}" } y1={ s"${leftUnscaled.y}" } x2={ s"${leftUnscaled.x + 2}" } y2={ s"${leftUnscaled.y}" } stroke={ s"${rgb(Color.lightGray)}" } stroke-width="1"/>)
           }
         })
       }
