@@ -134,20 +134,13 @@ object SVG {
       }
     }
 
-  implicit def svgPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _], plotDataView: PlotDataView[X, Y, D]): SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
+  implicit def svgPlot[X, Y, D]: SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
 
     def svg(plot: Plot[X, Y, D]): NodeSeq = {
 
       import plot._
 
-      val normalFont = new Font(fontName, BOLD, fontSize)
-      val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-      val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
-      val titleFont = new Font(titleFontName, BOLD, titleFontSize)
-      val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
-
-      val view = PlotView(plot, plot.initialValue, normalFont)
+      val view = PlotView(plot, plot.initialValue)
 
       import view._
 
@@ -217,8 +210,7 @@ object SVG {
       }
     }
 
-  implicit def svgBarChart[S: Show, Y: Plottable: Order: Eq: Tics, D](
-    implicit xls: LengthSpace[S, _], yls: LengthSpace[Y, _], dataView: DataView[S, Y, D]): SVG[BarChart[S, Y, D]] =
+  implicit def svgBarChart[S, Y, D]: SVG[BarChart[S, Y, D]] =
     new SVG[BarChart[S, Y, D]] {
 
       def svg(chart: BarChart[S, Y, D]): NodeSeq = {
