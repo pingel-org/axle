@@ -9,10 +9,16 @@ import scala.annotation.implicitNotFound
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 
+import axle.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
+import axle.algebra.Plottable
+import axle.visualize.BarChart
+import axle.visualize.BarChartView
+import axle.visualize.DataView
 import axle.visualize.Plot
+import axle.visualize.PlotDataView
 import axle.visualize.PlotView
 import axle.visualize.Point2D
 import axle.visualize.angleDouble
@@ -23,6 +29,7 @@ import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
+import spire.algebra.Order
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 
@@ -128,7 +135,7 @@ object SVG {
     }
 
   implicit def svgPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _]): SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
+    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _], plotDataView: PlotDataView[X, Y, D]): SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
 
     def svg(plot: Plot[X, Y, D]): NodeSeq = {
 
@@ -207,6 +214,38 @@ object SVG {
               <line x1={ s"${left.x - 2}" } y1={ s"${left.y}" } x2={ s"${left.x + 2}" } y2={ s"${left.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>)
           }
         })
+      }
+    }
+
+  implicit def svgBarChart[S: Show, Y: Plottable: Order: Eq: Tics, D](
+    implicit xls: LengthSpace[S, _], yls: LengthSpace[Y, _], dataView: DataView[S, Y, D]): SVG[BarChart[S, Y, D]] =
+    new SVG[BarChart[S, Y, D]] {
+
+      def svg(chart: BarChart[S, Y, D]): NodeSeq = {
+
+        import chart._
+
+        val normalFont: Font = ??? //new Font(fontName, BOLD, fontSize)
+        val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
+        val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
+        val titleFont = new Font(titleFontName, BOLD, titleFontSize)
+        val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
+
+        val view = BarChartView(chart, chart.initialValue, normalFont)
+
+        import view._
+
+        val nodes =
+          SVG[HorizontalLine[Double, Y]].svg(hLine) ::
+            SVG[VerticalLine[Double, Y]].svg(vLine) ::
+            SVG[XTics[Double, Y]].svg(gTics) ::
+            SVG[YTics[Double, Y]].svg(yTics) ::
+            List(
+              titleText.map(SVG[Text].svg),
+              xAxisLabelText.map(SVG[Text].svg),
+              yAxisLabelText.map(SVG[Text].svg)).flatten
+
+        svgFrame(nodes.reduce(_ ++ _), width, height)
       }
     }
 

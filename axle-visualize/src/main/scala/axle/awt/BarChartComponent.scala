@@ -18,6 +18,7 @@ import axle.algebra.Tics
 import axle.visualize.BarChart
 import axle.visualize.BarChartView
 import axle.visualize.DataFeedProtocol.Fetch
+import axle.visualize.DataView
 import axle.visualize.Fed
 import axle.visualize.angleDouble
 import axle.visualize.element.BarChartKey
@@ -33,7 +34,7 @@ import spire.algebra.Order
 
 case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag](
   chart: BarChart[S, Y, D])(
-    implicit yls: LengthSpace[Y, _])
+    implicit yls: LengthSpace[Y, _], dataView: DataView[S, Y, D])
   extends JPanel
   with Fed[D] {
 
@@ -64,7 +65,7 @@ case class BarChartComponent[S: Show, Y: Order: Tics: Eq: Plottable, D: ClassTag
       Await.result(dataFuture, 1.seconds)
     } getOrElse (chart.initialValue)
 
-    val view = BarChartView(chart, data, colorStream, normalFont)
+    val view = BarChartView(chart, data, normalFont)
 
     import view._
 

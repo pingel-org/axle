@@ -8,9 +8,7 @@ import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
 
-import axle.algebra.Plottable
-
-case class Plot[X: Plottable, Y: Plottable, D](
+case class Plot[X, Y, D](
   initialValue: List[(String, D)],
   connect: Boolean = true,
   drawKey: Boolean = true,
@@ -30,5 +28,4 @@ case class Plot[X: Plottable, Y: Plottable, D](
   xAxis: Option[Y] = None,
   xAxisLabel: Option[String] = None,
   yAxis: Option[X] = None,
-  yAxisLabel: Option[String] = None)(
-    implicit val plotDataView: PlotDataView[X, Y, D])
+  yAxisLabel: Option[String] = None)

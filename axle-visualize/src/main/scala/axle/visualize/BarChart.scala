@@ -8,12 +8,10 @@ import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
 
-import axle.Show
-import axle.algebra.Plottable
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 
-case class BarChart[S: Show, Y: Plottable, D](
+case class BarChart[S, Y, D](
   initialValue: D,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -32,5 +30,4 @@ case class BarChart[S: Show, Y: Plottable, D](
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
   labelAngle: UnittedQuantity[Angle, Double] = 36d *: angleDouble.degree,
-  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
-    implicit val dataView: DataView[S, Y, D])
+  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))

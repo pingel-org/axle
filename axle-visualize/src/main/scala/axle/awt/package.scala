@@ -24,6 +24,7 @@ import axle.algebra.LinearAlgebra
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
+import axle.awt.AxleFrame
 import axle.awt.Paintable
 import axle.awt.BarChartComponent
 import axle.awt.BarChartGroupedComponent
@@ -43,10 +44,13 @@ import axle.quanta.UnittedQuantity
 import axle.visualize.angleDouble
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
+import axle.visualize.DataView
 import axle.visualize.Fed
 import axle.visualize.FrameRepaintingActor
+import axle.visualize.GroupedDataView
 import axle.visualize.KMeansVisualization
 import axle.visualize.Plot
+import axle.visualize.PlotDataView
 import axle.visualize.Point2D
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.BarChartKey
@@ -104,20 +108,20 @@ package object awt {
   }
 
   implicit def drawPlot[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _]): Draw[Plot[X, Y, D]] =
+    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _], plotDataView: PlotDataView[X, Y, D]): Draw[Plot[X, Y, D]] =
     new Draw[Plot[X, Y, D]] {
 
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
     }
 
   implicit def drawBarChart[S: Show, Y: Plottable: Order: Tics: Eq, D: ClassTag](
-    implicit yls: LengthSpace[Y, _]): Draw[BarChart[S, Y, D]] =
+    implicit yls: LengthSpace[Y, _], dataView: DataView[S, Y, D]): Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
       def component(barChart: BarChart[S, Y, D]) = BarChartComponent(barChart)
     }
 
   implicit def drawBarChartGrouped[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
-    implicit yls: LengthSpace[Y, _]): Draw[BarChartGrouped[G, S, Y, D]] =
+    implicit yls: LengthSpace[Y, _], groupedDataView: GroupedDataView[G, S, Y, D]): Draw[BarChartGrouped[G, S, Y, D]] =
     new Draw[BarChartGrouped[G, S, Y, D]] {
       def component(barChart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(barChart)
     }
@@ -393,23 +397,24 @@ package object awt {
 
   }
 
-  implicit def paintBarChartKey[X: Show, Y, D]: Paintable[BarChartKey[X, Y, D]] = new Paintable[BarChartKey[X, Y, D]] {
+  implicit def paintBarChartKey[X: Show, Y, D]: Paintable[BarChartKey[X, Y, D]] =
+    new Paintable[BarChartKey[X, Y, D]] {
 
-    def paint(key: BarChartKey[X, Y, D], g2d: Graphics2D): Unit = {
+      def paint(key: BarChartKey[X, Y, D], g2d: Graphics2D): Unit = {
 
-      import key._
-      import chart._
+        import key._
+        import chart._
 
-      g2d.setFont(font)
-      val lineHeight = g2d.getFontMetrics.getHeight
-      slices.toVector.zipWithIndex.zip(colorStream) foreach {
-        case ((s, j), color) =>
-          g2d.setColor(color)
-          g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+        g2d.setFont(font)
+        val lineHeight = g2d.getFontMetrics.getHeight
+        slices.toVector.zipWithIndex.zip(colorStream) foreach {
+          case ((s, j), color) =>
+            g2d.setColor(color)
+            g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+        }
       }
-    }
 
-  }
+    }
 
   implicit def paintBarChartGroupedKey[G: Show, S: Show, Y, D]: Paintable[BarChartGroupedKey[G, S, Y, D]] = new Paintable[BarChartGroupedKey[G, S, Y, D]] {
 
@@ -491,5 +496,5 @@ package object awt {
       g2d.translate(-fp.x, -fp.y - fontMetrics.getHeight)
     }
   }
-  
+
 }

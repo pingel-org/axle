@@ -16,6 +16,7 @@ import axle.algebra.Zero
 import axle.visualize.DataFeedProtocol.Fetch
 import axle.visualize.Fed
 import axle.visualize.Plot
+import axle.visualize.PlotDataView
 import axle.visualize.PlotView
 import axle.visualize.angleDouble
 import axle.visualize.element.DataLines
@@ -30,7 +31,9 @@ import spire.algebra.Eq
 
 case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
   plot: Plot[X, Y, D])(
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _])
+    implicit xls: LengthSpace[X, _],
+    yls: LengthSpace[Y, _],
+    plotDataView: PlotDataView[X, Y, D])
     extends JPanel
     with Fed[List[(String, D)]] {
 

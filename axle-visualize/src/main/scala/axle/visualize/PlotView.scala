@@ -28,7 +28,8 @@ case class PlotView[X, Y, D](
         yZero: Zero[Y],
         yts: Tics[Y],
         yEq: Eq[Y],
-        yLength: LengthSpace[Y, _]) {
+        yLength: LengthSpace[Y, _],
+        plotDataView: PlotDataView[X, Y, D]) {
 
   import plot._
 

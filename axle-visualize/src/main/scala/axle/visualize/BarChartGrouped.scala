@@ -8,10 +8,7 @@ import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
 
-import axle.Show
-import axle.algebra.Plottable
-
-case class BarChartGrouped[G: Show, S: Show, Y: Plottable, D](
+case class BarChartGrouped[G, S, Y, D](
   initialValue: D,
   drawKey: Boolean = true,
   width: Int = 700,
@@ -29,5 +26,4 @@ case class BarChartGrouped[G: Show, S: Show, Y: Plottable, D](
   xAxis: Y,
   xAxisLabel: Option[String] = None,
   yAxisLabel: Option[String] = None,
-  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
-    implicit val groupedDataView: GroupedDataView[G, S, Y, D])
+  colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))

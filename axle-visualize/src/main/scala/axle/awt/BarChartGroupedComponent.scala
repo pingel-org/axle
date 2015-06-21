@@ -27,7 +27,8 @@ import spire.algebra.Order
 
 case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
   chart: BarChartGrouped[G, S, Y, D])(
-    implicit yls: LengthSpace[Y, _])
+    implicit lengthSpaceY: LengthSpace[Y, _],
+    groupedDataView: GroupedDataView[G, S, Y, D])
     extends JPanel
     with Fed[D] {
 
@@ -58,7 +59,7 @@ case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order:
       Await.result(dataFuture, 1.seconds)
     } getOrElse (chart.initialValue)
 
-    val view = BarChartGroupedView(chart, data, colorStream, normalFont)
+    val view = BarChartGroupedView(chart, data, normalFont)
 
     import view._
 

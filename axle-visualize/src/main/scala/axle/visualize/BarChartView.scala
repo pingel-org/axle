@@ -15,25 +15,29 @@ import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
+
+import scala.Stream.continually
+
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 
 case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](
-  chart: BarChart[S, Y, D],
-  data: D,
-  colorStream: Stream[Color],
-  normalFont: Font)(
-    implicit yLength: LengthSpace[Y, _]) {
+    chart: BarChart[S, Y, D],
+    data: D,
+    normalFont: Font)(
+        implicit val dataView: DataView[S, Y, D], yLength: LengthSpace[Y, _]) {
 
   import chart._
+
+  val colorStream = continually(colors.toStream).flatten
 
   val minX = 0d
   val maxX = 1d
   val yAxis = minX
 
-  val slices = chart.dataView.keys(data)
+  val slices = dataView.keys(data)
 
   val padding = 0.05 // on each side
   val widthPerSlice = (1d - (2 * padding)) / slices.size
