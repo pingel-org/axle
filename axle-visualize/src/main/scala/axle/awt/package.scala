@@ -114,16 +114,14 @@ package object awt {
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
     }
 
-  implicit def drawBarChart[S: Show, Y: Plottable: Order: Tics: Eq, D: ClassTag](
-    implicit yls: LengthSpace[Y, _], dataView: DataView[S, Y, D]): Draw[BarChart[S, Y, D]] =
+  implicit def drawBarChart[S, Y, D]: Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
-      def component(barChart: BarChart[S, Y, D]) = BarChartComponent(barChart)
+      def component(chart: BarChart[S, Y, D]) = BarChartComponent(chart)
     }
 
-  implicit def drawBarChartGrouped[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
-    implicit yls: LengthSpace[Y, _], groupedDataView: GroupedDataView[G, S, Y, D]): Draw[BarChartGrouped[G, S, Y, D]] =
+  implicit def drawBarChartGrouped[G, S, Y, D]: Draw[BarChartGrouped[G, S, Y, D]] =
     new Draw[BarChartGrouped[G, S, Y, D]] {
-      def component(barChart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(barChart)
+      def component(chart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(chart)
     }
 
   implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[JungUndirectedGraph[VP, EP]] =
@@ -397,7 +395,7 @@ package object awt {
 
   }
 
-  implicit def paintBarChartKey[X: Show, Y, D]: Paintable[BarChartKey[X, Y, D]] =
+  implicit def paintBarChartKey[X, Y, D]: Paintable[BarChartKey[X, Y, D]] =
     new Paintable[BarChartKey[X, Y, D]] {
 
       def paint(key: BarChartKey[X, Y, D], g2d: Graphics2D): Unit = {
@@ -416,7 +414,8 @@ package object awt {
 
     }
 
-  implicit def paintBarChartGroupedKey[G: Show, S: Show, Y, D]: Paintable[BarChartGroupedKey[G, S, Y, D]] = new Paintable[BarChartGroupedKey[G, S, Y, D]] {
+  implicit def paintBarChartGroupedKey[G, S, Y, D]: Paintable[BarChartGroupedKey[G, S, Y, D]] =
+    new Paintable[BarChartGroupedKey[G, S, Y, D]] {
 
     def paint(key: BarChartGroupedKey[G, S, Y, D], g2d: Graphics2D): Unit = {
 

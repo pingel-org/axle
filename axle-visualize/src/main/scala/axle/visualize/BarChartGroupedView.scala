@@ -22,13 +22,9 @@ import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 
-case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](
+case class BarChartGroupedView[G, S, Y, D](
     chart: BarChartGrouped[G, S, Y, D],
-    data: D,
-    normalFont: Font)(
-        implicit val groupedDataView: GroupedDataView[G, S, Y, D], yls: LengthSpace[Y, _]) {
-
-  val colorStream = continually(chart.colors.toStream).flatten
+    data: D) {
 
   import chart._
 

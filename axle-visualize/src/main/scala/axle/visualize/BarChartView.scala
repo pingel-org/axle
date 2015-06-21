@@ -1,37 +1,22 @@
 package axle.visualize
 
-import java.awt.Color
 import java.awt.Color.black
-import java.awt.Font
 
-import axle.Show
-import axle.algebra.LengthSpace
-import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.quanta.AngleConverter
 import axle.string
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-
-import scala.Stream.continually
-
-import spire.algebra.Eq
-import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 
-case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](
+case class BarChartView[S, Y, D](
     chart: BarChart[S, Y, D],
-    data: D,
-    normalFont: Font)(
-        implicit val dataView: DataView[S, Y, D], yLength: LengthSpace[Y, _]) {
+    data: D) {
 
   import chart._
-
-  val colorStream = continually(colors.toStream).flatten
 
   val minX = 0d
   val maxX = 1d

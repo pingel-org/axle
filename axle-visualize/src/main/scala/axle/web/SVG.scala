@@ -225,13 +225,7 @@ object SVG {
 
         import chart._
 
-        val normalFont: Font = ??? //new Font(fontName, BOLD, fontSize)
-        val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-        val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
-        val titleFont = new Font(titleFontName, BOLD, titleFontSize)
-        val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
-
-        val view = BarChartView(chart, chart.initialValue, normalFont)
+        val view = BarChartView(chart, chart.initialValue)
 
         import view._
 

@@ -1,34 +1,29 @@
 package axle.awt
 
 import java.awt.Dimension
-import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import scala.Stream.continually
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
-import scala.reflect.ClassTag
 
-import axle.visualize._
-import DataFeedProtocol.Fetch
 import akka.pattern.ask
-import axle.Show
 import axle.actor.Defaults.askTimeout
-import axle.algebra.LengthSpace
-import axle.algebra.Plottable
-import axle.algebra.Tics
-import axle.quanta.AngleConverter
+import axle.visualize.BarChartGrouped
 import axle.visualize.BarChartGroupedView
-import axle.visualize.element._
+import axle.visualize.DataFeedProtocol.Fetch
+import axle.visualize.Fed
+import axle.visualize.element.BarChartGroupedKey
+import axle.visualize.element.HorizontalLine
+import axle.visualize.element.Rectangle
+import axle.visualize.element.Text
+import axle.visualize.element.VerticalLine
+import axle.visualize.element.XTics
+import axle.visualize.element.YTics
 import javax.swing.JPanel
-import spire.algebra.Eq
-import spire.algebra.Order
 
-case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order: Eq, D: ClassTag](
-  chart: BarChartGrouped[G, S, Y, D])(
-    implicit lengthSpaceY: LengthSpace[Y, _],
-    groupedDataView: GroupedDataView[G, S, Y, D])
+case class BarChartGroupedComponent[G, S, Y, D](
+  chart: BarChartGrouped[G, S, Y, D])
     extends JPanel
     with Fed[D] {
 
@@ -38,15 +33,8 @@ case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order:
 
   def initialValue = chart.initialValue
 
-  val colorStream = continually(colors.toStream).flatten
-  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
-  val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
-  val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
-  val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
-
   val keyOpt = if (drawKey) {
-    Some(BarChartGroupedKey(chart, normalFont, colorStream))
+    Some(BarChartGroupedKey(chart, normalFont))
   } else {
     None
   }
@@ -59,7 +47,7 @@ case class BarChartGroupedComponent[G: Show, S: Show, Y: Plottable: Tics: Order:
       Await.result(dataFuture, 1.seconds)
     } getOrElse (chart.initialValue)
 
-    val view = BarChartGroupedView(chart, data, normalFont)
+    val view = BarChartGroupedView(chart, data)
 
     import view._
 
