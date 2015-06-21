@@ -25,6 +25,7 @@ import axle.visualize.angleDouble
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
+import axle.visualize.element.Rectangle
 import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
@@ -134,6 +135,19 @@ object SVG {
       }
     }
 
+  implicit def svgRectangle[X, Y]: SVG[Rectangle[X, Y]] =
+    new SVG[Rectangle[X, Y]] {
+
+      def svg(rectangle: Rectangle[X, Y]): NodeSeq = {
+        import rectangle.scaledArea
+        val ll = scaledArea.framePoint(rectangle.lowerLeft)
+        val ur = scaledArea.framePoint(rectangle.upperRight)
+        val width = ur.x - ll.x
+        val height = ll.y - ur.y
+        <rect x={s"${ll.x}"} y={s"${ur.y}"} width={s"$width"} height={s"$height"} fill={ s"${rgb(rectangle.fillColor.getOrElse(Color.blue))}" } stroke-width="1"/>
+      }
+    }
+
   implicit def svgPlot[X, Y, D]: SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
 
     def svg(plot: Plot[X, Y, D]): NodeSeq = {
@@ -226,6 +240,7 @@ object SVG {
             SVG[VerticalLine[Double, Y]].svg(vLine) ::
             SVG[XTics[Double, Y]].svg(gTics) ::
             SVG[YTics[Double, Y]].svg(yTics) ::
+            bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             List(
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
