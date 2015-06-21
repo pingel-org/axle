@@ -53,8 +53,10 @@ case class BarChart[S, Y, D](
         val lengthSpaceY: LengthSpace[Y, _]) {
 
   val colorStream = continually(colors.toStream).flatten
+
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
   val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
+
   val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
   val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
   val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
