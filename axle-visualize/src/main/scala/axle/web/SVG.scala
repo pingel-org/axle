@@ -144,7 +144,7 @@ object SVG {
         val ur = scaledArea.framePoint(rectangle.upperRight)
         val width = ur.x - ll.x
         val height = ll.y - ur.y
-        <rect x={s"${ll.x}"} y={s"${ur.y}"} width={s"$width"} height={s"$height"} fill={ s"${rgb(rectangle.fillColor.getOrElse(Color.blue))}" } stroke-width="1"/>
+        <rect x={s"${ll.x}"} y={s"${ur.y}"} width={s"$width"} height={s"$height"} fill={ s"${rgb(rectangle.fillColor.getOrElse(Color.blue))}" } stroke={ s"${rgb(rectangle.borderColor.getOrElse(Color.blue))}" } stroke-width="1"/>
       }
     }
 
