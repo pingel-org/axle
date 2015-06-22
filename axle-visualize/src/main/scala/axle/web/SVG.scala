@@ -16,6 +16,8 @@ import axle.algebra.Zero
 import axle.algebra.Plottable
 import axle.visualize.BarChart
 import axle.visualize.BarChartView
+import axle.visualize.BarChartGrouped
+import axle.visualize.BarChartGroupedView
 import axle.visualize.DataView
 import axle.visualize.Plot
 import axle.visualize.PlotDataView
@@ -144,7 +146,11 @@ object SVG {
         val ur = scaledArea.framePoint(rectangle.upperRight)
         val width = ur.x - ll.x
         val height = ll.y - ur.y
-        <rect x={s"${ll.x}"} y={s"${ur.y}"} width={s"$width"} height={s"$height"} fill={ s"${rgb(rectangle.fillColor.getOrElse(Color.blue))}" } stroke={ s"${rgb(rectangle.borderColor.getOrElse(Color.blue))}" } stroke-width="1"/>
+        if (rectangle.borderColor.isDefined) {
+          <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.getOrElse(Color.blue))}" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1"/>
+        } else {
+          <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.getOrElse(Color.blue))}" } stroke-width="1"/>
+        }
       }
     }
 
@@ -184,18 +190,21 @@ object SVG {
 
         tics flatMap {
           case (x, label) => {
-            val pre = if (fDrawLines) {
-              val bottom = scaledArea.framePoint(Point2D(x, minY))
-              val top = scaledArea.framePoint(Point2D(x, maxY))
-              List(<line x1={ s"${bottom.x}" } y1={ s"${bottom.y}" } x2={ s"${top.x}" } y2={ s"${top.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>)
-            } else {
-              Nil
-            }
+
             val bottom = framePoint(Point2D(x, minY))
+
+            val tic = <line x1={ s"${bottom.x}" } y1={ s"${bottom.y - 2}" } x2={ s"${bottom.x}" } y2={ s"${bottom.y + 2}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>
+
             // TODO: if (angle === zeroDegrees)
-            pre ++ List(
-              <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>,
-              <line x1={ s"${bottom.x}" } y1={ s"${bottom.y - 2}" } x2={ s"${bottom.x}" } y2={ s"${bottom.y + 2}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>)
+            val text = <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
+
+            if (fDrawLines) {
+              val top = scaledArea.framePoint(Point2D(x, maxY))
+              val line = <line x1={ s"${bottom.x}" } y1={ s"${bottom.y}" } x2={ s"${top.x}" } y2={ s"${top.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>
+              line ++ List(text, tic)
+            } else {
+              List(text, tic)
+            }
           }
         }
       }
@@ -232,6 +241,32 @@ object SVG {
         import chart._
 
         val view = BarChartView(chart, chart.initialValue)
+
+        import view._
+
+        val nodes =
+          SVG[HorizontalLine[Double, Y]].svg(hLine) ::
+            SVG[VerticalLine[Double, Y]].svg(vLine) ::
+            SVG[XTics[Double, Y]].svg(gTics) ::
+            SVG[YTics[Double, Y]].svg(yTics) ::
+            bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
+            List(
+              titleText.map(SVG[Text].svg),
+              xAxisLabelText.map(SVG[Text].svg),
+              yAxisLabelText.map(SVG[Text].svg)).flatten
+
+        svgFrame(nodes.reduce(_ ++ _), width, height)
+      }
+    }
+
+  implicit def svgBarChartGrouped[G, S, Y, D]: SVG[BarChartGrouped[G, S, Y, D]] =
+    new SVG[BarChartGrouped[G, S, Y, D]] {
+
+      def svg(chart: BarChartGrouped[G, S, Y, D]): NodeSeq = {
+
+        import chart._
+
+        val view = BarChartGroupedView(chart, chart.initialValue)
 
         import view._
 
