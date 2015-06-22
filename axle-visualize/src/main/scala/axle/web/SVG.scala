@@ -14,6 +14,9 @@ import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.algebra.Plottable
+import axle.algebra.LinearAlgebra
+import axle.ml.KMeans
+import axle.visualize.KMeansVisualization
 import axle.visualize.BarChart
 import axle.visualize.BarChartView
 import axle.visualize.BarChartGrouped
@@ -27,6 +30,7 @@ import axle.visualize.angleDouble
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
+import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
@@ -34,6 +38,7 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import spire.algebra.Order
 import spire.algebra.Eq
+import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra
 
 @implicitNotFound("Witness not found for SVG[${S}]")
@@ -154,6 +159,36 @@ object SVG {
       }
     }
 
+  implicit def svgOval[X, Y]: SVG[Oval[X, Y]] =
+    new SVG[Oval[X, Y]] {
+
+      def svg(oval: Oval[X, Y]): NodeSeq = {
+        import oval._
+        val c = scaledArea.framePoint(center)
+        // TODO border
+        <ellipse cx={ s"${c.x}" } cy={ s"${c.y}" } rx={ s"${width / 2}" } ry={ s"${height / 2}" } fill={ s"${rgb(oval.color)}" } stroke-width="1"/>
+      }
+    }
+
+  implicit def svgKMeans[D, F[_], M]: SVG[KMeans[D, F, M]] =
+    new SVG[KMeans[D, F, M]] {
+
+      def svg(kmeans: KMeans[D, F, M]): NodeSeq = {
+
+        import kmeans._
+        val vis = KMeansVisualization(kmeans)
+        import vis._
+
+        val nodes = (SVG[Rectangle[Double, Double]].svg(boundingRectangle) ::
+          SVG[XTics[Double, Double]].svg(xTics) ::
+          SVG[YTics[Double, Double]].svg(yTics) ::
+          (centroidOvals map { SVG[Oval[Double, Double]].svg }) ::
+          (points.toList map { SVG[Oval[Double, Double]].svg })).flatten.reduce(_ ++ _)
+
+        svgFrame(nodes, width, height)
+      }
+    }
+
   implicit def svgPlot[X, Y, D]: SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
 
     def svg(plot: Plot[X, Y, D]): NodeSeq = {
@@ -165,7 +200,7 @@ object SVG {
       import view._
 
       val nodes =
-        SVG[HorizontalLine[X, Y]].svg(hLine) ::
+        (SVG[HorizontalLine[X, Y]].svg(hLine) ::
           SVG[VerticalLine[X, Y]].svg(vLine) ::
           SVG[XTics[X, Y]].svg(xTics) ::
           SVG[YTics[X, Y]].svg(yTics) ::
@@ -174,9 +209,9 @@ object SVG {
             titleText.map(SVG[Text].svg),
             xAxisLabelText.map(SVG[Text].svg),
             yAxisLabelText.map(SVG[Text].svg),
-            view.keyOpt.map(SVG[Key[X, Y, D]].svg)).flatten
+            view.keyOpt.map(SVG[Key[X, Y, D]].svg)).flatten).reduce(_ ++ _)
 
-      svgFrame(nodes.reduce(_ ++ _), width, height)
+      svgFrame(nodes, width, height)
     }
   }
 
