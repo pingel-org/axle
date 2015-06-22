@@ -68,17 +68,12 @@ case class KMeansVisualization[D, F[_], M](
 
   val centroidOvals = (0 until classifier.K).map(centroidOval)
 
-  val points = (0 until classifier.K).zip(colorStream).flatMap {
-    case (i, color) =>
-      (0 until featureMatrix.rows) flatMap { r =>
-        if (classifier.a.get(r, 0) === i) { // TODO avoid this scan
-          // TODO figure out what to do when N > 2
-          val center = Point2D(featureMatrix.get(r, 0), featureMatrix.get(r, 1))
-          Some(Oval(scaledArea, center, pointDiameter, pointDiameter, color, color))
-        } else {
-          None
-        }
-      }
+  val points = (0 until featureMatrix.rows).map { r =>
+    val clusterNumber = classifier.a.get(r, 0).toInt
+    val color = colors(clusterNumber % colors.length)
+    // TODO figure out what to do when N > 2
+    val center = Point2D(featureMatrix.get(r, 0), featureMatrix.get(r, 1))
+    Oval(scaledArea, center, pointDiameter, pointDiameter, color, color)
   }
 
 }
