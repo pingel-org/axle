@@ -5,6 +5,7 @@ import java.awt.Color.black
 import java.awt.Font
 
 import scala.reflect.ClassTag
+import scala.Stream.continually
 
 import axle.Show
 import axle.algebra.LengthSpace
@@ -21,12 +22,9 @@ import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 
-case class BarChartGroupedView[G: Show, S: Show, Y: Order: Tics: Eq, D: ClassTag](
-  chart: BarChartGrouped[G, S, Y, D],
-  data: D,
-  colorStream: Stream[Color],
-  normalFont: Font)(
-    implicit yls: LengthSpace[Y, _]) {
+case class BarChartGroupedView[G, S, Y, D](
+    chart: BarChartGrouped[G, S, Y, D],
+    data: D) {
 
   import chart._
 

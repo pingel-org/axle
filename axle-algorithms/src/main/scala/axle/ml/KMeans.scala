@@ -50,7 +50,7 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor, M](
   K: Int,
   iterations: Int)(
     implicit space: MetricSpace[M, Double],
-    la: LinearAlgebra[M, Int, Int, Double],
+    val la: LinearAlgebra[M, Int, Int, Double],
     index: Indexed[F, Int],
     finite: Finite[F, Int])
   extends Function1[T, Int] {

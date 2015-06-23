@@ -1,31 +1,20 @@
 package axle.visualize
 
-import java.awt.Color
 import java.awt.Color.black
-import java.awt.Font
 
-import axle.Show
-import axle.algebra.LengthSpace
-import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.quanta.AngleConverter
 import axle.string
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import spire.algebra.Eq
-import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 
-case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](
-  chart: BarChart[S, Y, D],
-  data: D,
-  colorStream: Stream[Color],
-  normalFont: Font)(
-    implicit yLength: LengthSpace[Y, _]) {
+case class BarChartView[S, Y, D](
+    chart: BarChart[S, Y, D],
+    data: D) {
 
   import chart._
 
@@ -33,7 +22,7 @@ case class BarChartView[S: Show, Y: Plottable: Order: Eq: Tics, D](
   val maxX = 1d
   val yAxis = minX
 
-  val slices = chart.dataView.keys(data)
+  val slices = dataView.keys(data)
 
   val padding = 0.05 // on each side
   val widthPerSlice = (1d - (2 * padding)) / slices.size

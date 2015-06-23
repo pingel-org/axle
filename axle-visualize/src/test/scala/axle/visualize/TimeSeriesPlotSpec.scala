@@ -11,6 +11,8 @@ import axle.joda.dateTimeOrder
 import axle.joda.dateTimeOrdering
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeZero
+import axle.joda.dateTimeTics
+import axle.joda.dateTimeDurationLengthSpace
 import axle.jung.JungDirectedGraph
 import axle.jung.JungDirectedGraph.directedGraphJung
 import axle.quanta.Information

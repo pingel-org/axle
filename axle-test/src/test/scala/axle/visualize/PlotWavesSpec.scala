@@ -11,6 +11,8 @@ import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
 import axle.joda.dateTimeOrdering
 import axle.joda.dateTimePlottable
+import axle.joda.dateTimeTics
+import axle.joda.dateTimeDurationLengthSpace
 import spire.implicits.DoubleAlgebra
 
 class PlotWavesSpec extends Specification {
@@ -42,7 +44,7 @@ class PlotWavesSpec extends Specification {
         xAxis = Some(0d),
         xAxisLabel = Some("time (t)"),
         yAxis = Some(now),
-        yAxisLabel = Some("A * sin(ω*t + φ)"))
+        yAxisLabel = Some("A·sin(ω·t + φ)"))
 
       // png(plot, "waves.png")
 

@@ -19,20 +19,9 @@ import spire.algebra.Eq
 
 case class PlotView[X, Y, D](
     plot: Plot[X, Y, D],
-    data: Seq[(String, D)],
-    normalFont: Font)(
-        implicit xZero: Zero[X],
-        xts: Tics[X],
-        xEq: Eq[X],
-        xLength: LengthSpace[X, _],
-        yZero: Zero[Y],
-        yts: Tics[Y],
-        yEq: Eq[Y],
-        yLength: LengthSpace[Y, _]) {
+    data: Seq[(String, D)]) {
 
   import plot._
-
-  val colorStream = continually(colors.toStream).flatten
 
   val keyOpt = if (drawKey) {
     Some(Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))

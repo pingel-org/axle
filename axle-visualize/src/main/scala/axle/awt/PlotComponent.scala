@@ -10,12 +10,10 @@ import scala.concurrent.duration.DurationInt
 
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
-import axle.algebra.LengthSpace
-import axle.algebra.Tics
-import axle.algebra.Zero
 import axle.visualize.DataFeedProtocol.Fetch
 import axle.visualize.Fed
 import axle.visualize.Plot
+import axle.visualize.PlotDataView
 import axle.visualize.PlotView
 import axle.visualize.angleDouble
 import axle.visualize.element.DataLines
@@ -26,11 +24,9 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import javax.swing.JPanel
-import spire.algebra.Eq
 
-case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
-  plot: Plot[X, Y, D])(
-    implicit xls: LengthSpace[X, _], yls: LengthSpace[Y, _])
+case class PlotComponent[X, Y, D](
+  plot: Plot[X, Y, D])
     extends JPanel
     with Fed[List[(String, D)]] {
 
@@ -39,12 +35,6 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
   import plot._
 
   setMinimumSize(new Dimension(width, height))
-
-  val normalFont = new Font(fontName, Font.BOLD, fontSize)
-  val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
-  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
-  val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
 
   override def paintComponent(g: Graphics): Unit = {
 
@@ -56,7 +46,7 @@ case class PlotComponent[X: Zero: Tics: Eq, Y: Zero: Tics: Eq, D](
 
     val g2d = g.asInstanceOf[Graphics2D]
 
-    val view = PlotView(plot, data, normalFont)
+    val view = PlotView(plot, data)
     import view._
 
     Paintable[HorizontalLine[X, Y]].paint(hLine, g2d)
