@@ -152,9 +152,17 @@ object SVG {
         val width = ur.x - ll.x
         val height = ll.y - ur.y
         if (rectangle.borderColor.isDefined) {
-          <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.getOrElse(Color.blue))}" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1"/>
+          if (rectangle.fillColor.isDefined) {
+            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
+          } else {
+            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1"/>
+          }
         } else {
-          <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.getOrElse(Color.blue))}" } stroke-width="1"/>
+          if (rectangle.fillColor.isDefined) {
+            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
+          } else {
+            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ "black" } stroke-width="1"/>
+          }
         }
       }
     }
@@ -165,8 +173,7 @@ object SVG {
       def svg(oval: Oval[X, Y]): NodeSeq = {
         import oval._
         val c = scaledArea.framePoint(center)
-        // TODO border
-        <ellipse cx={ s"${c.x}" } cy={ s"${c.y}" } rx={ s"${width / 2}" } ry={ s"${height / 2}" } fill={ s"${rgb(oval.color)}" } stroke-width="1"/>
+        <ellipse cx={ s"${c.x}" } cy={ s"${c.y}" } rx={ s"${width / 2}" } ry={ s"${height / 2}" } fill={ s"${rgb(oval.color)}" } stroke={ s"${rgb(oval.borderColor)}" } stroke-width="1"/>
       }
     }
 

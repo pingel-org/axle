@@ -1,14 +1,15 @@
 package axle.visualize
 
-import java.awt.Color.black
 
 import scala.Stream.continually
+import java.awt.Color.black
 import java.awt.Color.blue
 import java.awt.Color.darkGray
 import java.awt.Color.green
 import java.awt.Color.orange
 import java.awt.Color.pink
 import java.awt.Color.red
+import java.awt.Color.white
 import java.awt.Color.yellow
 import java.awt.Font
 
@@ -58,7 +59,8 @@ case class KMeansVisualization[D, F[_], M](
   val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0d *: angleDouble.degree, black)
   val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), normalFont, black)
 
-  val boundingRectangle = Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black))
+  val boundingRectangle =
+    Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black), fillColor=Some(white))
 
   def centroidOval(i: Int): Oval[Double, Double] = {
     val denormalized = classifier.normalizer.unapply(classifier.μ.row(i))
