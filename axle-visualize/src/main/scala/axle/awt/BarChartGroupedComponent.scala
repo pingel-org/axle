@@ -33,12 +33,6 @@ case class BarChartGroupedComponent[G, S, Y, D](
 
   def initialValue = chart.initialValue
 
-  val keyOpt = if (drawKey) {
-    Some(BarChartGroupedKey(chart, normalFont))
-  } else {
-    None
-  }
-
   override def paintComponent(g: Graphics): Unit = {
 
     val data = feeder map { dataFeedActor =>

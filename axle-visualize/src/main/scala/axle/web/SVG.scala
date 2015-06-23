@@ -29,6 +29,7 @@ import axle.visualize.PlotView
 import axle.visualize.Point2D
 import axle.visualize.angleDouble
 import axle.visualize.element.BarChartKey
+import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -104,12 +105,26 @@ object SVG {
         val lineHeight = chart.normalFontSize
         slices.toList.zip(chart.colorStream).zipWithIndex map {
           case ((slice, color), i) => {
-            <text x={ s"${width - keyWidth}" } y={ s"${keyTopPadding + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ string(slice) }</text>
+            <text x={ s"${width - keyWidth}" } y={ s"${keyTopPadding + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
           }
         }
       }
     }
-  
+
+  implicit def svgBarChartGroupedKey[G, S, Y, D]: SVG[BarChartGroupedKey[G, S, Y, D]] =
+    new SVG[BarChartGroupedKey[G, S, Y, D]] {
+      def svg(key: BarChartGroupedKey[G, S, Y, D]): NodeSeq = {
+        import key._
+        import chart._
+        val lineHeight = chart.normalFontSize
+        slices.toList.zip(chart.colorStream).zipWithIndex map {
+          case ((slice, color), i) => {
+            <text x={ s"${width - keyWidth}" } y={ s"${keyTopPadding + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
+          }
+        }
+      }
+    }
+
   implicit def svgText: SVG[Text] =
     new SVG[Text] {
 
@@ -336,6 +351,7 @@ object SVG {
             SVG[YTics[Double, Y]].svg(yTics) ::
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             List(
+              keyOpt.map(SVG[BarChartGroupedKey[G, S, Y, D]].svg),
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
               yAxisLabelText.map(SVG[Text].svg)).flatten

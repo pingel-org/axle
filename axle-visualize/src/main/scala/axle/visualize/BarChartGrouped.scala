@@ -16,6 +16,7 @@ import spire.algebra.Order
 import axle.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
+import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 
 case class BarChartGrouped[G, S, Y, D](
@@ -44,6 +45,12 @@ case class BarChartGrouped[G, S, Y, D](
         val lengthSpaceY: LengthSpace[Y, _],
         val classTagD: ClassTag[D],
         val groupedDataView: GroupedDataView[G, S, Y, D]) {
+
+  val keyOpt = if (drawKey) {
+    Some(BarChartGroupedKey(this, normalFont))
+  } else {
+    None
+  }
 
   val colorStream = continually(colors.toStream).flatten
   val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
