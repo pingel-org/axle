@@ -141,7 +141,7 @@ package object awt {
     }
   }
 
-  implicit def drawKMeansClasifier[T, F[_], M](implicit la: LinearAlgebra[M, Int, Int, Double]): Draw[KMeans[T, F, M]] =
+  implicit def drawKMeansClasifier[T, F[_], M]: Draw[KMeans[T, F, M]] =
     new Draw[KMeans[T, F, M]] {
       def component(kmc: KMeans[T, F, M]) = KMeansComponent(KMeansVisualization(kmc))
     }
