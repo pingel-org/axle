@@ -9,6 +9,7 @@ import scala.annotation.implicitNotFound
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 
+import axle.string
 import axle.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
@@ -27,6 +28,7 @@ import axle.visualize.PlotDataView
 import axle.visualize.PlotView
 import axle.visualize.Point2D
 import axle.visualize.angleDouble
+import axle.visualize.element.BarChartKey
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -94,6 +96,20 @@ object SVG {
       }
     }
 
+  implicit def svgBarChartKey[S, Y, D]: SVG[BarChartKey[S, Y, D]] =
+    new SVG[BarChartKey[S, Y, D]] {
+      def svg(key: BarChartKey[S, Y, D]): NodeSeq = {
+        import key._
+        import chart._
+        val lineHeight = chart.normalFontSize
+        slices.toList.zip(chart.colorStream).zipWithIndex map {
+          case ((slice, color), i) => {
+            <text x={ s"${width - keyWidth}" } y={ s"${keyTopPadding + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ string(slice) }</text>
+          }
+        }
+      }
+    }
+  
   implicit def svgText: SVG[Text] =
     new SVG[Text] {
 
@@ -293,6 +309,7 @@ object SVG {
             SVG[YTics[Double, Y]].svg(yTics) ::
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             List(
+              keyOpt.map(SVG[BarChartKey[S, Y, D]].svg),
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
               yAxisLabelText.map(SVG[Text].svg)).flatten
