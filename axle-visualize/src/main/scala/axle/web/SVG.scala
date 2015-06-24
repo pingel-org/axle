@@ -268,8 +268,14 @@ object SVG {
 
             val tic = <line x1={ s"${bottom.x}" } y1={ s"${bottom.y - 2}" } x2={ s"${bottom.x}" } y2={ s"${bottom.y + 2}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>
 
-            // TODO: if (angle === zeroDegrees)
-            val text = <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
+            import axle.visualize.angleDouble
+
+            val text =
+              if (angle.magnitude == 0d) {
+                <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
+              } else {
+                <text text-anchor="start" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } transform={ s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
+              }
 
             if (fDrawLines) {
               val top = scaledArea.framePoint(Point2D(x, maxY))
