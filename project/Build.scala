@@ -20,11 +20,11 @@ object AxleBuild extends Build {
 
     organization := "org.axle-lang",
 
-    scalaVersion := "2.11.6",
+    scalaVersion := "2.11.7",
 
-    //crossScalaVersions := Seq("2.10.4", "2.11.6"),
+    //crossScalaVersions := Seq("2.10.4", "2.11.7"),
 
-    crossScalaVersions := Seq("2.11.6"),
+    crossScalaVersions := Seq("2.11.7"),
 
     libraryDependencies ++= Seq(
       "org.typelevel" %% "discipline" % "0.2.1",
@@ -43,7 +43,7 @@ object AxleBuild extends Build {
       "-language:postfixOps"),
 
     initialCommands in console := """
-import axle._
+//import axle._
 """,
 
     // http://www.scala-sbt.org/using_sonatype.html
@@ -345,7 +345,7 @@ import axle._
     name := "axle-repl",
 
     libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-compiler" % "2.11.6",
+      "org.scala-lang" % "scala-compiler" % "2.11.7",
       "jline" % "jline" % "2.11" // http://grokbase.com/t/gg/scala-internals/1433gjdg5h/missing-jline-for-scala-2-11-0-rc1
     ),
 
