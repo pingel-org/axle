@@ -18,7 +18,7 @@ import scala.Stream.continually
 import spire.algebra.Eq
 
 case class Plot[X, Y, D](
-    initialValue: List[(String, D)],
+    initialValue: Seq[(String, D)],
     connect: Boolean = true,
     drawKey: Boolean = true,
     width: Int = 700,
