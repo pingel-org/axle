@@ -227,7 +227,7 @@ object NeedlemanWunsch {
 
 }
 
-case class NeedlemanWunschMetricSpace[S[_], C: Eq: ClassTag, I: Ring: Order, M, V: AdditiveMonoid: Order](
+case class NeedlemanWunschMetricSpace[S[_], C: Eq: ClassTag, M, I: Ring: Order, V: AdditiveMonoid: Order](
   similarity: (C, C) => V,
   gapPenalty: V)(
     implicit la: LinearAlgebra[M, I, I, V],
