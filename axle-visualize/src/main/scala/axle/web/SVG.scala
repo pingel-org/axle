@@ -272,7 +272,7 @@ object SVG {
 
             val text =
               if (angle.magnitude == 0d) {
-                <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
+                <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y + 3}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
               } else {
                 <text text-anchor="start" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } transform={ s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
               }
