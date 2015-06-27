@@ -8,7 +8,6 @@ import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
 import axle.joda.dateTimeOrder
-import axle.joda.dateTimeOrdering
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeZero
 import axle.joda.dateTimeTics
