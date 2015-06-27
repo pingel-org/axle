@@ -9,7 +9,6 @@ import org.specs2.mutable.Specification
 
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
-import axle.joda.dateTimeOrdering
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
@@ -19,6 +18,8 @@ class PlotWavesSpec extends Specification {
 
   "wave plot" should {
     "work" in {
+
+      import spire.compat.ordering
 
       val now = new DateTime()
 
