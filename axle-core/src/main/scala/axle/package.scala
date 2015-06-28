@@ -207,24 +207,9 @@ package object axle {
 
   def √[N: NRoot](x: N): N = x.sqrt
 
-  //  implicit val charEq = new Eq[Char] {
-  //    def eqv(x: Char, y: Char): Boolean = x equals y
-  //  }
-  //
-  //  implicit val stringEq = new Eq[String] {
-  //    def eqv(x: String, y: String): Boolean = x equals y
-  //  }
-  //
-  //  implicit val boolEq = new Eq[Boolean] {
-  //    def eqv(x: Boolean, y: Boolean): Boolean = x equals y
-  //  }
-
   implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
     def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
   }
-
-  def smoosh[K1, K2, V](data: Map[K1, Map[K2, V]]): Map[(K2, K1), V] =
-    data flatMap { case (k1, inner) => inner.map({ case (k2, v) => (k2, k1) -> v }) } toMap
 
   def string[T: Show](t: T): String = Show[T].text(t)
 
