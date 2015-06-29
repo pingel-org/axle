@@ -29,8 +29,8 @@ case class BarChartView[S, Y, D](
   val whiteSpace = widthPerSlice * (1d - barWidthPercent)
 
   val (dataMinY, dataMaxY) = dataView.yRange(data)
-  val minY = List(xAxis, dataMinY).min
-  val maxY = List(xAxis, dataMaxY).max
+  val minY = List(xAxis.getOrElse(zeroY.zero), dataMinY).min
+  val maxY = List(xAxis.getOrElse(zeroY.zero), dataMaxY).max
 
   implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
 
@@ -41,7 +41,7 @@ case class BarChartView[S, Y, D](
     minX, maxX, minY, maxY)
 
   val vLine = VerticalLine(scaledArea, yAxis, black)
-  val hLine = HorizontalLine(scaledArea, xAxis, black)
+  val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(zeroY.zero), black)
 
   val gTics = XTics(
     scaledArea,

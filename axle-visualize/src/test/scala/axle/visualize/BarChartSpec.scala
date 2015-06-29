@@ -30,7 +30,7 @@ class BarChartSpec extends Specification {
 
       val chart = BarChart[String, Double, Map[String, Double]](
         sales,
-        xAxis = 0d,
+        xAxis = Some(0d),
         labelAngle = 36d *: angleDouble.degree,
         title = Some("fruit sales"))
 
@@ -58,7 +58,7 @@ class BarChartSpec extends Specification {
 
       val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
         sales,
-        xAxis = 0d,
+        // xAxis = Some(0d),
         title = Some("fruit sales"))
 
       1 must be equalTo 1
@@ -85,7 +85,7 @@ class BarChartSpec extends Specification {
       import spire.implicits.IntAlgebra
       val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
         distribution,
-        xAxis = Rational(0),
+        xAxis = Some(Rational(0)),
         title = Some("d6 + d6"),
         labelAngle = 36d *: angleDouble.degree,
         colors = List(blue),

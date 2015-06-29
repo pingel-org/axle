@@ -16,6 +16,7 @@ import axle.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
+import axle.algebra.Zero
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.BarChartKey
@@ -38,12 +39,13 @@ case class BarChart[S, Y, D](
     normalFontSize: Int = 12,
     titleFontName: String = "Palatino",
     titleFontSize: Int = 20,
-    xAxis: Y,
+    xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
     labelAngle: UnittedQuantity[Angle, Double] = 36d *: angleDouble.degree,
     colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
         implicit val showS: Show[S],
+        val zeroY: Zero[Y],
         val orderY: Order[Y],
         val ticsY: Tics[Y],
         val eqY: Eq[Y],

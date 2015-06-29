@@ -13,9 +13,11 @@ import scala.Stream.continually
 import scala.reflect.ClassTag
 
 import spire.algebra.Order
+
 import axle.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
+import axle.algebra.Zero
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 
@@ -34,13 +36,14 @@ case class BarChartGrouped[G, S, Y, D](
     normalFontSize: Int = 12,
     titleFontName: String = "Palatino",
     titleFontSize: Int = 20,
-    xAxis: Y,
+    xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
     colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
         implicit val showG: Show[G],
         val showS: Show[S], 
         val orderY: Order[Y],
+        val zeroY: Zero[Y],
         val ticsY: Tics[Y],
         val lengthSpaceY: LengthSpace[Y, _],
         val classTagD: ClassTag[D],
