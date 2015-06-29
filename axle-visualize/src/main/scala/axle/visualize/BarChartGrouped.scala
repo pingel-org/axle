@@ -51,7 +51,7 @@ case class BarChartGrouped[G, S, Y, D](
         val groupedDataView: GroupedDataView[G, S, Y, D]) {
 
   val keyOpt = if (drawKey) {
-    Some(BarChartGroupedKey(this, normalFont))
+    Some(BarChartGroupedKey(this, keyTitle, normalFont))
   } else {
     None
   }

@@ -65,7 +65,7 @@ case class BarChart[S, Y, D](
   val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
 
   val keyOpt = if (drawKey) {
-    Some(BarChartKey(this, normalFont))
+    Some(BarChartKey(this, keyTitle, normalFont))
   } else {
     None
   }

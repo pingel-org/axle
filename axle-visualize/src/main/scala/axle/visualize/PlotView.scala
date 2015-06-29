@@ -24,7 +24,7 @@ case class PlotView[X, Y, D](
   import plot._
 
   val keyOpt = if (drawKey) {
-    Some(Key(plot, normalFont, colorStream, keyWidth, keyTopPadding, data))
+    Some(Key(plot, keyTitle, normalFont, colorStream, keyWidth, keyTopPadding, data))
   } else {
     None
   }
