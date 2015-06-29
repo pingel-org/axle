@@ -8,7 +8,6 @@ import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
 import axle.joda.dateTimeOrder
-import axle.joda.dateTimeOrdering
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeZero
 import axle.joda.dateTimeTics
@@ -39,7 +38,7 @@ class TimeSeriesPlotSpec extends Specification {
         (0 to 100).map(j => (now.plusMinutes(2 * j) -> amp * sin(phase + (j / (10 * f))))).toMap)
     }
 
-    val lfs = (0 until 20).map(randomTimeSeries).toList
+    val lfs = (0 until 20).map(randomTimeSeries)
 
     implicit val dateZero = dateTimeZero(now)
 

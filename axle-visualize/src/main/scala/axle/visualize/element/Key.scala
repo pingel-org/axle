@@ -7,6 +7,7 @@ import axle.visualize.Plot
 
 case class Key[X, Y, D](
   plot: Plot[X, Y, D],
+  title: Option[String],
   font: Font,
   colorStream: Stream[Color],
   width: Int,

@@ -19,13 +19,9 @@ package object joda {
     def zero: DateTime = t // new DateTime()
   }
 
-  trait JodaDateTimeOrder extends Order[DateTime] {
+  implicit val dateTimeOrder: Order[DateTime] = new Order[DateTime] {
     def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
   }
-
-  implicit val dateTimeOrder: Order[DateTime] = new JodaDateTimeOrder {}
-
-  implicit val dateTimeOrdering = spire.compat.ordering(dateTimeOrder)
 
   implicit def dateTimeEq: Eq[DateTime] = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)

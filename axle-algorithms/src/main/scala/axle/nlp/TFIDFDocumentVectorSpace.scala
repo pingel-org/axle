@@ -15,14 +15,10 @@ import spire.math.ConvertableTo
 
 case class TFIDFDocumentVectorSpace[D: Field: ClassTag: ConvertableFrom: ConvertableTo](
   corpus: Iterable[String],
-  termVectorizer: TermVectorizer[D])(implicit _eqD: Eq[D])
+  termVectorizer: TermVectorizer[D])(implicit val eqD: Eq[D])
     extends DocumentVectorSpace[D] {
 
   def scalar = Field[D]
-
-  implicit def eqD = _eqD
-
-  // val dZero = Ring[D].zero
 
   val numDocs = corpus.size
 

@@ -28,7 +28,7 @@ import javax.swing.JPanel
 case class PlotComponent[X, Y, D](
   plot: Plot[X, Y, D])
     extends JPanel
-    with Fed[List[(String, D)]] {
+    with Fed[Seq[(String, D)]] {
 
   def initialValue = plot.initialValue
 

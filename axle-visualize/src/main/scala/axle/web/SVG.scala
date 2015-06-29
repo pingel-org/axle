@@ -88,26 +88,49 @@ object SVG {
   implicit def svgKey[X, Y, D]: SVG[Key[X, Y, D]] =
     new SVG[Key[X, Y, D]] {
       def svg(key: Key[X, Y, D]): NodeSeq = {
+
         import key._
-        data.zip(colorStream).zipWithIndex map {
+
+        val lineHeight = plot.fontSize
+
+        val keyTop = plot.keyTopPadding + lineHeight * (if (key.title.isDefined) 1 else 0)
+
+        val ktto = key.title map { kt =>
+          <text x={ s"${plot.width - key.width}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
+        } toList
+
+        val keyEntries = data.zip(colorStream).zipWithIndex map {
           case (((label, _), color), i) => {
             <text x={ s"${plot.width - width}" } y={ s"${topPadding + font.getSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
           }
         }
+
+        ktto ++ keyEntries
       }
     }
 
   implicit def svgBarChartKey[S, Y, D]: SVG[BarChartKey[S, Y, D]] =
     new SVG[BarChartKey[S, Y, D]] {
       def svg(key: BarChartKey[S, Y, D]): NodeSeq = {
+
         import key._
         import chart._
-        val lineHeight = chart.normalFontSize
-        slices.toList.zip(chart.colorStream).zipWithIndex map {
+
+        val lineHeight = normalFontSize
+
+        val keyTop = keyTopPadding + lineHeight * (if (keyTitle.isDefined) 1 else 0)
+
+        val ktto = keyTitle map { kt =>
+          <text x={ s"${width - keyWidth}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
+        } toList
+
+        val keyEntries = slices.toList.zip(chart.colorStream).zipWithIndex map {
           case ((slice, color), i) => {
-            <text x={ s"${width - keyWidth}" } y={ s"${keyTopPadding + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
+            <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
           }
         }
+
+        ktto ++ keyEntries
       }
     }
 
@@ -117,11 +140,20 @@ object SVG {
         import key._
         import chart._
         val lineHeight = chart.normalFontSize
-        slices.toList.zip(chart.colorStream).zipWithIndex map {
+
+        val keyTop = keyTopPadding + lineHeight * (if (keyTitle.isDefined) 1 else 0)
+
+        val ktto = keyTitle map { kt =>
+          <text x={ s"${width - keyWidth}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
+        } toList
+
+        val keyEntries = slices.toList.zip(chart.colorStream).zipWithIndex map {
           case ((slice, color), i) => {
-            <text x={ s"${width - keyWidth}" } y={ s"${keyTopPadding + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
+            <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
           }
         }
+
+        ktto ++ keyEntries
       }
     }
 
