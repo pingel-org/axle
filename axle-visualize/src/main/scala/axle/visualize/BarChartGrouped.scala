@@ -32,6 +32,7 @@ case class BarChartGrouped[G, S, Y, D](
     keyTopPadding: Int = 50,
     keyWidth: Int = 80,
     title: Option[String] = None,
+    keyTitle: Option[String] = None,
     normalFontName: String = "Courier New",
     normalFontSize: Int = 12,
     titleFontName: String = "Palatino",

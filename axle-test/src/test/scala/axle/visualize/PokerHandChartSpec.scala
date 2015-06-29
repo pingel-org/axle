@@ -28,8 +28,9 @@ class PokerHandChartSpec extends Specification {
 
       val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]](
         data.tally.withDefaultValue(0),
+        title = Some("Poker Hands"),
         yAxisLabel = Some("instances of hand category by initial hand size (1000 trial for each hand size)"),
-        title = Some("Poker Hands"))
+        keyTitle = Some("Initial Hand Size"))
 
       import axle.web._
 

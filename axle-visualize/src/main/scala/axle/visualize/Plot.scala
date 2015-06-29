@@ -34,6 +34,7 @@ case class Plot[X, Y, D](
     titleFontSize: Int = 20,
     colors: Seq[Color] = List(blue, red, green, orange, pink, yellow),
     title: Option[String] = None,
+    keyTitle: Option[String] = None,
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxis: Option[X] = None,
