@@ -7,7 +7,6 @@ import java.awt.Color.orange
 import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
-import java.awt.Font
 
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
@@ -30,6 +29,7 @@ case class Plot[X, Y, D](
     keyWidth: Int = 80,
     fontName: String = "Courier New",
     fontSize: Int = 12,
+    bold: Boolean = false,
     titleFontName: String = "Palatino",
     titleFontSize: Int = 20,
     colors: Seq[Color] = List(blue, red, green, orange, pink, yellow),
@@ -51,12 +51,10 @@ case class Plot[X, Y, D](
 
   val colorStream = continually(colors.toStream).flatten
 
-  val normalFont = new Font(fontName, Font.BOLD, fontSize)
+  val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold=true))
 
-  val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
+  val yAxisLabelText = yAxisLabel.map(Text(_,  20, height / 2, fontName, fontSize, bold=true, angle = Some(90d *: angleDouble.degree)))
 
-  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
-  val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
+  val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold=true))
 
 }

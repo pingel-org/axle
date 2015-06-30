@@ -2,7 +2,6 @@ package axle.visualize
 
 import java.awt.Color
 import java.awt.Color.black
-import java.awt.Font
 
 import scala.reflect.ClassTag
 import scala.Stream.continually
@@ -57,12 +56,14 @@ case class BarChartGroupedView[G, S, Y, D](
   val gTics = XTics(
     scaledArea,
     groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
-    normalFont,
-    false,
+    normalFontName,
+    normalFontSize,
+    bold=true,
+    drawLines=false,
     36d *: angleDouble.degree,
     black)
 
-  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFont, black)
+  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFontName, normalFontSize, black)
 
   val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
 

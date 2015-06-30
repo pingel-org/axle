@@ -2,8 +2,6 @@ package axle.web
 
 import java.awt.Color
 import java.awt.Color.lightGray
-import java.awt.Font
-import java.awt.Font.BOLD
 
 import scala.annotation.implicitNotFound
 import scala.xml.NodeSeq
@@ -101,7 +99,7 @@ object SVG {
 
         val keyEntries = data.zip(colorStream).zipWithIndex map {
           case (((label, _), color), i) => {
-            <text x={ s"${plot.width - width}" } y={ s"${topPadding + font.getSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
+            <text x={ s"${plot.width - width}" } y={ s"${topPadding + plot.fontSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${plot.fontSize}" }>{ label }</text>
           }
         }
 
@@ -169,15 +167,15 @@ object SVG {
           import spire.implicits._
           val twist = angle.get.in(angleDouble.degree).magnitude * -1d
           if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ t.text }</text>
+            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
           } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ t.text }</text>
+            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
           }
         } else {
           if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ t.text }</text>
+            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
           } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ t.text }</text>
+            <text text-anchor="left" x={ s"$x" } y={ s"$y" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
           }
         }
       }
@@ -304,12 +302,12 @@ object SVG {
 
             val text =
               if (angle.magnitude == 0d) {
-                <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y + 3}" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
+                <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y + 3}" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ label }</text>
               } else {
-                <text text-anchor="start" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } transform={ s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})" } fill={ s"${rgb(color)}" } font-size={ s"${font.getSize}" }>{ label }</text>
+                <text text-anchor="start" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } transform={ s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ label }</text>
               }
 
-            if (fDrawLines) {
+            if (drawLines) {
               val top = scaledArea.framePoint(Point2D(x, maxY))
               val line = <line x1={ s"${bottom.x}" } y1={ s"${bottom.y}" } x2={ s"${top.x}" } y2={ s"${top.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>
               line ++ List(text, tic)
@@ -337,7 +335,7 @@ object SVG {
 
             List(
               <line x1={ s"${left.x}" } y1={ s"${left.y}" } x2={ s"${right.x}" } y2={ s"${right.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>,
-              <text text-anchor="end" alignment-baseline="middle" x={ s"${left.x - 5}" } y={ s"${left.y}" } font-size={ s"${font.getSize}" }>{ label }</text>,
+              <text text-anchor="end" alignment-baseline="middle" x={ s"${left.x - 5}" } y={ s"${left.y}" } font-size={ s"${fontSize}" }>{ label }</text>,
               <line x1={ s"${left.x - 2}" } y1={ s"${left.y}" } x2={ s"${left.x + 2}" } y2={ s"${left.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>)
           }
         })
