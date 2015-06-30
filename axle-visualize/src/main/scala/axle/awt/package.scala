@@ -4,6 +4,7 @@ package axle
 import scala.math.abs
 import scala.math.min
 
+import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Color
 import java.awt.Component
@@ -104,6 +105,20 @@ package object awt {
         feeder
       }
       case _ => null
+    }
+  }
+
+  val fontMemo = scala.collection.mutable.Map.empty[(String, Int, Boolean), Font]
+
+  def cachedFont(name: String, size: Int, bold: Boolean): Font = {
+    val fontKey = (name, size, bold)
+    if (fontMemo.contains(fontKey)) {
+      fontMemo(fontKey)
+    } else {
+      val effect = if (bold) Font.BOLD else Font.PLAIN
+      val font = new Font(name, effect, size)
+      fontMemo += fontKey -> font
+      font
     }
   }
 
@@ -243,7 +258,7 @@ package object awt {
       import t._
 
       g2d.setColor(color)
-      g2d.setFont(font)
+      g2d.setFont(cachedFont(fontName, fontSize, bold))
 
       val fontMetrics = g2d.getFontMetrics
 
@@ -345,13 +360,13 @@ package object awt {
       import scaledArea._
 
       g2d.setColor(color)
-      g2d.setFont(font)
+      g2d.setFont(cachedFont(fontName, fontSize, bold))
 
       val fontMetrics = g2d.getFontMetrics
 
       tics map {
         case (x, label) => {
-          if (fDrawLines) {
+          if (drawLines) {
             g2d.setColor(Color.lightGray)
             drawLine(g2d, scaledArea, Point2D(x, minY), Point2D(x, maxY))
           }
@@ -380,7 +395,7 @@ package object awt {
 
       import key._
 
-      g2d.setFont(font)
+      g2d.setFont(cachedFont(plot.fontName, plot.fontSize, plot.bold))
       val fontMetrics = g2d.getFontMetrics
 
       val lineHeight = g2d.getFontMetrics.getHeight
@@ -401,7 +416,7 @@ package object awt {
         import key._
         import chart._
 
-        g2d.setFont(font)
+        g2d.setFont(cachedFont(chart.normalFontName, chart.normalFontSize, true))
         val lineHeight = g2d.getFontMetrics.getHeight
         slices.toVector.zipWithIndex.zip(colorStream) foreach {
           case ((s, j), color) =>
@@ -415,21 +430,21 @@ package object awt {
   implicit def paintBarChartGroupedKey[G, S, Y, D]: Paintable[BarChartGroupedKey[G, S, Y, D]] =
     new Paintable[BarChartGroupedKey[G, S, Y, D]] {
 
-    def paint(key: BarChartGroupedKey[G, S, Y, D], g2d: Graphics2D): Unit = {
+      def paint(key: BarChartGroupedKey[G, S, Y, D], g2d: Graphics2D): Unit = {
 
-      import key._
-      import chart._
+        import key._
+        import chart._
 
-      g2d.setFont(font)
-      val lineHeight = g2d.getFontMetrics.getHeight
-      slices.toVector.zipWithIndex.zip(colorStream) foreach {
-        case ((s, j), color) =>
-          g2d.setColor(color)
-          g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+        g2d.setFont(cachedFont(chart.normalFontName, chart.normalFontSize, true))
+        val lineHeight = g2d.getFontMetrics.getHeight
+        slices.toVector.zipWithIndex.zip(colorStream) foreach {
+          case ((s, j), color) =>
+            g2d.setColor(color)
+            g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+        }
       }
-    }
 
-  }
+    }
 
   def fillOval[X, Y](g2d: Graphics2D, scaledArea2D: ScaledArea2D[X, Y], p: Point2D[X, Y], width: Int, height: Int): Unit = {
     if (scaledArea2D.nonZeroArea) {

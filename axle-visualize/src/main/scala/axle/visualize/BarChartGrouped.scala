@@ -7,7 +7,6 @@ import java.awt.Color.orange
 import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
-import java.awt.Font
 
 import scala.Stream.continually
 import scala.reflect.ClassTag
@@ -42,7 +41,7 @@ case class BarChartGrouped[G, S, Y, D](
     yAxisLabel: Option[String] = None,
     colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
         implicit val showG: Show[G],
-        val showS: Show[S], 
+        val showS: Show[S],
         val orderY: Order[Y],
         val zeroY: Zero[Y],
         val ticsY: Tics[Y],
@@ -51,16 +50,14 @@ case class BarChartGrouped[G, S, Y, D](
         val groupedDataView: GroupedDataView[G, S, Y, D]) {
 
   val keyOpt = if (drawKey) {
-    Some(BarChartGroupedKey(this, keyTitle, normalFont))
+    Some(BarChartGroupedKey(this, keyTitle))
   } else {
     None
   }
 
   val colorStream = continually(colors.toStream).flatten
-  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
-  val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
-  val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
-  val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
+  val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold = true))
+  val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, normalFontName, normalFontSize, bold = true))
+  val yAxisLabelText = yAxisLabel.map(Text(_, 20, height / 2, normalFontName, normalFontSize, bold = true, angle = Some(90d *: angleDouble.degree)))
 
 }

@@ -76,10 +76,10 @@ class TimeSeriesPlotSpec extends Specification {
       yAxisLabel = Some("H"),
       title = Some("Entropy"))
 
-    import axle.awt._
-    val d = Draw[Plot[Rational, UnittedQuantity[Information, Double], D]]
+    import axle.web._
+    val d = SVG[Plot[Rational, UnittedQuantity[Information, Double], D]]
 
-    // png(plot, "")
+    // svg(plot, "")
   }
 
 }

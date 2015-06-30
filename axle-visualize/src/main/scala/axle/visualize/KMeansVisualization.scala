@@ -1,6 +1,5 @@
 package axle.visualize
 
-
 import scala.Stream.continually
 import java.awt.Color.black
 import java.awt.Color.blue
@@ -11,7 +10,6 @@ import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.white
 import java.awt.Color.yellow
-import java.awt.Font
 
 import axle.algebra.LinearAlgebra
 import axle.algebra.Tics
@@ -53,11 +51,9 @@ case class KMeansVisualization[D, F[_], M](
   implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
   val scaledArea = ScaledArea2D(width, height, border, minX, maxX, minY, maxY)
 
-  val normalFont = new Font(fontName, Font.BOLD, fontSize)
-
   implicit val doubleTics = Tics[Double]
-  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), normalFont, true, 0d *: angleDouble.degree, black)
-  val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), normalFont, black)
+  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, 0d *: angleDouble.degree, black)
+  val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), fontName, fontSize, black)
 
   val boundingRectangle =
     Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black), fillColor=Some(white))

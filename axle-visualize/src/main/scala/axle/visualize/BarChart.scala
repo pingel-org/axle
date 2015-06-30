@@ -7,7 +7,6 @@ import java.awt.Color.orange
 import java.awt.Color.pink
 import java.awt.Color.red
 import java.awt.Color.yellow
-import java.awt.Font
 
 import scala.Stream.continually
 import scala.reflect.ClassTag
@@ -57,15 +56,12 @@ case class BarChart[S, Y, D](
 
   val colorStream = continually(colors.toStream).flatten
 
-  val titleFont = new Font(titleFontName, Font.BOLD, titleFontSize)
-  val normalFont = new Font(normalFontName, Font.BOLD, normalFontSize)
-
-  val titleText = title.map(Text(_, titleFont, width / 2, titleFontSize))
-  val xAxisLabelText = xAxisLabel.map(Text(_, normalFont, width / 2, height - border / 2))
-  val yAxisLabelText = yAxisLabel.map(Text(_, normalFont, 20, height / 2, angle = Some(90d *: angleDouble.degree)))
+  val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold = true))
+  val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, normalFontName, normalFontSize, bold = true))
+  val yAxisLabelText = yAxisLabel.map(Text(_, 20, height / 2, normalFontName, normalFontSize, bold = true, angle = Some(90d *: angleDouble.degree)))
 
   val keyOpt = if (drawKey) {
-    Some(BarChartKey(this, keyTitle, normalFont))
+    Some(BarChartKey(this, keyTitle))
   } else {
     None
   }

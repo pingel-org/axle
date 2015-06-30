@@ -46,12 +46,14 @@ case class BarChartView[S, Y, D](
   val gTics = XTics(
     scaledArea,
     slices.toStream.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, string(s)) }).toList,
-    normalFont,
-    false,
+    normalFontName,
+    normalFontSize,
+    bold=true,
+    drawLines=false,
     labelAngle,
     black)
 
-  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFont, black)
+  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFontName, normalFontSize, black)
 
   val bars = slices.toStream.zipWithIndex.zip(colorStream).map({
     case ((s, i), color) => {

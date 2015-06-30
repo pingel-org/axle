@@ -1,7 +1,6 @@
 package axle.visualize
 
 import java.awt.Color.black
-import java.awt.Font
 
 import scala.Stream.continually
 
@@ -24,7 +23,7 @@ case class PlotView[X, Y, D](
   import plot._
 
   val keyOpt = if (drawKey) {
-    Some(Key(plot, keyTitle, normalFont, colorStream, keyWidth, keyTopPadding, data))
+    Some(Key(plot, keyTitle, colorStream, keyWidth, keyTopPadding, data))
   } else {
     None
   }
@@ -42,8 +41,8 @@ case class PlotView[X, Y, D](
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, xts.tics(minX, maxX), normalFont, true, 0d *: angleDouble.degree, black)
-  val yTics = YTics(scaledArea, yts.tics(minY, maxY), normalFont, black)
+  val xTics = XTics(scaledArea, xts.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, 0d *: angleDouble.degree, black)
+  val yTics = YTics(scaledArea, yts.tics(minY, maxY), fontName, fontSize, black)
 
   val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorStream, pointDiameter, connect)
 
