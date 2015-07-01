@@ -2,14 +2,8 @@ package axle.visualize
 
 import scala.Stream.continually
 import java.awt.Color.black
-import java.awt.Color.blue
-import java.awt.Color.darkGray
-import java.awt.Color.green
-import java.awt.Color.orange
-import java.awt.Color.pink
-import java.awt.Color.red
 import java.awt.Color.white
-import java.awt.Color.yellow
+import java.awt.Color.darkGray
 
 import axle.algebra.LinearAlgebra
 import axle.algebra.Tics
@@ -36,7 +30,7 @@ case class KMeansVisualization[D, F[_], M](
   import classifier.featureMatrix
   import classifier.la
 
-  val colors = List(blue, red, green, orange, pink, yellow)
+  val colors = defaultColors
 
   val colorStream = continually(colors).flatten
 

@@ -1,12 +1,6 @@
 package axle.visualize
 
 import java.awt.Color
-import java.awt.Color.blue
-import java.awt.Color.green
-import java.awt.Color.orange
-import java.awt.Color.pink
-import java.awt.Color.red
-import java.awt.Color.yellow
 
 import scala.Stream.continually
 import scala.reflect.ClassTag
@@ -39,7 +33,7 @@ case class BarChartGrouped[G, S, Y, D](
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
-    colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
+    colors: Seq[Color] = defaultColors)(
         implicit val showG: Show[G],
         val showS: Show[S],
         val orderY: Order[Y],
