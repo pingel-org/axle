@@ -1,7 +1,7 @@
 package axle.visualize.element
 
 import axle.visualize.Color
-import axle.visualize.black
+import axle.visualize.Color.black
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D
 

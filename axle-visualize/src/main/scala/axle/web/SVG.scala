@@ -13,7 +13,7 @@ import axle.algebra.Plottable
 import axle.algebra.LinearAlgebra
 import axle.ml.KMeans
 import axle.visualize.Color
-import axle.visualize.lightGray
+import axle.visualize.Color.lightGray
 import axle.visualize.KMeansVisualization
 import axle.visualize.BarChart
 import axle.visualize.BarChartView

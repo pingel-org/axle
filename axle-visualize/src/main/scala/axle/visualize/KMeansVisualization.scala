@@ -6,6 +6,9 @@ import axle.algebra.LinearAlgebra
 import axle.algebra.Tics
 import axle.ml.KMeans
 import axle.syntax.linearalgebra.matrixOps
+import axle.visualize.Color.black
+import axle.visualize.Color.darkGray
+import axle.visualize.Color.white
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics

@@ -1,7 +1,7 @@
 package axle.visualize.element
 
 import axle.visualize.Color
-import axle.visualize.black
+import axle.visualize.Color.black
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.visualize.angleDouble

@@ -8,6 +8,7 @@ import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.quanta.AngleConverter
 import axle.string
+import axle.visualize.Color.black
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
