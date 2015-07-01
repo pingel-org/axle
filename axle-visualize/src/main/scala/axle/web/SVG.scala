@@ -1,8 +1,5 @@
 package axle.web
 
-import java.awt.Color
-import java.awt.Color.lightGray
-
 import scala.annotation.implicitNotFound
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
@@ -15,6 +12,8 @@ import axle.algebra.Zero
 import axle.algebra.Plottable
 import axle.algebra.LinearAlgebra
 import axle.ml.KMeans
+import axle.visualize.Color
+import axle.visualize.Color.lightGray
 import axle.visualize.KMeansVisualization
 import axle.visualize.BarChart
 import axle.visualize.BarChartView
@@ -53,7 +52,7 @@ object SVG {
 
   @inline final def apply[S: SVG]: SVG[S] = implicitly[SVG[S]]
 
-  def rgb(color: Color): String = s"rgb(${color.getRed},${color.getGreen},${color.getBlue})"
+  def rgb(color: Color): String = s"rgb(${color.r},${color.g},${color.b})"
 
   implicit def svgDataLines[X, Y, D]: SVG[DataLines[X, Y, D]] =
     new SVG[DataLines[X, Y, D]] {

@@ -1,13 +1,5 @@
 package axle.visualize
 
-import java.awt.Color
-import java.awt.Color.blue
-import java.awt.Color.green
-import java.awt.Color.orange
-import java.awt.Color.pink
-import java.awt.Color.red
-import java.awt.Color.yellow
-
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
@@ -32,7 +24,7 @@ case class Plot[X, Y, D](
     bold: Boolean = false,
     titleFontName: String = "Palatino",
     titleFontSize: Int = 20,
-    colors: Seq[Color] = List(blue, red, green, orange, pink, yellow),
+    colors: Seq[Color] = defaultColors,
     title: Option[String] = None,
     keyTitle: Option[String] = None,
     xAxis: Option[Y] = None,

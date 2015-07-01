@@ -1,7 +1,6 @@
 package axle.visualize.element
 
-import java.awt.Color
-
+import axle.visualize.Color
 import axle.visualize.Plot
 
 case class Key[X, Y, D](

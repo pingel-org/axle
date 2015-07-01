@@ -1,7 +1,5 @@
 package axle.visualize
 
-import java.awt.Color.blue
-
 import scala.Vector
 
 import org.specs2.mutable.Specification
@@ -11,6 +9,7 @@ import axle.game.Dice.die
 import axle.jung.JungDirectedGraph
 import axle.quanta.Angle
 import axle.stats.Distribution0
+import axle.visualize.Color.blue
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra

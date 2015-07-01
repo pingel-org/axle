@@ -1,13 +1,5 @@
 package axle.visualize
 
-import java.awt.Color
-import java.awt.Color.blue
-import java.awt.Color.green
-import java.awt.Color.orange
-import java.awt.Color.pink
-import java.awt.Color.red
-import java.awt.Color.yellow
-
 import scala.Stream.continually
 import scala.reflect.ClassTag
 
@@ -43,7 +35,7 @@ case class BarChart[S, Y, D](
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
     labelAngle: UnittedQuantity[Angle, Double] = 36d *: angleDouble.degree,
-    colors: Seq[Color] = List(blue, red, green, orange, pink, yellow))(
+    colors: Seq[Color] = defaultColors)(
         implicit val showS: Show[S],
         val zeroY: Zero[Y],
         val orderY: Order[Y],

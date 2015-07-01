@@ -1,13 +1,12 @@
 package axle.visualize
 
-import java.awt.Color.black
-
 import scala.Stream.continually
 
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.quanta.AngleConverter
+import axle.visualize.Color.black
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key

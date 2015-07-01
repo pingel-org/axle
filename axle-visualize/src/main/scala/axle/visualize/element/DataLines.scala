@@ -1,7 +1,6 @@
 package axle.visualize.element
 
-import java.awt.Color
-
+import axle.visualize.Color
 import axle.visualize.ScaledArea2D
 
 case class DataLines[X, Y, D](
