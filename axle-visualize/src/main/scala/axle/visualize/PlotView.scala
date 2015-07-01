@@ -1,7 +1,5 @@
 package axle.visualize
 
-import java.awt.Color.black
-
 import scala.Stream.continually
 
 import axle.algebra.LengthSpace

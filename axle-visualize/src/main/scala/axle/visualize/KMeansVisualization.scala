@@ -1,9 +1,6 @@
 package axle.visualize
 
 import scala.Stream.continually
-import java.awt.Color.black
-import java.awt.Color.white
-import java.awt.Color.darkGray
 
 import axle.algebra.LinearAlgebra
 import axle.algebra.Tics

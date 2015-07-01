@@ -1,7 +1,5 @@
 package axle.visualize
 
-import java.awt.Color
-
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero

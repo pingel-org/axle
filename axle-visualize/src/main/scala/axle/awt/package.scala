@@ -122,6 +122,17 @@ package object awt {
     }
   }
 
+  val colorMemo = scala.collection.mutable.Map.empty[axle.visualize.Color, java.awt.Color]
+  def cachedColor(axc: axle.visualize.Color): java.awt.Color = {
+    if (colorMemo.contains(axc)) {
+      colorMemo(axc)
+    } else {
+      val jc = new java.awt.Color(axc.r, axc.g, axc.b)
+      colorMemo += axc -> jc
+      jc
+    }
+  }
+
   implicit def drawPlot[X, Y, D]: Draw[Plot[X, Y, D]] =
     new Draw[Plot[X, Y, D]] {
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
@@ -206,7 +217,7 @@ package object awt {
 
       data.zip(colorStream) foreach {
         case (((label, d), color)) =>
-          g2d.setColor(color)
+          g2d.setColor(cachedColor(color))
           val xs = orderedXs(d).toVector
           if (connect && xs.size > 1) {
             val xsStream = xs.toStream
@@ -232,7 +243,7 @@ package object awt {
       import hLine._
       import scaledArea._
 
-      g2d.setColor(color)
+      g2d.setColor(cachedColor(color))
       drawLine(g2d, scaledArea, Point2D(minX, h), Point2D(maxX, h))
     }
 
@@ -245,7 +256,7 @@ package object awt {
       import vLine._
       import scaledArea._
 
-      g2d.setColor(color)
+      g2d.setColor(cachedColor(color))
       drawLine(g2d, scaledArea, Point2D(v, minY), Point2D(v, maxY))
     }
 
@@ -257,7 +268,7 @@ package object awt {
 
       import t._
 
-      g2d.setColor(color)
+      g2d.setColor(cachedColor(color))
       g2d.setFont(cachedFont(fontName, fontSize, bold))
 
       val fontMetrics = g2d.getFontMetrics
@@ -291,10 +302,10 @@ package object awt {
 
       import oval._
 
-      g2d.setColor(borderColor)
+      g2d.setColor(cachedColor(borderColor))
       fillOval(g2d, scaledArea, center, width, height)
 
-      g2d.setColor(color)
+      g2d.setColor(cachedColor(color))
       drawOval(g2d, scaledArea, center, width, height)
     }
 
@@ -307,7 +318,7 @@ package object awt {
       import r._
 
       fillColor.map(color => {
-        g2d.setColor(color)
+        g2d.setColor(cachedColor(color))
         fillRectangle(
           g2d,
           scaledArea,
@@ -315,7 +326,7 @@ package object awt {
           Point2D(upperRight.x, upperRight.y))
       })
       borderColor.map(color => {
-        g2d.setColor(color)
+        g2d.setColor(cachedColor(color))
         drawRectangle(
           g2d,
           scaledArea,
@@ -331,7 +342,7 @@ package object awt {
     def paint(yt: YTics[X, Y], g2d: Graphics2D): Unit = {
 
       import yt._
-      g2d.setColor(color)
+      g2d.setColor(cachedColor(color))
 
       val fontMetrics = g2d.getFontMetrics
       import scaledArea._
@@ -359,7 +370,7 @@ package object awt {
       import xt._
       import scaledArea._
 
-      g2d.setColor(color)
+      g2d.setColor(cachedColor(color))
       g2d.setFont(cachedFont(fontName, fontSize, bold))
 
       val fontMetrics = g2d.getFontMetrics
@@ -401,7 +412,7 @@ package object awt {
       val lineHeight = g2d.getFontMetrics.getHeight
       data.zip(colorStream).zipWithIndex foreach {
         case (((label, _), color), i) =>
-          g2d.setColor(color)
+          g2d.setColor(cachedColor(color))
           g2d.drawString(label, plot.width - width, topPadding + lineHeight * (i + 1))
       }
     }
@@ -420,7 +431,7 @@ package object awt {
         val lineHeight = g2d.getFontMetrics.getHeight
         slices.toVector.zipWithIndex.zip(colorStream) foreach {
           case ((s, j), color) =>
-            g2d.setColor(color)
+            g2d.setColor(cachedColor(color))
             g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
         }
       }
@@ -439,7 +450,7 @@ package object awt {
         val lineHeight = g2d.getFontMetrics.getHeight
         slices.toVector.zipWithIndex.zip(colorStream) foreach {
           case ((s, j), color) =>
-            g2d.setColor(color)
+            g2d.setColor(cachedColor(color))
             g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
         }
       }

@@ -7,14 +7,18 @@ import axle.algebra.DirectedGraph
 import axle.jung.JungDirectedGraph
 import spire.implicits.DoubleAlgebra
 
-import java.awt.Color.blue
-import java.awt.Color.green
-import java.awt.Color.orange
-import java.awt.Color.pink
-import java.awt.Color.red
-import java.awt.Color.yellow
-
 package object visualize {
+
+  val white = Color(r = 255, g = 255, b = 255)
+  val lightGray = Color(r = 192, g = 192, b = 192)
+  val darkGray = Color(r = 64, g = 64, b = 64)
+  val black = Color(r = 0, g = 0, b = 0)
+  val blue = Color(r = 0, g = 0, b = 255)
+  val red = Color(r = 255, g = 0, b = 0)
+  val green = Color(r = 0, g = 255, b = 0)
+  val orange = Color(r = 255, g = 200, b = 0)
+  val pink = Color(r = 255, g = 175, b = 175)
+  val yellow = Color(r = 255, g = 255, b = 0)
 
   val defaultColors = List(blue, red, green, orange, pink, yellow)
 

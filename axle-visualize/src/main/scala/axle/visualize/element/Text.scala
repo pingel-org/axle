@@ -1,7 +1,7 @@
 package axle.visualize.element
 
-import java.awt.Color
-
+import axle.visualize.Color
+import axle.visualize.black
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.visualize.angleDouble
@@ -15,7 +15,7 @@ case class Text(
     fontSize: Int,
     bold: Boolean = false,
     centered: Boolean = true,
-    color: Color = Color.black,
+    color: Color = black,
     angle: Option[UnittedQuantity[Angle, Double]] = None) {
 
   val angleRadOpt = angle.map(a => (a in angleDouble.radian).magnitude)

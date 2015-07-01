@@ -1,7 +1,5 @@
 package axle.visualize
 
-import java.awt.Color.black
-
 import axle.algebra.Tics
 import axle.string
 import axle.visualize.element.HorizontalLine

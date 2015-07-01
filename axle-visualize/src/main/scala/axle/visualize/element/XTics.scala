@@ -1,7 +1,7 @@
 package axle.visualize.element
 
-import java.awt.Color
-
+import axle.visualize.Color
+import axle.visualize.black
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.visualize.ScaledArea2D
@@ -15,7 +15,7 @@ case class XTics[X, Y](
     bold: Boolean = false,
     drawLines: Boolean = true,
     angle: UnittedQuantity[Angle, Double],
-    color: Color = Color.black) {
+    color: Color = black) {
 
   val zeroDegrees = 0d *: angleDouble.degree
 

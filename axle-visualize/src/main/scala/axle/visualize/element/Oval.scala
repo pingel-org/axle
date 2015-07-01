@@ -1,7 +1,6 @@
 package axle.visualize.element
 
-import java.awt.Color
-
+import axle.visualize.Color
 import axle.visualize.Point2D
 import axle.visualize.ScaledArea2D
 

@@ -1,7 +1,5 @@
 package axle.visualize
 
-import java.awt.Color
-
 import scala.Stream.continually
 import scala.reflect.ClassTag
 
