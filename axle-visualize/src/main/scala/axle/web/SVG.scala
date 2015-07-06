@@ -39,6 +39,8 @@ import edu.uci.ics.jung.visualization.DefaultVisualizationModel
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import scala.annotation.implicitNotFound
+import scala.math.atan
+import scala.math.Pi
 
 @implicitNotFound("Witness not found for SVG[${S}]")
 trait SVG[S] {
@@ -398,29 +400,35 @@ object SVG {
 
     def svg(jdg: JungDirectedGraph[VP, EP]): NodeSeq = {
 
+      // TODO make these all configurable
       val width = 1000
       val height = 1000
       val border = 20
-
-      val layout = new FRLayout(jdg.jdsg)
-      layout.setSize(new Dimension(width, height))
-      val visualization = new DefaultVisualizationModel(layout)
-
       val radius = 10
       val color = yellow
       val borderColor = black
       val fontSize = 12
 
+      val layout = new FRLayout(jdg.jdsg)
+      layout.setSize(new Dimension(width, height))
+      val visualization = new DefaultVisualizationModel(layout)
+
       val lines: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
         <line x1={ s"${layout.getX(edge.from)}" } y1={ s"${layout.getY(edge.from)}" } x2={ s"${layout.getX(edge.to)}" } y2={ s"${layout.getY(edge.to)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
       } toList
 
-      // TODO
       val arrows: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
-        val width = layout.getX(edge.to) - layout.getX(edge.from)
-        val height = layout.getY(edge.to) - layout.getY(edge.from)
-        val angle = scala.math.atan(height.toDouble / width)
-        <circle cx={ s"$radius" } cy="0" r={ s"${3}" } fill={ s"${rgb(black)}" } stroke={ s"${rgb(black)}" } stroke-width="1" transform={ s"rotate($angle 0 0)" }/>
+        val fromX = layout.getX(edge.from)
+        val fromY = layout.getY(edge.from)
+        val toX = layout.getX(edge.to)
+        val toY = layout.getY(edge.to)
+        val actualPointAngle = (atan((fromY - toY) / (toX - fromX)) / Pi) * 180d
+        val svgRotationAngle = if (width < 0d) {
+          -actualPointAngle
+        } else {
+          180d - actualPointAngle
+        }
+        <polygon points="10,0 20,3 20,-3" fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
       } toList
 
       val circles: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
@@ -430,8 +438,6 @@ object SVG {
       val labels: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
         <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
       } toList
-
-      // jdg.vertices.map { vertex =>
 
       val nodes = lines ++ arrows ++ circles ++ labels
 
