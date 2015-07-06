@@ -402,8 +402,8 @@ object SVG {
     def svg(jdg: JungDirectedGraph[VP, EP]): NodeSeq = {
 
       // TODO make these all configurable
-      val width = 1000
-      val height = 1000
+      val width = 600
+      val height = 600
       val border = 20
       val radius = 10
       val color = yellow
@@ -451,8 +451,8 @@ object SVG {
     def svg(jug: JungUndirectedGraph[VP, EP]): NodeSeq = {
 
       // TODO make these all configurable
-      val width = 1000
-      val height = 1000
+      val width = 600
+      val height = 600
       val border = 20
       val radius = 10
       val color = yellow
