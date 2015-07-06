@@ -418,11 +418,10 @@ object SVG {
       } toList
 
       val arrows: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
-        val fromX = layout.getX(edge.from)
-        val fromY = layout.getY(edge.from)
-        val toX = layout.getX(edge.to)
-        val toY = layout.getY(edge.to)
-        val actualPointAngle = (atan((fromY - toY) / (toX - fromX)) / Pi) * 180d
+        val height = layout.getY(edge.from) - layout.getY(edge.to)
+        val width = layout.getX(edge.to) - layout.getX(edge.from)
+        val actualPointAngle = (atan(height / width) / Pi) * 180d
+        // atan is only defined on right half, so check if flip is required
         val svgRotationAngle = if (width < 0d) {
           -actualPointAngle
         } else {
