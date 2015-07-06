@@ -7,6 +7,7 @@ import scala.xml.NodeSeq.seqToNodeSeq
 import axle.HtmlFrom
 import axle.Show
 import axle.jung.JungDirectedGraph
+import axle.jung.JungUndirectedGraph
 import axle.ml.KMeans
 import axle.string
 import axle.visualize.BarChart
@@ -445,4 +446,39 @@ object SVG {
 
   }
 
+  implicit def drawJungUndirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[JungUndirectedGraph[VP, EP]] = new SVG[JungUndirectedGraph[VP, EP]] {
+
+    def svg(jug: JungUndirectedGraph[VP, EP]): NodeSeq = {
+
+      // TODO make these all configurable
+      val width = 1000
+      val height = 1000
+      val border = 20
+      val radius = 10
+      val color = yellow
+      val borderColor = black
+      val fontSize = 12
+
+      val layout = new FRLayout(jug.jusg)
+      layout.setSize(new Dimension(width, height))
+      val visualization = new DefaultVisualizationModel(layout)
+
+      val lines: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
+        <line x1={ s"${layout.getX(edge.v1)}" } y1={ s"${layout.getY(edge.v1)}" } x2={ s"${layout.getX(edge.v2)}" } y2={ s"${layout.getY(edge.v2)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
+      } toList
+
+      val circles: List[xml.Node] = jug.jusg.getVertices.asScala.map { vertex =>
+        <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
+      } toList
+
+      val labels: List[xml.Node] = jug.jusg.getVertices.asScala.map { vertex =>
+        <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
+      } toList
+
+      val nodes = lines ++ circles ++ labels
+
+      svgFrame(nodes, width, height)
+    }
+
+  }  
 }
