@@ -42,6 +42,10 @@ import spire.implicits.DoubleAlgebra
 import scala.annotation.implicitNotFound
 import scala.math.atan
 import scala.math.Pi
+import spire.algebra.Field
+import axle.algebra.DirectedGraph
+import axle.pgm.BayesianNetwork
+import axle.pgm.BayesianNetworkNode
 
 @implicitNotFound("Witness not found for SVG[${S}]")
 trait SVG[S] {
@@ -436,7 +440,15 @@ object SVG {
       } toList
 
       val labels: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
-        <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
+        val node = HtmlFrom[VP].toHtml(vertex.payload)
+        node match {
+          case xml.Text(text) =>
+            <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
+          case _ =>
+            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
+              { node }
+            </foreignObject>
+        }
       } toList
 
       val nodes = lines ++ arrows ++ circles ++ labels
@@ -472,7 +484,15 @@ object SVG {
       } toList
 
       val labels: List[xml.Node] = jug.jusg.getVertices.asScala.map { vertex =>
-        <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
+        val node = HtmlFrom[VP].toHtml(vertex.payload)
+        node match {
+          case xml.Text(t) =>
+            <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
+          case _ =>
+            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
+              { node }
+            </foreignObject>
+        }
       } toList
 
       val nodes = lines ++ circles ++ labels
@@ -480,5 +500,13 @@ object SVG {
       svgFrame(nodes, width, height)
     }
 
-  }  
+  }
+
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](implicit svgDG: SVG[DG[BayesianNetworkNode[T, N], String]]): SVG[BayesianNetwork[T, N, DG]] = {
+    new SVG[BayesianNetwork[T, N, DG]] {
+      def svg(bn: BayesianNetwork[T, N, DG]): NodeSeq =
+        svgDG.svg(bn.graph)
+    }
+  }
+
 }
