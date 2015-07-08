@@ -1,32 +1,30 @@
 package axle.web
 
-import scala.annotation.implicitNotFound
+import java.awt.Dimension
+import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
-
-import axle.string
+import axle.HtmlFrom
 import axle.Show
-import axle.algebra.LengthSpace
-import axle.algebra.Tics
-import axle.algebra.Zero
-import axle.algebra.Plottable
-import axle.algebra.LinearAlgebra
+import axle.jung.JungDirectedGraph
+import axle.jung.JungUndirectedGraph
 import axle.ml.KMeans
-import axle.visualize.Color
-import axle.visualize.Color.lightGray
-import axle.visualize.KMeansVisualization
+import axle.string
 import axle.visualize.BarChart
-import axle.visualize.BarChartView
 import axle.visualize.BarChartGrouped
 import axle.visualize.BarChartGroupedView
-import axle.visualize.DataView
+import axle.visualize.BarChartView
+import axle.visualize.Color
+import axle.visualize.Color.black
+import axle.visualize.Color.lightGray
+import axle.visualize.Color.yellow
+import axle.visualize.KMeansVisualization
 import axle.visualize.Plot
-import axle.visualize.PlotDataView
 import axle.visualize.PlotView
 import axle.visualize.Point2D
 import axle.visualize.angleDouble
-import axle.visualize.element.BarChartKey
 import axle.visualize.element.BarChartGroupedKey
+import axle.visualize.element.BarChartKey
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
@@ -36,10 +34,18 @@ import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import spire.algebra.Order
+import edu.uci.ics.jung.algorithms.layout.FRLayout
+import edu.uci.ics.jung.visualization.BasicVisualizationServer
+import edu.uci.ics.jung.visualization.DefaultVisualizationModel
 import spire.algebra.Eq
-import spire.implicits.eqOps
 import spire.implicits.DoubleAlgebra
+import scala.annotation.implicitNotFound
+import scala.math.atan
+import scala.math.Pi
+import spire.algebra.Field
+import axle.algebra.DirectedGraph
+import axle.pgm.BayesianNetwork
+import axle.pgm.BayesianNetworkNode
 
 @implicitNotFound("Witness not found for SVG[${S}]")
 trait SVG[S] {
@@ -394,5 +400,113 @@ object SVG {
         svgFrame(nodes.reduce(_ ++ _), width, height)
       }
     }
+
+  implicit def drawJungDirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[JungDirectedGraph[VP, EP]] = new SVG[JungDirectedGraph[VP, EP]] {
+
+    def svg(jdg: JungDirectedGraph[VP, EP]): NodeSeq = {
+
+      // TODO make these all configurable
+      val width = 600
+      val height = 600
+      val border = 20
+      val radius = 10
+      val color = yellow
+      val borderColor = black
+      val fontSize = 12
+
+      val layout = new FRLayout(jdg.jdsg)
+      layout.setSize(new Dimension(width, height))
+      val visualization = new DefaultVisualizationModel(layout)
+
+      val lines: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
+        <line x1={ s"${layout.getX(edge.from)}" } y1={ s"${layout.getY(edge.from)}" } x2={ s"${layout.getX(edge.to)}" } y2={ s"${layout.getY(edge.to)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
+      } toList
+
+      val arrows: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
+        val height = layout.getY(edge.from) - layout.getY(edge.to)
+        val width = layout.getX(edge.to) - layout.getX(edge.from)
+        val actualPointAngle = (atan(height / width) / Pi) * 180d
+        // atan is only defined on right half, so check if flip is required
+        val svgRotationAngle = if (width < 0d) {
+          -actualPointAngle
+        } else {
+          180d - actualPointAngle
+        }
+        <polygon points="10,0 20,3 20,-3" fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
+      } toList
+
+      val circles: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
+        <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
+      } toList
+
+      val labels: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
+        val node = HtmlFrom[VP].toHtml(vertex.payload)
+        node match {
+          case xml.Text(text) =>
+            <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
+          case _ =>
+            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
+              { node }
+            </foreignObject>
+        }
+      } toList
+
+      val nodes = lines ++ arrows ++ circles ++ labels
+
+      svgFrame(nodes, width, height)
+    }
+
+  }
+
+  implicit def drawJungUndirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[JungUndirectedGraph[VP, EP]] = new SVG[JungUndirectedGraph[VP, EP]] {
+
+    def svg(jug: JungUndirectedGraph[VP, EP]): NodeSeq = {
+
+      // TODO make these all configurable
+      val width = 600
+      val height = 600
+      val border = 20
+      val radius = 10
+      val color = yellow
+      val borderColor = black
+      val fontSize = 12
+
+      val layout = new FRLayout(jug.jusg)
+      layout.setSize(new Dimension(width, height))
+      val visualization = new DefaultVisualizationModel(layout)
+
+      val lines: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
+        <line x1={ s"${layout.getX(edge.v1)}" } y1={ s"${layout.getY(edge.v1)}" } x2={ s"${layout.getX(edge.v2)}" } y2={ s"${layout.getY(edge.v2)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
+      } toList
+
+      val circles: List[xml.Node] = jug.jusg.getVertices.asScala.map { vertex =>
+        <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
+      } toList
+
+      val labels: List[xml.Node] = jug.jusg.getVertices.asScala.map { vertex =>
+        val node = HtmlFrom[VP].toHtml(vertex.payload)
+        node match {
+          case xml.Text(t) =>
+            <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
+          case _ =>
+            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
+              { node }
+            </foreignObject>
+        }
+      } toList
+
+      val nodes = lines ++ circles ++ labels
+
+      svgFrame(nodes, width, height)
+    }
+
+  }
+
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](implicit svgDG: SVG[DG[BayesianNetworkNode[T, N], String]]): SVG[BayesianNetwork[T, N, DG]] = {
+    new SVG[BayesianNetwork[T, N, DG]] {
+      def svg(bn: BayesianNetwork[T, N, DG]): NodeSeq =
+        svgDG.svg(bn.graph)
+    }
+  }
 
 }

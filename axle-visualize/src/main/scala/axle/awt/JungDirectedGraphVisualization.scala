@@ -43,9 +43,9 @@ case class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, b
       def transform(i: Vertex[VP]): Paint = Color.GREEN
     }
 
-    val dash = List(10.0f).toArray
+    val dash = List(10f).toArray
 
-    val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
+    val edgeStroke = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0f)
 
     val edgeStrokeTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], Stroke]() {
       def transform(e: JungDirectedGraphEdge[VP, EP]): BasicStroke = edgeStroke

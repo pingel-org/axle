@@ -40,7 +40,7 @@ object BayesianNetworkNode {
   implicit def bnnHtmlFrom[T, N]: HtmlFrom[BayesianNetworkNode[T, N]] = new HtmlFrom[BayesianNetworkNode[T, N]] {
 
     def toHtml(bnn: BayesianNetworkNode[T, N]): xml.Node =
-      <html>
+      <html xmlns="http://www.w3.org/1999/xhtml">
         <div>
           <center><h2>{ bnn.rv.name }</h2></center>
           { bnn.cpt.toHtml }
