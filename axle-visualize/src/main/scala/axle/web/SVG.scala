@@ -425,12 +425,12 @@ object SVG {
       val arrows: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
         val height = layout.getY(edge.from) - layout.getY(edge.to)
         val width = layout.getX(edge.to) - layout.getX(edge.from)
-        val actualPointAngle = (atan(height / width) / Pi) * 180d
+        val actualPointAngle = (atan(height / width) / Pi) * -180d
         // atan is only defined on right half, so check if flip is required
         val svgRotationAngle = if (width < 0d) {
-          -actualPointAngle
+          actualPointAngle
         } else {
-          180d - actualPointAngle
+          actualPointAngle - 180d
         }
         <polygon points="10,0 20,3 20,-3" fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
       } toList
