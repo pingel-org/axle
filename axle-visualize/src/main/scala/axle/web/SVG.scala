@@ -451,7 +451,7 @@ object SVG {
         }
       } toList
 
-     val edgeLabels: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
+      val edgeLabels: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
         val node = HtmlFrom[EP].toHtml(edge.payload)
         val cx = (layout.getX(edge.to) - layout.getX(edge.from)) * 0.6 + layout.getX(edge.from)
         val cy = (layout.getY(edge.to) - layout.getY(edge.from)) * 0.6 + layout.getY(edge.from)
@@ -509,7 +509,7 @@ object SVG {
         }
       } toList
 
-     val edgeLabels: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
+      val edgeLabels: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
         val node = HtmlFrom[EP].toHtml(edge.payload)
         val cx = (layout.getX(edge.v2) - layout.getX(edge.v1)) * 0.5 + layout.getX(edge.v1)
         val cy = (layout.getY(edge.v2) - layout.getY(edge.v1)) * 0.5 + layout.getY(edge.v1)
