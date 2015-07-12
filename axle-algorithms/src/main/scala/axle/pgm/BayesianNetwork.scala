@@ -41,7 +41,7 @@ object BayesianNetworkNode {
 
     def toHtml(bnn: BayesianNetworkNode[T, N]): xml.Node =
       <div>
-        <center><h2>{ bnn.rv.name }</h2></center>
+        <h2>{ bnn.rv.name }</h2>
         { bnn.cpt.toHtml }
       </div>
 

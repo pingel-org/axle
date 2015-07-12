@@ -406,8 +406,8 @@ object SVG {
     def svg(jdg: JungDirectedGraph[VP, EP]): NodeSeq = {
 
       // TODO make these all configurable
-      val width = 600
-      val height = 600
+      val width = 800
+      val height = 800
       val border = 20
       val radius = 10
       val arrowLength = 10
@@ -446,7 +446,7 @@ object SVG {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
           case _ =>
-            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
+            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
               <html xmlns="http://www.w3.org/1999/xhtml">
                 { node }
               </html>
@@ -462,7 +462,7 @@ object SVG {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
           case _ =>
-            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="150" height="200">
+            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="100%" height="100%">
               { node }
             </foreignObject>
         }
@@ -506,7 +506,7 @@ object SVG {
           case xml.Text(t) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
           case _ =>
-            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
+            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
               { node }
             </foreignObject>
         }
@@ -520,7 +520,7 @@ object SVG {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
           case _ =>
-            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="150" height="200">
+            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="100%" height="100%">
               { node }
             </foreignObject>
         }

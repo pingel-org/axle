@@ -15,8 +15,9 @@ package object web {
       <body>{ inner }</body>
     </html>
 
+  // optional svg attribute: viewBox={ s"0 0 ${width} ${height}" }
   def svgFrame(inner: NodeSeq, width: Int, height: Int): Node =
-    <svg viewBox={ s"0 0 ${width} ${height}" } version="1.1" xmlns="http://www.w3.org/2000/svg" width={ s"$width" } height={ s"$height" }>{ inner }Sorry, your browser does not support inline SVG.</svg>
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width={ s"$width" } height={ s"$height" }>{ inner }Sorry, your browser does not support inline SVG.</svg>
 
   def svg[T: SVG](t: T, filename: String, width: Int, height: Int): Unit =
     XML.save(filename, svgFrame(SVG[T].svg(t), width, height), encoding, true, null)
