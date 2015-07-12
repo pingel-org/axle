@@ -425,12 +425,12 @@ object SVG {
       val arrows: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
         val height = layout.getY(edge.from) - layout.getY(edge.to)
         val width = layout.getX(edge.to) - layout.getX(edge.from)
-        val actualPointAngle = (atan(height / width) / Pi) * 180d
+        val actualPointAngle = (atan(height / width) / Pi) * -180d
         // atan is only defined on right half, so check if flip is required
         val svgRotationAngle = if (width < 0d) {
-          -actualPointAngle
+          actualPointAngle
         } else {
-          180d - actualPointAngle
+          actualPointAngle - 180d
         }
         <polygon points="10,0 20,3 20,-3" fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
       } toList
@@ -451,7 +451,21 @@ object SVG {
         }
       } toList
 
-      val nodes = lines ++ arrows ++ circles ++ labels
+     val edgeLabels: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
+        val node = HtmlFrom[EP].toHtml(edge.payload)
+        val cx = (layout.getX(edge.to) - layout.getX(edge.from)) * 0.6 + layout.getX(edge.from)
+        val cy = (layout.getY(edge.to) - layout.getY(edge.from)) * 0.6 + layout.getY(edge.from)
+        node match {
+          case xml.Text(text) =>
+            <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
+          case _ =>
+            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="150" height="200">
+              { node }
+            </foreignObject>
+        }
+      } toList
+
+      val nodes = lines ++ arrows ++ circles ++ labels ++ edgeLabels
 
       svgFrame(nodes, width, height)
     }
@@ -495,7 +509,21 @@ object SVG {
         }
       } toList
 
-      val nodes = lines ++ circles ++ labels
+     val edgeLabels: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
+        val node = HtmlFrom[EP].toHtml(edge.payload)
+        val cx = (layout.getX(edge.v2) - layout.getX(edge.v1)) * 0.5 + layout.getX(edge.v1)
+        val cy = (layout.getY(edge.v2) - layout.getY(edge.v1)) * 0.5 + layout.getY(edge.v1)
+        node match {
+          case xml.Text(text) =>
+            <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
+          case _ =>
+            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="150" height="200">
+              { node }
+            </foreignObject>
+        }
+      } toList
+
+      val nodes = lines ++ circles ++ labels ++ edgeLabels
 
       svgFrame(nodes, width, height)
     }
