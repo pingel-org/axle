@@ -3,9 +3,7 @@ package axle.jung
 import scala.collection.JavaConverters.asScalaBufferConverter
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
-import axle.algebra.DirectedEdge
 import axle.algebra.DirectedGraph
-import axle.algebra.Vertex
 import axle.enrichIndexedSeq
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -13,76 +11,66 @@ import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
-case class JungDirectedGraph[VP, EP](
-  jdsg: DirectedSparseGraph[Vertex[VP], JungDirectedGraphEdge[VP, EP]])
-
-case class JungDirectedGraphEdge[VP, EP](
-  from: Vertex[VP],
-  to: Vertex[VP],
-  payload: EP) extends DirectedEdge[VP, EP]
-
 // Note: ES includes the vertices in order to provide uniqueness for jung
 // This could also be accomplished by making Edge not a case class
 
 object JungDirectedGraph {
 
-  implicit def directedGraphJung: DirectedGraph[JungDirectedGraph] = new DirectedGraph[JungDirectedGraph] {
+  implicit def directedGraphJung: DirectedGraph[DirectedSparseGraph] = new DirectedGraph[DirectedSparseGraph] {
 
-    def make[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]): JungDirectedGraph[VP, EP] = {
+    def make[V, E](vertices: Seq[V], ef: Seq[V] => Seq[(V, V, E)]): DirectedSparseGraph[V, E] = {
 
-      val jdsg = new DirectedSparseGraph[Vertex[VP], JungDirectedGraphEdge[VP, EP]]
-
-      val vertices = vps map { Vertex(_) }
+      val jdsg = new DirectedSparseGraph[V, E]
 
       vertices foreach { jdsg.addVertex } // TODO check return value
 
       ef(vertices) foreach {
-        case (vi, vj, ep) =>
-          jdsg.addEdge(JungDirectedGraphEdge(vi, vj, ep), vi, vj) // TODO check return value
+        case (vi, vj, e) =>
+          jdsg.addEdge(e, vi, vj) // TODO check return value
       }
 
-      JungDirectedGraph(jdsg)
+      jdsg
     }
 
-    def vertices[VP, EP](jdg: JungDirectedGraph[VP, EP]): Iterable[Vertex[VP]] =
-      jdg.jdsg.getVertices.asScala
+    def vertices[V, E](jdsg: DirectedSparseGraph[V, E]): Iterable[V] =
+      jdsg.getVertices.asScala
 
-    def edges[VP, EP](jdg: JungDirectedGraph[VP, EP]): Iterable[DirectedEdge[VP, EP]] =
-      jdg.jdsg.getEdges.asScala
+    def edges[V, E](jdsg: DirectedSparseGraph[V, E]): Iterable[E] =
+      jdsg.getEdges.asScala
 
-    def size[VP, EP](jdg: JungDirectedGraph[VP, EP]): Int =
-      jdg.jdsg.getVertexCount
+    def size[V, E](jdsg: DirectedSparseGraph[V, E]): Int =
+      jdsg.getVertexCount
 
     // TODO findVertex needs an index
-    def findVertex[VP, EP](jdg: JungDirectedGraph[VP, EP], f: Vertex[VP] => Boolean): Option[Vertex[VP]] =
-      vertices(jdg).find(f)
+    def findVertex[V, E](jdsg: DirectedSparseGraph[V, E], f: V => Boolean): Option[V] =
+      vertices(jdsg).find(f)
 
-    def filterEdges[VP, EP](jdg: JungDirectedGraph[VP, EP], f: DirectedEdge[VP, EP] => Boolean): JungDirectedGraph[VP, EP] =
+    def filterEdges[V, E](jdsg: DirectedSparseGraph[V, E], f: E => Boolean): DirectedSparseGraph[V, E] =
       make(
-        vertices(jdg).map(_.payload).toSeq,
-        (es: Seq[Vertex[VP]]) => edges(jdg).filter(f).toList.map({ case e => (e.from, e.to, e.payload) }))
+        vertices(jdsg).toSeq,
+        (es: Seq[V]) => edges(jdsg).filter(f).toList.map({ case e => (e.from, e.to, e) }))
 
-    def areNeighbors[VP: Eq, EP](jdg: JungDirectedGraph[VP, EP], v1: Vertex[VP], v2: Vertex[VP]): Boolean =
+    def areNeighbors[V: Eq, E](jdg: DirectedSparseGraph[V, E], v1: V, v2: V): Boolean =
       edgesTouching(jdg, v1).exists(edge => connects(jdg, edge, v1, v2))
 
-    def isClique[VP: Eq, EP](jdg: JungDirectedGraph[VP, EP], vs: collection.GenTraversable[Vertex[VP]]): Boolean =
+    def isClique[V: Eq, E](jdsg: DirectedSparseGraph[V, E], vs: collection.GenTraversable[V]): Boolean =
       (for {
         vi <- vs
         vj <- vs
       } yield {
-        (vi === vj) || areNeighbors(jdg, vi, vj)
+        (vi === vj) || areNeighbors(jdsg, vi, vj)
       }).forall(identity)
 
-    def forceClique[VP: Eq: Manifest, EP](jdg: JungDirectedGraph[VP, EP], among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): JungDirectedGraph[VP, EP] = {
+    def forceClique[V: Eq: Manifest, E](jdsg: DirectedSparseGraph[V, E], among: Set[V], payload: (V, V) => E): DirectedSparseGraph[V, E] = {
 
-      val cliqued = (newVs: Seq[Vertex[VP]]) => {
+      val cliqued = (newVs: Seq[V]) => {
 
-        val old2new: Map[Vertex[VP], Vertex[VP]] = ??? // TODO _vertices.zip(newVs).toMap
+        val old2new: Map[V, V] = ??? // TODO _vertices.zip(newVs).toMap
 
         val newEdges = among.toVector.permutations(2)
           .map({ a => (a(0), a(1)) })
           .collect({
-            case (vi: Vertex[VP], vj: Vertex[VP]) if !areNeighbors(jdg, vi, vj) =>
+            case (vi: V, vj: V) if !areNeighbors(jdsg, vi, vj) =>
               val newVi = old2new(vi)
               val newVj = old2new(vj)
               (newVi, newVj, payload(newVi, newVj))
@@ -91,28 +79,28 @@ object JungDirectedGraph {
         ??? // ef(newVs) ++ newEdges
       }
 
-      make(vertices(jdg).map(_.payload).toList, cliqued)
+      make(vertices(jdsg).toList, cliqued)
     }
 
-    def degree[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP]): Int =
-      edgesTouching(jdg, v).size
+    def degree[V, E](jdsg: DirectedSparseGraph[V, E], v: V): Int =
+      edgesTouching(jdsg, v).size
 
-    def edgesTouching[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP]): Set[DirectedEdge[VP, EP]] =
-      jdg.jdsg.getIncidentEdges(v).asScala.toSet
+    def edgesTouching[V, E](jdsg: DirectedSparseGraph[V, E], v: V): Set[E] =
+      jdsg.getIncidentEdges(v).asScala.toSet
 
-    def neighbors[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP]): Set[Vertex[VP]] =
-      jdg.jdsg.getNeighbors(v).asScala.toSet
+    def neighbors[V, E](jdsg: DirectedSparseGraph[V, E], v: V): Set[V] =
+      jdsg.getNeighbors(v).asScala.toSet
 
     // a "leaf" is vertex with only one neighbor
-    def firstLeafOtherThan[VP: Eq, EP](jdg: JungDirectedGraph[VP, EP], r: Vertex[VP]): Option[Vertex[VP]] =
-      vertices(jdg).find(v => neighbors(jdg, v).size === 1 && (!(v === r)))
+    def firstLeafOtherThan[V: Eq, E](jdsg: DirectedSparseGraph[V, E], r: V): Option[V] =
+      vertices(jdsg).find(v => neighbors(jdsg, v).size === 1 && (!(v === r)))
 
     /**
      * "decompositions" page 3 (Definition 3, Section 9.3)
      * turn the neighbors of v into a clique
      */
 
-    def eliminate[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP], payload: (Vertex[VP], Vertex[VP]) => EP): JungDirectedGraph[VP, EP] = {
+    def eliminate[V, E](jdsg: DirectedSparseGraph[V, E], v: V, payload: (V, V) => E): DirectedSparseGraph[V, E] = {
 
       // TODO
       //    val vs = neighbors(v)
@@ -121,59 +109,58 @@ object JungDirectedGraph {
       ???
     }
 
-    def other[VP: Eq, EP](jdg: JungDirectedGraph[VP, EP], edge: DirectedEdge[VP, EP], u: Vertex[VP]): Vertex[VP] = {
+    def other[V: Eq, E](jdsg: DirectedSparseGraph[V, E], edge: E, u: V): V =
       u match {
         case _ if (u === edge.from) => edge.to
         case _ if (u === edge.to)   => edge.from
         case _                      => throw new Exception("can't find 'other' of a vertex that isn't on the edge itself")
       }
-    }
 
-    def connects[VP: Eq, EP](jdg: JungDirectedGraph[VP, EP], edge: DirectedEdge[VP, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean =
+    def connects[V: Eq, E](jdsg: DirectedSparseGraph[V, E], edge: E, a1: V, a2: V): Boolean =
       (a1 === edge.from && a2 === edge.to) || (a2 === edge.from && a1 === edge.to)
 
-    def map[VP, EP, NVP, NEP](jdg: JungDirectedGraph[VP, EP], vpf: VP => NVP, epf: EP => NEP): JungDirectedGraph[NVP, NEP] =
-      make(vertices(jdg).map(v => vpf(v.payload)).toList,
-        (newVs: Seq[Vertex[NVP]]) => ???)
+    def map[V, E, NV, NE](jdsg: DirectedSparseGraph[V, E], vpf: V => NV, epf: E => NE): DirectedSparseGraph[NV, NE] =
+      make(vertices(jdsg).map(vpf).toList,
+        (newVs: Seq[NV]) => ???)
 
-    def leaves[VP: Eq, EP](jdg: JungDirectedGraph[VP, EP]): Set[Vertex[VP]] =
-      vertices(jdg).filter(v => isLeaf(jdg, v)).toSet
+    def leaves[V: Eq, E](jdsg: DirectedSparseGraph[V, E]): Set[V] =
+      vertices(jdsg).filter(v => isLeaf(jdsg, v)).toSet
 
-    def precedes[VP, EP](jdg: JungDirectedGraph[VP, EP], v1: Vertex[VP], v2: Vertex[VP]): Boolean =
-      predecessors(jdg, v2).contains(v1)
+    def precedes[V, E](jdsg: DirectedSparseGraph[V, E], v1: V, v2: V): Boolean =
+      predecessors(jdsg, v2).contains(v1)
 
-    def predecessors[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP]): Set[Vertex[VP]] =
-      jdg.jdsg.getPredecessors(v).asScala.toSet
+    def predecessors[V, E](jdsg: DirectedSparseGraph[V, E], v: V): Set[V] =
+      jdsg.getPredecessors(v).asScala.toSet
 
-    def isLeaf[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP]): Boolean =
-      jdg.jdsg.getSuccessorCount(v) === 0
+    def isLeaf[V, E](jdsg: DirectedSparseGraph[V, E], v: V): Boolean =
+      jdsg.getSuccessorCount(v) === 0
 
-    def successors[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP]): Set[Vertex[VP]] =
-      jdg.jdsg.getSuccessors(v).asScala.toSet
+    def successors[V, E](jdsg: DirectedSparseGraph[V, E], v: V): Set[V] =
+      jdsg.getSuccessors(v).asScala.toSet
 
-    def outputEdgesOf[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP]): Set[DirectedEdge[VP, EP]] =
-      jdg.jdsg.getOutEdges(v).asScala.toSet
+    def outputEdgesOf[V, E](jdsg: DirectedSparseGraph[V, E], v: V): Set[V] =
+      jdsg.getOutEdges(v).asScala.toSet
 
-    def descendantsIntersectsSet[VP, EP](jdg: JungDirectedGraph[VP, EP], v: Vertex[VP], s: Set[Vertex[VP]]): Boolean =
-      s.contains(v) || s.exists(x => descendantsIntersectsSet(jdg, x, s))
+    def descendantsIntersectsSet[V, E](jdsg: DirectedSparseGraph[V, E], v: V, s: Set[V]): Boolean =
+      s.contains(v) || s.exists(x => descendantsIntersectsSet(jdsg, x, s))
 
-    def removeInputs[VP, EP](jdg: JungDirectedGraph[VP, EP], to: Set[Vertex[VP]]): JungDirectedGraph[VP, EP] =
-      filterEdges(jdg, edge => !to.contains(edge.to))
+    def removeInputs[V, E](jdsg: DirectedSparseGraph[V, E], to: Set[V]): DirectedSparseGraph[V, E] =
+      filterEdges(jdsg, edge => !to.contains(edge.to))
 
-    def removeOutputs[VP, EP](jdg: JungDirectedGraph[VP, EP], from: Set[Vertex[VP]]): JungDirectedGraph[VP, EP] =
-      filterEdges(jdg, edge => !from.contains(edge.from))
+    def removeOutputs[V, E](jdsg: DirectedSparseGraph[V, E], from: Set[V]): DirectedSparseGraph[V, E] =
+      filterEdges(jdsg, edge => !from.contains(edge.from))
 
-    def moralGraph[VP, EP](jdg: JungDirectedGraph[VP, EP]): Boolean =
+    def moralGraph[V, E](jdsg: DirectedSparseGraph[V, E]): Boolean =
       ???
 
-    def isAcyclic[VP, EP](jdg: JungDirectedGraph[VP, EP]): Boolean =
+    def isAcyclic[V, E](jdsg: DirectedSparseGraph[V, E]): Boolean =
       ???
 
-    def shortestPath[VP: Eq, EP](jdg: JungDirectedGraph[VP, EP], source: Vertex[VP], goal: Vertex[VP]): Option[List[DirectedEdge[VP, EP]]] =
+    def shortestPath[V: Eq, E](jdsg: DirectedSparseGraph[V, E], source: V, goal: V): Option[List[V]] =
       if (source === goal) {
         Some(Nil)
       } else {
-        Option((new DijkstraShortestPath(jdg.jdsg)).getPath(source, goal)) flatMap { path =>
+        Option((new DijkstraShortestPath(jdsg)).getPath(source, goal)) flatMap { path =>
           if (path.size === 0)
             None
           else

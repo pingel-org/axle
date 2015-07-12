@@ -3,7 +3,6 @@ package axle.lx
 
 import axle.Show
 import axle.algebra.DirectedGraph
-import axle.algebra.Vertex
 import axle.string
 import axle.syntax.directedgraph._
 import spire.algebra.Eq
@@ -36,7 +35,7 @@ object Angluin {
 
     val graph = directedGraph[DG, String, Symbol](vps, vs => Nil)
 
-    def Q: Set[Vertex[String]] = graph.vertices.toSet
+    def Q: Set[String] = graph.vertices.toSet
 
     //    def addState(isInitial: Boolean, isFinal: Boolean): Acceptor = {
     //      val (newG, v) = g + "" // TODO
@@ -45,12 +44,12 @@ object Angluin {
     //      Acceptor(newG, newI, newF)
     //    }
 
-    def δSymbol(state: Vertex[String], symbol: Symbol): Set[Vertex[String]] =
-      graph.edges.collect({ case e if (e.from === state && Symbol.symbolEq.eqv(e.payload, symbol)) => e.to }).toSet
+    def δSymbol(state: String, symbol: Symbol): Set[String] =
+      graph.edges.collect({ case e if (e.from === state && Symbol.symbolEq.eqv(e, symbol)) => e.to }).toSet
 
-    def δ(state: Vertex[String], exp: List[Symbol]): Set[String] = exp match {
+    def δ(state: String, exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
-      case Nil          => Set(state.payload)
+      case Nil          => Set(state)
     }
 
     // TODO: not sure if this should count edges or nodes:
@@ -62,13 +61,13 @@ object Angluin {
 
     def isSubacceptorOf(other: AngluinAcceptor[DG]): Boolean = ???
 
-    def induce(P: Set[Vertex[String]]): AngluinAcceptor[DG] = ???
+    def induce(P: Set[String]): AngluinAcceptor[DG] = ???
 
   }
 
   // type Expression = List[Symbol]
 
-  val ♯ = List[Symbol]()
+  val ♯ = List.empty[Symbol]
 
   // val g = graph[String, Symbol]()
 

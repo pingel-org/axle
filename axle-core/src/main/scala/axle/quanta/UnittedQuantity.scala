@@ -1,6 +1,5 @@
 package axle.quanta
 
-import axle.algebra.Vertex
 import axle.Show
 import axle.string
 import axle.algebra.Functor

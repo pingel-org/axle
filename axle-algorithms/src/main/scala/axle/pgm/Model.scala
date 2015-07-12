@@ -21,7 +21,7 @@ case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](graph: DG[Distribu
   def vertexPayloadToDistribution(mvp: T): Distribution[T, N] = ???
 
   def randomVariables: Vector[Distribution[T, N]] =
-    graph.vertices.map(_.payload).toVector
+    graph.vertices.toVector
 
   def variable(name: String): Distribution[T, N] = ??? // TODO name2variable(name)
 
@@ -57,15 +57,10 @@ case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](graph: DG[Distribu
       ", to = " + to.map(_.name).mkString(", ") +
       ", evidence = " + given.map(_.name).mkString(", ")
 
-    val priorVertexOpt = priorOpt.map(prior => graph.findVertex(_.payload === prior).get)
-    val givenVertices = given.map(v1 => graph.findVertex(_.payload === v1).get)
+    (current -- priorOpt.map(visited).getOrElse(Set.empty)).toList.flatMap(variable => {
 
-    (current -- priorOpt.map(visited).getOrElse(Set())).toList.flatMap(variable => {
-
-      val variableVertex = graph.findVertex(_.payload === variable).get
-
-      val (directionPriorToVar, openToVar) = priorVertexOpt.map(priorVertex => {
-        val d = if (graph.precedes(variableVertex, priorVertex)) {
+      val (directionPriorToVar, openToVar) = priorOpt.map(prior => {
+        val d = if (graph.precedes(variable, prior)) {
           Direction.INWARD
         } else {
           Direction.OUTWARD
@@ -74,7 +69,7 @@ case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](graph: DG[Distribu
           val priorGiven = given.contains(priorOpt.get)
           (priorDirection === Direction.INWARD && !priorGiven && d === Direction.OUTWARD) ||
             (priorDirection === Direction.OUTWARD && !priorGiven && d === Direction.OUTWARD) ||
-            (priorDirection === Direction.INWARD && graph.descendantsIntersectsSet(variableVertex, givenVertices) && d === Direction.INWARD)
+            (priorDirection === Direction.INWARD && graph.descendantsIntersectsSet(variable, given) && d === Direction.INWARD)
         } else {
           true
         }
@@ -91,7 +86,7 @@ case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](graph: DG[Distribu
             }).getOrElse(visited),
             -1 * directionPriorToVar,
             Some(variable),
-            (graph.neighbors(variableVertex) - priorVertexOpt.get).map(_.payload),
+            (graph.neighbors(variable) - priorOpt.get),
             to,
             given)
             .map(_ ++ List(variable))

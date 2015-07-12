@@ -6,89 +6,89 @@ import scala.annotation.implicitNotFound
 @implicitNotFound("Witness not found for DirectedGraph[${DG}]")
 trait DirectedGraph[DG[_, _]] {
 
-  def make[VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]): DG[VP, EP]
+  def make[V, E](Vs: Seq[V], ef: Seq[V] => Seq[(V, V, E)]): DG[V, E]
 
-  def vertices[VP, EP](jdg: DG[VP, EP]): Iterable[Vertex[VP]]
+  def vertices[V, E](jdg: DG[V, E]): Iterable[V]
 
-  def edges[VP, EP](jdg: DG[VP, EP]): Iterable[DirectedEdge[VP, EP]]
+  def edges[V, E](jdg: DG[V, E]): Iterable[E]
 
-  def size[VP, EP](jdg: DG[VP, EP]): Int
+  def size[V, E](jdg: DG[V, E]): Int
 
   // TODO findVertex needs an index
-  def findVertex[VP, EP](jdg: DG[VP, EP], f: Vertex[VP] => Boolean): Option[Vertex[VP]]
+  def findVertex[V, E](jdg: DG[V, E], f: V => Boolean): Option[V]
 
-  def filterEdges[VP, EP](jdg: DG[VP, EP], f: DirectedEdge[VP, EP] => Boolean): DG[VP, EP]
+  def filterEdges[V, E](jdg: DG[V, E], f: E => Boolean): DG[V, E]
 
-  def areNeighbors[VP: Eq, EP](jdg: DG[VP, EP], v1: Vertex[VP], v2: Vertex[VP]): Boolean
+  def areNeighbors[V: Eq, E](jdg: DG[V, E], v1: V, v2: V): Boolean
 
-  def isClique[VP: Eq, EP](jdg: DG[VP, EP], vs: collection.GenTraversable[Vertex[VP]]): Boolean
+  def isClique[V: Eq, E](jdg: DG[V, E], vs: collection.GenTraversable[V]): Boolean
 
-  def forceClique[VP: Eq: Manifest, EP](jdg: DG[VP, EP], among: Set[Vertex[VP]], payload: (Vertex[VP], Vertex[VP]) => EP): DG[VP, EP]
+  def forceClique[V: Eq: Manifest, E](jdg: DG[V, E], among: Set[V], payload: (V, V) => E): DG[V, E]
 
-  def degree[VP, EP](jdg: DG[VP, EP], v: Vertex[VP]): Int
+  def degree[V, E](jdg: DG[V, E], v: V): Int
 
-  def edgesTouching[VP, EP](jdg: DG[VP, EP], v: Vertex[VP]): Set[DirectedEdge[VP, EP]]
+  def edgesTouching[V, E](jdg: DG[V, E], v: V): Set[E]
 
-  def neighbors[VP, EP](jdg: DG[VP, EP], v: Vertex[VP]): Set[Vertex[VP]]
+  def neighbors[V, E](jdg: DG[V, E], v: V): Set[V]
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan[VP: Eq, EP](jdg: DG[VP, EP], r: Vertex[VP]): Option[Vertex[VP]]
+  def firstLeafOtherThan[V: Eq, E](jdg: DG[V, E], r: V): Option[V]
 
-  def eliminate[VP, EP](jdg: DG[VP, EP], v: Vertex[VP], payload: (Vertex[VP], Vertex[VP]) => EP): DG[VP, EP]
+  def eliminate[V, E](jdg: DG[V, E], v: V, payload: (V, V) => E): DG[V, E]
 
-  def other[VP: Eq, EP](jdg: DG[VP, EP], edge: DirectedEdge[VP, EP], u: Vertex[VP]): Vertex[VP]
+  def other[V: Eq, E](jdg: DG[V, E], edge: E, u: V): V
 
-  def connects[VP: Eq, EP](jdg: DG[VP, EP], edge: DirectedEdge[VP, EP], a1: Vertex[VP], a2: Vertex[VP]): Boolean
+  def connects[V: Eq, E](jdg: DG[V, E], edge: E, a1: V, a2: V): Boolean
 
-  def map[VP, EP, NVP, NEP](jdg: DG[VP, EP], vpf: VP => NVP, epf: EP => NEP): DG[NVP, NEP]
+  def map[V, E, NV, NE](jdg: DG[V, E], Vf: V => NV, epf: E => NE): DG[NV, NE]
 
-  def leaves[VP: Eq, EP](jdg: DG[VP, EP]): Set[Vertex[VP]]
+  def leaves[V: Eq, E](jdg: DG[V, E]): Set[V]
 
-  def precedes[VP, EP](jdg: DG[VP, EP], v1: Vertex[VP], v2: Vertex[VP]): Boolean
+  def precedes[V, E](jdg: DG[V, E], v1: V, v2: V): Boolean
 
-  def predecessors[VP, EP](jdg: DG[VP, EP], v: Vertex[VP]): Set[Vertex[VP]]
+  def predecessors[V, E](jdg: DG[V, E], v: V): Set[V]
 
-  def isLeaf[VP, EP](jdg: DG[VP, EP], v: Vertex[VP]): Boolean
+  def isLeaf[V, E](jdg: DG[V, E], v: V): Boolean
 
-  def successors[VP, EP](jdg: DG[VP, EP], v: Vertex[VP]): Set[Vertex[VP]]
+  def successors[V, E](jdg: DG[V, E], v: V): Set[V]
 
-  def outputEdgesOf[VP, EP](jdg: DG[VP, EP], v: Vertex[VP]): Set[DirectedEdge[VP, EP]]
+  def outputEdgesOf[V, E](jdg: DG[V, E], v: V): Set[E]
 
-  def descendantsIntersectsSet[VP, EP](jdg: DG[VP, EP], v: Vertex[VP], s: Set[Vertex[VP]]): Boolean
+  def descendantsIntersectsSet[V, E](jdg: DG[V, E], v: V, s: Set[V]): Boolean
 
-  def removeInputs[VP, EP](jdg: DG[VP, EP], to: Set[Vertex[VP]]): DG[VP, EP]
+  def removeInputs[V, E](jdg: DG[V, E], to: Set[V]): DG[V, E]
 
-  def removeOutputs[VP, EP](jdg: DG[VP, EP], from: Set[Vertex[VP]]): DG[VP, EP]
+  def removeOutputs[V, E](jdg: DG[V, E], from: Set[V]): DG[V, E]
 
-  def moralGraph[VP, EP](jdg: DG[VP, EP]): Boolean
+  def moralGraph[V, E](jdg: DG[V, E]): Boolean
 
-  def isAcyclic[VP, EP](jdg: DG[VP, EP]): Boolean
+  def isAcyclic[V, E](jdg: DG[V, E]): Boolean
 
-  def shortestPath[VP: Eq, EP](jdg: DG[VP, EP], source: Vertex[VP], goal: Vertex[VP]): Option[List[DirectedEdge[VP, EP]]]
+  def shortestPath[V: Eq, E](jdg: DG[V, E], source: V, goal: V): Option[List[E]]
 
   // inefficient
-  def _descendants[VP, EP](jdg: DG[VP, EP], v: Vertex[VP], accumulator: Set[Vertex[VP]]): Set[Vertex[VP]] =
+  def _descendants[V, E](jdg: DG[V, E], v: V, accumulator: Set[V]): Set[V] =
     if (!accumulator.contains(v)) {
       successors(jdg, v).foldLeft(accumulator + v)((a, v) => _descendants(jdg, v, a))
     } else {
       accumulator
     }
 
-  def descendants[VP, EP](jdg: DG[VP, EP], v: Vertex[VP]): Set[Vertex[VP]] =
-    _descendants(jdg, v, Set[Vertex[VP]]())
+  def descendants[V, E](jdg: DG[V, E], v: V): Set[V] =
+    _descendants(jdg, v, Set[V]())
 
   //  // inefficient
-  //  def _ancestors(v: Vertex[VP], accumulator: Set[Vertex[VP]]): Set[Vertex[VP]] =
+  //  def _ancestors(v: Vertex[V], accumulator: Set[Vertex[V]]): Set[Vertex[V]] =
   //    if (!accumulator.contains(v)) {
   //      predecessors(v).foldLeft(accumulator + v)((a, v) => _ancestors(v, a))
   //    } else {
   //      accumulator
   //    }
 
-  //  def ancestors(v: Vertex[VP]): Set[Vertex[VP]] = _ancestors(v, Set[Vertex[VP]]())
+  //  def ancestors(v: Vertex[V]): Set[Vertex[V]] = _ancestors(v, Set[Vertex[V]]())
 
-  //  def ancestors(vs: Set[Vertex[VP]]): Set[Vertex[VP]] =
-  //    vs.foldLeft(Set[Vertex[VP]]())((a, v) => _ancestors(v, a))
+  //  def ancestors(vs: Set[Vertex[V]]): Set[Vertex[V]] =
+  //    vs.foldLeft(Set[Vertex[V]]())((a, v) => _ancestors(v, a))
 
 }
 
