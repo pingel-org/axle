@@ -1,6 +1,7 @@
 package axle.ml
 
 import scala.collection.immutable.TreeMap
+import scala.math.abs
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 import spire.implicits._
@@ -48,11 +49,11 @@ case class LinearRegression[D, M](
   def dTheta(X: M, y: M, θ: M): M = dθ(X, y, θ)
 
   def gradientDescent(X: M, y: M, θ: M, α: Double, iterations: Int) =
-    (0 until iterations).foldLeft((θ, List[Double]()))(
+    (0 until iterations).foldLeft((θ, List.empty[Double]))(
       (θiErrLog: (M, List[Double]), i: Int) => {
         val (θi, errLog) = θiErrLog
         val errMatrix = dθ(X, y, θi)
-        val error = (0 until errMatrix.rows).map(errMatrix.get(_, 0)).sum
+        val error = (0 until errMatrix.rows).map(i => abs(errMatrix.get(i, 0))).sum
         (la.ring.minus(θi, (errMatrix :* α)), error :: errLog)
       })
 

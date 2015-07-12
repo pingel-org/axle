@@ -406,10 +406,11 @@ object SVG {
     def svg(jdg: JungDirectedGraph[VP, EP]): NodeSeq = {
 
       // TODO make these all configurable
-      val width = 600
-      val height = 600
+      val width = 800
+      val height = 800
       val border = 20
       val radius = 10
+      val arrowLength = 10
       val color = yellow
       val borderColor = black
       val fontSize = 12
@@ -432,7 +433,7 @@ object SVG {
         } else {
           actualPointAngle - 180d
         }
-        <polygon points="10,0 20,3 20,-3" fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
+        <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
       } toList
 
       val circles: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
@@ -445,13 +446,15 @@ object SVG {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
           case _ =>
-            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
-              { node }
+            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
+              <html xmlns="http://www.w3.org/1999/xhtml">
+                { node }
+              </html>
             </foreignObject>
         }
       } toList
 
-     val edgeLabels: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
+      val edgeLabels: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
         val node = HtmlFrom[EP].toHtml(edge.payload)
         val cx = (layout.getX(edge.to) - layout.getX(edge.from)) * 0.6 + layout.getX(edge.from)
         val cy = (layout.getY(edge.to) - layout.getY(edge.from)) * 0.6 + layout.getY(edge.from)
@@ -459,7 +462,7 @@ object SVG {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
           case _ =>
-            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="150" height="200">
+            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="100%" height="100%">
               { node }
             </foreignObject>
         }
@@ -503,13 +506,13 @@ object SVG {
           case xml.Text(t) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
           case _ =>
-            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
+            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
               { node }
             </foreignObject>
         }
       } toList
 
-     val edgeLabels: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
+      val edgeLabels: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
         val node = HtmlFrom[EP].toHtml(edge.payload)
         val cx = (layout.getX(edge.v2) - layout.getX(edge.v1)) * 0.5 + layout.getX(edge.v1)
         val cy = (layout.getY(edge.v2) - layout.getY(edge.v1)) * 0.5 + layout.getY(edge.v1)
@@ -517,7 +520,7 @@ object SVG {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
           case _ =>
-            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="150" height="200">
+            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="100%" height="100%">
               { node }
             </foreignObject>
         }

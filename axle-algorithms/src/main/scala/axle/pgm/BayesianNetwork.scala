@@ -40,12 +40,10 @@ object BayesianNetworkNode {
   implicit def bnnHtmlFrom[T, N]: HtmlFrom[BayesianNetworkNode[T, N]] = new HtmlFrom[BayesianNetworkNode[T, N]] {
 
     def toHtml(bnn: BayesianNetworkNode[T, N]): xml.Node =
-      <html xmlns="http://www.w3.org/1999/xhtml">
-        <div>
-          <center><h2>{ bnn.rv.name }</h2></center>
-          { bnn.cpt.toHtml }
-        </div>
-      </html>
+      <div>
+        <h2>{ bnn.rv.name }</h2>
+        { bnn.cpt.toHtml }
+      </div>
 
   }
 
@@ -55,8 +53,8 @@ object BayesianNetworkNode {
 }
 
 case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show, DG[_, _]: DirectedGraph](
-  name: String,
-  graph: DG[BayesianNetworkNode[T, N], String]) {
+    name: String,
+    graph: DG[BayesianNetworkNode[T, N], String]) {
 
   def duplicate: BayesianNetwork[T, N, DG] = BayesianNetwork(name, graph)
 
