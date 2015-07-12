@@ -433,7 +433,7 @@ object SVG {
         } else {
           actualPointAngle - 180d
         }
-        <polygon points={s"${radius},0 ${radius+arrowLength},3 ${radius+arrowLength},-3"} fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
+        <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
       } toList
 
       val circles: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
@@ -447,7 +447,9 @@ object SVG {
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
           case _ =>
             <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="150" height="200">
-              { node }
+              <html xmlns="http://www.w3.org/1999/xhtml">
+                { node }
+              </html>
             </foreignObject>
         }
       } toList

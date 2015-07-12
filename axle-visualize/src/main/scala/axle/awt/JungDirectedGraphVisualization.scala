@@ -52,7 +52,13 @@ case class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, b
     }
 
     val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
-      def transform(v: Vertex[VP]): String = string(html(v.payload))
+      def transform(v: Vertex[VP]): String = {
+        val label = html(v.payload)
+        label match {
+          case xml.Text(text) => text
+          case _              => string((<html>{ label }</html>).asInstanceOf[xml.Node])
+        }
+      }
     }
 
     val edgeLabelTransformer = new Transformer[JungDirectedGraphEdge[VP, EP], String]() {
