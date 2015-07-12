@@ -410,6 +410,7 @@ object SVG {
       val height = 600
       val border = 20
       val radius = 10
+      val arrowLength = 10
       val color = yellow
       val borderColor = black
       val fontSize = 12
@@ -432,7 +433,7 @@ object SVG {
         } else {
           actualPointAngle - 180d
         }
-        <polygon points="10,0 20,3 20,-3" fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
+        <polygon points={s"${radius},0 ${radius+arrowLength},3 ${radius+arrowLength},-3"} fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
       } toList
 
       val circles: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
