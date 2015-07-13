@@ -21,17 +21,17 @@ class ABE extends Specification {
   val J = UnknownDistribution0[Boolean, Rational](bools, "John Calls")
   val M = UnknownDistribution0[Boolean, Rational](bools, "Mary Calls")
 
-  val bnnB = BayesianNetworkNode(B,
+  val bFactor =
     Factor(Vector(B), Map(
       Vector(B is true) -> Rational(1, 1000),
-      Vector(B is false) -> Rational(999, 1000))))
+      Vector(B is false) -> Rational(999, 1000)))
 
-  val bnnE = BayesianNetworkNode(E,
+  val eFactor =
     Factor(Vector(E), Map(
       Vector(E is true) -> Rational(1, 500),
-      Vector(E is false) -> Rational(499, 500))))
+      Vector(E is false) -> Rational(499, 500)))
 
-  val bnnA = BayesianNetworkNode(A,
+  val aFactor =
     Factor(Vector(B, E, A), Map(
       Vector(B is false, E is false, A is true) -> Rational(1, 1000),
       Vector(B is false, E is false, A is false) -> Rational(999, 1000),
@@ -40,33 +40,30 @@ class ABE extends Specification {
       Vector(B is false, E is true, A is true) -> Rational(290, 1000),
       Vector(B is false, E is true, A is false) -> Rational(710, 1000),
       Vector(B is true, E is true, A is true) -> Rational(950, 1000),
-      Vector(B is true, E is true, A is false) -> Rational(50, 1000))))
+      Vector(B is true, E is true, A is false) -> Rational(50, 1000)))
 
-  val bnnJ = BayesianNetworkNode(J,
+  val jFactor =
     Factor(Vector(A, J), Map(
       Vector(A is true, J is true) -> Rational(9, 10),
       Vector(A is true, J is false) -> Rational(1, 10),
       Vector(A is false, J is true) -> Rational(5, 100),
-      Vector(A is false, J is false) -> Rational(95, 100))))
+      Vector(A is false, J is false) -> Rational(95, 100)))
 
-  val bnnM = BayesianNetworkNode(M,
+  val mFactor =
     Factor(Vector(A, M), Map(
       Vector(A is true, M is true) -> Rational(7, 10),
       Vector(A is true, M is false) -> Rational(3, 10),
       Vector(A is false, M is true) -> Rational(1, 100),
-      Vector(A is false, M is false) -> Rational(99, 100))))
+      Vector(A is false, M is false) -> Rational(99, 100)))
 
-  val bn = BayesianNetwork(
+  // edges: ba, ea, aj, am
+  val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph](
     "A sounds (due to Burglary or Earthquake) and John or Mary Call",
-    List(bnnB, bnnE, bnnA, bnnJ, bnnM),
-    (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
-      case b :: e :: a :: j :: m :: Nil => List(
-        (b, a, new Edge),
-        (e, a, new Edge),
-        (a, j, new Edge),
-        (a, m, new Edge))
-      case _ => Nil
-    })
+    Map(B -> bFactor,
+      E -> eFactor,
+      A -> aFactor,
+      J -> jFactor,
+      M -> mFactor))
 
   "bayesian networks" should {
     "work" in {

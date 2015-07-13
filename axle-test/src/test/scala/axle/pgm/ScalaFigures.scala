@@ -30,52 +30,46 @@ class ScalaFigures extends Specification {
 
   def figure6_1: BayesianNetwork[Boolean, Rational, DirectedSparseGraph] = {
 
-    val bn = BayesianNetwork(
-      "6.1",
-      List(
-        BayesianNetworkNode(A,
-          Factor(Vector(A), Map(
-            Vector(A is true) -> Rational(6, 10),
-            Vector(A is false) -> Rational(4, 10)))),
-        BayesianNetworkNode(B, // B | A
-          Factor(Vector(B), Map(
-            Vector(B is true, A is true) -> Rational(2, 10),
-            Vector(B is true, A is false) -> Rational(8, 10),
-            Vector(B is false, A is true) -> Rational(3, 4),
-            Vector(B is false, A is false) -> Rational(1, 4)))),
-        BayesianNetworkNode(C, // C | A
-          Factor(Vector(C), Map(
-            Vector(C is true, A is true) -> Rational(4, 5),
-            Vector(C is true, A is false) -> Rational(1, 5),
-            Vector(C is false, A is true) -> Rational(1, 10),
-            Vector(C is false, A is false) -> Rational(9, 10)))),
-        BayesianNetworkNode(D, // D | BC
-          Factor(Vector(D), Map(
-            Vector(D is true, B is true, C is true) -> Rational(19, 20),
-            Vector(D is true, B is true, C is false) -> Rational(1, 20),
-            Vector(D is true, B is false, C is true) -> Rational(9, 10),
-            Vector(D is true, B is false, C is false) -> Rational(1, 10),
-            Vector(D is false, B is true, C is true) -> Rational(4, 5),
-            Vector(D is false, B is true, C is false) -> Rational(1, 5),
-            Vector(D is false, B is false, C is true) -> Rational(0, 1),
-            Vector(D is false, B is false, C is false) -> Rational(1, 1)))),
-        BayesianNetworkNode(E, // E | C
-          Factor(Vector(E), Map(
-            Vector(E is true, C is true) -> Rational(7, 10),
-            Vector(E is true, C is false) -> Rational(3, 10),
-            Vector(E is false, C is true) -> Rational(0),
-            Vector(E is false, C is false) -> Rational(1))))),
-      (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
-        case a :: b :: c :: d :: e :: Nil => List(
-          (a, b, new Edge),
-          (a, c, new Edge),
-          (b, d, new Edge),
-          (c, d, new Edge),
-          (c, e, new Edge))
-        case _ => Nil
-      })
+    val aFactor = Factor(Vector(A), Map(
+      Vector(A is true) -> Rational(6, 10),
+      Vector(A is false) -> Rational(4, 10)))
 
-    bn
+    val bFactor = Factor(Vector(B), Map(
+      Vector(B is true, A is true) -> Rational(2, 10),
+      Vector(B is true, A is false) -> Rational(8, 10),
+      Vector(B is false, A is true) -> Rational(3, 4),
+      Vector(B is false, A is false) -> Rational(1, 4)))
+
+    val cFactor = Factor(Vector(C), Map(
+      Vector(C is true, A is true) -> Rational(4, 5),
+      Vector(C is true, A is false) -> Rational(1, 5),
+      Vector(C is false, A is true) -> Rational(1, 10),
+      Vector(C is false, A is false) -> Rational(9, 10)))
+
+    val dFactor = Factor(Vector(D), Map(
+      Vector(D is true, B is true, C is true) -> Rational(19, 20),
+      Vector(D is true, B is true, C is false) -> Rational(1, 20),
+      Vector(D is true, B is false, C is true) -> Rational(9, 10),
+      Vector(D is true, B is false, C is false) -> Rational(1, 10),
+      Vector(D is false, B is true, C is true) -> Rational(4, 5),
+      Vector(D is false, B is true, C is false) -> Rational(1, 5),
+      Vector(D is false, B is false, C is true) -> Rational(0, 1),
+      Vector(D is false, B is false, C is false) -> Rational(1, 1)))
+
+    val eFactor = Factor(Vector(E), Map(
+      Vector(E is true, C is true) -> Rational(7, 10),
+      Vector(E is true, C is false) -> Rational(3, 10),
+      Vector(E is false, C is true) -> Rational(0),
+      Vector(E is false, C is false) -> Rational(1)))
+
+    // edges: ab, ac, bd, cd, ce
+    BayesianNetwork[Boolean, Rational, DirectedSparseGraph](
+      "6.1",
+      Map(A -> aFactor,
+        B -> bFactor,
+        C -> cFactor,
+        D -> dFactor,
+        E -> eFactor))
   }
 
   def figure6_2: Factor[Boolean, Rational] = figure6_1.jointProbabilityTable
@@ -108,27 +102,27 @@ class ScalaFigures extends Specification {
 
   def figure6_4: BayesianNetwork[Boolean, Rational, DirectedSparseGraph] = {
 
-    val bn = BayesianNetwork("6.4",
-      Vector(
-        BayesianNetworkNode(A, Factor(Vector(A), Map(
-          Vector(A is true) -> Rational(6, 10),
-          Vector(A is false) -> Rational(4, 10)))),
-        BayesianNetworkNode(B, Factor(Vector(B), Map( // B | A
-          Vector(B is true, A is true) -> Rational(9, 10),
-          Vector(B is true, A is false) -> Rational(1, 10),
-          Vector(B is false, A is true) -> Rational(2, 10),
-          Vector(B is false, A is false) -> Rational(8, 10)))),
-        BayesianNetworkNode(C, Factor(Vector(C), Map( // C | B
-          Vector(C is true, B is true) -> Rational(3, 10),
-          Vector(C is true, B is false) -> Rational(7, 10),
-          Vector(C is false, B is true) -> Rational(1, 2),
-          Vector(C is false, B is false) -> Rational(1, 2))))),
-      (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
-        case a :: b :: c :: Nil => List(
-          (a, b, new Edge),
-          (b, c, new Edge))
-        case _ => Nil
-      })
+    val aFactor = Factor(Vector(A), Map(
+      Vector(A is true) -> Rational(6, 10),
+      Vector(A is false) -> Rational(4, 10)))
+
+    val bFactor = Factor(Vector(B), Map( // B | A
+      Vector(B is true, A is true) -> Rational(9, 10),
+      Vector(B is true, A is false) -> Rational(1, 10),
+      Vector(B is false, A is true) -> Rational(2, 10),
+      Vector(B is false, A is false) -> Rational(8, 10)))
+
+    val cFactor = Factor(Vector(C), Map( // C | B
+      Vector(C is true, B is true) -> Rational(3, 10),
+      Vector(C is true, B is false) -> Rational(7, 10),
+      Vector(C is false, B is true) -> Rational(1, 2),
+      Vector(C is false, B is false) -> Rational(1, 2)))
+
+    // edges: ab, bc
+    val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph]("6.4",
+      Map(A -> aFactor,
+        B -> bFactor,
+        C -> cFactor))
 
     val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)
 

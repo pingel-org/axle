@@ -25,7 +25,7 @@ import axle.syntax.undirectedgraph._
 
 class Edge
 
-case class BayesianNetworkNode[T: Eq, N: Field](rv: Distribution[T, N], cpt: Factor[T, N])
+case class BayesianNetworkNode[T, N](rv: Distribution[T, N], cpt: Factor[T, N])
 
 object BayesianNetworkNode {
 
@@ -38,28 +38,45 @@ object BayesianNetworkNode {
 
   }
 
-  implicit def bnnHtmlFrom[T, N]: HtmlFrom[BayesianNetworkNode[T, N]] = new HtmlFrom[BayesianNetworkNode[T, N]] {
+  import axle.string
+  implicit def bnnHtmlFrom[T: Show, N]: HtmlFrom[BayesianNetworkNode[T, N]] =
+    new HtmlFrom[BayesianNetworkNode[T, N]] {
+      def toHtml(bnn: BayesianNetworkNode[T, N]): xml.Node =
+        <div>
+          <h2>{ bnn.rv.name }</h2>
+          <table border={ "1" }>
+            <tr>{ bnn.cpt.varList.map(rv => <td>{ rv.name }</td>): xml.NodeSeq }<td>P</td></tr>
+            {
+              bnn.cpt.cases.map(kase =>
+                <tr>
+                  { kase.map(ci => <td>{ string(ci.v) }</td>) }
+                  <td>{ bnn.cpt(kase) }</td>
+                </tr>)
+            }
+          </table>
+        </div>
 
-    def toHtml(bnn: BayesianNetworkNode[T, N]): xml.Node =
-      <div>
-        <h2>{ bnn.rv.name }</h2>
-        { bnn.cpt.toHtml }
-      </div>
-
-  }
+    }
 
   implicit def bnnEq[T: Eq, N: Field] = new Eq[BayesianNetworkNode[T, N]] {
     def eqv(x: BayesianNetworkNode[T, N], y: BayesianNetworkNode[T, N]): Boolean = x equals y
   }
 }
 
-case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show, DG[_, _]: DirectedGraph](
+case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG[_, _]: DirectedGraph](
     name: String,
-    graph: DG[BayesianNetworkNode[T, N], Edge]) {
+    variableFactorMap: Map[Distribution[T, N], Factor[T, N]]) {
 
-  def duplicate: BayesianNetwork[T, N, DG] = BayesianNetwork(name, graph)
+  val dg = implicitly[DirectedGraph[DG]]
 
-  def numVariables = graph.size
+  val _graph: DG[BayesianNetworkNode[T, N], Edge] =
+    dg.make(
+      variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList,
+      ???)
+
+  def graph = _graph
+
+  def numVariables = variableFactorMap.size
 
   def randomVariables: Vector[Distribution[T, N]] =
     graph.vertices.map(_.rv).toVector
@@ -83,7 +100,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
     val Z: Set[Distribution[T, N]] = graph.predecessors(rvVertex).map(_.rv).toSet
     val D = graph.descendants(rvVertex) ++ graph.predecessors(rvVertex) + rvVertex
     val Dvars = D.map(_.rv)
-    Independence(X, Z, randomVariables.filter(!Dvars.contains(_)).toSet)
+    Independence(X, Z, randomVariables.filterNot(Dvars.contains).toSet)
   }
 
   def computeFullCase(c: List[CaseIs[T, N]]): Double = {
@@ -209,7 +226,7 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
         case 0 => empty
         case _ => {
           val result = xVertices.foldLeft(g)(
-            (bn, xV) => BayesianNetwork(bn.name + " - " + xV, bn.graph /* TODO filterVertices(v => ! v === xV) */ ))
+            (bn, xV) => BayesianNetwork(bn.name + " - " + xV, bn.variableFactorMap /* TODO filterVertices(v => ! v === xV) */ ))
           cons(result, nodePruneStream(result))
         }
       }
@@ -371,15 +388,5 @@ case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Ord
       }
       ???
     }
-
-}
-
-object BayesianNetwork {
-
-  def apply[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show, DG[_, _]: DirectedGraph](
-    name: String,
-    vps: Seq[BayesianNetworkNode[T, N]],
-    ef: Seq[BayesianNetworkNode[T, N]] => Seq[(BayesianNetworkNode[T, N], BayesianNetworkNode[T, N], Edge)]): BayesianNetwork[T, N, DG] =
-    apply(name, DirectedGraph[DG].make(vps, ef))
 
 }

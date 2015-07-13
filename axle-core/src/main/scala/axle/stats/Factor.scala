@@ -41,12 +41,12 @@ object Factor {
 
     }
 
-  implicit def factorEq[T: Eq, N: Field]: Eq[Factor[T, N]] =
+  implicit def factorEq[T: Eq, N]: Eq[Factor[T, N]] =
     new Eq[Factor[T, N]] {
       def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
     }
 
-  implicit def factorMultMonoid[T: Eq: Show, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] =
+  implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] =
     new MultiplicativeMonoid[Factor[T, N]] {
 
       val field = Field[N]
@@ -68,9 +68,9 @@ object Factor {
 
 }
 
-case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
-  val varList: Vector[Distribution[T, N]],
-  val values: Map[Vector[CaseIs[T, N]], N]) {
+case class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](
+    val varList: Vector[Distribution[T, N]],
+    val values: Map[Vector[CaseIs[T, N]], N]) {
 
   val field = Field[N]
 
@@ -115,21 +115,9 @@ case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
 
   def apply(c: Seq[CaseIs[T, N]]): N = elements(indexOf(c))
 
-  def toHtml: xml.Node =
-    <table border={ "1" }>
-      <tr>{ varList.map(rv => <td>{ rv.name }</td>): xml.NodeSeq }<td>P</td></tr>
-      {
-        cases.map(kase =>
-          <tr>
-            { kase.map(ci => <td>{ string(ci.v) }</td>) }
-            <td>{ this(kase) }</td>
-          </tr>)
-      }
-    </table>
-
   // Chapter 6 definition 6
   def maxOut(variable: Distribution[T, N]): Factor[T, N] = {
-    val newVars = variables.filter(v => !(variable === v))
+    val newVars = variables.filterNot(variable === _)
     Factor(newVars,
       Factor.cases(newVars)
         .map(kase => (kase, variable.values.map(value => this(kase)).max))
@@ -144,7 +132,10 @@ case class Factor[T: Eq: Show, N: Field: Order: ClassTag: ConvertableFrom](
         .map({ case (k, v) => (k.toVector, spire.optional.unicode.Σ(v.map(_._2))) })
         .toMap)
 
-  def tally[M](a: Distribution[T, N], b: Distribution[T, N])(implicit la: LinearAlgebra[M, Int, Int, Double]): M =
+  def tally[M](
+    a: Distribution[T, N],
+    b: Distribution[T, N])(
+      implicit la: LinearAlgebra[M, Int, Int, Double]): M =
     la.matrix(
       a.values.size,
       b.values.size,

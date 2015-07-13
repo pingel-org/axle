@@ -23,48 +23,46 @@ class ConditionalProbabilityTableSpecification
   val D = ubd("D")
   val E = ubd("E")
 
-  val bn = BayesianNetwork("6.1", Vector(
-    BayesianNetworkNode(A,
-      Factor(Vector(A), Map(
-        Vector(A is true) -> Rational(6, 10),
-        Vector(A is false) -> Rational(4, 10)))),
-    BayesianNetworkNode(B, // B | A
-      Factor(Vector(B), Map(
-        Vector(B is true, A is true) -> Rational(2, 10),
-        Vector(B is true, A is false) -> Rational(8, 10),
-        Vector(B is false, A is true) -> Rational(3, 4),
-        Vector(B is false, A is false) -> Rational(1, 4)))),
-    BayesianNetworkNode(C, // C | A
-      Factor(Vector(C), Map(
-        Vector(C is true, A is true) -> Rational(8, 10),
-        Vector(C is true, A is false) -> Rational(2, 10),
-        Vector(C is false, A is true) -> Rational(1, 10),
-        Vector(C is false, A is false) -> Rational(9, 10)))),
-    BayesianNetworkNode(D, // D | BC
-      Factor(Vector(D), Map(
-        Vector(D is true, B is true, C is true) -> Rational(95, 100),
-        Vector(D is true, B is true, C is false) -> Rational(5, 100),
-        Vector(D is true, B is false, C is true) -> Rational(9, 10),
-        Vector(D is true, B is false, C is false) -> Rational(1, 10),
-        Vector(D is false, B is true, C is true) -> Rational(8, 10),
-        Vector(D is false, B is true, C is false) -> Rational(2, 10),
-        Vector(D is false, B is false, C is true) -> Rational(0),
-        Vector(D is false, B is false, C is false) -> Rational(1)))),
-    BayesianNetworkNode(E, // E | C
-      Factor(Vector(E), Map(
-        Vector(E is true, C is true) -> Rational(7, 10),
-        Vector(E is true, C is false) -> Rational(3, 10),
-        Vector(E is false, C is true) -> Rational(0),
-        Vector(E is false, C is false) -> Rational(1))))),
-    (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
-      case a :: b :: c :: d :: e :: Nil => List(
-        (a, b, new Edge),
-        (a, c, new Edge),
-        (b, d, new Edge),
-        (c, d, new Edge),
-        (c, e, new Edge))
-      case _ => Nil
-    })
+  val aFactor = Factor(Vector(A), Map(
+    Vector(A is true) -> Rational(6, 10),
+    Vector(A is false) -> Rational(4, 10)))
+
+  val bFactor = Factor(Vector(B), Map(
+    Vector(B is true, A is true) -> Rational(2, 10),
+    Vector(B is true, A is false) -> Rational(8, 10),
+    Vector(B is false, A is true) -> Rational(3, 4),
+    Vector(B is false, A is false) -> Rational(1, 4)))
+
+  val cFactor = Factor(Vector(C), Map(
+    Vector(C is true, A is true) -> Rational(8, 10),
+    Vector(C is true, A is false) -> Rational(2, 10),
+    Vector(C is false, A is true) -> Rational(1, 10),
+    Vector(C is false, A is false) -> Rational(9, 10)))
+
+  val dFactor = Factor(Vector(D), Map(
+    Vector(D is true, B is true, C is true) -> Rational(95, 100),
+    Vector(D is true, B is true, C is false) -> Rational(5, 100),
+    Vector(D is true, B is false, C is true) -> Rational(9, 10),
+    Vector(D is true, B is false, C is false) -> Rational(1, 10),
+    Vector(D is false, B is true, C is true) -> Rational(8, 10),
+    Vector(D is false, B is true, C is false) -> Rational(2, 10),
+    Vector(D is false, B is false, C is true) -> Rational(0),
+    Vector(D is false, B is false, C is false) -> Rational(1)))
+
+  val eFactor = Factor(Vector(E), Map(
+    Vector(E is true, C is true) -> Rational(7, 10),
+    Vector(E is true, C is false) -> Rational(3, 10),
+    Vector(E is false, C is true) -> Rational(0),
+    Vector(E is false, C is false) -> Rational(1)))
+
+  // edges: ab, ac, bd, cd, ce
+  val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph](
+    "6.1",
+    Map(A -> aFactor,
+      B -> bFactor,
+      C -> cFactor,
+      D -> dFactor,
+      E -> eFactor))
 
   "CPT" should {
     "work" in {
