@@ -4,6 +4,7 @@ import scala.Stream.cons
 import scala.Stream.empty
 
 import axle.Show
+import axle.string
 import axle.HtmlFrom
 import axle.algebra.DirectedGraph
 import axle.algebra.UndirectedGraph
@@ -29,16 +30,16 @@ case class BayesianNetworkNode[T, N](rv: Distribution[T, N], cpt: Factor[T, N])
 
 object BayesianNetworkNode {
 
-  implicit def bnnShow[T, N]: Show[BayesianNetworkNode[T, N]] = new Show[BayesianNetworkNode[T, N]] {
+  implicit def bnnShow[T, N]: Show[BayesianNetworkNode[T, N]] =
+    new Show[BayesianNetworkNode[T, N]] {
 
-    def text(bnn: BayesianNetworkNode[T, N]): String = {
-      import bnn._
-      rv.name + "\n\n" + cpt
+      def text(bnn: BayesianNetworkNode[T, N]): String = {
+        import bnn._
+        rv.name + "\n\n" + cpt
+      }
+
     }
 
-  }
-
-  import axle.string
   implicit def bnnHtmlFrom[T: Show, N]: HtmlFrom[BayesianNetworkNode[T, N]] =
     new HtmlFrom[BayesianNetworkNode[T, N]] {
       def toHtml(bnn: BayesianNetworkNode[T, N]): xml.Node =
@@ -55,7 +56,6 @@ object BayesianNetworkNode {
             }
           </table>
         </div>
-
     }
 
   implicit def bnnEq[T: Eq, N: Field] = new Eq[BayesianNetworkNode[T, N]] {
@@ -69,10 +69,15 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   val dg = implicitly[DirectedGraph[DG]]
 
+  val bnns = variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList
+
+  val bnnByVariable = bnns.map(bnn => bnn.rv -> bnn).toMap
+
   val _graph: DG[BayesianNetworkNode[T, N], Edge] =
-    dg.make(
-      variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList,
-      ???)
+    dg.make(bnns,
+      vs => bnns.flatMap(dest =>
+        dest.cpt.variables.filterNot(_ === dest.rv)
+          .map(source => (bnnByVariable(source), dest, new Edge))))
 
   def graph = _graph
 
