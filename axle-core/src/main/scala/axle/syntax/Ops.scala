@@ -176,6 +176,10 @@ final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP,
 
   def edges = ev.edges(dg)
 
+  def source(e: EP) = ev.source(dg, e)
+
+  def destination(e: EP) = ev.destination(dg, e)
+
   def precedes(v1: VP, v2: VP) = ev.precedes(dg, v1, v2)
 
   def neighbors(v: VP) = ev.neighbors(dg, v)

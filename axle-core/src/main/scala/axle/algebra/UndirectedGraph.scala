@@ -17,7 +17,7 @@ trait UndirectedGraph[UG[_, _]] {
   // TODO findVertex needs an index
   def findVertex[V, E](jug: UG[V, E], f: V => Boolean): Option[V]
 
-  def filterEdges[V, E](jug: UG[V, E], f: V => Boolean): UG[V, E]
+  def filterEdges[V, E](jug: UG[V, E], f: E => Boolean): UG[V, E]
 
   //  def unlink(e: Edge[ES, E]): UG[V, E]
 

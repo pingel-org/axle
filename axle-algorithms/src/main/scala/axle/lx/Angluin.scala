@@ -45,7 +45,7 @@ object Angluin {
     //    }
 
     def δSymbol(state: String, symbol: Symbol): Set[String] =
-      graph.edges.collect({ case e if (e.from === state && Symbol.symbolEq.eqv(e, symbol)) => e.to }).toSet
+      graph.edges.collect({ case e if (graph.source(e) === state && Symbol.symbolEq.eqv(e, symbol)) => graph.destination(e) }).toSet
 
     def δ(state: String, exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)

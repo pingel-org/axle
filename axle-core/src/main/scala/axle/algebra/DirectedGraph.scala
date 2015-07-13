@@ -14,6 +14,10 @@ trait DirectedGraph[DG[_, _]] {
 
   def size[V, E](jdg: DG[V, E]): Int
 
+  def source[V, E](jdg: DG[V, E], e: E): V
+
+  def destination[V, E](jdg: DG[V, E], e: E): V
+
   // TODO findVertex needs an index
   def findVertex[V, E](jdg: DG[V, E], f: V => Boolean): Option[V]
 
