@@ -539,7 +539,8 @@ object SVG {
 
   }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](implicit svgDG: SVG[DG[BayesianNetworkNode[T, N], String]]): SVG[BayesianNetwork[T, N, DG]] = {
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](
+    implicit svgDG: SVG[DG[BayesianNetworkNode[T, N], axle.pgm.Edge]]): SVG[BayesianNetwork[T, N, DG]] = {
     new SVG[BayesianNetwork[T, N, DG]] {
       def svg(bn: BayesianNetwork[T, N, DG]): NodeSeq =
         svgDG.svg(bn.graph)

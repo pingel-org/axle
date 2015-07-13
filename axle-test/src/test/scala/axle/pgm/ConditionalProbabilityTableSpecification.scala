@@ -11,7 +11,7 @@ import axle.jung.directedGraphJung
 import org.specs2.mutable._
 
 class ConditionalProbabilityTableSpecification
-  extends Specification {
+    extends Specification {
 
   val bools = Vector(true, false)
 
@@ -57,8 +57,13 @@ class ConditionalProbabilityTableSpecification
         Vector(E is false, C is true) -> Rational(0),
         Vector(E is false, C is false) -> Rational(1))))),
     (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
-      case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
-      case _                            => Nil
+      case a :: b :: c :: d :: e :: Nil => List(
+        (a, b, new Edge),
+        (a, c, new Edge),
+        (b, d, new Edge),
+        (c, d, new Edge),
+        (c, e, new Edge))
+      case _ => Nil
     })
 
   "CPT" should {

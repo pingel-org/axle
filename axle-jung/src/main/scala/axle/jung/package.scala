@@ -27,8 +27,9 @@ package object jung {
       vertices foreach { jdsg.addVertex } // TODO check return value
 
       ef(vertices) foreach {
-        case (vi, vj, e) =>
+        case (vi, vj, e) => {
           jdsg.addEdge(e, vi, vj) // TODO check return value
+        }
       }
 
       jdsg

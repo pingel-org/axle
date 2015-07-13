@@ -160,7 +160,8 @@ package object awt {
         JungDirectedGraphVisualization().component(jdg)
     }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](implicit drawDG: Draw[DG[BayesianNetworkNode[T, N], String]]): Draw[BayesianNetwork[T, N, DG]] = {
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](
+    implicit drawDG: Draw[DG[BayesianNetworkNode[T, N], axle.pgm.Edge]]): Draw[BayesianNetwork[T, N, DG]] = {
     new Draw[BayesianNetwork[T, N, DG]] {
       def component(bn: BayesianNetwork[T, N, DG]) =
         drawDG.component(bn.graph)

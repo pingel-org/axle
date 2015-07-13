@@ -66,8 +66,13 @@ class ScalaFigures extends Specification {
             Vector(E is false, C is true) -> Rational(0),
             Vector(E is false, C is false) -> Rational(1))))),
       (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
-        case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
-        case _                            => Nil
+        case a :: b :: c :: d :: e :: Nil => List(
+          (a, b, new Edge),
+          (a, c, new Edge),
+          (b, d, new Edge),
+          (c, d, new Edge),
+          (c, e, new Edge))
+        case _ => Nil
       })
 
     bn
@@ -119,8 +124,10 @@ class ScalaFigures extends Specification {
           Vector(C is false, B is true) -> Rational(1, 2),
           Vector(C is false, B is false) -> Rational(1, 2))))),
       (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
-        case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
-        case _                  => Nil
+        case a :: b :: c :: Nil => List(
+          (a, b, new Edge),
+          (b, c, new Edge))
+        case _ => Nil
       })
 
     val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)

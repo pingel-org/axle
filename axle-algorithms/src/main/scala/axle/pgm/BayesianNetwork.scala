@@ -23,6 +23,8 @@ import spire.math.ConvertableFrom
 import axle.syntax.directedgraph._
 import axle.syntax.undirectedgraph._
 
+class Edge
+
 case class BayesianNetworkNode[T: Eq, N: Field](rv: Distribution[T, N], cpt: Factor[T, N])
 
 object BayesianNetworkNode {
@@ -53,7 +55,7 @@ object BayesianNetworkNode {
 
 case class BayesianNetwork[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show, DG[_, _]: DirectedGraph](
     name: String,
-    graph: DG[BayesianNetworkNode[T, N], String]) {
+    graph: DG[BayesianNetworkNode[T, N], Edge]) {
 
   def duplicate: BayesianNetwork[T, N, DG] = BayesianNetwork(name, graph)
 
@@ -377,14 +379,7 @@ object BayesianNetwork {
   def apply[T: Manifest: Eq: Show, N: Field: ConvertableFrom: Order: Manifest: Show, DG[_, _]: DirectedGraph](
     name: String,
     vps: Seq[BayesianNetworkNode[T, N]],
-    ef: Seq[BayesianNetworkNode[T, N]] => Seq[(BayesianNetworkNode[T, N], BayesianNetworkNode[T, N], String)]): BayesianNetwork[T, N, DG] =
+    ef: Seq[BayesianNetworkNode[T, N]] => Seq[(BayesianNetworkNode[T, N], BayesianNetworkNode[T, N], Edge)]): BayesianNetwork[T, N, DG] =
     apply(name, DirectedGraph[DG].make(vps, ef))
-
-  //    implicit def bnnAsModel[BT: Manifest: Eq] = new Model[BayesianNetwork[BT]] {
-  //      type T = BT
-  //      override def name(bnn: Model[BT]) = bnn.name
-  //      def graph(bnn: Model[BT]) = bnn.graph
-  //      override def vertexPayloadToRandomVariable(mvp: BayesianNetworkNode[T]): Distribution[T] = mvp.rv
-  //    }
 
 }
