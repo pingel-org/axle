@@ -6,8 +6,6 @@ import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 import axle.HtmlFrom
 import axle.Show
-import axle.jung.JungDirectedGraph
-import axle.jung.JungUndirectedGraph
 import axle.ml.KMeans
 import axle.string
 import axle.visualize.BarChart
@@ -37,6 +35,8 @@ import axle.visualize.element.YTics
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.BasicVisualizationServer
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import scala.annotation.implicitNotFound
@@ -46,6 +46,10 @@ import spire.algebra.Field
 import axle.algebra.DirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
+import axle.syntax.directedgraph.directedGraphOps
+import axle.syntax.undirectedgraph.undirectedGraphOps
+import axle.jung.directedGraphJung
+import axle.jung.undirectedGraphJung
 
 @implicitNotFound("Witness not found for SVG[${S}]")
 trait SVG[S] {
@@ -401,9 +405,9 @@ object SVG {
       }
     }
 
-  implicit def drawJungDirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[JungDirectedGraph[VP, EP]] = new SVG[JungDirectedGraph[VP, EP]] {
+  implicit def drawJungDirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedSparseGraph[VP, EP]] = new SVG[DirectedSparseGraph[VP, EP]] {
 
-    def svg(jdg: JungDirectedGraph[VP, EP]): NodeSeq = {
+    def svg(jdsg: DirectedSparseGraph[VP, EP]): NodeSeq = {
 
       // TODO make these all configurable
       val width = 800
@@ -415,17 +419,17 @@ object SVG {
       val borderColor = black
       val fontSize = 12
 
-      val layout = new FRLayout(jdg.jdsg)
+      val layout = new FRLayout(jdsg)
       layout.setSize(new Dimension(width, height))
       val visualization = new DefaultVisualizationModel(layout)
 
-      val lines: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
-        <line x1={ s"${layout.getX(edge.from)}" } y1={ s"${layout.getY(edge.from)}" } x2={ s"${layout.getX(edge.to)}" } y2={ s"${layout.getY(edge.to)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
+      val lines: List[xml.Node] = jdsg.getEdges.asScala.map { edge =>
+        <line x1={ s"${layout.getX(jdsg.getSource(edge))}" } y1={ s"${layout.getY(jdsg.getSource(edge))}" } x2={ s"${layout.getX(jdsg.getDest(edge))}" } y2={ s"${layout.getY(jdsg.getDest(edge))}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
       } toList
 
-      val arrows: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
-        val height = layout.getY(edge.from) - layout.getY(edge.to)
-        val width = layout.getX(edge.to) - layout.getX(edge.from)
+      val arrows: List[xml.Node] = jdsg.getEdges.asScala.map { edge =>
+        val height = layout.getY(jdsg.getSource(edge)) - layout.getY(jdsg.getDest(edge))
+        val width = layout.getX(jdsg.getDest(edge)) - layout.getX(jdsg.getSource(edge))
         val actualPointAngle = (atan(height / width) / Pi) * -180d
         // atan is only defined on right half, so check if flip is required
         val svgRotationAngle = if (width < 0d) {
@@ -433,15 +437,15 @@ object SVG {
         } else {
           actualPointAngle - 180d
         }
-        <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(edge.to)},${layout.getY(edge.to)}) rotate($svgRotationAngle)" }/>
+        <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(jdsg.getDest(edge))},${layout.getY(jdsg.getDest(edge))}) rotate($svgRotationAngle)" }/>
       } toList
 
-      val circles: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
+      val circles: List[xml.Node] = jdsg.getVertices.asScala.map { vertex =>
         <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
       } toList
 
-      val labels: List[xml.Node] = jdg.jdsg.getVertices.asScala.map { vertex =>
-        val node = HtmlFrom[VP].toHtml(vertex.payload)
+      val labels: List[xml.Node] = jdsg.getVertices.asScala.map { vertex =>
+        val node = HtmlFrom[VP].toHtml(vertex)
         node match {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
@@ -454,10 +458,10 @@ object SVG {
         }
       } toList
 
-      val edgeLabels: List[xml.Node] = jdg.jdsg.getEdges.asScala.map { edge =>
-        val node = HtmlFrom[EP].toHtml(edge.payload)
-        val cx = (layout.getX(edge.to) - layout.getX(edge.from)) * 0.6 + layout.getX(edge.from)
-        val cy = (layout.getY(edge.to) - layout.getY(edge.from)) * 0.6 + layout.getY(edge.from)
+      val edgeLabels: List[xml.Node] = jdsg.getEdges.asScala.map { edge =>
+        val node = HtmlFrom[EP].toHtml(edge)
+        val cx = (layout.getX(jdsg.getDest(edge)) - layout.getX(jdsg.getSource(edge))) * 0.6 + layout.getX(jdsg.getSource(edge))
+        val cy = (layout.getY(jdsg.getDest(edge)) - layout.getY(jdsg.getSource(edge))) * 0.6 + layout.getY(jdsg.getSource(edge))
         node match {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
@@ -475,9 +479,9 @@ object SVG {
 
   }
 
-  implicit def drawJungUndirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[JungUndirectedGraph[VP, EP]] = new SVG[JungUndirectedGraph[VP, EP]] {
+  implicit def drawJungUndirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[UndirectedSparseGraph[VP, EP]] = new SVG[UndirectedSparseGraph[VP, EP]] {
 
-    def svg(jug: JungUndirectedGraph[VP, EP]): NodeSeq = {
+    def svg(jusg: UndirectedSparseGraph[VP, EP]): NodeSeq = {
 
       // TODO make these all configurable
       val width = 600
@@ -488,23 +492,24 @@ object SVG {
       val borderColor = black
       val fontSize = 12
 
-      val layout = new FRLayout(jug.jusg)
+      val layout = new FRLayout(jusg)
       layout.setSize(new Dimension(width, height))
       val visualization = new DefaultVisualizationModel(layout)
 
-      val lines: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
-        <line x1={ s"${layout.getX(edge.v1)}" } y1={ s"${layout.getY(edge.v1)}" } x2={ s"${layout.getX(edge.v2)}" } y2={ s"${layout.getY(edge.v2)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
+      val lines: List[xml.Node] = jusg.getEdges.asScala.map { edge =>
+        val (v1, v2) = jusg.vertices(edge)
+        <line x1={ s"${layout.getX(v1)}" } y1={ s"${layout.getY(v1)}" } x2={ s"${layout.getX(v2)}" } y2={ s"${layout.getY(v2)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
       } toList
 
-      val circles: List[xml.Node] = jug.jusg.getVertices.asScala.map { vertex =>
+      val circles: List[xml.Node] = jusg.getVertices.asScala.map { vertex =>
         <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
       } toList
 
-      val labels: List[xml.Node] = jug.jusg.getVertices.asScala.map { vertex =>
-        val node = HtmlFrom[VP].toHtml(vertex.payload)
+      val labels: List[xml.Node] = jusg.getVertices.asScala.map { vertex =>
+        val node = HtmlFrom[VP].toHtml(vertex)
         node match {
           case xml.Text(t) =>
-            <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex.payload) }</text>
+            <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex) }</text>
           case _ =>
             <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
               { node }
@@ -512,10 +517,11 @@ object SVG {
         }
       } toList
 
-      val edgeLabels: List[xml.Node] = jug.jusg.getEdges.asScala.map { edge =>
-        val node = HtmlFrom[EP].toHtml(edge.payload)
-        val cx = (layout.getX(edge.v2) - layout.getX(edge.v1)) * 0.5 + layout.getX(edge.v1)
-        val cy = (layout.getY(edge.v2) - layout.getY(edge.v1)) * 0.5 + layout.getY(edge.v1)
+      val edgeLabels: List[xml.Node] = jusg.getEdges.asScala.map { edge =>
+        val node = HtmlFrom[EP].toHtml(edge)
+        val (v1, v2) = jusg.vertices(edge)
+        val cx = (layout.getX(v2) - layout.getX(v1)) * 0.5 + layout.getX(v1)
+        val cy = (layout.getY(v2) - layout.getY(v1)) * 0.5 + layout.getY(v1)
         node match {
           case xml.Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>

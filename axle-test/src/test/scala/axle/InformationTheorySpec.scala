@@ -8,16 +8,14 @@ import axle.stats.P
 import axle.stats.coin
 import axle.stats.entropy
 import axle.stats.rationalProbabilityDist
-import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 import spire.algebra.Order
 import spire.math.Number.apply
 import spire.math.Rational
 import spire.math.Real
 import spire.implicits._
-
-import axle.jung.JungDirectedGraph
-import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 import axle.quanta.Information
+import axle.jung.directedGraphJung
+import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 class InformationTheorySpec extends Specification {
 
@@ -25,7 +23,7 @@ class InformationTheorySpec extends Specification {
 
     "work" in {
 
-      implicit val id = Information.converterGraph[Double, JungDirectedGraph]
+      implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
 
       val d =
         ConditionalProbabilityTable0(Map(
@@ -70,7 +68,7 @@ class InformationTheorySpec extends Specification {
       val biasedCoin = coin(Rational(9, 10))
       val fairCoin = coin()
 
-      implicit val id = Information.converterGraph[Double, JungDirectedGraph]
+      implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
 
       // assumes entropy is in bits
       entropy(biasedCoin).magnitude should be equalTo (0.4689955935892812)

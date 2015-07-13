@@ -2,7 +2,6 @@ package axle
 
 import axle.algebra.DirectedGraph
 import axle.algebra.UndirectedGraph
-
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
@@ -179,7 +178,7 @@ package object jung {
 
   }
 
-  implicit def uJung: UndirectedGraph[UndirectedSparseGraph] = new UndirectedGraph[UndirectedSparseGraph] {
+  implicit def undirectedGraphJung: UndirectedGraph[UndirectedSparseGraph] = new UndirectedGraph[UndirectedSparseGraph] {
 
     import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 

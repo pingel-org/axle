@@ -12,6 +12,8 @@ trait UndirectedGraph[UG[_, _]] {
 
   def edges[V, E](jug: UG[V, E]): Iterable[E]
 
+  def vertices[V, E](jusg: UG[V, E], e: E): (V, V)
+
   def size[V, E](jug: UG[V, E]): Int
 
   // TODO findVertex needs an index

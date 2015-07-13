@@ -9,21 +9,22 @@ import spire.math.Rational
 import axle.quanta.Mass
 import axle.quanta.Distance
 import axle.quanta.Time
-import axle.jung.JungDirectedGraph
 import spire.algebra.Rng
 import spire.algebra.AdditiveGroup
 import spire.implicits.DoubleAlgebra
 import spire.algebra.MultiplicativeSemigroup
 import axle.algebra.modules.doubleRationalModule
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.jung.directedGraphJung
 
 class AstronomySpec extends Specification {
 
   "ordering celestial bodies by mass" should {
     "work" in {
 
-      implicit val md = Mass.converterGraph[Double, JungDirectedGraph]
-      implicit val dd = Distance.converterGraph[Double, JungDirectedGraph]
-      implicit val td = Time.converterGraph[Double, JungDirectedGraph]
+      implicit val md = Mass.converterGraph[Double, DirectedSparseGraph]
+      implicit val dd = Distance.converterGraph[Double, DirectedSparseGraph]
+      implicit val td = Time.converterGraph[Double, DirectedSparseGraph]
       val astro = axle.data.Astronomy()
       val sorted = astro.bodies.sortBy(_.mass)
 

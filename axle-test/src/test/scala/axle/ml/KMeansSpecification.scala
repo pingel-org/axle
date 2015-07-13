@@ -1,6 +1,7 @@
 package axle.ml
 
 import org.specs2.mutable.Specification
+import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 class KMeansSpecification
     extends Specification {
@@ -74,12 +75,12 @@ class KMeansSpecification
       implicit val distanceConverter: DistanceConverter[Double] = {
         import spire.implicits.DoubleAlgebra
         import axle.algebra.modules.doubleRationalModule
-        Distance.converterGraph[Double, JungDirectedGraph]
+        Distance.converterGraph[Double, DirectedSparseGraph]
       }
 
       import axle.data.Irises
 
-      val irisesData = new Irises[JungDirectedGraph]
+      val irisesData = new Irises[DirectedSparseGraph]
       import irisesData._
 
       import axle.ml.distance.Euclidean

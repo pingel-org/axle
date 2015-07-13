@@ -210,8 +210,10 @@ final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG
   def findVertex(f: VP => Boolean) =
     ev.findVertex(ug, f)
 
-  def vertices = ev.vertices(ug)
+  def vertices() = ev.vertices(ug)
 
+  def vertices(e: EP) = ev.vertices(ug, e)
+  
   def neighbors(v: VP) = ev.neighbors(ug, v)
 
   def firstLeafOtherThan(r: VP) = ev.firstLeafOtherThan(ug, r)

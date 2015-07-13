@@ -6,7 +6,6 @@ import org.specs2.mutable.Specification
 
 import axle.algebra.DirectedGraph
 import axle.game.Dice.die
-import axle.jung.JungDirectedGraph
 import axle.quanta.Angle
 import axle.stats.Distribution0
 import axle.visualize.Color.blue

@@ -8,8 +8,8 @@ import spire.math._
 import spire.implicits._
 import org.specs2.mutable._
 import axle.jblas._
-import axle.jung.JungDirectedGraph.directedGraphJung
-import axle.algebra.Vertex
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.jung.directedGraphJung
 
 class ABE extends Specification {
 
@@ -53,7 +53,7 @@ class ABE extends Specification {
           Vector(A is true, M is false) -> Rational(3, 10),
           Vector(A is false, M is true) -> Rational(1, 100),
           Vector(A is false, M is false) -> Rational(99, 100))))),
-    (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
+    (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
       case b :: e :: a :: j :: m :: Nil => List((b, a, ""), (e, a, ""), (a, j, ""), (a, m, ""))
       case _                            => Nil
     })

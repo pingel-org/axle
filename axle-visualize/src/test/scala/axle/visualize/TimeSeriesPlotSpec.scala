@@ -12,8 +12,6 @@ import axle.joda.dateTimePlottable
 import axle.joda.dateTimeZero
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
-import axle.jung.JungDirectedGraph
-import axle.jung.JungDirectedGraph.directedGraphJung
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.stats.H
@@ -55,9 +53,9 @@ class TimeSeriesPlotSpec extends Specification {
 
     type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
 
-    import axle.jung.JungDirectedGraph
-    //import axle.jung.JungDirectedGraph.directedGraphJung
-    implicit val id = Information.converterGraph[Double, JungDirectedGraph]
+    import edu.uci.ics.jung.graph.DirectedSparseGraph
+    import axle.jung.directedGraphJung
+    implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
 
     val hm: D =
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++

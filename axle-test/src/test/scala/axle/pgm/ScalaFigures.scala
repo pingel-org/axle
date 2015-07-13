@@ -4,7 +4,6 @@ package axle.pgm
 import org.specs2.mutable._
 
 import axle._
-import axle.algebra.Vertex
 import axle.algebra.DirectedGraph
 import axle.algebra.UndirectedGraph
 import axle.stats._
@@ -12,10 +11,10 @@ import axle.pgm._
 import spire.implicits._
 import spire.math._
 
-import axle.jung.JungDirectedGraph
-import axle.jung.JungUndirectedGraph
-import axle.jung.JungDirectedGraph.directedGraphJung
-import axle.jung.JungUndirectedGraph.uJung
+import axle.jung.undirectedGraphJung
+import axle.jung.directedGraphJung
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 class ScalaFigures extends Specification {
 
@@ -29,7 +28,7 @@ class ScalaFigures extends Specification {
   val D = ubd("D")
   val E = ubd("E")
 
-  def figure6_1: BayesianNetwork[Boolean, Rational, JungDirectedGraph] = {
+  def figure6_1: BayesianNetwork[Boolean, Rational, DirectedSparseGraph] = {
 
     val bn = BayesianNetwork(
       "6.1",
@@ -66,7 +65,7 @@ class ScalaFigures extends Specification {
             Vector(E is true, C is false) -> Rational(3, 10),
             Vector(E is false, C is true) -> Rational(0),
             Vector(E is false, C is false) -> Rational(1))))),
-      (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
+      (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
         case _                            => Nil
       })
@@ -102,7 +101,7 @@ class ScalaFigures extends Specification {
     (cptB, cptD)
   }
 
-  def figure6_4: BayesianNetwork[Boolean, Rational, JungDirectedGraph] = {
+  def figure6_4: BayesianNetwork[Boolean, Rational, DirectedSparseGraph] = {
 
     val bn = BayesianNetwork("6.4",
       Vector(
@@ -119,7 +118,7 @@ class ScalaFigures extends Specification {
           Vector(C is true, B is false) -> Rational(7, 10),
           Vector(C is false, B is true) -> Rational(1, 2),
           Vector(C is false, B is false) -> Rational(1, 2))))),
-      (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
+      (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
         case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
         case _                  => Nil
       })
@@ -129,7 +128,7 @@ class ScalaFigures extends Specification {
     bn
   }
 
-  def figure6_5: List[InteractionGraph[Boolean, Rational, JungUndirectedGraph]] =
+  def figure6_5: List[InteractionGraph[Boolean, Rational, UndirectedSparseGraph]] =
     figure6_1.interactionGraph.eliminationSequence(List(B, C, A, D))
 
   def figure6_7 = {
@@ -157,13 +156,13 @@ class ScalaFigures extends Specification {
   // Result of fe-i on a->b->c with Q={C}
   def figure7_2 = figure6_4.factorElimination1(Set(C))
 
-  def figure7_4: (BayesianNetwork[Boolean, Rational, JungDirectedGraph], EliminationTree[Boolean, Rational, JungUndirectedGraph], Factor[Boolean, Rational]) = {
+  def figure7_4: (BayesianNetwork[Boolean, Rational, DirectedSparseGraph], EliminationTree[Boolean, Rational, UndirectedSparseGraph], Factor[Boolean, Rational]) = {
 
     val f61 = figure6_1
 
-    val τ = EliminationTree[Boolean, Rational, JungUndirectedGraph](
+    val τ = EliminationTree[Boolean, Rational, UndirectedSparseGraph](
       Vector(A, B, C, D, E).map(f61.cpt),
-      (vs: Seq[Vertex[Factor[Boolean, Rational]]]) => vs match {
+      (vs: Seq[Factor[Boolean, Rational]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List(
           (a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
         case _ => Nil
@@ -185,7 +184,7 @@ class ScalaFigures extends Specification {
 
   def figure7_12 = JoinTree.makeJoinTree(
     Vector[Set[Distribution[Boolean, Rational]]](Set(A, B, C), Set(B, C, D), Set(C, E)),
-    (vs: Seq[Vertex[Set[Distribution[Boolean, Rational]]]]) => vs match {
+    (vs: Seq[Set[Distribution[Boolean, Rational]]]) => vs match {
       case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))
       case _                       => Nil
     })

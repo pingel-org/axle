@@ -1,9 +1,8 @@
 package axle.ml
 
 import org.specs2.mutable._
-
-import axle.jung.JungDirectedGraph.directedGraphJung
-
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.jung.directedGraphJung
 
 class HiddenMarkovModelSpecification extends Specification {
 

@@ -33,8 +33,6 @@ import axle.awt.PlotComponent
 import axle.awt.JungUndirectedGraphVisualization
 import axle.awt.JungDirectedGraphVisualization
 import axle.awt.KMeansComponent
-import axle.jung.JungDirectedGraph
-import axle.jung.JungUndirectedGraph
 import axle.ml.KMeans
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
@@ -70,6 +68,8 @@ import spire.algebra.Field
 import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 package object awt {
 
@@ -148,15 +148,15 @@ package object awt {
       def component(chart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(chart)
     }
 
-  implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[JungUndirectedGraph[VP, EP]] =
-    new Draw[JungUndirectedGraph[VP, EP]] {
-      def component(jug: JungUndirectedGraph[VP, EP]) =
+  implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedSparseGraph[VP, EP]] =
+    new Draw[UndirectedSparseGraph[VP, EP]] {
+      def component(jug: UndirectedSparseGraph[VP, EP]) =
         JungUndirectedGraphVisualization().component(jug)
     }
 
-  implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[JungDirectedGraph[VP, EP]] =
-    new Draw[JungDirectedGraph[VP, EP]] {
-      def component(jdg: JungDirectedGraph[VP, EP]) =
+  implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[DirectedSparseGraph[VP, EP]] =
+    new Draw[DirectedSparseGraph[VP, EP]] {
+      def component(jdg: DirectedSparseGraph[VP, EP]) =
         JungDirectedGraphVisualization().component(jdg)
     }
 

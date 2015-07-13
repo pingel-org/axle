@@ -2,12 +2,12 @@ package axle.pgm
 
 import axle._
 import axle.stats._
-import axle.algebra.Vertex
 import axle.algebra.DirectedGraph
 import axle.jblas._
-import axle.jung.JungDirectedGraph.directedGraphJung
 import spire.implicits._
 import spire.math._
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.jung.directedGraphJung
 import org.specs2.mutable._
 
 class ConditionalProbabilityTableSpecification
@@ -56,7 +56,7 @@ class ConditionalProbabilityTableSpecification
         Vector(E is true, C is false) -> Rational(3, 10),
         Vector(E is false, C is true) -> Rational(0),
         Vector(E is false, C is false) -> Rational(1))))),
-    (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
+    (vs: Seq[BayesianNetworkNode[Boolean, Rational]]) => vs match {
       case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
       case _                            => Nil
     })
