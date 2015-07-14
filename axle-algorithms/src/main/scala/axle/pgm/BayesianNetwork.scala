@@ -26,6 +26,17 @@ import axle.syntax.undirectedgraph._
 
 class Edge
 
+object Edge {
+
+  import axle.Show
+
+  implicit def showPgmEdge: Show[axle.pgm.Edge] =
+    new Show[axle.pgm.Edge] {
+      def text(e: axle.pgm.Edge): String = ""
+    }
+
+}
+
 case class BayesianNetworkNode[T, N](rv: Distribution[T, N], cpt: Factor[T, N])
 
 object BayesianNetworkNode {
