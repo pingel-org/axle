@@ -1,7 +1,6 @@
 package axle.pgm.docalculus
 
 import axle.algebra.DirectedGraph
-import axle.algebra.Vertex
 import axle.stats.Distribution
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -33,17 +32,17 @@ case class CausalModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](
   def duplicate: CausalModel[T, N, DG] = ???
 
   def randomVariables: Vector[Distribution[T, N]] =
-    graph.vertices.map(_.payload.rv).toVector
+    graph.vertices.map(_.rv).toVector
 
   // TODO: this should probably be Option[Boolean] ?
   def observes(rv: Distribution[T, N]): Boolean =
-    graph.findVertex(_.payload.rv === rv).map(_.payload.observable).getOrElse(false)
+    graph.findVertex(_.rv === rv).map(_.observable).getOrElse(false)
 
-  def nodesFor(rvs: Set[Distribution[T, N]]): Set[Vertex[CausalModelNode[T, N]]] =
-    rvs.flatMap(rv => graph.findVertex(_.payload.rv === rv))
+  def nodesFor(rvs: Set[Distribution[T, N]]): Set[CausalModelNode[T, N]] =
+    rvs.flatMap(rv => graph.findVertex(_.rv === rv))
 
-  def nodeFor(rv: Distribution[T, N]): Option[Vertex[CausalModelNode[T, N]]] =
-    graph.findVertex((n: Vertex[CausalModelNode[T, N]]) => n.payload.rv === rv)
+  def nodeFor(rv: Distribution[T, N]): Option[CausalModelNode[T, N]] =
+    graph.findVertex((n: CausalModelNode[T, N]) => n.rv === rv)
 
   // def vertexPayloadToDistribution(cmn: CausalModelNode[T]): Distribution[T] = cmn.rv
 

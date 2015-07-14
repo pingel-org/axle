@@ -2,7 +2,6 @@ package axle.syntax
 
 import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
-import axle.algebra.DirectedEdge
 import axle.algebra.Endofunctor
 import axle.algebra.Finite
 import axle.algebra.FunctionPair
@@ -13,8 +12,6 @@ import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
-import axle.algebra.UndirectedEdge
-import axle.algebra.Vertex
 import axle.algebra.Zero
 import scala.reflect.ClassTag
 import spire.algebra.Eq
@@ -172,32 +169,36 @@ final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP,
 
   def size = ev.size(dg)
 
-  def findVertex(f: Vertex[VP] => Boolean): Option[Vertex[VP]] =
+  def findVertex(f: VP => Boolean): Option[VP] =
     ev.findVertex(dg, f)
 
   def vertices = ev.vertices(dg)
 
   def edges = ev.edges(dg)
 
-  def precedes(v1: Vertex[VP], v2: Vertex[VP]) = ev.precedes(dg, v1, v2)
+  def source(e: EP) = ev.source(dg, e)
 
-  def neighbors(v: Vertex[VP]) = ev.neighbors(dg, v)
+  def destination(e: EP) = ev.destination(dg, e)
 
-  def predecessors(v: Vertex[VP]) = ev.predecessors(dg, v)
+  def precedes(v1: VP, v2: VP) = ev.precedes(dg, v1, v2)
 
-  def successors(v: Vertex[VP]) = ev.successors(dg, v)
+  def neighbors(v: VP) = ev.neighbors(dg, v)
 
-  def descendants(v: Vertex[VP]) = ev.descendants(dg, v)
+  def predecessors(v: VP) = ev.predecessors(dg, v)
 
-  def descendantsIntersectsSet(v: Vertex[VP], s: Set[Vertex[VP]]) = ev.descendantsIntersectsSet(dg, v, s)
+  def successors(v: VP) = ev.successors(dg, v)
+
+  def descendants(v: VP) = ev.descendants(dg, v)
+
+  def descendantsIntersectsSet(v: VP, s: Set[VP]) = ev.descendantsIntersectsSet(dg, v, s)
 
   // TODO: change first Edge type param:
-  def shortestPath(source: Vertex[VP], goal: Vertex[VP]): Option[List[DirectedEdge[VP, EP]]] =
+  def shortestPath(source: VP, goal: VP): Option[List[EP]] =
     ev.shortestPath(dg, source, goal)
 
   def leaves = ev.leaves(dg)
 
-  def outputEdgesOf(v: Vertex[VP]) = ev.outputEdgesOf(dg, v)
+  def outputEdgesOf(v: VP) = ev.outputEdgesOf(dg, v)
 }
 
 final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG[VP, EP]) {
@@ -206,14 +207,16 @@ final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG
 
   def size = ev.size(ug)
 
-  def findVertex(f: Vertex[VP] => Boolean) =
+  def findVertex(f: VP => Boolean) =
     ev.findVertex(ug, f)
 
-  def vertices = ev.vertices(ug)
+  def vertices() = ev.vertices(ug)
 
-  def neighbors(v: Vertex[VP]) = ev.neighbors(ug, v)
+  def vertices(e: EP) = ev.vertices(ug, e)
+  
+  def neighbors(v: VP) = ev.neighbors(ug, v)
 
-  def firstLeafOtherThan(r: Vertex[VP]) = ev.firstLeafOtherThan(ug, r)
+  def firstLeafOtherThan(r: VP) = ev.firstLeafOtherThan(ug, r)
 }
 
 final class FunctorOps[F[_]: Functor, A](val as: F[A]) {

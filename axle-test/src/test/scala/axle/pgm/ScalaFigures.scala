@@ -4,7 +4,6 @@ package axle.pgm
 import org.specs2.mutable._
 
 import axle._
-import axle.algebra.Vertex
 import axle.algebra.DirectedGraph
 import axle.algebra.UndirectedGraph
 import axle.stats._
@@ -12,10 +11,10 @@ import axle.pgm._
 import spire.implicits._
 import spire.math._
 
-import axle.jung.JungDirectedGraph
-import axle.jung.JungUndirectedGraph
-import axle.jung.JungDirectedGraph.directedGraphJung
-import axle.jung.JungUndirectedGraph.uJung
+import axle.jung.undirectedGraphJung
+import axle.jung.directedGraphJung
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 class ScalaFigures extends Specification {
 
@@ -29,49 +28,48 @@ class ScalaFigures extends Specification {
   val D = ubd("D")
   val E = ubd("E")
 
-  def figure6_1: BayesianNetwork[Boolean, Rational, JungDirectedGraph] = {
+  def figure6_1: BayesianNetwork[Boolean, Rational, DirectedSparseGraph] = {
 
-    val bn = BayesianNetwork(
+    val aFactor = Factor(Vector(A), Map(
+      Vector(A is true) -> Rational(6, 10),
+      Vector(A is false) -> Rational(4, 10)))
+
+    val bFactor = Factor(Vector(B), Map(
+      Vector(B is true, A is true) -> Rational(2, 10),
+      Vector(B is true, A is false) -> Rational(8, 10),
+      Vector(B is false, A is true) -> Rational(3, 4),
+      Vector(B is false, A is false) -> Rational(1, 4)))
+
+    val cFactor = Factor(Vector(C), Map(
+      Vector(C is true, A is true) -> Rational(4, 5),
+      Vector(C is true, A is false) -> Rational(1, 5),
+      Vector(C is false, A is true) -> Rational(1, 10),
+      Vector(C is false, A is false) -> Rational(9, 10)))
+
+    val dFactor = Factor(Vector(D), Map(
+      Vector(D is true, B is true, C is true) -> Rational(19, 20),
+      Vector(D is true, B is true, C is false) -> Rational(1, 20),
+      Vector(D is true, B is false, C is true) -> Rational(9, 10),
+      Vector(D is true, B is false, C is false) -> Rational(1, 10),
+      Vector(D is false, B is true, C is true) -> Rational(4, 5),
+      Vector(D is false, B is true, C is false) -> Rational(1, 5),
+      Vector(D is false, B is false, C is true) -> Rational(0, 1),
+      Vector(D is false, B is false, C is false) -> Rational(1, 1)))
+
+    val eFactor = Factor(Vector(E), Map(
+      Vector(E is true, C is true) -> Rational(7, 10),
+      Vector(E is true, C is false) -> Rational(3, 10),
+      Vector(E is false, C is true) -> Rational(0),
+      Vector(E is false, C is false) -> Rational(1)))
+
+    // edges: ab, ac, bd, cd, ce
+    BayesianNetwork[Boolean, Rational, DirectedSparseGraph](
       "6.1",
-      List(
-        BayesianNetworkNode(A,
-          Factor(Vector(A), Map(
-            Vector(A is true) -> Rational(6, 10),
-            Vector(A is false) -> Rational(4, 10)))),
-        BayesianNetworkNode(B, // B | A
-          Factor(Vector(B), Map(
-            Vector(B is true, A is true) -> Rational(2, 10),
-            Vector(B is true, A is false) -> Rational(8, 10),
-            Vector(B is false, A is true) -> Rational(3, 4),
-            Vector(B is false, A is false) -> Rational(1, 4)))),
-        BayesianNetworkNode(C, // C | A
-          Factor(Vector(C), Map(
-            Vector(C is true, A is true) -> Rational(4, 5),
-            Vector(C is true, A is false) -> Rational(1, 5),
-            Vector(C is false, A is true) -> Rational(1, 10),
-            Vector(C is false, A is false) -> Rational(9, 10)))),
-        BayesianNetworkNode(D, // D | BC
-          Factor(Vector(D), Map(
-            Vector(D is true, B is true, C is true) -> Rational(19, 20),
-            Vector(D is true, B is true, C is false) -> Rational(1, 20),
-            Vector(D is true, B is false, C is true) -> Rational(9, 10),
-            Vector(D is true, B is false, C is false) -> Rational(1, 10),
-            Vector(D is false, B is true, C is true) -> Rational(4, 5),
-            Vector(D is false, B is true, C is false) -> Rational(1, 5),
-            Vector(D is false, B is false, C is true) -> Rational(0, 1),
-            Vector(D is false, B is false, C is false) -> Rational(1, 1)))),
-        BayesianNetworkNode(E, // E | C
-          Factor(Vector(E), Map(
-            Vector(E is true, C is true) -> Rational(7, 10),
-            Vector(E is true, C is false) -> Rational(3, 10),
-            Vector(E is false, C is true) -> Rational(0),
-            Vector(E is false, C is false) -> Rational(1))))),
-      (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
-        case a :: b :: c :: d :: e :: Nil => List((a, b, ""), (a, c, ""), (b, d, ""), (c, d, ""), (c, e, ""))
-        case _                            => Nil
-      })
-
-    bn
+      Map(A -> aFactor,
+        B -> bFactor,
+        C -> cFactor,
+        D -> dFactor,
+        E -> eFactor))
   }
 
   def figure6_2: Factor[Boolean, Rational] = figure6_1.jointProbabilityTable
@@ -102,34 +100,36 @@ class ScalaFigures extends Specification {
     (cptB, cptD)
   }
 
-  def figure6_4: BayesianNetwork[Boolean, Rational, JungDirectedGraph] = {
+  def figure6_4: BayesianNetwork[Boolean, Rational, DirectedSparseGraph] = {
 
-    val bn = BayesianNetwork("6.4",
-      Vector(
-        BayesianNetworkNode(A, Factor(Vector(A), Map(
-          Vector(A is true) -> Rational(6, 10),
-          Vector(A is false) -> Rational(4, 10)))),
-        BayesianNetworkNode(B, Factor(Vector(B), Map( // B | A
-          Vector(B is true, A is true) -> Rational(9, 10),
-          Vector(B is true, A is false) -> Rational(1, 10),
-          Vector(B is false, A is true) -> Rational(2, 10),
-          Vector(B is false, A is false) -> Rational(8, 10)))),
-        BayesianNetworkNode(C, Factor(Vector(C), Map( // C | B
-          Vector(C is true, B is true) -> Rational(3, 10),
-          Vector(C is true, B is false) -> Rational(7, 10),
-          Vector(C is false, B is true) -> Rational(1, 2),
-          Vector(C is false, B is false) -> Rational(1, 2))))),
-      (vs: Seq[Vertex[BayesianNetworkNode[Boolean, Rational]]]) => vs match {
-        case a :: b :: c :: Nil => List((a, b, ""), (b, c, ""))
-        case _                  => Nil
-      })
+    val aFactor = Factor(Vector(A), Map(
+      Vector(A is true) -> Rational(6, 10),
+      Vector(A is false) -> Rational(4, 10)))
+
+    val bFactor = Factor(Vector(B), Map( // B | A
+      Vector(B is true, A is true) -> Rational(9, 10),
+      Vector(B is true, A is false) -> Rational(1, 10),
+      Vector(B is false, A is true) -> Rational(2, 10),
+      Vector(B is false, A is false) -> Rational(8, 10)))
+
+    val cFactor = Factor(Vector(C), Map( // C | B
+      Vector(C is true, B is true) -> Rational(3, 10),
+      Vector(C is true, B is false) -> Rational(7, 10),
+      Vector(C is false, B is true) -> Rational(1, 2),
+      Vector(C is false, B is false) -> Rational(1, 2)))
+
+    // edges: ab, bc
+    val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph]("6.4",
+      Map(A -> aFactor,
+        B -> bFactor,
+        C -> cFactor))
 
     val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)
 
     bn
   }
 
-  def figure6_5: List[InteractionGraph[Boolean, Rational, JungUndirectedGraph]] =
+  def figure6_5: List[InteractionGraph[Boolean, Rational, UndirectedSparseGraph]] =
     figure6_1.interactionGraph.eliminationSequence(List(B, C, A, D))
 
   def figure6_7 = {
@@ -157,13 +157,13 @@ class ScalaFigures extends Specification {
   // Result of fe-i on a->b->c with Q={C}
   def figure7_2 = figure6_4.factorElimination1(Set(C))
 
-  def figure7_4: (BayesianNetwork[Boolean, Rational, JungDirectedGraph], EliminationTree[Boolean, Rational, JungUndirectedGraph], Factor[Boolean, Rational]) = {
+  def figure7_4: (BayesianNetwork[Boolean, Rational, DirectedSparseGraph], EliminationTree[Boolean, Rational, UndirectedSparseGraph], Factor[Boolean, Rational]) = {
 
     val f61 = figure6_1
 
-    val τ = EliminationTree[Boolean, Rational, JungUndirectedGraph](
+    val τ = EliminationTree[Boolean, Rational, UndirectedSparseGraph](
       Vector(A, B, C, D, E).map(f61.cpt),
-      (vs: Seq[Vertex[Factor[Boolean, Rational]]]) => vs match {
+      (vs: Seq[Factor[Boolean, Rational]]) => vs match {
         case a :: b :: c :: d :: e :: Nil => List(
           (a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
         case _ => Nil
@@ -185,7 +185,7 @@ class ScalaFigures extends Specification {
 
   def figure7_12 = JoinTree.makeJoinTree(
     Vector[Set[Distribution[Boolean, Rational]]](Set(A, B, C), Set(B, C, D), Set(C, E)),
-    (vs: Seq[Vertex[Set[Distribution[Boolean, Rational]]]]) => vs match {
+    (vs: Seq[Set[Distribution[Boolean, Rational]]]) => vs match {
       case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))
       case _                       => Nil
     })

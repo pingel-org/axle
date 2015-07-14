@@ -2,7 +2,6 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import axle.algebra.Vertex
 import axle.syntax.directedgraph.directedGraphOps
 import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
@@ -14,7 +13,7 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
 
   private def conversions(
     vps: Seq[UnitOfMeasurement[Q]],
-    ef: Seq[Vertex[UnitOfMeasurement[Q]]] => Seq[(Vertex[UnitOfMeasurement[Q]], Vertex[UnitOfMeasurement[Q]], N => N)])(
+    ef: Seq[UnitOfMeasurement[Q]] => Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], N => N)])(
       implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q], N => N] =
     evDG.make[UnitOfMeasurement[Q], N => N](vps, ef)
 
@@ -23,8 +22,8 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
     links: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], Bijection[N, N])]): CG[Q, DG, N] =
     conversions(
       units,
-      (vs: Seq[Vertex[UnitOfMeasurement[Q]]]) => {
-        val name2vertex = vs.map(v => (v.payload.name, v)).toMap
+      (vs: Seq[UnitOfMeasurement[Q]]) => {
+        val name2vertex = vs.map(v => (v.name, v)).toMap
         links.flatMap({
           case (x, y, bijection) => {
             val xv = name2vertex(x.name)
@@ -38,8 +37,8 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
 
   private[this] def vertex(
     cg: DG[UnitOfMeasurement[Q], N => N],
-    query: UnitOfMeasurement[Q]): Vertex[UnitOfMeasurement[Q]] =
-    directedGraphOps(cg).findVertex(_.payload.name === query.name).get
+    query: UnitOfMeasurement[Q]): UnitOfMeasurement[Q] =
+    directedGraphOps(cg).findVertex(_.name === query.name).get
 
   val memo = collection.mutable.Map.empty[(UnitOfMeasurement[Q], UnitOfMeasurement[Q]), N => N]
 
@@ -55,7 +54,7 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
       } else {
         val pathOpt = directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
         if (pathOpt.isDefined) {
-          val path = pathOpt.get.map(_.payload)
+          val path = pathOpt.get
           val convert: N => N = path.reduceOption(combine).getOrElse(identity)
           memo += memoKey -> convert
           convert

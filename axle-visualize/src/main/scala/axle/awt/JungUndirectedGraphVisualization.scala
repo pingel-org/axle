@@ -11,9 +11,6 @@ import java.awt.event.MouseEvent
 import org.apache.commons.collections15.Transformer
 
 import axle.Show
-import axle.algebra.Vertex
-import axle.jung.JungUndirectedGraph
-import axle.jung.JungUndirectedGraphEdge
 import axle.string
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer
@@ -21,35 +18,36 @@ import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 case class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
 
-  def component[VP: Show, EP: Show](jug: JungUndirectedGraph[VP, EP]): Component = {
+  def component[VP: Show, EP: Show](jusg: UndirectedSparseGraph[VP, EP]): Component = {
 
-    val layout = new FRLayout(jug.jusg)
+    val layout = new FRLayout(jusg)
     layout.setSize(new Dimension(width, height))
     val vv = new VisualizationViewer(layout) // interactive
     vv.setPreferredSize(new Dimension(width + border, height + border))
     vv.setMinimumSize(new Dimension(width + border, height + border))
 
-    val vertexPaint = new Transformer[Vertex[VP], Paint]() {
-      def transform(i: Vertex[VP]): Paint = Color.GREEN
+    val vertexPaint = new Transformer[VP, Paint]() {
+      def transform(i: VP): Paint = Color.GREEN
     }
 
-    val dash = List(10.0f).toArray
+    val dash = List(10f).toArray
 
-    val edgeStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f)
+    val edgeStroke = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0f)
 
-    val edgeStrokeTransformer = new Transformer[JungUndirectedGraphEdge[VP, EP], Stroke]() {
-      def transform(edge: JungUndirectedGraphEdge[VP, EP]): BasicStroke = edgeStroke
+    val edgeStrokeTransformer = new Transformer[EP, Stroke]() {
+      def transform(edge: EP): BasicStroke = edgeStroke
     }
 
-    val vertexLabelTransformer = new Transformer[Vertex[VP], String]() {
-      def transform(vertex: Vertex[VP]): String = string(vertex.payload)
+    val vertexLabelTransformer = new Transformer[VP, String]() {
+      def transform(vertex: VP): String = string(vertex)
     }
 
-    val edgeLabelTransformer = new Transformer[JungUndirectedGraphEdge[VP, EP], String]() {
-      def transform(edge: JungUndirectedGraphEdge[VP, EP]): String = string(edge.payload)
+    val edgeLabelTransformer = new Transformer[EP, String]() {
+      def transform(edge: EP): String = string(edge)
     }
 
     vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)

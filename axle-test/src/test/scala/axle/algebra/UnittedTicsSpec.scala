@@ -6,22 +6,24 @@ import org.specs2.mutable.Specification
 
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
-import axle.jung.JungDirectedGraph
+import axle.jung.directedGraphJung
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.SeqOrder
 import spire.implicits._
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 class UnittedTicsSpec extends Specification {
 
   "Tics for UnittedQuantity" should {
     "work" in {
 
-      implicit val id = Information.converterGraph[Double, JungDirectedGraph]
+      implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
       import id.bit
       implicit val base = bit
 
-      val ticker = axle.quanta.unittedTics[Information, Double, JungDirectedGraph]
+      val ticker = axle.quanta.unittedTics[Information, Double, DirectedSparseGraph]
 
       val tics = ticker.tics(0d *: bit, 1d *: bit).toVector
 

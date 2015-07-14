@@ -3,24 +3,22 @@ package axle.stats
 import org.specs2.mutable.Specification
 
 import axle.quanta.Information
-import axle.jung.JungDirectedGraph
-import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
 import axle.quanta.UnittedQuantity
 import axle.quanta.Quantum
 import spire.math.Rational
 import spire.math.Real
 import spire.algebra.Order
-import axle.jung.JungDirectedGraph.directedGraphJung
-import axle.jung.JungDirectedGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits._
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.jung.directedGraphJung
 
 class EntropySpec extends Specification {
 
   "entropy of coin" should {
     "work" in {
 
-      implicit val id = Information.converterGraph[Double, JungDirectedGraph]
+      implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
 
       val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map(i => (Rational(i, 100), entropy(coin(Rational(i, 100))))).toMap

@@ -8,12 +8,13 @@ import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling.stateDistribution
-import axle.jung.JungDirectedGraph
 import axle.quanta.Angle
 import axle.stats.Distribution0
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.math.Rational
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.jung.directedGraphJung
 
 class GameChartSpec extends Specification {
 
@@ -24,7 +25,7 @@ class GameChartSpec extends Specification {
 
       val scoreD = stateD.map(_.tallied)
 
-      implicit val ac = Angle.converterGraph[Double, JungDirectedGraph]
+      implicit val ac = Angle.converterGraph[Double, DirectedSparseGraph]
       //      import ac.degree
       //
       //      val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](

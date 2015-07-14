@@ -12,7 +12,6 @@ import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
-import axle.algebra.Vertex
 import spire.algebra.Eq
 import spire.algebra.Field
 import scala.reflect.ClassTag
@@ -39,7 +38,7 @@ trait LinearAlgebraSyntax {
 
 trait DirectedGraphSyntax {
 
-  def directedGraph[DG[_, _]: DirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) =
+  def directedGraph[DG[_, _]: DirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[VP] => Seq[(VP, VP, EP)]) =
     DirectedGraph[DG].make(vps, ef)
 
   implicit def directedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](dg: DG[VP, EP]) =
@@ -48,7 +47,7 @@ trait DirectedGraphSyntax {
 
 trait UndirectedGraphSyntax {
 
-  def undirectedGraph[UG[_, _]: UndirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[Vertex[VP]] => Seq[(Vertex[VP], Vertex[VP], EP)]) =
+  def undirectedGraph[UG[_, _]: UndirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[VP] => Seq[(VP, VP, EP)]) =
     UndirectedGraph[UG].make(vps, ef)
 
   implicit def undirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](ug: UG[VP, EP]) =

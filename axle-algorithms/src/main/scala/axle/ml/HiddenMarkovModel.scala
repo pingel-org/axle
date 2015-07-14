@@ -1,7 +1,6 @@
 package axle.ml
 
 import axle.algebra.DirectedGraph
-import axle.algebra.Vertex
 import axle.syntax.directedgraph._
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
@@ -58,13 +57,14 @@ case class HiddenMarkovModel[DG[_, _]: DirectedGraph](
 
   val startState = MarkovModelStartState()
 
-  val graph = directedGraph[DG, MarkovModelState, Double](
+  class HMMEdge[N](p: N)
+
+  val graph = directedGraph[DG, MarkovModelState, HMMEdge[Double]](
     states ++ observations ++ List(startState),
-    (vs: Seq[Vertex[MarkovModelState]]) => {
-      val state2vertex = vs.map(v => (v.payload, v)).toMap
-      val startEdges = startProbability.map({ case (dest, p) => (state2vertex(startState), state2vertex(dest), p) })
-      val stateEdges = transitionProbability.flatMap({ case (from, toMap) => toMap.map({ case (to, p) => (state2vertex(from), state2vertex(to), p) }) })
-      val emissionEdges = emissionProbability.flatMap({ case (from, toMap) => toMap.map({ case (to, p) => (state2vertex(from), state2vertex(to), p) }) })
+    (vs: Seq[MarkovModelState]) => {
+      val startEdges = startProbability.map({ case (dest, p) => (startState, dest, new HMMEdge(p)) })
+      val stateEdges = transitionProbability.flatMap({ case (from, toMap) => toMap.map({ case (to, p) => (from, to, new HMMEdge(p)) }) })
+      val emissionEdges = emissionProbability.flatMap({ case (from, toMap) => toMap.map({ case (to, p) => (from, to, new HMMEdge(p)) }) })
       startEdges.toList ++ stateEdges.toList ++ emissionEdges.toList
     })
 

@@ -9,12 +9,12 @@ import spire.algebra.Module
 import spire.algebra.Group
 import spire.implicits._
 import spire.implicits.DoubleAlgebra
-import axle.jung.JungDirectedGraph
-import axle.jung.JungDirectedGraph.directedGraphJung
 import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.jung.directedGraphJung
 
 class QuantaSpec extends Specification {
 
@@ -23,9 +23,9 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      implicit val dr = Distance.converterGraph[Rational, JungDirectedGraph]
+      implicit val dr = Distance.converterGraph[Rational, DirectedSparseGraph]
       import dr._
-      implicit val tr = Time.converterGraph[Rational, JungDirectedGraph]
+      implicit val tr = Time.converterGraph[Rational, DirectedSparseGraph]
       import tr._
 
       val d1 = Rational(3, 4) *: meter
@@ -51,12 +51,12 @@ class QuantaSpec extends Specification {
   "Scalar conversion" should {
     "work" in {
 
-      val md = Mass.converterGraph[Double, JungDirectedGraph]
+      val md = Mass.converterGraph[Double, DirectedSparseGraph]
       import md._
 
       (5 *: gram).magnitude must be equalTo 5
 
-      implicit val dd = Distance.converterGraph[Double, JungDirectedGraph]
+      implicit val dd = Distance.converterGraph[Double, DirectedSparseGraph]
       import dd._
       import spire.implicits.DoubleAlgebra
 
@@ -69,9 +69,9 @@ class QuantaSpec extends Specification {
 
     "work" in {
 
-      implicit val md = Mass.converterGraph[Double, JungDirectedGraph]
+      implicit val md = Mass.converterGraph[Double, DirectedSparseGraph]
       import md._
-      implicit val dd = Distance.converterGraph[Double, JungDirectedGraph]
+      implicit val dd = Distance.converterGraph[Double, DirectedSparseGraph]
       import dd._
       import spire.implicits.DoubleAlgebra
 
@@ -83,7 +83,7 @@ class QuantaSpec extends Specification {
 
     "use Rational" in {
 
-      implicit val vr = Volume.converterGraph[Rational, JungDirectedGraph]
+      implicit val vr = Volume.converterGraph[Rational, DirectedSparseGraph]
       import vr._
 
       ((Rational(1, 10) *: liter) in milliliter).magnitude must be equalTo Rational(100)
@@ -93,9 +93,9 @@ class QuantaSpec extends Specification {
   "addition" should {
     "work" in {
 
-      implicit val md = Mass.converterGraph[Double, JungDirectedGraph]
+      implicit val md = Mass.converterGraph[Double, DirectedSparseGraph]
       import md._
-      implicit val dd = Distance.converterGraph[Double, JungDirectedGraph]
+      implicit val dd = Distance.converterGraph[Double, DirectedSparseGraph]
       import dd._
 
       // Shouldn't compile: gram + mile
@@ -115,7 +115,7 @@ class QuantaSpec extends Specification {
 
   "temperature" should {
     "work" in {
-      implicit val tc = Temperature.converterGraph[Double, JungDirectedGraph]
+      implicit val tc = Temperature.converterGraph[Double, DirectedSparseGraph]
       import tc._
       ((0d *: celsius) in kelvin).magnitude must be equalTo 273.15d
       ((0d *: celsius) in fahrenheit).magnitude must be equalTo 32d
@@ -126,9 +126,9 @@ class QuantaSpec extends Specification {
   "over" should {
     "work" in {
 
-      val vr = Volume.converterGraph[Rational, JungDirectedGraph]
+      val vr = Volume.converterGraph[Rational, DirectedSparseGraph]
       import vr._
-      val fr = Flow.converterGraph[Rational, JungDirectedGraph]
+      val fr = Flow.converterGraph[Rational, DirectedSparseGraph]
       import fr._
 
       // TODO convert that to years

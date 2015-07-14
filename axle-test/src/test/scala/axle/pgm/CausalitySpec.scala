@@ -9,8 +9,9 @@ import org.specs2.mutable._
 import spire.algebra._
 import spire.implicits._
 import spire.math._
-import axle.jung.JungDirectedGraph
-import axle.jung.JungDirectedGraph.directedGraphJung
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
+import axle.jung.directedGraphJung
 
 class CausalitySpec extends Specification {
 
@@ -58,7 +59,7 @@ class CausalitySpec extends Specification {
 
       def homework4Model(k: Int, p: Double) = {
 
-        val result = CausalModel[String, Rational, JungDirectedGraph]("Homework 4 model with k " + k + ", p = " + p, Nil)
+        val result = CausalModel[String, Rational, DirectedSparseGraph]("Homework 4 model with k " + k + ", p = " + p, Nil)
 
         val zero = Option.empty[(Distribution[Boolean, Rational], Distribution[Boolean, Rational], Distribution[Boolean, Rational], Distribution[Boolean, Rational])]
 
