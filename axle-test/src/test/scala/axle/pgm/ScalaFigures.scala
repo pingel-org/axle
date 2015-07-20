@@ -169,7 +169,7 @@ class ScalaFigures extends Specification {
       val e = f61.cpt(E)
       EliminationTree[Boolean, Rational, UndirectedSparseGraph](
         Vector(a, b, c, d, e),
-        List((a, b, ""), (a, d, ""), (d, c, ""), (c, e, "")))
+        List((a, b), (a, d), (d, c), (c, e)))
     }
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
@@ -194,7 +194,7 @@ class ScalaFigures extends Specification {
 
     JoinTree.makeJoinTree(
       Vector(abc, bcd, ce),
-      List((abc, bcd, ""), (bcd, ce, "")))
+      List((abc, bcd), (bcd, ce)))
   }
 
   "bayesian networks" should {
