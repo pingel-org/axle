@@ -11,7 +11,7 @@ import axle.syntax.undirectedgraph._
 
 case class EliminationTree[T: Eq: Manifest, N: Field: Manifest, UG[_, _]: UndirectedGraph](
   vps: Seq[Factor[T, N]],
-  ef: Seq[Factor[T, N]] => Seq[(Factor[T, N], Factor[T, N], String)]) {
+  ef: Seq[(Factor[T, N], Factor[T, N], String)]) {
 
   lazy val graph = undirectedGraph(vps, ef)
 

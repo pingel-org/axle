@@ -8,7 +8,7 @@ import spire.implicits.StringOrder
 
 case class InteractionGraph[T: Manifest: Eq, N: Field: Manifest, UG[_, _]: UndirectedGraph](
   vps: Seq[Distribution[T, N]],
-  ef: Seq[Distribution[T, N]] => Seq[(Distribution[T, N], Distribution[T, N], String)]) {
+  ef: Seq[(Distribution[T, N], Distribution[T, N], String)]) {
 
   lazy val graph = UndirectedGraph[UG].make(vps, ef)
 

@@ -161,13 +161,16 @@ class ScalaFigures extends Specification {
 
     val f61 = figure6_1
 
-    val τ = EliminationTree[Boolean, Rational, UndirectedSparseGraph](
-      Vector(A, B, C, D, E).map(f61.cpt),
-      (vs: Seq[Factor[Boolean, Rational]]) => vs match {
-        case a :: b :: c :: d :: e :: Nil => List(
-          (a, b, ""), (a, d, ""), (d, c, ""), (c, e, ""))
-        case _ => Nil
-      })
+    val τ = {
+      val a = f61.cpt(A)
+      val b = f61.cpt(B)
+      val c = f61.cpt(C)
+      val d = f61.cpt(D)
+      val e = f61.cpt(E)
+      EliminationTree[Boolean, Rational, UndirectedSparseGraph](
+        Vector(a, b, c, d, e),
+        List((a, b, ""), (a, d, ""), (d, c, ""), (c, e, "")))
+    }
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
     val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.cpt(C))
@@ -183,12 +186,16 @@ class ScalaFigures extends Specification {
     f75
   }
 
-  def figure7_12 = JoinTree.makeJoinTree(
-    Vector[Set[Distribution[Boolean, Rational]]](Set(A, B, C), Set(B, C, D), Set(C, E)),
-    (vs: Seq[Set[Distribution[Boolean, Rational]]]) => vs match {
-      case abc :: bcd :: ce :: Nil => List((abc, bcd, ""), (bcd, ce, ""))
-      case _                       => Nil
-    })
+  def figure7_12 = {
+
+    val abc: Set[Distribution[Boolean, Rational]] = Set(A, B, C)
+    val bcd: Set[Distribution[Boolean, Rational]] = Set(B, C, D)
+    val ce: Set[Distribution[Boolean, Rational]] = Set(C, E)
+
+    JoinTree.makeJoinTree(
+      Vector(abc, bcd, ce),
+      List((abc, bcd, ""), (bcd, ce, "")))
+  }
 
   "bayesian networks" should {
     "work" in {

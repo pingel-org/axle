@@ -12,7 +12,7 @@ object JoinTree {
 
   def makeJoinTree[T: Eq: Manifest, N: Field: Manifest, UG[_, _]: UndirectedGraph](
     vps: Vector[Set[Distribution[T, N]]],
-    ef: Seq[Set[Distribution[T, N]]] => Seq[(Set[Distribution[T, N]], Set[Distribution[T, N]], String)]): JoinTree[T, N, UG] =
+    ef: Seq[(Set[Distribution[T, N]], Set[Distribution[T, N]], String)]): JoinTree[T, N, UG] =
     JoinTree[T, N, UG](UndirectedGraph[UG].make(vps, ef))
 
   // returns a jointree for DAG G with width equal to width(π, G)
