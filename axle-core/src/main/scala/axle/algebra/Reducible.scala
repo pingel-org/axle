@@ -22,7 +22,7 @@ object Reducible {
 
   implicit def reduceIndexedSeq[A]: Reducible[IndexedSeq[A], A] =
     new Reducible[IndexedSeq[A], A] {
-      def reduceOption[A: ClassTag](is: IndexedSeq[A])(op: (A, A) => A): Option[A] =
+      def reduceOption(is: IndexedSeq[A])(op: (A, A) => A): Option[A] =
         is.reduceOption(op)
     }
 
