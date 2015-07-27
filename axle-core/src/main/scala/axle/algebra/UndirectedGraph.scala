@@ -6,7 +6,7 @@ import scala.annotation.implicitNotFound
 @implicitNotFound("Witness not found for UndirectedGraph[${UG}]")
 trait UndirectedGraph[UG[_, _]] {
 
-  def make[V, E](vps: Seq[V], ef: Seq[V] => Seq[(V, V, E)]): UG[V, E]
+  def make[V, E](vps: Seq[V], ef: Seq[(V, V, E)]): UG[V, E]
 
   def vertices[V, E](jug: UG[V, E]): Iterable[V]
 

@@ -6,7 +6,7 @@ import scala.annotation.implicitNotFound
 @implicitNotFound("Witness not found for DirectedGraph[${DG}]")
 trait DirectedGraph[DG[_, _]] {
 
-  def make[V, E](Vs: Seq[V], ef: Seq[V] => Seq[(V, V, E)]): DG[V, E]
+  def make[V, E](Vs: Seq[V], ef: Seq[(V, V, E)]): DG[V, E]
 
   def vertices[V, E](jdg: DG[V, E]): Iterable[V]
 
@@ -16,7 +16,6 @@ trait DirectedGraph[DG[_, _]] {
 
   def destination[V, E](jdg: DG[V, E], e: E): V
 
-  // TODO findVertex needs an index
   def findVertex[V, E](jdg: DG[V, E], f: V => Boolean): Option[V]
 
   def filterEdges[V, E](jdg: DG[V, E], f: E => Boolean): DG[V, E]

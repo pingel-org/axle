@@ -212,6 +212,7 @@ package object jung {
       }
     }
 
+
   implicit def edgeFunctorUDSG[V]: Functor[({ type λ[α] = UndirectedSparseGraph[V, α] })#λ] =
     new Functor[({ type λ[α] = UndirectedSparseGraph[V, α] })#λ] {
       def map[A, B: ClassTag](jusg: UndirectedSparseGraph[V, A])(f: A => B): UndirectedSparseGraph[V, B] = {

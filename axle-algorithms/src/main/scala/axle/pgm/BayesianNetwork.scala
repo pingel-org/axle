@@ -86,7 +86,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   val _graph: DG[BayesianNetworkNode[T, N], Edge] =
     dg.make(bnns,
-      vs => bnns.flatMap(dest =>
+      bnns.flatMap(dest =>
         dest.cpt.variables.filterNot(_ === dest.rv)
           .map(source => (bnnByVariable(source), dest, new Edge))))
 
@@ -178,14 +178,11 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   def interactionGraph[UG[_, _]: UndirectedGraph]: InteractionGraph[T, N, UG] =
     InteractionGraph(randomVariables,
-      (vs: Seq[Distribution[T, N]]) =>
-        (for {
-          vi <- vs // TODO "doubles"
-          vj <- vs
-          if interactsWith(vi, vj)
-        } yield {
-          (vi, vj, "")
-        }))
+      (for {
+        vi <- randomVariables // TODO "doubles"
+        vj <- randomVariables
+        if interactsWith(vi, vj)
+      } yield (vi, vj, "")))
 
   /**
    * orderWidth
