@@ -5,14 +5,14 @@ import scala.annotation.implicitNotFound
 import scala.collection.parallel.immutable.ParSeq
 
 @implicitNotFound("Witness not found for Indexed[${C}, ${IndexT}]")
-trait Indexed[C, IndexT, A] {
+trait Indexed[C, I, A] {
 
-  def at(xs: C)(i: IndexT): A
+  def at(xs: C)(i: I): A
 }
 
 object Indexed {
 
-  @inline final def apply[C, IndexT, A](implicit ev: Indexed[C, IndexT, A]): Indexed[C, IndexT, A] = ev
+  @inline final def apply[C, I, A](implicit ev: Indexed[C, I, A]): Indexed[C, I, A] = ev
 
   implicit def indexedSeq[A]: Indexed[Seq[A], Int, A] =
     new Indexed[Seq[A], Int, A] {

@@ -240,9 +240,9 @@ final class FiniteOps[F, S, A](val as: F)(implicit finite: Finite[F, S]) {
   def size = finite.size(as)
 }
 
-final class IndexedOps[F, IndexT, A](val as: F)(implicit index: Indexed[F, IndexT, A]) {
+final class IndexedOps[F, I, A](val as: F)(implicit index: Indexed[F, I, A]) {
 
-  def at(i: IndexT) = index.at(as)(i)
+  def at(i: I) = index.at(as)(i)
 }
 
 final class MapReducibleOps[M, A, B, K](val as: M)(implicit mr: MapReducible[M, A, B, K]) {
