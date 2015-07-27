@@ -15,7 +15,6 @@ import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.Order
 import spire.algebra.Rng
-import spire.implicits.DoubleAlgebra
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.partialOrderOps
 import spire.math.ConvertableTo
@@ -30,14 +29,16 @@ package object algebra {
       def distance(s1: String, s2: String): N = iscSpace.distance(s1, s2)
     }
 
-  def argmax[R[_]: Functor: Reducible, K, N: Order](ks: R[K], f: K => N): Option[K] = {
+  def argmax[R, K, N: Order, S](
+    ks: R,
+    f: K => N)(
+      implicit functorRknS: Functor[R, K, (K, N), S],
+      redicibleS: Reducible[S, (K, N)]): Option[K] = {
 
-    val functor = Functor[R]
-    val reducer = Reducible[R]
-    val mapped = functor.map(ks)(k => (k, f(k)))
+    val mapped = functorRknS.map(ks)(k => (k, f(k)))
     // TODO: This could be extracted as Reducible.maxBy
 
-    reducer.reduceOption(mapped)({
+    redicibleS.reduceOption(mapped)({
       case (kv1, kv2) =>
         if (kv1._2 > kv2._2) kv1 else kv2
     }).map(_._1)
@@ -45,48 +46,51 @@ package object algebra {
 
   //.maxBy(_._2)._1
 
-  def Σ[A: ClassTag, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
+  def Σ[A, F](fa: F)(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F, A, A]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
 
-  def sum[A: ClassTag, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
+  def sum[A, F](fa: F)(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F, A, A]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
 
-  def Π[A: ClassTag, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
+  def Π[A, F](fa: F)(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F, A, A]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
-  def product[A: ClassTag, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
+  def product[A, F](fa: F)(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F, A, A]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
-  def mean[A: ClassTag, F[_]](fa: F[A])(
+  def mean[A, F](fa: F)(
     implicit ev: Field[A],
-    agg: Aggregatable[F],
+    agg: Aggregatable[F, A, A],
     fin: Finite[F, A]): A =
     sum(fa) / fin.size(fa)
 
-  def harmonicMean[A: ClassTag, F[_]](xs: F[A])(
+  def harmonicMean[A, F](xs: F)(
     implicit field: Field[A],
-    fun: Functor[F],
-    agg: Aggregatable[F],
+    functorFaaF: Functor[F, A, A, F],
+    agg: Aggregatable[F, A, A],
     fin: Finite[F, A]): A =
-    field.div(fin.size(xs), sum(fun.map(xs)(field.reciprocal)))
+    field.div(fin.size(xs), sum(functorFaaF.map(xs)(field.reciprocal)))
 
-  implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] = new MetricSpace[Rational, Double] {
+  implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
+    new MetricSpace[Rational, Double] {
 
-    def distance(v: Rational, w: Rational): Double = (v.toDouble - w.toDouble).abs
-  }
+      def distance(v: Rational, w: Rational): Double = (v.toDouble - w.toDouble).abs
+    }
 
-  implicit val realDoubleMetricSpace: MetricSpace[Real, Double] = new MetricSpace[Real, Double] {
+  implicit val realDoubleMetricSpace: MetricSpace[Real, Double] =
+    new MetricSpace[Real, Double] {
 
-    def distance(v: Real, w: Real): Double = (v.toDouble - w.toDouble).abs
-  }
+      def distance(v: Real, w: Real): Double = (v.toDouble - w.toDouble).abs
+    }
 
-  implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] = new MetricSpace[Double, Double] {
+  implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] =
+    new MetricSpace[Double, Double] {
 
-    def distance(v: Double, w: Double): Double = (v - w).abs
-  }
+      def distance(v: Double, w: Double): Double = (v - w).abs
+    }
 
-  import spire.implicits._
-  import spire.math._
+  //import spire.implicits._
+  //import spire.math._
 
   //  implicit val rationalRng: Rng[Rational] = new Rng[Rational] {
   //
@@ -105,33 +109,38 @@ package object algebra {
 
     val rat = new spire.math.RationalAlgebra()
 
-    implicit val doubleIntModule: Module[Double, Int] = new Module[Double, Int] {
+    import spire.implicits.DoubleAlgebra
+    import spire.implicits.IntAlgebra
 
-      def negate(x: Double): Double = DoubleAlgebra.negate(x)
+    implicit val doubleIntModule: Module[Double, Int] =
+      new Module[Double, Int] {
 
-      def zero: Double = DoubleAlgebra.zero
+        def negate(x: Double): Double = DoubleAlgebra.negate(x)
 
-      def plus(x: Double, y: Double): Double = DoubleAlgebra.plus(x, y)
+        def zero: Double = DoubleAlgebra.zero
 
-      implicit def scalar: Rng[Int] = IntAlgebra
+        def plus(x: Double, y: Double): Double = DoubleAlgebra.plus(x, y)
 
-      def timesl(r: Int, v: Double): Double = r * v
+        implicit def scalar: Rng[Int] = IntAlgebra
 
-    }
+        def timesl(r: Int, v: Double): Double = r * v
 
-    implicit val doubleDoubleModule: Module[Double, Double] = new Module[Double, Double] {
+      }
 
-      def negate(x: Double): Double = DoubleAlgebra.negate(x)
+    implicit val doubleDoubleModule: Module[Double, Double] =
+      new Module[Double, Double] {
 
-      def zero: Double = DoubleAlgebra.zero
+        def negate(x: Double): Double = DoubleAlgebra.negate(x)
 
-      def plus(x: Double, y: Double): Double = DoubleAlgebra.plus(x, y)
+        def zero: Double = DoubleAlgebra.zero
 
-      implicit def scalar: Rng[Double] = DoubleAlgebra
+        def plus(x: Double, y: Double): Double = DoubleAlgebra.plus(x, y)
 
-      def timesl(r: Double, v: Double): Double = r * v
+        implicit def scalar: Rng[Double] = DoubleAlgebra
 
-    }
+        def timesl(r: Double, v: Double): Double = r * v
+
+      }
 
     implicit val doubleRationalModule: Module[Double, Rational] = new Module[Double, Rational] {
 

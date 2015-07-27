@@ -12,8 +12,6 @@ trait DirectedGraph[DG[_, _]] {
 
   def edges[V, E](jdg: DG[V, E]): Iterable[E]
 
-  def size[V, E](jdg: DG[V, E]): Int
-
   def source[V, E](jdg: DG[V, E], e: E): V
 
   def destination[V, E](jdg: DG[V, E], e: E): V
@@ -43,8 +41,6 @@ trait DirectedGraph[DG[_, _]] {
   def other[V: Eq, E](jdg: DG[V, E], edge: E, u: V): V
 
   def connects[V: Eq, E](jdg: DG[V, E], edge: E, a1: V, a2: V): Boolean
-
-  def map[V, E, NV, NE](jdg: DG[V, E], Vf: V => NV, epf: E => NE): DG[NV, NE]
 
   def leaves[V: Eq, E](jdg: DG[V, E]): Set[V]
 

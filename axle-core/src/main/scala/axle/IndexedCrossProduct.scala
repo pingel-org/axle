@@ -4,7 +4,7 @@ import spire.implicits._
 import spire.algebra.Bool
 
 case class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]])
-  extends Iterable[Seq[E]] {
+    extends Iterable[Seq[E]] {
 
   val mults = lists.reverse.map(_.size).scanLeft(1)(_ * _).reverse
 
@@ -12,9 +12,13 @@ case class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]])
 
   val modulos = mults.tail
 
+  import spire.implicits._
+  import spire.math._
+  import axle.algebra._
+
   def indexOf(objects: Seq[E]): Int = {
     val mults = lists.zip(objects).map(lo => lo._1.indexOf(lo._2)).zip(modulos).map(im => im._1 * im._2)
-    if (axle.forall(mults)(_ >= 0)) {
+    if (axle.forall(mults)({ i: Int => i >= 0 })) {
       mults.sum
     } else {
       -1

@@ -93,9 +93,9 @@ object NeedlemanWunsch {
    * ←
    */
 
-  def alignmentScore[S[_], N: Eq: ClassTag, I: Ring: Eq, M, V: AdditiveMonoid: Eq: ClassTag](
-    A: S[N],
-    B: S[N],
+  def alignmentScore[S, N: Eq: ClassTag, I: Ring: Eq, M, V: AdditiveMonoid: Eq: ClassTag](
+    A: S,
+    B: S,
     gap: N,
     similarity: (N, N) => V,
     gapPenalty: V)(

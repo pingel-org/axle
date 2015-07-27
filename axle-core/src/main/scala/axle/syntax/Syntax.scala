@@ -56,7 +56,7 @@ trait UndirectedGraphSyntax {
 
 trait FunctorSyntax {
 
-  implicit def functorOps[F[_]: Functor, A](fa: F[A]) =
+  implicit def functorOps[F, A, B, G](fa: F)(implicit functor: Functor[F, A, B, G]) =
     new FunctorOps(fa)
 }
 
@@ -68,27 +68,27 @@ trait EndofunctorSyntax {
 
 trait AggregatableSyntax {
 
-  implicit def aggregatableOps[A[_]: Aggregatable, T](at: A[T]) =
+  implicit def aggregatableOps[F, A, B](at: F)(implicit agg: Aggregatable[F, A, B]) =
     new AggregatableOps(at)
 }
 
 trait FiniteSyntax {
 
   implicit def finiteOps[F[_], S, A: ClassTag](fa: F[A])(
-    implicit finite: Finite[F, S]) =
+    implicit finite: Finite[F[A], S]) =
     new FiniteOps(fa)
 }
 
 trait IndexedSyntax {
 
-  implicit def indexedOps[F[_], IndexT, A: ClassTag](fa: F[A])(
-    implicit index: Indexed[F, IndexT]) =
+  implicit def indexedOps[F, IndexT, A](fa: F)(
+    implicit index: Indexed[F, IndexT, A]) =
     new IndexedOps(fa)
 }
 
 trait MapReducibleSyntax {
 
-  implicit def mapReducibleOps[F[_]: MapReducible, A: ClassTag](fa: F[A]) =
+  implicit def mapReducibleOps[F, A, B, K](fa: F)(implicit mr: MapReducible[F, A, B, K]) =
     new MapReducibleOps(fa)
 }
 

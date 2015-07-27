@@ -167,8 +167,6 @@ final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP,
 
   val ev = DirectedGraph[DG]
 
-  def size = ev.size(dg)
-
   def findVertex(f: VP => Boolean): Option[VP] =
     ev.findVertex(dg, f)
 
@@ -205,63 +203,52 @@ final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG
 
   val ev = UndirectedGraph[UG]
 
-  def size = ev.size(ug)
-
   def findVertex(f: VP => Boolean) =
     ev.findVertex(ug, f)
 
   def vertices() = ev.vertices(ug)
 
   def vertices(e: EP) = ev.vertices(ug, e)
-  
+
   def neighbors(v: VP) = ev.neighbors(ug, v)
 
   def firstLeafOtherThan(r: VP) = ev.firstLeafOtherThan(ug, r)
 }
 
-final class FunctorOps[F[_]: Functor, A](val as: F[A]) {
+final class FunctorOps[F, A, B, G](val as: F)(implicit functor: Functor[F, A, B, G]) {
 
-  val ev = Functor[F]
-
-  def map[B: ClassTag](f: A => B) = ev.map(as)(f)
+  def map(f: A => B) = functor.map(as)(f)
 
 }
 
-final class EndofunctorOps[E, A](val e: E)(implicit ev: Endofunctor[E, A]) {
+final class EndofunctorOps[E, A](val e: E)(implicit endo: Endofunctor[E, A]) {
 
-  def map(f: A => A) = ev.map(e)(f)
+  def map(f: A => A) = endo.map(e)(f)
 
 }
 
-final class AggregatableOps[G[_]: Aggregatable, A](val ts: G[A]) {
+final class AggregatableOps[G, A, B](val ts: G)(implicit agg: Aggregatable[G, A, B]) {
 
-  val ev = Aggregatable[G]
+  def aggregate(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B) =
+    agg.aggregate(ts)(zeroValue)(seqOp, combOp)
 
-  def aggregate[B: ClassTag](zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B) =
-    ev.aggregate(ts)(zeroValue)(seqOp, combOp)
-
-  def tally[N: Ring](implicit aEq: Eq[A]) = ev.tally(ts)
+  def tally[N: Ring](implicit aEq: Eq[A]) = agg.tally(ts)
 }
 
-final class FiniteOps[F[_], S, A: ClassTag](val as: F[A])(
-  implicit finite: Finite[F, S]) {
+final class FiniteOps[F, S, A](val as: F)(implicit finite: Finite[F, S]) {
 
   def size = finite.size(as)
 }
 
-final class IndexedOps[F[_], IndexT, A: ClassTag](
-  val as: F[A])(
-    implicit index: Indexed[F, IndexT]) {
+final class IndexedOps[F, IndexT, A](val as: F)(implicit index: Indexed[F, IndexT, A]) {
 
   def at(i: IndexT) = index.at(as)(i)
 }
 
-final class MapReducibleOps[M[_]: MapReducible, A: ClassTag](val as: M[A]) {
+final class MapReducibleOps[M, A, B, K](val as: M)(implicit mr: MapReducible[M, A, B, K]) {
 
-  val ev = MapReducible[M]
-
-  def mapReduce[B: ClassTag, K: ClassTag](mapper: A => (K, B), zero: B, op: (B, B) => B) =
-    ev.mapReduce[A, B, K](as, mapper, zero, op)
+  def mapReduce(mapper: A => (K, B), zero: B, op: (B, B) => B) =
+    mr.mapReduce(as, mapper, zero, op)
 }
 
 final class SetFromOps[F[_]: SetFrom, A: ClassTag](val as: F[A]) {

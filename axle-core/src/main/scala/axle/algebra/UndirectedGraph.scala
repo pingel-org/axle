@@ -14,9 +14,8 @@ trait UndirectedGraph[UG[_, _]] {
 
   def vertices[V, E](jusg: UG[V, E], e: E): (V, V)
 
-  def size[V, E](jug: UG[V, E]): Int
-
   // TODO findVertex needs an index
+
   def findVertex[V, E](jug: UG[V, E], f: V => Boolean): Option[V]
 
   def filterEdges[V, E](jug: UG[V, E], f: E => Boolean): UG[V, E]
@@ -53,8 +52,6 @@ trait UndirectedGraph[UG[_, _]] {
   def other[V: Eq, E](jug: UG[V, E], edge: E, u: V): V
 
   def connects[V: Eq, E](jug: UG[V, E], edge: E, a1: V, a2: V): Boolean
-
-  def map[V, E, NV, NE](jug: UG[V, E], vpf: V => NV, epf: E => NE): UG[NV, NE]
 
   //  def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[V]], payload: (Vertex[V], Vertex[V]) => E): Int =
   //    (for {
