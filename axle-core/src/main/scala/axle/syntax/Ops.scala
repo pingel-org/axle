@@ -248,9 +248,9 @@ final class IndexedOps[F, I, A](val as: F)(implicit index: Indexed[F, I, A]) {
   def at(i: I) = index.at(as)(i)
 }
 
-final class MapReducibleOps[M, A, B, K](val as: M)(implicit mr: MapReducible[M, A, B, K]) {
+final class MapReducibleOps[M, A, B, K, G](val as: M)(implicit mr: MapReducible[M, A, B, K, G]) {
 
-  def mapReduce(mapper: A => (K, B), zero: B, op: (B, B) => B) =
+  def mapReduce(mapper: A => (K, B), zero: B, op: (B, B) => B): G =
     mr.mapReduce(as, mapper, zero, op)
 }
 

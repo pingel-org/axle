@@ -88,7 +88,7 @@ trait IndexedSyntax {
 
 trait MapReducibleSyntax {
 
-  implicit def mapReducibleOps[F, A, B, K](fa: F)(implicit mr: MapReducible[F, A, B, K]) =
+  implicit def mapReducibleOps[F, A, B, K, G](fa: F)(implicit mr: MapReducible[F, A, B, K, G]) =
     new MapReducibleOps(fa)
 }
 
