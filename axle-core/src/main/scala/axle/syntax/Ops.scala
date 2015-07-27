@@ -11,6 +11,7 @@ import axle.algebra.MapFrom
 import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
+import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
 import axle.algebra.Zero
 import scala.reflect.ClassTag
@@ -231,8 +232,10 @@ final class AggregatableOps[G, A, B](val ts: G)(implicit agg: Aggregatable[G, A,
 
   def aggregate(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B) =
     agg.aggregate(ts)(zeroValue)(seqOp, combOp)
+}
 
-  def tally[N: Ring](implicit aEq: Eq[A]) = agg.tally(ts)
+final class TallyOps[F, T, N](val ts: F)(implicit talliable: Talliable[F, T, N]) {
+  def tally = talliable.tally(ts)
 }
 
 final class FiniteOps[F, S, A](val as: F)(implicit finite: Finite[F, S]) {
