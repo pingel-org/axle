@@ -20,13 +20,13 @@ package object jung {
     import spire.implicits.IntAlgebra
     import spire.implicits.eqOps
 
-    def make[V, E](vertices: Seq[V], ef: Seq[V] => Seq[(V, V, E)]): DirectedSparseGraph[V, E] = {
+    def make[V, E](vertices: Seq[V], ef: Seq[(V, V, E)]): DirectedSparseGraph[V, E] = {
 
       val jdsg = new DirectedSparseGraph[V, E]
 
       vertices foreach { jdsg.addVertex } // TODO check return value
 
-      ef(vertices) foreach {
+      ef foreach {
         case (vi, vj, e) => {
           jdsg.addEdge(e, vi, vj) // TODO check return value
         }
@@ -57,7 +57,7 @@ package object jung {
     def filterEdges[V, E](jdsg: DirectedSparseGraph[V, E], f: E => Boolean): DirectedSparseGraph[V, E] =
       make(
         vertices(jdsg).toSeq,
-        (es: Seq[V]) => edges(jdsg).filter(f).toList.map({ case e => (source(jdsg, e), destination(jdsg, e), e) }))
+        edges(jdsg).filter(f).toList.map({ case e => (source(jdsg, e), destination(jdsg, e), e) }))
 
     def areNeighbors[V: Eq, E](jdg: DirectedSparseGraph[V, E], v1: V, v2: V): Boolean =
       edgesTouching(jdg, v1).exists(edge => connects(jdg, edge, v1, v2))
@@ -72,7 +72,7 @@ package object jung {
 
     def forceClique[V: Eq: Manifest, E](jdsg: DirectedSparseGraph[V, E], among: Set[V], payload: (V, V) => E): DirectedSparseGraph[V, E] = {
 
-      val cliqued = (newVs: Seq[V]) => {
+      val cliqued = {
 
         val old2new: Map[V, V] = ??? // TODO _vertices.zip(newVs).toMap
 
@@ -130,7 +130,7 @@ package object jung {
 
     def map[V, E, NV, NE](jdsg: DirectedSparseGraph[V, E], vpf: V => NV, epf: E => NE): DirectedSparseGraph[NV, NE] =
       make(vertices(jdsg).map(vpf).toList,
-        (newVs: Seq[NV]) => ???)
+        ???)
 
     def leaves[V: Eq, E](jdsg: DirectedSparseGraph[V, E]): Set[V] =
       vertices(jdsg).filter(v => isLeaf(jdsg, v)).toSet
@@ -190,13 +190,13 @@ package object jung {
     import spire.implicits.IntAlgebra
     import spire.implicits.eqOps
 
-    def make[V, E](vertices: Seq[V], ef: Seq[V] => Seq[(V, V, E)]): UndirectedSparseGraph[V, E] = {
+    def make[V, E](vertices: Seq[V], ef: Seq[(V, V, E)]): UndirectedSparseGraph[V, E] = {
 
       val jusg = new UndirectedSparseGraph[V, E]
 
       vertices foreach { jusg.addVertex } // TODO check return value
 
-      ef(vertices) foreach {
+      ef foreach {
         case (vi, vj, e) =>
           jusg.addEdge(e, vi, vj) // TODO check return value
       }
@@ -225,7 +225,7 @@ package object jung {
     def filterEdges[V, E](jusg: UndirectedSparseGraph[V, E], f: E => Boolean): UndirectedSparseGraph[V, E] =
       make(
         vertices(jusg).toSeq,
-        (es: Seq[V]) => edges(jusg).filter(f).toList.map({
+        edges(jusg).filter(f).toList.map({
           case e => {
             val pair = vertices(jusg, e)
             (pair._1, pair._2, e)
@@ -256,7 +256,7 @@ package object jung {
 
     def forceClique[V: Eq: Manifest, E](jug: UndirectedSparseGraph[V, E], among: Set[V], payload: (V, V) => E): UndirectedSparseGraph[V, E] = {
 
-      val cliqued = (newVs: Seq[V]) => {
+      val cliqued = {
 
         val old2new: Map[V, V] = ??? // TODO _vertices.zip(newVs).toMap
 
@@ -321,7 +321,7 @@ package object jung {
 
     def map[V, E, NV, NE](jusg: UndirectedSparseGraph[V, E], vpf: V => NV, epf: E => NE): UndirectedSparseGraph[NV, NE] =
       make(vertices(jusg).map(vpf).toList,
-        (newVs: Seq[NV]) => ???)
+        ???)
 
   }
 

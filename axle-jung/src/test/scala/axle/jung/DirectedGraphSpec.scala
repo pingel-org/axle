@@ -17,17 +17,19 @@ class DirectedGraphSpec extends Specification {
 
       class Edge
 
-      val g = jdg.make[String, Edge](List("a", "b", "c", "d"),
-        (vs: Seq[String]) => vs match {
-          case a :: b :: c :: d :: Nil => List(
-            (a, b, new Edge),
-            (b, c, new Edge),
-            (c, d, new Edge),
-            (d, a, new Edge),
-            (a, c, new Edge),
-            (b, d, new Edge))
-          case _ => Nil
-        })
+      val a = "a"
+      val b = "b"
+      val c = "c"
+      val d = "d"
+
+      val g = jdg.make[String, Edge](List(a, b, c, d),
+        List(
+          (a, b, new Edge),
+          (b, c, new Edge),
+          (c, d, new Edge),
+          (d, a, new Edge),
+          (a, c, new Edge),
+          (b, d, new Edge)))
 
       g.size must be equalTo 4
     }
@@ -38,15 +40,17 @@ class DirectedGraphSpec extends Specification {
 
       class Edge(weight: Double)
 
-      val g = jdg.make[String, Edge](List("a", "b", "c", "d"),
-        (vs: Seq[String]) => vs match {
-          case a :: b :: c :: d :: Nil => List(
-            (a, b, new Edge(0.3)),
-            (a, c, new Edge(0.2)),
-            (b, c, new Edge(0.4)),
-            (c, d, new Edge(2.4)))
-          case _ => Nil
-        })
+      val a = "a"
+      val b = "b"
+      val c = "c"
+      val d = "d"
+
+      val g = jdg.make[String, Edge](List(a, b, c, d),
+        List(
+          (a, b, new Edge(0.3)),
+          (a, c, new Edge(0.2)),
+          (b, c, new Edge(0.4)),
+          (c, d, new Edge(2.4))))
 
       1 must be equalTo (1)
     }

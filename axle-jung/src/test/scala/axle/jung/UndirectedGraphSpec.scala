@@ -14,17 +14,19 @@ class UndirectedGraphSpec extends Specification {
 
       class Edge
 
-      val g = jug.make[String, Edge](List("a", "b", "c", "d"),
-        (vs: Seq[String]) => vs match {
-          case a :: b :: c :: d :: Nil => List(
-            (a, b, new Edge),
-            (b, c, new Edge),
-            (c, d, new Edge),
-            (d, a, new Edge),
-            (a, c, new Edge),
-            (b, d, new Edge))
-          case _ => Nil
-        })
+      val a = "a"
+      val b = "b"
+      val c = "c"
+      val d = "d"
+
+      val g = jug.make[String, Edge](List(a, b, c, d),
+        List(
+          (a, b, new Edge),
+          (b, c, new Edge),
+          (c, d, new Edge),
+          (d, a, new Edge),
+          (a, c, new Edge),
+          (b, d, new Edge)))
 
       jug.size(g) must be equalTo (4)
     }
@@ -37,7 +39,7 @@ class UndirectedGraphSpec extends Specification {
 
       val g = jug.make[String, Real](
         List("a"),
-        (vs: Seq[String]) => Nil)
+        Nil)
 
       1 must be equalTo (1)
     }

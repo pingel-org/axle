@@ -33,7 +33,7 @@ object Angluin {
 
   case class AngluinAcceptor[DG[_, _]: DirectedGraph](vps: Seq[String], I: Set[String], F: Set[String]) {
 
-    val graph = directedGraph[DG, String, Symbol](vps, vs => Nil)
+    val graph = directedGraph[DG, String, Symbol](vps, Nil)
 
     def Q: Set[String] = graph.vertices.toSet
 

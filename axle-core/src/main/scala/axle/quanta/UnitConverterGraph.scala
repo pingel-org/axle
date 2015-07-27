@@ -13,7 +13,7 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
 
   private def conversions(
     vps: Seq[UnitOfMeasurement[Q]],
-    ef: Seq[UnitOfMeasurement[Q]] => Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], N => N)])(
+    ef: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], N => N)])(
       implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q], N => N] =
     evDG.make[UnitOfMeasurement[Q], N => N](vps, ef)
 
@@ -22,12 +22,12 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
     links: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], Bijection[N, N])]): CG[Q, DG, N] =
     conversions(
       units,
-      (vs: Seq[UnitOfMeasurement[Q]]) => {
-        val name2vertex = vs.map(v => (v.name, v)).toMap
+      {
+        val name2uom = units.map(u => (u.name, u)).toMap
         links.flatMap({
           case (x, y, bijection) => {
-            val xv = name2vertex(x.name)
-            val yv = name2vertex(y.name)
+            val xv = name2uom(x.name)
+            val yv = name2uom(y.name)
             List((xv, yv, bijection.apply _), (yv, xv, bijection.unapply _))
           }
         })

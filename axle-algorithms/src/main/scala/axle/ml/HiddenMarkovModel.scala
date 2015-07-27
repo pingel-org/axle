@@ -61,7 +61,7 @@ case class HiddenMarkovModel[DG[_, _]: DirectedGraph](
 
   val graph = directedGraph[DG, MarkovModelState, HMMEdge[Double]](
     states ++ observations ++ List(startState),
-    (vs: Seq[MarkovModelState]) => {
+    {
       val startEdges = startProbability.map({ case (dest, p) => (startState, dest, new HMMEdge(p)) })
       val stateEdges = transitionProbability.flatMap({ case (from, toMap) => toMap.map({ case (to, p) => (from, to, new HMMEdge(p)) }) })
       val emissionEdges = emissionProbability.flatMap({ case (from, toMap) => toMap.map({ case (to, p) => (from, to, new HMMEdge(p)) }) })

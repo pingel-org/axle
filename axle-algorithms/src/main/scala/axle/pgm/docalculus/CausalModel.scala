@@ -55,6 +55,6 @@ case class CausalModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](
 object CausalModel {
 
   def apply[T: Eq, N: Field, DG[_, _]: DirectedGraph](name: String, vps: Seq[CausalModelNode[T, N]]): CausalModel[T, N, DG] =
-    CausalModel(name, DirectedGraph[DG].make[CausalModelNode[T, N], String](vps, vs => Nil))
+    CausalModel(name, DirectedGraph[DG].make[CausalModelNode[T, N], String](vps, Nil))
 
 }
