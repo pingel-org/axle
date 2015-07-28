@@ -18,8 +18,8 @@ import org.scalacheck.Prop._
 import axle.algebra.laws._
 
 class FunctorLawsSpec
-  extends Specification
-  with Discipline {
+    extends Specification
+    with Discipline {
 
   implicit def eqF1AB[A: Arbitrary, B: Eq]: Eq[A => B] =
     new Eq[A => B] {
@@ -33,16 +33,17 @@ class FunctorLawsSpec
       }
     }
 
-  checkAll("List[Int]", FunctorLaws[List, Int].functorIdentity)
-  checkAll("List[String]", FunctorLaws[List, String].functorIdentity)
-  checkAll("Option[Int]", FunctorLaws[Option, Int].functorIdentity)
-  checkAll("List[String]", FunctorLaws[List, String].functorIdentity)
-  checkAll("Function1[Int, Int]", FunctorLaws[({ type λ[α] = Int => α })#λ, Int].functorIdentity)
+  checkAll("List[Int]", FunctorLaws[List[Int], Int].functorIdentity)
+  checkAll("List[String]", FunctorLaws[List[String], String].functorIdentity)
+  checkAll("Option[Int]", FunctorLaws[Option[Int], Int].functorIdentity)
+  checkAll("List[String]", FunctorLaws[List[String], String].functorIdentity)
+  checkAll("Function1[Int, Int]", FunctorLaws[Int => Int, Int].functorIdentity)
+  //({ type λ[α] = Int => α })#λ
 
-  checkAll("List[Int]", FunctorLaws[List, Int].functorComposition[Int, Int])
-  checkAll("List[String]", FunctorLaws[List, String].functorComposition[String, String])
-  checkAll("Option[Int]", FunctorLaws[Option, Int].functorComposition[Int, Int])
-  checkAll("List[String]", FunctorLaws[List, String].functorComposition[String, String])
-  checkAll("Function1[Int, Int]", FunctorLaws[({ type λ[α] = Int => α })#λ, Int].functorComposition[Int, Int])
+  checkAll("List[Int]", FunctorLaws[List[Int], Int].functorComposition[Int, Int, List[Int], List[Int]])
+  checkAll("List[String]", FunctorLaws[List[String], String].functorComposition[String, String, List[String], List[String]])
+  checkAll("Option[Int]", FunctorLaws[Option[Int], Int].functorComposition[Int, Int, Option[Int], Option[Int]])
+  checkAll("List[String]", FunctorLaws[List[String], String].functorComposition[String, String, List[String], List[String]])
+  checkAll("Function1[Int, Int]", FunctorLaws[Int => Int, Int].functorComposition[Int, Int, Int => Int, Int => Int])
 
 }

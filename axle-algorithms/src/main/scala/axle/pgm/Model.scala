@@ -7,6 +7,7 @@ import spire.algebra.Field
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 import axle.syntax.directedgraph._
+import axle.syntax.finite._
 
 object Direction {
 
