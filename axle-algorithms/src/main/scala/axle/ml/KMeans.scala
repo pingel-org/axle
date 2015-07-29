@@ -3,7 +3,6 @@ package axle.ml
 import scala.Vector
 import scala.collection.immutable.TreeMap
 import scala.util.Random.shuffle
-import scala.reflect.ClassTag
 
 import axle.algebra.LinearAlgebra
 import axle.algebra.Aggregatable
@@ -41,8 +40,8 @@ import spire.implicits._
  *
  */
 
-case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor, M](
-  data: F[T],
+case class KMeans[T: Eq, F, M](
+  data: F,
   N: Int,
   featureExtractor: T => Seq[Double],
   normalizerMaker: M => Normalize[M],
@@ -50,10 +49,12 @@ case class KMeans[T: Eq: ClassTag, F[_]: Aggregatable: Functor, M](
   K: Int,
   iterations: Int)(
     implicit space: MetricSpace[M, Double],
+    agg: Aggregatable[F],
+    functor: Functor[F],
     val la: LinearAlgebra[M, Int, Int, Double],
-    index: Indexed[F, Int],
+    index: Indexed[F, Int, T],
     finite: Finite[F, Int])
-  extends Function1[T, Int] {
+    extends Function1[T, Int] {
 
   val features = data.map(featureExtractor)
 

@@ -27,16 +27,17 @@ import spire.math._
 import spire.implicits._
 import spire.syntax._
 import axle.stats.P
-import scala.reflect.ClassTag
 import axle.algebra._
 
-case class NaiveBayesClassifier[DATA: ClassTag, FEATURE: Order, CLASS: Order: Eq: ClassTag, F[_]: Aggregatable: Functor](
+case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F](
   data: F[DATA],
   featureRandomVariables: List[Distribution[FEATURE, Rational]],
   classRandomVariable: Distribution[CLASS, Rational],
   featureExtractor: DATA => List[FEATURE],
-  classExtractor: DATA => CLASS)
-  extends Function1[DATA, CLASS] {
+  classExtractor: DATA => CLASS)(
+    implicit agg: Aggregatable[F],
+    functor: Functor[F])
+    extends Function1[DATA, CLASS] {
 
   import axle._
 

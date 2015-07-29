@@ -124,13 +124,13 @@ object NeedlemanWunsch {
    *
    */
 
-  def computeF[I: Ring, S[_], N: ClassTag, M, V: AdditiveMonoid: Order](
-    A: S[N],
-    B: S[N],
+  def computeF[I: Ring, S, N: ClassTag, M, V: AdditiveMonoid: Order](
+    A: S,
+    B: S,
     similarity: (N, N) => V,
     gapPenalty: V)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I],
+      indexed: Indexed[S, I, N],
       finite: Finite[S, I],
       module: Module[V, I]): M = {
 
