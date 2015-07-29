@@ -19,13 +19,18 @@ import spire.algebra._
 import scala.reflect.ClassTag
 import math.{ ceil, log10 }
 
-case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: Functor: SetFrom: MapReducible: MapFrom, M](
-  classifier: Function1[T, CLASS],
-  data: F[T],
-  labelExtractor: T => L,
-  classes: IndexedSeq[CLASS])(
-    implicit val la: LinearAlgebra[M, Int, Int, Double],
-    finite: Finite[F, Int]) {
+case class ConfusionMatrix[T, CLASS: Order, L: Order, F, M, G, H](
+    classifier: Function1[T, CLASS],
+    data: F,
+    labelExtractor: T => L,
+    classes: IndexedSeq[CLASS])(
+        implicit val la: LinearAlgebra[M, Int, Int, Double],
+        finite: Finite[F, Int],
+        functorF: Functor[F, T, (L, CLASS), G],
+        functorG: Functor[G, (L, CLASS), L, H],
+        sf: SetFrom[H],
+        mr: MapReducible[F],
+        mf: MapFrom[F]) {
 
   val label2clusterId = data.map(datum => (labelExtractor(datum), classifier(datum)))
 
@@ -55,10 +60,10 @@ case class ConfusionMatrix[T: ClassTag, CLASS: Order, L: Order: ClassTag, F[_]: 
 
 object ConfusionMatrix {
 
-  implicit def showCM[T, CLASS, L, F[_], M](implicit la: LinearAlgebra[M, Int, Int, Double]): Show[ConfusionMatrix[T, CLASS, L, F, M]] =
-    new Show[ConfusionMatrix[T, CLASS, L, F, M]] {
+  implicit def showCM[T, CLASS, L, F, M, G](implicit la: LinearAlgebra[M, Int, Int, Double]): Show[ConfusionMatrix[T, CLASS, L, F, M, G]] =
+    new Show[ConfusionMatrix[T, CLASS, L, F, M, G]] {
 
-      def text(cm: ConfusionMatrix[T, CLASS, L, F, M]): String = {
+      def text(cm: ConfusionMatrix[T, CLASS, L, F, M, G]): String = {
         (cm.labelList.zipWithIndex.map({
           case (label, r) => ((0 until cm.counts.columns).map(c => cm.formatNumber(cm.counts.get(r, c).toInt)).mkString(" ") + " : " + cm.formatNumber(cm.rowSums.get(r, 0).toInt) + " " + label + "\n")
         }).mkString("")) + "\n" +

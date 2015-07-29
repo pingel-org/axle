@@ -43,12 +43,14 @@ import spire.compat.ordering
  *
  */
 
-case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor](
-  data: F[DATA],
-  retrieve: DATA => Boolean,
-  relevant: DATA => Boolean) {
+case class ClassifierPerformance[N, DATA, F, G](
+    data: F,
+    retrieve: DATA => Boolean,
+    relevant: DATA => Boolean)(
+        implicit functor: Functor[F, DATA, (N, N, N, N), G],
+        agg: Aggregatable[G, (N, N, N, N), (N, N, N, N)],
+        field: Field[N]) {
 
-  val field = Field[N]
   import field._
 
   val scores = data.map { d =>
@@ -60,7 +62,7 @@ case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor](
     }
   }
 
-  val (tp, fp, fn, tn) = Σ(scores)
+  val (tp, fp, fn, tn) = Σ[(N, N, N, N), G](scores)
 
   val precision: N = tp / (tp + fp)
 
@@ -79,10 +81,10 @@ case class ClassifierPerformance[N: Field, DATA, F[_]: Aggregatable: Functor](
 
 object ClassifierPerformance {
 
-  implicit def showCP[N, DATA, F[_]]: Show[ClassifierPerformance[N, DATA, F]] =
-    new Show[ClassifierPerformance[N, DATA, F]] {
+  implicit def showCP[N, DATA, F, G]: Show[ClassifierPerformance[N, DATA, F, G]] =
+    new Show[ClassifierPerformance[N, DATA, F, G]] {
 
-      def text(cp: ClassifierPerformance[N, DATA, F]): String = {
+      def text(cp: ClassifierPerformance[N, DATA, F, G]): String = {
         import cp._
         s"""Precision   $precision
 Recall      $recall
