@@ -254,14 +254,14 @@ final class MapReducibleOps[M, A, B, K, G](val as: M)(implicit mr: MapReducible[
     mr.mapReduce(as, mapper, zero, op)
 }
 
-final class SetFromOps[F[_]: SetFrom, A: ClassTag](val as: F[A]) {
+final class SetFromOps[F[_]: SetFrom, A](val as: F[A]) {
 
   val ev = SetFrom[F]
 
   def toSet = ev.toSet(as)
 }
 
-final class MapFromOps[F[_]: MapFrom, K: ClassTag, V: ClassTag](val fkv: F[(K, V)]) {
+final class MapFromOps[F[_]: MapFrom, K, V](val fkv: F[(K, V)]) {
 
   val ev = MapFrom[F]
 

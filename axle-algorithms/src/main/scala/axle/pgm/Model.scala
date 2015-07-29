@@ -6,6 +6,7 @@ import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
+import axle.algebra.Finite
 import axle.syntax.directedgraph._
 import axle.syntax.finite._
 
@@ -17,7 +18,9 @@ object Direction {
 
 }
 
-case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](graph: DG[Distribution[T, N], String]) {
+case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](
+    graph: DG[Distribution[T, N], Edge])(
+        implicit finiteDG: Finite[DG[Distribution[T, N], Edge], Int]) {
 
   def vertexPayloadToDistribution(mvp: T): Distribution[T, N] = ???
 

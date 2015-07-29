@@ -74,8 +74,8 @@ trait AggregatableSyntax {
 
 trait FiniteSyntax {
 
-  implicit def finiteOps[F[_], S, A: ClassTag](fa: F[A])(
-    implicit finite: Finite[F[A], S]) =
+  implicit def finiteOps[F, S, A](fa: F)(
+    implicit finite: Finite[F, S]) =
     new FiniteOps(fa)
 }
 
@@ -94,12 +94,12 @@ trait MapReducibleSyntax {
 
 trait SetFromSyntax {
 
-  implicit def setFromOps[F[_]: SetFrom, A: ClassTag](fa: F[A]) =
+  implicit def setFromOps[F[_]: SetFrom, A](fa: F[A]) =
     new SetFromOps(fa)
 }
 
 trait MapFromSyntax {
 
-  implicit def mapFromOps[F[_]: MapFrom, K: ClassTag, V: ClassTag](fkv: F[(K, V)]) =
+  implicit def mapFromOps[F[_]: MapFrom, K, V](fkv: F[(K, V)]) =
     new MapFromOps(fkv)
 }
