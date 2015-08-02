@@ -20,15 +20,21 @@ package object jung {
 
   implicit def vertexFunctorDSG[V, E, NV]: Functor[DirectedSparseGraph[V, E], V, NV, DirectedSparseGraph[NV, E]] =
     new Functor[DirectedSparseGraph[V, E], V, NV, DirectedSparseGraph[NV, E]] {
-      def map[A, B: ClassTag](jdsg: DirectedSparseGraph[A, E])(f: A => B): DirectedSparseGraph[B, E] = {
-        directedGraphJung.make(jdsg.getVertices.asScala.map(f).toList, 42)
+
+      def map(jdsg: DirectedSparseGraph[V, E])(f: V => NV): DirectedSparseGraph[NV, E] = {
+        directedGraphJung.make(
+          jdsg.getVertices.asScala.map(f).toList,
+          42)
       }
     }
 
   implicit def edgeFunctorDSG[V, E, NE]: Functor[DirectedSparseGraph[V, E], E, NE, DirectedSparseGraph[V, NE]] =
     new Functor[DirectedSparseGraph[V, E], E, NE, DirectedSparseGraph[V, NE]] {
-      def map[A, B: ClassTag](jdsg: DirectedSparseGraph[V, A])(f: A => B): DirectedSparseGraph[V, B] = {
-        directedGraphJung.make(jdsg.getVertices.asScala.toList, 42)
+
+      def map(jdsg: DirectedSparseGraph[V, E])(f: E => NE): DirectedSparseGraph[V, NE] = {
+        directedGraphJung.make(
+          jdsg.getVertices.asScala.toList,
+          42)
       }
     }
 
@@ -207,15 +213,20 @@ package object jung {
 
   implicit def vertexFunctorUDSG[V, E, NV]: Functor[UndirectedSparseGraph[V, E], V, NV, UndirectedSparseGraph[NV, E]] =
     new Functor[UndirectedSparseGraph[V, E], V, NV, UndirectedSparseGraph[NV, E]] {
-      def map[A, B: ClassTag](jusg: UndirectedSparseGraph[A, E])(f: A => B): UndirectedSparseGraph[B, E] = {
-        undirectedGraphJung.make(jusg.getVertices.asScala.map(f).toList, 42)
+
+      def map(jusg: UndirectedSparseGraph[V, E])(f: V => NV): UndirectedSparseGraph[NV, E] = {
+        undirectedGraphJung.make(
+          jusg.getVertices.asScala.map(f).toList,
+          42)
       }
     }
 
   implicit def edgeFunctorUDSG[V, E, NE]: Functor[UndirectedSparseGraph[V, E], E, NE, UndirectedSparseGraph[V, NE]] =
     new Functor[UndirectedSparseGraph[V, E], E, NE, UndirectedSparseGraph[V, NE]] {
-      def map[A, B: ClassTag](jusg: UndirectedSparseGraph[V, A])(f: A => B): UndirectedSparseGraph[V, B] = {
-        undirectedGraphJung.make(jusg.getVertices.asScala.toList, 42)
+      def map(jusg: UndirectedSparseGraph[V, E])(f: E => NE): UndirectedSparseGraph[V, NE] = {
+        undirectedGraphJung.make(
+          jusg.getVertices.asScala.toList,
+          42)
       }
     }
 
