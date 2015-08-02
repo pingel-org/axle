@@ -1,6 +1,8 @@
 language: scala
+
 scala:
   - 2.11.7
+
 cache:
   directories:
     - $HOME/.m2
@@ -8,7 +10,11 @@ cache:
 jdk:
   - oraclejdk7
   - openjdk7
-script: "cd core; sbt ++$TRAVIS_SCALA_VERSION test"
+
+# script: "cd core; sbt ++$TRAVIS_SCALA_VERSION test"
+
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport && bash <(curl -s https://codecov.io/bash)
 
 notifications:
   webhooks:
