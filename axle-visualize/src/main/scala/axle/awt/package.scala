@@ -168,9 +168,9 @@ package object awt {
     }
   }
 
-  implicit def drawKMeansClasifier[T, F[_], M]: Draw[KMeans[T, F, M]] =
-    new Draw[KMeans[T, F, M]] {
-      def component(kmc: KMeans[T, F, M]) = KMeansComponent(KMeansVisualization(kmc))
+  implicit def drawKMeansClasifier[T, F, G, M]: Draw[KMeans[T, F, G, M]] =
+    new Draw[KMeans[T, F, G, M]] {
+      def component(kmc: KMeans[T, F, G, M]) = KMeansComponent(KMeansVisualization(kmc))
     }
 
   /**

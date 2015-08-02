@@ -247,10 +247,10 @@ object SVG {
       }
     }
 
-  implicit def svgKMeans[D, F[_], M]: SVG[KMeans[D, F, M]] =
-    new SVG[KMeans[D, F, M]] {
+  implicit def svgKMeans[D, F, G, M]: SVG[KMeans[D, F, G, M]] =
+    new SVG[KMeans[D, F, G, M]] {
 
-      def svg(kmeans: KMeans[D, F, M]): NodeSeq = {
+      def svg(kmeans: KMeans[D, F, G, M]): NodeSeq = {
 
         import kmeans._
         val vis = KMeansVisualization(kmeans)
