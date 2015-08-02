@@ -14,9 +14,17 @@ import sbtrelease.Utilities._
 import com.typesafe.sbt.pgp.PgpKeys
 import com.typesafe.sbt.pgp.PgpKeys._
 
+import scoverage.ScoverageSbtPlugin._
+
 object AxleBuild extends Build {
 
-  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
+  lazy val scoverageSettings = Seq(
+    ScoverageKeys.coverageMinimum := 10,
+    ScoverageKeys.coverageFailOnMinimum := false,
+    ScoverageKeys.coverageHighlighting := true
+  )
+
+  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ scoverageSettings ++ Seq(
 
     organization := "org.axle-lang",
 
