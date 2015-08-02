@@ -10,9 +10,9 @@ trait Zipper[Z, A, ZZ] {
 
 object Zipper {
 
-  implicit def zipperK1[M[_], A]: Zipper[M[A], A, M[(A, A)]] =
-    implicitly[Zipper[M[A], A, M[(A, A)]]]
-
+//  implicit def zipperK1[M[_], A]: Zipper[M[A], A, M[(A, A)]] =
+//    implicitly[Zipper[M[A], A, M[(A, A)]]]
+//
   type ZipperK1[M[_], A] = Zipper[M[A], A, M[(A, A)]]
 
   def apply[Z, A, ZZ](implicit zipper: Zipper[Z, A, ZZ]): Zipper[Z, A, ZZ] =
@@ -28,7 +28,7 @@ object Zipper {
         zipped.unzip
     }
 
-  implicit def zipIndexedSeq[A] =
+  implicit def zipIndexedSeq[A]: ZipperK1[IndexedSeq, A] =
     new Zipper[IndexedSeq[A], A, IndexedSeq[(A, A)]] {
 
       def zip(left: IndexedSeq[A], right: IndexedSeq[A]): IndexedSeq[(A, A)] =

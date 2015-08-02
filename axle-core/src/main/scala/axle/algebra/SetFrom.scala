@@ -3,7 +3,7 @@ package axle.algebra
 import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for SetFrom[${C}]")
+@implicitNotFound("Witness not found for SetFrom[${C}, ${A}]")
 trait SetFrom[C, A] {
 
   def toSet(t: C): Set[A]

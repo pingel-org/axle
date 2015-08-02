@@ -98,9 +98,9 @@ object NeedlemanWunsch {
     gap: N,
     similarity: (N, N) => V,
     gapPenalty: V)(
-      implicit indexed: Indexed[S, I, V],
+      implicit indexed: Indexed[S, I, N],
       finite: Finite[S, I],
-      zipper: Zipper[S, V, SS],
+      zipper: Zipper[S, N, SS],
       functor: Functor[SS, (N, N), V, G],
       agg: Aggregatable[G, V, V]): V = {
 
@@ -226,11 +226,11 @@ object NeedlemanWunsch {
 
 }
 
-case class NeedlemanWunschMetricSpace[S, C: Eq, M, I: Ring: Order, V: AdditiveMonoid: Order](
-  similarity: (C, C) => V,
+case class NeedlemanWunschMetricSpace[S, N: Eq, M, I: Ring: Order, V: AdditiveMonoid: Order](
+  similarity: (N, N) => V,
   gapPenalty: V)(
     implicit la: LinearAlgebra[M, I, I, V],
-    indexed: Indexed[S, I, C],
+    indexed: Indexed[S, I, N],
     finite: Finite[S, I],
     module: Module[V, I])
     extends MetricSpace[S, V] {

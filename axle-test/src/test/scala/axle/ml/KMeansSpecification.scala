@@ -107,7 +107,7 @@ class KMeansSpecification
 
       val irisConstructor = (features: Seq[Double]) => Iris(1 *: cm, 1 *: cm, 1 *: cm, 1 *: cm, "")
 
-      val classifier = KMeans[Iris, List, DoubleMatrix](
+      val classifier = KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix](
         irises,
         N = 2,
         irisFeaturizer,

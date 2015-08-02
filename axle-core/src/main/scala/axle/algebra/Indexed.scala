@@ -4,7 +4,7 @@ import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 import scala.collection.parallel.immutable.ParSeq
 
-@implicitNotFound("Witness not found for Indexed[${C}, ${I}]")
+@implicitNotFound("Witness not found for Indexed[${C}, ${I}, ${A}]")
 trait Indexed[C, I, A] {
 
   def at(xs: C)(i: I): A

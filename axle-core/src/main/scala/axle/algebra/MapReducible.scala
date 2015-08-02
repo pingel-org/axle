@@ -3,7 +3,7 @@ package axle.algebra
 import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for MapReducible[${M}]")
+@implicitNotFound("Witness not found for MapReducible[${M}, ${A}, ${B}, ${K}, ${G}]")
 trait MapReducible[M, A, B, K, G] {
 
   def mapReduce(

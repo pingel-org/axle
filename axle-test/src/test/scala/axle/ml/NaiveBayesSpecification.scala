@@ -45,7 +45,7 @@ object NaiveBayesSpecification extends Specification {
 
       // data map { datum => datum.toString + "\t" + classifier(datum) } mkString ("\n")
 
-      val performance = ClassifierPerformance[Rational, Tennis, List](
+      val performance = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
         data,
         classifier,
         _.play)

@@ -11,7 +11,7 @@ import spire.implicits.additiveSemigroupOps
 
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for Aggregatable[${F}]")
+@implicitNotFound("Witness not found for Aggregatable[${F}, ${A}, ${B}]")
 trait Aggregatable[F, A, B] {
 
   def aggregate(xs: F)(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B

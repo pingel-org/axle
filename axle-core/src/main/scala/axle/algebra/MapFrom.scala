@@ -3,7 +3,7 @@ package axle.algebra
 import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for MapFrom[${C}]")
+@implicitNotFound("Witness not found for MapFrom[${C}, ${K}, ${V}]")
 trait MapFrom[C, K, V] {
 
   def toMap(t: C): Map[K, V]
