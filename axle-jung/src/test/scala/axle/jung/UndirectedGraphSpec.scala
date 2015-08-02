@@ -4,6 +4,7 @@ import axle.algebra.UndirectedGraph
 import org.specs2.mutable._
 import spire.math._
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
+import axle.syntax.finite._
 
 class UndirectedGraphSpec extends Specification {
 
@@ -28,7 +29,7 @@ class UndirectedGraphSpec extends Specification {
           (a, c, new Edge),
           (b, d, new Edge)))
 
-      jug.size(g) must be equalTo (4)
+      g.size must be equalTo 4
     }
   }
 
