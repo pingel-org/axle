@@ -40,7 +40,7 @@ import spire.implicits._
  *
  */
 
-case class KMeans[T: Eq, F, M](
+case class KMeans[T: Eq, F, G, M](
   data: F,
   N: Int,
   featureExtractor: T => Seq[Double],
@@ -49,10 +49,9 @@ case class KMeans[T: Eq, F, M](
   K: Int,
   iterations: Int)(
     implicit space: MetricSpace[M, Double],
-    agg: Aggregatable[F],
-    functor: Functor[F],
+    functor: Functor[F, T, Seq[Double], G],
     val la: LinearAlgebra[M, Int, Int, Double],
-    index: Indexed[F, Int, T],
+    index: Indexed[G, Int, Seq[Double]],
     finite: Finite[F, Int])
     extends Function1[T, Int] {
 

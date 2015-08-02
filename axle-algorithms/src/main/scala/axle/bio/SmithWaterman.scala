@@ -4,7 +4,6 @@ import scala.Vector
 import scala.collection.immutable.Stream
 import scala.collection.immutable.Stream.cons
 import scala.collection.immutable.Stream.empty
-import scala.reflect.ClassTag
 
 import axle.algebra.LinearAlgebra
 import axle.algebra.Finite
@@ -62,13 +61,13 @@ object SmithWaterman {
    *
    */
 
-  def computeH[S[_], C: ClassTag, M, I: Ring, V: Ring: Order](
-    A: S[C],
-    B: S[C],
+  def computeH[S, C, M, I: Ring, V: Ring: Order](
+    A: S,
+    B: S,
     w: (C, C, V) => V,
     mismatchPenalty: V)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I],
+      indexed: Indexed[S, I, C],
       finite: Finite[S, I]): M = {
 
     val iOne = Ring[I].one
@@ -87,17 +86,17 @@ object SmithWaterman {
         left + mismatchPenalty).max)
   }
 
-  def alignStep[S[_], C: ClassTag, M, I: Ring: Order, V: Ring: Order: Eq](
+  def alignStep[S, C, M, I: Ring: Order, V: Ring: Order: Eq](
     i: I,
     j: I,
-    A: S[C],
-    B: S[C],
+    A: S,
+    B: S,
     w: (C, C, V) => V,
     H: M,
     mismatchPenalty: V,
     gap: C)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I]): (C, C, I, I) = {
+      indexed: Indexed[S, I, C]): (C, C, I, I) = {
 
     val iZero = Ring[I].zero
     val iOne = Ring[I].one
@@ -112,17 +111,17 @@ object SmithWaterman {
     }
   }
 
-  def _optimalAlignment[S[_], C: ClassTag, M, I: Ring: Order, V: Ring: Order](
+  def _optimalAlignment[S, C, M, I: Ring: Order, V: Ring: Order](
     i: I,
     j: I,
-    A: S[C],
-    B: S[C],
+    A: S,
+    B: S,
     w: (C, C, V) => V,
     mismatchPenalty: V,
     gap: C,
     H: M)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I]): Stream[(C, C)] =
+      indexed: Indexed[S, I, C]): Stream[(C, C)] =
     if (i > 0 || j > 0) {
       val (preA, preB, newI, newJ) = alignStep[S, C, M, I, V](i, j, A, B, w, H, mismatchPenalty, gap)
       cons((preA, preB), _optimalAlignment[S, C, M, I, V](newI, newJ, A, B, w, mismatchPenalty, gap, H))
@@ -130,16 +129,16 @@ object SmithWaterman {
       empty
     }
 
-  def optimalAlignment[S[_], C: ClassTag, M, I: Ring: Order, V: Ring: Order](
-    A: S[C],
-    B: S[C],
+  def optimalAlignment[S, C, M, I: Ring: Order, V: Ring: Order](
+    A: S,
+    B: S,
     w: (C, C, V) => V,
     mismatchPenalty: V,
     gap: C)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I],
+      indexed: Indexed[S, I, C],
       finite: Finite[S, I],
-      fs: FromStream[S]): (S[C], S[C]) = {
+      fs: FromStream[S, C]): (S, S) = {
 
     val H = computeH[S, C, M, I, V](A, B, w, mismatchPenalty)
 
@@ -150,14 +149,14 @@ object SmithWaterman {
 
 }
 
-case class SmithWatermanMetricSpace[S[_], C: ClassTag, M, I: Ring, V: Ring: Order](
+case class SmithWatermanMetricSpace[S, C, M, I: Ring, V: Ring: Order](
     w: (C, C, V) => V,
     mismatchPenalty: V)(
         implicit la: LinearAlgebra[M, I, I, V],
         finite: Finite[S, I],
-        indexed: Indexed[S, I]) extends MetricSpace[S[C], V] {
+        indexed: Indexed[S, I, C]) extends MetricSpace[S, V] {
 
-  def distance(s1: S[C], s2: S[C]): V = {
+  def distance(s1: S, s2: S): V = {
 
     val H = SmithWaterman.computeH[S, C, M, I, V](s1, s2, w, mismatchPenalty)
 

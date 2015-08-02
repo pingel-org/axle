@@ -1,6 +1,7 @@
 package axle.syntax
 
 import axle.algebra.Aggregatable
+import axle.algebra.Talliable
 import axle.algebra.DirectedGraph
 import axle.algebra.Endofunctor
 import axle.algebra.FunctionPair
@@ -72,6 +73,12 @@ trait AggregatableSyntax {
     new AggregatableOps(at)
 }
 
+trait TalliableSyntax {
+
+  implicit def talliableOps[F, A, B](at: F)(implicit tal: Talliable[F, A, B]) =
+    new TalliableOps(at)
+}
+
 trait FiniteSyntax {
 
   implicit def finiteOps[F, S, A](fa: F)(
@@ -94,12 +101,12 @@ trait MapReducibleSyntax {
 
 trait SetFromSyntax {
 
-  implicit def setFromOps[F[_]: SetFrom, A](fa: F[A]) =
+  implicit def setFromOps[F, A](fa: F)(implicit sf: SetFrom[F, A]) =
     new SetFromOps(fa)
 }
 
 trait MapFromSyntax {
 
-  implicit def mapFromOps[F[_]: MapFrom, K, V](fkv: F[(K, V)]) =
+  implicit def mapFromOps[F, K, V](fkv: F)(implicit mf: MapFrom[F, K, V]) =
     new MapFromOps(fkv)
 }

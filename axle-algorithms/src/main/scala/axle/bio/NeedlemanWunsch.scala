@@ -1,7 +1,6 @@
 package axle.bio
 
 import scala.Vector
-import scala.reflect.ClassTag
 import scala.Stream.cons
 import scala.Stream.empty
 
@@ -93,29 +92,29 @@ object NeedlemanWunsch {
    * ←
    */
 
-  def alignmentScore[S, N: Eq: ClassTag, I: Ring: Eq, M, V: AdditiveMonoid: Eq: ClassTag](
+  def alignmentScore[S, N: Eq, I: Ring: Eq, M, V: AdditiveMonoid: Eq, SS, G](
     A: S,
     B: S,
     gap: N,
     similarity: (N, N) => V,
     gapPenalty: V)(
-      implicit indexed: Indexed[S, I],
-      agg: Aggregatable[S],
+      implicit indexed: Indexed[S, I, V],
       finite: Finite[S, I],
-      functor: Functor[S],
-      zipper: Zipper[S]): V = {
+      zipper: Zipper[S, V, SS],
+      functor: Functor[SS, (N, N), V, G],
+      agg: Aggregatable[G, V, V]): V = {
 
     assert(A.size === B.size)
 
     val zipped = zipper.zip(A, B)
 
-    val scores: S[V] =
+    val scores: G =
       zipped.map({
         case (a: N, b: N) =>
           if (a === gap || b === gap) { gapPenalty } else { similarity(a, b) }
       })
 
-    Σ(scores)
+    Σ[V, G](scores)
   }
 
   /**
@@ -124,7 +123,7 @@ object NeedlemanWunsch {
    *
    */
 
-  def computeF[I: Ring, S, N: ClassTag, M, V: AdditiveMonoid: Order](
+  def computeF[I: Ring, S, N, M, V: AdditiveMonoid: Order](
     A: S,
     B: S,
     similarity: (N, N) => V,
@@ -151,17 +150,17 @@ object NeedlemanWunsch {
 
   }
 
-  def alignStep[S[_], N: Eq: ClassTag, M, I: Ring: Order, V: AdditiveMonoid: Eq](
+  def alignStep[S, N: Eq, M, I: Ring: Order, V: AdditiveMonoid: Eq](
     i: I,
     j: I,
-    A: S[N],
-    B: S[N],
+    A: S,
+    B: S,
     F: M,
     similarity: (N, N) => V,
     gap: N,
     gapPenalty: V)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I]): (N, N, I, I) = {
+      indexed: Indexed[S, I, N]): (N, N, I, I) = {
 
     val one = Ring[I].one
     val zero = Ring[I].zero
@@ -176,17 +175,17 @@ object NeedlemanWunsch {
     }
   }
 
-  def _optimalAlignment[S[_], N: Eq: ClassTag, M, I: Ring: Order, V: AdditiveMonoid: Eq](
+  def _optimalAlignment[S, N: Eq, M, I: Ring: Order, V: AdditiveMonoid: Eq](
     i: I,
     j: I,
-    A: S[N],
-    B: S[N],
+    A: S,
+    B: S,
     similarity: (N, N) => V,
     gap: N,
     gapPenalty: V,
     F: M)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I]): Stream[(N, N)] = {
+      indexed: Indexed[S, I, N]): Stream[(N, N)] = {
 
     val zero = Ring[I].zero
 
@@ -198,17 +197,17 @@ object NeedlemanWunsch {
     }
   }
 
-  def optimalAlignment[S[_], N: Eq: ClassTag, M, I: Ring: Order, V: AdditiveMonoid: Order: Eq](
-    A: S[N],
-    B: S[N],
+  def optimalAlignment[S, N: Eq, M, I: Ring: Order, V: AdditiveMonoid: Order: Eq](
+    A: S,
+    B: S,
     similarity: (N, N) => V,
     gap: N,
     gapPenalty: V)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I],
+      indexed: Indexed[S, I, N],
       finite: Finite[S, I],
-      fs: FromStream[S],
-      module: Module[V, I]): (S[N], S[N]) = {
+      fs: FromStream[S, N],
+      module: Module[V, I]): (S, S) = {
 
     val F = computeF(A, B, similarity, gapPenalty)
 
@@ -227,16 +226,16 @@ object NeedlemanWunsch {
 
 }
 
-case class NeedlemanWunschMetricSpace[S[_], C: Eq: ClassTag, M, I: Ring: Order, V: AdditiveMonoid: Order](
+case class NeedlemanWunschMetricSpace[S, C: Eq, M, I: Ring: Order, V: AdditiveMonoid: Order](
   similarity: (C, C) => V,
   gapPenalty: V)(
     implicit la: LinearAlgebra[M, I, I, V],
-    indexed: Indexed[S, I],
+    indexed: Indexed[S, I, C],
     finite: Finite[S, I],
     module: Module[V, I])
-    extends MetricSpace[S[C], V] {
+    extends MetricSpace[S, V] {
 
-  def distance(s1: S[C], s2: S[C]): V =
+  def distance(s1: S, s2: S): V =
     computeF(s1, s2, similarity, gapPenalty).get(s1.size, s2.size)
 
 }

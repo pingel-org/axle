@@ -12,6 +12,7 @@ import axle.stats.TallyDistribution0
 import axle.stats.TallyDistribution1
 import axle.syntax.aggregatable._
 import axle.syntax.functor._
+import axle.syntax.talliable._
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.algebra.Field
@@ -19,24 +20,25 @@ import spire.compat.ordering
 import spire.implicits.MapInnerProductSpace
 import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps
+import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.eqOps
 import spire.math.Rational
 import spire.math.Real
 import spire.math.Real.apply
 import spire.math._
-import spire.implicits._
 import spire.syntax._
 import axle.stats.P
 import axle.algebra._
 
-case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F](
-  data: F[DATA],
-  featureRandomVariables: List[Distribution[FEATURE, Rational]],
-  classRandomVariable: Distribution[CLASS, Rational],
+case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N: Field: Order](
+  data: F,
+  featureRandomVariables: List[Distribution[FEATURE, N]],
+  classRandomVariable: Distribution[CLASS, N],
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS)(
-    implicit agg: Aggregatable[F],
-    functor: Functor[F])
+    implicit agg: Aggregatable[F, DATA, Map[(CLASS, String, FEATURE), N]],
+    functor: Functor[F, DATA, CLASS, G],
+    tal: Talliable[G, CLASS, N])
     extends Function1[DATA, CLASS] {
 
   import axle._
@@ -47,34 +49,34 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F](
 
   // TODO no probability should ever be 0
 
-  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), Rational].withDefaultValue(Field[Rational].zero)
+  val emptyFeatureTally = Map.empty[(CLASS, String, FEATURE), N].withDefaultValue(Field[N].zero)
 
-  val featureTally: Map[(CLASS, String, FEATURE), Rational] =
+  val featureTally: Map[(CLASS, String, FEATURE), N] =
     data.aggregate(emptyFeatureTally)(
       (acc, d) => {
         val fs = featureExtractor(d)
         val c = classExtractor(d)
-        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> Field[Rational].one) }).toMap
+        val dContrib = featureNames.zip(fs).map({ case (fName, fVal) => ((c, fName, fVal) -> Field[N].one) }).toMap
         acc + dContrib
       },
       _ + _)
 
-  val classTally: Map[CLASS, Rational] =
-    data.map(classExtractor).tally[Rational].withDefaultValue(Field[Rational].zero)
+  val classTally: Map[CLASS, N] =
+    data.map(classExtractor).tally.withDefaultValue(Field[N].zero)
 
   val C = TallyDistribution0(classTally, classRandomVariable.name)
 
-  def tallyFor(featureRandomVariable: Distribution[FEATURE, Rational]): Map[(FEATURE, CLASS), Rational] =
+  def tallyFor(featureRandomVariable: Distribution[FEATURE, N]): Map[(FEATURE, CLASS), N] =
     featureTally.filter {
       case (k, v) => k._2 === featureRandomVariable.name
     }.map {
       case (k, v) => ((k._3, k._1), v)
-    }.withDefaultValue(Field[Rational].zero)
+    }.withDefaultValue(Field[N].zero)
 
   // Note: The "parent" (or "given") of these feature variables is C
   val Fs = featureRandomVariables.map(featureRandomVariable =>
     TallyDistribution1(
-      tallyFor(featureRandomVariable).withDefaultValue(Field[Rational].zero),
+      tallyFor(featureRandomVariable).withDefaultValue(Field[N].zero),
       featureRandomVariable.name))
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
@@ -83,7 +85,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F](
 
     val fs = featureExtractor(d)
 
-    def f(c: CLASS): Rational =
+    def f(c: CLASS): N =
       Π(Fs.zip(fs).map({
         case (fVar, fVal) => {
           P((fVar is fVal) | (C is c)).apply()

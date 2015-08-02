@@ -4,31 +4,35 @@ import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Witness not found for MapFrom[${C}]")
-trait MapFrom[C[_]] {
+trait MapFrom[C, K, V] {
 
-  def toMap[K, V](t: C[(K, V)]): Map[K, V]
+  def toMap(t: C): Map[K, V]
 }
 
 object MapFrom {
 
-  @inline final def apply[C[_]: MapFrom]: MapFrom[C] = implicitly[MapFrom[C]]
+  @inline final def apply[C, K, V](implicit mfa: MapFrom[C, K, V]): MapFrom[C, K, V] =
+    implicitly[MapFrom[C, K, V]]
 
-  implicit def mapFromSeq: MapFrom[Seq] = new MapFrom[Seq] {
+  implicit def mapFromSeq[K, V]: MapFrom[Seq[(K, V)], K, V] =
+    new MapFrom[Seq[(K, V)], K, V] {
 
-    def toMap[K, V](seq: Seq[(K, V)]): Map[K, V] =
-      seq.toMap
-  }
+      def toMap(seq: Seq[(K, V)]): Map[K, V] =
+        seq.toMap
+    }
 
-  implicit def mapFromVector: MapFrom[Vector] = new MapFrom[Vector] {
+  implicit def mapFromVector[K, V]: MapFrom[Vector[(K, V)], K, V] =
+    new MapFrom[Vector[(K, V)], K, V] {
 
-    def toMap[K, V](vector: Vector[(K, V)]): Map[K, V] =
-      vector.toMap
-  }
+      def toMap(vector: Vector[(K, V)]): Map[K, V] =
+        vector.toMap
+    }
 
-  implicit def mapFromList: MapFrom[List] = new MapFrom[List] {
+  implicit def mapFromList[K, V]: MapFrom[List[(K, V)], K, V] =
+    new MapFrom[List[(K, V)], K, V] {
 
-    def toMap[K, V](list: List[(K, V)]): Map[K, V] =
-      list.toMap
-  }
+      def toMap(list: List[(K, V)]): Map[K, V] =
+        list.toMap
+    }
 
 }

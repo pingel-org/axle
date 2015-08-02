@@ -234,7 +234,8 @@ final class AggregatableOps[G, A, B](val ts: G)(implicit agg: Aggregatable[G, A,
     agg.aggregate(ts)(zeroValue)(seqOp, combOp)
 }
 
-final class TallyOps[F, T, N](val ts: F)(implicit talliable: Talliable[F, T, N]) {
+final class TalliableOps[F, T, N](val ts: F)(implicit talliable: Talliable[F, T, N]) {
+
   def tally = talliable.tally(ts)
 }
 
@@ -254,16 +255,12 @@ final class MapReducibleOps[M, A, B, K, G](val as: M)(implicit mr: MapReducible[
     mr.mapReduce(as, mapper, zero, op)
 }
 
-final class SetFromOps[F[_]: SetFrom, A](val as: F[A]) {
+final class SetFromOps[F, A](val as: F)(implicit sf: SetFrom[F, A]) {
 
-  val ev = SetFrom[F]
-
-  def toSet = ev.toSet(as)
+  def toSet = sf.toSet(as)
 }
 
-final class MapFromOps[F[_]: MapFrom, K, V](val fkv: F[(K, V)]) {
+final class MapFromOps[F, K, V](val fkv: F)(implicit mf: MapFrom[F, K, V]) {
 
-  val ev = MapFrom[F]
-
-  def toMap = ev.toMap(fkv)
+  def toMap = mf.toMap(fkv)
 }

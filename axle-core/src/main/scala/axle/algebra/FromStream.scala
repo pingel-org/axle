@@ -1,14 +1,15 @@
 package axle.algebra
 
-trait FromStream[S[_]] {
+trait FromStream[S, A] {
 
-  def fromStream[A](stream: Stream[A]): S[A]
+  def fromStream(stream: Stream[A]): S
 }
 
 object FromStream {
 
-  implicit def indexedSeqFromStream = new FromStream[IndexedSeq] {
+  implicit def indexedSeqFromStream[A] =
+    new FromStream[IndexedSeq[A], A] {
 
-    def fromStream[A](stream: Stream[A]): IndexedSeq[A] = stream.toIndexedSeq
-  }
+      def fromStream(stream: Stream[A]): IndexedSeq[A] = stream.toIndexedSeq
+    }
 }
