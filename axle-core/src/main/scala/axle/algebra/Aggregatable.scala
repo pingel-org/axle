@@ -1,7 +1,6 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-import scala.reflect.ClassTag
 import scala.collection.parallel.immutable.ParSeq
 
 import spire.algebra.Eq
@@ -15,12 +14,6 @@ import scala.annotation.implicitNotFound
 trait Aggregatable[F, A, B] {
 
   def aggregate(xs: F)(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B
-
-  //  def tally[N](xs: F)(implicit eq: Eq[A], ring: Ring[N]): Map[A, N] = {
-  //    aggregate(xs)(Map.empty[A, N].withDefaultValue(ring.zero))(
-  //      (m, x) => m + (x -> ring.plus(m(x), ring.one)),
-  //      _ + _)
-  //  }
 
 }
 
