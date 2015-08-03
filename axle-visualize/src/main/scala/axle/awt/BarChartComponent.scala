@@ -23,7 +23,9 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import javax.swing.JPanel
 
-case class BarChartComponent[S, Y, D](
+import scala.reflect.ClassTag
+
+case class BarChartComponent[S, Y, D: ClassTag](
   chart: BarChart[S, Y, D])
     extends JPanel
     with Fed[D] {
