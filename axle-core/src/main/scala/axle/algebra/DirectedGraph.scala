@@ -20,12 +20,11 @@ trait DirectedGraph[DG, V, E] {
 
   def filterEdges(jdg: DG, f: E => Boolean): DG
 
-  def areNeighbors(jdg: DG, v1: V, v2: V): Boolean
+  def areNeighbors(jdg: DG, v1: V, v2: V)(implicit eqV: Eq[V]): Boolean
 
   def isClique(jdg: DG, vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean
 
-  // TODO? Manifest[V]?
-  def forceClique(jdg: DG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V]): DG
+  def forceClique(jdg: DG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V], mV: Manifest[V]): DG
 
   def degree(jdg: DG, v: V): Int
 
@@ -34,7 +33,7 @@ trait DirectedGraph[DG, V, E] {
   def neighbors(jdg: DG, v: V): Set[V]
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan[V, E](jdg: DG, r: V): Option[V]
+  def firstLeafOtherThan(jdg: DG, r: V)(implicit eqV: Eq[V]): Option[V]
 
   def eliminate(jdg: DG, v: V, payload: (V, V) => E): DG
 

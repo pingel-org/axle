@@ -8,19 +8,19 @@ import axle.syntax.finite._
 
 class UndirectedGraphSpec extends Specification {
 
-  val jug = UndirectedGraph[UndirectedSparseGraph]
-
   "Undirected Graph" should {
     "work" in {
 
       class Edge
+
+      val jug = UndirectedGraph[UndirectedSparseGraph[String, Edge], String, Edge]
 
       val a = "a"
       val b = "b"
       val c = "c"
       val d = "d"
 
-      val g = jug.make[String, Edge](List(a, b, c, d),
+      val g = jug.make(List(a, b, c, d),
         List(
           (a, b, new Edge),
           (b, c, new Edge),
@@ -38,7 +38,9 @@ class UndirectedGraphSpec extends Specification {
 
       class Edge(weight: Real)
 
-      val g = jug.make[String, Real](
+      val jug = UndirectedGraph[UndirectedSparseGraph[String, Edge], String, Edge]
+
+      val g = jug.make(
         List("a"),
         Nil)
 

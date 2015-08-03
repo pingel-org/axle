@@ -29,7 +29,7 @@ trait UndirectedGraph[UG, V, E] {
 
   def isClique(jug: UG, vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean
 
-  def forceClique(jug: UG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V]): UG
+  def forceClique(jug: UG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V], mv: Manifest[V]): UG
 
   def degree(jug: UG, v: V): Int
 

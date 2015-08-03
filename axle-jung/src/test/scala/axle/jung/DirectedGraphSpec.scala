@@ -11,19 +11,19 @@ import spire.implicits.StringOrder
 
 class DirectedGraphSpec extends Specification {
 
-  val jdg = DirectedGraph[DirectedSparseGraph]
-
   "Directed Graph" should {
     "work" in {
 
       class Edge
+
+      val jdg = DirectedGraph[DirectedSparseGraph[String, Edge], String, Edge]
 
       val a = "a"
       val b = "b"
       val c = "c"
       val d = "d"
 
-      val g = jdg.make[String, Edge](List(a, b, c, d),
+      val g = jdg.make(List(a, b, c, d),
         List(
           (a, b, new Edge),
           (b, c, new Edge),
@@ -41,12 +41,14 @@ class DirectedGraphSpec extends Specification {
 
       class Edge(weight: Double)
 
+      val jdg = DirectedGraph[DirectedSparseGraph[String, Edge], String, Edge]
+
       val a = "a"
       val b = "b"
       val c = "c"
       val d = "d"
 
-      val g = jdg.make[String, Edge](List(a, b, c, d),
+      val g = jdg.make(List(a, b, c, d),
         List(
           (a, b, new Edge(0.3)),
           (a, c, new Edge(0.2)),
