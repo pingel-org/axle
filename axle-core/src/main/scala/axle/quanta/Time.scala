@@ -63,8 +63,9 @@ object Time {
   import spire.math._
   import spire.implicits._
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](
-    implicit moduleDouble: Module[N, Double], moduleRational: Module[N, Rational]) =
+  def converterGraph[N: Field: Eq, DG](
+    implicit moduleDouble: Module[N, Double], moduleRational: Module[N, Rational],
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Time], N => N]) =
     new UnitConverterGraph[Time, N, DG] with TimeConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Time], UnitOfMeasurement[Time], Bijection[N, N])] =

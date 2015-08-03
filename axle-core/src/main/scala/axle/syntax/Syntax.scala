@@ -38,19 +38,19 @@ trait LinearAlgebraSyntax {
 
 trait DirectedGraphSyntax {
 
-  def directedGraph[DG[_, _]: DirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[(VP, VP, EP)]) =
-    DirectedGraph[DG].make(vps, ef)
+  def directedGraph[DG, V, E](vps: Seq[V], ef: Seq[(V, V, E)])(implicit ev: DirectedGraph[DG, V, E]) =
+    ev.make(vps, ef)
 
-  implicit def directedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](dg: DG[VP, EP]) =
+  implicit def directedGraphOps[DG, V: Eq, E](dg: DG)(implicit ev: DirectedGraph[DG, V, E]) =
     new DirectedGraphOps(dg)
 }
 
 trait UndirectedGraphSyntax {
 
-  def undirectedGraph[UG[_, _]: UndirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[(VP, VP, EP)]) =
-    UndirectedGraph[UG].make(vps, ef)
+  def undirectedGraph[UG, V, E](vps: Seq[V], ef: Seq[(V, V, E)])(implicit ev: UndirectedGraph[UG, V, E]) =
+    ev.make(vps, ef)
 
-  implicit def undirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](ug: UG[VP, EP]) =
+  implicit def undirectedGraphOps[UG, V: Eq, E](ug: UG)(implicit ev: UndirectedGraph[UG, V, E]) =
     new UndirectedGraphOps(ug)
 }
 

@@ -28,7 +28,8 @@ trait MoneyPerForceConverter[N] extends UnitConverter[MoneyPerForce, N] with Mon
 
 object MoneyPerForce {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  def converterGraph[N: Field: Eq, DG](
+    implicit evDG: DirectedGraph[DG, UnitOfMeasurement[MoneyPerForce], N => N]) =
     new UnitConverterGraph[MoneyPerForce, N, DG] with MoneyPerForceConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[MoneyPerForce], UnitOfMeasurement[MoneyPerForce], Bijection[N, N])] =

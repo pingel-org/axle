@@ -163,56 +163,52 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
 }
 
-final class DirectedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](val dg: DG[VP, EP]) {
+final class DirectedGraphOps[DG, V: Eq, E](val dg: DG)(implicit ev: DirectedGraph[DG, V, E]) {
 
-  val ev = DirectedGraph[DG]
-
-  def findVertex(f: VP => Boolean): Option[VP] =
+  def findVertex(f: V => Boolean): Option[V] =
     ev.findVertex(dg, f)
 
   def vertices = ev.vertices(dg)
 
   def edges = ev.edges(dg)
 
-  def source(e: EP) = ev.source(dg, e)
+  def source(e: E) = ev.source(dg, e)
 
-  def destination(e: EP) = ev.destination(dg, e)
+  def destination(e: E) = ev.destination(dg, e)
 
-  def precedes(v1: VP, v2: VP) = ev.precedes(dg, v1, v2)
+  def precedes(v1: V, v2: V) = ev.precedes(dg, v1, v2)
 
-  def neighbors(v: VP) = ev.neighbors(dg, v)
+  def neighbors(v: V) = ev.neighbors(dg, v)
 
-  def predecessors(v: VP) = ev.predecessors(dg, v)
+  def predecessors(v: V) = ev.predecessors(dg, v)
 
-  def successors(v: VP) = ev.successors(dg, v)
+  def successors(v: V) = ev.successors(dg, v)
 
-  def descendants(v: VP) = ev.descendants(dg, v)
+  def descendants(v: V) = ev.descendants(dg, v)
 
-  def descendantsIntersectsSet(v: VP, s: Set[VP]) = ev.descendantsIntersectsSet(dg, v, s)
+  def descendantsIntersectsSet(v: V, s: Set[V]) = ev.descendantsIntersectsSet(dg, v, s)
 
   // TODO: change first Edge type param:
-  def shortestPath(source: VP, goal: VP): Option[List[EP]] =
+  def shortestPath(source: V, goal: V): Option[List[E]] =
     ev.shortestPath(dg, source, goal)
 
   def leaves = ev.leaves(dg)
 
-  def outputEdgesOf(v: VP) = ev.outputEdgesOf(dg, v)
+  def outputEdgesOf(v: V) = ev.outputEdgesOf(dg, v)
 }
 
-final class UndirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](val ug: UG[VP, EP]) {
+final class UndirectedGraphOps[UG, V: Eq, E](val ug: UG)(implicit ev: UndirectedGraph[UG, V, E]) {
 
-  val ev = UndirectedGraph[UG]
-
-  def findVertex(f: VP => Boolean) =
+  def findVertex(f: V => Boolean) =
     ev.findVertex(ug, f)
 
   def vertices() = ev.vertices(ug)
 
-  def vertices(e: EP) = ev.vertices(ug, e)
+  def vertices(e: E) = ev.vertices(ug, e)
 
-  def neighbors(v: VP) = ev.neighbors(ug, v)
+  def neighbors(v: V) = ev.neighbors(ug, v)
 
-  def firstLeafOtherThan(r: VP) = ev.firstLeafOtherThan(ug, r)
+  def firstLeafOtherThan(r: V) = ev.firstLeafOtherThan(ug, r)
 }
 
 final class FunctorOps[F, A, B, G](val as: F)(implicit functor: Functor[F, A, B, G]) {
