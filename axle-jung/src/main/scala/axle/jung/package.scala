@@ -6,7 +6,6 @@ import axle.algebra.Functor
 import axle.algebra.UndirectedGraph
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
-import scala.reflect.ClassTag
 import scala.collection.JavaConverters._
 
 package object jung {
