@@ -100,7 +100,7 @@ object NeedlemanWunsch {
     gapPenalty: V)(
       implicit indexed: Indexed[S, I, N],
       finite: Finite[S, I],
-      zipper: Zipper[S, N, SS],
+      zipper: Zipper[S, N, S, N, SS],
       functor: Functor[SS, (N, N), V, G],
       agg: Aggregatable[G, V, V]): V = {
 
