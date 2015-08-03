@@ -1,7 +1,5 @@
 package axle
 
-import scala.reflect.ClassTag
-
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.Functor

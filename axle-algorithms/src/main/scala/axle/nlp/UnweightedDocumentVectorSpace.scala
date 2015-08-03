@@ -1,13 +1,11 @@
 package axle.nlp
 
-import scala.reflect.ClassTag
-
 import axle.algebra.Σ
 import spire.algebra.Field
 import spire.algebra.Eq
 import spire.implicits.multiplicativeSemigroupOps
 
-case class UnweightedDocumentVectorSpace[D: Field: ClassTag]()(implicit _eqD: Eq[D])
+case class UnweightedDocumentVectorSpace[D: Field]()(implicit _eqD: Eq[D])
     extends DocumentVectorSpace[D] {
 
   def scalar = Field[D]

@@ -1,7 +1,6 @@
 package axle.visualize
 
 import scala.Stream.continually
-import scala.reflect.ClassTag
 
 import axle.Show
 import axle.algebra.LengthSpace
@@ -42,7 +41,6 @@ case class BarChart[S, Y, D](
         val ticsY: Tics[Y],
         val eqY: Eq[Y],
         val plottableY: Plottable[Y],
-        val classTagD: ClassTag[D],
         val dataView: DataView[S, Y, D],
         val lengthSpaceY: LengthSpace[Y, _]) {
 

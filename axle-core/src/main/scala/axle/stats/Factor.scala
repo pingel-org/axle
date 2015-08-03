@@ -1,6 +1,5 @@
 package axle.stats
 
-import scala.reflect.ClassTag
 import scala.xml.NodeSeq.seqToNodeSeq
 
 import axle.IndexedCrossProduct
@@ -46,7 +45,7 @@ object Factor {
       def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
     }
 
-  implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order: ClassTag]: MultiplicativeMonoid[Factor[T, N]] =
+  implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order]: MultiplicativeMonoid[Factor[T, N]] =
     new MultiplicativeMonoid[Factor[T, N]] {
 
       val field = Field[N]
@@ -68,7 +67,7 @@ object Factor {
 
 }
 
-case class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](
+case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
     val varList: Vector[Distribution[T, N]],
     val values: Map[Vector[CaseIs[T, N]], N]) {
 
@@ -76,10 +75,10 @@ case class Factor[T: Eq, N: Field: Order: ClassTag: ConvertableFrom](
 
   lazy val crossProduct = IndexedCrossProduct(varList.map(_.values))
 
-  lazy val elements: Array[N] =
+  lazy val elements: IndexedSeq[N] =
     (0 until crossProduct.size) map { i =>
       values.get(caseOf(i)).getOrElse(field.zero)
-    } toArray
+    } toIndexedSeq
 
   def variables: Vector[Distribution[T, N]] = varList
 

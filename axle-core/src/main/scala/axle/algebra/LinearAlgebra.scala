@@ -5,9 +5,9 @@ import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.Ring
 import spire.algebra.Rng
-import scala.reflect.ClassTag
 import org.scalacheck.Gen
 import org.scalacheck.Gen.Choose
+import scala.reflect.ClassTag
 
 @implicitNotFound("Witness not found for LinearAlgebra[${M}, ${RowT}, ${ColT}, ${T}]")
 trait LinearAlgebra[M, RowT, ColT, T] {

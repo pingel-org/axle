@@ -14,7 +14,6 @@ import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
 import axle.algebra.Zero
-import scala.reflect.ClassTag
 import spire.algebra.Eq
 import spire.algebra.Ring
 

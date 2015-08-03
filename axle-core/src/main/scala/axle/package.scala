@@ -42,7 +42,6 @@ import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
 import axle.algebra.Finite
 import axle.algebra.Functor
-import scala.reflect.ClassTag
 import spire.optional.unicode.Π
 import spire.optional.unicode.Σ
 import spire.algebra.Bool

@@ -1,6 +1,5 @@
 package axle.algebra
 
-import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 import scala.collection.parallel.immutable.ParSeq
 

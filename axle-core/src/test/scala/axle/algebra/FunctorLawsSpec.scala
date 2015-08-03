@@ -1,6 +1,5 @@
 package axle.algebra
 
-import scala.reflect.ClassTag
 import spire.algebra._
 import spire.implicits._
 import org.specs2.ScalaCheck

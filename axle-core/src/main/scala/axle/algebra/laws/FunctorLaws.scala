@@ -1,7 +1,5 @@
 package axle.algebra.laws
 
-import scala.reflect.ClassTag
-
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import org.scalacheck.Prop.forAll
@@ -50,7 +48,6 @@ trait FunctorLaws[F, A] extends Laws {
     arbFa: Arbitrary[F],
     arbAB: Arbitrary[A => B],
     arbBC: Arbitrary[B => C],
-    cta: ClassTag[A],
     eqH: Eq[H]) =
     new FunctorRuleSet {
 

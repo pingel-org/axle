@@ -1,7 +1,6 @@
 package axle.nlp
 
 import scala.math.log
-import scala.reflect.ClassTag
 
 import axle.algebra.Aggregatable
 import axle.algebra.Σ

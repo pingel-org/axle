@@ -15,7 +15,6 @@ import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import scala.reflect.ClassTag
 import scala.language.implicitConversions
 
 trait LinearAlgebraSyntax {

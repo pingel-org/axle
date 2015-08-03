@@ -5,7 +5,6 @@ import axle.algebra.Functor
 import axle.syntax.functor._
 import axle.syntax.aggregatable._
 import spire.algebra.Bool
-import scala.reflect.ClassTag
 
 object forall {
 

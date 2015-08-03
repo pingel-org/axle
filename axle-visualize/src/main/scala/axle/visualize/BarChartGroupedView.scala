@@ -1,6 +1,5 @@
 package axle.visualize
 
-import scala.reflect.ClassTag
 import scala.Stream.continually
 
 import axle.Show

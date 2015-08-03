@@ -14,7 +14,6 @@ import java.io.File
 import axle.visualize.ScaledArea2D
 
 import scala.annotation.implicitNotFound
-import scala.reflect.ClassTag
 
 import akka.actor.ActorRef
 import akka.actor.ActorSystem

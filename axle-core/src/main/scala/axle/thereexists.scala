@@ -1,7 +1,6 @@
 package axle
 
 import spire.algebra.Bool
-import scala.reflect.ClassTag
 import axle.algebra.Functor
 import axle.algebra.Aggregatable
 import axle.syntax.functor._

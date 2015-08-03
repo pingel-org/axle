@@ -7,7 +7,6 @@ import java.awt.Graphics2D
 import scala.annotation.tailrec
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
-import scala.reflect.ClassTag
 
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout

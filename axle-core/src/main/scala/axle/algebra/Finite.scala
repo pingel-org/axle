@@ -1,8 +1,8 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-import scala.reflect.ClassTag
 import scala.collection.parallel.immutable.ParSeq
+
 import spire.math.Rational
 
 @implicitNotFound("Witness not found for Finite[${C}, ${S}]")

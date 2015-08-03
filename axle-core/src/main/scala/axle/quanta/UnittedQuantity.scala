@@ -4,7 +4,6 @@ import axle.Show
 import axle.string
 import axle.algebra.Functor
 import axle.syntax.directedgraph.directedGraphOps
-import scala.reflect.ClassTag
 import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
