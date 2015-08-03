@@ -3,6 +3,8 @@ package axle.algebra
 import scala.annotation.implicitNotFound
 import spire.algebra.Eq
 import spire.algebra.Ring
+import spire.implicits.MapRng
+import spire.implicits.additiveSemigroupOps
 import axle.syntax.aggregatable._
 
 @implicitNotFound("Witness not found for Talliable[${F}, ${A}, ${N}]")
@@ -19,7 +21,7 @@ object Talliable {
       def tally(xs: Seq[A]): Map[A, N] = {
         xs.aggregate(Map.empty[A, N].withDefaultValue(ring.zero))(
           (m, x) => m + (x -> ring.plus(m(x), ring.one)),
-          ???) // _ + _)
+          _ + _)
       }
     }
 
@@ -29,7 +31,7 @@ object Talliable {
       def tally(xs: List[A]): Map[A, N] = {
         xs.aggregate(Map.empty[A, N].withDefaultValue(ring.zero))(
           (m, x) => m + (x -> ring.plus(m(x), ring.one)),
-          ???) // _ + _)
+          _ + _)
       }
     }
 
