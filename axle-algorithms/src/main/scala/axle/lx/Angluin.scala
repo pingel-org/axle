@@ -9,7 +9,6 @@ import spire.algebra.Eq
 import spire.algebra.Order
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
-import spire.implicits._
 
 object Angluin {
 
@@ -31,9 +30,10 @@ object Angluin {
 
   }
 
-  case class AngluinAcceptor[DG[_, _]: DirectedGraph](vps: Seq[String], I: Set[String], F: Set[String]) {
+  case class AngluinAcceptor[DG](vps: Seq[String], I: Set[String], F: Set[String])(
+      implicit evDG: DirectedGraph[DG, String, Symbol]) {
 
-    val graph = directedGraph[DG, String, Symbol](vps, Nil)
+    val graph = evDG.make(vps, Nil)
 
     def Q: Set[String] = graph.vertices.toSet
 
@@ -73,7 +73,7 @@ object Angluin {
 
   case class CanonicalAcceptorFactory() {
 
-    def makeCanonicalAcceptor[DG[_, _]: DirectedGraph](ℒ: Language): AngluinAcceptor[DG] = ???
+    def makeCanonicalAcceptor[DG](ℒ: Language): AngluinAcceptor[DG] = ???
 
   }
 
@@ -168,10 +168,10 @@ object Angluin {
   case class PartitionBlock() {}
 
   case class PrefixTreeFactory() {
-    def makePrefixTree[DG[_, _]: DirectedGraph](ℒ: Language): AngluinAcceptor[DG] = ???
+    def makePrefixTree[DG](ℒ: Language): AngluinAcceptor[DG] = ???
   }
 
-  case class Quotient[DG[_, _]: DirectedGraph](A: AngluinAcceptor[DG], π: Partition) {
+  case class Quotient[DG](A: AngluinAcceptor[DG], π: Partition) {
     def evaluate: AngluinAcceptor[DG] = ???
   }
 

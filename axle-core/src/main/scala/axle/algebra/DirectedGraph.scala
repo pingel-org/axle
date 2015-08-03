@@ -3,7 +3,7 @@ package axle.algebra
 import spire.algebra.Eq
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for DirectedGraph[${DG}]")
+@implicitNotFound("Witness not found for DirectedGraph[${DG}, ${V}, ${E}]")
 trait DirectedGraph[DG, V, E] {
 
   def make(Vs: Seq[V], ef: Seq[(V, V, E)]): DG
@@ -20,7 +20,7 @@ trait DirectedGraph[DG, V, E] {
 
   def filterEdges(jdg: DG, f: E => Boolean): DG
 
-  def areNeighbors(jdg: DG, v1: V, v2: V)(implicit eqV: Eq[V]): Boolean
+  def areNeighbors(jdg: DG, v1: V, v2: V): Boolean
 
   def isClique(jdg: DG, vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean
 
@@ -34,7 +34,7 @@ trait DirectedGraph[DG, V, E] {
   def neighbors(jdg: DG, v: V): Set[V]
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan[V: Eq, E](jdg: DG, r: V): Option[V]
+  def firstLeafOtherThan[V, E](jdg: DG, r: V): Option[V]
 
   def eliminate(jdg: DG, v: V, payload: (V, V) => E): DG
 
@@ -42,7 +42,7 @@ trait DirectedGraph[DG, V, E] {
 
   def connects(jdg: DG, edge: E, a1: V, a2: V)(implicit eqV: Eq[V]): Boolean
 
-  def leaves(jdg: DG)(implicit eqV: Eq[V]): Set[V]
+  def leaves(jdg: DG): Set[V]
 
   def precedes(jdg: DG, v1: V, v2: V): Boolean
 

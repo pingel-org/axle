@@ -18,9 +18,10 @@ object Direction {
 
 }
 
-case class GenModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](
-    graph: DG[Distribution[T, N], Edge])(
-        implicit finiteDG: Finite[DG[Distribution[T, N], Edge], Int]) {
+case class GenModel[T: Eq, N: Field, DG](
+    graph: DG)(
+        implicit finiteDG: Finite[DG, Int],
+        dg: DirectedGraph[DG, Distribution[T, N], Edge]) {
 
   def vertexPayloadToDistribution(mvp: T): Distribution[T, N] = ???
 

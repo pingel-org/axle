@@ -41,7 +41,7 @@ trait DirectedGraphSyntax {
   def directedGraph[DG, V, E](vps: Seq[V], ef: Seq[(V, V, E)])(implicit ev: DirectedGraph[DG, V, E]) =
     ev.make(vps, ef)
 
-  implicit def directedGraphOps[DG, V: Eq, E](dg: DG)(implicit ev: DirectedGraph[DG, V, E]) =
+  implicit def directedGraphOps[DG, V, E](dg: DG)(implicit ev: DirectedGraph[DG, V, E]) =
     new DirectedGraphOps(dg)
 }
 
@@ -50,7 +50,7 @@ trait UndirectedGraphSyntax {
   def undirectedGraph[UG, V, E](vps: Seq[V], ef: Seq[(V, V, E)])(implicit ev: UndirectedGraph[UG, V, E]) =
     ev.make(vps, ef)
 
-  implicit def undirectedGraphOps[UG, V: Eq, E](ug: UG)(implicit ev: UndirectedGraph[UG, V, E]) =
+  implicit def undirectedGraphOps[UG, V, E](ug: UG)(implicit ev: UndirectedGraph[UG, V, E]) =
     new UndirectedGraphOps(ug)
 }
 

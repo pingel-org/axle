@@ -3,7 +3,7 @@ package axle.algebra
 import spire.algebra.Eq
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for UndirectedGraph[${UG}]")
+@implicitNotFound("Witness not found for UndirectedGraph[${UG}, ${V}, ${E}]")
 trait UndirectedGraph[UG, V, E] {
 
   def make(vps: Seq[V], ef: Seq[(V, V, E)]): UG

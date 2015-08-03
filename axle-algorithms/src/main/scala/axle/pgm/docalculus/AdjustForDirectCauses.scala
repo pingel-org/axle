@@ -34,7 +34,7 @@ object AdjustForDirectCauses extends Rule {
   //        CausalityProbability(parentObservations, Set(), Set())
   //    })
 
-  def apply[T: Eq, N: Field, DG[_, _]](q: CausalityProbability[T, N], m: CausalModel[T, N, DG], namer: VariableNamer[T, N]): List[Form] =
+  def apply[T: Eq, N: Field, DG](q: CausalityProbability[T, N], m: CausalModel[T, N, DG], namer: VariableNamer[T, N]): List[Form] =
     Nil // TODO
   //    q.actions.flatMap(adjustForDirectCauses(m, q, namer, _)).toList
 

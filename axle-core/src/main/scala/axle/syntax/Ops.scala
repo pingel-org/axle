@@ -163,7 +163,7 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
 }
 
-final class DirectedGraphOps[DG, V: Eq, E](val dg: DG)(implicit ev: DirectedGraph[DG, V, E]) {
+final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG, V, E]) {
 
   def findVertex(f: V => Boolean): Option[V] =
     ev.findVertex(dg, f)
@@ -189,7 +189,7 @@ final class DirectedGraphOps[DG, V: Eq, E](val dg: DG)(implicit ev: DirectedGrap
   def descendantsIntersectsSet(v: V, s: Set[V]) = ev.descendantsIntersectsSet(dg, v, s)
 
   // TODO: change first Edge type param:
-  def shortestPath(source: V, goal: V): Option[List[E]] =
+  def shortestPath(source: V, goal: V)(implicit eqV: Eq[V]): Option[List[E]] =
     ev.shortestPath(dg, source, goal)
 
   def leaves = ev.leaves(dg)
@@ -197,7 +197,7 @@ final class DirectedGraphOps[DG, V: Eq, E](val dg: DG)(implicit ev: DirectedGrap
   def outputEdgesOf(v: V) = ev.outputEdgesOf(dg, v)
 }
 
-final class UndirectedGraphOps[UG, V: Eq, E](val ug: UG)(implicit ev: UndirectedGraph[UG, V, E]) {
+final class UndirectedGraphOps[UG, V, E](val ug: UG)(implicit ev: UndirectedGraph[UG, V, E]) {
 
   def findVertex(f: V => Boolean) =
     ev.findVertex(ug, f)
@@ -208,7 +208,7 @@ final class UndirectedGraphOps[UG, V: Eq, E](val ug: UG)(implicit ev: Undirected
 
   def neighbors(v: V) = ev.neighbors(ug, v)
 
-  def firstLeafOtherThan(r: V) = ev.firstLeafOtherThan(ug, r)
+  def firstLeafOtherThan(r: V)(implicit eqV: Eq[V]) = ev.firstLeafOtherThan(ug, r)
 }
 
 final class FunctorOps[F, A, B, G](val as: F)(implicit functor: Functor[F, A, B, G]) {
