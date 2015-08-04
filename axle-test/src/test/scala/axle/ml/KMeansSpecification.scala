@@ -2,6 +2,7 @@ package axle.ml
 
 import org.specs2.mutable.Specification
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.quanta.UnitOfMeasurement
 
 class KMeansSpecification
     extends Specification {
@@ -75,10 +76,11 @@ class KMeansSpecification
       implicit val distanceConverter: DistanceConverter[Double] = {
         import spire.implicits.DoubleAlgebra
         import axle.algebra.modules.doubleRationalModule
-        Distance.converterGraph[Double, DirectedSparseGraph]
+        Distance.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Distance], Double => Double]]
       }
 
       import axle.data.Irises
+      import axle.data.Iris
 
       val irisesData = new Irises[DirectedSparseGraph]
       import irisesData._
@@ -108,7 +110,7 @@ class KMeansSpecification
       val irisConstructor = (features: Seq[Double]) => Iris(1 *: cm, 1 *: cm, 1 *: cm, 1 *: cm, "")
 
       val classifier = KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix](
-        irises,
+        irisesData.irises,
         N = 2,
         irisFeaturizer,
         normalizer,

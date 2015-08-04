@@ -38,18 +38,18 @@ import spire.implicits.moduleOps
  *
  */
 
+case class Iris(
+  sepalLength: UnittedQuantity[Distance, Double],
+  sepalWidth: UnittedQuantity[Distance, Double],
+  petalLength: UnittedQuantity[Distance, Double],
+  petalWidth: UnittedQuantity[Distance, Double],
+  species: String)
+
+object Iris {
+  implicit val irisEq = new Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }
+}
+
 class Irises(implicit converter: DistanceConverter[Double]) {
-
-  case class Iris(
-    sepalLength: UnittedQuantity[Distance, Double],
-    sepalWidth: UnittedQuantity[Distance, Double],
-    petalLength: UnittedQuantity[Distance, Double],
-    petalWidth: UnittedQuantity[Distance, Double],
-    species: String)
-
-  object Iris {
-    implicit val irisEq = new Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }
-  }
 
   val dataUrl = "http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
 
