@@ -82,9 +82,8 @@ class KMeansSpecification
       import axle.data.Irises
       import axle.data.Iris
 
-      val irisesData = new Irises[DirectedSparseGraph]
-      import irisesData._
-
+      val irisesData = new Irises
+ 
       import axle.ml.distance.Euclidean
       import org.jblas.DoubleMatrix
       import axle.jblas.linearAlgebraDoubleMatrix
