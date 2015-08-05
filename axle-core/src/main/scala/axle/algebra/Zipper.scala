@@ -9,8 +9,6 @@ trait Zipper[X, A, Y, B, Z] {
 
 object Zipper {
 
-  type ZipperK1[M[_], A, B] = Zipper[M[A], A, M[B], B, M[(A, B)]]
-
   def apply[X, A, Y, B, Z](implicit zipper: Zipper[X, A, Y, B, Z]): Zipper[X, A, Y, B, Z] =
     zipper
 

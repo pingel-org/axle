@@ -9,6 +9,7 @@ class AlignDNA extends Specification {
   "Needleman-Wunsch" should {
     "work" in {
 
+      import NeedlemanWunsch.alignmentScoreK1
       import NeedlemanWunsch.alignmentScore
       import NeedlemanWunsch.optimalAlignment
       import NeedlemanWunsch.Default._
@@ -26,7 +27,14 @@ class AlignDNA extends Specification {
         optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](
           dna1, dna2, similarity, gap, gapPenalty)
 
-      val score = alignmentScore[IndexedSeq[Char], Char, Int, DoubleMatrix, Double, IndexedSeq[(Char, Char)], IndexedSeq[Double]](
+      val score = alignmentScore(
+        nwAlignment._1,
+        nwAlignment._2,
+        gap,
+        similarity,
+        gapPenalty)
+
+      val scoreK1 = alignmentScoreK1(
         nwAlignment._1,
         nwAlignment._2,
         gap,

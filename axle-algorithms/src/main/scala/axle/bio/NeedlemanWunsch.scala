@@ -5,6 +5,7 @@ import scala.Stream.cons
 import scala.Stream.empty
 
 import NeedlemanWunsch.computeF
+import axle.algebra._
 import axle.algebra.Σ
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
@@ -81,6 +82,19 @@ object NeedlemanWunsch {
     val gapPenalty = -5d
 
   }
+
+  def alignmentScoreK1[C[_], N: Eq, I: Ring: Eq, M, V: AdditiveMonoid: Eq](
+    a: C[N],
+    b: C[N],
+    gap: N,
+    similarity: (N, N) => V,
+    gapPenalty: V)(
+      implicit indexed: IndexedK1[C, I, N],
+      finite: FiniteK1[C, N, I],
+      zipper: ZipperK1[C, N, N],
+      functor: FunctorK1[C, (N, N), V],
+      agg: AggregatableK1[C, V, V]): V =
+    alignmentScore(a, b, gap, similarity, gapPenalty)
 
   /**
    * Computes the alignment score

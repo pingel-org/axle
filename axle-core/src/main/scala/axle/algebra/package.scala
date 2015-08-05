@@ -21,6 +21,16 @@ import spire.math.Real
 
 package object algebra {
 
+  type ZipperK1[M[_], A, B] = Zipper[M[A], A, M[B], B, M[(A, B)]]
+
+  type IndexedK1[M[_], I, N] = Indexed[M[N], I, N]
+
+  type FiniteK1[M[_], N, I] = Finite[M[N], I]
+
+  type FunctorK1[M[_], A, B] = Functor[M[A], A, B, M[B]]
+
+  type AggregatableK1[M[_], A, B] = Aggregatable[M[A], A, B]
+
   implicit def wrappedStringSpace[N](
     implicit iscSpace: MetricSpace[IndexedSeq[Char], N]) =
     new MetricSpace[String, N] {
