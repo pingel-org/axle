@@ -35,7 +35,7 @@ trait VolumeConverter[N] extends UnitConverter[Volume, N] with VolumeUnits {
 
 object Volume {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  def converterGraph[N: Field: Eq, DG](implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Volume], N => N]) =
     new UnitConverterGraph[Volume, N, DG] with VolumeConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Volume], UnitOfMeasurement[Volume], Bijection[N, N])] =

@@ -27,7 +27,7 @@ trait MoneyFlowConverter[N] extends UnitConverter[MoneyFlow, N] with MoneyFlowUn
 
 object MoneyFlow {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  def converterGraph[N: Field: Eq, DG](implicit evDG: DirectedGraph[DG, UnitOfMeasurement[MoneyFlow], N => N]) =
     new UnitConverterGraph[MoneyFlow, N, DG] with MoneyFlowConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[MoneyFlow], UnitOfMeasurement[MoneyFlow], Bijection[N, N])] =

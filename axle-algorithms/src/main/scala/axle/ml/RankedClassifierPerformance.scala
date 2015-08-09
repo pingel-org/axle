@@ -3,15 +3,11 @@ package axle.ml
 import scala.math.min
 
 import axle.algebra.mean
-import axle.algebra.Σ
-import axle.algebra.Aggregatable
 import axle.algebra.Finite
-import axle.algebra.Functor
-import axle.syntax.finite._
-import axle.syntax.functor._
+import axle.algebra.Σ
 import spire.algebra.Field
-import spire.implicits._
-import scala.reflect.ClassTag
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.multiplicativeGroupOps
 
 object RankedClassifierPerformance {
 
@@ -20,7 +16,7 @@ object RankedClassifierPerformance {
    *
    */
 
-  def averagePrecisionAtK[T, N: ClassTag](actual: Seq[T], predicted: Seq[T], k: Int)(implicit field: Field[N]): N = {
+  def averagePrecisionAtK[T, N](actual: Seq[T], predicted: Seq[T], k: Int)(implicit field: Field[N]): N = {
 
     if (actual.size == 0) {
       field.zero
@@ -29,7 +25,7 @@ object RankedClassifierPerformance {
       val cutOff = predicted.take(k)
 
       val score: N =
-        Σ[N, Seq](cutOff
+        Σ[N, Seq[N]](cutOff
           .zipWithIndex
           .filter({ case (p, i) => actual.contains(p) && (!cutOff.take(i).contains(p)) })
           .zipWithIndex
@@ -48,10 +44,12 @@ object RankedClassifierPerformance {
    */
 
   // TODO F[_]: Functor: Aggregatable: Zipper
-  def meanAveragePrecisionAtK[T, N: ClassTag: Field](
+  def meanAveragePrecisionAtK[T, N: Field](
     actual: Seq[Seq[T]],
     predicted: Seq[Seq[T]],
-    k: Int = 10)(implicit finite: Finite[Seq, N]): N =
-    mean(actual.zip(predicted).map({ case (a: Seq[T], p: Seq[T]) => averagePrecisionAtK[T, N](a, p, k) }))
+    k: Int = 10)(implicit finite: Finite[Seq[N], N]): N =
+    mean(
+      actual.zip(predicted)
+        .map({ case (a: Seq[T], p: Seq[T]) => averagePrecisionAtK[T, N](a, p, k) }))
 
 }

@@ -1,27 +1,27 @@
 package axle.algebra
 
-import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Witness not found for Reducible[${R}]")
-trait Reducible[R[_]] {
+trait Reducible[R, A] {
 
-  def reduceOption[A: ClassTag](as: R[A])(op: (A, A) => A): Option[A]
+  def reduceOption(as: R)(op: (A, A) => A): Option[A]
 }
 
 object Reducible {
 
-  @inline final def apply[R[_]: Reducible]: Reducible[R] = implicitly[Reducible[R]]
+  @inline final def apply[R, A](implicit ra: Reducible[R, A]): Reducible[R, A] =
+    implicitly[Reducible[R, A]]
 
-  implicit def reduceSeq: Reducible[Seq] = new Reducible[Seq] {
+  implicit def reduceSeq[A]: Reducible[Seq[A], A] = new Reducible[Seq[A], A] {
 
-    def reduceOption[A: ClassTag](as: Seq[A])(op: (A, A) => A): Option[A] =
+    def reduceOption(as: Seq[A])(op: (A, A) => A): Option[A] =
       as.reduceOption(op)
   }
 
-  implicit def reduceIndexedSeq: Reducible[IndexedSeq] =
-    new Reducible[IndexedSeq] {
-      def reduceOption[A: ClassTag](is: IndexedSeq[A])(op: (A, A) => A): Option[A] =
+  implicit def reduceIndexedSeq[A]: Reducible[IndexedSeq[A], A] =
+    new Reducible[IndexedSeq[A], A] {
+      def reduceOption(is: IndexedSeq[A])(op: (A, A) => A): Option[A] =
         is.reduceOption(op)
     }
 

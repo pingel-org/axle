@@ -1,33 +1,35 @@
 package axle.algebra
 
-trait Zipper[Z[_]] {
+trait Zipper[X, A, Y, B, Z] {
 
-  def zip[A](left: Z[A], right: Z[A]): Z[(A, A)]
+  def zip(left: X, right: Y): Z
 
-  def unzip[A](zipped: Z[(A, A)]): (Z[A], Z[A])
-
+  def unzip(zipped: Z): (X, Y)
 }
 
 object Zipper {
 
-  def apply[Z[_]](implicit zipper: Zipper[Z]): Zipper[Z] = zipper
+  def apply[X, A, Y, B, Z](implicit zipper: Zipper[X, A, Y, B, Z]): Zipper[X, A, Y, B, Z] =
+    zipper
 
-  implicit def zipSeq = new Zipper[Seq] {
+  implicit def zipSeq[A, B]: ZipperK1[Seq, A, B] =
+    new Zipper[Seq[A], A, Seq[B], B, Seq[(A, B)]] {
 
-    def zip[A](left: Seq[A], right: Seq[A]): Seq[(A, A)] =
-      left.zip(right)
+      def zip(left: Seq[A], right: Seq[B]): Seq[(A, B)] =
+        left.zip(right)
 
-    def unzip[A](zipped: Seq[(A, A)]): (Seq[A], Seq[A]) =
-      zipped.unzip
-  }
+      def unzip(zipped: Seq[(A, B)]): (Seq[A], Seq[B]) =
+        zipped.unzip
+    }
 
-  implicit def zipIndexedSeq = new Zipper[IndexedSeq] {
+  implicit def zipIndexedSeq[A, B]: ZipperK1[IndexedSeq, A, B] =
+    new Zipper[IndexedSeq[A], A, IndexedSeq[B], B, IndexedSeq[(A, B)]] {
 
-    def zip[A](left: IndexedSeq[A], right: IndexedSeq[A]): IndexedSeq[(A, A)] =
-      left.zip(right)
+      def zip(left: IndexedSeq[A], right: IndexedSeq[B]): IndexedSeq[(A, B)] =
+        left.zip(right)
 
-    def unzip[A](zipped: IndexedSeq[(A, A)]): (IndexedSeq[A], IndexedSeq[A]) =
-      zipped.unzip
-  }
+      def unzip(zipped: IndexedSeq[(A, B)]): (IndexedSeq[A], IndexedSeq[B]) =
+        zipped.unzip
+    }
 
 }

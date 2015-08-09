@@ -57,8 +57,9 @@ object Distance {
   import spire.math._
   import spire.implicits._
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](
-    implicit module: Module[N, Double], moduleRational: Module[N, Rational]) =
+  def converterGraph[N: Field: Eq, DG](
+    implicit module: Module[N, Double], moduleRational: Module[N, Rational],
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Distance], N => N]) =
     new UnitConverterGraph[Distance, N, DG] with DistanceConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])] =

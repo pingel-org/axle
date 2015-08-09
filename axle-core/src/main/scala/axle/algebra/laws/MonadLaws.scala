@@ -2,7 +2,6 @@ package axle.algebra.laws
 
 import org.typelevel.discipline.Laws
 import axle.algebra.Monad
-import scala.reflect.ClassTag
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import org.scalacheck.Prop.forAll

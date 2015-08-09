@@ -1,7 +1,6 @@
 package axle.nlp
 
 import scala.math.log
-import scala.reflect.ClassTag
 
 import axle.algebra.Aggregatable
 import axle.algebra.Σ
@@ -13,7 +12,7 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 
-case class TFIDFDocumentVectorSpace[D: Field: ClassTag: ConvertableFrom: ConvertableTo](
+case class TFIDFDocumentVectorSpace[D: Field: ConvertableFrom: ConvertableTo](
   corpus: Iterable[String],
   termVectorizer: TermVectorizer[D])(implicit val eqD: Eq[D])
     extends DocumentVectorSpace[D] {
@@ -42,7 +41,7 @@ case class TFIDFDocumentVectorSpace[D: Field: ClassTag: ConvertableFrom: Convert
 
     val weights = commonTerms.map(term => scalar.times(termWeight(term, v1), termWeight(term, v2)))
 
-    Σ(weights)(implicitly[ClassTag[D]], scalar, Aggregatable[List])
+    Σ(weights)(scalar, Aggregatable[List[D], D, D])
   }
 
 }

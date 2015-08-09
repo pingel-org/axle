@@ -16,8 +16,8 @@ import javax.swing.JPanel
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
 
-case class KMeansComponent[D, F[_], M](
-  kmv: KMeansVisualization[D, F, M])
+case class KMeansComponent[D, F, G, M](
+  kmv: KMeansVisualization[D, F, G, M])
     extends JPanel {
 
   import kmv._

@@ -1,7 +1,6 @@
 package axle
 
 import spire.algebra.Bool
-import scala.reflect.ClassTag
 import axle.algebra.Functor
 import axle.algebra.Aggregatable
 import axle.syntax.functor._
@@ -9,7 +8,12 @@ import axle.syntax.aggregatable._
 
 object thereexists {
 
-  def apply[A, B: ClassTag, F[_]: Functor: Aggregatable](as: F[A])(predicate: A => B)(implicit ev: Bool[B]): B =
-    as.map(predicate).aggregate(ev.zero)(ev.or, ev.or) //TODO short-circuit
+  def apply[A, B, F, G](
+    as: F)(
+      predicate: A => B)(
+        implicit bool: Bool[B],
+        functor: Functor[F, A, B, G],
+        agg: Aggregatable[G, B, B]): B =
+    as.map(predicate).aggregate(bool.zero)(bool.or, bool.or) //TODO short-circuit
 
 }

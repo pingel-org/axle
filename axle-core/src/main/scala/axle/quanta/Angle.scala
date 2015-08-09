@@ -44,8 +44,9 @@ object Angle {
   import spire.math._
   import spire.implicits._
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](
-    implicit module: Module[N, Double], moduleRational: Module[N, Rational]) =
+  def converterGraph[N: Field: Eq, DG](
+    implicit module: Module[N, Double], moduleRational: Module[N, Rational],
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Angle], N => N]) =
     new UnitConverterGraph[Angle, N, DG] with AngleConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])] =

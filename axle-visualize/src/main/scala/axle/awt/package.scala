@@ -84,7 +84,7 @@ package object awt {
     frame.setVisible(true)
   }
 
-  def play[T: Draw, D](
+  def play[T: Draw, D: ClassTag](
     t: T,
     f: D => D,
     interval: UnittedQuantity[Time, Double])(
@@ -138,12 +138,12 @@ package object awt {
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
     }
 
-  implicit def drawBarChart[S, Y, D]: Draw[BarChart[S, Y, D]] =
+  implicit def drawBarChart[S, Y, D: ClassTag]: Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
       def component(chart: BarChart[S, Y, D]) = BarChartComponent(chart)
     }
 
-  implicit def drawBarChartGrouped[G, S, Y, D]: Draw[BarChartGrouped[G, S, Y, D]] =
+  implicit def drawBarChartGrouped[G, S, Y, D: ClassTag]: Draw[BarChartGrouped[G, S, Y, D]] =
     new Draw[BarChartGrouped[G, S, Y, D]] {
       def component(chart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(chart)
     }
@@ -160,17 +160,17 @@ package object awt {
         JungDirectedGraphVisualization().component(jdg)
     }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](
-    implicit drawDG: Draw[DG[BayesianNetworkNode[T, N], axle.pgm.Edge]]): Draw[BayesianNetwork[T, N, DG]] = {
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+    implicit drawDG: Draw[DG], dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): Draw[BayesianNetwork[T, N, DG]] = {
     new Draw[BayesianNetwork[T, N, DG]] {
       def component(bn: BayesianNetwork[T, N, DG]) =
         drawDG.component(bn.graph)
     }
   }
 
-  implicit def drawKMeansClasifier[T, F[_], M]: Draw[KMeans[T, F, M]] =
-    new Draw[KMeans[T, F, M]] {
-      def component(kmc: KMeans[T, F, M]) = KMeansComponent(KMeansVisualization(kmc))
+  implicit def drawKMeansClasifier[T, F, G, M]: Draw[KMeans[T, F, G, M]] =
+    new Draw[KMeans[T, F, G, M]] {
+      def component(kmc: KMeans[T, F, G, M]) = KMeansComponent(KMeansVisualization(kmc))
     }
 
   /**

@@ -6,6 +6,7 @@ import java.awt.Graphics2D
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
+import scala.reflect.ClassTag
 
 import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
@@ -22,7 +23,7 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import javax.swing.JPanel
 
-case class BarChartGroupedComponent[G, S, Y, D](
+case class BarChartGroupedComponent[G, S, Y, D: ClassTag](
   chart: BarChartGrouped[G, S, Y, D])
     extends JPanel
     with Fed[D] {

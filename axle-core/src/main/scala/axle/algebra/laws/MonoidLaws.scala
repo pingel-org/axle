@@ -1,7 +1,5 @@
 package axle.algebra.laws
 
-import scala.reflect.ClassTag
-
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import org.scalacheck.Prop.forAll

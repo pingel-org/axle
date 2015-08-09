@@ -23,7 +23,7 @@ import spire.implicits.signedOps
 
 package object quanta {
 
-  type CG[Q, DG[_, _], N] = DG[UnitOfMeasurement[Q], N => N]
+  // type CG[Q, DG, N] = DG[UnitOfMeasurement[Q], N => N]
 
   implicit def modulize[N, Q](
     implicit fieldn: Field[N],
@@ -58,9 +58,10 @@ package object quanta {
 
     }
 
-  implicit def unittedTics[Q, N: Field: Eq: Tics: Show, DG[_, _]: DirectedGraph](
+  implicit def unittedTics[Q, N: Field: Eq: Tics: Show, DG](
     implicit base: UnitOfMeasurement[Q],
-    convert: UnitConverter[Q, N]): Tics[UnittedQuantity[Q, N]] =
+    convert: UnitConverter[Q, N],
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Q], N => N]): Tics[UnittedQuantity[Q, N]] =
     new Tics[UnittedQuantity[Q, N]] {
 
       def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =

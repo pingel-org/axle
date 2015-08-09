@@ -1,7 +1,6 @@
 package axle.ml.distance
 
 import scala.annotation.implicitNotFound
-import scala.reflect.ClassTag
 
 import org.jblas.DoubleMatrix
 import org.scalacheck.Arbitrary

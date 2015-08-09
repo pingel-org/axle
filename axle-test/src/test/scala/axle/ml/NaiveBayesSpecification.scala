@@ -32,7 +32,7 @@ object NaiveBayesSpecification extends Specification {
   "classifier f1 score" should {
     "work" in {
 
-      val classifier = NaiveBayesClassifier(
+      val classifier = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
         data,
         List(
           UnknownDistribution0[String, Rational](Vector("Sunny", "Overcast", "Rain"), "Outlook"),
@@ -45,7 +45,7 @@ object NaiveBayesSpecification extends Specification {
 
       // data map { datum => datum.toString + "\t" + classifier(datum) } mkString ("\n")
 
-      val performance = ClassifierPerformance[Rational, Tennis, List](
+      val performance = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
         data,
         classifier,
         _.play)

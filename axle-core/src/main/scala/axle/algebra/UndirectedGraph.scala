@@ -3,57 +3,55 @@ package axle.algebra
 import spire.algebra.Eq
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for UndirectedGraph[${UG}]")
-trait UndirectedGraph[UG[_, _]] {
+@implicitNotFound("Witness not found for UndirectedGraph[${UG}, ${V}, ${E}]")
+trait UndirectedGraph[UG, V, E] {
 
-  def make[V, E](vps: Seq[V], ef: Seq[(V, V, E)]): UG[V, E]
+  def make(vps: Seq[V], ef: Seq[(V, V, E)]): UG
 
-  def vertices[V, E](jug: UG[V, E]): Iterable[V]
+  def vertices(jug: UG): Iterable[V]
 
-  def edges[V, E](jug: UG[V, E]): Iterable[E]
+  def edges(jug: UG): Iterable[E]
 
-  def vertices[V, E](jusg: UG[V, E], e: E): (V, V)
+  def vertices(jusg: UG, e: E): (V, V)
 
-  def size[V, E](jug: UG[V, E]): Int
+  // TODO findVertex needs an index
 
-  def findVertex[V, E](jug: UG[V, E], f: V => Boolean): Option[V]
+  def findVertex(jug: UG, f: V => Boolean): Option[V]
 
-  def filterEdges[V, E](jug: UG[V, E], f: E => Boolean): UG[V, E]
+  def filterEdges(jug: UG, f: E => Boolean): UG
 
-  //  def unlink(e: Edge[ES, E]): UG[V, E]
+  //  def unlink(e: Edge[ES, E]): UG
 
-  //  // UG[V, E]
+  //  // UG
   //  def unlink(v1: Vertex[V], v2: Vertex[V])
 
-  def areNeighbors[V: Eq, E](jug: UG[V, E], v1: V, v2: V): Boolean
+  def areNeighbors(jug: UG, v1: V, v2: V)(implicit eqV: Eq[V]): Boolean
 
-  def isClique[V: Eq, E](jug: UG[V, E], vs: collection.GenTraversable[V]): Boolean
+  def isClique(jug: UG, vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean
 
-  def forceClique[V: Eq: Manifest, E](jug: UG[V, E], among: Set[V], payload: (V, V) => E): UG[V, E]
+  def forceClique(jug: UG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V], mv: Manifest[V]): UG
 
-  def degree[V, E](jug: UG[V, E], v: V): Int
+  def degree(jug: UG, v: V): Int
 
-  def edgesTouching[V, E](jug: UG[V, E], v: V): Set[E]
+  def edgesTouching(jug: UG, v: V): Set[E]
 
-  def neighbors[V, E](jug: UG[V, E], v: V): Set[V]
+  def neighbors(jug: UG, v: V): Set[V]
 
-  //  def delete(v: Vertex[V]): UG[V, E]
+  //  def delete(v: Vertex[V]): UG
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan[V: Eq, E](jug: UG[V, E], r: V): Option[V]
+  def firstLeafOtherThan(jug: UG, r: V)(implicit eqV: Eq[V]): Option[V]
 
   /**
    * "decompositions" page 3 (Definition 3, Section 9.3)
    * turn the neighbors of v into a clique
    */
 
-  def eliminate[V, E](jug: UG[V, E], v: V, payload: (V, V) => E): UG[V, E]
+  def eliminate(jug: UG, v: V, payload: (V, V) => E): UG
 
-  def other[V: Eq, E](jug: UG[V, E], edge: E, u: V): V
+  def other(jug: UG, edge: E, u: V)(implicit eqV: Eq[V]): V
 
-  def connects[V: Eq, E](jug: UG[V, E], edge: E, a1: V, a2: V): Boolean
-
-  def map[V, E, NV, NE](jug: UG[V, E], vpf: V => NV, epf: E => NE): UG[NV, NE]
+  def connects(jug: UG, edge: E, a1: V, a2: V)(implicit eqV: Eq[V]): Boolean
 
   //  def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[V]], payload: (Vertex[V], Vertex[V]) => E): Int =
   //    (for {
@@ -74,6 +72,6 @@ trait UndirectedGraph[UG[_, _]] {
 
 object UndirectedGraph {
 
-  @inline final def apply[UG[_, _]: UndirectedGraph]: UndirectedGraph[UG] = implicitly[UndirectedGraph[UG]]
+  @inline final def apply[UG, V, E](implicit ug: UndirectedGraph[UG, V, E]): UndirectedGraph[UG, V, E] = ug
 
 }

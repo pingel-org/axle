@@ -44,7 +44,9 @@ object Energy {
   import spire.math._
   import spire.implicits._
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](implicit module: Module[N, Double]) =
+  def converterGraph[N: Field: Eq, DG](
+    implicit module: Module[N, Double],
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Energy], N => N]) =
     new UnitConverterGraph[Energy, N, DG] with EnergyConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Energy], UnitOfMeasurement[Energy], Bijection[N, N])] =

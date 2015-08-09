@@ -247,10 +247,10 @@ object SVG {
       }
     }
 
-  implicit def svgKMeans[D, F[_], M]: SVG[KMeans[D, F, M]] =
-    new SVG[KMeans[D, F, M]] {
+  implicit def svgKMeans[D, F, G, M]: SVG[KMeans[D, F, G, M]] =
+    new SVG[KMeans[D, F, G, M]] {
 
-      def svg(kmeans: KMeans[D, F, M]): NodeSeq = {
+      def svg(kmeans: KMeans[D, F, G, M]): NodeSeq = {
 
         import kmeans._
         val vis = KMeansVisualization(kmeans)
@@ -547,8 +547,8 @@ object SVG {
         List(xml.Text(""))
     }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG[_, _]: DirectedGraph](
-    implicit svgDG: SVG[DG[BayesianNetworkNode[T, N], axle.pgm.Edge]]): SVG[BayesianNetwork[T, N, DG]] = {
+  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+    implicit svgDG: SVG[DG], dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): SVG[BayesianNetwork[T, N, DG]] = {
     new SVG[BayesianNetwork[T, N, DG]] {
       def svg(bn: BayesianNetwork[T, N, DG]): NodeSeq =
         svgDG.svg(bn.graph)

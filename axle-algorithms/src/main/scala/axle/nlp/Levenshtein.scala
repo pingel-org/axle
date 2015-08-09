@@ -1,7 +1,5 @@
 package axle.nlp
 
-import scala.reflect.ClassTag
-
 import axle.algebra.Finite
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
@@ -25,13 +23,13 @@ import spire.implicits.eqOps
  *
  */
 
-case class Levenshtein[S[_], E: Eq: ClassTag, M, I: Ring : Order]()(
+case class Levenshtein[S, E: Eq, M, I: Ring: Order]()(
   implicit la: LinearAlgebra[M, I, I, I],
-  idx: Indexed[S, I],
+  idx: Indexed[S, I, E],
   finite: Finite[S, I])
-  extends MetricSpace[S[E], I] {
+    extends MetricSpace[S, I] {
 
-  def distance(s1: S[E], s2: S[E]): I = {
+  def distance(s1: S, s2: S): I = {
 
     val i0 = Ring[I].zero
     val i1 = Ring[I].one

@@ -2,24 +2,24 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import axle.syntax.directedgraph.directedGraphOps
+import axle.syntax.directedgraph._
 import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
 
-abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
-  extends UnitConverter[Q, N] {
+abstract class UnitConverterGraph[Q, N, DG]()(
+  implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Q], N => N])
+    extends UnitConverter[Q, N] {
 
   private def conversions(
     vps: Seq[UnitOfMeasurement[Q]],
-    ef: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], N => N)])(
-      implicit evDG: DirectedGraph[DG]): DG[UnitOfMeasurement[Q], N => N] =
-    evDG.make[UnitOfMeasurement[Q], N => N](vps, ef)
+    ef: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], N => N)]): DG =
+    evDG.make(vps, ef)
 
   private def cgn(
     units: List[UnitOfMeasurement[Q]],
-    links: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], Bijection[N, N])]): CG[Q, DG, N] =
+    links: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], Bijection[N, N])]): DG =
     conversions(
       units,
       {
@@ -36,9 +36,9 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
   val conversionGraph = cgn(units, links)
 
   private[this] def vertex(
-    cg: DG[UnitOfMeasurement[Q], N => N],
+    cg: DG,
     query: UnitOfMeasurement[Q]): UnitOfMeasurement[Q] =
-    directedGraphOps(cg).findVertex(_.name === query.name).get
+    evDG.findVertex(cg, _.name === query.name).get
 
   val memo = collection.mutable.Map.empty[(UnitOfMeasurement[Q], UnitOfMeasurement[Q]), N => N]
 
@@ -52,7 +52,7 @@ abstract class UnitConverterGraph[Q, N, DG[_, _]: DirectedGraph]()
       if (memo.contains(memoKey)) {
         memo(memoKey)
       } else {
-        val pathOpt = directedGraphOps(conversionGraph).shortestPath(vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
+        val pathOpt = evDG.shortestPath(conversionGraph, vertex(conversionGraph, newUnit), vertex(conversionGraph, orig.unit))
         if (pathOpt.isDefined) {
           val path = pathOpt.get
           val convert: N => N = path.reduceOption(combine).getOrElse(identity)

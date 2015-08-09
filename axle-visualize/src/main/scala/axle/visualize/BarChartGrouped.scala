@@ -1,7 +1,6 @@
 package axle.visualize
 
 import scala.Stream.continually
-import scala.reflect.ClassTag
 
 import spire.algebra.Order
 
@@ -38,7 +37,6 @@ case class BarChartGrouped[G, S, Y, D](
         val zeroY: Zero[Y],
         val ticsY: Tics[Y],
         val lengthSpaceY: LengthSpace[Y, _],
-        val classTagD: ClassTag[D],
         val groupedDataView: GroupedDataView[G, S, Y, D]) {
 
   val keyOpt = if (drawKey) {

@@ -2,12 +2,14 @@ package axle.bio
 
 import org.jblas.DoubleMatrix
 import org.specs2.mutable.Specification
+import axle.algebra.Indexed.indexedSeq
 
 class AlignDNA extends Specification {
 
   "Needleman-Wunsch" should {
     "work" in {
 
+      import NeedlemanWunsch.alignmentScoreK1
       import NeedlemanWunsch.alignmentScore
       import NeedlemanWunsch.optimalAlignment
       import NeedlemanWunsch.Default._
@@ -22,12 +24,24 @@ class AlignDNA extends Specification {
       val bestAlignment = ("ATGCGGCC--".toIndexedSeq, "AT-C-GCCGG".toIndexedSeq)
 
       val nwAlignment =
-        optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Double](
+        optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](
           dna1, dna2, similarity, gap, gapPenalty)
 
-      val score = alignmentScore(nwAlignment._1, nwAlignment._2, gap, similarity, gapPenalty)
+      val score = alignmentScore(
+        nwAlignment._1,
+        nwAlignment._2,
+        gap,
+        similarity,
+        gapPenalty)
 
-      val space = NeedlemanWunschMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
+      val scoreK1 = alignmentScoreK1(
+        nwAlignment._1,
+        nwAlignment._2,
+        gap,
+        similarity,
+        gapPenalty)
+
+      val space = NeedlemanWunschMetricSpace[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
 
       nwAlignment must be equalTo bestAlignment
       score must be equalTo 32d
@@ -48,10 +62,10 @@ class AlignDNA extends Specification {
       val dna4 = "AGCACACA"
       val bestAlignment = ("A-CACACTA".toIndexedSeq, "AGCACAC-A".toIndexedSeq)
 
-      val swAlignment = optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Int](
+      val swAlignment = optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](
         dna3, dna4, w, mismatchPenalty, gap)
 
-      val space = SmithWatermanMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
+      val space = SmithWatermanMetricSpace[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
 
       swAlignment must be equalTo bestAlignment
       space.distance(dna3, dna4) must be equalTo 12

@@ -39,8 +39,9 @@ object Speed {
   import spire.math._
   import spire.implicits._
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph](
-    implicit moduleDouble: Module[N, Double], moduleRational: Module[N, Rational]) =
+  def converterGraph[N: Field: Eq, DG](
+    implicit moduleDouble: Module[N, Double], moduleRational: Module[N, Rational],
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Speed], N => N]) =
     new UnitConverterGraph[Speed, N, DG] with SpeedConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])] =
