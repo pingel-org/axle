@@ -1,42 +1,38 @@
 package axle
 
+import scala.Stream.cons
 import scala.Vector
-import scala.collection.GenTraversable
+import scala.language.implicitConversions
+import scala.util.Random.nextDouble
+import scala.util.Random.nextInt
 
-import axle.algebra.DirectedGraph
-import axle.stats.Case
-import axle.stats.ConditionalProbabilityTable0
-import axle.stats.Distribution
-import axle.stats.EnrichedCaseGenTraversable
-import axle.stats.P
-import axle.quanta.UnittedQuantity
 import axle.quanta.Information
+import axle.quanta.InformationConverter
+import axle.quanta.UnittedQuantity
+import axle.stats.Case
+import axle.stats.Distribution
+import axle.stats.Distribution0
+import axle.stats.EnrichedCaseGenTraversable
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Ring
+import spire.implicits.DoubleAlgebra
 import spire.implicits.additiveGroupOps
 import spire.implicits.convertableOps
+import spire.implicits.eqOps
 import spire.implicits.literalIntAdditiveGroupOps
-import spire.implicits.moduleOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.nrootOps
-import spire.implicits.orderOps
 import spire.implicits.semiringOps
-import spire.implicits._
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
-import spire.math.Number
 import spire.math.Rational
-import spire.math.Real
-import spire.random.Dist
 import spire.optional.unicode.Σ
-import axle.quanta.UnitConverter
-import axle.quanta.InformationConverter
-import scala.language.implicitConversions
+import spire.random.Dist
 
 package object stats {
 
@@ -126,5 +122,33 @@ package object stats {
   def H[A: Manifest, N: Field: Eq: ConvertableFrom](
     X: Distribution[A, N])(implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(X)
+
+  def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N]): Stream[List[N]] =
+    if (xs.isEmpty) {
+      cons(reservoir, Stream.empty)
+    } else {
+      val newReservoir =
+        if (i < k) {
+          xs.head :: reservoir
+        } else {
+          val r = nextDouble
+          if (r < (k / i.toDouble)) {
+            val skip = nextInt(reservoir.length)
+            xs.head :: (reservoir.zipWithIndex.filterNot({ case (e, i) => i == skip }).map(_._1))
+          } else {
+            reservoir
+          }
+        }
+      cons(newReservoir, _reservoirSampleK(k, i + 1, newReservoir, xs.tail))
+    }
+
+  /**
+   * Take a uniform k from the stream of integers starting at 1
+   * the sampling is stopped after the first 100 integers have been observed
+   *
+   * reservoirSampleK(10, Stream.from(1)).drop(100).head
+   */
+
+  def reservoirSampleK[N](k: Int, xs: Stream[N]) = _reservoirSampleK(k, 0, Nil, xs)
 
 }
