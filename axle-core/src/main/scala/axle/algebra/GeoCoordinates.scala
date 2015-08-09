@@ -56,7 +56,7 @@ object GeoCoordinates {
         val dLat = w.latitude - v.latitude
         val dLon = w.longitude - v.longitude
         val a = square(sine(dLat :* half)) + square(sine(dLon :* half)) * cosine(v.latitude) * cosine(w.latitude)
-        val c = ctn.fromDouble(atan2(sqrt(a), sqrt(1 - a)))
+        val c = ctn.fromDouble(2d * atan2(sqrt(a), sqrt(1 - a)))
         c *: radian
       }
 

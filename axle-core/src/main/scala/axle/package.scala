@@ -138,7 +138,7 @@ package object axle {
       ctn: ConvertableTo[N],
       angleModule: Module[UnittedQuantity[Angle, N], N],
       distanceModule: Module[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
-    sphereRadius :* (((angle in angleConverter.radian) :* ctn.fromDouble(2d)).magnitude)
+    sphereRadius :* ((angle in angleConverter.radian).magnitude)
 
   def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
