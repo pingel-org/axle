@@ -59,7 +59,7 @@ class CausalitySpec extends Specification {
 
       def homework4Model(k: Int, p: Double) = {
 
-        val result = CausalModel[String, Rational, DirectedSparseGraph]("Homework 4 model with k " + k + ", p = " + p, Nil)
+        val result = CausalModel[String, Rational, DirectedSparseGraph[CausalModelNode[String, Rational], CausalModelEdge]]("Homework 4 model with k " + k + ", p = " + p, Nil)
 
         val zero = Option.empty[(Distribution[Boolean, Rational], Distribution[Boolean, Rational], Distribution[Boolean, Rational], Distribution[Boolean, Rational])]
 

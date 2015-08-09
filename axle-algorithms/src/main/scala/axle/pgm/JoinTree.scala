@@ -12,21 +12,23 @@ class JoinTreeEdge
 
 object JoinTree {
 
-  def makeJoinTree[T: Eq: Manifest, N: Field: Manifest, UG[_, _]: UndirectedGraph](
+  def makeJoinTree[T: Eq: Manifest, N: Field: Manifest, UG](
     vps: Vector[Set[Distribution[T, N]]],
-    ef: Seq[(Set[Distribution[T, N]], Set[Distribution[T, N]])]): JoinTree[T, N, UG] =
-    JoinTree[T, N, UG](UndirectedGraph[UG].make(vps, ef.map({ case (v1, v2) => (v1, v2, new JoinTreeEdge)})))
+    ef: Seq[(Set[Distribution[T, N]], Set[Distribution[T, N]])])(
+      implicit ug: UndirectedGraph[UG, Set[Distribution[T, N]], JoinTreeEdge]): JoinTree[T, N, UG] =
+    JoinTree[T, N, UG](ug.make(vps, ef.map({ case (v1, v2) => (v1, v2, new JoinTreeEdge) })))
 
   // returns a jointree for DAG G with width equal to width(π, G)
-  def fromEliminationOrder[T, N: Field, UG[_, _], UndirectedGraph, DG[_, _]: DirectedGraph](m: BayesianNetwork[T, N, DG], π: List[Distribution[T, N]]): JoinTree[T, N, UG] = {
+  def fromEliminationOrder[T, N: Field, UG, DG](m: BayesianNetwork[T, N, DG], π: List[Distribution[T, N]]): JoinTree[T, N, UG] = {
     // val Gm = Gv.moralGraph
     // val clusterSequence: List[Set[Distribution[_]]] = Gm.induceClusterSequence(pi)
     ???
   }
 }
 
-case class JoinTree[T: Eq, N: Field, UG[_, _]: UndirectedGraph](
-    graph: UG[Set[Distribution[T, N]], JoinTreeEdge]) {
+case class JoinTree[T: Eq, N: Field, UG](
+    graph: UG)(
+        implicit ug: UndirectedGraph[UG, Set[Distribution[T, N]], JoinTreeEdge]) {
 
   //  def addToCluster(n: GV, v: Distribution[_]): Unit = n.getPayload += v
   //

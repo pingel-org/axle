@@ -55,7 +55,8 @@ class TimeSeriesPlotSpec extends Specification {
 
     import edu.uci.ics.jung.graph.DirectedSparseGraph
     import axle.jung.directedGraphJung
-    implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
+    import axle.quanta.UnitOfMeasurement
+    implicit val id = Information.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]]
 
     val hm: D =
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++

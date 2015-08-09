@@ -4,7 +4,6 @@ import axle.Show
 import axle.string
 import axle.algebra.Functor
 import axle.syntax.directedgraph.directedGraphOps
-import scala.reflect.ClassTag
 import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
@@ -32,9 +31,10 @@ object UnittedQuantity {
         Order[N].compare((x.in(y.unit)).magnitude, y.magnitude)
     }
 
-  implicit def functorUQ[Q]: Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] =
-    new Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] {
-      def map[N, B: ClassTag](uq: UnittedQuantity[Q, N])(f: N => B) =
+  // ({ type λ[α] = UnittedQuantity[Q, α] })#λ
+  implicit def functorUQ[Q, A, B]: Functor[UnittedQuantity[Q, A], A, B, UnittedQuantity[Q, B]] =
+    new Functor[UnittedQuantity[Q, A], A, B, UnittedQuantity[Q, B]] {
+      def map(uq: UnittedQuantity[Q, A])(f: A => B): UnittedQuantity[Q, B] =
         UnittedQuantity(f(uq.magnitude), uq.unit)
     }
 

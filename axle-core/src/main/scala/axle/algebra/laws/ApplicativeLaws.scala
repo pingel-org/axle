@@ -1,7 +1,6 @@
 package axle.algebra.laws
 
 import scala.annotation.implicitNotFound
-import scala.reflect.ClassTag
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
@@ -31,7 +30,7 @@ trait ApplicativeLaws[F[_], A] extends Laws {
 
   }
 
-  def leftIdentity(implicit app: Applicative[F], arbFa: Arbitrary[F[A]], cta: ClassTag[A], eqFa: Eq[F[A]]) =
+  def leftIdentity(implicit app: Applicative[F], arbFa: Arbitrary[F[A]], eqFa: Eq[F[A]]) =
     new ApplicativeRuleSet {
 
       def props: Seq[(String, Prop)] = Seq(
@@ -52,7 +51,7 @@ trait ApplicativeLaws[F[_], A] extends Laws {
   //  }
 
   // pure f <*> pure x = pure (f x)
-  def axiom3[B](implicit app: Applicative[F], arbA: Arbitrary[A], arbFa: Arbitrary[F[A]], cta: ClassTag[A], eqFa: Eq[F[A]], eqFb: Eq[F[B]], arbAB: Arbitrary[A => B]) =
+  def axiom3[B](implicit app: Applicative[F], arbA: Arbitrary[A], arbFa: Arbitrary[F[A]], eqFa: Eq[F[A]], eqFb: Eq[F[B]], arbAB: Arbitrary[A => B]) =
     new ApplicativeRuleSet {
 
       def props: Seq[(String, Prop)] = Seq(

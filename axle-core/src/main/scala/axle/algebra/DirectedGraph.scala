@@ -3,81 +3,77 @@ package axle.algebra
 import spire.algebra.Eq
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for DirectedGraph[${DG}]")
-trait DirectedGraph[DG[_, _]] {
+@implicitNotFound("Witness not found for DirectedGraph[${DG}, ${V}, ${E}]")
+trait DirectedGraph[DG, V, E] {
 
-  def make[V, E](Vs: Seq[V], ef: Seq[(V, V, E)]): DG[V, E]
+  def make(Vs: Seq[V], ef: Seq[(V, V, E)]): DG
 
-  def vertices[V, E](jdg: DG[V, E]): Iterable[V]
+  def vertices(jdg: DG): Iterable[V]
 
-  def edges[V, E](jdg: DG[V, E]): Iterable[E]
+  def edges(jdg: DG): Iterable[E]
 
-  def size[V, E](jdg: DG[V, E]): Int
+  def source(jdg: DG, e: E): V
 
-  def source[V, E](jdg: DG[V, E], e: E): V
+  def destination(jdg: DG, e: E): V
 
-  def destination[V, E](jdg: DG[V, E], e: E): V
+  def findVertex(jdg: DG, f: V => Boolean): Option[V]
 
-  def findVertex[V, E](jdg: DG[V, E], f: V => Boolean): Option[V]
+  def filterEdges(jdg: DG, f: E => Boolean): DG
 
-  def filterEdges[V, E](jdg: DG[V, E], f: E => Boolean): DG[V, E]
+  def areNeighbors(jdg: DG, v1: V, v2: V)(implicit eqV: Eq[V]): Boolean
 
-  def areNeighbors[V: Eq, E](jdg: DG[V, E], v1: V, v2: V): Boolean
+  def isClique(jdg: DG, vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean
 
-  def isClique[V: Eq, E](jdg: DG[V, E], vs: collection.GenTraversable[V]): Boolean
+  def forceClique(jdg: DG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V], mV: Manifest[V]): DG
 
-  def forceClique[V: Eq: Manifest, E](jdg: DG[V, E], among: Set[V], payload: (V, V) => E): DG[V, E]
+  def degree(jdg: DG, v: V): Int
 
-  def degree[V, E](jdg: DG[V, E], v: V): Int
+  def edgesTouching(jdg: DG, v: V): Set[E]
 
-  def edgesTouching[V, E](jdg: DG[V, E], v: V): Set[E]
-
-  def neighbors[V, E](jdg: DG[V, E], v: V): Set[V]
+  def neighbors(jdg: DG, v: V): Set[V]
 
   // a "leaf" is vertex with only one neighbor
-  def firstLeafOtherThan[V: Eq, E](jdg: DG[V, E], r: V): Option[V]
+  def firstLeafOtherThan(jdg: DG, r: V)(implicit eqV: Eq[V]): Option[V]
 
-  def eliminate[V, E](jdg: DG[V, E], v: V, payload: (V, V) => E): DG[V, E]
+  def eliminate(jdg: DG, v: V, payload: (V, V) => E): DG
 
-  def other[V: Eq, E](jdg: DG[V, E], edge: E, u: V): V
+  def other(jdg: DG, edge: E, u: V)(implicit eqV: Eq[V]): V
 
-  def connects[V: Eq, E](jdg: DG[V, E], edge: E, a1: V, a2: V): Boolean
+  def connects(jdg: DG, edge: E, a1: V, a2: V)(implicit eqV: Eq[V]): Boolean
 
-  def map[V, E, NV, NE](jdg: DG[V, E], Vf: V => NV, epf: E => NE): DG[NV, NE]
+  def leaves(jdg: DG): Set[V]
 
-  def leaves[V: Eq, E](jdg: DG[V, E]): Set[V]
+  def precedes(jdg: DG, v1: V, v2: V): Boolean
 
-  def precedes[V, E](jdg: DG[V, E], v1: V, v2: V): Boolean
+  def predecessors(jdg: DG, v: V): Set[V]
 
-  def predecessors[V, E](jdg: DG[V, E], v: V): Set[V]
+  def isLeaf(jdg: DG, v: V): Boolean
 
-  def isLeaf[V, E](jdg: DG[V, E], v: V): Boolean
+  def successors(jdg: DG, v: V): Set[V]
 
-  def successors[V, E](jdg: DG[V, E], v: V): Set[V]
+  def outputEdgesOf(jdg: DG, v: V): Set[E]
 
-  def outputEdgesOf[V, E](jdg: DG[V, E], v: V): Set[E]
+  def descendantsIntersectsSet(jdg: DG, v: V, s: Set[V]): Boolean
 
-  def descendantsIntersectsSet[V, E](jdg: DG[V, E], v: V, s: Set[V]): Boolean
+  def removeInputs(jdg: DG, to: Set[V]): DG
 
-  def removeInputs[V, E](jdg: DG[V, E], to: Set[V]): DG[V, E]
+  def removeOutputs(jdg: DG, from: Set[V]): DG
 
-  def removeOutputs[V, E](jdg: DG[V, E], from: Set[V]): DG[V, E]
+  def moralGraph(jdg: DG): Boolean
 
-  def moralGraph[V, E](jdg: DG[V, E]): Boolean
+  def isAcyclic(jdg: DG): Boolean
 
-  def isAcyclic[V, E](jdg: DG[V, E]): Boolean
-
-  def shortestPath[V: Eq, E](jdg: DG[V, E], source: V, goal: V): Option[List[E]]
+  def shortestPath(jdg: DG, source: V, goal: V)(implicit eqV: Eq[V]): Option[List[E]]
 
   // inefficient
-  def _descendants[V, E](jdg: DG[V, E], v: V, accumulator: Set[V]): Set[V] =
+  def _descendants(jdg: DG, v: V, accumulator: Set[V]): Set[V] =
     if (!accumulator.contains(v)) {
       successors(jdg, v).foldLeft(accumulator + v)((a, v) => _descendants(jdg, v, a))
     } else {
       accumulator
     }
 
-  def descendants[V, E](jdg: DG[V, E], v: V): Set[V] =
+  def descendants(jdg: DG, v: V): Set[V] =
     _descendants(jdg, v, Set[V]())
 
   //  // inefficient
@@ -97,6 +93,6 @@ trait DirectedGraph[DG[_, _]] {
 
 object DirectedGraph {
 
-  @inline final def apply[DG[_, _]: DirectedGraph]: DirectedGraph[DG] = implicitly[DirectedGraph[DG]]
+  @inline final def apply[DG, V, E](implicit dg: DirectedGraph[DG, V, E]): DirectedGraph[DG, V, E] = dg
 
 }

@@ -1,6 +1,7 @@
 package axle.syntax
 
 import axle.algebra.Aggregatable
+import axle.algebra.Talliable
 import axle.algebra.DirectedGraph
 import axle.algebra.Endofunctor
 import axle.algebra.FunctionPair
@@ -14,7 +15,6 @@ import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
 import spire.algebra.Eq
 import spire.algebra.Field
-import scala.reflect.ClassTag
 import scala.language.implicitConversions
 
 trait LinearAlgebraSyntax {
@@ -38,25 +38,25 @@ trait LinearAlgebraSyntax {
 
 trait DirectedGraphSyntax {
 
-  def directedGraph[DG[_, _]: DirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[(VP, VP, EP)]) =
-    DirectedGraph[DG].make(vps, ef)
+  def directedGraph[DG, V, E](vps: Seq[V], ef: Seq[(V, V, E)])(implicit ev: DirectedGraph[DG, V, E]) =
+    ev.make(vps, ef)
 
-  implicit def directedGraphOps[DG[_, _]: DirectedGraph, VP: Eq, EP](dg: DG[VP, EP]) =
+  implicit def directedGraphOps[DG, V, E](dg: DG)(implicit ev: DirectedGraph[DG, V, E]) =
     new DirectedGraphOps(dg)
 }
 
 trait UndirectedGraphSyntax {
 
-  def undirectedGraph[UG[_, _]: UndirectedGraph, VP, EP](vps: Seq[VP], ef: Seq[(VP, VP, EP)]) =
-    UndirectedGraph[UG].make(vps, ef)
+  def undirectedGraph[UG, V, E](vps: Seq[V], ef: Seq[(V, V, E)])(implicit ev: UndirectedGraph[UG, V, E]) =
+    ev.make(vps, ef)
 
-  implicit def undirectedGraphOps[UG[_, _]: UndirectedGraph, VP: Eq, EP](ug: UG[VP, EP]) =
+  implicit def undirectedGraphOps[UG, V, E](ug: UG)(implicit ev: UndirectedGraph[UG, V, E]) =
     new UndirectedGraphOps(ug)
 }
 
 trait FunctorSyntax {
 
-  implicit def functorOps[F[_]: Functor, A](fa: F[A]) =
+  implicit def functorOps[F, A, B, G](fa: F)(implicit functor: Functor[F, A, B, G]) =
     new FunctorOps(fa)
 }
 
@@ -68,38 +68,44 @@ trait EndofunctorSyntax {
 
 trait AggregatableSyntax {
 
-  implicit def aggregatableOps[A[_]: Aggregatable, T](at: A[T]) =
+  implicit def aggregatableOps[F, A, B](at: F)(implicit agg: Aggregatable[F, A, B]) =
     new AggregatableOps(at)
+}
+
+trait TalliableSyntax {
+
+  implicit def talliableOps[F, A, B](at: F)(implicit tal: Talliable[F, A, B]) =
+    new TalliableOps(at)
 }
 
 trait FiniteSyntax {
 
-  implicit def finiteOps[F[_], S, A: ClassTag](fa: F[A])(
+  implicit def finiteOps[F, S, A](fa: F)(
     implicit finite: Finite[F, S]) =
     new FiniteOps(fa)
 }
 
 trait IndexedSyntax {
 
-  implicit def indexedOps[F[_], IndexT, A: ClassTag](fa: F[A])(
-    implicit index: Indexed[F, IndexT]) =
+  implicit def indexedOps[F, IndexT, A](fa: F)(
+    implicit index: Indexed[F, IndexT, A]) =
     new IndexedOps(fa)
 }
 
 trait MapReducibleSyntax {
 
-  implicit def mapReducibleOps[F[_]: MapReducible, A: ClassTag](fa: F[A]) =
+  implicit def mapReducibleOps[F, A, B, K, G](fa: F)(implicit mr: MapReducible[F, A, B, K, G]) =
     new MapReducibleOps(fa)
 }
 
 trait SetFromSyntax {
 
-  implicit def setFromOps[F[_]: SetFrom, A: ClassTag](fa: F[A]) =
+  implicit def setFromOps[F, A](fa: F)(implicit sf: SetFrom[F, A]) =
     new SetFromOps(fa)
 }
 
 trait MapFromSyntax {
 
-  implicit def mapFromOps[F[_]: MapFrom, K: ClassTag, V: ClassTag](fkv: F[(K, V)]) =
+  implicit def mapFromOps[F, K, V](fkv: F)(implicit mf: MapFrom[F, K, V]) =
     new MapFromOps(fkv)
 }

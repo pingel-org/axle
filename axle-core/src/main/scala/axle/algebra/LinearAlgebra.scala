@@ -5,12 +5,12 @@ import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.Ring
 import spire.algebra.Rng
-import scala.reflect.ClassTag
 import org.scalacheck.Gen
 import org.scalacheck.Gen.Choose
+import scala.reflect.ClassTag
 
-@implicitNotFound("Witness not found for LinearAlgebra[${M}, ${RowT}, ${ColT}, ${T}]")
-trait LinearAlgebra[M, RowT, ColT, T] {
+@implicitNotFound("Witness not found for LinearAlgebra[${M}, ${R}, ${C}, ${T}]")
+trait LinearAlgebra[M, R, C, T] {
 
   def ring: Ring[M]
 
@@ -20,20 +20,20 @@ trait LinearAlgebra[M, RowT, ColT, T] {
 
   def module: Module[M, T]
 
-  def rows(m: M): RowT
+  def rows(m: M): R
 
-  def columns(m: M): ColT
+  def columns(m: M): C
 
   def length(m: M): Int // TODO
 
-  def get(m: M)(i: RowT, j: ColT): T
+  def get(m: M)(i: R, j: C): T
 
-  def slice(m: M)(rs: Seq[RowT], cs: Seq[ColT]): M
+  def slice(m: M)(rs: Seq[R], cs: Seq[C]): M
 
   def toList(m: M): List[T]
 
-  def column(m: M)(j: ColT): M
-  def row(m: M)(i: RowT): M
+  def column(m: M)(j: C): M
+  def row(m: M)(i: R): M
 
   def isEmpty(m: M): Boolean
   def isRowVector(m: M): Boolean
@@ -66,9 +66,9 @@ trait LinearAlgebra[M, RowT, ColT, T] {
   //  def multiplyScalar(m: M)(x: T): M
   def divideScalar(m: M)(x: T): M
 
-  def addAssignment(m: M)(r: RowT, c: ColT, v: T): M
-  def mulRow(m: M)(i: RowT, x: T): M
-  def mulColumn(m: M)(i: ColT, x: T): M
+  def addAssignment(m: M)(r: R, c: C, v: T): M
+  def mulRow(m: M)(i: R, x: T): M
+  def mulColumn(m: M)(i: C, x: T): M
 
   // Operations on pairs of matrices
 
@@ -110,9 +110,9 @@ trait LinearAlgebra[M, RowT, ColT, T] {
   // various mins and maxs
 
   def max(m: M): T
-  def argmax(m: M): (RowT, ColT)
+  def argmax(m: M): (R, C)
   def min(m: M): T
-  def argmin(m: M): (RowT, ColT)
+  def argmin(m: M): (R, C)
 
   def rowSums(m: M): M
   def columnSums(m: M): M
@@ -129,11 +129,11 @@ trait LinearAlgebra[M, RowT, ColT, T] {
   def rowMeans(m: M): M
   def sortRows(m: M): M
 
-  def matrix(r: RowT, c: ColT, values: Array[T]): M
+  def matrix(r: R, c: C, values: Array[T]): M
 
-  def matrix(m: RowT, n: ColT, topleft: => T, left: RowT => T, top: ColT => T, fill: (RowT, ColT, T, T, T) => T): M
+  def matrix(m: R, n: C, topleft: => T, left: R => T, top: C => T, fill: (R, C, T, T, T) => T): M
 
-  def matrix(m: RowT, n: ColT, f: (RowT, ColT) => T): M
+  def matrix(m: R, n: C, f: (R, C) => T): M
 
   // Higher-order methods
 
@@ -180,18 +180,18 @@ trait LinearAlgebra[M, RowT, ColT, T] {
 
   // TODO:
   def zero: M = ring.zero
-  def zeros(laRows: RowT, laColumns: ColT): M
-  def eye(laRows: RowT): M = ring.one
-  def I(laRows: RowT): M = ring.one
-  def ones(laRows: RowT, laColumns: ColT): M
-  def rand(laRows: RowT, laColumns: ColT): M
-  def randn(laRows: RowT, laColumns: ColT): M
+  def zeros(laRows: R, laColumns: C): M
+  def eye(laRows: R): M = ring.one
+  def I(laRows: R): M = ring.one
+  def ones(laRows: R, laColumns: C): M
+  def rand(laRows: R, laColumns: C): M
+  def randn(laRows: R, laColumns: C): M
 
 }
 
 object LinearAlgebra {
 
-  @inline final def apply[M, RowT, ColT, T](implicit ev: LinearAlgebra[M, RowT, ColT, T]): LinearAlgebra[M, RowT, ColT, T] = ev
+  @inline final def apply[M, R, C, T](implicit ev: LinearAlgebra[M, R, C, T]): LinearAlgebra[M, R, C, T] = ev
 
   def genMatrix[M, T: Choose: ClassTag](
     m: Int,

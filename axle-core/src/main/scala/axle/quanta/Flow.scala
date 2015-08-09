@@ -27,7 +27,7 @@ trait FlowConverter[N] extends UnitConverter[Flow, N] with FlowUnits {
 
 object Flow {
 
-  def converterGraph[N: Field: Eq, DG[_, _]: DirectedGraph] =
+  def converterGraph[N: Field: Eq, DG](implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Flow], N => N]) =
     new UnitConverterGraph[Flow, N, DG] with FlowConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])] =

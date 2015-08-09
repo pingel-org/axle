@@ -18,8 +18,8 @@ import axle.syntax.linearalgebra._
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
 
-case class KMeansVisualization[D, F[_], M](
-    classifier: KMeans[D, F, M],
+case class KMeansVisualization[D, F, G, M](
+    classifier: KMeans[D, F, G, M],
     width: Int = 600,
     height: Int = 600,
     border: Int = 50,

@@ -1,66 +1,66 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-import scala.reflect.ClassTag
 import scala.collection.parallel.immutable.ParSeq
+
 import spire.math.Rational
 
 @implicitNotFound("Witness not found for Finite[${C}, ${S}]")
-trait Finite[C[_], S] {
+trait Finite[C, S] {
 
-  def size[A: ClassTag](t: C[A]): S
+  def size(t: C): S
 }
 
 object Finite {
 
-  @inline final def apply[C[_], S](implicit ev: Finite[C, S]): Finite[C, S] = ev
+  @inline final def apply[C, S](implicit ev: Finite[C, S]): Finite[C, S] = ev
 
-  implicit def finiteCIntRational[C[_]](implicit ev: Finite[C, Int]): Finite[C, Rational] =
+  implicit def finiteCIntRational[C](implicit ev: Finite[C, Int]): Finite[C, Rational] =
     new Finite[C, Rational] {
-      def size[A: ClassTag](xs: C[A]): Rational = ev.size(xs)
+      def size(xs: C): Rational = ev.size(xs)
     }
 
-  implicit def finiteCIntLong[C[_]](implicit ev: Finite[C, Int]): Finite[C, Long] =
+  implicit def finiteCIntLong[C](implicit ev: Finite[C, Int]): Finite[C, Long] =
     new Finite[C, Long] {
-      def size[A: ClassTag](xs: C[A]): Long = ev.size(xs).toLong
+      def size(xs: C): Long = ev.size(xs).toLong
     }
 
-  implicit def finiteSeq: Finite[Seq, Int] =
-    new Finite[Seq, Int] {
+  implicit def finiteSeq[T]: Finite[Seq[T], Int] =
+    new Finite[Seq[T], Int] {
 
-      def size[A: ClassTag](seq: Seq[A]): Int = seq.size
+      def size(seq: Seq[T]): Int = seq.size
     }
 
-  implicit def finiteList: Finite[List, Int] =
-    new Finite[List, Int] {
+  implicit def finiteList[T]: Finite[List[T], Int] =
+    new Finite[List[T], Int] {
 
-      def size[A: ClassTag](list: List[A]): Int = list.length
+      def size(list: List[T]): Int = list.length
     }
 
-  implicit def finiteVector: Finite[Vector, Int] =
-    new Finite[Vector, Int] {
+  implicit def finiteVector[T]: Finite[Vector[T], Int] =
+    new Finite[Vector[T], Int] {
 
-      def size[A: ClassTag](vector: Vector[A]): Int =
+      def size(vector: Vector[T]): Int =
         vector.length
     }
 
-  implicit def finiteParSeq: Finite[ParSeq, Int] =
-    new Finite[ParSeq, Int] {
+  implicit def finiteParSeq[T]: Finite[ParSeq[T], Int] =
+    new Finite[ParSeq[T], Int] {
 
-      def size[A: ClassTag](ps: ParSeq[A]): Int =
+      def size(ps: ParSeq[T]): Int =
         ps.length
     }
 
-  implicit def finiteIndexedSeq: Finite[IndexedSeq, Int] =
-    new Finite[IndexedSeq, Int] {
+  implicit def finiteIndexedSeq[T]: Finite[IndexedSeq[T], Int] =
+    new Finite[IndexedSeq[T], Int] {
 
-      def size[A: ClassTag](is: IndexedSeq[A]): Int = is.length
+      def size(is: IndexedSeq[T]): Int = is.length
     }
 
-  implicit def finiteImmutableIndexedSeq: Finite[scala.collection.immutable.IndexedSeq, Int] =
-    new Finite[scala.collection.immutable.IndexedSeq, Int] {
+  implicit def finiteImmutableIndexedSeq[T]: Finite[scala.collection.immutable.IndexedSeq[T], Int] =
+    new Finite[scala.collection.immutable.IndexedSeq[T], Int] {
 
-      def size[A: ClassTag](is: scala.collection.immutable.IndexedSeq[A]): Int =
+      def size(is: scala.collection.immutable.IndexedSeq[T]): Int =
         is.length
     }
   

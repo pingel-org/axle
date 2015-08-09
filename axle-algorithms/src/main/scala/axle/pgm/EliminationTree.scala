@@ -9,13 +9,14 @@ import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import axle.syntax.undirectedgraph._
 
-case class EliminationTree[T: Eq: Manifest, N: Field: Manifest, UG[_, _]: UndirectedGraph](
+class EliminationTreeEdge
+
+case class EliminationTree[T: Eq: Manifest, N: Field: Manifest, UG](
     vps: Seq[Factor[T, N]],
-    ef: Seq[(Factor[T, N], Factor[T, N])]) {
+    ef: Seq[(Factor[T, N], Factor[T, N])])(
+        implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]) {
 
-  class Edge
-
-  lazy val graph = undirectedGraph(vps, ef.map({ case (v1, v2) => (v1, v2, new Edge) }))
+  lazy val graph = ug.make(vps, ef.map({ case (v1, v2) => (v1, v2, new EliminationTreeEdge) }))
 
   def gatherVars(
     stop: Factor[T, N],

@@ -11,6 +11,8 @@ import axle.syntax.directedgraph._
 
 case class CausalModelNode[T: Eq, N: Field](rv: Distribution[T, N], observable: Boolean = true)
 
+class CausalModelEdge
+
 object CausalModelNode {
   implicit def cmnEq[T: Eq, N: Field]: Eq[CausalModelNode[T, N]] = new Eq[CausalModelNode[T, N]] {
     def eqv(x: CausalModelNode[T, N], y: CausalModelNode[T, N]): Boolean =
@@ -25,8 +27,10 @@ trait PFunction[T, N] {
   def inputs: Seq[Distribution[T, N]]
 }
 
-case class CausalModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](
-  val name: String, graph: DG[CausalModelNode[T, N], String]) {
+case class CausalModel[T: Eq, N: Field, DG](
+    val name: String, graph: DG)(
+        implicit dg: DirectedGraph[DG, CausalModelNode[T, N], CausalModelEdge]) {
+
   import graph._
 
   def duplicate: CausalModel[T, N, DG] = ???
@@ -54,7 +58,10 @@ case class CausalModel[T: Eq, N: Field, DG[_, _]: DirectedGraph](
 
 object CausalModel {
 
-  def apply[T: Eq, N: Field, DG[_, _]: DirectedGraph](name: String, vps: Seq[CausalModelNode[T, N]]): CausalModel[T, N, DG] =
-    CausalModel(name, DirectedGraph[DG].make[CausalModelNode[T, N], String](vps, Nil))
+  def apply[T: Eq, N: Field, DG](
+    name: String,
+    vps: Seq[CausalModelNode[T, N]])(
+      implicit dg: DirectedGraph[DG, CausalModelNode[T, N], CausalModelEdge]): CausalModel[T, N, DG] =
+    CausalModel(name, dg.make(vps, Nil))
 
 }

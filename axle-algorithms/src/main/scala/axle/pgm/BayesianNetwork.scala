@@ -74,17 +74,16 @@ object BayesianNetworkNode {
   }
 }
 
-case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG[_, _]: DirectedGraph](
+case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG](
     name: String,
-    variableFactorMap: Map[Distribution[T, N], Factor[T, N]]) {
-
-  val dg = implicitly[DirectedGraph[DG]]
+    variableFactorMap: Map[Distribution[T, N], Factor[T, N]])(
+        implicit dg: DirectedGraph[DG, BayesianNetworkNode[T, N], Edge]) {
 
   val bnns = variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList
 
   val bnnByVariable = bnns.map(bnn => bnn.rv -> bnn).toMap
 
-  val _graph: DG[BayesianNetworkNode[T, N], Edge] =
+  val _graph: DG =
     dg.make(bnns,
       bnns.flatMap(dest =>
         dest.cpt.variables.filterNot(_ === dest.rv)
@@ -95,7 +94,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def numVariables = variableFactorMap.size
 
   def randomVariables: Vector[Distribution[T, N]] =
-    graph.vertices.map(_.rv).toVector
+    dg.vertices(graph).map(_.rv).toVector
 
   def jointProbabilityTable: Factor[T, N] = {
     val newVars = randomVariables
@@ -176,13 +175,13 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    * Also called the "moral graph"
    */
 
-  def interactionGraph[UG[_, _]: UndirectedGraph]: InteractionGraph[T, N, UG] =
+  def interactionGraph[UG](implicit ug: UndirectedGraph[UG, Distribution[T, N], InteractionGraphEdge]): InteractionGraph[T, N, UG] =
     InteractionGraph(randomVariables,
       (for {
         vi <- randomVariables // TODO "doubles"
         vj <- randomVariables
         if interactsWith(vi, vj)
-      } yield (vi, vj, "")))
+      } yield (vi, vj, new InteractionGraphEdge)))
 
   /**
    * orderWidth
@@ -190,7 +189,8 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    * Chapter 6 Algorithm 2 (page 13)
    */
 
-  def orderWidth[UG[_, _]: UndirectedGraph](order: List[Distribution[T, N]]): Int =
+  def orderWidth[UG](order: List[Distribution[T, N]])(
+    implicit ug: UndirectedGraph[UG, Distribution[T, N], InteractionGraphEdge]): Int =
     randomVariables.scanLeft((interactionGraph, 0))(
       (gi, rv) => {
         val ig = gi._1
@@ -354,7 +354,11 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
-  def factorElimination2[UG[_, _]: UndirectedGraph](Q: Set[Distribution[T, N]], τ: EliminationTree[T, N, UG], f: Factor[T, N]): (BayesianNetwork[T, N, DG], Factor[T, N]) = {
+  def factorElimination2[UG](
+    Q: Set[Distribution[T, N]],
+    τ: EliminationTree[T, N, UG],
+    f: Factor[T, N])(
+      implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]): (BayesianNetwork[T, N, DG], Factor[T, N]) = {
     while (τ.graph.vertices.size > 1) {
       // remove node i (other than r) that has single neighbor j in τ
       val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_ === f).get)
@@ -385,7 +389,9 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   //  }
 
   // Note: not sure about this return type:
-  def factorElimination[UG[_, _]: UndirectedGraph](τ: EliminationTree[T, N, UG], e: List[CaseIs[T, N]]): Map[Factor[T, N], Factor[T, N]] =
+  def factorElimination[UG](
+    τ: EliminationTree[T, N, UG],
+    e: List[CaseIs[T, N]])(implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]): Map[Factor[T, N], Factor[T, N]] =
     {
       τ.graph.vertices foreach { i =>
         e foreach { ci =>

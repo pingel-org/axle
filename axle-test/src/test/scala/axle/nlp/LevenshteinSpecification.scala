@@ -25,7 +25,7 @@ class LevenshteinSpecification
 
   implicit val laJblasInt = linearAlgebraDoubleMatrix[Int]
 
-  implicit val space = Levenshtein[IndexedSeq, Char, DoubleMatrix, Int]()
+  implicit val space = Levenshtein[IndexedSeq[Char], Char, DoubleMatrix, Int]()
 
   implicit val pred: Predicate[Int] = new Predicate[Int] {
     def apply(a: Int) = true

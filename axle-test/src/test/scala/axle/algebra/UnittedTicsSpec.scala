@@ -6,6 +6,7 @@ import org.specs2.mutable.Specification
 
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
+import axle.quanta.UnitOfMeasurement
 import axle.jung.directedGraphJung
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
@@ -19,11 +20,11 @@ class UnittedTicsSpec extends Specification {
   "Tics for UnittedQuantity" should {
     "work" in {
 
-      implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
+      implicit val id = Information.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]]
       import id.bit
       implicit val base = bit
 
-      val ticker = axle.quanta.unittedTics[Information, Double, DirectedSparseGraph]
+      val ticker = axle.quanta.unittedTics[Information, Double, DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]]
 
       val tics = ticker.tics(0d *: bit, 1d *: bit).toVector
 

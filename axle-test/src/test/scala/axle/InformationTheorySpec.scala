@@ -2,6 +2,7 @@ package axle
 
 import org.specs2.mutable.Specification
 
+import axle.quanta.UnitOfMeasurement
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.ConditionalProbabilityTable2
 import axle.stats.P
@@ -23,7 +24,7 @@ class InformationTheorySpec extends Specification {
 
     "work" in {
 
-      implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
+      implicit val id = Information.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]]
 
       val d =
         ConditionalProbabilityTable0(Map(
@@ -68,7 +69,7 @@ class InformationTheorySpec extends Specification {
       val biasedCoin = coin(Rational(9, 10))
       val fairCoin = coin()
 
-      implicit val id = Information.converterGraph[Double, DirectedSparseGraph]
+      implicit val id = Information.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]]
 
       // assumes entropy is in bits
       entropy(biasedCoin).magnitude should be equalTo (0.4689955935892812)

@@ -42,7 +42,6 @@ import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
 import axle.algebra.Finite
 import axle.algebra.Functor
-import scala.reflect.ClassTag
 import spire.optional.unicode.Π
 import spire.optional.unicode.Σ
 import spire.algebra.Bool
@@ -54,12 +53,11 @@ import spire.algebra.AdditiveMonoid
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.compat.ordering
-import spire.implicits.IntAlgebra
-import spire.implicits.LongAlgebra
 import spire.implicits.eqOps
 import spire.implicits.moduleOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
+import spire.implicits.convertableOps
 import spire.math.Rational
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
@@ -67,7 +65,6 @@ import axle.quanta.UnitOfMeasurement
 import axle.quanta.AngleConverter
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
-import spire.implicits._
 import scala.language.implicitConversions
 
 /**
@@ -97,29 +94,40 @@ package object axle {
    * Monte Carlo approximation of pi http://en.wikipedia.org/wiki/Monte_Carlo_method
    *
    * TODO get n2v implicitly?
-   * 
+   *
    */
 
-  def monteCarloPiEstimate[F[_]: Functor: Aggregatable, N: ClassTag, V: ClassTag: Field: ConvertableTo](
-    trials: F[N], n2v: N => V)(
-      implicit finite: Finite[F, N]): V = {
+  def monteCarloPiEstimate[F, N, V: ConvertableTo, G](
+    trials: F,
+    n2v: N => V)(
+      implicit finite: Finite[F, N],
+      functor: Functor[F, N, V, G],
+      agg: Aggregatable[G, V, V],
+      field: Field[V]): V = {
 
     import scala.math.random
     import axle.algebra.Σ
     import axle.syntax.functor.functorOps
-
-    val vOne = Field[V].one
-    val vZero = Field[V].zero
+    import spire.implicits.multiplicativeSemigroupOps
+    import spire.implicits.multiplicativeGroupOps
 
     val randomPointInCircle: () => V = () => {
       val x = random * 2 - 1
       val y = random * 2 - 1
-      if (x * x + y * y < 1) vOne else vZero
+      if (x * x + y * y < 1) field.one else field.zero
     }
 
     val vFour = ConvertableTo[V].fromDouble(4d)
 
-    (vFour * Σ(trials.map(i => randomPointInCircle()))) / n2v(finite.size(trials))
+    val counts: G = trials.map(i => randomPointInCircle())
+
+    val s: V = Σ(counts)
+
+    val numerator: V = vFour * s
+
+    val denominator: V = n2v(finite.size(trials))
+
+    numerator / denominator
   }
 
   def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
@@ -173,7 +181,10 @@ package object axle {
    * http://en.wikipedia.org/wiki/Ackermann_function
    */
 
-  def ackermann(m: Long, n: Long): Long =
+  def ackermann(m: Long, n: Long): Long = {
+
+    import spire.implicits.LongAlgebra
+
     if (m === 0) {
       n + 1
     } else if (m > 0 && n === 0) {
@@ -181,6 +192,7 @@ package object axle {
     } else {
       ackermann(m - 1, ackermann(m, n - 1))
     }
+  }
 
   // Fundamental:
 
@@ -208,6 +220,9 @@ package object axle {
   def √[N: NRoot](x: N): N = x.sqrt
 
   implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
+
+    import spire.implicits.IntAlgebra
+
     def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
   }
 

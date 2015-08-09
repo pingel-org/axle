@@ -56,7 +56,7 @@ class ConditionalProbabilityTableSpecification
     Vector(E is false, C is false) -> Rational(1)))
 
   // edges: ab, ac, bd, cd, ce
-  val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph](
+  val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
     "6.1",
     Map(A -> aFactor,
       B -> bFactor,

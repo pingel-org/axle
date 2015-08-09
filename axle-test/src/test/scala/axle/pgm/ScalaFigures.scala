@@ -28,7 +28,7 @@ class ScalaFigures extends Specification {
   val D = ubd("D")
   val E = ubd("E")
 
-  def figure6_1: BayesianNetwork[Boolean, Rational, DirectedSparseGraph] = {
+  def figure6_1: BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]] = {
 
     val aFactor = Factor(Vector(A), Map(
       Vector(A is true) -> Rational(6, 10),
@@ -63,7 +63,7 @@ class ScalaFigures extends Specification {
       Vector(E is false, C is false) -> Rational(1)))
 
     // edges: ab, ac, bd, cd, ce
-    BayesianNetwork[Boolean, Rational, DirectedSparseGraph](
+    BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
       "6.1",
       Map(A -> aFactor,
         B -> bFactor,
@@ -100,7 +100,7 @@ class ScalaFigures extends Specification {
     (cptB, cptD)
   }
 
-  def figure6_4: BayesianNetwork[Boolean, Rational, DirectedSparseGraph] = {
+  def figure6_4: BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]] = {
 
     val aFactor = Factor(Vector(A), Map(
       Vector(A is true) -> Rational(6, 10),
@@ -119,7 +119,7 @@ class ScalaFigures extends Specification {
       Vector(C is false, B is false) -> Rational(1, 2)))
 
     // edges: ab, bc
-    val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph]("6.4",
+    val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]]("6.4",
       Map(A -> aFactor,
         B -> bFactor,
         C -> cFactor))
@@ -129,7 +129,7 @@ class ScalaFigures extends Specification {
     bn
   }
 
-  def figure6_5: List[InteractionGraph[Boolean, Rational, UndirectedSparseGraph]] =
+  def figure6_5: List[InteractionGraph[Boolean, Rational, UndirectedSparseGraph[Distribution[Boolean, Rational], InteractionGraphEdge]]] =
     figure6_1.interactionGraph.eliminationSequence(List(B, C, A, D))
 
   def figure6_7 = {
@@ -157,7 +157,7 @@ class ScalaFigures extends Specification {
   // Result of fe-i on a->b->c with Q={C}
   def figure7_2 = figure6_4.factorElimination1(Set(C))
 
-  def figure7_4: (BayesianNetwork[Boolean, Rational, DirectedSparseGraph], EliminationTree[Boolean, Rational, UndirectedSparseGraph], Factor[Boolean, Rational]) = {
+  def figure7_4: (BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]], EliminationTree[Boolean, Rational, UndirectedSparseGraph[Factor[Boolean, Rational], EliminationTreeEdge]], Factor[Boolean, Rational]) = {
 
     val f61 = figure6_1
 
@@ -167,7 +167,7 @@ class ScalaFigures extends Specification {
       val c = f61.cpt(C)
       val d = f61.cpt(D)
       val e = f61.cpt(E)
-      EliminationTree[Boolean, Rational, UndirectedSparseGraph](
+      EliminationTree[Boolean, Rational, UndirectedSparseGraph[Factor[Boolean, Rational], EliminationTreeEdge]](
         Vector(a, b, c, d, e),
         List((a, b), (a, d), (d, c), (c, e)))
     }

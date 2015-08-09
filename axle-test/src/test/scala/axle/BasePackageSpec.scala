@@ -8,11 +8,11 @@ import spire.optional.unicode.Σ
 class BasePackageSpec extends Specification {
 
   // from spire: Σ((1 to 10) map { _ * 2 })
-  
+
   "quantifiers there exists (∃) and for all (∀)" should {
     "work" in {
-      ∃(List(1, 2, 3)) { _ % 2 == 0 } must beTrue
-      ∀(List(1, 2, 3)) { _ % 2 == 0 } must beFalse
+      ∃(List(1, 2, 3)) { i: Int => i % 2 == 0 } must beTrue
+      ∀(List(1, 2, 3)) { i: Int => i % 2 == 0 } must beFalse
     }
   }
 

@@ -47,19 +47,19 @@ object ObservableMarkovModelState {
     }
 }
 
-case class HiddenMarkovModel[DG[_, _]: DirectedGraph](
+class HMMEdge[N](p: N)
+
+case class HiddenMarkovModel[DG](
   states: IndexedSeq[UnobservableMarkovModelState],
   observations: IndexedSeq[ObservableMarkovModelState],
   startProbability: Map[UnobservableMarkovModelState, Double],
   transitionProbability: Map[UnobservableMarkovModelState, Map[UnobservableMarkovModelState, Double]], // can be fully-connected
   emissionProbability: Map[UnobservableMarkovModelState, Map[ObservableMarkovModelState, Double]] // arrows from un-observables to observables
-  ) {
+  )(implicit dg: DirectedGraph[DG, MarkovModelState, HMMEdge[Double]]) {
 
   val startState = MarkovModelStartState()
 
-  class HMMEdge[N](p: N)
-
-  val graph = directedGraph[DG, MarkovModelState, HMMEdge[Double]](
+  val graph = dg.make(
     states ++ observations ++ List(startState),
     {
       val startEdges = startProbability.map({ case (dest, p) => (startState, dest, new HMMEdge(p)) })

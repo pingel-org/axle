@@ -1,21 +1,21 @@
 package axle.algebra
 
-import scala.reflect.ClassTag
 import scala.annotation.implicitNotFound
+import scala.reflect.ClassTag
 
-@implicitNotFound("Witness not found for ArrayFrom[${C}]")
-trait ArrayFrom[C[_]] {
+@implicitNotFound("Witness not found for ArrayFrom[${C}, ${A}]")
+trait ArrayFrom[C, A] {
 
-  def toArray[A: ClassTag](af: C[A]): Array[A]
+  def toArray(af: C): Array[A]
 }
 
 object ArrayFrom {
 
-  @inline final def apply[C[_]: ArrayFrom]: ArrayFrom[C] = implicitly[ArrayFrom[C]]
+  @inline final def apply[C, A](implicit af: ArrayFrom[C, A]): ArrayFrom[C, A] = af
 
-  implicit def arrayFromSeq: ArrayFrom[Seq] = new ArrayFrom[Seq] {
+  implicit def arrayFromSeq[A: ClassTag]: ArrayFrom[Seq[A], A] = new ArrayFrom[Seq[A], A] {
 
-    def toArray[A: ClassTag](af: Seq[A]): Array[A] = af.toArray
+    def toArray(af: Seq[A]): Array[A] = af.toArray
   }
 
 }
