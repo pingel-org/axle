@@ -11,6 +11,7 @@ import axle.quanta.Distance
 import axle.quanta.UnitOfMeasurement
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
+import spire.implicits.metricSpaceOps
 
 class GeoLengthSpaceSpec extends Specification {
 
@@ -26,11 +27,9 @@ class GeoLengthSpaceSpec extends Specification {
       val sf = GeoCoordinates(37.7833 *: °, 122.4167 *: °)
       val ny = GeoCoordinates(40.7127 *: °, 74.0059 *: °)
 
-      import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
+      // val geoLengthSpace = geoCoordinatesLengthSpace[Double]
 
-      val geoLengthSpace = geoCoordinatesLengthSpace[Double]
-
-      (geoLengthSpace.distance(sf, ny) in km).magnitude must be equalTo 4128.553030413071
+      ((sf distance ny) in km).magnitude must be equalTo 4128.553030413071
     }
   }
 
