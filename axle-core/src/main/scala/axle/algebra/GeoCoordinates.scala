@@ -20,6 +20,7 @@ import axle.sine
 import axle.square
 import spire.algebra.Eq
 import spire.algebra.Field
+import spire.algebra.MetricSpace
 import spire.implicits.DoubleAlgebra
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
@@ -40,10 +41,10 @@ case class GeoCoordinates[N](
 
 object GeoCoordinates {
 
-  implicit def geoCoordinatesLengthSpace[N: Field: Eq: ConvertableFrom: ConvertableTo](
+  implicit def geoCoordinatesMetricSpace[N: Field: Eq: ConvertableFrom: ConvertableTo](
     implicit angleConverter: AngleConverter[N],
-    distanceConverter: DistanceConverter[N]): LengthSpace[GeoCoordinates[N], UnittedQuantity[Distance, N]] =
-    new LengthSpace[GeoCoordinates[N], UnittedQuantity[Distance, N]] {
+    distanceConverter: DistanceConverter[N]): MetricSpace[GeoCoordinates[N], UnittedQuantity[Distance, N]] =
+    new MetricSpace[GeoCoordinates[N], UnittedQuantity[Distance, N]] {
 
       import distanceConverter.km
       val ctn = ConvertableTo[N]
@@ -60,6 +61,25 @@ object GeoCoordinates {
         val c = ctn.fromDouble(2 * atan2(sqrt(a), sqrt(1 - a)))
         earthRadius :* c
       }
+
+    }
+
+  implicit def geoCoordinatesLengthSpace[N: Field: Eq: ConvertableFrom: ConvertableTo](
+    implicit angleConverter: AngleConverter[N],
+    distanceConverter: DistanceConverter[N]): LengthSpace[GeoCoordinates[N], UnittedQuantity[Distance, N]] =
+    new LengthSpace[GeoCoordinates[N], UnittedQuantity[Distance, N]] {
+
+      val metricSpace: MetricSpace[GeoCoordinates[N], UnittedQuantity[Distance, N]] =
+        geoCoordinatesMetricSpace[N]
+
+      import distanceConverter.km
+      val ctn = ConvertableTo[N]
+      val cfn = ConvertableFrom[N]
+      val earthRadius = ctn.fromDouble(6371d) *: km
+      val half = ctn.fromRational(Rational(1, 2))
+
+      def distance(v: GeoCoordinates[N], w: GeoCoordinates[N]): UnittedQuantity[Distance, N] =
+        metricSpace.distance(v, w)
 
       def onPath(left: GeoCoordinates[N], right: GeoCoordinates[N], p: Double): GeoCoordinates[N] = {
         val portion = ctn.fromDouble(p)

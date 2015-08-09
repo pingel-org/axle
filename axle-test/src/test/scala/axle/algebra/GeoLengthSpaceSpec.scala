@@ -2,7 +2,7 @@ package axle.algebra
 
 import org.specs2.mutable.Specification
 
-import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
+import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
 import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.jung.directedGraphJung
@@ -26,8 +26,6 @@ class GeoLengthSpaceSpec extends Specification {
 
       val sf = GeoCoordinates(37.7833 *: °, 122.4167 *: °)
       val ny = GeoCoordinates(40.7127 *: °, 74.0059 *: °)
-
-      // val geoLengthSpace = geoCoordinatesLengthSpace[Double]
 
       ((sf distance ny) in km).magnitude must be equalTo 4128.553030413071
     }
