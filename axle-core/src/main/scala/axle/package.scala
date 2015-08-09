@@ -63,6 +63,7 @@ import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.AngleConverter
+import axle.quanta.Distance
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 import scala.language.implicitConversions
@@ -129,6 +130,15 @@ package object axle {
 
     numerator / denominator
   }
+
+  def distanceOnSphere[N: MultiplicativeMonoid](
+    angle: UnittedQuantity[Angle, N],
+    sphereRadius: UnittedQuantity[Distance, N])(
+      implicit angleConverter: AngleConverter[N],
+      ctn: ConvertableTo[N],
+      angleModule: Module[UnittedQuantity[Angle, N], N],
+      distanceModule: Module[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
+    sphereRadius :* ((angle in angleConverter.radian).magnitude)
 
   def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
     a: UnittedQuantity[Angle, N])(
