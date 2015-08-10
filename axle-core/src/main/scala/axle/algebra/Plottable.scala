@@ -17,8 +17,8 @@ trait Plottable[T] {
 
 object Plottable {
 
-  @inline final def apply[T: Plottable]: Plottable[T] = implicitly[Plottable[T]]
-  
+  final def apply[T: Plottable]: Plottable[T] = implicitly[Plottable[T]]
+
   implicit val doublePlottable: Plottable[Double] =
     new Plottable[Double] {
       override def isPlottable(t: Double): Boolean = (!t.isInfinite) && (!t.isNaN)

@@ -24,7 +24,7 @@ trait Monad[M[_]] {
 
 object Monad {
 
-  @inline final def apply[M[_]: Monad]: Monad[M] = implicitly[Monad[M]]
+  final def apply[M[_]: Monad]: Monad[M] = implicitly[Monad[M]]
 
   //  implicit def monadEq[M[_]]() = new Eq[Monad[M[_]]] {
   //    def eqv(x: Monad[A], y: Monad[A]): Boolean = ???

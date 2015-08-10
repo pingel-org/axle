@@ -20,7 +20,7 @@ trait Zero[T] {
 
 object Zero {
 
-  @inline final def apply[T: Zero]: Zero[T] = implicitly[Zero[T]]
+  final def apply[T: Zero]: Zero[T] = implicitly[Zero[T]]
 
   implicit def addemZero[T: AdditiveMonoid]: Zero[T] =
     new Zero[T] {

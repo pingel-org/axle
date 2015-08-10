@@ -93,6 +93,6 @@ trait DirectedGraph[DG, V, E] {
 
 object DirectedGraph {
 
-  @inline final def apply[DG, V, E](implicit dg: DirectedGraph[DG, V, E]): DirectedGraph[DG, V, E] = dg
+  final def apply[DG, V, E](implicit dg: DirectedGraph[DG, V, E]): DirectedGraph[DG, V, E] = dg
 
 }

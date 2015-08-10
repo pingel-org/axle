@@ -10,7 +10,7 @@ trait SetFrom[C, A] {
 
 object SetFrom {
 
-  @inline final def apply[C, A](implicit sfa: SetFrom[C, A]): SetFrom[C, A] =
+  final def apply[C, A](implicit sfa: SetFrom[C, A]): SetFrom[C, A] =
     implicitly[SetFrom[C, A]]
 
   implicit def setFromSeq[A]: SetFrom[Seq[A], A] =

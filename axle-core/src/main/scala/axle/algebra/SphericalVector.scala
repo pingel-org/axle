@@ -20,7 +20,7 @@ import spire.implicits.multiplicativeSemigroupOps
  * http://en.wikipedia.org/wiki/Spherical_coordinate_system
  *
  */
-case class SphericalVector[N]( // Field: Order
+case class SphericalVector[N](
   ρ: UnittedQuantity[Distance, N], // radius
   θ: UnittedQuantity[Angle, N], // 90 - latitude N, aka "co-latitude"
   φ: UnittedQuantity[Angle, N] // longitude E

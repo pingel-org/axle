@@ -44,7 +44,7 @@ trait LengthSpace[V, R] extends MetricSpace[V, R] {
 
 object LengthSpace {
 
-  @inline final def apply[V, R](implicit ev: LengthSpace[V, R]): LengthSpace[V, R] = ev
+  final def apply[V, R](implicit ev: LengthSpace[V, R]): LengthSpace[V, R] = ev
 
   // TODO move uqDoubleLengthSpace to UnittedQuantity.scala
   // it also seems like this wrapped lengthspace could be generalized

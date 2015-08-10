@@ -191,7 +191,7 @@ trait LinearAlgebra[M, R, C, T] {
 
 object LinearAlgebra {
 
-  @inline final def apply[M, R, C, T](implicit ev: LinearAlgebra[M, R, C, T]): LinearAlgebra[M, R, C, T] = ev
+  final def apply[M, R, C, T](implicit ev: LinearAlgebra[M, R, C, T]): LinearAlgebra[M, R, C, T] = ev
 
   def genMatrix[M, T: Choose: ClassTag](
     m: Int,

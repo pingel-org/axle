@@ -72,6 +72,6 @@ trait UndirectedGraph[UG, V, E] {
 
 object UndirectedGraph {
 
-  @inline final def apply[UG, V, E](implicit ug: UndirectedGraph[UG, V, E]): UndirectedGraph[UG, V, E] = ug
+  final def apply[UG, V, E](implicit ug: UndirectedGraph[UG, V, E]): UndirectedGraph[UG, V, E] = ug
 
 }

@@ -10,7 +10,7 @@ trait Reducible[R, A] {
 
 object Reducible {
 
-  @inline final def apply[R, A](implicit ra: Reducible[R, A]): Reducible[R, A] =
+  final def apply[R, A](implicit ra: Reducible[R, A]): Reducible[R, A] =
     implicitly[Reducible[R, A]]
 
   implicit def reduceSeq[A]: Reducible[Seq[A], A] = new Reducible[Seq[A], A] {

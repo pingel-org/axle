@@ -24,7 +24,7 @@ trait DataView[X, Y, D] {
 
 object DataView {
 
-  @inline final def apply[X, Y, D](implicit ev: DataView[X, Y, D]) = ev
+  final def apply[X, Y, D](implicit ev: DataView[X, Y, D]) = ev
 
   implicit def mapDataView[X: Order, Y: Plottable: Zero: Order]: DataView[X, Y, Map[X, Y]] =
     new DataView[X, Y, Map[X, Y]] {
