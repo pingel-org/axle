@@ -41,6 +41,20 @@ case class GeoCoordinates[N](
 
 object GeoCoordinates {
 
+  import spire.algebra.Eq
+  import spire.algebra.MultiplicativeMonoid
+  import spire.implicits.eqOps
+
+  implicit def eqgcd[N: Eq: MultiplicativeMonoid](
+    implicit ac: AngleConverter[N]): Eq[GeoCoordinates[N]] =
+    new Eq[GeoCoordinates[N]] {
+      def eqv(x: GeoCoordinates[N], y: GeoCoordinates[N]): Boolean = {
+        val lateq: Boolean = (x.latitude.magnitude === (y.latitude in x.latitude.unit).magnitude)
+        val longeq: Boolean = (x.longitude.magnitude === (y.longitude in x.latitude.unit).magnitude)
+        lateq && longeq
+      }
+    }
+
   implicit def geoCoordinatesMetricSpace[N: Field: Eq: ConvertableFrom: ConvertableTo](
     implicit angleConverter: AngleConverter[N]): MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
     new MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] {
