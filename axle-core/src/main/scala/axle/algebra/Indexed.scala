@@ -11,7 +11,7 @@ trait Indexed[C, I, A] {
 
 object Indexed {
 
-  @inline final def apply[C, I, A](implicit ev: Indexed[C, I, A]): Indexed[C, I, A] = ev
+  final def apply[C, I, A](implicit ev: Indexed[C, I, A]): Indexed[C, I, A] = ev
 
   implicit def indexedSeq[A]: Indexed[Seq[A], Int, A] =
     new Indexed[Seq[A], Int, A] {

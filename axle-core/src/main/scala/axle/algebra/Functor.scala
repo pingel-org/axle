@@ -11,9 +11,9 @@ trait Functor[F, A, B, G] {
 
 object Functor {
 
-  @inline final def apply[F, A, B, G](
+  final def apply[F, A, B, G](
     implicit functor: Functor[F, A, B, G]): Functor[F, A, B, G] =
-    implicitly[Functor[F, A, B, G]]
+    functor
 
   implicit def functorSeq[A, B] =
     new Functor[Seq[A], A, B, Seq[B]] {

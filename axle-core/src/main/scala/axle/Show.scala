@@ -11,7 +11,7 @@ trait Show[T] {
 
 object Show {
 
-  @inline final def apply[T: Show]: Show[T] = implicitly[Show[T]]
+  final def apply[T: Show]: Show[T] = implicitly[Show[T]]
 
   implicit val showDouble: Show[Double] = new Show[Double] {
     // TODO: configurable precision

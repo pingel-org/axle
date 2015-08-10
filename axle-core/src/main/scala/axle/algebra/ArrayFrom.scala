@@ -11,7 +11,7 @@ trait ArrayFrom[C, A] {
 
 object ArrayFrom {
 
-  @inline final def apply[C, A](implicit af: ArrayFrom[C, A]): ArrayFrom[C, A] = af
+  final def apply[C, A](implicit af: ArrayFrom[C, A]): ArrayFrom[C, A] = af
 
   implicit def arrayFromSeq[A: ClassTag]: ArrayFrom[Seq[A], A] = new ArrayFrom[Seq[A], A] {
 

@@ -12,6 +12,6 @@ trait Paintable[P] {
 
 object Paintable {
 
-  @inline final def apply[P: Paintable]: Paintable[P] = implicitly[Paintable[P]]
+  final def apply[P](implicit paintable: Paintable[P]): Paintable[P] = paintable
 
 }

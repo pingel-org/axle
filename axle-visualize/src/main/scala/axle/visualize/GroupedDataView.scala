@@ -27,7 +27,7 @@ trait GroupedDataView[G, S, Y, D] {
 
 object GroupedDataView {
 
-  @inline final def apply[G, S, Y, D](implicit ev: GroupedDataView[G, S, Y, D]): GroupedDataView[G, S, Y, D] = ev
+  final def apply[G, S, Y, D](implicit ev: GroupedDataView[G, S, Y, D]): GroupedDataView[G, S, Y, D] = ev
 
   implicit def mapGroupedDataView[G: Order, S: Order, Y: Plottable: Zero: Order]: GroupedDataView[G, S, Y, Map[(G, S), Y]] =
     new GroupedDataView[G, S, Y, Map[(G, S), Y]] {

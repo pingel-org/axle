@@ -60,7 +60,7 @@ trait SVG[S] {
 
 object SVG {
 
-  @inline final def apply[S: SVG]: SVG[S] = implicitly[SVG[S]]
+  final def apply[S](implicit svg: SVG[S]): SVG[S] = svg
 
   def rgb(color: Color): String = s"rgb(${color.r},${color.g},${color.b})"
 

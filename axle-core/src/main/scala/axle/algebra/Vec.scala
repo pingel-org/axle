@@ -17,7 +17,7 @@ trait Vec[V[_]] {
 
 object Vec {
 
-  @inline final def apply[V[_]: Vec]: Vec[V] = implicitly[Vec[V]]
+  final def apply[V[_]: Vec]: Vec[V] = implicitly[Vec[V]]
 
   type TV[N] = (N, N)
 

@@ -11,7 +11,7 @@ trait FoldLeft[F[_]] {
 
 object FoldLeft {
 
-  @inline final def apply[F[_]: FoldLeft]: FoldLeft[F] = implicitly[FoldLeft[F]]
+  final def apply[F[_]: FoldLeft]: FoldLeft[F] = implicitly[FoldLeft[F]]
 
   implicit val foldLeftList = new FoldLeft[List] {
     def foldLeft[A, B](xs: List[A], zero: B, op: (B, A) => B): B = xs.foldLeft(zero)(op)

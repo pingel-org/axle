@@ -19,7 +19,7 @@ trait Render[A] {
 
 object Render {
 
-  @inline final def apply[A: Render]: Render[A] = implicitly[Render[A]]
+  final def apply[A](implicit render: Render[A]): Render[A] = render
 
   implicit val quadRenderer = new Render[Quad[Float]] {
     def render(quad: Quad[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {

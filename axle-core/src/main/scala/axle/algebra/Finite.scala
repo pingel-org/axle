@@ -13,7 +13,7 @@ trait Finite[C, S] {
 
 object Finite {
 
-  @inline final def apply[C, S](implicit ev: Finite[C, S]): Finite[C, S] = ev
+  final def apply[C, S](implicit ev: Finite[C, S]): Finite[C, S] = ev
 
   implicit def finiteCIntRational[C](implicit ev: Finite[C, Int]): Finite[C, Rational] =
     new Finite[C, Rational] {

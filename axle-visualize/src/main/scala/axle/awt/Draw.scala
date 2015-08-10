@@ -11,5 +11,5 @@ trait Draw[T] {
 
 object Draw {
 
-  @inline final def apply[T: Draw]: Draw[T] = implicitly[Draw[T]]
+  final def apply[T](implicit draw: Draw[T]): Draw[T] = draw
 }

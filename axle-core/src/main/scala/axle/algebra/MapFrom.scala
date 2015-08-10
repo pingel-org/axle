@@ -10,7 +10,7 @@ trait MapFrom[C, K, V] {
 
 object MapFrom {
 
-  @inline final def apply[C, K, V](implicit mfa: MapFrom[C, K, V]): MapFrom[C, K, V] =
+  final def apply[C, K, V](implicit mfa: MapFrom[C, K, V]): MapFrom[C, K, V] =
     implicitly[MapFrom[C, K, V]]
 
   implicit def mapFromSeq[K, V]: MapFrom[Seq[(K, V)], K, V] =

@@ -17,7 +17,7 @@ trait Tics[T] {
 
 object Tics {
 
-  @inline final def apply[T: Tics]: Tics[T] = implicitly[Tics[T]]
+  final def apply[T: Tics]: Tics[T] = implicitly[Tics[T]]
 
   implicit def doubleTics: Tics[Double] = new Tics[Double] {
 

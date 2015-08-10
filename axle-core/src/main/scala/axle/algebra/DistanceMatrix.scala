@@ -4,10 +4,6 @@ import axle.enrichGenTraversable
 import spire.algebra.MetricSpace
 import scala.reflect.ClassTag
 
-// http://en.wikipedia.org/wiki/Triangle_inequality
-// def triangleInequalityHolds(data: collection.GenTraversable[T]): Boolean =
-//   data.triples.forall({ case (a, b, c) => distance(a, b) + distance(b, c) >= distance(a, c) })
-
 case class DistanceMatrix[T, F, M](
   vectors: F)(
     implicit space: MetricSpace[T, Double],

@@ -14,7 +14,7 @@ trait MapReducible[M, A, B, K, G] {
 
 object MapReducible {
 
-  @inline final def apply[M, A, B, K, G](implicit mra: MapReducible[M, A, B, K, G]): MapReducible[M, A, B, K, G] =
+  final def apply[M, A, B, K, G](implicit mra: MapReducible[M, A, B, K, G]): MapReducible[M, A, B, K, G] =
     implicitly[MapReducible[M, A, B, K, G]]
 
   implicit def mapReduceSeq[A, B, K]: MapReducible[Seq[A], A, B, K, Seq[(K, B)]] =
