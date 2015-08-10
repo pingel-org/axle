@@ -30,7 +30,7 @@ object StochasticLambdaCalculus extends Specification {
   "π estimation" should {
     "work" in {
 
-      import scala.math.sqrt
+      import spire.math.sqrt
 
       val n = 200
 

@@ -1,7 +1,7 @@
 package axle.ml
 
 import scala.collection.immutable.TreeMap
-import scala.math.abs
+import spire.math.abs
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 import spire.implicits._

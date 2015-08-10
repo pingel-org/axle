@@ -1,7 +1,7 @@
 package axle.visualize
 
 import scala.collection.immutable.TreeMap
-import scala.math.sin
+import spire.math.sin
 import scala.util.Random
 
 import org.joda.time.DateTime

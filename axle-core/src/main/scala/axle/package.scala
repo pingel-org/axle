@@ -52,6 +52,7 @@ import spire.algebra.Order
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
+import spire.algebra.Trig
 import spire.compat.ordering
 import spire.implicits.eqOps
 import spire.implicits.moduleOps
@@ -106,7 +107,7 @@ package object axle {
       agg: Aggregatable[G, V, V],
       field: Field[V]): V = {
 
-    import scala.math.random
+    import spire.math.random
     import axle.algebra.Σ
     import axle.syntax.functor.functorOps
     import spire.implicits.multiplicativeSemigroupOps
@@ -140,20 +141,20 @@ package object axle {
       distanceModule: Module[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
     sphereRadius :* ((angle in angleConverter.radian).magnitude)
 
-  def sine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
+  def sine[N: MultiplicativeMonoid: Eq: Trig](
     a: UnittedQuantity[Angle, N])(
-      implicit converter: AngleConverter[N]): Double =
-    scala.math.sin((a in converter.radian).magnitude.toDouble)
+      implicit converter: AngleConverter[N]): N =
+    spire.math.sin((a in converter.radian).magnitude)
 
-  def cosine[N: MultiplicativeMonoid: Eq: ConvertableFrom](
+  def cosine[N: MultiplicativeMonoid: Eq: Trig](
     a: UnittedQuantity[Angle, N])(
-      implicit converter: AngleConverter[N]): Double =
-    scala.math.cos((a in converter.radian).magnitude.toDouble)
+      implicit converter: AngleConverter[N]): N =
+    spire.math.cos((a in converter.radian).magnitude)
 
-  def tangent[N: MultiplicativeMonoid: Eq: ConvertableFrom](
+  def tangent[N: MultiplicativeMonoid: Eq: Trig](
     a: UnittedQuantity[Angle, N])(
-      implicit converter: AngleConverter[N]): Double =
-    scala.math.tan((a in converter.radian).magnitude.toDouble)
+      implicit converter: AngleConverter[N]): N =
+    spire.math.tan((a in converter.radian).magnitude)
 
   implicit val orderSymbols: Order[Symbol] =
     new Order[Symbol] {

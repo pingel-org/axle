@@ -9,8 +9,9 @@ import axle.sine
 import spire.algebra.Eq
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
+import spire.algebra.Trig
 import spire.implicits.moduleOps
-import spire.math.ConvertableFrom
+import spire.implicits.multiplicativeSemigroupOps
 
 /**
  *
@@ -29,10 +30,10 @@ case class SphericalVector[N]( // Field: Order
 
   def toPosition(
     implicit ac: AngleConverter[N],
-    mmn: MultiplicativeMonoid[N],
+    mult: MultiplicativeMonoid[N],
     eqn: Eq[N],
-    cfn: ConvertableFrom[N],
-    modn: Module[UnittedQuantity[Distance, N], Double],
+    trig: Trig[N],
+    modn: Module[UnittedQuantity[Distance, N], N],
     pos: Position3DSpace[N, P]): P =
     (
       ρ :* (sine(θ) * cosine(φ)),

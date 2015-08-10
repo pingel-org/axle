@@ -10,10 +10,10 @@ class KMeansSpecification
   "K-Means Clustering" should {
     "cluster random 2d points with small gaussian distribution around a center into 2 clusters" in {
 
-      import scala.math.Pi
-      import scala.math.cos
-      import scala.math.sin
-      import scala.math.sqrt
+      import spire.math.pi
+      import spire.math.cos
+      import spire.math.sin
+      import spire.math.sqrt
       import scala.util.Random.nextDouble
       import scala.util.Random.nextGaussian
       import scala.util.Random.shuffle
@@ -34,7 +34,7 @@ class KMeansSpecification
 
       def randomPoint(center: Foo, σ2: Double): Foo = {
         val distance = nextGaussian() * σ2
-        val angle = 2 * Pi * nextDouble
+        val angle = 2 * pi * nextDouble
         Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
       }
 

@@ -15,6 +15,7 @@ import spire.algebra.InnerProductSpace
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
+import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Ring
 import spire.algebra.Rng
@@ -174,7 +175,7 @@ package object jblas {
         } mkString ("\n")
     }
 
-  implicit def linearAlgebraDoubleMatrix[N: Rng](
+  implicit def linearAlgebraDoubleMatrix[N: Rng: NRoot](
       implicit cfn: ConvertableFrom[N],
       ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
     new LinearAlgebra[DoubleMatrix, Int, Int, N] {
@@ -439,7 +440,7 @@ package object jblas {
 
       def std(m: DoubleMatrix): DoubleMatrix = {
         val centered = sumsq(centerColumns(m)).div(m.getColumns)
-        endofunctor.map(centered)(n => ctn.fromDouble(scala.math.sqrt(n.toDouble)))
+        endofunctor.map(centered)(n => spire.math.sqrt(n))
       }
 
       def zscore(m: DoubleMatrix): DoubleMatrix =
