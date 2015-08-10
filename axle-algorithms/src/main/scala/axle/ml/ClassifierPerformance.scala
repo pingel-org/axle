@@ -57,12 +57,12 @@ case class ClassifierPerformance[N, DATA, F, G](
     (relevant(d), retrieve(d)) match {
       case (true, true)   => (one, zero, zero, zero) // true positive
       case (false, true)  => (zero, one, zero, zero) // false positive
-      case (false, false) => (zero, zero, one, zero) // false negative
-      case (true, false)  => (zero, zero, zero, one) // true negative
+      case (false, false) => (zero, zero, one, zero) // true negative
+      case (true, false)  => (zero, zero, zero, one) // false negative
     }
   }
 
-  val (tp, fp, fn, tn) = Σ[(N, N, N, N), G](scores)
+  val (tp, fp, tn, fn) = Σ[(N, N, N, N), G](scores)
 
   val precision: N = tp / (tp + fp)
 
