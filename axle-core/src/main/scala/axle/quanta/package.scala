@@ -11,36 +11,63 @@ import axle.quanta.UnitConverter
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
 import spire.algebra.AdditiveMonoid
+import spire.algebra.AdditiveSemigroup
+import spire.algebra.AdditiveGroup
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Module
+import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
 import spire.algebra.Rng
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.multiplicativeMonoidOps
 import spire.implicits.signedOps
 
 package object quanta {
 
-  // type CG[Q, DG, N] = DG[UnitOfMeasurement[Q], N => N]
+  implicit def quantumAdditiveGroup[Q, N: MultiplicativeMonoid](
+    implicit converter: UnitConverter[Q, N],
+    additiveGroup: AdditiveGroup[N]): AdditiveGroup[UnittedQuantity[Q, N]] =
+    new AdditiveGroup[UnittedQuantity[Q, N]] {
+
+      // AdditiveGroup
+      def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
+        UnittedQuantity(-x.magnitude, x.unit)
+
+      // AdditiveMonoid
+      def zero: UnittedQuantity[Q, N] =
+        UnittedQuantity(additiveGroup.zero, converter.defaultUnit)
+
+      // AdditiveSemigroup
+      def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
+        UnittedQuantity((x in y.unit).magnitude + y.magnitude, y.unit)
+    }
 
   implicit def modulize[N, Q](
     implicit fieldn: Field[N],
-    converter: UnitConverter[Q, N]): Module[UnittedQuantity[Q, N], N] =
+    converter: UnitConverter[Q, N]): Module[UnittedQuantity[Q, N], N] = {
+
+    val additiveGroup = quantumAdditiveGroup[Q, N]
+
     new Module[UnittedQuantity[Q, N], N] {
 
-      def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(-x.magnitude, x.unit) // AdditiveGroup
+      def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
+        additiveGroup.negate(x)
 
-      def zero: UnittedQuantity[Q, N] = UnittedQuantity(Field[N].zero, converter.defaultUnit)
+      def zero: UnittedQuantity[Q, N] =
+        additiveGroup.zero
 
       def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
-        UnittedQuantity((x in y.unit).magnitude + y.magnitude, y.unit) // AdditiveSemigroup
+        additiveGroup.plus(x, y)
 
       implicit def scalar: Rng[N] = fieldn // Module
 
-      def timesl(r: N, v: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = UnittedQuantity(v.magnitude * r, v.unit)
+      def timesl(r: N, v: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
+        UnittedQuantity(v.magnitude * r, v.unit)
     }
+  }
 
   implicit def uqPlottable[Q, N: Plottable]: Plottable[UnittedQuantity[Q, N]] =
     new Plottable[UnittedQuantity[Q, N]] {

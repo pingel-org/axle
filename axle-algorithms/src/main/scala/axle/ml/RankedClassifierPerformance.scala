@@ -1,6 +1,6 @@
 package axle.ml
 
-import scala.math.min
+import spire.math.min
 
 import axle.algebra.mean
 import axle.algebra.Finite

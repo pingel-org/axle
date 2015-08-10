@@ -1,18 +1,10 @@
 package axle.ml.distance
 
-import scala.math.Pi
-import scala.math.abs
-import scala.math.acos
-
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
-import spire.algebra.MetricSpace
 import spire.algebra.NRoot
-import spire.implicits.convertableOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.math.ConvertableFrom
-import spire.math.ConvertableTo
 
 /**
  *
@@ -35,7 +27,7 @@ import spire.math.ConvertableTo
  *
  */
 
-case class Cosine[M, D: NRoot: Field: ConvertableFrom: ConvertableTo](
+case class Cosine[M, D: NRoot: Field](
   implicit ips: InnerProductSpace[M, D]) {
 
   val normed = ips.normed

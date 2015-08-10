@@ -1,6 +1,6 @@
 package axle.ml.distance
 
-import scala.math.abs
+import spire.math.abs
 
 import axle.algebra.LinearAlgebra
 import axle.syntax.endofunctor.endofunctorOps

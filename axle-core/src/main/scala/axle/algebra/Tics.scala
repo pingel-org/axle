@@ -43,7 +43,7 @@ object Tics {
   implicit def longTics: Tics[Long] = new Tics[Long] {
 
     def step(from: Long, to: Long): Long = {
-      val n = (scala.math.ceil(scala.math.log10(abs(to - from))) - 1).toInt
+      val n = (spire.math.ceil(spire.math.log10(abs(to - from))) - 1).toInt
       max(1, pow(10, n).toLong)
     }
 
@@ -61,7 +61,7 @@ object Tics {
   implicit def intTics: Tics[Int] = new Tics[Int] {
 
     def step(from: Int, to: Int): Int = {
-      val n = (scala.math.ceil(scala.math.log10(abs(to - from))) - 1).toInt
+      val n = (spire.math.ceil(spire.math.log10(abs(to - from))) - 1).toInt
       max(1, pow(10, n).toInt)
     }
 

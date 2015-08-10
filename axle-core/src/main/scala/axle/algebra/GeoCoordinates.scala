@@ -6,8 +6,8 @@ package axle.algebra
  *
  */
 
-import java.lang.Math.atan2
-import java.lang.Math.sqrt
+import spire.math.atan2
+import spire.math.sqrt
 
 import axle.cosine
 import axle.quanta.Angle
@@ -21,6 +21,9 @@ import axle.square
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.MetricSpace
+import spire.algebra.MultiplicativeSemigroup
+import spire.algebra.NRoot
+import spire.algebra.Trig
 import spire.implicits.DoubleAlgebra
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
@@ -41,13 +44,28 @@ case class GeoCoordinates[N](
 
 object GeoCoordinates {
 
-  implicit def geoCoordinatesMetricSpace[N: Field: Eq: ConvertableFrom: ConvertableTo](
+  import spire.algebra.Eq
+  import spire.algebra.MultiplicativeMonoid
+  import spire.implicits.eqOps
+
+  implicit def eqgcd[N: Eq: MultiplicativeMonoid](
+    implicit ac: AngleConverter[N]): Eq[GeoCoordinates[N]] =
+    new Eq[GeoCoordinates[N]] {
+      def eqv(x: GeoCoordinates[N], y: GeoCoordinates[N]): Boolean = {
+        val lateq: Boolean = (x.latitude.magnitude === (y.latitude in x.latitude.unit).magnitude)
+        val longeq: Boolean = (x.longitude.magnitude === (y.longitude in x.latitude.unit).magnitude)
+        lateq && longeq
+      }
+    }
+
+  implicit def geoCoordinatesMetricSpace[N: Field: Eq: Trig: ConvertableTo: MultiplicativeSemigroup: NRoot](
     implicit angleConverter: AngleConverter[N]): MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
     new MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] {
 
+      import spire.implicits._
       import angleConverter.radian
       val ctn = ConvertableTo[N]
-      val cfn = ConvertableFrom[N]
+      // val cfn = ConvertableFrom[N]
       val half = ctn.fromRational(Rational(1, 2))
 
       // Haversine distance
@@ -56,13 +74,12 @@ object GeoCoordinates {
         val dLat = w.latitude - v.latitude
         val dLon = w.longitude - v.longitude
         val a = square(sine(dLat :* half)) + square(sine(dLon :* half)) * cosine(v.latitude) * cosine(w.latitude)
-        val c = ctn.fromDouble(2d * atan2(sqrt(a), sqrt(1 - a)))
-        c *: radian
+        (2 * atan2(sqrt(a), sqrt(1 - a))) *: radian
       }
 
     }
 
-  implicit def geoCoordinatesLengthSpace[N: Field: Eq: ConvertableFrom: ConvertableTo](
+  implicit def geoCoordinatesLengthSpace[N: Field: Eq: Trig: ConvertableFrom: ConvertableTo: MultiplicativeMonoid: NRoot](
     implicit angleConverter: AngleConverter[N]): LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
     new LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] {
 
@@ -72,7 +89,7 @@ object GeoCoordinates {
       import angleConverter.radian
       val ctn = ConvertableTo[N]
       val cfn = ConvertableFrom[N]
-      val half = ctn.fromRational(Rational(1, 2))
+      val half: N = ctn.fromRational(Rational(1, 2))
 
       def distance(v: GeoCoordinates[N], w: GeoCoordinates[N]): UnittedQuantity[Angle, N] =
         metricSpace.distance(v, w)
@@ -88,6 +105,7 @@ object GeoCoordinates {
 
       def onPath(p1: GeoCoordinates[N], p2: GeoCoordinates[N], f: Double): GeoCoordinates[N] = {
 
+        import spire.implicits._
         val d = distance(p1, p2)
 
         val A = sine(d :* ctn.fromDouble(1d - f)) / sine(d)
@@ -96,8 +114,9 @@ object GeoCoordinates {
         val y = A * cosine(p1.latitude) * sine(p1.longitude) + B * cosine(p2.latitude) * sine(p2.longitude)
         val z = A * sine(p1.latitude) + B * sine(p2.latitude)
 
-        val latitude = ctn.fromDouble(atan2(z, sqrt(square(x) + square(y)))) *: radian
-        val longitude = ctn.fromDouble(atan2(y, x)) *: radian
+        import axle.√
+        val latitude = atan2(z, √(square(x) + square(y))) *: radian
+        val longitude = atan2(y, x) *: radian
 
         GeoCoordinates(latitude, longitude)
       }

@@ -2,7 +2,7 @@ package axle.mtj
 
 import scala.annotation.elidable
 import scala.annotation.elidable.ASSERTION
-import scala.math.sqrt
+import spire.math.sqrt
 import scala.util.Random.nextDouble
 import scala.util.Random.nextGaussian
 
@@ -21,12 +21,14 @@ import spire.implicits.eqOps
  *
  */
 
-case class ConvertedMtjDenseMatrix[T](mtj: DenseMatrix)(implicit val fp: FunctionPair[Double, T])
+case class ConvertedMtjDenseMatrix[T](
+  mtj: DenseMatrix)(
+    implicit val fp: FunctionPair[Double, T])
 
 object ConvertedMtjDenseMatrix {
 
-//  implicit val jblasConvertedMatrix: Matrix[ConvertedMtjDenseMatrix] =
-//    ???
+  //  implicit val jblasConvertedMatrix: Matrix[ConvertedMtjDenseMatrix] =
+  //    ???
   //new Matrix[ConvertedMtjDenseMatrix] {  }
 }
     

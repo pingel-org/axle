@@ -1,7 +1,7 @@
 package axle.stats
 
-import scala.math.pow
-import scala.math.sqrt
+import spire.math.pow
+import spire.math.sqrt
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 import spire.implicits.IntAlgebra

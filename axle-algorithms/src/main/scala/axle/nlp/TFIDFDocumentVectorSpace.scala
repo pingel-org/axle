@@ -1,6 +1,6 @@
 package axle.nlp
 
-import scala.math.log
+import spire.math.log
 
 import axle.algebra.Aggregatable
 import axle.algebra.Σ

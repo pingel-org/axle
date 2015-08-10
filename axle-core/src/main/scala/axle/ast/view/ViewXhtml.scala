@@ -1,8 +1,8 @@
 
 package axle.ast.view
 
-import scala.math.max
-import scala.math.min
+import spire.math.max
+import spire.math.min
 import scala.xml.NodeSeq.seqToNodeSeq
 
 import Emission.emit

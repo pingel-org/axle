@@ -150,6 +150,34 @@ package object algebra {
 
       }
 
+    implicit val realDoubleModule: Module[Real, Double] =
+      new Module[Real, Double] {
+
+        def negate(x: Real): Real = -x
+
+        def zero: Real = Real(0)
+
+        def plus(x: Real, y: Real): Real = x + y
+
+        implicit def scalar: Rng[Double] = DoubleAlgebra
+
+        def timesl(r: Double, v: Real): Real = r * v
+      }
+
+    implicit val realRationalModule: Module[Real, Rational] =
+      new Module[Real, Rational] {
+
+        def negate(x: Real): Real = -x
+
+        def zero: Real = Real(0)
+
+        def plus(x: Real, y: Real): Real = x + y
+
+        implicit def scalar: Rng[Rational] = Rng[Rational]
+
+        def timesl(r: Rational, v: Real): Real = r * v
+      }
+
     implicit val doubleRationalModule: Module[Double, Rational] = new Module[Double, Rational] {
 
       def negate(x: Double): Double = DoubleAlgebra.negate(x)

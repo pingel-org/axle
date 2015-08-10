@@ -1,6 +1,6 @@
 package axle.quanta
 
-import scala.math.{ Pi => π }
+import spire.math.{ pi => π }
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph

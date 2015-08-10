@@ -1,7 +1,7 @@
 package axle.ml
 
-import scala.math.exp
-import scala.math.log
+import spire.math.exp
+import spire.math.log
 
 import axle.syntax.linearalgebra._
 import axle.algebra.LinearAlgebra

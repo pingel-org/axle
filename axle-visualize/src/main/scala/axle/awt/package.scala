@@ -1,8 +1,8 @@
 
 package axle
 
-import scala.math.abs
-import scala.math.min
+import spire.math.abs
+import spire.math.min
 
 import java.awt.Font
 import java.awt.FontMetrics
