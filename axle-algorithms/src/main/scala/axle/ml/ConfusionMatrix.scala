@@ -16,8 +16,8 @@ import axle.syntax.aggregatable._
 import axle.syntax.mapreducible._
 import axle.syntax.setfrom._
 import spire.algebra._
-
-import math.{ ceil, log10 }
+import spire.math.ceil
+import spire.math.log10
 
 case class ConfusionMatrix[T, CLASS: Order, L: Order, F, M, G, H](
     classifier: Function1[T, CLASS],
@@ -71,5 +71,19 @@ object ConfusionMatrix {
       }
 
     }
+
+  def common[T, CLASS: Order, L: Order, U[_], M](
+    classifier: Function1[T, CLASS],
+    data: U[T],
+    labelExtractor: T => L,
+    classes: IndexedSeq[CLASS])(
+      implicit la: LinearAlgebra[M, Int, Int, Double],
+      finite: Finite[U[T], Int],
+      functorF: Functor[U[T], T, (L, CLASS), U[(L, CLASS)]],
+      functorG: Functor[U[(L, CLASS)], (L, CLASS), L, U[L]],
+      sf: SetFrom[U[L], L],
+      mr: MapReducible[U[(L, CLASS)], (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]],
+      mf: MapFrom[List[(L, Int)], L, Int]) =
+    ConfusionMatrix(classifier, data, labelExtractor, classes)
 
 }

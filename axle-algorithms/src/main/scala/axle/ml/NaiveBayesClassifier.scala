@@ -98,3 +98,17 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
   }
 
 }
+
+object NaiveBayesClassifier {
+
+  def common[DATA, FEATURE: Order, CLASS: Order: Eq, U[_], N: Field: Order](
+    data: U[DATA],
+    featureRandomVariables: List[Distribution[FEATURE, N]],
+    classRandomVariable: Distribution[CLASS, N],
+    featureExtractor: DATA => List[FEATURE],
+    classExtractor: DATA => CLASS)(
+      implicit agg: Aggregatable[U[DATA], DATA, Map[(CLASS, String, FEATURE), N]],
+      functor: Functor[U[DATA], DATA, CLASS, U[CLASS]],
+      tal: Talliable[U[CLASS], CLASS, N]) =
+    NaiveBayesClassifier(data, featureRandomVariables, classRandomVariable, featureExtractor, classExtractor)
+}

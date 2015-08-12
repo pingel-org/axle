@@ -108,7 +108,8 @@ class KMeansSpecification
 
       val irisConstructor = (features: Seq[Double]) => Iris(1 *: cm, 1 *: cm, 1 *: cm, 1 *: cm, "")
 
-      val classifier = KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix](
+      // Alternately: Kmeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix]
+      val classifier = KMeans.common[Iris, List, DoubleMatrix](
         irisesData.irises,
         N = 2,
         irisFeaturizer,
@@ -121,7 +122,8 @@ class KMeansSpecification
       import spire.implicits.IntAlgebra
       import axle.orderStrings
 
-      val confusion = ConfusionMatrix[Iris, Int, String, Vector[Iris], DoubleMatrix, Vector[(String, Int)], Vector[String]](
+      // Alternately: ConfusionMatrix[Iris, Int, String, Vector[Iris], DoubleMatrix, Vector[(String, Int)], Vector[String]]
+      val confusion = ConfusionMatrix.common[Iris, Int, String, Vector, DoubleMatrix](
         classifier,
         irisesData.irises.toVector,
         _.species,
