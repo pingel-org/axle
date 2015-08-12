@@ -96,4 +96,13 @@ F1 Score    $f1Score
 
     }
 
+  def common[N, DATA, U[_]](
+    data: U[DATA],
+    retrieve: DATA => Boolean,
+    relevant: DATA => Boolean)(
+      implicit functor: Functor[U[DATA], DATA, (N, N, N, N), U[(N, N, N, N)]],
+      agg: Aggregatable[U[(N, N, N, N)], (N, N, N, N), (N, N, N, N)],
+      field: Field[N]) =
+    ClassifierPerformance(data, retrieve, relevant)
+
 }

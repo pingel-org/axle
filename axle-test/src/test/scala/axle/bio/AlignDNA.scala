@@ -41,7 +41,7 @@ class AlignDNA extends Specification {
         similarity,
         gapPenalty)
 
-      val space = NeedlemanWunschMetricSpace[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
+      val space = NeedlemanWunschMetricSpace.common[IndexedSeq, Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
 
       nwAlignment must be equalTo bestAlignment
       score must be equalTo 32d
@@ -65,7 +65,7 @@ class AlignDNA extends Specification {
       val swAlignment = optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](
         dna3, dna4, w, mismatchPenalty, gap)
 
-      val space = SmithWatermanMetricSpace[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
+      val space = SmithWatermanMetricSpace.common[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
 
       swAlignment must be equalTo bestAlignment
       space.distance(dna3, dna4) must be equalTo 12

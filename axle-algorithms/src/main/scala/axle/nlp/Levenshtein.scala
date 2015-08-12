@@ -55,3 +55,12 @@ case class Levenshtein[S, E: Eq, M, I: Ring: Order]()(
   def min(nums: I*): I = nums.min
 
 }
+
+object Levenshtein {
+
+  def common[U[_], E: Eq, M, I: Ring: Order]()(
+    implicit la: LinearAlgebra[M, I, I, I],
+    idx: Indexed[U[E], I, E],
+    finite: Finite[U[E], I]) =
+    Levenshtein[U[E], E, M, I]()
+}

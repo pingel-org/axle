@@ -253,3 +253,15 @@ case class NeedlemanWunschMetricSpace[S, N: Eq, M, I: Ring: Order, V: AdditiveMo
     computeF(s1, s2, similarity, gapPenalty).get(s1.size, s2.size)
 
 }
+
+object NeedlemanWunschMetricSpace {
+
+  def common[U[_], N: Eq, M, I: Ring: Order, V: AdditiveMonoid: Order](
+    similarity: (N, N) => V,
+    gapPenalty: V)(
+      implicit la: LinearAlgebra[M, I, I, V],
+      indexed: Indexed[U[N], I, N],
+      finite: Finite[U[N], I],
+      module: Module[V, I]) =
+    NeedlemanWunschMetricSpace(similarity, gapPenalty)
+}

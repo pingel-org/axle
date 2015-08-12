@@ -20,7 +20,6 @@ import spire.algebra.MetricSpace
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
-import spire.implicits._
 
 /**
  * KMeans
@@ -173,4 +172,22 @@ case class KMeans[T: Eq, F, G, M](
   def distanceLogSeries: List[(String, TreeMap[Int, Double])] =
     (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList
 
+}
+
+object KMeans {
+
+  def common[T: Eq, U[_], M](
+    data: U[T],
+    N: Int,
+    featureExtractor: T => Seq[Double],
+    normalizerMaker: M => Normalize[M],
+    constructor: Seq[Double] => T,
+    K: Int,
+    iterations: Int)(
+      implicit space: MetricSpace[M, Double],
+      functor: Functor[U[T], T, Seq[Double], U[Seq[Double]]],
+      la: LinearAlgebra[M, Int, Int, Double],
+      index: Indexed[U[Seq[Double]], Int, Seq[Double]],
+      finite: Finite[U[T], Int]) =
+    KMeans(data, N, featureExtractor, normalizerMaker, constructor, K, iterations)
 }

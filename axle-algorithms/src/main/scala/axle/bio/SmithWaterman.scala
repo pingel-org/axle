@@ -164,3 +164,14 @@ case class SmithWatermanMetricSpace[S, C, M, I: Ring, V: Ring: Order](
   }
 
 }
+
+object SmithWatermanMetricSpace {
+
+  def common[U[_], C, M, I: Ring, V: Ring: Order](
+    w: (C, C, V) => V,
+    mismatchPenalty: V)(
+      implicit la: LinearAlgebra[M, I, I, V],
+      finite: Finite[U[C], I],
+      indexed: Indexed[U[C], I, C]) =
+    SmithWatermanMetricSpace[U[C], C, M, I, V](w, mismatchPenalty)
+}
