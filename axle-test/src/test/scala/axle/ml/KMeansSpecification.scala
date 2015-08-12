@@ -83,7 +83,7 @@ class KMeansSpecification
       import axle.data.Iris
 
       val irisesData = new Irises
- 
+
       import axle.ml.distance.Euclidean
       import org.jblas.DoubleMatrix
       import axle.jblas.linearAlgebraDoubleMatrix
@@ -119,9 +119,13 @@ class KMeansSpecification
 
       import axle.ml.ConfusionMatrix
       import spire.implicits.IntAlgebra
-      // import spire.implicits.StringAlgebra
+      import axle.orderStrings
 
-      // val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](classifier, irises.toVector, _.species, 0 to 2)
+      val confusion = ConfusionMatrix[Iris, Int, String, Vector[Iris], DoubleMatrix, Vector[(String, Int)], Vector[String]](
+        classifier,
+        irisesData.irises.toVector,
+        _.species,
+        0 to 2)
 
       1 must be equalTo 1
     }
