@@ -237,6 +237,22 @@ package object axle {
     def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
   }
 
+  implicit def eqIndexedSeq[T: Eq]: Eq[IndexedSeq[T]] = new Eq[IndexedSeq[T]] {
+    def eqv(x: IndexedSeq[T], y: IndexedSeq[T]): Boolean = {
+      val lhs = (x.size == y.size)
+      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
+      lhs && rhs
+    }
+  }
+
+  implicit def eqSeq[T: Eq]: Eq[Seq[T]] = new Eq[Seq[T]] {
+    def eqv(x: Seq[T], y: Seq[T]): Boolean = {
+      val lhs = (x.size == y.size)
+      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
+      lhs && rhs
+    }
+  }
+
   def string[T: Show](t: T): String = Show[T].text(t)
 
   def show[T: Show](t: T): Unit = println(string(t))
