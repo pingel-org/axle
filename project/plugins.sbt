@@ -12,10 +12,12 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.3.2")
 
 addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "4.0.0")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8.3")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "0.5.0")
 
+addSbtPlugin("com.typesafe.sbt" % "sbt-pgp" % "0.8.3")
+// addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
+
+// addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.0")
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.8.5")
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.0.4")
-
-// addSbtPlugin("com.jsuereth" % "xsbt-gpg-plugin" % "0.6")

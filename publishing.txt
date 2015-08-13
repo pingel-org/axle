@@ -10,14 +10,14 @@ Release:
 Then:
  https://oss.sonatype.org/
  Staging Repositories
- find org.pingel repository
+ find org.axle-lang repository
  close
  "closing axle $v"
  wait
- find org.pingel repository
+ find org.axle-lang repository
  release
  "releasing axle $v"
- confirm at https://oss.sonatype.org/content/repositories/releases/org/pingel/
+ confirm at https://oss.sonatype.org/content/repositories/releases/org/axle-lang/
 
 Latest detailed guide: http://central.sonatype.org/pages/releasing-the-deployment.html
 
