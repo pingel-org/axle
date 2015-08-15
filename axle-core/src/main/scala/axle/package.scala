@@ -156,6 +156,22 @@ package object axle {
       implicit converter: AngleConverter[N]): N =
     spire.math.tan((a in converter.radian).magnitude)
 
+  def arcTangent[N: Trig](x: N)(
+    implicit converter: AngleConverter[N]): UnittedQuantity[Angle, N] =
+    spire.math.atan(x) *: converter.radian
+
+  def arcTangent2[N: Trig](x: N, y: N)(
+    implicit converter: AngleConverter[N]): UnittedQuantity[Angle, N] =
+    spire.math.atan2(x, y) *: converter.radian
+
+  def arcCosine[N: Trig](x: N)(
+    implicit converter: AngleConverter[N]): UnittedQuantity[Angle, N] =
+    spire.math.acos(x) *: converter.radian
+
+  def arcSine[N: Trig](x: N)(
+    implicit converter: AngleConverter[N]): UnittedQuantity[Angle, N] =
+    spire.math.asin(x) *: converter.radian
+
   implicit val orderSymbols: Order[Symbol] =
     new Order[Symbol] {
       def compare(x: Symbol, y: Symbol): Int = Order[String].compare(string(x), string(y))
