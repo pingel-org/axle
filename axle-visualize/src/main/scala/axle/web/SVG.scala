@@ -40,7 +40,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import scala.annotation.implicitNotFound
-import spire.math.atan
+import axle.arcTangent2
 import spire.math.pi
 import spire.algebra.Field
 import axle.algebra.DirectedGraph
@@ -431,13 +431,7 @@ object SVG {
         val arrows: List[xml.Node] = jdsg.getEdges.asScala.map { edge =>
           val height = layout.getY(jdsg.getSource(edge)) - layout.getY(jdsg.getDest(edge))
           val width = layout.getX(jdsg.getDest(edge)) - layout.getX(jdsg.getSource(edge))
-          val actualPointAngle = (atan(height / width) / pi) * -180d
-          // atan is only defined on right half, so check if flip is required
-          val svgRotationAngle = if (width < 0d) {
-            actualPointAngle
-          } else {
-            actualPointAngle - 180d
-          }
+          val svgRotationAngle = (arcTangent2(height, width) in angleDouble.degree).magnitude
           <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(jdsg.getDest(edge))},${layout.getY(jdsg.getDest(edge))}) rotate($svgRotationAngle)" }/>
         } toList
 

@@ -1,37 +1,33 @@
 package axle.algebra
 
-/**
- *
- * http://www.movable-type.co.uk/scripts/latlong.html
- *
- */
-
-import spire.math.atan2
-import spire.math.sqrt
-
+import axle.Show
+import axle.arcTangent2
 import axle.cosine
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
-import axle.quanta.Distance
-import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
 import axle.quanta.modulize
 import axle.sine
 import axle.square
+import axle.{ √ => √ }
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.MetricSpace
+import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.NRoot
 import spire.algebra.Trig
-import spire.implicits.DoubleAlgebra
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
+import spire.implicits.eqOps
+import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.moduleOps
 import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 import spire.math.Rational
+import spire.math.sqrt
 
 case class GeoCoordinates[N](
     latitude: UnittedQuantity[Angle, N],
@@ -44,9 +40,13 @@ case class GeoCoordinates[N](
 
 object GeoCoordinates {
 
-  import spire.algebra.Eq
-  import spire.algebra.MultiplicativeMonoid
-  import spire.implicits.eqOps
+  implicit def showGC[N: MultiplicativeMonoid: Eq](
+    implicit converter: AngleConverter[N]) =
+    new Show[GeoCoordinates[N]] {
+      import converter.°
+      def text(p: GeoCoordinates[N]): String =
+        (p.latitude in °).magnitude + "° N " + (p.longitude in °).magnitude + "° W"
+    }
 
   implicit def eqgcd[N: Eq: MultiplicativeMonoid](
     implicit ac: AngleConverter[N]): Eq[GeoCoordinates[N]] =
@@ -62,7 +62,6 @@ object GeoCoordinates {
     implicit angleConverter: AngleConverter[N]): MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
     new MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] {
 
-      import spire.implicits._
       import angleConverter.radian
       val ctn = ConvertableTo[N]
       // val cfn = ConvertableFrom[N]
@@ -74,9 +73,8 @@ object GeoCoordinates {
         val dLat = w.latitude - v.latitude
         val dLon = w.longitude - v.longitude
         val a = square(sine(dLat :* half)) + square(sine(dLon :* half)) * cosine(v.latitude) * cosine(w.latitude)
-        (2 * atan2(sqrt(a), sqrt(1 - a))) *: radian
+        arcTangent2(sqrt(a), sqrt(1 - a)) :* 2
       }
-
     }
 
   implicit def geoCoordinatesLengthSpace[N: Field: Eq: Trig: ConvertableFrom: ConvertableTo: MultiplicativeMonoid: NRoot](
@@ -105,7 +103,6 @@ object GeoCoordinates {
 
       def onPath(p1: GeoCoordinates[N], p2: GeoCoordinates[N], f: Double): GeoCoordinates[N] = {
 
-        import spire.implicits._
         val d = distance(p1, p2)
 
         val A = sine(d :* ctn.fromDouble(1d - f)) / sine(d)
@@ -114,9 +111,8 @@ object GeoCoordinates {
         val y = A * cosine(p1.latitude) * sine(p1.longitude) + B * cosine(p2.latitude) * sine(p2.longitude)
         val z = A * sine(p1.latitude) + B * sine(p2.latitude)
 
-        import axle.√
-        val latitude = atan2(z, √(square(x) + square(y))) *: radian
-        val longitude = atan2(y, x) *: radian
+        val latitude = arcTangent2(z, √(square(x) + square(y)))
+        val longitude = arcTangent2(y, x)
 
         GeoCoordinates(latitude, longitude)
       }
