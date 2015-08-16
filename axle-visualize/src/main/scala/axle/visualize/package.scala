@@ -17,7 +17,7 @@ package object visualize {
   val defaultColors = List(blue, red, green, orange, pink, yellow)
 
   // angleDouble is here for visualizations that take an angle.  For example: BarChart's label angle
-  implicit val angleDouble = Angle.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Angle], Double => Double]](
+  implicit val angleDouble = Angle.converterGraphK2[Double, DirectedSparseGraph](
     Field[Double],
     Eq[Double],
     axle.algebra.modules.doubleDoubleModule,

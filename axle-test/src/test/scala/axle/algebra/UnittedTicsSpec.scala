@@ -20,7 +20,7 @@ class UnittedTicsSpec extends Specification {
   "Tics for UnittedQuantity" should {
     "work" in {
 
-      implicit val id = Information.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]]
+      implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]
       import id.bit
       implicit val base = bit
 

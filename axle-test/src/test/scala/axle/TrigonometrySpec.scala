@@ -18,10 +18,9 @@ class TrigonometrySpec extends Specification {
 
     "work" in {
 
-      implicit val amd = Angle.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Angle], Double => Double]]
+      implicit val amd = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
       axle.sine(UnittedQuantity(2d, amd.radian)) must be equalTo math.sin(2d)
-
     }
   }
 
@@ -29,7 +28,7 @@ class TrigonometrySpec extends Specification {
 
     "work" in {
 
-      implicit val amd = Angle.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Angle], Double => Double]]
+      implicit val amd = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
       axle.cosine(UnittedQuantity(2d, amd.radian)) must be equalTo math.cos(2d)
 
@@ -40,7 +39,7 @@ class TrigonometrySpec extends Specification {
 
     "work" in {
 
-      implicit val amd = Angle.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Angle], Double => Double]]
+      implicit val amd = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
       axle.tangent(UnittedQuantity(2d, amd.radian)) must be equalTo math.tan(2d)
 

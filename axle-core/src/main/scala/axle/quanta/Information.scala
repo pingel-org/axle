@@ -37,7 +37,12 @@ trait InformationConverter[N] extends UnitConverter[Information, N] with Informa
 
 object Information {
 
-  def converterGraph[N: Field: Eq, DG](implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Information], N => N]) =
+  def converterGraphK2[N: Field: Eq, DG[_, _]](
+    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Information], N => N], UnitOfMeasurement[Information], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[Information], N => N]]
+
+  def converterGraph[N: Field: Eq, DG](
+    implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Information], N => N]) =
     new UnitConverterGraph[Information, N, DG] with InformationConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Information], UnitOfMeasurement[Information], Bijection[N, N])] =

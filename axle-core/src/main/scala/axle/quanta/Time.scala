@@ -63,6 +63,11 @@ object Time {
   import spire.math._
   import spire.implicits._
 
+  def converterGraphK2[N: Field: Eq, DG[_, _]](
+    implicit moduleDouble: Module[N, Double], moduleRational: Module[N, Rational],
+    evDG: DirectedGraph[DG[UnitOfMeasurement[Time], N => N], UnitOfMeasurement[Time], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[Time], N => N]]
+
   def converterGraph[N: Field: Eq, DG](
     implicit moduleDouble: Module[N, Double], moduleRational: Module[N, Rational],
     evDG: DirectedGraph[DG, UnitOfMeasurement[Time], N => N]) =
