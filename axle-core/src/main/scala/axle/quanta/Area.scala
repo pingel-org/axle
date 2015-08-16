@@ -30,7 +30,12 @@ trait AreaConverter[N] extends UnitConverter[Area, N] with AreaUnits {
 
 object Area {
 
-  def converterGraph[N: Field: Eq, DG](implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Area], N => N]) =
+  def converterGraphK2[N: Field: Eq, DG[_, _]](
+    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Area], N => N], UnitOfMeasurement[Area], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[Area], N => N]]
+
+  def converterGraph[N: Field: Eq, DG](
+    implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Area], N => N]) =
     new UnitConverterGraph[Area, N, DG] with AreaConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Area], UnitOfMeasurement[Area], Bijection[N, N])] =

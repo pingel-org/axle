@@ -30,7 +30,12 @@ trait ForceConverter[N] extends UnitConverter[Force, N] with ForceUnits {
 
 object Force {
 
-  def converterGraph[N: Field: Eq, DG](implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Force], N => N]) =
+  def converterGraphK2[N: Field: Eq, DG[_, _]](
+    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Force], N => N], UnitOfMeasurement[Force], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[Force], N => N]]
+
+  def converterGraph[N: Field: Eq, DG](
+    implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Force], N => N]) =
     new UnitConverterGraph[Force, N, DG] with ForceConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Force], UnitOfMeasurement[Force], Bijection[N, N])] =

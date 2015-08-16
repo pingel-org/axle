@@ -28,6 +28,10 @@ trait MoneyPerForceConverter[N] extends UnitConverter[MoneyPerForce, N] with Mon
 
 object MoneyPerForce {
 
+  def converterGraphK2[N: Field: Eq, DG[_, _]](
+    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[MoneyPerForce], N => N], UnitOfMeasurement[MoneyPerForce], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[MoneyPerForce], N => N]]
+
   def converterGraph[N: Field: Eq, DG](
     implicit evDG: DirectedGraph[DG, UnitOfMeasurement[MoneyPerForce], N => N]) =
     new UnitConverterGraph[MoneyPerForce, N, DG] with MoneyPerForceConverter[N] {

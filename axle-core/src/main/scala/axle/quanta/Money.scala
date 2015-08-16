@@ -27,6 +27,10 @@ trait MoneyConverter[N] extends UnitConverter[Money, N] with MoneyUnits {
 
 object Money {
 
+  def converterGraphK2[N: Field: Eq, DG[_, _]](
+    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Money], N => N], UnitOfMeasurement[Money], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[Money], N => N]]
+
   def converterGraph[N: Field: Eq, DG](
     implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Money], N => N]) =
     new UnitConverterGraph[Money, N, DG] with MoneyConverter[N] {

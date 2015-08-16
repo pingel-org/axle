@@ -26,7 +26,7 @@ class GameChartSpec extends Specification {
 
       val scoreD = stateD.map(_.tallied)
 
-      implicit val ac = Angle.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Angle], Double => Double]]
+      implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
       //      import ac.degree
       //
       //      val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](

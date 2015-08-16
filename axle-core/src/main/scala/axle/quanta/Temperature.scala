@@ -36,6 +36,11 @@ object Temperature {
   import spire.math._
   import spire.implicits._
 
+  def converterGraphK2[N: ConvertableTo: Eq, DG[_, _]](
+    implicit module: Module[N, Rational], field: Field[N],
+    evDG: DirectedGraph[DG[UnitOfMeasurement[Temperature], N => N], UnitOfMeasurement[Temperature], N => N]) =
+      converterGraph[N, DG[UnitOfMeasurement[Temperature], N => N]]
+
   def converterGraph[N: ConvertableTo: Eq, DG](
     implicit module: Module[N, Rational], field: Field[N],
     evDG: DirectedGraph[DG, UnitOfMeasurement[Temperature], N => N]) =

@@ -23,9 +23,9 @@ class AstronomySpec extends Specification {
   "ordering celestial bodies by mass" should {
     "work" in {
 
-      implicit val md = Mass.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Mass], Double => Double]]
-      implicit val dd = Distance.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Distance], Double => Double]]
-      implicit val td = Time.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Time], Double => Double]]
+      implicit val md = Mass.converterGraphK2[Double, DirectedSparseGraph]
+      implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
+      implicit val td = Time.converterGraphK2[Double, DirectedSparseGraph]
       val astro = axle.data.Astronomy()
       val sorted = astro.bodies.sortBy(_.mass)
 

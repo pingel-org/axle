@@ -18,15 +18,17 @@ import spire.implicits.moduleOps
 
 class GeoLengthSpaceSpec extends Specification {
 
-  implicit val angleConverter = Angle.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Angle], Double => Double]]
+  implicit val angleConverter = Angle.converterGraphK2[Double, DirectedSparseGraph]
   import angleConverter.°
   import angleConverter.radian
 
-  implicit val distanceConverter = Distance.converterGraph[Double, DirectedSparseGraph[UnitOfMeasurement[Distance], Double => Double]]
+  implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
   import axle.quanta.UnittedQuantity
 
   val sf = GeoCoordinates(37.7833 *: °, 122.4167 *: °)
   val ny = GeoCoordinates(40.7127 *: °, 74.0059 *: °)
+  val sfo = GeoCoordinates(37.6189 *: °, 122.3750 *: °)
+  val hel = GeoCoordinates(60.3172 *: °, -24.9633 *: °)
   val lax = GeoCoordinates(0.592539 *: radian, 2.066470 *: radian)
   val jfk = GeoCoordinates(0.709186 *: radian, 1.287762 *: radian)
 

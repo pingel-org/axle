@@ -38,6 +38,10 @@ trait PowerConverter[N] extends UnitConverter[Power, N] with PowerUnits {
 
 object Power {
 
+  def converterGraphK2[N: Field: Eq, DG[_, _]](
+    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Power], N => N], UnitOfMeasurement[Power], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[Power], N => N]]
+
   def converterGraph[N: Field: Eq, DG](
     implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Power], N => N]) =
     new UnitConverterGraph[Power, N, DG] with PowerConverter[N] {
