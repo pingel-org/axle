@@ -77,16 +77,15 @@ object GeoCoordinates {
       }
     }
 
-  implicit def geoCoordinatesLengthSpace[N: Field: Eq: Trig: ConvertableFrom: ConvertableTo: MultiplicativeMonoid: NRoot](
-    implicit angleConverter: AngleConverter[N]): LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
-    new LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] {
+  implicit def geoCoordinatesLengthSpace[N: Field: Eq: Trig: ConvertableTo: MultiplicativeMonoid: NRoot](
+    implicit angleConverter: AngleConverter[N]): LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N], N] =
+    new LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N], N] {
 
       val metricSpace: MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
         geoCoordinatesMetricSpace[N]
 
       import angleConverter.radian
       val ctn = ConvertableTo[N]
-      val cfn = ConvertableFrom[N]
       val half: N = ctn.fromRational(Rational(1, 2))
 
       def distance(v: GeoCoordinates[N], w: GeoCoordinates[N]): UnittedQuantity[Angle, N] =
@@ -101,12 +100,12 @@ object GeoCoordinates {
        *
        */
 
-      def onPath(p1: GeoCoordinates[N], p2: GeoCoordinates[N], f: Double): GeoCoordinates[N] = {
+      def onPath(p1: GeoCoordinates[N], p2: GeoCoordinates[N], f: N): GeoCoordinates[N] = {
 
         val d = distance(p1, p2)
 
-        val A = sine(d :* ctn.fromDouble(1d - f)) / sine(d)
-        val B = sine(d :* ctn.fromDouble(f)) / sine(d)
+        val A = sine(d :* (Field[N].one - f)) / sine(d)
+        val B = sine(d :* f) / sine(d)
         val x = A * cosine(p1.latitude) * cosine(p1.longitude) + B * cosine(p2.latitude) * cosine(p2.longitude)
         val y = A * cosine(p1.latitude) * sine(p1.longitude) + B * cosine(p2.latitude) * sine(p2.longitude)
         val z = A * sine(p1.latitude) + B * sine(p2.latitude)
@@ -118,10 +117,10 @@ object GeoCoordinates {
       }
 
       // assumes that v is on the path from p1 to p2
-      def portion(p1: GeoCoordinates[N], v: GeoCoordinates[N], p2: GeoCoordinates[N]): Double = {
+      def portion(p1: GeoCoordinates[N], v: GeoCoordinates[N], p2: GeoCoordinates[N]): N = {
         val num = (distance(p1, v) in radian).magnitude
         val denom = (distance(p1, p2) in radian).magnitude
-        cfn.toDouble(num / denom)
+        num / denom
       }
     }
 }

@@ -101,20 +101,20 @@ package object quanta {
     }
 
   implicit def unittedLengthSpace[Q, N: Field: Order](
-    implicit base: UnitOfMeasurement[Q], space: LengthSpace[N, Double],
+    implicit base: UnitOfMeasurement[Q], space: LengthSpace[N, Double, N],
     convert: UnitConverter[Q, N],
     module: Module[UnittedQuantity[Q, N], N]) =
-    new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N]] {
+    new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N], N] {
 
       val field = Field[N]
 
       def distance(v: UnittedQuantity[Q, N], w: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
         (field.minus((v in base).magnitude, (w in base).magnitude).abs) *: base
 
-      def onPath(left: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N], p: Double): UnittedQuantity[Q, N] =
+      def onPath(left: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N], p: N): UnittedQuantity[Q, N] =
         ((field.minus((right in base).magnitude, (left in base).magnitude)) * p + (left in base).magnitude) *: base
 
-      def portion(left: UnittedQuantity[Q, N], v: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N]): Double =
+      def portion(left: UnittedQuantity[Q, N], v: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N]): N =
         space.portion((left in base).magnitude, (v in base).magnitude, (right in base).magnitude)
 
     }
