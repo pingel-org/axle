@@ -100,17 +100,17 @@ object LengthSpace {
         (v - left).toDouble / (right - left)
     }
 
-  implicit val rationalRationalLengthSpace: LengthSpace[Rational, Rational, Rational] =
-    new LengthSpace[Rational, Rational, Rational] {
+  implicit val rationalRationalLengthSpace: LengthSpace[Rational, Rational, Double] =
+    new LengthSpace[Rational, Rational, Double] {
 
       def distance(v: Rational, w: Rational): Rational =
         (v - w).abs
 
-      def onPath(left: Rational, right: Rational, p: Rational): Rational =
+      def onPath(left: Rational, right: Rational, p: Double): Rational =
         (right - left) * p + left
 
-      def portion(left: Rational, v: Rational, right: Rational): Rational =
-        (v - left) / (right - left)
+      def portion(left: Rational, v: Rational, right: Rational): Double =
+        ((v - left) / (right - left)).toDouble
     }
 
 }
