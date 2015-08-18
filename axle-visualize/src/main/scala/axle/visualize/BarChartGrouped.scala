@@ -36,7 +36,7 @@ case class BarChartGrouped[G, S, Y, D](
         val orderY: Order[Y],
         val zeroY: Zero[Y],
         val ticsY: Tics[Y],
-        val lengthSpaceY: LengthSpace[Y, _],
+        val lengthSpaceY: LengthSpace[Y, _, Double],
         val groupedDataView: GroupedDataView[G, S, Y, D]) {
 
   val keyOpt = if (drawKey) {

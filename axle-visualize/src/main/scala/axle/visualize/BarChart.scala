@@ -42,7 +42,7 @@ case class BarChart[S, Y, D](
         val eqY: Eq[Y],
         val plottableY: Plottable[Y],
         val dataView: DataView[S, Y, D],
-        val lengthSpaceY: LengthSpace[Y, _]) {
+        val lengthSpaceY: LengthSpace[Y, _, Double]) {
 
   val colorStream = continually(colors.toStream).flatten
 

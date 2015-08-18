@@ -16,16 +16,13 @@ case class ScaledArea2D[X, Y](
     maxY: Y)(
         implicit eqX: Eq[X],
         eqY: Eq[Y],
-        lengthX: LengthSpace[X, _],
-        lengthY: LengthSpace[Y, _]) {
+        lengthX: LengthSpace[X, _, Double],
+        lengthY: LengthSpace[Y, _, Double]) {
 
   val nonZeroArea = (!(minX === maxX)) && (!(minY === maxY))
 
   val drawableWidth = width - (2 * pad)
   val drawableHeight = height - (2 * pad)
-
-  // TODO Double, Double should be parameterized.
-  // Could use LengthSpace instead
 
   def framePoint(sp: Point2D[X, Y]): Point2D[Int, Int] = Point2D(
     pad + (drawableWidth * lengthX.portion(minX, sp.x, maxX)).toInt,

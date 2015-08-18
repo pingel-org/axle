@@ -34,11 +34,11 @@ case class Plot[X, Y, D](
         implicit val xZero: Zero[X],
         val xts: Tics[X],
         val xEq: Eq[X],
-        val xLength: LengthSpace[X, _],
+        val xLength: LengthSpace[X, _, Double],
         val yZero: Zero[Y],
         val yts: Tics[Y],
         val yEq: Eq[Y],
-        val yLength: LengthSpace[Y, _],
+        val yLength: LengthSpace[Y, _, Double],
         val plotDataView: PlotDataView[X, Y, D]) {
 
   val colorStream = continually(colors.toStream).flatten

@@ -70,14 +70,17 @@ package object joda {
 
   }
 
-  implicit def dateTimeDurationLengthSpace: LengthSpace[DateTime, Duration] =
-    new LengthSpace[DateTime, Duration] {
+  implicit def dateTimeDurationLengthSpace: LengthSpace[DateTime, Duration, Double] =
+    new LengthSpace[DateTime, Duration, Double] {
 
-      def distance(v: DateTime, w: DateTime): Duration = new Duration(v, w)
+      def distance(v: DateTime, w: DateTime): Duration =
+        new Duration(v, w)
 
-      def onPath(left: DateTime, right: DateTime, p: Double): DateTime = left.plusMillis(((right.getMillis - left.getMillis).toDouble * p).toInt)
+      def onPath(left: DateTime, right: DateTime, p: Double): DateTime =
+        left.plusMillis(((right.getMillis - left.getMillis).toDouble * p).toInt)
 
-      def portion(left: DateTime, v: DateTime, right: DateTime): Double = (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
+      def portion(left: DateTime, v: DateTime, right: DateTime): Double =
+        (v.getMillis - left.getMillis).toDouble / (right.getMillis - left.getMillis)
 
     }
 
