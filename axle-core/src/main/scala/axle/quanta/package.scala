@@ -85,6 +85,13 @@ package object quanta {
 
     }
 
+  // [UnitOfMeasurement[Information], Double => Double]
+  def unittedTicsGraphK2[Q, N: Field: Eq: Tics: Show, DG[_, _]](
+    implicit base: UnitOfMeasurement[Q],
+    convert: UnitConverter[Q, N],
+    evDG: DirectedGraph[DG[UnitOfMeasurement[Q], N => N], UnitOfMeasurement[Q], N => N]): Tics[UnittedQuantity[Q, N]] =
+    unittedTics[Q, N, DG[UnitOfMeasurement[Q], N => N]]
+
   implicit def unittedTics[Q, N: Field: Eq: Tics: Show, DG](
     implicit base: UnitOfMeasurement[Q],
     convert: UnitConverter[Q, N],

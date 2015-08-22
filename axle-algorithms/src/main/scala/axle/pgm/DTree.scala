@@ -4,9 +4,9 @@ import axle.stats.Distribution
 import spire.algebra.Eq
 import spire.algebra.Field
 
-case class DTreeEdge() {}
+case class DTreeEdge()
 
-case class DTreeNode() {}
+case class DTreeNode()
 
 case class DTree[T: Eq, N: Field]() {
 

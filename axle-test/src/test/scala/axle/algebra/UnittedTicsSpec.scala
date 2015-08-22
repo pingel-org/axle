@@ -24,7 +24,7 @@ class UnittedTicsSpec extends Specification {
       import id.bit
       implicit val base = bit
 
-      val ticker = axle.quanta.unittedTics[Information, Double, DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]]
+      val ticker = axle.quanta.unittedTicsGraphK2[Information, Double, DirectedSparseGraph]
 
       val tics = ticker.tics(0d *: bit, 1d *: bit).toVector
 
