@@ -57,7 +57,7 @@ class ABE extends Specification {
       Vector(A is false, M is false) -> Rational(99, 100)))
 
   // edges: ba, ea, aj, am
-  val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
+  val bn = BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
     "A sounds (due to Burglary or Earthquake) and John or Mary Call",
     Map(B -> bFactor,
       E -> eFactor,

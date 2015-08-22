@@ -39,7 +39,7 @@ object Edge {
 
 object BayesianNetwork {
 
-  def common[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG[_, _]](
+  def withGraphK2[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG[_, _]](
     name: String,
     variableFactorMap: Map[Distribution[T, N], Factor[T, N]])(
       implicit dg: DirectedGraph[DG[BayesianNetworkNode[T, N], Edge], BayesianNetworkNode[T, N], Edge]) =
