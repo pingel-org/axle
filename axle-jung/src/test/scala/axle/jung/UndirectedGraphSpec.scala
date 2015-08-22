@@ -13,7 +13,7 @@ class UndirectedGraphSpec extends Specification {
 
       class Edge
 
-      val jug = UndirectedGraph[UndirectedSparseGraph[String, Edge], String, Edge]
+      val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
 
       val a = "a"
       val b = "b"
@@ -38,7 +38,7 @@ class UndirectedGraphSpec extends Specification {
 
       class Edge(weight: Real)
 
-      val jug = UndirectedGraph[UndirectedSparseGraph[String, Edge], String, Edge]
+      val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
 
       val g = jug.make(
         List("a"),
