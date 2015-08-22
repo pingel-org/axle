@@ -66,11 +66,11 @@ class ABE extends Specification {
       M -> mFactor))
 
   "bayesian networks" should {
-    "work" in {
+    "produce a Joint Probability Table, which is '1' when all variables are removed" in {
 
       val jpt = bn.jointProbabilityTable
 
-      val sansAll = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
+      val sansAll: Factor[Boolean, Rational] = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 
       val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
 
@@ -85,7 +85,8 @@ class ABE extends Specification {
       // println("eliminating variables other than A, B, and E; and then finding those consistent with E = true")
       // println(afterVE)
 
-      1 must be equalTo 1
+      sansAll.values(Vector.empty) must be equalTo Rational(1)
+      sansAll.evaluate(Seq.empty, Seq.empty) must be equalTo Rational(1)
     }
   }
 
