@@ -16,7 +16,7 @@ class DirectedGraphSpec extends Specification {
 
       class Edge
 
-      val jdg = DirectedGraph[DirectedSparseGraph[String, Edge], String, Edge]
+      val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
 
       val a = "a"
       val b = "b"
@@ -41,7 +41,7 @@ class DirectedGraphSpec extends Specification {
 
       class Edge(weight: Double)
 
-      val jdg = DirectedGraph[DirectedSparseGraph[String, Edge], String, Edge]
+      val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
 
       val a = "a"
       val b = "b"
