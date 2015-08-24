@@ -431,7 +431,7 @@ object SVG {
         val arrows: List[xml.Node] = jdsg.getEdges.asScala.map { edge =>
           val height = layout.getY(jdsg.getSource(edge)) - layout.getY(jdsg.getDest(edge))
           val width = layout.getX(jdsg.getDest(edge)) - layout.getX(jdsg.getSource(edge))
-          val svgRotationAngle = (arcTangent2(height, width) in angleDouble.degree).magnitude
+          val svgRotationAngle = 180d - (arcTangent2(height, width) in angleDouble.degree).magnitude
           <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(jdsg.getDest(edge))},${layout.getY(jdsg.getDest(edge))}) rotate($svgRotationAngle)" }/>
         } toList
 
