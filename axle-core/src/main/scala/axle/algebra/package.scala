@@ -1,6 +1,7 @@
 package axle
 
 import axle.syntax.finite.finiteOps
+import axle.syntax.functor.functorOps
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.Functor
@@ -17,6 +18,7 @@ import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Rng
 import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.partialOrderOps
 import spire.math.ConvertableTo
 import spire.math.Rational
@@ -69,6 +71,13 @@ package object algebra {
   def product[A, F](fa: F)(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F, A, A]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
+  /**
+   * arithmetic, geometric, and harmonic means are "Pythagorean"
+   *
+   * https://en.wikipedia.org/wiki/Pythagorean_means
+   *
+   */
+
   def mean[N, F](ns: F)(
     implicit field: Field[N],
     aggregatable: Aggregatable[F, N, N],
@@ -94,6 +103,24 @@ package object algebra {
     agg: Aggregatable[F, N, N],
     fin: Finite[F, N]): N =
     ns.size / Σ(functorFaaF.map(ns)(field.reciprocal))
+
+  /**
+   * Generalized mean
+   * 
+   * https://en.wikipedia.org/wiki/Generalized_mean
+   *
+   * TODO could be special-cased for p = -∞ or ∞
+   */
+
+  def generalizedMean[N, F](p: N, ns: F)(
+    implicit field: Field[N],
+    functorFaaF: Functor[F, N, N, F],
+    agg: Aggregatable[F, N, N],
+    fin: Finite[F, N],
+    nroot: NRoot[N]): N =
+    nroot.fpow(
+      field.reciprocal(ns.size) * Σ(ns.map(x => nroot.fpow(x, p))),
+      field.reciprocal(p))
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
     new MetricSpace[Rational, Double] {

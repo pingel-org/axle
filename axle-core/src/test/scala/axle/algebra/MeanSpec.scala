@@ -42,4 +42,46 @@ class Mean extends Specification {
     }
   }
 
+  "Generalized Mean" should {
+
+    "be Arithmetic Mean when p = 1" in {
+
+      import spire.implicits.DoubleAlgebra
+
+      val xs = List(1d, 2d, 3d)
+
+      val am = arithmeticMean[Double, List[Double]](xs)
+      val gm1 = generalizedMean[Double, List[Double]](1d, xs)
+
+      am must be equalTo gm1
+    }
+
+    "be Harmonic Mean when p = -1" in {
+
+      import spire.implicits.DoubleAlgebra
+
+      val xs = List(1d, 2d, 3d)
+
+      val hm = harmonicMean[Double, List[Double]](xs)
+      val gm1 = generalizedMean[Double, List[Double]](-1d, xs)
+
+      hm must be equalTo gm1
+    }
+
+    "be Geometric Mean as p approaches 0" in {
+
+      import spire.implicits.DoubleAlgebra
+
+      val xs = List(1d, 2d, 3d)
+
+      val geom = geometricMean[Double, List[Double]](xs)
+      val gm1 = generalizedMean[Double, List[Double]](0.0001, xs)
+
+      val diff = geom - gm1
+ 
+      diff must be lessThan 0.001
+    }
+
+  }
+
 }

@@ -2,7 +2,7 @@ package axle.algebra
 
 import scala.annotation.implicitNotFound
 import scala.collection.parallel.immutable.ParSeq
-
+import spire.math.Real
 import spire.math.Rational
 
 @implicitNotFound("Witness not found for Finite[${C}, ${S}]")
@@ -28,6 +28,11 @@ object Finite {
   implicit def finiteCIntDouble[C](implicit ev: Finite[C, Int]): Finite[C, Double] =
     new Finite[C, Double] {
       def size(xs: C): Double = ev.size(xs).toDouble
+    }
+
+  implicit def finiteCIntReal[C](implicit ev: Finite[C, Int]): Finite[C, Real] =
+    new Finite[C, Real] {
+      def size(xs: C): Real = ev.size(xs)
     }
 
   implicit def finiteSeq[T]: Finite[Seq[T], Int] =
