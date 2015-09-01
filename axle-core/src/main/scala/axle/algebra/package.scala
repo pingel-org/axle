@@ -1,5 +1,6 @@
 package axle
 
+import axle.syntax.finite.finiteOps
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.Functor
@@ -9,6 +10,7 @@ import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.MetricSpace
 import spire.algebra.Module
+import spire.algebra.MultiplicativeGroup
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.NRoot
@@ -67,31 +69,31 @@ package object algebra {
   def product[A, F](fa: F)(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F, A, A]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
-  def mean[A, F](fa: F)(
-    implicit ev: Field[A],
-    agg: Aggregatable[F, A, A],
-    fin: Finite[F, A]): A =
-    arithmeticMean[A, F](fa)
+  def mean[N, F](ns: F)(
+    implicit field: Field[N],
+    aggregatable: Aggregatable[F, N, N],
+    finite: Finite[F, N]): N =
+    arithmeticMean[N, F](ns)
 
-  def arithmeticMean[A, F](fa: F)(
-    implicit ev: Field[A],
-    agg: Aggregatable[F, A, A],
-    fin: Finite[F, A]): A =
-    sum(fa) / fin.size(fa)
+  def arithmeticMean[N, F](ns: F)(
+    implicit field: Field[N],
+    aggregatable: Aggregatable[F, N, N],
+    finite: Finite[F, N]): N =
+    Σ(ns) / ns.size
 
-  def geometricMean[A, F](fa: F)(
-    implicit ev: Field[A],
-    agg: Aggregatable[F, A, A],
+  def geometricMean[N, F](ns: F)(
+    implicit ev: MultiplicativeMonoid[N],
+    agg: Aggregatable[F, N, N],
     fin: Finite[F, Int],
-    nroot: NRoot[A]): A =
-    nroot.nroot(Π(fa), fin.size(fa))
+    nroot: NRoot[N]): N =
+    nroot.nroot(Π(ns), ns.size)
 
-  def harmonicMean[A, F](xs: F)(
-    implicit field: Field[A],
-    functorFaaF: Functor[F, A, A, F],
-    agg: Aggregatable[F, A, A],
-    fin: Finite[F, A]): A =
-    field.div(fin.size(xs), sum(functorFaaF.map(xs)(field.reciprocal)))
+  def harmonicMean[N, F](ns: F)(
+    implicit field: Field[N],
+    functorFaaF: Functor[F, N, N, F],
+    agg: Aggregatable[F, N, N],
+    fin: Finite[F, N]): N =
+    ns.size / Σ(functorFaaF.map(ns)(field.reciprocal))
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
     new MetricSpace[Rational, Double] {

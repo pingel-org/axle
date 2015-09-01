@@ -25,6 +25,11 @@ object Finite {
       def size(xs: C): Long = ev.size(xs).toLong
     }
 
+  implicit def finiteCIntDouble[C](implicit ev: Finite[C, Int]): Finite[C, Double] =
+    new Finite[C, Double] {
+      def size(xs: C): Double = ev.size(xs).toDouble
+    }
+
   implicit def finiteSeq[T]: Finite[Seq[T], Int] =
     new Finite[Seq[T], Int] {
 
@@ -63,5 +68,5 @@ object Finite {
       def size(is: scala.collection.immutable.IndexedSeq[T]): Int =
         is.length
     }
-  
+
 }
