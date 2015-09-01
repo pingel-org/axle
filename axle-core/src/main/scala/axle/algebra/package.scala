@@ -11,6 +11,7 @@ import spire.algebra.MetricSpace
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
+import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Rng
 import spire.implicits.multiplicativeGroupOps
@@ -70,7 +71,20 @@ package object algebra {
     implicit ev: Field[A],
     agg: Aggregatable[F, A, A],
     fin: Finite[F, A]): A =
+    arithmeticMean[A, F](fa)
+
+  def arithmeticMean[A, F](fa: F)(
+    implicit ev: Field[A],
+    agg: Aggregatable[F, A, A],
+    fin: Finite[F, A]): A =
     sum(fa) / fin.size(fa)
+
+  def geometricMean[A, F](fa: F)(
+    implicit ev: Field[A],
+    agg: Aggregatable[F, A, A],
+    fin: Finite[F, Int],
+    nroot: NRoot[A]): A =
+    nroot.nroot(Π(fa), fin.size(fa))
 
   def harmonicMean[A, F](xs: F)(
     implicit field: Field[A],
