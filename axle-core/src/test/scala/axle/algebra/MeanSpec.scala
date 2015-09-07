@@ -78,7 +78,7 @@ class Mean extends Specification {
       val gm1 = generalizedMean[Double, List[Double]](0.0001, xs)
 
       val diff = geom - gm1
- 
+
       diff must be lessThan 0.001
     }
 
