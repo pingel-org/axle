@@ -22,6 +22,16 @@ object Zipper {
         zipped.unzip
     }
 
+  implicit def zipList[A, B]: ZipperK1[List, A, B] =
+    new Zipper[List[A], A, List[B], B, List[(A, B)]] {
+
+      def zip(left: List[A], right: List[B]): List[(A, B)] =
+        left.zip(right)
+
+      def unzip(zipped: List[(A, B)]): (List[A], List[B]) =
+        zipped.unzip
+    }
+
   implicit def zipIndexedSeq[A, B]: ZipperK1[IndexedSeq, A, B] =
     new Zipper[IndexedSeq[A], A, IndexedSeq[B], B, IndexedSeq[(A, B)]] {
 

@@ -106,7 +106,7 @@ package object algebra {
 
   /**
    * Generalized mean
-   * 
+   *
    * https://en.wikipedia.org/wiki/Generalized_mean
    *
    * TODO could be special-cased for p = -∞ or ∞
@@ -121,6 +121,19 @@ package object algebra {
     nroot.fpow(
       field.reciprocal(ns.size) * Σ(ns.map(x => nroot.fpow(x, p))),
       field.reciprocal(p))
+
+  def movingArithmeticMean[F, I, N, G](xs: F, size: I)(
+    implicit convert: I => N,
+    indexed: Indexed[F, I, N],
+    field: Field[N],
+    zipper: Zipper[F, N, F, N, G],
+    agg: Aggregatable[F, N, N],
+    scanner: Scanner[G, (N, N), N, F],
+    functor: Functor[F, N, N, F]): F =
+    scanner
+      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(Σ(indexed.take(xs)(size)))({ (s: N, outIn: (N, N)) =>
+        field.minus(field.plus(s, outIn._2), outIn._1)
+      }).map(_ / convert(size))
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
     new MetricSpace[Rational, Double] {
