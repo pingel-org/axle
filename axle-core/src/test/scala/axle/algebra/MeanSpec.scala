@@ -81,7 +81,19 @@ class Mean extends Specification {
 
       diff must be lessThan 0.001
     }
+  }
 
+  "movingArithmeticMean" should {
+
+    "1 to 100 by 5" in {
+
+      import axle.algebra.movingArithmeticMean
+      import spire.implicits.DoubleAlgebra
+
+      val xs = movingArithmeticMean[List[Double], Int, Double, List[(Double, Double)]]((1 to 100).toList.map(_.toDouble), 5)
+
+      xs must be equalTo (3 to 98).map(_.toDouble).toList
+    }
   }
 
 }
