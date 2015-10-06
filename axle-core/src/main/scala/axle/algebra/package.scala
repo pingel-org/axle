@@ -159,6 +159,25 @@ package object algebra {
       })
   }
 
+  def movingHarmonicMean[F, I, N, G](xs: F, size: I)(
+    implicit convert: I => N,
+    indexed: Indexed[F, I, N],
+    field: Field[N],
+    zipper: Zipper[F, N, F, N, G],
+    agg: Aggregatable[F, N, N],
+    scanner: Scanner[G, (N, N), N, F],
+    functor: Functor[F, N, N, F],
+    fin: Finite[F, N],
+    nroot: NRoot[N]): F = {
+
+    val initial: N = harmonicMean(indexed.take(xs)(size))
+
+    scanner
+      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (p: N, outIn: (N, N)) =>
+        field.times(field.reciprocal(field.plus(field.reciprocal(field.div(p, convert(size))), field.minus(field.reciprocal(outIn._2), field.reciprocal(outIn._1)))), size)
+      })
+  }
+
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
     new MetricSpace[Rational, Double] {
 

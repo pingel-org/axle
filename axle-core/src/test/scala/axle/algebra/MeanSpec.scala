@@ -102,7 +102,7 @@ class Mean extends Specification {
 
   "movingGeometricMean" should {
 
-    "1 to 625 by 2" in {
+    "1 to 625 by 3" in {
 
       import spire.math.Real
 
@@ -112,6 +112,23 @@ class Mean extends Specification {
       val moved = movingGeometricMean[List[Real], Int, Real, List[(Real, Real)]](xs, window)
 
       val expected = xs.sliding(window).map(ys => geometricMean[Real, List[Real]](ys.toList)).toList
+
+      moved must be equalTo expected
+    }
+  }
+
+  "movingHarmonicMean" should {
+
+    "1 to 5 by 3" in {
+
+      import spire.math.Real
+
+      val xs: List[Real] = (1 to 5).toList.map(v => Real(v))
+      val window = 3
+
+      val moved = movingHarmonicMean[List[Real], Int, Real, List[(Real, Real)]](xs, window)
+
+      val expected = xs.sliding(window).map(ys => harmonicMean[Real, List[Real]](ys.toList)).toList
 
       moved must be equalTo expected
     }
