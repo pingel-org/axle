@@ -1,5 +1,7 @@
 package axle
 
+import axle.syntax.finite.finiteOps
+import axle.syntax.functor.functorOps
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.Functor
@@ -9,12 +11,14 @@ import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.MetricSpace
 import spire.algebra.Module
+import spire.algebra.MultiplicativeGroup
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Rng
 import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.partialOrderOps
 import spire.math.ConvertableTo
 import spire.math.Rational
@@ -67,31 +71,69 @@ package object algebra {
   def product[A, F](fa: F)(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F, A, A]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
-  def mean[A, F](fa: F)(
-    implicit ev: Field[A],
-    agg: Aggregatable[F, A, A],
-    fin: Finite[F, A]): A =
-    arithmeticMean[A, F](fa)
+  /**
+   * arithmetic, geometric, and harmonic means are "Pythagorean"
+   *
+   * https://en.wikipedia.org/wiki/Pythagorean_means
+   *
+   */
 
-  def arithmeticMean[A, F](fa: F)(
-    implicit ev: Field[A],
-    agg: Aggregatable[F, A, A],
-    fin: Finite[F, A]): A =
-    sum(fa) / fin.size(fa)
+  def mean[N, F](ns: F)(
+    implicit field: Field[N],
+    aggregatable: Aggregatable[F, N, N],
+    finite: Finite[F, N]): N =
+    arithmeticMean[N, F](ns)
 
-  def geometricMean[A, F](fa: F)(
-    implicit ev: Field[A],
-    agg: Aggregatable[F, A, A],
+  def arithmeticMean[N, F](ns: F)(
+    implicit field: Field[N],
+    aggregatable: Aggregatable[F, N, N],
+    finite: Finite[F, N]): N =
+    Σ(ns) / ns.size
+
+  def geometricMean[N, F](ns: F)(
+    implicit ev: MultiplicativeMonoid[N],
+    agg: Aggregatable[F, N, N],
     fin: Finite[F, Int],
-    nroot: NRoot[A]): A =
-    nroot.nroot(Π(fa), fin.size(fa))
+    nroot: NRoot[N]): N =
+    nroot.nroot(Π(ns), ns.size)
 
-  def harmonicMean[A, F](xs: F)(
-    implicit field: Field[A],
-    functorFaaF: Functor[F, A, A, F],
-    agg: Aggregatable[F, A, A],
-    fin: Finite[F, A]): A =
-    field.div(fin.size(xs), sum(functorFaaF.map(xs)(field.reciprocal)))
+  def harmonicMean[N, F](ns: F)(
+    implicit field: Field[N],
+    functorFaaF: Functor[F, N, N, F],
+    agg: Aggregatable[F, N, N],
+    fin: Finite[F, N]): N =
+    ns.size / Σ(functorFaaF.map(ns)(field.reciprocal))
+
+  /**
+   * Generalized mean
+   *
+   * https://en.wikipedia.org/wiki/Generalized_mean
+   *
+   * TODO could be special-cased for p = -∞ or ∞
+   */
+
+  def generalizedMean[N, F](p: N, ns: F)(
+    implicit field: Field[N],
+    functorFaaF: Functor[F, N, N, F],
+    agg: Aggregatable[F, N, N],
+    fin: Finite[F, N],
+    nroot: NRoot[N]): N =
+    nroot.fpow(
+      field.reciprocal(ns.size) * Σ(ns.map(x => nroot.fpow(x, p))),
+      field.reciprocal(p))
+
+  def movingArithmeticMean[F, I, N, G](xs: F, size: I)(
+    implicit convert: I => N,
+    indexed: Indexed[F, I, N],
+    field: Field[N],
+    zipper: Zipper[F, N, F, N, G],
+    agg: Aggregatable[F, N, N],
+    scanner: Scanner[G, (N, N), N, F],
+    functor: Functor[F, N, N, F]): F =
+    scanner
+      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(Σ(indexed.take(xs)(size)))({ (s: N, outIn: (N, N)) =>
+        field.minus(field.plus(s, outIn._2), outIn._1)
+      }).map(_ / convert(size))
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
     new MetricSpace[Rational, Double] {
