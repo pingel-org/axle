@@ -167,14 +167,32 @@ package object algebra {
     agg: Aggregatable[F, N, N],
     scanner: Scanner[G, (N, N), N, F],
     functor: Functor[F, N, N, F],
-    fin: Finite[F, N],
-    nroot: NRoot[N]): F = {
+    fin: Finite[F, N]): F = {
 
     val initial: N = harmonicMean(indexed.take(xs)(size))
 
     scanner
       .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (p: N, outIn: (N, N)) =>
         field.times(field.reciprocal(field.plus(field.reciprocal(field.div(p, convert(size))), field.minus(field.reciprocal(outIn._2), field.reciprocal(outIn._1)))), size)
+      })
+  }
+
+  def movingGeneralizedMean[F, I, N, G](p: N, xs: F, size: I)(
+    implicit convert: I => N,
+    indexed: Indexed[F, I, N],
+    field: Field[N],
+    zipper: Zipper[F, N, F, N, G],
+    agg: Aggregatable[F, N, N],
+    scanner: Scanner[G, (N, N), N, F],
+    functor: Functor[F, N, N, F],
+    fin: Finite[F, N],
+    nroot: NRoot[N]): F = {
+
+    val initial: N = generalizedMean(p, indexed.take(xs)(size))
+
+    scanner
+      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
+        nroot.fpow(field.div(field.plus(field.times(nroot.fpow(s, p), size), field.minus(nroot.fpow(outIn._2, p), nroot.fpow(outIn._1, p))), size), field.reciprocal(p))
       })
   }
 
