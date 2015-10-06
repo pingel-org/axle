@@ -125,15 +125,39 @@ package object algebra {
   def movingArithmeticMean[F, I, N, G](xs: F, size: I)(
     implicit convert: I => N,
     indexed: Indexed[F, I, N],
+    fin: Finite[F, N],
     field: Field[N],
     zipper: Zipper[F, N, F, N, G],
     agg: Aggregatable[F, N, N],
     scanner: Scanner[G, (N, N), N, F],
-    functor: Functor[F, N, N, F]): F =
+    functor: Functor[F, N, N, F]): F = {
+
+    val initial: N = arithmeticMean(indexed.take(xs)(size))
+
     scanner
-      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(Σ(indexed.take(xs)(size)))({ (s: N, outIn: (N, N)) =>
-        field.minus(field.plus(s, outIn._2), outIn._1)
-      }).map(_ / convert(size))
+      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
+        field.plus(s, field.minus(outIn._2, outIn._1) / convert(size))
+      })
+  }
+
+  def movingGeometricMean[F, I, N, G](xs: F, size: I)(
+    implicit convert: I => Int,
+    indexed: Indexed[F, I, N],
+    field: Field[N],
+    zipper: Zipper[F, N, F, N, G],
+    agg: Aggregatable[F, N, N],
+    scanner: Scanner[G, (N, N), N, F],
+    functor: Functor[F, N, N, F],
+    fin: Finite[F, Int],
+    nroot: NRoot[N]): F = {
+
+    val initial: N = geometricMean(indexed.take(xs)(size))
+
+    scanner
+      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
+        field.times(s, nroot.nroot(field.div(outIn._2, outIn._1), convert(size)))
+      })
+  }
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
     new MetricSpace[Rational, Double] {

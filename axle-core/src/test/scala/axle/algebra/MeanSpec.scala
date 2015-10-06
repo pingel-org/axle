@@ -87,12 +87,33 @@ class Mean extends Specification {
 
     "1 to 100 by 5" in {
 
-      import axle.algebra.movingArithmeticMean
       import spire.implicits.DoubleAlgebra
 
-      val xs = movingArithmeticMean[List[Double], Int, Double, List[(Double, Double)]]((1 to 100).toList.map(_.toDouble), 5)
+      val xs = (1 to 100).toList.map(_.toDouble)
+      val window = 5
 
-      xs must be equalTo (3 to 98).map(_.toDouble).toList
+      val moved = movingArithmeticMean[List[Double], Int, Double, List[(Double, Double)]](xs, window)
+
+      val expected = xs.sliding(window).map(ys => arithmeticMean(ys.toList)).toList
+
+      moved must be equalTo expected
+    }
+  }
+
+  "movingGeometricMean" should {
+
+    "1 to 625 by 2" in {
+
+      import spire.math.Real
+
+      val xs: List[Real] = List(1d, 5d, 25d, 125d, 625d)
+      val window = 3
+
+      val moved = movingGeometricMean[List[Real], Int, Real, List[(Real, Real)]](xs, window)
+
+      val expected = xs.sliding(window).map(ys => geometricMean[Real, List[Real]](ys.toList)).toList
+
+      moved must be equalTo expected
     }
   }
 
