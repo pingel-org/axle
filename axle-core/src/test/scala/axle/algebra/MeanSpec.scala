@@ -134,4 +134,22 @@ class Mean extends Specification {
     }
   }
 
+  "movingGeneralizedMean" should {
+
+    "1 to 5 by 3 with p=0.2" in {
+
+      import spire.implicits.DoubleAlgebra
+
+      val xs: List[Double] = (1 to 5).toList.map(_.toDouble)
+      val window = 3
+      val p = 0.2
+
+      val moved = movingGeneralizedMean[List[Double], Int, Double, List[(Double, Double)]](p, xs, window)
+
+      val expected = xs.sliding(window).map(ys => generalizedMean[Double, List[Double]](p, ys.toList)).toList
+
+      moved must be equalTo expected
+    }
+  }
+
 }
