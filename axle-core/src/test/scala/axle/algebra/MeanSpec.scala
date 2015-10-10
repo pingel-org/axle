@@ -83,6 +83,29 @@ class Mean extends Specification {
     }
   }
 
+  "Generalized f-Mean" should {
+
+    "be Harmonic Mean when f(x) = 1/x" in {
+
+      import spire.implicits.DoubleAlgebra
+
+      val xs = List(1d, 2d, 3d)
+
+      val hm = harmonicMean(xs)
+
+      val f = new Bijection[Double, Double] {
+
+        def apply(x: Double): Double = 1d / x
+
+        def unapply(x: Double): Double = 1d / x
+      }
+
+      val gfm = generalizedFMean(f, xs)
+
+      hm must be equalTo gfm
+    }
+  }
+
   "movingArithmeticMean" should {
 
     "1 to 100 by 5" in {
@@ -127,6 +150,46 @@ class Mean extends Specification {
       val window = 3
 
       val moved = movingHarmonicMean[List[Real], Int, Real, List[(Real, Real)]](xs, window)
+
+      val expected = xs.sliding(window).map(ys => harmonicMean[Real, List[Real]](ys.toList)).toList
+
+      moved must be equalTo expected
+    }
+  }
+
+  "movingGeneralizedMean" should {
+
+    "1 to 5 by 3 with p=0.2" in {
+
+      import spire.implicits.DoubleAlgebra
+
+      val xs: List[Double] = (1 to 5).toList.map(_.toDouble)
+      val window = 3
+      val p = 0.2
+
+      val moved = movingGeneralizedMean[List[Double], Int, Double, List[(Double, Double)]](p, xs, window)
+
+      val expected = xs.sliding(window).map(ys => generalizedMean[Double, List[Double]](p, ys.toList)).toList
+
+      moved must be equalTo expected
+    }
+  }
+
+  "movingGeneralizedFMean" should {
+
+    "1 to 5 by 3 harmonicMean with f(x) = 1/x" in {
+
+      import spire.math.Real
+
+      val xs: List[Real] = (1 to 5).toList.map(v => Real(v))
+      val window = 3
+
+      val f = new Bijection[Real, Real] {
+        def apply(x: Real): Real = 1d / x
+        def unapply(x: Real): Real = 1d / x
+      }
+
+      val moved = movingGeneralizedFMean[List[Real], Int, Real, List[(Real, Real)]](f, xs, window)
 
       val expected = xs.sliding(window).map(ys => harmonicMean[Real, List[Real]](ys.toList)).toList
 
