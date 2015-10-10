@@ -175,4 +175,26 @@ class Mean extends Specification {
     }
   }
 
+  "movingGeneralizedFMean" should {
+
+    "1 to 5 by 3 harmonicMean with f(x) = 1/x" in {
+
+      import spire.math.Real
+
+      val xs: List[Real] = (1 to 5).toList.map(v => Real(v))
+      val window = 3
+
+      val f = new Bijection[Real, Real] {
+        def apply(x: Real): Real = 1d / x
+        def unapply(x: Real): Real = 1d / x
+      }
+
+      val moved = movingGeneralizedFMean[List[Real], Int, Real, List[(Real, Real)]](f, xs, window)
+
+      val expected = xs.sliding(window).map(ys => harmonicMean[Real, List[Real]](ys.toList)).toList
+
+      moved must be equalTo expected
+    }
+  }
+
 }
