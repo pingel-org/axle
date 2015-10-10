@@ -122,6 +122,23 @@ package object algebra {
       field.reciprocal(ns.size) * Σ(ns.map(x => nroot.fpow(x, p))),
       field.reciprocal(p))
 
+  /**
+   * Generalized f-Mean
+   *
+   * https://en.wikipedia.org/wiki/Generalized_mean#Generalized_f-mean
+   * 
+   * https://en.wikipedia.org/wiki/Quasi-arithmetic_mean
+   *
+   * TODO f need only be injective
+   */
+
+  def generalizedFMean[N, F](f: Bijection[N, N], ns: F)(
+    implicit field: Field[N],
+    functorFaaF: Functor[F, N, N, F],
+    agg: Aggregatable[F, N, N],
+    fin: Finite[F, N]): N =
+    f.unapply(field.reciprocal(ns.size) * Σ(ns.map(f)))
+
   def movingArithmeticMean[F, I, N, G](xs: F, size: I)(
     implicit convert: I => N,
     indexed: Indexed[F, I, N],

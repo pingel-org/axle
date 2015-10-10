@@ -83,6 +83,29 @@ class Mean extends Specification {
     }
   }
 
+  "Generalized f-Mean" should {
+
+    "be Harmonic Mean when f(x) = 1/x" in {
+
+      import spire.implicits.DoubleAlgebra
+
+      val xs = List(1d, 2d, 3d)
+
+      val hm = harmonicMean(xs)
+
+      val f = new Bijection[Double, Double] {
+
+        def apply(x: Double): Double = 1d / x
+
+        def unapply(x: Double): Double = 1d / x
+      }
+
+      val gfm = generalizedFMean(f, xs)
+
+      hm must be equalTo gfm
+    }
+  }
+
   "movingArithmeticMean" should {
 
     "1 to 100 by 5" in {
