@@ -126,7 +126,7 @@ package object algebra {
    * Generalized f-Mean
    *
    * https://en.wikipedia.org/wiki/Generalized_mean#Generalized_f-mean
-   * 
+   *
    * https://en.wikipedia.org/wiki/Quasi-arithmetic_mean
    *
    * TODO f need only be injective
@@ -210,6 +210,24 @@ package object algebra {
     scanner
       .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
         nroot.fpow(field.div(field.plus(field.times(nroot.fpow(s, p), size), field.minus(nroot.fpow(outIn._2, p), nroot.fpow(outIn._1, p))), size), field.reciprocal(p))
+      })
+  }
+
+  def movingGeneralizedFMean[F, I, N, G](f: Bijection[N, N], xs: F, size: I)(
+    implicit convert: I => N,
+    indexed: Indexed[F, I, N],
+    field: Field[N],
+    zipper: Zipper[F, N, F, N, G],
+    agg: Aggregatable[F, N, N],
+    scanner: Scanner[G, (N, N), N, F],
+    functor: Functor[F, N, N, F],
+    fin: Finite[F, N]): F = {
+
+    val initial: N = generalizedFMean(f, indexed.take(xs)(size))
+
+    scanner
+      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
+        f.unapply(field.div(field.plus(field.times(f(s), size), field.minus(f(outIn._2), f(outIn._1))), size))
       })
   }
 
