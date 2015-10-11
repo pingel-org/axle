@@ -2,6 +2,7 @@ package axle
 
 import axle.syntax.finite.finiteOps
 import axle.syntax.functor.functorOps
+import axle.syntax.indexed.indexedOps
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.Functor
@@ -17,6 +18,7 @@ import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Rng
+import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.partialOrderOps
@@ -149,11 +151,12 @@ package object algebra {
     scanner: Scanner[G, (N, N), N, F],
     functor: Functor[F, N, N, F]): F = {
 
-    val initial: N = arithmeticMean(indexed.take(xs)(size))
+    val initial: N = arithmeticMean(xs.take(size))
 
     scanner
-      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
-        field.plus(s, field.minus(outIn._2, outIn._1) / convert(size))
+      .scanLeft(zipper.zip(xs, xs.drop(size)))(initial)({ (s: N, outIn: (N, N)) =>
+        val sumDelta = outIn._2 - outIn._1
+        field.plus(s, sumDelta / convert(size))
       })
   }
 
@@ -168,11 +171,11 @@ package object algebra {
     fin: Finite[F, Int],
     nroot: NRoot[N]): F = {
 
-    val initial: N = geometricMean(indexed.take(xs)(size))
+    val initial: N = geometricMean(xs.take(size))
 
     scanner
-      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
-        field.times(s, nroot.nroot(field.div(outIn._2, outIn._1), convert(size)))
+      .scanLeft(zipper.zip(xs, xs.drop(size)))(initial)({ (s: N, outIn: (N, N)) =>
+        s * nroot.nroot((outIn._2 / outIn._1), convert(size))
       })
   }
 
@@ -186,11 +189,13 @@ package object algebra {
     functor: Functor[F, N, N, F],
     fin: Finite[F, N]): F = {
 
-    val initial: N = harmonicMean(indexed.take(xs)(size))
+    val initial: N = harmonicMean(xs.take(size))
 
     scanner
-      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (p: N, outIn: (N, N)) =>
-        field.times(field.reciprocal(field.plus(field.reciprocal(field.div(p, convert(size))), field.minus(field.reciprocal(outIn._2), field.reciprocal(outIn._1)))), size)
+      .scanLeft(zipper.zip(xs, xs.drop(size)))(initial)({ (p: N, outIn: (N, N)) =>
+        val oldSum = field.reciprocal(p / convert(size))
+        val sumDelta = field.reciprocal(outIn._2) - field.reciprocal(outIn._1)
+        field.reciprocal(field.plus(oldSum, sumDelta)) * size
       })
   }
 
@@ -205,11 +210,13 @@ package object algebra {
     fin: Finite[F, N],
     nroot: NRoot[N]): F = {
 
-    val initial: N = generalizedMean(p, indexed.take(xs)(size))
+    val initial: N = generalizedMean(p, xs.take(size))
 
     scanner
-      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
-        nroot.fpow(field.div(field.plus(field.times(nroot.fpow(s, p), size), field.minus(nroot.fpow(outIn._2, p), nroot.fpow(outIn._1, p))), size), field.reciprocal(p))
+      .scanLeft(zipper.zip(xs, xs.drop(size)))(initial)({ (s: N, outIn: (N, N)) =>
+        val oldSum = nroot.fpow(s, p) * size
+        val sumDelta = nroot.fpow(outIn._2, p) - nroot.fpow(outIn._1, p)
+        nroot.fpow((field.plus(oldSum, sumDelta) / size), field.reciprocal(p))
       })
   }
 
@@ -223,11 +230,13 @@ package object algebra {
     functor: Functor[F, N, N, F],
     fin: Finite[F, N]): F = {
 
-    val initial: N = generalizedFMean(f, indexed.take(xs)(size))
+    val initial: N = generalizedFMean(f, xs.take(size))
 
     scanner
-      .scanLeft(zipper.zip(xs, indexed.drop(xs)(size)))(initial)({ (s: N, outIn: (N, N)) =>
-        f.unapply(field.div(field.plus(field.times(f(s), size), field.minus(f(outIn._2), f(outIn._1))), size))
+      .scanLeft(zipper.zip(xs, xs.drop(size)))(initial)({ (s: N, outIn: (N, N)) =>
+        val oldSum = f(s) * size
+        val sumDelta = f(outIn._2) - f(outIn._1)
+        f.unapply(field.plus(oldSum, sumDelta) / size)
       })
   }
 
