@@ -6,6 +6,9 @@ import scala.language.implicitConversions
 import scala.util.Random.nextDouble
 import scala.util.Random.nextInt
 
+import axle.algebra.Finite
+import axle.algebra.Functor
+import axle.algebra.Aggregatable
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
@@ -13,6 +16,7 @@ import axle.stats.Case
 import axle.stats.Distribution
 import axle.stats.Distribution0
 import axle.stats.EnrichedCaseGenTraversable
+import axle.syntax.functor.functorOps
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -85,10 +89,31 @@ package object stats {
   def square[N: Ring](x: N): N = x ** 2
 
   /**
+   *
+   * https://en.wikipedia.org/wiki/Root-mean-square_deviation
+   */
+
+  def rootMeanSquareDeviation[C, X, Y, D](
+    data: C,
+    actual: X => Y,
+    estimator: X => Y)(
+      implicit finite: Finite[C, Y],
+      functor: Functor[C, X, Y, D],
+      agg: Aggregatable[D, Y, Y],
+      field: Field[Y],
+      nroot: NRoot[Y]): Y = {
+
+    import axle.algebra.Σ
+
+    nroot.sqrt(Σ[Y, D](data.map(x => square(actual(x) - estimator(x)))))
+  }
+
+  /**
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A = {
+  def standardDeviation[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    distribution: Distribution[A, N]): A = {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
