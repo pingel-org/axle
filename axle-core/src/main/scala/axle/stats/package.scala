@@ -6,6 +6,10 @@ import scala.language.implicitConversions
 import scala.util.Random.nextDouble
 import scala.util.Random.nextInt
 
+import axle.algebra.Σ
+import axle.algebra.Finite
+import axle.algebra.Functor
+import axle.algebra.Aggregatable
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
@@ -13,13 +17,14 @@ import axle.stats.Case
 import axle.stats.Distribution
 import axle.stats.Distribution0
 import axle.stats.EnrichedCaseGenTraversable
+import axle.syntax.functor.functorOps
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Ring
-import spire.implicits.DoubleAlgebra
+//import spire.implicits.DoubleAlgebra
 import spire.implicits.additiveGroupOps
 import spire.implicits.convertableOps
 import spire.implicits.eqOps
@@ -31,7 +36,6 @@ import spire.implicits.semiringOps
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 import spire.math.Rational
-import spire.optional.unicode.Σ
 import spire.random.Dist
 
 package object stats {
@@ -80,21 +84,40 @@ package object stats {
 
   def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)
 
-  def mean[N: Field: Manifest](xs: Iterable[N]): N = Σ(xs) / xs.size
-
   def square[N: Ring](x: N): N = x ** 2
+
+  /**
+   *
+   * https://en.wikipedia.org/wiki/Root-mean-square_deviation
+   */
+
+  def rootMeanSquareDeviation[C, X, Y, D](
+    data: C,
+    actual: X => Y,
+    estimator: X => Y)(
+      implicit finite: Finite[C, Y],
+      functor: Functor[C, X, Y, D],
+      agg: Aggregatable[D, Y, Y],
+      field: Field[Y],
+      nroot: NRoot[Y]): Y =
+    nroot.sqrt(Σ[Y, D](data.map(x => square(actual(x) - estimator(x)))))
 
   /**
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A = {
+  def standardDeviation[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    distribution: Distribution[A, N]): A = {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ(distribution.values map { x => n2a(distribution.probabilityOf(x)) * x })
+    val foo: IndexedSeq[A] = distribution.values.map({ x => n2a(distribution.probabilityOf(x)) * x })
 
-    Σ(distribution.values map { x => n2a(distribution.probabilityOf(x)) * square(x - μ) }).sqrt
+    val μ: A = Σ[A, IndexedSeq[A]](foo)
+
+    val bar: IndexedSeq[A] = distribution.values map { x => n2a(distribution.probabilityOf(x)) * square(x - μ) }
+
+    Σ[A, IndexedSeq[A]](bar).sqrt
   }
 
   def σ[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
@@ -107,8 +130,10 @@ package object stats {
     X: Distribution[A, N])(
       implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
+    import spire.implicits.DoubleAlgebra
+
     val convertN = ConvertableFrom[N]
-    val H = Σ(X.values map { x =>
+    val H = Σ[Double, IndexedSeq[Double]](X.values map { x =>
       val px: N = axle.stats.P(X is x).apply()
       if (px === Field[N].zero) {
         0d
