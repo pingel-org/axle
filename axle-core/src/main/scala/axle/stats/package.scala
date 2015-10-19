@@ -111,13 +111,9 @@ package object stats {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val foo: IndexedSeq[A] = distribution.values.map({ x => n2a(distribution.probabilityOf(x)) * x })
+    val μ: A = Σ[A, IndexedSeq[A]](distribution.values.map({ x => n2a(distribution.probabilityOf(x)) * x }))
 
-    val μ: A = Σ[A, IndexedSeq[A]](foo)
-
-    val bar: IndexedSeq[A] = distribution.values map { x => n2a(distribution.probabilityOf(x)) * square(x - μ) }
-
-    Σ[A, IndexedSeq[A]](bar).sqrt
+    Σ[A, IndexedSeq[A]](distribution.values map { x => n2a(distribution.probabilityOf(x)) * square(x - μ) }).sqrt
   }
 
   def σ[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
