@@ -42,8 +42,7 @@ import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
 import axle.algebra.Finite
 import axle.algebra.Functor
-import spire.optional.unicode.Π
-import spire.optional.unicode.Σ
+import axle.algebra.Π
 import spire.algebra.Bool
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -90,7 +89,7 @@ package object axle {
    *
    */
   def wallisΠ(iterations: Int = 10000) =
-    2 * Π((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
+    2 * Π[Rational, IndexedSeq[Rational]]((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
 
   /**
    * Monte Carlo approximation of pi http://en.wikipedia.org/wiki/Monte_Carlo_method

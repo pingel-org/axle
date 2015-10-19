@@ -12,7 +12,7 @@ import axle.stats.CaseIs
 import axle.stats.Distribution
 import axle.stats.Independence
 import axle.stats.Factor
-import spire.optional.unicode.Π
+import axle.algebra.Π
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Order
@@ -80,7 +80,8 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def cpt(variable: Distribution[T, N]): Factor[T, N] =
     graph.findVertex(_.rv === variable).map(_.cpt).get
 
-  def probabilityOf(cs: Seq[CaseIs[T, N]]) = Π(cs.map(c => cpt(c.distribution)(cs)).toVector)
+  def probabilityOf(cs: Seq[CaseIs[T, N]]): N =
+    Π[N, Vector[N]](cs.map(c => cpt(c.distribution)(cs)).toVector)
 
   def markovAssumptionsFor(rv: Distribution[T, N]): Independence[T, N] = {
     val rvVertex = graph.findVertex(_.rv === rv).get
@@ -115,10 +116,12 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    * The cost is the cost of the Tk multiplication. This is highly dependent on π
    */
 
-  def variableEliminationPriorMarginalI(Q: Set[Distribution[T, N]], π: List[Distribution[T, N]]): Factor[T, N] =
-    Π(π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
-      val allMentions = S.filter(_.mentions(rv))
-      val mentionsWithout = Π(allMentions).sumOut(rv)
+  def variableEliminationPriorMarginalI(
+    Q: Set[Distribution[T, N]],
+    π: List[Distribution[T, N]]): Factor[T, N] =
+    Π[Factor[T, N], Set[Factor[T, N]]](π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
+      val allMentions: Set[Factor[T, N]] = S.filter(_.mentions(rv))
+      val mentionsWithout = Π[Factor[T, N], Set[Factor[T, N]]](allMentions).sumOut(rv)
       (S -- allMentions) + mentionsWithout
     }))
 
@@ -132,11 +135,14 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    *
    */
 
-  def variableEliminationPriorMarginalII(Q: Set[Distribution[T, N]], π: List[Distribution[T, N]], e: CaseIs[T, N]): Factor[T, N] =
-    Π(π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
+  def variableEliminationPriorMarginalII(
+    Q: Set[Distribution[T, N]],
+    π: List[Distribution[T, N]],
+    e: CaseIs[T, N]): Factor[T, N] =
+    Π[Factor[T, N], Set[Factor[T, N]]](π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        (S -- allMentions) + Π(allMentions).sumOut(rv)
+        (S -- allMentions) + Π[Factor[T, N], Set[Factor[T, N]]](allMentions).sumOut(rv)
       }))
 
   def interactsWith(v1: Distribution[T, N], v2: Distribution[T, N]): Boolean =

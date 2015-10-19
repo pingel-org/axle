@@ -52,6 +52,18 @@ object Aggregatable {
         is.aggregate(zeroValue)(seqOp, combOp)
     }
 
+  implicit def aggregatableIterable[A, B] =
+    new Aggregatable[Iterable[A], A, B] {
+      def aggregate(i: Iterable[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+        i.aggregate(zeroValue)(seqOp, combOp)
+    }
+
+  implicit def aggregatableSet[A, B] =
+    new Aggregatable[Set[A], A, B] {
+      def aggregate(s: Set[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+        s.aggregate(zeroValue)(seqOp, combOp)
+    }
+
   import scala.collection.immutable.{ IndexedSeq => ImmIndexedSeq }
 
   implicit def aggregatableImmutableIndexedSeq[A, B] =

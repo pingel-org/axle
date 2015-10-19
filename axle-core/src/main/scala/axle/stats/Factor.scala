@@ -15,7 +15,6 @@ import spire.implicits.eqOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
-import spire.optional.unicode.Σ
 import spire.compat.ordering
 
 import axle.Show
