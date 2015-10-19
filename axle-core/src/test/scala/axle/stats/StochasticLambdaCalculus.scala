@@ -3,7 +3,7 @@ package axle.stats
 import org.specs2.mutable.Specification
 
 import axle.game.Dice.die
-import spire.optional.unicode.Σ
+import axle.algebra.Σ
 import spire.implicits.IntAlgebra
 import spire.math.Rational
 import spire.syntax.literals._
@@ -23,7 +23,7 @@ object StochasticLambdaCalculus extends Specification {
 
       distribution.probabilityOf(12) must be equalTo Rational(1, 54)
 
-      Σ(distribution.values map distribution.probabilityOf) must be equalTo Rational(1)
+      Σ[Rational, IndexedSeq[Rational]](distribution.values map distribution.probabilityOf) must be equalTo Rational(1)
     }
   }
 

@@ -2,7 +2,7 @@ package axle.stats
 
 import scala.util.Random
 
-import spire.optional.unicode.Σ
+import axle.algebra.Σ
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -62,7 +62,7 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name
 
   def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
 
-  val totalCount: N = Σ(tally.values)
+  val totalCount: N = Σ[N, Iterable[N]](tally.values)
 
   val bars: Map[A, N] =
     tally.scanLeft((null.asInstanceOf[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2)))
@@ -94,17 +94,17 @@ case class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), 
 
   def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
 
-  val totalCount = Σ(tally.values)
+  val totalCount: N = Σ[N, Iterable[N]](tally.values)
 
   def observe(): A = ???
 
   def observe(gv: G): A = ???
 
-  def probabilityOf(a: A): N = Σ(gvs.map(gv => tally((a, gv)))) / totalCount
+  def probabilityOf(a: A): N = Σ[N, Iterable[N]](gvs.map(gv => tally((a, gv)))) / totalCount
 
   def probabilityOf(a: A, given: Case[G, N]): N = given match {
-    case CaseIs(argGrv, gv)   => tally.get((a, gv)).getOrElse(Field[N].zero) / Σ(tally.filter(_._1._2 === gv).map(_._2))
-    case CaseIsnt(argGrv, gv) => 1 - (tally.get((a, gv)).getOrElse(Field[N].zero) / Σ(tally.filter(_._1._2 === gv).map(_._2)))
+    case CaseIs(argGrv, gv)   => tally.get((a, gv)).getOrElse(Field[N].zero) / Σ[N, Iterable[N]](tally.filter(_._1._2 === gv).map(_._2))
+    case CaseIsnt(argGrv, gv) => 1 - (tally.get((a, gv)).getOrElse(Field[N].zero) / Σ[N, Iterable[N]](tally.filter(_._1._2 === gv).map(_._2)))
     case _                    => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
   }
 

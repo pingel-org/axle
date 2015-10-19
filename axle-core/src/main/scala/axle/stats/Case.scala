@@ -2,7 +2,7 @@ package axle.stats
 
 import scala.collection.GenTraversable
 
-import spire.optional.unicode.Π
+import axle.algebra.Π
 import spire.algebra.Field
 import spire.implicits.additiveGroupOps
 
@@ -21,19 +21,21 @@ trait Case[A, N] {
   def bayes: () => N // perhaps bayes should return a Seq[Case] or similar
 }
 
-case class CaseAndGT[A: Manifest, N](conjuncts: Iterable[Case[A, N]])(implicit val field: Field[N])
-  extends Case[List[A], N] {
+case class CaseAndGT[A: Manifest, N](
+  conjuncts: Iterable[Case[A, N]])(
+    implicit val field: Field[N])
+    extends Case[List[A], N] {
 
   def probability[B](given: Option[Case[B, N]] = None): N =
     given
-      .map(g => Π(conjuncts map { (c: Case[A, N]) => P(c | g).apply() }))
-      .getOrElse(Π(conjuncts map { P(_).apply() }))
+      .map(g => Π[N, Iterable[N]](conjuncts map { (c: Case[A, N]) => P(c | g).apply() }))
+      .getOrElse(Π[N, Iterable[N]](conjuncts map { P(_).apply() }))
 
   def bayes = ???
 }
 
 case class CaseAnd[A, B, N](left: Case[A, N], right: Case[B, N])(implicit val field: Field[N])
-  extends Case[(A, B), N] {
+    extends Case[(A, B), N] {
 
   def probability[C](given: Option[Case[C, N]] = None): N =
     (given.map(g => P(left | g) * P(right | g)).getOrElse(P(left) * P(right))).apply()
@@ -46,7 +48,7 @@ case class CaseAnd[A, B, N](left: Case[A, N], right: Case[B, N])(implicit val fi
 }
 
 case class CaseOr[A, B, N](left: Case[A, N], right: Case[B, N])(implicit val field: Field[N])
-  extends Case[(A, B), N] {
+    extends Case[(A, B), N] {
 
   def probability[C](given: Option[Case[C, N]] = None): N =
     given
@@ -63,7 +65,7 @@ case class CaseOr[A, B, N](left: Case[A, N], right: Case[B, N])(implicit val fie
 
 // TODO: use phantom types to ensure that only one "given" clause is specified
 case class CaseGiven[A, B, N](c: Case[A, N], given: Case[B, N])(implicit val field: Field[N])
-  extends Case[(A, B), N] {
+    extends Case[(A, B), N] {
 
   def probability[C](givenArg: Option[Case[C, N]] = None): N = {
     assert(givenArg.isEmpty)
@@ -76,7 +78,7 @@ case class CaseGiven[A, B, N](c: Case[A, N], given: Case[B, N])(implicit val fie
 
 // TODO: may want CaseIs{With, No] classes to avoid the run-time type-checking below
 case class CaseIs[A, N](distribution: Distribution[A, N], v: A)(implicit val field: Field[N])
-  extends Case[A, N] {
+    extends Case[A, N] {
 
   def probability[G](given: Option[Case[G, N]]): N =
     distribution match {
@@ -105,7 +107,7 @@ object CaseIs {
 }
 
 case class CaseIsnt[A, N](distribution: Distribution[A, N], v: A)(implicit val field: Field[N])
-  extends Case[A, N] {
+    extends Case[A, N] {
 
   def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(distribution is v).apply())
 
