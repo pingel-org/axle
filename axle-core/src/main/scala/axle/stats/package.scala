@@ -142,13 +142,6 @@ package object stats {
       cons(newReservoir, _reservoirSampleK(k, i + 1, newReservoir, xs.tail))
     }
 
-  /**
-   * Take a uniform k from the stream of integers starting at 1
-   * the sampling is stopped after the first 100 integers have been observed
-   *
-   * reservoirSampleK(10, Stream.from(1)).drop(100).head
-   */
-
   def reservoirSampleK[N](k: Int, xs: Stream[N]) = _reservoirSampleK(k, 0, Nil, xs)
 
 }
