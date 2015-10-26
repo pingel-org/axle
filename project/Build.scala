@@ -256,7 +256,7 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-spark",
     libraryDependencies ++= Seq(
-      "org.apache.spark" %% "spark-core" % "1.3.0"
+      "org.apache.spark" %% "spark-core" % "1.5.0" % "provided"
     )
   ).dependsOn(axleCore)
 
