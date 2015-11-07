@@ -18,6 +18,17 @@ import scoverage.ScoverageSbtPlugin._
 
 object AxleBuild extends Build {
 
+  lazy val spireVersion = "0.10.1"
+  lazy val shapelessVersion = "2.2.2"
+  lazy val hadoopVersion = "1.1.2"
+  lazy val jungVersion = "2.0.1"
+  lazy val jodaTimeVersion = "2.3"
+  lazy val jodaConvertVersion = "1.6"
+  lazy val jblasVersion = "1.2.3"
+  lazy val akkaVersion = "2.3.3"
+  lazy val sparkVersion = "1.5.1"
+  lazy val jogampVersion = "2.0.2"
+
   lazy val scoverageSettings = Seq(
     ScoverageKeys.coverageMinimum := 10,
     ScoverageKeys.coverageFailOnMinimum := false,
@@ -135,8 +146,8 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-core",
     libraryDependencies ++= Seq(
-      "org.spire-math" %% "spire" % "0.10.1",
-      "org.spire-math" %% "spire-scalacheck-binding" % "0.10.1"
+      "org.spire-math" %% "spire" % spireVersion,
+      "org.spire-math" %% "spire-scalacheck-binding" % spireVersion
     )
   )
 
@@ -147,7 +158,7 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-algorithms",
     libraryDependencies ++= Seq(
-      "com.chuusai" %% "shapeless" % "2.2.2"
+      "com.chuusai" %% "shapeless" % shapelessVersion
     )
   ).dependsOn(axleCore)
 
@@ -178,8 +189,8 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-joda",
     libraryDependencies ++= Seq(
-      "joda-time" % "joda-time" % "2.3",
-      "org.joda" % "joda-convert" % "1.6"
+      "joda-time" % "joda-time" % jodaTimeVersion % "provided",
+      "org.joda" % "joda-convert" % jodaConvertVersion % "provided"
     )
   ).dependsOn(axleCore)
 
@@ -190,7 +201,7 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-jblas",
     libraryDependencies ++= Seq(
-      "org.jblas" % "jblas" % "1.2.3"
+      "org.jblas" % "jblas" % jblasVersion % "provided"
     )
   ).dependsOn(axleCore)
 /*
@@ -218,7 +229,6 @@ object AxleBuild extends Build {
     )
   ).dependsOn(axleCore)
 */
-  lazy val jungVersion = "2.0.1"
 
   lazy val axleJung = Project(
     id = "axle-jung",
@@ -227,14 +237,12 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-jung",
     libraryDependencies ++= Seq(
-      "net.sf.jung" % "jung-algorithms" % jungVersion,
-      "net.sf.jung" % "jung-api" % jungVersion,
-      "net.sf.jung" % "jung-graph-impl" % jungVersion,
-      "net.sf.jung" % "jung-io" % jungVersion
+      "net.sf.jung" % "jung-algorithms" % jungVersion % "provided",
+      "net.sf.jung" % "jung-api" % jungVersion % "provided",
+      "net.sf.jung" % "jung-graph-impl" % jungVersion % "provided",
+      "net.sf.jung" % "jung-io" % jungVersion % "provided"
     )
   ).dependsOn(axleCore)
-
-  lazy val hadoopVersion = "1.1.2"
 
 /*
   lazy val axleHBase = Project(
@@ -256,7 +264,7 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-spark",
     libraryDependencies ++= Seq(
-      "org.apache.spark" %% "spark-core" % "1.5.0" % "provided"
+      "org.apache.spark" %% "spark-core" % sparkVersion % "provided"
     )
   ).dependsOn(axleCore)
 
@@ -293,9 +301,16 @@ object AxleBuild extends Build {
     name := "axle-visualize",
     libraryDependencies ++= Seq(
       "net.sf.jung" % "jung-visualization" % jungVersion,
-      "com.typesafe.akka" %% "akka-actor" % "2.3.3",
-      "org.jogamp.gluegen" % "gluegen-rt-main" % "2.0.2", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
-      "org.jogamp.jogl" % "jogl-all-main" % "2.0.2"
+      "net.sf.jung" % "jung-algorithms" % jungVersion,
+      "net.sf.jung" % "jung-api" % jungVersion,
+      "net.sf.jung" % "jung-graph-impl" % jungVersion,
+      "net.sf.jung" % "jung-io" % jungVersion,
+      "joda-time" % "joda-time" % jodaTimeVersion,
+      "org.joda" % "joda-convert" % jodaConvertVersion,
+      "org.jblas" % "jblas" % jblasVersion,
+      "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+      "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion, // other jogl deps: http://jogamp.org/wiki/index.php/Maven
+      "org.jogamp.jogl" % "jogl-all-main" % jogampVersion
     )
   ).dependsOn(axleCore, axleJung, axleAlgorithms, axleJoda)
 
@@ -306,6 +321,12 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-test",
     libraryDependencies ++= Seq(
+      "joda-time" % "joda-time" % jodaTimeVersion,
+      "org.joda" % "joda-convert" % jodaConvertVersion,
+      "net.sf.jung" % "jung-algorithms" % jungVersion,
+      "net.sf.jung" % "jung-api" % jungVersion,
+      "net.sf.jung" % "jung-graph-impl" % jungVersion,
+      "net.sf.jung" % "jung-io" % jungVersion
     )
   ).dependsOn(
     axleCore,
