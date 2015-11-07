@@ -219,7 +219,7 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-jcublas",
     libraryDependencies ++= Seq(
-      "org.nd4j" % "jcublas" % jcublasVersion
+      "org.nd4j" % "jcublas" % jcublasVersion % "provided"
     )
   ).dependsOn(axleCore)
 */
@@ -259,8 +259,8 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-hbase",
     libraryDependencies ++= Seq(
-      "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
-      "org.apache.hbase" % "hbase" % hbaseVersion
+      "org.apache.hadoop" % "hadoop-core" % hadoopVersion % "provided",
+      "org.apache.hbase" % "hbase" % hbaseVersion % "provided"
     )
   ).dependsOn(axleCore)
 */
@@ -283,8 +283,8 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-scalding",
     libraryDependencies ++= Seq(
-      "org.apache.hadoop" % "hadoop-core" % hadoopVersion,
-      "com.twitter" %% "scalding-core" % scaldingVersion
+      "org.apache.hadoop" % "hadoop-core" % hadoopVersion % "provided",
+      "com.twitter" %% "scalding-core" % scaldingVersion % "provided"
     )
   ).dependsOn(axleCore)
 */
@@ -296,7 +296,7 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-figaro",
     libraryDependencies ++= Seq(
-      "com.cra.figaro" %% "figaro" % figaroVersion
+      "com.cra.figaro" %% "figaro" % figaroVersion % "provided"
     )
   ).dependsOn(axleCore)
 */
@@ -307,17 +307,17 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-visualize",
     libraryDependencies ++= Seq(
-      "net.sf.jung" % "jung-visualization" % jungVersion,
-      "net.sf.jung" % "jung-algorithms" % jungVersion,
-      "net.sf.jung" % "jung-api" % jungVersion,
-      "net.sf.jung" % "jung-graph-impl" % jungVersion,
-      "net.sf.jung" % "jung-io" % jungVersion,
-      "joda-time" % "joda-time" % jodaTimeVersion,
-      "org.joda" % "joda-convert" % jodaConvertVersion,
-      "org.jblas" % "jblas" % jblasVersion,
-      "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-      "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion, // other jogl deps: http://jogamp.org/wiki/index.php/Maven
-      "org.jogamp.jogl" % "jogl-all-main" % jogampVersion
+      "net.sf.jung" % "jung-visualization" % jungVersion % "provided",
+      "net.sf.jung" % "jung-algorithms" % jungVersion % "provided",
+      "net.sf.jung" % "jung-api" % jungVersion % "provided",
+      "net.sf.jung" % "jung-graph-impl" % jungVersion % "provided",
+      "net.sf.jung" % "jung-io" % jungVersion % "provided",
+      "joda-time" % "joda-time" % jodaTimeVersion % "provided",
+      "org.joda" % "joda-convert" % jodaConvertVersion % "provided",
+      "org.jblas" % "jblas" % jblasVersion % "provided",
+      "com.typesafe.akka" %% "akka-actor" % akkaVersion % "provided",
+      "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion % "provided", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
+      "org.jogamp.jogl" % "jogl-all-main" % jogampVersion % "provided"
     )
   ).dependsOn(axleCore, axleJung, axleAlgorithms, axleJoda)
 
@@ -328,6 +328,7 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-test",
     libraryDependencies ++= Seq(
+      "org.jblas" % "jblas" % jblasVersion,
       "joda-time" % "joda-time" % jodaTimeVersion,
       "org.joda" % "joda-convert" % jodaConvertVersion,
       "net.sf.jung" % "jung-algorithms" % jungVersion,
