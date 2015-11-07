@@ -5,7 +5,7 @@ Release:
 
 `sbt "release with-defaults"`
 
-(May also need to edit version.sbt and run `sbt publish-signed`)
+(May also need to edit version.sbt and run `sbt publishSigned`)
 
 Then:
  https://oss.sonatype.org/
