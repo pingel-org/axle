@@ -2,10 +2,9 @@
 package axle.logic
 
 import org.specs2.mutable._
-import spire.algebra._
-import spire.implicits._
-import FOPL._
-import SamplePredicates._
+import spire.algebra.Eq
+//import spire.implicits._
+import spire.std.option._
 
 /**
  *
@@ -13,6 +12,9 @@ import SamplePredicates._
  */
 
 class StatementSpecification extends Specification {
+
+  import axle.logic.FOPL._
+  import SamplePredicates._
 
   // This spec especially suffers from the conflicting specs "equalTo" and spire's ===
   // which results in this code being much less readable than it should be

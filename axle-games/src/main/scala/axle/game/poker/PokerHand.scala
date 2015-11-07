@@ -47,7 +47,7 @@ case class PokerHand(cards: IndexedSeq[Card]) {
 
   lazy val category: PokerHandCategory =
     if (isFlush && isStraight) {
-      if (sortedHand(0).rank === Ace) {
+      if (sortedHand(0).rank == Ace) {
         RoyalFlush
       } else {
         StraightFlush

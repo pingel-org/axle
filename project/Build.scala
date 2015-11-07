@@ -21,7 +21,7 @@ import Version._
 object AxleBuild extends Build {
 
   lazy val disciplineVersion = "0.2.1"
-  lazy val spireVersion = "0.10.1"
+  lazy val spireVersion = "0.11.0"
   lazy val shapelessVersion = "2.2.2"
   lazy val scalaXmlVersion = "1.0.4"
   lazy val hadoopVersion = "1.1.2"
@@ -152,7 +152,7 @@ object AxleBuild extends Build {
       "org.specs2" %% "specs2" % specsVersion,
       "org.typelevel" %% "discipline" % disciplineVersion,
       "org.spire-math" %% "spire" % spireVersion,
-      "org.spire-math" %% "spire-scalacheck-binding" % spireVersion,
+      "org.spire-math" %% "spire-laws" % spireVersion,
       "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaXmlVersion
     )

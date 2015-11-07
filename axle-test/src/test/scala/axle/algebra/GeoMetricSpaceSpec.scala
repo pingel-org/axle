@@ -61,27 +61,6 @@ class GeoMetricSpaceSpec
   import spire.math.RealAlgebra
   val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
 
-  // The metric space laws require a Rng, even though the times method is not called.
-  // A future version of spire could relax the constraint.
-  // For now this Rng is created with an unimplemented times method
-  //  ... in order for the tests to pass
-  import spire.algebra.Rng
-  implicit val angleRealRng: Rng[UnittedQuantity[Angle, Real]] =
-    new Rng[UnittedQuantity[Angle, Real]] {
-
-      def negate(x: UnittedQuantity[Angle, Real]): UnittedQuantity[Angle, Real] =
-        ag.negate(x)
-
-      def zero: UnittedQuantity[Angle, Real] =
-        ag.zero
-
-      def plus(x: UnittedQuantity[Angle, Real], y: UnittedQuantity[Angle, Real]): UnittedQuantity[Angle, Real] =
-        ag.plus(x, y)
-
-      def times(x: UnittedQuantity[Angle, Real], y: UnittedQuantity[Angle, Real]): UnittedQuantity[Angle, Real] =
-        ???
-    }
-
   checkAll(s"GeoCoordinates metric space",
     VectorSpaceLaws[GeoCoordinates[Real], UnittedQuantity[Angle, Real]].metricSpace)
 
