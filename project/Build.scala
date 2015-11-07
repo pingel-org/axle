@@ -100,8 +100,8 @@ object AxleBuild extends Build {
     </license>
   </licenses>
   <scm>
-    <url>git@github.com:adampingel/axle.git</url>
-    <connection>scm:git:git@github.com:adampingel/axle.git</connection>
+    <url>git@github.com:axlelang/axle.git</url>
+    <connection>scm:git:git@github.com:axlelang/axle.git</connection>
   </scm>
   <developers>
     <developer>
