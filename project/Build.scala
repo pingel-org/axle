@@ -35,7 +35,7 @@ object AxleBuild extends Build {
   lazy val jblasVersion = "1.2.4"
   lazy val akkaVersion = "2.3.3"
   lazy val sparkVersion = "1.5.1"
-  lazy val jogampVersion = "2.0.2"
+  lazy val jogampVersion = "2.3.2"
   lazy val specsVersion = "3.6.5"
   lazy val jcublasVersion = "6.5"
   lazy val figaroVersion = "3.0.0.0"
