@@ -35,7 +35,7 @@ object AxleBuild extends Build {
   lazy val akkaVersion = "2.3.3"
   lazy val sparkVersion = "1.5.1"
   lazy val jogampVersion = "2.0.2"
-  lazy val specsVersion = "3.3.1"
+  lazy val specsVersion = "3.6.5"
   lazy val jcublasVersion = "6.5"
   lazy val figaroVersion = "3.0.0.0"
 
@@ -149,7 +149,8 @@ object AxleBuild extends Build {
   ).settings(
     name := "axle-core",
     libraryDependencies ++= Seq(
-      "org.specs2" %% "specs2" % specsVersion,
+      "org.specs2" %% "specs2-core" % specsVersion,
+      "org.specs2" %% "specs2-scalacheck" % specsVersion,
       "org.typelevel" %% "discipline" % disciplineVersion,
       "org.spire-math" %% "spire" % spireVersion,
       "org.spire-math" %% "spire-laws" % spireVersion,
