@@ -16,10 +16,10 @@ import axle.quanta.DistanceConverter
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
 import axle.quanta.modulize
-import javax.media.opengl.GL2
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION
-import javax.media.opengl.glu.GLU
+import com.jogamp.opengl.GL2
+import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
+import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_POSITION
+import com.jogamp.opengl.glu.GLU
 import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
 import spire.implicits.moduleOps

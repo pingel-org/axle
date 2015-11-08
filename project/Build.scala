@@ -22,19 +22,20 @@ object AxleBuild extends Build {
 
   lazy val disciplineVersion = "0.4"
   lazy val spireVersion = "0.11.0"
-  lazy val shapelessVersion = "2.2.2"
-  lazy val scalaXmlVersion = "1.0.4"
-  lazy val hadoopVersion = "1.1.2"
-  lazy val scaldingVersion = "0.13.1"
-  lazy val hbaseVersion = "0.94.7"
+  lazy val shapelessVersion = "2.2.5"
+  lazy val scalaXmlVersion = "1.0.5"
+  lazy val scalaParserCombinatorsVersion = "1.0.4"
+  lazy val hadoopVersion = "1.2.1"
+  lazy val scaldingVersion = "0.15.0"
+  lazy val hbaseVersion = "1.1.2"
   lazy val jungVersion = "2.0.1"
-  lazy val jacksonVersion = "2.4.3"
-  lazy val jodaTimeVersion = "2.3"
-  lazy val jodaConvertVersion = "1.6"
-  lazy val jblasVersion = "1.2.3"
-  lazy val akkaVersion = "2.3.3"
+  lazy val jacksonVersion = "2.6.3"
+  lazy val jodaTimeVersion = "2.9"
+  lazy val jodaConvertVersion = "1.8.1"
+  lazy val jblasVersion = "1.2.4"
+  lazy val akkaVersion = "2.4.0"
   lazy val sparkVersion = "1.5.1"
-  lazy val jogampVersion = "2.0.2"
+  lazy val jogampVersion = "2.3.2"
   lazy val specsVersion = "3.6.5"
   lazy val jcublasVersion = "6.5"
   lazy val figaroVersion = "3.0.0.0"
@@ -155,7 +156,7 @@ object AxleBuild extends Build {
       "org.spire-math" %% "spire" % spireVersion,
       "org.spire-math" %% "spire-laws" % spireVersion,
       "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
-      "org.scala-lang.modules" %% "scala-parser-combinators" % scalaXmlVersion
+      "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion
     )
   )
 
