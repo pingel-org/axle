@@ -32,7 +32,7 @@ object AxleBuild extends Build {
   lazy val jacksonVersion = "2.6.3"
   lazy val jodaTimeVersion = "2.9"
   lazy val jodaConvertVersion = "1.8.1"
-  lazy val jblasVersion = "1.2.3"
+  lazy val jblasVersion = "1.2.4"
   lazy val akkaVersion = "2.3.3"
   lazy val sparkVersion = "1.5.1"
   lazy val jogampVersion = "2.0.2"
