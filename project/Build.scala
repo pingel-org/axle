@@ -23,7 +23,7 @@ object AxleBuild extends Build {
   lazy val disciplineVersion = "0.4"
   lazy val spireVersion = "0.11.0"
   lazy val shapelessVersion = "2.2.2"
-  lazy val scalaXmlVersion = "1.0.4"
+  lazy val scalaXmlVersion = "1.0.5"
   lazy val hadoopVersion = "1.1.2"
   lazy val scaldingVersion = "0.13.1"
   lazy val hbaseVersion = "0.94.7"
