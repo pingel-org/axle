@@ -3,14 +3,15 @@ package axle.jogl
 import scala.Vector
 import scala.annotation.implicitNotFound
 
-import javax.media.opengl.GL.GL_FRONT
-import javax.media.opengl.GL.GL_TRIANGLES
-import javax.media.opengl.GL2
-import javax.media.opengl.GL2GL3.GL_QUADS
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS
-import javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
-import javax.media.opengl.glu.GLU
+import com.jogamp.opengl.GL.GL_FRONT
+import com.jogamp.opengl.GL.GL_TRIANGLES
+import com.jogamp.opengl.GL2
+//import com.jogamp.opengl.GL2GL3.GL_QUADS
+import com.jogamp.opengl.GL2GL3.GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION
+import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT
+import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_SHININESS
+import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
+import com.jogamp.opengl.glu.GLU
 
 @implicitNotFound("Witness not found for Render[${A}]")
 trait Render[A] {
@@ -27,7 +28,7 @@ object Render {
       val w = width.magnitude / 2
       val h = height.magnitude / 2
       gl.glColor3f(color.red, color.green, color.blue)
-      gl.glBegin(GL_QUADS)
+      gl.glBegin(GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION)
       gl.glVertex3f(-w, h, 0f)
       gl.glVertex3f(w, h, 0f)
       gl.glVertex3f(w, -h, 0f)
