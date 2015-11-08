@@ -8,7 +8,7 @@ case class AITicTacToePlayer(id: String, description: String = "minimax")(implic
   extends TicTacToePlayer() {
 
   val heuristic = (state: TicTacToeState) => ttt.players.map(p => {
-    (p, state.outcome.map(out => if (out.winner === Some(p)) Real(1) else Real(-1)).getOrElse(Real(0)))
+    (p, state.outcome.map(out => if (out.winner == Some(p)) Real(1) else Real(-1)).getOrElse(Real(0)))
   }).toMap
 
   def move(state: TicTacToeState): (TicTacToeMove, TicTacToeState) = {

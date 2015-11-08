@@ -43,14 +43,14 @@ case class TicTacToeState(
   def apply(position: Int): Option[TicTacToePlayer] = playerAt(position)
 
   def hasWonRow(player: TicTacToePlayer): Boolean =
-    (0 until ttt.boardSize).exists(row(_).toList.forall(_ === Some(player)))
+    (0 until ttt.boardSize).exists(row(_).toList.forall(_ == Some(player)))
 
   def hasWonColumn(player: TicTacToePlayer): Boolean =
-    (0 until ttt.boardSize).exists(column(_).toList.forall(_ === Some(player)))
+    (0 until ttt.boardSize).exists(column(_).toList.forall(_ == Some(player)))
 
   def hasWonDiagonal(player: TicTacToePlayer): Boolean =
-    (0 until ttt.boardSize).forall(i => playerAt(i, i) === Some(player)) ||
-      (0 until ttt.boardSize).forall(i => playerAt(i, (ttt.boardSize - 1) - i) === Some(player))
+    (0 until ttt.boardSize).forall(i => playerAt(i, i) == Some(player)) ||
+      (0 until ttt.boardSize).forall(i => playerAt(i, (ttt.boardSize - 1) - i) == Some(player))
 
   def hasWon(player: TicTacToePlayer): Boolean = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 

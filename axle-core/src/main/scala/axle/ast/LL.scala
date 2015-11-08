@@ -86,11 +86,11 @@ case class LLParserState(
 
   def apply(action: LLParserAction): LLParserState = action match {
     case Shift() => {
-      assert(stack.head === inputSymbol)
+      assert(stack.head == inputSymbol)
       LLParserState(grammar, input, stack.tail, i + 1)
     }
     case Reduce(rule) => {
-      assert(stack.head === rule.from)
+      assert(stack.head == rule.from)
       LLParserState(grammar, input, rule.rhs ++ stack.tail, i)
     }
     case ParseError(msg) => { sys.error(string(this) + "\nparse error: " + msg) }
@@ -98,7 +98,7 @@ case class LLParserState(
 
   def nextAction(): LLParserAction = stack.head match {
 
-    case sts if sts === inputSymbol => Shift()
+    case sts if sts == inputSymbol => Shift()
 
     case foo @ NonTerminal(_) =>
       if (grammar.parseTable.contains((foo, inputSymbol))) {
@@ -111,6 +111,6 @@ case class LLParserState(
 
   }
 
-  def finished: Boolean = input.length === i && stack.head === ⊥
+  def finished: Boolean = input.length === i && stack.head == ⊥
 
 }

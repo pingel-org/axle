@@ -123,7 +123,7 @@ case class LLLanguage(
             val (accSet, followMemo): (Set[Symbol], Map[Symbol, Set[Symbol]]) = v
             val x: Set[Symbol] = (rule.rhs match {
               // TODO?: enforce that rest is composed of only terminals (maybe not the case)
-              case Terminal(_) :: symbol :: rest => first(rest).filter(x => !(x === ε))
+              case Terminal(_) :: symbol :: rest => first(rest).filter(x => !(x == ε))
               case _                             => Set()
             })
             val y: (Set[Symbol], Map[Symbol, Set[Symbol]]) = (rule.rhs match {
@@ -146,7 +146,7 @@ case class LLLanguage(
       first(rule.rhs).flatMap(a => {
         if (terminalsByName.contains(a.label)) {
           List((rule.from, a) -> rule)
-        } else if (a === ε) {
+        } else if (a == ε) {
           val memo0 = Map[Symbol, Set[Symbol]]() // TODO !!!
           val (foll, memo1) = follow(rule.from, memo0) // TODO including $
           foll.map(t => (rule.from, t) -> rule)
