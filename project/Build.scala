@@ -24,6 +24,7 @@ object AxleBuild extends Build {
   lazy val spireVersion = "0.11.0"
   lazy val shapelessVersion = "2.2.5"
   lazy val scalaXmlVersion = "1.0.5"
+  lazy val scalaParserCombinatorsVersion = "1.0.4"
   lazy val hadoopVersion = "1.1.2"
   lazy val scaldingVersion = "0.13.1"
   lazy val hbaseVersion = "0.94.7"
@@ -155,7 +156,7 @@ object AxleBuild extends Build {
       "org.spire-math" %% "spire" % spireVersion,
       "org.spire-math" %% "spire-laws" % spireVersion,
       "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
-      "org.scala-lang.modules" %% "scala-parser-combinators" % scalaXmlVersion
+      "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion
     )
   )
 
