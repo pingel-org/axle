@@ -111,7 +111,7 @@ object Render {
     def render(cube: Cube[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import cube._
       val l = length.magnitude
-      gl.glBegin(GL_QUADS)
+      gl.glBegin(GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION)
 
       gl.glColor3f(color.red, color.green, color.blue)
 
@@ -153,7 +153,7 @@ object Render {
     def render(cube: MultiColorCube[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
       import cube._
       val l = length.magnitude
-      gl.glBegin(GL_QUADS)
+      gl.glBegin(GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION)
 
       gl.glColor3f(topColor.red, topColor.green, topColor.blue)
       gl.glVertex3f(l, l, -l)
@@ -288,7 +288,7 @@ object Render {
       // gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE)
       texture.bind(gl)
 
-      gl.glBegin(GL_QUADS)
+      gl.glBegin(GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION)
 
       // Front Face
       gl.glTexCoord2f(textureLeft, textureBottom)
