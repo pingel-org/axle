@@ -61,7 +61,7 @@ object AxleBuild extends Build {
       "-deprecation",
       "-feature",
       "-optimize",
-      "-Yinline-warnings",
+      // "-Yinline-warnings",
       "-language:higherKinds",
       "-language:postfixOps"),
 
