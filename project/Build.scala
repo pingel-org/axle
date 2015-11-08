@@ -28,7 +28,7 @@ object AxleBuild extends Build {
   lazy val scaldingVersion = "0.13.1"
   lazy val hbaseVersion = "0.94.7"
   lazy val jungVersion = "2.0.1"
-  lazy val jacksonVersion = "2.4.3"
+  lazy val jacksonVersion = "2.6.3"
   lazy val jodaTimeVersion = "2.3"
   lazy val jodaConvertVersion = "1.6"
   lazy val jblasVersion = "1.2.3"
