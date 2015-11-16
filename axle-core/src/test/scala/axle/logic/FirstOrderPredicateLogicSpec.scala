@@ -1,19 +1,14 @@
-
 package axle.logic
 
 import org.specs2.mutable._
 import spire.algebra.Eq
-//import spire.implicits._
-import spire.std.option._
 
-/**
- *
- *
- */
+import FirstOrderPredicateLogic.enrichSymbol
+import FirstOrderPredicateLogic.Statement
+import FirstOrderPredicateLogic._
 
-class StatementSpecification extends Specification {
+class FirstOrderPredicateLogicSpec extends Specification {
 
-  import axle.logic.FOPL._
   import SamplePredicates._
 
   // This spec especially suffers from the conflicting specs "equalTo" and spire's ===
