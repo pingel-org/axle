@@ -11,7 +11,7 @@ import axle.Show
 import axle.string
 import scala.language.implicitConversions
 
-object FOPL {
+object FirstOrderPredicateLogic {
 
   def skolemFor(skolems: Map[Symbol, Set[Symbol]], s: Symbol, universally: Set[Symbol]) = {
     val newSym = Symbol("sk" + skolems.size)
