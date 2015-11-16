@@ -34,6 +34,7 @@ object AxleBuild extends Build {
   lazy val jodaConvertVersion = "1.8.1"
   lazy val jblasVersion = "1.2.4"
   lazy val akkaVersion = "2.4.0"
+  lazy val akkaStreamVersion = "2.0-M1"
   lazy val sparkVersion = "1.5.1"
   lazy val jogampVersion = "2.3.2"
   lazy val specsVersion = "3.6.5"
@@ -318,6 +319,7 @@ object AxleBuild extends Build {
       "org.joda" % "joda-convert" % jodaConvertVersion % "provided",
       "org.jblas" % "jblas" % jblasVersion % "provided",
       "com.typesafe.akka" %% "akka-actor" % akkaVersion % "provided",
+      "com.typesafe.akka" %% "akka-stream-experimental" % akkaStreamVersion % "provided",
       "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion % "provided", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.jogl" % "jogl-all-main" % jogampVersion % "provided"
     )
