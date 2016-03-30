@@ -51,6 +51,7 @@ import spire.algebra.Order
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
+import spire.algebra.Ring
 import spire.algebra.Trig
 import spire.compat.ordering
 import spire.implicits.eqOps
@@ -218,6 +219,16 @@ package object axle {
     } else {
       ackermann(m - 1, ackermann(m, n - 1))
     }
+  }
+
+  /**
+   * https://en.wikipedia.org/wiki/Logistic_map
+   */
+
+  def logisticMap[N: Ring](λ: N): N => N = {
+    import spire.implicits.multiplicativeSemigroupOps
+    import spire.implicits.additiveGroupOps
+    x => λ * x * (Ring[N].one - x)
   }
 
   // Fundamental:
