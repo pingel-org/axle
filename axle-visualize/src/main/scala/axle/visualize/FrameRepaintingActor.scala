@@ -15,7 +15,7 @@ import javax.swing.JFrame
 class FrameRepaintingActor(frame: JFrame, dataFeedActor: ActorRef)
   extends Actor
   with ActorLogging {
-  
+
   dataFeedActor ! RegisterViewer()
 
   context.system.scheduler.schedule(0.millis, 42.millis, self, RepaintIfDirty())
