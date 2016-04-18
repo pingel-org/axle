@@ -20,10 +20,12 @@ import axle.visualize.KMeansVisualization
 import axle.visualize.Plot
 import axle.visualize.PlotView
 import axle.visualize.Point2D
+import axle.visualize.ScatterPlot
 import axle.visualize.angleDouble
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.DataLines
+import axle.visualize.element.DataPoints
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
 import axle.visualize.element.Oval
@@ -87,6 +89,29 @@ object SVG {
                 List.empty
               }
             polyline :: pointCircles
+          }
+        }
+      }
+    }
+
+  implicit def svgDataPoints[X, Y]: SVG[DataPoints[X, Y]] =
+    new SVG[DataPoints[X, Y]] {
+      def svg(dl: DataPoints[X, Y]): NodeSeq = {
+
+        import dl._
+
+        val pointRadius = pointDiameter / 2d
+
+        val color = colorStream.head
+
+        data.toList.flatMap {
+          case (x, y) => {
+            val center = scaledArea.framePoint(Point2D(x, y))
+            if (pointRadius > 0) {
+              <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+            } else {
+              List.empty
+            }
           }
         }
       }
@@ -261,6 +286,28 @@ object SVG {
           SVG[YTics[Double, Double]].svg(yTics) ::
           (centroidOvals map { SVG[Oval[Double, Double]].svg }) ::
           (points.toList map { SVG[Oval[Double, Double]].svg })).flatten.reduce(_ ++ _)
+
+        svgFrame(nodes, width, height)
+      }
+    }
+
+  implicit def svgScatterPlot[X, Y]: SVG[ScatterPlot[X, Y]] =
+    new SVG[ScatterPlot[X, Y]] {
+
+      def svg(scatterPlot: ScatterPlot[X, Y]): NodeSeq = {
+
+        import scatterPlot._
+
+        val nodes =
+          (SVG[HorizontalLine[X, Y]].svg(hLine) ::
+            SVG[VerticalLine[X, Y]].svg(vLine) ::
+            SVG[XTics[X, Y]].svg(xTics) ::
+            SVG[YTics[X, Y]].svg(yTics) ::
+            SVG[DataPoints[X, Y]].svg(dataPoints) ::
+            List(
+              titleText.map(SVG[Text].svg),
+              xAxisLabelText.map(SVG[Text].svg),
+              yAxisLabelText.map(SVG[Text].svg)).flatten).reduce(_ ++ _)
 
         svgFrame(nodes, width, height)
       }

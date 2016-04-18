@@ -51,6 +51,8 @@ import spire.algebra.Order
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
+import spire.algebra.Ring
+import spire.algebra.Signed
 import spire.algebra.Trig
 import spire.compat.ordering
 import spire.implicits.eqOps
@@ -58,6 +60,8 @@ import spire.implicits.moduleOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 import spire.implicits.convertableOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.additiveGroupOps
 import spire.math.Rational
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
@@ -191,6 +195,8 @@ package object axle {
 
   implicit def enrichIndexedSeq[T: Manifest](is: IndexedSeq[T]): EnrichedIndexedSeq[T] = EnrichedIndexedSeq(is)
 
+  implicit def enrichIterator[T](it: Iterator[T]) = new EnrichedIterator(it)
+
   implicit def enrichByteArray(barr: Array[Byte]): EnrichedByteArray = EnrichedByteArray(barr)
 
   implicit def enrichMutableBuffer[T](buffer: Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
@@ -218,6 +224,37 @@ package object axle {
     } else {
       ackermann(m - 1, ackermann(m, n - 1))
     }
+  }
+
+  /**
+   * https://en.wikipedia.org/wiki/Logistic_map
+   */
+
+  def logisticMap[N: Ring](λ: N): N => N = {
+    x => λ * x * (Ring[N].one - x)
+  }
+
+  def applyK[N](f: N => N, x0: N, k: Int): N =
+    (1 to k).foldLeft(x0)({ case (x, _) => f(x) })
+
+  def trace[N](f: N => N, x0: N): Iterator[(N, Set[N])] = {
+    Iterator
+      .continually(Unit)
+      .scanLeft((x0, Set.empty[N]))({
+        case ((x, points), _) =>
+          (f(x), points + x)
+      })
+  }
+
+  def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] = {
+    trace(f, x0)
+      .takeWhile({
+        case (x, points) =>
+          // TODO inefficient. query points for the closest (or bounding) elements to x
+          !points.exists(close(x))
+      })
+      .lastOption.toList
+      .flatMap(_._2.toList)
   }
 
   // Fundamental:
