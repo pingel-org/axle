@@ -16,7 +16,7 @@ package object web {
     </html>
 
   // optional svg attribute: viewBox={ s"0 0 ${width} ${height}" }
-  def svgFrame(inner: NodeSeq, width: Int, height: Int): Node =
+  def svgFrame(inner: NodeSeq, width: Double, height: Double): Node =
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width={ s"$width" } height={ s"$height" }>{ inner }Sorry, your browser does not support inline SVG.</svg>
 
   def svg[T: SVG](t: T, filename: String, width: Int, height: Int): Unit =

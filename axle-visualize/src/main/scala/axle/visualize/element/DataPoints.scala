@@ -7,4 +7,4 @@ case class DataPoints[X, Y](
   scaledArea: ScaledArea2D[X, Y],
   data: Set[(X, Y)],
   colorStream: Stream[Color],
-  pointDiameter: Int)
+  pointDiameter: Double)

@@ -100,7 +100,7 @@ object SVG {
 
         import dl._
 
-        val pointRadius = pointDiameter / 2d
+        val pointRadius = pointDiameter / 2
 
         val color = colorStream.head
 
