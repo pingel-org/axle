@@ -38,6 +38,11 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
     titleFontSize: Int = 20,
     colors: Seq[Color] = defaultColors,
     title: Option[String] = None,
+    drawXTics: Boolean = true,
+    drawXTicLines: Boolean = true,
+    drawYTics: Boolean = true,
+    drawYTicLines: Boolean = true,
+    drawBorder: Boolean = true,
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxis: Option[X] = None,
@@ -68,8 +73,8 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = true, 0d *: angleDouble.degree, black)
-  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, black)
+  val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = drawXTicLines, 0d *: angleDouble.degree, black)
+  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, drawLines = drawYTicLines, black)
 
   val dataPoints = DataPoints(scaledArea, data, colorStream, pointDiameter)
 

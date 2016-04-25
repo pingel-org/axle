@@ -298,11 +298,27 @@ object SVG {
 
         import scatterPlot._
 
+        val border: Seq[xml.Node] = if (drawBorder) {
+          SVG[HorizontalLine[X, Y]].svg(hLine) ++
+            SVG[VerticalLine[X, Y]].svg(vLine)
+        } else {
+          Nil
+        }
+
+        val xtics: Seq[xml.Node] = if (drawXTics) {
+          SVG[XTics[X, Y]].svg(xTics)
+        } else {
+          Nil
+        }
+
+        val ytics: Seq[xml.Node] = if (drawYTics) {
+          SVG[YTics[X, Y]].svg(yTics)
+        } else {
+          Nil
+        }
+
         val nodes =
-          (SVG[HorizontalLine[X, Y]].svg(hLine) ::
-            SVG[VerticalLine[X, Y]].svg(vLine) ::
-            SVG[XTics[X, Y]].svg(xTics) ::
-            SVG[YTics[X, Y]].svg(yTics) ::
+          (border :: xtics :: ytics ::
             SVG[DataPoints[X, Y]].svg(dataPoints) ::
             List(
               titleText.map(SVG[Text].svg),
@@ -389,10 +405,16 @@ object SVG {
             val left = framePoint(Point2D(minX, y))
             val right = framePoint(Point2D(maxX, y))
 
-            List(
-              <line x1={ s"${left.x}" } y1={ s"${left.y}" } x2={ s"${right.x}" } y2={ s"${right.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>,
+            val ticAndText = List(
               <text text-anchor="end" alignment-baseline="middle" x={ s"${left.x - 5}" } y={ s"${left.y}" } font-size={ s"${fontSize}" }>{ label }</text>,
               <line x1={ s"${left.x - 2}" } y1={ s"${left.y}" } x2={ s"${left.x + 2}" } y2={ s"${left.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>)
+
+            if (drawLines) {
+              val line = <line x1={ s"${left.x}" } y1={ s"${left.y}" } x2={ s"${right.x}" } y2={ s"${right.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>
+              line :: ticAndText
+            } else {
+              ticAndText
+            }
           }
         })
       }

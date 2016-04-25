@@ -9,4 +9,5 @@ case class YTics[X, Y](
   tics: Seq[(Y, String)],
   fontName: String,
   fontSize: Int,
+  drawLines: Boolean = true,
   color: Color = black)
