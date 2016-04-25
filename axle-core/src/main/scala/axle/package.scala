@@ -250,6 +250,14 @@ package object axle {
       .takeWhile(mandelbrotContinue)
       .terminatesWithin(cutoff)
 
+  def inMandelbrotSetAt(R: Double, I: Double, cutoff: Int): Option[Int] =
+    applyForever(mandelbrotNext(R, I), (0d, 0d))
+      .takeWhile(mandelbrotContinue)
+      .take(cutoff)
+      .zipWithIndex
+      .lastOption
+      .flatMap({ l => if (l._2 + 1 < cutoff) Some(l._2) else None })
+
   def applyK[N](f: N => N, x0: N, k: Int): N =
     (1 to k).foldLeft(x0)({ case (x, _) => f(x) })
 
