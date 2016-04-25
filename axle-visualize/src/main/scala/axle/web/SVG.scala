@@ -94,19 +94,22 @@ object SVG {
       }
     }
 
-  implicit def svgDataPoints[X, Y]: SVG[DataPoints[X, Y]] =
-    new SVG[DataPoints[X, Y]] {
-      def svg(dl: DataPoints[X, Y]): NodeSeq = {
+  implicit def svgDataPoints[X, Y, D]: SVG[DataPoints[X, Y, D]] =
+    new SVG[DataPoints[X, Y, D]] {
+      def svg(dl: DataPoints[X, Y, D]): NodeSeq = {
 
         import dl._
 
         val pointRadius = pointDiameter / 2
 
-        val color = colorStream.head
+        // val color = colorStream.head
 
-        data.toList.flatMap {
+        val domain = dataToDomain(data)
+
+        domain.toList.flatMap {
           case (x, y) => {
             val center = scaledArea.framePoint(Point2D(x, y))
+            val color = colorOf(x, y)
             if (pointRadius > 0) {
               <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
             } else {
@@ -291,10 +294,10 @@ object SVG {
       }
     }
 
-  implicit def svgScatterPlot[X, Y]: SVG[ScatterPlot[X, Y]] =
-    new SVG[ScatterPlot[X, Y]] {
+  implicit def svgScatterPlot[X, Y, D]: SVG[ScatterPlot[X, Y, D]] =
+    new SVG[ScatterPlot[X, Y, D]] {
 
-      def svg(scatterPlot: ScatterPlot[X, Y]): NodeSeq = {
+      def svg(scatterPlot: ScatterPlot[X, Y, D]): NodeSeq = {
 
         import scatterPlot._
 
@@ -319,7 +322,7 @@ object SVG {
 
         val nodes =
           (border :: xtics :: ytics ::
-            SVG[DataPoints[X, Y]].svg(dataPoints) ::
+            SVG[DataPoints[X, Y, D]].svg(dataPoints) ::
             List(
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),

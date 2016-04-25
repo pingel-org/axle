@@ -25,8 +25,10 @@ import axle.visualize.element.HorizontalLine
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.DataPoints
 
-case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
-    data: Set[(X, Y)],
+case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
+    data: D,
+    dataToDomain: D => Set[(X, Y)],// TODO put in typeclass
+    colorOf: (X, Y) => Color, // TODO also in typeclass
     width: Double = 600d,
     height: Double = 600d,
     border: Double = 50d,
@@ -36,7 +38,6 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
     bold: Boolean = false,
     titleFontName: String = "Palatino",
     titleFontSize: Double = 20d,
-    colors: Seq[Color] = defaultColors,
     title: Option[String] = None,
     drawXTics: Boolean = true,
     drawXTicLines: Boolean = true,
@@ -50,8 +51,6 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
         implicit lengthX: LengthSpace[X, X, Double],
         lengthY: LengthSpace[Y, Y, Double]) {
 
-  val colorStream = continually(colors).flatten
-
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold = true))
 
   val yAxisLabelText = yAxisLabel.map(Text(_, 20, height / 2, fontName, fontSize, bold = true, angle = Some(90d *: angleDouble.degree)))
@@ -60,8 +59,10 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
 
   def minMax[T: Ordering](data: List[T]): (T, T) = (data.min, data.max)
 
-  val (minX, maxX) = minMax(yAxis.toList ++ data.map(_._1).toList)
-  val (minY, maxY) = minMax(xAxis.toList ++ data.map(_._2).toList)
+  val domain = dataToDomain(data)
+
+  val (minX, maxX) = minMax(yAxis.toList ++ domain.map(_._1).toList)
+  val (minY, maxY) = minMax(xAxis.toList ++ domain.map(_._2).toList)
 
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
@@ -76,6 +77,6 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
   val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = drawXTicLines, 0d *: angleDouble.degree, black)
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, drawLines = drawYTicLines, black)
 
-  val dataPoints = DataPoints(scaledArea, data, colorStream, pointDiameter)
+  val dataPoints = DataPoints(scaledArea, data, dataToDomain, colorOf, pointDiameter)
 
 }
