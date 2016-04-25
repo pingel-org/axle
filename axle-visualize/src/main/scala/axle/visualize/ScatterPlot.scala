@@ -27,8 +27,6 @@ import axle.visualize.element.DataPoints
 
 case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     data: D,
-    dataToDomain: D => Set[(X, Y)],// TODO put in typeclass
-    colorOf: (X, Y) => Color, // TODO also in typeclass
     width: Double = 600d,
     height: Double = 600d,
     border: Double = 50d,
@@ -49,7 +47,9 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
         implicit lengthX: LengthSpace[X, X, Double],
-        lengthY: LengthSpace[Y, Y, Double]) {
+        lengthY: LengthSpace[Y, Y, Double],
+        val dataView: ScatterDataView[X, Y, D]
+        ) {
 
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold = true))
 
@@ -59,7 +59,7 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
 
   def minMax[T: Ordering](data: List[T]): (T, T) = (data.min, data.max)
 
-  val domain = dataToDomain(data)
+  val domain = dataView.dataToDomain(data)
 
   val (minX, maxX) = minMax(yAxis.toList ++ domain.map(_._1).toList)
   val (minY, maxY) = minMax(xAxis.toList ++ domain.map(_._2).toList)
@@ -77,6 +77,6 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
   val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = drawXTicLines, 0d *: angleDouble.degree, black)
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, drawLines = drawYTicLines, black)
 
-  val dataPoints = DataPoints(scaledArea, data, dataToDomain, colorOf, pointDiameter)
+  val dataPoints = DataPoints(scaledArea, data, pointDiameter)
 
 }

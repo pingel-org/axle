@@ -102,14 +102,12 @@ object SVG {
 
         val pointRadius = pointDiameter / 2
 
-        // val color = colorStream.head
-
-        val domain = dataToDomain(data)
+        val domain = dataView.dataToDomain(data)
 
         domain.toList.flatMap {
           case (x, y) => {
             val center = scaledArea.framePoint(Point2D(x, y))
-            val color = colorOf(x, y)
+            val color = dataView.colorOf(data, x, y)
             if (pointRadius > 0) {
               <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
             } else {
