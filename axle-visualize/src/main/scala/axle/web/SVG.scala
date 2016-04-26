@@ -94,19 +94,20 @@ object SVG {
       }
     }
 
-  implicit def svgDataPoints[X, Y]: SVG[DataPoints[X, Y]] =
-    new SVG[DataPoints[X, Y]] {
-      def svg(dl: DataPoints[X, Y]): NodeSeq = {
+  implicit def svgDataPoints[X, Y, D]: SVG[DataPoints[X, Y, D]] =
+    new SVG[DataPoints[X, Y, D]] {
+      def svg(dl: DataPoints[X, Y, D]): NodeSeq = {
 
         import dl._
 
-        val pointRadius = pointDiameter / 2d
+        val pointRadius = pointDiameter / 2
 
-        val color = colorStream.head
+        val domain = dataView.dataToDomain(data)
 
-        data.toList.flatMap {
+        domain.toList.flatMap {
           case (x, y) => {
             val center = scaledArea.framePoint(Point2D(x, y))
+            val color = dataView.colorOf(data, x, y)
             if (pointRadius > 0) {
               <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
             } else {
@@ -291,19 +292,35 @@ object SVG {
       }
     }
 
-  implicit def svgScatterPlot[X, Y]: SVG[ScatterPlot[X, Y]] =
-    new SVG[ScatterPlot[X, Y]] {
+  implicit def svgScatterPlot[X, Y, D]: SVG[ScatterPlot[X, Y, D]] =
+    new SVG[ScatterPlot[X, Y, D]] {
 
-      def svg(scatterPlot: ScatterPlot[X, Y]): NodeSeq = {
+      def svg(scatterPlot: ScatterPlot[X, Y, D]): NodeSeq = {
 
         import scatterPlot._
 
+        val border: Seq[xml.Node] = if (drawBorder) {
+          SVG[HorizontalLine[X, Y]].svg(hLine) ++
+            SVG[VerticalLine[X, Y]].svg(vLine)
+        } else {
+          Nil
+        }
+
+        val xtics: Seq[xml.Node] = if (drawXTics) {
+          SVG[XTics[X, Y]].svg(xTics)
+        } else {
+          Nil
+        }
+
+        val ytics: Seq[xml.Node] = if (drawYTics) {
+          SVG[YTics[X, Y]].svg(yTics)
+        } else {
+          Nil
+        }
+
         val nodes =
-          (SVG[HorizontalLine[X, Y]].svg(hLine) ::
-            SVG[VerticalLine[X, Y]].svg(vLine) ::
-            SVG[XTics[X, Y]].svg(xTics) ::
-            SVG[YTics[X, Y]].svg(yTics) ::
-            SVG[DataPoints[X, Y]].svg(dataPoints) ::
+          (border :: xtics :: ytics ::
+            SVG[DataPoints[X, Y, D]].svg(dataPoints) ::
             List(
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
@@ -389,10 +406,16 @@ object SVG {
             val left = framePoint(Point2D(minX, y))
             val right = framePoint(Point2D(maxX, y))
 
-            List(
-              <line x1={ s"${left.x}" } y1={ s"${left.y}" } x2={ s"${right.x}" } y2={ s"${right.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>,
+            val ticAndText = List(
               <text text-anchor="end" alignment-baseline="middle" x={ s"${left.x - 5}" } y={ s"${left.y}" } font-size={ s"${fontSize}" }>{ label }</text>,
               <line x1={ s"${left.x - 2}" } y1={ s"${left.y}" } x2={ s"${left.x + 2}" } y2={ s"${left.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>)
+
+            if (drawLines) {
+              val line = <line x1={ s"${left.x}" } y1={ s"${left.y}" } x2={ s"${right.x}" } y2={ s"${right.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>
+              line :: ticAndText
+            } else {
+              ticAndText
+            }
           }
         })
       }

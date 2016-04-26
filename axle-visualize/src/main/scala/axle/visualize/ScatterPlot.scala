@@ -25,27 +25,31 @@ import axle.visualize.element.HorizontalLine
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.DataPoints
 
-case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
-    data: Set[(X, Y)],
-    width: Int = 600,
-    height: Int = 600,
-    border: Int = 50,
-    pointDiameter: Int = 10,
+case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
+    data: D,
+    width: Double = 600d,
+    height: Double = 600d,
+    border: Double = 50d,
+    pointDiameter: Double = 10d,
     fontName: String = "Courier New",
-    fontSize: Int = 12,
+    fontSize: Double = 12d,
     bold: Boolean = false,
     titleFontName: String = "Palatino",
-    titleFontSize: Int = 20,
-    colors: Seq[Color] = defaultColors,
+    titleFontSize: Double = 20d,
     title: Option[String] = None,
+    drawXTics: Boolean = true,
+    drawXTicLines: Boolean = true,
+    drawYTics: Boolean = true,
+    drawYTicLines: Boolean = true,
+    drawBorder: Boolean = true,
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
         implicit lengthX: LengthSpace[X, X, Double],
-        lengthY: LengthSpace[Y, Y, Double]) {
-
-  val colorStream = continually(colors).flatten
+        lengthY: LengthSpace[Y, Y, Double],
+        val dataView: ScatterDataView[X, Y, D]
+        ) {
 
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold = true))
 
@@ -55,8 +59,10 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
 
   def minMax[T: Ordering](data: List[T]): (T, T) = (data.min, data.max)
 
-  val (minX, maxX) = minMax(yAxis.toList ++ data.map(_._1).toList)
-  val (minY, maxY) = minMax(xAxis.toList ++ data.map(_._2).toList)
+  val domain = dataView.dataToDomain(data)
+
+  val (minX, maxX) = minMax(yAxis.toList ++ domain.map(_._1).toList)
+  val (minY, maxY) = minMax(xAxis.toList ++ domain.map(_._2).toList)
 
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)
@@ -68,9 +74,9 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order](
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = true, 0d *: angleDouble.degree, black)
-  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, black)
+  val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = drawXTicLines, 0d *: angleDouble.degree, black)
+  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, drawLines = drawYTicLines, black)
 
-  val dataPoints = DataPoints(scaledArea, data, colorStream, pointDiameter)
+  val dataPoints = DataPoints(scaledArea, data, pointDiameter)
 
 }

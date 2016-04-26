@@ -8,5 +8,6 @@ case class YTics[X, Y](
   scaledArea: ScaledArea2D[X, Y],
   tics: Seq[(Y, String)],
   fontName: String,
-  fontSize: Int,
+  fontSize: Double,
+  drawLines: Boolean = true,
   color: Color = black)

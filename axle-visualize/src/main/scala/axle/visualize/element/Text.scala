@@ -9,10 +9,10 @@ import spire.implicits.DoubleAlgebra
 
 case class Text(
     text: String,
-    x: Int,
-    y: Int,
+    x: Double,
+    y: Double,
     fontName: String,
-    fontSize: Int,
+    fontSize: Double,
     bold: Boolean = false,
     centered: Boolean = true,
     color: Color = black,

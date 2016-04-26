@@ -11,7 +11,7 @@ case class XTics[X, Y](
     scaledArea: ScaledArea2D[X, Y],
     tics: Seq[(X, String)],
     fontName: String,
-    fontSize: Int,
+    fontSize: Double,
     bold: Boolean = false,
     drawLines: Boolean = true,
     angle: UnittedQuantity[Angle, Double],

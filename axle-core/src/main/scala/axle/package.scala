@@ -234,8 +234,37 @@ package object axle {
     x => λ * x * (Ring[N].one - x)
   }
 
+  /**
+   * https://en.wikipedia.org/wiki/Mandelbrot_set
+   *
+   */
+
+  def mandelbrotNext(R: Double, I: Double) =
+    (c: (Double, Double)) => (c._1 * c._1 - c._2 * c._2 + R, 2 * c._1 * c._2 + I)
+
+  def mandelbrotContinue(c: (Double, Double)): Boolean =
+    c._1 * c._1 + c._2 * c._2 <= 4
+
+  def inMandelbrotSet(R: Double, I: Double, cutoff: Int): Boolean =
+    applyForever(mandelbrotNext(R, I), (0d, 0d))
+      .takeWhile(mandelbrotContinue)
+      .terminatesWithin(cutoff)
+
+  def inMandelbrotSetAt(R: Double, I: Double, cutoff: Int): Option[Int] =
+    applyForever(mandelbrotNext(R, I), (0d, 0d))
+      .takeWhile(mandelbrotContinue)
+      .take(cutoff)
+      .zipWithIndex
+      .lastOption
+      .flatMap({ l => if (l._2 + 1 < cutoff) Some(l._2) else None })
+
   def applyK[N](f: N => N, x0: N, k: Int): N =
     (1 to k).foldLeft(x0)({ case (x, _) => f(x) })
+
+  def applyForever[N](f: N => N, x0: N): Iterator[N] =
+    Iterator
+      .continually(Unit)
+      .scanLeft(x0)({ case (x, _) => f(x) })
 
   def trace[N](f: N => N, x0: N): Iterator[(N, Set[N])] = {
     Iterator
@@ -246,7 +275,7 @@ package object axle {
       })
   }
 
-  def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] = {
+  def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] =
     trace(f, x0)
       .takeWhile({
         case (x, points) =>
@@ -255,7 +284,6 @@ package object axle {
       })
       .lastOption.toList
       .flatMap(_._2.toList)
-  }
 
   // Fundamental:
 
