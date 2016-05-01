@@ -42,6 +42,7 @@ import axle.visualize.Fed
 import axle.visualize.FrameRepaintingActor
 import axle.visualize.GroupedDataView
 import axle.visualize.KMeansVisualization
+import axle.visualize.PixelatedColoredArea
 import axle.visualize.Plot
 import axle.visualize.PlotDataView
 import axle.visualize.Point2D
@@ -93,7 +94,7 @@ package object awt {
     xs.runWith(Sink.foreach(println))
   }
 
-  draw2[Int](3, _ + 1, 700)
+  // draw2[Int](3, _ + 1, 700)
 
   def draw[T: Draw](t: T): Unit = {
     val draw = Draw[T]
@@ -196,41 +197,24 @@ package object awt {
     }
 
   /**
-   * component2file
+   * image2file
    *
    * encoding: PNG, JPEG, gif, BMP
    *
-   * http://stackoverflow.com/questions/4028898/create-an-image-from-a-non-visible-awt-component
    */
 
-  def draw2file[T: Draw](t: T, filename: String, encoding: String): Unit = {
-
-    val component = Draw[T].component(t)
-
-    val minSize = component.getMinimumSize
-    val frame = AxleFrame(minSize.width, minSize.height)
-    frame.setUndecorated(true)
-    frame.initialize()
-    val rc = frame.add(component)
-    // rc.setVisible(true)
-    frame.setVisible(true)
-
-    val img = new BufferedImage(frame.getWidth, frame.getHeight, BufferedImage.TYPE_INT_RGB) // ARGB
-    val g = img.createGraphics()
-    frame.paintAll(g)
-
-    ImageIO.write(img, encoding, new File(filename))
-
-    g.dispose()
+  def image2file[T: Image](t: T, filename: String, encoding: String): Unit = {
+    val image = Image[T].image(t)
+    ImageIO.write(image, encoding, new File(filename))
   }
 
-  def png[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "PNG")
+  def png[T: Image](t: T, filename: String): Unit = image2file(t, filename, "PNG")
 
-  def jpeg[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "JPEG")
+  def jpeg[T: Image](t: T, filename: String): Unit = image2file(t, filename, "JPEG")
 
-  def gif[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "gif")
+  def gif[T: Image](t: T, filename: String): Unit = image2file(t, filename, "gif")
 
-  def bmp[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "BMP")
+  def bmp[T: Image](t: T, filename: String): Unit = image2file(t, filename, "BMP")
 
   implicit def paintDataLines[X, Y, D]: Paintable[DataLines[X, Y, D]] = new Paintable[DataLines[X, Y, D]] {
 
