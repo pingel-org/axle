@@ -226,15 +226,11 @@ package object awt {
   }
 
   def image2file[T: Image](t: T, filename: String, encoding: String): Unit = {
-
     val image = Image[T].image(t)
-
     ImageIO.write(image, encoding, new File(filename))
   }
 
   def png[T: Image](t: T, filename: String): Unit = image2file(t, filename, "PNG")
-
-  def oldpng[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "PNG")
 
   def jpeg[T: Image](t: T, filename: String): Unit = image2file(t, filename, "JPEG")
 
