@@ -23,7 +23,6 @@ import axle.awt.AxleFrame
 import axle.awt.Paintable
 import axle.awt.BarChartComponent
 import axle.awt.BarChartGroupedComponent
-import axle.awt.PixelatedColoredAreaComponent
 import axle.awt.PlotComponent
 import axle.awt.JungUndirectedGraphVisualization
 import axle.awt.JungDirectedGraphVisualization
@@ -172,11 +171,6 @@ package object awt {
       def component(chart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(chart)
     }
 
-  implicit def drawPixelatedColoredArea[X, Y, V]: Draw[PixelatedColoredArea[X, Y, V]] =
-    new Draw[PixelatedColoredArea[X, Y, V]] {
-      def component(pca: PixelatedColoredArea[X, Y, V]) = PixelatedColoredAreaComponent[X, Y, V](pca)
-    }
-
   implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedSparseGraph[VP, EP]] =
     new Draw[UndirectedSparseGraph[VP, EP]] {
       def component(jug: UndirectedSparseGraph[VP, EP]) =
@@ -222,7 +216,7 @@ package object awt {
     // rc.setVisible(true)
     frame.setVisible(true)
 
-    val img = new BufferedImage(frame.getWidth, frame.getHeight, BufferedImage.TYPE_INT_RGB) // ARGB
+    val img = new BufferedImage(frame.getWidth, frame.getHeight, BufferedImage.TYPE_INT_RGB)
     val g = img.createGraphics()
     frame.paintAll(g)
 
@@ -231,13 +225,22 @@ package object awt {
     g.dispose()
   }
 
-  def png[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "PNG")
+  def image2file[T: Image](t: T, filename: String, encoding: String): Unit = {
 
-  def jpeg[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "JPEG")
+    val image = Image[T].image(t)
 
-  def gif[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "gif")
+    ImageIO.write(image, encoding, new File(filename))
+  }
 
-  def bmp[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "BMP")
+  def png[T: Image](t: T, filename: String): Unit = image2file(t, filename, "PNG")
+
+  def oldpng[T: Draw](t: T, filename: String): Unit = draw2file(t, filename, "PNG")
+
+  def jpeg[T: Image](t: T, filename: String): Unit = image2file(t, filename, "JPEG")
+
+  def gif[T: Image](t: T, filename: String): Unit = image2file(t, filename, "gif")
+
+  def bmp[T: Image](t: T, filename: String): Unit = image2file(t, filename, "BMP")
 
   implicit def paintDataLines[X, Y, D]: Paintable[DataLines[X, Y, D]] = new Paintable[DataLines[X, Y, D]] {
 
