@@ -21,6 +21,33 @@ object Image {
 
   final def apply[T](implicit i: Image[T]): Image[T] = i
 
+  /**
+   * http://stackoverflow.com/questions/4028898/create-an-image-from-a-non-visible-awt-component
+   */
+
+  implicit def draw2image[T: Draw]: Image[T] = new Image[T] {
+
+    def image(t: T): BufferedImage = {
+      val component = Draw[T].component(t)
+
+      val minSize = component.getMinimumSize
+      val frame = AxleFrame(minSize.width, minSize.height)
+      frame.setUndecorated(true)
+      frame.initialize()
+      val rc = frame.add(component)
+      // rc.setVisible(true)
+      frame.setVisible(true)
+
+      val image = new BufferedImage(frame.getWidth, frame.getHeight, BufferedImage.TYPE_INT_RGB)
+      val g = image.createGraphics()
+      frame.paintAll(g)
+
+      g.dispose()
+
+      image
+    }
+  }
+
   implicit def pcaImage[X, Y, V]: Image[PixelatedColoredArea[X, Y, V]] =
     new Image[PixelatedColoredArea[X, Y, V]] {
 

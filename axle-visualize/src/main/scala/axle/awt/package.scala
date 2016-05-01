@@ -197,33 +197,11 @@ package object awt {
     }
 
   /**
-   * component2file
+   * image2file
    *
    * encoding: PNG, JPEG, gif, BMP
    *
-   * http://stackoverflow.com/questions/4028898/create-an-image-from-a-non-visible-awt-component
    */
-
-  def draw2file[T: Draw](t: T, filename: String, encoding: String): Unit = {
-
-    val component = Draw[T].component(t)
-
-    val minSize = component.getMinimumSize
-    val frame = AxleFrame(minSize.width, minSize.height)
-    frame.setUndecorated(true)
-    frame.initialize()
-    val rc = frame.add(component)
-    // rc.setVisible(true)
-    frame.setVisible(true)
-
-    val img = new BufferedImage(frame.getWidth, frame.getHeight, BufferedImage.TYPE_INT_RGB)
-    val g = img.createGraphics()
-    frame.paintAll(g)
-
-    ImageIO.write(img, encoding, new File(filename))
-
-    g.dispose()
-  }
 
   def image2file[T: Image](t: T, filename: String, encoding: String): Unit = {
     val image = Image[T].image(t)
