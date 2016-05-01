@@ -23,6 +23,7 @@ import axle.awt.AxleFrame
 import axle.awt.Paintable
 import axle.awt.BarChartComponent
 import axle.awt.BarChartGroupedComponent
+import axle.awt.PixelatedColoredAreaComponent
 import axle.awt.PlotComponent
 import axle.awt.JungUndirectedGraphVisualization
 import axle.awt.JungDirectedGraphVisualization
@@ -42,6 +43,7 @@ import axle.visualize.Fed
 import axle.visualize.FrameRepaintingActor
 import axle.visualize.GroupedDataView
 import axle.visualize.KMeansVisualization
+import axle.visualize.PixelatedColoredArea
 import axle.visualize.Plot
 import axle.visualize.PlotDataView
 import axle.visualize.Point2D
@@ -93,7 +95,7 @@ package object awt {
     xs.runWith(Sink.foreach(println))
   }
 
-  draw2[Int](3, _ + 1, 700)
+  // draw2[Int](3, _ + 1, 700)
 
   def draw[T: Draw](t: T): Unit = {
     val draw = Draw[T]
@@ -168,6 +170,11 @@ package object awt {
   implicit def drawBarChartGrouped[G, S, Y, D: ClassTag]: Draw[BarChartGrouped[G, S, Y, D]] =
     new Draw[BarChartGrouped[G, S, Y, D]] {
       def component(chart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(chart)
+    }
+
+  implicit def drawPixelatedColoredArea[X, Y, V]: Draw[PixelatedColoredArea[X, Y, V]] =
+    new Draw[PixelatedColoredArea[X, Y, V]] {
+      def component(pca: PixelatedColoredArea[X, Y, V]) = PixelatedColoredAreaComponent[X, Y, V](pca)
     }
 
   implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedSparseGraph[VP, EP]] =

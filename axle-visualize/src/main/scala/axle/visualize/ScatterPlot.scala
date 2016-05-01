@@ -1,29 +1,14 @@
 package axle.visualize
 
-import scala.Stream.continually
+// import scala.annotation.migration
 
-import axle.algebra.Tics
 import axle.algebra.LengthSpace
-import axle.ml.KMeans
-import axle.syntax.linearalgebra.matrixOps
+import axle.algebra.Tics
 import axle.visualize.Color.black
-import axle.visualize.Color.darkGray
-import axle.visualize.Color.white
-import axle.visualize.element.Oval
-import axle.visualize.element.Rectangle
-import axle.visualize.element.XTics
-import axle.visualize.element.YTics
-import axle.syntax.LinearAlgebraOps
-import axle.syntax.linearalgebra._
-import spire.implicits.DoubleAlgebra
+import axle.visualize.element._
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.compat.ordering
-import spire.implicits.eqOps
-import axle.visualize.element.Text
-import axle.visualize.element.HorizontalLine
-import axle.visualize.element.VerticalLine
-import axle.visualize.element.DataPoints
 
 case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     data: D,

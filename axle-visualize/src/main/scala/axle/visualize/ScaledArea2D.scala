@@ -24,8 +24,24 @@ case class ScaledArea2D[X, Y](
   val drawableWidth = width - (2 * pad)
   val drawableHeight = height - (2 * pad)
 
+  def frameX(x: X): Double =
+    pad + (drawableWidth * lengthX.portion(minX, x, maxX))
+
+  def unframeX(px: Double): X =
+    lengthX.onPath(minX, maxX, (px - pad) / drawableWidth)
+
+  def frameY(y: Y): Double =
+    height - pad - (drawableHeight * lengthY.portion(minY, y, maxY))
+
+  def unframeY(py: Double): Y =
+    lengthY.onPath(minY, maxY, (py - pad) / drawableHeight)
+
   def framePoint(sp: Point2D[X, Y]): Point2D[Double, Double] = Point2D(
-    pad + (drawableWidth * lengthX.portion(minX, sp.x, maxX)),
-    height - pad - (drawableHeight * lengthY.portion(minY, sp.y, maxY)))
+    frameX(sp.x),
+    frameY(sp.y))
+
+  def unframePoint(p: Point2D[Double, Double]): Point2D[X, Y] = Point2D(
+    unframeX(p.x),
+    unframeY(p.y))
 
 }
