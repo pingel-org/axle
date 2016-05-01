@@ -43,6 +43,8 @@ object Image {
       frame.paintAll(g)
 
       g.dispose()
+      frame.setVisible(false)
+      frame.dispose
 
       image
     }
