@@ -51,9 +51,11 @@ import spire.algebra.Order
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
+import spire.algebra.Rng
 import spire.algebra.Ring
 import spire.algebra.Signed
 import spire.algebra.Trig
+import spire.math.Complex
 import spire.compat.ordering
 import spire.implicits.eqOps
 import spire.implicits.moduleOps
@@ -62,6 +64,7 @@ import spire.implicits.semiringOps
 import spire.implicits.convertableOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
+import spire.implicits.multiplicativeGroupOps
 import spire.math.Rational
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
@@ -239,24 +242,40 @@ package object axle {
    *
    */
 
-  def mandelbrotNext(R: Double, I: Double) =
-    (c: (Double, Double)) => (c._1 * c._1 - c._2 * c._2 + R, 2 * c._1 * c._2 + I)
+  def mandelbrotNext[N](R: N, I: N)(
+    implicit rng: Rng[N]): ((N, N)) => (N, N) = (nn: (N, N)) => {
+    import rng.plus
+    import rng.minus
+    import rng.times
+    val c: N = plus(minus(times(nn._1, nn._1), times(nn._2, nn._2)), R)
+    val i: N = plus(plus(times(nn._1, nn._2), times(nn._1, nn._2)), I)
+    (c, i)
+  }
 
-  def mandelbrotContinue(c: (Double, Double)): Boolean =
-    c._1 * c._1 + c._2 * c._2 <= 4
+  def mandelbrotContinue[N](radius: N)(
+    implicit rng: Rng[N],
+    o: Order[N]): ((N, N)) => Boolean = (c: (N, N)) => {
+    import rng.times
+    import rng.plus
+    o.lteqv(plus(times(c._1, c._1), (times(c._2, c._2))), radius)
+  }
 
-  def inMandelbrotSet(R: Double, I: Double, cutoff: Int): Boolean =
-    applyForever(mandelbrotNext(R, I), (0d, 0d))
-      .takeWhile(mandelbrotContinue)
-      .terminatesWithin(cutoff)
+  def inMandelbrotSet[N](radius: N, R: N, I: N, maxIt: Int)(
+    implicit rng: Rng[N],
+    o: Order[N]): Boolean =
+    applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
+      .takeWhile(mandelbrotContinue(radius) _)
+      .terminatesWithin(maxIt)
 
-  def inMandelbrotSetAt(R: Double, I: Double, cutoff: Int): Option[Int] =
-    applyForever(mandelbrotNext(R, I), (0d, 0d))
-      .takeWhile(mandelbrotContinue)
-      .take(cutoff)
+  def inMandelbrotSetAt[N](radius: N, R: N, I: N, maxIt: Int)(
+    implicit rng: Rng[N],
+    o: Order[N]): Option[Int] =
+    applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
+      .takeWhile(mandelbrotContinue(radius) _)
+      .take(maxIt)
       .zipWithIndex
       .lastOption
-      .flatMap({ l => if (l._2 + 1 < cutoff) Some(l._2) else None })
+      .flatMap({ l => if (l._2 + 1 < maxIt) Some(l._2) else None })
 
   def applyK[N](f: N => N, x0: N, k: Int): N =
     (1 to k).foldLeft(x0)({ case (x, _) => f(x) })
