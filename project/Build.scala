@@ -45,8 +45,8 @@ object AxleBuild extends Build {
   lazy val figaroVersion = "3.0.0.0"
 
   // akka
-  lazy val akkaVersion = "2.4.0"
-  lazy val akkaStreamVersion = "2.0-M1"
+  lazy val akkaVersion = "2.4.7"
+  lazy val akkaStreamVersion = "2.0.4"
 
   lazy val scoverageSettings = Seq(
     ScoverageKeys.coverageMinimum := 10,
