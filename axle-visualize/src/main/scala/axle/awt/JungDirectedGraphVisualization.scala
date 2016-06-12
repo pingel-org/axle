@@ -8,7 +8,7 @@ import java.awt.Paint
 import java.awt.Stroke
 import java.awt.event.MouseEvent
 
-import org.apache.commons.collections15.Transformer
+import com.google.common.base.{Function => GoogleFunction}
 
 import axle.HtmlFrom
 import axle.Show
@@ -38,20 +38,20 @@ case class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, b
     vv.setPreferredSize(new Dimension(width + border, height + border))
     vv.setMinimumSize(new Dimension(width + border, height + border))
 
-    val vertexPaint = new Transformer[VP, Paint]() {
-      def transform(i: VP): Paint = Color.GREEN
+    val vertexPaint = new GoogleFunction[VP, Paint]() {
+      def apply(i: VP): Paint = Color.GREEN
     }
 
     val dash = List(10f).toArray
 
     val edgeStroke = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0f)
 
-    val edgeStrokeTransformer = new Transformer[EP, Stroke]() {
-      def transform(e: EP): BasicStroke = edgeStroke
+    val edgeStrokeTransformer = new GoogleFunction[EP, Stroke]() {
+      def apply(e: EP): BasicStroke = edgeStroke
     }
 
-    val vertexLabelTransformer = new Transformer[VP, String]() {
-      def transform(v: VP): String = {
+    val vertexLabelTransformer = new GoogleFunction[VP, String]() {
+      def apply(v: VP): String = {
         val label = html(v)
         label match {
           case xml.Text(text) => text
@@ -60,8 +60,8 @@ case class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, b
       }
     }
 
-    val edgeLabelTransformer = new Transformer[EP, String]() {
-      def transform(e: EP): String = string(e)
+    val edgeLabelTransformer = new GoogleFunction[EP, String]() {
+      def apply(e: EP): String = string(e)
     }
 
     vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)
