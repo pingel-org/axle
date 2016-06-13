@@ -23,8 +23,8 @@ object AxleBuild extends Build {
   // typelevel dependencies
   lazy val spireVersion = "0.11.0"
   lazy val shapelessVersion = "2.3.1"
-  lazy val disciplineVersion = "0.5"
-  lazy val specsVersion = "3.8.3"
+  lazy val disciplineVersion = "0.4"
+  lazy val specsVersion = "3.6.5"
 
   // legacy scala packages
   lazy val scalaXmlVersion = "1.0.5"
