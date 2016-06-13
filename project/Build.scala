@@ -20,26 +20,33 @@ import Version._
 
 object AxleBuild extends Build {
 
-  lazy val disciplineVersion = "0.4"
+  // typelevel dependencies
   lazy val spireVersion = "0.11.0"
-  lazy val shapelessVersion = "2.2.5"
+  lazy val shapelessVersion = "2.3.1"
+  lazy val disciplineVersion = "0.4"
+  lazy val specsVersion = "3.6.5"
+
+  // legacy scala packages
   lazy val scalaXmlVersion = "1.0.5"
   lazy val scalaParserCombinatorsVersion = "1.0.4"
-  lazy val hadoopVersion = "1.2.1"
-  lazy val scaldingVersion = "0.15.0"
-  lazy val hbaseVersion = "1.1.2"
-  lazy val jungVersion = "2.0.1"
-  lazy val jacksonVersion = "2.6.3"
-  lazy val jodaTimeVersion = "2.9"
-  lazy val jodaConvertVersion = "1.8.1"
+
+  // spokes
+  //lazy val hadoopVersion = "1.2.1"
+  //lazy val hbaseVersion = "1.1.2"
+  lazy val sparkVersion = "1.6.1"
+  //lazy val scaldingVersion = "0.15.0"
+  lazy val jungVersion = "2.1"
   lazy val jblasVersion = "1.2.4"
-  lazy val akkaVersion = "2.4.0"
-  lazy val akkaStreamVersion = "2.0-M1"
-  lazy val sparkVersion = "1.5.1"
+  //lazy val jcublasVersion = "6.5"
+  lazy val jacksonVersion = "2.7.4"
+  lazy val jodaTimeVersion = "2.9.4"
+  lazy val jodaConvertVersion = "1.8.1"
   lazy val jogampVersion = "2.3.2"
-  lazy val specsVersion = "3.6.5"
-  lazy val jcublasVersion = "6.5"
-  lazy val figaroVersion = "3.0.0.0"
+  //lazy val figaroVersion = "3.0.0.0"
+
+  // akka
+  lazy val akkaVersion = "2.4.7"
+  lazy val akkaStreamVersion = "2.0.4"
 
   lazy val scoverageSettings = Seq(
     ScoverageKeys.coverageMinimum := 10,
@@ -51,11 +58,11 @@ object AxleBuild extends Build {
 
     organization := "org.axle-lang",
 
-    scalaVersion := "2.11.7",
+    scalaVersion := "2.11.8",
 
-    //crossScalaVersions := Seq("2.10.4", "2.11.7"),
+    //crossScalaVersions := Seq("2.10.4", "2.11.8"),
 
-    crossScalaVersions := Seq("2.11.7"),
+    crossScalaVersions := Seq("2.11.8"),
 
     scalacOptions ++= Seq(
       "-unchecked",
