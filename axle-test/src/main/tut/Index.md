@@ -1,115 +1,130 @@
 
-Axle
-====
+![axle](images/axle.png)
 
 Axle is an open-source Scala-embedded domain specific language for scientific computing.
 
-Primary Jars
-------------
+Core
+====
 
 ```
 "org.axle-lang" %% "axle-core" % "releaseVersion"
 ```
 
-### [Package Object](chapter/PackageObject.md)
+## [Package Object](chapter/PackageObject.md)
 Extensions to core Scala data types.
 Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases
 
-### [Algebra](chapter/Algebra.md)
+## [Algebra](chapter/Algebra.md)
 Typeclasses Functor, Indexed, Finite, LengthSpace
 
-### [Game Theory](chapter/GameTheory.md)
+## [Game Theory](chapter/GameTheory.md)
 Framework for the `axle-games` jar.
 
-### [Logic](chapter/Logic.md)
+## [Logic](chapter/Logic.md)
 First-Order Predicate Logic
 
-### [Quanta](chapter/Quanta.md)
+## [Quanta](chapter/Quanta.md)
 Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) and conversions between them
 
-### [Unitted Trigonometry](chapter/UnittedTrigonometry.md)
+## [Unitted Trigonometry](chapter/UnittedTrigonometry.md)
 
-### [Pythagorean Means](chapter/PythagoreanMeans.md)
+## [Pythagorean Means](chapter/PythagoreanMeans.md)
 Arithmetic, Harmonic, Geometric, and Generalized means
 
-### [Statistics](chapter/Statistics.md)
+## [Statistics](chapter/Statistics.md)
 Random Variables, Probability, Distributions, Standard Deviation
-#### [Two Dice](chapter/TwoDice.md)
+### [Two Dice](chapter/TwoDice.md)
 simulation vs flat mapping distribution monads
 
-### [Information Theory](chapter/InformationTheory.md)
-#### [Entropy of a Coin](chapter/CoinEntropy.md)
+## [Information Theory](chapter/InformationTheory.md)
+### [Entropy of a Coin](chapter/CoinEntropy.md)
+
+Algorithms
+==========
 
 ```
 "org.axle-lang" %% "axle-algorithms" % "releaseVersion"
 ```
 
-### [Machine Learning](chapter/MachineLearning.md)
+## [Machine Learning](chapter/MachineLearning.md)
 
-#### [Linear Regression](chapter/LinearRegression.md)
-#### [K-Means Clustering](chapter/KMeansClustering.md)
-#### [Naive Bayes Clustering](chapter/NaiveBayesClassifier.md)
-#### [Genetic Algorithms](chapter/GeneticAlgorithms.md)
+### [Linear Regression](chapter/LinearRegression.md)
+### [K-Means Clustering](chapter/KMeansClustering.md)
+### [Naive Bayes Clustering](chapter/NaiveBayesClassifier.md)
+### [Genetic Algorithms](chapter/GeneticAlgorithms.md)
 
-### [Probabilistic Graphical Models](chapter/ProbabilisticGraphicalModels.md) (PGM)
+## [Probabilistic Graphical Models](chapter/ProbabilisticGraphicalModels.md) (PGM)
 
-#### [Bayesian Networks](chapter/BayesianNetworks.md)
+### [Bayesian Networks](chapter/BayesianNetworks.md)
 
-### [Natural Langage Processing (NLP)](chapter/NaturalLanguageProcessing.md)
+## [Natural Langage Processing (NLP)](chapter/NaturalLanguageProcessing.md)
 
-#### [Language Modules](chapter/LanguageModules.md)
+### [Language Modules](chapter/LanguageModules.md)
 including Stemming and Stop Words
-#### [Edit Distance](chapter/EditDistance.md)
+### [Edit Distance](chapter/EditDistance.md)
 Levenshtein
-#### [Vector Space Model](chapter/VectorSpaceModel.md)
+### [Vector Space Model](chapter/VectorSpaceModel.md)
 including TF-IDF
 
-### [Linguistics](chapter/Linguistics.md)
+## [Linguistics](chapter/Linguistics.md)
 
-#### [Angluin Learner](chapter/AngluinLearner.md)
-#### [Gold Paradigm](chapter/GoldParadigm.md)
+### [Angluin Learner](chapter/AngluinLearner.md)
+### [Gold Paradigm](chapter/GoldParadigm.md)
 
-### [Bioinformatics](chapter/Bioinformatics.md)
+## [Bioinformatics](chapter/Bioinformatics.md)
 DNA Sequence alignment algorithms.
 
-#### [Smith Waterman](chapter/SmithWaterman.md)
-#### [Needleman Wunsch](chapter/NeedlemanWunsch.md)
+### [Smith Waterman](chapter/SmithWaterman.md)
+### [Needleman Wunsch](chapter/NeedlemanWunsch.md)
 
-### Data sets from `axle.data`
+## Data sets from `axle.data`
 
-#### Astronomy
-#### Evolution
-#### Federalist Papers
-#### Irises
+### Astronomy
+### Evolution
+### Federalist Papers
+### Irises
+
+Visualizations
+==============
 
 ```
 "org.axle-lang" %% "axle-visualize" % "releaseVersion"
 ```
 
-### [Visualize](chapter/Visualize.md)
+## [Visualize](chapter/Visualize.md)
 
-#### [Plots](chapter/Plots.md)
-#### [Bar Charts](chapter/BarCharts.md)
-#### [Grouped Bar Charts](chapter/GroupedBarCharts.md)
+### [Plots](chapter/Plots.md)
+### [Bar Charts](chapter/BarCharts.md)
+### [Grouped Bar Charts](chapter/GroupedBarCharts.md)
+
+Games
+=====
 
 ```
 "org.axle-lang" %% "axle-games" % "releaseVersion"
 ```
 
-#### [Tic Tac Toe](chapter/TicTacToe.md)
-#### [Poker](chapter/Poker.md)
+### [Tic Tac Toe](chapter/TicTacToe.md)
+### [Poker](chapter/Poker.md)
 
 Witnesses for 3rd party libraries
----------------------------------
+=================================
 
 The "Spokes"
+
+JBLAS
+=====
 
 ```
 "org.axle-lang" %% "axle-jblas" % "releaseVersion"
 ```
 
-### [Matrix](chapter/Matrix.md)
-LinearAlgebra and other witnesses for <a href="http://jblas.org/">JBLAS</a> which itself is a wrapper for <a href="http://www.netlib.org/lapack/">LAPACK</a>.  Includes Principal Component Analysis (PCA).
+## [Matrix](chapter/Matrix.md)
+LinearAlgebra and other witnesses for <a href="http://jblas.org/">JBLAS</a> which itself is a wrapper for <a href="http://www.netlib.org/lapack/">LAPACK</a>.
+Includes Principal Component Analysis (PCA).
+
+JODA
+====
 
 ```
 "org.axle-lang" %% "axle-joda" % "releaseVersion"
@@ -117,19 +132,26 @@ LinearAlgebra and other witnesses for <a href="http://jblas.org/">JBLAS</a> whic
 
 Witnesses for the <a href="http://www.joda.org/joda-time/">Joda</a> time library.
 
+JUNG
+====
+
 ```
 "org.axle-lang" %% "axle-jung" % "releaseVersion"
 ```
-### [Graph](chapter/Graph.md)
+## [Graph](chapter/Graph.md)
 Directed and undirected graph witnesses for the <a href="http://jung.sourceforge.net/">JUNG</a> library.
+
+Spark
+=====
 
 ```
 "org.axle-lang" %% "axle-spark" % "releaseVersion"
 ```
+
 Witnesses for <a href="https://spark.apache.org/">Spark</a>.
 
 More Resources
---------------
+==============
 
 * [Installation](chapter/Installation.md) notes
 * <a href="https://github.com/axlelang/axle">Source code</a> on github

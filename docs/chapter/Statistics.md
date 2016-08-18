@@ -60,10 +60,10 @@ The `observe` method selects a value for the random variable based on the distri
 
 ```scala
 scala> (1 to 10) map { i => fairCoin.observe }
-res1: scala.collection.immutable.IndexedSeq[Symbol] = Vector('HEAD, 'HEAD, 'TAIL, 'HEAD, 'TAIL, 'TAIL, 'HEAD, 'HEAD, 'TAIL, 'TAIL)
+res1: scala.collection.immutable.IndexedSeq[Symbol] = Vector('HEAD, 'HEAD, 'TAIL, 'TAIL, 'TAIL, 'TAIL, 'TAIL, 'TAIL, 'HEAD, 'HEAD)
 
 scala> (1 to 10) map { i => biasedCoin.observe }
-res2: scala.collection.immutable.IndexedSeq[Symbol] = Vector('HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD)
+res2: scala.collection.immutable.IndexedSeq[Symbol] = Vector('TAIL, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD, 'HEAD)
 ```
 
 Create and query distributions

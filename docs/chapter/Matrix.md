@@ -20,7 +20,7 @@ scala> import spire.implicits.DoubleAlgebra
 import spire.implicits.DoubleAlgebra
 
 scala> implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
-laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix,Int,Int,Double] = axle.jblas.package$$anon$12@690eb9f6
+laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix,Int,Int,Double] = axle.jblas.package$$anon$12@4b4ae52
 
 scala> import laJblasDouble._
 import laJblasDouble._
@@ -353,7 +353,7 @@ Map element values
 
 ```scala
 scala> implicit val endo = axle.jblas.endoFunctorDoubleMatrix[Double]
-endo: axle.algebra.Endofunctor[org.jblas.DoubleMatrix,Double] = axle.jblas.package$$anon$8@7f3b59e
+endo: axle.algebra.Endofunctor[org.jblas.DoubleMatrix,Double] = axle.jblas.package$$anon$8@6a153d46
 
 scala> import axle.syntax.endofunctor.endofunctorOps
 import axle.syntax.endofunctor.endofunctorOps
