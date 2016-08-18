@@ -31,37 +31,37 @@ scala> import axle.string
 import axle.string
 
 scala> string(winnerFromHandSize(7))
-res0: String = 5♠ 9♢ 9♡ K♡ K♢
+res0: String = J♠ J♡ Q♣ K♡ A♢
 ```
 
 20 simulated 5-card hands made of 7-card hands.  Sorted.
 
 ```scala
 scala> val hands = (1 to 20).map(n => winnerFromHandSize(7)).sorted
-hands: scala.collection.immutable.IndexedSeq[axle.game.poker.PokerHand] = Vector(PokerHand(Vector(Card(axle.game.cards.R7$@35280e82,axle.game.cards.Diamonds$@2d1b65b1), Card(axle.game.cards.Jack$@5697b7cb,axle.game.cards.Clubs$@28667a2e), Card(axle.game.cards.Queen$@1bcb17ae,axle.game.cards.Spades$@74943f7c), Card(axle.game.cards.R10$@4d33adac,axle.game.cards.Hearts$@4bd08744), Card(axle.game.cards.R9$@57b45ce1,axle.game.cards.Clubs$@28667a2e))), PokerHand(Vector(Card(axle.game.cards.Ace$@3df373db,axle.game.cards.Spades$@74943f7c), Card(axle.game.cards.Jack$@5697b7cb,axle.game.cards.Clubs$@28667a2e), Card(axle.game.cards.R6$@1b161ed6,axle.game.cards.Clubs$@28667a2e), Card(axle.game.cards.R8$@569f0a5b,axle.game.cards.Hearts$@4bd08744), Card(axle.game.cards.R10$@4d33adac,axle.game.cards.S...
+hands: scala.collection.immutable.IndexedSeq[axle.game.poker.PokerHand] = Vector(PokerHand(Vector(Card(axle.game.cards.R8$@3abf839e,axle.game.cards.Spades$@775fa641), Card(axle.game.cards.Queen$@281b13a4,axle.game.cards.Hearts$@6fda8ebc), Card(axle.game.cards.Jack$@4a45daa5,axle.game.cards.Spades$@775fa641), Card(axle.game.cards.R7$@58ee44cd,axle.game.cards.Diamonds$@4ad2a8e), Card(axle.game.cards.R4$@7655db4c,axle.game.cards.Hearts$@6fda8ebc))), PokerHand(Vector(Card(axle.game.cards.R9$@46c3bc51,axle.game.cards.Hearts$@6fda8ebc), Card(axle.game.cards.Jack$@4a45daa5,axle.game.cards.Spades$@775fa641), Card(axle.game.cards.R4$@7655db4c,axle.game.cards.Clubs$@71c75a1a), Card(axle.game.cards.Queen$@281b13a4,axle.game.cards.Hearts$@6fda8ebc), Card(axle.game.cards.Ace$@60d954c2,axle.game.card...
 
 scala> hands.map({ hand => string(hand) + "  " + hand.description }).mkString("\n")
 res1: String =
-7♢ 9♣ T♡ J♣ Q♠  Q high
-6♣ 8♡ T♠ J♣ A♠  A high
-7♠ T♣ J♢ K♣ A♡  A high
-9♣ T♠ Q♢ K♢ A♠  A high
-3♠ 3♢ 7♡ T♣ K♣  pair of 3
-6♡ 6♣ 7♢ J♢ A♡  pair of 6
-5♢ 7♠ 9♡ 9♢ T♣  pair of 9
-J♠ J♢ Q♢ K♣ A♣  pair of J
-5♡ 9♠ J♢ A♣ A♢  pair of A
-9♠ T♢ Q♡ A♢ A♠  pair of A
-8♡ J♣ K♣ A♢ A♡  pair of A
-4♣ 4♡ 7♡ 7♣ A♢  two pair 7 and 4
-2♠ 2♡ 8♢ 8♣ A♢  two pair 8 and 2
-2♢ 2♠ 7♡ J♣ J♠  two pair J and 2
-J♣ J♠ Q♡ A♣ A♢  two pair A and J
-2♡ 2♣ 2♢ K♡ A♣  three of a kind of 2
-4♣ 4♢ 4♠ 9♣ J♠  three of a kind of 4
-6♣ 7♣ J♢ J♠ J♣  three of a kind of J
-2♢ 3♢ 4♢ 5♢ 6♠  straight to 6
-T♢ J♣ Q♢ K♠ A♣  straight to A
+4♡ 7♢ 8♠ J♠ Q♡  Q high
+4♣ 9♡ J♠ Q♡ A♡  A high
+2♢ 2♡ J♢ Q♡ K♡  pair of 2
+2♠ 2♣ J♢ Q♠ K♣  pair of 2
+2♣ 2♢ 6♡ J♣ A♣  pair of 2
+3♠ 3♡ 9♠ J♣ Q♣  pair of 3
+5♡ 5♠ 7♣ T♠ J♠  pair of 5
+5♢ 5♡ T♡ J♣ K♣  pair of 5
+5♢ 6♡ 6♢ T♢ J♡  pair of 6
+6♢ 6♠ 7♠ 8♠ K♣  pair of 6
+8♣ 8♡ T♣ J♢ K♡  pair of 8
+8♠ 9♢ 9♡ J♣ K♠  pair of 9
+7♠ 8♡ J♠ J♣ Q♠  pair of J
+7♣ 8♣ J♠ J♣ K♡  pair of J
+5♣ 5♡ 7♠ 7♢ A♡  two pair 7 and 5
+4♣ 4♠ 8♡ K♠ K♢  two pair K and 4
+3♠ 3♢ K♣ A♠ A♢  two pair A and 3
+7♣ 8♠ 9♠ T♣ J♢  straight to J
+3♡ 7♡ 9♡ J♡ A♡  flush in ♡
+6♢ 6♠ 6♣ 6♡ K♣  four of a kind of 6
 ```
 
 Record 1000 simulated hands for each drawn hand size from 5 to 9
@@ -72,7 +72,7 @@ scala> val data: IndexedSeq[(PokerHandCategory, Int)] =
      |     handSize <- 5 to 9
      |     trial <- 1 to 1000
      |   } yield (winnerFromHandSize(handSize).category, handSize)
-data: IndexedSeq[(axle.game.poker.PokerHandCategory, Int)] = Vector((axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.Pair$@6ab333ca,5), (axle.game.poker.Pair$@6ab333ca,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.Pair$@6ab333ca,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.High$@33644315,5), (axle.game.poker.Pair$@6ab333ca,5), (axle.game.poker.Pair$@6ab333ca,5), (axle.game.poker.Pair$@6ab333ca,5), (axle.gam...
+data: IndexedSeq[(axle.game.poker.PokerHandCategory, Int)] = Vector((axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.TwoPair$@276fa4c0,5), (axle.game.poker.Pair$@2ff7304f,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.Pair$@2ff7304f,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.High$@432c69cd,5), (axle.game.poker.Pair$@2ff7304f,5), (axle.game.poker.Pair$@2ff7304f,5), (axle.game.poker.Pair$@2ff7304f,5), (axle.game.poker.High$@432c69cd,5), (axle....
 ```
 
 BarChartGrouped to visualize the results
@@ -90,7 +90,7 @@ scala> val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCa
      |   keyTitle = Some("Hand Size"),
      |   yAxisLabel = Some("instances of category by hand size (1000 trials each)")
      |   )
-chart: axle.visualize.BarChartGrouped[axle.game.poker.PokerHandCategory,Int,Int,Map[(axle.game.poker.PokerHandCategory, Int),Int]] = BarChartGrouped(Map((axle.game.poker.Flush$@5694e120,5) -> 4, (axle.game.poker.Flush$@5694e120,7) -> 31, (axle.game.poker.FullHouse$@7721c73b,7) -> 28, (axle.game.poker.TwoPair$@66cc5c1c,8) -> 343, (axle.game.poker.Flush$@5694e120,9) -> 126, (axle.game.poker.High$@33644315,6) -> 343, (axle.game.poker.ThreeOfAKind$@79c57f86,7) -> 64, (axle.game.poker.High$@33644315,9) -> 21, (axle.game.poker.Straight$@4ff9776,6) -> 13, (axle.game.poker.Pair$@6ab333ca,6) -> 469, (axle.game.poker.Pair$@6ab333ca,7) -> 450, (axle.game.poker.Straight$@4ff9776,5) -> 4, (axle.game.poker.High$@33644315,7) -> 146, (axle.game.poker.Pair$@6ab333ca,8) -> 333, (axle.game.poker.High$@336...
+chart: axle.visualize.BarChartGrouped[axle.game.poker.PokerHandCategory,Int,Int,Map[(axle.game.poker.PokerHandCategory, Int),Int]] = BarChartGrouped(Map((axle.game.poker.Flush$@414350b4,5) -> 2, (axle.game.poker.High$@432c69cd,8) -> 75, (axle.game.poker.Straight$@57a0759b,9) -> 114, (axle.game.poker.ThreeOfAKind$@3b92da14,6) -> 32, (axle.game.poker.Straight$@57a0759b,6) -> 20, (axle.game.poker.Pair$@2ff7304f,7) -> 444, (axle.game.poker.Flush$@414350b4,7) -> 29, (axle.game.poker.High$@432c69cd,6) -> 340, (axle.game.poker.High$@432c69cd,9) -> 22, (axle.game.poker.TwoPair$@276fa4c0,9) -> 411, (axle.game.poker.FullHouse$@1bd0beaa,6) -> 6, (axle.game.poker.FourOfAKind$@38afcad8,7) -> 1, (axle.game.poker.Flush$@414350b4,6) -> 6, (axle.game.poker.Pair$@2ff7304f,8) -> 325, (axle.game.poker.TwoP...
 
 scala> import axle.web._
 import axle.web._
