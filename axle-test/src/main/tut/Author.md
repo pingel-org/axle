@@ -28,6 +28,6 @@ For more background, see his accounts on:
 * <a href="http://www.linkedin.com/in/adampingel">LinkedIn</a>
 * <a href="http://stackoverflow.com/users/528536/adam-p">StackOverflow</a>
 * <a href="https://twitter.com/#!/pingel">@pingel on Twitter</a>
-* <a href={"http://scholar.google.com/citations?user=xj0ZeKQAAAAJ&hl=en"}>{"Google Scholar"}</a>
+* <a href="http://scholar.google.com/citations?user=xj0ZeKQAAAAJ&hl=en">Google Scholar</a>
 
 He can be reached at adam@axle-lang.org.
