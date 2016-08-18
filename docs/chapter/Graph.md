@@ -28,7 +28,7 @@ Example
 
 ```scala
 scala> val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
-jdg: axle.algebra.DirectedGraph[edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$4@59742a4d
+jdg: axle.algebra.DirectedGraph[edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$4@da0cb72
 
 scala> val a = "a"
 a: String = a
@@ -52,7 +52,7 @@ scala> val dg = jdg.make(List(a, b, c, d),
      |     (b, d, new Edge)))
 dg: edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge] =
 Vertices:a,b,c,d
-Edges:Edge@3f0597f4[b,d] Edge@7698205b[a,c] Edge@4138cc4[d,a] Edge@2a7c7501[b,c] Edge@43e4c3ca[c,d] Edge@4ed795c8[a,b]
+Edges:Edge@2a9eeb1e[b,c] Edge@79979977[c,d] Edge@11fa4378[d,a] Edge@54ad8585[a,b] Edge@7458a552[b,d] Edge@29c36d6f[a,c]
 ```
 
 ```scala
@@ -84,11 +84,6 @@ java.lang.NoClassDefFoundError: edu/uci/ics/jung/visualization/DefaultVisualizat
   at axle.web.SVG$$anon$18.svg(SVG.scala:479)
   at axle.web.package$.svg(package.scala:26)
   ... 414 elided
-Caused by: java.lang.ClassNotFoundException: edu.uci.ics.jung.visualization.DefaultVisualizationModel
-  at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
-  at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
-  at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
-  ... 417 more
 ```
 
 ![directed graph](../images/SimpleDirectedGraph.svg)
@@ -109,7 +104,7 @@ Example
 
 ```scala
 scala> val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
-jug: axle.algebra.UndirectedGraph[edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$8@5ca210ea
+jug: axle.algebra.UndirectedGraph[edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$8@7eace109
 
 scala> val a = "a"
 a: String = a
@@ -133,7 +128,7 @@ scala> val ug = jug.make(List(a, b, c, d),
      |     (b, d, new Edge)))
 ug: edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge] =
 Vertices:a,b,c,d
-Edges:Edge@38b64524[a,b] Edge@42224c36[a,c] Edge@48b7af61[d,a] Edge@3513527b[b,c] Edge@55f8f244[c,d] Edge@6d0d5e83[b,d]
+Edges:Edge@b9499a4[a,b] Edge@396885fa[d,a] Edge@161e62ca[a,c] Edge@45cd0cb8[b,d] Edge@c396cae[c,d] Edge@672684dd[b,c]
 ```
 
 ```scala
