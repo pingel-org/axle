@@ -28,7 +28,7 @@ Example
 
 ```scala
 scala> val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
-jdg: axle.algebra.DirectedGraph[edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$4@b87b353
+jdg: axle.algebra.DirectedGraph[edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$4@59742a4d
 
 scala> val a = "a"
 a: String = a
@@ -52,7 +52,7 @@ scala> val dg = jdg.make(List(a, b, c, d),
      |     (b, d, new Edge)))
 dg: edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge] =
 Vertices:a,b,c,d
-Edges:Edge@637904c9[a,b] Edge@64f209b[d,a] Edge@6ca7f2a3[b,d] Edge@2096d82e[c,d] Edge@2d3b33d7[a,c] Edge@7f17c94a[b,c]
+Edges:Edge@3f0597f4[b,d] Edge@7698205b[a,c] Edge@4138cc4[d,a] Edge@2a7c7501[b,c] Edge@43e4c3ca[c,d] Edge@4ed795c8[a,b]
 ```
 
 ```scala
@@ -83,12 +83,12 @@ java.lang.NoClassDefFoundError: edu/uci/ics/jung/visualization/DefaultVisualizat
   at axle.web.SVG$$anon$18.svg(SVG.scala:495)
   at axle.web.SVG$$anon$18.svg(SVG.scala:479)
   at axle.web.package$.svg(package.scala:26)
-  ... 418 elided
+  ... 414 elided
 Caused by: java.lang.ClassNotFoundException: edu.uci.ics.jung.visualization.DefaultVisualizationModel
   at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
   at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
   at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
-  ... 421 more
+  ... 417 more
 ```
 
 ![directed graph](../images/SimpleDirectedGraph.svg)
@@ -109,7 +109,7 @@ Example
 
 ```scala
 scala> val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
-jug: axle.algebra.UndirectedGraph[edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$8@29c0cb0d
+jug: axle.algebra.UndirectedGraph[edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$8@5ca210ea
 
 scala> val a = "a"
 a: String = a
@@ -133,7 +133,7 @@ scala> val ug = jug.make(List(a, b, c, d),
      |     (b, d, new Edge)))
 ug: edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge] =
 Vertices:a,b,c,d
-Edges:Edge@390ba498[c,d] Edge@1c44d4e7[b,d] Edge@30466213[a,c] Edge@305ab3e[d,a] Edge@6bbb0964[a,b] Edge@405d8e62[b,c]
+Edges:Edge@38b64524[a,b] Edge@42224c36[a,c] Edge@48b7af61[d,a] Edge@3513527b[b,c] Edge@55f8f244[c,d] Edge@6d0d5e83[b,d]
 ```
 
 ```scala
@@ -158,12 +158,12 @@ java.lang.NoClassDefFoundError: edu/uci/ics/jung/visualization/DefaultVisualizat
   at axle.web.SVG$$anon$19.svg(SVG.scala:562)
   at axle.web.SVG$$anon$19.svg(SVG.scala:547)
   at axle.web.package$.svg(package.scala:26)
-  ... 618 elided
+  ... 614 elided
 Caused by: java.lang.ClassNotFoundException: edu.uci.ics.jung.visualization.DefaultVisualizationModel
   at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
   at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
   at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
-  ... 621 more
+  ... 617 more
 ```
 
 ![undirected graph](../images/SimpleUndirectedGraph.svg)
