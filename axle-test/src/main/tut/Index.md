@@ -32,11 +32,13 @@ Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) 
 ### [Pythagorean Means](chapter/PythagoreanMeans.md)
 Arithmetic, Harmonic, Geometric, and Generalized means
 
-### [Statistics](chapter/Statistics.md): Random Variables, Probability, Distributions, Standard Deviation
-#### [Two Dice](chapter/TwoDice.md) simulation vs flat mapping distribution monads
+### [Statistics](chapter/Statistics.md)
+Random Variables, Probability, Distributions, Standard Deviation
+#### [Two Dice](chapter/TwoDice.md)
+simulation vs flat mapping distribution monads
 
 ### [Information Theory](chapter/InformationTheory.md)
-#### [Coin Entropy](chapter/CoinEntropy.md) and visualization
+#### [Entropy of a Coin](chapter/CoinEntropy.md)
 
 ```
 "org.axle-lang" %% "axle-algorithms" % "releaseVersion"
@@ -55,16 +57,20 @@ Arithmetic, Harmonic, Geometric, and Generalized means
 
 ### [Natural Langage Processing (NLP)](chapter/NaturalLanguageProcessing.md)
 
-#### [Language Modules](chapter/LanguageModules.md) including Stemming and Stop Words
-#### [Edit Distance](chapter/EditDistance.md): Levenshtein
-#### [Vector Space Model](chapter/VectorSpaceModel.md) including TF-IDF
+#### [Language Modules](chapter/LanguageModules.md)
+including Stemming and Stop Words
+#### [Edit Distance](chapter/EditDistance.md)
+Levenshtein
+#### [Vector Space Model](chapter/VectorSpaceModel.md)
+including TF-IDF
 
 ### [Linguistics](chapter/Linguistics.md)
 
 #### [Angluin Learner](chapter/AngluinLearner.md)
 #### [Gold Paradigm](chapter/GoldParadigm.md)
 
-### [Bioinformatics](chapter/Bioinformatics.md) DNA Sequence alignment algorithms.
+### [Bioinformatics](chapter/Bioinformatics.md)
+DNA Sequence alignment algorithms.
 
 #### [Smith Waterman](chapter/SmithWaterman.md)
 #### [Needleman Wunsch](chapter/NeedlemanWunsch.md)
@@ -102,12 +108,14 @@ The "Spokes"
 "org.axle-lang" %% "axle-jblas" % "releaseVersion"
 ```
 
-### [Matrix](chapter/Matrix.md): LinearAlgebra and other witnesses for <a href="http://jblas.org/">JBLAS</a> which itself is a wrapper for <a href="http://www.netlib.org/lapack/">LAPACK</a>.  Includes Principal Component Analysis (PCA).
+### [Matrix](chapter/Matrix.md)
+LinearAlgebra and other witnesses for <a href="http://jblas.org/">JBLAS</a> which itself is a wrapper for <a href="http://www.netlib.org/lapack/">LAPACK</a>.  Includes Principal Component Analysis (PCA).
 
 ```
 "org.axle-lang" %% "axle-joda" % "releaseVersion"
 ```
-### Witnesses for the <a href="http://www.joda.org/joda-time/">Joda</a> time library.
+
+Witnesses for the <a href="http://www.joda.org/joda-time/">Joda</a> time library.
 
 ```
 "org.axle-lang" %% "axle-jung" % "releaseVersion"
@@ -118,7 +126,7 @@ Directed and undirected graph witnesses for the <a href="http://jung.sourceforge
 ```
 "org.axle-lang" %% "axle-spark" % "releaseVersion"
 ```
-### Witnesses for <a href="https://spark.apache.org/">Spark</a>.
+Witnesses for <a href="https://spark.apache.org/">Spark</a>.
 
 More Resources
 --------------
