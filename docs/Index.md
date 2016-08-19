@@ -7,7 +7,7 @@ Core
 ====
 
 ```
-"org.axle-lang" %% "axle-core" % "releaseVersion"
+"org.axle-lang" %% "axle-core" % "0.2.3"
 ```
 
 ## [Package Object](chapter/PackageObject.md)
@@ -43,7 +43,7 @@ Algorithms
 ==========
 
 ```
-"org.axle-lang" %% "axle-algorithms" % "releaseVersion"
+"org.axle-lang" %% "axle-algorithms" % "0.2.3"
 ```
 
 ## [Machine Learning](chapter/MachineLearning.md)
@@ -88,7 +88,7 @@ Visualizations
 ==============
 
 ```
-"org.axle-lang" %% "axle-visualize" % "releaseVersion"
+"org.axle-lang" %% "axle-visualize" % "0.2.3"
 ```
 
 ## [Visualize](chapter/Visualize.md)
@@ -101,7 +101,7 @@ Games
 =====
 
 ```
-"org.axle-lang" %% "axle-games" % "releaseVersion"
+"org.axle-lang" %% "axle-games" % "0.2.3"
 ```
 
 ### [Tic Tac Toe](chapter/TicTacToe.md)
@@ -116,7 +116,7 @@ JBLAS
 =====
 
 ```
-"org.axle-lang" %% "axle-jblas" % "releaseVersion"
+"org.axle-lang" %% "axle-jblas" % "0.2.3"
 ```
 
 ## [Matrix](chapter/Matrix.md)
@@ -127,7 +127,7 @@ JODA
 ====
 
 ```
-"org.axle-lang" %% "axle-joda" % "releaseVersion"
+"org.axle-lang" %% "axle-joda" % "0.2.3"
 ```
 
 Witnesses for the <a href="http://www.joda.org/joda-time/">Joda</a> time library.
@@ -136,7 +136,7 @@ JUNG
 ====
 
 ```
-"org.axle-lang" %% "axle-jung" % "releaseVersion"
+"org.axle-lang" %% "axle-jung" % "0.2.3"
 ```
 ## [Graph](chapter/Graph.md)
 Directed and undirected graph witnesses for the <a href="http://jung.sourceforge.net/">JUNG</a> library.
@@ -145,7 +145,7 @@ Spark
 =====
 
 ```
-"org.axle-lang" %% "axle-spark" % "releaseVersion"
+"org.axle-lang" %% "axle-spark" % "0.2.3"
 ```
 
 Witnesses for <a href="https://spark.apache.org/">Spark</a>.

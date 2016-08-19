@@ -33,7 +33,7 @@ scala> val histogram =
      |   (0 until 10000).
      |   map(i => d6a.observe + d6b.observe).
      |   tally
-histogram: Map[Int,Int] = Map(5 -> 1120, 10 -> 881, 6 -> 1354, 9 -> 1119, 2 -> 291, 12 -> 287, 7 -> 1645, 3 -> 567, 11 -> 547, 8 -> 1384, 4 -> 805)
+histogram: Map[Int,Int] = Map(5 -> 1102, 10 -> 830, 6 -> 1361, 9 -> 1098, 2 -> 275, 12 -> 278, 7 -> 1721, 3 -> 585, 11 -> 579, 8 -> 1356, 4 -> 815)
 ```
 
 Define visualization
@@ -52,7 +52,7 @@ scala> val chart = BarChart[Int, Int, Map[Int, Int]](
      |   labelAngle = 0d *: angleDouble.degree,
      |   colors = List(blue),
      |   drawKey = false)
-chart: axle.visualize.BarChart[Int,Int,Map[Int,Int]] = BarChart(Map(5 -> 1120, 10 -> 881, 6 -> 1354, 9 -> 1119, 2 -> 291, 12 -> 287, 7 -> 1645, 3 -> 567, 11 -> 547, 8 -> 1384, 4 -> 805),false,700,600,50,0.8,20,50,80,Some(d6 + d6),None,Courier New,12,Palatino,20,Some(0),None,None,UnittedQuantity(0.0,UnitOfMeasurement(degree,°,Some(http://en.wikipedia.org/wiki/Degree_(angle)))),List(Color(0,0,255)))
+chart: axle.visualize.BarChart[Int,Int,Map[Int,Int]] = BarChart(Map(5 -> 1102, 10 -> 830, 6 -> 1361, 9 -> 1098, 2 -> 275, 12 -> 278, 7 -> 1721, 3 -> 585, 11 -> 579, 8 -> 1356, 4 -> 815),false,700,600,50,0.8,20,50,80,Some(d6 + d6),None,Courier New,12,Palatino,20,Some(0),None,None,UnittedQuantity(0.0,UnitOfMeasurement(degree,°,Some(http://en.wikipedia.org/wiki/Degree_(angle)))),List(Color(0,0,255)))
 ```
 
 Create SVG

@@ -30,7 +30,7 @@ scala> import spire.implicits.DoubleAlgebra
 import spire.implicits.DoubleAlgebra
 
 scala> implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
-laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix,Int,Int,Double] = axle.jblas.package$$anon$12@2a115bab
+laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix,Int,Int,Double] = axle.jblas.package$$anon$12@4ed99399
 
 scala> import axle.ml.LinearRegression
 import axle.ml.LinearRegression

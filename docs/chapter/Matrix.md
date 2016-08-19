@@ -20,7 +20,7 @@ scala> import spire.implicits.DoubleAlgebra
 import spire.implicits.DoubleAlgebra
 
 scala> implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
-laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix,Int,Int,Double] = axle.jblas.package$$anon$12@950f3a6
+laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix,Int,Int,Double] = axle.jblas.package$$anon$12@4575fe0e
 
 scala> import laJblasDouble._
 import laJblasDouble._
@@ -76,13 +76,13 @@ Random matrices
 
 ```scala
 scala> val r = rand(3, 3)
-r: org.jblas.DoubleMatrix = [0.471153, 0.335687, 0.809630; 0.593703, 0.392600, 0.109539; 0.180983, 0.914234, 0.818691]
+r: org.jblas.DoubleMatrix = [0.108968, 0.686349, 0.234190; 0.514379, 0.929198, 0.019634; 0.037215, 0.265196, 0.537034]
 
 scala> string(r)
 res6: String =
-0.471153 0.335687 0.809630
-0.593703 0.392600 0.109539
-0.180983 0.914234 0.818691
+0.108968 0.686349 0.234190
+0.514379 0.929198 0.019634
+0.037215 0.265196 0.537034
 ```
 
 Matrices defined by functions
@@ -207,37 +207,37 @@ scala> // x.multiplyScalar(10d)
 res36: org.jblas.DoubleMatrix = [0.040000; 0.051000; 0.062000]
 
 scala> r.max
-res37: Double = 0.9142339430630595
+res37: Double = 0.9291979574828061
 
 scala> r.min
-res38: Double = 0.10953926057371133
+res38: Double = 0.01963384373424193
 
 scala> r.rowMaxs
-res39: org.jblas.DoubleMatrix = [0.809630; 0.593703; 0.914234]
+res39: org.jblas.DoubleMatrix = [0.686349; 0.929198; 0.537034]
 
 scala> r.rowMins
-res40: org.jblas.DoubleMatrix = [0.335687; 0.109539; 0.180983]
+res40: org.jblas.DoubleMatrix = [0.108968; 0.019634; 0.037215]
 
 scala> r.columnMaxs
-res41: org.jblas.DoubleMatrix = [0.593703, 0.914234, 0.818691]
+res41: org.jblas.DoubleMatrix = [0.514379, 0.929198, 0.537034]
 
 scala> r.columnMins
-res42: org.jblas.DoubleMatrix = [0.180983, 0.335687, 0.109539]
+res42: org.jblas.DoubleMatrix = [0.037215, 0.265196, 0.019634]
 
 scala> rowRange(r)
-res43: org.jblas.DoubleMatrix = [0.473943; 0.484164; 0.733251]
+res43: org.jblas.DoubleMatrix = [0.577381; 0.909564; 0.499819]
 
 scala> columnRange(r)
-res44: org.jblas.DoubleMatrix = [0.412720, 0.578547, 0.709152]
+res44: org.jblas.DoubleMatrix = [0.477164, 0.664002, 0.517401]
 
 scala> r.sortRows
-res45: org.jblas.DoubleMatrix = [0.335687, 0.471153, 0.809630; 0.109539, 0.392600, 0.593703; 0.180983, 0.818691, 0.914234]
+res45: org.jblas.DoubleMatrix = [0.108968, 0.234190, 0.686349; 0.019634, 0.514379, 0.929198; 0.037215, 0.265196, 0.537034]
 
 scala> r.sortColumns
-res46: org.jblas.DoubleMatrix = [0.180983, 0.335687, 0.109539; 0.471153, 0.392600, 0.809630; 0.593703, 0.914234, 0.818691]
+res46: org.jblas.DoubleMatrix = [0.037215, 0.265196, 0.019634; 0.108968, 0.686349, 0.234190; 0.514379, 0.929198, 0.537034]
 
 scala> r.sortRows.sortColumns
-res47: org.jblas.DoubleMatrix = [0.109539, 0.392600, 0.593703; 0.180983, 0.471153, 0.809630; 0.335687, 0.818691, 0.914234]
+res47: org.jblas.DoubleMatrix = [0.019634, 0.234190, 0.537034; 0.037215, 0.265196, 0.686349; 0.108968, 0.514379, 0.929198]
 ```
 
 Statistics
@@ -245,46 +245,46 @@ Statistics
 
 ```scala
 scala> r.rowMeans
-res48: org.jblas.DoubleMatrix = [0.538823; 0.365281; 0.637970]
+res48: org.jblas.DoubleMatrix = [0.343169; 0.487737; 0.279815]
 
 scala> r.columnMeans
-res49: org.jblas.DoubleMatrix = [0.415280, 0.547507, 0.579287]
+res49: org.jblas.DoubleMatrix = [0.220187, 0.626915, 0.263619]
 
 scala> // median(r)
      | 
      | sumsq(r)
-res52: org.jblas.DoubleMatrix = [0.607224, 1.102644, 1.337755]
+res52: org.jblas.DoubleMatrix = [0.277844, 1.404813, 0.343636]
 
 scala> std(r)
-res53: org.jblas.DoubleMatrix = [0.173062, 0.260354, 0.332182]
+res53: org.jblas.DoubleMatrix = [0.210077, 0.274316, 0.212250]
 
 scala> cov(r)
-res54: org.jblas.DoubleMatrix = [0.001041, -0.012598, -0.017990; -0.012598, 0.007999, -0.057423; -0.017990, -0.057423, 0.019105]
+res54: org.jblas.DoubleMatrix = [0.004123, 0.005828, 0.001795; 0.005828, 0.030458, 0.029418; 0.001795, 0.029418, 0.024919]
 
 scala> centerRows(r)
-res55: org.jblas.DoubleMatrix = [-0.067670, -0.203137, 0.270807; 0.228422, 0.027320, -0.255742; -0.456986, 0.276264, 0.180722]
+res55: org.jblas.DoubleMatrix = [-0.234201, 0.343180, -0.108979; 0.026642, 0.441461, -0.468103; -0.242600, -0.014619, 0.257219]
 
 scala> centerColumns(r)
-res56: org.jblas.DoubleMatrix = [0.055873, -0.211820, 0.230343; 0.178423, -0.154907, -0.469748; -0.234296, 0.366727, 0.239404]
+res56: org.jblas.DoubleMatrix = [-0.111219, 0.059435, -0.029429; 0.294191, 0.302283, -0.243986; -0.182972, -0.361718, 0.273415]
 
 scala> zscore(r)
-res57: org.jblas.DoubleMatrix = [0.322852, -0.813586, 0.693424; 1.030977, -0.594985, -1.414126; -1.353829, 1.408571, 0.720702]
+res57: org.jblas.DoubleMatrix = [-0.529420, 0.216666, -0.138653; 1.400397, 1.101953, -1.149518; -0.870977, -1.318619, 1.288171]
 
 scala> val (u, s) = pca(r, 0.95)
-u: org.jblas.DoubleMatrix = [0.072637, -0.371308, -0.925664; 0.660425, -0.677577, 0.323617; -0.747371, -0.634838, 0.196004]
-s: org.jblas.DoubleMatrix = [0.071596; 0.052706; 0.009254]
+u: org.jblas.DoubleMatrix = [-0.102472, 0.923313, 0.370126; -0.738609, 0.178609, -0.650043; -0.666301, -0.339989, 0.663664]
+s: org.jblas.DoubleMatrix = [0.057805; 0.004590; 0.002895]
 
 scala> string(u)
 res58: String =
-0.072637 -0.371308 -0.925664
-0.660425 -0.677577 0.323617
--0.747371 -0.634838 0.196004
+-0.102472 0.923313 0.370126
+-0.738609 0.178609 -0.650043
+-0.666301 -0.339989 0.663664
 
 scala> string(s)
 res59: String =
-0.071596
-0.052706
-0.009254
+0.057805
+0.004590
+0.002895
 ```
 
 Horizontal and vertical concatenation
@@ -320,7 +320,7 @@ Map element values
 
 ```scala
 scala> implicit val endo = axle.jblas.endoFunctorDoubleMatrix[Double]
-endo: axle.algebra.Endofunctor[org.jblas.DoubleMatrix,Double] = axle.jblas.package$$anon$8@7cd2454
+endo: axle.algebra.Endofunctor[org.jblas.DoubleMatrix,Double] = axle.jblas.package$$anon$8@17c51ce0
 
 scala> import axle.syntax.endofunctor.endofunctorOps
 import axle.syntax.endofunctor.endofunctorOps
@@ -334,16 +334,16 @@ Boolean operators
 
 ```scala
 scala> r lt half
-res62: org.jblas.DoubleMatrix = [1.000000, 1.000000, 0.000000; 0.000000, 1.000000, 1.000000; 1.000000, 0.000000, 0.000000]
+res62: org.jblas.DoubleMatrix = [1.000000, 0.000000, 1.000000; 0.000000, 0.000000, 1.000000; 1.000000, 1.000000, 0.000000]
 
 scala> r le half
-res63: org.jblas.DoubleMatrix = [1.000000, 1.000000, 0.000000; 0.000000, 1.000000, 1.000000; 1.000000, 0.000000, 0.000000]
+res63: org.jblas.DoubleMatrix = [1.000000, 0.000000, 1.000000; 0.000000, 0.000000, 1.000000; 1.000000, 1.000000, 0.000000]
 
 scala> r gt half
-res64: org.jblas.DoubleMatrix = [0.000000, 0.000000, 1.000000; 1.000000, 0.000000, 0.000000; 0.000000, 1.000000, 1.000000]
+res64: org.jblas.DoubleMatrix = [0.000000, 1.000000, 0.000000; 1.000000, 1.000000, 0.000000; 0.000000, 0.000000, 1.000000]
 
 scala> r ge half
-res65: org.jblas.DoubleMatrix = [0.000000, 0.000000, 1.000000; 1.000000, 0.000000, 0.000000; 0.000000, 1.000000, 1.000000]
+res65: org.jblas.DoubleMatrix = [0.000000, 1.000000, 0.000000; 1.000000, 1.000000, 0.000000; 0.000000, 0.000000, 1.000000]
 
 scala> r eq half
 res66: org.jblas.DoubleMatrix = [0.000000, 0.000000, 0.000000; 0.000000, 0.000000, 0.000000; 0.000000, 0.000000, 0.000000]
@@ -361,7 +361,7 @@ scala> (r lt half) xor (r gt half)
 res70: org.jblas.DoubleMatrix = [1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000]
 
 scala> (r lt half) not
-res71: org.jblas.DoubleMatrix = [0.000000, 0.000000, 1.000000; 1.000000, 0.000000, 0.000000; 0.000000, 1.000000, 1.000000]
+res71: org.jblas.DoubleMatrix = [0.000000, 1.000000, 0.000000; 1.000000, 1.000000, 0.000000; 0.000000, 0.000000, 1.000000]
 ```
 
 Higher order methods

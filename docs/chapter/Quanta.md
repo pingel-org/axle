@@ -71,12 +71,12 @@ scala> import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 scala> implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
-distanceConverter: axle.quanta.UnitConverterGraph[axle.quanta.Distance,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Distance],Double => Double]] with axle.quanta.DistanceConverter[Double] = axle.quanta.Distance$$anon$1@1008efd7
+distanceConverter: axle.quanta.UnitConverterGraph[axle.quanta.Distance,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Distance],Double => Double]] with axle.quanta.DistanceConverter[Double] = axle.quanta.Distance$$anon$1@ba73167
 
 scala> implicit val showDDAt1 = new Show[Double => Double] {
      |   def text(f: Double => Double): String = f(1d).toString
      | }
-showDDAt1: axle.Show[Double => Double] = $anon$1@4c3f44b7
+showDDAt1: axle.Show[Double => Double] = $anon$1@7e40a766
 
 scala> import axle.visualize._
 import axle.visualize._
@@ -85,11 +85,6 @@ scala> import axle.web._
 import axle.web._
 
 scala> svg(distanceConverter.conversionGraph, "Distance.svg")
-java.lang.NoClassDefFoundError: edu/uci/ics/jung/visualization/DefaultVisualizationModel
-  at axle.web.SVG$$anon$18.svg(SVG.scala:495)
-  at axle.web.SVG$$anon$18.svg(SVG.scala:479)
-  at axle.web.package$.svg(package.scala:26)
-  ... 502 elided
 ```
 
 // TODO
@@ -111,19 +106,19 @@ scala> import spire.implicits.DoubleAlgebra
 import spire.implicits.DoubleAlgebra
 
 scala> implicit val massConverter = Mass.converterGraphK2[Double, DirectedSparseGraph]
-massConverter: axle.quanta.UnitConverterGraph[axle.quanta.Mass,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Mass],Double => Double]] with axle.quanta.MassConverter[Double] = axle.quanta.Mass$$anon$1@3caab8d9
+massConverter: axle.quanta.UnitConverterGraph[axle.quanta.Mass,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Mass],Double => Double]] with axle.quanta.MassConverter[Double] = axle.quanta.Mass$$anon$1@51823aa8
 
 scala> import massConverter._
 import massConverter._
 
 scala> implicit val powerConverter = Power.converterGraphK2[Double, DirectedSparseGraph]
-powerConverter: axle.quanta.UnitConverterGraph[axle.quanta.Power,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Power],Double => Double]] with axle.quanta.PowerConverter[Double] = axle.quanta.Power$$anon$1@10adac26
+powerConverter: axle.quanta.UnitConverterGraph[axle.quanta.Power,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Power],Double => Double]] with axle.quanta.PowerConverter[Double] = axle.quanta.Power$$anon$1@51b04f66
 
 scala> import powerConverter._
 import powerConverter._
 
 scala> implicit val energyConverter = Energy.converterGraphK2[Double, DirectedSparseGraph]
-energyConverter: axle.quanta.UnitConverterGraph[axle.quanta.Energy,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Energy],Double => Double]] with axle.quanta.EnergyConverter[Double] = axle.quanta.Energy$$anon$1@6fe19ac3
+energyConverter: axle.quanta.UnitConverterGraph[axle.quanta.Energy,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Energy],Double => Double]] with axle.quanta.EnergyConverter[Double] = axle.quanta.Energy$$anon$1@7526686f
 
 scala> import energyConverter._
 import energyConverter._
@@ -132,13 +127,13 @@ scala> import axle.algebra.modules.doubleRationalModule
 import axle.algebra.modules.doubleRationalModule
 
 scala> implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
-distanceConverter: axle.quanta.UnitConverterGraph[axle.quanta.Distance,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Distance],Double => Double]] with axle.quanta.DistanceConverter[Double] = axle.quanta.Distance$$anon$1@71002ac9
+distanceConverter: axle.quanta.UnitConverterGraph[axle.quanta.Distance,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Distance],Double => Double]] with axle.quanta.DistanceConverter[Double] = axle.quanta.Distance$$anon$1@34242e98
 
 scala> import distanceConverter._
 import distanceConverter._
 
 scala> implicit val timeConverter = Time.converterGraphK2[Double, DirectedSparseGraph]
-timeConverter: axle.quanta.UnitConverterGraph[axle.quanta.Time,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Time],Double => Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@401510b3
+timeConverter: axle.quanta.UnitConverterGraph[axle.quanta.Time,Double,edu.uci.ics.jung.graph.DirectedSparseGraph[axle.quanta.UnitOfMeasurement[axle.quanta.Time],Double => Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@1342156f
 
 scala> import timeConverter._
 import timeConverter._

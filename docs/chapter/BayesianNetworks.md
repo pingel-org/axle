@@ -104,18 +104,6 @@ scala> import axle.web._
 import axle.web._
 
 scala> svg(bn, "alarmbayes.svg")
-java.lang.NoClassDefFoundError: edu/uci/ics/jung/visualization/DefaultVisualizationModel
-  at axle.web.SVG$$anon$18.svg(SVG.scala:495)
-  at axle.web.SVG$$anon$18.svg(SVG.scala:479)
-  at axle.web.SVG$$anon$21.svg(SVG.scala:618)
-  at axle.web.SVG$$anon$21.svg(SVG.scala:616)
-  at axle.web.package$.svg(package.scala:26)
-  ... 486 elided
-Caused by: java.lang.ClassNotFoundException: edu.uci.ics.jung.visualization.DefaultVisualizationModel
-  at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
-  at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
-  at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
-  ... 491 more
 ```
 
 ![alarm bayes network](../images/alarmbayes.svg)
