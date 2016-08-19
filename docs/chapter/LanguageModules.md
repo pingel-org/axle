@@ -35,21 +35,10 @@ Usage
 scala> import axle.nlp.language.English
 import axle.nlp.language.English
 
-scala> English.tokenize(text.toLowerCase)
-res0: IndexedSeq[String] = Vector(now, we, are, engaged, in, a, great, civil, war, testing, whether, that, nation, or, any, nation, so, conceived, and, so, dedicated, can, long, endure, we, are, met, on, a, great, battle-field, of, that, war, we, have, come, to, dedicate, a, portion, of, that, field, as, a, final, resting, place, for, those, who, here, gave, their, lives, that, that, nation, might, live, it, is, altogether, fitting, and, proper, that, we, should, do, this)
-
-scala>   .filterNot(English.stopWords.contains)
-<console>:2: error: illegal start of definition
-  .filterNot(English.stopWords.contains)
-  ^
-
-scala>   .map(English.stem)
-<console>:2: error: illegal start of definition
-  .map(English.stem)
-  ^
-
-scala>   .mkString(" ")
-<console>:2: error: illegal start of definition
-  .mkString(" ")
-  ^
+scala> English.
+     |   tokenize(text.toLowerCase).
+     |   filterNot(English.stopWords.contains).
+     |   map(English.stem).
+     |   mkString(" ")
+res0: String = now we engag great civil war test whether nation ani nation so conceiv so dedic can long endur we met great battle-field war we have come dedic portion field final rest place those who here gave live nation might live altogeth fit proper we should do
 ```

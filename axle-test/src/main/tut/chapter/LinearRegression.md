@@ -11,11 +11,11 @@ Predicting Home Prices
 ```tut
 case class RealtyListing(size: Double, bedrooms: Int, floors: Int, age: Int, price: Double)
 
-val listings = RealtyListing(2104, 5, 1, 45, 460d) ::
-               RealtyListing(1416, 3, 2, 40, 232d) ::
-               RealtyListing(1534, 3, 2, 30, 315d) ::
-               RealtyListing(852, 2, 1, 36, 178d) ::
-               Nil
+val listings = List(
+  RealtyListing(2104, 5, 1, 45, 460d),
+  RealtyListing(1416, 3, 2, 40, 232d),
+  RealtyListing(1534, 3, 2, 30, 315d),
+  RealtyListing(852, 2, 1, 36, 178d))
 ```
 
 Create a price estimator using linear regression.

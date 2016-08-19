@@ -20,7 +20,7 @@ scala> import spire.implicits.DoubleAlgebra
 import spire.implicits.DoubleAlgebra
 
 scala> implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
-laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix,Int,Int,Double] = axle.jblas.package$$anon$12@4b4ae52
+laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix,Int,Int,Double] = axle.jblas.package$$anon$12@950f3a6
 
 scala> import laJblasDouble._
 import laJblasDouble._
@@ -60,26 +60,29 @@ res4: String =
 1.100000 2.200000
 3.300000 4.400000
 
-scala> val m = matrix(4, 5, (1 to 20).map(_.toDouble).toArray)\nstring(m)
-<console>:24: error: value \ is not a member of org.jblas.DoubleMatrix
-       val m = matrix(4, 5, (1 to 20).map(_.toDouble).toArray)\nstring(m)
-                                                              ^
-<console>:24: error: not found: value nstring
-       val m = matrix(4, 5, (1 to 20).map(_.toDouble).toArray)\nstring(m)
-                                                               ^
+scala> val m = matrix(4, 5, (1 to 20).map(_.toDouble).toArray)
+m: org.jblas.DoubleMatrix = [1.000000, 5.000000, 9.000000, 13.000000, 17.000000; 2.000000, 6.000000, 10.000000, 14.000000, 18.000000; 3.000000, 7.000000, 11.000000, 15.000000, 19.000000; 4.000000, 8.000000, 12.000000, 16.000000, 20.000000]
+
+scala> string(m)
+res5: String =
+1.000000 5.000000 9.000000 13.000000 17.000000
+2.000000 6.000000 10.000000 14.000000 18.000000
+3.000000 7.000000 11.000000 15.000000 19.000000
+4.000000 8.000000 12.000000 16.000000 20.000000
 ```
 
 Random matrices
 ---------------
 
 ```scala
-scala> val r = rand(3, 3)\nstring(r)
-<console>:24: error: value \ is not a member of org.jblas.DoubleMatrix
-       val r = rand(3, 3)\nstring(r)
-                         ^
-<console>:24: error: not found: value nstring
-       val r = rand(3, 3)\nstring(r)
-                          ^
+scala> val r = rand(3, 3)
+r: org.jblas.DoubleMatrix = [0.471153, 0.335687, 0.809630; 0.593703, 0.392600, 0.109539; 0.180983, 0.914234, 0.818691]
+
+scala> string(r)
+res6: String =
+0.471153 0.335687 0.809630
+0.593703 0.392600 0.109539
+0.180983 0.914234 0.818691
 ```
 
 Matrices defined by functions
@@ -87,7 +90,7 @@ Matrices defined by functions
 
 ```scala
 scala> string(matrix(4, 5, (r, c) => r / (c + 1d)))
-res5: String =
+res7: String =
 0.000000 0.000000 0.000000 0.000000 0.000000
 1.000000 0.500000 0.333333 0.250000 0.200000
 2.000000 1.000000 0.666667 0.500000 0.400000
@@ -97,7 +100,7 @@ scala> string(matrix(4, 5, 1d,
      |   (r: Int) => r + 0.5,
      |   (c: Int) => c + 0.6,
      |   (r: Int, c: Int, diag: Double, left: Double, right: Double) => diag))
-res6: String =
+res8: String =
 1.000000 1.600000 2.600000 3.600000 4.600000
 1.500000 1.000000 1.600000 2.600000 3.600000
 2.500000 1.500000 1.000000 1.600000 2.600000
@@ -112,7 +115,7 @@ scala> val x = matrix(3, 1, Vector(4.0, 5.1, 6.2).toArray)
 x: org.jblas.DoubleMatrix = [4.000000; 5.100000; 6.200000]
 
 scala> string(x)
-res7: String =
+res9: String =
 4.000000
 5.100000
 6.200000
@@ -121,34 +124,34 @@ scala> val y = matrix(3, 1, Vector(7.3, 8.4, 9.5).toArray)
 y: org.jblas.DoubleMatrix = [7.300000; 8.400000; 9.500000]
 
 scala> string(y)
-res8: String =
+res10: String =
 7.300000
 8.400000
 9.500000
 
 scala> x.isEmpty
-res9: Boolean = false
+res11: Boolean = false
 
 scala> x.isRowVector
-res10: Boolean = false
-
-scala> x.isColumnVector
-res11: Boolean = true
-
-scala> x.isSquare
 res12: Boolean = false
 
+scala> x.isColumnVector
+res13: Boolean = true
+
+scala> x.isSquare
+res14: Boolean = false
+
 scala> x.isScalar
-res13: Boolean = false
+res15: Boolean = false
 
 scala> x.rows
-res14: Int = 3
+res16: Int = 3
 
 scala> x.columns
-res15: Int = 1
+res17: Int = 1
 
 scala> x.length
-res16: Int = 3
+res18: Int = 3
 ```
 
 Accessing columns, rows, and elements
@@ -156,22 +159,22 @@ Accessing columns, rows, and elements
 
 ```scala
 scala> x.column(0)
-res17: org.jblas.DoubleMatrix = [4.000000; 5.100000; 6.200000]
+res19: org.jblas.DoubleMatrix = [4.000000; 5.100000; 6.200000]
 
 scala> x.row(1)
-res18: org.jblas.DoubleMatrix = [5.100000]
+res20: org.jblas.DoubleMatrix = [5.100000]
 
 scala> x.get(2, 0)
-res19: Double = 6.2
+res21: Double = 6.2
 
 scala> val fiveByFive = matrix(5, 5, (1 to 25).map(_.toDouble).toArray)
 fiveByFive: org.jblas.DoubleMatrix = [1.000000, 6.000000, 11.000000, 16.000000, 21.000000; 2.000000, 7.000000, 12.000000, 17.000000, 22.000000; 3.000000, 8.000000, 13.000000, 18.000000, 23.000000; 4.000000, 9.000000, 14.000000, 19.000000, 24.000000; 5.000000, 10.000000, 15.000000, 20.000000, 25.000000]
 
 scala> fiveByFive.slice(1 to 3, 2 to 4)
-res20: org.jblas.DoubleMatrix = [12.000000, 17.000000, 22.000000; 13.000000, 18.000000, 23.000000; 14.000000, 19.000000, 24.000000]
+res22: org.jblas.DoubleMatrix = [12.000000, 17.000000, 22.000000; 13.000000, 18.000000, 23.000000; 14.000000, 19.000000, 24.000000]
 
 scala> fiveByFive.slice(0.until(5,2), 0.until(5,2))
-res21: org.jblas.DoubleMatrix = [1.000000, 11.000000, 21.000000; 3.000000, 13.000000, 23.000000; 5.000000, 15.000000, 25.000000]
+res23: org.jblas.DoubleMatrix = [1.000000, 11.000000, 21.000000; 3.000000, 13.000000, 23.000000; 5.000000, 15.000000, 25.000000]
 ```
 
 Other mathematical operations
@@ -179,10 +182,10 @@ Other mathematical operations
 
 ```scala
 scala> x.negate
-res22: org.jblas.DoubleMatrix = [-4.000000; -5.100000; -6.200000]
+res24: org.jblas.DoubleMatrix = [-4.000000; -5.100000; -6.200000]
 
 scala> x.transpose
-res23: org.jblas.DoubleMatrix = [4.000000, 5.100000, 6.200000]
+res25: org.jblas.DoubleMatrix = [4.000000, 5.100000, 6.200000]
 
 scala> // x.ceil
      | // x.floor
@@ -190,73 +193,51 @@ scala> // x.ceil
      | // x.log10
      | 
      | x.pow(2d)
-res29: org.jblas.DoubleMatrix = [16.000000; 26.010000; 38.440000]
+res31: org.jblas.DoubleMatrix = [16.000000; 26.010000; 38.440000]
 
 scala> x.addScalar(1.1)
-res30: org.jblas.DoubleMatrix = [5.100000; 6.200000; 7.300000]
+res32: org.jblas.DoubleMatrix = [5.100000; 6.200000; 7.300000]
 
 scala> x.subtractScalar(0.2)
-res31: org.jblas.DoubleMatrix = [3.800000; 4.900000; 6.000000]
+res33: org.jblas.DoubleMatrix = [3.800000; 4.900000; 6.000000]
 
 scala> // x.multiplyScalar(10d)
      | 
      | x.divideScalar(100d)
-res34: org.jblas.DoubleMatrix = [0.040000; 0.051000; 0.062000]
+res36: org.jblas.DoubleMatrix = [0.040000; 0.051000; 0.062000]
 
 scala> r.max
-<console>:25: error: not found: value r
-       r.max
-       ^
+res37: Double = 0.9142339430630595
 
 scala> r.min
-<console>:25: error: not found: value r
-       r.min
-       ^
+res38: Double = 0.10953926057371133
 
 scala> r.rowMaxs
-<console>:25: error: not found: value r
-       r.rowMaxs
-       ^
+res39: org.jblas.DoubleMatrix = [0.809630; 0.593703; 0.914234]
 
 scala> r.rowMins
-<console>:25: error: not found: value r
-       r.rowMins
-       ^
+res40: org.jblas.DoubleMatrix = [0.335687; 0.109539; 0.180983]
 
 scala> r.columnMaxs
-<console>:25: error: not found: value r
-       r.columnMaxs
-       ^
+res41: org.jblas.DoubleMatrix = [0.593703, 0.914234, 0.818691]
 
 scala> r.columnMins
-<console>:25: error: not found: value r
-       r.columnMins
-       ^
+res42: org.jblas.DoubleMatrix = [0.180983, 0.335687, 0.109539]
 
 scala> rowRange(r)
-<console>:25: error: not found: value r
-       rowRange(r)
-                ^
+res43: org.jblas.DoubleMatrix = [0.473943; 0.484164; 0.733251]
 
 scala> columnRange(r)
-<console>:25: error: not found: value r
-       columnRange(r)
-                   ^
+res44: org.jblas.DoubleMatrix = [0.412720, 0.578547, 0.709152]
 
 scala> r.sortRows
-<console>:25: error: not found: value r
-       r.sortRows
-       ^
+res45: org.jblas.DoubleMatrix = [0.335687, 0.471153, 0.809630; 0.109539, 0.392600, 0.593703; 0.180983, 0.818691, 0.914234]
 
 scala> r.sortColumns
-<console>:25: error: not found: value r
-       r.sortColumns
-       ^
+res46: org.jblas.DoubleMatrix = [0.180983, 0.335687, 0.109539; 0.471153, 0.392600, 0.809630; 0.593703, 0.914234, 0.818691]
 
 scala> r.sortRows.sortColumns
-<console>:25: error: not found: value r
-       r.sortRows.sortColumns
-       ^
+res47: org.jblas.DoubleMatrix = [0.109539, 0.392600, 0.593703; 0.180983, 0.471153, 0.809630; 0.335687, 0.818691, 0.914234]
 ```
 
 Statistics
@@ -264,74 +245,60 @@ Statistics
 
 ```scala
 scala> r.rowMeans
-<console>:25: error: not found: value r
-       r.rowMeans
-       ^
+res48: org.jblas.DoubleMatrix = [0.538823; 0.365281; 0.637970]
+
 scala> r.columnMeans
-<console>:25: error: not found: value r
-       r.columnMeans
-       ^
+res49: org.jblas.DoubleMatrix = [0.415280, 0.547507, 0.579287]
+
 scala> // median(r)
      | 
      | sumsq(r)
-<console>:27: error: not found: value r
-       sumsq(r)
-             ^
-     | 
-     | std(r)
-<console>:28: error: not found: value r
-       std(r)
-           ^
-     | 
-     | cov(r)
-<console>:29: error: not found: value r
-       cov(r)
-           ^
-     | 
-     | centerRows(r)
-<console>:30: error: not found: value r
-       centerRows(r)
-                  ^
-     | 
-     | centerColumns(r)
-<console>:31: error: not found: value r
-       centerColumns(r)
-                     ^
-     | 
-     | zscore(r)
-<console>:32: error: not found: value r
-       zscore(r)
-              ^
-     | 
-     | val (u, s) = pca(r, 0.95)\nstring(u)
-<console>:32: error: not found: value r
-       val (u, s) = pca(r, 0.95)\nstring(u)
-                        ^
-<console>:32: error: not found: value nstring
-       val (u, s) = pca(r, 0.95)\nstring(u)
-                                 ^
-<console>:32: error: recursive value x$1 needs type
-       val (u, s) = pca(r, 0.95)\nstring(u)
-            ^
-     | 
-     | string(s)
-<console>:34: error: not found: value s
-       string(s)
-              ^
+res52: org.jblas.DoubleMatrix = [0.607224, 1.102644, 1.337755]
+
+scala> std(r)
+res53: org.jblas.DoubleMatrix = [0.173062, 0.260354, 0.332182]
+
+scala> cov(r)
+res54: org.jblas.DoubleMatrix = [0.001041, -0.012598, -0.017990; -0.012598, 0.007999, -0.057423; -0.017990, -0.057423, 0.019105]
+
+scala> centerRows(r)
+res55: org.jblas.DoubleMatrix = [-0.067670, -0.203137, 0.270807; 0.228422, 0.027320, -0.255742; -0.456986, 0.276264, 0.180722]
+
+scala> centerColumns(r)
+res56: org.jblas.DoubleMatrix = [0.055873, -0.211820, 0.230343; 0.178423, -0.154907, -0.469748; -0.234296, 0.366727, 0.239404]
+
+scala> zscore(r)
+res57: org.jblas.DoubleMatrix = [0.322852, -0.813586, 0.693424; 1.030977, -0.594985, -1.414126; -1.353829, 1.408571, 0.720702]
+
+scala> val (u, s) = pca(r, 0.95)
+u: org.jblas.DoubleMatrix = [0.072637, -0.371308, -0.925664; 0.660425, -0.677577, 0.323617; -0.747371, -0.634838, 0.196004]
+s: org.jblas.DoubleMatrix = [0.071596; 0.052706; 0.009254]
+
+scala> string(u)
+res58: String =
+0.072637 -0.371308 -0.925664
+0.660425 -0.677577 0.323617
+-0.747371 -0.634838 0.196004
+
+scala> string(s)
+res59: String =
+0.071596
+0.052706
+0.009254
 ```
 
 Horizontal and vertical concatenation
 -------------------------------------
 
 ```scala
-     | string(x aside y)
-res64: String =
+scala> string(x aside y)
+res60: String =
 4.000000 7.300000
 5.100000 8.400000
 6.200000 9.500000
 
 scala> string(x atop y)
-res65: String =
+res61: String =
 4.000000
 5.100000
 6.200000
@@ -353,7 +320,7 @@ Map element values
 
 ```scala
 scala> implicit val endo = axle.jblas.endoFunctorDoubleMatrix[Double]
-endo: axle.algebra.Endofunctor[org.jblas.DoubleMatrix,Double] = axle.jblas.package$$anon$8@6a153d46
+endo: axle.algebra.Endofunctor[org.jblas.DoubleMatrix,Double] = axle.jblas.package$$anon$8@7cd2454
 
 scala> import axle.syntax.endofunctor.endofunctorOps
 import axle.syntax.endofunctor.endofunctorOps
@@ -367,54 +334,34 @@ Boolean operators
 
 ```scala
 scala> r lt half
-<console>:28: error: not found: value r
-       r lt half
-       ^
+res62: org.jblas.DoubleMatrix = [1.000000, 1.000000, 0.000000; 0.000000, 1.000000, 1.000000; 1.000000, 0.000000, 0.000000]
+
 scala> r le half
-<console>:28: error: not found: value r
-       r le half
-       ^
+res63: org.jblas.DoubleMatrix = [1.000000, 1.000000, 0.000000; 0.000000, 1.000000, 1.000000; 1.000000, 0.000000, 0.000000]
+
 scala> r gt half
-<console>:28: error: not found: value r
-       r gt half
-       ^
+res64: org.jblas.DoubleMatrix = [0.000000, 0.000000, 1.000000; 1.000000, 0.000000, 0.000000; 0.000000, 1.000000, 1.000000]
+
 scala> r ge half
-<console>:28: error: not found: value r
-       r ge half
-       ^
+res65: org.jblas.DoubleMatrix = [0.000000, 0.000000, 1.000000; 1.000000, 0.000000, 0.000000; 0.000000, 1.000000, 1.000000]
+
 scala> r eq half
-<console>:28: error: not found: value r
-       r eq half
-       ^
+res66: org.jblas.DoubleMatrix = [0.000000, 0.000000, 0.000000; 0.000000, 0.000000, 0.000000; 0.000000, 0.000000, 0.000000]
+
 scala> r ne half
-<console>:28: error: not found: value r
-       r ne half
-       ^
+res67: org.jblas.DoubleMatrix = [1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000]
+
 scala> (r lt half) or (r gt half)
-<console>:28: error: not found: value r
-       (r lt half) or (r gt half)
-        ^
-<console>:28: error: not found: value r
-       (r lt half) or (r gt half)
-                       ^
+res68: org.jblas.DoubleMatrix = [1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000]
+
 scala> (r lt half) and (r gt half)
-<console>:28: error: not found: value r
-       (r lt half) and (r gt half)
-        ^
-<console>:28: error: not found: value r
-       (r lt half) and (r gt half)
-                        ^
+res69: org.jblas.DoubleMatrix = [0.000000, 0.000000, 0.000000; 0.000000, 0.000000, 0.000000; 0.000000, 0.000000, 0.000000]
+
 scala> (r lt half) xor (r gt half)
-<console>:28: error: not found: value r
-       (r lt half) xor (r gt half)
-        ^
-<console>:28: error: not found: value r
-       (r lt half) xor (r gt half)
-                        ^
+res70: org.jblas.DoubleMatrix = [1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000]
+
 scala> (r lt half) not
-<console>:28: error: not found: value r
-       (r lt half) not
-        ^
+res71: org.jblas.DoubleMatrix = [0.000000, 0.000000, 1.000000; 1.000000, 0.000000, 0.000000; 0.000000, 1.000000, 1.000000]
 ```
 
 Higher order methods
@@ -422,24 +369,18 @@ Higher order methods
 
 ```scala
 scala> m.map(_ + 1)
-<console>:27: error: not found: value m
-       m.map(_ + 1)
-       ^
+res72: org.jblas.DoubleMatrix = [2.000000, 6.000000, 10.000000, 14.000000, 18.000000; 3.000000, 7.000000, 11.000000, 15.000000, 19.000000; 4.000000, 8.000000, 12.000000, 16.000000, 20.000000; 5.000000, 9.000000, 13.000000, 17.000000, 21.000000]
+
 scala> m.map(_ * 10)
-<console>:27: error: not found: value m
-       m.map(_ * 10)
-       ^
+res73: org.jblas.DoubleMatrix = [10.000000, 50.000000, 90.000000, 130.000000, 170.000000; 20.000000, 60.000000, 100.000000, 140.000000, 180.000000; 30.000000, 70.000000, 110.000000, 150.000000, 190.000000; 40.000000, 80.000000, 120.000000, 160.000000, 200.000000]
+
 scala> // m.foldLeft(zeros(4, 1))(_ + _)
      | 
      | m.foldLeft(ones(4, 1))(_ mulPointwise _)
-<console>:29: error: not found: value m
-       m.foldLeft(ones(4, 1))(_ mulPointwise _)
-       ^
-     | 
-     | // m.foldTop(zeros(1, 5))(_ + _)
+res76: org.jblas.DoubleMatrix = [9945.000000; 30240.000000; 65835.000000; 122880.000000]
+
+scala> // m.foldTop(zeros(1, 5))(_ + _)
      | 
      | m.foldTop(ones(1, 5))(_ mulPointwise _)
-<console>:32: error: not found: value m
-       m.foldTop(ones(1, 5))(_ mulPointwise _)
-       ^
+res79: org.jblas.DoubleMatrix = [24.000000, 1680.000000, 11880.000000, 43680.000000, 116280.000000]
 ```

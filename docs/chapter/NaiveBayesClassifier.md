@@ -10,73 +10,22 @@ The classic tennis example:
 scala> case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 defined class Tennis
 
-scala> val events = Tennis("Sunny", "Hot", "High", "Weak", false) ::
-<console>:14: error: value :: is not a member of Tennis
-       val events = Tennis("Sunny", "Hot", "High", "Weak", false) ::
-                                                                  ^
-
-scala>     Tennis("Sunny", "Hot", "High", "Strong", false) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Sunny", "Hot", "High", "Strong", false) ::
-                                                           ^
-
-scala>     Tennis("Overcast", "Hot", "High", "Weak", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Overcast", "Hot", "High", "Weak", true) ::
-                                                           ^
-
-scala>     Tennis("Rain", "Mild", "High", "Weak", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Rain", "Mild", "High", "Weak", true) ::
-                                                        ^
-
-scala>     Tennis("Rain", "Cool", "Normal", "Weak", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Rain", "Cool", "Normal", "Weak", true) ::
-                                                          ^
-
-scala>     Tennis("Rain", "Cool", "Normal", "Strong", false) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Rain", "Cool", "Normal", "Strong", false) ::
-                                                             ^
-
-scala>     Tennis("Overcast", "Cool", "Normal", "Strong", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Overcast", "Cool", "Normal", "Strong", true) ::
-                                                                ^
-
-scala>     Tennis("Sunny", "Mild", "High", "Weak", false) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Sunny", "Mild", "High", "Weak", false) ::
-                                                          ^
-
-scala>     Tennis("Sunny", "Cool", "Normal", "Weak", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Sunny", "Cool", "Normal", "Weak", true) ::
-                                                           ^
-
-scala>     Tennis("Rain", "Mild", "Normal", "Weak", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Rain", "Mild", "Normal", "Weak", true) ::
-                                                          ^
-
-scala>     Tennis("Sunny", "Mild", "Normal", "Strong", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Sunny", "Mild", "Normal", "Strong", true) ::
-                                                             ^
-
-scala>     Tennis("Overcast", "Mild", "High", "Strong", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Overcast", "Mild", "High", "Strong", true) ::
-                                                              ^
-
-scala>     Tennis("Overcast", "Hot", "Normal", "Weak", true) ::
-<console>:15: error: value :: is not a member of Tennis
-           Tennis("Overcast", "Hot", "Normal", "Weak", true) ::
-                                                             ^
-
-scala>     Tennis("Rain", "Mild", "High", "Strong", false) :: Nil
-res12: List[Tennis] = List(Tennis(Rain,Mild,High,Strong,false))
+scala> val events = List(
+     |   Tennis("Sunny", "Hot", "High", "Weak", false),
+     |   Tennis("Sunny", "Hot", "High", "Strong", false),
+     |   Tennis("Overcast", "Hot", "High", "Weak", true),
+     |   Tennis("Rain", "Mild", "High", "Weak", true),
+     |   Tennis("Rain", "Cool", "Normal", "Weak", true),
+     |   Tennis("Rain", "Cool", "Normal", "Strong", false),
+     |   Tennis("Overcast", "Cool", "Normal", "Strong", true),
+     |   Tennis("Sunny", "Mild", "High", "Weak", false),
+     |   Tennis("Sunny", "Cool", "Normal", "Weak", true),
+     |   Tennis("Rain", "Mild", "Normal", "Weak", true),
+     |   Tennis("Sunny", "Mild", "Normal", "Strong", true),
+     |   Tennis("Overcast", "Mild", "High", "Strong", true),
+     |   Tennis("Overcast", "Hot", "Normal", "Weak", true),
+     |   Tennis("Rain", "Mild", "High", "Strong", false))
+events: List[Tennis] = List(Tennis(Sunny,Hot,High,Weak,false), Tennis(Sunny,Hot,High,Strong,false), Tennis(Overcast,Hot,High,Weak,true), Tennis(Rain,Mild,High,Weak,true), Tennis(Rain,Cool,Normal,Weak,true), Tennis(Rain,Cool,Normal,Strong,false), Tennis(Overcast,Cool,Normal,Strong,true), Tennis(Sunny,Mild,High,Weak,false), Tennis(Sunny,Cool,Normal,Weak,true), Tennis(Rain,Mild,Normal,Weak,true), Tennis(Sunny,Mild,Normal,Strong,true), Tennis(Overcast,Mild,High,Strong,true), Tennis(Overcast,Hot,Normal,Weak,true), Tennis(Rain,Mild,High,Strong,false))
 ```
 
 Build a classifier to predict the Boolean feature 'play' given all the other features of the observations
@@ -110,27 +59,43 @@ scala> val classifier = NaiveBayesClassifier[Tennis, String, Boolean, List[Tenni
      |   UnknownDistribution0[Boolean, Rational](Vector(true, false), "Play"),
      |   (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
      |   (t: Tennis) => t.play)
-<console>:28: error: not found: value events
-         events,
-         ^
-     | 
-     | events map { datum => datum.toString + "\t" + classifier(datum) } mkString("\n")
+classifier: axle.ml.NaiveBayesClassifier[Tennis,String,Boolean,List[Tennis],List[Boolean],spire.math.Rational] = <function1>
+
+scala> events map { datum => datum.toString + "\t" + classifier(datum) } mkString("\n")
+res0: String =
+Tennis(Sunny,Hot,High,Weak,false)	false
+Tennis(Sunny,Hot,High,Strong,false)	false
+Tennis(Overcast,Hot,High,Weak,true)	true
+Tennis(Rain,Mild,High,Weak,true)	true
+Tennis(Rain,Cool,Normal,Weak,true)	true
+Tennis(Rain,Cool,Normal,Strong,false)	true
+Tennis(Overcast,Cool,Normal,Strong,true)	true
+Tennis(Sunny,Mild,High,Weak,false)	false
+Tennis(Sunny,Cool,Normal,Weak,true)	true
+Tennis(Rain,Mild,Normal,Weak,true)	true
+Tennis(Sunny,Mild,Normal,Strong,true)	true
+Tennis(Overcast,Mild,High,Strong,true)	true
+Tennis(Overcast,Hot,Normal,Weak,true)	true
+Tennis(Rain,Mild,High,Strong,false)	false
 ```
 
 Measure the classifier's performance
 
 ```scala
-     | import axle.ml.ClassifierPerformance
-<console>:14: error: ')' expected but 'import' found.
+scala> import axle.ml.ClassifierPerformance
 import axle.ml.ClassifierPerformance
-^
-     | 
-     | val perf = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](events, classifier, _.play)
-<console>:15: error: ')' expected but 'val' found.
-val perf = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](events, classifier, _.play)
-^
-     | 
-     | string(perf)
+
+scala> val perf = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](events, classifier, _.play)
+perf: axle.ml.ClassifierPerformance[spire.math.Rational,Tennis,List[Tennis],List[(spire.math.Rational, spire.math.Rational, spire.math.Rational, spire.math.Rational)]] = ClassifierPerformance(List(Tennis(Sunny,Hot,High,Weak,false), Tennis(Sunny,Hot,High,Strong,false), Tennis(Overcast,Hot,High,Weak,true), Tennis(Rain,Mild,High,Weak,true), Tennis(Rain,Cool,Normal,Weak,true), Tennis(Rain,Cool,Normal,Strong,false), Tennis(Overcast,Cool,Normal,Strong,true), Tennis(Sunny,Mild,High,Weak,false), Tennis(Sunny,Cool,Normal,Weak,true), Tennis(Rain,Mild,Normal,Weak,true), Tennis(Sunny,Mild,Normal,Strong,true), Tennis(Overcast,Mild,High,Strong,true), Tennis(Overcast,Hot,Normal,Weak,true), Tennis(Rain,Mild,High,Strong,false)),<function1>,<function1>)
+
+scala> string(perf)
+res1: String =
+"Precision   9/10
+Recall      1
+Specificity 4/5
+Accuracy    13/14
+F1 Score    18/19
+"
 ```
 
 See <a href="http://en.wikipedia.org/wiki/Precision_and_recall">Precision and Recall</a>

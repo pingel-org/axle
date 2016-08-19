@@ -40,10 +40,10 @@ val ɸ = MemorizingLearner()
 Usage
 
 ```tut
-ɸ.guesses(T)
-  .find(_.ℒ === ℒ)
-  .map(finalGuess => "well done, ɸ")
-  .getOrElse("ɸ never made a correct guess")
+ɸ.guesses(T).
+  find(_.ℒ === ℒ).
+  map(finalGuess => "well done, ɸ").
+  getOrElse("ɸ never made a correct guess")
 
 T
 

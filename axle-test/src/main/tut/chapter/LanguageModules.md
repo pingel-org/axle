@@ -26,8 +26,9 @@ Usage
 ```tut
 import axle.nlp.language.English
 
-English.tokenize(text.toLowerCase)
-  .filterNot(English.stopWords.contains)
-  .map(English.stem)
-  .mkString(" ")
+English.
+  tokenize(text.toLowerCase).
+  filterNot(English.stopWords.contains).
+  map(English.stem).
+  mkString(" ")
 ```
