@@ -13,6 +13,7 @@ import sbtrelease.ReleaseStateTransformations._
 import sbtrelease.Utilities._
 import com.typesafe.sbt.pgp.PgpKeys
 import com.typesafe.sbt.pgp.PgpKeys._
+import tut.Plugin._
 
 import scoverage.ScoverageSbtPlugin._
 
@@ -54,7 +55,7 @@ object AxleBuild extends Build {
     ScoverageKeys.coverageHighlighting := true
   )
 
-  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ scoverageSettings ++ Seq(
+  val sharedSettings = Project.defaultSettings ++ tutSettings ++ releaseSettings ++ scoverageSettings ++ Seq(
 
     organization := "org.axle-lang",
 
@@ -342,6 +343,7 @@ object AxleBuild extends Build {
       "org.jblas" % "jblas" % jblasVersion,
       "joda-time" % "joda-time" % jodaTimeVersion,
       "org.joda" % "joda-convert" % jodaConvertVersion,
+      "net.sf.jung" % "jung-visualization" % jungVersion,
       "net.sf.jung" % "jung-algorithms" % jungVersion,
       "net.sf.jung" % "jung-api" % jungVersion,
       "net.sf.jung" % "jung-graph-impl" % jungVersion,
