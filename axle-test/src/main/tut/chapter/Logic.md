@@ -10,7 +10,7 @@ Imports
 ```tut
 import axle.string
 import axle.logic._
-import FOPL._
+import FirstOrderPredicateLogic._
 import SamplePredicates._
 ```
 

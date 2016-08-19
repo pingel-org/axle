@@ -51,7 +51,7 @@ scala> import axle.nlp.UnweightedDocumentVectorSpace
 import axle.nlp.UnweightedDocumentVectorSpace
 
 scala> implicit val unweighted = UnweightedDocumentVectorSpace().normed
-unweighted: spire.algebra.NormedVectorSpace[Map[String,Double],Double] = spire.algebra.InnerProductSpace$$anon$3@f4be8dc
+unweighted: spire.algebra.NormedVectorSpace[Map[String,Double],Double] = spire.algebra.InnerProductSpace$$anon$3@eeaadea
 
 scala> unweighted.distance(v1, v2)
 res0: Double = 3.4641016151377544
@@ -103,7 +103,7 @@ scala> import axle.nlp.TFIDFDocumentVectorSpace
 import axle.nlp.TFIDFDocumentVectorSpace
 
 scala> val tfidf = TFIDFDocumentVectorSpace(corpus, vectorizer).normed
-tfidf: spire.algebra.NormedVectorSpace[Map[String,Double],Double] = spire.algebra.InnerProductSpace$$anon$3@207d63c5
+tfidf: spire.algebra.NormedVectorSpace[Map[String,Double],Double] = spire.algebra.InnerProductSpace$$anon$3@525a66e
 
 scala> tfidf.distance(v1, v2)
 res4: Double = 4.068944074907273
