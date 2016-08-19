@@ -46,9 +46,13 @@ val dg = jdg.make(List(a, b, c, d),
 
 ```tut
 dg.size
+
 dg.findVertex(_ === "a").map(v => dg.successors(v))
+
 dg.findVertex(_ === "c").map(v => dg.successors(v))
+
 dg.findVertex(_ === "c").map(v => dg.predecessors(v))
+
 dg.findVertex(_ === "c").map(v => dg.neighbors(v))
 ```
 
