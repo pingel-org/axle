@@ -30,17 +30,18 @@ resolvers += "sonatype snapshots" at "https://oss.sonatype.org/content/repositor
 resolvers += "sonatype releases" at "https://oss.sonatype.org/content/repositories/releases/"
 
 libraryDependencies ++= Seq(
-  "org.axle-lang" %% "axle-core" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-games" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-visualize" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-jblas" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-joda" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-jung" % "${releaseVersion}"
+  "org.axle-lang" %% "axle-core" % "releaseVersion",
+  "org.axle-lang" %% "axle-games" % "releaseVersion",
+  "org.axle-lang" %% "axle-visualize" % "releaseVersion",
+  "org.axle-lang" %% "axle-jblas" % "releaseVersion",
+  "org.axle-lang" %% "axle-joda" % "releaseVersion",
+  "org.axle-lang" %% "axle-jung" % "releaseVersion"
 )
 
-initialCommands in console := """ + "\"\"\"" + """
+initialCommands in console := """
 import axle._
 // ...
+"""
 ```
 
 4. Run `sbt console` to launch the Scala REPL with the Axle jars in the classpath.
