@@ -28,7 +28,7 @@ Example
 
 ```scala
 scala> val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
-jdg: axle.algebra.DirectedGraph[edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$4@1b55d5f4
+jdg: axle.algebra.DirectedGraph[edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$4@82d7eda
 
 scala> val a = "a"
 a: String = a
@@ -52,7 +52,7 @@ scala> val dg = jdg.make(List(a, b, c, d),
      |     (b, d, new Edge)))
 dg: edu.uci.ics.jung.graph.DirectedSparseGraph[String,Edge] =
 Vertices:a,b,c,d
-Edges:Edge@707b704b[b,d] Edge@77dad76e[d,a] Edge@2c85e7f3[b,c] Edge@796fbe39[c,d] Edge@72eede54[a,b] Edge@73c2abbf[a,c]
+Edges:Edge@32c72666[c,d] Edge@424260b7[b,d] Edge@2455589d[b,c] Edge@54acd[d,a] Edge@7e26565a[a,b] Edge@4c5d5811[a,c]
 ```
 
 ```scala
@@ -99,7 +99,7 @@ Example
 
 ```scala
 scala> val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
-jug: axle.algebra.UndirectedGraph[edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$8@2e13a98e
+jug: axle.algebra.UndirectedGraph[edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge],String,Edge] = axle.jung.package$$anon$8@7afb3dde
 
 scala> val a = "a"
 a: String = a
@@ -123,7 +123,7 @@ scala> val ug = jug.make(List(a, b, c, d),
      |     (b, d, new Edge)))
 ug: edu.uci.ics.jung.graph.UndirectedSparseGraph[String,Edge] =
 Vertices:a,b,c,d
-Edges:Edge@4cdb868b[a,b] Edge@199b48fa[d,a] Edge@35f1bca3[b,c] Edge@9646a9c[a,c] Edge@4b083735[c,d] Edge@31c8cbb7[b,d]
+Edges:Edge@16e71f9d[b,c] Edge@12ff90d4[c,d] Edge@44a4241[a,c] Edge@42752d18[a,b] Edge@2a7faea2[b,d] Edge@6f3cbf53[d,a]
 ```
 
 ```scala
