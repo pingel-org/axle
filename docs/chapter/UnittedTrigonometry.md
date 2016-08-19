@@ -30,10 +30,13 @@ import angleConverter.radian
 
 Usage
 
-```
-cosine(10d *: degree)
+```scala
+scala> cosine(10d *: degree)
+res2: Double = 0.984807753012208
 
-sine(3d *: radian)
+scala> sine(3d *: radian)
+res3: Double = 0.1411200080598672
 
-tangent(40d *: degree)
+scala> tangent(40d *: degree)
+res4: Double = 0.8390996311772799
 ```

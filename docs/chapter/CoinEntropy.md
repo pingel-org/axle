@@ -46,7 +46,7 @@ scala> implicit val bitDouble = id.bit
 bitDouble: axle.quanta.UnitOfMeasurement[axle.quanta.Information] = UnitOfMeasurement(bit,b,None)
 
 scala> implicit val ut = axle.quanta.unittedTicsGraphK2[Information, Double, DirectedSparseGraph]
-ut: axle.algebra.Tics[axle.quanta.UnittedQuantity[axle.quanta.Information,Double]] = axle.quanta.package$$anon$6@3b4b1904
+ut: axle.algebra.Tics[axle.quanta.UnittedQuantity[axle.quanta.Information,Double]] = axle.quanta.package$$anon$6@5d64348c
 
 scala> val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
      |   List(("h", hm)),

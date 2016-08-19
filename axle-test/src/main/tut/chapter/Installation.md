@@ -30,17 +30,18 @@ resolvers += "sonatype snapshots" at "https://oss.sonatype.org/content/repositor
 resolvers += "sonatype releases" at "https://oss.sonatype.org/content/repositories/releases/"
 
 libraryDependencies ++= Seq(
-  "org.axle-lang" %% "axle-core" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-games" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-visualize" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-jblas" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-joda" % "${releaseVersion}",
-  "org.axle-lang" %% "axle-jung" % "${releaseVersion}"
+  "org.axle-lang" %% "axle-core" % "releaseVersion",
+  "org.axle-lang" %% "axle-games" % "releaseVersion",
+  "org.axle-lang" %% "axle-visualize" % "releaseVersion",
+  "org.axle-lang" %% "axle-jblas" % "releaseVersion",
+  "org.axle-lang" %% "axle-joda" % "releaseVersion",
+  "org.axle-lang" %% "axle-jung" % "releaseVersion"
 )
 
-initialCommands in console := """ + "\"\"\"" + """
+initialCommands in console := """
 import axle._
 // ...
+"""
 ```
 
 4. Run `sbt console` to launch the Scala REPL with the Axle jars in the classpath.
@@ -51,22 +52,22 @@ Axle works well interactively -- especially during prototyping, debugging, and t
 Releases
 --------
 
-Version ${snapshotVersion} is hosted on the Sonatype snapshot repo (https://oss.sonatype.org/content/repositories/snapshots).
+Version snapshotVersion is hosted on the Sonatype snapshot repo (https://oss.sonatype.org/content/repositories/snapshots).
 The schedule for publishing snapshot versions is irregular.
 The full dependency is:
 
 ```
-"org.axle-lang" %% "axle-core" % "${snapshotVersion}"
+"org.axle-lang" %% "axle-core" % "snapshotVersion"
 ```
 
-${releaseVersion} is the most recent released version:
+releaseVersion is the most recent released version:
 
 ```
-"org.axle-lang" %% "axle-core" % "${releaseVersion}"
+"org.axle-lang" %% "axle-core" % "releaseVersion"
 ```
 
 In addition to `axle-core` the artifacts `axle-algorithms`, `axle-games`,
 `axle-visualize`, `axle-jblas`, `axle-joda`, and `axle-jung`
 are also published to Sonatype.
 
-See the {RoadMap.link()} for more information on the release schedule.
+See the [Road Map](../RoadMap.md) for more information on the release schedule.

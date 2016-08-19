@@ -40,23 +40,11 @@ val ɸ = MemorizingLearner()
 Usage
 
 ```scala
-scala> ɸ.guesses(T)
-res4: Iterator[axle.lx.Angluin.Grammar] = non-empty iterator
-
-scala>   .find(_.ℒ === ℒ)
-<console>:2: error: illegal start of definition
-  .find(_.ℒ === ℒ)
-  ^
-
-scala>   .map(finalGuess => "well done, ɸ")
-<console>:2: error: illegal start of definition
-  .map(finalGuess => "well done, ɸ")
-  ^
-
-scala>   .getOrElse("ɸ never made a correct guess")
-<console>:2: error: illegal start of definition
-  .getOrElse("ɸ never made a correct guess")
-  ^
+scala> ɸ.guesses(T).
+     |   find(_.ℒ === ℒ).
+     |   map(finalGuess => "well done, ɸ").
+     |   getOrElse("ɸ never made a correct guess")
+res4: String = well done, ɸ
 
 scala> T
 res5: axle.lx.Angluin.Text = Text(List(List(Symbol(hi), Symbol(I'm), Symbol(your), Symbol(Mother)), List(), List(), List(Symbol(shut), Symbol(up)), List(), List(Symbol(shut), Symbol(up)), List(Symbol(shut), Symbol(up))))

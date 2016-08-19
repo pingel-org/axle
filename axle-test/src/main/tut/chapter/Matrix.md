@@ -35,14 +35,16 @@ string(matrix(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray))
 
 string(matrix(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray).t)
 
-val m = matrix(4, 5, (1 to 20).map(_.toDouble).toArray)\nstring(m)
+val m = matrix(4, 5, (1 to 20).map(_.toDouble).toArray)
+string(m)
 ```
 
 Random matrices
 ---------------
 
 ```tut
-val r = rand(3, 3)\nstring(r)
+val r = rand(3, 3)
+string(r)
 ```
 
 Matrices defined by functions
@@ -169,7 +171,8 @@ centerColumns(r)
 
 zscore(r)
 
-val (u, s) = pca(r, 0.95)\nstring(u)
+val (u, s) = pca(r, 0.95)
+string(u)
 
 string(s)
 ```

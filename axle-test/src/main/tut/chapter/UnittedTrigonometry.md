@@ -30,7 +30,7 @@ import angleConverter.radian
 
 Usage
 
-```
+```tut
 cosine(10d *: degree)
 
 sine(3d *: radian)

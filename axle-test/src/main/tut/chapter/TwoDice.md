@@ -26,9 +26,9 @@ val d6b = die(6)
 import spire.implicits.IntAlgebra
 
 val histogram =
-  (0 until 10000)
-  .map(i => d6a.observe + d6b.observe)
-  .tally
+  (0 until 10000).
+  map(i => d6a.observe + d6b.observe).
+  tally
 ```
 
 Define visualization

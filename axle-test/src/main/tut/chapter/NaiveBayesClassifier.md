@@ -9,20 +9,21 @@ The classic tennis example:
 ```tut
 case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 
-val events = Tennis("Sunny", "Hot", "High", "Weak", false) ::
-    Tennis("Sunny", "Hot", "High", "Strong", false) ::
-    Tennis("Overcast", "Hot", "High", "Weak", true) ::
-    Tennis("Rain", "Mild", "High", "Weak", true) ::
-    Tennis("Rain", "Cool", "Normal", "Weak", true) ::
-    Tennis("Rain", "Cool", "Normal", "Strong", false) ::
-    Tennis("Overcast", "Cool", "Normal", "Strong", true) ::
-    Tennis("Sunny", "Mild", "High", "Weak", false) ::
-    Tennis("Sunny", "Cool", "Normal", "Weak", true) ::
-    Tennis("Rain", "Mild", "Normal", "Weak", true) ::
-    Tennis("Sunny", "Mild", "Normal", "Strong", true) ::
-    Tennis("Overcast", "Mild", "High", "Strong", true) ::
-    Tennis("Overcast", "Hot", "Normal", "Weak", true) ::
-    Tennis("Rain", "Mild", "High", "Strong", false) :: Nil
+val events = List(
+  Tennis("Sunny", "Hot", "High", "Weak", false),
+  Tennis("Sunny", "Hot", "High", "Strong", false),
+  Tennis("Overcast", "Hot", "High", "Weak", true),
+  Tennis("Rain", "Mild", "High", "Weak", true),
+  Tennis("Rain", "Cool", "Normal", "Weak", true),
+  Tennis("Rain", "Cool", "Normal", "Strong", false),
+  Tennis("Overcast", "Cool", "Normal", "Strong", true),
+  Tennis("Sunny", "Mild", "High", "Weak", false),
+  Tennis("Sunny", "Cool", "Normal", "Weak", true),
+  Tennis("Rain", "Mild", "Normal", "Weak", true),
+  Tennis("Sunny", "Mild", "Normal", "Strong", true),
+  Tennis("Overcast", "Mild", "High", "Strong", true),
+  Tennis("Overcast", "Hot", "Normal", "Weak", true),
+  Tennis("Rain", "Mild", "High", "Strong", false))
 ```
 
 Build a classifier to predict the Boolean feature 'play' given all the other features of the observations

@@ -33,7 +33,7 @@ scala> import axle.data.Iris
 import axle.data.Iris
 
 scala> val irisesData = new Irises
-irisesData: axle.data.Irises = axle.data.Irises@19cfe6d2
+irisesData: axle.data.Irises = axle.data.Irises@360a2838
 ```
 
 Make a 2-D Euclidean space implicitly available for clustering
@@ -109,10 +109,10 @@ confusion: axle.ml.ConfusionMatrix[axle.data.Iris,Int,String,Vector[axle.data.Ir
 scala> string(confusion)
 res2: String =
 " 49   0   1 :  50 Iris-setosa
-  0  14  36 :  50 Iris-versicolor
-  0  30  20 :  50 Iris-virginica
+  0  16  34 :  50 Iris-versicolor
+  0  34  16 :  50 Iris-virginica
 
- 49  44  57
+ 49  50  51
 "
 ```
 
@@ -146,7 +146,7 @@ scala> val plot = Plot(
      |   xAxisLabel = Some("step"),
      |   yAxis = Some(0),
      |   yAxisLabel = Some("average distance to centroid"))
-plot: axle.visualize.Plot[Int,Double,scala.collection.immutable.TreeMap[Int,Double]] = Plot(List((centroid 0,Map(0 -> 0.22491689090560338, 1 -> 0.10708722818046262, 2 -> 0.05375351872533059, 3 -> 0.021052445342016748, 4 -> 0.01967572246170513, 5 -> 0.01967572246170513, 6 -> 0.01967572246170513, 7 -> 0.01967572246170513, 8 -> 0.01967572246170513, 9 -> 0.01967572246170513, 10 -> 0.01967572246170513, 11 -> 0.01967572246170513, 12 -> 0.01967572246170513, 13 -> 0.01967572246170513, 14 -> 0.01967572246170513, 15 -> 0.01967572246170513, 16 -> 0.01967572246170513, 17 -> 0.01967572246170513, 18 -> 0.01967572246170513, 19 -> 0.01967572246170513)), (centroid 1,Map(0 -> 0.12656102501753996, 1 -> 0.03419025232034247, 2 -> 0.08313700434802954, 3 -> 0.1167273885700823, 4 -> 0.118905766398801, 5 -> 0.1...
+plot: axle.visualize.Plot[Int,Double,scala.collection.immutable.TreeMap[Int,Double]] = Plot(List((centroid 0,Map(0 -> 0.19876704349073962, 1 -> 0.10733554370371912, 2 -> 0.07039691277906088, 3 -> 0.05239216545437309, 4 -> 0.04948148544682851, 5 -> 0.04948148544682851, 6 -> 0.041880588149514196, 7 -> 0.03619236707601005, 8 -> 0.03619236707601005, 9 -> 0.01889837621787509, 10 -> 0.015343687611263182, 11 -> 0.003742558859301236, 12 -> 0.0055125807122289264, 13 -> 0.01208001247759386, 14 -> 0.01967572246170513, 15 -> 0.01967572246170513, 16 -> 0.01967572246170513, 17 -> 0.01967572246170513, 18 -> 0.01967572246170513, 19 -> 0.01967572246170513)), (centroid 1,Map(0 -> 0.21656596271047937, 1 -> 0.1242359896860034, 2 -> 0.119016529878183, 3 -> 0.10602764101794449, 4 -> 0.08207443786704324, 5 ->...
 
 scala> import axle.web._
 import axle.web._
