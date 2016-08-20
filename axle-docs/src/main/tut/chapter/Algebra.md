@@ -9,7 +9,7 @@ witnesses for many common numeric types as well as those defined in `spire.math`
 The `axle.algebra` package defines several categories of typeclasses:
 
 * higher-kinded: Functor, Finite, Indexed, Aggregatable
-* mathematical: LinearAlgebra, LengthSpace<
+* mathematical: LinearAlgebra, LengthSpace
 * visualization: Tics, Plottable
 
 Axioms are defined in the
