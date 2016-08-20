@@ -10,7 +10,7 @@ Alarm Example
 
 Imports
 
-```tut:silent
+```book:silent
 import axle._
 import axle.algebra.DirectedGraph
 import axle.stats._
@@ -24,7 +24,7 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 Setup
 
-```tut
+```book
 val bools = Vector(true, false)
 
 val B = UnknownDistribution0[Boolean, Rational](bools, "Burglary")
@@ -80,7 +80,7 @@ val bn = BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
 
 An AWT visualization is available with:
 
-```tut
+```book
 import axle.visualize._
 import axle.web._
 svg(bn, "alarmbayes.svg")
@@ -90,7 +90,7 @@ svg(bn, "alarmbayes.svg")
 
 The network can be used to compute the joint probability table:
 
-```tut
+```book
 val jpt = bn.jointProbabilityTable
 
 string(jpt)
@@ -98,17 +98,17 @@ string(jpt)
 
 Variables can be summed out of the factor:
 
-```tut
+```book
 jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 ```
 
-```tut
+```book
 jpt.sumOut(M).sumOut(J).sumOut(A).sumOut(B).sumOut(E)
 ```
 
 Multiplication of factors also works:
 
-```tut
+```book
 val f = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
 
 string(f)
@@ -116,7 +116,7 @@ string(f)
 
 Markov assumptions:
 
-```tut
+```book
 string(bn.markovAssumptionsFor(M))
 ```
 

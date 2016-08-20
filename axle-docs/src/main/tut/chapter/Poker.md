@@ -10,7 +10,7 @@ The `axle.game.cards` package models decks, cards, ranks, suits, and ordering.
 
 Define a function that takes the hand size and returns the best 5-card hand
 
-```tut
+```book
 import axle.game.cards.Deck
 import axle.game.poker.PokerHand
 import axle.game.poker.PokerHandCategory
@@ -26,7 +26,7 @@ string(winnerFromHandSize(7))
 
 20 simulated 5-card hands made of 7-card hands.  Sorted.
 
-```tut
+```book
 val hands = (1 to 20).map(n => winnerFromHandSize(7)).sorted
 
 hands.map({ hand => string(hand) + "  " + hand.description }).mkString("\n")
@@ -34,7 +34,7 @@ hands.map({ hand => string(hand) + "  " + hand.description }).mkString("\n")
 
 Record 1000 simulated hands for each drawn hand size from 5 to 9
 
-```tut
+```book
 val data: IndexedSeq[(PokerHandCategory, Int)] =
   for {
     handSize <- 5 to 9
@@ -44,7 +44,7 @@ val data: IndexedSeq[(PokerHandCategory, Int)] =
 
 BarChartGrouped to visualize the results
 
-```tut
+```book
 import spire.implicits.IntAlgebra
 import axle.visualize.BarChartGrouped
 

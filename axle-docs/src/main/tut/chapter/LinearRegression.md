@@ -8,7 +8,7 @@ See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Linear_regressi
 Predicting Home Prices
 ----------------------
 
-```tut
+```book
 case class RealtyListing(size: Double, bedrooms: Int, floors: Int, age: Int, price: Double)
 
 val listings = List(
@@ -20,7 +20,7 @@ val listings = List(
 
 Create a price estimator using linear regression.
 
-```tut
+```book
 import axle.jblas._
 import spire.implicits.DoubleAlgebra
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
@@ -38,13 +38,13 @@ val estimator = LinearRegression(
 
 Use the estimator
 
-```tut
+```book
 estimator.estimate(RealtyListing(1416, 3, 2, 40, 0d))
 ```
 
 Plot the error during the training
 
-```tut
+```book
 import spire.implicits._
 import axle.visualize._
 import axle.algebra.Plottable._

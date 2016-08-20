@@ -6,7 +6,7 @@ Tennis
 
 The classic tennis example:
 
-```tut
+```book
 case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 
 val events = List(
@@ -28,7 +28,7 @@ val events = List(
 
 Build a classifier to predict the Boolean feature 'play' given all the other features of the observations
 
-```tut
+```book
 import axle._
 import axle.stats._
 import axle.ml.NaiveBayesClassifier
@@ -36,7 +36,7 @@ import spire.algebra._
 import spire.math._
 ```
 
-```tut
+```book
 val classifier = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
   events,
   List(
@@ -54,7 +54,7 @@ events map { datum => datum.toString + "\t" + classifier(datum) } mkString("\n")
 
 Measure the classifier's performance
 
-```tut
+```book
 import axle.ml.ClassifierPerformance
 
 val perf = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](events, classifier, _.play)

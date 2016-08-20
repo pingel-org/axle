@@ -11,14 +11,14 @@ Arithmetic, Geometric, and Harmonic Mean Examples
 
 Imports
 
-```tut
+```book
 import axle._
 import axle.algebra._
 ```
 
 Examples
 
-```tut
+```book
 import spire.implicits.DoubleAlgebra
 
 arithmeticMean(List(2d, 3d, 4d, 5d))
@@ -39,7 +39,7 @@ When the parameter `p` is 1, it is the arithmetic mean.
 At -1 it is the harmonic mean.
 As `p` approaches 0, it is the geometric mean.
 
-```tut
+```book
 generalizedMean[Double, List[Double]](1d, List(2d, 3d, 4d, 5d))
 
 generalizedMean[Double, List[Double]](-1d, List(2d, 3d, 4d, 5d))

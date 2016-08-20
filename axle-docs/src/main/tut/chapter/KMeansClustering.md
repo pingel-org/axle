@@ -9,7 +9,7 @@ Clustering Irises
 
 A demonstration of k-Means Clustering using the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris flower data set</a>
 
-```tut:silent
+```book:silent
 import axle._
 import axle.quanta.Distance
 import axle.jung.directedGraphJung
@@ -25,7 +25,7 @@ implicit val distanceConverter = {
 
 Import the Irises data set
 
-```tut
+```book
 import axle.data.Irises
 import axle.data.Iris
 
@@ -34,7 +34,7 @@ val irisesData = new Irises
 
 Make a 2-D Euclidean space implicitly available for clustering
 
-```tut:silent
+```book:silent
 import axle.ml.distance.Euclidean
 import org.jblas.DoubleMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
@@ -50,7 +50,7 @@ implicit val space = {
 
 Build a classifier of irises based on sepal length and width using the K-Means algorithm
 
-```tut
+```book
 import axle.ml.KMeans
 import axle.ml.PCAFeatureNormalizer
 import distanceConverter.cm
@@ -74,7 +74,7 @@ val classifier = KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix](
 
 Produce a "confusion matrix"
 
-```tut
+```book
 import axle.ml.ConfusionMatrix
 import spire.implicits.IntAlgebra
 import axle.orderStrings
@@ -91,7 +91,7 @@ string(confusion)
 Visualize the final (two dimensional) centroid positions
 
 
-```tut
+```book
 import axle.web._
 
 svg(classifier, "kmeans.svg")
@@ -101,7 +101,7 @@ svg(classifier, "kmeans.svg")
 
 Average centroid/cluster vs iteration:
 
-```tut
+```book
 import scala.collection.immutable.TreeMap
 import axle.visualize._
 

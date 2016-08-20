@@ -6,7 +6,7 @@ Visualize the relationship of a coin's bias to its entropy with this code snippe
 
 Imports and implicits:
 
-```tut:silent
+```book:silent
 import axle._
 import axle.stats._
 import spire.math._
@@ -31,13 +31,13 @@ import axle.stats.coin
 
 Create dataset
 
-```tut
+```book
 val hm: D = new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 ```
 
 Define visualization
 
-```tut
+```book
 import axle.visualize._
 implicit val bitDouble = id.bit
 
@@ -56,7 +56,7 @@ val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
 
 Export to SVG
 
-```tut
+```book
 import axle.web._
 svg(plot, "coinentropy.svg")
 ```

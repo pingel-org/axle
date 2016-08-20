@@ -9,7 +9,7 @@ Simulation
 
 Imports
 
-```tut:silent
+```book:silent
 import spire.math._
 import spire.algebra._
 import axle._
@@ -19,7 +19,7 @@ import axle.game.Dice._
 
 Simulate 10k rolls of two dice
 
-```tut
+```book
 val d6a = die(6)
 val d6b = die(6)
 
@@ -33,7 +33,7 @@ val histogram =
 
 Define visualization
 
-```tut
+```book
 import axle.visualize.Color.blue
 import axle.visualize._
 
@@ -48,7 +48,7 @@ val chart = BarChart[Int, Int, Map[Int, Int]](
 
 Create SVG
 
-```tut
+```book
 import axle.web._
 svg(chart, "d6plusd6.svg")
 ```
@@ -62,7 +62,7 @@ and charted directly.
 
 Imports (Note: documentation resets interpreter here)
 
-```tut:reset
+```book:reset
 import spire.math._
 import spire.algebra._
 import axle._
@@ -72,7 +72,7 @@ import axle.game.Dice.die
 
 Create probability distribution of the addition of two 6-sided die:
 
-```tut
+```book
 val distribution = for {
   a <- die(6)
   b <- die(6)
@@ -81,7 +81,7 @@ val distribution = for {
 
 Define visualization
 
-```tut
+```book
 import axle.visualize._
 import axle.visualize.Color.blue
 import spire.implicits.IntAlgebra
@@ -97,7 +97,7 @@ val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
 
 Create SVG
 
-```tut
+```book
 import axle.web._
 svg(chart, "distributionMonad.svg")
 ```

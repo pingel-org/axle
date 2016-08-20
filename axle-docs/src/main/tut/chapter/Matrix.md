@@ -6,7 +6,7 @@ Witnesses for the jblas jars including LinearAlgebra.
 Establish implicit LinearAlgebra witness
 ----------------------------------------
 
-```tut
+```book
 import axle._
 import axle.jblas._
 import axle.syntax.linearalgebra.matrixOps
@@ -19,7 +19,7 @@ import laJblasDouble._
 Creating Matrices
 -----------------
 
-```tut
+```book
 string(ones(2, 3))
 
 string(ones(1, 4))
@@ -30,7 +30,7 @@ string(ones(4, 1))
 Creating matrices from arrays
 -----------------------------
 
-```tut
+```book
 string(matrix(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray))
 
 string(matrix(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray).t)
@@ -42,7 +42,7 @@ string(m)
 Random matrices
 ---------------
 
-```tut
+```book
 val r = rand(3, 3)
 string(r)
 ```
@@ -50,7 +50,7 @@ string(r)
 Matrices defined by functions
 -----------------------------
 
-```tut
+```book
 string(matrix(4, 5, (r, c) => r / (c + 1d)))
 
 string(matrix(4, 5, 1d,
@@ -62,7 +62,7 @@ string(matrix(4, 5, 1d,
 Metadata
 --------
 
-```tut
+```book
 val x = matrix(3, 1, Vector(4.0, 5.1, 6.2).toArray)
 string(x)
 
@@ -89,7 +89,7 @@ x.length
 Accessing columns, rows, and elements
 -------------------------------------
 
-```tut
+```book
 x.column(0)
 
 x.row(1)
@@ -106,7 +106,7 @@ fiveByFive.slice(0.until(5,2), 0.until(5,2))
 Other mathematical operations
 -----------------------------
 
-```tut
+```book
 x.negate
 
 x.transpose
@@ -152,7 +152,7 @@ r.sortRows.sortColumns
 Statistics
 ----------
 
-```tut
+```book
 r.rowMeans
 
 r.columnMeans
@@ -180,7 +180,7 @@ string(s)
 Horizontal and vertical concatenation
 -------------------------------------
 
-```tut
+```book
 string(x aside y)
 
 string(x atop y)
@@ -197,7 +197,7 @@ Addition and multiplication
 Map element values
 ------------------
 
-```tut
+```book
 implicit val endo = axle.jblas.endoFunctorDoubleMatrix[Double]
 import axle.syntax.endofunctor.endofunctorOps
 
@@ -207,7 +207,7 @@ val half = ones(3, 3).map(_ / 2d)
 Boolean operators
 -----------------
 
-```tut
+```book
 r lt half
 
 r le half
@@ -232,7 +232,7 @@ r ne half
 Higher order methods
 --------------------
 
-```tut
+```book
 m.map(_ + 1)
 
 m.map(_ * 10)

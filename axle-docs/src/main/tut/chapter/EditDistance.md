@@ -10,7 +10,7 @@ See the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Levenshtein_dis
 
 Imports and implicits
 
-```tut:silent
+```book:silent
 import axle._
 import axle.nlp._
 import axle.nlp.Levenshtein
@@ -26,7 +26,7 @@ implicit val space = Levenshtein[IndexedSeq[Char], Char, DoubleMatrix, Int]()
 
 Usage
 
-```tut
+```book
 space.distance("the quick brown fox", "the quik brown fax")
 ```
 
@@ -34,14 +34,14 @@ Usage with spire's `distance` operator
 
 Imports
 
-```tut:silent
+```book:silent
 import axle.algebra.wrappedStringSpace
 import spire.syntax.metricSpace.metricSpaceOps
 ```
 
 Usage
 
-```tut
+```book
 "the quick brown fox" distance "the quik brown fax"
 
 "the quick brown fox" distance "the quik brown fox"
