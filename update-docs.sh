@@ -1,13 +1,11 @@
 #!/bin/bash
 
-sbt -J-Xmx6G "project axle-docs" tut
+sbt -J-Xmx6G "project axle-docs" makeSite
 
-mv *.svg docs/images/
+mv *.svg axle-docs/target/site/images/
 
-cp -R axle-docs/target/scala-2.11/tut/* docs/
+sed -i -e 's/releaseVersion/0.2.3/g' `find axle-docs/target/site/ -name '*.md'`
 
-sed -i -e 's/releaseVersion/0.2.3/g' `find docs -name '*.md'`
-
-sed -i -e 's/snapshotVersion/0.2.4-SNAPSHOT/g' `find docs -name '*.md'`
+sed -i -e 's/snapshotVersion/0.2.4-SNAPSHOT/g' `find axle-docs/target/site/ -name '*.md'`
 
 find . -name '*.md-e' | xargs rm
