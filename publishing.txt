@@ -9,6 +9,7 @@ Release:
 
 Then:
  https://oss.sonatype.org/
+ login credentials found in ~/.sbt/global.sbt
  Staging Repositories
  find org.axle-lang repository
  close
