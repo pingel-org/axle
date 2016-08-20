@@ -257,7 +257,9 @@ lazy val docSettings = Seq(
   includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
 
-lazy val docs = project
+lazy val docs = Project(
+    id = "axle-docs",
+    base = file("axle-docs"))
   .settings(moduleName := "axle-docs")
   .settings(axleSettings)
   .settings(noPublishSettings)
