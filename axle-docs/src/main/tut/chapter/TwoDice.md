@@ -55,7 +55,7 @@ import axle.web._
 svg(chart, "d6plusd6.svg")
 ```
 
-![Observed d6 + d6](../images/d6plusd6.svg)
+![Observed d6 + d6](/chapter/images/d6plusd6.svg)
 
 Distribution Monad
 
@@ -104,4 +104,4 @@ import axle.web._
 svg(chart, "distributionMonad.svg")
 ```
 
-![Monadic d6 + d6](../images/distributionMonad.svg)
+![Monadic d6 + d6](/chapter/images/distributionMonad.svg)

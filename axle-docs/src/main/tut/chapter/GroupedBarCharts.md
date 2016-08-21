@@ -39,7 +39,7 @@ import axle.web._
 svg(chart, "barchart1.svg")
 ```
 
-![barchart1](../images/barchart1.svg)
+![barchart1](/chapter/images/barchart1.svg)
 
 Or:
 
@@ -55,7 +55,7 @@ import axle.web._
 svg(chart, "barchart2.svg")
 ```
 
-![barchart2](../images/barchart2.svg)
+![barchart2](/chapter/images/barchart2.svg)
 
 Animation
 ---------

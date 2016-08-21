@@ -88,7 +88,7 @@ import axle.web._
 svg(bn, "alarmbayes.svg")
 ```
 
-![alarm bayes network](../images/alarmbayes.svg)
+![alarm bayes network](/chapter/images/alarmbayes.svg)
 
 The network can be used to compute the joint probability table:
 

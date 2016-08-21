@@ -65,4 +65,4 @@ svg(plot, "coinentropy.svg")
 
 The result is the classic Claude Shannon graph
 
-![coin entropy](../images/coinentropy.svg)
+![coin entropy](/chapter/images/coinentropy.svg)

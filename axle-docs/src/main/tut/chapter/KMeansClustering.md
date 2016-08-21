@@ -99,7 +99,7 @@ import axle.web._
 svg(classifier, "kmeans.svg")
 ```
 
-![kmeans](../images/kmeans.svg)
+![kmeans](/chapter/images/kmeans.svg)
 
 Average centroid/cluster vs iteration:
 
@@ -121,4 +121,4 @@ import axle.web._
 svg(plot, "kmeansvsiteration.svg")
 ```
 
-![kmeans](../images/kmeansvsiteration.svg)
+![kmeans](/chapter/images/kmeansvsiteration.svg)

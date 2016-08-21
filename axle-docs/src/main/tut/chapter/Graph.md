@@ -66,7 +66,7 @@ import axle.web._
 svg(dg, "SimpleDirectedGraph.svg")
 ```
 
-![directed graph](../images/SimpleDirectedGraph.svg)
+![directed graph](/chapter/images/SimpleDirectedGraph.svg)
 
 Undirected Graph
 ----------------
@@ -116,4 +116,4 @@ import axle.web._
 svg(ug, "SimpleUndirectedGraph.svg")
 ```
 
-![undirected graph](../images/SimpleUndirectedGraph.svg)
+![undirected graph](/chapter/images/SimpleUndirectedGraph.svg)

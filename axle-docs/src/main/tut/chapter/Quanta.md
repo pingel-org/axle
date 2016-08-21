@@ -21,7 +21,7 @@ and Volume.
 Axle's values are represented in such a way that a value's "quantum" is present in the type,
 meaning that nonsensical expressions like `mile + gram` can be rejected at compile time.
 
-![Distance conversions](../images/Distance.svg)
+![Distance conversions](/chapter/images/Distance.svg)
 
 Additionally, various values within the Quantum objects are imported.
 This package uses the definition of "Quantum" as "something that can

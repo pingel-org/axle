@@ -56,7 +56,7 @@ import axle.web._
 svg(plot, "waves.svg")
 ```
 
-![waves](../images/waves.svg)
+![waves](/chapter/images/waves.svg)
 
 Animation
 ---------

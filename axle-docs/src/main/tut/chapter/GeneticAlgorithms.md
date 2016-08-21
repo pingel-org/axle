@@ -80,4 +80,4 @@ import axle.web._
 svg(plot, "ga.svg")
 ```
 
-![ga](../images/ga.svg)
+![ga](/chapter/images/ga.svg)

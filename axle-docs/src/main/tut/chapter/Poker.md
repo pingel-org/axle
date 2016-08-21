@@ -62,7 +62,7 @@ import axle.web._
 svg(chart, "pokerhands.svg")
 ```
 
-![poker hands](../images/pokerhands.svg)
+![poker hands](/chapter/images/pokerhands.svg)
 
 ### Texas Hold 'Em Poker
 

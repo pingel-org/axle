@@ -35,4 +35,4 @@ import axle.web._
 svg(chart, "fruitsales.svg")
 ```
 
-![fruit sales](../images/fruitsales.svg)
+![fruit sales](/chapter/images/fruitsales.svg)
