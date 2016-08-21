@@ -1,6 +1,8 @@
-
-Machine Learning
-================
+---
+layout: page
+title: Machine Learning
+permalink: /chapter/machine_learning/
+---
 
 Algorithms
 ----------

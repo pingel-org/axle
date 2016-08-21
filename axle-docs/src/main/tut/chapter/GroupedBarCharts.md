@@ -1,6 +1,8 @@
-
-Grouped Bar Charts
-==================
+---
+layout: page
+title: Grouped Bar Charts
+permalink: /chapter/Grouped Bar Charts/
+---
 
 Two-dimensional grouped bar charts
 

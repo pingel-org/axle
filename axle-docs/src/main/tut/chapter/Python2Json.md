@@ -1,6 +1,8 @@
-
-python2json.py
-==============
+---
+layout: page
+title: python2json.py
+permalink: /chapter/python2json/
+---
 
 This is part of a larger project on source code search algorithms.
 

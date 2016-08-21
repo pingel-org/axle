@@ -1,6 +1,8 @@
-
-Needleman-Wunsch
-================
+---
+layout: page
+title: Needleman-Wunsch
+permalink: /chapter/needleman_wunsch/
+---
 
 See the Wikipedia page on the 
 <a href="https://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm">Needleman-Wunsch</a> algorithm.

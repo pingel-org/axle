@@ -1,6 +1,8 @@
-
-Angluin Learner
-===============
+---
+layout: page
+title: Angluin Learner
+permalink: /chapter/angluin_learner/
+---
 
 Models <a href="https://en.wikipedia.org/wiki/Dana_Angluin">Dana Angluin's</a> Language Learner.
 

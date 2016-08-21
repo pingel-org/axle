@@ -1,8 +1,8 @@
-
-Axle ScalaDoc
-=============
-
-/scaladoc/index.html
+---
+layout: page
+title: ScalaDoc
+permalink: /scaladoc/
+---
 
 by jar
 ------

@@ -1,5 +1,8 @@
-
-Bioinformatics
+---
+layout: page
+title: Bioinformatics
+permalink: /chapter/bioinformatics/
+---
 
 ### Algorithms for DNA sequence alignment
 

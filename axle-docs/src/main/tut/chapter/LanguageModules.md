@@ -1,6 +1,8 @@
-
-Language Modules
-================
+---
+layout: page
+title: Language Modules
+permalink: /chapter/language_modules/
+---
 
 Natural-language-specific stop words, tokenization, stemming, etc. 
 

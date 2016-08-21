@@ -1,5 +1,8 @@
-Linear Regression
-=================
+---
+layout: page
+title: Linear Regression
+permalink: /chapter/linear_regression/
+---
 
 `axle.ml.LinearRegression` makes use of `axle.algebra.LinearAlgebra`.
 

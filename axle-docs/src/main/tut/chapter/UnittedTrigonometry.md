@@ -1,5 +1,8 @@
-Unitted Trigonometry
-====================
+---
+layout: page
+title: Unitted Trigonometry
+permalink: /chapter/unitted_trigonometry/
+---
 
 Versions of the trigonometric functions sine, cosine, and tangent, require that the arguments are Angles.
 

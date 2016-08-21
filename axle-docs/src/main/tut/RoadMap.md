@@ -1,6 +1,8 @@
-
-Road Map
-========
+---
+layout: page
+title: Road Map
+permalink: /roadmap/
+---
 
 ## 0.2.0 (August 12, 2015)
 * reorganize to minimize dependencies from axle-core, with witnesses in the axle-X jars (axle.X package) for library X

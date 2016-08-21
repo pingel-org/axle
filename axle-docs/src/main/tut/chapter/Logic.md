@@ -1,6 +1,8 @@
-
-Logic
-=====
+---
+layout: page
+title: Logic
+permalink: /chapter/logic/
+---
 
 Conjunctive Normal Form Converter
 ---------------------------------

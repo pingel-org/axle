@@ -1,10 +1,11 @@
-Naïve Bayes
-===========
+---
+layout: page
+title: Naïve Bayes
+permalink: /chapter/naive_bayes/
+---
 
-Tennis
-------
-
-The classic tennis example:
+Tennis Example
+--------------
 
 ```tut:book
 case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)

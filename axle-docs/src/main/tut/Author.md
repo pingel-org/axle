@@ -1,6 +1,8 @@
-
-Adam Pingel
-===========
+---
+layout: page
+title: Author
+permalink: /author/
+---
 
 <img alt="Adam Pingel" src="http://www.gravatar.com/avatar/e6a25e87deb4da4ff6aa52d3376d3767.png"/>
 

@@ -1,5 +1,8 @@
-Matrix
-======
+---
+layout: page
+title: Matrix
+permalink: /chapter/matrix/
+---
 
 Witnesses for the jblas jars including LinearAlgebra.
 

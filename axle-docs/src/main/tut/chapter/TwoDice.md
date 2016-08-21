@@ -1,6 +1,8 @@
-
-Two Dice
-========
+---
+layout: page
+title: Two Dice
+permalink: /chapter/two_dice/
+---
 
 This page describes two ways of calculation the sum of two dice rolls.
 

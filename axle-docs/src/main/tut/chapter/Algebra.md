@@ -1,6 +1,8 @@
-
-Algebra
-=======
+---
+layout: page
+title: Algebra
+permalink: /chapter/algebra/
+---
 
 The [spire](http://github.com/non/spire) project is a dependency of Axle.
 `spire.algebra` defines typeclasses for Monoid, Group, Ring, Field, VectorSpace, etc, and

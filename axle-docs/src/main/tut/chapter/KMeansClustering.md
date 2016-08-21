@@ -1,6 +1,8 @@
-
-k-Means Clustering
-==================
+---
+layout: page
+title: k-Means Clustering
+permalink: /chapter/k_means_clustering/
+---
 
 See the wikipedia page on <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-Means Clustering</a>
 

@@ -1,6 +1,8 @@
-
-Videos
-=======
+---
+layout: page
+title: Videos
+permalink: /videos/
+---
 
 Scala Introduction using the REPL
 <iframe

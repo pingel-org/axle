@@ -1,5 +1,8 @@
-Tic Tac Toe
-===========
+---
+layout: page
+title: Tic Tac Toe
+permalink: /chapter/tic_tac_toe/
+---
 
 A Perfect Information, Zero-sum game
 

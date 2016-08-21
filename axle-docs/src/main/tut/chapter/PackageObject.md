@@ -1,6 +1,8 @@
-
-axle._ Package Object
-=====================
+---
+layout: page
+title: axle._ Package Object
+permalink: /chapter/axle_package_object/
+---
 
 This page describes the axle package object.
 

@@ -1,5 +1,8 @@
-Bar Charts
-==========
+---
+layout: page
+title: Bar Charts
+permalink: /chapter/bar_charts/
+---
 
 Two-dimensional bar charts.
 

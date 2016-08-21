@@ -1,5 +1,8 @@
-Poker
-=====
+---
+layout: page
+title: Poker
+permalink: /chapter/poker/
+---
 
 An N-Player, Imperfect Information, Zero-sum game
 

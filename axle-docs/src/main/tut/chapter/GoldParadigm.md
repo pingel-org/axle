@@ -1,6 +1,8 @@
-
-Gold Paradigm
-=============
+---
+layout: page
+title: Gold Paradigm
+permalink: /chapter/gold_paradigm/
+---
 
 Models the Gold Paradigm.
 

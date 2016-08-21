@@ -1,10 +1,10 @@
-Quanta, Units, and Conversions
-==============================
+---
+layout: page
+title: Quanta, Units, and Conversions
+permalink: /chapter/quanta_units_conversions/
+---
 
 `UnittedQuantity` is the primary case class in `axle.quanta`
-
-Introduction
-------------
 
 The `axle.quanta` package models units of measurement.
 Via typeclasses, it implements expected operators like `+ - * over by`,

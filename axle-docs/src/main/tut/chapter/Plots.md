@@ -1,5 +1,8 @@
-Plots
-=====
+---
+layout: page
+title: Plots
+permalink: /chapter/plots/
+---
 
 Two-dimensional plots
 

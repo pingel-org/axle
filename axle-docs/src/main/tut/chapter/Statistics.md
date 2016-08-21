@@ -1,6 +1,8 @@
-
-Statistics
-==========
+---
+layout: page
+title: Statistics
+permalink: /chapter/statistics/
+---
 
 Topics include: Random Variables, Distributions, Probability, and Standard Deviation.
 

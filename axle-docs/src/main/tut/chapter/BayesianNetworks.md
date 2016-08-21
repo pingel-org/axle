@@ -1,6 +1,8 @@
-
-Bayesian Networks
-=================
+---
+layout: page
+title: Bayesian Networks
+permalink: /chapter/bayesian_networks/
+---
 
 See the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Bayesian_network">Bayesian networks</a>
 

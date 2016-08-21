@@ -1,6 +1,8 @@
-
-Information Theory
-==================
+---
+layout: page
+title: Information Theory
+permalink: /chapter/information_theory/
+---
 
 Entropy
 -------

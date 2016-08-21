@@ -1,6 +1,8 @@
-
-Natural Language Processing
-===========================
+---
+layout: page
+title: Natural Language Processing
+permalink: /chapter/natural_language_processing/
+---
 
 Sub-topics include
 
