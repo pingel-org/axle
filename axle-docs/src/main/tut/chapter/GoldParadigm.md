@@ -9,7 +9,7 @@ Example
 
 Imports
 
-```book:silent
+```tut:book:silent
 import axle._
 import axle.lx._
 import Gold._
@@ -18,7 +18,7 @@ import spire.implicits._
 
 Setup
 
-```book:silent
+```tut:book:silent
 val mHi = Morpheme("hi")
 val mIm = Morpheme("I'm")
 val mYour = Morpheme("your")

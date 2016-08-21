@@ -7,7 +7,7 @@ Conjunctive Normal Form Converter
 
 Imports
 
-```book
+```tut:book
 import axle.string
 import axle.logic._
 import FirstOrderPredicateLogic._
@@ -16,13 +16,13 @@ import SamplePredicates._
 
 Example CNF conversion
 
-```book
+```tut:book
 val s = ∃('z ∈ Z, (A('z) ∧ G('z)) ⇔ (B('z) ∨ H('z)))
 
 val (cnf, skolemMap) = conjunctiveNormalForm(s)
 ```
 
-```book
+```tut:book
 string(cnf)
 
 skolemMap

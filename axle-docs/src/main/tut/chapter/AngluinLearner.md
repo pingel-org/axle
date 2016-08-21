@@ -9,7 +9,7 @@ Example
 
 Imports
 
-```book:silent
+```tut:book:silent
 import axle._
 import axle.lx._
 import Angluin._
@@ -18,7 +18,7 @@ import spire.implicits._
 
 Setup
 
-```book:silent
+```tut:book:silent
 val mHi = Symbol("hi")
 val mIm = Symbol("I'm")
 val mYour = Symbol("your")
@@ -39,7 +39,7 @@ val ɸ = MemorizingLearner()
 
 Usage
 
-```book
+```tut:book
 ɸ.guesses(T).
   find(_.ℒ === ℒ).
   map(finalGuess => "well done, ɸ").

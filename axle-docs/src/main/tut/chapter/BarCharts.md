@@ -8,7 +8,7 @@ Example
 
 The dataset:
 
-```book
+```tut:book
 val sales = Map(
   "apple" -> 83.8,
   "banana" -> 77.9,
@@ -18,7 +18,7 @@ val sales = Map(
 
 Can be visualized as a bar chart with:
 
-```book
+```tut:book
 import spire.implicits.DoubleAlgebra
 import spire.implicits.StringOrder
 import axle.visualize.BarChart

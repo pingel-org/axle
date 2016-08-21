@@ -27,7 +27,7 @@ Additionally, various values within the Quantum objects are imported.
 This package uses the definition of "Quantum" as "something that can
 be quantified or measured".
 
-```book
+```tut:book
 import axle._
 import axle.quanta._
 import axle.jung.directedGraphJung
@@ -39,13 +39,13 @@ import spire.implicits.moduleOps
 Quanta each define a Wikipedia link where you can find out more
 about relative scale:
 
-```book
+```tut:book
 Distance().wikipediaUrl
 ```
 
 A visualization of each Quantum (like the one for Distance shown above) is produced with:
 
-```book
+```tut:book
 import axle.algebra.modules.doubleRationalModule
 import spire.implicits.DoubleAlgebra
 import axle.jung.directedGraphJung
@@ -77,7 +77,7 @@ graph.
 The conversion graphs should be placed in implicit scope.
 Within each are defined units of measurement which can be imported.
 
-```book
+```tut:book
 import spire.implicits.DoubleAlgebra
 
 implicit val massConverter = Mass.converterGraphK2[Double, DirectedSparseGraph]
@@ -100,7 +100,7 @@ import timeConverter._
 
 Standard Units of Measurement are defined:
 
-```book
+```tut:book
 gram
 
 foot
@@ -114,7 +114,7 @@ Construction
 Values with units are constructed with the right-associative `*:` method on any spire `Number` type
 as long as a spire `Field` is implicitly available.
 
-```book
+```tut:book
 10d *: gram
 
 3d *: lightyear
@@ -137,13 +137,13 @@ Quantities can be converted into other units of measurement.
 This is possible as long as 1) the values are in the same
 Quantum, and 2) there is a path in the Quantum between the two.
 
-```book
+```tut:book
 10d *: gram in kilogram
 ```
 
 Converting between quanta is not allowed, and is caught at compile time:
 
-```book:fail
+```tut:book:fail
 (1 *: gram) in mile
 ```
 
@@ -153,7 +153,7 @@ Show
 A witness for the `Show` typeclass is defined, meaning that `string` will return
 a `String` representation, and `show` will send it to stdout.
 
-```book
+```tut:book
 string(10d *: gram in kilogram)
 ```
 
@@ -163,7 +163,7 @@ Math
 Addition and subtraction are defined on Quantity by converting the
 right Quantity to the unit of the left.
 
-```book
+```tut:book
 (1d *: kilogram) + (10d *: gram)
 
 (7d *: mile) - (123d *: foot)
@@ -171,13 +171,13 @@ right Quantity to the unit of the left.
 
 Addition and subtraction between different quanta is rejected at compile time:
 
-```book:fail
+```tut:book:fail
 (1d *: newton) + (2d *: foot)
 ```
 
 Multiplication comes from spire's Module typeclass:
 
-```book
+```tut:book
 (5.4 *: second) :* 100d
 
 (32d *: century) :* (1d/3)

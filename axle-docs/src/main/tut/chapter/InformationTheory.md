@@ -10,7 +10,7 @@ as well as the traditional `H`:
 
 Imports and implicits
 
-```book:silent
+```tut:book:silent
 import axle._
 import axle.stats._
 import spire.math._
@@ -28,7 +28,7 @@ implicit val informationConverter = Information.converterGraphK2[Double, Directe
 
 Usage
 
-```book
+```tut:book
 string(H(die(6)))
 
 string(entropy(coin(Rational(7, 10))))

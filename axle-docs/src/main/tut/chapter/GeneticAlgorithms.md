@@ -7,13 +7,13 @@ See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Genetic_algorit
 Example
 -------
 
-```book
+```tut:book
 case class Rabbit(a: Int, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double)
 ```
 
 Define a random rabbit generator and fitness function
 
-```book
+```tut:book
 import shapeless._
 import syntax.singleton._
 import record._
@@ -51,7 +51,7 @@ implicit val rabbitSpecies = new Species[gen.Repr] {
 
 Run the genetic algorithm
 
-```book
+```tut:book
 import spire.implicits._
 
 val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
@@ -61,7 +61,7 @@ val log = ga.run()
 
 Plot the min, average, and max fitness function by generation
 
-```book
+```tut:book
 import scala.collection.immutable.TreeMap
 import axle.visualize._
 

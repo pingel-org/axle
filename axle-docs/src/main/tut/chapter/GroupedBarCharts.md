@@ -9,7 +9,7 @@ Example
 
 The following example dataset:
 
-```book
+```tut:book
 val sales = Map(
   ("apple", 2011) -> 43.0,
   ("apple", 2012) -> 83.8,
@@ -22,7 +22,7 @@ val sales = Map(
 
 Can be grouped in two ways to produce bar charts:
 
-```book
+```tut:book
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.implicits.StringOrder
@@ -41,7 +41,7 @@ svg(chart, "barchart1.svg")
 
 Or:
 
-```book
+```tut:book
 import spire.implicits.DoubleAlgebra
 
 val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double]](

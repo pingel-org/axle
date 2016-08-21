@@ -9,7 +9,7 @@ Example
 
 Imports and implicits
 
-```book:silent
+```tut:book:silent
 import axle.bio._
 import SmithWaterman.Default._
 import SmithWaterman.optimalAlignment
@@ -20,21 +20,21 @@ import org.jblas.DoubleMatrix
 
 Setup
 
-```book
+```tut:book
 val dna3 = "ACACACTA"
 val dna4 = "AGCACACA"
 ```
 
 Align the sequences
 
-```book
+```tut:book
 val swAlignment = optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](
   dna3, dna4, w, mismatchPenalty, gap)
 ```
 
 Compute distance of the sequences
 
-```book
+```tut:book
 import spire.implicits.DoubleAlgebra
 
 val space = SmithWatermanMetricSpace[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](w, mismatchPenalty)

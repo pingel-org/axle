@@ -10,7 +10,7 @@ Example
 
 Setup:
 
-```book:silent
+```tut:book:silent
 import axle.bio._
 import org.jblas.DoubleMatrix
 import NeedlemanWunsch.alignmentScore
@@ -28,7 +28,7 @@ val dna2 = "ATCGCCGG"
 
 DNA Sequence Alignment
 
-```book
+```tut:book
 val nwAlignment =
   optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](
     dna1, dna2, similarity, gap, gapPenalty)
@@ -36,7 +36,7 @@ val nwAlignment =
 
 Score aligment
 
-```book
+```tut:book
 import NeedlemanWunsch.alignmentScore
 
 alignmentScore(nwAlignment._1, nwAlignment._2, gap, similarity, gapPenalty)
@@ -44,7 +44,7 @@ alignmentScore(nwAlignment._1, nwAlignment._2, gap, similarity, gapPenalty)
 
 Compute distance
 
-```book
+```tut:book
 val space = NeedlemanWunschMetricSpace[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
 
 space.distance(dna1, dna2)

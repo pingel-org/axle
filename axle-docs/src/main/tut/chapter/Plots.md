@@ -8,7 +8,7 @@ Time-series plot example
 
 `axle.visualize.Plot`
 
-```book
+```tut:book
 import axle._
 import axle.visualize._
 import org.joda.time.DateTime

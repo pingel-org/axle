@@ -9,7 +9,7 @@ Uniform Distribution
 
 Imports
 
-```book
+```tut:book
 import axle._
 import axle.stats._
 import spire.math._
@@ -18,7 +18,7 @@ import spire.algebra._
 
 Example
 
-```book
+```tut:book
 val dist = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), "some doubles")
 ```
 
@@ -27,7 +27,7 @@ Standard Deviation
 
 Example
 
-```book
+```tut:book
 import spire.implicits.DoubleAlgebra
 
 standardDeviation(dist)
@@ -38,7 +38,7 @@ Random Variables
 
 Example fiar and biased coins:
 
-```book
+```tut:book
 val fairCoin = coin()
 
 val biasedCoin = coin(Rational(9, 10))
@@ -46,14 +46,14 @@ val biasedCoin = coin(Rational(9, 10))
 
 The `observe` method selects a value for the random variable based on the distribution.
 
-```book
+```tut:book
 (1 to 10) map { i => fairCoin.observe }
 (1 to 10) map { i => biasedCoin.observe }
 ```
 
 Create and query distributions
 
-```book
+```tut:book
 val flip1 = coin()
 val flip2 = coin()
 
@@ -70,7 +70,7 @@ Dice examples
 
 Setup
 
-```book
+```tut:book
 import axle.game.Dice._
 
 val d6a = utfD6
@@ -79,7 +79,7 @@ val d6b = utfD6
 
 Create and query distributions
 
-```book
+```tut:book
 P((d6a is '⚃) and (d6b is '⚃)).apply()
 
 P((d6a isnt '⚃)).apply()

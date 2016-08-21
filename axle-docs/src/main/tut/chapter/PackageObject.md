@@ -9,7 +9,7 @@ Enriched GenTraversable
 
 Imports
 
-```book
+```tut:book
 import axle._
 import spire.implicits._
 import spire.optional.unicode._
@@ -18,7 +18,7 @@ import spire.implicits.eqOps
 
 Common aggregators ∃, ∀, Σ, Π:
 
-```book
+```tut:book
 ∃(List(1, 2, 3)) { i: Int => i % 2 == 0 }
 
 ∀(List(1, 2, 3)) { i: Int => i % 2 == 0 }
@@ -30,7 +30,7 @@ Common aggregators ∃, ∀, Σ, Π:
 
 Doubles, triples, and cross-products
 
-```book
+```tut:book
 Set(1, 2, 3).doubles
 
 Set(1, 2, 3).triples
@@ -46,7 +46,7 @@ TODO: document `and`, `∧`, `or`, `∨`, `implies`
 Indexed Power Set
 -----------------
 
-```book
+```tut:book
 (0 until 4).℘
 
 val ps = Vector("a", "b", "c").℘
@@ -59,21 +59,21 @@ ps(7)
 Permutations
 ------------
 
-```book
+```tut:book
 (0 until 4).permutations(2).toList
 ```
 
 Combinations
 ------------
 
-```book
+```tut:book
 (0 until 4).combinations(2).toList
 ```
 
 Indexed Cross Product
 ---------------------
 
-```book
+```tut:book
 val icp = IndexedCrossProduct(Vector(
   Vector("a", "b", "c"),
   Vector("d", "e"),

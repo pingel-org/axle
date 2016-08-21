@@ -9,7 +9,7 @@ Directed Graph
 
 Imports and implicits
 
-```book:silent
+```tut:book:silent
 import axle._
 import axle.algebra._
 import axle.jung._
@@ -26,7 +26,7 @@ implicit val showEdge: Show[Edge] = new Show[Edge] { def text(e: Edge): String =
 
 Example
 
-```book
+```tut:book
 val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
 
 val a = "a"
@@ -44,7 +44,7 @@ val dg = jdg.make(List(a, b, c, d),
     (b, d, new Edge)))
 ```
 
-```book
+```tut:book
 dg.size
 
 dg.findVertex(_ === "a").map(v => dg.successors(v))
@@ -58,7 +58,7 @@ dg.findVertex(_ === "c").map(v => dg.neighbors(v))
 
 Visualize the graph
 
-```book
+```tut:book
 import axle.web._
 
 svg(dg, "SimpleDirectedGraph.svg")
@@ -71,7 +71,7 @@ Undirected Graph
 
 Imports and implicits
 
-```book:silent
+```tut:book:silent
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 class Edge
@@ -80,7 +80,7 @@ implicit val showEdge: Show[Edge] = new Show[Edge] { def text(e: Edge): String =
 
 Example
 
-```book
+```tut:book
 val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
 
 val a = "a"
@@ -98,7 +98,7 @@ val ug = jug.make(List(a, b, c, d),
     (b, d, new Edge)))
 ```
 
-```book
+```tut:book
 ug.size
 
 ug.findVertex(_ == "c").map(v => ug.neighbors(v))
@@ -108,7 +108,7 @@ ug.findVertex(_ == "a").map(v => ug.neighbors(v))
 
 Visualize the graph
 
-```book
+```tut:book
 import axle.web._
 
 svg(ug, "SimpleUndirectedGraph.svg")

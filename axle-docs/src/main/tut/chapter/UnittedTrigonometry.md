@@ -10,7 +10,7 @@ Examples of the functions
 
 Imports and implicits
 
-```book:silent
+```tut:book:silent
 import axle._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
@@ -30,7 +30,7 @@ import angleConverter.radian
 
 Usage
 
-```book
+```tut:book
 cosine(10d *: degree)
 
 sine(3d *: radian)
