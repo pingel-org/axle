@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Quanta, Units, and Conversions
-permalink: /chapter/quanta_units_conversions/
+permalink: /chapter/quanta/
 ---
 
 `UnittedQuantity` is the primary case class in `axle.quanta`
