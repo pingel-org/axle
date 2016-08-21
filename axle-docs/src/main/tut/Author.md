@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Author
+in_header: true
 permalink: /author/
 ---
 

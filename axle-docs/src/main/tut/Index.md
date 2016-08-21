@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Axle
+in_header: true
 permalink: /
 ---
 

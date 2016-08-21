@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Project
+in_header: true
 permalink: /project/
 ---
 

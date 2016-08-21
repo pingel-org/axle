@@ -1,6 +1,7 @@
 ---
 layout: page
 title: ScalaDoc
+in_header: true
 permalink: /scaladoc/
 ---
 
