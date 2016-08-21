@@ -4,12 +4,12 @@ title: Edit Distance
 permalink: /chapter/edit_distance/
 ---
 
-See the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Edit_distance">Edit distance</a>
+See the Wikipedia page on [Edit distance](https://en.wikipedia.org/wiki/Edit_distance)
 
 Levenshtein
 -----------
 
-See the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a>
+See the Wikipedia page on [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
 
 Imports and implicits
 

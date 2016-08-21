@@ -4,7 +4,7 @@ title: Vector Space Model
 permalink: /chapter/vector_space_model/
 ---
 
-See the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Vector_space_model">Vector space model</a>
+See the Wikipedia page on [Vector space model](https://en.wikipedia.org/wiki/Vector_space_model)
 
 Example
 -------

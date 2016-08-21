@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Road Map
-permalink: /roadmap/
+permalink: /road_map/
 ---
 
 ## 0.2.0 (August 12, 2015)

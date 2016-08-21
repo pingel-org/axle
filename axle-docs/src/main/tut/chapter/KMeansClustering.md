@@ -4,12 +4,12 @@ title: k-Means Clustering
 permalink: /chapter/k_means_clustering/
 ---
 
-See the wikipedia page on <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-Means Clustering</a>
+See the wikipedia page on [k-Means Clustering](https://en.wikipedia.org/wiki/K-means_clustering)
 
 Clustering Irises
 -----------------
 
-A demonstration of k-Means Clustering using the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris flower data set</a>
+A demonstration of k-Means Clustering using the [Iris flower data set](https://en.wikipedia.org/wiki/Iris_flower_data_set)
 
 ```tut:book:silent
 import axle._

@@ -6,7 +6,7 @@ permalink: /chapter/linear_regression/
 
 `axle.ml.LinearRegression` makes use of `axle.algebra.LinearAlgebra`.
 
-See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Linear_regression">Linear Regression</a>
+See the wikipedia page on [Linear Regression](https://en.wikipedia.org/wiki/Linear_regression)
 
 Predicting Home Prices
 ----------------------
@@ -66,4 +66,4 @@ import axle.web._
 svg(errorPlot, "lrerror.svg")
 ```
 
-![lr error](../images/lrerror.svg)
+![lr error](/chapter/images/lrerror.svg)

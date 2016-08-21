@@ -4,7 +4,7 @@ title: Author
 permalink: /author/
 ---
 
-<img alt="Adam Pingel" src="http://www.gravatar.com/avatar/e6a25e87deb4da4ff6aa52d3376d3767.png"/>
+![Adam Pingel](http://www.gravatar.com/avatar/e6a25e87deb4da4ff6aa52d3376d3767.png)
 
 Adam Pingel is an Iowa native who wrote his first lines of code on an Apple ][ in 1983.
 
@@ -27,9 +27,9 @@ In September 2015 he became VP of Engineering at Ravel Law.
 
 For more background, see his accounts on:
 
-* <a href="http://www.linkedin.com/in/adampingel">LinkedIn</a>
-* <a href="http://stackoverflow.com/users/528536/adam-p">StackOverflow</a>
-* <a href="https://twitter.com/#!/pingel">@pingel on Twitter</a>
-* <a href="http://scholar.google.com/citations?user=xj0ZeKQAAAAJ&hl=en">Google Scholar</a>
+* [LinkedIn](http://www.linkedin.com/in/adampingel)
+* [StackOverflow](http://stackoverflow.com/users/528536/adam-p)
+* [@pingel](https://twitter.com/#!/pingel) on Twitter
+* [Google Scholar](http://scholar.google.com/citations?user=xj0ZeKQAAAAJ&hl=en)
 
 He can be reached at adam@axle-lang.org.

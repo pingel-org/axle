@@ -13,10 +13,10 @@ and a right associative value constructor `*:`
 
 The "quanta" are
 Acceleration, Area, Angle, 
-<a href={"https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Distance.scala"}>Distance</a>,
-<a href={"https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Energy.scala"}>Energy</a>,
+[Distance](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Distance.scala),
+[Energy](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Energy.scala),
 Flow, Force, Frequency, Information, Mass, Money, MoneyFlow, MoneyPerForce, Power, Speed, Temperature,
-<a href={"https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Time.scala"}>Time</a>,
+[Time](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Time.scala),
 and Volume.
 Axle's values are represented in such a way that a value's "quantum" is present in the type,
 meaning that nonsensical expressions like `mile + gram` can be rejected at compile time.
@@ -131,7 +131,7 @@ Conversion
 
 A Quantum defines a directed graph, where the UnitsOfMeasurement
 are the vertices, and the Conversions define the directed edges.
-See the <a href={"/graph.html"}>Graph</a> package for more on how graphs work.
+See the [Graph](/chapter/graph/) package for more on how graphs work.
 
 Quantities can be converted into other units of measurement.
 This is possible as long as 1) the values are in the same

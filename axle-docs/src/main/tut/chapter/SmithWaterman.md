@@ -5,7 +5,7 @@ permalink: /chapter/smith_waterman/
 ---
 
 See the Wikipedia page on the
-<a href="https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm">Smith-Waterman</a> algorithm.
+[Smith-Waterman](https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm) algorithm.
 
 Example
 -------

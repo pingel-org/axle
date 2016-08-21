@@ -93,4 +93,4 @@ Observe rolls of a die
 (1 to 10) map { i => utfD6.observe }
 ```
 
-See also <a href="TwoDice.md">Two Dice</a> examples.
+See also [Two Dice](/chapter/two_dice/) examples.

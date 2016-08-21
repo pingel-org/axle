@@ -15,7 +15,7 @@ The `axle.algebra` package defines several categories of typeclasses:
 * visualization: Tics, Plottable
 
 Axioms are defined in the
-<a href="https://github.com/axlelang/axle/tree/master/axle-core/src/main/scala/axle/algebra/laws">axle.algebra.laws</a> package
-as <a href="http://scalacheck.org/">ScalaCheck</a> properties.
+[axle.algebra.laws](https://github.com/axlelang/axle/tree/master/axle-core/src/main/scala/axle/algebra/laws) package
+as [ScalaCheck](http://scalacheck.org/) properties.
 
-They are organized with <a href="https://github.com/typelevel/discipline">Discipline</a>.
+They are organized with [Discipline](https://github.com/typelevel/discipline).

@@ -9,7 +9,7 @@ Axle as a dependency of an SBT project.
 Usage
 -----
 
-1. Install <a href="https://github.com/harrah/xsbt/wiki/Getting-Started-Setup">sbt</a>
+1. Install [sbt](https://github.com/harrah/xsbt/wiki/Getting-Started-Setup)
 2. Create a simple sbt project directory structure
 
 ```bash
@@ -72,4 +72,4 @@ In addition to `axle-core` the artifacts `axle-algorithms`, `axle-games`,
 `axle-visualize`, `axle-jblas`, `axle-joda`, and `axle-jung`
 are also published to Sonatype.
 
-See the [Road Map](../RoadMap.md) for more information on the release schedule.
+See the [Road Map](/road_map/) for more information on the release schedule.

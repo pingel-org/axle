@@ -6,7 +6,7 @@ permalink: /chapter/pythagorean_means/
 
 Arithmetic, Geometric, and Harmonic Means are all 'Pythagorean'.
 
-See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Pythagorean_means">Pythagorean Means</a>
+See the wikipedia page on [Pythagorean Means](https://en.wikipedia.org/wiki/Pythagorean_means)
 for more.
 
 Arithmetic, Geometric, and Harmonic Mean Examples
@@ -36,7 +36,7 @@ harmonicMean(List(2d, 3d, 4d, 5d))
 Generalized Mean
 ----------------
 
-See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Generalized_mean">Generalized Mean</a>.
+See the wikipedia page on [Generalized Mean](https://en.wikipedia.org/wiki/Generalized_mean).
 
 When the parameter `p` is 1, it is the arithmetic mean.
 At -1 it is the harmonic mean.

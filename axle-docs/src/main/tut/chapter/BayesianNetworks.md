@@ -4,7 +4,7 @@ title: Bayesian Networks
 permalink: /chapter/bayesian_networks/
 ---
 
-See the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Bayesian_network">Bayesian networks</a>
+See the Wikipedia page on [Bayesian networks](https://en.wikipedia.org/wiki/Bayesian_network)
 
 
 Alarm Example

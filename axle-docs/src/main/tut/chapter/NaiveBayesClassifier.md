@@ -63,5 +63,5 @@ val perf = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational,
 string(perf)
 ```
 
-See <a href="http://en.wikipedia.org/wiki/Precision_and_recall">Precision and Recall</a>
+See [Precision and Recall](http://en.wikipedia.org/wiki/Precision_and_recall)
 for the definition of the performance metrics.

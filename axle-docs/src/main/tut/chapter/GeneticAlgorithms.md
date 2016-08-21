@@ -4,7 +4,7 @@ title: Genetic Algorithms
 permalink: /chapter/genetic_algorithms/
 ---
 
-See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Genetic_algorithm">Genetic Algorithms</a>
+See the wikipedia page on [Genetic Algorithms](https://en.wikipedia.org/wiki/Genetic_algorithm)
 
 Example
 -------
