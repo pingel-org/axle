@@ -124,15 +124,15 @@ More Resources
 
 * [Installation](/chapter/installation/) notes
 * [Source code](https://github.com/axlelang/axle) on github
-* Current build status on Travis: <a href="http://travis-ci.org/axlelang/axle"><img src="https://secure.travis-ci.org/axlelang/axle.png" alt="Build Status"/></a>
-* <a href="http://codecov.io/github/axlelang/axle?branch=master"><img src="http://codecov.io/github/axlelang/axle/coverage.svg?branch=master"/></a>
+* Current build status on Travis [![Build status](https://secure.travis-ci.org/axlelang/axle.png)](http://travis-ci.org/axlelang/axle)
+* Code coverage [![codecov](http://codecov.io/github/axlelang/axle?branch=master)](http://codecov.io/github/axlelang/axle/coverage.svg?branch=master)
 * [Scaladoc](/scaladoc)
 * [axle-user](https://groups.google.com/forum/#!forum/axle-user) google group
-* Join the chat on the gitter channel: <a href="https://gitter.im/axlelang/axle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg"/></a> https://gitter.im/axlelang/axle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+* Join the chat on the gitter channel: [![gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/axlelang/axle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * [@axledsl](https://twitter.com/axledsl) twitter handle
 * [AxleLang YouTube Channel](http://www.youtube.com/user/axlelang)
 * Other related [Videos](/videos/)
-* Waffle project management: <a href="http://waffle.io/axlelang/axle"><img src="https://badge.waffle.io/axlelang/axle.png?label=ready&title=Ready" alt="Stories in Ready"/></a>
+* Waffle project management: [![Stories in Ready](https://badge.waffle.io/axlelang/axle.png?label=ready&title=Ready)](http://waffle.io/axlelang/axle)
 * [Project](/about/) background
 * See the [Road Map](/road_map/) for more information on the release schedule and priorities
 * [Author](/author/) background
