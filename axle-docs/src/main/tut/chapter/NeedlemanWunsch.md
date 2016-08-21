@@ -1,0 +1,53 @@
+---
+layout: page
+title: Needleman-Wunsch
+permalink: /chapter/needleman_wunsch/
+---
+
+See the Wikipedia page on the 
+[Needleman-Wunsch](https://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm) algorithm.
+
+Example
+-------
+
+Setup:
+
+```tut:book:silent
+import axle.bio._
+import org.jblas.DoubleMatrix
+import NeedlemanWunsch.alignmentScore
+import NeedlemanWunsch.optimalAlignment
+import NeedlemanWunsch.Default._
+
+implicit val laJblasDouble = {
+  import spire.implicits.DoubleAlgebra
+  axle.jblas.linearAlgebraDoubleMatrix[Double]
+}
+
+val dna1 = "ATGCGGCC"
+val dna2 = "ATCGCCGG"
+```
+
+DNA Sequence Alignment
+
+```tut:book
+val nwAlignment =
+  optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](
+    dna1, dna2, similarity, gap, gapPenalty)
+```
+
+Score aligment
+
+```tut:book
+import NeedlemanWunsch.alignmentScore
+
+alignmentScore(nwAlignment._1, nwAlignment._2, gap, similarity, gapPenalty)
+```
+
+Compute distance
+
+```tut:book
+val space = NeedlemanWunschMetricSpace[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
+
+space.distance(dna1, dna2)
+```
