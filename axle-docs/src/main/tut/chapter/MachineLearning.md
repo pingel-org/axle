@@ -7,7 +7,7 @@ permalink: /chapter/machine_learning/
 Algorithms
 ----------
 
-* [Linear Regression](LinearRegression.md)
-* [K-Means Clustering](KMeansClustering.md)
-* [Naive Bayes Clustering](NaiveBayesClassifier.md)
-* [Genetic Algorithms](GeneticAlgorithms.md)
+* [Linear Regression](/chapter/linear_regression/)
+* [K-Means Clustering](/chapter/k_means_clustering/)
+* [Naive Bayes Clustering](/chapter/naive_bayes/)
+* [Genetic Algorithms](/chapter/genetic_algorithms/)

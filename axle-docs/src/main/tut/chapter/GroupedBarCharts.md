@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Grouped Bar Charts
-permalink: /chapter/Grouped Bar Charts/
+permalink: /chapter/grouped_bar_charts/
 ---
 
 Two-dimensional grouped bar charts

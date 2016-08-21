@@ -24,9 +24,9 @@ svg(plot, "plot.svg")
 Visualizations
 --------------
 
-* [Bar Charts](BarCharts.md)
-* [Grouped Bar Charts](GroupedBarCharts.md)
-* [Plots](Plots.md)
+* [Bar Charts](/chapter/bar_charts/)
+* [Grouped Bar Charts](/chapter/grouped_bar_charts/)
+* [Plots](/chapter/plots/)
 
 Animation
 ---------

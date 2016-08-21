@@ -38,4 +38,4 @@ string(entropy(coin(Rational(7, 10))))
 string(H(coin()))
 ```
 
-See also the [Coin Entropy](CoinEntropy.md) example.
+See also the [Coin Entropy](/chapter/entropy_biased_coins/) example.
