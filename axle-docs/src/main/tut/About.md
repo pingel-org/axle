@@ -1,8 +1,8 @@
 ---
 layout: page
-title: Project
+title: About
 in_header: true
-permalink: /project/
+permalink: /about/
 ---
 
 αχλε

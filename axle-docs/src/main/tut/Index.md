@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Axle
+title: Index
 in_header: true
 permalink: /
 ---
@@ -158,7 +158,7 @@ Witnesses for [Spark](https://spark.apache.org/).
 More Resources
 ==============
 
-* [Installation](/chapter/Installation) notes
+* [Installation](/chapter/installation/) notes
 * [Source code](https://github.com/axlelang/axle) on github
 * Current build status on Travis: <a href="http://travis-ci.org/axlelang/axle"><img src="https://secure.travis-ci.org/axlelang/axle.png" alt="Build Status"/></a>
 * <a href="http://codecov.io/github/axlelang/axle?branch=master"><img src="http://codecov.io/github/axlelang/axle/coverage.svg?branch=master"/></a>
@@ -169,7 +169,7 @@ More Resources
 * [AxleLang YouTube Channel](http://www.youtube.com/user/axlelang)
 * Other related [Videos](/videos/)
 * Waffle project management: <a href="http://waffle.io/axlelang/axle"><img src="https://badge.waffle.io/axlelang/axle.png?label=ready&title=Ready" alt="Stories in Ready"/></a>
-* [Project](/project/) background
+* [Project](/about/) background
 * See the [Road Map](/road_map/) for more information on the release schedule and priorities
 * [Author](/author/) background
 
