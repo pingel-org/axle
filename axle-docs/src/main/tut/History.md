@@ -1,8 +1,7 @@
 ---
 layout: page
-title: About
-in_header: true
-permalink: /about/
+title: History
+permalink: /history/
 ---
 
 αχλε
@@ -17,7 +16,8 @@ are secondary goals.
 The name "axle" was originally chosen because it sounds like "Haskell".
 Given the use of UTF symbols, I tried spelling it using Greek letters to get "αχλε".
 It turns out that this is the Etruscan spelling of
-[Achilles](http://en.wikipedia.org/wiki/File:Etruscan_mural_achilles_Troilus.gif)
+[Achilles](http://en.wikipedia.org/wiki/Achilles)
+![Achilles](http://en.wikipedia.org/wiki/File:Etruscan_mural_achilles_Troilus.gif)
 
 Follow [@axledsl](https://twitter.com/axledsl) on Twitter.
 
@@ -81,3 +81,7 @@ The text I was using at the time was
 Based on notes from [Ed Stabler](http://www.linguistics.ucla.edu/people/stabler/)'s
 graduate courses on language evolution and
 [computational linguistics](http://www.linguistics.ucla.edu/people/stabler/212-08.pdf) at UCLA.
+
+### Author
+
+See the [author](/author/) page for more about the author.
