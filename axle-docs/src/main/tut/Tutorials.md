@@ -50,6 +50,9 @@ Algorithms
 * [Bioinformatics](/tutorial/bioinformatics/) DNA Sequence alignment algorithms
   * [Smith Waterman](/tutorial/smith_waterman/)
   * [Needleman Wunsch](/tutorial/needleman_wunsch/)
+* Chaos Theory
+  * [Logistic Map](/tutorial/logistic_map/)
+  * [Mandelbrot Set](/tutorial/mandelbrot/)
 * Data sets from `axle.data`
   * Astronomy
   * Evolution
