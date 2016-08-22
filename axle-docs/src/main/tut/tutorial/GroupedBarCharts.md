@@ -22,36 +22,48 @@ val sales = Map(
 )
 ```
 
-Can be grouped in two ways to produce bar charts:
+Shared imports
 
-```tut:book
+```tut:silent
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.implicits.StringOrder
 import axle.visualize.BarChartGrouped
+```
 
+The data can be grouped in two ways to produce bar charts:
+
+```tut:book
 val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
   sales,
   title = Some("fruit sales")
 )
+```
 
+Create the SVG
+
+```tut:book
 import axle.web._
+
 svg(chart, "barchart1.svg")
 ```
 
 ![barchart1](/tutorial/images/barchart1.svg)
 
-Or:
+Or alternatively
 
 ```tut:book
-import spire.implicits.DoubleAlgebra
-
 val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double]](
   sales map { case (k, v) => (k._2, k._1) -> v},
   title = Some("fruit sales")
 )
+```
 
+Create the second SVG
+
+```
 import axle.web._
+
 svg(chart, "barchart2.svg")
 ```
 

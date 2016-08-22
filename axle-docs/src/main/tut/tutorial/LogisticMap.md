@@ -22,7 +22,7 @@ val scatter = for {
 } yield (λ, p)
 ```
 
-Define visualization
+Define a scatterplot visualization
 
 ```tut:book
 import axle.visualize._
@@ -30,7 +30,7 @@ import axle.visualize._
 val sp = ScatterPlot(scatter.toSet, pointDiameter=1)
 ```
 
-Create SVG
+Create the SVG
 
 ```tut:book
 import axle.web._

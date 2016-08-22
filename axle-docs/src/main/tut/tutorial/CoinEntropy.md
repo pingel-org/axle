@@ -56,10 +56,11 @@ val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
   title = Some("Entropy"))
 ```
 
-Export to SVG
+Create the SVG
 
 ```tut:book
 import axle.web._
+
 svg(plot, "coinentropy.svg")
 ```
 

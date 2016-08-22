@@ -11,7 +11,7 @@ Enriched GenTraversable
 
 Imports
 
-```tut:book
+```tut:silent
 import axle._
 import spire.implicits._
 import spire.optional.unicode._

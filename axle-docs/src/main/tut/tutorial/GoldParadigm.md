@@ -11,7 +11,7 @@ Example
 
 Imports
 
-```tut:book:silent
+```tut:silent
 import axle._
 import axle.lx._
 import Gold._
@@ -20,7 +20,7 @@ import spire.implicits._
 
 Setup
 
-```tut:book:silent
+```tut:silent
 val mHi = Morpheme("hi")
 val mIm = Morpheme("I'm")
 val mYour = Morpheme("your")
@@ -42,7 +42,7 @@ val ɸ = MemorizingLearner()
 
 Usage
 
-```    
+```tut:book
 ɸ.guesses(T)
  .find(_.ℒ === ℒ)
  .map(finalGuess => "well done, ɸ")

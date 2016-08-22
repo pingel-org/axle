@@ -33,7 +33,7 @@ Algorithms
 "org.axle-lang" %% "axle-algorithms" % "releaseVersion"
 ```
 
-* [Machine Learning](/tutorial/machine_earning/)
+* [Machine Learning](/tutorial/machine_learning/)
   * [Linear Regression](/tutorial/linear_regression/)
   * [K-Means Clustering](/tutorial/k_means_clustering/)
   * [Naive Bayes Clustering](/tutorial/naive_bayes/)
@@ -66,10 +66,10 @@ Visualizations
 "org.axle-lang" %% "axle-visualize" % "releaseVersion"
 ```
 
-* [Visualize](/tutorial/Visualize)
-  * [Plots](/tutorial/Plots)
-  * [Bar Charts](/tutorial/BarCharts)
-  * [Grouped Bar Charts](/tutorial/GroupedBarCharts)
+* [Visualize](/tutorial/visualize/)
+  * [Plots](/tutorial/plots/)
+  * [Bar Charts](/tutorial/bar_charts/)
+  * [Grouped Bar Charts](/tutorial/grouped_bar_charts/)
 
 Games
 =====
@@ -78,6 +78,6 @@ Games
 "org.axle-lang" %% "axle-games" % "releaseVersion"
 ```
 
-* [Tic Tac Toe](/tutorial/TicTacToe)
-* [Poker](/tutorial/Poker)
+* [Tic Tac Toe](/tutorial/tic_tac_toe/)
+* [Poker](/tutorial/poker/)
 

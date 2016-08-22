@@ -80,11 +80,12 @@ val bn = BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
     M -> mFactor))
 ```
 
-An AWT visualization is available with:
+Create an SVG visualization
 
 ```tut:book
 import axle.visualize._
 import axle.web._
+
 svg(bn, "alarmbayes.svg")
 ```
 

@@ -11,7 +11,9 @@ Time-series plot example
 
 `axle.visualize.Plot`
 
-```tut:book
+Imports
+
+```tut:silent
 import axle._
 import axle.visualize._
 import org.joda.time.DateTime
@@ -20,7 +22,11 @@ import scala.collection.immutable.TreeMap
 import scala.math.sin
 import scala.util.Random.nextDouble
 import axle.joda.dateTimeOrder
+```
 
+Generate the time-series to plot
+
+```tut:book
 val now = new DateTime()
 
 def randomTimeSeries(i: Int) = {
@@ -35,8 +41,13 @@ def randomTimeSeries(i: Int) = {
 val waves = (0 until 20).map(randomTimeSeries)
 
 import axle.joda.dateTimeZero
-implicit val zeroDT = dateTimeZero(now)
 
+implicit val zeroDT = dateTimeZero(now)
+```
+
+Imports
+
+```tut:silent
 import axle.visualize.Plot
 import spire.implicits.DoubleAlgebra
 import axle.algebra.Plottable.doublePlottable
@@ -44,15 +55,24 @@ import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
+```
 
+Define the visualization
+
+```tut:book
 val plot = Plot(
   waves,
   title = Some("Random Waves"),
   xAxis = Some(0d),
   xAxisLabel = Some("time (t)"),
   yAxisLabel = Some("A sin(ωt + φ)"))
+```
 
+Create the SVG
+
+```tut:book
 import axle.web._
+
 svg(plot, "waves.svg")
 ```
 

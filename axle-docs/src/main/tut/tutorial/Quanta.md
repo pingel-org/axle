@@ -27,7 +27,7 @@ Additionally, various values within the Quantum objects are imported.
 This package uses the definition of "Quantum" as "something that can
 be quantified or measured".
 
-```tut:book
+```tut:silent
 import axle._
 import axle.quanta._
 import axle.jung.directedGraphJung
@@ -45,7 +45,7 @@ Distance().wikipediaUrl
 
 A visualization of each Quantum (like the one for Distance shown above) is produced with:
 
-```tut:book
+```tut:silent
 import axle.algebra.modules.doubleRationalModule
 import spire.implicits.DoubleAlgebra
 import axle.jung.directedGraphJung
@@ -63,11 +63,6 @@ import axle.web._
 svg(distanceConverter.conversionGraph, "Distance.svg")
 ```
 
-// TODO
-// import axle.syntax.directedgraph.directedGraphOps
-// import axle.syntax.functor.functorOps
-// val g = cg.mapEdges(f => f(1d))
-
 Units
 -----
 
@@ -77,7 +72,7 @@ graph.
 The conversion graphs should be placed in implicit scope.
 Within each are defined units of measurement which can be imported.
 
-```tut:book
+```tut:silent
 import spire.implicits.DoubleAlgebra
 
 implicit val massConverter = Mass.converterGraphK2[Double, DirectedSparseGraph]

@@ -19,7 +19,7 @@ val sales = Map(
 )
 ```
 
-Can be visualized as a bar chart with:
+Define a bar chart visualization
 
 ```tut:book
 import spire.implicits.DoubleAlgebra
@@ -30,7 +30,11 @@ val chart = BarChart[String, Double, Map[String, Double]](
   sales,
   title = Some("fruit sales")
 )
+```
 
+Create the SVG
+
+```tut:book
 import axle.web._
 svg(chart, "fruitsales.svg")
 ```

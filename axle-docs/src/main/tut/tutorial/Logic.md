@@ -9,16 +9,17 @@ Conjunctive Normal Form Converter
 
 Imports
 
-```tut:book
+```tut:silent
 import axle.string
 import axle.logic._
 import FirstOrderPredicateLogic._
-import SamplePredicates._
 ```
 
 Example CNF conversion
 
 ```tut:book
+import SamplePredicates._
+
 val s = ∃('z ∈ Z, (A('z) ∧ G('z)) ⇔ (B('z) ∨ H('z)))
 
 val (cnf, skolemMap) = conjunctiveNormalForm(s)

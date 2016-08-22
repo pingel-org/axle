@@ -30,12 +30,24 @@ implicit val informationConverter = Information.converterGraphK2[Double, Directe
 
 Usage
 
+Entropy of fair 6-sided die
+
 ```tut:book
-string(H(die(6)))
+val d6 = die(6)
 
-string(entropy(coin(Rational(7, 10))))
-
-string(H(coin()))
+string(H(d6))
 ```
 
-See also the [Coin Entropy](/tutorial/entropy_biased_coins/) example.
+Entropy of fair and biased coins
+
+```tut:book
+val fairCoin = coin()
+
+string(H(fairCoin))
+
+val biasedCoin = coin(Rational(7, 10))
+
+string(entropy(biasedCoin))
+```
+
+See also the [Coin Entropy](/tutorial/entropy_biased_coin/) example.

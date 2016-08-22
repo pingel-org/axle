@@ -11,7 +11,7 @@ Uniform Distribution
 
 Imports
 
-```tut:book
+```tut:silent
 import axle._
 import axle.stats._
 import spire.math._
@@ -50,6 +50,7 @@ The `observe` method selects a value for the random variable based on the distri
 
 ```tut:book
 (1 to 10) map { i => fairCoin.observe }
+
 (1 to 10) map { i => biasedCoin.observe }
 ```
 
@@ -69,6 +70,7 @@ P((flip1 is 'HEAD) | (flip2 is 'TAIL)).apply()
 ```
 
 Dice examples
+-------------
 
 Setup
 
@@ -89,7 +91,7 @@ P((d6a isnt '⚃)).apply()
 
 Observe rolls of a die
 
-```
+```tut:book
 (1 to 10) map { i => utfD6.observe }
 ```
 
