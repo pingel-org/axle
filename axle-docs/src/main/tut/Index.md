@@ -9,7 +9,7 @@ Axle is an open-source Scala-embedded domain specific language for scientific co
 
 * [Tutorials](/tutorial/) demonstrate the functionality of the three primary jars
 * [Spokes](/spokes/) are support for 3rd party jars
-* [Installation](/chapter/installation/) notes
+* [Installation](/tutorial/installation/) notes
 
 For additional context see
 

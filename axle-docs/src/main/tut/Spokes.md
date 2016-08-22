@@ -14,7 +14,7 @@ JBLAS
 "org.axle-lang" %% "axle-jblas" % "releaseVersion"
 ```
 
-* [Matrix](/chapter/Matrix) LinearAlgebra and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/). Includes Principal Component Analysis (PCA).
+* [Matrix](/tutorial/Matrix) LinearAlgebra and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/). Includes Principal Component Analysis (PCA).
 
 JODA
 ====
@@ -32,7 +32,7 @@ JUNG
 "org.axle-lang" %% "axle-jung" % "releaseVersion"
 ```
 
-* [Graph](/chapter/Graph) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
+* [Graph](/tutorial/Graph) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
 
 Spark
 =====
