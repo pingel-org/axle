@@ -5,9 +5,14 @@ in_header: true
 permalink: /
 ---
 
+| ------- | ------- | ------- |
+| ![mandelbrot](/tutorial/images/mandelbrot.png) | ![coin entropy](/tutorial/images/coinentropy.svg) | ![alarm bayes](/tutorial/images/alarmbayes.svg) |
+| ![waves](/tutorial/images/waves.svg) | ![poker hands](/tutorial/images/pokerhands.svg) | ![distribution monad](/tutorial/images/distributionMonad.svg) |
+| ![k means](/tutorial/images/kmeans.svg) | ![lrerror](/tutorial/images/lrerror.svg) | ![fruit sales](/tutorial/images/fruitsales.svg) |
+
 Axle is an open-source Scala-embedded domain specific language for scientific computing.
 
-* [Tutorials](/tutorial/) demonstrate the functionality of the primary jars
+* [Tutorials](/tutorial/) demonstrate the functionality of the three primary jars
 * [Spokes](/spokes/) are support for 3rd party jars
 * [Installation](/tutorial/installation/) notes
 
@@ -18,4 +23,3 @@ For additional context see
 * [Author](/author/) background
 * Other related [Videos](/videos/)
 * External [resources](/resources/) and tools
-
