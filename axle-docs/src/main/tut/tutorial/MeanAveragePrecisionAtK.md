@@ -6,7 +6,7 @@ permalink: /tutorial/map_at_k/
 
 See the page on [mean average precision](https://www.kaggle.com/wiki/MeanAveragePrecision) at Kaggle
 
-``tut:silent
+```tut:silent
 import spire.math.Rational
 import axle.ml.RankedClassifierPerformance._
 ```
