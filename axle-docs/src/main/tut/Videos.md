@@ -4,6 +4,14 @@ title: Videos
 permalink: /videos/
 ---
 
+Talk at Scala by the Bay 2015
+<iframe
+  width="320"
+  height="195"
+  src="http://www.youtube.com/embed/Y6NiPx-YpdE"
+  frameborder="0">
+</iframe>
+
 Scala Introduction using the REPL
 <iframe
   width="320"

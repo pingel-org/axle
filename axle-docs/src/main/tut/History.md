@@ -17,7 +17,7 @@ The name "axle" was originally chosen because it sounds like "Haskell".
 Given the use of UTF symbols, I tried spelling it using Greek letters to get "αχλε".
 It turns out that this is the Etruscan spelling of
 [Achilles](http://en.wikipedia.org/wiki/Achilles)
-![Achilles](http://en.wikipedia.org/wiki/File:Etruscan_mural_achilles_Troilus.gif)
+![Achilles](https://upload.wikimedia.org/wikipedia/commons/4/4c/Etruscan_mural_achilles_Troilus.gif) ([image context](http://en.wikipedia.org/wiki/File:Etruscan_mural_achilles_Troilus.gif))
 
 Follow [@axledsl](https://twitter.com/axledsl) on Twitter.
 
@@ -44,7 +44,7 @@ The inimitable [Artificial Intelligence: A Modern Approach](http://www.amazon.co
 
 ### Statistics, Information Theory, Bayesian Networks, &amp; Causality
 
-The Information Theory code is based on [Thomas Cover](http://www.stanford.edu/~cover/)'s
+The Information Theory code is based on [Thomas Cover](https://en.wikipedia.org/wiki/Thomas_M._Cover)'s
 [Elements of Information Theory](http://www.amazon.com/Elements-Information-Theory-Telecommunications-Processing/dp/0471241954/ref=sr_1_1?ie=UTF8),)
 and his EE 376A course.
 
@@ -80,7 +80,7 @@ The text I was using at the time was
 
 Based on notes from [Ed Stabler](http://www.linguistics.ucla.edu/people/stabler/)'s
 graduate courses on language evolution and
-[computational linguistics](http://www.linguistics.ucla.edu/people/stabler/212-08.pdf) at UCLA.
+computational linguistics (Lx 212 08) at UCLA.
 
 ### Author
 

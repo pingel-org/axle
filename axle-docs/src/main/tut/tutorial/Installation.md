@@ -9,7 +9,7 @@ Axle as a dependency of an SBT project.
 Usage
 -----
 
-1. Install [sbt](https://github.com/harrah/xsbt/wiki/Getting-Started-Setup)
+1. Install [sbt](http://www.scala-sbt.org/)
 2. Create a simple sbt project directory structure
 
 ```bash
@@ -54,7 +54,7 @@ Axle works well interactively -- especially during prototyping, debugging, and t
 Releases
 --------
 
-Version snapshotVersion is hosted on the Sonatype snapshot repo (https://oss.sonatype.org/content/repositories/snapshots).
+Version snapshotVersion is hosted on the [Sonatype snapshot repo](https://oss.sonatype.org/content/repositories/snapshots).
 The schedule for publishing snapshot versions is irregular.
 The full dependency is:
 
