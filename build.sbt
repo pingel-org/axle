@@ -219,6 +219,8 @@ lazy val axleTest = Project(
 ).settings(
   name := "axle-test",
   libraryDependencies ++= Seq(
+    "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+    "com.typesafe.akka" %% "akka-stream-experimental" % akkaStreamVersion,
     "org.jblas" % "jblas" % jblasVersion,
     "joda-time" % "joda-time" % jodaTimeVersion,
     "org.joda" % "joda-convert" % jodaConvertVersion,
