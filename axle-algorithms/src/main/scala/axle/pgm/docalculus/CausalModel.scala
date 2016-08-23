@@ -5,7 +5,6 @@ import axle.stats.Distribution
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.BooleanStructure
-import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import axle.syntax.directedgraph._
 
@@ -30,8 +29,6 @@ trait PFunction[T, N] {
 case class CausalModel[T: Eq, N: Field, DG](
     val name: String, graph: DG)(
         implicit dg: DirectedGraph[DG, CausalModelNode[T, N], CausalModelEdge]) {
-
-  import graph._
 
   def duplicate: CausalModel[T, N, DG] = ???
 

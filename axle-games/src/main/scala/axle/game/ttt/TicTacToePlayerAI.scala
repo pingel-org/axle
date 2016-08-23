@@ -1,8 +1,6 @@
 package axle.game.ttt
 
-import axle.algebra._
 import spire.math._
-import spire.implicits._
 
 case class AITicTacToePlayer(id: String, description: String = "minimax")(implicit ttt: TicTacToe)
   extends TicTacToePlayer() {

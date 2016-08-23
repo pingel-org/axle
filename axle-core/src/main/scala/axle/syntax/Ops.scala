@@ -4,7 +4,6 @@ import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
 import axle.algebra.Endofunctor
 import axle.algebra.Finite
-import axle.algebra.FunctionPair
 import axle.algebra.Functor
 import axle.algebra.Indexed
 import axle.algebra.MapFrom
@@ -15,7 +14,6 @@ import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
 import axle.algebra.Zero
 import spire.algebra.Eq
-import spire.algebra.Ring
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) {
 

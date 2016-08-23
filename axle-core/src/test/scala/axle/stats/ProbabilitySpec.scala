@@ -2,11 +2,8 @@ package axle.stats
 
 import org.specs2.mutable._
 
-import axle.stats._
 import axle.game.Dice._
 import spire.math._
-import spire.algebra._
-import spire.implicits._
 
 class ProbabilitySpec extends Specification {
 

@@ -1,7 +1,5 @@
 package axle.algebra.laws
 
-import scala.annotation.implicitNotFound
-
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
 import org.scalacheck.Prop.forAll

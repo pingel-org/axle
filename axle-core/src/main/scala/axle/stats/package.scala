@@ -13,10 +13,6 @@ import axle.algebra.Aggregatable
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
-import axle.stats.Case
-import axle.stats.Distribution
-import axle.stats.Distribution0
-import axle.stats.EnrichedCaseGenTraversable
 import axle.syntax.functor.functorOps
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Eq
@@ -24,12 +20,10 @@ import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Ring
-//import spire.implicits.DoubleAlgebra
 import spire.implicits.additiveGroupOps
 import spire.implicits.convertableOps
 import spire.implicits.eqOps
 import spire.implicits.literalIntAdditiveGroupOps
-import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps

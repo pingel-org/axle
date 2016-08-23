@@ -1,7 +1,6 @@
 package axle.quanta
 
 import axle.algebra.Bijection
-import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.MultiplicativeMonoid
 

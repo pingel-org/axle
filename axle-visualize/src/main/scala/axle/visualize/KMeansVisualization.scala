@@ -2,7 +2,6 @@ package axle.visualize
 
 import scala.Stream.continually
 
-import axle.algebra.LinearAlgebra
 import axle.algebra.Tics
 import axle.ml.KMeans
 import axle.syntax.linearalgebra.matrixOps
@@ -13,10 +12,8 @@ import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import axle.syntax.LinearAlgebraOps
 import axle.syntax.linearalgebra._
 import spire.implicits.DoubleAlgebra
-import spire.implicits.eqOps
 
 case class KMeansVisualization[D, F, G, M](
     classifier: KMeans[D, F, G, M],

@@ -4,8 +4,6 @@ import axle.quanta.VolumeConverter
 
 case class Lakes()(implicit vc: VolumeConverter[Double]) {
 
-  import vc._
-
   /**
    * http://en.wikipedia.org/wiki/Great_Lakes
    */

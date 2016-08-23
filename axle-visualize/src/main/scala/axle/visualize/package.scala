@@ -4,12 +4,10 @@ import axle.algebra.DirectedGraph
 import axle.quanta.Angle
 import axle.quanta.UnitOfMeasurement
 import axle.visualize.Color._
-import spire.math.Rational
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import axle.jung.directedGraphJung
 
 package object visualize {

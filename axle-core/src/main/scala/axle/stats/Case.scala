@@ -1,7 +1,5 @@
 package axle.stats
 
-import scala.collection.GenTraversable
-
 import axle.algebra.Π
 import spire.algebra.Field
 import spire.implicits.additiveGroupOps

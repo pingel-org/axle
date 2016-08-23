@@ -1,7 +1,6 @@
 package axle.awt
 
 import java.awt.Dimension
-import java.awt.Font
 import java.awt.Graphics
 import java.awt.Graphics2D
 
@@ -13,9 +12,7 @@ import axle.actor.Defaults.askTimeout
 import axle.visualize.DataFeedProtocol.Fetch
 import axle.visualize.Fed
 import axle.visualize.Plot
-import axle.visualize.PlotDataView
 import axle.visualize.PlotView
-import axle.visualize.angleDouble
 import axle.visualize.element.DataLines
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key

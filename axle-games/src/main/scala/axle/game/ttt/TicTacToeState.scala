@@ -2,7 +2,6 @@ package axle.game.ttt
 
 import axle.string
 import axle.game._
-import axle.algebra._
 import spire.implicits._
 
 case class TicTacToeState(
@@ -81,4 +80,3 @@ case class TicTacToeState(
     TicTacToeState(player, board, qs)
 
 }
-

@@ -1,7 +1,5 @@
 package axle.stats
 
-import scala.collection.GenTraversable
-
 import spire.algebra.Field
 
 // Note: Actually enriching an Iterable (TODO fix)

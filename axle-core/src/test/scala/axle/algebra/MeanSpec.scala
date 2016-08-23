@@ -8,8 +8,6 @@ class Mean extends Specification {
     "work" in {
 
       import spire.math.Rational
-      import spire.math.RationalAlgebra
-      import spire.math.RationalIsField
 
       val m = arithmeticMean[Rational, List[Rational]](List(Rational(1), Rational(2), Rational(3)))
 
@@ -21,8 +19,6 @@ class Mean extends Specification {
     "work" in {
 
       import spire.math.Rational
-      import spire.math.RationalAlgebra
-      import spire.math.RationalIsField
 
       val m = harmonicMean[Rational, List[Rational]](List(Rational(1), Rational(2), Rational(4)))
 
@@ -34,7 +30,6 @@ class Mean extends Specification {
     "work" in {
 
       import spire.math.Real
-      import spire.implicits.DoubleAlgebra
 
       val m = geometricMean[Real, List[Real]](List(1d, 5d, 25d))
 

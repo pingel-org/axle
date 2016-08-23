@@ -1,7 +1,5 @@
 package axle.algebra
 
-import scala.annotation.elidable
-import scala.annotation.elidable.ASSERTION
 import scala.collection.JavaConverters.asScalaBufferConverter
 
 import org.scalacheck.Arbitrary

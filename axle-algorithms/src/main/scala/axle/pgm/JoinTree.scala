@@ -1,12 +1,9 @@
 package axle.pgm
 
-import axle.eqSet
 import axle.algebra.UndirectedGraph
-import axle.algebra.DirectedGraph
 import axle.stats.Distribution
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.implicits.StringOrder
 
 class JoinTreeEdge
 

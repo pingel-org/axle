@@ -3,9 +3,6 @@ package axle.pgm
 import scala.Stream.cons
 import scala.Stream.empty
 
-import axle.Show
-import axle.string
-import axle.HtmlFrom
 import axle.algebra.DirectedGraph
 import axle.algebra.UndirectedGraph
 import axle.stats.CaseIs
@@ -17,7 +14,6 @@ import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.implicits.IntAlgebra
-import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom

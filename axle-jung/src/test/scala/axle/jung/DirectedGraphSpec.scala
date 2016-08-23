@@ -5,9 +5,7 @@ import org.specs2.mutable.Specification
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.algebra.DirectedGraph
-import axle.syntax.directedgraph.directedGraphOps
 import axle.syntax.finite._
-import spire.implicits.StringOrder
 
 class DirectedGraphSpec extends Specification {
 

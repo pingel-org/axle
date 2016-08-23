@@ -1,13 +1,9 @@
 package axle.awt
 
-import java.awt.Dimension
-import java.awt.Graphics
-import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 
 import axle.visualize.Color
 import axle.visualize.PixelatedColoredArea
-import javax.swing.JPanel
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Witness not found for Image[${T}]")

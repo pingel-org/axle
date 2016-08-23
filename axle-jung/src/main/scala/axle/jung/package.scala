@@ -60,7 +60,6 @@ package object jung {
       import scala.collection.JavaConverters.asScalaBufferConverter
       import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
-      import axle.algebra.DirectedGraph
       import axle.enrichIndexedSeq
       import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
       import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -271,7 +270,6 @@ package object jung {
 
       import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
-      import axle.algebra.UndirectedGraph
       import axle.enrichIndexedSeq
       import edu.uci.ics.jung.graph.UndirectedSparseGraph
       import spire.algebra.Eq

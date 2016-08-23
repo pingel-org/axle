@@ -1,10 +1,8 @@
 package axle.game
 
 import axle.stats._
-import axle.game.Dice.die
 import spire.implicits.IntAlgebra
 import spire.math.Rational
-import spire.syntax.literals._
 
 object MontyHall {
 

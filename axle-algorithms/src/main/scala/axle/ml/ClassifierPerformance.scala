@@ -4,20 +4,10 @@ import axle.Show
 import axle._
 import axle.algebra.Σ
 import axle.algebra.Aggregatable
-import axle.algebra.LinearAlgebra
 import axle.algebra.Functor
-import axle.algebra.Finite
-import axle.algebra.SetFrom
-import axle.algebra.MapReducible
-import axle.algebra.MapFrom
-import axle.algebra.FunctionPair
-import axle.algebra.Semigroups._
 import axle.syntax.functor._
-import axle.syntax.finite._
-import spire.math._
 import spire.implicits._
 import spire.algebra._
-import spire.compat.ordering
 
 /**
  * ClassifierPerformance computes measures of classification performance

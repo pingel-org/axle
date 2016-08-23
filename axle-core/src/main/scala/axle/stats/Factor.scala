@@ -1,7 +1,5 @@
 package axle.stats
 
-import scala.xml.NodeSeq.seqToNodeSeq
-
 import axle.IndexedCrossProduct
 import axle.algebra.LinearAlgebra
 import spire.algebra.Eq

@@ -3,13 +3,10 @@ package axle.quanta
 import axle.Show
 import axle.string
 import axle.algebra.Functor
-import axle.syntax.directedgraph.directedGraphOps
 import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Order
-import spire.implicits.StringOrder
 import spire.implicits.eqOps
-import spire.implicits.multiplicativeSemigroupOps
 
 object UnittedQuantity {
 

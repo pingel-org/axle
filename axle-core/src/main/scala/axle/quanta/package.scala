@@ -1,17 +1,12 @@
 package axle
 
-import scala.language.reflectiveCalls
 
 import axle.algebra.DirectedGraph
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
-import axle.quanta.UnitConverter
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.UnittedQuantity
 import spire.algebra.AdditiveMonoid
-import spire.algebra.AdditiveSemigroup
 import spire.algebra.AdditiveGroup
 import spire.algebra.Eq
 import spire.algebra.Field
@@ -22,7 +17,6 @@ import spire.algebra.Rng
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.multiplicativeMonoidOps
 import spire.implicits.signedOps
 
 package object quanta {

@@ -2,7 +2,6 @@ package axle.stats
 
 import org.specs2.mutable._
 import spire.math._
-import spire.algebra._
 import spire.implicits._
 
 class Stats101 extends Specification {

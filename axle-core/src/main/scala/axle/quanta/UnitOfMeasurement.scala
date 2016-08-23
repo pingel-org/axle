@@ -2,8 +2,6 @@ package axle.quanta
 
 import axle.Show
 import spire.algebra.Eq
-import spire.implicits.StringOrder
-import spire.implicits.eqOps
 
 object UnitOfMeasurement {
 

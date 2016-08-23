@@ -6,7 +6,6 @@ import org.scalacheck.Prop.forAll
 import org.scalacheck.Prop.propBoolean
 import org.typelevel.discipline.Laws
 
-import axle.algebra.Functor
 import spire.algebra.Monoid
 import spire.algebra.Eq
 import spire.implicits.eqOps

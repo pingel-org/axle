@@ -4,9 +4,6 @@ import java.lang.Double.isInfinite
 import java.lang.Double.isNaN
 import scala.annotation.implicitNotFound
 
-import spire.algebra.Order
-import spire.algebra.Field
-import spire.algebra.Eq
 import spire.math.Rational
 
 @implicitNotFound("Witness not found for Plottable[${T}]")

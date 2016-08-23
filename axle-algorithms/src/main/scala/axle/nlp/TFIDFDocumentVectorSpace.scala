@@ -6,7 +6,6 @@ import axle.algebra.Aggregatable
 import axle.algebra.Σ
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.algebra.Ring
 import spire.implicits.convertableOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom

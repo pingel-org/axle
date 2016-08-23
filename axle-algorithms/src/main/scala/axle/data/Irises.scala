@@ -9,10 +9,7 @@ import scala.util.Try
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
-import axle.algebra.DirectedGraph
 import spire.algebra.Eq
-import spire.implicits.DoubleAlgebra
-import spire.implicits.moduleOps
 
 /**
  *

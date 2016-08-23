@@ -1,6 +1,5 @@
 package axle.stats
 
-import spire.math.Rational
 import org.specs2.mutable._
 import axle.algebra.arithmeticMean
 import spire.implicits.DoubleAlgebra

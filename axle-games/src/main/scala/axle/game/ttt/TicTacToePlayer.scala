@@ -3,7 +3,6 @@ package axle.game.ttt
 import axle.game._
 import spire.algebra.Eq
 import axle.Show
-import axle.string
 
 object TicTacToePlayer {
 

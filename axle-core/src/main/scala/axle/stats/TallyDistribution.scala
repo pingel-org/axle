@@ -13,7 +13,6 @@ import spire.implicits.eqOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.orderOps
 import axle.Show
 import axle.string
 

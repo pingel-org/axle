@@ -4,13 +4,9 @@ import scala.Vector
 
 import org.specs2.mutable.Specification
 
-import axle.algebra.DirectedGraph
 import axle.game.Dice.die
-import axle.quanta.Angle
 import axle.stats.Distribution0
 import axle.visualize.Color.blue
-import spire.algebra.Eq
-import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import spire.math.Rational
 

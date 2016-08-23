@@ -1,7 +1,5 @@
 package axle.stats
 
-import spire.math.pow
-import spire.math.sqrt
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 import spire.implicits.IntAlgebra
