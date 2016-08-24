@@ -70,7 +70,7 @@ package object awt {
 
     // see https://groups.google.com/forum/#!topic/akka-user/swhrgX6YobM
 
-    xs.runWith(Sink.foreach(println))
+    val rc = xs.runWith(Sink.foreach(println))
   }
 
   // draw2[Int](3, _ + 1, 700)
@@ -184,7 +184,7 @@ package object awt {
 
   def image2file[T: Image](t: T, filename: String, encoding: String): Unit = {
     val image = Image[T].image(t)
-    ImageIO.write(image, encoding, new File(filename))
+    val rc = ImageIO.write(image, encoding, new File(filename))
   }
 
   def png[T: Image](t: T, filename: String): Unit = image2file(t, filename, "PNG")
@@ -303,7 +303,7 @@ package object awt {
 
       import r._
 
-      fillColor.map(color => {
+      fillColor.foreach(color => {
         g2d.setColor(cachedColor(color))
         fillRectangle(
           g2d,
@@ -311,7 +311,7 @@ package object awt {
           Point2D(lowerLeft.x, lowerLeft.y),
           Point2D(upperRight.x, upperRight.y))
       })
-      borderColor.map(color => {
+      borderColor.foreach(color => {
         g2d.setColor(cachedColor(color))
         drawRectangle(
           g2d,
@@ -334,7 +334,7 @@ package object awt {
       import scaledArea._
       import java.awt.Color
 
-      tics.map({
+      tics foreach {
         case (y, label) => {
           val leftScaled = Point2D(minX, y)
           val leftUnscaled = framePoint(leftScaled)
@@ -344,7 +344,7 @@ package object awt {
           g2d.drawString(label, (leftUnscaled.x - fontMetrics.stringWidth(label) - 5).toInt, (leftUnscaled.y + fontMetrics.getHeight / 2).toInt)
           g2d.drawLine((leftUnscaled.x - 2).toInt, leftUnscaled.y.toInt, (leftUnscaled.x + 2).toInt, leftUnscaled.y.toInt)
         }
-      })
+      }
     }
 
   }
@@ -361,7 +361,7 @@ package object awt {
 
       val fontMetrics = g2d.getFontMetrics
 
-      tics map {
+      tics foreach {
         case (x, label) => {
           if (drawLines) {
             g2d.setColor(Color.lightGray)

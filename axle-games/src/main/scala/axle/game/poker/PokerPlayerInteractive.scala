@@ -29,7 +29,7 @@ Example moves:
   override def endGame(state: PokerState): Unit = {
     println()
     println(state.displayTo(state.player))
-    state.outcome.map(println)
+    state.outcome.foreach(println)
   }
 
   def userInputStream(): Stream[String] = {

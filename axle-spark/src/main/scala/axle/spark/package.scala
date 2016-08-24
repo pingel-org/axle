@@ -1,6 +1,5 @@
 package axle
 
-import scala.collection.GenTraversableOnce
 import scala.reflect.ClassTag
 
 import axle.algebra.Aggregatable
@@ -10,8 +9,6 @@ import axle.algebra.MapFrom
 import axle.algebra.MapReducible
 import axle.algebra.SetFrom
 
-import org.apache.spark.Partition
-import org.apache.spark.TaskContext
 import org.apache.spark.rdd.RDD
 
 import com.twitter.chill.MeatLocker
