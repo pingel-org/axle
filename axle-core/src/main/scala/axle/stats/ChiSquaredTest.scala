@@ -30,7 +30,7 @@ case class ChiSquaredTest[M](
    *    val dof = (table.height - 1) * (table.width - 1)
    */
 
-  def independent[M]: Boolean = χ2 < threshold
+  def independent: Boolean = χ2 < threshold
 
 }
 

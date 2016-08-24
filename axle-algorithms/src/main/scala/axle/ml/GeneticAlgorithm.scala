@@ -71,13 +71,13 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
    *
    */
 
-  def crossover[Z <: HList](h1: G, h2: G)(
-    implicit zipper: Zip.Aux[G :: G :: HNil, Z],
-    mapper: Mapper[Mixer.type, Z]) = (h1 zip h2) map Mixer
+  def crossover[X <: HList](h1: G, h2: G)(
+    implicit zipper: Zip.Aux[G :: G :: HNil, X],
+    mapper: Mapper[Mixer.type, X]) = (h1 zip h2) map Mixer
 
-  def mutate[Z <: HList](x: G, r: G)(
-    implicit zipper: Zip.Aux[G :: G :: HNil, Z],
-    mapper: Mapper[Mutator.type, Z]) = (x zip r) map Mutator
+  def mutate[X <: HList](x: G, r: G)(
+    implicit zipper: Zip.Aux[G :: G :: HNil, X],
+    mapper: Mapper[Mutator.type, X]) = (x zip r) map Mutator
 
   def live(population: IndexedSeq[(G, Double)], fitnessLog: List[(Double, Double, Double)]): (IndexedSeq[(G, Double)], List[(Double, Double, Double)]) = {
     val nextGen = (0 until populationSize).map(i => {

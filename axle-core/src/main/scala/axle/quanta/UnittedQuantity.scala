@@ -44,7 +44,7 @@ case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q]) {
     convert.convert(this, newUnit)
 
   // TODO
-  def over[QR, Q2, N](denominator: UnittedQuantity[QR, N]): UnitOfMeasurement[Q2] =
+  def over[QR, Q2, M](denominator: UnittedQuantity[QR, M]): UnitOfMeasurement[Q2] =
     UnitOfMeasurement[Q2]("TODO", "TODO", None)
 
 }

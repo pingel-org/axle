@@ -59,7 +59,7 @@ object Functor {
         is map f
     }
 
-  implicit def Function1Functor[Function1[A, B], A, B, C]: Functor[A => B, B, C, A => C] =
+  implicit def Function1Functor[F[A, B] <: Function1[A, B], A, B, C]: Functor[A => B, B, C, A => C] =
     new Functor[A => B, B, C, A => C] {
       def map(ab: A => B)(bc: B => C): A => C =
         bc compose ab
