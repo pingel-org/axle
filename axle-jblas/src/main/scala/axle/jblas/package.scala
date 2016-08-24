@@ -16,7 +16,6 @@ import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.NRoot
-import spire.algebra.Order
 import spire.algebra.Ring
 import spire.algebra.Rng
 import spire.implicits.convertableOps

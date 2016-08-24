@@ -9,7 +9,6 @@ class MatrixSpecification extends Specification {
   "DoubleJblasMatrix" should {
     "work" in {
 
-      import axle.syntax.endofunctor.endofunctorOps
       import axle.syntax.linearalgebra.matrixOps
       import spire.implicits.DoubleAlgebra
 
@@ -32,7 +31,6 @@ class MatrixSpecification extends Specification {
     "work" in {
 
       import axle.syntax.endofunctor.endofunctorOps
-      import axle.syntax.linearalgebra.matrixOps
       import spire.implicits.DoubleAlgebra
 
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
@@ -53,7 +51,6 @@ class MatrixSpecification extends Specification {
   "aside, atop, transpose" should {
     "work" in {
 
-      import axle.syntax.endofunctor.endofunctorOps
       import axle.syntax.linearalgebra.matrixOps
       import spire.implicits.DoubleAlgebra
 
