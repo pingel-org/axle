@@ -1,7 +1,7 @@
 
 # custom variables defined here are accessible in the templates via {{ site.myvariable }}.
 
-title: Axle Domain Specific Language
+title: Axle DSL
 email: adam@axle-lang.org
 description: > # this means to ignore newlines until "baseurl:"
   Axle Domain Specific Language

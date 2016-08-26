@@ -12,6 +12,8 @@ sed -i -e 's/snapshotVersion/0.2.4-SNAPSHOT/g' `find axle-docs/target/site/ -nam
 
 find axle-docs -name '*.md-e' | xargs rm
 
+cp -R axle-docs/src/site/css axle-docs/target/site/
+
 jekyll build --source axle-docs/target/site/ --destination ~/s3/axle-lang.org/
 
 (cd ~/s3/axle-lang.org/; python -m SimpleHTTPServer 8000)

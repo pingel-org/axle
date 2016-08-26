@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Architectue
+title: Architecture
 in_header: true
 permalink: /architecture/
 ---
