@@ -26,10 +26,6 @@ object Monad {
 
   final def apply[M[_]: Monad]: Monad[M] = implicitly[Monad[M]]
 
-  //  implicit def monadEq[M[_]]() = new Eq[Monad[M[_]]] {
-  //    def eqv(x: Monad[A], y: Monad[A]): Boolean = ???
-  //  }
-
   implicit val listMonad = new Monad[List] {
 
     def bind[A, B](list: List[A])(f: A => List[B]): List[B] = list.flatMap(f)
