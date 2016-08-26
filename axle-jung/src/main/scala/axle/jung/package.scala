@@ -121,7 +121,7 @@ package object jung {
 
         val cliqued = {
 
-          val old2new: Map[V, V] = ??? // TODO _vertices.zip(newVs).toMap
+          val old2new: Map[V, V] = ??? //jdsg.getVertices.zip(newVs).toMap
 
           val newEdges = among.toVector.permutations(2)
             .map({ a => (a(0), a(1)) })
