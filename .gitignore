@@ -9,3 +9,4 @@ target
 .cache-tests
 .cache-main
 */bin
+.sass-cache
