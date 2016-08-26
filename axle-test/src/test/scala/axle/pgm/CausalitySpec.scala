@@ -1,16 +1,13 @@
 
 package axle.pgm
 
-import axle._
 import axle.stats._
 import axle.pgm.docalculus._
-import axle.algebra.DirectedGraph
 import org.specs2.mutable._
 import spire.algebra._
 import spire.implicits._
 import spire.math._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import axle.jung.directedGraphJung
 
 class CausalitySpec extends Specification {

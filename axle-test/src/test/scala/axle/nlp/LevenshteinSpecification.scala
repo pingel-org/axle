@@ -7,7 +7,6 @@ import org.typelevel.discipline.specs2.mutable.Discipline
 
 import axle.eqIndexedSeq
 import axle.jblas.linearAlgebraDoubleMatrix
-import spire.algebra.Eq
 import spire.implicits.CharAlgebra
 import spire.implicits.IntAlgebra
 import spire.laws.VectorSpaceLaws

@@ -5,21 +5,14 @@ import org.scalacheck.Gen
 import org.specs2.mutable.Specification
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
-import spire.implicits.DoubleAlgebra
-import spire.implicits.IntAlgebra
 import spire.math.Real
 import spire.laws.VectorSpaceLaws
 import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
-import axle.distanceOnSphere
 import axle.jung.directedGraphJung
 import axle.quanta._
 import axle.quanta.Angle
-import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.DoubleAlgebra
-import spire.implicits.metricSpaceOps
-import spire.implicits.moduleOps
 
 class GeoMetricSpaceSpec
     extends Specification
@@ -58,7 +51,6 @@ class GeoMetricSpaceSpec
       def apply(a: UnittedQuantity[Angle, Real]) = true
     }
 
-  import spire.math.RealAlgebra
   val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
 
   checkAll(s"GeoCoordinates metric space",

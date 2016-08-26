@@ -9,10 +9,7 @@ import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
 
 import axle.algebra.DistanceMatrix
-import axle.jblas.linearAlgebraDoubleMatrix
-import axle.ml.distance.Cosine
 import spire.algebra.Eq
-import spire.implicits.DoubleAlgebra
 import spire.laws.VectorSpaceLaws
 import spire.math.Real
 

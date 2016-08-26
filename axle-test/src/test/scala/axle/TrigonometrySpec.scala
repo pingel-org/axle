@@ -4,11 +4,8 @@ import org.specs2.mutable.Specification
 
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitOfMeasurement
 import axle.algebra.modules.doubleRationalModule
 import spire.implicits.DoubleAlgebra
-import spire.algebra.Module
-import spire.math.Rational
 import axle.jung.directedGraphJung
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 

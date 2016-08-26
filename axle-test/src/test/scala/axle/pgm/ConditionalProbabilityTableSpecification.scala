@@ -1,9 +1,6 @@
 package axle.pgm
 
-import axle._
 import axle.stats._
-import axle.algebra.DirectedGraph
-import axle.jblas._
 import spire.implicits._
 import spire.math._
 import edu.uci.ics.jung.graph.DirectedSparseGraph

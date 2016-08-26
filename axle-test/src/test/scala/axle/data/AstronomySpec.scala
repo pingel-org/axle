@@ -2,18 +2,11 @@ package axle.data
 
 import org.specs2.mutable._
 import spire.implicits._
-import spire.math._
 import spire.compat.ordering
-import spire.algebra.Module
-import spire.math.Rational
 import axle.quanta.Mass
 import axle.quanta.Distance
 import axle.quanta.Time
-import axle.quanta.UnitOfMeasurement
-import spire.algebra.Rng
-import spire.algebra.AdditiveGroup
 import spire.implicits.DoubleAlgebra
-import spire.algebra.MultiplicativeSemigroup
 import axle.algebra.modules.doubleRationalModule
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung

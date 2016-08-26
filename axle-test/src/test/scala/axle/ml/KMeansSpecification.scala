@@ -2,7 +2,6 @@ package axle.ml
 
 import org.specs2.mutable.Specification
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.quanta.UnitOfMeasurement
 
 class KMeansSpecification
     extends Specification {

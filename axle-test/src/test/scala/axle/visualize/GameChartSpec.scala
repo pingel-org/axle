@@ -1,7 +1,5 @@
 package axle.visualize
 
-import java.awt.Color.blue
-
 import org.specs2.mutable.Specification
 
 import axle.algebra.modules.doubleDoubleModule
@@ -9,7 +7,6 @@ import axle.algebra.modules.doubleRationalModule
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling.stateDistribution
 import axle.quanta.Angle
-import axle.quanta.UnitOfMeasurement
 import axle.stats.Distribution0
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
