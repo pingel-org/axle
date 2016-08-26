@@ -222,7 +222,7 @@ trait AstNodeFormatter[R, S] {
     _indent.accSpan("repr", xml.Utility.escape(r), r.length)
 
   def name(n: String): AstNodeFormatter[R, S] = {
-    val f0 = _indent // TODO !!! side effect ???
+    val f0 = _indent // TODO side effect
     val special = false // TODO
     special match {
       case true => {

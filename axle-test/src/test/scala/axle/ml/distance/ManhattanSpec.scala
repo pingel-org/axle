@@ -1,11 +1,7 @@
 package axle.ml.distance
 
-import scala.annotation.implicitNotFound
-
 import org.jblas.DoubleMatrix
 import org.scalacheck.Arbitrary
-import org.scalacheck.Gen
-import org.scalacheck.Gen.Choose
 import org.specs2.mutable.Specification
 import org.typelevel.discipline.specs2.mutable.Discipline
 import org.typelevel.discipline.Predicate

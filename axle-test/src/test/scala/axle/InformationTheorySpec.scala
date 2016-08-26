@@ -2,17 +2,13 @@ package axle
 
 import org.specs2.mutable.Specification
 
-import axle.quanta.UnitOfMeasurement
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.ConditionalProbabilityTable2
 import axle.stats.P
 import axle.stats.coin
 import axle.stats.entropy
 import axle.stats.rationalProbabilityDist
-import spire.algebra.Order
-import spire.math.Number.apply
 import spire.math.Rational
-import spire.math.Real
 import spire.implicits._
 import axle.quanta.Information
 import axle.jung.directedGraphJung

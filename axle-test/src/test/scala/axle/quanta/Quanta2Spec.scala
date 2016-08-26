@@ -6,7 +6,6 @@ import spire.implicits.additiveSemigroupOps
 import spire.implicits.moduleOps
 import spire.math.Rational
 import spire.algebra.Module
-import spire.algebra.Group
 import spire.implicits._
 import spire.implicits.DoubleAlgebra
 import axle.algebra.modules.doubleDoubleModule

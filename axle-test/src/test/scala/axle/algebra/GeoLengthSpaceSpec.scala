@@ -9,12 +9,9 @@ import axle.distanceOnSphere
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.UnittedQuantity
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.metricSpaceOps
-import spire.implicits.moduleOps
 
 class GeoLengthSpaceSpec extends Specification {
 
@@ -23,7 +20,6 @@ class GeoLengthSpaceSpec extends Specification {
   import angleConverter.radian
 
   implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
-  import axle.quanta.UnittedQuantity
 
   val sf = GeoCoordinates(37.7833 *: °, 122.4167 *: °)
   val ny = GeoCoordinates(40.7127 *: °, 74.0059 *: °)

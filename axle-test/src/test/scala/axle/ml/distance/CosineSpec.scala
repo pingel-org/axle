@@ -7,13 +7,11 @@ import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
 
 import axle.algebra.LinearAlgebra
-import axle.jblas.eqDoubleMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.moduleDoubleMatrix
 import axle.jblas.rowVectorInnerProductSpace
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
-import spire.laws.VectorSpaceLaws
 
 class CosineSpec
     extends Specification

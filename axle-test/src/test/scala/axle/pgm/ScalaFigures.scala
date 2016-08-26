@@ -3,11 +3,7 @@ package axle.pgm
 
 import org.specs2.mutable._
 
-import axle._
-import axle.algebra.DirectedGraph
-import axle.algebra.UndirectedGraph
 import axle.stats._
-import axle.pgm._
 import spire.implicits._
 import spire.math._
 

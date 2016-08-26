@@ -6,14 +6,12 @@ import org.specs2.mutable.Specification
 
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
-import axle.quanta.UnitOfMeasurement
 import axle.jung.directedGraphJung
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.SeqOrder
 import spire.implicits._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 class UnittedTicsSpec extends Specification {
 

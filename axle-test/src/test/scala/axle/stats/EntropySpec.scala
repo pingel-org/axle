@@ -4,10 +4,7 @@ import org.specs2.mutable.Specification
 
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
-import axle.quanta.Quantum
-import axle.quanta.UnitOfMeasurement
 import spire.math.Rational
-import spire.math.Real
 import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
 import spire.implicits._
