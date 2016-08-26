@@ -24,6 +24,11 @@ Read more about these ["spokes"](/spokes/).
 
 The code will soon compile warning-free.
 
+Remaining Design Issues
+-----------------------
+
+### Spark Context Bounds
+
 The biggest outstanding issue is how to deal with Spark's context bounds
 on functions like `map`.
 In this case, it means that either `Functor`'s map must also take have the context bound,
@@ -34,4 +39,9 @@ Axle has opted for the latter until another solution can be found.
 The biggest downside is the introduction of additional type parameters in typeclasses
 like `Functor`.
 
-Please get in touch if you'd like to discuss alternative approaches.
+### Matrix dimensions
+
+Dependent types are needed to encode the size of matrices.
+You can see the need for them in the multiplicative and additive monoids for matrices (eg jblas).
+
+Please get in touch if you'd like to discuss these or other questions.
