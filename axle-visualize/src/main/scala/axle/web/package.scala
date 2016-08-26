@@ -4,8 +4,6 @@ import scala.xml.Node
 import scala.xml.NodeSeq
 import scala.xml.XML
 
-import axle.web.SVG
-
 package object web {
 
   final val encoding = "UTF-8"

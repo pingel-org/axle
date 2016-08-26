@@ -5,7 +5,6 @@ import axle.stats.Distribution
 import axle.stats.Factor
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import axle.syntax.undirectedgraph._
 

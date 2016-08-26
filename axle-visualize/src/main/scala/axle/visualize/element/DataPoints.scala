@@ -1,6 +1,5 @@
 package axle.visualize.element
 
-import axle.visualize.Color
 import axle.visualize.ScaledArea2D
 import axle.visualize.ScatterDataView
 

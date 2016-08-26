@@ -1,7 +1,6 @@
 package axle.game.cards
 
 import spire.algebra._
-import spire.implicits._
 
 import axle.Show
 

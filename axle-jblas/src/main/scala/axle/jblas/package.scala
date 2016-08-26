@@ -16,7 +16,6 @@ import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.NRoot
-import spire.algebra.Order
 import spire.algebra.Ring
 import spire.algebra.Rng
 import spire.implicits.convertableOps
@@ -103,8 +102,7 @@ package object jblas {
       def plus(x: DoubleMatrix, y: DoubleMatrix) =
         semigroup.plus(x, y)
 
-      def zero: DoubleMatrix =
-        DoubleMatrix.zeros(???, ???)
+      def zero: DoubleMatrix = ??? // DoubleMatrix.zeros(rows, columns)
     }
 
   implicit def multiplicativeSemigroupDoubleMatrix: MultiplicativeSemigroup[DoubleMatrix] =
@@ -122,8 +120,7 @@ package object jblas {
       def times(x: DoubleMatrix, y: DoubleMatrix) =
         semigroup.times(x, y)
 
-      def one: DoubleMatrix =
-        DoubleMatrix.eye(???) // TODO: dimension m
+      def one: DoubleMatrix = ??? // DoubleMatrix.eye(size)
     }
 
   implicit def additiveAbGroupDoubleMatrix: AdditiveAbGroup[DoubleMatrix] =

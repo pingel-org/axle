@@ -4,7 +4,6 @@ import axle.algebra.Aggregatable
 import axle.algebra.Talliable
 import axle.algebra.DirectedGraph
 import axle.algebra.Endofunctor
-import axle.algebra.FunctionPair
 import axle.algebra.Functor
 import axle.algebra.Finite
 import axle.algebra.Indexed
@@ -13,7 +12,6 @@ import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
-import spire.algebra.Eq
 import spire.algebra.Field
 import scala.language.implicitConversions
 

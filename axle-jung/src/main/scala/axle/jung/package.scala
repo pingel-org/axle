@@ -60,7 +60,6 @@ package object jung {
       import scala.collection.JavaConverters.asScalaBufferConverter
       import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
-      import axle.algebra.DirectedGraph
       import axle.enrichIndexedSeq
       import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
       import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -122,7 +121,7 @@ package object jung {
 
         val cliqued = {
 
-          val old2new: Map[V, V] = ??? // TODO _vertices.zip(newVs).toMap
+          val old2new: Map[V, V] = ??? //jdsg.getVertices.zip(newVs).toMap
 
           val newEdges = among.toVector.permutations(2)
             .map({ a => (a(0), a(1)) })
@@ -271,7 +270,6 @@ package object jung {
 
       import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
-      import axle.algebra.UndirectedGraph
       import axle.enrichIndexedSeq
       import edu.uci.ics.jung.graph.UndirectedSparseGraph
       import spire.algebra.Eq

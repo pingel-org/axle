@@ -4,24 +4,18 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import axle.algebra.LinearAlgebra
-import axle.syntax.linearalgebra.matrixOps
 import axle.visualize.KMeansVisualization
-import axle.visualize.Point2D
 import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import javax.swing.JPanel
-import spire.implicits.DoubleAlgebra
-import spire.implicits.eqOps
 
 case class KMeansComponent[D, F, G, M](
   kmv: KMeansVisualization[D, F, G, M])
     extends JPanel {
 
   import kmv._
-  import classifier._
 
   setMinimumSize(new Dimension(width + border, height + border))
 

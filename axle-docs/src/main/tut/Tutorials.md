@@ -22,6 +22,7 @@ Core
 * [Unitted Trigonometry](/tutorial/unitted_trigonometry/)
 * [Pythagorean Means](/tutorial/pythagorean_means/) Arithmetic, Harmonic, Geometric, and Generalized means
 * [Statistics](/tutorial/statistics/) Random Variables, Probability, Distributions, Standard Deviation
+  * [Reservoir Sampling](/tutorial/reservoir_sampling/)
   * [Two Dice](/tutorial/two_dice/) simulation vs flat mapping distribution monads
 * [Information Theory](/tutorial/information_theory/)
   * [Entropy of a Coin](/tutorial/entropy_biased_coin/)
@@ -47,6 +48,7 @@ Algorithms
 * [Linguistics](/tutorial/linguistics/)
   * [Angluin Learner](/tutorial/angluin_learner/)
   * [Gold Paradigm](/tutorial/gold_paradigm/)
+* [MAP@K](/tutorial/map_at_k) Mean Average Precision at K (ranking metric)
 * [Bioinformatics](/tutorial/bioinformatics/) DNA Sequence alignment algorithms
   * [Smith Waterman](/tutorial/smith_waterman/)
   * [Needleman Wunsch](/tutorial/needleman_wunsch/)

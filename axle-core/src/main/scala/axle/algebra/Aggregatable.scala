@@ -3,13 +3,6 @@ package axle.algebra
 import scala.annotation.implicitNotFound
 import scala.collection.parallel.immutable.ParSeq
 
-import spire.algebra.Eq
-import spire.algebra.Ring
-import spire.implicits.MapRng
-import spire.implicits.additiveSemigroupOps
-
-import scala.annotation.implicitNotFound
-
 @implicitNotFound("Witness not found for Aggregatable[${F}, ${A}, ${B}]")
 trait Aggregatable[F, A, B] {
 

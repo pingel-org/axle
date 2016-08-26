@@ -3,18 +3,11 @@ package axle
 import axle.syntax.finite.finiteOps
 import axle.syntax.functor.functorOps
 import axle.syntax.indexed.indexedOps
-import axle.algebra.Aggregatable
-import axle.algebra.Finite
-import axle.algebra.Functor
-import axle.algebra.Reducible
-import spire.algebra.AdditiveGroup
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.MetricSpace
 import spire.algebra.Module
-import spire.algebra.MultiplicativeGroup
 import spire.algebra.MultiplicativeMonoid
-import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.NRoot
 import spire.algebra.Order
 import spire.algebra.Rng
@@ -22,7 +15,6 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.partialOrderOps
-import spire.math.ConvertableTo
 import spire.math.Rational
 import spire.math.Real
 

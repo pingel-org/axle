@@ -7,7 +7,6 @@ import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
 import spire.algebra.Eq
-import spire.algebra.Field
 import spire.algebra.MetricSpace
 import spire.algebra.Order
 import spire.algebra.Ring

@@ -41,7 +41,6 @@ trait EnergyConverter[N] extends UnitConverter[Energy, N] with EnergyUnits {
 object Energy {
 
   import spire.algebra.Module
-  import spire.math._
   import spire.implicits._
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](

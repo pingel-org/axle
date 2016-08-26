@@ -1,7 +1,6 @@
 package axle.ast.language
 
 import axle.ast._
-import util.matching.Regex
 import spire.implicits._
 
 object Python {

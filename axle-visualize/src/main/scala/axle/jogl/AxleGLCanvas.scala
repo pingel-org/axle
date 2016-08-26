@@ -107,5 +107,5 @@ case class AxleGLCanvas(
     scene.tic()
   }
 
-  override def dispose(drawable: GLAutoDrawable) {}
+  override def dispose(drawable: GLAutoDrawable): Unit = {}
 }

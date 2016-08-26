@@ -1,8 +1,6 @@
 package axle.algebra
 
-import axle.enrichGenTraversable
 import spire.algebra.MetricSpace
-import scala.reflect.ClassTag
 
 case class DistanceMatrix[T, F, M](
   vectors: F)(

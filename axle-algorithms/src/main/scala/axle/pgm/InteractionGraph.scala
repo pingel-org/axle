@@ -4,7 +4,6 @@ import axle.algebra.UndirectedGraph
 import axle.stats.Distribution
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.implicits.StringOrder
 
 class InteractionGraphEdge
 

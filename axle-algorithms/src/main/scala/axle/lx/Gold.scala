@@ -20,7 +20,7 @@ object Gold {
     implicit val orderExpression: Order[Expression] = new Order[Expression] {
       def compare(x: Expression, y: Expression): Int = string(x).compareTo(string(y))
     }
-   
+
   }
 
   val ♯ = List[Morpheme]()
@@ -36,11 +36,11 @@ object Gold {
   case class Language(sequences: Set[Expression])
 
   object Language {
-    
+
     implicit def showLanguage: Show[Language] = new Show[Language] {
       def text(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
     }
-    
+
     implicit val languageEq = new Eq[Language] {
       def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
     }

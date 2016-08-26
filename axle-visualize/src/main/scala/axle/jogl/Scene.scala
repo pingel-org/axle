@@ -8,21 +8,17 @@ import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
 
 import axle.algebra.Position3DSpace
-import axle.algebra.SphericalVector
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
-import axle.quanta.modulize
 import com.jogamp.opengl.GL2
 import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_POSITION
 import com.jogamp.opengl.glu.GLU
-import spire.implicits.DoubleAlgebra
 import spire.implicits.FloatAlgebra
-import spire.implicits.moduleOps
 
 abstract class Scene(val distanceUnit: UnitOfMeasurement[Distance])(
   implicit angleMetaFloat: AngleConverter[Float],

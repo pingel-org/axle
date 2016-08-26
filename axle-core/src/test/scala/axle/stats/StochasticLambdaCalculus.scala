@@ -6,7 +6,6 @@ import axle.game.Dice.die
 import axle.algebra.Σ
 import spire.implicits.IntAlgebra
 import spire.math.Rational
-import spire.syntax.literals._
 
 object StochasticLambdaCalculus extends Specification {
 

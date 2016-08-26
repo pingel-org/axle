@@ -1,10 +1,7 @@
 package axle.ml
 
 import axle.algebra.DirectedGraph
-import axle.syntax.directedgraph._
 import spire.algebra.Eq
-import spire.implicits.DoubleAlgebra
-
 import axle.Show
 
 /**

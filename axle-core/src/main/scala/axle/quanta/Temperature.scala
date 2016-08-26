@@ -6,7 +6,6 @@ import axle.algebra.Transform
 import axle.algebra.Scale
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.algebra.Group
 
 case class Temperature() extends Quantum {
 

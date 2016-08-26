@@ -11,7 +11,6 @@ import axle.algebra.FromStream
 import axle.algebra.Indexed
 
 import spire.algebra.Eq
-import spire.algebra.Group
 import spire.algebra.MetricSpace
 import spire.algebra.Order
 import spire.algebra.Ring
@@ -20,13 +19,9 @@ import spire.compat.ordering
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.eqOps
-import spire.implicits.moduleOps
 import spire.implicits.partialOrderOps
-
 import axle.syntax.finite.finiteOps
-import axle.syntax.functor.functorOps
 import axle.syntax.indexed.indexedOps
-import axle.syntax.linearalgebra.matrix
 import axle.syntax.linearalgebra.matrixOps
 
 /**

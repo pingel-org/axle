@@ -7,12 +7,9 @@ import axle.algebra.Finite
 import axle.algebra.SetFrom
 import axle.algebra.MapReducible
 import axle.algebra.MapFrom
-import axle.algebra.FunctionPair
 import axle.syntax.linearalgebra._
 import axle.syntax.functor._
 import axle.syntax.finite._
-import axle.syntax.mapfrom._
-import axle.syntax.aggregatable._
 import axle.syntax.mapreducible._
 import axle.syntax.setfrom._
 import spire.algebra._

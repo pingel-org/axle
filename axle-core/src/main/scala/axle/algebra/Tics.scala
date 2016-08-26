@@ -1,11 +1,9 @@
 package axle.algebra
 
 import spire.math._
-import spire.algebra._
 import spire.implicits._
 import scala.annotation.implicitNotFound
 import axle.string
-import axle.Show.showDouble
 import java.lang.Double.{ isInfinite, isNaN }
 
 @implicitNotFound("Witness not found for Tics[${T}]")

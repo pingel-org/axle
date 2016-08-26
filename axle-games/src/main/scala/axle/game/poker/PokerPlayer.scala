@@ -2,7 +2,6 @@ package axle.game.poker
 
 import axle.game._
 import axle.Show
-import axle.string
 import spire.algebra.Eq
 
 object PokerPlayer {

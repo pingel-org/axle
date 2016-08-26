@@ -1,13 +1,9 @@
 package axle.ml.distance
 
-import spire.math.abs
-
 import axle.algebra.LinearAlgebra
-import axle.syntax.endofunctor.endofunctorOps
 import axle.syntax.linearalgebra.matrixOps
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
-import spire.implicits.additiveGroupOps
 
 case class Manhattan[M, R, C, D](
   implicit la: LinearAlgebra[M, R, C, D],

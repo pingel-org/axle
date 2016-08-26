@@ -4,7 +4,6 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import scala.annotation.tailrec
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 

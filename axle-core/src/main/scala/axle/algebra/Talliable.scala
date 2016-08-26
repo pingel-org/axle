@@ -1,11 +1,9 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-import spire.algebra.Eq
 import spire.algebra.Ring
 import spire.implicits.MapRng
 import spire.implicits.additiveSemigroupOps
-import axle.syntax.aggregatable._
 
 @implicitNotFound("Witness not found for Talliable[${F}, ${A}, ${N}]")
 trait Talliable[F, A, N] {

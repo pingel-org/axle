@@ -2,8 +2,6 @@
 package axle.game.ttt
 
 import axle.game._
-import axle.algebra._
-import util.Random.{ nextInt }
 import spire.implicits._
 
 /**

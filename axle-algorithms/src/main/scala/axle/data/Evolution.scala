@@ -1,7 +1,6 @@
 package axle.data
 
 import axle.quanta._
-import spire.algebra.Module
 import spire.implicits._
 import axle.algebra.Vec
 

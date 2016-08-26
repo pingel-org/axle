@@ -2,18 +2,11 @@ package axle.algebra
 
 import spire.algebra._
 import spire.implicits._
-import org.specs2.ScalaCheck
 import org.specs2.mutable._
 import org.scalacheck._
 import Arbitrary._
-import Gen._
-import Prop._
-import org.typelevel.discipline.Laws
-import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop
-import org.scalacheck.Prop._
 import axle.algebra.laws._
 
 class FunctorLawsSpec

@@ -2,8 +2,6 @@ package axle
 
 import org.specs2.mutable._
 import spire.implicits._
-import spire.math._
-import spire.algebra._
 
 class EnrichmentsSpec extends Specification {
 

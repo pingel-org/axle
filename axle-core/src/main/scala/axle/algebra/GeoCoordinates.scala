@@ -24,7 +24,6 @@ import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.moduleOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 import spire.math.Rational
 import spire.math.sqrt
@@ -62,7 +61,6 @@ object GeoCoordinates {
     implicit angleConverter: AngleConverter[N]): MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
     new MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] {
 
-      import angleConverter.radian
       val ctn = ConvertableTo[N]
       // val cfn = ConvertableFrom[N]
       val half = ctn.fromRational(Rational(1, 2))

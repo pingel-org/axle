@@ -5,11 +5,9 @@ import scala.collection.immutable.TreeMap
 import scala.util.Random.shuffle
 
 import axle.algebra.LinearAlgebra
-import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.Functor
 import axle.algebra.Indexed
-import axle.algebra.Monad
 import axle.syntax.finite._
 import axle.syntax.indexed._
 import axle.syntax.functor._

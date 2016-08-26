@@ -51,7 +51,7 @@ case class SceneFrame(
         frame.setTitle(scene.title)
         frame.pack()
         frame.setVisible(true)
-        animator.start()
+        val rc = animator.start()
       }
     })
 

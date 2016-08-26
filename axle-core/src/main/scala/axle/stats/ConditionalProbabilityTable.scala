@@ -7,7 +7,6 @@ import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.orderOps
 import spire.random.Dist
 import spire.random.rng.Cmwc5
 

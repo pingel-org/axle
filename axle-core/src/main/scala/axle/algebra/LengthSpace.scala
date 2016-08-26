@@ -2,10 +2,7 @@ package axle.algebra
 
 import scala.annotation.implicitNotFound
 import spire.algebra.MetricSpace
-import spire.algebra.Order
-import spire.implicits.LongAlgebra
 import spire.math.Rational
-import spire.math.Rational.apply
 import spire.std.DoubleAlgebra
 import spire.std.IntAlgebra
 import spire.std.LongAlgebra

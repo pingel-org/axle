@@ -2,12 +2,8 @@ package axle.ml
 
 import axle.algebra.argmax
 import axle.algebra.Functor
-import axle.algebra.Reducible
-import axle.enrichGenSeq
 import axle.stats.P
 import axle.stats.Distribution
-import axle.stats.Distribution0
-import axle.stats.Distribution1
 import axle.stats.TallyDistribution0
 import axle.stats.TallyDistribution1
 import axle.syntax.aggregatable._
@@ -22,11 +18,6 @@ import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.eqOps
-import spire.math.Rational
-import spire.math.Real
-import spire.math.Real.apply
-import spire.math._
-import spire.syntax._
 import axle.stats.P
 import axle.algebra._
 

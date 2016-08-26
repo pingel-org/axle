@@ -2,8 +2,6 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import axle.syntax.directedgraph._
-import spire.algebra.Eq
 import spire.algebra.MultiplicativeMonoid
 import spire.implicits.StringOrder
 import spire.implicits.eqOps

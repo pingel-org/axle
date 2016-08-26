@@ -8,25 +8,10 @@ import java.awt.FontMetrics
 import java.awt.Color
 import java.awt.Component
 import java.awt.Graphics2D
-import java.awt.image.BufferedImage
 import java.io.File
 import axle.visualize.ScaledArea2D
-import scala.annotation.implicitNotFound
 import scala.reflect.ClassTag
 import axle.algebra.DirectedGraph
-import axle.algebra.LengthSpace
-import axle.algebra.LinearAlgebra
-import axle.algebra.Plottable
-import axle.algebra.Tics
-import axle.algebra.Zero
-import axle.awt.AxleFrame
-import axle.awt.Paintable
-import axle.awt.BarChartComponent
-import axle.awt.BarChartGroupedComponent
-import axle.awt.PlotComponent
-import axle.awt.JungUndirectedGraphVisualization
-import axle.awt.JungDirectedGraphVisualization
-import axle.awt.KMeansComponent
 import axle.ml.KMeans
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
@@ -37,14 +22,10 @@ import axle.quanta.UnittedQuantity
 import axle.visualize.angleDouble
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
-import axle.visualize.DataView
 import axle.visualize.Fed
 import axle.visualize.FrameRepaintingActor
-import axle.visualize.GroupedDataView
 import axle.visualize.KMeansVisualization
-import axle.visualize.PixelatedColoredArea
 import axle.visualize.Plot
-import axle.visualize.PlotDataView
 import axle.visualize.Point2D
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.BarChartKey
@@ -60,7 +41,6 @@ import axle.visualize.element.YTics
 import javax.imageio.ImageIO
 import spire.algebra.Eq
 import spire.algebra.Field
-import spire.algebra.Order
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -69,7 +49,6 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import akka.stream.scaladsl.Source
 import akka.stream.scaladsl.Sink
 import akka.stream.ActorMaterializer
-import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
 import java.util.concurrent.TimeUnit
 import akka.actor.Cancellable
@@ -91,7 +70,7 @@ package object awt {
 
     // see https://groups.google.com/forum/#!topic/akka-user/swhrgX6YobM
 
-    xs.runWith(Sink.foreach(println))
+    val rc = xs.runWith(Sink.foreach(println))
   }
 
   // draw2[Int](3, _ + 1, 700)
@@ -205,7 +184,7 @@ package object awt {
 
   def image2file[T: Image](t: T, filename: String, encoding: String): Unit = {
     val image = Image[T].image(t)
-    ImageIO.write(image, encoding, new File(filename))
+    val rc = ImageIO.write(image, encoding, new File(filename))
   }
 
   def png[T: Image](t: T, filename: String): Unit = image2file(t, filename, "PNG")
@@ -324,7 +303,7 @@ package object awt {
 
       import r._
 
-      fillColor.map(color => {
+      fillColor.foreach(color => {
         g2d.setColor(cachedColor(color))
         fillRectangle(
           g2d,
@@ -332,7 +311,7 @@ package object awt {
           Point2D(lowerLeft.x, lowerLeft.y),
           Point2D(upperRight.x, upperRight.y))
       })
-      borderColor.map(color => {
+      borderColor.foreach(color => {
         g2d.setColor(cachedColor(color))
         drawRectangle(
           g2d,
@@ -355,7 +334,7 @@ package object awt {
       import scaledArea._
       import java.awt.Color
 
-      tics.map({
+      tics foreach {
         case (y, label) => {
           val leftScaled = Point2D(minX, y)
           val leftUnscaled = framePoint(leftScaled)
@@ -365,7 +344,7 @@ package object awt {
           g2d.drawString(label, (leftUnscaled.x - fontMetrics.stringWidth(label) - 5).toInt, (leftUnscaled.y + fontMetrics.getHeight / 2).toInt)
           g2d.drawLine((leftUnscaled.x - 2).toInt, leftUnscaled.y.toInt, (leftUnscaled.x + 2).toInt, leftUnscaled.y.toInt)
         }
-      })
+      }
     }
 
   }
@@ -382,7 +361,7 @@ package object awt {
 
       val fontMetrics = g2d.getFontMetrics
 
-      tics map {
+      tics foreach {
         case (x, label) => {
           if (drawLines) {
             g2d.setColor(Color.lightGray)

@@ -125,7 +125,7 @@ object Angluin {
 
   case class SilentLearner(T: Text) extends Learner[Nothing] {
 
-    def initialState() = null.asInstanceOf[Nothing]
+    def initialState = null.asInstanceOf[Nothing]
 
     def processExpression(state: Nothing, expression: Iterable[Symbol]) = (initialState, None)
   }

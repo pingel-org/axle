@@ -1,11 +1,7 @@
 package axle.game.poker
 
 import axle.game._
-
-import axle._
-import util.Random.nextInt
 import axle.game.cards._
-import Stream.cons
 
 case class Poker(numPlayers: Int) extends Game[Poker] {
 

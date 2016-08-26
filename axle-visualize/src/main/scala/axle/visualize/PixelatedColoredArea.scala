@@ -1,12 +1,7 @@
 package axle.visualize
 
 import axle.algebra.LengthSpace
-import axle.algebra.Tics
-import axle.visualize.Color.black
-import axle.visualize.element._
 import spire.algebra.Eq
-import spire.algebra.Order
-import spire.compat.ordering
 
 case class PixelatedColoredArea[X: Eq, Y: Eq, V](
     f: (X, Y) => V,

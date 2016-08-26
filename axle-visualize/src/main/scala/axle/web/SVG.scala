@@ -35,7 +35,6 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import edu.uci.ics.jung.algorithms.layout.FRLayout
-import edu.uci.ics.jung.visualization.BasicVisualizationServer
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
@@ -43,14 +42,12 @@ import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import scala.annotation.implicitNotFound
 import axle.arcTangent2
-import spire.math.pi
 import spire.algebra.Field
 import axle.algebra.DirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.syntax.directedgraph.directedGraphOps
 import axle.syntax.undirectedgraph.undirectedGraphOps
-import axle.jung.directedGraphJung
 import axle.jung.undirectedGraphJung
 
 @implicitNotFound("Witness not found for SVG[${S}]")
@@ -278,7 +275,6 @@ object SVG {
 
       def svg(kmeans: KMeans[D, F, G, M]): NodeSeq = {
 
-        import kmeans._
         val vis = KMeansVisualization(kmeans)
         import vis._
 
