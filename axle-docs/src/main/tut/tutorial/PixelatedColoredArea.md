@@ -4,6 +4,15 @@ title: Pixelated Colored Area
 permalink: /tutorial/pixelated_colored_area/
 ---
 
+This visualization shows the composition of a function `f: (X, Y) => V` with a
+colorizing function `c: V => Color`
+over a rectangular range on the `(X, Y)` plane.
+`LengthSpace[X, X, Double]` and
+`LengthSpace[Y, Y, Double]` must be implicitly in scope.
+
+Example
+-------
+
 A few imports:
 
 ```tut:silent
@@ -30,7 +39,7 @@ val roy = (0 until n).map(i => Color(255, ((i / n.toDouble) * 255).toInt, 0)).to
 def toColor(v: Double) = roy(v.toInt)
 ```
 
-Define a `PixelatedColoredArea` to show a range of `toColor ∘ f` (`(0,0)` to `(1000,1000)`)
+Define a `PixelatedColoredArea` to show `toColor ∘ f` over the range `(0,0)` to `(1000,1000)`
 represented as a 400 pixel square.
 
 ```tut:book
@@ -46,7 +55,10 @@ png(pca, "roy_diagonal.png")
 
 ![ROY Diagonal](/tutorial/images/roy_diagonal.png)
 
-Another (more compact) example
+Second example
+--------------
+
+More compactly:
 
 ```tut:book
 import spire.math.sqrt
