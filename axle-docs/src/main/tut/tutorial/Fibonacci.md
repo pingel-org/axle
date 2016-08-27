@@ -28,7 +28,7 @@ Recursive with memoization:
 ```tut:book
 val memo = collection.mutable.Map(0 -> 0L, 1 -> 1L)
 
-def fibonacciRecursivelyWithMemo(n: Int): Long =
+def fibonacciRecursivelyWithMemo(n: Int): Long = {
   if (memo.contains(n)) {
     memo(n)
   } else {
@@ -36,6 +36,7 @@ def fibonacciRecursivelyWithMemo(n: Int): Long =
     memo += n -> result
     result
   }
+}
 
 fibonacciRecursivelyWithMemo(10)
 ```
@@ -56,10 +57,10 @@ val fibMatrix1 = FibMatrix(1, 1, 1, 0)
 
 val matrixMemo = collection.mutable.Map(1 -> fibMatrix1)
 
-def nthFibMatrix(n: Int): FibMatrix =
-  if (matrixMemo.contains(n))
+def nthFibMatrix(n: Int): FibMatrix = {
+  if (matrixMemo.contains(n)) {
     matrixMemo(n)
-  else if (n % 2 == 0) {
+  } else if (n % 2 == 0) {
     val result = nthFibMatrix(n / 2) * nthFibMatrix(n / 2)
     matrixMemo += n -> result
     result
@@ -68,6 +69,7 @@ def nthFibMatrix(n: Int): FibMatrix =
     matrixMemo += n -> result
     result
   }
+}
 
 def fibonacciFast(n: Int) = n match {
   case 0 => 0
