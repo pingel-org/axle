@@ -22,6 +22,7 @@ Core
 * [Unitted Trigonometry](/tutorial/unitted_trigonometry/)
 * [Pythagorean Means](/tutorial/pythagorean_means/) Arithmetic, Harmonic, Geometric, and Generalized means
 * [Statistics](/tutorial/statistics/) Random Variables, Probability, Distributions, Standard Deviation
+  * [Root-mean-square deviation](/tutorial/rmsd/) (aka RMSE)
   * [Reservoir Sampling](/tutorial/reservoir_sampling/)
   * [Two Dice](/tutorial/two_dice/) simulation vs flat mapping distribution monads
 * [Information Theory](/tutorial/information_theory/)

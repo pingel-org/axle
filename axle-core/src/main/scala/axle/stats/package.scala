@@ -85,16 +85,15 @@ package object stats {
    * https://en.wikipedia.org/wiki/Root-mean-square_deviation
    */
 
-  def rootMeanSquareDeviation[C, X, Y, D](
+  def rootMeanSquareDeviation[C, X, D](
     data: C,
-    actual: X => Y,
-    estimator: X => Y)(
-      implicit finite: Finite[C, Y],
-      functor: Functor[C, X, Y, D],
-      agg: Aggregatable[D, Y, Y],
-      field: Field[Y],
-      nroot: NRoot[Y]): Y =
-    nroot.sqrt(Σ[Y, D](data.map(x => square(actual(x) - estimator(x)))))
+    estimator: X => X)(
+      implicit finite: Finite[C, X],
+      functor: Functor[C, X, X, D],
+      agg: Aggregatable[D, X, X],
+      field: Field[X],
+      nroot: NRoot[X]): X =
+    nroot.sqrt(Σ[X, D](data.map(x => square(x - estimator(x)))))
 
   /**
    * http://en.wikipedia.org/wiki/Standard_deviation
