@@ -24,19 +24,19 @@ import axle.visualize._
 Define a function to compute an `Double` for each point on the plane `(x, y): (Double, Double)`
 
 ```tut:book
-val n = 100
-
-def f(x: Double, y: Double) = (x + y) % n
+def f(x: Double, y: Double) = x + y
 ```
 
 Define a `toColor` function.
 Here we first prepare an array of colors to avoid creating the objects during rendering.
 
 ```tut:book
+val n = 100
+
 // red to orange to yellow
 val roy = (0 until n).map(i => Color(255, ((i / n.toDouble) * 255).toInt, 0)).toArray
 
-def toColor(v: Double) = roy(v.toInt)
+def toColor(v: Double) = roy(v.toInt % n)
 ```
 
 Define a `PixelatedColoredArea` to show `toColor ∘ f` over the range `(0,0)` to `(1000,1000)`
