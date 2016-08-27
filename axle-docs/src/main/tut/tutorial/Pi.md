@@ -1,10 +1,10 @@
 ---
 layout: page
-title: pi
+title: π
 permalink: /tutorial/pi/
 ---
 
-Two estimators π
+Two estimators for π
 
 ```tut:silent
 import axle._

@@ -27,9 +27,10 @@ Core
   * [Two Dice](/tutorial/two_dice/) simulation vs flat mapping distribution monads
 * [Information Theory](/tutorial/information_theory/)
   * [Entropy of a Coin](/tutorial/entropy_biased_coin/)
+* [Geo Coordinates](/tutorial/geo_coordinates/)
 * Historically important functions
   * [Ackermann](/tutorial/ackermann/)
-  * [pi](/tutorial/pi/)
+  * [π](/tutorial/pi/)
   * [Fibonacci](/tutorial/fibonacci/)
 
 
