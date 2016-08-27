@@ -29,9 +29,9 @@ Recursive with memoization:
 val memo = collection.mutable.Map(0 -> 0L, 1 -> 1L)
 
 def fibonacciRecursivelyWithMemo(n: Int): Long =
-  if (memo.contains(n))
+  if (memo.contains(n)) {
     memo(n)
-  else {
+  } else {
     val result = fibonacciRecursivelyWithMemo(n - 2) + fibonacciRecursivelyWithMemo(n - 1)
     memo += n -> result
     result
