@@ -8,7 +8,7 @@ permalink: /
 | ------- | ------- | ------- |
 | ![mandelbrot](/tutorial/images/mandelbrot.png) | ![coin entropy](/tutorial/images/coinentropy.svg) | ![alarm bayes](/tutorial/images/alarmbayes.svg) |
 | ![waves](/tutorial/images/waves.svg) | ![poker hands](/tutorial/images/pokerhands.svg) | ![distribution monad](/tutorial/images/distributionMonad.svg) |
-| ![k means](/tutorial/images/kmeans.svg) | ![lrerror](/tutorial/images/lrerror.svg) | ![SFO to HEL](/tutorial/images/sfo_hel.png) |
+| ![k means](/tutorial/images/kmeans.svg) | ![lrerror](/tutorial/images/lrerror.svg) | ![SFO to HEL](/tutorial/images/sfo_hel_small.png) |
 
 Axle is an open-source Scala-embedded domain specific language for scientific computing.
 
