@@ -44,6 +44,7 @@ Algorithms
 * [Machine Learning](/tutorial/machine_learning/)
   * [Linear Regression](/tutorial/linear_regression/)
   * [K-Means Clustering](/tutorial/k_means_clustering/)
+    * [Cluster Federalist Papers](/tutorial/federalist_papers/)
   * [Naive Bayes Clustering](/tutorial/naive_bayes/)
   * [Genetic Algorithms](/tutorial/genetic_algorithms/)
 * [Probabilistic Graphical Models](/tutorial/probabilistic_graphical_models/) (PGM)
