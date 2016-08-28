@@ -8,7 +8,7 @@ Imports
 
 ```tut:silent
 import axle.data.FederalistPapers._
-``
+```
 
 The Federalist articles:
 
