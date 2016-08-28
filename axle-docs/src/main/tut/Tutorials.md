@@ -41,12 +41,12 @@ Algorithms
 "org.axle-lang" %% "axle-algorithms" % "releaseVersion"
 ```
 
-* [Machine Learning](/tutorial/machine_learning/)
-  * [Linear Regression](/tutorial/linear_regression/)
-  * [K-Means Clustering](/tutorial/k_means_clustering/)
-    * [Cluster Federalist Papers](/tutorial/federalist_papers/)
-  * [Naive Bayes Clustering](/tutorial/naive_bayes/)
-  * [Genetic Algorithms](/tutorial/genetic_algorithms/)
+* [Linear Regression](/tutorial/linear_regression/)
+* [Naive Bayes Clustering](/tutorial/naive_bayes/) Tennis example
+* k-Means Clustering
+  * [Cluster Irises](/tutorial/cluster_irises_k_means/)
+  * [Cluster Federalist Papers](/tutorial/cluster_federalist_papers_k_means/)
+* [Genetic Algorithms](/tutorial/genetic_algorithms/)
 * [Probabilistic Graphical Models](/tutorial/probabilistic_graphical_models/) (PGM)
   * [Bayesian Networks](/tutorial/bayesian_networks/)
 * [Natural Langage Processing (NLP)](/tutorial/natural_language_processing/)

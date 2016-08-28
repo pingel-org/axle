@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Federalist Papers
-permalink: /tutorial/federalist_papers/
+title: Clusters Federalist Papers with k-Means
+permalink: /tutorial/cluster_federalist_papers_k_means/
 ---
 
 Imports
@@ -92,18 +92,19 @@ val classifier = KMeans[Article, List[Article], List[Seq[Double]], DoubleMatrix]
 
 Show cluster vs author in a confusion matrix:
 
-```tut:book
+```tut:silent
 import axle.ml.ConfusionMatrix
 import spire.implicits.IntAlgebra
 import axle.orderStrings
+import axle.string
+```
 
+```tut:book
 val confusion = ConfusionMatrix[Article, Int, String, Vector[Article], DoubleMatrix, Vector[(String, Int)], Vector[String]](
   classifier,
   articles.toVector,
   _.author,
   0 to 3)
-
-import axle.string
 
 string(confusion)
 ```

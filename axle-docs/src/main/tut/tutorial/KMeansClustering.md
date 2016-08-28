@@ -1,7 +1,7 @@
 ---
 layout: page
-title: k-Means Clustering
-permalink: /tutorial/k_means_clustering/
+title: Cluster Irises with k-Means Clustering
+permalink: /tutorial/cluster_irises_k_means/
 ---
 
 See the wikipedia page on [k-Means Clustering](https://en.wikipedia.org/wiki/K-means_clustering)
