@@ -76,8 +76,6 @@ import spire.implicits.DoubleAlgebra
 ```
 
 ```tut:book
-val articleConstructor = (xs: Seq[Double]) => Article(0, "", "", "")
-
 val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
 val classifier = KMeans[Article, List[Article], List[Seq[Double]], DoubleMatrix](
@@ -85,7 +83,6 @@ val classifier = KMeans[Article, List[Article], List[Seq[Double]], DoubleMatrix]
     N = numDimensions,
     featureExtractor,
     normalizer,
-    articleConstructor,
     K = 4,
     iterations = 100)
 ```

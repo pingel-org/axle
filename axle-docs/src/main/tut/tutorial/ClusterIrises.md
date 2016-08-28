@@ -62,14 +62,11 @@ val irisFeaturizer = (iris: Iris) => List((iris.sepalLength in cm).magnitude.toD
 
 val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-val irisConstructor = (features: Seq[Double]) => Iris(1 *: cm, 1 *: cm, 1 *: cm, 1 *: cm, "")
-
 val classifier = KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix](
     irisesData.irises,
     N = 2,
     irisFeaturizer,
     normalizer,
-    irisConstructor,
     K = 3,
     iterations = 20)
 ```

@@ -55,11 +55,12 @@ class KMeansSpecification
         2,
         (p: Foo) => Seq(p.x, p.y),
         (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98),
-        (features: Seq[Double]) => Foo(features(0), features(1)),
         K = 2,
         100)
 
-      val exemplar = km.exemplar(km(Foo(99.9, 99.9)))
+      val constructor = (features: Seq[Double]) => Foo(features(0), features(1))
+
+      val exemplar = constructor(km.centroid(km(Foo(99.9, 99.9))))
 
       fooSimilarity(exemplar, Foo(100, 100)) must be lessThan 5d
     }
@@ -105,7 +106,7 @@ class KMeansSpecification
 
       val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-      val irisConstructor = (features: Seq[Double]) => Iris(1 *: cm, 1 *: cm, 1 *: cm, 1 *: cm, "")
+      // val irisConstructor = (features: Seq[Double]) => Iris(1 *: cm, 1 *: cm, 1 *: cm, 1 *: cm, "")
 
       // Alternately: Kmeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix]
       val classifier = KMeans.common[Iris, List, DoubleMatrix](
@@ -113,7 +114,6 @@ class KMeansSpecification
         N = 2,
         irisFeaturizer,
         normalizer,
-        irisConstructor,
         K = 3,
         iterations = 20)
 

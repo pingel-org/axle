@@ -42,7 +42,6 @@ case class KMeans[T: Eq, F, G, M](
   N: Int,
   featureExtractor: T => Seq[Double],
   normalizerMaker: M => Normalize[M],
-  constructor: Seq[Double] => T,
   K: Int,
   iterations: Int)(
     implicit space: MetricSpace[M, Double],
@@ -67,10 +66,7 @@ case class KMeans[T: Eq, F, G, M](
   val assignmentLog = μads.map(_._2)
   val distanceLog = μads.map(_._3)
 
-  val exemplars =
-    (0 until K).map(i => constructor(normalizer.unapply(μ.row(i)))).toList
-
-  def exemplar(i: Int): T = exemplars(i)
+  def centroid(i: Int): Seq[Double] = normalizer.unapply(μ.row(i))
 
   def classes: Range = 0 until K
 
@@ -179,7 +175,6 @@ object KMeans {
     N: Int,
     featureExtractor: T => Seq[Double],
     normalizerMaker: M => Normalize[M],
-    constructor: Seq[Double] => T,
     K: Int,
     iterations: Int)(
       implicit space: MetricSpace[M, Double],
@@ -187,5 +182,5 @@ object KMeans {
       la: LinearAlgebra[M, Int, Int, Double],
       index: Indexed[U[Seq[Double]], Int, Seq[Double]],
       finite: Finite[U[T], Int]) =
-    KMeans(data, N, featureExtractor, normalizerMaker, constructor, K, iterations)
+    KMeans(data, N, featureExtractor, normalizerMaker, K, iterations)
 }
