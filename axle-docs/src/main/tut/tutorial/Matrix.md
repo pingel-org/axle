@@ -1,15 +1,23 @@
 ---
 layout: page
-title: Matrix
-permalink: /tutorial/matrix/
+title: Linear Algebra
+permalink: /tutorial/linear_algebra/
 ---
 
-Witnesses for the jblas jars including LinearAlgebra.
+A `LinearAlgebra` typeclass.
 
-Establish implicit LinearAlgebra witness
-----------------------------------------
+The `axle-jblas` spoke provides witnesses for JBLAS matrices.
 
-```tut:book
+The default jblas matrix `toString` isn't very readable,
+so this tutorial wraps most results in the Axle `string` function,
+invoking Axle's `Show` witness for those matrices.
+
+Imports and implicits
+---------------------
+
+Import JBLAS and Axle's `LinearAlgebra` witness for it.
+
+```tut:silent
 import axle._
 import axle.jblas._
 import axle.syntax.linearalgebra.matrixOps
@@ -47,6 +55,7 @@ Random matrices
 
 ```tut:book
 val r = rand(3, 3)
+
 string(r)
 ```
 
@@ -93,55 +102,57 @@ Accessing columns, rows, and elements
 -------------------------------------
 
 ```tut:book
-x.column(0)
+string(x.column(0))
 
-x.row(1)
+string(x.row(1))
 
 x.get(2, 0)
 
 val fiveByFive = matrix(5, 5, (1 to 25).map(_.toDouble).toArray)
 
-fiveByFive.slice(1 to 3, 2 to 4)
+string(fiveByFive)
 
-fiveByFive.slice(0.until(5,2), 0.until(5,2))
+string(fiveByFive.slice(1 to 3, 2 to 4))
+
+string(fiveByFive.slice(0.until(5,2), 0.until(5,2)))
 ```
 
 Other mathematical operations
 -----------------------------
 
 ```tut:book
-x.negate
+string(x.negate)
 
-x.transpose
+string(x.transpose)
 
 // x.ceil
 // x.floor
 // x.log
 // x.log10
 
-x.pow(2d)
+string(x.pow(2d))
 
-x.addScalar(1.1)
+string(x.addScalar(1.1))
 
-x.subtractScalar(0.2)
+string(x.subtractScalar(0.2))
 
-// x.multiplyScalar(10d)
+// string(x.multiplyScalar(10d))
 
-x.divideScalar(100d)
+string(x.divideScalar(100d))
 
 r.max
 
 r.min
 
-r.rowMaxs
+string(r.rowMaxs)
 
-r.rowMins
+string(r.rowMins)
 
-r.columnMaxs
+string(r.columnMaxs)
 
-r.columnMins
+string(r.columnMins)
 
-rowRange(r)
+string(rowRange(r))
 
 columnRange(r)
 
