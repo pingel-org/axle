@@ -117,21 +117,24 @@ string(fiveByFive.slice(1 to 3, 2 to 4))
 string(fiveByFive.slice(0.until(5,2), 0.until(5,2)))
 ```
 
-Other mathematical operations
------------------------------
+Negate, Transpose, Power
+------------------------
 
 ```tut:book
 string(x.negate)
 
 string(x.transpose)
 
-// x.ceil
-// x.floor
 // x.log
 // x.log10
 
 string(x.pow(2d))
+```
 
+Scalar math
+-----------
+
+```tut:book
 string(x.addScalar(1.1))
 
 string(x.subtractScalar(0.2))
@@ -139,10 +142,18 @@ string(x.subtractScalar(0.2))
 // string(x.multiplyScalar(10d))
 
 string(x.divideScalar(100d))
+```
 
+Mins, Maxs, Ranges, and Sorts
+-----------------------------
+
+```
 r.max
 
 r.min
+
+// r.ceil
+// r.floor
 
 string(r.rowMaxs)
 
