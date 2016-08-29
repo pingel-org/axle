@@ -93,4 +93,5 @@ Games
 
 * [Tic Tac Toe](/tutorial/tic_tac_toe/)
 * [Poker](/tutorial/poker/)
+* [Monty Hall](/tutorial/monty_hall/)
 
