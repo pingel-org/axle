@@ -16,7 +16,7 @@ Core
 
 * [Package Object](/tutorial/axle_package_object/) Extensions to core Scala data types. Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases
 * [Algebra](/tutorial/algebra/) Typeclasses Functor, Indexed, Finite, LengthSpace
-* [Linear Algebra](/tutorial/linear_algebra/)
+* [Linear Algebra](/tutorial/linear_algebra/) including Principal Component Analysis (PCA)
 * [Graph](/tutorial/graph/)
 * [Game Theory](/tutorial/game_theory/) Framework for the `axle-games` jar.
 * [Logic](/tutorial/logic/) First-Order Predicate Logic
