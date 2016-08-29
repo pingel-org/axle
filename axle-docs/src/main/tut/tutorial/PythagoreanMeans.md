@@ -54,14 +54,51 @@ When the parameter `p` is 1, it is the arithmetic mean.
 generalizedMean[Double, List[Double]](1d, List(2d, 3d, 4d, 5d))
 ```
 
+As `p` approaches 0, it is the geometric mean.
+
+```tut:book
+generalizedMean[Double, List[Double]](0.0001, List(1d, 5d, 25d))
+```
+
 At -1 it is the harmonic mean.
 
 ```tut:book
 generalizedMean[Double, List[Double]](-1d, List(2d, 3d, 4d, 5d))
 ```
 
-As `p` approaches 0, it is the geometric mean.
+Moving means
+------------
+
+```tut:silent
+import spire.math._
+```
+
+Moving arithmetic mean
 
 ```tut:book
-generalizedMean[Double, List[Double]](0.0001, List(1d, 5d, 25d))
+val xs = (1 to 100).toList.map(_.toDouble)
+
+val window = 5
+
+val moved = movingArithmeticMean[List[Double], Int, Double, List[(Double, Double)]](xs, window)
+```
+
+Moving geometric mean
+
+```tut:book
+val xs: List[Real] = List(1d, 5d, 25d, 125d, 625d)
+
+val window = 3
+
+val moved = movingGeometricMean[List[Real], Int, Real, List[(Real, Real)]](xs, window)
+```
+
+Moving harmonic mean
+
+```tut:book
+val xs: List[Real] = (1 to 5).toList.map(v => Real(v))
+
+val window = 3
+
+val moved = movingHarmonicMean[List[Real], Int, Real, List[(Real, Real)]](xs, window)
 ```
