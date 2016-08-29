@@ -200,7 +200,7 @@ string(zscore(r))
 Principal Component Analysis
 ----------------------------
 
-```
+```tut:book
 val (u, s) = pca(r, 0.95)
 
 string(u)
@@ -233,6 +233,8 @@ implicit val endo = axle.jblas.endoFunctorDoubleMatrix[Double]
 import axle.syntax.endofunctor.endofunctorOps
 
 val half = ones(3, 3).map(_ / 2d)
+
+string(half)
 ```
 
 Boolean operators
