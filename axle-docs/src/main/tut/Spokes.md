@@ -33,7 +33,7 @@ JUNG
 "org.axle-lang" %% "axle-jung" % "releaseVersion"
 ```
 
-[Graph](/tutorial/Graph) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
+[Graph](/tutorial/graph/) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
 
 Spark
 =====
