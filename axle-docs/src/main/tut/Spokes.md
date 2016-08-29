@@ -14,7 +14,8 @@ JBLAS
 "org.axle-lang" %% "axle-jblas" % "releaseVersion"
 ```
 
-* [Matrix](/tutorial/Matrix) LinearAlgebra and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/). Includes Principal Component Analysis (PCA).
+[Linear Algebra](/tutorial/linear_algebra/) and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/).
+Includes Principal Component Analysis (PCA).
 
 JODA
 ====
@@ -23,7 +24,7 @@ JODA
 "org.axle-lang" %% "axle-joda" % "releaseVersion"
 ```
 
-* Witnesses for the [Joda](http://www.joda.org/joda-time/) time library.
+Witnesses for the [Joda](http://www.joda.org/joda-time/) time library.
 
 JUNG
 ====
@@ -32,7 +33,7 @@ JUNG
 "org.axle-lang" %% "axle-jung" % "releaseVersion"
 ```
 
-* [Graph](/tutorial/Graph) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
+[Graph](/tutorial/Graph) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
 
 Spark
 =====
