@@ -154,38 +154,44 @@ string(r.columnMins)
 
 string(rowRange(r))
 
-columnRange(r)
+string(columnRange(r))
 
-r.sortRows
+string(r.sortRows)
 
-r.sortColumns
+string(r.sortColumns)
 
-r.sortRows.sortColumns
+string(r.sortRows.sortColumns)
 ```
 
 Statistics
 ----------
 
 ```tut:book
-r.rowMeans
+string(r.rowMeans)
 
-r.columnMeans
+string(r.columnMeans)
 
 // median(r)
 
-sumsq(r)
+string(sumsq(r))
 
-std(r)
+string(std(r))
 
-cov(r)
+string(cov(r))
 
-centerRows(r)
+string(centerRows(r))
 
-centerColumns(r)
+string(centerColumns(r))
 
-zscore(r)
+string(zscore(r))
+```
 
+Principal Component Analysis
+----------------------------
+
+```
 val (u, s) = pca(r, 0.95)
+
 string(u)
 
 string(s)
@@ -222,40 +228,40 @@ Boolean operators
 -----------------
 
 ```tut:book
-r lt half
+string(r lt half)
 
-r le half
+string(r le half)
 
-r gt half
+string(r gt half)
 
-r ge half
+string(r ge half)
 
-r eq half
+string(r eq half)
 
-r ne half
+string(r ne half)
 
-(r lt half) or (r gt half)
+string((r lt half) or (r gt half))
 
-(r lt half) and (r gt half)
+string((r lt half) and (r gt half))
 
-(r lt half) xor (r gt half)
+string((r lt half) xor (r gt half))
 
-(r lt half) not
+string((r lt half) not)
 ```
 
 Higher order methods
 --------------------
 
 ```tut:book
-m.map(_ + 1)
+string(m.map(_ + 1))
 
-m.map(_ * 10)
+string(m.map(_ * 10))
 
 // m.foldLeft(zeros(4, 1))(_ + _)
 
-m.foldLeft(ones(4, 1))(_ mulPointwise _)
+string(m.foldLeft(ones(4, 1))(_ mulPointwise _))
 
 // m.foldTop(zeros(1, 5))(_ + _)
 
-m.foldTop(ones(1, 5))(_ mulPointwise _)
+string(m.foldTop(ones(1, 5))(_ mulPointwise _))
 ```
