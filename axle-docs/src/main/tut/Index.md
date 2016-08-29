@@ -6,9 +6,9 @@ permalink: /
 ---
 
 | ------- | ------- | ------- |
-| ![mandelbrot](/tutorial/images/mandelbrot.png) | ![coin entropy](/tutorial/images/coinentropy.svg) | ![alarm bayes](/tutorial/images/alarmbayes.svg) |
-| ![waves](/tutorial/images/waves.svg) | ![poker hands](/tutorial/images/pokerhands.svg) | ![distribution monad](/tutorial/images/distributionMonad.svg) |
-| ![k means](/tutorial/images/kmeans.svg) | ![lrerror](/tutorial/images/lrerror.svg) | ![fruit sales](/tutorial/images/fruitsales.svg) |
+| [![mandelbrot](/tutorial/images/mandelbrot.png)](/tutorial/mandelbrot/) | [![coin entropy](/tutorial/images/coinentropy.svg)](/tutorial/entropy_biased_coin/) | [![alarm bayes](/tutorial/images/alarmbayes.svg)](/tutorial/bayesian_networks/) |
+| [![waves](/tutorial/images/waves.svg)](/tutorial/plots/) | [![poker hands](/tutorial/images/pokerhands.svg)](/tutorial/poker/) | [![distribution monad](/tutorial/images/distributionMonad.svg)](/tutorial/two_dice/) |
+| [![k means](/tutorial/images/kmeans.svg)](/tutorial/cluster_irises_k_means/) | [![lrerror](/tutorial/images/lrerror.svg)](/tutorial/linear_regression/) | [![SFO to HEL](/tutorial/images/sfo_hel_small.png)](/tutorial/geo_coordinates/) |
 
 Axle is an open-source Scala-embedded domain specific language for scientific computing.
 

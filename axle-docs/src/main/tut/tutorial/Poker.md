@@ -11,18 +11,22 @@ Example
 
 The `axle.game.cards` package models decks, cards, ranks, suits, and ordering.
 
-Define a function that takes the hand size and returns the best 5-card hand
+Imports
 
-```tut:book
+```tut:silent
 import axle.game.cards.Deck
 import axle.game.poker.PokerHand
 import axle.game.poker.PokerHandCategory
+import axle.string
+```
+
+Define a function that takes the hand size and returns the best 5-card hand
+
+```tut:book
 import spire.compat.ordering
 
 def winnerFromHandSize(handSize: Int) =
   Deck().cards.take(handSize).combinations(5).map(PokerHand(_)).toList.max
-
-import axle.string
 
 string(winnerFromHandSize(7))
 ```

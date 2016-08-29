@@ -35,10 +35,12 @@ val histogram =
 
 Define visualization
 
-```tut:book
+```tut:silent
 import axle.visualize.Color.blue
 import axle.visualize._
+```
 
+```tut:book
 val chart = BarChart[Int, Int, Map[Int, Int]](
   histogram,
   xAxis = Some(0),
@@ -64,7 +66,7 @@ and charted directly.
 
 Imports (Note: documentation resets interpreter here)
 
-```tut:book:reset
+```tut:silent:reset
 import spire.math._
 import spire.algebra._
 import axle._
@@ -83,11 +85,13 @@ val distribution = for {
 
 Define visualization
 
-```tut:book
+```tut:silent
 import axle.visualize._
 import axle.visualize.Color.blue
 import spire.implicits.IntAlgebra
+```
 
+```tut:book
 val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
   distribution,
   xAxis = Some(Rational(0)),

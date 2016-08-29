@@ -1,15 +1,23 @@
 ---
 layout: page
-title: Matrix
-permalink: /tutorial/matrix/
+title: Linear Algebra
+permalink: /tutorial/linear_algebra/
 ---
 
-Witnesses for the jblas jars including LinearAlgebra.
+A `LinearAlgebra` typeclass.
 
-Establish implicit LinearAlgebra witness
-----------------------------------------
+The `axle-jblas` spoke provides witnesses for JBLAS matrices.
 
-```tut:book
+The default jblas matrix `toString` isn't very readable,
+so this tutorial wraps most results in the Axle `string` function,
+invoking Axle's `Show` witness for those matrices.
+
+Imports and implicits
+---------------------
+
+Import JBLAS and Axle's `LinearAlgebra` witness for it.
+
+```tut:silent
 import axle._
 import axle.jblas._
 import axle.syntax.linearalgebra.matrixOps
@@ -47,6 +55,7 @@ Random matrices
 
 ```tut:book
 val r = rand(3, 3)
+
 string(r)
 ```
 
@@ -93,88 +102,107 @@ Accessing columns, rows, and elements
 -------------------------------------
 
 ```tut:book
-x.column(0)
+string(x.column(0))
 
-x.row(1)
+string(x.row(1))
 
 x.get(2, 0)
 
 val fiveByFive = matrix(5, 5, (1 to 25).map(_.toDouble).toArray)
 
-fiveByFive.slice(1 to 3, 2 to 4)
+string(fiveByFive)
 
-fiveByFive.slice(0.until(5,2), 0.until(5,2))
+string(fiveByFive.slice(1 to 3, 2 to 4))
+
+string(fiveByFive.slice(0.until(5,2), 0.until(5,2)))
 ```
 
-Other mathematical operations
------------------------------
+Negate, Transpose, Power
+------------------------
 
 ```tut:book
-x.negate
+string(x.negate)
 
-x.transpose
+string(x.transpose)
 
-// x.ceil
-// x.floor
 // x.log
 // x.log10
 
-x.pow(2d)
+string(x.pow(2d))
+```
 
-x.addScalar(1.1)
+Scalar math
+-----------
 
-x.subtractScalar(0.2)
+```tut:book
+string(x.addScalar(1.1))
 
-// x.multiplyScalar(10d)
+string(x.subtractScalar(0.2))
 
-x.divideScalar(100d)
+// string(x.multiplyScalar(10d))
 
+string(x.divideScalar(100d))
+```
+
+Mins, Maxs, Ranges, and Sorts
+-----------------------------
+
+```
 r.max
 
 r.min
 
-r.rowMaxs
+// r.ceil
+// r.floor
 
-r.rowMins
+string(r.rowMaxs)
 
-r.columnMaxs
+string(r.rowMins)
 
-r.columnMins
+string(r.columnMaxs)
 
-rowRange(r)
+string(r.columnMins)
 
-columnRange(r)
+string(rowRange(r))
 
-r.sortRows
+string(columnRange(r))
 
-r.sortColumns
+string(r.sortRows)
 
-r.sortRows.sortColumns
+string(r.sortColumns)
+
+string(r.sortRows.sortColumns)
 ```
 
 Statistics
 ----------
 
 ```tut:book
-r.rowMeans
+string(r.rowMeans)
 
-r.columnMeans
+string(r.columnMeans)
 
 // median(r)
 
-sumsq(r)
+string(sumsq(r))
 
-std(r)
+string(std(r))
 
-cov(r)
+string(cov(r))
 
-centerRows(r)
+string(centerRows(r))
 
-centerColumns(r)
+string(centerColumns(r))
 
-zscore(r)
+string(zscore(r))
+```
 
+Principal Component Analysis
+----------------------------
+
+```tut:book
 val (u, s) = pca(r, 0.95)
+
 string(u)
 
 string(s)
@@ -205,46 +233,48 @@ implicit val endo = axle.jblas.endoFunctorDoubleMatrix[Double]
 import axle.syntax.endofunctor.endofunctorOps
 
 val half = ones(3, 3).map(_ / 2d)
+
+string(half)
 ```
 
 Boolean operators
 -----------------
 
 ```tut:book
-r lt half
+string(r lt half)
 
-r le half
+string(r le half)
 
-r gt half
+string(r gt half)
 
-r ge half
+string(r ge half)
 
-r eq half
+string(r eq half)
 
-r ne half
+string(r ne half)
 
-(r lt half) or (r gt half)
+string((r lt half) or (r gt half))
 
-(r lt half) and (r gt half)
+string((r lt half) and (r gt half))
 
-(r lt half) xor (r gt half)
+string((r lt half) xor (r gt half))
 
-(r lt half) not
+string((r lt half) not)
 ```
 
 Higher order methods
 --------------------
 
 ```tut:book
-m.map(_ + 1)
+string(m.map(_ + 1))
 
-m.map(_ * 10)
+string(m.map(_ * 10))
 
 // m.foldLeft(zeros(4, 1))(_ + _)
 
-m.foldLeft(ones(4, 1))(_ mulPointwise _)
+string(m.foldLeft(ones(4, 1))(_ mulPointwise _))
 
 // m.foldTop(zeros(1, 5))(_ + _)
 
-m.foldTop(ones(1, 5))(_ mulPointwise _)
+string(m.foldTop(ones(1, 5))(_ mulPointwise _))
 ```
