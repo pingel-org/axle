@@ -228,7 +228,9 @@ lazy val axleTest = Project(
     "net.sf.jung" % "jung-algorithms" % jungVersion,
     "net.sf.jung" % "jung-api" % jungVersion,
     "net.sf.jung" % "jung-graph-impl" % jungVersion,
-    "net.sf.jung" % "jung-io" % jungVersion
+    "net.sf.jung" % "jung-io" % jungVersion,
+    "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion,
+    "org.jogamp.jogl" % "jogl-all-main" % jogampVersion
   )
 ).dependsOn(
   axleCore,
