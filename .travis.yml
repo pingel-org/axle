@@ -26,8 +26,8 @@ jdk:
   - oraclejdk7
   - openjdk7
 
-#script:
-#  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport && bash <(curl -s https://codecov.io/bash)
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport && bash <(curl -s https://codecov.io/bash)
 
 notifications:
   webhooks:
