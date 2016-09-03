@@ -37,7 +37,7 @@ lazy val buildSettings = Seq(
 
 lazy val axleDoctestSettings = Seq(
   doctestWithDependencies := false
-) ++ doctestSettings
+)
 
 lazy val axleCore = Project(
     id = "axle-core",
