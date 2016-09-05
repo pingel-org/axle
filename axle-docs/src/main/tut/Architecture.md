@@ -8,7 +8,7 @@ permalink: /architecture/
 Axle generally strives to follow the patterns established
 by the [Typelevel](http://typelevel.org/) projects.
 
-The functions are side-effect free.
+With few exceptions, the functions are side-effect free.
 
 The typeclass patterns are drawn from two traditions:
 1. [Typeclassopedia](https://wiki.haskell.org/Typeclassopedia)

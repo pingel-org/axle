@@ -28,9 +28,9 @@ val corpus = Corpus(articles.map(_.text), English)
 Define a feature extractor using top words and bigrams.
 
 ```tut:book
-val topWords = corpus.topWords(100)
+val frequentWords = corpus.wordsMoreFrequentThan(100)
 
-val topBigrams = corpus.topBigrams(200)
+val topBigrams = corpus.topKBigrams(200)
 
 val numDimensions = topWords.size + topBigrams.size
 
@@ -41,7 +41,7 @@ def featureExtractor(fp: Article): List[Double] = {
   val tokens = English.tokenize(fp.text.toLowerCase)
   val wordCounts = tokens.tally[Long]
   val bigramCounts =  bigrams(tokens).tally[Long]
-  val wordFeatures = topWords.map(wordCounts(_) + 0.1)
+  val wordFeatures = frequentWords.map(wordCounts(_) + 0.1)
   val bigramFeatures = topBigrams.map(bigramCounts(_) + 0.1)
   wordFeatures ++ bigramFeatures
 }
