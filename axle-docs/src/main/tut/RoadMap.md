@@ -122,6 +122,9 @@ Previous Milestones
 * axle-spark
 * Apache 2.0 license
 
+## 0.2.2 (October 10, 2015)
+* Pythagorean means
+
 ## 0.2.3 (July 30, 2016)
 * ScatterPlot
 * Logistic Map and Mandelbrot
