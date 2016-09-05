@@ -4,27 +4,31 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.0 (August 12, 2015)
-* reorganize to minimize dependencies from axle-core, with witnesses in the axle-X jars (axle.X package) for library X
-* LinearAlgebra typeclass
-* Functor, Aggregatable typeclasses
-* Show, Draw, Play typeclasses
-* MAP@k, harmonicMean
-* axle-spark
-* Apache 2.0 license
+## 0.2.4 (September 5, 2016)
+* Redo all and extend documentation using Tut
+* Convert Build.scala to build.sbt
+* LinearAlgebra doc fixes / clarification
+* Make some axle.nlp.Corpus methods more consistent
+* Avoid using wget in axle.data._
+* float*Module witnesses in axle._
 
 ## 0.2.x
 * Increase test coverage
-* Logistic Regression
+* Use dependent types (Shapeless?) for matrix size
 * Akka Streams for animating visualizations
-* Stochastic Lambda Calculus
+
+## 0.3.0
 * P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
+* solve the Spark ClassTag issue
+* redo axle-game "family polymorphism"
+
+## 0.3.x
+* Logistic Regression
+* Stochastic Lambda Calculus
 * Neural Networks
 * Hidden Markov Models
 * Game Theory: information sets, equilibria
-* Shapeless2 HLists for feature vectors
 * netlib-java Matrix
-* redo axle-game "family polymorphism"
 * Algebird/Scalding for distributed matrices
 * Performance benchmarking
 * Physics (eg, how Volume relates to Flow)
@@ -108,3 +112,12 @@ Previous Milestones
 ## 0.1.13 through 0.1.17 (October 12, 2014)
 * Distribution as a Monad
 * Spire 'Module' for axle.quanta
+
+## 0.2.0 (August 12, 2015)
+* reorganize to minimize dependencies from axle-core, with witnesses in the axle-X jars (axle.X package) for library X
+* LinearAlgebra typeclass
+* Functor, Aggregatable typeclasses
+* Show, Draw, Play typeclasses
+* MAP@k, harmonicMean
+* axle-spark
+* Apache 2.0 license
