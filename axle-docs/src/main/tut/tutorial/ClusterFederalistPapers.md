@@ -32,7 +32,7 @@ val frequentWords = corpus.wordsMoreFrequentThan(100)
 
 val topBigrams = corpus.topKBigrams(200)
 
-val numDimensions = topWords.size + topBigrams.size
+val numDimensions = frequentWords.size + topBigrams.size
 
 def featureExtractor(fp: Article): List[Double] = {
   import axle.enrichGenSeq
