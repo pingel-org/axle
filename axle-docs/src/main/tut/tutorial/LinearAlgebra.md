@@ -131,19 +131,6 @@ string(x.transpose)
 string(x.pow(2d))
 ```
 
-Scalar math
------------
-
-```tut:book
-string(x.addScalar(1.1))
-
-string(x.subtractScalar(0.2))
-
-// string(x.multiplyScalar(10d))
-
-string(x.divideScalar(100d))
-```
-
 Mins, Maxs, Ranges, and Sorts
 -----------------------------
 
@@ -217,13 +204,67 @@ string(x aside y)
 string(x atop y)
 ```
 
-Addition and multiplication
+Addition and subtraction
+------------------------
+
+```tut:book
+val x = ones(2, 3)
+
+string(x)
+```
+
+Matrix addition
+
+```tut:book
+import spire.implicits.additiveSemigroupOps
+
+string(x + x)
+```
+
+Scalar addition (JBLAS method)
+
+```tut:book
+string(x.addScalar(1.1))
+```
+
+Matrix subtraction
+
+```tut:book
+import spire.implicits.additiveGroupOps
+
+string(x - x)
+```
+
+Scalar subtraction (JBLAS method)
+
+```tut:book
+string(x.subtractScalar(0.2))
+```
+
+Multiplication and Division
 ---------------------------
 
-// val o = ones(3, 3)
-// val o2 = o * 2
-// o.multiplyMatrix(o2)
-// o + o2
+Scalar multiplication
+
+```tut:book
+import spire.implicits.moduleOps
+
+string(x :* 3d)
+```
+
+Matrix multiplication
+
+```tut:book
+import spire.implicits.multiplicativeSemigroupOps
+
+string(x * x.transpose)
+```
+
+Scalar division (JBLAS method)
+
+```tut:book
+string(x.divideScalar(100d))
+```
 
 Map element values
 ------------------

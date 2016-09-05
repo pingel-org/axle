@@ -20,8 +20,11 @@ case class Corpus(val documents: GenSeq[String], language: Language) {
       .sortBy { _._2 }
       .reverse
 
-  def topWords(cutoff: Long): List[String] =
+  def wordsMoreFrequentThan(cutoff: Long): List[String] =
     topWordCounts(cutoff) map { _._1 }
+
+  def topKWords(k: Int): List[String] = 
+    wordCountMap.toList.sortBy(_._2).reverse.take(k).map(_._1)
 
   lazy val bigramCounts = documents.flatMap({ d =>
     bigrams(language.tokenize(d.toLowerCase))
@@ -34,8 +37,8 @@ case class Corpus(val documents: GenSeq[String], language: Language) {
       .sortBy { _._2 }
       .reverse
 
-  def topBigrams(maxBigrams: Int): List[(String, String)] =
-    sortedBigramCounts take (maxBigrams) map { _._1 }
+  def topKBigrams(k: Int): List[(String, String)] =
+    sortedBigramCounts take (k) map { _._1 }
 
 }
 
@@ -51,9 +54,9 @@ object Corpus {
 
       s"""
 Corpus of ${documents.length} documents.
-There are ${topWords(wordCutoff).length} unique words used more than $wordCutoff time(s).
-Top 10 words: ${topWords(wordCutoff).take(10).mkString(", ")}
-Top 10 bigrams: ${topBigrams(10).mkString(", ")}
+There are ${wordsMoreFrequentThan(wordCutoff).length} unique words used more than $wordCutoff time(s).
+Top 10 words: ${topKWords(10).mkString(", ")}
+Top 10 bigrams: ${topKBigrams(10).mkString(", ")}
 """
     }
   }

@@ -1,10 +1,8 @@
 package axle.data
 
-import java.io.File
-
 import scala.Option.option2Iterable
-import scala.sys.process.stringSeqToProcess
 import scala.util.Try
+import java.net.URL
 
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
@@ -46,19 +44,14 @@ object Iris {
   implicit val irisEq = new Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }
 }
 
-class Irises(implicit converter: DistanceConverter[Double]) {
+class Irises(implicit converter: DistanceConverter[Double]) extends Util {
 
-  val dataUrl = "http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
-
+  val source = new URL("http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data")
   val filename = "iris.data"
 
-  val file = new File(filename)
+  val file = urlToCachedFile(source, filename)
 
   import converter.centimeter
-
-  if (!file.exists) {
-    Seq("wget", "-q", dataUrl, "-O", filename)!!
-  }
 
   val irises = io.Source.fromFile(file).getLines().toList flatMap { line =>
     Try {

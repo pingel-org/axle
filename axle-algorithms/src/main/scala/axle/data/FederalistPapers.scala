@@ -1,10 +1,7 @@
 package axle.data
 
-import java.io.File
-
 import scala.Vector
-import scala.sys.process.stringSeqToProcess
-
+import java.net.URL
 import spire.algebra.Eq
 
 /**
@@ -13,7 +10,7 @@ import spire.algebra.Eq
  *
  */
 
-object FederalistPapers {
+object FederalistPapers extends Util {
 
   val idPattern = """FEDERALIST.? No. (\d+)""".r
 
@@ -25,15 +22,11 @@ object FederalistPapers {
     def eqv(x: Article, y: Article): Boolean = x equals y
   }
 
-  val dataUrl = "http://www.gutenberg.org/files/18/18.txt"
+  val source = new URL("http://www.gutenberg.org/files/18/18.txt")
 
   val filename = "gutenberg18.txt"
 
-  val file = new File(filename)
-
-  if (!file.exists) {
-    Seq("wget", "-q", dataUrl, "-O", filename)!!
-  }
+  val file = urlToCachedFile(source, filename)
 
   lazy val articles: List[Article] = {
 

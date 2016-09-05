@@ -345,6 +345,39 @@ package object algebra {
 
     }
 
+    implicit val floatRationalModule: Module[Float, Rational] = new Module[Float, Rational] {
+
+      import spire.implicits.FloatAlgebra
+
+      def negate(x: Float): Float = FloatAlgebra.negate(x)
+
+      def zero: Float = FloatAlgebra.zero
+
+      def plus(x: Float, y: Float): Float = FloatAlgebra.plus(x, y)
+
+      implicit def scalar: Rng[Rational] = rat
+
+      def timesl(r: Rational, v: Float): Float = r.toDouble.toFloat * v
+
+    }
+
+    implicit val floatDoubleModule: Module[Float, Double] =
+      new Module[Float, Double] {
+
+        import spire.implicits.FloatAlgebra
+
+        def negate(x: Float): Float = FloatAlgebra.negate(x)
+
+        def zero: Float = FloatAlgebra.zero
+
+        def plus(x: Float, y: Float): Float = FloatAlgebra.plus(x, y)
+
+        implicit def scalar: Rng[Double] = DoubleAlgebra
+
+        def timesl(r: Double, v: Float): Float = (r * v).toFloat
+
+      }
+
     implicit val rationalDoubleModule: Module[Rational, Double] = new Module[Rational, Double] {
 
       def negate(x: Rational): Rational = rat.negate(x)
