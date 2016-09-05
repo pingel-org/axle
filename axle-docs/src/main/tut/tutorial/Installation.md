@@ -51,7 +51,7 @@ jars will explicitly provide those dependencies.
 See the project's current (build.sbt)[https://github.com/axlelang/axle/blob/master/build.sbt]
 file for up to date version information.
 
-As of version 2.4 the full list of dependencies is below.
+As of version 0.2.4 the full list of dependencies is below.
 Add this section to your `build.sbt` file to pull them all in to the `demo` project:
 
 ```
