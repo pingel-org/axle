@@ -5,6 +5,8 @@ permalink: /road_map/
 ---
 
 ## 0.2.4 (September 5, 2016)
+* Logistic Map and Mandelbrot
+* PixelatedColoredArea
 * Redo all and extend documentation using Tut
 * Convert Build.scala to build.sbt
 * LinearAlgebra doc fixes / clarification
