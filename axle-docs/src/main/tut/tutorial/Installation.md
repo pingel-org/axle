@@ -84,7 +84,7 @@ Next Steps
 
 Run `sbt console` to launch the Scala REPL with the Axle jars in the classpath.
 Axle works well interactively -- especially during prototyping, debugging, and testing.
-Any of the [Tutorials](/tutorial/).
+Any of the [Axle tutorials](/tutorial/) can be copied and pasted into the REPL.
 
 To start writing code, do `mkdir -p src/main/scala/org/acme/demo`, and add your code there.
 
