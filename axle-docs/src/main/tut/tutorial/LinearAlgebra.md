@@ -241,6 +241,9 @@ Scalar subtraction (JBLAS method)
 string(x.subtractScalar(0.2))
 ```
 
+Multiplication and Division
+---------------------------
+
 Scalar multiplication
 
 ```tut:book
