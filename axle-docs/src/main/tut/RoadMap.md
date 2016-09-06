@@ -4,42 +4,39 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.4 (September 5, 2016)
-* Redo all and extend documentation using Tut
-* Convert Build.scala to build.sbt
-* LinearAlgebra doc fixes / clarification
-* Make some axle.nlp.Corpus methods more consistent
-* Avoid using wget in axle.data._
-* float*Module witnesses in axle._
-
-## 0.2.x
+## 0.2.x (December 2016)
 * Increase test coverage
 * Use dependent types (Shapeless?) for matrix size
 * Akka Streams for animating visualizations
 
-## 0.3.0
+## 0.3.0 (Spring 2017)
 * P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
+* redo Logic using abstract algebra
 * solve the Spark ClassTag issue
 * redo axle-game "family polymorphism"
 
-## 0.3.x
+## 0.3.x (late 2017)
 * Logistic Regression
-* Stochastic Lambda Calculus
 * Neural Networks
 * Hidden Markov Models
-* Game Theory: information sets, equilibria
-* netlib-java Matrix
-* Algebird/Scalding for distributed matrices
-* Performance benchmarking
-* Physics (eg, how Volume relates to Flow)
-* Use Shapeless for compound Quanta and Bayesian Networks
-* A* Search
-* HyperLogLog
+* Support Vector Machines
 * Decision Trees
+* Random Forest
+* Stochastic Lambda Calculus
+* Metropolis Hastings
+* Game Theory: information sets, equilibria
+
+## 0.4.x (2018)
+* Performance benchmarking
+* Use Shapeless for compound Quanta and Bayesian Networks
+* Physics (eg, how Volume relates to Flow)
+* netlib-java Matrix
+* GPU/CUDA support
+* Algebird/Scalding for distributed matrices, HyperLogLog, etc
 * do-calculus (Causality)
 * Heterogenous Model types
-* Information Theory
-* GPU/CUDA support
+* A* Search
+
 
 Previous Milestones
 ===================
@@ -129,3 +126,11 @@ Previous Milestones
 * ScatterPlot
 * Logistic Map and Mandelbrot
 * PixelatedColoredArea
+
+## 0.2.4 (September 5, 2016)
+* Redo all and extend documentation using Tut
+* Convert Build.scala to build.sbt
+* LinearAlgebra doc fixes / clarification
+* Make some axle.nlp.Corpus methods more consistent
+* Avoid using wget in axle.data._
+* float*Module witnesses in axle._
