@@ -13,7 +13,7 @@ class ReservoirSamplingSpec extends Specification {
 
       val mean = arithmeticMean(sample.map(_.toDouble))
 
-      math.abs(mean - 50) must be lessThan 20
+      math.abs(mean - 50) must be lessThan 23
     }
   }
 
