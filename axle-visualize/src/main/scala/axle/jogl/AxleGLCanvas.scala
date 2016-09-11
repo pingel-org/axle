@@ -34,23 +34,29 @@ import com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import com.jogamp.opengl.glu.GLU
 import spire.implicits.FloatAlgebra
 
-case class AxleGLCanvas(
-  scene: Scene,
+import com.jogamp.opengl.util.texture.Texture
+import com.jogamp.opengl.util.texture.TextureIO
+import java.net.URL
+
+case class AxleGLCanvas[S](
+  scene: SceneFrame[S],
+  textureUrls: Seq[(URL, String)],
   fovy: UnittedQuantity[Angle, Float],
   zNear: UnittedQuantity[Distance, Float],
   zFar: UnittedQuantity[Distance, Float],
   distanceUnit: UnitOfMeasurement[Distance])(
     implicit angleMeta: AngleConverter[Float],
     distanceMeta: DistanceConverter[Float])
-  extends GLCanvas with GLEventListener {
+    extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)
 
-  var glu: GLU = null
+  var rc: RenderContext = null
+  var state: S = scene.initialState
 
   override def init(drawable: GLAutoDrawable): Unit = {
     val gl = drawable.getGL.getGL2
-    glu = new GLU()
+    val glu = new GLU()
     gl.glClearColor(0f, 0f, 0f, 0f)
     gl.glClearDepth(1f)
     gl.glEnable(GL_DEPTH_TEST)
@@ -58,7 +64,13 @@ case class AxleGLCanvas(
     gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
     gl.glShadeModel(GL_SMOOTH)
 
-    scene.registerTextures()
+    val url2texture: Map[URL, Texture] =
+      textureUrls map {
+        case (url, extension) =>
+          url -> TextureIO.newTexture(url, false, extension)
+      } toMap
+
+    rc = RenderContext(url2texture, glu)
 
     gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
@@ -81,19 +93,17 @@ case class AxleGLCanvas(
   override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int): Unit = {
     val gl = drawable.getGL.getGL2
 
-    // import axle.jung.JungDirectedGraph.directedGraphJung // conversion graph
-
     assert(height > 0)
     val aspect = width.toFloat / height
     gl.glViewport(0, 0, width, height)
     gl.glMatrixMode(GL_PROJECTION)
     gl.glLoadIdentity()
     fovy.in(angleMeta.degree)
-    glu.gluPerspective(
+    rc.glu.gluPerspective(
       (fovy in angleMeta.degree).magnitude,
       aspect,
-      (zNear in scene.distanceUnit).magnitude,
-      (zFar in scene.distanceUnit).magnitude)
+      (zNear in distanceUnit).magnitude,
+      (zFar in distanceUnit).magnitude)
     gl.glMatrixMode(GL_MODELVIEW)
     gl.glLoadIdentity()
   }
@@ -103,8 +113,8 @@ case class AxleGLCanvas(
     val gl = drawable.getGL.getGL2
     gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-    scene.renderAll(gl, glu)
-    scene.tic()
+    scene.renderAll(gl, rc, state)
+    state = scene.tic(state)
   }
 
   override def dispose(drawable: GLAutoDrawable): Unit = {}

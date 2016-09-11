@@ -15,7 +15,7 @@ import com.jogamp.opengl.glu.GLU
 
 @implicitNotFound("Witness not found for Render[${A}]")
 trait Render[A] {
-  def render(value: A, scene: Scene, gl: GL2, glu: GLU): Unit
+  def render(value: A, rc: RenderContext, gl: GL2): Unit
 }
 
 object Render {
@@ -23,7 +23,7 @@ object Render {
   final def apply[A](implicit render: Render[A]): Render[A] = render
 
   implicit val quadRenderer = new Render[Quad[Float]] {
-    def render(quad: Quad[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(quad: Quad[Float], rc: RenderContext, gl: GL2): Unit = {
       import quad._
       val w = width.magnitude / 2
       val h = height.magnitude / 2
@@ -38,7 +38,8 @@ object Render {
   }
 
   implicit val coloredSphereRenderer = new Render[Sphere[Float]] {
-    def render(sphere: Sphere[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(sphere: Sphere[Float], rc: RenderContext, gl: GL2): Unit = {
+      import rc.glu
       import sphere._
       gl.glColor3f(color.red, color.green, color.blue)
       glu.gluSphere(glu.gluNewQuadric(), radius.magnitude, slices, stacks)
@@ -51,7 +52,9 @@ object Render {
   val rgba = Vector(1f, 1f, 1f).toArray
 
   implicit val sphereRenderer = new Render[TexturedSphere[Float]] {
-    def render(sphere: TexturedSphere[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(sphere: TexturedSphere[Float], rc: RenderContext, gl: GL2): Unit = {
+
+      import rc.glu
 
       import sphere._
       gl.glColor3f(reflectionColor.red, reflectionColor.green, reflectionColor.blue)
@@ -59,7 +62,7 @@ object Render {
       gl.glMaterialfv(GL_FRONT, GL_SPECULAR, rgba, 0)
       gl.glMaterialf(GL_FRONT, GL_SHININESS, 0.5f)
 
-      val texture = scene.textureFor(textureUrl)
+      val texture = rc.url2texture(textureUrl)
       texture.enable(gl)
       texture.bind(gl)
 
@@ -74,7 +77,7 @@ object Render {
   }
 
   implicit val triangleRenderer = new Render[Triangle[Float]] {
-    def render(triangle: Triangle[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(triangle: Triangle[Float], rc: RenderContext, gl: GL2): Unit = {
       import triangle._
       val l = length.magnitude
       gl.glBegin(GL_TRIANGLES)
@@ -93,7 +96,7 @@ object Render {
   // gl.glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, colorBlack)
 
   implicit val triColorTriangleRenderer = new Render[TriColorTriangle[Float]] {
-    def render(triangle: TriColorTriangle[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(triangle: TriColorTriangle[Float], rc: RenderContext, gl: GL2): Unit = {
       import triangle._
       val l = length.magnitude
       gl.glBegin(GL_TRIANGLES)
@@ -108,7 +111,7 @@ object Render {
   }
 
   implicit val cubeRenderer = new Render[Cube[Float]] {
-    def render(cube: Cube[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(cube: Cube[Float], rc: RenderContext, gl: GL2): Unit = {
       import cube._
       val l = length.magnitude
       gl.glBegin(GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION)
@@ -150,7 +153,7 @@ object Render {
   }
 
   implicit val multiColorCubeRenderer = new Render[MultiColorCube[Float]] {
-    def render(cube: MultiColorCube[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(cube: MultiColorCube[Float], rc: RenderContext, gl: GL2): Unit = {
       import cube._
       val l = length.magnitude
       gl.glBegin(GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION)
@@ -197,7 +200,7 @@ object Render {
   }
 
   implicit val pyramidRenderer = new Render[Pyramid[Float]] {
-    def render(pyramid: Pyramid[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(pyramid: Pyramid[Float], rc: RenderContext, gl: GL2): Unit = {
       import pyramid._
       val l = length.magnitude
       gl.glBegin(GL_TRIANGLES)
@@ -225,7 +228,7 @@ object Render {
   }
 
   implicit val multiColorPyramidRenderer = new Render[MultiColorPyramid[Float]] {
-    def render(pyramid: MultiColorPyramid[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(pyramid: MultiColorPyramid[Float], rc: RenderContext, gl: GL2): Unit = {
       import pyramid._
       val l = length.magnitude
       gl.glBegin(GL_TRIANGLES)
@@ -268,13 +271,13 @@ object Render {
 
   implicit val texturedCubeRenderer = new Render[TexturedCube[Float]] {
 
-    def render(cube: TexturedCube[Float], scene: Scene, gl: GL2, glu: GLU): Unit = {
+    def render(cube: TexturedCube[Float], rc: RenderContext, gl: GL2): Unit = {
 
       import cube._
 
       val l = length.magnitude
 
-      val texture = scene.textureFor(textureUrl)
+      val texture = rc.url2texture(textureUrl)
 
       val textureCoords = texture.getImageTexCoords()
       val textureTop = textureCoords.top()
