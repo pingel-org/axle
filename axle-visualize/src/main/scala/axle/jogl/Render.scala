@@ -66,13 +66,13 @@ object Render {
       texture.enable(gl)
       texture.bind(gl)
 
-      val earth = glu.gluNewQuadric()
-      glu.gluQuadricTexture(earth, true)
-      glu.gluQuadricDrawStyle(earth, GLU.GLU_FILL)
-      glu.gluQuadricNormals(earth, GLU.GLU_FLAT)
-      glu.gluQuadricOrientation(earth, GLU.GLU_OUTSIDE)
-      glu.gluSphere(earth, radius.magnitude, slices, stacks)
-      glu.gluDeleteQuadric(earth)
+      val quadratic = glu.gluNewQuadric()
+      glu.gluQuadricTexture(quadratic, true)
+      glu.gluQuadricDrawStyle(quadratic, GLU.GLU_FILL)
+      glu.gluQuadricNormals(quadratic, GLU.GLU_FLAT)
+      glu.gluQuadricOrientation(quadratic, GLU.GLU_OUTSIDE)
+      glu.gluSphere(quadratic, radius.magnitude, slices, stacks)
+      glu.gluDeleteQuadric(quadratic)
     }
   }
 
