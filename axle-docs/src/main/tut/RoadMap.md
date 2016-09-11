@@ -28,11 +28,11 @@ permalink: /road_map/
 
 ## 0.4.x (2018)
 * Performance benchmarking
-* Use Shapeless for compound Quanta and Bayesian Networks
-* Physics (eg, how Volume relates to Flow)
 * netlib-java Matrix
 * GPU/CUDA support
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
+* Use Shapeless for compound Quanta and Bayesian Networks
+* Physics (eg, how Volume relates to Flow)
 * do-calculus (Causality)
 * Heterogenous Model types
 * A* Search
