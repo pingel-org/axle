@@ -97,7 +97,7 @@ def moonOrienter(t: Long)(gl: GL2): Unit = {
 
 Sun (the light source)
 
-```
+```tut:book
 val sunDistance = 1f *: au
 ```
 
