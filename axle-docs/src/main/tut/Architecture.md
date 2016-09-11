@@ -27,6 +27,10 @@ The code will soon compile warning-free.
 Remaining Design Issues
 -----------------------
 
+See the [Road Map](/road_map/) for more details on the timing of upcoming changes.
+
+Please get in touch if you'd like to discuss these or other questions.
+
 ### Spark Context Bounds
 
 The biggest outstanding issue is how to deal with Spark's context bounds
@@ -44,13 +48,6 @@ like `Functor`.
 Dependent types are needed to encode the size of matrices.
 You can see the need for them in the multiplicative and additive monoids for matrices (eg jblas).
 
-Please get in touch if you'd like to discuss these or other questions.
-
 ### Cats and Algebra
 
 When Spire depends on Algebra and Cats, Axle will too.
-
-See the [Road Map](/road_map/) for more details on the timing of upcoming changes.
-
-
-

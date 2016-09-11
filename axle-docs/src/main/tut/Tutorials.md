@@ -83,6 +83,7 @@ Visualizations
   * [Bar Charts](/tutorial/bar_charts/)
   * [Grouped Bar Charts](/tutorial/grouped_bar_charts/)
   * [Pixelated Colored Area](/tutorial/pixelated_colored_area/)
+  * [Earth Scene](/tutorial/earth_scene/) demonstrating Java OpenGL (JOGL)
 
 Games
 =====
