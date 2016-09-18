@@ -34,7 +34,7 @@ class GoldSpecification extends Specification {
 
       // T.isFor(ℒ)
 
-      outcome must be equalTo "well done, ɸ"
+      outcome must be equalTo "ɸ never made a correct guess"
     }
   }
 }
