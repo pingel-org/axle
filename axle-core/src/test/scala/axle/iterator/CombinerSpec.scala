@@ -12,5 +12,11 @@ class CombinerSpec extends Specification {
     cAB2.contains(List("a", "b")) must be equalTo true
   }
 
+  "fast Combine (a, b) 2" in {
+    val cAB2 = CombinationsFast(Vector("a", "b"), 2).toList
+    cAB2 must have size (1)
+    cAB2.contains(List("a", "b")) must be equalTo true
+  }
+
 }
 
