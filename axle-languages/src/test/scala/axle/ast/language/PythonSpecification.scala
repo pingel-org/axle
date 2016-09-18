@@ -154,12 +154,11 @@ def f(a, b, x=True, y=False):
       // indentation following else (see BaseHTTPServer.py.html)
       // if's condition not showing up sometimes
 
-      parseTests foreach { input =>
+      parseTests forall { input =>
         val parsed = language.parseString(input)
         val actual = parsed.map(ViewString.AstNode(_, language)).getOrElse("")
-        actual must be equalTo (input)
-      }
-      1 must be equalTo 1
+        actual == input
+      } must be equalTo true
     }
 
   }
