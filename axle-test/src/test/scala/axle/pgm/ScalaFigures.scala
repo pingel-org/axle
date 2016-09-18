@@ -193,11 +193,4 @@ class ScalaFigures extends Specification {
       List((abc, bcd), (bcd, ce)))
   }
 
-  "bayesian networks" should {
-    "work" in {
-
-      1 must be equalTo 1
-    }
-  }
-
 }

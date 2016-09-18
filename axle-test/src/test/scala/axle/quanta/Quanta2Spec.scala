@@ -35,13 +35,12 @@ class QuantaSpec extends Specification {
       val d3 = d1 + d2
       val d4 = d2 - d2
 
-      //val d5 = d2 + t2 // shouldn't compile
       val t5 = t2 in minute
       val t6 = t1 :* Rational(5, 2)
-      val t8 = Rational(5, 3) *: t1
+      val t8 = Rational(5, 3) *: (t1 in minute)
       val t9 = t1 :* 60
 
-      1 must be equalTo 1
+      t8.magnitude must be equalTo Rational(1, 9)
     }
   }
 

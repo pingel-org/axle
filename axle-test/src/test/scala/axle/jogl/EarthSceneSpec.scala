@@ -148,8 +148,7 @@ class EarthSceneSpec extends Specification {
 
       // sceneFrame.run()
 
-      1 must be equalTo 1
-
+      sceneFrame.title must be equalTo "Axle Scene Demo"
     }
   }
 }

@@ -54,7 +54,7 @@ class DocumentVectorSpaceSpec
 
       val unweightedDistanceMatrix = DistanceMatrix(corpus.map(vectorizer))
 
-      1 must be equalTo 1
+      unweightedDistanceMatrix.distanceMatrix.get(2, 2) must be equalTo 0d
     }
   }
 
