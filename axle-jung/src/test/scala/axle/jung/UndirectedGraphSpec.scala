@@ -44,7 +44,7 @@ class UndirectedGraphSpec extends Specification {
         List("a"),
         Nil)
 
-      1 must be equalTo (1)
+      g.size must be equalTo 1
     }
   }
 

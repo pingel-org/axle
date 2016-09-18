@@ -7,7 +7,7 @@ import spire.algebra.Ring
 class MatrixSpecification extends Specification {
 
   "DoubleJblasMatrix" should {
-    "work" in {
+    "create simple matries" in {
 
       import axle.syntax.linearalgebra.matrixOps
       import spire.implicits.DoubleAlgebra
@@ -23,37 +23,31 @@ class MatrixSpecification extends Specification {
       val c = y.column(2)
       val r = y.row(2)
 
-      1 must be equalTo (1)
+      z.rows must be equalTo 3
+      z.columns must be equalTo 4
     }
   }
 
   "x+x === x.map(_*2)" should {
-    "work" in {
+    "hold for random 2x2 matrix x" in {
 
       import axle.syntax.endofunctor.endofunctorOps
       import spire.implicits.DoubleAlgebra
-
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
       import laJblasDouble.randn
+      implicit val endo = endoFunctorDoubleMatrix[Double] // TODO remove
 
       val x = randn(2, 2)
 
-      val xx = implicitly[Ring[DoubleMatrix]].plus(x, x) // TODO clean up
-
-      implicit val endo = endoFunctorDoubleMatrix[Double] // TODO remove
-
-      val mapped = x.map(_ * 2d)
-
-      xx must be equalTo mapped
+      implicitly[Ring[DoubleMatrix]].plus(x, x) must be equalTo x.map(_ * 2d)
     }
   }
 
-  "aside, atop, transpose" should {
-    "work" in {
+  "(n atop m) === (n.t aside m.t).t" should {
+    "hold for random 2x3 matrices m and n" in {
 
       import axle.syntax.linearalgebra.matrixOps
       import spire.implicits.DoubleAlgebra
-
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
       import laJblasDouble.rand
 

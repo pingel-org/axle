@@ -53,7 +53,7 @@ class DirectedGraphSpec extends Specification {
           (b, c, new Edge(0.4)),
           (c, d, new Edge(2.4))))
 
-      1 must be equalTo (1)
+      g.size must be equalTo 4
     }
   }
 

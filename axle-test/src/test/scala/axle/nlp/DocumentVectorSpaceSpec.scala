@@ -73,7 +73,7 @@ class DocumentVectorSpaceSpec
       implicit val normedTfidf = tfidfSpace.normed
       val tfidfDistanceMatrix = DistanceMatrix(vectors)
 
-      1 must be equalTo 1
+      tfidfDistanceMatrix.distanceMatrix.get(2, 2) must be equalTo 0d
     }
   }
 
