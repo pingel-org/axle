@@ -36,7 +36,11 @@ class PokerHandChartSpec extends Specification {
 
       SVG[BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]]]
 
-      1 must be equalTo 1
+      val filename = "poker.svg"
+
+      svg(chart, filename)
+
+      new java.io.File(filename).exists must be equalTo true
     }
   }
 
