@@ -26,12 +26,12 @@ class AngluinSpecification extends Specification {
       val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
 
       val ɸ = MemorizingLearner()
-      ɸ.guesses(T)
+      val outcome = ɸ.guesses(T)
         .find(guess => Language.languageEq.eqv(guess.ℒ, ℒ))
         .map(finalGuess => "well done, ɸ")
         .getOrElse("ɸ never made a correct guess")
 
-      1 must be equalTo (1)
+      outcome must be equalTo "well done, ɸ"
     }
 
   }

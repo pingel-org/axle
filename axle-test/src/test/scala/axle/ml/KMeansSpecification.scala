@@ -128,7 +128,7 @@ class KMeansSpecification
         _.species,
         0 to 2)
 
-      1 must be equalTo 1
+      confusion.rowSums.columnSums.get(0, 0) must be equalTo irisesData.irises.size
     }
   }
 

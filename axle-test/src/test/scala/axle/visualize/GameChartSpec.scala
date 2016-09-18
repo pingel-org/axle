@@ -6,13 +6,14 @@ import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling.stateDistribution
+import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.stats.Distribution0
+import axle.web._
+import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.math.Rational
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.jung.directedGraphJung
 
 class GameChartSpec extends Specification {
 
@@ -24,21 +25,9 @@ class GameChartSpec extends Specification {
       val scoreD = stateD.map(_.tallied)
 
       implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
-      //      import ac.degree
-      //
-      //      val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
-      //        scoreD,
-      //        xAxis = Rational(0),
-      //        title = Some("bowling scores"),
-      //        labelAngle = 36d *: degree,
-      //        colors = List(blue),
-      //        drawKey = false)
-      //
-      //      implicit val dc = axle.visualize.BarChart.drawBarChart[Int, Rational, Distribution0[Int, Rational]]
 
-      // draw(chart)
-
-      //implicit val pdv = axle.visualize.PlotDataView.distribution0DataView[Int, Rational]
+      // test implicit conjuring:
+      PlotDataView.distribution0DataView[Int, Rational]
 
       val plot = Plot[Int, Rational, Distribution0[Int, Rational]](
         List(("score", scoreD)),
@@ -47,9 +36,11 @@ class GameChartSpec extends Specification {
         xAxis = Some(Rational(0)),
         yAxis = Some(0))
 
-      // draw(plot)
+      val filename = "bowl.svg"
 
-      1 must be equalTo 1
+      svg(plot, filename)
+
+      new java.io.File(filename).exists must be equalTo true
     }
   }
 

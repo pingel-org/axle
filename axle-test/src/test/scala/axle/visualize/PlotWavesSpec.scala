@@ -1,8 +1,9 @@
 package axle.visualize
 
 import scala.collection.immutable.TreeMap
-import spire.math.sin
 import scala.util.Random.nextDouble
+import spire.math.sin
+import spire.implicits.DoubleAlgebra
 
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
@@ -12,7 +13,7 @@ import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
-import spire.implicits.DoubleAlgebra
+import axle.web._
 
 class PlotWavesSpec extends Specification {
 
@@ -36,7 +37,8 @@ class PlotWavesSpec extends Specification {
 
       implicit val zeroDT = axle.joda.dateTimeZero(now)
 
-      // val pdv = implicitly[PlotDataView[DateTime, Double, TreeMap[DateTime, Double]]]
+      // test implicit conjuring:
+      PlotDataView[DateTime, Double, TreeMap[DateTime, Double]]
 
       val plot = Plot(
         waves,
@@ -47,9 +49,11 @@ class PlotWavesSpec extends Specification {
         yAxis = Some(now),
         yAxisLabel = Some("A·sin(ω·t + φ)"))
 
-      // png(plot, "waves.png")
+      val filename = "waves.svg"
 
-      1 must be equalTo 1
+      svg(plot, filename)
+
+      new java.io.File(filename).exists must be equalTo true
     }
   }
 

@@ -26,8 +26,8 @@ object StochasticLambdaCalculus extends Specification {
     }
   }
 
-  "π estimation" should {
-    "work" in {
+  "π estimation by testing a uniform subset of the unit square" should {
+    "get in the ballpark of π" in {
 
       import spire.math.sqrt
 
@@ -45,7 +45,7 @@ object StochasticLambdaCalculus extends Specification {
         y <- uniformDistribution(0 to n, "y")
       } yield if (sqrt(x * x + y * y) <= n) 1 else 0
 
-      1 must be equalTo 1
+      4 * piDist.probabilityOf(1) must be greaterThan Rational(3)
     }
   }
 

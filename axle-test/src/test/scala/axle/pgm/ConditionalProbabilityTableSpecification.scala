@@ -64,13 +64,11 @@ class ConditionalProbabilityTableSpecification
   "CPT" should {
     "work" in {
 
-      // for (kase <- cptB.cases) {
-      //   for (caseIs <- kase) {
-      //     println(caseIs.rv + " " + caseIs.v)
-      //   }
-      // }
+      // TODO more CPT-specific tests
 
-      1 must be equalTo (1)
+      val factor = bn.jointProbabilityTable.sumOut(A).sumOut(B).sumOut(C).sumOut(D).sumOut(E)
+
+      factor.values.size must be equalTo 1
     }
   }
 

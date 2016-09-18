@@ -28,7 +28,7 @@ class BarChartSpec extends Specification {
         labelAngle = 36d *: angleDouble.degree,
         title = Some("fruit sales"))
 
-      1 must be equalTo 1
+      chart.title.get must be equalTo "fruit sales"
     }
   }
 
@@ -55,7 +55,7 @@ class BarChartSpec extends Specification {
         // xAxis = Some(0d),
         title = Some("fruit sales"))
 
-      1 must be equalTo 1
+      chart.title.get must be equalTo "fruit sales"
     }
   }
 
@@ -67,15 +67,6 @@ class BarChartSpec extends Specification {
         b <- die(6)
       } yield a + b
 
-      //      DataView[Int, Rational, Distribution0[Int, Rational]]
-      //      Show[Int]
-      //      Plottable[Rational]
-      //      Field[Double]
-      //      Eq[Double]
-      //      DirectedGraph[JungDirectedGraph]
-      //      Module[Double, Double]
-      //      Module[Double, Rational]
-
       import spire.implicits.IntAlgebra
       val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
         distribution,
@@ -85,8 +76,7 @@ class BarChartSpec extends Specification {
         colors = List(blue),
         drawKey = false)
 
-      1 must be equalTo 1
-
+      chart.title.get must be equalTo "d6 + d6"
     }
   }
 
