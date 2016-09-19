@@ -40,7 +40,7 @@ class EnrichmentsSpec extends Specification {
       val xs = (1 to 5).toVector
       xs.permutations(2).size must be equalTo 20
     }
-    "combionations(n) creates combinations" in {
+    "combinations(n) creates combinations" in {
       val xs = (1 to 5).toVector
       xs.combinations(2).size must be equalTo 10
     }
