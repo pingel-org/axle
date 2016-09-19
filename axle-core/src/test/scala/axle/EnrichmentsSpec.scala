@@ -20,6 +20,10 @@ class EnrichmentsSpec extends Specification {
       val xs = (1 to 10).toVector
       xs(3 to 7).size must be equalTo 5
     }
+    "apply(empty range) returns empty IndexedSequence" in {
+      val xs = (1 to 10).toVector
+      xs(3 until 3).size must be equalTo 0
+    }
     "swap(i, j) swaps values" in {
       val xs = (1 to 3).toVector
       xs.swap(0, 1) must be equalTo Vector(2, 1, 3)
