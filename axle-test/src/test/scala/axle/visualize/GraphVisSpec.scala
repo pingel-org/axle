@@ -29,13 +29,19 @@ class GraphVisSpec extends Specification {
           (a, c, new Edge),
           (b, d, new Edge)))
 
-      val filename = "ug.svg"
-      import axle.web._
       import axle._
       implicit val showEdge: Show[Edge] = new Show[Edge] { def text(e: Edge): String = "" }
-      svg(g, filename)
 
-      new java.io.File(filename).exists must be equalTo true
+      import axle.web._
+      val svgName = "ug.svg"
+      svg(g, svgName)
+
+      import axle.awt._
+      val pngName = "ug.png"
+      png(g, pngName)
+
+      new java.io.File(svgName).exists must be equalTo true
+      new java.io.File(pngName).exists must be equalTo true
     }
   }
 
@@ -63,14 +69,19 @@ class GraphVisSpec extends Specification {
           (d, a, new Edge),
           (a, c, new Edge),
           (b, d, new Edge)))
-
-      val filename = "dg.svg"
-      import axle.web._
       import axle._
       implicit val showEdge: Show[Edge] = new Show[Edge] { def text(e: Edge): String = "" }
-      svg(dg, filename)
 
-      new java.io.File(filename).exists must be equalTo true
+      import axle.web._
+      val svgName = "dg.svg"
+      svg(dg, svgName)
+
+      import axle.awt._
+      val pngName = "dg.png"
+      png(dg, pngName)
+
+      new java.io.File(svgName).exists must be equalTo true
+      new java.io.File(pngName).exists must be equalTo true
     }
   }
 }
