@@ -14,7 +14,7 @@ import spire.math.Rational
 class BarChartSpec extends Specification {
 
   "BarChart" should {
-    "work" in {
+    "render an SVG of fruit sales" in {
 
       val sales = Map(
         "apple" -> 83.8,
@@ -39,7 +39,7 @@ class BarChartSpec extends Specification {
   }
 
   "BarChartGrouped" should {
-    "work" in {
+    "render an SVG of fruit sales" in {
 
       val fruits = Vector("apple", "banana", "coconut")
 
@@ -71,7 +71,7 @@ class BarChartSpec extends Specification {
   }
 
   "BarChart" should {
-    "chart d6 + d6 probability distribution" in {
+    "render a SVG of d6 + d6 probability distribution" in {
 
       val distribution: Distribution0[Int, Rational] = for {
         a <- die(6)
