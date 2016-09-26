@@ -23,8 +23,8 @@ install:
 sudo: false
 
 jdk:
-  - oraclejdk7
-  - openjdk7
+  - oraclejdk8
+#  - openjdk8
 
 script:
   - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport && bash <(curl -s https://codecov.io/bash)
