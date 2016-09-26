@@ -13,7 +13,6 @@ import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
-import axle.web._
 
 class PlotWavesSpec extends Specification {
 
@@ -49,11 +48,16 @@ class PlotWavesSpec extends Specification {
         yAxis = Some(now),
         yAxisLabel = Some("A·sin(ω·t + φ)"))
 
-      val filename = "waves.svg"
+      import axle.web._
+      val svgName = "waves.svg"
+      svg(plot, svgName)
 
-      svg(plot, filename)
+      import axle.awt._
+      val pngName = "waves.png"
+      png(plot, pngName)
 
-      new java.io.File(filename).exists must be equalTo true
+      new java.io.File(svgName).exists must be equalTo true
+      new java.io.File(pngName).exists must be equalTo true
     }
   }
 
