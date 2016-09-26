@@ -67,7 +67,7 @@ class KMeansSpecification
   }
 
   "K-Means Clustering" should {
-    "cluster irises" in {
+    "cluster irises, generate confusion matrix, and create SVG visualization" in {
 
       import axle.quanta.Distance
       import axle.quanta.DistanceConverter
@@ -106,9 +106,6 @@ class KMeansSpecification
 
       val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-      // val irisConstructor = (features: Seq[Double]) => Iris(1 *: cm, 1 *: cm, 1 *: cm, 1 *: cm, "")
-
-      // Alternately: Kmeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix]
       val classifier = KMeans.common[Iris, List, DoubleMatrix](
         irisesData.irises,
         N = 2,
@@ -121,13 +118,17 @@ class KMeansSpecification
       import spire.implicits.IntAlgebra
       import axle.orderStrings
 
-      // Alternately: ConfusionMatrix[Iris, Int, String, Vector[Iris], DoubleMatrix, Vector[(String, Int)], Vector[String]]
       val confusion = ConfusionMatrix.common[Iris, Int, String, Vector, DoubleMatrix](
         classifier,
         irisesData.irises.toVector,
         _.species,
         0 to 2)
 
+      import axle.web._
+      val filename = "kmeans.svg"
+      svg(classifier, filename)
+
+      new java.io.File(filename).exists must be equalTo true
       confusion.rowSums.columnSums.get(0, 0) must be equalTo irisesData.irises.size
     }
   }
