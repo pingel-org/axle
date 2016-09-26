@@ -9,7 +9,6 @@ import axle.game.Bowling.stateDistribution
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.stats.Distribution0
-import axle.web._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
@@ -36,11 +35,16 @@ class GameChartSpec extends Specification {
         xAxis = Some(Rational(0)),
         yAxis = Some(0))
 
-      val filename = "bowl.svg"
+      val svgName = "bowl.svg"
+      import axle.web._
+      svg(plot, svgName)
 
-      svg(plot, filename)
+      val pngName = "bowl.png"
+      import axle.awt._
+      png(plot, pngName)
 
-      new java.io.File(filename).exists must be equalTo true
+      new java.io.File(svgName).exists must be equalTo true
+      new java.io.File(pngName).exists must be equalTo true
     }
   }
 
