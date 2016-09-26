@@ -33,14 +33,16 @@ class PokerHandChartSpec extends Specification {
         keyTitle = Some("Initial Hand Size"))
 
       import axle.web._
-
       SVG[BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]]]
+      val svgName = "poker.svg"
+      svg(chart, svgName)
 
-      val filename = "poker.svg"
+      import axle.awt._
+      val pngName = "poker.png"
+      png(chart, pngName)
 
-      svg(chart, filename)
-
-      new java.io.File(filename).exists must be equalTo true
+      new java.io.File(svgName).exists must be equalTo true
+      new java.io.File(pngName).exists must be equalTo true
     }
   }
 
