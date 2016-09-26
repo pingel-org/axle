@@ -125,10 +125,15 @@ class KMeansSpecification
         0 to 2)
 
       import axle.web._
-      val filename = "kmeans.svg"
-      svg(classifier, filename)
+      val svgName = "kmeans.svg"
+      svg(classifier, svgName)
 
-      new java.io.File(filename).exists must be equalTo true
+      import axle.awt._
+      val pngName = "kmeans.png"
+      png(classifier, pngName)
+
+      new java.io.File(svgName).exists must be equalTo true
+      new java.io.File(pngName).exists must be equalTo true
       confusion.rowSums.columnSums.get(0, 0) must be equalTo irisesData.irises.size
     }
   }
