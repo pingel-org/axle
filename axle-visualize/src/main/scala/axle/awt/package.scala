@@ -26,10 +26,12 @@ import axle.visualize.Fed
 import axle.visualize.FrameRepaintingActor
 import axle.visualize.KMeansVisualization
 import axle.visualize.Plot
+import axle.visualize.ScatterPlot
 import axle.visualize.Point2D
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.DataLines
+import axle.visualize.element.DataPoints
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Key
 import axle.visualize.element.Oval
@@ -140,6 +142,11 @@ package object awt {
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
     }
 
+  implicit def drawScatterPlot[X, Y, D: ClassTag]: Draw[ScatterPlot[X, Y, D]] =
+    new Draw[ScatterPlot[X, Y, D]] {
+      def component(plot: ScatterPlot[X, Y, D]) = ScatterPlotComponent(plot)
+    }
+
   implicit def drawBarChart[S, Y, D: ClassTag]: Draw[BarChart[S, Y, D]] =
     new Draw[BarChart[S, Y, D]] {
       def component(chart: BarChart[S, Y, D]) = BarChartComponent(chart)
@@ -217,6 +224,26 @@ package object awt {
               fillOval(g2d, scaledArea, Point2D(x, x2y(d, x)), pointDiameter, pointDiameter)
             }
           }
+      }
+    }
+
+  }
+
+  implicit def paintDataPoints[X, Y, D]: Paintable[DataPoints[X, Y, D]] = new Paintable[DataPoints[X, Y, D]] {
+
+    def paint(dataPoints: DataPoints[X, Y, D], g2d: Graphics2D): Unit = {
+
+      import dataPoints._
+
+      val domain = dataView.dataToDomain(data)
+
+      if (pointDiameter.toInt > 0) {
+        domain foreach {
+          case (x, y) => {
+            g2d.setColor(cachedColor(dataView.colorOf(data, x, y)))
+            fillOval(g2d, scaledArea, Point2D(x, y), pointDiameter.toInt, pointDiameter.toInt)
+          }
+        }
       }
     }
 

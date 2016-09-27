@@ -26,12 +26,16 @@ class ScatterPlotSpec extends Specification {
       import spire.implicits.IntAlgebra
       val plot = ScatterPlot[Int, Int, Map[(Int, Int), Int]](data)
 
-      val filename = "scatter.svg"
-
       import axle.web._
-      svg(plot, filename)
+      val svgName = "scatter.svg"
+      svg(plot, svgName)
 
-      new java.io.File(filename).exists must be equalTo true
+      import axle.awt._
+      val pngName = "scatter.png"
+      png(plot, pngName)
+
+      new java.io.File(svgName).exists must be equalTo true
+      new java.io.File(pngName).exists must be equalTo true
     }
   }
 

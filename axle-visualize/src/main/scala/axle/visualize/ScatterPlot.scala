@@ -31,10 +31,9 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     xAxisLabel: Option[String] = None,
     yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
-        implicit lengthX: LengthSpace[X, X, Double],
-        lengthY: LengthSpace[Y, Y, Double],
-        val dataView: ScatterDataView[X, Y, D]
-        ) {
+        implicit val lengthX: LengthSpace[X, X, Double],
+        val lengthY: LengthSpace[Y, Y, Double],
+        val dataView: ScatterDataView[X, Y, D]) {
 
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold = true))
 
