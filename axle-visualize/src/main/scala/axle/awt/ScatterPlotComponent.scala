@@ -37,14 +37,11 @@ case class ScatterPlotComponent[X, Y, D: ClassTag](
 
     val g2d = g.asInstanceOf[Graphics2D]
 
-    val view = ScatterPlotView(plot, data)
-    import view._
-
     Paintable[HorizontalLine[X, Y]].paint(hLine, g2d)
     Paintable[VerticalLine[X, Y]].paint(vLine, g2d)
     Paintable[XTics[X, Y]].paint(xTics, g2d)
     Paintable[YTics[X, Y]].paint(yTics, g2d)
-    // Paintable[DataLines[X, Y, D]].paint(dataLines, g2d)
+    Paintable[DataPoints[X, Y, D]].paint(dataPoints, g2d)
 
     titleText.foreach(Paintable[Text].paint(_, g2d))
     xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
