@@ -4,18 +4,23 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.x (December 2016)
+## 0.2.5 (November 2016)
 * Increase test coverage
-* Use dependent types (Shapeless?) for matrix size
-* Akka Streams for animating visualizations
+* Depend on Spire on Algebra on Cats
+
+## 0.2.6 (December 2016)
+* Dependent types (Shapeless?) for matrix size
+
+## 0.2.7 (January 2017)
+* Reactive Streams (Akka?) for animating visualizations
 
 ## 0.3.0 (Spring 2017)
-* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
-* redo Logic using abstract algebra
-* solve the Spark ClassTag issue
-* redo axle-game "family polymorphism"
+* Solve the Spark ClassTag issue
 
 ## 0.3.x (late 2017)
+* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
+* redo Logic using abstract algebra
+* redo axle-game "family polymorphism"
 * Logistic Regression
 * Neural Networks
 * Hidden Markov Models
@@ -25,6 +30,7 @@ permalink: /road_map/
 * Stochastic Lambda Calculus
 * Metropolis Hastings
 * Game Theory: information sets, equilibria
+* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
 
 ## 0.4.x (2018)
 * Performance benchmarking
