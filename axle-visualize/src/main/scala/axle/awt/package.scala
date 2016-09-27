@@ -141,7 +141,7 @@ package object awt {
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
     }
 
-  implicit def drawScatterPlot[X, Y, D]: Draw[ScatterPlot[X, Y, D]] =
+  implicit def drawScatterPlot[X, Y, D: ClassTag]: Draw[ScatterPlot[X, Y, D]] =
     new Draw[ScatterPlot[X, Y, D]] {
       def component(plot: ScatterPlot[X, Y, D]) = ScatterPlotComponent(plot)
     }
