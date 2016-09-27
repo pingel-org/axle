@@ -6,6 +6,10 @@ trait ScatterDataView[X, Y, D] {
 
   def colorOf(d: D, x: X, y: Y): Color
 
+  def xRange(data: D, include: Option[X]): (X, X)
+
+  def yRange(data: D, include: Option[Y]): (Y, Y)
+
 }
 
 object ScatterDataView {

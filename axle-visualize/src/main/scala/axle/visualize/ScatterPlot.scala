@@ -10,7 +10,7 @@ import spire.algebra.Eq
 import spire.algebra.Order
 import spire.compat.ordering
 
-case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
+case class ScatterPlot[X: Order, Y: Order, D](
     data: D,
     width: Double = 600d,
     height: Double = 600d,
@@ -31,10 +31,13 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     xAxisLabel: Option[String] = None,
     yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
-        implicit lengthX: LengthSpace[X, X, Double],
-        lengthY: LengthSpace[Y, Y, Double],
-        val dataView: ScatterDataView[X, Y, D]
-        ) {
+        implicit val eqX: Eq[X],
+        val lengthX: LengthSpace[X, X, Double],
+        val xts: Tics[X],
+        val eqY: Eq[Y],
+        val lengthY: LengthSpace[Y, Y, Double],
+        val yts: Tics[Y],
+        val dataView: ScatterDataView[X, Y, D]) {
 
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold = true))
 

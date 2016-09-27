@@ -26,6 +26,7 @@ import axle.visualize.Fed
 import axle.visualize.FrameRepaintingActor
 import axle.visualize.KMeansVisualization
 import axle.visualize.Plot
+import axle.visualize.ScatterPlot
 import axle.visualize.Point2D
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.BarChartKey
@@ -138,6 +139,11 @@ package object awt {
   implicit def drawPlot[X, Y, D]: Draw[Plot[X, Y, D]] =
     new Draw[Plot[X, Y, D]] {
       def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
+    }
+
+  implicit def drawScatterPlot[X, Y, D]: Draw[ScatterPlot[X, Y, D]] =
+    new Draw[ScatterPlot[X, Y, D]] {
+      def component(plot: ScatterPlot[X, Y, D]) = ScatterPlotComponent(plot)
     }
 
   implicit def drawBarChart[S, Y, D: ClassTag]: Draw[BarChart[S, Y, D]] =
