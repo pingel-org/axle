@@ -137,7 +137,7 @@ class EarthSceneSpec extends Specification {
         renderAll,
         startTimeMillis,
         tic,
-        "Axle Scene Demo",
+        "Axle Earth Scene Demo",
         Vector.empty, // Vector((moonUrl, "png"), (earthUrl, "jpg")),
         km,
         width,
@@ -150,7 +150,7 @@ class EarthSceneSpec extends Specification {
       Thread.sleep(1000L)
       sceneFrame.canvas.destroy()
 
-      sceneFrame.title must be equalTo "Axle Scene Demo"
+      sceneFrame.title must be equalTo "Axle Earth Scene Demo"
     }
   }
 }
