@@ -131,7 +131,7 @@ class EarthSceneSpec extends Specification {
       val height = 480
       val zNear = 700f *: km
       val zFar = 700000f *: km
-      val fps = 30
+      val fps = 2
 
       val sceneFrame = SceneFrame[Long](
         renderAll,
