@@ -146,7 +146,9 @@ class EarthSceneSpec extends Specification {
         zFar,
         fps)
 
-      // sceneFrame.run()
+      sceneFrame.run()
+      Thread.sleep(1000L)
+      sceneFrame.canvas.destroy()
 
       sceneFrame.title must be equalTo "Axle Scene Demo"
     }

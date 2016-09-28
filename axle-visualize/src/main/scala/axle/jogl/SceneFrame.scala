@@ -33,24 +33,24 @@ case class SceneFrame[S](
 
   val fortyFiveDegreeFloat = 45f *: angleMeta.degree
 
+  val canvas = AxleGLCanvas(sceneFrame, textureUrls, fortyFiveDegreeFloat, zNear, zFar, distanceUnit)
+  canvas.setPreferredSize(new Dimension(width, height))
+
   def run(): Unit = {
 
     SwingUtilities.invokeLater(new Runnable() {
 
       def run(): Unit = {
 
-        val canvas = AxleGLCanvas(sceneFrame, textureUrls, fortyFiveDegreeFloat, zNear, zFar, distanceUnit)
-        canvas.setPreferredSize(new Dimension(width, height))
-
         val animator = new FPSAnimator(canvas, fps, true)
 
         val frame = new JFrame()
-        frame.getContentPane().add(canvas)
+        frame.getContentPane.add(canvas)
         frame.addWindowListener(new WindowAdapter() {
           override def windowClosing(e: WindowEvent): Unit = {
             new Thread() {
               override def run(): Unit = {
-                if (animator.isStarted()) animator.stop()
+                if (animator.isStarted) animator.stop()
                 System.exit(0)
               }
             }.start()
