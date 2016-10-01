@@ -9,19 +9,21 @@ See the wikipedia page on [Genetic Algorithms](https://en.wikipedia.org/wiki/Gen
 Example
 -------
 
-```tut:book
-case class Rabbit(a: Int, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double)
-```
+Imports
 
-Define a random rabbit generator and fitness function
-
-```tut:book
+```tut:silent
 import shapeless._
 import syntax.singleton._
 import record._
 import util.Random.nextDouble
 import util.Random.nextInt
 import axle.ml._
+```
+
+Define a random rabbit generator and fitness function
+
+```tut:book
+case class Rabbit(a: Int, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double)
 
 val gen = Generic[Rabbit]
 
