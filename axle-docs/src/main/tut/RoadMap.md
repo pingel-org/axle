@@ -5,7 +5,7 @@ permalink: /road_map/
 ---
 
 ## 0.2.5 (November 2016)
-* Increase test coverage
+* Increase test coverage to over 80%
 * Depend on Spire on Algebra on Cats
 
 ## 0.2.6 (December 2016)
@@ -21,7 +21,6 @@ permalink: /road_map/
 * P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
 * redo Logic using abstract algebra
 * redo axle-game "family polymorphism"
-* Logistic Regression
 * Neural Networks
 * Hidden Markov Models
 * Support Vector Machines
