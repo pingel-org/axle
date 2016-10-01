@@ -13,8 +13,8 @@ class GeneticAlgorithmSpec extends Specification {
 
   case class Rabbit(a: Int, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double)
 
-  "" should {
-    "" in {
+  "Genetic Algorithm" should {
+    "build a better rabbit" in {
 
       val gen = Generic[Rabbit]
 
@@ -49,7 +49,10 @@ class GeneticAlgorithmSpec extends Specification {
 
       val log = ga.run()
 
+      val winner = log.winners.last
+
       log.maxs.size must be equalTo 100
+      rabbitSpecies.fitness(winner) must be greaterThan 0d
     }
   }
 
