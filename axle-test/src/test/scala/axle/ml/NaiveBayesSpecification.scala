@@ -2,6 +2,7 @@ package axle.ml
 
 import org.specs2.mutable.Specification
 
+import axle.string
 import axle.stats.UnknownDistribution0
 import axle.stats.rationalProbabilityDist
 import spire.implicits.BooleanStructure
@@ -115,7 +116,7 @@ object NaiveBayesSpecification extends Specification {
       performance2.specificity must be equalTo Rational(2, 5)
       performance2.accuracy must be equalTo Rational(11, 14)
       performance2.f1Score must be equalTo Rational(6, 7)
-      axle.string(performance2).contains("F1") must be true
+      string(performance2) must contain("F1")
     }
   }
 
