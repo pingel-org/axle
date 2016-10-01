@@ -21,7 +21,7 @@ class LinearRegressionSpecification
       import spire.implicits.DoubleAlgebra
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
 
-      val estimator = LinearRegression(
+      val priceEstimator = LinearRegression(
         data,
         4,
         (rl: RealtyListing) => (rl.size :: rl.bedrooms.toDouble :: rl.floors.toDouble :: rl.age.toDouble :: Nil),
@@ -29,13 +29,7 @@ class LinearRegressionSpecification
         0.1,
         10)
 
-      val unknown = RealtyListing(1416, 3, 2, 40, 0.0)
-
-      val priceGuess = estimator.estimate(unknown)
-
-      //      val frame = AxleFrame()
-      //      val vis = Plot(List(estimator.errTree), true)
-      //      frame.add(vis)
+      val priceGuess = priceEstimator(RealtyListing(1416, 3, 2, 40, 0.0))
 
       priceGuess must be equalTo (412.6509523494042)
     }

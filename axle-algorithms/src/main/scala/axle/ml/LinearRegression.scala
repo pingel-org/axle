@@ -12,7 +12,8 @@ case class LinearRegression[D, M](
   featureExtractor: D => Seq[Double],
   objectiveExtractor: D => Double,
   α: Double = 0.1,
-  iterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double]) {
+  iterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
+    extends Function1[D, Double] {
 
   implicit val ring = la.ring
 
@@ -63,7 +64,7 @@ case class LinearRegression[D, M](
       (0 until errorLog.length).map(j => j -> errorLog(j)).toMap
   }
 
-  def estimate(observation: D): Double = {
+  def apply(observation: D): Double = {
     val scaledX = la.ones(1, 1) +|+ featureNormalizer(featureExtractor(observation))
     objectiveNormalizer.unapply((scaledX * θ)).head
   }
