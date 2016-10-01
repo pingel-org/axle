@@ -42,23 +42,6 @@ object NaiveBayesSpecification extends Specification {
         (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
         (t: Tennis) => t.play)
 
-      // data1 map { datum => datum.toString + "\t" + classifier(datum) } mkString ("\n")
-
-      //Tennis(Sunny,Hot,High,Weak,false) false
-      //Tennis(Sunny,Hot,High,Strong,false) false
-      //Tennis(Overcast,Hot,High,Weak,true) true
-      //Tennis(Rain,Mild,High,Weak,true)  true
-      //Tennis(Rain,Cool,Normal,Weak,true)  true
-      //Tennis(Rain,Cool,Normal,Strong,false) true
-      //Tennis(Overcast,Cool,Normal,Strong,true)  true
-      //Tennis(Sunny,Mild,High,Weak,false)  false
-      //Tennis(Sunny,Cool,Normal,Weak,true) true
-      //Tennis(Rain,Mild,Normal,Weak,true)  true
-      //Tennis(Sunny,Mild,Normal,Strong,true) true
-      //Tennis(Overcast,Mild,High,Strong,true)  true
-      //Tennis(Overcast,Hot,Normal,Weak,true) true
-      //Tennis(Rain,Mild,High,Strong,false) false
-
       val performance1 = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
         data,
         classifier1,
@@ -123,22 +106,6 @@ object NaiveBayesSpecification extends Specification {
         classifier2,
         _.play)
 
-      // data map { datum => datum.toString + "\t" + classifier2(datum) } foreach { println }
-      //Tennis(Sunny,Hot,High,Weak,false) true
-      //Tennis(Sunny,Hot,High,Strong,false) false
-      //Tennis(Overcast,Hot,High,Weak,true) true
-      //Tennis(Rain,Mild,High,Weak,true)  true
-      //Tennis(Rain,Cool,Normal,Weak,true)  true
-      //Tennis(Rain,Cool,Normal,Strong,false) false
-      //Tennis(Overcast,Cool,Normal,Strong,true)  true
-      //Tennis(Sunny,Mild,High,Weak,false)  true
-      //Tennis(Sunny,Cool,Normal,Weak,true) true
-      //Tennis(Rain,Mild,Normal,Weak,true)  true
-      //Tennis(Sunny,Mild,Normal,Strong,true) true
-      //Tennis(Overcast,Mild,High,Strong,true)  true
-      //Tennis(Overcast,Hot,Normal,Weak,true) true
-      //Tennis(Rain,Mild,High,Strong,false) true
-
       performance2.tp must be equalTo 9
       performance2.fp must be equalTo 3
       performance2.tn must be equalTo 2
@@ -148,6 +115,7 @@ object NaiveBayesSpecification extends Specification {
       performance2.specificity must be equalTo Rational(2, 5)
       performance2.accuracy must be equalTo Rational(11, 14)
       performance2.f1Score must be equalTo Rational(6, 7)
+      axle.string(performance2).contains("F1") must be true
     }
   }
 
