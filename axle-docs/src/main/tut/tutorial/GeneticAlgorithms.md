@@ -61,6 +61,8 @@ import spire.implicits._
 val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
 
 val log = ga.run()
+
+val winner = log.winners.last
 ```
 
 Plot the min, average, and max fitness function by generation
