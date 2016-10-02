@@ -110,15 +110,23 @@ class QuantaSpec extends Specification {
     }
   }
 
-  "temperature" should {
-    "convert celsius, fahrenheit, and kelvin" in {
+  "area" should {
+    "order square meter and square centimeter" in {
 
-      implicit val tc = Temperature.converterGraphK2[Double, DirectedSparseGraph]
-      import tc._
+      implicit val acg = Area.converterGraphK2[Double, DirectedSparseGraph]
+      import acg._
 
-      ((0d *: celsius) in kelvin).magnitude must be equalTo 273.15d
-      ((0d *: celsius) in fahrenheit).magnitude must be equalTo 32d
-      ((212d *: fahrenheit) in celsius).magnitude must be equalTo 100d
+      (1d *: m2) must be greaterThan (1d *: cm2)
+    }
+  }
+
+  "acceleration" should {
+    "order g and mpsps" in {
+
+      implicit val acg = Acceleration.converterGraphK2[Double, DirectedSparseGraph]
+      import acg._
+
+      (1d *: g) must be greaterThan (1d *: mpsps)
     }
   }
 
@@ -152,13 +160,37 @@ class QuantaSpec extends Specification {
     }
   }
 
-  "area" should {
-    "order square meter and square centimeter" in {
+  // TODO Money, MoneyFlow, MoneyPerForce
 
-      implicit val acg = Area.converterGraphK2[Double, DirectedSparseGraph]
-      import acg._
+  "power" should {
+    "order watt and horsepower" in {
 
-      (1d *: m2) must be greaterThan (1d *: cm2)
+      implicit val pcg = Power.converterGraphK2[Double, DirectedSparseGraph]
+      import pcg._
+
+      (1d *: horsepower) must be greaterThan (1d *: watt)
+    }
+  }
+
+  "speed" should {
+    "order knot and mph" in {
+
+      implicit val scg = Speed.converterGraphK2[Double, DirectedSparseGraph]
+      import scg._
+
+      (1d *: knot) must be greaterThan (1d *: mph)
+    }
+  }
+
+  "temperature" should {
+    "convert celsius, fahrenheit, and kelvin" in {
+
+      implicit val tc = Temperature.converterGraphK2[Double, DirectedSparseGraph]
+      import tc._
+
+      ((0d *: celsius) in kelvin).magnitude must be equalTo 273.15d
+      ((0d *: celsius) in fahrenheit).magnitude must be equalTo 32d
+      ((212d *: fahrenheit) in celsius).magnitude must be equalTo 100d
     }
   }
 
