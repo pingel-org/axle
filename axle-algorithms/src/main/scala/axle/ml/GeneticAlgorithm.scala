@@ -22,7 +22,7 @@ trait Species[G] {
 }
 
 case class GeneticAlgorithmLog[G](
-  popLog: IndexedSeq[(G, Double)],
+  winners: IndexedSeq[G],
   mins: TreeMap[Int, Double],
   maxs: TreeMap[Int, Double],
   aves: TreeMap[Int, Double])
@@ -96,14 +96,15 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
     (population.minBy(_._2)._2, population.maxBy(_._2)._2, population.map(_._2).sum / population.size)
 
   def run(): GeneticAlgorithmLog[G] = {
-    val popLog = (0 until numGenerations)
+    val populationLog = (0 until numGenerations)
       .foldLeft((initialPopulation(), List[(Double, Double, Double)]()))(
         (pl: (IndexedSeq[(G, Double)], List[(Double, Double, Double)]), i: Int) => live(pl._1, pl._2))
-    val logs = popLog._2.reverse
+    val logs = populationLog._2.reverse
+    val winners = populationLog._1.reverse.map(_._1)
     val mins = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._1))
     val maxs = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._2))
     val aves = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._3))
-    GeneticAlgorithmLog[G](popLog._1, mins, maxs, aves)
+    GeneticAlgorithmLog[G](winners, mins, maxs, aves)
   }
 
 }

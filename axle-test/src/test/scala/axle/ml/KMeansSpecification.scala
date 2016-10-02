@@ -2,6 +2,7 @@ package axle.ml
 
 import org.specs2.mutable.Specification
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.string
 
 class KMeansSpecification
     extends Specification {
@@ -135,6 +136,7 @@ class KMeansSpecification
       new java.io.File(svgName).exists must be equalTo true
       new java.io.File(pngName).exists must be equalTo true
       confusion.rowSums.columnSums.get(0, 0) must be equalTo irisesData.irises.size
+      string(confusion) must contain("versicolor")
     }
   }
 

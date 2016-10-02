@@ -30,7 +30,7 @@ implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 
 import axle.ml.LinearRegression
 
-val estimator = LinearRegression(
+val priceEstimator = LinearRegression(
   listings,
   numFeatures = 4,
   featureExtractor = (rl: RealtyListing) => (rl.size :: rl.bedrooms.toDouble :: rl.floors.toDouble :: rl.age.toDouble :: Nil),
@@ -42,7 +42,7 @@ val estimator = LinearRegression(
 Use the estimator
 
 ```tut:book
-estimator.estimate(RealtyListing(1416, 3, 2, 40, 0d))
+priceEstimator(RealtyListing(1416, 3, 2, 40, 0d))
 ```
 
 Plot the error during the training
@@ -53,7 +53,7 @@ import axle.visualize._
 import axle.algebra.Plottable._
 
 val errorPlot = Plot(
-  List(("error" -> estimator.errTree)),
+  List(("error" -> priceEstimator.errTree)),
   connect = true,
   drawKey = true,
   title = Some("Linear Regression Error"),

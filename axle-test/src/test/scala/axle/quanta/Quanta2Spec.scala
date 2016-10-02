@@ -14,6 +14,7 @@ import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
+import spire.compat.ordering
 
 class QuantaSpec extends Specification {
 
@@ -109,10 +110,84 @@ class QuantaSpec extends Specification {
     }
   }
 
+  "area" should {
+    "order square meter and square centimeter" in {
+
+      implicit val acg = Area.converterGraphK2[Double, DirectedSparseGraph]
+      import acg._
+
+      (1d *: m2) must be greaterThan (1d *: cm2)
+    }
+  }
+
+  "acceleration" should {
+    "order g and mpsps" in {
+
+      implicit val acg = Acceleration.converterGraphK2[Double, DirectedSparseGraph]
+      import acg._
+
+      (1d *: g) must be greaterThan (1d *: mpsps)
+    }
+  }
+
+  "force" should {
+    "order newton and pound" in {
+
+      implicit val fcg = Force.converterGraphK2[Double, DirectedSparseGraph]
+      import fcg._
+
+      (1d *: pound) must be greaterThan (1d *: newton)
+    }
+  }
+
+  "frequency" should {
+    "order KHz and Hz" in {
+
+      implicit val fcg = Frequency.converterGraphK2[Double, DirectedSparseGraph]
+      import fcg._
+
+      (1d *: KHz) must be greaterThan (1d *: Hz)
+    }
+  }
+
+  "energy" should {
+    "order ton TNT and Joule" in {
+
+      implicit val ecg = Energy.converterGraphK2[Double, DirectedSparseGraph]
+      import ecg._
+
+      (1d *: tonTNT) must be greaterThan (1d *: joule)
+    }
+  }
+
+  // TODO Money, MoneyFlow, MoneyPerForce
+
+  "power" should {
+    "order watt and horsepower" in {
+
+      implicit val pcg = Power.converterGraphK2[Double, DirectedSparseGraph]
+      import pcg._
+
+      (1d *: horsepower) must be greaterThan (1d *: watt)
+    }
+  }
+
+  "speed" should {
+    "order knot and mph" in {
+
+      implicit val scg = Speed.converterGraphK2[Double, DirectedSparseGraph]
+      import scg._
+
+      (1d *: knot) must be greaterThan (1d *: mph)
+    }
+  }
+
   "temperature" should {
-    "work" in {
+    "convert celsius, fahrenheit, and kelvin" in {
+
       implicit val tc = Temperature.converterGraphK2[Double, DirectedSparseGraph]
       import tc._
+
       ((0d *: celsius) in kelvin).magnitude must be equalTo 273.15d
       ((0d *: celsius) in fahrenheit).magnitude must be equalTo 32d
       ((212d *: fahrenheit) in celsius).magnitude must be equalTo 100d

@@ -52,7 +52,9 @@ object Speed {
 
       def links: Seq[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])] =
         List[(UnitOfMeasurement[Speed], UnitOfMeasurement[Speed], Bijection[N, N])](
-          (knot, kph, Scale(1.852)),
+          (kph, knot, Scale(1.852)),
+          (kph, mph, Scale(1.609344)),
+          (mph, mps, Scale(Rational(3600))),
           (mps, c, Scale(Rational(299792458))))
 
     }

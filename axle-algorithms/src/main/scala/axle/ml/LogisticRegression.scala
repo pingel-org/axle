@@ -9,26 +9,25 @@ import spire.implicits._
 
 case class LogisticRegression[D, M](
   examples: List[D],
-  numObservations: Int,
-  observationExtractor: D => List[Double],
+  numFeatures: Int,
+  featureExtractor: D => List[Double],
   objectiveExtractor: D => Boolean,
   α: Double = 0.1,
-  numIterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double]) {
+  numIterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
+    extends Function1[List[Double], Double] {
 
   implicit val module = la.module
   implicit val ring = la.ring
 
   // h is essentially P(y=1 | X;θ)
-  def h(xi: M, θ: M): Double = 1 / (1 + exp(-1 * (θ.t * xi).scalar))
+  def h(xi: M, θ: M): Double =
+    1 / (1 + exp(-1 * (θ.t * xi).scalar))
 
   // yi is boolean (1d or 0d)
-  def cost(xi: M, θ: M, yi: Double) =
+  def cost(xi: M, θ: M, yi: Double): Double =
     -1 * log(if (yi > 0d) h(θ, xi) else 1 - h(θ, xi))
 
-  def predictedY(xi: M, θ: M): Boolean =
-    h(xi, θ) >= 0.5
-
-  def Jθ(X: M, θ: M, y: M) =
+  def Jθ(X: M, θ: M, y: M): Double =
     (0 until X.rows)
       .foldLeft(0d)((r: Double, i: Int) => r + cost(X.row(i), θ, y.get(i, 0))) / X.rows
 
@@ -38,27 +37,36 @@ case class LogisticRegression[D, M](
     })
   }
 
-  // objective: minimize (over θ) the value of Jθ
+  /**
+   * 
+   * Gradient descent's objective: minimize (over θ) the value of Jθ
+   */
 
-  def gradientDescent(X: M, y: M, θ: M, α: Double, iterations: Int): M =
-    (0 until iterations).foldLeft(θ)((θi: M, i: Int) => la.ring.minus(θi, (dθ(X, y, θi) :* α)))
+  def gradientDescent(X: M, y: M, α: Double, iterations: Int): M = {
+    val θ0 = la.ones(X.columns, 1)
+    (0 until iterations).foldLeft(θ0)((θi: M, i: Int) => la.ring.minus(θi, (dθ(X, y, θi) :* α)))
+  }
 
-  val inputX = la.matrix(examples.length, numObservations, examples.flatMap(observationExtractor).toArray).t
+  val inputX: M = la.matrix(examples.length, numFeatures, examples.flatMap(featureExtractor).toArray)
+
+  def boolean2double(b: Boolean): Double = b match {
+    case true  => 1d
+    case false => 0d
+  }
 
   val y = la.matrix(
     examples.length,
     1,
-    examples.map(objectiveExtractor).map(o => o match { case true => 1d case false => 0d }).toArray)
+    examples.map(objectiveExtractor).map(boolean2double).toArray)
 
   val featureNormalizer = LinearFeatureNormalizer(inputX)
 
-  val X = la.ones(examples.length, 1) +|+ featureNormalizer.normalizedData
+  // val X = la.ones(examples.length, 1) aside featureNormalizer.normalizedData
+  val X = featureNormalizer.normalizedData
 
-  val θ0 = la.ones(X.columns, 1)
+  val finalθ = gradientDescent(X, y, α, numIterations)
 
-  val θ = gradientDescent(X, y, θ0, α, numIterations)
-
-  // TODO: These were returned by 'regression' method previously:
-  (θ, featureNormalizer)
+  def apply(features: List[Double]): Double =
+    h(featureNormalizer(features), finalθ)
 
 }
