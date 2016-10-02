@@ -14,6 +14,7 @@ import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
+import spire.compat.ordering
 
 class QuantaSpec extends Specification {
 
@@ -110,12 +111,55 @@ class QuantaSpec extends Specification {
   }
 
   "temperature" should {
-    "work" in {
+    "convert celsius, fahrenheit, and kelvin" in {
+
       implicit val tc = Temperature.converterGraphK2[Double, DirectedSparseGraph]
       import tc._
+
       ((0d *: celsius) in kelvin).magnitude must be equalTo 273.15d
       ((0d *: celsius) in fahrenheit).magnitude must be equalTo 32d
       ((212d *: fahrenheit) in celsius).magnitude must be equalTo 100d
+    }
+  }
+
+  "force" should {
+    "order newton and pound" in {
+
+      implicit val fcg = Force.converterGraphK2[Double, DirectedSparseGraph]
+      import fcg._
+
+      // TODO
+      1 must be equalTo 1
+    }
+  }
+
+  "frequency" should {
+    "order KHz and Hz" in {
+
+      implicit val fcg = Frequency.converterGraphK2[Double, DirectedSparseGraph]
+      import fcg._
+
+      (1d *: KHz) must be greaterThan (1d *: Hz)
+    }
+  }
+
+  "energy" should {
+    "order ton TNT and Joule" in {
+
+      implicit val ecg = Energy.converterGraphK2[Double, DirectedSparseGraph]
+      import ecg._
+
+      (1d *: tonTNT) must be greaterThan (1d *: joule)
+    }
+  }
+
+  "area" should {
+    "order square meter and square centimeter" in {
+
+      implicit val acg = Area.converterGraphK2[Double, DirectedSparseGraph]
+      import acg._
+
+      (1d *: m2) must be greaterThan (1d *: cm2)
     }
   }
 
