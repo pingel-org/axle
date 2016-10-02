@@ -51,6 +51,8 @@ object Power {
     evDG: DirectedGraph[DG, UnitOfMeasurement[Power], N => N]) =
     new UnitConverterGraph[Power, N, DG] with PowerConverter[N] {
 
+      import spire.implicits.DoubleAlgebra
+
       def links: Seq[(UnitOfMeasurement[Power], UnitOfMeasurement[Power], Bijection[N, N])] =
         List[(UnitOfMeasurement[Power], UnitOfMeasurement[Power], Bijection[N, N])](
           (watt, kilowatt, Scale10s(3)),
