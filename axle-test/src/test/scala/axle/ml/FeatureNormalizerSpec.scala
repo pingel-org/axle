@@ -39,7 +39,7 @@ class FeatureNormalizerSpec extends Specification {
 
       val normalized = featureNormalizer(1.4 :: 6.7 :: Nil)
 
-      string(normalized) must be equalTo "-0.726598 0.051956"
+      axle.string(normalized) must be equalTo "-0.726598 0.051956"
       //la.matrix(1, 2, Array(-0.726598, 0.051956))
     }
   }
