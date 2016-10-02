@@ -25,7 +25,7 @@ trait FrequencyUnits extends QuantumUnits[Frequency] {
   lazy val GHz = gigahertz
 
   def units: List[UnitOfMeasurement[Frequency]] =
-    List(degree)
+    List(degree, hertz, kilohertz, megahertz, gigahertz)
 
 }
 
