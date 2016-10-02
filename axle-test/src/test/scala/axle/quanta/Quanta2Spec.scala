@@ -128,8 +128,7 @@ class QuantaSpec extends Specification {
       implicit val fcg = Force.converterGraphK2[Double, DirectedSparseGraph]
       import fcg._
 
-      // TODO
-      1 must be equalTo 1
+      (1d *: pound) must be greaterThan (1d *: newton)
     }
   }
 
