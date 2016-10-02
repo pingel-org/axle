@@ -1,8 +1,8 @@
 package axle.jogl
 
-import org.specs2.mutable.Specification
-
 import java.util.Date
+
+import org.specs2.mutable.Specification
 
 import com.jogamp.opengl.GL2
 
@@ -13,11 +13,8 @@ import axle.algebra.modules.floatRationalModule
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
-import axle.quanta.UnittedQuantity
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.FloatAlgebra
-import spire.implicits.additiveGroupOps
-import spire.implicits.moduleOps
 
 class ShapesSpec extends Specification {
 

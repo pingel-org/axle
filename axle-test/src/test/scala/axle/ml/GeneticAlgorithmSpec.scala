@@ -3,11 +3,8 @@ package axle.ml
 import org.specs2.mutable.Specification
 
 import shapeless._
-import syntax.singleton._
-import record._
 import util.Random.nextDouble
 import util.Random.nextInt
-import axle.ml._
 
 class GeneticAlgorithmSpec extends Specification {
 
