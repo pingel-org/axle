@@ -18,8 +18,8 @@ class TicTacToeSpec extends Specification {
       val moves = movesFrom(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 6), (x, 7)))
       val (_, lastState) = scriptToLastMoveState[TicTacToe](game, moves)
       val outcome = lastState.outcome(game).get
-      outcome.displayTo(x, game) must contain("win")
-      outcome.displayTo(o, game) must contain("lose")
+      outcome.displayTo(x, game) must contain("You have beaten")
+      outcome.displayTo(o, game) must contain("beat you")
       outcome.winner.get should be equalTo x
     }
   }
