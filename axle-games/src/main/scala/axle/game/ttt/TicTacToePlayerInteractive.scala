@@ -15,15 +15,15 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
 
   override def displayEvents(events: List[Event[TicTacToe]], ttt: TicTacToe): Unit = {
     println()
-    println(events.map(_.displayTo(this)).mkString("  "))
+    println(events.map(_.displayTo(this, ttt)).mkString("  "))
     println()
   }
 
   override def endGame(state: TicTacToeState, ttt: TicTacToe): Unit = {
     println()
-    println(state.displayTo(this))
+    println(state.displayTo(this, ttt))
     println()
-    println(state.outcome(ttt).map(_.displayTo(this)))
+    println(state.outcome(ttt).map(_.displayTo(this, ttt)))
     println()
   }
 
@@ -57,7 +57,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
   }
 
   def move(state: TicTacToeState, ttt: TicTacToe): (TicTacToeMove, TicTacToeState) = {
-    println(state.displayTo(state.player))
+    println(state.displayTo(state.player, ttt))
     val position = userInputStream().find(input => isValidMove(input, state, ttt)).map(_.toInt).get
     val move = TicTacToeMove(this, position, ttt.boardSize)
     (move, state(move, ttt).get) // TODO .get

@@ -23,7 +23,7 @@ case class TicTacToeMove(player: TicTacToePlayer, position: Int, boardSize: Int)
     case _ => string(position)
   }
 
-  def displayTo(p: TicTacToePlayer)(implicit eqp: Eq[TicTacToePlayer], sp: Show[TicTacToePlayer]): String =
+  def displayTo(p: TicTacToePlayer, ttt: TicTacToe)(implicit eqp: Eq[TicTacToePlayer], sp: Show[TicTacToePlayer]): String =
     (if (player != p) "I will" else "You have") +
       " put an " + player.id +
       " in the " + description + "."

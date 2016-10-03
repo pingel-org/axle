@@ -50,7 +50,7 @@ case class TicTacToe(
   def startBoard: Array[Option[TicTacToePlayer]] =
     (0 until (boardSize * boardSize)).map(i => None).toArray
 
-  def players: Set[TicTacToePlayer] = Set(x, o)
+  def players: IndexedSeq[TicTacToePlayer] = Vector(x, o)
 
   def playerAfter(player: TicTacToePlayer): TicTacToePlayer =
     if (player === x) o else x

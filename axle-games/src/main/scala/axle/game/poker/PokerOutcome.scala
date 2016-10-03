@@ -15,8 +15,5 @@ object PokerOutcome {
   }
 }
 
-case class PokerOutcome(winner: Option[PokerPlayer], hand: Option[PokerHand])(implicit ev: Poker)
-  extends Outcome[Poker] {
-
-  implicit def game = ev
-}
+case class PokerOutcome(winner: Option[PokerPlayer], hand: Option[PokerHand])
+  extends Outcome[Poker]

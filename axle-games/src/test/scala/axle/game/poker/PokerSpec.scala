@@ -2,9 +2,13 @@ package axle.game.poker
 
 import org.specs2.mutable._
 
-import axle.game.cards._
 import spire.algebra.Eq
 import spire.compat.ordering
+
+// 6♡,6♢,T♠,T♡,A♡,6♡,6♢,T♠,J♠,J♡
+// 6♡,6♢,8♠,9♡,K♡,K♡,K♢,2♠,3♠,5♡
+// 6♡,6♢,6♠,Q♡,K♡,7♡,7♢,7♠,3♠,4♡
+// 6♡,6♢,6♠,6♣,Q♡,7♡,7♢,7♠,7♣,2♡
 
 class PokerSpec extends Specification {
 

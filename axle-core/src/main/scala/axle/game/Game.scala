@@ -18,7 +18,7 @@ trait Game[G <: Game[G]] {
   type MOVE <: Move[G]
   type OUTCOME <: Outcome[G]
 
-  def players: Set[G#PLAYER]
+  def players: IndexedSeq[G#PLAYER]
 
   def introMessage: String
 
@@ -79,7 +79,7 @@ trait Game[G <: Game[G]] {
     if (s0.outcome(self).isDefined) {
       empty
     } else {
-      val s1 = s0.displayEvents(Set(s0.player), self)
+      val s1 = s0.displayEvents(Seq(s0.player), self)
       val (move, _) = s1.player.move(s1, self) // TODO: figure out why in some cases the second argument (a State) wasn't modified (eg minimax)
       val s2 = s1(move, self).get // TODO .get
       val s3 = s2.broadcast(players, move)

@@ -9,7 +9,7 @@ case class TicTacToeState(
   board: Array[Option[TicTacToePlayer]],
   boardSize: Int,
   _eventQueues: Map[TicTacToePlayer, List[Event[TicTacToe]]] = Map())
-  extends State[TicTacToe]() {
+    extends State[TicTacToe]() {
 
   val numPositions = board.length
 
@@ -27,7 +27,7 @@ case class TicTacToeState(
     updated
   }
 
-  def displayTo(viewer: TicTacToePlayer): String = {
+  def displayTo(viewer: TicTacToePlayer, game: TicTacToe): String = {
 
     val keyWidth = string(numPositions).length
 
@@ -61,9 +61,9 @@ case class TicTacToeState(
   def outcome(ttt: TicTacToe): Option[TicTacToeOutcome] = {
     val winner = ttt.players.find(hasWon)
     if (winner.isDefined) {
-      Some(TicTacToeOutcome(winner, ttt))
+      Some(TicTacToeOutcome(winner))
     } else if (openPositions(ttt).length === 0) {
-      Some(TicTacToeOutcome(None, ttt))
+      Some(TicTacToeOutcome(None))
     } else {
       None
     }
