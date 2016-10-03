@@ -30,10 +30,7 @@ case class TicTacToe(
     player: TicTacToePlayer,
     board: Array[Option[TicTacToePlayer]],
     eventQueue: Map[TicTacToePlayer, List[Event[TicTacToe]]]): Option[TicTacToeState] =
-    Some(TicTacToeState(player, board, eventQueue))
-
-  def move(player: TicTacToePlayer, position: Int): TicTacToeMove =
-    TicTacToeMove(player, position)
+    Some(TicTacToeState(player, board, boardSize, eventQueue))
 
   def player(id: String, description: String, which: String): TicTacToePlayer =
     which match {
@@ -42,7 +39,7 @@ case class TicTacToe(
       case _        => InteractiveTicTacToePlayer(id, description)
     }
 
-  def startState: TicTacToeState = TicTacToeState(x, startBoard)
+  def startState: TicTacToeState = TicTacToeState(x, startBoard, boardSize)
 
   def startFrom(s: TicTacToeState): Option[TicTacToeState] = Some(startState)
 

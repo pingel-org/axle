@@ -5,10 +5,10 @@ import axle.game.Move
 import axle.string
 import spire.algebra.Eq
 
-case class TicTacToeMove(player: TicTacToePlayer, position: Int)(implicit ttt: TicTacToe)
+case class TicTacToeMove(player: TicTacToePlayer, position: Int, boardSize: Int)
   extends Move[TicTacToe] {
 
-  def description: String = ttt.boardSize match {
+  def description: String = boardSize match {
     case 3 => position match {
       case 1 => "upper left"
       case 2 => "upper middle"
