@@ -7,6 +7,9 @@ import axle.string
 
 object Card {
 
+  def fromString(s: String): IndexedSeq[Card] =
+    s.split(",").map(Card(_))
+
   implicit def cardEq: Eq[Card] = new Eq[Card] {
     def eqv(x: Card, y: Card): Boolean = x.rank === y.rank && x.suit === y.suit
   }
