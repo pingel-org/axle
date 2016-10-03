@@ -17,7 +17,7 @@ object Rank {
   }
 
   implicit def show[R <: Rank]: Show[R] = new Show[R] { def text(r: R) = r.serialize.toString }
-  
+
   def apply(c: Char): Rank = c match {
     case '2' => R2
     case '3' => R3
