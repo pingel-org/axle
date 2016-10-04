@@ -73,10 +73,10 @@ class TicTacToeSpec extends Specification {
       i.displayEvents(List(firstMove), game)
       i.endGame(game.startState, game)
       i.id must be equalTo "i"
-      i.validateMove("1", game.startState, game).right.toOption.get.position must be equalTo 1
-      i.validateMove("14", game.startState, game) must be equalTo Left("Please enter a number between 1 and 9")
-      i.validateMove("foo", game.startState, game) must be equalTo Left("foo is not a valid move.  Please select again")
-      i.validateMove("2", secondState, game) must be equalTo Left("That space is occupied.")
+      i.validateMoveInput("1", game.startState, game).right.toOption.get.position must be equalTo 1
+      i.validateMoveInput("14", game.startState, game) must be equalTo Left("Please enter a number between 1 and 9")
+      i.validateMoveInput("foo", game.startState, game) must be equalTo Left("foo is not a valid move.  Please select again")
+      i.validateMoveInput("2", secondState, game) must be equalTo Left("That space is occupied.")
     }
   }
 

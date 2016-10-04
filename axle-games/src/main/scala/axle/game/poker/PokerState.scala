@@ -78,12 +78,12 @@ case class PokerState(
     case Deal(dealer) => {
       // TODO clean up these range calculations
       val cards = Vector() ++ deck.cards
-      val hands = game._players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
-      val shared = cards(game._players.size * 2 to game._players.size * 2 + 4)
-      val unused = cards((game._players.size * 2 + 5) until cards.length)
+      val hands = game.players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
+      val shared = cards(game.players.size * 2 to game.players.size * 2 + 4)
+      val unused = cards((game.players.size * 2 + 5) until cards.length)
 
       // TODO: should blinds be a part of the "deal" or are they minimums during first round of betting?
-      val orderedStillIn = game._players.filter(stillIn.contains)
+      val orderedStillIn = game.players.filter(stillIn.contains)
       val smallBlindPlayer = orderedStillIn(0)
       val bigBlindPlayer = orderedStillIn(1) // list should be at least this long
 
@@ -193,7 +193,7 @@ case class PokerState(
 
       val newPiles = piles + (winner -> (piles(winner) + pot))
 
-      val newStillIn = game._players.filter(newPiles(_) >= bigBlind).toSet
+      val newStillIn = game.players.filter(newPiles(_) >= bigBlind).toSet
 
       Some(PokerState(
         s => game.dealer,
