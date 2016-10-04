@@ -51,6 +51,11 @@ class TicTacToeSpec extends Specification {
       startingMoves.length must be equalTo 9
       startingMoves.map(_.description).mkString(",") must contain("upper")
     }
+    "work for large (4x4) game" in {
+      val bigGame = TicTacToe(4, "human", "human")
+      val startingMoves = bigGame.startState.moves(game)
+      startingMoves.map(_.description).mkString(",") must contain("16")
+    }
   }
 
   "event queues" should {
