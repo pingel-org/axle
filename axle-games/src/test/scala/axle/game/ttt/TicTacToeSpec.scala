@@ -14,9 +14,10 @@ class TicTacToeSpec extends Specification {
     pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
 
   "start state" should {
-    "display movement key to player x" in {
+    "display movement key to player x, and have 9 moves available to x" in {
 
       game.startState.displayTo(x, game) must contain("Movement Key")
+      game.startState.moves(game).length must be equalTo 9
     }
   }
 
