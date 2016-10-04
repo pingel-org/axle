@@ -18,6 +18,7 @@ class TicTacToeSpec extends Specification {
 
       game.startState.displayTo(x, game) must contain("Movement Key")
       game.startState.moves(game).length must be equalTo 9
+      game.startState.eventQueues.size must be equalTo 2
     }
   }
 
