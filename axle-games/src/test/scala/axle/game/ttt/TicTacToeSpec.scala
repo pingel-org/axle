@@ -32,7 +32,7 @@ class TicTacToeSpec extends Specification {
       val state = game.startState
       val move = state.moves(game).head
       val nextState = state(move, game).get // TODO .get
-      game.startFrom(nextState).get must be equalTo game.startState
+      game.startFrom(nextState).get.moves(game).length must be equalTo 9
     }
   }
 
