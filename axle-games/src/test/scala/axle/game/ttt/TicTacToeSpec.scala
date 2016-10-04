@@ -33,6 +33,8 @@ class TicTacToeSpec extends Specification {
 
   "event queues" should {
     "be two" in {
+      val move = game.startState.moves(game).head
+      game.startState.broadcast(game.players, move)
       game.startState.eventQueues.size must be equalTo 2
     }
   }
