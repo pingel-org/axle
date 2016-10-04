@@ -35,7 +35,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
     cons(num, userInputStream)
   }
 
-  def validateMove(input: String, state: TicTacToeState, ttt: TicTacToe): Either[String, TicTacToeMove] = {
+  def validateMoveInput(input: String, state: TicTacToeState, ttt: TicTacToe): Either[String, TicTacToeMove] = {
     val eitherI: Either[String, Int] = try {
       val i: Int = input.toInt
       if (i >= 1 && i <= ttt.numPositions) {
@@ -62,7 +62,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
     val move =
       userInputStream().
         map(input => {
-          val validated = validateMove(input, state, ttt)
+          val validated = validateMoveInput(input, state, ttt)
           validated.left.map(println)
           validated
         }).
