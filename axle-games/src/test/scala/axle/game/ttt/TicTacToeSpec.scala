@@ -22,15 +22,31 @@ class TicTacToeSpec extends Specification {
     }
   }
 
+  "random game" should {
+
+    val rx = RandomTicTacToePlayer("x", "R X")
+    val ro = RandomTicTacToePlayer("o", "R O")
+    val rGame = TicTacToe(3, rx, ro)
+
+    "produce moveStateStream" in {
+      rGame.moveStateStream(rGame.startState).take(3).length must be equalTo 3
+    }
+
+    "play" in {
+      val endState: TicTacToeState = rGame.play(rGame.startState, false).get
+      endState.moves(rGame).length must be equalTo 0
+    }
+
+    "product game stream" in {
+      val games = rGame.gameStream(rGame.startState, false).take(2)
+      games.length must be equalTo 2
+    }
+
+  }
+
   "start state" should {
     "display movement key to player x, and have 9 moves available to x" in {
       game.startState.displayTo(x, game) must contain("Movement Key")
-    }
-    "produce moveStateStream" in {
-      val rx = RandomTicTacToePlayer("x", "R X")
-      val ro = RandomTicTacToePlayer("o", "R O")
-      val game = TicTacToe(3, rx, ro)
-      game.moveStateStream(game.startState).take(3).length must be equalTo 3
     }
   }
 
