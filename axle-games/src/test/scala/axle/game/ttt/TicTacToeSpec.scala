@@ -17,7 +17,22 @@ class TicTacToeSpec extends Specification {
     "display movement key to player x, and have 9 moves available to x" in {
 
       game.startState.displayTo(x, game) must contain("Movement Key")
-      game.startState.moves(game).length must be equalTo 9
+    }
+  }
+
+  "starting moves" should {
+    "be nine-fold, display to O with 'put an', and have string descriptions that contain 'upper'" in {
+
+      val startingMoves = game.startState.moves(game)
+
+      startingMoves.head.displayTo(o, game) must contain("put an")
+      startingMoves.length must be equalTo 9
+      startingMoves.map(_.description).mkString(",") must contain("upper")
+    }
+  }
+
+  "event queues" should {
+    "be two" in {
       game.startState.eventQueues.size must be equalTo 2
     }
   }
