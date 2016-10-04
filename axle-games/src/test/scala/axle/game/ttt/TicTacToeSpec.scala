@@ -13,8 +13,15 @@ class TicTacToeSpec extends Specification {
   def movesFrom(pps: List[(TicTacToePlayer, Int)]): List[TicTacToeMove] =
     pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
 
-  "game1" should {
-    "work" in {
+  "start state" should {
+    "display movement key to player x" in {
+
+      game.startState.displayTo(x, game) must contain("Movement Key")
+    }
+  }
+
+  "7-move x diagonal" should {
+    "be a victory for x" in {
       val moves = movesFrom(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 6), (x, 7)))
       val (_, lastState) = scriptToLastMoveState[TicTacToe](game, moves)
       val outcome = lastState.outcome(game).get
@@ -24,8 +31,8 @@ class TicTacToeSpec extends Specification {
     }
   }
 
-  "game2" should {
-    "work" in {
+  "7-move o diagonal" should {
+    "be a victory for o" in {
       val moves = movesFrom(List((x, 2), (o, 3), (x, 4), (o, 5), (x, 6), (o, 7), (x, 8)))
       val (_, lastState) = scriptToLastMoveState[TicTacToe](game, moves)
       val winnerOpt = lastState.outcome(game).flatMap(_.winner)
@@ -33,8 +40,8 @@ class TicTacToeSpec extends Specification {
     }
   }
 
-  "game3" should {
-    "work" in {
+  "9 move tie" should {
+    "result in no-winner outcome" in {
       val moves = movesFrom(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 7), (x, 8), (o, 9), (x, 6)))
       val (_, lastState) = scriptToLastMoveState[TicTacToe](game, moves)
       val winnerOpt = lastState.outcome(game).flatMap(_.winner)
