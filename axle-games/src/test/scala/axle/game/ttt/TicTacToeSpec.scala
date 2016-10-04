@@ -19,6 +19,12 @@ class TicTacToeSpec extends Specification {
       game.introMessage must contain("Intro")
       game.numPositions must be equalTo 9
     }
+    "construct random and ai players via the player method" in {
+      val rando = game.player("r", "RP", "random")
+      val ai = game.player("a", "AI", "ai")
+      rando.id must be equalTo "r"
+      ai.id must be equalTo "a"
+    }
   }
 
   "start state" should {
