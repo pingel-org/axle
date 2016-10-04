@@ -61,6 +61,22 @@ class TicTacToeSpec extends Specification {
     }
   }
 
+  "interactive player" should {
+    "print various messages" in {
+      val i = InteractiveTicTacToePlayer("i", "IP")
+
+      val state = game.startState
+      val move = state.moves(game).head
+
+      // TODO grab resulting output via an IO Monad or some such
+      i.introduceGame(game)
+      i.displayEvents(List(move), game)
+      i.endGame(game.startState, game)
+
+      i.id must be equalTo "i"
+    }
+  }
+
   "random player" should {
     "make a move" in {
       val rando = RandomTicTacToePlayer("r", "RP")
