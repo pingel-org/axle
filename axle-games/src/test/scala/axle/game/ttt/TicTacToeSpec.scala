@@ -65,15 +65,18 @@ class TicTacToeSpec extends Specification {
     "print various messages" in {
       val i = InteractiveTicTacToePlayer("i", "IP")
 
-      val state = game.startState
-      val move = state.moves(game).head
+      val firstMove = TicTacToeMove(x, 2, game.boardSize)
+      val secondState = game.startState.apply(firstMove, game).get
 
       // TODO grab resulting output via an IO Monad or some such
       i.introduceGame(game)
-      i.displayEvents(List(move), game)
+      i.displayEvents(List(firstMove), game)
       i.endGame(game.startState, game)
-
       i.id must be equalTo "i"
+      i.validateMove("1", game.startState, game).right.toOption.get.position must be equalTo 1
+      i.validateMove("14", game.startState, game) must be equalTo Left("Please enter a number between 1 and 9")
+      i.validateMove("foo", game.startState, game) must be equalTo Left("foo is not a valid move.  Please select again")
+      i.validateMove("2", secondState, game) must be equalTo Left("That space is occupied.")
     }
   }
 
