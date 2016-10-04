@@ -26,6 +26,12 @@ class TicTacToeSpec extends Specification {
     "display movement key to player x, and have 9 moves available to x" in {
       game.startState.displayTo(x, game) must contain("Movement Key")
     }
+    "produce moveStateStream" in {
+      val rx = RandomTicTacToePlayer("x", "R X")
+      val ro = RandomTicTacToePlayer("o", "R O")
+      val game = TicTacToe(3, rx, ro)
+      game.moveStateStream(game.startState).take(3).length must be equalTo 3
+    }
   }
 
   "startFrom" should {
