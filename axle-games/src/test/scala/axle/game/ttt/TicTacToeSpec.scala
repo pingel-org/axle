@@ -13,6 +13,14 @@ class TicTacToeSpec extends Specification {
   def movesFrom(pps: List[(TicTacToePlayer, Int)]): List[TicTacToeMove] =
     pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
 
+  "game" should {
+    "define intro message, have 9 positions" in {
+
+      game.introMessage must contain("Intro")
+      game.numPositions must be equalTo 9
+    }
+  }
+
   "start state" should {
     "display movement key to player x, and have 9 moves available to x" in {
 
