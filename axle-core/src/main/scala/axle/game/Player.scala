@@ -5,16 +5,16 @@ import axle.Show
 trait Player[G <: Game[G]] {
 
   def id: String
-  
+
   def description: String
-  
-  def move(state: G#STATE): (G#MOVE, G#STATE)
 
-  def introduceGame(): Unit = {}
+  def move(state: G#STATE, game: G): (G#MOVE, G#STATE)
 
-  def displayEvents(events: List[Event[G]]): Unit = {}
+  def introduceGame(game: G): Unit = {}
 
-  def endGame(state: G#STATE): Unit = {}
+  def displayEvents(events: List[Event[G]], game: G): Unit = {}
+
+  def endGame(state: G#STATE, game: G): Unit = {}
 }
 
 object Player {

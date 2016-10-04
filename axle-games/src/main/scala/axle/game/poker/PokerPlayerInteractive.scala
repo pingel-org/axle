@@ -3,10 +3,10 @@ package axle.game.poker
 import axle.game._
 import Stream.cons
 
-case class PokerPlayerInteractive(id: String, description: String = "human")(implicit game: Poker)
+case class PokerPlayerInteractive(id: String, description: String = "human")
   extends PokerPlayer() {
 
-  override def introduceGame(): Unit = {
+  override def introduceGame(game: Poker): Unit = {
     val intro = """
 Texas Hold Em Poker
 
@@ -21,15 +21,15 @@ Example moves:
     println(intro)
   }
 
-  override def displayEvents(events: List[Event[Poker]]): Unit = {
+  override def displayEvents(events: List[Event[Poker]], game: Poker): Unit = {
     println()
-    println(events.map(_.displayTo(this)).mkString("  "))
+    println(events.map(_.displayTo(this, game)).mkString("  "))
   }
 
-  override def endGame(state: PokerState): Unit = {
+  override def endGame(state: PokerState, game: Poker): Unit = {
     println()
-    println(state.displayTo(state.player))
-    state.outcome.foreach(println)
+    println(state.displayTo(state.player, game))
+    state.outcome(game).foreach(println)
   }
 
   def userInputStream(): Stream[String] = {
@@ -41,13 +41,13 @@ Example moves:
 
   val moveParser = MoveParser()
 
-  def move(state: PokerState): (PokerMove, PokerState) = {
+  def move(state: PokerState, game: Poker): (PokerMove, PokerState) = {
     // displayEvents()
-    println(state.displayTo(this))
+    println(state.displayTo(this, game))
     val move = userInputStream()
       .flatMap(moveParser.parse(_)(state.player, game))
-      .find(move => state(move).isDefined).get
-    (move, state(move).get) // TODO .get
+      .find(move => state(move, game).isDefined).get
+    (move, state(move, game).get) // TODO .get
   }
 
 }

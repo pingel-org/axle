@@ -2,28 +2,29 @@ package axle.game.ttt
 
 import axle.game._
 import Stream.cons
+import scala.Either
 
-case class InteractiveTicTacToePlayer(id: String, description: String = "human")(implicit ttt: TicTacToe)
-  extends TicTacToePlayer() {
+case class InteractiveTicTacToePlayer(id: String, description: String = "human")
+    extends TicTacToePlayer() {
 
-  override def introduceGame(): Unit = {
+  override def introduceGame(ttt: TicTacToe): Unit = {
     val intro = """
 Tic Tac Toe
 Moves are numbers 1-%s.""".format(ttt.numPositions)
     println(intro)
   }
 
-  override def displayEvents(events: List[Event[TicTacToe]]): Unit = {
+  override def displayEvents(events: List[Event[TicTacToe]], ttt: TicTacToe): Unit = {
     println()
-    println(events.map(_.displayTo(this)).mkString("  "))
+    println(events.map(_.displayTo(this, ttt)).mkString("  "))
     println()
   }
 
-  override def endGame(state: TicTacToeState): Unit = {
+  override def endGame(state: TicTacToeState, ttt: TicTacToe): Unit = {
     println()
-    println(state.displayTo(this))
+    println(state.displayTo(this, ttt))
     println()
-    println(state.outcome.map(_.displayTo(this)))
+    println(state.outcome(ttt).map(_.displayTo(this, ttt)))
     println()
   }
 
@@ -34,32 +35,40 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
     cons(num, userInputStream)
   }
 
-  def isValidMove(num: String, state: TicTacToeState): Boolean = {
-    try {
-      val i = num.toInt
+  def validateMove(input: String, state: TicTacToeState, ttt: TicTacToe): Either[String, TicTacToeMove] = {
+    val eitherI: Either[String, Int] = try {
+      val i: Int = input.toInt
       if (i >= 1 && i <= ttt.numPositions) {
         if (state(i).isEmpty) {
-          true
+          Right(i)
         } else {
-          println("That space is occupied.")
-          false
+          Left("That space is occupied.")
         }
       } else {
-        println("Please enter a number between 1 and " + ttt.numPositions)
-        false
+        Left("Please enter a number between 1 and " + ttt.numPositions)
       }
     } catch {
       case e: Exception => {
-        println(num + " is not a valid move.  Please select again")
-        false
+        Left(input + " is not a valid move.  Please select again")
       }
+    }
+    eitherI.right.map { position =>
+      TicTacToeMove(this, position, ttt.boardSize)
     }
   }
 
-  def move(state: TicTacToeState): (TicTacToeMove, TicTacToeState) = {
-    println(state.displayTo(state.player))
-    val move = TicTacToeMove(this, userInputStream().find(input => isValidMove(input, state)).map(_.toInt).get)
-    (move, state(move).get) // TODO .get
+  def move(state: TicTacToeState, ttt: TicTacToe): (TicTacToeMove, TicTacToeState) = {
+    println(state.displayTo(state.player, ttt))
+    val move =
+      userInputStream().
+        map(input => {
+          val validated = validateMove(input, state, ttt)
+          validated.left.map(println)
+          validated
+        }).
+        find(_.isRight).get.
+        right.toOption.get
+    (move, state(move, ttt).get) // TODO .get
   }
 
 }

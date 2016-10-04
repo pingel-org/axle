@@ -61,6 +61,6 @@ case class Poker(numPlayers: Int) extends Game[Poker] {
 
   def introMessage: String = "Welcome to Axle Texas Hold Em Poker"
 
-  def players: Set[PokerPlayer] = _players.toSet
+  def players: IndexedSeq[PokerPlayer] = _players
 
 }

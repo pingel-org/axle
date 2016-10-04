@@ -11,13 +11,13 @@ object Rank {
   implicit def rankEq: Eq[Rank] = new Eq[Rank] {
     def eqv(x: Rank, y: Rank): Boolean = x.asInt === y.asInt
   }
-  
+
   implicit object RankOrder extends Order[Rank] {
     def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
   }
 
   implicit def show[R <: Rank]: Show[R] = new Show[R] { def text(r: R) = r.serialize.toString }
-  
+
   def apply(c: Char): Rank = c match {
     case '2' => R2
     case '3' => R3
