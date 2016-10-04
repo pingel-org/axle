@@ -6,9 +6,10 @@ import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {
 
-  val game = TicTacToe(3, "human", "human")
+  val x = InteractiveTicTacToePlayer("X", "Player X")
+  val o = InteractiveTicTacToePlayer("O", "Player O")
 
-  import game.{ x, o }
+  val game = TicTacToe(3, x, o)
 
   def movesFrom(pps: List[(TicTacToePlayer, Int)]): List[TicTacToeMove] =
     pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
@@ -18,12 +19,6 @@ class TicTacToeSpec extends Specification {
 
       game.introMessage must contain("Intro")
       game.numPositions must be equalTo 9
-    }
-    "construct random and ai players via the player method" in {
-      val rando = game.player("r", "RP", "random")
-      val ai = game.player("a", "AI", "ai")
-      rando.id must be equalTo "r"
-      ai.id must be equalTo "a"
     }
   }
 
@@ -52,7 +47,7 @@ class TicTacToeSpec extends Specification {
       startingMoves.map(_.description).mkString(",") must contain("upper")
     }
     "work for large (4x4) game" in {
-      val bigGame = TicTacToe(4, "human", "human")
+      val bigGame = TicTacToe(4, x, o)
       val startingMoves = bigGame.startState.moves(game)
       startingMoves.map(_.description).mkString(",") must contain("16")
     }
@@ -63,6 +58,31 @@ class TicTacToeSpec extends Specification {
       val move = game.startState.moves(game).head
       val newState = game.startState.broadcast(game.players, move)
       newState.eventQueues.size must be equalTo 2
+    }
+  }
+
+  "random player" should {
+    "make a move" in {
+      val rando = RandomTicTacToePlayer("r", "RP")
+
+      val (move, result) = rando.move(game.startState, game)
+
+      move.position must be greaterThan 0
+    }
+  }
+
+  "A.I. player with" should {
+    "make a move" in {
+
+      val ai = AITicTacToePlayer("o", "aio")
+
+      val firstMove = TicTacToeMove(x, 2, game.boardSize)
+
+      val secondState = game.startState.apply(firstMove, game).get
+
+      val (move, result) = ai.move(secondState, game)
+
+      move.position must be greaterThan 0
     }
   }
 

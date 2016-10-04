@@ -2,7 +2,7 @@ package axle.game.ttt
 
 import spire.math._
 
-case class AITicTacToePlayer(id: String, description: String = "minimax")
+case class AITicTacToePlayer(id: String, description: String = "minimax", lookahead: Int = 3)
   extends TicTacToePlayer() {
 
   def heuristic(ttt: TicTacToe) = (state: TicTacToeState) => ttt.players.map(p => {
@@ -10,7 +10,7 @@ case class AITicTacToePlayer(id: String, description: String = "minimax")
   }).toMap
 
   def move(state: TicTacToeState, ttt: TicTacToe): (TicTacToeMove, TicTacToeState) = {
-    val (move, newState, values) = ttt.minimax(state, 3, heuristic(ttt))
+    val (move, newState, values) = ttt.minimax(state, lookahead, heuristic(ttt))
     (move, newState)
   }
 }
