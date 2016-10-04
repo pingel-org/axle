@@ -23,8 +23,16 @@ class TicTacToeSpec extends Specification {
 
   "start state" should {
     "display movement key to player x, and have 9 moves available to x" in {
-
       game.startState.displayTo(x, game) must contain("Movement Key")
+    }
+  }
+
+  "startFrom" should {
+    "simply return the start state" in {
+      val state = game.startState
+      val move = state.moves(game).head
+      val nextState = state(move, game).get // TODO .get
+      game.startFrom(nextState).get must be equalTo game.startState
     }
   }
 
