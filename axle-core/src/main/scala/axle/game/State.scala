@@ -16,16 +16,4 @@ trait State[G <: Game[G]] {
 
   def setEventQueues(qs: Map[G#PLAYER, List[Event[G]]]): G#STATE
 
-  def displayEvents(players: Seq[G#PLAYER], game: G): G#STATE = {
-    val qs = eventQueues
-    players.foreach(p => p.displayEvents(qs.get(p).getOrElse(Nil), game))
-    setEventQueues(qs ++ players.map(p => (p -> Nil)))
-  }
-
-  def broadcast[E <: Event[G]](players: Seq[G#PLAYER], event: E): G#STATE = {
-    val qs = eventQueues
-    setEventQueues(players.map(p => {
-      (p -> (qs.get(p).getOrElse(Nil) ++ List(event)))
-    }).toMap)
-  }
 }

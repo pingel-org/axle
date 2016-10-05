@@ -1,7 +1,7 @@
 
 package axle.game.ttt
 
-import axle.game.scriptToLastMoveState
+import axle.game._
 import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {
@@ -29,17 +29,17 @@ class TicTacToeSpec extends Specification {
     val rGame = TicTacToe(3, rx, ro)
 
     "produce moveStateStream" in {
-      rGame.moveStateStream(rGame.startState).take(3).length must be equalTo 3
+      moveStateStream(rGame, rGame.startState).take(3).length must be equalTo 3
     }
 
     "play" in {
-      val endState: TicTacToeState = rGame.play(rGame.startState, false).get
+      val endState: TicTacToeState = play(rGame, rGame.startState, false).get
       // TODO number of moves should really be 0
       endState.moves(rGame).length must be lessThan 5
     }
 
     "product game stream" in {
-      val games = rGame.gameStream(rGame.startState, false).take(2)
+      val games = gameStream(rGame, rGame.startState, false).take(2)
       games.length must be equalTo 2
     }
 
@@ -79,7 +79,7 @@ class TicTacToeSpec extends Specification {
   "event queues" should {
     "be two" in {
       val move = game.startState.moves(game).head
-      val newState = game.startState.broadcast(game.players, move)
+      val newState = broadcast(game.startState, game.players, move)
       newState.eventQueues.size must be equalTo 2
     }
   }
