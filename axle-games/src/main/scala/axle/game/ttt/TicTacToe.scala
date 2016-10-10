@@ -51,7 +51,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
 
       def players(g: TicTacToe): IndexedSeq[Player] = g.players
 
-      def strategyFor(g: TicTacToe, player: Player): (TicTacToeState, TicTacToe, Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]) => (TicTacToeMove, TicTacToeState) = ???
+      def strategyFor(g: TicTacToe, player: Player): (TicTacToeState, TicTacToe, Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]) => TicTacToeMove = ???
 
     }
 }

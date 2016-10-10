@@ -158,7 +158,7 @@ package object game {
     } else {
       val s1 = displayEvents(game, s0)
       val strategy = evGame.strategyFor(game, evState.mover(s1))
-      val (move, _) = strategy.apply(s1, game, evGame)
+      val move = strategy.apply(s1, game, evGame)
       val s2 = evState.applyMove(s1, move, game).get // TODO .get
       val s3 = broadcast(game, s2, Right(move))
       cons((move, s3), moveStateStream(game, s3))

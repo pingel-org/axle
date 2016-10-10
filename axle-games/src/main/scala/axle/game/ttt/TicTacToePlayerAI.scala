@@ -14,6 +14,6 @@ object AITicTacToePlayer {
     evState: State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]) =
     (state: TicTacToeState, ttt: TicTacToe) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic(ttt))
-      (move, newState)
+      move
     }
 }

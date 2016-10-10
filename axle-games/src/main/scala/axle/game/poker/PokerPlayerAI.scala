@@ -17,8 +17,8 @@ object PokerPlayerAI {
   def move(state: PokerState,
            game: Poker)(
              implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove],
-             evState: State[Poker, PokerState, PokerOutcome, PokerMove]): (PokerMove, PokerState) = {
+             evState: State[Poker, PokerState, PokerOutcome, PokerMove]): PokerMove = {
     val (move, newState, values) = minimax(game, state, 3, heuristic(game, state))
-    (move, newState)
+    move
   }
 }

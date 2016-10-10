@@ -3,7 +3,6 @@ package axle.game.poker
 import spire.algebra.Eq
 import axle.Show
 import axle.game.Game
-import axle.game.Outcome
 import axle.game.Player
 import axle.string
 

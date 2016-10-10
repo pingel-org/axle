@@ -30,19 +30,17 @@ object InteractiveTicTacToePlayer {
   def move(
     state: TicTacToeState,
     ttt: TicTacToe)(
-      implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): (TicTacToeMove, TicTacToeState) = {
+      implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeMove = {
     // TODO use 'displayerFor' for this println
     println(state.displayTo(state.player, ttt))
-    val move =
-      userInputStream().
-        map(input => {
-          val validated = validateMoveInput(input, state, ttt)
-          validated.left.map(println)
-          validated
-        }).
-        find(_.isRight).get.
-        right.toOption.get
-    (move, state(move, ttt).get) // TODO .get
+    userInputStream().
+      map(input => {
+        val validated = validateMoveInput(input, state, ttt)
+        validated.left.map(println)
+        validated
+      }).
+      find(_.isRight).get.
+      right.toOption.get
   }
 
 }

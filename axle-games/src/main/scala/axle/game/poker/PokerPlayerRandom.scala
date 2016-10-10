@@ -5,9 +5,8 @@ import axle.game._
 
 object RandomPokerPlayer {
 
-  def move(state: PokerState, game: Poker, evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): (PokerMove, PokerState) = {
+  def move(state: PokerState, game: Poker, evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerMove = {
     val opens = state.moves(game)
-    val m = opens(nextInt(opens.length))
-    (m, state(m, game).get)
+    opens(nextInt(opens.length))
   }
 }

@@ -1,8 +1,8 @@
 package axle.game.poker
 
 import axle.game._
-import spire.algebra.Eq
-import axle.Show
+//import spire.algebra.Eq
+//import axle.Show
 
 trait PokerMove {
 

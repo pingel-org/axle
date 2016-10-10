@@ -6,13 +6,12 @@ object PokerPlayerInteractive {
 
   val moveParser = MoveParser()
 
-  def move(state: PokerState, game: Poker, evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): (PokerMove, PokerState) = {
+  def move(state: PokerState, game: Poker, evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerMove = {
     // displayEvents()
     println(state.displayTo(state.mover, game))
-    val move = userInputStream()
+    userInputStream()
       .flatMap(moveParser.parse(_)(state.mover))
       .find(move => state(move, game).isDefined).get
-    (move, state(move, game).get) // TODO .get
   }
 
 }

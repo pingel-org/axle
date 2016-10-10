@@ -5,9 +5,8 @@ import util.Random.nextInt
 
 object RandomTicTacToePlayer {
 
-  def move(state: TicTacToeState, game: TicTacToe, evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): (TicTacToeMove, TicTacToeState) = {
+  def move(state: TicTacToeState, game: TicTacToe, evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeMove = {
     val opens = state.moves(game).toList
-    val move = opens(nextInt(opens.length))
-    (move, state(move, game).get) // TODO: .get
+    opens(nextInt(opens.length))
   }
 }
