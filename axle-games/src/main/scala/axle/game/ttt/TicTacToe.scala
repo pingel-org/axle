@@ -47,5 +47,11 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       def startFrom(ttt: TicTacToe, s: TicTacToeState): Option[TicTacToeState] =
         Some(startState(ttt))
 
+      def displayerFor(g: TicTacToe, player: Player): String => Unit = ???
+
+      def players(g: TicTacToe): IndexedSeq[Player] = ???
+
+      def strategyFor(g: TicTacToe, player: Player): (TicTacToeState, TicTacToe, Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]) => (TicTacToeMove, TicTacToeState) = ???
+
     }
 }

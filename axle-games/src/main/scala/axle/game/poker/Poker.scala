@@ -69,6 +69,12 @@ Example moves:
         }
       }
 
+      def displayerFor(g: Poker, player: Player): String => Unit = ???
+
+      def players(g: Poker): IndexedSeq[Player] = ???
+
+      def strategyFor(g: Poker, player: Player): (PokerState, Poker, Game[Poker, PokerState, PokerOutcome, PokerMove]) => (PokerMove, PokerState) = ???
+
     }
 
 }
