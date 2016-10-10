@@ -9,38 +9,43 @@ import spire.implicits._
  */
 
 case class TicTacToe(
-  boardSize: Int = 3,
-  x: TicTacToePlayer,
-  o: TicTacToePlayer)
-    extends Game[TicTacToe] {
+    boardSize: Int = 3,
+    x: Player,
+    o: Player) {
 
-  type PLAYER = TicTacToePlayer
-  type MOVE = TicTacToeMove
-  type STATE = TicTacToeState
-  type OUTCOME = TicTacToeOutcome
-
-  val playersSeq = Vector(x, o)
-
-  def state(
-    player: TicTacToePlayer,
-    board: Array[Option[TicTacToePlayer]],
-    eventQueue: Map[TicTacToePlayer, List[Event[TicTacToe]]]): Option[TicTacToeState] =
-    Some(TicTacToeState(player, board, boardSize, eventQueue))
-
-  def startState: TicTacToeState = TicTacToeState(x, startBoard, boardSize)
-
-  def startFrom(s: TicTacToeState): Option[TicTacToeState] = Some(startState)
+  val players = Vector(x, o)
 
   def numPositions: Int = boardSize * boardSize
 
-  def introMessage: String = "Intro message to Tic Tac Toe"
-
-  def startBoard: Array[Option[TicTacToePlayer]] =
+  def startBoard: Array[Option[Player]] =
     (0 until (boardSize * boardSize)).map(i => None).toArray
 
-  def players: IndexedSeq[TicTacToePlayer] = Vector(x, o)
-
-  def playerAfter(player: TicTacToePlayer): TicTacToePlayer =
+  def playerAfter(player: Player): Player =
     if (player === x) o else x
 
+  def state(
+    player: Player,
+    board: Array[Option[Player]],
+    eventQueue: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]]): Option[TicTacToeState] =
+    Some(TicTacToeState(player, board, boardSize, eventQueue))
+
+}
+
+object TicTacToe {
+
+  implicit val game: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
+    new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
+
+      // def introMessage: String = "Intro message to Tic Tac Toe"
+      def introMessage(ttt: TicTacToe) = """
+Tic Tac Toe
+Moves are numbers 1-%s.""".format(ttt.numPositions)
+
+      def startState(ttt: TicTacToe): TicTacToeState =
+        TicTacToeState(ttt.x, ttt.startBoard, ttt.boardSize)
+
+      def startFrom(ttt: TicTacToe, s: TicTacToeState): Option[TicTacToeState] =
+        Some(startState(ttt))
+
+    }
 }

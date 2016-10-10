@@ -1,7 +1,10 @@
 package axle.game.poker
 
+import spire.algebra.Eq
 import axle.Show
+import axle.game.Game
 import axle.game.Outcome
+import axle.game.Player
 import axle.string
 
 object PokerOutcome {
@@ -15,5 +18,10 @@ object PokerOutcome {
   }
 }
 
-case class PokerOutcome(winner: Option[PokerPlayer], hand: Option[PokerHand])
-  extends Outcome[Poker]
+case class PokerOutcome(winner: Option[Player], hand: Option[PokerHand]) {
+
+  def displayTo(player: Player, game: Game[Poker, PokerState, PokerOutcome, PokerMove])(
+    implicit eqp: Eq[Player], sp: Show[Player]): String =
+    string(this)
+
+}

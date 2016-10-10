@@ -6,7 +6,7 @@ import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {
 
-  val x = InteractiveTicTacToePlayer("X", "Player X")
+  val x = Player[TicTacToe]("X", "Player X", InteractiveTicTacToePlayer.move, println)
   val o = InteractiveTicTacToePlayer("O", "Player O")
 
   val game = TicTacToe(3, x, o)

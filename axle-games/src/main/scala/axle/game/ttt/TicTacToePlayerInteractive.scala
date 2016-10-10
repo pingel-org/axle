@@ -1,39 +1,9 @@
 package axle.game.ttt
 
 import axle.game._
-import Stream.cons
 import scala.Either
 
-case class InteractiveTicTacToePlayer(id: String, description: String = "human")
-    extends TicTacToePlayer() {
-
-  override def introduceGame(ttt: TicTacToe): Unit = {
-    val intro = """
-Tic Tac Toe
-Moves are numbers 1-%s.""".format(ttt.numPositions)
-    println(intro)
-  }
-
-  override def displayEvents(events: List[Event[TicTacToe]], ttt: TicTacToe): Unit = {
-    println()
-    println(events.map(_.displayTo(this, ttt)).mkString("  "))
-    println()
-  }
-
-  override def endGame(state: TicTacToeState, ttt: TicTacToe): Unit = {
-    println()
-    println(state.displayTo(this, ttt))
-    println()
-    println(state.outcome(ttt).map(_.displayTo(this, ttt)))
-    println()
-  }
-
-  def userInputStream(): Stream[String] = {
-    print("Enter move: ")
-    val num = scala.io.StdIn.readLine()
-    println
-    cons(num, userInputStream)
-  }
+object InteractiveTicTacToePlayer {
 
   def validateMoveInput(input: String, state: TicTacToeState, ttt: TicTacToe): Either[String, TicTacToeMove] = {
     val eitherI: Either[String, Int] = try {
@@ -53,11 +23,15 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       }
     }
     eitherI.right.map { position =>
-      TicTacToeMove(this, position, ttt.boardSize)
+      TicTacToeMove(state.player, position, ttt.boardSize)
     }
   }
 
-  def move(state: TicTacToeState, ttt: TicTacToe): (TicTacToeMove, TicTacToeState) = {
+  def move(
+    state: TicTacToeState,
+    ttt: TicTacToe)(
+      implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): (TicTacToeMove, TicTacToeState) = {
+    // TODO use 'displayerFor' for this println
     println(state.displayTo(state.player, ttt))
     val move =
       userInputStream().

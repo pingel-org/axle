@@ -1,6 +1,5 @@
 package axle.game.ttt
 
-import axle.game.Outcome
+import axle.game._
 
-case class TicTacToeOutcome(winner: Option[TicTacToe#PLAYER])
-  extends Outcome[TicTacToe]
+case class TicTacToeOutcome(winner: Option[Player])
