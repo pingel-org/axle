@@ -35,23 +35,28 @@ package object game {
   def displayEvents[G, S, O, M](
     player: Player,
     events: List[Either[O, M]],
-    game: Game[G, S, O, M]): Unit = {
+    game: Game[G, S, O, M])(
+      implicit evOutcome: Outcome[O],
+      evMove: Move[M]): Unit = {
     val display = game.displayerFor(player)
     display("")
-    display(events.map(event => {
-      display(event.toString) // displayTo(player, game) // TODO avoid toString.  use evEvent
-    }).mkString("  "))
+    display(events.map(event =>
+      event match {
+        case Left(outcome) => evOutcome.displayTo(outcome, player, game)
+        case Right(move)   => evMove.displayTo(move, player, game)
+      }).mkString("  "))
   }
 
   def endGame[G, S, O, M](
     player: Player,
     state: S,
     game: Game[G, S, O, M])(
-      implicit evState: State[G, S, O, M]): Unit = {
+      implicit evState: State[G, S, O, M],
+      evOutcome: Outcome[O]): Unit = {
     val display = game.displayerFor(player)
     display("")
     display(evState.displayTo(player, game))
-    evState.outcome(state).foreach(outcome => display(outcome.toString)) // TODO avoid toString
+    evState.outcome(state).foreach(outcome => evOutcome.displayTo(outcome, player, game))
   }
 
   // From State:
@@ -59,7 +64,9 @@ package object game {
   def displayEvents[G, S, O, M](
     state: S,
     game: Game[G, S, O, M])(
-      implicit evState: State[G, S, O, M]): S = {
+      implicit evState: State[G, S, O, M],
+      evOutcome: Outcome[O],
+      evMove: Move[M]): S = {
     val qs = evState.eventQueues(state)
     evState.players(state).foreach(p => {
       val events = qs.get(p).getOrElse(List.empty)
@@ -163,7 +170,9 @@ package object game {
     g: G,
     game: Game[G, S, O, M],
     s0: S)(
-      implicit evState: State[G, S, O, M]): Stream[(M, S)] =
+      implicit evState: State[G, S, O, M],
+      evOutcome: Outcome[O],
+      evMove: Move[M]): Stream[(M, S)] =
     if (evState.outcome(s0).isDefined) {
       empty
     } else {
@@ -195,7 +204,9 @@ package object game {
     game: Game[G, S, O, M],
     start: S,
     intro: Boolean = true)(
-      implicit evState: State[G, S, O, M]): Option[S] = {
+      implicit evState: State[G, S, O, M],
+      evOutcome: Outcome[O],
+      evMove: Move[M]): Option[S] = {
     if (intro) {
       evState.players(start) foreach { player =>
         introduceGame(player, g, game)
@@ -218,7 +229,9 @@ package object game {
     game: Game[G, S, O, M],
     start: S,
     intro: Boolean = true)(
-      implicit evState: State[G, S, O, M]): Stream[S] =
+      implicit evState: State[G, S, O, M],
+      evOutcome: Outcome[O],
+      evMove: Move[M]): Stream[S] =
     play(g, game, start, intro).flatMap(end => {
       game.startFrom(g, end).map(newStart =>
         cons(end, gameStream(g, game, newStart, false)))
@@ -229,7 +242,9 @@ package object game {
     g: G,
     game: Game[G, S, O, M],
     start: S)(
-      implicit evState: State[G, S, O, M]): S =
+      implicit evState: State[G, S, O, M],
+      evOutcome: Outcome[O],
+      evMove: Move[M]): S =
     gameStream(g, game, start).last
 
 }
