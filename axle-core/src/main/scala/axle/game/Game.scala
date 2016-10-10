@@ -1,19 +1,23 @@
 
 package axle.game
 
-trait Game[G <: Game[G]] {
+trait Game[G, S, O, M] {
 
-  type PLAYER <: Player[G]
-  type STATE <: State[G]
-  type EVENT <: Event[G]
-  type MOVE <: Move[G]
-  type OUTCOME <: Outcome[G]
+  def introMessage(g: G): String
 
-  def players: IndexedSeq[G#PLAYER]
+  def startState(g: G): S
 
-  def introMessage: String
+  def startFrom(g: G, s: S): Option[S]
 
-  def startState: G#STATE
+  def strategyFor(player: Player): (S, Game[G, S, O, M]) => (M, S)
 
-  def startFrom(s: G#STATE): Option[G#STATE]
+  /**
+   *
+   * default shoud be no-op:
+   *
+   *    (s: String) => {}
+   */
+
+  def displayerFor(player: Player): String => Unit
+
 }

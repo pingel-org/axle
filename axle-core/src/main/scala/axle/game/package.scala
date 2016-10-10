@@ -3,45 +3,100 @@ package axle
 import scala.util.Random.nextInt
 import scala.Stream.cons
 import scala.Stream.empty
-
-import spire.algebra.Eq
-import spire.implicits.eqOps
 import spire.compat.integral
 import spire.math.Real
 
 package object game {
 
-  def scriptToLastMoveState[G <: Game[G]](game: G, moves: List[G#MOVE]): (G#MOVE, G#STATE) =
-    scriptedMoveStateStream(game, game.startState, moves.iterator).last
+  def userInputStream(): Stream[String] = {
+    print("Enter move: ")
+    val command = scala.io.StdIn.readLine() // TODO echo characters as typed (shouldn't have to use jline for this)
+    println(command)
+    cons(command, userInputStream)
+  }
+
+  def scriptToLastMoveState[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    moves: List[M])(
+      implicit evState: State[G, S, O, M]): (M, S) =
+    scriptedMoveStateStream(g, game, game.startState(g), moves.iterator).last
+
+  // From Player:
+
+  def introduceGame[G, S, O, M](
+    player: Player,
+    g: G,
+    game: Game[G, S, O, M]): Unit = {
+    val display = game.displayerFor(player)
+    display(game.introMessage(g))
+  }
+
+  def displayEvents[G, S, O, M](
+    player: Player,
+    events: List[Either[O, M]],
+    game: Game[G, S, O, M]): Unit = {
+    val display = game.displayerFor(player)
+    display("")
+    display(events.map(event => {
+      display(event.toString) // displayTo(player, game) // TODO avoid toString.  use evEvent
+    }).mkString("  "))
+  }
+
+  def endGame[G, S, O, M](
+    player: Player,
+    state: S,
+    game: Game[G, S, O, M])(
+      implicit evState: State[G, S, O, M]): Unit = {
+    val display = game.displayerFor(player)
+    display("")
+    display(evState.displayTo(player, game))
+    evState.outcome(state).foreach(outcome => display(outcome.toString)) // TODO avoid toString
+  }
 
   // From State:
 
-  def displayEvents[G <: Game[G]](state: G#STATE, players: Seq[G#PLAYER], game: G): G#STATE = {
-    val qs = state.eventQueues
-    players.foreach(p => p.displayEvents(qs.get(p).getOrElse(Nil), game))
-    state.setEventQueues(qs ++ players.map(p => (p -> Nil)))
+  def displayEvents[G, S, O, M](
+    state: S,
+    game: Game[G, S, O, M])(
+      implicit evState: State[G, S, O, M]): S = {
+    val qs = evState.eventQueues(state)
+    evState.players(state).foreach(p => {
+      val events = qs.get(p).getOrElse(List.empty)
+      displayEvents(p, events, game)
+    })
+    evState.setEventQueues(state, qs ++ evState.players(state).map(p => (p -> Nil)))
   }
 
-  def broadcast[G <: Game[G], E <: Event[G]](state: G#STATE, players: Seq[G#PLAYER], event: E): G#STATE = {
-    val qs = state.eventQueues
-    state.setEventQueues(players.map(p => {
+  def broadcast[G, S, O, M](
+    state: S,
+    event: Either[O, M])(
+      implicit evState: State[G, S, O, M]): S = {
+    val qs = evState.eventQueues(state)
+    evState.setEventQueues(state, evState.players(state).map(p => {
       (p -> (qs.get(p).getOrElse(Nil) ++ List(event)))
     }).toMap)
   }
 
   // From Game:
 
-  def minimax[G <: Game[G]](game: G, state: G#STATE, depth: Int, heuristic: G#STATE => Map[G#PLAYER, Real]): (G#MOVE, G#STATE, Map[G#PLAYER, Real]) =
-    if (state.outcome(game).isDefined || depth <= 0) {
-      (null.asInstanceOf[G#MOVE], null.asInstanceOf[G#STATE], heuristic(state)) // TODO null
+  def minimax[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    state: S,
+    depth: Int,
+    heuristic: S => Map[Player, Real])(
+      implicit evState: State[G, S, O, M]): (M, S, Map[Player, Real]) =
+    if (evState.outcome(state).isDefined || depth <= 0) {
+      (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
     } else {
       // TODO: .get
-      val moveValue = state.moves(game).map(move => {
-        val newState = state(move, game).get // TODO: .get
-        (move, state, minimax(game, newState, depth - 1, heuristic)._3)
+      val moveValue = evState.moves(state).map(move => {
+        val newState = evState.applyMove(state, move, g, game).get // TODO: .get
+        (move, state, minimax(g, game, newState, depth - 1, heuristic)._3)
       })
-      val bestValue = moveValue.map(mcr => (mcr._3)(state.player)).max
-      val matches = moveValue.filter(mcr => (mcr._3)(state.player) === bestValue).toIndexedSeq
+      val bestValue = moveValue.map(mcr => (mcr._3)(evState.mover(state))).max
+      val matches = moveValue.filter(mcr => (mcr._3)(evState.mover(state)) === bestValue).toIndexedSeq
       matches(nextInt(matches.length))
     }
 
@@ -54,90 +109,127 @@ package object game {
    *
    */
 
-  def alphabeta[G <: Game[G]](game: G, state: G#STATE, depth: Int, heuristic: G#STATE => Map[G#PLAYER, Double]): (G#MOVE, Map[G#PLAYER, Double]) =
-    _alphabeta(game, state, depth, game.players.map((_, Double.MinValue)).toMap, heuristic)
+  def alphabeta[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    state: S,
+    depth: Int,
+    heuristic: S => Map[Player, Double])(
+      implicit evState: State[G, S, O, M]): (M, Map[Player, Double]) =
+    _alphabeta(g, game, state, depth, evState.players(state).map((_, Double.MinValue)).toMap, heuristic)
 
-  case class AlphaBetaFold[G <: Game[G]](game: G, move: G#MOVE, cutoff: Map[G#PLAYER, Double], done: Boolean) {
+  case class AlphaBetaFold[G, S, O, M](
+      g: G,
+      game: Game[G, S, O, M],
+      move: M,
+      cutoff: Map[Player, Double],
+      done: Boolean)(
+          implicit evState: State[G, S, O, M]) {
 
-    def process(m: G#MOVE, state: G#STATE, heuristic: G#STATE => Map[G#PLAYER, Double]): AlphaBetaFold[G] =
+    def process(
+      m: M,
+      state: S,
+      heuristic: S => Map[Player, Double]): AlphaBetaFold[G, S, O, M] =
       if (done) {
         this
       } else {
-        val α = heuristic(state(m, game).get)
-        if (cutoff(state.player) <= α(state.player)) // TODO: forall other players ??
-          AlphaBetaFold(game, m, α, false) // TODO move = m?
-        else
-          AlphaBetaFold(game, m, cutoff, true)
+        val α = heuristic(evState.applyMove(state, m, g, game).get)
+        // TODO: forall other players ??
+        if (cutoff(evState.mover(state)) <= α(evState.mover(state))) {
+          AlphaBetaFold(g, game, m, α, false) // TODO move = m?
+        } else {
+          AlphaBetaFold(g, game, m, cutoff, true)
+        }
       }
   }
 
-  def _alphabeta[G <: Game[G]](game: G, state: G#STATE, depth: Int, cutoff: Map[G#PLAYER, Double], heuristic: G#STATE => Map[G#PLAYER, Double]): (G#MOVE, Map[G#PLAYER, Double]) =
-    if (state.outcome(game).isDefined || depth <= 0) {
-      (null.asInstanceOf[G#MOVE], heuristic(state)) // TODO null
+  def _alphabeta[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    state: S,
+    depth: Int,
+    cutoff: Map[Player, Double],
+    heuristic: S => Map[Player, Double])(
+      implicit evState: State[G, S, O, M]): (M, Map[Player, Double]) =
+    if (evState.outcome(state).isDefined || depth <= 0) {
+      (null.asInstanceOf[M], heuristic(state)) // TODO null
     } else {
-      val result = state.moves(game).foldLeft(AlphaBetaFold[G](game, null.asInstanceOf[G#MOVE], cutoff, false))(
-        (in: AlphaBetaFold[G], move: G#MOVE) => in.process(move, state, heuristic))
+      val result = evState.moves(state).foldLeft(AlphaBetaFold[G, S, O, M](g, game, null.asInstanceOf[M], cutoff, false))(
+        (in: AlphaBetaFold[G, S, O, M], move: M) => in.process(move, state, heuristic))
       (result.move, result.cutoff)
     }
 
-  def moveStateStream[G <: Game[G]](game: G, s0: G#STATE): Stream[(G#MOVE, G#STATE)] =
-    if (s0.outcome(game).isDefined) {
+  def moveStateStream[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    s0: S)(
+      implicit evState: State[G, S, O, M]): Stream[(M, S)] =
+    if (evState.outcome(s0).isDefined) {
       empty
     } else {
-      val s1 = displayEvents(s0, Seq(s0.player), game)
-      val (move, _) = s1.player.move(s1, game) // TODO: figure out why in some cases the second argument (a State) wasn't modified (eg minimax)
-      val s2 = s1(move, game).get // TODO .get
-      val s3 = broadcast(s2, game.players, move)
-      cons((move, s3), moveStateStream(game, s3))
+      val s1 = displayEvents(s0, game)
+      val strategy = game.strategyFor(evState.mover(s1))
+      val (move, _) = strategy.apply(s1, game) // TODO: figure out why in some cases the second argument (a State) wasn't modified (eg minimax)
+      val s2 = evState.applyMove(s1, move, g, game).get // TODO .get
+      val s3 = broadcast(s2, Right(move))
+      cons((move, s3), moveStateStream(g, game, s3))
     }
 
-  def scriptedMoveStateStream[G <: Game[G]](game: G, state: G#STATE, moveIt: Iterator[G#MOVE]): Stream[(G#MOVE, G#STATE)] =
-    if (state.outcome(game).isDefined || !moveIt.hasNext) {
+  def scriptedMoveStateStream[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    state: S,
+    moveIt: Iterator[M])(
+      implicit evState: State[G, S, O, M]): Stream[(M, S)] =
+    if (evState.outcome(state).isDefined || !moveIt.hasNext) {
       empty
     } else {
       val move = moveIt.next
-      val nextState = state(move, game).get // TODO .get
-      cons((move, nextState), scriptedMoveStateStream(game, nextState, moveIt))
+      val nextState = evState.applyMove(state, move, g, game).get // TODO .get
+      cons((move, nextState), scriptedMoveStateStream(g, game, nextState, moveIt))
     }
 
   // note default start was game.startState
-  def play[G <: Game[G]](game: G, start: G#STATE, intro: Boolean = true): Option[G#STATE] = {
+  def play[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    start: S,
+    intro: Boolean = true)(
+      implicit evState: State[G, S, O, M]): Option[S] = {
     if (intro) {
-      game.players foreach { player =>
-        player.introduceGame(game)
+      evState.players(start) foreach { player =>
+        introduceGame(player, g, game)
       }
     }
-    moveStateStream(game, start).lastOption.map({
+    moveStateStream(g, game, start).lastOption.map({
       case (lastMove, s0) => {
-        val s1 = s0.outcome(game).map(o => broadcast(s0, game.players, o)).getOrElse(s0)
-        val s2 = displayEvents(s1, game.players, game)
-        game.players foreach { player =>
-          player.endGame(s2, game)
+        val s1 = evState.outcome(s0).map(o => broadcast(s0, Left(o))).getOrElse(s0)
+        val s2 = displayEvents(s1, game)
+        evState.players(s2) foreach { player =>
+          endGame(player, s2, game)
         }
         s2
       }
     })
   }
 
-  def gameStream[G <: Game[G]](game: G, start: G#STATE, intro: Boolean = true): Stream[G#STATE] =
-    play(game, start, intro).flatMap(end => {
-      game.startFrom(end).map(newStart =>
-        cons(end, gameStream(game, newStart, false)))
+  def gameStream[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    start: S,
+    intro: Boolean = true)(
+      implicit evState: State[G, S, O, M]): Stream[S] =
+    play(g, game, start, intro).flatMap(end => {
+      game.startFrom(g, end).map(newStart =>
+        cons(end, gameStream(g, game, newStart, false)))
     }).getOrElse(empty)
 
   // Note: start default was game.startState
-  def playContinuously[G <: Game[G]](game: G, start: G#STATE): G#STATE =
-    gameStream(game, start).last
-
-  // Note: from Outcome
-
-  def displayTo[G <: Game[G]](outcome: G#OUTCOME, player: G#PLAYER, game: G)(implicit eqp: Eq[G#PLAYER], sp: Show[G#PLAYER]): String =
-    outcome.winner map { wp =>
-      if (wp === player) {
-        "You have beaten " + game.players.collect({ case p if !(p === player) => string(p) }).toList.mkString(" and ") + "!"
-      } else {
-        "%s beat you!".format(wp)
-      }
-    } getOrElse ("The game was a draw.")
+  def playContinuously[G, S, O, M](
+    g: G,
+    game: Game[G, S, O, M],
+    start: S)(
+      implicit evState: State[G, S, O, M]): S =
+    gameStream(g, game, start).last
 
 }

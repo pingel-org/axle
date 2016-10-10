@@ -1,27 +1,21 @@
 package axle.game
 
 import axle.Show
+import spire.algebra.Eq
 
-trait Player[G <: Game[G]] {
-
-  def id: String
-
-  def description: String
-
-  def move(state: G#STATE, game: G): (G#MOVE, G#STATE)
-
-  def introduceGame(game: G): Unit = {}
-
-  def displayEvents(events: List[Event[G]], game: G): Unit = {}
-
-  def endGame(state: G#STATE, game: G): Unit = {}
-}
+case class Player(id: String, description: String)
 
 object Player {
-  
-  implicit def showPlayer[G <: Game[G]]: Show[Player[G]] = new Show[Player[G]] {
-    
-    def text(player: Player[G]): String = player.description
+
+  implicit def showPlayer: Show[Player] = new Show[Player] {
+
+    def text(player: Player): String = player.description
   }
-  
+
+  implicit def eqPlayer: Eq[Player] = new Eq[Player] {
+
+    def eqv(left: Player, right: Player): Boolean =
+      left.==(right)
+  }
+
 }

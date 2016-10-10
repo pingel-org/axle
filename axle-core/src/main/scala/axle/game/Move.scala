@@ -1,8 +1,7 @@
 package axle.game
 
-trait Move[G <: Game[G]]
-  extends Event[G] {
+trait Move[M] extends Event[M] {
 
-  def player: G#PLAYER
+  def player: Player
 
 }
