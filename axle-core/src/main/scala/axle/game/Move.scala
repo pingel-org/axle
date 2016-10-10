@@ -8,9 +8,10 @@ trait Move[M] {
   def player: Player
 
   def displayTo[G, S, O](
+    game: G,
     move: M,
-    player: Player,
-    game: Game[G, S, O, M])(
-      implicit eqp: Eq[Player],
+    player: Player)(
+      implicit evGame: Game[G, S, O, M],
+      eqp: Eq[Player],
       sp: Show[Player]): String
 }

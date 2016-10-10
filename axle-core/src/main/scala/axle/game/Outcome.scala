@@ -10,10 +10,11 @@ trait Outcome[O] {
 
   // TODO: merge/unify with displayTo of Move
   def displayTo[G, S, M](
+    game: G,
     outcome: O,
-    player: Player,
-    game: Game[G, S, O, M])(
-      implicit eqp: Eq[Player],
+    player: Player)(
+      implicit evGame: Game[G, S, O, M],
+      eqp: Eq[Player],
       sp: Show[Player]): String =
     winner(outcome) map { wp =>
       if (wp === player) {

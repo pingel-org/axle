@@ -9,7 +9,9 @@ trait Game[G, S, O, M] {
 
   def startFrom(g: G, s: S): Option[S]
 
-  def strategyFor(player: Player): (S, Game[G, S, O, M]) => (M, S)
+  def players(g: G): IndexedSeq[Player]
+
+  def strategyFor(g: G, player: Player): (S, G, Game[G, S, O, M]) => (M, S)
 
   /**
    *
@@ -18,6 +20,6 @@ trait Game[G, S, O, M] {
    *    (s: String) => {}
    */
 
-  def displayerFor(player: Player): String => Unit
+  def displayerFor(g: G, player: Player): String => Unit
 
 }
