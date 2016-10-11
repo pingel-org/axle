@@ -4,7 +4,10 @@ import scala.util.Random.nextInt
 import scala.Stream.cons
 import scala.Stream.empty
 import spire.compat.integral
-import spire.math.Real
+import spire.compat.ordering
+import spire.algebra.Order
+import spire.algebra.Eq
+import spire.implicits.eqOps
 
 package object game {
 
@@ -93,13 +96,13 @@ package object game {
 
   // From Game:
 
-  def minimax[G, S, O, M](
+  def minimax[G, S, O, M, N: Order: Eq](
     game: G,
     state: S,
     depth: Int,
-    heuristic: S => Map[Player, Real])(
+    heuristic: S => Map[Player, N])(
       implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): (M, S, Map[Player, Real]) =
+      evState: State[G, S, O, M]): (M, S, Map[Player, N]) =
     if (evState.outcome(state, game).isDefined || depth <= 0) {
       (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
     } else {
