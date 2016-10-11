@@ -11,9 +11,17 @@ import spire.implicits._
 case class TicTacToe(
     boardSize: Int = 3,
     x: Player,
-    o: Player) {
+    xStrategy: (TicTacToeState, TicTacToe) => TicTacToeMove,
+    xDisplayer: String => Unit,
+    o: Player,
+    oStrategy: (TicTacToeState, TicTacToe) => TicTacToeMove,
+    oDisplayer: String => Unit) {
 
   val players = Vector(x, o)
+
+  val playerToDisplayer = Map(x -> xDisplayer, o -> oDisplayer)
+
+  val playerToStrategy = Map(x -> xStrategy, o -> oStrategy)
 
   def numPositions: Int = boardSize * boardSize
 
@@ -47,11 +55,14 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       def startFrom(ttt: TicTacToe, s: TicTacToeState): Option[TicTacToeState] =
         Some(startState(ttt))
 
-      def displayerFor(g: TicTacToe, player: Player): String => Unit = ???
+      def players(g: TicTacToe): IndexedSeq[Player] =
+        g.players
 
-      def players(g: TicTacToe): IndexedSeq[Player] = g.players
+      def strategyFor(g: TicTacToe, player: Player): (TicTacToeState, TicTacToe) => TicTacToeMove =
+        g.playerToStrategy(player)
 
-      def strategyFor(g: TicTacToe, player: Player): (TicTacToeState, TicTacToe, Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]) => TicTacToeMove = ???
+      def displayerFor(g: TicTacToe, player: Player): String => Unit =
+        g.playerToDisplayer(player)
 
     }
 }

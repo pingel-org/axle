@@ -11,7 +11,7 @@ trait Game[G, S, O, M] {
 
   def players(g: G): IndexedSeq[Player]
 
-  def strategyFor(g: G, player: Player): (S, G, Game[G, S, O, M]) => M
+  def strategyFor(g: G, player: Player): (S, G) => M
 
   /**
    *

@@ -11,6 +11,15 @@ import spire.implicits.eqOps
 
 package object game {
 
+  def introMessage[G, S, O, M](g: G)(implicit evGame: Game[G, S, O, M]): String =
+    evGame.introMessage(g)
+
+  def startState[G, S, O, M](g: G)(implicit evGame: Game[G, S, O, M]): S =
+    evGame.startState(g)
+
+  def startFrom[G, S, O, M](g: G, s: S)(implicit evGame: Game[G, S, O, M]): Option[S] =
+    evGame.startFrom(g, s)
+
   def userInputStream(): Stream[String] = {
     // TODO: reuse "displayer" for println
     print("Enter move: ")
@@ -161,7 +170,7 @@ package object game {
     } else {
       val s1 = displayEvents(game, s0)
       val strategy = evGame.strategyFor(game, evState.mover(s1))
-      val move = strategy.apply(s1, game, evGame)
+      val move = strategy.apply(s1, game)
       val s2 = evState.applyMove(s1, move, game).get // TODO .get
       val s3 = broadcast(game, s2, Right(move))
       cons((move, s3), moveStateStream(game, s3))

@@ -29,8 +29,7 @@ object InteractiveTicTacToePlayer {
 
   def move(
     state: TicTacToeState,
-    ttt: TicTacToe)(
-      implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeMove = {
+    ttt: TicTacToe): TicTacToeMove = {
     // TODO use 'displayerFor' for this println
     println(state.displayTo(state.player, ttt))
     userInputStream().
