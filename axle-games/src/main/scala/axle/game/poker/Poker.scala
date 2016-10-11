@@ -4,13 +4,15 @@ import axle.game._
 import axle.game.cards._
 
 case class Poker(
-    players: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)]) {
+    playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)]) {
+
+  val players = playersStrategiesDisplayers.map(_._1)
 
   val numPlayers = players.length
 
-  val dealer = Player("D", "Dealer") // TODO ??? PokerPlayerDealer.move)
+  val dealer = Player("D", "Dealer")
 
-  val allPlayers = (dealer, ???, (s: String) => {}) +: players
+  val allPlayers = (dealer, PokerPlayerDealer.move _, (s: String) => {}) +: playersStrategiesDisplayers
 
   val playerToStrategy = allPlayers.map(tuple => tuple._1 -> tuple._2).toMap
 
@@ -46,9 +48,9 @@ Example moves:
           Map[Player, Seq[Card]](),
           0, // pot
           0, // current bet
-          g.players.map(_._1).toSet, // stillIn
+          g.players.toSet, // stillIn
           Map(), // inFors
-          g.players.map(psd => (psd._1, 100)).toMap, // piles
+          g.players.map(player => (player, 100)).toMap, // piles
           None,
           Map())
 
@@ -74,7 +76,7 @@ Example moves:
       }
 
       def players(g: Poker): IndexedSeq[Player] =
-        g.players.map(_._1)
+        g.players
 
       def strategyFor(g: Poker, player: Player): (PokerState, Poker) => PokerMove =
         g.playerToStrategy(player)
