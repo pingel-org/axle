@@ -7,30 +7,29 @@ import spire.implicits._
 import spire.compat.ordering
 
 case class PokerState(
-  playerFn: PokerState => PokerPlayer,
-  deck: Deck,
-  shared: IndexedSeq[Card], // flop, turn, river
-  numShown: Int,
-  hands: Map[PokerPlayer, Seq[Card]],
-  pot: Int,
-  currentBet: Int,
-  stillIn: Set[PokerPlayer],
-  inFors: Map[PokerPlayer, Int],
-  piles: Map[PokerPlayer, Int],
-  _outcome: Option[PokerOutcome],
-  _eventQueues: Map[PokerPlayer, List[Event[Poker]]])
-  extends State[Poker]() {
+    moverFn: PokerState => Player,
+    deck: Deck,
+    shared: IndexedSeq[Card], // flop, turn, river
+    numShown: Int,
+    hands: Map[Player, Seq[Card]],
+    pot: Int,
+    currentBet: Int,
+    stillIn: Set[Player],
+    inFors: Map[Player, Int],
+    piles: Map[Player, Int],
+    _outcome: Option[PokerOutcome],
+    _eventQueues: Map[Player, List[Either[PokerOutcome, PokerMove]]]) {
 
   val bigBlind = 2 // the "minimum bet"
   val smallBlind = bigBlind / 2
 
-  lazy val _player = playerFn(this)
+  lazy val _mover = moverFn(this)
 
-  def player: PokerPlayer = _player
+  def mover: Player = _mover
 
-  def firstBetter(game: Poker): PokerPlayer = game.players.find(stillIn.contains).get
+  def firstBetter(game: Poker): Player = game.players.find(stillIn.contains).get
 
-  def betterAfter(before: PokerPlayer, game: Poker): Option[PokerPlayer] = {
+  def betterAfter(before: Player, game: Poker): Option[Player] = {
     if (stillIn.forall(p => inFors.get(p).map(_ === currentBet).getOrElse(false))) {
       None
     } else {
@@ -41,8 +40,8 @@ case class PokerState(
   }
 
   // TODO: displayTo could be phrased in terms of Show
-  def displayTo(viewer: PokerPlayer, game: Poker): String =
-    "To: " + player + "\n" +
+  def displayTo(viewer: Player, game: Poker): String =
+    "To: " + mover + "\n" +
       "Current bet: " + currentBet + "\n" +
       "Pot: " + pot + "\n" +
       "Shared: " + shared.zipWithIndex.map({
@@ -78,12 +77,12 @@ case class PokerState(
     case Deal(dealer) => {
       // TODO clean up these range calculations
       val cards = Vector() ++ deck.cards
-      val hands = game._players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
-      val shared = cards(game._players.size * 2 to game._players.size * 2 + 4)
-      val unused = cards((game._players.size * 2 + 5) until cards.length)
+      val hands = game.players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
+      val shared = cards(game.players.size * 2 to game.players.size * 2 + 4)
+      val unused = cards((game.players.size * 2 + 5) until cards.length)
 
       // TODO: should blinds be a part of the "deal" or are they minimums during first round of betting?
-      val orderedStillIn = game._players.filter(stillIn.contains)
+      val orderedStillIn = game.players.filter(stillIn.contains)
       val smallBlindPlayer = orderedStillIn(0)
       val bigBlindPlayer = orderedStillIn(1) // list should be at least this long
 
@@ -193,7 +192,7 @@ case class PokerState(
 
       val newPiles = piles + (winner -> (piles(winner) + pot))
 
-      val newStillIn = game._players.filter(newPiles(_) >= bigBlind).toSet
+      val newStillIn = game.players.filter(newPiles(_) >= bigBlind).toSet
 
       Some(PokerState(
         s => game.dealer,
@@ -212,10 +211,10 @@ case class PokerState(
 
   }
 
-  def eventQueues: Map[PokerPlayer, List[Event[Poker]]] = _eventQueues
+  def eventQueues: Map[Player, List[Either[PokerOutcome, PokerMove]]] = _eventQueues
 
-  def setEventQueues(qs: Map[PokerPlayer, List[Event[Poker]]]): PokerState = PokerState(
-    playerFn,
+  def setEventQueues(qs: Map[Player, List[Either[PokerOutcome, PokerMove]]]): PokerState = PokerState(
+    moverFn,
     deck,
     shared,
     numShown,

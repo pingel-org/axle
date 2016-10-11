@@ -49,4 +49,16 @@ class PokerSpec extends Specification {
 
   }
 
+  "poker" should {
+    "foo" in {
+
+      1 must be equalTo 1
+    }
+  }
+
+//    case "random" => RandomPokerPlayer(id, description)
+//    case "ai"     => PokerPlayerAI(id, description)
+//    case "dealer" => PokerPlayerDealer(id, description)
+//    case _        => PokerPlayerInteractive(id, description)
+
 }

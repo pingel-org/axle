@@ -3,64 +3,78 @@ package axle.game.poker
 import axle.game._
 import axle.game.cards._
 
-case class Poker(numPlayers: Int) extends Game[Poker] {
+// (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
+// def players: IndexedSeq[PokerPlayer] = _players
 
-  implicit val poker = this
+case class Poker(players: IndexedSeq[Player]) {
 
-  type PLAYER = PokerPlayer
-  type MOVE = PokerMove
-  type STATE = PokerState
-  type OUTCOME = PokerOutcome
+  val numPlayers = players.length
 
-  val dealer = player("D", "Dealer", "dealer")
+  val dealer = Player("D", "Dealer") // TODO ??? PokerPlayerDealer.move)
 
-  val _players = (1 to numPlayers).map(i => player("P" + i, "Player " + i, "human"))
+}
 
-  def player(id: String, description: String, which: String): PokerPlayer = which match {
-    case "random" => RandomPokerPlayer(id, description)
-    case "ai"     => PokerPlayerAI(id, description)
-    case "dealer" => PokerPlayerDealer(id, description)
-    case _        => PokerPlayerInteractive(id, description)
-  }
+object Poker {
 
-  def startState: PokerState =
-    PokerState(
-      state => dealer,
-      Deck(),
-      Vector(),
-      0, // # of shared cards showing
-      Map[PokerPlayer, Seq[Card]](),
-      0, // pot
-      0, // current bet
-      _players.toSet, // stillIn
-      Map(), // inFors
-      players.map(player => (player, 100)).toMap, // piles
-      None,
-      Map())
+  implicit val pokerGame: Game[Poker, PokerState, PokerOutcome, PokerMove] =
+    new Game[Poker, PokerState, PokerOutcome, PokerMove] {
 
-  def startFrom(s: PokerState): Option[PokerState] = {
+      // def introMessage: String = "Welcome to Axle Texas Hold Em Poker"
 
-    if (s.stillIn.size > 0) {
-      Some(PokerState(
-        state => dealer,
-        Deck(),
-        Vector(),
-        0,
-        Map(),
-        0,
-        0,
-        s.stillIn,
-        Map(),
-        s.piles,
-        None,
-        Map()))
-    } else {
-      None
+      def introMessage(g: Poker) = """
+Texas Hold Em Poker
+
+Example moves:
+
+  check
+  raise 1.0
+  call
+  fold
+
+"""
+
+      def startState(g: Poker): PokerState =
+        PokerState(
+          state => g.dealer,
+          Deck(),
+          Vector(),
+          0, // # of shared cards showing
+          Map[Player, Seq[Card]](),
+          0, // pot
+          0, // current bet
+          g.players.toSet, // stillIn
+          Map(), // inFors
+          g.players.map(player => (player, 100)).toMap, // piles
+          None,
+          Map())
+
+      def startFrom(g: Poker, s: PokerState): Option[PokerState] = {
+
+        if (s.stillIn.size > 0) {
+          Some(PokerState(
+            state => g.dealer,
+            Deck(),
+            Vector(),
+            0,
+            Map(),
+            0,
+            0,
+            s.stillIn,
+            Map(),
+            s.piles,
+            None,
+            Map()))
+        } else {
+          None
+        }
+      }
+
+      def displayerFor(g: Poker, player: Player): String => Unit = ???
+
+      def players(g: Poker): IndexedSeq[Player] = g.players
+
+      def strategyFor(g: Poker, player: Player): (PokerState, Poker) => PokerMove = ???
+
     }
-  }
-
-  def introMessage: String = "Welcome to Axle Texas Hold Em Poker"
-
-  def players: IndexedSeq[PokerPlayer] = _players
 
 }

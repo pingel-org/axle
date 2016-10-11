@@ -1,21 +1,22 @@
 package axle.game.poker
 
 import spire.implicits._
+import axle.game.Game
 
-case class PokerPlayerDealer(id: String, description: String = "dealer")
-  extends PokerPlayer() {
+object PokerPlayerDealer {
 
-  def move(state: PokerState, game: Poker): (PokerMove, PokerState) = {
+  def move(state: PokerState, game: Poker, evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): (PokerMove, PokerState) = {
+    val dealer = state.mover
     val move = state.numShown match {
       case 0 =>
         if (state.inFors.size === 0) {
-          Deal(game.dealer)
+          Deal(dealer)
         } else {
-          Flop(game.dealer)
+          Flop(dealer)
         }
-      case 3 => Turn(game.dealer)
-      case 4 => River(game.dealer)
-      case 5 => Payout(game.dealer)
+      case 3 => Turn(dealer)
+      case 4 => River(dealer)
+      case 5 => Payout(dealer)
     }
     (move, state(move, game).get) // TODO .get
   }

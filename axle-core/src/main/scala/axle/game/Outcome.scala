@@ -1,20 +1,27 @@
 package axle.game
 
 import axle.Show
-import axle.string
 import spire.algebra.Eq
 import spire.implicits.eqOps
 
-trait Outcome[G <: Game[G]] extends Event[G] {
+trait Outcome[O] {
 
-  def winner: Option[G#PLAYER]
+  def winner(outcome: O): Option[Player]
 
-  def displayTo(player: G#PLAYER, game: G)(implicit eqp: Eq[G#PLAYER], sp: Show[G#PLAYER]): String =
-    winner map { wp =>
+  // TODO: merge/unify with displayTo of Move
+  def displayTo[G, S, M](
+    game: G,
+    outcome: O,
+    player: Player)(
+      implicit evGame: Game[G, S, O, M],
+      eqp: Eq[Player],
+      sp: Show[Player]): String =
+    winner(outcome) map { wp =>
       if (wp === player) {
-        "You have beaten " + game.players.collect({ case p if !(p === player) => string(p) }).toList.mkString(" and ") + "!"
+        "You have beaten " // TODO + game.players.collect({ case p if !(p === player) => string(p) }).toList.mkString(" and ") + "!"
       } else {
         "%s beat you!".format(wp)
       }
     } getOrElse ("The game was a draw.")
+
 }
