@@ -1,7 +1,7 @@
 package axle.game.poker
 
 import org.specs2.mutable._
-
+import axle.game._
 import spire.algebra.Eq
 import spire.compat.ordering
 
@@ -11,6 +11,19 @@ import spire.compat.ordering
 // 6♡,6♢,6♠,6♣,Q♡,7♡,7♢,7♠,7♣,2♡
 
 class PokerSpec extends Specification {
+
+  val p1 = Player("P1", "Player 1")
+  val p2 = Player("P2", "Player 2")
+
+  val game = Poker(Vector(
+    (p1, PokerPlayerInteractive.move, println),
+    (p2, PokerPlayerInteractive.move, println)))
+
+  "start state" should {
+    "display something" in {
+      startState(game).displayTo(p1, game) must contain("Current bet: 0")
+    }
+  }
 
   "poker hand ranking" should {
 

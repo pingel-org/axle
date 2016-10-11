@@ -6,7 +6,7 @@ object PokerPlayerInteractive {
 
   val moveParser = MoveParser()
 
-  def move(state: PokerState, game: Poker, evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerMove = {
+  def move(state: PokerState, game: Poker): PokerMove = {
     // displayEvents()
     println(state.displayTo(state.mover, game))
     userInputStream()
