@@ -44,7 +44,6 @@ object TicTacToe {
   implicit val game: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
     new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
 
-      // def introMessage: String = "Intro message to Tic Tac Toe"
       def introMessage(ttt: TicTacToe) = """
 Tic Tac Toe
 Moves are numbers 1-%s.""".format(ttt.numPositions)

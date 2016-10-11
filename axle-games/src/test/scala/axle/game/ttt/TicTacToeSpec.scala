@@ -9,7 +9,9 @@ class TicTacToeSpec extends Specification {
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
 
-  val game = TicTacToe(3, x, InteractiveTicTacToePlayer.move, println, o, InteractiveTicTacToePlayer.move, println)
+  val game = TicTacToe(3,
+    x, InteractiveTicTacToePlayer.move, println,
+    o, InteractiveTicTacToePlayer.move, println)
 
   def movesFrom(pps: List[(Player, Int)]): List[TicTacToeMove] =
     pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
@@ -17,7 +19,7 @@ class TicTacToeSpec extends Specification {
   "game" should {
     "define intro message, have 9 positions" in {
 
-      introMessage(game) must contain("Intro")
+      introMessage(game) must contain("Moves are")
       game.numPositions must be equalTo 9
     }
   }
