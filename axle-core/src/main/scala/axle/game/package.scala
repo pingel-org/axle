@@ -58,8 +58,8 @@ package object game {
       evOutcome: Outcome[O]): Unit = {
     val display = evGame.displayerFor(game, player)
     display("")
-    display(evState.displayTo(player))
-    evState.outcome(state).foreach(outcome => evOutcome.displayTo(game, outcome, player))
+    display(evState.displayTo(state, player, game))
+    evState.outcome(state, game).foreach(outcome => evOutcome.displayTo(game, outcome, player))
   }
 
   // From State:
@@ -100,11 +100,11 @@ package object game {
     heuristic: S => Map[Player, Real])(
       implicit evGame: Game[G, S, O, M],
       evState: State[G, S, O, M]): (M, S, Map[Player, Real]) =
-    if (evState.outcome(state).isDefined || depth <= 0) {
+    if (evState.outcome(state, game).isDefined || depth <= 0) {
       (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
     } else {
       // TODO: .get
-      val moveValue = evState.moves(state).map(move => {
+      val moveValue = evState.moves(state, game).map(move => {
         val newState = evState.applyMove(state, move, game).get // TODO: .get
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
@@ -138,10 +138,10 @@ package object game {
     heuristic: S => Map[Player, Double])(
       implicit evGame: Game[G, S, O, M],
       evState: State[G, S, O, M]): (M, Map[Player, Double]) =
-    if (evState.outcome(state).isDefined || depth <= 0) {
+    if (evState.outcome(state, g).isDefined || depth <= 0) {
       (null.asInstanceOf[M], heuristic(state)) // TODO null
     } else {
-      val result = evState.moves(state).foldLeft(AlphaBetaFold[G, S, O, M](g, null.asInstanceOf[M], cutoff, false))(
+      val result = evState.moves(state, g).foldLeft(AlphaBetaFold[G, S, O, M](g, null.asInstanceOf[M], cutoff, false))(
         (in: AlphaBetaFold[G, S, O, M], move: M) => in.process(move, state, heuristic))
       (result.move, result.cutoff)
     }
@@ -153,7 +153,7 @@ package object game {
       evState: State[G, S, O, M],
       evOutcome: Outcome[O],
       evMove: Move[M]): Stream[(M, S)] =
-    if (evState.outcome(s0).isDefined) {
+    if (evState.outcome(s0, game).isDefined) {
       empty
     } else {
       val s1 = displayEvents(game, s0)
@@ -170,7 +170,7 @@ package object game {
     moveIt: Iterator[M])(
       implicit evGame: Game[G, S, O, M],
       evState: State[G, S, O, M]): Stream[(M, S)] =
-    if (evState.outcome(state).isDefined || !moveIt.hasNext) {
+    if (evState.outcome(state, game).isDefined || !moveIt.hasNext) {
       empty
     } else {
       val move = moveIt.next
@@ -194,7 +194,7 @@ package object game {
     }
     moveStateStream(game, start).lastOption.map({
       case (lastMove, s0) => {
-        val s1 = evState.outcome(s0).map(o => broadcast(game, s0, Left(o))).getOrElse(s0)
+        val s1 = evState.outcome(s0, game).map(o => broadcast(game, s0, Left(o))).getOrElse(s0)
         val s2 = displayEvents(game, s1)
         evGame.players(game) foreach { player =>
           endGame(game, player, s2)

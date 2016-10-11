@@ -12,9 +12,9 @@ class TicTacToeSpec extends Specification {
   val game = TicTacToe(3, x, o)
 
   implicit val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
-  implicit val evState: State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] = ??? // implicitly[State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
-  implicit val evOutcome: Outcome[TicTacToeOutcome] = ??? // implicitly[Outcome[TicTacToe]]
-  implicit val evMove: Move[TicTacToeMove] = ??? // implicitly[Move[TicTacToe]]
+  implicit val evState: State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] = implicitly[State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
+  //  implicit val evOutcome: Outcome[TicTacToeOutcome] = implicitly[Outcome[TicTacToeOutcome]]
+  //  implicit val evMove: Move[TicTacToeMove] = implicitly[Move[TicTacToeMove]]
 
   def movesFrom(pps: List[(Player, Int)]): List[TicTacToeMove] =
     pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
@@ -70,7 +70,7 @@ class TicTacToeSpec extends Specification {
 
       val startingMoves = evGame.startState(game).moves(game)
 
-      startingMoves.head.displayTo(o, game) must contain("put an")
+      evMove.displayTo(game, startingMoves.head, o) must contain("put an")
       startingMoves.length must be equalTo 9
       startingMoves.map(_.description).mkString(",") must contain("upper")
     }

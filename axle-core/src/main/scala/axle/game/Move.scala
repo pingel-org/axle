@@ -5,7 +5,7 @@ import axle.Show
 
 trait Move[M] {
 
-  def player: Player
+  def player(m: M): Player
 
   def displayTo[G, S, O](
     game: G,
