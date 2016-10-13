@@ -45,7 +45,7 @@ package object poker {
         implicit evGame: Game[G, S, O, PokerMove], eqp: Eq[Player], sp: Show[Player]): String =
         ???
 
-      def player(m: PokerMove): Player = ???
+      def player(m: PokerMove): Player = m.player
     }
 
 }
