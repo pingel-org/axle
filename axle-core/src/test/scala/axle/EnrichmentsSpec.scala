@@ -61,8 +61,8 @@ class EnrichmentsSpec extends Specification {
       (1 to 10).toIterator.lastOption should be equalTo Some(10)
     }
     "support terminatesWithin" in {
-      (1 to 10).toIterator.terminatesWithin(20) should be equalTo false
-      (1 to 10).toIterator.terminatesWithin(5) should be equalTo true
+      (1 to 10).toIterator.terminatesWithin(20) should be equalTo true
+      (1 to 10).toIterator.terminatesWithin(5) should be equalTo false
     }
   }
 }
