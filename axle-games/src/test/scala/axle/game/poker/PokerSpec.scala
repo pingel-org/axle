@@ -80,6 +80,19 @@ class PokerSpec extends Specification {
     }
   }
 
+  "move parser" should {
+    "parse moves" in {
+
+      val moveParser = MoveParser()
+
+      moveParser.parse("call")(p1).get must be equalTo Call(p1)
+      moveParser.parse("fold")(p1).get must be equalTo Fold(p1)
+      moveParser.parse("raise 1")(p1).get must be equalTo Raise(p1, 1)
+      moveParser.parse("raise x")(p1) must be equalTo None
+      moveParser.parse("asdf")(p1) must be equalTo None
+    }
+  }
+
   "poker hand comparison" should {
 
     "ace high < pair of 6s" in {
