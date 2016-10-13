@@ -24,14 +24,14 @@ class PokerSpec extends Specification {
     }
   }
 
-  "deal, flop, bet(p1,1), raise(p2,1), call, turn, call, call, river, call, call" should {
+  "deal, flop, bet(p1,1), raise(p2,1), call, turn, call, call, river, call, fold, payout" should {
     "be a victory for p1" in {
       val moves: List[PokerMove] = List(
         // small and big blinds are built in
         Deal(dealer), Call(p1), Call(p2),
         Flop(dealer), Raise(p1, 1), Raise(p2, 1), Call(p1),
         Turn(dealer), Call(p1), Call(p2),
-        River(dealer), Call(p1), Call(p2),
+        River(dealer), Call(p1), Fold(p2),
         Payout(dealer))
       val (_, lastState) = scriptToLastMoveState(game, moves)
       val outcome = lastState.outcome(game).get
