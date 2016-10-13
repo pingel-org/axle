@@ -41,6 +41,7 @@ class PokerSpec extends Specification {
       evOutcome.displayTo(game, outcome, p2) must contain("beat you")
       outcome.winner.get should be equalTo p1
       newGameState.moves(game).length must be equalTo 0 // TODO
+      newGameState.setEventQueues(Map.empty).eventQueues.size must be equalTo 0
     }
   }
 
