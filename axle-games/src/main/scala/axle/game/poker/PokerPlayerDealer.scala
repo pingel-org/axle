@@ -1,13 +1,12 @@
 package axle.game.poker
 
 import spire.implicits._
-import axle.game.Game
 
 object PokerPlayerDealer {
 
-  def move(state: PokerState, game: Poker, evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): (PokerMove, PokerState) = {
+  def move(state: PokerState, game: Poker): PokerMove = {
     val dealer = state.mover
-    val move = state.numShown match {
+    state.numShown match {
       case 0 =>
         if (state.inFors.size === 0) {
           Deal(dealer)
@@ -18,6 +17,5 @@ object PokerPlayerDealer {
       case 4 => River(dealer)
       case 5 => Payout(dealer)
     }
-    (move, state(move, game).get) // TODO .get
   }
 }

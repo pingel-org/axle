@@ -6,6 +6,8 @@ import axle.game._
 
 trait PokerMove {
 
+  def player: Player
+
   def description: String
 
 //  def displayTo(p: Player)(implicit eqp: Eq[Player], sp: Show[Player]): String =

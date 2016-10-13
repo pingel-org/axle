@@ -10,13 +10,6 @@ case class TicTacToeState(
     boardSize: Int,
     _eventQueues: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]] = Map()) {
 
-  //def apply(move: axle.game.Move[axle.game.ttt.TicTacToe],g: axle.game.ttt.TicTacToe,game: axle.game.Game[axle.game.ttt.TicTacToe]): Option[axle.game.State[axle.game.ttt.TicTacToe]] = ???
-  //def displayTo(viewer: axle.game.Player[axle.game.ttt.TicTacToe],game: axle.game.Game[axle.game.ttt.TicTacToe]): String = ???
-  //def mover: axle.game.Player[axle.game.ttt.TicTacToe] = ???
-  //def moves(game: axle.game.Game[axle.game.ttt.TicTacToe]): Seq[axle.game.Move[axle.game.ttt.TicTacToe]] = ???
-  //def outcome(game: axle.game.Game[axle.game.ttt.TicTacToe]): Option[axle.game.Outcome[axle.game.ttt.TicTacToe]] = ???
-  //def players: IndexedSeq[axle.game.Player[axle.game.ttt.TicTacToe]] = ???
-
   val numPositions = board.length
 
   def row(r: Int) = (0 until boardSize) map { c => playerAt(r, c) }
