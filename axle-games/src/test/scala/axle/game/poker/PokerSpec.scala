@@ -35,6 +35,7 @@ class PokerSpec extends Specification {
         Payout(dealer))
       val (_, lastState) = scriptToLastMoveState(game, moves)
       val outcome = lastState.outcome(game).get
+      // TODO these messages should include amounts
       evOutcome.displayTo(game, outcome, p1) must contain("You have beaten")
       evOutcome.displayTo(game, outcome, p2) must contain("beat you")
       outcome.winner.get should be equalTo p1
