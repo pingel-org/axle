@@ -82,20 +82,58 @@ class PokerSpec extends Specification {
 
   "poker hand comparison" should {
 
-    "work for 2 pair" in {
-      PokerHand.fromString("6♡,6♢,T♠,T♡,A♡") must be lessThan PokerHand.fromString("6♡,6♢,T♠,J♠,J♡")
+    "ace high < pair of 6s" in {
+      val hand = PokerHand.fromString("3♡,6♢,9♠,T♡,A♡")
+      hand.description must contain("high")
+      hand must be lessThan PokerHand.fromString("6♡,6♢,T♠,J♠,4♡")
     }
 
-    "work for pair" in {
-      PokerHand.fromString("6♡,6♢,8♠,9♡,K♡") must be lessThan PokerHand.fromString("K♡,K♢,2♠,3♠,5♡")
+    "straight > two pair" in {
+      val hand = PokerHand.fromString("7♡,6♠,8♡,5♠,9♢")
+      hand.description must contain("straight")
+      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
     }
 
-    "work for three-of-a-kind" in {
-      PokerHand.fromString("6♡,6♢,6♠,Q♡,K♡") must be lessThan PokerHand.fromString("7♡,7♢,7♠,3♠,4♡")
+    "flush > two pair" in {
+      val hand = PokerHand.fromString("3♡,6♡,9♡,T♡,A♡")
+      hand.description must contain("flush")
+      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
     }
 
-    "work for four-of-a-kind" in {
-      PokerHand.fromString("6♡,6♢,6♠,6♣,Q♡") must be lessThan PokerHand.fromString("7♡,7♢,7♠,7♣,2♡")
+    "straight flush > two pair" in {
+      val hand = PokerHand.fromString("2♡,3♡,4♡,5♡,6♡")
+      hand.description must contain("straight flush")
+      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
+    }
+
+    "royal flush > two pair" in {
+      val hand = PokerHand.fromString("T♡,J♡,Q♡,K♡,A♡")
+      hand.description must contain("royal")
+      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
+    }
+
+    "two pair vs two pair" in {
+      val hand = PokerHand.fromString("6♡,6♢,T♠,T♡,A♡")
+      hand.description must contain("two pair")
+      hand must be lessThan PokerHand.fromString("6♡,6♢,T♠,J♠,J♡")
+    }
+
+    "pair vs pair" in {
+      val hand = PokerHand.fromString("6♡,6♢,8♠,9♡,K♡")
+      hand.description must contain("pair")
+      hand must be lessThan PokerHand.fromString("K♡,K♢,2♠,3♠,5♡")
+    }
+
+    "three-of-a-kind vs three-of-a-kind" in {
+      val hand = PokerHand.fromString("6♡,6♢,6♠,Q♡,K♡")
+      hand.description must contain("three")
+      hand must be lessThan PokerHand.fromString("7♡,7♢,7♠,3♠,4♡")
+    }
+
+    "four-of-a-kind vs four-of-a-kind" in {
+      val hand = PokerHand.fromString("6♡,6♢,6♠,6♣,Q♡")
+      hand.description must contain("four")
+      hand must be lessThan PokerHand.fromString("7♡,7♢,7♠,7♣,2♡")
     }
 
   }
