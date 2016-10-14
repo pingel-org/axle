@@ -160,7 +160,35 @@ class QuantaSpec extends Specification {
     }
   }
 
-  // TODO Money, MoneyFlow, MoneyPerForce
+  "money" should {
+    "define USD" in {
+
+      implicit val mcg = Money.converterGraphK2[Double, DirectedSparseGraph]
+      import mcg._
+
+      (1d *: USD).magnitude must be equalTo 1d
+    }
+  }
+
+  "money flow" should {
+    "define USD per hour" in {
+
+      implicit val mfcg = MoneyFlow.converterGraphK2[Double, DirectedSparseGraph]
+      import mfcg._
+
+      (1d *: USDperHour).magnitude must be equalTo 1d
+    }
+  }
+
+  "money per force" should {
+    "define USD per force" in {
+
+      implicit val mfcg = MoneyPerForce.converterGraphK2[Double, DirectedSparseGraph]
+      import mfcg._
+
+      (1d *: USDperPound).magnitude must be equalTo 1d
+    }
+  }
 
   "power" should {
     "order watt and horsepower" in {
