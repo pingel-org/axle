@@ -75,7 +75,9 @@ class ShapesSpec extends Specification {
         positionLight(sunVector.toPosition, km, gl)
 
         render(sphere, shapeOrienter(t) _, gl, rc)
+        render(texturedSphere, shapeOrienter(t) _, gl, rc)
         render(cube, shapeOrienter(t) _, gl, rc)
+        render(texturedCube, shapeOrienter(t) _, gl, rc)
         render(triangle, shapeOrienter(t) _, gl, rc)
         render(tritri, shapeOrienter(t) _, gl, rc)
         render(pyramid, shapeOrienter(t) _, gl, rc)
