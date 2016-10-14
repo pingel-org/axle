@@ -15,6 +15,7 @@ import axle.quanta.Angle
 import axle.quanta.Distance
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.FloatAlgebra
+import java.nio.file.Paths
 
 class ShapesSpec extends Specification {
 
@@ -40,7 +41,7 @@ class ShapesSpec extends Specification {
       val cameraCoordinates = GeoCoordinates(39.828328f *: °, -98.579416f *: °)
 
       import java.net.URL
-      val textureUrl: URL = new URL("file://axle-docs/src/site/images/axle.png")
+      val textureUrl: URL = Paths.get("axle-docs/src/site/images/axle.png").toUri().toURL()
 
       val sphere = Sphere(1000f *: km, 24, 8, white)
       val texturedSphere = TexturedSphere(1000f *: km, 24, 8, blue, textureUrl, "png")
