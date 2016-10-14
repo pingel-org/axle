@@ -39,16 +39,19 @@ class ShapesSpec extends Specification {
       val cameraDistance = 13000f *: km
       val cameraCoordinates = GeoCoordinates(39.828328f *: °, -98.579416f *: °)
 
-      val sphere = Sphere(1000f *: km, 48, 16, white)
+      import java.net.URL
+      val textureUrl: URL = new URL("file://axle-docs/src/site/images/axle.png")
+
+      val sphere = Sphere(1000f *: km, 24, 8, white)
+      val texturedSphere = TexturedSphere(1000f *: km, 24, 8, blue, textureUrl, "png")
       val cube = Cube(1000f *: km, red)
+      val texturedCube = TexturedCube(1000f *: km, blue, textureUrl, "png")
       val triangle = Triangle(1000f *: km, blue)
       val tritri = TriColorTriangle(1000f *: km, yellow, blue, red)
       val pyramid = Pyramid(1000f *: km, green)
       val multipyr = MultiColorPyramid(1000f *: km, yellow, blue, red)
       val quad = Quad(1000f *: km, 1000f *: km, red)
       val multicube = MultiColorCube(1000f *: km, red, blue, green, white, black, yellow)
-      // TexturedCube(1000f *: km, reflectionColor: Color, textureUrl: URL, textureExtension: String)
-      // TexturedSphere(1000f *: km, slices: Int, stacks: Int, reflectionColor: Color, textureUrl: URL, textureExtension: String)
 
       val sunDistance = 1f *: au
       val zeroDegrees = 0f *: °
@@ -103,7 +106,7 @@ class ShapesSpec extends Specification {
         startTimeMillis,
         tic,
         "Axle JOGL Shape Demo",
-        Vector.empty,
+        Vector((textureUrl, "png")),
         km,
         width,
         height,
