@@ -15,6 +15,7 @@ import axle.quanta.Angle
 import axle.quanta.Distance
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.FloatAlgebra
+import java.nio.file.Paths
 
 class ShapesSpec extends Specification {
 
@@ -39,16 +40,19 @@ class ShapesSpec extends Specification {
       val cameraDistance = 13000f *: km
       val cameraCoordinates = GeoCoordinates(39.828328f *: °, -98.579416f *: °)
 
-      val sphere = Sphere(1000f *: km, 48, 16, white)
+      import java.net.URL
+      val textureUrl: URL = Paths.get("axle-docs/src/site/images/axle.png").toUri().toURL()
+
+      val sphere = Sphere(1000f *: km, 24, 8, white)
+      val texturedSphere = TexturedSphere(1000f *: km, 24, 8, blue, textureUrl, "png")
       val cube = Cube(1000f *: km, red)
+      val texturedCube = TexturedCube(1000f *: km, blue, textureUrl, "png")
       val triangle = Triangle(1000f *: km, blue)
       val tritri = TriColorTriangle(1000f *: km, yellow, blue, red)
       val pyramid = Pyramid(1000f *: km, green)
       val multipyr = MultiColorPyramid(1000f *: km, yellow, blue, red)
       val quad = Quad(1000f *: km, 1000f *: km, red)
       val multicube = MultiColorCube(1000f *: km, red, blue, green, white, black, yellow)
-      // TexturedCube(1000f *: km, reflectionColor: Color, textureUrl: URL, textureExtension: String)
-      // TexturedSphere(1000f *: km, slices: Int, stacks: Int, reflectionColor: Color, textureUrl: URL, textureExtension: String)
 
       val sunDistance = 1f *: au
       val zeroDegrees = 0f *: °
@@ -71,7 +75,9 @@ class ShapesSpec extends Specification {
         positionLight(sunVector.toPosition, km, gl)
 
         render(sphere, shapeOrienter(t) _, gl, rc)
+        render(texturedSphere, shapeOrienter(t) _, gl, rc)
         render(cube, shapeOrienter(t) _, gl, rc)
+        render(texturedCube, shapeOrienter(t) _, gl, rc)
         render(triangle, shapeOrienter(t) _, gl, rc)
         render(tritri, shapeOrienter(t) _, gl, rc)
         render(pyramid, shapeOrienter(t) _, gl, rc)
@@ -103,7 +109,7 @@ class ShapesSpec extends Specification {
         startTimeMillis,
         tic,
         "Axle JOGL Shape Demo",
-        Vector.empty,
+        Vector((textureUrl, "png")),
         km,
         width,
         height,
