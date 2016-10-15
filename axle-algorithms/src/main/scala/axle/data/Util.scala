@@ -8,12 +8,14 @@ import java.nio.file.StandardCopyOption
 
 trait Util {
 
+  val dataCacheDir = "data_cache/"
+
   def urlToCachedFile(source: URL, filename: String): File = {
 
-    val file = new File(filename)
+    val file = new File(dataCacheDir + filename)
 
     if (!file.exists) {
-      Files.copy(source.openStream(), Paths.get(filename), StandardCopyOption.REPLACE_EXISTING)
+      Files.copy(source.openStream(), Paths.get(dataCacheDir + filename), StandardCopyOption.REPLACE_EXISTING)
     }
 
     file

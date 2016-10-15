@@ -30,7 +30,7 @@ object FederalistPapers extends Util {
 
   lazy val articles: List[Article] = {
 
-    val lines = io.Source.fromFile(filename).getLines.toList
+    val lines = io.Source.fromFile(file).getLines.toList
 
     val starts = lines.zipWithIndex.collect({ case (line, i) if line.startsWith("FEDERALIST") => i })
 

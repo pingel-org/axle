@@ -4,43 +4,52 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.5 (November 2016)
-* Increase test coverage to over 80%
+## 0.2.5 (October 2016)
+* Typeclasses for axle.game
+* Increase test coverage to over 75%
+
+## 0.2.6 (November 2016)
 * Depend on Spire on Algebra on Cats
 
-## 0.2.6 (December 2016)
+## 0.2.7 (December 2016)
 * Dependent types (Shapeless?) for matrix size
 
-## 0.2.7 (January 2017)
+## 0.2.8 (January 2017)
 * Reactive Streams (Akka?) for animating visualizations
 
-## 0.3.0 (Spring 2017)
+## 0.3.0 (March 2017)
 * Solve the Spark ClassTag issue
 
-## 0.3.x (late 2017)
-* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
-* redo Logic using abstract algebra
-* redo axle-game "family polymorphism"
+## 0.3.x (Spring 2017)
+* LSA
+* LDA
+* GLM
 * Neural Networks
-* Hidden Markov Models
 * Support Vector Machines
+* Gradient Boosted Trees
 * Decision Trees
 * Random Forest
+* A* Search
+
+## 0.4.x (Fall 2017)
+* Use Shapeless for compound Quanta and Bayesian Networks
+* Physics (eg, how Volume relates to Flow)
+* Heterogenous Model types
+* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
 * Stochastic Lambda Calculus
 * Metropolis Hastings
 * Game Theory: information sets, equilibria
-* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
+* Redo Logic using abstract algebra
+* do-calculus (Causality)
+* Conditional Random Fields (CRF)
+* Hidden Markov Models
 
-## 0.4.x (2018)
+## 0.5.x (Spring 2018)
+* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
 * Performance benchmarking
 * netlib-java Matrix
 * GPU/CUDA support
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
-* Use Shapeless for compound Quanta and Bayesian Networks
-* Physics (eg, how Volume relates to Flow)
-* do-calculus (Causality)
-* Heterogenous Model types
-* A* Search
 
 
 Previous Milestones
