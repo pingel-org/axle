@@ -5,7 +5,7 @@ import org.specs2.mutable._
 import spire.math._
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import axle.syntax.finite._
-import axle.syntax.undirectedgraph._
+//import axle.syntax.undirectedgraph._
 import axle.syntax.UndirectedGraphOps
 
 class UndirectedGraphSpec extends Specification {
@@ -33,7 +33,7 @@ class UndirectedGraphSpec extends Specification {
 
       g.size must be equalTo 4
       val gops = new UndirectedGraphOps[UndirectedSparseGraph[String, Edge], String, Edge](g)
-      gops.neighbors(a).size must be equalTo 2
+      gops.neighbors(a).size must be equalTo 3
       //gops.edges.size must be equalTo 6
       gops.vertices.size must be equalTo 4
       gops.findVertex { _ == "a" } must be equalTo Some("a")
