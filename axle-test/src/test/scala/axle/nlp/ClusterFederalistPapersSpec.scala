@@ -29,7 +29,6 @@ class ClusterFederalistPapersSpec extends Specification {
       }
 
       import spire.implicits._
-      import spire.algebra._
       import axle.ml.distance._
       import axle.ml.distance.Euclidean
       import org.jblas.DoubleMatrix
