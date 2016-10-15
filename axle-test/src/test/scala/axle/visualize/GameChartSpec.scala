@@ -28,31 +28,41 @@ class GameChartSpec extends Specification {
       // test implicit conjuring:
       PlotDataView.distribution0DataView[Int, Rational]
 
-      val plot = BarChart[Int, Rational, Distribution0[Int, Rational]](
+      val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
         scoreD,
         drawKey = true,
         xAxis = Some(Rational(0)))
 
-      val svgName = "bowl.svg"
+      val plot = Plot[Int, Rational, Distribution0[Int, Rational]](
+        Vector(("", scoreD)),
+        drawKey = true,
+        xAxis = Some(Rational(0)))
+
       import axle.web._
-      svg(plot, svgName)
+      import axle.awt._
+
+      val svgPlotName = "bowl_plot.svg"
+      svg(plot, svgPlotName)
+
+      val svgName = "bowl.svg"
+      svg(chart, svgName)
 
       val pngName = "bowl.png"
-      import axle.awt._
-      png(plot, pngName)
+      png(chart, pngName)
 
       val jpegName = "bowl.jpg"
-      jpeg(plot, jpegName)
+      jpeg(chart, jpegName)
 
       val gifName = "bowl.gif"
-      gif(plot, gifName)
+      gif(chart, gifName)
 
       val bmpName = "bowl.bmp"
-      bmp(plot, bmpName)
+      bmp(chart, bmpName)
 
       val htmlName = "bowl.html"
-      html(plot, htmlName)
+      html(chart, htmlName)
 
+      new java.io.File(svgPlotName).exists must be equalTo true
       new java.io.File(svgName).exists must be equalTo true
       new java.io.File(pngName).exists must be equalTo true
       new java.io.File(jpegName).exists must be equalTo true
