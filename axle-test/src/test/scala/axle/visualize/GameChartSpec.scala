@@ -50,11 +50,15 @@ class GameChartSpec extends Specification {
       val bmpName = "bowl.bmp"
       bmp(plot, bmpName)
 
+      val htmlName = "bowl.html"
+      html(plot, htmlName)
+
       new java.io.File(svgName).exists must be equalTo true
       new java.io.File(pngName).exists must be equalTo true
       new java.io.File(jpegName).exists must be equalTo true
       new java.io.File(gifName).exists must be equalTo true
       new java.io.File(bmpName).exists must be equalTo true
+      new java.io.File(htmlName).exists must be equalTo true
     }
   }
 
