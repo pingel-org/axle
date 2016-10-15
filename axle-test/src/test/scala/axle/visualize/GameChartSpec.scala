@@ -28,12 +28,10 @@ class GameChartSpec extends Specification {
       // test implicit conjuring:
       PlotDataView.distribution0DataView[Int, Rational]
 
-      val plot = Plot[Int, Rational, Distribution0[Int, Rational]](
-        List(("score", scoreD)),
-        connect = true,
+      val plot = BarChart[Int, Rational, Distribution0[Int, Rational]](
+        scoreD,
         drawKey = true,
-        xAxis = Some(Rational(0)),
-        yAxis = Some(0))
+        xAxis = Some(Rational(0)))
 
       val svgName = "bowl.svg"
       import axle.web._
