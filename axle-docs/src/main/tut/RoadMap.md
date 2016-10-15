@@ -4,14 +4,17 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.5 (November 2016)
-* Increase test coverage to over 80%
+## 0.2.5 (October 2016)
+* Typeclasses for axle.game
+* Increase test coverage to over 75%
+
+## 0.2.6 (November 2016)
 * Depend on Spire on Algebra on Cats
 
-## 0.2.6 (December 2016)
+## 0.2.7 (December 2016)
 * Dependent types (Shapeless?) for matrix size
 
-## 0.2.7 (January 2017)
+## 0.2.8 (January 2017)
 * Reactive Streams (Akka?) for animating visualizations
 
 ## 0.3.0 (Spring 2017)
