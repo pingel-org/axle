@@ -14,7 +14,7 @@ class TicsSpec extends Specification {
     "cover five seconds" in {
 
       Tics[DateTime].tics(start, start.plusSeconds(5)) must be equalTo List(
-        (new DateTime("2016-01-04T12:10:06.000-08:00"), "10:0"),
+        (new DateTime("2016-01-04T12:10:06.000-08:00"), "10:06"),
         (new DateTime("2016-01-04T12:10:07.000-08:00"), "10:07"),
         (new DateTime("2016-01-04T12:10:08.000-08:00"), "10:08"),
         (new DateTime("2016-01-04T12:10:09.000-08:00"), "10:09"),
@@ -62,7 +62,7 @@ class TicsSpec extends Specification {
 
     "cover five days" in {
 
-      Tics[DateTime].tics(start, start.plusWeeks(1)) must be equalTo List(
+      Tics[DateTime].tics(start, start.plusDays(5)) must be equalTo List(
         (new DateTime("2016-01-05T12:10:05.000-08:00"), "01/05 12"),
         (new DateTime("2016-01-06T12:10:05.000-08:00"), "01/06 12"),
         (new DateTime("2016-01-07T12:10:05.000-08:00"), "01/07 12"),
@@ -84,7 +84,7 @@ class TicsSpec extends Specification {
 
     "cover four weeks" in {
 
-      Tics[DateTime].tics(start, start.plusWeeks(3)) must be equalTo List(
+      Tics[DateTime].tics(start, start.plusWeeks(4)) must be equalTo List(
         (new DateTime("2016-01-11T12:10:05.000-08:00"), "01/11"),
         (new DateTime("2016-01-18T12:10:05.000-08:00"), "01/18"),
         (new DateTime("2016-01-25T12:10:05.000-08:00"), "01/25"),
