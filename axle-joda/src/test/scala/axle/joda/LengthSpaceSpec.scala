@@ -18,7 +18,7 @@ class LengthSpaceSpec extends Specification {
 
   "joda Eq" should {
     "distinguish different times" in {
-      spire.algebra.Eq[DateTime].eqv(start, start.plusHours(1)) must be equalTo false
+      axle.joda.dateTimeEq.eqv(start, start.plusHours(1)) must be equalTo false
     }
   }
 }
