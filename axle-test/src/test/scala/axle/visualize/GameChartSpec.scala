@@ -41,8 +41,20 @@ class GameChartSpec extends Specification {
       import axle.awt._
       png(plot, pngName)
 
+      val jpegName = "bowl.jpg"
+      jpeg(plot, jpegName)
+
+      val gifName = "bowl.gif"
+      gif(plot, gifName)
+
+      val bmpName = "bowl.bmp"
+      bmp(plot, bmpName)
+
       new java.io.File(svgName).exists must be equalTo true
       new java.io.File(pngName).exists must be equalTo true
+      new java.io.File(jpegName).exists must be equalTo true
+      new java.io.File(gifName).exists must be equalTo true
+      new java.io.File(bmpName).exists must be equalTo true
     }
   }
 
