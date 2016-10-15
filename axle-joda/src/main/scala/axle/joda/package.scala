@@ -9,6 +9,8 @@ import axle.algebra.Tics
 import axle.algebra.Plottable
 import axle.algebra.LengthSpace
 
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 import org.joda.time.DateTime
 import org.joda.time.Duration
 import org.joda.time.{ Seconds, Minutes, Hours, Days, Weeks }
@@ -53,19 +55,20 @@ package object joda {
         (_.plusSeconds(1), "mm:ss")
       }
 
-    def ticStream(from: DateTime, to: DateTime, stepFn: DateTime => DateTime, fmt: String): Stream[(DateTime, String)] = {
+    def ticStream(from: DateTime, to: DateTime, stepFn: DateTime => DateTime, formatter: DateTimeFormatter): Stream[(DateTime, String)] = {
       val nextTic = stepFn(from)
       if (nextTic.isAfter(to)) {
         Stream.empty
       } else {
-        Stream.cons((nextTic, nextTic.toString(fmt)), ticStream(nextTic, to, stepFn, fmt))
+        Stream.cons((nextTic, formatter.print(nextTic)), ticStream(nextTic, to, stepFn, formatter))
       }
     }
 
     def tics(from: DateTime, to: DateTime): Seq[(DateTime, String)] = {
       val dur = new org.joda.time.Interval(from, to).toDuration
-      val (stepFn, fmt) = step(dur)
-      ticStream(from, to, stepFn, fmt).toList
+      val (stepFn, pattern) = step(dur)
+      val formatter = DateTimeFormat.forPattern(pattern).withZone(from.getZone)
+      ticStream(from, to, stepFn, formatter).toList
     }
 
   }
