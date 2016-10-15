@@ -9,7 +9,7 @@ import org.joda.time.DateTimeZone
 class TicsSpec extends Specification {
 
   val tz = DateTimeZone.forID("America/Los_Angeles")
-  val start = new DateTime("2016-01-04T12:10:05.000-08:00").withZone(tz)
+  val start = new DateTime("2016-01-04T12:10:05.000").withZone(tz)
 
   "Tics for Joda DateTime" should {
 
