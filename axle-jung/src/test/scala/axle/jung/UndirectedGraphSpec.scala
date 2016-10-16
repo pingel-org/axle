@@ -13,7 +13,7 @@ class UndirectedGraphSpec extends Specification {
   "Undirected Graph" should {
     "work" in {
 
-      class Edge
+      class Edge(val weight: Real)
 
       val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
 
@@ -24,12 +24,12 @@ class UndirectedGraphSpec extends Specification {
 
       val g = jug.make(List(a, b, c, d),
         List(
-          (a, b, new Edge),
-          (b, c, new Edge),
-          (c, d, new Edge),
-          (d, a, new Edge),
-          (a, c, new Edge),
-          (b, d, new Edge)))
+          (a, b, new Edge(1.1)),
+          (b, c, new Edge(2.2)),
+          (c, d, new Edge(7.1)),
+          (d, a, new Edge(-1.8)),
+          (a, c, new Edge(8.0)),
+          (b, d, new Edge(4.9))))
 
       g.size must be equalTo 4
       g.neighbors(a).size must be equalTo 3
@@ -37,6 +37,7 @@ class UndirectedGraphSpec extends Specification {
       g.vertices.size must be equalTo 4
       g.findVertex(_ == "a").get must be equalTo "a"
       vertexFunctorUDSG.map(g)(s => s + s).findVertex(_ == "aa").get must be equalTo "aa"
+      edgeFunctorUDSG.map(g)(r => new Edge(r.weight + 1.1)).findEdge("a","b").weight must be equalTo Real(2.2)
     }
   }
 
