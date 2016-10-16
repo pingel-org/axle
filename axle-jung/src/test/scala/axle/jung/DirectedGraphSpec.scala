@@ -28,17 +28,18 @@ class DirectedGraphSpec extends Specification {
       val g = jdg.make(List(a, b, c, d),
         List(
           (a, b, new Edge(1.1)),
-          (b, c, new Edge(1.1)),
-          (c, d, new Edge(1.1)),
-          (d, a, new Edge(1.1)),
-          (a, c, new Edge(1.1)),
-          (b, d, new Edge(1.1))))
+          (b, c, new Edge(4.1)),
+          (c, d, new Edge(5.1)),
+          (d, a, new Edge(8.1)),
+          (a, c, new Edge(-1.1)),
+          (b, d, new Edge(5.3))))
 
       g.size must be equalTo 4
       g.neighbors(a).size must be equalTo 3
-      // g.edges.size must be equalTo 6
       g.vertices.size must be equalTo 4
+      g.edges.size must be equalTo 6
       g.findVertex(_ == "a").get must be equalTo "a"
+      g.filterEdges(_.weight > Real(4.1)).size must be equalTo 3
       vertexFunctorDSG.map(g)(s => s + s).findVertex(_ == "aa").get must be equalTo "aa"
       edgeFunctorDSG.map(g)(r => new Edge(r.weight + 1.1)).findEdge("a","b").weight must be equalTo Real(2.2)
     }

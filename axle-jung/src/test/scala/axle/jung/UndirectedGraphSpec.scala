@@ -33,11 +33,12 @@ class UndirectedGraphSpec extends Specification {
 
       g.size must be equalTo 4
       g.neighbors(a).size must be equalTo 3
-      // g.edges.size must be equalTo 6
       g.vertices.size must be equalTo 4
+      g.edges.size must be equalTo 6
       g.findVertex(_ == "a").get must be equalTo "a"
+      g.filterEdges(_.weight > Real(4.1)).size must be equalTo 3
       vertexFunctorUDSG.map(g)(s => s + s).findVertex(_ == "aa").get must be equalTo "aa"
-      edgeFunctorUDSG.map(g)(r => new Edge(r.weight + 1.1)).findEdge("a","b").weight must be equalTo Real(2.2)
+      edgeFunctorUDSG.map(g)(r => new Edge(r.weight + 1.1)).findEdge("a", "b").weight must be equalTo Real(2.2)
     }
   }
 
