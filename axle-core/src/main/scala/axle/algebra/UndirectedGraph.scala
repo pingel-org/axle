@@ -35,7 +35,7 @@ trait UndirectedGraph[UG, V, E] {
 
   def edgesTouching(jug: UG, v: V): collection.GenTraversable[E]
 
-  def neighbors(jug: UG, v: V): collection.GenTraversable[E]
+  def neighbors(jug: UG, v: V): collection.GenTraversable[V]
 
   //  def delete(v: Vertex[V]): UG
 

@@ -364,11 +364,11 @@ package object jung {
       def degree(jusg: UndirectedSparseGraph[V, E], v: V): Int =
         edgesTouching(jusg, v).size
 
-      def edgesTouching(jusg: UndirectedSparseGraph[V, E], v: V): Set[E] =
-        jusg.getIncidentEdges(v).asScala.toSet
+      def edgesTouching(jusg: UndirectedSparseGraph[V, E], v: V): collection.GenTraversable[E] =
+        jusg.getIncidentEdges(v).asScala
 
-      def neighbors(jusg: UndirectedSparseGraph[V, E], v: V): Set[V] =
-        jusg.getNeighbors(v).asScala.toSet
+      def neighbors(jusg: UndirectedSparseGraph[V, E], v: V): collection.GenTraversable[V] =
+        jusg.getNeighbors(v).asScala
 
       //  def delete(v: Vertex[V]): UndirectedSparseGraph[V, E] =
       //    UndirectedSparseGraph(vertices.toSeq.filter(_ != v).map(_.payload), ef)

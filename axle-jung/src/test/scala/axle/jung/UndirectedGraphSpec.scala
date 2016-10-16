@@ -22,9 +22,11 @@ class UndirectedGraphSpec extends Specification {
       val c = "c"
       val d = "d"
 
+      val e1 = new Edge(1.1)
+
       val g = jug.make(List(a, b, c, d),
         List(
-          (a, b, new Edge(1.1)),
+          (a, b, e1),
           (b, c, new Edge(2.2)),
           (c, d, new Edge(7.1)),
           (d, a, new Edge(-1.8)),
@@ -32,6 +34,7 @@ class UndirectedGraphSpec extends Specification {
           (b, d, new Edge(4.9))))
 
       g.size must be equalTo 4
+      g.connects(e1, a, b) must be equalTo true
       g.neighbors(a).size must be equalTo 3
       g.edgesTouching(a).size must be equalTo 3
       g.vertices.size must be equalTo 4
