@@ -41,19 +41,4 @@ class UndirectedGraphSpec extends Specification {
     }
   }
 
-  "REPL Demo" should {
-    "work" in {
-
-      class Edge(weight: Real)
-
-      val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
-
-      val g = jug.make(
-        List("a"),
-        Nil)
-
-      g.size must be equalTo 1
-    }
-  }
-
 }
