@@ -38,7 +38,7 @@ class DirectedGraphSpec extends Specification {
       g.vertices.size must be equalTo 4
       g.edges.size must be equalTo 6
       g.findVertex(_ == "a").get must be equalTo "a"
-      g.filterEdges(_.weight > Real(4.1)).size must be equalTo 3
+      g.filterEdges(_.weight > Real(0d)).edges.size must be equalTo 6
       vertexFunctorDSG.map(g)(s => s + s).findVertex(_ == "aa").get must be equalTo "aa"
       edgeFunctorDSG.map(g)(r => new Edge(r.weight + 1.1)).findEdge("a","b").weight must be equalTo Real(2.2)
     }

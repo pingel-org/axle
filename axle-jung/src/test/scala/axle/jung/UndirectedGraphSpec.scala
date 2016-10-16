@@ -40,7 +40,7 @@ class UndirectedGraphSpec extends Specification {
       g.vertices.size must be equalTo 4
       g.edges.size must be equalTo 6
       g.findVertex(_ == a).get must be equalTo "a"
-      g.filterEdges(_.weight > Real(4.1)).size must be equalTo 3
+      g.filterEdges(_.weight > Real(0)).edges.size must be equalTo 5
       g.degree(a) must be equalTo 3
       g.areNeighbors(a, b) must be equalTo true
       g.isClique(List(a, b, c)) must be equalTo false
