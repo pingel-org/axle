@@ -1,12 +1,12 @@
 package axle.jung
 
 import axle.algebra.UndirectedGraph
-import org.specs2.mutable._
-import spire.math._
+import org.specs2.mutable.Specification
+import spire.math.Real
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
+import spire.implicits._
 import axle.syntax.finite._
-//import axle.syntax.undirectedgraph._
-import axle.syntax.UndirectedGraphOps
+import axle.syntax.undirectedgraph._
 
 class UndirectedGraphSpec extends Specification {
 
@@ -32,11 +32,11 @@ class UndirectedGraphSpec extends Specification {
           (b, d, new Edge)))
 
       g.size must be equalTo 4
-      val gops = new UndirectedGraphOps[UndirectedSparseGraph[String, Edge], String, Edge](g)
-      gops.neighbors(a).size must be equalTo 3
-      //gops.edges.size must be equalTo 6
-      gops.vertices.size must be equalTo 4
-      gops.findVertex { _ == "a" } must be equalTo Some("a")
+      g.neighbors(a).size must be equalTo 3
+      // g.edges.size must be equalTo 6
+      g.vertices.size must be equalTo 4
+      g.findVertex(_ == "a").get must be equalTo "a"
+      vertexFunctorUDSG.map(g)(s => s + s).findVertex(_ == "aa").get must be equalTo "aa"
     }
   }
 

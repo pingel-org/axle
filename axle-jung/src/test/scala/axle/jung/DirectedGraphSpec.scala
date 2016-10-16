@@ -6,6 +6,8 @@ import org.specs2.mutable.Specification
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.algebra.DirectedGraph
 import axle.syntax.finite._
+import axle.syntax.directedgraph._
+import axle.syntax.DirectedGraphOps
 
 class DirectedGraphSpec extends Specification {
 
