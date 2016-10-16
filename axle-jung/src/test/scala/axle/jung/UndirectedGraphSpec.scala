@@ -35,6 +35,7 @@ class UndirectedGraphSpec extends Specification {
 
       g.size must be equalTo 4
       g.connects(e1, a, b) must be equalTo true
+      g.other(e1, a) must be equalTo b
       g.neighbors(a).size must be equalTo 3
       g.edgesTouching(a).size must be equalTo 3
       g.vertices.size must be equalTo 4
@@ -43,7 +44,7 @@ class UndirectedGraphSpec extends Specification {
       g.filterEdges(_.weight > Real(0)).edges.size must be equalTo 5
       g.degree(a) must be equalTo 3
       g.areNeighbors(a, b) must be equalTo true
-      g.isClique(List(a, b, c)) must be equalTo false
+      g.isClique(List(a, b, c)) must be equalTo true
       vertexFunctorUDSG.map(g)(s => s + s).findVertex(_ == "aa").get must be equalTo "aa"
       edgeFunctorUDSG.map(g)(r => new Edge(r.weight + 1.1)).findEdge(a, b).weight must be equalTo Real(2.2)
     }
