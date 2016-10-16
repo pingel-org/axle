@@ -9,7 +9,6 @@ import spire.math.Real
 import spire.implicits._
 import axle.syntax.finite._
 import axle.syntax.directedgraph._
-import axle.syntax.DirectedGraphOps
 
 class DirectedGraphSpec extends Specification {
 

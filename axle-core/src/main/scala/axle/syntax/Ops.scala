@@ -170,6 +170,8 @@ final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG
 
   def edges = ev.edges(dg)
 
+  def filterEdges(f: E => Boolean) = ev.filterEdges(dg, f)
+
   def source(e: E) = ev.source(dg, e)
 
   def destination(e: E) = ev.destination(dg, e)
@@ -200,11 +202,21 @@ final class UndirectedGraphOps[UG, V, E](val ug: UG)(implicit ev: UndirectedGrap
   def findVertex(f: V => Boolean) =
     ev.findVertex(ug, f)
 
-  def vertices() = ev.vertices(ug)
+  def vertices = ev.vertices(ug)
+
+  def edges = ev.edges(ug)
 
   def vertices(e: E) = ev.vertices(ug, e)
 
   def neighbors(v: V) = ev.neighbors(ug, v)
+
+  def areNeighbors(v1: V, v2: V)(implicit eqV: Eq[V]): Boolean = ev.areNeighbors(ug, v1, v2)
+
+  def edgesTouching(v: V): collection.GenTraversable[E] = ev.edgesTouching(ug, v)
+
+  def isClique(vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(ug, vs)
+
+  def filterEdges(f: E => Boolean) = ev.filterEdges(ug, f)
 
   def firstLeafOtherThan(r: V)(implicit eqV: Eq[V]) = ev.firstLeafOtherThan(ug, r)
 }

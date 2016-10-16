@@ -33,9 +33,9 @@ trait UndirectedGraph[UG, V, E] {
 
   def degree(jug: UG, v: V): Int
 
-  def edgesTouching(jug: UG, v: V): Set[E]
+  def edgesTouching(jug: UG, v: V): collection.GenTraversable[E]
 
-  def neighbors(jug: UG, v: V): Set[V]
+  def neighbors(jug: UG, v: V): collection.GenTraversable[E]
 
   //  def delete(v: Vertex[V]): UG
 
