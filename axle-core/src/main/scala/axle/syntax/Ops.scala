@@ -176,6 +176,9 @@ final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG
 
   def isClique(vs: Iterable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(dg, vs)
 
+  def forceClique(vs: Set[V], edgeFn: (V, V) => E)(implicit eqV: Eq[V], manV: Manifest[V]): DG =
+    ev.forceClique(dg, vs, edgeFn)
+
   def edgesTouching(v: V) = ev.edgesTouching(dg, v)
 
   def other(e: E, v: V)(implicit eqV: Eq[V]): V = ev.other(dg, e, v)
@@ -234,9 +237,12 @@ final class UndirectedGraphOps[UG, V, E](val ug: UG)(implicit ev: UndirectedGrap
 
   def isClique(vs: Iterable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(ug, vs)
 
-  def filterEdges(f: E => Boolean) = ev.filterEdges(ug, f)
+  def forceClique(vs: Set[V], edgeFn: (V, V) => E)(implicit eqV: Eq[V], manV: Manifest[V]): UG =
+    ev.forceClique(ug, vs, edgeFn)
 
-  def firstLeafOtherThan(r: V)(implicit eqV: Eq[V]) = ev.firstLeafOtherThan(ug, r)
+  def filterEdges(f: E => Boolean): UG = ev.filterEdges(ug, f)
+
+  def firstLeafOtherThan(r: V)(implicit eqV: Eq[V]): Option[V] = ev.firstLeafOtherThan(ug, r)
 }
 
 final class FunctorOps[F, A, B, G](val as: F)(implicit functor: Functor[F, A, B, G]) {
