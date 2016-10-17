@@ -3,6 +3,7 @@ package axle.joda
 import org.specs2.mutable.Specification
 
 import org.joda.time.DateTime
+import org.joda.time.Duration
 
 class LengthSpaceSpec extends Specification {
 
@@ -13,6 +14,12 @@ class LengthSpaceSpec extends Specification {
 
       val midpoint = dateTimeDurationLengthSpace.onPath(start, start.plusDays(1), 0.5)
       midpoint must be equalTo start.plusHours(12)
+    }
+
+    "compute day distance" in {
+
+      val distance = dateTimeDurationLengthSpace.distance(start, start.plusDays(1))
+      distance must be equalTo Duration.standardDays(1)
     }
   }
 

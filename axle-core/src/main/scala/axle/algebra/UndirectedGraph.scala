@@ -27,15 +27,15 @@ trait UndirectedGraph[UG, V, E] {
 
   def areNeighbors(jug: UG, v1: V, v2: V)(implicit eqV: Eq[V]): Boolean
 
-  def isClique(jug: UG, vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean
+  def isClique(jug: UG, vs: Iterable[V])(implicit eqV: Eq[V]): Boolean
 
   def forceClique(jug: UG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V], mv: Manifest[V]): UG
 
   def degree(jug: UG, v: V): Int
 
-  def edgesTouching(jug: UG, v: V): Set[E]
+  def edgesTouching(jug: UG, v: V): Iterable[E]
 
-  def neighbors(jug: UG, v: V): Set[V]
+  def neighbors(jug: UG, v: V): Iterable[V]
 
   //  def delete(v: Vertex[V]): UG
 
@@ -53,7 +53,7 @@ trait UndirectedGraph[UG, V, E] {
 
   def connects(jug: UG, edge: E, a1: V, a2: V)(implicit eqV: Eq[V]): Boolean
 
-  //  def numEdgesToForceClique(vs: collection.GenTraversable[Vertex[V]], payload: (Vertex[V], Vertex[V]) => E): Int =
+  //  def numEdgesToForceClique(vs: Iterable[Vertex[V]], payload: (Vertex[V], Vertex[V]) => E): Int =
   //    (for {
   //      vi <- vs
   //      vj <- vs

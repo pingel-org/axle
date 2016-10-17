@@ -170,9 +170,24 @@ final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG
 
   def edges = ev.edges(dg)
 
+  def filterEdges(f: E => Boolean): DG = ev.filterEdges(dg, f)
+
+  def areNeighbors(v1: V, v2: V)(implicit eqV: Eq[V]): Boolean = ev.areNeighbors(dg, v1, v2)
+
+  def isClique(vs: Iterable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(dg, vs)
+
+  def forceClique(vs: Set[V], edgeFn: (V, V) => E)(implicit eqV: Eq[V], manV: Manifest[V]): DG =
+    ev.forceClique(dg, vs, edgeFn)
+
+  def edgesTouching(v: V) = ev.edgesTouching(dg, v)
+
+  def other(e: E, v: V)(implicit eqV: Eq[V]): V = ev.other(dg, e, v)
+
   def source(e: E) = ev.source(dg, e)
 
   def destination(e: E) = ev.destination(dg, e)
+
+  def connects(e: E, v1: V, v2: V)(implicit eqV: Eq[V]) = ev.connects(dg, e, v1, v2)
 
   def precedes(v1: V, v2: V) = ev.precedes(dg, v1, v2)
 
@@ -185,6 +200,10 @@ final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG
   def descendants(v: V) = ev.descendants(dg, v)
 
   def descendantsIntersectsSet(v: V, s: Set[V]) = ev.descendantsIntersectsSet(dg, v, s)
+
+  def removeInputs(vs: Set[V]): DG = ev.removeInputs(dg, vs)
+
+  def removeOutputs(vs: Set[V]): DG = ev.removeOutputs(dg, vs)
 
   // TODO: change first Edge type param:
   def shortestPath(source: V, goal: V)(implicit eqV: Eq[V]): Option[List[E]] =
@@ -200,13 +219,30 @@ final class UndirectedGraphOps[UG, V, E](val ug: UG)(implicit ev: UndirectedGrap
   def findVertex(f: V => Boolean) =
     ev.findVertex(ug, f)
 
-  def vertices() = ev.vertices(ug)
+  def vertices = ev.vertices(ug)
+
+  def edges = ev.edges(ug)
 
   def vertices(e: E) = ev.vertices(ug, e)
 
   def neighbors(v: V) = ev.neighbors(ug, v)
 
-  def firstLeafOtherThan(r: V)(implicit eqV: Eq[V]) = ev.firstLeafOtherThan(ug, r)
+  def areNeighbors(v1: V, v2: V)(implicit eqV: Eq[V]): Boolean = ev.areNeighbors(ug, v1, v2)
+
+  def edgesTouching(v: V): Iterable[E] = ev.edgesTouching(ug, v)
+
+  def other(e: E, v: V)(implicit eqV: Eq[V]): V = ev.other(ug, e, v)
+
+  def connects(e: E, v1: V, v2: V)(implicit eqV: Eq[V]): Boolean = ev.connects(ug, e, v1, v2)
+
+  def isClique(vs: Iterable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(ug, vs)
+
+  def forceClique(vs: Set[V], edgeFn: (V, V) => E)(implicit eqV: Eq[V], manV: Manifest[V]): UG =
+    ev.forceClique(ug, vs, edgeFn)
+
+  def filterEdges(f: E => Boolean): UG = ev.filterEdges(ug, f)
+
+  def firstLeafOtherThan(r: V)(implicit eqV: Eq[V]): Option[V] = ev.firstLeafOtherThan(ug, r)
 }
 
 final class FunctorOps[F, A, B, G](val as: F)(implicit functor: Functor[F, A, B, G]) {

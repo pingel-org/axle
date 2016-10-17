@@ -106,7 +106,7 @@ package object jung {
       def areNeighbors(jdg: DirectedSparseGraph[V, E], v1: V, v2: V)(implicit eqV: Eq[V]): Boolean =
         edgesTouching(jdg, v1).exists(edge => connects(jdg, edge, v1, v2))
 
-      def isClique(jdsg: DirectedSparseGraph[V, E], vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean =
+      def isClique(jdsg: DirectedSparseGraph[V, E], vs: Iterable[V])(implicit eqV: Eq[V]): Boolean =
         (for {
           vi <- vs
           vj <- vs
@@ -117,25 +117,17 @@ package object jung {
       def forceClique(
         jdsg: DirectedSparseGraph[V, E],
         among: Set[V],
-        payload: (V, V) => E)(implicit eqV: Eq[V], mV: Manifest[V]): DirectedSparseGraph[V, E] = {
+        edgeFn: (V, V) => E)(implicit eqV: Eq[V], mV: Manifest[V]): DirectedSparseGraph[V, E] = {
 
-        val cliqued = {
+        val newEdges: Iterable[(V, V, E)] = among.toVector.permutations(2)
+          .map({ a =>
+            val from = a(0)
+            val to = a(1)
+            val edge = Option(jdsg.findEdge(from, to)).getOrElse(edgeFn(from, to))
+            (from, to, edge)
+          })
 
-          val old2new: Map[V, V] = ??? //jdsg.getVertices.zip(newVs).toMap
-
-          val newEdges = among.toVector.permutations(2)
-            .map({ a => (a(0), a(1)) })
-            .collect({
-              case (vi: V, vj: V) if !areNeighbors(jdsg, vi, vj) =>
-                val newVi = old2new(vi)
-                val newVj = old2new(vj)
-                (newVi, newVj, payload(newVi, newVj))
-            })
-
-          ??? // ef(newVs) ++ newEdges
-        }
-
-        make(vertices(jdsg).toList, cliqued)
+        make(vertices(jdsg).toList, newEdges.toList)
       }
 
       def degree(jdsg: DirectedSparseGraph[V, E], v: V): Int =
@@ -202,11 +194,9 @@ package object jung {
       def removeOutputs(jdsg: DirectedSparseGraph[V, E], from: Set[V]): DirectedSparseGraph[V, E] =
         filterEdges(jdsg, edge => !from.contains(source(jdsg, edge)))
 
-      def moralGraph(jdsg: DirectedSparseGraph[V, E]): Boolean =
-        ???
+      // TODO def moralGraph(jdsg: DirectedSparseGraph[V, E]): Boolean
 
-      def isAcyclic(jdsg: DirectedSparseGraph[V, E]): Boolean =
-        ???
+      // TODO def isAcyclic(jdsg: DirectedSparseGraph[V, E]): Boolean
 
       def shortestPath(jdsg: DirectedSparseGraph[V, E], source: V, goal: V)(implicit eqV: Eq[V]): Option[List[E]] =
         if (source === goal) {
@@ -270,7 +260,6 @@ package object jung {
 
       import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
-      import axle.enrichIndexedSeq
       import edu.uci.ics.jung.graph.UndirectedSparseGraph
       import spire.algebra.Eq
       import spire.implicits.IntAlgebra
@@ -329,7 +318,7 @@ package object jung {
       def areNeighbors(jug: UndirectedSparseGraph[V, E], v1: V, v2: V)(implicit eqV: Eq[V]): Boolean =
         edgesTouching(jug, v1).exists(edge => connects(jug, edge, v1, v2))
 
-      def isClique(jug: UndirectedSparseGraph[V, E], vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean =
+      def isClique(jug: UndirectedSparseGraph[V, E], vs: Iterable[V])(implicit eqV: Eq[V]): Boolean =
         (for {
           vi <- vs
           vj <- vs
@@ -340,35 +329,27 @@ package object jung {
       def forceClique(
         jug: UndirectedSparseGraph[V, E],
         among: Set[V],
-        payload: (V, V) => E)(implicit eqV: Eq[V], mv: Manifest[V]): UndirectedSparseGraph[V, E] = {
+        edgeFn: (V, V) => E)(implicit eqV: Eq[V], mv: Manifest[V]): UndirectedSparseGraph[V, E] = {
 
-        val cliqued = {
+        val newEdges: Iterator[(V, V, E)] = among.toVector.combinations(2)
+          .map({ both =>
+            val v1 = both(0)
+            val v2 = both(1)
+            val edge = Option(jug.findEdge(v1, v2)).getOrElse(edgeFn(v1, v2))
+            (v1, v2, edge)
+          })
 
-          val old2new: Map[V, V] = ??? // TODO _vertices.zip(newVs).toMap
-
-          val newEdges = among.toVector.permutations(2)
-            .map({ a => (a(0), a(1)) })
-            .collect({
-              case (vi: V, vj: V) if !areNeighbors(jug, vi, vj) =>
-                val newVi = old2new(vi)
-                val newVj = old2new(vj)
-                (newVi, newVj, payload(newVi, newVj))
-            })
-
-          ??? // ef(newVs) ++ newEdges
-        }
-
-        make(vertices(jug).toList, cliqued)
+        make(vertices(jug).toList, newEdges.toList)
       }
 
       def degree(jusg: UndirectedSparseGraph[V, E], v: V): Int =
         edgesTouching(jusg, v).size
 
-      def edgesTouching(jusg: UndirectedSparseGraph[V, E], v: V): Set[E] =
-        jusg.getIncidentEdges(v).asScala.toSet
+      def edgesTouching(jusg: UndirectedSparseGraph[V, E], v: V): Iterable[E] =
+        jusg.getIncidentEdges(v).asScala
 
-      def neighbors(jusg: UndirectedSparseGraph[V, E], v: V): Set[V] =
-        jusg.getNeighbors(v).asScala.toSet
+      def neighbors(jusg: UndirectedSparseGraph[V, E], v: V): Iterable[V] =
+        jusg.getNeighbors(v).asScala
 
       //  def delete(v: Vertex[V]): UndirectedSparseGraph[V, E] =
       //    UndirectedSparseGraph(vertices.toSeq.filter(_ != v).map(_.payload), ef)

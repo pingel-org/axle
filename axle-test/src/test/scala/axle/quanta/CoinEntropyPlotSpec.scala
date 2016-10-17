@@ -3,19 +3,9 @@ package axle.quanta
 import axle.visualize._
 
 import scala.collection.immutable.TreeMap
-import spire.math.sin
-import scala.util.Random
 
-import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
-import axle.joda.dateTimeOrder
-import axle.joda.dateTimePlottable
-import axle.joda.dateTimeZero
-import axle.joda.dateTimeTics
-import axle.joda.dateTimeDurationLengthSpace
-import axle.quanta.Information
-import axle.quanta.UnittedQuantity
 import axle.stats.H
 import axle.stats.coin
 

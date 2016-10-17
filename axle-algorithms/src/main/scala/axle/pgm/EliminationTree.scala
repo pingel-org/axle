@@ -27,7 +27,7 @@ case class EliminationTree[T: Eq: Manifest, N: Field: Manifest, UG](
       .foldLeft(accumulated ++ node.variables)((a, y) => gatherVars(node, y, a))
 
   def cluster(i: Factor[T, N]): Set[Distribution[T, N]] =
-    graph.neighbors(i).flatMap(separate(i, _)) ++ i.variables
+    graph.neighbors(i).flatMap(separate(i, _)).toSet ++ i.variables
 
   def separate(i: Factor[T, N], j: Factor[T, N]): Set[Distribution[T, N]] =
     gatherVars(j, i, Set.empty[Distribution[T, N]]).intersect(gatherVars(i, j, Set[Distribution[T, N]]()))
