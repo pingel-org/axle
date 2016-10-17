@@ -64,7 +64,6 @@ class MatrixSpecification extends Specification {
   "boolean tests" should {
     "return false for random 2x3 matrix" in {
 
-      // import axle.syntax.linearalgebra.matrixOps
       import axle.syntax.LinearAlgebraOps
       import spire.implicits.DoubleAlgebra
       implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
@@ -79,6 +78,43 @@ class MatrixSpecification extends Specification {
       m.isVector must be equalTo false
       m.isSquare must be equalTo false
       m.isScalar must be equalTo false
+    }
+  }
+
+  "ceil, floor, log, log10" should {
+    "transform a 2x3 matrix" in {
+
+      import axle.syntax.LinearAlgebraOps
+      import spire.implicits.DoubleAlgebra
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+      import laJblasDouble.matrix
+      import axle.syntax.linearalgebra._
+
+      // mask raw matrix to ensure Axle's methods are being tested
+      val m = new LinearAlgebraOps(matrix(2, 3,
+        Array(
+          1.4, 22d, 17.5,
+          2.3, 18d, 105d)))
+
+      m.ceil must be equalTo matrix(2, 3,
+        Array(
+          2d, 22d, 18d,
+          3d, 18d, 105d))
+
+      m.floor must be equalTo matrix(2, 3,
+        Array(
+          1d, 22d, 17d,
+          2d, 18d, 105d))
+
+      m.log.floor must be equalTo matrix(2, 3,
+        Array(
+          0d, 3d, 2d,
+          0d, 2d, 4d))
+
+      m.log10.floor must be equalTo matrix(2, 3,
+        Array(
+          0d, 1d, 1d,
+          0d, 1d, 2d))
     }
   }
 

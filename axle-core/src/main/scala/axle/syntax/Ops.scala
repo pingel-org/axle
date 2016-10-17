@@ -47,6 +47,14 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   def isScalar: Boolean = la.isScalar(lhs)
 
+  def transpose = la.transpose(lhs)
+  def diag = la.diag(lhs)
+  def invert = la.invert(lhs)
+  def ceil = la.ceil(lhs)
+  def floor = la.floor(lhs)
+  def log = la.log(lhs)
+  def log10 = la.log10(lhs)
+
   //def fullSVD[T](m: M[A]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
 
   def pow(p: Double) = la.pow(lhs)(p)
