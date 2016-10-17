@@ -170,11 +170,21 @@ final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG
 
   def edges = ev.edges(dg)
 
-  def filterEdges(f: E => Boolean) = ev.filterEdges(dg, f)
+  def filterEdges(f: E => Boolean): DG = ev.filterEdges(dg, f)
+
+  def areNeighbors(v1: V, v2: V)(implicit eqV: Eq[V]): Boolean = ev.areNeighbors(dg, v1, v2)
+
+  def isClique(vs: Iterable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(dg, vs)
+
+  def edgesTouching(v: V) = ev.edgesTouching(dg, v)
+
+  def other(e: E, v: V)(implicit eqV: Eq[V]): V = ev.other(dg, e, v)
 
   def source(e: E) = ev.source(dg, e)
 
   def destination(e: E) = ev.destination(dg, e)
+
+  def connects(e: E, v1: V, v2: V)(implicit eqV: Eq[V]) = ev.connects(dg, e, v1, v2)
 
   def precedes(v1: V, v2: V) = ev.precedes(dg, v1, v2)
 
