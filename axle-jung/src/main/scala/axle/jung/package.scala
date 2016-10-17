@@ -260,7 +260,6 @@ package object jung {
 
       import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
-      import axle.enrichIndexedSeq
       import edu.uci.ics.jung.graph.UndirectedSparseGraph
       import spire.algebra.Eq
       import spire.implicits.IntAlgebra
