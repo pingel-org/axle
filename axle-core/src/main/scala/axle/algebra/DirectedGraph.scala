@@ -59,9 +59,9 @@ trait DirectedGraph[DG, V, E] {
 
   def removeOutputs(jdg: DG, from: Set[V]): DG
 
-  def moralGraph(jdg: DG): Boolean
+  // def moralGraph(jdg: DG): Boolean
 
-  def isAcyclic(jdg: DG): Boolean
+  // def isAcyclic(jdg: DG): Boolean
 
   def shortestPath(jdg: DG, source: V, goal: V)(implicit eqV: Eq[V]): Option[List[E]]
 

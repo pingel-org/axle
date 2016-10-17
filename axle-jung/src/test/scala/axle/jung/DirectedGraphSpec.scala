@@ -24,28 +24,37 @@ class DirectedGraphSpec extends Specification {
       val c = "c"
       val d = "d"
 
-      val e1 = new Edge(1.1)
+      val abEdge = new Edge(1.1)
+      val acEdge = new Edge(-1.1)
 
       val g = jdg.make(List(a, b, c, d),
         List(
-          (a, b, e1),
+          (a, b, abEdge),
           (b, c, new Edge(4.1)),
           (c, d, new Edge(5.1)),
           (d, a, new Edge(8.1)),
-          (a, c, new Edge(-1.1)),
+          (a, c, acEdge),
           (b, d, new Edge(5.3))))
 
       g.size must be equalTo 4
       g.neighbors(a).size must be equalTo 3
       g.edgesTouching(a).size must be equalTo 3
       g.degree(a) must be equalTo 3
-      g.other(e1, a) must be equalTo b
-      g.connects(e1, a, b) must be equalTo true
+      g.other(abEdge, a) must be equalTo b
+      g.other(abEdge, b) must be equalTo a
+      g.connects(abEdge, a, b) must be equalTo true
+      g.precedes(a, b) must be equalTo true
       g.predecessors(b) must be equalTo Set(a)
+      g.successors(a) must be equalTo Set(b, c)
+      g.outputEdgesOf(a) must be equalTo Set(abEdge, acEdge)
+      g.descendantsIntersectsSet(a, Set(d)) must be equalTo true
+      // TODO g.follows(a, b)
       g.vertices.size must be equalTo 4
       g.edges.size must be equalTo 6
       g.findVertex(_ == "a").get must be equalTo "a"
       g.filterEdges(_.weight > Real(0d)).edges.size must be equalTo 5
+      g.removeInputs(a).edges.size must be equalTo 5
+      g.removeOutputs(d).edges.size must be equalTo 5
       g.areNeighbors(a, b) must be equalTo true
       g.isClique(List(a, b, c)) must be equalTo true
       g.leaves must be equalTo Set.empty

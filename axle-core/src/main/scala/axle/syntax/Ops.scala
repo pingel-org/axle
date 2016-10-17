@@ -198,6 +198,10 @@ final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG
 
   def descendantsIntersectsSet(v: V, s: Set[V]) = ev.descendantsIntersectsSet(dg, v, s)
 
+  def removeInputs(vs: Set[V]): DG = ev.removeInputs(dg, vs)
+
+  def removeOutputs(vs: Set[V]): DG = ev.removeOutputs(dg, vs)
+
   // TODO: change first Edge type param:
   def shortestPath(source: V, goal: V)(implicit eqV: Eq[V]): Option[List[E]] =
     ev.shortestPath(dg, source, goal)

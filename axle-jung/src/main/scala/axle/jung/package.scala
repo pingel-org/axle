@@ -202,11 +202,9 @@ package object jung {
       def removeOutputs(jdsg: DirectedSparseGraph[V, E], from: Set[V]): DirectedSparseGraph[V, E] =
         filterEdges(jdsg, edge => !from.contains(source(jdsg, edge)))
 
-      def moralGraph(jdsg: DirectedSparseGraph[V, E]): Boolean =
-        ???
+      // TODO def moralGraph(jdsg: DirectedSparseGraph[V, E]): Boolean
 
-      def isAcyclic(jdsg: DirectedSparseGraph[V, E]): Boolean =
-        ???
+      // TODO def isAcyclic(jdsg: DirectedSparseGraph[V, E]): Boolean
 
       def shortestPath(jdsg: DirectedSparseGraph[V, E], source: V, goal: V)(implicit eqV: Eq[V]): Option[List[E]] =
         if (source === goal) {
