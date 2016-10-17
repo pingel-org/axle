@@ -212,13 +212,13 @@ final class UndirectedGraphOps[UG, V, E](val ug: UG)(implicit ev: UndirectedGrap
 
   def areNeighbors(v1: V, v2: V)(implicit eqV: Eq[V]): Boolean = ev.areNeighbors(ug, v1, v2)
 
-  def edgesTouching(v: V): collection.GenTraversable[E] = ev.edgesTouching(ug, v)
+  def edgesTouching(v: V): Iterable[E] = ev.edgesTouching(ug, v)
 
   def other(e: E, v: V)(implicit eqV: Eq[V]): V = ev.other(ug, e, v)
 
   def connects(e: E, v1: V, v2: V)(implicit eqV: Eq[V]): Boolean = ev.connects(ug, e, v1, v2)
 
-  def isClique(vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(ug, vs)
+  def isClique(vs: Iterable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(ug, vs)
 
   def filterEdges(f: E => Boolean) = ev.filterEdges(ug, f)
 

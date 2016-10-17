@@ -106,7 +106,7 @@ package object jung {
       def areNeighbors(jdg: DirectedSparseGraph[V, E], v1: V, v2: V)(implicit eqV: Eq[V]): Boolean =
         edgesTouching(jdg, v1).exists(edge => connects(jdg, edge, v1, v2))
 
-      def isClique(jdsg: DirectedSparseGraph[V, E], vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean =
+      def isClique(jdsg: DirectedSparseGraph[V, E], vs: Iterable[V])(implicit eqV: Eq[V]): Boolean =
         (for {
           vi <- vs
           vj <- vs
@@ -329,7 +329,7 @@ package object jung {
       def areNeighbors(jug: UndirectedSparseGraph[V, E], v1: V, v2: V)(implicit eqV: Eq[V]): Boolean =
         edgesTouching(jug, v1).exists(edge => connects(jug, edge, v1, v2))
 
-      def isClique(jug: UndirectedSparseGraph[V, E], vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean =
+      def isClique(jug: UndirectedSparseGraph[V, E], vs: Iterable[V])(implicit eqV: Eq[V]): Boolean =
         (for {
           vi <- vs
           vj <- vs
@@ -364,10 +364,10 @@ package object jung {
       def degree(jusg: UndirectedSparseGraph[V, E], v: V): Int =
         edgesTouching(jusg, v).size
 
-      def edgesTouching(jusg: UndirectedSparseGraph[V, E], v: V): collection.GenTraversable[E] =
+      def edgesTouching(jusg: UndirectedSparseGraph[V, E], v: V): Iterable[E] =
         jusg.getIncidentEdges(v).asScala
 
-      def neighbors(jusg: UndirectedSparseGraph[V, E], v: V): collection.GenTraversable[V] =
+      def neighbors(jusg: UndirectedSparseGraph[V, E], v: V): Iterable[V] =
         jusg.getNeighbors(v).asScala
 
       //  def delete(v: Vertex[V]): UndirectedSparseGraph[V, E] =

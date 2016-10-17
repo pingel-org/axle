@@ -22,7 +22,7 @@ trait DirectedGraph[DG, V, E] {
 
   def areNeighbors(jdg: DG, v1: V, v2: V)(implicit eqV: Eq[V]): Boolean
 
-  def isClique(jdg: DG, vs: collection.GenTraversable[V])(implicit eqV: Eq[V]): Boolean
+  def isClique(jdg: DG, vs: Iterable[V])(implicit eqV: Eq[V]): Boolean
 
   def forceClique(jdg: DG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V], mV: Manifest[V]): DG
 
