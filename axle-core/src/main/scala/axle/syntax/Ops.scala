@@ -35,6 +35,18 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   def negate = la.negate(lhs)
 
+  def isEmpty: Boolean = la.isEmpty(lhs)
+
+  def isRowVector: Boolean = la.isRowVector(lhs)
+
+  def isColumnVector: Boolean = la.isColumnVector(lhs)
+
+  def isVector: Boolean = la.isVector(lhs)
+
+  def isSquare: Boolean = la.isSquare(lhs)
+
+  def isScalar: Boolean = la.isScalar(lhs)
+
   //def fullSVD[T](m: M[A]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
 
   def pow(p: Double) = la.pow(lhs)(p)

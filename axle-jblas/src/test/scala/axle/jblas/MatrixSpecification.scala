@@ -61,5 +61,26 @@ class MatrixSpecification extends Specification {
     }
   }
 
+  "boolean tests" should {
+    "return false for random 2x3 matrix" in {
+
+      // import axle.syntax.linearalgebra.matrixOps
+      import axle.syntax.LinearAlgebraOps
+      import spire.implicits.DoubleAlgebra
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+      import laJblasDouble.rand
+
+      // mask raw matrix to ensure Axle's methods are being tested
+      val m = new LinearAlgebraOps(rand(2, 3))
+
+      m.isEmpty must be equalTo false
+      m.isColumnVector must be equalTo false
+      m.isRowVector must be equalTo false
+      m.isVector must be equalTo false
+      m.isSquare must be equalTo false
+      m.isScalar must be equalTo false
+    }
+  }
+
 }
 
