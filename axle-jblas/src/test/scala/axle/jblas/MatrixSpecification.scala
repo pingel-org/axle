@@ -76,7 +76,7 @@ class MatrixSpecification extends Specification {
   "boolean comparisons" should {
     "work on 2x2 matrix" in {
 
-      val lhs = new LinearAlgebraOps(matrix(1, 2, Array(0.5, 1.0, 1.5)))
+      val lhs = new LinearAlgebraOps(matrix(1, 3, Array(0.5, 1.0, 1.5)))
 
       (lhs lt ones(1, 3)) must be equalTo matrix(1, 3, Array(1d, 0d, 0d))
       (lhs le ones(1, 3)) must be equalTo matrix(1, 3, Array(1d, 1d, 0d))
