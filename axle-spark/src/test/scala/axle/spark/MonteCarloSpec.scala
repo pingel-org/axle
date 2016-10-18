@@ -33,7 +33,7 @@ class MonteCarloSpec extends Specification {
       spark.stop()
 
       mrCount must be equalTo 10L
-      π must be greaterThan 3.1
+      π must be greaterThan 2.9
     }
   }
 
