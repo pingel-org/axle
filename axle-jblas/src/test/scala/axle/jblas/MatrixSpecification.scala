@@ -163,14 +163,23 @@ class MatrixSpecification extends Specification {
   //      1 must be equalTo 1
   //    }
   //  }
-  //
-  //  "sorts" should {
-  //    "" in {
-  //      //      def sortColumns(m: DoubleMatrix): DoubleMatrix
-  //      //      def sortRows(m: DoubleMatrix): DoubleMatrix
-  //      1 must be equalTo 1
-  //    }
-  //  }
+
+  "sorts" should {
+    "sort columns and rows" in {
+
+      val m = new LinearAlgebraOps(matrix(2, 3,
+        Array(
+          1.4, 22d, 17.5,
+          2.3, 18d, 105d)))
+
+      m.sortRows must be equalTo matrix(2, 3, Array(
+        1.4, 17.5, 22d,
+        2.3, 18d, 105d))
+      m.sortColumns must be equalTo matrix(2, 3, Array(
+        1.4, 18d, 17.5,
+        2.3, 22d, 105d))
+    }
+  }
 
   "ceil, floor, log, log10, pow" should {
     "transform a 2x3 matrix" in {
