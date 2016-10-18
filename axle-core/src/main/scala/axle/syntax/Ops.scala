@@ -101,6 +101,15 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
   def divRowVector(row: M) = la.divRowVector(lhs)(row)
   def divColumnVector(column: M) = la.divColumnVector(lhs)(column)
 
+  // comparisons
+
+  def lt(other: M): M = la.lt(lhs)(other)
+  def le(other: M): M = la.le(lhs)(other)
+  def gt(other: M): M = la.gt(lhs)(other)
+  def ge(other: M): M = la.ge(lhs)(other)
+  def eq(other: M): M = la.eq(lhs)(other)
+  def ne(other: M): M = la.ne(lhs)(other)
+
   // boolean
 
   def and(rhs: M) = la.and(lhs)(rhs)

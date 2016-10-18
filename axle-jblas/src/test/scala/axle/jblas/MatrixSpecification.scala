@@ -73,18 +73,19 @@ class MatrixSpecification extends Specification {
     }
   }
 
-  //  "boolean comparisons" should {
-  //    "work on 2x2 matrix" in {
-  //
-  //      //      lt
-  //      //      le
-  //      //      gt
-  //      //      ge
-  //      //      eq
-  //      //      ne
-  //      1 must be equalTo 1
-  //    }
-  //  }
+  "boolean comparisons" should {
+    "work on 2x2 matrix" in {
+
+      val lhs = new LinearAlgebraOps(matrix(1, 2, Array(0.5, 1.0, 1.5)))
+
+      (lhs lt ones(1, 3)) must be equalTo matrix(1, 3, Array(1d, 0d, 0d))
+      (lhs le ones(1, 3)) must be equalTo matrix(1, 3, Array(1d, 1d, 0d))
+      (lhs gt ones(1, 3)) must be equalTo matrix(1, 3, Array(0d, 0d, 1d))
+      (lhs ge ones(1, 3)) must be equalTo matrix(1, 3, Array(0d, 1d, 1d))
+      (lhs eq ones(1, 3)) must be equalTo matrix(1, 3, Array(0d, 1d, 0d))
+      (lhs ne ones(1, 3)) must be equalTo matrix(1, 3, Array(1d, 0d, 1d))
+    }
+  }
 
   "boolean operators" should {
     "work on 2x2 matrix" in {
