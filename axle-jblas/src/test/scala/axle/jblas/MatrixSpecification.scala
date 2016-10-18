@@ -23,8 +23,12 @@ class MatrixSpecification extends Specification {
       val c = y.column(2)
       val r = y.row(2)
 
-      z.rows must be equalTo 3
-      z.columns must be equalTo 4
+      val zops = new LinearAlgebraOps(z)
+
+      zops.rows must be equalTo 3
+      zops.columns must be equalTo 4
+      zops.length must be equalTo 12
+      new LinearAlgebraOps(y).diag.length must be equalTo 3
     }
   }
 
@@ -123,13 +127,13 @@ class MatrixSpecification extends Specification {
   //      1 must be equalTo 1
   //    }
   //  }
-  //
-  //  "flatMap" should {
-  //    "" in {
-  //      // def flatMapColumns(m: DoubleMatrix)(f: DoubleMatrix => DoubleMatrix): DoubleMatrix
-  //      1 must be equalTo 1
-  //    }
-  //  }
+
+  "flatMap" should {
+    "" in {
+      // def flatMapColumns(m: DoubleMatrix)(f: DoubleMatrix => DoubleMatrix): DoubleMatrix
+      1 must be equalTo 1
+    }
+  }
 
   "folds" should {
     "apply plus by row and column" in {
