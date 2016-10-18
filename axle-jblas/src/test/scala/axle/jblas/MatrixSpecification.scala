@@ -210,14 +210,14 @@ class MatrixSpecification extends Specification {
   }
 
   "addAssignment" should {
-    "set (2,3) to 6d in a 2x3 matrix, leaving original unmodified" in {
+    "addAssignment (1,2) to 6d in a 2x3 matrix, leaving original unmodified" in {
 
       val m = matrix(2, 3,
         Array(
           1d, 2d, 3d,
           4d, 5d, 0d))
 
-      m.addAssignment(2, 3, 6d) must be equalTo matrix(2, 3,
+      m.addAssignment(1, 2, 6d) must be equalTo matrix(2, 3,
         Array(
           1d, 2d, 3d,
           4d, 5d, 6d))
