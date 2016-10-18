@@ -1,19 +1,19 @@
 package axle.jblas
 
-import org.jblas.DoubleMatrix
 import org.specs2.mutable.Specification
-import spire.algebra.Ring
+import spire.implicits._
+import axle.syntax.LinearAlgebraOps
+import axle.syntax.linearalgebra.matrixOps
+import axle.syntax.endofunctor.endofunctorOps
 
 class MatrixSpecification extends Specification {
 
-  "DoubleJblasMatrix" should {
-    "create simple matries" in {
+  implicit val endo = endoFunctorDoubleMatrix[Double]
+  implicit val la = linearAlgebraDoubleMatrix[Double]
+  import la._
 
-      import axle.syntax.linearalgebra.matrixOps
-      import spire.implicits.DoubleAlgebra
-
-      implicit val dm = linearAlgebraDoubleMatrix[Double]
-      import dm.{ ones, zeros, rand }
+  "Linear Algebra for org.jblas.DoubleMatrix" should {
+    "create simple matrices" in {
 
       val z = zeros(3, 4)
       val o = ones(2, 3)
@@ -28,28 +28,25 @@ class MatrixSpecification extends Specification {
     }
   }
 
+  //  "eye and diag" should {
+  //    "sum of diag elements in eye(4) is 4" in {
+  //      // TODO eye(4).diag.rowSums.get(1, 1) must be equalTo 4d
+  //      // TODO eye(4).rows must be equalTo 4
+  //    }
+  //  }
+
   "x+x === x.map(_*2)" should {
     "hold for random 2x2 matrix x" in {
 
-      import axle.syntax.endofunctor.endofunctorOps
-      import spire.implicits.DoubleAlgebra
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
-      import laJblasDouble.randn
-      implicit val endo = endoFunctorDoubleMatrix[Double] // TODO remove
-
       val x = randn(2, 2)
 
-      implicitly[Ring[DoubleMatrix]].plus(x, x) must be equalTo x.map(_ * 2d)
+      // implicitly[Ring[DoubleMatrix]].plus
+      (x + x) must be equalTo x.map(_ * 2d)
     }
   }
 
   "(n atop m) === (n.t aside m.t).t" should {
     "hold for random 2x3 matrices m and n" in {
-
-      import axle.syntax.linearalgebra.matrixOps
-      import spire.implicits.DoubleAlgebra
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
-      import laJblasDouble.rand
 
       val r = 2
       val c = 3
@@ -64,11 +61,6 @@ class MatrixSpecification extends Specification {
   "boolean tests" should {
     "return false for random 2x3 matrix" in {
 
-      import axle.syntax.LinearAlgebraOps
-      import spire.implicits.DoubleAlgebra
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
-      import laJblasDouble.rand
-
       // mask raw matrix to ensure Axle's methods are being tested
       val m = new LinearAlgebraOps(rand(2, 3))
 
@@ -81,14 +73,107 @@ class MatrixSpecification extends Specification {
     }
   }
 
-  "ceil, floor, log, log10" should {
-    "transform a 2x3 matrix" in {
+  //  "boolean comparisons" should {
+  //    "work on 2x2 matrix" in {
+  //
+  //      //      lt
+  //      //      le
+  //      //      gt
+  //      //      ge
+  //      //      eq
+  //      //      ne
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "boolean operators" should {
+  //    "work on 2x2 matrix" in {
+  //
+  //      //      and
+  //      //      or
+  //      //      xor
+  //      //      not
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "mul row and column" should {
+  //    "" in {
+  //      // def mulRow(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix = m.mulRow(i, x.toDouble)
+  //      // def mulColumn
+  //
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "invert" should {
+  //    "" in {
+  //
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "solve" should {
+  //    "" in {
+  //
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "flatMap" should {
+  //    "" in {
+  //      // def flatMapColumns(m: DoubleMatrix)(f: DoubleMatrix => DoubleMatrix): DoubleMatrix
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "folds" should {
+  //    "" in {
+  //
+  //      //      foldLeft(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix
+  //      //      foldTop(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "range, min, max, argmax" should {
+  //    "" in {
+  //      //      rowRange(m: DoubleMatrix): DoubleMatrix
+  //      //      columnRange(m: DoubleMatrix): DoubleMatrix
+  //      //      def rowMins(m: DoubleMatrix): DoubleMatrix
+  //      //      def rowMaxs(m: DoubleMatrix): DoubleMatrix
+  //      //      def columnMins(m: DoubleMatrix): DoubleMatrix
+  //      //      def columnMaxs(m: DoubleMatrix): DoubleMatrix
+  //      //      def max(m: DoubleMatrix): N
+  //      //      def argmax(m: DoubleMatrix): (Int, Int)
+  //      //      def min(m: DoubleMatrix): N 
+  //      //      def argmin(m: DoubleMatrix): (Int, Int)
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "center, mean, sum" should {
+  //    "" in {
+  //      //      def rowSums(m: DoubleMatrix): DoubleMatrix
+  //      //      def columnSums(m: DoubleMatrix): DoubleMatrix
+  //      //      def columnMeans(m: DoubleMatrix): DoubleMatrix
+  //      //      def rowMeans(m: DoubleMatrix): DoubleMatrix
+  //      //      centerRows(m: DoubleMatrix): DoubleMatrix
+  //      //      centerColumns(m: DoubleMatrix): DoubleMatrix
+  //      1 must be equalTo 1
+  //    }
+  //  }
+  //
+  //  "sorts" should {
+  //    "" in {
+  //      //      def sortColumns(m: DoubleMatrix): DoubleMatrix
+  //      //      def sortRows(m: DoubleMatrix): DoubleMatrix
+  //      1 must be equalTo 1
+  //    }
+  //  }
 
-      import axle.syntax.LinearAlgebraOps
-      import spire.implicits.DoubleAlgebra
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
-      import laJblasDouble.matrix
-      import axle.syntax.linearalgebra._
+  "ceil, floor, log, log10, pow" should {
+    "transform a 2x3 matrix" in {
 
       // mask raw matrix to ensure Axle's methods are being tested
       val m = new LinearAlgebraOps(matrix(2, 3,
@@ -115,6 +200,32 @@ class MatrixSpecification extends Specification {
         Array(
           0d, 1d, 1d,
           0d, 1d, 2d))
+
+      m.pow(2d) must be equalTo matrix(2, 3,
+        Array(
+          1.9599999999999997, 484d, 306.25,
+          5.289999999999999, 324d, 11025d))
+
+    }
+  }
+
+  "addAssignment" should {
+    "set (2,3) to 6d in a 2x3 matrix, leaving original unmodified" in {
+
+      val m = matrix(2, 3,
+        Array(
+          1d, 2d, 3d,
+          4d, 5d, 0d))
+
+      m.addAssignment(2, 3, 6d) must be equalTo matrix(2, 3,
+        Array(
+          1d, 2d, 3d,
+          4d, 5d, 6d))
+
+      m must be equalTo matrix(2, 3,
+        Array(
+          1d, 2d, 3d,
+          4d, 5d, 0d))
     }
   }
 
