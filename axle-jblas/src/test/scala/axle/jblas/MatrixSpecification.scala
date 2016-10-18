@@ -139,22 +139,26 @@ class MatrixSpecification extends Specification {
   //      1 must be equalTo 1
   //    }
   //  }
-  //
-  //  "range, min, max, argmax" should {
-  //    "" in {
-  //      //      rowRange(m: DoubleMatrix): DoubleMatrix
-  //      //      columnRange(m: DoubleMatrix): DoubleMatrix
-  //      //      def rowMins(m: DoubleMatrix): DoubleMatrix
-  //      //      def rowMaxs(m: DoubleMatrix): DoubleMatrix
-  //      //      def columnMins(m: DoubleMatrix): DoubleMatrix
-  //      //      def columnMaxs(m: DoubleMatrix): DoubleMatrix
-  //      //      def max(m: DoubleMatrix): N
-  //      //      def argmax(m: DoubleMatrix): (Int, Int)
-  //      //      def min(m: DoubleMatrix): N 
-  //      //      def argmin(m: DoubleMatrix): (Int, Int)
-  //      1 must be equalTo 1
-  //    }
-  //  }
+
+  "range, min, max, argmax" should {
+    "calculate {column,row,}x{arg,}x{min,max} (not including {row,col}arg{min,max})" in {
+
+      val m = new LinearAlgebraOps(matrix(2, 3,
+        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+
+      m.rowMins must be equalTo matrix(2, 1, Array(1.4, 2.3))
+      m.rowMaxs must be equalTo matrix(2, 1, Array(18d, 105d))
+      m.rowRange must be equalTo matrix(2, 1, Array(16.6, 102.7))
+      m.columnMins must be equalTo matrix(1, 3, Array(1.4, 2.3, 18d))
+      m.columnMaxs must be equalTo matrix(1, 3, Array(22d, 17.5, 105d))
+      m.columnRange must be equalTo matrix(1, 3 , Array(20.6, 15.2, 87d))
+
+      m.max must be equalTo 105d
+      m.argmax must be equalTo ((1, 2))
+      m.min must be equalTo 1.4
+      m.argmin must be equalTo ((0, 0))
+    }
+  }
 
   "center, mean, sum" should {
     "sum, mean, and center by row and column" in {
