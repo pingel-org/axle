@@ -151,33 +151,45 @@ class MatrixSpecification extends Specification {
   //      1 must be equalTo 1
   //    }
   //  }
-  //
-  //  "center, mean, sum" should {
-  //    "" in {
-  //      //      def rowSums(m: DoubleMatrix): DoubleMatrix
-  //      //      def columnSums(m: DoubleMatrix): DoubleMatrix
-  //      //      def columnMeans(m: DoubleMatrix): DoubleMatrix
-  //      //      def rowMeans(m: DoubleMatrix): DoubleMatrix
-  //      //      centerRows(m: DoubleMatrix): DoubleMatrix
-  //      //      centerColumns(m: DoubleMatrix): DoubleMatrix
-  //      1 must be equalTo 1
-  //    }
-  //  }
+
+  "center, mean, sum" should {
+    "sum, mean, and center by row and column" in {
+
+      val m = new LinearAlgebraOps(matrix(2, 3,
+        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+
+      m.rowSums must be equalTo matrix(2, 1,
+        Array(36.900000, 129.300000))
+
+      m.columnSums must be equalTo matrix(1, 3,
+        Array(23.400000, 19.800000, 123.000000))
+
+      // 'floor' to workaround rounding error
+      m.rowMeans.floor must be equalTo matrix(2, 1,
+        Array(12d, 43d))
+
+      m.columnMeans must be equalTo matrix(1, 3,
+        Array(11.7, 9.9, 61.5))
+
+      m.centerRows.floor must be equalTo matrix(2, 3,
+        Array(-11d, -22d, 5d, -41, 5d, 61d))
+
+      m.centerColumns.floor must be equalTo matrix(2, 3,
+        Array(-11d, 10d, 7d, -8d, -44d, 43d))
+    }
+  }
 
   "sorts" should {
     "sort columns and rows" in {
 
       val m = new LinearAlgebraOps(matrix(2, 3,
-        Array(
-          1.4, 22d, 17.5,
-          2.3, 18d, 105d)))
+        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
 
-      m.sortRows must be equalTo matrix(2, 3, Array(
-        1.4, 17.5, 22d,
-        2.3, 18d, 105d))
-      m.sortColumns must be equalTo matrix(2, 3, Array(
-        1.4, 18d, 17.5,
-        2.3, 22d, 105d))
+      m.sortRows must be equalTo matrix(2, 3,
+        Array(1.4, 2.3, 17.5, 22d, 18d, 105d))
+
+      m.sortColumns must be equalTo matrix(2, 3,
+        Array(1.4, 22d, 2.3, 17.5, 18d, 105d))
     }
   }
 
@@ -186,34 +198,22 @@ class MatrixSpecification extends Specification {
 
       // mask raw matrix to ensure Axle's methods are being tested
       val m = new LinearAlgebraOps(matrix(2, 3,
-        Array(
-          1.4, 22d, 17.5,
-          2.3, 18d, 105d)))
+        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
 
       m.ceil must be equalTo matrix(2, 3,
-        Array(
-          2d, 22d, 18d,
-          3d, 18d, 105d))
+        Array(2d, 22d, 18d, 3d, 18d, 105d))
 
       m.floor must be equalTo matrix(2, 3,
-        Array(
-          1d, 22d, 17d,
-          2d, 18d, 105d))
+        Array(1d, 22d, 17d, 2d, 18d, 105d))
 
       m.log.floor must be equalTo matrix(2, 3,
-        Array(
-          0d, 3d, 2d,
-          0d, 2d, 4d))
+        Array(0d, 3d, 2d, 0d, 2d, 4d))
 
       m.log10.floor must be equalTo matrix(2, 3,
-        Array(
-          0d, 1d, 1d,
-          0d, 1d, 2d))
+        Array(0d, 1d, 1d, 0d, 1d, 2d))
 
       m.pow(2d) must be equalTo matrix(2, 3,
-        Array(
-          1.9599999999999997, 484d, 306.25,
-          5.289999999999999, 324d, 11025d))
+        Array(1.9599999999999997, 484d, 306.25, 5.289999999999999, 324d, 11025d))
 
     }
   }
@@ -222,19 +222,13 @@ class MatrixSpecification extends Specification {
     "addAssignment (1,2) to 6d in a 2x3 matrix, leaving original unmodified" in {
 
       val m = matrix(2, 3,
-        Array(
-          1d, 2d, 3d,
-          4d, 5d, 0d))
+        Array(1d, 2d, 3d, 4d, 5d, 0d))
 
       m.addAssignment(1, 2, 6d) must be equalTo matrix(2, 3,
-        Array(
-          1d, 2d, 3d,
-          4d, 5d, 6d))
+        Array(1d, 2d, 3d, 4d, 5d, 6d))
 
       m must be equalTo matrix(2, 3,
-        Array(
-          1d, 2d, 3d,
-          4d, 5d, 0d))
+        Array(1d, 2d, 3d, 4d, 5d, 0d))
     }
   }
 

@@ -118,6 +118,9 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
   def columnMeans = la.columnMeans(lhs)
   def sortColumns = la.sortColumns(lhs)
 
+  def centerRows = la.centerRows(lhs)
+  def centerColumns = la.centerColumns(lhs)
+
   def rowMins = la.rowMins(lhs)
   def rowMaxs = la.rowMaxs(lhs)
   def rowMeans = la.rowMeans(lhs)
