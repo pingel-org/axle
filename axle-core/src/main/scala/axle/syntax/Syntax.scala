@@ -31,7 +31,8 @@ trait LinearAlgebraSyntax {
   def numComponentsForCutoff[M, RowT, ColT, T](m: M, cutoff: Double)(implicit la: LinearAlgebra[M, RowT, ColT, T], fieldT: Field[T]) =
     la.numComponentsForCutoff(m, cutoff)
 
-  implicit def matrixOps[M, RowT, ColT, T](m: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) = new LinearAlgebraOps(m)
+  implicit def matrixOps[M, RowT, ColT, T](m: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) =
+    new LinearAlgebraOps(m)
 }
 
 trait DirectedGraphSyntax {

@@ -35,6 +35,26 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   def negate = la.negate(lhs)
 
+  def isEmpty: Boolean = la.isEmpty(lhs)
+
+  def isRowVector: Boolean = la.isRowVector(lhs)
+
+  def isColumnVector: Boolean = la.isColumnVector(lhs)
+
+  def isVector: Boolean = la.isVector(lhs)
+
+  def isSquare: Boolean = la.isSquare(lhs)
+
+  def isScalar: Boolean = la.isScalar(lhs)
+
+  def transpose = la.transpose(lhs)
+  def diag = la.diag(lhs)
+  def invert = la.invert(lhs)
+  def ceil = la.ceil(lhs)
+  def floor = la.floor(lhs)
+  def log = la.log(lhs)
+  def log10 = la.log10(lhs)
+
   //def fullSVD[T](m: M[A]) // (U, S, V) such that A = U * diag(S) * V' // TODO: all Matrix[Double] ?
 
   def pow(p: Double) = la.pow(lhs)(p)
@@ -81,6 +101,22 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
   def divRowVector(row: M) = la.divRowVector(lhs)(row)
   def divColumnVector(column: M) = la.divColumnVector(lhs)(column)
 
+  // comparisons
+
+  def lt(other: M): M = la.lt(lhs)(other)
+  def le(other: M): M = la.le(lhs)(other)
+  def gt(other: M): M = la.gt(lhs)(other)
+  def ge(other: M): M = la.ge(lhs)(other)
+  def eq(other: M): M = la.eq(lhs)(other)
+  def ne(other: M): M = la.ne(lhs)(other)
+
+  // boolean
+
+  def and(rhs: M) = la.and(lhs)(rhs)
+  def or(rhs: M) = la.or(lhs)(rhs)
+  def xor(rhs: M) = la.xor(lhs)(rhs)
+  def not = la.not(lhs)
+
   // various mins and maxs
 
   def max = la.max(lhs)
@@ -97,6 +133,12 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   def columnMeans = la.columnMeans(lhs)
   def sortColumns = la.sortColumns(lhs)
+
+  def centerRows = la.centerRows(lhs)
+  def centerColumns = la.centerColumns(lhs)
+
+  def rowRange = la.rowRange(lhs)
+  def columnRange = la.columnRange(lhs)
 
   def rowMins = la.rowMins(lhs)
   def rowMaxs = la.rowMaxs(lhs)

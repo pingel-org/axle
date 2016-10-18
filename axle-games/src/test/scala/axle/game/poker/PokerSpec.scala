@@ -14,8 +14,6 @@ class PokerSpec extends Specification {
     (p1, PokerPlayerInteractive.move, println),
     (p2, PokerPlayerInteractive.move, println)))
 
-  implicitly[Game[Poker, PokerState, PokerOutcome, PokerMove]]
-
   import game.dealer
 
   "start state" should {

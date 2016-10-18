@@ -334,14 +334,14 @@ package object jblas {
 
       def argmax(m: DoubleMatrix): (Int, Int) = {
         val i = m.argmax
-        (i % m.getColumns, i / m.getColumns)
+        (i % m.getRows, i / m.getRows)
       }
 
       def min(m: DoubleMatrix): N = ctn.fromDouble(m.min)
 
       def argmin(m: DoubleMatrix): (Int, Int) = {
         val i = m.argmin
-        (i % m.getColumns, i / m.getColumns)
+        (i % m.getRows, i / m.getRows)
       }
 
       def rowSums(m: DoubleMatrix): DoubleMatrix = m.rowSums

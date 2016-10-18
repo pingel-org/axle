@@ -4,7 +4,7 @@ import org.specs2.mutable._
 
 class PackageSpec extends Specification {
 
-  "monte carlos pi" should {
+  "monte carlo pi" should {
     "be at least 3" in {
       import spire.implicits._
       monteCarloPiEstimate(
