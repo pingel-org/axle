@@ -101,6 +101,13 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
   def divRowVector(row: M) = la.divRowVector(lhs)(row)
   def divColumnVector(column: M) = la.divColumnVector(lhs)(column)
 
+  // boolean
+
+  def and(rhs: M) = la.and(lhs)(rhs)
+  def or(rhs: M) = la.or(lhs)(rhs)
+  def xor(rhs: M) = la.xor(lhs)(rhs)
+  def not = la.not(lhs)
+
   // various mins and maxs
 
   def max = la.max(lhs)

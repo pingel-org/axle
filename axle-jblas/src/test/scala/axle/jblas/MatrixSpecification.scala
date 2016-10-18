@@ -85,18 +85,21 @@ class MatrixSpecification extends Specification {
   //      1 must be equalTo 1
   //    }
   //  }
-  //
-  //  "boolean operators" should {
-  //    "work on 2x2 matrix" in {
-  //
-  //      //      and
-  //      //      or
-  //      //      xor
-  //      //      not
-  //      1 must be equalTo 1
-  //    }
-  //  }
-  //
+
+  "boolean operators" should {
+    "work on 2x2 matrix" in {
+
+      val tf = matrix(1, 2, Array(1d, 0d))
+      val ft = matrix(1, 2, Array(0d, 1d))
+      val tfops = new LinearAlgebraOps(tf)
+
+      (tfops and ft) must be equalTo matrix(1, 2, Array(0d, 0d))
+      (tfops or ft) must be equalTo matrix(1, 2, Array(1d, 1d))
+      (tfops xor ft) must be equalTo matrix(1, 2, Array(1d, 1d))
+      (tfops not) must be equalTo ft
+    }
+  }
+
   //  "mul row and column" should {
   //    "" in {
   //      // def mulRow(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix = m.mulRow(i, x.toDouble)
