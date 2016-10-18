@@ -130,15 +130,17 @@ class MatrixSpecification extends Specification {
   //      1 must be equalTo 1
   //    }
   //  }
-  //
-  //  "folds" should {
-  //    "" in {
-  //
-  //      //      foldLeft(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix
-  //      //      foldTop(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix
-  //      1 must be equalTo 1
-  //    }
-  //  }
+
+  "folds" should {
+    "apply plus by row and column" in {
+
+      val m = new LinearAlgebraOps(matrix(2, 3,
+        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+
+      m.foldLeft(zeros(2, 1))({ case (acc, c) => acc + c }) must be equalTo m.rowSums
+      m.foldTop(zeros(1, 3))({ case (acc, r) => acc + r }) must be equalTo m.columnSums
+    }
+  }
 
   "range, min, max, argmax" should {
     "calculate {column,row,}x{arg,}x{min,max} (not including {row,col}arg{min,max})" in {
@@ -151,7 +153,7 @@ class MatrixSpecification extends Specification {
       m.rowRange must be equalTo matrix(2, 1, Array(16.6, 102.7))
       m.columnMins must be equalTo matrix(1, 3, Array(1.4, 2.3, 18d))
       m.columnMaxs must be equalTo matrix(1, 3, Array(22d, 17.5, 105d))
-      m.columnRange must be equalTo matrix(1, 3 , Array(20.6, 15.2, 87d))
+      m.columnRange must be equalTo matrix(1, 3, Array(20.6, 15.2, 87d))
 
       m.max must be equalTo 105d
       m.argmax must be equalTo ((1, 2))
