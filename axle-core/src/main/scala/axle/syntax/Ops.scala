@@ -47,6 +47,8 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   def isScalar: Boolean = la.isScalar(lhs)
 
+  def dup = la.dup(lhs)
+
   def transpose = la.transpose(lhs)
   def diag = la.diag(lhs)
   def invert = la.invert(lhs)
