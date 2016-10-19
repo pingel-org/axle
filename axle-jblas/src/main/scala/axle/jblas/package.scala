@@ -255,8 +255,11 @@ package object jblas {
         newJblas
       }
 
-      def mulRow(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix = m.mulRow(i, x.toDouble)
-      def mulColumn(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix = m.mulColumn(i, x.toDouble)
+      def mulRow(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix =
+        m.dup.mulRow(i, x.toDouble)
+
+      def mulColumn(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix =
+        m.dup.mulColumn(i, x.toDouble)
 
       // Operations on pairs of matrices
 
