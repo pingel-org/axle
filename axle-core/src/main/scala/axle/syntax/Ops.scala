@@ -47,6 +47,8 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   def isScalar: Boolean = la.isScalar(lhs)
 
+  def dup = la.dup(lhs)
+
   def transpose = la.transpose(lhs)
   def diag = la.diag(lhs)
   def invert = la.invert(lhs)
@@ -147,7 +149,7 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   // higher order methods
 
-  def flatMapColumns(f: M => M) = la.flatMapColumns(lhs)(f)
+  def flatMap(f: T => M) = la.flatMap(lhs)(f)
 
   def foldLeft(zero: M)(f: (M, M) => M) = la.foldLeft(lhs)(zero)(f)
 

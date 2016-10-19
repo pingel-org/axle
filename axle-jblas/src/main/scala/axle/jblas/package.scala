@@ -173,8 +173,8 @@ package object jblas {
     }
 
   implicit def linearAlgebraDoubleMatrix[N: Rng: NRoot](
-      implicit cfn: ConvertableFrom[N],
-      ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
+    implicit cfn: ConvertableFrom[N],
+    ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
     new LinearAlgebra[DoubleMatrix, Int, Int, N] {
 
       def elementRng: Rng[N] = Rng[N]
@@ -255,8 +255,11 @@ package object jblas {
         newJblas
       }
 
-      def mulRow(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix = m.mulRow(i, x.toDouble)
-      def mulColumn(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix = m.mulColumn(i, x.toDouble)
+      def mulRow(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix =
+        m.dup.mulRow(i, x.toDouble)
+
+      def mulColumn(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix =
+        m.dup.mulColumn(i, x.toDouble)
 
       // Operations on pairs of matrices
 
@@ -398,18 +401,13 @@ package object jblas {
         jblas
       }
 
-      //def flatMapColumns[B](f: M[A] => M[B])(implicit fpB: FunctionPair[Double, B])
-      def flatMapColumns(m: DoubleMatrix)(f: DoubleMatrix => DoubleMatrix): DoubleMatrix = {
-        val jblas = DoubleMatrix.zeros(m.getRows, m.getColumns)
-        (0 until m.getColumns) foreach { c =>
-          val fc = f(column(m)(c))
-          (0 until m.getRows) foreach { r =>
-            // assumes fc.rows === this.rows
-            jblas.put(r, c, get(fc)(r, 0).toDouble)
-          }
-        }
-        jblas
-      }
+      // TODO this belongs in a Monad typeclass witness
+      def flatMap(m: DoubleMatrix)(f: N => DoubleMatrix): DoubleMatrix =
+        (0 until m.getRows).map(r => {
+          (0 until m.getColumns).map(c => {
+            f(ctn.fromDouble(m.get(r, c)))
+          }).reduce(DoubleMatrix.concatHorizontally _)
+        }).reduce(DoubleMatrix.concatVertically _)
 
       def foldLeft(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix =
         (0 until columns(m)).foldLeft(zero)((x: DoubleMatrix, c: Int) => f(x, column(m)(c)))

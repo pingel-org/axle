@@ -23,8 +23,13 @@ class MatrixSpecification extends Specification {
       val c = y.column(2)
       val r = y.row(2)
 
-      z.rows must be equalTo 3
-      z.columns must be equalTo 4
+      val zops = new LinearAlgebraOps(z)
+
+      zops.rows must be equalTo 3
+      zops.columns must be equalTo 4
+      zops.length must be equalTo 12
+      new LinearAlgebraOps(y).diag.length must be equalTo 3
+      zops.dup must be equalTo z
     }
   }
 
@@ -101,44 +106,51 @@ class MatrixSpecification extends Specification {
     }
   }
 
-  //  "mul row and column" should {
-  //    "" in {
-  //      // def mulRow(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix = m.mulRow(i, x.toDouble)
-  //      // def mulColumn
-  //
-  //      1 must be equalTo 1
-  //    }
-  //  }
-  //
+  "mul row and column" should {
+    "operate on ones(2,2)" in {
+
+      val square = new LinearAlgebraOps(ones(2, 2))
+
+      square.mulRow(0, 3.14) must be equalTo matrix(2, 2, Array(3.14, 1d, 3.14, 1d))
+      square.mulColumn(1, 2.717) must be equalTo matrix(2, 2, Array(1d, 1d, 2.717, 2.717))
+    }
+  }
+
   //  "invert" should {
   //    "" in {
   //
   //      1 must be equalTo 1
   //    }
   //  }
-  //
+
   //  "solve" should {
   //    "" in {
   //
   //      1 must be equalTo 1
   //    }
   //  }
-  //
-  //  "flatMap" should {
-  //    "" in {
-  //      // def flatMapColumns(m: DoubleMatrix)(f: DoubleMatrix => DoubleMatrix): DoubleMatrix
-  //      1 must be equalTo 1
-  //    }
-  //  }
-  //
-  //  "folds" should {
-  //    "" in {
-  //
-  //      //      foldLeft(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix
-  //      //      foldTop(m: DoubleMatrix)(zero: DoubleMatrix)(f: (DoubleMatrix, DoubleMatrix) => DoubleMatrix): DoubleMatrix
-  //      1 must be equalTo 1
-  //    }
-  //  }
+
+  "flatMap" should {
+    "apply Double => Matrix[1,2] to Matrix[r,c] to get a Matrix[r,2c]" in {
+
+      val m = new LinearAlgebraOps(matrix(1, 2,
+        Array(1.4, 22d)))
+
+      m.flatMap { x => matrix(1, 2, Array(x, 2 * x)) } must be equalTo
+        matrix(1, 4, Array(1.4, 2.8, 22d, 44d))
+    }
+  }
+
+  "folds" should {
+    "apply plus by row and column" in {
+
+      val m = new LinearAlgebraOps(matrix(2, 3,
+        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+
+      m.foldLeft(zeros(2, 1))({ case (acc, c) => acc + c }) must be equalTo m.rowSums
+      m.foldTop(zeros(1, 3))({ case (acc, r) => acc + r }) must be equalTo m.columnSums
+    }
+  }
 
   "range, min, max, argmax" should {
     "calculate {column,row,}x{arg,}x{min,max} (not including {row,col}arg{min,max})" in {
@@ -151,7 +163,7 @@ class MatrixSpecification extends Specification {
       m.rowRange must be equalTo matrix(2, 1, Array(16.6, 102.7))
       m.columnMins must be equalTo matrix(1, 3, Array(1.4, 2.3, 18d))
       m.columnMaxs must be equalTo matrix(1, 3, Array(22d, 17.5, 105d))
-      m.columnRange must be equalTo matrix(1, 3 , Array(20.6, 15.2, 87d))
+      m.columnRange must be equalTo matrix(1, 3, Array(20.6, 15.2, 87d))
 
       m.max must be equalTo 105d
       m.argmax must be equalTo ((1, 2))
@@ -237,6 +249,40 @@ class MatrixSpecification extends Specification {
 
       m must be equalTo matrix(2, 3,
         Array(1d, 2d, 3d, 4d, 5d, 0d))
+    }
+  }
+
+  "column and row vector operations" should {
+    "apply correctly to ones(2, 2)" in {
+
+      val square = new LinearAlgebraOps(ones(2, 2))
+
+      val row = matrix(1, 2, Array(1d, 2d))
+      val column = row.t
+
+      square.addRowVector(row) must be equalTo matrix(2, 2, Array(2d, 2d, 3d, 3d))
+      square.subRowVector(row) must be equalTo matrix(2, 2, Array(0d, 0d, -1d, -1d))
+      square.mulRowVector(row) must be equalTo matrix(2, 2, Array(1d, 1d, 2d, 2d))
+      square.divRowVector(row) must be equalTo matrix(2, 2, Array(1d, 1d, 0.5, 0.5))
+      square.addColumnVector(column) must be equalTo matrix(2, 2, Array(2d, 3d, 2d, 3d))
+      square.subColumnVector(column) must be equalTo matrix(2, 2, Array(0d, -1d, 0d, -1d))
+      square.mulColumnVector(column) must be equalTo matrix(2, 2, Array(1d, 2d, 1d, 2d))
+      square.divColumnVector(column) must be equalTo matrix(2, 2, Array(1d, 0.5, 1d, 0.5))
+    }
+  }
+
+  "scalar operations" should {
+    "operate on ones(2,2)" in {
+
+      val square = ones(2, 2)
+      val sops = new LinearAlgebraOps(square)
+
+      // implicit val module = moduleDoubleMatrix[Double]
+
+      sops.addScalar(2d) must be equalTo matrix(2, 2, Array(3d, 3d, 3d, 3d))
+      sops.subtractScalar(2d) must be equalTo matrix(2, 2, Array(-1d, -1d, -1d, -1d))
+      square :* 2d must be equalTo matrix(2, 2, Array(2d, 2d, 2d, 2d))
+      sops.divideScalar(2d) must be equalTo matrix(2, 2, Array(0.5, 0.5, 0.5, 0.5))
     }
   }
 

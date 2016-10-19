@@ -5,11 +5,11 @@ import org.specs2.mutable._
 class PackageSpec extends Specification {
 
   "monte carlo pi" should {
-    "be at least 3" in {
+    "be at least 2.9" in {
       import spire.implicits._
       monteCarloPiEstimate(
         (1 to 1000).toList,
-        (n: Int) => n.toDouble) must be greaterThan 3d
+        (n: Int) => n.toDouble) must be greaterThan 2.9
     }
   }
 
