@@ -398,6 +398,7 @@ package object jblas {
         jblas
       }
 
+      // TODO this belongs in a Monad typeclass witness
       def flatMap(m: DoubleMatrix)(f: N => DoubleMatrix): DoubleMatrix =
         (0 until m.getRows).map(r => {
           (0 until m.getColumns).map(c => {

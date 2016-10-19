@@ -250,5 +250,24 @@ class MatrixSpecification extends Specification {
     }
   }
 
+  "column and row vector operations" should {
+    "apply correctly to ones(2, 2)" in {
+
+      val square = new LinearAlgebraOps(ones(2, 2))
+
+      val row = matrix(1, 2, Array(1d, 2d))
+      val column = row.t
+
+      square.addRowVector(row) must be equalTo matrix(2, 2, Array(2d, 2d, 3d, 3d))
+      square.subRowVector(row) must be equalTo matrix(2, 2, Array(0d, 0d, -1d, -1d))
+      square.mulRowVector(row) must be equalTo matrix(2, 2, Array(1d, 1d, 2d, 2d))
+      square.divRowVector(row) must be equalTo matrix(2, 2, Array(1d, 1d, 0.5, 0.5))
+      square.addColumnVector(column) must be equalTo matrix(2, 2, Array(2d, 3d, 2d, 3d))
+      square.subColumnVector(column) must be equalTo matrix(2, 2, Array(0d, -1d, 0d, -1d))
+      square.mulColumnVector(column) must be equalTo matrix(2, 2, Array(1d, 2d, 1d, 2d))
+      square.divColumnVector(column) must be equalTo matrix(2, 2, Array(1d, 0.5, 1d, 0.5))
+    }
+  }
+
 }
 
