@@ -105,14 +105,15 @@ class MatrixSpecification extends Specification {
     }
   }
 
-  //  "mul row and column" should {
-  //    "" in {
-  //      // def mulRow(m: DoubleMatrix)(i: Int, x: N): DoubleMatrix = m.mulRow(i, x.toDouble)
-  //      // def mulColumn
-  //
-  //      1 must be equalTo 1
-  //    }
-  //  }
+  "mul row and column" should {
+    "" in {
+
+      val square = new LinearAlgebraOps(ones(2, 2))
+
+      square.mulRow(0, 3.14) must be equalTo matrix(2, 2, Array(3.14, 1d, 3.14, 1d))
+      square.mulColumn(1, 2.717) must be equalTo matrix(2, 2, Array(1d, 1d, 2.717, 2.717))
+    }
+  }
 
   //  "invert" should {
   //    "" in {
