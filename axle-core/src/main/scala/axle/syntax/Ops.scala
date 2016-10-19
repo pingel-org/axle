@@ -147,7 +147,7 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
   // higher order methods
 
-  def flatMapColumns(f: M => M) = la.flatMapColumns(lhs)(f)
+  def flatMap(f: T => M) = la.flatMap(lhs)(f)
 
   def foldLeft(zero: M)(f: (M, M) => M) = la.foldLeft(lhs)(zero)(f)
 

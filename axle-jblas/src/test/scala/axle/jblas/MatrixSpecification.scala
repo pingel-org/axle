@@ -113,14 +113,14 @@ class MatrixSpecification extends Specification {
   //      1 must be equalTo 1
   //    }
   //  }
-  //
+
   //  "invert" should {
   //    "" in {
   //
   //      1 must be equalTo 1
   //    }
   //  }
-  //
+
   //  "solve" should {
   //    "" in {
   //
@@ -129,9 +129,13 @@ class MatrixSpecification extends Specification {
   //  }
 
   "flatMap" should {
-    "" in {
-      // def flatMapColumns(m: DoubleMatrix)(f: DoubleMatrix => DoubleMatrix): DoubleMatrix
-      1 must be equalTo 1
+    "apply Double => Matrix[1,2] to Matrix[r,c] to get a Matrix[r,2c]" in {
+
+      val m = new LinearAlgebraOps(matrix(1, 2,
+        Array(1.4, 22d)))
+
+      m.flatMap { x => matrix(1, 2, Array(x, 2 * x)) } must be equalTo
+        matrix(1, 4, Array(1.4, 2.8, 22d, 44d))
     }
   }
 

@@ -137,7 +137,7 @@ trait LinearAlgebra[M, R, C, T] {
 
   // Higher-order methods
 
-  def flatMapColumns(m: M)(f: M => M): M
+  def flatMap(m: M)(f: T => M): M
 
   def foldLeft(m: M)(zero: M)(f: (M, M) => M): M
 
