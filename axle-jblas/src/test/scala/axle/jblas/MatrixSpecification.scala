@@ -29,6 +29,7 @@ class MatrixSpecification extends Specification {
       zops.columns must be equalTo 4
       zops.length must be equalTo 12
       new LinearAlgebraOps(y).diag.length must be equalTo 3
+      zops.dup must be equalTo z
     }
   }
 
