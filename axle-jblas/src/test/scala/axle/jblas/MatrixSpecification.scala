@@ -107,7 +107,7 @@ class MatrixSpecification extends Specification {
   }
 
   "mul row and column" should {
-    "" in {
+    "operate on ones(2,2)" in {
 
       val square = new LinearAlgebraOps(ones(2, 2))
 
@@ -268,6 +268,21 @@ class MatrixSpecification extends Specification {
       square.subColumnVector(column) must be equalTo matrix(2, 2, Array(0d, -1d, 0d, -1d))
       square.mulColumnVector(column) must be equalTo matrix(2, 2, Array(1d, 2d, 1d, 2d))
       square.divColumnVector(column) must be equalTo matrix(2, 2, Array(1d, 0.5, 1d, 0.5))
+    }
+  }
+
+  "scalar operations" should {
+    "operate on ones(2,2)" in {
+
+      val square = ones(2, 2)
+      val sops = new LinearAlgebraOps(square)
+
+      // implicit val module = moduleDoubleMatrix[Double]
+
+      sops.addScalar(2d) must be equalTo matrix(2, 2, Array(3d, 3d, 3d, 3d))
+      sops.subtractScalar(2d) must be equalTo matrix(2, 2, Array(-1d, -1d, -1d, -1d))
+      square :* 2d must be equalTo matrix(2, 2, Array(2d, 2d, 2d, 2d))
+      sops.divideScalar(2d) must be equalTo matrix(2, 2, Array(0.5, 0.5, 0.5, 0.5))
     }
   }
 
