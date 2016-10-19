@@ -149,17 +149,6 @@ trait LinearAlgebra[M, R, C, T] {
   //  def hilb(n: Int) = matrix(n, n,
   //    (r: Int, c: Int) => elementField.one / (r + c + elementField.one))
 
-  //  def median(m: M): M = {
-  //    val sorted = sortColumns(m)
-  //    if (rows(m) % 2 === 0) {
-  //      val left = row(sorted)(rows(m) / 2 - 1)
-  //      val right = row(sorted)(rows(m) / 2)
-  //      divideScalar(plus(left)(right))(2d)
-  //    } else {
-  //      row(sorted)(rows(m) / 2)
-  //    }
-  //  }
-
   def centerRows(m: M): M
   def centerColumns(m: M): M
 
