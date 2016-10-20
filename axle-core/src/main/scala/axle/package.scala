@@ -293,7 +293,8 @@ package object axle {
 
   // IO
 
-  def getLine(): String = scala.io.Source.stdin.getLines().next
+  // TODO echo characters as typed (shouldn't have to use jline for this)
+  def getLine(): String = scala.io.StdIn.readLine()
 
   // List enrichments:
 

@@ -27,15 +27,12 @@ object InteractiveTicTacToePlayer {
     }
   }
 
-  // TODO echo characters as typed (shouldn't have to use jline for this)
-  def read(): String = scala.io.StdIn.readLine()
-
   def move(
     state: TicTacToeState,
     ttt: TicTacToe): TicTacToeMove = {
     val display = ttt.playerToDisplayer(state.player)
     display(state.displayTo(state.player, ttt))
-    userInputStream(display, read).
+    userInputStream(display, axle.getLine).
       map(input => {
         val validated = validateMoveInput(input, state, ttt)
         validated.left.map(display)
