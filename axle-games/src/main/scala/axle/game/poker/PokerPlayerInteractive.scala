@@ -8,8 +8,9 @@ object PokerPlayerInteractive {
 
   def move(state: PokerState, game: Poker): PokerMove = {
     // displayEvents()
-    println(state.displayTo(state.mover, game))
-    userInputStream()
+    val display = game.playerToDisplayer(state.mover)
+    display(state.displayTo(state.mover, game))
+    userInputStream(display)
       .flatMap(moveParser.parse(_)(state.mover))
       .find(move => state(move, game).isDefined).get
   }

@@ -30,12 +30,12 @@ object InteractiveTicTacToePlayer {
   def move(
     state: TicTacToeState,
     ttt: TicTacToe): TicTacToeMove = {
-    // TODO use 'displayerFor' for this println
-    println(state.displayTo(state.player, ttt))
-    userInputStream().
+    val display = ttt.playerToDisplayer(state.player)
+    display(state.displayTo(state.player, ttt))
+    userInputStream(display).
       map(input => {
         val validated = validateMoveInput(input, state, ttt)
-        validated.left.map(println)
+        validated.left.map(display)
         validated
       }).
       find(_.isRight).get.
