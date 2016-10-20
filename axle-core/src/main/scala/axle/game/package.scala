@@ -20,12 +20,11 @@ package object game {
   def startFrom[G, S, O, M](g: G, s: S)(implicit evGame: Game[G, S, O, M]): Option[S] =
     evGame.startFrom(g, s)
 
-  def userInputStream(): Stream[String] = {
-    // TODO: reuse "displayer" for println
-    print("Enter move: ")
-    val command = scala.io.StdIn.readLine() // TODO echo characters as typed (shouldn't have to use jline for this)
-    println(command)
-    cons(command, userInputStream)
+  def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
+    display("Enter move: ")
+    val command = read()
+    display(command)
+    cons(command, userInputStream(display, read))
   }
 
   def scriptToLastMoveState[G, S, O, M](
