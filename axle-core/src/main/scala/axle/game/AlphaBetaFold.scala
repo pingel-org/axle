@@ -1,7 +1,6 @@
 package axle.game
 
 import spire.algebra.Order
-import spire.compat.ordering
 import spire.implicits._
 
 case class AlphaBetaFold[G, S, O, M, N: Order](
