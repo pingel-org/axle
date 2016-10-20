@@ -22,18 +22,18 @@ object Strategies {
     }
   }
 
-  def heuristic(game: Poker, state: PokerState): PokerState => Map[Player, Real] =
+  def heuristic(game: Poker): PokerState => Map[Player, Real] =
     (state: PokerState) => game.players.map(p => {
       (p, state.outcome(game).map(out => if (out.winner.get === p) Real(1) else Real(-1)).getOrElse(Real(0)))
     }).toMap
 
-  def aiMove(state: PokerState,
-             game: Poker)(
-               implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove],
-               evState: State[Poker, PokerState, PokerOutcome, PokerMove]): PokerMove = {
-    val (move, newState, values) = minimax(game, state, 3, heuristic(game, state))
-    move
-  }
+  def aiMover(lookahead: Int)(
+    implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove],
+    evState: State[Poker, PokerState, PokerOutcome, PokerMove]) =
+    (state: PokerState, poker: Poker) => {
+      val (move, newState, values) = minimax(poker, state, lookahead, heuristic(poker))
+      move
+    }
 
   val moveParser = MoveParser()
 
@@ -46,7 +46,7 @@ object Strategies {
       .find(move => state(move, game).isDefined).get
   }
 
-  def randomMove(state: PokerState, game: Poker, evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerMove = {
+  def randomMove(state: PokerState, game: Poker): PokerMove = {
     val opens = state.moves(game)
     opens(nextInt(opens.length))
   }
