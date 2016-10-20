@@ -1,22 +1,27 @@
 package axle.game
 
-case class AlphaBetaFold[G, S, O, M](
+import spire.algebra.Order
+import spire.compat.ordering
+import spire.implicits._
+
+case class AlphaBetaFold[G, S, O, M, N: Order](
     g: G,
     move: M,
-    cutoff: Map[Player, Double],
+    cutoff: Map[Player, N],
     done: Boolean)(
         implicit evGame: Game[G, S, O, M], evState: State[G, S, O, M]) {
 
   def process(
     m: M,
     state: S,
-    heuristic: S => Map[Player, Double]): AlphaBetaFold[G, S, O, M] =
+    heuristic: S => Map[Player, N]): AlphaBetaFold[G, S, O, M, N] =
     if (done) {
       this
     } else {
       val α = heuristic(evState.applyMove(state, m, g).get)
       // TODO: forall other players ??
-      if (cutoff(evState.mover(state)) <= α(evState.mover(state))) {
+      val c = cutoff.get(evState.mover(state))
+      if (c.isEmpty || c.get <= α(evState.mover(state))) {
         AlphaBetaFold(g, m, α, false) // TODO move = m?
       } else {
         AlphaBetaFold(g, m, cutoff, true)

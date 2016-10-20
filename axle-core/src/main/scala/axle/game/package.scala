@@ -133,27 +133,27 @@ package object game {
    *
    */
 
-  def alphabeta[G, S, O, M](
+  def alphabeta[G, S, O, M, N: Order](
     game: G,
     state: S,
     depth: Int,
-    heuristic: S => Map[Player, Double])(
-      implicit evGame: Game[G, S, O, M], evState: State[G, S, O, M]): (M, Map[Player, Double]) =
-    _alphabeta(game, state, depth, evGame.players(game).map((_, Double.MinValue)).toMap, heuristic)
+    heuristic: S => Map[Player, N])(
+      implicit evGame: Game[G, S, O, M], evState: State[G, S, O, M]): (M, Map[Player, N]) =
+    _alphabeta(game, state, depth, Map.empty, heuristic)
 
-  def _alphabeta[G, S, O, M](
+  def _alphabeta[G, S, O, M, N: Order](
     g: G,
     state: S,
     depth: Int,
-    cutoff: Map[Player, Double],
-    heuristic: S => Map[Player, Double])(
+    cutoff: Map[Player, N],
+    heuristic: S => Map[Player, N])(
       implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): (M, Map[Player, Double]) =
+      evState: State[G, S, O, M]): (M, Map[Player, N]) =
     if (evState.outcome(state, g).isDefined || depth <= 0) {
       (null.asInstanceOf[M], heuristic(state)) // TODO null
     } else {
-      val result = evState.moves(state, g).foldLeft(AlphaBetaFold[G, S, O, M](g, null.asInstanceOf[M], cutoff, false))(
-        (in: AlphaBetaFold[G, S, O, M], move: M) => in.process(move, state, heuristic))
+      val initial = AlphaBetaFold(g, null.asInstanceOf[M], cutoff, false)
+      val result = evState.moves(state, g).foldLeft(initial)(_.process(_, state, heuristic))
       (result.move, result.cutoff)
     }
 
