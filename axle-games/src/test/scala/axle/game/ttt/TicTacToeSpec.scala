@@ -2,6 +2,7 @@
 package axle.game.ttt
 
 import axle.game._
+import axle.game.ttt.Strategies._
 import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {
@@ -10,8 +11,8 @@ class TicTacToeSpec extends Specification {
   val o = Player("O", "Player O")
 
   val game = TicTacToe(3,
-    x, InteractiveTicTacToePlayer.move, println,
-    o, InteractiveTicTacToePlayer.move, println)
+    x, interactiveMove, println,
+    o, interactiveMove, println)
 
   def movesFrom(pps: List[(Player, Int)]): List[TicTacToeMove] =
     pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
@@ -27,8 +28,8 @@ class TicTacToeSpec extends Specification {
   "random game" should {
 
     val rGame = TicTacToe(3,
-      x, RandomTicTacToePlayer.move, (s: String) => {},
-      o, RandomTicTacToePlayer.move, (s: String) => {})
+      x, randomMove, (s: String) => {},
+      o, randomMove, (s: String) => {})
 
     "produce moveStateStream" in {
       moveStateStream(rGame, startState(rGame)).take(3).length must be equalTo 3
@@ -73,8 +74,8 @@ class TicTacToeSpec extends Specification {
     }
     "be defined for 4x4 game" in {
       val bigGame = TicTacToe(4,
-        x, RandomTicTacToePlayer.move, (s: String) => {},
-        o, RandomTicTacToePlayer.move, (s: String) => {})
+        x, randomMove, (s: String) => {},
+        o, randomMove, (s: String) => {})
       val startingMoves = startState(bigGame).moves(game)
       startingMoves.map(_.description).mkString(",") must contain("16")
     }
@@ -90,8 +91,6 @@ class TicTacToeSpec extends Specification {
 
   "interactive player" should {
     "print various messages" in {
-
-      import axle.game.ttt.InteractiveTicTacToePlayer._
 
       val firstMove = TicTacToeMove(x, 2, game.boardSize)
       val secondState = startState(game).apply(firstMove, game).get
@@ -112,9 +111,7 @@ class TicTacToeSpec extends Specification {
   "random strategy" should {
     "make a move" in {
 
-      import axle.game.ttt.RandomTicTacToePlayer._
-
-      val m = move(startState(game), game)
+      val m = randomMove(startState(game), game)
 
       m.position must be greaterThan 0
     }
@@ -123,11 +120,9 @@ class TicTacToeSpec extends Specification {
   "A.I. strategy" should {
     "make a move" in {
 
-      import axle.game.ttt.AITicTacToePlayer._
-
       val firstMove = TicTacToeMove(x, 2, game.boardSize)
 
-      val ai4 = mover(4)
+      val ai4 = aiMover(4)
 
       val secondState = startState(game).apply(firstMove, game).get
 
