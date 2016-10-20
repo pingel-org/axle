@@ -4,6 +4,7 @@ import org.specs2.mutable._
 import axle.game._
 import spire.algebra.Eq
 import spire.compat.ordering
+import axle.game.poker.Strategies._
 
 class PokerSpec extends Specification {
 
@@ -11,8 +12,8 @@ class PokerSpec extends Specification {
   val p2 = Player("P2", "Player 2")
 
   val game = Poker(Vector(
-    (p1, PokerPlayerInteractive.move, println),
-    (p2, PokerPlayerInteractive.move, println)))
+    (p1, interactiveMove, println),
+    (p2, interactiveMove, println)))
 
   import game.dealer
 
