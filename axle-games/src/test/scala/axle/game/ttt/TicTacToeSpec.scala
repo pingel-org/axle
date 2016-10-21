@@ -57,7 +57,7 @@ class TicTacToeSpec extends Specification {
     "simply return the start state" in {
       val state = startState(game)
       val move = state.moves(game).head
-      val nextState = state(move, game).get // TODO .get
+      val nextState = state(move, game)
       startFrom(game, nextState).get.moves(game).length must be equalTo 9
     }
   }
@@ -92,18 +92,20 @@ class TicTacToeSpec extends Specification {
     "print various messages" in {
 
       val firstMove = TicTacToeMove(x, 2, game.boardSize)
-      val secondState = startState(game).apply(firstMove, game).get
+      val secondState = startState(game).apply(firstMove, game)
 
-      // TODO grab resulting output via an IO Monad or some such
-      // TODO create new game where x's displayer = println
       introduceGame(x, game)
       displayEvents(game, x, List(Right(firstMove)))
       endGame(game, x, startState(game))
 
-      validateMoveInputT("1", startState(game), game).right.toOption.get.position must be equalTo 1
-      validateMoveInputT("14", startState(game), game) must be equalTo Left("Please enter a number between 1 and 9")
-      validateMoveInputT("foo", startState(game), game) must be equalTo Left("foo is not a valid move.  Please select again")
-      validateMoveInputT("2", secondState, game) must be equalTo Left("That space is occupied.")
+      val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
+
+      val m = secondState.player
+      evGame.parseMove(game, "14", m) must be equalTo Left("Please enter a number between 1 and 9")
+      evGame.parseMove(game, "foo", m) must be equalTo Left("foo is not a valid move.  Please select again")
+
+      evGame.parseMove(game, "1", m).right.flatMap(move => evGame.isValid(game, secondState, move)).right.toOption.get.position must be equalTo 1
+      evGame.parseMove(game, "2", m).right.flatMap(move => evGame.isValid(game, secondState, move)) must be equalTo Left("That space is occupied.")
     }
   }
 
@@ -125,7 +127,7 @@ class TicTacToeSpec extends Specification {
       import spire.implicits.DoubleAlgebra
       val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](4, didIWinHeuristic(game))
 
-      val secondState = startState(game).apply(firstMove, game).get
+      val secondState = startState(game).apply(firstMove, game)
 
       val move = ai4(secondState, game)
 
