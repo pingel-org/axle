@@ -84,11 +84,11 @@ Example moves:
       def displayerFor(g: Poker, player: Player): String => Unit =
         g.playerToDisplayer(player)
 
-      def parseMove(input: String, mover: Player): Option[PokerMove] = {
+      def parseMove(g: Poker, input: String, mover: Player): Either[String, PokerMove] = {
         moveParser.parse(input)(mover)
       }
 
-      def isValid(state: PokerState, move: PokerMove, game: Poker): Either[String, PokerMove] =
+      def isValid(g: Poker, state: PokerState, move: PokerMove, game: Poker): Either[String, PokerMove] =
         Right(move) // TODO
 
     }
