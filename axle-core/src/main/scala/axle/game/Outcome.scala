@@ -20,7 +20,7 @@ trait Outcome[O] {
       if (wp === player) {
         "You have beaten " + evGame.players(game).collect({ case p if !(p === player) => p.description }).toList.mkString(" and ") + "!"
       } else {
-        "%s beat you!".format(wp)
+        "%s beat you!".format(wp.description)
       }
     } getOrElse ("The game was a draw.")
 
