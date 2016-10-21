@@ -31,6 +31,9 @@ case class TicTacToe(
   def playerAfter(player: Player): Player =
     if (player === x) o else x
 
+  def markFor(player: Player): Char =
+    if (player === x) 'X' else 'O'
+
   def state(
     player: Player,
     board: Array[Option[Player]],
