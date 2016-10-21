@@ -41,14 +41,14 @@ package object game {
 
     val stream = userInputStream(display, axle.getLine).
       map(input => {
-        evGame.parseMove(input, evState.mover(state)).map(move => {
-          val validated = evGame.isValid(state, move, game)
-          validated.left.map(display)
+        evGame.parseMove(game, input, evState.mover(state)).right.flatMap(move => {
+          val validated = evGame.isValid(game, state, move)
+          validated.left.foreach(display)
           validated
         })
       })
 
-    stream.find(oem => oem.isDefined && oem.get.isRight).get.get.right.toOption.get
+    stream.find(esm => esm.isRight).get.right.toOption.get
   }
 
   def randomMove[G, S, O, M](implicit evState: State[G, S, O, M]): (S, G) => M =

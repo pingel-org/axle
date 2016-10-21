@@ -22,10 +22,8 @@ trait Game[G, S, O, M] {
 
   def displayerFor(g: G, player: Player): String => Unit
 
-  // ttt was: moveParser.parse(_)(state.mover)
-  def parseMove(input: String, mover: Player): Option[M]
+  def parseMove(g: G, input: String, mover: Player): Either[String, M]
 
-  // ttt was just: state(move, game).isDefined
-  def isValid(state: S, move: M, game: G): Either[String, M]
+  def isValid(g: G, state: S, move: M): Either[String, M]
 
 }
