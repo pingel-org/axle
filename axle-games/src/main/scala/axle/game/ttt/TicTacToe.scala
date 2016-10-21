@@ -66,23 +66,13 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       def displayerFor(g: TicTacToe, player: Player): String => Unit =
         g.playerToDisplayer(player)
 
-      def parseMove(input: String, mover: Player): Option[TicTacToeMove] = {
-        val position = input.toInt
-        TicTacToeMove(mover, position, ttt.boardSize)
-      }
-
-      // was just: state(move, game).isDefined
-      def isValid(state: TicTacToeState, move: TicTacToeMove, ttt: TicTacToe): Either[String, TicTacToeMove] = {
+      def parseMove(g: TicTacToe, input: String, mover: Player): Either[String, TicTacToeMove] = {
         val eitherI: Either[String, Int] = try {
-          val i: Int = input.toInt
-          if (i >= 1 && i <= ttt.numPositions) {
-            if (state(i).isEmpty) {
-              Right(i)
-            } else {
-              Left("That space is occupied.")
-            }
+          val position = input.toInt
+          if (position >= 1 && position <= g.numPositions) {
+            Right(position)
           } else {
-            Left("Please enter a number between 1 and " + ttt.numPositions)
+            Left("Please enter a number between 1 and " + g.numPositions)
           }
         } catch {
           case e: Exception => {
@@ -90,10 +80,16 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
           }
         }
         eitherI.right.map { position =>
-          TicTacToeMove(state.player, position, ttt.boardSize)
+          TicTacToeMove(mover, position, g.boardSize)
         }
-
       }
+
+      def isValid(g: TicTacToe, state: TicTacToeState, move: TicTacToeMove): Either[String, TicTacToeMove] =
+        if (state(move.position).isEmpty) {
+          Right(move)
+        } else {
+          Left("That space is occupied.")
+        }
 
     }
 }
