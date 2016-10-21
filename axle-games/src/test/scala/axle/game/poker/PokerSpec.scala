@@ -84,11 +84,11 @@ class PokerSpec extends Specification {
 
       val moveParser = MoveParser()
 
-      moveParser.parse("call")(p1).get must be equalTo Call(p1)
-      moveParser.parse("fold")(p1).get must be equalTo Fold(p1)
-      moveParser.parse("raise 1")(p1).get must be equalTo Raise(p1, 1)
-      moveParser.parse("raise x")(p1) must be equalTo None
-      moveParser.parse("asdf")(p1) must be equalTo None
+      moveParser.parse("call")(p1) must be equalTo Right(Call(p1))
+      moveParser.parse("fold")(p1) must be equalTo Right(Fold(p1))
+      moveParser.parse("raise 1")(p1) must be equalTo Right(Raise(p1, 1))
+      moveParser.parse("raise x")(p1) must be equalTo Left("invalid input: raise x")
+      moveParser.parse("asdf")(p1) must be equalTo Left("invalid input: asdf")
     }
   }
 
