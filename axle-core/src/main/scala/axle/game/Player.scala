@@ -3,7 +3,16 @@ package axle.game
 import axle.Show
 import spire.algebra.Eq
 
-case class Player(id: String, description: String)
+case class Player(id: String, description: String) {
+
+  def referenceFor(observer: Player): String =
+    if (observer == this) {
+      "You"
+    } else {
+      description
+    }
+
+}
 
 object Player {
 

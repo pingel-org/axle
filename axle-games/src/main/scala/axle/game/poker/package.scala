@@ -43,7 +43,7 @@ package object poker {
 
       def displayTo[G, S, O](game: G, move: PokerMove, p: Player)(
         implicit evGame: Game[G, S, O, PokerMove], eqp: Eq[Player], sp: Show[Player]): String =
-        (if (move.player != p) move.player.description else "You") + " " + move.description + "."
+        move.player.referenceFor(p) + " " + move.description + "."
 
       def player(m: PokerMove): Player = m.player
     }

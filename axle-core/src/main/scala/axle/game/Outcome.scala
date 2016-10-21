@@ -17,11 +17,7 @@ trait Outcome[O] {
       eqp: Eq[Player],
       sp: Show[Player]): String =
     winner(outcome) map { wp =>
-      if (wp === player) {
-        "You have beaten " + evGame.players(game).collect({ case p if !(p === player) => p.description }).toList.mkString(" and ") + "!"
-      } else {
-        "%s beat you!".format(wp.description)
-      }
+      s"${wp.referenceFor(player)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(player)).toList.mkString(" and ") + "!"
     } getOrElse ("The game was a draw.")
 
 }

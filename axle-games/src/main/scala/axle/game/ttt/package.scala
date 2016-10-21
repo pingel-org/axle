@@ -43,7 +43,7 @@ package object ttt {
 
       def displayTo[G, S, O](game: G, move: TicTacToeMove, p: Player)(
         implicit evGame: Game[G, S, O, TicTacToeMove], eqp: Eq[Player], sp: Show[Player]): String =
-        (if (move.player != p) "I will" else "You have") +
+        move.player.referenceFor(p) +
           " put an " + move.player.id +
           " in the " + move.description + "."
 
