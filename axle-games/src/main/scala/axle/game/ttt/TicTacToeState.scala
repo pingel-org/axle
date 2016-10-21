@@ -32,7 +32,7 @@ case class TicTacToeState(
 
     "Board:         Movement Key:\n" +
       0.until(boardSize).map(r => {
-        row(r).map(playerOpt => playerOpt.map(string(_)).getOrElse(" ")).mkString("|") +
+        row(r).map(playerOpt => playerOpt.map(_.id).getOrElse(" ")).mkString("|") +
           "          " +
           (1 + r * boardSize).until(1 + (r + 1) * boardSize).mkString("|") // TODO rjust(keyWidth)
       }).mkString("\n")

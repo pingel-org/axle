@@ -18,7 +18,7 @@ trait Outcome[O] {
       sp: Show[Player]): String =
     winner(outcome) map { wp =>
       if (wp === player) {
-        "You have beaten " // TODO + game.players.collect({ case p if !(p === player) => string(p) }).toList.mkString(" and ") + "!"
+        "You have beaten " + evGame.players(game).collect({ case p if !(p === player) => p.description }).toList.mkString(" and ") + "!"
       } else {
         "%s beat you!".format(wp)
       }
