@@ -35,7 +35,7 @@ class PokerSpec extends Specification {
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get
       // TODO these messages should include amounts
-      evOutcome.displayTo(game, outcome, p1) must contain("You have beaten")
+      evOutcome.displayTo(game, outcome, p1) must contain("You beat")
       evOutcome.displayTo(game, outcome, p2) must contain("beat you")
       outcome.winner.get should be equalTo p1
       newGameState.moves(game).length must be equalTo 0 // TODO
