@@ -1,11 +1,27 @@
 package axle.game
 
 import spire.algebra.Eq
+import spire.implicits._
 import axle.Show
 
 package object poker {
 
   lazy val moveParser = MoveParser()
+
+  def dealerMove(state: PokerState, game: Poker): PokerMove = {
+    val dealer = state.mover
+    state.numShown match {
+      case 0 =>
+        if (state.inFors.size === 0) {
+          Deal(dealer)
+        } else {
+          Flop(dealer)
+        }
+      case 3 => Turn(dealer)
+      case 4 => River(dealer)
+      case 5 => Payout(dealer)
+    }
+  }
 
   implicit val evState: State[Poker, PokerState, PokerOutcome, PokerMove] =
     new State[Poker, PokerState, PokerOutcome, PokerMove] {

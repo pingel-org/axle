@@ -33,12 +33,6 @@ package object game {
       move
     }
 
-  // ttt was: moveParser.parse(_)(state.mover)
-  def parseMove[M](input: String): Option[M] = ???
-
-  // ttt was just: state(move, game).isDefined
-  def isValid[G, S, O, M](state: S, move: M, game: G): Either[String, M] = ???
-
   def interactiveMove[G, S, O, M](
     implicit evGame: Game[G, S, O, M],
     evState: State[G, S, O, M]): (S, G) => M = (state: S, game: G) => {
@@ -47,8 +41,8 @@ package object game {
 
     val stream = userInputStream(display, axle.getLine).
       map(input => {
-        parseMove(input).map(move => {
-          val validated = isValid[G, S, O, M](state, move, game)
+        evGame.parseMove(input, evState.mover(state)).map(move => {
+          val validated = evGame.isValid(state, move, game)
           validated.left.map(display)
           validated
         })

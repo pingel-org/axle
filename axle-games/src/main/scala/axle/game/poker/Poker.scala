@@ -2,7 +2,6 @@ package axle.game.poker
 
 import axle.game._
 import axle.game.cards._
-import axle.game.poker.Strategies.dealerMove
 
 case class Poker(
     playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)]) {
@@ -84,6 +83,13 @@ Example moves:
 
       def displayerFor(g: Poker, player: Player): String => Unit =
         g.playerToDisplayer(player)
+
+      def parseMove(input: String, mover: Player): Option[PokerMove] = {
+        moveParser.parse(input)(mover)
+      }
+
+      def isValid(state: PokerState, move: PokerMove, game: Poker): Either[String, PokerMove] =
+        Right(move) // TODO
 
     }
 

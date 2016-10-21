@@ -66,5 +66,34 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       def displayerFor(g: TicTacToe, player: Player): String => Unit =
         g.playerToDisplayer(player)
 
+      def parseMove(input: String, mover: Player): Option[TicTacToeMove] = {
+        val position = input.toInt
+        TicTacToeMove(mover, position, ttt.boardSize)
+      }
+
+      // was just: state(move, game).isDefined
+      def isValid(state: TicTacToeState, move: TicTacToeMove, ttt: TicTacToe): Either[String, TicTacToeMove] = {
+        val eitherI: Either[String, Int] = try {
+          val i: Int = input.toInt
+          if (i >= 1 && i <= ttt.numPositions) {
+            if (state(i).isEmpty) {
+              Right(i)
+            } else {
+              Left("That space is occupied.")
+            }
+          } else {
+            Left("Please enter a number between 1 and " + ttt.numPositions)
+          }
+        } catch {
+          case e: Exception => {
+            Left(input + " is not a valid move.  Please select again")
+          }
+        }
+        eitherI.right.map { position =>
+          TicTacToeMove(state.player, position, ttt.boardSize)
+        }
+
+      }
+
     }
 }
