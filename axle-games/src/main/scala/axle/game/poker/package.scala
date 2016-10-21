@@ -38,11 +38,11 @@ package object poker {
       def winner(outcome: PokerOutcome): Option[Player] = outcome.winner
     }
 
-  implicit val evMove: Move[PokerMove] =
-    new Move[PokerMove] {
+  implicit val evMove: Move[Poker, PokerState, PokerOutcome, PokerMove] =
+    new Move[Poker, PokerState, PokerOutcome, PokerMove] {
 
-      def displayTo[G, S, O](game: G, move: PokerMove, p: Player)(
-        implicit evGame: Game[G, S, O, PokerMove], eqp: Eq[Player], sp: Show[Player]): String =
+      def displayTo(game: Poker, move: PokerMove, p: Player)(
+        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove], eqp: Eq[Player], sp: Show[Player]): String =
         move.player.referenceFor(p) + " " + move.description + "."
 
       def player(m: PokerMove): Player = m.player
