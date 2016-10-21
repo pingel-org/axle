@@ -8,11 +8,63 @@ import spire.compat.ordering
 import spire.algebra.Order
 import spire.algebra.Eq
 import spire.implicits.eqOps
+import spire.implicits._
+import util.Random.nextInt
 
 package object game {
 
-  def prefixedDisplay(prefix: String): String => Unit = 
-    (s: String) => s.split("\n").foreach(line => println(prefix + "> " + line))
+  def didIWinHeuristic[G, S, O, M](game: G)(
+    implicit evGame: Game[G, S, O, M],
+    evOutcome: Outcome[O],
+    evState: State[G, S, O, M]): S => Map[Player, Double] =
+    (state: S) => evGame.players(game).map(p => {
+      val score =
+        evState.outcome(state, game).flatMap(out =>
+          evOutcome.winner(out).map(winner =>
+            if (winner === p) 1d else -1d)).getOrElse(0d)
+      (p, score)
+    }).toMap
+
+  def aiMover[G, S, O, M, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
+    implicit evGame: Game[G, S, O, M],
+    evState: State[G, S, O, M]) =
+    (state: S, ttt: G) => {
+      val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
+      move
+    }
+
+  // ttt was: moveParser.parse(_)(state.mover)
+  def parseMove[M](input: String): Option[M] = ???
+
+  // ttt was just: state(move, game).isDefined
+  def isValid[G, S, O, M](state: S, move: M, game: G): Either[String, M] = ???
+
+  def interactiveMove[G, S, O, M](
+    implicit evGame: Game[G, S, O, M],
+    evState: State[G, S, O, M]): (S, G) => M = (state: S, game: G) => {
+
+    val display = evGame.displayerFor(game, evState.mover(state))
+
+    val stream = userInputStream(display, axle.getLine).
+      map(input => {
+        parseMove(input).map(move => {
+          val validated = isValid[G, S, O, M](state, move, game)
+          validated.left.map(display)
+          validated
+        })
+      })
+
+    stream.find(oem => oem.isDefined && oem.get.isRight).get.get.right.toOption.get
+  }
+
+  def randomMove[G, S, O, M](implicit evState: State[G, S, O, M]): (S, G) => M =
+    (state: S, game: G) => {
+      val opens = evState.moves(state, game).toList
+      opens(nextInt(opens.length))
+    }
+
+  def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
+    (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))
 
   def introMessage[G, S, O, M](g: G)(implicit evGame: Game[G, S, O, M]): String =
     evGame.introMessage(g)

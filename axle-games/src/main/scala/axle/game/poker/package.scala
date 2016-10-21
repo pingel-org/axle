@@ -5,6 +5,8 @@ import axle.Show
 
 package object poker {
 
+  lazy val moveParser = MoveParser()
+
   implicit val evState: State[Poker, PokerState, PokerOutcome, PokerMove] =
     new State[Poker, PokerState, PokerOutcome, PokerMove] {
 

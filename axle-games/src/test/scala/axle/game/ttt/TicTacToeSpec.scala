@@ -101,17 +101,18 @@ class TicTacToeSpec extends Specification {
       displayEvents(game, x, List(Right(firstMove)))
       endGame(game, x, startState(game))
 
-      validateMoveInput("1", startState(game), game).right.toOption.get.position must be equalTo 1
-      validateMoveInput("14", startState(game), game) must be equalTo Left("Please enter a number between 1 and 9")
-      validateMoveInput("foo", startState(game), game) must be equalTo Left("foo is not a valid move.  Please select again")
-      validateMoveInput("2", secondState, game) must be equalTo Left("That space is occupied.")
+      validateMoveInputT("1", startState(game), game).right.toOption.get.position must be equalTo 1
+      validateMoveInputT("14", startState(game), game) must be equalTo Left("Please enter a number between 1 and 9")
+      validateMoveInputT("foo", startState(game), game) must be equalTo Left("foo is not a valid move.  Please select again")
+      validateMoveInputT("2", secondState, game) must be equalTo Left("That space is occupied.")
     }
   }
 
   "random strategy" should {
     "make a move" in {
 
-      val m = randomMove(startState(game), game)
+      val mover = randomMove
+      val m = mover(startState(game), game)
 
       m.position must be greaterThan 0
     }
@@ -122,7 +123,8 @@ class TicTacToeSpec extends Specification {
 
       val firstMove = TicTacToeMove(x, 2, game.boardSize)
 
-      val ai4 = aiMover(4)
+      import spire.implicits.DoubleAlgebra
+      val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](4, didIWinHeuristic(game))
 
       val secondState = startState(game).apply(firstMove, game).get
 
