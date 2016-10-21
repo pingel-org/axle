@@ -40,7 +40,6 @@ object Strategies {
     state: TicTacToeState,
     ttt: TicTacToe): TicTacToeMove = {
     val display = ttt.playerToDisplayer(state.player)
-    display(state.displayTo(state.player, ttt))
     userInputStream(display, axle.getLine).
       map(input => {
         val validated = validateMoveInput(input, state, ttt)
