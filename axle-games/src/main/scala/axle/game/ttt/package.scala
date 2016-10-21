@@ -9,7 +9,7 @@ package object ttt {
     new State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
 
       def applyMove(s: TicTacToeState, move: TicTacToeMove, game: TicTacToe)(
-        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): Option[TicTacToeState] =
+        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState =
         s(move, game)
 
       def displayTo(s: TicTacToeState, viewer: Player, game: TicTacToe)(

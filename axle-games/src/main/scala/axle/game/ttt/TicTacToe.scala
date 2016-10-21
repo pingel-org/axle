@@ -37,8 +37,8 @@ case class TicTacToe(
   def state(
     player: Player,
     board: Array[Option[Player]],
-    eventQueue: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]]): Option[TicTacToeState] =
-    Some(TicTacToeState(player, board, boardSize, eventQueue))
+    eventQueue: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]]): TicTacToeState =
+    TicTacToeState(player, board, boardSize, eventQueue)
 
 }
 

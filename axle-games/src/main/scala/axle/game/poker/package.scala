@@ -27,7 +27,7 @@ package object poker {
     new State[Poker, PokerState, PokerOutcome, PokerMove] {
 
       def applyMove(s: PokerState, move: PokerMove, game: Poker)(
-        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): Option[PokerState] =
+        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerState =
         s(move, game)
 
       def displayTo(s: PokerState, viewer: Player, game: Poker)(

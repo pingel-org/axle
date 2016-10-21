@@ -68,7 +68,7 @@ case class TicTacToeState(
     }
   }
 
-  def apply(move: TicTacToeMove, ttt: TicTacToe)(implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): Option[TicTacToeState] =
+  def apply(move: TicTacToeMove, ttt: TicTacToe)(implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState =
     ttt.state(
       ttt.playerAfter(move.player),
       place(move.position, Some(player)),
