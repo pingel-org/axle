@@ -41,7 +41,7 @@ case class PokerState(
 
   // TODO: displayTo could be phrased in terms of Show
   def displayTo(viewer: Player, game: Poker): String =
-    "To: " + mover + "\n" +
+    "To: " + mover.referenceFor(viewer) + "\n" +
       "Current bet: " + currentBet + "\n" +
       "Pot: " + pot + "\n" +
       "Shared: " + shared.zipWithIndex.map({
