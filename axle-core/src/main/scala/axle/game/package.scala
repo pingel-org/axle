@@ -163,9 +163,8 @@ package object game {
     if (evState.outcome(state, game).isDefined || depth <= 0) {
       (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
     } else {
-      // TODO: .get
       val moveValue = evState.moves(state, game).map(move => {
-        val newState = evState.applyMove(state, move, game).get // TODO: .get
+        val newState = evState.applyMove(state, move, game)
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
       val bestValue = moveValue.map(mcr => (mcr._3)(evState.mover(state))).max
@@ -222,7 +221,7 @@ package object game {
       display(evState.displayTo(s1, mover, game))
       val strategy = evGame.strategyFor(game, mover)
       val move = strategy.apply(s1, game)
-      val s2 = evState.applyMove(s1, move, game).get // TODO .get
+      val s2 = evState.applyMove(s1, move, game)
       val s3 = broadcast(game, s2, Right(move))
       cons((move, s3), moveStateStream(game, s3))
     }
@@ -237,7 +236,7 @@ package object game {
       empty
     } else {
       val move = moveIt.next
-      val nextState = evState.applyMove(state, move, game).get // TODO .get
+      val nextState = evState.applyMove(state, move, game)
       cons((move, nextState), scriptedMoveStateStream(game, nextState, moveIt))
     }
 

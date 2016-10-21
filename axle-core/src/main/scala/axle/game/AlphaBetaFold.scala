@@ -17,7 +17,7 @@ case class AlphaBetaFold[G, S, O, M, N: Order](
     if (done) {
       this
     } else {
-      val α = heuristic(evState.applyMove(state, m, g).get)
+      val α = heuristic(evState.applyMove(state, m, g))
       // TODO: forall other players ??
       val c = cutoff.get(evState.mover(state))
       if (c.isEmpty || c.get <= α(evState.mover(state))) {
