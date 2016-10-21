@@ -150,27 +150,27 @@ class PokerSpec extends Specification {
 
   }
 
-  "random game" should {
-
-    val rGame: Poker = Poker(Vector(
-      (p1, randomMove _, (s: String) => {}),
-      (p2, randomMove _, (s: String) => {})))
-
-    "produce moveStateStream" in {
-      moveStateStream(rGame, startState(rGame)).take(3).length must be equalTo 3
-    }
-
-    "play" in {
-      val endState: PokerState = play(rGame, startState(rGame), false).get
-      // TODO number of moves should really be 0
-      endState.moves(rGame).length must be lessThan 5
-    }
-
-    "product game stream" in {
-      val games = gameStream(rGame, startState(rGame), false).take(2)
-      games.length must be equalTo 2
-    }
-
-  }
+//  "random game" should {
+//
+//    val rGame: Poker = Poker(Vector(
+//      (p1, randomMove _, (s: String) => {}),
+//      (p2, randomMove _, (s: String) => {})))
+//
+//    "produce moveStateStream" in {
+//      moveStateStream(rGame, startState(rGame)).take(3).length must be equalTo 3
+//    }
+//
+//    "play" in {
+//      val endState: PokerState = play(rGame, startState(rGame), false).get
+//      // TODO number of moves should really be 0
+//      endState.moves(rGame).length must be lessThan 5
+//    }
+//
+//    "product game stream" in {
+//      val games = gameStream(rGame, startState(rGame), false).take(2)
+//      games.length must be equalTo 2
+//    }
+//
+//  }
 
 }
