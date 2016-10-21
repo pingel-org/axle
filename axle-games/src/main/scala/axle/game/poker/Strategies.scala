@@ -38,9 +38,7 @@ object Strategies {
   val moveParser = MoveParser()
 
   def interactiveMove(state: PokerState, game: Poker): PokerMove = {
-    // displayEvents()
     val display = game.playerToDisplayer(state.mover)
-    display(state.displayTo(state.mover, game))
     userInputStream(display, axle.getLine)
       .flatMap(moveParser.parse(_)(state.mover))
       .find(move => state(move, game).isDefined).get
