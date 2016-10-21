@@ -9,7 +9,7 @@ package object ttt {
     new State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
 
       def applyMove(s: TicTacToeState, move: TicTacToeMove, game: TicTacToe)(
-        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): Option[TicTacToeState] =
+        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState =
         s(move, game)
 
       def displayTo(s: TicTacToeState, viewer: Player, game: TicTacToe)(
@@ -38,13 +38,13 @@ package object ttt {
       def winner(outcome: TicTacToeOutcome): Option[Player] = outcome.winner
     }
 
-  implicit val evMove: Move[TicTacToeMove] =
-    new Move[TicTacToeMove] {
+  implicit val evMove: Move[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
+    new Move[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
 
-      def displayTo[G, S, O](game: G, move: TicTacToeMove, p: Player)(
-        implicit evGame: Game[G, S, O, TicTacToeMove], eqp: Eq[Player], sp: Show[Player]): String =
-        (if (move.player != p) "I will" else "You have") +
-          " put an " + move.player.id +
+      def displayTo(game: TicTacToe, move: TicTacToeMove, p: Player)(
+        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove], eqp: Eq[Player], sp: Show[Player]): String =
+        move.player.referenceFor(p) +
+          " put an " + game.markFor(move.player) +
           " in the " + move.description + "."
 
       def player(m: TicTacToeMove): Player = m.player

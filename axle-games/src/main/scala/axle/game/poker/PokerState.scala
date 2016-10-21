@@ -41,7 +41,7 @@ case class PokerState(
 
   // TODO: displayTo could be phrased in terms of Show
   def displayTo(viewer: Player, game: Poker): String =
-    "To: " + mover + "\n" +
+    "To: " + mover.referenceFor(viewer) + "\n" +
       "Current bet: " + currentBet + "\n" +
       "Pot: " + pot + "\n" +
       "Shared: " + shared.zipWithIndex.map({
@@ -72,7 +72,7 @@ case class PokerState(
   // TODO: is there a limit to the number of raises that can occur?
   // TODO: how to handle player exhausting pile during game?
 
-  def apply(move: PokerMove, game: Poker): Option[PokerState] = move match {
+  def apply(move: PokerMove, game: Poker): PokerState = move match {
 
     case Deal(dealer) => {
       // TODO clean up these range calculations
@@ -91,7 +91,7 @@ case class PokerState(
       // TODO: some kind of "transfer" method that handles money flow from better
       // to pot would simplify the code and make it less error prone
 
-      Some(PokerState(
+      PokerState(
         s => nextBetter,
         Deck(unused),
         shared,
@@ -103,78 +103,72 @@ case class PokerState(
         Map(smallBlindPlayer -> smallBlind, bigBlindPlayer -> bigBlind),
         piles + (smallBlindPlayer -> (piles(smallBlindPlayer) - smallBlind)) + (bigBlindPlayer -> (piles(bigBlindPlayer) - bigBlind)),
         None,
-        _eventQueues))
+        _eventQueues)
     }
 
     case Raise(player, amount) => {
       val diff = currentBet + amount - inFors.get(player).getOrElse(0)
-      if (piles(player) - diff >= 0) {
-        Some(PokerState(
-          _.betterAfter(player, game).getOrElse(game.dealer),
-          deck,
-          shared,
-          numShown,
-          hands,
-          pot + diff,
-          currentBet + amount,
-          stillIn,
-          inFors + (player -> (currentBet + amount)),
-          piles + (player -> (piles(player) - diff)),
-          None,
-          _eventQueues))
-      } else {
-        None
-      }
+      assert(piles(player) - diff >= 0)
+      PokerState(
+        _.betterAfter(player, game).getOrElse(game.dealer),
+        deck,
+        shared,
+        numShown,
+        hands,
+        pot + diff,
+        currentBet + amount,
+        stillIn,
+        inFors + (player -> (currentBet + amount)),
+        piles + (player -> (piles(player) - diff)),
+        None,
+        _eventQueues)
     }
 
     case Call(player) => {
       val diff = currentBet - inFors.get(player).getOrElse(0)
-      if (piles(player) - diff >= 0) {
-        Some(PokerState(
-          _.betterAfter(player, game).getOrElse(game.dealer),
-          deck,
-          shared,
-          numShown,
-          hands,
-          pot + diff,
-          currentBet,
-          stillIn,
-          inFors + (player -> currentBet),
-          piles + (player -> (piles(player) - diff)),
-          None,
-          _eventQueues))
-      } else {
-        None
-      }
+      assert(piles(player) - diff >= 0)
+      PokerState(
+        _.betterAfter(player, game).getOrElse(game.dealer),
+        deck,
+        shared,
+        numShown,
+        hands,
+        pot + diff,
+        currentBet,
+        stillIn,
+        inFors + (player -> currentBet),
+        piles + (player -> (piles(player) - diff)),
+        None,
+        _eventQueues)
     }
 
     case Fold(player) =>
-      Some(PokerState(
+      PokerState(
         _.betterAfter(player, game).getOrElse(game.dealer),
         deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles,
         None,
-        _eventQueues))
+        _eventQueues)
 
     case Flop(dealer) =>
-      Some(PokerState(
+      PokerState(
         _.firstBetter(game),
         deck, shared, 3, hands, pot, 0, stillIn, Map(), piles,
         None,
-        _eventQueues))
+        _eventQueues)
 
     case Turn(dealer) =>
-      Some(PokerState(
+      PokerState(
         _.firstBetter(game),
         deck, shared, 4, hands, pot, 0, stillIn, Map(), piles,
         None,
-        _eventQueues))
+        _eventQueues)
 
     case River(dealer) =>
-      Some(PokerState(
+      PokerState(
         _.firstBetter(game),
         deck, shared, 5, hands, pot, 0, stillIn, Map(), piles,
         None,
-        _eventQueues))
+        _eventQueues)
 
     case Payout(dealer) => {
 
@@ -194,7 +188,7 @@ case class PokerState(
 
       val newStillIn = game.players.filter(newPiles(_) >= bigBlind).toSet
 
-      Some(PokerState(
+      PokerState(
         s => game.dealer,
         deck,
         shared,
@@ -206,7 +200,7 @@ case class PokerState(
         Map(),
         newPiles,
         Some(PokerOutcome(Some(winner), handOpt)),
-        _eventQueues))
+        _eventQueues)
     }
 
   }

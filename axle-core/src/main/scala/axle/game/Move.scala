@@ -3,11 +3,11 @@ package axle.game
 import spire.algebra.Eq
 import axle.Show
 
-trait Move[M] {
+trait Move[G, S, O, M] {
 
   def player(m: M): Player
 
-  def displayTo[G, S, O](
+  def displayTo(
     game: G,
     move: M,
     player: Player)(

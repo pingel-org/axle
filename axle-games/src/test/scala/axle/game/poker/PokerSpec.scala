@@ -11,8 +11,8 @@ class PokerSpec extends Specification {
   val p2 = Player("P2", "Player 2")
 
   val game = Poker(Vector(
-    (p1, PokerPlayerInteractive.move, println),
-    (p2, PokerPlayerInteractive.move, println)))
+    (p1, interactiveMove, println),
+    (p2, interactiveMove, println)))
 
   import game.dealer
 
@@ -35,8 +35,8 @@ class PokerSpec extends Specification {
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get
       // TODO these messages should include amounts
-      evOutcome.displayTo(game, outcome, p1) must contain("You have beaten")
-      evOutcome.displayTo(game, outcome, p2) must contain("beat you")
+      evOutcome.displayTo(game, outcome, p1) must contain("You beat")
+      evOutcome.displayTo(game, outcome, p2) must contain("beat You")
       outcome.winner.get should be equalTo p1
       newGameState.moves(game).length must be equalTo 0 // TODO
       newGameState.setEventQueues(Map.empty).eventQueues.size must be equalTo 0
@@ -84,11 +84,11 @@ class PokerSpec extends Specification {
 
       val moveParser = MoveParser()
 
-      moveParser.parse("call")(p1).get must be equalTo Call(p1)
-      moveParser.parse("fold")(p1).get must be equalTo Fold(p1)
-      moveParser.parse("raise 1")(p1).get must be equalTo Raise(p1, 1)
-      moveParser.parse("raise x")(p1) must be equalTo None
-      moveParser.parse("asdf")(p1) must be equalTo None
+      moveParser.parse("call")(p1) must be equalTo Right(Call(p1))
+      moveParser.parse("fold")(p1) must be equalTo Right(Fold(p1))
+      moveParser.parse("raise 1")(p1) must be equalTo Right(Raise(p1, 1))
+      moveParser.parse("raise x")(p1) must be equalTo Left("invalid input: raise x")
+      moveParser.parse("asdf")(p1) must be equalTo Left("invalid input: asdf")
     }
   }
 
@@ -149,5 +149,28 @@ class PokerSpec extends Specification {
     }
 
   }
+
+//  "random game" should {
+//
+//    val rGame: Poker = Poker(Vector(
+//      (p1, randomMove _, (s: String) => {}),
+//      (p2, randomMove _, (s: String) => {})))
+//
+//    "produce moveStateStream" in {
+//      moveStateStream(rGame, startState(rGame)).take(3).length must be equalTo 3
+//    }
+//
+//    "play" in {
+//      val endState: PokerState = play(rGame, startState(rGame), false).get
+//      // TODO number of moves should really be 0
+//      endState.moves(rGame).length must be lessThan 5
+//    }
+//
+//    "product game stream" in {
+//      val games = gameStream(rGame, startState(rGame), false).take(2)
+//      games.length must be equalTo 2
+//    }
+//
+//  }
 
 }

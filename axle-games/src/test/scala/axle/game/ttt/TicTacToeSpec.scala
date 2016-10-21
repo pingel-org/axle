@@ -10,8 +10,8 @@ class TicTacToeSpec extends Specification {
   val o = Player("O", "Player O")
 
   val game = TicTacToe(3,
-    x, InteractiveTicTacToePlayer.move, println,
-    o, InteractiveTicTacToePlayer.move, println)
+    x, interactiveMove, println,
+    o, interactiveMove, println)
 
   def movesFrom(pps: List[(Player, Int)]): List[TicTacToeMove] =
     pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
@@ -27,8 +27,8 @@ class TicTacToeSpec extends Specification {
   "random game" should {
 
     val rGame = TicTacToe(3,
-      x, RandomTicTacToePlayer.move, (s: String) => {},
-      o, RandomTicTacToePlayer.move, (s: String) => {})
+      x, randomMove, (s: String) => {},
+      o, randomMove, (s: String) => {})
 
     "produce moveStateStream" in {
       moveStateStream(rGame, startState(rGame)).take(3).length must be equalTo 3
@@ -57,7 +57,7 @@ class TicTacToeSpec extends Specification {
     "simply return the start state" in {
       val state = startState(game)
       val move = state.moves(game).head
-      val nextState = state(move, game).get // TODO .get
+      val nextState = state(move, game)
       startFrom(game, nextState).get.moves(game).length must be equalTo 9
     }
   }
@@ -73,8 +73,8 @@ class TicTacToeSpec extends Specification {
     }
     "be defined for 4x4 game" in {
       val bigGame = TicTacToe(4,
-        x, RandomTicTacToePlayer.move, (s: String) => {},
-        o, RandomTicTacToePlayer.move, (s: String) => {})
+        x, randomMove, (s: String) => {},
+        o, randomMove, (s: String) => {})
       val startingMoves = startState(bigGame).moves(game)
       startingMoves.map(_.description).mkString(",") must contain("16")
     }
@@ -91,30 +91,29 @@ class TicTacToeSpec extends Specification {
   "interactive player" should {
     "print various messages" in {
 
-      import axle.game.ttt.InteractiveTicTacToePlayer._
-
       val firstMove = TicTacToeMove(x, 2, game.boardSize)
-      val secondState = startState(game).apply(firstMove, game).get
+      val secondState = startState(game).apply(firstMove, game)
 
-      // TODO grab resulting output via an IO Monad or some such
-      // TODO create new game where x's displayer = println
       introduceGame(x, game)
       displayEvents(game, x, List(Right(firstMove)))
       endGame(game, x, startState(game))
 
-      validateMoveInput("1", startState(game), game).right.toOption.get.position must be equalTo 1
-      validateMoveInput("14", startState(game), game) must be equalTo Left("Please enter a number between 1 and 9")
-      validateMoveInput("foo", startState(game), game) must be equalTo Left("foo is not a valid move.  Please select again")
-      validateMoveInput("2", secondState, game) must be equalTo Left("That space is occupied.")
+      val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
+
+      val m = secondState.player
+      evGame.parseMove(game, "14", m) must be equalTo Left("Please enter a number between 1 and 9")
+      evGame.parseMove(game, "foo", m) must be equalTo Left("foo is not a valid move.  Please select again")
+
+      evGame.parseMove(game, "1", m).right.flatMap(move => evGame.isValid(game, secondState, move)).right.toOption.get.position must be equalTo 1
+      evGame.parseMove(game, "2", m).right.flatMap(move => evGame.isValid(game, secondState, move)) must be equalTo Left("That space is occupied.")
     }
   }
 
   "random strategy" should {
     "make a move" in {
 
-      import axle.game.ttt.RandomTicTacToePlayer._
-
-      val m = move(startState(game), game)
+      val mover = randomMove
+      val m = mover(startState(game), game)
 
       m.position must be greaterThan 0
     }
@@ -123,13 +122,12 @@ class TicTacToeSpec extends Specification {
   "A.I. strategy" should {
     "make a move" in {
 
-      import axle.game.ttt.AITicTacToePlayer._
-
       val firstMove = TicTacToeMove(x, 2, game.boardSize)
 
-      val ai4 = mover(4)
+      import spire.implicits.DoubleAlgebra
+      val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](4, didIWinHeuristic(game))
 
-      val secondState = startState(game).apply(firstMove, game).get
+      val secondState = startState(game).apply(firstMove, game)
 
       val move = ai4(secondState, game)
 
@@ -142,8 +140,8 @@ class TicTacToeSpec extends Specification {
       val moves = movesFrom(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 6), (x, 7)))
       val (_, lastState) = scriptToLastMoveState(game, moves)
       val outcome = lastState.outcome(game).get
-      evOutcome.displayTo(game, outcome, x) must contain("You have beaten")
-      evOutcome.displayTo(game, outcome, o) must contain("beat you")
+      evOutcome.displayTo(game, outcome, x) must contain("You beat")
+      evOutcome.displayTo(game, outcome, o) must contain("beat You")
       outcome.winner.get should be equalTo x
     }
   }

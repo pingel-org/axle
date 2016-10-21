@@ -15,11 +15,15 @@ trait Game[G, S, O, M] {
 
   /**
    *
-   * default shoud be no-op:
+   * default should be no-op:
    *
    *    (s: String) => {}
    */
 
   def displayerFor(g: G, player: Player): String => Unit
+
+  def parseMove(g: G, input: String, mover: Player): Either[String, M]
+
+  def isValid(g: G, state: S, move: M): Either[String, M]
 
 }

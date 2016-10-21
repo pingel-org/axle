@@ -32,7 +32,7 @@ case class TicTacToeState(
 
     "Board:         Movement Key:\n" +
       0.until(boardSize).map(r => {
-        row(r).map(playerOpt => playerOpt.map(string(_)).getOrElse(" ")).mkString("|") +
+        row(r).map(playerOpt => playerOpt.map(game.markFor(_)).getOrElse(" ")).mkString("|") +
           "          " +
           (1 + r * boardSize).until(1 + (r + 1) * boardSize).mkString("|") // TODO rjust(keyWidth)
       }).mkString("\n")
@@ -68,7 +68,7 @@ case class TicTacToeState(
     }
   }
 
-  def apply(move: TicTacToeMove, ttt: TicTacToe)(implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): Option[TicTacToeState] =
+  def apply(move: TicTacToeMove, ttt: TicTacToe)(implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState =
     ttt.state(
       ttt.playerAfter(move.player),
       place(move.position, Some(player)),

@@ -31,11 +31,14 @@ case class TicTacToe(
   def playerAfter(player: Player): Player =
     if (player === x) o else x
 
+  def markFor(player: Player): Char =
+    if (player === x) 'X' else 'O'
+
   def state(
     player: Player,
     board: Array[Option[Player]],
-    eventQueue: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]]): Option[TicTacToeState] =
-    Some(TicTacToeState(player, board, boardSize, eventQueue))
+    eventQueue: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]]): TicTacToeState =
+    TicTacToeState(player, board, boardSize, eventQueue)
 
 }
 
@@ -62,6 +65,31 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
 
       def displayerFor(g: TicTacToe, player: Player): String => Unit =
         g.playerToDisplayer(player)
+
+      def parseMove(g: TicTacToe, input: String, mover: Player): Either[String, TicTacToeMove] = {
+        val eitherI: Either[String, Int] = try {
+          val position = input.toInt
+          if (position >= 1 && position <= g.numPositions) {
+            Right(position)
+          } else {
+            Left("Please enter a number between 1 and " + g.numPositions)
+          }
+        } catch {
+          case e: Exception => {
+            Left(input + " is not a valid move.  Please select again")
+          }
+        }
+        eitherI.right.map { position =>
+          TicTacToeMove(mover, position, g.boardSize)
+        }
+      }
+
+      def isValid(g: TicTacToe, state: TicTacToeState, move: TicTacToeMove): Either[String, TicTacToeMove] =
+        if (state(move.position).isEmpty) {
+          Right(move)
+        } else {
+          Left("That space is occupied.")
+        }
 
     }
 }

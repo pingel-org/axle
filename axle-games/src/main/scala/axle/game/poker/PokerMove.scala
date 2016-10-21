@@ -10,8 +10,6 @@ trait PokerMove {
 
   def description: String
 
-//  def displayTo(p: Player)(implicit eqp: Eq[Player], sp: Show[Player]): String =
-//    (if (player != p) player.description else "You") + " " + description + "."
 }
 
 case class Call(player: Player) extends PokerMove {

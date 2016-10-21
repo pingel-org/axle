@@ -12,7 +12,7 @@ case class Poker(
 
   val dealer = Player("D", "Dealer")
 
-  val allPlayers = (dealer, PokerPlayerDealer.move _, (s: String) => {}) +: playersStrategiesDisplayers
+  val allPlayers = (dealer, dealerMove _, (s: String) => {}) +: playersStrategiesDisplayers
 
   val playerToStrategy = allPlayers.map(tuple => tuple._1 -> tuple._2).toMap
 
@@ -83,6 +83,13 @@ Example moves:
 
       def displayerFor(g: Poker, player: Player): String => Unit =
         g.playerToDisplayer(player)
+
+      def parseMove(g: Poker, input: String, mover: Player): Either[String, PokerMove] = {
+        moveParser.parse(input)(mover)
+      }
+
+      def isValid(g: Poker, state: PokerState, move: PokerMove): Either[String, PokerMove] =
+        Right(move) // TODO
 
     }
 

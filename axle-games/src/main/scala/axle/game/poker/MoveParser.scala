@@ -17,6 +17,9 @@ case class MoveParser() extends RegexParsers {
 
   def move(player: Player): Parser[PokerMove] = raise(player) | call(player) | fold(player)
 
-  def parse(input: String)(player: Player): Option[PokerMove] = parseAll(move(player), input).map(Some(_)).getOrElse(None)
+  def parse(input: String)(player: Player): Either[String, PokerMove] = {
+    val parsed = parseAll(move(player), input)
+    parsed.map(Right.apply).getOrElse(Left("invalid input: " + input))
+  }
 
 }
