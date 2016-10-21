@@ -11,6 +11,9 @@ import spire.implicits.eqOps
 
 package object game {
 
+  def prefixedDisplay(prefix: String): String => Unit = 
+    (s: String) => s.split("\n").foreach(line => println(prefix + "> " + line))
+  
   def introMessage[G, S, O, M](g: G)(implicit evGame: Game[G, S, O, M]): String =
     evGame.introMessage(g)
 
