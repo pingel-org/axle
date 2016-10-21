@@ -88,7 +88,7 @@ Example moves:
         moveParser.parse(input)(mover)
       }
 
-      def isValid(g: Poker, state: PokerState, move: PokerMove, game: Poker): Either[String, PokerMove] =
+      def isValid(g: Poker, state: PokerState, move: PokerMove): Either[String, PokerMove] =
         Right(move) // TODO
 
     }
