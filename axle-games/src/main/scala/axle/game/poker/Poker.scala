@@ -4,7 +4,8 @@ import axle.game._
 import axle.game.cards._
 
 case class Poker(
-    playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)]) {
+    playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)],
+    dealerDisplayer: String => Unit) {
 
   val players = playersStrategiesDisplayers.map(_._1)
 
@@ -12,7 +13,7 @@ case class Poker(
 
   val dealer = Player("D", "Dealer")
 
-  val allPlayers = (dealer, randomMove, (s: String) => {}) +: playersStrategiesDisplayers
+  val allPlayers = (dealer, randomMove, dealerDisplayer) +: playersStrategiesDisplayers
 
   val playerToStrategy = allPlayers.map(tuple => tuple._1 -> tuple._2).toMap
 
