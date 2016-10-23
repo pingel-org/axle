@@ -95,22 +95,6 @@ package object game {
     display(evGame.introMessage(game))
   }
 
-  def displayEvents[G, S, O, M](
-    game: G,
-    observer: Player,
-    events: List[Either[O, M]])(
-      implicit evGame: Game[G, S, O, M],
-      evOutcome: Outcome[O],
-      evMove: Move[G, S, O, M]): Unit = {
-    val display = evGame.displayerFor(game, observer)
-    display("")
-    display(events.map(event =>
-      event match {
-        case Left(outcome) => evOutcome.displayTo(game, outcome, observer)
-        case Right(move)   => evMove.displayTo(game, ???, move, observer)
-      }).mkString("  "))
-  }
-
   def endGame[G, S, O, M](
     game: G,
     player: Player,
@@ -126,32 +110,27 @@ package object game {
 
   // From State:
 
-  def displayEvents[G, S, O, M](
-    game: G,
-    state: S)(
-      implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M],
-      evOutcome: Outcome[O],
-      evMove: Move[G, S, O, M]): S = {
-    val qs = evState.eventQueues(state)
-    evGame.players(game).foreach(p => {
-      val events = qs.get(p).getOrElse(List.empty)
-      displayEvents(game, p, events)
-    })
-    evState.setEventQueues(state, qs ++ evGame.players(game).map(p => (p -> Nil)))
-  }
-
-  def broadcast[G, S, O, M](
+  def broadcastMove[G, S, O, M](
     game: G,
     state: S,
-    event: Either[O, M])(
+    move: M)(
       implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): S = {
-    val qs = evState.eventQueues(state)
-    evState.setEventQueues(state, evGame.players(game).map(p => {
-      (p -> (qs.get(p).getOrElse(Nil) ++ List(event)))
-    }).toMap)
-  }
+      evState: State[G, S, O, M],
+      evMove: Move[G, S, O, M]): Unit =
+    evGame.players(game) foreach { observer =>
+      evMove.displayTo(game, evState.mover(state), move, observer)
+    }
+
+  def broadcastOutcome[G, S, O, M](
+    game: G,
+    state: S,
+    outcome: O)(
+      implicit evGame: Game[G, S, O, M],
+      evState: State[G, S, O, M],
+      evOutcome: Outcome[O]): Unit =
+    evGame.players(game) foreach { observer =>
+      evOutcome.displayTo(game, outcome, observer)
+    }
 
   // From Game:
 
@@ -217,15 +196,14 @@ package object game {
     if (evState.outcome(s0, game).isDefined) {
       empty
     } else {
-      val s1 = displayEvents(game, s0)
-      val mover = evState.mover(s1)
+      val mover = evState.mover(s0)
       val display = evGame.displayerFor(game, mover)
-      display(evState.displayTo(s1, mover, game))
+      display(evState.displayTo(s0, mover, game))
       val strategy = evGame.strategyFor(game, mover)
-      val move = strategy.apply(s1, game)
-      val s2 = evState.applyMove(s1, game, move)
-      val s3 = broadcast(game, s2, Right(move))
-      cons((move, s3), moveStateStream(game, s3))
+      val move = strategy.apply(s0, game)
+      val s1 = evState.applyMove(s0, game, move)
+      broadcastMove(game, s1, move)
+      cons((move, s1), moveStateStream(game, s1))
     }
 
   def scriptedMoveStateStream[G, S, O, M](
@@ -263,13 +241,13 @@ package object game {
       }
     }
     moveStateStream(game, start).lastOption.map({
-      case (lastMove, s0) => {
-        val s1 = evState.outcome(s0, game).map(o => broadcast(game, s0, Left(o))).getOrElse(s0)
-        val s2 = displayEvents(game, s1)
+      case (lastMove, s) => {
+        val outcome = evState.outcome(s, game).get // TODO .get
+        broadcastOutcome(game, s, outcome)
         evGame.players(game) foreach { player =>
-          endGame(game, player, s2)
+          endGame(game, player, s)
         }
-        s2
+        s
       }
     })
   }
@@ -287,7 +265,6 @@ package object game {
         cons(end, gameStream(game, newStart, false)))
     }).getOrElse(empty)
 
-  // Note: start default was game.startState
   def playContinuously[G, S, O, M](
     game: G,
     start: S)(

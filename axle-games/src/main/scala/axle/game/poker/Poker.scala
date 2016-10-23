@@ -52,8 +52,7 @@ Example moves:
           g.players.toSet, // stillIn
           Map(), // inFors
           g.players.map(player => (player, 100)).toMap, // piles
-          None,
-          Map())
+          None)
 
       def startFrom(g: Poker, s: PokerState): Option[PokerState] = {
 
@@ -69,8 +68,7 @@ Example moves:
             s.stillIn,
             Map(),
             s.piles,
-            None,
-            Map()))
+            None))
         } else {
           None
         }

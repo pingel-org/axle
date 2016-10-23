@@ -17,8 +17,7 @@ case class PokerState(
     stillIn: Set[Player],
     inFors: Map[Player, Int],
     piles: Map[Player, Int],
-    _outcome: Option[PokerOutcome],
-    _eventQueues: Map[Player, List[Either[PokerOutcome, PokerMove]]]) {
+    _outcome: Option[PokerOutcome]) {
 
   val bigBlind = 2 // the "minimum bet"
   val smallBlind = bigBlind / 2
@@ -123,8 +122,7 @@ case class PokerState(
         stillIn,
         Map(smallBlindPlayer -> smallBlind, bigBlindPlayer -> bigBlind),
         piles + (smallBlindPlayer -> (piles(smallBlindPlayer) - smallBlind)) + (bigBlindPlayer -> (piles(bigBlindPlayer) - bigBlind)),
-        None,
-        _eventQueues)
+        None)
     }
 
     case Raise(amount) => {
@@ -141,8 +139,7 @@ case class PokerState(
         stillIn,
         inFors + (mover -> (currentBet + amount)),
         piles + (mover -> (piles(mover) - diff)),
-        None,
-        _eventQueues)
+        None)
     }
 
     case Call() => {
@@ -159,37 +156,32 @@ case class PokerState(
         stillIn,
         inFors + (mover -> currentBet),
         piles + (mover -> (piles(mover) - diff)),
-        None,
-        _eventQueues)
+        None)
     }
 
     case Fold() =>
       PokerState(
         _.betterAfter(mover, game).getOrElse(game.dealer),
         deck, shared, numShown, hands, pot, currentBet, stillIn - mover, inFors - mover, piles,
-        None,
-        _eventQueues)
+        None)
 
     case Flop() =>
       PokerState(
         _.firstBetter(game),
         deck, shared, 3, hands, pot, 0, stillIn, Map(), piles,
-        None,
-        _eventQueues)
+        None)
 
     case Turn() =>
       PokerState(
         _.firstBetter(game),
         deck, shared, 4, hands, pot, 0, stillIn, Map(), piles,
-        None,
-        _eventQueues)
+        None)
 
     case River() =>
       PokerState(
         _.firstBetter(game),
         deck, shared, 5, hands, pot, 0, stillIn, Map(), piles,
-        None,
-        _eventQueues)
+        None)
 
     case Payout() => {
 
@@ -220,26 +212,9 @@ case class PokerState(
         newStillIn,
         Map(),
         newPiles,
-        Some(PokerOutcome(Some(winner), handOpt)),
-        _eventQueues)
+        Some(PokerOutcome(Some(winner), handOpt)))
     }
 
   }
-
-  def eventQueues: Map[Player, List[Either[PokerOutcome, PokerMove]]] = _eventQueues
-
-  def setEventQueues(qs: Map[Player, List[Either[PokerOutcome, PokerMove]]]): PokerState = PokerState(
-    moverFn,
-    deck,
-    shared,
-    numShown,
-    hands,
-    pot,
-    currentBet,
-    stillIn,
-    inFors,
-    piles,
-    _outcome,
-    qs)
 
 }

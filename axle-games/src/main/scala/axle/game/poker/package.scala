@@ -18,9 +18,6 @@ package object poker {
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
         s.displayTo(observer, game)
 
-      def eventQueues(s: PokerState): Map[Player, List[Either[PokerOutcome, PokerMove]]] =
-        s.eventQueues
-
       def mover(s: PokerState): Player =
         s.mover
 
@@ -29,9 +26,6 @@ package object poker {
 
       def outcome(s: PokerState, game: Poker): Option[PokerOutcome] =
         s.outcome(game)
-
-      def setEventQueues(s: PokerState, qs: Map[Player, List[Either[PokerOutcome, PokerMove]]]): PokerState =
-        s.setEventQueues(qs)
     }
 
   implicit val evOutcome: Outcome[PokerOutcome] =

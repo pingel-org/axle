@@ -12,12 +12,12 @@ trait Outcome[O] {
   def displayTo[G, S, M](
     game: G,
     outcome: O,
-    player: Player)(
+    observer: Player)(
       implicit evGame: Game[G, S, O, M],
       eqp: Eq[Player],
       sp: Show[Player]): String =
     winner(outcome) map { wp =>
-      s"${wp.referenceFor(player)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(player)).toList.mkString(" and ") + "!"
+      s"${wp.referenceFor(observer)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(observer)).toList.mkString(" and ") + "!"
     } getOrElse ("The game was a draw.")
 
 }

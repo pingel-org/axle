@@ -16,9 +16,6 @@ package object ttt {
         implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): String =
         s.displayTo(viewer, game)
 
-      def eventQueues(s: TicTacToeState): Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]] =
-        s.eventQueues
-
       def mover(s: TicTacToeState): Player =
         s.player
 
@@ -27,9 +24,6 @@ package object ttt {
 
       def outcome(s: TicTacToeState, game: TicTacToe): Option[TicTacToeOutcome] =
         s.outcome(game)
-
-      def setEventQueues(s: TicTacToeState, qs: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]]): TicTacToeState =
-        s.setEventQueues(qs)
     }
 
   implicit val evOutcome: Outcome[TicTacToeOutcome] =

@@ -7,8 +7,7 @@ import spire.implicits._
 case class TicTacToeState(
     player: Player,
     board: Array[Option[Player]],
-    boardSize: Int,
-    _eventQueues: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]] = Map()) {
+    boardSize: Int) {
 
   val numPositions = board.length
 
@@ -71,12 +70,6 @@ case class TicTacToeState(
   def apply(move: TicTacToeMove, ttt: TicTacToe)(implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState =
     ttt.state(
       ttt.playerAfter(move.player),
-      place(move.position, Some(player)),
-      _eventQueues)
-
-  def eventQueues: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]] = _eventQueues
-
-  def setEventQueues(qs: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]]): TicTacToeState =
-    TicTacToeState(player, board, boardSize, qs)
+      place(move.position, Some(player)))
 
 }

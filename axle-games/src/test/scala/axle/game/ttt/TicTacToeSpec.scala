@@ -80,14 +80,6 @@ class TicTacToeSpec extends Specification {
     }
   }
 
-  "event queues" should {
-    "be two-fold" in {
-      val move = startState(game).moves(game).head
-      val newState = broadcast(game, startState(game), Right(move))
-      newState.eventQueues.size must be equalTo 2
-    }
-  }
-
   "interactive player" should {
     "print various messages" in {
 
@@ -95,7 +87,7 @@ class TicTacToeSpec extends Specification {
       val secondState = startState(game).apply(firstMove, game)
 
       introduceGame(x, game)
-      displayEvents(game, x, List(Right(firstMove)))
+      broadcastMove(game, startState(game), firstMove)
       endGame(game, x, startState(game))
 
       val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]

@@ -17,8 +17,4 @@ trait State[G, S, O, M] {
 
   def moves(s: S, game: G): Seq[M]
 
-  def eventQueues(s: S): Map[Player, List[Either[O, M]]]
-
-  def setEventQueues(s: S, qs: Map[Player, List[Either[O, M]]]): S
-
 }
