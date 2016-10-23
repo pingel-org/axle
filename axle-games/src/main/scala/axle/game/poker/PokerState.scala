@@ -4,6 +4,7 @@ import axle._
 import axle.game.cards._
 import axle.game._
 import spire.implicits._
+import spire.math.min
 import spire.compat.ordering
 
 case class PokerState(
@@ -78,13 +79,21 @@ case class PokerState(
         case 5 => Payout() :: Nil
       }
     } else {
-      val maxRaise = piles(mover) + inFors.get(mover).getOrElse(0) - currentBet
+      val maxPersonalRaise = piles(mover) + inFors.get(mover).getOrElse(0) - currentBet
 
-      // TODO this is the biggest problem with the implementation.  This restriction
-      // guarantees that the player with the most money can force others to fold.
+      val maxTableRaise = game.players.map(p => piles(p) + inFors.get(p).getOrElse(0)).min - currentBet
+
+      assert(maxTableRaise <= maxPersonalRaise)
+      // This policy is a workaround for not supporting multiple pots, which are required when
+      // a player with a small "pile" "goes all in", but other still-in players have "piles" large
+      // enough that allow them to raise the bet beyond that level.
+      val maxRaise = maxTableRaise
+
+      // given the above policy, this should always be true:
       val canCall = currentBet - inFors.get(mover).getOrElse(0) <= piles(mover)
+      assert(canCall)
 
-      Fold() :: (if (canCall) (Call() :: Nil) else Nil) ++ (0 to maxRaise).map(Raise.apply).toList
+      Fold() :: (if (canCall) (Call() :: Nil) else Nil) ++ (1 to maxRaise).map(Raise.apply).toList
     }
 
   def outcome(game: Poker): Option[PokerOutcome] = _outcome
