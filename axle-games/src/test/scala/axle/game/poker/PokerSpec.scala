@@ -54,7 +54,7 @@ class PokerSpec extends Specification {
     }
 
     "terminate in a state with no further moves" in {
-      val endState = play(rGame).get
+      val endState = play(rGame)
       endState.moves(rGame).length must be equalTo 0
     }
 

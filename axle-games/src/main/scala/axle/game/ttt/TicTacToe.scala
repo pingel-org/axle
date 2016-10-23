@@ -37,7 +37,7 @@ case class TicTacToe(
   def state(
     player: Player,
     board: Array[Option[Player]]): TicTacToeState =
-    TicTacToeState(player, board, boardSize)
+    TicTacToeState(Some(player), board, boardSize)
 
 }
 
@@ -51,7 +51,7 @@ Tic Tac Toe
 Moves are numbers 1-%s.""".format(ttt.numPositions)
 
       def startState(ttt: TicTacToe): TicTacToeState =
-        TicTacToeState(ttt.x, ttt.startBoard, ttt.boardSize)
+        TicTacToeState(Some(ttt.x), ttt.startBoard, ttt.boardSize)
 
       def startFrom(ttt: TicTacToe, s: TicTacToeState): Option[TicTacToeState] =
         Some(startState(ttt))

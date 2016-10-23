@@ -42,7 +42,7 @@ Example moves:
 
       def startState(g: Poker): PokerState =
         PokerState(
-          state => g.dealer,
+          state => Some(g.dealer),
           Deck(),
           Vector(),
           0, // # of shared cards showing
@@ -58,7 +58,7 @@ Example moves:
 
         if (s.stillIn.size > 0) {
           Some(PokerState(
-            state => g.dealer,
+            state => Some(g.dealer),
             Deck(),
             Vector(),
             0,

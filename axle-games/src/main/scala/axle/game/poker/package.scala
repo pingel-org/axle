@@ -18,8 +18,8 @@ package object poker {
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
         s.displayTo(observer, game)
 
-      def mover(s: PokerState): Player =
-        s.mover
+      def mover(s: PokerState): Option[Player] =
+        s.moverOpt
 
       def moves(s: PokerState, game: Poker): Seq[PokerMove] =
         s.moves(game)

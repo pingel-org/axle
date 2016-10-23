@@ -5,7 +5,7 @@ import axle.game._
 import spire.implicits._
 
 case class TicTacToeState(
-    player: Player,
+    player: Option[Player],
     board: Array[Option[Player]],
     boardSize: Int) {
 
@@ -54,7 +54,8 @@ case class TicTacToeState(
 
   def openPositions(ttt: TicTacToe): IndexedSeq[Int] = (1 to numPositions).filter(this(_).isEmpty)
 
-  def moves(ttt: TicTacToe): Seq[TicTacToeMove] = openPositions(ttt).map(TicTacToeMove(player, _, boardSize))
+  def moves(ttt: TicTacToe): Seq[TicTacToeMove] =
+    player.map { p => openPositions(ttt).map(TicTacToeMove(p, _, boardSize)) } getOrElse (List.empty)
 
   def outcome(ttt: TicTacToe): Option[TicTacToeOutcome] = {
     val winner = ttt.players.find(hasWon)
@@ -70,6 +71,6 @@ case class TicTacToeState(
   def apply(move: TicTacToeMove, ttt: TicTacToe)(implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState =
     ttt.state(
       ttt.playerAfter(move.player),
-      place(move.position, Some(player)))
+      place(move.position, player))
 
 }

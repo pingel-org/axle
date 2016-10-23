@@ -35,9 +35,8 @@ class TicTacToeSpec extends Specification {
     }
 
     "play" in {
-      val endState: TicTacToeState = play(rGame, startState(rGame), false).get
-      // TODO number of moves should really be 0
-      endState.moves(rGame).length must be lessThan 5
+      val endState = play(rGame, startState(rGame), false)
+      endState.moves(rGame).length must be lessThan 0
     }
 
     "product game stream" in {
@@ -85,10 +84,6 @@ class TicTacToeSpec extends Specification {
 
       val firstMove = TicTacToeMove(x, 2, game.boardSize)
       val secondState = startState(game).apply(firstMove, game)
-
-      introduceGame(x, game)
-      // TODO test display of move and outcome
-      endGame(game, x, startState(game))
 
       val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
 

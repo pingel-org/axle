@@ -16,7 +16,7 @@ package object ttt {
         implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): String =
         s.displayTo(viewer, game)
 
-      def mover(s: TicTacToeState): Player =
+      def mover(s: TicTacToeState): Option[Player] =
         s.player
 
       def moves(s: TicTacToeState, game: TicTacToe): Seq[TicTacToeMove] =
