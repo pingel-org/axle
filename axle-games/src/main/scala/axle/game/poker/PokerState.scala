@@ -84,7 +84,7 @@ case class PokerState(
       // guarantees that the player with the most money can force others to fold.
       val canCall = currentBet - inFors.get(mover).getOrElse(0) <= piles(mover)
 
-      Fold() :: (if (canCall) (Call() :: Nil) else Nil) ++ (0 to maxRaise).map(Raise(_)).toList
+      Fold() :: (if (canCall) (Call() :: Nil) else Nil) ++ (0 to maxRaise).map(Raise.apply).toList
     }
 
   def outcome(game: Poker): Option[PokerOutcome] = _outcome
@@ -192,7 +192,7 @@ case class PokerState(
           // TODO: handle tie
           val (winner, hand) = hands
             .filter({ case (p, cards) => stillIn.contains(p) }).toList
-            .map({ case (p, cards) => (p, (shared ++ cards).combinations(5).map(PokerHand(_)).toList.max) })
+            .map({ case (p, cards) => (p, (shared ++ cards).combinations(5).map(PokerHand.apply).toList.max) })
             .maxBy(_._2)
           (winner, Some(hand))
         }
