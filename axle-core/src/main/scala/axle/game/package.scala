@@ -41,7 +41,9 @@ package object game {
 
     val stream = userInputStream(display, axle.getLine).
       map(input => {
-        evGame.parseMove(game, input, evState.mover(state)).right.flatMap(move => {
+        val parsed = evGame.parseMove(game, input, evState.mover(state))
+        parsed.left.foreach(display)
+        parsed.right.flatMap(move => {
           val validated = evGame.isValid(game, state, move)
           validated.left.foreach(display)
           validated
