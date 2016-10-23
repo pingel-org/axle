@@ -5,8 +5,6 @@ import axle.game._
 
 class PokerSpec extends Specification {
 
-  val dropOutput = (s: String) => {}
-
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
 
@@ -30,7 +28,7 @@ class PokerSpec extends Specification {
         Turn(), Call(), Call(),
         River(), Call(), Fold(),
         Payout())
-      val (_, lastState) = scriptToLastMoveState(game, moves)
+      val lastState: PokerState = ???
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get
       // TODO these messages should include amounts

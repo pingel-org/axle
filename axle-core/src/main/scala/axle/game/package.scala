@@ -12,6 +12,8 @@ import util.Random.nextInt
 
 package object game {
 
+  val dropOutput = (s: String) => {}
+
   def didIWinHeuristic[G, S, O, M](game: G)(
     implicit evGame: Game[G, S, O, M],
     evOutcome: Outcome[O],
@@ -32,6 +34,11 @@ package object game {
       move
     }
 
+  def hardCodedStrategy[G, S, O, M](
+    input: (S, G) => String)(
+      implicit evGame: Game[G, S, O, M]): (S, G) => M =
+    (state: S, game: G) => evGame.parseMove(game, input(state, game)).right.toOption.get
+
   def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
     display("Enter move: ")
     val command = read()
@@ -49,7 +56,7 @@ package object game {
 
     val stream = userInputStream(display, axle.getLine).
       map(input => {
-        val parsed = evGame.parseMove(game, input, mover)
+        val parsed = evGame.parseMove(game, input)
         parsed.left.foreach(display)
         parsed.right.flatMap(move => {
           val validated = evGame.isValid(game, state, move)
