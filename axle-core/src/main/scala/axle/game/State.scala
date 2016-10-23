@@ -6,17 +6,15 @@ trait State[G, S, O, M] {
 
   def applyMove(
     state: S,
-    move: M,
-    game: G)(
+    game: G,
+    move: M)(
       implicit evGame: Game[G, S, O, M]): S
 
   def displayTo(state: S, viewer: Player, game: G)(
     implicit evGame: Game[G, S, O, M]): String
 
-  // previously had game as argument
   def outcome(s: S, game: G): Option[O]
 
-  // previously had game as argument
   def moves(s: S, game: G): Seq[M]
 
   def eventQueues(s: S): Map[Player, List[Either[O, M]]]

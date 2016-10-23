@@ -67,7 +67,7 @@ class TicTacToeSpec extends Specification {
 
       val startingMoves = startState(game).moves(game)
 
-      evMove.displayTo(game, startingMoves.head, o) must contain("put an")
+      evMove.displayTo(game, x, startingMoves.head, o) must contain("put an")
       startingMoves.length must be equalTo 9
       startingMoves.map(_.description).mkString(",") must contain("upper")
     }

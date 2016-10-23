@@ -10,13 +10,13 @@ class PokerMoveParserSpec extends Specification {
 
   "move parser" should {
     "parse well-formed move strings" in {
-      moveParser.parse("call")(p1) must be equalTo Right(Call(p1))
-      moveParser.parse("fold")(p1) must be equalTo Right(Fold(p1))
-      moveParser.parse("raise 1")(p1) must be equalTo Right(Raise(p1, 1))
+      moveParser.parse("call") must be equalTo Right(Call())
+      moveParser.parse("fold") must be equalTo Right(Fold())
+      moveParser.parse("raise 1") must be equalTo Right(Raise(1))
     }
     "reject ill-formed move strings" in {
-      moveParser.parse("raise x")(p1) must be equalTo Left("invalid input: raise x")
-      moveParser.parse("asdf")(p1) must be equalTo Left("invalid input: asdf")
+      moveParser.parse("raise x") must be equalTo Left("invalid input: raise x")
+      moveParser.parse("asdf") must be equalTo Left("invalid input: asdf")
     }
   }
 

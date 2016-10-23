@@ -7,8 +7,9 @@ trait Move[G, S, O, M] {
 
   def displayTo(
     game: G,
+    mover: Player,
     move: M,
-    player: Player)(
+    observer: Player)(
       implicit evGame: Game[G, S, O, M],
       eqp: Eq[Player],
       sp: Show[Player]): String

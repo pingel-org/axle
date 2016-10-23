@@ -10,13 +10,13 @@ package object poker {
   implicit val evState: State[Poker, PokerState, PokerOutcome, PokerMove] =
     new State[Poker, PokerState, PokerOutcome, PokerMove] {
 
-      def applyMove(s: PokerState, move: PokerMove, game: Poker)(
+    def applyMove(s: PokerState, game: Poker, move: PokerMove)(
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerState =
-        s(move, game)
+        s(game, move)
 
-      def displayTo(s: PokerState, viewer: Player, game: Poker)(
+      def displayTo(s: PokerState, observer: Player, game: Poker)(
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
-        s.displayTo(viewer, game)
+        s.displayTo(observer, game)
 
       def eventQueues(s: PokerState): Map[Player, List[Either[PokerOutcome, PokerMove]]] =
         s.eventQueues
@@ -43,11 +43,9 @@ package object poker {
   implicit val evMove: Move[Poker, PokerState, PokerOutcome, PokerMove] =
     new Move[Poker, PokerState, PokerOutcome, PokerMove] {
 
-      def displayTo(game: Poker, move: PokerMove, p: Player)(
+      def displayTo(game: Poker, mover: Player, move: PokerMove, observer: Player)(
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove], eqp: Eq[Player], sp: Show[Player]): String =
-        move.player.referenceFor(p) + " " + move.description + "."
-
-      def player(m: PokerMove): Player = m.player
+        mover.referenceFor(observer) + " " + move.description + "."
     }
 
 }

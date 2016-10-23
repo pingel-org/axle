@@ -70,13 +70,13 @@ case class PokerState(
       numShown match {
         case 0 =>
           if (inFors.size === 0) {
-            Deal(game.dealer) :: Nil
+            Deal() :: Nil
           } else {
-            Flop(game.dealer) :: Nil
+            Flop() :: Nil
           }
-        case 3 => Turn(game.dealer) :: Nil
-        case 4 => River(game.dealer) :: Nil
-        case 5 => Payout(game.dealer) :: Nil
+        case 3 => Turn() :: Nil
+        case 4 => River() :: Nil
+        case 5 => Payout() :: Nil
       }
     } else {
       val maxRaise = piles(mover) + inFors.get(mover).getOrElse(0) - currentBet
@@ -85,7 +85,7 @@ case class PokerState(
       // guarantees that the player with the most money can force others to fold.
       val canCall = currentBet - inFors.get(mover).getOrElse(0) <= piles(mover)
 
-      Fold(mover) :: (if (canCall) (Call(mover) :: Nil) else Nil) ++ (0 to maxRaise).map(Raise(mover, _)).toList
+      Fold() :: (if (canCall) (Call() :: Nil) else Nil) ++ (0 to maxRaise).map(Raise(_)).toList
     }
 
   def outcome(game: Poker): Option[PokerOutcome] = _outcome
@@ -93,9 +93,9 @@ case class PokerState(
   // TODO: is there a limit to the number of raises that can occur?
   // TODO: how to handle player exhausting pile during game?
 
-  def apply(move: PokerMove, game: Poker): PokerState = move match {
+  def apply(game: Poker, move: PokerMove): PokerState = move match {
 
-    case Deal(dealer) => {
+    case Deal() => {
       // TODO clean up these range calculations
       val cards = Vector() ++ deck.cards
       val hands = game.players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
@@ -127,11 +127,11 @@ case class PokerState(
         _eventQueues)
     }
 
-    case Raise(player, amount) => {
-      val diff = currentBet + amount - inFors.get(player).getOrElse(0)
-      assert(piles(player) - diff >= 0)
+    case Raise(amount) => {
+      val diff = currentBet + amount - inFors.get(mover).getOrElse(0)
+      assert(piles(mover) - diff >= 0)
       PokerState(
-        _.betterAfter(player, game).getOrElse(game.dealer),
+        _.betterAfter(mover, game).getOrElse(game.dealer),
         deck,
         shared,
         numShown,
@@ -139,17 +139,17 @@ case class PokerState(
         pot + diff,
         currentBet + amount,
         stillIn,
-        inFors + (player -> (currentBet + amount)),
-        piles + (player -> (piles(player) - diff)),
+        inFors + (mover -> (currentBet + amount)),
+        piles + (mover -> (piles(mover) - diff)),
         None,
         _eventQueues)
     }
 
-    case Call(player) => {
-      val diff = currentBet - inFors.get(player).getOrElse(0)
-      assert(piles(player) - diff >= 0)
+    case Call() => {
+      val diff = currentBet - inFors.get(mover).getOrElse(0)
+      assert(piles(mover) - diff >= 0)
       PokerState(
-        _.betterAfter(player, game).getOrElse(game.dealer),
+        _.betterAfter(mover, game).getOrElse(game.dealer),
         deck,
         shared,
         numShown,
@@ -157,41 +157,41 @@ case class PokerState(
         pot + diff,
         currentBet,
         stillIn,
-        inFors + (player -> currentBet),
-        piles + (player -> (piles(player) - diff)),
+        inFors + (mover -> currentBet),
+        piles + (mover -> (piles(mover) - diff)),
         None,
         _eventQueues)
     }
 
-    case Fold(player) =>
+    case Fold() =>
       PokerState(
-        _.betterAfter(player, game).getOrElse(game.dealer),
-        deck, shared, numShown, hands, pot, currentBet, stillIn - player, inFors - player, piles,
+        _.betterAfter(mover, game).getOrElse(game.dealer),
+        deck, shared, numShown, hands, pot, currentBet, stillIn - mover, inFors - mover, piles,
         None,
         _eventQueues)
 
-    case Flop(dealer) =>
+    case Flop() =>
       PokerState(
         _.firstBetter(game),
         deck, shared, 3, hands, pot, 0, stillIn, Map(), piles,
         None,
         _eventQueues)
 
-    case Turn(dealer) =>
+    case Turn() =>
       PokerState(
         _.firstBetter(game),
         deck, shared, 4, hands, pot, 0, stillIn, Map(), piles,
         None,
         _eventQueues)
 
-    case River(dealer) =>
+    case River() =>
       PokerState(
         _.firstBetter(game),
         deck, shared, 5, hands, pot, 0, stillIn, Map(), piles,
         None,
         _eventQueues)
 
-    case Payout(dealer) => {
+    case Payout() => {
 
       val (winner, handOpt) =
         if (stillIn.size === 1) {

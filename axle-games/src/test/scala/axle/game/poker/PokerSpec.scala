@@ -15,8 +15,6 @@ class PokerSpec extends Specification {
     (p2, interactiveMove, println)),
     println)
 
-  import game.dealer
-
   "start state" should {
     "display something" in {
       startState(game).displayTo(p1, game) must contain("Current bet: 0")
@@ -27,11 +25,11 @@ class PokerSpec extends Specification {
     "be a victory for p1" in {
       val moves: List[PokerMove] = List(
         // small and big blinds are built in
-        Deal(dealer), Call(p1), Call(p2),
-        Flop(dealer), Raise(p1, 1), Raise(p2, 1), Call(p1),
-        Turn(dealer), Call(p1), Call(p2),
-        River(dealer), Call(p1), Fold(p2),
-        Payout(dealer))
+        Deal(), Call(), Call(),
+        Flop(), Raise(1), Raise(1), Call(),
+        Turn(), Call(), Call(),
+        River(), Call(), Fold(),
+        Payout())
       val (_, lastState) = scriptToLastMoveState(game, moves)
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get

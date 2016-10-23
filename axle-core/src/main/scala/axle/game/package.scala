@@ -97,17 +97,17 @@ package object game {
 
   def displayEvents[G, S, O, M](
     game: G,
-    player: Player,
+    observer: Player,
     events: List[Either[O, M]])(
       implicit evGame: Game[G, S, O, M],
       evOutcome: Outcome[O],
       evMove: Move[G, S, O, M]): Unit = {
-    val display = evGame.displayerFor(game, player)
+    val display = evGame.displayerFor(game, observer)
     display("")
     display(events.map(event =>
       event match {
-        case Left(outcome) => evOutcome.displayTo(game, outcome, player)
-        case Right(move)   => evMove.displayTo(game, move, player)
+        case Left(outcome) => evOutcome.displayTo(game, outcome, observer)
+        case Right(move)   => evMove.displayTo(game, ???, move, observer)
       }).mkString("  "))
   }
 
@@ -166,7 +166,7 @@ package object game {
       (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
     } else {
       val moveValue = evState.moves(state, game).map(move => {
-        val newState = evState.applyMove(state, move, game)
+        val newState = evState.applyMove(state, game, move)
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
       val bestValue = moveValue.map(mcr => (mcr._3)(evState.mover(state))).max
@@ -223,7 +223,7 @@ package object game {
       display(evState.displayTo(s1, mover, game))
       val strategy = evGame.strategyFor(game, mover)
       val move = strategy.apply(s1, game)
-      val s2 = evState.applyMove(s1, move, game)
+      val s2 = evState.applyMove(s1, game, move)
       val s3 = broadcast(game, s2, Right(move))
       cons((move, s3), moveStateStream(game, s3))
     }
@@ -238,7 +238,7 @@ package object game {
       empty
     } else {
       val move = moveIt.next
-      val nextState = evState.applyMove(state, move, game)
+      val nextState = evState.applyMove(state, game, move)
       cons((move, nextState), scriptedMoveStateStream(game, nextState, moveIt))
     }
 

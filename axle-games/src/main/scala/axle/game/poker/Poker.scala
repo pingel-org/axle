@@ -86,7 +86,7 @@ Example moves:
         g.playerToDisplayer(player)
 
       def parseMove(g: Poker, input: String, mover: Player): Either[String, PokerMove] = {
-        moveParser.parse(input)(mover)
+        moveParser.parse(input)
       }
 
       // TODO: this implementation works, but ideally there is more information in the error

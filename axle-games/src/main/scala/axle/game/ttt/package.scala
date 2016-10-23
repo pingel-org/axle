@@ -8,7 +8,7 @@ package object ttt {
   implicit val evState: State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
     new State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
 
-      def applyMove(s: TicTacToeState, move: TicTacToeMove, game: TicTacToe)(
+      def applyMove(s: TicTacToeState, game: TicTacToe, move: TicTacToeMove)(
         implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState =
         s(move, game)
 
@@ -41,13 +41,11 @@ package object ttt {
   implicit val evMove: Move[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
     new Move[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
 
-      def displayTo(game: TicTacToe, move: TicTacToeMove, p: Player)(
+      def displayTo(game: TicTacToe, mover: Player, move: TicTacToeMove, observer: Player)(
         implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove], eqp: Eq[Player], sp: Show[Player]): String =
-        move.player.referenceFor(p) +
-          " put an " + game.markFor(move.player) +
+        mover.referenceFor(observer) +
+          " put an " + game.markFor(mover) +
           " in the " + move.description + "."
-
-      def player(m: TicTacToeMove): Player = m.player
     }
 
 }
