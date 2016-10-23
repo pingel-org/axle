@@ -87,12 +87,12 @@ class TicTacToeSpec extends Specification {
       val secondState = startState(game).apply(firstMove, game)
 
       introduceGame(x, game)
-      broadcastMove(game, startState(game), firstMove)
+      // TODO test display of move and outcome
       endGame(game, x, startState(game))
 
       val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
 
-      val m = secondState.player
+      val m = secondState.player.get
       evGame.parseMove(game, "14", m) must be equalTo Left("Please enter a number between 1 and 9")
       evGame.parseMove(game, "foo", m) must be equalTo Left("foo is not a valid move.  Please select again")
 

@@ -2,7 +2,7 @@ package axle.game
 
 trait State[G, S, O, M] {
 
-  def mover(s: S): Player
+  def mover(s: S): Option[Player]
 
   def applyMove(
     state: S,
