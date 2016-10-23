@@ -242,7 +242,15 @@ package object game {
       cons((move, nextState), scriptedMoveStateStream(game, nextState, moveIt))
     }
 
-  // note default start was game.startState
+  def play[G, S, O, M](
+    game: G,
+    intro: Boolean = true)(
+      implicit evGame: Game[G, S, O, M],
+      evState: State[G, S, O, M],
+      evOutcome: Outcome[O],
+      evMove: Move[G, S, O, M]): Option[S] =
+    play(game, startState(game), intro)
+
   def play[G, S, O, M](
     game: G,
     start: S,
