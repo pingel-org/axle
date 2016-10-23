@@ -12,7 +12,7 @@ case class Poker(
 
   val dealer = Player("D", "Dealer")
 
-  val allPlayers = (dealer, dealerMove _, (s: String) => {}) +: playersStrategiesDisplayers
+  val allPlayers = (dealer, randomMove, (s: String) => {}) +: playersStrategiesDisplayers
 
   val playerToStrategy = allPlayers.map(tuple => tuple._1 -> tuple._2).toMap
 
@@ -33,7 +33,7 @@ Texas Hold Em Poker
 Example moves:
 
   check
-  raise 1.0
+  raise 1
   call
   fold
 
@@ -88,8 +88,14 @@ Example moves:
         moveParser.parse(input)(mover)
       }
 
+      // TODO: this implementation works, but ideally there is more information in the error
+      // string about why the move is invalid (eg player raised more than he had)
       def isValid(g: Poker, state: PokerState, move: PokerMove): Either[String, PokerMove] =
-        Right(move) // TODO
+        if (state.moves(g).contains(move)) {
+          Right(move)
+        } else {
+          Left("invalid move")
+        }
 
     }
 

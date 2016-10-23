@@ -65,7 +65,28 @@ case class PokerState(
             ", $" + piles.get(p).map(amt => string(amt)).getOrElse("--") + " remaining"
       }).mkString("\n")
 
-  def moves(game: Poker): Seq[PokerMove] = List()
+  def moves(game: Poker): Seq[PokerMove] =
+    if (mover === game.dealer) {
+      numShown match {
+        case 0 =>
+          if (inFors.size === 0) {
+            Deal(game.dealer) :: Nil
+          } else {
+            Flop(game.dealer) :: Nil
+          }
+        case 3 => Turn(game.dealer) :: Nil
+        case 4 => River(game.dealer) :: Nil
+        case 5 => Payout(game.dealer) :: Nil
+      }
+    } else {
+      val maxRaise = piles(mover) + inFors.get(mover).getOrElse(0) - currentBet
+
+      // TODO this is the biggest problem with the implementation.  This restriction
+      // guarantees that the player with the most money can force others to fold.
+      val canCall = currentBet - inFors.get(mover).getOrElse(0) <= piles(mover)
+
+      Fold(mover) :: (if (canCall) (Call(mover) :: Nil) else Nil) ++ (0 to maxRaise).map(Raise(mover, _)).toList
+    }
 
   def outcome(game: Poker): Option[PokerOutcome] = _outcome
 
