@@ -1,9 +1,8 @@
 package axle.game.ttt
 
-import axle.game._
 import axle.string
 
-case class TicTacToeMove(player: Player, position: Int, boardSize: Int) {
+case class TicTacToeMove(position: Int, boardSize: Int) {
 
   def description: String = boardSize match {
     case 3 => position match {

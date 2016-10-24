@@ -83,9 +83,8 @@ Example moves:
       def displayerFor(g: Poker, player: Player): String => Unit =
         g.playerToDisplayer(player)
 
-      def parseMove(g: Poker, input: String, mover: Player): Either[String, PokerMove] = {
+      def parseMove(g: Poker, input: String): Either[String, PokerMove] =
         moveParser.parse(input)
-      }
 
       // TODO: this implementation works, but ideally there is more information in the error
       // string about why the move is invalid (eg player raised more than he had)

@@ -32,7 +32,7 @@ class TicTacToeSpec extends Specification {
 
     "play" in {
       val endState = play(rGame, startState(rGame), false)
-      endState.moves(rGame).length must be lessThan 0
+      evState.moves(endState, rGame).length must be lessThan 0
     }
 
     "product game stream" in {
@@ -51,16 +51,17 @@ class TicTacToeSpec extends Specification {
   "startFrom" should {
     "simply return the start state" in {
       val state = startState(game)
-      val move = state.moves(game).head
-      val nextState = state(move, game)
-      startFrom(game, nextState).get.moves(game).length must be equalTo 9
+      val move = evState.moves(state, game).head
+      val nextState = evState.applyMove(state, game, move)
+      val newStart = startFrom(game, nextState).get
+      evState.moves(newStart, game).length must be equalTo 9
     }
   }
 
   "starting moves" should {
     "be nine-fold, display to O with 'put an', and have string descriptions that contain 'upper'" in {
 
-      val startingMoves = startState(game).moves(game)
+      val startingMoves = evState.moves(startState(game), game)
 
       evMove.displayTo(game, x, startingMoves.head, o) must contain("put an")
       startingMoves.length must be equalTo 9
@@ -70,7 +71,7 @@ class TicTacToeSpec extends Specification {
       val bigGame = TicTacToe(4,
         x, randomMove, dropOutput,
         o, randomMove, dropOutput)
-      val startingMoves = startState(bigGame).moves(game)
+      val startingMoves = evState.moves(startState(bigGame), bigGame)
       startingMoves.map(_.description).mkString(",") must contain("16")
     }
   }
@@ -79,7 +80,7 @@ class TicTacToeSpec extends Specification {
     "print various messages" in {
 
       val firstMove = TicTacToeMove(2, game.boardSize)
-      val secondState = startState(game).apply(firstMove, game)
+      val secondState = evState.applyMove(startState(game), game, firstMove)
 
       val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
 
@@ -110,7 +111,7 @@ class TicTacToeSpec extends Specification {
       import spire.implicits.DoubleAlgebra
       val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](4, didIWinHeuristic(game))
 
-      val secondState = startState(game).apply(firstMove, game)
+      val secondState = evState.applyMove(startState(game), game, firstMove)
 
       val move = ai4(secondState, game)
 
@@ -121,14 +122,14 @@ class TicTacToeSpec extends Specification {
   "7-move x diagonal" should {
     "be a victory for x" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = state.moves(game).size match {
+      def xMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
         case 9 => "1"
         case 7 => "3"
         case 5 => "5"
         case 3 => "7"
       }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = state.moves(game).size match {
+      def oMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
         case 8 => "2"
         case 6 => "4"
         case 4 => "6"

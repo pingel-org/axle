@@ -35,15 +35,15 @@ case class TicTacToe(
     if (player === x) 'X' else 'O'
 
   def state(
-    player: Player,
+    playerOptFn: (TicTacToeState) => Option[Player],
     board: Array[Option[Player]]): TicTacToeState =
-    TicTacToeState(Some(player), board, boardSize)
+    TicTacToeState(playerOptFn, board, boardSize)
 
 }
 
 object TicTacToe {
 
-  implicit val game: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
+  implicit val evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
     new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
 
       def introMessage(ttt: TicTacToe) = """
@@ -51,7 +51,7 @@ Tic Tac Toe
 Moves are numbers 1-%s.""".format(ttt.numPositions)
 
       def startState(ttt: TicTacToe): TicTacToeState =
-        TicTacToeState(Some(ttt.x), ttt.startBoard, ttt.boardSize)
+        TicTacToeState(s => Some(ttt.x), ttt.startBoard, ttt.boardSize)
 
       def startFrom(ttt: TicTacToe, s: TicTacToeState): Option[TicTacToeState] =
         Some(startState(ttt))
@@ -65,7 +65,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       def displayerFor(g: TicTacToe, player: Player): String => Unit =
         g.playerToDisplayer(player)
 
-      def parseMove(g: TicTacToe, input: String, mover: Player): Either[String, TicTacToeMove] = {
+      def parseMove(g: TicTacToe, input: String): Either[String, TicTacToeMove] = {
         val eitherI: Either[String, Int] = try {
           val position = input.toInt
           if (position >= 1 && position <= g.numPositions) {
@@ -79,7 +79,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
           }
         }
         eitherI.right.map { position =>
-          TicTacToeMove(mover, position, g.boardSize)
+          TicTacToeMove(position, g.boardSize)
         }
       }
 
