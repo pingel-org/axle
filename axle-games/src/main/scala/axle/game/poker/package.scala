@@ -42,7 +42,7 @@ package object poker {
           implicit evGame: Game[G, S, PokerOutcome, M],
           eqp: Eq[Player],
           sp: Show[Player]): String = {
-        "Winner: " + winner(outcome).get + "\n" +
+        "Winner: " + winner(outcome).get.description + "\n" +
           "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
       }
 
