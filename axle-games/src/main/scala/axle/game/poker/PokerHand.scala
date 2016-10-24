@@ -15,7 +15,7 @@ object PokerHand {
   def fromString(s: String): PokerHand =
     PokerHand(Card.fromString(s))
 
-  implicit def showPokerHand: Show[PokerHand] = new Show[PokerHand] {
+  implicit val showPokerHand: Show[PokerHand] = new Show[PokerHand] {
     def text(hand: PokerHand): String = hand.sortedHand.reverse.map(string(_)).mkString(" ")
   }
 
