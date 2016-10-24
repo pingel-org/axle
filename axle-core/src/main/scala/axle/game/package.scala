@@ -197,7 +197,7 @@ package object game {
       display("")
       display(evState.displayTo(lastState, observer, game))
       evState.outcome(lastState, game) foreach { outcome =>
-        evOutcome.displayTo(game, outcome, observer)
+        display(evOutcome.displayTo(game, outcome, observer))
       }
     }
 
