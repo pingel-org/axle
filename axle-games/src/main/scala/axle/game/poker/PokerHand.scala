@@ -4,7 +4,6 @@ import axle.Show
 import axle.game.cards.Ace
 import axle.game.cards.Card
 import axle.string
-import spire.algebra.Eq
 import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.IntAlgebra
