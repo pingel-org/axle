@@ -60,23 +60,6 @@ import akka.actor.Props
 
 package object awt {
 
-  def draw2[T](x: T, f: T => T, i: Long): Unit = {
-
-    implicit val system = ActorSystem("draw2")
-    implicit val materializer = ActorMaterializer()
-
-    val xs: Source[T, Cancellable] = {
-      // apply f to x every i ms
-      Source.tick(FiniteDuration(0, TimeUnit.MILLISECONDS), FiniteDuration(i, TimeUnit.MILLISECONDS), x)
-    }
-
-    // see https://groups.google.com/forum/#!topic/akka-user/swhrgX6YobM
-
-    val rc = xs.runWith(Sink.foreach(println))
-  }
-
-  // draw2[Int](3, _ + 1, 700)
-
   def draw[T: Draw](t: T): Unit = {
     val draw = Draw[T]
     val component = draw.component(t)
