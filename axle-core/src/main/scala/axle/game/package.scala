@@ -6,7 +6,7 @@ import spire.compat.integral
 import spire.compat.ordering
 import spire.algebra.Order
 import spire.algebra.Eq
-import spire.implicits.eqOps
+import spire.algebra.Ring
 import spire.implicits._
 import util.Random.nextInt
 
@@ -14,15 +14,12 @@ package object game {
 
   val dropOutput = (s: String) => {}
 
-  def didIWinHeuristic[G, S, O, M](game: G)(
+  def outcomeRingHeuristic[G, S, O, M, N: Ring](game: G, f: (O, Player) => N)(
     implicit evGame: Game[G, S, O, M],
     evOutcome: Outcome[O],
-    evState: State[G, S, O, M]): S => Map[Player, Double] =
+    evState: State[G, S, O, M]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
-      val score =
-        evState.outcome(state, game).flatMap(out =>
-          evOutcome.winner(out).map(winner =>
-            if (winner === p) 1d else -1d)).getOrElse(0d)
+      val score = evState.outcome(state, game).map(o => f(o, p)).getOrElse(Ring[N].zero)
       (p, score)
     }).toMap
 

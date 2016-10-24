@@ -108,8 +108,12 @@ class TicTacToeSpec extends Specification {
 
       val firstMove = TicTacToeMove(2, game.boardSize)
 
+      val h = (outcome: TicTacToeOutcome, p: Player) =>
+        outcome.winner.map(wp => if (wp == p) 1d else -1d).getOrElse(0d)
+
       import spire.implicits.DoubleAlgebra
-      val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](4, didIWinHeuristic(game))
+      val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](
+        4, outcomeRingHeuristic(game, h))
 
       val secondState = evState.applyMove(startState(game), game, firstMove)
 

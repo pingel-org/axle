@@ -33,8 +33,6 @@ package object poker {
   implicit val evOutcome: Outcome[PokerOutcome] =
     new Outcome[PokerOutcome] {
 
-      def winner(outcome: PokerOutcome): Option[Player] = outcome.winner
-
       def displayTo[G, S, M](
         game: G,
         outcome: PokerOutcome,
@@ -42,7 +40,7 @@ package object poker {
           implicit evGame: Game[G, S, PokerOutcome, M],
           eqp: Eq[Player],
           sp: Show[Player]): String = {
-        "Winner: " + winner(outcome).get.description + "\n" +
+        "Winner: " + outcome.winner.get.description + "\n" +
           "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
       }
 
