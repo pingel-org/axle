@@ -2,7 +2,6 @@ package axle.game
 
 import axle.Show
 import spire.algebra.Eq
-import spire.implicits.eqOps
 
 trait Outcome[O] {
 
@@ -15,9 +14,6 @@ trait Outcome[O] {
     observer: Player)(
       implicit evGame: Game[G, S, O, M],
       eqp: Eq[Player],
-      sp: Show[Player]): String =
-    winner(outcome) map { wp =>
-      s"${wp.referenceFor(observer)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(observer)).toList.mkString(" and ") + "!"
-    } getOrElse ("The game was a draw.")
+      sp: Show[Player]): String
 
 }
