@@ -1,4 +1,3 @@
-
 package axle.game.ttt
 
 import axle.game._
@@ -10,11 +9,8 @@ class TicTacToeSpec extends Specification {
   val o = Player("O", "Player O")
 
   val game = TicTacToe(3,
-    x, interactiveMove, println,
-    o, interactiveMove, println)
-
-  def movesFrom(pps: List[(Player, Int)]): List[TicTacToeMove] =
-    pps.map({ case pp => TicTacToeMove(pp._1, pp._2, game.boardSize) })
+    x, interactiveMove, dropOutput,
+    o, interactiveMove, dropOutput)
 
   "game" should {
     "define intro message, have 9 positions" in {
@@ -27,17 +23,16 @@ class TicTacToeSpec extends Specification {
   "random game" should {
 
     val rGame = TicTacToe(3,
-      x, randomMove, (s: String) => {},
-      o, randomMove, (s: String) => {})
+      x, randomMove, dropOutput,
+      o, randomMove, dropOutput)
 
     "produce moveStateStream" in {
       moveStateStream(rGame, startState(rGame)).take(3).length must be equalTo 3
     }
 
     "play" in {
-      val endState: TicTacToeState = play(rGame, startState(rGame), false).get
-      // TODO number of moves should really be 0
-      endState.moves(rGame).length must be lessThan 5
+      val endState = play(rGame, startState(rGame), false)
+      evState.moves(endState, rGame).length must be equalTo 0
     }
 
     "product game stream" in {
@@ -56,56 +51,45 @@ class TicTacToeSpec extends Specification {
   "startFrom" should {
     "simply return the start state" in {
       val state = startState(game)
-      val move = state.moves(game).head
-      val nextState = state(move, game)
-      startFrom(game, nextState).get.moves(game).length must be equalTo 9
+      val move = evState.moves(state, game).head
+      val nextState = evState.applyMove(state, game, move)
+      val newStart = startFrom(game, nextState).get
+      evState.moves(newStart, game).length must be equalTo 9
     }
   }
 
   "starting moves" should {
     "be nine-fold, display to O with 'put an', and have string descriptions that contain 'upper'" in {
 
-      val startingMoves = startState(game).moves(game)
+      val startingMoves = evState.moves(startState(game), game)
 
-      evMove.displayTo(game, startingMoves.head, o) must contain("put an")
+      evMove.displayTo(game, x, startingMoves.head, o) must contain("put an")
       startingMoves.length must be equalTo 9
       startingMoves.map(_.description).mkString(",") must contain("upper")
     }
     "be defined for 4x4 game" in {
       val bigGame = TicTacToe(4,
-        x, randomMove, (s: String) => {},
-        o, randomMove, (s: String) => {})
-      val startingMoves = startState(bigGame).moves(game)
+        x, randomMove, dropOutput,
+        o, randomMove, dropOutput)
+      val startingMoves = evState.moves(startState(bigGame), bigGame)
       startingMoves.map(_.description).mkString(",") must contain("16")
-    }
-  }
-
-  "event queues" should {
-    "be two-fold" in {
-      val move = startState(game).moves(game).head
-      val newState = broadcast(game, startState(game), Right(move))
-      newState.eventQueues.size must be equalTo 2
     }
   }
 
   "interactive player" should {
     "print various messages" in {
 
-      val firstMove = TicTacToeMove(x, 2, game.boardSize)
-      val secondState = startState(game).apply(firstMove, game)
-
-      introduceGame(x, game)
-      displayEvents(game, x, List(Right(firstMove)))
-      endGame(game, x, startState(game))
+      val firstMove = TicTacToeMove(2, game.boardSize)
+      val secondState = evState.applyMove(startState(game), game, firstMove)
 
       val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
 
-      val m = secondState.player
-      evGame.parseMove(game, "14", m) must be equalTo Left("Please enter a number between 1 and 9")
-      evGame.parseMove(game, "foo", m) must be equalTo Left("foo is not a valid move.  Please select again")
+      val m = secondState.moverOpt.get
+      evGame.parseMove(game, "14") must be equalTo Left("Please enter a number between 1 and 9")
+      evGame.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
 
-      evGame.parseMove(game, "1", m).right.flatMap(move => evGame.isValid(game, secondState, move)).right.toOption.get.position must be equalTo 1
-      evGame.parseMove(game, "2", m).right.flatMap(move => evGame.isValid(game, secondState, move)) must be equalTo Left("That space is occupied.")
+      evGame.parseMove(game, "1").right.flatMap(move => evGame.isValid(game, secondState, move)).right.toOption.get.position must be equalTo 1
+      evGame.parseMove(game, "2").right.flatMap(move => evGame.isValid(game, secondState, move)) must be equalTo Left("That space is occupied.")
     }
   }
 
@@ -122,12 +106,12 @@ class TicTacToeSpec extends Specification {
   "A.I. strategy" should {
     "make a move" in {
 
-      val firstMove = TicTacToeMove(x, 2, game.boardSize)
+      val firstMove = TicTacToeMove(2, game.boardSize)
 
       import spire.implicits.DoubleAlgebra
       val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](4, didIWinHeuristic(game))
 
-      val secondState = startState(game).apply(firstMove, game)
+      val secondState = evState.applyMove(startState(game), game, firstMove)
 
       val move = ai4(secondState, game)
 
@@ -137,8 +121,26 @@ class TicTacToeSpec extends Specification {
 
   "7-move x diagonal" should {
     "be a victory for x" in {
-      val moves = movesFrom(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 6), (x, 7)))
-      val (_, lastState) = scriptToLastMoveState(game, moves)
+
+      def xMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+        case 9 => "1"
+        case 7 => "3"
+        case 5 => "5"
+        case 3 => "7"
+      }
+
+      def oMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+        case 8 => "2"
+        case 6 => "4"
+        case 4 => "6"
+      }
+
+      val game = TicTacToe(3,
+        x, hardCodedStrategy(xMove), dropOutput,
+        o, hardCodedStrategy(oMove), dropOutput)
+
+      val start = startState(game)
+      val lastState = moveStateStream(game, start).last._3
       val outcome = lastState.outcome(game).get
       evOutcome.displayTo(game, outcome, x) must contain("You beat")
       evOutcome.displayTo(game, outcome, o) must contain("beat You")
@@ -148,8 +150,26 @@ class TicTacToeSpec extends Specification {
 
   "7-move o diagonal" should {
     "be a victory for o" in {
-      val moves = movesFrom(List((x, 2), (o, 3), (x, 4), (o, 5), (x, 6), (o, 7), (x, 8)))
-      val (_, lastState) = scriptToLastMoveState(game, moves)
+
+      def xMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+        case 9 => "2"
+        case 7 => "4"
+        case 5 => "6"
+        case 3 => "8"
+      }
+
+      def oMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+        case 8 => "3"
+        case 6 => "5"
+        case 4 => "7"
+      }
+
+      val game = TicTacToe(3,
+        x, hardCodedStrategy(xMove), dropOutput,
+        o, hardCodedStrategy(oMove), dropOutput)
+
+      val start = startState(game)
+      val lastState = moveStateStream(game, start).last._3
       val winnerOpt = lastState.outcome(game).flatMap(_.winner)
       winnerOpt should be equalTo (Some(o))
     }
@@ -157,8 +177,29 @@ class TicTacToeSpec extends Specification {
 
   "9 move tie" should {
     "result in no-winner outcome" in {
-      val moves = movesFrom(List((x, 1), (o, 2), (x, 3), (o, 4), (x, 5), (o, 7), (x, 8), (o, 9), (x, 6)))
-      val (_, lastState) = scriptToLastMoveState(game, moves)
+
+      def xMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+        case 9 => "1"
+        case 7 => "3"
+        case 5 => "5"
+        case 3 => "8"
+        case 1 => "6"
+      }
+
+      def oMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+        case 8 => "2"
+        case 6 => "4"
+        case 4 => "7"
+        case 2 => "9"
+      }
+
+      val game = TicTacToe(3,
+        x, hardCodedStrategy(xMove), dropOutput,
+        o, hardCodedStrategy(oMove), dropOutput)
+
+      val start = startState(game)
+      val lastState = moveStateStream(game, start).last._3
+
       val winnerOpt = lastState.outcome(game).flatMap(_.winner)
       winnerOpt should be equalTo (None)
     }

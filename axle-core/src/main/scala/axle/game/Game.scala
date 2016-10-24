@@ -22,7 +22,7 @@ trait Game[G, S, O, M] {
 
   def displayerFor(g: G, player: Player): String => Unit
 
-  def parseMove(g: G, input: String, mover: Player): Either[String, M]
+  def parseMove(g: G, input: String): Either[String, M]
 
   def isValid(g: G, state: S, move: M): Either[String, M]
 

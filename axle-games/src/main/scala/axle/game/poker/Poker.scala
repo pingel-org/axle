@@ -4,7 +4,8 @@ import axle.game._
 import axle.game.cards._
 
 case class Poker(
-    playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)]) {
+    playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)],
+    dealerDisplayer: String => Unit) {
 
   val players = playersStrategiesDisplayers.map(_._1)
 
@@ -12,7 +13,7 @@ case class Poker(
 
   val dealer = Player("D", "Dealer")
 
-  val allPlayers = (dealer, dealerMove _, (s: String) => {}) +: playersStrategiesDisplayers
+  val allPlayers = (dealer, randomMove, dealerDisplayer) +: playersStrategiesDisplayers
 
   val playerToStrategy = allPlayers.map(tuple => tuple._1 -> tuple._2).toMap
 
@@ -33,7 +34,7 @@ Texas Hold Em Poker
 Example moves:
 
   check
-  raise 1.0
+  raise 1
   call
   fold
 
@@ -41,7 +42,7 @@ Example moves:
 
       def startState(g: Poker): PokerState =
         PokerState(
-          state => g.dealer,
+          state => Some(g.dealer),
           Deck(),
           Vector(),
           0, // # of shared cards showing
@@ -51,14 +52,13 @@ Example moves:
           g.players.toSet, // stillIn
           Map(), // inFors
           g.players.map(player => (player, 100)).toMap, // piles
-          None,
-          Map())
+          None)
 
       def startFrom(g: Poker, s: PokerState): Option[PokerState] = {
 
         if (s.stillIn.size > 0) {
           Some(PokerState(
-            state => g.dealer,
+            state => Some(g.dealer),
             Deck(),
             Vector(),
             0,
@@ -68,8 +68,7 @@ Example moves:
             s.stillIn,
             Map(),
             s.piles,
-            None,
-            Map()))
+            None))
         } else {
           None
         }
@@ -84,12 +83,17 @@ Example moves:
       def displayerFor(g: Poker, player: Player): String => Unit =
         g.playerToDisplayer(player)
 
-      def parseMove(g: Poker, input: String, mover: Player): Either[String, PokerMove] = {
-        moveParser.parse(input)(mover)
-      }
+      def parseMove(g: Poker, input: String): Either[String, PokerMove] =
+        moveParser.parse(input)
 
+      // TODO: this implementation works, but ideally there is more information in the error
+      // string about why the move is invalid (eg player raised more than he had)
       def isValid(g: Poker, state: PokerState, move: PokerMove): Either[String, PokerMove] =
-        Right(move) // TODO
+        if (state.moves(g).contains(move)) {
+          Right(move)
+        } else {
+          Left("invalid move")
+        }
 
     }
 

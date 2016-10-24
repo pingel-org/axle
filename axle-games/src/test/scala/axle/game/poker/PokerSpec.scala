@@ -2,8 +2,6 @@ package axle.game.poker
 
 import org.specs2.mutable._
 import axle.game._
-import spire.algebra.Eq
-import spire.compat.ordering
 
 class PokerSpec extends Specification {
 
@@ -12,9 +10,8 @@ class PokerSpec extends Specification {
 
   val game = Poker(Vector(
     (p1, interactiveMove, println),
-    (p2, interactiveMove, println)))
-
-  import game.dealer
+    (p2, interactiveMove, println)),
+    println)
 
   "start state" should {
     "display something" in {
@@ -22,153 +19,67 @@ class PokerSpec extends Specification {
     }
   }
 
-  "deal, flop, bet(p1,1), raise(p2,1), call, turn, call, call, river, call, fold, payout" should {
-    "be a victory for p1" in {
-      val moves: List[PokerMove] = List(
-        // small and big blinds are built in
-        Deal(dealer), Call(p1), Call(p2),
-        Flop(dealer), Raise(p1, 1), Raise(p2, 1), Call(p1),
-        Turn(dealer), Call(p1), Call(p2),
-        River(dealer), Call(p1), Fold(p2),
-        Payout(dealer))
-      val (_, lastState) = scriptToLastMoveState(game, moves)
+  "p2 folding after river" should {
+    "result in victory for p1" in {
+
+      // small and big blinds are built in
+
+      def p1Move(state: PokerState, game: Poker): String =
+        (state.numShown, state.currentBet) match {
+          case (0, _) => "call"
+          case (3, 2) => "raise 1"
+          case (3, _) => "call"
+          case (4, _) => "call"
+          case (5, _) => "call"
+        }
+
+      def p2Move(state: PokerState, game: Poker): String =
+        (state.numShown, state.currentBet) match {
+          case (0, _) => "call"
+          case (3, 2) => "raise 1"
+          case (3, _) => "call"
+          case (4, _) => "call"
+          case (5, _) => "fold"
+        }
+
+      val game = Poker(Vector(
+        (p1, hardCodedStrategy(p1Move), dropOutput),
+        (p2, hardCodedStrategy(p2Move), dropOutput)),
+        dropOutput)
+
+      val start = startState(game)
+      val lastState = moveStateStream(game, start).last._3
+
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get
       // TODO these messages should include amounts
       evOutcome.displayTo(game, outcome, p1) must contain("You beat")
       evOutcome.displayTo(game, outcome, p2) must contain("beat You")
       outcome.winner.get should be equalTo p1
-      newGameState.moves(game).length must be equalTo 0 // TODO
-      newGameState.setEventQueues(Map.empty).eventQueues.size must be equalTo 0
+      newGameState.moves(game).length must be equalTo 1 // new deal
     }
-  }
-
-  "interactive player" should {
-    "print various messages" in {
-
-      //      import axle.game.ttt.InteractivePokerPlayer._
-      //
-      //      val firstMove = TicTacToeMove(x, 2, game.boardSize)
-      //      val secondState = startState(game).apply(firstMove, game).get
-      //
-      //      introduceGame(x, game)
-      //      displayEvents(game, x, List(Right(firstMove)))
-      //      endGame(game, x, startState(game))
-      //      validateMoveInput("1", startState(game), game).right.toOption.get.position must be equalTo 1
-      //      validateMoveInput("14", startState(game), game) must be equalTo Left("Please enter a number between 1 and 9")
-      //      validateMoveInput("foo", startState(game), game) must be equalTo Left("foo is not a valid move.  Please select again")
-      //      validateMoveInput("2", secondState, game) must be equalTo Left("That space is occupied.")
-      1 must be equalTo 1
-    }
-  }
-
-  "poker hand ranking" should {
-
-    "work" in {
-
-      val shared = PokerHand.fromString("J♡,T♠,6♡,6♢,8♡")
-      val personals = Vector("J♠,4♠", "A♠,T♢", "K♠,Q♢").map(PokerHand.fromString)
-
-      val hands = personals map { personal =>
-        (personal.cards ++ shared.cards).combinations(5).map(PokerHand(_)).max
-      }
-
-      val jacksAndSixes = PokerHand.fromString("6♡,6♢,T♠,J♠,J♡")
-
-      true must be equalTo Eq[PokerHand].eqv(hands.max, jacksAndSixes)
-    }
-  }
-
-  "move parser" should {
-    "parse moves" in {
-
-      val moveParser = MoveParser()
-
-      moveParser.parse("call")(p1) must be equalTo Right(Call(p1))
-      moveParser.parse("fold")(p1) must be equalTo Right(Fold(p1))
-      moveParser.parse("raise 1")(p1) must be equalTo Right(Raise(p1, 1))
-      moveParser.parse("raise x")(p1) must be equalTo Left("invalid input: raise x")
-      moveParser.parse("asdf")(p1) must be equalTo Left("invalid input: asdf")
-    }
-  }
-
-  "poker hand comparison" should {
-
-    "ace high < pair of 6s" in {
-      val hand = PokerHand.fromString("3♡,6♢,9♠,T♡,A♡")
-      hand.description must contain("high")
-      hand must be lessThan PokerHand.fromString("6♡,6♢,T♠,J♠,4♡")
-    }
-
-    "straight > two pair" in {
-      val hand = PokerHand.fromString("7♡,6♠,8♡,5♠,9♢")
-      hand.description must contain("straight")
-      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
-    }
-
-    "flush > two pair" in {
-      val hand = PokerHand.fromString("3♡,6♡,9♡,T♡,A♡")
-      hand.description must contain("flush")
-      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
-    }
-
-    "straight flush > two pair" in {
-      val hand = PokerHand.fromString("2♡,3♡,4♡,5♡,6♡")
-      hand.description must contain("straight flush")
-      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
-    }
-
-    "royal flush > two pair" in {
-      val hand = PokerHand.fromString("T♡,J♡,Q♡,K♡,A♡")
-      hand.description must contain("royal")
-      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
-    }
-
-    "two pair vs two pair" in {
-      val hand = PokerHand.fromString("6♡,6♢,T♠,T♡,A♡")
-      hand.description must contain("two pair")
-      hand must be lessThan PokerHand.fromString("6♡,6♢,T♠,J♠,J♡")
-    }
-
-    "pair vs pair" in {
-      val hand = PokerHand.fromString("6♡,6♢,8♠,9♡,K♡")
-      hand.description must contain("pair")
-      hand must be lessThan PokerHand.fromString("K♡,K♢,2♠,3♠,5♡")
-    }
-
-    "three-of-a-kind vs three-of-a-kind" in {
-      val hand = PokerHand.fromString("6♡,6♢,6♠,Q♡,K♡")
-      hand.description must contain("three")
-      hand must be lessThan PokerHand.fromString("7♡,7♢,7♠,3♠,4♡")
-    }
-
-    "four-of-a-kind vs four-of-a-kind" in {
-      val hand = PokerHand.fromString("6♡,6♢,6♠,6♣,Q♡")
-      hand.description must contain("four")
-      hand must be lessThan PokerHand.fromString("7♡,7♢,7♠,7♣,2♡")
-    }
-
   }
 
 //  "random game" should {
 //
 //    val rGame: Poker = Poker(Vector(
-//      (p1, randomMove _, (s: String) => {}),
-//      (p2, randomMove _, (s: String) => {})))
+//      (p1, randomMove, dropOutput),
+//      (p2, randomMove, dropOutput)),
+//      dropOutput)
 //
 //    "produce moveStateStream" in {
-//      moveStateStream(rGame, startState(rGame)).take(3).length must be equalTo 3
+//      val stream = moveStateStream(rGame, startState(rGame))
+//      stream.take(3).length must be equalTo 3
 //    }
 //
-//    "play" in {
-//      val endState: PokerState = play(rGame, startState(rGame), false).get
-//      // TODO number of moves should really be 0
-//      endState.moves(rGame).length must be lessThan 5
+//    "terminate in a state with no further moves" in {
+//      val endState = play(rGame)
+//      endState.moves(rGame).length must be equalTo 0
 //    }
 //
-//    "product game stream" in {
-//      val games = gameStream(rGame, startState(rGame), false).take(2)
-//      games.length must be equalTo 2
+//    "produce game stream" in {
+//      val stream = gameStream(rGame, startState(rGame), false)
+//      stream.take(2).length must be equalTo 2
 //    }
 //
 //  }

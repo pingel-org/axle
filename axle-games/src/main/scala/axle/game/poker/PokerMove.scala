@@ -1,38 +1,32 @@
 package axle.game.poker
 
-import axle.game._
-//import spire.algebra.Eq
-//import axle.Show
-
 trait PokerMove {
-
-  def player: Player
 
   def description: String
 
 }
 
-case class Call(player: Player) extends PokerMove {
+case class Call() extends PokerMove {
   def description: String = "calls"
 }
-case class Raise(player: Player, amount: Int) extends PokerMove {
+case class Raise(amount: Int) extends PokerMove {
   def description: String = "raises the bet by " + amount
 }
-case class Fold(player: Player) extends PokerMove {
+case class Fold() extends PokerMove {
   def description: String = "folds"
 }
-case class Deal(player: Player) extends PokerMove {
+case class Deal() extends PokerMove {
   def description: String = "initial deal"
 }
-case class Flop(player: Player) extends PokerMove {
+case class Flop() extends PokerMove {
   def description: String = "reveals the flop"
 }
-case class Turn(player: Player) extends PokerMove {
+case class Turn() extends PokerMove {
   def description: String = "reveals the turn"
 }
-case class River(player: Player) extends PokerMove {
+case class River() extends PokerMove {
   def description: String = "reveals the river"
 }
-case class Payout(player: Player) extends PokerMove {
+case class Payout() extends PokerMove {
   def description: String = "pays out"
 }

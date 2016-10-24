@@ -5,12 +5,13 @@ import axle.game._
 import spire.implicits._
 
 case class TicTacToeState(
-    player: Player,
+    playerOptFn: (TicTacToeState) => Option[Player],
     board: Array[Option[Player]],
-    boardSize: Int,
-    _eventQueues: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]] = Map()) {
+    boardSize: Int) {
 
   val numPositions = board.length
+
+  val moverOpt = playerOptFn(this)
 
   def row(r: Int) = (0 until boardSize) map { c => playerAt(r, c) }
 
@@ -20,9 +21,9 @@ case class TicTacToeState(
 
   def playerAt(i: Int) = board(i - 1)
 
-  def place(position: Int, player: Option[Player]): Array[Option[Player]] = {
+  def place(position: Int, player: Player): Array[Option[Player]] = {
     val updated = board.clone()
-    updated.update(position - 1, player)
+    updated.update(position - 1, Some(player))
     updated
   }
 
@@ -32,7 +33,7 @@ case class TicTacToeState(
 
     "Board:         Movement Key:\n" +
       0.until(boardSize).map(r => {
-        row(r).map(playerOpt => playerOpt.map(game.markFor(_)).getOrElse(" ")).mkString("|") +
+        row(r).map(playerOpt => playerOpt.map(game.markFor).getOrElse(" ")).mkString("|") +
           "          " +
           (1 + r * boardSize).until(1 + (r + 1) * boardSize).mkString("|") // TODO rjust(keyWidth)
       }).mkString("\n")
@@ -55,8 +56,6 @@ case class TicTacToeState(
 
   def openPositions(ttt: TicTacToe): IndexedSeq[Int] = (1 to numPositions).filter(this(_).isEmpty)
 
-  def moves(ttt: TicTacToe): Seq[TicTacToeMove] = openPositions(ttt).map(TicTacToeMove(player, _, boardSize))
-
   def outcome(ttt: TicTacToe): Option[TicTacToeOutcome] = {
     val winner = ttt.players.find(hasWon)
     if (winner.isDefined) {
@@ -67,16 +66,5 @@ case class TicTacToeState(
       None
     }
   }
-
-  def apply(move: TicTacToeMove, ttt: TicTacToe)(implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState =
-    ttt.state(
-      ttt.playerAfter(move.player),
-      place(move.position, Some(player)),
-      _eventQueues)
-
-  def eventQueues: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]] = _eventQueues
-
-  def setEventQueues(qs: Map[Player, List[Either[TicTacToeOutcome, TicTacToeMove]]]): TicTacToeState =
-    TicTacToeState(player, board, boardSize, qs)
 
 }

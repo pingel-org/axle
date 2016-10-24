@@ -1,7 +1,6 @@
 package axle.game.poker
 
 import util.parsing.combinator._
-import axle.game.Player
 
 case class MoveParser() extends RegexParsers {
 
@@ -9,16 +8,16 @@ case class MoveParser() extends RegexParsers {
 
   lazy val NUMBER = "\\d+".r
 
-  def raise(player: Player): Parser[Raise] = ("r(aise)?".r ~ NUMBER) ^^ { case r ~ n => Raise(player, n.toInt) }
+  def raise: Parser[Raise] = ("r(aise)?".r ~ NUMBER) ^^ { case r ~ n => Raise(n.toInt) }
 
-  def call(player: Player): Parser[Call] = "c(all)?".r ^^ { case c => Call(player) }
+  def call: Parser[Call] = "c(all)?".r ^^ { case c => Call() }
 
-  def fold(player: Player): Parser[Fold] = "f(old)?".r ^^ { case f => Fold(player) }
+  def fold: Parser[Fold] = "f(old)?".r ^^ { case f => Fold() }
 
-  def move(player: Player): Parser[PokerMove] = raise(player) | call(player) | fold(player)
+  def move: Parser[PokerMove] = raise | call | fold
 
-  def parse(input: String)(player: Player): Either[String, PokerMove] = {
-    val parsed = parseAll(move(player), input)
+  def parse(input: String): Either[String, PokerMove] = {
+    val parsed = parseAll(move, input)
     parsed.map(Right.apply).getOrElse(Left("invalid input: " + input))
   }
 
