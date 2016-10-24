@@ -48,12 +48,6 @@ import spire.implicits.eqOps
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
-import akka.stream.scaladsl.Source
-import akka.stream.scaladsl.Sink
-import akka.stream.ActorMaterializer
-import scala.concurrent.duration.FiniteDuration
-import java.util.concurrent.TimeUnit
-import akka.actor.Cancellable
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
