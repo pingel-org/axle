@@ -37,7 +37,11 @@ package object game {
   def hardCodedStrategy[G, S, O, M](
     input: (S, G) => String)(
       implicit evGame: Game[G, S, O, M]): (S, G) => M =
-    (state: S, game: G) => evGame.parseMove(game, input(state, game)).right.toOption.get
+    (state: S, game: G) => {
+      val parsed = evGame.parseMove(game, input(state, game)).right.toOption.get
+      val validated = evGame.isValid(game, state, parsed)
+      validated.right.toOption.get
+    }
 
   def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
     display("Enter move: ")
