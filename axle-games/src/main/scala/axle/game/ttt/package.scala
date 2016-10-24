@@ -2,6 +2,7 @@ package axle.game
 
 import axle.Show
 import spire.algebra.Eq
+import spire.implicits.eqOps
 
 package object ttt {
 
@@ -37,6 +38,19 @@ package object ttt {
     new Outcome[TicTacToeOutcome] {
 
       def winner(outcome: TicTacToeOutcome): Option[Player] = outcome.winner
+
+      def displayTo[G, S, M](
+        game: G,
+        outcome: TicTacToeOutcome,
+        observer: Player)(
+          implicit evGame: Game[G, S, TicTacToeOutcome, M],
+          eqp: Eq[Player],
+          sp: Show[Player]): String = {
+        winner(outcome) map { wp =>
+          s"${wp.referenceFor(observer)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(observer)).toList.mkString(" and ") + "!"
+        } getOrElse ("The game was a draw.")
+      }
+
     }
 
   implicit val evMove: Move[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =

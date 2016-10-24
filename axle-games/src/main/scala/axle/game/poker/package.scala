@@ -2,6 +2,8 @@ package axle.game
 
 import spire.algebra.Eq
 import axle.Show
+import axle.string
+// import spire.implicits.eqOps
 
 package object poker {
 
@@ -10,7 +12,7 @@ package object poker {
   implicit val evState: State[Poker, PokerState, PokerOutcome, PokerMove] =
     new State[Poker, PokerState, PokerOutcome, PokerMove] {
 
-    def applyMove(s: PokerState, game: Poker, move: PokerMove)(
+      def applyMove(s: PokerState, game: Poker, move: PokerMove)(
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerState =
         s(game, move)
 
@@ -32,6 +34,18 @@ package object poker {
     new Outcome[PokerOutcome] {
 
       def winner(outcome: PokerOutcome): Option[Player] = outcome.winner
+
+      def displayTo[G, S, M](
+        game: G,
+        outcome: PokerOutcome,
+        observer: Player)(
+          implicit evGame: Game[G, S, PokerOutcome, M],
+          eqp: Eq[Player],
+          sp: Show[Player]): String = {
+        "Winner: " + winner(outcome).get.description + "\n" +
+          "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
+      }
+
     }
 
   implicit val evMove: Move[Poker, PokerState, PokerOutcome, PokerMove] =

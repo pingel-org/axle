@@ -23,7 +23,7 @@ case class Poker(
 
 object Poker {
 
-  implicit val pokerGame: Game[Poker, PokerState, PokerOutcome, PokerMove] =
+  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove] =
     new Game[Poker, PokerState, PokerOutcome, PokerMove] {
 
       // def introMessage: String = "Welcome to Axle Texas Hold Em Poker"
