@@ -60,8 +60,10 @@ class PokerSpec extends Specification {
         }
       }).mkString(", ") must contain("call")
       // TODO these messages should include amounts
+      evState.moves(history.drop(1).head._1, game) must contain(Fold())
       evOutcome.displayTo(game, outcome, p1) must contain("You beat")
       evOutcome.displayTo(game, outcome, p2) must contain("beat You")
+      Poker.evGame.introMessage(game) must contain("Texas")
       outcome.winner.get should be equalTo p1
       newGameState.moves(game).length must be equalTo 1 // new deal
     }
