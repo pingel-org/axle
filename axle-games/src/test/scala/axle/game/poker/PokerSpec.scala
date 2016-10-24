@@ -21,14 +21,35 @@ class PokerSpec extends Specification {
 
   "deal, flop, bet(p1,1), raise(p2,1), call, turn, call, call, river, call, fold, payout" should {
     "be a victory for p1" in {
-      val moves: List[PokerMove] = List(
-        // small and big blinds are built in
-        Deal(), Call(), Call(),
-        Flop(), Raise(1), Raise(1), Call(),
-        Turn(), Call(), Call(),
-        River(), Call(), Fold(),
-        Payout())
-      val lastState: PokerState = ???
+
+      // small and big blinds are built in
+
+      def p1Move(state: PokerState, game: Poker): String =
+        (state.numShown, state.currentBet) match {
+          case (0, _) => "call"
+          case (3, 2) => "raise 1"
+          case (3, _) => "call"
+          case (4, _) => "call"
+          case (5, _) => "call"
+        }
+
+      def p2Move(state: PokerState, game: Poker): String =
+        (state.numShown, state.currentBet) match {
+          case (0, _) => "call"
+          case (3, 2) => "raise 1"
+          case (3, _) => "call"
+          case (4, _) => "call"
+          case (5, _) => "fold"
+        }
+
+      val game = Poker(Vector(
+        (p1, hardCodedStrategy(p1Move), dropOutput),
+        (p2, hardCodedStrategy(p2Move), dropOutput)),
+        dropOutput)
+
+      val start = startState(game)
+      val lastState = moveStateStream(game, start).last._3
+
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get
       // TODO these messages should include amounts
