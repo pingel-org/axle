@@ -32,7 +32,7 @@ class TicTacToeSpec extends Specification {
 
     "play" in {
       val endState = play(rGame, startState(rGame), false)
-      evState.moves(endState, rGame).length must be lessThan 0
+      evState.moves(endState, rGame).length must be equalTo 0
     }
 
     "product game stream" in {
