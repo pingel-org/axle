@@ -13,7 +13,7 @@ class PokerMoveValidationSpec extends Specification {
     (p2, randomMove, println)),
     println)
 
-  "move validator" must {
+  "move validator" should {
     "reject River as first move" in {
 
       Poker.evGame.isValid(game, startState(game), River()) must be equalTo Left("invalid move")
