@@ -213,10 +213,7 @@ package object game {
       evOutcome: Outcome[O],
       evMove: Move[G, S, O, M]): Stream[S] = {
     val end = play(game, start, intro)
-    val tail = evGame.startFrom(game, end) map { newStart =>
-      gameStream(game, newStart, false)
-    } getOrElse Stream.empty
-    cons(end, tail)
+    cons(end, gameStream(game, evGame.startFrom(game, end).get, false))
   }
 
   def playContinuously[G, S, O, M](
