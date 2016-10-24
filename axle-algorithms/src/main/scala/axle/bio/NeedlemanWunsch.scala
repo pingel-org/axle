@@ -40,7 +40,7 @@ import spire.implicits.partialOrderOps
 
 object NeedlemanWunsch {
 
-  object Default {
+  object Standard {
 
     // Default evidence for optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Double]
 
@@ -58,8 +58,8 @@ object NeedlemanWunsch {
      *
      */
 
-    def similarity(x: Char, y: Char): Double =
-      (x, y) match {
+    def similarity(x: Char, y: Char): Double = {
+      val result = (x, y) match {
         case ('A', 'A') => 10
         case ('A', 'G') => -1
         case ('A', 'C') => -3
@@ -77,6 +77,8 @@ object NeedlemanWunsch {
         case ('T', 'C') => 0
         case ('T', 'T') => 8
       }
+      result
+    }
 
     val gap = '-'
 
