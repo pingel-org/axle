@@ -10,7 +10,7 @@ trait State[G, S, O, M] {
     move: M)(
       implicit evGame: Game[G, S, O, M]): S
 
-  def displayTo(state: S, viewer: Player, game: G)(
+  def displayTo(state: S, observer: Player, game: G)(
     implicit evGame: Game[G, S, O, M]): String
 
   def outcome(s: S, game: G): Option[O]
