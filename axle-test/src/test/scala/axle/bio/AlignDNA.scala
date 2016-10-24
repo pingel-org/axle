@@ -6,12 +6,12 @@ import org.specs2.mutable.Specification
 class AlignDNA extends Specification {
 
   "Needleman-Wunsch" should {
-    "work" in {
+    "align DNA" in {
 
       import NeedlemanWunsch.alignmentScoreK1
       import NeedlemanWunsch.alignmentScore
       import NeedlemanWunsch.optimalAlignment
-      import NeedlemanWunsch.Default._
+      import NeedlemanWunsch.Standard._
 
       implicit val laJblasDouble = {
         import spire.implicits.DoubleAlgebra
@@ -20,7 +20,6 @@ class AlignDNA extends Specification {
 
       val dna1 = "ATGCGGCC"
       val dna2 = "ATCGCCGG"
-      val bestAlignment = ("ATGCGGCC--".toIndexedSeq, "AT-C-GCCGG".toIndexedSeq)
 
       val nwAlignment =
         optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Double](
@@ -40,16 +39,17 @@ class AlignDNA extends Specification {
         similarity,
         gapPenalty)
 
-      val space = NeedlemanWunschMetricSpace.common[IndexedSeq, Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
+      val space = NeedlemanWunschMetricSpace.common[IndexedSeq, Char, DoubleMatrix, Int, Double](
+        similarity, gapPenalty)
 
-      nwAlignment must be equalTo bestAlignment
+      nwAlignment must be equalTo (("ATGCGGCC--".toIndexedSeq, "AT-C-GCCGG".toIndexedSeq))
       score must be equalTo 32d
       space.distance(dna1, dna2) must be equalTo score
     }
   }
 
   "Smith-Waterman" should {
-    "work" in {
+    "align DNA" in {
 
       import SmithWaterman.Default._
       import SmithWaterman.optimalAlignment
