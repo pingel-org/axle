@@ -20,12 +20,7 @@ object PokerHand {
     def text(hand: PokerHand): String = hand.sortedHand.reverse.map(string(_)).mkString(" ")
   }
 
-  implicit def pokerHandEq: Eq[PokerHand] = new Eq[PokerHand] {
-    def eqv(x: PokerHand, y: PokerHand): Boolean =
-      x.sortedHand === y.sortedHand
-  }
-
-  implicit object PokerHandOrder extends Order[PokerHand] {
+  implicit val orderPokerHand: Order[PokerHand] = new Order[PokerHand] {
 
     def compare(a: PokerHand, b: PokerHand): Int = {
       val ac = a.category
