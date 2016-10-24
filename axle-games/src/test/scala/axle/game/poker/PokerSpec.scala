@@ -19,8 +19,8 @@ class PokerSpec extends Specification {
     }
   }
 
-  "deal, flop, bet(p1,1), raise(p2,1), call, turn, call, call, river, call, fold, payout" should {
-    "be a victory for p1" in {
+  "p2 folding after river" should {
+    "result in victory for p1" in {
 
       // small and big blinds are built in
 
