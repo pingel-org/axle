@@ -53,13 +53,13 @@ class PokerSpec extends Specification {
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get
 
-      // TODO these messages should include amounts
       history.map({
         case (from, move, to) => {
           val mover = evState.mover(from).get
           evMove.displayTo(game, mover, move, p1)
         }
       }).mkString(", ") must contain("call")
+      // TODO these messages should include amounts
       evOutcome.displayTo(game, outcome, p1) must contain("You beat")
       evOutcome.displayTo(game, outcome, p2) must contain("beat You")
       outcome.winner.get should be equalTo p1

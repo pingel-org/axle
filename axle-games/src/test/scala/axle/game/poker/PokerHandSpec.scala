@@ -64,7 +64,7 @@ class PokerHandSpec extends Specification {
     "full house vs two pair" in {
       val hand = PokerHand.fromString("6♡,6♢,T♠,T♡,T♢")
       hand.description must contain("full house")
-      hand must be lessThan PokerHand.fromString("6♡,6♢,T♠,J♠,J♡")
+      hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,J♠,J♡")
     }
 
     "pair vs pair" in {
