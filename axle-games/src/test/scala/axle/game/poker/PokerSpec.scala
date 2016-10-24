@@ -49,10 +49,12 @@ class PokerSpec extends Specification {
       val start = startState(game)
       val history = moveStateStream(game, start).toVector
       val lastState = history.last._3
+      val lastStateByPlay = play(game)
 
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get
 
+      lastState must be equalTo lastStateByPlay
       history.map({
         case (from, move, to) => {
           val mover = evState.mover(from).get
