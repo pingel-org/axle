@@ -1,6 +1,7 @@
 package axle.game.poker
 
 import org.specs2.mutable._
+import axle.string
 import spire.compat.ordering
 import spire.algebra.Eq
 
@@ -34,12 +35,14 @@ class PokerHandSpec extends Specification {
     "straight > two pair" in {
       val hand = PokerHand.fromString("7♡,6♠,8♡,5♠,9♢")
       hand.description must contain("straight")
+      string(hand) must be equalTo "5♠ 6♠ 7♡ 8♡ 9♢"
       hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
     }
 
     "flush > two pair" in {
-      val hand = PokerHand.fromString("3♡,6♡,9♡,T♡,A♡")
+      val hand = PokerHand.fromString("6♡,3♡,9♡,T♡,A♡")
       hand.description must contain("flush")
+      string(hand) must be equalTo "3♡ 6♡ 9♡ T♡ A♡"
       hand must be greaterThan PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
     }
 

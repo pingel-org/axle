@@ -117,8 +117,7 @@ object High extends PokerHandCategory {
 
   def asInt: Int = 0
   def name: String = "high"
-  override def describe(hand: PokerHand): String = string(rank(hand)) + " " + name
-  def specifics(hand: PokerHand): String = "" + string(rank(hand))
+  def specifics(hand: PokerHand): String = "" + string(rank(hand)) + " " + name
   def rank(hand: PokerHand): Rank = hand.sortedHand(0).rank
 
 }

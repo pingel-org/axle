@@ -10,18 +10,14 @@ object Card {
   def fromString(s: String): IndexedSeq[Card] =
     s.split(",").map(Card(_))
 
-  implicit def cardEq: Eq[Card] = new Eq[Card] {
-    def eqv(x: Card, y: Card): Boolean = x.rank === y.rank && x.suit === y.suit
-  }
-
-  implicit object CardOrder extends Order[Card] {
+  implicit val orderCard: Order[Card] = new Order[Card] {
     def compare(a: Card, b: Card): Int = Order[Rank].compare(a.rank, b.rank)
   }
 
   implicit def showCard: Show[Card] = new Show[Card] {
     def text(card: Card): String =  "" + card.rank.serialize + card.suit.serialize
   }
-  
+
   def apply(s: String): Card = Card(Rank(s.charAt(0)), Suit(s.charAt(1)))
 
 }

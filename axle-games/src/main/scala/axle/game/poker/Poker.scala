@@ -56,7 +56,7 @@ Example moves:
 
       def startFrom(g: Poker, s: PokerState): Option[PokerState] = {
 
-        if (s.stillIn.size > 0) {
+        if (s.stillIn.size > 1) {
           Some(PokerState(
             state => Some(g.dealer),
             Deck(),

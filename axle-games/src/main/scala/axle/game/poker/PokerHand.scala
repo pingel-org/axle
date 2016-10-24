@@ -4,7 +4,6 @@ import axle.Show
 import axle.game.cards.Ace
 import axle.game.cards.Card
 import axle.string
-import spire.algebra.Eq
 import spire.algebra.Order
 import spire.compat.ordering
 import spire.implicits.IntAlgebra
@@ -16,16 +15,11 @@ object PokerHand {
   def fromString(s: String): PokerHand =
     PokerHand(Card.fromString(s))
 
-  implicit def showPokerHand: Show[PokerHand] = new Show[PokerHand] {
+  implicit val showPokerHand: Show[PokerHand] = new Show[PokerHand] {
     def text(hand: PokerHand): String = hand.sortedHand.reverse.map(string(_)).mkString(" ")
   }
 
-  implicit def pokerHandEq: Eq[PokerHand] = new Eq[PokerHand] {
-    def eqv(x: PokerHand, y: PokerHand): Boolean =
-      x.sortedHand === y.sortedHand
-  }
-
-  implicit object PokerHandOrder extends Order[PokerHand] {
+  implicit val orderPokerHand: Order[PokerHand] = new Order[PokerHand] {
 
     def compare(a: PokerHand, b: PokerHand): Int = {
       val ac = a.category
