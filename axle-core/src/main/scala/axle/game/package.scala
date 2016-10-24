@@ -183,10 +183,10 @@ package object game {
       case (fromState, move, toState) => {
         evState.mover(fromState) foreach { mover =>
           evGame.players(game) foreach { observer =>
-            evMove.displayTo(game, mover, move, observer)
+            val display = evGame.displayerFor(game, observer)
+            display(evMove.displayTo(game, mover, move, observer))
+            display(evState.displayTo(toState, observer, game))
           }
-          val display = evGame.displayerFor(game, mover)
-          display(evState.displayTo(toState, mover, game))
         }
         toState
       }
