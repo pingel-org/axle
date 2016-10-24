@@ -18,6 +18,31 @@ class PokerSpec extends Specification {
     }
   }
 
+  "only 1 player 'still in'" should {
+    "not allow another game to begin" in {
+
+      val game = Poker(Vector(
+        (p1, interactiveMove, println),
+        (p2, interactiveMove, println)),
+        println)
+
+      val state = PokerState(
+        _ => Some(p1),
+        axle.game.cards.Deck(),
+        Vector.empty, // shared
+        0,
+        Map.empty,
+        0, // pot
+        5, // currentBet
+        Set(p1), // stillIn
+        Map(p1 -> 5), // in for
+        Map(p1 -> 200, p2 -> 0), // piles
+        Some(PokerOutcome(Some(p1), None)))
+
+      Poker.evGame.startFrom(game, state) must be equalTo None
+    }
+  }
+
   "p2 folding after river" should {
     "result in victory for p1" in {
 
@@ -25,11 +50,11 @@ class PokerSpec extends Specification {
 
       def p1Move(state: PokerState, game: Poker): String =
         (state.numShown, state.currentBet) match {
-          case (0, _) => "call"
+          case (0, _)              => "call"
           case (3, bet) if bet < 3 => "raise 1"
-          case (3, _) => "call"
-          case (4, _) => "call"
-          case (5, _) => "call"
+          case (3, _)              => "call"
+          case (4, _)              => "call"
+          case (5, _)              => "call"
         }
 
       def p2Move(state: PokerState, game: Poker): String =
@@ -53,7 +78,7 @@ class PokerSpec extends Specification {
       val outcome = lastState.outcome(game).get
       val newGameState = startFrom(game, lastState).get
 
-      // lastState must be equalTo lastStateByPlay
+      // TODO lastState must be equalTo lastStateByPlay
       history.map({
         case (from, move, to) => {
           val mover = evState.mover(from).get
