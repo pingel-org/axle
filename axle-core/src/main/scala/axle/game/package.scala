@@ -15,16 +15,14 @@ package object game {
   val dropOutput = (s: String) => {}
 
   def outcomeRingHeuristic[G, S, O, M, N: Ring](game: G, f: (O, Player) => N)(
-    implicit evGame: Game[G, S, O, M],
-    evState: State[G, S, O, M]): S => Map[Player, N] =
+    implicit evGame: Game[G, S, O, M]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
-      val score = evState.outcome(state, game).map(o => f(o, p)).getOrElse(Ring[N].zero)
+      val score = evGame.outcome(state, game).map(o => f(o, p)).getOrElse(Ring[N].zero)
       (p, score)
     }).toMap
 
   def aiMover[G, S, O, M, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
-    implicit evGame: Game[G, S, O, M],
-    evState: State[G, S, O, M]) =
+    implicit evGame: Game[G, S, O, M]) =
     (state: S, ttt: G) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
       move
@@ -47,10 +45,9 @@ package object game {
   }
 
   def interactiveMove[G, S, O, M](
-    implicit evGame: Game[G, S, O, M],
-    evState: State[G, S, O, M]): (S, G) => M = (state: S, game: G) => {
+    implicit evGame: Game[G, S, O, M]): (S, G) => M = (state: S, game: G) => {
 
-    val mover = evState.mover(state).get // TODO .get
+    val mover = evGame.mover(state).get // TODO .get
 
     val display = evGame.displayerFor(game, mover)
 
@@ -68,9 +65,9 @@ package object game {
     stream.find(esm => esm.isRight).get.right.toOption.get
   }
 
-  def randomMove[G, S, O, M](implicit evState: State[G, S, O, M]): (S, G) => M =
+  def randomMove[G, S, O, M](implicit evGame: Game[G, S, O, M]): (S, G) => M =
     (state: S, game: G) => {
-      val opens = evState.moves(state, game).toList
+      val opens = evGame.moves(state, game).toList
       opens(nextInt(opens.length))
     }
 
@@ -91,16 +88,15 @@ package object game {
     state: S,
     depth: Int,
     heuristic: S => Map[Player, N])(
-      implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): (M, S, Map[Player, N]) =
-    if (evState.outcome(state, game).isDefined || depth <= 0) {
+      implicit evGame: Game[G, S, O, M]): (M, S, Map[Player, N]) =
+    if (evGame.outcome(state, game).isDefined || depth <= 0) {
       (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
     } else {
-      val moveValue = evState.moves(state, game).map(move => {
-        val newState = evState.applyMove(state, game, move)
+      val moveValue = evGame.moves(state, game).map(move => {
+        val newState = evGame.applyMove(state, game, move)
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
-      val mover = evState.mover(state).get // TODO .get
+      val mover = evGame.mover(state).get // TODO .get
       val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
       val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
       matches(nextInt(matches.length))
@@ -120,7 +116,7 @@ package object game {
     state: S,
     depth: Int,
     heuristic: S => Map[Player, N])(
-      implicit evGame: Game[G, S, O, M], evState: State[G, S, O, M]): (M, Map[Player, N]) =
+      implicit evGame: Game[G, S, O, M]): (M, Map[Player, N]) =
     _alphabeta(game, state, depth, Map.empty, heuristic)
 
   def _alphabeta[G, S, O, M, N: Order](
@@ -129,57 +125,53 @@ package object game {
     depth: Int,
     cutoff: Map[Player, N],
     heuristic: S => Map[Player, N])(
-      implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): (M, Map[Player, N]) =
-    if (evState.outcome(state, g).isDefined || depth <= 0) {
+      implicit evGame: Game[G, S, O, M]): (M, Map[Player, N]) =
+    if (evGame.outcome(state, g).isDefined || depth <= 0) {
       (null.asInstanceOf[M], heuristic(state)) // TODO null
     } else {
       val initial = AlphaBetaFold(g, null.asInstanceOf[M], cutoff, false)
-      val result = evState.moves(state, g).foldLeft(initial)(_.process(_, state, heuristic))
+      val result = evGame.moves(state, g).foldLeft(initial)(_.process(_, state, heuristic))
       (result.move, result.cutoff)
     }
 
   def moveStateStream[G, S, O, M](
     game: G,
     fromState: S)(
-      implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): Stream[(S, M, S)] =
-    evState.mover(fromState).map(mover => {
+      implicit evGame: Game[G, S, O, M]): Stream[(S, M, S)] =
+    evGame.mover(fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
       val move = strategy.apply(fromState, game)
-      val toState = evState.applyMove(fromState, game, move)
+      val toState = evGame.applyMove(fromState, game, move)
       cons((fromState, move, toState), moveStateStream(game, toState))
     }) getOrElse {
       Stream.empty
     }
 
   def play[G, S, O, M](game: G)(
-    implicit evGame: Game[G, S, O, M],
-    evState: State[G, S, O, M]): S =
+    implicit evGame: Game[G, S, O, M]): S =
     play(game, startState(game), true)
 
   def play[G, S, O, M](
     game: G,
     start: S,
     intro: Boolean = true)(
-      implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): S = {
+      implicit evGame: Game[G, S, O, M]): S = {
 
     evGame.players(game) foreach { observer =>
       val display = evGame.displayerFor(game, observer)
       if (intro) {
         display(evGame.introMessage(game))
       }
-      display(evState.displayTo(start, observer, game))
+      display(evGame.displayTo(start, observer, game))
     }
 
     val lastState = moveStateStream(game, start) map {
       case (fromState, move, toState) => {
-        evState.mover(fromState) foreach { mover =>
+        evGame.mover(fromState) foreach { mover =>
           evGame.players(game) foreach { observer =>
             val display = evGame.displayerFor(game, observer)
             display(evGame.displayMoveTo(game, mover, move, observer))
-            display(evState.displayTo(toState, observer, game))
+            display(evGame.displayTo(toState, observer, game))
           }
         }
         toState
@@ -189,8 +181,8 @@ package object game {
     evGame.players(game) foreach { observer =>
       val display = evGame.displayerFor(game, observer)
       display("")
-      display(evState.displayTo(lastState, observer, game))
-      evState.outcome(lastState, game) foreach { outcome =>
+      display(evGame.displayTo(lastState, observer, game))
+      evGame.outcome(lastState, game) foreach { outcome =>
         display(evGame.displayOutcomeTo(game, outcome, observer))
       }
     }
@@ -202,8 +194,7 @@ package object game {
     game: G,
     start: S,
     intro: Boolean = true)(
-      implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): Stream[S] = {
+      implicit evGame: Game[G, S, O, M]): Stream[S] = {
     val end = play(game, start, intro)
     cons(end, gameStream(game, evGame.startFrom(game, end).get, false))
   }
@@ -211,8 +202,7 @@ package object game {
   def playContinuously[G, S, O, M](
     game: G,
     start: S)(
-      implicit evGame: Game[G, S, O, M],
-      evState: State[G, S, O, M]): S =
+      implicit evGame: Game[G, S, O, M]): S =
     gameStream(game, start).last
 
 }

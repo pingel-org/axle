@@ -8,7 +8,7 @@ case class AlphaBetaFold[G, S, O, M, N: Order](
     move: M,
     cutoff: Map[Player, N],
     done: Boolean)(
-        implicit evGame: Game[G, S, O, M], evState: State[G, S, O, M]) {
+        implicit evGame: Game[G, S, O, M]) {
 
   def process(
     m: M,
@@ -17,9 +17,9 @@ case class AlphaBetaFold[G, S, O, M, N: Order](
     if (done) {
       this
     } else {
-      val α = heuristic(evState.applyMove(state, g, m))
+      val α = heuristic(evGame.applyMove(state, g, m))
       // TODO: forall other players ??
-      val mover = evState.mover(state).get
+      val mover = evGame.mover(state).get
       val c = cutoff.get(mover)
       if (c.isEmpty || c.get <= α(mover)) {
         AlphaBetaFold(g, m, α, false) // TODO move = m?

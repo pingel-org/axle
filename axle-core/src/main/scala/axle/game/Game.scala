@@ -33,10 +33,25 @@ trait Game[G, S, O, M] {
     observer: Player)(
       implicit evGame: Game[G, S, O, M]): String
 
-  def displayOutcomeTo[G, S, M](
+  def displayOutcomeTo(
     game: G,
     outcome: O,
     observer: Player)(
       implicit evGame: Game[G, S, O, M]): String
+
+  def mover(s: S): Option[Player]
+
+  def applyMove(
+    state: S,
+    game: G,
+    move: M)(
+      implicit evGame: Game[G, S, O, M]): S
+
+  def displayTo(state: S, observer: Player, game: G)(
+    implicit evGame: Game[G, S, O, M]): String
+
+  def outcome(s: S, game: G): Option[O]
+
+  def moves(s: S, game: G): Seq[M]
 
 }
