@@ -90,11 +90,11 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
           Left("That space is occupied.")
         }
 
-      def displayOutcomeTo[G, S, M](
-        game: G,
+      def displayOutcomeTo(
+        game: TicTacToe,
         outcome: TicTacToeOutcome,
         observer: Player)(
-          implicit evGame: Game[G, S, TicTacToeOutcome, M]): String = {
+          implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): String = {
         outcome.winner map { wp =>
           s"${wp.referenceFor(observer)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(observer)).toList.mkString(" and ") + "!"
         } getOrElse ("The game was a draw.")
@@ -109,6 +109,30 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
         mover.referenceFor(observer) +
           " put an " + game.markFor(mover) +
           " in the " + move.description + "."
+
+      def applyMove(s: TicTacToeState, game: TicTacToe, move: TicTacToeMove)(
+        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState = {
+        val nextMoverOptFn = (newState: TicTacToeState) =>
+          if (outcome(newState, game).isDefined) {
+            None
+          } else {
+            Some(game.playerAfter(s.moverOpt.get))
+          }
+        game.state(nextMoverOptFn, s.place(move.position, s.moverOpt.get))
+      }
+
+      def displayTo(s: TicTacToeState, viewer: Player, game: TicTacToe)(
+        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): String =
+        s.displayTo(viewer, game)
+
+      def mover(s: TicTacToeState): Option[Player] =
+        s.moverOpt
+
+      def moves(s: TicTacToeState, game: TicTacToe): Seq[TicTacToeMove] =
+        mover(s).map { p => s.openPositions(game).map(TicTacToeMove(_, game.boardSize)) } getOrElse (List.empty)
+
+      def outcome(s: TicTacToeState, game: TicTacToe): Option[TicTacToeOutcome] =
+        s.outcome(game)
 
     }
 }

@@ -5,6 +5,8 @@ import axle.game._
 
 class PokerSpec extends Specification {
 
+  import Poker.evGame._
+
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
 
@@ -39,7 +41,7 @@ class PokerSpec extends Specification {
         Map(p1 -> 200, p2 -> 0), // piles
         Some(PokerOutcome(Some(p1), None)))
 
-      Poker.evGame.startFrom(game, state) must be equalTo None
+      startFrom(game, state) must be equalTo None
     }
   }
 
@@ -81,15 +83,14 @@ class PokerSpec extends Specification {
       // TODO lastState must be equalTo lastStateByPlay
       history.map({
         case (from, move, to) => {
-          val mover = evState.mover(from).get
-          Poker.evGame.displayMoveTo(game, mover, move, p1)
+          displayMoveTo(game, mover(from).get, move, p1)
         }
       }).mkString(", ") must contain("call")
       // TODO these messages should include amounts
-      evState.moves(history.drop(1).head._1, game) must contain(Fold())
-      Poker.evGame.displayOutcomeTo(game, outcome, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
-      Poker.evGame.displayOutcomeTo(game, outcome, p2) must contain("Winner: Player 1")
-      Poker.evGame.introMessage(game) must contain("Texas")
+      moves(history.drop(1).head._1, game) must contain(Fold())
+      displayOutcomeTo(game, outcome, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
+      displayOutcomeTo(game, outcome, p2) must contain("Winner: Player 1")
+      introMessage(game) must contain("Texas")
       outcome.winner.get should be equalTo p1
       newGameState.moves(game).length must be equalTo 1 // new deal
     }

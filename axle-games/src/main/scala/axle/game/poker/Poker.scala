@@ -6,7 +6,7 @@ import axle.string
 
 case class Poker(
     playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)],
-    dealerDisplayer: String => Unit) {
+    dealerDisplayer: String => Unit)(implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]) {
 
   val players = playersStrategiesDisplayers.map(_._1)
 
@@ -14,7 +14,7 @@ case class Poker(
 
   val dealer = Player("D", "Dealer")
 
-  val allPlayers = (dealer, randomMove, dealerDisplayer) +: playersStrategiesDisplayers
+  val allPlayers = (dealer, randomMove(evGame), dealerDisplayer) +: playersStrategiesDisplayers
 
   val playerToStrategy = allPlayers.map(tuple => tuple._1 -> tuple._2).toMap
 
@@ -96,11 +96,11 @@ Example moves:
           Left("invalid move")
         }
 
-      def displayOutcomeTo[G, S, M](
-        game: G,
+      def displayOutcomeTo(
+        game: Poker,
         outcome: PokerOutcome,
         observer: Player)(
-          implicit evGame: Game[G, S, PokerOutcome, M]): String = {
+          implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String = {
         "Winner: " + outcome.winner.get.description + "\n" +
           "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
       }
@@ -108,6 +108,23 @@ Example moves:
       def displayMoveTo(game: Poker, mover: Player, move: PokerMove, observer: Player)(
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
         mover.referenceFor(observer) + " " + move.description + "."
+
+      def applyMove(s: PokerState, game: Poker, move: PokerMove)(
+        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerState =
+        s(game, move)
+
+      def displayTo(s: PokerState, observer: Player, game: Poker)(
+        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
+        s.displayTo(observer, game)
+
+      def mover(s: PokerState): Option[Player] =
+        s.moverOpt
+
+      def moves(s: PokerState, game: Poker): Seq[PokerMove] =
+        s.moves(game)
+
+      def outcome(s: PokerState, game: Poker): Option[PokerOutcome] =
+        s.outcome(game)
 
     }
 

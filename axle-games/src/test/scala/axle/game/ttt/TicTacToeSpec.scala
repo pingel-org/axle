@@ -5,6 +5,8 @@ import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {
 
+  import TicTacToe.evGame._
+
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
 
@@ -32,7 +34,7 @@ class TicTacToeSpec extends Specification {
 
     "play" in {
       val endState = play(rGame, startState(rGame), false)
-      evState.moves(endState, rGame).length must be equalTo 0
+      moves(endState, rGame).length must be equalTo 0
     }
 
     "product game stream" in {
@@ -51,17 +53,17 @@ class TicTacToeSpec extends Specification {
   "startFrom" should {
     "simply return the start state" in {
       val state = startState(game)
-      val move = evState.moves(state, game).head
-      val nextState = evState.applyMove(state, game, move)
+      val move = moves(state, game).head
+      val nextState = applyMove(state, game, move)
       val newStart = startFrom(game, nextState).get
-      evState.moves(newStart, game).length must be equalTo 9
+      moves(newStart, game).length must be equalTo 9
     }
   }
 
   "starting moves" should {
     "be nine-fold, display to O with 'put an', and have string descriptions that contain 'upper'" in {
 
-      val startingMoves = evState.moves(startState(game), game)
+      val startingMoves = moves(startState(game), game)
 
       TicTacToe.evGame.displayMoveTo(game, x, startingMoves.head, o) must contain("put an")
       startingMoves.length must be equalTo 9
@@ -71,7 +73,7 @@ class TicTacToeSpec extends Specification {
       val bigGame = TicTacToe(4,
         x, randomMove, dropOutput,
         o, randomMove, dropOutput)
-      val startingMoves = evState.moves(startState(bigGame), bigGame)
+      val startingMoves = moves(startState(bigGame), bigGame)
       startingMoves.map(_.description).mkString(",") must contain("16")
     }
   }
@@ -80,7 +82,7 @@ class TicTacToeSpec extends Specification {
     "print various messages" in {
 
       val firstMove = TicTacToeMove(2, game.boardSize)
-      val secondState = evState.applyMove(startState(game), game, firstMove)
+      val secondState = applyMove(startState(game), game, firstMove)
 
       val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
 
@@ -96,7 +98,7 @@ class TicTacToeSpec extends Specification {
   "random strategy" should {
     "make a move" in {
 
-      val mover = randomMove
+      val mover = randomMove(TicTacToe.evGame)
       val m = mover(startState(game), game)
 
       m.position must be greaterThan 0
@@ -115,7 +117,7 @@ class TicTacToeSpec extends Specification {
       val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](
         4, outcomeRingHeuristic(game, h))
 
-      val secondState = evState.applyMove(startState(game), game, firstMove)
+      val secondState = applyMove(startState(game), game, firstMove)
 
       val move = ai4(secondState, game)
 
@@ -126,14 +128,14 @@ class TicTacToeSpec extends Specification {
   "7-move x diagonal" should {
     "be a victory for x" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
         case 9 => "1"
         case 7 => "3"
         case 5 => "5"
         case 3 => "7"
       }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
         case 8 => "2"
         case 6 => "4"
         case 4 => "6"
@@ -155,14 +157,14 @@ class TicTacToeSpec extends Specification {
   "7-move o diagonal" should {
     "be a victory for o" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
         case 9 => "2"
         case 7 => "4"
         case 5 => "6"
         case 3 => "8"
       }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
         case 8 => "3"
         case 6 => "5"
         case 4 => "7"
@@ -182,7 +184,7 @@ class TicTacToeSpec extends Specification {
   "9 move tie" should {
     "result in no-winner outcome" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
         case 9 => "1"
         case 7 => "3"
         case 5 => "5"
@@ -190,7 +192,7 @@ class TicTacToeSpec extends Specification {
         case 1 => "6"
       }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = evState.moves(state, game).size match {
+      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
         case 8 => "2"
         case 6 => "4"
         case 4 => "7"
