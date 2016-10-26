@@ -1,9 +1,5 @@
 package axle.game
 
-import axle.Show
-import spire.algebra.Eq
-import spire.implicits.eqOps
-
 package object ttt {
 
   implicit val evState: State[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
@@ -34,31 +30,5 @@ package object ttt {
         s.outcome(game)
     }
 
-  implicit val evOutcome: Outcome[TicTacToeOutcome] =
-    new Outcome[TicTacToeOutcome] {
-
-      def displayTo[G, S, M](
-        game: G,
-        outcome: TicTacToeOutcome,
-        observer: Player)(
-          implicit evGame: Game[G, S, TicTacToeOutcome, M],
-          eqp: Eq[Player],
-          sp: Show[Player]): String = {
-        outcome.winner map { wp =>
-          s"${wp.referenceFor(observer)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(observer)).toList.mkString(" and ") + "!"
-        } getOrElse ("The game was a draw.")
-      }
-
-    }
-
-  implicit val evMove: Move[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
-    new Move[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
-
-      def displayTo(game: TicTacToe, mover: Player, move: TicTacToeMove, observer: Player)(
-        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove], eqp: Eq[Player], sp: Show[Player]): String =
-        mover.referenceFor(observer) +
-          " put an " + game.markFor(mover) +
-          " in the " + move.description + "."
-    }
 
 }

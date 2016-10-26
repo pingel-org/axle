@@ -26,4 +26,17 @@ trait Game[G, S, O, M] {
 
   def isValid(g: G, state: S, move: M): Either[String, M]
 
+  def displayMoveTo(
+    game: G,
+    mover: Player,
+    move: M,
+    observer: Player)(
+      implicit evGame: Game[G, S, O, M]): String
+
+  def displayOutcomeTo[G, S, M](
+    game: G,
+    outcome: O,
+    observer: Player)(
+      implicit evGame: Game[G, S, O, M]): String
+
 }

@@ -2,6 +2,7 @@ package axle.game.poker
 
 import axle.game._
 import axle.game.cards._
+import axle.string
 
 case class Poker(
     playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)],
@@ -94,6 +95,19 @@ Example moves:
         } else {
           Left("invalid move")
         }
+
+      def displayOutcomeTo[G, S, M](
+        game: G,
+        outcome: PokerOutcome,
+        observer: Player)(
+          implicit evGame: Game[G, S, PokerOutcome, M]): String = {
+        "Winner: " + outcome.winner.get.description + "\n" +
+          "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
+      }
+
+      def displayMoveTo(game: Poker, mover: Player, move: PokerMove, observer: Player)(
+        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
+        mover.referenceFor(observer) + " " + move.description + "."
 
     }
 

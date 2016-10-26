@@ -1,10 +1,5 @@
 package axle.game
 
-import spire.algebra.Eq
-import axle.Show
-import axle.string
-// import spire.implicits.eqOps
-
 package object poker {
 
   lazy val moveParser = MoveParser()
@@ -30,28 +25,5 @@ package object poker {
         s.outcome(game)
     }
 
-  implicit val evOutcome: Outcome[PokerOutcome] =
-    new Outcome[PokerOutcome] {
-
-      def displayTo[G, S, M](
-        game: G,
-        outcome: PokerOutcome,
-        observer: Player)(
-          implicit evGame: Game[G, S, PokerOutcome, M],
-          eqp: Eq[Player],
-          sp: Show[Player]): String = {
-        "Winner: " + outcome.winner.get.description + "\n" +
-          "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
-      }
-
-    }
-
-  implicit val evMove: Move[Poker, PokerState, PokerOutcome, PokerMove] =
-    new Move[Poker, PokerState, PokerOutcome, PokerMove] {
-
-      def displayTo(game: Poker, mover: Player, move: PokerMove, observer: Player)(
-        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove], eqp: Eq[Player], sp: Show[Player]): String =
-        mover.referenceFor(observer) + " " + move.description + "."
-    }
 
 }

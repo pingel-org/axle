@@ -82,13 +82,13 @@ class PokerSpec extends Specification {
       history.map({
         case (from, move, to) => {
           val mover = evState.mover(from).get
-          evMove.displayTo(game, mover, move, p1)
+          Poker.evGame.displayMoveTo(game, mover, move, p1)
         }
       }).mkString(", ") must contain("call")
       // TODO these messages should include amounts
       evState.moves(history.drop(1).head._1, game) must contain(Fold())
-      evOutcome.displayTo(game, outcome, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
-      evOutcome.displayTo(game, outcome, p2) must contain("Winner: Player 1")
+      Poker.evGame.displayOutcomeTo(game, outcome, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
+      Poker.evGame.displayOutcomeTo(game, outcome, p2) must contain("Winner: Player 1")
       Poker.evGame.introMessage(game) must contain("Texas")
       outcome.winner.get should be equalTo p1
       newGameState.moves(game).length must be equalTo 1 // new deal
