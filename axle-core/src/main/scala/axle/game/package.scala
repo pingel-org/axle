@@ -32,7 +32,7 @@ package object game {
       if (intro) {
         display(evGame.introMessage(game))
       }
-      display(evGame.displayTo(start, observer, game))
+      display(evGame.displayStateTo(start, observer, game))
     }
 
     val lastState = moveStateStream(game, start) map {
@@ -41,7 +41,7 @@ package object game {
           evGame.players(game) foreach { observer =>
             val display = evGame.displayerFor(game, observer)
             display(evGame.displayMoveTo(game, mover, move, observer))
-            display(evGame.displayTo(toState, observer, game))
+            display(evGame.displayStateTo(toState, observer, game))
           }
         }
         toState
@@ -51,7 +51,7 @@ package object game {
     evGame.players(game) foreach { observer =>
       val display = evGame.displayerFor(game, observer)
       display("")
-      display(evGame.displayTo(lastState, observer, game))
+      display(evGame.displayStateTo(lastState, observer, game))
       evGame.outcome(lastState, game) foreach { outcome =>
         display(evGame.displayOutcomeTo(game, outcome, observer))
       }
