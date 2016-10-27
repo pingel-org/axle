@@ -7,7 +7,7 @@ import axle.game.Strategies._
 
 class PokerSpec extends Specification {
 
-  import Poker.evGame._
+  import axle.game.poker.evGame._
 
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
