@@ -93,19 +93,16 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       def displayOutcomeTo(
         game: TicTacToe,
         outcome: TicTacToeOutcome,
-        observer: Player)(
-          implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): String = {
+        observer: Player): String =
         outcome.winner map { wp =>
           s"${wp.referenceFor(observer)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(observer)).toList.mkString(" and ") + "!"
         } getOrElse ("The game was a draw.")
-      }
 
       def displayMoveTo(
         game: TicTacToe,
         mover: Player,
         move: TicTacToeMove,
-        observer: Player)(
-          implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): String =
+        observer: Player): String =
         mover.referenceFor(observer) +
           " put an " + game.markFor(mover) +
           " in the " + move.description + "."
@@ -121,8 +118,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
         game.state(nextMoverOptFn, s.place(move.position, s.moverOpt.get))
       }
 
-      def displayStateTo(s: TicTacToeState, viewer: Player, game: TicTacToe)(
-        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): String =
+      def displayStateTo(s: TicTacToeState, viewer: Player, game: TicTacToe): String =
         s.displayTo(viewer, game)
 
       def mover(s: TicTacToeState): Option[Player] =

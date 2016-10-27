@@ -100,22 +100,18 @@ Example moves:
       def displayOutcomeTo(
         game: Poker,
         outcome: PokerOutcome,
-        observer: Player)(
-          implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String = {
+        observer: Player): String = {
         "Winner: " + outcome.winner.get.description + "\n" +
           "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
       }
 
-      def displayMoveTo(game: Poker, mover: Player, move: PokerMove, observer: Player)(
-        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
+      def displayMoveTo(game: Poker, mover: Player, move: PokerMove, observer: Player): String =
         mover.referenceFor(observer) + " " + move.description + "."
 
-      def applyMove(s: PokerState, game: Poker, move: PokerMove)(
-        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerState =
+      def applyMove(s: PokerState, game: Poker, move: PokerMove): PokerState =
         s(game, move)
 
-      def displayStateTo(s: PokerState, observer: Player, game: Poker)(
-        implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
+      def displayStateTo(s: PokerState, observer: Player, game: Poker): String =
         s.displayTo(observer, game)
 
       def mover(s: PokerState): Option[Player] =
