@@ -1,6 +1,7 @@
 package axle.game.poker
 
 import axle.game._
+import axle.game.Strategies._
 import axle.game.cards._
 import axle.string
 

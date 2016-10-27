@@ -1,6 +1,7 @@
 package axle.game.ttt
 
 import axle.game._
+import axle.game.Strategies._
 import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {

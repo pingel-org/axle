@@ -2,6 +2,7 @@ package axle.game.poker
 
 import org.specs2.mutable._
 import axle.game._
+import axle.game.Strategies._
 
 class PokerMoveValidationSpec extends Specification {
 
