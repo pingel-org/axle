@@ -35,11 +35,6 @@ case class TicTacToe(
   def markFor(player: Player): Char =
     if (player === x) 'X' else 'O'
 
-  def state(
-    playerOptFn: (TicTacToeState) => Option[Player],
-    board: Array[Option[Player]]): TicTacToeState =
-    TicTacToeState(playerOptFn, board, boardSize)
-
 }
 
 object TicTacToe {
@@ -115,7 +110,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
           } else {
             Some(game.playerAfter(s.moverOpt.get))
           }
-        game.state(nextMoverOptFn, s.place(move.position, s.moverOpt.get))
+        TicTacToeState(nextMoverOptFn, s.place(move.position, s.moverOpt.get), game.boardSize)
       }
 
       def displayStateTo(s: TicTacToeState, observer: Player, game: TicTacToe): String = {
