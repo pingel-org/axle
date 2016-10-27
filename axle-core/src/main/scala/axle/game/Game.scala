@@ -44,7 +44,7 @@ trait Game[G, S, O, M] {
     observer: Player)(
       implicit evGame: Game[G, S, O, M]): String
 
-  def displayTo(state: S, observer: Player, game: G)(
+  def displayStateTo(state: S, observer: Player, game: G)(
     implicit evGame: Game[G, S, O, M]): String
 
 }

@@ -114,7 +114,7 @@ Example moves:
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): PokerState =
         s(game, move)
 
-      def displayTo(s: PokerState, observer: Player, game: Poker)(
+      def displayStateTo(s: PokerState, observer: Player, game: Poker)(
         implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]): String =
         s.displayTo(observer, game)
 

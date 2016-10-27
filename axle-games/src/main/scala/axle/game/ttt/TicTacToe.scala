@@ -121,7 +121,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
         game.state(nextMoverOptFn, s.place(move.position, s.moverOpt.get))
       }
 
-      def displayTo(s: TicTacToeState, viewer: Player, game: TicTacToe)(
+      def displayStateTo(s: TicTacToeState, viewer: Player, game: TicTacToe)(
         implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): String =
         s.displayTo(viewer, game)
 
