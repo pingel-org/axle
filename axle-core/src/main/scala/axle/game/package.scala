@@ -4,11 +4,6 @@ import scala.Stream.cons
 
 package object game {
 
-  val dropOutput = (s: String) => {}
-
-  def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
-    (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))
-
   def moveStateStream[G, S, O, M](
     game: G,
     fromState: S)(

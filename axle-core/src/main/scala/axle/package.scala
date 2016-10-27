@@ -64,6 +64,11 @@ import scala.language.implicitConversions
 
 package object axle {
 
+  def dropOutput(s: String): Unit = {}
+
+  def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
+    (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))
+
   //  val Sigma = Σ _
   //
   //  val Pi = Π _
