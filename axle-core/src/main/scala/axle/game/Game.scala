@@ -1,35 +1,41 @@
 
 package axle.game
 
+/**
+ * Axioms:
+ * 
+ * For all move in moves(s, g), isValid(g, s, move).isRight
+ */
+
 trait Game[G, S, O, M] {
 
-  def startState(g: G): S
+  def startState(game: G): S
 
-  def startFrom(g: G, s: S): Option[S]
+  def startFrom(game: G, state: S): Option[S]
 
-  def players(g: G): IndexedSeq[Player]
+  def players(game: G): IndexedSeq[Player]
 
-  def mover(s: S): Option[Player]
+  def mover(state: S): Option[Player]
 
-  def moves(s: S, game: G): Seq[M]
+  def moves(state: S, game: G): Seq[M]
 
-  def strategyFor(g: G, player: Player): (S, G) => M
+  def strategyFor(game: G, player: Player): (S, G) => M
 
-  def isValid(g: G, state: S, move: M): Either[String, M]
+  def isValid(game: G, state: S, move: M): Either[String, M]
 
   def applyMove(state: S, game: G, move: M): S
 
-  def outcome(s: S, game: G): Option[O]
+  def outcome(state: S, game: G): Option[O]
 
   /**
    * IO related
    */
 
-  def parseMove(g: G, input: String): Either[String, M]
+  def parseMove(game: G, input: String): Either[String, M]
 
-  def displayerFor(g: G, player: Player): String => Unit
+  def displayerFor(game: G, player: Player): String => Unit
 
-  def introMessage(g: G): String
+  def introMessage(game: G): String
 
   def displayMoveTo(game: G, mover: Player, move: M, observer: Player): String
 
