@@ -5,6 +5,8 @@ import axle.game._
 
 class PokerMoveValidationSpec extends Specification {
 
+  import Poker.evGame._
+
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
 
@@ -16,7 +18,7 @@ class PokerMoveValidationSpec extends Specification {
   "move validator" should {
     "reject River as first move" in {
 
-      Poker.evGame.isValid(game, startState(game), River()) must be equalTo Left("invalid move")
+      isValid(game, startState(game), River()) must be equalTo Left("invalid move")
     }
   }
 }

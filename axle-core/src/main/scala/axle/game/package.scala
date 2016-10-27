@@ -74,15 +74,6 @@ package object game {
   def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
     (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))
 
-  def introMessage[G, S, O, M](g: G)(implicit evGame: Game[G, S, O, M]): String =
-    evGame.introMessage(g)
-
-  def startState[G, S, O, M](g: G)(implicit evGame: Game[G, S, O, M]): S =
-    evGame.startState(g)
-
-  def startFrom[G, S, O, M](g: G, s: S)(implicit evGame: Game[G, S, O, M]): Option[S] =
-    evGame.startFrom(g, s)
-
   def minimax[G, S, O, M, N: Order: Eq](
     game: G,
     state: S,
@@ -149,7 +140,7 @@ package object game {
 
   def play[G, S, O, M](game: G)(
     implicit evGame: Game[G, S, O, M]): S =
-    play(game, startState(game), true)
+    play(game, evGame.startState(game), true)
 
   def play[G, S, O, M](
     game: G,
