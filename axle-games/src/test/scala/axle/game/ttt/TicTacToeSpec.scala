@@ -7,7 +7,7 @@ import org.specs2.mutable._
 
 class TicTacToeSpec extends Specification {
 
-  import TicTacToe.evGame._
+  import axle.game.ttt.evGame._
 
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
@@ -67,7 +67,7 @@ class TicTacToeSpec extends Specification {
 
       val startingMoves = moves(startState(game), game)
 
-      TicTacToe.evGame.displayMoveTo(game, x, startingMoves.head, o) must contain("put an")
+      displayMoveTo(game, x, startingMoves.head, o) must contain("put an")
       startingMoves.length must be equalTo 9
       startingMoves.map(_.description).mkString(",") must contain("upper")
     }
@@ -100,7 +100,7 @@ class TicTacToeSpec extends Specification {
   "random strategy" should {
     "make a move" in {
 
-      val mover = randomMove(TicTacToe.evGame)
+      val mover = randomMove(evGame)
       val m = mover(startState(game), game)
 
       m.position must be greaterThan 0
