@@ -36,7 +36,7 @@ class TicTacToeSpec extends Specification {
 
     "play" in {
       val endState = play(rGame, startState(rGame), false)
-      moves(endState, rGame).length must be equalTo 0
+      moves(rGame, endState).length must be equalTo 0
     }
 
     "product game stream" in {
@@ -48,26 +48,26 @@ class TicTacToeSpec extends Specification {
 
   "start state" should {
     "display movement key to player x, and have 9 moves available to x" in {
-      displayStateTo(startState(game), x, game) must contain("Movement Key")
+      displayStateTo(game, startState(game), x) must contain("Movement Key")
     }
   }
 
   "startFrom" should {
     "simply return the start state" in {
       val state = startState(game)
-      val move = moves(state, game).head
-      val nextState = applyMove(state, game, move)
+      val move = moves(game, state).head
+      val nextState = applyMove(game, state, move)
       val newStart = startFrom(game, nextState).get
-      moves(newStart, game).length must be equalTo 9
+      moves(game, newStart).length must be equalTo 9
     }
   }
 
   "starting moves" should {
     "be nine-fold, display to O with 'put an', and have string descriptions that contain 'upper'" in {
 
-      val startingMoves = moves(startState(game), game)
+      val startingMoves = moves(game, startState(game))
 
-      displayMoveTo(game, x, startingMoves.head, o) must contain("put an")
+      displayMoveTo(game, startingMoves.head, x, o) must contain("put an")
       startingMoves.length must be equalTo 9
       startingMoves.map(_.description).mkString(",") must contain("upper")
     }
@@ -75,7 +75,7 @@ class TicTacToeSpec extends Specification {
       val bigGame = TicTacToe(4,
         x, randomMove, dropOutput,
         o, randomMove, dropOutput)
-      val startingMoves = moves(startState(bigGame), bigGame)
+      val startingMoves = moves(bigGame, startState(bigGame))
       startingMoves.map(_.description).mkString(",") must contain("16")
     }
   }
@@ -84,7 +84,7 @@ class TicTacToeSpec extends Specification {
     "print various messages" in {
 
       val firstMove = TicTacToeMove(2, game.boardSize)
-      val secondState = applyMove(startState(game), game, firstMove)
+      val secondState = applyMove(game, startState(game), firstMove)
 
       val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
 
@@ -119,7 +119,7 @@ class TicTacToeSpec extends Specification {
       val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, Double](
         4, outcomeRingHeuristic(game, h))
 
-      val secondState = applyMove(startState(game), game, firstMove)
+      val secondState = applyMove(game, startState(game), firstMove)
 
       val move = ai4(secondState, game)
 
@@ -130,14 +130,14 @@ class TicTacToeSpec extends Specification {
   "7-move x diagonal" should {
     "be a victory for x" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
+      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
         case 9 => "1"
         case 7 => "3"
         case 5 => "5"
         case 3 => "7"
       }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
+      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
         case 8 => "2"
         case 6 => "4"
         case 4 => "6"
@@ -149,7 +149,7 @@ class TicTacToeSpec extends Specification {
 
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3
-      val out = outcome(lastState, game).get
+      val out = outcome(game, lastState).get
       displayOutcomeTo(game, out, x) must contain("You beat")
       displayOutcomeTo(game, out, o) must contain("beat You")
       out.winner.get should be equalTo x
@@ -159,14 +159,14 @@ class TicTacToeSpec extends Specification {
   "7-move o diagonal" should {
     "be a victory for o" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
+      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
         case 9 => "2"
         case 7 => "4"
         case 5 => "6"
         case 3 => "8"
       }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
+      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
         case 8 => "3"
         case 6 => "5"
         case 4 => "7"
@@ -178,7 +178,7 @@ class TicTacToeSpec extends Specification {
 
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3
-      val winnerOpt = outcome(lastState, game).flatMap(_.winner)
+      val winnerOpt = outcome(game, lastState).flatMap(_.winner)
       winnerOpt should be equalTo (Some(o))
     }
   }
@@ -186,7 +186,7 @@ class TicTacToeSpec extends Specification {
   "9 move tie" should {
     "result in no-winner outcome" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
+      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
         case 9 => "1"
         case 7 => "3"
         case 5 => "5"
@@ -194,7 +194,7 @@ class TicTacToeSpec extends Specification {
         case 1 => "6"
       }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(state, game).size match {
+      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
         case 8 => "2"
         case 6 => "4"
         case 4 => "7"
@@ -208,7 +208,7 @@ class TicTacToeSpec extends Specification {
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3
 
-      val winnerOpt = outcome(lastState, game).flatMap(_.winner)
+      val winnerOpt = outcome(game, lastState).flatMap(_.winner)
       winnerOpt should be equalTo (None)
     }
   }

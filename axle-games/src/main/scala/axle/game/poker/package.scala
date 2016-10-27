@@ -57,16 +57,16 @@ package object poker {
 
       // TODO: this implementation works, but ideally there is more information in the error
       // string about why the move is invalid (eg player raised more than he had)
-      def isValid(g: Poker, state: PokerState, move: PokerMove): Either[String, PokerMove] =
-        if (moves(state, g).contains(move)) {
+      def isValid(game: Poker, state: PokerState, move: PokerMove): Either[String, PokerMove] =
+        if (moves(game, state).contains(move)) {
           Right(move)
         } else {
           Left("invalid move")
         }
 
-      def applyMove(s: PokerState, game: Poker, move: PokerMove): PokerState = {
+      def applyMove(game: Poker, state: PokerState, move: PokerMove): PokerState = {
 
-        import s._
+        import state._
 
         val mover = _mover.get // TODO .get
 
@@ -198,7 +198,7 @@ package object poker {
 
       def mover(s: PokerState): Option[Player] = s._mover
 
-      def moves(s: PokerState, game: Poker): Seq[PokerMove] = {
+      def moves(game: Poker, s: PokerState): Seq[PokerMove] = {
 
         import s._
 
@@ -236,7 +236,7 @@ package object poker {
         } getOrElse (List.empty)
       }
 
-      def outcome(s: PokerState, game: Poker): Option[PokerOutcome] = s._outcome
+      def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
 
       /**
        * IO related
@@ -261,7 +261,7 @@ Example moves:
 
 """
 
-      def displayStateTo(s: PokerState, observer: Player, game: Poker): String = {
+      def displayStateTo(game: Poker, s: PokerState, observer: Player): String = {
         s._mover.map(mover => "To: " + mover.referenceFor(observer) + "\n").getOrElse("") +
           "Current bet: " + s.currentBet + "\n" +
           "Pot: " + s.pot + "\n" +
@@ -295,7 +295,7 @@ Example moves:
           "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
       }
 
-      def displayMoveTo(game: Poker, mover: Player, move: PokerMove, observer: Player): String =
+      def displayMoveTo(game: Poker, move: PokerMove, mover: Player, observer: Player): String =
         mover.referenceFor(observer) + " " + move.description + "."
 
     }

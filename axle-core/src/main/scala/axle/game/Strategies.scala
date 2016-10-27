@@ -14,7 +14,7 @@ object Strategies {
   def outcomeRingHeuristic[G, S, O, M, N: Ring](game: G, f: (O, Player) => N)(
     implicit evGame: Game[G, S, O, M]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
-      val score = evGame.outcome(state, game).map(o => f(o, p)).getOrElse(Ring[N].zero)
+      val score = evGame.outcome(game, state).map(o => f(o, p)).getOrElse(Ring[N].zero)
       (p, score)
     }).toMap
 
@@ -64,7 +64,7 @@ object Strategies {
 
   def randomMove[G, S, O, M](implicit evGame: Game[G, S, O, M]): (S, G) => M =
     (state: S, game: G) => {
-      val opens = evGame.moves(state, game).toList
+      val opens = evGame.moves(game, state).toList
       opens(nextInt(opens.length))
     }
 
@@ -74,11 +74,11 @@ object Strategies {
     depth: Int,
     heuristic: S => Map[Player, N])(
       implicit evGame: Game[G, S, O, M]): (M, S, Map[Player, N]) =
-    if (evGame.outcome(state, game).isDefined || depth <= 0) {
+    if (evGame.outcome(game, state).isDefined || depth <= 0) {
       (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
     } else {
-      val moveValue = evGame.moves(state, game).map(move => {
-        val newState = evGame.applyMove(state, game, move)
+      val moveValue = evGame.moves(game, state).map(move => {
+        val newState = evGame.applyMove(game, state, move)
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
       val mover = evGame.mover(state).get // TODO .get
@@ -105,17 +105,17 @@ object Strategies {
     _alphabeta(game, state, depth, Map.empty, heuristic)
 
   def _alphabeta[G, S, O, M, N: Order](
-    g: G,
+    game: G,
     state: S,
     depth: Int,
     cutoff: Map[Player, N],
     heuristic: S => Map[Player, N])(
       implicit evGame: Game[G, S, O, M]): (M, Map[Player, N]) =
-    if (evGame.outcome(state, g).isDefined || depth <= 0) {
+    if (evGame.outcome(game, state).isDefined || depth <= 0) {
       (null.asInstanceOf[M], heuristic(state)) // TODO null
     } else {
-      val initial = AlphaBetaFold(g, null.asInstanceOf[M], cutoff, false)
-      val result = evGame.moves(state, g).foldLeft(initial)(_.process(_, state, heuristic))
+      val initial = AlphaBetaFold(game, null.asInstanceOf[M], cutoff, false)
+      val result = evGame.moves(game, state).foldLeft(initial)(_.process(_, state, heuristic))
       (result.move, result.cutoff)
     }
 

@@ -17,15 +17,15 @@ trait Game[G, S, O, M] {
 
   def mover(state: S): Option[Player]
 
-  def moves(state: S, game: G): Seq[M]
+  def moves(game: G, state: S): Seq[M]
 
   def strategyFor(game: G, player: Player): (S, G) => M
 
   def isValid(game: G, state: S, move: M): Either[String, M]
 
-  def applyMove(state: S, game: G, move: M): S
+  def applyMove(game: G, state: S, move: M): S
 
-  def outcome(state: S, game: G): Option[O]
+  def outcome(game: G, state: S): Option[O]
 
   /**
    * IO related
@@ -37,10 +37,10 @@ trait Game[G, S, O, M] {
 
   def introMessage(game: G): String
 
-  def displayMoveTo(game: G, mover: Player, move: M, observer: Player): String
+  def displayMoveTo(game: G, move: M, mover: Player, observer: Player): String
 
   def displayOutcomeTo(game: G, outcome: O, observer: Player): String
 
-  def displayStateTo(state: S, observer: Player, game: G): String
+  def displayStateTo(game: G, state: S, observer: Player): String
 
 }

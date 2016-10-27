@@ -27,24 +27,24 @@ package object ttt {
           Left("That space is occupied.")
         }
 
-      def applyMove(s: TicTacToeState, game: TicTacToe, move: TicTacToeMove): TicTacToeState = {
+      def applyMove(game: TicTacToe, state: TicTacToeState, move: TicTacToeMove): TicTacToeState = {
         val nextMoverOptFn = (newState: TicTacToeState) =>
-          if (outcome(newState, game).isDefined) {
+          if (outcome(game, newState).isDefined) {
             None
           } else {
-            Some(game.playerAfter(s.moverOpt.get))
+            Some(game.playerAfter(state.moverOpt.get))
           }
-        TicTacToeState(nextMoverOptFn, s.place(move.position, s.moverOpt.get), game.boardSize)
+        TicTacToeState(nextMoverOptFn, state.place(move.position, state.moverOpt.get), game.boardSize)
       }
 
       def mover(s: TicTacToeState): Option[Player] =
         s.moverOpt
 
-      def moves(s: TicTacToeState, game: TicTacToe): Seq[TicTacToeMove] =
+      def moves(game: TicTacToe, s: TicTacToeState): Seq[TicTacToeMove] =
         mover(s).map { p => s.openPositions(game).map(TicTacToeMove(_, game.boardSize)) } getOrElse (List.empty)
 
-      def outcome(s: TicTacToeState, game: TicTacToe): Option[TicTacToeOutcome] = {
-        import s._
+      def outcome(game: TicTacToe, state: TicTacToeState): Option[TicTacToeOutcome] = {
+        import state._
         val winner = game.players.find(hasWon)
         if (winner.isDefined) {
           Some(TicTacToeOutcome(winner))
@@ -84,7 +84,7 @@ package object ttt {
 Tic Tac Toe
 Moves are numbers 1-%s.""".format(ttt.numPositions)
 
-      def displayStateTo(s: TicTacToeState, observer: Player, game: TicTacToe): String = {
+      def displayStateTo(game: TicTacToe, s: TicTacToeState, observer: Player): String = {
         val keyWidth = string(s.numPositions).length
 
         "Board:         Movement Key:\n" +
@@ -97,8 +97,8 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
 
       def displayMoveTo(
         game: TicTacToe,
-        mover: Player,
         move: TicTacToeMove,
+        mover: Player,
         observer: Player): String =
         mover.referenceFor(observer) +
           " put an " + game.markFor(mover) +

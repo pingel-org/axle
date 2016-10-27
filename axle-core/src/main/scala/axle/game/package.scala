@@ -11,7 +11,7 @@ package object game {
     evGame.mover(fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
       val move = strategy.apply(fromState, game)
-      val toState = evGame.applyMove(fromState, game, move)
+      val toState = evGame.applyMove(game, fromState, move)
       cons((fromState, move, toState), moveStateStream(game, toState))
     }) getOrElse {
       Stream.empty
@@ -32,7 +32,7 @@ package object game {
       if (intro) {
         display(evGame.introMessage(game))
       }
-      display(evGame.displayStateTo(start, observer, game))
+      display(evGame.displayStateTo(game, start, observer))
     }
 
     val lastState = moveStateStream(game, start) map {
@@ -40,8 +40,8 @@ package object game {
         evGame.mover(fromState) foreach { mover =>
           evGame.players(game) foreach { observer =>
             val display = evGame.displayerFor(game, observer)
-            display(evGame.displayMoveTo(game, mover, move, observer))
-            display(evGame.displayStateTo(toState, observer, game))
+            display(evGame.displayMoveTo(game, move, mover, observer))
+            display(evGame.displayStateTo(game, toState, observer))
           }
         }
         toState
@@ -51,8 +51,8 @@ package object game {
     evGame.players(game) foreach { observer =>
       val display = evGame.displayerFor(game, observer)
       display("")
-      display(evGame.displayStateTo(lastState, observer, game))
-      evGame.outcome(lastState, game) foreach { outcome =>
+      display(evGame.displayStateTo(game, lastState, observer))
+      evGame.outcome(game, lastState) foreach { outcome =>
         display(evGame.displayOutcomeTo(game, outcome, observer))
       }
     }
