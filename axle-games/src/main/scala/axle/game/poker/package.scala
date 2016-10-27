@@ -15,18 +15,6 @@ package object poker {
   implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove] =
     new Game[Poker, PokerState, PokerOutcome, PokerMove] {
 
-      def introMessage(g: Poker) = """
-Texas Hold Em Poker
-
-Example moves:
-
-  check
-  raise 1
-  call
-  fold
-
-"""
-
       def startState(g: Poker): PokerState =
         PokerState(
           state => Some(g.dealer),
@@ -67,12 +55,6 @@ Example moves:
       def strategyFor(g: Poker, player: Player): (PokerState, Poker) => PokerMove =
         g.playerToStrategy(player)
 
-      def displayerFor(g: Poker, player: Player): String => Unit =
-        g.playerToDisplayer(player)
-
-      def parseMove(g: Poker, input: String): Either[String, PokerMove] =
-        moveParser.parse(input)
-
       // TODO: this implementation works, but ideally there is more information in the error
       // string about why the move is invalid (eg player raised more than he had)
       def isValid(g: Poker, state: PokerState, move: PokerMove): Either[String, PokerMove] =
@@ -81,17 +63,6 @@ Example moves:
         } else {
           Left("invalid move")
         }
-
-      def displayOutcomeTo(
-        game: Poker,
-        outcome: PokerOutcome,
-        observer: Player): String = {
-        "Winner: " + outcome.winner.get.description + "\n" +
-          "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
-      }
-
-      def displayMoveTo(game: Poker, mover: Player, move: PokerMove, observer: Player): String =
-        mover.referenceFor(observer) + " " + move.description + "."
 
       def applyMove(s: PokerState, game: Poker, move: PokerMove): PokerState = {
 
@@ -225,32 +196,6 @@ Example moves:
         }
       }
 
-      def displayStateTo(s: PokerState, observer: Player, game: Poker): String = {
-        s._mover.map(mover => "To: " + mover.referenceFor(observer) + "\n").getOrElse("") +
-          "Current bet: " + s.currentBet + "\n" +
-          "Pot: " + s.pot + "\n" +
-          "Shared: " + s.shared.zipWithIndex.map({
-            case (card, i) => if (i < s.numShown) string(card) else "??"
-          }).mkString(" ") + "\n" +
-          "\n" +
-          game.players.map(p => {
-            p.id + ": " +
-              " hand " + (
-                s.hands.get(p).map(_.map(c =>
-                  if (observer === p || (s._outcome.isDefined && s.stillIn.size > 1)) {
-                    string(c)
-                  } else {
-                    "??"
-                  }).mkString(" ")).getOrElse("--")) + " " +
-                (if (s.stillIn.contains(p)) {
-                  "in for $" + s.inFors.get(p).map(amt => string(amt)).getOrElse("--")
-                } else {
-                  "out"
-                }) +
-                ", $" + s.piles.get(p).map(amt => string(amt)).getOrElse("--") + " remaining"
-          }).mkString("\n")
-      }
-
       def mover(s: PokerState): Option[Player] = s._mover
 
       def moves(s: PokerState, game: Poker): Seq[PokerMove] = {
@@ -292,6 +237,66 @@ Example moves:
       }
 
       def outcome(s: PokerState, game: Poker): Option[PokerOutcome] = s._outcome
+
+      /**
+       * IO related
+       *
+       */
+
+      def displayerFor(g: Poker, player: Player): String => Unit =
+        g.playerToDisplayer(player)
+
+      def parseMove(g: Poker, input: String): Either[String, PokerMove] =
+        moveParser.parse(input)
+
+      def introMessage(g: Poker) = """
+Texas Hold Em Poker
+
+Example moves:
+
+  check
+  raise 1
+  call
+  fold
+
+"""
+
+      def displayStateTo(s: PokerState, observer: Player, game: Poker): String = {
+        s._mover.map(mover => "To: " + mover.referenceFor(observer) + "\n").getOrElse("") +
+          "Current bet: " + s.currentBet + "\n" +
+          "Pot: " + s.pot + "\n" +
+          "Shared: " + s.shared.zipWithIndex.map({
+            case (card, i) => if (i < s.numShown) string(card) else "??"
+          }).mkString(" ") + "\n" +
+          "\n" +
+          game.players.map(p => {
+            p.id + ": " +
+              " hand " + (
+                s.hands.get(p).map(_.map(c =>
+                  if (observer === p || (s._outcome.isDefined && s.stillIn.size > 1)) {
+                    string(c)
+                  } else {
+                    "??"
+                  }).mkString(" ")).getOrElse("--")) + " " +
+                (if (s.stillIn.contains(p)) {
+                  "in for $" + s.inFors.get(p).map(amt => string(amt)).getOrElse("--")
+                } else {
+                  "out"
+                }) +
+                ", $" + s.piles.get(p).map(amt => string(amt)).getOrElse("--") + " remaining"
+          }).mkString("\n")
+      }
+
+      def displayOutcomeTo(
+        game: Poker,
+        outcome: PokerOutcome,
+        observer: Player): String = {
+        "Winner: " + outcome.winner.get.description + "\n" +
+          "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
+      }
+
+      def displayMoveTo(game: Poker, mover: Player, move: PokerMove, observer: Player): String =
+        mover.referenceFor(observer) + " " + move.description + "."
 
     }
 
