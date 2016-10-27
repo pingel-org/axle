@@ -107,8 +107,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
           " put an " + game.markFor(mover) +
           " in the " + move.description + "."
 
-      def applyMove(s: TicTacToeState, game: TicTacToe, move: TicTacToeMove)(
-        implicit evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]): TicTacToeState = {
+      def applyMove(s: TicTacToeState, game: TicTacToe, move: TicTacToeMove): TicTacToeState = {
         val nextMoverOptFn = (newState: TicTacToeState) =>
           if (outcome(newState, game).isDefined) {
             None

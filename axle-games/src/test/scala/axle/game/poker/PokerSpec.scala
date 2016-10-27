@@ -18,7 +18,7 @@ class PokerSpec extends Specification {
         (p1, interactiveMove, println),
         (p2, interactiveMove, println)),
         println)
-      startState(game).displayTo(p1, game) must contain("Current bet: 0")
+      displayStateTo(startState(game), p1, game) must contain("Current bet: 0")
     }
   }
 
@@ -79,7 +79,7 @@ class PokerSpec extends Specification {
       val lastState = history.last._3
       val lastStateByPlay = play(game) // TODO make use of this
 
-      val outcome = lastState.outcome(game).get
+      val o = outcome(lastState, game).get
       val newGameState = startFrom(game, lastState).get
 
       // TODO lastState must be equalTo lastStateByPlay
@@ -90,11 +90,11 @@ class PokerSpec extends Specification {
       }).mkString(", ") must contain("call")
       // TODO these messages should include amounts
       moves(history.drop(1).head._1, game) must contain(Fold())
-      displayOutcomeTo(game, outcome, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
-      displayOutcomeTo(game, outcome, p2) must contain("Winner: Player 1")
+      displayOutcomeTo(game, o, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
+      displayOutcomeTo(game, o, p2) must contain("Winner: Player 1")
       introMessage(game) must contain("Texas")
-      outcome.winner.get should be equalTo p1
-      newGameState.moves(game).length must be equalTo 1 // new deal
+      o.winner.get should be equalTo p1
+      moves(newGameState, game).length must be equalTo 1 // new deal
     }
   }
 
