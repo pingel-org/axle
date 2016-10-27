@@ -1,6 +1,5 @@
 package axle.game.ttt
 
-import axle.string
 import axle.game._
 import spire.implicits._
 
@@ -27,21 +26,6 @@ case class TicTacToeState(
     updated
   }
 
-  def displayTo(viewer: Player, game: TicTacToe): String = {
-
-    val keyWidth = string(numPositions).length
-
-    "Board:         Movement Key:\n" +
-      0.until(boardSize).map(r => {
-        row(r).map(playerOpt => playerOpt.map(game.markFor).getOrElse(" ")).mkString("|") +
-          "          " +
-          (1 + r * boardSize).until(1 + (r + 1) * boardSize).mkString("|") // TODO rjust(keyWidth)
-      }).mkString("\n")
-
-  }
-
-  def apply(position: Int): Option[Player] = playerAt(position)
-
   def hasWonRow(player: Player): Boolean =
     (0 until boardSize).exists(row(_).toList.forall(_ == Some(player)))
 
@@ -54,17 +38,6 @@ case class TicTacToeState(
 
   def hasWon(player: Player): Boolean = hasWonRow(player) || hasWonColumn(player) || hasWonDiagonal(player)
 
-  def openPositions(ttt: TicTacToe): IndexedSeq[Int] = (1 to numPositions).filter(this(_).isEmpty)
-
-  def outcome(ttt: TicTacToe): Option[TicTacToeOutcome] = {
-    val winner = ttt.players.find(hasWon)
-    if (winner.isDefined) {
-      Some(TicTacToeOutcome(winner))
-    } else if (openPositions(ttt).length === 0) {
-      Some(TicTacToeOutcome(None))
-    } else {
-      None
-    }
-  }
+  def openPositions(ttt: TicTacToe): IndexedSeq[Int] = (1 to numPositions).filter(playerAt(_).isEmpty)
 
 }

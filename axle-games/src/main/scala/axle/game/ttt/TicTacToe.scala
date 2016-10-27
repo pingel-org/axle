@@ -1,6 +1,7 @@
 
 package axle.game.ttt
 
+import axle.string
 import axle.game._
 import spire.implicits._
 
@@ -84,7 +85,7 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       }
 
       def isValid(g: TicTacToe, state: TicTacToeState, move: TicTacToeMove): Either[String, TicTacToeMove] =
-        if (state(move.position).isEmpty) {
+        if (state.playerAt(move.position).isEmpty) {
           Right(move)
         } else {
           Left("That space is occupied.")
@@ -117,8 +118,16 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
         game.state(nextMoverOptFn, s.place(move.position, s.moverOpt.get))
       }
 
-      def displayStateTo(s: TicTacToeState, viewer: Player, game: TicTacToe): String =
-        s.displayTo(viewer, game)
+      def displayStateTo(s: TicTacToeState, observer: Player, game: TicTacToe): String = {
+        val keyWidth = string(s.numPositions).length
+
+        "Board:         Movement Key:\n" +
+          0.until(s.boardSize).map(r => {
+            s.row(r).map(playerOpt => playerOpt.map(game.markFor).getOrElse(" ")).mkString("|") +
+              "          " +
+              (1 + r * s.boardSize).until(1 + (r + 1) * s.boardSize).mkString("|") // TODO rjust(keyWidth)
+          }).mkString("\n")
+      }
 
       def mover(s: TicTacToeState): Option[Player] =
         s.moverOpt
@@ -126,8 +135,17 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       def moves(s: TicTacToeState, game: TicTacToe): Seq[TicTacToeMove] =
         mover(s).map { p => s.openPositions(game).map(TicTacToeMove(_, game.boardSize)) } getOrElse (List.empty)
 
-      def outcome(s: TicTacToeState, game: TicTacToe): Option[TicTacToeOutcome] =
-        s.outcome(game)
+      def outcome(s: TicTacToeState, game: TicTacToe): Option[TicTacToeOutcome] = {
+        import s._
+        val winner = game.players.find(hasWon)
+        if (winner.isDefined) {
+          Some(TicTacToeOutcome(winner))
+        } else if (openPositions(game).length === 0) {
+          Some(TicTacToeOutcome(None))
+        } else {
+          None
+        }
+      }
 
     }
 }

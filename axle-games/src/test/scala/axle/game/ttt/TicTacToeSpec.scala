@@ -48,7 +48,7 @@ class TicTacToeSpec extends Specification {
 
   "start state" should {
     "display movement key to player x, and have 9 moves available to x" in {
-      startState(game).displayTo(x, game) must contain("Movement Key")
+      displayStateTo(startState(game), x, game) must contain("Movement Key")
     }
   }
 
@@ -149,10 +149,10 @@ class TicTacToeSpec extends Specification {
 
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3
-      val outcome = lastState.outcome(game).get
-      TicTacToe.evGame.displayOutcomeTo(game, outcome, x) must contain("You beat")
-      TicTacToe.evGame.displayOutcomeTo(game, outcome, o) must contain("beat You")
-      outcome.winner.get should be equalTo x
+      val out = outcome(lastState, game).get
+      displayOutcomeTo(game, out, x) must contain("You beat")
+      displayOutcomeTo(game, out, o) must contain("beat You")
+      out.winner.get should be equalTo x
     }
   }
 
@@ -178,7 +178,7 @@ class TicTacToeSpec extends Specification {
 
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3
-      val winnerOpt = lastState.outcome(game).flatMap(_.winner)
+      val winnerOpt = outcome(lastState, game).flatMap(_.winner)
       winnerOpt should be equalTo (Some(o))
     }
   }
@@ -208,7 +208,7 @@ class TicTacToeSpec extends Specification {
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3
 
-      val winnerOpt = lastState.outcome(game).flatMap(_.winner)
+      val winnerOpt = outcome(lastState, game).flatMap(_.winner)
       winnerOpt should be equalTo (None)
     }
   }
