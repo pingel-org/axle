@@ -37,11 +37,11 @@ package object ttt {
         TicTacToeState(nextMoverOptFn, state.place(move.position, state.moverOpt.get), game.boardSize)
       }
 
-      def mover(s: TicTacToeState): Option[Player] =
+      def mover(game: TicTacToe, s: TicTacToeState): Option[Player] =
         s.moverOpt
 
       def moves(game: TicTacToe, s: TicTacToeState): Seq[TicTacToeMove] =
-        mover(s).map { p => s.openPositions(game).map(TicTacToeMove(_, game.boardSize)) } getOrElse (List.empty)
+        mover(game, s).map { p => s.openPositions(game).map(TicTacToeMove(_, game.boardSize)) } getOrElse (List.empty)
 
       def outcome(game: TicTacToe, state: TicTacToeState): Option[TicTacToeOutcome] = {
         import state._

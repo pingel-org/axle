@@ -15,7 +15,7 @@ trait Game[G, S, O, M] {
 
   def players(game: G): IndexedSeq[Player]
 
-  def mover(state: S): Option[Player]
+  def mover(game: G, state: S): Option[Player]
 
   def moves(game: G, state: S): Seq[M]
 

@@ -47,7 +47,7 @@ object Strategies {
     evGameIO: GameIO[G, S, O, M]): (G, S) => M =
     (game: G, state: S) => {
 
-      val mover = evGame.mover(state).get // TODO .get
+      val mover = evGame.mover(game, state).get // TODO .get
 
       val display = evGameIO.displayerFor(game, mover)
 
@@ -84,7 +84,7 @@ object Strategies {
         val newState = evGame.applyMove(game, state, move)
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
-      val mover = evGame.mover(state).get // TODO .get
+      val mover = evGame.mover(game, state).get // TODO .get
       val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
       val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
       matches(nextInt(matches.length))

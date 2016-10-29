@@ -19,7 +19,7 @@ case class AlphaBetaFold[G, S, O, M, N: Order](
     } else {
       val α = heuristic(evGame.applyMove(game, state, move))
       // TODO: forall other players ??
-      val mover = evGame.mover(state).get
+      val mover = evGame.mover(game, state).get
       val c = cutoff.get(mover)
       if (c.isEmpty || c.get <= α(mover)) {
         AlphaBetaFold(game, move, α, false) // TODO move = m?

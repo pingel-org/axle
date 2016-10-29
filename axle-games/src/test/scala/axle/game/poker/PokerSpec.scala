@@ -86,7 +86,7 @@ class PokerSpec extends Specification {
       // TODO lastState must be equalTo lastStateByPlay
       history.map({
         case (from, move, to) => {
-          displayMoveTo(game, move, mover(from).get, p1)
+          displayMoveTo(game, move, mover(game, from).get, p1)
         }
       }).mkString(", ") must contain("call")
       // TODO these messages should include amounts

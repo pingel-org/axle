@@ -8,7 +8,7 @@ package object game {
     game: G,
     fromState: S)(
       implicit evGame: Game[G, S, O, M]): Stream[(S, M, S)] =
-    evGame.mover(fromState).map(mover => {
+    evGame.mover(game, fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
       val move = strategy.apply(game, fromState)
       val toState = evGame.applyMove(game, fromState, move)
@@ -39,7 +39,7 @@ package object game {
 
     val lastState = moveStateStream(game, start) map {
       case (fromState, move, toState) => {
-        evGame.mover(fromState) foreach { mover =>
+        evGame.mover(game, fromState) foreach { mover =>
           evGame.players(game) foreach { observer =>
             val display = evGameIO.displayerFor(game, observer)
             display(evGameIO.displayMoveTo(game, move, mover, observer))

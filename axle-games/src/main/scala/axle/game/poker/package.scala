@@ -196,7 +196,7 @@ package object poker {
         }
       }
 
-      def mover(s: PokerState): Option[Player] = s._mover
+      def mover(game: Poker, s: PokerState): Option[Player] = s._mover
 
       def moves(game: Poker, s: PokerState): Seq[PokerMove] = {
 
