@@ -10,7 +10,7 @@ package object game {
       implicit evGame: Game[G, S, O, M]): Stream[(S, M, S)] =
     evGame.mover(fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
-      val move = strategy.apply(fromState, game)
+      val move = strategy.apply(game, fromState)
       val toState = evGame.applyMove(game, fromState, move)
       cons((fromState, move, toState), moveStateStream(game, toState))
     }) getOrElse {

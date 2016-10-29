@@ -4,7 +4,7 @@ import axle.game._
 import axle.game.Strategies._
 
 case class Poker(
-    playersStrategiesDisplayers: IndexedSeq[(Player, (PokerState, Poker) => PokerMove, String => Unit)],
+    playersStrategiesDisplayers: IndexedSeq[(Player, (Poker, PokerState) => PokerMove, String => Unit)],
     dealerDisplayer: String => Unit)(implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove]) {
 
   val players = playersStrategiesDisplayers.map(_._1)

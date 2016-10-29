@@ -17,7 +17,7 @@ package object ttt {
       def players(g: TicTacToe): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: TicTacToe, player: Player): (TicTacToeState, TicTacToe) => TicTacToeMove =
+      def strategyFor(g: TicTacToe, player: Player): (TicTacToe, TicTacToeState) => TicTacToeMove =
         g.playerToStrategy(player)
 
       def isValid(g: TicTacToe, state: TicTacToeState, move: TicTacToeMove): Either[String, TicTacToeMove] =

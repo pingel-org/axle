@@ -19,8 +19,8 @@ object Strategies {
     }).toMap
 
   def aiMover[G, S, O, M, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
-    implicit evGame: Game[G, S, O, M]) =
-    (state: S, ttt: G) => {
+    implicit evGame: Game[G, S, O, M]): (G, S) => M =
+    (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
       move
     }
@@ -28,8 +28,8 @@ object Strategies {
   def hardCodedStringStrategy[G, S, O, M](
     input: (S, G) => String)(
       implicit evGame: Game[G, S, O, M],
-      evGameIO: GameIO[G, S, O, M]): (S, G) => M =
-    (state: S, game: G) => {
+      evGameIO: GameIO[G, S, O, M]): (G, S) => M =
+    (game: G, state: S) => {
       val parsed = evGameIO.parseMove(game, input(state, game)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
       validated.right.toOption.get
@@ -44,28 +44,29 @@ object Strategies {
 
   def interactiveMove[G, S, O, M](
     implicit evGame: Game[G, S, O, M],
-    evGameIO: GameIO[G, S, O, M]): (S, G) => M = (state: S, game: G) => {
+    evGameIO: GameIO[G, S, O, M]): (G, S) => M =
+    (game: G, state: S) => {
 
-    val mover = evGame.mover(state).get // TODO .get
+      val mover = evGame.mover(state).get // TODO .get
 
-    val display = evGameIO.displayerFor(game, mover)
+      val display = evGameIO.displayerFor(game, mover)
 
-    val stream = userInputStream(display, axle.getLine).
-      map(input => {
-        val parsed = evGameIO.parseMove(game, input)
-        parsed.left.foreach(display)
-        parsed.right.flatMap(move => {
-          val validated = evGame.isValid(game, state, move)
-          validated.left.foreach(display)
-          validated
+      val stream = userInputStream(display, axle.getLine).
+        map(input => {
+          val parsed = evGameIO.parseMove(game, input)
+          parsed.left.foreach(display)
+          parsed.right.flatMap(move => {
+            val validated = evGame.isValid(game, state, move)
+            validated.left.foreach(display)
+            validated
+          })
         })
-      })
 
-    stream.find(esm => esm.isRight).get.right.toOption.get
-  }
+      stream.find(esm => esm.isRight).get.right.toOption.get
+    }
 
-  def randomMove[G, S, O, M](implicit evGame: Game[G, S, O, M]): (S, G) => M =
-    (state: S, game: G) => {
+  def randomMove[G, S, O, M](implicit evGame: Game[G, S, O, M]): (G, S) => M =
+    (game: G, state: S) => {
       val opens = evGame.moves(game, state).toList
       opens(nextInt(opens.length))
     }

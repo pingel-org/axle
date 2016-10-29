@@ -11,10 +11,10 @@ import spire.implicits._
 case class TicTacToe(
     boardSize: Int = 3,
     x: Player,
-    xStrategy: (TicTacToeState, TicTacToe) => TicTacToeMove,
+    xStrategy: (TicTacToe, TicTacToeState) => TicTacToeMove,
     xDisplayer: String => Unit,
     o: Player,
-    oStrategy: (TicTacToeState, TicTacToe) => TicTacToeMove,
+    oStrategy: (TicTacToe, TicTacToeState) => TicTacToeMove,
     oDisplayer: String => Unit) {
 
   val players = Vector(x, o)

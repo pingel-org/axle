@@ -102,7 +102,7 @@ class TicTacToeSpec extends Specification {
     "make a move" in {
 
       val mover = randomMove(evGame)
-      val m = mover(startState(game), game)
+      val m = mover(game, startState(game))
 
       m.position must be greaterThan 0
     }
@@ -122,7 +122,7 @@ class TicTacToeSpec extends Specification {
 
       val secondState = applyMove(game, startState(game), firstMove)
 
-      val move = ai4(secondState, game)
+      val move = ai4(game, secondState)
 
       move.position must be greaterThan 0
     }

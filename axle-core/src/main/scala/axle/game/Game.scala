@@ -19,7 +19,7 @@ trait Game[G, S, O, M] {
 
   def moves(game: G, state: S): Seq[M]
 
-  def strategyFor(game: G, player: Player): (S, G) => M
+  def strategyFor(game: G, player: Player): (G, S) => M
 
   def isValid(game: G, state: S, move: M): Either[String, M]
 

@@ -52,7 +52,7 @@ package object poker {
       def players(g: Poker): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: Poker, player: Player): (PokerState, Poker) => PokerMove =
+      def strategyFor(g: Poker, player: Player): (Poker, PokerState) => PokerMove =
         g.playerToStrategy(player)
 
       // TODO: this implementation works, but ideally there is more information in the error
