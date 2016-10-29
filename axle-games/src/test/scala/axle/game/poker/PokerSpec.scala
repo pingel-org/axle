@@ -8,6 +8,7 @@ import axle.game.Strategies._
 class PokerSpec extends Specification {
 
   import axle.game.poker.evGame._
+  import axle.game.poker.evGameIO._
 
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
@@ -70,8 +71,8 @@ class PokerSpec extends Specification {
         }
 
       val game = Poker(Vector(
-        (p1, hardCodedStrategy(p1Move), dropOutput),
-        (p2, hardCodedStrategy(p2Move), dropOutput)),
+        (p1, hardCodedStringStrategy(p1Move), dropOutput),
+        (p2, hardCodedStringStrategy(p2Move), dropOutput)),
         dropOutput)
 
       val start = startState(game)

@@ -8,6 +8,7 @@ import org.specs2.mutable._
 class TicTacToeSpec extends Specification {
 
   import axle.game.ttt.evGame._
+  import axle.game.ttt.evGameIO._
 
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
@@ -89,11 +90,11 @@ class TicTacToeSpec extends Specification {
       val evGame = implicitly[Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove]]
 
       val m = secondState.moverOpt.get
-      evGame.parseMove(game, "14") must be equalTo Left("Please enter a number between 1 and 9")
-      evGame.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
+      evGameIO.parseMove(game, "14") must be equalTo Left("Please enter a number between 1 and 9")
+      evGameIO.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
 
-      evGame.parseMove(game, "1").right.flatMap(move => evGame.isValid(game, secondState, move)).right.toOption.get.position must be equalTo 1
-      evGame.parseMove(game, "2").right.flatMap(move => evGame.isValid(game, secondState, move)) must be equalTo Left("That space is occupied.")
+      evGameIO.parseMove(game, "1").right.flatMap(move => evGame.isValid(game, secondState, move)).right.toOption.get.position must be equalTo 1
+      evGameIO.parseMove(game, "2").right.flatMap(move => evGame.isValid(game, secondState, move)) must be equalTo Left("That space is occupied.")
     }
   }
 
@@ -144,8 +145,8 @@ class TicTacToeSpec extends Specification {
       }
 
       val game = TicTacToe(3,
-        x, hardCodedStrategy(xMove), dropOutput,
-        o, hardCodedStrategy(oMove), dropOutput)
+        x, hardCodedStringStrategy(xMove), dropOutput,
+        o, hardCodedStringStrategy(oMove), dropOutput)
 
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3
@@ -173,8 +174,8 @@ class TicTacToeSpec extends Specification {
       }
 
       val game = TicTacToe(3,
-        x, hardCodedStrategy(xMove), dropOutput,
-        o, hardCodedStrategy(oMove), dropOutput)
+        x, hardCodedStringStrategy(xMove), dropOutput,
+        o, hardCodedStringStrategy(oMove), dropOutput)
 
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3
@@ -202,8 +203,8 @@ class TicTacToeSpec extends Specification {
       }
 
       val game = TicTacToe(3,
-        x, hardCodedStrategy(xMove), dropOutput,
-        o, hardCodedStrategy(oMove), dropOutput)
+        x, hardCodedStringStrategy(xMove), dropOutput,
+        o, hardCodedStringStrategy(oMove), dropOutput)
 
       val start = startState(game)
       val lastState = moveStateStream(game, start).last._3

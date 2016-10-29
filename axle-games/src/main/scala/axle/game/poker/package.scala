@@ -238,10 +238,10 @@ package object poker {
 
       def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
 
-      /**
-       * IO related
-       *
-       */
+    }
+
+  implicit val evGameIO: GameIO[Poker, PokerState, PokerOutcome, PokerMove] =
+    new GameIO[Poker, PokerState, PokerOutcome, PokerMove] {
 
       def displayerFor(g: Poker, player: Player): String => Unit =
         g.playerToDisplayer(player)

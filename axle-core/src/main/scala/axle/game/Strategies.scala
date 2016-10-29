@@ -25,11 +25,12 @@ object Strategies {
       move
     }
 
-  def hardCodedStrategy[G, S, O, M](
+  def hardCodedStringStrategy[G, S, O, M](
     input: (S, G) => String)(
-      implicit evGame: Game[G, S, O, M]): (S, G) => M =
+      implicit evGame: Game[G, S, O, M],
+      evGameIO: GameIO[G, S, O, M]): (S, G) => M =
     (state: S, game: G) => {
-      val parsed = evGame.parseMove(game, input(state, game)).right.toOption.get
+      val parsed = evGameIO.parseMove(game, input(state, game)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
       validated.right.toOption.get
     }
@@ -42,15 +43,16 @@ object Strategies {
   }
 
   def interactiveMove[G, S, O, M](
-    implicit evGame: Game[G, S, O, M]): (S, G) => M = (state: S, game: G) => {
+    implicit evGame: Game[G, S, O, M],
+    evGameIO: GameIO[G, S, O, M]): (S, G) => M = (state: S, game: G) => {
 
     val mover = evGame.mover(state).get // TODO .get
 
-    val display = evGame.displayerFor(game, mover)
+    val display = evGameIO.displayerFor(game, mover)
 
     val stream = userInputStream(display, axle.getLine).
       map(input => {
-        val parsed = evGame.parseMove(game, input)
+        val parsed = evGameIO.parseMove(game, input)
         parsed.left.foreach(display)
         parsed.right.flatMap(move => {
           val validated = evGame.isValid(game, state, move)

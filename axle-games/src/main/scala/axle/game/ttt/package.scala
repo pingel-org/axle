@@ -55,9 +55,10 @@ package object ttt {
         }
       }
 
-      /**
-       * IO related methods
-       */
+    }
+
+  implicit val evGameIO: GameIO[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
+    new GameIO[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
 
       def displayerFor(g: TicTacToe, player: Player): String => Unit =
         g.playerToDisplayer(player)

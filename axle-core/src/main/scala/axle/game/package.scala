@@ -18,30 +18,32 @@ package object game {
     }
 
   def play[G, S, O, M](game: G)(
-    implicit evGame: Game[G, S, O, M]): S =
+    implicit evGame: Game[G, S, O, M],
+    evGameIO: GameIO[G, S, O, M]): S =
     play(game, evGame.startState(game), true)
 
   def play[G, S, O, M](
     game: G,
     start: S,
     intro: Boolean = true)(
-      implicit evGame: Game[G, S, O, M]): S = {
+      implicit evGame: Game[G, S, O, M],
+      evGameIO: GameIO[G, S, O, M]): S = {
 
     evGame.players(game) foreach { observer =>
-      val display = evGame.displayerFor(game, observer)
+      val display = evGameIO.displayerFor(game, observer)
       if (intro) {
-        display(evGame.introMessage(game))
+        display(evGameIO.introMessage(game))
       }
-      display(evGame.displayStateTo(game, start, observer))
+      display(evGameIO.displayStateTo(game, start, observer))
     }
 
     val lastState = moveStateStream(game, start) map {
       case (fromState, move, toState) => {
         evGame.mover(fromState) foreach { mover =>
           evGame.players(game) foreach { observer =>
-            val display = evGame.displayerFor(game, observer)
-            display(evGame.displayMoveTo(game, move, mover, observer))
-            display(evGame.displayStateTo(game, toState, observer))
+            val display = evGameIO.displayerFor(game, observer)
+            display(evGameIO.displayMoveTo(game, move, mover, observer))
+            display(evGameIO.displayStateTo(game, toState, observer))
           }
         }
         toState
@@ -49,11 +51,11 @@ package object game {
     } last
 
     evGame.players(game) foreach { observer =>
-      val display = evGame.displayerFor(game, observer)
+      val display = evGameIO.displayerFor(game, observer)
       display("")
-      display(evGame.displayStateTo(game, lastState, observer))
+      display(evGameIO.displayStateTo(game, lastState, observer))
       evGame.outcome(game, lastState) foreach { outcome =>
-        display(evGame.displayOutcomeTo(game, outcome, observer))
+        display(evGameIO.displayOutcomeTo(game, outcome, observer))
       }
     }
 
@@ -64,7 +66,8 @@ package object game {
     game: G,
     start: S,
     intro: Boolean = true)(
-      implicit evGame: Game[G, S, O, M]): Stream[S] = {
+      implicit evGame: Game[G, S, O, M],
+      evGameIO: GameIO[G, S, O, M]): Stream[S] = {
     val end = play(game, start, intro)
     cons(end, gameStream(game, evGame.startFrom(game, end).get, false))
   }
@@ -72,7 +75,8 @@ package object game {
   def playContinuously[G, S, O, M](
     game: G,
     start: S)(
-      implicit evGame: Game[G, S, O, M]): S =
+      implicit evGame: Game[G, S, O, M],
+      evGameIO: GameIO[G, S, O, M]): S =
     gameStream(game, start).last
 
 }
