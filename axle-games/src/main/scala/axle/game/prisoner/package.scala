@@ -11,32 +11,42 @@ package object prisoner {
   implicit val evGame: Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove] =
     new Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove] {
 
-      def startState(ttt: PrisonersDilemma): PrisonersDilemmaState =
+      def startState(game: PrisonersDilemma): PrisonersDilemmaState =
         PrisonersDilemmaState(None, None)
 
       // TODO iterated PD will provide the move/outcome history
-      def startFrom(ttt: PrisonersDilemma, s: PrisonersDilemmaState): Option[PrisonersDilemmaState] =
-        Some(startState(ttt))
+      def startFrom(game: PrisonersDilemma, s: PrisonersDilemmaState): Option[PrisonersDilemmaState] =
+        Some(startState(game))
 
-      def players(g: PrisonersDilemma): IndexedSeq[Player] =
-        Vector(g.p1, g.p2)
+      def players(game: PrisonersDilemma): IndexedSeq[Player] =
+        Vector(game.p1, game.p2)
 
-      def strategyFor(g: PrisonersDilemma, player: Player): (PrisonersDilemma, PrisonersDilemmaState) => PrisonersDilemmaMove =
+      def strategyFor(
+        game: PrisonersDilemma,
+        player: Player): (PrisonersDilemma, PrisonersDilemmaState) => PrisonersDilemmaMove =
         player match {
-          case g.p1 => g.p1Strategy
-          case g.p2 => g.p2Strategy
+          case game.p1 => game.p1Strategy
+          case game.p2 => game.p2Strategy
         }
 
-      def isValid(g: PrisonersDilemma, state: PrisonersDilemmaState, move: PrisonersDilemmaMove): Either[String, PrisonersDilemmaMove] =
+      def isValid(
+        g: PrisonersDilemma,
+        state: PrisonersDilemmaState,
+        move: PrisonersDilemmaMove): Either[String, PrisonersDilemmaMove] =
         Right(move)
 
-      def applyMove(game: PrisonersDilemma, state: PrisonersDilemmaState, move: PrisonersDilemmaMove): PrisonersDilemmaState =
-        mover(game, state) match {
+      def applyMove(
+        game: PrisonersDilemma,
+        state: PrisonersDilemmaState,
+        move: PrisonersDilemmaMove): PrisonersDilemmaState =
+        mover(game, state).get match {
           case game.p1 => PrisonersDilemmaState(Some(move), state.p2Move)
           case _       => PrisonersDilemmaState(state.p1Move, Some(move))
         }
 
-      def mover(game: PrisonersDilemma, s: PrisonersDilemmaState): Option[Player] =
+      def mover(
+        game: PrisonersDilemma,
+        s: PrisonersDilemmaState): Option[Player] =
         if (s.p1Move.isEmpty) {
           Some(game.p1)
         } else if (s.p2Move.isEmpty) {
@@ -45,7 +55,9 @@ package object prisoner {
           None
         }
 
-      def moves(game: PrisonersDilemma, s: PrisonersDilemmaState): Seq[PrisonersDilemmaMove] =
+      def moves(
+        game: PrisonersDilemma,
+        s: PrisonersDilemmaState): Seq[PrisonersDilemmaMove] =
         mover(game, s) match {
           case game.p1 => s.p1Move match {
             case Some(_) => List.empty
@@ -57,7 +69,9 @@ package object prisoner {
           }
         }
 
-      def outcome(game: PrisonersDilemma, state: PrisonersDilemmaState): Option[PrisonersDilemmaOutcome] = {
+      def outcome(
+        game: PrisonersDilemma,
+        state: PrisonersDilemmaState): Option[PrisonersDilemmaOutcome] = {
         (state.p1Move, state.p2Move) match {
           case (Some(m1), Some(m2)) => (m1, m2) match {
             case (Silence(), Silence())   => Some(PrisonersDilemmaOutcome(1, 1))
