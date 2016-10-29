@@ -1,9 +1,14 @@
 package axle.game.poker
 
 import org.specs2.mutable._
+import axle.dropOutput
 import axle.game._
+import axle.game.Strategies._
 
 class PokerSpec extends Specification {
+
+  import axle.game.poker.evGame._
+  import axle.game.poker.evGameIO._
 
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
@@ -14,7 +19,7 @@ class PokerSpec extends Specification {
         (p1, interactiveMove, println),
         (p2, interactiveMove, println)),
         println)
-      startState(game).displayTo(p1, game) must contain("Current bet: 0")
+      displayStateTo(game, startState(game), p1) must contain("Current bet: 0")
     }
   }
 
@@ -39,7 +44,7 @@ class PokerSpec extends Specification {
         Map(p1 -> 200, p2 -> 0), // piles
         Some(PokerOutcome(Some(p1), None)))
 
-      Poker.evGame.startFrom(game, state) must be equalTo None
+      startFrom(game, state) must be equalTo None
     }
   }
 
@@ -48,7 +53,7 @@ class PokerSpec extends Specification {
 
       // small and big blinds are built in
 
-      def p1Move(state: PokerState, game: Poker): String =
+      def p1Move(game: Poker, state: PokerState): String =
         (state.numShown, state.currentBet) match {
           case (0, _)              => "call"
           case (3, bet) if bet < 3 => "raise 1"
@@ -57,7 +62,7 @@ class PokerSpec extends Specification {
           case (5, _)              => "call"
         }
 
-      def p2Move(state: PokerState, game: Poker): String =
+      def p2Move(game: Poker, state: PokerState): String =
         (state.numShown, state.currentBet) match {
           case (0, _) => "call"
           case (3, _) => "call"
@@ -66,8 +71,8 @@ class PokerSpec extends Specification {
         }
 
       val game = Poker(Vector(
-        (p1, hardCodedStrategy(p1Move), dropOutput),
-        (p2, hardCodedStrategy(p2Move), dropOutput)),
+        (p1, hardCodedStringStrategy(p1Move), dropOutput),
+        (p2, hardCodedStringStrategy(p2Move), dropOutput)),
         dropOutput)
 
       val start = startState(game)
@@ -75,23 +80,22 @@ class PokerSpec extends Specification {
       val lastState = history.last._3
       val lastStateByPlay = play(game) // TODO make use of this
 
-      val outcome = lastState.outcome(game).get
+      val o = outcome(game, lastState).get
       val newGameState = startFrom(game, lastState).get
 
       // TODO lastState must be equalTo lastStateByPlay
       history.map({
         case (from, move, to) => {
-          val mover = evState.mover(from).get
-          evMove.displayTo(game, mover, move, p1)
+          displayMoveTo(game, move, mover(game, from).get, p1)
         }
       }).mkString(", ") must contain("call")
       // TODO these messages should include amounts
-      evState.moves(history.drop(1).head._1, game) must contain(Fold())
-      evOutcome.displayTo(game, outcome, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
-      evOutcome.displayTo(game, outcome, p2) must contain("Winner: Player 1")
-      Poker.evGame.introMessage(game) must contain("Texas")
-      outcome.winner.get should be equalTo p1
-      newGameState.moves(game).length must be equalTo 1 // new deal
+      moves(game, history.drop(1).head._1) must contain(Fold())
+      displayOutcomeTo(game, o, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
+      displayOutcomeTo(game, o, p2) must contain("Winner: Player 1")
+      introMessage(game) must contain("Texas")
+      o.winner.get should be equalTo p1
+      moves(game, newGameState).length must be equalTo 1 // new deal
     }
   }
 

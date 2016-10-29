@@ -4,27 +4,27 @@ import spire.algebra.Order
 import spire.implicits._
 
 case class AlphaBetaFold[G, S, O, M, N: Order](
-    g: G,
+    game: G,
     move: M,
     cutoff: Map[Player, N],
     done: Boolean)(
-        implicit evGame: Game[G, S, O, M], evState: State[G, S, O, M]) {
+        implicit evGame: Game[G, S, O, M]) {
 
   def process(
-    m: M,
+    move: M,
     state: S,
     heuristic: S => Map[Player, N]): AlphaBetaFold[G, S, O, M, N] =
     if (done) {
       this
     } else {
-      val α = heuristic(evState.applyMove(state, g, m))
+      val α = heuristic(evGame.applyMove(game, state, move))
       // TODO: forall other players ??
-      val mover = evState.mover(state).get
+      val mover = evGame.mover(game, state).get
       val c = cutoff.get(mover)
       if (c.isEmpty || c.get <= α(mover)) {
-        AlphaBetaFold(g, m, α, false) // TODO move = m?
+        AlphaBetaFold(game, move, α, false) // TODO move = m?
       } else {
-        AlphaBetaFold(g, m, cutoff, true)
+        AlphaBetaFold(game, move, cutoff, true)
       }
     }
 }
