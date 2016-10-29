@@ -131,18 +131,20 @@ class TicTacToeSpec extends Specification {
   "7-move x diagonal" should {
     "be a victory for x" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
-        case 9 => "1"
-        case 7 => "3"
-        case 5 => "5"
-        case 3 => "7"
-      }
+      def xMove(game: TicTacToe, state: TicTacToeState): String =
+        moves(game, state).size match {
+          case 9 => "1"
+          case 7 => "3"
+          case 5 => "5"
+          case 3 => "7"
+        }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
-        case 8 => "2"
-        case 6 => "4"
-        case 4 => "6"
-      }
+      def oMove(game: TicTacToe, state: TicTacToeState): String =
+        moves(game, state).size match {
+          case 8 => "2"
+          case 6 => "4"
+          case 4 => "6"
+        }
 
       val game = TicTacToe(3,
         x, hardCodedStringStrategy(xMove), dropOutput,
@@ -160,18 +162,20 @@ class TicTacToeSpec extends Specification {
   "7-move o diagonal" should {
     "be a victory for o" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
-        case 9 => "2"
-        case 7 => "4"
-        case 5 => "6"
-        case 3 => "8"
-      }
+      def xMove(game: TicTacToe, state: TicTacToeState): String =
+        moves(game, state).size match {
+          case 9 => "2"
+          case 7 => "4"
+          case 5 => "6"
+          case 3 => "8"
+        }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
-        case 8 => "3"
-        case 6 => "5"
-        case 4 => "7"
-      }
+      def oMove(game: TicTacToe, state: TicTacToeState): String =
+        moves(game, state).size match {
+          case 8 => "3"
+          case 6 => "5"
+          case 4 => "7"
+        }
 
       val game = TicTacToe(3,
         x, hardCodedStringStrategy(xMove), dropOutput,
@@ -187,20 +191,22 @@ class TicTacToeSpec extends Specification {
   "9 move tie" should {
     "result in no-winner outcome" in {
 
-      def xMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
-        case 9 => "1"
-        case 7 => "3"
-        case 5 => "5"
-        case 3 => "8"
-        case 1 => "6"
-      }
+      def xMove(game: TicTacToe, state: TicTacToeState): String =
+        moves(game, state).size match {
+          case 9 => "1"
+          case 7 => "3"
+          case 5 => "5"
+          case 3 => "8"
+          case 1 => "6"
+        }
 
-      def oMove(state: TicTacToeState, game: TicTacToe): String = moves(game, state).size match {
-        case 8 => "2"
-        case 6 => "4"
-        case 4 => "7"
-        case 2 => "9"
-      }
+      def oMove(game: TicTacToe, state: TicTacToeState): String =
+        moves(game, state).size match {
+          case 8 => "2"
+          case 6 => "4"
+          case 4 => "7"
+          case 2 => "9"
+        }
 
       val game = TicTacToe(3,
         x, hardCodedStringStrategy(xMove), dropOutput,

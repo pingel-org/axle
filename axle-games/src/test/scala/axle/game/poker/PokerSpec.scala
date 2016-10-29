@@ -53,7 +53,7 @@ class PokerSpec extends Specification {
 
       // small and big blinds are built in
 
-      def p1Move(state: PokerState, game: Poker): String =
+      def p1Move(game: Poker, state: PokerState): String =
         (state.numShown, state.currentBet) match {
           case (0, _)              => "call"
           case (3, bet) if bet < 3 => "raise 1"
@@ -62,7 +62,7 @@ class PokerSpec extends Specification {
           case (5, _)              => "call"
         }
 
-      def p2Move(state: PokerState, game: Poker): String =
+      def p2Move(game: Poker, state: PokerState): String =
         (state.numShown, state.currentBet) match {
           case (0, _) => "call"
           case (3, _) => "call"

@@ -26,11 +26,11 @@ object Strategies {
     }
 
   def hardCodedStringStrategy[G, S, O, M](
-    input: (S, G) => String)(
+    input: (G, S) => String)(
       implicit evGame: Game[G, S, O, M],
       evGameIO: GameIO[G, S, O, M]): (G, S) => M =
     (game: G, state: S) => {
-      val parsed = evGameIO.parseMove(game, input(state, game)).right.toOption.get
+      val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
       validated.right.toOption.get
     }
