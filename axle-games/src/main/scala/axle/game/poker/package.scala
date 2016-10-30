@@ -237,16 +237,22 @@ package object poker {
         } getOrElse (List.empty)
       }
 
-      def maskState(game: Poker, state: PokerState, observer: Player): PokerStateMasked =
+      def maskState(game: Poker, state: PokerState, observer: Player): PokerStateMasked = {
         PokerStateMasked(
           mover = state._mover,
           shownShared = state.shared.take(state.numShown),
-          hands = state.hands.filterKeys { _ === observer },
+          hands =
+            if (state._outcome.isDefined && state.stillIn.size > 1) {
+              state.hands.filterKeys { state.stillIn.contains }
+            } else {
+              state.hands.filterKeys { _ === observer }
+            },
           pot = state.pot,
           currentBet = state.currentBet,
           stillIn = state.stillIn,
           inFors = state.inFors,
           piles = state.piles)
+      }
 
       def maskMove(game: Poker, move: PokerMove, mover: Player, observer: Player): PokerMove =
         move
@@ -287,7 +293,7 @@ Example moves:
           game.players.map(p => {
             p.id + ": " +
               " hand " + (
-                s.hands.get(p).map(h => h.map(c => string(c))).getOrElse("--")) + " " +
+                s.hands.get(p).map(h => h.map(c => string(c)).mkString(" ") ).getOrElse("--")) + " " +
                 (if (s.stillIn.contains(p)) {
                   "in for $" + s.inFors.get(p).map(amt => string(amt)).getOrElse("--")
                 } else {
