@@ -136,7 +136,7 @@ package object montyhall {
         } else {
 
           def mark(d: Int): String =
-            s.placement.map(c => if (d == c) "car" else "goat").getOrElse("???") +
+            s.placement.map(c => if (d == c.door) "car" else "goat").getOrElse("???") +
               s.firstChoice.map(f => if (d == f) ", first choice" else "").getOrElse("") +
               s.reveal.map(r => if (d == r) ", revealed" else "").getOrElse("") +
               s.secondChoice.map(sc =>
