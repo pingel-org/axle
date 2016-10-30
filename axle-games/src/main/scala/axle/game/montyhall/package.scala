@@ -6,6 +6,8 @@ package axle.game
  *
  */
 
+import spire.implicits._
+
 package object montyhall {
 
   implicit val evGame: Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove] =
@@ -120,30 +122,30 @@ package object montyhall {
 
       def displayStateTo(game: MontyHall, s: MontyHallState, observer: Player): String = {
 
-        if (observer == game.contestant) {
+        if (observer === game.contestant) {
 
           def mark(d: Int): String =
-            s.firstChoice.map(f => if (d == f) "first choice" else "").getOrElse("") +
-              s.reveal.map(r => if (d == r) ", revealed goat" else "").getOrElse("") +
+            s.firstChoice.map(f => if (d === f.door) "first choice" else "").getOrElse("") +
+              s.reveal.map(r => if (d === r.door) ", revealed goat" else "").getOrElse("") +
               s.secondChoice.map(sc =>
                 if (sc.isLeft) {
-                  if (d != s.firstChoice.get.door) ", changed to" else ""
+                  if (d =!= s.firstChoice.get.door && d =!= s.reveal.get.door) ", changed to" else ""
                 } else {
-                  if (d == s.firstChoice.get.door) ", stuck with" else ""
+                  if (d === s.firstChoice.get.door && d =!= s.reveal.get.door) ", stuck with" else ""
                 }).getOrElse("")
 
           (1 to 3).map(d => s"Door #${d}: ${mark(d)}").mkString("\n")
         } else {
 
           def mark(d: Int): String =
-            s.placement.map(c => if (d == c.door) "car" else "goat").getOrElse("???") +
-              s.firstChoice.map(f => if (d == f) ", first choice" else "").getOrElse("") +
-              s.reveal.map(r => if (d == r) ", revealed" else "").getOrElse("") +
+            s.placement.map(c => if (d === c.door) "car" else "goat").getOrElse("???") +
+              s.firstChoice.map(f => if (d === f.door) ", first choice" else "").getOrElse("") +
+              s.reveal.map(r => if (d === r.door) ", revealed" else "").getOrElse("") +
               s.secondChoice.map(sc =>
                 if (sc.isLeft) {
-                  if (d != s.firstChoice.get.door) ", changed to" else ""
+                  if (d =!= s.firstChoice.get.door && d =!= s.reveal.get.door) ", changed to" else ""
                 } else {
-                  if (d == s.firstChoice.get.door) ", stuck with" else ""
+                  if (d === s.firstChoice.get.door && d =!= s.reveal.get.door) ", stuck with" else ""
                 }).getOrElse("")
 
           (1 to 3).map(d => s"Door #${d}: ${mark(d)}").mkString("\n")
