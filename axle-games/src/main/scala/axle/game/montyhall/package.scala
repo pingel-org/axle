@@ -72,9 +72,10 @@ package object montyhall {
           (1 to 3).map(FirstChoice.apply)
         } else if (s.reveal.isEmpty) {
           (1 to 3).filter(d => (d != s.firstChoice.get.door && d != s.placement.get.door)).map(Reveal.apply)
-        } else {
-          assert(s.secondChoice.isEmpty)
+        } else if (s.secondChoice.isEmpty) {
           List(Change(), Stay())
+        } else {
+          List.empty
         }
 
       def outcome(
