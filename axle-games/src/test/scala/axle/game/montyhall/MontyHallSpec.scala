@@ -1,0 +1,75 @@
+package axle.game.montyhall
+
+import axle.dropOutput
+import axle.game._
+import axle.game.Strategies._
+import org.specs2.mutable._
+
+class MontyHallSpec extends Specification {
+
+  import axle.game.montyhall.evGame._
+  import axle.game.montyhall.evGameIO._
+
+  val contestant = Player("C", "Contestant")
+  val monty = Player("M", "Monty Hall")
+
+  val game = MontyHall(
+    contestant, interactiveMove, dropOutput,
+    monty, interactiveMove, dropOutput)
+
+  "random game" should {
+
+    val rGame = MontyHall(
+      contestant, randomMove, dropOutput,
+      monty, randomMove, dropOutput)
+
+    "produce moveStateStream" in {
+      moveStateStream(rGame, startState(rGame)).take(2).length must be equalTo 2
+    }
+
+    "play" in {
+      val endState = play(rGame, startState(rGame), false)
+      moves(rGame, endState).length must be equalTo 0
+    }
+
+    "product game stream" in {
+      val games = gameStream(rGame, startState(rGame), false).take(2)
+      games.length must be equalTo 2
+    }
+
+  }
+
+  "startFrom" should {
+    "simply return the start state" in {
+      val state = startState(game)
+      val move = moves(game, state).head
+      val nextState = applyMove(game, state, move)
+      val newStart = startFrom(game, nextState).get
+      moves(game, newStart).length must be equalTo 3
+    }
+  }
+
+  "starting moves" should {
+    "be three-fold, display to monty with 'something'" in {
+
+      val startingMoves = moves(game, startState(game))
+
+      displayMoveTo(game, startingMoves.head, contestant, monty) must contain("placed")
+      startingMoves.length must be equalTo 3
+    }
+  }
+
+  "interactive player" should {
+    "print various messages" in {
+
+      val firstMove = PlaceCar(1)
+      val secondState = applyMove(game, startState(game), firstMove)
+
+      evGameIO.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
+
+      evGameIO.parseMove(game, "silence").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
+      evGameIO.parseMove(game, "betrayal").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
+    }
+  }
+
+}
