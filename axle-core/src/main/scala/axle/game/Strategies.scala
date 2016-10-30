@@ -80,7 +80,7 @@ object Strategies {
     if (evGame.outcome(game, state).isDefined || depth <= 0) {
       (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
     } else {
-      val mover: Player = ??? // evGame.mover(game, state).get // TODO .get
+      val mover = evGame.mover(game, state).get // TODO .get
       val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
       val moveValue = evGame.moves(game, ms).map(move => {
         val newState = evGame.applyMove(game, state, move)
