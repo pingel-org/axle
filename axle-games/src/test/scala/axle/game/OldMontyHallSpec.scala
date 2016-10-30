@@ -3,13 +3,13 @@ package axle.game
 import org.specs2.mutable.Specification
 import spire.math.Rational
 
-class MontyHallSpec extends Specification {
+class OldMontyHallSpec extends Specification {
 
   "Monty Hall contestant" should {
 
     "always pick the other door" in {
 
-      import MontyHall._
+      import OldMontyHall._
 
       chanceOfWinning(Rational(1)) must be equalTo Rational(1, 2)
 
