@@ -5,8 +5,8 @@ import spire.implicits._
 
 package object ttt {
 
-  implicit val evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
-    new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
+  implicit val evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove] =
+    new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove] {
 
       def startState(ttt: TicTacToe): TicTacToeState =
         TicTacToeState(s => Some(ttt.x), ttt.startBoard, ttt.boardSize)
@@ -40,8 +40,17 @@ package object ttt {
       def mover(game: TicTacToe, s: TicTacToeState): Option[Player] =
         s.moverOpt
 
+      def moverM(game: TicTacToe, s: TicTacToeState): Option[Player] =
+        mover(game, s)
+
       def moves(game: TicTacToe, s: TicTacToeState): Seq[TicTacToeMove] =
         mover(game, s).map { p => s.openPositions(game).map(TicTacToeMove(_, game.boardSize)) } getOrElse (List.empty)
+
+      def maskState(game: TicTacToe, state: TicTacToeState, observer: Player): TicTacToeState =
+        state
+
+      def maskMove(game: TicTacToe, move: TicTacToeMove, mover: Player, observer: Player): TicTacToeMove =
+        move
 
       def outcome(game: TicTacToe, state: TicTacToeState): Option[TicTacToeOutcome] = {
         import state._
@@ -57,8 +66,8 @@ package object ttt {
 
     }
 
-  implicit val evGameIO: GameIO[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] =
-    new GameIO[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove] {
+  implicit val evGameIO: GameIO[TicTacToe, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove] =
+    new GameIO[TicTacToe, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove] {
 
       def displayerFor(g: TicTacToe, player: Player): String => Unit =
         g.playerToDisplayer(player)

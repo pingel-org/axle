@@ -1,5 +1,7 @@
 package axle.game
 
+import spire.implicits._
+
 /**
  * Prisoner's Dilemma
  *
@@ -8,11 +10,11 @@ package axle.game
 
 package object prisoner {
 
-  implicit val evGame: Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove] =
-    new Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove] {
+  implicit val evGame: Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] =
+    new Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] {
 
       def startState(game: PrisonersDilemma): PrisonersDilemmaState =
-        PrisonersDilemmaState(None, None)
+        PrisonersDilemmaState(None, false, None)
 
       // TODO iterated PD will provide the move/outcome history
       def startFrom(game: PrisonersDilemma, s: PrisonersDilemmaState): Option[PrisonersDilemmaState] =
@@ -40,14 +42,26 @@ package object prisoner {
         state: PrisonersDilemmaState,
         move: PrisonersDilemmaMove): PrisonersDilemmaState =
         mover(game, state).get match {
-          case game.p1 => PrisonersDilemmaState(Some(move), state.p2Move)
-          case _       => PrisonersDilemmaState(state.p1Move, Some(move))
+          case game.p1 => state.copy(p1Move = Some(move), p1Moved = true)
+          case _       => state.copy(p2Move = Some(move))
         }
 
       def mover(
         game: PrisonersDilemma,
         s: PrisonersDilemmaState): Option[Player] =
-        if (s.p1Move.isEmpty) {
+        if (!s.p1Moved) {
+          assert(s.p1Move.isEmpty)
+          Some(game.p1)
+        } else if (s.p2Move.isEmpty) {
+          Some(game.p2)
+        } else {
+          None
+        }
+
+      def moverM(
+        game: PrisonersDilemma,
+        s: PrisonersDilemmaState): Option[Player] =
+        if (!s.p1Moved) {
           Some(game.p1)
         } else if (s.p2Move.isEmpty) {
           Some(game.p2)
@@ -69,6 +83,20 @@ package object prisoner {
           }
         }
 
+      def maskState(game: PrisonersDilemma, state: PrisonersDilemmaState, observer: Player): PrisonersDilemmaState =
+        if (game.p1 === observer) {
+          state.copy(p2Move = None)
+        } else {
+          state.copy(p1Move = None)
+        }
+
+      def maskMove(game: PrisonersDilemma, move: PrisonersDilemmaMove, mover: Player, observer: Player): Option[PrisonersDilemmaMove] =
+        if (mover === observer) {
+          Some(move)
+        } else {
+          None
+        }
+
       def outcome(
         game: PrisonersDilemma,
         state: PrisonersDilemmaState): Option[PrisonersDilemmaOutcome] = {
@@ -85,8 +113,8 @@ package object prisoner {
 
     }
 
-  implicit val evGameIO: GameIO[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove] =
-    new GameIO[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove] {
+  implicit val evGameIO: GameIO[PrisonersDilemma, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] =
+    new GameIO[PrisonersDilemma, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] {
 
       def displayerFor(g: PrisonersDilemma, player: Player): String => Unit =
         player match {
@@ -109,16 +137,11 @@ package object prisoner {
 
       def displayMoveTo(
         game: PrisonersDilemma,
-        move: PrisonersDilemmaMove,
+        move: Option[PrisonersDilemmaMove],
         mover: Player,
         observer: Player): String =
-        mover.referenceFor(observer) + " chose " + {
-          if (mover == observer) {
-            move.description
-          } else {
-            "something"
-          }
-        }
+        mover.referenceFor(observer) + " chose " +
+          move.map(_.description).getOrElse("something")
 
       def displayOutcomeTo(
         game: PrisonersDilemma,

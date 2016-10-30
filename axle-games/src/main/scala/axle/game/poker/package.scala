@@ -12,8 +12,8 @@ package object poker {
   // TODO: is there a limit to the number of raises that can occur?
   // TODO: how to handle player exhausting pile during game?
 
-  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove] =
-    new Game[Poker, PokerState, PokerOutcome, PokerMove] {
+  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] =
+    new Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] {
 
       def startState(g: Poker): PokerState =
         PokerState(
@@ -52,17 +52,18 @@ package object poker {
       def players(g: Poker): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: Poker, player: Player): (Poker, PokerState) => PokerMove =
+      def strategyFor(g: Poker, player: Player): (Poker, PokerStateMasked) => PokerMove =
         g.playerToStrategy(player)
 
       // TODO: this implementation works, but ideally there is more information in the error
       // string about why the move is invalid (eg player raised more than he had)
-      def isValid(game: Poker, state: PokerState, move: PokerMove): Either[String, PokerMove] =
+      def isValid(game: Poker, state: PokerStateMasked, move: PokerMove): Either[String, PokerMove] = {
         if (moves(game, state).contains(move)) {
           Right(move)
         } else {
           Left("invalid move")
         }
+      }
 
       def applyMove(game: Poker, state: PokerState, move: PokerMove): PokerState = {
 
@@ -198,16 +199,16 @@ package object poker {
 
       def mover(game: Poker, s: PokerState): Option[Player] = s._mover
 
-      def moves(game: Poker, s: PokerState): Seq[PokerMove] = {
+      def moverM(game: Poker, s: PokerStateMasked): Option[Player] = s.mover
 
-        import s._
+      def moves(game: Poker, s: PokerStateMasked): Seq[PokerMove] = {
 
-        _mover map { mover =>
+        s.mover map { mvr =>
 
-          if (mover === game.dealer) {
-            numShown match {
+          if (mvr === game.dealer) {
+            s.shownShared.length match {
               case 0 =>
-                if (inFors.size === 0) {
+                if (s.inFors.size === 0) {
                   Deal() :: Nil
                 } else {
                   Flop() :: Nil
@@ -217,9 +218,9 @@ package object poker {
               case 5 => Payout() :: Nil
             }
           } else {
-            val maxPersonalRaise = piles(mover) + inFors.get(mover).getOrElse(0) - currentBet
+            val maxPersonalRaise = s.piles(mvr) + s.inFors.get(mvr).getOrElse(0) - s.currentBet
 
-            val maxTableRaise = game.players.map(p => piles(p) + inFors.get(p).getOrElse(0)).min - currentBet
+            val maxTableRaise = game.players.map(p => s.piles(p) + s.inFors.get(p).getOrElse(0)).min - s.currentBet
 
             assert(maxTableRaise <= maxPersonalRaise)
             // This policy is a workaround for not supporting multiple pots, which are required when
@@ -228,7 +229,7 @@ package object poker {
             val maxRaise = maxTableRaise
 
             // given the above policy, this should always be true:
-            val canCall = currentBet - inFors.get(mover).getOrElse(0) <= piles(mover)
+            val canCall = s.currentBet - s.inFors.get(mvr).getOrElse(0) <= s.piles(mvr)
             assert(canCall)
 
             Fold() :: (if (canCall) (Call() :: Nil) else Nil) ++ (1 to maxRaise).map(Raise.apply).toList
@@ -236,12 +237,26 @@ package object poker {
         } getOrElse (List.empty)
       }
 
+      def maskState(game: Poker, state: PokerState, observer: Player): PokerStateMasked =
+        PokerStateMasked(
+          mover = state._mover,
+          shownShared = state.shared.take(state.numShown),
+          hands = state.hands.filterKeys { _ === observer },
+          pot = state.pot,
+          currentBet = state.currentBet,
+          stillIn = state.stillIn,
+          inFors = state.inFors,
+          piles = state.piles)
+
+      def maskMove(game: Poker, move: PokerMove, mover: Player, observer: Player): PokerMove =
+        move
+
       def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
 
     }
 
-  implicit val evGameIO: GameIO[Poker, PokerState, PokerOutcome, PokerMove] =
-    new GameIO[Poker, PokerState, PokerOutcome, PokerMove] {
+  implicit val evGameIO: GameIO[Poker, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] =
+    new GameIO[Poker, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] {
 
       def displayerFor(g: Poker, player: Player): String => Unit =
         g.playerToDisplayer(player)
@@ -261,23 +276,18 @@ Example moves:
 
 """
 
-      def displayStateTo(game: Poker, s: PokerState, observer: Player): String = {
-        s._mover.map(mover => "To: " + mover.referenceFor(observer) + "\n").getOrElse("") +
+      def displayStateTo(game: Poker, s: PokerStateMasked, observer: Player): String = {
+        s.mover.map(mover => "To: " + mover.referenceFor(observer) + "\n").getOrElse("") +
           "Current bet: " + s.currentBet + "\n" +
           "Pot: " + s.pot + "\n" +
-          "Shared: " + s.shared.zipWithIndex.map({
-            case (card, i) => if (i < s.numShown) string(card) else "??"
+          "Shared: " + s.shownShared.map({
+            card => string(card)
           }).mkString(" ") + "\n" +
           "\n" +
           game.players.map(p => {
             p.id + ": " +
               " hand " + (
-                s.hands.get(p).map(_.map(c =>
-                  if (observer === p || (s._outcome.isDefined && s.stillIn.size > 1)) {
-                    string(c)
-                  } else {
-                    "??"
-                  }).mkString(" ")).getOrElse("--")) + " " +
+                s.hands.get(p).map(h => h.map(c => string(c))).getOrElse("--")) + " " +
                 (if (s.stillIn.contains(p)) {
                   "in for $" + s.inFors.get(p).map(amt => string(amt)).getOrElse("--")
                 } else {

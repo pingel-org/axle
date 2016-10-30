@@ -19,7 +19,8 @@ class PokerMoveValidationSpec extends Specification {
   "move validator" should {
     "reject River as first move" in {
 
-      isValid(game, startState(game), River()) must be equalTo Left("invalid move")
+      val ms = evGame.maskState(game, startState(game), game.dealer)
+      isValid(game, ms, River()) must be equalTo Left("invalid move")
     }
   }
 }

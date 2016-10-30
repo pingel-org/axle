@@ -53,8 +53,9 @@ class MontyHallSpec extends Specification {
     "be three-fold, display to monty with 'something'" in {
 
       val startingMoves = moves(game, startState(game))
+      val mm = evGame.maskMove(game, startingMoves.head, contestant, monty)
 
-      displayMoveTo(game, startingMoves.head, contestant, monty) must contain("placed")
+      displayMoveTo(game, mm, contestant, monty) must contain("placed")
       startingMoves.length must be equalTo 3
     }
   }
