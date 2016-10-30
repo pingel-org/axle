@@ -15,7 +15,7 @@ class MonteCarloSpec extends Specification {
 
   "Spark" should {
     "have enough witnesses to support axle.monteCarloPiEstimate" in {
-/*
+
       val slices = 2
       val n = 1000L * slices
       val conf = new SparkConf().setAppName("Pi on Axle on Spark").setMaster("local[2]")
@@ -35,9 +35,6 @@ class MonteCarloSpec extends Specification {
 
       mrCount must be equalTo 10L
       π must be greaterThan 2.9
-      * 
-      */
-      1 must be equalTo 1
     }
   }
 
