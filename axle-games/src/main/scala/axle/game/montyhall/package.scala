@@ -132,7 +132,7 @@ package object montyhall {
                   if (d == s.firstChoice.get.door) ", stuck with" else ""
                 }).getOrElse("")
 
-          (1 to 3).map(d => s"Door #${d}: ${mark(d)}").mkString(", ")
+          (1 to 3).map(d => s"Door #${d}: ${mark(d)}").mkString("\n")
         } else {
 
           def mark(d: Int): String =
@@ -146,7 +146,7 @@ package object montyhall {
                   if (d == s.firstChoice.get.door) ", stuck with" else ""
                 }).getOrElse("")
 
-          (1 to 3).map(d => s"Door #${d}: ${mark(d)}").mkString(", ")
+          (1 to 3).map(d => s"Door #${d}: ${mark(d)}").mkString("\n")
         }
       }
 
