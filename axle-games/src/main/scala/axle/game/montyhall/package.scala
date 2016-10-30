@@ -41,7 +41,7 @@ package object montyhall {
         state: MontyHallState,
         move: MontyHallMove): MontyHallState =
         move match {
-          case place @ PlaceCar(d) => state.copy(placement = Some(place))
+          case place @ PlaceCar(d) => state.copy(placement = Some(place), carPlaced = true)
           case fc @ FirstChoice(d) => state.copy(firstChoice = Some(fc))
           case reveal @ Reveal(d)  => state.copy(reveal = Some(reveal))
           case change @ Change()   => state.copy(secondChoice = Some(Left(change)))
