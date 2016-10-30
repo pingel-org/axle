@@ -67,8 +67,8 @@ class MontyHallSpec extends Specification {
 
       evGameIO.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
 
-      evGameIO.parseMove(game, "silence").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
-      evGameIO.parseMove(game, "betrayal").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
+      evGameIO.parseMove(game, "pick 1").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
+      evGameIO.parseMove(game, "pick 3").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
     }
   }
 
