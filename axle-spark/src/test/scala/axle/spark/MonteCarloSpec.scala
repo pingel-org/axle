@@ -31,7 +31,6 @@ class MonteCarloSpec extends Specification {
       val mrCount = mr.count()
 
       spark.stop()
-      spark = null
 
       mrCount must be equalTo 10L
       π must be greaterThan 2.9
