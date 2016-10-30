@@ -8,7 +8,7 @@ import ScoverageSbtPlugin._
 lazy val spireVersion = "0.11.0"
 lazy val shapelessVersion = "2.3.1"
 lazy val disciplineVersion = "0.4"
-lazy val scalacheckVersion = "1.13.2"
+lazy val scalacheckVersion = "1.12.5"
 lazy val specsVersion = "3.8.5"
 lazy val scalaXmlVersion = "1.0.5"
 lazy val scalaParserCombinatorsVersion = "1.0.4"
