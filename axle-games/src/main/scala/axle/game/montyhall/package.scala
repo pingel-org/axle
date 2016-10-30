@@ -39,7 +39,7 @@ package object montyhall {
       def applyMove(
         game: MontyHall,
         state: MontyHallState,
-        move: MontyHallMove): MontyHallState =
+        move: MontyHallMove): MontyHallState = {
         move match {
           case place @ PlaceCar(d) => state.copy(placement = Some(place), carPlaced = true)
           case fc @ FirstChoice(d) => state.copy(firstChoice = Some(fc))
@@ -47,6 +47,7 @@ package object montyhall {
           case change @ Change()   => state.copy(secondChoice = Some(Left(change)))
           case stay @ Stay()       => state.copy(secondChoice = Some(Right(stay)))
         }
+      }
 
       def mover(
         game: MontyHall,
@@ -71,8 +72,9 @@ package object montyhall {
 
       def moves(
         game: MontyHall,
-        s: MontyHallState): Seq[MontyHallMove] =
-        if (s.placement.isEmpty) {
+        s: MontyHallState): Seq[MontyHallMove] = {
+        if (!s.carPlaced) {
+          assert(s.placement.isEmpty)
           (1 to 3).map(PlaceCar.apply)
         } else if (s.firstChoice.isEmpty) {
           (1 to 3).map(FirstChoice.apply)
@@ -83,6 +85,7 @@ package object montyhall {
         } else {
           List.empty
         }
+      }
 
       def maskState(game: MontyHall, state: MontyHallState, observer: Player): MontyHallState =
         if (observer === game.monty) {
