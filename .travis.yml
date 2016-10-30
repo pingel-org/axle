@@ -36,7 +36,7 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport && bash <(curl -s https://codecov.io/bash)
+  - sbt -J-Xmx3500M ++$TRAVIS_SCALA_VERSION coverage test coverageReport && bash <(curl -s https://codecov.io/bash)
 
 notifications:
   webhooks:
