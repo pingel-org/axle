@@ -10,11 +10,11 @@ import spire.implicits._
 
 package object montyhall {
 
-  implicit val evGame: Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove] =
-    new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove] {
+  implicit val evGame: Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] =
+    new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] {
 
       def startState(game: MontyHall): MontyHallState =
-        MontyHallState(None, None, None, None)
+        MontyHallState(None, false, None, None, None)
 
       def startFrom(game: MontyHall, s: MontyHallState): Option[MontyHallState] =
         Some(startState(game))
@@ -39,19 +39,21 @@ package object montyhall {
       def applyMove(
         game: MontyHall,
         state: MontyHallState,
-        move: MontyHallMove): MontyHallState =
+        move: MontyHallMove): MontyHallState = {
         move match {
-          case place @ PlaceCar(d) => state.copy(placement = Some(place))
+          case place @ PlaceCar(d) => state.copy(placement = Some(place), carPlaced = true)
           case fc @ FirstChoice(d) => state.copy(firstChoice = Some(fc))
           case reveal @ Reveal(d)  => state.copy(reveal = Some(reveal))
           case change @ Change()   => state.copy(secondChoice = Some(Left(change)))
           case stay @ Stay()       => state.copy(secondChoice = Some(Right(stay)))
         }
+      }
 
       def mover(
         game: MontyHall,
         s: MontyHallState): Option[Player] =
-        if (s.placement.isEmpty) {
+        if (!s.carPlaced) {
+          assert(s.placement.isEmpty)
           Some(game.monty)
         } else if (s.firstChoice.isEmpty) {
           Some(game.contestant)
@@ -63,10 +65,16 @@ package object montyhall {
           None
         }
 
+      def moverM(
+        game: MontyHall,
+        s: MontyHallState): Option[Player] =
+        mover(game, s)
+
       def moves(
         game: MontyHall,
-        s: MontyHallState): Seq[MontyHallMove] =
-        if (s.placement.isEmpty) {
+        s: MontyHallState): Seq[MontyHallMove] = {
+        if (!s.carPlaced) {
+          assert(s.placement.isEmpty)
           (1 to 3).map(PlaceCar.apply)
         } else if (s.firstChoice.isEmpty) {
           (1 to 3).map(FirstChoice.apply)
@@ -77,12 +85,30 @@ package object montyhall {
         } else {
           List.empty
         }
+      }
+
+      def maskState(game: MontyHall, state: MontyHallState, observer: Player): MontyHallState =
+        if (observer === game.monty) {
+          state
+        } else {
+          state.copy(placement = None)
+        }
+
+      def maskMove(game: MontyHall, move: MontyHallMove, mover: Player, observer: Player): Option[MontyHallMove] =
+        if (observer === game.monty) {
+          Some(move)
+        } else {
+          move match {
+            case PlaceCar(_) => None
+            case _           => Some(move)
+          }
+        }
 
       def outcome(
         game: MontyHall,
         state: MontyHallState): Option[MontyHallOutcome] = {
         state match {
-          case MontyHallState(Some(PlaceCar(c)), Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
+          case MontyHallState(Some(PlaceCar(c)), _, Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
             sc match {
               case Left(Change()) => Some(MontyHallOutcome(c != f))
               case Right(Stay())  => Some(MontyHallOutcome(c == f))
@@ -93,8 +119,8 @@ package object montyhall {
 
     }
 
-  implicit val evGameIO: GameIO[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove] =
-    new GameIO[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove] {
+  implicit val evGameIO: GameIO[MontyHall, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] =
+    new GameIO[MontyHall, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] {
 
       def displayerFor(g: MontyHall, player: Player): String => Unit =
         player match {
@@ -155,10 +181,10 @@ package object montyhall {
 
       def displayMoveTo(
         game: MontyHall,
-        move: MontyHallMove,
+        move: Option[MontyHallMove],
         mover: Player,
         observer: Player): String =
-        mover.referenceFor(observer) + " did " + move.description
+        mover.referenceFor(observer) + " did " + move.map(_.description).getOrElse("something")
 
       def displayOutcomeTo(
         game: MontyHall,

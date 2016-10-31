@@ -4,7 +4,7 @@ import axle.stats._
 import spire.implicits.IntAlgebra
 import spire.math.Rational
 
-object MontyHall {
+object OldMontyHall {
 
   val numDoors = 3
 

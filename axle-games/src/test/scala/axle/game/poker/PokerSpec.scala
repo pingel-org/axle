@@ -19,7 +19,8 @@ class PokerSpec extends Specification {
         (p1, interactiveMove, println),
         (p2, interactiveMove, println)),
         println)
-      displayStateTo(game, startState(game), p1) must contain("Current bet: 0")
+      val ms = evGame.maskState(game, startState(game), p1)
+      displayStateTo(game, ms, p1) must contain("Current bet: 0")
     }
   }
 
@@ -53,8 +54,8 @@ class PokerSpec extends Specification {
 
       // small and big blinds are built in
 
-      def p1Move(game: Poker, state: PokerState): String =
-        (state.numShown, state.currentBet) match {
+      def p1Move(game: Poker, state: PokerStateMasked): String =
+        (state.shownShared.length, state.currentBet) match {
           case (0, _)              => "call"
           case (3, bet) if bet < 3 => "raise 1"
           case (3, _)              => "call"
@@ -62,8 +63,8 @@ class PokerSpec extends Specification {
           case (5, _)              => "call"
         }
 
-      def p2Move(game: Poker, state: PokerState): String =
-        (state.numShown, state.currentBet) match {
+      def p2Move(game: Poker, state: PokerStateMasked): String =
+        (state.shownShared.length, state.currentBet) match {
           case (0, _) => "call"
           case (3, _) => "call"
           case (4, _) => "call"
@@ -82,6 +83,7 @@ class PokerSpec extends Specification {
 
       val o = outcome(game, lastState).get
       val newGameState = startFrom(game, lastState).get
+      val ms = maskState(game, history.drop(1).head._1, p1)
 
       // TODO lastState must be equalTo lastStateByPlay
       history.map({
@@ -90,12 +92,13 @@ class PokerSpec extends Specification {
         }
       }).mkString(", ") must contain("call")
       // TODO these messages should include amounts
-      moves(game, history.drop(1).head._1) must contain(Fold())
+      moves(game, ms) must contain(Fold())
       displayOutcomeTo(game, o, p1) must contain("Winner: Player 1") // TODO show P1 his own hand
       displayOutcomeTo(game, o, p2) must contain("Winner: Player 1")
       introMessage(game) must contain("Texas")
       o.winner.get should be equalTo p1
-      moves(game, newGameState).length must be equalTo 1 // new deal
+      val mngs = evGame.maskState(game, newGameState, p1)
+      moves(game, mngs).length must be equalTo 1 // new deal
     }
   }
 

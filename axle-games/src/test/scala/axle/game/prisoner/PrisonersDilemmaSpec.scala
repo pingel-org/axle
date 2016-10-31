@@ -54,7 +54,7 @@ class PrisonersDilemmaSpec extends Specification {
 
       val startingMoves = moves(game, startState(game))
 
-      displayMoveTo(game, startingMoves.head, p1, p2) must contain("something")
+      displayMoveTo(game, None, p1, p2) must contain("something")
       startingMoves.length must be equalTo 2
     }
   }

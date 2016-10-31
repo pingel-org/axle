@@ -1,6 +1,6 @@
 package axle.game.montyhall
 
-trait MontyHallMove {
+sealed trait MontyHallMove {
 
   def description: String
 }
