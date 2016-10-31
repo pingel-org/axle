@@ -6,15 +6,18 @@ permalink: /road_map/
 
 ## 0.2.5 (October 2016)
 * Typeclasses for axle.game
-* Increase test coverage to over 75%
+* Increase test coverage to 78%
 
 ## 0.2.6 (November 2016)
+* Bug fixes
+
+## 0.2.7 (November 2016)
 * Depend on Spire on Algebra on Cats
 
-## 0.2.7 (December 2016)
+## 0.2.8 (December 2016)
 * Dependent types (Shapeless?) for matrix size
 
-## 0.2.8 (January 2017)
+## 0.2.9 (January 2017)
 * Reactive Streams (Akka?) for animating visualizations
 
 ## 0.3.0 (March 2017)
