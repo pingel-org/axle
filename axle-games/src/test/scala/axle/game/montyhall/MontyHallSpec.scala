@@ -23,6 +23,10 @@ class MontyHallSpec extends Specification {
       contestant, randomMove, dropOutput,
       monty, randomMove, dropOutput)
 
+    "have an intro message" in {
+      introMessage(rGame) must contain("Monty")
+    }
+
     "produce moveStateStream" in {
       moveStateStream(rGame, startState(rGame)).take(2).length must be equalTo 2
     }
@@ -60,13 +64,30 @@ class MontyHallSpec extends Specification {
     }
   }
 
-  "interactive player" should {
-    "print various messages" in {
+  "move parser" should {
+    "accept and reject strings appropriately" in {
+
+      evGameIO.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
+
+      evGameIO.parseMove(game, "car 1") must be equalTo (Right(PlaceCar(1)))
+      evGameIO.parseMove(game, "car 2") must be equalTo (Right(PlaceCar(2)))
+      evGameIO.parseMove(game, "car 3") must be equalTo (Right(PlaceCar(3)))
+      evGameIO.parseMove(game, "pick 1") must be equalTo (Right(FirstChoice(1)))
+      evGameIO.parseMove(game, "pick 2") must be equalTo (Right(FirstChoice(2)))
+      evGameIO.parseMove(game, "pick 3") must be equalTo (Right(FirstChoice(3)))
+      evGameIO.parseMove(game, "reveal 1") must be equalTo (Right(Reveal(1)))
+      evGameIO.parseMove(game, "reveal 2") must be equalTo (Right(Reveal(2)))
+      evGameIO.parseMove(game, "reveal 3") must be equalTo (Right(Reveal(3)))
+      evGameIO.parseMove(game, "change") must be equalTo (Right(Change()))
+      evGameIO.parseMove(game, "stay") must be equalTo (Right(Stay()))
+    }
+  }
+
+  "move validator" should {
+    "accept and reject moves appropriately" in {
 
       val firstMove = PlaceCar(1)
       val secondState = applyMove(game, startState(game), firstMove)
-
-      evGameIO.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
 
       evGameIO.parseMove(game, "pick 1").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
       evGameIO.parseMove(game, "pick 3").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
