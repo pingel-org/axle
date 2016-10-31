@@ -6,10 +6,10 @@ permalink: /tutorial/monty_hall/
 
 See the Wikipedia page on the [Monty Hall problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
 
-The `axle.game.MontyHall` object contains a model of the rules of the game.
+The `axle.game.OldMontyHall` object contains a model of the rules of the game.
 
 ```tut:silent
-import axle.game.MontyHall._
+import axle.game.OldMontyHall._
 import spire.math.Rational
 ```
 

@@ -9,26 +9,18 @@ A Perfect Information, Zero-sum game
 Example
 -------
 
-```
+```tut
 import axle._
+import axle.game._
 import axle.game.ttt._
+import Strategies._
 
-val game = TicTacToe(3, "human", "ai")
-val start = game.startState()
+val x = Player("X", "Player X")
+val o = Player("O", "Player O")
 
-game.play(start)
-```
+val game = TicTacToe(3,
+  x, randomMove, prefixedDisplay("X")(println),
+  o, randomMove, prefixedDisplay("O")(println))
 
-Will pit a human player (X) against an AI player (O).  The AI is simple 3-move lookahead minimax algorithm, with no heuristic (it only counts wins and losses).
-
-An example of the first few lines of output:
-
-```
-        Tic Tac Toe
-Moves are numbers 1-9.
-
-Board:         Movement Key:
- | |           1|2|3
- | |           4|5|6
- | |           7|8|9
+play(game)
 ```

@@ -14,7 +14,7 @@ Imports and implicits
 
 ```tut:book:silent
 import axle.bio._
-import SmithWaterman.Default._
+import SmithWaterman.Standard._
 import SmithWaterman.optimalAlignment
 import spire.implicits.IntAlgebra
 implicit val laJblasInt = axle.jblas.linearAlgebraDoubleMatrix[Int]
