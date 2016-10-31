@@ -72,36 +72,19 @@ svg(chart, "pokerhands.svg")
 
 As a game of "imperfect information", poker introduces the concept of Information Set.
 
-```
+```tut
+import axle._
+import axle.game._
 import axle.game.poker._
+import Strategies._
 
-val game = new Poker(3)
-game.play()
+val p1 = Player("P1", "Player 1")
+val p2 = Player("P2", "Player 2")
+
+val game = Poker(Vector(
+  (p1, randomMove, prefixedDisplay("1")(println)),
+  (p2, randomMove, prefixedDisplay("2")(println))),
+  prefixedDisplay("D")(println))
+
+play(game)
 ```
-
-An example of the first few lines of output:
-
-```
-Texas Hold Em Poker
-
-Example moves:
-
-  check
-  raise 1.0
-  call
-  fold
-
-Dealer initial deal.
-
-To: Player 3
-Current bet: 2
-Pot: 3
-Shared: ?? ?? ?? ?? ??
-
-P1:  hand ?? ?? in for $1, $99 remaining
-P2:  hand ?? ?? in for $2, $98 remaining
-P3:  hand 7♢ Q♢ in for $--, $100 remaining
-```
-
-Note that `game.play()` will play a single round.
-`game.playContinuously()` will play rounds until there is only a single player with money remaining.

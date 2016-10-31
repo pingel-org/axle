@@ -51,7 +51,7 @@ class AlignDNA extends Specification {
   "Smith-Waterman" should {
     "align DNA" in {
 
-      import SmithWaterman.Default._
+      import SmithWaterman.Standard._
       import SmithWaterman.optimalAlignment
 
       import spire.implicits.IntAlgebra

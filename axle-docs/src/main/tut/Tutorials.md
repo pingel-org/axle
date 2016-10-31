@@ -44,7 +44,6 @@ Algorithms
 ```
 
 * [Linear Regression](/tutorial/linear_regression/)
-* [Logistic Regression](/tutorial/logistic_regression/)
 * [Naive Bayes Clustering](/tutorial/naive_bayes/) Tennis example
 * k-Means Clustering
   * [Cluster Irises](/tutorial/cluster_irises_k_means/)

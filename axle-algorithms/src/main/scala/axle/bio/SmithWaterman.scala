@@ -32,7 +32,7 @@ import axle.syntax.linearalgebra.matrixOps
 
 object SmithWaterman {
 
-  object Default {
+  object Standard {
 
     def w(x: Char, y: Char, mismatchPenalty: Int): Int =
       if (x != y) {
