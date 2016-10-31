@@ -23,6 +23,10 @@ class MontyHallSpec extends Specification {
       contestant, randomMove, dropOutput,
       monty, randomMove, dropOutput)
 
+    "have an intro message" in {
+      introMessage(rGame) must contain("Monty")
+    }
+
     "produce moveStateStream" in {
       moveStateStream(rGame, startState(rGame)).take(2).length must be equalTo 2
     }

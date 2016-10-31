@@ -23,6 +23,10 @@ class PrisonersDilemmaSpec extends Specification {
       p1, randomMove, dropOutput,
       p2, randomMove, dropOutput)
 
+    "have an intro message" in {
+      introMessage(game) must contain("Prisoner")
+    }
+
     "produce moveStateStream" in {
       moveStateStream(rGame, startState(rGame)).take(2).length must be equalTo 2
     }
