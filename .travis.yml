@@ -28,7 +28,6 @@ sudo: false
 
 jdk:
   - oraclejdk8
-#  - openjdk8
 
 before_script:
   - "export DISPLAY=:99.0"
@@ -36,7 +35,7 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 script:
-  - sbt -J-Xmx2900M ++$TRAVIS_SCALA_VERSION coverage test coverageReport && bash <(curl -s https://codecov.io/bash)
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport && bash <(curl -s https://codecov.io/bash)
 
 notifications:
   webhooks:
