@@ -140,7 +140,7 @@ package object poker {
 
           case Fold() =>
             PokerState(
-              s => Some(s.betterAfter(mover, game).getOrElse(game.dealer)),
+              s => Some(if (stillIn.size == 2) game.dealer else s.betterAfter(mover, game).getOrElse(game.dealer)),
               deck, shared, numShown, hands, pot, currentBet, stillIn - mover, inFors - mover, piles,
               None)
 
@@ -184,7 +184,7 @@ package object poker {
               s => None,
               deck,
               shared,
-              5,
+              numShown,
               hands,
               0,
               0,
@@ -206,17 +206,13 @@ package object poker {
         s.mover map { mvr =>
 
           if (mvr === game.dealer) {
-            s.shownShared.length match {
-              case 0 =>
-                if (s.inFors.size === 0) {
-                  Deal() :: Nil
-                } else {
-                  Flop() :: Nil
-                }
-              case 3 => Turn() :: Nil
-              case 4 => River() :: Nil
-              case 5 => Payout() :: Nil
-            }
+            ((s.stillIn.size, s.shownShared.length) match {
+              case (1, _) => Payout()
+              case (_, 0) => if (s.inFors.size === 0) Deal() else Flop()
+              case (_, 3) => Turn()
+              case (_, 4) => River()
+              case (_, 5) => Payout()
+            }) :: Nil
           } else {
             val maxPersonalRaise = s.piles(mvr) + s.inFors.get(mvr).getOrElse(0) - s.currentBet
 
@@ -293,7 +289,7 @@ Example moves:
           game.players.map(p => {
             p.id + ": " +
               " hand " + (
-                s.hands.get(p).map(h => h.map(c => string(c)).mkString(" ") ).getOrElse("--")) + " " +
+                s.hands.get(p).map(h => h.map(c => string(c)).mkString(" ")).getOrElse("--")) + " " +
                 (if (s.stillIn.contains(p)) {
                   "in for $" + s.inFors.get(p).map(amt => string(amt)).getOrElse("--")
                 } else {
