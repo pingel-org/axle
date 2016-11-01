@@ -27,3 +27,22 @@ At the other extreme, the player always sticks with the initial choice.
 ```tut:book
 chanceOfWinning(Rational(0))
 ```
+
+The newer `axl.game.montyhall._` package uses `axle.game` typeclasses to model the game:
+
+```tut
+import axle._
+import axle.game._
+import axle.game.montyhall._
+
+import Strategies._
+
+val contestant = Player("C", "Contestant")
+val monty = Player("M", "Monty Hall")
+
+val game = MontyHall(
+  contestant, randomMove, prefixedDisplay("C")(println),
+  monty, randomMove, prefixedDisplay("M")(println))
+
+play(game)
+```
