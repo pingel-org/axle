@@ -3,13 +3,21 @@ package axle.game
 import scala.Stream.cons
 import scala.util.Random.nextInt
 
+import axle.stats.Distribution0
+import axle.stats.ConditionalProbabilityTable0
+
+import spire.math.Rational
 import spire.algebra.Eq
 import spire.algebra.Order
 import spire.algebra.Ring
 import spire.compat.ordering
 import spire.implicits.eqOps
+import spire.implicits._
+import spire.random.Dist
 
 object Strategies {
+
+  implicit val distDouble = implicitly[Dist[Double]].map[Rational](d => Rational(d))
 
   def outcomeRingHeuristic[G, S, O, M, MS, MM, N: Ring](game: G, f: (O, Player) => N)(
     implicit evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
@@ -19,10 +27,10 @@ object Strategies {
     }).toMap
 
   def aiMover[G, S, O, M, MS, MM, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
-    implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => M =
+    implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => Distribution0[M, Rational] =
     (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
-      move
+      ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)))
     }
 
   def hardCodedStringStrategy[G, S, O, M, MS, MM](
@@ -44,7 +52,7 @@ object Strategies {
 
   def interactiveMove[G, S, O, M, MS, MM](
     implicit evGame: Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => M =
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
     (game: G, state: MS) => {
 
       val mover = evGame.moverM(game, state).get // TODO .get
@@ -62,13 +70,14 @@ object Strategies {
           })
         })
 
-      stream.find(esm => esm.isRight).get.right.toOption.get
+      ConditionalProbabilityTable0[M, Rational](Map(stream.find(esm => esm.isRight).get.right.toOption.get -> Rational(1)))
     }
 
-  def randomMove[G, S, O, M, MS, MM](implicit evGame: Game[G, S, O, M, MS, MM]): (G, MS) => M =
+  def randomMove[G, S, O, M, MS, MM](implicit evGame: Game[G, S, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
     (game: G, state: MS) => {
       val opens = evGame.moves(game, state).toList
-      opens(nextInt(opens.length))
+      val p = Rational(1, opens.length)
+      ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap)
     }
 
   def minimax[G, S, O, M, MS, MM, N: Order: Eq](

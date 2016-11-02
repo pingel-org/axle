@@ -1,6 +1,8 @@
 package axle.game
 
 import axle.string
+import axle.stats.Distribution0
+import spire.math.Rational
 import spire.implicits._
 
 package object ttt {
@@ -17,7 +19,7 @@ package object ttt {
       def players(g: TicTacToe): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: TicTacToe, player: Player): (TicTacToe, TicTacToeState) => TicTacToeMove =
+      def strategyFor(g: TicTacToe, player: Player): (TicTacToe, TicTacToeState) => Distribution0[TicTacToeMove, Rational] =
         g.playerToStrategy(player)
 
       def isValid(g: TicTacToe, state: TicTacToeState, move: TicTacToeMove): Either[String, TicTacToeMove] =

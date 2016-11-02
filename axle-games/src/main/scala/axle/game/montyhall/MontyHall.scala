@@ -1,11 +1,13 @@
 package axle.game.montyhall
 
 import axle.game._
+import axle.stats.Distribution0
+import spire.math.Rational
 
 case class MontyHall(
   contestant: Player,
-  contestantStrategy: (MontyHall, MontyHallState) => MontyHallMove,
+  contestantStrategy: (MontyHall, MontyHallState) => Distribution0[MontyHallMove, Rational],
   contestantDisplayer: String => Unit,
   monty: Player,
-  montyStrategy: (MontyHall, MontyHallState) => MontyHallMove,
+  montyStrategy: (MontyHall, MontyHallState) => Distribution0[MontyHallMove, Rational],
   montyDisplayer: String => Unit)
