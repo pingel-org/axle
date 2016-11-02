@@ -36,11 +36,11 @@ object Strategies {
   def hardCodedStringStrategy[G, S, O, M, MS, MM](
     input: (G, MS) => String)(
       implicit evGame: Game[G, S, O, M, MS, MM],
-      evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => M =
+      evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
     (game: G, state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
-      validated.right.toOption.get
+      ConditionalProbabilityTable0[M, Rational](Map(validated.right.toOption.get -> Rational(1)))
     }
 
   def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
