@@ -19,16 +19,16 @@ case class LinearRegression[D, M](
 
   implicit val module = la.module
 
-  val inputX = la.matrix(
+  val inputX = la.fromRowMajorArray(
     examples.length,
     numFeatures,
-    examples.flatMap(featureExtractor).toArray).t
+    examples.flatMap(featureExtractor).toArray)
 
   val featureNormalizer = LinearFeatureNormalizer(inputX)
 
   val X = la.ones(inputX.rows, 1) +|+ featureNormalizer.normalizedData
 
-  val y = la.matrix(examples.length, 1, examples.map(objectiveExtractor).toArray)
+  val y = la.fromColumnMajorArray(examples.length, 1, examples.map(objectiveExtractor).toArray)
 
   val objectiveNormalizer = LinearFeatureNormalizer(y)
 

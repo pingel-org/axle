@@ -47,14 +47,14 @@ case class LogisticRegression[D, M](
     (0 until iterations).foldLeft(θ0)((θi: M, i: Int) => la.ring.minus(θi, (dθ(X, y, θi) :* α)))
   }
 
-  val inputX: M = la.matrix(examples.length, numFeatures, examples.flatMap(featureExtractor).toArray)
+  val inputX: M = la.fromColumnMajorArray(examples.length, numFeatures, examples.flatMap(featureExtractor).toArray)
 
   def boolean2double(b: Boolean): Double = b match {
     case true  => 1d
     case false => 0d
   }
 
-  val y = la.matrix(
+  val y = la.fromColumnMajorArray(
     examples.length,
     1,
     examples.map(objectiveExtractor).map(boolean2double).toArray)

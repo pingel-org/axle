@@ -11,7 +11,7 @@ class FeatureNormalizerSpec extends Specification {
       import spire.implicits.DoubleAlgebra
       implicit val la = linearAlgebraDoubleMatrix[Double]
 
-      val X = la.matrix(
+      val X = la.fromColumnMajorArray(
         4,
         2,
         List(1.1d, 2d, 3d, 4.1d, 5.2d, 6.3d, 7d, 8d).toArray)
@@ -20,7 +20,7 @@ class FeatureNormalizerSpec extends Specification {
 
       val normalized = featureNormalizer(1.4 :: 6.7 :: Nil)
 
-      normalized must be equalTo la.matrix(1, 2, Array(1.4, 6.7))
+      normalized must be equalTo la.fromColumnMajorArray(1, 2, Array(1.4, 6.7))
     }
   }
 
@@ -30,7 +30,7 @@ class FeatureNormalizerSpec extends Specification {
       import spire.implicits.DoubleAlgebra
       implicit val la = linearAlgebraDoubleMatrix[Double]
 
-      val X = la.matrix(
+      val X = la.fromColumnMajorArray(
         4,
         2,
         List(1.1d, 2d, 3d, 4.1d, 5.2d, 6.3d, 7d, 8d).toArray)
