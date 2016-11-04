@@ -40,7 +40,7 @@ trait Distribution0[A, N] extends Distribution[A, N] {
   //    val μ = Σ(values.map(xi => probabilityOf(xi) * xi))(identity)
   //    (Σ(Xs.map(xi => p(xi) * ((xi - μ) ** 2)))(identity)).sqrt
   //  }
-  
+
 }
 
 trait Distribution1[A, G1, N] extends Distribution[A, N] {

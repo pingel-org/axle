@@ -2,6 +2,8 @@ package axle.game
 
 import axle.string
 import axle.game.cards._
+import axle.stats.Distribution0
+import spire.math.Rational
 import spire.compat.ordering
 import spire.implicits._
 
@@ -52,7 +54,7 @@ package object poker {
       def players(g: Poker): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: Poker, player: Player): (Poker, PokerStateMasked) => PokerMove =
+      def strategyFor(g: Poker, player: Player): (Poker, PokerStateMasked) => Distribution0[PokerMove, Rational] =
         g.playerToStrategy(player)
 
       // TODO: this implementation works, but ideally there is more information in the error

@@ -9,6 +9,9 @@ package axle.game
  * for all observers, moves(game, maksState(game, state,observer)) should ...
  */
 
+import axle.stats.Distribution0
+import spire.math.Rational
+
 trait Game[G, S, O, M, MS, MM] {
 
   def startState(game: G): S
@@ -28,7 +31,7 @@ trait Game[G, S, O, M, MS, MM] {
 
   def maskMove(game: G, move: M, mover: Player, observer: Player): MM
 
-  def strategyFor(game: G, player: Player): (G, MS) => M
+  def strategyFor(game: G, player: Player): (G, MS) => Distribution0[M, Rational]
 
   def isValid(game: G, state: MS, move: M): Either[String, M]
 
