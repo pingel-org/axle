@@ -129,7 +129,9 @@ trait LinearAlgebra[M, R, C, T] {
   def rowMeans(m: M): M
   def sortRows(m: M): M
 
-  def matrix(r: R, c: C, values: Array[T]): M
+  def fromColumnMajorArray(r: R, c: C, values: Array[T]): M
+
+  def fromRowMajorArray(r: R, c: C, values: Array[T]): M
 
   def matrix(m: R, n: C, topleft: => T, left: R => T, top: C => T, fill: (R, C, T, T, T) => T): M
 
@@ -189,7 +191,7 @@ object LinearAlgebra {
     maximum: T)(
       implicit la: LinearAlgebra[M, Int, Int, T]): Gen[M] =
     Gen.listOfN[T](m * n, Gen.choose[T](minimum, maximum)) map { numList =>
-      la.matrix(m, n, numList.toArray)
+      la.fromColumnMajorArray(m, n, numList.toArray)
     }
 
 }

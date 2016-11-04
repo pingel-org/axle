@@ -362,10 +362,16 @@ package object jblas {
       def rowMeans(m: DoubleMatrix): DoubleMatrix = m.rowMeans
       def sortRows(m: DoubleMatrix): DoubleMatrix = m.sortRows
 
-      def matrix(r: Int, c: Int, values: Array[N]): DoubleMatrix = {
+      def fromColumnMajorArray(r: Int, c: Int, values: Array[N]): DoubleMatrix = {
         val jdm = new org.jblas.DoubleMatrix(values.map(cfn.toDouble))
         jdm.reshape(r, c)
         jdm
+      }
+
+      def fromRowMajorArray(r: Int, c: Int, values: Array[N]): DoubleMatrix = {
+        val jdm = new org.jblas.DoubleMatrix(values.map(cfn.toDouble))
+        jdm.reshape(r, c)
+        jdm.transpose
       }
 
       def matrix(

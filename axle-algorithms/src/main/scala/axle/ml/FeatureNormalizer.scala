@@ -21,12 +21,12 @@ case class IdentityFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int,
   def normalizedData: M = X
 
   def apply(featureList: Seq[Double]): M =
-    la.matrix(1, featureList.length, featureList.toArray)
+    la.fromColumnMajorArray(1, featureList.length, featureList.toArray)
 
   def unapply(featureRow: M): Seq[Double] =
     featureRow.toList
 
-  def random(): M = la.matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
+  def random(): M = la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
 }
 
 case class LinearFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, Int, Double])
@@ -42,13 +42,13 @@ case class LinearFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, I
   def normalizedData: M = nd
 
   def apply(features: Seq[Double]): M =
-    la.matrix(1, features.length, features.toArray).subRowVector(colMins).divPointwise(colRanges)
+    la.fromColumnMajorArray(1, features.length, features.toArray).subRowVector(colMins).divPointwise(colRanges)
 
   def unapply(featureRow: M): Seq[Double] =
     (featureRow.mulPointwise(colRanges) + colMins).toList
 
   def random(): M =
-    la.matrix(1, X.columns, (0 until X.columns).map(i => math.random).toArray).mulPointwise(colRanges) + colMins
+    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => math.random).toArray).mulPointwise(colRanges) + colMins
 
 }
 
@@ -65,13 +65,13 @@ case class ZScoreFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, I
   def normalizedData: M = nd
 
   def apply(features: Seq[Double]): M =
-    (la.matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s)
+    (la.fromColumnMajorArray(1, features.length, features.toArray) - μs).divPointwise(σ2s)
 
   def unapply(featureRow: M): Seq[Double] =
     (featureRow.mulPointwise(σ2s) + μs).toList
 
   def random(): M =
-    la.matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
+    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
 
 }
 
@@ -91,13 +91,13 @@ case class PCAFeatureNormalizer[M](cutoff: Double, X: M)(implicit la: LinearAlge
   def normalizedData: M = zd * Uk
 
   def apply(features: Seq[Double]): M =
-    (la.matrix(1, features.length, features.toArray) - μs).divPointwise(σ2s) * Uk
+    (la.fromColumnMajorArray(1, features.length, features.toArray) - μs).divPointwise(σ2s) * Uk
 
   def unapply(featureRow: M): Seq[Double] =
     ((featureRow * Uk.t).mulPointwise(σ2s) + μs).toList
 
   def random(): M =
-    la.matrix(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) * Uk
+    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) * Uk
 
   // (truncatedSigmas.mulPointwise(featureRow) + truncatedMeans).toList
   // val truncatedSigmas = σ2s * Uk

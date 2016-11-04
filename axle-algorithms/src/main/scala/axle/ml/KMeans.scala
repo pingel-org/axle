@@ -108,7 +108,7 @@ case class KMeans[T: Eq, F, G, M](
       val (a, d) = centroidIndexAndDistanceClosestTo(space, μ, xi)
       Vector(a, d)
     }).transpose
-    (la.matrix(X.rows, 1, AD(0).toArray), la.matrix(X.rows, 1, AD(1).toArray))
+    (la.fromColumnMajorArray(X.rows, 1, AD(0).toArray), la.fromColumnMajorArray(X.rows, 1, AD(1).toArray))
   }
 
   /**
