@@ -145,11 +145,13 @@ class PrisonersDilemmaSpec extends Specification {
         p1, hardCodedStringStrategy(betrayal), dropOutput,
         p2, hardCodedStringStrategy(silence), dropOutput)
 
-      val p1silentOutcome = outcome(p1silent, moveStateStream(p1silent, start).last._3).get
+      val lastStateP1Silent = moveStateStream(p1silent, start).last._3
+      val p1silentOutcome = outcome(p1silent, lastStateP1Silent).get
       val p2silentOutcome = outcome(p2silent, moveStateStream(p2silent, start).last._3).get
 
       p1silentOutcome.p1YearsInPrison must be equalTo p2silentOutcome.p2YearsInPrison
       p1silentOutcome.p2YearsInPrison must be equalTo p2silentOutcome.p1YearsInPrison
+      moverM(game, lastStateP1Silent) must be equalTo None
     }
   }
 
