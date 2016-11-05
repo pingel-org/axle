@@ -53,6 +53,16 @@ class MontyHallSpec extends Specification {
     }
   }
 
+  "masked-sate mover" should {
+    "be the same as raw state mover" in {
+      val state = startState(game)
+      val move = moves(game, state).head
+      val nextState = applyMove(game, state, move)
+      moverM(game, state) must be equalTo mover(game, state)
+      moverM(game, nextState) must be equalTo mover(game, nextState)
+    }
+  }
+
   "starting moves" should {
     "be three-fold, display to monty with 'something'" in {
 
