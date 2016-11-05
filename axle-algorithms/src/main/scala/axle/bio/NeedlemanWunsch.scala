@@ -1,20 +1,24 @@
 package axle.bio
 
-import scala.Vector
 import scala.Stream.cons
 import scala.Stream.empty
+import scala.Vector
 import scala.reflect.ClassTag
 
 import NeedlemanWunsch.computeF
-import axle.algebra._
-import axle.algebra.Σ
 import axle.algebra.Aggregatable
+import axle.algebra.AggregatableK1
 import axle.algebra.Finite
+import axle.algebra.FiniteK1
 import axle.algebra.FromStream
 import axle.algebra.Functor
+import axle.algebra.FunctorK1
 import axle.algebra.Indexed
+import axle.algebra.IndexedK1
 import axle.algebra.LinearAlgebra
 import axle.algebra.Zipper
+import axle.algebra.ZipperK1
+import axle.algebra.Σ
 import axle.syntax.finite.finiteOps
 import axle.syntax.functor.functorOps
 import axle.syntax.indexed.indexedOps
@@ -39,52 +43,6 @@ import spire.implicits.partialOrderOps
  */
 
 object NeedlemanWunsch {
-
-  object Standard {
-
-    // Default evidence for optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Double]
-
-    implicit val charEq: Eq[Char] = spire.implicits.CharAlgebra
-    implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
-    implicit val orderRing: Order[Int] = spire.implicits.IntAlgebra
-    implicit val dim: Module[Double, Int] = axle.algebra.modules.doubleIntModule
-    implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
-    implicit val od: Order[Double] = spire.implicits.DoubleAlgebra
-
-    /**
-     * similarity function for nucleotides
-     *
-     * S(a, b) === S(b, a)
-     *
-     */
-
-    def similarity(x: Char, y: Char): Double = {
-      val result = (x, y) match {
-        case ('A', 'A') => 10
-        case ('A', 'G') => -1
-        case ('A', 'C') => -3
-        case ('A', 'T') => -4
-        case ('G', 'A') => -1
-        case ('G', 'G') => 7
-        case ('G', 'C') => -5
-        case ('G', 'T') => -3
-        case ('C', 'A') => -3
-        case ('C', 'G') => -5
-        case ('C', 'C') => 9
-        case ('C', 'T') => 0
-        case ('T', 'A') => -4
-        case ('T', 'G') => -3
-        case ('T', 'C') => 0
-        case ('T', 'T') => 8
-      }
-      result
-    }
-
-    val gap = '-'
-
-    val gapPenalty = -5d
-
-  }
 
   def alignmentScoreK1[C[_], N: Eq: ClassTag, I: Ring: Eq, M, V: AdditiveMonoid: Eq](
     a: C[N],

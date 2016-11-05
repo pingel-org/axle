@@ -11,7 +11,7 @@ class AlignDNA extends Specification {
       import NeedlemanWunsch.alignmentScoreK1
       import NeedlemanWunsch.alignmentScore
       import NeedlemanWunsch.optimalAlignment
-      import NeedlemanWunsch.Standard._
+      import NeedlemanWunschDefaults._
 
       implicit val laJblasDouble = {
         import spire.implicits.DoubleAlgebra
@@ -51,7 +51,7 @@ class AlignDNA extends Specification {
   "Smith-Waterman" should {
     "align DNA" in {
 
-      import SmithWaterman.Standard._
+      import SmithWatermanDefaults._
       import SmithWaterman.optimalAlignment
 
       import spire.implicits.IntAlgebra
