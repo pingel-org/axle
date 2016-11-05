@@ -60,6 +60,7 @@ class TicTacToeSpec extends Specification {
       val nextState = applyMove(game, state, move)
       val newStart = startFrom(game, nextState).get
       moves(game, newStart).length must be equalTo 9
+      outcome(game, state) must be equalTo None
     }
   }
 

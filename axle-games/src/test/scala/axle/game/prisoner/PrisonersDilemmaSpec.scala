@@ -59,6 +59,7 @@ class PrisonersDilemmaSpec extends Specification {
       val nextMove = moves(game, state).head
       val newStart = startFrom(game, nextState).get
       moves(game, newStart).length must be equalTo 2
+      outcome(game, state) must be equalTo None
     }
   }
 

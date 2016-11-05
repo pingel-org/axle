@@ -21,8 +21,10 @@ class PokerSpec extends Specification {
         (p2, interactiveMove, println)),
         println)
 
-      val ms = evGame.maskState(game, startState(game), p1)
+      val state = startState(game)
+      val ms = evGame.maskState(game, state, p1)
       displayStateTo(game, ms, p1) must contain("Current bet: 0")
+      outcome(game, state) must be equalTo None
     }
   }
 

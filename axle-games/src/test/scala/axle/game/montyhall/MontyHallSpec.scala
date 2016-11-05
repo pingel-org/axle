@@ -50,6 +50,7 @@ class MontyHallSpec extends Specification {
       val nextState = applyMove(game, state, move)
       val newStart = startFrom(game, nextState).get
       moves(game, newStart).length must be equalTo 3
+      outcome(game, state) must be equalTo None
     }
   }
 
