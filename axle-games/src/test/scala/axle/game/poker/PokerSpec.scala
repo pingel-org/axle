@@ -15,12 +15,35 @@ class PokerSpec extends Specification {
 
   "start state" should {
     "display something" in {
+
       val game = Poker(Vector(
         (p1, interactiveMove, println),
         (p2, interactiveMove, println)),
         println)
-      val ms = evGame.maskState(game, startState(game), p1)
+
+      val state = startState(game)
+      val ms = evGame.maskState(game, state, p1)
       displayStateTo(game, ms, p1) must contain("Current bet: 0")
+      outcome(game, state) must be equalTo None
+    }
+  }
+
+  "masked-sate mover" should {
+    "be the same as raw state mover" in {
+
+      val game = Poker(Vector(
+        (p1, interactiveMove, println),
+        (p2, interactiveMove, println)),
+        println)
+
+      val state = startState(game)
+      val msp1 = maskState(game, state, p1)
+      val move = moves(game, msp1).head
+      val nextState = applyMove(game, state, move)
+      moverM(game, maskState(game, state, p1)) must be equalTo mover(game, state)
+      moverM(game, maskState(game, state, p2)) must be equalTo mover(game, state)
+      moverM(game, maskState(game, nextState, p1)) must be equalTo mover(game, nextState)
+      moverM(game, maskState(game, nextState, p2)) must be equalTo mover(game, nextState)
     }
   }
 

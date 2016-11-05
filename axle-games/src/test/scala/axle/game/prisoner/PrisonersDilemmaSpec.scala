@@ -17,6 +17,14 @@ class PrisonersDilemmaSpec extends Specification {
     p1, interactiveMove, dropOutput,
     p2, interactiveMove, dropOutput)
 
+  def silence(game: PrisonersDilemma, state: PrisonersDilemmaState): String =
+    "silence"
+
+  def betrayal(game: PrisonersDilemma, state: PrisonersDilemmaState): String =
+    "betrayal"
+
+  val start = startState(game)
+
   "random game" should {
 
     val rGame = PrisonersDilemma(
@@ -48,8 +56,20 @@ class PrisonersDilemmaSpec extends Specification {
       val state = startState(game)
       val move = moves(game, state).head
       val nextState = applyMove(game, state, move)
+      val nextMove = moves(game, state).head
       val newStart = startFrom(game, nextState).get
       moves(game, newStart).length must be equalTo 2
+      outcome(game, state) must be equalTo None
+    }
+  }
+
+  "masked-sate mover" should {
+    "be the same as raw state mover" in {
+      val state = startState(game)
+      val move = moves(game, state).head
+      val nextState = applyMove(game, state, move)
+      moverM(game, state) must be equalTo mover(game, state)
+      moverM(game, nextState) must be equalTo mover(game, nextState)
     }
   }
 
@@ -96,16 +116,9 @@ class PrisonersDilemmaSpec extends Specification {
   //    }
   //  }
 
-  "dual silence" should {
-    "be better than dual betrayal for both" in {
+  "outcomes" should {
 
-      def silence(game: PrisonersDilemma, state: PrisonersDilemmaState): String =
-        "silence"
-
-      def betrayal(game: PrisonersDilemma, state: PrisonersDilemmaState): String =
-        "betrayal"
-
-      val start = startState(game)
+    "dual silence > dual betrayal for both" in {
 
       val silenceGame = PrisonersDilemma(
         p1, hardCodedStringStrategy(silence), dropOutput,
@@ -120,6 +133,25 @@ class PrisonersDilemmaSpec extends Specification {
 
       silentOutcome.p1YearsInPrison must be lessThan betrayalOutcome.p1YearsInPrison
       silentOutcome.p2YearsInPrison must be lessThan betrayalOutcome.p2YearsInPrison
+    }
+
+    "silence/betrayal inverse asymmetry" in {
+
+      val p1silent = PrisonersDilemma(
+        p1, hardCodedStringStrategy(silence), dropOutput,
+        p2, hardCodedStringStrategy(betrayal), dropOutput)
+
+      val p2silent = PrisonersDilemma(
+        p1, hardCodedStringStrategy(betrayal), dropOutput,
+        p2, hardCodedStringStrategy(silence), dropOutput)
+
+      val lastStateP1Silent = moveStateStream(p1silent, start).last._3
+      val p1silentOutcome = outcome(p1silent, lastStateP1Silent).get
+      val p2silentOutcome = outcome(p2silent, moveStateStream(p2silent, start).last._3).get
+
+      p1silentOutcome.p1YearsInPrison must be equalTo p2silentOutcome.p2YearsInPrison
+      p1silentOutcome.p2YearsInPrison must be equalTo p2silentOutcome.p1YearsInPrison
+      moverM(game, lastStateP1Silent) must be equalTo None
     }
   }
 

@@ -60,6 +60,17 @@ class TicTacToeSpec extends Specification {
       val nextState = applyMove(game, state, move)
       val newStart = startFrom(game, nextState).get
       moves(game, newStart).length must be equalTo 9
+      outcome(game, state) must be equalTo None
+    }
+  }
+
+  "masked-sate mover" should {
+    "be the same as raw state mover" in {
+      val state = startState(game)
+      val move = moves(game, state).head
+      val nextState = applyMove(game, state, move)
+      moverM(game, state) must be equalTo mover(game, state)
+      moverM(game, nextState) must be equalTo mover(game, nextState)
     }
   }
 
