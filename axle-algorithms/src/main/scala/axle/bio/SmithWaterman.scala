@@ -32,21 +32,6 @@ import axle.syntax.linearalgebra.matrixOps
 
 object SmithWaterman {
 
-  object Standard {
-
-    def w(x: Char, y: Char, mismatchPenalty: Int): Int =
-      if (x != y) {
-        mismatchPenalty
-      } else {
-        2 // also see NeedlemanWunsch.Default.similarity
-      }
-
-    val mismatchPenalty = -1
-
-    val gap = '-'
-
-  }
-
   /**
    *
    * Computes the "H" matrix for two DNA sequences, A and B
