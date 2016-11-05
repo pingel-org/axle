@@ -3,6 +3,7 @@ package axle.game
 import spire.implicits._
 import axle.stats.Distribution0
 import spire.math.Rational
+import spire.implicits.eqOps
 
 /**
  * Prisoner's Dilemma
@@ -73,17 +74,22 @@ package object prisoner {
 
       def moves(
         game: PrisonersDilemma,
-        s: PrisonersDilemmaState): Seq[PrisonersDilemmaMove] =
-        mover(game, s) match {
-          case game.p1 => s.p1Move match {
+        s: PrisonersDilemmaState): Seq[PrisonersDilemmaMove] = {
+        val m = mover(game, s)
+        if (m === Option(game.p1)) {
+          s.p1Move match {
             case Some(_) => List.empty
             case None    => List(Silence(), Betrayal())
           }
-          case _ => s.p2Move match {
+        } else if (m === Option(game.p2)) {
+          s.p2Move match {
             case Some(_) => List.empty
             case None    => List(Silence(), Betrayal())
           }
+        } else {
+          List.empty
         }
+      }
 
       def maskState(game: PrisonersDilemma, state: PrisonersDilemmaState, observer: Player): PrisonersDilemmaState =
         if (game.p1 === observer) {
