@@ -1,7 +1,7 @@
 
 package axle.lx
 
-import axle.Show
+import cats.Show
 import axle.string
 import spire.algebra.Eq
 import spire.algebra.Order
@@ -14,7 +14,7 @@ object Gold {
   object Expression {
 
     implicit val showExpression: Show[Expression] = new Show[Expression] {
-      def text(expr: Expression): String = expr.mkString(" ")
+      def show(expr: Expression): String = expr.mkString(" ")
     }
 
     implicit val orderExpression: Order[Expression] = new Order[Expression] {
@@ -38,7 +38,7 @@ object Gold {
   object Language {
 
     implicit def showLanguage: Show[Language] = new Show[Language] {
-      def text(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
+      def show(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
     }
 
     implicit val languageEq = new Eq[Language] {
@@ -82,7 +82,7 @@ object Gold {
   case class Morpheme(s: String)
   object Morpheme {
     implicit def showMorpheme: Show[Morpheme] = new Show[Morpheme] {
-      def text(m: Morpheme): String = m.s
+      def show(m: Morpheme): String = m.s
     }
   }
 
@@ -96,7 +96,7 @@ object Gold {
   }
   object Text {
     implicit def showText: Show[Text] = new Show[Text] {
-      def text(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
+      def show(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
     }
   }
 

@@ -4,7 +4,7 @@ import scala.collection.GenSeq
 
 import axle.enrichGenSeq
 import spire.implicits.LongAlgebra
-import axle.Show
+import cats.Show
 
 case class Corpus(val documents: GenSeq[String], language: Language) {
 
@@ -46,7 +46,7 @@ object Corpus {
 
   implicit val showCorpus: Show[Corpus] = new Show[Corpus] {
 
-    def text(corpus: Corpus): String = {
+    def show(corpus: Corpus): String = {
 
       import corpus._
 

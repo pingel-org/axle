@@ -2,7 +2,7 @@ package axle.ml
 
 import axle.algebra.DirectedGraph
 import spire.algebra.Eq
-import axle.Show
+import cats.Show
 
 /**
  *
@@ -23,7 +23,7 @@ case class MarkovModelStartState() extends MarkovModelState
 object MarkovModelStartState {
   implicit def showStart: Show[MarkovModelStartState] =
     new Show[MarkovModelStartState] {
-      def text(s: MarkovModelStartState): String = "start"
+      def show(s: MarkovModelStartState): String = "start"
     }
 }
 
@@ -32,7 +32,7 @@ case class UnobservableMarkovModelState(label: String) extends MarkovModelState
 object UnobservableMarkovModelState {
   implicit def showStart: Show[UnobservableMarkovModelState] =
     new Show[UnobservableMarkovModelState] {
-      def text(s: UnobservableMarkovModelState): String = s.label
+      def show(s: UnobservableMarkovModelState): String = s.label
     }
 }
 
@@ -40,7 +40,7 @@ case class ObservableMarkovModelState(label: String) extends MarkovModelState
 object ObservableMarkovModelState {
   implicit def showStart: Show[ObservableMarkovModelState] =
     new Show[ObservableMarkovModelState] {
-      def text(s: ObservableMarkovModelState): String = s.label
+      def show(s: ObservableMarkovModelState): String = s.label
     }
 }
 

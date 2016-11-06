@@ -1,6 +1,6 @@
 package axle.ml
 
-import axle.Show
+import cats.Show
 import axle.algebra.LinearAlgebra
 import axle.algebra.Functor
 import axle.algebra.Finite
@@ -60,7 +60,7 @@ object ConfusionMatrix {
   implicit def showCM[T, CLASS, L, F, M, G, H](implicit la: LinearAlgebra[M, Int, Int, Double]): Show[ConfusionMatrix[T, CLASS, L, F, M, G, H]] =
     new Show[ConfusionMatrix[T, CLASS, L, F, M, G, H]] {
 
-      def text(cm: ConfusionMatrix[T, CLASS, L, F, M, G, H]): String = {
+      def show(cm: ConfusionMatrix[T, CLASS, L, F, M, G, H]): String = {
         (cm.labelList.zipWithIndex.map({
           case (label, r) => ((0 until cm.counts.columns).map(c => cm.formatNumber(cm.counts.get(r, c).toInt)).mkString(" ") + " : " + cm.formatNumber(cm.rowSums.get(r, 0).toInt) + " " + label + "\n")
         }).mkString("")) + "\n" +

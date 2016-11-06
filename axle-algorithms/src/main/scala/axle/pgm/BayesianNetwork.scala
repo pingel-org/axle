@@ -24,11 +24,11 @@ class Edge
 
 object Edge {
 
-  import axle.Show
+  import cats.Show
 
   implicit def showPgmEdge: Show[axle.pgm.Edge] =
     new Show[axle.pgm.Edge] {
-      def text(e: axle.pgm.Edge): String = ""
+      def show(e: axle.pgm.Edge): String = ""
     }
 
 }

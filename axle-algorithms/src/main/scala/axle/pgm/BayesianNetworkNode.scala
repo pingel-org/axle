@@ -3,7 +3,7 @@ package axle.pgm
 import scala.xml.NodeSeq.seqToNodeSeq
 
 import axle.HtmlFrom
-import axle.Show
+import cats.Show
 import axle.stats.Distribution
 import axle.stats.Factor
 import axle.string
@@ -17,7 +17,7 @@ object BayesianNetworkNode {
   implicit def bnnShow[T, N]: Show[BayesianNetworkNode[T, N]] =
     new Show[BayesianNetworkNode[T, N]] {
 
-      def text(bnn: BayesianNetworkNode[T, N]): String = {
+      def show(bnn: BayesianNetworkNode[T, N]): String = {
         import bnn._
         rv.name + "\n\n" + cpt
       }
