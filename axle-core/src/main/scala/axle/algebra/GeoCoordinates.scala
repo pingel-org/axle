@@ -1,6 +1,6 @@
 package axle.algebra
 
-import axle.Show
+import cats.Show
 import axle.arcTangent2
 import axle.cosine
 import axle.quanta.Angle
@@ -43,7 +43,7 @@ object GeoCoordinates {
     implicit converter: AngleConverter[N]) =
     new Show[GeoCoordinates[N]] {
       import converter.°
-      def text(p: GeoCoordinates[N]): String =
+      def show(p: GeoCoordinates[N]): String =
         (p.latitude in °).magnitude + "° N " + (p.longitude in °).magnitude + "° W"
     }
 

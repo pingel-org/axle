@@ -33,6 +33,7 @@ import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.Functor
 import axle.algebra.Π
+import cats.Show
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
@@ -63,6 +64,29 @@ import scala.language.implicitConversions
  */
 
 package object axle {
+
+  implicit val showDouble: Show[Double] = new Show[Double] {
+    // TODO: configurable precision
+    def show(d: Double): String = """%.6f""".format(d)
+  }
+
+  implicit val showSymbol: Show[Symbol] = Show.fromToString[Symbol]
+
+  implicit val showBoolean: Show[Boolean] = Show.fromToString[Boolean]
+
+  implicit val showBD: Show[BigDecimal] = Show.fromToString[BigDecimal]
+
+  implicit val showLong: Show[Long] = Show.fromToString[Long]
+
+  implicit val showChar: Show[Char] = Show.fromToString[Char]
+
+  implicit val showInt: Show[Int] = Show.fromToString[Int]
+
+  implicit val showString: Show[String] = Show.fromToString[String]
+
+  implicit val showRational: Show[Rational] = Show.fromToString[Rational]
+
+  implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
 
   def dropOutput(s: String): Unit = {}
 
@@ -339,9 +363,11 @@ package object axle {
     }
   }
 
-  def string[T: Show](t: T): String = Show[T].text(t)
+  def string[T: Show](t: T): String = Show[T].show(t)
 
-  def show[T: Show](t: T): Unit = println(string(t))
+  def show[T: Show](t: T): String = Show[T].show(t)
+
+  def print[T: Show](t: T): Unit = println(string(t))
 
   def html[T: HtmlFrom](t: T): xml.Node = HtmlFrom[T].toHtml(t)
 

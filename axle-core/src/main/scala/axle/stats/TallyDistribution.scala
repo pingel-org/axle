@@ -13,13 +13,13 @@ import spire.implicits.eqOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import axle.Show
+import cats.Show
 import axle.string
 
 object TallyDistribution0 {
 
   implicit def show[A: Order: Show, N: Show]: Show[TallyDistribution0[A, N]] = new Show[TallyDistribution0[A, N]] {
-    def text(td: TallyDistribution0[A, N]): String =
+    def show(td: TallyDistribution0[A, N]): String =
       td.name + "\n" +
         td.values.sorted.map(a => {
           val aString = string(a)

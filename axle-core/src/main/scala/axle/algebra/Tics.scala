@@ -1,5 +1,6 @@
 package axle.algebra
 
+import axle._
 import spire.math._
 import spire.implicits._
 import scala.annotation.implicitNotFound

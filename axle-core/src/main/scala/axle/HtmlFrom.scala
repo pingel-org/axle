@@ -1,6 +1,7 @@
 package axle
 
 import scala.annotation.implicitNotFound
+import cats.Show
 
 @implicitNotFound("Witness not found for HtmlFrom[${T}]")
 trait HtmlFrom[T] {

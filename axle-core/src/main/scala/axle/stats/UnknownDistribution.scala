@@ -1,6 +1,6 @@
 package axle.stats
 
-import axle.Show
+import cats.Show
 import spire.algebra.Field
 import spire.algebra.Order
 import spire.random.Dist
@@ -9,7 +9,7 @@ object UnknownDistribution0 {
 
   implicit def show[A, N]: Show[UnknownDistribution0[A, N]] =
     new Show[UnknownDistribution0[A, N]] {
-      def text(t: UnknownDistribution0[A, N]): String = "unknown"
+      def show(t: UnknownDistribution0[A, N]): String = "unknown"
     }
 
 }

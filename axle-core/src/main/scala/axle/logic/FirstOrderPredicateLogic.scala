@@ -7,7 +7,7 @@ import spire.implicits.IntAlgebra
 import spire.implicits.SeqEq
 import spire.implicits.StringOrder
 import spire.implicits.eqOps
-import axle.Show
+import cats.Show
 import axle.string
 import scala.language.implicitConversions
 
@@ -31,7 +31,7 @@ object FirstOrderPredicateLogic {
 
     implicit def showPredicate: Show[Predicate] = new Show[Predicate] {
 
-      def text(predicate: Predicate): String = {
+      def show(predicate: Predicate): String = {
         import predicate._
         name + "(" + symbols.mkString(", ") + ")"
       }
@@ -86,7 +86,7 @@ object FirstOrderPredicateLogic {
 
     implicit def showStatement: Show[Statement] = new Show[Statement] {
       // TODO: How can I avoid this pattern match ?
-      def text(s: Statement): String = s match {
+      def show(s: Statement): String = s match {
         case p: Predicate    => string(p)
         case a: And          => string(a)
         case o: Or           => string(o)
@@ -126,7 +126,7 @@ object FirstOrderPredicateLogic {
       def eqv(x: And, y: And): Boolean = (x.left === y.left && x.right === y.right)
     }
     implicit def showAnd: Show[And] = new Show[And] {
-      def text(a: And): String = "(" + string(a.left) + " ∧ " + string(a.right) + ")"
+      def show(a: And): String = "(" + string(a.left) + " ∧ " + string(a.right) + ")"
     }
   }
 
@@ -135,7 +135,7 @@ object FirstOrderPredicateLogic {
       def eqv(x: Or, y: Or): Boolean = (x.left === y.left && x.right === y.right)
     }
     implicit def showOr: Show[Or] = new Show[Or] {
-      def text(o: Or): String = "(" + string(o.left) + " ∨ " + string(o.right) + ")"
+      def show(o: Or): String = "(" + string(o.left) + " ∨ " + string(o.right) + ")"
     }
   }
   case class Or(left: Statement, right: Statement) extends Statement {
@@ -147,7 +147,7 @@ object FirstOrderPredicateLogic {
       def eqv(x: Iff, y: Iff): Boolean = (x.left === y.left && x.right === y.right)
     }
     implicit def showIff: Show[Iff] = new Show[Iff] {
-      def text(i: Iff): String = "(" + string(i.left) + " ⇔ " + string(i.right) + ")"
+      def show(i: Iff): String = "(" + string(i.left) + " ⇔ " + string(i.right) + ")"
     }
   }
   case class Iff(left: Statement, right: Statement) extends Statement {
@@ -163,7 +163,7 @@ object FirstOrderPredicateLogic {
       def eqv(x: Implies, y: Implies): Boolean = (x.left === y.left && x.right === y.right)
     }
     implicit def showImplies: Show[Implies] = new Show[Implies] {
-      def text(i: Implies): String = "(" + string(i.left) + " ⊃ " + string(i.right) + ")"
+      def show(i: Implies): String = "(" + string(i.left) + " ⊃ " + string(i.right) + ")"
     }
   }
   case class Implies(left: Statement, right: Statement) extends Statement {
@@ -175,7 +175,7 @@ object FirstOrderPredicateLogic {
       def eqv(x: ¬, y: ¬): Boolean = (x.statement === y.statement)
     }
     implicit def showNeg: Show[¬] = new Show[¬] {
-      def text(n: ¬): String = "¬" + string(n.statement)
+      def show(n: ¬): String = "¬" + string(n.statement)
     }
   }
   case class ¬(statement: Statement) extends Statement {
@@ -188,7 +188,7 @@ object FirstOrderPredicateLogic {
         (x.symbol === y.symbol) && (x.set.intersect(y.set).size === x.set.size)
     }
     implicit def showEO: Show[ElementOf] = new Show[ElementOf] {
-      def text(eo: ElementOf): String = eo.symbol + " ∈ " + eo.set
+      def show(eo: ElementOf): String = eo.symbol + " ∈ " + eo.set
     }
   }
   case class ElementOf(symbol: Symbol, set: Set[Any])
@@ -206,7 +206,7 @@ object FirstOrderPredicateLogic {
         (x.symbolSet === y.symbolSet) && (x.statement === y.statement)
     }
     implicit def showExists: Show[∃] = new Show[∃] {
-      def text(e: ∃): String = "∃" + e.symbolSet + " " + string(e.statement)
+      def show(e: ∃): String = "∃" + e.symbolSet + " " + string(e.statement)
     }
   }
   case class ∃(symbolSet: ElementOf, statement: Statement) extends Statement {
@@ -220,7 +220,7 @@ object FirstOrderPredicateLogic {
         (x.symbolSet === y.symbolSet) && (x.statement === y.statement)
     }
     implicit def showForall: Show[∀] = new Show[∀] {
-      def text(a: ∀): String = "∀" + a.symbolSet + " " + string(a.statement)
+      def show(a: ∀): String = "∀" + a.symbolSet + " " + string(a.statement)
     }
   }
   case class ∀(symbolSet: ElementOf, statement: Statement) extends Statement {
@@ -238,7 +238,7 @@ object FirstOrderPredicateLogic {
         x.b === y.b
     }
     implicit def showConstant: Show[Constant] = new Show[Constant] {
-      def text(c: Constant): String = c.toString
+      def show(c: Constant): String = c.toString
     }
   }
   case class Constant(b: Boolean) extends Statement {

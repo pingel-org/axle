@@ -7,6 +7,7 @@ import ScoverageSbtPlugin._
 
 lazy val spireVersion = "0.11.0"
 lazy val shapelessVersion = "2.3.1"
+lazy val catsVersion = "0.8.0"
 lazy val disciplineVersion = "0.4"
 lazy val scalacheckVersion = "1.12.5"
 lazy val specsVersion = "3.6.5"
@@ -51,6 +52,7 @@ lazy val axleCore = Project(
       "org.typelevel" %% "discipline" % disciplineVersion,
       "org.spire-math" %% "spire" % spireVersion,
       "org.spire-math" %% "spire-laws" % spireVersion,
+      "org.typelevel" %% "cats-core" % catsVersion,
       "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion
       // "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test"

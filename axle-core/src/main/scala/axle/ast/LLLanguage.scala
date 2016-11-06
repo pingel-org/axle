@@ -1,7 +1,7 @@
 
 package axle.ast
 
-import axle.Show
+import cats.Show
 import axle.string
 import scala.Stream.cons
 import scala.Stream.empty
@@ -14,12 +14,10 @@ import spire.implicits.eqOps
  *
  */
 
-import axle.Show
-
 object LLLanguage {
 
   implicit def showLLLanguage: Show[LLLanguage] = new Show[LLLanguage] {
-    def text(lll: LLLanguage): String = view.ViewString.llLanguage(lll)
+    def show(lll: LLLanguage): String = view.ViewString.llLanguage(lll)
   }
 }
 
