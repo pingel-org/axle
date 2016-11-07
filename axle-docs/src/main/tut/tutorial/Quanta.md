@@ -50,11 +50,12 @@ import axle.algebra.modules.doubleRationalModule
 import spire.implicits.DoubleAlgebra
 import axle.jung.directedGraphJung
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.Show
 
 implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
 
 implicit val showDDAt1 = new Show[Double => Double] {
-  def text(f: Double => Double): String = f(1d).toString
+  def show(f: Double => Double): String = f(1d).toString
 }
 
 import axle.visualize._
@@ -145,8 +146,8 @@ Converting between quanta is not allowed, and is caught at compile time:
 Show
 ----
 
-A witness for the `Show` typeclass is defined, meaning that `string` will return
-a `String` representation, and `show` will send it to stdout.
+A witness for the `cats.Show` typeclass is defined, meaning that `string` or `show` will return
+a `String` representation, and `print` will send it to stdout.
 
 ```tut:book
 string(10d *: gram in kilogram)

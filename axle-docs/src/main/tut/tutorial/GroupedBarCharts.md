@@ -29,6 +29,8 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.implicits.StringOrder
 import axle.visualize.BarChartGrouped
+import axle.showString
+import axle.showInt
 ```
 
 The data can be grouped in two ways to produce bar charts:

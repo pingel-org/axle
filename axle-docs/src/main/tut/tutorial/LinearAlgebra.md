@@ -10,7 +10,7 @@ The `axle-jblas` spoke provides witnesses for JBLAS matrices.
 
 The default jblas matrix `toString` isn't very readable,
 so this tutorial wraps most results in the Axle `string` function,
-invoking Axle's `Show` witness for those matrices.
+invoking the `cats.Show` witness for those matrices.
 
 Imports and implicits
 ---------------------
@@ -42,11 +42,11 @@ Creating matrices from arrays
 -----------------------------
 
 ```tut:book
-string(matrix(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray))
+string(fromColumnMajorArray(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray))
 
-string(matrix(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray).t)
+string(fromColumnMajorArray(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray).t)
 
-val m = matrix(4, 5, (1 to 20).map(_.toDouble).toArray)
+val m = fromColumnMajorArray(4, 5, (1 to 20).map(_.toDouble).toArray)
 string(m)
 ```
 
@@ -75,10 +75,10 @@ Metadata
 --------
 
 ```tut:book
-val x = matrix(3, 1, Vector(4.0, 5.1, 6.2).toArray)
+val x = fromColumnMajorArray(3, 1, Vector(4.0, 5.1, 6.2).toArray)
 string(x)
 
-val y = matrix(3, 1, Vector(7.3, 8.4, 9.5).toArray)
+val y = fromColumnMajorArray(3, 1, Vector(7.3, 8.4, 9.5).toArray)
 string(y)
 
 x.isEmpty
@@ -108,7 +108,7 @@ string(x.row(1))
 
 x.get(2, 0)
 
-val fiveByFive = matrix(5, 5, (1 to 25).map(_.toDouble).toArray)
+val fiveByFive = fromColumnMajorArray(5, 5, (1 to 25).map(_.toDouble).toArray)
 
 string(fiveByFive)
 
