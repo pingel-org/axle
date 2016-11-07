@@ -4,12 +4,6 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.6 (November 2016)
-* Depends on Cats (initially just for Show typeclass)
-* Strategy: (G, MS) => Distribution[M, Rational]
-* LinearAlgebra.from{Column,Row}MajorArray
-* Minor Poker fixes
-
 ## 0.2.7 (December 2016)
 * Depend on Spire on Algebra on Cats
 * Fix Logistic regression
@@ -157,3 +151,9 @@ Previous Milestones
 ## 0.2.5 (October 2016)
 * Typeclasses for axle.game
 * Increase test coverage to 78%
+
+## 0.2.6 (November 2016)
+* Depends on Cats (initially just for Show typeclass)
+* Strategy: (G, MS) => Distribution[M, Rational]
+* LinearAlgebra.from{Column,Row}MajorArray
+* Minor Poker fixes
