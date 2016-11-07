@@ -1,6 +1,6 @@
 package axle.ast.view
 
-import axle.Show
+import cats.Show
 
 case class AstNodeFormatterString(
   config: FormatterConfig,
@@ -39,7 +39,7 @@ object AstNodeFormatterString {
   implicit val showAstNodeFormatterString: Show[AstNodeFormatterString] =
     new Show[AstNodeFormatterString] {
 
-      def text(anfs: AstNodeFormatterString): String = anfs.subState.toList.mkString("")
+      def show(anfs: AstNodeFormatterString): String = anfs.subState.toList.mkString("")
     }
 
 }

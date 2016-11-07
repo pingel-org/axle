@@ -1,7 +1,7 @@
 package axle.game.cards
 
 import spire.algebra.Order
-import axle.Show
+import cats.Show
 
 object Rank {
 
@@ -9,7 +9,7 @@ object Rank {
     def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
   }
 
-  implicit def show[R <: Rank]: Show[R] = new Show[R] { def text(r: R) = r.serialize.toString }
+  implicit def show[R <: Rank]: Show[R] = new Show[R] { def show(r: R) = r.serialize.toString }
 
   def apply(c: Char): Rank = c match {
     case '2' => R2

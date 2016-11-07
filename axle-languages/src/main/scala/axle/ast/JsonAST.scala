@@ -1,7 +1,7 @@
 
 package axle.ast
 
-import axle.string
+import axle._
 import scala.collection.mutable.Buffer
 
 object Jackson {

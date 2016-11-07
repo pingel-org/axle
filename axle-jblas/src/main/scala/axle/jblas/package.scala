@@ -4,6 +4,7 @@ import org.jblas.DoubleMatrix
 import org.jblas.MatrixFunctions
 import org.jblas.Solve
 
+import cats.Show
 import axle.algebra.Endofunctor
 import axle.algebra.LinearAlgebra
 import spire.algebra.AdditiveAbGroup
@@ -164,7 +165,7 @@ package object jblas {
   implicit def showDoubleMatrix: Show[DoubleMatrix] =
     new Show[DoubleMatrix] {
 
-      def text(m: DoubleMatrix): String =
+      def show(m: DoubleMatrix): String =
         (0 until m.getRows) map { i =>
           (0 until m.getColumns) map { j =>
             string(m.get(i, j))

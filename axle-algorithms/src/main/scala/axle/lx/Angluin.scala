@@ -1,7 +1,7 @@
 
 package axle.lx
 
-import axle.Show
+import cats.Show
 import axle.algebra.DirectedGraph
 import axle.string
 import axle.syntax.directedgraph._
@@ -21,7 +21,7 @@ object Angluin {
     }
 
     implicit def showSymbol: Show[Symbol] = new Show[Symbol] {
-      def text(s: Symbol): String = s.s
+      def show(s: Symbol): String = s.s
     }
 
     implicit val orderSymbol: Order[Symbol] = new Order[Symbol] {
@@ -101,7 +101,7 @@ object Angluin {
       def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
     }
     implicit def showLanguage: Show[Language] = new Show[Language] {
-      def text(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
+      def show(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
     }
   }
 
@@ -194,7 +194,7 @@ object Angluin {
 
   object Text {
     implicit def showText: Show[Text] = new Show[Text] {
-      def text(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
+      def show(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
     }
   }
 

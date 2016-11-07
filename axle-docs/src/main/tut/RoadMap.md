@@ -4,26 +4,35 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.5 (October 2016)
-* Typeclasses for axle.game
-* Increase test coverage to 78%
-
 ## 0.2.6 (November 2016)
-* Bug fixes
+* Depends on Cats (initially just for Show typeclass)
+* Strategy: (G, MS) => Distribution[M, Rational]
+* LinearAlgebra.from{Column,Row}MajorArray
+* Minor Poker fixes
 
-## 0.2.7 (November 2016)
+## 0.2.7 (December 2016)
 * Depend on Spire on Algebra on Cats
+* Fix Logistic regression
+* Fix JodaTime Tics handling of timezones
+* Publish Scala 2.12 artifacts
+* Code coverage to ?%
 
-## 0.2.8 (December 2016)
+## 0.2.8 (January 2016)
 * Dependent types (Shapeless?) for matrix size
 
-## 0.2.9 (January 2017)
-* Reactive Streams (Akka?) for animating visualizations
+## 0.2.9 (February 2017)
+* Reactive Streams for animating visualizations
 
-## 0.3.0 (March 2017)
+## 0.3.0 (April 2017)
 * Solve the Spark ClassTag issue
+* Redo Logic using Abstract Algebra
+* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
+* Use Shapeless for compound Quanta and Bayesian Networks
+* Physics (eg, how Volume relates to Flow)
+* Heterogenous Model types
+* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
 
-## 0.3.x (Spring 2017)
+## 0.3.x (Summer-Fall 2017)
 * LSA
 * LDA
 * GLM
@@ -33,22 +42,15 @@ permalink: /road_map/
 * Decision Trees
 * Random Forest
 * A* Search
-
-## 0.4.x (Fall 2017)
-* Use Shapeless for compound Quanta and Bayesian Networks
-* Physics (eg, how Volume relates to Flow)
-* Heterogenous Model types
-* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
 * Stochastic Lambda Calculus
+* MCMC
 * Metropolis Hastings
 * Game Theory: information sets, equilibria
-* Redo Logic using abstract algebra
 * do-calculus (Causality)
 * Conditional Random Fields (CRF)
 * Hidden Markov Models
 
-## 0.5.x (Spring 2018)
-* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
+## 0.4.x (2018)
 * Performance benchmarking
 * netlib-java Matrix
 * GPU/CUDA support
@@ -151,3 +153,7 @@ Previous Milestones
 * Make some axle.nlp.Corpus methods more consistent
 * Avoid using wget in axle.data._
 * float*Module witnesses in axle._
+
+## 0.2.5 (October 2016)
+* Typeclasses for axle.game
+* Increase test coverage to 78%

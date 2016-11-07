@@ -1,6 +1,7 @@
 package axle.game
 
 import axle.string
+import axle.showInt
 import axle.stats.Distribution0
 import spire.math.Rational
 import spire.implicits._

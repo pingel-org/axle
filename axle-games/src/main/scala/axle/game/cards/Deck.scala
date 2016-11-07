@@ -1,7 +1,7 @@
 package axle.game.cards
 
 import util.Random.shuffle
-import axle.Show
+import cats.Show
 import axle.string
 
 case class Deck(cards: IndexedSeq[Card] = shuffle(Deck.cards))
@@ -17,7 +17,7 @@ object Deck {
   } yield Card(rank, suit)
 
   implicit def showDeck: Show[Deck] = new Show[Deck] {
-    def text(deck: Deck): String = cards.map(string(_)).mkString(" ")
+    def show(deck: Deck): String = cards.map(string(_)).mkString(" ")
   }
 
 }

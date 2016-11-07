@@ -5,7 +5,7 @@ import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 import axle.HtmlFrom
-import axle.Show
+import cats.Show
 import axle.ml.KMeans
 import axle.string
 import axle.visualize.BarChart

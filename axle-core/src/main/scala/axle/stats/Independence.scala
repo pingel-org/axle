@@ -3,7 +3,7 @@ package axle.stats
 import spire.algebra.Eq
 import spire.algebra.Field
 
-import axle.Show
+import cats.Show
 
 /**
  *
@@ -20,7 +20,7 @@ object Independence {
   def variablesToString[T, N](s: Set[Distribution[T, N]]): String = "{" + (s map { _.name }).mkString(", ") + "}"
 
   implicit def showIndependence[T, N]: Show[Independence[T, N]] = new Show[Independence[T, N]] {
-    def text(i: Independence[T, N]): String =
+    def show(i: Independence[T, N]): String =
       "I(" + variablesToString(i.X) + ", " + variablesToString(i.Z) + ", " + variablesToString(i.Y) + ")"
   }
 

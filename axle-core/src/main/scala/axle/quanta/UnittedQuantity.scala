@@ -1,6 +1,6 @@
 package axle.quanta
 
-import axle.Show
+import cats.Show
 import axle.string
 import axle.algebra.Functor
 import spire.algebra.Eq
@@ -12,7 +12,7 @@ object UnittedQuantity {
 
   implicit def showUQ[Q, N: Show]: Show[UnittedQuantity[Q, N]] =
     new Show[UnittedQuantity[Q, N]] {
-      def text(uq: UnittedQuantity[Q, N]): String = string(uq.magnitude) + " " + uq.unit.symbol
+      def show(uq: UnittedQuantity[Q, N]): String = string(uq.magnitude) + " " + uq.unit.symbol
     }
 
   implicit def eqqqn[Q, N: Eq]: Eq[UnittedQuantity[Q, N]] =

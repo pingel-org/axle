@@ -28,6 +28,7 @@ class GameChartSpec extends Specification {
       // test implicit conjuring:
       PlotDataView.distribution0DataView[Int, Rational]
 
+      import axle.showInt
       val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
         scoreD,
         drawKey = true,

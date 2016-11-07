@@ -6,6 +6,7 @@ import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
+import cats.Show
 import spire.algebra.AdditiveMonoid
 import spire.algebra.AdditiveGroup
 import spire.algebra.Eq

@@ -1,6 +1,6 @@
 package axle.stats
 
-import axle.Show
+import cats.Show
 import axle.string
 import spire.algebra.Field
 import spire.algebra.Order
@@ -15,7 +15,7 @@ object ConditionalProbabilityTable0 {
   implicit def showCPT[A: Show: Order, N: Show]: Show[ConditionalProbabilityTable0[A, N]] =
     new Show[ConditionalProbabilityTable0[A, N]] {
 
-      def text(cpt: ConditionalProbabilityTable0[A, N]): String =
+      def show(cpt: ConditionalProbabilityTable0[A, N]): String =
         cpt.name + "\n" +
           cpt.values.sorted.map(a => {
             val aString = string(a)

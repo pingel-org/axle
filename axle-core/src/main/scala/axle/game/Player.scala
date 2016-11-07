@@ -1,6 +1,6 @@
 package axle.game
 
-import axle.Show
+import cats.Show
 import spire.algebra.Eq
 
 case class Player(id: String, description: String) {
@@ -18,7 +18,7 @@ object Player {
 
   implicit def showPlayer: Show[Player] = new Show[Player] {
 
-    def text(player: Player): String = player.description
+    def show(player: Player): String = player.description
   }
 
   implicit def eqPlayer: Eq[Player] = new Eq[Player] {

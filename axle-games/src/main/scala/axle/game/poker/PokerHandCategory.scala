@@ -3,7 +3,7 @@ package axle.game.poker
 import axle.game.cards._
 import spire.algebra.Order
 import spire.compat.ordering
-import axle.Show
+import cats.Show
 import axle.string
 
 object PokerHandCategory {
@@ -16,7 +16,7 @@ object PokerHandCategory {
   val categories = Vector(High, Pair, TwoPair, ThreeOfAKind, Straight, Flush, FullHouse, FourOfAKind, StraightFlush, RoyalFlush).sorted
 
   implicit def showPHC: Show[PokerHandCategory] = new Show[PokerHandCategory] {
-    def text(phc: PokerHandCategory): String = phc.name
+    def show(phc: PokerHandCategory): String = phc.name
   }
 
 }

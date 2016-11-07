@@ -2,7 +2,7 @@ package axle.game.cards
 
 import spire.implicits._
 import spire.algebra._
-import axle.Show
+import cats.Show
 import axle.string
 
 object Card {
@@ -15,7 +15,7 @@ object Card {
   }
 
   implicit def showCard: Show[Card] = new Show[Card] {
-    def text(card: Card): String =  "" + card.rank.serialize + card.suit.serialize
+    def show(card: Card): String =  "" + card.rank.serialize + card.suit.serialize
   }
 
   def apply(s: String): Card = Card(Rank(s.charAt(0)), Suit(s.charAt(1)))

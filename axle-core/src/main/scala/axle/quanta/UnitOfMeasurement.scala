@@ -1,6 +1,6 @@
 package axle.quanta
 
-import axle.Show
+import cats.Show
 import spire.algebra.Eq
 
 object UnitOfMeasurement {
@@ -12,7 +12,7 @@ object UnitOfMeasurement {
 
   implicit def showUoM[T]: Show[UnitOfMeasurement[T]] =
     new Show[UnitOfMeasurement[T]] {
-      def text(u: UnitOfMeasurement[T]): String = s"${u.name} (${u.symbol}) "
+      def show(u: UnitOfMeasurement[T]): String = s"${u.name} (${u.symbol}) "
     }
 
 }

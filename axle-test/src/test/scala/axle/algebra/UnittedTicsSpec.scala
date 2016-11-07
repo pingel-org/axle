@@ -7,6 +7,7 @@ import org.specs2.mutable.Specification
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.jung.directedGraphJung
+import axle.showDouble
 import spire.algebra.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.SeqOrder

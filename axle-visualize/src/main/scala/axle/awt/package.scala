@@ -1,6 +1,7 @@
 
 package axle
 
+import cats.Show
 import spire.math.abs
 import spire.math.min
 import java.awt.Font

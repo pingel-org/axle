@@ -1,8 +1,8 @@
 
 package axle.ast
 
-import axle.Show
-import axle.string
+import cats.Show
+import axle._
 import spire.algebra.Eq
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
@@ -18,7 +18,7 @@ object Symbol {
   }
 
   implicit def showSymbol: Show[Symbol] = new Show[Symbol] {
-    def text(s: Symbol): String = s.label
+    def show(s: Symbol): String = s.label
   }
 }
 
@@ -43,7 +43,7 @@ case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol])
 
 object LLRule {
   implicit def showLLRule: Show[LLRule] = new Show[LLRule] {
-    def text(llr: LLRule) = llr.from.toString + " -> " + llr.rhs.mkString("", " ", "")
+    def show(llr: LLRule) = llr.from.toString + " -> " + llr.rhs.mkString("", " ", "")
   }
 }
 
@@ -56,7 +56,7 @@ object LLParserAction {
 
   implicit def showLLParserAction: Show[LLParserAction] = new Show[LLParserAction] {
 
-    def text(action: LLParserAction): String = action.toString
+    def show(action: LLParserAction): String = action.toString
   }
 
 }
@@ -65,7 +65,7 @@ object LLParserState {
 
   implicit def showLLParserState: Show[LLParserState] = new Show[LLParserState] {
 
-    def text(llps: LLParserState): String = {
+    def show(llps: LLParserState): String = {
       import llps._
       inputBufferWithMarker + "\n" + stack.mkString("", " ", "")
     }

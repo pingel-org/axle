@@ -1,6 +1,6 @@
 package axle.ast.view
 
-import axle.Show
+import cats.Show
 
 case class XhtmlAstNodeFormatter(
   config: FormatterConfig,
@@ -40,7 +40,7 @@ object XhtmlAstNodeFormatter {
   implicit val showXhtmlAstNodeFormatter: Show[XhtmlAstNodeFormatter] =
     new Show[XhtmlAstNodeFormatter] {
 
-      def text(anfx: XhtmlAstNodeFormatter): String = anfx.subState.toList.mkString("")
+      def show(anfx: XhtmlAstNodeFormatter): String = anfx.subState.toList.mkString("")
     }
 
 }

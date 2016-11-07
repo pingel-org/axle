@@ -15,7 +15,7 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 import spire.compat.ordering
 
-import axle.Show
+import cats.Show
 import axle.string
 
 /* Technically a "Distribution" is probably a table that sums to 1, which is not
@@ -27,7 +27,7 @@ object Factor {
   implicit def showFactor[T: Show, N: Show]: Show[Factor[T, N]] =
     new Show[Factor[T, N]] {
 
-      def text(factor: Factor[T, N]): String = {
+      def show(factor: Factor[T, N]): String = {
         import factor._
         varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
           factor.cases.map(kase =>

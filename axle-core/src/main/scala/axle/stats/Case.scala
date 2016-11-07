@@ -92,11 +92,11 @@ case class CaseIs[A, N](distribution: Distribution[A, N], v: A)(implicit val fie
 
 object CaseIs {
 
-  import axle.Show
+  import cats.Show
 
   implicit def showCaseIs[A, N]: Show[CaseIs[A, N]] = new Show[CaseIs[A, N]] {
 
-    def text(c: CaseIs[A, N]): String = {
+    def show(c: CaseIs[A, N]): String = {
       import c._
       distribution.name + " = " + v
     }

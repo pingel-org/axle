@@ -1,7 +1,6 @@
 package axle.ml
 
-import axle.Show
-import axle._
+import cats.Show
 import axle.algebra.Σ
 import axle.algebra.Aggregatable
 import axle.algebra.Functor
@@ -74,7 +73,7 @@ object ClassifierPerformance {
   implicit def showCP[N, DATA, F, G]: Show[ClassifierPerformance[N, DATA, F, G]] =
     new Show[ClassifierPerformance[N, DATA, F, G]] {
 
-      def text(cp: ClassifierPerformance[N, DATA, F, G]): String = {
+      def show(cp: ClassifierPerformance[N, DATA, F, G]): String = {
         import cp._
         s"""Precision   $precision
 Recall      $recall
