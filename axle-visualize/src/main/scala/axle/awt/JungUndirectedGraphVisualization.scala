@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent
 
 import com.google.common.base.{Function => GoogleFunction}
 
-import axle.Show
+import cats.Show
 import axle.string
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer

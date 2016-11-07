@@ -1,6 +1,6 @@
 package axle.game.poker
 
-import axle.Show
+import cats.Show
 import axle.game.cards.Ace
 import axle.game.cards.Card
 import axle.string
@@ -16,7 +16,7 @@ object PokerHand {
     PokerHand(Card.fromString(s))
 
   implicit val showPokerHand: Show[PokerHand] = new Show[PokerHand] {
-    def text(hand: PokerHand): String = hand.sortedHand.reverse.map(string(_)).mkString(" ")
+    def show(hand: PokerHand): String = hand.sortedHand.reverse.map(string(_)).mkString(" ")
   }
 
   implicit val orderPokerHand: Order[PokerHand] = new Order[PokerHand] {

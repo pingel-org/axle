@@ -11,9 +11,10 @@ import java.awt.event.MouseEvent
 import com.google.common.base.{Function => GoogleFunction}
 
 import axle.HtmlFrom
-import axle.Show
+import cats.Show
 import axle.html
 import axle.string
+import axle.showNode
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.VisualizationViewer
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin

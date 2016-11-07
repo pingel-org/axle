@@ -4,7 +4,7 @@ import scala.Stream.continually
 
 import spire.algebra.Order
 
-import axle.Show
+import cats.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero

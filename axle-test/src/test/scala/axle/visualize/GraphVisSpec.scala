@@ -29,9 +29,10 @@ class GraphVisSpec extends Specification {
           (a, c, new Edge),
           (b, d, new Edge)))
 
-      import axle._
-      implicit val showEdge: Show[Edge] = new Show[Edge] { def text(e: Edge): String = "" }
+      import cats.Show
+      implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 
+      import axle._
       import axle.web._
       val svgName = "ug.svg"
       svg(g, svgName)
@@ -69,9 +70,11 @@ class GraphVisSpec extends Specification {
           (d, a, new Edge),
           (a, c, new Edge),
           (b, d, new Edge)))
-      import axle._
-      implicit val showEdge: Show[Edge] = new Show[Edge] { def text(e: Edge): String = "" }
 
+      import cats.Show
+      implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
+
+      import axle._
       import axle.web._
       val svgName = "dg.svg"
       svg(dg, svgName)

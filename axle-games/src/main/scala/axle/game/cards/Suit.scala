@@ -2,7 +2,7 @@ package axle.game.cards
 
 import spire.algebra._
 
-import axle.Show
+import cats.Show
 
 object Suit {
 
@@ -10,8 +10,8 @@ object Suit {
     def eqv(x: Suit, y: Suit): Boolean = x.equals(y)
   }
 
-  implicit def show[S <: Suit]: Show[S] = new Show[S] { def text(s: S) = s.serialize.toString }
-  
+  implicit def show[S <: Suit]: Show[S] = new Show[S] { def show(s: S) = s.serialize.toString }
+
   def apply(c: Char): Suit = c match {
     case '♠' => Spades
     case '♢' => Diamonds

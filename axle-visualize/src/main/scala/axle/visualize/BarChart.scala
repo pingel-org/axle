@@ -2,7 +2,7 @@ package axle.visualize
 
 import scala.Stream.continually
 
-import axle.Show
+import cats.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics

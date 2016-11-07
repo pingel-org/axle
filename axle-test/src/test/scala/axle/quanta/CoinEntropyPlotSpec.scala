@@ -31,6 +31,7 @@ class CoinEntropyPlotSpec extends Specification {
           (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
       implicit val bitDouble = id.bit
+      import axle._
       //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
 
       val plot = Plot[Rational, UnittedQuantity[Information, Double], D](

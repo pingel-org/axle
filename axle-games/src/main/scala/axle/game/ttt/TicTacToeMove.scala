@@ -1,6 +1,7 @@
 package axle.game.ttt
 
 import axle.string
+import axle.showInt
 
 case class TicTacToeMove(position: Int, boardSize: Int) {
 

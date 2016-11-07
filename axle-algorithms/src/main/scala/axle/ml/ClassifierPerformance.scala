@@ -1,7 +1,6 @@
 package axle.ml
 
 import cats.Show
-import axle._
 import axle.algebra.Σ
 import axle.algebra.Aggregatable
 import axle.algebra.Functor
