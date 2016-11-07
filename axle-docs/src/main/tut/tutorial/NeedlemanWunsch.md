@@ -17,7 +17,7 @@ import axle.bio._
 import org.jblas.DoubleMatrix
 import NeedlemanWunsch.alignmentScore
 import NeedlemanWunsch.optimalAlignment
-import NeedlemanWunsch.Standard._
+import NeedlemanWunschDefaults._
 
 implicit val laJblasDouble = {
   import spire.implicits.DoubleAlgebra

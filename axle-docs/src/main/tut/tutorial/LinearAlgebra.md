@@ -10,7 +10,7 @@ The `axle-jblas` spoke provides witnesses for JBLAS matrices.
 
 The default jblas matrix `toString` isn't very readable,
 so this tutorial wraps most results in the Axle `string` function,
-invoking Axle's `Show` witness for those matrices.
+invoking the `cats.Show` witness for those matrices.
 
 Imports and implicits
 ---------------------

@@ -21,9 +21,10 @@ import spire.implicits.StringOrder
 import spire.implicits.eqOps
 import axle.syntax.finite.finiteOps
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.Show
 
 class Edge
-implicit val showEdge: Show[Edge] = new Show[Edge] { def text(e: Edge): String = "" }
+implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 ```
 
 Example
@@ -77,7 +78,7 @@ Imports and implicits
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 class Edge
-implicit val showEdge: Show[Edge] = new Show[Edge] { def text(e: Edge): String = "" }
+implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 ```
 
 Example
