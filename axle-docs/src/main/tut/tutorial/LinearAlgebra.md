@@ -63,9 +63,9 @@ Matrices defined by functions
 -----------------------------
 
 ```tut:book
-string(fromColumnMajorArray(4, 5, (r, c) => r / (c + 1d)))
+string(matrix(4, 5, (r, c) => r / (c + 1d)))
 
-string(fromColumnMajorArray(4, 5, 1d,
+string(matrix(4, 5, 1d,
   (r: Int) => r + 0.5,
   (c: Int) => c + 0.6,
   (r: Int, c: Int, diag: Double, left: Double, right: Double) => diag))
