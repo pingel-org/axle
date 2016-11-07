@@ -25,6 +25,7 @@ Define a bar chart visualization
 import spire.implicits.DoubleAlgebra
 import spire.implicits.StringOrder
 import axle.visualize.BarChart
+import axle.showString
 
 val chart = BarChart[String, Double, Map[String, Double]](
   sales,

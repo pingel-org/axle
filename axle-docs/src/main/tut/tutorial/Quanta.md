@@ -50,7 +50,7 @@ import axle.algebra.modules.doubleRationalModule
 import spire.implicits.DoubleAlgebra
 import axle.jung.directedGraphJung
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.Show
+import cats.Show
 
 implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
 
