@@ -4,6 +4,7 @@ import org.scalacheck.Arbitrary.arbInt
 import org.specs2.mutable.Specification
 import org.typelevel.discipline.specs2.mutable.Discipline
 
+import axle.spireToCatsEq
 import axle.algebra.laws.MonoidLaws
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MultiplicativeMonoid

@@ -1,13 +1,13 @@
 package axle.algebra
 
-import spire.algebra._
-import spire.implicits._
-import org.specs2.mutable._
-import org.scalacheck._
-import Arbitrary._
-import org.typelevel.discipline.specs2.mutable.Discipline
 import org.scalacheck.Arbitrary
-import axle.algebra.laws._
+import org.scalacheck.Arbitrary._
+import org.specs2.mutable.Specification
+import org.typelevel.discipline.specs2.mutable.Discipline
+
+import axle.algebra.laws.FunctorLaws
+import cats.implicits._
+import cats.kernel.Eq
 
 class FunctorLawsSpec
     extends Specification

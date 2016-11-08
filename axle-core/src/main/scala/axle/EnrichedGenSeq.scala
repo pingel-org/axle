@@ -3,11 +3,10 @@ package axle
 import scala.collection.GenSeq
 import scala.collection.immutable.TreeMap
 
+import cats.kernel.Order
 import spire.algebra.Ring
-import spire.algebra.Order
 import spire.implicits.MapRng
 import spire.implicits.additiveSemigroupOps
-import spire.compat.ordering
 
 case class EnrichedGenSeq[T](genSeq: GenSeq[T]) {
 

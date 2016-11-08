@@ -1,24 +1,25 @@
 package axle
 
-
 import axle.algebra.DirectedGraph
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
 import axle.algebra.Zero
 import cats.Show
+import cats.kernel.Eq
+import cats.kernel.Order
 import spire.algebra.AdditiveMonoid
 import spire.algebra.AdditiveGroup
-import spire.algebra.Eq
 import spire.algebra.Field
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
-import spire.algebra.Order
 import spire.algebra.Rng
+import spire.algebra.Signed
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.signedOps
+import spire.implicits._
 
 package object quanta {
 
@@ -102,16 +103,19 @@ package object quanta {
         }
     }
 
-  implicit def unittedLengthSpace[Q, N: Field: Order](
-    implicit base: UnitOfMeasurement[Q], space: LengthSpace[N, Double, N],
+  implicit def unittedLengthSpace[Q, N: Field: Order: Signed](
+    implicit base: UnitOfMeasurement[Q],
+    space: LengthSpace[N, Double, N],
     convert: UnitConverter[Q, N],
     module: Module[UnittedQuantity[Q, N], N]) =
     new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N], N] {
 
       val field = Field[N]
 
-      def distance(v: UnittedQuantity[Q, N], w: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
-        (field.minus((v in base).magnitude, (w in base).magnitude).abs) *: base
+      def distance(v: UnittedQuantity[Q, N], w: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] = {
+        val d: N = field.minus((v in base).magnitude, (w in base).magnitude)
+        d.abs *: base
+      }
 
       def onPath(left: UnittedQuantity[Q, N], right: UnittedQuantity[Q, N], p: N): UnittedQuantity[Q, N] =
         ((field.minus((right in base).magnitude, (left in base).magnitude)) * p + (left in base).magnitude) *: base

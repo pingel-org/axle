@@ -4,10 +4,8 @@ import scala.Vector
 
 import org.specs2.mutable.Specification
 
-import spire.algebra.Eq
-import spire.implicits.DoubleAlgebra
-import spire.implicits.SeqOrder
-import spire.implicits._
+import cats.kernel.Eq
+import cats.implicits._
 
 class TicsSpec extends Specification {
 

@@ -1,12 +1,8 @@
 
 package axle.logic
 
-import spire.algebra.Eq
-import spire.implicits.BooleanStructure
-import spire.implicits.IntAlgebra
-import spire.implicits.SeqEq
-import spire.implicits.StringOrder
-import spire.implicits.eqOps
+import cats.kernel.Eq
+import cats.implicits._
 import cats.Show
 import axle.string
 import scala.language.implicitConversions
@@ -24,7 +20,9 @@ object FirstOrderPredicateLogic {
 
   object Predicate {
 
-    implicit def predicateEq = new Eq[Predicate] {
+    import axle.eqSeq
+
+    implicit val predicateEq = new Eq[Predicate] {
       def eqv(x: Predicate, y: Predicate): Boolean =
         (x.name === y.name) && (x.symbols === y.symbols)
     }

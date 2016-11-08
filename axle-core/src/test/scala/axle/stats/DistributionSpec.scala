@@ -1,5 +1,6 @@
 package axle.stats
 
+import axle.spireToCatsOrder
 import spire.math.Rational
 import org.specs2.mutable._
 

@@ -4,8 +4,9 @@ import org.specs2.mutable.Specification
 
 import axle.game.Dice.die
 import axle.algebra.Σ
-import spire.implicits.IntAlgebra
+import axle.spireToCatsOrder
 import spire.math.Rational
+import cats.implicits._
 
 object StochasticLambdaCalculus extends Specification {
 

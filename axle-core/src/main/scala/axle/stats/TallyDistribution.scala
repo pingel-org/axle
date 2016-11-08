@@ -3,18 +3,18 @@ package axle.stats
 import scala.util.Random
 
 import axle.algebra.Σ
+import axle.orderToOrdering
+import axle.string
+import cats.Show
+import cats.implicits.catsSyntaxEq
+import cats.kernel.Eq
+import cats.kernel.Order
 import spire.algebra.AdditiveMonoid
-import spire.algebra.Eq
 import spire.algebra.Field
-import spire.algebra.Order
 import spire.algebra.Ring
-import spire.compat.ordering
-import spire.implicits.eqOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import cats.Show
-import axle.string
 
 object TallyDistribution0 {
 

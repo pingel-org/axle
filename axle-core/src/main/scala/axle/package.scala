@@ -34,16 +34,16 @@ import axle.algebra.Finite
 import axle.algebra.Functor
 import axle.algebra.Π
 import cats.Show
-import spire.algebra.Eq
+import cats.kernel.Eq
+import cats.implicits._
 import spire.algebra.Field
 import spire.algebra.NRoot
-import spire.algebra.Order
+import cats.kernel.Order
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Rng
 import spire.algebra.Ring
 import spire.algebra.Trig
-import spire.implicits.eqOps
 import spire.implicits.moduleOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
@@ -72,21 +72,51 @@ package object axle {
 
   implicit val showSymbol: Show[Symbol] = Show.fromToString[Symbol]
 
-  implicit val showBoolean: Show[Boolean] = Show.fromToString[Boolean]
-
   implicit val showBD: Show[BigDecimal] = Show.fromToString[BigDecimal]
 
-  implicit val showLong: Show[Long] = Show.fromToString[Long]
-
-  implicit val showChar: Show[Char] = Show.fromToString[Char]
-
-  implicit val showInt: Show[Int] = Show.fromToString[Int]
-
-  implicit val showString: Show[String] = Show.fromToString[String]
+  implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
-  implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
+  // implicit val showBoolean: Show[Boolean] = Show.fromToString[Boolean]
+  // implicit val showLong: Show[Long] = Show.fromToString[Long]
+  // implicit val showChar: Show[Char] = Show.fromToString[Char]
+  // implicit val showInt: Show[Int] = Show.fromToString[Int]
+  // implicit val showString: Show[String] = Show.fromToString[String]
+
+  implicit def catsToSpireEq[T](implicit ceq: Eq[T]): spire.algebra.Eq[T] =
+    new spire.algebra.Eq[T] {
+      def eqv(x: T, y: T): Boolean = ceq.eqv(x, y)
+    }
+
+  implicit def spireToCatsEq[T](implicit seq: spire.algebra.Eq[T]): Eq[T] =
+    new Eq[T] {
+      def eqv(x: T, y: T): Boolean = seq.eqv(x, y)
+    }
+
+  implicit val orderSymbols: Order[Symbol] =
+    new Order[Symbol] {
+      def compare(x: Symbol, y: Symbol): Int = Order[String].compare(string(x), string(y))
+    }
+
+  // implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
+
+  implicit val orderChars = Order.from((c1: Char, c2: Char) => c1.compare(c2))
+
+  implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
+
+  // See spire.syntax.Syntax DoubleOrder
+  implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
+
+  implicit def spireToCatsOrder[T](implicit so: spire.algebra.Order[T]): Order[T] =
+    new Order[T] {
+      def compare(x: T, y: T): Int = so.compare(x, y)
+    }
+
+  implicit def orderToOrdering[T](implicit o: Order[T]): scala.math.Ordering[T] =
+    new Ordering[T] {
+      def compare(x: T, y: T): Int = o.compare(x, y)
+    }
 
   def dropOutput(s: String): Unit = {}
 
@@ -187,20 +217,6 @@ package object axle {
   def arcSine[N: Trig](x: N)(
     implicit converter: AngleConverter[N]): UnittedQuantity[Angle, N] =
     spire.math.asin(x) *: converter.radian
-
-  implicit val orderSymbols: Order[Symbol] =
-    new Order[Symbol] {
-      def compare(x: Symbol, y: Symbol): Int = Order[String].compare(string(x), string(y))
-    }
-
-  implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
-
-  implicit val orderChars = Order.from((c1: Char, c2: Char) => c1.compare(c2))
-
-  implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
-
-  // See spire.syntax.Syntax DoubleOrder
-  implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
 
   implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
 
