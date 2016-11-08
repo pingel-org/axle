@@ -1,6 +1,6 @@
 package axle.game.cards
 
-import spire.algebra.Order
+import cats.kernel.Order
 import cats.Show
 
 object Rank {

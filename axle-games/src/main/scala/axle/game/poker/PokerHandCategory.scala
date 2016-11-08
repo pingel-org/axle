@@ -1,8 +1,8 @@
 package axle.game.poker
 
 import axle.game.cards._
-import spire.algebra.Order
-import spire.compat.ordering
+import cats.kernel.Order
+import axle.orderToOrdering
 import cats.Show
 import axle.string
 

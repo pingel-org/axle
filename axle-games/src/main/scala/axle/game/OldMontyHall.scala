@@ -1,8 +1,9 @@
 package axle.game
 
 import axle.stats._
-import spire.implicits.IntAlgebra
 import spire.math.Rational
+import axle.spireToCatsOrder
+import cats.implicits._
 
 object OldMontyHall {
 

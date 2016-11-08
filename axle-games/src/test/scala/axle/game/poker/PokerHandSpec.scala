@@ -2,8 +2,8 @@ package axle.game.poker
 
 import org.specs2.mutable._
 import axle.string
-import spire.compat.ordering
-import spire.algebra.Eq
+import axle.orderToOrdering
+import cats.kernel.Eq
 
 class PokerHandSpec extends Specification {
 
@@ -15,7 +15,7 @@ class PokerHandSpec extends Specification {
       val personals = Vector("J♠,4♠", "A♠,T♢", "K♠,Q♢").map(PokerHand.fromString)
 
       val hands = personals map { personal =>
-        (personal.cards ++ shared.cards).combinations(5).map(PokerHand(_)).max
+        (personal.cards ++ shared.cards).combinations(5).map(PokerHand.apply).max
       }
 
       val jacksAndSixes = PokerHand.fromString("6♡,6♢,T♠,J♠,J♡")

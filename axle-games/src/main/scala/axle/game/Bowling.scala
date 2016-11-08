@@ -1,6 +1,7 @@
 package axle.game
 
 import axle.stats._
+import axle.spireToCatsOrder
 import spire.math.Rational
 import spire.implicits._
 

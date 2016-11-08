@@ -1,5 +1,6 @@
 package axle.game.ttt
 
+import cats.implicits._
 import axle.dropOutput
 import axle.game._
 import axle.game.Strategies._

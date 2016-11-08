@@ -11,7 +11,7 @@ class CardSpec extends Specification {
       Card("6♡").serialize must be equalTo "6♡"
     }
     "be equal" in {
-      import spire.algebra.Eq
+      import cats.kernel.Eq
       Eq[Card].eqv(Card("7♣"), Card("7♣")) must be equalTo true
     }
   }
