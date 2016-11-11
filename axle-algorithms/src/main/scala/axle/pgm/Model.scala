@@ -2,7 +2,7 @@ package axle.pgm
 
 import axle.algebra.DirectedGraph
 import axle.stats.Distribution
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps

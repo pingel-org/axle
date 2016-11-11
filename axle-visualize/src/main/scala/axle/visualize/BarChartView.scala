@@ -2,14 +2,14 @@ package axle.visualize
 
 import axle.algebra.Tics
 import axle.string
+import axle.orderToOrdering
 import axle.visualize.Color.black
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import spire.compat.ordering
-import spire.implicits.DoubleAlgebra
+import cats.implicits._
 
 case class BarChartView[S, Y, D](
     chart: BarChart[S, Y, D],

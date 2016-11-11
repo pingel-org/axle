@@ -2,7 +2,7 @@ package axle.pgm
 
 import axle.algebra.UndirectedGraph
 import axle.stats.Distribution
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 
 class JoinTreeEdge

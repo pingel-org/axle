@@ -2,7 +2,7 @@ package axle.data
 
 import scala.Vector
 import java.net.URL
-import spire.algebra.Eq
+import cats.kernel.Eq
 
 /**
  *

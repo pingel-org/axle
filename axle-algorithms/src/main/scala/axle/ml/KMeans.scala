@@ -13,7 +13,7 @@ import axle.syntax.indexed._
 import axle.syntax.functor._
 import axle.syntax.linearalgebra._
 
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.MetricSpace
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra

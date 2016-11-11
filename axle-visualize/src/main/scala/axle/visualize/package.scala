@@ -4,7 +4,7 @@ import axle.algebra.DirectedGraph
 import axle.quanta.Angle
 import axle.quanta.UnitOfMeasurement
 import axle.visualize.Color._
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import edu.uci.ics.jung.graph.DirectedSparseGraph

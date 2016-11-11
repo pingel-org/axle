@@ -5,10 +5,9 @@ import cats.Show
 import axle.algebra.DirectedGraph
 import axle.string
 import axle.syntax.directedgraph._
-import spire.algebra.Eq
-import spire.algebra.Order
-import spire.implicits.StringOrder
-import spire.implicits.eqOps
+import cats.kernel.Eq
+import cats.kernel.Order
+import cats.implicits._
 
 object Angluin {
 

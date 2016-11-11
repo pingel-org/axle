@@ -7,6 +7,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import spire.implicits._
 import axle.syntax.finite._
 import axle.syntax.undirectedgraph._
+import cats.implicits._
 
 class UndirectedGraphSpec extends Specification {
 

@@ -8,7 +8,7 @@ import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.jung.directedGraphJung
 import axle.showDouble
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.SeqOrder
 import spire.implicits._

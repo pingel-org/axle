@@ -1,10 +1,10 @@
 package axle.visualize
 
+import axle.orderToOrdering
 import axle.algebra.Plottable
 import axle.algebra.Zero
 import scala.annotation.implicitNotFound
-import spire.algebra.Order
-import spire.compat.ordering
+import cats.kernel.Order
 
 /**
  *

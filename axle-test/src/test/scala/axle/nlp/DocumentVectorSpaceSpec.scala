@@ -9,7 +9,7 @@ import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
 
 import axle.algebra.DistanceMatrix
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.laws.VectorSpaceLaws
 import spire.math.Real
 

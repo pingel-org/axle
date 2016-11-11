@@ -3,8 +3,8 @@ package axle.lx
 
 import cats.Show
 import axle.string
-import spire.algebra.Eq
-import spire.algebra.Order
+import cats.kernel.Eq
+import cats.kernel.Order
 import scala.language.implicitConversions
 
 object Gold {

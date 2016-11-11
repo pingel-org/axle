@@ -1,14 +1,12 @@
 package axle.visualize
 
-// import scala.annotation.migration
-
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.visualize.Color.black
 import axle.visualize.element._
-import spire.algebra.Eq
-import spire.algebra.Order
-import spire.compat.ordering
+import cats.kernel.Eq
+import cats.kernel.Order
+import axle.orderToOrdering
 
 case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     data: D,

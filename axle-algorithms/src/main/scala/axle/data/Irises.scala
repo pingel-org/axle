@@ -7,7 +7,7 @@ import java.net.URL
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
-import spire.algebra.Eq
+import cats.kernel.Eq
 
 /**
  *

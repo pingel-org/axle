@@ -5,7 +5,7 @@ import org.specs2.mutable.Specification
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import spire.math.Rational
-import spire.algebra.Order
+import cats.kernel.Order
 import spire.implicits.DoubleAlgebra
 import spire.implicits._
 import edu.uci.ics.jung.graph.DirectedSparseGraph

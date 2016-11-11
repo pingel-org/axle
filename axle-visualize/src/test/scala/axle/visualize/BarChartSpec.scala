@@ -4,12 +4,14 @@ import scala.Vector
 
 import org.specs2.mutable.Specification
 
+import axle.spireToCatsOrder
 import axle.game.Dice.die
 import axle.stats.Distribution0
 import axle.visualize.Color.blue
 import axle.web._
 import spire.implicits.DoubleAlgebra
 import spire.math.Rational
+import cats.implicits._
 
 class BarChartSpec extends Specification {
 
@@ -20,9 +22,6 @@ class BarChartSpec extends Specification {
         "apple" -> 83.8,
         "banana" -> 77.9,
         "coconut" -> 10.1)
-
-      import axle.orderStrings
-      import axle.showString
 
       val chart = BarChart[String, Double, Map[String, Double]](
         sales,
@@ -54,10 +53,7 @@ class BarChartSpec extends Specification {
         ("coconut", 2011) -> 88.0,
         ("coconut", 2012) -> 10.1)
 
-      import axle.orderStrings
-      import axle.showString
-      import axle.showInt
-      import spire.implicits.IntAlgebra
+      import cats.implicits._
 
       val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
         sales,
@@ -80,9 +76,6 @@ class BarChartSpec extends Specification {
         a <- die(6)
         b <- die(6)
       } yield a + b
-
-      import spire.implicits.IntAlgebra
-      import axle.showInt
 
       val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
         distribution,

@@ -1,8 +1,9 @@
 
 package axle.ast
 
-import axle._
+import axle.string
 import scala.collection.mutable.Buffer
+import cats.implicits._
 
 object Jackson {
 

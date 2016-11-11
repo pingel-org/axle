@@ -1,7 +1,7 @@
 package axle.ml
 
 import axle.algebra.DirectedGraph
-import spire.algebra.Eq
+import cats.kernel.Eq
 import cats.Show
 
 /**

@@ -1,5 +1,6 @@
 package axle.ml
 
+import axle.orderToOrdering
 import axle.algebra.argmax
 import axle.algebra.Functor
 import axle.stats.P
@@ -9,10 +10,9 @@ import axle.stats.TallyDistribution1
 import axle.syntax.aggregatable._
 import axle.syntax.functor._
 import axle.syntax.talliable._
-import spire.algebra.Eq
-import spire.algebra.Order
+import cats.kernel.Eq
+import cats.kernel.Order
 import spire.algebra.Field
-import spire.compat.ordering
 import spire.implicits.MapInnerProductSpace
 import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps

@@ -1,7 +1,8 @@
 package axle.nlp
 
+import axle.catsToSpireEq
 import spire.algebra.InnerProductSpace
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.implicits.multiplicativeSemigroupOps
 
 trait DocumentVectorSpace[D]

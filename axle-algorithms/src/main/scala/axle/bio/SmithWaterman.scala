@@ -5,24 +5,22 @@ import scala.collection.immutable.Stream
 import scala.collection.immutable.Stream.cons
 import scala.collection.immutable.Stream.empty
 
-import axle.algebra.LinearAlgebra
 import axle.algebra.Finite
 import axle.algebra.FromStream
 import axle.algebra.Indexed
-
-import spire.algebra.Eq
-import spire.algebra.MetricSpace
-import spire.algebra.Order
-import spire.algebra.Ring
-
-import spire.compat.ordering
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
-import spire.implicits.eqOps
-import spire.implicits.partialOrderOps
+import axle.algebra.LinearAlgebra
+import axle.orderToOrdering
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
+import cats.implicits._
+import cats.kernel.Eq
+import cats.kernel.Order
+import spire.algebra.MetricSpace
+import spire.algebra.Ring
+import spire.implicits.additiveGroupOps
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.partialOrderOps
 
 /**
  *
@@ -83,10 +81,10 @@ object SmithWaterman {
 
     if (i > iZero && j > iZero && (H.get(i, j) === H.get(i - iOne, j - iOne) + w(A.at(i - iOne), B.at(j - iOne), mismatchPenalty))) {
       (A.at(i - iOne), B.at(j - iOne), i - iOne, j - iOne)
-    } else if (i > 0 && H.get(i, j) === H.get(i - iOne, j) + mismatchPenalty) {
+    } else if (i > iZero && H.get(i, j) === H.get(i - iOne, j) + mismatchPenalty) {
       (A.at(i - iOne), gap, i - iOne, j)
     } else {
-      assert(j > 0 && H.get(i, j) === H.get(i, j - iOne) + mismatchPenalty)
+      assert(j > iZero && H.get(i, j) === H.get(i, j - iOne) + mismatchPenalty)
       (gap, B.at(j - iOne), i, j - iOne)
     }
   }
@@ -101,13 +99,15 @@ object SmithWaterman {
     gap: C,
     H: M)(
       implicit la: LinearAlgebra[M, I, I, V],
-      indexed: Indexed[S, I, C]): Stream[(C, C)] =
-    if (i > 0 || j > 0) {
+      indexed: Indexed[S, I, C]): Stream[(C, C)] = {
+    val iZero = Ring[I].zero
+    if (i > iZero || j > iZero) {
       val (preA, preB, newI, newJ) = alignStep[S, C, M, I, V](i, j, A, B, w, H, mismatchPenalty, gap)
       cons((preA, preB), _optimalAlignment[S, C, M, I, V](newI, newJ, A, B, w, mismatchPenalty, gap, H))
     } else {
       empty
     }
+  }
 
   def optimalAlignment[S, C, M, I: Ring: Order, V: Ring: Order](
     A: S,

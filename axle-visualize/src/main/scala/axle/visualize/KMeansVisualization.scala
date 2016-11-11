@@ -13,7 +13,7 @@ import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import axle.syntax.linearalgebra._
-import spire.implicits.DoubleAlgebra
+import cats.implicits._
 
 case class KMeansVisualization[D, F, G, M](
     classifier: KMeans[D, F, G, M],

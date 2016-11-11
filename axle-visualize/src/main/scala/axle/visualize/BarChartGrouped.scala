@@ -2,7 +2,7 @@ package axle.visualize
 
 import scala.Stream.continually
 
-import spire.algebra.Order
+import cats.kernel.Order
 
 import cats.Show
 import axle.algebra.LengthSpace

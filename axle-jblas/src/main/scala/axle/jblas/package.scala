@@ -10,7 +10,7 @@ import axle.algebra.LinearAlgebra
 import spire.algebra.AdditiveAbGroup
 import spire.algebra.AdditiveCSemigroup
 import spire.algebra.AdditiveMonoid
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
 import spire.algebra.Module

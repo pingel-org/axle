@@ -24,7 +24,7 @@ class KMeansSpecification
       import axle.jblas.rowVectorInnerProductSpace
       import axle.jblas.moduleDoubleMatrix
       import axle.ml.distance.Euclidean
-      import spire.algebra.Eq
+      import cats.kernel.Eq
       import spire.implicits.DoubleAlgebra
       import spire.implicits.IntAlgebra
 
