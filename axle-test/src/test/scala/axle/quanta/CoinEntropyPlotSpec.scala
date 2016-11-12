@@ -8,10 +8,11 @@ import org.specs2.mutable.Specification
 
 import axle.stats.H
 import axle.stats.coin
-
-import spire.compat.ordering
-import spire.implicits.DoubleAlgebra
+import axle.orderToOrdering
 import spire.math.Rational
+import axle.spireToCatsEq
+import spire.implicits._
+import cats.implicits._
 
 class CoinEntropyPlotSpec extends Specification {
 
@@ -26,12 +27,13 @@ class CoinEntropyPlotSpec extends Specification {
 
       implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]
 
+      import axle._
+
       val hm: D =
         new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
           (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
       implicit val bitDouble = id.bit
-      import axle._
       //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
 
       val plot = Plot[Rational, UnittedQuantity[Information, Double], D](

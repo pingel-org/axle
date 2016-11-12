@@ -13,6 +13,7 @@ import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
+import axle.orderToOrdering
 
 class PlotWavesSpec extends Specification {
 
@@ -37,6 +38,7 @@ class PlotWavesSpec extends Specification {
       implicit val zeroDT = axle.joda.dateTimeZero(now)
 
       // test implicit conjuring:
+      import cats.implicits._
       PlotDataView[DateTime, Double, TreeMap[DateTime, Double]]
 
       val plot = Plot(

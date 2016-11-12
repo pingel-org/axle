@@ -8,6 +8,7 @@ import axle.stats.rationalProbabilityDist
 import spire.implicits.BooleanStructure
 import spire.implicits.StringOrder
 import spire.math.Rational
+import axle.spireToCatsOrder
 
 object NaiveBayesSpecification extends Specification {
 

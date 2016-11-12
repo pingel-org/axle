@@ -6,6 +6,8 @@ import spire.math._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
 import org.specs2.mutable._
+import axle.spireToCatsOrder
+import cats.implicits._
 
 class ConditionalProbabilityTableSpecification
     extends Specification {

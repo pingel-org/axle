@@ -13,13 +13,16 @@ import axle.quanta._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.spireToCatsEq
+import axle.catsToSpireOrder
+import cats.implicits._
 
 class GeoMetricSpaceSpec
     extends Specification
     with Discipline {
 
   import spire.implicits._
-  
+
   implicit val angleConverter: AngleConverter[Real] = {
     import axle.algebra.modules.realRationalModule
     import axle.algebra.modules.realDoubleModule

@@ -113,6 +113,11 @@ package object axle {
       def compare(x: T, y: T): Int = so.compare(x, y)
     }
 
+  implicit def catsToSpireOrder[T](implicit cko: Order[T]): spire.algebra.Order[T] =
+    new spire.algebra.Order[T] {
+      def compare(x: T, y: T): Int = cko.compare(x, y)
+    }
+
   implicit def orderToOrdering[T](implicit o: Order[T]): scala.math.Ordering[T] =
     new Ordering[T] {
       def compare(x: T, y: T): Int = o.compare(x, y)

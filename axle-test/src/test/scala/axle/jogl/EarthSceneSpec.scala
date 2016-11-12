@@ -18,6 +18,7 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.FloatAlgebra
 import spire.implicits.additiveGroupOps
 import spire.implicits.moduleOps
+import cats.implicits._
 
 class EarthSceneSpec extends Specification {
 

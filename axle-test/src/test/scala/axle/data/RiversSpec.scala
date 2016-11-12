@@ -6,6 +6,7 @@ import spire.compat.ordering
 import axle.quanta.Distance
 import axle.quanta.Flow
 import spire.implicits.DoubleAlgebra
+import axle.spireToCatsEq
 import axle.algebra.modules.doubleRationalModule
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung

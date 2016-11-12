@@ -6,6 +6,7 @@ import org.specs2.mutable.Specification
 import org.typelevel.discipline.specs2.mutable.Discipline
 import org.typelevel.discipline.Predicate
 
+import axle.catsToSpireEq
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix

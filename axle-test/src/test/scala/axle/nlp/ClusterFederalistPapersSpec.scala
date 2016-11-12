@@ -57,8 +57,6 @@ class ClusterFederalistPapersSpec extends Specification {
         iterations = 100)
 
       import axle.ml.ConfusionMatrix
-      import spire.implicits.IntAlgebra
-      import axle.orderStrings
 
       val confusion = ConfusionMatrix[Article, Int, String, Vector[Article], DoubleMatrix, Vector[(String, Int)], Vector[String]](
         classifier,

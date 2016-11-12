@@ -1,6 +1,7 @@
 package axle.visualize
 
 import org.specs2.mutable.Specification
+import cats.implicits._
 
 class GraphVisSpec extends Specification {
 

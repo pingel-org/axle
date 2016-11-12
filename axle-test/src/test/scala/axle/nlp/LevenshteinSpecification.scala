@@ -5,11 +5,10 @@ import org.specs2.mutable.Specification
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.specs2.mutable.Discipline
 
-import axle.eqIndexedSeq
 import axle.jblas.linearAlgebraDoubleMatrix
-import spire.implicits.CharAlgebra
-import spire.implicits.IntAlgebra
 import spire.laws.VectorSpaceLaws
+import spire.implicits._
+import cats.implicits._
 
 class LevenshteinSpecification
     extends Specification

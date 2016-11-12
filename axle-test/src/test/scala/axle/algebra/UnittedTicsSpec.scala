@@ -7,11 +7,10 @@ import org.specs2.mutable.Specification
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.jung.directedGraphJung
-import axle.showDouble
 import cats.kernel.Eq
 import spire.implicits.DoubleAlgebra
-import spire.implicits.SeqOrder
 import spire.implicits._
+import cats.implicits._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 class UnittedTicsSpec extends Specification {

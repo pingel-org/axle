@@ -12,6 +12,7 @@ import axle.jblas.eqDoubleMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.moduleDoubleMatrix
 import axle.jblas.rowVectorInnerProductSpace
+import axle.catsToSpireEq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.laws.VectorSpaceLaws

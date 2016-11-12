@@ -12,6 +12,7 @@ import axle.quanta.Distance
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.metricSpaceOps
+import cats.implicits._
 
 class GeoLengthSpaceSpec extends Specification {
 

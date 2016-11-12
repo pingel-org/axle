@@ -1,20 +1,18 @@
 package axle.quanta
 
 import org.specs2.mutable._
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
-import spire.implicits.moduleOps
 import spire.math.Rational
 import spire.algebra.Module
 import spire.implicits._
-import spire.implicits.DoubleAlgebra
 import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
-import spire.compat.ordering
+import axle.orderToOrdering
+import axle.spireToCatsEq
+import cats.implicits._
 
 class QuantaSpec extends Specification {
 

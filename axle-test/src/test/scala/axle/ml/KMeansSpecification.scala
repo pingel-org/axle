@@ -77,6 +77,7 @@ class KMeansSpecification
       implicit val distanceConverter: DistanceConverter[Double] = {
         import spire.implicits.DoubleAlgebra
         import axle.algebra.modules.doubleRationalModule
+        import axle.spireToCatsEq
         Distance.converterGraphK2[Double, DirectedSparseGraph]
       }
 
@@ -116,8 +117,8 @@ class KMeansSpecification
         iterations = 20)
 
       import axle.ml.ConfusionMatrix
-      import spire.implicits.IntAlgebra
-      import axle.orderStrings
+      import cats.implicits._
+      import axle.catsToSpireOrder
 
       val confusion = ConfusionMatrix.common[Iris, Int, String, Vector, DoubleMatrix](
         classifier,

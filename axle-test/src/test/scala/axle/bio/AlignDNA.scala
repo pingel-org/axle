@@ -2,6 +2,7 @@ package axle.bio
 
 import org.jblas.DoubleMatrix
 import org.specs2.mutable.Specification
+import cats.implicits._
 
 class AlignDNA extends Specification {
 

@@ -12,6 +12,9 @@ import axle.jung.directedGraphJung
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
+import axle.spireToCatsOrder
+import cats.implicits._
+
 class ScalaFigures extends Specification {
 
   val bools = Vector(true, false)

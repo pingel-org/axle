@@ -13,6 +13,7 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.math.Rational
+import cats.implicits._
 
 class GameChartSpec extends Specification {
 
@@ -26,9 +27,9 @@ class GameChartSpec extends Specification {
       implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
       // test implicit conjuring:
+      import axle.spireToCatsOrder
       PlotDataView.distribution0DataView[Int, Rational]
 
-      import axle.showInt
       val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
         scoreD,
         drawKey = true,

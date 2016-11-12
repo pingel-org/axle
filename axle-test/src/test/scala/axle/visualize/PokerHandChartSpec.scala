@@ -25,7 +25,7 @@ class PokerHandChartSpec extends Specification {
 
       import spire.implicits.IntAlgebra
       import axle.visualize.BarChartGrouped
-      import axle.showInt
+      import cats.implicits._
 
       val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]](
         data.tally.withDefaultValue(0),

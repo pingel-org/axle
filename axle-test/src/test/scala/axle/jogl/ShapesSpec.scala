@@ -14,8 +14,9 @@ import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.FloatAlgebra
 import java.nio.file.Paths
+import spire.implicits._
+import cats.implicits._
 
 class ShapesSpec extends Specification {
 
@@ -25,7 +26,6 @@ class ShapesSpec extends Specification {
 
       implicit val ddc = {
         import axle.algebra.modules.doubleRationalModule
-        import spire.implicits.DoubleAlgebra
         Distance.converterGraphK2[Double, DirectedSparseGraph]
       }
 

@@ -12,6 +12,9 @@ import axle.algebra.DistanceMatrix
 import cats.kernel.Eq
 import spire.laws.VectorSpaceLaws
 import spire.math.Real
+import spire.implicits._
+import axle.catsToSpireEq
+import cats.implicits._
 
 class DocumentVectorSpaceSpec
     extends Specification

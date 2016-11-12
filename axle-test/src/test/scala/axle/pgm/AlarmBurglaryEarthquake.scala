@@ -1,11 +1,13 @@
 package axle.stats
 
-import axle.pgm._
 import spire.math._
-import spire.implicits._
 import org.specs2.mutable._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.spireToCatsOrder
+import axle.pgm._
 import axle.jung.directedGraphJung
+import spire.implicits._
+import cats.implicits._
 
 class ABE extends Specification {
 

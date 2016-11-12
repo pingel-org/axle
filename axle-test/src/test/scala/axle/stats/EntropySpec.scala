@@ -10,6 +10,9 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
+import axle.catsToSpireOrder
+import axle.spireToCatsOrder
+import axle.orderToOrdering
 
 class EntropySpec extends Specification {
 
