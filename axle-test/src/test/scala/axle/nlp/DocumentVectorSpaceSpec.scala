@@ -13,7 +13,8 @@ import cats.kernel.Eq
 import spire.laws.VectorSpaceLaws
 import spire.math.Real
 import spire.implicits._
-import axle.catsToSpireEq
+import axle.spireToCatsEq
+// import axle.catsToSpireEq
 import cats.implicits._
 
 class DocumentVectorSpaceSpec
@@ -98,6 +99,8 @@ class DocumentVectorSpaceSpec
   // TODO more possibilities for genReal
   val genReal = Gen.oneOf[Real](1, 2, 3.9, 10)
 
+  // import axle.spireToCatsEq
+  // import axle.catsToSpireEq
   val vsl = VectorSpaceLaws[Map[String, Real], Real](
     eqMapKV[String, Real],
     Arbitrary(genTermVector),

@@ -10,7 +10,6 @@ import axle.stats.H
 import axle.stats.coin
 import axle.orderToOrdering
 import spire.math.Rational
-import axle.spireToCatsEq
 import spire.implicits._
 import cats.implicits._
 
@@ -34,7 +33,7 @@ class CoinEntropyPlotSpec extends Specification {
           (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
 
       implicit val bitDouble = id.bit
-      //implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity4[Information[Double], Double]]
+      // implicit val pdv = axle.visualize.PlotDataView.treeMapDataView[Rational, UnittedQuantity[Information, Double]]
 
       val plot = Plot[Rational, UnittedQuantity[Information, Double], D](
         List(("h", hm)),

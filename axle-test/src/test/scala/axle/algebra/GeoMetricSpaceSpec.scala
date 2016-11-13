@@ -13,9 +13,9 @@ import axle.quanta._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.spireToCatsEq
+//import axle.spireToCatsEq
 import axle.catsToSpireOrder
-import cats.implicits._
+//import cats.implicits._
 
 class GeoMetricSpaceSpec
     extends Specification
@@ -26,11 +26,16 @@ class GeoMetricSpaceSpec
   implicit val angleConverter: AngleConverter[Real] = {
     import axle.algebra.modules.realRationalModule
     import axle.algebra.modules.realDoubleModule
+    import axle.spireToCatsEq
+    import axle.catsToSpireOrder
     Angle.converterGraphK2[Real, DirectedSparseGraph]
   }
   import angleConverter.°
 
-  implicit val space = geoCoordinatesMetricSpace[Real]
+  implicit val space = {
+    import axle.spireToCatsEq
+    geoCoordinatesMetricSpace[Real]
+  }
 
   implicit val genAngleMagnitudeDouble: Gen[Double] = Gen.choose[Double](-180d, 180d)
 

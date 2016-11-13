@@ -23,7 +23,7 @@ class ScatterPlotSpec extends Specification {
         case 2 => Color.green
       }
 
-      import spire.implicits.IntAlgebra
+      import cats.implicits._
       val plot = ScatterPlot[Int, Int, Map[(Int, Int), Int]](data)
 
       import axle.web._

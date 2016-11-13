@@ -1,7 +1,7 @@
 package axle.visualize
 
 import org.specs2.mutable.Specification
-import spire.implicits.DoubleAlgebra
+import cats.implicits._
 
 class PixelatedColoredAreaSpec extends Specification {
 

@@ -75,7 +75,7 @@ class GraphVisSpec extends Specification {
       import cats.Show
       implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 
-      import axle._
+      // import axle._
       import axle.web._
       val svgName = "dg.svg"
       svg(dg, svgName)
