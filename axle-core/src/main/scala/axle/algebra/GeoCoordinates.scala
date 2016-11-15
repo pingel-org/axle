@@ -1,6 +1,5 @@
 package axle.algebra
 
-import cats.Show
 import axle.arcTangent2
 import axle.cosine
 import axle.quanta.Angle
@@ -10,8 +9,6 @@ import axle.quanta.modulize
 import axle.sine
 import axle.square
 import axle.{ √ => √ }
-import cats.kernel.Eq
-import cats.implicits._
 import spire.algebra.Field
 import spire.algebra.MetricSpace
 import spire.algebra.MultiplicativeMonoid
@@ -27,6 +24,9 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableTo
 import spire.math.Rational
 import spire.math.sqrt
+import cats.kernel.Eq
+import cats.Show
+import cats.implicits._
 
 case class GeoCoordinates[N](
     latitude: UnittedQuantity[Angle, N],

@@ -13,15 +13,10 @@ import axle.quanta._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-//import axle.spireToCatsEq
-import axle.catsToSpireOrder
-//import cats.implicits._
 
 class GeoMetricSpaceSpec
     extends Specification
     with Discipline {
-
-  import spire.implicits._
 
   implicit val angleConverter: AngleConverter[Real] = {
     import axle.algebra.modules.realRationalModule
@@ -61,8 +56,10 @@ class GeoMetricSpaceSpec
 
   val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
 
-  checkAll(s"GeoCoordinates metric space",
-    VectorSpaceLaws[GeoCoordinates[Real], UnittedQuantity[Angle, Real]].metricSpace)
+  import axle.catsToSpireEq
+  val vsl = VectorSpaceLaws[GeoCoordinates[Real], UnittedQuantity[Angle, Real]]
+
+  checkAll(s"GeoCoordinates metric space", vsl.metricSpace)
 
   // Note: Currently failing "space.symmetric"
   // A counter-example is: 

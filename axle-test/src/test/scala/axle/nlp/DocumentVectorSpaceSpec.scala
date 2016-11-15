@@ -99,12 +99,10 @@ class DocumentVectorSpaceSpec
   // TODO more possibilities for genReal
   val genReal = Gen.oneOf[Real](1, 2, 3.9, 10)
 
-  // import axle.spireToCatsEq
-  // import axle.catsToSpireEq
   val vsl = VectorSpaceLaws[Map[String, Real], Real](
-    eqMapKV[String, Real],
+    axle.catsToSpireEq(eqMapKV[String, Real]),
     Arbitrary(genTermVector),
-    implicitly[Eq[Real]],
+    implicitly[spire.algebra.Eq[Real]],
     Arbitrary(genReal),
     tautology)
 

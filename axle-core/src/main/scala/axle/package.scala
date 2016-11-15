@@ -65,10 +65,12 @@ import scala.language.implicitConversions
 
 package object axle {
 
-  implicit val showDouble: Show[Double] = new Show[Double] {
-    // TODO: configurable precision
-    def show(d: Double): String = """%.6f""".format(d)
-  }
+  // was implicit val
+  def showDoubleWithPrecision(p: Int = 6): Show[Double] =
+    new Show[Double] {
+      val fmt = s"""%.${p}f"""
+      def show(d: Double): String = fmt.format(d)
+    }
 
   implicit val showSymbol: Show[Symbol] = Show.fromToString[Symbol]
 
@@ -101,12 +103,12 @@ package object axle {
 
   // implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
 
-  implicit val orderChars = Order.from((c1: Char, c2: Char) => c1.compare(c2))
+  // implicit val orderChars = Order.from((c1: Char, c2: Char) => c1.compare(c2))
 
-  implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
+  // implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
 
   // See spire.syntax.Syntax DoubleOrder
-  implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
+  // implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
 
   implicit def spireToCatsOrder[T](implicit so: spire.algebra.Order[T]): Order[T] =
     new Order[T] {

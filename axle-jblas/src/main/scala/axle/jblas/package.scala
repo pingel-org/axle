@@ -165,6 +165,8 @@ package object jblas {
   implicit def showDoubleMatrix: Show[DoubleMatrix] =
     new Show[DoubleMatrix] {
 
+      implicit val showDouble: Show[Double] = axle.showDoubleWithPrecision(6)
+
       def show(m: DoubleMatrix): String =
         (0 until m.getRows) map { i =>
           (0 until m.getColumns) map { j =>
