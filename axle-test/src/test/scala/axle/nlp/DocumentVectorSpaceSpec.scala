@@ -12,7 +12,7 @@ import axle.algebra.DistanceMatrix
 import cats.kernel.Eq
 import spire.laws.VectorSpaceLaws
 import spire.math.Real
-import spire.implicits._
+//import spire.implicits._
 import axle.spireToCatsEq
 // import axle.catsToSpireEq
 import cats.implicits._
