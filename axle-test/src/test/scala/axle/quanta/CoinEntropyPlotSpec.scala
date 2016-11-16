@@ -38,6 +38,10 @@ class CoinEntropyPlotSpec extends Specification {
 
       type DG = DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]
 
+      implicit val or: Order[Rational] = new cats.kernel.Order[Rational] {
+        val ord = Order[Double]
+        def compare(x: Rational, y: Rational): Int = ord.compare(x.toDouble, y.toDouble)
+      }
       implicit val bitDouble = id.bit
 
       val hm: D =
@@ -52,7 +56,6 @@ class CoinEntropyPlotSpec extends Specification {
       // implicit val tuqid = unittedTics[Information, Double, DG]
       // implicit val euqid = Eq[UnittedQuantity[Information, Double]]
       // implicit val lsuqiddd = LengthSpace[UnittedQuantity[Information, Double], Double, Double]
-      implicit val or: Order[Rational] = cats.kernel.Order.apply[Rational]
       // implicit val pdv = PlotDataView.treeMapDataView[Rational, UnittedQuantity[Information, Double]]
 
       val plot = Plot[Rational, UnittedQuantity[Information, Double], D](
