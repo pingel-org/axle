@@ -123,14 +123,33 @@ class KMeansSpecification
 
       val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-      val classifier: KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix] =
+      val classifier: KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix] = {
+
+        // import spire.algebra.MetricSpace
+        import axle.algebra.Functor
+        import axle.algebra.Indexed
+        import axle.algebra.Finite
+        // implicit val eqi: Eq[Iris] = Iris.irisEq
+        // val space: MetricSpace[DoubleMatrix, Double] = // above
+        // val functor: Functor[List[Iris], Iris, Seq[Double], List[Seq[Double]]] = Functor[List[Iris], Iris, Seq[Double], List[Seq[Double]]]
+        // val la: LinearAlgebra[DoubleMatrix, Int, Int, Double] = // above
+        // val index: Indexed[List[Seq[Double]], Int, Seq[Double]] = Indexed[List[Seq[Double]], Int, Seq[Double]]
+        // val finite: Finite[List[Iris], Int] = Finite[List[Iris], Int]
+
         KMeans.common[Iris, List, DoubleMatrix](
           irisesData.irises,
           N = 2,
           irisFeaturizer,
           normalizer,
           K = 3,
-          iterations = 20)
+          iterations = 20)(
+            Iris.irisEq,
+            space,
+            Functor[List[Iris], Iris, Seq[Double], List[Seq[Double]]],
+            la,
+            Indexed[List[Seq[Double]], Int, Seq[Double]],
+            Finite[List[Iris], Int])
+      }
 
       val confusion = {
         import cats.implicits._

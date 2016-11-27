@@ -7,7 +7,7 @@ import java.net.URL
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
-import cats.kernel.Eq
+//import cats.kernel.Eq
 
 /**
  *
@@ -41,7 +41,7 @@ case class Iris(
   species: String)
 
 object Iris {
-  implicit val irisEq = new Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }
+  implicit val irisEq = new cats.kernel.Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }
 }
 
 class Irises(implicit converter: DistanceConverter[Double]) extends Util {
