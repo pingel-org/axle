@@ -1,11 +1,8 @@
 package axle.data
 
 import org.specs2.mutable._
-import spire.implicits._
-import axle.quanta.Mass
-import axle.quanta.Distance
-import axle.quanta.Time
 import spire.implicits.DoubleAlgebra
+import axle.quanta._
 import axle.algebra.modules.doubleRationalModule
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
