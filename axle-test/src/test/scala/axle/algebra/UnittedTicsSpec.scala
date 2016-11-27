@@ -8,7 +8,6 @@ import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.jung.directedGraphJung
 import cats.kernel.Eq
-import spire.implicits.DoubleAlgebra
 import spire.implicits._
 import cats.implicits._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -39,8 +38,6 @@ class UnittedTicsSpec extends Specification {
         (0.8 *: bit, "0.800000"),
         (0.9 *: bit, "0.900000"),
         (1.0 *: bit, "1.000000"))
-
-      val foo = Eq[UnittedQuantity[Information, Double]]
 
       val vieq = Eq[Vector[(UnittedQuantity[Information, Double], String)]]
 
