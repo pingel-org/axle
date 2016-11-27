@@ -182,6 +182,6 @@ object KMeans {
       functor: Functor[U[T], T, Seq[Double], U[Seq[Double]]],
       la: LinearAlgebra[M, Int, Int, Double],
       index: Indexed[U[Seq[Double]], Int, Seq[Double]],
-      finite: Finite[U[T], Int]) =
+      finite: Finite[U[T], Int]): KMeans[T, U[T], U[Seq[Double]], M] =
     KMeans(data, N, featureExtractor, normalizerMaker, K, iterations)
 }
