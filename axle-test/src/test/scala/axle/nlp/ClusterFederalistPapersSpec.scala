@@ -28,7 +28,7 @@ class ClusterFederalistPapersSpec extends Specification {
         wordFeatures ++ bigramFeatures
       }
 
-      import spire.implicits._
+      // import spire.implicits._
       import axle.ml.distance._
       import axle.ml.distance.Euclidean
       import org.jblas.DoubleMatrix
@@ -57,6 +57,7 @@ class ClusterFederalistPapersSpec extends Specification {
         iterations = 100)
 
       import axle.ml.ConfusionMatrix
+      import cats.implicits._
 
       val confusion = ConfusionMatrix[Article, Int, String, Vector[Article], DoubleMatrix, Vector[(String, Int)], Vector[String]](
         classifier,

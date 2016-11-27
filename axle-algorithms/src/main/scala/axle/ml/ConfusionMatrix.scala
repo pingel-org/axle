@@ -12,9 +12,9 @@ import axle.syntax.functor._
 import axle.syntax.finite._
 import axle.syntax.mapreducible._
 import axle.syntax.setfrom._
-import spire.algebra._
 import spire.math.ceil
 import spire.math.log10
+import cats.kernel.Order
 
 case class ConfusionMatrix[T, CLASS: Order, L: Order, F, M, G, H](
     classifier: Function1[T, CLASS],
