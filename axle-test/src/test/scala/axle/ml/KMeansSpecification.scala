@@ -20,19 +20,18 @@ class KMeansSpecification
 
       import org.jblas.DoubleMatrix
       import axle.jblas.linearAlgebraDoubleMatrix
-      import axle.jblas.additiveAbGroupDoubleMatrix
+      // import axle.jblas.additiveAbGroupDoubleMatrix
       import axle.jblas.rowVectorInnerProductSpace
       import axle.jblas.moduleDoubleMatrix
       import axle.ml.distance.Euclidean
       import cats.kernel.Eq
-      import spire.implicits.DoubleAlgebra
-      import spire.implicits.IntAlgebra
 
       case class Foo(x: Double, y: Double)
 
       def fooSimilarity(foo1: Foo, foo2: Foo) = sqrt(List(foo1.x - foo2.x, foo1.y - foo2.y).map(x => x * x).sum)
 
       def randomPoint(center: Foo, σ2: Double): Foo = {
+        import spire.implicits.DoubleAlgebra
         val distance = nextGaussian() * σ2
         val angle = 2 * pi * nextDouble
         Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
@@ -43,13 +42,23 @@ class KMeansSpecification
           (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
       //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
-      implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](2)
+      implicit val innerSpace = {
+        import spire.implicits.DoubleAlgebra
+        import spire.implicits.IntAlgebra
+        rowVectorInnerProductSpace[Int, Int, Double](2)
+      }
 
-      implicit val space = Euclidean[DoubleMatrix, Double]()
+      implicit val space = {
+        import spire.implicits.DoubleAlgebra
+        Euclidean[DoubleMatrix, Double]()
+      }
 
       implicit val fooEq = new Eq[Foo] {
         def eqv(x: Foo, y: Foo): Boolean = x equals y
       }
+
+      import spire.implicits.DoubleAlgebra
+      implicit val la = axle.jblas.linearAlgebraDoubleMatrix[Double]
 
       val km = KMeans(
         data,
@@ -86,45 +95,51 @@ class KMeansSpecification
 
       val irisesData = new Irises
 
-      import axle.ml.distance.Euclidean
       import org.jblas.DoubleMatrix
-      import axle.jblas.linearAlgebraDoubleMatrix
-
-      implicit val space: Euclidean[DoubleMatrix, Double] = {
+      implicit val space: distance.Euclidean[DoubleMatrix, Double] = {
+        import axle.ml.distance.Euclidean
         import spire.implicits.IntAlgebra
         import spire.implicits.DoubleAlgebra
         import axle.jblas.moduleDoubleMatrix
+        import axle.jblas.linearAlgebraDoubleMatrix
         implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](2)
         Euclidean[DoubleMatrix, Double]
       }
 
       import axle.ml.KMeans
       import axle.ml.PCAFeatureNormalizer
-      import distanceConverter.cm
-      import spire.implicits.DoubleAlgebra
       import axle.ml.PCAFeatureNormalizer
+      import distanceConverter.cm
 
-      val irisFeaturizer = (iris: Iris) => List((iris.sepalLength in cm).magnitude.toDouble, (iris.sepalWidth in cm).magnitude.toDouble)
+      val irisFeaturizer = {
+        import spire.implicits.DoubleAlgebra
+        (iris: Iris) => List((iris.sepalLength in cm).magnitude.toDouble, (iris.sepalWidth in cm).magnitude.toDouble)
+      }
+
+      implicit val la = {
+        import spire.implicits.DoubleAlgebra
+        axle.jblas.linearAlgebraDoubleMatrix[Double]
+      }
 
       val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-      val classifier = KMeans.common[Iris, List, DoubleMatrix](
-        irisesData.irises,
-        N = 2,
-        irisFeaturizer,
-        normalizer,
-        K = 3,
-        iterations = 20)
+      val classifier: KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix] =
+        KMeans.common[Iris, List, DoubleMatrix](
+          irisesData.irises,
+          N = 2,
+          irisFeaturizer,
+          normalizer,
+          K = 3,
+          iterations = 20)
 
-      import axle.ml.ConfusionMatrix
-      import cats.implicits._
-      import axle.catsToSpireOrder
-
-      val confusion = ConfusionMatrix.common[Iris, Int, String, Vector, DoubleMatrix](
-        classifier,
-        irisesData.irises.toVector,
-        _.species,
-        0 to 2)
+      val confusion = {
+        import cats.implicits._
+        ConfusionMatrix.common[Iris, Int, String, Vector, DoubleMatrix](
+          classifier,
+          irisesData.irises.toVector,
+          _.species,
+          0 to 2)
+      }
 
       import axle.web._
       val svgName = "kmeans.svg"
