@@ -6,10 +6,10 @@ import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
 lazy val spireVersion = "0.13.0"
-lazy val shapelessVersion = "2.3.1"
+lazy val shapelessVersion = "2.3.2"
 lazy val catsVersion = "0.8.1" // must match spire's algebra's catsVersion
-lazy val disciplineVersion = "0.4"
-lazy val scalacheckVersion = "1.12.5"
+lazy val disciplineVersion = "0.7.2"
+lazy val scalacheckVersion = "1.13.4"
 lazy val specsVersion = "3.6.5"
 lazy val scalaXmlVersion = "1.0.5"
 lazy val scalaParserCombinatorsVersion = "1.0.4"
