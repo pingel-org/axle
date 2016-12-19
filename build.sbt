@@ -5,9 +5,9 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
-lazy val spireVersion = "0.11.0"
+lazy val spireVersion = "0.13.0"
 lazy val shapelessVersion = "2.3.1"
-lazy val catsVersion = "0.8.0"
+lazy val catsVersion = "0.8.1" // must match spire's algebra's catsVersion
 lazy val disciplineVersion = "0.4"
 lazy val scalacheckVersion = "1.12.5"
 lazy val specsVersion = "3.6.5"
