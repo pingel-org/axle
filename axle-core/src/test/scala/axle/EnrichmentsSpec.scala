@@ -56,10 +56,9 @@ class EnrichmentsSpec extends FunSuite with Matchers {
   }
 
   test("forall in axle._") {
-    val p: Integer => Boolean = (x: Integer) => x % 2 == 0
-    val ints = List(2, 4, 6)
-    val r: Boolean = false // TODO axle.forall(ints)(p)
-    assertResult(r)(true)
+    import axle.forall
+    val p: Int => Boolean = (x: Int) => x % 2 == 0
+    assertResult(forall(List(2, 4, 6))(p))(true)
   }
 
   test("enriched iterator supports lastOption") {
