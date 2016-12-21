@@ -29,14 +29,12 @@ class FunctorLawsSpec
   checkAll("List[Int]", FunctorLaws[List[Int], Int].functorIdentity)
   checkAll("List[String]", FunctorLaws[List[String], String].functorIdentity)
   checkAll("Option[Int]", FunctorLaws[Option[Int], Int].functorIdentity)
-  checkAll("List[String]", FunctorLaws[List[String], String].functorIdentity)
   checkAll("Function1[Int, Int]", FunctorLaws[Int => Int, Int].functorIdentity)
   //({ type λ[α] = Int => α })#λ
 
   checkAll("List[Int]", FunctorLaws[List[Int], Int].functorComposition[Int, Int, List[Int], List[Int]])
   checkAll("List[String]", FunctorLaws[List[String], String].functorComposition[String, String, List[String], List[String]])
   checkAll("Option[Int]", FunctorLaws[Option[Int], Int].functorComposition[Int, Int, Option[Int], Option[Int]])
-  checkAll("List[String]", FunctorLaws[List[String], String].functorComposition[String, String, List[String], List[String]])
   checkAll("Function1[Int, Int]", FunctorLaws[Int => Int, Int].functorComposition[Int, Int, Int => Int, Int => Int])
 
 }
