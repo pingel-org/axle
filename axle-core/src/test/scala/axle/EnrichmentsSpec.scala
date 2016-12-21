@@ -32,7 +32,9 @@ class EnrichmentsSpec extends FunSuite with Matchers {
 
   test("EnrichedIndexdSeq random selects random element") {
     val xs = (1 to 10).toVector
-    xs.random should be >= 4
+    val r = xs.random
+    r should be > 0
+    r should be < 11
   }
 
   test("EnrichedIndexdSeq powerset creates powerset") {
