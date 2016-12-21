@@ -2,20 +2,18 @@
 package axle.iterator
 
 import axle._
-import org.specs2.mutable._
+import org.scalatest._
 
-class PowerSetSpec extends Specification {
+class PowerSetSpec extends FunSuite with Matchers {
 
-  "Indexed Power Set" should {
-    "Enumerate subsets of {a, b}" in {
-      val elems = Vector("a", "b")
-      val psAB = ℘(elems).toList
-      psAB must have size (4)
-      psAB.contains(Set()) must be equalTo true
-      psAB.contains(Set("a")) must be equalTo true
-      psAB.contains(Set("b")) must be equalTo true
-      psAB.contains(Set("a", "b")) must be equalTo true
-    }
+  test("Indexed Power Set Enumerate subsets of {a, b}") {
+    val elems = Vector("a", "b")
+    val psAB = ℘(elems).toList
+    psAB should have size (4)
+    psAB.contains(Set()) should be(true)
+    psAB.contains(Set("a")) should be(true)
+    psAB.contains(Set("b")) should be(true)
+    psAB.contains(Set("a", "b")) should be(true)
   }
 
 }

@@ -1,20 +1,18 @@
 package axle.stats
 
-import org.specs2.mutable._
+import org.scalatest._
 
-class RootMeanSquareDeviationSpec extends Specification {
+class RootMeanSquareDeviationSpec extends FunSuite with Matchers {
 
-  "RMSD" should {
-    "work" in {
+  test("RMSD") {
 
-      import spire.implicits.DoubleAlgebra
+    import spire.implicits.DoubleAlgebra
 
-      val rmsd = rootMeanSquareDeviation(
-        (1 to 4).map(_.toDouble).toList,
-        (x: Double) => x + 0.2)
+    val rmsd = rootMeanSquareDeviation(
+      (1 to 4).map(_.toDouble).toList,
+      (x: Double) => x + 0.2)
 
-      rmsd must be equalTo 0.4000000000000002
-    }
+    rmsd should be(0.4000000000000002)
   }
 
 }

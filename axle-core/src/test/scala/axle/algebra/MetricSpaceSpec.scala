@@ -4,9 +4,9 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.specs2.mutable.Specification
+import org.scalatest._
 import org.typelevel.discipline.Predicate
-import org.typelevel.discipline.specs2.mutable.Discipline
+import org.typelevel.discipline.scalatest.Discipline
 
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
@@ -61,7 +61,7 @@ object ArbitrarySpaceStuff {
     Arbitrary(genRealSeqLengthN(n))
 }
 
-class MetricSpaceSpec() extends Specification with Discipline {
+class MetricSpaceSpec() extends FunSuite with Matchers with Discipline {
 
   import ArbitrarySpaceStuff._
 
