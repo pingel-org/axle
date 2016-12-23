@@ -114,7 +114,7 @@ class NaiveBayesSpecification extends FunSuite with Matchers {
     performance2.specificity should be(Rational(2, 5))
     performance2.accuracy should be(Rational(11, 14))
     performance2.f1Score should be(Rational(6, 7))
-    string(performance2) should contain("F1")
+    string(performance2) should include("F1")
   }
 
 }
