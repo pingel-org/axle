@@ -66,7 +66,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
 
     import axle.string
 
-    string(corpus) should contain("Top 10 words")
+    string(corpus) should include("Top 10 words")
     articles.size should be > 50
     confusion.counts.rows should be(5)
   }
