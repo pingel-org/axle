@@ -48,7 +48,7 @@ lazy val axleCore = Project(
     name := "axle-core",
     moduleName := "axle-core",
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % scalaTestVersion % "test",
+      "org.scalatest" %% "scalatest" % scalaTestVersion, // TODO % "test",
       "org.typelevel" %% "discipline" % disciplineVersion,
       "org.spire-math" %% "spire" % spireVersion,
       "org.spire-math" %% "spire-laws" % spireVersion,
