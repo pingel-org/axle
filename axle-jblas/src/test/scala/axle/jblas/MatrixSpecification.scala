@@ -1,289 +1,249 @@
 package axle.jblas
 
-import org.specs2.mutable.Specification
+import org.scalatest._
 import spire.implicits._
 import axle.syntax.LinearAlgebraOps
 import axle.syntax.linearalgebra.matrixOps
 import axle.syntax.endofunctor.endofunctorOps
 
-class MatrixSpecification extends Specification {
+class MatrixSpecification extends FunSuite with Matchers {
 
   implicit val endo = endoFunctorDoubleMatrix[Double]
   implicit val la = linearAlgebraDoubleMatrix[Double]
   import la._
 
-  "Linear Algebra for org.jblas.DoubleMatrix" should {
-    "create simple matrices" in {
+  test("Linear Algebra for org.jblas.DoubleMatrix create simple matrices") {
 
-      val z = zeros(3, 4)
-      val o = ones(2, 3)
-      val x = rand(1, 2)
+    val z = zeros(3, 4)
+    val o = ones(2, 3)
+    val x = rand(1, 2)
 
-      val y = rand(3, 3)
-      val c = y.column(2)
-      val r = y.row(2)
+    val y = rand(3, 3)
+    val c = y.column(2)
+    val r = y.row(2)
 
-      val zops = new LinearAlgebraOps(z)
+    val zops = new LinearAlgebraOps(z)
 
-      zops.rows must be equalTo 3
-      zops.columns must be equalTo 4
-      zops.length must be equalTo 12
-      new LinearAlgebraOps(y).diag.length must be equalTo 3
-      zops.dup must be equalTo z
-    }
+    zops.rows should be(3)
+    zops.columns should be(4)
+    zops.length should be(12)
+    new LinearAlgebraOps(y).diag.length should be(3)
+    zops.dup should be(z)
   }
 
   //  "eye and diag" should {
   //    "sum of diag elements in eye(4) is 4" in {
-  //      // TODO eye(4).diag.rowSums.get(1, 1) must be equalTo 4d
-  //      // TODO eye(4).rows must be equalTo 4
+  //      // TODO eye(4).diag.rowSums.get(1, 1) should be ( 4d
+  //      // TODO eye(4).rows should be ( 4
   //    }
   //  }
 
-  "x+x === x.map(_*2)" should {
-    "hold for random 2x2 matrix x" in {
+  test("x+x === x.map(_*2)") {
 
-      val x = randn(2, 2)
+    val x = randn(2, 2)
 
-      // implicitly[Ring[DoubleMatrix]].plus
-      (x + x) must be equalTo x.map(_ * 2d)
-    }
+    // implicitly[Ring[DoubleMatrix]].plus
+    (x + x) should be(x.map(_ * 2d))
   }
 
-  "(n atop m) === (n.t aside m.t).t" should {
-    "hold for random 2x3 matrices m and n" in {
+  test("(n atop m) === (n.t aside m.t).t") {
 
-      val r = 2
-      val c = 3
+    val r = 2
+    val c = 3
 
-      val m = rand(r, c)
-      val n = rand(r, c)
+    val m = rand(r, c)
+    val n = rand(r, c)
 
-      (n atop m) must be equalTo ((n.t aside m.t).t)
-    }
+    (n atop m) should be((n.t aside m.t).t)
   }
 
-  "boolean tests" should {
-    "return false for random 2x3 matrix" in {
+  test("boolean tests") {
 
-      // mask raw matrix to ensure Axle's methods are being tested
-      val m = new LinearAlgebraOps(rand(2, 3))
+    // mask raw matrix to ensure Axle's methods are being tested
+    val m = new LinearAlgebraOps(rand(2, 3))
 
-      m.isEmpty must be equalTo false
-      m.isColumnVector must be equalTo false
-      m.isRowVector must be equalTo false
-      m.isVector must be equalTo false
-      m.isSquare must be equalTo false
-      m.isScalar must be equalTo false
-    }
+    m.isEmpty should be(false)
+    m.isColumnVector should be(false)
+    m.isRowVector should be(false)
+    m.isVector should be(false)
+    m.isSquare should be(false)
+    m.isScalar should be(false)
   }
 
-  "boolean comparisons" should {
-    "work on 2x2 matrix" in {
+  test("boolean comparisons on 2x2 matrices") {
 
-      val lhs = new LinearAlgebraOps(fromColumnMajorArray(1, 3, Array(0.5, 1.0, 1.5)))
+    val lhs = new LinearAlgebraOps(fromColumnMajorArray(1, 3, Array(0.5, 1.0, 1.5)))
 
-      (lhs lt ones(1, 3)) must be equalTo fromColumnMajorArray(1, 3, Array(1d, 0d, 0d))
-      (lhs le ones(1, 3)) must be equalTo fromColumnMajorArray(1, 3, Array(1d, 1d, 0d))
-      (lhs gt ones(1, 3)) must be equalTo fromColumnMajorArray(1, 3, Array(0d, 0d, 1d))
-      (lhs ge ones(1, 3)) must be equalTo fromColumnMajorArray(1, 3, Array(0d, 1d, 1d))
-      (lhs eq ones(1, 3)) must be equalTo fromColumnMajorArray(1, 3, Array(0d, 1d, 0d))
-      (lhs ne ones(1, 3)) must be equalTo fromColumnMajorArray(1, 3, Array(1d, 0d, 1d))
-    }
+    (lhs lt ones(1, 3)) should be(fromColumnMajorArray(1, 3, Array(1d, 0d, 0d)))
+    (lhs le ones(1, 3)) should be(fromColumnMajorArray(1, 3, Array(1d, 1d, 0d)))
+    (lhs gt ones(1, 3)) should be(fromColumnMajorArray(1, 3, Array(0d, 0d, 1d)))
+    (lhs ge ones(1, 3)) should be(fromColumnMajorArray(1, 3, Array(0d, 1d, 1d)))
+    (lhs eq ones(1, 3)) should be(fromColumnMajorArray(1, 3, Array(0d, 1d, 0d)))
+    (lhs ne ones(1, 3)) should be(fromColumnMajorArray(1, 3, Array(1d, 0d, 1d)))
   }
 
-  "boolean operators" should {
-    "work on 2x2 matrix" in {
+  test("boolean operators on 2x2 matrices") {
 
-      val tf = fromColumnMajorArray(1, 2, Array(1d, 0d))
-      val ft = fromColumnMajorArray(1, 2, Array(0d, 1d))
-      val tfops = new LinearAlgebraOps(tf)
+    val tf = fromColumnMajorArray(1, 2, Array(1d, 0d))
+    val ft = fromColumnMajorArray(1, 2, Array(0d, 1d))
+    val tfops = new LinearAlgebraOps(tf)
 
-      (tfops and ft) must be equalTo fromColumnMajorArray(1, 2, Array(0d, 0d))
-      (tfops or ft) must be equalTo fromColumnMajorArray(1, 2, Array(1d, 1d))
-      (tfops xor ft) must be equalTo fromColumnMajorArray(1, 2, Array(1d, 1d))
-      (tfops not) must be equalTo ft
-    }
+    (tfops and ft) should be(fromColumnMajorArray(1, 2, Array(0d, 0d)))
+    (tfops or ft) should be(fromColumnMajorArray(1, 2, Array(1d, 1d)))
+    (tfops xor ft) should be(fromColumnMajorArray(1, 2, Array(1d, 1d)))
+    (tfops not) should be(ft)
   }
 
-  "mul row and column" should {
-    "operate on ones(2,2)" in {
+  test("mul row and column on ones(2, 2)") {
 
-      val square = new LinearAlgebraOps(ones(2, 2))
+    val square = new LinearAlgebraOps(ones(2, 2))
 
-      square.mulRow(0, 3.14) must be equalTo fromColumnMajorArray(2, 2, Array(3.14, 1d, 3.14, 1d))
-      square.mulColumn(1, 2.717) must be equalTo fromColumnMajorArray(2, 2, Array(1d, 1d, 2.717, 2.717))
-    }
+    square.mulRow(0, 3.14) should be(fromColumnMajorArray(2, 2, Array(3.14, 1d, 3.14, 1d)))
+    square.mulColumn(1, 2.717) should be(fromColumnMajorArray(2, 2, Array(1d, 1d, 2.717, 2.717)))
   }
 
-  //  "invert" should {
-  //    "" in {
+  //  test("invert") {
+  //  }
   //
-  //      1 must be equalTo 1
-  //    }
+  //  test("solve") {
   //  }
 
-  //  "solve" should {
-  //    "" in {
-  //
-  //      1 must be equalTo 1
-  //    }
-  //  }
+  test("flatMap apply Double => Matrix[1,2] to Matrix[r,c] to get a Matrix[r,2c]") {
 
-  "flatMap" should {
-    "apply Double => Matrix[1,2] to Matrix[r,c] to get a Matrix[r,2c]" in {
+    val m = new LinearAlgebraOps(fromColumnMajorArray(1, 2,
+      Array(1.4, 22d)))
 
-      val m = new LinearAlgebraOps(fromColumnMajorArray(1, 2,
-        Array(1.4, 22d)))
-
-      m.flatMap { x => fromColumnMajorArray(1, 2, Array(x, 2 * x)) } must be equalTo
-        fromColumnMajorArray(1, 4, Array(1.4, 2.8, 22d, 44d))
-    }
+    m.flatMap { x => fromColumnMajorArray(1, 2, Array(x, 2 * x)) } should be(
+      fromColumnMajorArray(1, 4, Array(1.4, 2.8, 22d, 44d)))
   }
 
-  "folds" should {
-    "apply plus by row and column" in {
+  test("folds apply plus by row and column") {
 
-      val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
-        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+    val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
+      Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
 
-      m.foldLeft(zeros(2, 1))({ case (acc, c) => acc + c }) must be equalTo m.rowSums
-      m.foldTop(zeros(1, 3))({ case (acc, r) => acc + r }) must be equalTo m.columnSums
-    }
+    m.foldLeft(zeros(2, 1))({ case (acc, c) => acc + c }) should be(m.rowSums)
+    m.foldTop(zeros(1, 3))({ case (acc, r) => acc + r }) should be(m.columnSums)
   }
 
-  "range, min, max, argmax" should {
-    "calculate {column,row,}x{arg,}x{min,max} (not including {row,col}arg{min,max})" in {
+  test("range, min, max, argmax calculate {column,row,}x{arg,}x{min,max} (not including {row,col}arg{min,max})") {
 
-      val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
-        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+    val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
+      Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
 
-      m.rowMins must be equalTo fromColumnMajorArray(2, 1, Array(1.4, 2.3))
-      m.rowMaxs must be equalTo fromColumnMajorArray(2, 1, Array(18d, 105d))
-      m.rowRange must be equalTo fromColumnMajorArray(2, 1, Array(16.6, 102.7))
-      m.columnMins must be equalTo fromColumnMajorArray(1, 3, Array(1.4, 2.3, 18d))
-      m.columnMaxs must be equalTo fromColumnMajorArray(1, 3, Array(22d, 17.5, 105d))
-      m.columnRange must be equalTo fromColumnMajorArray(1, 3, Array(20.6, 15.2, 87d))
+    m.rowMins should be(fromColumnMajorArray(2, 1, Array(1.4, 2.3)))
+    m.rowMaxs should be(fromColumnMajorArray(2, 1, Array(18d, 105d)))
+    m.rowRange should be(fromColumnMajorArray(2, 1, Array(16.6, 102.7)))
+    m.columnMins should be(fromColumnMajorArray(1, 3, Array(1.4, 2.3, 18d)))
+    m.columnMaxs should be(fromColumnMajorArray(1, 3, Array(22d, 17.5, 105d)))
+    m.columnRange should be(fromColumnMajorArray(1, 3, Array(20.6, 15.2, 87d)))
 
-      m.max must be equalTo 105d
-      m.argmax must be equalTo ((1, 2))
-      m.min must be equalTo 1.4
-      m.argmin must be equalTo ((0, 0))
-    }
+    m.max should be(105d)
+    m.argmax should be((1, 2))
+    m.min should be(1.4)
+    m.argmin should be((0, 0))
   }
 
-  "center, mean, sum" should {
-    "sum, mean, and center by row and column" in {
+  test("center, mean, sum by row and column") {
 
-      val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
-        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+    val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
+      Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
 
-      m.rowSums must be equalTo fromColumnMajorArray(2, 1,
-        Array(36.900000, 129.300000))
+    m.rowSums should be(fromColumnMajorArray(2, 1,
+      Array(36.900000, 129.300000)))
 
-      m.columnSums must be equalTo fromColumnMajorArray(1, 3,
-        Array(23.400000, 19.800000, 123.000000))
+    m.columnSums should be(fromColumnMajorArray(1, 3,
+      Array(23.400000, 19.800000, 123.000000)))
 
-      // 'floor' to workaround rounding error
-      m.rowMeans.floor must be equalTo fromColumnMajorArray(2, 1,
-        Array(12d, 43d))
+    // 'floor' to workaround rounding error
+    m.rowMeans.floor should be(fromColumnMajorArray(2, 1,
+      Array(12d, 43d)))
 
-      m.columnMeans must be equalTo fromColumnMajorArray(1, 3,
-        Array(11.7, 9.9, 61.5))
+    m.columnMeans should be(fromColumnMajorArray(1, 3,
+      Array(11.7, 9.9, 61.5)))
 
-      m.centerRows.floor must be equalTo fromColumnMajorArray(2, 3,
-        Array(-11d, -22d, 5d, -41, 5d, 61d))
+    m.centerRows.floor should be(fromColumnMajorArray(2, 3,
+      Array(-11d, -22d, 5d, -41, 5d, 61d)))
 
-      m.centerColumns.floor must be equalTo fromColumnMajorArray(2, 3,
-        Array(-11d, 10d, 7d, -8d, -44d, 43d))
-    }
+    m.centerColumns.floor should be(fromColumnMajorArray(2, 3,
+      Array(-11d, 10d, 7d, -8d, -44d, 43d)))
   }
 
-  "sorts" should {
-    "sort columns and rows" in {
+  test("sort columns and rows") {
 
-      val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
-        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+    val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
+      Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
 
-      m.sortRows must be equalTo fromColumnMajorArray(2, 3,
-        Array(1.4, 2.3, 17.5, 22d, 18d, 105d))
+    m.sortRows should be(fromColumnMajorArray(2, 3,
+      Array(1.4, 2.3, 17.5, 22d, 18d, 105d)))
 
-      m.sortColumns must be equalTo fromColumnMajorArray(2, 3,
-        Array(1.4, 22d, 2.3, 17.5, 18d, 105d))
-    }
+    m.sortColumns should be(fromColumnMajorArray(2, 3,
+      Array(1.4, 22d, 2.3, 17.5, 18d, 105d)))
   }
 
-  "ceil, floor, log, log10, pow" should {
-    "transform a 2x3 matrix" in {
+  test("ceil, floor, log, log10, pow on 2x3 matrix") {
 
-      // mask raw matrix to ensure Axle's methods are being tested
-      val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
-        Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
+    // mask raw matrix to ensure Axle's methods are being tested
+    val m = new LinearAlgebraOps(fromColumnMajorArray(2, 3,
+      Array(1.4, 22d, 17.5, 2.3, 18d, 105d)))
 
-      m.ceil must be equalTo fromColumnMajorArray(2, 3,
-        Array(2d, 22d, 18d, 3d, 18d, 105d))
+    m.ceil should be(fromColumnMajorArray(2, 3,
+      Array(2d, 22d, 18d, 3d, 18d, 105d)))
 
-      m.floor must be equalTo fromColumnMajorArray(2, 3,
-        Array(1d, 22d, 17d, 2d, 18d, 105d))
+    m.floor should be(fromColumnMajorArray(2, 3,
+      Array(1d, 22d, 17d, 2d, 18d, 105d)))
 
-      m.log.floor must be equalTo fromColumnMajorArray(2, 3,
-        Array(0d, 3d, 2d, 0d, 2d, 4d))
+    m.log.floor should be(fromColumnMajorArray(2, 3,
+      Array(0d, 3d, 2d, 0d, 2d, 4d)))
 
-      m.log10.floor must be equalTo fromColumnMajorArray(2, 3,
-        Array(0d, 1d, 1d, 0d, 1d, 2d))
+    m.log10.floor should be(fromColumnMajorArray(2, 3,
+      Array(0d, 1d, 1d, 0d, 1d, 2d)))
 
-      m.pow(2d) must be equalTo fromColumnMajorArray(2, 3,
-        Array(1.9599999999999997, 484d, 306.25, 5.289999999999999, 324d, 11025d))
+    m.pow(2d) should be(fromColumnMajorArray(2, 3,
+      Array(1.9599999999999997, 484d, 306.25, 5.289999999999999, 324d, 11025d)))
 
-    }
   }
 
-  "addAssignment" should {
-    "addAssignment (1,2) to 6d in a 2x3 matrix, leaving original unmodified" in {
+  test("addAssignment (1,2) to 6d in a 2x3 matrix, leaving original unmodified") {
 
-      val m = fromColumnMajorArray(2, 3,
-        Array(1d, 2d, 3d, 4d, 5d, 0d))
+    val m = fromColumnMajorArray(2, 3,
+      Array(1d, 2d, 3d, 4d, 5d, 0d))
 
-      m.addAssignment(1, 2, 6d) must be equalTo fromColumnMajorArray(2, 3,
-        Array(1d, 2d, 3d, 4d, 5d, 6d))
+    m.addAssignment(1, 2, 6d) should be(fromColumnMajorArray(2, 3,
+      Array(1d, 2d, 3d, 4d, 5d, 6d)))
 
-      m must be equalTo fromColumnMajorArray(2, 3,
-        Array(1d, 2d, 3d, 4d, 5d, 0d))
-    }
+    m should be(fromColumnMajorArray(2, 3,
+      Array(1d, 2d, 3d, 4d, 5d, 0d)))
   }
 
-  "column and row vector operations" should {
-    "apply correctly to ones(2, 2)" in {
+  test("column and row vector operations on ones(2,2)") {
 
-      val square = new LinearAlgebraOps(ones(2, 2))
+    val square = new LinearAlgebraOps(ones(2, 2))
 
-      val row = fromColumnMajorArray(1, 2, Array(1d, 2d))
-      val column = row.t
+    val row = fromColumnMajorArray(1, 2, Array(1d, 2d))
+    val column = row.t
 
-      square.addRowVector(row) must be equalTo fromColumnMajorArray(2, 2, Array(2d, 2d, 3d, 3d))
-      square.subRowVector(row) must be equalTo fromColumnMajorArray(2, 2, Array(0d, 0d, -1d, -1d))
-      square.mulRowVector(row) must be equalTo fromColumnMajorArray(2, 2, Array(1d, 1d, 2d, 2d))
-      square.divRowVector(row) must be equalTo fromColumnMajorArray(2, 2, Array(1d, 1d, 0.5, 0.5))
-      square.addColumnVector(column) must be equalTo fromColumnMajorArray(2, 2, Array(2d, 3d, 2d, 3d))
-      square.subColumnVector(column) must be equalTo fromColumnMajorArray(2, 2, Array(0d, -1d, 0d, -1d))
-      square.mulColumnVector(column) must be equalTo fromColumnMajorArray(2, 2, Array(1d, 2d, 1d, 2d))
-      square.divColumnVector(column) must be equalTo fromColumnMajorArray(2, 2, Array(1d, 0.5, 1d, 0.5))
-    }
+    square.addRowVector(row) should be(fromColumnMajorArray(2, 2, Array(2d, 2d, 3d, 3d)))
+    square.subRowVector(row) should be(fromColumnMajorArray(2, 2, Array(0d, 0d, -1d, -1d)))
+    square.mulRowVector(row) should be(fromColumnMajorArray(2, 2, Array(1d, 1d, 2d, 2d)))
+    square.divRowVector(row) should be(fromColumnMajorArray(2, 2, Array(1d, 1d, 0.5, 0.5)))
+    square.addColumnVector(column) should be(fromColumnMajorArray(2, 2, Array(2d, 3d, 2d, 3d)))
+    square.subColumnVector(column) should be(fromColumnMajorArray(2, 2, Array(0d, -1d, 0d, -1d)))
+    square.mulColumnVector(column) should be(fromColumnMajorArray(2, 2, Array(1d, 2d, 1d, 2d)))
+    square.divColumnVector(column) should be(fromColumnMajorArray(2, 2, Array(1d, 0.5, 1d, 0.5)))
   }
 
-  "scalar operations" should {
-    "operate on ones(2,2)" in {
+  test("scalar operations on ones(2,2)") {
 
-      val square = ones(2, 2)
-      val sops = new LinearAlgebraOps(square)
+    val square = ones(2, 2)
+    val sops = new LinearAlgebraOps(square)
 
-      // implicit val module = moduleDoubleMatrix[Double]
+    // implicit val module = moduleDoubleMatrix[Double]
 
-      sops.addScalar(2d) must be equalTo fromColumnMajorArray(2, 2, Array(3d, 3d, 3d, 3d))
-      sops.subtractScalar(2d) must be equalTo fromColumnMajorArray(2, 2, Array(-1d, -1d, -1d, -1d))
-      square :* 2d must be equalTo fromColumnMajorArray(2, 2, Array(2d, 2d, 2d, 2d))
-      sops.divideScalar(2d) must be equalTo fromColumnMajorArray(2, 2, Array(0.5, 0.5, 0.5, 0.5))
-    }
+    sops.addScalar(2d) should be(fromColumnMajorArray(2, 2, Array(3d, 3d, 3d, 3d)))
+    sops.subtractScalar(2d) should be(fromColumnMajorArray(2, 2, Array(-1d, -1d, -1d, -1d)))
+    square :* 2d should be(fromColumnMajorArray(2, 2, Array(2d, 2d, 2d, 2d)))
+    sops.divideScalar(2d) should be(fromColumnMajorArray(2, 2, Array(0.5, 0.5, 0.5, 0.5)))
   }
 
 }
