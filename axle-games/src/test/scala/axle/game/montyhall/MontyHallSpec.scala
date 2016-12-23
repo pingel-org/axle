@@ -3,9 +3,9 @@ package axle.game.montyhall
 import axle.dropOutput
 import axle.game._
 import axle.game.Strategies._
-import org.specs2.mutable._
+import org.scalatest._
 
-class MontyHallSpec extends Specification {
+class MontyHallSpec extends FunSuite with Matchers {
 
   import axle.game.montyhall.evGame._
   import axle.game.montyhall.evGameIO._
@@ -17,92 +17,77 @@ class MontyHallSpec extends Specification {
     contestant, interactiveMove, dropOutput,
     monty, interactiveMove, dropOutput)
 
-  "random game" should {
+  val rGame = MontyHall(
+    contestant, randomMove, dropOutput,
+    monty, randomMove, dropOutput)
 
-    val rGame = MontyHall(
-      contestant, randomMove, dropOutput,
-      monty, randomMove, dropOutput)
-
-    "have an intro message" in {
-      introMessage(rGame) must contain("Monty")
-    }
-
-    "produce moveStateStream" in {
-      moveStateStream(rGame, startState(rGame)).take(2).length must be equalTo 2
-    }
-
-    "play" in {
-      val endState = play(rGame, startState(rGame), false)
-      moves(rGame, endState).length must be equalTo 0
-    }
-
-    "product game stream" in {
-      val games = gameStream(rGame, startState(rGame), false).take(2)
-      games.length must be equalTo 2
-    }
-
+  test("random game has an intro message") {
+    introMessage(rGame) should contain("Monty")
   }
 
-  "startFrom" should {
-    "simply return the start state" in {
-      val state = startState(game)
-      val move = moves(game, state).head
-      val nextState = applyMove(game, state, move)
-      val newStart = startFrom(game, nextState).get
-      moves(game, newStart).length must be equalTo 3
-      outcome(game, state) must be equalTo None
-    }
+  test("random game produces moveStateStream") {
+    moveStateStream(rGame, startState(rGame)).take(2) should have length 2
   }
 
-  "masked-sate mover" should {
-    "be the same as raw state mover" in {
-      val state = startState(game)
-      val move = moves(game, state).head
-      val nextState = applyMove(game, state, move)
-      moverM(game, state) must be equalTo mover(game, state)
-      moverM(game, nextState) must be equalTo mover(game, nextState)
-    }
+  test("random game plays") {
+    val endState = play(rGame, startState(rGame), false)
+    moves(rGame, endState) should have length 0
   }
 
-  "starting moves" should {
-    "be three-fold, display to monty with 'something'" in {
-
-      val startingMoves = moves(game, startState(game))
-      val mm = evGame.maskMove(game, startingMoves.head, contestant, monty)
-
-      displayMoveTo(game, mm, contestant, monty) must contain("placed")
-      startingMoves.length must be equalTo 3
-    }
+  test("random game produces game stream") {
+    val games = gameStream(rGame, startState(rGame), false).take(2)
+    games should have length 2
   }
 
-  "move parser" should {
-    "accept and reject strings appropriately" in {
-
-      evGameIO.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
-
-      evGameIO.parseMove(game, "car 1") must be equalTo (Right(PlaceCar(1)))
-      evGameIO.parseMove(game, "car 2") must be equalTo (Right(PlaceCar(2)))
-      evGameIO.parseMove(game, "car 3") must be equalTo (Right(PlaceCar(3)))
-      evGameIO.parseMove(game, "pick 1") must be equalTo (Right(FirstChoice(1)))
-      evGameIO.parseMove(game, "pick 2") must be equalTo (Right(FirstChoice(2)))
-      evGameIO.parseMove(game, "pick 3") must be equalTo (Right(FirstChoice(3)))
-      evGameIO.parseMove(game, "reveal 1") must be equalTo (Right(Reveal(1)))
-      evGameIO.parseMove(game, "reveal 2") must be equalTo (Right(Reveal(2)))
-      evGameIO.parseMove(game, "reveal 3") must be equalTo (Right(Reveal(3)))
-      evGameIO.parseMove(game, "change") must be equalTo (Right(Change()))
-      evGameIO.parseMove(game, "stay") must be equalTo (Right(Stay()))
-    }
+  test("startFrom returns the start state") {
+    val state = startState(game)
+    val move = moves(game, state).head
+    val nextState = applyMove(game, state, move)
+    val newStart = startFrom(game, nextState).get
+    moves(game, newStart) should have length 3
+    outcome(game, state) should be(None)
   }
 
-  "move validator" should {
-    "accept and reject moves appropriately" in {
+  test("masked-sate mover is the same as raw state move") {
+    val state = startState(game)
+    val move = moves(game, state).head
+    val nextState = applyMove(game, state, move)
+    moverM(game, state) should be(mover(game, state))
+    moverM(game, nextState) should be(mover(game, nextState))
+  }
 
-      val firstMove = PlaceCar(1)
-      val secondState = applyMove(game, startState(game), firstMove)
+  test("starting moves are three-fold, display to monty with 'something'") {
 
-      evGameIO.parseMove(game, "pick 1").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
-      evGameIO.parseMove(game, "pick 3").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
-    }
+    val startingMoves = moves(game, startState(game))
+    val mm = evGame.maskMove(game, startingMoves.head, contestant, monty)
+
+    displayMoveTo(game, mm, contestant, monty) should contain("placed")
+    startingMoves should have length 3
+  }
+
+  test("move parser") {
+
+    evGameIO.parseMove(game, "foo") should be(Left("foo is not a valid move.  Please select again"))
+
+    evGameIO.parseMove(game, "car 1") should be(Right(PlaceCar(1)))
+    evGameIO.parseMove(game, "car 2") should be(Right(PlaceCar(2)))
+    evGameIO.parseMove(game, "car 3") should be(Right(PlaceCar(3)))
+    evGameIO.parseMove(game, "pick 1") should be(Right(FirstChoice(1)))
+    evGameIO.parseMove(game, "pick 2") should be(Right(FirstChoice(2)))
+    evGameIO.parseMove(game, "pick 3") should be(Right(FirstChoice(3)))
+    evGameIO.parseMove(game, "reveal 1") should be(Right(Reveal(1)))
+    evGameIO.parseMove(game, "reveal 2") should be(Right(Reveal(2)))
+    evGameIO.parseMove(game, "reveal 3") should be(Right(Reveal(3)))
+    evGameIO.parseMove(game, "change") should be(Right(Change()))
+    evGameIO.parseMove(game, "stay") should be(Right(Stay()))
+  }
+
+  test("move validator") {
+    val firstMove = PlaceCar(1)
+    val secondState = applyMove(game, startState(game), firstMove)
+
+    evGameIO.parseMove(game, "pick 1").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "pick 3").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
   }
 
 }

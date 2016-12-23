@@ -3,9 +3,9 @@ package axle.game.prisoner
 import axle.dropOutput
 import axle.game._
 import axle.game.Strategies._
-import org.specs2.mutable._
+import org.scalatest._
 
-class PrisonersDilemmaSpec extends Specification {
+class PrisonersDilemmaSpec extends FunSuite with Matchers {
 
   import axle.game.prisoner.evGame._
   import axle.game.prisoner.evGameIO._
@@ -25,79 +25,66 @@ class PrisonersDilemmaSpec extends Specification {
 
   val start = startState(game)
 
-  "random game" should {
+  val rGame = PrisonersDilemma(
+    p1, randomMove, dropOutput,
+    p2, randomMove, dropOutput)
 
-    val rGame = PrisonersDilemma(
-      p1, randomMove, dropOutput,
-      p2, randomMove, dropOutput)
-
-    "have an intro message" in {
-      introMessage(game) must contain("Prisoner")
-    }
-
-    "produce moveStateStream" in {
-      moveStateStream(rGame, startState(rGame)).take(2).length must be equalTo 2
-    }
-
-    "play" in {
-      val endState = play(rGame, startState(rGame), false)
-      moves(rGame, endState).length must be equalTo 0
-    }
-
-    "product game stream" in {
-      val games = gameStream(rGame, startState(rGame), false).take(2)
-      games.length must be equalTo 2
-    }
-
+  test("random game has an intro message") {
+    introMessage(game) should contain("Prisoner")
   }
 
-  "startFrom" should {
-    "simply return the start state" in {
-      val state = startState(game)
-      val move = moves(game, state).head
-      val nextState = applyMove(game, state, move)
-      val nextMove = moves(game, state).head
-      val newStart = startFrom(game, nextState).get
-      moves(game, newStart).length must be equalTo 2
-      outcome(game, state) must be equalTo None
-    }
+  test("random game produces moveStateStream") {
+    moveStateStream(rGame, startState(rGame)).take(2) should have length 2
   }
 
-  "masked-sate mover" should {
-    "be the same as raw state mover" in {
-      val state = startState(game)
-      val move = moves(game, state).head
-      val nextState = applyMove(game, state, move)
-      moverM(game, state) must be equalTo mover(game, state)
-      moverM(game, nextState) must be equalTo mover(game, nextState)
-    }
+  test("random game plays") {
+    val endState = play(rGame, startState(rGame), false)
+    moves(rGame, endState) should have length 0
   }
 
-  "starting moves" should {
-    "be two-fold, display to p2 with 'something'" in {
-
-      val startingMoves = moves(game, startState(game))
-
-      displayMoveTo(game, None, p1, p2) must contain("something")
-      startingMoves.length must be equalTo 2
-    }
+  test("random game produces game stream") {
+    val games = gameStream(rGame, startState(rGame), false).take(2)
+    games should have length 2
   }
 
-  "interactive player" should {
-    "print various messages" in {
-
-      val firstMove = Silence()
-      val secondState = applyMove(game, startState(game), firstMove)
-
-      evGameIO.parseMove(game, "foo") must be equalTo Left("foo is not a valid move.  Please select again")
-
-      evGameIO.parseMove(game, "silence").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
-      evGameIO.parseMove(game, "betrayal").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight must be equalTo true
-    }
+  test("startFrom return the start state") {
+    val state = startState(game)
+    val move = moves(game, state).head
+    val nextState = applyMove(game, state, move)
+    val nextMove = moves(game, state).head
+    val newStart = startFrom(game, nextState).get
+    moves(game, newStart) should have length 2
+    outcome(game, state) should be(None)
   }
 
-  //  "A.I. strategy" should {
-  //    "make a move" in {
+  test("masked-sate mover are the same as raw state mover") {
+    val state = startState(game)
+    val move = moves(game, state).head
+    val nextState = applyMove(game, state, move)
+    moverM(game, state) should be(mover(game, state))
+    moverM(game, nextState) should be(mover(game, nextState))
+  }
+
+  test("starting moves are two-fold, display to p2 with 'something'") {
+
+    val startingMoves = moves(game, startState(game))
+
+    displayMoveTo(game, None, p1, p2) should contain("something")
+    startingMoves should have length 2
+  }
+
+  test("interactive player prints various messages") {
+
+    val firstMove = Silence()
+    val secondState = applyMove(game, startState(game), firstMove)
+
+    evGameIO.parseMove(game, "foo") should be(Left("foo is not a valid move.  Please select again"))
+
+    evGameIO.parseMove(game, "silence").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "betrayal").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+  }
+
+  //  test("A.I. strategy") {
   //
   //      val firstMove = Silence()
   //
@@ -112,47 +99,43 @@ class PrisonersDilemmaSpec extends Specification {
   //
   //      val move = ai4(game, secondState)
   //
-  //      move.position must be greaterThan 0
-  //    }
+  //      move.position should be > 0
   //  }
 
-  "outcomes" should {
+  test("dual silence > dual betrayal for both") {
 
-    "dual silence > dual betrayal for both" in {
+    val silenceGame = PrisonersDilemma(
+      p1, hardCodedStringStrategy(silence), dropOutput,
+      p2, hardCodedStringStrategy(silence), dropOutput)
 
-      val silenceGame = PrisonersDilemma(
-        p1, hardCodedStringStrategy(silence), dropOutput,
-        p2, hardCodedStringStrategy(silence), dropOutput)
+    val betrayalGame = PrisonersDilemma(
+      p1, hardCodedStringStrategy(betrayal), dropOutput,
+      p2, hardCodedStringStrategy(betrayal), dropOutput)
 
-      val betrayalGame = PrisonersDilemma(
-        p1, hardCodedStringStrategy(betrayal), dropOutput,
-        p2, hardCodedStringStrategy(betrayal), dropOutput)
+    val silentOutcome = outcome(silenceGame, moveStateStream(silenceGame, start).last._3).get
+    val betrayalOutcome = outcome(betrayalGame, moveStateStream(betrayalGame, start).last._3).get
 
-      val silentOutcome = outcome(silenceGame, moveStateStream(silenceGame, start).last._3).get
-      val betrayalOutcome = outcome(betrayalGame, moveStateStream(betrayalGame, start).last._3).get
+    silentOutcome.p1YearsInPrison should be < betrayalOutcome.p1YearsInPrison
+    silentOutcome.p2YearsInPrison should be < betrayalOutcome.p2YearsInPrison
+  }
 
-      silentOutcome.p1YearsInPrison must be lessThan betrayalOutcome.p1YearsInPrison
-      silentOutcome.p2YearsInPrison must be lessThan betrayalOutcome.p2YearsInPrison
-    }
+  test("silence/betrayal inverse asymmetry") {
 
-    "silence/betrayal inverse asymmetry" in {
+    val p1silent = PrisonersDilemma(
+      p1, hardCodedStringStrategy(silence), dropOutput,
+      p2, hardCodedStringStrategy(betrayal), dropOutput)
 
-      val p1silent = PrisonersDilemma(
-        p1, hardCodedStringStrategy(silence), dropOutput,
-        p2, hardCodedStringStrategy(betrayal), dropOutput)
+    val p2silent = PrisonersDilemma(
+      p1, hardCodedStringStrategy(betrayal), dropOutput,
+      p2, hardCodedStringStrategy(silence), dropOutput)
 
-      val p2silent = PrisonersDilemma(
-        p1, hardCodedStringStrategy(betrayal), dropOutput,
-        p2, hardCodedStringStrategy(silence), dropOutput)
+    val lastStateP1Silent = moveStateStream(p1silent, start).last._3
+    val p1silentOutcome = outcome(p1silent, lastStateP1Silent).get
+    val p2silentOutcome = outcome(p2silent, moveStateStream(p2silent, start).last._3).get
 
-      val lastStateP1Silent = moveStateStream(p1silent, start).last._3
-      val p1silentOutcome = outcome(p1silent, lastStateP1Silent).get
-      val p2silentOutcome = outcome(p2silent, moveStateStream(p2silent, start).last._3).get
-
-      p1silentOutcome.p1YearsInPrison must be equalTo p2silentOutcome.p2YearsInPrison
-      p1silentOutcome.p2YearsInPrison must be equalTo p2silentOutcome.p1YearsInPrison
-      moverM(game, lastStateP1Silent) must be equalTo None
-    }
+    p1silentOutcome.p1YearsInPrison should be(p2silentOutcome.p2YearsInPrison)
+    p1silentOutcome.p2YearsInPrison should be(p2silentOutcome.p1YearsInPrison)
+    moverM(game, lastStateP1Silent) should be(None)
   }
 
 }
