@@ -168,7 +168,7 @@ class KMeansSpecification
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
     confusion.rowSums.columnSums.get(0, 0) should be(irisesData.irises.size)
-    string(confusion) should contain("versicolor")
+    string(confusion) should include("versicolor")
   }
 
 }

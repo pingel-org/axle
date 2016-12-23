@@ -30,7 +30,7 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
     p2, randomMove, dropOutput)
 
   test("random game has an intro message") {
-    introMessage(game) should contain("Prisoner")
+    introMessage(game) should include("Prisoner")
   }
 
   test("random game produces moveStateStream") {
@@ -69,7 +69,7 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
 
     val startingMoves = moves(game, startState(game))
 
-    displayMoveTo(game, None, p1, p2) should contain("something")
+    displayMoveTo(game, None, p1, p2) should include("something")
     startingMoves should have length 2
   }
 

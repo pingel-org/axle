@@ -22,7 +22,7 @@ class MontyHallSpec extends FunSuite with Matchers {
     monty, randomMove, dropOutput)
 
   test("random game has an intro message") {
-    introMessage(rGame) should contain("Monty")
+    introMessage(rGame) should include("Monty")
   }
 
   test("random game produces moveStateStream") {
@@ -61,7 +61,7 @@ class MontyHallSpec extends FunSuite with Matchers {
     val startingMoves = moves(game, startState(game))
     val mm = evGame.maskMove(game, startingMoves.head, contestant, monty)
 
-    displayMoveTo(game, mm, contestant, monty) should contain("placed")
+    displayMoveTo(game, mm, contestant, monty) should include("placed")
     startingMoves should have length 3
   }
 

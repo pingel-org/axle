@@ -20,7 +20,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
 
   test("game define intro message, have 9 positions") {
 
-    introMessage(game) should contain("Moves are")
+    introMessage(game) should include("Moves are")
     game.numPositions should be(9)
   }
 
@@ -43,7 +43,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
   }
 
   test("start state display movement key to player x, and have 9 moves available to x") {
-    displayStateTo(game, startState(game), x) should contain("Movement Key")
+    displayStateTo(game, startState(game), x) should include("Movement Key")
   }
 
   test("startFrom return the start state") {
@@ -63,13 +63,13 @@ class TicTacToeSpec extends FunSuite with Matchers {
     moverM(game, nextState) should be(mover(game, nextState))
   }
 
-  test("starting moves are nine-fold, display to O with 'put an', and have string descriptions that contain 'upper'") {
+  test("starting moves are nine-fold, display to O with 'put an', and have string descriptions that include 'upper'") {
 
     val startingMoves = moves(game, startState(game))
 
-    displayMoveTo(game, startingMoves.head, x, o) should contain("put an")
+    displayMoveTo(game, startingMoves.head, x, o) should include("put an")
     startingMoves.length should be(9)
-    startingMoves.map(_.description).mkString(",") should contain("upper")
+    startingMoves.map(_.description).mkString(",") should include("upper")
   }
 
   test("starting moves are defined for 4x4 game") {
@@ -77,7 +77,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
       x, randomMove, dropOutput,
       o, randomMove, dropOutput)
     val startingMoves = moves(bigGame, startState(bigGame))
-    startingMoves.map(_.description).mkString(",") should contain("16")
+    startingMoves.map(_.description).mkString(",") should include("16")
   }
 
   test("interactive player produces messages") {
@@ -143,8 +143,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
     val start = startState(game)
     val lastState = moveStateStream(game, start).last._3
     val out = outcome(game, lastState).get
-    displayOutcomeTo(game, out, x) should contain("You beat")
-    displayOutcomeTo(game, out, o) should contain("beat You")
+    displayOutcomeTo(game, out, x) should include("You beat")
+    displayOutcomeTo(game, out, o) should include("beat You")
     out.winner.get should be(x)
   }
 

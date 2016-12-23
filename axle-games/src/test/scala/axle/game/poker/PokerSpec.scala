@@ -22,7 +22,7 @@ class PokerSpec extends FunSuite with Matchers {
 
     val state = startState(game)
     val ms = evGame.maskState(game, state, p1)
-    displayStateTo(game, ms, p1) should contain("Current bet: 0")
+    displayStateTo(game, ms, p1) should include("Current bet: 0")
     outcome(game, state) should be(None)
   }
 
@@ -106,12 +106,12 @@ class PokerSpec extends FunSuite with Matchers {
       case (from, move, to) => {
         displayMoveTo(game, move, mover(game, from).get, p1)
       }
-    }).mkString(", ") should contain("call")
+    }).mkString(", ") should include("call")
     // TODO these messages should include amounts
     moves(game, ms) should contain(Fold())
-    displayOutcomeTo(game, o, p1) should contain("Winner: Player 1") // TODO show P1 his own hand
-    displayOutcomeTo(game, o, p2) should contain("Winner: Player 1")
-    introMessage(game) should contain("Texas")
+    displayOutcomeTo(game, o, p1) should include("Winner: Player 1") // TODO show P1 his own hand
+    displayOutcomeTo(game, o, p2) should include("Winner: Player 1")
+    introMessage(game) should include("Texas")
     o.winner.get should be(p1)
     val mngs = evGame.maskState(game, newGameState, p1)
     moves(game, mngs) should have length 1 // new deal
