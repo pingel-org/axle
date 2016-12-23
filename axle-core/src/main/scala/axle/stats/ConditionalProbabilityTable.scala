@@ -1,10 +1,10 @@
 package axle.stats
 
 import cats.Show
+import cats.kernel.Order
 import axle.string
+import axle.orderToOrdering
 import spire.algebra.Field
-import spire.algebra.Order
-import spire.compat.ordering
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.random.Dist

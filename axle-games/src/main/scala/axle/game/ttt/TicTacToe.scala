@@ -4,7 +4,7 @@ package axle.game.ttt
 import axle.game._
 import axle.stats.Distribution0
 import spire.math.Rational
-import spire.implicits._
+import cats.implicits._
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game

@@ -1,238 +1,203 @@
 package axle.quanta
 
-import org.specs2.mutable._
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
-import spire.implicits.moduleOps
+import org.scalatest._
 import spire.math.Rational
 import spire.algebra.Module
 import spire.implicits._
-import spire.implicits.DoubleAlgebra
 import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
-import spire.compat.ordering
+import axle.orderToOrdering
+import axle.spireToCatsEq
+import cats.implicits._
 
-class QuantaSpec extends Specification {
+class QuantaSpec extends FunSuite with Matchers {
 
-  "Scalar conversion" should {
-    "work" in {
+  test("Distance and Time scalar conversion") {
 
-      implicit val dr = Distance.converterGraphK2[Rational, DirectedSparseGraph]
-      import dr._
-      implicit val tr = Time.converterGraphK2[Rational, DirectedSparseGraph]
-      import tr._
+    implicit val dr = Distance.converterGraphK2[Rational, DirectedSparseGraph]
+    import dr._
+    implicit val tr = Time.converterGraphK2[Rational, DirectedSparseGraph]
+    import tr._
 
-      val d1 = Rational(3, 4) *: meter
-      val d2 = Rational(7, 2) *: meter
-      val t1 = Rational(4) *: second
-      val t2 = Rational(9, 88) *: second
-      val t3 = Rational(5d) *: second
-      val t4 = 10 *: second
+    val d1 = Rational(3, 4) *: meter
+    val d2 = Rational(7, 2) *: meter
+    val t1 = Rational(4) *: second
+    val t2 = Rational(9, 88) *: second
+    val t3 = Rational(5d) *: second
+    val t4 = 10 *: second
 
-      val d3 = d1 + d2
-      val d4 = d2 - d2
+    val d3 = d1 + d2
+    val d4 = d2 - d2
 
-      val t5 = t2 in minute
-      val t6 = t1 :* Rational(5, 2)
-      val t8 = Rational(5, 3) *: (t1 in minute)
-      val t9 = t1 :* 60
+    val t5 = t2 in minute
+    val t6 = t1 :* Rational(5, 2)
+    val t8 = Rational(5, 3) *: (t1 in minute)
+    val t9 = t1 :* 60
 
-      t8.magnitude must be equalTo Rational(1, 9)
-    }
+    t8.magnitude should be(Rational(1, 9))
   }
 
-  "Scalar conversion" should {
-    "work" in {
+  test("Mass and Distance scalar conversion") {
 
-      val md = Mass.converterGraphK2[Double, DirectedSparseGraph]
-      import md._
+    val md = Mass.converterGraphK2[Double, DirectedSparseGraph]
+    import md._
 
-      (5 *: gram).magnitude must be equalTo 5
+    (5 *: gram).magnitude should be(5)
 
-      implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
-      import dd._
-      import spire.implicits.DoubleAlgebra
+    implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
+    import dd._
+    import spire.implicits.DoubleAlgebra
 
-      ((1d *: parsec) + (4d *: lightyear)).magnitude must be equalTo 7.260
-      ((4d *: lightyear) + (1d *: parsec)).magnitude must be equalTo 2.226993865030675
-    }
+    ((1d *: parsec) + (4d *: lightyear)).magnitude should be(7.260)
+    ((4d *: lightyear) + (1d *: parsec)).magnitude should be(2.226993865030675)
   }
 
-  "Quanta conversion" should {
+  test("Quanta conversion") {
 
-    "work" in {
+    implicit val md = Mass.converterGraphK2[Double, DirectedSparseGraph]
+    import md._
+    implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
+    import dd._
+    import spire.implicits.DoubleAlgebra
 
-      implicit val md = Mass.converterGraphK2[Double, DirectedSparseGraph]
-      import md._
-      implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
-      import dd._
-      import spire.implicits.DoubleAlgebra
+    ((1d *: kilogram) in gram).magnitude should be(1000d)
+    ((1d *: megagram) in milligram).magnitude should be(1000000000d)
+    ((1d *: mile) in ft).magnitude should be(5280d)
 
-      ((1d *: kilogram) in gram).magnitude must be equalTo 1000d
-      ((1d *: megagram) in milligram).magnitude must be equalTo 1000000000d
-      ((1d *: mile) in ft).magnitude must be equalTo 5280d
-
-    }
-
-    "use Rational" in {
-
-      implicit val vr = Volume.converterGraphK2[Rational, DirectedSparseGraph]
-      import vr._
-
-      ((Rational(1, 10) *: liter) in milliliter).magnitude must be equalTo Rational(100)
-    }
   }
 
-  "addition" should {
-    "work" in {
+  test("Quanta conversion with Rational") {
 
-      implicit val md = Mass.converterGraphK2[Double, DirectedSparseGraph]
-      import md._
-      implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
-      import dd._
+    implicit val vr = Volume.converterGraphK2[Rational, DirectedSparseGraph]
+    import vr._
 
-      // Shouldn't compile: gram + mile
-      // Shouldn't compile: gram + kilogram + mile + gram
-
-      // val mx = axle.quanta.modulize4[Double, Distance[Double], JungDirectedGraph] // fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement4[Q, N], N => N]
-
-      val module = Module[UnittedQuantity[Distance, Double], Double]
-      val d1 = 1d *: meter
-      val d2 = 1d *: foot
-      module.plus(d1, d2)
-
-      ((1d *: meter) + (1d *: foot)).magnitude must be equalTo 4.2808398950131235
-      ((1d *: gram) + (1d *: kilogram)).magnitude must be equalTo 1.001
-    }
+    ((Rational(1, 10) *: liter) in milliliter).magnitude should be(Rational(100))
   }
 
-  "area" should {
-    "order square meter and square centimeter" in {
+  test("addition") {
 
-      implicit val acg = Area.converterGraphK2[Double, DirectedSparseGraph]
-      import acg._
+    implicit val md = Mass.converterGraphK2[Double, DirectedSparseGraph]
+    import md._
+    implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
+    import dd._
 
-      (1d *: m2) must be greaterThan (1d *: cm2)
-    }
+    // Shouldn't compile: gram + mile
+    // Shouldn't compile: gram + kilogram + mile + gram
+
+    // val mx = axle.quanta.modulize4[Double, Distance[Double], JungDirectedGraph] // fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement4[Q, N], N => N]
+
+    val module = Module[UnittedQuantity[Distance, Double], Double]
+    val d1 = 1d *: meter
+    val d2 = 1d *: foot
+    module.plus(d1, d2)
+
+    ((1d *: meter) + (1d *: foot)).magnitude should be(4.2808398950131235)
+    ((1d *: gram) + (1d *: kilogram)).magnitude should be(1.001)
   }
 
-  "acceleration" should {
-    "order g and mpsps" in {
+  test("order square meter and square centimeter") {
 
-      implicit val acg = Acceleration.converterGraphK2[Double, DirectedSparseGraph]
-      import acg._
+    implicit val acg = Area.converterGraphK2[Double, DirectedSparseGraph]
+    import acg._
 
-      (1d *: g) must be greaterThan (1d *: mpsps)
-    }
+    (1d *: m2) should be > (1d *: cm2)
   }
 
-  "force" should {
-    "order newton and pound" in {
+  test("order g and mpsps") {
 
-      implicit val fcg = Force.converterGraphK2[Double, DirectedSparseGraph]
-      import fcg._
+    implicit val acg = Acceleration.converterGraphK2[Double, DirectedSparseGraph]
+    import acg._
 
-      (1d *: pound) must be greaterThan (1d *: newton)
-    }
+    (1d *: g) should be > (1d *: mpsps)
   }
 
-  "frequency" should {
-    "order KHz and Hz" in {
+  test("order newton and pound") {
 
-      implicit val fcg = Frequency.converterGraphK2[Double, DirectedSparseGraph]
-      import fcg._
+    implicit val fcg = Force.converterGraphK2[Double, DirectedSparseGraph]
+    import fcg._
 
-      (1d *: KHz) must be greaterThan (1d *: Hz)
-    }
+    (1d *: pound) should be > (1d *: newton)
   }
 
-  "energy" should {
-    "order ton TNT and Joule" in {
+  test("order KHz and Hz") {
 
-      implicit val ecg = Energy.converterGraphK2[Double, DirectedSparseGraph]
-      import ecg._
+    implicit val fcg = Frequency.converterGraphK2[Double, DirectedSparseGraph]
+    import fcg._
 
-      (1d *: tonTNT) must be greaterThan (1d *: joule)
-    }
+    (1d *: KHz) should be > (1d *: Hz)
   }
 
-  "money" should {
-    "define USD" in {
+  test("order ton TNT and Joule") {
 
-      implicit val mcg = Money.converterGraphK2[Double, DirectedSparseGraph]
-      import mcg._
+    implicit val ecg = Energy.converterGraphK2[Double, DirectedSparseGraph]
+    import ecg._
 
-      (1d *: USD).magnitude must be equalTo 1d
-    }
+    (1d *: tonTNT) should be > (1d *: joule)
   }
 
-  "money flow" should {
-    "define USD per hour" in {
+  test("define USD") {
 
-      implicit val mfcg = MoneyFlow.converterGraphK2[Double, DirectedSparseGraph]
-      import mfcg._
+    implicit val mcg = Money.converterGraphK2[Double, DirectedSparseGraph]
+    import mcg._
 
-      (1d *: USDperHour).magnitude must be equalTo 1d
-    }
+    (1d *: USD).magnitude should be(1d)
   }
 
-  "money per force" should {
-    "define USD per force" in {
+  test("define USD per hour") {
 
-      implicit val mfcg = MoneyPerForce.converterGraphK2[Double, DirectedSparseGraph]
-      import mfcg._
+    implicit val mfcg = MoneyFlow.converterGraphK2[Double, DirectedSparseGraph]
+    import mfcg._
 
-      (1d *: USDperPound).magnitude must be equalTo 1d
-    }
+    (1d *: USDperHour).magnitude should be(1d)
   }
 
-  "power" should {
-    "order watt and horsepower" in {
+  test("define USD per force") {
 
-      implicit val pcg = Power.converterGraphK2[Double, DirectedSparseGraph]
-      import pcg._
+    implicit val mfcg = MoneyPerForce.converterGraphK2[Double, DirectedSparseGraph]
+    import mfcg._
 
-      (1d *: horsepower) must be greaterThan (1d *: watt)
-    }
+    (1d *: USDperPound).magnitude should be(1d)
   }
 
-  "speed" should {
-    "order knot and mph" in {
+  test("order watt and horsepower") {
 
-      implicit val scg = Speed.converterGraphK2[Double, DirectedSparseGraph]
-      import scg._
+    implicit val pcg = Power.converterGraphK2[Double, DirectedSparseGraph]
+    import pcg._
 
-      (1d *: knot) must be greaterThan (1d *: mph)
-    }
+    (1d *: horsepower) should be > (1d *: watt)
   }
 
-  "temperature" should {
-    "convert celsius, fahrenheit, and kelvin" in {
+  test("order knot and mph") {
 
-      implicit val tc = Temperature.converterGraphK2[Double, DirectedSparseGraph]
-      import tc._
+    implicit val scg = Speed.converterGraphK2[Double, DirectedSparseGraph]
+    import scg._
 
-      ((0d *: celsius) in kelvin).magnitude must be equalTo 273.15d
-      ((0d *: celsius) in fahrenheit).magnitude must be equalTo 32d
-      ((212d *: fahrenheit) in celsius).magnitude must be equalTo 100d
-    }
+    (1d *: knot) should be > (1d *: mph)
   }
 
-  "over" should {
-    "work" in {
+  test("convert celsius, fahrenheit, and kelvin") {
 
-      val vr = Volume.converterGraphK2[Rational, DirectedSparseGraph]
-      import vr._
-      val fr = Flow.converterGraphK2[Rational, DirectedSparseGraph]
-      import fr._
+    implicit val tc = Temperature.converterGraphK2[Double, DirectedSparseGraph]
+    import tc._
 
-      // TODO convert that to years
-      (1d *: m3).over[Flow, Time, Rational](1d *: m3s).name must be equalTo "TODO" // TODO
-    }
+    ((0d *: celsius) in kelvin).magnitude should be(273.15d)
+    ((0d *: celsius) in fahrenheit).magnitude should be(32d)
+    ((212d *: fahrenheit) in celsius).magnitude should be(100d)
+  }
+
+  test("over") {
+
+    val vr = Volume.converterGraphK2[Rational, DirectedSparseGraph]
+    import vr._
+    val fr = Flow.converterGraphK2[Rational, DirectedSparseGraph]
+    import fr._
+
+    // TODO convert that to years
+    (1d *: m3).over[Flow, Time, Rational](1d *: m3s).name should be("TODO") // TODO
   }
 
 }

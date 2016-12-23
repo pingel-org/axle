@@ -2,7 +2,7 @@ package axle.quanta
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 import axle.algebra.Scale10s
 import axle.algebra.BijectiveIdentity

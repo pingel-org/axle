@@ -10,7 +10,7 @@ import axle.algebra.LinearAlgebra
 import spire.algebra.AdditiveAbGroup
 import spire.algebra.AdditiveCSemigroup
 import spire.algebra.AdditiveMonoid
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
 import spire.algebra.Module
@@ -164,6 +164,8 @@ package object jblas {
 
   implicit def showDoubleMatrix: Show[DoubleMatrix] =
     new Show[DoubleMatrix] {
+
+      implicit val showDouble: Show[Double] = axle.showDoubleWithPrecision(6)
 
       def show(m: DoubleMatrix): String =
         (0 until m.getRows) map { i =>

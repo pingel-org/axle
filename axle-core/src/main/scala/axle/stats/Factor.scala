@@ -2,21 +2,20 @@ package axle.stats
 
 import axle.IndexedCrossProduct
 import axle.algebra.LinearAlgebra
-import spire.algebra.Eq
+import axle.orderToOrdering
+import axle.string
+import cats.Show
+import cats.implicits.catsKernelStdOrderForString
+import cats.implicits.catsSyntaxEq
+import cats.kernel.Eq
+import cats.kernel.Order
 import spire.algebra.Field
 import spire.algebra.MultiplicativeMonoid
-import spire.algebra.Order
 import spire.implicits.RingProduct2
-import spire.implicits.StringOrder
 import spire.implicits.convertableOps
-import spire.implicits.eqOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
-import spire.compat.ordering
-
-import cats.Show
-import axle.string
 
 /* Technically a "Distribution" is probably a table that sums to 1, which is not
    * always true in a Factor.  They should be siblings rather than parent/child.

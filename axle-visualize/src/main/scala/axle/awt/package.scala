@@ -42,7 +42,7 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import javax.imageio.ImageIO
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps

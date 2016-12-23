@@ -3,21 +3,22 @@ package axle.ml.distance
 import org.jblas.DoubleMatrix
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.specs2.mutable.Specification
+import org.scalatest._
 import org.typelevel.discipline.Predicate
-import org.typelevel.discipline.specs2.mutable.Discipline
+import org.typelevel.discipline.scalatest.Discipline
 
 import axle.algebra.LinearAlgebra
 import axle.jblas.eqDoubleMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.moduleDoubleMatrix
 import axle.jblas.rowVectorInnerProductSpace
+import axle.catsToSpireEq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.laws.VectorSpaceLaws
 
 class EuclideanSpec
-    extends Specification
+    extends FunSuite with Matchers
     with Discipline {
 
   val n = 2

@@ -7,6 +7,7 @@ import axle.algebra.UndirectedGraph
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import scala.collection.JavaConverters._
+import cats.implicits._
 
 package object jung {
 
@@ -63,9 +64,7 @@ package object jung {
       import axle.enrichIndexedSeq
       import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
       import edu.uci.ics.jung.graph.DirectedSparseGraph
-      import spire.algebra.Eq
-      import spire.implicits.IntAlgebra
-      import spire.implicits.eqOps
+      import cats.kernel.Eq
 
       def make(vertices: Seq[V], ef: Seq[(V, V, E)]): DirectedSparseGraph[V, E] = {
 
@@ -261,7 +260,7 @@ package object jung {
       import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
       import edu.uci.ics.jung.graph.UndirectedSparseGraph
-      import spire.algebra.Eq
+      import cats.kernel.Eq
       import spire.implicits.IntAlgebra
       import spire.implicits.eqOps
 

@@ -4,6 +4,7 @@ import scala.Stream.cons
 import scala.Stream.empty
 import scala.Vector
 import scala.reflect.ClassTag
+import axle.orderToOrdering
 
 import NeedlemanWunsch.computeF
 import axle.algebra.Aggregatable
@@ -24,17 +25,16 @@ import axle.syntax.functor.functorOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
 import spire.algebra.AdditiveMonoid
-import spire.algebra.Eq
 import spire.algebra.MetricSpace
 import spire.algebra.Module
-import spire.algebra.Order
 import spire.algebra.Ring
-import spire.compat.ordering
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
-import spire.implicits.eqOps
 import spire.implicits.moduleOps
 import spire.implicits.partialOrderOps
+import cats.kernel.Order
+import cats.kernel.Eq
+import cats.implicits._
 
 /**
  *

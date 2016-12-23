@@ -1,6 +1,6 @@
 package axle.stats
 
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 
 import cats.Show

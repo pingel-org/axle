@@ -1,10 +1,10 @@
 package axle.game.poker
 
-import org.specs2.mutable._
+import org.scalatest._
 import axle.game._
 import axle.game.Strategies._
 
-class PokerMoveValidationSpec extends Specification {
+class PokerMoveValidationSpec extends FunSuite with Matchers {
 
   import axle.game.poker.evGame._
 
@@ -16,11 +16,8 @@ class PokerMoveValidationSpec extends Specification {
     (p2, randomMove, println)),
     println)
 
-  "move validator" should {
-    "reject River as first move" in {
-
-      val ms = evGame.maskState(game, startState(game), game.dealer)
-      isValid(game, ms, River()) must be equalTo Left("invalid move")
-    }
+  test("move validator reject River as first move") {
+    val ms = evGame.maskState(game, startState(game), game.dealer)
+    isValid(game, ms, River()) should be(Left("invalid move"))
   }
 }

@@ -1,7 +1,7 @@
 package axle.pgm
 
 import axle.stats.Distribution
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 
 case class DTreeEdge()

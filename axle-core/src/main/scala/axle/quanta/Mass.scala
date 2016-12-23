@@ -4,7 +4,7 @@ import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale10s
 import axle.algebra.BijectiveIdentity
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 
 case class Mass() extends Quantum {

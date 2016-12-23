@@ -2,7 +2,7 @@ package axle.game.poker
 
 import axle.game._
 import axle.game.cards._
-import spire.implicits._
+import cats.implicits._
 
 case class PokerStateMasked(
   mover: Option[Player],

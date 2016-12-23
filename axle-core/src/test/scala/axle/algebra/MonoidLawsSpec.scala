@@ -1,15 +1,16 @@
 package axle.algebra
 
 import org.scalacheck.Arbitrary.arbInt
-import org.specs2.mutable.Specification
-import org.typelevel.discipline.specs2.mutable.Discipline
+import org.scalatest._
+import org.typelevel.discipline.scalatest.Discipline
 
+import axle.spireToCatsEq
 import axle.algebra.laws.MonoidLaws
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MultiplicativeMonoid
 import spire.implicits.IntAlgebra
 
-class MonoidLawsSpec() extends Specification with Discipline {
+class MonoidLawsSpec() extends FunSuite with Matchers with Discipline {
 
   //  lazy val genMonoid: Gen[Monoid[A]] = Gen.oneOf(monoids)
   //

@@ -6,9 +6,9 @@ package axle.game
  *
  */
 
-import spire.implicits._
 import axle.stats.Distribution0
 import spire.math.Rational
+import cats.implicits._
 
 package object montyhall {
 

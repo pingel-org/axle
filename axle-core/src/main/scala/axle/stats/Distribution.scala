@@ -2,7 +2,7 @@ package axle.stats
 
 import cats.Show
 import axle.string
-import spire.algebra.Eq
+import cats.kernel.Eq
 
 object Distribution {
 

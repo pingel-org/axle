@@ -1,23 +1,20 @@
 package axle.game
 
-import org.specs2.mutable.Specification
+import org.scalatest._
 import spire.math.Rational
 
-class OldMontyHallSpec extends Specification {
+class OldMontyHallSpec extends FunSuite with Matchers {
 
-  "Monty Hall contestant" should {
+  test("Monty Hall contestant should always pick the other door") {
 
-    "always pick the other door" in {
+    import OldMontyHall._
 
-      import OldMontyHall._
+    chanceOfWinning(Rational(1)) should be(Rational(1, 2))
 
-      chanceOfWinning(Rational(1)) must be equalTo Rational(1, 2)
+    chanceOfWinning(Rational(0)) should be(Rational(1, 3))
 
-      chanceOfWinning(Rational(0)) must be equalTo Rational(1, 3)
-
-      // TODO: p1 > p2 <=> chanceOfWinning(p1) > chanceOfWinning(p2)
-      //        aka "is monotonically increasing"
-    }
+    // TODO: p1 > p2 <=> chanceOfWinning(p1) > chanceOfWinning(p2)
+    //        aka "is monotonically increasing"
   }
 
 }

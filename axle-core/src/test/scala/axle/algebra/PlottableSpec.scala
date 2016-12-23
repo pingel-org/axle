@@ -1,15 +1,13 @@
 package axle.algebra
 
 import axle.algebra.Plottable.doublePlottable
-import org.specs2.mutable.Specification
+import org.scalatest._
 
-class PlottableSpec extends Specification {
+class PlottableSpec extends FunSuite with Matchers {
 
-  "Plottable[Double]" should {
-    "work" in {
+  test("Plottable[Double]") {
 
-      doublePlottable.isPlottable(1d) must be equalTo true
-    }
+    doublePlottable.isPlottable(1d) should be(true)
   }
 
 }

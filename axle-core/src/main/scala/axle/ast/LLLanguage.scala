@@ -6,7 +6,7 @@ import axle.string
 import scala.Stream.cons
 import scala.Stream.empty
 
-import spire.implicits.eqOps
+import cats.implicits._
 
 /**
  *

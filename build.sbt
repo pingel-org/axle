@@ -5,12 +5,13 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
-lazy val spireVersion = "0.11.0"
-lazy val shapelessVersion = "2.3.1"
-lazy val catsVersion = "0.8.0"
-lazy val disciplineVersion = "0.4"
-lazy val scalacheckVersion = "1.12.5"
-lazy val specsVersion = "3.6.5"
+lazy val spireVersion = "0.13.0"
+lazy val shapelessVersion = "2.3.2"
+lazy val catsVersion = "0.8.1" // must match spire's algebra's catsVersion
+lazy val disciplineVersion = "0.7.2"
+lazy val scalaCheckVersion = "1.13.4"
+lazy val scalaTestVersion = "3.0.0"
+
 lazy val scalaXmlVersion = "1.0.5"
 lazy val scalaParserCombinatorsVersion = "1.0.4"
 lazy val sparkVersion = "2.0.1"
@@ -47,15 +48,14 @@ lazy val axleCore = Project(
     name := "axle-core",
     moduleName := "axle-core",
     libraryDependencies ++= Seq(
-      "org.specs2" %% "specs2-core" % specsVersion,
-      "org.specs2" %% "specs2-scalacheck" % specsVersion,
+      "org.scalatest" %% "scalatest" % scalaTestVersion, // TODO % "test",
       "org.typelevel" %% "discipline" % disciplineVersion,
       "org.spire-math" %% "spire" % spireVersion,
       "org.spire-math" %% "spire-laws" % spireVersion,
       "org.typelevel" %% "cats-core" % catsVersion,
       "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
-      "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion
-      // "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test"
+      "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
+      "org.scalacheck" %% "scalacheck" % scalaCheckVersion % "test"
   ))
   .settings(axleSettings:_*)
   .settings(commonJvmSettings:_*)
@@ -109,7 +109,7 @@ lazy val commonJvmSettings = Seq(
 lazy val axleSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
 lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %% "scalacheck" % scalacheckVersion,
+  libraryDependencies += "org.scalacheck" %% "scalacheck" % scalaCheckVersion,
   libraryDependencies += "org.typelevel" %% "discipline" % disciplineVersion
 )
 

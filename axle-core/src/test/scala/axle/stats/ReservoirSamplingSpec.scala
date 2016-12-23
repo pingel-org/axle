@@ -1,20 +1,18 @@
 package axle.stats
 
-import org.specs2.mutable._
+import org.scalatest._
 import axle.algebra.arithmeticMean
 import spire.implicits.DoubleAlgebra
 
-class ReservoirSamplingSpec extends Specification {
+class ReservoirSamplingSpec extends FunSuite with Matchers {
 
-  "Reservoir Sampling" should {
-    "uniformly sample 15 of the first 100 integers" in {
+  test("Reservoir Sampling uniformly samples 15 of the first 100 integers") {
 
-      val sample = reservoirSampleK(15, Stream.from(1)).drop(100).head
+    val sample = reservoirSampleK(15, Stream.from(1)).drop(100).head
 
-      val mean = arithmeticMean(sample.map(_.toDouble))
+    val mean = arithmeticMean(sample.map(_.toDouble))
 
-      math.abs(mean - 50) must be lessThan 23
-    }
+    math.abs(mean - 50d) should be < 23d
   }
 
 }

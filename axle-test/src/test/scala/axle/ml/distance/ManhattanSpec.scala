@@ -2,10 +2,11 @@ package axle.ml.distance
 
 import org.jblas.DoubleMatrix
 import org.scalacheck.Arbitrary
-import org.specs2.mutable.Specification
-import org.typelevel.discipline.specs2.mutable.Discipline
+import org.scalatest._
 import org.typelevel.discipline.Predicate
+import org.typelevel.discipline.scalatest.Discipline
 
+import axle.catsToSpireEq
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix
@@ -13,7 +14,7 @@ import spire.implicits.IntAlgebra
 import spire.laws.VectorSpaceLaws
 
 class ManhattanSpec
-    extends Specification
+    extends FunSuite with Matchers
     with Discipline {
 
   implicit val space = Manhattan[DoubleMatrix, Int, Int, Int]()

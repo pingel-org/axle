@@ -1,6 +1,6 @@
 package axle.algebra
 
-import spire.algebra.Eq
+import cats.kernel.Eq
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Witness not found for UndirectedGraph[${UG}, ${V}, ${E}]")

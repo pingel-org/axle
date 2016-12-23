@@ -6,7 +6,7 @@ import axle.quanta.AngleConverter
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
 import axle.sine
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Trig

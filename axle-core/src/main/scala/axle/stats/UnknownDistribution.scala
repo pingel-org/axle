@@ -2,7 +2,7 @@ package axle.stats
 
 import cats.Show
 import spire.algebra.Field
-import spire.algebra.Order
+import cats.kernel.Order
 import spire.random.Dist
 
 object UnknownDistribution0 {

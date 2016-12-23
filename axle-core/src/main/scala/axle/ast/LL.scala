@@ -1,9 +1,10 @@
 
 package axle.ast
 
+import axle.string
 import cats.Show
-import axle._
-import spire.algebra.Eq
+import cats.kernel.Eq
+import cats.implicits._
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 

@@ -1,14 +1,12 @@
 package axle.algebra
 
-import org.specs2.mutable.Specification
+import org.scalatest._
 
-class LengthSpaceSpec extends Specification {
+class LengthSpaceSpec extends FunSuite with Matchers {
 
-  "LengthSpace[Double, Double]" should {
-    "work" in {
+  test("LengthSpace[Double, Double]") {
 
-      axle.algebra.LengthSpace.doubleDoubleLengthSpace.onPath(0d, 10d, 0.5) must be equalTo 5d
-    }
+    axle.algebra.LengthSpace.doubleDoubleLengthSpace.onPath(0d, 10d, 0.5) should be(5d)
   }
 
 }

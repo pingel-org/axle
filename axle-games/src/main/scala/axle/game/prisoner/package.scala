@@ -1,9 +1,8 @@
 package axle.game
 
-import spire.implicits._
+import cats.implicits._
 import axle.stats.Distribution0
 import spire.math.Rational
-import spire.implicits.eqOps
 
 /**
  * Prisoner's Dilemma

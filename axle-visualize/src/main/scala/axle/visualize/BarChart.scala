@@ -11,8 +11,8 @@ import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.Text
-import spire.algebra.Eq
-import spire.algebra.Order
+import cats.kernel.Eq
+import cats.kernel.Order
 
 case class BarChart[S, Y, D](
     initialValue: D,

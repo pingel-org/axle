@@ -5,13 +5,12 @@ import scala.util.Random.nextInt
 
 import axle.stats.Distribution0
 import axle.stats.ConditionalProbabilityTable0
+import axle.spireToCatsOrder
 
+import cats.kernel.Order
+import cats.implicits._
 import spire.math.Rational
-import spire.algebra.Eq
-import spire.algebra.Order
 import spire.algebra.Ring
-import spire.compat.ordering
-import spire.implicits.eqOps
 import spire.implicits._
 import spire.random.Dist
 
@@ -80,7 +79,7 @@ object Strategies {
       ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap)
     }
 
-  def minimax[G, S, O, M, MS, MM, N: Order: Eq](
+  def minimax[G, S, O, M, MS, MM, N: Order](
     game: G,
     state: S,
     depth: Int,
@@ -95,6 +94,8 @@ object Strategies {
         val newState = evGame.applyMove(game, state, move)
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
+      implicit val ordering = Order[N].toOrdering // TODO unnecessary (cats research)
+      // import cats.implicits._
       val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
       val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
       matches(nextInt(matches.length))

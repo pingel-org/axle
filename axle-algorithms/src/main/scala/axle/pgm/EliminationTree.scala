@@ -3,9 +3,9 @@ package axle.pgm
 import axle.algebra.UndirectedGraph
 import axle.stats.Distribution
 import axle.stats.Factor
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
-import spire.implicits.eqOps
+import cats.implicits._
 import axle.syntax.undirectedgraph._
 
 class EliminationTreeEdge

@@ -3,10 +3,10 @@ package axle.quanta
 import cats.Show
 import axle.string
 import axle.algebra.Functor
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.MultiplicativeMonoid
-import spire.algebra.Order
-import spire.implicits.eqOps
+import cats.kernel.Order
+import cats.implicits._
 
 object UnittedQuantity {
 

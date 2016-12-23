@@ -13,11 +13,10 @@ import axle.syntax.indexed._
 import axle.syntax.functor._
 import axle.syntax.linearalgebra._
 
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.MetricSpace
-import spire.implicits.DoubleAlgebra
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
+//import spire.implicits.DoubleAlgebra
+//import spire.implicits.IntAlgebra
 
 /**
  * KMeans
@@ -152,6 +151,8 @@ case class KMeans[T: Eq, F, G, M](
 
   def centroids(X: M, K: Int, assignments: M): (M, Seq[Int]) = {
 
+    import cats.implicits._ // for ===
+
     val A = la.matrix(X.rows, K, (r: Int, c: Int) => if (c === assignments.get(r, 0).toInt) 1d else 0d)
     val distances = la.ring.times(A.t, X) // K x N
     val counts = A.columnSums.t // K x 1
@@ -181,6 +182,6 @@ object KMeans {
       functor: Functor[U[T], T, Seq[Double], U[Seq[Double]]],
       la: LinearAlgebra[M, Int, Int, Double],
       index: Indexed[U[Seq[Double]], Int, Seq[Double]],
-      finite: Finite[U[T], Int]) =
+      finite: Finite[U[T], Int]): KMeans[T, U[T], U[Seq[Double]], M] =
     KMeans(data, N, featureExtractor, normalizerMaker, K, iterations)
 }

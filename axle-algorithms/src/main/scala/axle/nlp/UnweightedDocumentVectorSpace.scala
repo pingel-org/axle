@@ -2,7 +2,7 @@ package axle.nlp
 
 import axle.algebra.Σ
 import spire.algebra.Field
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.implicits.multiplicativeSemigroupOps
 
 case class UnweightedDocumentVectorSpace[D: Field]()(implicit _eqD: Eq[D])

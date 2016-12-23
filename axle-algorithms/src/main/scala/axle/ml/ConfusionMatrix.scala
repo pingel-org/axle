@@ -12,9 +12,9 @@ import axle.syntax.functor._
 import axle.syntax.finite._
 import axle.syntax.mapreducible._
 import axle.syntax.setfrom._
-import spire.algebra._
 import spire.math.ceil
 import spire.math.log10
+import cats.kernel.Order
 
 case class ConfusionMatrix[T, CLASS: Order, L: Order, F, M, G, H](
     classifier: Function1[T, CLASS],
@@ -80,7 +80,7 @@ object ConfusionMatrix {
       functorG: Functor[U[(L, CLASS)], (L, CLASS), L, U[L]],
       sf: SetFrom[U[L], L],
       mr: MapReducible[U[(L, CLASS)], (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]],
-      mf: MapFrom[List[(L, Int)], L, Int]) =
+      mf: MapFrom[List[(L, Int)], L, Int]): ConfusionMatrix[T, CLASS, L, U[T], M, U[(L, CLASS)], U[L]] =
     ConfusionMatrix(classifier, data, labelExtractor, classes)
 
 }

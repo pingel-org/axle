@@ -1,7 +1,7 @@
 package axle.game
 
 import cats.Show
-import spire.algebra.Eq
+import cats.kernel.Eq
 
 case class Player(id: String, description: String) {
 

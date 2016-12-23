@@ -1,22 +1,21 @@
 package axle.stats
 
+import axle.spireToCatsOrder
 import spire.math.Rational
-import org.specs2.mutable._
+import org.scalatest._
 
-object DistributionSpec extends Specification {
+class DistributionSpec extends FunSuite with Matchers {
 
-  "Distribution map" should {
-    "work" in {
+  test("Distribution map") {
 
-      val c = ConditionalProbabilityTable0(Map(
-        List(1, 2, 3) -> Rational(1, 3),
-        List(1, 2, 8) -> Rational(1, 2),
-        List(8, 9) -> Rational(1, 6)))
+    val c = ConditionalProbabilityTable0(Map(
+      List(1, 2, 3) -> Rational(1, 3),
+      List(1, 2, 8) -> Rational(1, 2),
+      List(8, 9) -> Rational(1, 6)))
 
-      val distSize = c.map(_.size)
+    val distSize = c.map(_.size)
 
-      distSize.probabilityOf(3) must be equalTo Rational(5, 6)
-    }
+    distSize.probabilityOf(3) should be(Rational(5, 6))
   }
 
 }

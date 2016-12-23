@@ -6,7 +6,7 @@ import axle.algebra.Zero
 import axle.visualize.element.Text
 
 import scala.Stream.continually
-import spire.algebra.Eq
+import cats.kernel.Eq
 
 case class Plot[X, Y, D](
     initialValue: Seq[(String, D)],

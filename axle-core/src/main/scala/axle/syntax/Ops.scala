@@ -13,7 +13,7 @@ import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
 import axle.algebra.Zero
-import spire.algebra.Eq
+import cats.kernel.Eq
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) {
 

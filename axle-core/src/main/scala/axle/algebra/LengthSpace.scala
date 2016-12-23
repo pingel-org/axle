@@ -46,7 +46,7 @@ object LengthSpace {
   import axle.quanta.UnittedQuantity
   import axle.quanta.UnitConverter
   import spire.algebra.MultiplicativeMonoid
-  import spire.algebra.Eq
+  import cats.kernel.Eq
 
   // TODO move uqDoubleLengthSpace to UnittedQuantity.scala
   // it also seems like this wrapped lengthspace could be generalized

@@ -1,7 +1,7 @@
 package axle.game
 
-import spire.algebra.Order
-import spire.implicits._
+import cats.kernel.Order
+import cats.implicits._
 
 case class AlphaBetaFold[G, S, O, M, MS, MM, N: Order](
     game: G,

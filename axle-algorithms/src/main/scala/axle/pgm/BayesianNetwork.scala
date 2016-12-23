@@ -10,15 +10,14 @@ import axle.stats.Distribution
 import axle.stats.Independence
 import axle.stats.Factor
 import axle.algebra.Π
-import spire.algebra.Eq
 import spire.algebra.Field
-import spire.algebra.Order
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 import axle.syntax.directedgraph._
 import axle.syntax.undirectedgraph._
+import cats.kernel.Eq
+import cats.kernel.Order
+import cats.implicits._
 
 class Edge
 

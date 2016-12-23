@@ -38,7 +38,7 @@ import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.implicits.DoubleAlgebra
 import scala.annotation.implicitNotFound
 import axle.arcTangent2

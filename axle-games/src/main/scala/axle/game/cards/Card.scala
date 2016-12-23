@@ -1,7 +1,6 @@
 package axle.game.cards
 
-import spire.implicits._
-import spire.algebra._
+import cats.kernel.Order
 import cats.Show
 import axle.string
 

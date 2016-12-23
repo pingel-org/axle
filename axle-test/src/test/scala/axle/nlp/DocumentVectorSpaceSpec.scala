@@ -4,31 +4,33 @@ import scala.Vector
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.specs2.mutable.Specification
+import org.scalatest._
+import org.typelevel.discipline.scalatest.Discipline
 import org.typelevel.discipline.Predicate
-import org.typelevel.discipline.specs2.mutable.Discipline
 
 import axle.algebra.DistanceMatrix
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.laws.VectorSpaceLaws
 import spire.math.Real
+//import spire.implicits._
+import axle.spireToCatsEq
+// import axle.catsToSpireEq
+import cats.implicits._
 
 class DocumentVectorSpaceSpec
-    extends Specification
+    extends FunSuite with Matchers
     with Discipline {
 
-  "TermVectorizer" should {
-    "create term vectors correctly" in {
+  test("TermVectorizer creates term vectors correctly") {
 
-      val stopwords = Set("this", "the")
-      import spire.implicits.DoubleAlgebra
-      val vectorizer = TermVectorizer[Double](stopwords)
+    val stopwords = Set("this", "the")
+    import spire.implicits.DoubleAlgebra
+    val vectorizer = TermVectorizer[Double](stopwords)
 
-      val lines = Vector("foo bar baz", "foo fu", "fu fu fu bar")
+    val lines = Vector("foo bar baz", "foo fu", "fu fu fu bar")
 
-      vectorizer.wordCount(lines) must be equalTo Map("foo" -> 2d, "bar" -> 2d, "baz" -> 1d, "fu" -> 4d)
-      vectorizer.wordExistsCount(lines) must be equalTo Map("foo" -> 2d, "bar" -> 2d, "baz" -> 1d, "fu" -> 2d)
-    }
+    vectorizer.wordCount(lines) should be(Map("foo" -> 2d, "bar" -> 2d, "baz" -> 1d, "fu" -> 4d))
+    vectorizer.wordExistsCount(lines) should be(Map("foo" -> 2d, "bar" -> 2d, "baz" -> 1d, "fu" -> 2d))
   }
 
   val stopwords = Set("the", "a", "of", "for", "in").toSet
@@ -40,41 +42,37 @@ class DocumentVectorSpaceSpec
     "quick lazy word",
     "foo bar dog")
 
-  "dvs" should {
-    "create a distance matrix on sample corpus" in {
+  test("DocumentVectorSpace creates a distance matrix on sample corpus") {
 
-      import spire.implicits.DoubleAlgebra
-      val vectorizer = TermVectorizer[Double](stopwords)
+    import spire.implicits.DoubleAlgebra
+    val vectorizer = TermVectorizer[Double](stopwords)
 
-      val unweightedSpace = UnweightedDocumentVectorSpace[Double]()
+    val unweightedSpace = UnweightedDocumentVectorSpace[Double]()
 
-      import axle.jblas.linearAlgebraDoubleMatrix
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
-      implicit val normedUnweightedSpace = unweightedSpace.normed
+    import axle.jblas.linearAlgebraDoubleMatrix
+    implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+    implicit val normedUnweightedSpace = unweightedSpace.normed
 
-      val unweightedDistanceMatrix = DistanceMatrix(corpus.map(vectorizer))
+    val unweightedDistanceMatrix = DistanceMatrix(corpus.map(vectorizer))
 
-      unweightedDistanceMatrix.distanceMatrix.get(2, 2) must be equalTo 0d
-    }
+    unweightedDistanceMatrix.distanceMatrix.get(2, 2) should be(0d)
   }
 
-  "tfidf" should {
-    "create a distance matrix on sample corpus" in {
+  test("tfidf creates a distance matrix on sample corpus") {
 
-      import spire.implicits.DoubleAlgebra
-      val vectorizer = TermVectorizer[Double](stopwords)
+    import spire.implicits.DoubleAlgebra
+    val vectorizer = TermVectorizer[Double](stopwords)
 
-      implicit val tfidfSpace = TFIDFDocumentVectorSpace[Double](corpus, vectorizer)
-      val vectors = corpus.map(vectorizer)
+    implicit val tfidfSpace = TFIDFDocumentVectorSpace[Double](corpus, vectorizer)
+    val vectors = corpus.map(vectorizer)
 
-      import axle.jblas.linearAlgebraDoubleMatrix
-      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+    import axle.jblas.linearAlgebraDoubleMatrix
+    implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
 
-      implicit val normedTfidf = tfidfSpace.normed
-      val tfidfDistanceMatrix = DistanceMatrix(vectors)
+    implicit val normedTfidf = tfidfSpace.normed
+    val tfidfDistanceMatrix = DistanceMatrix(vectors)
 
-      tfidfDistanceMatrix.distanceMatrix.get(2, 2) must be equalTo 0d
-    }
+    tfidfDistanceMatrix.distanceMatrix.get(2, 2) should be(0d)
   }
 
   def tautology[T]: Predicate[T] = new Predicate[T] {
@@ -96,9 +94,9 @@ class DocumentVectorSpaceSpec
   val genReal = Gen.oneOf[Real](1, 2, 3.9, 10)
 
   val vsl = VectorSpaceLaws[Map[String, Real], Real](
-    eqMapKV[String, Real],
+    axle.catsToSpireEq(eqMapKV[String, Real]),
     Arbitrary(genTermVector),
-    implicitly[Eq[Real]],
+    implicitly[spire.algebra.Eq[Real]],
     Arbitrary(genReal),
     tautology)
 

@@ -15,14 +15,14 @@ import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
 import axle.syntax.functor.functorOps
 import spire.algebra.AdditiveMonoid
-import spire.algebra.Eq
+import cats.kernel.Eq
+import cats.implicits._
 import spire.algebra.Field
 import spire.algebra.NRoot
-import spire.algebra.Order
+import cats.kernel.Order
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
 import spire.implicits.convertableOps
-import spire.implicits.eqOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.nrootOps

@@ -1,15 +1,13 @@
 package axle.game
 
-import org.specs2.mutable._
+import org.scalatest._
 import axle.game.cards.Deck
 import axle.string
 
-class DeckSpec extends Specification {
+class DeckSpec extends FunSuite with Matchers {
 
-  "deck" should {
-    "have a string representation" in {
-      string(Deck()).length must be equalTo (52 * 3 - 1)
-    }
+  test("deck has a string representation") {
+    string(Deck()).length should be(52 * 3 - 1)
   }
 
 }

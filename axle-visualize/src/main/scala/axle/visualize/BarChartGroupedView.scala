@@ -8,8 +8,8 @@ import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import spire.compat.ordering
-import spire.implicits.DoubleAlgebra
+import axle.orderToOrdering
+import cats.implicits._
 
 case class BarChartGroupedView[G, S, Y, D](
     chart: BarChartGrouped[G, S, Y, D],

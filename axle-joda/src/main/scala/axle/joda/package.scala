@@ -1,8 +1,8 @@
 
 package axle
 
-import spire.algebra.Order
-import spire.algebra.Eq
+import cats.kernel.Order
+import cats.kernel.Eq
 
 import axle.algebra.Zero
 import axle.algebra.Tics

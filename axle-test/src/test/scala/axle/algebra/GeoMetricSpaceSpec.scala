@@ -1,33 +1,38 @@
 package axle.algebra
 
+import org.scalatest._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.specs2.mutable.Specification
 import org.typelevel.discipline.Predicate
-import org.typelevel.discipline.specs2.mutable.Discipline
+import org.typelevel.discipline.scalatest.Discipline
+
 import spire.math.Real
 import spire.laws.VectorSpaceLaws
-import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
+// import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
 import axle.jung.directedGraphJung
 import axle.quanta._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.kernel.Eq
 
 class GeoMetricSpaceSpec
-    extends Specification
+    extends FunSuite with Matchers
     with Discipline {
 
-  import spire.implicits._
-  
   implicit val angleConverter: AngleConverter[Real] = {
     import axle.algebra.modules.realRationalModule
     import axle.algebra.modules.realDoubleModule
+    import axle.spireToCatsEq
+    import axle.catsToSpireOrder
     Angle.converterGraphK2[Real, DirectedSparseGraph]
   }
   import angleConverter.°
 
-  implicit val space = geoCoordinatesMetricSpace[Real]
+  //  implicit val space = {
+  //    import axle.spireToCatsEq
+  //    geoCoordinatesMetricSpace[Real]
+  //  }
 
   implicit val genAngleMagnitudeDouble: Gen[Double] = Gen.choose[Double](-180d, 180d)
 
@@ -40,10 +45,21 @@ class GeoMetricSpaceSpec
     long <- genAngle
   } yield GeoCoordinates(lat, long)
 
-  implicit def arbCoords: Arbitrary[GeoCoordinates[Real]] =
+  val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
+
+  implicit val eqgcr: spire.algebra.Eq[GeoCoordinates[Real]] =
+    axle.catsToSpireEq(Eq[GeoCoordinates[Real]])
+
+  implicit val arbCoords: Arbitrary[GeoCoordinates[Real]] =
     Arbitrary(genCoords)
 
-  implicit def arbAngle: Arbitrary[UnittedQuantity[Angle, Real]] =
+  implicit val ova: spire.algebra.Order[UnittedQuantity[Angle, Real]] =
+    axle.catsToSpireOrder(cats.kernel.Order.apply[UnittedQuantity[Angle, Real]])
+
+  implicit val equaqr: spire.algebra.Eq[UnittedQuantity[Angle, Real]] =
+    axle.catsToSpireEq(Eq[UnittedQuantity[Angle, Real]])
+
+  implicit val arbAngle: Arbitrary[UnittedQuantity[Angle, Real]] =
     Arbitrary(genAngle)
 
   implicit val pred: Predicate[UnittedQuantity[Angle, Real]] =
@@ -51,10 +67,16 @@ class GeoMetricSpaceSpec
       def apply(a: UnittedQuantity[Angle, Real]) = true
     }
 
-  val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
+  val vsl = VectorSpaceLaws[GeoCoordinates[Real], UnittedQuantity[Angle, Real]](
+    eqgcr, arbCoords, equaqr, arbAngle, pred)
 
-  checkAll(s"GeoCoordinates metric space",
-    VectorSpaceLaws[GeoCoordinates[Real], UnittedQuantity[Angle, Real]].metricSpace)
+  implicit val msva: spire.algebra.MetricSpace[GeoCoordinates[Real], UnittedQuantity[Angle, Real]] =
+    spire.algebra.MetricSpace.apply[GeoCoordinates[Real], UnittedQuantity[Angle, Real]]
+
+  implicit val ama: spire.algebra.AdditiveMonoid[UnittedQuantity[Angle, Real]] =
+    axle.quanta.quantumAdditiveGroup[Angle, Real]
+
+  // checkAll(s"GeoCoordinates metric space", vsl.metricSpace(msva, ova, ama))
 
   // Note: Currently failing "space.symmetric"
   // A counter-example is: 

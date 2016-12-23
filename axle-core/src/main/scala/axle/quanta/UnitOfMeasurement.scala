@@ -1,7 +1,7 @@
 package axle.quanta
 
 import cats.Show
-import spire.algebra.Eq
+import cats.kernel.Eq
 
 object UnitOfMeasurement {
 

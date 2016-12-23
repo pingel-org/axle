@@ -1,28 +1,22 @@
 package axle.algebra
 
-import org.specs2.mutable.Specification
+import org.scalatest._
 
-class ZeroSpec extends Specification {
+class ZeroSpec extends FunSuite with Matchers {
 
-  "Zero[Double]" should {
-    "be available" in {
-      import spire.implicits.DoubleAlgebra
-      Zero[Double].zero must be equalTo 0d
-    }
+  test("Zero[Double]") {
+    import spire.implicits.DoubleAlgebra
+    Zero[Double].zero should be(0d)
   }
 
-  "Zero[Int]" should {
-    "be available" in {
-      import spire.implicits.IntAlgebra
-      Zero[Int].zero must be equalTo 0
-    }
+  test("Zero[Int]") {
+    import spire.implicits.IntAlgebra
+    Zero[Int].zero should be(0)
   }
 
-  "Zero[Long]" should {
-    "be available" in {
-      import spire.implicits.LongAlgebra
-      Zero[Long].zero must be equalTo 0L
-    }
+  test("Zero[Long]") {
+    import spire.implicits.LongAlgebra
+    Zero[Long].zero should be(0L)
   }
 
 }

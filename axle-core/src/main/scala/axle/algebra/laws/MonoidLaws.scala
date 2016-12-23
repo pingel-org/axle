@@ -7,8 +7,8 @@ import org.scalacheck.Prop.propBoolean
 import org.typelevel.discipline.Laws
 
 import spire.algebra.Monoid
-import spire.algebra.Eq
-import spire.implicits.eqOps
+import cats.kernel.Eq
+import cats.implicits._
 
 object MonoidLaws {
 

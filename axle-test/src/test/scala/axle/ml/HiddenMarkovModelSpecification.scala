@@ -1,9 +1,9 @@
 package axle.ml
 
-import org.specs2.mutable._
+import org.scalatest._
 import axle.jung.directedGraphJung
 
-class HiddenMarkovModelSpecification extends Specification {
+class HiddenMarkovModelSpecification extends FunSuite with Matchers {
 
   val rainy = UnobservableMarkovModelState("Rainy")
   val sunny = UnobservableMarkovModelState("Sunny")

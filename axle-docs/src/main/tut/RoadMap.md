@@ -156,4 +156,6 @@ Previous Milestones
 * Depends on Cats (initially just for Show typeclass)
 * Strategy: (G, MS) => Distribution[M, Rational]
 * LinearAlgebra.from{Column,Row}MajorArray
+* Implementation of Monty Hall using axle.game typeclasses
+* Implementaiton of Prisoner's Dilemma using axle.game typeclasses
 * Minor Poker fixes

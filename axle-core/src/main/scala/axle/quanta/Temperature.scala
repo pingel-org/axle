@@ -4,7 +4,7 @@ import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Transform
 import axle.algebra.Scale
-import spire.algebra.Eq
+import cats.kernel.Eq
 import spire.algebra.Field
 
 case class Temperature() extends Quantum {

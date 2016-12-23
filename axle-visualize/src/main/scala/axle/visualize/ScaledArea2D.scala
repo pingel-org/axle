@@ -1,8 +1,8 @@
 package axle.visualize
 
 import axle.algebra.LengthSpace
-import spire.algebra.Eq
-import spire.implicits.eqOps
+import cats.kernel.Eq
+import cats.implicits._
 
 // http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
 
