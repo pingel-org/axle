@@ -26,19 +26,22 @@ class UnittedTicsSpec extends FunSuite with Matchers {
 
     // TODO: configurable precision
     val expected = Vector(
-      (0.0 *: bit, "0.000000"),
-      (0.1 *: bit, "0.100000"),
-      (0.2 *: bit, "0.200000"),
-      (0.3 *: bit, "0.300000"),
-      (0.4 *: bit, "0.400000"),
-      (0.5 *: bit, "0.500000"),
-      (0.6 *: bit, "0.600000"),
-      (0.7 *: bit, "0.700000"),
-      (0.8 *: bit, "0.800000"),
-      (0.9 *: bit, "0.900000"),
-      (1.0 *: bit, "1.000000"))
+      (0.0 *: bit, "0.0"),
+      (0.1 *: bit, "0.1"),
+      (0.2 *: bit, "0.2"),
+      (0.3 *: bit, "0.3"),
+      (0.4 *: bit, "0.4"),
+      (0.5 *: bit, "0.5"),
+      (0.6 *: bit, "0.6"),
+      (0.7 *: bit, "0.7"),
+      (0.8 *: bit, "0.8"),
+      (0.9 *: bit, "0.9"),
+      (1.0 *: bit, "1.0"))
 
     val vieq = Eq[Vector[(UnittedQuantity[Information, Double], String)]]
+
+    println("+++ tics     = " + tics)
+    println("+++ expected = " + expected)
 
     // tics must be equalTo expected
     vieq.eqv(tics, expected) should be(true)
