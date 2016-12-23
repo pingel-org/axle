@@ -5,7 +5,7 @@ import axle.ast._
 import axle.ast.view.ViewString
 import org.scalatest._
 
-object PythonSpecification extends FunSuite with Matchers {
+class PythonSpecification extends FunSuite with Matchers {
 
   test("conversion from JSON to AstNode turn 3 into 3") {
 

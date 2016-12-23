@@ -4,7 +4,7 @@ import axle.spireToCatsOrder
 import spire.math.Rational
 import org.scalatest._
 
-object DistributionSpec extends FunSuite with Matchers {
+class DistributionSpec extends FunSuite with Matchers {
 
   test("Distribution map") {
 

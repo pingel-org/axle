@@ -8,7 +8,7 @@ import axle.spireToCatsOrder
 import spire.math.Rational
 import cats.implicits._
 
-object StochasticLambdaCalculus extends FunSuite with Matchers {
+class StochasticLambdaCalculus extends FunSuite with Matchers {
 
   test("iffy (stochastic if) maps fair boolean to d6 + (d6+d6)") {
 

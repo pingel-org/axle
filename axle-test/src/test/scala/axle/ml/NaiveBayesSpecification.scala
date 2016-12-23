@@ -10,7 +10,7 @@ import spire.implicits.StringOrder
 import spire.math.Rational
 import axle.spireToCatsOrder
 
-object NaiveBayesSpecification extends FunSuite with Matchers {
+class NaiveBayesSpecification extends FunSuite with Matchers {
 
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 

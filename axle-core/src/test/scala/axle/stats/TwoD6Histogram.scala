@@ -7,7 +7,7 @@ import axle.game.Dice.die
 import spire.implicits.IntAlgebra
 import spire.math.Rational
 
-object TwoD6Histogram extends FunSuite with Matchers {
+class TwoD6Histogram extends FunSuite with Matchers {
 
   test("tally") {
 
