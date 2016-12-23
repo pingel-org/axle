@@ -1,31 +1,27 @@
 package axle.joda
 
-import org.specs2.mutable.Specification
+import org.scalatest._
 
 import org.joda.time.DateTime
 import org.joda.time.Duration
 
-class LengthSpaceSpec extends Specification {
+class LengthSpaceSpec extends FunSuite with Matchers {
 
   val start = new DateTime("2016-01-04T12:10:05.000-08:00")
 
-  "joda LengthSpace" should {
-    "compute time onPath" in {
+  test("joda LengthSpace compute time onPath") {
 
-      val midpoint = dateTimeDurationLengthSpace.onPath(start, start.plusDays(1), 0.5)
-      midpoint must be equalTo start.plusHours(12)
-    }
-
-    "compute day distance" in {
-
-      val distance = dateTimeDurationLengthSpace.distance(start, start.plusDays(1))
-      distance must be equalTo Duration.standardDays(1)
-    }
+    val midpoint = dateTimeDurationLengthSpace.onPath(start, start.plusDays(1), 0.5)
+    midpoint should be(start.plusHours(12))
   }
 
-  "joda Eq" should {
-    "distinguish different times" in {
-      axle.joda.dateTimeEq.eqv(start, start.plusHours(1)) must be equalTo false
-    }
+  test("joda LengthSpace compute day distance") {
+
+    val distance = dateTimeDurationLengthSpace.distance(start, start.plusDays(1))
+    distance should be(Duration.standardDays(1))
+  }
+
+  test("joda Eq") {
+    axle.joda.dateTimeEq.eqv(start, start.plusHours(1)) should be(false)
   }
 }
