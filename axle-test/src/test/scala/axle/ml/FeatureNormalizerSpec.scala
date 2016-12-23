@@ -1,47 +1,43 @@
 package axle.ml
 
-import org.specs2.mutable._
+import org.scalatest._
 import axle.jblas._
 
-class FeatureNormalizerSpec extends Specification {
+class FeatureNormalizerSpec extends FunSuite with Matchers {
 
-  "identity normalizer" should {
-    "leave features alone" in {
+  test("identity normalizer leaves features alone") {
 
-      import spire.implicits.DoubleAlgebra
-      implicit val la = linearAlgebraDoubleMatrix[Double]
+    import spire.implicits.DoubleAlgebra
+    implicit val la = linearAlgebraDoubleMatrix[Double]
 
-      val X = la.fromColumnMajorArray(
-        4,
-        2,
-        List(1.1d, 2d, 3d, 4.1d, 5.2d, 6.3d, 7d, 8d).toArray)
+    val X = la.fromColumnMajorArray(
+      4,
+      2,
+      List(1.1d, 2d, 3d, 4.1d, 5.2d, 6.3d, 7d, 8d).toArray)
 
-      val featureNormalizer = IdentityFeatureNormalizer(X)
+    val featureNormalizer = IdentityFeatureNormalizer(X)
 
-      val normalized = featureNormalizer(1.4 :: 6.7 :: Nil)
+    val normalized = featureNormalizer(1.4 :: 6.7 :: Nil)
 
-      normalized must be equalTo la.fromColumnMajorArray(1, 2, Array(1.4, 6.7))
-    }
+    normalized should be(la.fromColumnMajorArray(1, 2, Array(1.4, 6.7)))
   }
 
-  "z score normalizer" should {
-    "center features" in {
+  test("z score normalizer centers features") {
 
-      import spire.implicits.DoubleAlgebra
-      implicit val la = linearAlgebraDoubleMatrix[Double]
+    import spire.implicits.DoubleAlgebra
+    implicit val la = linearAlgebraDoubleMatrix[Double]
 
-      val X = la.fromColumnMajorArray(
-        4,
-        2,
-        List(1.1d, 2d, 3d, 4.1d, 5.2d, 6.3d, 7d, 8d).toArray)
+    val X = la.fromColumnMajorArray(
+      4,
+      2,
+      List(1.1d, 2d, 3d, 4.1d, 5.2d, 6.3d, 7d, 8d).toArray)
 
-      val featureNormalizer = ZScoreFeatureNormalizer(X)
+    val featureNormalizer = ZScoreFeatureNormalizer(X)
 
-      val normalized = featureNormalizer(1.4 :: 6.7 :: Nil)
+    val normalized = featureNormalizer(1.4 :: 6.7 :: Nil)
 
-      axle.string(normalized) must be equalTo "-0.726598 0.051956"
-      //la.matrix(1, 2, Array(-0.726598, 0.051956))
-    }
+    axle.string(normalized) should be("-0.726598 0.051956")
+    //la.matrix(1, 2, Array(-0.726598, 0.051956))
   }
 
 }

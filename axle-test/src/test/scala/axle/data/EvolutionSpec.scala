@@ -1,6 +1,6 @@
 package axle.data
 
-import org.specs2.mutable._
+import org.scalatest._
 import spire.implicits._
 import spire.compat.ordering
 import axle.quanta.Time
@@ -10,21 +10,19 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
 import cats.implicits._
 
-class EvolutionSpec extends Specification {
+class EvolutionSpec extends FunSuite with Matchers {
 
-  "Evolution data" should {
-    "development modern humans is most recent event" in {
+  test("Evolution data: development modern humans is most recent event") {
 
-      implicit val tcg = Time.converterGraphK2[Double, DirectedSparseGraph]
+    implicit val tcg = Time.converterGraphK2[Double, DirectedSparseGraph]
 
-      val evo = Evolution()
+    val evo = Evolution()
 
-      import evo.history
+    import evo.history
 
-      val recent = history.maxBy(_.timestamp)
+    val recent = history.maxBy(_.timestamp)
 
-      recent.e must be equalTo "Modern Humans"
-    }
+    recent.e should be("Modern Humans")
   }
 
 }

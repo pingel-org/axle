@@ -1,10 +1,11 @@
 package axle.algebra
 
+import org.scalatest._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.specs2.mutable.Specification
 import org.typelevel.discipline.Predicate
-import org.typelevel.discipline.specs2.mutable.Discipline
+import org.typelevel.discipline.scalatest.Discipline
+
 import spire.math.Real
 import spire.laws.VectorSpaceLaws
 // import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
@@ -16,7 +17,7 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.kernel.Eq
 
 class GeoMetricSpaceSpec
-    extends Specification
+    extends FunSuite with Matchers
     with Discipline {
 
   implicit val angleConverter: AngleConverter[Real] = {

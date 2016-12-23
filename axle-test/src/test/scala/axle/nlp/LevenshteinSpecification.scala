@@ -1,9 +1,9 @@
 package axle.nlp
 
 import org.jblas.DoubleMatrix
-import org.specs2.mutable.Specification
+import org.scalatest._
 import org.typelevel.discipline.Predicate
-import org.typelevel.discipline.specs2.mutable.Discipline
+import org.typelevel.discipline.scalatest.Discipline
 
 import axle.jblas.linearAlgebraDoubleMatrix
 import spire.laws.VectorSpaceLaws
@@ -11,7 +11,7 @@ import spire.implicits._
 import cats.implicits._
 
 class LevenshteinSpecification
-    extends Specification
+    extends FunSuite with Matchers
     with Discipline {
 
   implicit val laJblasInt = linearAlgebraDoubleMatrix[Int]

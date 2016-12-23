@@ -1,6 +1,6 @@
 package axle.ml
 
-import org.specs2.mutable.Specification
+import org.scalatest._
 
 import axle.string
 import axle.stats.UnknownDistribution0
@@ -10,7 +10,7 @@ import spire.implicits.StringOrder
 import spire.math.Rational
 import axle.spireToCatsOrder
 
-object NaiveBayesSpecification extends Specification {
+object NaiveBayesSpecification extends FunSuite with Matchers {
 
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 
@@ -30,35 +30,33 @@ object NaiveBayesSpecification extends Specification {
       Tennis("Overcast", "Hot", "Normal", "Weak", true) ::
       Tennis("Rain", "Mild", "High", "Strong", false) :: Nil
 
-  "naive bayes tennis classifier" should {
-    "predict play in dataset #1" in {
+  test("naive bayes tennis classifier: predict play in dataset #1") {
 
-      val classifier1 = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
-        data,
-        List(
-          UnknownDistribution0[String, Rational](Vector("Sunny", "Overcast", "Rain"), "Outlook"),
-          UnknownDistribution0[String, Rational](Vector("Hot", "Mild", "Cool"), "Temperature"),
-          UnknownDistribution0[String, Rational](Vector("High", "Normal", "Low"), "Humidity"),
-          UnknownDistribution0[String, Rational](Vector("Weak", "Strong"), "Wind")),
-        UnknownDistribution0[Boolean, Rational](Vector(true, false), "Play"),
-        (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
-        (t: Tennis) => t.play)
+    val classifier1 = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
+      data,
+      List(
+        UnknownDistribution0[String, Rational](Vector("Sunny", "Overcast", "Rain"), "Outlook"),
+        UnknownDistribution0[String, Rational](Vector("Hot", "Mild", "Cool"), "Temperature"),
+        UnknownDistribution0[String, Rational](Vector("High", "Normal", "Low"), "Humidity"),
+        UnknownDistribution0[String, Rational](Vector("Weak", "Strong"), "Wind")),
+      UnknownDistribution0[Boolean, Rational](Vector(true, false), "Play"),
+      (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
+      (t: Tennis) => t.play)
 
-      val performance1 = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
-        data,
-        classifier1,
-        _.play)
+    val performance1 = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
+      data,
+      classifier1,
+      _.play)
 
-      performance1.tp must be equalTo 9
-      performance1.fp must be equalTo 1
-      performance1.tn must be equalTo 4
-      performance1.fn must be equalTo 0
-      performance1.precision must be equalTo Rational(9, 10)
-      performance1.recall must be equalTo Rational(1)
-      performance1.accuracy must be equalTo Rational(13, 14)
-      performance1.specificity must be equalTo Rational(4, 5)
-      performance1.f1Score must be equalTo Rational(18, 19)
-    }
+    performance1.tp should be(9)
+    performance1.fp should be(1)
+    performance1.tn should be(4)
+    performance1.fn should be(0)
+    performance1.precision should be(Rational(9, 10))
+    performance1.recall should be(Rational(1))
+    performance1.accuracy should be(Rational(13, 14))
+    performance1.specificity should be(Rational(4, 5))
+    performance1.f1Score should be(Rational(18, 19))
   }
 
   // http://www.dhgarrette.com/nlpclass/assignments/a2classification.html
@@ -89,36 +87,34 @@ object NaiveBayesSpecification extends Specification {
    * All predictions of 'Play' by Naive Bayes are correct
    */
 
-  "naive bayes tennis classifier" should {
-    "predict play in dataset #2" in {
+  test("naive bayes tennis classifier: predict play in dataset #2") {
 
-      val classifier2 = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
-        data2,
-        List(
-          UnknownDistribution0[String, Rational](Vector("Sunny", "Overcast", "Rain"), "Outlook"),
-          UnknownDistribution0[String, Rational](Vector("Hot", "Mild", "Cool"), "Temperature"),
-          UnknownDistribution0[String, Rational](Vector("High", "Normal", "Low"), "Humidity"),
-          UnknownDistribution0[String, Rational](Vector("Weak", "Strong"), "Wind")),
-        UnknownDistribution0[Boolean, Rational](Vector(true, false), "Play"),
-        (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
-        (t: Tennis) => t.play)
+    val classifier2 = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
+      data2,
+      List(
+        UnknownDistribution0[String, Rational](Vector("Sunny", "Overcast", "Rain"), "Outlook"),
+        UnknownDistribution0[String, Rational](Vector("Hot", "Mild", "Cool"), "Temperature"),
+        UnknownDistribution0[String, Rational](Vector("High", "Normal", "Low"), "Humidity"),
+        UnknownDistribution0[String, Rational](Vector("Weak", "Strong"), "Wind")),
+      UnknownDistribution0[Boolean, Rational](Vector(true, false), "Play"),
+      (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
+      (t: Tennis) => t.play)
 
-      val performance2 = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
-        data, // Note: not the same as the training dataset
-        classifier2,
-        _.play)
+    val performance2 = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
+      data, // Note: not the same as the training dataset
+      classifier2,
+      _.play)
 
-      performance2.tp must be equalTo 9
-      performance2.fp must be equalTo 3
-      performance2.tn must be equalTo 2
-      performance2.fn must be equalTo 0
-      performance2.precision must be equalTo Rational(3, 4)
-      performance2.recall must be equalTo Rational(1)
-      performance2.specificity must be equalTo Rational(2, 5)
-      performance2.accuracy must be equalTo Rational(11, 14)
-      performance2.f1Score must be equalTo Rational(6, 7)
-      string(performance2) must contain("F1")
-    }
+    performance2.tp should be(9)
+    performance2.fp should be(3)
+    performance2.tn should be(2)
+    performance2.fn should be(0)
+    performance2.precision should be(Rational(3, 4))
+    performance2.recall should be(Rational(1))
+    performance2.specificity should be(Rational(2, 5))
+    performance2.accuracy should be(Rational(11, 14))
+    performance2.f1Score should be(Rational(6, 7))
+    string(performance2) should contain("F1")
   }
 
 }

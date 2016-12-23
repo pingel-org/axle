@@ -5,12 +5,12 @@ import spire.implicits._
 import spire.math._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
-import org.specs2.mutable._
+import org.scalatest._
 import axle.spireToCatsOrder
 import cats.implicits._
 
 class ConditionalProbabilityTableSpecification
-    extends Specification {
+    extends FunSuite with Matchers {
 
   val bools = Vector(true, false)
 
@@ -63,15 +63,13 @@ class ConditionalProbabilityTableSpecification
       D -> dFactor,
       E -> eFactor))
 
-  "CPT" should {
-    "work" in {
+  test("CPT") {
 
-      // TODO more CPT-specific tests
+    // TODO more CPT-specific tests
 
-      val factor = bn.jointProbabilityTable.sumOut(A).sumOut(B).sumOut(C).sumOut(D).sumOut(E)
+    val factor = bn.jointProbabilityTable.sumOut(A).sumOut(B).sumOut(C).sumOut(D).sumOut(E)
 
-      factor.values.size must be equalTo 1
-    }
+    factor.values should have size 1
   }
 
 }

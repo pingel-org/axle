@@ -1,7 +1,7 @@
 
 package axle.pgm
 
-import org.specs2.mutable._
+import org.scalatest._
 
 import axle.stats._
 import spire.implicits._
@@ -15,7 +15,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import axle.spireToCatsOrder
 import cats.implicits._
 
-class ScalaFigures extends Specification {
+class ScalaFigures extends FunSuite with Matchers {
 
   val bools = Vector(true, false)
 

@@ -1,7 +1,7 @@
 package axle.stats
 
 import spire.math._
-import org.specs2.mutable._
+import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.spireToCatsOrder
 import axle.pgm._
@@ -9,7 +9,7 @@ import axle.jung.directedGraphJung
 import spire.implicits._
 import cats.implicits._
 
-class ABE extends Specification {
+class ABE extends FunSuite with Matchers {
 
   val bools = Vector(true, false)
 
@@ -63,29 +63,27 @@ class ABE extends Specification {
       J -> jFactor,
       M -> mFactor))
 
-  "bayesian networks" should {
-    "produce a Joint Probability Table, which is '1' when all variables are removed" in {
+  test("bayesian networks produces a Joint Probability Table, which is '1' when all variables are removed") {
 
-      val jpt = bn.jointProbabilityTable
+    val jpt = bn.jointProbabilityTable
 
-      val sansAll: Factor[Boolean, Rational] = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
+    val sansAll: Factor[Boolean, Rational] = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 
-      val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
+    val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
 
-      val Q: Set[Distribution[Boolean, Rational]] = Set(E, B, A)
-      val order = List(J, M)
+    val Q: Set[Distribution[Boolean, Rational]] = Set(E, B, A)
+    val order = List(J, M)
 
-      // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
-      // val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E is true)
-      // bn.getDistributions.map(rv => println(bn.getMarkovAssumptionsFor(rv)))
-      // println("P(B) = " + ans1) // 0.001
-      // println("P(A| B, -E) = " + ans2) // 0.94
-      // println("eliminating variables other than A, B, and E; and then finding those consistent with E = true")
-      // println(afterVE)
+    // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
+    // val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E is true)
+    // bn.getDistributions.map(rv => println(bn.getMarkovAssumptionsFor(rv)))
+    // println("P(B) = " + ans1) // 0.001
+    // println("P(A| B, -E) = " + ans2) // 0.94
+    // println("eliminating variables other than A, B, and E; and then finding those consistent with E = true")
+    // println(afterVE)
 
-      sansAll.values(Vector.empty) must be equalTo Rational(1)
-      sansAll.evaluate(Seq.empty, Seq.empty) must be equalTo Rational(1)
-    }
+    sansAll.values(Vector.empty) should be(Rational(1))
+    sansAll.evaluate(Seq.empty, Seq.empty) should be(Rational(1))
   }
 
 }

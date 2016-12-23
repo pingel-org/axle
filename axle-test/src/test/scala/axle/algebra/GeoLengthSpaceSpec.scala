@@ -1,6 +1,6 @@
 package axle.algebra
 
-import org.specs2.mutable.Specification
+import org.scalatest._
 
 import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
 import axle.algebra.modules.doubleDoubleModule
@@ -14,7 +14,7 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.metricSpaceOps
 import cats.implicits._
 
-class GeoLengthSpaceSpec extends Specification {
+class GeoLengthSpaceSpec extends FunSuite with Matchers {
 
   implicit val angleConverter = Angle.converterGraphK2[Double, DirectedSparseGraph]
   import angleConverter.°
@@ -29,38 +29,33 @@ class GeoLengthSpaceSpec extends Specification {
   val lax = GeoCoordinates(0.592539 *: radian, 2.066470 *: radian)
   val jfk = GeoCoordinates(0.709186 *: radian, 1.287762 *: radian)
 
-  "geo metric space" should {
+  test("geo metric space: distance from San Francisco to New York") {
 
-    "calculate distance from San Francisco to New York" in {
+    val degreesDistance = ((sf distance ny) in °).magnitude
 
-      val degreesDistance = ((sf distance ny) in °).magnitude
+    import distanceConverter.km
+    val earthRadius = 6371d *: km
+    val kmDistance = (distanceOnSphere(sf distance ny, earthRadius) in km).magnitude
 
-      import distanceConverter.km
-      val earthRadius = 6371d *: km
-      val kmDistance = (distanceOnSphere(sf distance ny, earthRadius) in km).magnitude
+    degreesDistance should be(37.12896941431725)
+    kmDistance should be(4128.553030413071)
+  }
 
-      degreesDistance must be equalTo 37.12896941431725
-      kmDistance must be equalTo 4128.553030413071
-    }
+  test("geo metric space: angular distance from LAX to JFK") {
 
-    "calculate angular distance from LAX to JFK" in {
-
-      ((lax distance jfk) in radian).magnitude must be equalTo 0.6235849243922914
-    }
+    ((lax distance jfk) in radian).magnitude should be(0.6235849243922914)
   }
 
   // See http://williams.best.vwh.net/avform.htm
 
-  "geo length space" should {
-    "calculate the way-point 40% from LAX to JFK correctly" in {
+  test("geo length space: way-point 40% from LAX to JFK correctly") {
 
-      import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
+    import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
 
-      val waypoint = geoCoordinatesLengthSpace.onPath(lax, jfk, 0.4)
+    val waypoint = geoCoordinatesLengthSpace.onPath(lax, jfk, 0.4)
 
-      (waypoint.latitude in °).magnitude must be equalTo 38.66945192546367
-      (waypoint.longitude in °).magnitude must be equalTo 101.6261713931811
-    }
+    (waypoint.latitude in °).magnitude should be(38.66945192546367)
+    (waypoint.longitude in °).magnitude should be(101.6261713931811)
   }
 
 }
