@@ -5,28 +5,38 @@ permalink: /road_map/
 ---
 
 ## 0.2.7 (December 2016)
-* Depend on Spire on Algebra on Cats
+* Depend on Spire 0.13.0 (which depends on Typelevel Algebra)
+* Use cats-kernel's Eq and Order in favor of Spire's
+# Convert tests to use scalatest (to match Cats and Spire)
+
+## 0.2.8 (January 2017)
 * Fix Logistic regression
 * Fix JodaTime Tics handling of timezones
 * Publish Scala 2.12 artifacts
 * Code coverage to ?%
 
-## 0.2.8 (January 2016)
+## 0.2.9 (February 2017)
 * Dependent types (Shapeless?) for matrix size
 
-## 0.2.9 (February 2017)
+## 0.2.10 (March 2017)
 * Reactive Streams for animating visualizations
 
-## 0.3.0 (April 2017)
+## 0.3.0 (June 2017)
 * Solve the Spark ClassTag issue
-* Redo Logic using Abstract Algebra
-* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
-* Use Shapeless for compound Quanta and Bayesian Networks
-* Physics (eg, how Volume relates to Flow)
-* Heterogenous Model types
+
+## 0.3.1 (July 2017)
 * P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
 
-## 0.3.x (Summer-Fall 2017)
+## 0.3.2 (August 2017)
+* Shapeless for compound Quanta and Bayesian Networks
+* Physics (eg, how Volume relates to Flow)
+
+## 0.3.3 (September 2017)
+* Heterogenous Model types
+* Redo Logic using Abstract Algebra
+* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
+
+## 0.3.x (Fall 2017)
 * LSA
 * LDA
 * GLM
@@ -36,15 +46,15 @@ permalink: /road_map/
 * Decision Trees
 * Random Forest
 * A* Search
+* Conditional Random Fields (CRF)
+* Hidden Markov Models
+
+## 0.4.x (2018)
 * Stochastic Lambda Calculus
 * MCMC
 * Metropolis Hastings
 * Game Theory: information sets, equilibria
 * do-calculus (Causality)
-* Conditional Random Fields (CRF)
-* Hidden Markov Models
-
-## 0.4.x (2018)
 * Performance benchmarking
 * netlib-java Matrix
 * GPU/CUDA support
@@ -153,7 +163,7 @@ Previous Milestones
 * Increase test coverage to 78%
 
 ## 0.2.6 (November 2016)
-* Depends on Cats (initially just for Show typeclass)
+* Depends on cats-core (initially just for Show typeclass)
 * Strategy: (G, MS) => Distribution[M, Rational]
 * LinearAlgebra.from{Column,Row}MajorArray
 * Implementation of Monty Hall using axle.game typeclasses
