@@ -16,27 +16,15 @@ permalink: /road_map/
 * Code coverage to ?%
 
 ## 0.2.9 (February 2017)
-* Dependent types (Shapeless?) for matrix size
+* Dependent types (Shapeless? Refined?) for matrix size
 
 ## 0.2.10 (March 2017)
 * Reactive Streams for animating visualizations
 
-## 0.3.0 (June 2017)
+## 0.3.0 (April 2017)
 * Solve the Spark ClassTag issue
 
-## 0.3.1 (July 2017)
-* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
-
-## 0.3.2 (August 2017)
-* Shapeless for compound Quanta and Bayesian Networks
-* Physics (eg, how Volume relates to Flow)
-
-## 0.3.3 (September 2017)
-* Heterogenous Model types
-* Redo Logic using Abstract Algebra
-* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
-
-## 0.3.x (Fall 2017)
+## 0.3.x (Summer/Fall 2017)
 * LSA
 * LDA
 * GLM
@@ -46,10 +34,16 @@ permalink: /road_map/
 * Decision Trees
 * Random Forest
 * A* Search
-* Conditional Random Fields (CRF)
-* Hidden Markov Models
 
 ## 0.4.x (2018)
+* Shapeless for compound Quanta and Bayesian Networks
+* Physics (eg, how Volume relates to Flow)
+* Heterogenous Model types
+* Redo Logic using Abstract Algebra
+* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
+* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
+* Conditional Random Fields (CRF)
+* Hidden Markov Models
 * Stochastic Lambda Calculus
 * MCMC
 * Metropolis Hastings
