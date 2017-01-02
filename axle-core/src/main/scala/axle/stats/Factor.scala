@@ -8,6 +8,8 @@ import cats.implicits.catsKernelStdOrderForString
 import cats.implicits.catsSyntaxEq
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
+
 import spire.algebra.Field
 import spire.algebra.MultiplicativeMonoid
 import spire.implicits.RingProduct2
@@ -67,8 +69,6 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
     val values: Map[Vector[CaseIs[T, N]], N]) {
 
   val field = Field[N]
-
-  implicit lazy val orderingN = Order[N].toOrdering
 
   lazy val crossProduct = IndexedCrossProduct(varList.map(_.values))
 

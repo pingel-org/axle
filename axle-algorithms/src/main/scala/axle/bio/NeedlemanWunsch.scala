@@ -33,6 +33,7 @@ import spire.implicits.moduleOps
 import spire.implicits.partialOrderOps
 import cats.kernel.Order
 import cats.kernel.Eq
+import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 
 /**
@@ -108,8 +109,6 @@ object NeedlemanWunsch {
       module: Module[V, I]): M = {
 
     val one = Ring[I].one
-
-    implicit val orderingV = Order[V].toOrdering
 
     la.matrix(
       A.size + one,

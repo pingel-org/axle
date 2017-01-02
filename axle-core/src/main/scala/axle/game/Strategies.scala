@@ -7,6 +7,7 @@ import axle.stats.Distribution0
 import axle.stats.ConditionalProbabilityTable0
 
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 import spire.math.Rational
 import spire.algebra.Ring
@@ -94,8 +95,6 @@ object Strategies {
         val newState = evGame.applyMove(game, state, move)
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
-      implicit val ordering = Order[N].toOrdering // TODO unnecessary (cats research)
-      // import cats.implicits._
       val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
       val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
       matches(nextInt(matches.length))

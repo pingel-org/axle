@@ -5,6 +5,7 @@ import axle.algebra.Zero
 import axle.stats.Distribution0
 import scala.annotation.implicitNotFound
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 
 /**
  * implicits for Plot and BarChart
@@ -31,9 +32,6 @@ object DataView {
       val yPlottable = Plottable[Y]
       val yZero = Zero[Y]
 
-      implicit val orderingX = Order[X].toOrdering
-      implicit val orderingY = Order[Y].toOrdering
-
       def keys(d: Map[X, Y]): Traversable[X] = d.keys.toList.sorted
 
       def valueOf(d: Map[X, Y], x: X): Y = d.get(x).getOrElse(yZero.zero)
@@ -53,9 +51,6 @@ object DataView {
 
       val yPlottable = Plottable[Y]
       val yZero = Zero[Y]
-
-      implicit val orderingX = Order[X].toOrdering
-      implicit val orderingY = Order[Y].toOrdering
 
       def keys(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys.toList.sorted
 

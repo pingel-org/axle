@@ -2,6 +2,7 @@ package axle.stats
 
 import cats.Show
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import axle.string
 import spire.algebra.Field
 import spire.implicits.additiveSemigroupOps
@@ -13,8 +14,6 @@ object ConditionalProbabilityTable0 {
 
   implicit def showCPT[A: Show: Order, N: Show]: Show[ConditionalProbabilityTable0[A, N]] =
     new Show[ConditionalProbabilityTable0[A, N]] {
-
-      implicit val orderingA = Order[A].toOrdering
 
       def show(cpt: ConditionalProbabilityTable0[A, N]): String =
         cpt.name + "\n" +

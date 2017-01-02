@@ -3,6 +3,7 @@ package axle.game.poker
 import axle.game.cards._
 import cats.kernel.Order
 import cats.Show
+import cats.Order.catsKernelOrderingForOrder
 import axle.string
 
 object PokerHandCategory {
@@ -11,8 +12,6 @@ object PokerHandCategory {
     def compare(a: PokerHandCategory, b: PokerHandCategory): Int =
       a.asInt.compare(b.asInt)
   }
-
-  implicit val orderingPokerHandCategory = orderPokerHandCategory.toOrdering
 
   val categories = Vector(
     High,

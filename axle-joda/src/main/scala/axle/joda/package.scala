@@ -25,8 +25,6 @@ package object joda {
     def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
   }
 
-  implicit val dateTimeOrdering = dateTimeOrder.toOrdering
-
   implicit def dateTimeEq: Eq[DateTime] = new Eq[DateTime] {
     def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
   }

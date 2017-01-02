@@ -9,8 +9,6 @@ object Rank {
     def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
   }
 
-  implicit val orderingRank = Order[Rank].toOrdering
-
   implicit def show[R <: Rank]: Show[R] = new Show[R] { def show(r: R) = r.serialize.toString }
 
   def apply(c: Char): Rank = c match {

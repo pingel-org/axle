@@ -8,6 +8,7 @@ import axle.algebra.Zero
 import axle.stats.Distribution0
 import cats.kernel.Order
 import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[X, Y, D] {
@@ -27,9 +28,6 @@ object PlotDataView {
 
   implicit def treeMapDataView[X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[X, Y, TreeMap[X, Y]] =
     new PlotDataView[X, Y, TreeMap[X, Y]] {
-
-      implicit val orderingX = Order[X].toOrdering
-      implicit val orderingY = Order[Y].toOrdering
 
       def xsOf(d: TreeMap[X, Y]): Traversable[X] = d.keys
 
@@ -83,9 +81,6 @@ object PlotDataView {
 
   implicit def distribution0DataView[X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[X, Y, Distribution0[X, Y]] =
     new PlotDataView[X, Y, Distribution0[X, Y]] {
-
-      implicit val orderingX = Order[X].toOrdering
-      implicit val orderingY = Order[Y].toOrdering
 
       def xsOf(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys.toList.sorted
 

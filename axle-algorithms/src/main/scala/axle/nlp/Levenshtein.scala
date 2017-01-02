@@ -13,6 +13,7 @@ import spire.implicits.additiveSemigroupOps
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
 
 /**
  * Based on the Scala implementation of
@@ -26,8 +27,6 @@ case class Levenshtein[S, E: Eq, M, I: Ring: Order]()(
   idx: Indexed[S, I, E],
   finite: Finite[S, I])
     extends MetricSpace[S, I] {
-
-  implicit val orderingI = Order[I].toOrdering
 
   def distance(s1: S, s2: S): I = {
 

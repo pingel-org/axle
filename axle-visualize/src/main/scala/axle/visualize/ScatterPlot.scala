@@ -6,6 +6,7 @@ import axle.visualize.Color.black
 import axle.visualize.element._
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 
 case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     data: D,
@@ -42,8 +43,6 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
 
   val domain = dataView.dataToDomain(data)
 
-  implicit val orderingX = Order[X].toOrdering
-  implicit val orderingY = Order[Y].toOrdering
   val (minX, maxX) = minMax(yAxis.toList ++ domain.map(_._1).toList)
   val (minY, maxY) = minMax(xAxis.toList ++ domain.map(_._2).toList)
 

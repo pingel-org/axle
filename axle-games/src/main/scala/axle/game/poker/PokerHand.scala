@@ -5,7 +5,9 @@ import axle.game.cards.Card
 import axle.string
 import cats.Show
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import spire.implicits.IntAlgebra
+
 import spire.implicits.SeqOrder
 import spire.implicits.eqOps
 
@@ -28,8 +30,6 @@ object PokerHand {
     }
 
   }
-
-  implicit val orderingPokerHand = orderPokerHand.toOrdering
 
 }
 

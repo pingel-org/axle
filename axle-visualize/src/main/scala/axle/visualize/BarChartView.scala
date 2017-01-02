@@ -9,6 +9,7 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
 
 case class BarChartView[S, Y, D](
     chart: BarChart[S, Y, D],
@@ -28,7 +29,6 @@ case class BarChartView[S, Y, D](
 
   val (dataMinY, dataMaxY) = dataView.yRange(data)
 
-  implicit val orderingY = orderY.toOrdering
   val minY = List(xAxis.getOrElse(zeroY.zero), dataMinY).min
   val maxY = List(xAxis.getOrElse(zeroY.zero), dataMaxY).max
 

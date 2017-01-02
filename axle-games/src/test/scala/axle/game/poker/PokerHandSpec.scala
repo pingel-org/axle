@@ -3,6 +3,7 @@ package axle.game.poker
 import org.scalatest._
 import axle.string
 import cats.kernel.Eq
+import cats.Order.catsKernelOrderingForOrder
 
 class PokerHandSpec extends FunSuite with Matchers {
 

@@ -13,8 +13,6 @@ object Card {
     def compare(a: Card, b: Card): Int = Order[Rank].compare(a.rank, b.rank)
   }
 
-  implicit val orderingCard = Order[Card].toOrdering
-
   implicit def showCard: Show[Card] = new Show[Card] {
     def show(card: Card): String =  "" + card.rank.serialize + card.suit.serialize
   }

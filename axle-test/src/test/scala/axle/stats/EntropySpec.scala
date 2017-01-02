@@ -2,16 +2,16 @@ package axle.stats
 
 import org.scalatest._
 
-import axle.eqRational
-import axle.quanta.Information
-import axle.quanta.UnittedQuantity
+import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.math.Rational
 import spire.implicits.DoubleAlgebra
 import spire.implicits._
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.jung.directedGraphJung
-import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
+import axle.jung.directedGraphJung
+import axle.eqRational
+import axle.quanta.Information
+import axle.quanta.UnittedQuantity
 
 class EntropySpec extends FunSuite with Matchers {
 
@@ -32,8 +32,6 @@ class EntropySpec extends FunSuite with Matchers {
     val lhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 100))
     val rhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 2))
     implicit val base = id.bit
-    implicit val ord = Order[UnittedQuantity[Information, Double]]
-    implicit val ordering = ord.toOrdering
 
     lhs should be < rhs
   }

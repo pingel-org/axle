@@ -1,6 +1,7 @@
 package axle.visualize
 
 import org.scalatest._
+import cats.Order.catsKernelOrderingForOrder
 
 class PokerHandChartSpec extends FunSuite with Matchers {
 
@@ -9,7 +10,6 @@ class PokerHandChartSpec extends FunSuite with Matchers {
     import axle.game.cards.Deck
     import axle.game.poker.PokerHand
     import axle.game.poker.PokerHandCategory
-    import spire.compat.ordering
 
     def winnerFromHandSize(handSize: Int) =
       Deck().cards.take(handSize).combinations(5).map(PokerHand(_)).toList.max

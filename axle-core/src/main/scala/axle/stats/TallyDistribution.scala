@@ -4,10 +4,13 @@ import scala.util.Random
 
 import axle.algebra.Σ
 import axle.string
+
 import cats.Show
 import cats.implicits.catsSyntaxEq
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
+
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.Ring
@@ -17,17 +20,16 @@ import spire.implicits.multiplicativeSemigroupOps
 
 object TallyDistribution0 {
 
-  implicit def show[A: Order: Show, N: Show]: Show[TallyDistribution0[A, N]] = new Show[TallyDistribution0[A, N]] {
+  implicit def show[A: Order: Show, N: Show]: Show[TallyDistribution0[A, N]] =
+    new Show[TallyDistribution0[A, N]] {
 
-    implicit val orderingA = Order[A].toOrdering
-
-    def show(td: TallyDistribution0[A, N]): String =
-      td.name + "\n" +
-        td.values.sorted.map(a => {
-          val aString = string(a)
-          (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
-        }).mkString("\n")
-  }
+      def show(td: TallyDistribution0[A, N]): String =
+        td.name + "\n" +
+          td.values.sorted.map(a => {
+            val aString = string(a)
+            (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
+          }).mkString("\n")
+    }
 
 }
 

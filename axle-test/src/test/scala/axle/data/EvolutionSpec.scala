@@ -1,14 +1,15 @@
 package axle.data
 
 import org.scalatest._
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
 import spire.implicits._
 import spire.compat.ordering
-import axle.quanta.Time
 import spire.implicits.DoubleAlgebra
+import axle.quanta.Time
 import axle.algebra.modules.doubleRationalModule
-import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
-import cats.implicits._
 
 class EvolutionSpec extends FunSuite with Matchers {
 

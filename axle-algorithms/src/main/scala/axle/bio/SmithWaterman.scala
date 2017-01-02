@@ -15,6 +15,7 @@ import axle.syntax.linearalgebra.matrixOps
 import cats.implicits._
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import spire.algebra.MetricSpace
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
@@ -49,8 +50,6 @@ object SmithWaterman {
 
     val iOne = Ring[I].one
     val vZero = Ring[V].zero
-
-    implicit val orderingV = Order[V].toOrdering
 
     la.matrix(
       A.size + iOne,
