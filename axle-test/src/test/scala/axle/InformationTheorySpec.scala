@@ -8,11 +8,12 @@ import axle.stats.P
 import axle.stats.coin
 import axle.stats.entropy
 import axle.stats.rationalProbabilityDist
-import spire.math.Rational
-import spire.implicits._
 import axle.quanta.Information
 import axle.jung.directedGraphJung
+import spire.math.Rational
+import spire.implicits._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
 
 class InformationTheorySpec extends FunSuite with Matchers {
 

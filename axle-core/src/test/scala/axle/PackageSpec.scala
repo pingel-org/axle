@@ -29,6 +29,8 @@ class PackageSpec extends FunSuite with Matchers {
 
   test("mandelbrot at 1.8 1.7") {
     import spire.implicits.DoubleAlgebra
+    import cats.implicits._
+
     assertResult(inMandelbrotSetAt(4d, 1.8, 1.7, 100).get)(0)
   }
 

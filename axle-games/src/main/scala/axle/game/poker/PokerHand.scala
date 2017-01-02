@@ -2,11 +2,12 @@ package axle.game.poker
 
 import axle.game.cards.Ace
 import axle.game.cards.Card
-import axle.orderToOrdering
 import axle.string
 import cats.Show
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import spire.implicits.IntAlgebra
+
 import spire.implicits.SeqOrder
 import spire.implicits.eqOps
 

@@ -6,9 +6,9 @@ import scala.annotation.implicitNotFound
 import axle.algebra.Plottable
 import axle.algebra.Zero
 import axle.stats.Distribution0
-import axle.orderToOrdering
 import cats.kernel.Order
 import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[X, Y, D] {

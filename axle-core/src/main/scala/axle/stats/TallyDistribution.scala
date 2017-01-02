@@ -3,12 +3,14 @@ package axle.stats
 import scala.util.Random
 
 import axle.algebra.Σ
-import axle.orderToOrdering
 import axle.string
+
 import cats.Show
 import cats.implicits.catsSyntaxEq
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
+
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.Ring
@@ -18,19 +20,21 @@ import spire.implicits.multiplicativeSemigroupOps
 
 object TallyDistribution0 {
 
-  implicit def show[A: Order: Show, N: Show]: Show[TallyDistribution0[A, N]] = new Show[TallyDistribution0[A, N]] {
-    def show(td: TallyDistribution0[A, N]): String =
-      td.name + "\n" +
-        td.values.sorted.map(a => {
-          val aString = string(a)
-          (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
-        }).mkString("\n")
-  }
+  implicit def show[A: Order: Show, N: Show]: Show[TallyDistribution0[A, N]] =
+    new Show[TallyDistribution0[A, N]] {
+
+      def show(td: TallyDistribution0[A, N]): String =
+        td.name + "\n" +
+          td.values.sorted.map(a => {
+            val aString = string(a)
+            (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
+          }).mkString("\n")
+    }
 
 }
 
 case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name: String = "unnamed")
-  extends Distribution0[A, N] {
+    extends Distribution0[A, N] {
 
   val ring = Ring[N]
   val addition = implicitly[AdditiveMonoid[N]]
@@ -78,7 +82,7 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name
 }
 
 case class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), N], _name: String = "unnamed")
-  extends Distribution1[A, G, N] {
+    extends Distribution1[A, G, N] {
 
   def name: String = _name
 

@@ -12,10 +12,6 @@ import axle.algebra.DistanceMatrix
 import cats.kernel.Eq
 import spire.laws.VectorSpaceLaws
 import spire.math.Real
-//import spire.implicits._
-import axle.spireToCatsEq
-// import axle.catsToSpireEq
-import cats.implicits._
 
 class DocumentVectorSpaceSpec
     extends FunSuite with Matchers
@@ -93,8 +89,15 @@ class DocumentVectorSpaceSpec
   // TODO more possibilities for genReal
   val genReal = Gen.oneOf[Real](1, 2, 3.9, 10)
 
+  // TODO spire conversion
+  val spireEqMapStringReal = new spire.algebra.Eq[Map[String, Real]] {
+    val catsEq = eqMapKV[String, Real]
+    def eqv(x: Map[String, Real], y: Map[String, Real]): Boolean =
+      catsEq.eqv(x, y)
+  }
+
   val vsl = VectorSpaceLaws[Map[String, Real], Real](
-    axle.catsToSpireEq(eqMapKV[String, Real]),
+    spireEqMapStringReal,
     Arbitrary(genTermVector),
     implicitly[spire.algebra.Eq[Real]],
     Arbitrary(genReal),

@@ -1,11 +1,11 @@
 package axle.visualize
 
-import axle.orderToOrdering
 import axle.algebra.Plottable
 import axle.algebra.Zero
 import axle.stats.Distribution0
 import scala.annotation.implicitNotFound
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 
 /**
  * implicits for Plot and BarChart

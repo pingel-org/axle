@@ -1,6 +1,5 @@
 package axle.ml
 
-import axle.orderToOrdering
 import axle.algebra.argmax
 import axle.algebra.Functor
 import axle.stats.P
@@ -12,6 +11,7 @@ import axle.syntax.functor._
 import axle.syntax.talliable._
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import spire.algebra.Field
 import spire.implicits.MapInnerProductSpace
 import spire.implicits.StringOrder
@@ -31,8 +31,6 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
     functor: Functor[F, DATA, CLASS, G],
     tal: Talliable[G, CLASS, N])
     extends Function1[DATA, CLASS] {
-
-  import axle._
 
   val featureNames = featureRandomVariables map { _.name }
 

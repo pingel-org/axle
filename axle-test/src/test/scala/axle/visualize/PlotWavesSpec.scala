@@ -2,18 +2,19 @@ package axle.visualize
 
 import scala.collection.immutable.TreeMap
 import scala.util.Random.nextDouble
+
 import spire.math.sin
 import spire.implicits.DoubleAlgebra
-
-import org.joda.time.DateTime
-import org.scalatest._
+import cats.Order.catsKernelOrderingForOrder
 
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
-import axle.orderToOrdering
+
+import org.joda.time.DateTime
+import org.scalatest._
 
 class PlotWavesSpec extends FunSuite with Matchers {
 

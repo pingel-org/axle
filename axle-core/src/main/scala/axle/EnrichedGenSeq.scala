@@ -4,6 +4,7 @@ import scala.collection.GenSeq
 import scala.collection.immutable.TreeMap
 
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import spire.algebra.Ring
 import spire.implicits.MapRng
 import spire.implicits.additiveSemigroupOps

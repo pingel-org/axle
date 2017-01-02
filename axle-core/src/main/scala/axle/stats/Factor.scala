@@ -2,13 +2,14 @@ package axle.stats
 
 import axle.IndexedCrossProduct
 import axle.algebra.LinearAlgebra
-import axle.orderToOrdering
 import axle.string
 import cats.Show
 import cats.implicits.catsKernelStdOrderForString
 import cats.implicits.catsSyntaxEq
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
+
 import spire.algebra.Field
 import spire.algebra.MultiplicativeMonoid
 import spire.implicits.RingProduct2

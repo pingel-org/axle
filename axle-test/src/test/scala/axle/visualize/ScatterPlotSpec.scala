@@ -16,11 +16,12 @@ class ScatterPlotSpec extends FunSuite with Matchers {
       (0, 2) -> 2,
       (1, 3) -> 2)
 
-    implicit def v2color(v: Int): Color = v match {
-      case 0 => Color.red
-      case 1 => Color.blue
-      case 2 => Color.green
-    }
+    implicit val v2color: Int => Color =
+      (v: Int) => v match {
+        case 0 => Color.red
+        case 1 => Color.blue
+        case 2 => Color.green
+      }
 
     import cats.implicits._
     val plot = ScatterPlot[Int, Int, Map[(Int, Int), Int]](data)

@@ -42,10 +42,11 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import javax.imageio.ImageIO
-import cats.kernel.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
+import cats.kernel.Eq
+import cats.implicits._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 

@@ -6,7 +6,7 @@ import axle.visualize.Color.black
 import axle.visualize.element._
 import cats.kernel.Eq
 import cats.kernel.Order
-import axle.orderToOrdering
+import cats.Order.catsKernelOrderingForOrder
 
 case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     data: D,

@@ -5,18 +5,19 @@ import scala.util.Random.nextInt
 
 import axle.stats.Distribution0
 import axle.stats.ConditionalProbabilityTable0
-import axle.spireToCatsOrder
 
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 import spire.math.Rational
 import spire.algebra.Ring
 import spire.implicits._
 import spire.random.Dist
+import axle.orderRational
 
 object Strategies {
 
-  implicit val distDouble = implicitly[Dist[Double]].map[Rational](d => Rational(d))
+  implicit val distDouble = implicitly[Dist[Double]].map(Rational.apply)
 
   def outcomeRingHeuristic[G, S, O, M, MS, MM, N: Ring](game: G, f: (O, Player) => N)(
     implicit evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
@@ -94,8 +95,6 @@ object Strategies {
         val newState = evGame.applyMove(game, state, move)
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       })
-      implicit val ordering = Order[N].toOrdering // TODO unnecessary (cats research)
-      // import cats.implicits._
       val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
       val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
       matches(nextInt(matches.length))

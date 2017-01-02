@@ -4,7 +4,6 @@ import org.scalatest._
 
 import scala.Vector
 
-import axle.spireToCatsOrder
 import axle.game.Dice.die
 import axle.stats.Distribution0
 import axle.visualize.Color.blue
@@ -66,6 +65,8 @@ class BarChartSpec extends FunSuite with Matchers {
   }
 
   test("BarChart render a SVG of d6 + d6 probability distribution") {
+
+    import axle.orderRational
 
     val distribution: Distribution0[Int, Rational] = for {
       a <- die(6)

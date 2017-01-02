@@ -9,13 +9,13 @@ import axle.algebra.Finite
 import axle.algebra.FromStream
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
-import axle.orderToOrdering
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
 import cats.implicits._
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import spire.algebra.MetricSpace
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps

@@ -5,7 +5,7 @@ import cats.Show
 
 object Rank {
 
-  implicit object RankOrder extends Order[Rank] {
+  implicit val orderRank = new Order[Rank] {
     def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
   }
 

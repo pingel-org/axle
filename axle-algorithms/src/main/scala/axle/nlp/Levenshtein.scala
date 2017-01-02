@@ -1,13 +1,11 @@
 package axle.nlp
 
-import axle.orderToOrdering
 import axle.algebra.Finite
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
-import axle.orderToOrdering
 import spire.algebra.MetricSpace
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
@@ -15,6 +13,7 @@ import spire.implicits.additiveSemigroupOps
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
 
 /**
  * Based on the Scala implementation of

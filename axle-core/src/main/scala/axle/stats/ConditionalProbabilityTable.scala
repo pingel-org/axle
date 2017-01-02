@@ -2,8 +2,8 @@ package axle.stats
 
 import cats.Show
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import axle.string
-import axle.orderToOrdering
 import spire.algebra.Field
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps

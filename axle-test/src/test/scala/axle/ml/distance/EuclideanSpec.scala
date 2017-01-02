@@ -12,7 +12,6 @@ import axle.jblas.eqDoubleMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.moduleDoubleMatrix
 import axle.jblas.rowVectorInnerProductSpace
-import axle.catsToSpireEq
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.laws.VectorSpaceLaws
@@ -36,6 +35,13 @@ class EuclideanSpec
   implicit val pred: Predicate[Double] = new Predicate[Double] {
     def apply(a: Double) = true
   }
+
+  // TODO spire conversion
+  implicit val spireEqDoubleMatrix =
+    new spire.algebra.Eq[DoubleMatrix] {
+      val catsEq = cats.kernel.Eq[DoubleMatrix]
+      def eqv(x: DoubleMatrix, y: DoubleMatrix): Boolean = catsEq.eqv(x, y)
+    }
 
   checkAll(s"Euclidean space on 1x${n} matrix",
     VectorSpaceLaws[DoubleMatrix, Double].metricSpace)

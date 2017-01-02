@@ -50,6 +50,7 @@ import spire.implicits.semiringOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.math.Rational
+import spire.math.Real
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.AngleConverter
@@ -65,7 +66,6 @@ import scala.language.implicitConversions
 
 package object axle {
 
-  // was implicit val
   def showDoubleWithPrecision(p: Int = 6): Show[Double] =
     new Show[Double] {
       val fmt = s"""%.${p}f"""
@@ -80,50 +80,20 @@ package object axle {
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
-  // implicit val showBoolean: Show[Boolean] = Show.fromToString[Boolean]
-  // implicit val showLong: Show[Long] = Show.fromToString[Long]
-  // implicit val showChar: Show[Char] = Show.fromToString[Char]
-  // implicit val showInt: Show[Int] = Show.fromToString[Int]
-  // implicit val showString: Show[String] = Show.fromToString[String]
+  implicit val eqRational: Eq[Rational] =
+    Eq.instance(spire.algebra.Eq[Rational].eqv)
 
-  implicit def catsToSpireEq[T](implicit ceq: Eq[T]): spire.algebra.Eq[T] =
-    new spire.algebra.Eq[T] {
-      def eqv(x: T, y: T): Boolean = ceq.eqv(x, y)
-    }
+  implicit val orderRational: Order[Rational] =
+    Order.from(spire.algebra.Order[Rational].compare)
 
-  implicit def spireToCatsEq[T](implicit seq: spire.algebra.Eq[T]): Eq[T] =
-    new Eq[T] {
-      def eqv(x: T, y: T): Boolean = seq.eqv(x, y)
-    }
+  implicit val eqReal: Eq[Real] =
+    Eq.instance(spire.algebra.Eq[Real].eqv)
 
-  implicit val orderSymbols: Order[Symbol] =
-    new Order[Symbol] {
-      def compare(x: Symbol, y: Symbol): Int = Order[String].compare(string(x), string(y))
-    }
+  implicit val orderReal: Order[Real] =
+    Order.from(spire.algebra.Order[Real].compare)
 
-  // implicit val orderStrings = Order.from((s1: String, s2: String) => s1.compare(s2))
-
-  // implicit val orderChars = Order.from((c1: Char, c2: Char) => c1.compare(c2))
-
-  // implicit val orderBooleans = Order.from((b1: Boolean, b2: Boolean) => b1.compare(b2))
-
-  // See spire.syntax.Syntax DoubleOrder
-  // implicit val orderDoubles = Order.from((d1: Double, d2: Double) => d1.compare(d2))
-
-  implicit def spireToCatsOrder[T](implicit so: spire.algebra.Order[T]): Order[T] =
-    new Order[T] {
-      def compare(x: T, y: T): Int = so.compare(x, y)
-    }
-
-  implicit def catsToSpireOrder[T](implicit cko: Order[T]): spire.algebra.Order[T] =
-    new spire.algebra.Order[T] {
-      def compare(x: T, y: T): Int = cko.compare(x, y)
-    }
-
-  implicit def orderToOrdering[T](implicit o: Order[T]): scala.math.Ordering[T] =
-    new Ordering[T] {
-      def compare(x: T, y: T): Int = o.compare(x, y)
-    }
+  implicit val orderSymbol: Order[Symbol] =
+    Order.from((x: Symbol, y: Symbol) => Order[String].compare(string(x), string(y)))
 
   def dropOutput(s: String): Unit = {}
 
@@ -251,8 +221,6 @@ package object axle {
 
   def ackermann(m: Long, n: Long): Long = {
 
-    import spire.implicits.LongAlgebra
-
     if (m === 0L) {
       n + 1
     } else if (m > 0 && n === 0L) {
@@ -364,9 +332,6 @@ package object axle {
   def √[N: NRoot](x: N): N = x.sqrt
 
   implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
-
-    import spire.implicits.IntAlgebra
-
     def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
   }
 

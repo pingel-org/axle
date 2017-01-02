@@ -1,6 +1,9 @@
 package axle.quanta
 
 import org.scalatest._
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
 import spire.math.Rational
 import spire.algebra.Module
 import spire.implicits._
@@ -8,11 +11,8 @@ import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
-import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
-import axle.orderToOrdering
-import axle.spireToCatsEq
-import cats.implicits._
+import axle.eqRational
 
 class QuantaSpec extends FunSuite with Matchers {
 

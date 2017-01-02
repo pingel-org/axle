@@ -6,7 +6,6 @@ import org.scalatest._
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
-import axle.catsToSpireEq
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix
@@ -30,6 +29,13 @@ class ManhattanSpec
   implicit val pred: Predicate[Int] = new Predicate[Int] {
     def apply(a: Int) = true
   }
+
+  // TODO spire conversion
+  implicit val spireEqDoubleMatrix =
+    new spire.algebra.Eq[DoubleMatrix] {
+      val catsEq = cats.kernel.Eq[DoubleMatrix]
+      def eqv(x: DoubleMatrix, y: DoubleMatrix): Boolean = catsEq.eqv(x, y)
+    }
 
   checkAll(s"Manhattan space on ${m}x${n} matrix",
     VectorSpaceLaws[DoubleMatrix, Int].metricSpace)
