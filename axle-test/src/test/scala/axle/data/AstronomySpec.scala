@@ -16,8 +16,6 @@ class AstronomySpec extends FunSuite with Matchers {
     implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
     implicit val td = Time.converterGraphK2[Double, DirectedSparseGraph]
 
-    implicit val orderingMassDouble = cats.kernel.Order[UnittedQuantity[Mass, Double]].toOrdering
-
     val astro = axle.data.Astronomy()
     val sorted = astro.bodies.sortBy(_.mass)
 
