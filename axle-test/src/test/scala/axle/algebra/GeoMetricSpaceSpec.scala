@@ -49,16 +49,16 @@ class GeoMetricSpaceSpec
   val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
 
   implicit val eqgcr: spire.algebra.Eq[GeoCoordinates[Real]] =
-    axle.catsToSpireEq(Eq[GeoCoordinates[Real]])
+    Eq[GeoCoordinates[Real]].asInstanceOf[spire.algebra.Eq[GeoCoordinates[Real]]]
 
   implicit val arbCoords: Arbitrary[GeoCoordinates[Real]] =
     Arbitrary(genCoords)
 
   implicit val ova: spire.algebra.Order[UnittedQuantity[Angle, Real]] =
-    axle.catsToSpireOrder(cats.kernel.Order.apply[UnittedQuantity[Angle, Real]])
+    cats.kernel.Order[UnittedQuantity[Angle, Real]].asInstanceOf[spire.algebra.Order[UnittedQuantity[Angle, Real]]]
 
   implicit val equaqr: spire.algebra.Eq[UnittedQuantity[Angle, Real]] =
-    axle.catsToSpireEq(Eq[UnittedQuantity[Angle, Real]])
+    Eq[UnittedQuantity[Angle, Real]].asInstanceOf[spire.algebra.Eq[UnittedQuantity[Angle, Real]]]
 
   implicit val arbAngle: Arbitrary[UnittedQuantity[Angle, Real]] =
     Arbitrary(genAngle)

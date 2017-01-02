@@ -36,6 +36,8 @@ class EuclideanSpec
     def apply(a: Double) = true
   }
 
+  implicit val spireEqDoubleMatrix = cats.kernel.Eq[DoubleMatrix].asInstanceOf[spire.algebra.Eq[DoubleMatrix]]
+
   checkAll(s"Euclidean space on 1x${n} matrix",
     VectorSpaceLaws[DoubleMatrix, Double].metricSpace)
 }
