@@ -1,13 +1,11 @@
 package axle.nlp
 
-import axle.orderToOrdering
 import axle.algebra.Finite
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
-import axle.orderToOrdering
 import spire.algebra.MetricSpace
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
@@ -28,6 +26,8 @@ case class Levenshtein[S, E: Eq, M, I: Ring: Order]()(
   idx: Indexed[S, I, E],
   finite: Finite[S, I])
     extends MetricSpace[S, I] {
+
+  implicit val orderingI = Order[I].toOrdering
 
   def distance(s1: S, s2: S): I = {
 

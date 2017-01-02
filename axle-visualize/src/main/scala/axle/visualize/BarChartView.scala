@@ -2,7 +2,6 @@ package axle.visualize
 
 import axle.algebra.Tics
 import axle.string
-import axle.orderToOrdering
 import axle.visualize.Color.black
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
@@ -28,6 +27,8 @@ case class BarChartView[S, Y, D](
   val whiteSpace = widthPerSlice * (1d - barWidthPercent)
 
   val (dataMinY, dataMaxY) = dataView.yRange(data)
+
+  implicit val orderingY = orderY.toOrdering
   val minY = List(xAxis.getOrElse(zeroY.zero), dataMinY).min
   val maxY = List(xAxis.getOrElse(zeroY.zero), dataMaxY).max
 

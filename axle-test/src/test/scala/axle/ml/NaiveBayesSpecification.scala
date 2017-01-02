@@ -5,10 +5,9 @@ import org.scalatest._
 import axle.string
 import axle.stats.UnknownDistribution0
 import axle.stats.rationalProbabilityDist
-import spire.implicits.BooleanStructure
-import spire.implicits.StringOrder
+import axle.orderRational
 import spire.math.Rational
-import axle.spireToCatsOrder
+import cats.implicits._
 
 class NaiveBayesSpecification extends FunSuite with Matchers {
 

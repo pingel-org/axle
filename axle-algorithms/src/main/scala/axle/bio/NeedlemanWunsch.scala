@@ -4,7 +4,6 @@ import scala.Stream.cons
 import scala.Stream.empty
 import scala.Vector
 import scala.reflect.ClassTag
-import axle.orderToOrdering
 
 import NeedlemanWunsch.computeF
 import axle.algebra.Aggregatable
@@ -109,6 +108,8 @@ object NeedlemanWunsch {
       module: Module[V, I]): M = {
 
     val one = Ring[I].one
+
+    implicit val orderingV = Order[V].toOrdering
 
     la.matrix(
       A.size + one,

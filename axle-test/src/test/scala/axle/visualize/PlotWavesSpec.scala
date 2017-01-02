@@ -10,10 +10,10 @@ import org.scalatest._
 
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
+import axle.joda.dateTimeOrdering
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
-import axle.orderToOrdering
 
 class PlotWavesSpec extends FunSuite with Matchers {
 

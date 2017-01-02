@@ -1,12 +1,11 @@
 package axle.pgm
 
 import axle.stats._
-import spire.implicits._
 import spire.math._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
 import org.scalatest._
-import axle.spireToCatsOrder
+import axle.orderRational
 import cats.implicits._
 
 class ConditionalProbabilityTableSpecification

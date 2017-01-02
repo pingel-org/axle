@@ -2,7 +2,6 @@ package axle.data
 
 import org.scalatest._
 import spire.implicits._
-import axle.orderToOrdering
 import axle.quanta.Distance
 import axle.quanta.Flow
 import axle.algebra.modules.doubleRationalModule
@@ -15,7 +14,6 @@ class RiversSpec extends FunSuite with Matchers {
   test("rivers data") {
 
     implicit val dcg = {
-      import axle.spireToCatsEq
       Distance.converterGraphK2[Double, DirectedSparseGraph]
     }
     implicit val fcg = Flow.converterGraphK2[Double, DirectedSparseGraph]

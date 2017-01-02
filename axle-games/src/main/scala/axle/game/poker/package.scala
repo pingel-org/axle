@@ -4,7 +4,6 @@ import axle.string
 import axle.game.cards._
 import axle.stats.Distribution0
 import spire.math.Rational
-import axle.orderToOrdering
 import cats.implicits._
 
 package object poker {

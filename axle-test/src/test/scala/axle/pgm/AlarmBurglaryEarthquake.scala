@@ -3,7 +3,7 @@ package axle.stats
 import spire.math._
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.spireToCatsOrder
+import axle.orderRational
 import axle.pgm._
 import axle.jung.directedGraphJung
 import spire.implicits._

@@ -9,7 +9,6 @@ import axle.algebra.Finite
 import axle.algebra.FromStream
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
-import axle.orderToOrdering
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
@@ -50,6 +49,8 @@ object SmithWaterman {
 
     val iOne = Ring[I].one
     val vZero = Ring[V].zero
+
+    implicit val orderingV = Order[V].toOrdering
 
     la.matrix(
       A.size + iOne,

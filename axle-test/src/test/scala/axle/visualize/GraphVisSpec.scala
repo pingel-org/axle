@@ -32,7 +32,6 @@ class GraphVisSpec extends FunSuite with Matchers {
     import cats.Show
     implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 
-    import axle._
     import axle.web._
     val svgName = "ug.svg"
     svg(g, svgName)

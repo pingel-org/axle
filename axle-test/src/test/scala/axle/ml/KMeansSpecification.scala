@@ -83,7 +83,7 @@ class KMeansSpecification
     implicit val distanceConverter: DistanceConverter[Double] = {
       import spire.implicits.DoubleAlgebra
       import axle.algebra.modules.doubleRationalModule
-      import axle.spireToCatsEq
+      import cats.implicits._
       Distance.converterGraphK2[Double, DirectedSparseGraph]
     }
 

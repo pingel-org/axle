@@ -1,6 +1,5 @@
 package axle.visualize
 
-import axle.orderToOrdering
 import axle.algebra.Plottable
 import axle.algebra.Zero
 import scala.annotation.implicitNotFound
@@ -34,6 +33,10 @@ object GroupedDataView {
 
       val yZero = Zero[Y]
       val yPlottable = Plottable[Y]
+
+      implicit val orderingG = Order[G].toOrdering
+      implicit val orderingS = Order[S].toOrdering
+      implicit val orderingY = Order[Y].toOrdering
 
       def groups(d: Map[(G, S), Y]): Traversable[G] =
         d.keys.map(_._1).toSet.toList.sorted // TODO cache

@@ -8,7 +8,6 @@ import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import axle.orderToOrdering
 import cats.implicits._
 
 case class BarChartGroupedView[G, S, Y, D](
@@ -29,6 +28,8 @@ case class BarChartGroupedView[G, S, Y, D](
   val whiteSpace = widthPerGroup * (1d - barWidthPercent)
 
   val (dataMinY, dataMaxY) = groupedDataView.yRange(data)
+
+  implicit val orderingY = orderY.toOrdering
   val minY = List(xAxis.getOrElse(zeroY.zero), dataMinY).min
   val maxY = List(xAxis.getOrElse(zeroY.zero), dataMaxY).max
 

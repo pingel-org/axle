@@ -1,6 +1,5 @@
 package axle.ml
 
-import axle.orderToOrdering
 import axle.algebra.argmax
 import axle.algebra.Functor
 import axle.stats.P
@@ -32,7 +31,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
     tal: Talliable[G, CLASS, N])
     extends Function1[DATA, CLASS] {
 
-  import axle._
+  implicit val orderingCLASS = Order[CLASS].toOrdering
 
   val featureNames = featureRandomVariables map { _.name }
 

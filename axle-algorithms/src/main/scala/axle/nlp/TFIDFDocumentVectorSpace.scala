@@ -4,7 +4,7 @@ import spire.math.log
 
 import axle.algebra.Aggregatable
 import axle.algebra.Σ
-import cats.kernel.Eq
+import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.convertableOps
 import spire.implicits.multiplicativeSemigroupOps

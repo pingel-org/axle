@@ -2,7 +2,6 @@ package axle.game.poker
 
 import axle.game.cards.Ace
 import axle.game.cards.Card
-import axle.orderToOrdering
 import axle.string
 import cats.Show
 import cats.kernel.Order
@@ -29,6 +28,8 @@ object PokerHand {
     }
 
   }
+
+  implicit val orderingPokerHand = orderPokerHand.toOrdering
 
 }
 

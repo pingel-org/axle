@@ -9,6 +9,7 @@ import axle.game.Bowling.stateDistribution
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.stats.Distribution0
+import axle.orderRational
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
@@ -26,7 +27,6 @@ class GameChartSpec extends FunSuite with Matchers {
     implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
     // test implicit conjuring:
-    import axle.spireToCatsOrder
     PlotDataView.distribution0DataView[Int, Rational]
 
     val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](

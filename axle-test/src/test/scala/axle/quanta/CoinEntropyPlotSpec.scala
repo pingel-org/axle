@@ -21,12 +21,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
 
     import edu.uci.ics.jung.graph.DirectedSparseGraph
     import axle.jung.directedGraphJung
-    import axle.spireToCatsEq
-    //import axle.algebra.Tics
     import cats.kernel.Order
-    //import cats.kernel.Eq
-    //import axle.algebra.Zero
-    //import axle.algebra.LengthSpace
     import axle.quanta.unittedTics
 
     implicit val id =

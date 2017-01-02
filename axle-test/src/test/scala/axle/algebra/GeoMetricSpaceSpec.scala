@@ -13,6 +13,9 @@ import axle.jung.directedGraphJung
 import axle.quanta._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
+//import axle.eqReal
+import axle.orderReal
+
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.kernel.Eq
 
@@ -23,8 +26,6 @@ class GeoMetricSpaceSpec
   implicit val angleConverter: AngleConverter[Real] = {
     import axle.algebra.modules.realRationalModule
     import axle.algebra.modules.realDoubleModule
-    import axle.spireToCatsEq
-    import axle.catsToSpireOrder
     Angle.converterGraphK2[Real, DirectedSparseGraph]
   }
   import angleConverter.°

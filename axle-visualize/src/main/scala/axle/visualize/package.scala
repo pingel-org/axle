@@ -9,6 +9,7 @@ import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
+import cats.implicits._
 
 package object visualize {
 

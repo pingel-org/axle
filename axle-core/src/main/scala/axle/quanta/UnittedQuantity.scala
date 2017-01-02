@@ -28,6 +28,9 @@ object UnittedQuantity {
         Order[N].compare((x.in(y.unit)).magnitude, y.magnitude)
     }
 
+  implicit def orderingUQ[Q, N](implicit order: Order[UnittedQuantity[Q, N]]): Ordering[UnittedQuantity[Q, N]] = 
+    order.toOrdering
+
   // ({ type λ[α] = UnittedQuantity[Q, α] })#λ
   implicit def functorUQ[Q, A, B]: Functor[UnittedQuantity[Q, A], A, B, UnittedQuantity[Q, B]] =
     new Functor[UnittedQuantity[Q, A], A, B, UnittedQuantity[Q, B]] {

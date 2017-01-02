@@ -2,20 +2,31 @@ package axle.game.poker
 
 import axle.game.cards._
 import cats.kernel.Order
-import axle.orderToOrdering
 import cats.Show
 import axle.string
 
 object PokerHandCategory {
 
-  implicit object PokerHandCategoryOrder extends Order[PokerHandCategory] {
+  implicit val orderPokerHandCategory = new Order[PokerHandCategory] {
     def compare(a: PokerHandCategory, b: PokerHandCategory): Int =
       a.asInt.compare(b.asInt)
   }
 
-  val categories = Vector(High, Pair, TwoPair, ThreeOfAKind, Straight, Flush, FullHouse, FourOfAKind, StraightFlush, RoyalFlush).sorted
+  implicit val orderingPokerHandCategory = orderPokerHandCategory.toOrdering
 
-  implicit def showPHC: Show[PokerHandCategory] = new Show[PokerHandCategory] {
+  val categories = Vector(
+    High,
+    Pair,
+    TwoPair,
+    ThreeOfAKind,
+    Straight,
+    Flush,
+    FullHouse,
+    FourOfAKind,
+    StraightFlush,
+    RoyalFlush).sorted
+
+  implicit val showPHC: Show[PokerHandCategory] = new Show[PokerHandCategory] {
     def show(phc: PokerHandCategory): String = phc.name
   }
 

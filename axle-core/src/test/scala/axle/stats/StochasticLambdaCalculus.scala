@@ -4,9 +4,9 @@ import org.scalatest._
 
 import axle.game.Dice.die
 import axle.algebra.Σ
-import axle.spireToCatsOrder
 import spire.math.Rational
 import cats.implicits._
+import axle.orderRational
 
 class StochasticLambdaCalculus extends FunSuite with Matchers {
 

@@ -5,9 +5,10 @@ import org.scalatest._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.algebra.modules.doubleRationalModule
-import spire.implicits.DoubleAlgebra
 import axle.jung.directedGraphJung
+import spire.implicits.DoubleAlgebra
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
 
 class TrigonometrySpec extends FunSuite with Matchers {
 

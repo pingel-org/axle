@@ -2,7 +2,7 @@ package axle.game
 
 import axle.stats._
 import spire.math.Rational
-import axle.spireToCatsOrder
+import axle.orderRational
 import cats.implicits._
 
 object OldMontyHall {

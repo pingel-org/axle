@@ -8,10 +8,9 @@ import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
-import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung.directedGraphJung
-import axle.orderToOrdering
-import axle.spireToCatsEq
+import axle.eqRational
+import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
 
 class QuantaSpec extends FunSuite with Matchers {

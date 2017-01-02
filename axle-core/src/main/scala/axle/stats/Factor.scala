@@ -2,7 +2,6 @@ package axle.stats
 
 import axle.IndexedCrossProduct
 import axle.algebra.LinearAlgebra
-import axle.orderToOrdering
 import axle.string
 import cats.Show
 import cats.implicits.catsKernelStdOrderForString
@@ -68,6 +67,8 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
     val values: Map[Vector[CaseIs[T, N]], N]) {
 
   val field = Field[N]
+
+  implicit lazy val orderingN = Order[N].toOrdering
 
   lazy val crossProduct = IndexedCrossProduct(varList.map(_.values))
 
