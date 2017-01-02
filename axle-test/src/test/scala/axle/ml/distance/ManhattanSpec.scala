@@ -30,7 +30,12 @@ class ManhattanSpec
     def apply(a: Int) = true
   }
 
-  implicit val spireEqDoubleMatrix = cats.kernel.Eq[DoubleMatrix].asInstanceOf[spire.algebra.Eq[DoubleMatrix]]
+  // TODO spire conversion
+  implicit val spireEqDoubleMatrix =
+    new spire.algebra.Eq[DoubleMatrix] {
+      val catsEq = cats.kernel.Eq[DoubleMatrix]
+      def eqv(x: DoubleMatrix, y: DoubleMatrix): Boolean = catsEq.eqv(x, y)
+    }
 
   checkAll(s"Manhattan space on ${m}x${n} matrix",
     VectorSpaceLaws[DoubleMatrix, Int].metricSpace)

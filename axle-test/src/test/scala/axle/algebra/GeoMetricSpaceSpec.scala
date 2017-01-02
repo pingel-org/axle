@@ -48,17 +48,32 @@ class GeoMetricSpaceSpec
 
   val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
 
+  // TODO spire conversion
   implicit val eqgcr: spire.algebra.Eq[GeoCoordinates[Real]] =
-    Eq[GeoCoordinates[Real]].asInstanceOf[spire.algebra.Eq[GeoCoordinates[Real]]]
+    new spire.algebra.Eq[GeoCoordinates[Real]] {
+      val eqGeoReal = Eq[GeoCoordinates[Real]]
+      def eqv(x: GeoCoordinates[Real], y: GeoCoordinates[Real]): Boolean =
+        eqGeoReal.eqv(x, y)
+    }
 
   implicit val arbCoords: Arbitrary[GeoCoordinates[Real]] =
     Arbitrary(genCoords)
 
+  // TODO spire conversion
   implicit val ova: spire.algebra.Order[UnittedQuantity[Angle, Real]] =
-    cats.kernel.Order[UnittedQuantity[Angle, Real]].asInstanceOf[spire.algebra.Order[UnittedQuantity[Angle, Real]]]
+    new spire.algebra.Order[UnittedQuantity[Angle, Real]] {
+      val catsOrderUQAngleReal = cats.kernel.Order[UnittedQuantity[Angle, Real]]
+      def compare(x: UnittedQuantity[Angle, Real], y: UnittedQuantity[Angle, Real]): Int =
+        catsOrderUQAngleReal.compare(x, y)
+    }
 
+  // TODO spire conversion
   implicit val equaqr: spire.algebra.Eq[UnittedQuantity[Angle, Real]] =
-    Eq[UnittedQuantity[Angle, Real]].asInstanceOf[spire.algebra.Eq[UnittedQuantity[Angle, Real]]]
+    new spire.algebra.Eq[UnittedQuantity[Angle, Real]] {
+      val eqUQAngleReal = Eq[UnittedQuantity[Angle, Real]]
+      def eqv(x: UnittedQuantity[Angle, Real], y: UnittedQuantity[Angle, Real]): Boolean =
+        eqUQAngleReal.eqv(x, y)
+    }
 
   implicit val arbAngle: Arbitrary[UnittedQuantity[Angle, Real]] =
     Arbitrary(genAngle)
