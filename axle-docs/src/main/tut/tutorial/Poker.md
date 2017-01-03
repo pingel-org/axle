@@ -17,8 +17,6 @@ Imports
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
 
-import spire.implicits._
-
 import axle.game.cards.Deck
 import axle.game.poker.PokerHand
 import axle.game.poker.PokerHandCategory
@@ -55,7 +53,7 @@ val data: IndexedSeq[(PokerHandCategory, Int)] =
 BarChartGrouped to visualize the results
 
 ```tut:book
-// import spire.implicits.IntAlgebra
+import spire.implicits.IntAlgebra
 import axle.visualize.BarChartGrouped
 
 val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]](
