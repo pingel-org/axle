@@ -13,6 +13,13 @@ import java.util.Date
 import scala.Vector
 
 import com.jogamp.opengl.GL2
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+
+import cats.implicits._
+
+import spire.implicits.FloatAlgebra
+import spire.implicits.additiveGroupOps
+import spire.implicits.moduleOps
 
 import axle.algebra.GeoCoordinates
 import axle.algebra.SphericalVector
@@ -22,10 +29,6 @@ import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.FloatAlgebra
-import spire.implicits.additiveGroupOps
-import spire.implicits.moduleOps
 
 import axle.jogl._
 import Color._

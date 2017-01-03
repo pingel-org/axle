@@ -14,13 +14,17 @@ Time-series plot example
 Imports
 
 ```tut:silent
-import axle._
-import axle.visualize._
 import org.joda.time.DateTime
-import spire.compat.ordering
+
 import scala.collection.immutable.TreeMap
 import scala.math.sin
 import scala.util.Random.nextDouble
+
+import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
+
+import axle._
+import axle.visualize._
 import axle.joda.dateTimeOrder
 ```
 

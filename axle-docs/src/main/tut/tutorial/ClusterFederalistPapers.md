@@ -90,9 +90,9 @@ val classifier = KMeans[Article, List[Article], List[Seq[Double]], DoubleMatrix]
 Show cluster vs author in a confusion matrix:
 
 ```tut:silent
+import cats.implicits._
 import axle.ml.ConfusionMatrix
-import spire.implicits.IntAlgebra
-import axle.orderStrings
+//import spire.implicits.IntAlgebra
 import axle.string
 ```
 

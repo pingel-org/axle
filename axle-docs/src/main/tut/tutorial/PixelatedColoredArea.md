@@ -16,8 +16,11 @@ Example
 A few imports:
 
 ```tut:silent
-import axle._
+import cats.implicits._
+
 import spire.implicits.DoubleAlgebra
+
+import axle._
 import axle.visualize._
 ```
 

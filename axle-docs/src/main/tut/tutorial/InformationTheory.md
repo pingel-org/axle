@@ -13,15 +13,19 @@ as well as the traditional `H`:
 Imports and implicits
 
 ```tut:book:silent
-import axle._
-import axle.stats._
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+
+import cats.implicits._
+
 import spire.math._
 import spire.algebra._
-import axle.quanta.Information
 import spire.implicits.DoubleAlgebra
+
+import axle._
+import axle.stats._
+import axle.quanta.Information
 import axle.algebra.modules.doubleRationalModule
 import axle.jung.directedGraphJung
-import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.quanta.UnitOfMeasurement
 import axle.game.Dice.die
 

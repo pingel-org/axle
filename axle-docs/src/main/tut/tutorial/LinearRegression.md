@@ -24,8 +24,10 @@ val listings = List(
 Create a price estimator using linear regression.
 
 ```tut:book
-import axle.jblas._
+import cats.implicits._
 import spire.implicits.DoubleAlgebra
+import axle.jblas._
+
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 
 import axle.ml.LinearRegression

@@ -30,11 +30,14 @@ val events = List(
 Build a classifier to predict the Boolean feature 'play' given all the other features of the observations
 
 ```tut:silent
+import cats.implicits._
+
+import spire.algebra._
+import spire.math._
+
 import axle._
 import axle.stats._
 import axle.ml.NaiveBayesClassifier
-import spire.algebra._
-import spire.math._
 ```
 
 ```tut:book

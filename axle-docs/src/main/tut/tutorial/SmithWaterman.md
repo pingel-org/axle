@@ -13,12 +13,17 @@ Example
 Imports and implicits
 
 ```tut:book:silent
+import org.jblas.DoubleMatrix
+
+import cats.implicits._
+
+import spire.implicits.IntAlgebra
+
 import axle.bio._
 import SmithWatermanDefaults._
 import SmithWaterman.optimalAlignment
-import spire.implicits.IntAlgebra
+
 implicit val laJblasInt = axle.jblas.linearAlgebraDoubleMatrix[Int]
-import org.jblas.DoubleMatrix
 ```
 
 Setup
