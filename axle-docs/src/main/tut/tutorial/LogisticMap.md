@@ -9,10 +9,11 @@ See the wikipedia page on [Logistic Map](https://en.wikipedia.org/wiki/Logistic_
 Create data for a range of the logistic map function
 
 ```tut:book
-import axle._
+import math.abs
 import spire.implicits.DoubleAlgebra
+import axle.{logisticMap, orbit, applyK}
 
-def doubleClose(z: Double)(y: Double) = math.abs(z - y) < 1e-6
+def doubleClose(z: Double)(y: Double) = abs(z - y) < 1e-6
 
 val functions = (2.9 to 4.0 by 0.001).map(λ => λ -> logisticMap(λ))
 
@@ -25,9 +26,10 @@ val scatter = for {
 Define a scatterplot visualization
 
 ```tut:book
+import cats.implicits._
 import axle.visualize._
 
-val sp = ScatterPlot(scatter.toSet, pointDiameter=1)
+val sp = ScatterPlot[Double, Double, Set[(Double, Double)]](scatter.toSet, pointDiameter=1)
 ```
 
 Create the SVG
