@@ -7,12 +7,13 @@ permalink: /tutorial/geo_coordinates/
 Imports and implicits
 
 ```tut:silent
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
+import spire.implicits.DoubleAlgebra
 import axle._
 import axle.quanta._
 import axle.algebra.GeoCoordinates
 import axle.jung.directedGraphJung
-import spire.implicits.DoubleAlgebra
-import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.algebra.modules.doubleRationalModule
 
 implicit val angleConverter = Angle.converterGraphK2[Double, DirectedSparseGraph]

@@ -15,7 +15,7 @@ Imports
 import axle._
 import axle.lx._
 import Angluin._
-import spire.implicits._
+import cats.implicits._
 ```
 
 Setup

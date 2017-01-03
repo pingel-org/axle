@@ -12,16 +12,15 @@ Directed Graph
 Imports and implicits
 
 ```tut:book:silent
+import cats.implicits._
+import cats.Show
 import axle._
 import axle.algebra._
 import axle.jung._
 import axle.syntax.directedgraph.directedGraphOps
 import axle.syntax.undirectedgraph.undirectedGraphOps
-import spire.implicits.StringOrder
-import spire.implicits.eqOps
 import axle.syntax.finite.finiteOps
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import cats.Show
 
 class Edge
 implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }

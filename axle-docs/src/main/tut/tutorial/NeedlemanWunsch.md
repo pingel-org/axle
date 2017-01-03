@@ -13,8 +13,9 @@ Example
 Setup:
 
 ```tut:book:silent
-import axle.bio._
 import org.jblas.DoubleMatrix
+import cats.implicits._
+import axle.bio._
 import NeedlemanWunsch.alignmentScore
 import NeedlemanWunsch.optimalAlignment
 import NeedlemanWunschDefaults._

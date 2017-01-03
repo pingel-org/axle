@@ -14,6 +14,9 @@ The `axle.game.cards` package models decks, cards, ranks, suits, and ordering.
 Imports
 
 ```tut:silent
+import cats.implicits._
+import cats.Order.catsKernelOrderingForOrder
+
 import axle.game.cards.Deck
 import axle.game.poker.PokerHand
 import axle.game.poker.PokerHandCategory
@@ -23,8 +26,6 @@ import axle.string
 Define a function that takes the hand size and returns the best 5-card hand
 
 ```tut:book
-import spire.compat.ordering
-
 def winnerFromHandSize(handSize: Int) =
   Deck().cards.take(handSize).combinations(5).map(PokerHand(_)).toList.max
 
@@ -54,7 +55,6 @@ BarChartGrouped to visualize the results
 ```tut:book
 import spire.implicits.IntAlgebra
 import axle.visualize.BarChartGrouped
-import axle.showInt
 
 val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]](
   data.tally.withDefaultValue(0),

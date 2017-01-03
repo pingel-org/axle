@@ -28,12 +28,13 @@ This package uses the definition of "Quantum" as "something that can
 be quantified or measured".
 
 ```tut:silent
-import axle._
-import axle.quanta._
-import axle.jung.directedGraphJung
+import cats.implicits._
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.moduleOps
+import axle._
+import axle.quanta._
+import axle.jung.directedGraphJung
 ```
 
 Quanta each define a Wikipedia link where you can find out more
@@ -46,11 +47,11 @@ Distance().wikipediaUrl
 A visualization of each Quantum (like the one for Distance shown above) is produced with:
 
 ```tut:silent
-import axle.algebra.modules.doubleRationalModule
-import spire.implicits.DoubleAlgebra
-import axle.jung.directedGraphJung
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.Show
+import spire.implicits.DoubleAlgebra
+import axle.algebra.modules.doubleRationalModule
+import axle.jung.directedGraphJung
 
 implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
 

@@ -9,8 +9,9 @@ See the wikipedia page on the [Mandelbrot Set](https://en.wikipedia.org/wiki/Man
 First a couple imports:
 
 ```tut:silent
-import axle._
+import cats.implicits._
 import spire.implicits.DoubleAlgebra
+import axle._
 ```
 
 Define a function to compute the Mandelbrot velocity at point on the plane `(x, y)`

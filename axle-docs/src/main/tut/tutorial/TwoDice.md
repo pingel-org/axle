@@ -12,8 +12,11 @@ Simulation
 Imports
 
 ```tut:silent
+import cats.implicits._
+
 import spire.math._
 import spire.algebra._
+
 import axle._
 import axle.stats._
 import axle.game.Dice._
@@ -69,6 +72,9 @@ Imports (Note: documentation resets interpreter here)
 ```tut:silent:reset
 import spire.math._
 import spire.algebra._
+
+import cats.implicits._
+
 import axle._
 import axle.stats._
 import axle.game.Dice.die

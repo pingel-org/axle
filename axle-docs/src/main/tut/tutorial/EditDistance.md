@@ -14,14 +14,17 @@ See the Wikipedia page on [Levenshtein distance](https://en.wikipedia.org/wiki/L
 Imports and implicits
 
 ```tut:book:silent
+import org.jblas.DoubleMatrix
+
+import cats.implicits._
+
+import spire.implicits.IntAlgebra
+import spire.implicits.CharAlgebra
+
 import axle._
 import axle.nlp._
 import axle.nlp.Levenshtein
-import spire.implicits.IntAlgebra
-import spire.implicits.CharAlgebra
-import org.jblas.DoubleMatrix
 import axle.jblas._
-import spire.algebra.Eq
 
 implicit val laJblasInt = linearAlgebraDoubleMatrix[Int]
 implicit val space = Levenshtein[IndexedSeq[Char], Char, DoubleMatrix, Int]()

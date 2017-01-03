@@ -12,11 +12,12 @@ Example
 Imports
 
 ```tut:silent
+import util.Random.nextDouble
+import util.Random.nextInt
 import shapeless._
 import syntax.singleton._
 import record._
-import util.Random.nextDouble
-import util.Random.nextInt
+import cats.implicits._
 import axle.ml._
 ```
 

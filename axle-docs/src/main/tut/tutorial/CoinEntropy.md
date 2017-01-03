@@ -9,14 +9,13 @@ Visualize the relationship of a coin's bias to its entropy with this code snippe
 Imports and implicits:
 
 ```tut:book:silent
+import scala.collection.immutable.TreeMap
+import cats.implicits._
+import spire.math.Rational
 import axle._
 import axle.stats._
-import spire.math._
-import spire.algebra._
 import axle.quanta.Information
-import scala.collection.immutable.TreeMap
 import axle.quanta.UnittedQuantity
-import spire.math.Rational
 
 type D = TreeMap[Rational, UnittedQuantity[Information, Double]]
 

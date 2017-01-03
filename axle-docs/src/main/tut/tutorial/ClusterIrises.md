@@ -14,6 +14,7 @@ A demonstration of k-Means Clustering using the [Iris flower data set](https://e
 Imports for Distance quanta
 
 ```tut:book:silent
+import cats.implicits._
 import axle._
 import axle.quanta.Distance
 import axle.jung.directedGraphJung
@@ -82,7 +83,6 @@ Produce a "confusion matrix"
 ```tut:silent
 import axle.ml.ConfusionMatrix
 import spire.implicits.IntAlgebra
-import axle.orderStrings
 ```
 
 ```tut:book
