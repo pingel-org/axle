@@ -13,15 +13,16 @@ Alarm Example
 Imports
 
 ```tut:book:silent
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
+import spire.math._
+import spire.implicits._
 import axle._
 import axle.algebra.DirectedGraph
 import axle.stats._
 import axle.pgm._
-import spire.math._
-import spire.implicits._
 import axle.jblas._
 import axle.jung.directedGraphJung
-import edu.uci.ics.jung.graph.DirectedSparseGraph
 ```
 
 Setup

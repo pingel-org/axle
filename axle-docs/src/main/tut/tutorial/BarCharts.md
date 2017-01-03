@@ -22,10 +22,9 @@ val sales = Map(
 Define a bar chart visualization
 
 ```tut:book
-import spire.implicits.DoubleAlgebra
-import spire.implicits.StringOrder
 import axle.visualize.BarChart
-import axle.showString
+import spire.implicits.DoubleAlgebra
+import cats.implicits._
 
 val chart = BarChart[String, Double, Map[String, Double]](
   sales,
