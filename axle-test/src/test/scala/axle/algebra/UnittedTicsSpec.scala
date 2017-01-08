@@ -40,9 +40,6 @@ class UnittedTicsSpec extends FunSuite with Matchers {
 
     val vieq = Eq[Vector[(UnittedQuantity[Information, Double], String)]]
 
-    println("+++ tics     = " + tics)
-    println("+++ expected = " + expected)
-
     // tics must be equalTo expected
     vieq.eqv(tics, expected) should be(true)
   }
