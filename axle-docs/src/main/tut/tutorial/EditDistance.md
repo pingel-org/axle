@@ -19,7 +19,6 @@ import org.jblas.DoubleMatrix
 import cats.implicits._
 
 import spire.implicits.IntAlgebra
-import spire.implicits.CharAlgebra
 
 import axle._
 import axle.nlp._
