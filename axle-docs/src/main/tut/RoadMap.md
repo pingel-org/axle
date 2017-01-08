@@ -4,10 +4,8 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.7 (December 2016)
-* Depend on Spire 0.13.0 (which depends on Typelevel Algebra)
-* Use cats-kernel's Eq and Order in favor of Spire's
-# Convert tests to use scalatest (to match Cats and Spire)
+## 0.2.8 (January 2016)
+* Depend on Spire 0.13.1 (which depends on Typelevel Algebra)
 
 ## 0.2.8 (January 2017)
 * Fix Logistic regression
@@ -163,3 +161,7 @@ Previous Milestones
 * Implementation of Monty Hall using axle.game typeclasses
 * Implementaiton of Prisoner's Dilemma using axle.game typeclasses
 * Minor Poker fixes
+
+## 0.2.7 (January 2016)
+* Use cats-kernel's Eq and Order in favor of Spire's (with Shims to continue to work with Spire)
+# Convert tests to use scalatest (to match Cats and Spire)
