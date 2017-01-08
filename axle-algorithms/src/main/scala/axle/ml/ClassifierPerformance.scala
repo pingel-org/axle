@@ -1,12 +1,13 @@
 package axle.ml
 
 import cats.Show
+import cats.implicits._
+import spire.algebra.Field
+import spire.implicits._
 import axle.algebra.Σ
 import axle.algebra.Aggregatable
 import axle.algebra.Functor
 import axle.syntax.functor._
-import spire.implicits._
-import spire.algebra._
 
 /**
  * ClassifierPerformance computes measures of classification performance
@@ -51,7 +52,7 @@ case class ClassifierPerformance[N, DATA, F, G](
     }
   }
 
-  val (tp, fp, tn, fn) = Σ[(N, N, N, N), G](scores)
+  val (tp, fp, tn, fn): (N, N, N, N) = Σ[(N, N, N, N), G](scores)
 
   val precision: N = tp / (tp + fp)
 

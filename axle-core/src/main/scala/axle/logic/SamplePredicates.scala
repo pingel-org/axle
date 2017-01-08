@@ -9,73 +9,124 @@ object SamplePredicates {
   val Y: Set[Any] = Set(4, 5, 6)
   val Z: Set[Any] = Set(7, 8, 9)
 
-  case class A(symbols: Symbol*) extends Predicate {
+  case class A(symbols: List[Symbol]) extends Predicate {
     def name: String = "A"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class B(symbols: Symbol*) extends Predicate {
+  object A {
+    def apply(symbols: Symbol*): A = A(symbols.toList)
+  }
+  case class B(symbols: List[Symbol]) extends Predicate {
     def name: String = "B"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class C(symbols: Symbol*) extends Predicate {
+  object B {
+    def apply(symbols: Symbol*): B = B(symbols.toList)
+  }
+  case class C(symbols: List[Symbol]) extends Predicate {
     def name: String = "C"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class D(symbols: Symbol*) extends Predicate {
+  object C {
+    def apply(symbols: Symbol*): C = C(symbols.toList)
+  }
+  case class D(symbols: List[Symbol]) extends Predicate {
     def name: String = "D"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class E(symbols: Symbol*) extends Predicate {
+  object D {
+    def apply(symbols: Symbol*): D = D(symbols.toList)
+  }
+  case class E(symbols: List[Symbol]) extends Predicate {
     def name: String = "E"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class F(symbols: Symbol*) extends Predicate {
+  object E {
+    def apply(symbols: Symbol*): E = E(symbols.toList)
+  }
+  case class F(symbols: List[Symbol]) extends Predicate {
     def name: String = "F"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class G(symbols: Symbol*) extends Predicate {
+  object F {
+    def apply(symbols: Symbol*): F = F(symbols.toList)
+  }
+  case class G(symbols: List[Symbol]) extends Predicate {
     def name: String = "G"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class H(symbols: Symbol*) extends Predicate {
+  object G {
+    def apply(symbols: Symbol*): G = G(symbols.toList)
+  }
+  case class H(symbols: List[Symbol]) extends Predicate {
     def name: String = "H"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class M(symbols: Symbol*) extends Predicate {
+  object H {
+    def apply(symbols: Symbol*): H = H(symbols.toList)
+  }
+  case class M(symbols: List[Symbol]) extends Predicate {
     def name: String = "M"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class N(symbols: Symbol*) extends Predicate {
+  object M {
+    def apply(symbols: Symbol*): M = M(symbols.toList)
+  }
+  case class N(symbols: List[Symbol]) extends Predicate {
     def name: String = "N"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class P(symbols: Symbol*) extends Predicate {
+  object N {
+    def apply(symbols: Symbol*): N = N(symbols.toList)
+  }
+  case class P(symbols: List[Symbol]) extends Predicate {
     def name: String = "P"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class Q(symbols: Symbol*) extends Predicate {
+  object P {
+    def apply(symbols: Symbol*): P = P(symbols.toList)
+  }
+  case class Q(symbols: List[Symbol]) extends Predicate {
     def name: String = "Q"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class R(symbols: Symbol*) extends Predicate {
+  object Q {
+    def apply(symbols: Symbol*): Q = Q(symbols.toList)
+  }
+  case class R(symbols: List[Symbol]) extends Predicate {
     def name: String = "R"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class S(symbols: Symbol*) extends Predicate {
+  object R {
+    def apply(symbols: Symbol*): R = R(symbols.toList)
+  }
+  case class S(symbols: List[Symbol]) extends Predicate {
     def name: String = "S"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class T(symbols: Symbol*) extends Predicate {
+  object S {
+    def apply(symbols: Symbol*): S = S(symbols.toList)
+  }
+  case class T(symbols: List[Symbol]) extends Predicate {
     def name: String = "T"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class U(symbols: Symbol*) extends Predicate {
+  object T {
+    def apply(symbols: Symbol*): T = T(symbols.toList)
+  }
+  case class U(symbols: List[Symbol]) extends Predicate {
     def name: String = "U"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
   }
-  case class W(symbols: Symbol*) extends Predicate {
+  object U {
+    def apply(symbols: Symbol*): U = U(symbols.toList)
+  }
+  case class W(symbols: List[Symbol]) extends Predicate {
     def name: String = "W"
     def apply(symbolTable: Map[Symbol, Any]): Boolean = true
+  }
+  object W {
+    def apply(symbols: Symbol*): W = W(symbols.toList)
   }
 
 }

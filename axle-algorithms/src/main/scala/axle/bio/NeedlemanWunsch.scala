@@ -5,7 +5,18 @@ import scala.Stream.empty
 import scala.Vector
 import scala.reflect.ClassTag
 
-import NeedlemanWunsch.computeF
+import cats.kernel.Order
+import cats.kernel.Eq
+import cats.Order.catsKernelOrderingForOrder
+import cats.implicits._
+import spire.algebra.AdditiveMonoid
+import spire.algebra.MetricSpace
+import spire.algebra.Module
+import spire.algebra.Ring
+import spire.implicits.additiveGroupOps
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.moduleOps
+//import spire.implicits.partialOrderOps
 import axle.algebra.Aggregatable
 import axle.algebra.AggregatableK1
 import axle.algebra.Finite
@@ -23,18 +34,8 @@ import axle.syntax.finite.finiteOps
 import axle.syntax.functor.functorOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
-import spire.algebra.AdditiveMonoid
-import spire.algebra.MetricSpace
-import spire.algebra.Module
-import spire.algebra.Ring
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
-import spire.implicits.moduleOps
-import spire.implicits.partialOrderOps
-import cats.kernel.Order
-import cats.kernel.Eq
-import cats.Order.catsKernelOrderingForOrder
-import cats.implicits._
+
+import NeedlemanWunsch.computeF
 
 /**
  *

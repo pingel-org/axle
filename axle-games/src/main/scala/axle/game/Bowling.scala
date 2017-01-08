@@ -1,9 +1,9 @@
 package axle.game
 
-import axle.stats._
-import axle.orderRational
+import cats.implicits._
 import spire.math.Rational
 import spire.implicits._
+import axle.stats._
 
 object Bowling {
 

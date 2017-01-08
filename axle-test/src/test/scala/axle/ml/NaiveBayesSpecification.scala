@@ -2,12 +2,11 @@ package axle.ml
 
 import org.scalatest._
 
+import cats.implicits._
+import spire.math.Rational
 import axle.string
 import axle.stats.UnknownDistribution0
 import axle.stats.rationalProbabilityDist
-import axle.orderRational
-import spire.math.Rational
-import cats.implicits._
 
 class NaiveBayesSpecification extends FunSuite with Matchers {
 

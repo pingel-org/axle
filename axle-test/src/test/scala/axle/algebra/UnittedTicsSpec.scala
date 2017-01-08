@@ -4,13 +4,13 @@ import scala.Vector
 
 import org.scalatest._
 
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.kernel.Eq
+import cats.implicits._
+import spire.implicits.DoubleAlgebra
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.jung.directedGraphJung
-import cats.kernel.Eq
-import spire.implicits._
-import cats.implicits._
-import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 class UnittedTicsSpec extends FunSuite with Matchers {
 

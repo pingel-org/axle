@@ -50,7 +50,7 @@ import spire.implicits.semiringOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.math.Rational
-import spire.math.Real
+// import spire.math.Real
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.AngleConverter
@@ -74,23 +74,13 @@ package object axle {
 
   implicit val showSymbol: Show[Symbol] = Show.fromToString[Symbol]
 
+  implicit val eqSymbol: Eq[Symbol] = Eq.fromUniversalEquals[Symbol]
+
   implicit val showBD: Show[BigDecimal] = Show.fromToString[BigDecimal]
 
   implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
-
-  implicit val eqRational: Eq[Rational] =
-    Eq.instance(spire.algebra.Eq[Rational].eqv)
-
-  implicit val orderRational: Order[Rational] =
-    Order.from(spire.algebra.Order[Rational].compare)
-
-  implicit val eqReal: Eq[Real] =
-    Eq.instance(spire.algebra.Eq[Real].eqv)
-
-  implicit val orderReal: Order[Real] =
-    Order.from(spire.algebra.Order[Real].compare)
 
   implicit val orderSymbol: Order[Symbol] =
     Order.from((x: Symbol, y: Symbol) => Order[String].compare(string(x), string(y)))
@@ -331,25 +321,25 @@ package object axle {
 
   def √[N: NRoot](x: N): N = x.sqrt
 
-  implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
-    def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
-  }
-
-  implicit def eqIndexedSeq[T: Eq]: Eq[IndexedSeq[T]] = new Eq[IndexedSeq[T]] {
-    def eqv(x: IndexedSeq[T], y: IndexedSeq[T]): Boolean = {
-      val lhs = (x.size == y.size)
-      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
-      lhs && rhs
-    }
-  }
-
-  implicit def eqSeq[T: Eq]: Eq[Seq[T]] = new Eq[Seq[T]] {
-    def eqv(x: Seq[T], y: Seq[T]): Boolean = {
-      val lhs = (x.size == y.size)
-      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
-      lhs && rhs
-    }
-  }
+//  implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
+//    def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
+//  }
+//
+//  implicit def eqIndexedSeq[T: Eq]: Eq[IndexedSeq[T]] = new Eq[IndexedSeq[T]] {
+//    def eqv(x: IndexedSeq[T], y: IndexedSeq[T]): Boolean = {
+//      val lhs = (x.size == y.size)
+//      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
+//      lhs && rhs
+//    }
+//  }
+//
+//  implicit def eqSeq[T: Eq]: Eq[Seq[T]] = new Eq[Seq[T]] {
+//    def eqv(x: Seq[T], y: Seq[T]): Boolean = {
+//      val lhs = (x.size == y.size)
+//      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
+//      lhs && rhs
+//    }
+//  }
 
   def string[T: Show](t: T): String = Show[T].show(t)
 

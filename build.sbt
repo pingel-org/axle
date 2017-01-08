@@ -5,7 +5,7 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import ScoverageSbtPlugin._
 
-lazy val spireVersion = "0.13.0"
+lazy val spireVersion = "0.13.1-SNAPSHOT"
 lazy val shapelessVersion = "2.3.2"
 lazy val catsVersion = "0.8.1" // must match spire's algebra's catsVersion
 lazy val disciplineVersion = "0.7.2"
@@ -33,8 +33,8 @@ lazy val scoverageSettings = Seq(
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
   scalaVersion := "2.11.8",
-  //crossScalaVersions := Seq("2.10.6", "2.11.8")
-  crossScalaVersions := Seq("2.11.8")
+  //crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0")
+  crossScalaVersions := Seq("2.12.0")
 )
 
 lazy val axleDoctestSettings = Seq(

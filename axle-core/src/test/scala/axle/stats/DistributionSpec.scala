@@ -2,7 +2,6 @@ package axle.stats
 
 import spire.math.Rational
 import org.scalatest._
-import axle.orderRational
 
 class DistributionSpec extends FunSuite with Matchers {
 

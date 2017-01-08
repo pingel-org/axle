@@ -1,12 +1,11 @@
 package axle.pgm
 
-import axle.stats._
-import spire.math._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.jung.directedGraphJung
 import org.scalatest._
-import axle.orderRational
 import cats.implicits._
+import spire.math._
+import axle.stats._
+import axle.jung.directedGraphJung
 
 class ConditionalProbabilityTableSpecification
     extends FunSuite with Matchers {

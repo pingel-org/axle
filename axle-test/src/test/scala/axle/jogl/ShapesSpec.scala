@@ -5,7 +5,9 @@ import org.scalatest._
 import java.util.Date
 
 import com.jogamp.opengl.GL2
-
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import java.nio.file.Paths
+import spire.implicits._
 import axle.algebra.GeoCoordinates
 import axle.algebra.SphericalVector
 import axle.algebra.modules.floatDoubleModule
@@ -13,10 +15,6 @@ import axle.algebra.modules.floatRationalModule
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import java.nio.file.Paths
-import spire.implicits._
-import cats.implicits._
 
 class ShapesSpec extends FunSuite with Matchers {
 

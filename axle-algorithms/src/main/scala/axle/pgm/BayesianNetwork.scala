@@ -3,6 +3,14 @@ package axle.pgm
 import scala.Stream.cons
 import scala.Stream.empty
 
+import cats.kernel.Eq
+import cats.kernel.Order
+import cats.implicits._
+
+import spire.algebra.Field
+// import spire.implicits.multiplicativeSemigroupOps
+import spire.math.ConvertableFrom
+
 import axle.algebra.DirectedGraph
 import axle.algebra.UndirectedGraph
 import axle.stats.CaseIs
@@ -10,14 +18,8 @@ import axle.stats.Distribution
 import axle.stats.Independence
 import axle.stats.Factor
 import axle.algebra.Π
-import spire.algebra.Field
-import spire.implicits.multiplicativeSemigroupOps
-import spire.math.ConvertableFrom
 import axle.syntax.directedgraph._
 import axle.syntax.undirectedgraph._
-import cats.kernel.Eq
-import cats.kernel.Order
-import cats.implicits._
 
 class Edge
 
@@ -315,11 +317,12 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
     case fi :: Nil => fi.projectToOnly(Q.toVector)
 
-    case fi :: fj :: rest =>
-      _factorElimination1(Q,
-        rest ++ List(fj * fi.sumOut(fi.variables
-          .filter(v => !Q.contains(v) && !S.exists(_.mentions(v)))
-          .toSet)))
+    case fi :: fj :: rest => {
+      implicit val mmFactorTN = Factor.factorMultMonoid[T, N]
+      val fiSummedOut: Factor[T, N] =
+        fi.sumOut(fi.variables.filter(v => !Q.contains(v) && !S.exists(_.mentions(v))).toSet)
+      _factorElimination1(Q, rest ++ List(mmFactorTN.times(fj, fiSummedOut)))
+    }
 
   }
 
@@ -340,7 +343,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
         val j = τ.graph.neighbors(i).iterator.next()
         val ɸ_i = i
         //τ.graph.delete(i)
-        // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables().toSet -- τ.getAllVariables().toSet))
+        // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables.toSet -- τ.getAllVariables.toSet))
       })
     }
     (???, f.projectToOnly(Q.toVector))

@@ -6,7 +6,6 @@ import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Distribution0
 import axle.stats.rationalProbabilityDist
 import spire.math.Rational
-import axle.orderRational
 
 object Dice {
 

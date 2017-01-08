@@ -2,6 +2,9 @@ package axle
 
 import org.scalatest._
 
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import spire.math.Rational
+import spire.implicits._
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.ConditionalProbabilityTable2
 import axle.stats.P
@@ -10,10 +13,7 @@ import axle.stats.entropy
 import axle.stats.rationalProbabilityDist
 import axle.quanta.Information
 import axle.jung.directedGraphJung
-import spire.math.Rational
-import spire.implicits._
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import cats.implicits._
+// import cats.implicits._
 
 class InformationTheorySpec extends FunSuite with Matchers {
 

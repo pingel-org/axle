@@ -13,7 +13,6 @@ import spire.math.Rational
 import spire.algebra.Ring
 import spire.implicits._
 import spire.random.Dist
-import axle.orderRational
 
 object Strategies {
 

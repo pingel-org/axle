@@ -7,7 +7,6 @@ import axle.algebra.laws.MonoidLaws
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MultiplicativeMonoid
 import spire.implicits.IntAlgebra
-import cats.implicits._
 
 class MonoidLawsSpec() extends FunSuite with Matchers with Discipline {
 

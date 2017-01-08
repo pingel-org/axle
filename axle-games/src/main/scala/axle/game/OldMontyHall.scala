@@ -1,9 +1,8 @@
 package axle.game
 
-import axle.stats._
-import spire.math.Rational
-import axle.orderRational
 import cats.implicits._
+import spire.math.Rational
+import axle.stats._
 
 object OldMontyHall {
 

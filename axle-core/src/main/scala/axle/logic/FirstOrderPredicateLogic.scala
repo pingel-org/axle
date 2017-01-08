@@ -1,11 +1,12 @@
 
 package axle.logic
 
+import scala.language.implicitConversions
 import cats.kernel.Eq
 import cats.implicits._
 import cats.Show
+import axle.eqSymbol
 import axle.string
-import scala.language.implicitConversions
 
 object FirstOrderPredicateLogic {
 
@@ -14,13 +15,7 @@ object FirstOrderPredicateLogic {
     (newSym, skolems + (newSym -> universally))
   }
 
-  implicit def symbolEq: Eq[Symbol] = new Eq[Symbol] {
-    def eqv(x: Symbol, y: Symbol): Boolean = x.equals(y)
-  }
-
   object Predicate {
-
-    import axle.eqSeq
 
     implicit val predicateEq = new Eq[Predicate] {
       def eqv(x: Predicate, y: Predicate): Boolean =
@@ -40,7 +35,7 @@ object FirstOrderPredicateLogic {
 
     outer =>
 
-    def symbols: Seq[Symbol]
+    def symbols: List[Symbol]
 
     def symbolSet: Set[Symbol] = symbols.toSet
 

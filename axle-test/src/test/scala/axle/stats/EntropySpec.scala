@@ -3,13 +3,11 @@ package axle.stats
 import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.Order.catsKernelOrderingForOrder
 import spire.math.Rational
 import spire.implicits.DoubleAlgebra
 import spire.implicits._
-import cats.Order.catsKernelOrderingForOrder
-import cats.implicits._
 import axle.jung.directedGraphJung
-import axle.eqRational
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 

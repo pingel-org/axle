@@ -6,6 +6,7 @@ import org.scalacheck.Gen
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
+import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.math.Real
 import spire.laws.VectorSpaceLaws
 // import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
@@ -13,11 +14,6 @@ import axle.jung.directedGraphJung
 import axle.quanta._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
-//import axle.eqReal
-import axle.orderReal
-
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import cats.kernel.Eq
 
 class GeoMetricSpaceSpec
     extends FunSuite with Matchers
@@ -48,32 +44,14 @@ class GeoMetricSpaceSpec
 
   val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
 
-  // TODO spire conversion
-  implicit val eqgcr: spire.algebra.Eq[GeoCoordinates[Real]] =
-    new spire.algebra.Eq[GeoCoordinates[Real]] {
-      val eqGeoReal = Eq[GeoCoordinates[Real]]
-      def eqv(x: GeoCoordinates[Real], y: GeoCoordinates[Real]): Boolean =
-        eqGeoReal.eqv(x, y)
-    }
+  implicit val eqgcr = cats.kernel.Eq[GeoCoordinates[Real]]
 
   implicit val arbCoords: Arbitrary[GeoCoordinates[Real]] =
     Arbitrary(genCoords)
 
-  // TODO spire conversion
-  implicit val ova: spire.algebra.Order[UnittedQuantity[Angle, Real]] =
-    new spire.algebra.Order[UnittedQuantity[Angle, Real]] {
-      val catsOrderUQAngleReal = cats.kernel.Order[UnittedQuantity[Angle, Real]]
-      def compare(x: UnittedQuantity[Angle, Real], y: UnittedQuantity[Angle, Real]): Int =
-        catsOrderUQAngleReal.compare(x, y)
-    }
+  implicit val ova = cats.kernel.Order[UnittedQuantity[Angle, Real]]
 
-  // TODO spire conversion
-  implicit val equaqr: spire.algebra.Eq[UnittedQuantity[Angle, Real]] =
-    new spire.algebra.Eq[UnittedQuantity[Angle, Real]] {
-      val eqUQAngleReal = Eq[UnittedQuantity[Angle, Real]]
-      def eqv(x: UnittedQuantity[Angle, Real], y: UnittedQuantity[Angle, Real]): Boolean =
-        eqUQAngleReal.eqv(x, y)
-    }
+  implicit val equaqr = cats.kernel.Eq[UnittedQuantity[Angle, Real]]
 
   implicit val arbAngle: Arbitrary[UnittedQuantity[Angle, Real]] =
     Arbitrary(genAngle)

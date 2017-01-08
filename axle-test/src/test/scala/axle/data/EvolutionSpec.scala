@@ -5,7 +5,6 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
 import spire.implicits._
-import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 import axle.quanta.Time
 import axle.algebra.modules.doubleRationalModule
