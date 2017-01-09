@@ -31,8 +31,8 @@ lazy val scoverageSettings = Seq(
 
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
-  scalaVersion := "2.12.0",
-  crossScalaVersions := Seq("2.11.8", "2.12.0")
+  scalaVersion := "2.11.8",
+  crossScalaVersions := Seq("2.11.8")
 )
 
 lazy val axleDoctestSettings = Seq(
