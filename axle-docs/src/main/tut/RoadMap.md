@@ -6,17 +6,17 @@ permalink: /road_map/
 
 ## 0.2.8 (January 2016)
 * Depend on Spire 0.13.1 (which depends on Typelevel Algebra)
+* Publish Scala 2.12 artifacts
 
-## 0.2.8 (January 2017)
+## 0.2.9 (January 2017)
 * Fix Logistic regression
 * Fix JodaTime Tics handling of timezones
-* Publish Scala 2.12 artifacts
-* Code coverage to ?%
 
-## 0.2.9 (February 2017)
+## 0.2.10 (February 2017)
+* Code coverage to ?%
 * Dependent types (Shapeless? Refined?) for matrix size
 
-## 0.2.10 (March 2017)
+## 0.2.11 (March 2017)
 * Reactive Streams for animating visualizations
 
 ## 0.3.0 (April 2017)
