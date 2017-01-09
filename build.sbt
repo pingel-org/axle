@@ -3,7 +3,7 @@ import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
-import ScoverageSbtPlugin._
+// import ScoverageSbtPlugin._
 
 lazy val spireVersion = "0.13.1-SNAPSHOT"
 lazy val shapelessVersion = "2.3.2"
@@ -25,9 +25,9 @@ lazy val akkaVersion = "2.4.7"
 lazy val akkaStreamVersion = "2.0.4"
 
 lazy val scoverageSettings = Seq(
-  ScoverageKeys.coverageMinimum := 10,
-  ScoverageKeys.coverageFailOnMinimum := false,
-  ScoverageKeys.coverageHighlighting := true
+  coverageMinimum := 10,
+  coverageFailOnMinimum := false,
+  coverageHighlighting := true
 )
 
 lazy val buildSettings = Seq(
