@@ -21,8 +21,7 @@ lazy val jacksonVersion = "2.8.4"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
 lazy val jogampVersion = "2.3.2"
-lazy val akkaVersion = "2.4.7"
-lazy val akkaStreamVersion = "2.0.4"
+lazy val akkaVersion = "2.4.14"
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 10,
@@ -207,7 +206,7 @@ lazy val axleVisualize = Project(
     "org.joda" % "joda-convert" % jodaConvertVersion % "provided",
     "org.jblas" % "jblas" % jblasVersion % "provided",
     "com.typesafe.akka" %% "akka-actor" % akkaVersion % "provided",
-    "com.typesafe.akka" %% "akka-stream-experimental" % akkaStreamVersion % "provided",
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion % "provided",
     "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion % "provided", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
     "org.jogamp.jogl" % "jogl-all-main" % jogampVersion % "provided"
   )
@@ -221,7 +220,7 @@ lazy val axleTest = Project(
   name := "axle-test",
   libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream-experimental" % akkaStreamVersion,
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
     "org.jblas" % "jblas" % jblasVersion,
     "joda-time" % "joda-time" % jodaTimeVersion,
     "org.joda" % "joda-convert" % jodaConvertVersion,
