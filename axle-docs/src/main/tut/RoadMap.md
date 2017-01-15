@@ -14,7 +14,7 @@ permalink: /road_map/
 
 ## 0.2.10 (February 2017)
 * Code coverage to ?%
-* Dependent types (Shapeless? Refined?) for matrix size
+* Dependent types (Shapeless? Refined? ValueOf SIP-23 in typelevel scala 2.11 and 2.12.2) for matrix size
 
 ## 0.2.11 (March 2017)
 * Reactive Streams for animating visualizations
