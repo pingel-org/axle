@@ -101,17 +101,46 @@ object SVG {
 
         val domain = dataView.dataToDomain(data)
 
-        domain.toList.flatMap {
-          case (x, y) => {
+        val circles = domain.toList.zipWithIndex.flatMap {
+          case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
             val color = dataView.colorOf(data, x, y)
             if (pointRadius > 0) {
-              <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+              dataView.labelOf(data, x, y) map {
+                case (label, permanent) =>
+                  if (permanent) {
+                    <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" }/>
+                  } else {
+                    <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" } onmousemove={ s"ShowTooltip(evt, $i)" } onmouseout={ s"HideTooltip(evt, $i)" }/>
+                  }
+              } getOrElse {
+                <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+              }
             } else {
               List.empty
             }
           }
         }
+
+        val labels = domain.toList.zipWithIndex.flatMap {
+          case ((x, y), i) => {
+            val center = scaledArea.framePoint(Point2D(x, y))
+            if (pointRadius > 0) {
+              dataView.labelOf(data, x, y) map {
+                case (label, permanent) =>
+                  if (permanent) {
+                    <text class="pointLabel" id={ "pointLabel" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="visible">{ label }</text>
+                  } else {
+                    <text class="pointLabel" id={ "tooltip" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="hidden">{ label }</text>
+                  }
+              }
+            } else {
+              List.empty
+            }
+          }
+        }
+
+        circles ++ labels
       }
     }
 
