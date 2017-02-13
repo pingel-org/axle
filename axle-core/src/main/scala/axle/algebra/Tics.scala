@@ -21,7 +21,8 @@ object Tics {
 
   implicit def doubleTics: Tics[Double] = new Tics[Double] {
 
-    def step(from: Double, to: Double): Double = pow(10, ceil(log10(abs(to - from))) - 1)
+    def step(from: Double, to: Double): Double =
+      pow(10, ceil(log10(abs(to - from)) - 0.3) - 1)
 
     def tics(from: Double, to: Double): Seq[(Double, String)] = {
       if ((from === to) || from.isNaN || from.isInfinity || to.isNaN || to.isInfinity) {
