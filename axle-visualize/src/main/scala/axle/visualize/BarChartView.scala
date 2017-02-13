@@ -48,8 +48,8 @@ case class BarChartView[S, Y, D](
     slices.toStream.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, string(s)) }).toList,
     normalFontName,
     normalFontSize,
-    bold=true,
-    drawLines=false,
+    bold = true,
+    drawLines = false,
     labelAngle,
     black)
 
@@ -59,7 +59,13 @@ case class BarChartView[S, Y, D](
     case ((s, i), color) => {
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
       val rightX = leftX + (widthPerSlice * barWidthPercent)
-      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, dataView.valueOf(data, s)), fillColor = Some(color))
+      val y = dataView.valueOf(data, s)
+      val y0 = zeroY.zero
+      if (y >= y0) {
+        Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color))
+      } else {
+        Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color))
+      }
     }
   })
 
