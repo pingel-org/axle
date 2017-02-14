@@ -30,7 +30,7 @@ case class BarChartGrouped[G, S, Y, D](
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
-    colors: Seq[Color] = defaultColors)(
+    colorOf: (G, S) => Color)(
         implicit val showG: Show[G],
         val showS: Show[S],
         val orderY: Order[Y],

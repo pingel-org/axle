@@ -24,7 +24,7 @@ case class Plot[X, Y, D](
     bold: Boolean = false,
     titleFontName: String = "Palatino",
     titleFontSize: Int = 20,
-    colors: Seq[Color] = defaultColors,
+    colorO: (String, X) => Color,
     title: Option[String] = None,
     keyTitle: Option[String] = None,
     xAxis: Option[Y] = None,
@@ -40,8 +40,6 @@ case class Plot[X, Y, D](
         val yEq: Eq[Y],
         val yLength: LengthSpace[Y, _, Double],
         val plotDataView: PlotDataView[X, Y, D]) {
-
-  val colorStream = continually(colors.toStream).flatten
 
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold=true))
 
