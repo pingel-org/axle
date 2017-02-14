@@ -55,8 +55,9 @@ case class BarChartView[S, Y, D](
 
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFontName, normalFontSize, true, black)
 
-  val bars = slices.toStream.zipWithIndex.zip(colorStream).map({
-    case ((s, i), color) => {
+  val bars = slices.toStream.zipWithIndex.map({
+    case (s, i) => {
+      val color = colorOf(s)
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
       val rightX = leftX + (widthPerSlice * barWidthPercent)
       val y = dataView.valueOf(data, s)

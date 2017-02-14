@@ -76,7 +76,7 @@ class BarChartSpec extends FunSuite with Matchers {
       xAxis = Some(Rational(0)),
       title = Some("d6 + d6"),
       labelAngle = 36d *: angleDouble.degree,
-      colors = List(blue),
+      colorOf = (i: Int) => blue,
       drawKey = false)
 
     val filename = "d6plusd6.svg"

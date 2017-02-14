@@ -421,8 +421,9 @@ package object awt {
 
         g2d.setFont(cachedFont(chart.normalFontName, chart.normalFontSize, true))
         val lineHeight = g2d.getFontMetrics.getHeight
-        slices.toVector.zipWithIndex.zip(colorStream) foreach {
-          case ((s, j), color) =>
+        slices.toVector.zipWithIndex foreach {
+          case (s, j) =>
+            val color = colorOf(s)
             g2d.setColor(cachedColor(color))
             g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
         }
