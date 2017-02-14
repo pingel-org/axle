@@ -116,9 +116,9 @@ package object awt {
     }
   }
 
-  implicit def drawPlot[X, Y, D]: Draw[Plot[X, Y, D]] =
-    new Draw[Plot[X, Y, D]] {
-      def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
+  implicit def drawPlot[S, X, Y, D]: Draw[Plot[S, X, Y, D]] =
+    new Draw[Plot[S, X, Y, D]] {
+      def component(plot: Plot[S, X, Y, D]) = PlotComponent(plot)
     }
 
   implicit def drawScatterPlot[X, Y, D: ClassTag]: Draw[ScatterPlot[X, Y, D]] =
@@ -181,9 +181,9 @@ package object awt {
 
   def bmp[T: Image](t: T, filename: String): Unit = image2file(t, filename, "BMP")
 
-  implicit def paintDataLines[X, Y, D]: Paintable[DataLines[X, Y, D]] = new Paintable[DataLines[X, Y, D]] {
+  implicit def paintDataLines[S, X, Y, D]: Paintable[DataLines[S, X, Y, D]] = new Paintable[DataLines[S, X, Y, D]] {
 
-    def paint(dataLines: DataLines[X, Y, D], g2d: Graphics2D): Unit = {
+    def paint(dataLines: DataLines[S, X, Y, D], g2d: Graphics2D): Unit = {
 
       import dataLines._
 
@@ -392,9 +392,9 @@ package object awt {
 
   }
 
-  implicit def paintKey[X, Y, D]: Paintable[Key[X, Y, D]] = new Paintable[Key[X, Y, D]] {
+  implicit def paintKey[S: Show, X, Y, D]: Paintable[Key[S, X, Y, D]] = new Paintable[Key[S, X, Y, D]] {
 
-    def paint(key: Key[X, Y, D], g2d: Graphics2D): Unit = {
+    def paint(key: Key[S, X, Y, D], g2d: Graphics2D): Unit = {
 
       import key._
 
@@ -406,7 +406,7 @@ package object awt {
         case ((label, d), i) =>
           val color = colorOf(label)
           g2d.setColor(cachedColor(color))
-          g2d.drawString(label, plot.width - width, topPadding + lineHeight * (i + 1))
+          g2d.drawString(string(label), plot.width - width, topPadding + lineHeight * (i + 1))
       }
     }
 

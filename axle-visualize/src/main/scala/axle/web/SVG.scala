@@ -63,9 +63,9 @@ object SVG {
 
   def rgb(color: Color): String = s"rgb(${color.r},${color.g},${color.b})"
 
-  implicit def svgDataLines[X, Y, D]: SVG[DataLines[X, Y, D]] =
-    new SVG[DataLines[X, Y, D]] {
-      def svg(dl: DataLines[X, Y, D]): NodeSeq = {
+  implicit def svgDataLines[S, X, Y, D]: SVG[DataLines[S, X, Y, D]] =
+    new SVG[DataLines[S, X, Y, D]] {
+      def svg(dl: DataLines[S, X, Y, D]): NodeSeq = {
 
         import dl._
 
@@ -145,9 +145,9 @@ object SVG {
       }
     }
 
-  implicit def svgKey[X, Y, D]: SVG[Key[X, Y, D]] =
-    new SVG[Key[X, Y, D]] {
-      def svg(key: Key[X, Y, D]): NodeSeq = {
+  implicit def svgKey[S: Show, X, Y, D]: SVG[Key[S, X, Y, D]] =
+    new SVG[Key[S, X, Y, D]] {
+      def svg(key: Key[S, X, Y, D]): NodeSeq = {
 
         import key._
 
@@ -162,7 +162,7 @@ object SVG {
         val keyEntries = data.zipWithIndex map {
           case ((label, d), i) => {
             val color = colorOf(label)
-            <text x={ s"${plot.width - width}" } y={ s"${topPadding + plot.fontSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${plot.fontSize}" }>{ label }</text>
+            <text x={ s"${plot.width - width}" } y={ s"${topPadding + plot.fontSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${plot.fontSize}" }>{ string(label) }</text>
           }
         }
 
@@ -359,9 +359,9 @@ object SVG {
       }
     }
 
-  implicit def svgPlot[X, Y, D]: SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
+  implicit def svgPlot[S, X, Y, D]: SVG[Plot[S, X, Y, D]] = new SVG[Plot[S, X, Y, D]] {
 
-    def svg(plot: Plot[X, Y, D]): NodeSeq = {
+    def svg(plot: Plot[S, X, Y, D]): NodeSeq = {
 
       import plot._
 
@@ -374,12 +374,12 @@ object SVG {
           SVG[VerticalLine[X, Y]].svg(vLine) ::
           SVG[XTics[X, Y]].svg(xTics) ::
           SVG[YTics[X, Y]].svg(yTics) ::
-          SVG[DataLines[X, Y, D]].svg(dataLines) ::
+          SVG[DataLines[S, X, Y, D]].svg(dataLines) ::
           List(
             titleText.map(SVG[Text].svg),
             xAxisLabelText.map(SVG[Text].svg),
             yAxisLabelText.map(SVG[Text].svg),
-            view.keyOpt.map(SVG[Key[X, Y, D]].svg)).flatten).reduce(_ ++ _)
+            view.keyOpt.map(SVG[Key[S, X, Y, D]].svg)).flatten).reduce(_ ++ _)
 
       svgFrame(nodes, width, height)
     }

@@ -42,8 +42,6 @@ case class BarChart[S, Y, D](
         val dataView: DataView[S, Y, D],
         val lengthSpaceY: LengthSpace[Y, _, Double]) {
 
-  // val colorStream = continually(colors.toStream).flatten
-
   val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold = true))
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, normalFontName, normalFontSize, bold = true))
   val yAxisLabelText = yAxisLabel.map(Text(_, 20, height / 2, normalFontName, normalFontSize, bold = true, angle = Some(90d *: angleDouble.degree)))

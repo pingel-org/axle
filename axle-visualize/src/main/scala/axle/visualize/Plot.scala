@@ -5,11 +5,11 @@ import axle.algebra.Tics
 import axle.algebra.Zero
 import axle.visualize.element.Text
 
-import scala.Stream.continually
+import cats.Show
 import cats.kernel.Eq
 
-case class Plot[X, Y, D](
-    initialValue: Seq[(String, D)],
+case class Plot[S, X, Y, D](
+    initialValue: Seq[(S, D)],
     connect: Boolean = true,
     drawKey: Boolean = true,
     width: Int = 700,
@@ -24,14 +24,15 @@ case class Plot[X, Y, D](
     bold: Boolean = false,
     titleFontName: String = "Palatino",
     titleFontSize: Int = 20,
-    colorOf: String => Color,
+    colorOf: S => Color,
     title: Option[String] = None,
     keyTitle: Option[String] = None,
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
-        implicit val xZero: Zero[X],
+        implicit val sShow: Show[S],
+        val xZero: Zero[X],
         val xts: Tics[X],
         val xEq: Eq[X],
         val xLength: LengthSpace[X, _, Double],
@@ -39,7 +40,7 @@ case class Plot[X, Y, D](
         val yts: Tics[Y],
         val yEq: Eq[Y],
         val yLength: LengthSpace[Y, _, Double],
-        val plotDataView: PlotDataView[X, Y, D]) {
+        val plotDataView: PlotDataView[S, X, Y, D]) {
 
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold=true))
 
