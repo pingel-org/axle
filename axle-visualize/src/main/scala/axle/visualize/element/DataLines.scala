@@ -8,6 +8,6 @@ case class DataLines[X, Y, D](
   data: Seq[(String, D)],
   orderedXs: D => Traversable[X],
   x2y: (D, X) => Y,
-  colorStream: Stream[Color],
+  colorOf: String => Color,
   pointDiameter: Int,
   connect: Boolean = true)

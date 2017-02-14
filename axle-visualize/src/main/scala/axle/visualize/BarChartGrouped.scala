@@ -1,6 +1,6 @@
 package axle.visualize
 
-import scala.Stream.continually
+// import scala.Stream.continually
 
 import cats.kernel.Order
 
@@ -30,7 +30,7 @@ case class BarChartGrouped[G, S, Y, D](
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
-    colorOf: (G, S) => Color)(
+    colorOf: S => Color)(
         implicit val showG: Show[G],
         val showS: Show[S],
         val orderY: Order[Y],
@@ -45,7 +45,7 @@ case class BarChartGrouped[G, S, Y, D](
     None
   }
 
-  val colorStream = continually(colors.toStream).flatten
+  // val colorStream = continually(colors.toStream).flatten
   val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold = true))
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, normalFontName, normalFontSize, bold = true))
   val yAxisLabelText = yAxisLabel.map(Text(_, 20, height / 2, normalFontName, normalFontSize, bold = true, angle = Some(90d *: angleDouble.degree)))

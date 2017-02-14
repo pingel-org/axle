@@ -187,9 +187,9 @@ package object awt {
 
       import dataLines._
 
-      data.zip(colorStream) foreach {
-        case (((label, d), color)) =>
-          g2d.setColor(cachedColor(color))
+      data foreach {
+        case (label, d) =>
+          g2d.setColor(cachedColor(colorOf(label)))
           val xs = orderedXs(d).toVector
           if (connect && xs.size > 1) {
             val xsStream = xs.toStream
@@ -402,8 +402,9 @@ package object awt {
       val fontMetrics = g2d.getFontMetrics
 
       val lineHeight = g2d.getFontMetrics.getHeight
-      data.zip(colorStream).zipWithIndex foreach {
-        case (((label, _), color), i) =>
+      data.zipWithIndex foreach {
+        case ((label, d), i) =>
+          val color = colorOf(label)
           g2d.setColor(cachedColor(color))
           g2d.drawString(label, plot.width - width, topPadding + lineHeight * (i + 1))
       }
@@ -441,9 +442,9 @@ package object awt {
 
         g2d.setFont(cachedFont(chart.normalFontName, chart.normalFontSize, true))
         val lineHeight = g2d.getFontMetrics.getHeight
-        slices.toVector.zipWithIndex.zip(colorStream) foreach {
-          case ((s, j), color) =>
-            g2d.setColor(cachedColor(color))
+        slices.toVector.zipWithIndex foreach {
+          case (s, j) =>
+            g2d.setColor(cachedColor(colorOf(s)))
             g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
         }
       }

@@ -15,7 +15,7 @@ case class PlotView[X, Y, D](
   import plot._
 
   val keyOpt = if (drawKey) {
-    Some(Key(plot, keyTitle, colorStream, keyWidth, keyTopPadding, data))
+    Some(Key(plot, keyTitle, colorOf, keyWidth, keyTopPadding, data))
   } else {
     None
   }
@@ -36,6 +36,6 @@ case class PlotView[X, Y, D](
   val xTics = XTics(scaledArea, xts.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, 0d *: angleDouble.degree, black)
   val yTics = YTics(scaledArea, yts.tics(minY, maxY), fontName, fontSize, true, black)
 
-  val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorStream, pointDiameter, connect)
+  val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorOf, pointDiameter, connect)
 
 }

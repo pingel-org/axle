@@ -24,7 +24,7 @@ case class Plot[X, Y, D](
     bold: Boolean = false,
     titleFontName: String = "Palatino",
     titleFontSize: Int = 20,
-    colorO: (String, X) => Color,
+    colorOf: String => Color,
     title: Option[String] = None,
     keyTitle: Option[String] = None,
     xAxis: Option[Y] = None,

@@ -71,11 +71,12 @@ object SVG {
 
         val pointRadius = pointDiameter / 2
 
-        data.zip(colorStream).flatMap {
-          case ((_, d), color) => {
+        data.flatMap {
+          case (s, d) => {
             val xs = orderedXs(d).toList
             val centers = xs.map(x => scaledArea.framePoint(Point2D(x, x2y(d, x))))
             val points = (centers map { c => s"${c.x},${c.y}" }).mkString(" ")
+            val color = colorOf(s)
             val polyline = <polyline points={ s"$points" } fill="none" stroke={ s"${rgb(color)}" } stroke-width="1"/>
             val pointCircles =
               if (pointRadius > 0) {
@@ -158,8 +159,9 @@ object SVG {
           <text x={ s"${plot.width - key.width}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
         } toList
 
-        val keyEntries = data.zip(colorStream).zipWithIndex map {
-          case (((label, _), color), i) => {
+        val keyEntries = data.zipWithIndex map {
+          case ((label, d), i) => {
+            val color = colorOf(label)
             <text x={ s"${plot.width - width}" } y={ s"${topPadding + plot.fontSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${plot.fontSize}" }>{ label }</text>
           }
         }
@@ -207,8 +209,9 @@ object SVG {
           <text x={ s"${width - keyWidth}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
         } toList
 
-        val keyEntries = slices.toList.zip(chart.colorStream).zipWithIndex map {
-          case ((slice, color), i) => {
+        val keyEntries = slices.toList.zipWithIndex map {
+          case (slice, i) => {
+            val color = colorOf(slice)
             <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
           }
         }
