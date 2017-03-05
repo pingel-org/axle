@@ -104,17 +104,26 @@ package object axle {
       .map({ case (x, g) => (x + one, x + g - one) })
   }
 
-  def breakUp(xs: List[Int], breaks: Set[Int]): List[List[Int]] = xs match {
-    case Nil => Nil
-    case head :: tail => {
+  def runs[T](xs: Seq[T], breaks: Set[T]): Seq[(T, T)] =
+    if (xs.isEmpty) {
+      List.empty
+    } else {
+      val tail = xs.drop(1)
       val run = tail.takeWhile(x => !breaks.contains(x))
-      (head :: run) :: breakUp(tail.drop(run.length), breaks)
+      (xs.head, (xs.head +: run).last) +: runs(tail.drop(run.length), breaks)
     }
-  }
 
-  def runs(xs: List[Int]): List[List[Int]] = {
-    val breaks = xs.sorted.zip(xs.drop(1)).filter({ case (x, y) => y - x > 1 }).map(_._2).toSet
-    breakUp(xs, breaks)
+  /**
+   * runs
+   *
+   * assumes xs is already sorted
+   */
+
+  def runs[T](xs: Seq[T])(implicit ringT: Ring[T], orderT: Order[T]): Seq[(T, T)] = {
+    import ringT.one
+    import spire.implicits._
+    val breaks = xs.zip(xs.drop(1)).filter({ case (x, y) => orderT.compare(y - x, one) == 1 }).map(_._2).toSet
+    runs(xs, breaks)
   }
 
   //  val Sigma = Σ _
