@@ -63,6 +63,7 @@ svg(chart, "d6plusd6.svg")
 ![Observed d6 + d6](/tutorial/images/d6plusd6.svg)
 
 Distribution Monad
+------------------
 
 The distribution of two rolls combined can be produced with a for comprehension
 and charted directly.
