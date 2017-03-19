@@ -11,7 +11,7 @@ class PackageSpec extends FunSuite with Matchers {
 
   test("find runs in List[Int]") {
     import spire.implicits._
-    gaps(List(1, 2, 6, 7, 8, 9, 10, 16)) should be(List((1, 2), (6, 10), (16, 16)))
+    runs(List(1, 2, 6, 7, 8, 9, 10, 16)) should be(List((1, 2), (6, 10), (16, 16)))
   }
 
   test("monte carlo pi be at least 2.9") {
