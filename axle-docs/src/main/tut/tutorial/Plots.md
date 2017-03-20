@@ -61,8 +61,9 @@ implicit val zeroDT = dateTimeZero(now)
 Imports
 
 ```tut:silent
-import axle.visualize.Plot
+import cats.Show
 import spire.implicits.DoubleAlgebra
+import axle.visualize.Plot
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
