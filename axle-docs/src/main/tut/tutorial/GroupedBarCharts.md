@@ -38,7 +38,10 @@ The data can be grouped in two ways to produce bar charts:
 val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
   sales,
   title = Some("fruit sales"),
-  colorOf = (label: Int) => blue
+  colorOf = (label: Int) => label match {
+    case 2011 => red
+    case 2012 => blue
+  }
 )
 ```
 
@@ -68,7 +71,7 @@ val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double]](
 
 Create the second SVG
 
-```
+```tut:book
 import axle.web._
 
 svg(chart, "barchart2.svg")
