@@ -80,6 +80,7 @@ Visualizations
 
 * [Visualize](/tutorial/visualize/)
   * [Plots](/tutorial/plots/)
+  * [ScatterPlot](/tutorial/scatterplot/)
   * [Bar Charts](/tutorial/bar_charts/)
   * [Grouped Bar Charts](/tutorial/grouped_bar_charts/)
   * [Pixelated Colored Area](/tutorial/pixelated_colored_area/)
