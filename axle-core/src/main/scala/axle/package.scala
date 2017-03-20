@@ -109,7 +109,7 @@ package object axle {
       List.empty
     } else {
       val tail = xs.drop(1)
-      val run = tail.takeWhile(x => !breaks.contains(x))
+        val run = tail.takeWhile(x => !breaks.contains(x))
       (xs.head, (xs.head +: run).last) +: runs(tail.drop(run.length), breaks)
     }
 

@@ -92,9 +92,9 @@ object SVG {
       }
     }
 
-  implicit def svgDataPoints[X, Y, D]: SVG[DataPoints[X, Y, D]] =
-    new SVG[DataPoints[X, Y, D]] {
-      def svg(dl: DataPoints[X, Y, D]): NodeSeq = {
+  implicit def svgDataPoints[S, X, Y, D]: SVG[DataPoints[S, X, Y, D]] =
+    new SVG[DataPoints[S, X, Y, D]] {
+      def svg(dl: DataPoints[S, X, Y, D]): NodeSeq = {
 
         import dl._
 
@@ -105,9 +105,9 @@ object SVG {
         val circles = domain.toList.zipWithIndex.flatMap {
           case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
-            val color = dataView.colorOf(data, x, y)
+            val color = colorOf(data, x, y)
             if (pointRadius > 0) {
-              dataView.labelOf(data, x, y) map {
+              labelOf(data, x, y) map {
                 case (label, permanent) =>
                   if (permanent) {
                     <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" }/>
@@ -127,7 +127,7 @@ object SVG {
           case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
             if (pointRadius > 0) {
-              dataView.labelOf(data, x, y) map {
+              labelOf(data, x, y) map {
                 case (label, permanent) =>
                   if (permanent) {
                     <text class="pointLabel" id={ "pointLabel" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="visible">{ label }</text>
@@ -321,10 +321,10 @@ object SVG {
       }
     }
 
-  implicit def svgScatterPlot[X, Y, D]: SVG[ScatterPlot[X, Y, D]] =
-    new SVG[ScatterPlot[X, Y, D]] {
+  implicit def svgScatterPlot[S, X, Y, D]: SVG[ScatterPlot[S, X, Y, D]] =
+    new SVG[ScatterPlot[S, X, Y, D]] {
 
-      def svg(scatterPlot: ScatterPlot[X, Y, D]): NodeSeq = {
+      def svg(scatterPlot: ScatterPlot[S, X, Y, D]): NodeSeq = {
 
         import scatterPlot._
 
@@ -349,7 +349,7 @@ object SVG {
 
         val nodes =
           (border :: xtics :: ytics ::
-            SVG[DataPoints[X, Y, D]].svg(dataPoints) ::
+            SVG[DataPoints[S, X, Y, D]].svg(dataPoints) ::
             List(
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),

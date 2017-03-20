@@ -121,9 +121,9 @@ package object awt {
       def component(plot: Plot[S, X, Y, D]) = PlotComponent(plot)
     }
 
-  implicit def drawScatterPlot[X, Y, D: ClassTag]: Draw[ScatterPlot[X, Y, D]] =
-    new Draw[ScatterPlot[X, Y, D]] {
-      def component(plot: ScatterPlot[X, Y, D]) = ScatterPlotComponent(plot)
+  implicit def drawScatterPlot[S, X, Y, D: ClassTag]: Draw[ScatterPlot[S, X, Y, D]] =
+    new Draw[ScatterPlot[S, X, Y, D]] {
+      def component(plot: ScatterPlot[S, X, Y, D]) = ScatterPlotComponent(plot)
     }
 
   implicit def drawBarChart[S, Y, D: ClassTag]: Draw[BarChart[S, Y, D]] =
@@ -208,9 +208,9 @@ package object awt {
 
   }
 
-  implicit def paintDataPoints[X, Y, D]: Paintable[DataPoints[X, Y, D]] = new Paintable[DataPoints[X, Y, D]] {
+  implicit def paintDataPoints[S, X, Y, D]: Paintable[DataPoints[S, X, Y, D]] = new Paintable[DataPoints[S, X, Y, D]] {
 
-    def paint(dataPoints: DataPoints[X, Y, D], g2d: Graphics2D): Unit = {
+    def paint(dataPoints: DataPoints[S, X, Y, D], g2d: Graphics2D): Unit = {
 
       import dataPoints._
 
@@ -219,7 +219,7 @@ package object awt {
       if (pointDiameter.toInt > 0) {
         domain foreach {
           case (x, y) => {
-            g2d.setColor(cachedColor(dataView.colorOf(data, x, y)))
+            g2d.setColor(cachedColor(dataPoints.colorOf(data, x, y)))
             fillOval(g2d, scaledArea, Point2D(x, y), pointDiameter.toInt, pointDiameter.toInt)
           }
         }
