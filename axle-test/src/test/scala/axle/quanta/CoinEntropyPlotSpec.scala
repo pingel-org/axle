@@ -51,9 +51,10 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
     // implicit val lsuqiddd = LengthSpace[UnittedQuantity[Information, Double], Double, Double]
     // implicit val pdv = PlotDataView.treeMapDataView[Rational, UnittedQuantity[Information, Double]]
 
-    val plot = Plot[Rational, UnittedQuantity[Information, Double], D](
+    val plot = Plot[String, Rational, UnittedQuantity[Information, Double], D](
       List(("h", hm)),
       connect = true,
+      colorOf = _ => Color.black,
       drawKey = false,
       xAxis = Some(0d *: bitDouble),
       xAxisLabel = Some("p(x='HEAD)"),
@@ -62,7 +63,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
       title = Some("Entropy")) // (zr, tr, er, lsrrd, zuqid, tuqid, euqid, lsuqiddd, pdv)
 
     import axle.web._
-    val d = SVG[Plot[Rational, UnittedQuantity[Information, Double], D]]
+    val d = SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
 
     val svgName = "coinentropyplot.svg"
     svg(plot, svgName)

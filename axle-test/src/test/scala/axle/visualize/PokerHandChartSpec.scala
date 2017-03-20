@@ -28,6 +28,7 @@ class PokerHandChartSpec extends FunSuite with Matchers {
 
     val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]](
       data.tally.withDefaultValue(0),
+      colorOf = _ => Color.black,
       title = Some("Poker Hands"),
       yAxisLabel = Some("instances of hand category by initial hand size (1000 trial for each hand size)"),
       keyTitle = Some("Initial Hand Size"))

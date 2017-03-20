@@ -35,11 +35,13 @@ class PlotWavesSpec extends FunSuite with Matchers {
     implicit val zeroDT = axle.joda.dateTimeZero(now)
 
     // test implicit conjuring:
-    PlotDataView[DateTime, Double, TreeMap[DateTime, Double]]
+    PlotDataView[String, DateTime, Double, TreeMap[DateTime, Double]]
+    import cats.implicits._
 
-    val plot = Plot(
+    val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
       waves,
       connect = true,
+      colorOf = _ => Color.black,
       title = Some("Random Waves"),
       xAxis = Some(0d),
       xAxisLabel = Some("time (t)"),
