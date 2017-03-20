@@ -216,12 +216,11 @@ package object awt {
 
       val domain = dataView.dataToDomain(data)
 
-      if (pointDiameter.toInt > 0) {
-        domain foreach {
-          case (x, y) => {
-            g2d.setColor(cachedColor(dataPoints.colorOf(data, x, y)))
-            fillOval(g2d, scaledArea, Point2D(x, y), pointDiameter.toInt, pointDiameter.toInt)
-          }
+      domain foreach {
+        case (x, y) => {
+          val pointDiameter = diameterOf(data, x, y)
+          g2d.setColor(cachedColor(dataPoints.colorOf(data, x, y)))
+          fillOval(g2d, scaledArea, Point2D(x, y), pointDiameter.toInt, pointDiameter.toInt)
         }
       }
     }

@@ -98,13 +98,12 @@ object SVG {
 
         import dl._
 
-        val pointRadius = pointDiameter / 2
-
         val domain = dataView.dataToDomain(data)
 
         val circles = domain.toList.zipWithIndex.flatMap {
           case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
+            val pointRadius = diameterOf(data, x, y) / 2
             val color = colorOf(data, x, y)
             if (pointRadius > 0) {
               labelOf(data, x, y) map {
@@ -126,6 +125,7 @@ object SVG {
         val labels = domain.toList.zipWithIndex.flatMap {
           case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
+            val pointRadius = diameterOf(data, x, y) / 2
             if (pointRadius > 0) {
               labelOf(data, x, y) map {
                 case (label, permanent) =>

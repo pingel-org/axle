@@ -9,19 +9,22 @@ import cats.kernel.Eq
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
 
-      /**
-       * labelOf optionally returns a double:
-       * 1. The label of the given data point
-       * 2. A Boolean representing whether that label should be permanently displayed
-       *    vs. just shown as a tooltip/mouseover
-       */
+/**
+ * labelOf optionally returns a double:
+ *
+ * 1. The label of the given data point
+ *
+ * 2. A Boolean representing whether that label should be permanently displayed
+ *    vs. just shown as a tooltip/mouseover
+ *
+ */
 
 case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     data: D,
     width: Double = 600d,
     height: Double = 600d,
     border: Double = 50d,
-    pointDiameter: Double = 10d,
+    diameterOf: (D, X, Y) => Double = (d: D, x: X, y: Y) => 10d,
     colorOf: (D, X, Y) => Color,
     labelOf: (D, X, Y) => Option[(S, Boolean)],
     fontName: String = "Courier New",
@@ -72,6 +75,6 @@ case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
   val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = drawXTicLines, 0d *: angleDouble.degree, black)
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, drawLines = drawYTicLines, black)
 
-  val dataPoints = DataPoints(scaledArea, data, pointDiameter, colorOf, labelOf)
+  val dataPoints = DataPoints(scaledArea, data, diameterOf, colorOf, labelOf)
 
 }
