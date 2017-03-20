@@ -26,7 +26,7 @@ Define the coloring strategy:
 ```tut
 import axle.visualize.Color._
 
-implicit val colorer: (Map[(Int, Int), Int], Int, Int) => Color =
+val colorer =
   (d: Map[(Int, Int), Int], x: Int, y: Int) => d((x, y)) match {
     case 0 => red
     case 1 => blue
@@ -37,7 +37,7 @@ implicit val colorer: (Map[(Int, Int), Int], Int, Int) => Color =
 Define the labeling strategy:
 
 ```tut
-implicit val labeller: (Map[(Int, Int), Int], Int, Int) => Option[(String, Boolean)] =
+val labeller =
   (d: Map[(Int, Int), Int], x: Int, y: Int) => d.get((x, y)).map(s => (s.toString, true))
 ```
 
