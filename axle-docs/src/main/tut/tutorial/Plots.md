@@ -64,8 +64,12 @@ import axle.joda.dateTimeDurationLengthSpace
 Define the visualization
 
 ```tut:book
+import Color._
+val colors = List(red, blue, green, yellow, orange)
+
 val plot = Plot(
   waves,
+  colorOf = (label: String) => colors.apply(label.length % colors.length),
   title = Some("Random Waves"),
   xAxis = Some(0d),
   xAxisLabel = Some("time (t)"),
@@ -107,6 +111,7 @@ implicit val dtz = dateTimeZero(now)
 val plot = Plot[DateTime, Double, TreeMap[DateTime, Double]](
   initialData,
   connect = true,
+  colorOf = _ => Color.black,
   title = Some("Saws"),
   xAxis = Some(0d),
   xAxisLabel = Some("time (t)"),

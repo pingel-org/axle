@@ -75,6 +75,10 @@ import axle.visualize._
 val plot = Plot(
   List("min" -> log.mins, "ave" -> log.aves, "max" -> log.maxs),
   connect = true,
+  colorOf = (label: String) => label match {
+    case "min" => Color.black
+    case "ave" => Color.blue
+    case "max" => Color.green },
   title = Some("GA Demo"),
   xAxis = Some(0d),
   xAxisLabel = Some("generation"),

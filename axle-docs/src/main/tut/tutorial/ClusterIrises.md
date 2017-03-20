@@ -119,6 +119,7 @@ val plot = Plot(
   classifier.distanceLogSeries,
   connect = true,
   drawKey = true,
+  colorOf = (label: String) => Color.blue,
   title = Some("KMeans Mean Centroid Distances"),
   xAxis = Some(0d),
   xAxisLabel = Some("step"),
