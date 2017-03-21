@@ -99,10 +99,16 @@ Visualize the final (two dimensional) centroid positions
 
 ```tut:silent
 import axle.web._
+import axle.visualize.KMeansVisualization
+import axle.visualize.Color._
 ```
 
 ```tut:book
-svg(classifier, "kmeans.svg")
+val colors = Vector(red, blue, green)
+
+val vis = KMeansVisualization(classifier, colors)
+
+svg(vis, "kmeans.svg")
 ```
 
 ![kmeans](/tutorial/images/kmeans.svg)
@@ -119,7 +125,7 @@ val plot = Plot(
   classifier.distanceLogSeries,
   connect = true,
   drawKey = true,
-  colorOf = (label: String) => Color.blue,
+  colorOf = colors,
   title = Some("KMeans Mean Centroid Distances"),
   xAxis = Some(0d),
   xAxisLabel = Some("step"),
