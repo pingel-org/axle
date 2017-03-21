@@ -1,7 +1,5 @@
 package axle.visualize
 
-import scala.Stream.continually
-
 import axle.algebra.Tics
 import axle.ml.KMeans
 import axle.syntax.linearalgebra.matrixOps
@@ -17,6 +15,7 @@ import cats.implicits._
 
 case class KMeansVisualization[D, F, G, M](
     classifier: KMeans[D, F, G, M],
+    colorOf: Int => Color,
     width: Int = 600,
     height: Int = 600,
     border: Int = 50,
@@ -26,10 +25,6 @@ case class KMeansVisualization[D, F, G, M](
 
   import classifier.featureMatrix
   import classifier.la
-
-  val colors = defaultColors
-
-  val colorStream = continually(colors).flatten
 
   val maxs = featureMatrix.columnMaxs
   val mins = featureMatrix.columnMins
@@ -52,14 +47,14 @@ case class KMeansVisualization[D, F, G, M](
   def centroidOval(i: Int): Oval[Double, Double] = {
     val denormalized = classifier.normalizer.unapply(classifier.μ.row(i))
     val center = Point2D(denormalized(0), denormalized(1))
-    Oval(scaledArea, center, 3 * pointDiameter, 3 * pointDiameter, colors(i % colors.length), darkGray)
+    Oval(scaledArea, center, 3 * pointDiameter, 3 * pointDiameter, colorOf(i), darkGray)
   }
 
   val centroidOvals = (0 until classifier.K).map(centroidOval)
 
   val points = (0 until featureMatrix.rows).map { r =>
     val clusterNumber = classifier.a.get(r, 0).toInt
-    val color = colors(clusterNumber % colors.length)
+    val color = colorOf(clusterNumber)
     // TODO figure out what to do when N > 2
     val center = Point2D(featureMatrix.get(r, 0), featureMatrix.get(r, 1))
     Oval(scaledArea, center, pointDiameter, pointDiameter, color, color)

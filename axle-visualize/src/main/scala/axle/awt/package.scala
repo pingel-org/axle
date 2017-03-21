@@ -13,7 +13,6 @@ import java.io.File
 import axle.visualize.ScaledArea2D
 import scala.reflect.ClassTag
 import axle.algebra.DirectedGraph
-import axle.ml.KMeans
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.quanta.Angle
@@ -156,9 +155,9 @@ package object awt {
     }
   }
 
-  implicit def drawKMeansClasifier[T, F, G, M]: Draw[KMeans[T, F, G, M]] =
-    new Draw[KMeans[T, F, G, M]] {
-      def component(kmc: KMeans[T, F, G, M]) = KMeansComponent(KMeansVisualization(kmc))
+  implicit def drawKMeansVisualization[T, F, G, M]: Draw[KMeansVisualization[T, F, G, M]] =
+    new Draw[KMeansVisualization[T, F, G, M]] {
+      def component(kmv: KMeansVisualization[T, F, G, M]) = KMeansComponent(kmv)
     }
 
   /**

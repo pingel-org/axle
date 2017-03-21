@@ -164,8 +164,8 @@ case class KMeans[T: Eq, F, G, M](
   def distanceTreeMap(centroidId: Int): TreeMap[Int, Double] = new TreeMap[Int, Double]() ++
     distanceLog.zipWithIndex.map({ case (dl, i) => i -> dl.get(centroidId, 0) }).toMap
 
-  def distanceLogSeries: List[(String, TreeMap[Int, Double])] =
-    (0 until K).map(i => ("centroid " + i, distanceTreeMap(i))).toList
+  def distanceLogSeries: List[(Int, TreeMap[Int, Double])] =
+    (0 until K).map(i => (i, distanceTreeMap(i))).toList
 
 }
 

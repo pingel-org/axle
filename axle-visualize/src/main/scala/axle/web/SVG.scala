@@ -6,7 +6,6 @@ import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 import axle.HtmlFrom
 import cats.Show
-import axle.ml.KMeans
 import axle.string
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
@@ -303,13 +302,12 @@ object SVG {
       }
     }
 
-  implicit def svgKMeans[D, F, G, M]: SVG[KMeans[D, F, G, M]] =
-    new SVG[KMeans[D, F, G, M]] {
+  implicit def svgKMeans[D, F, G, M]: SVG[KMeansVisualization[D, F, G, M]] =
+    new SVG[KMeansVisualization[D, F, G, M]] {
 
-      def svg(kmeans: KMeans[D, F, G, M]): NodeSeq = {
+      def svg(kmv: KMeansVisualization[D, F, G, M]): NodeSeq = {
 
-        val vis = KMeansVisualization(kmeans)
-        import vis._
+        import kmv._
 
         val nodes = (SVG[Rectangle[Double, Double]].svg(boundingRectangle) ::
           SVG[XTics[Double, Double]].svg(xTics) ::

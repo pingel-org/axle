@@ -156,13 +156,19 @@ class KMeansSpecification
         0 to 2)
     }
 
+    import axle.visualize.Color._
+    val colors = Vector(red, blue, green)
+
+    import axle.visualize.KMeansVisualization
+    val vis = KMeansVisualization(classifier, colors)
+
     import axle.web._
     val svgName = "kmeans.svg"
-    svg(classifier, svgName)
+    svg(vis, svgName)
 
     import axle.awt._
     val pngName = "kmeans.png"
-    png(classifier, pngName)
+    png(vis, pngName)
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
