@@ -4,21 +4,35 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.8 (January 2016)
-* Depend on Spire 0.13.1 (which depends on Typelevel Algebra)
-* Fix JodaTime Tics handling of timezones
-* Publish Scala 2.12 artifacts
+## 0.2.8 (March 2016)
+* Depend on Spire 0.14.0 (which depends on Typelevel Algebra)
 
-## 0.2.9 (January 2017)
-* Reactive Streams for animating visualizations
-
-## 0.2.10 (February 2017)
-* Dependent types (Shapeless? Refined? ValueOf SIP-23 in typelevel scala 2.11 and 2.12.2) for matrix size
+## 0.2.9 (April 2017)
+* log scale
+* Publish Scala 2.12 artifacts (depends on spark-core availability)
+* Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
+* Fix sbt-release plugin
 * Fix Logistic regression
+* Fix axle-test/src/test/scala/axle/algebra/GeoMetricSpaceSpec.scala
+* Fix malformed distribution axle.stats.ConditionalProbabilityTable0$$anonfun$observe$2.apply(ConditionalProbabilityTable.scala:68)
 
-## 0.3.0 (March 2017)
+## 0.2.10 (May 2017)
+* Reactive Streams for animating visualizations
+* SVG Animation
+* ScatterPlot `play` to awt
+* Formatted labels/tooltips for BarChart, etc
+* Remove jung dependency from axle-visualize
+* Fix multi-color cube rendering
+* KMeansVisualization / ScatterPlot similarity (at least DataPoints)
+
+## 0.2.11 (June 2017)
+* Max bet for Poker
 * Code coverage to ?%
+
+## 0.3.0 (August 2017)
+* Dependent types (Shapeless? Refined? ValueOf SIP-23 in typelevel scala 2.11 and 2.12.2) for matrix size
 * Solve the Spark ClassTag issue
+* Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
 
 ## 0.3.x (Summer/Fall 2017)
 * LSA
