@@ -176,4 +176,4 @@ Previous Milestones
 
 ## 0.2.7 (January 2016)
 * Use cats-kernel's Eq and Order in favor of Spire's (with Shims to continue to work with Spire)
-# Convert tests to use scalatest (to match Cats and Spire)
+* Convert tests to use scalatest (to match Cats and Spire)

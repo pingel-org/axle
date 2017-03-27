@@ -17,7 +17,10 @@ The name "axle" was originally chosen because it sounds like "Haskell".
 Given the use of UTF symbols, I tried spelling it using Greek letters to get "αχλε".
 It turns out that this is the Etruscan spelling of
 [Achilles](http://en.wikipedia.org/wiki/Achilles)
-![Achilles](https://upload.wikimedia.org/wikipedia/commons/4/4c/Etruscan_mural_achilles_Troilus.gif) ([image context](http://en.wikipedia.org/wiki/File:Etruscan_mural_achilles_Troilus.gif))
+
+![Achilles](https://upload.wikimedia.org/wikipedia/commons/4/4c/Etruscan_mural_achilles_Troilus.gif)
+
+([image context](http://en.wikipedia.org/wiki/File:Etruscan_mural_achilles_Troilus.gif))
 
 Follow [@axledsl](https://twitter.com/axledsl) on Twitter.
 
