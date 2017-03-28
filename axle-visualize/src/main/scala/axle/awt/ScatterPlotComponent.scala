@@ -16,8 +16,8 @@ import akka.pattern.ask
 import axle.actor.Defaults.askTimeout
 import axle.visualize.DataFeedProtocol.Fetch
 
-case class ScatterPlotComponent[X, Y, D: ClassTag](
-  plot: ScatterPlot[X, Y, D])
+case class ScatterPlotComponent[S, X, Y, D: ClassTag](
+  plot: ScatterPlot[S, X, Y, D])
     extends JPanel
     with Fed[D] {
 
@@ -41,7 +41,7 @@ case class ScatterPlotComponent[X, Y, D: ClassTag](
     Paintable[VerticalLine[X, Y]].paint(vLine, g2d)
     Paintable[XTics[X, Y]].paint(xTics, g2d)
     Paintable[YTics[X, Y]].paint(yTics, g2d)
-    Paintable[DataPoints[X, Y, D]].paint(dataPoints, g2d)
+    Paintable[DataPoints[S, X, Y, D]].paint(dataPoints, g2d)
 
     titleText.foreach(Paintable[Text].paint(_, g2d))
     xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))

@@ -16,15 +16,19 @@ class ScatterPlotSpec extends FunSuite with Matchers {
       (0, 2) -> 2,
       (1, 3) -> 2)
 
-    implicit val v2color: Int => Color =
-      (v: Int) => v match {
-        case 0 => Color.red
-        case 1 => Color.blue
-        case 2 => Color.green
-      }
+    import axle.visualize.Color._
+    val colors = Vector(red, blue, green)
+
+    val colorer =
+      (d: Map[(Int, Int), Int], x: Int, y: Int) => colors(d((x, y)))
+
+    val labeller =
+      (d: Map[(Int, Int), Int], x: Int, y: Int) => d.get((x, y)).map(s => (s.toString, true))
+
+    ScatterDataView.forMap[Int, Int, Map[(Int, Int), Int]]
 
     import cats.implicits._
-    val plot = ScatterPlot[Int, Int, Map[(Int, Int), Int]](data)
+    val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int]](data, colorOf = colorer, labelOf = labeller)
 
     import axle.web._
     val svgName = "scatter.svg"

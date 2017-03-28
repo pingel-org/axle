@@ -26,6 +26,8 @@ import cats.Order.catsKernelOrderingForOrder
 import axle._
 import axle.visualize._
 import axle.joda.dateTimeOrder
+
+import axle.visualize.Color._
 ```
 
 Generate the time-series to plot
@@ -33,13 +35,20 @@ Generate the time-series to plot
 ```tut:book
 val now = new DateTime()
 
+val colors = Vector(red, blue, green, yellow, orange)
+
 def randomTimeSeries(i: Int) = {
+
   val φ = nextDouble
   val A = nextDouble
   val ω = 0.1 / nextDouble
-  ("%1.2f %1.2f %1.2f".format(φ, A, ω),
-    new TreeMap[DateTime, Double]() ++
-    (0 to 100).map(t => (now.plusMinutes(2 * t) -> A * sin(ω*t + φ))).toMap)
+  val color = colors.random
+
+  val data = new TreeMap[DateTime, Double]() ++ (0 to 100).map(t => (now.plusMinutes(2 * t) -> A * sin(ω*t + φ))).toMap
+
+  val label = "%1.2f %1.2f %1.2f".format(φ, A, ω)
+
+  (color, label) -> data
 }
 
 val waves = (0 until 20).map(randomTimeSeries)
@@ -52,8 +61,9 @@ implicit val zeroDT = dateTimeZero(now)
 Imports
 
 ```tut:silent
-import axle.visualize.Plot
+import cats.Show
 import spire.implicits.DoubleAlgebra
+import axle.visualize.Plot
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
@@ -64,8 +74,11 @@ import axle.joda.dateTimeDurationLengthSpace
 Define the visualization
 
 ```tut:book
+implicit val showCL: Show[(Color, String)] = new Show[(Color, String)] { def show(cl: (Color, String)): String = cl._2 }
+
 val plot = Plot(
   waves,
+  colorOf = (cl: (Color, String)) => cl._1,
   title = Some("Random Waves"),
   xAxis = Some(0d),
   xAxisLabel = Some("time (t)"),
@@ -107,6 +120,7 @@ implicit val dtz = dateTimeZero(now)
 val plot = Plot[DateTime, Double, TreeMap[DateTime, Double]](
   initialData,
   connect = true,
+  colorOf = _ => Color.black,
   title = Some("Saws"),
   xAxis = Some(0d),
   xAxisLabel = Some("time (t)"),

@@ -11,29 +11,29 @@ import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
-trait PlotDataView[X, Y, D] {
+trait PlotDataView[S, X, Y, D] {
 
   def xsOf(d: D): Traversable[X]
 
   def valueOf(d: D, x: X): Y
 
-  def xRange(data: Seq[(String, D)], include: Option[X]): (X, X)
+  def xRange(data: Seq[(S, D)], include: Option[X]): (X, X)
 
-  def yRange(data: Seq[(String, D)], include: Option[Y]): (Y, Y)
+  def yRange(data: Seq[(S, D)], include: Option[Y]): (Y, Y)
 }
 
 object PlotDataView {
 
-  final def apply[X, Y, D](implicit ev: PlotDataView[X, Y, D]) = ev
+  final def apply[S, X, Y, D](implicit ev: PlotDataView[S, X, Y, D]) = ev
 
-  implicit def treeMapDataView[X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[X, Y, TreeMap[X, Y]] =
-    new PlotDataView[X, Y, TreeMap[X, Y]] {
+  implicit def treeMapDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[S, X, Y, TreeMap[X, Y]] =
+    new PlotDataView[S, X, Y, TreeMap[X, Y]] {
 
       def xsOf(d: TreeMap[X, Y]): Traversable[X] = d.keys
 
       def valueOf(d: TreeMap[X, Y], x: X): Y = d.apply(x)
 
-      def xRange(data: Seq[(String, TreeMap[X, Y])], include: Option[X]): (X, X) = {
+      def xRange(data: Seq[(S, TreeMap[X, Y])], include: Option[X]): (X, X) = {
 
         val minXCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) => xsOf(d).headOption
@@ -50,7 +50,7 @@ object PlotDataView {
 
       }
 
-      def yRange(data: Seq[(String, TreeMap[X, Y])], include: Option[Y]): (Y, Y) = {
+      def yRange(data: Seq[(S, TreeMap[X, Y])], include: Option[Y]): (Y, Y) = {
 
         val minYCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) =>
@@ -79,14 +79,14 @@ object PlotDataView {
       }
     }
 
-  implicit def distribution0DataView[X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[X, Y, Distribution0[X, Y]] =
-    new PlotDataView[X, Y, Distribution0[X, Y]] {
+  implicit def distribution0DataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[S, X, Y, Distribution0[X, Y]] =
+    new PlotDataView[S, X, Y, Distribution0[X, Y]] {
 
       def xsOf(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys.toList.sorted
 
       def valueOf(d: Distribution0[X, Y], x: X): Y = d.probabilityOf(x)
 
-      def xRange(data: Seq[(String, Distribution0[X, Y])], include: Option[X]): (X, X) = {
+      def xRange(data: Seq[(S, Distribution0[X, Y])], include: Option[X]): (X, X) = {
 
         val minXCandidates = include.toList ++ (data flatMap {
           case (label, d: Distribution0[X, Y]) => xsOf(d).headOption
@@ -103,7 +103,7 @@ object PlotDataView {
 
       }
 
-      def yRange(data: Seq[(String, Distribution0[X, Y])], include: Option[Y]): (Y, Y) = {
+      def yRange(data: Seq[(S, Distribution0[X, Y])], include: Option[Y]): (Y, Y) = {
 
         val minYCandidates = include.toList ++ (data flatMap {
           case (label, d: Distribution0[X, Y]) =>

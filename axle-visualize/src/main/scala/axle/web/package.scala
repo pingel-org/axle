@@ -13,9 +13,41 @@ package object web {
       <body>{ inner }</body>
     </html>
 
+  val svgStyle = """
+.caption{
+  font-size: 14px;
+  font-family: Georgia, serif;
+}
+"""
+
+  val svgScript = """
+  function init(evt) {
+    if ( window.svgDocument == null ) {
+      svgDocument = evt.target.ownerDocument;
+    }
+  }
+
+  function ShowTooltip(evt, i) {
+    tooltip = svgDocument.getElementById('tooltip' + i);
+    //tooltip.setAttributeNS(null,"x",evt.clientX+10);
+    //tooltip.setAttributeNS(null,"y",evt.clientY+30);
+    tooltip.setAttributeNS(null,"visibility","visible");
+  }
+
+  function HideTooltip(evt, i) {
+    tooltip = svgDocument.getElementById('tooltip' + i);
+    tooltip.setAttributeNS(null,"visibility","hidden");
+  }
+"""
+
   // optional svg attribute: viewBox={ s"0 0 ${width} ${height}" }
   def svgFrame(inner: NodeSeq, width: Double, height: Double): Node =
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width={ s"$width" } height={ s"$height" }>{ inner }Sorry, your browser does not support inline SVG.</svg>
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width={ s"$width" } height={ s"$height" } onload="init(evt)">
+      <style>{ svgStyle }</style>
+      <script type="text/ecmascript">{ scala.xml.Unparsed("<![CDATA[%s]]>".format(svgScript)) }</script>
+      { inner }
+      Sorry, your browser does not support inline SVG.
+    </svg>
 
   def svg[T: SVG](t: T, filename: String, width: Int, height: Int): Unit =
     XML.save(filename, svgFrame(SVG[T].svg(t), width, height), encoding, true, null)

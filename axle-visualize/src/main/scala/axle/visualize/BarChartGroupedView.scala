@@ -59,12 +59,12 @@ case class BarChartGroupedView[G, S, Y, D](
   val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
 
   val bars = for {
-    ((s, j), color) <- slices.toVector.zipWithIndex.zip(colorStream)
+    (s, j) <- slices.toVector.zipWithIndex
     (g, i) <- groups.toStream.zipWithIndex
   } yield {
     val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth
     val rightX = leftX + barSliceWidth
-    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, groupedDataView.valueOf(data, (g, s))), fillColor = Some(color))
+    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, groupedDataView.valueOf(data, (g, s))), Option(colorOf(s)))
   }
 
 }

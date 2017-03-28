@@ -6,7 +6,6 @@ import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 import axle.HtmlFrom
 import cats.Show
-import axle.ml.KMeans
 import axle.string
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
@@ -63,19 +62,20 @@ object SVG {
 
   def rgb(color: Color): String = s"rgb(${color.r},${color.g},${color.b})"
 
-  implicit def svgDataLines[X, Y, D]: SVG[DataLines[X, Y, D]] =
-    new SVG[DataLines[X, Y, D]] {
-      def svg(dl: DataLines[X, Y, D]): NodeSeq = {
+  implicit def svgDataLines[S, X, Y, D]: SVG[DataLines[S, X, Y, D]] =
+    new SVG[DataLines[S, X, Y, D]] {
+      def svg(dl: DataLines[S, X, Y, D]): NodeSeq = {
 
         import dl._
 
         val pointRadius = pointDiameter / 2
 
-        data.zip(colorStream).flatMap {
-          case ((_, d), color) => {
+        data.flatMap {
+          case (s, d) => {
             val xs = orderedXs(d).toList
             val centers = xs.map(x => scaledArea.framePoint(Point2D(x, x2y(d, x))))
             val points = (centers map { c => s"${c.x},${c.y}" }).mkString(" ")
+            val color = colorOf(s)
             val polyline = <polyline points={ s"$points" } fill="none" stroke={ s"${rgb(color)}" } stroke-width="1"/>
             val pointCircles =
               if (pointRadius > 0) {
@@ -91,33 +91,62 @@ object SVG {
       }
     }
 
-  implicit def svgDataPoints[X, Y, D]: SVG[DataPoints[X, Y, D]] =
-    new SVG[DataPoints[X, Y, D]] {
-      def svg(dl: DataPoints[X, Y, D]): NodeSeq = {
+  implicit def svgDataPoints[S, X, Y, D]: SVG[DataPoints[S, X, Y, D]] =
+    new SVG[DataPoints[S, X, Y, D]] {
+      def svg(dl: DataPoints[S, X, Y, D]): NodeSeq = {
 
         import dl._
 
-        val pointRadius = pointDiameter / 2
-
         val domain = dataView.dataToDomain(data)
 
-        domain.toList.flatMap {
-          case (x, y) => {
+        val circles = domain.toList.zipWithIndex.flatMap {
+          case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
-            val color = dataView.colorOf(data, x, y)
+            val pointRadius = diameterOf(data, x, y) / 2
+            val color = colorOf(data, x, y)
             if (pointRadius > 0) {
-              <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+              labelOf(data, x, y) map {
+                case (label, permanent) =>
+                  if (permanent) {
+                    <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" }/>
+                  } else {
+                    <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" } onmousemove={ s"ShowTooltip(evt, $i)" } onmouseout={ s"HideTooltip(evt, $i)" }/>
+                  }
+              } getOrElse {
+                <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+              }
             } else {
               List.empty
             }
           }
         }
+
+        val labels = domain.toList.zipWithIndex.flatMap {
+          case ((x, y), i) => {
+            val center = scaledArea.framePoint(Point2D(x, y))
+            val pointRadius = diameterOf(data, x, y) / 2
+            if (pointRadius > 0) {
+              labelOf(data, x, y) map {
+                case (label, permanent) =>
+                  if (permanent) {
+                    <text class="pointLabel" id={ "pointLabel" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="visible">{ label }</text>
+                  } else {
+                    <text class="pointLabel" id={ "tooltip" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="hidden">{ label }</text>
+                  }
+              }
+            } else {
+              List.empty
+            }
+          }
+        }
+
+        circles ++ labels
       }
     }
 
-  implicit def svgKey[X, Y, D]: SVG[Key[X, Y, D]] =
-    new SVG[Key[X, Y, D]] {
-      def svg(key: Key[X, Y, D]): NodeSeq = {
+  implicit def svgKey[S: Show, X, Y, D]: SVG[Key[S, X, Y, D]] =
+    new SVG[Key[S, X, Y, D]] {
+      def svg(key: Key[S, X, Y, D]): NodeSeq = {
 
         import key._
 
@@ -129,9 +158,10 @@ object SVG {
           <text x={ s"${plot.width - key.width}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
         } toList
 
-        val keyEntries = data.zip(colorStream).zipWithIndex map {
-          case (((label, _), color), i) => {
-            <text x={ s"${plot.width - width}" } y={ s"${topPadding + plot.fontSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${plot.fontSize}" }>{ label }</text>
+        val keyEntries = data.zipWithIndex map {
+          case ((label, d), i) => {
+            val color = colorOf(label)
+            <text x={ s"${plot.width - width}" } y={ s"${topPadding + plot.fontSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${plot.fontSize}" }>{ string(label) }</text>
           }
         }
 
@@ -154,8 +184,9 @@ object SVG {
           <text x={ s"${width - keyWidth}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
         } toList
 
-        val keyEntries = slices.toList.zip(chart.colorStream).zipWithIndex map {
-          case ((slice, color), i) => {
+        val keyEntries = slices.toList.zipWithIndex map {
+          case (slice, i) => {
+            val color = colorOf(slice)
             <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
           }
         }
@@ -177,8 +208,9 @@ object SVG {
           <text x={ s"${width - keyWidth}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
         } toList
 
-        val keyEntries = slices.toList.zip(chart.colorStream).zipWithIndex map {
-          case ((slice, color), i) => {
+        val keyEntries = slices.toList.zipWithIndex map {
+          case (slice, i) => {
+            val color = colorOf(slice)
             <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
           }
         }
@@ -270,13 +302,12 @@ object SVG {
       }
     }
 
-  implicit def svgKMeans[D, F, G, M]: SVG[KMeans[D, F, G, M]] =
-    new SVG[KMeans[D, F, G, M]] {
+  implicit def svgKMeans[D, F, G, M]: SVG[KMeansVisualization[D, F, G, M]] =
+    new SVG[KMeansVisualization[D, F, G, M]] {
 
-      def svg(kmeans: KMeans[D, F, G, M]): NodeSeq = {
+      def svg(kmv: KMeansVisualization[D, F, G, M]): NodeSeq = {
 
-        val vis = KMeansVisualization(kmeans)
-        import vis._
+        import kmv._
 
         val nodes = (SVG[Rectangle[Double, Double]].svg(boundingRectangle) ::
           SVG[XTics[Double, Double]].svg(xTics) ::
@@ -288,10 +319,10 @@ object SVG {
       }
     }
 
-  implicit def svgScatterPlot[X, Y, D]: SVG[ScatterPlot[X, Y, D]] =
-    new SVG[ScatterPlot[X, Y, D]] {
+  implicit def svgScatterPlot[S, X, Y, D]: SVG[ScatterPlot[S, X, Y, D]] =
+    new SVG[ScatterPlot[S, X, Y, D]] {
 
-      def svg(scatterPlot: ScatterPlot[X, Y, D]): NodeSeq = {
+      def svg(scatterPlot: ScatterPlot[S, X, Y, D]): NodeSeq = {
 
         import scatterPlot._
 
@@ -316,7 +347,7 @@ object SVG {
 
         val nodes =
           (border :: xtics :: ytics ::
-            SVG[DataPoints[X, Y, D]].svg(dataPoints) ::
+            SVG[DataPoints[S, X, Y, D]].svg(dataPoints) ::
             List(
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
@@ -326,9 +357,9 @@ object SVG {
       }
     }
 
-  implicit def svgPlot[X, Y, D]: SVG[Plot[X, Y, D]] = new SVG[Plot[X, Y, D]] {
+  implicit def svgPlot[S, X, Y, D]: SVG[Plot[S, X, Y, D]] = new SVG[Plot[S, X, Y, D]] {
 
-    def svg(plot: Plot[X, Y, D]): NodeSeq = {
+    def svg(plot: Plot[S, X, Y, D]): NodeSeq = {
 
       import plot._
 
@@ -341,12 +372,12 @@ object SVG {
           SVG[VerticalLine[X, Y]].svg(vLine) ::
           SVG[XTics[X, Y]].svg(xTics) ::
           SVG[YTics[X, Y]].svg(yTics) ::
-          SVG[DataLines[X, Y, D]].svg(dataLines) ::
+          SVG[DataLines[S, X, Y, D]].svg(dataLines) ::
           List(
             titleText.map(SVG[Text].svg),
             xAxisLabelText.map(SVG[Text].svg),
             yAxisLabelText.map(SVG[Text].svg),
-            view.keyOpt.map(SVG[Key[X, Y, D]].svg)).flatten).reduce(_ ++ _)
+            view.keyOpt.map(SVG[Key[S, X, Y, D]].svg)).flatten).reduce(_ ++ _)
 
       svgFrame(nodes, width, height)
     }

@@ -3,10 +3,10 @@ package axle.visualize.element
 import axle.visualize.Color
 import axle.visualize.Plot
 
-case class Key[X, Y, D](
-  plot: Plot[X, Y, D],
+case class Key[S, X, Y, D](
+  plot: Plot[S, X, Y, D],
   title: Option[String],
-  colorStream: Stream[Color],
+  colorOf: S => Color,
   width: Int,
   topPadding: Int,
-  data: Seq[(String, D)])
+  data: Seq[(S, D)])

@@ -5,7 +5,7 @@ import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 // import ScoverageSbtPlugin._
 
-lazy val spireVersion = "0.13.1-SNAPSHOT"
+lazy val spireVersion = "0.14.0"
 lazy val shapelessVersion = "2.3.2"
 lazy val catsVersion = "0.8.1" // must match spire's algebra's catsVersion
 lazy val disciplineVersion = "0.7.2"
@@ -48,8 +48,8 @@ lazy val axleCore = Project(
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % scalaTestVersion, // TODO % "test",
       "org.typelevel" %% "discipline" % disciplineVersion,
-      "org.spire-math" %% "spire" % spireVersion,
-      "org.spire-math" %% "spire-laws" % spireVersion,
+      "org.typelevel" %% "spire" % spireVersion,
+      "org.typelevel" %% "spire-laws" % spireVersion,
       "org.typelevel" %% "cats-core" % catsVersion,
       "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,

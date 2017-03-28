@@ -58,6 +58,7 @@ val errorPlot = Plot(
   List(("error" -> priceEstimator.errTree)),
   connect = true,
   drawKey = true,
+  colorOf = (label: String) => Color.black,
   title = Some("Linear Regression Error"),
   xAxis = Some(0d),
   xAxisLabel = Some("step"),

@@ -29,6 +29,7 @@ import cats.implicits._
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import axle.visualize.BarChartGrouped
+import axle.visualize.Color._
 ```
 
 The data can be grouped in two ways to produce bar charts:
@@ -36,7 +37,11 @@ The data can be grouped in two ways to produce bar charts:
 ```tut:book
 val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
   sales,
-  title = Some("fruit sales")
+  title = Some("fruit sales"),
+  colorOf = (label: Int) => label match {
+    case 2011 => red
+    case 2012 => blue
+  }
 )
 ```
 
@@ -55,13 +60,18 @@ Or alternatively
 ```tut:book
 val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double]](
   sales map { case (k, v) => (k._2, k._1) -> v},
+  colorOf = (label: String) => label match {
+    case "apple" => red
+    case "banana" => yellow
+    case "coconut" => brown
+  },
   title = Some("fruit sales")
 )
 ```
 
 Create the second SVG
 
-```
+```tut:book
 import axle.web._
 
 svg(chart, "barchart2.svg")

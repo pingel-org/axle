@@ -13,7 +13,6 @@ import java.io.File
 import axle.visualize.ScaledArea2D
 import scala.reflect.ClassTag
 import axle.algebra.DirectedGraph
-import axle.ml.KMeans
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.quanta.Angle
@@ -116,14 +115,14 @@ package object awt {
     }
   }
 
-  implicit def drawPlot[X, Y, D]: Draw[Plot[X, Y, D]] =
-    new Draw[Plot[X, Y, D]] {
-      def component(plot: Plot[X, Y, D]) = PlotComponent(plot)
+  implicit def drawPlot[S, X, Y, D]: Draw[Plot[S, X, Y, D]] =
+    new Draw[Plot[S, X, Y, D]] {
+      def component(plot: Plot[S, X, Y, D]) = PlotComponent(plot)
     }
 
-  implicit def drawScatterPlot[X, Y, D: ClassTag]: Draw[ScatterPlot[X, Y, D]] =
-    new Draw[ScatterPlot[X, Y, D]] {
-      def component(plot: ScatterPlot[X, Y, D]) = ScatterPlotComponent(plot)
+  implicit def drawScatterPlot[S, X, Y, D: ClassTag]: Draw[ScatterPlot[S, X, Y, D]] =
+    new Draw[ScatterPlot[S, X, Y, D]] {
+      def component(plot: ScatterPlot[S, X, Y, D]) = ScatterPlotComponent(plot)
     }
 
   implicit def drawBarChart[S, Y, D: ClassTag]: Draw[BarChart[S, Y, D]] =
@@ -156,9 +155,9 @@ package object awt {
     }
   }
 
-  implicit def drawKMeansClasifier[T, F, G, M]: Draw[KMeans[T, F, G, M]] =
-    new Draw[KMeans[T, F, G, M]] {
-      def component(kmc: KMeans[T, F, G, M]) = KMeansComponent(KMeansVisualization(kmc))
+  implicit def drawKMeansVisualization[T, F, G, M]: Draw[KMeansVisualization[T, F, G, M]] =
+    new Draw[KMeansVisualization[T, F, G, M]] {
+      def component(kmv: KMeansVisualization[T, F, G, M]) = KMeansComponent(kmv)
     }
 
   /**
@@ -181,15 +180,15 @@ package object awt {
 
   def bmp[T: Image](t: T, filename: String): Unit = image2file(t, filename, "BMP")
 
-  implicit def paintDataLines[X, Y, D]: Paintable[DataLines[X, Y, D]] = new Paintable[DataLines[X, Y, D]] {
+  implicit def paintDataLines[S, X, Y, D]: Paintable[DataLines[S, X, Y, D]] = new Paintable[DataLines[S, X, Y, D]] {
 
-    def paint(dataLines: DataLines[X, Y, D], g2d: Graphics2D): Unit = {
+    def paint(dataLines: DataLines[S, X, Y, D], g2d: Graphics2D): Unit = {
 
       import dataLines._
 
-      data.zip(colorStream) foreach {
-        case (((label, d), color)) =>
-          g2d.setColor(cachedColor(color))
+      data foreach {
+        case (label, d) =>
+          g2d.setColor(cachedColor(colorOf(label)))
           val xs = orderedXs(d).toVector
           if (connect && xs.size > 1) {
             val xsStream = xs.toStream
@@ -208,20 +207,19 @@ package object awt {
 
   }
 
-  implicit def paintDataPoints[X, Y, D]: Paintable[DataPoints[X, Y, D]] = new Paintable[DataPoints[X, Y, D]] {
+  implicit def paintDataPoints[S, X, Y, D]: Paintable[DataPoints[S, X, Y, D]] = new Paintable[DataPoints[S, X, Y, D]] {
 
-    def paint(dataPoints: DataPoints[X, Y, D], g2d: Graphics2D): Unit = {
+    def paint(dataPoints: DataPoints[S, X, Y, D], g2d: Graphics2D): Unit = {
 
       import dataPoints._
 
       val domain = dataView.dataToDomain(data)
 
-      if (pointDiameter.toInt > 0) {
-        domain foreach {
-          case (x, y) => {
-            g2d.setColor(cachedColor(dataView.colorOf(data, x, y)))
-            fillOval(g2d, scaledArea, Point2D(x, y), pointDiameter.toInt, pointDiameter.toInt)
-          }
+      domain foreach {
+        case (x, y) => {
+          val pointDiameter = diameterOf(data, x, y)
+          g2d.setColor(cachedColor(dataPoints.colorOf(data, x, y)))
+          fillOval(g2d, scaledArea, Point2D(x, y), pointDiameter.toInt, pointDiameter.toInt)
         }
       }
     }
@@ -392,9 +390,9 @@ package object awt {
 
   }
 
-  implicit def paintKey[X, Y, D]: Paintable[Key[X, Y, D]] = new Paintable[Key[X, Y, D]] {
+  implicit def paintKey[S: Show, X, Y, D]: Paintable[Key[S, X, Y, D]] = new Paintable[Key[S, X, Y, D]] {
 
-    def paint(key: Key[X, Y, D], g2d: Graphics2D): Unit = {
+    def paint(key: Key[S, X, Y, D], g2d: Graphics2D): Unit = {
 
       import key._
 
@@ -402,10 +400,11 @@ package object awt {
       val fontMetrics = g2d.getFontMetrics
 
       val lineHeight = g2d.getFontMetrics.getHeight
-      data.zip(colorStream).zipWithIndex foreach {
-        case (((label, _), color), i) =>
+      data.zipWithIndex foreach {
+        case ((label, d), i) =>
+          val color = colorOf(label)
           g2d.setColor(cachedColor(color))
-          g2d.drawString(label, plot.width - width, topPadding + lineHeight * (i + 1))
+          g2d.drawString(string(label), plot.width - width, topPadding + lineHeight * (i + 1))
       }
     }
 
@@ -421,8 +420,9 @@ package object awt {
 
         g2d.setFont(cachedFont(chart.normalFontName, chart.normalFontSize, true))
         val lineHeight = g2d.getFontMetrics.getHeight
-        slices.toVector.zipWithIndex.zip(colorStream) foreach {
-          case ((s, j), color) =>
+        slices.toVector.zipWithIndex foreach {
+          case (s, j) =>
+            val color = colorOf(s)
             g2d.setColor(cachedColor(color))
             g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
         }
@@ -440,9 +440,9 @@ package object awt {
 
         g2d.setFont(cachedFont(chart.normalFontName, chart.normalFontSize, true))
         val lineHeight = g2d.getFontMetrics.getHeight
-        slices.toVector.zipWithIndex.zip(colorStream) foreach {
-          case ((s, j), color) =>
-            g2d.setColor(cachedColor(color))
+        slices.toVector.zipWithIndex foreach {
+          case (s, j) =>
+            g2d.setColor(cachedColor(colorOf(s)))
             g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
         }
       }

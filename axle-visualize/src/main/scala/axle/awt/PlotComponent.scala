@@ -22,10 +22,10 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import javax.swing.JPanel
 
-case class PlotComponent[X, Y, D](
-  plot: Plot[X, Y, D])
+case class PlotComponent[S, X, Y, D](
+  plot: Plot[S, X, Y, D])
     extends JPanel
-    with Fed[Seq[(String, D)]] {
+    with Fed[Seq[(S, D)]] {
 
   def initialValue = plot.initialValue
 
@@ -36,7 +36,7 @@ case class PlotComponent[X, Y, D](
   override def paintComponent(g: Graphics): Unit = {
 
     val data = feeder map { dataFeedActor =>
-      val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(String, D)]]
+      val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(S, D)]]
       // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
       Await.result(dataFuture, 1.seconds)
     } getOrElse (plot.initialValue)
@@ -50,12 +50,12 @@ case class PlotComponent[X, Y, D](
     Paintable[VerticalLine[X, Y]].paint(vLine, g2d)
     Paintable[XTics[X, Y]].paint(xTics, g2d)
     Paintable[YTics[X, Y]].paint(yTics, g2d)
-    Paintable[DataLines[X, Y, D]].paint(dataLines, g2d)
+    Paintable[DataLines[S, X, Y, D]].paint(dataLines, g2d)
 
     titleText.foreach(Paintable[Text].paint(_, g2d))
     xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
     yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
-    view.keyOpt.foreach(Paintable[Key[X, Y, D]].paint(_, g2d))
+    view.keyOpt.foreach(Paintable[Key[S, X, Y, D]].paint(_, g2d))
 
   }
 

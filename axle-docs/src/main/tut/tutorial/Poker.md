@@ -55,13 +55,17 @@ BarChartGrouped to visualize the results
 ```tut:book
 import spire.implicits.IntAlgebra
 import axle.visualize.BarChartGrouped
+import axle.visualize.Color._
+
+val colors = List(black, red, blue, yellow, green)
 
 val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]](
   data.tally.withDefaultValue(0),
   title = Some("Poker Hands"),
   keyTitle = Some("Hand Size"),
-  yAxisLabel = Some("instances of category by hand size (1000 trials each)")
-  )
+  yAxisLabel = Some("instances of category by hand size (1000 trials each)"),
+  colorOf = (handSize: Int) => colors( (handSize - 5) % colors.size)
+)
 
 import axle.web._
 svg(chart, "pokerhands.svg")

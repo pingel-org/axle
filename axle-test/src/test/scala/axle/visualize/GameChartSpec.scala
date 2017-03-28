@@ -26,15 +26,16 @@ class GameChartSpec extends FunSuite with Matchers {
     implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
     // test implicit conjuring:
-    PlotDataView.distribution0DataView[Int, Rational]
+    PlotDataView.distribution0DataView[String, Int, Rational]
 
     val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
       scoreD,
       drawKey = true,
       xAxis = Some(Rational(0)))
 
-    val plot = Plot[Int, Rational, Distribution0[Int, Rational]](
+    val plot = Plot[String, Int, Rational, Distribution0[Int, Rational]](
       Vector(("", scoreD)),
+      colorOf = _ => Color.black,
       drawKey = true,
       xAxis = Some(Rational(0)))
 

@@ -44,10 +44,11 @@ implicit val bitDouble = id.bit
 
 implicit val ut = axle.quanta.unittedTicsGraphK2[Information, Double, DirectedSparseGraph]
 
-val plot = new Plot[Rational, UnittedQuantity[Information, Double], D](
+val plot = Plot[String, Rational, UnittedQuantity[Information, Double], D](
   List(("h", hm)),
   connect = true,
   drawKey = false,
+  colorOf = _ => Color.black,
   xAxis = Some(0d *: bitDouble),
   xAxisLabel = Some("p(x='HEAD)"),
   yAxis = Some(Rational(0)),

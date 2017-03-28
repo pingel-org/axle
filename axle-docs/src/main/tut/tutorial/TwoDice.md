@@ -46,10 +46,10 @@ import axle.visualize._
 ```tut:book
 val chart = BarChart[Int, Int, Map[Int, Int]](
   histogram,
+  colorOf = _ => Color.blue,
   xAxis = Some(0),
   title = Some("d6 + d6"),
   labelAngle = 0d *: angleDouble.degree,
-  colors = List(blue),
   drawKey = false)
 ```
 
@@ -63,6 +63,7 @@ svg(chart, "d6plusd6.svg")
 ![Observed d6 + d6](/tutorial/images/d6plusd6.svg)
 
 Distribution Monad
+------------------
 
 The distribution of two rolls combined can be produced with a for comprehension
 and charted directly.
@@ -100,10 +101,10 @@ import spire.implicits.IntAlgebra
 ```tut:book
 val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
   distribution,
+  colorOf = _ => Color.blue,
   xAxis = Some(Rational(0)),
   title = Some("d6 + d6"),
   labelAngle = 0d *: angleDouble.degree,
-  colors = List(blue),
   drawKey = false)
 ```
 

@@ -54,6 +54,7 @@ class BarChartSpec extends FunSuite with Matchers {
     val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
       sales,
       // xAxis = Some(0d),
+      colorOf = (slice: Int) => blue,
       title = Some("fruit sales"))
 
     val filename = "fruit_sales_grouped.svg"
@@ -76,7 +77,7 @@ class BarChartSpec extends FunSuite with Matchers {
       xAxis = Some(Rational(0)),
       title = Some("d6 + d6"),
       labelAngle = 36d *: angleDouble.degree,
-      colors = List(blue),
+      colorOf = (i: Int) => blue,
       drawKey = false)
 
     val filename = "d6plusd6.svg"

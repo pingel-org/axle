@@ -1,7 +1,5 @@
 package axle.visualize
 
-import scala.Stream.continually
-
 import cats.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
@@ -34,7 +32,7 @@ case class BarChart[S, Y, D](
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
     labelAngle: UnittedQuantity[Angle, Double] = 36d *: angleDouble.degree,
-    colors: Seq[Color] = defaultColors)(
+    colorOf: S => Color = (s: S) => Color.blue)(
         implicit val showS: Show[S],
         val zeroY: Zero[Y],
         val orderY: Order[Y],
@@ -43,8 +41,6 @@ case class BarChart[S, Y, D](
         val plottableY: Plottable[Y],
         val dataView: DataView[S, Y, D],
         val lengthSpaceY: LengthSpace[Y, _, Double]) {
-
-  val colorStream = continually(colors.toStream).flatten
 
   val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold = true))
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, normalFontName, normalFontSize, bold = true))

@@ -90,6 +90,42 @@ package object axle {
   def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
     (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))
 
+  /**
+   * gaps
+   *
+   * assumes that the input xs are already sorted
+   */
+  def gaps[T](xs: Seq[T])(implicit ringT: Ring[T]): Seq[(T, T)] = {
+    import ringT.one
+    import spire.implicits._
+    xs.zip(xs.drop(1))
+      .map({ case (x, y) => (x, y - x) })
+      .filterNot(_._2 == one)
+      .map({ case (x, g) => (x + one, x + g - one) })
+  }
+
+  def runs[T](xs: Seq[T], breaks: Set[T]): Seq[(T, T)] =
+    if (xs.isEmpty) {
+      List.empty
+    } else {
+      val tail = xs.drop(1)
+        val run = tail.takeWhile(x => !breaks.contains(x))
+      (xs.head, (xs.head +: run).last) +: runs(tail.drop(run.length), breaks)
+    }
+
+  /**
+   * runs
+   *
+   * assumes xs is already sorted
+   */
+
+  def runs[T](xs: Seq[T])(implicit ringT: Ring[T], orderT: Order[T]): Seq[(T, T)] = {
+    import ringT.one
+    import spire.implicits._
+    val breaks = xs.zip(xs.drop(1)).filter({ case (x, y) => orderT.compare(y - x, one) == 1 }).map(_._2).toSet
+    runs(xs, breaks)
+  }
+
   //  val Sigma = Σ _
   //
   //  val Pi = Π _
@@ -321,25 +357,25 @@ package object axle {
 
   def √[N: NRoot](x: N): N = x.sqrt
 
-//  implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
-//    def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
-//  }
-//
-//  implicit def eqIndexedSeq[T: Eq]: Eq[IndexedSeq[T]] = new Eq[IndexedSeq[T]] {
-//    def eqv(x: IndexedSeq[T], y: IndexedSeq[T]): Boolean = {
-//      val lhs = (x.size == y.size)
-//      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
-//      lhs && rhs
-//    }
-//  }
-//
-//  implicit def eqSeq[T: Eq]: Eq[Seq[T]] = new Eq[Seq[T]] {
-//    def eqv(x: Seq[T], y: Seq[T]): Boolean = {
-//      val lhs = (x.size == y.size)
-//      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
-//      lhs && rhs
-//    }
-//  }
+  //  implicit def eqSet[S: Eq]: Eq[Set[S]] = new Eq[Set[S]] {
+  //    def eqv(x: Set[S], y: Set[S]): Boolean = (x.size === y.size) && x.intersect(y).size === x.size
+  //  }
+  //
+  //  implicit def eqIndexedSeq[T: Eq]: Eq[IndexedSeq[T]] = new Eq[IndexedSeq[T]] {
+  //    def eqv(x: IndexedSeq[T], y: IndexedSeq[T]): Boolean = {
+  //      val lhs = (x.size == y.size)
+  //      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
+  //      lhs && rhs
+  //    }
+  //  }
+  //
+  //  implicit def eqSeq[T: Eq]: Eq[Seq[T]] = new Eq[Seq[T]] {
+  //    def eqv(x: Seq[T], y: Seq[T]): Boolean = {
+  //      val lhs = (x.size == y.size)
+  //      val rhs = (x.zip(y).forall({ case (a, b) => a === b }))
+  //      lhs && rhs
+  //    }
+  //  }
 
   def string[T: Show](t: T): String = Show[T].show(t)
 
