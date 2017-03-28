@@ -4,10 +4,7 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.8 (April 2016)
-* Depend on Spire 0.14.0 (which depends on Typelevel Algebra)
-
-## 0.2.9 (May 2017)
+## 0.2.9 (April 2017)
 * log scale
 * Publish Scala 2.12 artifacts (depends on spark-core availability)
 * Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
@@ -16,7 +13,7 @@ permalink: /road_map/
 * Fix axle-test/src/test/scala/axle/algebra/GeoMetricSpaceSpec.scala
 * Fix malformed distribution axle.stats.ConditionalProbabilityTable0$$anonfun$observe$2.apply(ConditionalProbabilityTable.scala:68)
 
-## 0.2.10 (June 2017)
+## 0.2.10 (May 2017)
 * Reactive Streams (FS2?) for animating visualizations
 * SVG Animation
 * ScatterPlot `play` to awt
@@ -25,7 +22,7 @@ permalink: /road_map/
 * Fix multi-color cube rendering
 * KMeansVisualization / ScatterPlot similarity (at least DataPoints)
 
-## 0.2.11 (July 2017)
+## 0.2.11 (June 2017)
 * Max bet for Poker
 * Code coverage to ?%
 
@@ -177,3 +174,8 @@ Previous Milestones
 ## 0.2.7 (January 2016)
 * Use cats-kernel's Eq and Order in favor of Spire's (with Shims to continue to work with Spire)
 * Convert tests to use scalatest (to match Cats and Spire)
+
+## 0.2.8 (March 2016)
+* Fix SVG rendering of negative values in BarChart
+* Make more arguments to vis components functions (colorOf, labelOf, diameterOf)
+* Depend on Spire 0.14.0 (which depends on Typelevel Algebra)
