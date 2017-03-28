@@ -15,7 +15,7 @@ case class Manhattan[M, R, C, D](
 
     val subDistances = r1.zipWith(subSpace.distance)(r2)
 
-    subDistances.reduceToScalar(add.additive.op _)
+    subDistances.reduceToScalar(add.additive.combine _)
   }
 
 }

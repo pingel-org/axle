@@ -4,24 +4,20 @@ title: Road Map
 permalink: /road_map/
 ---
 
-## 0.2.7 (December 2016)
-* Depend on Spire 0.13.0 (which depends on Typelevel Algebra)
-* Use cats-kernel's Eq and Order in favor of Spire's
-# Convert tests to use scalatest (to match Cats and Spire)
-
-## 0.2.8 (January 2017)
-* Fix Logistic regression
+## 0.2.8 (January 2016)
+* Depend on Spire 0.13.1 (which depends on Typelevel Algebra)
 * Fix JodaTime Tics handling of timezones
 * Publish Scala 2.12 artifacts
-* Code coverage to ?%
 
-## 0.2.9 (February 2017)
-* Dependent types (Shapeless? Refined?) for matrix size
-
-## 0.2.10 (March 2017)
+## 0.2.9 (January 2017)
 * Reactive Streams for animating visualizations
 
-## 0.3.0 (April 2017)
+## 0.2.10 (February 2017)
+* Dependent types (Shapeless? Refined? ValueOf SIP-23 in typelevel scala 2.11 and 2.12.2) for matrix size
+* Fix Logistic regression
+
+## 0.3.0 (March 2017)
+* Code coverage to ?%
 * Solve the Spark ClassTag issue
 
 ## 0.3.x (Summer/Fall 2017)
@@ -163,3 +159,7 @@ Previous Milestones
 * Implementation of Monty Hall using axle.game typeclasses
 * Implementaiton of Prisoner's Dilemma using axle.game typeclasses
 * Minor Poker fixes
+
+## 0.2.7 (January 2016)
+* Use cats-kernel's Eq and Order in favor of Spire's (with Shims to continue to work with Spire)
+# Convert tests to use scalatest (to match Cats and Spire)

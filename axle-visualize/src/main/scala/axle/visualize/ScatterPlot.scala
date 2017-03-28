@@ -25,9 +25,11 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     drawYTics: Boolean = true,
     drawYTicLines: Boolean = true,
     drawBorder: Boolean = true,
+    xRange: Option[(X, X)] = None,
+    yAxis: Option[X] = None,
+    yRange: Option[(Y, Y)] = None,
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
-    yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
         implicit val lengthX: LengthSpace[X, X, Double],
         val lengthY: LengthSpace[Y, Y, Double],
@@ -43,8 +45,8 @@ case class ScatterPlot[X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
 
   val domain = dataView.dataToDomain(data)
 
-  val (minX, maxX) = minMax(yAxis.toList ++ domain.map(_._1).toList)
-  val (minY, maxY) = minMax(xAxis.toList ++ domain.map(_._2).toList)
+  val (minX, maxX) = xRange.getOrElse(minMax(yAxis.toList ++ domain.map(_._1).toList))
+  val (minY, maxY) = yRange.getOrElse(minMax(xAxis.toList ++ domain.map(_._2).toList))
 
   val minPoint = Point2D(minX, minY)
   val maxPoint = Point2D(maxX, maxY)

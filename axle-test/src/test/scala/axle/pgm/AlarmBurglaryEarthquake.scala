@@ -1,13 +1,12 @@
 package axle.stats
 
-import spire.math._
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.orderRational
+// import cats.implicits._
+import spire.math._
+import spire.implicits._
 import axle.pgm._
 import axle.jung.directedGraphJung
-import spire.implicits._
-import cats.implicits._
 
 class ABE extends FunSuite with Matchers {
 

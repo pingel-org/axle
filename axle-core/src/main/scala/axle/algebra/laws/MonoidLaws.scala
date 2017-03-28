@@ -32,13 +32,13 @@ trait MonoidLaws[A] extends Laws {
 
       def props: Seq[(String, Prop)] = Seq(
         "left zero" → forAll { (x: A) =>
-          m.op(m.id, x) === x
+          m.combine(m.empty, x) === x
         },
         "right zero" → forAll { (x: A) =>
-          m.op(x, m.id) === x
+          m.combine(x, m.empty) === x
         },
         "associativity" → forAll { (x: A, y: A, z: A) =>
-          m.op(m.op(x, y), z) === m.op(x, m.op(y, z))
+          m.combine(m.combine(x, y), z) === m.combine(x, m.combine(y, z))
         })
     }
 

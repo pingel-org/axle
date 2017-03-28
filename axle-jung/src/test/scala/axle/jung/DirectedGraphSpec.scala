@@ -4,12 +4,11 @@ package axle.jung
 import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.algebra.DirectedGraph
+import cats.implicits._
 import spire.math.Real
-import spire.implicits._
 import axle.syntax.finite._
 import axle.syntax.directedgraph._
-import cats.implicits._
+import axle.algebra.DirectedGraph
 
 class DirectedGraphSpec extends FunSuite with Matchers {
 

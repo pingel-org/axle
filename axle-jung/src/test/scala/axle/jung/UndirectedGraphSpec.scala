@@ -2,13 +2,12 @@ package axle.jung
 
 import org.scalatest._
 
-import axle.algebra.UndirectedGraph
-import spire.math.Real
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
-import spire.implicits._
+import cats.implicits._
+import spire.math.Real
+import axle.algebra.UndirectedGraph
 import axle.syntax.finite._
 import axle.syntax.undirectedgraph._
-import cats.implicits._
 
 class UndirectedGraphSpec extends FunSuite with Matchers {
 

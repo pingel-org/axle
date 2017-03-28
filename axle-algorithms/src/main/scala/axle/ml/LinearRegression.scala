@@ -2,9 +2,12 @@ package axle.ml
 
 import scala.collection.immutable.TreeMap
 import spire.math.abs
+import spire.algebra.Module
+import spire.algebra.Ring
+// import spire.implicits.IntAlgebra
+import spire.implicits._
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
-import spire.implicits._
 
 case class LinearRegression[D, M](
   examples: Seq[D],
@@ -15,9 +18,9 @@ case class LinearRegression[D, M](
   iterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
     extends Function1[D, Double] {
 
-  implicit val ring = la.ring
-
-  implicit val module = la.module
+  implicit val ringM: Ring[M] = la.ring
+  implicit val module: Module[M, Double] = la.module
+  // implicit val zeroInt = axle.algebra.Zero.ringZero[Int]
 
   val inputX = la.fromRowMajorArray(
     examples.length,
@@ -45,7 +48,7 @@ case class LinearRegression[D, M](
   def dθ(X: M, y: M, θ: M): M =
     (0 until X.rows)
       .foldLeft(la.zeros(1, X.columns))(
-        (m: M, i: Int) => ring.plus(m, (X.row(i) * (h(X.row(i), θ).subtractScalar(y.get(i, 0)))))).divideScalar(X.rows)
+        (m: M, i: Int) => ringM.plus(m, (X.row(i) * (h(X.row(i), θ).subtractScalar(y.get(i, 0)))))).divideScalar(X.rows)
 
   def dTheta(X: M, y: M, θ: M): M = dθ(X, y, θ)
 

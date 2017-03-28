@@ -3,15 +3,14 @@ package axle.pgm
 
 import org.scalatest._
 
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
+// import cats.implicits._
+import spire.implicits._
+import spire.math._
 import axle.stats._
 import axle.jung.undirectedGraphJung
 import axle.jung.directedGraphJung
-import axle.orderRational
-import spire.implicits._
-import spire.math._
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
-import cats.implicits._
 
 class ScalaFigures extends FunSuite with Matchers {
 

@@ -9,7 +9,6 @@ import axle.game.Bowling.stateDistribution
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.stats.Distribution0
-import axle.orderRational
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra

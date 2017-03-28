@@ -2,6 +2,9 @@ package axle.algebra
 
 import org.scalatest._
 
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import spire.implicits.DoubleAlgebra
+import spire.implicits.metricSpaceOps
 import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
 import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
@@ -9,10 +12,6 @@ import axle.distanceOnSphere
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.DoubleAlgebra
-import spire.implicits.metricSpaceOps
-import cats.implicits._
 
 class GeoLengthSpaceSpec extends FunSuite with Matchers {
 

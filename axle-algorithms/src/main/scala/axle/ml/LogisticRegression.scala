@@ -5,6 +5,8 @@ import spire.math.log
 
 import axle.syntax.linearalgebra._
 import axle.algebra.LinearAlgebra
+import spire.algebra.Ring
+import spire.algebra.Module
 import spire.implicits._
 
 case class LogisticRegression[D, M](
@@ -16,12 +18,13 @@ case class LogisticRegression[D, M](
   numIterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
     extends Function1[List[Double], Double] {
 
-  implicit val module = la.module
-  implicit val ring = la.ring
+  implicit val moduleMDouble: Module[M, Double] = la.module
+  implicit val ringM: Ring[M] = la.ring
+  // implicit val zeroInt = axle.algebra.Zero.ringZero[Int]
 
   // h is essentially P(y=1 | X;θ)
   def h(xi: M, θ: M): Double =
-    1 / (1 + exp(-1 * (θ.t * xi).scalar))
+    1 / (1 + exp(-1 * (ringM.times(θ.t, xi)).scalar))
 
   // yi is boolean (1d or 0d)
   def cost(xi: M, θ: M, yi: Double): Double =

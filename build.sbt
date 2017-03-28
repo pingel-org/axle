@@ -3,9 +3,9 @@ import com.typesafe.sbt.SbtSite.SiteKeys._
 import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
-import ScoverageSbtPlugin._
+// import ScoverageSbtPlugin._
 
-lazy val spireVersion = "0.13.0"
+lazy val spireVersion = "0.13.1-SNAPSHOT"
 lazy val shapelessVersion = "2.3.2"
 lazy val catsVersion = "0.8.1" // must match spire's algebra's catsVersion
 lazy val disciplineVersion = "0.7.2"
@@ -17,23 +17,21 @@ lazy val scalaParserCombinatorsVersion = "1.0.4"
 lazy val sparkVersion = "2.0.1"
 lazy val jungVersion = "2.1"
 lazy val jblasVersion = "1.2.4"
-lazy val jacksonVersion = "2.7.4"
+lazy val jacksonVersion = "2.8.4"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
 lazy val jogampVersion = "2.3.2"
-lazy val akkaVersion = "2.4.7"
-lazy val akkaStreamVersion = "2.0.4"
+lazy val akkaVersion = "2.4.14"
 
 lazy val scoverageSettings = Seq(
-  ScoverageKeys.coverageMinimum := 10,
-  ScoverageKeys.coverageFailOnMinimum := false,
-  ScoverageKeys.coverageHighlighting := true
+  coverageMinimum := 10,
+  coverageFailOnMinimum := false,
+  coverageHighlighting := true
 )
 
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
   scalaVersion := "2.11.8",
-  //crossScalaVersions := Seq("2.10.6", "2.11.8")
   crossScalaVersions := Seq("2.11.8")
 )
 
@@ -208,7 +206,7 @@ lazy val axleVisualize = Project(
     "org.joda" % "joda-convert" % jodaConvertVersion % "provided",
     "org.jblas" % "jblas" % jblasVersion % "provided",
     "com.typesafe.akka" %% "akka-actor" % akkaVersion % "provided",
-    "com.typesafe.akka" %% "akka-stream-experimental" % akkaStreamVersion % "provided",
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion % "provided",
     "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion % "provided", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
     "org.jogamp.jogl" % "jogl-all-main" % jogampVersion % "provided"
   )
@@ -222,7 +220,7 @@ lazy val axleTest = Project(
   name := "axle-test",
   libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream-experimental" % akkaStreamVersion,
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
     "org.jblas" % "jblas" % jblasVersion,
     "joda-time" % "joda-time" % jodaTimeVersion,
     "org.joda" % "joda-convert" % jodaConvertVersion,

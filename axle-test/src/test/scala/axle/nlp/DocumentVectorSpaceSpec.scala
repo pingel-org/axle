@@ -89,12 +89,7 @@ class DocumentVectorSpaceSpec
   // TODO more possibilities for genReal
   val genReal = Gen.oneOf[Real](1, 2, 3.9, 10)
 
-  // TODO spire conversion
-  val spireEqMapStringReal = new spire.algebra.Eq[Map[String, Real]] {
-    val catsEq = eqMapKV[String, Real]
-    def eqv(x: Map[String, Real], y: Map[String, Real]): Boolean =
-      catsEq.eqv(x, y)
-  }
+  val spireEqMapStringReal = eqMapKV[String, Real]
 
   val vsl = VectorSpaceLaws[Map[String, Real], Real](
     spireEqMapStringReal,

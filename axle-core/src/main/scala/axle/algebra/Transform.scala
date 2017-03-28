@@ -2,10 +2,10 @@ package axle.algebra
 
 import spire.algebra.AbGroup
 
-case class Transform[N](t: N)(implicit group: AbGroup[N]) extends Bijection[N, N] {
+case class Transform[N](u: N)(implicit group: AbGroup[N]) extends Bijection[N, N] {
 
-  def apply(n: N): N = group.op(n, t)
+  def apply(v: N): N = group.combine(u, v)
 
-  def unapply(n: N): N = group.opInverse(n, t)
+  def unapply(v: N): N = group.combine(v, group.inverse(u))
 
 }

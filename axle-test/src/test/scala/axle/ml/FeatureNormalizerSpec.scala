@@ -5,6 +5,15 @@ import axle.jblas._
 
 class FeatureNormalizerSpec extends FunSuite with Matchers {
 
+  import org.scalactic._
+
+  import scala.reflect.ClassTag
+  implicit def catsToScalacticEq[T](implicit ckeq: cats.kernel.Eq[T], ct: ClassTag[T]): Equality[T] =
+    new Equality[T] {
+      def areEqual(a: T, b: Any): Boolean =
+        ct.runtimeClass.isInstance(b) && ckeq.eqv(a, b.asInstanceOf[T])
+    }
+
   test("identity normalizer leaves features alone") {
 
     import spire.implicits.DoubleAlgebra
@@ -36,8 +45,9 @@ class FeatureNormalizerSpec extends FunSuite with Matchers {
 
     val normalized = featureNormalizer(1.4 :: 6.7 :: Nil)
 
-    axle.string(normalized) should be("-0.726598 0.051956")
-    //la.matrix(1, 2, Array(-0.726598, 0.051956))
+    val expected = la.fromColumnMajorArray(1, 2, Array(-0.726597627147548, 0.051956328853936716))
+
+    normalized should ===(expected)
   }
 
 }
