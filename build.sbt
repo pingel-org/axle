@@ -48,8 +48,8 @@ lazy val axleCore = Project(
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % scalaTestVersion, // TODO % "test",
       "org.typelevel" %% "discipline" % disciplineVersion,
-      "org.spire-math" %% "spire" % spireVersion,
-      "org.spire-math" %% "spire-laws" % spireVersion,
+      "org.typelevel" %% "spire" % spireVersion,
+      "org.typelevel" %% "spire-laws" % spireVersion,
       "org.typelevel" %% "cats-core" % catsVersion,
       "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
