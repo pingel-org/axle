@@ -6,9 +6,6 @@ permalink: /road_map/
 
 See [Release Notes](/tutorial/release_notes/) for the record of previously released features.
 
-Road Map
-========
-
 ## 0.2.9 (April 2017)
 * log scale
 * Publish Scala 2.12 artifacts (depends on spark-core availability)

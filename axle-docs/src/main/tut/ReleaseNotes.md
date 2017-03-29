@@ -6,9 +6,6 @@ permalink: /release_notes/
 
 See [Road Map](/tutorial/road_map/) for the plan of upcoming releases and features.
 
-Release Notes
-=============
-
 ## 0.2.8 (March 28, 2016)
 * Fix SVG rendering of negative values in BarChart
 * Make more arguments to vis components functions (colorOf, labelOf, diameterOf)
