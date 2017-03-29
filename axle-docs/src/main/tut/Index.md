@@ -19,7 +19,8 @@ Axle is an open-source Scala-embedded domain specific language for scientific co
 For additional context see
 
 * The [history](/history/) of axle
-* See the [Road Map](/road_map/) for more information on the release schedule and priorities
+* See [Release Notes](/tutorial/release_notes/) for the record of previously released features.
+* See [Road Map](/tutorial/road_map/) for the plan of upcoming releases and features.
 * [Author](/author/) background
 * Other related [Videos](/videos/)
 * External [resources](/resources/) and tools
