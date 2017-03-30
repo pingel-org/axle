@@ -64,7 +64,6 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
 
   def observe(): A = {
     val r = rng.next[N]
-    //bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
     bars.find({ case (_, v) => order.gteqv(v, r) }).get._1 // otherwise malformed distribution
   }
 
