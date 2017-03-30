@@ -52,7 +52,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
 
   // TODO Is there a version of scanLeft that is more like a reduce?
   // This would allow me to avoid having to construct the initial dummy element
-  val bars = p.scanLeft((null.asInstanceOf[A], field.zero))((x, y) => (y._1, x._2 + y._2))
+  val bars = p.scanLeft((null.asInstanceOf[A], field.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
   val rng = Cmwc5()
 
@@ -65,7 +65,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
   def observe(): A = {
     val r = rng.next[N]
     //bars.find(_._2 > r).getOrElse(throw new Exception("malformed distribution"))._1
-    bars.find({ case (_, v) => order.gt(v, r) }).getOrElse(throw new Exception("malformed distribution"))._1
+    bars.find({ case (_, v) => order.gteqv(v, r) }).get._1 // otherwise malformed distribution
   }
 
   def values: IndexedSeq[A] = p.keys.toVector
