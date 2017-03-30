@@ -4,7 +4,7 @@ title: Road Map
 permalink: /road_map/
 ---
 
-See [Release Notes](/tutorial/release_notes/) for the record of previously released features.
+See [Release Notes](/release_notes/) for the record of previously released features.
 
 ## 0.2.9 (April 2017)
 * log scale

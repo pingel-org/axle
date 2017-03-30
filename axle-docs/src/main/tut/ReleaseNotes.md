@@ -4,7 +4,7 @@ title: Release notes
 permalink: /release_notes/
 ---
 
-See [Road Map](/tutorial/road_map/) for the plan of upcoming releases and features.
+See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
 ## 0.2.8 (March 28, 2016)
 * Fix SVG rendering of negative values in BarChart
