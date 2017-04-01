@@ -7,7 +7,7 @@ import ReleaseTransformations._
 
 lazy val spireVersion = "0.14.1"
 lazy val shapelessVersion = "2.3.2"
-lazy val catsVersion = "0.8.1" // must match spire's algebra's catsVersion
+lazy val catsVersion = "0.9.0" // must match spire's algebra's catsVersion
 lazy val disciplineVersion = "0.7.2"
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.0"
@@ -21,7 +21,7 @@ lazy val jacksonVersion = "2.8.4"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
 lazy val jogampVersion = "2.3.2"
-lazy val akkaVersion = "2.4.14"
+lazy val akkaVersion = "2.4.17"
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 10,
@@ -32,6 +32,7 @@ lazy val scoverageSettings = Seq(
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
   scalaVersion := "2.11.8",
+  scalaOrganization := "org.typelevel",
   crossScalaVersions := Seq("2.11.8")
 )
 
@@ -66,7 +67,7 @@ lazy val publishSettings = Seq(
   apiURL := Some(url("http://axle-lang.org/axle/api/")),
   publishArtifact in (Compile, packageDoc) := {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
+      // case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
       case _ => true
     }
   },
