@@ -68,13 +68,13 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name
   val totalCount: N = Σ[N, Iterable[N]](tally.values)
 
   val bars: Map[A, N] =
-    tally.scanLeft((null.asInstanceOf[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2)))
+    tally.scanLeft((null.asInstanceOf[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2))).drop(1)
 
   val order = Order[N]
 
   def observe(): A = {
     val r: N = totalCount * Random.nextDouble()
-    bars.find({ case (_, v) => order.gt(v, r) }).getOrElse(throw new Exception("malformed distribution"))._1
+    bars.find({ case (_, v) => order.gteqv(v, r) }).get._1 // or distribution is malformed
   }
 
   def probabilityOf(a: A): N = tally.get(a).getOrElse(ring.zero) / totalCount

@@ -72,8 +72,6 @@ package object axle {
       def show(d: Double): String = fmt.format(d)
     }
 
-  implicit val showSymbol: Show[Symbol] = Show.fromToString[Symbol]
-
   implicit val eqSymbol: Eq[Symbol] = Eq.fromUniversalEquals[Symbol]
 
   implicit val showBD: Show[BigDecimal] = Show.fromToString[BigDecimal]
