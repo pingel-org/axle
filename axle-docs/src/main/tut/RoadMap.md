@@ -6,43 +6,51 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.3.0 (mid April 2017)
-* Scala org to Typelevel
+## 0.3.1
+* Fix sbt-release plugin (use sbt-sonatype?)
+* Remove Spark spoke
+* Remove Spark impacts on Functor, etc, and just use Cats versions
+* Publish Scala 2.12 artifacts
+
+## 0.4.x
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
+* Eigenvector
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
-* Fix malformed distribution in ConditionalProbabilityTable0 and TallyDistribution0
+* Fix logistic regression
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
+* Fix axle.algebra.GeoMetricSpaceSpec
 
-## 0.3.1 (late April 2017)
-* Reactive Streams (FS2?) for animating visualizations
+## 0.5.x
+* Reactive Streams (FS2? Monix? Akka?) for animating visualizations
 * Remove jung dependency from axle-visualize
-
-## 0.3.2 (May 2017)
 * ScatterPlot `play` to awt
 * Formatted labels/tooltips for BarChart, etc
 * KMeansVisualization / ScatterPlot similarity (at least DataPoints)
 * Log scale
-* Fix axle.algebra.GeoMetricSpaceSpec
 * Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
 * Fix multi-color cube rendering
 
-## 0.3.3 (June 2017)
-* Rm throws from axle.stats.TallyDistribution
-* Rm throws from axle.pgm.BayesianNetwork
+## 0.6.x
+* game theory axioms
+* axle.game: Observable[T]
+* redo original monty hall spec
+* move state dist stream
+* Max bet for Poker
+
+## 0.7.x
+* axle.algorithms coverage > 80%
+* axle.core coverage > 80%
 * Rm throws from axle.quanta.UnitConverterGraph
 * Rm throws from axle.jung
-* Code coverage to ?%
+* Rm throws from axle.pgm.BayesianNetwork
+* Rm throws from axle.stats.TallyDistribution
 
-## 0.4.0 (July 2017)
-* Solve the Spark ClassTag issue (see Frameless?)
-* Fix sbt-release plugin
-* Publish Scala 2.12 artifacts (depends on spark-core availability)
-
-## 0.4.x (Summer 2017 - Winter 2018)
-* Fix logistic regression
+## Algorithm breadth
 * LSA
 * LDA
 * GLM
 * Neural Networks
+* t-distributed stochastic neighbor embedding (t-SNE)
 * Support Vector Machines
 * Gradient Boosted Trees
 * Decision Trees
@@ -50,12 +58,19 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * A* Search
 * Conditional Random Fields (CRF)
 * Hidden Markov Models
-* Max bet for Poker
-* WebGL
 
-## 0.5.x (2018)
-* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
+## Platform
+* WebGL
 * SVG Animation
+* Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)
+* Spark syntax
+* Performance benchmarking
+* netlib-java Matrix
+* GPU/CUDA support
+* Algebird/Scalding for distributed matrices, HyperLogLog, etc
+
+## Deeper exploration
+* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
 * Nerod Partition
 * Motivation for Gold Paradigm, Angluin Learner
 * Stochastic Lambda Calculus
@@ -67,8 +82,5 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Physics (eg, how Volume relates to Flow)
 * Heterogenous Model types
 * Redo Logic using Abstract Algebra
+* Topoi
 * do-calculus (Causality)
-* Performance benchmarking
-* netlib-java Matrix
-* GPU/CUDA support
-* Algebird/Scalding for distributed matrices, HyperLogLog, etc
