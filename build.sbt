@@ -52,6 +52,7 @@ lazy val axleCore = Project(
       "org.typelevel" %% "spire" % spireVersion,
       "org.typelevel" %% "spire-laws" % spireVersion,
       "org.typelevel" %% "cats-core" % catsVersion,
+      // "eu.timepit" %% "singleton-ops" % "0.0.4",
       "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % "test"

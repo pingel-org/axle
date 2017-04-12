@@ -6,6 +6,11 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.3.0 (April 2017)
+* Scala org to Typelevel
+* Fix malformed distribution in ConditionalProbabilityTable0 and TallyDistribution0
+* Depend on Spire 0.14.0 (which depends on Typelevel Algebra)
+
 ## 0.2.8 (March 28, 2016)
 * Fix SVG rendering of negative values in BarChart
 * Make more arguments to vis components functions (colorOf, labelOf, diameterOf)

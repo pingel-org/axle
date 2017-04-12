@@ -6,60 +6,81 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.2.9 (April 2017)
-* log scale
-* Publish Scala 2.12 artifacts (depends on spark-core availability)
-* Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
-* Fix sbt-release plugin
-* Fix Logistic regression
-* Fix axle-test/src/test/scala/axle/algebra/GeoMetricSpaceSpec.scala
-* Fix malformed distribution axle.stats.ConditionalProbabilityTable0$$anonfun$observe$2.apply(ConditionalProbabilityTable.scala:68)
+## 0.3.1
+* Fix sbt-release plugin (use sbt-sonatype?)
+* Remove Spark spoke
+* Remove Spark impacts on Functor, etc, and just use Cats versions
+* Publish Scala 2.12 artifacts
 
-## 0.2.10 (May 2017)
-* Reactive Streams (FS2?) for animating visualizations
-* SVG Animation
+## 0.4.x
+* Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
+* Eigenvector
+* Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
+* Fix logistic regression
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
+* Fix axle.algebra.GeoMetricSpaceSpec
+
+## 0.5.x
+* Reactive Streams (FS2? Monix? Akka?) for animating visualizations
+* Remove jung dependency from axle-visualize
 * ScatterPlot `play` to awt
 * Formatted labels/tooltips for BarChart, etc
-* Remove jung dependency from axle-visualize
-* Fix multi-color cube rendering
 * KMeansVisualization / ScatterPlot similarity (at least DataPoints)
+* Log scale
+* Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
+* Fix multi-color cube rendering
 
-## 0.2.11 (June 2017)
+## 0.6.x
+* game theory axioms
+* axle.game: Observable[T]
+* redo original monty hall spec
+* move state dist stream
 * Max bet for Poker
-* Code coverage to ?%
 
-## 0.3.0 (September 2017)
-* Dependent types (Shapeless? Refined? ValueOf SIP-23 in typelevel scala 2.11 and 2.12.2) for matrix size
-* Solve the Spark ClassTag issue
-* Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
+## 0.7.x
+* axle.algorithms coverage > 80%
+* axle.core coverage > 80%
+* Rm throws from axle.quanta.UnitConverterGraph
+* Rm throws from axle.jung
+* Rm throws from axle.pgm.BayesianNetwork
+* Rm throws from axle.stats.TallyDistribution
 
-## 0.3.x (Fall 2017)
+## Algorithm breadth
 * LSA
 * LDA
 * GLM
 * Neural Networks
+* t-distributed stochastic neighbor embedding (t-SNE)
 * Support Vector Machines
 * Gradient Boosted Trees
 * Decision Trees
 * Random Forest
 * A* Search
-
-## 0.4.x (2018)
-* Shapeless for compound Quanta and Bayesian Networks
-* Physics (eg, how Volume relates to Flow)
-* Heterogenous Model types
-* Redo Logic using Abstract Algebra
-* Motivation for Gold Paradigm, Angluin Learner, Nerod Partition
-* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
 * Conditional Random Fields (CRF)
 * Hidden Markov Models
-* Stochastic Lambda Calculus
-* MCMC
-* Metropolis Hastings
-* Game Theory: information sets, equilibria
-* do-calculus (Causality)
+
+## Platform
+* WebGL
+* SVG Animation
+* Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)
+* Spark syntax
 * Performance benchmarking
 * netlib-java Matrix
 * GPU/CUDA support
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
 
+## Deeper exploration
+* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
+* Nerod Partition
+* Motivation for Gold Paradigm, Angluin Learner
+* Stochastic Lambda Calculus
+* MCMC
+* Metropolis Hastings
+* Game Theory: information sets, equilibria
+* Redo axle.ast.* (rm throws, more typesafe)
+* Shapeless for compound Quanta and Bayesian Networks
+* Physics (eg, how Volume relates to Flow)
+* Heterogenous Model types
+* Redo Logic using Abstract Algebra
+* Topoi
+* do-calculus (Causality)
