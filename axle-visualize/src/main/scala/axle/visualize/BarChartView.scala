@@ -11,8 +11,8 @@ import axle.visualize.element.YTics
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
 
-case class BarChartView[S, Y, D](
-    chart: BarChart[S, Y, D],
+case class BarChartView[C, Y, D, H](
+    chart: BarChart[C, Y, D, H],
     data: D) {
 
   import chart._
@@ -56,16 +56,26 @@ case class BarChartView[S, Y, D](
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFontName, normalFontSize, true, black)
 
   val bars = slices.toStream.zipWithIndex.map({
-    case (s, i) => {
-      val color = colorOf(s)
+    case (c, i) => {
+      val color = colorOf(c)
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
       val rightX = leftX + (widthPerSlice * barWidthPercent)
-      val y = dataView.valueOf(data, s)
+      val y = dataView.valueOf(data, c)
       val y0 = zeroY.zero
-      if (y >= y0) {
-        Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color))
-      } else {
-        Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color))
+      val hoverOpt = hoverOf(data, c, y)
+      hoverOpt.map { hover =>
+        val hoverString = string(hover)
+        if (y >= y0) {
+          Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color), id = Some(i.toString -> hoverString))
+        } else {
+          Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color), id = Some(i.toString -> hoverString))
+        }
+      } getOrElse {
+        if (y >= y0) {
+          Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color))
+        } else {
+          Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color))
+        }
       }
     }
   })

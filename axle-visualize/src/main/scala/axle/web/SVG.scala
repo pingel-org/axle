@@ -169,9 +169,9 @@ object SVG {
       }
     }
 
-  implicit def svgBarChartKey[S, Y, D]: SVG[BarChartKey[S, Y, D]] =
-    new SVG[BarChartKey[S, Y, D]] {
-      def svg(key: BarChartKey[S, Y, D]): NodeSeq = {
+  implicit def svgBarChartKey[S, Y, D, H]: SVG[BarChartKey[S, Y, D, H]] =
+    new SVG[BarChartKey[S, Y, D, H]] {
+      def svg(key: BarChartKey[S, Y, D, H]): NodeSeq = {
 
         import key._
         import chart._
@@ -271,22 +271,46 @@ object SVG {
     new SVG[Rectangle[X, Y]] {
 
       def svg(rectangle: Rectangle[X, Y]): NodeSeq = {
+        val foo = <rect/>
+
         import rectangle.scaledArea
         val ll = scaledArea.framePoint(rectangle.lowerLeft)
         val ur = scaledArea.framePoint(rectangle.upperRight)
         val width = ur.x - ll.x
         val height = ll.y - ur.y
-        if (rectangle.borderColor.isDefined) {
-          if (rectangle.fillColor.isDefined) {
-            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
+        // TODO figure out how to construct attributes prior to xml.Node in order to
+        // avoid code duplication
+        if (rectangle.id.isDefined) {
+          val (id, hoverText) = rectangle.id.get
+          val hoverTextNode = <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x + width / 2}" } y={ s"${ll.y - height / 2}" } visibility="hidden">{ hoverText }</text>
+
+          val rectNode = if (rectangle.borderColor.isDefined) {
+            if (rectangle.fillColor.isDefined) {
+              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1" id={ s"rect$id" } onmousemove={ s"ShowTooltip(evt, $id)" } onmouseout={ s"HideTooltip(evt, $id)" }/>
+            } else {
+              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1" id={ s"rect$id" } onmousemove={ s"ShowTooltip(evt, $id)" } onmouseout={ s"HideTooltip(evt, $id)" }/>
+            }
           } else {
-            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1"/>
+            if (rectangle.fillColor.isDefined) {
+              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1" id={ s"rect$id" } onmousemove={ s"ShowTooltip(evt, $id)" } onmouseout={ s"HideTooltip(evt, $id)" }/>
+            } else {
+              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ "black" } stroke-width="1" id={ s"rect$id" } onmousemove={ s"ShowTooltip(evt, $id)" } onmouseout={ s"HideTooltip(evt, $id)" }/>
+            }
           }
+          rectNode :+ hoverTextNode
         } else {
-          if (rectangle.fillColor.isDefined) {
-            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
+          if (rectangle.borderColor.isDefined) {
+            if (rectangle.fillColor.isDefined) {
+              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
+            } else {
+              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1"/>
+            }
           } else {
-            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ "black" } stroke-width="1"/>
+            if (rectangle.fillColor.isDefined) {
+              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
+            } else {
+              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ "black" } stroke-width="1"/>
+            }
           }
         }
       }
@@ -448,10 +472,10 @@ object SVG {
       }
     }
 
-  implicit def svgBarChart[S, Y, D]: SVG[BarChart[S, Y, D]] =
-    new SVG[BarChart[S, Y, D]] {
+  implicit def svgBarChart[C, Y, D, H]: SVG[BarChart[C, Y, D, H]] =
+    new SVG[BarChart[C, Y, D, H]] {
 
-      def svg(chart: BarChart[S, Y, D]): NodeSeq = {
+      def svg(chart: BarChart[C, Y, D, H]): NodeSeq = {
 
         import chart._
 
@@ -466,7 +490,7 @@ object SVG {
             SVG[YTics[Double, Y]].svg(yTics) ::
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             List(
-              keyOpt.map(SVG[BarChartKey[S, Y, D]].svg),
+              keyOpt.map(SVG[BarChartKey[C, Y, D, H]].svg),
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
               yAxisLabelText.map(SVG[Text].svg)).flatten

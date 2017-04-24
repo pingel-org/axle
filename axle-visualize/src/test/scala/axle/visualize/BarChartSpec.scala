@@ -21,11 +21,13 @@ class BarChartSpec extends FunSuite with Matchers {
       "banana" -> 77.9,
       "coconut" -> 10.1)
 
-    val chart = BarChart[String, Double, Map[String, Double]](
+    val chart = BarChart[String, Double, Map[String, Double], String](
       sales,
+      title = Some("fruit sales"),
       xAxis = Some(0d),
       labelAngle = 36d *: angleDouble.degree,
-      title = Some("fruit sales"))
+      hoverOf = (d: Map[String, Double], c: String, y: Double) => Some(c)
+    )
 
     val filename = "fruit_sales.svg"
 
@@ -72,7 +74,7 @@ class BarChartSpec extends FunSuite with Matchers {
       b <- die(6)
     } yield a + b
 
-    val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
+    val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
       distribution,
       xAxis = Some(Rational(0)),
       title = Some("d6 + d6"),

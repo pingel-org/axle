@@ -125,9 +125,9 @@ package object awt {
       def component(plot: ScatterPlot[S, X, Y, D]) = ScatterPlotComponent(plot)
     }
 
-  implicit def drawBarChart[S, Y, D: ClassTag]: Draw[BarChart[S, Y, D]] =
-    new Draw[BarChart[S, Y, D]] {
-      def component(chart: BarChart[S, Y, D]) = BarChartComponent(chart)
+  implicit def drawBarChart[C, Y, D: ClassTag, H]: Draw[BarChart[C, Y, D, H]] =
+    new Draw[BarChart[C, Y, D, H]] {
+      def component(chart: BarChart[C, Y, D, H]) = BarChartComponent(chart)
     }
 
   implicit def drawBarChartGrouped[G, S, Y, D: ClassTag]: Draw[BarChartGrouped[G, S, Y, D]] =
@@ -410,10 +410,10 @@ package object awt {
 
   }
 
-  implicit def paintBarChartKey[X, Y, D]: Paintable[BarChartKey[X, Y, D]] =
-    new Paintable[BarChartKey[X, Y, D]] {
+  implicit def paintBarChartKey[X, Y, D, H]: Paintable[BarChartKey[X, Y, D, H]] =
+    new Paintable[BarChartKey[X, Y, D, H]] {
 
-      def paint(key: BarChartKey[X, Y, D], g2d: Graphics2D): Unit = {
+      def paint(key: BarChartKey[X, Y, D, H], g2d: Graphics2D): Unit = {
 
         import key._
         import chart._
