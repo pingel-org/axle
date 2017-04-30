@@ -232,22 +232,22 @@ object SVG {
 
         val angled = angle.isDefined
 
-        // TODO elem dry
+        val textBase =
+          elem("text",
+            "x" -> s"$x" ::
+              "y" -> s"$y" ::
+              "text-anchor" -> (if (centered) "middle" else "left") ::
+              "fill" -> s"${rgb(color)}" ::
+              "font-size" -> s"${fontSize}" :: Nil,
+            xml.Text(t.text))
+
         if (angle.isDefined) {
           import axle.visualize.angleDouble
           import spire.implicits._
           val twist = angle.get.in(angleDouble.degree).magnitude * -1d
-          if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
-          } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
-          }
+          elemWithAttributes(textBase, attribute("transform", s"rotate($twist $x $y)") :: Nil)
         } else {
-          if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
-          } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
-          }
+          textBase
         }
       }
     }
