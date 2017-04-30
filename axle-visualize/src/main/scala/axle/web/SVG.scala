@@ -300,40 +300,16 @@ object SVG {
               "height" -> s"$height" ::
               "stroke-width" -> "1" :: Nil)
 
-        // TODO dry using elem
-        if (rectangle.id.isDefined) {
+        val rectBordered = elemWithAttributes(rectBase, attribute("stroke", (rectangle.borderColor.map(bc => s"${rgb(bc)}").getOrElse("black"))) :: Nil)
+        val rectFilled = rectangle.fillColor.map(fc => elemWithAttributes(rectBordered, attribute("fill", s"${rgb(fc)}") :: Nil)).getOrElse(rectBordered)
+
+        rectangle.id.map(id => {
           val (id, hoverText) = rectangle.id.get
           val hoverTextNode = <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x + width / 2}" } y={ s"${ll.y - height / 2}" } visibility="hidden">{ hoverText }</text>
-
-          val rectNode = if (rectangle.borderColor.isDefined) {
-            if (rectangle.fillColor.isDefined) {
-              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1" id={ s"rect$id" } onmousemove={ s"ShowTooltip(evt, $id)" } onmouseout={ s"HideTooltip(evt, $id)" }/>
-            } else {
-              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1" id={ s"rect$id" } onmousemove={ s"ShowTooltip(evt, $id)" } onmouseout={ s"HideTooltip(evt, $id)" }/>
-            }
-          } else {
-            if (rectangle.fillColor.isDefined) {
-              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1" id={ s"rect$id" } onmousemove={ s"ShowTooltip(evt, $id)" } onmouseout={ s"HideTooltip(evt, $id)" }/>
-            } else {
-              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ "black" } stroke-width="1" id={ s"rect$id" } onmousemove={ s"ShowTooltip(evt, $id)" } onmouseout={ s"HideTooltip(evt, $id)" }/>
-            }
-          }
-          rectNode :+ hoverTextNode
-        } else {
-          if (rectangle.borderColor.isDefined) {
-            if (rectangle.fillColor.isDefined) {
-              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
-            } else {
-              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1"/>
-            }
-          } else {
-            if (rectangle.fillColor.isDefined) {
-              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
-            } else {
-              <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ "black" } stroke-width="1"/>
-            }
-          }
-        }
+          val rectWithId = elemWithAttributes(rectFilled,
+            attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
+          rectWithId :+ hoverTextNode
+        }).getOrElse(rectFilled)
       }
     }
 
