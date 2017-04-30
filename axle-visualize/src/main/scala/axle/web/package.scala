@@ -65,7 +65,7 @@ package object web {
     XML.save(filename, bodify(SVG[T].svg(t)), encoding, true, null)
 
   def elem(label: String, attributes: List[(String, String)], children: xml.Node*): xml.Elem = {
-    val baseElem = xml.Elem(null, label, xml.Null, xml.TopScope, children: _*)
+    val baseElem = xml.Elem(null, label, xml.Null, xml.TopScope, true, children: _*)
     elemWithAttributes(baseElem, attributes.map({ case (n, v) => attribute(n, v) }).reverse)
   }
 
