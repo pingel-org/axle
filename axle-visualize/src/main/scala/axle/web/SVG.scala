@@ -205,9 +205,9 @@ object SVG {
       }
     }
 
-  implicit def svgBarChartGroupedKey[G, S, Y, D]: SVG[BarChartGroupedKey[G, S, Y, D]] =
-    new SVG[BarChartGroupedKey[G, S, Y, D]] {
-      def svg(key: BarChartGroupedKey[G, S, Y, D]): NodeSeq = {
+  implicit def svgBarChartGroupedKey[G, S, Y, D, H]: SVG[BarChartGroupedKey[G, S, Y, D, H]] =
+    new SVG[BarChartGroupedKey[G, S, Y, D, H]] {
+      def svg(key: BarChartGroupedKey[G, S, Y, D, H]): NodeSeq = {
         import key._
         import chart._
         val lineHeight = chart.normalFontSize
@@ -499,10 +499,10 @@ object SVG {
       }
     }
 
-  implicit def svgBarChartGrouped[G, S, Y, D]: SVG[BarChartGrouped[G, S, Y, D]] =
-    new SVG[BarChartGrouped[G, S, Y, D]] {
+  implicit def svgBarChartGrouped[G, S, Y, D, H]: SVG[BarChartGrouped[G, S, Y, D, H]] =
+    new SVG[BarChartGrouped[G, S, Y, D, H]] {
 
-      def svg(chart: BarChartGrouped[G, S, Y, D]): NodeSeq = {
+      def svg(chart: BarChartGrouped[G, S, Y, D, H]): NodeSeq = {
 
         import chart._
 
@@ -517,7 +517,7 @@ object SVG {
             SVG[YTics[Double, Y]].svg(yTics) ::
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             List(
-              keyOpt.map(SVG[BarChartGroupedKey[G, S, Y, D]].svg),
+              keyOpt.map(SVG[BarChartGroupedKey[G, S, Y, D, H]].svg),
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
               yAxisLabelText.map(SVG[Text].svg)).flatten

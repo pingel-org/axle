@@ -130,9 +130,9 @@ package object awt {
       def component(chart: BarChart[C, Y, D, H]) = BarChartComponent(chart)
     }
 
-  implicit def drawBarChartGrouped[G, S, Y, D: ClassTag]: Draw[BarChartGrouped[G, S, Y, D]] =
-    new Draw[BarChartGrouped[G, S, Y, D]] {
-      def component(chart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(chart)
+  implicit def drawBarChartGrouped[G, S, Y, D: ClassTag, H]: Draw[BarChartGrouped[G, S, Y, D, H]] =
+    new Draw[BarChartGrouped[G, S, Y, D, H]] {
+      def component(chart: BarChartGrouped[G, S, Y, D, H]) = BarChartGroupedComponent(chart)
     }
 
   implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedSparseGraph[VP, EP]] =
@@ -430,10 +430,10 @@ package object awt {
 
     }
 
-  implicit def paintBarChartGroupedKey[G, S, Y, D]: Paintable[BarChartGroupedKey[G, S, Y, D]] =
-    new Paintable[BarChartGroupedKey[G, S, Y, D]] {
+  implicit def paintBarChartGroupedKey[G, S, Y, D, H]: Paintable[BarChartGroupedKey[G, S, Y, D, H]] =
+    new Paintable[BarChartGroupedKey[G, S, Y, D, H]] {
 
-      def paint(key: BarChartGroupedKey[G, S, Y, D], g2d: Graphics2D): Unit = {
+      def paint(key: BarChartGroupedKey[G, S, Y, D, H], g2d: Graphics2D): Unit = {
 
         import key._
         import chart._

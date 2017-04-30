@@ -1,7 +1,5 @@
 package axle.visualize
 
-// import scala.Stream.continually
-
 import cats.kernel.Order
 
 import cats.Show
@@ -11,7 +9,7 @@ import axle.algebra.Zero
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 
-case class BarChartGrouped[G, S, Y, D](
+case class BarChartGrouped[G, S, Y, D, H](
     initialValue: D,
     drawKey: Boolean = true,
     width: Int = 700,
@@ -30,9 +28,11 @@ case class BarChartGrouped[G, S, Y, D](
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
-    colorOf: S => Color)(
+    colorOf: S => Color,
+    hoverOf: (D, G, S, Y) => Option[(H, Color)] = (d: D, g: G, s: S, y: Y) => None)(
         implicit val showG: Show[G],
         val showS: Show[S],
+        val showH: Show[H],
         val orderY: Order[Y],
         val zeroY: Zero[Y],
         val ticsY: Tics[Y],

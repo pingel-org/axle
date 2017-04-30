@@ -23,8 +23,8 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import javax.swing.JPanel
 
-case class BarChartGroupedComponent[G, S, Y, D: ClassTag](
-  chart: BarChartGrouped[G, S, Y, D])
+case class BarChartGroupedComponent[G, S, Y, D: ClassTag, H](
+  chart: BarChartGrouped[G, S, Y, D, H])
     extends JPanel
     with Fed[D] {
 
@@ -55,7 +55,7 @@ case class BarChartGroupedComponent[G, S, Y, D: ClassTag](
     yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
     Paintable[XTics[Double, Y]].paint(gTics, g2d)
     Paintable[YTics[Double, Y]].paint(yTics, g2d)
-    keyOpt.foreach(Paintable[BarChartGroupedKey[G, S, Y, D]].paint(_, g2d))
+    keyOpt.foreach(Paintable[BarChartGroupedKey[G, S, Y, D, H]].paint(_, g2d))
     bars.foreach(Paintable[Rectangle[Double, Y]].paint(_, g2d))
   }
 

@@ -53,11 +53,12 @@ class BarChartSpec extends FunSuite with Matchers {
 
     import cats.implicits._
 
-    val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
+    val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String](
       sales,
       // xAxis = Some(0d),
+      title = Some("fruit sales"),
       colorOf = (slice: Int) => blue,
-      title = Some("fruit sales"))
+      hoverOf = (d: Map[(String, Int), Double], g: String, s: Int, y: Double) => Some(s"$g $s" -> Color.white))
 
     val filename = "fruit_sales_grouped.svg"
 
