@@ -305,10 +305,8 @@ object SVG {
 
         rectangle.id.map({
           case (id, hoverText, hoverTextColor) =>
-            val hoverTextNode = <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill={ rgb(hoverTextColor).toString } visibility="hidden">{ hoverText }</text>
-            val rectWithId = elemWithAttributes(rectFilled,
+            elemWithAttributes(rectFilled,
               attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
-            rectWithId :+ hoverTextNode
         }).getOrElse(rectFilled)
       }
     }
@@ -490,6 +488,19 @@ object SVG {
             SVG[XTics[Double, Y]].svg(gTics) ::
             SVG[YTics[Double, Y]].svg(yTics) ::
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
+            (for {
+              bar <- bars
+              (id, hoverText, hoverTextColor) <- bar.id
+            } yield {
+              // TODO if .svg has the notion of "layers", then
+              // Rectangle's svg could handle this <text/> node creation
+              import bar.scaledArea
+              val ll = scaledArea.framePoint(bar.lowerLeft)
+              val ur = scaledArea.framePoint(bar.upperRight)
+              val width = ur.x - ll.x
+              val height = ll.y - ur.y
+              <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill={ rgb(hoverTextColor).toString } visibility="hidden">{ hoverText }</text>
+            }) ::
             List(
               keyOpt.map(SVG[BarChartKey[C, Y, D, H]].svg),
               titleText.map(SVG[Text].svg),
@@ -517,6 +528,19 @@ object SVG {
             SVG[XTics[Double, Y]].svg(gTics) ::
             SVG[YTics[Double, Y]].svg(yTics) ::
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
+            (for {
+              bar <- bars
+              (id, hoverText, hoverTextColor) <- bar.id
+            } yield {
+              // TODO if .svg has the notion of "layers", then
+              // Rectangle's svg could handle this <text/> node creation
+              import bar.scaledArea
+              val ll = scaledArea.framePoint(bar.lowerLeft)
+              val ur = scaledArea.framePoint(bar.upperRight)
+              val width = ur.x - ll.x
+              val height = ll.y - ur.y
+              <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill={ rgb(hoverTextColor).toString } visibility="hidden">{ hoverText }</text>
+            }) ::
             List(
               keyOpt.map(SVG[BarChartGroupedKey[G, S, Y, D, H]].svg),
               titleText.map(SVG[Text].svg),
