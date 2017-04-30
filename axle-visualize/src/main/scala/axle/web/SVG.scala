@@ -305,7 +305,7 @@ object SVG {
 
         rectangle.id.map(id => {
           val (id, hoverText) = rectangle.id.get
-          val hoverTextNode = <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x + width / 2}" } y={ s"${ll.y - height / 2}" } visibility="hidden">{ hoverText }</text>
+          val hoverTextNode = <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } visibility="hidden">{ hoverText }</text>
           val rectWithId = elemWithAttributes(rectFilled,
             attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
           rectWithId :+ hoverTextNode
