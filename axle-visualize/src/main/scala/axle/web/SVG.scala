@@ -218,13 +218,14 @@ object SVG {
           <text x={ s"${width - keyWidth}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
         } toList
 
-        val keyEntries = slices.toList.zipWithIndex map {
-          case (slice, i) => {
-            val color = colorOf(slice)
-            <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
-          }
+        val keyEntries = for {
+          (slice, i) <- slices.toList.zipWithIndex
+          (group, j) <- groups.toList.zipWithIndex
+        } yield {
+          val color = colorOf(group, slice)
+          val r = i * groups.size + j
+          <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (r + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
         }
-
         ktto ++ keyEntries
       }
     }

@@ -11,4 +11,7 @@ case class BarChartGroupedKey[G, S, Y, D, H](
   val slices =
     groupedDataView.slices(chart.initialValue)
 
+  val groups =
+    groupedDataView.groups(chart.initialValue)
+
 }

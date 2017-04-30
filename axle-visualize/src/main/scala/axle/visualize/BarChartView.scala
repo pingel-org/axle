@@ -57,12 +57,12 @@ case class BarChartView[C, Y, D, H](
 
   val bars = slices.toStream.zipWithIndex.map({
     case (c, i) => {
+      val y = dataView.valueOf(data, c)
       val color = colorOf(c)
       val leftX = padding + (whiteSpace / 2d) + i * widthPerSlice
       val rightX = leftX + (widthPerSlice * barWidthPercent)
-      val y = dataView.valueOf(data, c)
       val y0 = zeroY.zero
-      val hoverOpt = hoverOf(data, c, y)
+      val hoverOpt = hoverOf(c)
       hoverOpt.map { case (hover, hoverTextColor) =>
         val hoverString = string(hover)
         if (y >= y0) {

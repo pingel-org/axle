@@ -28,8 +28,8 @@ case class BarChartGrouped[G, S, Y, D, H](
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
-    colorOf: S => Color,
-    hoverOf: (D, G, S, Y) => Option[(H, Color)] = (d: D, g: G, s: S, y: Y) => None)(
+    colorOf: (G, S) => Color,
+    hoverOf: (G, S) => Option[(H, Color)] = (g: G, s: S) => None)(
         implicit val showG: Show[G],
         val showS: Show[S],
         val showH: Show[H],
