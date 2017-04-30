@@ -1,11 +1,24 @@
 package axle.web
 
 import java.awt.Dimension
+
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
-import axle.HtmlFrom
+import scala.annotation.implicitNotFound
+
+import edu.uci.ics.jung.algorithms.layout.FRLayout
+import edu.uci.ics.jung.visualization.DefaultVisualizationModel
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
+
 import cats.Show
+import cats.kernel.Eq
+
+import spire.implicits.DoubleAlgebra
+import spire.algebra.Field
+
+import axle.HtmlFrom
 import axle.string
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
@@ -33,21 +46,14 @@ import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import edu.uci.ics.jung.algorithms.layout.FRLayout
-import edu.uci.ics.jung.visualization.DefaultVisualizationModel
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
-import cats.kernel.Eq
-import spire.implicits.DoubleAlgebra
-import scala.annotation.implicitNotFound
 import axle.arcTangent2
-import spire.algebra.Field
 import axle.algebra.DirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.syntax.directedgraph.directedGraphOps
 import axle.syntax.undirectedgraph.undirectedGraphOps
 import axle.jung.undirectedGraphJung
+import axle.xml._
 
 @implicitNotFound("Witness not found for SVG[${S}]")
 trait SVG[S] {
@@ -285,6 +291,15 @@ object SVG {
         val ur = scaledArea.framePoint(rectangle.upperRight)
         val width = ur.x - ll.x
         val height = ll.y - ur.y
+
+        val rectBase =
+          elem("rect",
+            "x" -> s"${ll.x}" ::
+              "y" -> s"${ur.y}" ::
+              "width" -> s"$width" ::
+              "height" -> s"$height" ::
+              "stroke-width" -> "1" :: Nil)
+
         // TODO dry using elem
         if (rectangle.id.isDefined) {
           val (id, hoverText) = rectangle.id.get

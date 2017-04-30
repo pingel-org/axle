@@ -64,18 +64,4 @@ package object web {
   def html[T: SVG](t: T, filename: String): Unit =
     XML.save(filename, bodify(SVG[T].svg(t)), encoding, true, null)
 
-  def elem(label: String, attributes: List[(String, String)], children: xml.Node*): xml.Elem = {
-    val baseElem = xml.Elem(null, label, xml.Null, xml.TopScope, true, children: _*)
-    elemWithAttributes(baseElem, attributes.map({ case (n, v) => attribute(n, v) }).reverse)
-  }
-
-  def attribute(name: String, value: String): xml.Attribute =
-    xml.Attribute(None, name, xml.Text(value), xml.Null)
-
-  def elemWithAttributes(e: xml.Elem, attrs: List[xml.Attribute]): xml.Elem =
-    attrs match {
-      case Nil          => e
-      case head :: tail => elemWithAttributes(e % head, tail)
-    }
-
 }
