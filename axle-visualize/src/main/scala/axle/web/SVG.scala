@@ -284,7 +284,6 @@ object SVG {
     new SVG[Rectangle[X, Y]] {
 
       def svg(rectangle: Rectangle[X, Y]): NodeSeq = {
-        val foo = <rect/>
 
         import rectangle.scaledArea
         val ll = scaledArea.framePoint(rectangle.lowerLeft)
@@ -303,12 +302,12 @@ object SVG {
         val rectBordered = elemWithAttributes(rectBase, attribute("stroke", (rectangle.borderColor.map(bc => s"${rgb(bc)}").getOrElse("black"))) :: Nil)
         val rectFilled = rectangle.fillColor.map(fc => elemWithAttributes(rectBordered, attribute("fill", s"${rgb(fc)}") :: Nil)).getOrElse(rectBordered)
 
-        rectangle.id.map(id => {
-          val (id, hoverText) = rectangle.id.get
-          val hoverTextNode = <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } visibility="hidden">{ hoverText }</text>
-          val rectWithId = elemWithAttributes(rectFilled,
-            attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
-          rectWithId :+ hoverTextNode
+        rectangle.id.map({
+          case (id, hoverText, hoverTextColor) =>
+            val hoverTextNode = <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill={ rgb(hoverTextColor).toString } visibility="hidden">{ hoverText }</text>
+            val rectWithId = elemWithAttributes(rectFilled,
+              attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
+            rectWithId :+ hoverTextNode
         }).getOrElse(rectFilled)
       }
     }
@@ -428,7 +427,6 @@ object SVG {
               "alignment-baseline" -> "hanging",
               "x" -> bottom.x.toString,
               "y" -> (if (angled) bottom.y else bottom.y + 3).toString,
-              "fill" -> rgb(color).toString,
               "font-size" -> fontSize.toString) ++
               (if (angled) List("transform" -> s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})") else Nil),
               xml.Text(label))

@@ -66,9 +66,9 @@ case class BarChartView[C, Y, D, H](
       hoverOpt.map { case (hover, hoverTextColor) =>
         val hoverString = string(hover)
         if (y >= y0) {
-          Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color), id = Some(i.toString -> hoverString))
+          Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color), id = Some((i.toString, hoverString, hoverTextColor)))
         } else {
-          Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color), id = Some(i.toString -> hoverString))
+          Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color), id = Some((i.toString, hoverString, hoverTextColor)))
         }
       } getOrElse {
         if (y >= y0) {
