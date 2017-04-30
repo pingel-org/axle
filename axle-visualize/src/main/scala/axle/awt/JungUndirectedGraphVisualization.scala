@@ -20,7 +20,7 @@ import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
-case class JungUndirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
+case class JungUndirectedGraphVisualization(width: Int, height: Int, border: Int) {
 
   def component[VP: Show, EP: Show](jusg: UndirectedSparseGraph[VP, EP]): Component = {
 

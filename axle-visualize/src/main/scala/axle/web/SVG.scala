@@ -91,7 +91,7 @@ object SVG {
       }
     }
 
-  implicit def svgDataPoints[S, X, Y, D]: SVG[DataPoints[S, X, Y, D]] =
+  implicit def svgDataPoints[S: Show, X, Y, D]: SVG[DataPoints[S, X, Y, D]] =
     new SVG[DataPoints[S, X, Y, D]] {
       def svg(dl: DataPoints[S, X, Y, D]): NodeSeq = {
 
@@ -105,15 +105,17 @@ object SVG {
             val pointRadius = diameterOf(data, x, y) / 2
             val color = colorOf(data, x, y)
             if (pointRadius > 0) {
+              val baseCircle = <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
               labelOf(data, x, y) map {
                 case (label, permanent) =>
+                  val idCircle = elemWithAttributes(baseCircle, attribute("id", s"rect$i") :: Nil)
                   if (permanent) {
-                    <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" }/>
+                    idCircle
                   } else {
-                    <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" } onmousemove={ s"ShowTooltip(evt, $i)" } onmouseout={ s"HideTooltip(evt, $i)" }/>
+                    elemWithAttributes(idCircle, attribute("onmousemove", s"ShowTooltip(evt, $i)") :: attribute("onmouseout", s"HideTooltip(evt, $i)") :: Nil)
                   }
               } getOrElse {
-                <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+                baseCircle
               }
             } else {
               List.empty
@@ -128,11 +130,13 @@ object SVG {
             if (pointRadius > 0) {
               labelOf(data, x, y) map {
                 case (label, permanent) =>
-                  if (permanent) {
-                    <text class="pointLabel" id={ "pointLabel" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="visible">{ label }</text>
-                  } else {
-                    <text class="pointLabel" id={ "tooltip" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="hidden">{ label }</text>
-                  }
+                  elem("text",
+                    "class" -> "pointLabel" ::
+                      "id" -> (if (permanent) ("pointLabel" + i) else ("tooltip" + i)) ::
+                      "x" -> s"${center.x + pointRadius}" ::
+                      "y" -> s"${center.y - pointRadius}" ::
+                      "visibility" -> (if (permanent) "visible" else "hidden") :: Nil,
+                    xml.Text(string(label)))
               }
             } else {
               List.empty
@@ -226,6 +230,9 @@ object SVG {
 
         import t._
 
+        val angled = angle.isDefined
+
+        // TODO elem dry
         if (angle.isDefined) {
           import axle.visualize.angleDouble
           import spire.implicits._
@@ -278,8 +285,7 @@ object SVG {
         val ur = scaledArea.framePoint(rectangle.upperRight)
         val width = ur.x - ll.x
         val height = ll.y - ur.y
-        // TODO figure out how to construct attributes prior to xml.Node in order to
-        // avoid code duplication
+        // TODO dry using elem
         if (rectangle.id.isDefined) {
           val (id, hoverText) = rectangle.id.get
           val hoverTextNode = <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x + width / 2}" } y={ s"${ll.y - height / 2}" } visibility="hidden">{ hoverText }</text>
@@ -343,7 +349,7 @@ object SVG {
       }
     }
 
-  implicit def svgScatterPlot[S, X, Y, D]: SVG[ScatterPlot[S, X, Y, D]] =
+  implicit def svgScatterPlot[S: Show, X, Y, D]: SVG[ScatterPlot[S, X, Y, D]] =
     new SVG[ScatterPlot[S, X, Y, D]] {
 
       def svg(scatterPlot: ScatterPlot[S, X, Y, D]): NodeSeq = {
@@ -424,12 +430,17 @@ object SVG {
 
             import axle.visualize.angleDouble
 
-            val text =
-              if (angle.magnitude == 0d) {
-                <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y + 3}" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ label }</text>
-              } else {
-                <text text-anchor="start" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } transform={ s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ label }</text>
-              }
+            val angled = angle.magnitude != 0d
+
+            val text = elem("text", List(
+              "text-anchor" -> (if (angled) "start" else "middle"),
+              "alignment-baseline" -> "hanging",
+              "x" -> bottom.x.toString,
+              "y" -> (if (angled) bottom.y else bottom.y + 3).toString,
+              "fill" -> rgb(color).toString,
+              "font-size" -> fontSize.toString) ++
+              (if (angled) List("transform" -> s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})") else Nil),
+              xml.Text(label))
 
             if (drawLines) {
               val top = scaledArea.framePoint(Point2D(x, maxY))
@@ -655,11 +666,10 @@ object SVG {
 
   }
 
-  // TODO
   implicit def svgPgmEdge: SVG[axle.pgm.Edge] =
     new SVG[axle.pgm.Edge] {
       def svg(e: axle.pgm.Edge): NodeSeq =
-        List(xml.Text(""))
+        NodeSeq.Empty
     }
 
   implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](

@@ -23,7 +23,7 @@ import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
-case class JungDirectedGraphVisualization(width: Int = 700, height: Int = 700, border: Int = 50) {
+case class JungDirectedGraphVisualization(width: Int, height: Int, border: Int) {
 
   def component[VP: HtmlFrom, EP: Show](jdsg: DirectedSparseGraph[VP, EP]): Component = {
 

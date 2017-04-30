@@ -138,13 +138,13 @@ package object awt {
   implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedSparseGraph[VP, EP]] =
     new Draw[UndirectedSparseGraph[VP, EP]] {
       def component(jug: UndirectedSparseGraph[VP, EP]) =
-        JungUndirectedGraphVisualization().component(jug)
+        JungUndirectedGraphVisualization(700, 700, 50).component(jug)
     }
 
   implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[DirectedSparseGraph[VP, EP]] =
     new Draw[DirectedSparseGraph[VP, EP]] {
       def component(jdg: DirectedSparseGraph[VP, EP]) =
-        JungDirectedGraphVisualization().component(jdg)
+        JungDirectedGraphVisualization(700, 700, 50).component(jdg)
     }
 
   implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
