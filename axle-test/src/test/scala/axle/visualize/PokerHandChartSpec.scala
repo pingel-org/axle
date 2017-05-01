@@ -26,15 +26,15 @@ class PokerHandChartSpec extends FunSuite with Matchers {
     import axle.visualize.BarChartGrouped
     import cats.implicits._
 
-    val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]](
+    val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int], String](
       data.tally.withDefaultValue(0),
-      colorOf = _ => Color.black,
+      colorOf = (g: PokerHandCategory, s: Int) => Color.black,
       title = Some("Poker Hands"),
       yAxisLabel = Some("instances of hand category by initial hand size (1000 trial for each hand size)"),
       keyTitle = Some("Initial Hand Size"))
 
     import axle.web._
-    SVG[BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int]]]
+    SVG[BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int], String]]
     val svgName = "poker.svg"
     svg(chart, svgName)
 

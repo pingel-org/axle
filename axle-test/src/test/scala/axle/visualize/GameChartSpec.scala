@@ -28,7 +28,7 @@ class GameChartSpec extends FunSuite with Matchers {
     // test implicit conjuring:
     PlotDataView.distribution0DataView[String, Int, Rational]
 
-    val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
+    val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
       scoreD,
       drawKey = true,
       xAxis = Some(Rational(0)))
