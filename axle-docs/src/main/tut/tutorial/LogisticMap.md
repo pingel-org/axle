@@ -31,7 +31,7 @@ import axle.visualize._
 
 val sp = ScatterPlot[String, Double, Double, Set[(Double, Double)]](
   scatter.toSet,
-  diameterOf = (d: Set[(Double, Double)], x: Double, y: Double) => 1d
+  diameterOf = (x: Double, y: Double) => 1d
 )
 ```
 
