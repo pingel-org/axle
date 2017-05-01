@@ -14,7 +14,7 @@ case class XTics[X, Y](
     fontSize: Double,
     bold: Boolean = false,
     drawLines: Boolean = true,
-    angle: UnittedQuantity[Angle, Double],
+    angle: Option[UnittedQuantity[Angle, Double]], // no labels when angle = None
     color: Color = black) {
 
   val zeroDegrees = 0d *: angleDouble.degree

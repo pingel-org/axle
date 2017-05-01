@@ -51,7 +51,7 @@ case class BarChartGroupedView[G, S, Y, D, H](
     normalFontSize,
     bold = true,
     drawLines = false,
-    36d *: angleDouble.degree,
+    labelAngle,
     black)
 
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFontName, normalFontSize, true, black)

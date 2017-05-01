@@ -38,7 +38,7 @@ case class KMeansVisualization[D, F, G, M](
   val scaledArea = ScaledArea2D(width, height, border, minX, maxX, minY, maxY)
 
   implicit val doubleTics = Tics[Double]
-  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, 0d *: angleDouble.degree, black)
+  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, Some(0d *: angleDouble.degree), black)
   val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), fontName, fontSize, true, black)
 
   val boundingRectangle =

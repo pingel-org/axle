@@ -33,7 +33,7 @@ case class PlotView[S, X, Y, D](
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, xts.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, 0d *: angleDouble.degree, black)
+  val xTics = XTics(scaledArea, xts.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, Some(0d *: angleDouble.degree), black)
   val yTics = YTics(scaledArea, yts.tics(minY, maxY), fontName, fontSize, true, black)
 
   val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorOf, pointDiameter, connect)

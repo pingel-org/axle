@@ -419,24 +419,24 @@ object SVG {
 
             import axle.visualize.angleDouble
 
-            val angled = angle.magnitude != 0d
-
-            val text = elem("text", List(
-              "text-anchor" -> (if (angled) "start" else "middle"),
-              "alignment-baseline" -> "hanging",
-              "x" -> bottom.x.toString,
-              "y" -> (if (angled) bottom.y else bottom.y + 3).toString,
-              "font-size" -> fontSize.toString) ++
-              (if (angled) List("transform" -> s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})") else Nil),
-              xml.Text(label))
-
-            if (drawLines) {
-              val top = scaledArea.framePoint(Point2D(x, maxY))
-              val line = <line x1={ s"${bottom.x}" } y1={ s"${bottom.y}" } x2={ s"${top.x}" } y2={ s"${top.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>
-              line ++ List(text, tic)
-            } else {
-              List(text, tic)
+            val textOpt = angle.map { a =>
+              val angled = a.magnitude != 0d
+              elem("text", List(
+                "text-anchor" -> (if (angled) "start" else "middle"),
+                "alignment-baseline" -> "hanging",
+                "x" -> bottom.x.toString,
+                "y" -> (if (angled) bottom.y else bottom.y + 3).toString,
+                "font-size" -> fontSize.toString) ++
+                (if (angled) List("transform" -> s"rotate(${a.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})") else Nil),
+                xml.Text(label))
             }
+
+            val lineOpt = if (drawLines) {
+              val top = scaledArea.framePoint(Point2D(x, maxY))
+              Some(<line x1={ s"${bottom.x}" } y1={ s"${bottom.y}" } x2={ s"${top.x}" } y2={ s"${top.y}" } stroke={ s"${rgb(lightGray)}" } stroke-width="1"/>)
+            } else None
+
+            lineOpt ++ List(tic) ++ textOpt
           }
         }
       }

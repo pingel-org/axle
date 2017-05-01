@@ -31,7 +31,7 @@ case class BarChart[C, Y, D, H](
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
-    labelAngle: UnittedQuantity[Angle, Double] = 36d *: angleDouble.degree,
+    labelAngle: Option[UnittedQuantity[Angle, Double]] = Some(36d *: angleDouble.degree),
     colorOf: C => Color = (c: C) => Color.blue,
     hoverOf: C => Option[H] = (c: C) => None
     )(
