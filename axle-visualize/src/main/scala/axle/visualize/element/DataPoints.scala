@@ -7,7 +7,7 @@ import axle.visualize.Color
 case class DataPoints[S, X, Y, D](
   scaledArea: ScaledArea2D[X, Y],
   data: D,
-  diameterOf: (D, X, Y) => Double,
-  colorOf: (D, X, Y) => Color,
-  labelOf: (D, X, Y) => Option[(S, Boolean)])(
+  diameterOf: (X, Y) => Double,
+  colorOf: (X, Y) => Color,
+  labelOf: (X, Y) => Option[(S, Boolean)])(
     implicit val dataView: ScatterDataView[X, Y, D])

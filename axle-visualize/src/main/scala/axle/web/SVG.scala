@@ -108,13 +108,13 @@ object SVG {
         val circles = domain.toList.zipWithIndex.flatMap {
           case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
-            val pointRadius = diameterOf(data, x, y) / 2
-            val color = colorOf(data, x, y)
+            val pointRadius = diameterOf(x, y) / 2
+            val color = colorOf(x, y)
             if (pointRadius > 0) {
               val baseCircle = <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
-              labelOf(data, x, y) map {
+              labelOf(x, y) map {
                 case (label, permanent) =>
-                  val idCircle = elemWithAttributes(baseCircle, attribute("id", s"rect$i") :: Nil)
+                  val idCircle = elemWithAttributes(baseCircle, attribute("id", s"circle$i") :: Nil)
                   if (permanent) {
                     idCircle
                   } else {
@@ -132,13 +132,13 @@ object SVG {
         val labels = domain.toList.zipWithIndex.flatMap {
           case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
-            val pointRadius = diameterOf(data, x, y) / 2
+            val pointRadius = diameterOf(x, y) / 2
             if (pointRadius > 0) {
-              labelOf(data, x, y) map {
+              labelOf(x, y) map {
                 case (label, permanent) =>
                   elem("text",
                     "class" -> "pointLabel" ::
-                      "id" -> (if (permanent) ("pointLabel" + i) else ("tooltip" + i)) ::
+                      "id" -> (if (permanent) ("pointLabel" + i) else ("tooltiptext" + i)) ::
                       "x" -> s"${center.x + pointRadius}" ::
                       "y" -> s"${center.y - pointRadius}" ::
                       "visibility" -> (if (permanent) "visible" else "hidden") :: Nil,

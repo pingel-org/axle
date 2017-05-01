@@ -217,8 +217,8 @@ package object awt {
 
       domain foreach {
         case (x, y) => {
-          val pointDiameter = diameterOf(data, x, y)
-          g2d.setColor(cachedColor(dataPoints.colorOf(data, x, y)))
+          val pointDiameter = diameterOf(x, y)
+          g2d.setColor(cachedColor(dataPoints.colorOf(x, y)))
           fillOval(g2d, scaledArea, Point2D(x, y), pointDiameter.toInt, pointDiameter.toInt)
         }
       }
