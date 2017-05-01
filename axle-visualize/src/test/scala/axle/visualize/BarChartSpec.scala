@@ -61,7 +61,7 @@ class BarChartSpec extends FunSuite with Matchers {
         case "banana"  => Color.yellow
         case "coconut" => Color.brown
       },
-      hoverOf = (g: String, s: Int) => Some(s"$g $s" -> Color.white))
+      hoverOf = (g: String, s: Int) => Some(s"$g $s"))
 
     val filename = "fruit_sales_grouped.svg"
 
