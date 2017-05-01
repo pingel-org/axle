@@ -17,7 +17,7 @@ case class BarChart[C, Y, D, H](
     drawKey: Boolean = true,
     width: Int = 700,
     height: Int = 600,
-    border: Int = 10,
+    border: Int = 50,
     barWidthPercent: Double = 0.80,
     keyLeftPadding: Int = 20,
     keyTopPadding: Int = 50,
