@@ -27,7 +27,7 @@ Define the coloring strategy:
 import axle.visualize.Color._
 
 val colorer =
-  (d: Map[(Int, Int), Int], x: Int, y: Int) => d((x, y)) match {
+  (x: Int, y: Int) => data((x, y)) match {
     case 0 => red
     case 1 => blue
     case 2 => green
@@ -38,7 +38,7 @@ Define the labeling strategy:
 
 ```tut
 val labeller =
-  (d: Map[(Int, Int), Int], x: Int, y: Int) => d.get((x, y)).map(s => (s.toString, true))
+  (x: Int, y: Int) => data.get((x, y)).map(s => (s.toString, true))
 ```
 
 Define the ScatterPlot
@@ -46,7 +46,7 @@ Define the ScatterPlot
 ```tut
 import cats.implicits._
 
-val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int]](data, colorOf = colorer, labelOf = labeller)
+val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int], String](data, colorOf = colorer, labelOf = labeller)
 ```
 
 Create the SVG
