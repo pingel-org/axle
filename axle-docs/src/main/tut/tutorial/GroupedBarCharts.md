@@ -35,7 +35,7 @@ import axle.visualize.Color._
 The data can be grouped in two ways to produce bar charts:
 
 ```tut:book
-val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
+val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String](
   sales,
   title = Some("fruit sales"),
   colorOf = (label: Int) => label match {
@@ -58,7 +58,7 @@ svg(chart, "barchart1.svg")
 Or alternatively
 
 ```tut:book
-val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double]](
+val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double, String]](
   sales map { case (k, v) => (k._2, k._1) -> v},
   colorOf = (label: String) => label match {
     case "apple" => red
@@ -90,7 +90,7 @@ val initial = Map("foo" -> 1d, "bar" -> 1d)
 import axle.visualize._
 import spire.implicits._
  
-val chart = BarChart[String, Double, Map[String, Double]](
+val chart = BarChart[String, Double, Map[String, Double], String](
   initial,
   title = Some("random")
 )
