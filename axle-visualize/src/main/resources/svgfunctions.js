@@ -1,3 +1,4 @@
+
 function init(evt) {
   if ( window.svgDocument == null ) {
     svgDocument = evt.target.ownerDocument;
@@ -5,13 +6,20 @@ function init(evt) {
 }
 
 function ShowTooltip(evt, i) {
-  tooltip = svgDocument.getElementById('tooltip' + i);
-  //tooltip.setAttributeNS(null,"x",evt.clientX+10);
-  //tooltip.setAttributeNS(null,"y",evt.clientY+30);
-  tooltip.setAttributeNS(null,"visibility","visible");
+  tooltipbg = svgDocument.getElementById('tooltipbg' + i);
+  tooltiptext = svgDocument.getElementById('tooltiptext' + i);
+  tbb = tooltiptext.getBBox();
+  tooltipbg.setAttributeNS(null,"visibility","visible");
+  tooltipbg.setAttributeNS(null,"width",tbb.width);
+  tooltipbg.setAttributeNS(null,"height",tbb.height);
+  tooltipbg.setAttributeNS(null,"x",tbb.x);
+  tooltipbg.setAttributeNS(null,"y",tbb.y);
+  tooltiptext.setAttributeNS(null,"visibility","visible");
 }
 
 function HideTooltip(evt, i) {
-  tooltip = svgDocument.getElementById('tooltip' + i);
-  tooltip.setAttributeNS(null,"visibility","hidden");
+  tooltipbg = svgDocument.getElementById('tooltipbg' + i);
+  tooltiptext = svgDocument.getElementById('tooltiptext' + i);
+  tooltipbg.setAttributeNS(null,"visibility","hidden");
+  tooltiptext.setAttributeNS(null,"visibility","hidden");
 }

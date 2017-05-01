@@ -304,7 +304,7 @@ object SVG {
         val rectFilled = rectangle.fillColor.map(fc => elemWithAttributes(rectBordered, attribute("fill", s"${rgb(fc)}") :: Nil)).getOrElse(rectBordered)
 
         rectangle.id.map({
-          case (id, hoverText, hoverTextColor) =>
+          case (id, hoverText) =>
             elemWithAttributes(rectFilled,
               attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
         }).getOrElse(rectFilled)
@@ -490,7 +490,7 @@ object SVG {
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             (for {
               bar <- bars
-              (id, hoverText, hoverTextColor) <- bar.id
+              (id, hoverText) <- bar.id
             } yield {
               // TODO if .svg has the notion of "layers", then
               // Rectangle's svg could handle this <text/> node creation
@@ -499,7 +499,10 @@ object SVG {
               val ur = scaledArea.framePoint(bar.upperRight)
               val width = ur.x - ll.x
               val height = ll.y - ur.y
-              <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill={ rgb(hoverTextColor).toString } visibility="hidden">{ hoverText }</text>
+              <g>
+                <rect id={ s"tooltipbg${id}" } x="0" y="0" width="0" height="0" visibility="hidden" fill="white"/>
+                <text class="pointLabel" id={ s"tooltiptext${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill="black" visibility="hidden">{ hoverText }</text>
+              </g>
             }) ::
             List(
               keyOpt.map(SVG[BarChartKey[C, Y, D, H]].svg),
@@ -530,7 +533,7 @@ object SVG {
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             (for {
               bar <- bars
-              (id, hoverText, hoverTextColor) <- bar.id
+              (id, hoverText) <- bar.id
             } yield {
               // TODO if .svg has the notion of "layers", then
               // Rectangle's svg could handle this <text/> node creation
@@ -539,7 +542,10 @@ object SVG {
               val ur = scaledArea.framePoint(bar.upperRight)
               val width = ur.x - ll.x
               val height = ll.y - ur.y
-              <text class="pointLabel" id={ s"tooltip${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill={ rgb(hoverTextColor).toString } visibility="hidden">{ hoverText }</text>
+              <g>
+                <rect id={ s"tooltipbg${id}" } x="0" y="0" width="0" height="0" visibility="hidden" fill="white"/>
+                <text class="pointLabel" id={ s"tooltiptext${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill="black" visibility="hidden">{ hoverText }</text>
+              </g>
             }) ::
             List(
               keyOpt.map(SVG[BarChartGroupedKey[G, S, Y, D, H]].svg),

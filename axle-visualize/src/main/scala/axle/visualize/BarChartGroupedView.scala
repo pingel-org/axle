@@ -69,7 +69,7 @@ case class BarChartGroupedView[G, S, Y, D, H](
       case (hover, hoverTextColor) => {
         val hoverString = string(hover)
         val r = groups.size * i + j
-        Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y), Option(colorOf(g, s)), id = Some((r.toString, hoverString, hoverTextColor)))
+        Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y), Option(colorOf(g, s)), id = Some((r.toString, hoverString)))
       }
     } getOrElse {
       Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y), Option(colorOf(g, s)))
