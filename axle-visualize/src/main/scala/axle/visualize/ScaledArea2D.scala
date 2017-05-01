@@ -7,8 +7,8 @@ import cats.implicits._
 case class ScaledArea2D[X, Y](
     left: Double,
     right: Double,
+    top: Double, // Note top/bottom is counter-intuitively in reverse order from minY/maxY
     bottom: Double,
-    top: Double,
     minX: X,
     maxX: X,
     minY: Y,
