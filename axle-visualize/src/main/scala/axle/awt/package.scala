@@ -125,26 +125,26 @@ package object awt {
       def component(plot: ScatterPlot[S, X, Y, D]) = ScatterPlotComponent(plot)
     }
 
-  implicit def drawBarChart[S, Y, D: ClassTag]: Draw[BarChart[S, Y, D]] =
-    new Draw[BarChart[S, Y, D]] {
-      def component(chart: BarChart[S, Y, D]) = BarChartComponent(chart)
+  implicit def drawBarChart[C, Y, D: ClassTag, H]: Draw[BarChart[C, Y, D, H]] =
+    new Draw[BarChart[C, Y, D, H]] {
+      def component(chart: BarChart[C, Y, D, H]) = BarChartComponent(chart)
     }
 
-  implicit def drawBarChartGrouped[G, S, Y, D: ClassTag]: Draw[BarChartGrouped[G, S, Y, D]] =
-    new Draw[BarChartGrouped[G, S, Y, D]] {
-      def component(chart: BarChartGrouped[G, S, Y, D]) = BarChartGroupedComponent(chart)
+  implicit def drawBarChartGrouped[G, S, Y, D: ClassTag, H]: Draw[BarChartGrouped[G, S, Y, D, H]] =
+    new Draw[BarChartGrouped[G, S, Y, D, H]] {
+      def component(chart: BarChartGrouped[G, S, Y, D, H]) = BarChartGroupedComponent(chart)
     }
 
   implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedSparseGraph[VP, EP]] =
     new Draw[UndirectedSparseGraph[VP, EP]] {
       def component(jug: UndirectedSparseGraph[VP, EP]) =
-        JungUndirectedGraphVisualization().component(jug)
+        JungUndirectedGraphVisualization(700, 700, 50).component(jug)
     }
 
   implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[DirectedSparseGraph[VP, EP]] =
     new Draw[DirectedSparseGraph[VP, EP]] {
       def component(jdg: DirectedSparseGraph[VP, EP]) =
-        JungDirectedGraphVisualization().component(jdg)
+        JungDirectedGraphVisualization(700, 700, 50).component(jdg)
     }
 
   implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
@@ -217,8 +217,8 @@ package object awt {
 
       domain foreach {
         case (x, y) => {
-          val pointDiameter = diameterOf(data, x, y)
-          g2d.setColor(cachedColor(dataPoints.colorOf(data, x, y)))
+          val pointDiameter = diameterOf(x, y)
+          g2d.setColor(cachedColor(dataPoints.colorOf(x, y)))
           fillOval(g2d, scaledArea, Point2D(x, y), pointDiameter.toInt, pointDiameter.toInt)
         }
       }
@@ -410,10 +410,10 @@ package object awt {
 
   }
 
-  implicit def paintBarChartKey[X, Y, D]: Paintable[BarChartKey[X, Y, D]] =
-    new Paintable[BarChartKey[X, Y, D]] {
+  implicit def paintBarChartKey[X, Y, D, H]: Paintable[BarChartKey[X, Y, D, H]] =
+    new Paintable[BarChartKey[X, Y, D, H]] {
 
-      def paint(key: BarChartKey[X, Y, D], g2d: Graphics2D): Unit = {
+      def paint(key: BarChartKey[X, Y, D, H], g2d: Graphics2D): Unit = {
 
         import key._
         import chart._
@@ -430,10 +430,10 @@ package object awt {
 
     }
 
-  implicit def paintBarChartGroupedKey[G, S, Y, D]: Paintable[BarChartGroupedKey[G, S, Y, D]] =
-    new Paintable[BarChartGroupedKey[G, S, Y, D]] {
+  implicit def paintBarChartGroupedKey[G, S, Y, D, H]: Paintable[BarChartGroupedKey[G, S, Y, D, H]] =
+    new Paintable[BarChartGroupedKey[G, S, Y, D, H]] {
 
-      def paint(key: BarChartGroupedKey[G, S, Y, D], g2d: Graphics2D): Unit = {
+      def paint(key: BarChartGroupedKey[G, S, Y, D, H], g2d: Graphics2D): Unit = {
 
         import key._
         import chart._
@@ -441,9 +441,13 @@ package object awt {
         g2d.setFont(cachedFont(chart.normalFontName, chart.normalFontSize, true))
         val lineHeight = g2d.getFontMetrics.getHeight
         slices.toVector.zipWithIndex foreach {
-          case (s, j) =>
-            g2d.setColor(cachedColor(colorOf(s)))
-            g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+          case (s, i) =>
+            groups.toVector.zipWithIndex foreach {
+              case (g, j) =>
+                val r = i * groups.size + j
+                g2d.setColor(cachedColor(colorOf(g, s)))
+                g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (r + 1))
+            }
         }
       }
 

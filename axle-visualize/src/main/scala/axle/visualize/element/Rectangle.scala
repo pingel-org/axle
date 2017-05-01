@@ -9,4 +9,5 @@ case class Rectangle[X, Y](
   lowerLeft: Point2D[X, Y],
   upperRight: Point2D[X, Y],
   fillColor: Option[Color] = None,
-  borderColor: Option[Color] = None)
+  borderColor: Option[Color] = None,
+  id: Option[(String, String)] = None) // optional (id, hoverText)

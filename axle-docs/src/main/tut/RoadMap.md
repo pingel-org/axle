@@ -7,18 +7,19 @@ permalink: /road_map/
 See [Release Notes](/release_notes/) for the record of previously released features.
 
 ## 0.3.1
-* Fix sbt-release plugin (use sbt-sonatype?)
 * Remove Spark spoke
 * Remove Spark impacts on Functor, etc, and just use Cats versions
 * Publish Scala 2.12 artifacts
 
+## 0.3.2
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
+* Fix logistic regression
+* Fix axle.algebra.GeoMetricSpaceSpec
+
 ## 0.4.x
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
-* Eigenvector
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
-* Fix logistic regression
-* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-* Fix axle.algebra.GeoMetricSpaceSpec
+* Eigenvector
 
 ## 0.5.x
 * Reactive Streams (FS2? Monix? Akka?) for animating visualizations
@@ -36,6 +37,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * redo original monty hall spec
 * move state dist stream
 * Max bet for Poker
+* Fix sbt-release plugin (use sbt-sonatype?)
 
 ## 0.7.x
 * axle.algorithms coverage > 80%
@@ -60,10 +62,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Hidden Markov Models
 
 ## Platform
-* WebGL
-* SVG Animation
 * Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)
 * Spark syntax
+* WebGL
+* SVG Animation
 * Performance benchmarking
 * netlib-java Matrix
 * GPU/CUDA support

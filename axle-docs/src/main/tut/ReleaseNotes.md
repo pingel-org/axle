@@ -9,12 +9,12 @@ See [Road Map](/road_map/) for the plan of upcoming releases and features.
 ## 0.3.0 (April 2017)
 * Scala org to Typelevel
 * Fix malformed distribution in ConditionalProbabilityTable0 and TallyDistribution0
-* Depend on Spire 0.14.0 (which depends on Typelevel Algebra)
+* Depend on Spire 0.14.1 (fix mistaken dependency on snapshot release in 0.2.8)
 
 ## 0.2.8 (March 28, 2016)
 * Fix SVG rendering of negative values in BarChart
 * Make more arguments to vis components functions (colorOf, labelOf, diameterOf)
-* Depend on Spire 0.14.0 (which depends on Typelevel Algebra)
+* Depend on Spire 0.13.1-SNAPSHOT (which depends on Typelevel Algebra)
 
 ## 0.2.7 (January 2016)
 * Use cats-kernel's Eq and Order in favor of Spire's (with Shims to continue to work with Spire)

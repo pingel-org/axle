@@ -11,8 +11,8 @@ import axle.visualize.element.YTics
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
 
-case class BarChartGroupedView[G, S, Y, D](
-    chart: BarChartGrouped[G, S, Y, D],
+case class BarChartGroupedView[G, S, Y, D, H](
+    chart: BarChartGrouped[G, S, Y, D, H],
     data: D) {
 
   import chart._
@@ -49,8 +49,8 @@ case class BarChartGroupedView[G, S, Y, D](
     groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
     normalFontName,
     normalFontSize,
-    bold=true,
-    drawLines=false,
+    bold = true,
+    drawLines = false,
     36d *: angleDouble.degree,
     black)
 
@@ -59,12 +59,21 @@ case class BarChartGroupedView[G, S, Y, D](
   val barSliceWidth = (widthPerGroup - (whiteSpace / 2d)) / slices.size.toDouble
 
   val bars = for {
-    (s, j) <- slices.toVector.zipWithIndex
-    (g, i) <- groups.toStream.zipWithIndex
+    (s, i) <- slices.toVector.zipWithIndex
+    (g, j) <- groups.toStream.zipWithIndex
   } yield {
-    val leftX = padding + (whiteSpace / 2d) + i * widthPerGroup + j * barSliceWidth
+    val leftX = padding + (whiteSpace / 2d) + j * widthPerGroup + i * barSliceWidth
     val rightX = leftX + barSliceWidth
-    Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, groupedDataView.valueOf(data, (g, s))), Option(colorOf(s)))
+    val y = groupedDataView.valueOf(data, (g, s))
+    hoverOf(g, s).map {
+      case (hover, hoverTextColor) => {
+        val hoverString = string(hover)
+        val r = groups.size * i + j
+        Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y), Option(colorOf(g, s)), id = Some((r.toString, hoverString)))
+      }
+    } getOrElse {
+      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y), Option(colorOf(g, s)))
+    }
   }
 
 }

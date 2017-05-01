@@ -12,7 +12,7 @@ import axle.visualize.element.Text
 import cats.kernel.Eq
 import cats.kernel.Order
 
-case class BarChart[S, Y, D](
+case class BarChart[C, Y, D, H](
     initialValue: D,
     drawKey: Boolean = true,
     width: Int = 700,
@@ -32,14 +32,17 @@ case class BarChart[S, Y, D](
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
     labelAngle: UnittedQuantity[Angle, Double] = 36d *: angleDouble.degree,
-    colorOf: S => Color = (s: S) => Color.blue)(
-        implicit val showS: Show[S],
+    colorOf: C => Color = (c: C) => Color.blue,
+    hoverOf: C => Option[H] = (c: C) => None
+    )(
+        implicit val showC: Show[C],
+        val showH: Show[H],
         val zeroY: Zero[Y],
         val orderY: Order[Y],
         val ticsY: Tics[Y],
         val eqY: Eq[Y],
         val plottableY: Plottable[Y],
-        val dataView: DataView[S, Y, D],
+        val dataView: DataView[C, Y, D],
         val lengthSpaceY: LengthSpace[Y, _, Double]) {
 
   val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold = true))

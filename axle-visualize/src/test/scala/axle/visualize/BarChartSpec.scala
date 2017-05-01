@@ -21,11 +21,12 @@ class BarChartSpec extends FunSuite with Matchers {
       "banana" -> 77.9,
       "coconut" -> 10.1)
 
-    val chart = BarChart[String, Double, Map[String, Double]](
+    val chart = BarChart[String, Double, Map[String, Double], String](
       sales,
+      title = Some("fruit sales"),
       xAxis = Some(0d),
       labelAngle = 36d *: angleDouble.degree,
-      title = Some("fruit sales"))
+      hoverOf = (c: String) => Some(c))
 
     val filename = "fruit_sales.svg"
 
@@ -51,11 +52,16 @@ class BarChartSpec extends FunSuite with Matchers {
 
     import cats.implicits._
 
-    val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double]](
+    val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String](
       sales,
       // xAxis = Some(0d),
-      colorOf = (slice: Int) => blue,
-      title = Some("fruit sales"))
+      title = Some("fruit sales"),
+      colorOf = (g: String, s: Int) => g match {
+        case "apple"   => Color.red
+        case "banana"  => Color.yellow
+        case "coconut" => Color.brown
+      },
+      hoverOf = (g: String, s: Int) => Some(s"$g $s" -> Color.white))
 
     val filename = "fruit_sales_grouped.svg"
 
@@ -72,7 +78,7 @@ class BarChartSpec extends FunSuite with Matchers {
       b <- die(6)
     } yield a + b
 
-    val chart = BarChart[Int, Rational, Distribution0[Int, Rational]](
+    val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
       distribution,
       xAxis = Some(Rational(0)),
       title = Some("d6 + d6"),

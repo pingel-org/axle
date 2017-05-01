@@ -24,8 +24,8 @@ import javax.swing.JPanel
 
 import scala.reflect.ClassTag
 
-case class BarChartComponent[S, Y, D: ClassTag](
-  chart: BarChart[S, Y, D])
+case class BarChartComponent[C, Y, D: ClassTag, H](
+  chart: BarChart[C, Y, D, H])
     extends JPanel
     with Fed[D] {
 
@@ -56,7 +56,7 @@ case class BarChartComponent[S, Y, D: ClassTag](
     yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
     Paintable[XTics[Double, Y]].paint(gTics, g2d)
     Paintable[YTics[Double, Y]].paint(yTics, g2d)
-    keyOpt.foreach(Paintable[BarChartKey[S, Y, D]].paint(_, g2d))
+    keyOpt.foreach(Paintable[BarChartKey[C, Y, D, H]].paint(_, g2d))
     bars.foreach(Paintable[Rectangle[Double, Y]].paint(_, g2d))
 
   }

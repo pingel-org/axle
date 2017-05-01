@@ -13,32 +13,13 @@ package object web {
       <body>{ inner }</body>
     </html>
 
-  val svgStyle = """
-.caption{
-  font-size: 14px;
-  font-family: Georgia, serif;
-}
-"""
+  val svgStyleStream = this.getClass.getResourceAsStream("/svgstyle.css")
+  val svgStyle = io.Source.fromInputStream(svgStyleStream).mkString
+  svgStyleStream.close()
 
-  val svgScript = """
-  function init(evt) {
-    if ( window.svgDocument == null ) {
-      svgDocument = evt.target.ownerDocument;
-    }
-  }
-
-  function ShowTooltip(evt, i) {
-    tooltip = svgDocument.getElementById('tooltip' + i);
-    //tooltip.setAttributeNS(null,"x",evt.clientX+10);
-    //tooltip.setAttributeNS(null,"y",evt.clientY+30);
-    tooltip.setAttributeNS(null,"visibility","visible");
-  }
-
-  function HideTooltip(evt, i) {
-    tooltip = svgDocument.getElementById('tooltip' + i);
-    tooltip.setAttributeNS(null,"visibility","hidden");
-  }
-"""
+  val svgScriptStream = this.getClass.getResourceAsStream("/svgfunctions.js")
+  val svgScript = io.Source.fromInputStream(svgScriptStream).mkString
+  svgScriptStream.close()
 
   // optional svg attribute: viewBox={ s"0 0 ${width} ${height}" }
   def svgFrame(inner: NodeSeq, width: Double, height: Double): Node =

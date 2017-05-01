@@ -1,11 +1,24 @@
 package axle.web
 
 import java.awt.Dimension
+
 import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
-import axle.HtmlFrom
+import scala.annotation.implicitNotFound
+
+import edu.uci.ics.jung.algorithms.layout.FRLayout
+import edu.uci.ics.jung.visualization.DefaultVisualizationModel
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
+
 import cats.Show
+import cats.kernel.Eq
+
+import spire.implicits.DoubleAlgebra
+import spire.algebra.Field
+
+import axle.HtmlFrom
 import axle.string
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
@@ -33,21 +46,14 @@ import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import edu.uci.ics.jung.algorithms.layout.FRLayout
-import edu.uci.ics.jung.visualization.DefaultVisualizationModel
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
-import cats.kernel.Eq
-import spire.implicits.DoubleAlgebra
-import scala.annotation.implicitNotFound
 import axle.arcTangent2
-import spire.algebra.Field
 import axle.algebra.DirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.syntax.directedgraph.directedGraphOps
 import axle.syntax.undirectedgraph.undirectedGraphOps
 import axle.jung.undirectedGraphJung
+import axle.xml._
 
 @implicitNotFound("Witness not found for SVG[${S}]")
 trait SVG[S] {
@@ -91,7 +97,7 @@ object SVG {
       }
     }
 
-  implicit def svgDataPoints[S, X, Y, D]: SVG[DataPoints[S, X, Y, D]] =
+  implicit def svgDataPoints[S: Show, X, Y, D]: SVG[DataPoints[S, X, Y, D]] =
     new SVG[DataPoints[S, X, Y, D]] {
       def svg(dl: DataPoints[S, X, Y, D]): NodeSeq = {
 
@@ -102,18 +108,20 @@ object SVG {
         val circles = domain.toList.zipWithIndex.flatMap {
           case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
-            val pointRadius = diameterOf(data, x, y) / 2
-            val color = colorOf(data, x, y)
+            val pointRadius = diameterOf(x, y) / 2
+            val color = colorOf(x, y)
             if (pointRadius > 0) {
-              labelOf(data, x, y) map {
+              val baseCircle = <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+              labelOf(x, y) map {
                 case (label, permanent) =>
+                  val idCircle = elemWithAttributes(baseCircle, attribute("id", s"circle$i") :: Nil)
                   if (permanent) {
-                    <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" }/>
+                    idCircle
                   } else {
-                    <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" } id={ s"rect$i" } onmousemove={ s"ShowTooltip(evt, $i)" } onmouseout={ s"HideTooltip(evt, $i)" }/>
+                    elemWithAttributes(idCircle, attribute("onmousemove", s"ShowTooltip(evt, $i)") :: attribute("onmouseout", s"HideTooltip(evt, $i)") :: Nil)
                   }
               } getOrElse {
-                <circle cx={ s"${center.x}" } cy={ s"${center.y}" } r={ s"${pointRadius}" } fill={ s"${rgb(color)}" }/>
+                baseCircle
               }
             } else {
               List.empty
@@ -124,15 +132,17 @@ object SVG {
         val labels = domain.toList.zipWithIndex.flatMap {
           case ((x, y), i) => {
             val center = scaledArea.framePoint(Point2D(x, y))
-            val pointRadius = diameterOf(data, x, y) / 2
+            val pointRadius = diameterOf(x, y) / 2
             if (pointRadius > 0) {
-              labelOf(data, x, y) map {
+              labelOf(x, y) map {
                 case (label, permanent) =>
-                  if (permanent) {
-                    <text class="pointLabel" id={ "pointLabel" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="visible">{ label }</text>
-                  } else {
-                    <text class="pointLabel" id={ "tooltip" + i } x={ s"${center.x + pointRadius}" } y={ s"${center.y - pointRadius}" } visibility="hidden">{ label }</text>
-                  }
+                  elem("text",
+                    "class" -> "pointLabel" ::
+                      "id" -> (if (permanent) ("pointLabel" + i) else ("tooltiptext" + i)) ::
+                      "x" -> s"${center.x + pointRadius}" ::
+                      "y" -> s"${center.y - pointRadius}" ::
+                      "visibility" -> (if (permanent) "visible" else "hidden") :: Nil,
+                    xml.Text(string(label)))
               }
             } else {
               List.empty
@@ -169,9 +179,9 @@ object SVG {
       }
     }
 
-  implicit def svgBarChartKey[S, Y, D]: SVG[BarChartKey[S, Y, D]] =
-    new SVG[BarChartKey[S, Y, D]] {
-      def svg(key: BarChartKey[S, Y, D]): NodeSeq = {
+  implicit def svgBarChartKey[S, Y, D, H]: SVG[BarChartKey[S, Y, D, H]] =
+    new SVG[BarChartKey[S, Y, D, H]] {
+      def svg(key: BarChartKey[S, Y, D, H]): NodeSeq = {
 
         import key._
         import chart._
@@ -195,9 +205,9 @@ object SVG {
       }
     }
 
-  implicit def svgBarChartGroupedKey[G, S, Y, D]: SVG[BarChartGroupedKey[G, S, Y, D]] =
-    new SVG[BarChartGroupedKey[G, S, Y, D]] {
-      def svg(key: BarChartGroupedKey[G, S, Y, D]): NodeSeq = {
+  implicit def svgBarChartGroupedKey[G, S, Y, D, H]: SVG[BarChartGroupedKey[G, S, Y, D, H]] =
+    new SVG[BarChartGroupedKey[G, S, Y, D, H]] {
+      def svg(key: BarChartGroupedKey[G, S, Y, D, H]): NodeSeq = {
         import key._
         import chart._
         val lineHeight = chart.normalFontSize
@@ -208,13 +218,14 @@ object SVG {
           <text x={ s"${width - keyWidth}" } y={ s"${keyTop}" } font-size={ s"${lineHeight}" }>{ kt }</text>
         } toList
 
-        val keyEntries = slices.toList.zipWithIndex map {
-          case (slice, i) => {
-            val color = colorOf(slice)
-            <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
-          }
+        val keyEntries = for {
+          (slice, i) <- slices.toList.zipWithIndex
+          (group, j) <- groups.toList.zipWithIndex
+        } yield {
+          val color = colorOf(group, slice)
+          val r = i * groups.size + j
+          <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (r + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(group) + " " + string(slice) }</text>
         }
-
         ktto ++ keyEntries
       }
     }
@@ -226,21 +237,24 @@ object SVG {
 
         import t._
 
+        val angled = angle.isDefined
+
+        val textBase =
+          elem("text",
+            "x" -> s"$x" ::
+              "y" -> s"$y" ::
+              "text-anchor" -> (if (centered) "middle" else "left") ::
+              "fill" -> s"${rgb(color)}" ::
+              "font-size" -> s"${fontSize}" :: Nil,
+            xml.Text(t.text))
+
         if (angle.isDefined) {
           import axle.visualize.angleDouble
           import spire.implicits._
           val twist = angle.get.in(angleDouble.degree).magnitude * -1d
-          if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
-          } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } transform={ s"rotate($twist $x $y)" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
-          }
+          elemWithAttributes(textBase, attribute("transform", s"rotate($twist $x $y)") :: Nil)
         } else {
-          if (centered) {
-            <text text-anchor="middle" x={ s"$x" } y={ s"$y" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
-          } else {
-            <text text-anchor="left" x={ s"$x" } y={ s"$y" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ t.text }</text>
-          }
+          textBase
         }
       }
     }
@@ -271,24 +285,29 @@ object SVG {
     new SVG[Rectangle[X, Y]] {
 
       def svg(rectangle: Rectangle[X, Y]): NodeSeq = {
+
         import rectangle.scaledArea
         val ll = scaledArea.framePoint(rectangle.lowerLeft)
         val ur = scaledArea.framePoint(rectangle.upperRight)
         val width = ur.x - ll.x
         val height = ll.y - ur.y
-        if (rectangle.borderColor.isDefined) {
-          if (rectangle.fillColor.isDefined) {
-            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
-          } else {
-            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ s"${rgb(rectangle.borderColor.get)}" } stroke-width="1"/>
-          }
-        } else {
-          if (rectangle.fillColor.isDefined) {
-            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } fill={ s"${rgb(rectangle.fillColor.get)}" } stroke-width="1"/>
-          } else {
-            <rect x={ s"${ll.x}" } y={ s"${ur.y}" } width={ s"$width" } height={ s"$height" } stroke={ "black" } stroke-width="1"/>
-          }
-        }
+
+        val rectBase =
+          elem("rect",
+            "x" -> s"${ll.x}" ::
+              "y" -> s"${ur.y}" ::
+              "width" -> s"$width" ::
+              "height" -> s"$height" ::
+              "stroke-width" -> "1" :: Nil)
+
+        val rectBordered = elemWithAttributes(rectBase, attribute("stroke", (rectangle.borderColor.map(bc => s"${rgb(bc)}").getOrElse("black"))) :: Nil)
+        val rectFilled = rectangle.fillColor.map(fc => elemWithAttributes(rectBordered, attribute("fill", s"${rgb(fc)}") :: Nil)).getOrElse(rectBordered)
+
+        rectangle.id.map({
+          case (id, hoverText) =>
+            elemWithAttributes(rectFilled,
+              attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
+        }).getOrElse(rectFilled)
       }
     }
 
@@ -319,7 +338,7 @@ object SVG {
       }
     }
 
-  implicit def svgScatterPlot[S, X, Y, D]: SVG[ScatterPlot[S, X, Y, D]] =
+  implicit def svgScatterPlot[S: Show, X, Y, D]: SVG[ScatterPlot[S, X, Y, D]] =
     new SVG[ScatterPlot[S, X, Y, D]] {
 
       def svg(scatterPlot: ScatterPlot[S, X, Y, D]): NodeSeq = {
@@ -400,12 +419,16 @@ object SVG {
 
             import axle.visualize.angleDouble
 
-            val text =
-              if (angle.magnitude == 0d) {
-                <text text-anchor="middle" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y + 3}" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ label }</text>
-              } else {
-                <text text-anchor="start" alignment-baseline="hanging" x={ s"${bottom.x}" } y={ s"${bottom.y}" } transform={ s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})" } fill={ s"${rgb(color)}" } font-size={ s"${fontSize}" }>{ label }</text>
-              }
+            val angled = angle.magnitude != 0d
+
+            val text = elem("text", List(
+              "text-anchor" -> (if (angled) "start" else "middle"),
+              "alignment-baseline" -> "hanging",
+              "x" -> bottom.x.toString,
+              "y" -> (if (angled) bottom.y else bottom.y + 3).toString,
+              "font-size" -> fontSize.toString) ++
+              (if (angled) List("transform" -> s"rotate(${angle.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})") else Nil),
+              xml.Text(label))
 
             if (drawLines) {
               val top = scaledArea.framePoint(Point2D(x, maxY))
@@ -448,10 +471,10 @@ object SVG {
       }
     }
 
-  implicit def svgBarChart[S, Y, D]: SVG[BarChart[S, Y, D]] =
-    new SVG[BarChart[S, Y, D]] {
+  implicit def svgBarChart[C, Y, D, H]: SVG[BarChart[C, Y, D, H]] =
+    new SVG[BarChart[C, Y, D, H]] {
 
-      def svg(chart: BarChart[S, Y, D]): NodeSeq = {
+      def svg(chart: BarChart[C, Y, D, H]): NodeSeq = {
 
         import chart._
 
@@ -465,8 +488,24 @@ object SVG {
             SVG[XTics[Double, Y]].svg(gTics) ::
             SVG[YTics[Double, Y]].svg(yTics) ::
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
+            (for {
+              bar <- bars
+              (id, hoverText) <- bar.id
+            } yield {
+              // TODO if .svg has the notion of "layers", then
+              // Rectangle's svg could handle this <text/> node creation
+              import bar.scaledArea
+              val ll = scaledArea.framePoint(bar.lowerLeft)
+              val ur = scaledArea.framePoint(bar.upperRight)
+              val width = ur.x - ll.x
+              val height = ll.y - ur.y
+              <g>
+                <rect id={ s"tooltipbg${id}" } x="0" y="0" width="0" height="0" visibility="hidden" fill="white"/>
+                <text class="pointLabel" id={ s"tooltiptext${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill="black" visibility="hidden">{ hoverText }</text>
+              </g>
+            }) ::
             List(
-              keyOpt.map(SVG[BarChartKey[S, Y, D]].svg),
+              keyOpt.map(SVG[BarChartKey[C, Y, D, H]].svg),
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
               yAxisLabelText.map(SVG[Text].svg)).flatten
@@ -475,10 +514,10 @@ object SVG {
       }
     }
 
-  implicit def svgBarChartGrouped[G, S, Y, D]: SVG[BarChartGrouped[G, S, Y, D]] =
-    new SVG[BarChartGrouped[G, S, Y, D]] {
+  implicit def svgBarChartGrouped[G, S, Y, D, H]: SVG[BarChartGrouped[G, S, Y, D, H]] =
+    new SVG[BarChartGrouped[G, S, Y, D, H]] {
 
-      def svg(chart: BarChartGrouped[G, S, Y, D]): NodeSeq = {
+      def svg(chart: BarChartGrouped[G, S, Y, D, H]): NodeSeq = {
 
         import chart._
 
@@ -492,8 +531,24 @@ object SVG {
             SVG[XTics[Double, Y]].svg(gTics) ::
             SVG[YTics[Double, Y]].svg(yTics) ::
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
+            (for {
+              bar <- bars
+              (id, hoverText) <- bar.id
+            } yield {
+              // TODO if .svg has the notion of "layers", then
+              // Rectangle's svg could handle this <text/> node creation
+              import bar.scaledArea
+              val ll = scaledArea.framePoint(bar.lowerLeft)
+              val ur = scaledArea.framePoint(bar.upperRight)
+              val width = ur.x - ll.x
+              val height = ll.y - ur.y
+              <g>
+                <rect id={ s"tooltipbg${id}" } x="0" y="0" width="0" height="0" visibility="hidden" fill="white"/>
+                <text class="pointLabel" id={ s"tooltiptext${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill="black" visibility="hidden">{ hoverText }</text>
+              </g>
+            }) ::
             List(
-              keyOpt.map(SVG[BarChartGroupedKey[G, S, Y, D]].svg),
+              keyOpt.map(SVG[BarChartGroupedKey[G, S, Y, D, H]].svg),
               titleText.map(SVG[Text].svg),
               xAxisLabelText.map(SVG[Text].svg),
               yAxisLabelText.map(SVG[Text].svg)).flatten
@@ -631,11 +686,10 @@ object SVG {
 
   }
 
-  // TODO
   implicit def svgPgmEdge: SVG[axle.pgm.Edge] =
     new SVG[axle.pgm.Edge] {
       def svg(e: axle.pgm.Edge): NodeSeq =
-        List(xml.Text(""))
+        NodeSeq.Empty
     }
 
   implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
