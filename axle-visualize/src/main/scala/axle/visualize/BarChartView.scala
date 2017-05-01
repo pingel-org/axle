@@ -36,7 +36,7 @@ case class BarChartView[C, Y, D, H](
 
   val scaledArea = ScaledArea2D(
     border, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border,
-    border, height - border,
+    border, height - (if (labelAngle.isDefined) border else 5),
     minX, maxX,
     minY, maxY)
 
