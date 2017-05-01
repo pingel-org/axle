@@ -224,7 +224,7 @@ object SVG {
         } yield {
           val color = colorOf(group, slice)
           val r = i * groups.size + j
-          <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (r + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
+          <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (r + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(group) + " " + string(slice) }</text>
         }
         ktto ++ keyEntries
       }
