@@ -63,7 +63,7 @@ case class BarChartView[C, Y, D, H](
       val rightX = leftX + (widthPerSlice * barWidthPercent)
       val y0 = zeroY.zero
       val hoverOpt = hoverOf(c)
-      hoverOpt.map { case (hover, hoverTextColor) =>
+      hoverOpt.map { case (hover) =>
         val hoverString = string(hover)
         if (y >= y0) {
           Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color), id = Some((i.toString, hoverString)))

@@ -33,7 +33,7 @@ case class BarChart[C, Y, D, H](
     yAxisLabel: Option[String] = None,
     labelAngle: UnittedQuantity[Angle, Double] = 36d *: angleDouble.degree,
     colorOf: C => Color = (c: C) => Color.blue,
-    hoverOf: C => Option[(H, Color)] = (c: C) => None
+    hoverOf: C => Option[H] = (c: C) => None
     )(
         implicit val showC: Show[C],
         val showH: Show[H],
