@@ -36,10 +36,10 @@ case class BarChartGroupedView[G, S, Y, D, H](
   implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
 
   val scaledArea = ScaledArea2D(
-    width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
-    height,
-    border,
-    minX, maxX, minY, maxY)
+    border, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border,
+    border, height - border,
+    minX, maxX,
+    minY, maxY)
 
   val vLine = VerticalLine(scaledArea, yAxis, black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(zeroY.zero), black)

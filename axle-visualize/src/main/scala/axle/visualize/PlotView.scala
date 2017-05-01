@@ -27,13 +27,14 @@ case class PlotView[S, X, Y, D](
   val maxPoint = Point2D(maxX, maxY)
 
   val scaledArea = ScaledArea2D(
-    width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
-    height, border,
-    minPoint.x, maxPoint.x, minPoint.y, maxPoint.y)
+    border, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border,
+    border, height - border,
+    minPoint.x, maxPoint.x,
+    minPoint.y, maxPoint.y)
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, xts.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, Some(0d *: angleDouble.degree), black)
+  val xTics = XTics(scaledArea, xts.tics(minX, maxX), fontName, fontSize, bold = true, drawLines = true, Some(0d *: angleDouble.degree), black)
   val yTics = YTics(scaledArea, yts.tics(minY, maxY), fontName, fontSize, true, black)
 
   val dataLines = DataLines(scaledArea, data, plotDataView.xsOf, plotDataView.valueOf, colorOf, pointDiameter, connect)

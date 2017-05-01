@@ -66,9 +66,10 @@ case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
   val maxPoint = Point2D(maxX, maxY)
 
   val scaledArea = ScaledArea2D(
-    width = width,
-    height, border,
-    minPoint.x, maxPoint.x, minPoint.y, maxPoint.y)
+    border, width - border,
+    border, height - border,
+    minPoint.x, maxPoint.x,
+    minPoint.y, maxPoint.y)
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)

@@ -4,12 +4,11 @@ import axle.algebra.LengthSpace
 import cats.kernel.Eq
 import cats.implicits._
 
-// http://www.apl.jhu.edu/~hall/java/Java2D-Tutorial.html
-
 case class ScaledArea2D[X, Y](
-    width: Double,
-    height: Double,
-    pad: Double,
+    left: Double,
+    right: Double,
+    bottom: Double,
+    top: Double,
     minX: X,
     maxX: X,
     minY: Y,
@@ -21,27 +20,25 @@ case class ScaledArea2D[X, Y](
 
   val nonZeroArea = (!(minX === maxX)) && (!(minY === maxY))
 
-  val drawableWidth = width - (2 * pad)
-  val drawableHeight = height - (2 * pad)
+  val width = right - left
+  val height = top - bottom
 
   def frameX(x: X): Double =
-    pad + (drawableWidth * lengthX.portion(minX, x, maxX))
+    left + width * lengthX.portion(minX, x, maxX)
 
   def unframeX(px: Double): X =
-    lengthX.onPath(minX, maxX, (px - pad) / drawableWidth)
+    lengthX.onPath(minX, maxX, (px - left) / width)
 
   def frameY(y: Y): Double =
-    height - pad - (drawableHeight * lengthY.portion(minY, y, maxY))
+    bottom + height * lengthY.portion(minY, y, maxY)
 
   def unframeY(py: Double): Y =
-    lengthY.onPath(minY, maxY, (py - pad) / drawableHeight)
+    lengthY.onPath(minY, maxY, (py - bottom) / height)
 
-  def framePoint(sp: Point2D[X, Y]): Point2D[Double, Double] = Point2D(
-    frameX(sp.x),
-    frameY(sp.y))
+  def framePoint(sp: Point2D[X, Y]): Point2D[Double, Double] =
+    Point2D(frameX(sp.x), frameY(sp.y))
 
-  def unframePoint(p: Point2D[Double, Double]): Point2D[X, Y] = Point2D(
-    unframeX(p.x),
-    unframeY(p.y))
+  def unframePoint(p: Point2D[Double, Double]): Point2D[X, Y] =
+    Point2D(unframeX(p.x), unframeY(p.y))
 
 }
