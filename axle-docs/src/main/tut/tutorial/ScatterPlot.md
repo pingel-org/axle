@@ -46,7 +46,7 @@ Define the ScatterPlot
 ```tut
 import cats.implicits._
 
-val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int], String](data, colorOf = colorer, labelOf = labeller)
+val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int]](data, colorOf = colorer, labelOf = labeller)
 ```
 
 Create the SVG

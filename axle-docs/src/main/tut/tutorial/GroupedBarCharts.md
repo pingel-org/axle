@@ -38,7 +38,7 @@ The data can be grouped in two ways to produce bar charts:
 val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String](
   sales,
   title = Some("fruit sales"),
-  colorOf = (label: Int) => label match {
+  colorOf = (label: String, year: Int) => year match {
     case 2011 => red
     case 2012 => blue
   }
@@ -58,9 +58,9 @@ svg(chart, "barchart1.svg")
 Or alternatively
 
 ```tut:book
-val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double, String]](
+val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double], String](
   sales map { case (k, v) => (k._2, k._1) -> v},
-  colorOf = (label: String) => label match {
+  colorOf = (year: Int, label: String) => label match {
     case "apple" => red
     case "banana" => yellow
     case "coconut" => brown
