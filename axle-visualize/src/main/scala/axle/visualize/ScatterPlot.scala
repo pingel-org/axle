@@ -66,13 +66,14 @@ case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
   val maxPoint = Point2D(maxX, maxY)
 
   val scaledArea = ScaledArea2D(
-    width = width,
-    height, border,
-    minPoint.x, maxPoint.x, minPoint.y, maxPoint.y)
+    border, width - border,
+    border, height - border,
+    minPoint.x, maxPoint.x,
+    minPoint.y, maxPoint.y)
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
-  val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = drawXTicLines, 0d *: angleDouble.degree, black)
+  val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = drawXTicLines, Some(0d *: angleDouble.degree), black)
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, drawLines = drawYTicLines, black)
 
   val dataPoints = DataPoints(scaledArea, data, diameterOf, colorOf, labelOf)

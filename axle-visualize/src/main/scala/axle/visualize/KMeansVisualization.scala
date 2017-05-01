@@ -35,14 +35,19 @@ case class KMeansVisualization[D, F, G, M](
   val maxY = maxs.get(0, 1)
 
   implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
-  val scaledArea = ScaledArea2D(width, height, border, minX, maxX, minY, maxY)
+  val scaledArea =
+    ScaledArea2D(
+      border, width - border,
+      border, height - border,
+      minX, maxX,
+      minY, maxY)
 
   implicit val doubleTics = Tics[Double]
-  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), fontName, fontSize, bold=true, drawLines=true, 0d *: angleDouble.degree, black)
+  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), fontName, fontSize, bold = true, drawLines = true, Some(0d *: angleDouble.degree), black)
   val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), fontName, fontSize, true, black)
 
   val boundingRectangle =
-    Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black), fillColor=Some(white))
+    Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black), fillColor = Some(white))
 
   def centroidOval(i: Int): Oval[Double, Double] = {
     val denormalized = classifier.normalizer.unapply(classifier.μ.row(i))

@@ -35,10 +35,10 @@ case class BarChartView[C, Y, D, H](
   implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
 
   val scaledArea = ScaledArea2D(
-    width = if (drawKey) width - (keyWidth + keyLeftPadding) else width,
-    height,
-    border,
-    minX, maxX, minY, maxY)
+    border, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border,
+    border, height - (if (labelAngle.isDefined) border else 5),
+    minX, maxX,
+    minY, maxY)
 
   val vLine = VerticalLine(scaledArea, yAxis, black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(zeroY.zero), black)
@@ -63,13 +63,14 @@ case class BarChartView[C, Y, D, H](
       val rightX = leftX + (widthPerSlice * barWidthPercent)
       val y0 = zeroY.zero
       val hoverOpt = hoverOf(c)
-      hoverOpt.map { case (hover) =>
-        val hoverString = string(hover)
-        if (y >= y0) {
-          Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color), id = Some((i.toString, hoverString)))
-        } else {
-          Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color), id = Some((i.toString, hoverString)))
-        }
+      hoverOpt.map {
+        case (hover) =>
+          val hoverString = string(hover)
+          if (y >= y0) {
+            Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color), id = Some((i.toString, hoverString)))
+          } else {
+            Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color), id = Some((i.toString, hoverString)))
+          }
       } getOrElse {
         if (y >= y0) {
           Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color))

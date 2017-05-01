@@ -376,10 +376,12 @@ package object awt {
           g2d.setColor(Color.black)
 
           // TODO: angle xtics?
-          if (angle === zeroDegrees) {
-            g2d.drawString(label, (bottomUnscaled.x - fontMetrics.stringWidth(label) / 2).toInt, bottomUnscaled.y.toInt + fontMetrics.getHeight)
-          } else {
-            drawStringAtAngle(g2d, scaledArea, fontMetrics, label, bottomScaled, angle)
+          angle foreach { a =>
+            if (a === zeroDegrees) {
+              g2d.drawString(label, (bottomUnscaled.x - fontMetrics.stringWidth(label) / 2).toInt, bottomUnscaled.y.toInt + fontMetrics.getHeight)
+            } else {
+              drawStringAtAngle(g2d, scaledArea, fontMetrics, label, bottomScaled, a)
+            }
           }
 
           g2d.drawLine(bottomUnscaled.x.toInt, (bottomUnscaled.y - 2).toInt, bottomUnscaled.x.toInt, (bottomUnscaled.y + 2).toInt)

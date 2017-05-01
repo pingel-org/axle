@@ -25,7 +25,7 @@ class BarChartSpec extends FunSuite with Matchers {
       sales,
       title = Some("fruit sales"),
       xAxis = Some(0d),
-      labelAngle = 36d *: angleDouble.degree,
+      labelAngle = Some(36d *: angleDouble.degree),
       hoverOf = (c: String) => Some(c))
 
     val filename = "fruit_sales.svg"
@@ -82,7 +82,7 @@ class BarChartSpec extends FunSuite with Matchers {
       distribution,
       xAxis = Some(Rational(0)),
       title = Some("d6 + d6"),
-      labelAngle = 36d *: angleDouble.degree,
+      labelAngle = Some(36d *: angleDouble.degree),
       colorOf = (i: Int) => blue,
       drawKey = false)
 

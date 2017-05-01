@@ -18,8 +18,8 @@ case class PixelatedColoredArea[X: Eq, Y: Eq, V](
   val border = 0d
 
   val scaledArea = ScaledArea2D(
-    width = width,
-    height, border,
+    border, width - border,
+    border, height - border,
     minX, maxX,
     minY, maxY)
 

@@ -3,6 +3,8 @@ package axle.visualize
 import cats.kernel.Order
 
 import cats.Show
+import axle.quanta.UnittedQuantity
+import axle.quanta.Angle
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.algebra.Zero
@@ -28,6 +30,7 @@ case class BarChartGrouped[G, S, Y, D, H](
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None,
+    labelAngle: Option[UnittedQuantity[Angle, Double]] = Some(36d *: angleDouble.degree),
     colorOf: (G, S) => Color,
     hoverOf: (G, S) => Option[(H, Color)] = (g: G, s: S) => None)(
         implicit val showG: Show[G],
