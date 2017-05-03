@@ -40,4 +40,4 @@ import axle.web._
 svg(chart, "fruitsales.svg")
 ```
 
-![fruit sales](/tutorial/images/fruitsales.svg)
+<object data="/tutorial/images/fruitsales.svg" type="image/svg+xml" alt="fruit sales"/>
