@@ -28,7 +28,8 @@ import cats.implicits._
 
 val chart = BarChart[String, Double, Map[String, Double], String](
   sales,
-  title = Some("fruit sales")
+  title = Some("fruit sales"),
+  hoverOf = (c: String) => Some(c)
 )
 ```
 
