@@ -95,33 +95,11 @@ package object jblas {
         x.add(y)
     }
 
-  implicit def additiveCMonoidDoubleMatrix: AdditiveMonoid[DoubleMatrix] =
-    new AdditiveMonoid[DoubleMatrix] {
-
-      lazy val semigroup = additiveCSemigroupDoubleMatrix
-
-      def plus(x: DoubleMatrix, y: DoubleMatrix) =
-        semigroup.plus(x, y)
-
-      def zero: DoubleMatrix = ??? // DoubleMatrix.zeros(rows, columns)
-    }
-
   implicit def multiplicativeSemigroupDoubleMatrix: MultiplicativeSemigroup[DoubleMatrix] =
     new MultiplicativeSemigroup[DoubleMatrix] {
 
       def times(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
         x.mmul(y)
-    }
-
-  implicit def multiplicativeMonoidDoubleMatrix: MultiplicativeMonoid[DoubleMatrix] =
-    new MultiplicativeMonoid[DoubleMatrix] {
-
-      lazy val semigroup = multiplicativeSemigroupDoubleMatrix
-
-      def times(x: DoubleMatrix, y: DoubleMatrix) =
-        semigroup.times(x, y)
-
-      def one: DoubleMatrix = ??? // DoubleMatrix.eye(size)
     }
 
   implicit def additiveAbGroupDoubleMatrix: AdditiveAbGroup[DoubleMatrix] =
