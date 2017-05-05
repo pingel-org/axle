@@ -9,13 +9,13 @@ permalink: /tutorial/fibonacci/
 import axle._
 ```
 
-Linear implemntation using `foldLeft`:
+# Linear using `foldLeft`:
 
 ```tut:book
 fib(10)
 ```
 
-Recursive implementation:
+# Recursive
 
 ```tut:book
 recfib(10)
@@ -23,7 +23,7 @@ recfib(10)
 
 Some alternatives that are not in Axle include
 
-Recursive with memoization:
+# Recursive with memoization
 
 ```tut:book
 val memo = collection.mutable.Map(0 -> 0L, 1 -> 1L)
@@ -41,23 +41,29 @@ def fibonacciRecursivelyWithMemo(n: Int): Long = {
 fibonacciRecursivelyWithMemo(10)
 ```
 
-Or the seldom used sub-linear approach using matrices and "recursive squaring"
+# Recursive squaring
+
+A less well-known approach to obtain sub-linear time.
 
 (TODO: use Axle 2x2 matrices rather than this case class.)
 
 ```tut:book
-case class FibMatrix(_00: Long, _01: Long, _10: Long, _11: Long) {
-  def *(right: FibMatrix) = FibMatrix(
-    _00 * right._00 + _01 * right._10, _00 * right._01 + _01 * right._11,
-    _10 * right._00 + _11 * right._10, _10 * right._01 + _11 * right._11
-  )
-}
 
-val fibMatrix1 = FibMatrix(1, 1, 1, 0)
+import org.jblas.DoubleMatrix
+import axle._
+import axle.jblas._
+import axle.syntax.linearalgebra.matrixOps
+import spire.implicits.DoubleAlgebra
+import spire.implicits.multiplicativeSemigroupOps
+
+implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
+import laJblasDouble._
+
+val fibMatrix1 = fromColumnMajorArray(2, 2, List(1d, 1d, 1d, 0d).toArray)
 
 val matrixMemo = collection.mutable.Map(1 -> fibMatrix1)
 
-def nthFibMatrix(n: Int): FibMatrix = {
+def nthFibMatrix(n: Int): DoubleMatrix = {
   if (matrixMemo.contains(n)) {
     matrixMemo(n)
   } else if (n % 2 == 0) {
@@ -71,10 +77,12 @@ def nthFibMatrix(n: Int): FibMatrix = {
   }
 }
 
-def fibonacciFast(n: Int) = n match {
-  case 0 => 0
-  case _ => nthFibMatrix(n)._01
+def fibonacciFast(n: Int): Long = n match {
+  case 0 => 0L
+  case _ => nthFibMatrix(n).get(0, 1).toLong
 }
 
-fibonacciFast(100)
+fibonacciFast(78)
 ```
+
+Note: Beyond 78 inaccuracies creep in due to the limitations of the `Double` number type.
