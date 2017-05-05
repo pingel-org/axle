@@ -9,13 +9,13 @@ permalink: /tutorial/fibonacci/
 import axle._
 ```
 
-# Linear using `foldLeft`:
+## Linear using `foldLeft`:
 
 ```tut:book
 fib(10)
 ```
 
-# Recursive
+## Recursive
 
 ```tut:book
 recfib(10)
@@ -23,7 +23,7 @@ recfib(10)
 
 Some alternatives that are not in Axle include
 
-# Recursive with memoization
+## Recursive with memoization
 
 ```tut:book
 val memo = collection.mutable.Map(0 -> 0L, 1 -> 1L)
@@ -41,7 +41,7 @@ def fibonacciRecursivelyWithMemo(n: Int): Long = {
 fibonacciRecursivelyWithMemo(10)
 ```
 
-# Recursive squaring
+## Recursive squaring
 
 A less well-known approach to obtain sub-linear time.
 
