@@ -45,43 +45,67 @@ fibonacciRecursivelyWithMemo(10)
 
 A less well-known approach to obtain sub-linear time.
 
-(TODO: use Axle 2x2 matrices rather than this case class.)
+Imports:
 
 ```tut:book
-
-import org.jblas.DoubleMatrix
 import axle._
 import axle.jblas._
 import axle.syntax.linearalgebra.matrixOps
 import spire.implicits.DoubleAlgebra
-import spire.implicits.multiplicativeSemigroupOps
+import spire.algebra.MultiplicativeSemigroup
+import axle.algebra._
+```
 
-implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
-import laJblasDouble._
+Define `nthFibMatrix` using recursive squaring:
 
-val fibMatrix1 = fromColumnMajorArray(2, 2, List(1d, 1d, 1d, 0d).toArray)
+```tut:book
+def nthFibMatrix[M, V](
+  n: Int,
+  memo: collection.mutable.Map[Int, M], m1: M)(
+  implicit la: LinearAlgebra[M, Int, Int, V],
+  ms: MultiplicativeSemigroup[M]): M = {
 
-val matrixMemo = collection.mutable.Map(1 -> fibMatrix1)
+  import spire.implicits.multiplicativeSemigroupOps
 
-def nthFibMatrix(n: Int): DoubleMatrix = {
-  if (matrixMemo.contains(n)) {
-    matrixMemo(n)
+  if (memo.contains(n)) {
+    memo(n)
   } else if (n % 2 == 0) {
-    val result = nthFibMatrix(n / 2) * nthFibMatrix(n / 2)
-    matrixMemo += n -> result
+    val half = nthFibMatrix(n / 2, memo, m1)
+    val result = half * half
+    memo += n -> result
     result
   } else {
-    val result = nthFibMatrix((n - 1) / 2) * nthFibMatrix((n - 1) / 2) * fibMatrix1
-    matrixMemo += n -> result
+    val half = nthFibMatrix((n - 1) / 2, memo, m1)
+    val result = half * half * m1
+    memo += n -> result
     result
   }
 }
+```
 
-def fibonacciFast(n: Int): Long = n match {
-  case 0 => 0L
-  case _ => nthFibMatrix(n).get(0, 1).toLong
+Wrapper utilizing `nthFibMatrix` using jblas matrices and `axle.jblas`:
+
+```tut:book
+def fibonacciFast(n: Int): Long = {
+
+  import org.jblas.DoubleMatrix
+  implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
+  import laJblasDouble._
+
+  val m1 = fromColumnMajorArray(2, 2, List(1d, 1d, 1d, 0d).toArray)
+
+  val memo = collection.mutable.Map(1 -> m1)
+
+  n match {
+    case 0 => 0L
+    case _ => nthFibMatrix(n, memo, m1).get(0, 1).toLong
+  }
 }
+```
 
+Demo:
+
+```tut:book
 fibonacciFast(78)
 ```
 
