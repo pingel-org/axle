@@ -9,7 +9,7 @@ permalink: /tutorial/fibonacci/
 import axle._
 ```
 
-## Linear using `foldLeft`:
+## Linear using `foldLeft`
 
 ```tut:book
 fib(10)
@@ -45,9 +45,9 @@ fibonacciRecursivelyWithMemo(10)
 
 A less well-known approach to obtain sub-linear time.
 
-Imports:
+Imports
 
-```tut:book
+```tut:silent
 import axle._
 import axle.jblas._
 import axle.syntax.linearalgebra.matrixOps
