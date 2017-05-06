@@ -38,8 +38,8 @@ package object jblas {
   // TODO put column count in type and make this implicit
   def rowVectorInnerProductSpace[R: MultiplicativeMonoid, C, N: Field](n: C)(
     implicit la: LinearAlgebra[DoubleMatrix, R, C, N],
-    module: Module[DoubleMatrix, N],
-    ctn: ConvertableTo[N]) =
+    // module: Module[DoubleMatrix, N],
+    ctn: ConvertableTo[N], cfn: ConvertableFrom[N]) =
     new InnerProductSpace[DoubleMatrix, N] {
 
       def negate(x: DoubleMatrix): DoubleMatrix = la.negate(x)
@@ -50,7 +50,7 @@ package object jblas {
         x.add(y)
 
       def timesl(r: N, v: DoubleMatrix): DoubleMatrix =
-        module.timesl(r, v)
+        v.mul(cfn.toDouble(r))
 
       def scalar: Field[N] = Field[N]
 
@@ -64,13 +64,6 @@ package object jblas {
       def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
         x.add(y)
     }
-
-  implicit def minusSemigroupDoubleMatrix: Semigroup[DoubleMatrix] = 
-    new Semigroup[DoubleMatrix] {
-
-      def combine(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
-        x.sub(y)
-  }
 
   implicit def multiplicativeSemigroupDoubleMatrix: MultiplicativeSemigroup[DoubleMatrix] =
     new MultiplicativeSemigroup[DoubleMatrix] {

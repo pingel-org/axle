@@ -2,12 +2,9 @@ package axle.ml
 
 import spire.math.exp
 import spire.math.log
-
+import spire.implicits._
 import axle.syntax.linearalgebra._
 import axle.algebra.LinearAlgebra
-import spire.algebra.Ring
-import spire.algebra.Module
-import spire.implicits._
 
 case class LogisticRegression[D, M](
   examples: List[D],

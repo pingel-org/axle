@@ -2,9 +2,6 @@ package axle.ml
 
 import scala.collection.immutable.TreeMap
 import spire.math.abs
-import spire.algebra.Module
-import spire.algebra.Ring
-// import spire.implicits.IntAlgebra
 import spire.implicits._
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
