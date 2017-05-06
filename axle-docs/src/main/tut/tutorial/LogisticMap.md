@@ -16,6 +16,8 @@ import axle.{ logisticMap, orbit, applyK }
 import java.util.TreeSet
 val memo = collection.mutable.Map.empty[Double, TreeSet[Double]]
 
+def doubleClose(z: Double)(y: Double) = abs(z - y) < 1e-6
+
 def f(λ: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
   val f = logisticMap(λ)
   val set = memo.get(λ).getOrElse {
