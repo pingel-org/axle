@@ -17,7 +17,7 @@ import axle._
 Define a function to compute the Mandelbrot velocity at point on the plane `(x, y)`
 
 ```tut:book
-val f = (x: Double, y: Double) => inMandelbrotSetAt(4d, x, y, 1000).getOrElse(-1)
+val f = (x0: Double, x1: Double, y0: Double, y1: Double) => inMandelbrotSetAt(4d, x0, y0, 1000).getOrElse(-1)
 ```
 
 Import visualization package

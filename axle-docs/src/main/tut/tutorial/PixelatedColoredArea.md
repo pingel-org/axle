@@ -27,7 +27,7 @@ import axle.visualize._
 Define a function to compute an `Double` for each point on the plane `(x, y): (Double, Double)`
 
 ```tut:book
-def f(x: Double, y: Double) = x + y
+def f(x0: Double, x1: Double, y0: Double, y1: Double) = x0 + y0
 ```
 
 Define a `toColor` function.
@@ -72,7 +72,7 @@ val greens = (0 until m).map(i => Color(0, ((i / m.toDouble) * 255).toInt, 0)).t
 
 png(
   PixelatedColoredArea(
-    (x: Double, y: Double) => sqrt(x*x + y*y),
+    (x0: Double, x1: Double, y0: Double, y1: Double) => sqrt(x0*x0 + y0*y0),
     (v: Double) => greens(v.toInt % m),
     400, 400,
     0d, 1000d,

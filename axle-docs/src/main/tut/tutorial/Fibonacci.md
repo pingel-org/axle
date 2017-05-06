@@ -12,13 +12,13 @@ import axle._
 ## Linear using `foldLeft`
 
 ```tut:book
-fib(10)
+fibonacciByFold(10)
 ```
 
 ## Recursive
 
 ```tut:book
-recfib(10)
+fibonacciRecursively(10)
 ```
 
 Some alternatives that are not in Axle include
