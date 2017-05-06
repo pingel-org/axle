@@ -26,11 +26,16 @@ class PackageSpec extends FunSuite with Matchers {
   }
 
   test("fibonacci iteratively arrive at fib(7) == 21") {
-    assertResult(fib(7))(21)
+    assertResult(fibonacciByFold(7))(21)
   }
 
   test("fibonacci recursively") {
-    assertResult(recfib(7))(21)
+    assertResult(fibonacciRecursively(7))(21)
+  }
+
+  test("exponentiation by recursive squaring") {
+    import spire.implicits._
+    assertResult(exponentiateByRecursiveSquaring(2, 10))(1024)
   }
 
   test("ackermann(2, 2) == ") {
