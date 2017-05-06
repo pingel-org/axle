@@ -43,7 +43,7 @@ Define a `PixelatedColoredArea` to show a range of Logistic Map.
 ```tut:book
 import cats.implicits._
 
-val pca = PixelatedColoredArea(f, v2c, 1600, 1600, 2.9, 4d, 0d, 1d)
+val pca = PixelatedColoredArea(f, v2c, 4000, 4000, 2.9, 4d, 0d, 1d)
 ```
 
 Create the PNG
