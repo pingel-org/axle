@@ -4,7 +4,7 @@ import axle.algebra.LengthSpace
 import cats.kernel.Eq
 
 case class PixelatedColoredArea[X: Eq, Y: Eq, V](
-    f: (X, Y) => V,
+    f: (X, X, Y, Y) => V,
     c: V => Color,
     width: Int = 600,
     height: Int = 600,

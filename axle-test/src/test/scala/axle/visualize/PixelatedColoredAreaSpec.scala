@@ -7,7 +7,7 @@ class PixelatedColoredAreaSpec extends FunSuite with Matchers {
 
   test("PixelatedColoredArea renders a PNG") {
 
-    def f(x: Double, y: Double) = x + y
+    def f(minX: Double, maxX: Double, minY: Double, maxY: Double) = minX + minY
 
     val n = 100
 

@@ -54,10 +54,12 @@ object Image {
         val lastRow = height - 1
         val image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
         (0 until width) foreach { column =>
-          val x = scaledArea.unframeX(column)
+          val minX = scaledArea.unframeX(column)
+          val maxX = scaledArea.unframeX(column + 1)
           (0 until height) foreach { row =>
-            val y = scaledArea.unframeY(row)
-            val rgb = Color.toRGB(c(f(x, y)))
+            val minY = scaledArea.unframeY(row)
+            val maxY = scaledArea.unframeY(row + 1)
+            val rgb = Color.toRGB(c(f(minX, maxX, minY, maxY)))
             image.setRGB(column, lastRow - row, rgb)
           }
         }
