@@ -56,34 +56,26 @@ import spire.algebra.MultiplicativeSemigroup
 import axle.algebra._
 ```
 
-Define `nthFibMatrix` using recursive squaring:
+Define general-purpose sub-linear strategy for exponentiation called "recursive squaring"
 
 ```tut:book
-def nthFibMatrix[M, V](
-  n: Int,
-  memo: collection.mutable.Map[Int, M], m1: M)(
-  implicit la: LinearAlgebra[M, Int, Int, V],
-  ms: MultiplicativeSemigroup[M]): M = {
+def exponentiateByRecursiveSquaring[B](base: B, pow: Int)(implicit multB: MultiplicativeSemigroup[B]): B = {
 
   import spire.implicits.multiplicativeSemigroupOps
 
-  if (memo.contains(n)) {
-    memo(n)
-  } else if (n % 2 == 0) {
-    val half = nthFibMatrix(n / 2, memo, m1)
-    val result = half * half
-    memo += n -> result
-    result
+  if (pow == 1) {
+    base
+  } else if (pow % 2 == 0) {
+    val half = exponentiateByRecursiveSquaring(base, pow / 2)
+    half * half
   } else {
-    val half = nthFibMatrix((n - 1) / 2, memo, m1)
-    val result = half * half * m1
-    memo += n -> result
-    result
+    val half = exponentiateByRecursiveSquaring(base, (pow - 1) / 2)
+    half * half * base
   }
 }
 ```
 
-Wrapper utilizing `nthFibMatrix` using jblas matrices and `axle.jblas`:
+Define `nthFibMatrix` using `exponentiateByRecursiveSquaring` with the special base matrix:
 
 ```tut:book
 def fibonacciFast(n: Int): Long = {
@@ -92,13 +84,11 @@ def fibonacciFast(n: Int): Long = {
   implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
   import laJblasDouble._
 
-  val m1 = fromColumnMajorArray(2, 2, List(1d, 1d, 1d, 0d).toArray)
-
-  val memo = collection.mutable.Map(1 -> m1)
+  val base = fromColumnMajorArray(2, 2, List(1d, 1d, 1d, 0d).toArray)
 
   n match {
     case 0 => 0L
-    case _ => nthFibMatrix(n, memo, m1).get(0, 1).toLong
+    case _ => exponentiateByRecursiveSquaring(base, n).get(0, 1).toLong
   }
 }
 ```
