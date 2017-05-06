@@ -6,6 +6,13 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.3.2 (May 6, 2017)
+* Remove `axle.jblas.{additiveCMonoidDoubleMatrix, multiplicativeMonoidDoubleMatrix, module, ring}
+* `axle.math.exponentiateByRecursiveSquaring`
+* Rename `fibonacci*` methods
+* `PixelatedColoredArea` should take a function that is given a rectangle (not just a point)
+* Logistic Map vis using `PixelatedColoredArea` (documentation)
+
 ## 0.3.1 (May 1, 2017)
 * `BarChart*.hoverOf`
 * `BarChart*` label angle is Option. None indicates no labels below bars.
