@@ -72,7 +72,7 @@ val greens = (0 until m).map(i => Color(0, ((i / m.toDouble) * 255).toInt, 0)).t
 
 png(
   PixelatedColoredArea(
-    (x: Double, y: Double) => sqrt(x*x + y*y),
+    (x0: Double, x1: Double, y0: Double, y1: Double) => sqrt(x0*x0 + y0*y0),
     (v: Double) => greens(v.toInt % m),
     400, 400,
     0d, 1000d,
