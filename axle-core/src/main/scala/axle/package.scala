@@ -29,34 +29,27 @@
 
 import scala.collection.mutable.Buffer
 
-import axle.algebra.Aggregatable
-import axle.algebra.Finite
-import axle.algebra.Functor
-import axle.algebra.Π
+import scala.language.implicitConversions
 import cats.Show
 import cats.kernel.Eq
-import cats.implicits._
-import spire.algebra.Field
-import spire.algebra.NRoot
 import cats.kernel.Order
-import spire.algebra.Module
-import spire.algebra.MultiplicativeMonoid
-import spire.algebra.Rng
-import spire.algebra.Ring
-import spire.algebra.Trig
+import cats.implicits._
+import spire.algebra._
 import spire.implicits.moduleOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.math.Rational
-// import spire.math.Real
+import spire.math.ConvertableTo
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.AngleConverter
 import axle.quanta.Distance
-import spire.math.ConvertableTo
-import scala.language.implicitConversions
+import axle.algebra.Aggregatable
+import axle.algebra.Finite
+import axle.algebra.Functor
+import axle.algebra.Π
 
 /**
  *
@@ -107,7 +100,7 @@ package object axle {
       List.empty
     } else {
       val tail = xs.drop(1)
-        val run = tail.takeWhile(x => !breaks.contains(x))
+      val run = tail.takeWhile(x => !breaks.contains(x))
       (xs.head, (xs.head +: run).last) +: runs(tail.drop(run.length), breaks)
     }
 
@@ -235,9 +228,35 @@ package object axle {
 
   implicit def enrichInt(n: Int): EnrichedInt = EnrichedInt(n)
 
-  def fib(n: Int): Int = (1 to n).foldLeft((1, 1))((pre, i) => (pre._2, pre._1 + pre._2))._1
+  def fibonacciByFold(n: Int): Int =
+    (1 to n).foldLeft((1, 1))((pre, i) => (pre._2, pre._1 + pre._2))._1
 
-  def recfib(n: Int): Int = n match { case 0 | 1 => 1 case _ => recfib(n - 2) + recfib(n - 1) }
+  def fibonacciRecursively(n: Int): Int =
+    n match {
+      case 0 | 1 => 1
+      case _     => fibonacciRecursively(n - 2) + fibonacciRecursively(n - 1)
+    }
+
+  import spire.implicits.multiplicativeSemigroupOps
+
+  def exponentiateByRecursiveSquaring[B, N](base: B, pow: N)(
+    implicit multB: MultiplicativeSemigroup[B],
+    eucRingN: EuclideanRing[N], eqN: Eq[N]): B = {
+
+    import eucRingN.{ one, zero }
+
+    val two = eucRingN.plus(one, one)
+
+    if (eqN.eqv(pow, one)) {
+      base
+    } else if (eqN.eqv(eucRingN.mod(pow, two), zero)) {
+      val half = exponentiateByRecursiveSquaring(base, eucRingN.quot(pow, two))
+      half * half
+    } else {
+      val half = exponentiateByRecursiveSquaring(base, eucRingN.quot(eucRingN.minus(pow, one), two))
+      half * half * base
+    }
+  }
 
   /**
    * http://en.wikipedia.org/wiki/Ackermann_function
