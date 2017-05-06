@@ -242,7 +242,7 @@ class MatrixSpecification extends FunSuite with Matchers {
 
     sops.addScalar(2d) should be(fromColumnMajorArray(2, 2, Array(3d, 3d, 3d, 3d)))
     sops.subtractScalar(2d) should be(fromColumnMajorArray(2, 2, Array(-1d, -1d, -1d, -1d)))
-    // square :* 2d should be(fromColumnMajorArray(2, 2, Array(2d, 2d, 2d, 2d)))
+    square.multiplyScalar(2d) should be(fromColumnMajorArray(2, 2, Array(2d, 2d, 2d, 2d)))
     sops.divideScalar(2d) should be(fromColumnMajorArray(2, 2, Array(0.5, 0.5, 0.5, 0.5)))
   }
 
