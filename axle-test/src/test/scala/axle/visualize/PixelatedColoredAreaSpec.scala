@@ -27,4 +27,42 @@ class PixelatedColoredAreaSpec extends FunSuite with Matchers {
     new java.io.File(filename).exists should be(true)
   }
 
+  test("PixelatedColoredArea renders a Logistic Map") {
+
+    import math.abs
+    import spire.implicits.DoubleAlgebra
+    import axle.{ logisticMap, orbit, applyK }
+
+    def doubleClose(z: Double)(y: Double) = abs(z - y) < 1e-6
+
+    import java.util.TreeSet
+    val memo = collection.mutable.Map.empty[Double, TreeSet[Double]]
+
+    def f(λ: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
+      val f = logisticMap(λ)
+      val set = memo.get(λ).getOrElse {
+        val set = new TreeSet[Double]()
+        orbit(f, applyK(f, 0.3, 100000), doubleClose) foreach { set.add }
+        memo += λ -> set
+        set
+      }
+      set.subSet(minY, maxY).size > 0
+    }
+
+    import axle.visualize._
+
+    val v2c = (v: Boolean) => if (v) Color.black else Color.white
+
+    import cats.implicits._
+
+    val pca = PixelatedColoredArea(f, v2c, 100, 100, 2.9, 4d, 0d, 1d)
+
+    import axle.awt._
+
+    val filename = "logMap.png"
+    png(pca, filename)
+
+    new java.io.File(filename).exists should be(true)
+  }
+
 }

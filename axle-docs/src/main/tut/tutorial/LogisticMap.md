@@ -11,35 +11,45 @@ Create data for a range of the logistic map function
 ```tut:book
 import math.abs
 import spire.implicits.DoubleAlgebra
-import axle.{logisticMap, orbit, applyK}
+import axle.{ logisticMap, orbit, applyK }
 
-def doubleClose(z: Double)(y: Double) = abs(z - y) < 1e-6
+import java.util.TreeSet
+val memo = collection.mutable.Map.empty[Double, TreeSet[Double]]
 
-val functions = (2.9 to 4.0 by 0.001).map(λ => λ -> logisticMap(λ))
-
-val scatter = for {
-  (λ, f) <- functions
-  p <- orbit(f, applyK(f, 0.3, 100000), doubleClose)
-} yield (λ, p)
+def f(λ: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
+  val f = logisticMap(λ)
+  val set = memo.get(λ).getOrElse {
+    val set = new TreeSet[Double]()
+    orbit(f, applyK(f, 0.3, 100000), doubleClose) foreach { set.add }
+    memo += λ -> set
+    set
+  }
+  set.subSet(minY, maxY).size > 0
+}
 ```
 
-Define a scatterplot visualization
+Define a "value to color" function.
+
+```tut:book
+import axle.visualize._
+
+val v2c = (v: Boolean) => if (v) Color.black else Color.white
+```
+
+Define a `PixelatedColoredArea` to show a range of Logistic Map.
 
 ```tut:book
 import cats.implicits._
-import axle.visualize._
 
-val sp = ScatterPlot[String, Double, Double, Set[(Double, Double)]](
-  scatter.toSet,
-  diameterOf = (x: Double, y: Double) => 1d
-)
+val pca = PixelatedColoredArea(f, v2c, 1600, 1600, 2.9, 4d, 0d, 1d)
 ```
 
-Create the SVG
+Create the PNG
 
 ```tut:book
-import axle.web._
-svg(sp, "logMap.svg")
+import axle.awt._
+
+png(pca, "logMap.png")
 ```
 
-![Logistic Map](/tutorial/images/logMap.svg)
+![Logistic Map](/tutorial/images/logMap.png)
