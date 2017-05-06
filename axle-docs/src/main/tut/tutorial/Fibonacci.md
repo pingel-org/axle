@@ -9,13 +9,13 @@ permalink: /tutorial/fibonacci/
 import axle._
 ```
 
-Linear implemntation using `foldLeft`:
+## Linear using `foldLeft`
 
 ```tut:book
 fib(10)
 ```
 
-Recursive implementation:
+## Recursive
 
 ```tut:book
 recfib(10)
@@ -23,7 +23,7 @@ recfib(10)
 
 Some alternatives that are not in Axle include
 
-Recursive with memoization:
+## Recursive with memoization
 
 ```tut:book
 val memo = collection.mutable.Map(0 -> 0L, 1 -> 1L)
@@ -41,40 +41,62 @@ def fibonacciRecursivelyWithMemo(n: Int): Long = {
 fibonacciRecursivelyWithMemo(10)
 ```
 
-Or the seldom used sub-linear approach using matrices and "recursive squaring"
+## Recursive squaring
 
-(TODO: use Axle 2x2 matrices rather than this case class.)
+A less well-known approach to obtain sub-linear time.
+
+Imports
+
+```tut:silent
+import axle._
+import axle.jblas._
+import axle.syntax.linearalgebra.matrixOps
+import spire.implicits.DoubleAlgebra
+import spire.algebra.MultiplicativeSemigroup
+import axle.algebra._
+```
+
+Define general-purpose sub-linear strategy for exponentiation called "recursive squaring"
 
 ```tut:book
-case class FibMatrix(_00: Long, _01: Long, _10: Long, _11: Long) {
-  def *(right: FibMatrix) = FibMatrix(
-    _00 * right._00 + _01 * right._10, _00 * right._01 + _01 * right._11,
-    _10 * right._00 + _11 * right._10, _10 * right._01 + _11 * right._11
-  )
-}
+def exponentiateByRecursiveSquaring[B](base: B, pow: Int)(implicit multB: MultiplicativeSemigroup[B]): B = {
 
-val fibMatrix1 = FibMatrix(1, 1, 1, 0)
+  import spire.implicits.multiplicativeSemigroupOps
 
-val matrixMemo = collection.mutable.Map(1 -> fibMatrix1)
-
-def nthFibMatrix(n: Int): FibMatrix = {
-  if (matrixMemo.contains(n)) {
-    matrixMemo(n)
-  } else if (n % 2 == 0) {
-    val result = nthFibMatrix(n / 2) * nthFibMatrix(n / 2)
-    matrixMemo += n -> result
-    result
+  if (pow == 1) {
+    base
+  } else if (pow % 2 == 0) {
+    val half = exponentiateByRecursiveSquaring(base, pow / 2)
+    half * half
   } else {
-    val result = nthFibMatrix((n - 1) / 2) * nthFibMatrix((n - 1) / 2) * fibMatrix1
-    matrixMemo += n -> result
-    result
+    val half = exponentiateByRecursiveSquaring(base, (pow - 1) / 2)
+    half * half * base
   }
 }
-
-def fibonacciFast(n: Int) = n match {
-  case 0 => 0
-  case _ => nthFibMatrix(n)._01
-}
-
-fibonacciFast(100)
 ```
+
+Define `nthFibMatrix` using `exponentiateByRecursiveSquaring` with the special base matrix:
+
+```tut:book
+def fibonacciFast(n: Int): Long = {
+
+  import org.jblas.DoubleMatrix
+  implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
+  import laJblasDouble._
+
+  val base = fromColumnMajorArray(2, 2, List(1d, 1d, 1d, 0d).toArray)
+
+  n match {
+    case 0 => 0L
+    case _ => exponentiateByRecursiveSquaring(base, n).get(0, 1).toLong
+  }
+}
+```
+
+Demo:
+
+```tut:book
+fibonacciFast(78)
+```
+
+Note: Beyond 78 inaccuracies creep in due to the limitations of the `Double` number type.

@@ -1,6 +1,5 @@
 package axle.ml
 
-import spire.algebra.Ring
 import spire.implicits._
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
@@ -8,8 +7,8 @@ import axle.syntax.linearalgebra._
 case class PCAFeatureNormalizer[M](cutoff: Double, X: M)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends Normalize[M] {
 
-  //implicit val module = la.module
-  implicit val ring: Ring[M] = la.ring
+  implicit val mul = la.multiplicative
+  implicit val additive = la.additive
 
   lazy val μs = X.columnMeans
   lazy val σ2s = std(X)

@@ -10,7 +10,6 @@ import org.typelevel.discipline.scalatest.Discipline
 import axle.algebra.LinearAlgebra
 import axle.jblas.eqDoubleMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
-import axle.jblas.moduleDoubleMatrix
 import axle.jblas.rowVectorInnerProductSpace
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra

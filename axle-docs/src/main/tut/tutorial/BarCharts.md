@@ -28,7 +28,8 @@ import cats.implicits._
 
 val chart = BarChart[String, Double, Map[String, Double], String](
   sales,
-  title = Some("fruit sales")
+  title = Some("fruit sales"),
+  hoverOf = (c: String) => Some(c)
 )
 ```
 
@@ -39,4 +40,4 @@ import axle.web._
 svg(chart, "fruitsales.svg")
 ```
 
-![fruit sales](/tutorial/images/fruitsales.svg)
+<object data="/tutorial/images/fruitsales.svg" type="image/svg+xml" alt="fruit sales"/>

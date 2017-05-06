@@ -2,12 +2,9 @@ package axle.ml
 
 import spire.math.exp
 import spire.math.log
-
+import spire.implicits._
 import axle.syntax.linearalgebra._
 import axle.algebra.LinearAlgebra
-import spire.algebra.Ring
-import spire.algebra.Module
-import spire.implicits._
 
 case class LogisticRegression[D, M](
   examples: List[D],
@@ -18,13 +15,11 @@ case class LogisticRegression[D, M](
   numIterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
     extends Function1[List[Double], Double] {
 
-  implicit val moduleMDouble: Module[M, Double] = la.module
-  implicit val ringM: Ring[M] = la.ring
-  // implicit val zeroInt = axle.algebra.Zero.ringZero[Int]
+  implicit val mul = la.multiplicative
 
   // h is essentially P(y=1 | X;θ)
   def h(xi: M, θ: M): Double =
-    1 / (1 + exp(-1 * (ringM.times(θ.t, xi)).scalar))
+    1 / (1 + exp(-1 * (mul.times(θ.t, xi)).scalar))
 
   // yi is boolean (1d or 0d)
   def cost(xi: M, θ: M, yi: Double): Double =
@@ -47,7 +42,7 @@ case class LogisticRegression[D, M](
 
   def gradientDescent(X: M, y: M, α: Double, iterations: Int): M = {
     val θ0 = la.ones(X.columns, 1)
-    (0 until iterations).foldLeft(θ0)((θi: M, i: Int) => la.ring.minus(θi, (dθ(X, y, θi) :* α)))
+    (0 until iterations).foldLeft(θ0)((θi: M, i: Int) => la.minus(θi, (dθ(X, y, θi).multiplyScalar(α))))
   }
 
   val inputX: M = la.fromColumnMajorArray(examples.length, numFeatures, examples.flatMap(featureExtractor).toArray)

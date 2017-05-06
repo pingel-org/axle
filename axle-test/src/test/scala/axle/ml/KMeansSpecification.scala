@@ -21,7 +21,6 @@ class KMeansSpecification
     import axle.jblas.linearAlgebraDoubleMatrix
     // import axle.jblas.additiveAbGroupDoubleMatrix
     import axle.jblas.rowVectorInnerProductSpace
-    import axle.jblas.moduleDoubleMatrix
     import axle.ml.distance.Euclidean
     import cats.kernel.Eq
 
@@ -96,7 +95,6 @@ class KMeansSpecification
       import axle.ml.distance.Euclidean
       import spire.implicits.IntAlgebra
       import spire.implicits.DoubleAlgebra
-      import axle.jblas.moduleDoubleMatrix
       import axle.jblas.linearAlgebraDoubleMatrix
       implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](2)
       Euclidean[DoubleMatrix, Double]
