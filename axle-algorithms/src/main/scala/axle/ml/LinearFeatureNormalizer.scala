@@ -1,17 +1,19 @@
 package axle.ml
 
-import spire.algebra.Ring
 import spire.implicits._
+import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.additiveSemigroupOps
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 
 case class LinearFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends Normalize[M] {
 
-  //implicit val module = la.module
-  implicit val ring: Ring[M] = la.ring
+  implicit val mul = la.multiplicative
+  implicit val add = la.additive
 
   val colMins = X.columnMins
+
   val colRanges = X.columnMaxs - colMins
   val nd = X.subRowVector(colMins).divRowVector(colRanges)
 

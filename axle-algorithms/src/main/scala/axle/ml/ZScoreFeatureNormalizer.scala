@@ -7,8 +7,7 @@ import axle.syntax.linearalgebra._
 case class ZScoreFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, Int, Double])
   extends Normalize[M] {
 
-  //implicit val ring = la.ring
-  implicit val module = la.module
+  implicit val additive = la.additive
 
   lazy val μs = X.columnMeans
   lazy val σ2s = std(X)

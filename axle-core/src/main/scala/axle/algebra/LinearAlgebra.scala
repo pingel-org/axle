@@ -1,10 +1,7 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-import spire.algebra.Field
-import spire.algebra.Module
-import spire.algebra.Ring
-import spire.algebra.Rng
+import spire.algebra._
 import org.scalacheck.Gen
 import org.scalacheck.Gen.Choose
 import scala.reflect.ClassTag
@@ -12,13 +9,15 @@ import scala.reflect.ClassTag
 @implicitNotFound("Witness not found for LinearAlgebra[${M}, ${R}, ${C}, ${T}]")
 trait LinearAlgebra[M, R, C, T] {
 
-  def ring: Ring[M]
+  def additive: AdditiveCSemigroup[M]
+
+  def minus(x: M, y: M): M
+
+  def multiplicative: MultiplicativeSemigroup[M]
 
   def elementRng: Rng[T]
 
   def endofunctor: Endofunctor[M, T]
-
-  def module: Module[M, T]
 
   def rows(m: M): R
 
@@ -62,8 +61,7 @@ trait LinearAlgebra[M, R, C, T] {
   def addScalar(m: M)(x: T): M
   def subtractScalar(m: M)(x: T): M
 
-  // TODO: from Module:
-  //  def multiplyScalar(m: M)(x: T): M
+  def multiplyScalar(m: M)(x: T): M
   def divideScalar(m: M)(x: T): M
 
   def addAssignment(m: M)(r: R, c: C, v: T): M
@@ -170,10 +168,9 @@ trait LinearAlgebra[M, R, C, T] {
   def numComponentsForCutoff(s: M, cutoff: Double)(implicit field: Field[T]): Int
 
   // TODO:
-  def zero: M = ring.zero
   def zeros(laRows: R, laColumns: C): M
-  def eye(laRows: R): M = ring.one
-  def I(laRows: R): M = ring.one
+  def eye(laRows: R): M
+  def I(laRows: R): M = eye(laRows)
   def ones(laRows: R, laColumns: C): M
   def rand(laRows: R, laColumns: C): M
   def randn(laRows: R, laColumns: C): M

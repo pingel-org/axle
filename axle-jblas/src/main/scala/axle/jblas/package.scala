@@ -5,24 +5,14 @@ import org.jblas.MatrixFunctions
 import org.jblas.Solve
 
 import cats.Show
-import axle.algebra.Endofunctor
-import axle.algebra.LinearAlgebra
-import spire.algebra.AdditiveAbGroup
-import spire.algebra.AdditiveCSemigroup
-import spire.algebra.AdditiveMonoid
 import cats.kernel.Eq
-import spire.algebra.Field
-import spire.algebra.InnerProductSpace
-import spire.algebra.Module
-import spire.algebra.MultiplicativeMonoid
-import spire.algebra.MultiplicativeSemigroup
-import spire.algebra.NRoot
-import spire.algebra.Ring
-import spire.algebra.Rng
+import spire.algebra._
 import spire.implicits.convertableOps
 import spire.implicits.multiplicativeGroupOps
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
+import axle.algebra.Endofunctor
+import axle.algebra.LinearAlgebra
 
 package object jblas {
 
@@ -57,7 +47,7 @@ package object jblas {
       def zero: DoubleMatrix = la.zeros(implicitly[MultiplicativeMonoid[R]].one, n)
 
       def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
-        la.ring.plus(x, y)
+        x.add(y)
 
       def timesl(r: N, v: DoubleMatrix): DoubleMatrix =
         module.timesl(r, v)
@@ -68,26 +58,6 @@ package object jblas {
         ctn.fromDouble(la.mulPointwise(v)(w).rowSums.scalar)
     }
 
-  implicit def moduleDoubleMatrix[N](
-    implicit rng: Rng[N],
-    cfn: ConvertableFrom[N]): Module[DoubleMatrix, N] =
-    new Module[DoubleMatrix, N] {
-
-      def negate(x: DoubleMatrix): DoubleMatrix =
-        additiveAbGroupDoubleMatrix.negate(x)
-
-      def zero: DoubleMatrix =
-        additiveCMonoidDoubleMatrix.zero
-
-      def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
-        additiveCSemigroupDoubleMatrix.plus(x, y)
-
-      implicit def scalar: Rng[N] = rng
-
-      def timesl(r: N, v: DoubleMatrix): DoubleMatrix = v.mul(r.toDouble)
-
-    }
-
   implicit def additiveCSemigroupDoubleMatrix: AdditiveCSemigroup[DoubleMatrix] =
     new AdditiveCSemigroup[DoubleMatrix] {
 
@@ -95,49 +65,18 @@ package object jblas {
         x.add(y)
     }
 
+  implicit def minusSemigroupDoubleMatrix: Semigroup[DoubleMatrix] = 
+    new Semigroup[DoubleMatrix] {
+
+      def combine(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
+        x.sub(y)
+  }
+
   implicit def multiplicativeSemigroupDoubleMatrix: MultiplicativeSemigroup[DoubleMatrix] =
     new MultiplicativeSemigroup[DoubleMatrix] {
 
       def times(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
         x.mmul(y)
-    }
-
-  implicit def additiveAbGroupDoubleMatrix: AdditiveAbGroup[DoubleMatrix] =
-    new AdditiveAbGroup[DoubleMatrix] {
-
-      lazy val additiveCMonoid = additiveCMonoidDoubleMatrix
-
-      def zero: DoubleMatrix =
-        additiveCMonoid.zero
-
-      def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
-        additiveCMonoid.plus(x, y)
-
-      def negate(x: DoubleMatrix): DoubleMatrix =
-        x.neg
-    }
-
-  implicit def ringDoubleMatrix: Ring[DoubleMatrix] =
-    new Ring[DoubleMatrix] {
-
-      lazy val additiveAbGroup = additiveAbGroupDoubleMatrix
-
-      def negate(x: DoubleMatrix): DoubleMatrix =
-        additiveAbGroup.negate(x)
-
-      def zero: DoubleMatrix =
-        additiveAbGroup.zero
-
-      def plus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
-        additiveAbGroup.plus(x, y)
-
-      lazy val multiplicativeMonoid = multiplicativeMonoidDoubleMatrix
-
-      def one: DoubleMatrix =
-        multiplicativeMonoid.one
-
-      def times(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix =
-        multiplicativeMonoid.times(x, y)
     }
 
   implicit def showDoubleMatrix: Show[DoubleMatrix] =
@@ -160,9 +99,11 @@ package object jblas {
 
       def elementRng: Rng[N] = Rng[N]
 
-      def ring = ringDoubleMatrix
+      def additive = additiveCSemigroupDoubleMatrix
 
-      def module = moduleDoubleMatrix
+      def minus(x: DoubleMatrix, y: DoubleMatrix): DoubleMatrix = x.sub(y)
+
+      def multiplicative = multiplicativeSemigroupDoubleMatrix
 
       def endofunctor = endoFunctorDoubleMatrix
 
@@ -206,10 +147,10 @@ package object jblas {
 
       def addScalar(m: DoubleMatrix)(x: N): DoubleMatrix = m.add(x.toDouble)
       def subtractScalar(m: DoubleMatrix)(x: N): DoubleMatrix = m.sub(x.toDouble)
-      // def multiplyScalar(m: DoubleMatrix)(x: N): DoubleMatrix = m.mul(x.toDouble)
+      def multiplyScalar(m: DoubleMatrix)(x: N): DoubleMatrix = m.mul(x.toDouble)
       def divideScalar(m: DoubleMatrix)(x: N): DoubleMatrix = m.div(x.toDouble)
 
-      def negate(m: DoubleMatrix): DoubleMatrix = ring.negate(m)
+      def negate(m: DoubleMatrix): DoubleMatrix = m.neg
 
       def transpose(m: DoubleMatrix): DoubleMatrix = m.transpose
       def diag(m: DoubleMatrix): DoubleMatrix = m.diag
@@ -243,10 +184,6 @@ package object jblas {
         m.dup.mulColumn(i, x.toDouble)
 
       // Operations on pairs of matrices
-
-      //      def addMatrix(lhs: DoubleMatrix, rhs: DoubleMatrix): DoubleMatrix = ring.plus(lhs, rhs)
-      //      def subtractMatrix(lhs: DoubleMatrix, rhs: DoubleMatrix): DoubleMatrix = ring.minus(lhs, rhs)
-      //      def multiplyMatrix(lhs: DoubleMatrix, rhs: DoubleMatrix): DoubleMatrix = ring.times(lhs, rhs)
 
       def mulPointwise(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.mul(rhs)
       def divPointwise(m: DoubleMatrix)(rhs: DoubleMatrix): DoubleMatrix = m.div(rhs)
@@ -459,10 +396,20 @@ package object jblas {
         numComponents
       }
 
-      def zeros(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.zeros(laRows, laColumns)
-      def ones(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.ones(laRows, laColumns)
-      def rand(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.rand(laRows, laColumns) // evenly distributed from 0.0 to 1.0
-      def randn(laRows: Int, laColumns: Int): DoubleMatrix = DoubleMatrix.randn(laRows, laColumns) // normal distribution
+      def zeros(laRows: Int, laColumns: Int): DoubleMatrix =
+        DoubleMatrix.zeros(laRows, laColumns)
+
+      def eye(laRows: Int): DoubleMatrix =
+        DoubleMatrix.eye(laRows)
+
+      def ones(laRows: Int, laColumns: Int): DoubleMatrix =
+        DoubleMatrix.ones(laRows, laColumns)
+
+      def rand(laRows: Int, laColumns: Int): DoubleMatrix =
+        DoubleMatrix.rand(laRows, laColumns) // evenly distributed from 0.0 to 1.0
+
+      def randn(laRows: Int, laColumns: Int): DoubleMatrix =
+        DoubleMatrix.randn(laRows, laColumns) // normal distribution
 
     }
 

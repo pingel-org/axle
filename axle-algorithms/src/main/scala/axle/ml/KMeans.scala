@@ -154,7 +154,7 @@ case class KMeans[T: Eq, F, G, M](
     import cats.implicits._ // for ===
 
     val A = la.matrix(X.rows, K, (r: Int, c: Int) => if (c === assignments.get(r, 0).toInt) 1d else 0d)
-    val distances = la.ring.times(A.t, X) // K x N
+    val distances = la.multiplicative.times(A.t, X) // K x N
     val counts = A.columnSums.t // K x 1
     val unassignedClusterIds = (0 until K).filter(counts.get(_, 0) === 0d)
 

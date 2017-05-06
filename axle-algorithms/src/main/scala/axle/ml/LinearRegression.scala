@@ -18,9 +18,8 @@ case class LinearRegression[D, M](
   iterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
     extends Function1[D, Double] {
 
-  implicit val ringM: Ring[M] = la.ring
-  implicit val module: Module[M, Double] = la.module
-  // implicit val zeroInt = axle.algebra.Zero.ringZero[Int]
+  implicit val additive = la.additive
+  implicit val mul = la.multiplicative
 
   val inputX = la.fromRowMajorArray(
     examples.length,
@@ -48,7 +47,7 @@ case class LinearRegression[D, M](
   def dθ(X: M, y: M, θ: M): M =
     (0 until X.rows)
       .foldLeft(la.zeros(1, X.columns))(
-        (m: M, i: Int) => ringM.plus(m, (X.row(i) * (h(X.row(i), θ).subtractScalar(y.get(i, 0)))))).divideScalar(X.rows)
+        (m: M, i: Int) => additive.plus(m, (X.row(i) * (h(X.row(i), θ).subtractScalar(y.get(i, 0)))))).divideScalar(X.rows)
 
   def dTheta(X: M, y: M, θ: M): M = dθ(X, y, θ)
 
@@ -58,7 +57,7 @@ case class LinearRegression[D, M](
         val (θi, errLog) = θiErrLog
         val errMatrix = dθ(X, y, θi)
         val error = (0 until errMatrix.rows).map(i => abs(errMatrix.get(i, 0))).sum
-        (la.ring.minus(θi, (errMatrix :* α)), error :: errLog)
+        (la.minus(θi, (errMatrix.multiplyScalar(α))), error :: errLog)
       })
 
   def errTree = {

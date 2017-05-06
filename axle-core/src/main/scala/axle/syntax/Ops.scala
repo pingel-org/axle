@@ -64,8 +64,12 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
   def addScalar(x: T) = la.addScalar(lhs)(x)
   def subtractScalar(x: T) = la.subtractScalar(lhs)(x)
 
-  //  def multiplyScalar(x: T) = la.multiplyScalar(lhs)(x)
-  def divideScalar(x: T) = la.divideScalar(lhs)(x)
+  def minus(rhs: M): M = la.minus(lhs, rhs)
+  def -(rhs: M): M = la.minus(lhs, rhs)
+
+  def multiplyScalar(x: T): M = la.multiplyScalar(lhs)(x)
+  def :*(x: T): M = la.multiplyScalar(lhs)(x)
+  def divideScalar(x: T): M = la.divideScalar(lhs)(x)
 
   def addAssignment(r: RowT, c: ColT, v: T) = la.addAssignment(lhs)(r, c, v)
   def mulRow(i: RowT, x: T) = la.mulRow(lhs)(i, x)
