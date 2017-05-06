@@ -38,7 +38,6 @@ package object jblas {
   // TODO put column count in type and make this implicit
   def rowVectorInnerProductSpace[R: MultiplicativeMonoid, C, N: Field](n: C)(
     implicit la: LinearAlgebra[DoubleMatrix, R, C, N],
-    // module: Module[DoubleMatrix, N],
     ctn: ConvertableTo[N], cfn: ConvertableFrom[N]) =
     new InnerProductSpace[DoubleMatrix, N] {
 
