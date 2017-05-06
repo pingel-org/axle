@@ -24,7 +24,7 @@ def f(λ: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
     memo += λ -> set
     set
   }
-  set.subSet(minY, maxY).size > 0
+  !set.tailSet(minY).headSet(maxY).isEmpty
 }
 ```
 

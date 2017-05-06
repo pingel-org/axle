@@ -46,7 +46,7 @@ class PixelatedColoredAreaSpec extends FunSuite with Matchers {
         memo += λ -> set
         set
       }
-      set.subSet(minY, maxY).size > 0
+      !set.tailSet(minY).headSet(maxY).isEmpty
     }
 
     import axle.visualize._
