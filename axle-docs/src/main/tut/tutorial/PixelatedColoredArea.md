@@ -27,7 +27,7 @@ import axle.visualize._
 Define a function to compute an `Double` for each point on the plane `(x, y): (Double, Double)`
 
 ```tut:book
-def f(x: Double, y: Double) = x + y
+def f(x0: Double, x1: Double, y0: Double, y1: Double) = minX + minY
 ```
 
 Define a `toColor` function.

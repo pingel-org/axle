@@ -247,9 +247,7 @@ Multiplication and Division
 Scalar multiplication
 
 ```tut:book
-import spire.implicits.moduleOps
-
-string(x :* 3d)
+string(x.multiplyScalar(3d))
 ```
 
 Matrix multiplication

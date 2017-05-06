@@ -49,7 +49,6 @@ import axle.jblas.linearAlgebraDoubleMatrix
 implicit val space = {
   import spire.implicits.IntAlgebra
   import spire.implicits.DoubleAlgebra
-  import axle.jblas.moduleDoubleMatrix
   implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](2)
   Euclidean[DoubleMatrix, Double]
 }
