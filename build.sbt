@@ -273,10 +273,10 @@ lazy val docs = Project(
   .settings(site.settings)
   .settings(ghpages.settings)
   .settings(docSettings)
-  .settings(tutSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(commonJvmSettings)
   .dependsOn(axleTest) // was only "core"
+
+enablePlugins(TutPlugin)
 
 lazy val noPublishSettings = Seq(
   publish := (),
@@ -300,8 +300,8 @@ lazy val commonScalacOptions = Seq(
   "-Yliteral-types",
 //  "-Yinline-warnings",
   "-Yno-adapted-args",
-//  "-Ywarn-dead-code",
-//  "-Ywarn-numeric-widen",
+  "-Ywarn-dead-code",
+  "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
   "-Xfuture"
 )
