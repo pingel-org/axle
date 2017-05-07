@@ -501,7 +501,7 @@ object SVG {
               val height = ll.y - ur.y
               <g>
                 <rect id={ s"tooltipbg${id}" } x="0" y="0" width="0" height="0" visibility="hidden" fill="white"/>
-                <text class="pointLabel" id={ s"tooltiptext${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill="black" visibility="hidden">{ hoverText }</text>
+                <text class="pointLabel" id={ s"tooltiptext${id}" } text-anchor="middle" alignment-baseline="middle" x={ s"${ll.x + width / 2}" } y={ s"${ll.y - height / 2}" } fill="black" visibility="hidden">{ hoverText }</text>
               </g>
             }) ::
             List(
@@ -544,7 +544,7 @@ object SVG {
               val height = ll.y - ur.y
               <g>
                 <rect id={ s"tooltipbg${id}" } x="0" y="0" width="0" height="0" visibility="hidden" fill="white"/>
-                <text class="pointLabel" id={ s"tooltiptext${id}" } x={ s"${ll.x}" } y={ s"${ll.y - height / 2}" } fill="black" visibility="hidden">{ hoverText }</text>
+                <text class="pointLabel" id={ s"tooltiptext${id}" } text-anchor="middle" alignment-baseline="middle" x={ s"${ll.x + width / 2}" } y={ s"${ll.y - height / 2}" } fill="black" visibility="hidden">{ hoverText }</text>
               </g>
             }) ::
             List(

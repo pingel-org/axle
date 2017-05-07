@@ -10,11 +10,11 @@ function ShowTooltip(evt, i) {
   tooltipbg = svgDocument.getElementById('tooltipbg' + i);
   if( tooltipbg != null) {
     tbb = tooltiptext.getBBox();
-    tooltipbg.setAttributeNS(null,"width",tbb.width);
-    tooltipbg.setAttributeNS(null,"height",tbb.height);
-    tooltipbg.setAttributeNS(null,"x",tbb.x);
-    tooltipbg.setAttributeNS(null,"y",tbb.y);
-    tooltipbg.setAttributeNS(null,"visibility","visible");
+    tooltipbg.setAttributeNS(null, "width", tbb.width);
+    tooltipbg.setAttributeNS(null, "height", tbb.height);
+    tooltipbg.setAttributeNS(null, "x", tbb.x);
+    tooltipbg.setAttributeNS(null, "y", tbb.y);
+    tooltipbg.setAttributeNS(null, "visibility", "visible");
   }
   tooltiptext.setAttributeNS(null,"visibility","visible");
 }

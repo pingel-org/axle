@@ -7,18 +7,21 @@ permalink: /road_map/
 See [Release Notes](/release_notes/) for the record of previously released features.
 
 ## 0.3.3 (May 7, 2017)
-* Scatterplot hoverOver in doc
 * `BarChart` Center hover text
 * `BarChart` Bar as link (also alter color to indicate link)
 * Case class -> table visualization
-* SVG[Matrix]
+
+## 0.3.4 (May 14, 2017)
+* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
 * `BarChart` Variable width bars
 * Horizontal barchart
+* Configurable visualization parameters for {un,}directedGraph
+* SVG[LinearAlgebra]
 
 ## 0.4.0 (May 21, 2017)
-* Pull out axle-web and axle-awt (algorithm and visualize should go to axle-core)
-* Monix for animating visualizations
-* Remove jung dependency from axle-visualize
+* -algorithm and -visualize should go to axle-core
+* -games and -languages and axle.data should go to axle-examples
+* Replace Akka with Monix for animating visualizations
 * Remove Spark spoke
 * Remove Spark impacts on Functor, etc, and just use Cats versions
 * Publish Scala 2.12 artifacts
@@ -26,11 +29,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.4.x (Summer 2017)
 * Box Plot
 * Candlestick Chart
-* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
+* Log scale
 * Background box for `ScatterPlot` hover text?
 * `ScatterPlot` `play` to awt
-* Configurable visualization parameters for {un,}directedGraph
-* Log scale
 * Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
 * Fix multi-color cube rendering
 
