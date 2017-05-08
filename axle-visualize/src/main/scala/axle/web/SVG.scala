@@ -305,8 +305,16 @@ object SVG {
 
         rectangle.id.map({
           case (id, hoverText) =>
-            elemWithAttributes(rectFilled,
+            val withId = elemWithAttributes(rectFilled,
               attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
+            rectangle.link.map({
+              case (url, hoverColor) =>
+                elemWithAttributes(withId,
+                  attribute("onclick", s"window.open('${url.toString}')") ::
+                    attribute("onmouseout", s"RectUnhover(evt, $id, 'rgb(0,0,255)')") ::
+                    attribute("onmousemove", s"RectHover(evt, $id, 'rgb(255,0,0)')") ::
+                    Nil)
+            }).getOrElse(withId)
         }).getOrElse(rectFilled)
       }
     }

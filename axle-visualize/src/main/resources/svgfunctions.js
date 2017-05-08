@@ -5,7 +5,11 @@ function init(evt) {
   }
 }
 
-function ShowTooltip(evt, i) {
+function RectHover(evt, i, c) {
+  rect = svgDocument.getElementById('rect' + i);
+  if( c != null ) {
+    rect.setAttributeNS(null, "fill", c)  
+  }
   tooltiptext = svgDocument.getElementById('tooltiptext' + i);
   tooltipbg = svgDocument.getElementById('tooltipbg' + i);
   if( tooltipbg != null) {
@@ -19,7 +23,11 @@ function ShowTooltip(evt, i) {
   tooltiptext.setAttributeNS(null,"visibility","visible");
 }
 
-function HideTooltip(evt, i) {
+function RectUnhover(evt, i, c) {
+  rect = svgDocument.getElementById('rect' + i);
+  if( c != null ) {
+    rect.setAttributeNS(null, "fill", c)  
+  }
   tooltiptext = svgDocument.getElementById('tooltiptext' + i);
   tooltiptext.setAttributeNS(null,"visibility","hidden");
   tooltipbg = svgDocument.getElementById('tooltipbg' + i);

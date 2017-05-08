@@ -10,4 +10,6 @@ case class Rectangle[X, Y](
   upperRight: Point2D[X, Y],
   fillColor: Option[Color] = None,
   borderColor: Option[Color] = None,
-  id: Option[(String, String)] = None) // optional (id, hoverText)
+  id: Option[(String, String)] = None, // optional (id, hoverText)
+  link: Option[(java.net.URL, Color)] = None // optional (url, hoverColor)
+  )
