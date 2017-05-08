@@ -23,6 +23,7 @@ Define a bar chart visualization
 
 ```tut:silent
 import axle.visualize.BarChart
+import axle.visualize.Color.lightGray
 import spire.implicits.DoubleAlgebra
 import cats.implicits._
 ```
