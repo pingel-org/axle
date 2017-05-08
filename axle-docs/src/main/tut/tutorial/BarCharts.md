@@ -23,6 +23,7 @@ Define a bar chart visualization
 
 ```tut:silent
 import axle.visualize.BarChart
+import axle.visualize.Color.lightGray
 import spire.implicits.DoubleAlgebra
 import cats.implicits._
 ```
@@ -31,7 +32,8 @@ import cats.implicits._
 val chart = BarChart[String, Double, Map[String, Double], String](
   sales,
   title = Some("fruit sales"),
-  hoverOf = (c: String) => Some(c)
+  hoverOf = (c: String) => Some(c),
+  linkOf = (c: String) => Some((new java.net.URL(s"http://wikipedia.org/wiki/$c"), lightGray))
 )
 ```
 

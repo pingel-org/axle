@@ -6,6 +6,10 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.3.3 (May 7, 2017)
+* `BarChart.hoverof` -- center text in bar
+* `BarChart{,Grouped}.linkOf`
+
 ## 0.3.2 (May 6, 2017)
 * Remove `axle.jblas.{additiveCMonoidDoubleMatrix, multiplicativeMonoidDoubleMatrix, module, ring}
 * `axle.math.exponentiateByRecursiveSquaring`
