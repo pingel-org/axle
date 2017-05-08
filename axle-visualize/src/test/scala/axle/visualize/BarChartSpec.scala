@@ -26,7 +26,8 @@ class BarChartSpec extends FunSuite with Matchers {
       title = Some("fruit sales"),
       xAxis = Some(0d),
       labelAngle = Some(36d *: angleDouble.degree),
-      hoverOf = (c: String) => Some(c))
+      hoverOf = (c: String) => Some(c),
+      linkOf = (c: String) => Some((new java.net.URL(s"http://wikipedia.org/wiki/$c"), Color.lightGray)))
 
     val filename = "fruit_sales.svg"
 
