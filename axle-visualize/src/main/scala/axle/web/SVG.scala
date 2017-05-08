@@ -311,8 +311,8 @@ object SVG {
               case (url, hoverColor) =>
                 elemWithAttributes(withId,
                   attribute("onclick", s"window.open('${url.toString}')") ::
-                    attribute("onmouseout", s"RectUnhover(evt, $id, 'rgb(0,0,255)')") ::
-                    attribute("onmousemove", s"RectHover(evt, $id, 'rgb(255,0,0)')") ::
+                    attribute("onmouseout", s"RectUnhover(evt, $id, '${rectangle.fillColor.map(fc => rgb(fc)).getOrElse("null")}')") ::
+                    attribute("onmousemove", s"RectHover(evt, $id, '${rgb(hoverColor)}')") ::
                     Nil)
             }).getOrElse(withId)
         }).getOrElse(rectFilled)
