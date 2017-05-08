@@ -7,9 +7,11 @@ permalink: /tutorial/scatterplot/
 ScatterPlot
 
 
-```tut:book
+```tut:silent
 import axle.visualize._
+```
 
+```tut:book
 val data = Map(
   (1, 1) -> 0,
   (2, 2) -> 0,
@@ -21,40 +23,32 @@ val data = Map(
   (1, 3) -> 2)
 ```
 
-Define the coloring strategy:
+Define the ScatterPlot
 
-```tut
+```tut:silent
 import axle.visualize.Color._
+import cats.implicits._
+```
 
-val colorer =
-  (x: Int, y: Int) => data((x, y)) match {
+```tut:book
+val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int]](
+  data,
+  colorOf = (x: Int, y: Int) => data((x, y)) match {
     case 0 => red
     case 1 => blue
     case 2 => green
-  }
-```
-
-Define the labeling strategy:
-
-```tut
-val labeller =
-  (x: Int, y: Int) => data.get((x, y)).map(s => (s.toString, true))
-```
-
-Define the ScatterPlot
-
-```tut
-import cats.implicits._
-
-val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int]](data, colorOf = colorer, labelOf = labeller)
+  },
+  labelOf = (x: Int, y: Int) => data.get((x, y)).map(s => (s.toString, false)))
 ```
 
 Create the SVG
 
-```tut
+```tut:silent
 import axle.web._
+```
 
+```tut:book
 svg(plot, "scatter.svg")
 ```
 
-![scatter](/tutorial/images/scatter.svg)
+<object data="/tutorial/images/scatter.svg" type="image/svg+xml" alt="scatter plot"/>

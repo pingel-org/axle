@@ -46,7 +46,7 @@ case class ConfusionMatrix[T, CLASS: Order, L: Order, F, M, G, H](
     classes.size,
     (r: Int, c: Int) => labelIdClusterId2count((r, classes(c))))
 
-  val width = ceil(log10(data.size)).toInt
+  val width = ceil(log10(data.size.toDouble)).toInt
 
   val formatNumber = (n: Int) => ("%" + width + "d").format(n)
 

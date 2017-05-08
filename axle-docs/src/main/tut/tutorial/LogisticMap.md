@@ -8,12 +8,17 @@ See the wikipedia page on [Logistic Map](https://en.wikipedia.org/wiki/Logistic_
 
 Create data for a range of the logistic map function
 
-```tut:book
+```tut:silent
 import math.abs
 import spire.implicits.DoubleAlgebra
 import axle.{ logisticMap, orbit, applyK }
-
 import java.util.TreeSet
+import axle.visualize._
+import cats.implicits._
+import axle.awt._
+```
+
+```tut:book
 val memo = collection.mutable.Map.empty[Double, TreeSet[Double]]
 
 def doubleClose(z: Double)(y: Double) = abs(z - y) < 1e-6
@@ -33,24 +38,18 @@ def f(λ: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
 Define a "value to color" function.
 
 ```tut:book
-import axle.visualize._
-
 val v2c = (v: Boolean) => if (v) Color.black else Color.white
 ```
 
 Define a `PixelatedColoredArea` to show a range of Logistic Map.
 
 ```tut:book
-import cats.implicits._
-
 val pca = PixelatedColoredArea(f, v2c, 4000, 4000, 2.9, 4d, 0d, 1d)
 ```
 
 Create the PNG
 
 ```tut:book
-import axle.awt._
-
 png(pca, "logMap.png")
 ```
 

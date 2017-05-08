@@ -65,15 +65,26 @@ case class BarChartGroupedView[G, S, Y, D, H](
     val leftX = padding + (whiteSpace / 2d) + j * widthPerGroup + i * barSliceWidth
     val rightX = leftX + barSliceWidth
     val y = groupedDataView.valueOf(data, (g, s))
-    hoverOf(g, s).map {
+
+    val rectBase = Rectangle(
+      scaledArea,
+      Point2D(leftX, minY),
+      Point2D(rightX, y),
+      Option(colorOf(g, s)),
+      id = Some((groups.size * i + j).toString))
+
+    val hovered = hoverOf(g, s).map {
       case (hover) => {
         val hoverString = string(hover)
-        val r = groups.size * i + j
-        Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y), Option(colorOf(g, s)), id = Some((r.toString, hoverString)))
+        rectBase.copy(hoverText = Some(hoverString))
       }
-    } getOrElse {
-      Rectangle(scaledArea, Point2D(leftX, minY), Point2D(rightX, y), Option(colorOf(g, s)))
-    }
+    } getOrElse { rectBase }
+
+    linkOf(g, s) map {
+      case (url, color) =>
+        hovered.copy(link = Some((url, color)))
+    } getOrElse { hovered }
+
   }
 
 }
