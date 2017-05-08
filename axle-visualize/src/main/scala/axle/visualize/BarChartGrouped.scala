@@ -32,7 +32,8 @@ case class BarChartGrouped[G, S, Y, D, H](
     yAxisLabel: Option[String] = None,
     labelAngle: Option[UnittedQuantity[Angle, Double]] = Some(36d *: angleDouble.degree),
     colorOf: (G, S) => Color,
-    hoverOf: (G, S) => Option[H] = (g: G, s: S) => None)(
+    hoverOf: (G, S) => Option[H] = (g: G, s: S) => None,
+    linkOf: (G, S) => Option[(java.net.URL, Color)] = (g: G, s: S) => None)(
         implicit val showG: Show[G],
         val showS: Show[S],
         val showH: Show[H],

@@ -62,7 +62,8 @@ class BarChartSpec extends FunSuite with Matchers {
         case "banana"  => Color.yellow
         case "coconut" => Color.brown
       },
-      hoverOf = (g: String, s: Int) => Some(s"$g $s"))
+      hoverOf = (g: String, s: Int) => Some(s"$g $s"),
+      linkOf = (g: String, s: Int) => Some((new java.net.URL(s"http://wikipedia.org/wiki/$g"), Color.lightGray)))
 
     val filename = "fruit_sales_grouped.svg"
 
