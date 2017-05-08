@@ -63,22 +63,20 @@ case class BarChartView[C, Y, D, H](
       val rightX = leftX + (widthPerSlice * barWidthPercent)
       val y0 = zeroY.zero
 
+      val (ll, ur) =
+        if (y >= y0) {
+          (Point2D(leftX, y0), Point2D(rightX, y))
+        } else {
+          (Point2D(leftX, y), Point2D(rightX, y0))
+        }
+
+      val baseRect = Rectangle(scaledArea, ll, ur, fillColor = Some(color), id = Some(i.toString))
+
       val hovered =
         hoverOf(c) map {
           case (hover) =>
-            val hoverString = string(hover)
-            if (y >= y0) {
-              Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color), id = Some((i.toString, hoverString)))
-            } else {
-              Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color), id = Some((i.toString, hoverString)))
-            }
-        } getOrElse {
-          if (y >= y0) {
-            Rectangle(scaledArea, Point2D(leftX, y0), Point2D(rightX, y), fillColor = Some(color))
-          } else {
-            Rectangle(scaledArea, Point2D(leftX, y), Point2D(rightX, y0), fillColor = Some(color))
-          }
-        }
+            baseRect.copy(hoverText = Some(string(hover)))
+        } getOrElse { baseRect }
 
       linkOf(c) map {
         case (url, color) =>

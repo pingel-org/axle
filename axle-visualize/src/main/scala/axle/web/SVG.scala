@@ -303,18 +303,18 @@ object SVG {
         val rectBordered = elemWithAttributes(rectBase, attribute("stroke", (rectangle.borderColor.map(bc => s"${rgb(bc)}").getOrElse("black"))) :: Nil)
         val rectFilled = rectangle.fillColor.map(fc => elemWithAttributes(rectBordered, attribute("fill", s"${rgb(fc)}") :: Nil)).getOrElse(rectBordered)
 
-        rectangle.id.map({
-          case (id, hoverText) =>
-            val withId = elemWithAttributes(rectFilled,
-              attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
-            rectangle.link.map({
-              case (url, hoverColor) =>
-                elemWithAttributes(withId,
-                  attribute("onclick", s"window.open('${url.toString}')") ::
-                    attribute("onmouseout", s"RectUnhover(evt, $id, '${rectangle.fillColor.map(fc => rgb(fc)).getOrElse("null")}')") ::
-                    attribute("onmousemove", s"RectHover(evt, $id, '${rgb(hoverColor)}')") ::
-                    Nil)
-            }).getOrElse(withId)
+        rectangle.hoverText.map({ hoverText =>
+          val id = rectangle.id.getOrElse("0") // TODO change Rectangle to model this dependency
+          val withId = elemWithAttributes(rectFilled,
+            attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
+          rectangle.link.map({
+            case (url, hoverColor) =>
+              elemWithAttributes(withId,
+                attribute("onclick", s"window.open('${url.toString}')") ::
+                  attribute("onmouseout", s"RectUnhover(evt, $id, '${rectangle.fillColor.map(fc => rgb(fc)).getOrElse("null")}')") ::
+                  attribute("onmousemove", s"RectHover(evt, $id, '${rgb(hoverColor)}')") ::
+                  Nil)
+          }).getOrElse(withId)
         }).getOrElse(rectFilled)
       }
     }
@@ -498,7 +498,8 @@ object SVG {
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             (for {
               bar <- bars
-              (id, hoverText) <- bar.id
+              id <- bar.id
+              hoverText <- bar.hoverText
             } yield {
               // TODO if .svg has the notion of "layers", then
               // Rectangle's svg could handle this <text/> node creation
@@ -541,7 +542,8 @@ object SVG {
             bars.map(SVG[Rectangle[Double, Y]].svg).flatten ::
             (for {
               bar <- bars
-              (id, hoverText) <- bar.id
+              id <- bar.id
+              hoverText <- bar.hoverText
             } yield {
               // TODO if .svg has the notion of "layers", then
               // Rectangle's svg could handle this <text/> node creation
