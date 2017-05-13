@@ -20,9 +20,9 @@ case class Scale10s[N: Field](exp: Int) extends Bijection[N, N] {
 
   require(exp > 0)
 
-  def apply(n: N): N = n * (10d ** exp)
+  def apply(n: N): N = n * (10d ** exp.toDouble)
 
-  def unapply(n: N): N = n * (10d ** -exp)
+  def unapply(n: N): N = n * (10d ** -exp.toDouble)
 }
 
 case class Scale2s[N: Field](exp: Int) extends Bijection[N, N] {
