@@ -368,14 +368,13 @@ package object axle {
     }
   }
 
-  def filterOut[T](stream: Stream[T], toRemove: Stream[T])(implicit orderT: Order[T]): Stream[T] = {
+  def filterOut[T](stream: Stream[T], toRemove: Stream[T])(implicit orderT: Order[T]): Stream[T] =
     if (stream.isEmpty || toRemove.isEmpty) {
       stream
     } else {
       val remove = toRemove.head
-      stream.takeWhile(_ < remove) ++ filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
+      stream.takeWhile(_ < remove) append filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
     }
-  }
 
   /**
    * Sieve of Eratosthenes
