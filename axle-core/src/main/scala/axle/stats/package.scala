@@ -54,7 +54,7 @@ package object stats {
 
   def uniformDistribution[T](values: Seq[T], name: String): Distribution0[T, Rational] = {
 
-    val dist = values.groupBy(identity).mapValues({ ks => Rational(ks.size, values.size) }).toMap
+    val dist = values.groupBy(identity).mapValues({ ks => Rational(ks.size.toLong, values.size.toLong) }).toMap
 
     ConditionalProbabilityTable0(dist, name)
   }
