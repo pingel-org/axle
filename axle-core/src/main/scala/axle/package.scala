@@ -348,6 +348,60 @@ package object axle {
       .lastOption.toList
       .flatMap(_._2.toList)
 
+  def mergeStreams(streams: Seq[Stream[Int]]): Stream[Int] = {
+    val mins = streams.flatMap(_.headOption)
+    if (mins.size == 0) {
+      Stream.empty
+    } else {
+      val head = mins.min
+      val tail = mergeStreams(streams.map(_.dropWhile(_ === head)))
+      Stream.cons(head, tail)
+    }
+  }
+
+  def filterOut(stream: Stream[Int], toRemove: Stream[Int]): Stream[Int] =
+    toRemove.headOption.map { remove =>
+      stream.takeWhile(_ < remove) ++: filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
+    } getOrElse { stream }
+
+  /**
+   * https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+   *
+   * input: n > 1
+   */
+
+  def sieveOfEratosthenes(n: Int): Seq[Int] = {
+
+    import spire.math.floor
+    import spire.implicits.DoubleAlgebra
+
+    val A = new Array[Boolean](n)
+    (2 until n) foreach { i => A(i) = true }
+
+    (2 to floor(√(n.toDouble)).toInt) foreach { i =>
+      if (A(i)) {
+        Stream.from(0).map(i * i + i * _).takeWhile(_ < n) foreach { j =>
+          A(j) = false
+        }
+      }
+    }
+
+    (2 until n) filter { A }
+  }
+
+  def sieveOfEratosthenesStreamy(n: Int): Seq[Int] = {
+
+    import spire.math.floor
+    import spire.implicits.DoubleAlgebra
+
+    /* TODO simultaneously skip streams */
+    val marks = mergeStreams((2 to floor(√(n.toDouble)).toInt) map { i =>
+      Stream.from(0).map(i * i + i * _).takeWhile(_ < n)
+    })
+
+    filterOut(Stream.from(2).takeWhile(_ < n), marks)
+  }
+
   // Fundamental:
 
   def id[A](x: A): A = x
