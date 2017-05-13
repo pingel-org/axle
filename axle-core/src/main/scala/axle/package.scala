@@ -33,6 +33,7 @@ import scala.language.implicitConversions
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 import spire.algebra._
 import spire.implicits.moduleOps
@@ -348,18 +349,23 @@ package object axle {
       .lastOption.toList
       .flatMap(_._2.toList)
 
-  def mergeStreams(streams: Seq[Stream[Int]]): Stream[Int] = {
-    val mins = streams.flatMap(_.headOption)
-    if (mins.size == 0) {
+  /**
+   * mergeStreams takes streams that are ordered w.r.t. Order[T]
+   *
+   */
+
+  def mergeStreams[T](streams: Seq[Stream[T]])(
+    implicit eqT: Eq[T], orderT: Order[T]): Stream[T] = {
+    val frontier = streams.flatMap(_.headOption)
+    if (frontier.size === 0) {
       Stream.empty
     } else {
-      val head = mins.min
-      val tail = mergeStreams(streams.map(_.dropWhile(_ === head)))
-      Stream.cons(head, tail)
+      val head = frontier.min
+      Stream.cons(head, mergeStreams(streams.map(_.dropWhile(_ === head))))
     }
   }
 
-  def filterOut(stream: Stream[Int], toRemove: Stream[Int]): Stream[Int] =
+  def filterOut[T](stream: Stream[T], toRemove: Stream[T])(implicit orderT: Order[T]): Stream[T] =
     toRemove.headOption.map { remove =>
       stream.takeWhile(_ < remove) ++: filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
     } getOrElse { stream }
