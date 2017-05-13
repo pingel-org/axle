@@ -406,25 +406,29 @@ package object axle {
     (2 until n) filter { A }
   }
 
-  def notPrimeUpTo(n: Int): Stream[Int] = {
+  def streamFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] =
+    Stream.cons(n, streamFrom(ringN.plus(n, ringN.one)))
 
-    import spire.math.{ floor, sqrt }
+  def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] = {
 
-    val root = floor(sqrt(n.toDouble)).toInt
+    val two = ringN.plus(ringN.one, ringN.one)
 
-    val bases = (2 to root).toStream
+    val bases = streamFrom(two).takeWhile(i => ringN.times(i, i) < n)
 
     val notPrimeStreams =
-      filterOut(bases, if (root > 2) notPrimeUpTo(root) else Stream.empty) map { i =>
-        Stream.from(0).map(i * i + i * _)
+      filterOut(bases, if (!bases.isEmpty) notPrimeUpTo(bases.last) else Stream.empty) map { i =>
+        streamFrom(ringN.zero).map(j => ringN.plus(i * i, i * j))
       }
 
     mergeStreams(notPrimeStreams)
   }
 
-  def sieveOfEratosthenesStream(n: Int): Stream[Int] = {
-    require(n > 1)
-    filterOut(Stream.from(2).takeWhile(_ < n), notPrimeUpTo(n))
+  def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] = {
+
+    require(n > ringN.one)
+
+    val two = ringN.plus(ringN.one, ringN.one)
+    filterOut(streamFrom(two).takeWhile(i => i < n), notPrimeUpTo(n))
   }
 
   // Fundamental:

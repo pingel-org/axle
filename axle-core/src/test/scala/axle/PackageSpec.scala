@@ -61,9 +61,10 @@ class PackageSpec extends FunSuite with Matchers {
     primes.filter(_ < 10000).length should be(1229)
   }
 
-  test("primes using sieveOfEratosthenesStream") {
+  test("primes using primeStream") {
     // See https://primes.utm.edu/howmany.html
-    val primes = sieveOfEratosthenesStream(10000).toList
+    import spire.implicits.IntAlgebra
+    val primes = primeStream(10000).toList
     primes.filter(_ < 10).length should be(4)
     primes.filter(_ < 100).length should be(25)
     primes.filter(_ < 1000).length should be(168)
