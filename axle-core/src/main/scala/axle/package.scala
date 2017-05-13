@@ -355,8 +355,11 @@ package object axle {
    */
 
   def mergeStreams[T](streams: Seq[Stream[T]])(
-    implicit eqT: Eq[T], orderT: Order[T]): Stream[T] = {
+    implicit eqT: Eq[T],
+    orderT: Order[T]): Stream[T] = {
+
     val frontier = streams.flatMap(_.headOption)
+
     if (frontier.size === 0) {
       Stream.empty
     } else {
@@ -365,26 +368,35 @@ package object axle {
     }
   }
 
-  def filterOut[T](stream: Stream[T], toRemove: Stream[T])(implicit orderT: Order[T]): Stream[T] =
-    toRemove.headOption.map { remove =>
-      stream.takeWhile(_ < remove) ++: filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
-    } getOrElse { stream }
+  def filterOut[T](stream: Stream[T], toRemove: Stream[T])(implicit orderT: Order[T]): Stream[T] = {
+    if (stream.isEmpty || toRemove.isEmpty) {
+      stream
+    } else {
+      val remove = toRemove.head
+      stream.takeWhile(_ < remove) ++ filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
+    }
+  }
 
   /**
-   * https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+   * Sieve of Eratosthenes
    *
-   * input: n > 1
+   * The old-fashioned mutable way, described in pseudocode here:
+   *
+   *   https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+   *
+   * input must be greater than one
    */
 
   def sieveOfEratosthenes(n: Int): Seq[Int] = {
 
-    import spire.math.floor
-    import spire.implicits.DoubleAlgebra
+    require(n > 1)
+
+    import spire.math.{ sqrt, floor }
 
     val A = new Array[Boolean](n)
     (2 until n) foreach { i => A(i) = true }
 
-    (2 to floor(√(n.toDouble)).toInt) foreach { i =>
+    (2 to floor(sqrt(n.toDouble)).toInt) foreach { i =>
       if (A(i)) {
         Stream.from(0).map(i * i + i * _).takeWhile(_ < n) foreach { j =>
           A(j) = false
@@ -395,17 +407,25 @@ package object axle {
     (2 until n) filter { A }
   }
 
-  def sieveOfEratosthenesStreamy(n: Int): Seq[Int] = {
+  def notPrimeUpTo(n: Int): Stream[Int] = {
 
-    import spire.math.floor
-    import spire.implicits.DoubleAlgebra
+    import spire.math.{ floor, sqrt }
 
-    /* TODO simultaneously skip streams */
-    val marks = mergeStreams((2 to floor(√(n.toDouble)).toInt) map { i =>
-      Stream.from(0).map(i * i + i * _).takeWhile(_ < n)
-    })
+    val root = floor(sqrt(n.toDouble)).toInt
 
-    filterOut(Stream.from(2).takeWhile(_ < n), marks)
+    val bases = (2 to root).toStream
+
+    val notPrimeStreams =
+      filterOut(bases, if (root > 2) notPrimeUpTo(root) else Stream.empty) map { i =>
+        Stream.from(0).map(i * i + i * _)
+      }
+
+    mergeStreams(notPrimeStreams)
+  }
+
+  def sieveOfEratosthenesStream(n: Int): Stream[Int] = {
+    require(n > 1)
+    filterOut(Stream.from(2).takeWhile(_ < n), notPrimeUpTo(n))
   }
 
   // Fundamental:
