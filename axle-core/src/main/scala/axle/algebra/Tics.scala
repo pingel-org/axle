@@ -44,7 +44,7 @@ object Tics {
   implicit def longTics: Tics[Long] = new Tics[Long] {
 
     def step(from: Long, to: Long): Long = {
-      val n = (spire.math.ceil(spire.math.log10(abs(to - from))) - 1).toInt
+      val n = floor(spire.math.ceil(spire.math.log10(abs(to - from).toDouble)) - 1d)
       max(1, pow(10, n).toLong)
     }
 
@@ -62,7 +62,7 @@ object Tics {
   implicit def intTics: Tics[Int] = new Tics[Int] {
 
     def step(from: Int, to: Int): Int = {
-      val n = (spire.math.ceil(spire.math.log10(abs(to - from))) - 1).toInt
+      val n = floor(spire.math.ceil(spire.math.log10(abs(to - from).toDouble)) - 1d)
       max(1, pow(10, n).toInt)
     }
 
@@ -81,12 +81,12 @@ object Tics {
   implicit def rationalTics: Tics[Rational] = new Tics[Rational] {
 
     def step(from: Rational, to: Rational): Rational = {
-      val power = (ceil(log10((to - from).abs.toDouble)) - 1).toInt
-      if (power >= 0) {
-        Rational(10 ** power, 1)
+      val power = ceil(log10((to - from).abs.toDouble)).toLong - 1L
+      if (power >= 0d) {
+        Rational(10L ** power, 1L)
       } else {
         // spire doesn't like negative arguments to **
-        Rational(1, 10 ** power.abs)
+        Rational(1L, 10L ** power.abs)
       }
     }
 

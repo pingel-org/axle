@@ -10,7 +10,7 @@ import spire.math.Rational
 object Dice {
 
   def die(n: Int): Distribution0[Int, Rational] =
-    ConditionalProbabilityTable0((1 to n).map(i => (i, Rational(1, n))).toMap, s"d$n")
+    ConditionalProbabilityTable0((1 to n).map(i => (i, Rational(1, n.toLong))).toMap, s"d$n")
 
   //  def die(n: Natural): Distribution[Natural, Rational] =
   //    Distribution0[Natural, Rational](

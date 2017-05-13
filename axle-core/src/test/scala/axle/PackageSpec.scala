@@ -51,4 +51,24 @@ class PackageSpec extends FunSuite with Matchers {
   test("intersperse") {
     assertResult(intersperse(7)((11 to 13).toList))(List(11, 7, 12, 7, 13))
   }
+
+  test("primes using sieveOfEratosthenes") {
+    // See https://primes.utm.edu/howmany.html
+    val primes = sieveOfEratosthenes(10000)
+    primes.filter(_ < 10).length should be(4)
+    primes.filter(_ < 100).length should be(25)
+    primes.filter(_ < 1000).length should be(168)
+    primes.filter(_ < 10000).length should be(1229)
+  }
+
+  test("primes using primeStream") {
+    // See https://primes.utm.edu/howmany.html
+    import spire.implicits.IntAlgebra
+    val primes = primeStream(10000).toList
+    primes.filter(_ < 10).length should be(4)
+    primes.filter(_ < 100).length should be(25)
+    primes.filter(_ < 1000).length should be(168)
+    primes.filter(_ < 10000).length should be(1229)
+  }
+
 }

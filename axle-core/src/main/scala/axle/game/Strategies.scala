@@ -75,7 +75,7 @@ object Strategies {
   def randomMove[G, S, O, M, MS, MM](implicit evGame: Game[G, S, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
     (game: G, state: MS) => {
       val opens = evGame.moves(game, state).toList
-      val p = Rational(1, opens.length)
+      val p = Rational(1L, opens.length.toLong)
       ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap)
     }
 

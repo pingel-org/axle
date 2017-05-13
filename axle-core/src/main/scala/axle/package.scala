@@ -33,6 +33,7 @@ import scala.language.implicitConversions
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 import spire.algebra._
 import spire.implicits.moduleOps
@@ -347,6 +348,88 @@ package object axle {
       })
       .lastOption.toList
       .flatMap(_._2.toList)
+
+  /**
+   * mergeStreams takes streams that are ordered w.r.t. Order[T]
+   *
+   */
+
+  def mergeStreams[T](streams: Seq[Stream[T]])(
+    implicit eqT: Eq[T],
+    orderT: Order[T]): Stream[T] = {
+
+    val frontier = streams.flatMap(_.headOption)
+
+    if (frontier.size === 0) {
+      Stream.empty
+    } else {
+      val head = frontier.min
+      Stream.cons(head, mergeStreams(streams.map(_.dropWhile(_ === head))))
+    }
+  }
+
+  def filterOut[T](stream: Stream[T], toRemove: Stream[T])(implicit orderT: Order[T]): Stream[T] =
+    if (stream.isEmpty || toRemove.isEmpty) {
+      stream
+    } else {
+      val remove = toRemove.head
+      stream.takeWhile(_ < remove) append filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
+    }
+
+  /**
+   * Sieve of Eratosthenes
+   *
+   * The old-fashioned mutable way, described in pseudocode here:
+   *
+   *   https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+   *
+   * input must be greater than one
+   */
+
+  def sieveOfEratosthenes(n: Int): Seq[Int] = {
+
+    require(n > 1)
+
+    import spire.math.{ sqrt, floor }
+
+    val A = new Array[Boolean](n)
+    (2 until n) foreach { i => A(i) = true }
+
+    (2 to floor(sqrt(n.toDouble)).toInt) foreach { i =>
+      if (A(i)) {
+        Stream.from(0).map(i * i + i * _).takeWhile(_ < n) foreach { j =>
+          A(j) = false
+        }
+      }
+    }
+
+    (2 until n) filter { A }
+  }
+
+  def streamFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] =
+    Stream.cons(n, streamFrom(ringN.plus(n, ringN.one)))
+
+  def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] = {
+
+    val two = ringN.plus(ringN.one, ringN.one)
+
+    val bases = streamFrom(two).takeWhile(i => ringN.times(i, i) < n)
+
+    val notPrimeStreams =
+      filterOut(bases, if (!bases.isEmpty) notPrimeUpTo(bases.last) else Stream.empty) map { i =>
+        streamFrom(ringN.zero).map(j => ringN.plus(i * i, i * j))
+      }
+
+    mergeStreams(notPrimeStreams)
+  }
+
+  def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] = {
+
+    require(n > ringN.one)
+
+    val two = ringN.plus(ringN.one, ringN.one)
+    filterOut(streamFrom(two).takeWhile(i => i < n), notPrimeUpTo(n))
+  }
 
   // Fundamental:
 

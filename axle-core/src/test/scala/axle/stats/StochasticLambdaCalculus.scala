@@ -26,8 +26,6 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
 
   test("π estimation by testing a uniform subset of the unit square gets in the ballpark of π") {
 
-    import spire.math.sqrt
-
     val n = 200
 
     // TODO: sample a subset of n for each of x and y
@@ -37,10 +35,10 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
     // However, there should be a way to utilize the "if" statement to
     // reduce the complexity.
 
-    val piDist = for {
+    val piDist: Distribution0[Int, Rational] = for {
       x <- uniformDistribution(0 to n, "x")
       y <- uniformDistribution(0 to n, "y")
-    } yield if (sqrt(x * x + y * y) <= n) 1 else 0
+    } yield if (spire.math.sqrt((x * x + y * y).toDouble) <= n) 1 else 0
 
     4 * piDist.probabilityOf(1) should be > Rational(3)
   }
