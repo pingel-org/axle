@@ -300,8 +300,8 @@ lazy val commonScalacOptions = Seq(
   "-Yliteral-types",
 //  "-Yinline-warnings",
   "-Yno-adapted-args",
-  "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen",
+//  "-Ywarn-dead-code",
+//  "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
   "-Xfuture"
 )
