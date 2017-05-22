@@ -22,6 +22,8 @@ import axle.algebra.Π
 
 package object math {
 
+  // def argmax[K, N: Order](ks: Iterable[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
+
   /**
    * Englishman John Wallis (1616 - 1703) approximation of π in 1655
    *

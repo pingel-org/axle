@@ -1,6 +1,5 @@
 import scala.collection.mutable.Buffer
 
-
 import scala.language.implicitConversions
 import cats.Show
 import cats.kernel.Eq
@@ -17,26 +16,50 @@ import spire.math.Rational
 
 package object axle {
 
+  // unicode aliases
+
+  //  val Sigma = Σ _
+  //
+  //  val Pi = Π _
+
+  val ∀ = forall
+
+  val ∃ = thereexists
+
+  // missing Show witnesses
+
+  implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
+
+  implicit val showRational: Show[Rational] = Show.fromToString[Rational]
+
   def showDoubleWithPrecision(p: Int = 6): Show[Double] =
     new Show[Double] {
       val fmt = s"""%.${p}f"""
       def show(d: Double): String = fmt.format(d)
     }
 
-  implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
-
-  implicit val showRational: Show[Rational] = Show.fromToString[Rational]
+  // basic functions
 
   def ignore[T]: T => Unit = (t: T) => {}
 
+  def id[A](x: A): A = x
+
+  // IO
+
   def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
     (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))
+
+  // TODO echo characters as typed (shouldn't have to use jline for this)
+  def getLine(): String = scala.io.StdIn.readLine()
+
+  // Seq operations
 
   /**
    * gaps
    *
    * assumes that the input xs are already sorted
    */
+
   def gaps[T](xs: Seq[T])(implicit ringT: Ring[T]): Seq[(T, T)] = {
     import ringT.one
     import spire.implicits._
@@ -68,13 +91,16 @@ package object axle {
     runs(xs, breaks)
   }
 
-  //  val Sigma = Σ _
-  //
-  //  val Pi = Π _
+  // List methods
 
-  val ∀ = forall
+  def replicate[T](n: Int)(v: T): List[T] = (0 until n).map(i => v).toList
 
-  val ∃ = thereexists
+  def reverse[T](l: List[T]): List[T] = l.reverse
+
+  def intersperse[T](d: T)(l: List[T]): List[T] =
+    (0 until (2 * l.size - 1)).map(i => i % 2 match { case 0 => l(i / 2) case 1 => d }).toList
+
+  // Axle enrichments of scala collections
 
   implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
 
@@ -92,8 +118,12 @@ package object axle {
 
   implicit def enrichInt(n: Int): EnrichedInt = EnrichedInt(n)
 
+  // Function application patterns
+
   def applyK[N](f: N => N, x0: N, k: Int): N =
     (1 to k).foldLeft(x0)({ case (x, _) => f(x) })
+
+  // Iterator methods
 
   def applyForever[N](f: N => N, x0: N): Iterator[N] =
     Iterator
@@ -149,25 +179,7 @@ package object axle {
   def streamFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] =
     Stream.cons(n, streamFrom(ringN.plus(n, ringN.one)))
 
-  // Fundamental:
-
-  def id[A](x: A): A = x
-
-  // def argmax[K, N: Order](ks: Iterable[K], f: K => N): K = ks.map(k => (k, f(k))).maxBy(_._2)._1
-
-  // IO
-
-  // TODO echo characters as typed (shouldn't have to use jline for this)
-  def getLine(): String = scala.io.StdIn.readLine()
-
-  // List enrichments:
-
-  def replicate[T](n: Int)(v: T): List[T] = (0 until n).map(i => v).toList
-
-  def reverse[T](l: List[T]): List[T] = l.reverse
-
-  def intersperse[T](d: T)(l: List[T]): List[T] =
-    (0 until (2 * l.size - 1)).map(i => i % 2 match { case 0 => l(i / 2) case 1 => d }).toList
+  // Typeclass-based method invocations
 
   def string[T: Show](t: T): String = Show[T].show(t)
 
