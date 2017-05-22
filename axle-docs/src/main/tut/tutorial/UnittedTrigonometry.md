@@ -22,7 +22,7 @@ import spire.implicits.DoubleAlgebra
 import spire.algebra.Module
 import spire.math.Rational
 
-import axle._
+import axle.math._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement

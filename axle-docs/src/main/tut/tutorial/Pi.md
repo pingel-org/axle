@@ -7,7 +7,7 @@ permalink: /tutorial/pi/
 Two estimators for π
 
 ```tut:silent
-import axle._
+import axle.math._
 ```
 
 Wallis
