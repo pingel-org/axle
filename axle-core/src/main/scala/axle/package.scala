@@ -66,16 +66,11 @@ package object axle {
       def show(d: Double): String = fmt.format(d)
     }
 
-  implicit val eqSymbol: Eq[Symbol] = Eq.fromUniversalEquals[Symbol]
-
   implicit val showBD: Show[BigDecimal] = Show.fromToString[BigDecimal]
 
   implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
-
-  implicit val orderSymbol: Order[Symbol] =
-    Order.from((x: Symbol, y: Symbol) => Order[String].compare(string(x), string(y)))
 
   def dropOutput(s: String): Unit = {}
 
