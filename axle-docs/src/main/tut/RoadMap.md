@@ -6,12 +6,6 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.3.4 (May 22, 2017)
-* Sieve of Eratosthenes
-* Move math stuff from `axle._` package object to new `axle.math._` package object
-* Remove some `Eq` and `Order` witnesses from `axle._` as they are now available in `cats._`
-* Tut 0.5.2 -- to avoid as transitive dependency
-
 ## 0.3.5 (May 24, 2017)
 * `axle.web.Table` and `HtmlFrom[Table[T]`
 * Clean up GA doc
