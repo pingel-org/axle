@@ -247,10 +247,10 @@ lazy val axleTest = Project(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-    inProjects(axleCore),  // -- inProjects(noDocProjects(scalaVersion.value): _*),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(axleCore),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
+  // site.addMappingsToSiteDir(tut, "tut"),
   ghpagesNoJekyll := false,
   siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
@@ -272,11 +272,11 @@ lazy val docs = Project(
   .settings(unidocSettings)
   .settings(site.settings)
   .settings(ghpages.settings)
+  .settings(tutSettings)
+  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(docSettings)
   .settings(commonJvmSettings)
   .dependsOn(axleTest) // was only "core"
-
-enablePlugins(TutPlugin)
 
 lazy val noPublishSettings = Seq(
   publish := (),
