@@ -1,6 +1,6 @@
 
 /**
- * Copyright (c) 2011-2014 Adam Pingel
+ * Copyright (c) 2011-2017 Adam Pingel
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
