@@ -5,7 +5,6 @@ import scala.language.implicitConversions
 import cats.kernel.Eq
 import cats.implicits._
 import cats.Show
-import axle.eqSymbol
 import axle.string
 
 object FirstOrderPredicateLogic {
