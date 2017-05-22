@@ -1,6 +1,5 @@
 package axle.game.montyhall
 
-import axle.dropOutput
 import axle.game._
 import axle.game.Strategies._
 import org.scalatest._
@@ -14,12 +13,12 @@ class MontyHallSpec extends FunSuite with Matchers {
   val monty = Player("M", "Monty Hall")
 
   val game = MontyHall(
-    contestant, interactiveMove, dropOutput,
-    monty, interactiveMove, dropOutput)
+    contestant, interactiveMove, axle.ignore,
+    monty, interactiveMove, axle.ignore)
 
   val rGame = MontyHall(
-    contestant, randomMove, dropOutput,
-    monty, randomMove, dropOutput)
+    contestant, randomMove, axle.ignore,
+    monty, randomMove, axle.ignore)
 
   test("random game has an intro message") {
     introMessage(rGame) should include("Monty")

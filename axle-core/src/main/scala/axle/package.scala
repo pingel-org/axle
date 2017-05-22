@@ -27,7 +27,7 @@ package object axle {
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
-  def ignore[T](t: T): Unit = {}
+  def ignore[T]: T => Unit = (t: T) => {}
 
   def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
     (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))

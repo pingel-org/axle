@@ -14,27 +14,27 @@ class TrigonometrySpec extends FunSuite with Matchers {
   implicit val amd = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
   test("sine(UnittedQuantity[Angle, Double]) => Double") {
-    axle.sine(UnittedQuantity(2d, amd.radian)) should be(math.sin(2d))
+    axle.math.sine(UnittedQuantity(2d, amd.radian)) should be(scala.math.sin(2d))
   }
 
   test("arcSine(Double) => UnittedQuantity[Angle, Double]") {
-    axle.arcSine(0.5) should be(UnittedQuantity(math.asin(0.5d), amd.radian))
+    axle.math.arcSine(0.5) should be(UnittedQuantity(scala.math.asin(0.5d), amd.radian))
   }
 
   test("cosine(UnittedQuantity[Angle, Double]) => Double") {
-    axle.cosine(UnittedQuantity(2d, amd.radian)) should be(math.cos(2d))
+    axle.math.cosine(UnittedQuantity(2d, amd.radian)) should be(scala.math.cos(2d))
   }
 
   test("arcCosine(Double) => UnittedQuantity[Angle, Double]") {
-    axle.arcCosine(0.5) should be(UnittedQuantity(math.acos(0.5d), amd.radian))
+    axle.math.arcCosine(0.5) should be(UnittedQuantity(scala.math.acos(0.5d), amd.radian))
   }
 
   test("tangent(UnittedQuantity[Angle, Double]) => Double") {
-    axle.tangent(UnittedQuantity(2d, amd.radian)) should be(math.tan(2d))
+    axle.math.tangent(UnittedQuantity(2d, amd.radian)) should be(scala.math.tan(2d))
   }
 
   test("arcTangent(Double) => UnittedQuantity[Angle, Double]") {
-    axle.arcTangent(0.5) should be(UnittedQuantity(math.atan(0.5d), amd.radian))
+    axle.math.arcTangent(0.5) should be(UnittedQuantity(scala.math.atan(0.5d), amd.radian))
   }
 
 }

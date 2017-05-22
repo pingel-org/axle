@@ -1,7 +1,6 @@
 package axle.game.poker
 
 import org.scalatest._
-import axle.dropOutput
 import axle.game._
 import axle.game.Strategies._
 
@@ -88,9 +87,9 @@ class PokerSpec extends FunSuite with Matchers {
       }
 
     val game = Poker(Vector(
-      (p1, hardCodedStringStrategy(p1Move), dropOutput),
-      (p2, hardCodedStringStrategy(p2Move), dropOutput)),
-      dropOutput)
+      (p1, hardCodedStringStrategy(p1Move), axle.ignore),
+      (p2, hardCodedStringStrategy(p2Move), axle.ignore)),
+      ignore)
 
     val start = startState(game)
     val history = moveStateStream(game, start).toVector
