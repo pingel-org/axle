@@ -8,7 +8,7 @@ import spire.implicits.metricSpaceOps
 import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
 import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
-import axle.distanceOnSphere
+import axle.math.distanceOnSphere
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
