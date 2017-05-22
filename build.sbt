@@ -350,7 +350,7 @@ lazy val warnUnusedImport = Seq(
     }
   },
   scalacOptions in (Compile, console) ~= {_.filterNot("-Ywarn-unused-import" == _)},
-  scalacOptions in (Test, console) <<= (scalacOptions in (Compile, console))
+  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )
 lazy val credentialSettings = Seq(
   // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
