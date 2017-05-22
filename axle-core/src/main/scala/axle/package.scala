@@ -23,8 +23,6 @@ package object axle {
       def show(d: Double): String = fmt.format(d)
     }
 
-  implicit val showBD: Show[BigDecimal] = Show.fromToString[BigDecimal]
-
   implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
