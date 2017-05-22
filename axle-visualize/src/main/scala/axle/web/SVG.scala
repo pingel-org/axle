@@ -46,7 +46,7 @@ import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import axle.arcTangent2
+import axle.math.arcTangent2
 import axle.algebra.DirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode

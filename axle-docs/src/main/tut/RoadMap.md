@@ -6,49 +6,46 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.3.4 (May 14, 2017)
-* Case class -> table visualization
+## 0.3.5 (May 24, 2017)
+* `axle.web.Table` and `HtmlFrom[Table[T]`
+* Clean up GA doc
 
-## 0.4.0 (May 28, 2017)
-* Fix implicit numeric widening warnings
+## 0.4.0 (May 29, 2017)
 * -algorithm and -visualize should go to axle-core
 * -games and -languages and axle.data should go to axle-examples
 * Replace Akka with Monix for animating visualizations
 * Remove Spark spoke
 * Remove Spark impacts on Functor, etc, and just use Cats versions
+
+## 0.4.x (Summer 2017)
+* Fix implicit numeric widening warnings
 * Publish Scala 2.12 artifacts
 * Fix sbt-release plugin (use sbt-sonatype?)
-
-## 0.4.1 (June 2017)
+* … as Stream.from(Int)
+* Configurable visualization parameters for {un,}directedGraph
 * SVG[H] for BarChart hover (wrap with <g> to do getBBox)
 * SVG[Matrix]
-* Configurable visualization parameters for {un,}directedGraph
 * `BarChart` Variable width bars
 * Horizontal barchart
-
-## 0.4.2 (July 2017)
 * `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
 * Background box for `ScatterPlot` hover text?
 * `ScatterPlot` `play` to awt
 * Log scale
 * Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
 * Fix multi-color cube rendering
+* Bloom filter surface
 
-## 0.5.0 (September 2017)
+## 0.5.x (Fall 2017)
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-
-## 0.5.1 (October 2017)
 * Fix logistic regression
 * Fix axle.algebra.GeoMetricSpaceSpec
 
-## 0.6.0 (November 2017)
+## 0.6.x (Late 2017)
 * game theory axioms
 * axle.game: Observable[T]
 * move state dist stream
-
-## 0.6.1 (December 2017)
 * redo original monty hall spec
 * Max bet for Poker
 

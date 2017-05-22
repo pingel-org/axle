@@ -7,7 +7,7 @@ permalink: /tutorial/ackermann/
 See the Wikipedia page on the [Ackermann function](http://en.wikipedia.org/wiki/Ackermann_function)
 
 ```tut:silent
-import axle._
+import axle.math._
 ```
 
 The computational complexity is enormous.

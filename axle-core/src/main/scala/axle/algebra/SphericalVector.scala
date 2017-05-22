@@ -1,11 +1,11 @@
 package axle.algebra
 
-import axle.cosine
+import axle.math.cosine
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
-import axle.sine
+import axle.math.sine
 import cats.kernel.Eq
 import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid

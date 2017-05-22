@@ -1,14 +1,14 @@
 package axle.algebra
 
-import axle.arcTangent2
-import axle.cosine
+import axle.math.arcTangent2
+import axle.math.cosine
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.UnittedQuantity
 import axle.quanta.modulize
-import axle.sine
-import axle.square
-import axle.{ √ => √ }
+import axle.math.sine
+import axle.math.square
+import axle.math.{ √ => √ }
 import spire.algebra.Field
 import spire.algebra.MetricSpace
 import spire.algebra.MultiplicativeMonoid

@@ -6,7 +6,7 @@ permalink: /tutorial/fibonacci/
 
 
 ```tut:silent
-import axle._
+import axle.math._
 ```
 
 ## Linear using `foldLeft`

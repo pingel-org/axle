@@ -12,6 +12,7 @@ First a couple imports:
 import cats.implicits._
 import spire.implicits.DoubleAlgebra
 import axle._
+import axle.math._
 ```
 
 Define a function to compute the Mandelbrot velocity at point on the plane `(x, y)`

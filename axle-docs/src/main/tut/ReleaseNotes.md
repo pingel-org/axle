@@ -6,6 +6,12 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.3.4 (May 22, 2017)
+* Move mathy methods from `axle._` package object to new `axle.math._` package object
+* Sieve of Eratosthenes
+* Remove some `Eq` and `Order` witnesses from `axle._` as they are now available in `cats._`
+* Revert Tut to version 0.4.8
+
 ## 0.3.3 (May 7, 2017)
 * `BarChart.hoverof` -- center text in bar
 * `BarChart{,Grouped}.linkOf`

@@ -76,7 +76,8 @@ package object stats {
     ConditionalProbabilityTable0(newDist, "todo")
   }
 
-  def log2[N: Field: ConvertableFrom](x: N) = math.log(x.toDouble) / math.log(2)
+  def log2[N: Field: ConvertableFrom](x: N) =
+    spire.math.log(x.toDouble) / spire.math.log(2d)
 
   def square[N: Ring](x: N): N = x ** 2
 

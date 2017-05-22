@@ -1,6 +1,5 @@
 package axle.game.ttt
 
-import axle.dropOutput
 import axle.game._
 import axle.game.Strategies._
 import org.scalatest._
@@ -14,8 +13,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
   val o = Player("O", "Player O")
 
   val game = TicTacToe(3,
-    x, interactiveMove, dropOutput,
-    o, interactiveMove, dropOutput)
+    x, interactiveMove, axle.ignore,
+    o, interactiveMove, axle.ignore)
 
   test("game define intro message, have 9 positions") {
 
@@ -24,8 +23,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
   }
 
   val rGame = TicTacToe(3,
-    x, randomMove, dropOutput,
-    o, randomMove, dropOutput)
+    x, randomMove, axle.ignore,
+    o, randomMove, axle.ignore)
 
   test("random game produce moveStateStream") {
     moveStateStream(rGame, startState(rGame)).take(3).length should be(3)
@@ -73,8 +72,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
 
   test("starting moves are defined for 4x4 game") {
     val bigGame = TicTacToe(4,
-      x, randomMove, dropOutput,
-      o, randomMove, dropOutput)
+      x, randomMove, axle.ignore,
+      o, randomMove, axle.ignore)
     val startingMoves = moves(bigGame, startState(bigGame))
     startingMoves.map(_.description).mkString(",") should include("16")
   }
@@ -136,8 +135,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
       }
 
     val game = TicTacToe(3,
-      x, hardCodedStringStrategy(xMove), dropOutput,
-      o, hardCodedStringStrategy(oMove), dropOutput)
+      x, hardCodedStringStrategy(xMove), axle.ignore,
+      o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
     val lastState = moveStateStream(game, start).last._3
@@ -165,8 +164,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
       }
 
     val game = TicTacToe(3,
-      x, hardCodedStringStrategy(xMove), dropOutput,
-      o, hardCodedStringStrategy(oMove), dropOutput)
+      x, hardCodedStringStrategy(xMove), axle.ignore,
+      o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
     val lastState = moveStateStream(game, start).last._3
@@ -194,8 +193,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
       }
 
     val game = TicTacToe(3,
-      x, hardCodedStringStrategy(xMove), dropOutput,
-      o, hardCodedStringStrategy(oMove), dropOutput)
+      x, hardCodedStringStrategy(xMove), axle.ignore,
+      o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
     val lastState = moveStateStream(game, start).last._3

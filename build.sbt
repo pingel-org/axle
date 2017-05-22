@@ -247,10 +247,10 @@ lazy val axleTest = Project(
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-    inProjects(axleCore),  // -- inProjects(noDocProjects(scalaVersion.value): _*),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(axleCore),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   site.addMappingsToSiteDir(tut, "_tut"),
+  // site.addMappingsToSiteDir(tut, "tut"),
   ghpagesNoJekyll := false,
   siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
@@ -272,11 +272,11 @@ lazy val docs = Project(
   .settings(unidocSettings)
   .settings(site.settings)
   .settings(ghpages.settings)
+  .settings(tutSettings)
+  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(docSettings)
   .settings(commonJvmSettings)
   .dependsOn(axleTest) // was only "core"
-
-enablePlugins(TutPlugin)
 
 lazy val noPublishSettings = Seq(
   publish := (),
@@ -300,8 +300,8 @@ lazy val commonScalacOptions = Seq(
   "-Yliteral-types",
 //  "-Yinline-warnings",
   "-Yno-adapted-args",
-  "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen",
+//  "-Ywarn-dead-code",
+//  "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
   "-Xfuture"
 )
@@ -350,7 +350,7 @@ lazy val warnUnusedImport = Seq(
     }
   },
   scalacOptions in (Compile, console) ~= {_.filterNot("-Ywarn-unused-import" == _)},
-  scalacOptions in (Test, console) <<= (scalacOptions in (Compile, console))
+  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 )
 lazy val credentialSettings = Seq(
   // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci

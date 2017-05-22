@@ -31,7 +31,8 @@ class PixelatedColoredAreaSpec extends FunSuite with Matchers {
 
     import math.abs
     import spire.implicits.DoubleAlgebra
-    import axle.{ logisticMap, orbit, applyK }
+    import axle.{ orbit, applyK }
+    import axle.math.logisticMap
 
     def doubleClose(z: Double)(y: Double) = abs(z - y) < 1e-6
 

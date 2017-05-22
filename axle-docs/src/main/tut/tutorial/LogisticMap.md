@@ -9,12 +9,13 @@ See the wikipedia page on [Logistic Map](https://en.wikipedia.org/wiki/Logistic_
 Create data for a range of the logistic map function
 
 ```tut:silent
-import math.abs
-import spire.implicits.DoubleAlgebra
-import axle.{ logisticMap, orbit, applyK }
 import java.util.TreeSet
-import axle.visualize._
 import cats.implicits._
+import spire.math.abs
+import spire.implicits.DoubleAlgebra
+import axle.math.logisticMap
+import axle.{ orbit, applyK }
+import axle.visualize._
 import axle.awt._
 ```
 

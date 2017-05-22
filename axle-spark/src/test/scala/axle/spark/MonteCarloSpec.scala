@@ -10,6 +10,7 @@ import spire.implicits._
 import axle.syntax.setfrom._
 import axle.syntax.mapfrom._
 import axle.syntax.mapreducible._
+import axle.math.monteCarloPiEstimate
 
 class MonteCarloSpec extends FunSuite with Matchers {
 
