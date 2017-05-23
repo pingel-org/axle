@@ -1,13 +1,11 @@
 package axle.ml
 
 import spire.math.min
-
-import axle.algebra.mean
-import axle.algebra.Finite
-import axle.algebra.Σ
 import spire.algebra.Field
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeGroupOps
+import axle.algebra.Finite
+import axle.math._
 
 object RankedClassifierPerformance {
 

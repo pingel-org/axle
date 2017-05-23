@@ -1,15 +1,15 @@
 package axle.nlp
 
 import spire.math.log
-
-import axle.algebra.Aggregatable
-import axle.algebra.Σ
 import spire.algebra.Eq
 import spire.algebra.Field
 import spire.implicits.convertableOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
+
+import axle.algebra.Aggregatable
+import axle.math._
 
 case class TFIDFDocumentVectorSpace[D: Field: ConvertableFrom: ConvertableTo](
   corpus: Iterable[String],

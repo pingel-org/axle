@@ -17,7 +17,7 @@ import axle.stats.CaseIs
 import axle.stats.Distribution
 import axle.stats.Independence
 import axle.stats.Factor
-import axle.algebra.Π
+import axle.math.Π
 import axle.syntax.directedgraph._
 import axle.syntax.undirectedgraph._
 

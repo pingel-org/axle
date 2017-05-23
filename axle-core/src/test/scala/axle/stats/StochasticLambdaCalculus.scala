@@ -3,7 +3,7 @@ package axle.stats
 import org.scalatest._
 
 import axle.game.Dice.die
-import axle.algebra.Σ
+import axle.math.Σ
 import spire.math.Rational
 import cats.implicits._
 

@@ -1,6 +1,7 @@
-package axle.algebra
+package axle.math
 
 import org.scalatest._
+import axle.algebra.Bijection
 
 class Mean extends FunSuite with Matchers {
 
