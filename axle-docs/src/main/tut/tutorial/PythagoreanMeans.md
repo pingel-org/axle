@@ -16,7 +16,7 @@ Imports
 
 ```tut:silent
 import axle._
-import axle.algebra._
+import axle.math._
 ```
 
 Examples
