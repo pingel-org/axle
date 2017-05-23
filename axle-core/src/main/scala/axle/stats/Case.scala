@@ -1,8 +1,8 @@
 package axle.stats
 
-import axle.algebra.Π
 import spire.algebra.Field
 import spire.implicits.additiveGroupOps
+import axle.math.Π
 
 trait Case[A, N] {
 

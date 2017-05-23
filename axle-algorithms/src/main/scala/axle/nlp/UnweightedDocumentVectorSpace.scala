@@ -1,9 +1,9 @@
 package axle.nlp
 
-import axle.algebra.Σ
 import spire.algebra.Field
 import spire.algebra.Eq
 import spire.implicits.multiplicativeSemigroupOps
+import axle.math._
 
 case class UnweightedDocumentVectorSpace[D: Field]()(implicit _eqD: Eq[D])
     extends DocumentVectorSpace[D] {

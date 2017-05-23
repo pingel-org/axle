@@ -1,14 +1,5 @@
 package axle.ml
 
-import axle.algebra.argmax
-import axle.algebra.Functor
-import axle.stats.P
-import axle.stats.Distribution
-import axle.stats.TallyDistribution0
-import axle.stats.TallyDistribution1
-import axle.syntax.aggregatable._
-import axle.syntax.functor._
-import axle.syntax.talliable._
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
@@ -18,8 +9,15 @@ import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.eqOps
+import axle.stats.Distribution
+import axle.stats.TallyDistribution0
+import axle.stats.TallyDistribution1
+import axle.syntax.aggregatable._
+import axle.syntax.functor._
+import axle.syntax.talliable._
 import axle.stats.P
 import axle.algebra._
+import axle.math._
 
 case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N: Field: Order](
   data: F,

@@ -6,20 +6,20 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.3.5 (May 24, 2017)
-* `axle.web.Table` and `HtmlFrom[Table[T]`
-* Clean up GA doc
-
-## 0.4.0 (May 29, 2017)
+## 0.3.6 (May 26, 2017)
 * -algorithm and -visualize should go to axle-core
 * -games and -languages and axle.data should go to axle-examples
-* Replace Akka with Monix for animating visualizations
 * Remove Spark spoke
+* Publish Scala 2.12 artifacts
+
+## 0.4.0 (May 29, 2017)
 * Remove Spark impacts on Functor, etc, and just use Cats versions
+* Replace Akka with Monix or FS2 for animating visualizations
 
 ## 0.4.x (Summer 2017)
 * Fix implicit numeric widening warnings
-* Publish Scala 2.12 artifacts
+* `axle.web.Table` and `HtmlFrom[Table[T]`
+* Clean up GA doc
 * Fix sbt-release plugin (use sbt-sonatype?)
 * … as Stream.from(Int)
 * Configurable visualization parameters for {un,}directedGraph

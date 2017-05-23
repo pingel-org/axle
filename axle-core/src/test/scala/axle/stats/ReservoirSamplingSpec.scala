@@ -1,7 +1,7 @@
 package axle.stats
 
 import org.scalatest._
-import axle.algebra.arithmeticMean
+import axle.math.arithmeticMean
 import spire.implicits.DoubleAlgebra
 
 class ReservoirSamplingSpec extends FunSuite with Matchers {

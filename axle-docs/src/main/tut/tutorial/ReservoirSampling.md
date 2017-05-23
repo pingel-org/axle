@@ -9,7 +9,7 @@ Reservoir Sampling is the answer to a common interview question.
 ```tut:silent
 import axle.stats._
 import spire.math.Rational
-import axle.algebra.arithmeticMean
+import axle.math.arithmeticMean
 import spire.implicits.DoubleAlgebra
 ```
 

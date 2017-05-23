@@ -6,7 +6,7 @@ import scala.language.implicitConversions
 import scala.util.Random.nextDouble
 import scala.util.Random.nextInt
 
-import axle.algebra.Σ
+import axle.math.Σ
 import axle.algebra.Finite
 import axle.algebra.Functor
 import axle.algebra.Aggregatable

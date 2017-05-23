@@ -4,7 +4,7 @@ import cats.Show
 import cats.implicits._
 import spire.algebra.Field
 import spire.implicits._
-import axle.algebra.Σ
+import axle.math.Σ
 import axle.algebra.Aggregatable
 import axle.algebra.Functor
 import axle.syntax.functor._

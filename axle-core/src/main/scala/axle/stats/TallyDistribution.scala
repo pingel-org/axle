@@ -2,7 +2,7 @@ package axle.stats
 
 import scala.util.Random
 
-import axle.algebra.Σ
+import axle.math.Σ
 import axle.string
 
 import cats.Show

@@ -29,7 +29,7 @@ import axle.algebra.IndexedK1
 import axle.algebra.LinearAlgebra
 import axle.algebra.Zipper
 import axle.algebra.ZipperK1
-import axle.algebra.Σ
+import axle.math._
 import axle.syntax.finite.finiteOps
 import axle.syntax.functor.functorOps
 import axle.syntax.indexed.indexedOps
