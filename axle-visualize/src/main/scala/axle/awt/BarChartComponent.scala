@@ -4,30 +4,18 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
-
-import akka.pattern.ask
-import axle.actor.Defaults.askTimeout
-import axle.visualize.BarChart
-import axle.visualize.BarChartView
-import axle.visualize.DataFeedProtocol.Fetch
-import axle.visualize.Fed
-import axle.visualize.element.BarChartKey
-import axle.visualize.element.HorizontalLine
-import axle.visualize.element.Rectangle
-import axle.visualize.element.Text
-import axle.visualize.element.VerticalLine
-import axle.visualize.element.XTics
-import axle.visualize.element.YTics
 import javax.swing.JPanel
 
-import scala.reflect.ClassTag
+import monix.reactive._
 
-case class BarChartComponent[C, Y, D: ClassTag, H](
-  chart: BarChart[C, Y, D, H])
-    extends JPanel
-    with Fed[D] {
+import axle.visualize.BarChart
+import axle.visualize.BarChartView
+import axle.visualize.element._
+
+case class BarChartComponent[C, Y, D, H](
+  chart: BarChart[C, Y, D, H],
+  dataUpdatesOpt: Option[Observable[D]] = None)
+    extends JPanel {
 
   import chart._
 
@@ -37,11 +25,7 @@ case class BarChartComponent[C, Y, D: ClassTag, H](
 
   override def paintComponent(g: Graphics): Unit = {
 
-    val data = feeder map { dataFeedActor =>
-      val dataFuture = (dataFeedActor ? Fetch()).mapTo[D]
-      // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-      Await.result(dataFuture, 1.seconds)
-    } getOrElse (chart.initialValue)
+    val data: D = chart.initialValue // TODO refresh
 
     val view = BarChartView(chart, data)
 

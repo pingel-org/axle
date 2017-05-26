@@ -20,8 +20,9 @@ lazy val jblasVersion = "1.2.4"
 lazy val jacksonVersion = "2.8.4"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
-lazy val jogampVersion = "2.3.2"
 lazy val akkaVersion = "2.4.17"
+lazy val monixVersion = "2.3.0"
+lazy val jogampVersion = "2.3.2"
 
 lazy val scoverageSettings = Seq(
   coverageMinimum := 10,
@@ -47,15 +48,15 @@ lazy val axleCore = Project(
     name := "axle-core",
     moduleName := "axle-core",
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % scalaTestVersion, // TODO % "test",
-      "org.typelevel" %% "discipline" % disciplineVersion,
-      "org.typelevel" %% "spire" % spireVersion,
-      "org.typelevel" %% "spire-laws" % spireVersion,
-      "org.typelevel" %% "cats-core" % catsVersion,
-      // "eu.timepit" %% "singleton-ops" % "0.0.4",
-      "org.scala-lang.modules" %% "scala-xml" % scalaXmlVersion,
+      "org.scalatest"          %% "scalatest"                % scalaTestVersion, // TODO % "test",
+      "org.typelevel"          %% "discipline"               % disciplineVersion,
+      "org.typelevel"          %% "spire"                    % spireVersion,
+      "org.typelevel"          %% "spire-laws"               % spireVersion,
+      "org.typelevel"          %% "cats-core"                % catsVersion,
+      // "eu.timepit"          %% "singleton-ops"            % "0.0.4",
+      "org.scala-lang.modules" %% "scala-xml"                % scalaXmlVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
-      "org.scalacheck" %% "scalacheck" % scalaCheckVersion % "test"
+      "org.scalacheck"         %% "scalacheck"               % scalaCheckVersion % "test"
   ))
   .settings(axleSettings:_*)
   .settings(commonJvmSettings:_*)
@@ -110,7 +111,7 @@ lazy val axleSettings = buildSettings ++ commonSettings ++ publishSettings ++ sc
 
 lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %% "scalacheck" % scalaCheckVersion,
-  libraryDependencies += "org.typelevel" %% "discipline" % disciplineVersion
+  libraryDependencies += "org.typelevel"  %% "discipline" % disciplineVersion
 )
 
 lazy val axleAlgorithms = Project(
@@ -151,8 +152,8 @@ lazy val axleJoda = Project(
 ).settings(
   name := "axle-joda",
   libraryDependencies ++= Seq(
-    "joda-time" % "joda-time" % jodaTimeVersion % "provided",
-    "org.joda" % "joda-convert" % jodaConvertVersion % "provided"
+    "joda-time" % "joda-time"    % jodaTimeVersion    % "provided",
+    "org.joda"  % "joda-convert" % jodaConvertVersion % "provided"
   )
 ).dependsOn(axleCore)
 
@@ -163,7 +164,7 @@ lazy val axleJblas = Project(
 ).settings(
   name := "axle-jblas",
   libraryDependencies ++= Seq(
-    "org.jblas" % "jblas" % jblasVersion % "provided"
+    "org.jblas"   % "jblas"           % jblasVersion % "provided"
   )
 ).dependsOn(axleCore)
 
@@ -175,9 +176,9 @@ lazy val axleJung = Project(
   name := "axle-jung",
   libraryDependencies ++= Seq(
     "net.sf.jung" % "jung-algorithms" % jungVersion % "provided",
-    "net.sf.jung" % "jung-api" % jungVersion % "provided",
+    "net.sf.jung" % "jung-api"        % jungVersion % "provided",
     "net.sf.jung" % "jung-graph-impl" % jungVersion % "provided",
-    "net.sf.jung" % "jung-io" % jungVersion % "provided"
+    "net.sf.jung" % "jung-io"         % jungVersion % "provided"
   )
 ).dependsOn(axleCore)
 
@@ -199,18 +200,20 @@ lazy val axleVisualize = Project(
 ).settings(
   name := "axle-visualize",
   libraryDependencies ++= Seq(
-    "net.sf.jung" % "jung-visualization" % jungVersion % "provided",
-    "net.sf.jung" % "jung-algorithms" % jungVersion % "provided",
-    "net.sf.jung" % "jung-api" % jungVersion % "provided",
-    "net.sf.jung" % "jung-graph-impl" % jungVersion % "provided",
-    "net.sf.jung" % "jung-io" % jungVersion % "provided",
-    "joda-time" % "joda-time" % jodaTimeVersion % "provided",
-    "org.joda" % "joda-convert" % jodaConvertVersion % "provided",
-    "org.jblas" % "jblas" % jblasVersion % "provided",
-    "com.typesafe.akka" %% "akka-actor" % akkaVersion % "provided",
-    "com.typesafe.akka" %% "akka-stream" % akkaVersion % "provided",
-    "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion % "provided", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
-    "org.jogamp.jogl" % "jogl-all-main" % jogampVersion % "provided"
+    "net.sf.jung"        % "jung-visualization" % jungVersion        % "provided",
+    "net.sf.jung"        % "jung-algorithms"    % jungVersion        % "provided",
+    "net.sf.jung"        % "jung-api"           % jungVersion        % "provided",
+    "net.sf.jung"        % "jung-graph-impl"    % jungVersion        % "provided",
+    "net.sf.jung"        % "jung-io"            % jungVersion        % "provided",
+    "joda-time"          % "joda-time"          % jodaTimeVersion    % "provided",
+    "org.joda"           % "joda-convert"       % jodaConvertVersion % "provided",
+    "org.jblas"          % "jblas"              % jblasVersion       % "provided",
+    "io.monix"           %% "monix-reactive"    % monixVersion,
+    "io.monix"           %% "monix-cats"        % monixVersion,
+//    "com.typesafe.akka"  %% "akka-actor"        % akkaVersion        % "provided",
+//    "com.typesafe.akka"  %% "akka-stream"       % akkaVersion        % "provided",
+    "org.jogamp.gluegen" % "gluegen-rt-main"    % jogampVersion      % "provided", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
+    "org.jogamp.jogl"    % "jogl-all-main"      % jogampVersion      % "provided"
   )
 ).dependsOn(axleCore, axleJung, axleAlgorithms, axleJoda)
 
@@ -221,18 +224,18 @@ lazy val axleTest = Project(
 ).settings(
   name := "axle-test",
   libraryDependencies ++= Seq(
-    "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-    "org.jblas" % "jblas" % jblasVersion,
-    "joda-time" % "joda-time" % jodaTimeVersion,
-    "org.joda" % "joda-convert" % jodaConvertVersion,
-    "net.sf.jung" % "jung-visualization" % jungVersion,
-    "net.sf.jung" % "jung-algorithms" % jungVersion,
-    "net.sf.jung" % "jung-api" % jungVersion,
-    "net.sf.jung" % "jung-graph-impl" % jungVersion,
-    "net.sf.jung" % "jung-io" % jungVersion,
-    "org.jogamp.gluegen" % "gluegen-rt-main" % jogampVersion,
-    "org.jogamp.jogl" % "jogl-all-main" % jogampVersion
+    "com.typesafe.akka"  %% "akka-actor"         % akkaVersion,
+    "com.typesafe.akka"  %% "akka-stream"        % akkaVersion,
+    "org.jblas"          %  "jblas"              % jblasVersion,
+    "joda-time"          %  "joda-time"          % jodaTimeVersion,
+    "org.joda"           %  "joda-convert"       % jodaConvertVersion,
+    "net.sf.jung"        %  "jung-visualization" % jungVersion,
+    "net.sf.jung"        %  "jung-algorithms"    % jungVersion,
+    "net.sf.jung"        %  "jung-api"           % jungVersion,
+    "net.sf.jung"        %  "jung-graph-impl"    % jungVersion,
+    "net.sf.jung"        %  "jung-io"            % jungVersion,
+    "org.jogamp.gluegen" %  "gluegen-rt-main"    % jogampVersion,
+    "org.jogamp.jogl"    %  "jogl-all-main"      % jogampVersion
   )
 ).dependsOn(
   axleCore,

@@ -2,24 +2,19 @@ package axle.awt
 
 import javax.swing.JPanel
 import java.awt._
-import axle.visualize._
-import axle.visualize.element._
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import scala.reflect.ClassTag
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
+import monix.reactive._
 
-import akka.pattern.ask
-import axle.actor.Defaults.askTimeout
-import axle.visualize.DataFeedProtocol.Fetch
+import axle.visualize._
+import axle.visualize.element._
 
-case class ScatterPlotComponent[S, X, Y, D: ClassTag](
-  plot: ScatterPlot[S, X, Y, D])
-    extends JPanel
-    with Fed[D] {
+case class ScatterPlotComponent[S, X, Y, D](
+  plot: ScatterPlot[S, X, Y, D],
+  dataUpdatesOpt: Option[Observable[D]] = None)
+    extends JPanel {
 
   def initialValue = plot.data
 
@@ -29,11 +24,7 @@ case class ScatterPlotComponent[S, X, Y, D: ClassTag](
 
   override def paintComponent(g: Graphics): Unit = {
 
-    val data = feeder map { dataFeedActor =>
-      val dataFuture = (dataFeedActor ? Fetch()).mapTo[D]
-      // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-      Await.result(dataFuture, 1.seconds)
-    } getOrElse (plot.data)
+    val data: D = plot.data // TODO refresh
 
     val g2d = g.asInstanceOf[Graphics2D]
 

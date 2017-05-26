@@ -4,28 +4,18 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
-
-import akka.pattern.ask
-import axle.actor.Defaults.askTimeout
-import axle.visualize.DataFeedProtocol.Fetch
-import axle.visualize.Fed
-import axle.visualize.Plot
-import axle.visualize.PlotView
-import axle.visualize.element.DataLines
-import axle.visualize.element.HorizontalLine
-import axle.visualize.element.Key
-import axle.visualize.element.Text
-import axle.visualize.element.VerticalLine
-import axle.visualize.element.XTics
-import axle.visualize.element.YTics
 import javax.swing.JPanel
 
+import monix.reactive._
+
+import axle.visualize.Plot
+import axle.visualize.PlotView
+import axle.visualize.element._
+
 case class PlotComponent[S, X, Y, D](
-  plot: Plot[S, X, Y, D])
-    extends JPanel
-    with Fed[Seq[(S, D)]] {
+  plot: Plot[S, X, Y, D],
+  dataUpdatesOpt: Option[Observable[Seq[(S, D)]]] = None)
+    extends JPanel {
 
   def initialValue = plot.initialValue
 
@@ -35,11 +25,7 @@ case class PlotComponent[S, X, Y, D](
 
   override def paintComponent(g: Graphics): Unit = {
 
-    val data = feeder map { dataFeedActor =>
-      val dataFuture = (dataFeedActor ? Fetch()).mapTo[List[(S, D)]]
-      // Getting rid of this Await is awaiting a better approach to integrating AWT and Akka
-      Await.result(dataFuture, 1.seconds)
-    } getOrElse (plot.initialValue)
+    val data: Seq[(S, D)] = plot.initialValue // TODO refresh
 
     val g2d = g.asInstanceOf[Graphics2D]
 

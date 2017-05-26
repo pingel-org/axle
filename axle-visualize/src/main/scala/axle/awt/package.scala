@@ -1,17 +1,34 @@
 
 package axle
 
-import cats.Show
-import spire.math.abs
-import spire.math.min
 import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Color
 import java.awt.Component
 import java.awt.Graphics2D
 import java.io.File
-import axle.visualize.ScaledArea2D
+
+import javax.imageio.ImageIO
+
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
+
 import scala.reflect.ClassTag
+
+import cats.kernel.Eq
+import cats.implicits._
+import cats.Show
+
+import monix.execution.Cancelable
+import monix.execution.Scheduler
+
+import spire.math.abs
+import spire.math.min
+import spire.algebra.Field
+import spire.implicits.DoubleAlgebra
+import spire.implicits.eqOps
+
+import axle.visualize.ScaledArea2D
 import axle.algebra.DirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
@@ -22,8 +39,6 @@ import axle.quanta.UnittedQuantity
 import axle.visualize.angleDouble
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
-import axle.visualize.Fed
-import axle.visualize.FrameRepaintingActor
 import axle.visualize.KMeansVisualization
 import axle.visualize.Plot
 import axle.visualize.ScatterPlot
@@ -40,18 +55,6 @@ import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import javax.imageio.ImageIO
-import spire.algebra.Field
-import spire.implicits.DoubleAlgebra
-import spire.implicits.eqOps
-import cats.kernel.Eq
-import cats.implicits._
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
-
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.Props
 
 package object awt {
 
@@ -70,24 +73,20 @@ package object awt {
     t: T,
     f: D => D,
     interval: UnittedQuantity[Time, Double])(
-      implicit system: ActorSystem,
-      tc: TimeConverter[Double]): ActorRef = {
+      implicit scheduler: Scheduler,
+      tc: TimeConverter[Double]): Cancelable = {
 
     val draw = Draw[T]
-    draw.component(t) match {
-      case fed: Component with Fed[D] => {
-        val minSize = fed.getMinimumSize
-        val frame = AxleFrame(minSize.width, minSize.height)
-        val feeder = fed.setFeeder(f, interval, system)
-        system.actorOf(Props(classOf[FrameRepaintingActor], frame, fed.feeder.get))
-        frame.initialize()
-        val rc = frame.add(fed)
-        rc.setVisible(true)
-        frame.setVisible(true)
-        feeder
-      }
-      case _ => null
-    }
+    val component = draw.component(t)
+    val minSize = component.getMinimumSize
+    val frame = AxleFrame(minSize.width, minSize.height)
+    // TODO use f t and interval
+    frame.initialize()
+    val rc = frame.add(component)
+    rc.setVisible(true)
+    frame.setVisible(true)
+    feeder
+    ???
   }
 
   val fontMemo = scala.collection.mutable.Map.empty[(String, Int, Boolean), Font]
