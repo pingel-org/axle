@@ -77,7 +77,7 @@ package object awt {
       tc: TimeConverter[Double]): Cancelable = {
 
     val draw = Draw[T]
-    val component = draw.component(t)
+    val component: Component = draw.component(t)
     val minSize = component.getMinimumSize
     val frame = AxleFrame(minSize.width, minSize.height)
     // TODO use f t and interval
@@ -85,7 +85,6 @@ package object awt {
     val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
-    feeder
     ???
   }
 
