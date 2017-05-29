@@ -9,7 +9,7 @@ import cats.Show
 import cats.kernel.Eq
 
 case class Plot[S, X, Y, D](
-    initialValue: Seq[(S, D)],
+    dataFn: Function0[Seq[(S, D)]],
     connect: Boolean = true,
     drawKey: Boolean = true,
     width: Int = 700,
@@ -31,7 +31,9 @@ case class Plot[S, X, Y, D](
     xAxisLabel: Option[String] = None,
     yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
-        implicit val sShow: Show[S],
+        implicit val eqS: Eq[S],
+        val eqD: Eq[D],
+        val sShow: Show[S],
         val xZero: Zero[X],
         val xts: Tics[X],
         val xEq: Eq[X],

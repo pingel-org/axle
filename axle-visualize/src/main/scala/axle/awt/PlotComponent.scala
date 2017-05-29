@@ -6,18 +6,16 @@ import java.awt.Graphics2D
 
 import javax.swing.JPanel
 
-import monix.reactive._
-
+import cats.implicits._
+import axle.eqSeq
 import axle.visualize.Plot
 import axle.visualize.PlotView
 import axle.visualize.element._
 
-case class PlotComponent[S, X, Y, D](
-  plot: Plot[S, X, Y, D],
-  dataUpdatesOpt: Option[Observable[Seq[(S, D)]]] = None)
+case class PlotComponent[S, X, Y, D](plot: Plot[S, X, Y, D])
     extends JPanel {
 
-  def initialValue = plot.initialValue
+  var drawnData: Option[Seq[(S, D)]] = None
 
   import plot._
 
@@ -25,24 +23,31 @@ case class PlotComponent[S, X, Y, D](
 
   override def paintComponent(g: Graphics): Unit = {
 
-    val data: Seq[(S, D)] = plot.initialValue // TODO refresh
+    val nextData: Option[Seq[(S, D)]] = Option(dataFn.apply)
 
-    val g2d = g.asInstanceOf[Graphics2D]
+    if (nextData.isDefined &&
+      (drawnData.isEmpty || (drawnData.get === nextData.get))) {
 
-    val view = PlotView(plot, data)
-    import view._
+      val data = nextData.get
 
-    Paintable[HorizontalLine[X, Y]].paint(hLine, g2d)
-    Paintable[VerticalLine[X, Y]].paint(vLine, g2d)
-    Paintable[XTics[X, Y]].paint(xTics, g2d)
-    Paintable[YTics[X, Y]].paint(yTics, g2d)
-    Paintable[DataLines[S, X, Y, D]].paint(dataLines, g2d)
+      val g2d = g.asInstanceOf[Graphics2D]
 
-    titleText.foreach(Paintable[Text].paint(_, g2d))
-    xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
-    yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
-    view.keyOpt.foreach(Paintable[Key[S, X, Y, D]].paint(_, g2d))
+      val view = PlotView(plot, data)
+      import view._
 
+      Paintable[HorizontalLine[X, Y]].paint(hLine, g2d)
+      Paintable[VerticalLine[X, Y]].paint(vLine, g2d)
+      Paintable[XTics[X, Y]].paint(xTics, g2d)
+      Paintable[YTics[X, Y]].paint(yTics, g2d)
+      Paintable[DataLines[S, X, Y, D]].paint(dataLines, g2d)
+
+      titleText.foreach(Paintable[Text].paint(_, g2d))
+      xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+      yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+      view.keyOpt.foreach(Paintable[Key[S, X, Y, D]].paint(_, g2d))
+
+      drawnData = nextData
+    }
   }
 
 }

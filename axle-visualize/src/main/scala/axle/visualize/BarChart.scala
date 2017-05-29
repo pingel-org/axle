@@ -13,7 +13,7 @@ import cats.kernel.Eq
 import cats.kernel.Order
 
 case class BarChart[C, Y, D, H](
-    initialValue: D,
+    dataFn: Function0[D],
     drawKey: Boolean = true,
     width: Int = 700,
     height: Int = 600,
@@ -35,7 +35,8 @@ case class BarChart[C, Y, D, H](
     colorOf: C => Color = (c: C) => Color.blue,
     hoverOf: C => Option[H] = (c: C) => None,
     linkOf: C => Option[(java.net.URL, Color)] = (c: C) => None)(
-        implicit val showC: Show[C],
+        implicit val eqD: Eq[D],
+        val showC: Show[C],
         val showH: Show[H],
         val zeroY: Zero[Y],
         val orderY: Order[Y],

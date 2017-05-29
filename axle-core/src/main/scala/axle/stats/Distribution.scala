@@ -43,6 +43,19 @@ trait Distribution0[A, N] extends Distribution[A, N] {
 
 }
 
+object Distribution0 {
+
+  import cats.Eq
+  import cats.implicits._
+
+  implicit def eqDistribution0[A: Eq, N: Eq]: Eq[Distribution0[A, N]] = new Eq[Distribution0[A, N]] {
+
+    def eqv(x: Distribution0[A, N], y: Distribution0[A, N]): Boolean = 
+      x.toMap === y.toMap
+
+  }
+}
+
 trait Distribution1[A, G1, N] extends Distribution[A, N] {
 
   def observe(gv: G1): A

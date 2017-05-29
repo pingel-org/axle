@@ -38,6 +38,13 @@ package object axle {
       def show(d: Double): String = fmt.format(d)
     }
 
+  // missing Eq witnesses
+
+  implicit def eqSeq[T](implicit eqT: Eq[T]): Eq[Seq[T]] = new Eq[Seq[T]] {
+    def eqv(x: Seq[T], y: Seq[T]): Boolean =
+      x.length === y.length && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
+  }
+
   // basic functions
 
   def ignore[T]: T => Unit = (t: T) => {}

@@ -39,7 +39,7 @@ class PlotWavesSpec extends FunSuite with Matchers {
     import cats.implicits._
 
     val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
-      waves,
+      () => waves,
       connect = true,
       colorOf = _ => Color.black,
       title = Some("Random Waves"),

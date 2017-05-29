@@ -13,6 +13,7 @@ import javax.imageio.ImageIO
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
+import scala.concurrent.duration._
 import scala.reflect.ClassTag
 
 import cats.kernel.Eq
@@ -21,6 +22,7 @@ import cats.Show
 
 import monix.execution.Cancelable
 import monix.execution.Scheduler
+import monix.reactive.Observable
 
 import spire.math.abs
 import spire.math.min
@@ -28,37 +30,18 @@ import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
 
-import axle.visualize.ScaledArea2D
 import axle.algebra.DirectedGraph
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.quanta.Angle
-import axle.quanta.Time
-import axle.quanta.TimeConverter
 import axle.quanta.UnittedQuantity
-import axle.visualize.angleDouble
-import axle.visualize.BarChart
-import axle.visualize.BarChartGrouped
-import axle.visualize.KMeansVisualization
-import axle.visualize.Plot
-import axle.visualize.ScatterPlot
-import axle.visualize.Point2D
-import axle.visualize.element.BarChartGroupedKey
-import axle.visualize.element.BarChartKey
-import axle.visualize.element.DataLines
-import axle.visualize.element.DataPoints
-import axle.visualize.element.HorizontalLine
-import axle.visualize.element.Key
-import axle.visualize.element.Oval
-import axle.visualize.element.Rectangle
-import axle.visualize.element.Text
-import axle.visualize.element.VerticalLine
-import axle.visualize.element.XTics
-import axle.visualize.element.YTics
+import axle.visualize._
+import axle.visualize.element._
 
 package object awt {
 
-  def draw[T: Draw](t: T): Unit = {
+  def draw[T: Draw](t: T): AxleFrame = {
+
     val draw = Draw[T]
     val component = draw.component(t)
     val minSize = component.getMinimumSize
@@ -67,25 +50,27 @@ package object awt {
     val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
+    frame
   }
 
-  def play[T: Draw, D: ClassTag](
-    t: T,
-    f: D => D,
-    interval: UnittedQuantity[Time, Double])(
-      implicit scheduler: Scheduler,
-      tc: TimeConverter[Double]): Cancelable = {
+  def play[T: Draw](t: T)(implicit scheduler: Scheduler): (AxleFrame, Cancelable) = {
 
     val draw = Draw[T]
     val component: Component = draw.component(t)
     val minSize = component.getMinimumSize
     val frame = AxleFrame(minSize.width, minSize.height)
-    // TODO use f t and interval
+
     frame.initialize()
     val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
-    ???
+    frame.repaint()
+
+    val cancelPainting = Observable.interval(42.milliseconds).foreach(t => {
+      frame.repaint()
+    })
+
+    (frame, cancelPainting)
   }
 
   val fontMemo = scala.collection.mutable.Map.empty[(String, Int, Boolean), Font]

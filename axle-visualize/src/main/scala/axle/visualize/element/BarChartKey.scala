@@ -8,6 +8,6 @@ case class BarChartKey[C, Y, D, H](
     title: Option[String])(
         implicit dataView: DataView[C, Y, D]) {
 
-  val slices = dataView.keys(chart.initialValue)
+  val slices = dataView.keys(chart.dataFn.apply)
 
 }

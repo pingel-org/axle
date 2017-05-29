@@ -390,7 +390,7 @@ object SVG {
 
       import plot._
 
-      val view = PlotView(plot, plot.initialValue)
+      val view = PlotView(plot, plot.dataFn.apply)
 
       import view._
 
@@ -486,7 +486,7 @@ object SVG {
 
         import chart._
 
-        val view = BarChartView(chart, chart.initialValue)
+        val view = BarChartView(chart, chart.dataFn.apply)
 
         import view._
 
@@ -530,7 +530,7 @@ object SVG {
 
         import chart._
 
-        val view = BarChartGroupedView(chart, chart.initialValue)
+        val view = BarChartGroupedView(chart, chart.dataFn.apply)
 
         import view._
 

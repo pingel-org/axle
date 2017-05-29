@@ -6,7 +6,7 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
-## 0.3.5 (May 22, 2017)
+## 0.3.5 (May 23, 2017)
 * Move math methods from `axle.algebra._` package object to `axle.math._`
 
 ## 0.3.4 (May 22, 2017)
