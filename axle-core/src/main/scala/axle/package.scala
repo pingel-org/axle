@@ -1,5 +1,6 @@
 import scala.collection.mutable.Buffer
 
+import scala.collection.immutable.TreeMap
 import scala.language.implicitConversions
 import cats.Show
 import cats.kernel.Eq
@@ -40,10 +41,23 @@ package object axle {
 
   // missing Eq witnesses
 
-  implicit def eqSeq[T](implicit eqT: Eq[T]): Eq[Seq[T]] = new Eq[Seq[T]] {
-    def eqv(x: Seq[T], y: Seq[T]): Boolean =
-      x.length === y.length && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
-  }
+  implicit def eqSeq[T](implicit eqT: Eq[T]): Eq[Seq[T]] =
+    new Eq[Seq[T]] {
+      def eqv(x: Seq[T], y: Seq[T]): Boolean =
+        x.length === y.length && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
+    }
+
+  implicit def eqIterable[T](implicit eqT: Eq[T]): Eq[Iterable[T]] =
+    new Eq[Iterable[T]] {
+      def eqv(x: Iterable[T], y: Iterable[T]): Boolean =
+        x.size === y.size && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
+    }
+
+  implicit def eqTreeMap[K, V](implicit eqK: Eq[K], eqV: Eq[V]): Eq[TreeMap[K, V]] =
+    new Eq[TreeMap[K, V]] {
+      def eqv(x: TreeMap[K, V], y: TreeMap[K, V]): Boolean =
+        x.keys === y.keys && x.keySet.forall(k => x.get(k) === y.get(k))
+    }
 
   // basic functions
 
