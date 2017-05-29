@@ -20,7 +20,6 @@ lazy val jblasVersion = "1.2.4"
 lazy val jacksonVersion = "2.8.4"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
-lazy val akkaVersion = "2.4.17"
 lazy val monixVersion = "2.3.0"
 lazy val jogampVersion = "2.3.2"
 
@@ -210,8 +209,6 @@ lazy val axleVisualize = Project(
     "org.jblas"          % "jblas"              % jblasVersion       % "provided",
     "io.monix"           %% "monix-reactive"    % monixVersion,
     "io.monix"           %% "monix-cats"        % monixVersion,
-//    "com.typesafe.akka"  %% "akka-actor"        % akkaVersion        % "provided",
-//    "com.typesafe.akka"  %% "akka-stream"       % akkaVersion        % "provided",
     "org.jogamp.gluegen" % "gluegen-rt-main"    % jogampVersion      % "provided", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
     "org.jogamp.jogl"    % "jogl-all-main"      % jogampVersion      % "provided"
   )
@@ -224,8 +221,6 @@ lazy val axleTest = Project(
 ).settings(
   name := "axle-test",
   libraryDependencies ++= Seq(
-    "com.typesafe.akka"  %% "akka-actor"         % akkaVersion,
-    "com.typesafe.akka"  %% "akka-stream"        % akkaVersion,
     "org.jblas"          %  "jblas"              % jblasVersion,
     "joda-time"          %  "joda-time"          % jodaTimeVersion,
     "org.joda"           %  "joda-convert"       % jodaConvertVersion,
