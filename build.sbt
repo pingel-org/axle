@@ -64,7 +64,7 @@ lazy val axleCore = Project(
       "net.sf.jung"            % "jung-algorithms"           % jungVersion        % "provided",
       "net.sf.jung"            % "jung-api"                  % jungVersion        % "provided",
       "net.sf.jung"            % "jung-graph-impl"           % jungVersion        % "provided",
-      "net.sf.jung"            % "jung-io"                   % jungVersion        % "provided"
+      "net.sf.jung"            % "jung-io"                   % jungVersion        % "provided",
       // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.gluegen"     % "gluegen-rt-main"           % jogampVersion      % "provided",
       "org.jogamp.jogl"        % "jogl-all-main"             % jogampVersion      % "provided"
