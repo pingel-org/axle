@@ -31,11 +31,14 @@ Visualizations
 Animation
 ---------
 
-`Plot`, `BarChart`, and `BarChartGrouped` support animation.
+`Plot`, `BarChart`, `BarChartGrouped`, and `ScatterPlot` support animation.
 The visualizing frame polls for updates at a rate of approximately 24 Hz (every 42 ms).
 
 The `play` command requires the same first argument as `show` does.
-Additionally, `play` requires a `refresher` function that takes the
-previous data and returns the new data.
-The third argument is an interval (of type `Time.Q`) that denotes the period at which values are recomputed.
-The fourth argument is an `akka.actor.ActorSystem`.
+Additionally, `play` requires a `Observable[D]` function that represents the stream of data updates.
+The implicit argument is a `monix.execution.Scheduler`.
+
+An `axle.reactive.CurrentValueSubscriber` based on the `Observable[D]` can be used to create the
+`dataFn` read by the visualization.
+
+See [Grouped Bar Charts](/tutorial/grouped_bar_charts/) for a full example of animation.

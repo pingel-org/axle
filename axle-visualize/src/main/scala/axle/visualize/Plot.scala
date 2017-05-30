@@ -31,9 +31,7 @@ case class Plot[S, X, Y, D](
     xAxisLabel: Option[String] = None,
     yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
-        implicit val eqS: Eq[S],
-        val eqD: Eq[D],
-        val sShow: Show[S],
+        implicit val sShow: Show[S],
         val xZero: Zero[X],
         val xts: Tics[X],
         val xEq: Eq[X],

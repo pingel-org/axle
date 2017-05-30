@@ -6,6 +6,10 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.3.6 (May 29, 2017)
+* Replace Akka with Monix for animating visualizations
+* `ScatterPlot` `play` to awt
+
 ## 0.3.5 (May 23, 2017)
 * Move math methods from `axle.algebra._` package object to `axle.math._`
 

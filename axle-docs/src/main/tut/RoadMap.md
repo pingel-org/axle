@@ -6,11 +6,6 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.3.6 (May 29, 2017)
-* Replace Akka with Monix for animating visualizations
-* `ScatterPlot` `play` to awt
-* Update animation docs: Visualize.md and GroupedBarCharts.md
-
 ## 0.4.0 (May 31, 2017)
 * -algorithm and -visualize should go to axle-core
 * -games and -languages and axle.data should go to axle-examples

@@ -45,7 +45,7 @@ import axle.visualize._
 
 ```tut:book
 val chart = BarChart[Int, Int, Map[Int, Int], String](
-  histogram,
+  () => histogram,
   colorOf = _ => Color.blue,
   xAxis = Some(0),
   title = Some("d6 + d6"),
@@ -100,7 +100,7 @@ import spire.implicits.IntAlgebra
 
 ```tut:book
 val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
-  distribution,
+  () => distribution,
   colorOf = _ => Color.blue,
   xAxis = Some(Rational(0)),
   title = Some("d6 + d6"),

@@ -60,7 +60,7 @@ import axle.visualize.Color._
 val colors = List(black, red, blue, yellow, green)
 
 val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int], String](
-  data.tally.withDefaultValue(0),
+  () => data.tally.withDefaultValue(0),
   title = Some("Poker Hands"),
   drawKey = false,
   yAxisLabel = Some("instances of category by hand size (1000 trials each)"),
