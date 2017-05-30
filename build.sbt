@@ -60,14 +60,14 @@ lazy val axleCore = Project(
       "org.scalacheck"         %% "scalacheck"               % scalaCheckVersion  % "test",
       "org.typelevel"          %% "discipline"               % disciplineVersion,
       // needed for visualizations
-      "net.sf.jung"            % "jung-visualization"        % jungVersion        % "provided",
-      "net.sf.jung"            % "jung-algorithms"           % jungVersion        % "provided",
-      "net.sf.jung"            % "jung-api"                  % jungVersion        % "provided",
-      "net.sf.jung"            % "jung-graph-impl"           % jungVersion        % "provided",
-      "net.sf.jung"            % "jung-io"                   % jungVersion        % "provided",
+      "net.sf.jung"            %  "jung-visualization"       % jungVersion        % "provided",
+      "net.sf.jung"            %  "jung-algorithms"          % jungVersion        % "provided",
+      "net.sf.jung"            %  "jung-api"                 % jungVersion        % "provided",
+      "net.sf.jung"            %  "jung-graph-impl"          % jungVersion        % "provided",
+      // "net.sf.jung"            %  "jung-io"                  % jungVersion        % "provided",
       // other jogl deps: http://jogamp.org/wiki/index.php/Maven
-      "org.jogamp.gluegen"     % "gluegen-rt-main"           % jogampVersion      % "provided",
-      "org.jogamp.jogl"        % "jogl-all-main"             % jogampVersion      % "provided"
+      "org.jogamp.gluegen"     %  "gluegen-rt-main"          % jogampVersion      % "provided",
+      "org.jogamp.jogl"        %  "jogl-all-main"            % jogampVersion      % "provided"
   ))
   .settings(axleSettings:_*)
   .settings(commonJvmSettings:_*)
@@ -120,11 +120,6 @@ lazy val commonJvmSettings = Seq(
 
 lazy val axleSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
-lazy val disciplineDependencies = Seq(
-  libraryDependencies += "org.scalacheck" %% "scalacheck" % scalaCheckVersion,
-  libraryDependencies += "org.typelevel"  %% "discipline" % disciplineVersion
-)
-
 lazy val axleJoda = Project(
   id = "axle-joda",
   base = file("axle-joda"),
@@ -174,7 +169,7 @@ lazy val axleTest = Project(
     "net.sf.jung"                  %  "jung-algorithms"      % jungVersion,
     "net.sf.jung"                  %  "jung-api"             % jungVersion,
     "net.sf.jung"                  %  "jung-graph-impl"      % jungVersion,
-    "net.sf.jung"                  %  "jung-io"              % jungVersion,
+    // "net.sf.jung"                  %  "jung-io"              % jungVersion,
     "org.jogamp.gluegen"           %  "gluegen-rt-main"      % jogampVersion,
     "org.jogamp.jogl"              %  "jogl-all-main"        % jogampVersion
   )
