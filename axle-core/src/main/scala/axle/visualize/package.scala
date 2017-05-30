@@ -1,14 +1,14 @@
 package axle
 
-import edu.uci.ics.jung.graph.DirectedSparseGraph
+import edu.uci.ics.jung.graph.DirectedSparseGraph // for the angleDouble converter
 import cats.kernel.Eq
 import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import axle.algebra.DirectedGraph
 import axle.quanta.Angle
 import axle.quanta.UnitOfMeasurement
-import axle.jung.directedGraphJung
 import axle.visualize.Color._
+import axle.jung.undirectedGraphJung
 
 package object visualize {
 

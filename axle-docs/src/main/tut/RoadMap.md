@@ -7,8 +7,8 @@ permalink: /road_map/
 See [Release Notes](/release_notes/) for the record of previously released features.
 
 ## 0.4.0 (May 31, 2017)
-* -algorithm and -visualize should go to axle-core
-* -games and -languages and axle.data should go to axle-examples
+* axle-visualize and most of axle-algorithm merged with axle-core
+* create new axle-??? formed from axle-{test, games, languages} and parts of algorithms
 * Remove Spark spoke
 * Publish Scala 2.12 artifacts
 
