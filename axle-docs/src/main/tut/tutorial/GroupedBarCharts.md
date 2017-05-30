@@ -118,7 +118,7 @@ val dataUpdates: Observable[Map[String, Double]] = intervalScan(initial, tick, 1
 
 Create `CurrentValueSubscriber`, which will be used by the `BarChart` to get the latest value
 
-```tut:book
+```scala
 val cvSub = new CurrentValueSubscriber[Map[String, Double]]()
 val cvCancellable = dataUpdates.subscribe(cvSub)
 
@@ -131,17 +131,13 @@ val chart = BarChart[String, Double, Map[String, Double], String](
 Animate
 
 ```scala
-val (frame, paintCancellable) = play(chart, dataUpdates)
+val paintCancellable = play(chart, dataUpdates)
 ```
 
 Tear down the resources
 
 ```scala
 paintCancellable.cancel()
-frame.setVisible(false)
-```
-
-```tut:silent
 cvCancellable.cancel()
 ```
 

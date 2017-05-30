@@ -151,7 +151,7 @@ val dataUpdates: Observable[Seq[(String, TreeMap[DateTime, Double])]] =
 
 Create `CurrentValueSubscriber`, which will be used by the `Plot` to get the latest values
 
-```tut:book
+```scala
 val cvSub = new CurrentValueSubscriber[Seq[(String, TreeMap[DateTime, Double])]]()
 val cvCancellable = dataUpdates.subscribe(cvSub)
 
@@ -171,16 +171,12 @@ val plot = Plot(
 Animate
 
 ```scala
-val (frame, paintCancellable) = play(plot, dataUpdates)
+val paintCancellable = play(plot, dataUpdates)
 ```
 
 Tear down resources
 
 ```scala
 paintCancellable.cancel()
-frame.setVisible(false)
-```
-
-```tut:silent
 cvCancellable.cancel()
 ```
