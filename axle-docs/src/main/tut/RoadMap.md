@@ -6,13 +6,9 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.4.0 (May 31, 2017)
-* -algorithm and -visualize should go to axle-core
-* -games and -languages and axle.data should go to axle-examples
+## 0.4.x (Summer 2017)
 * Remove Spark spoke
 * Publish Scala 2.12 artifacts
-
-## 0.4.x (Summer 2017)
 * Fix implicit numeric widening warnings
 * Remove Spark impacts on Functor, etc, and just use Cats versions
 * `axle.web.Table` and `HtmlFrom[Table[T]`

@@ -29,7 +29,7 @@ package object axle {
 
   // missing Show witnesses
 
-  implicit val showNode: Show[xml.Node] = Show.fromToString[xml.Node]
+  implicit val showNode: Show[scala.xml.Node] = Show.fromToString[scala.xml.Node]
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
@@ -208,6 +208,6 @@ package object axle {
 
   def print[T: Show](t: T): Unit = println(string(t))
 
-  def html[T: HtmlFrom](t: T): xml.Node = HtmlFrom[T].toHtml(t)
+  def html[T: HtmlFrom](t: T): scala.xml.Node = HtmlFrom[T].toHtml(t)
 
 }
