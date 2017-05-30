@@ -170,14 +170,17 @@ val plot = Plot(
 
 Animate
 
-```tut:silent
+```scala
 val (frame, paintCancellable) = play(plot, dataUpdates)
 ```
 
 Tear down resources
 
-```tut:silent
+```scala
 paintCancellable.cancel()
 frame.setVisible(false)
+```
+
+```tut:silent
 cvCancellable.cancel()
 ```

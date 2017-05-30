@@ -130,14 +130,18 @@ val chart = BarChart[String, Double, Map[String, Double], String](
 
 Animate
 
-```tut:book
+```scala
 val (frame, paintCancellable) = play(chart, dataUpdates)
 ```
 
 Tear down the resources
 
-```tut:book
+```scala
 paintCancellable.cancel()
 frame.setVisible(false)
+```
+
+```tut:silent
 cvCancellable.cancel()
 ```
+
