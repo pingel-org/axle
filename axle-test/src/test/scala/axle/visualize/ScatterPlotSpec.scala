@@ -27,7 +27,7 @@ class ScatterPlotSpec extends FunSuite with Matchers {
 
     import cats.implicits._
     val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int]](
-      data,
+      () => data,
       colorOf = colorer,
       labelOf = labeller)
 

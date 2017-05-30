@@ -27,7 +27,7 @@ class PokerHandChartSpec extends FunSuite with Matchers {
     import cats.implicits._
 
     val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int], String](
-      data.tally.withDefaultValue(0),
+      () => data.tally.withDefaultValue(0),
       colorOf = (g: PokerHandCategory, s: Int) => Color.black,
       title = Some("Poker Hands"),
       yAxisLabel = Some("instances of hand category by initial hand size (1000 trial for each hand size)"),

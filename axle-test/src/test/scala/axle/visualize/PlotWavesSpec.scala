@@ -9,6 +9,7 @@ import org.scalatest._
 import cats.Order.catsKernelOrderingForOrder
 import spire.math.sin
 import spire.implicits.DoubleAlgebra
+import axle.eqTreeMap
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
@@ -39,7 +40,7 @@ class PlotWavesSpec extends FunSuite with Matchers {
     import cats.implicits._
 
     val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
-      waves,
+      () => waves,
       connect = true,
       colorOf = _ => Color.black,
       title = Some("Random Waves"),

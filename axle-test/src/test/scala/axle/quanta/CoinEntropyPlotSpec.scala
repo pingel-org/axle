@@ -52,7 +52,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
     // implicit val pdv = PlotDataView.treeMapDataView[Rational, UnittedQuantity[Information, Double]]
 
     val plot = Plot[String, Rational, UnittedQuantity[Information, Double], D](
-      List(("h", hm)),
+      () => List(("h", hm)),
       connect = true,
       colorOf = _ => Color.black,
       drawKey = false,

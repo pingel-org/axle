@@ -22,7 +22,7 @@ class BarChartSpec extends FunSuite with Matchers {
       "coconut" -> 10.1)
 
     val chart = BarChart[String, Double, Map[String, Double], String](
-      sales,
+      () => sales,
       title = Some("fruit sales"),
       xAxis = Some(0d),
       labelAngle = Some(36d *: angleDouble.degree),
@@ -52,9 +52,10 @@ class BarChartSpec extends FunSuite with Matchers {
       ("coconut", 2012) -> 10.1)
 
     import cats.implicits._
+    import java.net.URL
 
     val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String](
-      sales,
+      () => sales,
       // xAxis = Some(0d),
       title = Some("fruit sales"),
       colorOf = (g: String, s: Int) => g match {
@@ -63,7 +64,7 @@ class BarChartSpec extends FunSuite with Matchers {
         case "coconut" => Color.brown
       },
       hoverOf = (g: String, s: Int) => Some(s"$g $s"),
-      linkOf = (g: String, s: Int) => Some((new java.net.URL(s"http://wikipedia.org/wiki/$g"), Color.lightGray)))
+      linkOf = (g: String, s: Int) => Some((new URL(s"http://wikipedia.org/wiki/$g"), Color.lightGray)))
 
     val filename = "fruit_sales_grouped.svg"
 
@@ -81,7 +82,7 @@ class BarChartSpec extends FunSuite with Matchers {
     } yield a + b
 
     val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
-      distribution,
+      () => distribution,
       xAxis = Some(Rational(0)),
       title = Some("d6 + d6"),
       labelAngle = Some(36d *: angleDouble.degree),

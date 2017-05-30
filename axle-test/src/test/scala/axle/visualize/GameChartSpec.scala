@@ -29,12 +29,12 @@ class GameChartSpec extends FunSuite with Matchers {
     PlotDataView.distribution0DataView[String, Int, Rational]
 
     val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
-      scoreD,
+      () => scoreD,
       drawKey = true,
       xAxis = Some(Rational(0)))
 
     val plot = Plot[String, Int, Rational, Distribution0[Int, Rational]](
-      Vector(("", scoreD)),
+      () => Vector(("", scoreD)),
       colorOf = _ => Color.black,
       drawKey = true,
       xAxis = Some(Rational(0)))
