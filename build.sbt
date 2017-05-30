@@ -52,6 +52,7 @@ lazy val axleCore = Project(
       "org.typelevel"          %% "spire"                    % spireVersion,
       "org.typelevel"          %% "spire-laws"               % spireVersion,
       "org.typelevel"          %% "cats-core"                % catsVersion,
+      "com.chuusai"            %% "shapeless"                % shapelessVersion,
       // "eu.timepit"          %% "singleton-ops"            % "0.0.4",
       "org.scala-lang.modules" %% "scala-xml"                % scalaXmlVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
@@ -112,17 +113,6 @@ lazy val disciplineDependencies = Seq(
   libraryDependencies += "org.scalacheck" %% "scalacheck" % scalaCheckVersion,
   libraryDependencies += "org.typelevel"  %% "discipline" % disciplineVersion
 )
-
-lazy val axleAlgorithms = Project(
-  id = "axle-algorithms",
-  base = file("axle-algorithms"),
-  settings = axleSettings
-).settings(
-  name := "axle-algorithms",
-  libraryDependencies ++= Seq(
-    "com.chuusai" %% "shapeless" % shapelessVersion
-  )
-).dependsOn(axleCore)
 
 lazy val axleLanguages = Project(
   id = "axle-languages",
@@ -212,7 +202,7 @@ lazy val axleVisualize = Project(
     "org.jogamp.gluegen" % "gluegen-rt-main"    % jogampVersion      % "provided", // other jogl deps: http://jogamp.org/wiki/index.php/Maven
     "org.jogamp.jogl"    % "jogl-all-main"      % jogampVersion      % "provided"
   )
-).dependsOn(axleCore, axleJung, axleAlgorithms, axleJoda)
+).dependsOn(axleCore, axleJung, axleJoda)
 
 lazy val axleTest = Project(
   id = "axle-test",
@@ -234,7 +224,6 @@ lazy val axleTest = Project(
   )
 ).dependsOn(
   axleCore,
-  axleAlgorithms,
   axleVisualize,
   axleJoda,
   axleJblas,
