@@ -53,7 +53,7 @@ package object awt {
     frame
   }
 
-  def play[T: Draw](t: T)(implicit scheduler: Scheduler): (AxleFrame, Cancelable) = {
+  def play[T: Draw, D](t: T, dataStream: Observable[D])(implicit scheduler: Scheduler): (AxleFrame, Cancelable) = {
 
     val draw = Draw[T]
     val component: Component = draw.component(t)
@@ -66,9 +66,12 @@ package object awt {
     frame.setVisible(true)
     frame.repaint()
 
-    val cancelPainting = Observable.interval(42.milliseconds).foreach(t => {
-      frame.repaint()
-    })
+    val frameTic = Observable.interval(42.milliseconds)
+
+    val cancelPainting =
+      Observable.zipMap2(dataStream, frameTic)({ case (d, t) => {} }).foreach(u => {
+        frame.repaint()
+      })
 
     (frame, cancelPainting)
   }

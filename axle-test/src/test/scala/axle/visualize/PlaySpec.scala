@@ -2,6 +2,7 @@ package axle.visualize
 
 import org.scalatest._
 
+import java.net.URL
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
 import spire.implicits.DoubleAlgebra
@@ -30,7 +31,7 @@ class PlaySpec extends FunSuite with Matchers {
 
     implicit val tr = Time.converterGraphK2[Double, DirectedSparseGraph]
     import tr._
-    val dataUpdates: Observable[Map[String, Double]] = intervalScan(sales, update, 1d *: second).take(10)
+    val dataUpdates: Observable[Map[String, Double]] = intervalScan(sales, update, 1d *: second)
 
     val cvSub = new CurrentValueSubscriber[Map[String, Double]]()
     val cvCancellable = dataUpdates.subscribe(cvSub)
@@ -41,9 +42,9 @@ class PlaySpec extends FunSuite with Matchers {
       xAxis = Some(0d),
       labelAngle = Some(36d *: angleDouble.degree),
       hoverOf = (c: String) => Some(c),
-      linkOf = (c: String) => Some((new java.net.URL(s"http://wikipedia.org/wiki/$c"), Color.lightGray)))
+      linkOf = (c: String) => Some((new URL(s"http://wikipedia.org/wiki/$c"), Color.lightGray)))
 
-    val (frame, paintCancellable) = play(chart)
+    val (frame, paintCancellable) = play(chart, dataUpdates)
 
     paintCancellable.cancel()
     frame.setVisible(false)

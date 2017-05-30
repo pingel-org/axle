@@ -6,8 +6,6 @@ import java.awt.Graphics2D
 
 import javax.swing.JPanel
 
-import cats.implicits._
-import axle.eqSeq
 import axle.visualize.Plot
 import axle.visualize.PlotView
 import axle.visualize.element._
@@ -23,12 +21,7 @@ case class PlotComponent[S, X, Y, D](plot: Plot[S, X, Y, D])
 
   override def paintComponent(g: Graphics): Unit = {
 
-    val nextData: Option[Seq[(S, D)]] = Option(dataFn.apply)
-
-    if (nextData.isDefined &&
-      (drawnData.isEmpty || (drawnData.get === nextData.get))) {
-
-      val data = nextData.get
+    Option(dataFn.apply) foreach { data =>
 
       val g2d = g.asInstanceOf[Graphics2D]
 
@@ -45,8 +38,6 @@ case class PlotComponent[S, X, Y, D](plot: Plot[S, X, Y, D])
       xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
       yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
       view.keyOpt.foreach(Paintable[Key[S, X, Y, D]].paint(_, g2d))
-
-      drawnData = nextData
     }
   }
 

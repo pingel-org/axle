@@ -6,8 +6,6 @@ import java.awt.Graphics2D
 
 import javax.swing.JPanel
 
-import cats.implicits._
-
 import axle.visualize.BarChart
 import axle.visualize.BarChartView
 import axle.visualize.element._
@@ -19,16 +17,9 @@ case class BarChartComponent[C, Y, D, H](chart: BarChart[C, Y, D, H])
 
   setMinimumSize(new Dimension(width, height))
 
-  var drawnData: Option[D] = None
-
   override def paintComponent(g: Graphics): Unit = {
 
-    val nextData: Option[D] = Option(dataFn.apply())
-
-    if (nextData.isDefined &&
-      (drawnData.isEmpty || (drawnData.get === nextData.get))) {
-
-      val data = nextData.get
+    Option(dataFn.apply()) foreach { data =>
 
       val view = BarChartView(chart, data)
 
@@ -45,8 +36,6 @@ case class BarChartComponent[C, Y, D, H](chart: BarChart[C, Y, D, H])
       Paintable[YTics[Double, Y]].paint(yTics, g2d)
       keyOpt.foreach(Paintable[BarChartKey[C, Y, D, H]].paint(_, g2d))
       bars.foreach(Paintable[Rectangle[Double, Y]].paint(_, g2d))
-
-      drawnData = nextData
     }
   }
 
