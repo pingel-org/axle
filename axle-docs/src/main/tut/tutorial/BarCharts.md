@@ -30,7 +30,7 @@ import cats.implicits._
 
 ```tut:book
 val chart = BarChart[String, Double, Map[String, Double], String](
-  sales,
+  () => sales,
   title = Some("fruit sales"),
   hoverOf = (c: String) => Some(c),
   linkOf = (c: String) => Some((new java.net.URL(s"http://wikipedia.org/wiki/$c"), lightGray))

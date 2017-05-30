@@ -55,7 +55,7 @@ import axle.visualize._
 import axle.algebra.Plottable._
 
 val errorPlot = Plot(
-  List(("error" -> priceEstimator.errTree)),
+  () => List(("error" -> priceEstimator.errTree)),
   connect = true,
   drawKey = true,
   colorOf = (label: String) => Color.black,

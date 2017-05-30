@@ -121,7 +121,7 @@ import axle.visualize._
 
 ```tut:book
 val plot = Plot(
-  classifier.distanceLogSeries,
+  () => classifier.distanceLogSeries,
   connect = true,
   drawKey = true,
   colorOf = colors,

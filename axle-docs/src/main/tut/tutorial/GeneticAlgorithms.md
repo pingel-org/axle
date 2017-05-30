@@ -73,7 +73,7 @@ import scala.collection.immutable.TreeMap
 import axle.visualize._
 
 val plot = Plot(
-  List("min" -> log.mins, "ave" -> log.aves, "max" -> log.maxs),
+  () => List("min" -> log.mins, "ave" -> log.aves, "max" -> log.maxs),
   connect = true,
   colorOf = (label: String) => label match {
     case "min" => Color.black

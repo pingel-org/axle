@@ -36,7 +36,7 @@ The data can be grouped in two ways to produce bar charts:
 
 ```tut:book
 val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String](
-  sales,
+  () => sales,
   title = Some("fruit sales"),
   colorOf = (label: String, year: Int) => year match {
     case 2011 => red
@@ -59,7 +59,7 @@ Or alternatively
 
 ```tut:book
 val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double], String](
-  sales map { case (k, v) => (k._2, k._1) -> v},
+  () => sales map { case (k, v) => (k._2, k._1) -> v},
   colorOf = (year: Int, label: String) => label match {
     case "apple" => red
     case "banana" => yellow
@@ -83,26 +83,29 @@ Animation
 ---------
 This example keeps the "bar" value steady at 1.0 while assigning a new random Double (between 0 and 1) to "foo" every second.
 
-```scala
+Imports
+
+```tut:silent
+import axle.visualize._
+import spire.implicits._
+import scala.util.Random.nextDouble
+import axle.jung._
+import axle.quanta.Time
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import monix.reactive._
+import monix.execution.Scheduler.Implicits.global
+import axle.reactive.intervalScan
+import axle.reactive.CurrentValueSubscriber
+import axle.awt.play
+```
+
+Define stream of data updates
+
+```tut:book
 val groups = Vector("foo", "bar")
 val initial = Map("foo" -> 1d, "bar" -> 1d)
 
-import axle.visualize._
-import spire.implicits._
- 
-val chart = BarChart[String, Double, Map[String, Double], String](
-  initial,
-  title = Some("random")
-)
-
-import scala.util.Random.nextDouble
 val tick = (previous: Map[String, Double]) => previous + ("foo" -> nextDouble)
-
-import akka.actor.ActorSystem
-implicit val system = ActorSystem("Animator")
-
-import axle.jung._
-import axle.quanta.Time
 
 implicit val timeConverter = {
   import axle.algebra.modules.doubleRationalModule
@@ -110,5 +113,31 @@ implicit val timeConverter = {
 }
 import timeConverter.second
 
-play(chart, tick, 1d *: second)
+val dataUpdates: Observable[Map[String, Double]] = intervalScan(initial, tick, 1d *: second)
+```
+
+Create `CurrentValueSubscriber`, which will be used by the `BarChart` to get the latest value
+
+```tut:book
+val cvSub = new CurrentValueSubscriber[Map[String, Double]]()
+val cvCancellable = dataUpdates.subscribe(cvSub)
+
+val chart = BarChart[String, Double, Map[String, Double], String](
+  () => cvSub.currentValue.getOrElse(initial),
+  title = Some("random")
+)
+```
+
+Begin the animation
+
+```tut:book
+val (frame, paintCancellable) = play(chart, dataUpdates)
+```
+
+Tear down the resources
+
+```tut:book
+paintCancellable.cancel()
+frame.setVisible(false)
+cvCancellable.cancel()
 ```
