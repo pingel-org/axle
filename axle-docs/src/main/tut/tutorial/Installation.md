@@ -49,29 +49,27 @@ jars will explicitly provide those dependencies.
 See the project's current (build.sbt)[https://github.com/axlelang/axle/blob/master/build.sbt]
 file for up to date version information.
 
-As of version 0.2.4 the full list of dependencies is below.
+As of version 0.4.0 the full list of dependencies is below.
 Add this section to your `build.sbt` file to pull them all in to the `demo` project:
 
 ```
 libraryDependencies ++= Seq(
 
   // needed by axle-core
-  "com.typesafe.akka" %% "akka-actor" % "2.4.7",
-  "com.typesafe.akka" %% "akka-stream-experimental" % "2.0.4",
-  "org.jogamp.gluegen" % "gluegen-rt-main" % "2.3.2",
-  "org.jogamp.jogl" % "jogl-all-main" % "2.3.2",
-  "net.sf.jung" % "jung-visualization" % "2.1",
-  "net.sf.jung" % "jung-algorithms" % "2.1",
-  "net.sf.jung" % "jung-api" % "2.1",
-  "net.sf.jung" % "jung-graph-impl" % "2.1",
-  // "net.sf.jung" % "jung-io" % "2.1",
+  "org.jogamp.gluegen"     % "gluegen-rt-main"    % "2.3.2",
+  "org.jogamp.jogl"        % "jogl-all-main"      % "2.3.2",
+  "net.sf.jung"            % "jung-visualization" % "2.1",
+  "net.sf.jung"            % "jung-algorithms"    % "2.1",
+  "net.sf.jung"            % "jung-api"           % "2.1",
+  "net.sf.jung"            % "jung-graph-impl"    % "2.1",
+  //"net.sf.jung"          % "jung-io"            % "2.1",
 
   // needed by axle-jblas
-  "org.jblas" % "jblas" % "1.2.4",
+  "org.jblas"              % "jblas"              % "1.2.4",
 
   // needed by axle-joda
-  "joda-time" % "joda-time" % "2.9.4",
-  "org.joda" % "joda-convert" % "1.8.1"
+  "joda-time"              % "joda-time"          % "2.9.4",
+  "org.joda"               % "joda-convert"       % "1.8.1"
 )
 ```
 
