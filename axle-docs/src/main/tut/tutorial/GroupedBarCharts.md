@@ -128,7 +128,7 @@ val chart = BarChart[String, Double, Map[String, Double], String](
 )
 ```
 
-Begin the animation
+Animate
 
 ```tut:book
 val (frame, paintCancellable) = play(chart, dataUpdates)

@@ -3,7 +3,6 @@ package axle.visualize
 import cats.kernel.Order
 
 import cats.Show
-import cats.Eq
 import axle.quanta.UnittedQuantity
 import axle.quanta.Angle
 import axle.algebra.LengthSpace
@@ -35,8 +34,7 @@ case class BarChartGrouped[G, S, Y, D, H](
     colorOf: (G, S) => Color,
     hoverOf: (G, S) => Option[H] = (g: G, s: S) => None,
     linkOf: (G, S) => Option[(java.net.URL, Color)] = (g: G, s: S) => None)(
-        implicit val eqD: Eq[D],
-        val showG: Show[G],
+        implicit val showG: Show[G],
         val showS: Show[S],
         val showH: Show[H],
         val orderY: Order[Y],

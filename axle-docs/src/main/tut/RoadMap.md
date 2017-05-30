@@ -17,7 +17,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Remove Spark impacts on Functor, etc, and just use Cats versions
 * `axle.web.Table` and `HtmlFrom[Table[T]`
 * Factor Draw to return something other than Component
-* Remove unused Eq witnesses from visualization classes (`Eq[D]`)
 * Clean up GA doc
 * Fix sbt-release plugin (use sbt-sonatype?)
 * … as Stream.from(Int)

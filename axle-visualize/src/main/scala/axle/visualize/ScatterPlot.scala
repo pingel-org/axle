@@ -44,8 +44,7 @@ case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     xAxis: Option[Y] = None,
     xAxisLabel: Option[String] = None,
     yAxisLabel: Option[String] = None)(
-        implicit val eqD: Eq[D],
-        val lengthX: LengthSpace[X, X, Double],
+        implicit val lengthX: LengthSpace[X, X, Double],
         val lengthY: LengthSpace[Y, Y, Double],
         val dataView: ScatterDataView[X, Y, D],
         showS: Show[S]) {

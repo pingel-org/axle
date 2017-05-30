@@ -100,32 +100,36 @@ Animation
 
 This example traces two "saw" functions vs time:
 
-```scala
-import collection.immutable.TreeMap
-import org.joda.time.DateTime
-import axle.joda._
-import spire.compat.ordering
+Imports
 
+```tut:silent
+import org.joda.time.DateTime
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import collection.immutable.TreeMap
+import cats.implicits._
+import monix.reactive._
+import monix.execution.Scheduler.Implicits.global
+import spire.compat.ordering
+import spire.implicits.DoubleAlgebra
+import axle.joda._
+import axle.jung._
+import axle.quanta.Time
+import axle.visualize._
+import axle.reactive.intervalScan
+import axle.reactive.CurrentValueSubscriber
+import axle.awt.play
+```
+
+Define stream of data updates refreshing every 500 milliseconds
+
+```tut:book
 val initialData = List(
   ("saw 1", new TreeMap[DateTime, Double]()),
   ("saw 2", new TreeMap[DateTime, Double]())
 )
 
-import spire.implicits.DoubleAlgebra
-import axle.visualize._
-
 val now = new DateTime()
 implicit val dtz = dateTimeZero(now)
-
-val plot = Plot[DateTime, Double, TreeMap[DateTime, Double]](
-  initialData,
-  connect = true,
-  colorOf = _ => Color.black,
-  title = Some("Saws"),
-  xAxis = Some(0d),
-  xAxisLabel = Some("time (t)"),
-  yAxisLabel = Some("y")
-)
 
 val saw1 = (t: Long) => (t % 10000) / 10000d
 val saw2 = (t: Long) => (t % 100000) / 50000d
@@ -137,18 +141,45 @@ val refreshFn = (previous: List[(String, TreeMap[DateTime, Double])]) => {
   previous.zip(fs).map({ case (old, f) => (old._1, old._2 ++ Vector(now -> f(now.getMillis))) })
 }
 
-import akka.actor.ActorSystem
-implicit val system = ActorSystem("Animator")
-
-import axle.jung._
-import axle.quanta.Time
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-
 implicit val timeConverter = {
   import axle.algebra.modules.doubleRationalModule
   Time.converterGraphK2[Double, DirectedSparseGraph]
 }
 import timeConverter.millisecond
 
-play(plot, refreshFn, 500 *: millisecond)
+val dataUpdates: Observable[Seq[(String, TreeMap[DateTime, Double])]] =
+  intervalScan(initialData, refreshFn, 500d *: millisecond)
+```
+
+Create `CurrentValueSubscriber`, which will be used by the `Plot` to get the latest values
+
+```tut:book
+val cvSub = new CurrentValueSubscriber[Seq[(String, TreeMap[DateTime, Double])]]()
+val cvCancellable = dataUpdates.subscribe(cvSub)
+
+// [DateTime, Double, TreeMap[DateTime, Double]]
+
+val plot = Plot(
+  () => cvSub.currentValue.getOrElse(initialData),
+  connect = true,
+  colorOf = (label: String) => Color.black,
+  title = Some("Saws"),
+  xAxis = Some(0d),
+  xAxisLabel = Some("time (t)"),
+  yAxisLabel = Some("y")
+)
+```
+
+Animate
+
+```tut:silent
+val (frame, paintCancellable) = play(plot, dataUpdates)
+```
+
+Tear down resources
+
+```tut:silent
+paintCancellable.cancel()
+frame.setVisible(false)
+cvCancellable.cancel()
 ```
