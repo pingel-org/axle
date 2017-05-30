@@ -154,12 +154,12 @@ lazy val axleSpark = Project(
   )
 ).dependsOn(axleCore)
 
-lazy val axleTest = Project(
-  id = "axle-test",
-  base = file("axle-test"),
+lazy val axleWheel = Project(
+  id = "axle-wheel",
+  base = file("axle-wheel"),
   settings = axleSettings
 ).settings(
-  name := "axle-test",
+  name := "axle-wheel",
   libraryDependencies ++= Seq(
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
     "org.jblas"                    %  "jblas"                % jblasVersion,
@@ -210,7 +210,7 @@ lazy val docs = Project(
   .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(docSettings)
   .settings(commonJvmSettings)
-  .dependsOn(axleTest) // was only "core"
+  .dependsOn(axleWheel)
 
 lazy val noPublishSettings = Seq(
   publish := (),

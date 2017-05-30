@@ -8,11 +8,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.4.0 (May 31, 2017)
 * axle-visualize and most of axle-algorithm merged with axle-core
-* create new axle-??? formed from axle-{test, games, languages} and parts of algorithms
-* Remove Spark spoke
-* Publish Scala 2.12 artifacts
+* create new axle-wheel formed from axle-{test, games, languages} and parts of algorithms
 
 ## 0.4.x (Summer 2017)
+* Remove Spark spoke
+* Publish Scala 2.12 artifacts
 * Fix implicit numeric widening warnings
 * Remove Spark impacts on Functor, etc, and just use Cats versions
 * `axle.web.Table` and `HtmlFrom[Table[T]`
