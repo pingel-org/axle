@@ -53,6 +53,7 @@ Plot the error during the training
 import spire.implicits._
 import axle.visualize._
 import axle.algebra.Plottable._
+import axle.eqTreeMap
 
 val errorPlot = Plot(
   () => List(("error" -> priceEstimator.errTree)),
