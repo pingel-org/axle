@@ -29,12 +29,10 @@ be quantified or measured".
 
 ```tut:silent
 import cats.implicits._
-import spire.implicits.additiveSemigroupOps
-import spire.implicits.additiveGroupOps
-import spire.implicits.moduleOps
+import spire.implicits._
 import axle._
 import axle.quanta._
-import axle.jung.directedGraphJung
+import axle.jung._
 ```
 
 Quanta each define a Wikipedia link where you can find out more
@@ -49,9 +47,7 @@ A visualization of each Quantum (like the one for Distance shown above) is produ
 ```tut:silent
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.Show
-import spire.implicits.DoubleAlgebra
 import axle.algebra.modules.doubleRationalModule
-import axle.jung.directedGraphJung
 
 implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
 
@@ -75,8 +71,6 @@ The conversion graphs should be placed in implicit scope.
 Within each are defined units of measurement which can be imported.
 
 ```tut:silent
-import spire.implicits.DoubleAlgebra
-
 implicit val massConverter = Mass.converterGraphK2[Double, DirectedSparseGraph]
 import massConverter._
 
@@ -169,7 +163,7 @@ right Quantity to the unit of the left.
 Addition and subtraction between different quanta is rejected at compile time:
 
 ```tut:book:fail
-(1d *: newton) + (2d *: foot)
+(1d *: gram) + (2d *: foot)
 ```
 
 Multiplication comes from spire's Module typeclass:
