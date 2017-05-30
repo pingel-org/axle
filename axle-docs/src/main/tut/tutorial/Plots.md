@@ -109,7 +109,6 @@ import collection.immutable.TreeMap
 import cats.implicits._
 import monix.reactive._
 import monix.execution.Scheduler.Implicits.global
-import spire.compat.ordering
 import spire.implicits.DoubleAlgebra
 import axle.joda._
 import axle.jung._
@@ -128,8 +127,7 @@ val initialData = List(
   ("saw 2", new TreeMap[DateTime, Double]())
 )
 
-val now = new DateTime()
-implicit val dtz = dateTimeZero(now)
+// Note: uses zeroDT defined above
 
 val saw1 = (t: Long) => (t % 10000) / 10000d
 val saw2 = (t: Long) => (t % 100000) / 50000d
