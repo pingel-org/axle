@@ -9,7 +9,6 @@ import org.scalatest._
 import cats.Order.catsKernelOrderingForOrder
 import spire.math.sin
 import spire.implicits.DoubleAlgebra
-import axle.eqTreeMap
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable

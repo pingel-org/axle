@@ -1,8 +1,6 @@
 package axle.web
 
-import java.awt.Dimension
-
-import scala.collection.JavaConverters.collectionAsScalaIterableConverter
+// import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 import scala.annotation.implicitNotFound
@@ -13,22 +11,18 @@ import cats.kernel.Eq
 import spire.implicits.DoubleAlgebra
 import spire.algebra.Field
 
-import axle.HtmlFrom
 import axle.string
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
 import axle.visualize.BarChartGroupedView
 import axle.visualize.BarChartView
 import axle.visualize.Color
-import axle.visualize.Color.black
 import axle.visualize.Color.lightGray
-import axle.visualize.Color.yellow
 import axle.visualize.KMeansVisualization
 import axle.visualize.Plot
 import axle.visualize.PlotView
 import axle.visualize.Point2D
 import axle.visualize.ScatterPlot
-import axle.visualize.angleDouble
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.DataLines
