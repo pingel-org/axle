@@ -70,6 +70,7 @@ Plot the min, average, and max fitness function by generation
 
 ```tut:book
 import scala.collection.immutable.TreeMap
+import axle.eqTreeMap
 import axle.visualize._
 
 val plot = Plot(
