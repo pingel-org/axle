@@ -32,7 +32,7 @@ import cats.implicits._
 
 ```tut:book
 val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int]](
-  data,
+  () => data,
   colorOf = (x: Int, y: Int) => data((x, y)) match {
     case 0 => red
     case 1 => blue

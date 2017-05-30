@@ -77,7 +77,7 @@ Define the visualization
 implicit val showCL: Show[(Color, String)] = new Show[(Color, String)] { def show(cl: (Color, String)): String = cl._2 }
 
 val plot = Plot(
-  waves,
+  () => waves,
   colorOf = (cl: (Color, String)) => cl._1,
   title = Some("Random Waves"),
   xAxis = Some(0d),
