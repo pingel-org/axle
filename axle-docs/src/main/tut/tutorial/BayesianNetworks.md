@@ -22,7 +22,7 @@ import axle.algebra.DirectedGraph
 import axle.stats._
 import axle.pgm._
 import axle.jblas._
-import axle.jung.directedGraphJung
+import axle.jung._
 ```
 
 Setup

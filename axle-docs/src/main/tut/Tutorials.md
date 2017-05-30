@@ -10,8 +10,12 @@ By jar
 Core
 ====
 
+(With "Spokes" for Joda and JBLAS in some cases.)
+
 ```
-"org.axle-lang" %% "axle-core" % "releaseVersion"
+"org.axle-lang" %% "axle-core"  % "releaseVersion"
+"org.axle-lang" %% "axle-jung"  % "releaseVersion"
+"org.axle-lang" %% "axle-jblas" % "releaseVersion"
 ```
 
 * [Package Object](/tutorial/axle_package_object/) Extensions to core Scala data types. Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases
@@ -34,15 +38,6 @@ Core
   * [Ackermann](/tutorial/ackermann/)
   * [π](/tutorial/pi/)
   * [Fibonacci](/tutorial/fibonacci/)
-
-
-Algorithms
-==========
-
-```
-"org.axle-lang" %% "axle-algorithms" % "releaseVersion"
-```
-
 * [Linear Regression](/tutorial/linear_regression/)
 * [Naive Bayes Clustering](/tutorial/naive_bayes/) Tennis example
 * k-Means Clustering
@@ -70,14 +65,6 @@ Algorithms
   * Evolution
   * Federalist Papers
   * Irises
-
-Visualizations
-==============
-
-```
-"org.axle-lang" %% "axle-visualize" % "releaseVersion"
-```
-
 * [Visualize](/tutorial/visualize/)
   * [Plots](/tutorial/plots/)
   * [ScatterPlot](/tutorial/scatterplot/)
@@ -86,11 +73,11 @@ Visualizations
   * [Pixelated Colored Area](/tutorial/pixelated_colored_area/)
   * [Earth Scene](/tutorial/earth_scene/) demonstrating Java OpenGL (JOGL)
 
-Games
+Wheel
 =====
 
 ```
-"org.axle-lang" %% "axle-games" % "releaseVersion"
+"org.axle-lang" %% "axle-wheel" % "releaseVersion"
 ```
 
 * [Tic Tac Toe](/tutorial/tic_tac_toe/)

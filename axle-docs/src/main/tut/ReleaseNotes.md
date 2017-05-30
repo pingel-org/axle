@@ -6,6 +6,10 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.4.0 (May 30, 2017)
+* axle-core gets axle-visualize and most of axle-algorithm
+* new axle-wheel formed from axle-{test, games, languages} and parts of axle-algorithms
+
 ## 0.3.6 (May 29, 2017)
 * Replace Akka with Monix for animating visualizations
 * `ScatterPlot` `play` to awt
