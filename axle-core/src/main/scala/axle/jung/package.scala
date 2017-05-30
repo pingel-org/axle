@@ -1,11 +1,18 @@
 package axle
 
+import java.awt.Dimension
 import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import scala.collection.JavaConverters._
+import scala.xml.Node
+import scala.xml.NodeSeq
+import scala.xml.Text
+import cats.Eq
+import cats.Show
 import cats.implicits._
+import spire.implicits._
 import axle.algebra.DirectedGraph
 import axle.algebra.Finite
 import axle.algebra.Functor
@@ -13,6 +20,12 @@ import axle.algebra.UndirectedGraph
 import axle.syntax.directedgraph.directedGraphOps
 import axle.syntax.undirectedgraph.undirectedGraphOps
 import axle.math.arcTangent2
+import axle.web.SVG
+import axle.web.SVG.rgb
+import axle.web.svgFrame
+import axle.visualize.angleDouble
+import axle.visualize.Color.black
+import axle.visualize.Color.yellow
 
 package object jung {
 
@@ -411,25 +424,25 @@ package object jung {
         layout.setSize(new Dimension(width, height))
         val visualization = new DefaultVisualizationModel(layout)
 
-        val lines: List[xml.Node] = jdsg.getEdges.asScala.map { edge =>
+        val lines: List[Node] = jdsg.getEdges.asScala.map { edge =>
           <line x1={ s"${layout.getX(jdsg.getSource(edge))}" } y1={ s"${layout.getY(jdsg.getSource(edge))}" } x2={ s"${layout.getX(jdsg.getDest(edge))}" } y2={ s"${layout.getY(jdsg.getDest(edge))}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
         } toList
 
-        val arrows: List[xml.Node] = jdsg.getEdges.asScala.map { edge =>
+        val arrows: List[Node] = jdsg.getEdges.asScala.map { edge =>
           val height = layout.getY(jdsg.getSource(edge)) - layout.getY(jdsg.getDest(edge))
           val width = layout.getX(jdsg.getDest(edge)) - layout.getX(jdsg.getSource(edge))
           val svgRotationAngle = 180d - (arcTangent2(height, width) in angleDouble.degree).magnitude
           <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(jdsg.getDest(edge))},${layout.getY(jdsg.getDest(edge))}) rotate($svgRotationAngle)" }/>
         } toList
 
-        val circles: List[xml.Node] = jdsg.getVertices.asScala.map { vertex =>
+        val circles: List[Node] = jdsg.getVertices.asScala.map { vertex =>
           <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
         } toList
 
-        val labels: List[xml.Node] = jdsg.getVertices.asScala.map { vertex =>
+        val labels: List[Node] = jdsg.getVertices.asScala.map { vertex =>
           val node = HtmlFrom[VP].toHtml(vertex)
           node match {
-            case xml.Text(text) =>
+            case scala.xml.Text(text) =>
               <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
             case _ =>
               <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
@@ -440,12 +453,12 @@ package object jung {
           }
         } toList
 
-        val edgeLabels: List[xml.Node] = jdsg.getEdges.asScala.map { edge =>
+        val edgeLabels: List[Node] = jdsg.getEdges.asScala.map { edge =>
           val node = HtmlFrom[EP].toHtml(edge)
           val cx = (layout.getX(jdsg.getDest(edge)) - layout.getX(jdsg.getSource(edge))) * 0.6 + layout.getX(jdsg.getSource(edge))
           val cy = (layout.getY(jdsg.getDest(edge)) - layout.getY(jdsg.getSource(edge))) * 0.6 + layout.getY(jdsg.getSource(edge))
           node match {
-            case xml.Text(text) =>
+            case Text(text) =>
               <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
             case _ =>
               <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="100%" height="100%">
@@ -478,19 +491,19 @@ package object jung {
       layout.setSize(new Dimension(width, height))
       val visualization = new DefaultVisualizationModel(layout)
 
-      val lines: List[xml.Node] = jusg.getEdges.asScala.map { edge =>
+      val lines: List[Node] = jusg.getEdges.asScala.map { edge =>
         val (v1, v2) = jusg.vertices(edge)
         <line x1={ s"${layout.getX(v1)}" } y1={ s"${layout.getY(v1)}" } x2={ s"${layout.getX(v2)}" } y2={ s"${layout.getY(v2)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
       } toList
 
-      val circles: List[xml.Node] = jusg.getVertices.asScala.map { vertex =>
+      val circles: List[Node] = jusg.getVertices.asScala.map { vertex =>
         <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
       } toList
 
-      val labels: List[xml.Node] = jusg.getVertices.asScala.map { vertex =>
+      val labels: List[Node] = jusg.getVertices.asScala.map { vertex =>
         val node = HtmlFrom[VP].toHtml(vertex)
         node match {
-          case xml.Text(t) =>
+          case Text(t) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex) }</text>
           case _ =>
             <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
@@ -499,13 +512,13 @@ package object jung {
         }
       } toList
 
-      val edgeLabels: List[xml.Node] = jusg.getEdges.asScala.map { edge =>
+      val edgeLabels: List[Node] = jusg.getEdges.asScala.map { edge =>
         val node = HtmlFrom[EP].toHtml(edge)
         val (v1, v2) = jusg.vertices(edge)
         val cx = (layout.getX(v2) - layout.getX(v1)) * 0.5 + layout.getX(v1)
         val cy = (layout.getY(v2) - layout.getY(v1)) * 0.5 + layout.getY(v1)
         node match {
-          case xml.Text(text) =>
+          case Text(text) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
           case _ =>
             <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="100%" height="100%">

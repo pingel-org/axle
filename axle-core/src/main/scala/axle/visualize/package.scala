@@ -8,7 +8,8 @@ import axle.algebra.DirectedGraph
 import axle.quanta.Angle
 import axle.quanta.UnitOfMeasurement
 import axle.visualize.Color._
-import axle.jung.undirectedGraphJung
+import axle.jung.directedGraphJung
+// import axle.jung.undirectedGraphJung
 
 package object visualize {
 
