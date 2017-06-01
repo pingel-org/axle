@@ -35,8 +35,8 @@ case class BarChartView[C, Y, D, H](
   implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
 
   val scaledArea = ScaledArea2D(
-    border, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border,
-    border, height - (if (labelAngle.isDefined) border else 5),
+    border.toDouble, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border.toDouble,
+    border.toDouble, height - (if (labelAngle.isDefined) border.toDouble else 5d),
     minX, maxX,
     minY, maxY)
 
@@ -47,13 +47,13 @@ case class BarChartView[C, Y, D, H](
     scaledArea,
     slices.toStream.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, string(s)) }).toList,
     normalFontName,
-    normalFontSize,
+    normalFontSize.toDouble,
     bold = true,
     drawLines = false,
     labelAngle,
     black)
 
-  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFontName, normalFontSize, true, black)
+  val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFontName, normalFontSize.toDouble, true, black)
 
   val bars = slices.toStream.zipWithIndex.map({
     case (c, i) => {

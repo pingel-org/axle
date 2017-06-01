@@ -44,7 +44,7 @@ case class LinearRegression[D, M](
   def dθ(X: M, y: M, θ: M): M =
     (0 until X.rows)
       .foldLeft(la.zeros(1, X.columns))(
-        (m: M, i: Int) => additive.plus(m, (X.row(i) * (h(X.row(i), θ).subtractScalar(y.get(i, 0)))))).divideScalar(X.rows)
+        (m: M, i: Int) => additive.plus(m, (X.row(i) * (h(X.row(i), θ).subtractScalar(y.get(i, 0)))))).divideScalar(X.rows.toDouble)
 
   def dTheta(X: M, y: M, θ: M): M = dθ(X, y, θ)
 

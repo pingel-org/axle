@@ -44,7 +44,7 @@ case class ConfusionMatrix[T, CLASS: Order, L: Order, F, M, G, H](
   val counts = la.matrix(
     labelList.length,
     classes.size,
-    (r: Int, c: Int) => labelIdClusterId2count((r, classes(c))))
+    (r: Int, c: Int) => labelIdClusterId2count((r, classes(c))).toDouble)
 
   val width = ceil(log10(data.size.toDouble)).toInt
 

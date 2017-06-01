@@ -31,7 +31,7 @@ package object web {
     </svg>
 
   def svg[T: SVG](t: T, filename: String, width: Int, height: Int): Unit =
-    XML.save(filename, svgFrame(SVG[T].svg(t), width, height), encoding, true, null)
+    XML.save(filename, svgFrame(SVG[T].svg(t), width.toDouble, height.toDouble), encoding, true, null)
 
   def svg[T: SVG](t: T, filename: String): Unit = {
     val nodes = SVG[T].svg(t)
