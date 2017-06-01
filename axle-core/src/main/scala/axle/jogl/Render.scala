@@ -42,7 +42,7 @@ object Render {
       import rc.glu
       import sphere._
       gl.glColor3f(color.red, color.green, color.blue)
-      glu.gluSphere(glu.gluNewQuadric(), radius.magnitude, slices, stacks)
+      glu.gluSphere(glu.gluNewQuadric(), radius.magnitude.toDouble, slices, stacks)
     }
   }
 
@@ -71,7 +71,7 @@ object Render {
       glu.gluQuadricDrawStyle(quadratic, GLU.GLU_FILL)
       glu.gluQuadricNormals(quadratic, GLU.GLU_FLAT)
       glu.gluQuadricOrientation(quadratic, GLU.GLU_OUTSIDE)
-      glu.gluSphere(quadratic, radius.magnitude, slices, stacks)
+      glu.gluSphere(quadratic, radius.magnitude.toDouble, slices, stacks)
       glu.gluDeleteQuadric(quadratic)
     }
   }

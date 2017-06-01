@@ -36,7 +36,9 @@ package object stats {
 
   implicit val rationalProbabilityDist: Dist[Rational] = {
     val biggishInt = 1000000
-    Dist(Rational(_: Int, biggishInt))(Dist.intrange(0, biggishInt))
+    val x = (i: Int) => Rational(i.toLong, biggishInt.toLong)
+    val y = Dist.intrange(0, biggishInt)
+    Dist(x)(y)
   }
 
   //implicit def evalProbability[N]: Probability[N] => N = _()

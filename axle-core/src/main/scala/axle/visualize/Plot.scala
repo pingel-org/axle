@@ -42,10 +42,10 @@ case class Plot[S, X, Y, D](
         val yLength: LengthSpace[Y, _, Double],
         val plotDataView: PlotDataView[S, X, Y, D]) {
 
-  val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold=true))
+  val xAxisLabelText = xAxisLabel.map(Text(_, width / 2d, height - border / 2d, fontName, fontSize.toDouble, bold=true))
 
-  val yAxisLabelText = yAxisLabel.map(Text(_,  20, height / 2, fontName, fontSize, bold=true, angle = Some(90d *: angleDouble.degree)))
+  val yAxisLabelText = yAxisLabel.map(Text(_,  20, height / 2d, fontName, fontSize.toDouble, bold=true, angle = Some(90d *: angleDouble.degree)))
 
-  val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold=true))
+  val titleText = title.map(Text(_, width / 2d, titleFontSize.toDouble, titleFontName, titleFontSize.toDouble, bold=true))
 
 }

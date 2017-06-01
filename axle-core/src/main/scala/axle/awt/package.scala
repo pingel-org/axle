@@ -40,7 +40,7 @@ import axle.visualize.element._
 
 package object awt {
 
-  def draw[T: Draw](t: T): AxleFrame = {
+  def draw[T: Draw](t: T): Unit = {
 
     val draw = Draw[T]
     val component = draw.component(t)
@@ -50,7 +50,6 @@ package object awt {
     val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
-    frame
   }
 
   def play[T: Draw, D](t: T, dataStream: Observable[D])(implicit scheduler: Scheduler): (AxleFrame, Cancelable) = {

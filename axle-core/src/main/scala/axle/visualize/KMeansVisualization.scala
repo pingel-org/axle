@@ -37,14 +37,14 @@ case class KMeansVisualization[D, F, G, M](
   implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
   val scaledArea =
     ScaledArea2D(
-      border, width - border,
-      border, height - border,
+      border.toDouble, width - border.toDouble,
+      border.toDouble, height - border.toDouble,
       minX, maxX,
       minY, maxY)
 
   implicit val doubleTics = Tics[Double]
-  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), fontName, fontSize, bold = true, drawLines = true, Some(0d *: angleDouble.degree), black)
-  val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), fontName, fontSize, true, black)
+  val xTics = XTics(scaledArea, doubleTics.tics(minX, maxX), fontName, fontSize.toDouble, bold = true, drawLines = true, Some(0d *: angleDouble.degree), black)
+  val yTics = YTics(scaledArea, doubleTics.tics(minY, maxY), fontName, fontSize.toDouble, true, black)
 
   val boundingRectangle =
     Rectangle(scaledArea, Point2D(minX, minY), Point2D(maxX, maxY), borderColor = Some(black), fillColor = Some(white))

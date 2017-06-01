@@ -469,7 +469,7 @@ package object jung {
 
         val nodes = lines ++ arrows ++ circles ++ labels ++ edgeLabels
 
-        svgFrame(nodes, width, height)
+        svgFrame(nodes, width.toDouble, height.toDouble)
       }
 
     }
@@ -529,7 +529,7 @@ package object jung {
 
       val nodes = lines ++ circles ++ labels ++ edgeLabels
 
-      svgFrame(nodes, width, height)
+      svgFrame(nodes, width.toDouble, height.toDouble)
     }
 
   }

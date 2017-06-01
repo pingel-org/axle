@@ -50,8 +50,8 @@ case class BarChartGrouped[G, S, Y, D, H](
   }
 
   // val colorStream = continually(colors.toStream).flatten
-  val titleText = title.map(Text(_, width / 2, titleFontSize, titleFontName, titleFontSize, bold = true))
-  val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, normalFontName, normalFontSize, bold = true))
-  val yAxisLabelText = yAxisLabel.map(Text(_, 20, height / 2, normalFontName, normalFontSize, bold = true, angle = Some(90d *: angleDouble.degree)))
+  val titleText = title.map(Text(_, width / 2d, titleFontSize.toDouble, titleFontName, titleFontSize.toDouble, bold = true))
+  val xAxisLabelText = xAxisLabel.map(Text(_, width / 2d, height - border / 2d, normalFontName, normalFontSize.toDouble, bold = true))
+  val yAxisLabelText = yAxisLabel.map(Text(_, 20, height / 2d, normalFontName, normalFontSize.toDouble, bold = true, angle = Some(90d *: angleDouble.degree)))
 
 }

@@ -105,7 +105,7 @@ case class KMeans[T: Eq, F, G, M](
     val AD = (0 until X.rows).map(r => {
       val xi = X.row(r)
       val (a, d) = centroidIndexAndDistanceClosestTo(space, μ, xi)
-      Vector(a, d)
+      Vector(a.toDouble, d)
     }).transpose
     (la.fromColumnMajorArray(X.rows, 1, AD(0).toArray), la.fromColumnMajorArray(X.rows, 1, AD(1).toArray))
   }
