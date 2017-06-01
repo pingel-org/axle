@@ -52,7 +52,7 @@ package object awt {
     frame.setVisible(true)
   }
 
-  def play[T: Draw, D](t: T, dataStream: Observable[D])(implicit scheduler: Scheduler): Cancelable = {
+  def play[T: Draw, D](t: T, dataStream: Observable[D])(implicit scheduler: Scheduler): (AxleFrame, Cancelable) = {
 
     val draw = Draw[T]
     val component: Component = draw.component(t)
@@ -72,7 +72,7 @@ package object awt {
         frame.repaint()
       })
 
-    cancelPainting
+    (frame, cancelPainting)
   }
 
   val fontMemo = scala.collection.mutable.Map.empty[(String, Int, Boolean), Font]
