@@ -20,7 +20,7 @@ object NeedlemanWunschDefaults {
    */
 
   def similarity(x: Char, y: Char): Double = {
-    val result = (x, y) match {
+    val result: Int = (x, y) match {
       case ('A', 'A') => 10
       case ('A', 'G') => -1
       case ('A', 'C') => -3
@@ -38,7 +38,7 @@ object NeedlemanWunschDefaults {
       case ('T', 'C') => 0
       case ('T', 'T') => 8
     }
-    result
+    result.toDouble
   }
 
   val gap = '-'

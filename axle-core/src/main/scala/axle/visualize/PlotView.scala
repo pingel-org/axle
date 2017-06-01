@@ -27,8 +27,8 @@ case class PlotView[S, X, Y, D](
   val maxPoint = Point2D(maxX, maxY)
 
   val scaledArea = ScaledArea2D(
-    border, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border,
-    border, height - border,
+    border.toDouble, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border.toDouble,
+    border.toDouble, height - border.toDouble,
     minPoint.x, maxPoint.x,
     minPoint.y, maxPoint.y)
 

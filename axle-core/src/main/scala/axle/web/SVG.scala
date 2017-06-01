@@ -327,7 +327,7 @@ object SVG {
           (centroidOvals map { SVG[Oval[Double, Double]].svg }) ::
           (points.toList map { SVG[Oval[Double, Double]].svg })).flatten.reduce(_ ++ _)
 
-        svgFrame(nodes, width, height)
+        svgFrame(nodes, width.toDouble, height.toDouble)
       }
     }
 
@@ -391,7 +391,7 @@ object SVG {
             yAxisLabelText.map(SVG[Text].svg),
             view.keyOpt.map(SVG[Key[S, X, Y, D]].svg)).flatten).reduce(_ ++ _)
 
-      svgFrame(nodes, width, height)
+      svgFrame(nodes, width.toDouble, height.toDouble)
     }
   }
 
@@ -504,7 +504,7 @@ object SVG {
               xAxisLabelText.map(SVG[Text].svg),
               yAxisLabelText.map(SVG[Text].svg)).flatten
 
-        svgFrame(nodes.reduce(_ ++ _), width, height)
+        svgFrame(nodes.reduce(_ ++ _), width.toDouble, height.toDouble)
       }
     }
 
@@ -548,7 +548,7 @@ object SVG {
               xAxisLabelText.map(SVG[Text].svg),
               yAxisLabelText.map(SVG[Text].svg)).flatten
 
-        svgFrame(nodes.reduce(_ ++ _), width, height)
+        svgFrame(nodes.reduce(_ ++ _), width.toDouble, height.toDouble)
       }
     }
 
