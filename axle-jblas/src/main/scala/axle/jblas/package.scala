@@ -347,10 +347,10 @@ package object jblas {
         columnSums(mulPointwise(m)(m))
 
       def cov(m: DoubleMatrix): DoubleMatrix =
-        centerColumns(m).transpose.mul(centerColumns(m)).div(m.getColumns)
+        centerColumns(m).transpose.mul(centerColumns(m)).div(m.getColumns.toDouble)
 
       def std(m: DoubleMatrix): DoubleMatrix = {
-        val centered = sumsq(centerColumns(m)).div(m.getColumns)
+        val centered = sumsq(centerColumns(m)).div(m.getColumns.toDouble)
         endofunctor.map(centered)(n => spire.math.sqrt(n))
       }
 

@@ -18,7 +18,7 @@ class EntropySpec extends FunSuite with Matchers {
     implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]
 
     val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
-      (0 to 100).map(i => (Rational(i, 100), entropy(coin(Rational(i, 100))))).toMap
+      (0 to 100).map(i => (Rational(i.toLong, 100), entropy(coin(Rational(i.toLong, 100))))).toMap
 
     // implicit val bitp = bit.plottable
 

@@ -39,7 +39,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
 
     val hm: D =
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
-        (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
+        (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i.toLong, 100))))).toMap
 
     // implicit val zr = Zero[Rational]
     // implicit val tr = Tics[Rational]

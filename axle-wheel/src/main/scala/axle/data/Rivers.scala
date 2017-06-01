@@ -27,14 +27,14 @@ case class Rivers()(implicit dc: DistanceConverter[Double], fc: FlowConverter[Do
   lazy val nile =
     River(
       "Nile",
-      6853 *: km,
-      2830 *: m3s,
+      6853d *: km,
+      2830d *: m3s,
       "https://en.wikipedia.org/wiki/Nile")
 
   lazy val mississippi =
     River(
       "Mississippi",
-      6027 *: km, // Note: Not for "Mississippi–Missouri–Jefferson", which is longer
+      6027d *: km, // Note: Not for "Mississippi–Missouri–Jefferson", which is longer
       16792d *: m3s,
       "https://en.wikipedia.org/wiki/Mississippi_River")
 
