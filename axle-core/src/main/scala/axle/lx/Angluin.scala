@@ -122,22 +122,22 @@ object Angluin {
    * The SilentLearner never makes a guess
    */
 
-  case class SilentLearner(T: Text) extends Learner[Nothing] {
+  case class SilentLearner(T: Text) extends Learner[Unit] {
 
-    def initialState = null.asInstanceOf[Nothing]
+    def initialState = null.asInstanceOf[Unit]
 
-    def processExpression(state: Nothing, expression: Iterable[Symbol]) = (initialState, None)
+    def processExpression(state: Unit, expression: Iterable[Symbol]) = (initialState, None)
   }
 
   /**
    * The HardCodedLearner always guesses the same thing
    */
 
-  case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
+  case class HardCodedLearner(G: Grammar) extends Learner[Unit] {
 
-    def initialState: Nothing = null.asInstanceOf[Nothing]
+    def initialState: Unit = null.asInstanceOf[Unit]
 
-    def processExpression(state: Nothing, expression: Iterable[Symbol]): (Nothing, Option[Grammar]) =
+    def processExpression(state: Unit, expression: Iterable[Symbol]): (Unit, Option[Grammar]) =
       (initialState, Some(G))
   }
 
