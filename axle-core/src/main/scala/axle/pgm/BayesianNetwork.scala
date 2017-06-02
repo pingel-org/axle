@@ -229,8 +229,13 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    * 6.8.3
    */
 
-  def pruneNetworkVarsAndEdges(Q: Set[Distribution[T, N]], eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N, DG] =
-    BayesianNetwork(this.name, ???) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
+  def pruneNetworkVarsAndEdges(
+    Q: Set[Distribution[T, N]],
+    eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N, DG] = {
+    // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
+    // BayesianNetwork(this.name, ???)
+    ???
+  }
   //
   //  def variableEliminationPR(Q: Set[Distribution[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
   //
