@@ -67,7 +67,9 @@ lazy val axleCore = Project(
       // "net.sf.jung"            %  "jung-io"                  % jungVersion        % "provided",
       // other jogl deps: http://jogamp.org/wiki/index.php/Maven
       "org.jogamp.gluegen"     %  "gluegen-rt-main"          % jogampVersion      % "provided",
-      "org.jogamp.jogl"        %  "jogl-all-main"            % jogampVersion      % "provided"
+      "org.jogamp.jogl"        %  "jogl-all-main"            % jogampVersion      % "provided",
+      // something references this.  would be nice to remove:
+      "com.google.code.findbugs" % "jsr305"                  % "3.0.0"            % "provided"
   ))
   .settings(axleSettings:_*)
   .settings(commonJvmSettings:_*)
