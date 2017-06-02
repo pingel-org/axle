@@ -15,7 +15,9 @@ trait Case[A, N] {
   def ∨[B](right: Case[B, N]): Case[(A, B), N] = CaseOr(this, right)
   def ∪[B](right: Case[B, N]): Case[(A, B), N] = CaseOr(this, right)
   def |[B](given: Case[B, N]): Case[(A, B), N] = CaseGiven(this, given)
+
   def probability[B](given: Option[Case[B, N]] = None): N
+
   def bayes: () => N // perhaps bayes should return a Seq[Case] or similar
 }
 
@@ -81,8 +83,8 @@ case class CaseIs[A, N](distribution: Distribution[A, N], v: A)(implicit val fie
   def probability[G](given: Option[Case[G, N]]): N =
     distribution match {
       case d0: Distribution0[A, N] => d0.probabilityOf(v)
-      case d1: Distribution1[A, G, N] => given
-        .map(g => d1.probabilityOf(v, g))
+      case d1: Distribution1[A, _, N] => given
+        .map(g => d1.asInstanceOf[Distribution1[A, G, N]].probabilityOf(v, g))
         .getOrElse(d1.probabilityOf(v))
     }
 

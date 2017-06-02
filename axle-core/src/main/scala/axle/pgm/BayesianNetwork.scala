@@ -183,26 +183,27 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    */
 
   def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N, DG] = {
-    val result = BayesianNetwork[T, N, DG](resultName, ???)
-    eOpt.map(e => {
-      e.map(_.distribution) foreach { U =>
-        val uVertex = result.graph.findVertex(_.rv === U).get
-        result.graph.outputEdgesOf(uVertex) foreach { edge => // ModelEdge
-          // TODO !!!
-          //          val X = edge.dest.payload.rv
-          //          val oldF = result.cpt(X)
-          //          result.deleteEdge(edge) // TODO: not functional
-          //          val smallerF: Factor = makeFactorFor(X)
-          //          smallerF.cases foreach { c =>
-          //            // set its value to what e sets it to
-          //            // TODO c(U) = e.valueOf(U)
-          //            // TODO smallerF(c) = oldF(c)
-          //          }
-          // TODO result.setCPT(edge.getDest.getPayload, smallerF) // TODO should be setting on the return value
-        }
-      }
-      result
-    }).getOrElse(result)
+    //    val result = BayesianNetwork[T, N, DG](resultName, ???)
+    //    eOpt.map(e => {
+    //      e.map(_.distribution) foreach { U =>
+    //        val uVertex = result.graph.findVertex(_.rv === U).get
+    //        result.graph.outputEdgesOf(uVertex) foreach { edge => // ModelEdge
+    //          // TODO !!!
+    //          //          val X = edge.dest.payload.rv
+    //          //          val oldF = result.cpt(X)
+    //          //          result.deleteEdge(edge) // TODO: not functional
+    //          //          val smallerF: Factor = makeFactorFor(X)
+    //          //          smallerF.cases foreach { c =>
+    //          //            // set its value to what e sets it to
+    //          //            // TODO c(U) = e.valueOf(U)
+    //          //            // TODO smallerF(c) = oldF(c)
+    //          //          }
+    //          // TODO result.setCPT(edge.getDest.getPayload, smallerF) // TODO should be setting on the return value
+    //        }
+    //      }
+    //      result
+    //    }).getOrElse(result)
+    ???
   }
 
   def pruneNodes(Q: Set[Distribution[T, N]], eOpt: Option[List[CaseIs[T, N]]], g: BayesianNetwork[T, N, DG]): BayesianNetwork[T, N, DG] = {
@@ -229,8 +230,13 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    * 6.8.3
    */
 
-  def pruneNetworkVarsAndEdges(Q: Set[Distribution[T, N]], eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N, DG] =
-    BayesianNetwork(this.name, ???) // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
+  def pruneNetworkVarsAndEdges(
+    Q: Set[Distribution[T, N]],
+    eOpt: Option[List[CaseIs[T, N]]]): BayesianNetwork[T, N, DG] = {
+    // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
+    // BayesianNetwork(this.name, ???)
+    ???
+  }
   //
   //  def variableEliminationPR(Q: Set[Distribution[_]], eOpt: Option[List[CaseIs[_]]]): (Factor, BayesianNetwork) = {
   //
@@ -336,17 +342,18 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
     τ: EliminationTree[T, N, UG],
     f: Factor[T, N])(
       implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]): (BayesianNetwork[T, N, DG], Factor[T, N]) = {
-    while (τ.graph.vertices.size > 1) {
-      // remove node i (other than r) that has single neighbor j in τ
-      val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_ === f).get)
-      fl.map(i => {
-        val j = τ.graph.neighbors(i).iterator.next()
-        val ɸ_i = i
-        //τ.graph.delete(i)
-        // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables.toSet -- τ.getAllVariables.toSet))
-      })
-    }
-    (???, f.projectToOnly(Q.toVector))
+    //    while (τ.graph.vertices.size > 1) {
+    //      // remove node i (other than r) that has single neighbor j in τ
+    //      val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_ === f).get)
+    //      fl.map(i => {
+    //        val j = τ.graph.neighbors(i).iterator.next()
+    //        val ɸ_i = i
+    //        //τ.graph.delete(i)
+    //        // TODO j.setPayload(ɸ_i.sumOut(ɸ_i.getVariables.toSet -- τ.getAllVariables.toSet))
+    //      })
+    //    }
+    //    (???, f.projectToOnly(Q.toVector))
+    ???
   }
 
   //  def factorElimination3(Q: Set[Distribution[_]], τ: EliminationTree, f: Factor): Factor = {

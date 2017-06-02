@@ -5,7 +5,6 @@ import org.scalatest._
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import axle._
 import spire.implicits._
 import axle.syntax.setfrom._
 import axle.syntax.mapfrom._

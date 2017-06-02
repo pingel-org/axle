@@ -60,11 +60,11 @@ object Gold {
         .flatMap(_._2)
   }
 
-  case class HardCodedLearner(G: Grammar) extends Learner[Nothing] {
+  case class HardCodedLearner(G: Grammar) extends Learner[Unit] {
 
-    def initialState: Nothing = null.asInstanceOf[Nothing]
+    def initialState: Unit = null.asInstanceOf[Unit]
 
-    def processExpression(state: Nothing, e: Expression): (Nothing, Option[Grammar]) =
+    def processExpression(state: Unit, e: Expression): (Unit, Option[Grammar]) =
       (initialState, Some(G))
   }
 

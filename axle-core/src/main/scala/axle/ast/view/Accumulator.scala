@@ -1,6 +1,5 @@
 package axle.ast.view
 
-/*
 trait Accumulator {
 
   type A <: Accumulator
@@ -20,4 +19,3 @@ trait Accumulator {
   def accPopAndWrapStack(label: String): A
 
 }
-*/

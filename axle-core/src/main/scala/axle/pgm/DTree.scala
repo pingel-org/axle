@@ -24,11 +24,11 @@ case class DTree[T: Eq, N: Field]() {
       val ct = context(t) // Set<Distribution>
       cluster(t).filter(v => !ct.contains(v)).toList
     } else {
-      val leftPi: List[Distribution[T, N]] = ???
-      val rightPi: List[Distribution[T, N]] = ???
+      // val leftPi: List[Distribution[T, N]] = ???
+      // val rightPi: List[Distribution[T, N]] = ???
       // TODO merge them
       // TODO add cluster(t) - context(t) in any order to result
-      Nil
+      ???
     }
 
 }
