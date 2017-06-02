@@ -83,9 +83,9 @@ case class CaseIs[A, N](distribution: Distribution[A, N], v: A)(implicit val fie
   def probability[G](given: Option[Case[G, N]]): N =
     distribution match {
       case d0: Distribution0[A, N] => d0.probabilityOf(v)
-//      case d1: Distribution1[A, G, N] => given
-//        .map(g => d1.probabilityOf(v, g))
-//        .getOrElse(d1.probabilityOf(v))
+      case d1: Distribution1[A, _, N] => given
+        .map(g => d1.asInstanceOf[Distribution1[A, G, N]].probabilityOf(v, g))
+        .getOrElse(d1.probabilityOf(v))
     }
 
   def bayes = () => this.probability()
