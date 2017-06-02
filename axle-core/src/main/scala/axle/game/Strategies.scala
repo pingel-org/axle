@@ -127,10 +127,11 @@ object Strategies {
     if (evGame.outcome(game, state).isDefined || depth <= 0) {
       (null.asInstanceOf[M], heuristic(state)) // TODO null
     } else {
-      val initial = AlphaBetaFold(game, null.asInstanceOf[M], cutoff, false)
-      val ms = evGame.maskState(game, state, ???) // TODO move this elsewhere
-      val result = evGame.moves(game, ms).foldLeft(initial)(_.process(_, state, heuristic))
-      (result.move, result.cutoff)
+//      val initial = AlphaBetaFold(game, null.asInstanceOf[M], cutoff, false)
+//      val ms = evGame.maskState(game, state, ???) // TODO move this elsewhere
+//      val result = evGame.moves(game, ms).foldLeft(initial)(_.process(_, state, heuristic))
+//      (result.move, result.cutoff)
+      ???
     }
 
 }
