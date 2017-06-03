@@ -84,9 +84,10 @@ object NeedlemanWunsch {
     val zipped = zipper.zip(A, B)
 
     val scores: G =
-      zipped.map({
-        case (a: N, b: N) =>
-          if (a === gap || b === gap) { gapPenalty } else { similarity(a, b) }
+      zipped.map({ ab =>
+        val an = ab._1.asInstanceOf[N]
+        val bn = ab._2.asInstanceOf[N]
+        if (an === gap || bn === gap) { gapPenalty } else { similarity(an, bn) }
       })
 
     Σ[V, G](scores)
