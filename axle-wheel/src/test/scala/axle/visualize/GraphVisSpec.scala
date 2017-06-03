@@ -38,7 +38,7 @@ class GraphVisSpec extends FunSuite with Matchers {
 
     import axle.awt._
     val pngName = "ug.png"
-    png(g, pngName)
+    png(JungUndirectedSparseGraphVisualization(g, 200, 200, 10), pngName)
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
@@ -78,7 +78,7 @@ class GraphVisSpec extends FunSuite with Matchers {
 
     import axle.awt._
     val pngName = "dg.png"
-    png(dg, pngName)
+    png(JungDirectedSparseGraphVisualization(dg, 200, 200, 10), pngName)
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
