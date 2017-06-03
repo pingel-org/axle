@@ -13,8 +13,6 @@ import axle.visualize.element._
 case class PlotComponent[S, X, Y, D](plot: Plot[S, X, Y, D])
     extends JPanel {
 
-  var drawnData: Option[Seq[(S, D)]] = None
-
   import plot._
 
   setMinimumSize(new Dimension(width, height))

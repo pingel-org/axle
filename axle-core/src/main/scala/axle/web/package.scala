@@ -31,18 +31,18 @@ package object web {
     </svg>
 
   def svg[T: SVG](t: T, filename: String, width: Int, height: Int): Unit =
-    XML.save(filename, svgFrame(SVG[T].svg(t), width.toDouble, height.toDouble), encoding, true, null)
+    XML.save(filename, svgFrame(SVG[T].svg(t), width.toDouble, height.toDouble), encoding, true)
 
   def svg[T: SVG](t: T, filename: String): Unit = {
     val nodes = SVG[T].svg(t)
     if (nodes.length == 1 && nodes.head.label == "svg") {
-      XML.save(filename, nodes.head, encoding, true, null)
+      XML.save(filename, nodes.head, encoding, true)
     } else {
-      XML.save(filename, svgFrame(nodes, 500, 500), encoding, true, null)
+      XML.save(filename, svgFrame(nodes, 500, 500), encoding, true)
     }
   }
 
   def html[T: SVG](t: T, filename: String): Unit =
-    XML.save(filename, bodify(SVG[T].svg(t)), encoding, true, null)
+    XML.save(filename, bodify(SVG[T].svg(t)), encoding, true)
 
 }

@@ -52,7 +52,7 @@ object Gold {
 
     def processExpression(state: S, expression: Expression): (S, Option[Grammar])
 
-    val noGuess = None.asInstanceOf[Option[Grammar]]
+    val noGuess = Option.empty[Grammar]
 
     def guesses(T: Text): Iterator[Grammar] =
       T.expressions.iterator
@@ -62,7 +62,7 @@ object Gold {
 
   case class HardCodedLearner(G: Grammar) extends Learner[Unit] {
 
-    def initialState: Unit = null.asInstanceOf[Unit]
+    def initialState: Unit = {}
 
     def processExpression(state: Unit, e: Expression): (Unit, Option[Grammar]) =
       (initialState, Some(G))

@@ -14,7 +14,6 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 
 import scala.concurrent.duration._
-import scala.reflect.ClassTag
 
 import cats.kernel.Eq
 import cats.implicits._
@@ -105,17 +104,17 @@ package object awt {
       def component(plot: Plot[S, X, Y, D]) = PlotComponent(plot)
     }
 
-  implicit def drawScatterPlot[S, X, Y, D: ClassTag]: Draw[ScatterPlot[S, X, Y, D]] =
+  implicit def drawScatterPlot[S, X, Y, D]: Draw[ScatterPlot[S, X, Y, D]] =
     new Draw[ScatterPlot[S, X, Y, D]] {
       def component(plot: ScatterPlot[S, X, Y, D]) = ScatterPlotComponent(plot)
     }
 
-  implicit def drawBarChart[C, Y, D: ClassTag, H]: Draw[BarChart[C, Y, D, H]] =
+  implicit def drawBarChart[C, Y, D, H]: Draw[BarChart[C, Y, D, H]] =
     new Draw[BarChart[C, Y, D, H]] {
       def component(chart: BarChart[C, Y, D, H]) = BarChartComponent(chart)
     }
 
-  implicit def drawBarChartGrouped[G, S, Y, D: ClassTag, H]: Draw[BarChartGrouped[G, S, Y, D, H]] =
+  implicit def drawBarChartGrouped[G, S, Y, D, H]: Draw[BarChartGrouped[G, S, Y, D, H]] =
     new Draw[BarChartGrouped[G, S, Y, D, H]] {
       def component(chart: BarChartGrouped[G, S, Y, D, H]) = BarChartGroupedComponent(chart)
     }
