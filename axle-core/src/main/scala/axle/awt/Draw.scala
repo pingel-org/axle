@@ -1,12 +1,15 @@
 package axle.awt
 
-import java.awt.Component
+import java.awt.Dimension
+import java.awt.Graphics2D
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("Witness not found for Draw[${T}]")
 trait Draw[T] {
 
-  def component(t: T): Component
+  def dimension(t: T): Dimension
+
+  def paint(t: T, g2d: Graphics2D): Unit
 }
 
 object Draw {
