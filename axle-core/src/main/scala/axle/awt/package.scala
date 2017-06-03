@@ -5,7 +5,6 @@ import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Color
 import java.awt.Dimension
-import java.awt.Graphics
 import java.awt.Graphics2D
 import java.io.File
 
@@ -42,25 +41,23 @@ package object awt {
 
   def draw[T: Draw](t: T): Unit = {
 
-    val draw = Draw[T]
-    val panel = AxlePanel(t)
-    val minSize = panel.getMinimumSize
+    val component = Draw[T].component(t)
+    val minSize = component.getMinimumSize
     val frame = AxleFrame(minSize.width, minSize.height)
     frame.initialize()
-    val rc = frame.add(panel)
+    val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
   }
 
   def play[T: Draw, D](t: T, dataStream: Observable[D])(implicit scheduler: Scheduler): (AxleFrame, Cancelable) = {
 
-    val draw = Draw[T]
-    val panel = AxlePanel(t)
-    val minSize = panel.getMinimumSize
+    val component = Draw[T].component(t)
+    val minSize = component.getMinimumSize
     val frame = AxleFrame(minSize.width, minSize.height)
 
     frame.initialize()
-    val rc = frame.add(panel)
+    val rc = frame.add(component)
     rc.setVisible(true)
     frame.setVisible(true)
     frame.repaint()
@@ -100,8 +97,8 @@ package object awt {
     }
   }
 
-  implicit def drawPlot[S, X, Y, D]: Draw[Plot[S, X, Y, D]] =
-    new Draw[Plot[S, X, Y, D]] {
+  implicit def drawPlot[S, X, Y, D]: DrawPanel[Plot[S, X, Y, D]] =
+    new DrawPanel[Plot[S, X, Y, D]] {
 
       def dimension(plot: Plot[S, X, Y, D]): Dimension = {
         import plot._
@@ -130,8 +127,8 @@ package object awt {
 
     }
 
-  implicit def drawScatterPlot[S, X, Y, D]: Draw[ScatterPlot[S, X, Y, D]] =
-    new Draw[ScatterPlot[S, X, Y, D]] {
+  implicit def drawScatterPlot[S, X, Y, D]: DrawPanel[ScatterPlot[S, X, Y, D]] =
+    new DrawPanel[ScatterPlot[S, X, Y, D]] {
 
       def dimension(plot: ScatterPlot[S, X, Y, D]) = {
         import plot._
@@ -155,8 +152,8 @@ package object awt {
       }
     }
 
-  implicit def drawBarChart[C, Y, D, H]: Draw[BarChart[C, Y, D, H]] =
-    new Draw[BarChart[C, Y, D, H]] {
+  implicit def drawBarChart[C, Y, D, H]: DrawPanel[BarChart[C, Y, D, H]] =
+    new DrawPanel[BarChart[C, Y, D, H]] {
 
       def dimension(chart: BarChart[C, Y, D, H]) = {
         import chart._
@@ -184,8 +181,8 @@ package object awt {
       }
     }
 
-  implicit def drawBarChartGrouped[G, S, Y, D, H]: Draw[BarChartGrouped[G, S, Y, D, H]] =
-    new Draw[BarChartGrouped[G, S, Y, D, H]] {
+  implicit def drawBarChartGrouped[G, S, Y, D, H]: DrawPanel[BarChartGrouped[G, S, Y, D, H]] =
+    new DrawPanel[BarChartGrouped[G, S, Y, D, H]] {
 
       def dimension(chart: BarChartGrouped[G, S, Y, D, H]) = {
         import chart._
@@ -228,8 +225,8 @@ package object awt {
     }
 
   implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
-    implicit drawDG: Draw[DG], dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): Draw[BayesianNetwork[T, N, DG]] = {
-    new Draw[BayesianNetwork[T, N, DG]] {
+    implicit drawDG: DrawPanel[DG], dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): DrawPanel[BayesianNetwork[T, N, DG]] = {
+    new DrawPanel[BayesianNetwork[T, N, DG]] {
       def dimension(bn: BayesianNetwork[T, N, DG]) =
         drawDG.dimension(bn.graph)
       def paint(bn: BayesianNetwork[T, N, DG], g2d: Graphics2D): Unit =
@@ -237,8 +234,8 @@ package object awt {
     }
   }
 
-  implicit def drawKMeansVisualization[T, F, G, M]: Draw[KMeansVisualization[T, F, G, M]] =
-    new Draw[KMeansVisualization[T, F, G, M]] {
+  implicit def drawKMeansVisualization[T, F, G, M]: DrawPanel[KMeansVisualization[T, F, G, M]] =
+    new DrawPanel[KMeansVisualization[T, F, G, M]] {
 
       def dimension(kmv: KMeansVisualization[T, F, G, M]) = {
         import kmv._
