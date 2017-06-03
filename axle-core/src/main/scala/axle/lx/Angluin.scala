@@ -110,7 +110,7 @@ object Angluin {
 
     def processExpression(state: S, expression: Iterable[Symbol]): (S, Option[Grammar])
 
-    val noGuess = None.asInstanceOf[Option[Grammar]]
+    val noGuess = Option.empty[Grammar]
 
     def guesses(T: Text): Iterator[Grammar] =
       T.expressions.iterator
@@ -124,9 +124,10 @@ object Angluin {
 
   case class SilentLearner(T: Text) extends Learner[Unit] {
 
-    def initialState = null.asInstanceOf[Unit]
+    def initialState: Unit = {}
 
-    def processExpression(state: Unit, expression: Iterable[Symbol]) = (initialState, None)
+    def processExpression(state: Unit, expression: Iterable[Symbol]) =
+      (initialState, None)
   }
 
   /**
@@ -135,7 +136,7 @@ object Angluin {
 
   case class HardCodedLearner(G: Grammar) extends Learner[Unit] {
 
-    def initialState: Unit = null.asInstanceOf[Unit]
+    def initialState: Unit = {}
 
     def processExpression(state: Unit, expression: Iterable[Symbol]): (Unit, Option[Grammar]) =
       (initialState, Some(G))
