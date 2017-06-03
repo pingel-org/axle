@@ -3,7 +3,6 @@ package axle.bio
 import scala.Stream.cons
 import scala.Stream.empty
 import scala.Vector
-import scala.reflect.ClassTag
 
 import cats.kernel.Order
 import cats.kernel.Eq
@@ -45,7 +44,7 @@ import NeedlemanWunsch.computeF
 
 object NeedlemanWunsch {
 
-  def alignmentScoreK1[C[_], N: Eq: ClassTag, I: Ring: Eq, M, V: AdditiveMonoid: Eq](
+  def alignmentScoreK1[C[_], N: Eq, I: Ring: Eq, M, V: AdditiveMonoid: Eq](
     a: C[N],
     b: C[N],
     gap: N,
@@ -68,7 +67,7 @@ object NeedlemanWunsch {
    * ←
    */
 
-  def alignmentScore[S, N: Eq: ClassTag, I: Ring: Eq, M, V: AdditiveMonoid: Eq, SS, G](
+  def alignmentScore[S, N: Eq, I: Ring: Eq, M, V: AdditiveMonoid: Eq, SS, G](
     A: S,
     B: S,
     gap: N,
