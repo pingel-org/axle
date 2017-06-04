@@ -82,8 +82,8 @@ implicit val showEdge: Show[Edge] = new Show[Edge] {
 
 val vis = DirectedGraphVisualization(
   dg,
-  width = 500,
-  height = 500,
+  width = 300,
+  height = 300,
   border = 10,
   radius = 10,
   arrowLength = 10,
@@ -143,7 +143,7 @@ Visualize the graph
 import axle.visualize._
 import axle.web._
 
-val vis = UndirectedGraphVisualization(ug, width=500, height=500, border=10, color=Color.yellow)
+val vis = UndirectedGraphVisualization(ug, width=300, height=300, border=10, color=Color.yellow)
 
 svg(vis, "SimpleUndirectedGraph.svg")
 ```
