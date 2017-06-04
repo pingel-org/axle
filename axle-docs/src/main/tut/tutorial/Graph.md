@@ -116,7 +116,7 @@ that we will use Jung's `UndirectedSparseGraph` as the graph type, with
 val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
 ```
 
-Use the `ug` witness's `make` method to create the undirected graph
+Use the `jug` witness's `make` method to create the undirected graph
 
 ```tut:book
 val ug = jug.make(List(a, b, c, d),
