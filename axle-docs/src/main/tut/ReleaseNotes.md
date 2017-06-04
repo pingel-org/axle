@@ -6,6 +6,12 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.4.1 (June 4, 2017)
+* Fix all warnings, and turn on fatal warnings
+* DrawPanel typeclass
+* Configurable visualization parameters for {un,}directedGraph and BayesianNetwork
+* Make Monix "provided"
+
 ## 0.4.0 (May 30, 2017)
 * axle-core gets axle-visualize and most of axle-algorithm
 * new axle-wheel formed from axle-{test, games, languages} and parts of axle-algorithms
