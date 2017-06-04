@@ -64,7 +64,8 @@ Visualize the graph
 import axle.visualize._
 import axle.web._
 
-svg(DirectedGraphVisualization(dg), "SimpleDirectedGraph.svg")
+val vis = DirectedGraphVisualization(dg, width=500, height=500, border=10, color=Color.green)
+svg(vis, "SimpleDirectedGraph.svg")
 ```
 
 ![directed graph](/tutorial/images/SimpleDirectedGraph.svg)
@@ -115,7 +116,8 @@ Visualize the graph
 import axle.visualize._
 import axle.web._
 
-svg(UndirectedGraphVisualization(ug), "SimpleUndirectedGraph.svg")
+val vis = UndirectedGraphVisualization(ug, width=500, height=500, border=10, color=Color.yellow)
+svg(vis, "SimpleUndirectedGraph.svg")
 ```
 
 ![undirected graph](/tutorial/images/SimpleUndirectedGraph.svg)
