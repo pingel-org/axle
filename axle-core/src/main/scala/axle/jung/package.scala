@@ -660,20 +660,4 @@ package object jung {
       }
     }
 
-  import spire.algebra.Field
-  import axle.visualize.BayesianNetworkVisualization
-  import axle.pgm.BayesianNetworkNode
-
-  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq](
-    implicit drawDG: Draw[DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[T, N], axle.pgm.Edge]]]): Draw[BayesianNetworkVisualization[T, N]] = {
-    new Draw[BayesianNetworkVisualization[T, N]] {
-
-      def component(vis: BayesianNetworkVisualization[T, N]): java.awt.Component = {
-        import vis._
-        val subVis = DirectedGraphVisualization(vis.bn.graph, width, height, border)
-        drawDG.component(subVis)
-      }
-    }
-  }
-
 }

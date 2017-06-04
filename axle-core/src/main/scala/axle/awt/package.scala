@@ -583,4 +583,20 @@ package object awt {
     }
   }
 
+  import spire.algebra.Field
+  import axle.visualize.BayesianNetworkVisualization
+  import cats.Eq
+
+  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+    implicit drawDG: Draw[DirectedGraphVisualization[DG]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
+    new Draw[BayesianNetworkVisualization[T, N, DG]] {
+
+      def component(vis: BayesianNetworkVisualization[T, N, DG]): java.awt.Component = {
+        import vis._
+        val subVis = DirectedGraphVisualization(vis.bn.graph, width, height, border)
+        drawDG.component(subVis)
+      }
+    }
+  }
+
 }
