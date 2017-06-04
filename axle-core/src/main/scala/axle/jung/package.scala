@@ -25,7 +25,6 @@ import axle.web.SVG.rgb
 import axle.web.svgFrame
 import axle.visualize.angleDouble
 import axle.visualize.Color.black
-import axle.visualize.Color.yellow
 import axle.awt.Draw
 import axle.visualize.DirectedGraphVisualization
 import axle.visualize.UndirectedGraphVisualization
