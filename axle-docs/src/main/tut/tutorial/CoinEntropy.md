@@ -33,7 +33,9 @@ import axle.stats.coin
 Create dataset
 
 ```tut:book
-val hm: D = new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++ (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i, 100))))).toMap
+val hm: D =
+  new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
+    (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i.toLong, 100))))).toMap
 ```
 
 Define visualization
