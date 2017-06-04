@@ -7,24 +7,22 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
 /**
- *
  * Cosine
  *
  * http://en.wikipedia.org/wiki/Cosine_similarity
  *
- * @param n = num columns in row vectors
+ * n = num columns in row vectors
  *
  * http://math.stackexchange.com/questions/102924/cosine-similarity-distance-and-triangle-equation
  *
  * Also see:
  *
- *   "Metric Distances Derived from Cosine Similarity and Pearson and Spearman Correlations"
+ *   Metric Distances Derived from Cosine Similarity and Pearson and Spearman Correlations
  *   http://arxiv.org/pdf/1208.3145.pdf
  *
  * one distance in terms of similarity:
  *
  *   1d - 2d *abs(acos(similarity(u, v)) / Pi)
- *
  */
 
 case class Cosine[M, D: NRoot: Field](
