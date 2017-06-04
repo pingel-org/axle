@@ -1,4 +1,4 @@
-package axle.awt
+package axle.visualize
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 

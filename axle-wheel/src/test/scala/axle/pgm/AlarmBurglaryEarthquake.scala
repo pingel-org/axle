@@ -89,6 +89,7 @@ class ABE extends FunSuite with Matchers {
   test("bayesian network visualization") {
 
     import axle.awt._
+    import axle.visualize._
 
     val pngGName = "gnGraph.png"
     val graphVis = JungDirectedSparseGraphVisualization[BayesianNetworkNode[Boolean, Rational], Edge](

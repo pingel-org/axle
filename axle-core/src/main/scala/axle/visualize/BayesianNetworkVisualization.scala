@@ -1,4 +1,4 @@
-package axle.awt
+package axle.visualize
 
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
