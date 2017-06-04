@@ -26,8 +26,6 @@ import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
 import spire.implicits.eqOps
 
-import axle.algebra.DirectedGraph
-import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
