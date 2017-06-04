@@ -549,7 +549,7 @@ package object jung {
         vv.setMinimumSize(new Dimension(width + border, height + border))
 
         val vertexPaint = new GoogleFunction[VP, Paint]() {
-          def apply(i: VP): Paint = Color.GREEN
+          def apply(i: VP): Paint = Color.GREEN // TODO use color.{r,g,b}
         }
 
         val dash = List(10f).toArray
@@ -618,7 +618,7 @@ package object jung {
         vv.setMinimumSize(new Dimension(width + border, height + border))
 
         val vertexPaint = new GoogleFunction[VP, Paint]() {
-          def apply(i: VP): Paint = Color.GREEN
+          def apply(i: VP): Paint = Color.GREEN // TODO use color.{r,g,b}
         }
 
         val dash = List(10f).toArray
