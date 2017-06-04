@@ -58,7 +58,7 @@ implicit val showDDAt1 = new Show[Double => Double] {
 import axle.visualize._
 import axle.web._
 
-svg(distanceConverter.conversionGraph, "Distance.svg")
+svg(DirectedGraphVisualization(distanceConverter.conversionGraph), "Distance.svg")
 ```
 
 Units

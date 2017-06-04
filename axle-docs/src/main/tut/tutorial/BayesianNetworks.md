@@ -87,7 +87,7 @@ Create an SVG visualization
 import axle.visualize._
 import axle.web._
 
-svg(bn, "alarmbayes.svg")
+svg(BayesianNetworkVisualization(bn, 1000, 1000, 20), "alarmbayes.svg")
 ```
 
 ![alarm bayes network](/tutorial/images/alarmbayes.svg)

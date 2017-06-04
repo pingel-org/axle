@@ -64,6 +64,10 @@ libraryDependencies ++= Seq(
   "net.sf.jung"            % "jung-graph-impl"    % "2.1",
   //"net.sf.jung"          % "jung-io"            % "2.1",
 
+  // for animations
+  "io.monix"               %% "monix-reactive"    % "2.3.0",
+  "io.monix"               %% "monix-cats"        % "2.3.0",
+
   // needed by axle-jblas
   "org.jblas"              % "jblas"              % "1.2.4",
 

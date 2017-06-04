@@ -6,27 +6,35 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.4.x (Summer 2017)
+## 0.4.2 (July 2017)
+* Probability trait
+* Remove several asInstanceOf
+* Review ClassTag and Manifest usage
+
+## 0.4.3 (Summer 2017)
+* `axle.web.Table` and `HtmlFrom[Table[T]`
+* Clean up GA doc
+
+## 0.4.4 (Summer 2017)
 * Remove Spark spoke
 * Publish Scala 2.12 artifacts
-* Fix implicit numeric widening warnings
 * Remove Spark impacts on Functor, etc, and just use Cats versions
-* `axle.web.Table` and `HtmlFrom[Table[T]`
-* Factor Draw to return something other than Component
-* Clean up GA doc
-* Fix sbt-release plugin (use sbt-sonatype?)
-* … as Stream.from(Int)
-* Configurable visualization parameters for {un,}directedGraph
-* SVG[H] for BarChart hover (wrap with <g> to do getBBox)
+
+## 0.4.x (Summer 2017)
+* Honor graph vis params in awt graph visualizations
+* Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
+* Log scale
 * SVG[Matrix]
 * `BarChart` Variable width bars
 * Horizontal barchart
 * `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
+* SVG[H] for BarChart hover (wrap with <g> to do getBBox)
 * Background box for `ScatterPlot` hover text?
-* Log scale
-* Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
 * Fix multi-color cube rendering
 * Bloom filter surface
+* Fix sbt-release plugin (use sbt-sonatype?)
+* … as Stream.from(Int)
+* Factor similarity between SVG and Draw?
 
 ## 0.5.x (Last half of 2017)
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
