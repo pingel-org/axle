@@ -54,13 +54,14 @@ class ABE extends FunSuite with Matchers {
       Vector(A is false, M is false) -> Rational(99, 100)))
 
   // edges: ba, ea, aj, am
-  val bn = BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
-    "A sounds (due to Burglary or Earthquake) and John or Mary Call",
-    Map(B -> bFactor,
-      E -> eFactor,
-      A -> aFactor,
-      J -> jFactor,
-      M -> mFactor))
+  val bn: BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]] =
+    BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
+      "A sounds (due to Burglary or Earthquake) and John or Mary Call",
+      Map(B -> bFactor,
+        E -> eFactor,
+        A -> aFactor,
+        J -> jFactor,
+        M -> mFactor))
 
   test("bayesian networks produces a Joint Probability Table, which is '1' when all variables are removed") {
 
@@ -85,4 +86,29 @@ class ABE extends FunSuite with Matchers {
     sansAll.evaluate(Seq.empty, Seq.empty) should be(Rational(1))
   }
 
+  test("bayesian network visualization") {
+
+    import axle.awt._
+
+    val pngGName = "gnGraph.png"
+    val graphVis = JungDirectedSparseGraphVisualization[BayesianNetworkNode[Boolean, Rational], Edge](
+      bn.graph, 200, 200, 10)
+    png(graphVis, pngGName)
+
+    //    import axle.HtmlFrom
+    //    implicitly[HtmlFrom[BayesianNetworkNode[Boolean, Rational]]]
+    //    implicitly[cats.Show[Edge]]
+    //    axle.awt.drawJungDirectedSparseGraphVisualization[BayesianNetworkNode[Boolean, Rational], Edge]
+    //    val graphDrawer = implicitly[Draw[JungDirectedSparseGraphVisualization[BayesianNetworkNode[Boolean, Rational], Edge]]]
+    //    val visDrawer = axle.awt.drawBayesianNetworkVisualization[Boolean, Rational]
+    //    visDrawer.component(vis)
+
+    val pngName = "bn.png"
+    val vis = BayesianNetworkVisualization[Boolean, Rational](bn, 200, 200, 10)
+    png(vis, pngName)
+
+    new java.io.File(pngGName).exists should be(true)
+    new java.io.File(pngName).exists should be(true)
+
+  }
 }

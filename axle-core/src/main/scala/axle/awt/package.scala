@@ -272,7 +272,7 @@ package object awt {
 
     }
 
-  implicit def drawJungDirectedGraphVisualization[VP: HtmlFrom, EP: Show]: Draw[JungDirectedSparseGraphVisualization[VP, EP]] =
+  implicit def drawJungDirectedSparseGraphVisualization[VP: HtmlFrom, EP: Show]: Draw[JungDirectedSparseGraphVisualization[VP, EP]] =
     new Draw[JungDirectedSparseGraphVisualization[VP, EP]] {
 
       import java.awt.BasicStroke
@@ -348,13 +348,15 @@ package object awt {
       }
     }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
-    implicit drawDG: DrawPanel[DG], dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): DrawPanel[BayesianNetwork[T, N, DG]] = {
-    new DrawPanel[BayesianNetwork[T, N, DG]] {
-      def dimension(bn: BayesianNetwork[T, N, DG]) =
-        drawDG.dimension(bn.graph)
-      def paint(bn: BayesianNetwork[T, N, DG], g2d: Graphics2D): Unit =
-        drawDG.paint(bn.graph, g2d)
+  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq](
+    implicit drawDG: Draw[JungDirectedSparseGraphVisualization[BayesianNetworkNode[T, N], axle.pgm.Edge]]): Draw[BayesianNetworkVisualization[T, N]] = {
+    new Draw[BayesianNetworkVisualization[T, N]] {
+
+      def component(vis: BayesianNetworkVisualization[T, N]): java.awt.Component = {
+        import vis._
+        val subVis = JungDirectedSparseGraphVisualization(vis.bn.graph, width, height, border)
+        drawDG.component(subVis)
+      }
     }
   }
 
