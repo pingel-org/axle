@@ -63,7 +63,7 @@ Visualize the graph
 ```tut:book
 import axle.web._
 
-svg(dg, "SimpleDirectedGraph.svg")
+svg(DirectedGraphVisualization(dg), "SimpleDirectedGraph.svg")
 ```
 
 ![directed graph](/tutorial/images/SimpleDirectedGraph.svg)
@@ -113,7 +113,7 @@ Visualize the graph
 ```tut:book
 import axle.web._
 
-svg(ug, "SimpleUndirectedGraph.svg")
+svg(UndirectedGraphVisualization(ug), "SimpleUndirectedGraph.svg")
 ```
 
 ![undirected graph](/tutorial/images/SimpleUndirectedGraph.svg)
