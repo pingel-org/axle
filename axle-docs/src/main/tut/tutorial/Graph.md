@@ -11,31 +11,43 @@ Directed Graph
 
 Imports and implicits
 
-```tut:book:silent
+```tut:silent
 import cats.implicits._
 import cats.Show
 import axle._
-import axle.algebra._
+
+import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.jung._
+
+import axle.algebra._
 import axle.syntax.directedgraph.directedGraphOps
 import axle.syntax.undirectedgraph.undirectedGraphOps
 import axle.syntax.finite.finiteOps
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-
-class Edge
-implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 ```
 
-Example
+Example with `String` is the vertex value
+
+```tut:book
+val (a, b, c, d) = ("a", "b", "c", "d")
+```
+
+And a stateless `Edge` type as the edge value
+
+```tut:book
+class Edge
+```
+
+Invokes the `DirectedGraph` typeclass with type parameters that denote
+that we will use Jung's `DirectedSparseGraph` as the graph type, with
+`String` and `Edge` as vertex and edge values, respectively.
 
 ```tut:book
 val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
+```
 
-val a = "a"
-val b = "b"
-val c = "c"
-val d = "d"
+Use the `jdg` witness's `make` method to create the directed graph
 
+```tut:book
 val dg = jdg.make(List(a, b, c, d),
   List(
     (a, b, new Edge),
@@ -64,7 +76,20 @@ Visualize the graph
 import axle.visualize._
 import axle.web._
 
-val vis = DirectedGraphVisualization(dg, width=500, height=500, border=10, color=Color.green)
+implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
+
+val vis = DirectedGraphVisualization(
+  dg,
+  width = 500,
+  height = 500,
+  border = 10,
+  radius = 10,
+  arrowLength = 10,
+  color = Color.green,
+  borderColor = Color.black,
+  fontSize = 12
+)
+
 svg(vis, "SimpleDirectedGraph.svg")
 ```
 
@@ -75,22 +100,16 @@ Undirected Graph
 
 Imports and implicits
 
-```tut:book:silent
+```tut:book
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
-
-class Edge
-implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 ```
 
-Example
+Example using the `Edge` edge value defined above.
 
 ```tut:book
 val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
 
-val a = "a"
-val b = "b"
-val c = "c"
-val d = "d"
+val (a, b, c, d) = ("a", "b", "c", "d")
 
 val ug = jug.make(List(a, b, c, d),
   List(
@@ -117,6 +136,7 @@ import axle.visualize._
 import axle.web._
 
 val vis = UndirectedGraphVisualization(ug, width=500, height=500, border=10, color=Color.yellow)
+
 svg(vis, "SimpleUndirectedGraph.svg")
 ```
 
