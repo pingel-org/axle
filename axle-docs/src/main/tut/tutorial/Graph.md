@@ -61,6 +61,7 @@ dg.findVertex(_ === "c").map(v => dg.neighbors(v))
 Visualize the graph
 
 ```tut:book
+import axle.visualize._
 import axle.web._
 
 svg(DirectedGraphVisualization(dg), "SimpleDirectedGraph.svg")
@@ -111,6 +112,7 @@ ug.findVertex(_ == "a").map(v => ug.neighbors(v))
 Visualize the graph
 
 ```tut:book
+import axle.visualize._
 import axle.web._
 
 svg(UndirectedGraphVisualization(ug), "SimpleUndirectedGraph.svg")
