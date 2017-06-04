@@ -31,13 +31,13 @@ Example with `String` is the vertex value
 val (a, b, c, d) = ("a", "b", "c", "d")
 ```
 
-And a stateless `Edge` type as the edge value
+And an `Edge` type with two values (a `String` and an `Int`) to represent the edges
 
 ```tut:book
-class Edge
+class Edge(val s: String, val i: Int)
 ```
 
-Invokes the `DirectedGraph` typeclass with type parameters that denote
+Invoke the `DirectedGraph` typeclass with type parameters that denote
 that we will use Jung's `DirectedSparseGraph` as the graph type, with
 `String` and `Edge` as vertex and edge values, respectively.
 
@@ -50,12 +50,12 @@ Use the `jdg` witness's `make` method to create the directed graph
 ```tut:book
 val dg = jdg.make(List(a, b, c, d),
   List(
-    (a, b, new Edge),
-    (b, c, new Edge),
-    (c, d, new Edge),
-    (d, a, new Edge),
-    (a, c, new Edge),
-    (b, d, new Edge)))
+    (a, b, new Edge("hello", 1)),
+    (b, c, new Edge("world", 4)),
+    (c, d, new Edge("hi", 3)),
+    (d, a, new Edge("earth", 1)),
+    (a, c, new Edge("!", 7)),
+    (b, d, new Edge("hey", 2))))
 ```
 
 ```tut:book
@@ -76,7 +76,9 @@ Visualize the graph
 import axle.visualize._
 import axle.web._
 
-implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
+implicit val showEdge: Show[Edge] = new Show[Edge] {
+  def show(e: Edge): String = e.s + " " + e.i
+}
 
 val vis = DirectedGraphVisualization(
   dg,
@@ -98,27 +100,33 @@ svg(vis, "SimpleDirectedGraph.svg")
 Undirected Graph
 ----------------
 
-Imports and implicits
+Imports
 
 ```tut:book
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 ```
 
-Example using the `Edge` edge value defined above.
+Example using the `Edge` edge value defined above and the same vertex values defined above.
+
+Invoke the `UndirectedGraph` typeclass with type parameters that denote
+that we will use Jung's `UndirectedSparseGraph` as the graph type, with
+`String` and `Edge` as vertex and edge values, respectively.
 
 ```tut:book
 val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
+```
 
-val (a, b, c, d) = ("a", "b", "c", "d")
+Use the `ug` witness's `make` method to create the undirected graph
 
+```tut:book
 val ug = jug.make(List(a, b, c, d),
   List(
-    (a, b, new Edge),
-    (b, c, new Edge),
-    (c, d, new Edge),
-    (d, a, new Edge),
-    (a, c, new Edge),
-    (b, d, new Edge)))
+    (a, b, new Edge("hello", 10)),
+    (b, c, new Edge("world", 1)),
+    (c, d, new Edge("hi", 3)),
+    (d, a, new Edge("earth", 7)),
+    (a, c, new Edge("!", 1)),
+    (b, d, new Edge("hey", 2))))
 ```
 
 ```tut:book
