@@ -26,6 +26,9 @@ import axle.web.svgFrame
 import axle.visualize.angleDouble
 import axle.visualize.Color.black
 import axle.visualize.Color.yellow
+import axle.awt.Draw
+import axle.visualize.DirectedGraphVisualization
+import axle.visualize.UndirectedGraphVisualization
 
 package object jung {
 
@@ -405,41 +408,33 @@ package object jung {
 
     }
 
-  implicit def svgJungDirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedSparseGraph[VP, EP]] =
-    new SVG[DirectedSparseGraph[VP, EP]] {
+  implicit def svgJungDirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] =
+    new SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] {
 
-      def svg(jdsg: DirectedSparseGraph[VP, EP]): NodeSeq = {
+      def svg(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]): NodeSeq = {
 
-        // TODO make these all configurable
-        val width = 800
-        val height = 800
-        val border = 20
-        val radius = 10
-        val arrowLength = 10
-        val color = yellow
-        val borderColor = black
-        val fontSize = 12
+        import vis._
 
-        val layout = new FRLayout(jdsg)
+        val layout = new FRLayout(dg)
         layout.setSize(new Dimension(width, height))
         val visualization = new DefaultVisualizationModel(layout)
 
-        val lines: List[Node] = jdsg.getEdges.asScala.map { edge =>
-          <line x1={ s"${layout.getX(jdsg.getSource(edge))}" } y1={ s"${layout.getY(jdsg.getSource(edge))}" } x2={ s"${layout.getX(jdsg.getDest(edge))}" } y2={ s"${layout.getY(jdsg.getDest(edge))}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
+        val lines: List[Node] = dg.getEdges.asScala.map { edge =>
+          <line x1={ s"${layout.getX(dg.getSource(edge))}" } y1={ s"${layout.getY(dg.getSource(edge))}" } x2={ s"${layout.getX(dg.getDest(edge))}" } y2={ s"${layout.getY(dg.getDest(edge))}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
         } toList
 
-        val arrows: List[Node] = jdsg.getEdges.asScala.map { edge =>
-          val height = layout.getY(jdsg.getSource(edge)) - layout.getY(jdsg.getDest(edge))
-          val width = layout.getX(jdsg.getDest(edge)) - layout.getX(jdsg.getSource(edge))
+        val arrows: List[Node] = dg.getEdges.asScala.map { edge =>
+          val height = layout.getY(dg.getSource(edge)) - layout.getY(dg.getDest(edge))
+          val width = layout.getX(dg.getDest(edge)) - layout.getX(dg.getSource(edge))
           val svgRotationAngle = 180d - (arcTangent2(height, width) in angleDouble.degree).magnitude
-          <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(jdsg.getDest(edge))},${layout.getY(jdsg.getDest(edge))}) rotate($svgRotationAngle)" }/>
+          <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(dg.getDest(edge))},${layout.getY(dg.getDest(edge))}) rotate($svgRotationAngle)" }/>
         } toList
 
-        val circles: List[Node] = jdsg.getVertices.asScala.map { vertex =>
+        val circles: List[Node] = dg.getVertices.asScala.map { vertex =>
           <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
         } toList
 
-        val labels: List[Node] = jdsg.getVertices.asScala.map { vertex =>
+        val labels: List[Node] = dg.getVertices.asScala.map { vertex =>
           val node = HtmlFrom[VP].toHtml(vertex)
           node match {
             case scala.xml.Text(text) =>
@@ -453,10 +448,10 @@ package object jung {
           }
         } toList
 
-        val edgeLabels: List[Node] = jdsg.getEdges.asScala.map { edge =>
+        val edgeLabels: List[Node] = dg.getEdges.asScala.map { edge =>
           val node = HtmlFrom[EP].toHtml(edge)
-          val cx = (layout.getX(jdsg.getDest(edge)) - layout.getX(jdsg.getSource(edge))) * 0.6 + layout.getX(jdsg.getSource(edge))
-          val cy = (layout.getY(jdsg.getDest(edge)) - layout.getY(jdsg.getSource(edge))) * 0.6 + layout.getY(jdsg.getSource(edge))
+          val cx = (layout.getX(dg.getDest(edge)) - layout.getX(dg.getSource(edge))) * 0.6 + layout.getX(dg.getSource(edge))
+          val cy = (layout.getY(dg.getDest(edge)) - layout.getY(dg.getSource(edge))) * 0.6 + layout.getY(dg.getSource(edge))
           node match {
             case Text(text) =>
               <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
@@ -474,33 +469,26 @@ package object jung {
 
     }
 
-  implicit def svgJungUndirectedGraph[VP: Eq: HtmlFrom, EP: Show]: SVG[UndirectedSparseGraph[VP, EP]] = new SVG[UndirectedSparseGraph[VP, EP]] {
+  implicit def svgJungUndirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] = new SVG[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] {
 
-    def svg(jusg: UndirectedSparseGraph[VP, EP]): NodeSeq = {
+    def svg(vis: UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]): NodeSeq = {
 
-      // TODO make these all configurable
-      val width = 600
-      val height = 600
-      val border = 20
-      val radius = 10
-      val color = yellow
-      val borderColor = black
-      val fontSize = 12
+      import vis._
 
-      val layout = new FRLayout(jusg)
+      val layout = new FRLayout(ug)
       layout.setSize(new Dimension(width, height))
       val visualization = new DefaultVisualizationModel(layout)
 
-      val lines: List[Node] = jusg.getEdges.asScala.map { edge =>
-        val (v1, v2) = jusg.vertices(edge)
+      val lines: List[Node] = ug.getEdges.asScala.map { edge =>
+        val (v1, v2) = ug.vertices(edge)
         <line x1={ s"${layout.getX(v1)}" } y1={ s"${layout.getY(v1)}" } x2={ s"${layout.getX(v2)}" } y2={ s"${layout.getY(v2)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
       } toList
 
-      val circles: List[Node] = jusg.getVertices.asScala.map { vertex =>
+      val circles: List[Node] = ug.getVertices.asScala.map { vertex =>
         <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
       } toList
 
-      val labels: List[Node] = jusg.getVertices.asScala.map { vertex =>
+      val labels: List[Node] = ug.getVertices.asScala.map { vertex =>
         val node = HtmlFrom[VP].toHtml(vertex)
         node match {
           case Text(t) =>
@@ -512,9 +500,9 @@ package object jung {
         }
       } toList
 
-      val edgeLabels: List[Node] = jusg.getEdges.asScala.map { edge =>
+      val edgeLabels: List[Node] = ug.getEdges.asScala.map { edge =>
         val node = HtmlFrom[EP].toHtml(edge)
-        val (v1, v2) = jusg.vertices(edge)
+        val (v1, v2) = ug.vertices(edge)
         val cx = (layout.getX(v2) - layout.getX(v1)) * 0.5 + layout.getX(v1)
         val cy = (layout.getY(v2) - layout.getY(v1)) * 0.5 + layout.getY(v1)
         node match {
@@ -532,6 +520,161 @@ package object jung {
       svgFrame(nodes, width.toDouble, height.toDouble)
     }
 
+  }
+
+  implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] =
+    new Draw[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] {
+
+      import java.awt.BasicStroke
+      import java.awt.Color
+      import java.awt.Dimension
+      import java.awt.Paint
+      import java.awt.Stroke
+      import java.awt.event.MouseEvent
+
+      import edu.uci.ics.jung.algorithms.layout.FRLayout
+      import edu.uci.ics.jung.visualization.VisualizationViewer
+      import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
+      import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
+      import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
+      import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
+
+      import com.google.common.base.{ Function => GoogleFunction }
+
+      def component(vis: UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]) = {
+        import vis._
+        val layout = new FRLayout(ug)
+        layout.setSize(new Dimension(width, height))
+        val vv = new VisualizationViewer(layout) // interactive
+        vv.setPreferredSize(new Dimension(width + border, height + border))
+        vv.setMinimumSize(new Dimension(width + border, height + border))
+
+        val vertexPaint = new GoogleFunction[VP, Paint]() {
+          def apply(i: VP): Paint = Color.GREEN
+        }
+
+        val dash = List(10f).toArray
+
+        val edgeStroke = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0f)
+
+        val edgeStrokeTransformer = new GoogleFunction[EP, Stroke]() {
+          def apply(edge: EP): BasicStroke = edgeStroke
+        }
+
+        val vertexLabelTransformer = new GoogleFunction[VP, String]() {
+          def apply(vertex: VP): String = string(vertex)
+        }
+
+        val edgeLabelTransformer = new GoogleFunction[EP, String]() {
+          def apply(edge: EP): String = string(edge)
+        }
+
+        vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)
+        vv.getRenderContext.setEdgeStrokeTransformer(edgeStrokeTransformer)
+        vv.getRenderContext.setVertexLabelTransformer(vertexLabelTransformer)
+        vv.getRenderContext.setEdgeLabelTransformer(edgeLabelTransformer)
+        vv.getRenderer.getVertexLabelRenderer.setPosition(Position.CNTR)
+
+        val gm = new PluggableGraphMouse()
+        gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1))
+        gm.add(new PickingGraphMousePlugin())
+        vv.setGraphMouse(gm)
+
+        vv
+      }
+
+    }
+
+  implicit def drawJungDirectedSparseGraphVisualization[VP: HtmlFrom, EP: Show]: Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] =
+    new Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] {
+
+      import java.awt.BasicStroke
+      import java.awt.Color
+      // import java.awt.Component
+      import java.awt.Dimension
+      import java.awt.Paint
+      import java.awt.Stroke
+      import java.awt.event.MouseEvent
+      import edu.uci.ics.jung.algorithms.layout.FRLayout
+      import edu.uci.ics.jung.visualization.VisualizationViewer
+      import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin
+      import edu.uci.ics.jung.visualization.control.PluggableGraphMouse
+      import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin
+      import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position
+
+      import com.google.common.base.{ Function => GoogleFunction }
+
+      def component(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]) = {
+        // see
+        // http://www.grotto-networking.com/JUNG/
+        // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf
+
+        import vis._
+
+        val layout = new FRLayout(dg)
+        layout.setSize(new Dimension(width, height))
+        // val vv = new BasicVisualizationServer[ug.type#V, ug.type#E](layout) // non-interactive
+        val vv = new VisualizationViewer(layout) // interactive
+        vv.setPreferredSize(new Dimension(width + border, height + border))
+        vv.setMinimumSize(new Dimension(width + border, height + border))
+
+        val vertexPaint = new GoogleFunction[VP, Paint]() {
+          def apply(i: VP): Paint = Color.GREEN
+        }
+
+        val dash = List(10f).toArray
+
+        val edgeStroke = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0f)
+
+        val edgeStrokeTransformer = new GoogleFunction[EP, Stroke]() {
+          def apply(e: EP): BasicStroke = edgeStroke
+        }
+
+        val vertexLabelTransformer = new GoogleFunction[VP, String]() {
+          def apply(v: VP): String = {
+            val label = html(v)
+            label match {
+              case scala.xml.Text(text) => text
+              case _                    => string((<html>{ label }</html>).asInstanceOf[scala.xml.Node])
+            }
+          }
+        }
+
+        val edgeLabelTransformer = new GoogleFunction[EP, String]() {
+          def apply(e: EP): String = string(e)
+        }
+
+        vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)
+        vv.getRenderContext.setEdgeStrokeTransformer(edgeStrokeTransformer)
+        vv.getRenderContext.setVertexLabelTransformer(vertexLabelTransformer)
+        vv.getRenderContext.setEdgeLabelTransformer(edgeLabelTransformer)
+        vv.getRenderer.getVertexLabelRenderer.setPosition(Position.CNTR)
+
+        // val gm = new DefaultModalGraphMouse()
+        // gm.setMode(ModalGraphMouse.Mode.TRANSFORMING)
+        val gm = new PluggableGraphMouse()
+        gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1))
+        gm.add(new PickingGraphMousePlugin())
+        // gm.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, 1.1f, 0.9f))
+        vv.setGraphMouse(gm)
+        vv
+      }
+    }
+
+  import spire.algebra.Field
+  import axle.visualize.BayesianNetworkVisualization
+  import axle.pgm.BayesianNetworkNode
+
+  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq](
+    implicit drawDG: Draw[DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[T, N], axle.pgm.Edge]]]): Draw[BayesianNetworkVisualization[T, N]] = {
+    new Draw[BayesianNetworkVisualization[T, N]] {
+
+      def component(vis: BayesianNetworkVisualization[T, N]): java.awt.Component = {
+        import vis._
+        val subVis = DirectedGraphVisualization(vis.bn.graph, width, height, border)
+        drawDG.component(subVis)
+      }
+    }
   }
 
 }

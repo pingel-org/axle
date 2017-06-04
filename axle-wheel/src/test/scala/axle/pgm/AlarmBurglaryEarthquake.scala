@@ -88,13 +88,17 @@ class ABE extends FunSuite with Matchers {
 
   test("bayesian network visualization") {
 
-    import axle.awt._
+    import axle.jung._
     import axle.visualize._
+    import axle.awt._
+    import axle.web._
 
     val pngGName = "gnGraph.png"
-    val graphVis = JungDirectedSparseGraphVisualization[BayesianNetworkNode[Boolean, Rational], Edge](
+    val svgGName = "gnGraph.svg"
+    val graphVis = DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
       bn.graph, 200, 200, 10)
     png(graphVis, pngGName)
+    svg(graphVis, svgGName)
 
     //    import axle.HtmlFrom
     //    implicitly[HtmlFrom[BayesianNetworkNode[Boolean, Rational]]]
@@ -105,11 +109,15 @@ class ABE extends FunSuite with Matchers {
     //    visDrawer.component(vis)
 
     val pngName = "bn.png"
+    val svgName = "bn.svg"
     val vis = BayesianNetworkVisualization[Boolean, Rational](bn, 200, 200, 10)
     png(vis, pngName)
+    //svg(vis, svgName)
 
     new java.io.File(pngGName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
+    new java.io.File(svgGName).exists should be(true)
+    new java.io.File(svgName).exists should be(true)
 
   }
 }

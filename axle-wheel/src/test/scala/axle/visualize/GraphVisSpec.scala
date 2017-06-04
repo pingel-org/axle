@@ -32,13 +32,16 @@ class GraphVisSpec extends FunSuite with Matchers {
     import cats.Show
     implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 
+    val vis = UndirectedGraphVisualization(g, width = 200, height = 200, border = 10)
+
+    import axle.jung._
     import axle.web._
     val svgName = "ug.svg"
-    svg(g, svgName)
+    svg(vis, svgName)
 
     import axle.awt._
     val pngName = "ug.png"
-    png(JungUndirectedSparseGraphVisualization(g, 200, 200, 10), pngName)
+    png(vis, pngName)
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
@@ -71,14 +74,17 @@ class GraphVisSpec extends FunSuite with Matchers {
     import cats.Show
     implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
 
+    val vis = DirectedGraphVisualization(dg, 200, 200, 10)
+
     // import axle._
+    import axle.jung._
     import axle.web._
     val svgName = "dg.svg"
-    svg(dg, svgName)
+    svg(vis, svgName)
 
     import axle.awt._
     val pngName = "dg.png"
-    png(JungDirectedSparseGraphVisualization(dg, 200, 200, 10), pngName)
+    png(vis, pngName)
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)

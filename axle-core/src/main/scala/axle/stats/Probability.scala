@@ -2,26 +2,17 @@ package axle.stats
 
 import spire.algebra.Field
 
-trait Probability[N] extends (() => N) {
+trait Probability[N] extends Function0[N] {
 
   def *(right: () => N)(implicit f: Field[N]): () => N = PMultiply(this, right)
-  
+
   def bayes: () => N
 }
 
 case class P[A, N: Field](c: Case[A, N]) extends Probability[N] {
 
   def apply(): N = c.probability()
-  
+
   def bayes: () => N = c.bayes
 }
 
-//case class P2[A, B](c: Case[(A, B)]) extends Probability {
-//  def apply(): Real = c.probability()
-//  def bayes() = c.bayes()
-//}
-
-//case class P3[A, B, C](c: Case[(A, B, C)]) extends Probability {
-//  def apply(): Real = c.probability()
-//  def bayes() = c.bayes()
-//}
