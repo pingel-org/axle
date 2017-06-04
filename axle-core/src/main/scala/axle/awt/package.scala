@@ -4,18 +4,15 @@ package axle
 import java.awt.Font
 import java.awt.FontMetrics
 import java.awt.Color
-import java.awt.Component
+import java.awt.Dimension
 import java.awt.Graphics2D
 import java.io.File
 
 import javax.imageio.ImageIO
 
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
-
 import scala.concurrent.duration._
 
-import cats.kernel.Eq
+// import cats.kernel.Eq
 import cats.implicits._
 import cats.Show
 
@@ -25,13 +22,11 @@ import monix.reactive.Observable
 
 import spire.math.abs
 import spire.math.min
-import spire.algebra.Field
+//import spire.algebra.Field
 import spire.implicits.DoubleAlgebra
-import spire.implicits.eqOps
+//import spire.implicits.eqOps
 
-import axle.algebra.DirectedGraph
-import axle.pgm.BayesianNetwork
-import axle.pgm.BayesianNetworkNode
+//import axle.pgm.BayesianNetworkNode
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.visualize._
@@ -41,8 +36,7 @@ package object awt {
 
   def draw[T: Draw](t: T): Unit = {
 
-    val draw = Draw[T]
-    val component = draw.component(t)
+    val component = Draw[T].component(t)
     val minSize = component.getMinimumSize
     val frame = AxleFrame(minSize.width, minSize.height)
     frame.initialize()
@@ -53,8 +47,7 @@ package object awt {
 
   def play[T: Draw, D](t: T, dataStream: Observable[D])(implicit scheduler: Scheduler): (AxleFrame, Cancelable) = {
 
-    val draw = Draw[T]
-    val component: Component = draw.component(t)
+    val component = Draw[T].component(t)
     val minSize = component.getMinimumSize
     val frame = AxleFrame(minSize.width, minSize.height)
 
@@ -99,49 +92,137 @@ package object awt {
     }
   }
 
-  implicit def drawPlot[S, X, Y, D]: Draw[Plot[S, X, Y, D]] =
-    new Draw[Plot[S, X, Y, D]] {
-      def component(plot: Plot[S, X, Y, D]) = PlotComponent(plot)
+  implicit def drawPlot[S, X, Y, D]: DrawPanel[Plot[S, X, Y, D]] =
+    new DrawPanel[Plot[S, X, Y, D]] {
+
+      def dimension(plot: Plot[S, X, Y, D]): Dimension = {
+        import plot._
+        new Dimension(width, height)
+      }
+
+      def paint(plot: Plot[S, X, Y, D], g2d: Graphics2D): Unit = {
+        import plot._
+        Option(dataFn.apply) foreach { data =>
+
+          val view = PlotView(plot, data)
+          import view._
+
+          Paintable[HorizontalLine[X, Y]].paint(hLine, g2d)
+          Paintable[VerticalLine[X, Y]].paint(vLine, g2d)
+          Paintable[XTics[X, Y]].paint(xTics, g2d)
+          Paintable[YTics[X, Y]].paint(yTics, g2d)
+          Paintable[DataLines[S, X, Y, D]].paint(dataLines, g2d)
+
+          titleText.foreach(Paintable[Text].paint(_, g2d))
+          xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+          yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+          view.keyOpt.foreach(Paintable[Key[S, X, Y, D]].paint(_, g2d))
+        }
+      }
+
     }
 
-  implicit def drawScatterPlot[S, X, Y, D]: Draw[ScatterPlot[S, X, Y, D]] =
-    new Draw[ScatterPlot[S, X, Y, D]] {
-      def component(plot: ScatterPlot[S, X, Y, D]) = ScatterPlotComponent(plot)
+  implicit def drawScatterPlot[S, X, Y, D]: DrawPanel[ScatterPlot[S, X, Y, D]] =
+    new DrawPanel[ScatterPlot[S, X, Y, D]] {
+
+      def dimension(plot: ScatterPlot[S, X, Y, D]) = {
+        import plot._
+        new Dimension(width.toInt, height.toInt)
+      }
+
+      def paint(plot: ScatterPlot[S, X, Y, D], g2d: Graphics2D): Unit = {
+        import plot._
+        Option(dataFn.apply()) foreach { data =>
+
+          Paintable[HorizontalLine[X, Y]].paint(hLine, g2d)
+          Paintable[VerticalLine[X, Y]].paint(vLine, g2d)
+          Paintable[XTics[X, Y]].paint(xTics, g2d)
+          Paintable[YTics[X, Y]].paint(yTics, g2d)
+          Paintable[DataPoints[S, X, Y, D]].paint(dataPoints, g2d)
+
+          titleText.foreach(Paintable[Text].paint(_, g2d))
+          xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+          yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+        }
+      }
     }
 
-  implicit def drawBarChart[C, Y, D, H]: Draw[BarChart[C, Y, D, H]] =
-    new Draw[BarChart[C, Y, D, H]] {
-      def component(chart: BarChart[C, Y, D, H]) = BarChartComponent(chart)
+  implicit def drawBarChart[C, Y, D, H]: DrawPanel[BarChart[C, Y, D, H]] =
+    new DrawPanel[BarChart[C, Y, D, H]] {
+
+      def dimension(chart: BarChart[C, Y, D, H]) = {
+        import chart._
+        new Dimension(width, height)
+      }
+
+      def paint(chart: BarChart[C, Y, D, H], g2d: Graphics2D): Unit = {
+        import chart._
+        Option(dataFn.apply()) foreach { data =>
+
+          val view = BarChartView(chart, data)
+
+          import view._
+
+          titleText.foreach(Paintable[Text].paint(_, g2d))
+          Paintable[HorizontalLine[Double, Y]].paint(hLine, g2d)
+          Paintable[VerticalLine[Double, Y]].paint(vLine, g2d)
+          xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+          yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+          Paintable[XTics[Double, Y]].paint(gTics, g2d)
+          Paintable[YTics[Double, Y]].paint(yTics, g2d)
+          keyOpt.foreach(Paintable[BarChartKey[C, Y, D, H]].paint(_, g2d))
+          bars.foreach(Paintable[Rectangle[Double, Y]].paint(_, g2d))
+        }
+      }
     }
 
-  implicit def drawBarChartGrouped[G, S, Y, D, H]: Draw[BarChartGrouped[G, S, Y, D, H]] =
-    new Draw[BarChartGrouped[G, S, Y, D, H]] {
-      def component(chart: BarChartGrouped[G, S, Y, D, H]) = BarChartGroupedComponent(chart)
+  implicit def drawBarChartGrouped[G, S, Y, D, H]: DrawPanel[BarChartGrouped[G, S, Y, D, H]] =
+    new DrawPanel[BarChartGrouped[G, S, Y, D, H]] {
+
+      def dimension(chart: BarChartGrouped[G, S, Y, D, H]) = {
+        import chart._
+        new Dimension(width, height)
+      }
+
+      def paint(chart: BarChartGrouped[G, S, Y, D, H], g2d: Graphics2D): Unit = {
+        import chart._
+        Option(dataFn.apply()) foreach { data =>
+
+          val view = BarChartGroupedView(chart, data)
+
+          import view._
+
+          val fontMetrics = g2d.getFontMetrics
+          titleText.foreach(Paintable[Text].paint(_, g2d))
+          Paintable[HorizontalLine[Double, Y]].paint(hLine, g2d)
+          Paintable[VerticalLine[Double, Y]].paint(vLine, g2d)
+          xAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+          yAxisLabelText.foreach(Paintable[Text].paint(_, g2d))
+          Paintable[XTics[Double, Y]].paint(gTics, g2d)
+          Paintable[YTics[Double, Y]].paint(yTics, g2d)
+          keyOpt.foreach(Paintable[BarChartGroupedKey[G, S, Y, D, H]].paint(_, g2d))
+          bars.foreach(Paintable[Rectangle[Double, Y]].paint(_, g2d))
+        }
+      }
+
     }
 
-  implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedSparseGraph[VP, EP]] =
-    new Draw[UndirectedSparseGraph[VP, EP]] {
-      def component(jug: UndirectedSparseGraph[VP, EP]) =
-        JungUndirectedGraphVisualization(700, 700, 50).component(jug)
-    }
+  implicit def drawKMeansVisualization[T, F, G, M]: DrawPanel[KMeansVisualization[T, F, G, M]] =
+    new DrawPanel[KMeansVisualization[T, F, G, M]] {
 
-  implicit def drawJungDirectedGraph[VP: HtmlFrom, EP: Show]: Draw[DirectedSparseGraph[VP, EP]] =
-    new Draw[DirectedSparseGraph[VP, EP]] {
-      def component(jdg: DirectedSparseGraph[VP, EP]) =
-        JungDirectedGraphVisualization(700, 700, 50).component(jdg)
-    }
+      def dimension(kmv: KMeansVisualization[T, F, G, M]) = {
+        import kmv._
+        new Dimension(width + border, height + border)
+      }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
-    implicit drawDG: Draw[DG], dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): Draw[BayesianNetwork[T, N, DG]] = {
-    new Draw[BayesianNetwork[T, N, DG]] {
-      def component(bn: BayesianNetwork[T, N, DG]) =
-        drawDG.component(bn.graph)
-    }
-  }
-
-  implicit def drawKMeansVisualization[T, F, G, M]: Draw[KMeansVisualization[T, F, G, M]] =
-    new Draw[KMeansVisualization[T, F, G, M]] {
-      def component(kmv: KMeansVisualization[T, F, G, M]) = KMeansComponent(kmv)
+      def paint(kmv: KMeansVisualization[T, F, G, M], g2d: Graphics2D): Unit = {
+        import kmv._
+        Paintable[Rectangle[Double, Double]].paint(boundingRectangle, g2d)
+        Paintable[XTics[Double, Double]].paint(xTics, g2d)
+        Paintable[YTics[Double, Double]].paint(yTics, g2d)
+        centroidOvals foreach { Paintable[Oval[Double, Double]].paint(_, g2d) }
+        points foreach { Paintable[Oval[Double, Double]].paint(_, g2d) }
+      }
     }
 
   /**
@@ -499,6 +580,22 @@ package object awt {
       g2d.drawString(s, 0, 0)
       g2d.rotate(-1 * a)
       g2d.translate(-fp.x, -fp.y - fontMetrics.getHeight)
+    }
+  }
+
+  import spire.algebra.Field
+  import axle.visualize.BayesianNetworkVisualization
+  import cats.Eq
+
+  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+    implicit drawDG: Draw[DirectedGraphVisualization[DG]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
+    new Draw[BayesianNetworkVisualization[T, N, DG]] {
+
+      def component(vis: BayesianNetworkVisualization[T, N, DG]): java.awt.Component = {
+        import vis._
+        val subVis = DirectedGraphVisualization(vis.bn.graph, width, height, border)
+        drawDG.component(subVis)
+      }
     }
   }
 

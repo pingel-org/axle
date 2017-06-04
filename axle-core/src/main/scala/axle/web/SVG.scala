@@ -23,6 +23,8 @@ import axle.visualize.Plot
 import axle.visualize.PlotView
 import axle.visualize.Point2D
 import axle.visualize.ScatterPlot
+import axle.visualize.BayesianNetworkVisualization
+import axle.visualize.DirectedGraphVisualization
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.BarChartKey
 import axle.visualize.element.DataLines
@@ -36,7 +38,6 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import axle.algebra.DirectedGraph
-import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.xml._
 
@@ -558,11 +559,15 @@ object SVG {
         NodeSeq.Empty
     }
 
-  implicit def drawBayesianNetwork[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
-    implicit svgDG: SVG[DG], dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): SVG[BayesianNetwork[T, N, DG]] = {
-    new SVG[BayesianNetwork[T, N, DG]] {
-      def svg(bn: BayesianNetwork[T, N, DG]): NodeSeq =
-        svgDG.svg(bn.graph)
+  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+    implicit svgDGVis: SVG[DirectedGraphVisualization[DG]],
+    dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): SVG[BayesianNetworkVisualization[T, N, DG]] = {
+    new SVG[BayesianNetworkVisualization[T, N, DG]] {
+      def svg(vis: BayesianNetworkVisualization[T, N, DG]): NodeSeq = {
+        import vis._
+        val subVis = DirectedGraphVisualization(vis.bn.graph, width, height, border)
+        svgDGVis.svg(subVis)
+      }
     }
   }
 

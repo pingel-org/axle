@@ -54,13 +54,14 @@ class ABE extends FunSuite with Matchers {
       Vector(A is false, M is false) -> Rational(99, 100)))
 
   // edges: ba, ea, aj, am
-  val bn = BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
-    "A sounds (due to Burglary or Earthquake) and John or Mary Call",
-    Map(B -> bFactor,
-      E -> eFactor,
-      A -> aFactor,
-      J -> jFactor,
-      M -> mFactor))
+  val bn: BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]] =
+    BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
+      "A sounds (due to Burglary or Earthquake) and John or Mary Call",
+      Map(B -> bFactor,
+        E -> eFactor,
+        A -> aFactor,
+        J -> jFactor,
+        M -> mFactor))
 
   test("bayesian networks produces a Joint Probability Table, which is '1' when all variables are removed") {
 
@@ -85,4 +86,30 @@ class ABE extends FunSuite with Matchers {
     sansAll.evaluate(Seq.empty, Seq.empty) should be(Rational(1))
   }
 
+  test("bayesian network visualization") {
+
+    import axle.jung._
+    import axle.visualize._
+    import axle.awt._
+    import axle.web._
+
+    val pngGName = "gnGraph.png"
+    val svgGName = "gnGraph.svg"
+    val graphVis = DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
+      bn.graph, 200, 200, 10)
+    png(graphVis, pngGName)
+    svg(graphVis, svgGName)
+
+    val pngName = "bn.png"
+    val svgName = "bn.svg"
+    val vis = BayesianNetworkVisualization[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](bn, 200, 200, 10)
+    png(vis, pngName)
+    svg(vis, svgName)
+
+    new java.io.File(pngGName).exists should be(true)
+    new java.io.File(pngName).exists should be(true)
+    new java.io.File(svgGName).exists should be(true)
+    new java.io.File(svgName).exists should be(true)
+
+  }
 }
