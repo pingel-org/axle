@@ -81,10 +81,11 @@ object Strategies {
 
   /**
    * Given a game and state, minimax returns the move and resulting state that maximizes
-   * the outcome for the state's mover
-   *
-   * It returns None when the given state is terminal (defines an outcome).
-   *
+   * the outcome for the state's mover, assuming that other players also follow the minimax
+   * strategy through the given depth.  Beyond that depth (or when a terminal state is encountered),
+   * the heuristic function is applied to the state.
+   * 
+   * The third return value is a Map of Player to estimated best value from the returned state.
    */
 
   def minimax[G, S, O, M, MS, MM, N: Order](
