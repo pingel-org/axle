@@ -27,7 +27,7 @@ object ConditionalProbabilityTable0 {
 }
 
 case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], val name: String = "unnamed")
-  extends Distribution0[A, N] {
+    extends Distribution0[A, N] {
 
   val field = Field[N]
 
@@ -51,8 +51,6 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
         .groupBy(_._1)
         .mapValues(_.map(_._2).reduce(field.plus)))
 
-  // TODO Is there a version of scanLeft that is more like a reduce?
-  // This would allow me to avoid having to construct the initial dummy element
   val bars = p.scanLeft((dummy[A], field.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
   val rng = Cmwc5()
@@ -75,7 +73,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
 }
 
 case class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]], val name: String = "unnamed")
-  extends Distribution2[A, G1, G2, N] {
+    extends Distribution2[A, G1, G2, N] {
 
   lazy val _values = p.values.map(_.keySet).reduce(_ union _).toVector
 

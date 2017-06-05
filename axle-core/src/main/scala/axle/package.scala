@@ -67,6 +67,13 @@ package object axle {
    * without using an Option type for an already complicated method signature.
    * A better work-around would be an alternate version of scanLeft that had
    * this behavior built in.
+   *
+   * Something like this:
+   * 
+   * def scanLeftDropFirst[A, Repr, B, C, That](
+   *   tl: scala.collection.TraversableLike[A, Repr])(z: C)(op: ((B, C), A) ⇒ (B, C))(
+   *   implicit bf: scala.collection.generic.CanBuildFrom[Repr, (B, C), That]) =
+   *   tl.scanLeft((axle.dummy[B], z))(op) // Caller should .drop(1). TODO do that here
    */
 
   def dummy[T]: T = null.asInstanceOf[T]
