@@ -92,7 +92,11 @@ object Strategies {
     val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
     val moveValue = evGame.moves(game, ms).map(move => {
       val newState = evGame.applyMove(game, state, move)
-      (move, state, minimax(game, newState, depth - 1, heuristic)._3)
+      if (evGame.outcome(game, newState).isDefined) {
+        (move, state, heuristic(newState))
+      } else {
+        (move, state, minimax(game, newState, depth - 1, heuristic)._3)
+      }
     })
     val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
     val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
