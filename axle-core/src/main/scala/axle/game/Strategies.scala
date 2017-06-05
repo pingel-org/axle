@@ -79,6 +79,14 @@ object Strategies {
       ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap)
     }
 
+  /**
+   * Given a game and state, minimax returns the move and resulting state that maximizes
+   * the outcome for the state's mover
+   *
+   * It returns None when the given state is terminal (defines an outcome).
+   *
+   */
+
   def minimax[G, S, O, M, MS, MM, N: Order](
     game: G,
     state: S,
@@ -86,13 +94,14 @@ object Strategies {
     heuristic: S => Map[Player, N])(
       implicit evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
 
-    assert(evGame.outcome(game, state).isEmpty && depth > 0) // TODO capture as type constraint
+    // TODO capture as type constraint
+    assert(evGame.outcome(game, state).isEmpty)
 
     val mover = evGame.mover(game, state).get // TODO .get
     val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
     val moveValue = evGame.moves(game, ms).map(move => {
       val newState = evGame.applyMove(game, state, move)
-      if (evGame.outcome(game, newState).isDefined) {
+      if (evGame.outcome(game, newState).isDefined || depth === 0) {
         (move, state, heuristic(newState))
       } else {
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
