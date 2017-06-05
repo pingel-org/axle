@@ -79,25 +79,38 @@ object Strategies {
       ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap)
     }
 
+  /**
+   * Given a game and state, minimax returns the move and resulting state that maximizes
+   * the outcome for the state's mover, assuming that other players also follow the minimax
+   * strategy through the given depth.  Beyond that depth (or when a terminal state is encountered),
+   * the heuristic function is applied to the state.
+   * 
+   * The third return value is a Map of Player to estimated best value from the returned state.
+   */
+
   def minimax[G, S, O, M, MS, MM, N: Order](
     game: G,
     state: S,
     depth: Int,
     heuristic: S => Map[Player, N])(
       implicit evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
-    if (evGame.outcome(game, state).isDefined || depth <= 0) {
-      (null.asInstanceOf[M], null.asInstanceOf[S], heuristic(state)) // TODO null
-    } else {
-      val mover = evGame.mover(game, state).get // TODO .get
-      val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
-      val moveValue = evGame.moves(game, ms).map(move => {
-        val newState = evGame.applyMove(game, state, move)
+
+    // TODO capture as type constraint
+    assert(evGame.outcome(game, state).isEmpty)
+
+    val mover = evGame.mover(game, state).get // TODO .get
+    val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
+    val moveValue = evGame.moves(game, ms).map(move => {
+      val newState = evGame.applyMove(game, state, move)
+      if (evGame.outcome(game, newState).isDefined || depth === 0) {
+        (move, state, heuristic(newState))
+      } else {
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
-      })
-      val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
-      val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
-      matches(nextInt(matches.length))
-    }
+      }
+    })
+    val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
+    val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
+    matches(nextInt(matches.length))
   }
 
   /**
@@ -123,15 +136,15 @@ object Strategies {
     depth: Int,
     cutoff: Map[Player, N],
     heuristic: S => Map[Player, N])(
-      implicit evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) =
-    if (evGame.outcome(game, state).isDefined || depth <= 0) {
-      (null.asInstanceOf[M], heuristic(state)) // TODO null
-    } else {
-//      val initial = AlphaBetaFold(game, null.asInstanceOf[M], cutoff, false)
-//      val ms = evGame.maskState(game, state, ???) // TODO move this elsewhere
-//      val result = evGame.moves(game, ms).foldLeft(initial)(_.process(_, state, heuristic))
-//      (result.move, result.cutoff)
-      ???
-    }
+      implicit evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) = {
+
+    assert(evGame.outcome(game, state).isEmpty && depth > 0) // TODO capture as type constraint
+
+    //      val initial = AlphaBetaFold(game, dummy[M], cutoff, false)
+    //      val ms = evGame.maskState(game, state, ???) // TODO move this elsewhere
+    //      val result = evGame.moves(game, ms).foldLeft(initial)(_.process(_, state, heuristic))
+    //      (result.move, result.cutoff)
+    ???
+  }
 
 }

@@ -61,6 +61,23 @@ package object axle {
 
   // basic functions
 
+  /**
+   * dummy is not to be used widely, but is usefor for scanLeft, where
+   * it's often desirable to provide a throw-away value as the first argument
+   * without using an Option type for an already complicated method signature.
+   * A better work-around would be an alternate version of scanLeft that had
+   * this behavior built in.
+   *
+   * Something like this:
+   * 
+   * def scanLeftDropFirst[A, Repr, B, C, That](
+   *   tl: scala.collection.TraversableLike[A, Repr])(z: C)(op: ((B, C), A) ⇒ (B, C))(
+   *   implicit bf: scala.collection.generic.CanBuildFrom[Repr, (B, C), That]) =
+   *   tl.scanLeft((axle.dummy[B], z))(op) // Caller should .drop(1). TODO do that here
+   */
+
+  def dummy[T]: T = null.asInstanceOf[T]
+
   def ignore[T]: T => Unit = (t: T) => {}
 
   def id[A](x: A): A = x

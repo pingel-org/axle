@@ -5,6 +5,7 @@ import scala.language.implicitConversions
 import cats.kernel.Eq
 import cats.implicits._
 import cats.Show
+import axle.dummy
 import axle.string
 
 object FirstOrderPredicateLogic {
@@ -42,7 +43,7 @@ object FirstOrderPredicateLogic {
 
     def skolemize(universally: Set[Symbol], existentially: Set[Symbol], skolems: Map[Symbol, Set[Symbol]]): (Predicate, Map[Symbol, Set[Symbol]]) = {
 
-      val symbolsSkolems = symbols.scanLeft((null.asInstanceOf[Symbol], skolems))({
+      val symbolsSkolems = symbols.scanLeft((dummy[Symbol], skolems))({
         case (previous, s) =>
           if (existentially.contains(s)) skolemFor(previous._2, s, universally)
           else (s, previous._2)
