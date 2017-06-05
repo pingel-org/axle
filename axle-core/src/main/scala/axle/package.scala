@@ -61,6 +61,16 @@ package object axle {
 
   // basic functions
 
+  /**
+   * dummy is not to be used widely, but is usefor for scanLeft, where
+   * it's often desirable to provide a throw-away value as the first argument
+   * without using an Option type for an already complicated method signature.
+   * A better work-around would be an alternate version of scanLeft that had
+   * this behavior built in.
+   */
+
+  def dummy[T]: T = null.asInstanceOf[T]
+
   def ignore[T]: T => Unit = (t: T) => {}
 
   def id[A](x: A): A = x

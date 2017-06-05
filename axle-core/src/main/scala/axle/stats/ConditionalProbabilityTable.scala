@@ -3,12 +3,13 @@ package axle.stats
 import cats.Show
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
-import axle.string
 import spire.algebra.Field
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.random.Dist
 import spire.random.rng.Cmwc5
+import axle.string
+import axle.dummy
 
 object ConditionalProbabilityTable0 {
 
@@ -52,7 +53,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
 
   // TODO Is there a version of scanLeft that is more like a reduce?
   // This would allow me to avoid having to construct the initial dummy element
-  val bars = p.scanLeft((null.asInstanceOf[A], field.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
+  val bars = p.scanLeft((dummy[A], field.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
   val rng = Cmwc5()
 

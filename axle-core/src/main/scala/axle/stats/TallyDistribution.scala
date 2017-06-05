@@ -2,9 +2,6 @@ package axle.stats
 
 import scala.util.Random
 
-import axle.math.Σ
-import axle.string
-
 import cats.Show
 import cats.implicits.catsSyntaxEq
 import cats.kernel.Eq
@@ -17,6 +14,10 @@ import spire.algebra.Ring
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
+
+import axle.math.Σ
+import axle.string
+import axle.dummy
 
 object TallyDistribution0 {
 
@@ -68,7 +69,7 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name
   val totalCount: N = Σ[N, Iterable[N]](tally.values)
 
   val bars: Map[A, N] =
-    tally.scanLeft((null.asInstanceOf[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2))).drop(1)
+    tally.scanLeft((dummy[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2))).drop(1)
 
   val order = Order[N]
 
