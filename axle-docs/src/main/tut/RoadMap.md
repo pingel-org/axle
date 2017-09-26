@@ -6,23 +6,35 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.4.2 (July 2017)
-* Probability trait
-* Remove several asInstanceOf
-* Review ClassTag and Manifest usage
+## 0.4.2 (August 2017)
+* Redo `axle.stats`
+  * Probability trait
+  * Variable
+  * Pexpr DSL
+  * P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
+* Re-try mandelbrot with Rational
+* Update cats to 1.0.0
+* `axle.dummy` for a handful of scanLeft calls
 
-## 0.4.3 (Summer 2017)
-* `axle.web.Table` and `HtmlFrom[Table[T]`
-* Clean up GA doc
-
-## 0.4.4 (Summer 2017)
+## 0.4.3 (September 2017)
 * Remove Spark spoke
 * Publish Scala 2.12 artifacts
 * Remove Spark impacts on Functor, etc, and just use Cats versions
+* make sure animation doc has right return value
 
-## 0.4.x (Summer 2017)
+## 0.4.5 (October)
+* game theory axioms
+* axle.game: Observable[T]
+* move state dist stream
+* redo original monty hall spec
+* Max bet for Poker
+
+## 0.4.x (Early 2018)
+* Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
 * Honor graph vis params in awt graph visualizations
 * Fix JodaTime Tics handling of timezones (see TZ requirement in axle.joda.TicsSpec)
+* `axle.web.Table` and `HtmlFrom[Table[T]]`
+* Clean up GA doc
 * Log scale
 * SVG[Matrix]
 * `BarChart` Variable width bars
@@ -36,19 +48,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * … as Stream.from(Int)
 * Factor similarity between SVG and Draw?
 
-## 0.5.x (Last half of 2017)
+## 0.5.x (Mid-2018)
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Fix logistic regression
 * Fix axle.algebra.GeoMetricSpaceSpec
-
-## 0.6.x (First half of 2018)
-* game theory axioms
-* axle.game: Observable[T]
-* move state dist stream
-* redo original monty hall spec
-* Max bet for Poker
 
 # Backlog
 
@@ -65,6 +70,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * A* Search
 * Conditional Random Fields (CRF)
 * Hidden Markov Models
+* N Queens
+* Multi-armed bandit
 
 ## Platform
 * Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)
@@ -77,7 +84,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
 
 ## Deeper exploration
-* P() backed by BayesianNetwork (and Interaction graph, Elimination graph, Jointree)
 * Nerod Partition
 * Motivation for Gold Paradigm, Angluin Learner
 * Stochastic Lambda Calculus

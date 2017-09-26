@@ -34,8 +34,9 @@ object TallyDistribution0 {
 
 }
 
-case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name: String = "unnamed")
-    extends Distribution0[A, N] {
+case class TallyDistribution0[A, N: Field: Order](
+    val tally: Map[A, N],
+    val name: String = "unnamed") {
 
   val ring = Ring[N]
   val addition = implicitly[AdditiveMonoid[N]]
@@ -62,10 +63,6 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name
         .groupBy(_._1)
         .mapValues(_.map(_._2).reduce(addition.plus)))
 
-  def is(v: A): CaseIs[A, N] = CaseIs(this, v)
-
-  def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
-
   val totalCount: N = Σ[N, Iterable[N]](tally.values)
 
   val bars: Map[A, N] =
@@ -82,8 +79,22 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N], val name
 
 }
 
-case class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), N], _name: String = "unnamed")
-    extends Distribution1[A, G, N] {
+object TallyDistribution1 {
+
+  def probabilityOf(a: A): N =
+    Σ[N, Iterable[N]](gvs.map(gv => tally((a, gv)))) / totalCount
+
+  def probabilityOf(a: A, given: Case[G]): N = given match {
+    case CaseIs(argGrv, gv)   => tally.get((a, gv)).getOrElse(Field[N].zero) / Σ[N, Iterable[N]](tally.filter(_._1._2 === gv).map(_._2))
+    case CaseIsnt(argGrv, gv) => 1 - (tally.get((a, gv)).getOrElse(Field[N].zero) / Σ[N, Iterable[N]](tally.filter(_._1._2 === gv).map(_._2)))
+    case _                    => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
+  }
+
+}
+
+case class TallyDistribution1[A, G: Eq, N: Field: Order](
+    val tally: Map[(A, G), N],
+    _name: String = "unnamed") {
 
   def name: String = _name
 
@@ -94,23 +105,5 @@ case class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), 
 
   val gvs = tally.keys.map(_._2).toSet
 
-  def is(v: A): CaseIs[A, N] = CaseIs(this, v)
-
-  def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
-
   val totalCount: N = Σ[N, Iterable[N]](tally.values)
-
-  def observe(): A = ???
-
-  def observe(gv: G): A = ???
-
-  def probabilityOf(a: A): N = Σ[N, Iterable[N]](gvs.map(gv => tally((a, gv)))) / totalCount
-
-  def probabilityOf(a: A, given: Case[G, N]): N = given match {
-    case CaseIs(argGrv, gv)   => tally.get((a, gv)).getOrElse(Field[N].zero) / Σ[N, Iterable[N]](tally.filter(_._1._2 === gv).map(_._2))
-    case CaseIsnt(argGrv, gv) => 1 - (tally.get((a, gv)).getOrElse(Field[N].zero) / Σ[N, Iterable[N]](tally.filter(_._1._2 === gv).map(_._2)))
-    case _                    => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
-  }
-
 }
-

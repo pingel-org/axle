@@ -1,18 +1,69 @@
 package axle.stats
 
-import spire.algebra.Field
+// import spire.algebra.Field
+// import spire.implicits.additiveGroupOps
+// import axle.math.Π
 
-trait Probability[N] extends Function0[N] {
+trait Probability[D, V, N] extends Function2[D, V, N] {
 
-  def *(right: () => N)(implicit f: Field[N]): () => N = PMultiply(this, right)
+  def values(d: D): IndexedSeq[V]
 
-  def bayes: () => N
+  def fromMap(m: Map[V, N]): D
 }
 
-case class P[A, N: Field](c: Case[A, N]) extends Probability[N] {
+trait ProbabilityGiven1[D, V, G, N] extends Function3[D, V, G, N] {
 
-  def apply(): N = c.probability()
-
-  def bayes: () => N = c.bayes
+  def values(d: D): IndexedSeq[V]
 }
 
+trait ProbabilityGiven2[D, V, G1, G2, N] extends Function4[D, V, G1, G2, N] {
+
+  def values(d: D): IndexedSeq[V]
+}
+
+object Probability {
+
+  // CaseAndGT (GenTraversable)
+  //  def probability[B](given: Option[Case[B, N]] = None): N =
+  //    given
+  //      .map(g => Π[N, Iterable[N]](conjuncts map { (c: Case[A, N]) => P(c | g).apply() }))
+  //      .getOrElse(Π[N, Iterable[N]](conjuncts map { P(_).apply() }))
+
+  // CaseAnd
+  //  def probability[C](given: Option[Case[C, N]] = None): N =
+  //    (given.map(g => P(left | g) * P(right | g)).getOrElse(P(left) * P(right))).apply()
+
+  // CaseOr
+  //  def probability[C](given: Option[Case[C, N]] = None): N =
+  //    given
+  //      .map { g =>
+  //        // P(left | g) + P(right | g) - P((left ∧ right) | g)
+  //        field.plus(P(left | g).apply(), P(right | g).apply()) - P((left ∧ right) | g).apply()
+  //      }
+  //      .getOrElse(
+  //        field.plus(P(left).apply(), P(right).apply()) - P(left ∧ right).apply())
+
+  // CaseGiven
+  //  def probability[C](givenArg: Option[Case[C, N]] = None): N = {
+  //    assert(givenArg.isEmpty)
+  //    c.probability(Some(given))
+  //  }
+
+  // CaseIs
+  //  implicit def probabilityCaseIs[C, N]: Probability[CaseIs[C], N] =
+  //    new Probability[CaseIs[C], N] {
+  //      def apply(c: CaseIs[C], d: Distribution0[C, N]): N =
+  //        d.probabilityOf(c.v)
+  //    }
+
+  //  implicit def probabilityCaseIsGiven[C, N]: N =
+  //    new Probability[CaseIs[C], N] {
+  //      def apply(): N = given
+  //        .map(g => d1.asInstanceOf[Distribution1[A, G, N]].probabilityOf(v, g))
+  //        .getOrElse(d1.probabilityOf(v))
+  //    }
+
+  // CaseIsnt
+  // def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(distribution is v).apply())
+
+}

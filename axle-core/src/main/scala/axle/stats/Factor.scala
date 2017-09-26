@@ -54,7 +54,7 @@ object Factor {
       def one: Factor[T, N] = Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
-  def cases[T: Eq, N: Field](varSeq: Vector[Distribution[T, N]]): Iterable[Vector[CaseIs[T, N]]] =
+  def cases[T: Eq, N: Field](varSeq: Vector[Variable[T]]): Iterable[Vector[CaseIs[T]]] =
     IndexedCrossProduct(varSeq.map(_.values)) map { kase =>
       varSeq.zip(kase) map {
         case (rv, v) =>
@@ -65,8 +65,8 @@ object Factor {
 }
 
 case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
-    val varList: Vector[Distribution[T, N]],
-    val values: Map[Vector[CaseIs[T, N]], N]) {
+    val varList: Vector[Variable[T]],
+    val values: Map[Vector[CaseIs[T]], N]) {
 
   val field = Field[N]
 
@@ -77,12 +77,12 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
       values.get(caseOf(i)).getOrElse(field.zero)
     } toIndexedSeq
 
-  def variables: Vector[Distribution[T, N]] = varList
+  def variables: Vector[Variable[T]] = varList
 
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
 
-  def evaluate(prior: Seq[CaseIs[T, N]], condition: Seq[CaseIs[T, N]]): N = {
+  def evaluate(prior: Seq[CaseIs[T]], condition: Seq[CaseIs[T]]): N = {
     val pw = spire.optional.unicode.Σ(cases.map(c => {
       if (isSupersetOf(c, prior)) {
         if (isSupersetOf(c, condition)) {
@@ -98,21 +98,21 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
     pw._1 / pw._2
   }
 
-  def indexOf(cs: Seq[CaseIs[T, N]]): Int = {
-    val rvvs: Seq[(Distribution[T, N], T)] = cs.map(ci => (ci.distribution, ci.v))
+  def indexOf(cs: Seq[CaseIs[T]]): Int = {
+    val rvvs: Seq[(Variable[T], T)] = cs.map(ci => (ci.distribution, ci.v))
     val rvvm = rvvs.toMap
     crossProduct.indexOf(varList.map(rvvm))
   }
 
-  private[this] def caseOf(i: Int): Vector[CaseIs[T, N]] =
+  private[this] def caseOf(i: Int): Vector[CaseIs[T]] =
     varList.zip(crossProduct(i)) map { case (variable, value) => CaseIs(variable, value) }
 
-  def cases: Iterable[Seq[CaseIs[T, N]]] = (0 until elements.length) map { caseOf }
+  def cases: Iterable[Seq[CaseIs[T]]] = (0 until elements.length) map { caseOf }
 
-  def apply(c: Seq[CaseIs[T, N]]): N = elements(indexOf(c))
+  def apply(c: Seq[CaseIs[T]]): N = elements(indexOf(c))
 
   // Chapter 6 definition 6
-  def maxOut(variable: Distribution[T, N]): Factor[T, N] = {
+  def maxOut(variable: Variable[T]): Factor[T, N] = {
     val newVars = variables.filterNot(variable === _)
     Factor(newVars,
       Factor.cases(newVars)
@@ -120,7 +120,7 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
         .toMap)
   }
 
-  def projectToOnly(remainingVars: Vector[Distribution[T, N]]): Factor[T, N] =
+  def projectToOnly(remainingVars: Vector[Variable[T]]): Factor[T, N] =
     Factor(remainingVars,
       Factor.cases[T, N](remainingVars).toVector
         .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
@@ -129,53 +129,53 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
         .toMap)
 
   def tally[M](
-    a: Distribution[T, N],
-    b: Distribution[T, N])(
+    a: Variable[T],
+    b: Variable[T])(
       implicit la: LinearAlgebra[M, Int, Int, Double]): M =
     la.matrix(
       a.values.size,
       b.values.size,
       (r: Int, c: Int) => spire.optional.unicode.Σ(cases.filter(isSupersetOf(_, Vector(a is a.values(r), b is b.values(c)))).map(this(_)).toVector).toDouble)
 
-  def Σ(varToSumOut: Distribution[T, N]): Factor[T, N] = this.sumOut(varToSumOut)
+  def Σ(varToSumOut: Variable[T]): Factor[T, N] = this.sumOut(varToSumOut)
 
   // depending on assumptions, this may not be the best way to remove the vars
-  def sumOut(gone: Distribution[T, N]): Factor[T, N] = {
+  def sumOut(gone: Variable[T]): Factor[T, N] = {
     val position = varList.indexOf(gone)
     val newVars = varList.filter(v => !(v === gone))
     Factor(
       newVars,
       Factor.cases(newVars).map(kase => {
         val reals = gone.values.map(gv => {
-          val ciGone = List(CaseIs(gone.asInstanceOf[Distribution[T, N]], gv)) // TODO cast
+          val ciGone = List(CaseIs(gv, gone))
           this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
         })
         (kase, spire.optional.unicode.Σ(reals))
       }).toMap)
   }
 
-  def Σ(varsToSumOut: Set[Distribution[T, N]]): Factor[T, N] = sumOut(varsToSumOut)
+  def Σ(varsToSumOut: Set[Variable[T]]): Factor[T, N] = sumOut(varsToSumOut)
 
-  def sumOut(varsToSumOut: Set[Distribution[T, N]]): Factor[T, N] =
+  def sumOut(varsToSumOut: Set[Variable[T]]): Factor[T, N] =
     varsToSumOut.foldLeft(this)((result, v) => result.sumOut(v))
 
   // as defined on chapter 6 page 15
-  def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T, N]]]): Factor[T, N] = {
+  def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T]]]): Factor[T, N] = {
     val e = eOpt.get
     Factor(variables,
       Factor.cases(e.map(_.distribution).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
   }
 
-  def mentions(variable: Distribution[T, N]): Boolean =
+  def mentions(variable: Variable[T]): Boolean =
     variables.exists(v => variable.name === v.name)
 
-  def isSupersetOf(left: Seq[CaseIs[T, N]], right: Seq[CaseIs[T, N]]): Boolean = {
-    val ll: Seq[(Distribution[T, N], T)] = left.map(ci => (ci.distribution, ci.v))
+  def isSupersetOf(left: Seq[CaseIs[T]], right: Seq[CaseIs[T]]): Boolean = {
+    val ll: Seq[(Variable[T], T)] = left.map(ci => (ci.distribution, ci.v))
     val lm = ll.toMap
-    right.forall((rightCaseIs: CaseIs[T, N]) => lm.contains(rightCaseIs.distribution) && (rightCaseIs.v === lm(rightCaseIs.distribution)))
+    right.forall((rightCaseIs: CaseIs[T]) => lm.contains(rightCaseIs.distribution) && (rightCaseIs.v === lm(rightCaseIs.distribution)))
   }
 
-  def projectToVars(cs: Seq[CaseIs[T, N]], pVars: Set[Distribution[T, N]]): Seq[CaseIs[T, N]] =
+  def projectToVars(cs: Seq[CaseIs[T]], pVars: Set[Variable[T]]): Seq[CaseIs[T]] =
     cs.filter(ci => pVars.contains(ci.distribution))
 
 }

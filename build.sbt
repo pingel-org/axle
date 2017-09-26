@@ -50,6 +50,7 @@ lazy val axleCore = Project(
       "org.typelevel"          %% "spire"                    % spireVersion,
       "org.typelevel"          %% "spire-laws"               % spireVersion,
       "org.typelevel"          %% "cats-core"                % catsVersion,
+      "org.typelevel"          %% "cats-free"                % catsVersion,
       "com.chuusai"            %% "shapeless"                % shapelessVersion,
       // "eu.timepit"          %% "singleton-ops"            % "0.0.4"
       "io.monix"               %% "monix-reactive"           % monixVersion,

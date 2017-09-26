@@ -4,13 +4,13 @@ import scala.xml.NodeSeq.seqToNodeSeq
 
 import axle.HtmlFrom
 import cats.Show
-import axle.stats.Distribution
+import axle.stats.Variable
 import axle.stats.Factor
 import axle.string
 import cats.kernel.Eq
 import spire.algebra.Field
 
-case class BayesianNetworkNode[T, N](rv: Distribution[T, N], cpt: Factor[T, N])
+case class BayesianNetworkNode[T, N](rv: Variable[T], cpt: Factor[T, N])
 
 object BayesianNetworkNode {
 

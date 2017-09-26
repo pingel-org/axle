@@ -26,8 +26,7 @@ object ConditionalProbabilityTable0 {
 
 }
 
-case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], val name: String = "unnamed")
-    extends Distribution0[A, N] {
+case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], val name: String = "unnamed") {
 
   val field = Field[N]
 
@@ -55,10 +54,6 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
 
   val rng = Cmwc5()
 
-  def is(v: A): CaseIs[A, N] = CaseIs(this, v)
-
-  def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
-
   val order = Order[N]
 
   def observe(): A = {
@@ -72,23 +67,12 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
 
 }
 
-case class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](p: Map[(G1, G2), Map[A, N]], val name: String = "unnamed")
-    extends Distribution2[A, G1, G2, N] {
+case class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](
+    p: Map[(G1, G2), Map[A, N]],
+    val name: String = "unnamed") {
 
   lazy val _values = p.values.map(_.keySet).reduce(_ union _).toVector
 
   def values: IndexedSeq[A] = _values
-
-  def is(v: A): CaseIs[A, N] = CaseIs(this, v)
-
-  def isnt(v: A): CaseIsnt[A, N] = CaseIsnt(this, v)
-
-  def observe(): A = ???
-
-  def observe(gv1: G1, gv2: G2): A = ???
-
-  def probabilityOf(a: A): N = ???
-
-  def probabilityOf(a: A, given1: Case[G1, N], given2: Case[G2, N]): N = ???
 
 }

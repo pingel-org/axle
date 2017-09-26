@@ -9,7 +9,7 @@ import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.eqOps
-import axle.stats.Distribution
+import axle.stats.Variable
 import axle.stats.TallyDistribution0
 import axle.stats.TallyDistribution1
 import axle.syntax.aggregatable._
@@ -21,8 +21,8 @@ import axle.math._
 
 case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N: Field: Order](
   data: F,
-  featureRandomVariables: List[Distribution[FEATURE, N]],
-  classRandomVariable: Distribution[CLASS, N],
+  featureRandomVariables: List[Variable[FEATURE]],
+  classRandomVariable: Variable[CLASS],
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS)(
     implicit agg: Aggregatable[F, DATA, Map[(CLASS, String, FEATURE), N]],
@@ -53,7 +53,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
 
   val C = TallyDistribution0(classTally, classRandomVariable.name)
 
-  def tallyFor(featureRandomVariable: Distribution[FEATURE, N]): Map[(FEATURE, CLASS), N] =
+  def tallyFor(featureRandomVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =
     featureTally.filter {
       case (k, v) => k._2 === featureRandomVariable.name
     }.map {
@@ -90,8 +90,8 @@ object NaiveBayesClassifier {
 
   def common[DATA, FEATURE: Order, CLASS: Order: Eq, U[_], N: Field: Order](
     data: U[DATA],
-    featureRandomVariables: List[Distribution[FEATURE, N]],
-    classRandomVariable: Distribution[CLASS, N],
+    featureRandomVariables: List[Variable[FEATURE]],
+    classRandomVariable: Variable[CLASS],
     featureExtractor: DATA => List[FEATURE],
     classExtractor: DATA => CLASS)(
       implicit agg: Aggregatable[U[DATA], DATA, Map[(CLASS, String, FEATURE), N]],

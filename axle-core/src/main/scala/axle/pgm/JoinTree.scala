@@ -1,7 +1,7 @@
 package axle.pgm
 
 import axle.algebra.UndirectedGraph
-import axle.stats.Distribution
+import axle.stats.Variable
 import cats.kernel.Eq
 import spire.algebra.Field
 
@@ -10,13 +10,13 @@ class JoinTreeEdge
 object JoinTree {
 
   def makeJoinTree[T: Eq: Manifest, N: Field: Manifest, UG](
-    vps: Vector[Set[Distribution[T, N]]],
-    ef: Seq[(Set[Distribution[T, N]], Set[Distribution[T, N]])])(
-      implicit ug: UndirectedGraph[UG, Set[Distribution[T, N]], JoinTreeEdge]): JoinTree[T, N, UG] =
+    vps: Vector[Set[Variable[T]]],
+    ef: Seq[(Set[Variable[T]], Set[Variable[T]])])(
+      implicit ug: UndirectedGraph[UG, Set[Variable[T]], JoinTreeEdge]): JoinTree[T, N, UG] =
     JoinTree[T, N, UG](ug.make(vps, ef.map({ case (v1, v2) => (v1, v2, new JoinTreeEdge) })))
 
   // returns a jointree for DAG G with width equal to width(π, G)
-  def fromEliminationOrder[T, N: Field, UG, DG](m: BayesianNetwork[T, N, DG], π: List[Distribution[T, N]]): JoinTree[T, N, UG] = {
+  def fromEliminationOrder[T, N: Field, UG, DG](m: BayesianNetwork[T, N, DG], π: List[Variable[T]]): JoinTree[T, N, UG] = {
     // val Gm = Gv.moralGraph
     // val clusterSequence: List[Set[Distribution[_]]] = Gm.induceClusterSequence(pi)
     ???
@@ -25,7 +25,7 @@ object JoinTree {
 
 case class JoinTree[T: Eq, N: Field, UG](
     graph: UG)(
-        implicit ug: UndirectedGraph[UG, Set[Distribution[T, N]], JoinTreeEdge]) {
+        implicit ug: UndirectedGraph[UG, Set[Variable[T]], JoinTreeEdge]) {
 
   //  def addToCluster(n: GV, v: Distribution[_]): Unit = n.getPayload += v
   //
