@@ -5,9 +5,10 @@ package axle.stats
 //   def *[R](right: R) = PMultiply(this, right)
 //}
 
-case class P(c: CaseExpr) {
+object P {
 
-  def value[N, A](implicit prob: Probability[Variable[A], A, N]): N = ???
+  def apply[N, A](c: CaseIs[A])(implicit prob: Probability[Variable[A], A, N]): () => N =
+    () => prob.apply(c.variable, c.value)
 }
 
 // case class PMultiply[L, R, N](left: L, right: R) extends PExpr[N]

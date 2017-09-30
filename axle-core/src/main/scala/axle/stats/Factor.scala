@@ -31,7 +31,7 @@ object Factor {
         import factor._
         varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
           factor.cases.map(kase =>
-            kase.map(ci => string(ci.v).padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
+            kase.map(ci => string(ci.value).padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
               " " + string(factor(kase))).mkString("\n") // Note: was "%f".format() prior to spire.math
       }
 
@@ -57,8 +57,7 @@ object Factor {
   def cases[T: Eq, N: Field](varSeq: Vector[Variable[T]]): Iterable[Vector[CaseIs[T]]] =
     IndexedCrossProduct(varSeq.map(_.values)) map { kase =>
       varSeq.zip(kase) map {
-        case (rv, v) =>
-          CaseIs(rv, v)
+        case (rv, v) => CaseIs(rv, v)
       } toVector
     }
 
@@ -99,7 +98,7 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
   }
 
   def indexOf(cs: Seq[CaseIs[T]]): Int = {
-    val rvvs: Seq[(Variable[T], T)] = cs.map(ci => (ci.distribution, ci.v))
+    val rvvs: Seq[(Variable[T], T)] = cs.map(ci => (ci.distribution, ci.value))
     val rvvm = rvvs.toMap
     crossProduct.indexOf(varList.map(rvvm))
   }

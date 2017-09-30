@@ -14,7 +14,6 @@ import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
-import spire.implicits.convertableOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.nrootOps
@@ -25,7 +24,6 @@ import spire.math.ConvertableTo
 import spire.math.Rational
 import spire.random.Dist
 import axle.math.Σ
-import axle.algebra.Finite
 import axle.algebra.Functor
 import axle.algebra.Aggregatable
 import axle.quanta.Information
@@ -54,16 +52,17 @@ package object stats {
 
   def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable0[Symbol, Rational] =
     ConditionalProbabilityTable0[Symbol, Rational](
-      Map('HEAD -> pHead, 'TAIL -> (1 - pHead)), "coin")
+      Map('HEAD -> pHead,
+          'TAIL -> (1 - pHead)))
 
   def binaryDecision(yes: Rational): ConditionalProbabilityTable0[Boolean, Rational] =
-    ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), s"binaryDecision $yes")
+    ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)))
 
-  def uniformDistribution[T](values: Seq[T], name: String): ConditionalProbabilityTable0[T, Rational] = {
+  def uniformDistribution[T](values: Seq[T]): ConditionalProbabilityTable0[T, Rational] = {
 
     val dist = values.groupBy(identity).mapValues({ ks => Rational(ks.size.toLong, values.size.toLong) }).toMap
 
-    ConditionalProbabilityTable0(dist, name)
+    ConditionalProbabilityTable0(dist)
   }
 
   def iffy[C: Eq, N: Field: Order: Dist, D, R](
@@ -88,7 +87,7 @@ package object stats {
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double =
-    log(x.toDouble) / log(2d)
+    log(ConvertableFrom[N].toDouble(x)) / log(2d)
 
   def square[N: Ring](x: N): N = x ** 2
 
@@ -100,8 +99,7 @@ package object stats {
   def rootMeanSquareDeviation[C, X, D](
     data: C,
     estimator: X => X)(
-      implicit finite: Finite[C, X],
-      functor: Functor[C, X, X, D],
+      implicit functor: Functor[C, X, X, D],
       agg: Aggregatable[D, X, X],
       field: Field[X],
       nroot: NRoot[X]): X =
@@ -118,7 +116,9 @@ package object stats {
 
     val μ: A = Σ[A, IndexedSeq[A]](prob.values(distribution).map({ x => n2a(prob(distribution, x)) * x }))
 
-    Σ[A, IndexedSeq[A]](prob.values(distribution) map { x => n2a(prob(distribution, x)) * square(x - μ) }).sqrt
+    val sum: A = Σ[A, IndexedSeq[A]](prob.values(distribution) map { x => n2a(prob(distribution, x)) * square(x - μ) })
+
+    NRoot[A].sqrt(sum)
   }
 
   def σ[D, A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
@@ -138,12 +138,11 @@ package object stats {
 
     val convertN = ConvertableFrom[N]
     val H = Σ[Double, IndexedSeq[Double]](prob.values(X) map { x =>
-      val p = P(CaseIs(x, X))
-      val px: N = p.value(prob)
+      val px: N = P(CaseIs(x, X))(prob).apply()
       if (px === Field[N].zero) {
         0d
       } else {
-        convertN.toDouble(-px) * log2(px)
+        -convertN.toDouble(px) * log2(px)
       }
     })
     UnittedQuantity(H, convert.bit)

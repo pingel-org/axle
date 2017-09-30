@@ -20,7 +20,6 @@ package axle.stats
 //
 //  def probabilityOf(a: A): N
 //
-//  def charWidth(implicit sa: Show[A]): Int = (name.length :: values.map(a => string(a).length).toList).reduce(math.max)
 //}
 //
 //trait Distribution0[A, N] extends Distribution[A, N] {

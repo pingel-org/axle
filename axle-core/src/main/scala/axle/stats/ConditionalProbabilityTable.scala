@@ -17,16 +17,15 @@ object ConditionalProbabilityTable0 {
     new Show[ConditionalProbabilityTable0[A, N]] {
 
       def show(cpt: ConditionalProbabilityTable0[A, N]): String =
-        cpt.name + "\n" +
-          cpt.values.sorted.map(a => {
-            val aString = string(a)
-            (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(cpt.probabilityOf(a)))
-          }).mkString("\n")
+        cpt.values.sorted.map(a => {
+          val aString = string(a)
+          (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(cpt.probabilityOf(a)))
+        }).mkString("\n")
     }
 
 }
 
-case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], val name: String = "unnamed") {
+case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N]) {
 
   val field = Field[N]
 
@@ -37,7 +36,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
         .groupBy(_._1)
         .mapValues(_.map(_._2).reduce(field.plus)))
 
-  def flatMap[B](f: A => Distribution0[B, N]): ConditionalProbabilityTable0[B, N] =
+  def flatMap[B](f: A => ConditionalProbabilityTable0[B, N]): ConditionalProbabilityTable0[B, N] =
     ConditionalProbabilityTable0[B, N](
       values
         .flatMap(a => {
@@ -64,6 +63,9 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N], 
   def values: IndexedSeq[A] = p.keys.toVector
 
   def probabilityOf(a: A): N = p.get(a).getOrElse(field.zero)
+
+  def charWidth(implicit sa: Show[A]): Int =
+    (values.map(a => string(a).length).toList).reduce(math.max)
 
 }
 

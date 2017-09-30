@@ -51,12 +51,12 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   val bnns = variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList
 
-  val bnnByVariable = bnns.map(bnn => bnn.rv -> bnn).toMap
+  val bnnByVariable = bnns.map(bnn => bnn.variable -> bnn).toMap
 
   val _graph: DG =
     dg.make(bnns,
       bnns.flatMap(dest =>
-        dest.cpt.variables.filterNot(_ === dest.rv)
+        dest.cpt.variables.filterNot(_ === dest.variable)
           .map(source => (bnnByVariable(source), dest, new Edge))))
 
   def graph = _graph
@@ -64,7 +64,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def numVariables = variableFactorMap.size
 
   def randomVariables: Vector[Variable[T]] =
-    dg.vertices(graph).map(_.rv).toVector
+    dg.vertices(graph).map(_.variable).toVector
 
   def jointProbabilityTable: Factor[T, N] = {
     val newVars = randomVariables
@@ -75,17 +75,17 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   }
 
   def cpt(variable: Variable[T]): Factor[T, N] =
-    graph.findVertex(_.rv === variable).map(_.cpt).get
+    graph.findVertex(_.variable === variable).map(_.cpt).get
 
   def probabilityOf(cs: Seq[CaseIs[T]]): N =
     Π[N, Vector[N]](cs.map(c => cpt(c.distribution)(cs)).toVector)
 
   def markovAssumptionsFor(rv: Variable[T]): Independence[T] = {
-    val rvVertex = graph.findVertex(_.rv === rv).get
+    val rvVertex = graph.findVertex(_.variable === rv).get
     val X: Set[Variable[T]] = Set(rv)
-    val Z: Set[Variable[T]] = graph.predecessors(rvVertex).map(_.rv).toSet
+    val Z: Set[Variable[T]] = graph.predecessors(rvVertex).map(_.variable).toSet
     val D = graph.descendants(rvVertex) ++ graph.predecessors(rvVertex) + rvVertex
-    val Dvars = D.map(_.rv)
+    val Dvars = D.map(_.variable)
     Independence(X, Z, randomVariables.filterNot(Dvars.contains).toSet)
   }
 

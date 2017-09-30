@@ -10,7 +10,7 @@ import axle.string
 import cats.kernel.Eq
 import spire.algebra.Field
 
-case class BayesianNetworkNode[T, N](rv: Variable[T], cpt: Factor[T, N])
+case class BayesianNetworkNode[T, N](variable: Variable[T], cpt: Factor[T, N])
 
 object BayesianNetworkNode {
 
@@ -19,7 +19,7 @@ object BayesianNetworkNode {
 
       def show(bnn: BayesianNetworkNode[T, N]): String = {
         import bnn._
-        rv.name + "\n\n" + cpt
+        variable.name + "\n\n" + cpt
       }
 
     }
@@ -28,13 +28,13 @@ object BayesianNetworkNode {
     new HtmlFrom[BayesianNetworkNode[T, N]] {
       def toHtml(bnn: BayesianNetworkNode[T, N]): xml.Node =
         <div>
-          <h2>{ bnn.rv.name }</h2>
+          <h2>{ bnn.variable.name }</h2>
           <table border={ "1" }>
-            <tr>{ bnn.cpt.varList.map(rv => <td>{ rv.name }</td>): xml.NodeSeq }<td>P</td></tr>
+            <tr>{ bnn.cpt.varList.map(variable => <td>{ variable.name }</td>): xml.NodeSeq }<td>P</td></tr>
             {
               bnn.cpt.cases.map(kase =>
                 <tr>
-                  { kase.map(ci => <td>{ string(ci.v) }</td>) }
+                  { kase.map(ci => <td>{ string(ci.value) }</td>) }
                   <td>{ bnn.cpt(kase) }</td>
                 </tr>)
             }

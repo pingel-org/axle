@@ -3,7 +3,6 @@ package axle.game
 import scala.Stream.cons
 import scala.util.Random.nextInt
 
-import axle.stats.Distribution0
 import axle.stats.ConditionalProbabilityTable0
 
 import cats.kernel.Order
@@ -26,7 +25,7 @@ object Strategies {
     }).toMap
 
   def aiMover[G, S, O, M, MS, MM, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
-    implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => Distribution0[M, Rational] =
+    implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
     (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
       ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)))
@@ -35,7 +34,7 @@ object Strategies {
   def hardCodedStringStrategy[G, S, O, M, MS, MM](
     input: (G, MS) => String)(
       implicit evGame: Game[G, S, O, M, MS, MM],
-      evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
+      evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
     (game: G, state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
@@ -51,7 +50,7 @@ object Strategies {
 
   def interactiveMove[G, S, O, M, MS, MM](
     implicit evGame: Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
     (game: G, state: MS) => {
 
       val mover = evGame.moverM(game, state).get // TODO .get
@@ -72,7 +71,7 @@ object Strategies {
       ConditionalProbabilityTable0[M, Rational](Map(stream.find(esm => esm.isRight).get.right.toOption.get -> Rational(1)))
     }
 
-  def randomMove[G, S, O, M, MS, MM](implicit evGame: Game[G, S, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
+  def randomMove[G, S, O, M, MS, MM](implicit evGame: Game[G, S, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
     (game: G, state: MS) => {
       val opens = evGame.moves(game, state).toList
       val p = Rational(1L, opens.length.toLong)

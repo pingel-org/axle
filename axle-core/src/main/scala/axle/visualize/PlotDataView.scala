@@ -5,7 +5,7 @@ import scala.annotation.implicitNotFound
 
 import axle.algebra.Plottable
 import axle.algebra.Zero
-import axle.stats.Distribution0
+import axle.stats.Probability
 import cats.kernel.Order
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
@@ -79,34 +79,34 @@ object PlotDataView {
       }
     }
 
-  implicit def distribution0DataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[S, X, Y, Distribution0[X, Y]] =
-    new PlotDataView[S, X, Y, Distribution0[X, Y]] {
+  implicit def probabilityDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable, D](
+      implicit prob: Probability[D, X, Y]): PlotDataView[S, X, Y, D] =
+    new PlotDataView[S, X, Y, D] {
 
-      def xsOf(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys.toList.sorted
+      def xsOf(d: D): Traversable[X] = prob.values(d)
 
-      def valueOf(d: Distribution0[X, Y], x: X): Y = d.probabilityOf(x)
+      def valueOf(d: D, x: X): Y = prob(d, x)
 
-      def xRange(data: Seq[(S, Distribution0[X, Y])], include: Option[X]): (X, X) = {
+      def xRange(data: Seq[(S, D)], include: Option[X]): (X, X) = {
 
         val minXCandidates = include.toList ++ (data flatMap {
-          case (label, d: Distribution0[X, Y]) => xsOf(d).headOption
+          case (label, d) => xsOf(d).headOption
         })
         val minX = if (minXCandidates.size > 0) minXCandidates.min else Zero[X].zero
 
         val maxXCandidates = include.toList ++ (data flatMap {
-          case (label, d: Distribution0[X, Y]) => xsOf(d).lastOption
+          case (label, d) => xsOf(d).lastOption
         })
 
         val maxX = if (minXCandidates.size > 0) maxXCandidates.max else Zero[X].zero
 
         (minX, maxX)
-
       }
 
-      def yRange(data: Seq[(S, Distribution0[X, Y])], include: Option[Y]): (Y, Y) = {
+      def yRange(data: Seq[(S, D)], include: Option[Y]): (Y, Y) = {
 
         val minYCandidates = include.toList ++ (data flatMap {
-          case (label, d: Distribution0[X, Y]) =>
+          case (label, d) =>
             val xs = xsOf(d)
             if (xs.size === 0)
               None
@@ -117,7 +117,7 @@ object PlotDataView {
         val minY = if (minYCandidates.size > 0) minYCandidates.min else Zero[Y].zero
 
         val maxYCandidates = include.toList ++ (data flatMap {
-          case (label, d: Distribution0[X, Y]) => {
+          case (label, d) => {
             val xs = xsOf(d)
             if (xs.size === 0)
               None
