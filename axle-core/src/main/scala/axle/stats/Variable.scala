@@ -5,6 +5,8 @@ case class Variable[T](
     values: IndexedSeq[T]) {
 
   def is(t: T): CaseIs[T] = CaseIs(t, this)
+  
+  def charWidth: Int = name.length
 }
 
 object Variable {

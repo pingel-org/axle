@@ -31,7 +31,7 @@ object Factor {
         import factor._
         varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
           factor.cases.map(kase =>
-            kase.map(ci => string(ci.value).padTo(ci.distribution.charWidth, " ").mkString("")).mkString(" ") +
+            kase.map(ci => string(ci.value).padTo(ci.variable.charWidth, " ").mkString("")).mkString(" ") +
               " " + string(factor(kase))).mkString("\n") // Note: was "%f".format() prior to spire.math
       }
 
@@ -57,7 +57,7 @@ object Factor {
   def cases[T: Eq, N: Field](varSeq: Vector[Variable[T]]): Iterable[Vector[CaseIs[T]]] =
     IndexedCrossProduct(varSeq.map(_.values)) map { kase =>
       varSeq.zip(kase) map {
-        case (rv, v) => CaseIs(rv, v)
+        case (variable, value) => CaseIs(value, variable)
       } toVector
     }
 
@@ -98,13 +98,13 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
   }
 
   def indexOf(cs: Seq[CaseIs[T]]): Int = {
-    val rvvs: Seq[(Variable[T], T)] = cs.map(ci => (ci.distribution, ci.value))
+    val rvvs: Seq[(Variable[T], T)] = cs.map(ci => (ci.variable, ci.value))
     val rvvm = rvvs.toMap
     crossProduct.indexOf(varList.map(rvvm))
   }
 
   private[this] def caseOf(i: Int): Vector[CaseIs[T]] =
-    varList.zip(crossProduct(i)) map { case (variable, value) => CaseIs(variable, value) }
+    varList.zip(crossProduct(i)) map { case (variable, value) => CaseIs(value, variable) }
 
   def cases: Iterable[Seq[CaseIs[T]]] = (0 until elements.length) map { caseOf }
 
@@ -162,19 +162,19 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
   def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T]]]): Factor[T, N] = {
     val e = eOpt.get
     Factor(variables,
-      Factor.cases(e.map(_.distribution).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
+      Factor.cases(e.map(_.variable).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
   }
 
   def mentions(variable: Variable[T]): Boolean =
     variables.exists(v => variable.name === v.name)
 
   def isSupersetOf(left: Seq[CaseIs[T]], right: Seq[CaseIs[T]]): Boolean = {
-    val ll: Seq[(Variable[T], T)] = left.map(ci => (ci.distribution, ci.v))
+    val ll: Seq[(Variable[T], T)] = left.map(ci => (ci.variable, ci.value))
     val lm = ll.toMap
-    right.forall((rightCaseIs: CaseIs[T]) => lm.contains(rightCaseIs.distribution) && (rightCaseIs.v === lm(rightCaseIs.distribution)))
+    right.forall((rightCaseIs: CaseIs[T]) => lm.contains(rightCaseIs.variable) && (rightCaseIs.value === lm(rightCaseIs.variable)))
   }
 
   def projectToVars(cs: Seq[CaseIs[T]], pVars: Set[Variable[T]]): Seq[CaseIs[T]] =
-    cs.filter(ci => pVars.contains(ci.distribution))
+    cs.filter(ci => pVars.contains(ci.variable))
 
 }
