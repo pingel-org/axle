@@ -3,7 +3,7 @@ package axle.stats
 import scala.util.Random
 
 import cats.Show
-import cats.implicits.catsSyntaxEq
+//import cats.implicits.catsSyntaxEq
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
@@ -25,11 +25,11 @@ object TallyDistribution0 {
     new Show[TallyDistribution0[A, N]] {
 
       def show(td: TallyDistribution0[A, N]): String =
-        td.name + "\n" +
-          td.values.sorted.map(a => {
-            val aString = string(a)
-            (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
-          }).mkString("\n")
+        td.values.sorted.map(a => {
+          val aString = string(a)
+          // (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
+          (aString + " " + string(td.probabilityOf(a)))
+        }).mkString("\n")
     }
 
 }
