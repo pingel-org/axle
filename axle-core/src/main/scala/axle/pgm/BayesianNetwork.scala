@@ -78,7 +78,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
     graph.findVertex(_.variable === variable).map(_.cpt).get
 
   def probabilityOf(cs: Seq[CaseIs[T]]): N =
-    Π[N, Vector[N]](cs.map(c => cpt(c.distribution)(cs)).toVector)
+    Π[N, Vector[N]](cs.map(c => cpt(c.variable)(cs)).toVector)
 
   def markovAssumptionsFor(rv: Variable[T]): Independence[T] = {
     val rvVertex = graph.findVertex(_.variable === rv).get
@@ -208,10 +208,10 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   def pruneNodes(Q: Set[Variable[T]], eOpt: Option[List[CaseIs[T]]], g: BayesianNetwork[T, N, DG]): BayesianNetwork[T, N, DG] = {
 
-    val vars = eOpt.map(Q ++ _.map(_.distribution)).getOrElse(Q)
+    val vars = eOpt.map(Q ++ _.map(_.variable)).getOrElse(Q)
 
     def nodePruneStream(g: BayesianNetwork[T, N, DG]): Stream[BayesianNetwork[T, N, DG]] = {
-      val xVertices = g.graph.leaves.toSet -- vars.map(rv => g.graph.findVertex(_.rv === rv).get)
+      val xVertices = g.graph.leaves.toSet -- vars.map(rv => g.graph.findVertex(_.variable === rv).get)
       xVertices.size match {
         case 0 => empty
         case _ => {
