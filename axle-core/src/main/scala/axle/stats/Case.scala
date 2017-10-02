@@ -1,31 +1,28 @@
 package axle.stats
 
-sealed trait CaseExpr {
-
-  def and[R](right: R) = CaseAnd(this, right)
-  def ∧[R](right: R) = CaseAnd(this, right)
-  def ∩[R](right: R) = CaseAnd(this, right)
-
-  def or[R](right: R) = CaseOr(this, right)
-  def ∨[R](right: R) = CaseOr(this, right)
-  def ∪[R](right: R) = CaseOr(this, right)
-
-  def |[R](given: R) = CaseGiven(this, given)
-}
-
 /**
  * TODO
- * 1) use phantom types to ensure that only one "given" clause is specified for CaseGiven
- * 2) handle other arity distributions with CaseIs and CaseIsnt
+ * 
+ * Define Case expressions to support full range of case types
  *
  */
 
-case class CaseAndGT[A: Manifest](conjuncts: Iterable[A]) extends CaseExpr
-case class CaseAnd[L, R](left: L, right: R) extends CaseExpr
-case class CaseOr[L, R](left: L, right: R) extends CaseExpr
-case class CaseGiven[A, B](c: A, given: B) extends CaseExpr
-case class CaseIs[A](value: A, variable: Variable[A]) extends CaseExpr
-case class CaseIsnt[A](value: A, variable: Variable[A]) extends CaseExpr
+case class CaseIs[A](value: A, variable: Variable[A], is: Boolean = true) {
+
+  def and[R](right: CaseIs[R]) = CaseAnd(this, right)
+  def ∧[R](right: CaseIs[R]) = CaseAnd(this, right)
+  def ∩[R](right: CaseIs[R]) = CaseAnd(this, right)
+
+  def or[R](right: CaseIs[R]) = CaseOr(this, right)
+  def ∨[R](right: CaseIs[R]) = CaseOr(this, right)
+  def ∪[R](right: CaseIs[R]) = CaseOr(this, right)
+
+  def |[R](given: CaseIs[R]) = CaseGiven(this, given)
+}
+case class CaseAnd[L, R](left: CaseIs[L], right: CaseIs[R])
+case class CaseOr[L, R](left: CaseIs[L], right: CaseIs[R])
+case class CaseGiven[A, G](c: CaseIs[A], given: CaseIs[G])
+case class CaseGiven2[A, G1, G2](c: CaseIs[A], given: CaseAnd[G1, G2])
 
 object CaseIs {
 
@@ -35,7 +32,8 @@ object CaseIs {
     new Show[CaseIs[A]] {
       def show(c: CaseIs[A]): String = {
         import c._
-        variable.name + " = " + value
+        val opStr = if(c.is) " = " else " != "
+        variable.name + opStr + value
       }
     }
 }

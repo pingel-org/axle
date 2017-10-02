@@ -51,7 +51,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
   val classTally: Map[CLASS, N] =
     data.map(classExtractor).tally.withDefaultValue(Field[N].zero)
 
-  val C = TallyDistribution0(classTally, classRandomVariable.name)
+  val C = TallyDistribution0(classTally)
 
   def tallyFor(featureRandomVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =
     featureTally.filter {
@@ -62,9 +62,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
 
   // Note: The "parent" (or "given") of these feature variables is C
   val Fs = featureRandomVariables.map(featureRandomVariable =>
-    TallyDistribution1(
-      tallyFor(featureRandomVariable).withDefaultValue(Field[N].zero),
-      featureRandomVariable.name))
+    TallyDistribution1(tallyFor(featureRandomVariable).withDefaultValue(Field[N].zero)))
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
@@ -73,13 +71,16 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
     val fs = featureExtractor(d)
 
     def f(c: CLASS): N =
-      Π(Fs.zip(fs).map({
+      Π(featureRandomVariables.zip(fs).map({
         case (fVar, fVal) => {
-          P((fVar is fVal) | (C is c)).apply()
+          // TODO P.apply will need Fs for Probability
+          val given = (fVar is fVal) | (classRandomVariable is c)
+          P(given).apply()
         }
       }))
 
-    def g(c: CLASS) = P(C is c).apply() * f(c)
+    // TODO C will need to be used in P calculation
+    def g(c: CLASS) = P(classRandomVariable is c).apply() * f(c)
 
     argmax(C.values, g).get // TODO: will be None if C.values is empty
   }

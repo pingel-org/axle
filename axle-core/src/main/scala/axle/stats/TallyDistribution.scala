@@ -1,7 +1,5 @@
 package axle.stats
 
-import scala.util.Random
-
 import cats.Show
 //import cats.implicits.catsSyntaxEq
 import cats.kernel.Eq
@@ -14,6 +12,8 @@ import spire.algebra.Ring
 //import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
+import spire.random.Dist
+import spire.random.Generator
 
 import axle.math.Σ
 import axle.string
@@ -30,6 +30,33 @@ object TallyDistribution0 {
           // (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
           (aString + " " + string(td.probabilityOf(a)))
         }).mkString("\n")
+    }
+
+  implicit def probability[A, N](implicit fieldN: Field[N], orderN: Order[N]): Probability[TallyDistribution0[A, N], A, N] =
+    new Probability[TallyDistribution0[A, N], A, N] {
+
+      def apply(model: TallyDistribution0[A, N], c: CaseIs[A]): N =
+        if(c.is) {
+          model.probabilityOf(c.value)
+        } else {
+          fieldN.minus(fieldN.one, model.probabilityOf(c.value))
+        }
+
+      def values(model: TallyDistribution0[A, N], variable: Variable[A]): IndexedSeq[A] =
+        model.values
+
+      def combine(variable: Variable[A], modelsToProbabilities: Map[TallyDistribution0[A, N], N]): TallyDistribution0[A, N] = {
+
+        val parts: IndexedSeq[(A, N)] =
+          modelsToProbabilities.toVector flatMap { case (model, weight) =>
+            values(model, variable).map(v => (v, apply(model, CaseIs(v, variable)) * weight))
+          }
+
+        val newDist: Map[A, N] =
+          parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldN.plus)).toMap
+
+        TallyDistribution0[A, N](newDist)
+      }
     }
 
 }
@@ -68,8 +95,8 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N]) {
 
   val order = Order[N]
 
-  def observe(): A = {
-    val r: N = totalCount * Random.nextDouble()
+  def observe(gen: Generator)(implicit rng: Dist[Double]): A = {
+    val r: N = totalCount * rng.apply(gen)
     bars.find({ case (_, v) => order.gteqv(v, r) }).get._1 // or distribution is malformed
   }
 

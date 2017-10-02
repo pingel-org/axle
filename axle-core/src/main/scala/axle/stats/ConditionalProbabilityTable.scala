@@ -3,11 +3,13 @@ package axle.stats
 import cats.Show
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
+
 import spire.algebra.Field
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.random.Dist
-import spire.random.rng.Cmwc5
+import spire.random.Generator
+
 import axle.string
 import axle.dummy
 
@@ -21,6 +23,33 @@ object ConditionalProbabilityTable0 {
           val aString = string(a)
           (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(cpt.probabilityOf(a)))
         }).mkString("\n")
+    }
+
+  implicit def probability[A, N](implicit fieldN: Field[N], orderN: Order[N], distN: Dist[N]): Probability[ConditionalProbabilityTable0[A, N], A, N] =
+    new Probability[ConditionalProbabilityTable0[A, N], A, N] {
+
+      def apply(model: ConditionalProbabilityTable0[A, N], c: CaseIs[A]): N =
+        if(c.is) {
+          model.probabilityOf(c.value)
+        } else {
+          fieldN.minus(fieldN.one, model.probabilityOf(c.value))
+        }
+
+      def values(model: ConditionalProbabilityTable0[A, N], variable: Variable[A]): IndexedSeq[A] =
+        model.values
+
+      def combine(variable: Variable[A], modelsToProbabilities: Map[ConditionalProbabilityTable0[A, N], N]): ConditionalProbabilityTable0[A, N] = {
+
+        val parts: IndexedSeq[(A, N)] =
+          modelsToProbabilities.toVector flatMap { case (model, weight) =>
+            values(model, variable).map(v => (v, apply(model, CaseIs(v, variable)) * weight))
+          }
+
+        val newDist: Map[A, N] =
+          parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldN.plus)).toMap
+
+        ConditionalProbabilityTable0[A, N](newDist)
+      }
     }
 
 }
@@ -51,12 +80,10 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N]) 
 
   val bars = p.scanLeft((dummy[A], field.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
-  val rng = Cmwc5()
-
   val order = Order[N]
 
-  def observe(): A = {
-    val r = rng.next[N]
+  def observe(gen: Generator)(implicit rng: Dist[N]): A = {
+    val r: N = rng.apply(gen)
     bars.find({ case (_, v) => order.gteqv(v, r) }).get._1 // otherwise malformed distribution
   }
 

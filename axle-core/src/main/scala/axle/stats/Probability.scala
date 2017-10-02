@@ -4,21 +4,24 @@ package axle.stats
 // import spire.implicits.additiveGroupOps
 // import axle.math.Π
 
-trait Probability[D, V, N] extends Function2[D, V, N] {
+trait Probability[M, A, N] {
 
-  def values(d: D): IndexedSeq[V]
+  def apply(model: M, c: CaseIs[A]): N
 
-  def fromMap(m: Map[V, N]): D
+  def values(model: M, variable: Variable[A]): IndexedSeq[A]
+
+  def combine(variable: Variable[A], modelsToProbabilities: Map[M, N]): M
 }
 
-trait ProbabilityGiven1[D, V, G, N] extends Function3[D, V, G, N] {
+trait ProbabilityGiven1[M, A, G, N] extends Function2[M, CaseGiven[A, G], N] {
 
-  def values(d: D): IndexedSeq[V]
+  def values(model: M, variable: Variable[A]): IndexedSeq[A]
 }
 
-trait ProbabilityGiven2[D, V, G1, G2, N] extends Function4[D, V, G1, G2, N] {
+trait ProbabilityGiven2[M, A, G1, G2, N]
+extends Function2[M, CaseGiven2[A, G1, G2], N] {
 
-  def values(d: D): IndexedSeq[V]
+  def values(model: M, variable: Variable[A]): IndexedSeq[A]
 }
 
 object Probability {

@@ -3,12 +3,15 @@ package axle.visualize
 import scala.collection.immutable.TreeMap
 import scala.annotation.implicitNotFound
 
-import axle.algebra.Plottable
-import axle.algebra.Zero
-import axle.stats.Probability
 import cats.kernel.Order
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
+
+import axle.algebra.Plottable
+import axle.algebra.Zero
+import axle.stats.Probability
+import axle.stats.CaseIs
+import axle.stats.Variable
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[S, X, Y, D] {
@@ -79,13 +82,14 @@ object PlotDataView {
       }
     }
 
-  implicit def probabilityDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable, D](
-      implicit prob: Probability[D, X, Y]): PlotDataView[S, X, Y, D] =
-    new PlotDataView[S, X, Y, D] {
+  def probabilityDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable, M](
+      variable: Variable[X])(
+      implicit prob: Probability[M, X, Y]): PlotDataView[S, X, Y, (M, CaseIs[X])] =
+    new PlotDataView[S, X, Y, (M, CaseIs[X])] {
 
-      def xsOf(d: D): Traversable[X] = prob.values(d)
+      def xsOf(model: M): Traversable[X] = prob.values(model, variable)
 
-      def valueOf(d: D, x: X): Y = prob(d, x)
+      def valueOf(model: M, cx: CaseIs[X]): Y = prob(model, cx)
 
       def xRange(data: Seq[(S, D)], include: Option[X]): (X, X) = {
 
