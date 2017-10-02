@@ -21,14 +21,14 @@ import axle.dummy
 
 object TallyDistribution0 {
 
-  implicit def show[A: Order: Show, N: Show]: Show[TallyDistribution0[A, N]] =
+  implicit def show[A: Order: Show, N: Show](implicit prob: Probability[TallyDistribution0[A, N], A, N]): Show[TallyDistribution0[A, N]] =
     new Show[TallyDistribution0[A, N]] {
 
       def show(td: TallyDistribution0[A, N]): String =
         td.values.sorted.map(a => {
           val aString = string(a)
           // (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
-          (aString + " " + string(td.probabilityOf(a)))
+          (aString + " " + string(prob.probabilityOf(td, a)))
         }).mkString("\n")
     }
 
@@ -37,9 +37,9 @@ object TallyDistribution0 {
 
       def apply(model: TallyDistribution0[A, N], c: CaseIs[A]): N =
         if(c.is) {
-          model.probabilityOf(c.value)
+          probabilityOf(model, c.value)
         } else {
-          fieldN.minus(fieldN.one, model.probabilityOf(c.value))
+          fieldN.minus(fieldN.one, probabilityOf(model, c.value))
         }
 
       def values(model: TallyDistribution0[A, N], variable: Variable[A]): IndexedSeq[A] =
@@ -57,7 +57,16 @@ object TallyDistribution0 {
 
         TallyDistribution0[A, N](newDist)
       }
+
+    def observe(model: TallyDistribution0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
+      val r: N = model.totalCount * rng.apply(gen)
+      model.bars.find({ case (_, v) => model.order.gteqv(v, r) }).get._1 // or distribution is malformed
     }
+
+    def probabilityOf(model: TallyDistribution0[A, N], a: A): N =
+      model.tally.get(a).getOrElse(model.ring.zero) / model.totalCount
+
+  }
 
 }
 
@@ -65,8 +74,9 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N]) {
 
   val ring = Ring[N]
   val addition = implicitly[AdditiveMonoid[N]]
+  val order = Order[N]
 
-  def values: IndexedSeq[A] = tally.keys.toVector
+  val values: IndexedSeq[A] = tally.keys.toVector
 
   def map[B](f: A => B): TallyDistribution0[B, N] =
     TallyDistribution0(
@@ -92,15 +102,6 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N]) {
 
   val bars: Map[A, N] =
     tally.scanLeft((dummy[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2))).drop(1)
-
-  val order = Order[N]
-
-  def observe(gen: Generator)(implicit rng: Dist[Double]): A = {
-    val r: N = totalCount * rng.apply(gen)
-    bars.find({ case (_, v) => order.gteqv(v, r) }).get._1 // or distribution is malformed
-  }
-
-  def probabilityOf(a: A): N = tally.get(a).getOrElse(ring.zero) / totalCount
 
 }
 

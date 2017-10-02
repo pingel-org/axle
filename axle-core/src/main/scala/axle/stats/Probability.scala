@@ -4,6 +4,9 @@ package axle.stats
 // import spire.implicits.additiveGroupOps
 // import axle.math.Π
 
+import spire.random.Generator
+import spire.random.Dist
+
 trait Probability[M, A, N] {
 
   def apply(model: M, c: CaseIs[A]): N
@@ -11,6 +14,10 @@ trait Probability[M, A, N] {
   def values(model: M, variable: Variable[A]): IndexedSeq[A]
 
   def combine(variable: Variable[A], modelsToProbabilities: Map[M, N]): M
+
+  def observe(model: M, gen: Generator)(implicit rng: Dist[N]): A
+
+  def probabilityOf(model: M, a: A): N
 }
 
 trait ProbabilityGiven1[M, A, G, N] extends Function2[M, CaseGiven[A, G], N] {

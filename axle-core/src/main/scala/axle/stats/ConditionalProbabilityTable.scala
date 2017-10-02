@@ -15,13 +15,13 @@ import axle.dummy
 
 object ConditionalProbabilityTable0 {
 
-  implicit def showCPT[A: Show: Order, N: Show]: Show[ConditionalProbabilityTable0[A, N]] =
+  implicit def showCPT[A: Show: Order, N: Show](implicit prob: Probability[ConditionalProbabilityTable0[A, N], A, N]): Show[ConditionalProbabilityTable0[A, N]] =
     new Show[ConditionalProbabilityTable0[A, N]] {
 
       def show(cpt: ConditionalProbabilityTable0[A, N]): String =
         cpt.values.sorted.map(a => {
           val aString = string(a)
-          (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(cpt.probabilityOf(a)))
+          (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(prob.probabilityOf(cpt, a)))
         }).mkString("\n")
     }
 
@@ -30,9 +30,9 @@ object ConditionalProbabilityTable0 {
 
       def apply(model: ConditionalProbabilityTable0[A, N], c: CaseIs[A]): N =
         if(c.is) {
-          model.probabilityOf(c.value)
+          probabilityOf(model, c.value)
         } else {
-          fieldN.minus(fieldN.one, model.probabilityOf(c.value))
+          fieldN.minus(fieldN.one, probabilityOf(model, c.value))
         }
 
       def values(model: ConditionalProbabilityTable0[A, N], variable: Variable[A]): IndexedSeq[A] =
@@ -50,13 +50,23 @@ object ConditionalProbabilityTable0 {
 
         ConditionalProbabilityTable0[A, N](newDist)
       }
+
+      def observe(model: ConditionalProbabilityTable0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
+        val r: N = rng.apply(gen)
+        model.bars.find({ case (_, v) => model.order.gteqv(v, r) }).get._1 // otherwise malformed distribution
+      }
+
+      def probabilityOf(model: ConditionalProbabilityTable0[A, N], a: A): N =
+        model.p.get(a).getOrElse(model.field.zero)
+
     }
 
 }
 
-case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N]) {
+case class ConditionalProbabilityTable0[A, N: Field: Order](val p: Map[A, N]) {
 
   val field = Field[N]
+  val order = Order[N]
 
   def map[B](f: A => B): ConditionalProbabilityTable0[B, N] =
     ConditionalProbabilityTable0[B, N](
@@ -80,16 +90,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order: Dist](p: Map[A, N]) 
 
   val bars = p.scanLeft((dummy[A], field.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
-  val order = Order[N]
-
-  def observe(gen: Generator)(implicit rng: Dist[N]): A = {
-    val r: N = rng.apply(gen)
-    bars.find({ case (_, v) => order.gteqv(v, r) }).get._1 // otherwise malformed distribution
-  }
-
   def values: IndexedSeq[A] = p.keys.toVector
-
-  def probabilityOf(a: A): N = p.get(a).getOrElse(field.zero)
 
   def charWidth(implicit sa: Show[A]): Int =
     (values.map(a => string(a).length).toList).reduce(math.max)

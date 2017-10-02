@@ -8,14 +8,14 @@ package object game {
 
   def moveStateStream[G, S, O, M, MS, MM](
     game: G,
-    fromState: S)(
+    fromState: S,
+    gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM]): Stream[(S, M, S)] =
     evGame.mover(game, fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
-      val gen: Generator = ???
       val move = strategy(game, evGame.maskState(game, fromState, mover)).observe(gen)
       val toState = evGame.applyMove(game, fromState, move)
-      cons((fromState, move, toState), moveStateStream(game, toState))
+      cons((fromState, move, toState), moveStateStream(game, toState, gen))
     }) getOrElse {
       Stream.empty
     }
