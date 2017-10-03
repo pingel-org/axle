@@ -41,20 +41,22 @@ object ConditionalProbabilityTable0 {
         val newDist: Map[A, N] =
           parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldN.plus)).toMap
 
-        ConditionalProbabilityTable0[A, N](newDist)
+        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m)}).getOrElse(Variable("?", Vector.empty))
+
+        ConditionalProbabilityTable0[A, N](newDist, v)
       }
 
       def condition[G](model: ConditionalProbabilityTable0[A, N], given: CaseIs[G]): ConditionalProbabilityTable0[A, N] =
-        ???
+        model // TODO true unless G =:= A and model.variable === variable
 
-      def empty[B]: ConditionalProbabilityTable0[B, N] =
-        ConditionalProbabilityTable0(Map.empty)
+      def empty[B](variable: Variable[B]): ConditionalProbabilityTable0[B, N] =
+        ConditionalProbabilityTable0(Map.empty, variable)
 
       def orientation(model: ConditionalProbabilityTable0[A, N]): Variable[A] =
-        ???
+        model.variable
 
       def orient[B](model: ConditionalProbabilityTable0[A, N], newVariable: Variable[B]): ConditionalProbabilityTable0[B, N] =
-        ???
+        empty[B](newVariable)
 
       def observe(model: ConditionalProbabilityTable0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
         val r: N = rng.apply(gen)
@@ -68,7 +70,9 @@ object ConditionalProbabilityTable0 {
 
 }
 
-case class ConditionalProbabilityTable0[A, N: Field: Order](val p: Map[A, N]) {
+case class ConditionalProbabilityTable0[A, N: Field: Order](
+    p: Map[A, N],
+    variable: Variable[A]) {
 
   val field = Field[N]
   val order = Order[N]

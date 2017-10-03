@@ -15,7 +15,7 @@ trait Probability[M[_], A, N] {
 
   def condition[G](model: M[A], given: CaseIs[G]): M[A]
 
-  def empty[B]: M[B]
+  def empty[B](variable: Variable[B]): M[B]
 
   def orientation(model: M[A]): Variable[A]
 

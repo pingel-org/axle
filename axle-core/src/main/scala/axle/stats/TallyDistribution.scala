@@ -43,6 +43,8 @@ object TallyDistribution0 {
 
       def combine(modelsToProbabilities: Map[TallyDistribution0[A, N], N]): TallyDistribution0[A, N] = {
 
+        // TODO assert that all models are oriented for same Variable[A]
+
         val parts: IndexedSeq[(A, N)] =
           modelsToProbabilities.toVector flatMap { case (model, weight) =>
             values(model).map(v => (v, model.tally.get(v).getOrElse(model.ring.zero) * weight))
@@ -51,20 +53,22 @@ object TallyDistribution0 {
         val newDist: Map[A, N] =
           parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldN.plus)).toMap
 
-        TallyDistribution0[A, N](newDist)
+        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m)}).getOrElse(Variable("?", Vector.empty))
+
+        TallyDistribution0[A, N](newDist, v)
       }
 
-      def condition[G](model: TallyDistribution0[A, N], given: CaseIs[G]): TallyDistribution0[A, N] =
-        ???
+      def condition[G](model: TallyDistribution0[A, N], value: G, variable: Variable[G]): TallyDistribution0[A, N] =
+        model // TODO true unless G =:= A and model.variable === variable
 
-      def empty[B]: TallyDistribution0[B, N] =
-        ???
+      def empty[B](variable: Variable[B]): TallyDistribution0[B, N] =
+        TallyDistribution0(Map.empty, variable)
 
       def orientation(model: TallyDistribution0[A, N]): Variable[A] =
-        ???
+        model.variable
 
-      def orient[B](model: TallyDistribution0[A, N]): TallyDistribution0[B, N] =
-        ???
+      def orient[B](model: TallyDistribution0[A, N], newVariable: Variable[B]): TallyDistribution0[B, N] =
+        empty[B](newVariable) // TODO could check if variable == newVariable
 
       def observe(model: TallyDistribution0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
         val r: N = model.totalCount * rng.apply(gen)
@@ -78,7 +82,9 @@ object TallyDistribution0 {
 
 }
 
-case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N]) {
+case class TallyDistribution0[A, N: Field: Order](
+    tally: Map[A, N],
+    variable: Variable[A]) {
 
   val ring = Ring[N]
   val addition = implicitly[AdditiveMonoid[N]]

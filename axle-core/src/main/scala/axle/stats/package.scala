@@ -53,16 +53,17 @@ package object stats {
   def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable0[Symbol, Rational] =
     ConditionalProbabilityTable0[Symbol, Rational](
       Map('HEAD -> pHead,
-          'TAIL -> (1 - pHead)))
+          'TAIL -> (1 - pHead)),
+    Variable(s"coin $pHead", sides))
 
   def binaryDecision(yes: Rational): ConditionalProbabilityTable0[Boolean, Rational] =
-    ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)))
+    ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), Variable("binary", Vector(true, false)))
 
   def uniformDistribution[T](values: Seq[T]): ConditionalProbabilityTable0[T, Rational] = {
 
     val dist = values.groupBy(identity).mapValues({ ks => Rational(ks.size.toLong, values.size.toLong) }).toMap
 
-    ConditionalProbabilityTable0(dist)
+    ConditionalProbabilityTable0(dist, Variable("uniform", values.toIndexedSeq))
   }
 
   def iffy[T, N, C[_], M[_]](
