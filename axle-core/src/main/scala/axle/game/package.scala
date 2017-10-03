@@ -2,7 +2,10 @@ package axle
 
 import scala.Stream.cons
 import spire.random.Generator
+import spire.math.Rational
 import axle.stats.rationalProbabilityDist
+import axle.stats.Probability
+import axle.stats.ConditionalProbabilityTable0
 
 package object game {
 
@@ -10,26 +13,31 @@ package object game {
     game: G,
     fromState: S,
     gen: Generator)(
-      implicit evGame: Game[G, S, O, M, MS, MM]): Stream[(S, M, S)] =
+      implicit evGame: Game[G, S, O, M, MS, MM],
+      prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational]): Stream[(S, M, S)] =
     evGame.mover(game, fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
-      val move = strategy(game, evGame.maskState(game, fromState, mover)).observe(gen)
+      val strategyCPT = strategy(game, evGame.maskState(game, fromState, mover))
+      val move = prob.observe(strategyCPT, gen)(rationalProbabilityDist)
       val toState = evGame.applyMove(game, fromState, move)
       cons((fromState, move, toState), moveStateStream(game, toState, gen))
     }) getOrElse {
       Stream.empty
     }
 
-  def play[G, S, O, M, MS, MM](game: G)(
+  def play[G, S, O, M, MS, MM](game: G, gen: Generator)(
     implicit evGame: Game[G, S, O, M, MS, MM],
+    prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational],
     evGameIO: GameIO[G, O, M, MS, MM]): S =
-    play(game, evGame.startState(game), true)
+    play(game, evGame.startState(game), true, gen)
 
   def play[G, S, O, M, MS, MM](
     game: G,
     start: S,
-    intro: Boolean = true)(
+    intro: Boolean = true,
+    gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM],
+      prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational],
       evGameIO: GameIO[G, O, M, MS, MM]): S = {
 
     evGame.players(game) foreach { observer =>
@@ -40,7 +48,7 @@ package object game {
       display(evGameIO.displayStateTo(game, evGame.maskState(game, start, observer), observer))
     }
 
-    val lastState = moveStateStream(game, start) map {
+    val lastState = moveStateStream(game, start, gen) map {
       case (fromState, move, toState) => {
         val mover = evGame.mover(game, fromState)
         mover foreach { mover =>
@@ -69,18 +77,22 @@ package object game {
   def gameStream[G, S, O, M, MS, MM](
     game: G,
     start: S,
-    intro: Boolean = true)(
+    intro: Boolean = true,
+    gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM],
+      prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational],
       evGameIO: GameIO[G, O, M, MS, MM]): Stream[S] = {
-    val end = play(game, start, intro)
-    cons(end, gameStream(game, evGame.startFrom(game, end).get, false))
+    val end = play(game, start, intro, gen)
+    cons(end, gameStream(game, evGame.startFrom(game, end).get, false, gen))
   }
 
   def playContinuously[G, S, O, M, MS, MM](
     game: G,
-    start: S)(
+    start: S,
+    gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM],
+      prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational],
       evGameIO: GameIO[G, O, M, MS, MM]): S =
-    gameStream(game, start).last
+    gameStream(game, start, true, gen).last
 
 }

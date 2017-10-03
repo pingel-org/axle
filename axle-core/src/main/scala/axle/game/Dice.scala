@@ -3,7 +3,7 @@ package axle.game
 import scala.Vector
 
 import axle.stats.ConditionalProbabilityTable0
-import axle.stats.rationalProbabilityDist
+//import axle.stats.rationalProbabilityDist
 import spire.math.Rational
 
 object Dice {
