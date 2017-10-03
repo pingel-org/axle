@@ -15,7 +15,7 @@ import axle.dummy
 
 object ConditionalProbabilityTable0 {
 
-  implicit def showCPT[A: Show: Order, N: Show](implicit prob: Probability[({ type M[T] = ConditionalProbabilityTable0[T, N] })#M, A, N]): Show[ConditionalProbabilityTable0[A, N]] =
+  implicit def showCPT[A: Show: Order, N: Show](implicit prob: Probability[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, A, N]): Show[ConditionalProbabilityTable0[A, N]] =
     new Show[ConditionalProbabilityTable0[A, N]] {
 
       def show(cpt: ConditionalProbabilityTable0[A, N]): String =
@@ -25,8 +25,8 @@ object ConditionalProbabilityTable0 {
         }).mkString("\n")
     }
 
-  implicit def probability[A, N](implicit fieldN: Field[N], orderN: Order[N]): Probability[({ type M[T] = ConditionalProbabilityTable0[T, N] })#M, A, N] =
-    new Probability[({ type M[T] = ConditionalProbabilityTable0[T, N] })#M, A, N] {
+  implicit def probability[A, N](implicit fieldN: Field[N], orderN: Order[N]): Probability[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, A, N] =
+    new Probability[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, A, N] {
 
       def values(model: ConditionalProbabilityTable0[A, N]): IndexedSeq[A] =
         model.values
