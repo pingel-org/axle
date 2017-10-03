@@ -4,6 +4,7 @@ package axle.stats
 // import spire.implicits.additiveGroupOps
 // import axle.math.Π
 
+import spire.algebra.AdditiveMonoid
 import spire.random.Generator
 import spire.random.Dist
 
@@ -33,47 +34,36 @@ extends Function2[M, CaseGiven2[A, G1, G2], N] {
 
 object Probability {
 
-  // CaseAndGT (GenTraversable)
-  //  def probability[B](given: Option[Case[B, N]] = None): N =
-  //    given
-  //      .map(g => Π[N, Iterable[N]](conjuncts map { (c: Case[A, N]) => P(c | g).apply() }))
-  //      .getOrElse(Π[N, Iterable[N]](conjuncts map { P(_).apply() }))
+  trait Monad[T]
 
-  // CaseAnd
-  //  def probability[C](given: Option[Case[C, N]] = None): N =
-  //    (given.map(g => P(left | g) * P(right | g)).getOrElse(P(left) * P(right))).apply()
+  def monad[M, A, N](variable: Variable[A])(implicit prob: Probability[M, A, N], addition: AdditiveMonoid[N]): Monad[M] =
+    new Monad[M] {
 
-  // CaseOr
-  //  def probability[C](given: Option[Case[C, N]] = None): N =
-  //    given
-  //      .map { g =>
-  //        // P(left | g) + P(right | g) - P((left ∧ right) | g)
-  //        field.plus(P(left | g).apply(), P(right | g).apply()) - P((left ∧ right) | g).apply()
-  //      }
-  //      .getOrElse(
-  //        field.plus(P(left).apply(), P(right).apply()) - P(left ∧ right).apply())
+      def unit(a: Any): M = ???
 
-  // CaseGiven
-  //  def probability[C](givenArg: Option[Case[C, N]] = None): N = {
-  //    assert(givenArg.isEmpty)
-  //    c.probability(Some(given))
-  //  }
+      // (CPT0[A, N], A => B) => CPT0[B, N]
+      def map[B](model: M, f: A => B): M =
+        unit(
+          prob
+          .values(model, variable)
+          .map({ v => f(v) -> prob.probabilityOf(model, v) })
+          .groupBy(_._1)
+          .mapValues(_.map(_._2).reduce(addition.plus)))
 
-  // CaseIs
-  //  implicit def probabilityCaseIs[C, N]: Probability[CaseIs[C], N] =
-  //    new Probability[CaseIs[C], N] {
-  //      def apply(c: CaseIs[C], d: Distribution0[C, N]): N =
-  //        d.probabilityOf(c.v)
-  //    }
+      def flatMap[B](model: M, f: A => M, vb: Variable[B]): M =
+        unit(
+          prob
+          .values(model, variable)
+          .flatMap(a => {
+            val p = prob.probabilityOf(model, a)
+            val subDistribution = f(a)
+            prob.values(subDistribution, vb).map(b => {
+              b -> (p * subDistribution.probabilityOf(b))
+            })
+          })
+          .groupBy(_._1)
+          .mapValues(_.map(_._2).reduce(addition.plus)))
 
-  //  implicit def probabilityCaseIsGiven[C, N]: N =
-  //    new Probability[CaseIs[C], N] {
-  //      def apply(): N = given
-  //        .map(g => d1.asInstanceOf[Distribution1[A, G, N]].probabilityOf(v, g))
-  //        .getOrElse(d1.probabilityOf(v))
-  //    }
-
-  // CaseIsnt
-  // def probability[B](given: Option[Case[B, N]] = None): N = field.minus(field.one, P(distribution is v).apply())
+  }
 
 }

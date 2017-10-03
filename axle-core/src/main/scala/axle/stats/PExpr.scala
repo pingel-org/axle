@@ -1,10 +1,5 @@
 package axle.stats
 
-//sealed trait PExpr[N] extends Function0[N] {
-//
-//   def *[R](right: R) = PMultiply(this, right)
-//}
-
 object P {
 
   def apply[M, N, A](model: M, c: CaseIs[A])(implicit prob: Probability[M, A, N]): () => N =
@@ -14,5 +9,3 @@ object P {
     () => prob.apply(model, c)
 
 }
-
-// case class PMultiply[L, R, N](left: L, right: R) extends PExpr[N]

@@ -78,26 +78,6 @@ case class TallyDistribution0[A, N: Field: Order](val tally: Map[A, N]) {
 
   val values: IndexedSeq[A] = tally.keys.toVector
 
-  def map[B](f: A => B): TallyDistribution0[B, N] =
-    TallyDistribution0(
-      values
-        .map({ v => f(v) -> probabilityOf(v) })
-        .groupBy(_._1)
-        .mapValues(_.map(_._2).reduce(addition.plus)))
-
-  def flatMap[B](f: A => TallyDistribution0[B, N]): TallyDistribution0[B, N] =
-    TallyDistribution0(
-      values
-        .flatMap(a => {
-          val p = probabilityOf(a)
-          val subDistribution = f(a)
-          subDistribution.values.map(b => {
-            b -> (p * subDistribution.probabilityOf(b))
-          })
-        })
-        .groupBy(_._1)
-        .mapValues(_.map(_._2).reduce(addition.plus)))
-
   val totalCount: N = Σ[N, Iterable[N]](tally.values)
 
   val bars: Map[A, N] =
