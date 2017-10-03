@@ -65,22 +65,19 @@ package object stats {
     ConditionalProbabilityTable0(dist)
   }
 
-  def iffy[T, N, C, M](
-    conditionModel: C,
-    conditionVariable: Variable[Boolean],
-    trueBranchModel: M,
-    falseBranchModel: M,
-    resultVariable: Variable[T])(
+  def iffy[T, N, C[_], M[_]](
+    conditionModel: C[Boolean],
+    trueBranchModel: M[T],
+    falseBranchModel: M[T])(
       implicit pIn: Probability[C, Boolean, N],
-      pOut: Probability[M, T, N]): M = {
+      pOut: Probability[M, T, N]): M[T] = {
 
-    val pTrue: N = pIn(conditionModel, CaseIs(true, conditionVariable))
-    val pFalse: N = pIn(conditionModel, CaseIs(false, conditionVariable))
+    val pTrue: N = pIn.probabilityOf(conditionModel, true)
+    val pFalse: N = pIn.probabilityOf(conditionModel, false)
 
-    pOut.combine(
-      resultVariable,
-      Map(trueBranchModel -> pTrue,
-          falseBranchModel -> pFalse))
+    pOut.combine(Map(
+        trueBranchModel -> pTrue,
+        falseBranchModel -> pFalse))
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double =
@@ -106,36 +103,35 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[M, A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M, variable: Variable[A])(implicit prob: Probability[M, A, N]): A = {
+  def standardDeviation[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A])(implicit prob: Probability[M, A, N]): A = {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ[A, IndexedSeq[A]](prob.values(model, variable).map({ x => n2a(prob(model, CaseIs(x, variable))) * x }))
+    val μ: A = Σ[A, IndexedSeq[A]](prob.values(model).map({ x => n2a(prob.probabilityOf(model, x)) * x }))
 
-    val sum: A = Σ[A, IndexedSeq[A]](prob.values(model, variable) map { x => n2a(prob(model, CaseIs(x, variable))) * square(x - μ) })
+    val sum: A = Σ[A, IndexedSeq[A]](prob.values(model) map { x => n2a(prob.probabilityOf(model, x)) * square(x - μ) })
 
     NRoot[A].sqrt(sum)
   }
 
-  def σ[M, A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M, variable: Variable[A])(implicit prob: Probability[M, A, N]): A =
-    standardDeviation[M, A, N](model, variable)
+  def σ[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A])(implicit prob: Probability[M, A, N]): A =
+    standardDeviation[M, A, N](model)
 
-  def stddev[M, A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M, variable: Variable[A])(implicit prob: Probability[M, A, N]): A =
-    standardDeviation[M, A, N](model, variable)
+  def stddev[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A])(implicit prob: Probability[M, A, N]): A =
+    standardDeviation[M, A, N](model)
 
-  def entropy[M, A: Manifest, N: Field: Eq: ConvertableFrom](model: M,
-    X: Variable[A])(
+  def entropy[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
       implicit prob: Probability[M, A, N],
       convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     import spire.implicits.DoubleAlgebra
 
     val convertN = ConvertableFrom[N]
-    val H = Σ[Double, IndexedSeq[Double]](prob.values(model, X) map { x =>
-      val px: N = P(model, CaseIs(x, X))(prob).apply()
+    val H = Σ[Double, IndexedSeq[Double]](prob.values(model) map { x =>
+      val px: N = P(model, x)(prob).apply()
       if (px === Field[N].zero) {
         0d
       } else {
@@ -145,12 +141,10 @@ package object stats {
     UnittedQuantity(H, convert.bit)
   }
 
-  def H[M, A: Manifest, N: Field: Eq: ConvertableFrom](
-    model: M,
-    X: Variable[A])(
+  def H[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
       implicit prob: Probability[M, A, N],
       convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
-    entropy(model, X)
+    entropy(model)
 
   def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N]): Stream[List[N]] =
     if (xs.isEmpty) {

@@ -15,7 +15,7 @@ import axle.dummy
 
 object ConditionalProbabilityTable0 {
 
-  implicit def showCPT[A: Show: Order, N: Show](implicit prob: Probability[ConditionalProbabilityTable0[A, N], A, N]): Show[ConditionalProbabilityTable0[A, N]] =
+  implicit def showCPT[A: Show: Order, N: Show](implicit prob: Probability[({ type M[T] = ConditionalProbabilityTable0[T, N] })#M, A, N]): Show[ConditionalProbabilityTable0[A, N]] =
     new Show[ConditionalProbabilityTable0[A, N]] {
 
       def show(cpt: ConditionalProbabilityTable0[A, N]): String =
@@ -25,24 +25,17 @@ object ConditionalProbabilityTable0 {
         }).mkString("\n")
     }
 
-  implicit def probability[A, N](implicit fieldN: Field[N], orderN: Order[N], distN: Dist[N]): Probability[ConditionalProbabilityTable0[A, N], A, N] =
-    new Probability[ConditionalProbabilityTable0[A, N], A, N] {
+  implicit def probability[A, N](implicit fieldN: Field[N], orderN: Order[N]): Probability[({ type M[T] = ConditionalProbabilityTable0[T, N] })#M, A, N] =
+    new Probability[({ type M[T] = ConditionalProbabilityTable0[T, N] })#M, A, N] {
 
-      def apply(model: ConditionalProbabilityTable0[A, N], c: CaseIs[A]): N =
-        if(c.is) {
-          probabilityOf(model, c.value)
-        } else {
-          fieldN.minus(fieldN.one, probabilityOf(model, c.value))
-        }
-
-      def values(model: ConditionalProbabilityTable0[A, N], variable: Variable[A]): IndexedSeq[A] =
+      def values(model: ConditionalProbabilityTable0[A, N]): IndexedSeq[A] =
         model.values
 
-      def combine(variable: Variable[A], modelsToProbabilities: Map[ConditionalProbabilityTable0[A, N], N]): ConditionalProbabilityTable0[A, N] = {
+      def combine(modelsToProbabilities: Map[ConditionalProbabilityTable0[A, N], N]): ConditionalProbabilityTable0[A, N] = {
 
         val parts: IndexedSeq[(A, N)] =
           modelsToProbabilities.toVector flatMap { case (model, weight) =>
-            values(model, variable).map(v => (v, apply(model, CaseIs(v, variable)) * weight))
+            values(model).map(v => (v, probabilityOf(model, v) * weight))
           }
 
         val newDist: Map[A, N] =
@@ -50,6 +43,18 @@ object ConditionalProbabilityTable0 {
 
         ConditionalProbabilityTable0[A, N](newDist)
       }
+
+      def condition[G](model: ConditionalProbabilityTable0[A, N], given: CaseIs[G]): ConditionalProbabilityTable0[A, N] =
+        ???
+
+      def empty[B]: ConditionalProbabilityTable0[B, N] =
+        ConditionalProbabilityTable0(Map.empty)
+
+      def orientation(model: ConditionalProbabilityTable0[A, N]): Variable[A] =
+        ???
+
+      def orient[B](model: ConditionalProbabilityTable0[A, N], newVariable: Variable[B]): ConditionalProbabilityTable0[B, N] =
+        ???
 
       def observe(model: ConditionalProbabilityTable0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
         val r: N = rng.apply(gen)

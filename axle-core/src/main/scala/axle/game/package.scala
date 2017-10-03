@@ -14,7 +14,7 @@ package object game {
     fromState: S,
     gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM],
-      prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational]): Stream[(S, M, S)] =
+      prob: Probability[({ type C[T] = ConditionalProbabilityTable0[T, Rational] })#C, M, Rational]): Stream[(S, M, S)] =
     evGame.mover(game, fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
       val strategyCPT = strategy(game, evGame.maskState(game, fromState, mover))
@@ -27,7 +27,7 @@ package object game {
 
   def play[G, S, O, M, MS, MM](game: G, gen: Generator)(
     implicit evGame: Game[G, S, O, M, MS, MM],
-    prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational],
+    prob: Probability[({ type C[T] = ConditionalProbabilityTable0[T, Rational] })#C, M, Rational],
     evGameIO: GameIO[G, O, M, MS, MM]): S =
     play(game, evGame.startState(game), true, gen)
 
@@ -37,7 +37,7 @@ package object game {
     intro: Boolean = true,
     gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM],
-      prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational],
+      prob: Probability[({ type C[T] = ConditionalProbabilityTable0[T, Rational] })#C, M, Rational],
       evGameIO: GameIO[G, O, M, MS, MM]): S = {
 
     evGame.players(game) foreach { observer =>
@@ -80,7 +80,7 @@ package object game {
     intro: Boolean = true,
     gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM],
-      prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational],
+      prob: Probability[({ type C[T] = ConditionalProbabilityTable0[T, Rational] })#C, M, Rational],
       evGameIO: GameIO[G, O, M, MS, MM]): Stream[S] = {
     val end = play(game, start, intro, gen)
     cons(end, gameStream(game, evGame.startFrom(game, end).get, false, gen))
@@ -91,7 +91,7 @@ package object game {
     start: S,
     gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM],
-      prob: Probability[ConditionalProbabilityTable0[M, Rational], M, Rational],
+      prob: Probability[({ type C[T] = ConditionalProbabilityTable0[T, Rational] })#C, M, Rational],
       evGameIO: GameIO[G, O, M, MS, MM]): S =
     gameStream(game, start, true, gen).last
 

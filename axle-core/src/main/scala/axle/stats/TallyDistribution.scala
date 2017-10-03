@@ -21,7 +21,8 @@ import axle.dummy
 
 object TallyDistribution0 {
 
-  implicit def show[A: Order: Show, N: Show](implicit prob: Probability[TallyDistribution0[A, N], A, N]): Show[TallyDistribution0[A, N]] =
+  implicit def show[A: Order: Show, N: Show](
+      implicit prob: Probability[({ type M[T] = TallyDistribution0[T, N] })#M, A, N]): Show[TallyDistribution0[A, N]] =
     new Show[TallyDistribution0[A, N]] {
 
       def show(td: TallyDistribution0[A, N]): String =
@@ -32,24 +33,19 @@ object TallyDistribution0 {
         }).mkString("\n")
     }
 
-  implicit def probability[A, N](implicit fieldN: Field[N], orderN: Order[N]): Probability[TallyDistribution0[A, N], A, N] =
-    new Probability[TallyDistribution0[A, N], A, N] {
+  implicit def probability[A, N](
+      implicit fieldN: Field[N],
+      orderN: Order[N]): Probability[({ type M[T] = TallyDistribution0[T, N] })#M, A, N] =
+    new Probability[({ type M[T] = TallyDistribution0[T, N] })#M, A, N] {
 
-      def apply(model: TallyDistribution0[A, N], c: CaseIs[A]): N =
-        if(c.is) {
-          probabilityOf(model, c.value)
-        } else {
-          fieldN.minus(fieldN.one, probabilityOf(model, c.value))
-        }
-
-      def values(model: TallyDistribution0[A, N], variable: Variable[A]): IndexedSeq[A] =
+      def values(model: TallyDistribution0[A, N]): IndexedSeq[A] =
         model.values
 
-      def combine(variable: Variable[A], modelsToProbabilities: Map[TallyDistribution0[A, N], N]): TallyDistribution0[A, N] = {
+      def combine(modelsToProbabilities: Map[TallyDistribution0[A, N], N]): TallyDistribution0[A, N] = {
 
         val parts: IndexedSeq[(A, N)] =
           modelsToProbabilities.toVector flatMap { case (model, weight) =>
-            values(model, variable).map(v => (v, apply(model, CaseIs(v, variable)) * weight))
+            values(model).map(v => (v, model.tally.get(v).getOrElse(model.ring.zero) * weight))
           }
 
         val newDist: Map[A, N] =
@@ -58,13 +54,25 @@ object TallyDistribution0 {
         TallyDistribution0[A, N](newDist)
       }
 
-    def observe(model: TallyDistribution0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
-      val r: N = model.totalCount * rng.apply(gen)
-      model.bars.find({ case (_, v) => model.order.gteqv(v, r) }).get._1 // or distribution is malformed
-    }
+      def condition[G](model: TallyDistribution0[A, N], given: CaseIs[G]): TallyDistribution0[A, N] =
+        ???
 
-    def probabilityOf(model: TallyDistribution0[A, N], a: A): N =
-      model.tally.get(a).getOrElse(model.ring.zero) / model.totalCount
+      def empty[B]: TallyDistribution0[B, N] =
+        ???
+
+      def orientation(model: TallyDistribution0[A, N]): Variable[A] =
+        ???
+
+      def orient[B](model: TallyDistribution0[A, N]): TallyDistribution0[B, N] =
+        ???
+
+      def observe(model: TallyDistribution0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
+        val r: N = model.totalCount * rng.apply(gen)
+        model.bars.find({ case (_, v) => model.order.gteqv(v, r) }).get._1 // or distribution is malformed
+      }
+
+      def probabilityOf(model: TallyDistribution0[A, N], a: A): N =
+        model.tally.get(a).getOrElse(model.ring.zero) / model.totalCount
 
   }
 

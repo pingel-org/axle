@@ -7,7 +7,7 @@ package axle.stats
  *
  */
 
-case class CaseIs[A](value: A, variable: Variable[A], is: Boolean = true) {
+case class CaseIs[A](value: A, variable: Variable[A]) {
 
   def and[R](right: CaseIs[R]) = CaseAnd(this, right)
   def ∧[R](right: CaseIs[R]) = CaseAnd(this, right)
@@ -32,7 +32,7 @@ object CaseIs {
     new Show[CaseIs[A]] {
       def show(c: CaseIs[A]): String = {
         import c._
-        val opStr = if(c.is) " = " else " != "
+        val opStr = " = "
         variable.name + opStr + value
       }
     }
