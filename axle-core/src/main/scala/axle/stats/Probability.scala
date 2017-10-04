@@ -9,6 +9,8 @@ import spire.random.Dist
 
 trait Probability[M[_], N] {
 
+  def construct[A](variable: Variable[A], as: Iterable[A], f: A => N): M[A]
+
   def values[A](model: M[A]): IndexedSeq[A]
 
   def combine[A](modelsToProbabilities: Map[M[A], N]): M[A]
@@ -34,19 +36,26 @@ object Probability {
   implicit def monad[M[_], N](implicit prob: Probability[M, N], fieldN: Field[N]): Monad[M] =
     new Monad[M] {
 
-      def unit[B](a: Any): M[B] = ???
+      def pure[A](a: A): M[A] =
+        prob.construct(Variable("a", Vector(a)), Vector(a), (a: A) => Field[N].one)
 
-      override def map[A, B](model: M[A], f: A => B): M[B] =
-        unit(
-          prob
+      def tailRecM[A, B](a: A)(f: A => M[Either[A,B]]): M[B] =
+       ???
+
+      override def map[A, B](model: M[A])(f: A => B): M[B] = {
+
+        val b2n = prob
           .values(model)
           .map({ v => f(v) -> prob.probabilityOf(model, v) })
           .groupBy(_._1)
-          .mapValues(_.map(_._2).reduce(fieldN.plus)))
+          .mapValues(_.map(_._2).reduce(fieldN.plus))
 
-      override def flatMap[A, B](model: M[A], f: A => M[B]): M[B] =
-        unit(
-          prob
+        prob.construct(Variable("b", b2n.keys.toVector), b2n.keys, b2n)
+      }
+
+      override def flatMap[A, B](model: M[A])(f: A => M[B]): M[B] = {
+
+        val b2n = prob
           .values(model)
           .flatMap(a => {
             val p = prob.probabilityOf(model, a)
@@ -56,7 +65,10 @@ object Probability {
             })
           })
           .groupBy(_._1)
-          .mapValues(_.map(_._2).reduce(fieldN.plus)))
+          .mapValues(_.map(_._2).reduce(fieldN.plus))
+
+        prob.construct(Variable("b", b2n.keys.toVector), b2n.keys, b2n)
+      }
   }
 
 }
