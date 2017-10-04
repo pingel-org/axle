@@ -22,7 +22,7 @@ import axle.dummy
 object TallyDistribution0 {
 
   implicit def show[A: Order: Show, N: Show](
-      implicit prob: Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, A, N]): Show[TallyDistribution0[A, N]] =
+      implicit prob: Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]): Show[TallyDistribution0[A, N]] =
     new Show[TallyDistribution0[A, N]] {
 
       def show(td: TallyDistribution0[A, N]): String =
@@ -33,15 +33,15 @@ object TallyDistribution0 {
         }).mkString("\n")
     }
 
-  implicit def probability[A, N](
+  implicit def probability[N](
       implicit fieldN: Field[N],
-      orderN: Order[N]): Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, A, N] =
-    new Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, A, N] {
+      orderN: Order[N]): Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] =
+    new Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] {
 
-      def values(model: TallyDistribution0[A, N]): IndexedSeq[A] =
+      def values[A](model: TallyDistribution0[A, N]): IndexedSeq[A] =
         model.values
 
-      def combine(modelsToProbabilities: Map[TallyDistribution0[A, N], N]): TallyDistribution0[A, N] = {
+      def combine[A](modelsToProbabilities: Map[TallyDistribution0[A, N], N]): TallyDistribution0[A, N] = {
 
         // TODO assert that all models are oriented for same Variable[A]
 
@@ -58,24 +58,24 @@ object TallyDistribution0 {
         TallyDistribution0[A, N](newDist, v)
       }
 
-      def condition[G](model: TallyDistribution0[A, N], value: G, variable: Variable[G]): TallyDistribution0[A, N] =
+      def condition[A, G](model: TallyDistribution0[A, N], given: CaseIs[G]): TallyDistribution0[A, N] =
         model // TODO true unless G =:= A and model.variable === variable
 
-      def empty[B](variable: Variable[B]): TallyDistribution0[B, N] =
+      def empty[A](variable: Variable[A]): TallyDistribution0[A, N] =
         TallyDistribution0(Map.empty, variable)
 
-      def orientation(model: TallyDistribution0[A, N]): Variable[A] =
+      def orientation[A](model: TallyDistribution0[A, N]): Variable[A] =
         model.variable
 
-      def orient[B](model: TallyDistribution0[A, N], newVariable: Variable[B]): TallyDistribution0[B, N] =
+      def orient[A, B](model: TallyDistribution0[A, N], newVariable: Variable[B]): TallyDistribution0[B, N] =
         empty[B](newVariable) // TODO could check if variable == newVariable
 
-      def observe(model: TallyDistribution0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
+      def observe[A](model: TallyDistribution0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
         val r: N = model.totalCount * rng.apply(gen)
         model.bars.find({ case (_, v) => model.order.gteqv(v, r) }).get._1 // or distribution is malformed
       }
 
-      def probabilityOf(model: TallyDistribution0[A, N], a: A): N =
+      def probabilityOf[A](model: TallyDistribution0[A, N], a: A): N =
         model.tally.get(a).getOrElse(model.ring.zero) / model.totalCount
 
   }

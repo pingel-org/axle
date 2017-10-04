@@ -70,8 +70,8 @@ package object stats {
     conditionModel: C[Boolean],
     trueBranchModel: M[T],
     falseBranchModel: M[T])(
-      implicit pIn: Probability[C, Boolean, N],
-      pOut: Probability[M, T, N]): M[T] = {
+      implicit pIn: Probability[C, N],
+      pOut: Probability[M, N]): M[T] = {
 
     val pTrue: N = pIn.probabilityOf(conditionModel, true)
     val pFalse: N = pIn.probabilityOf(conditionModel, false)
@@ -105,7 +105,7 @@ package object stats {
    */
 
   def standardDeviation[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A])(implicit prob: Probability[M, A, N]): A = {
+    model: M[A])(implicit prob: Probability[M, N]): A = {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
@@ -117,15 +117,15 @@ package object stats {
   }
 
   def σ[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A])(implicit prob: Probability[M, A, N]): A =
+    model: M[A])(implicit prob: Probability[M, N]): A =
     standardDeviation[M, A, N](model)
 
   def stddev[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A])(implicit prob: Probability[M, A, N]): A =
+    model: M[A])(implicit prob: Probability[M, N]): A =
     standardDeviation[M, A, N](model)
 
   def entropy[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
-      implicit prob: Probability[M, A, N],
+      implicit prob: Probability[M, N],
       convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     import spire.implicits.DoubleAlgebra
@@ -143,7 +143,7 @@ package object stats {
   }
 
   def H[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
-      implicit prob: Probability[M, A, N],
+      implicit prob: Probability[M, N],
       convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 

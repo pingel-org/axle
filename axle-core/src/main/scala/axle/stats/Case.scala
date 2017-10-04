@@ -7,22 +7,7 @@ package axle.stats
  *
  */
 
-case class CaseIs[A](value: A, variable: Variable[A]) {
-
-  def and[R](right: CaseIs[R]) = CaseAnd(this, right)
-  def ∧[R](right: CaseIs[R]) = CaseAnd(this, right)
-  def ∩[R](right: CaseIs[R]) = CaseAnd(this, right)
-
-  def or[R](right: CaseIs[R]) = CaseOr(this, right)
-  def ∨[R](right: CaseIs[R]) = CaseOr(this, right)
-  def ∪[R](right: CaseIs[R]) = CaseOr(this, right)
-
-  def |[R](given: CaseIs[R]) = CaseGiven(this, given)
-}
-case class CaseAnd[L, R](left: CaseIs[L], right: CaseIs[R])
-case class CaseOr[L, R](left: CaseIs[L], right: CaseIs[R])
-case class CaseGiven[A, G](c: CaseIs[A], given: CaseIs[G])
-case class CaseGiven2[A, G1, G2](c: CaseIs[A], given: CaseAnd[G1, G2])
+case class CaseIs[A](value: A, variable: Variable[A])
 
 object CaseIs {
 

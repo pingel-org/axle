@@ -51,7 +51,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
   val classTally: Map[CLASS, N] =
     data.map(classExtractor).tally.withDefaultValue(Field[N].zero)
 
-  val C = TallyDistribution0(classTally)
+  val C = TallyDistribution0(classTally, Variable("class", classTally.keys.toVector))
 
   def tallyFor(featureRandomVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =
     featureTally.filter {

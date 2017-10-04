@@ -10,8 +10,6 @@ import cats.Order.catsKernelOrderingForOrder
 import axle.algebra.Plottable
 import axle.algebra.Zero
 import axle.stats.Probability
-import axle.stats.CaseIs
-import axle.stats.Variable
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[S, X, Y, D] {
@@ -82,51 +80,50 @@ object PlotDataView {
       }
     }
 
-  def probabilityDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable, M](
-      variable: Variable[X])(
-      implicit prob: Probability[M, X, Y]): PlotDataView[S, X, Y, (M, CaseIs[X])] =
-    new PlotDataView[S, X, Y, (M, CaseIs[X])] {
+  implicit def probabilityDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable, M[_]](
+      implicit prob: Probability[M, Y]): PlotDataView[S, X, Y, M[X]] =
+    new PlotDataView[S, X, Y, M[X]] {
 
-      def xsOf(model: M): Traversable[X] = prob.values(model, variable)
+      def xsOf(model: M[X]): Traversable[X] = prob.values(model)
 
-      def valueOf(model: M, cx: CaseIs[X]): Y = prob(model, cx)
+      def valueOf(model: M[X], x: X): Y =
+        prob.probabilityOf(model, x)
 
-      def xRange(data: Seq[(S, D)], include: Option[X]): (X, X) = {
+      def xRange(data: Seq[(S, M[X])], include: Option[X]): (X, X) = {
 
         val minXCandidates = include.toList ++ (data flatMap {
-          case (label, d) => xsOf(d).headOption
+          case (label, model) => xsOf(model).headOption
         })
         val minX = if (minXCandidates.size > 0) minXCandidates.min else Zero[X].zero
 
         val maxXCandidates = include.toList ++ (data flatMap {
-          case (label, d) => xsOf(d).lastOption
+          case (label, model) => xsOf(model).lastOption
         })
-
         val maxX = if (minXCandidates.size > 0) maxXCandidates.max else Zero[X].zero
 
         (minX, maxX)
       }
 
-      def yRange(data: Seq[(S, D)], include: Option[Y]): (Y, Y) = {
+      def yRange(data: Seq[(S, M[X])], include: Option[Y]): (Y, Y) = {
 
         val minYCandidates = include.toList ++ (data flatMap {
-          case (label, d) =>
-            val xs = xsOf(d)
+          case (label, model) =>
+            val xs = xsOf(model)
             if (xs.size === 0)
               None
             else
-              Some(xs map { valueOf(d, _) } min)
+              Some(xs map { valueOf(model, _) } min)
         }) filter { Plottable[Y].isPlottable _ }
 
         val minY = if (minYCandidates.size > 0) minYCandidates.min else Zero[Y].zero
 
         val maxYCandidates = include.toList ++ (data flatMap {
-          case (label, d) => {
-            val xs = xsOf(d)
+          case (label, model) => {
+            val xs = xsOf(model)
             if (xs.size === 0)
               None
             else
-              Some(xs map { valueOf(d, _) } max)
+              Some(xs map { valueOf(model, _) } max)
           }
         }) filter { Plottable[Y].isPlottable _ }
 

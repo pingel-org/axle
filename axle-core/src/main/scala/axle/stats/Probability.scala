@@ -7,55 +7,56 @@ package axle.stats
 import spire.random.Generator
 import spire.random.Dist
 
-trait Probability[M[_], A, N] {
+trait Probability[M[_], N] {
 
-  def values(model: M[A]): IndexedSeq[A]
+  def values[A](model: M[A]): IndexedSeq[A]
 
-  def combine(modelsToProbabilities: Map[M[A], N]): M[A]
+  def combine[A](modelsToProbabilities: Map[M[A], N]): M[A]
 
-  def condition[G](model: M[A], given: CaseIs[G]): M[A]
+  def condition[A, G](model: M[A], given: CaseIs[G]): M[A]
 
-  def empty[B](variable: Variable[B]): M[B]
+  def empty[A](variable: Variable[A]): M[A]
 
-  def orientation(model: M[A]): Variable[A]
+  def orientation[A](model: M[A]): Variable[A]
 
-  def orient[B](model: M[A], newVariable: Variable[B]): M[B]
+  def orient[A, B](model: M[A], newVariable: Variable[B]): M[B]
 
-  def observe(model: M[A], gen: Generator)(implicit rng: Dist[N]): A
+  def observe[A](model: M[A], gen: Generator)(implicit rng: Dist[N]): A
 
-  def probabilityOf(model: M[A], a: A): N
+  def probabilityOf[A](model: M[A], a: A): N
 }
 
 object Probability {
 
-  /*
-  def monad[M, A, N](variable: Variable[A])(implicit prob: Probability[M, A, N], addition: AdditiveMonoid[N]): Monad[M] =
+  import cats._
+  import spire.algebra.Field
+
+  implicit def monad[M[_], N](implicit prob: Probability[M, N], fieldN: Field[N]): Monad[M] =
     new Monad[M] {
 
-      def unit(a: Any): M = ???
+      def unit[B](a: Any): M[B] = ???
 
-      // (CPT0[A, N], A => B) => CPT0[B, N]
-      def map[B](model: M, f: A => B): M =
+      override def map[A, B](model: M[A], f: A => B): M[B] =
         unit(
           prob
-          .values(model, variable)
+          .values(model)
           .map({ v => f(v) -> prob.probabilityOf(model, v) })
           .groupBy(_._1)
-          .mapValues(_.map(_._2).reduce(addition.plus)))
+          .mapValues(_.map(_._2).reduce(fieldN.plus)))
 
-      def flatMap[B](model: M, f: A => M, vb: Variable[B]): M =
+      override def flatMap[A, B](model: M[A], f: A => M[B]): M[B] =
         unit(
           prob
-          .values(model, variable)
+          .values(model)
           .flatMap(a => {
             val p = prob.probabilityOf(model, a)
             val subDistribution = f(a)
-            prob.values(subDistribution, vb).map(b => {
-              b -> (p * subDistribution.probabilityOf(b))
+            prob.values(subDistribution).map(b => {
+              b -> (fieldN.times(p, prob.probabilityOf(subDistribution, b)))
             })
           })
           .groupBy(_._1)
-          .mapValues(_.map(_._2).reduce(addition.plus)))
+          .mapValues(_.map(_._2).reduce(fieldN.plus)))
   }
-  */
+
 }

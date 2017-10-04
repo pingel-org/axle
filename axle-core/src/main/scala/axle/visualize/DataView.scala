@@ -7,7 +7,6 @@ import axle.algebra.Plottable
 import axle.algebra.Zero
 import axle.stats.Probability
 import axle.stats.Variable
-import axle.stats.CaseIs
 
 /**
  * implicits for Plot and BarChart
@@ -48,19 +47,19 @@ object DataView {
 
     }
 
-  def probabilityDataView[X: Order, Y: Plottable: Zero: Order, M](
+  def probabilityDataView[X: Order, Y: Plottable: Zero: Order, M[_]](
       variable: Variable[X])(
-      implicit prob: Probability[M, X, Y]): DataView[X, Y, M] =
-    new DataView[X, Y, M] {
+      implicit prob: Probability[M, Y]): DataView[X, Y, M[X]] =
+    new DataView[X, Y, M[X]] {
 
       val yPlottable = Plottable[Y]
       val yZero = Zero[Y]
 
-      def keys(d: M): Traversable[X] = prob.values(d, variable)
+      def keys(d: M[X]): Traversable[X] = prob.values(d)
 
-      def valueOf(d: M, x: X): Y = prob.apply(d, CaseIs(x, variable))
+      def valueOf(d: M[X], x: X): Y = prob.probabilityOf(d, x)
 
-      def yRange(d: M): (Y, Y) = {
+      def yRange(d: M[X]): (Y, Y) = {
 
         val ks = keys(d)
 
