@@ -28,6 +28,9 @@ object ConditionalProbabilityTable0 {
   implicit def probability[N](implicit fieldN: Field[N], orderN: Order[N]): Probability[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N] =
     new Probability[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N] {
 
+      def construct[A](variable: Variable[A], as: Iterable[A], f: A => N): ConditionalProbabilityTable0[A, N] =
+        ConditionalProbabilityTable0(as.map(a => a -> f(a)).toMap, variable)
+
       def values[A](model: ConditionalProbabilityTable0[A, N]): IndexedSeq[A] =
         model.values
 

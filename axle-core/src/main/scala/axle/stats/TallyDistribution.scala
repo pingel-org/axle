@@ -38,6 +38,9 @@ object TallyDistribution0 {
       orderN: Order[N]): Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] =
     new Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] {
 
+      def construct[A](variable: Variable[A], as: Iterable[A], f: A => N): TallyDistribution0[A, N] =
+        TallyDistribution0(as.map(a => a -> f(a)).toMap, variable)
+
       def values[A](model: TallyDistribution0[A, N]): IndexedSeq[A] =
         model.values
 
