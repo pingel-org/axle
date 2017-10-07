@@ -8,11 +8,15 @@ import cats.implicits._
 import spire.implicits.DoubleAlgebra
 import spire.math.Rational
 import axle.game.Dice.die
-import axle.stats.Distribution0
+import axle.stats.Probability
+import axle.stats.ConditionalProbabilityTable0
 import axle.visualize.Color.blue
 import axle.web._
 
 class BarChartSpec extends FunSuite with Matchers {
+
+  implicit val monad = Probability.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+  val prob = implicitly[Probability[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
   test("BarChart render an SVG of fruit sales") {
 
@@ -76,12 +80,12 @@ class BarChartSpec extends FunSuite with Matchers {
 
   test("BarChart render a SVG of d6 + d6 probability distribution") {
 
-    val distribution: Distribution0[Int, Rational] = for {
+    val distribution = for {
       a <- die(6)
       b <- die(6)
     } yield a + b
 
-    val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
+    val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
       () => distribution,
       xAxis = Some(Rational(0)),
       title = Some("d6 + d6"),

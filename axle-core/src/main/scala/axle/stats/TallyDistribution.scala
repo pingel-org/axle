@@ -115,7 +115,9 @@ case class TallyDistribution0[A, N: Field: Order](
 //  }
 //}
 
-case class TallyDistribution1[A, G: Eq, N: Field: Order](val tally: Map[(A, G), N]) {
+case class TallyDistribution1[A, G: Eq, N: Field: Order](
+    tally: Map[(A, G), N],
+    variable: Variable[A]) {
 
   lazy val _values: IndexedSeq[A] =
     tally.keys.map(_._1).toSet.toVector

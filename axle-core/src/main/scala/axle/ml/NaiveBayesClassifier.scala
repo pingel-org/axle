@@ -12,17 +12,18 @@ import spire.implicits.eqOps
 import axle.stats.Variable
 import axle.stats.TallyDistribution0
 import axle.stats.TallyDistribution1
+//import axle.stats.CaseIs
 import axle.syntax.aggregatable._
 import axle.syntax.functor._
 import axle.syntax.talliable._
-import axle.stats.P
+import axle.stats.Probability
 import axle.algebra._
 import axle.math._
 
 case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N: Field: Order](
   data: F,
-  featureRandomVariables: List[Variable[FEATURE]],
-  classRandomVariable: Variable[CLASS],
+  featureVariables: List[Variable[FEATURE]],
+  classVariable: Variable[CLASS],
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS)(
     implicit agg: Aggregatable[F, DATA, Map[(CLASS, String, FEATURE), N]],
@@ -30,7 +31,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
     tal: Talliable[G, CLASS, N])
     extends Function1[DATA, CLASS] {
 
-  val featureNames = featureRandomVariables map { _.name }
+  val featureNames = featureVariables map { _.name }
 
   val numFeatures = featureNames.size
 
@@ -53,16 +54,19 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
 
   val C = TallyDistribution0(classTally, Variable("class", classTally.keys.toVector))
 
-  def tallyFor(featureRandomVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =
+  val probTally0 = implicitly[Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]]
+  // TODO val probTally1 = implicitly[Probability[({ type λ[T] = TallyDistribution1[T, CLASS, N] })#λ, N]]
+
+  def tallyFor(featureVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =
     featureTally.filter {
-      case (k, v) => k._2 === featureRandomVariable.name
+      case (k, v) => k._2 === featureVariable.name
     }.map {
       case (k, v) => ((k._3, k._1), v)
     }.withDefaultValue(Field[N].zero)
 
   // Note: The "parent" (or "given") of these feature variables is C
-  val Fs = featureRandomVariables.map(featureRandomVariable =>
-    TallyDistribution1(tallyFor(featureRandomVariable).withDefaultValue(Field[N].zero)))
+  val Fs = featureVariables.map(featureVariable =>
+    TallyDistribution1(tallyFor(featureVariable).withDefaultValue(Field[N].zero), featureVariable))
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
@@ -71,16 +75,15 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
     val fs = featureExtractor(d)
 
     def f(c: CLASS): N =
-      Π(featureRandomVariables.zip(fs).map({
-        case (fVar, fVal) => {
-          // TODO P.apply will need Fs for Probability
-          val given = (fVar is fVal) | (classRandomVariable is c)
-          P(given).apply()
+      Π(featureVariables.zip(fs).zip(Fs).map({
+        case ((featureVariable, featureValue), featureGivenModel) => {
+          // TODO val featureModel = probTally1.condition(featureGivenModel, CaseIs(c, classVariable))
+          // TODO probTally.probabilityOf(featureModel, featureValue)
+          Field[N].zero
         }
       }))
 
-    // TODO C will need to be used in P calculation
-    def g(c: CLASS) = P(classRandomVariable is c).apply() * f(c)
+    def g(c: CLASS): N = probTally0.probabilityOf(C, c) * f(c)
 
     argmax(C.values, g).get // TODO: will be None if C.values is empty
   }
@@ -91,12 +94,12 @@ object NaiveBayesClassifier {
 
   def common[DATA, FEATURE: Order, CLASS: Order: Eq, U[_], N: Field: Order](
     data: U[DATA],
-    featureRandomVariables: List[Variable[FEATURE]],
-    classRandomVariable: Variable[CLASS],
+    featureVariables: List[Variable[FEATURE]],
+    classVariable: Variable[CLASS],
     featureExtractor: DATA => List[FEATURE],
     classExtractor: DATA => CLASS)(
       implicit agg: Aggregatable[U[DATA], DATA, Map[(CLASS, String, FEATURE), N]],
       functor: Functor[U[DATA], DATA, CLASS, U[CLASS]],
       tal: Talliable[U[CLASS], CLASS, N]) =
-    NaiveBayesClassifier(data, featureRandomVariables, classRandomVariable, featureExtractor, classExtractor)
+    NaiveBayesClassifier(data, featureVariables, classVariable, featureExtractor, classExtractor)
 }

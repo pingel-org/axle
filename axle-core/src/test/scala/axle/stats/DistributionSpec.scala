@@ -5,16 +5,21 @@ import org.scalatest._
 
 class DistributionSpec extends FunSuite with Matchers {
 
+  implicit val monad = Probability.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+  val prob = implicitly[Probability[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+
   test("Distribution map") {
 
-    val c = ConditionalProbabilityTable0(Map(
+    val m = Map(
       List(1, 2, 3) -> Rational(1, 3),
       List(1, 2, 8) -> Rational(1, 2),
-      List(8, 9) -> Rational(1, 6)))
+      List(8, 9) -> Rational(1, 6))
 
-    val distSize = c.map(_.size)
+    val c = ConditionalProbabilityTable0[List[Int], Rational](m, Variable("c", m.keys.toVector))
 
-    distSize.probabilityOf(3) should be(Rational(5, 6))
+    val modelSize = monad.map(c)(_.size)
+
+    prob.probabilityOf(modelSize, 3) should be(Rational(5, 6))
   }
 
 }
