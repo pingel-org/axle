@@ -6,7 +6,6 @@ import cats.Order.catsKernelOrderingForOrder
 import axle.algebra.Plottable
 import axle.algebra.Zero
 import axle.stats.Probability
-import axle.stats.Variable
 
 /**
  * implicits for Plot and BarChart
@@ -47,8 +46,7 @@ object DataView {
 
     }
 
-  def probabilityDataView[X: Order, Y: Plottable: Zero: Order, M[_]](
-      variable: Variable[X])(
+  implicit def probabilityDataView[X: Order, Y: Plottable: Zero: Order, M[_]](
       implicit prob: Probability[M, Y]): DataView[X, Y, M[X]] =
     new DataView[X, Y, M[X]] {
 

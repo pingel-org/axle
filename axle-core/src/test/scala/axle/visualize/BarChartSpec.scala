@@ -85,6 +85,10 @@ class BarChartSpec extends FunSuite with Matchers {
       b <- die(6)
     } yield a + b
 
+    implicit val prob = implicitly[Probability[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+    implicit val dataViewCPT: DataView[Int, Rational, ConditionalProbabilityTable0[Int, Rational]] =
+      DataView.probabilityDataView[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
+
     val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
       () => distribution,
       xAxis = Some(Rational(0)),
