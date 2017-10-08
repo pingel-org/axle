@@ -10,12 +10,12 @@ class DistributionSpec extends FunSuite with Matchers {
 
   test("Distribution map") {
 
-    val m = Map(
-      List(1, 2, 3) -> Rational(1, 3),
-      List(1, 2, 8) -> Rational(1, 2),
-      List(8, 9) -> Rational(1, 6))
-
-    val c = ConditionalProbabilityTable0[List[Int], Rational](m, Variable("c", m.keys.toVector))
+    val c = ConditionalProbabilityTable0[List[Int], Rational](
+      Map(
+        List(1, 2, 3) -> Rational(1, 3),
+        List(1, 2, 8) -> Rational(1, 2),
+        List(8, 9) -> Rational(1, 6)),
+      Variable("c"))
 
     val modelSize = monad.map(c)(_.size)
 

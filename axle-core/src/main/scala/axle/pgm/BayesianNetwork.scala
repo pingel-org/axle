@@ -53,13 +53,11 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   val bnnByVariable = bnns.map(bnn => bnn.variable -> bnn).toMap
 
-  val _graph: DG =
+  val graph =
     dg.make(bnns,
       bnns.flatMap(dest =>
         dest.cpt.variables.filterNot(_ === dest.variable)
           .map(source => (bnnByVariable(source), dest, new Edge))))
-
-  def graph = _graph
 
   def numVariables = variableFactorMap.size
 
@@ -68,8 +66,8 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   def jointProbabilityTable: Factor[T, N] = {
     val newVars = randomVariables
-    Factor(newVars,
-      Factor.cases(newVars)
+    Factor(newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable))}),
+      Factor.cases(newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) }))
         .map(kase => (kase, probabilityOf(kase)))
         .toMap)
   }

@@ -1,7 +1,5 @@
 package axle.pgm
 
-import scala.xml.NodeSeq.seqToNodeSeq
-
 import axle.HtmlFrom
 import cats.Show
 import axle.stats.Variable
@@ -30,7 +28,7 @@ object BayesianNetworkNode {
         <div>
           <h2>{ bnn.variable.name }</h2>
           <table border={ "1" }>
-            <tr>{ bnn.cpt.varList.map(variable => <td>{ variable.name }</td>): xml.NodeSeq }<td>P</td></tr>
+            <tr>{ bnn.cpt.variables.map(variable => <td>{ variable.name }</td>): xml.NodeSeq }<td>P</td></tr>
             {
               bnn.cpt.cases.map(kase =>
                 <tr>

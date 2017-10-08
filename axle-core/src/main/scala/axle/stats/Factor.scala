@@ -19,8 +19,8 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 
 /* Technically a "Distribution" is probably a table that sums to 1, which is not
-   * always true in a Factor.  They should be siblings rather than parent/child.
-   */
+ * always true in a Factor.  They should be siblings rather than parent/child.
+ */
 
 object Factor {
 
@@ -29,7 +29,7 @@ object Factor {
 
       def show(factor: Factor[T, N]): String = {
         import factor._
-        varList.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
+        variables.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
           factor.cases.map(kase =>
             kase.map(ci => string(ci.value).padTo(ci.variable.charWidth, " ").mkString("")).mkString(" ") +
               " " + string(factor(kase))).mkString("\n") // Note: was "%f".format() prior to spire.math
@@ -49,14 +49,20 @@ object Factor {
 
       def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
         val newVars = (x.variables.toSet union y.variables.toSet).toVector
-        Factor(newVars, Factor.cases(newVars).map(kase => (kase, x(kase) * y(kase))).toMap)
+        val newVariablesWithValues = newVars.map( variable => (variable, x.valuesOfVariable(variable)) )
+        Factor(
+          newVariablesWithValues,
+          Factor.cases(
+            newVars.map({ variable =>
+              (variable, x.valuesOfVariable(variable)) // TODO assert the x is same as y in this regard
+            })).map(kase => (kase, x(kase) * y(kase))).toMap)
       }
       def one: Factor[T, N] = Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
-  def cases[T: Eq, N: Field](varSeq: Vector[Variable[T]]): Iterable[Vector[CaseIs[T]]] =
-    IndexedCrossProduct(varSeq.map(_.values)) map { kase =>
-      varSeq.zip(kase) map {
+  def cases[T: Eq, N: Field](varSeq: Vector[(Variable[T], IndexedSeq[T])]): Iterable[Vector[CaseIs[T]]] =
+    IndexedCrossProduct(varSeq.map(_._2)) map { kase =>
+      varSeq.map(_._1).zip(kase) map {
         case (variable, value) => CaseIs(value, variable)
       } toVector
     }
@@ -64,19 +70,21 @@ object Factor {
 }
 
 case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
-    val varList: Vector[Variable[T]],
-    val values: Map[Vector[CaseIs[T]], N]) {
+    variablesWithValues: Vector[(Variable[T], Vector[T])],
+    probabilities: Map[Vector[CaseIs[T]], N]) {
+
+  val variables = variablesWithValues.map(_._1)
+
+  val valuesOfVariable: Map[Variable[T], Vector[T]] = variablesWithValues.toMap
 
   val field = Field[N]
 
-  lazy val crossProduct = IndexedCrossProduct(varList.map(_.values))
+  lazy val crossProduct = IndexedCrossProduct(variables.map(valuesOfVariable))
 
   lazy val elements: IndexedSeq[N] =
     (0 until crossProduct.size) map { i =>
-      values.get(caseOf(i)).getOrElse(field.zero)
+      probabilities.get(caseOf(i)).getOrElse(field.zero)
     } toIndexedSeq
-
-  def variables: Vector[Variable[T]] = varList
 
   // assume prior and condition are disjoint, and that they are
   // each compatible with this table
@@ -100,11 +108,11 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
   def indexOf(cs: Seq[CaseIs[T]]): Int = {
     val rvvs: Seq[(Variable[T], T)] = cs.map(ci => (ci.variable, ci.value))
     val rvvm = rvvs.toMap
-    crossProduct.indexOf(varList.map(rvvm))
+    crossProduct.indexOf(variables.map(rvvm))
   }
 
   private[this] def caseOf(i: Int): Vector[CaseIs[T]] =
-    varList.zip(crossProduct(i)) map { case (variable, value) => CaseIs(value, variable) }
+    variables.zip(crossProduct(i)) map { case (variable, value) => CaseIs(value, variable) }
 
   def cases: Iterable[Seq[CaseIs[T]]] = (0 until elements.length) map { caseOf }
 
@@ -113,15 +121,15 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
   // Chapter 6 definition 6
   def maxOut(variable: Variable[T]): Factor[T, N] = {
     val newVars = variables.filterNot(variable === _)
-    Factor(newVars,
-      Factor.cases(newVars)
-        .map(kase => (kase, variable.values.map(value => this(kase)).max))
+    Factor(variablesWithValues.filter({ case (variable, _) => newVars.contains(variable)}),
+      Factor.cases(newVars.map({ variable => (variable, valuesOfVariable(variable))}))
+        .map(kase => (kase, valuesOfVariable(variable).map(value => this(kase)).max))
         .toMap)
   }
 
   def projectToOnly(remainingVars: Vector[Variable[T]]): Factor[T, N] =
-    Factor(remainingVars,
-      Factor.cases[T, N](remainingVars).toVector
+    Factor(remainingVars.map( variable => (variable, valuesOfVariable(variable)) ),
+      Factor.cases[T, N](remainingVars.map({variable => (variable, valuesOfVariable(variable))})).toVector
         .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
         .groupBy(_._1)
         .map({ case (k, v) => (k.toVector, spire.optional.unicode.Σ(v.map(_._2))) })
@@ -132,25 +140,26 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
     b: Variable[T])(
       implicit la: LinearAlgebra[M, Int, Int, Double]): M =
     la.matrix(
-      a.values.size,
-      b.values.size,
-      (r: Int, c: Int) => spire.optional.unicode.Σ(cases.filter(isSupersetOf(_, Vector(a is a.values(r), b is b.values(c)))).map(this(_)).toVector).toDouble)
+      valuesOfVariable(a).size,
+      valuesOfVariable(b).size,
+      (r: Int, c: Int) => spire.optional.unicode.Σ(
+          cases.filter(isSupersetOf(_, Vector(a is valuesOfVariable(a).apply(r), b is valuesOfVariable(b).apply(c)))).map(this(_)).toVector).toDouble)
 
   def Σ(varToSumOut: Variable[T]): Factor[T, N] = this.sumOut(varToSumOut)
 
   // depending on assumptions, this may not be the best way to remove the vars
   def sumOut(gone: Variable[T]): Factor[T, N] = {
-    val position = varList.indexOf(gone)
-    val newVars = varList.filter(v => !(v === gone))
-    Factor(
-      newVars,
-      Factor.cases(newVars).map(kase => {
-        val reals = gone.values.map(gv => {
-          val ciGone = List(CaseIs(gv, gone))
-          this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
-        })
-        (kase, spire.optional.unicode.Σ(reals))
-      }).toMap)
+    val position = variables.indexOf(gone)
+    val newVars = variables.filter(v => !(v === gone))
+    val newVariablesWithValues = variablesWithValues.filter({ case (variable, _) => newVars.contains(variable) })
+    val newKases = Factor.cases(newVariablesWithValues).map( kase => {
+      val reals = valuesOfVariable(gone).map(gv => {
+        val ciGone = List(CaseIs(gv, gone))
+        this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
+      })
+      (kase, spire.optional.unicode.Σ(reals))
+    }).toMap
+    Factor(newVariablesWithValues, newKases)
   }
 
   def Σ(varsToSumOut: Set[Variable[T]]): Factor[T, N] = sumOut(varsToSumOut)
@@ -160,9 +169,14 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
 
   // as defined on chapter 6 page 15
   def projectRowsConsistentWith(eOpt: Option[List[CaseIs[T]]]): Factor[T, N] = {
-    val e = eOpt.get
-    Factor(variables,
-      Factor.cases(e.map(_.variable).toVector).map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
+    val e = eOpt.get // TODO either don't take Option or return an Option
+    val newVars = e.map(_.variable)
+    val newVariablesWithValues = variablesWithValues.filter({ case (variable, _) => newVars.contains(variable) })
+    Factor(newVariablesWithValues,
+      Factor.cases(
+          e.map(_.variable).toVector
+          .map({variable => (variable, valuesOfVariable(variable))}))
+        .map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
   }
 
   def mentions(variable: Variable[T]): Boolean =
