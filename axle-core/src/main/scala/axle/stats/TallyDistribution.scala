@@ -56,7 +56,7 @@ object TallyDistribution0 {
         val newDist: Map[A, N] =
           parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldN.plus)).toMap
 
-        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m)}).getOrElse(Variable("?", Vector.empty))
+        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m)}).getOrElse(Variable("?"))
 
         TallyDistribution0[A, N](newDist, v)
       }

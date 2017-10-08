@@ -37,7 +37,7 @@ object Probability {
     new Monad[M] {
 
       def pure[A](a: A): M[A] =
-        prob.construct(Variable("a", Vector(a)), Vector(a), (a: A) => Field[N].one)
+        prob.construct(Variable[A]("a"), Vector(a), (a: A) => Field[N].one)
 
       def tailRecM[A, B](a: A)(f: A => M[Either[A,B]]): M[B] =
        ???
@@ -50,7 +50,7 @@ object Probability {
           .groupBy(_._1)
           .mapValues(_.map(_._2).reduce(fieldN.plus))
 
-        prob.construct(Variable("b", b2n.keys.toVector), b2n.keys, b2n)
+        prob.construct(Variable[B]("b"), b2n.keys, b2n)
       }
 
       override def flatMap[A, B](model: M[A])(f: A => M[B]): M[B] = {
@@ -67,7 +67,7 @@ object Probability {
           .groupBy(_._1)
           .mapValues(_.map(_._2).reduce(fieldN.plus))
 
-        prob.construct(Variable("b", b2n.keys.toVector), b2n.keys, b2n)
+        prob.construct(Variable[B]("b"), b2n.keys, b2n)
       }
   }
 

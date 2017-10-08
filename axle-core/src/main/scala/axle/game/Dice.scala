@@ -12,7 +12,7 @@ object Dice {
   def die(n: Int): ConditionalProbabilityTable0[Int, Rational] =
     ConditionalProbabilityTable0(
       (1 to n).map(i => (i, Rational(1, n.toLong))).toMap,
-      Variable(s"D$n", 1 to n))
+      Variable[Int](s"D$n"))
 
   val sixth = Rational(1, 6)
 

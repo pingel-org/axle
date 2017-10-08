@@ -52,7 +52,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
   val classTally: Map[CLASS, N] =
     data.map(classExtractor).tally.withDefaultValue(Field[N].zero)
 
-  val C = TallyDistribution0(classTally, Variable("class", classTally.keys.toVector))
+  val C = TallyDistribution0(classTally, Variable[CLASS]("class"))
 
   val probTally0 = implicitly[Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]]
   // TODO val probTally1 = implicitly[Probability[({ type λ[T] = TallyDistribution1[T, CLASS, N] })#λ, N]]

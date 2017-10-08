@@ -29,7 +29,7 @@ object Strategies {
     implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
     (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
-      val v = Variable[M]("ai move", Vector(move))
+      val v = Variable[M]("ai move")
       ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
     }
 
@@ -41,7 +41,7 @@ object Strategies {
       val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
       val move = validated.right.toOption.get
-      val v = Variable("hard-coded", Vector(move))
+      val v = Variable[M]("hard-coded")
       ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
     }
 
@@ -73,7 +73,7 @@ object Strategies {
         })
 
       val move = stream.find(esm => esm.isRight).get.right.toOption.get
-      val v = Variable("interactive", Vector(move))
+      val v = Variable[M]("interactive")
       ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
     }
 
@@ -81,7 +81,7 @@ object Strategies {
     (game: G, state: MS) => {
       val opens = evGame.moves(game, state).toVector
       val p = Rational(1L, opens.length.toLong)
-      val v = Variable("random", opens)
+      val v = Variable[M]("random")
       ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap, v)
     }
 
