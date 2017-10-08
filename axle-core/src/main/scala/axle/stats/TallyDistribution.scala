@@ -22,7 +22,7 @@ import axle.dummy
 object TallyDistribution0 {
 
   implicit def show[A: Order: Show, N: Show](
-      implicit prob: Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]): Show[TallyDistribution0[A, N]] =
+      implicit prob: ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]): Show[TallyDistribution0[A, N]] =
     new Show[TallyDistribution0[A, N]] {
 
       def show(td: TallyDistribution0[A, N]): String =
@@ -35,8 +35,8 @@ object TallyDistribution0 {
 
   implicit def probability[N](
       implicit fieldN: Field[N],
-      orderN: Order[N]): Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] =
-    new Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] {
+      orderN: Order[N]): ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] =
+    new ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] {
 
       def construct[A](variable: Variable[A], as: Iterable[A], f: A => N): TallyDistribution0[A, N] =
         TallyDistribution0(as.map(a => a -> f(a)).toMap, variable)

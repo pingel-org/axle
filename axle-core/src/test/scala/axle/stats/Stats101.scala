@@ -7,7 +7,7 @@ import spire.implicits._
 class Stats101 extends FunSuite with Matchers {
 
   type λ[T] = ConditionalProbabilityTable0[T, Rational]
-  val prob = implicitly[Probability[λ, Rational]]
+  val prob = implicitly[ProbabilityModel[λ, Rational]]
 
   test("standard deviation on a list of doubles") {
 

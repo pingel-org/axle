@@ -16,7 +16,7 @@ import axle.stats.TallyDistribution1
 import axle.syntax.aggregatable._
 import axle.syntax.functor._
 import axle.syntax.talliable._
-import axle.stats.Probability
+import axle.stats.ProbabilityModel
 import axle.algebra._
 import axle.math._
 
@@ -54,7 +54,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
 
   val C = TallyDistribution0(classTally, Variable[CLASS]("class"))
 
-  val probTally0 = implicitly[Probability[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]]
+  val probTally0 = implicitly[ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]]
   // TODO val probTally1 = implicitly[Probability[({ type λ[T] = TallyDistribution1[T, CLASS, N] })#λ, N]]
 
   def tallyFor(featureVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =

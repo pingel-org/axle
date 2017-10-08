@@ -8,15 +8,15 @@ import cats.implicits._
 import spire.implicits.DoubleAlgebra
 import spire.math.Rational
 import axle.game.Dice.die
-import axle.stats.Probability
+import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable0
 import axle.visualize.Color.blue
 import axle.web._
 
 class BarChartSpec extends FunSuite with Matchers {
 
-  implicit val monad = Probability.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-  val prob = implicitly[Probability[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
   test("BarChart render an SVG of fruit sales") {
 
@@ -85,7 +85,7 @@ class BarChartSpec extends FunSuite with Matchers {
       b <- die(6)
     } yield a + b
 
-    implicit val prob = implicitly[Probability[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+    implicit val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
     implicit val dataViewCPT: DataView[Int, Rational, ConditionalProbabilityTable0[Int, Rational]] =
       DataView.probabilityDataView[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
 

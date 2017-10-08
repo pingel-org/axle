@@ -1,13 +1,15 @@
 package axle.stats
 
-// import spire.algebra.Field
-// import spire.implicits.additiveGroupOps
-// import axle.math.Π
-// import spire.algebra.AdditiveMonoid
+/**
+ * ProbabilityModel
+ * 
+ * See http://www.stat.yale.edu/Courses/1997-98/101/probint.htm
+ */
+
 import spire.random.Generator
 import spire.random.Dist
 
-trait Probability[M[_], N] {
+trait ProbabilityModel[M[_], N] {
 
   def construct[A](variable: Variable[A], as: Iterable[A], f: A => N): M[A]
 
@@ -28,12 +30,12 @@ trait Probability[M[_], N] {
   def probabilityOf[A](model: M[A], a: A): N
 }
 
-object Probability {
+object ProbabilityModel {
 
   import cats._
   import spire.algebra.Field
 
-  implicit def monad[M[_], N](implicit prob: Probability[M, N], fieldN: Field[N]): Monad[M] =
+  implicit def monad[M[_], N](implicit prob: ProbabilityModel[M, N], fieldN: Field[N]): Monad[M] =
     new Monad[M] {
 
       def pure[A](a: A): M[A] =

@@ -9,7 +9,7 @@ import cats.Order.catsKernelOrderingForOrder
 
 import axle.algebra.Plottable
 import axle.algebra.Zero
-import axle.stats.Probability
+import axle.stats.ProbabilityModel
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[S, X, Y, D] {
@@ -81,7 +81,7 @@ object PlotDataView {
     }
 
   implicit def probabilityDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable, M[_]](
-      implicit prob: Probability[M, Y]): PlotDataView[S, X, Y, M[X]] =
+      implicit prob: ProbabilityModel[M, Y]): PlotDataView[S, X, Y, M[X]] =
     new PlotDataView[S, X, Y, M[X]] {
 
       def xsOf(model: M[X]): Traversable[X] = prob.values(model)
