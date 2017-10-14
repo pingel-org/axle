@@ -32,9 +32,6 @@ import axle.syntax.functor.functorOps
 
 package object stats {
 
-  def bayes[A, B](a: A)(implicit b: Bayes[A, B]): B =
-    b(a)
-
   implicit val rationalProbabilityDist: Dist[Rational] = {
     val biggishInt = 1000000
     val x = (i: Int) => Rational(i.toLong, biggishInt.toLong)
