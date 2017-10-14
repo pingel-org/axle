@@ -2,8 +2,13 @@ package axle.ml
 
 import scala.Vector
 import scala.collection.immutable.TreeMap
-import scala.util.Random.shuffle
 
+import cats.kernel.Eq
+
+import spire.algebra.MetricSpace
+import spire.random.Generator
+
+import axle.shuffle
 import axle.algebra.LinearAlgebra
 import axle.algebra.Finite
 import axle.algebra.Functor
@@ -12,11 +17,6 @@ import axle.syntax.finite._
 import axle.syntax.indexed._
 import axle.syntax.functor._
 import axle.syntax.linearalgebra._
-
-import cats.kernel.Eq
-import spire.algebra.MetricSpace
-//import spire.implicits.DoubleAlgebra
-//import spire.implicits.IntAlgebra
 
 /**
  * KMeans
@@ -43,6 +43,7 @@ case class KMeans[T: Eq, F, G, M](
   normalizerMaker: M => Normalize[M],
   K: Int,
   iterations: Int)(
+  gen: Generator)(
     implicit space: MetricSpace[M, Double],
     functor: Functor[F, T, Seq[Double], G],
     val la: LinearAlgebra[M, Int, Int, Double],
@@ -58,7 +59,7 @@ case class KMeans[T: Eq, F, G, M](
 
   val X = normalizer.normalizedData
 
-  val μads = clusterLA(X, space, K, iterations)
+  val μads = clusterLA(X, space, K, iterations)(gen)
 
   val (μ, a, d) = μads.last
 
@@ -124,11 +125,12 @@ case class KMeans[T: Eq, F, G, M](
     X: M,
     space: MetricSpace[M, Double],
     K: Int,
-    iterations: Int): Seq[(M, M, M)] = {
+    iterations: Int)(gen: Generator): Seq[(M, M, M)] = {
 
     assert(K < X.rows)
 
-    val μ0 = X.slice(shuffle((0 until X.rows).toList).take(K), 0 until X.columns)
+    val selection = shuffle((0 until X.rows).toList)(gen).take(K)
+    val μ0 = X.slice(selection, 0 until X.columns)
     val a0 = la.zeros(X.rows, 1)
     val d0 = la.zeros(X.rows, 1)
 
@@ -178,10 +180,11 @@ object KMeans {
     normalizerMaker: M => Normalize[M],
     K: Int,
     iterations: Int)(
+    gen: Generator)(
       implicit space: MetricSpace[M, Double],
       functor: Functor[U[T], T, Seq[Double], U[Seq[Double]]],
       la: LinearAlgebra[M, Int, Int, Double],
       index: Indexed[U[Seq[Double]], Int, Seq[Double]],
       finite: Finite[U[T], Int]): KMeans[T, U[T], U[Seq[Double]], M] =
-    KMeans(data, N, featureExtractor, normalizerMaker, K, iterations)
+    KMeans(data, N, featureExtractor, normalizerMaker, K, iterations)(gen)
 }

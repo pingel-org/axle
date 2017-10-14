@@ -2,14 +2,17 @@ import scala.collection.mutable.Buffer
 
 import scala.collection.immutable.TreeMap
 import scala.language.implicitConversions
+
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
+
 import spire.algebra._
-import spire.implicits.additiveGroupOps
 import spire.math.Rational
+import spire.random.Generator
+import spire.implicits.additiveGroupOps
 
 /**
  *
@@ -128,6 +131,14 @@ package object axle {
     val breaks = xs.zip(xs.drop(1)).filter({ case (x, y) => orderT.compare(y - x, one) == 1 }).map(_._2).toSet
     runs(xs, breaks)
   }
+
+  /**
+   * 
+   * shuffle
+   */
+
+  def shuffle[T](xs: Seq[T])(gen: Generator): Seq[T] =
+    xs.map(x => (x, gen.nextInt)).sortBy(_._2).map(_._1)
 
   // List methods
 

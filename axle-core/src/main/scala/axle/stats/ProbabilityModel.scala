@@ -17,17 +17,18 @@ trait ProbabilityModel[M[_], N] {
 
   def combine[A](modelsToProbabilities: Map[M[A], N]): M[A]
 
-  def condition[A, G](model: M[A], given: CaseIs[G]): M[A]
-
   def empty[A](variable: Variable[A]): M[A]
 
   def orientation[A](model: M[A]): Variable[A]
 
   def orient[A, B](model: M[A], newVariable: Variable[B]): M[B]
 
+  def probabilityOf[A](model: M[A], a: A): N
+
+  def condition[A, G](model: M[A], given: CaseIs[G]): M[A]
+
   def observe[A](model: M[A], gen: Generator)(implicit rng: Dist[N]): A
 
-  def probabilityOf[A](model: M[A], a: A): N
 }
 
 object ProbabilityModel {

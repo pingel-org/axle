@@ -1,8 +1,8 @@
 package axle
 
 import scala.collection.IndexedSeq
-import scala.util.Random.nextInt
 
+import spire.random.Generator
 import spire.implicits.IntAlgebra
 import spire.implicits.eqOps
 
@@ -23,7 +23,7 @@ case class EnrichedIndexedSeq[T: Manifest](is: IndexedSeq[T]) {
         if (i === i0) is(i1) else (if (i === i1) is(i0) else v)
     })
 
-  def random: T = is(nextInt(is.size))
+  def random(gen: Generator): T = is(gen.nextInt(is.size))
 
   def powerset: IndexedPowerSet[T] = IndexedPowerSet(is)
 

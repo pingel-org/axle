@@ -1,6 +1,7 @@
 package axle.ml
 
 import spire.implicits._
+
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 
@@ -25,8 +26,8 @@ case class PCAFeatureNormalizer[M](cutoff: Double, X: M)(implicit la: LinearAlge
   def unapply(featureRow: M): Seq[Double] =
     ((featureRow * Uk.t).mulPointwise(σ2s) + μs).toList
 
-  def random(): M =
-    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) * Uk
+//  def random(): M =
+//    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray) * Uk
 
   // (truncatedSigmas.mulPointwise(featureRow) + truncatedMeans).toList
   // val truncatedSigmas = σ2s * Uk

@@ -3,14 +3,11 @@ package axle
 import scala.Stream.cons
 import scala.Vector
 import scala.language.implicitConversions
-import scala.util.Random.nextDouble
-import scala.util.Random.nextInt
 
 import cats.kernel.Eq
 import cats.implicits._
-//import cats.kernel.Order
-//import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
+
 import spire.algebra.NRoot
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
@@ -23,6 +20,8 @@ import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 import spire.math.Rational
 import spire.random.Dist
+import spire.random.Generator
+
 import axle.math.Σ
 import axle.algebra.Functor
 import axle.algebra.Aggregatable
@@ -42,8 +41,6 @@ package object stats {
     val y = Dist.intrange(0, biggishInt)
     Dist(x)(y)
   }
-
-  //implicit def evalProbability[N]: Probability[N] => N = _()
 
   implicit def enrichCaseGenTraversable[R, A: Manifest, N: Field](cgt: Iterable[CaseIs[A]]): EnrichedCaseGenTraversable[R, A, N] =
     EnrichedCaseGenTraversable(cgt)
@@ -148,7 +145,7 @@ package object stats {
       convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 
-  def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N]): Stream[List[N]] =
+  def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N], gen: Generator): Stream[List[N]] =
     if (xs.isEmpty) {
       cons(reservoir, Stream.empty)
     } else {
@@ -156,17 +153,18 @@ package object stats {
         if (i < k) {
           xs.head :: reservoir
         } else {
-          val r = nextDouble
+          val r = gen.nextDouble()
           if (r < (k / i.toDouble)) {
-            val skip = nextInt(reservoir.length)
+            val skip = gen.nextInt(reservoir.length)
             xs.head :: (reservoir.zipWithIndex.filterNot({ case (e, i) => i == skip }).map(_._1))
           } else {
             reservoir
           }
         }
-      cons(newReservoir, _reservoirSampleK(k, i + 1, newReservoir, xs.tail))
+      cons(newReservoir, _reservoirSampleK(k, i + 1, newReservoir, xs.tail, gen))
     }
 
-  def reservoirSampleK[N](k: Int, xs: Stream[N]) = _reservoirSampleK(k, 0, Nil, xs)
+  def reservoirSampleK[N](k: Int, xs: Stream[N], gen: Generator) =
+    _reservoirSampleK(k, 0, Nil, xs, gen)
 
 }
