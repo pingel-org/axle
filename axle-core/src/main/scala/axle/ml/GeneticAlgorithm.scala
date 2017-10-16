@@ -9,7 +9,7 @@ import axle.poly._
 
 /**
 
-  Rough non-HList approximation of the "mate" function:
+  Non-HList approximation of the "mate" function:
 
   type GA[T] = (Generator, List[T])
 
@@ -36,14 +36,6 @@ import axle.poly._
 
  */
 
-trait Species[G] {
-
-  def random(gen: Generator): G
-
-  def fitness(genotype: G): Double
-
-}
-
 case class GeneticAlgorithmLog[G](
   winners: IndexedSeq[G],
   mins: TreeMap[Int, Double],
@@ -51,18 +43,19 @@ case class GeneticAlgorithmLog[G](
   aves: TreeMap[Int, Double])
 
 case class GeneticAlgorithm[G <: HList, Z <: HList](
+  random: Generator => G,
+  fitness: G => Double,
   populationSize: Int = 1000,
   numGenerations: Int = 100)(
-    implicit species: Species[G],
-    zipper: Zip.Aux[G :: G :: HNil, Z],
+    implicit zipper: Zip.Aux[G :: G :: HNil, Z],
     folderMixer: RightFolder[Z, Generator, Mixer2.type],
     folderMutate: RightFolder[Z, Generator, Mutator2.type]
     ) {
 
   def initialPopulation(gen: Generator): IndexedSeq[(G, Double)] =
     (0 until populationSize).map(i => { 
-      val r = species.random(gen)
-      (r, species.fitness(r))
+      val r = random(gen)
+      (r, fitness(r))
     })
 
   def mate[X <: HList](m: G, f: G, gen: Generator)(
@@ -70,7 +63,7 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
       folderMixer: RightFolder[X, Generator, Mixer2.type],
       folderMutator: RightFolder[X, Generator, Mutator2.type]) = {
 
-    val r: G = species.random(gen)
+    val r: G = random(gen)
 
     val mixed = ((m zip f).foldRight(gen)(Mixer2)(folderMixer)).asInstanceOf[G] // TODO
     ((r zip mixed).foldRight(gen)(Mutator2)).asInstanceOf[G] // TODO
@@ -90,7 +83,7 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
       val (f, _) = population(gen.nextInt(population.size))
 
       val kid = mate(male, f, gen).asInstanceOf[G]
-      (kid, species.fitness(kid))
+      (kid, fitness(kid))
     })
 
     (nextGen, minMaxAve(nextGen) :: fitnessLog)
