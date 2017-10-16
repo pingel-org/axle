@@ -19,7 +19,7 @@ object OldMontyHall {
     uniformDistribution((1 to numDoors).filter(d => d == p || d == c), Variable[Int]("reveal"))
 
   def switch(probabilityOfSwitching: Rational, c: Int, r: Int) =
-    iffy(
+    iffy[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
       binaryDecision(probabilityOfSwitching),
       uniformDistribution((1 to numDoors).filter(d => d == r || d == c), Variable("switch")), // switch
       uniformDistribution(Seq(c), Variable("switch")) // stay
@@ -39,6 +39,7 @@ object OldMontyHall {
   // val chanceOfWinning = pos map { outcome }
   // cow should also now have a value at pos.min and pos.max
 
-  val chanceOfWinning = (probabilityOfSwitching: Rational) => outcome(probabilityOfSwitching).probabilityOf(true)
+  val chanceOfWinning =
+    (probabilityOfSwitching: Rational) => prob.probabilityOf(outcome(probabilityOfSwitching), true)
 
 }
