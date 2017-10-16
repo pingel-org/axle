@@ -1,16 +1,12 @@
 package axle.ml
 
 import scala.collection.immutable.TreeMap
-
-import shapeless.{ :: => :: }
-import shapeless.HList
-import shapeless.HNil
-import shapeless.Poly1
+import shapeless._
 import shapeless.ops.hlist.Mapper
 import shapeless.ops.hlist.Zip
-import shapeless.syntax.std.tuple.hlistOps
-
 import spire.random.Generator
+import axle.poly._
+
 
 trait Species[G] {
 
@@ -26,74 +22,43 @@ case class GeneticAlgorithmLog[G](
   maxs: TreeMap[Int, Double],
   aves: TreeMap[Int, Double])
 
-object Mixer extends Poly1 {
-  implicit def caseTuple[T] = at[(T, T)](t =>
-    if (gen.nextBoolean) t._2 else t._1)
-}
-
-object Mater extends Poly1 {
-  implicit def caseTuple[T] = at[(T, T, T)](t =>
-    if (gen.nextDouble < 0.03) {
-      t._3
-    } else if (gen.nextBoolean) {
-      t._2
-    } else {
-      t._1
-    })
-}
-
-object Mutator extends Poly1 {
-  implicit def caseTuple[T] = at[(T, T)](t =>
-    if (gen.nextDouble < 0.03) t._2 else t._1
-  )
-}
-
 case class GeneticAlgorithm[G <: HList, Z <: HList](
   populationSize: Int = 1000,
   numGenerations: Int = 100)(
     implicit species: Species[G],
     zipper: Zip.Aux[G :: G :: HNil, Z],
-    mapperMix: Mapper[Mixer.type, Z],
-    mapperMutate: Mapper[Mutator.type, Z]) {
+    mapperMixer: Mapper[Mixer1.type, Z],
+    mapperMutate: Mapper[Mutator1.type, Z]
+    ) {
 
   def initialPopulation(gen: Generator): IndexedSeq[(G, Double)] =
-    (0 until populationSize).map(i => {
+    (0 until populationSize).map(i => { 
       val r = species.random(gen)
       (r, species.fitness(r))
     })
 
-  /**
-   * There are many variations of produceChild.
-   * The important components are:
-   *
-   * 1. Fitness-based selection
-   * 2. Crossover / gene-swapping
-   * 3. Mutation
-   *
-   */
-
-  def crossover[X <: HList](h1: G, h2: G)(
-    implicit zipper: Zip.Aux[G :: G :: HNil, X],
-    mapper: Mapper[Mixer.type, X]) =
-      (h1 zip h2) map Mixer
-
-  def mutate[X <: HList](x: G, r: G)(
-    implicit zipper: Zip.Aux[G :: G :: HNil, X],
-    mapper: Mapper[Mutator.type, X]) = (x zip r) map Mutator
+  def mate[X <: HList](r: G, m: G, f: G)(
+      implicit zipper: Zip.Aux[G :: G :: HNil, X],
+      mapperMixer: Mapper[Mixer1.type, X],
+      mapperMutator: Mapper[Mutator1.type, X]) = {
+    val mixed = ((m zip f) map Mixer1).asInstanceOf[G] // TODO
+    ((r zip mixed) map Mutator1).asInstanceOf[G] // TODO
+  }
 
   def live(
       population: IndexedSeq[(G, Double)],
       fitnessLog: List[(Double, Double, Double)])(
       gen: Generator): (IndexedSeq[(G, Double)], List[(Double, Double, Double)]) = {
+
     val nextGen = (0 until populationSize).map(i => {
       val (m1, m1f) = population(gen.nextInt(population.size))
       val (m2, m2f) = population(gen.nextInt(population.size))
       val (f, _) = population(gen.nextInt(population.size))
       val m = if (m1f > m2f) { m1 } else { m2 }
-      val crossed = crossover(m, f).asInstanceOf[G]
-      val kid = mutate(crossed, species.random(gen)).asInstanceOf[G] // TODO
+      val kid = mate(m, f, species.random(gen)).asInstanceOf[G]
       (kid, species.fitness(kid))
     })
+
     (nextGen, minMaxAve(nextGen) :: fitnessLog)
   }
 
@@ -101,14 +66,17 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
     (population.minBy(_._2)._2, population.maxBy(_._2)._2, population.map(_._2).sum / population.size)
 
   def run(gen: Generator): GeneticAlgorithmLog[G] = {
+
     val populationLog = (0 until numGenerations)
       .foldLeft((initialPopulation(gen), List[(Double, Double, Double)]()))(
         (pl: (IndexedSeq[(G, Double)], List[(Double, Double, Double)]), i: Int) => live(pl._1, pl._2)(gen))
-    val logs = populationLog._2.reverse
+
     val winners = populationLog._1.reverse.map(_._1)
+    val logs = populationLog._2.reverse
     val mins = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._1))
     val maxs = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._2))
     val aves = new TreeMap[Int, Double]() ++ (0 until logs.size).map(i => (i, logs(i)._3))
+
     GeneticAlgorithmLog[G](winners, mins, maxs, aves)
   }
 
