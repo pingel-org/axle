@@ -2,11 +2,39 @@ package axle.ml
 
 import scala.collection.immutable.TreeMap
 import shapeless._
-import shapeless.ops.hlist.Mapper
+import shapeless.ops.hlist.RightFolder
 import shapeless.ops.hlist.Zip
 import spire.random.Generator
 import axle.poly._
 
+/**
+
+  Rough non-HList approximation of the "mate" function:
+
+  type GA[T] = (Generator, List[T])
+
+  def mix[T](current: (T, T), genAcc: GA[T]): GA[T] = {
+    val (gen, acc) = genAcc
+    val choice = if (gen.nextBoolean()) current._1 else current._2
+    (gen, choice :: acc)
+  }
+
+  def mutate[T](current: (T, T), genAcc: GA[T]): GA[T] = {
+    val (gen, acc) = genAcc
+    val choice = if (gen.nextDouble() < 0.03) current._1 else current._2
+    (gen, choice :: acc)
+  }
+
+  import spire.random.Generator.rng
+
+  val m = List(1, 8, 11)
+  val f = List(2, 3, 12)
+  val r = List(7, 7, 7)
+
+  val mixed = m.zip(f).foldRight((rng, List.empty[Int]))(mix)._2
+  val mated = r.zip(mixed).foldRight((rng, List.empty[Int]))(mutate)._2
+
+ */
 
 trait Species[G] {
 
@@ -27,8 +55,8 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
   numGenerations: Int = 100)(
     implicit species: Species[G],
     zipper: Zip.Aux[G :: G :: HNil, Z],
-    mapperMixer: Mapper[Mixer1.type, Z],
-    mapperMutate: Mapper[Mutator1.type, Z]
+    folderMixer: RightFolder[Z, Generator, Mixer2.type],
+    folderMutate: RightFolder[Z, Generator, Mutator2.type]
     ) {
 
   def initialPopulation(gen: Generator): IndexedSeq[(G, Double)] =
@@ -37,12 +65,15 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
       (r, species.fitness(r))
     })
 
-  def mate[X <: HList](r: G, m: G, f: G)(
+  def mate[X <: HList](m: G, f: G, gen: Generator)(
       implicit zipper: Zip.Aux[G :: G :: HNil, X],
-      mapperMixer: Mapper[Mixer1.type, X],
-      mapperMutator: Mapper[Mutator1.type, X]) = {
-    val mixed = ((m zip f) map Mixer1).asInstanceOf[G] // TODO
-    ((r zip mixed) map Mutator1).asInstanceOf[G] // TODO
+      folderMixer: RightFolder[X, Generator, Mixer2.type],
+      folderMutator: RightFolder[X, Generator, Mutator2.type]) = {
+
+    val r: G = species.random(gen)
+
+    val mixed = ((m zip f).foldRight(gen)(Mixer2)(folderMixer)).asInstanceOf[G] // TODO
+    ((r zip mixed).foldRight(gen)(Mutator2)).asInstanceOf[G] // TODO
   }
 
   def live(
@@ -51,11 +82,14 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
       gen: Generator): (IndexedSeq[(G, Double)], List[(Double, Double, Double)]) = {
 
     val nextGen = (0 until populationSize).map(i => {
-      val (m1, m1f) = population(gen.nextInt(population.size))
-      val (m2, m2f) = population(gen.nextInt(population.size))
+
+      val (male1, m1f) = population(gen.nextInt(population.size))
+      val (male2, m2f) = population(gen.nextInt(population.size))
+      val male = if (m1f > m2f) { male1 } else { male2 }
+
       val (f, _) = population(gen.nextInt(population.size))
-      val m = if (m1f > m2f) { m1 } else { m2 }
-      val kid = mate(m, f, species.random(gen)).asInstanceOf[G]
+
+      val kid = mate(male, f, gen).asInstanceOf[G]
       (kid, species.fitness(kid))
     })
 
