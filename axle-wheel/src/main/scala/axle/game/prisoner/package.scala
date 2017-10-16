@@ -1,7 +1,7 @@
 package axle.game
 
 import cats.implicits._
-import axle.stats.Distribution0
+import axle.stats.ConditionalProbabilityTable0
 import spire.math.Rational
 
 /**
@@ -27,7 +27,7 @@ package object prisoner {
 
       def strategyFor(
         game: PrisonersDilemma,
-        player: Player): (PrisonersDilemma, PrisonersDilemmaState) => Distribution0[PrisonersDilemmaMove, Rational] =
+        player: Player): (PrisonersDilemma, PrisonersDilemmaState) => ConditionalProbabilityTable0[PrisonersDilemmaMove, Rational] =
         player match {
           case game.p1 => game.p1Strategy
           case game.p2 => game.p2Strategy

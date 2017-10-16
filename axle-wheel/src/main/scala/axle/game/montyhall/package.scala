@@ -6,7 +6,7 @@ package axle.game
  *
  */
 
-import axle.stats.Distribution0
+import axle.stats.ConditionalProbabilityTable0
 import spire.math.Rational
 import cats.implicits._
 
@@ -26,7 +26,7 @@ package object montyhall {
 
       def strategyFor(
         game: MontyHall,
-        player: Player): (MontyHall, MontyHallState) => Distribution0[MontyHallMove, Rational] =
+        player: Player): (MontyHall, MontyHallState) => ConditionalProbabilityTable0[MontyHallMove, Rational] =
         player match {
           case game.contestant => game.contestantStrategy
           case game.monty      => game.montyStrategy

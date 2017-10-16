@@ -41,8 +41,8 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
     // reduce the complexity.
 
     val piDist = for {
-      x <- uniformDistribution(0 to n)
-      y <- uniformDistribution(0 to n)
+      x <- uniformDistribution(0 to n, Variable[Int]("x"))
+      y <- uniformDistribution(0 to n, Variable[Int]("y"))
     } yield if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0
 
     4 * prob.probabilityOf(piDist, 1) should be > Rational(3)

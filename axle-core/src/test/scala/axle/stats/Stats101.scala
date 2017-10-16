@@ -11,7 +11,7 @@ class Stats101 extends FunSuite with Matchers {
 
   test("standard deviation on a list of doubles") {
 
-    val model = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d))
+    val model = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), Variable[Double]("x"))
 
     standardDeviation[λ, Double, Rational](model) should be(2d)
   }
@@ -26,7 +26,7 @@ class Stats101 extends FunSuite with Matchers {
         Real(5),
         Real(5),
         Real(7),
-        Real(9)))
+        Real(9)), Variable[Real]("x"))
 
     standardDeviation[λ, Real, Rational](dist) should be(Real(2))
   }

@@ -1,7 +1,7 @@
 package axle.game
 
 import axle.string
-import axle.stats.Distribution0
+import axle.stats.ConditionalProbabilityTable0
 import spire.math.Rational
 import cats.implicits._
 
@@ -19,7 +19,7 @@ package object ttt {
       def players(g: TicTacToe): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: TicTacToe, player: Player): (TicTacToe, TicTacToeState) => Distribution0[TicTacToeMove, Rational] =
+      def strategyFor(g: TicTacToe, player: Player): (TicTacToe, TicTacToeState) => ConditionalProbabilityTable0[TicTacToeMove, Rational] =
         g.playerToStrategy(player)
 
       def isValid(g: TicTacToe, state: TicTacToeState, move: TicTacToeMove): Either[String, TicTacToeMove] =

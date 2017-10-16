@@ -34,7 +34,7 @@ object Bowling {
   object Bowlers {
     val randomBowler =
       Bowler[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
-        firstRoll = uniformDistribution(0 to 10),
+        firstRoll = uniformDistribution(0 to 10, Variable[Int]("firstRoll")),
         spare = binaryDecision(Rational(1, 2)))
 
     // bad bowler.  50% gutter-ball, even (5%) distribution of 1-10

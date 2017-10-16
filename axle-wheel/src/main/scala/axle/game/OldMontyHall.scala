@@ -6,20 +6,23 @@ import axle.stats._
 
 object OldMontyHall {
 
+  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+
   val numDoors = 3
 
-  val prizeDoor = uniformDistribution(1 to numDoors, "prize")
+  val prizeDoor = uniformDistribution(1 to numDoors, Variable[Int]("prize"))
 
-  val chosenDoor = uniformDistribution(1 to numDoors, "chosen")
+  val chosenDoor = uniformDistribution(1 to numDoors, Variable[Int]("chosen"))
 
   def reveal(p: Int, c: Int) =
-    uniformDistribution((1 to numDoors).filter(d => d == p || d == c), "reveal")
+    uniformDistribution((1 to numDoors).filter(d => d == p || d == c), Variable[Int]("reveal"))
 
   def switch(probabilityOfSwitching: Rational, c: Int, r: Int) =
     iffy(
       binaryDecision(probabilityOfSwitching),
-      uniformDistribution((1 to numDoors).filter(d => d == r || d == c), "switch"), // switch
-      uniformDistribution(Seq(c), "switch") // stay
+      uniformDistribution((1 to numDoors).filter(d => d == r || d == c), Variable("switch")), // switch
+      uniformDistribution(Seq(c), Variable("switch")) // stay
       )
 
   // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
