@@ -8,7 +8,7 @@ import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling.stateDistribution
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
-import axle.stats.Distribution0
+import axle.stats.ConditionalProbabilityTable0
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
@@ -26,14 +26,14 @@ class GameChartSpec extends FunSuite with Matchers {
     implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
     // test implicit conjuring:
-    PlotDataView.distribution0DataView[String, Int, Rational]
+    PlotDataView.probabilityDataView[String, Int, Rational]
 
-    val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
+    val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
       () => scoreD,
       drawKey = true,
       xAxis = Some(Rational(0)))
 
-    val plot = Plot[String, Int, Rational, Distribution0[Int, Rational]](
+    val plot = Plot[String, Int, Rational, ConditionalProbabilityTable0[Int, Rational]](
       () => Vector(("", scoreD)),
       colorOf = _ => Color.black,
       drawKey = true,

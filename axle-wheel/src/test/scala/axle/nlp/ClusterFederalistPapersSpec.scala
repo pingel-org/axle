@@ -1,6 +1,7 @@
 package axle.nlp
 
 import org.scalatest._
+import spire.random.Generator.rng
 import axle.nlp.language.English
 
 class ClusterFederalistPapersSpec extends FunSuite with Matchers {
@@ -53,7 +54,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
       featureExtractor,
       normalizer,
       K = 4,
-      iterations = 100)
+      iterations = 100)(rng)
 
     import axle.ml.ConfusionMatrix
     import cats.implicits._

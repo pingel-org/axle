@@ -1,6 +1,8 @@
 package axle.game.poker
 
 import org.scalatest._
+
+import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
 
@@ -92,9 +94,9 @@ class PokerSpec extends FunSuite with Matchers {
       axle.ignore)
 
     val start = startState(game)
-    val history = moveStateStream(game, start).toVector
+    val history = moveStateStream(game, start, rng).toVector
     val lastState = history.last._3
-    val lastStateByPlay = play(game) // TODO make use of this
+    val lastStateByPlay = play(game, rng) // TODO make use of this
 
     val o = outcome(game, lastState).get
     val newGameState = startFrom(game, lastState).get

@@ -1,8 +1,10 @@
 package axle.game.ttt
 
+import org.scalatest._
+
+import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
-import org.scalatest._
 
 class TicTacToeSpec extends FunSuite with Matchers {
 
@@ -27,16 +29,16 @@ class TicTacToeSpec extends FunSuite with Matchers {
     o, randomMove, axle.ignore)
 
   test("random game produce moveStateStream") {
-    moveStateStream(rGame, startState(rGame)).take(3).length should be(3)
+    moveStateStream(rGame, startState(rGame), rng).take(3).length should be(3)
   }
 
   test("random game plays") {
-    val endState = play(rGame, startState(rGame), false)
+    val endState = play(rGame, startState(rGame), false, rng)
     moves(rGame, endState).length should be(0)
   }
 
   test("random game produce game stream") {
-    val games = gameStream(rGame, startState(rGame), false).take(2)
+    val games = gameStream(rGame, startState(rGame), false, rng).take(2)
     games.length should be(2)
   }
 
@@ -108,7 +110,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
 
     import spire.implicits.DoubleAlgebra
     val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Double](
-      4, outcomeRingHeuristic(game, h))
+      4, outcomeRingHeuristic(game, h))(rng)
 
     val secondState = applyMove(game, startState(game), firstMove)
 
@@ -139,7 +141,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
       o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
-    val lastState = moveStateStream(game, start).last._3
+    val lastState = moveStateStream(game, start, rng).last._3
     val out = outcome(game, lastState).get
     displayOutcomeTo(game, out, x) should include("You beat")
     displayOutcomeTo(game, out, o) should include("beat You")
@@ -168,7 +170,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
       o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
-    val lastState = moveStateStream(game, start).last._3
+    val lastState = moveStateStream(game, start, rng).last._3
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(Some(o))
   }
@@ -197,7 +199,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
       o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
-    val lastState = moveStateStream(game, start).last._3
+    val lastState = moveStateStream(game, start, rng).last._3
 
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(None)

@@ -2,6 +2,7 @@ package axle.ml
 
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import spire.random.Generator.rng
 import axle.string
 
 class KMeansSpecification
@@ -64,7 +65,7 @@ class KMeansSpecification
       (p: Foo) => Seq(p.x, p.y),
       (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98),
       K = 2,
-      100)
+      100)(rng)
 
     val constructor = (features: Seq[Double]) => Foo(features(0), features(1))
 
@@ -136,7 +137,7 @@ class KMeansSpecification
         irisFeaturizer,
         normalizer,
         K = 3,
-        iterations = 20)(
+        iterations = 20)(rng)(
           Iris.irisEq,
           space,
           Functor[List[Iris], Iris, Seq[Double], List[Seq[Double]]],

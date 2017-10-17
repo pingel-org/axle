@@ -1,8 +1,10 @@
 package axle.game.montyhall
 
+import org.scalatest._
+
+import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
-import org.scalatest._
 
 class MontyHallSpec extends FunSuite with Matchers {
 
@@ -25,16 +27,16 @@ class MontyHallSpec extends FunSuite with Matchers {
   }
 
   test("random game produces moveStateStream") {
-    moveStateStream(rGame, startState(rGame)).take(2) should have length 2
+    moveStateStream(rGame, startState(rGame), rng).take(2) should have length 2
   }
 
   test("random game plays") {
-    val endState = play(rGame, startState(rGame), false)
+    val endState = play(rGame, startState(rGame), false, rng)
     moves(rGame, endState) should have length 0
   }
 
   test("random game produces game stream") {
-    val games = gameStream(rGame, startState(rGame), false).take(2)
+    val games = gameStream(rGame, startState(rGame), false, rng).take(2)
     games should have length 2
   }
 

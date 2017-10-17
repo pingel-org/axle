@@ -22,8 +22,8 @@ import axle.math._
 
 case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N: Field: Order](
   data: F,
-  featureVariables: List[Variable[FEATURE]],
-  classVariable: Variable[CLASS],
+  featureVariablesAndValues: List[(Variable[FEATURE], IndexedSeq[FEATURE])],
+  classVariableAndValues: (Variable[CLASS], IndexedSeq[CLASS]),
   featureExtractor: DATA => List[FEATURE],
   classExtractor: DATA => CLASS)(
     implicit agg: Aggregatable[F, DATA, Map[(CLASS, String, FEATURE), N]],
@@ -31,6 +31,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
     tal: Talliable[G, CLASS, N])
     extends Function1[DATA, CLASS] {
 
+  val featureVariables = featureVariablesAndValues map { _._1 }
   val featureNames = featureVariables map { _.name }
 
   val numFeatures = featureNames.size
@@ -65,8 +66,9 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
     }.withDefaultValue(Field[N].zero)
 
   // Note: The "parent" (or "given") of these feature variables is C
-  val Fs = featureVariables.map(featureVariable =>
-    TallyDistribution1(tallyFor(featureVariable).withDefaultValue(Field[N].zero), featureVariable))
+  val Fs = featureVariablesAndValues.map { case (featureVariable, _) =>
+    TallyDistribution1(tallyFor(featureVariable).withDefaultValue(Field[N].zero), featureVariable)
+  }
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
 
@@ -94,12 +96,13 @@ object NaiveBayesClassifier {
 
   def common[DATA, FEATURE: Order, CLASS: Order: Eq, U[_], N: Field: Order](
     data: U[DATA],
-    featureVariables: List[Variable[FEATURE]],
-    classVariable: Variable[CLASS],
+    featureVariablesAndValues: List[(Variable[FEATURE], IndexedSeq[FEATURE])],
+    classVariableAndValues: (Variable[CLASS], IndexedSeq[CLASS]),
     featureExtractor: DATA => List[FEATURE],
     classExtractor: DATA => CLASS)(
       implicit agg: Aggregatable[U[DATA], DATA, Map[(CLASS, String, FEATURE), N]],
       functor: Functor[U[DATA], DATA, CLASS, U[CLASS]],
       tal: Talliable[U[CLASS], CLASS, N]) =
-    NaiveBayesClassifier(data, featureVariables, classVariable, featureExtractor, classExtractor)
+    NaiveBayesClassifier[DATA, FEATURE, CLASS, U[DATA], U[CLASS], N](
+        data, featureVariablesAndValues, classVariableAndValues, featureExtractor, classExtractor)
 }

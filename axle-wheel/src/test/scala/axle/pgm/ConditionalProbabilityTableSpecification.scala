@@ -12,31 +12,29 @@ class ConditionalProbabilityTableSpecification
 
   val bools = Vector(true, false)
 
-  def ubd(name: String) = UnknownDistribution0[Boolean, Rational](bools, name)
+  val A = Variable[Boolean]("A")
+  val B = Variable[Boolean]("B")
+  val C = Variable[Boolean]("C")
+  val D = Variable[Boolean]("D")
+  val E = Variable[Boolean]("E")
 
-  val A = ubd("A")
-  val B = ubd("B")
-  val C = ubd("C")
-  val D = ubd("D")
-  val E = ubd("E")
-
-  val aFactor = Factor(Vector(A), Map(
+  val aFactor = Factor(Vector(A -> bools), Map(
     Vector(A is true) -> Rational(6, 10),
     Vector(A is false) -> Rational(4, 10)))
 
-  val bFactor = Factor(Vector(B), Map(
+  val bFactor = Factor(Vector(B -> bools), Map(
     Vector(B is true, A is true) -> Rational(2, 10),
     Vector(B is true, A is false) -> Rational(8, 10),
     Vector(B is false, A is true) -> Rational(3, 4),
     Vector(B is false, A is false) -> Rational(1, 4)))
 
-  val cFactor = Factor(Vector(C), Map(
+  val cFactor = Factor(Vector(C -> bools), Map(
     Vector(C is true, A is true) -> Rational(8, 10),
     Vector(C is true, A is false) -> Rational(2, 10),
     Vector(C is false, A is true) -> Rational(1, 10),
     Vector(C is false, A is false) -> Rational(9, 10)))
 
-  val dFactor = Factor(Vector(D), Map(
+  val dFactor = Factor(Vector(D -> bools), Map(
     Vector(D is true, B is true, C is true) -> Rational(95, 100),
     Vector(D is true, B is true, C is false) -> Rational(5, 100),
     Vector(D is true, B is false, C is true) -> Rational(9, 10),
@@ -46,7 +44,7 @@ class ConditionalProbabilityTableSpecification
     Vector(D is false, B is false, C is true) -> Rational(0),
     Vector(D is false, B is false, C is false) -> Rational(1)))
 
-  val eFactor = Factor(Vector(E), Map(
+  val eFactor = Factor(Vector(E -> bools), Map(
     Vector(E is true, C is true) -> Rational(7, 10),
     Vector(E is true, C is false) -> Rational(3, 10),
     Vector(E is false, C is true) -> Rational(0),

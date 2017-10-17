@@ -7,10 +7,11 @@ import spire.math.Rational
 import spire.implicits._
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.ConditionalProbabilityTable2
-import axle.stats.P
+// import axle.stats.P
 import axle.stats.coin
 import axle.stats.entropy
-import axle.stats.rationalProbabilityDist
+// import axle.stats.rationalProbabilityDist
+import axle.stats.Variable
 import axle.quanta.Information
 import axle.jung.directedGraphJung
 // import cats.implicits._
@@ -25,7 +26,7 @@ class InformationTheorySpec extends FunSuite with Matchers {
       ConditionalProbabilityTable0(Map(
         "A" -> Rational(2, 10),
         "B" -> Rational(1, 10),
-        "C" -> Rational(7, 10)), "d")
+        "C" -> Rational(7, 10)), Variable[String]("d"))
 
     entropy(d).magnitude should be(1.1567796494470395)
   }
@@ -34,11 +35,11 @@ class InformationTheorySpec extends FunSuite with Matchers {
 
     val X = ConditionalProbabilityTable0(Map(
       "foo" -> Rational(1, 10),
-      "food" -> Rational(9, 10)), "X")
+      "food" -> Rational(9, 10)), Variable[String]("X"))
 
     val Y = ConditionalProbabilityTable0(Map(
       "bar" -> Rational(9, 10),
-      "bard" -> Rational(1, 10)), "Y")
+      "bard" -> Rational(1, 10)), Variable[String]("Y"))
 
     // Note: A is given X and Y
     val A = ConditionalProbabilityTable2(Map(
@@ -46,10 +47,10 @@ class InformationTheorySpec extends FunSuite with Matchers {
       ("foo", "bard") -> Map("a" -> Rational(2, 10), "b" -> Rational(8, 10)),
       ("food", "bar") -> Map("a" -> Rational(9, 10), "b" -> Rational(1, 10)),
       ("food", "bard") -> Map("a" -> Rational(5, 10), "b" -> Rational(5, 10))),
-      "A")
+      Variable[String]("A"))
 
-    val p = P((A is "a") | (X is "foo") ∧ (Y isnt "bar"))
-    val b = P((A is "a") ∧ (X is "foo")).bayes
+    //val p = P((A is "a") | (X is "foo") ∧ (Y isnt "bar"))
+    //val b = P((A is "a") ∧ (X is "foo")).bayes
 
     // TODO
     1 should be(1)
