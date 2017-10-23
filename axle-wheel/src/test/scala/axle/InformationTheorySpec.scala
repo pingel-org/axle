@@ -32,7 +32,7 @@ class InformationTheorySpec extends FunSuite with Matchers {
 
     val e = entropy[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, String, Rational](d)
 
-    e should be(1.1567796494470395)
+    e.magnitude should ===(1.1567796494470395)
   }
 
   /*
