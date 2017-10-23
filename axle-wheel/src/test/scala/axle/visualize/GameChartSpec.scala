@@ -26,7 +26,11 @@ class GameChartSpec extends FunSuite with Matchers {
     implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
     // test implicit conjuring:
-    PlotDataView.probabilityDataView[String, Int, Rational]
+    PlotDataView.probabilityDataView[String, Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
+
+    //import axle.stats.ProbabilityModel
+    //implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+    //implicit val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
     val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
       () => scoreD,

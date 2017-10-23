@@ -82,7 +82,7 @@ class ABE extends FunSuite with Matchers {
     // println("eliminating variables other than A, B, and E; and then finding those consistent with E = true")
     // println(afterVE)
 
-    sansAll.values(Vector.empty) should be(Rational(1))
+    sansAll.apply(Vector.empty) should be(Rational(1))
     sansAll.evaluate(Seq.empty, Seq.empty) should be(Rational(1))
   }
 

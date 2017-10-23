@@ -65,7 +65,7 @@ class ConditionalProbabilityTableSpecification
 
     val factor = bn.jointProbabilityTable.sumOut(A).sumOut(B).sumOut(C).sumOut(D).sumOut(E)
 
-    factor.values should have size 1
+    factor.cases should have size 1
   }
 
 }
