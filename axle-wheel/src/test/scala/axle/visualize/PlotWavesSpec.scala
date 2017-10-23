@@ -1,7 +1,6 @@
 package axle.visualize
 
 import scala.collection.immutable.TreeMap
-import scala.util.Random.nextDouble
 
 import org.joda.time.DateTime
 import org.scalatest._
@@ -9,6 +8,8 @@ import org.scalatest._
 import cats.Order.catsKernelOrderingForOrder
 import spire.math.sin
 import spire.implicits.DoubleAlgebra
+import spire.random.Generator.rng
+
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
@@ -22,9 +23,9 @@ class PlotWavesSpec extends FunSuite with Matchers {
     val now = new DateTime()
 
     def randomTimeSeries(i: Int) = {
-      val φ = nextDouble
-      val A = nextDouble
-      val ω = 0.1 / nextDouble
+      val φ = rng.nextDouble()
+      val A = rng.nextDouble()
+      val ω = 0.1 / rng.nextDouble()
       ("series %d %1.2f %1.2f %1.2f".format(i, φ, A, ω),
         new TreeMap[DateTime, Double]() ++
         (0 to 100).map(t => (now.plusMinutes(2 * t) -> A * sin(ω * t + φ))).toMap)

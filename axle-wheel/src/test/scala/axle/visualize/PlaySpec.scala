@@ -4,10 +4,13 @@ import org.scalatest._
 
 import java.net.URL
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+
 import cats.implicits._
 import spire.implicits.DoubleAlgebra
+import spire.random.Generator.rng
 import monix.reactive._
 import monix.execution.Scheduler.Implicits.global
+
 import axle.reactive.intervalScan
 import axle.quanta.Time
 import axle.algebra.modules._
@@ -25,9 +28,9 @@ class PlaySpec extends FunSuite with Matchers {
       "coconut" -> 10.1)
 
     val update: Map[String, Double] => Map[String, Double] = (old: Map[String, Double]) =>
-      Map("apple" -> scala.util.Random.nextDouble() * 100d,
-        "banana" -> scala.util.Random.nextDouble() * 100d,
-        "coconut" -> scala.util.Random.nextDouble() * 100d)
+      Map("apple" -> rng.nextDouble() * 100d,
+        "banana" -> rng.nextDouble() * 100d,
+        "coconut" -> rng.nextDouble() * 100d)
 
     implicit val tr = Time.converterGraphK2[Double, DirectedSparseGraph]
     import tr._
