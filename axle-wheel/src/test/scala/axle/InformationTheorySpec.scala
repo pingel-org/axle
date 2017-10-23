@@ -3,20 +3,23 @@ package axle
 import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+
 import spire.math.Rational
 import spire.implicits._
+
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.ConditionalProbabilityTable2
-// import axle.stats.P
+import axle.stats.ProbabilityModel
+import axle.stats.Variable
 import axle.stats.coin
 import axle.stats.entropy
-// import axle.stats.rationalProbabilityDist
-import axle.stats.Variable
 import axle.quanta.Information
 import axle.jung.directedGraphJung
-// import cats.implicits._
 
 class InformationTheorySpec extends FunSuite with Matchers {
+
+  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+  implicit val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
   test("hard-coded distributions") {
 
@@ -28,7 +31,9 @@ class InformationTheorySpec extends FunSuite with Matchers {
         "B" -> Rational(1, 10),
         "C" -> Rational(7, 10)), Variable[String]("d"))
 
-    entropy(d).magnitude should be(1.1567796494470395)
+    val e = entropy[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, String, Rational](d)
+
+    e should be(1.1567796494470395)
   }
 
   test("cpt") {
@@ -42,12 +47,14 @@ class InformationTheorySpec extends FunSuite with Matchers {
       "bard" -> Rational(1, 10)), Variable[String]("Y"))
 
     // Note: A is given X and Y
+    /*
     val A = ConditionalProbabilityTable2(Map(
       ("foo", "bar") -> Map("a" -> Rational(3, 10), "b" -> Rational(7, 10)),
       ("foo", "bard") -> Map("a" -> Rational(2, 10), "b" -> Rational(8, 10)),
       ("food", "bar") -> Map("a" -> Rational(9, 10), "b" -> Rational(1, 10)),
       ("food", "bard") -> Map("a" -> Rational(5, 10), "b" -> Rational(5, 10))),
       Variable[String]("A"))
+    */
 
     //val p = P((A is "a") | (X is "foo") ∧ (Y isnt "bar"))
     //val b = P((A is "a") ∧ (X is "foo")).bayes
@@ -64,8 +71,11 @@ class InformationTheorySpec extends FunSuite with Matchers {
     implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]
 
     // assumes entropy is in bits
-    entropy(biasedCoin).magnitude should be(0.4689955935892812)
-    entropy(fairCoin).magnitude should be(1d)
+    val biasedCoinEntropy = entropy[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Symbol, Rational](biasedCoin)
+    biasedCoinEntropy.magnitude should be(0.4689955935892812)
+
+    val fairCoinEntropy = entropy[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Symbol, Rational](fairCoin)
+    fairCoinEntropy.magnitude should be(1d)
   }
 
 }

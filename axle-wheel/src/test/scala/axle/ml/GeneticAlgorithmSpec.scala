@@ -4,7 +4,6 @@ import org.scalatest._
 
 import shapeless._
 import spire.random.Generator
-import axle.poly._
 
 class GeneticAlgorithmSpec extends FunSuite with Matchers {
 

@@ -3,10 +3,16 @@ package axle.game.ttt
 import org.scalatest._
 
 import spire.random.Generator.rng
+import spire.math.Rational
+import axle.stats.ProbabilityModel
+import axle.stats.ConditionalProbabilityTable0
 import axle.game._
 import axle.game.Strategies._
 
 class TicTacToeSpec extends FunSuite with Matchers {
+
+  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
   import axle.game.ttt.evGame._
   import axle.game.ttt.evGameIO._
@@ -85,7 +91,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
     val firstMove = TicTacToeMove(2, game.boardSize)
     val secondState = applyMove(game, startState(game), firstMove)
 
-    val m = secondState.moverOpt.get
+    // val m = secondState.moverOpt.get
     evGameIO.parseMove(game, "14") should be(Left("Please enter a number between 1 and 9"))
     evGameIO.parseMove(game, "foo") should be(Left("foo is not a valid move.  Please select again"))
 
@@ -96,7 +102,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
   test("random strategy makes a move") {
 
     val mover = randomMove(evGame)
-    val m = mover(game, startState(game)).observe()
+    val moveCpt = mover(game, startState(game))
+    val m = prob.observe(moveCpt, rng)
 
     m.position should be > 0
   }
@@ -110,11 +117,11 @@ class TicTacToeSpec extends FunSuite with Matchers {
 
     import spire.implicits.DoubleAlgebra
     val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Double](
-      4, outcomeRingHeuristic(game, h))(rng)
+      4, outcomeRingHeuristic(game, h))
 
     val secondState = applyMove(game, startState(game), firstMove)
-
-    val move = ai4(game, secondState).observe()
+    val cpt = ai4(game, secondState)
+    val move = prob.observe(cpt, rng)
 
     move.position should be > 0
   }

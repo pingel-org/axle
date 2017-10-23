@@ -90,7 +90,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order](
 
 case class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](
     p: Map[(G1, G2), Map[A, N]],
-    val name: String = "unnamed") {
+    variable: Variable[A]) {
 
   lazy val _values = p.values.map(_.keySet).reduce(_ union _).toVector
 

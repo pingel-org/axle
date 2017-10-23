@@ -9,7 +9,6 @@ import cats.implicits._
 import spire.math.Rational
 import spire.algebra.Ring
 import spire.random.Dist
-import spire.random.Generator
 import spire.implicits._
 
 import axle.stats.ConditionalProbabilityTable0
@@ -27,10 +26,9 @@ object Strategies {
     }).toMap
 
   def aiMover[G, S, O, M, MS, MM, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
-    gen: Generator)(
     implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
     (ttt: G, state: S) => {
-      val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)(gen)
+      val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
       val v = Variable[M]("ai move")
       ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
     }
@@ -101,7 +99,6 @@ object Strategies {
     state: S,
     depth: Int,
     heuristic: S => Map[Player, N])(
-      gen: Generator)(
       implicit evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
 
     // TODO capture as type constraint
@@ -114,12 +111,13 @@ object Strategies {
       if (evGame.outcome(game, newState).isDefined || depth === 0) {
         (move, state, heuristic(newState))
       } else {
-        (move, state, minimax(game, newState, depth - 1, heuristic)(gen)._3)
+        (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       }
     })
     val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
     val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
-    matches(gen.nextInt(matches.length))
+    // matches(gen.nextInt(matches.length))
+    ???
   }
 
   /**
