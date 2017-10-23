@@ -129,7 +129,7 @@ case class KMeans[T: Eq, F, G, M](
 
     assert(K < X.rows)
 
-    val selection = shuffle((0 until X.rows).toList)(gen).take(K)
+    val selection = shuffle((0 until X.rows).toIndexedSeq)(gen).take(K)
     val μ0 = X.slice(selection, 0 until X.columns)
     val a0 = la.zeros(X.rows, 1)
     val d0 = la.zeros(X.rows, 1)
