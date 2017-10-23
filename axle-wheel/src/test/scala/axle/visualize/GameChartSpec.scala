@@ -6,6 +6,7 @@ import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling.stateDistribution
+import axle.game.Bowling.monad
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.stats.ConditionalProbabilityTable0
