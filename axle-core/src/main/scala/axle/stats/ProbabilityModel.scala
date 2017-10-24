@@ -58,8 +58,7 @@ object ProbabilityModel {
 
       override def flatMap[A, B](model: M[A])(f: A => M[B]): M[B] = {
 
-        val b2n = prob
-          .values(model)
+        val foo = prob.values(model)
           .flatMap(a => {
             val p = prob.probabilityOf(model, a)
             val subDistribution = f(a)
@@ -67,6 +66,9 @@ object ProbabilityModel {
               b -> (fieldN.times(p, prob.probabilityOf(subDistribution, b)))
             })
           })
+
+        val b2n =
+          foo
           .groupBy(_._1)
           .mapValues(_.map(_._2).reduce(fieldN.plus))
 
