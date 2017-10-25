@@ -9,7 +9,7 @@ import cats.implicits._
 import spire.math.Rational
 import spire.algebra.Ring
 import spire.random.Dist
-import spire.implicits._
+//import spire.implicits._
 
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Variable
@@ -28,6 +28,7 @@ object Strategies {
   def aiMover[G, S, O, M, MS, MM, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
     implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
     (ttt: G, state: S) => {
+      import spire.implicits._
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
       val v = Variable[M]("ai move")
       ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
@@ -114,10 +115,7 @@ object Strategies {
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       }
     })
-    val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
-    val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
-    // matches(gen.nextInt(matches.length))
-    ???
+    moveValue.maxBy(mcr => (mcr._3)(mover))
   }
 
   /**
