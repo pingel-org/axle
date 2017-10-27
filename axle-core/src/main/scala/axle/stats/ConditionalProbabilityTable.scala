@@ -61,8 +61,8 @@ object ConditionalProbabilityTable0 {
       def orient[A, B](model: ConditionalProbabilityTable0[A, N], newVariable: Variable[B]): ConditionalProbabilityTable0[B, N] =
         empty[B](newVariable)
 
-      def observe[A](model: ConditionalProbabilityTable0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
-        val r: N = rng.apply(gen)
+      def observe[A](model: ConditionalProbabilityTable0[A, N], gen: Generator)(implicit spireDist: Dist[N]): A = {
+        val r: N = gen.next[N]
         model.bars.find({ case (_, v) => model.order.gteqv(v, r) }).get._1 // otherwise malformed distribution
       }
 

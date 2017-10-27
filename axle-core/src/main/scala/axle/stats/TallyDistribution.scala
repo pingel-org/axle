@@ -73,8 +73,8 @@ object TallyDistribution0 {
       def orient[A, B](model: TallyDistribution0[A, N], newVariable: Variable[B]): TallyDistribution0[B, N] =
         empty[B](newVariable) // TODO could check if variable == newVariable
 
-      def observe[A](model: TallyDistribution0[A, N], gen: Generator)(implicit rng: Dist[N]): A = {
-        val r: N = model.totalCount * rng.apply(gen)
+      def observe[A](model: TallyDistribution0[A, N], gen: Generator)(implicit spireDist: Dist[N]): A = {
+        val r: N = model.totalCount * gen.next[N]
         model.bars.find({ case (_, v) => model.order.gteqv(v, r) }).get._1 // or distribution is malformed
       }
 

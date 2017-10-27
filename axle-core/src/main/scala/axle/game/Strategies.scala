@@ -8,15 +8,11 @@ import cats.implicits._
 
 import spire.math.Rational
 import spire.algebra.Ring
-import spire.random.Dist
-//import spire.implicits._
 
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Variable
 
 object Strategies {
-
-  implicit val distDouble = implicitly[Dist[Double]].map(Rational.apply)
 
   def outcomeRingHeuristic[G, S, O, M, MS, MM, N: Ring](game: G, f: (O, Player) => N)(
     implicit evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =

@@ -27,7 +27,7 @@ trait ProbabilityModel[M[_], N] {
 
   def condition[A, G](model: M[A], given: CaseIs[G]): M[A]
 
-  def observe[A](model: M[A], gen: Generator)(implicit rng: Dist[N]): A
+  def observe[A](model: M[A], gen: Generator)(implicit spireDist: Dist[N]): A
 
 }
 
