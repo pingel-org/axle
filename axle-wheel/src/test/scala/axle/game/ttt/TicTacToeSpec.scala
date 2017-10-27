@@ -4,8 +4,10 @@ import org.scalatest._
 
 import spire.random.Generator.rng
 import spire.math.Rational
+
 import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable0
+import axle.stats.rationalProbabilityDist
 import axle.game._
 import axle.game.Strategies._
 
