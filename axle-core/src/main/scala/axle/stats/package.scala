@@ -33,9 +33,9 @@ import axle.syntax.functor.functorOps
 package object stats {
 
   implicit val rationalProbabilityDist: Dist[Rational] = {
-    val biggishInt = 1000000
-    val x = (i: Int) => Rational(i.toLong, biggishInt.toLong)
-    val y = Dist.intrange(0, biggishInt)
+    val denominator = Integer.MAX_VALUE - 1 // 1000000
+    val x = (i: Int) => Rational(i.toLong, denominator.toLong)
+    val y = Dist.intrange(0, denominator)
     Dist(x)(y)
   }
 
