@@ -4,9 +4,9 @@ import org.scalatest._
 
 import shapeless._
 import spire.random.Generator
-//import spire.random.Generator.rng
-//import axle.poly.Mixer2
-//import axle.poly.Mutator2
+import spire.random.Generator.rng
+import axle.poly.Mixer2
+import axle.poly.Mutator2
 
 class GeneticAlgorithmSpec extends FunSuite with Matchers {
 
@@ -39,7 +39,6 @@ class GeneticAlgorithmSpec extends FunSuite with Matchers {
 
     }
 
-    /*
     val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
 
     val log = ga.run(rng)
@@ -48,9 +47,6 @@ class GeneticAlgorithmSpec extends FunSuite with Matchers {
 
     log.maxs should have size 100
     rabbitSpecies.fitness(winner) should be > 0d
-    * 
-    */
-    1 should ===(1)
   }
 
 }
