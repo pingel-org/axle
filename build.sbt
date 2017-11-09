@@ -16,7 +16,6 @@ lazy val scalaTestVersion = "3.0.0"
 
 lazy val scalaXmlVersion = "1.0.5"
 lazy val scalaParserCombinatorsVersion = "1.0.4"
-lazy val sparkVersion = "2.0.1"
 lazy val jungVersion = "2.1"
 lazy val jblasVersion = "1.2.4"
 lazy val jacksonVersion = "2.8.4"
@@ -143,15 +142,6 @@ lazy val axleJblas = Project("axle-jblas", file("axle-jblas"))
    libraryDependencies ++= Seq(
      "org.jblas"              % "jblas"                     % jblasVersion       % "provided"
    )
-).dependsOn(axleCore)
-
-lazy val axleSpark = Project("axle-spark", file("axle-spark"))
- .settings(axleSettings)
- .settings(
-  name := "axle-spark",
-  libraryDependencies ++= Seq(
-    "org.apache.spark"         %% "spark-core"               % sparkVersion       % "provided"
-  )
 ).dependsOn(axleCore)
 
 lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
