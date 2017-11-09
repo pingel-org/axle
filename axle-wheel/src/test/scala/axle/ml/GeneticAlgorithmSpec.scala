@@ -39,6 +39,9 @@ class GeneticAlgorithmSpec extends FunSuite with Matchers {
 
     }
 
+    // import shapeless.ops.hlist.RightFolder
+    // implicitly[RightFolder[generic.Repr,Generator,Mutator2.type]]
+
     val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
 
     val log = ga.run(rng)

@@ -49,13 +49,13 @@ case class GeneticAlgorithmLog[G](
   maxs: TreeMap[Int, Double],
   aves: TreeMap[Int, Double])
 
-case class GeneticAlgorithm[G <: HList, Z <: HList](
+case class GeneticAlgorithm[G <: HList](
   populationSize: Int = 1000,
   numGenerations: Int = 100)(
     implicit species: Species[G],
-    zipper: Zip.Aux[G :: G :: HNil, Z],
-    folderMixer: RightFolder[Z, Generator, Mixer2.type],
-    folderMutate: RightFolder[Z, Generator, Mutator2.type]
+    zipper: Zip.Aux[G :: G :: HNil, G],
+    folderMutate: RightFolder.Aux[G, Generator, Mutator2.type, G],
+    folderMixer: RightFolder.Aux[G, Generator, Mixer2.type, G]
     ) {
 
   def initialPopulation(gen: Generator): IndexedSeq[(G, Double)] =
@@ -64,15 +64,10 @@ case class GeneticAlgorithm[G <: HList, Z <: HList](
       (r, species.fitness(r))
     })
 
-  def mate[X <: HList](m: G, f: G, gen: Generator)(
-      implicit zipper: Zip.Aux[G :: G :: HNil, X],
-      folderMixer: RightFolder[X, Generator, Mixer2.type],
-      folderMutator: RightFolder[X, Generator, Mutator2.type]) = {
-
-    val r: G = species.random(gen)
-
-    val mixed = ((m zip f).foldRight(gen)(Mixer2)(folderMixer)).asInstanceOf[G] // TODO
-    ((r zip mixed).foldRight(gen)(Mutator2)).asInstanceOf[G] // TODO
+  def mate(m: G, f: G, gen: Generator): G = {
+    val mixed: G = ((m zip f).foldRight(gen)(Mixer2)(folderMixer))
+    val mutated: G = ((species.random(gen) zip mixed).foldRight(gen)(Mutator2)(folderMutate))
+    mutated
   }
 
   def live(
