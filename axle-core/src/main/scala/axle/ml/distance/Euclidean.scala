@@ -13,7 +13,7 @@ import spire.implicits.additiveGroupOps
  *
  */
 
-case class Euclidean[M: AdditiveAbGroup, D: NRoot](
+class Euclidean[M: AdditiveAbGroup, D: NRoot](
   implicit ips: InnerProductSpace[M, D])
     extends MetricSpace[M, D] {
 

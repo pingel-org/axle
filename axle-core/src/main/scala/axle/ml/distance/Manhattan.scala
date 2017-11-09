@@ -5,7 +5,7 @@ import axle.syntax.linearalgebra.matrixOps
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
 
-case class Manhattan[M, R, C, D](
+class Manhattan[M, R, C, D](
   implicit la: LinearAlgebra[M, R, C, D],
   subSpace: MetricSpace[D, D],
   add: AdditiveMonoid[D])
