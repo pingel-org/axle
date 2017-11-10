@@ -9,7 +9,9 @@ import ReleaseTransformations._
 
 lazy val spireVersion = "0.14.1"
 lazy val shapelessVersion = "2.3.2"
-lazy val catsVersion = "0.9.0" // must match spire's algebra's catsVersion
+lazy val kittensVersion = "1.0.0-RC1"
+lazy val catsVersion = "0.9.0" // must match spire's algebra's catsVersion; next "1.0.0-MF"
+
 lazy val disciplineVersion = "0.7.2"
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.0"
@@ -54,6 +56,7 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
       "org.typelevel"          %% "cats-core"                % catsVersion,
       "org.typelevel"          %% "cats-free"                % catsVersion,
       "com.chuusai"            %% "shapeless"                % shapelessVersion,
+      "org.typelevel"          %% "kittens"                  % kittensVersion,
       // "eu.timepit"          %% "singleton-ops"            % "0.0.4"
       "io.monix"               %% "monix-reactive"           % monixVersion,
       "io.monix"               %% "monix-cats"               % monixVersion,
@@ -203,6 +206,7 @@ lazy val commonScalacOptions = Seq(
   "-Xlint",
 //  "-Yliteral-types",
 //  "-Yinline-warnings",
+  "-Ypartial-unification",
   "-Ywarn-unused-import",
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
