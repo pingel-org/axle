@@ -20,6 +20,8 @@ before_cache:
 before_install:
   - export TZ=America/Los_Angeles
   - date
+  - sudo apt-get -qq update
+  - sudo apt-get install libgfortran3"
 
 install:
   - pip install --user codecov
