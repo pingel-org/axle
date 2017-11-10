@@ -4,12 +4,9 @@ import shapeless._
 
 import spire.random.Generator
 
-object Mixer2 extends Poly2 {
-
-  implicit def caseTL[A, B <: HList] = at[(A, A), (Generator, B)] {
-    case ((left, right), (gen, acc)) =>
-      val choice: A = if (gen.nextBoolean()) left else right
-      (gen, choice :: acc)
-  }
-
+object Mix extends Poly1 {
+  implicit def casePair[A] =
+    at[(A, A)] { aa: (A, A) => (g: Generator) =>
+      if (g.nextBoolean) aa._1 else aa._2
+    }
 }

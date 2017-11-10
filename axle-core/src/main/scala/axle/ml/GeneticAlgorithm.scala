@@ -2,38 +2,38 @@ package axle.ml
 
 import scala.collection.immutable.TreeMap
 import shapeless._
-import shapeless.ops.hlist.RightFolder
-import shapeless.ops.hlist.Zip
+import shapeless.ops.hlist._
+import cats.sequence._
 import spire.random.Generator
 import axle.poly._
 
 /**
-
-  Non-HList approximation of the "mate" function:
-
-  type GA[T] = (Generator, List[T])
-
-  def mix[T](current: (T, T), genAcc: GA[T]): GA[T] = {
-    val (gen, acc) = genAcc
-    val choice = if (gen.nextBoolean()) current._1 else current._2
-    (gen, choice :: acc)
-  }
-
-  def mutate[T](current: (T, T), genAcc: GA[T]): GA[T] = {
-    val (gen, acc) = genAcc
-    val choice = if (gen.nextDouble() < 0.03) current._1 else current._2
-    (gen, choice :: acc)
-  }
-
-  import spire.random.Generator.rng
-
-  val m = List(1, 8, 11)
-  val f = List(2, 3, 12)
-  val r = List(7, 7, 7)
-
-  val mixed = m.zip(f).foldRight((rng, List.empty[Int]))(mix)._2
-  val mated = r.zip(mixed).foldRight((rng, List.empty[Int]))(mutate)._2
-
+ *
+ * Non-HList approximation of the "mate" function:
+ *
+ * type GA[T] = (Generator, List[T])
+ *
+ * def mix[T](current: (T, T), genAcc: GA[T]): GA[T] = {
+ * val (gen, acc) = genAcc
+ * val choice = if (gen.nextBoolean()) current._1 else current._2
+ * (gen, choice :: acc)
+ * }
+ *
+ * def mutate[T](current: (T, T), genAcc: GA[T]): GA[T] = {
+ * val (gen, acc) = genAcc
+ * val choice = if (gen.nextDouble() < 0.03) current._1 else current._2
+ * (gen, choice :: acc)
+ * }
+ *
+ * import spire.random.Generator.rng
+ *
+ * val m = List(1, 8, 11)
+ * val f = List(2, 3, 12)
+ * val r = List(7, 7, 7)
+ *
+ * val mixed = m.zip(f).foldRight((rng, List.empty[Int]))(mix)._2
+ * val mated = r.zip(mixed).foldRight((rng, List.empty[Int]))(mutate)._2
+ *
  */
 
 trait Species[G] {
@@ -45,35 +45,38 @@ trait Species[G] {
 
 case class GeneticAlgorithmLog[G](
   winners: IndexedSeq[G],
-  mins: TreeMap[Int, Double],
-  maxs: TreeMap[Int, Double],
-  aves: TreeMap[Int, Double])
+  mins:    TreeMap[Int, Double],
+  maxs:    TreeMap[Int, Double],
+  aves:    TreeMap[Int, Double])
 
-case class GeneticAlgorithm[G <: HList](
+case class GeneticAlgorithm[G <: HList, GG <: HList](
   populationSize: Int = 1000,
   numGenerations: Int = 100)(
-    implicit species: Species[G],
-    zipper: Zip.Aux[G :: G :: HNil, G],
-    folderMutate: RightFolder.Aux[G, Generator, Mutator2.type, G],
-    folderMixer: RightFolder.Aux[G, Generator, Mixer2.type, G]
-    ) {
+  implicit
+  species:        Species[G],
+  zipper:         Zip.Aux[G :: G :: HNil, GG],
+  traverseMix:    Traverser.Aux[GG, Mix.type, Generator => G],
+  traverseMutate: Traverser.Aux[GG, Mutate.type, Generator => G]) {
 
   def initialPopulation(gen: Generator): IndexedSeq[(G, Double)] =
-    (0 until populationSize).map(i => { 
+    (0 until populationSize).map(i => {
       val r = species.random(gen)
       (r, species.fitness(r))
     })
 
   def mate(m: G, f: G, gen: Generator): G = {
-    val mixed: G = ((m zip f).foldRight(gen)(Mixer2)(folderMixer))
-    val mutated: G = ((species.random(gen) zip mixed).foldRight(gen)(Mutator2)(folderMutate))
+    val traversedForMix = (m zip f).traverse(Mix)
+    val mixed = traversedForMix(gen)
+    val random: G = species.random(gen)
+    val traversedForMutate = (random zip mixed).traverse(Mutate)
+    val mutated = traversedForMutate(gen)
     mutated
   }
 
   def live(
-      population: IndexedSeq[(G, Double)],
-      fitnessLog: List[(Double, Double, Double)])(
-      gen: Generator): (IndexedSeq[(G, Double)], List[(Double, Double, Double)]) = {
+    population: IndexedSeq[(G, Double)],
+    fitnessLog: List[(Double, Double, Double)])(
+    gen: Generator): (IndexedSeq[(G, Double)], List[(Double, Double, Double)]) = {
 
     val nextGen = (0 until populationSize).map(i => {
 
