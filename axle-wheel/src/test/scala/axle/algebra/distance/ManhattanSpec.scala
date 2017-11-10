@@ -1,4 +1,4 @@
-package axle.ml.distance
+package axle.algebra.distance
 
 import org.jblas.DoubleMatrix
 import org.scalacheck.Arbitrary

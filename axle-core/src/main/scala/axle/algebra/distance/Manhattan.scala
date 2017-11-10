@@ -1,4 +1,4 @@
-package axle.ml.distance
+package axle.algebra.distance
 
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra.matrixOps

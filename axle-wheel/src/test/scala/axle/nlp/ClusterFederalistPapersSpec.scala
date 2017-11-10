@@ -29,8 +29,8 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
     }
 
     // import spire.implicits._
-    import axle.ml.distance._
-    import axle.ml.distance.Euclidean
+    import axle.algebra.distance._
+    import axle.algebra.distance.Euclidean
     import org.jblas.DoubleMatrix
     import axle.jblas.linearAlgebraDoubleMatrix
 

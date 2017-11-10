@@ -20,7 +20,7 @@ class KMeansSpecification
     import axle.jblas.linearAlgebraDoubleMatrix
     // import axle.jblas.additiveAbGroupDoubleMatrix
     import axle.jblas.rowVectorInnerProductSpace
-    import axle.ml.distance.Euclidean
+    import axle.algebra.distance.Euclidean
     import cats.kernel.Eq
 
     case class Foo(x: Double, y: Double)
@@ -90,8 +90,8 @@ class KMeansSpecification
     val irisesData = new Irises
 
     import org.jblas.DoubleMatrix
-    implicit val space: distance.Euclidean[DoubleMatrix, Double] = {
-      import axle.ml.distance.Euclidean
+    implicit val space: axle.algebra.distance.Euclidean[DoubleMatrix, Double] = {
+      import axle.algebra.distance.Euclidean
       import spire.implicits.IntAlgebra
       import spire.implicits.DoubleAlgebra
       import axle.jblas.linearAlgebraDoubleMatrix

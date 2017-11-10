@@ -1,4 +1,4 @@
-package axle.ml.distance
+package axle.algebra.distance
 
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace

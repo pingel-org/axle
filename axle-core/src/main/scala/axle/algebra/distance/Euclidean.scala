@@ -1,4 +1,4 @@
-package axle.ml.distance
+package axle.algebra.distance
 
 import spire.algebra.AdditiveAbGroup
 import spire.algebra.InnerProductSpace
