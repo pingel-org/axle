@@ -1,7 +1,7 @@
 package axle.pgm
 
 import axle.algebra.DirectedGraph
-import axle.stats.Distribution
+import axle.stats.Variable
 import cats.kernel.Eq
 import spire.algebra.Field
 import spire.implicits.IntAlgebra
@@ -21,23 +21,23 @@ object Direction {
 case class GenModel[T: Eq, N: Field, DG](
     graph: DG)(
         implicit finiteDG: Finite[DG, Int],
-        dg: DirectedGraph[DG, Distribution[T, N], Edge]) {
+        dg: DirectedGraph[DG, Variable[T], Edge]) {
 
-  def vertexPayloadToDistribution(mvp: T): Distribution[T, N] = ???
+  def vertexPayloadToDistribution(mvp: T): Variable[T] = ???
 
-  def randomVariables: Vector[Distribution[T, N]] =
+  def randomVariables: Vector[Variable[T]] =
     graph.vertices.toVector
 
-  def variable(name: String): Distribution[T, N] = ??? // TODO name2variable(name)
+  def variable(name: String): Variable[T] = ??? // TODO name2variable(name)
 
   def numVariables: Int = graph.size
 
   def blocks(
-    from: Set[Distribution[T, N]],
-    to: Set[Distribution[T, N]],
-    given: Set[Distribution[T, N]]): Boolean =
+    from: Set[Variable[T]],
+    to: Set[Variable[T]],
+    given: Set[Variable[T]]): Boolean =
     _findOpenPath(
-      Map.empty[Distribution[T, N], Set[Distribution[T, N]]],
+      Map.empty[Variable[T], Set[Variable[T]]],
       Direction.UNKNOWN,
       None,
       from,
@@ -49,18 +49,18 @@ case class GenModel[T: Eq, N: Field, DG](
   //  }
 
   def _findOpenPath(
-    visited: Map[Distribution[T, N], Set[Distribution[T, N]]],
+    visited: Map[Variable[T], Set[Variable[T]]],
     priorDirection: Int,
-    priorOpt: Option[Distribution[T, N]],
-    current: Set[Distribution[T, N]], // Note: this used to be mutabl.  I may have introduced bugs.
-    to: Set[Distribution[T, N]],
-    given: Set[Distribution[T, N]]): Option[List[Distribution[T, N]]] = {
+    priorOpt: Option[Variable[T]],
+    current: Set[Variable[T]], // Note: this used to be mutabl.  I may have introduced bugs.
+    to: Set[Variable[T]],
+    given: Set[Variable[T]]): Option[List[Variable[T]]] = {
 
-    lazy val logMessage = "_fOP: " + priorDirection +
-      ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
-      ", current = " + current.map(_.name).mkString(", ") +
-      ", to = " + to.map(_.name).mkString(", ") +
-      ", evidence = " + given.map(_.name).mkString(", ")
+//    lazy val logMessage = "_fOP: " + priorDirection +
+//      ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
+//      ", current = " + current.map(_.name).mkString(", ") +
+//      ", to = " + to.map(_.name).mkString(", ") +
+//      ", evidence = " + given.map(_.name).mkString(", ")
 
     (current -- priorOpt.map(visited).getOrElse(Set.empty)).toList.flatMap(variable => {
 
@@ -87,7 +87,7 @@ case class GenModel[T: Eq, N: Field, DG](
         } else {
           _findOpenPath(
             priorOpt.map(prior => {
-              visited + (prior -> (visited.get(prior).getOrElse(Set[Distribution[T, N]]()) ++ Set(variable)))
+              visited + (prior -> (visited.get(prior).getOrElse(Set[Variable[T]]()) ++ Set(variable)))
             }).getOrElse(visited),
             -1 * directionPriorToVar,
             Some(variable),

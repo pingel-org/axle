@@ -2,6 +2,8 @@ package axle.ml
 
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import spire.random.Generator.rng
+import axle.shuffle
 import axle.string
 
 class KMeansSpecification
@@ -13,15 +15,12 @@ class KMeansSpecification
     import spire.math.cos
     import spire.math.sin
     import spire.math.sqrt
-    import scala.util.Random.nextDouble
-    import scala.util.Random.nextGaussian
-    import scala.util.Random.shuffle
 
     import org.jblas.DoubleMatrix
     import axle.jblas.linearAlgebraDoubleMatrix
     // import axle.jblas.additiveAbGroupDoubleMatrix
     import axle.jblas.rowVectorInnerProductSpace
-    import axle.ml.distance.Euclidean
+    import axle.algebra.distance.Euclidean
     import cats.kernel.Eq
 
     case class Foo(x: Double, y: Double)
@@ -30,14 +29,14 @@ class KMeansSpecification
 
     def randomPoint(center: Foo, σ2: Double): Foo = {
       import spire.implicits.DoubleAlgebra
-      val distance = nextGaussian() * σ2
-      val angle = 2 * pi * nextDouble
+      val distance = rng.nextGaussian() * σ2
+      val angle = 2 * pi * rng.nextDouble
       Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
     }
 
     val data = shuffle(
       (0 until 20).map(i => randomPoint(Foo(100, 100), 0.1)) ++
-        (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))
+        (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))(rng)
     //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
     implicit val innerSpace = {
@@ -48,7 +47,7 @@ class KMeansSpecification
 
     implicit val space = {
       import spire.implicits.DoubleAlgebra
-      Euclidean[DoubleMatrix, Double]()
+      new Euclidean[DoubleMatrix, Double]()
     }
 
     implicit val fooEq = new Eq[Foo] {
@@ -64,7 +63,7 @@ class KMeansSpecification
       (p: Foo) => Seq(p.x, p.y),
       (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98),
       K = 2,
-      100)
+      100)(rng)
 
     val constructor = (features: Seq[Double]) => Foo(features(0), features(1))
 
@@ -91,13 +90,13 @@ class KMeansSpecification
     val irisesData = new Irises
 
     import org.jblas.DoubleMatrix
-    implicit val space: distance.Euclidean[DoubleMatrix, Double] = {
-      import axle.ml.distance.Euclidean
+    implicit val space: axle.algebra.distance.Euclidean[DoubleMatrix, Double] = {
+      import axle.algebra.distance.Euclidean
       import spire.implicits.IntAlgebra
       import spire.implicits.DoubleAlgebra
       import axle.jblas.linearAlgebraDoubleMatrix
       implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](2)
-      Euclidean[DoubleMatrix, Double]
+      new Euclidean[DoubleMatrix, Double]
     }
 
     import axle.ml.KMeans
@@ -136,7 +135,7 @@ class KMeansSpecification
         irisFeaturizer,
         normalizer,
         K = 3,
-        iterations = 20)(
+        iterations = 20)(rng)(
           Iris.irisEq,
           space,
           Functor[List[Iris], Iris, Seq[Double], List[Seq[Double]]],

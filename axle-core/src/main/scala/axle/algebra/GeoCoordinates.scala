@@ -83,8 +83,8 @@ object GeoCoordinates {
         geoCoordinatesMetricSpace[N]
 
       import angleConverter.radian
-      val ctn = ConvertableTo[N]
-      val half: N = ctn.fromRational(Rational(1, 2))
+      // val ctn = ConvertableTo[N]
+      // val half: N = ctn.fromRational(Rational(1, 2))
 
       def distance(v: GeoCoordinates[N], w: GeoCoordinates[N]): UnittedQuantity[Angle, N] =
         metricSpace.distance(v, w)

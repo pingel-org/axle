@@ -1,6 +1,5 @@
 package axle
 
-import axle.algebra.DirectedGraph
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
@@ -81,17 +80,14 @@ package object quanta {
 
     }
 
-  // [UnitOfMeasurement[Information], Double => Double]
   def unittedTicsGraphK2[Q, N: Field: Eq: Tics: Show, DG[_, _]](
     implicit base: UnitOfMeasurement[Q],
-    convert: UnitConverter[Q, N],
-    evDG: DirectedGraph[DG[UnitOfMeasurement[Q], N => N], UnitOfMeasurement[Q], N => N]): Tics[UnittedQuantity[Q, N]] =
+    convert: UnitConverter[Q, N]): Tics[UnittedQuantity[Q, N]] =
     unittedTics[Q, N, DG[UnitOfMeasurement[Q], N => N]]
 
   implicit def unittedTics[Q, N: Field: Eq: Tics: Show, DG](
     implicit base: UnitOfMeasurement[Q],
-    convert: UnitConverter[Q, N],
-    evDG: DirectedGraph[DG, UnitOfMeasurement[Q], N => N]): Tics[UnittedQuantity[Q, N]] =
+    convert: UnitConverter[Q, N]): Tics[UnittedQuantity[Q, N]] =
     new Tics[UnittedQuantity[Q, N]] {
 
       def tics(from: UnittedQuantity[Q, N], to: UnittedQuantity[Q, N]): Seq[(UnittedQuantity[Q, N], String)] =
@@ -106,8 +102,7 @@ package object quanta {
   implicit def unittedLengthSpace[Q, N: Field: Order: Signed](
     implicit base: UnitOfMeasurement[Q],
     space: LengthSpace[N, Double, N],
-    convert: UnitConverter[Q, N],
-    module: Module[UnittedQuantity[Q, N], N]) =
+    convert: UnitConverter[Q, N]) =
     new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N], N] {
 
       val field = Field[N]

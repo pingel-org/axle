@@ -110,7 +110,7 @@ trait AstNodeFormatter[R, S] {
     }
 
   def raw(element: String): AstNodeFormatter[R, S] = {
-    val f1 = this._indent
+    val _ = this._indent
     val lines = element.split("\n")
     val f2 = lines.size match {
       case 0 | 1 =>

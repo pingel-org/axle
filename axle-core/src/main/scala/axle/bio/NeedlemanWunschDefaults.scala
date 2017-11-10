@@ -37,6 +37,7 @@ object NeedlemanWunschDefaults {
       case ('T', 'G') => -3
       case ('T', 'C') => 0
       case ('T', 'T') => 8
+      case _          => 0 // TODO not reachable, but scalac doesn't know that
     }
     result.toDouble
   }

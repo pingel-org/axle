@@ -1,11 +1,11 @@
 package axle.visualize
 
-import axle.algebra.Plottable
-import axle.algebra.Zero
-import axle.stats.Distribution0
 import scala.annotation.implicitNotFound
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
+import axle.algebra.Plottable
+import axle.algebra.Zero
+import axle.stats.ProbabilityModel
 
 /**
  * implicits for Plot and BarChart
@@ -46,17 +46,18 @@ object DataView {
 
     }
 
-  implicit def distribution0DataView[X: Order, Y: Plottable: Zero: Order]: DataView[X, Y, Distribution0[X, Y]] =
-    new DataView[X, Y, Distribution0[X, Y]] {
+  implicit def probabilityDataView[X: Order, Y: Plottable: Zero: Order, M[_]](
+      implicit prob: ProbabilityModel[M, Y]): DataView[X, Y, M[X]] =
+    new DataView[X, Y, M[X]] {
 
       val yPlottable = Plottable[Y]
       val yZero = Zero[Y]
 
-      def keys(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys.toList.sorted
+      def keys(d: M[X]): Traversable[X] = prob.values(d)
 
-      def valueOf(d: Distribution0[X, Y], x: X): Y = d.probabilityOf(x)
+      def valueOf(d: M[X], x: X): Y = prob.probabilityOf(d, x)
 
-      def yRange(d: Distribution0[X, Y]): (Y, Y) = {
+      def yRange(d: M[X]): (Y, Y) = {
 
         val ks = keys(d)
 

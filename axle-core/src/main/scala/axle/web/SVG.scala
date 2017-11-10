@@ -37,8 +37,6 @@ import axle.visualize.element.Text
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import axle.algebra.DirectedGraph
-import axle.pgm.BayesianNetworkNode
 import axle.xml._
 
 @implicitNotFound("Witness not found for SVG[${S}]")
@@ -222,8 +220,6 @@ object SVG {
       def svg(t: Text): NodeSeq = {
 
         import t._
-
-        val angled = angle.isDefined
 
         val textBase =
           elem("text",
@@ -560,8 +556,7 @@ object SVG {
     }
 
   implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
-    implicit svgDGVis: SVG[DirectedGraphVisualization[DG]],
-    dg: DirectedGraph[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]): SVG[BayesianNetworkVisualization[T, N, DG]] = {
+    implicit svgDGVis: SVG[DirectedGraphVisualization[DG]]): SVG[BayesianNetworkVisualization[T, N, DG]] = {
     new SVG[BayesianNetworkVisualization[T, N, DG]] {
       def svg(vis: BayesianNetworkVisualization[T, N, DG]): NodeSeq = {
         import vis._

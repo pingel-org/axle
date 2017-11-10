@@ -15,7 +15,7 @@ class AngluinSpecification extends FunSuite with Matchers {
     val mShut = Symbol("shut")
     val mUp = Symbol("up")
 
-    val Σ = Alphabet(Set(mHi, mIm, mYour, mMother, mShut, mUp))
+    // val Σ = Alphabet(Set(mHi, mIm, mYour, mMother, mShut, mUp))
 
     val s1 = mHi :: mIm :: mYour :: mMother :: Nil
     val s2 = mShut :: mUp :: Nil

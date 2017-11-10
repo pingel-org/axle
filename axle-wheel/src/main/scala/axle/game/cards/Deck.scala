@@ -1,10 +1,11 @@
 package axle.game.cards
 
-import util.Random.shuffle
 import cats.Show
+import spire.random.Generator.rng
+import axle.shuffle
 import axle.string
 
-case class Deck(cards: IndexedSeq[Card] = shuffle(Deck.cards))
+case class Deck(cards: IndexedSeq[Card] = shuffle(Deck.cards)(rng))
 
 object Deck {
 

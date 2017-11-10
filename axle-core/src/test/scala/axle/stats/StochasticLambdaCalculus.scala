@@ -2,26 +2,31 @@ package axle.stats
 
 import org.scalatest._
 
+import cats.implicits._
+//import cats.syntax._
+import spire.math.Rational
+import spire.math.sqrt
 import axle.game.Dice.die
 import axle.math.Σ
-import spire.math.Rational
-import cats.implicits._
 
 class StochasticLambdaCalculus extends FunSuite with Matchers {
+
+  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
   test("iffy (stochastic if) maps fair boolean to d6 + (d6+d6)") {
 
     val distribution =
-      iffy(
+      iffy[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
         binaryDecision(Rational(1, 3)),
         die(6),
         for { a <- die(6); b <- die(6) } yield a + b)
 
-    distribution.probabilityOf(1) should be(Rational(1, 18))
+    prob.probabilityOf(distribution, 1) should be(Rational(1, 18))
 
-    distribution.probabilityOf(12) should be(Rational(1, 54))
+    prob.probabilityOf(distribution, 12) should be(Rational(1, 54))
 
-    Σ[Rational, IndexedSeq[Rational]](distribution.values map distribution.probabilityOf) should be(Rational(1))
+    Σ[Rational, IndexedSeq[Rational]](distribution.values map { v => prob.probabilityOf(distribution, v) }) should be(Rational(1))
   }
 
   test("π estimation by testing a uniform subset of the unit square gets in the ballpark of π") {
@@ -35,12 +40,12 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
     // However, there should be a way to utilize the "if" statement to
     // reduce the complexity.
 
-    val piDist: Distribution0[Int, Rational] = for {
-      x <- uniformDistribution(0 to n, "x")
-      y <- uniformDistribution(0 to n, "y")
-    } yield if (spire.math.sqrt((x * x + y * y).toDouble) <= n) 1 else 0
+    val piDist = for {
+      x <- uniformDistribution(0 to n, Variable[Int]("x"))
+      y <- uniformDistribution(0 to n, Variable[Int]("y"))
+    } yield if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0
 
-    4 * piDist.probabilityOf(1) should be > Rational(3)
+    4 * prob.probabilityOf(piDist, 1) should be > Rational(3)
   }
 
 }

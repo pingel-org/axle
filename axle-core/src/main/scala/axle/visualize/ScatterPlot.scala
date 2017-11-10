@@ -4,7 +4,6 @@ import axle.algebra.LengthSpace
 import axle.algebra.Tics
 import axle.visualize.Color.black
 import axle.visualize.element._
-import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
@@ -46,8 +45,7 @@ case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
     yAxisLabel: Option[String] = None)(
         implicit val lengthX: LengthSpace[X, X, Double],
         val lengthY: LengthSpace[Y, Y, Double],
-        val dataView: ScatterDataView[X, Y, D],
-        showS: Show[S]) {
+        val dataView: ScatterDataView[X, Y, D]) {
 
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold = true))
 

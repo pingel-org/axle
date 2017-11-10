@@ -6,7 +6,7 @@ package axle.game
  *
  */
 
-import axle.stats.Distribution0
+import axle.stats.ConditionalProbabilityTable0
 import spire.math.Rational
 import cats.implicits._
 
@@ -26,10 +26,11 @@ package object montyhall {
 
       def strategyFor(
         game: MontyHall,
-        player: Player): (MontyHall, MontyHallState) => Distribution0[MontyHallMove, Rational] =
+        player: Player): (MontyHall, MontyHallState) => ConditionalProbabilityTable0[MontyHallMove, Rational] =
         player match {
           case game.contestant => game.contestantStrategy
           case game.monty      => game.montyStrategy
+          case _               => game.contestantStrategy // TODO unreachable
         }
 
       def isValid(
@@ -128,6 +129,7 @@ package object montyhall {
         player match {
           case g.contestant => g.contestantDisplayer
           case g.monty      => g.montyDisplayer
+          case _            => g.contestantDisplayer
         }
 
       def parseMove(g: MontyHall, input: String): Either[String, MontyHallMove] =

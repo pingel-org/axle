@@ -1,22 +1,18 @@
 package axle.game
 
 import scala.Stream.cons
-import scala.util.Random.nextInt
-
-import axle.stats.Distribution0
-import axle.stats.ConditionalProbabilityTable0
 
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
+
 import spire.math.Rational
 import spire.algebra.Ring
-import spire.implicits._
-import spire.random.Dist
+
+import axle.stats.ConditionalProbabilityTable0
+import axle.stats.Variable
 
 object Strategies {
-
-  implicit val distDouble = implicitly[Dist[Double]].map(Rational.apply)
 
   def outcomeRingHeuristic[G, S, O, M, MS, MM, N: Ring](game: G, f: (O, Player) => N)(
     implicit evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
@@ -26,20 +22,24 @@ object Strategies {
     }).toMap
 
   def aiMover[G, S, O, M, MS, MM, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
-    implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => Distribution0[M, Rational] =
+    implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
     (ttt: G, state: S) => {
+      import spire.implicits._
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
-      ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)))
+      val v = Variable[M]("ai move")
+      ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
     }
 
   def hardCodedStringStrategy[G, S, O, M, MS, MM](
     input: (G, MS) => String)(
       implicit evGame: Game[G, S, O, M, MS, MM],
-      evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
+      evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
     (game: G, state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
-      ConditionalProbabilityTable0[M, Rational](Map(validated.right.toOption.get -> Rational(1)))
+      val move = validated.right.toOption.get
+      val v = Variable[M]("hard-coded")
+      ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
     }
 
   def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
@@ -51,14 +51,14 @@ object Strategies {
 
   def interactiveMove[G, S, O, M, MS, MM](
     implicit evGame: Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
     (game: G, state: MS) => {
 
       val mover = evGame.moverM(game, state).get // TODO .get
 
       val display = evGameIO.displayerFor(game, mover)
 
-      val stream = userInputStream(display, axle.getLine).
+      val stream = userInputStream(display, () => axle.getLine).
         map(input => {
           val parsed = evGameIO.parseMove(game, input)
           parsed.left.foreach(display)
@@ -69,14 +69,17 @@ object Strategies {
           })
         })
 
-      ConditionalProbabilityTable0[M, Rational](Map(stream.find(esm => esm.isRight).get.right.toOption.get -> Rational(1)))
+      val move = stream.find(esm => esm.isRight).get.right.toOption.get
+      val v = Variable[M]("interactive")
+      ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
     }
 
-  def randomMove[G, S, O, M, MS, MM](implicit evGame: Game[G, S, O, M, MS, MM]): (G, MS) => Distribution0[M, Rational] =
+  def randomMove[G, S, O, M, MS, MM](implicit evGame: Game[G, S, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
     (game: G, state: MS) => {
-      val opens = evGame.moves(game, state).toList
+      val opens = evGame.moves(game, state).toVector
       val p = Rational(1L, opens.length.toLong)
-      ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap)
+      val v = Variable[M]("random")
+      ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap, v)
     }
 
   /**
@@ -108,9 +111,7 @@ object Strategies {
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
       }
     })
-    val bestValue = moveValue.map(mcr => (mcr._3)(mover)).max
-    val matches = moveValue.filter(mcr => (mcr._3)(mover) === bestValue).toIndexedSeq
-    matches(nextInt(matches.length))
+    moveValue.maxBy(mcr => (mcr._3)(mover))
   }
 
   /**
