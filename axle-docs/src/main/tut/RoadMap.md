@@ -6,43 +6,26 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.4.2 (October 2017)
-* `axle.dummy` for a handful of scanLeft calls
-* `axle.ml.GeneticAlgorithm`
-  * `axle.poly` package for `Mixer` and `Mutator` of `HLists`, suitable for `RightFolder` with a `spire.random.Generator`
+## 0.5.0 (November 2017)
+* Move to Scala 2.12
+* Remove `axle-spark` (Spark "spoke") for now
+* `axle.ml.GeneticAlgorithm` rewritten in terms of [kittens](https://github.com/milessabin/kittens)
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
+* Move `axle.ml.distance` to `axle.algebra.distance`
+* `axle.dummy` for a handful of scanLeft calls
 * Redo `axle.stats`
   * `ProbabilityModel` typeclass (refactored from `Distribution`)
   * `Variable` instead of `RandomVariable`
   * remove `Bayes`
 
+  * sync master
   * Fix GeneticAlgorithmSpec
-
-  * eliminate rationalProbabilityDist usage by introducing new `Probability` (or some such) typeclass
-  * Kolmogorov's axiom's of probability
-  * Finish NaiveBayesClassifier
-  * What to do with TD1 and CPT2? Fix "cpt" in InformationTheorySpec
-  * Fix ProbabilitySpec
-  * ProbabilityModel.probabilityOfNot ProbabilityModel.conditionNot
-  * Rename TallyDistribution0 and ConditionalProbabilityTable0 to Tally0 and ProbabilityTable0, respectively
-
   * Check Monad[ProbabilityModel] with discipline (needs axle.stats.ProbabilityModel.monad.tailRecM)
-  * Syntax for ProbabilityModel.probabilityOf, observe, etc
-  * Avoid these:
-     implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-     val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
-  * Mandelbrot with Rational
+  * Remove Spark impacts on Functor, etc, and just use Cats versions
   * fix tut and site
-  * publish artifact  
-
-## 0.5.0 (December 2017)
-* Remove Spark spoke
-* Remove Spark impacts on Functor, etc, and just use Cats versions
-* Replace type lambdas with kind projector
-* Publish Scala 2.12 artifacts
-* Update cats to 1.0.0
 
 ## 0.5.1 (January 2017)
+
 * game theory axioms
 * axle.game: Observable[T]
 * move state dist stream
@@ -51,11 +34,30 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Game.strategyFor should return a M[_] type upon which the ProbabilityModel[M, Rational] can act
 * replace some refs to {CPT0,TallyDist0} with ProbabilityModel
 
+  * eliminate rationalProbabilityDist usage by introducing new `Probability` (or some such) typeclass
+  * Kolmogorov's axiom's of probability
+  * Finish NaiveBayesClassifier
+  * What to do with TD1 and CPT2? Fix "cpt" in InformationTheorySpec
+  * Fix NaiveBayesSpec
+  * Fix ProbabilitySpec
+  * ProbabilityModel.probabilityOfNot ProbabilityModel.conditionNot
+  * Rename TallyDistribution0 and ConditionalProbabilityTable0 to Tally0 and ProbabilityTable0, respectively
+
+
 ## 0.5.2 (February 2018)
-* Heterogenous Model types
-* ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
+* Update cats to 1.0.0
+* Demo Mandelbrot with Rational
+* Fix "unreachable" default pattern match cases
+* Make sure animation doc has right return value
+* Replace type lambdas with kind projector
+* Syntax for ProbabilityModel.probabilityOf, observe, etc
+* Avoid these:
+     implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+     val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
 ## 0.5.3 (Spring 2018)
+* Heterogenous Model types
+* ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 * Bayes Theorem
 * Hypothesis testing
 * Describing Data
@@ -66,7 +68,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Accuracy, Precision
 * Bias, Variance
 * Normalizer axioms
-* Make sure animation doc has right return value
 
 ## 0.5.4 (May 2018)
 * P / Case expression DSL
