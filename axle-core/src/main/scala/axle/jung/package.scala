@@ -2,7 +2,6 @@ package axle
 
 import java.awt.Dimension
 import edu.uci.ics.jung.algorithms.layout.FRLayout
-import edu.uci.ics.jung.visualization.DefaultVisualizationModel
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import scala.collection.JavaConverters._
@@ -416,7 +415,6 @@ package object jung {
 
         val layout = new FRLayout(dg)
         layout.setSize(new Dimension(width, height))
-        val visualization = new DefaultVisualizationModel(layout)
 
         val lines: List[Node] = dg.getEdges.asScala.map { edge =>
           <line x1={ s"${layout.getX(dg.getSource(edge))}" } y1={ s"${layout.getY(dg.getSource(edge))}" } x2={ s"${layout.getX(dg.getDest(edge))}" } y2={ s"${layout.getY(dg.getDest(edge))}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
@@ -476,7 +474,6 @@ package object jung {
 
       val layout = new FRLayout(ug)
       layout.setSize(new Dimension(width, height))
-      val visualization = new DefaultVisualizationModel(layout)
 
       val lines: List[Node] = ug.getEdges.asScala.map { edge =>
         val (v1, v2) = ug.vertices(edge)

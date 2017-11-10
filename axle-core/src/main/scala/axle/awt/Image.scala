@@ -30,7 +30,7 @@ object Image {
       val frame = AxleFrame(minSize.width, minSize.height)
       frame.setUndecorated(true)
       frame.initialize()
-      val rc = frame.add(component)
+      frame.add(component) // returns Component
       // rc.setVisible(true)
       frame.setVisible(true)
 

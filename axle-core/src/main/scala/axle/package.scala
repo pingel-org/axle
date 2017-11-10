@@ -204,8 +204,7 @@ package object axle {
    */
 
   def mergeStreams[T](streams: Seq[Stream[T]])(
-    implicit eqT: Eq[T],
-    orderT: Order[T]): Stream[T] = {
+    implicit orderT: Order[T]): Stream[T] = {
 
     val frontier = streams.flatMap(_.headOption)
 

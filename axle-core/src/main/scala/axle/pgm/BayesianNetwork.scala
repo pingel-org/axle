@@ -338,8 +338,9 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def factorElimination2[UG](
     Q: Set[Variable[T]],
     τ: EliminationTree[T, N, UG],
-    f: Factor[T, N])(
-      implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]): (BayesianNetwork[T, N, DG], Factor[T, N]) = {
+    f: Factor[T, N])
+    // (implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge])
+    : (BayesianNetwork[T, N, DG], Factor[T, N]) = {
     //    while (τ.graph.vertices.size > 1) {
     //      // remove node i (other than r) that has single neighbor j in τ
     //      val fl = τ.graph.firstLeafOtherThan(τ.graph.findVertex(_ === f).get)

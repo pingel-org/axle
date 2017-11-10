@@ -6,7 +6,6 @@ import axle.algebra.Functor
 import axle.algebra.Finite
 import axle.algebra.SetFrom
 import axle.algebra.MapReducible
-import axle.algebra.MapFrom
 import axle.syntax.linearalgebra._
 import axle.syntax.functor._
 import axle.syntax.finite._
@@ -26,8 +25,7 @@ case class ConfusionMatrix[T, CLASS: Order, L: Order, F, M, G, H](
         functorF: Functor[F, T, (L, CLASS), G],
         functorG: Functor[G, (L, CLASS), L, H],
         sf: SetFrom[H, L],
-        mr: MapReducible[G, (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]],
-        mf: MapFrom[List[(L, Int)], L, Int]) {
+        mr: MapReducible[G, (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]]) {
 
   val label2clusterId = data.map(datum => (labelExtractor(datum), classifier(datum)))
 
@@ -79,8 +77,8 @@ object ConfusionMatrix {
       functorF: Functor[U[T], T, (L, CLASS), U[(L, CLASS)]],
       functorG: Functor[U[(L, CLASS)], (L, CLASS), L, U[L]],
       sf: SetFrom[U[L], L],
-      mr: MapReducible[U[(L, CLASS)], (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]],
-      mf: MapFrom[List[(L, Int)], L, Int]): ConfusionMatrix[T, CLASS, L, U[T], M, U[(L, CLASS)], U[L]] =
+      mr: MapReducible[U[(L, CLASS)], (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]]
+      ): ConfusionMatrix[T, CLASS, L, U[T], M, U[(L, CLASS)], U[L]] =
     ConfusionMatrix(classifier, data, labelExtractor, classes)
 
 }

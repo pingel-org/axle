@@ -192,7 +192,7 @@ package object awt {
 
           import view._
 
-          val fontMetrics = g2d.getFontMetrics
+          // val fontMetrics = g2d.getFontMetrics
           titleText.foreach(Paintable[Text].paint(_, g2d))
           Paintable[HorizontalLine[Double, Y]].paint(hLine, g2d)
           Paintable[VerticalLine[Double, Y]].paint(vLine, g2d)
@@ -232,18 +232,18 @@ package object awt {
    *
    */
 
-  def image2file[T: Image](t: T, filename: String, encoding: String): Unit = {
+  def image2file[T: Image](t: T, filename: String, encoding: String): Boolean = {
     val image = Image[T].image(t)
-    val rc = ImageIO.write(image, encoding, new File(filename))
+    ImageIO.write(image, encoding, new File(filename)) // returns Boolean
   }
 
-  def png[T: Image](t: T, filename: String): Unit = image2file(t, filename, "PNG")
+  def png[T: Image](t: T, filename: String): Boolean = image2file(t, filename, "PNG")
 
-  def jpeg[T: Image](t: T, filename: String): Unit = image2file(t, filename, "JPEG")
+  def jpeg[T: Image](t: T, filename: String): Boolean = image2file(t, filename, "JPEG")
 
-  def gif[T: Image](t: T, filename: String): Unit = image2file(t, filename, "gif")
+  def gif[T: Image](t: T, filename: String): Boolean = image2file(t, filename, "gif")
 
-  def bmp[T: Image](t: T, filename: String): Unit = image2file(t, filename, "BMP")
+  def bmp[T: Image](t: T, filename: String): Boolean = image2file(t, filename, "BMP")
 
   implicit def paintDataLines[S, X, Y, D]: Paintable[DataLines[S, X, Y, D]] = new Paintable[DataLines[S, X, Y, D]] {
 
@@ -464,7 +464,7 @@ package object awt {
       import key._
 
       g2d.setFont(cachedFont(plot.fontName, plot.fontSize, plot.bold))
-      val fontMetrics = g2d.getFontMetrics
+      // val fontMetrics = g2d.getFontMetrics
 
       val lineHeight = g2d.getFontMetrics.getHeight
       data.zipWithIndex foreach {

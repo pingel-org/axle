@@ -15,7 +15,7 @@ class GoldSpecification extends FunSuite with Matchers {
     val mShut = Morpheme("shut")
     val mUp = Morpheme("up")
 
-    val Σ = Vocabulary(Set(mHi, mIm, mYour, mMother, mShut, mUp))
+    // val Σ = Vocabulary(Set(mHi, mIm, mYour, mMother, mShut, mUp))
 
     val s1 = mHi :: mIm :: mYour :: mMother :: Nil
     val s2 = mShut :: mUp :: Nil

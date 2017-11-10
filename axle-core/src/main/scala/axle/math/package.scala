@@ -81,8 +81,8 @@ package object math {
     angle: UnittedQuantity[Angle, N],
     sphereRadius: UnittedQuantity[Distance, N])(
       implicit angleConverter: AngleConverter[N],
-      ctn: ConvertableTo[N],
-      angleModule: Module[UnittedQuantity[Angle, N], N],
+      //ctn: ConvertableTo[N],
+      //angleModule: Module[UnittedQuantity[Angle, N], N],
       distanceModule: Module[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
     sphereRadius :* ((angle in angleConverter.radian).magnitude)
 
@@ -369,8 +369,7 @@ package object math {
     field: Field[N],
     zipper: Zipper[F, N, F, N, G],
     agg: Aggregatable[F, N, N],
-    scanner: Scanner[G, (N, N), N, F],
-    functor: Functor[F, N, N, F]): F = {
+    scanner: Scanner[G, (N, N), N, F]): F = {
 
     val initial: N = arithmeticMean(xs.take(size))
 
@@ -388,7 +387,6 @@ package object math {
     zipper: Zipper[F, N, F, N, G],
     agg: Aggregatable[F, N, N],
     scanner: Scanner[G, (N, N), N, F],
-    functor: Functor[F, N, N, F],
     fin: Finite[F, Int],
     nroot: NRoot[N]): F = {
 

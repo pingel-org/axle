@@ -2,8 +2,6 @@ package axle.visualize
 
 import org.scalatest._
 
-import scala.Vector
-
 import cats.implicits._
 import spire.implicits.DoubleAlgebra
 import spire.math.Rational
@@ -42,10 +40,6 @@ class BarChartSpec extends FunSuite with Matchers {
   }
 
   test("BarChartGrouped render an SVG of fruit sales") {
-
-    val fruits = Vector("apple", "banana", "coconut")
-
-    val years = Vector(2011, 2012)
 
     val sales = Map(
       ("apple", 2011) -> 43.0,

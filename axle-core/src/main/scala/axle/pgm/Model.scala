@@ -56,11 +56,11 @@ case class GenModel[T: Eq, N: Field, DG](
     to: Set[Variable[T]],
     given: Set[Variable[T]]): Option[List[Variable[T]]] = {
 
-    lazy val logMessage = "_fOP: " + priorDirection +
-      ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
-      ", current = " + current.map(_.name).mkString(", ") +
-      ", to = " + to.map(_.name).mkString(", ") +
-      ", evidence = " + given.map(_.name).mkString(", ")
+//    lazy val logMessage = "_fOP: " + priorDirection +
+//      ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
+//      ", current = " + current.map(_.name).mkString(", ") +
+//      ", to = " + to.map(_.name).mkString(", ") +
+//      ", evidence = " + given.map(_.name).mkString(", ")
 
     (current -- priorOpt.map(visited).getOrElse(Set.empty)).toList.flatMap(variable => {
 

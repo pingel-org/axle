@@ -24,8 +24,9 @@ object JoinTree {
 }
 
 case class JoinTree[T: Eq, N: Field, UG](
-    graph: UG)(
-        implicit ug: UndirectedGraph[UG, Set[Variable[T]], JoinTreeEdge]) {
+    graph: UG)
+    // (implicit ug: UndirectedGraph[UG, Set[Variable[T]], JoinTreeEdge])
+    {
 
   //  def addToCluster(n: GV, v: Distribution[_]): Unit = n.getPayload += v
   //
