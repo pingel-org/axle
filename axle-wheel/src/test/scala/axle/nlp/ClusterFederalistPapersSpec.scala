@@ -39,7 +39,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
       import spire.implicits.DoubleAlgebra
       // import axle.jblas.moduleDoubleMatrix
       implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](numDimensions)
-      Euclidean[DoubleMatrix, Double]
+      new Euclidean[DoubleMatrix, Double]
     }
 
     import axle.ml.KMeans

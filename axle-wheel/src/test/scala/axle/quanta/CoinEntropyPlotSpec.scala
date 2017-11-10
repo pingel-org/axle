@@ -27,10 +27,6 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
     implicit val id =
       Information.converterGraphK2[Double, DirectedSparseGraph]
 
-    implicit val idg = id.conversionGraph
-
-    type DG = DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]
-
     implicit val or: Order[Rational] = new cats.kernel.Order[Rational] {
       val ord = Order[Double]
       def compare(x: Rational, y: Rational): Int = ord.compare(x.toDouble, y.toDouble)
@@ -67,7 +63,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
       title = Some("Entropy")) // (zr, tr, er, lsrrd, zuqid, tuqid, euqid, lsuqiddd, pdv)
 
     import axle.web._
-    val d = SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
+    SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
 
     val svgName = "coinentropyplot.svg"
     svg(plot, svgName)

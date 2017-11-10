@@ -89,8 +89,8 @@ class ScalaFigures extends FunSuite with Matchers {
       Vector(D is false, E is true) -> Rational(112, 1000),
       Vector(D is false, E is false) -> Rational(248, 1000)))
 
-    val h = (cptB.sumOut(D)).sumOut(C)
-    val m = cptB * cptD
+    (cptB.sumOut(D)).sumOut(C)
+    cptB * cptD
 
     (cptB, cptD)
   }
@@ -119,7 +119,7 @@ class ScalaFigures extends FunSuite with Matchers {
         B -> bFactor,
         C -> cFactor))
 
-    val pB = (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C)
+    (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C) // pB
 
     bn
   }

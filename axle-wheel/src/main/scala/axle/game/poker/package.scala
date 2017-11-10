@@ -214,6 +214,7 @@ package object poker {
               case (_, 3) => Turn()
               case (_, 4) => River()
               case (_, 5) => Payout()
+              case (_, _) => Payout() // TODO unreachable
             }) :: Nil
           } else {
             val maxPersonalRaise = s.piles(mvr) + s.inFors.get(mvr).getOrElse(0) - s.currentBet

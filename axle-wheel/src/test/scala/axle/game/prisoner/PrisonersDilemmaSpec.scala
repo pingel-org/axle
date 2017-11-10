@@ -52,7 +52,7 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
-    val nextMove = moves(game, state).head
+    val _ = moves(game, state).head // dropping "nextMove"
     val newStart = startFrom(game, nextState).get
     moves(game, newStart) should have length 2
     outcome(game, state) should be(None)

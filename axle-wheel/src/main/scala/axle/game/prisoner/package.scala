@@ -31,6 +31,7 @@ package object prisoner {
         player match {
           case game.p1 => game.p1Strategy
           case game.p2 => game.p2Strategy
+          case _       => game.p1Strategy // TODO unreachable
         }
 
       def isValid(
@@ -103,6 +104,7 @@ package object prisoner {
             case (Silence(), Betrayal())  => Some(PrisonersDilemmaOutcome(3, 0))
             case (Betrayal(), Silence())  => Some(PrisonersDilemmaOutcome(0, 3))
             case (Betrayal(), Betrayal()) => Some(PrisonersDilemmaOutcome(2, 2))
+            case (_, _)                   => None // TODO unreachable
           }
           case _ => None
         }
@@ -117,6 +119,7 @@ package object prisoner {
         player match {
           case g.p1 => g.p1Displayer
           case g.p2 => g.p2Displayer
+          case _    => g.p1Displayer // TODO unreachable
         }
 
       def parseMove(g: PrisonersDilemma, input: String): Either[String, PrisonersDilemmaMove] =

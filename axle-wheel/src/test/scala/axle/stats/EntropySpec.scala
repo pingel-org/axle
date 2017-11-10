@@ -33,7 +33,7 @@ class EntropySpec extends FunSuite with Matchers {
 
     val lhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 100))
     val rhs: UnittedQuantity[Information, Double] = biasToEntropy(Rational(1, 2))
-    implicit val base = id.bit
+    // val base = id.bit
 
     lhs should be < rhs
   }

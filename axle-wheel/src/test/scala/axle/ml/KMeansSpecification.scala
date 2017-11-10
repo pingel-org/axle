@@ -47,7 +47,7 @@ class KMeansSpecification
 
     implicit val space = {
       import spire.implicits.DoubleAlgebra
-      Euclidean[DoubleMatrix, Double]()
+      new Euclidean[DoubleMatrix, Double]()
     }
 
     implicit val fooEq = new Eq[Foo] {
@@ -96,7 +96,7 @@ class KMeansSpecification
       import spire.implicits.DoubleAlgebra
       import axle.jblas.linearAlgebraDoubleMatrix
       implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](2)
-      Euclidean[DoubleMatrix, Double]
+      new Euclidean[DoubleMatrix, Double]
     }
 
     import axle.ml.KMeans

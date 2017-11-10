@@ -16,7 +16,7 @@ class ManhattanSpec
     extends FunSuite with Matchers
     with Discipline {
 
-  implicit val space = Manhattan[DoubleMatrix, Int, Int, Int]()
+  implicit val space = new Manhattan[DoubleMatrix, Int, Int, Int]()
 
   val m = 1
   val n = 2

@@ -69,10 +69,10 @@ class ABE extends FunSuite with Matchers {
 
     val sansAll: Factor[Boolean, Rational] = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 
-    val abe = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
+    (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E) // dropping "abe"
 
-    val Q: Set[Variable[Boolean]] = Set(E, B, A)
-    val order = List(J, M)
+    // val Q: Set[Variable[Boolean]] = Set(E, B, A)
+    // val order = List(J, M)
 
     // val afterVE = bn.variableEliminationPriorMarginalI(Q, order)
     // val afterVE = bn.variableEliminationPriorMarginalII(Q, order, E is true)

@@ -25,16 +25,16 @@ class QuantaSpec extends FunSuite with Matchers {
     val d2 = Rational(7, 2) *: meter
     val t1 = Rational(4) *: second
     val t2 = Rational(9, 88) *: second
-    val t3 = Rational(5d) *: second
-    val t4 = 10 *: second
+    Rational(5d) *: second
+    10 *: second
 
-    val d3 = d1 + d2
-    val d4 = d2 - d2
+    d1 + d2
+    d2 - d2
 
-    val t5 = t2 in minute
-    val t6 = t1 :* Rational(5, 2)
+    t2 in minute
+    t1 :* Rational(5, 2)
     val t8 = Rational(5, 3) *: (t1 in minute)
-    val t9 = t1 :* 60
+    t1 :* 60
 
     t8.magnitude should be(Rational(1, 9))
   }

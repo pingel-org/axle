@@ -30,6 +30,7 @@ package object montyhall {
         player match {
           case game.contestant => game.contestantStrategy
           case game.monty      => game.montyStrategy
+          case _               => game.contestantStrategy // TODO unreachable
         }
 
       def isValid(
@@ -128,6 +129,7 @@ package object montyhall {
         player match {
           case g.contestant => g.contestantDisplayer
           case g.monty      => g.montyDisplayer
+          case _            => g.contestantDisplayer
         }
 
       def parseMove(g: MontyHall, input: String): Either[String, MontyHallMove] =

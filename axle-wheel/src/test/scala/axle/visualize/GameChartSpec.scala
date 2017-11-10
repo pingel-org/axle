@@ -2,16 +2,10 @@ package axle.visualize
 
 import org.scalatest._
 
-import axle.algebra.modules.doubleDoubleModule
-import axle.algebra.modules.doubleRationalModule
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling.stateDistribution
 import axle.game.Bowling.monad
-import axle.jung.directedGraphJung
-import axle.quanta.Angle
 import axle.stats.ConditionalProbabilityTable0
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 import spire.math.Rational
 import cats.implicits._
@@ -24,7 +18,7 @@ class GameChartSpec extends FunSuite with Matchers {
 
     val scoreD = stateD.map(_.tallied)
 
-    implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
+    // implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
     // test implicit conjuring:
 

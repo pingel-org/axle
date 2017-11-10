@@ -44,6 +44,7 @@ class AlignDNA extends FunSuite with Matchers {
 
     nwAlignment should be(("ATGCGGCC--".toIndexedSeq, "AT-C-GCCGG".toIndexedSeq))
     score should be(32d)
+    score should be(scoreK1)
     space.distance(dna1, dna2) should be(score)
   }
 

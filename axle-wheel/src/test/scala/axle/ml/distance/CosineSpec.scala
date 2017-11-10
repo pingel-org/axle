@@ -18,7 +18,7 @@ class CosineSpec
 
   val n = 2
   implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](n)
-  implicit val space = Cosine[DoubleMatrix, Double]()
+  implicit val space = new Cosine[DoubleMatrix, Double]()
 
   implicit val pred: Predicate[Double] = new Predicate[Double] {
     def apply(a: Double) = true

@@ -86,6 +86,7 @@ class PokerSpec extends FunSuite with Matchers {
         case (3, _) => "call"
         case (4, _) => "call"
         case (5, _) => "fold"
+        case (_, _) => "call" // TODO unreachable
       }
 
     val game = Poker(Vector(
@@ -96,7 +97,7 @@ class PokerSpec extends FunSuite with Matchers {
     val start = startState(game)
     val history = moveStateStream(game, start, rng).toVector
     val lastState = history.last._3
-    val lastStateByPlay = play(game, rng) // TODO make use of this
+    val _ = play(game, rng) // TODO make use of this "lastStateByPlay"
 
     val o = outcome(game, lastState).get
     val newGameState = startFrom(game, lastState).get

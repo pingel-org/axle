@@ -1,6 +1,5 @@
 package axle.game
 
-import axle.string
 import axle.stats.ConditionalProbabilityTable0
 import spire.math.Rational
 import cats.implicits._
@@ -97,7 +96,7 @@ Tic Tac Toe
 Moves are numbers 1-%s.""".format(ttt.numPositions)
 
       def displayStateTo(game: TicTacToe, s: TicTacToeState, observer: Player): String = {
-        val keyWidth = string(s.numPositions).length
+        // val keyWidth = string(s.numPositions).length
 
         "Board:         Movement Key:\n" +
           0.until(s.boardSize).map(r => {

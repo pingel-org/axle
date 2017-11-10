@@ -24,7 +24,7 @@ class EuclideanSpec
   // TODO Double value type
   implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](n)
 
-  implicit val space = Euclidean[DoubleMatrix, Double]()
+  implicit val space = new Euclidean[DoubleMatrix, Double]()
 
   implicit val arbMatrix: Arbitrary[DoubleMatrix] =
     Arbitrary(LinearAlgebra.genMatrix[DoubleMatrix, Double](1, n, -100000d, 100000d))
