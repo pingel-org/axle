@@ -3,83 +3,81 @@ package axle
 import scala.Stream.cons
 import scala.Vector
 import scala.language.implicitConversions
-import scala.util.Random.nextDouble
-import scala.util.Random.nextInt
+
+import cats.kernel.Eq
+import cats.implicits._
+import spire.algebra.Field
+
+import spire.algebra.NRoot
+import spire.algebra.Ring
+import spire.implicits.additiveGroupOps
+import spire.implicits.literalIntAdditiveGroupOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.nrootOps
+import spire.implicits.semiringOps
+import spire.math.log
+import spire.math.ConvertableFrom
+import spire.math.ConvertableTo
+import spire.math.Rational
+import spire.random.Dist
+import spire.random.Generator
 
 import axle.math.Σ
-import axle.algebra.Finite
 import axle.algebra.Functor
 import axle.algebra.Aggregatable
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
 import axle.syntax.functor.functorOps
-import spire.algebra.AdditiveMonoid
-import cats.kernel.Eq
-import cats.implicits._
-import spire.algebra.Field
-import spire.algebra.NRoot
-import cats.kernel.Order
-import spire.algebra.Ring
-import spire.implicits.additiveGroupOps
-import spire.implicits.convertableOps
-import spire.implicits.literalIntAdditiveGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.nrootOps
-import spire.implicits.semiringOps
-import spire.math.ConvertableFrom
-import spire.math.ConvertableTo
-import spire.math.Rational
-import spire.random.Dist
 
 package object stats {
 
   implicit val rationalProbabilityDist: Dist[Rational] = {
-    val biggishInt = 1000000
-    val x = (i: Int) => Rational(i.toLong, biggishInt.toLong)
-    val y = Dist.intrange(0, biggishInt)
+    val denominator = Integer.MAX_VALUE - 1 // 1000000
+    val x = (i: Int) => Rational(i.toLong, denominator.toLong)
+    val y = Dist.intrange(0, denominator)
     Dist(x)(y)
   }
 
-  //implicit def evalProbability[N]: Probability[N] => N = _()
-
-  implicit def enrichCaseGenTraversable[A: Manifest, N: Field](cgt: Iterable[Case[A, N]]): EnrichedCaseGenTraversable[A, N] = EnrichedCaseGenTraversable(cgt)
+  implicit def enrichCaseGenTraversable[R, A: Manifest, N: Field](cgt: Iterable[CaseIs[A]]): EnrichedCaseGenTraversable[R, A, N] =
+    EnrichedCaseGenTraversable(cgt)
 
   val sides = Vector('HEAD, 'TAIL)
 
-  def coin(pHead: Rational = Rational(1, 2)): Distribution[Symbol, Rational] =
+  def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable0[Symbol, Rational] =
     ConditionalProbabilityTable0[Symbol, Rational](
-      Map('HEAD -> pHead, 'TAIL -> (1 - pHead)), "coin")
+      Map('HEAD -> pHead,
+          'TAIL -> (1 - pHead)),
 
-  def binaryDecision(yes: Rational): Distribution0[Boolean, Rational] =
-    ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), s"binaryDecision $yes")
+    Variable(s"coin $pHead"))
 
-  def uniformDistribution[T](values: Seq[T], name: String): Distribution0[T, Rational] = {
+  def binaryDecision(yes: Rational): ConditionalProbabilityTable0[Boolean, Rational] =
+    ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), Variable("binary"))
+
+  def uniformDistribution[T](values: Seq[T], variable: Variable[T]): ConditionalProbabilityTable0[T, Rational] = {
 
     val dist = values.groupBy(identity).mapValues({ ks => Rational(ks.size.toLong, values.size.toLong) }).toMap
 
-    ConditionalProbabilityTable0(dist, name)
+    ConditionalProbabilityTable0(dist, variable)
   }
 
-  def iffy[C: Eq, N: Field: Order: Dist](
-    decision: Distribution0[Boolean, N],
-    trueBranch: Distribution[C, N],
-    falseBranch: Distribution[C, N]): Distribution0[C, N] = {
+  def iffy[T, N, C[_], M[_]](
+    conditionModel: C[Boolean],
+    trueBranchModel: M[T],
+    falseBranchModel: M[T])(
+      implicit pIn: ProbabilityModel[C, N],
+      pOut: ProbabilityModel[M, N]): M[T] = {
 
-    val addN = implicitly[AdditiveMonoid[N]]
-    val pTrue = decision.probabilityOf(true)
-    val pFalse = decision.probabilityOf(false)
+    val pTrue: N = pIn.probabilityOf(conditionModel, true)
+    val pFalse: N = pIn.probabilityOf(conditionModel, false)
 
-    val parts = (trueBranch.values.map(v => (v, trueBranch.probabilityOf(v) * pTrue)) ++
-      falseBranch.values.map(v => (v, falseBranch.probabilityOf(v) * pFalse)))
-
-    val newDist = parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(addN.plus)).toMap
-
-    ConditionalProbabilityTable0(newDist, "todo")
+    pOut.combine(Map(
+        trueBranchModel -> pTrue,
+        falseBranchModel -> pFalse))
   }
 
-  def log2[N: Field: ConvertableFrom](x: N) =
-    spire.math.log(x.toDouble) / spire.math.log(2d)
+  def log2[N: Field: ConvertableFrom](x: N): Double =
+    log(ConvertableFrom[N].toDouble(x)) / log(2d)
 
   def square[N: Ring](x: N): N = x ** 2
 
@@ -91,8 +89,7 @@ package object stats {
   def rootMeanSquareDeviation[C, X, D](
     data: C,
     estimator: X => X)(
-      implicit finite: Finite[C, X],
-      functor: Functor[C, X, X, D],
+      implicit functor: Functor[C, X, X, D],
       agg: Aggregatable[D, X, X],
       field: Field[X],
       nroot: NRoot[X]): X =
@@ -102,45 +99,50 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    distribution: Distribution[A, N]): A = {
+  def standardDeviation[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A])(implicit prob: ProbabilityModel[M, N]): A = {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ[A, IndexedSeq[A]](distribution.values.map({ x => n2a(distribution.probabilityOf(x)) * x }))
+    val μ: A = Σ[A, IndexedSeq[A]](prob.values(model).map({ x => n2a(prob.probabilityOf(model, x)) * x }))
 
-    Σ[A, IndexedSeq[A]](distribution.values map { x => n2a(distribution.probabilityOf(x)) * square(x - μ) }).sqrt
+    val sum: A = Σ[A, IndexedSeq[A]](prob.values(model) map { x => n2a(prob.probabilityOf(model, x)) * square(x - μ) })
+
+    NRoot[A].sqrt(sum)
   }
 
-  def σ[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
-    standardDeviation(distribution)
+  def σ[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A])(implicit prob: ProbabilityModel[M, N]): A =
+    standardDeviation[M, A, N](model)
 
-  def stddev[A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](distribution: Distribution[A, N]): A =
-    standardDeviation(distribution)
+  def stddev[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A])(implicit prob: ProbabilityModel[M, N]): A =
+    standardDeviation[M, A, N](model)
 
-  def entropy[A: Manifest, N: Field: Eq: ConvertableFrom](
-    X: Distribution[A, N])(
-      implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
+  def entropy[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
+      implicit prob: ProbabilityModel[M, N],
+      convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     import spire.implicits.DoubleAlgebra
 
     val convertN = ConvertableFrom[N]
-    val H = Σ[Double, IndexedSeq[Double]](X.values map { x =>
-      val px: N = axle.stats.P(X is x).apply()
+    val H = Σ[Double, IndexedSeq[Double]](prob.values(model) map { x =>
+      val px: N = P(model, x)(prob).apply()
       if (px === Field[N].zero) {
         0d
       } else {
-        convertN.toDouble(-px) * log2(px)
+        -convertN.toDouble(px) * log2(px)
       }
     })
     UnittedQuantity(H, convert.bit)
   }
 
-  def H[A: Manifest, N: Field: Eq: ConvertableFrom](
-    X: Distribution[A, N])(implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
-    entropy(X)
+  def H[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
+      implicit prob: ProbabilityModel[M, N],
+      convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
+    entropy(model)
 
-  def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N]): Stream[List[N]] =
+  def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N], gen: Generator): Stream[List[N]] =
     if (xs.isEmpty) {
       cons(reservoir, Stream.empty)
     } else {
@@ -148,17 +150,18 @@ package object stats {
         if (i < k) {
           xs.head :: reservoir
         } else {
-          val r = nextDouble
+          val r = gen.nextDouble()
           if (r < (k / i.toDouble)) {
-            val skip = nextInt(reservoir.length)
+            val skip = gen.nextInt(reservoir.length)
             xs.head :: (reservoir.zipWithIndex.filterNot({ case (e, i) => i == skip }).map(_._1))
           } else {
             reservoir
           }
         }
-      cons(newReservoir, _reservoirSampleK(k, i + 1, newReservoir, xs.tail))
+      cons(newReservoir, _reservoirSampleK(k, i + 1, newReservoir, xs.tail, gen))
     }
 
-  def reservoirSampleK[N](k: Int, xs: Stream[N]) = _reservoirSampleK(k, 0, Nil, xs)
+  def reservoirSampleK[N](k: Int, xs: Stream[N], gen: Generator) =
+    _reservoirSampleK(k, 0, Nil, xs, gen)
 
 }

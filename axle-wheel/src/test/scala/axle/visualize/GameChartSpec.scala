@@ -2,15 +2,10 @@ package axle.visualize
 
 import org.scalatest._
 
-import axle.algebra.modules.doubleDoubleModule
-import axle.algebra.modules.doubleRationalModule
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling.stateDistribution
-import axle.jung.directedGraphJung
-import axle.quanta.Angle
-import axle.stats.Distribution0
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.DoubleAlgebra
+import axle.game.Bowling.monad
+import axle.stats.ConditionalProbabilityTable0
 import spire.implicits.IntAlgebra
 import spire.math.Rational
 import cats.implicits._
@@ -23,17 +18,20 @@ class GameChartSpec extends FunSuite with Matchers {
 
     val scoreD = stateD.map(_.tallied)
 
-    implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
+    // implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
     // test implicit conjuring:
-    PlotDataView.distribution0DataView[String, Int, Rational]
 
-    val chart = BarChart[Int, Rational, Distribution0[Int, Rational], String](
+    implicit val dvInt = DataView.probabilityDataView[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
+
+    val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
       () => scoreD,
       drawKey = true,
       xAxis = Some(Rational(0)))
 
-    val plot = Plot[String, Int, Rational, Distribution0[Int, Rational]](
+    implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
+
+    val plot = Plot[String, Int, Rational, ConditionalProbabilityTable0[Int, Rational]](
       () => Vector(("", scoreD)),
       colorOf = _ => Color.black,
       drawKey = true,

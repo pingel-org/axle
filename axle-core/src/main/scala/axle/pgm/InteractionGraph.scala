@@ -1,22 +1,21 @@
 package axle.pgm
 
 import axle.algebra.UndirectedGraph
-import axle.stats.Distribution
+import axle.stats.Variable
 import cats.kernel.Eq
-import spire.algebra.Field
 
 class InteractionGraphEdge
 
-case class InteractionGraph[T: Manifest: Eq, N: Field: Manifest, UG](
-    vps: Seq[Distribution[T, N]],
-    ef: Seq[(Distribution[T, N], Distribution[T, N], InteractionGraphEdge)])(
-        implicit ug: UndirectedGraph[UG, Distribution[T, N], InteractionGraphEdge]) {
+case class InteractionGraph[T: Manifest: Eq, UG](
+    vps: Seq[Variable[T]],
+    ef: Seq[(Variable[T], Variable[T], InteractionGraphEdge)])(
+        implicit ug: UndirectedGraph[UG, Variable[T], InteractionGraphEdge]) {
 
   lazy val graph = ug.make(vps, ef)
 
-  def eliminate(rv: Distribution[T, N]): InteractionGraph[T, N, UG] = ???
+  def eliminate(rv: Variable[T]): InteractionGraph[T, UG] = ???
 
-  def eliminationSequence(π: List[Distribution[T, N]]): List[InteractionGraph[T, N, UG]] =
+  def eliminationSequence(π: List[Variable[T]]): List[InteractionGraph[T, UG]] =
     π.scanLeft(this)(_ eliminate _)
 
 }

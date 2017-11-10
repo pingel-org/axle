@@ -1,4 +1,4 @@
-package axle.ml.distance
+package axle.algebra.distance
 
 import spire.algebra.Field
 import spire.algebra.InnerProductSpace
@@ -25,7 +25,7 @@ import spire.implicits.multiplicativeSemigroupOps
  *   1d - 2d *abs(acos(similarity(u, v)) / Pi)
  */
 
-case class Cosine[M, D: NRoot: Field](
+class Cosine[M, D: NRoot: Field](
   implicit ips: InnerProductSpace[M, D]) {
 
   val normed = ips.normed

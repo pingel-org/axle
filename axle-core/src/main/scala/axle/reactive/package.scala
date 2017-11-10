@@ -3,7 +3,6 @@ package axle
 import concurrent.duration._
 import spire.implicits._
 import monix.reactive._
-import monix.execution.Scheduler
 import axle.quanta.UnittedQuantity
 import axle.quanta.Time
 import axle.quanta.TimeConverter
@@ -14,7 +13,7 @@ package object reactive {
     initialValue: D,
     f: D => D,
     interval: UnittedQuantity[Time, Double])(
-      implicit scheduler: Scheduler,
+      implicit
       tc: TimeConverter[Double]): Observable[D] = {
 
     Observable

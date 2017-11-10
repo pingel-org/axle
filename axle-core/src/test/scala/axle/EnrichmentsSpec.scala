@@ -32,7 +32,8 @@ class EnrichmentsSpec extends FunSuite with Matchers {
 
   test("EnrichedIndexdSeq random selects random element") {
     val xs = (1 to 10).toVector
-    val r = xs.random
+    import spire.random.Generator.rng
+    val r = xs.random(rng)
     r should be > 0
     r should be < 11
   }

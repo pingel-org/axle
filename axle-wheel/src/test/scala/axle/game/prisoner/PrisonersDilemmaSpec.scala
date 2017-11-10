@@ -1,8 +1,10 @@
 package axle.game.prisoner
 
+import org.scalatest._
+
+import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
-import org.scalatest._
 
 class PrisonersDilemmaSpec extends FunSuite with Matchers {
 
@@ -33,16 +35,16 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
   }
 
   test("random game produces moveStateStream") {
-    moveStateStream(rGame, startState(rGame)).take(2) should have length 2
+    moveStateStream(rGame, startState(rGame), rng).take(2) should have length 2
   }
 
   test("random game plays") {
-    val endState = play(rGame, startState(rGame), false)
+    val endState = play(rGame, startState(rGame), false, rng)
     moves(rGame, endState) should have length 0
   }
 
   test("random game produces game stream") {
-    val games = gameStream(rGame, startState(rGame), false).take(2)
+    val games = gameStream(rGame, startState(rGame), false, rng).take(2)
     games should have length 2
   }
 
@@ -50,7 +52,7 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
-    val nextMove = moves(game, state).head
+    val _ = moves(game, state).head // dropping "nextMove"
     val newStart = startFrom(game, nextState).get
     moves(game, newStart) should have length 2
     outcome(game, state) should be(None)
@@ -111,8 +113,8 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
       p1, hardCodedStringStrategy(betrayal), axle.ignore,
       p2, hardCodedStringStrategy(betrayal), axle.ignore)
 
-    val silentOutcome = outcome(silenceGame, moveStateStream(silenceGame, start).last._3).get
-    val betrayalOutcome = outcome(betrayalGame, moveStateStream(betrayalGame, start).last._3).get
+    val silentOutcome = outcome(silenceGame, moveStateStream(silenceGame, start, rng).last._3).get
+    val betrayalOutcome = outcome(betrayalGame, moveStateStream(betrayalGame, start, rng).last._3).get
 
     silentOutcome.p1YearsInPrison should be < betrayalOutcome.p1YearsInPrison
     silentOutcome.p2YearsInPrison should be < betrayalOutcome.p2YearsInPrison
@@ -128,9 +130,9 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
       p1, hardCodedStringStrategy(betrayal), axle.ignore,
       p2, hardCodedStringStrategy(silence), axle.ignore)
 
-    val lastStateP1Silent = moveStateStream(p1silent, start).last._3
+    val lastStateP1Silent = moveStateStream(p1silent, start, rng).last._3
     val p1silentOutcome = outcome(p1silent, lastStateP1Silent).get
-    val p2silentOutcome = outcome(p2silent, moveStateStream(p2silent, start).last._3).get
+    val p2silentOutcome = outcome(p2silent, moveStateStream(p2silent, start, rng).last._3).get
 
     p1silentOutcome.p1YearsInPrison should be(p2silentOutcome.p2YearsInPrison)
     p1silentOutcome.p2YearsInPrison should be(p2silentOutcome.p1YearsInPrison)

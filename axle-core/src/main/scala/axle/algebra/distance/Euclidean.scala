@@ -1,4 +1,4 @@
-package axle.ml.distance
+package axle.algebra.distance
 
 import spire.algebra.AdditiveAbGroup
 import spire.algebra.InnerProductSpace
@@ -13,7 +13,7 @@ import spire.implicits.additiveGroupOps
  *
  */
 
-case class Euclidean[M: AdditiveAbGroup, D: NRoot](
+class Euclidean[M: AdditiveAbGroup, D: NRoot](
   implicit ips: InnerProductSpace[M, D])
     extends MetricSpace[M, D] {
 

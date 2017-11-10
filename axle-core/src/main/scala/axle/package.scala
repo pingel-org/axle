@@ -2,14 +2,17 @@ import scala.collection.mutable.Buffer
 
 import scala.collection.immutable.TreeMap
 import scala.language.implicitConversions
+
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
+
 import spire.algebra._
-import spire.implicits.additiveGroupOps
 import spire.math.Rational
+import spire.random.Generator
+import spire.implicits.additiveGroupOps
 
 /**
  *
@@ -62,7 +65,7 @@ package object axle {
   // basic functions
 
   /**
-   * dummy is not to be used widely, but is usefor for scanLeft, where
+   * dummy is not to be used widely, but is used for for scanLeft, where
    * it's often desirable to provide a throw-away value as the first argument
    * without using an Option type for an already complicated method signature.
    * A better work-around would be an alternate version of scanLeft that had
@@ -129,6 +132,14 @@ package object axle {
     runs(xs, breaks)
   }
 
+  /**
+   * 
+   * shuffle
+   */
+
+  def shuffle[T](xs: IndexedSeq[T])(gen: Generator): IndexedSeq[T] =
+    xs.map(x => (x, gen.nextInt)).sortBy(_._2).map(_._1)
+
   // List methods
 
   def replicate[T](n: Int)(v: T): List[T] = (0 until n).map(i => v).toList
@@ -193,8 +204,7 @@ package object axle {
    */
 
   def mergeStreams[T](streams: Seq[Stream[T]])(
-    implicit eqT: Eq[T],
-    orderT: Order[T]): Stream[T] = {
+    implicit orderT: Order[T]): Stream[T] = {
 
     val frontier = streams.flatMap(_.headOption)
 

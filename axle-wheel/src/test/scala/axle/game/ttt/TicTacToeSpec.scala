@@ -1,10 +1,20 @@
 package axle.game.ttt
 
-import axle.game._
-import axle.game.Strategies._
 import org.scalatest._
 
+import spire.random.Generator.rng
+import spire.math.Rational
+
+import axle.stats.ProbabilityModel
+import axle.stats.ConditionalProbabilityTable0
+import axle.stats.rationalProbabilityDist
+import axle.game._
+import axle.game.Strategies._
+
 class TicTacToeSpec extends FunSuite with Matchers {
+
+  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
   import axle.game.ttt.evGame._
   import axle.game.ttt.evGameIO._
@@ -27,16 +37,16 @@ class TicTacToeSpec extends FunSuite with Matchers {
     o, randomMove, axle.ignore)
 
   test("random game produce moveStateStream") {
-    moveStateStream(rGame, startState(rGame)).take(3).length should be(3)
+    moveStateStream(rGame, startState(rGame), rng).take(3).length should be(3)
   }
 
   test("random game plays") {
-    val endState = play(rGame, startState(rGame), false)
+    val endState = play(rGame, startState(rGame), false, rng)
     moves(rGame, endState).length should be(0)
   }
 
   test("random game produce game stream") {
-    val games = gameStream(rGame, startState(rGame), false).take(2)
+    val games = gameStream(rGame, startState(rGame), false, rng).take(2)
     games.length should be(2)
   }
 
@@ -83,7 +93,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
     val firstMove = TicTacToeMove(2, game.boardSize)
     val secondState = applyMove(game, startState(game), firstMove)
 
-    val m = secondState.moverOpt.get
+    // val m = secondState.moverOpt.get
     evGameIO.parseMove(game, "14") should be(Left("Please enter a number between 1 and 9"))
     evGameIO.parseMove(game, "foo") should be(Left("foo is not a valid move.  Please select again"))
 
@@ -94,7 +104,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
   test("random strategy makes a move") {
 
     val mover = randomMove(evGame)
-    val m = mover(game, startState(game)).observe()
+    val moveCpt = mover(game, startState(game))
+    val m = prob.observe(moveCpt, rng)
 
     m.position should be > 0
   }
@@ -111,8 +122,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
       4, outcomeRingHeuristic(game, h))
 
     val secondState = applyMove(game, startState(game), firstMove)
-
-    val move = ai4(game, secondState).observe()
+    val cpt = ai4(game, secondState)
+    val move = prob.observe(cpt, rng)
 
     move.position should be > 0
   }
@@ -139,7 +150,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
       o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
-    val lastState = moveStateStream(game, start).last._3
+    val lastState = moveStateStream(game, start, rng).last._3
     val out = outcome(game, lastState).get
     displayOutcomeTo(game, out, x) should include("You beat")
     displayOutcomeTo(game, out, o) should include("beat You")
@@ -168,7 +179,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
       o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
-    val lastState = moveStateStream(game, start).last._3
+    val lastState = moveStateStream(game, start, rng).last._3
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(Some(o))
   }
@@ -197,7 +208,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
       o, hardCodedStringStrategy(oMove), axle.ignore)
 
     val start = startState(game)
-    val lastState = moveStateStream(game, start).last._3
+    val lastState = moveStateStream(game, start, rng).last._3
 
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(None)

@@ -9,8 +9,10 @@ class OldMontyHallSpec extends FunSuite with Matchers {
 
     import OldMontyHall._
 
-    chanceOfWinning(Rational(1)) should be(Rational(1, 2))
+    // 2/3 chance of winning by switching
+    chanceOfWinning(Rational(1)) should be(Rational(2, 3))
 
+    // 1/3 chance of winning by staying
     chanceOfWinning(Rational(0)) should be(Rational(1, 3))
 
     // TODO: p1 > p2 <=> chanceOfWinning(p1) > chanceOfWinning(p2)

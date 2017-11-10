@@ -27,19 +27,19 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
     implicit val id =
       Information.converterGraphK2[Double, DirectedSparseGraph]
 
-    implicit val idg = id.conversionGraph
-
-    type DG = DirectedSparseGraph[UnitOfMeasurement[Information], Double => Double]
-
     implicit val or: Order[Rational] = new cats.kernel.Order[Rational] {
       val ord = Order[Double]
       def compare(x: Rational, y: Rational): Int = ord.compare(x.toDouble, y.toDouble)
     }
     implicit val bitDouble = id.bit
+    import axle.stats.ConditionalProbabilityTable0
 
     val hm: D =
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
-        (0 to 100).map(i => (Rational(i / 100d), H(coin(Rational(i.toLong, 100))))).toMap
+        (0 to 100).map({ i =>
+          val r = Rational(i / 100d)
+          r -> H[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Symbol, Rational](coin(r))
+        }).toMap
 
     // implicit val zr = Zero[Rational]
     // implicit val tr = Tics[Rational]
@@ -63,7 +63,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
       title = Some("Entropy")) // (zr, tr, er, lsrrd, zuqid, tuqid, euqid, lsuqiddd, pdv)
 
     import axle.web._
-    val d = SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
+    SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
 
     val svgName = "coinentropyplot.svg"
     svg(plot, svgName)

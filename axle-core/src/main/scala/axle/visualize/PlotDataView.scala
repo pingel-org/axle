@@ -3,12 +3,13 @@ package axle.visualize
 import scala.collection.immutable.TreeMap
 import scala.annotation.implicitNotFound
 
-import axle.algebra.Plottable
-import axle.algebra.Zero
-import axle.stats.Distribution0
 import cats.kernel.Order
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
+
+import axle.algebra.Plottable
+import axle.algebra.Zero
+import axle.stats.ProbabilityModel
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[S, X, Y, D] {
@@ -79,50 +80,50 @@ object PlotDataView {
       }
     }
 
-  implicit def distribution0DataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[S, X, Y, Distribution0[X, Y]] =
-    new PlotDataView[S, X, Y, Distribution0[X, Y]] {
+  implicit def probabilityDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable, M[_]](
+      implicit prob: ProbabilityModel[M, Y]): PlotDataView[S, X, Y, M[X]] =
+    new PlotDataView[S, X, Y, M[X]] {
 
-      def xsOf(d: Distribution0[X, Y]): Traversable[X] = d.toMap.keys.toList.sorted
+      def xsOf(model: M[X]): Traversable[X] = prob.values(model)
 
-      def valueOf(d: Distribution0[X, Y], x: X): Y = d.probabilityOf(x)
+      def valueOf(model: M[X], x: X): Y =
+        prob.probabilityOf(model, x)
 
-      def xRange(data: Seq[(S, Distribution0[X, Y])], include: Option[X]): (X, X) = {
+      def xRange(data: Seq[(S, M[X])], include: Option[X]): (X, X) = {
 
         val minXCandidates = include.toList ++ (data flatMap {
-          case (label, d: Distribution0[X, Y]) => xsOf(d).headOption
+          case (label, model) => xsOf(model).headOption
         })
         val minX = if (minXCandidates.size > 0) minXCandidates.min else Zero[X].zero
 
         val maxXCandidates = include.toList ++ (data flatMap {
-          case (label, d: Distribution0[X, Y]) => xsOf(d).lastOption
+          case (label, model) => xsOf(model).lastOption
         })
-
         val maxX = if (minXCandidates.size > 0) maxXCandidates.max else Zero[X].zero
 
         (minX, maxX)
-
       }
 
-      def yRange(data: Seq[(S, Distribution0[X, Y])], include: Option[Y]): (Y, Y) = {
+      def yRange(data: Seq[(S, M[X])], include: Option[Y]): (Y, Y) = {
 
         val minYCandidates = include.toList ++ (data flatMap {
-          case (label, d: Distribution0[X, Y]) =>
-            val xs = xsOf(d)
+          case (label, model) =>
+            val xs = xsOf(model)
             if (xs.size === 0)
               None
             else
-              Some(xs map { valueOf(d, _) } min)
+              Some(xs map { valueOf(model, _) } min)
         }) filter { Plottable[Y].isPlottable _ }
 
         val minY = if (minYCandidates.size > 0) minYCandidates.min else Zero[Y].zero
 
         val maxYCandidates = include.toList ++ (data flatMap {
-          case (label, d: Distribution0[X, Y]) => {
-            val xs = xsOf(d)
+          case (label, model) => {
+            val xs = xsOf(model)
             if (xs.size === 0)
               None
             else
-              Some(xs map { valueOf(d, _) } max)
+              Some(xs map { valueOf(model, _) } max)
           }
         }) filter { Plottable[Y].isPlottable _ }
 

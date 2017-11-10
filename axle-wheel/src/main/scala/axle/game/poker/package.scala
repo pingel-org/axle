@@ -2,7 +2,7 @@ package axle.game
 
 import axle.string
 import axle.game.cards._
-import axle.stats.Distribution0
+import axle.stats.ConditionalProbabilityTable0
 import spire.math.Rational
 import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
@@ -54,7 +54,7 @@ package object poker {
       def players(g: Poker): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: Poker, player: Player): (Poker, PokerStateMasked) => Distribution0[PokerMove, Rational] =
+      def strategyFor(g: Poker, player: Player): (Poker, PokerStateMasked) => ConditionalProbabilityTable0[PokerMove, Rational] =
         g.playerToStrategy(player)
 
       // TODO: this implementation works, but ideally there is more information in the error
@@ -214,6 +214,7 @@ package object poker {
               case (_, 3) => Turn()
               case (_, 4) => River()
               case (_, 5) => Payout()
+              case (_, _) => Payout() // TODO unreachable
             }) :: Nil
           } else {
             val maxPersonalRaise = s.piles(mvr) + s.inFors.get(mvr).getOrElse(0) - s.currentBet

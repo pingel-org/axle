@@ -1,6 +1,7 @@
 package axle.nlp
 
 import org.scalatest._
+import spire.random.Generator.rng
 import axle.nlp.language.English
 
 class ClusterFederalistPapersSpec extends FunSuite with Matchers {
@@ -28,8 +29,8 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
     }
 
     // import spire.implicits._
-    import axle.ml.distance._
-    import axle.ml.distance.Euclidean
+    import axle.algebra.distance._
+    import axle.algebra.distance.Euclidean
     import org.jblas.DoubleMatrix
     import axle.jblas.linearAlgebraDoubleMatrix
 
@@ -38,7 +39,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
       import spire.implicits.DoubleAlgebra
       // import axle.jblas.moduleDoubleMatrix
       implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](numDimensions)
-      Euclidean[DoubleMatrix, Double]
+      new Euclidean[DoubleMatrix, Double]
     }
 
     import axle.ml.KMeans
@@ -53,7 +54,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
       featureExtractor,
       normalizer,
       K = 4,
-      iterations = 100)
+      iterations = 100)(rng)
 
     import axle.ml.ConfusionMatrix
     import cats.implicits._

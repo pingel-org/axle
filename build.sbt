@@ -1,9 +1,11 @@
 import com.typesafe.sbt.pgp.PgpKeys.publishSigned
 import com.typesafe.sbt.SbtSite.SiteKeys._
-import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
-import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 // import ScoverageSbtPlugin._
+
+// TODO site, tut, unidoc, doctestwithdependencies
+// TODO scoverage, noPublishSettings, release plugin
+// TODO minimum sbt version
 
 lazy val spireVersion = "0.14.1"
 lazy val shapelessVersion = "2.3.2"
@@ -14,7 +16,6 @@ lazy val scalaTestVersion = "3.0.0"
 
 lazy val scalaXmlVersion = "1.0.5"
 lazy val scalaParserCombinatorsVersion = "1.0.4"
-lazy val sparkVersion = "2.0.1"
 lazy val jungVersion = "2.1"
 lazy val jblasVersion = "1.2.4"
 lazy val jacksonVersion = "2.8.4"
@@ -29,20 +30,21 @@ lazy val scoverageSettings = Seq(
   coverageHighlighting := true
 )
 
+scalaVersion := "2.12.3"
+//scalaVersion := "2.11.8"
+
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
-  scalaVersion := "2.11.8",
-  scalaOrganization := "org.typelevel",
-  crossScalaVersions := Seq("2.11.8")
+  scalaVersion := "2.12.3",
+  // scalaOrganization := "org.typelevel",
+  crossScalaVersions := Seq("2.12.3")
 )
 
 lazy val axleDoctestSettings = Seq(
-  doctestWithDependencies := false
+  // doctestWithDependencies := false
 )
 
-lazy val axleCore = Project(
-    id = "axle-core",
-    base = file("axle-core"))
+lazy val axleCore = Project("axle-core", file("axle-core"))
   .settings(
     name := "axle-core",
     moduleName := "axle-core",
@@ -50,6 +52,7 @@ lazy val axleCore = Project(
       "org.typelevel"          %% "spire"                    % spireVersion,
       "org.typelevel"          %% "spire-laws"               % spireVersion,
       "org.typelevel"          %% "cats-core"                % catsVersion,
+      "org.typelevel"          %% "cats-free"                % catsVersion,
       "com.chuusai"            %% "shapeless"                % shapelessVersion,
       // "eu.timepit"          %% "singleton-ops"            % "0.0.4"
       "io.monix"               %% "monix-reactive"           % monixVersion,
@@ -71,8 +74,8 @@ lazy val axleCore = Project(
       // something references this.  would be nice to remove:
       "com.google.code.findbugs" % "jsr305"                  % "3.0.0"            % "provided"
   ))
-  .settings(axleSettings:_*)
-  .settings(commonJvmSettings:_*)
+  .settings(axleSettings)
+  .settings(commonJvmSettings)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("http://axle-lang.org")),
@@ -122,11 +125,9 @@ lazy val commonJvmSettings = Seq(
 
 lazy val axleSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
-lazy val axleJoda = Project(
-  id = "axle-joda",
-  base = file("axle-joda"),
-  settings = axleSettings
-).settings(
+lazy val axleJoda = Project("axle-joda", file("axle-joda"))
+ .settings(axleSettings)
+ .settings(
   name := "axle-joda",
   libraryDependencies ++= Seq(
     "joda-time"                % "joda-time"                 % jodaTimeVersion    % "provided",
@@ -134,33 +135,18 @@ lazy val axleJoda = Project(
   )
 ).dependsOn(axleCore)
 
-lazy val axleJblas = Project(
-  id = "axle-jblas",
-  base = file("axle-jblas"),
-  settings = axleSettings
-).settings(
-  name := "axle-jblas",
-  libraryDependencies ++= Seq(
-      "org.jblas"              % "jblas"                     % jblasVersion       % "provided"
-  )
+lazy val axleJblas = Project("axle-jblas", file("axle-jblas"))
+ .settings(axleSettings)
+ .settings(
+   name := "axle-jblas",
+   libraryDependencies ++= Seq(
+     "org.jblas"              % "jblas"                     % jblasVersion       % "provided"
+   )
 ).dependsOn(axleCore)
 
-lazy val axleSpark = Project(
-  id = "axle-spark",
-  base = file("axle-spark"),
-  settings = axleSettings
-).settings(
-  name := "axle-spark",
-  libraryDependencies ++= Seq(
-    "org.apache.spark"         %% "spark-core"               % sparkVersion       % "provided"
-  )
-).dependsOn(axleCore)
-
-lazy val axleWheel = Project(
-  id = "axle-wheel",
-  base = file("axle-wheel"),
-  settings = axleSettings
-).settings(
+lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
+ .settings(axleSettings)
+ .settings(
   name := "axle-wheel",
   libraryDependencies ++= Seq(
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
@@ -181,44 +167,26 @@ lazy val axleWheel = Project(
   axleJblas
 )
 
-lazy val docSettings = Seq(
-  autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(axleCore),
-  site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
-  site.addMappingsToSiteDir(tut, "_tut"),
-  // site.addMappingsToSiteDir(tut, "tut"),
-  ghpagesNoJekyll := false,
-  siteMappings += file("CONTRIBUTING.md") -> "contributing.md",
-  scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
-    "-Xfatal-warnings",
-    "-doc-source-url", scmInfo.value.get.browseUrl + "/tree/master€{FILE_PATH}.scala",
-    "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
-    "-diagrams"
-  ),
-  git.remoteRepo := "git@github.com:axlelang/axle.git",
-  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
-)
-
-lazy val docs = Project(
-    id = "axle-docs",
-    base = file("axle-docs"))
+lazy val docs = Project("axle-docs", file("axle-docs"))
   .settings(moduleName := "axle-docs")
   .settings(axleSettings)
-  .settings(noPublishSettings)
-  .settings(unidocSettings)
-  .settings(site.settings)
-  .settings(ghpages.settings)
-  .settings(tutSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
-  .settings(docSettings)
+  //.settings(noPublishSettings)
+  //.settings(site.settings)
+  .enablePlugins(TutPlugin)
+  //.settings(site.addMappingsToSiteDir(tut, "tut"))
+  .settings(
+    autoAPIMappings := true,
+    git.remoteRepo := "git@github.com:axlelang/axle.git",
+    includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
+  )
   .settings(commonJvmSettings)
   .dependsOn(axleWheel)
 
-lazy val noPublishSettings = Seq(
-  publish := (),
-  publishLocal := (),
-  publishArtifact := false
-)
+//lazy val noPublishSettings = Seq(
+//  publish := (),
+//  publishLocal := (),
+//  publishArtifact := false
+//)
 
 lazy val commonScalacOptions = Seq(
 // "-optimize",
@@ -273,7 +241,7 @@ lazy val sharedReleaseProcess = Seq(
     publishArtifacts,
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
+    //ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
     pushChanges)
 )
 

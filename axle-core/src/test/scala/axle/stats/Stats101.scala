@@ -6,18 +6,29 @@ import spire.implicits._
 
 class Stats101 extends FunSuite with Matchers {
 
+  type λ[T] = ConditionalProbabilityTable0[T, Rational]
+  val prob = implicitly[ProbabilityModel[λ, Rational]]
+
   test("standard deviation on a list of doubles") {
 
-    val dist = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), "some doubles")
+    val model = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), Variable[Double]("x"))
 
-    standardDeviation(dist) should be(2d)
+    standardDeviation[λ, Double, Rational](model) should be(2d)
   }
 
   test("standard deviation on a list of reals") {
 
-    val dist = uniformDistribution(List[Real](2, 4, 4, 4, 5, 5, 7, 9), "some reals")
+    val dist = uniformDistribution(List[Real](
+        Real(2),
+        Real(4),
+        Real(4),
+        Real(4),
+        Real(5),
+        Real(5),
+        Real(7),
+        Real(9)), Variable[Real]("x"))
 
-    standardDeviation(dist) should be(2)
+    standardDeviation[λ, Real, Rational](dist) should be(Real(2))
   }
 
 }

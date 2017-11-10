@@ -8,7 +8,6 @@ import com.jogamp.opengl.GL2
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import java.nio.file.Paths
 import spire.implicits._
-import axle.algebra.GeoCoordinates
 import axle.algebra.SphericalVector
 import axle.algebra.modules.floatDoubleModule
 import axle.algebra.modules.floatRationalModule
@@ -20,11 +19,6 @@ class ShapesSpec extends FunSuite with Matchers {
 
   test("axle.jogl shapes") {
 
-    implicit val ddc = {
-      import axle.algebra.modules.doubleRationalModule
-      Distance.converterGraphK2[Double, DirectedSparseGraph]
-    }
-
     implicit val distanceConverter = Distance.converterGraphK2[Float, DirectedSparseGraph]
     import distanceConverter._
 
@@ -32,9 +26,6 @@ class ShapesSpec extends FunSuite with Matchers {
     import angleConverter._
 
     import Color._
-
-    val cameraDistance = 13000f *: km
-    val cameraCoordinates = GeoCoordinates(39.828328f *: °, -98.579416f *: °)
 
     import java.net.URL
     val textureUrl: URL = Paths.get("axle-docs/src/site/images/axle.png").toUri().toURL()
