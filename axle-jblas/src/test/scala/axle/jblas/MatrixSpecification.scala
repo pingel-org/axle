@@ -15,12 +15,12 @@ class MatrixSpecification extends FunSuite with Matchers {
   test("Linear Algebra for org.jblas.DoubleMatrix create simple matrices") {
 
     val z = zeros(3, 4)
-    val o = ones(2, 3)
-    val x = rand(1, 2)
+    ones(2, 3)
+    rand(1, 2)
 
     val y = rand(3, 3)
-    val c = y.column(2)
-    val r = y.row(2)
+    y.column(2)
+    y.row(2)
 
     val zops = new LinearAlgebraOps(z)
 
