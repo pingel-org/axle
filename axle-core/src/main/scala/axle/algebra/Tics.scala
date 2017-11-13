@@ -1,9 +1,9 @@
 package axle.algebra
 
+import scala.annotation.implicitNotFound
+import cats.implicits._
 import spire.math._
 import spire.implicits._
-import cats.implicits._
-import scala.annotation.implicitNotFound
 import axle.string
 import axle.showRational
 import java.lang.Double.{ isInfinite, isNaN }
@@ -25,7 +25,7 @@ object Tics {
       pow(10, ceil(log10(abs(to - from)) - 0.3) - 1)
 
     def tics(from: Double, to: Double): Seq[(Double, String)] = {
-      if ((from === to) || from.isNaN || from.isInfinity || to.isNaN || to.isInfinity) {
+      if ((from == to) || from.isNaN || from.isInfinity || to.isNaN || to.isInfinity) {
         List((0d, "0.0"), (1d, "1.0"))
       } else {
         val s = step(from, to)

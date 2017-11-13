@@ -159,7 +159,7 @@ package object jung {
 
       // a "leaf" is vertex with only one neighbor
       def firstLeafOtherThan(jdsg: DirectedSparseGraph[V, E], r: V)(implicit eqV: Eq[V]): Option[V] =
-        vertices(jdsg).find(v => neighbors(jdsg, v).size === 1 && (!(v === r)))
+        vertices(jdsg).find(v => neighbors(jdsg, v).size == 1 && (!(v === r)))
 
       /**
        * "decompositions" page 3 (Definition 3, Section 9.3)
@@ -195,7 +195,7 @@ package object jung {
         jdsg.getPredecessors(v).asScala.toSet
 
       def isLeaf(jdsg: DirectedSparseGraph[V, E], v: V): Boolean =
-        jdsg.getSuccessorCount(v) === 0
+        jdsg.getSuccessorCount(v) == 0
 
       def successors(jdsg: DirectedSparseGraph[V, E], v: V): Set[V] =
         jdsg.getSuccessors(v).asScala.toSet
@@ -221,7 +221,7 @@ package object jung {
           Some(Nil)
         } else {
           Option((new DijkstraShortestPath(jdsg)).getPath(source, goal)) flatMap { path =>
-            if (path.size === 0)
+            if (path.size == 0)
               None
             else
               Some(path.asScala.toList)
@@ -280,7 +280,6 @@ package object jung {
 
       import edu.uci.ics.jung.graph.UndirectedSparseGraph
       import cats.kernel.Eq
-      import spire.implicits.IntAlgebra
       import spire.implicits.eqOps
 
       def make(vertices: Seq[V], ef: Seq[(V, V, E)]): UndirectedSparseGraph[V, E] = {
@@ -374,7 +373,7 @@ package object jung {
 
       // a "leaf" is vertex with only one neighbor
       def firstLeafOtherThan(jug: UndirectedSparseGraph[V, E], r: V)(implicit eqV: Eq[V]): Option[V] =
-        vertices(jug).find(v => neighbors(jug, v).size === 1 && (!(v === r)))
+        vertices(jug).find(v => neighbors(jug, v).size == 1 && (!(v === r)))
 
       /**
        * "decompositions" page 3 (Definition 3, Section 9.3)

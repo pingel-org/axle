@@ -5,8 +5,6 @@ import axle.string
 import cats.Show
 import cats.kernel.Eq
 import cats.implicits._
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
 
 trait Symbol {
   def label: String
@@ -112,6 +110,6 @@ case class LLParserState(
 
   }
 
-  def finished: Boolean = input.length === i && stack.head == ⊥
+  def finished: Boolean = input.length == i && stack.head == ⊥
 
 }

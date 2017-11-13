@@ -6,8 +6,9 @@ import scala.Vector
 
 import cats.kernel.Order
 import cats.kernel.Eq
-import cats.Order.catsKernelOrderingForOrder
+//import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
+
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
 import spire.algebra.Module
@@ -16,6 +17,7 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.moduleOps
 //import spire.implicits.partialOrderOps
+
 import axle.algebra.Aggregatable
 import axle.algebra.AggregatableK1
 import axle.algebra.Finite
