@@ -3,8 +3,10 @@ package axle.visualize
 import org.scalatest._
 
 import cats.implicits._
-import spire.implicits.DoubleAlgebra
+
+//import spire.implicits.DoubleAlgebra
 import spire.math.Rational
+
 import axle.game.Dice.die
 import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable0
@@ -49,7 +51,6 @@ class BarChartSpec extends FunSuite with Matchers {
       ("coconut", 2011) -> 88.0,
       ("coconut", 2012) -> 10.1)
 
-    import cats.implicits._
     import java.net.URL
 
     val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String](
@@ -74,10 +75,17 @@ class BarChartSpec extends FunSuite with Matchers {
 
   test("BarChart render a SVG of d6 + d6 probability distribution") {
 
-    val distribution = for {
-      a <- die(6)
-      b <- die(6)
-    } yield a + b
+    implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+
+    val distribution = monad.flatMap(die(6))(a =>
+      monad.map(die(6))(b =>
+        a + b))
+
+    // TODO monad syntax
+//    val distribution = for {
+//      a <- die(6)
+//      b <- die(6)
+//    } yield a + b
 
     implicit val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
     implicit val dataViewCPT: DataView[Int, Rational, ConditionalProbabilityTable0[Int, Rational]] =

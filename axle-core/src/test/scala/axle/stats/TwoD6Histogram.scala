@@ -4,6 +4,7 @@ import org.scalatest._
 
 import axle.enrichGenSeq
 import axle.game.Dice.die
+
 import spire.implicits.IntAlgebra
 import spire.math.Rational
 

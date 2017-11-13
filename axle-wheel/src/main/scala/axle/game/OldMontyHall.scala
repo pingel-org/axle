@@ -30,12 +30,24 @@ object OldMontyHall {
   }
 
   // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
-  val outcome = (probabilityOfSwitching: Rational) => for {
-    prizeDoor <- prizeDoorModel
-    chosenDoor <- chosenDoorModel
-    revealedDoor <- reveal(prizeDoor, chosenDoor)
-    finalChosenDoor <- switch(probabilityOfSwitching, chosenDoor, revealedDoor)
-  } yield finalChosenDoor === prizeDoor
+  //val outcome = (probabilityOfSwitching: Rational) => for {
+  //  prizeDoor <- prizeDoorModel
+  //  chosenDoor <- chosenDoorModel
+  //  revealedDoor <- reveal(prizeDoor, chosenDoor)
+  //  finalChosenDoor <- switch(probabilityOfSwitching, chosenDoor, revealedDoor)
+  //} yield finalChosenDoor === prizeDoor
+
+  // TODO monad syntax
+  val outcome = (probabilityOfSwitching: Rational) =>
+    monad.flatMap(prizeDoorModel)( prizeDoor => 
+      monad.flatMap(chosenDoorModel)( chosenDoor =>
+        monad.flatMap(reveal(prizeDoor, chosenDoor))( revealedDoor =>
+          monad.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor))( finalChosenDoor =>
+            finalChosenDoor === prizeDoor
+          )
+        )
+      )
+    )
 
   val chanceOfWinning =
     (probabilityOfSwitching: Rational) => prob.probabilityOf(outcome(probabilityOfSwitching), true)
