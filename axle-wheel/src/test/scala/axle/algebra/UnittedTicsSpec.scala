@@ -7,7 +7,7 @@ import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.kernel.Eq
 import cats.implicits._
-import spire.implicits.DoubleAlgebra
+import spire.algebra._
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.jung.directedGraphJung
@@ -16,11 +16,18 @@ class UnittedTicsSpec extends FunSuite with Matchers {
 
   test("Tics for UnittedQuantity") {
 
-    implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]
+    implicit val id = {
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      Information.converterGraphK2[Double, DirectedSparseGraph]
+    }
+
     import id.bit
     implicit val base = bit
 
-    val ticker = axle.quanta.unittedTicsGraphK2[Information, Double, DirectedSparseGraph]
+    val ticker = {
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      axle.quanta.unittedTicsGraphK2[Information, Double, DirectedSparseGraph]
+    }
 
     val tics = ticker.tics(0d *: bit, 1d *: bit).toVector
 
