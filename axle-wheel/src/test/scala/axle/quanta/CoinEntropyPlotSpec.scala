@@ -53,6 +53,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
     // implicit val lsuqiddd = LengthSpace[UnittedQuantity[Information, Double], Double, Double]
     // implicit val pdv = PlotDataView.treeMapDataView[Rational, UnittedQuantity[Information, Double]]
 
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     val plot = Plot[String, Rational, UnittedQuantity[Information, Double], D](
       () => List(("h", hm)),
       connect = true,
