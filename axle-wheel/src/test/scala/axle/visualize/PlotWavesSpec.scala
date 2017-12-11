@@ -5,9 +5,12 @@ import scala.collection.immutable.TreeMap
 import org.joda.time.DateTime
 import org.scalatest._
 
+import cats.implicits._
+
 import spire.math.sin
 import spire.random.Generator.rng
 import spire.algebra.Trig
+import spire.algebra.Field
 
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
@@ -40,6 +43,7 @@ class PlotWavesSpec extends FunSuite with Matchers {
     PlotDataView[String, DateTime, Double, TreeMap[DateTime, Double]]
     import cats.implicits._
 
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
       () => waves,
       connect = true,
