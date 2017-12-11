@@ -6,6 +6,7 @@ class PokerHandChartSpec extends FunSuite with Matchers {
 
   test("poker hand chart") {
 
+    import cats.implicits._
     import axle.game.cards.Deck
     import axle.game.poker.PokerHand
     import axle.game.poker.PokerHandCategory
@@ -24,6 +25,8 @@ class PokerHandChartSpec extends FunSuite with Matchers {
     import axle.visualize.BarChartGrouped
     import cats.implicits._
 
+    import spire.algebra.Ring
+    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
     val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int], String](
       () => data.tally.withDefaultValue(0),
       colorOf = (g: PokerHandCategory, s: Int) => Color.black,
