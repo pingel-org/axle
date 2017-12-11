@@ -27,12 +27,11 @@ class TwoD6Histogram extends FunSuite with Matchers {
 
   test("distribution monad: combine 2 D6 correctly") {
 
-    import cats.implicits._
+    // import cats.implicits._
 
-    val twoDiceSummed = for {
-      a <- die(6)
-      b <- die(6)
-    } yield a + b
+    // TODO monad syntax
+    val twoDiceSummed = monad.flatMap(die(6))(a =>
+      monad.map(die(6))(b => a + b))
 
     prob.probabilityOf(twoDiceSummed, 2) should be(Rational(1, 36))
     prob.probabilityOf(twoDiceSummed, 7) should be(Rational(1, 6))

@@ -13,7 +13,7 @@ class BowlingSpec extends FunSuite with Matchers {
 
     val stateD = stateDistribution(goodBowler, 4)
 
-    val scoreD = stateD.map(_.tallied)
+    val scoreD = monad.map(stateD)(_.tallied)
 
     // TODO: make same assertion about P(300) when last frame is handled correctly
     prob.probabilityOf(scoreD, 0) should be > Rational(0)

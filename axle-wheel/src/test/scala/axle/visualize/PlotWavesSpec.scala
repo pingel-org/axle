@@ -5,10 +5,9 @@ import scala.collection.immutable.TreeMap
 import org.joda.time.DateTime
 import org.scalatest._
 
-import cats.Order.catsKernelOrderingForOrder
 import spire.math.sin
-import spire.implicits.DoubleAlgebra
 import spire.random.Generator.rng
+import spire.algebra.Trig
 
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
@@ -17,6 +16,8 @@ import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
 
 class PlotWavesSpec extends FunSuite with Matchers {
+
+  implicit val trigDoudle: Trig[Double] = spire.implicits.DoubleAlgebra
 
   test("wave plot") {
 

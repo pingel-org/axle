@@ -1,7 +1,6 @@
 package axle.visualize
 
 import org.scalatest._
-import cats.Order.catsKernelOrderingForOrder
 
 class PokerHandChartSpec extends FunSuite with Matchers {
 
@@ -22,7 +21,6 @@ class PokerHandChartSpec extends FunSuite with Matchers {
 
     // TODO the inner Int should be (n: Int) => s"5 from $n"
 
-    import spire.implicits.IntAlgebra
     import axle.visualize.BarChartGrouped
     import cats.implicits._
 

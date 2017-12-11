@@ -6,7 +6,6 @@ import java.net.URL
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import cats.implicits._
-import spire.implicits.DoubleAlgebra
 import spire.random.Generator.rng
 import monix.reactive._
 import monix.execution.Scheduler.Implicits.global

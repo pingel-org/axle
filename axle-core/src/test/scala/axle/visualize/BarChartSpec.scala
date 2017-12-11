@@ -2,9 +2,12 @@ package axle.visualize
 
 import org.scalatest._
 
-import cats.implicits._
+// import cats.implicits._
+import cats.implicits.catsStdShowForInt
+import cats.implicits.catsStdShowForString
 
 //import spire.implicits.DoubleAlgebra
+import spire.implicits._
 import spire.math.Rational
 
 import axle.game.Dice.die

@@ -2,48 +2,38 @@ package axle.ml
 
 import org.scalatest._
 
-//import shapeless._
-//import spire.random.Generator
-//import spire.random.Generator.rng
-//import axle.poly.Mixer2
-//import axle.poly.Mutator2
+import shapeless._
+import nat._
+import spire.random.Generator
+import spire.random.Generator.rng
 
 class GeneticAlgorithmSpec extends FunSuite with Matchers {
 
-  case class Rabbit(a: Int, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double)
+  type G = Int :: Double :: Double :: Double :: Double :: HNil
+  type GG = (Int, Int) :: (Double, Double) :: (Double, Double) :: (Double, Double) :: (Double, Double) :: HNil
 
   test("Genetic Algorithm: build a better rabbit") {
 
-    /*
-    val generic = Generic[Rabbit]
+    // val generic = Generic[Rabbit]
+    // generic.Repr
 
-    implicit val rabbitSpecies = new Species[generic.Repr] {
+    implicit val rabbitSpecies = new Species[G] {
 
-      def random(gen: Generator): generic.Repr = {
-        val rabbit = Rabbit(
-          1 + gen.nextInt(2),
-          5 + 20 * gen.nextDouble(),
-          1 + 4 * gen.nextDouble(),
-          3 + 10 * gen.nextDouble(),
-          10 + 5 * gen.nextDouble(),
-          2 + 2 * gen.nextDouble(),
-          3 + 5 * gen.nextDouble(),
-          2 + 10 * gen.nextDouble())
-        generic.to(rabbit)
+      def random(gen: Generator): G = {
+        1 + gen.nextInt(2) ::
+          5 + 20 * gen.nextDouble() ::
+          1 + 4 * gen.nextDouble() ::
+          3 + 10 * gen.nextDouble() ::
+          10 + 5 * gen.nextDouble() :: HNil
       }
 
-      def fitness(rg: generic.Repr): Double = {
-        val rabbit = generic.from(rg)
-        import rabbit._
-        rabbit.a * 100 + 100.0 * b + 2.2 * (1.1 * c + 0.3 * d) + 1.3 * (1.4 * e - 3.1 * f + 1.3 * g) - 1.4 * h
+      def fitness(rg: G): Double = {
+        rg(_0) * 100 + 100.0 * rg(_1) + 2.2 * (1.1 * rg(_2) + 0.3 * rg(_3) + 1.3 * (1.4 * rg(_4)))
       }
 
     }
 
-    // import shapeless.ops.hlist.RightFolder
-    // implicitly[RightFolder[generic.Repr,Generator,Mutator2.type]]
-
-    val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
+    val ga = GeneticAlgorithm[G, GG](populationSize = 100, numGenerations = 100)
 
     val log = ga.run(rng)
 
@@ -51,8 +41,7 @@ class GeneticAlgorithmSpec extends FunSuite with Matchers {
 
     log.maxs should have size 100
     rabbitSpecies.fitness(winner) should be > 0d
-    *
-    */
+
     1 should be(1)
   }
 

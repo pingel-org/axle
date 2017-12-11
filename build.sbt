@@ -10,7 +10,8 @@ import ReleaseTransformations._
 lazy val spireVersion = "0.14.1"
 lazy val shapelessVersion = "2.3.2"
 lazy val kittensVersion = "1.0.0-RC1"
-lazy val catsVersion = "0.9.0" // must match spire's algebra's catsVersion; next "1.0.0-MF"
+//lazy val catsVersion = "0.9.0" // match spire's algebra's catsVersion (and monix)
+lazy val catsVersion = "1.0.0-RC1"
 
 lazy val disciplineVersion = "0.7.2"
 lazy val scalaCheckVersion = "1.13.4"
@@ -23,7 +24,7 @@ lazy val jblasVersion = "1.2.4"
 lazy val jacksonVersion = "2.8.4"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
-lazy val monixVersion = "2.3.0"
+lazy val monixVersion = "2.3.2"
 lazy val jogampVersion = "2.3.2"
 
 lazy val scoverageSettings = Seq(
