@@ -22,7 +22,10 @@ class EvolutionSpec extends FunSuite with Matchers {
 
     val evo = Evolution()
 
-    // history: List[Event[Double, V, String]]
+    implicit val mmd: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
+    //    implicit val ouq: Order[axle.quanta.UnittedQuantity[axle.quanta.Time, Double]] =
+    //      axle.quanta.UnittedQuantity.orderUQ[axle.quanta.Time, Double]
+
     val recent = evo.history.maxBy(_.timestamp)
 
     recent.e should be("Modern Humans")
