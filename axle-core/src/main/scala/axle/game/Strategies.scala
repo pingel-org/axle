@@ -3,7 +3,7 @@ package axle.game
 import scala.Stream.cons
 
 import cats.kernel.Order
-import cats.Order.catsKernelOrderingForOrder
+//import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 
 import spire.math.Rational
@@ -105,7 +105,7 @@ object Strategies {
     val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
     val moveValue = evGame.moves(game, ms).map(move => {
       val newState = evGame.applyMove(game, state, move)
-      if (evGame.outcome(game, newState).isDefined || depth === 0) {
+      if (evGame.outcome(game, newState).isDefined || depth == 0) {
         (move, state, heuristic(newState))
       } else {
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)

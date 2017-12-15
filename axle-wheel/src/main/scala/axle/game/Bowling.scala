@@ -2,7 +2,7 @@ package axle.game
 
 import cats.implicits._
 import spire.math.Rational
-import spire.implicits._
+// import spire.implicits._
 import axle.stats._
 
 object Bowling {
@@ -101,11 +101,18 @@ object Bowling {
 
     (1 to numFrames).foldLeft(startState)({
       case (currentState, frameNumber) =>
-        for {
-          c <- currentState
-          f <- firstRoll
-          s <- spare
-        } yield next(c, frameNumber === numFrames, f, s)
+//        for {
+//          c <- currentState
+//          f <- firstRoll
+//          s <- spare
+//        } yield next(c, frameNumber === numFrames, f, s)
+        monad.flatMap(currentState)( c =>
+          monad.flatMap(firstRoll)( f =>
+            monad.map(spare)( s =>
+              next(c, frameNumber === numFrames, f, s)
+            )
+          )
+        )
     })
   }
 

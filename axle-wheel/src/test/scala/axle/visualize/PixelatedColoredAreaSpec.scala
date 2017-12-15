@@ -1,6 +1,7 @@
 package axle.visualize
 
 import org.scalatest._
+import spire.algebra._
 import cats.implicits._
 
 class PixelatedColoredAreaSpec extends FunSuite with Matchers {
@@ -30,7 +31,6 @@ class PixelatedColoredAreaSpec extends FunSuite with Matchers {
   test("PixelatedColoredArea renders a Logistic Map") {
 
     import math.abs
-    import spire.implicits.DoubleAlgebra
     import axle.{ orbit, applyK }
     import axle.math.logisticMap
 
@@ -39,6 +39,7 @@ class PixelatedColoredAreaSpec extends FunSuite with Matchers {
     import java.util.TreeSet
     val memo = collection.mutable.Map.empty[Double, TreeSet[Double]]
 
+    implicit val ringDouble: Ring[Double] = spire.implicits.DoubleAlgebra
     def f(λ: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
       val f = logisticMap(λ)
       val set = memo.get(λ).getOrElse {

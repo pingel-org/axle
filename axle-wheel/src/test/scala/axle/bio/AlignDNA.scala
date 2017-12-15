@@ -53,17 +53,27 @@ class AlignDNA extends FunSuite with Matchers {
     import SmithWatermanDefaults._
     import SmithWaterman.optimalAlignment
 
-    import spire.implicits.IntAlgebra
-    implicit val laJblasInt = axle.jblas.linearAlgebraDoubleMatrix[Int]
+    import spire.algebra._
+
+    implicit val laJblasInt = {
+      import spire.implicits.IntAlgebra
+      axle.jblas.linearAlgebraDoubleMatrix[Int]
+    }
 
     val dna3 = "ACACACTA"
     val dna4 = "AGCACACA"
     val bestAlignment = ("A-CACACTA".toIndexedSeq, "AGCACAC-A".toIndexedSeq)
 
-    val swAlignment = optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](
-      dna3, dna4, w, mismatchPenalty, gap)
+    val swAlignment = {
+      implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+      optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](
+        dna3, dna4, w, mismatchPenalty, gap)
+    }
 
-    val space = SmithWatermanMetricSpace.common[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
+    val space = {
+      implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+      SmithWatermanMetricSpace.common[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
+    }
 
     swAlignment should be(bestAlignment)
     space.distance(dna3, dna4) should be(12)

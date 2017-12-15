@@ -1,17 +1,17 @@
 package axle.quanta
 
-import axle.visualize._
+import org.scalatest._
 
 import scala.collection.immutable.TreeMap
 
-import org.scalatest._
+import cats.implicits._
+
+import spire.math.Rational
+import spire.algebra._
 
 import axle.stats.H
 import axle.stats.coin
-// import axle.orderToOrdering
-import spire.math.Rational
-import spire.implicits._
-import cats.implicits._
+import axle.visualize._
 
 class CoinEntropyPlotSpec extends FunSuite with Matchers {
 
@@ -24,12 +24,14 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
     import cats.kernel.Order
     import axle.quanta.unittedTics
 
-    implicit val id =
+    implicit val id = {
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
       Information.converterGraphK2[Double, DirectedSparseGraph]
+    }
 
     implicit val or: Order[Rational] = new cats.kernel.Order[Rational] {
-      val ord = Order[Double]
-      def compare(x: Rational, y: Rational): Int = ord.compare(x.toDouble, y.toDouble)
+      implicit val doubleOrder = Order.fromOrdering[Double]
+      def compare(x: Rational, y: Rational): Int = doubleOrder.compare(x.toDouble, y.toDouble)
     }
     implicit val bitDouble = id.bit
     import axle.stats.ConditionalProbabilityTable0
@@ -51,6 +53,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
     // implicit val lsuqiddd = LengthSpace[UnittedQuantity[Information, Double], Double, Double]
     // implicit val pdv = PlotDataView.treeMapDataView[Rational, UnittedQuantity[Information, Double]]
 
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     val plot = Plot[String, Rational, UnittedQuantity[Information, Double], D](
       () => List(("h", hm)),
       connect = true,

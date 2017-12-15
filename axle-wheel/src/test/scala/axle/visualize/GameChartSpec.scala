@@ -2,13 +2,14 @@ package axle.visualize
 
 import org.scalatest._
 
+import cats.implicits._
+
+import spire.math.Rational
+
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling.stateDistribution
 import axle.game.Bowling.monad
 import axle.stats.ConditionalProbabilityTable0
-import spire.implicits.IntAlgebra
-import spire.math.Rational
-import cats.implicits._
 
 class GameChartSpec extends FunSuite with Matchers {
 
@@ -16,7 +17,7 @@ class GameChartSpec extends FunSuite with Matchers {
 
     val stateD = stateDistribution(goodBowler, 4)
 
-    val scoreD = stateD.map(_.tallied)
+    val scoreD = monad.map(stateD)(_.tallied)
 
     // implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
@@ -29,6 +30,8 @@ class GameChartSpec extends FunSuite with Matchers {
       drawKey = true,
       xAxis = Some(Rational(0)))
 
+    import spire.algebra.Ring
+    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
     implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
 
     val plot = Plot[String, Int, Rational, ConditionalProbabilityTable0[Int, Rational]](

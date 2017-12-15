@@ -23,7 +23,6 @@ import monix.reactive.Observable
 import spire.math.abs
 import spire.math.min
 //import spire.algebra.Field
-import spire.implicits.DoubleAlgebra
 //import spire.implicits.eqOps
 
 //import axle.pgm.BayesianNetworkNode
@@ -440,6 +439,9 @@ package object awt {
           val bottomUnscaled = framePoint(bottomScaled)
           g2d.setColor(Color.black)
 
+          cats.kernel.Eq[Double]
+          cats.kernel.Eq[UnittedQuantity[Angle, Double]]
+
           // TODO: angle xtics?
           angle foreach { a =>
             if (a === zeroDegrees) {
@@ -572,6 +574,7 @@ package object awt {
     s: String,
     p: Point2D[X, Y],
     angle: UnittedQuantity[Angle, Double]): Unit = {
+    import spire.implicits.DoubleAlgebra
     if (scaledArea.nonZeroArea) {
       val fp = scaledArea.framePoint(p)
       val a = (angle in angleDouble.radian).magnitude

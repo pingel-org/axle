@@ -16,11 +16,16 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
 
   test("iffy (stochastic if) maps fair boolean to d6 + (d6+d6)") {
 
+    // TODO monad syntax
+    val ab = monad.flatMap(die(6))(a =>
+      monad.map(die(6))(b =>
+        a + b))
+
     val distribution =
       iffy[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
         binaryDecision(Rational(1, 3)),
         die(6),
-        for { a <- die(6); b <- die(6) } yield a + b)
+        ab)
 
     prob.probabilityOf(distribution, 1) should be(Rational(1, 18))
 
@@ -40,10 +45,13 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
     // However, there should be a way to utilize the "if" statement to
     // reduce the complexity.
 
-    val piDist = for {
-      x <- uniformDistribution(0 to n, Variable[Int]("x"))
-      y <- uniformDistribution(0 to n, Variable[Int]("y"))
-    } yield if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0
+    val xDist = uniformDistribution(0 to n, Variable[Int]("x"))
+    val yDist = uniformDistribution(0 to n, Variable[Int]("y"))
+
+    // TODO monad syntax
+    val piDist = monad.flatMap(xDist)(x =>
+      monad.map(yDist)(y =>
+        if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0))
 
     4 * prob.probabilityOf(piDist, 1) should be > Rational(3)
   }

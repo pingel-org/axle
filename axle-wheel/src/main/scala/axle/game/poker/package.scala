@@ -4,7 +4,6 @@ import axle.string
 import axle.game.cards._
 import axle.stats.ConditionalProbabilityTable0
 import spire.math.Rational
-import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 
 package object poker {

@@ -6,7 +6,6 @@ import scala.language.implicitConversions
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
-import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 
 import spire.algebra._

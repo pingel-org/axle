@@ -6,7 +6,7 @@ import java.net.URL
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import cats.implicits._
-import spire.implicits.DoubleAlgebra
+import spire.algebra.Field
 import spire.random.Generator.rng
 import monix.reactive._
 import monix.execution.Scheduler.Implicits.global
@@ -28,17 +28,22 @@ class PlaySpec extends FunSuite with Matchers {
       "coconut" -> 10.1)
 
     val update: Map[String, Double] => Map[String, Double] = (old: Map[String, Double]) =>
-      Map("apple" -> rng.nextDouble() * 100d,
+      Map(
+        "apple" -> rng.nextDouble() * 100d,
         "banana" -> rng.nextDouble() * 100d,
         "coconut" -> rng.nextDouble() * 100d)
 
-    implicit val tr = Time.converterGraphK2[Double, DirectedSparseGraph]
+    implicit val tr = {
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      Time.converterGraphK2[Double, DirectedSparseGraph]
+    }
     import tr._
     val dataUpdates: Observable[Map[String, Double]] = intervalScan(sales, update, 1d *: second)
 
     val cvSub = new CurrentValueSubscriber[Map[String, Double]]()
     val cvCancellable = dataUpdates.subscribe(cvSub)
 
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     val chart = BarChart[String, Double, Map[String, Double], String](
       () => cvSub.currentValue.getOrElse(sales),
       title = Some("fruit sales"),
