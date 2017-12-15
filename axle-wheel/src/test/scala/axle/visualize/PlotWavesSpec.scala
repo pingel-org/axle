@@ -39,11 +39,11 @@ class PlotWavesSpec extends FunSuite with Matchers {
 
     implicit val zeroDT = axle.joda.dateTimeZero(now)
 
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     // test implicit conjuring:
     PlotDataView[String, DateTime, Double, TreeMap[DateTime, Double]]
     import cats.implicits._
 
-    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
       () => waves,
       connect = true,

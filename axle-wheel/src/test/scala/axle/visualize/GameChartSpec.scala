@@ -30,10 +30,10 @@ class GameChartSpec extends FunSuite with Matchers {
       drawKey = true,
       xAxis = Some(Rational(0)))
 
-    implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
-
     import spire.algebra.Ring
     implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+    implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
+
     val plot = Plot[String, Int, Rational, ConditionalProbabilityTable0[Int, Rational]](
       () => Vector(("", scoreD)),
       colorOf = _ => Color.black,
