@@ -5,7 +5,7 @@ import org.scalatest._
 import shapeless._
 import nat._
 import spire.random.Generator
-import spire.random.Generator.rng
+//import spire.random.Generator.rng
 
 class GeneticAlgorithmSpec extends FunSuite with Matchers {
 
@@ -16,7 +16,7 @@ class GeneticAlgorithmSpec extends FunSuite with Matchers {
 
     // val generic = Generic[Rabbit]
     // generic.Repr
-
+/*
     implicit val rabbitSpecies = new Species[G] {
 
       def random(gen: Generator): G = {
@@ -32,7 +32,7 @@ class GeneticAlgorithmSpec extends FunSuite with Matchers {
       }
 
     }
-
+*/
 //    val ga = GeneticAlgorithm[G, GG](populationSize = 100, numGenerations = 100)
 //
 //    val log = ga.run(rng)
