@@ -3,8 +3,8 @@ package axle.ml
 import org.scalatest._
 
 import shapeless._
-import nat._
-import spire.random.Generator
+//import nat._
+//import spire.random.Generator
 //import spire.random.Generator.rng
 
 class GeneticAlgorithmSpec extends FunSuite with Matchers {
