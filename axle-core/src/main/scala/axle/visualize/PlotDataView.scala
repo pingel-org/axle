@@ -3,12 +3,11 @@ package axle.visualize
 import scala.collection.immutable.TreeMap
 import scala.annotation.implicitNotFound
 
+import spire.algebra.AdditiveMonoid
 import cats.kernel.Order
 import cats.implicits._
-import cats.Order.catsKernelOrderingForOrder
 
 import axle.algebra.Plottable
-import axle.algebra.Zero
 import axle.stats.ProbabilityModel
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
@@ -27,7 +26,7 @@ object PlotDataView {
 
   final def apply[S, X, Y, D](implicit ev: PlotDataView[S, X, Y, D]) = ev
 
-  implicit def treeMapDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable]: PlotDataView[S, X, Y, TreeMap[X, Y]] =
+  implicit def treeMapDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: AdditiveMonoid: Plottable]: PlotDataView[S, X, Y, TreeMap[X, Y]] =
     new PlotDataView[S, X, Y, TreeMap[X, Y]] {
 
       def xsOf(d: TreeMap[X, Y]): Traversable[X] = d.keys
@@ -39,13 +38,13 @@ object PlotDataView {
         val minXCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) => xsOf(d).headOption
         })
-        val minX = if (minXCandidates.size > 0) minXCandidates.min else Zero[X].zero
+        val minX = if (minXCandidates.size > 0) minXCandidates.min else AdditiveMonoid[X].zero
 
         val maxXCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) => xsOf(d).lastOption
         })
 
-        val maxX = if (minXCandidates.size > 0) maxXCandidates.max else Zero[X].zero
+        val maxX = if (minXCandidates.size > 0) maxXCandidates.max else AdditiveMonoid[X].zero
 
         (minX, maxX)
 
@@ -62,7 +61,7 @@ object PlotDataView {
               Some(xs map { valueOf(d, _) } min)
         }) filter { Plottable[Y].isPlottable _ }
 
-        val minY = if (minYCandidates.size > 0) minYCandidates.min else Zero[Y].zero
+        val minY = if (minYCandidates.size > 0) minYCandidates.min else AdditiveMonoid[Y].zero
 
         val maxYCandidates = include.toList ++ (data flatMap {
           case (label, d: TreeMap[X, Y]) => {
@@ -74,13 +73,13 @@ object PlotDataView {
           }
         }) filter { Plottable[Y].isPlottable _ }
 
-        val maxY = if (minYCandidates.size > 0) maxYCandidates.max else Zero[Y].zero
+        val maxY = if (minYCandidates.size > 0) maxYCandidates.max else AdditiveMonoid[Y].zero
 
         (minY, maxY)
       }
     }
 
-  implicit def probabilityDataView[S, X: Order: Zero: Plottable, Y: Order: Zero: Plottable, M[_]](
+  implicit def probabilityDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: AdditiveMonoid: Plottable, M[_]](
       implicit prob: ProbabilityModel[M, Y]): PlotDataView[S, X, Y, M[X]] =
     new PlotDataView[S, X, Y, M[X]] {
 
@@ -94,12 +93,12 @@ object PlotDataView {
         val minXCandidates = include.toList ++ (data flatMap {
           case (label, model) => xsOf(model).headOption
         })
-        val minX = if (minXCandidates.size > 0) minXCandidates.min else Zero[X].zero
+        val minX = if (minXCandidates.size > 0) minXCandidates.min else AdditiveMonoid[X].zero
 
         val maxXCandidates = include.toList ++ (data flatMap {
           case (label, model) => xsOf(model).lastOption
         })
-        val maxX = if (minXCandidates.size > 0) maxXCandidates.max else Zero[X].zero
+        val maxX = if (minXCandidates.size > 0) maxXCandidates.max else AdditiveMonoid[X].zero
 
         (minX, maxX)
       }
@@ -115,7 +114,7 @@ object PlotDataView {
               Some(xs map { valueOf(model, _) } min)
         }) filter { Plottable[Y].isPlottable _ }
 
-        val minY = if (minYCandidates.size > 0) minYCandidates.min else Zero[Y].zero
+        val minY = if (minYCandidates.size > 0) minYCandidates.min else AdditiveMonoid[Y].zero
 
         val maxYCandidates = include.toList ++ (data flatMap {
           case (label, model) => {
@@ -127,7 +126,7 @@ object PlotDataView {
           }
         }) filter { Plottable[Y].isPlottable _ }
 
-        val maxY = if (minYCandidates.size > 0) maxYCandidates.max else Zero[Y].zero
+        val maxY = if (minYCandidates.size > 0) maxYCandidates.max else AdditiveMonoid[Y].zero
 
         (minY, maxY)
       }

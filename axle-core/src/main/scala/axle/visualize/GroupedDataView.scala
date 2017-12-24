@@ -1,10 +1,10 @@
 package axle.visualize
 
-import axle.algebra.Plottable
-import axle.algebra.Zero
 import scala.annotation.implicitNotFound
+import spire.algebra.AdditiveMonoid
 import cats.kernel.Order
-import cats.Order.catsKernelOrderingForOrder
+import cats.implicits._
+import axle.algebra.Plottable
 
 /**
  *
@@ -29,10 +29,10 @@ object GroupedDataView {
 
   final def apply[G, S, Y, D](implicit ev: GroupedDataView[G, S, Y, D]): GroupedDataView[G, S, Y, D] = ev
 
-  implicit def mapGroupedDataView[G: Order, S: Order, Y: Plottable: Zero: Order]: GroupedDataView[G, S, Y, Map[(G, S), Y]] =
+  implicit def mapGroupedDataView[G: Order, S: Order, Y: Plottable: AdditiveMonoid: Order]: GroupedDataView[G, S, Y, Map[(G, S), Y]] =
     new GroupedDataView[G, S, Y, Map[(G, S), Y]] {
 
-      val yZero = Zero[Y]
+      val yAdditiveMonoid = AdditiveMonoid[Y]
       val yPlottable = Plottable[Y]
 
       def groups(d: Map[(G, S), Y]): Traversable[G] =
@@ -42,17 +42,17 @@ object GroupedDataView {
         d.keys.map(_._2).toSet.toList.sorted // TODO cache
 
       def valueOf(d: Map[(G, S), Y], gs: (G, S)): Y =
-        d.get(gs).getOrElse(yZero.zero)
+        d.get(gs).getOrElse(yAdditiveMonoid.zero)
 
       def yRange(d: Map[(G, S), Y]): (Y, Y) = {
 
         val minY = slices(d).map { s =>
-          (groups(d).map { g => valueOf(d, (g, s)) } ++ List(yZero.zero))
+          (groups(d).map { g => valueOf(d, (g, s)) } ++ List(yAdditiveMonoid.zero))
             .filter(yPlottable.isPlottable _).min
         }.min
 
         val maxY = slices(d).map { s =>
-          (groups(d).map { g => valueOf(d, (g, s)) } ++ List(yZero.zero))
+          (groups(d).map { g => valueOf(d, (g, s)) } ++ List(yAdditiveMonoid.zero))
             .filter(yPlottable.isPlottable _).max
         }.max
 

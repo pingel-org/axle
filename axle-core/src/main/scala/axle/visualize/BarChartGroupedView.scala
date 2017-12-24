@@ -9,7 +9,6 @@ import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import cats.implicits._
-import cats.Order.catsKernelOrderingForOrder
 
 case class BarChartGroupedView[G, S, Y, D, H](
     chart: BarChartGrouped[G, S, Y, D, H],
@@ -30,8 +29,8 @@ case class BarChartGroupedView[G, S, Y, D, H](
 
   val (dataMinY, dataMaxY) = groupedDataView.yRange(data)
 
-  val minY = List(xAxis.getOrElse(zeroY.zero), dataMinY).min
-  val maxY = List(xAxis.getOrElse(zeroY.zero), dataMaxY).max
+  val minY = List(xAxis.getOrElse(additiveMonoidY.zero), dataMinY).min
+  val maxY = List(xAxis.getOrElse(additiveMonoidY.zero), dataMaxY).max
 
   implicit val ddls = axle.algebra.LengthSpace.doubleDoubleLengthSpace
 
@@ -42,7 +41,7 @@ case class BarChartGroupedView[G, S, Y, D, H](
     minY, maxY)
 
   val vLine = VerticalLine(scaledArea, yAxis, black)
-  val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(zeroY.zero), black)
+  val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(additiveMonoidY.zero), black)
 
   val gTics = XTics(
     scaledArea,

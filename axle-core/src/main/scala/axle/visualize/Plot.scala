@@ -2,7 +2,7 @@ package axle.visualize
 
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
-import axle.algebra.Zero
+import spire.algebra.AdditiveMonoid
 import axle.visualize.element.Text
 
 import cats.Show
@@ -32,11 +32,11 @@ case class Plot[S, X, Y, D](
     yAxis: Option[X] = None,
     yAxisLabel: Option[String] = None)(
         implicit val sShow: Show[S],
-        val xZero: Zero[X],
+        val xAdditiveMonoid: AdditiveMonoid[X],
         val xts: Tics[X],
         val xEq: Eq[X],
         val xLength: LengthSpace[X, _, Double],
-        val yZero: Zero[Y],
+        val yAdditiveMonoid: AdditiveMonoid[Y],
         val yts: Tics[Y],
         val yEq: Eq[Y],
         val yLength: LengthSpace[Y, _, Double],

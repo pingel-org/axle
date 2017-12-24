@@ -13,7 +13,6 @@ import monix.execution.Scheduler.Implicits.global
 
 import axle.reactive.intervalScan
 import axle.quanta.Time
-import axle.algebra.modules._
 import axle.jung.directedGraphJung
 import axle.reactive.CurrentValueSubscriber
 import axle.awt.play
@@ -35,6 +34,7 @@ class PlaySpec extends FunSuite with Matchers {
 
     implicit val tr = {
       implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      import axle.algebra.modules._
       Time.converterGraphK2[Double, DirectedSparseGraph]
     }
     import tr._
@@ -43,7 +43,9 @@ class PlaySpec extends FunSuite with Matchers {
     val cvSub = new CurrentValueSubscriber[Map[String, Double]]()
     val cvCancellable = dataUpdates.subscribe(cvSub)
 
-    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+    // implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+    import spire.algebra.AdditiveMonoid
+    implicit val additiveMonoidDouble: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
     val chart = BarChart[String, Double, Map[String, Double], String](
       () => cvSub.currentValue.getOrElse(sales),
       title = Some("fruit sales"),

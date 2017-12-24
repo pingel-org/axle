@@ -4,7 +4,8 @@ package axle
 import cats.kernel.Order
 import cats.kernel.Eq
 
-import axle.algebra.Zero
+import spire.algebra.AdditiveMonoid
+
 import axle.algebra.Tics
 import axle.algebra.Plottable
 import axle.algebra.LengthSpace
@@ -17,8 +18,11 @@ import org.joda.time.{ Seconds, Minutes, Hours, Days, Weeks }
 
 package object joda {
 
-  def dateTimeZero(t: DateTime): Zero[DateTime] = new Zero[DateTime] {
-    def zero: DateTime = t // new DateTime()
+  def dateTimeAdditiveMonoid(z: DateTime): AdditiveMonoid[DateTime] = new AdditiveMonoid[DateTime] {
+
+    def zero: DateTime = z // new DateTime()
+
+    def plus(l: DateTime, r: DateTime): DateTime = ???
   }
 
   implicit val dateTimeOrder: Order[DateTime] = new Order[DateTime] {

@@ -37,7 +37,7 @@ class PlotWavesSpec extends FunSuite with Matchers {
 
     val waves = (0 until 20).map(randomTimeSeries).toList
 
-    implicit val zeroDT = axle.joda.dateTimeZero(now)
+    implicit val zeroDT = axle.joda.dateTimeAdditiveMonoid(now)
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     // test implicit conjuring:

@@ -3,7 +3,6 @@ package axle
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.algebra.Zero
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
@@ -70,13 +69,18 @@ package object quanta {
       override def isPlottable(t: UnittedQuantity[Q, N]): Boolean = Plottable[N].isPlottable(t.magnitude)
     }
 
-  implicit def unittedZero[Q, N: AdditiveMonoid](
-    implicit base: UnitOfMeasurement[Q]): Zero[UnittedQuantity[Q, N]] =
-    new Zero[UnittedQuantity[Q, N]] {
+  implicit def unittedAdditiveMonoid[Q, N: AdditiveMonoid: MultiplicativeMonoid](
+    implicit converter: UnitConverter[Q, N],
+    base: UnitOfMeasurement[Q]): AdditiveMonoid[UnittedQuantity[Q, N]] =
+    new AdditiveMonoid[UnittedQuantity[Q, N]] {
 
       val am = implicitly[AdditiveMonoid[N]]
 
       def zero: UnittedQuantity[Q, N] = am.zero *: base
+
+      // AdditiveSemigroup
+      def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
+        UnittedQuantity((converter.convert(x, y.unit)).magnitude + y.magnitude, y.unit)
 
     }
 

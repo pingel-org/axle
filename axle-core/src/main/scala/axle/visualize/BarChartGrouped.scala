@@ -7,7 +7,7 @@ import axle.quanta.UnittedQuantity
 import axle.quanta.Angle
 import axle.algebra.LengthSpace
 import axle.algebra.Tics
-import axle.algebra.Zero
+import spire.algebra.AdditiveMonoid
 import axle.visualize.element.BarChartGroupedKey
 import axle.visualize.element.Text
 
@@ -38,7 +38,7 @@ case class BarChartGrouped[G, S, Y, D, H](
         val showS: Show[S],
         val showH: Show[H],
         val orderY: Order[Y],
-        val zeroY: Zero[Y],
+        val additiveMonoidY: AdditiveMonoid[Y],
         val ticsY: Tics[Y],
         val lengthSpaceY: LengthSpace[Y, _, Double],
         val groupedDataView: GroupedDataView[G, S, Y, D]) {
