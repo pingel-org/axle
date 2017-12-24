@@ -26,7 +26,66 @@ object PlotDataView {
 
   final def apply[S, X, Y, D](implicit ev: PlotDataView[S, X, Y, D]) = ev
 
-  implicit def treeMapDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: AdditiveMonoid: Plottable]: PlotDataView[S, X, Y, TreeMap[X, Y]] =
+  /**
+   * treeMapDataView
+   * 
+   * Note: unchecked requirement that xRange argument be non-empty
+   */
+
+  implicit def treeMapDataView[S, X: Order: Plottable, Y: Order: Plottable]: PlotDataView[S, X, Y, TreeMap[X, Y]] =
+    new PlotDataView[S, X, Y, TreeMap[X, Y]] {
+
+      def xsOf(d: TreeMap[X, Y]): Traversable[X] = d.keys
+
+      def valueOf(d: TreeMap[X, Y], x: X): Y = d.apply(x)
+
+      def xRange(data: Seq[(S, TreeMap[X, Y])], include: Option[X]): (X, X) = {
+
+        val minXCandidates = include.toList ++ (data flatMap {
+          case (label, d: TreeMap[X, Y]) => xsOf(d).headOption
+        })
+        val minX = minXCandidates.min
+
+        val maxXCandidates = include.toList ++ (data flatMap {
+          case (label, d: TreeMap[X, Y]) => xsOf(d).lastOption
+        })
+
+        val maxX = maxXCandidates.max
+
+        (minX, maxX)
+
+      }
+
+      def yRange(data: Seq[(S, TreeMap[X, Y])], include: Option[Y]): (Y, Y) = {
+
+        val minYCandidates = include.toList ++ (data flatMap {
+          case (label, d: TreeMap[X, Y]) =>
+            val xs = xsOf(d)
+            if (xs.size === 0)
+              None
+            else
+              Some(xs map { valueOf(d, _) } min)
+        }) filter { Plottable[Y].isPlottable _ }
+
+        val minY = minYCandidates.min
+
+        val maxYCandidates = include.toList ++ (data flatMap {
+          case (label, d: TreeMap[X, Y]) => {
+            val xs = xsOf(d)
+            if (xs.size === 0)
+              None
+            else
+              Some(xs map { valueOf(d, _) } max)
+          }
+        }) filter { Plottable[Y].isPlottable _ }
+
+        val maxY = maxYCandidates.max
+
+        (minY, maxY)
+      }
+    }
+
+  implicit def treeMapDataViewWithZeroes[S, X: Order: AdditiveMonoid: Plottable, Y: Order: AdditiveMonoid: Plottable]: PlotDataView[S, X, Y, TreeMap[X, Y]] =
     new PlotDataView[S, X, Y, TreeMap[X, Y]] {
 
       def xsOf(d: TreeMap[X, Y]): Traversable[X] = d.keys
@@ -80,7 +139,8 @@ object PlotDataView {
     }
 
   implicit def probabilityDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: AdditiveMonoid: Plottable, M[_]](
-      implicit prob: ProbabilityModel[M, Y]): PlotDataView[S, X, Y, M[X]] =
+    implicit
+    prob: ProbabilityModel[M, Y]): PlotDataView[S, X, Y, M[X]] =
     new PlotDataView[S, X, Y, M[X]] {
 
       def xsOf(model: M[X]): Traversable[X] = prob.values(model)
