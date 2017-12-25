@@ -19,7 +19,7 @@ import axle.joda.dateTimeDurationLengthSpace
 
 class PlotWavesSpec extends FunSuite with Matchers {
 
-  implicit val trigDoudle: Trig[Double] = spire.implicits.DoubleAlgebra
+  implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
 
   test("wave plot") {
 
