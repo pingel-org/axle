@@ -40,15 +40,17 @@ class PlotWavesSpec extends FunSuite with Matchers {
     PlotDataView[String, DateTime, Double, TreeMap[DateTime, Double]]
     import cats.implicits._
 
+    import spire.algebra.AdditiveMonoid
+    implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
+
     val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
       () => waves,
       connect = true,
       colorOf = _ => Color.black,
       title = Some("Random Waves"),
-      xAxis = Some(0d),
       xAxisLabel = Some("time (t)"),
       yAxis = Some(now),
-      yAxisLabel = Some("A·sin(ω·t + φ)"))
+      yAxisLabel = Some("A·sin(ω·t + φ)")).zeroXAxis
 
     import axle.web._
     val svgName = "waves.svg"

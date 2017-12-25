@@ -59,11 +59,9 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
       connect = true,
       colorOf = _ => Color.black,
       drawKey = false,
-      xAxis = Some(0d *: bitDouble),
       xAxisLabel = Some("p(x='HEAD)"),
-      yAxis = Some(Rational(0)),
       yAxisLabel = Some("H"),
-      title = Some("Entropy")) // (zr, tr, er, lsrrd, zuqid, tuqid, euqid, lsuqiddd, pdv)
+      title = Some("Entropy")).zeroAxes
 
     import axle.web._
     SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]

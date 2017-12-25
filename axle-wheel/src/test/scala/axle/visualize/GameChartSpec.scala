@@ -37,8 +37,7 @@ class GameChartSpec extends FunSuite with Matchers {
     val plot = Plot[String, Int, Rational, ConditionalProbabilityTable0[Int, Rational]](
       () => Vector(("", scoreD)),
       colorOf = _ => Color.black,
-      drawKey = true,
-      xAxis = Some(Rational(0)))
+      drawKey = true).zeroXAxis
 
     import axle.web._
     import axle.awt._
