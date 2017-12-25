@@ -10,7 +10,6 @@ import cats.implicits._
 import spire.math.sin
 import spire.random.Generator.rng
 import spire.algebra.Trig
-import spire.algebra.Field
 
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
@@ -37,9 +36,6 @@ class PlotWavesSpec extends FunSuite with Matchers {
 
     val waves = (0 until 20).map(randomTimeSeries).toList
 
-    implicit val zeroDT = axle.joda.dateTimeAdditiveMonoid(now)
-
-    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     // test implicit conjuring:
     PlotDataView[String, DateTime, Double, TreeMap[DateTime, Double]]
     import cats.implicits._

@@ -29,7 +29,7 @@ object PlotDataView {
   /**
    * treeMapDataView
    * 
-   * Note: unchecked requirement that xRange argument be non-empty
+   * Note: unchecked requirement that xRange and yRange argument be non-empty
    */
 
   implicit def treeMapDataView[S, X: Order: Plottable, Y: Order: Plottable]: PlotDataView[S, X, Y, TreeMap[X, Y]] =
