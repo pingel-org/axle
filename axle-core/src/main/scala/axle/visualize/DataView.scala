@@ -1,10 +1,10 @@
 package axle.visualize
 
 import scala.annotation.implicitNotFound
+import spire.algebra.AdditiveMonoid
 import cats.kernel.Order
-import cats.Order.catsKernelOrderingForOrder
+import cats.implicits._
 import axle.algebra.Plottable
-import axle.algebra.Zero
 import axle.stats.ProbabilityModel
 
 /**
@@ -26,32 +26,32 @@ object DataView {
 
   final def apply[X, Y, D](implicit ev: DataView[X, Y, D]) = ev
 
-  implicit def mapDataView[X: Order, Y: Plottable: Zero: Order]: DataView[X, Y, Map[X, Y]] =
+  implicit def mapDataView[X: Order, Y: Plottable: AdditiveMonoid: Order]: DataView[X, Y, Map[X, Y]] =
     new DataView[X, Y, Map[X, Y]] {
 
       val yPlottable = Plottable[Y]
-      val yZero = Zero[Y]
+      val yAdditiveMonoid = AdditiveMonoid[Y]
 
       def keys(d: Map[X, Y]): Traversable[X] = d.keys.toList.sorted
 
-      def valueOf(d: Map[X, Y], x: X): Y = d.get(x).getOrElse(yZero.zero)
+      def valueOf(d: Map[X, Y], x: X): Y = d.get(x).getOrElse(yAdditiveMonoid.zero)
 
       def yRange(d: Map[X, Y]): (Y, Y) = {
 
-        val yMin = (keys(d).map { x => valueOf(d, x) } ++ List(yZero.zero)).filter(yPlottable.isPlottable _).min
-        val yMax = (keys(d).map { x => valueOf(d, x) } ++ List(yZero.zero)).filter(yPlottable.isPlottable _).max
+        val yMin = (keys(d).map { x => valueOf(d, x) } ++ List(yAdditiveMonoid.zero)).filter(yPlottable.isPlottable _).min
+        val yMax = (keys(d).map { x => valueOf(d, x) } ++ List(yAdditiveMonoid.zero)).filter(yPlottable.isPlottable _).max
 
         (yMin, yMax)
       }
 
     }
 
-  implicit def probabilityDataView[X: Order, Y: Plottable: Zero: Order, M[_]](
+  implicit def probabilityDataView[X: Order, Y: Plottable: AdditiveMonoid: Order, M[_]](
       implicit prob: ProbabilityModel[M, Y]): DataView[X, Y, M[X]] =
     new DataView[X, Y, M[X]] {
 
       val yPlottable = Plottable[Y]
-      val yZero = Zero[Y]
+      val yAdditiveMonoid = AdditiveMonoid[Y]
 
       def keys(d: M[X]): Traversable[X] = prob.values(d)
 
@@ -61,8 +61,8 @@ object DataView {
 
         val ks = keys(d)
 
-        val yMin = (ks.map { x => valueOf(d, x) } ++ List(yZero.zero)).filter(yPlottable.isPlottable _).min
-        val yMax = (ks.map { x => valueOf(d, x) } ++ List(yZero.zero)).filter(yPlottable.isPlottable _).max
+        val yMin = (ks.map { x => valueOf(d, x) } ++ List(yAdditiveMonoid.zero)).filter(yPlottable.isPlottable _).min
+        val yMax = (ks.map { x => valueOf(d, x) } ++ List(yAdditiveMonoid.zero)).filter(yPlottable.isPlottable _).max
 
         (yMin, yMax)
       }

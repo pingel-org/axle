@@ -4,7 +4,6 @@ package axle
 import cats.kernel.Order
 import cats.kernel.Eq
 
-import axle.algebra.Zero
 import axle.algebra.Tics
 import axle.algebra.Plottable
 import axle.algebra.LengthSpace
@@ -16,10 +15,6 @@ import org.joda.time.Duration
 import org.joda.time.{ Seconds, Minutes, Hours, Days, Weeks }
 
 package object joda {
-
-  def dateTimeZero(t: DateTime): Zero[DateTime] = new Zero[DateTime] {
-    def zero: DateTime = t // new DateTime()
-  }
 
   implicit val dateTimeOrder: Order[DateTime] = new Order[DateTime] {
     def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)

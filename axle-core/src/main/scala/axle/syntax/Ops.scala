@@ -12,7 +12,7 @@ import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
-import axle.algebra.Zero
+import spire.algebra.AdditiveMonoid
 import cats.kernel.Eq
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) {
@@ -167,7 +167,7 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
   def tr = la.transpose(lhs)
   def inv = la.invert(lhs)
 
-  def scalar(implicit rz: Zero[RowT], cz: Zero[ColT]): T = {
+  def scalar(implicit rz: AdditiveMonoid[RowT], cz: AdditiveMonoid[ColT]): T = {
     assert(la.isScalar(lhs))
     la.get(lhs)(rz.zero, cz.zero)
   }

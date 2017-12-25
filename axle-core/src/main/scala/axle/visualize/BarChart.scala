@@ -4,7 +4,7 @@ import cats.Show
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.algebra.Zero
+import spire.algebra.AdditiveMonoid
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.visualize.element.BarChartKey
@@ -37,7 +37,7 @@ case class BarChart[C, Y, D, H](
     linkOf: C => Option[(java.net.URL, Color)] = (c: C) => None)(
         implicit val showC: Show[C],
         val showH: Show[H],
-        val zeroY: Zero[Y],
+        val additiveMonoidY: AdditiveMonoid[Y],
         val orderY: Order[Y],
         val ticsY: Tics[Y],
         val eqY: Eq[Y],

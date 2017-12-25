@@ -10,7 +10,6 @@ import cats.implicits._
 import spire.math.sin
 import spire.random.Generator.rng
 import spire.algebra.Trig
-import spire.algebra.Field
 
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
@@ -20,7 +19,7 @@ import axle.joda.dateTimeDurationLengthSpace
 
 class PlotWavesSpec extends FunSuite with Matchers {
 
-  implicit val trigDoudle: Trig[Double] = spire.implicits.DoubleAlgebra
+  implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
 
   test("wave plot") {
 
@@ -37,22 +36,21 @@ class PlotWavesSpec extends FunSuite with Matchers {
 
     val waves = (0 until 20).map(randomTimeSeries).toList
 
-    implicit val zeroDT = axle.joda.dateTimeZero(now)
-
-    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     // test implicit conjuring:
     PlotDataView[String, DateTime, Double, TreeMap[DateTime, Double]]
     import cats.implicits._
+
+    import spire.algebra.AdditiveMonoid
+    implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
 
     val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
       () => waves,
       connect = true,
       colorOf = _ => Color.black,
       title = Some("Random Waves"),
-      xAxis = Some(0d),
       xAxisLabel = Some("time (t)"),
       yAxis = Some(now),
-      yAxisLabel = Some("A·sin(ω·t + φ)"))
+      yAxisLabel = Some("A·sin(ω·t + φ)")).zeroXAxis
 
     import axle.web._
     val svgName = "waves.svg"
