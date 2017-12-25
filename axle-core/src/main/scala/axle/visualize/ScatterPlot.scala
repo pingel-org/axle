@@ -19,33 +19,34 @@ import cats.Order.catsKernelOrderingForOrder
  */
 
 case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
-    dataFn: Function0[D],
-    width: Double = 600d,
-    height: Double = 600d,
-    border: Double = 50d,
-    diameterOf: (X, Y) => Double = (x: X, y: Y) => 10d,
-    colorOf: (X, Y) => Color = (x: X, y: Y) => Color.red,
-    labelOf: (X, Y) => Option[(S, Boolean)] = (x: X, y: Y) => None,
-    fontName: String = "Courier New",
-    fontSize: Double = 12d,
-    bold: Boolean = false,
-    titleFontName: String = "Palatino",
-    titleFontSize: Double = 20d,
-    title: Option[String] = None,
-    drawXTics: Boolean = true,
-    drawXTicLines: Boolean = true,
-    drawYTics: Boolean = true,
-    drawYTicLines: Boolean = true,
-    drawBorder: Boolean = true,
-    xRange: Option[(X, X)] = None,
-    yAxis: Option[X] = None,
-    yRange: Option[(Y, Y)] = None,
-    xAxis: Option[Y] = None,
-    xAxisLabel: Option[String] = None,
-    yAxisLabel: Option[String] = None)(
-        implicit val lengthX: LengthSpace[X, X, Double],
-        val lengthY: LengthSpace[Y, Y, Double],
-        val dataView: ScatterDataView[X, Y, D]) {
+  dataFn:        Function0[D],
+  width:         Double                         = 600d,
+  height:        Double                         = 600d,
+  border:        Double                         = 50d,
+  diameterOf:    (X, Y) => Double               = (x: X, y: Y) => 10d,
+  colorOf:       (X, Y) => Color                = (x: X, y: Y) => Color.red,
+  labelOf:       (X, Y) => Option[(S, Boolean)] = (x: X, y: Y) => None,
+  fontName:      String                         = "Courier New",
+  fontSize:      Double                         = 12d,
+  bold:          Boolean                        = false,
+  titleFontName: String                         = "Palatino",
+  titleFontSize: Double                         = 20d,
+  title:         Option[String]                 = None,
+  drawXTics:     Boolean                        = true,
+  drawXTicLines: Boolean                        = true,
+  drawYTics:     Boolean                        = true,
+  drawYTicLines: Boolean                        = true,
+  drawBorder:    Boolean                        = true,
+  xRange:        Option[(X, X)]                 = None,
+  yAxis:         Option[X]                      = None,
+  yRange:        Option[(Y, Y)]                 = None,
+  xAxis:         Option[Y]                      = None,
+  xAxisLabel:    Option[String]                 = None,
+  yAxisLabel:    Option[String]                 = None)(
+  implicit
+  val lengthX:  LengthSpace[X, X, Double],
+  val lengthY:  LengthSpace[Y, Y, Double],
+  val dataView: ScatterDataView[X, Y, D]) {
 
   val xAxisLabelText = xAxisLabel.map(Text(_, width / 2, height - border / 2, fontName, fontSize, bold = true))
 
