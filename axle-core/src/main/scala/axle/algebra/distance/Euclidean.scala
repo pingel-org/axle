@@ -14,8 +14,9 @@ import spire.implicits.additiveGroupOps
  */
 
 class Euclidean[M: AdditiveAbGroup, D: NRoot](
-  implicit ips: InnerProductSpace[M, D])
-    extends MetricSpace[M, D] {
+  implicit
+  ips: InnerProductSpace[M, D])
+  extends MetricSpace[M, D] {
 
   val normed = ips.normed
 

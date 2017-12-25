@@ -11,8 +11,8 @@ import axle.visualize.element.YTics
 import cats.implicits._
 
 case class BarChartGroupedView[G, S, Y, D, H](
-    chart: BarChartGrouped[G, S, Y, D, H],
-    data: D) {
+  chart: BarChartGrouped[G, S, Y, D, H],
+  data:  D) {
 
   import chart._
 

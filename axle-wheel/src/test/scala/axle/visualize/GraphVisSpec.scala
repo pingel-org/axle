@@ -20,7 +20,8 @@ class GraphVisSpec extends FunSuite with Matchers {
     val c = "c"
     val d = "d"
 
-    val g = jug.make(List(a, b, c, d),
+    val g = jug.make(
+      List(a, b, c, d),
       List(
         (a, b, new Edge),
         (b, c, new Edge),
@@ -62,7 +63,8 @@ class GraphVisSpec extends FunSuite with Matchers {
     val c = "c"
     val d = "d"
 
-    val dg = jdg.make(List(a, b, c, d),
+    val dg = jdg.make(
+      List(a, b, c, d),
       List(
         (a, b, new Edge),
         (b, c, new Edge),

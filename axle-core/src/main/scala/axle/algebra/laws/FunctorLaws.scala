@@ -28,9 +28,10 @@ trait FunctorLaws[F, A] extends Laws {
   }
 
   def functorIdentity[G](
-    implicit functor: Functor[F, A, A, F],
-    arbF: Arbitrary[F],
-    eqF: Eq[F]) =
+    implicit
+    functor: Functor[F, A, A, F],
+    arbF:    Arbitrary[F],
+    eqF:     Eq[F]) =
     new FunctorRuleSet {
 
       def props: Seq[(String, Prop)] = Seq(
@@ -42,13 +43,14 @@ trait FunctorLaws[F, A] extends Laws {
     }
 
   def functorComposition[B, C, G, H](
-    implicit functorFabG: Functor[F, A, B, G],
+    implicit
+    functorFabG: Functor[F, A, B, G],
     functorGbcH: Functor[G, B, C, H],
     functorFacH: Functor[F, A, C, H],
-    arbFa: Arbitrary[F],
-    arbAB: Arbitrary[A => B],
-    arbBC: Arbitrary[B => C],
-    eqH: Eq[H]) =
+    arbFa:       Arbitrary[F],
+    arbAB:       Arbitrary[A => B],
+    arbBC:       Arbitrary[B => C],
+    eqH:         Eq[H]) =
     new FunctorRuleSet {
 
       def props: Seq[(String, Prop)] = Seq(

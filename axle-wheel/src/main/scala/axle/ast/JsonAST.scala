@@ -69,25 +69,25 @@ object JsonAST {
     case x: collection.convert.Wrappers$JMapWrapper =>
       mapToRuleNode(x.toMap.asInstanceOf[Map[String, Any]], parentLineNo)
 
-    case arr: Array[_] => AstNodeList(arr.map(obj2ast(_, parentLineNo)).toList, parentLineNo)
+    case arr: Array[_]   => AstNodeList(arr.map(obj2ast(_, parentLineNo)).toList, parentLineNo)
 
-    case list: List[_] => AstNodeList(list.map(obj2ast(_, parentLineNo)), parentLineNo)
-    
+    case list: List[_]   => AstNodeList(list.map(obj2ast(_, parentLineNo)), parentLineNo)
+
     case buff: Buffer[_] => AstNodeList(buff.map(obj2ast(_, parentLineNo)).toList, parentLineNo)
 
-    case i: Int => AstNodeValue(Some(string(i)), parentLineNo)
+    case i: Int          => AstNodeValue(Some(string(i)), parentLineNo)
 
-    case d: Double => AstNodeValue(Some(string(d)), parentLineNo)
+    case d: Double       => AstNodeValue(Some(string(d)), parentLineNo)
 
-    case s: String => AstNodeValue(Some(s), parentLineNo)
+    case s: String       => AstNodeValue(Some(s), parentLineNo)
 
-    case b: Boolean => AstNodeValue(Some(string(b)), parentLineNo)
+    case b: Boolean      => AstNodeValue(Some(string(b)), parentLineNo)
 
-    case None => AstNodeValue(None, parentLineNo) // verify this
+    case None            => AstNodeValue(None, parentLineNo) // verify this
 
-    case null => AstNodeValue(None, parentLineNo)
+    case null            => AstNodeValue(None, parentLineNo)
 
-    case z @ _ => throw new Exception("unable to fromJson: " + z)
+    case z @ _           => throw new Exception("unable to fromJson: " + z)
 
   }
 

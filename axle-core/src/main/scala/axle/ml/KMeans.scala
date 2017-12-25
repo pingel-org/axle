@@ -37,19 +37,20 @@ import axle.syntax.linearalgebra._
  */
 
 case class KMeans[T: Eq, F, G, M](
-  data: F,
-  N: Int,
+  data:             F,
+  N:                Int,
   featureExtractor: T => Seq[Double],
-  normalizerMaker: M => Normalize[M],
-  K: Int,
-  iterations: Int)(
+  normalizerMaker:  M => Normalize[M],
+  K:                Int,
+  iterations:       Int)(
   gen: Generator)(
-    implicit space: MetricSpace[M, Double],
-    functor: Functor[F, T, Seq[Double], G],
-    val la: LinearAlgebra[M, Int, Int, Double],
-    index: Indexed[G, Int, Seq[Double]],
-    finite: Finite[F, Int])
-    extends Function1[T, Int] {
+  implicit
+  space:   MetricSpace[M, Double],
+  functor: Functor[F, T, Seq[Double], G],
+  val la:  LinearAlgebra[M, Int, Int, Double],
+  index:   Indexed[G, Int, Seq[Double]],
+  finite:  Finite[F, Int])
+  extends Function1[T, Int] {
 
   val features = data.map(featureExtractor)
 
@@ -84,8 +85,8 @@ case class KMeans[T: Eq, F, G, M](
 
   def centroidIndexAndDistanceClosestTo(
     space: MetricSpace[M, Double],
-    μ: M,
-    x: M): (Int, Double) =
+    μ:     M,
+    x:     M): (Int, Double) =
     (0 until μ.rows).map(r => (r, space.distance(μ.row(r), x))).minBy(_._2)
 
   /**
@@ -101,8 +102,8 @@ case class KMeans[T: Eq, F, G, M](
 
   def assignmentsAndDistances(
     space: MetricSpace[M, Double],
-    X: M,
-    μ: M): (M, M) = {
+    X:     M,
+    μ:     M): (M, M) = {
     val AD = (0 until X.rows).map(r => {
       val xi = X.row(r)
       val (a, d) = centroidIndexAndDistanceClosestTo(space, μ, xi)
@@ -122,9 +123,9 @@ case class KMeans[T: Eq, F, G, M](
    */
 
   def clusterLA(
-    X: M,
-    space: MetricSpace[M, Double],
-    K: Int,
+    X:          M,
+    space:      MetricSpace[M, Double],
+    K:          Int,
     iterations: Int)(gen: Generator): Seq[(M, M, M)] = {
 
     assert(K < X.rows)
@@ -174,17 +175,18 @@ case class KMeans[T: Eq, F, G, M](
 object KMeans {
 
   def common[T: Eq, U[_], M](
-    data: U[T],
-    N: Int,
+    data:             U[T],
+    N:                Int,
     featureExtractor: T => Seq[Double],
-    normalizerMaker: M => Normalize[M],
-    K: Int,
-    iterations: Int)(
+    normalizerMaker:  M => Normalize[M],
+    K:                Int,
+    iterations:       Int)(
     gen: Generator)(
-      implicit space: MetricSpace[M, Double],
-      functor: Functor[U[T], T, Seq[Double], U[Seq[Double]]],
-      la: LinearAlgebra[M, Int, Int, Double],
-      index: Indexed[U[Seq[Double]], Int, Seq[Double]],
-      finite: Finite[U[T], Int]): KMeans[T, U[T], U[Seq[Double]], M] =
+    implicit
+    space:   MetricSpace[M, Double],
+    functor: Functor[U[T], T, Seq[Double], U[Seq[Double]]],
+    la:      LinearAlgebra[M, Int, Int, Double],
+    index:   Indexed[U[Seq[Double]], Int, Seq[Double]],
+    finite:  Finite[U[T], Int]): KMeans[T, U[T], U[Seq[Double]], M] =
     KMeans(data, N, featureExtractor, normalizerMaker, K, iterations)(gen)
 }

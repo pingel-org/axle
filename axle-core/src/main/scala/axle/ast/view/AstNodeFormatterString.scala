@@ -3,8 +3,8 @@ package axle.ast.view
 import cats.Show
 
 case class AstNodeFormatterString(
-  config: FormatterConfig,
-  state: FormatterState,
+  config:   FormatterConfig,
+  state:    FormatterState,
   subState: List[String]) // was "tokens"
   extends AstNodeFormatter[String, List[String]] {
 

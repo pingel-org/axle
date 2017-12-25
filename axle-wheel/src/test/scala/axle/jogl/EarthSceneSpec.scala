@@ -24,11 +24,11 @@ class EarthSceneSpec extends FunSuite with Matchers {
 
   test("axle.jogl earth scene") {
 
-//    implicit val ddc = {
-//      import axle.algebra.modules.doubleRationalModule
-//      import spire.implicits.DoubleAlgebra
-//      Distance.converterGraphK2[Double, DirectedSparseGraph]
-//    }
+    //    implicit val ddc = {
+    //      import axle.algebra.modules.doubleRationalModule
+    //      import spire.implicits.DoubleAlgebra
+    //      Distance.converterGraphK2[Double, DirectedSparseGraph]
+    //    }
 
     implicit val distanceConverter = Distance.converterGraphK2[Float, DirectedSparseGraph]
     import distanceConverter._
@@ -78,12 +78,12 @@ class EarthSceneSpec extends FunSuite with Matchers {
       rotate(gl, 90f *: °, -1f, 0f, 0f)
     }
 
-//    def earthOrienter(t: Long)(gl: GL2): Unit = {
-//      translate(gl, km, 0f *: km, 0f *: km, -1f *: cameraDistance)
-//      rotate(gl, cameraCoordinates.latitude, 1f, 0f, 0f)
-//      rotate(gl, cameraCoordinates.longitude, 0f, -1f, 0f)
-//      rotate(gl, 90f *: °, -1f, 0f, 0f)
-//    }
+    //    def earthOrienter(t: Long)(gl: GL2): Unit = {
+    //      translate(gl, km, 0f *: km, 0f *: km, -1f *: cameraDistance)
+    //      rotate(gl, cameraCoordinates.latitude, 1f, 0f, 0f)
+    //      rotate(gl, cameraCoordinates.longitude, 0f, -1f, 0f)
+    //      rotate(gl, 90f *: °, -1f, 0f, 0f)
+    //    }
 
     def airportOrienter(airport: Airport, t: Long)(gl: GL2): Unit = {
       translate(gl, km, 0f *: km, 0f *: km, -1f *: cameraDistance)

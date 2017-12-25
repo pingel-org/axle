@@ -7,10 +7,10 @@ import axle.quanta.FlowConverter
 import axle.quanta.UnittedQuantity
 
 case class River(
-  name: String,
-  length: UnittedQuantity[Distance, Double],
+  name:             String,
+  length:           UnittedQuantity[Distance, Double],
   averageDischarge: UnittedQuantity[Flow, Double],
-  wikpediaUrl: String)
+  wikpediaUrl:      String)
 
 /**
  * Rivers

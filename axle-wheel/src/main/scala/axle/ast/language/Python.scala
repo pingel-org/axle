@@ -80,7 +80,9 @@ object Python {
     "Exec" := Sq(Kw("exec"), Sp(), Sub("expr"), SqT(Lit(" in "), Sub("locals")), SqT(Lit(", "), Sub("globals"))))
 
   val if_rule = "If" :=
-    Sq(For("tests",
+    Sq(
+      For(
+      "tests",
       Sq(PosKw("if", "elif"), Sp(), VarN(0), Lit(":"), CR(),
         Indent(),
         VarN(1),
@@ -126,7 +128,8 @@ object Python {
     Indent(),
     Sub("body"),
     Dedent(),
-    For("handlers",
+    For(
+      "handlers",
       Sq(Dedent(), Kw("except"), Sp(), VarN(0), SqT(Lit(","), Sp(), VarN(1)), Lit(":"), CR(),
         Indent(),
         VarN(2),
@@ -167,7 +170,8 @@ object Python {
     if_rule :: for_rule :: ifexp_rule :: while_rule :: with_rule :: tryexcept_rule ::
       tryfinally_rule :: class_rule :: function_rule :: decorators_rule :: Nil
 
-  val precedence = List((List("Lambda"), "left"),
+  val precedence = List(
+    (List("Lambda"), "left"),
     (List("Or"), "left"),
     (List("And"), "left"),
     (List("Not"), "left"),

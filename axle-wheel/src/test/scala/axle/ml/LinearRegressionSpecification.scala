@@ -4,7 +4,7 @@ import org.scalatest._
 import axle.jblas._
 
 class LinearRegressionSpecification
-    extends FunSuite with Matchers {
+  extends FunSuite with Matchers {
 
   test("Linear Regression") {
 

@@ -22,9 +22,9 @@ object LLLanguage {
 }
 
 case class LLLanguage(
-  name: String,
+  name:                String,
   _llRuleDescriptions: List[(String, List[String])],
-  startSymbolString: String = "S") extends Language {
+  startSymbolString:   String                       = "S") extends Language {
 
   def rules = Nil
 

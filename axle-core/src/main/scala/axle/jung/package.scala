@@ -133,8 +133,8 @@ package object jung {
         }).forall(identity)
 
       def forceClique(
-        jdsg: DirectedSparseGraph[V, E],
-        among: Set[V],
+        jdsg:   DirectedSparseGraph[V, E],
+        among:  Set[V],
         edgeFn: (V, V) => E)(implicit eqV: Eq[V], mV: Manifest[V]): DirectedSparseGraph[V, E] = {
 
         val newEdges: Iterable[(V, V, E)] = among.toVector.permutations(2)
@@ -344,8 +344,8 @@ package object jung {
         }).forall(identity)
 
       def forceClique(
-        jug: UndirectedSparseGraph[V, E],
-        among: Set[V],
+        jug:    UndirectedSparseGraph[V, E],
+        among:  Set[V],
         edgeFn: (V, V) => E)(implicit eqV: Eq[V], mv: Manifest[V]): UndirectedSparseGraph[V, E] = {
 
         val newEdges: Iterator[(V, V, E)] = among.toVector.combinations(2)

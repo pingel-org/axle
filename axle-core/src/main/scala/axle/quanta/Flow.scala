@@ -28,11 +28,13 @@ trait FlowConverter[N] extends UnitConverter[Flow, N] with FlowUnits {
 object Flow {
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
-    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Flow], N => N], UnitOfMeasurement[Flow], N => N]) =
+    implicit
+    evDG: DirectedGraph[DG[UnitOfMeasurement[Flow], N => N], UnitOfMeasurement[Flow], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Flow], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
-    implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Flow], N => N]) =
+    implicit
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Flow], N => N]) =
     new UnitConverterGraph[Flow, N, DG] with FlowConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Flow], UnitOfMeasurement[Flow], Bijection[N, N])] =

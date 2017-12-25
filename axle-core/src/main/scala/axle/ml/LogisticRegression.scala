@@ -7,13 +7,13 @@ import axle.syntax.linearalgebra._
 import axle.algebra.LinearAlgebra
 
 case class LogisticRegression[D, M](
-  examples: List[D],
-  numFeatures: Int,
-  featureExtractor: D => List[Double],
+  examples:           List[D],
+  numFeatures:        Int,
+  featureExtractor:   D => List[Double],
   objectiveExtractor: D => Boolean,
-  α: Double = 0.1,
-  numIterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
-    extends Function1[List[Double], Double] {
+  α:                  Double            = 0.1,
+  numIterations:      Int               = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
+  extends Function1[List[Double], Double] {
 
   implicit val mul = la.multiplicative
 
@@ -36,7 +36,7 @@ case class LogisticRegression[D, M](
   }
 
   /**
-   * 
+   *
    * Gradient descent's objective: minimize (over θ) the value of Jθ
    */
 

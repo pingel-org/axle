@@ -36,11 +36,13 @@ trait VolumeConverter[N] extends UnitConverter[Volume, N] with VolumeUnits {
 object Volume {
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
-    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Volume], N => N], UnitOfMeasurement[Volume], N => N]) =
-      converterGraph[N, DG[UnitOfMeasurement[Volume], N => N]]
+    implicit
+    evDG: DirectedGraph[DG[UnitOfMeasurement[Volume], N => N], UnitOfMeasurement[Volume], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[Volume], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
-    implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Volume], N => N]) =
+    implicit
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Volume], N => N]) =
     new UnitConverterGraph[Volume, N, DG] with VolumeConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Volume], UnitOfMeasurement[Volume], Bijection[N, N])] =

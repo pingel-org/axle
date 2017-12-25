@@ -49,7 +49,7 @@ object Factor {
 
       def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
         val newVars = (x.variables.toSet union y.variables.toSet).toVector
-        val newVariablesWithValues = newVars.map( variable => (variable, x.valuesOfVariable(variable)) )
+        val newVariablesWithValues = newVars.map(variable => (variable, x.valuesOfVariable(variable)))
         Factor(
           newVariablesWithValues,
           Factor.cases(
@@ -70,8 +70,8 @@ object Factor {
 }
 
 case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
-    variablesWithValues: Vector[(Variable[T], Vector[T])],
-    probabilities: Map[Vector[CaseIs[T]], N]) {
+  variablesWithValues: Vector[(Variable[T], Vector[T])],
+  probabilities:       Map[Vector[CaseIs[T]], N]) {
 
   val variables = variablesWithValues.map(_._1)
 
@@ -121,15 +121,17 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
   // Chapter 6 definition 6
   def maxOut(variable: Variable[T]): Factor[T, N] = {
     val newVars = variables.filterNot(variable === _)
-    Factor(variablesWithValues.filter({ case (variable, _) => newVars.contains(variable)}),
-      Factor.cases(newVars.map({ variable => (variable, valuesOfVariable(variable))}))
+    Factor(
+      variablesWithValues.filter({ case (variable, _) => newVars.contains(variable) }),
+      Factor.cases(newVars.map({ variable => (variable, valuesOfVariable(variable)) }))
         .map(kase => (kase, valuesOfVariable(variable).map(value => this(kase)).max))
         .toMap)
   }
 
   def projectToOnly(remainingVars: Vector[Variable[T]]): Factor[T, N] =
-    Factor(remainingVars.map( variable => (variable, valuesOfVariable(variable)) ),
-      Factor.cases[T, N](remainingVars.map({variable => (variable, valuesOfVariable(variable))})).toVector
+    Factor(
+      remainingVars.map(variable => (variable, valuesOfVariable(variable))),
+      Factor.cases[T, N](remainingVars.map({ variable => (variable, valuesOfVariable(variable)) })).toVector
         .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
         .groupBy(_._1)
         .map({ case (k, v) => (k.toVector, spire.optional.unicode.Σ(v.map(_._2))) })
@@ -138,12 +140,13 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
   def tally[M](
     a: Variable[T],
     b: Variable[T])(
-      implicit la: LinearAlgebra[M, Int, Int, Double]): M =
+    implicit
+    la: LinearAlgebra[M, Int, Int, Double]): M =
     la.matrix(
       valuesOfVariable(a).size,
       valuesOfVariable(b).size,
       (r: Int, c: Int) => spire.optional.unicode.Σ(
-          cases.filter(isSupersetOf(_, Vector(a is valuesOfVariable(a).apply(r), b is valuesOfVariable(b).apply(c)))).map(this(_)).toVector).toDouble)
+        cases.filter(isSupersetOf(_, Vector(a is valuesOfVariable(a).apply(r), b is valuesOfVariable(b).apply(c)))).map(this(_)).toVector).toDouble)
 
   def Σ(varToSumOut: Variable[T]): Factor[T, N] = this.sumOut(varToSumOut)
 
@@ -152,7 +155,7 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
     val position = variables.indexOf(gone)
     val newVars = variables.filter(v => !(v === gone))
     val newVariablesWithValues = variablesWithValues.filter({ case (variable, _) => newVars.contains(variable) })
-    val newKases = Factor.cases(newVariablesWithValues).map( kase => {
+    val newKases = Factor.cases(newVariablesWithValues).map(kase => {
       val reals = valuesOfVariable(gone).map(gv => {
         val ciGone = List(CaseIs(gv, gone))
         this(kase.slice(0, position) ++ ciGone ++ kase.slice(position, kase.length))
@@ -172,10 +175,11 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
     val e = eOpt.get // TODO either don't take Option or return an Option
     val newVars = e.map(_.variable)
     val newVariablesWithValues = variablesWithValues.filter({ case (variable, _) => newVars.contains(variable) })
-    Factor(newVariablesWithValues,
+    Factor(
+      newVariablesWithValues,
       Factor.cases(
-          e.map(_.variable).toVector
-          .map({variable => (variable, valuesOfVariable(variable))}))
+        e.map(_.variable).toVector
+          .map({ variable => (variable, valuesOfVariable(variable)) }))
         .map(kase => (kase, if (isSupersetOf(kase, e)) this(kase) else field.zero)).toMap)
   }
 

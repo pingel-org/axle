@@ -5,27 +5,27 @@ import axle.game.cards._
 import cats.implicits._
 
 case class PokerStateMasked(
-  mover: Option[Player],
+  mover:       Option[Player],
   shownShared: IndexedSeq[Card], // length = numShown
-  hands: Map[Player, Seq[Card]],
-  pot: Int,
-  currentBet: Int,
-  stillIn: Set[Player],
-  inFors: Map[Player, Int],
-  piles: Map[Player, Int])
+  hands:       Map[Player, Seq[Card]],
+  pot:         Int,
+  currentBet:  Int,
+  stillIn:     Set[Player],
+  inFors:      Map[Player, Int],
+  piles:       Map[Player, Int])
 
 case class PokerState(
-    moverFn: PokerState => Option[Player],
-    deck: Deck,
-    shared: IndexedSeq[Card], // flop, turn, river
-    numShown: Int,
-    hands: Map[Player, Seq[Card]],
-    pot: Int,
-    currentBet: Int,
-    stillIn: Set[Player],
-    inFors: Map[Player, Int],
-    piles: Map[Player, Int],
-    _outcome: Option[PokerOutcome]) {
+  moverFn:    PokerState => Option[Player],
+  deck:       Deck,
+  shared:     IndexedSeq[Card], // flop, turn, river
+  numShown:   Int,
+  hands:      Map[Player, Seq[Card]],
+  pot:        Int,
+  currentBet: Int,
+  stillIn:    Set[Player],
+  inFors:     Map[Player, Int],
+  piles:      Map[Player, Int],
+  _outcome:   Option[PokerOutcome]) {
 
   val bigBlind = 2 // the "minimum bet"
   val smallBlind = bigBlind / 2

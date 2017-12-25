@@ -2,7 +2,7 @@ package axle.stats
 
 /**
  * TODO
- * 
+ *
  * Define Case expressions to support full range of case types
  *
  */

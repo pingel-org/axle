@@ -7,12 +7,13 @@ import spire.implicits.StringOrder
 import spire.implicits.eqOps
 
 abstract class UnitConverterGraph[Q, N, DG]()(
-  implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Q], N => N])
-    extends UnitConverter[Q, N] {
+  implicit
+  evDG: DirectedGraph[DG, UnitOfMeasurement[Q], N => N])
+  extends UnitConverter[Q, N] {
 
   private def conversions(
     vps: Seq[UnitOfMeasurement[Q]],
-    ef: Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], N => N)]): DG =
+    ef:  Seq[(UnitOfMeasurement[Q], UnitOfMeasurement[Q], N => N)]): DG =
     evDG.make(vps, ef)
 
   private def cgn(
@@ -34,7 +35,7 @@ abstract class UnitConverterGraph[Q, N, DG]()(
   val conversionGraph = cgn(units, links)
 
   private[this] def vertex(
-    cg: DG,
+    cg:    DG,
     query: UnitOfMeasurement[Q]): UnitOfMeasurement[Q] =
     evDG.findVertex(cg, _.name === query.name).get
 
@@ -43,7 +44,8 @@ abstract class UnitConverterGraph[Q, N, DG]()(
   val combine = (f: N => N, g: N => N) => f andThen g
 
   def convert(orig: UnittedQuantity[Q, N], newUnit: UnitOfMeasurement[Q])(
-    implicit ev: MultiplicativeMonoid[N]): UnittedQuantity[Q, N] = {
+    implicit
+    ev: MultiplicativeMonoid[N]): UnittedQuantity[Q, N] = {
 
     val memoKey = (newUnit, orig.unit)
     val convert: N => N =

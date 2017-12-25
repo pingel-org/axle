@@ -26,7 +26,7 @@ package object prisoner {
         Vector(game.p1, game.p2)
 
       def strategyFor(
-        game: PrisonersDilemma,
+        game:   PrisonersDilemma,
         player: Player): (PrisonersDilemma, PrisonersDilemmaState) => ConditionalProbabilityTable0[PrisonersDilemmaMove, Rational] =
         player match {
           case game.p1 => game.p1Strategy
@@ -35,15 +35,15 @@ package object prisoner {
         }
 
       def isValid(
-        g: PrisonersDilemma,
+        g:     PrisonersDilemma,
         state: PrisonersDilemmaState,
-        move: PrisonersDilemmaMove): Either[String, PrisonersDilemmaMove] =
+        move:  PrisonersDilemmaMove): Either[String, PrisonersDilemmaMove] =
         Right(move)
 
       def applyMove(
-        game: PrisonersDilemma,
+        game:  PrisonersDilemma,
         state: PrisonersDilemmaState,
-        move: PrisonersDilemmaMove): PrisonersDilemmaState =
+        move:  PrisonersDilemmaMove): PrisonersDilemmaState =
         mover(game, state).get match {
           case game.p1 => state.copy(p1Move = Some(move), p1Moved = true)
           case _       => state.copy(p2Move = Some(move))
@@ -51,7 +51,7 @@ package object prisoner {
 
       def mover(
         game: PrisonersDilemma,
-        s: PrisonersDilemmaState): Option[Player] =
+        s:    PrisonersDilemmaState): Option[Player] =
         if (!s.p1Moved) {
           assert(s.p1Move.isEmpty)
           Some(game.p1)
@@ -63,7 +63,7 @@ package object prisoner {
 
       def moverM(
         game: PrisonersDilemma,
-        s: PrisonersDilemmaState): Option[Player] =
+        s:    PrisonersDilemmaState): Option[Player] =
         if (!s.p1Moved) {
           Some(game.p1)
         } else if (s.p2Move.isEmpty) {
@@ -74,7 +74,7 @@ package object prisoner {
 
       def moves(
         game: PrisonersDilemma,
-        s: PrisonersDilemmaState): Seq[PrisonersDilemmaMove] =
+        s:    PrisonersDilemmaState): Seq[PrisonersDilemmaMove] =
         (mover(game, s), s.p1Move, s.p2Move) match {
           case (Some(game.p1), None, _) => List(Silence(), Betrayal())
           case (Some(game.p2), _, None) => List(Silence(), Betrayal())
@@ -96,7 +96,7 @@ package object prisoner {
         }
 
       def outcome(
-        game: PrisonersDilemma,
+        game:  PrisonersDilemma,
         state: PrisonersDilemmaState): Option[PrisonersDilemmaOutcome] = {
         (state.p1Move, state.p2Move) match {
           case (Some(m1), Some(m2)) => (m1, m2) match {
@@ -136,16 +136,16 @@ package object prisoner {
         "You have been caught"
 
       def displayMoveTo(
-        game: PrisonersDilemma,
-        move: Option[PrisonersDilemmaMove],
-        mover: Player,
+        game:     PrisonersDilemma,
+        move:     Option[PrisonersDilemmaMove],
+        mover:    Player,
         observer: Player): String =
         mover.referenceFor(observer) + " chose " +
           move.map(_.description).getOrElse("something")
 
       def displayOutcomeTo(
-        game: PrisonersDilemma,
-        outcome: PrisonersDilemmaOutcome,
+        game:     PrisonersDilemma,
+        outcome:  PrisonersDilemmaOutcome,
         observer: Player): String =
         s"${game.p1.referenceFor(observer)} is imprisoned for ${outcome.p1YearsInPrison} years\n" +
           s"${game.p2.referenceFor(observer)} is imprisoned for ${outcome.p2YearsInPrison} years\n"

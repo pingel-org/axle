@@ -58,13 +58,15 @@ object Distance {
   import spire.implicits._
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
-    implicit module: Module[N, Double],
+    implicit
+    module:         Module[N, Double],
     moduleRational: Module[N, Rational],
-    evDG: DirectedGraph[DG[UnitOfMeasurement[Distance], N => N], UnitOfMeasurement[Distance], N => N]) =
+    evDG:           DirectedGraph[DG[UnitOfMeasurement[Distance], N => N], UnitOfMeasurement[Distance], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Distance], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
-    implicit module: Module[N, Double], moduleRational: Module[N, Rational],
+    implicit
+    module: Module[N, Double], moduleRational: Module[N, Rational],
     evDG: DirectedGraph[DG, UnitOfMeasurement[Distance], N => N]) =
     new UnitConverterGraph[Distance, N, DG] with DistanceConverter[N] {
 

@@ -7,13 +7,13 @@ import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 
 case class LinearRegression[D, M](
-  examples: Seq[D],
-  numFeatures: Int,
-  featureExtractor: D => Seq[Double],
+  examples:           Seq[D],
+  numFeatures:        Int,
+  featureExtractor:   D => Seq[Double],
   objectiveExtractor: D => Double,
-  α: Double = 0.1,
-  iterations: Int = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
-    extends Function1[D, Double] {
+  α:                  Double           = 0.1,
+  iterations:         Int              = 100)(implicit la: LinearAlgebra[M, Int, Int, Double])
+  extends Function1[D, Double] {
 
   implicit val additive = la.additive
   implicit val mul = la.multiplicative

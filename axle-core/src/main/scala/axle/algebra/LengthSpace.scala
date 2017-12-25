@@ -51,7 +51,8 @@ object LengthSpace {
   // TODO move uqDoubleLengthSpace to UnittedQuantity.scala
   // it also seems like this wrapped lengthspace could be generalized
   implicit def uqDoubleLengthSpace[Q, V: MultiplicativeMonoid: Eq, R, P](
-    implicit vrpls: LengthSpace[V, R, P], uc: UnitConverter[Q, V]): LengthSpace[UnittedQuantity[Q, V], R, P] =
+    implicit
+    vrpls: LengthSpace[V, R, P], uc: UnitConverter[Q, V]): LengthSpace[UnittedQuantity[Q, V], R, P] =
     new DoubleAlgebra with LengthSpace[UnittedQuantity[Q, V], R, P] {
 
       def onPath(left: UnittedQuantity[Q, V], right: UnittedQuantity[Q, V], p: P): UnittedQuantity[Q, V] =

@@ -8,7 +8,7 @@ import axle.stats._
 import axle.jung.directedGraphJung
 
 class ConditionalProbabilityTableSpecification
-    extends FunSuite with Matchers {
+  extends FunSuite with Matchers {
 
   val bools = Vector(true, false)
 
@@ -53,7 +53,8 @@ class ConditionalProbabilityTableSpecification
   // edges: ab, ac, bd, cd, ce
   val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
     "6.1",
-    Map(A -> aFactor,
+    Map(
+      A -> aFactor,
       B -> bFactor,
       C -> cFactor,
       D -> dFactor,

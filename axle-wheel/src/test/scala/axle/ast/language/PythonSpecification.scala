@@ -54,20 +54,25 @@ class PythonSpecification extends FunSuite with Matchers {
 
   test("function call emit") {
 
-    val ast = AstNodeRule("CallFunc", //stmt = Sq(WrappedArray(Sub(node), Emb((,J(args,Sq(WrappedArray(Lit(,), Sp()))),)))), nodeOpt = Some(AstNodeRule(CallFunc,Map(node -> AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1), args -> AstNodeList(List(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1)),1)),1))
-      Map("node" -> //stmt = Sub(node), nodeOpt = Some(AstNodeRule(CallFunc,Map(node -> AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1), args -> AstNodeList(List(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1)),1)),1))
-        AstNodeRule("Name",
+    val ast = AstNodeRule(
+      "CallFunc", //stmt = Sq(WrappedArray(Sub(node), Emb((,J(args,Sq(WrappedArray(Lit(,), Sp()))),)))), nodeOpt = Some(AstNodeRule(CallFunc,Map(node -> AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1), args -> AstNodeList(List(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1)),1)),1))
+      Map(
+        "node" -> //stmt = Sub(node), nodeOpt = Some(AstNodeRule(CallFunc,Map(node -> AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1), args -> AstNodeList(List(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1)),1)),1))
+        AstNodeRule(
+          "Name",
           Map("name" -> //stmt = Attr(name), nodeOpt = Some(AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1))
             AstNodeValue(Some("f"), 1)), 1),
         "args" -> //stmt = J(args,Sq(WrappedArray(Lit(,), Sp()))), nodeOpt = Some(AstNodeRule(CallFunc,Map(node -> AstNodeRule(Name,Map(name -> AstNodeValue(Some(f),1)),1), args -> AstNodeList(List(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1)),1)),1))
-          AstNodeList(List(
-            AstNodeRule("Name",
+          AstNodeList(
+            List(
+            AstNodeRule(
+              "Name",
               Map("name" -> //stmt = Attr(name), nodeOpt = Some(AstNodeRule(Name,Map(name -> AstNodeValue(Some(a),1)),1))
                 AstNodeValue(Some("a"), 1)),
               1) // AstNodeRule("Name"
-              ), // List(
+          ), // List(
             1) // (List
-            ), // Map("node"...
+      ), // Map("node"...
       1)
 
     val actual = ViewString.AstNode(ast, language)

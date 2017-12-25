@@ -17,19 +17,20 @@ import javax.swing.SwingUtilities
 import java.net.URL
 
 case class SceneFrame[S](
-    renderAll: (GL2, RenderContext, S) => Unit,
-    initialState: S,
-    tic: S => S,
-    title: String,
-    textureUrls: Seq[(URL, String)],
-    distanceUnit: UnitOfMeasurement[Distance],
-    width: Int,
-    height: Int,
-    zNear: UnittedQuantity[Distance, Float],
-    zFar: UnittedQuantity[Distance, Float],
-    fps: Int)(
-        implicit angleMeta: AngleConverter[Float],
-        distanceMeta: DistanceConverter[Float]) { sceneFrame =>
+  renderAll:    (GL2, RenderContext, S) => Unit,
+  initialState: S,
+  tic:          S => S,
+  title:        String,
+  textureUrls:  Seq[(URL, String)],
+  distanceUnit: UnitOfMeasurement[Distance],
+  width:        Int,
+  height:       Int,
+  zNear:        UnittedQuantity[Distance, Float],
+  zFar:         UnittedQuantity[Distance, Float],
+  fps:          Int)(
+  implicit
+  angleMeta:    AngleConverter[Float],
+  distanceMeta: DistanceConverter[Float]) { sceneFrame =>
 
   val fortyFiveDegreeFloat = 45f *: angleMeta.degree
 

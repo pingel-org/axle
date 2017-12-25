@@ -23,7 +23,7 @@ case class Corpus(val documents: GenSeq[String], language: Language) {
   def wordsMoreFrequentThan(cutoff: Long): List[String] =
     topWordCounts(cutoff) map { _._1 }
 
-  def topKWords(k: Int): List[String] = 
+  def topKWords(k: Int): List[String] =
     wordCountMap.toList.sortBy(_._2).reverse.take(k).map(_._1)
 
   lazy val bigramCounts = documents.flatMap({ d =>

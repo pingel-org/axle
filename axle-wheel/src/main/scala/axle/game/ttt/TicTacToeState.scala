@@ -4,9 +4,9 @@ import axle.game._
 import spire.implicits._
 
 case class TicTacToeState(
-    playerOptFn: (TicTacToeState) => Option[Player],
-    board: Array[Option[Player]],
-    boardSize: Int) {
+  playerOptFn: (TicTacToeState) => Option[Player],
+  board:       Array[Option[Player]],
+  boardSize:   Int) {
 
   val numPositions = board.length
 

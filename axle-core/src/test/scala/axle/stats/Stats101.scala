@@ -19,14 +19,14 @@ class Stats101 extends FunSuite with Matchers {
   test("standard deviation on a list of reals") {
 
     val dist = uniformDistribution(List[Real](
-        Real(2),
-        Real(4),
-        Real(4),
-        Real(4),
-        Real(5),
-        Real(5),
-        Real(7),
-        Real(9)), Variable[Real]("x"))
+      Real(2),
+      Real(4),
+      Real(4),
+      Real(4),
+      Real(5),
+      Real(5),
+      Real(7),
+      Real(9)), Variable[Real]("x"))
 
     standardDeviation[λ, Real, Rational](dist) should be(Real(2))
   }

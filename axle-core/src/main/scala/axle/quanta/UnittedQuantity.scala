@@ -40,7 +40,8 @@ object UnittedQuantity {
 case class UnittedQuantity[Q, N](magnitude: N, unit: UnitOfMeasurement[Q]) {
 
   def in(newUnit: UnitOfMeasurement[Q])(
-    implicit convert: UnitConverter[Q, N], ev: MultiplicativeMonoid[N]): UnittedQuantity[Q, N] =
+    implicit
+    convert: UnitConverter[Q, N], ev: MultiplicativeMonoid[N]): UnittedQuantity[Q, N] =
     convert.convert(this, newUnit)
 
   // TODO

@@ -73,17 +73,20 @@ class MetricSpaceSpec() extends FunSuite with Matchers with Discipline {
 
   implicit val rrr = new RealTuple2Space {}
 
-  checkAll("MetricSpace[(Real, Real), Real",
+  checkAll(
+    "MetricSpace[(Real, Real), Real",
     VectorSpaceLaws[(Real, Real), Real].metricSpace)
 
   implicit val rr = new ScalarRealSpace {}
 
-  checkAll("MetricSpace[Real, Real]",
+  checkAll(
+    "MetricSpace[Real, Real]",
     VectorSpaceLaws[Real, Real].metricSpace)
 
   implicit val r4 = arbitraryRealSeqLengthN(4)
 
-  checkAll("MetricSpace[Seq[Real], Real]",
+  checkAll(
+    "MetricSpace[Seq[Real], Real]",
     VectorSpaceLaws[Seq[Real], Real].metricSpace)
 
 }

@@ -8,5 +8,5 @@ trait Normalize[M] extends (Seq[Double] => M) {
 
   def unapply(featureRow: M): Seq[Double]
 
-//  def random(): M
+  //  def random(): M
 }

@@ -302,8 +302,8 @@ Example moves:
       }
 
       def displayOutcomeTo(
-        game: Poker,
-        outcome: PokerOutcome,
+        game:     Poker,
+        outcome:  PokerOutcome,
         observer: Player): String = {
         "Winner: " + outcome.winner.get.description + "\n" +
           "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"

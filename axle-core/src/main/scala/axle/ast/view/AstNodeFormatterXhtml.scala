@@ -3,8 +3,8 @@ package axle.ast.view
 import cats.Show
 
 case class XhtmlAstNodeFormatter(
-  config: FormatterConfig,
-  state: FormatterState,
+  config:   FormatterConfig,
+  state:    FormatterState,
   subState: List[xml.Node])
   extends AstNodeFormatter[List[xml.Node], List[xml.Node]] {
 

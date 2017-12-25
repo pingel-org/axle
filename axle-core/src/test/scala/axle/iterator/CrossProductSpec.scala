@@ -25,9 +25,9 @@ class CrossProductSpec extends FunSuite with Matchers {
 
     val cp = IndexedCrossProduct(Vector(v1, v2, v3, v2))
 
-    cp(0) should be (List("a", "0", "X", "0"))
+    cp(0) should be(List("a", "0", "X", "0"))
 
-    cp.size should be (8)
+    cp.size should be(8)
   }
 
 }

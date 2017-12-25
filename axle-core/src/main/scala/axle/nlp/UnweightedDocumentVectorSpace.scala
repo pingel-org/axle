@@ -6,7 +6,7 @@ import spire.implicits.multiplicativeSemigroupOps
 import axle.math._
 
 case class UnweightedDocumentVectorSpace[D: Field]()(implicit _eqD: Eq[D])
-    extends DocumentVectorSpace[D] {
+  extends DocumentVectorSpace[D] {
 
   def scalar = Field[D]
 

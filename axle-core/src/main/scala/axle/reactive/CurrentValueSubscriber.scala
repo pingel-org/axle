@@ -23,7 +23,7 @@ import monix.execution.Ack.Continue
  */
 
 class CurrentValueSubscriber[T](implicit _sched: Scheduler)
-    extends Subscriber[T] {
+  extends Subscriber[T] {
 
   private[this] var _cv: Option[T] = None
 

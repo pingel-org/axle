@@ -9,7 +9,7 @@ import org.scalatest._
 // import axle.stats.rationalProbabilityDist
 
 class NaiveBayesSpecification extends FunSuite with Matchers {
-/*
+  /*
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 
   val data =

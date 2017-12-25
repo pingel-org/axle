@@ -13,8 +13,8 @@ import spire.implicits.DoubleAlgebra
 import spire.implicits.IntAlgebra
 
 class CosineSpec
-    extends FunSuite with Matchers
-    with Discipline {
+  extends FunSuite with Matchers
+  with Discipline {
 
   val n = 2
   implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](n)

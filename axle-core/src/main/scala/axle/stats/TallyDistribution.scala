@@ -22,7 +22,8 @@ import axle.dummy
 object TallyDistribution0 {
 
   implicit def show[A: Order: Show, N: Show](
-      implicit prob: ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]): Show[TallyDistribution0[A, N]] =
+    implicit
+    prob: ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]): Show[TallyDistribution0[A, N]] =
     new Show[TallyDistribution0[A, N]] {
 
       def show(td: TallyDistribution0[A, N]): String =
@@ -34,8 +35,9 @@ object TallyDistribution0 {
     }
 
   implicit def probability[N](
-      implicit fieldN: Field[N],
-      orderN: Order[N]): ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] =
+    implicit
+    fieldN: Field[N],
+    orderN: Order[N]): ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] =
     new ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N] {
 
       def construct[A](variable: Variable[A], as: Iterable[A], f: A => N): TallyDistribution0[A, N] =
@@ -49,14 +51,15 @@ object TallyDistribution0 {
         // TODO assert that all models are oriented for same Variable[A]
 
         val parts: IndexedSeq[(A, N)] =
-          modelsToProbabilities.toVector flatMap { case (model, weight) =>
-            values(model).map(v => (v, model.tally.get(v).getOrElse(model.ring.zero) * weight))
+          modelsToProbabilities.toVector flatMap {
+            case (model, weight) =>
+              values(model).map(v => (v, model.tally.get(v).getOrElse(model.ring.zero) * weight))
           }
 
         val newDist: Map[A, N] =
           parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldN.plus)).toMap
 
-        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m)}).getOrElse(Variable("?"))
+        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m) }).getOrElse(Variable("?"))
 
         TallyDistribution0[A, N](newDist, v)
       }
@@ -81,13 +84,13 @@ object TallyDistribution0 {
       def probabilityOf[A](model: TallyDistribution0[A, N], a: A): N =
         model.tally.get(a).getOrElse(model.ring.zero) / model.totalCount
 
-  }
+    }
 
 }
 
 case class TallyDistribution0[A, N: Field: Order](
-    tally: Map[A, N],
-    variable: Variable[A]) {
+  tally:    Map[A, N],
+  variable: Variable[A]) {
 
   val ring = Ring[N]
   val addition = implicitly[AdditiveMonoid[N]]
@@ -102,7 +105,6 @@ case class TallyDistribution0[A, N: Field: Order](
 
 }
 
-
 //object TallyDistribution1 {
 //
 //  def probabilityOf(a: A): N =
@@ -116,8 +118,8 @@ case class TallyDistribution0[A, N: Field: Order](
 //}
 
 case class TallyDistribution1[A, G: Eq, N: Field: Order](
-    tally: Map[(A, G), N],
-    variable: Variable[A]) {
+  tally:    Map[(A, G), N],
+  variable: Variable[A]) {
 
   lazy val _values: IndexedSeq[A] =
     tally.keys.map(_._1).toSet.toVector

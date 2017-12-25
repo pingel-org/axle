@@ -24,19 +24,20 @@ case class SphericalVector[N](
   ρ: UnittedQuantity[Distance, N], // radius
   θ: UnittedQuantity[Angle, N], // 90 - latitude N, aka "co-latitude"
   φ: UnittedQuantity[Angle, N] // longitude E
-  ) {
+) {
 
   type P = (UnittedQuantity[Distance, N], UnittedQuantity[Distance, N], UnittedQuantity[Distance, N])
 
   /**
-   * 
+   *
    * toPosition could also use a Position3DSpace[N, P] ?
    */
 
   def toPosition(
-    implicit ac: AngleConverter[N],
+    implicit
+    ac:   AngleConverter[N],
     mult: MultiplicativeMonoid[N],
-    eqn: Eq[N],
+    eqn:  Eq[N],
     trig: Trig[N],
     modn: Module[UnittedQuantity[Distance, N], N]): P =
     (

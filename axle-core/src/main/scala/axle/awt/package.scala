@@ -568,12 +568,12 @@ package object awt {
   }
 
   def drawStringAtAngle[X, Y](
-    g2d: Graphics2D,
-    scaledArea: ScaledArea2D[X, Y],
+    g2d:         Graphics2D,
+    scaledArea:  ScaledArea2D[X, Y],
     fontMetrics: FontMetrics,
-    s: String,
-    p: Point2D[X, Y],
-    angle: UnittedQuantity[Angle, Double]): Unit = {
+    s:           String,
+    p:           Point2D[X, Y],
+    angle:       UnittedQuantity[Angle, Double]): Unit = {
     import spire.implicits.DoubleAlgebra
     if (scaledArea.nonZeroArea) {
       val fp = scaledArea.framePoint(p)
@@ -591,7 +591,8 @@ package object awt {
   import cats.Eq
 
   implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
-    implicit drawDG: Draw[DirectedGraphVisualization[DG]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
+    implicit
+    drawDG: Draw[DirectedGraphVisualization[DG]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
     new Draw[BayesianNetworkVisualization[T, N, DG]] {
 
       def component(vis: BayesianNetworkVisualization[T, N, DG]): java.awt.Component = {

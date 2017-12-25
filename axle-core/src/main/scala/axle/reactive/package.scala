@@ -11,10 +11,10 @@ package object reactive {
 
   def intervalScan[D](
     initialValue: D,
-    f: D => D,
-    interval: UnittedQuantity[Time, Double])(
-      implicit
-      tc: TimeConverter[Double]): Observable[D] = {
+    f:            D => D,
+    interval:     UnittedQuantity[Time, Double])(
+    implicit
+    tc: TimeConverter[Double]): Observable[D] = {
 
     Observable
       .interval(((interval in tc.millisecond).magnitude).millis)

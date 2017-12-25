@@ -37,14 +37,15 @@ object ConditionalProbabilityTable0 {
       def combine[A](modelsToProbabilities: Map[ConditionalProbabilityTable0[A, N], N]): ConditionalProbabilityTable0[A, N] = {
 
         val parts: IndexedSeq[(A, N)] =
-          modelsToProbabilities.toVector flatMap { case (model, weight) =>
-            values(model).map(v => (v, probabilityOf(model, v) * weight))
+          modelsToProbabilities.toVector flatMap {
+            case (model, weight) =>
+              values(model).map(v => (v, probabilityOf(model, v) * weight))
           }
 
         val newDist: Map[A, N] =
           parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldN.plus)).toMap
 
-        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m)}).getOrElse(Variable[A]("?"))
+        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m) }).getOrElse(Variable[A]("?"))
 
         ConditionalProbabilityTable0[A, N](newDist, v)
       }
@@ -73,8 +74,8 @@ object ConditionalProbabilityTable0 {
 }
 
 case class ConditionalProbabilityTable0[A, N: Field: Order](
-    p: Map[A, N],
-    variable: Variable[A]) {
+  p:        Map[A, N],
+  variable: Variable[A]) {
 
   val field = Field[N]
   val order = Order[N]
@@ -89,8 +90,8 @@ case class ConditionalProbabilityTable0[A, N: Field: Order](
 }
 
 case class ConditionalProbabilityTable2[A, G1, G2, N: Field: Order](
-    p: Map[(G1, G2), Map[A, N]],
-    variable: Variable[A]) {
+  p:        Map[(G1, G2), Map[A, N]],
+  variable: Variable[A]) {
 
   lazy val _values = p.values.map(_.keySet).reduce(_ union _).toVector
 

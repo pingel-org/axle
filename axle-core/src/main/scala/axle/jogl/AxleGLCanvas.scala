@@ -39,15 +39,16 @@ import com.jogamp.opengl.util.texture.TextureIO
 import java.net.URL
 
 case class AxleGLCanvas[S](
-  scene: SceneFrame[S],
-  textureUrls: Seq[(URL, String)],
-  fovy: UnittedQuantity[Angle, Float],
-  zNear: UnittedQuantity[Distance, Float],
-  zFar: UnittedQuantity[Distance, Float],
+  scene:        SceneFrame[S],
+  textureUrls:  Seq[(URL, String)],
+  fovy:         UnittedQuantity[Angle, Float],
+  zNear:        UnittedQuantity[Distance, Float],
+  zFar:         UnittedQuantity[Distance, Float],
   distanceUnit: UnitOfMeasurement[Distance])(
-    implicit angleMeta: AngleConverter[Float],
-    distanceMeta: DistanceConverter[Float])
-    extends GLCanvas with GLEventListener {
+  implicit
+  angleMeta:    AngleConverter[Float],
+  distanceMeta: DistanceConverter[Float])
+  extends GLCanvas with GLEventListener {
 
   this.addGLEventListener(this)
 

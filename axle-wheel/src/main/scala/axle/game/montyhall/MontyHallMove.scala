@@ -30,4 +30,3 @@ case class Stay() extends MontyHallMove {
   def description = "stay with original choice"
 }
 
-

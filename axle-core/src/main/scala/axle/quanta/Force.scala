@@ -34,12 +34,14 @@ trait ForceConverter[N] extends UnitConverter[Force, N] with ForceUnits {
 object Force {
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
-    implicit module: Module[N, Double],
-    evDG: DirectedGraph[DG[UnitOfMeasurement[Force], N => N], UnitOfMeasurement[Force], N => N]) =
+    implicit
+    module: Module[N, Double],
+    evDG:   DirectedGraph[DG[UnitOfMeasurement[Force], N => N], UnitOfMeasurement[Force], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Force], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
-    implicit module: Module[N, Double], evDG: DirectedGraph[DG, UnitOfMeasurement[Force], N => N]) =
+    implicit
+    module: Module[N, Double], evDG: DirectedGraph[DG, UnitOfMeasurement[Force], N => N]) =
     new UnitConverterGraph[Force, N, DG] with ForceConverter[N] {
 
       import spire.implicits.DoubleAlgebra

@@ -29,8 +29,8 @@ import cats.Show
 import cats.implicits._
 
 case class GeoCoordinates[N](
-    latitude: UnittedQuantity[Angle, N],
-    longitude: UnittedQuantity[Angle, N]) {
+  latitude:  UnittedQuantity[Angle, N],
+  longitude: UnittedQuantity[Angle, N]) {
 
   def φ: UnittedQuantity[Angle, N] = latitude
 
@@ -40,7 +40,8 @@ case class GeoCoordinates[N](
 object GeoCoordinates {
 
   implicit def showGC[N: MultiplicativeMonoid: Eq](
-    implicit converter: AngleConverter[N]) =
+    implicit
+    converter: AngleConverter[N]) =
     new Show[GeoCoordinates[N]] {
       import converter.°
       def show(p: GeoCoordinates[N]): String =
@@ -48,7 +49,8 @@ object GeoCoordinates {
     }
 
   implicit def eqgcd[N: Eq: MultiplicativeMonoid](
-    implicit ac: AngleConverter[N]): Eq[GeoCoordinates[N]] =
+    implicit
+    ac: AngleConverter[N]): Eq[GeoCoordinates[N]] =
     new Eq[GeoCoordinates[N]] {
       def eqv(x: GeoCoordinates[N], y: GeoCoordinates[N]): Boolean = {
         val lateq: Boolean = (x.latitude.magnitude === (y.latitude in x.latitude.unit).magnitude)
@@ -58,7 +60,8 @@ object GeoCoordinates {
     }
 
   implicit def geoCoordinatesMetricSpace[N: Field: Eq: Trig: ConvertableTo: MultiplicativeSemigroup: NRoot](
-    implicit angleConverter: AngleConverter[N]): MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
+    implicit
+    angleConverter: AngleConverter[N]): MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =
     new MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] {
 
       val ctn = ConvertableTo[N]
@@ -76,7 +79,8 @@ object GeoCoordinates {
     }
 
   implicit def geoCoordinatesLengthSpace[N: Field: Eq: Trig: ConvertableTo: MultiplicativeMonoid: NRoot](
-    implicit angleConverter: AngleConverter[N]): LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N], N] =
+    implicit
+    angleConverter: AngleConverter[N]): LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N], N] =
     new LengthSpace[GeoCoordinates[N], UnittedQuantity[Angle, N], N] {
 
       val metricSpace: MetricSpace[GeoCoordinates[N], UnittedQuantity[Angle, N]] =

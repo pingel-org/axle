@@ -24,7 +24,8 @@ class UndirectedGraphSpec extends FunSuite with Matchers {
 
     val e1 = new Edge(1.1)
 
-    val g = jug.make(List(a, b, c, d),
+    val g = jug.make(
+      List(a, b, c, d),
       List(
         (a, b, e1),
         (b, c, new Edge(2.2)),

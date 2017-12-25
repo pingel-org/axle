@@ -27,24 +27,24 @@ case class Permutations[E: Manifest](pool: IndexedSeq[E], r: Int)
 
   private[this] def loop2branchTrue(
     indices0: Array[Int],
-    cycles0: Array[Int],
-    i0: Int): (Array[Int], Array[Int]) = {
+    cycles0:  Array[Int],
+    i0:       Int): (Array[Int], Array[Int]) = {
     (indices0(0 until i0) ++ indices0(i0 + 1 until n) ++ indices0(i0 until i0 + 1),
       cycles0.updated(i0, n - i0))
   }
 
   private[this] def loop2branchFalse(
     indices0: Array[Int],
-    cycles0: Array[Int],
-    i0: Int): (Array[E], Array[Int]) = {
+    cycles0:  Array[Int],
+    i0:       Int): (Array[E], Array[Int]) = {
     val indices1 = indices0.swap(indices0((n - cycles0(i0)) % n), indices0(i0))
     (untilR.map(indices1).map(pool), indices1)
   }
 
   private[this] def loop2branch(
     indices0: Array[Int],
-    cycles0: Array[Int],
-    i0: Int): (Option[IndexedSeq[E]], Array[Int], Array[Int], Int, Boolean) =
+    cycles0:  Array[Int],
+    i0:       Int): (Option[IndexedSeq[E]], Array[Int], Array[Int], Int, Boolean) =
     if (cycles0(i0) === 0) {
       val (indices1, cycles1) = loop2branchTrue(indices0, cycles0, i0)
       (None, indices1, cycles1, i0 - 1, false)
@@ -55,9 +55,9 @@ case class Permutations[E: Manifest](pool: IndexedSeq[E], r: Int)
 
   private[this] def loop2(
     indices0: Array[Int],
-    cycles0: Array[Int],
-    i0: Int,
-    broken0: Boolean): (Stream[IndexedSeq[E]], Array[Int], Array[Int], Boolean) =
+    cycles0:  Array[Int],
+    i0:       Int,
+    broken0:  Boolean): (Stream[IndexedSeq[E]], Array[Int], Array[Int], Boolean) =
     if (i0 >= 0 && !broken0) {
       val cycles1 = cycles0.updated(i0, cycles0(i0) - 1)
       val (result, indices2, cycles2, i2, broken2) = loop2branch(indices0, cycles1, i0)

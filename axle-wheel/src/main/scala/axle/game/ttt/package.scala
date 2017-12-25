@@ -107,17 +107,17 @@ Moves are numbers 1-%s.""".format(ttt.numPositions)
       }
 
       def displayMoveTo(
-        game: TicTacToe,
-        move: TicTacToeMove,
-        mover: Player,
+        game:     TicTacToe,
+        move:     TicTacToeMove,
+        mover:    Player,
         observer: Player): String =
         mover.referenceFor(observer) +
           " put an " + game.markFor(mover) +
           " in the " + move.description + "."
 
       def displayOutcomeTo(
-        game: TicTacToe,
-        outcome: TicTacToeOutcome,
+        game:     TicTacToe,
+        outcome:  TicTacToeOutcome,
         observer: Player): String =
         outcome.winner map { wp =>
           s"${wp.referenceFor(observer)} beat " + evGame.players(game).filterNot(_ === wp).map(_.referenceFor(observer)).toList.mkString(" and ") + "!"

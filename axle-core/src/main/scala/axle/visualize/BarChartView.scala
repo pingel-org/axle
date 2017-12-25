@@ -12,8 +12,8 @@ import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
 
 case class BarChartView[C, Y, D, H](
-    chart: BarChart[C, Y, D, H],
-    data: D) {
+  chart: BarChart[C, Y, D, H],
+  data:  D) {
 
   import chart._
 

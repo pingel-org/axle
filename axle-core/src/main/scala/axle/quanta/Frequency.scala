@@ -37,11 +37,13 @@ trait FrequencyConverter[N] extends UnitConverter[Frequency, N] with FrequencyUn
 object Frequency {
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
-    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Frequency], N => N], UnitOfMeasurement[Frequency], N => N]) =
+    implicit
+    evDG: DirectedGraph[DG[UnitOfMeasurement[Frequency], N => N], UnitOfMeasurement[Frequency], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Frequency], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
-    implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Frequency], N => N]) =
+    implicit
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Frequency], N => N]) =
     new UnitConverterGraph[Frequency, N, DG] with FrequencyConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Frequency], UnitOfMeasurement[Frequency], Bijection[N, N])] =

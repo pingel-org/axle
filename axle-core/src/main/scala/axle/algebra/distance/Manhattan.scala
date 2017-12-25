@@ -6,10 +6,11 @@ import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
 
 class Manhattan[M, R, C, D](
-  implicit la: LinearAlgebra[M, R, C, D],
+  implicit
+  la:       LinearAlgebra[M, R, C, D],
   subSpace: MetricSpace[D, D],
-  add: AdditiveMonoid[D])
-    extends MetricSpace[M, D] {
+  add:      AdditiveMonoid[D])
+  extends MetricSpace[M, D] {
 
   def distance(r1: M, r2: M): D = {
 

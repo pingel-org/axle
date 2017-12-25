@@ -19,9 +19,10 @@ object Direction {
 }
 
 case class GenModel[T: Eq, N: Field, DG](
-    graph: DG)(
-        implicit finiteDG: Finite[DG, Int],
-        dg: DirectedGraph[DG, Variable[T], Edge]) {
+  graph: DG)(
+  implicit
+  finiteDG: Finite[DG, Int],
+  dg:       DirectedGraph[DG, Variable[T], Edge]) {
 
   def vertexPayloadToDistribution(mvp: T): Variable[T] = ???
 
@@ -33,8 +34,8 @@ case class GenModel[T: Eq, N: Field, DG](
   def numVariables: Int = graph.size
 
   def blocks(
-    from: Set[Variable[T]],
-    to: Set[Variable[T]],
+    from:  Set[Variable[T]],
+    to:    Set[Variable[T]],
     given: Set[Variable[T]]): Boolean =
     _findOpenPath(
       Map.empty[Variable[T], Set[Variable[T]]],
@@ -49,18 +50,18 @@ case class GenModel[T: Eq, N: Field, DG](
   //  }
 
   def _findOpenPath(
-    visited: Map[Variable[T], Set[Variable[T]]],
+    visited:        Map[Variable[T], Set[Variable[T]]],
     priorDirection: Int,
-    priorOpt: Option[Variable[T]],
-    current: Set[Variable[T]], // Note: this used to be mutabl.  I may have introduced bugs.
-    to: Set[Variable[T]],
-    given: Set[Variable[T]]): Option[List[Variable[T]]] = {
+    priorOpt:       Option[Variable[T]],
+    current:        Set[Variable[T]], // Note: this used to be mutabl.  I may have introduced bugs.
+    to:             Set[Variable[T]],
+    given:          Set[Variable[T]]): Option[List[Variable[T]]] = {
 
-//    lazy val logMessage = "_fOP: " + priorDirection +
-//      ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
-//      ", current = " + current.map(_.name).mkString(", ") +
-//      ", to = " + to.map(_.name).mkString(", ") +
-//      ", evidence = " + given.map(_.name).mkString(", ")
+    //    lazy val logMessage = "_fOP: " + priorDirection +
+    //      ", prior = " + priorOpt.map(_.name).getOrElse("<none>") +
+    //      ", current = " + current.map(_.name).mkString(", ") +
+    //      ", to = " + to.map(_.name).mkString(", ") +
+    //      ", evidence = " + given.map(_.name).mkString(", ")
 
     (current -- priorOpt.map(visited).getOrElse(Set.empty)).toList.flatMap(variable => {
 

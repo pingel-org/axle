@@ -11,13 +11,13 @@ import cats.implicits._
  */
 
 case class TicTacToe(
-    boardSize: Int = 3,
-    x: Player,
-    xStrategy: (TicTacToe, TicTacToeState) => ConditionalProbabilityTable0[TicTacToeMove, Rational],
-    xDisplayer: String => Unit,
-    o: Player,
-    oStrategy: (TicTacToe, TicTacToeState) => ConditionalProbabilityTable0[TicTacToeMove, Rational],
-    oDisplayer: String => Unit) {
+  boardSize:  Int                                                                                  = 3,
+  x:          Player,
+  xStrategy:  (TicTacToe, TicTacToeState) => ConditionalProbabilityTable0[TicTacToeMove, Rational],
+  xDisplayer: String => Unit,
+  o:          Player,
+  oStrategy:  (TicTacToe, TicTacToeState) => ConditionalProbabilityTable0[TicTacToeMove, Rational],
+  oDisplayer: String => Unit) {
 
   val players = Vector(x, o)
 

@@ -4,13 +4,14 @@ import axle.quanta._
 import spire.implicits._
 
 case class CelestialBody(
-  name: String,
-  symbol: Option[String],
-  mass: UnittedQuantity[Mass, Double],
+  name:        String,
+  symbol:      Option[String],
+  mass:        UnittedQuantity[Mass, Double],
   wikpediaUrl: String)
 
 case class Astronomy()(
-  implicit mc: MassConverter[Double], dc: DistanceConverter[Double], tc: TimeConverter[Double]) {
+  implicit
+  mc: MassConverter[Double], dc: DistanceConverter[Double], tc: TimeConverter[Double]) {
 
   import mc._
   import dc._

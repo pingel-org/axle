@@ -7,9 +7,10 @@ import cats.kernel.Eq
 class InteractionGraphEdge
 
 case class InteractionGraph[T: Manifest: Eq, UG](
-    vps: Seq[Variable[T]],
-    ef: Seq[(Variable[T], Variable[T], InteractionGraphEdge)])(
-        implicit ug: UndirectedGraph[UG, Variable[T], InteractionGraphEdge]) {
+  vps: Seq[Variable[T]],
+  ef:  Seq[(Variable[T], Variable[T], InteractionGraphEdge)])(
+  implicit
+  ug: UndirectedGraph[UG, Variable[T], InteractionGraphEdge]) {
 
   lazy val graph = ug.make(vps, ef)
 

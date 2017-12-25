@@ -14,8 +14,8 @@ import spire.laws.VectorSpaceLaws
 import spire.math.Real
 
 class DocumentVectorSpaceSpec
-    extends FunSuite with Matchers
-    with Discipline {
+  extends FunSuite with Matchers
+  with Discipline {
 
   test("TermVectorizer creates term vectors correctly") {
 

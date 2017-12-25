@@ -16,8 +16,8 @@ import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 
 class GeoMetricSpaceSpec
-    extends FunSuite with Matchers
-    with Discipline {
+  extends FunSuite with Matchers
+  with Discipline {
 
   implicit val angleConverter: AngleConverter[Real] = {
     import axle.algebra.modules.realRationalModule
@@ -73,7 +73,7 @@ class GeoMetricSpaceSpec
   // checkAll(s"GeoCoordinates metric space", vsl.metricSpace(msva, ova, ama))
 
   // Note: Currently failing "space.symmetric"
-  // A counter-example is: 
+  // A counter-example is:
   // val p1 = GeoCoordinates(-45.78882683235767 *: °, 168.23386137273712 *: °)
   // val p2 = GeoCoordinates(-20.06087425414168 *: °, -94.44662683269094 *: °)
   // This would likely be fixed by testing Real values and using

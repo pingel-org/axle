@@ -18,12 +18,13 @@ import spire.implicits.FloatAlgebra
 package object jogl {
 
   def translate(
-    gl: GL2,
+    gl:           GL2,
     distanceUnit: UnitOfMeasurement[Distance],
-    x: UnittedQuantity[Distance, Float],
-    y: UnittedQuantity[Distance, Float],
-    z: UnittedQuantity[Distance, Float])(
-      implicit distanceMetaFloat: DistanceConverter[Float]): Unit =
+    x:            UnittedQuantity[Distance, Float],
+    y:            UnittedQuantity[Distance, Float],
+    z:            UnittedQuantity[Distance, Float])(
+    implicit
+    distanceMetaFloat: DistanceConverter[Float]): Unit =
     gl.glTranslatef(
       (x in distanceUnit).magnitude,
       (y in distanceUnit).magnitude,
@@ -31,19 +32,21 @@ package object jogl {
 
   def rotate(
     gl: GL2,
-    a: UnittedQuantity[Angle, Float],
-    x: Float,
-    y: Float,
-    z: Float)(
-      implicit angleMetaFloat: AngleConverter[Float]): Unit =
+    a:  UnittedQuantity[Angle, Float],
+    x:  Float,
+    y:  Float,
+    z:  Float)(
+    implicit
+    angleMetaFloat: AngleConverter[Float]): Unit =
     gl.glRotatef((a in angleMetaFloat.degree).magnitude, x, y, z)
 
   def positionLight[P](
-    p: P,
+    p:            P,
     distanceUnit: UnitOfMeasurement[Distance],
-    gl: GL2)(
-      implicit position: Position3DSpace[Float, P],
-      distanceMetaFloat: DistanceConverter[Float]): Unit = {
+    gl:           GL2)(
+    implicit
+    position:          Position3DSpace[Float, P],
+    distanceMetaFloat: DistanceConverter[Float]): Unit = {
 
     gl.glLightfv(GL_LIGHT0, GL_POSITION, Vector(
       (position.x(p) in distanceUnit).magnitude,

@@ -6,10 +6,10 @@ import scala.annotation.implicitNotFound
 trait MapReducible[M, A, B, K, G] {
 
   def mapReduce(
-    input: M,
+    input:  M,
     mapper: A => (K, B),
-    zero: B,
-    op: (B, B) => B): G
+    zero:   B,
+    op:     (B, B) => B): G
 }
 
 object MapReducible {
@@ -21,9 +21,9 @@ object MapReducible {
     new MapReducible[Seq[A], A, B, K, Map[K, B]] {
 
       def mapReduce(
-        input: Seq[A],
+        input:  Seq[A],
         mapper: A => (K, B),
-        zero: B,
+        zero:   B,
         reduce: (B, B) => B): Map[K, B] =
         input
           .map(mapper)
@@ -36,9 +36,9 @@ object MapReducible {
     new MapReducible[Vector[A], A, B, K, Map[K, B]] {
 
       def mapReduce(
-        input: Vector[A],
+        input:  Vector[A],
         mapper: A => (K, B),
-        zero: B,
+        zero:   B,
         reduce: (B, B) => B): Map[K, B] =
         input
           .map(mapper)
@@ -51,9 +51,9 @@ object MapReducible {
     new MapReducible[List[A], A, B, K, Map[K, B]] {
 
       def mapReduce(
-        input: List[A],
+        input:  List[A],
         mapper: A => (K, B),
-        zero: B,
+        zero:   B,
         reduce: (B, B) => B): Map[K, B] =
         input
           .map(mapper)

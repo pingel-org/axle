@@ -35,10 +35,10 @@ import axle.quanta.UnittedQuantity
 
 case class Iris(
   sepalLength: UnittedQuantity[Distance, Double],
-  sepalWidth: UnittedQuantity[Distance, Double],
+  sepalWidth:  UnittedQuantity[Distance, Double],
   petalLength: UnittedQuantity[Distance, Double],
-  petalWidth: UnittedQuantity[Distance, Double],
-  species: String)
+  petalWidth:  UnittedQuantity[Distance, Double],
+  species:     String)
 
 object Iris {
   implicit val irisEq = new cats.kernel.Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }

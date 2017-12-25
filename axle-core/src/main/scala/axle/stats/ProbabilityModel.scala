@@ -2,7 +2,7 @@ package axle.stats
 
 /**
  * ProbabilityModel
- * 
+ *
  * See http://www.stat.yale.edu/Courses/1997-98/101/probint.htm
  */
 
@@ -42,8 +42,8 @@ object ProbabilityModel {
       def pure[A](a: A): M[A] =
         prob.construct(Variable[A]("a"), Vector(a), (a: A) => Field[N].one)
 
-      def tailRecM[A, B](a: A)(f: A => M[Either[A,B]]): M[B] =
-       ???
+      def tailRecM[A, B](a: A)(f: A => M[Either[A, B]]): M[B] =
+        ???
 
       override def map[A, B](model: M[A])(f: A => B): M[B] = {
 
@@ -69,11 +69,11 @@ object ProbabilityModel {
 
         val b2n =
           foo
-          .groupBy(_._1)
-          .mapValues(_.map(_._2).reduce(fieldN.plus))
+            .groupBy(_._1)
+            .mapValues(_.map(_._2).reduce(fieldN.plus))
 
         prob.construct(Variable[B]("b"), b2n.keys, b2n)
       }
-  }
+    }
 
 }

@@ -22,7 +22,7 @@ case class ZScoreFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, I
   def unapply(featureRow: M): Seq[Double] =
     (featureRow.mulPointwise(σ2s) + μs).toList
 
-//  def random(): M =
-//    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
+  //  def random(): M =
+  //    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => util.Random.nextGaussian).toArray)
 
 }
