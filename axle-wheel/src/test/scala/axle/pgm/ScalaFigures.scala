@@ -60,7 +60,8 @@ class ScalaFigures extends FunSuite with Matchers {
     // edges: ab, ac, bd, cd, ce
     BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
       "6.1",
-      Map(A -> aFactor,
+      Map(
+        A -> aFactor,
         B -> bFactor,
         C -> cFactor,
         D -> dFactor,
@@ -114,8 +115,10 @@ class ScalaFigures extends FunSuite with Matchers {
       Vector(C is false, B is false) -> Rational(1, 2)))
 
     // edges: ab, bc
-    val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]]("6.4",
-      Map(A -> aFactor,
+    val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
+      "6.4",
+      Map(
+        A -> aFactor,
         B -> bFactor,
         C -> cFactor))
 

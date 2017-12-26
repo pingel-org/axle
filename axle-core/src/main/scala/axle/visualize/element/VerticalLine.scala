@@ -6,5 +6,5 @@ import axle.visualize.ScaledArea2D
 
 case class VerticalLine[X, Y](
   scaledArea: ScaledArea2D[X, Y],
-  v: X,
-  color: Color = black)
+  v:          X,
+  color:      Color              = black)

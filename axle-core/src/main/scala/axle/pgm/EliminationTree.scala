@@ -11,15 +11,16 @@ import axle.syntax.undirectedgraph._
 class EliminationTreeEdge
 
 case class EliminationTree[T: Eq: Manifest, N: Field: Manifest, UG](
-    vps: Seq[Factor[T, N]],
-    ef: Seq[(Factor[T, N], Factor[T, N])])(
-        implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]) {
+  vps: Seq[Factor[T, N]],
+  ef:  Seq[(Factor[T, N], Factor[T, N])])(
+  implicit
+  ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]) {
 
   lazy val graph = ug.make(vps, ef.map({ case (v1, v2) => (v1, v2, new EliminationTreeEdge) }))
 
   def gatherVars(
-    stop: Factor[T, N],
-    node: Factor[T, N],
+    stop:        Factor[T, N],
+    node:        Factor[T, N],
     accumulated: Set[Variable[T]]): Set[Variable[T]] =
     graph
       .neighbors(node)

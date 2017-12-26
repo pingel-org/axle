@@ -17,8 +17,9 @@ case class Quad[N](width: UnittedQuantity[Distance, N], height: UnittedQuantity[
 
 case class Cube[N](length: UnittedQuantity[Distance, N], color: Color)
 
-case class MultiColorCube[N](length: UnittedQuantity[Distance, N],
-                             topColor: Color, bottomColor: Color, frontColor: Color, backColor: Color, leftColor: Color, rightColor: Color)
+case class MultiColorCube[N](
+  length:   UnittedQuantity[Distance, N],
+  topColor: Color, bottomColor: Color, frontColor: Color, backColor: Color, leftColor: Color, rightColor: Color)
 
 case class TexturedCube[N](length: UnittedQuantity[Distance, N], reflectionColor: Color, textureUrl: URL, textureExtension: String)
 

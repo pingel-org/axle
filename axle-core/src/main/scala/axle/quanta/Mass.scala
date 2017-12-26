@@ -49,11 +49,13 @@ trait MassConverter[N] extends UnitConverter[Mass, N] with MassUnits {
 object Mass {
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
-    implicit evDG: DirectedGraph[DG[UnitOfMeasurement[Mass], N => N], UnitOfMeasurement[Mass], N => N]) =
-      converterGraph[N, DG[UnitOfMeasurement[Mass], N => N]]
+    implicit
+    evDG: DirectedGraph[DG[UnitOfMeasurement[Mass], N => N], UnitOfMeasurement[Mass], N => N]) =
+    converterGraph[N, DG[UnitOfMeasurement[Mass], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
-    implicit evDG: DirectedGraph[DG, UnitOfMeasurement[Mass], N => N]) =
+    implicit
+    evDG: DirectedGraph[DG, UnitOfMeasurement[Mass], N => N]) =
     new UnitConverterGraph[Mass, N, DG] with MassConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Mass], UnitOfMeasurement[Mass], Bijection[N, N])] =

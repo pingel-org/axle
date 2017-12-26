@@ -10,11 +10,12 @@ import axle.stats.ConditionalProbabilityTable0
 package object game {
 
   def moveStateStream[G, S, O, M, MS, MM](
-    game: G,
+    game:      G,
     fromState: S,
-    gen: Generator)(
-      implicit evGame: Game[G, S, O, M, MS, MM],
-      prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]): Stream[(S, M, S)] =
+    gen:       Generator)(
+    implicit
+    evGame: Game[G, S, O, M, MS, MM],
+    prob:   ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]): Stream[(S, M, S)] =
     evGame.mover(game, fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
       val strategyCPT = strategy(game, evGame.maskState(game, fromState, mover))
@@ -26,19 +27,21 @@ package object game {
     }
 
   def play[G, S, O, M, MS, MM](game: G, gen: Generator)(
-    implicit evGame: Game[G, S, O, M, MS, MM],
-    prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational],
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    prob:     ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational],
     evGameIO: GameIO[G, O, M, MS, MM]): S =
     play(game, evGame.startState(game), true, gen)
 
   def play[G, S, O, M, MS, MM](
-    game: G,
+    game:  G,
     start: S,
-    intro: Boolean = true,
-    gen: Generator)(
-      implicit evGame: Game[G, S, O, M, MS, MM],
-      prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational],
-      evGameIO: GameIO[G, O, M, MS, MM]): S = {
+    intro: Boolean   = true,
+    gen:   Generator)(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    prob:     ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational],
+    evGameIO: GameIO[G, O, M, MS, MM]): S = {
 
     evGame.players(game) foreach { observer =>
       val display = evGameIO.displayerFor(game, observer)
@@ -75,24 +78,26 @@ package object game {
   }
 
   def gameStream[G, S, O, M, MS, MM](
-    game: G,
+    game:  G,
     start: S,
-    intro: Boolean = true,
-    gen: Generator)(
-      implicit evGame: Game[G, S, O, M, MS, MM],
-      prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational],
-      evGameIO: GameIO[G, O, M, MS, MM]): Stream[S] = {
+    intro: Boolean   = true,
+    gen:   Generator)(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    prob:     ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational],
+    evGameIO: GameIO[G, O, M, MS, MM]): Stream[S] = {
     val end = play(game, start, intro, gen)
     cons(end, gameStream(game, evGame.startFrom(game, end).get, false, gen))
   }
 
   def playContinuously[G, S, O, M, MS, MM](
-    game: G,
+    game:  G,
     start: S,
-    gen: Generator)(
-      implicit evGame: Game[G, S, O, M, MS, MM],
-      prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational],
-      evGameIO: GameIO[G, O, M, MS, MM]): S =
+    gen:   Generator)(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    prob:     ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational],
+    evGameIO: GameIO[G, O, M, MS, MM]): S =
     gameStream(game, start, true, gen).last
 
 }

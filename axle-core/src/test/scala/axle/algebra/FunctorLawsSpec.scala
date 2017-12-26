@@ -10,8 +10,8 @@ import cats.implicits._
 import cats.kernel.Eq
 
 class FunctorLawsSpec
-    extends FunSuite with Matchers
-    with Discipline {
+  extends FunSuite with Matchers
+  with Discipline {
 
   implicit def eqF1AB[A: Arbitrary, B: Eq]: Eq[A => B] =
     new Eq[A => B] {

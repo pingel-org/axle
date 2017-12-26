@@ -11,7 +11,8 @@ class PokerMoveValidationSpec extends FunSuite with Matchers {
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
 
-  val game = Poker(Vector(
+  val game = Poker(
+    Vector(
     (p1, randomMove, println),
     (p2, randomMove, println)),
     println)

@@ -38,9 +38,9 @@ import spire.implicits.eqOps
 object Emission {
 
   def emit[R, S](
-    stmt: Statement,
-    nodeOpt: Option[AstNode],
-    grammar: Language,
+    stmt:      Statement,
+    nodeOpt:   Option[AstNode],
+    grammar:   Language,
     formatter: AstNodeFormatter[R, S]): AstNodeFormatter[R, S] = {
 
     (nodeOpt, stmt) match {
@@ -93,10 +93,10 @@ object Emission {
 
       case (_, PosKw(initial, rest)) => formatter.state.stack.head.map(_ match {
         case (0, _) => formatter.keyword(initial)
-        case _ => formatter.keyword(rest)
+        case _      => formatter.keyword(rest)
       }).getOrElse(formatter)
 
-      case (_, Sp()) => formatter.space
+      case (_, Sp())      => formatter.space
 
       case (_, Op(value)) => formatter.operator(value)
 
@@ -162,15 +162,15 @@ object Emission {
           }
         })
 
-      case (_, Indent()) => formatter.indent
+      case (_, Indent())                      => formatter.indent
 
-      case (_, Dedent()) => formatter.dedent
+      case (_, Dedent())                      => formatter.dedent
 
-      case (_, CR()) => formatter.newline(false, nodeOpt)
+      case (_, CR())                          => formatter.newline(false, nodeOpt)
 
-      case (_, CRH()) => formatter.newline(true, nodeOpt)
+      case (_, CRH())                         => formatter.newline(true, nodeOpt)
 
-      case (Some(node), Var()) => emit(grammar, node, formatter)
+      case (Some(node), Var())                => emit(grammar, node, formatter)
 
       case (Some(AstNodeList(l, _)), VarN(n)) => emit(grammar, l(n), formatter)
 
@@ -210,8 +210,8 @@ object Emission {
   }
 
   def emit[R, S](
-    grammar: Language,
-    node: AstNode,
+    grammar:   Language,
+    node:      AstNode,
     formatter: AstNodeFormatter[R, S]): AstNodeFormatter[R, S] = {
 
     val fLn = formatter.markLine(node, node.lineNo)

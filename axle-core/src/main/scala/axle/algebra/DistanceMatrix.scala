@@ -4,10 +4,11 @@ import spire.algebra.MetricSpace
 
 case class DistanceMatrix[T, F, M](
   vectors: F)(
-    implicit space: MetricSpace[T, Double],
-    la: LinearAlgebra[M, Int, Int, Double],
-    index: Indexed[F, Int, T],
-    finite: Finite[F, Int]) {
+  implicit
+  space:  MetricSpace[T, Double],
+  la:     LinearAlgebra[M, Int, Int, Double],
+  index:  Indexed[F, Int, T],
+  finite: Finite[F, Int]) {
 
   val n = finite.size(vectors)
 

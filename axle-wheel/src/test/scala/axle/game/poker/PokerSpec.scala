@@ -16,7 +16,8 @@ class PokerSpec extends FunSuite with Matchers {
 
   test("start state displays something") {
 
-    val game = Poker(Vector(
+    val game = Poker(
+      Vector(
       (p1, interactiveMove, println),
       (p2, interactiveMove, println)),
       println)
@@ -29,7 +30,8 @@ class PokerSpec extends FunSuite with Matchers {
 
   test("masked-sate mover is the same as raw state mover") {
 
-    val game = Poker(Vector(
+    val game = Poker(
+      Vector(
       (p1, interactiveMove, println),
       (p2, interactiveMove, println)),
       println)
@@ -46,7 +48,8 @@ class PokerSpec extends FunSuite with Matchers {
 
   test("only 1 player 'still in', not allow another game to begin") {
 
-    val game = Poker(Vector(
+    val game = Poker(
+      Vector(
       (p1, interactiveMove, println),
       (p2, interactiveMove, println)),
       println)
@@ -89,7 +92,8 @@ class PokerSpec extends FunSuite with Matchers {
         case (_, _) => "call" // TODO unreachable
       }
 
-    val game = Poker(Vector(
+    val game = Poker(
+      Vector(
       (p1, hardCodedStringStrategy(p1Move), axle.ignore),
       (p2, hardCodedStringStrategy(p2Move), axle.ignore)),
       axle.ignore)

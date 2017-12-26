@@ -12,9 +12,9 @@ import axle.algebra.Aggregatable
 import axle.math._
 
 case class TFIDFDocumentVectorSpace[D: Field: ConvertableFrom: ConvertableTo](
-  corpus: Iterable[String],
+  corpus:         Iterable[String],
   termVectorizer: TermVectorizer[D])(implicit val eqD: Eq[D])
-    extends DocumentVectorSpace[D] {
+  extends DocumentVectorSpace[D] {
 
   def scalar = Field[D]
 

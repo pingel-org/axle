@@ -73,11 +73,13 @@ trait UndirectedGraph[UG, V, E] {
 object UndirectedGraph {
 
   final def apply[UG, V, E](
-    implicit ug: UndirectedGraph[UG, V, E]): UndirectedGraph[UG, V, E] =
+    implicit
+    ug: UndirectedGraph[UG, V, E]): UndirectedGraph[UG, V, E] =
     ug
 
   final def k2[UG[_, _], V, E](
-    implicit ug: UndirectedGraph[UG[V, E], V, E]): UndirectedGraph[UG[V, E], V, E] =
+    implicit
+    ug: UndirectedGraph[UG[V, E], V, E]): UndirectedGraph[UG[V, E], V, E] =
     ug
 
 }

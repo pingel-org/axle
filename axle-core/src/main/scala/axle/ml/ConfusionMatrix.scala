@@ -16,16 +16,17 @@ import spire.math.log10
 import cats.kernel.Order
 
 case class ConfusionMatrix[T, CLASS: Order, L: Order, F, M, G, H](
-    classifier: Function1[T, CLASS],
-    data: F,
-    labelExtractor: T => L,
-    classes: IndexedSeq[CLASS])(
-        implicit val la: LinearAlgebra[M, Int, Int, Double],
-        finite: Finite[F, Int],
-        functorF: Functor[F, T, (L, CLASS), G],
-        functorG: Functor[G, (L, CLASS), L, H],
-        sf: SetFrom[H, L],
-        mr: MapReducible[G, (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]]) {
+  classifier:     Function1[T, CLASS],
+  data:           F,
+  labelExtractor: T => L,
+  classes:        IndexedSeq[CLASS])(
+  implicit
+  val la:   LinearAlgebra[M, Int, Int, Double],
+  finite:   Finite[F, Int],
+  functorF: Functor[F, T, (L, CLASS), G],
+  functorG: Functor[G, (L, CLASS), L, H],
+  sf:       SetFrom[H, L],
+  mr:       MapReducible[G, (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]]) {
 
   val label2clusterId = data.map(datum => (labelExtractor(datum), classifier(datum)))
 
@@ -68,17 +69,17 @@ object ConfusionMatrix {
     }
 
   def common[T, CLASS: Order, L: Order, U[_], M](
-    classifier: Function1[T, CLASS],
-    data: U[T],
+    classifier:     Function1[T, CLASS],
+    data:           U[T],
     labelExtractor: T => L,
-    classes: IndexedSeq[CLASS])(
-      implicit la: LinearAlgebra[M, Int, Int, Double],
-      finite: Finite[U[T], Int],
-      functorF: Functor[U[T], T, (L, CLASS), U[(L, CLASS)]],
-      functorG: Functor[U[(L, CLASS)], (L, CLASS), L, U[L]],
-      sf: SetFrom[U[L], L],
-      mr: MapReducible[U[(L, CLASS)], (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]]
-      ): ConfusionMatrix[T, CLASS, L, U[T], M, U[(L, CLASS)], U[L]] =
+    classes:        IndexedSeq[CLASS])(
+    implicit
+    la:       LinearAlgebra[M, Int, Int, Double],
+    finite:   Finite[U[T], Int],
+    functorF: Functor[U[T], T, (L, CLASS), U[(L, CLASS)]],
+    functorG: Functor[U[(L, CLASS)], (L, CLASS), L, U[L]],
+    sf:       SetFrom[U[L], L],
+    mr:       MapReducible[U[(L, CLASS)], (L, CLASS), Int, (Int, CLASS), Map[(Int, CLASS), Int]]): ConfusionMatrix[T, CLASS, L, U[T], M, U[(L, CLASS)], U[L]] =
     ConfusionMatrix(classifier, data, labelExtractor, classes)
 
 }

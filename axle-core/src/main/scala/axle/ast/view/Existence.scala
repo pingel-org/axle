@@ -37,44 +37,44 @@ object Existence {
 
   def exists(stmt: Statement, node: AstNode, grammar: Language): Boolean = stmt match {
 
-    case Spread() => true
+    case Spread()               => true
 
-    case Nop() => true
+    case Nop()                  => true
 
-    case Lit(value: String) => true
+    case Lit(value: String)     => true
 
-    case Repr(name) => true
+    case Repr(name)             => true
 
     case Emb(left, stmt, right) => exists(stmt, node, grammar)
 
-    case Kw(value) => true
+    case Kw(value)              => true
 
-    case PosKw(values) => true
+    case PosKw(values)          => true
 
-    case Sp() => true
+    case Sp()                   => true
 
-    case Op(value) => true
+    case Op(value)              => true
 
-    case Indent() => true
+    case Indent()               => true
 
-    case Dedent() => true
+    case Dedent()               => true
 
-    case CR() => true
+    case CR()                   => true
 
-    case CRH() => true
+    case CRH()                  => true
 
-    case Arglist() => true
+    case Arglist()              => true
 
-    case Sq(stmts @ _*) => true
+    case Sq(stmts @ _*)         => true
 
-    case SqT(stmts @ _*) => stmts.find(!exists(_, node, grammar)).isEmpty
+    case SqT(stmts @ _*)        => stmts.find(!exists(_, node, grammar)).isEmpty
 
     case Sub(name) => node match {
       case AstNodeRule(ruleName, mm, _) => {
         mm.contains(name) && {
           mm(name) match {
             case AstNodeValue(None, _) => false
-            case _ => true
+            case _                     => true
           }
         }
       }
@@ -86,7 +86,7 @@ object Existence {
         mm.contains(name) && {
           mm(name) match {
             case AstNodeValue(None, _) => false
-            case _ => true // need to recurse?
+            case _                     => true // need to recurse?
           }
         }
       }
@@ -104,19 +104,19 @@ object Existence {
       true // TODO !!!
     }
 
-    case J(subtree, stmt) => true // TODO !!!
+    case J(subtree, stmt)                => true // TODO !!!
 
-    case JItems(subtree, inner, outer) => true // TODO !!!
+    case JItems(subtree, inner, outer)   => true // TODO !!!
 
     case Affix(subtree, prefix, postfix) => true // TODO !!!
 
-    case Var() => true // TODO ?
+    case Var()                           => true // TODO ?
 
     case VarN(n) => node match {
       case AstNodeList(l: List[AstNode], _) if n < l.length => {
         l(n) match {
           case AstNodeValue(None, _) => false
-          case _ => true // need to recurse?
+          case _                     => true // need to recurse?
         }
       }
       case _ => false

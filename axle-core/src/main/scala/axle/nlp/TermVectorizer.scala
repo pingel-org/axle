@@ -5,7 +5,7 @@ import spire.implicits.MapRng
 import spire.implicits.additiveSemigroupOps
 
 case class TermVectorizer[V: Ring](stopwords: Set[String])
-    extends Function1[String, Map[String, V]] {
+  extends Function1[String, Map[String, V]] {
 
   val one = Ring[V].one
   val zero = Ring[V].zero

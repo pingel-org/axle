@@ -34,12 +34,13 @@ import axle.syntax.functor._
  */
 
 case class ClassifierPerformance[N, DATA, F, G](
-    data: F,
-    retrieve: DATA => Boolean,
-    relevant: DATA => Boolean)(
-        implicit functor: Functor[F, DATA, (N, N, N, N), G],
-        agg: Aggregatable[G, (N, N, N, N), (N, N, N, N)],
-        field: Field[N]) {
+  data:     F,
+  retrieve: DATA => Boolean,
+  relevant: DATA => Boolean)(
+  implicit
+  functor: Functor[F, DATA, (N, N, N, N), G],
+  agg:     Aggregatable[G, (N, N, N, N), (N, N, N, N)],
+  field:   Field[N]) {
 
   import field._
 
@@ -87,12 +88,13 @@ F1 Score    $f1Score
     }
 
   def common[N, DATA, U[_]](
-    data: U[DATA],
+    data:     U[DATA],
     retrieve: DATA => Boolean,
     relevant: DATA => Boolean)(
-      implicit functor: Functor[U[DATA], DATA, (N, N, N, N), U[(N, N, N, N)]],
-      agg: Aggregatable[U[(N, N, N, N)], (N, N, N, N), (N, N, N, N)],
-      field: Field[N]) =
+    implicit
+    functor: Functor[U[DATA], DATA, (N, N, N, N), U[(N, N, N, N)]],
+    agg:     Aggregatable[U[(N, N, N, N)], (N, N, N, N), (N, N, N, N)],
+    field:   Field[N]) =
     ClassifierPerformance(data, retrieve, relevant)
 
 }

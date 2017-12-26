@@ -11,8 +11,9 @@ object JoinTree {
 
   def makeJoinTree[T: Eq: Manifest, N: Field: Manifest, UG](
     vps: Vector[Set[Variable[T]]],
-    ef: Seq[(Set[Variable[T]], Set[Variable[T]])])(
-      implicit ug: UndirectedGraph[UG, Set[Variable[T]], JoinTreeEdge]): JoinTree[T, N, UG] =
+    ef:  Seq[(Set[Variable[T]], Set[Variable[T]])])(
+    implicit
+    ug: UndirectedGraph[UG, Set[Variable[T]], JoinTreeEdge]): JoinTree[T, N, UG] =
     JoinTree[T, N, UG](ug.make(vps, ef.map({ case (v1, v2) => (v1, v2, new JoinTreeEdge) })))
 
   // returns a jointree for DAG G with width equal to width(π, G)
@@ -24,9 +25,8 @@ object JoinTree {
 }
 
 case class JoinTree[T: Eq, N: Field, UG](
-    graph: UG)
-    // (implicit ug: UndirectedGraph[UG, Set[Variable[T]], JoinTreeEdge])
-    {
+  graph: UG) // (implicit ug: UndirectedGraph[UG, Set[Variable[T]], JoinTreeEdge])
+  {
 
   //  def addToCluster(n: GV, v: Distribution[_]): Unit = n.getPayload += v
   //

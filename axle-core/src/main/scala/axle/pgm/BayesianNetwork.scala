@@ -37,24 +37,27 @@ object Edge {
 object BayesianNetwork {
 
   def withGraphK2[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG[_, _]](
-    name: String,
+    name:              String,
     variableFactorMap: Map[Variable[T], Factor[T, N]])(
-      implicit dg: DirectedGraph[DG[BayesianNetworkNode[T, N], Edge], BayesianNetworkNode[T, N], Edge]) =
+    implicit
+    dg: DirectedGraph[DG[BayesianNetworkNode[T, N], Edge], BayesianNetworkNode[T, N], Edge]) =
     BayesianNetwork[T, N, DG[BayesianNetworkNode[T, N], Edge]](name, variableFactorMap)
 
 }
 
 case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG](
-    name: String,
-    variableFactorMap: Map[Variable[T], Factor[T, N]])(
-        implicit dg: DirectedGraph[DG, BayesianNetworkNode[T, N], Edge]) {
+  name:              String,
+  variableFactorMap: Map[Variable[T], Factor[T, N]])(
+  implicit
+  dg: DirectedGraph[DG, BayesianNetworkNode[T, N], Edge]) {
 
   val bnns = variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList
 
   val bnnByVariable = bnns.map(bnn => bnn.variable -> bnn).toMap
 
   val graph =
-    dg.make(bnns,
+    dg.make(
+      bnns,
       bnns.flatMap(dest =>
         dest.cpt.variables.filterNot(_ === dest.variable)
           .map(source => (bnnByVariable(source), dest, new Edge))))
@@ -66,7 +69,8 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   def jointProbabilityTable: Factor[T, N] = {
     val newVars = randomVariables
-    Factor(newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable))}),
+    Factor(
+      newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) }),
       Factor.cases(newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) }))
         .map(kase => (kase, probabilityOf(kase)))
         .toMap)
@@ -150,7 +154,8 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    */
 
   def interactionGraph[UG](implicit ug: UndirectedGraph[UG, Variable[T], InteractionGraphEdge]): InteractionGraph[T, UG] =
-    InteractionGraph(randomVariables,
+    InteractionGraph(
+      randomVariables,
       (for {
         vi <- randomVariables // TODO "doubles"
         vj <- randomVariables
@@ -164,7 +169,8 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    */
 
   def orderWidth[UG](order: List[Variable[T]])(
-    implicit ug: UndirectedGraph[UG, Variable[T], InteractionGraphEdge]): Int =
+    implicit
+    ug: UndirectedGraph[UG, Variable[T], InteractionGraphEdge]): Int =
     randomVariables.scanLeft((interactionGraph, 0))(
       (gi, rv) => {
         val ig = gi._1
@@ -229,7 +235,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    */
 
   def pruneNetworkVarsAndEdges(
-    Q: Set[Variable[T]],
+    Q:    Set[Variable[T]],
     eOpt: Option[List[CaseIs[T]]]): BayesianNetwork[T, N, DG] = {
     // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
     // BayesianNetwork(this.name, ???)
@@ -338,8 +344,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def factorElimination2[UG](
     Q: Set[Variable[T]],
     τ: EliminationTree[T, N, UG],
-    f: Factor[T, N])
-    // (implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge])
+    f: Factor[T, N]) // (implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge])
     : (BayesianNetwork[T, N, DG], Factor[T, N]) = {
     //    while (τ.graph.vertices.size > 1) {
     //      // remove node i (other than r) that has single neighbor j in τ

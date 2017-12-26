@@ -5,18 +5,19 @@ import cats.kernel.Eq
 import cats.implicits._
 
 case class ScaledArea2D[X, Y](
-    left: Double,
-    right: Double,
-    top: Double, // Note top/bottom is counter-intuitively in reverse order from minY/maxY
-    bottom: Double,
-    minX: X,
-    maxX: X,
-    minY: Y,
-    maxY: Y)(
-        implicit eqX: Eq[X],
-        eqY: Eq[Y],
-        lengthX: LengthSpace[X, _, Double],
-        lengthY: LengthSpace[Y, _, Double]) {
+  left:   Double,
+  right:  Double,
+  top:    Double, // Note top/bottom is counter-intuitively in reverse order from minY/maxY
+  bottom: Double,
+  minX:   X,
+  maxX:   X,
+  minY:   Y,
+  maxY:   Y)(
+  implicit
+  eqX:     Eq[X],
+  eqY:     Eq[Y],
+  lengthX: LengthSpace[X, _, Double],
+  lengthY: LengthSpace[Y, _, Double]) {
 
   val nonZeroArea = (!(minX === maxX)) && (!(minY === maxY))
 

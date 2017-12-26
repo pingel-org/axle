@@ -10,8 +10,9 @@ object Bowling {
   implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
   val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
-  case class Bowler[M[_]](firstRoll: M[Int],spare: M[Boolean])(
-    implicit val prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational])
+  case class Bowler[M[_]](firstRoll: M[Int], spare: M[Boolean])(
+    implicit
+    val prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational])
 
   case class State(tallied: Int, twoAgoStrike: Boolean, oneAgoSpare: Boolean, oneAgoStrike: Boolean)
 
@@ -90,29 +91,26 @@ object Bowling {
   }
 
   def stateDistribution(
-    bowler: Bowler[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ],
+    bowler:    Bowler[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ],
     numFrames: Int): ConditionalProbabilityTable0[State, Rational] = {
 
     import bowler._
 
     val startState = ConditionalProbabilityTable0(
-        Map(State(0, false, false, false) -> Rational(1)),
-        Variable[State]("startState"))
+      Map(State(0, false, false, false) -> Rational(1)),
+      Variable[State]("startState"))
 
     (1 to numFrames).foldLeft(startState)({
       case (currentState, frameNumber) =>
-//        for {
-//          c <- currentState
-//          f <- firstRoll
-//          s <- spare
-//        } yield next(c, frameNumber === numFrames, f, s)
-        monad.flatMap(currentState)( c =>
-          monad.flatMap(firstRoll)( f =>
-            monad.map(spare)( s =>
-              next(c, frameNumber === numFrames, f, s)
-            )
-          )
-        )
+        //        for {
+        //          c <- currentState
+        //          f <- firstRoll
+        //          s <- spare
+        //        } yield next(c, frameNumber === numFrames, f, s)
+        monad.flatMap(currentState)(c =>
+          monad.flatMap(firstRoll)(f =>
+            monad.map(spare)(s =>
+              next(c, frameNumber === numFrames, f, s))))
     })
   }
 

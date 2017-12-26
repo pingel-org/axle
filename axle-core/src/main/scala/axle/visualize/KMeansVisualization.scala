@@ -14,14 +14,14 @@ import axle.syntax.linearalgebra._
 import cats.implicits._
 
 case class KMeansVisualization[D, F, G, M](
-    classifier: KMeans[D, F, G, M],
-    colorOf: Int => Color,
-    width: Int = 600,
-    height: Int = 600,
-    border: Int = 50,
-    pointDiameter: Int = 10,
-    fontName: String = "Courier New",
-    fontSize: Int = 12) {
+  classifier:    KMeans[D, F, G, M],
+  colorOf:       Int => Color,
+  width:         Int                = 600,
+  height:        Int                = 600,
+  border:        Int                = 50,
+  pointDiameter: Int                = 10,
+  fontName:      String             = "Courier New",
+  fontSize:      Int                = 12) {
 
   import classifier.featureMatrix
   import classifier.la

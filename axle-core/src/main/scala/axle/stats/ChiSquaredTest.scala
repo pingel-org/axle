@@ -5,9 +5,10 @@ import axle.syntax.linearalgebra._
 import spire.implicits.IntAlgebra
 
 case class ChiSquaredTest[M](
-  tally: M,
+  tally:     M,
   threshold: Double = 0.004)(
-    implicit ev: LinearAlgebra[M, Int, Int, Double]) {
+  implicit
+  ev: LinearAlgebra[M, Int, Int, Double]) {
 
   val rowTotals = tally.rowSums
   val columnTotals = tally.columnSums
@@ -34,17 +35,17 @@ case class ChiSquaredTest[M](
 
 }
 
-  /**
-   * http://fonsg3.let.uva.nl/Service/Statistics/ChiSquare_distribution.html
-   *
-   * Z = {(X^2/DoF)^(1/3) - (1 - 2/(9*DoF))}/SQRT(2/(9*DoF))
-   *
-   * @param dof = degrees of freedom
-   *
-   * http://www.math.bcit.ca/faculty/david_sabo/apples/math2441/section8/onevariance/chisqtable/chisqtable.htm
-   *
-   * TODO validate this against http://www.ento.vt.edu/~sharov/PopEcol/tables/chisq.html
-   */
+/**
+ * http://fonsg3.let.uva.nl/Service/Statistics/ChiSquare_distribution.html
+ *
+ * Z = {(X^2/DoF)^(1/3) - (1 - 2/(9*DoF))}/SQRT(2/(9*DoF))
+ *
+ * @param dof = degrees of freedom
+ *
+ * http://www.math.bcit.ca/faculty/david_sabo/apples/math2441/section8/onevariance/chisqtable/chisqtable.htm
+ *
+ * TODO validate this against http://www.ento.vt.edu/~sharov/PopEcol/tables/chisq.html
+ */
 
 //  def χ2probability(χ2: Double, dof: Int): Double =
 //    pow((χ2 / dof), (1.0 / 3)) - (1 - 2.0 / (9 * dof)) / sqrt(2 / (9 * dof))

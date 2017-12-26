@@ -120,7 +120,8 @@ object SVG {
             if (pointRadius > 0) {
               labelOf(x, y) map {
                 case (label, permanent) =>
-                  elem("text",
+                  elem(
+                    "text",
                     "class" -> "pointLabel" ::
                       "id" -> (if (permanent) ("pointLabel" + i) else ("tooltiptext" + i)) ::
                       "x" -> s"${center.x + pointRadius}" ::
@@ -222,7 +223,8 @@ object SVG {
         import t._
 
         val textBase =
-          elem("text",
+          elem(
+            "text",
             "x" -> s"$x" ::
               "y" -> s"$y" ::
               "text-anchor" -> (if (centered) "middle" else "left") ::
@@ -275,7 +277,8 @@ object SVG {
         val height = ll.y - ur.y
 
         val rectBase =
-          elem("rect",
+          elem(
+            "rect",
             "x" -> s"${ll.x}" ::
               "y" -> s"${ur.y}" ::
               "width" -> s"$width" ::
@@ -287,11 +290,13 @@ object SVG {
 
         rectangle.hoverText.map({ hoverText =>
           val id = rectangle.id.getOrElse("0") // TODO change Rectangle to model this dependency
-          val withId = elemWithAttributes(rectFilled,
+          val withId = elemWithAttributes(
+            rectFilled,
             attribute("id", s"rect$id") :: attribute("onmousemove", s"ShowTooltip(evt, $id)") :: attribute("onmouseout", s"HideTooltip(evt, $id)") :: Nil)
           rectangle.link.map({
             case (url, hoverColor) =>
-              elemWithAttributes(withId,
+              elemWithAttributes(
+                withId,
                 attribute("onclick", s"window.open('${url.toString}')") ::
                   attribute("onmouseout", s"RectUnhover(evt, $id, '${rectangle.fillColor.map(fc => rgb(fc)).getOrElse("null")}')") ::
                   attribute("onmousemove", s"RectHover(evt, $id, '${rgb(hoverColor)}')") ::
@@ -556,7 +561,8 @@ object SVG {
     }
 
   implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
-    implicit svgDGVis: SVG[DirectedGraphVisualization[DG]]): SVG[BayesianNetworkVisualization[T, N, DG]] = {
+    implicit
+    svgDGVis: SVG[DirectedGraphVisualization[DG]]): SVG[BayesianNetworkVisualization[T, N, DG]] = {
     new SVG[BayesianNetworkVisualization[T, N, DG]] {
       def svg(vis: BayesianNetworkVisualization[T, N, DG]): NodeSeq = {
         import vis._

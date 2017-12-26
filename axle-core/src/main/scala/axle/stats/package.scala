@@ -46,10 +46,11 @@ package object stats {
 
   def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable0[Symbol, Rational] =
     ConditionalProbabilityTable0[Symbol, Rational](
-      Map('HEAD -> pHead,
-          'TAIL -> (1 - pHead)),
+      Map(
+        'HEAD -> pHead,
+        'TAIL -> (1 - pHead)),
 
-    Variable(s"coin $pHead"))
+      Variable(s"coin $pHead"))
 
   def binaryDecision(yes: Rational): ConditionalProbabilityTable0[Boolean, Rational] =
     ConditionalProbabilityTable0(Map(true -> yes, false -> (1 - yes)), Variable("binary"))
@@ -62,18 +63,19 @@ package object stats {
   }
 
   def iffy[T, N, C[_], M[_]](
-    conditionModel: C[Boolean],
-    trueBranchModel: M[T],
+    conditionModel:   C[Boolean],
+    trueBranchModel:  M[T],
     falseBranchModel: M[T])(
-      implicit pIn: ProbabilityModel[C, N],
-      pOut: ProbabilityModel[M, N]): M[T] = {
+    implicit
+    pIn:  ProbabilityModel[C, N],
+    pOut: ProbabilityModel[M, N]): M[T] = {
 
     val pTrue: N = pIn.probabilityOf(conditionModel, true)
     val pFalse: N = pIn.probabilityOf(conditionModel, false)
 
     pOut.combine(Map(
-        trueBranchModel -> pTrue,
-        falseBranchModel -> pFalse))
+      trueBranchModel -> pTrue,
+      falseBranchModel -> pFalse))
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double =
@@ -87,12 +89,13 @@ package object stats {
    */
 
   def rootMeanSquareDeviation[C, X, D](
-    data: C,
+    data:      C,
     estimator: X => X)(
-      implicit functor: Functor[C, X, X, D],
-      agg: Aggregatable[D, X, X],
-      field: Field[X],
-      nroot: NRoot[X]): X =
+    implicit
+    functor: Functor[C, X, X, D],
+    agg:     Aggregatable[D, X, X],
+    field:   Field[X],
+    nroot:   NRoot[X]): X =
     nroot.sqrt(Σ[X, D](data.map(x => square(x - estimator(x)))))
 
   /**
@@ -120,8 +123,9 @@ package object stats {
     standardDeviation[M, A, N](model)
 
   def entropy[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
-      implicit prob: ProbabilityModel[M, N],
-      convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
+    implicit
+    prob:    ProbabilityModel[M, N],
+    convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     import spire.implicits.DoubleAlgebra
 
@@ -138,8 +142,9 @@ package object stats {
   }
 
   def H[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
-      implicit prob: ProbabilityModel[M, N],
-      convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
+    implicit
+    prob:    ProbabilityModel[M, N],
+    convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 
   def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N], gen: Generator): Stream[List[N]] =

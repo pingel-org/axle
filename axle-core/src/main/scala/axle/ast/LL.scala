@@ -35,7 +35,7 @@ object ⊥ extends Terminal("⊥") // also known as '$'
 
 object ε extends Symbol {
   def label = "ε"
- // TODO terminal or non-terminal?
+  // TODO terminal or non-terminal?
 }
 
 case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol])
@@ -74,8 +74,8 @@ object LLParserState {
 
 case class LLParserState(
   grammar: LLLanguage,
-  input: String,
-  stack: List[Symbol],
+  input:   String,
+  stack:   List[Symbol],
   // derivation: List[LLParserAction],
   i: Int) {
 

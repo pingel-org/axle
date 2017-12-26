@@ -7,7 +7,7 @@ import axle.shuffle
 import axle.string
 
 class KMeansSpecification
-    extends FunSuite with Matchers {
+  extends FunSuite with Matchers {
 
   test("K-Means Clustering: cluster random 2d points with small gaussian distribution around a center into 2 clusters") {
 

@@ -15,14 +15,16 @@ import axle.stats.Variable
 object Strategies {
 
   def outcomeRingHeuristic[G, S, O, M, MS, MM, N: Ring](game: G, f: (O, Player) => N)(
-    implicit evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
+    implicit
+    evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
       val score = evGame.outcome(game, state).map(o => f(o, p)).getOrElse(Ring[N].zero)
       (p, score)
     }).toMap
 
   def aiMover[G, S, O, M, MS, MM, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
-    implicit evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
+    implicit
+    evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
     (ttt: G, state: S) => {
       import spire.implicits._
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
@@ -32,8 +34,9 @@ object Strategies {
 
   def hardCodedStringStrategy[G, S, O, M, MS, MM](
     input: (G, MS) => String)(
-      implicit evGame: Game[G, S, O, M, MS, MM],
-      evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
     (game: G, state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
@@ -50,7 +53,8 @@ object Strategies {
   }
 
   def interactiveMove[G, S, O, M, MS, MM](
-    implicit evGame: Game[G, S, O, M, MS, MM],
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
     evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
     (game: G, state: MS) => {
 
@@ -87,16 +91,17 @@ object Strategies {
    * the outcome for the state's mover, assuming that other players also follow the minimax
    * strategy through the given depth.  Beyond that depth (or when a terminal state is encountered),
    * the heuristic function is applied to the state.
-   * 
+   *
    * The third return value is a Map of Player to estimated best value from the returned state.
    */
 
   def minimax[G, S, O, M, MS, MM, N: Order](
-    game: G,
-    state: S,
-    depth: Int,
+    game:      G,
+    state:     S,
+    depth:     Int,
     heuristic: S => Map[Player, N])(
-      implicit evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
+    implicit
+    evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
 
     // TODO capture as type constraint
     assert(evGame.outcome(game, state).isEmpty)
@@ -124,20 +129,22 @@ object Strategies {
    */
 
   def alphabeta[G, S, O, M, MS, MM, N: Order](
-    game: G,
-    state: S,
-    depth: Int,
+    game:      G,
+    state:     S,
+    depth:     Int,
     heuristic: S => Map[Player, N])(
-      implicit evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) =
+    implicit
+    evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) =
     _alphabeta(game, state, depth, Map.empty, heuristic)
 
   def _alphabeta[G, S, O, M, MS, MM, N: Order](
-    game: G,
-    state: S,
-    depth: Int,
-    cutoff: Map[Player, N],
+    game:      G,
+    state:     S,
+    depth:     Int,
+    cutoff:    Map[Player, N],
     heuristic: S => Map[Player, N])(
-      implicit evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) = {
+    implicit
+    evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) = {
 
     assert(evGame.outcome(game, state).isEmpty && depth > 0) // TODO capture as type constraint
 

@@ -39,8 +39,7 @@ object English extends Language {
     "for", "if", "in", "into", "is", "it",
     "no", "not", "of", "on", "or", "such",
     "that", "the", "their", "then", "there", "these",
-    "they", "this", "to", "was", "will", "with"
-  )
+    "they", "this", "to", "was", "will", "with")
 
   def tokenize(s: String): IndexedSeq[String] = s
     .replaceAll("""([\?!()\";\|\[\]\.\,'])""", " ")

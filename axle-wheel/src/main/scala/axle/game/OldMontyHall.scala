@@ -39,15 +39,11 @@ object OldMontyHall {
 
   // TODO monad syntax
   val outcome = (probabilityOfSwitching: Rational) =>
-    monad.flatMap(prizeDoorModel)( prizeDoor => 
-      monad.flatMap(chosenDoorModel)( chosenDoor =>
-        monad.flatMap(reveal(prizeDoor, chosenDoor))( revealedDoor =>
-          monad.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor))( finalChosenDoor =>
-            finalChosenDoor === prizeDoor
-          )
-        )
-      )
-    )
+    monad.flatMap(prizeDoorModel)(prizeDoor =>
+      monad.flatMap(chosenDoorModel)(chosenDoor =>
+        monad.flatMap(reveal(prizeDoor, chosenDoor))(revealedDoor =>
+          monad.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor))(finalChosenDoor =>
+            finalChosenDoor === prizeDoor))))
 
   val chanceOfWinning =
     (probabilityOfSwitching: Rational) => prob.probabilityOf(outcome(probabilityOfSwitching), true)

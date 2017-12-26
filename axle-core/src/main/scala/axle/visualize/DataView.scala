@@ -47,7 +47,8 @@ object DataView {
     }
 
   implicit def probabilityDataView[X: Order, Y: Plottable: AdditiveMonoid: Order, M[_]](
-      implicit prob: ProbabilityModel[M, Y]): DataView[X, Y, M[X]] =
+    implicit
+    prob: ProbabilityModel[M, Y]): DataView[X, Y, M[X]] =
     new DataView[X, Y, M[X]] {
 
       val yPlottable = Plottable[Y]

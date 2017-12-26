@@ -182,11 +182,12 @@ object LinearAlgebra {
   final def apply[M, R, C, T](implicit ev: LinearAlgebra[M, R, C, T]): LinearAlgebra[M, R, C, T] = ev
 
   def genMatrix[M, T: Choose: ClassTag](
-    m: Int,
-    n: Int,
+    m:       Int,
+    n:       Int,
     minimum: T,
     maximum: T)(
-      implicit la: LinearAlgebra[M, Int, Int, T]): Gen[M] =
+    implicit
+    la: LinearAlgebra[M, Int, Int, T]): Gen[M] =
     Gen.listOfN[T](m * n, Gen.choose[T](minimum, maximum)) map { numList =>
       la.fromColumnMajorArray(m, n, numList.toArray)
     }

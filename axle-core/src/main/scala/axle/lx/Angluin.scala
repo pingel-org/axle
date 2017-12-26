@@ -30,7 +30,8 @@ object Angluin {
   }
 
   case class AngluinAcceptor[DG](vps: Seq[String], I: Set[String], F: Set[String])(
-      implicit evDG: DirectedGraph[DG, String, Symbol]) {
+    implicit
+    evDG: DirectedGraph[DG, String, Symbol]) {
 
     val graph = evDG.make(vps, Nil)
 

@@ -22,7 +22,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
 
-  val game = TicTacToe(3,
+  val game = TicTacToe(
+    3,
     x, interactiveMove, axle.ignore,
     o, interactiveMove, axle.ignore)
 
@@ -32,7 +33,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
     game.numPositions should be(9)
   }
 
-  val rGame = TicTacToe(3,
+  val rGame = TicTacToe(
+    3,
     x, randomMove, axle.ignore,
     o, randomMove, axle.ignore)
 
@@ -81,7 +83,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
   }
 
   test("starting moves are defined for 4x4 game") {
-    val bigGame = TicTacToe(4,
+    val bigGame = TicTacToe(
+      4,
       x, randomMove, axle.ignore,
       o, randomMove, axle.ignore)
     val startingMoves = moves(bigGame, startState(bigGame))
@@ -145,7 +148,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
         case 4 => "6"
       }
 
-    val game = TicTacToe(3,
+    val game = TicTacToe(
+      3,
       x, hardCodedStringStrategy(xMove), axle.ignore,
       o, hardCodedStringStrategy(oMove), axle.ignore)
 
@@ -174,7 +178,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
         case 4 => "7"
       }
 
-    val game = TicTacToe(3,
+    val game = TicTacToe(
+      3,
       x, hardCodedStringStrategy(xMove), axle.ignore,
       o, hardCodedStringStrategy(oMove), axle.ignore)
 
@@ -203,7 +208,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
         case 2 => "9"
       }
 
-    val game = TicTacToe(3,
+    val game = TicTacToe(
+      3,
       x, hardCodedStringStrategy(xMove), axle.ignore,
       o, hardCodedStringStrategy(oMove), axle.ignore)
 

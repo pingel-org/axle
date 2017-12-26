@@ -6,4 +6,4 @@ import com.jogamp.opengl.glu.GLU
 
 case class RenderContext(
   url2texture: Map[URL, Texture],
-  glu: GLU)
+  glu:         GLU)

@@ -13,8 +13,8 @@ import spire.implicits.IntAlgebra
 import spire.laws.VectorSpaceLaws
 
 class ManhattanSpec
-    extends FunSuite with Matchers
-    with Discipline {
+  extends FunSuite with Matchers
+  with Discipline {
 
   implicit val space = new Manhattan[DoubleMatrix, Int, Int, Int]()
 
@@ -32,7 +32,8 @@ class ManhattanSpec
 
   implicit val spireEqDoubleMatrix = cats.kernel.Eq[DoubleMatrix]
 
-  checkAll(s"Manhattan space on ${m}x${n} matrix",
+  checkAll(
+    s"Manhattan space on ${m}x${n} matrix",
     VectorSpaceLaws[DoubleMatrix, Int].metricSpace)
 
 }

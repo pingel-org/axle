@@ -9,8 +9,8 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 
 case class PlotView[S, X, Y, D](
-    plot: Plot[S, X, Y, D],
-    data: Seq[(S, D)]) {
+  plot: Plot[S, X, Y, D],
+  data: Seq[(S, D)]) {
 
   import plot._
 

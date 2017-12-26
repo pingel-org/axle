@@ -37,7 +37,8 @@ package object jblas {
 
   // TODO put column count in type and make this implicit
   def rowVectorInnerProductSpace[R: MultiplicativeMonoid, C, N: Field](n: C)(
-    implicit la: LinearAlgebra[DoubleMatrix, R, C, N],
+    implicit
+    la:  LinearAlgebra[DoubleMatrix, R, C, N],
     ctn: ConvertableTo[N], cfn: ConvertableFrom[N]) =
     new InnerProductSpace[DoubleMatrix, N] {
 
@@ -85,7 +86,8 @@ package object jblas {
     }
 
   implicit def linearAlgebraDoubleMatrix[N: Rng: NRoot](
-    implicit cfn: ConvertableFrom[N],
+    implicit
+    cfn: ConvertableFrom[N],
     ctn: ConvertableTo[N]): LinearAlgebra[DoubleMatrix, Int, Int, N] =
     new LinearAlgebra[DoubleMatrix, Int, Int, N] {
 
@@ -285,12 +287,12 @@ package object jblas {
       }
 
       def matrix(
-        m: Int,
-        n: Int,
+        m:       Int,
+        n:       Int,
         topleft: => N,
-        left: Int => N,
-        top: Int => N,
-        fill: (Int, Int, N, N, N) => N): DoubleMatrix = {
+        left:    Int => N,
+        top:     Int => N,
+        fill:    (Int, Int, N, N, N) => N): DoubleMatrix = {
 
         val jblas = DoubleMatrix.zeros(m, n)
         jblas.put(0, 0, topleft.toDouble)

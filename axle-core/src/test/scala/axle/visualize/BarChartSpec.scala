@@ -85,10 +85,10 @@ class BarChartSpec extends FunSuite with Matchers {
         a + b))
 
     // TODO monad syntax
-//    val distribution = for {
-//      a <- die(6)
-//      b <- die(6)
-//    } yield a + b
+    //    val distribution = for {
+    //      a <- die(6)
+    //      b <- die(6)
+    //    } yield a + b
 
     implicit val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
     implicit val dataViewCPT: DataView[Int, Rational, ConditionalProbabilityTable0[Int, Rational]] =

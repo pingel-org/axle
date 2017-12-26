@@ -5,7 +5,7 @@ import spire.algebra.Eq
 import spire.implicits.multiplicativeSemigroupOps
 
 trait DocumentVectorSpace[D]
-    extends InnerProductSpace[Map[String, D], D] {
+  extends InnerProductSpace[Map[String, D], D] {
 
   lazy val dZero = scalar.zero
 

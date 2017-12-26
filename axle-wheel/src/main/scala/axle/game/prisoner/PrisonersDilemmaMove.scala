@@ -15,4 +15,3 @@ case class Betrayal() extends PrisonersDilemmaMove {
   def description = "betrayal"
 }
 
-

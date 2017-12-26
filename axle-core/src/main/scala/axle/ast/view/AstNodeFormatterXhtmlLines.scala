@@ -1,9 +1,9 @@
 package axle.ast.view
 
 case class XhtmlLinesAstNodeFormatterState(
-  tokens: List[xml.Node],
+  tokens:      List[xml.Node],
   currentLine: Option[List[xml.Node]], // = Some(List[xml.Node]())
-  _lines: Map[Int, xml.NodeSeq])
+  _lines:      Map[Int, xml.NodeSeq])
 
 /*
 

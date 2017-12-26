@@ -71,7 +71,7 @@ package object axle {
    * this behavior built in.
    *
    * Something like this:
-   * 
+   *
    * def scanLeftDropFirst[A, Repr, B, C, That](
    *   tl: scala.collection.TraversableLike[A, Repr])(z: C)(op: ((B, C), A) ⇒ (B, C))(
    *   implicit bf: scala.collection.generic.CanBuildFrom[Repr, (B, C), That]) =
@@ -132,7 +132,7 @@ package object axle {
   }
 
   /**
-   * 
+   *
    * shuffle
    */
 
@@ -203,7 +203,8 @@ package object axle {
    */
 
   def mergeStreams[T](streams: Seq[Stream[T]])(
-    implicit orderT: Order[T]): Stream[T] = {
+    implicit
+    orderT: Order[T]): Stream[T] = {
 
     val frontier = streams.flatMap(_.headOption)
 

@@ -26,7 +26,8 @@ class DirectedGraphSpec extends FunSuite with Matchers {
     val abEdge = new Edge(1.1)
     val acEdge = new Edge(-1.1)
 
-    val g = jdg.make(List(a, b, c, d),
+    val g = jdg.make(
+      List(a, b, c, d),
       List(
         (a, b, abEdge),
         (b, c, new Edge(4.1)),

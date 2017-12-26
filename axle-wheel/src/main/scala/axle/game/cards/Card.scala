@@ -14,7 +14,7 @@ object Card {
   }
 
   implicit def showCard: Show[Card] = new Show[Card] {
-    def show(card: Card): String =  "" + card.rank.serialize + card.suit.serialize
+    def show(card: Card): String = "" + card.rank.serialize + card.suit.serialize
   }
 
   def apply(s: String): Card = Card(Rank(s.charAt(0)), Suit(s.charAt(1)))

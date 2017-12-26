@@ -22,7 +22,8 @@ package object algebra {
   type AggregatableK1[M[_], A, B] = Aggregatable[M[A], A, B]
 
   implicit def wrappedStringSpace[N](
-    implicit iscSpace: MetricSpace[IndexedSeq[Char], N]) =
+    implicit
+    iscSpace: MetricSpace[IndexedSeq[Char], N]) =
     new MetricSpace[String, N] {
       def distance(s1: String, s2: String): N = iscSpace.distance(s1, s2)
     }

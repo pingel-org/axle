@@ -10,7 +10,7 @@ class ProbabilitySpec extends FunSuite with Matchers {
   implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
   val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 
-/*
+  /*
   test("two independent coins") {
     val coin1: ConditionalProbabilityTable0[Symbol, Rational] = coin()
     val coin2: ConditionalProbabilityTable0[Symbol, Rational] = coin()

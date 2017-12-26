@@ -22,7 +22,8 @@ import spire.implicits._
 package object quanta {
 
   implicit def quantumAdditiveGroup[Q, N: MultiplicativeMonoid](
-    implicit converter: UnitConverter[Q, N],
+    implicit
+    converter:     UnitConverter[Q, N],
     additiveGroup: AdditiveGroup[N]): AdditiveGroup[UnittedQuantity[Q, N]] =
     new AdditiveGroup[UnittedQuantity[Q, N]] {
 
@@ -40,7 +41,8 @@ package object quanta {
     }
 
   implicit def modulize[N, Q](
-    implicit fieldn: Field[N],
+    implicit
+    fieldn:    Field[N],
     converter: UnitConverter[Q, N]): Module[UnittedQuantity[Q, N], N] = {
 
     val additiveGroup = quantumAdditiveGroup[Q, N]
@@ -70,8 +72,9 @@ package object quanta {
     }
 
   implicit def unittedAdditiveMonoid[Q, N: AdditiveMonoid: MultiplicativeMonoid](
-    implicit converter: UnitConverter[Q, N],
-    base: UnitOfMeasurement[Q]): AdditiveMonoid[UnittedQuantity[Q, N]] =
+    implicit
+    converter: UnitConverter[Q, N],
+    base:      UnitOfMeasurement[Q]): AdditiveMonoid[UnittedQuantity[Q, N]] =
     new AdditiveMonoid[UnittedQuantity[Q, N]] {
 
       val am = implicitly[AdditiveMonoid[N]]
@@ -85,12 +88,14 @@ package object quanta {
     }
 
   def unittedTicsGraphK2[Q, N: Field: Eq: Tics: Show, DG[_, _]](
-    implicit base: UnitOfMeasurement[Q],
+    implicit
+    base:    UnitOfMeasurement[Q],
     convert: UnitConverter[Q, N]): Tics[UnittedQuantity[Q, N]] =
     unittedTics[Q, N, DG[UnitOfMeasurement[Q], N => N]]
 
   implicit def unittedTics[Q, N: Field: Eq: Tics: Show, DG](
-    implicit base: UnitOfMeasurement[Q],
+    implicit
+    base:    UnitOfMeasurement[Q],
     convert: UnitConverter[Q, N]): Tics[UnittedQuantity[Q, N]] =
     new Tics[UnittedQuantity[Q, N]] {
 
@@ -104,8 +109,9 @@ package object quanta {
     }
 
   implicit def unittedLengthSpace[Q, N: Field: Order: Signed](
-    implicit base: UnitOfMeasurement[Q],
-    space: LengthSpace[N, Double, N],
+    implicit
+    base:    UnitOfMeasurement[Q],
+    space:   LengthSpace[N, Double, N],
     convert: UnitConverter[Q, N]) =
     new LengthSpace[UnittedQuantity[Q, N], UnittedQuantity[Q, N], N] {
 

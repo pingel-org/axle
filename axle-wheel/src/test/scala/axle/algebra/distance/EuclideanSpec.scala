@@ -16,8 +16,8 @@ import spire.implicits.IntAlgebra
 import spire.laws.VectorSpaceLaws
 
 class EuclideanSpec
-    extends FunSuite with Matchers
-    with Discipline {
+  extends FunSuite with Matchers
+  with Discipline {
 
   val n = 2
 
@@ -37,6 +37,7 @@ class EuclideanSpec
 
   implicit val spireEqDoubleMatrix = cats.kernel.Eq[DoubleMatrix]
 
-  checkAll(s"Euclidean space on 1x${n} matrix",
+  checkAll(
+    s"Euclidean space on 1x${n} matrix",
     VectorSpaceLaws[DoubleMatrix, Double].metricSpace)
 }

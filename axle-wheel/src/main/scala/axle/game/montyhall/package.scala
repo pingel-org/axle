@@ -25,7 +25,7 @@ package object montyhall {
         Vector(game.contestant, game.monty)
 
       def strategyFor(
-        game: MontyHall,
+        game:   MontyHall,
         player: Player): (MontyHall, MontyHallState) => ConditionalProbabilityTable0[MontyHallMove, Rational] =
         player match {
           case game.contestant => game.contestantStrategy
@@ -34,15 +34,15 @@ package object montyhall {
         }
 
       def isValid(
-        g: MontyHall,
+        g:     MontyHall,
         state: MontyHallState,
-        move: MontyHallMove): Either[String, MontyHallMove] =
+        move:  MontyHallMove): Either[String, MontyHallMove] =
         Right(move) // TODO
 
       def applyMove(
-        game: MontyHall,
+        game:  MontyHall,
         state: MontyHallState,
-        move: MontyHallMove): MontyHallState = {
+        move:  MontyHallMove): MontyHallState = {
         move match {
           case place @ PlaceCar(d) => state.copy(placement = Some(place), carPlaced = true)
           case fc @ FirstChoice(d) => state.copy(firstChoice = Some(fc))
@@ -54,7 +54,7 @@ package object montyhall {
 
       def mover(
         game: MontyHall,
-        s: MontyHallState): Option[Player] =
+        s:    MontyHallState): Option[Player] =
         if (!s.carPlaced) {
           assert(s.placement.isEmpty)
           Some(game.monty)
@@ -70,12 +70,12 @@ package object montyhall {
 
       def moverM(
         game: MontyHall,
-        s: MontyHallState): Option[Player] =
+        s:    MontyHallState): Option[Player] =
         mover(game, s)
 
       def moves(
         game: MontyHall,
-        s: MontyHallState): Seq[MontyHallMove] = {
+        s:    MontyHallState): Seq[MontyHallMove] = {
         if (!s.carPlaced) {
           assert(s.placement.isEmpty)
           (1 to 3).map(PlaceCar.apply)
@@ -108,7 +108,7 @@ package object montyhall {
         }
 
       def outcome(
-        game: MontyHall,
+        game:  MontyHall,
         state: MontyHallState): Option[MontyHallOutcome] = {
         state match {
           case MontyHallState(Some(PlaceCar(c)), _, Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
@@ -184,15 +184,15 @@ package object montyhall {
       }
 
       def displayMoveTo(
-        game: MontyHall,
-        move: Option[MontyHallMove],
-        mover: Player,
+        game:     MontyHall,
+        move:     Option[MontyHallMove],
+        mover:    Player,
         observer: Player): String =
         mover.referenceFor(observer) + " did " + move.map(_.description).getOrElse("something")
 
       def displayOutcomeTo(
-        game: MontyHall,
-        outcome: MontyHallOutcome,
+        game:     MontyHall,
+        outcome:  MontyHallOutcome,
         observer: Player): String =
         game.contestant.referenceFor(observer) + (if (outcome.car) " won the car!" else " won a goat")
 

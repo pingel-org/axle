@@ -80,14 +80,16 @@ trait TalliableSyntax {
 trait FiniteSyntax {
 
   implicit def finiteOps[F, S, A](fa: F)(
-    implicit finite: Finite[F, S]) =
+    implicit
+    finite: Finite[F, S]) =
     new FiniteOps(fa)
 }
 
 trait IndexedSyntax {
 
   implicit def indexedOps[F, IndexT, A](fa: F)(
-    implicit index: Indexed[F, IndexT, A]) =
+    implicit
+    index: Indexed[F, IndexT, A]) =
     new IndexedOps(fa)
 }
 

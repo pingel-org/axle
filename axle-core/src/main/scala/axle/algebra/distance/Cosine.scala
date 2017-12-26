@@ -26,7 +26,8 @@ import spire.implicits.multiplicativeSemigroupOps
  */
 
 class Cosine[M, D: NRoot: Field](
-  implicit ips: InnerProductSpace[M, D]) {
+  implicit
+  ips: InnerProductSpace[M, D]) {
 
   val normed = ips.normed
 
