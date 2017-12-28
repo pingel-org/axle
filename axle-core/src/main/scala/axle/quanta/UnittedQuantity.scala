@@ -1,12 +1,14 @@
 package axle.quanta
 
+import cats.Functor
 import cats.Show
-import axle.string
-import axle.algebra.Functor
 import cats.kernel.Eq
-import spire.algebra.MultiplicativeMonoid
 import cats.kernel.Order
 import cats.implicits._
+
+import spire.algebra.MultiplicativeMonoid
+
+import axle.string
 
 object UnittedQuantity {
 
@@ -28,10 +30,9 @@ object UnittedQuantity {
         Order[N].compare((x.in(y.unit)).magnitude, y.magnitude)
     }
 
-  // ({ type λ[α] = UnittedQuantity[Q, α] })#λ
-  implicit def functorUQ[Q, A, B]: Functor[UnittedQuantity[Q, A], A, B, UnittedQuantity[Q, B]] =
-    new Functor[UnittedQuantity[Q, A], A, B, UnittedQuantity[Q, B]] {
-      def map(uq: UnittedQuantity[Q, A])(f: A => B): UnittedQuantity[Q, B] =
+  implicit def functorUQ[Q]: Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] =
+    new Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] {
+      def map[A, B](uq: UnittedQuantity[Q, A])(f: A => B): UnittedQuantity[Q, B] =
         UnittedQuantity(f(uq.magnitude), uq.unit)
     }
 

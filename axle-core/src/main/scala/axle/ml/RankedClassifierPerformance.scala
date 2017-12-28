@@ -23,7 +23,7 @@ object RankedClassifierPerformance {
       val cutOff = predicted.take(k)
 
       val score: N =
-        Σ[N, Seq[N]](cutOff
+        Σ[N, Seq](cutOff
           .zipWithIndex
           .filter({ case (p, i) => actual.contains(p) && (!cutOff.take(i).contains(p)) })
           .zipWithIndex

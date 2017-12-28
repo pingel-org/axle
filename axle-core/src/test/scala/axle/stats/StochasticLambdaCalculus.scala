@@ -31,7 +31,7 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
 
     prob.probabilityOf(distribution, 12) should be(Rational(1, 54))
 
-    Σ[Rational, IndexedSeq[Rational]](distribution.values map { v => prob.probabilityOf(distribution, v) }) should be(Rational(1))
+    Σ[Rational, IndexedSeq](distribution.values map { v => prob.probabilityOf(distribution, v) }) should be(Rational(1))
   }
 
   test("π estimation by testing a uniform subset of the unit square gets in the ballpark of π") {

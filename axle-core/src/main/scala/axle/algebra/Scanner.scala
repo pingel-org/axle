@@ -2,27 +2,27 @@ package axle.algebra
 
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for Scanner[${S}, ${A}, ${B}, ${T}]")
-trait Scanner[S, A, B, T] {
+@implicitNotFound("Witness not found for Scanner[${S}]")
+trait Scanner[S[_]] {
 
-  def scanLeft(s: S)(z: B)(op: (B, A) => B): T
+  def scanLeft[A, B](s: S[A])(z: B)(op: (B, A) => B): S[B]
 }
 
 object Scanner {
 
-  final def apply[S, A, B, T](implicit ev: Scanner[S, A, B, T]): Scanner[S, A, B, T] = ev
+  final def apply[S[_]](implicit ev: Scanner[S]): Scanner[S] = ev
 
-  implicit def indexedSeq[A, B]: Scanner[IndexedSeq[A], A, B, IndexedSeq[B]] =
-    new Scanner[IndexedSeq[A], A, B, IndexedSeq[B]] {
+  implicit val indexedSeq: Scanner[IndexedSeq] =
+    new Scanner[IndexedSeq] {
 
-      def scanLeft(s: IndexedSeq[A])(z: B)(op: (B, A) => B): IndexedSeq[B] =
+      def scanLeft[A, B](s: IndexedSeq[A])(z: B)(op: (B, A) => B): IndexedSeq[B] =
         s.scanLeft(z)(op)
     }
 
-  implicit def list[A, B]: Scanner[List[A], A, B, List[B]] =
-    new Scanner[List[A], A, B, List[B]] {
+  implicit val list: Scanner[List] =
+    new Scanner[List] {
 
-      def scanLeft(s: List[A])(z: B)(op: (B, A) => B): List[B] =
+      def scanLeft[A, B](s: List[A])(z: B)(op: (B, A) => B): List[B] =
         s.scanLeft(z)(op)
     }
 

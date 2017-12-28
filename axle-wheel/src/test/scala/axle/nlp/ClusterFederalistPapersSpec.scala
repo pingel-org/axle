@@ -1,6 +1,7 @@
 package axle.nlp
 
 import org.scalatest._
+import cats.implicits._
 import spire.random.Generator.rng
 import axle.nlp.language.English
 
@@ -48,7 +49,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
 
     val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-    val classifier = KMeans[Article, List[Article], List[Seq[Double]], DoubleMatrix](
+    val classifier = KMeans[Article, List, DoubleMatrix](
       articles,
       N = numDimensions,
       featureExtractor,
@@ -59,7 +60,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
     import axle.ml.ConfusionMatrix
     import cats.implicits._
 
-    val confusion = ConfusionMatrix[Article, Int, String, Vector[Article], DoubleMatrix, Vector[(String, Int)], Vector[String]](
+    val confusion = ConfusionMatrix[Article, Int, String, Vector, DoubleMatrix](
       classifier,
       articles.toVector,
       _.author,

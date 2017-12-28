@@ -8,13 +8,16 @@ import scala.collection.JavaConverters._
 import scala.xml.Node
 import scala.xml.NodeSeq
 import scala.xml.Text
+
 import cats.Eq
+import cats.Functor
 import cats.Show
 import cats.implicits._
+
 import spire.implicits._
+
 import axle.algebra.DirectedGraph
 import axle.algebra.Finite
-import axle.algebra.Functor
 import axle.algebra.UndirectedGraph
 import axle.syntax.directedgraph.directedGraphOps
 import axle.syntax.undirectedgraph.undirectedGraphOps
@@ -37,10 +40,10 @@ package object jung {
         jdsg.getVertexCount
     }
 
-  implicit def vertexFunctorDSG[V, E, NV]: Functor[DirectedSparseGraph[V, E], V, NV, DirectedSparseGraph[NV, E]] =
-    new Functor[DirectedSparseGraph[V, E], V, NV, DirectedSparseGraph[NV, E]] {
+  implicit def vertexFunctorDSG[E]: Functor[({ type λ[α] = DirectedSparseGraph[α, E] })#λ] =
+    new Functor[({ type λ[α] = DirectedSparseGraph[α, E] })#λ] {
 
-      def map(jdsg: DirectedSparseGraph[V, E])(f: V => NV): DirectedSparseGraph[NV, E] = {
+      def map[V, NV](jdsg: DirectedSparseGraph[V, E])(f: V => NV): DirectedSparseGraph[NV, E] = {
 
         val vertexOld2New: Map[V, NV] =
           jdsg.getVertices.asScala.map({ v => v -> f(v) }).toMap
@@ -58,10 +61,10 @@ package object jung {
       }
     }
 
-  implicit def edgeFunctorDSG[V, E, NE]: Functor[DirectedSparseGraph[V, E], E, NE, DirectedSparseGraph[V, NE]] =
-    new Functor[DirectedSparseGraph[V, E], E, NE, DirectedSparseGraph[V, NE]] {
+  implicit def edgeFunctorDSG[V]: Functor[({ type λ[α] = DirectedSparseGraph[V, α] })#λ] =
+    new Functor[({ type λ[α] = DirectedSparseGraph[V, α] })#λ] {
 
-      def map(jdsg: DirectedSparseGraph[V, E])(f: E => NE): DirectedSparseGraph[V, NE] = {
+      def map[E, NE](jdsg: DirectedSparseGraph[V, E])(f: E => NE): DirectedSparseGraph[V, NE] = {
 
         val newEdges = jdsg.getEdges.asScala.toSeq.map(e => {
           val ends = jdsg.getEndpoints(e)
@@ -237,10 +240,10 @@ package object jung {
         jusg.getVertexCount
     }
 
-  implicit def vertexFunctorUDSG[V, E, NV]: Functor[UndirectedSparseGraph[V, E], V, NV, UndirectedSparseGraph[NV, E]] =
-    new Functor[UndirectedSparseGraph[V, E], V, NV, UndirectedSparseGraph[NV, E]] {
+  implicit def vertexFunctorUDSG[E]: Functor[({ type λ[α] = UndirectedSparseGraph[α, E] })#λ] =
+    new Functor[({ type λ[α] = UndirectedSparseGraph[α, E] })#λ] {
 
-      def map(jusg: UndirectedSparseGraph[V, E])(f: V => NV): UndirectedSparseGraph[NV, E] = {
+      def map[V, NV](jusg: UndirectedSparseGraph[V, E])(f: V => NV): UndirectedSparseGraph[NV, E] = {
 
         val vertexOld2New: Map[V, NV] =
           jusg.getVertices.asScala.map({ v => v -> f(v) }).toMap
@@ -258,9 +261,9 @@ package object jung {
       }
     }
 
-  implicit def edgeFunctorUDSG[V, E, NE]: Functor[UndirectedSparseGraph[V, E], E, NE, UndirectedSparseGraph[V, NE]] =
-    new Functor[UndirectedSparseGraph[V, E], E, NE, UndirectedSparseGraph[V, NE]] {
-      def map(jusg: UndirectedSparseGraph[V, E])(f: E => NE): UndirectedSparseGraph[V, NE] = {
+  implicit def edgeFunctorUDSG[V]: Functor[({ type λ[α] = UndirectedSparseGraph[V, α] })#λ] =
+    new Functor[({ type λ[α] = UndirectedSparseGraph[V, α] })#λ] {
+      def map[E, NE](jusg: UndirectedSparseGraph[V, E])(f: E => NE): UndirectedSparseGraph[V, NE] = {
 
         val newEdges = jusg.getEdges.asScala.toSeq.map(e => {
           val ends = jusg.getEndpoints(e)

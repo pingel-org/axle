@@ -98,7 +98,7 @@ case class TallyDistribution0[A, N: Field: Order](
 
   val values: IndexedSeq[A] = tally.keys.toVector
 
-  val totalCount: N = Σ[N, Iterable[N]](tally.values)
+  val totalCount: N = Σ[N, Iterable](tally.values)
 
   val bars: Map[A, N] =
     tally.scanLeft((dummy[A], ring.zero))((x, y) => (y._1, addition.plus(x._2, y._2))).drop(1)
@@ -128,5 +128,5 @@ case class TallyDistribution1[A, G: Eq, N: Field: Order](
 
   val gvs = tally.keys.map(_._2).toSet
 
-  val totalCount: N = Σ[N, Iterable[N]](tally.values)
+  val totalCount: N = Σ[N, Iterable](tally.values)
 }

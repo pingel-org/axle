@@ -2,6 +2,7 @@ package axle.math
 
 import org.scalatest._
 import axle.algebra.Bijection
+import cats.implicits._
 
 class Mean extends FunSuite with Matchers {
 
@@ -9,7 +10,7 @@ class Mean extends FunSuite with Matchers {
 
     import spire.math.Rational
 
-    val m = arithmeticMean[Rational, List[Rational]](List(Rational(1), Rational(2), Rational(3)))
+    val m = arithmeticMean[Rational, List](List(Rational(1), Rational(2), Rational(3)))
 
     assertResult(m)(Rational(2))
   }
@@ -18,7 +19,7 @@ class Mean extends FunSuite with Matchers {
 
     import spire.math.Rational
 
-    val m = harmonicMean[Rational, List[Rational]](List(Rational(1), Rational(2), Rational(4)))
+    val m = harmonicMean[Rational, List](List(Rational(1), Rational(2), Rational(4)))
 
     assertResult(m)(Rational(12, 7))
   }
@@ -27,7 +28,7 @@ class Mean extends FunSuite with Matchers {
 
     import spire.math.Real
 
-    val m = geometricMean[Real, List[Real]](List(1d, 5d, 25d))
+    val m = geometricMean[Real, List](List(1d, 5d, 25d))
 
     assertResult(m)(5d)
   }
@@ -38,8 +39,8 @@ class Mean extends FunSuite with Matchers {
 
     val xs = List(1d, 2d, 3d)
 
-    val am = arithmeticMean[Double, List[Double]](xs)
-    val gm1 = generalizedMean[Double, List[Double]](1d, xs)
+    val am = arithmeticMean[Double, List](xs)
+    val gm1 = generalizedMean[Double, List](1d, xs)
 
     assertResult(am)(gm1)
   }
@@ -50,8 +51,8 @@ class Mean extends FunSuite with Matchers {
 
     val xs = List(1d, 2d, 3d)
 
-    val hm = harmonicMean[Double, List[Double]](xs)
-    val gm1 = generalizedMean[Double, List[Double]](-1d, xs)
+    val hm = harmonicMean[Double, List](xs)
+    val gm1 = generalizedMean[Double, List](-1d, xs)
 
     assertResult(hm)(gm1)
   }
@@ -62,8 +63,8 @@ class Mean extends FunSuite with Matchers {
 
     val xs = List(1d, 2d, 3d)
 
-    val geom = geometricMean[Double, List[Double]](xs)
-    val gm1 = generalizedMean[Double, List[Double]](0.0001, xs)
+    val geom = geometricMean[Double, List](xs)
+    val gm1 = generalizedMean[Double, List](0.0001, xs)
 
     val diff = geom - gm1
 
@@ -97,7 +98,7 @@ class Mean extends FunSuite with Matchers {
     val xs = (1 to 100).toList.map(_.toDouble)
     val window = 5
 
-    val moved = movingArithmeticMean[List[Double], Int, Double, List[(Double, Double)]](xs, window)
+    val moved = movingArithmeticMean[List, Int, Double](xs, window)
 
     val expected = xs.sliding(window).map(ys => arithmeticMean(ys.toList)).toList
 
@@ -111,9 +112,9 @@ class Mean extends FunSuite with Matchers {
     val xs: List[Real] = List(1d, 5d, 25d, 125d, 625d)
     val window = 3
 
-    val moved = movingGeometricMean[List[Real], Int, Real, List[(Real, Real)]](xs, window)
+    val moved = movingGeometricMean[List, Int, Real](xs, window)
 
-    val expected = xs.sliding(window).map(ys => geometricMean[Real, List[Real]](ys.toList)).toList
+    val expected = xs.sliding(window).map(ys => geometricMean[Real, List](ys.toList)).toList
 
     assertResult(moved)(expected)
   }
@@ -125,9 +126,9 @@ class Mean extends FunSuite with Matchers {
     val xs: List[Real] = (1 to 5).toList.map(v => Real(v))
     val window = 3
 
-    val moved = movingHarmonicMean[List[Real], Int, Real, List[(Real, Real)]](xs, window)
+    val moved = movingHarmonicMean[List, Int, Real](xs, window)
 
-    val expected = xs.sliding(window).map(ys => harmonicMean[Real, List[Real]](ys.toList)).toList
+    val expected = xs.sliding(window).map(ys => harmonicMean[Real, List](ys.toList)).toList
 
     assertResult(moved)(expected)
   }
@@ -140,9 +141,9 @@ class Mean extends FunSuite with Matchers {
     val window = 3
     val p = 0.2
 
-    val moved = movingGeneralizedMean[List[Double], Int, Double, List[(Double, Double)]](p, xs, window)
+    val moved = movingGeneralizedMean[List, Int, Double](p, xs, window)
 
-    val expected = xs.sliding(window).map(ys => generalizedMean[Double, List[Double]](p, ys.toList)).toList
+    val expected = xs.sliding(window).map(ys => generalizedMean[Double, List](p, ys.toList)).toList
 
     assertResult(moved)(expected)
   }
@@ -159,9 +160,9 @@ class Mean extends FunSuite with Matchers {
       def unapply(x: Real): Real = 1d / x
     }
 
-    val moved = movingGeneralizedFMean[List[Real], Int, Real, List[(Real, Real)]](f, xs, window)
+    val moved = movingGeneralizedFMean[List, Int, Real](f, xs, window)
 
-    val expected = xs.sliding(window).map(ys => harmonicMean[Real, List[Real]](ys.toList)).toList
+    val expected = xs.sliding(window).map(ys => harmonicMean[Real, List](ys.toList)).toList
 
     assertResult(moved)(expected)
   }

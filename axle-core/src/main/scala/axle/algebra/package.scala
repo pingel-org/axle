@@ -1,5 +1,7 @@
 package axle
 
+import cats.Functor
+
 import spire.algebra.MetricSpace
 import spire.algebra.Module
 import spire.algebra.Rng
@@ -11,15 +13,17 @@ import spire.math.Real.apply
 
 package object algebra {
 
-  type ZipperK1[M[_], A, B] = Zipper[M[A], A, M[B], B, M[(A, B)]]
+  implicit val functorIndexedSeq: Functor[IndexedSeq] =
+    new Functor[IndexedSeq] {
+      def map[A, B](as: IndexedSeq[A])(f: A => B): IndexedSeq[B] =
+        as.map(f)
+    }
 
-  type IndexedK1[M[_], I, N] = Indexed[M[N], I, N]
-
-  type FiniteK1[M[_], N, I] = Finite[M[N], I]
-
-  type FunctorK1[M[_], A, B] = Functor[M[A], A, B, M[B]]
-
-  type AggregatableK1[M[_], A, B] = Aggregatable[M[A], A, B]
+  implicit val functorSeq: Functor[Seq] =
+    new Functor[Seq] {
+      def map[A, B](as: Seq[A])(f: A => B): Seq[B] =
+        as.map(f)
+    }
 
   implicit def wrappedStringSpace[N](
     implicit

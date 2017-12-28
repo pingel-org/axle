@@ -3,66 +3,66 @@ package axle.algebra
 import scala.annotation.implicitNotFound
 import scala.collection.parallel.immutable.ParSeq
 
-@implicitNotFound("Witness not found for Aggregatable[${F}, ${A}, ${B}]")
-trait Aggregatable[F, A, B] {
+@implicitNotFound("Witness not found for Aggregatable[${F}]")
+trait Aggregatable[F[_]] {
 
-  def aggregate(xs: F)(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B
+  def aggregate[A, B](xs: F[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B
 
 }
 
 object Aggregatable {
 
-  def apply[F, A, B](implicit aggFA: Aggregatable[F, A, B]): Aggregatable[F, A, B] =
-    implicitly[Aggregatable[F, A, B]]
+  def apply[F[_]](implicit aggFA: Aggregatable[F]): Aggregatable[F] =
+    implicitly[Aggregatable[F]]
 
-  implicit def aggregatableSeq[A, B] =
-    new Aggregatable[Seq[A], A, B] {
-      def aggregate(as: Seq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+  implicit val aggregatableSeq =
+    new Aggregatable[Seq] {
+      def aggregate[A, B](as: Seq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         as.aggregate(zeroValue)(seqOp, combOp)
     }
 
-  implicit def aggregatableList[A, B] =
-    new Aggregatable[List[A], A, B] {
-      def aggregate(as: List[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+  implicit val aggregatableList =
+    new Aggregatable[List] {
+      def aggregate[A, B](as: List[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         as.aggregate(zeroValue)(seqOp, combOp)
     }
 
-  implicit def aggregatableVector[A, B] =
-    new Aggregatable[Vector[A], A, B] {
-      def aggregate(as: Vector[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+  implicit val aggregatableVector =
+    new Aggregatable[Vector] {
+      def aggregate[A, B](as: Vector[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         as.aggregate(zeroValue)(seqOp, combOp)
     }
 
-  implicit def aggregatableParSeq[A, B] =
-    new Aggregatable[ParSeq[A], A, B] {
-      def aggregate(ps: ParSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+  implicit val aggregatableParSeq =
+    new Aggregatable[ParSeq] {
+      def aggregate[A, B](ps: ParSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         ps.aggregate(zeroValue)(seqOp, combOp)
     }
 
-  implicit def aggregatableIndexedSeq[A, B] =
-    new Aggregatable[IndexedSeq[A], A, B] {
-      def aggregate(is: IndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+  implicit val aggregatableIndexedSeq =
+    new Aggregatable[IndexedSeq] {
+      def aggregate[A, B](is: IndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         is.aggregate(zeroValue)(seqOp, combOp)
     }
 
-  implicit def aggregatableIterable[A, B] =
-    new Aggregatable[Iterable[A], A, B] {
-      def aggregate(i: Iterable[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+  implicit val aggregatableIterable =
+    new Aggregatable[Iterable] {
+      def aggregate[A, B](i: Iterable[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         i.aggregate(zeroValue)(seqOp, combOp)
     }
 
-  implicit def aggregatableSet[A, B] =
-    new Aggregatable[Set[A], A, B] {
-      def aggregate(s: Set[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+  implicit val aggregatableSet =
+    new Aggregatable[Set] {
+      def aggregate[A, B](s: Set[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         s.aggregate(zeroValue)(seqOp, combOp)
     }
 
   import scala.collection.immutable.{ IndexedSeq => ImmIndexedSeq }
 
-  implicit def aggregatableImmutableIndexedSeq[A, B] =
-    new Aggregatable[ImmIndexedSeq[A], A, B] {
+  implicit val aggregatableImmutableIndexedSeq =
+    new Aggregatable[ImmIndexedSeq] {
 
-      def aggregate(is: ImmIndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
+      def aggregate[A, B](is: ImmIndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         is.aggregate(zeroValue)(seqOp, combOp)
     }
 

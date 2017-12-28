@@ -2,6 +2,7 @@ package axle
 
 import org.scalatest._
 import spire.implicits._
+import cats.implicits._
 
 class EnrichmentsSpec extends FunSuite with Matchers {
 

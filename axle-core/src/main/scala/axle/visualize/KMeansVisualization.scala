@@ -13,8 +13,8 @@ import axle.visualize.element.YTics
 import axle.syntax.linearalgebra._
 import cats.implicits._
 
-case class KMeansVisualization[D, F, G, M](
-  classifier:    KMeans[D, F, G, M],
+case class KMeansVisualization[D, F[_], M](
+  classifier:    KMeans[D, F, M],
   colorOf:       Int => Color,
   width:         Int                = 600,
   height:        Int                = 600,

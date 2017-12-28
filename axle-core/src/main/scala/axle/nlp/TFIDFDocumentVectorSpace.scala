@@ -40,7 +40,7 @@ case class TFIDFDocumentVectorSpace[D: Field: ConvertableFrom: ConvertableTo](
 
     val weights = commonTerms.map(term => scalar.times(termWeight(term, v1), termWeight(term, v2)))
 
-    Σ(weights)(scalar, Aggregatable[List[D], D, D])
+    Σ(weights)(scalar, Aggregatable[List])
   }
 
 }
