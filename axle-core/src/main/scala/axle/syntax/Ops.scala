@@ -1,10 +1,13 @@
 package axle.syntax
 
+import cats.kernel.Eq
+
+import spire.algebra.AdditiveMonoid
+
 import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
 import axle.algebra.Endofunctor
 import axle.algebra.Finite
-import axle.algebra.Functor
 import axle.algebra.Indexed
 import axle.algebra.MapFrom
 import axle.algebra.MapReducible
@@ -12,8 +15,6 @@ import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
-import spire.algebra.AdditiveMonoid
-import cats.kernel.Eq
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) {
 
@@ -293,21 +294,15 @@ final class UndirectedGraphOps[UG, V, E](val ug: UG)(implicit ev: UndirectedGrap
   def firstLeafOtherThan(r: V)(implicit eqV: Eq[V]): Option[V] = ev.firstLeafOtherThan(ug, r)
 }
 
-final class FunctorOps[F, A, B, G](val as: F)(implicit functor: Functor[F, A, B, G]) {
-
-  def map(f: A => B) = functor.map(as)(f)
-
-}
-
 final class EndofunctorOps[E, A](val e: E)(implicit endo: Endofunctor[E, A]) {
 
   def map(f: A => A) = endo.map(e)(f)
 
 }
 
-final class AggregatableOps[G, A, B](val ts: G)(implicit agg: Aggregatable[G, A, B]) {
+final class AggregatableOps[G[_], A](val ts: G[A])(implicit agg: Aggregatable[G]) {
 
-  def aggregate(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B) =
+  def aggregate[B](zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B) =
     agg.aggregate(ts)(zeroValue)(seqOp, combOp)
 }
 
@@ -321,7 +316,7 @@ final class FiniteOps[F, S, A](val as: F)(implicit finite: Finite[F, S]) {
   def size = finite.size(as)
 }
 
-final class IndexedOps[F, I, A](val as: F)(implicit index: Indexed[F, I, A]) {
+final class IndexedOps[F[_], I, A](val as: F[A])(implicit index: Indexed[F, I]) {
 
   def at(i: I) = index.at(as)(i)
 
@@ -330,9 +325,9 @@ final class IndexedOps[F, I, A](val as: F)(implicit index: Indexed[F, I, A]) {
   def drop(i: I) = index.drop(as)(i)
 }
 
-final class MapReducibleOps[M, A, B, K, G](val as: M)(implicit mr: MapReducible[M, A, B, K, G]) {
+final class MapReducibleOps[M[_], A](val as: M[A])(implicit mr: MapReducible[M]) {
 
-  def mapReduce(mapper: A => (K, B), zero: B, op: (B, B) => B): G =
+  def mapReduce[B, K](mapper: A => (K, B), zero: B, op: (B, B) => B): M[(K, B)] =
     mr.mapReduce(as, mapper, zero, op)
 }
 

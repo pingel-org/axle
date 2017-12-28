@@ -1,11 +1,13 @@
 package axle.math
 
 import org.scalatest._
+import cats.implicits._
 
 class MathPackageSpec extends FunSuite with Matchers {
 
   test("monte carlo pi be at least 2.9") {
-    import spire.implicits._
+    import spire.algebra.Field
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     monteCarloPiEstimate(
       (1 to 1000).toList,
       (n: Int) => n.toDouble) should be > 2.9
@@ -24,7 +26,8 @@ class MathPackageSpec extends FunSuite with Matchers {
   }
 
   test("exponentiation by recursive squaring") {
-    import spire.implicits._
+    import spire.algebra.EuclideanRing
+    implicit val ern: EuclideanRing[Int] = spire.implicits.IntAlgebra
     assertResult(exponentiateByRecursiveSquaring(2, 10))(1024)
   }
 
@@ -33,8 +36,8 @@ class MathPackageSpec extends FunSuite with Matchers {
   }
 
   test("mandelbrot at 1.8 1.7") {
-    import spire.implicits.DoubleAlgebra
-    // import cats.implicits._
+    import spire.algebra.Field
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     assertResult(inMandelbrotSetAt(4d, 1.8, 1.7, 100).get)(0)
   }
 
@@ -49,7 +52,8 @@ class MathPackageSpec extends FunSuite with Matchers {
 
   test("primes using primeStream") {
     // See https://primes.utm.edu/howmany.html
-    import spire.implicits.IntAlgebra
+    import spire.algebra.Ring
+    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
     val primes = primeStream(10000).toList
     primes.filter(_ < 10).length should be(4)
     primes.filter(_ < 100).length should be(25)

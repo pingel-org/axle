@@ -2,64 +2,64 @@ package axle.algebra
 
 import scala.annotation.implicitNotFound
 
-@implicitNotFound("Witness not found for MapReducible[${M}, ${A}, ${B}, ${K}, ${G}]")
-trait MapReducible[M, A, B, K, G] {
+@implicitNotFound("Witness not found for MapReducible[${M}]")
+trait MapReducible[M[_]] {
 
-  def mapReduce(
-    input:  M,
+  def mapReduce[A, B, K](
+    input:  M[A],
     mapper: A => (K, B),
     zero:   B,
-    op:     (B, B) => B): G
+    op:     (B, B) => B): M[(K, B)]
 }
 
 object MapReducible {
 
-  final def apply[M, A, B, K, G](implicit mra: MapReducible[M, A, B, K, G]): MapReducible[M, A, B, K, G] =
-    implicitly[MapReducible[M, A, B, K, G]]
+  final def apply[M[_]](implicit mra: MapReducible[M]): MapReducible[M] =
+    implicitly[MapReducible[M]]
 
-  implicit def mapReduceSeq[A, B, K]: MapReducible[Seq[A], A, B, K, Map[K, B]] =
-    new MapReducible[Seq[A], A, B, K, Map[K, B]] {
+  implicit val mapReduceSeq: MapReducible[Seq] =
+    new MapReducible[Seq] {
 
-      def mapReduce(
+      def mapReduce[A, B, K](
         input:  Seq[A],
         mapper: A => (K, B),
         zero:   B,
-        reduce: (B, B) => B): Map[K, B] =
+        reduce: (B, B) => B): Seq[(K, B)] =
         input
           .map(mapper)
           .groupBy(_._1)
           .mapValues(kbs => kbs.map(_._2).foldLeft(zero)(reduce))
-          .toMap
+          .toSeq
     }
 
-  implicit def mapReduceVectorMap[A, B, K]: MapReducible[Vector[A], A, B, K, Map[K, B]] =
-    new MapReducible[Vector[A], A, B, K, Map[K, B]] {
+  implicit val mapReduceVector: MapReducible[Vector] =
+    new MapReducible[Vector] {
 
-      def mapReduce(
+      def mapReduce[A, B, K](
         input:  Vector[A],
         mapper: A => (K, B),
         zero:   B,
-        reduce: (B, B) => B): Map[K, B] =
+        reduce: (B, B) => B): Vector[(K, B)] =
         input
           .map(mapper)
           .groupBy(_._1)
           .mapValues(kbs => kbs.map(_._2).foldLeft(zero)(reduce))
-          .toMap
+          .toVector
     }
 
-  implicit def mapReduceListMap[A, B, K]: MapReducible[List[A], A, B, K, Map[K, B]] =
-    new MapReducible[List[A], A, B, K, Map[K, B]] {
+  implicit val mapReduceListMap: MapReducible[List] =
+    new MapReducible[List] {
 
-      def mapReduce(
+      def mapReduce[A, B, K](
         input:  List[A],
         mapper: A => (K, B),
         zero:   B,
-        reduce: (B, B) => B): Map[K, B] =
+        reduce: (B, B) => B): List[(K, B)] =
         input
           .map(mapper)
           .groupBy(_._1)
           .mapValues(kbs => kbs.map(_._2).foldLeft(zero)(reduce))
-          .toMap
+          .toList
     }
 
 }

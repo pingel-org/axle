@@ -4,8 +4,10 @@ import scala.Stream.cons
 import scala.Vector
 import scala.language.implicitConversions
 
+import cats.Functor
 import cats.kernel.Eq
 import cats.implicits._
+
 import spire.algebra.Field
 
 import spire.algebra.NRoot
@@ -23,12 +25,10 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.math.Σ
-import axle.algebra.Functor
 import axle.algebra.Aggregatable
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
-import axle.syntax.functor.functorOps
 
 package object stats {
 
@@ -88,15 +88,15 @@ package object stats {
    * https://en.wikipedia.org/wiki/Root-mean-square_deviation
    */
 
-  def rootMeanSquareDeviation[C, X, D](
-    data:      C,
+  def rootMeanSquareDeviation[C[_], X](
+    data:      C[X],
     estimator: X => X)(
     implicit
-    functor: Functor[C, X, X, D],
-    agg:     Aggregatable[D, X, X],
+    functor: Functor[C],
+    agg:     Aggregatable[C],
     field:   Field[X],
     nroot:   NRoot[X]): X =
-    nroot.sqrt(Σ[X, D](data.map(x => square(x - estimator(x)))))
+    nroot.sqrt(Σ[X, C](data.map(x => square(x - estimator(x)))))
 
   /**
    * http://en.wikipedia.org/wiki/Standard_deviation
@@ -107,9 +107,9 @@ package object stats {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ[A, IndexedSeq[A]](prob.values(model).map({ x => n2a(prob.probabilityOf(model, x)) * x }))
+    val μ: A = Σ[A, IndexedSeq](prob.values(model).map({ x => n2a(prob.probabilityOf(model, x)) * x }))
 
-    val sum: A = Σ[A, IndexedSeq[A]](prob.values(model) map { x => n2a(prob.probabilityOf(model, x)) * square(x - μ) })
+    val sum: A = Σ[A, IndexedSeq](prob.values(model) map { x => n2a(prob.probabilityOf(model, x)) * square(x - μ) })
 
     NRoot[A].sqrt(sum)
   }
@@ -130,7 +130,7 @@ package object stats {
     import spire.implicits.DoubleAlgebra
 
     val convertN = ConvertableFrom[N]
-    val H = Σ[Double, IndexedSeq[Double]](prob.values(model) map { x =>
+    val H = Σ[Double, IndexedSeq](prob.values(model) map { x =>
       val px: N = P(model, x)(prob).apply()
       if (px === Field[N].zero) {
         0d

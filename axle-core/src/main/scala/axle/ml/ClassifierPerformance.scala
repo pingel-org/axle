@@ -1,13 +1,12 @@
 package axle.ml
 
+import cats.Functor
 import cats.Show
 import cats.implicits._
 import spire.algebra.Field
 import spire.implicits._
 import axle.math.Σ
 import axle.algebra.Aggregatable
-import axle.algebra.Functor
-import axle.syntax.functor._
 
 /**
  * ClassifierPerformance computes measures of classification performance
@@ -33,13 +32,13 @@ import axle.syntax.functor._
  *
  */
 
-case class ClassifierPerformance[N, DATA, F, G](
-  data:     F,
+case class ClassifierPerformance[N, DATA, F[_]](
+  data:     F[DATA],
   retrieve: DATA => Boolean,
   relevant: DATA => Boolean)(
   implicit
-  functor: Functor[F, DATA, (N, N, N, N), G],
-  agg:     Aggregatable[G, (N, N, N, N), (N, N, N, N)],
+  functor: Functor[F],
+  agg:     Aggregatable[F],
   field:   Field[N]) {
 
   import field._
@@ -53,7 +52,7 @@ case class ClassifierPerformance[N, DATA, F, G](
     }
   }
 
-  val (tp, fp, tn, fn): (N, N, N, N) = Σ[(N, N, N, N), G](scores)
+  val (tp, fp, tn, fn): (N, N, N, N) = Σ[(N, N, N, N), F](scores)
 
   val precision: N = tp / (tp + fp)
 
@@ -72,10 +71,10 @@ case class ClassifierPerformance[N, DATA, F, G](
 
 object ClassifierPerformance {
 
-  implicit def showCP[N, DATA, F, G]: Show[ClassifierPerformance[N, DATA, F, G]] =
-    new Show[ClassifierPerformance[N, DATA, F, G]] {
+  implicit def showCP[N, DATA, F[_]]: Show[ClassifierPerformance[N, DATA, F]] =
+    new Show[ClassifierPerformance[N, DATA, F]] {
 
-      def show(cp: ClassifierPerformance[N, DATA, F, G]): String = {
+      def show(cp: ClassifierPerformance[N, DATA, F]): String = {
         import cp._
         s"""Precision   $precision
 Recall      $recall
@@ -86,15 +85,5 @@ F1 Score    $f1Score
       }
 
     }
-
-  def common[N, DATA, U[_]](
-    data:     U[DATA],
-    retrieve: DATA => Boolean,
-    relevant: DATA => Boolean)(
-    implicit
-    functor: Functor[U[DATA], DATA, (N, N, N, N), U[(N, N, N, N)]],
-    agg:     Aggregatable[U[(N, N, N, N)], (N, N, N, N), (N, N, N, N)],
-    field:   Field[N]) =
-    ClassifierPerformance(data, retrieve, relevant)
 
 }

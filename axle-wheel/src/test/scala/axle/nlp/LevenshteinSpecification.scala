@@ -22,7 +22,7 @@ class LevenshteinSpecification
 
   implicit val space = {
     implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
-    Levenshtein.common[Vector, Char, DoubleMatrix, Int]()
+    Levenshtein[Vector, Char, DoubleMatrix, Int]()
   }
 
   implicit val pred: Predicate[Int] = new Predicate[Int] {

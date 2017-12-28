@@ -1,10 +1,13 @@
 package axle.syntax
 
+import scala.language.implicitConversions
+
+import spire.algebra.Field
+
 import axle.algebra.Aggregatable
 import axle.algebra.Talliable
 import axle.algebra.DirectedGraph
 import axle.algebra.Endofunctor
-import axle.algebra.Functor
 import axle.algebra.Finite
 import axle.algebra.Indexed
 import axle.algebra.MapFrom
@@ -12,8 +15,6 @@ import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
-import spire.algebra.Field
-import scala.language.implicitConversions
 
 trait LinearAlgebraSyntax {
 
@@ -53,12 +54,6 @@ trait UndirectedGraphSyntax {
     new UndirectedGraphOps(ug)
 }
 
-trait FunctorSyntax {
-
-  implicit def functorOps[F, A, B, G](fa: F)(implicit functor: Functor[F, A, B, G]) =
-    new FunctorOps(fa)
-}
-
 trait EndofunctorSyntax {
 
   implicit def endofunctorOps[E, A](e: E)(implicit ev: Endofunctor[E, A]) =
@@ -67,7 +62,7 @@ trait EndofunctorSyntax {
 
 trait AggregatableSyntax {
 
-  implicit def aggregatableOps[F, A, B](at: F)(implicit agg: Aggregatable[F, A, B]) =
+  implicit def aggregatableOps[F[_], A](at: F[A])(implicit agg: Aggregatable[F]) =
     new AggregatableOps(at)
 }
 
@@ -87,15 +82,15 @@ trait FiniteSyntax {
 
 trait IndexedSyntax {
 
-  implicit def indexedOps[F, IndexT, A](fa: F)(
+  implicit def indexedOps[F[_], IndexT, A](fa: F[A])(
     implicit
-    index: Indexed[F, IndexT, A]) =
+    index: Indexed[F, IndexT]) =
     new IndexedOps(fa)
 }
 
 trait MapReducibleSyntax {
 
-  implicit def mapReducibleOps[F, A, B, K, G](fa: F)(implicit mr: MapReducible[F, A, B, K, G]) =
+  implicit def mapReducibleOps[F[_], A](fa: F[A])(implicit mr: MapReducible[F]) =
     new MapReducibleOps(fa)
 }
 

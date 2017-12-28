@@ -1,6 +1,7 @@
 package axle.stats
 
 import org.scalatest._
+import cats.implicits._
 
 class RootMeanSquareDeviationSpec extends FunSuite with Matchers {
 

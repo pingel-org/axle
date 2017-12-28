@@ -1,35 +1,36 @@
 package axle.ml
 
+import cats.Functor
 import cats.kernel.Eq
 import cats.kernel.Order
-import cats.Order.catsKernelOrderingForOrder
+import cats.implicits._
+
 import spire.algebra.Field
 import spire.implicits.MapInnerProductSpace
-import spire.implicits.StringOrder
+// import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.eqOps
+
+import axle.algebra._
+import axle.math._
 import axle.stats.Variable
 import axle.stats.TallyDistribution0
 import axle.stats.TallyDistribution1
-//import axle.stats.CaseIs
-import axle.syntax.aggregatable._
-import axle.syntax.functor._
-import axle.syntax.talliable._
 import axle.stats.ProbabilityModel
-import axle.algebra._
-import axle.math._
+import axle.syntax.aggregatable._
+import axle.syntax.talliable._
 
-case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N: Field: Order](
-  data:                      F,
+case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N: Field: Order](
+  data:                      F[DATA],
   featureVariablesAndValues: List[(Variable[FEATURE], IndexedSeq[FEATURE])],
   classVariableAndValues:    (Variable[CLASS], IndexedSeq[CLASS]),
   featureExtractor:          DATA => List[FEATURE],
   classExtractor:            DATA => CLASS)(
   implicit
-  agg:     Aggregatable[F, DATA, Map[(CLASS, String, FEATURE), N]],
-  functor: Functor[F, DATA, CLASS, G],
-  tal:     Talliable[G, CLASS, N])
+  agg:     Aggregatable[F],
+  functor: Functor[F],
+  tal:     Talliable[F[CLASS], CLASS, N])
   extends Function1[DATA, CLASS] {
 
   val featureVariables = featureVariablesAndValues map { _._1 }
@@ -92,20 +93,4 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F, G, N:
     argmax(C.values, g).get // TODO: will be None if C.values is empty
   }
 
-}
-
-object NaiveBayesClassifier {
-
-  def common[DATA, FEATURE: Order, CLASS: Order: Eq, U[_], N: Field: Order](
-    data:                      U[DATA],
-    featureVariablesAndValues: List[(Variable[FEATURE], IndexedSeq[FEATURE])],
-    classVariableAndValues:    (Variable[CLASS], IndexedSeq[CLASS]),
-    featureExtractor:          DATA => List[FEATURE],
-    classExtractor:            DATA => CLASS)(
-    implicit
-    agg:     Aggregatable[U[DATA], DATA, Map[(CLASS, String, FEATURE), N]],
-    functor: Functor[U[DATA], DATA, CLASS, U[CLASS]],
-    tal:     Talliable[U[CLASS], CLASS, N]) =
-    NaiveBayesClassifier[DATA, FEATURE, CLASS, U[DATA], U[CLASS], N](
-      data, featureVariablesAndValues, classVariableAndValues, featureExtractor, classExtractor)
 }
