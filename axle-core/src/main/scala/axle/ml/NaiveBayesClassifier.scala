@@ -30,7 +30,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   implicit
   agg:     Aggregatable[F],
   functor: Functor[F],
-  tal:     Talliable[F[CLASS], CLASS, N])
+  tal:     Talliable[F])
   extends Function1[DATA, CLASS] {
 
   val featureVariables = featureVariablesAndValues map { _._1 }

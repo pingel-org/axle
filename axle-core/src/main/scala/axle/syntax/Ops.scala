@@ -3,6 +3,7 @@ package axle.syntax
 import cats.kernel.Eq
 
 import spire.algebra.AdditiveMonoid
+import spire.algebra.Ring
 
 import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
@@ -16,7 +17,9 @@ import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
 
-final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAlgebra[M, RowT, ColT, T]) {
+final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
+  implicit
+  la: LinearAlgebra[M, RowT, ColT, T]) {
 
   def get(i: RowT, j: ColT) = la.get(lhs)(i, j)
 
@@ -210,7 +213,9 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(implicit la: LinearAl
 
 }
 
-final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG, V, E]) {
+final class DirectedGraphOps[DG, V, E](val dg: DG)(
+  implicit
+  ev: DirectedGraph[DG, V, E]) {
 
   def findVertex(f: V => Boolean): Option[V] =
     ev.findVertex(dg, f)
@@ -263,7 +268,9 @@ final class DirectedGraphOps[DG, V, E](val dg: DG)(implicit ev: DirectedGraph[DG
   def outputEdgesOf(v: V) = ev.outputEdgesOf(dg, v)
 }
 
-final class UndirectedGraphOps[UG, V, E](val ug: UG)(implicit ev: UndirectedGraph[UG, V, E]) {
+final class UndirectedGraphOps[UG, V, E](val ug: UG)(
+  implicit
+  ev: UndirectedGraph[UG, V, E]) {
 
   def findVertex(f: V => Boolean) =
     ev.findVertex(ug, f)
@@ -294,29 +301,40 @@ final class UndirectedGraphOps[UG, V, E](val ug: UG)(implicit ev: UndirectedGrap
   def firstLeafOtherThan(r: V)(implicit eqV: Eq[V]): Option[V] = ev.firstLeafOtherThan(ug, r)
 }
 
-final class EndofunctorOps[E, A](val e: E)(implicit endo: Endofunctor[E, A]) {
+final class EndofunctorOps[E, A](val e: E)(
+  implicit
+  endo: Endofunctor[E, A]) {
 
   def map(f: A => A) = endo.map(e)(f)
 
 }
 
-final class AggregatableOps[G[_], A](val ts: G[A])(implicit agg: Aggregatable[G]) {
+final class AggregatableOps[G[_], A](val ts: G[A])(
+  implicit
+  agg: Aggregatable[G]) {
 
   def aggregate[B](zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B) =
     agg.aggregate(ts)(zeroValue)(seqOp, combOp)
 }
 
-final class TalliableOps[F, T, N](val ts: F)(implicit talliable: Talliable[F, T, N]) {
+final class TalliableOps[F[_], A, N](val as: F[A])(
+  implicit
+  talliable: Talliable[F],
+  ring:      Ring[N]) {
 
-  def tally = talliable.tally(ts)
+  def tally = talliable.tally(as)
 }
 
-final class FiniteOps[F, S, A](val as: F)(implicit finite: Finite[F, S]) {
+final class FiniteOps[F, S, A](val as: F)(
+  implicit
+  finite: Finite[F, S]) {
 
   def size = finite.size(as)
 }
 
-final class IndexedOps[F[_], I, A](val as: F[A])(implicit index: Indexed[F, I]) {
+final class IndexedOps[F[_], I, A](val as: F[A])(
+  implicit
+  index: Indexed[F, I]) {
 
   def at(i: I) = index.at(as)(i)
 
@@ -325,18 +343,24 @@ final class IndexedOps[F[_], I, A](val as: F[A])(implicit index: Indexed[F, I]) 
   def drop(i: I) = index.drop(as)(i)
 }
 
-final class MapReducibleOps[M[_], A](val as: M[A])(implicit mr: MapReducible[M]) {
+final class MapReducibleOps[M[_], A](val as: M[A])(
+  implicit
+  mr: MapReducible[M]) {
 
   def mapReduce[B, K](mapper: A => (K, B), zero: B, op: (B, B) => B): M[(K, B)] =
     mr.mapReduce(as, mapper, zero, op)
 }
 
-final class SetFromOps[F, A](val as: F)(implicit sf: SetFrom[F, A]) {
+final class SetFromOps[F, A](val as: F)(
+  implicit
+  sf: SetFrom[F, A]) {
 
   def toSet = sf.toSet(as)
 }
 
-final class MapFromOps[F, K, V](val fkv: F)(implicit mf: MapFrom[F, K, V]) {
+final class MapFromOps[F, K, V](val fkv: F)(
+  implicit
+  mf: MapFrom[F, K, V]) {
 
   def toMap = mf.toMap(fkv)
 }
