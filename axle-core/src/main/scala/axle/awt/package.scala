@@ -206,15 +206,15 @@ package object awt {
 
     }
 
-  implicit def drawKMeansVisualization[T, F, G, M]: DrawPanel[KMeansVisualization[T, F, G, M]] =
-    new DrawPanel[KMeansVisualization[T, F, G, M]] {
+  implicit def drawKMeansVisualization[T, F[_], M]: DrawPanel[KMeansVisualization[T, F, M]] =
+    new DrawPanel[KMeansVisualization[T, F, M]] {
 
-      def dimension(kmv: KMeansVisualization[T, F, G, M]) = {
+      def dimension(kmv: KMeansVisualization[T, F, M]) = {
         import kmv._
         new Dimension(width + border, height + border)
       }
 
-      def paint(kmv: KMeansVisualization[T, F, G, M], g2d: Graphics2D): Unit = {
+      def paint(kmv: KMeansVisualization[T, F, M], g2d: Graphics2D): Unit = {
         import kmv._
         Paintable[Rectangle[Double, Double]].paint(boundingRectangle, g2d)
         Paintable[XTics[Double, Double]].paint(xTics, g2d)

@@ -2,12 +2,12 @@ package axle.algebra
 
 import spire.algebra.MetricSpace
 
-case class DistanceMatrix[T, F, M](
-  vectors: F)(
+case class DistanceMatrix[T, F[_], M](
+  vectors: F[T])(
   implicit
   space:  MetricSpace[T, Double],
   la:     LinearAlgebra[M, Int, Int, Double],
-  index:  Indexed[F, Int, T],
+  index:  Indexed[F, Int],
   finite: Finite[F, Int]) {
 
   val n = finite.size(vectors)

@@ -3,7 +3,9 @@ package axle.ml
 import scala.Vector
 import scala.collection.immutable.TreeMap
 
+import cats.Functor
 import cats.kernel.Eq
+import cats.implicits._
 
 import spire.algebra.MetricSpace
 import spire.random.Generator
@@ -11,11 +13,9 @@ import spire.random.Generator
 import axle.shuffle
 import axle.algebra.LinearAlgebra
 import axle.algebra.Finite
-import axle.algebra.Functor
 import axle.algebra.Indexed
 import axle.syntax.finite._
 import axle.syntax.indexed._
-import axle.syntax.functor._
 import axle.syntax.linearalgebra._
 
 /**
@@ -36,8 +36,8 @@ import axle.syntax.linearalgebra._
  *
  */
 
-case class KMeans[T: Eq, F, G, M](
-  data:             F,
+case class KMeans[T: Eq, F[_], M](
+  data:             F[T],
   N:                Int,
   featureExtractor: T => Seq[Double],
   normalizerMaker:  M => Normalize[M],
@@ -46,9 +46,9 @@ case class KMeans[T: Eq, F, G, M](
   gen: Generator)(
   implicit
   space:   MetricSpace[M, Double],
-  functor: Functor[F, T, Seq[Double], G],
+  functor: Functor[F],
   val la:  LinearAlgebra[M, Int, Int, Double],
-  index:   Indexed[G, Int, Seq[Double]],
+  index:   Indexed[F, Int],
   finite:  Finite[F, Int])
   extends Function1[T, Int] {
 
@@ -172,21 +172,3 @@ case class KMeans[T: Eq, F, G, M](
 
 }
 
-object KMeans {
-
-  def common[T: Eq, U[_], M](
-    data:             U[T],
-    N:                Int,
-    featureExtractor: T => Seq[Double],
-    normalizerMaker:  M => Normalize[M],
-    K:                Int,
-    iterations:       Int)(
-    gen: Generator)(
-    implicit
-    space:   MetricSpace[M, Double],
-    functor: Functor[U[T], T, Seq[Double], U[Seq[Double]]],
-    la:      LinearAlgebra[M, Int, Int, Double],
-    index:   Indexed[U[Seq[Double]], Int, Seq[Double]],
-    finite:  Finite[U[T], Int]): KMeans[T, U[T], U[Seq[Double]], M] =
-    KMeans(data, N, featureExtractor, normalizerMaker, K, iterations)(gen)
-}

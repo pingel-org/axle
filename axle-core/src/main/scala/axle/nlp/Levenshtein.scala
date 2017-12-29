@@ -22,14 +22,14 @@ import cats.Order.catsKernelOrderingForOrder
  *
  */
 
-case class Levenshtein[S, E: Eq, M, I: Ring: Order]()(
+case class Levenshtein[S[_], E: Eq, M, I: Ring: Order]()(
   implicit
   la:     LinearAlgebra[M, I, I, I],
-  idx:    Indexed[S, I, E],
+  idx:    Indexed[S, I],
   finite: Finite[S, I])
-  extends MetricSpace[S, I] {
+  extends MetricSpace[S[E], I] {
 
-  def distance(s1: S, s2: S): I = {
+  def distance(s1: S[E], s2: S[E]): I = {
 
     val i0 = Ring[I].zero
     val i1 = Ring[I].one
@@ -54,14 +54,4 @@ case class Levenshtein[S, E: Eq, M, I: Ring: Order]()(
 
   def min(nums: I*): I = nums.min
 
-}
-
-object Levenshtein {
-
-  def common[U[_], E: Eq, M, I: Ring: Order]()(
-    implicit
-    la:     LinearAlgebra[M, I, I, I],
-    idx:    Indexed[U[E], I, E],
-    finite: Finite[U[E], I]) =
-    Levenshtein[U[E], E, M, I]()
 }

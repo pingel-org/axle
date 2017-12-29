@@ -80,7 +80,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
     graph.findVertex(_.variable === variable).map(_.cpt).get
 
   def probabilityOf(cs: Seq[CaseIs[T]]): N =
-    Π[N, Vector[N]](cs.map(c => cpt(c.variable)(cs)).toVector)
+    Π[N, Vector](cs.map(c => cpt(c.variable)(cs)).toVector)
 
   def markovAssumptionsFor(rv: Variable[T]): Independence[T] = {
     val rvVertex = graph.findVertex(_.variable === rv).get
@@ -118,9 +118,9 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def variableEliminationPriorMarginalI(
     Q: Set[Variable[T]],
     π: List[Variable[T]]): Factor[T, N] =
-    Π[Factor[T, N], Set[Factor[T, N]]](π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
+    Π[Factor[T, N], Set](π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
       val allMentions: Set[Factor[T, N]] = S.filter(_.mentions(rv))
-      val mentionsWithout = Π[Factor[T, N], Set[Factor[T, N]]](allMentions).sumOut(rv)
+      val mentionsWithout = Π[Factor[T, N], Set](allMentions).sumOut(rv)
       (S -- allMentions) + mentionsWithout
     }))
 
@@ -138,10 +138,10 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
     Q: Set[Variable[T]],
     π: List[Variable[T]],
     e: CaseIs[T]): Factor[T, N] =
-    Π[Factor[T, N], Set[Factor[T, N]]](π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
+    Π[Factor[T, N], Set](π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
       (S, rv) => {
         val allMentions = S.filter(_.mentions(rv))
-        (S -- allMentions) + Π[Factor[T, N], Set[Factor[T, N]]](allMentions).sumOut(rv)
+        (S -- allMentions) + Π[Factor[T, N], Set](allMentions).sumOut(rv)
       }))
 
   def interactsWith(v1: Variable[T], v2: Variable[T]): Boolean =

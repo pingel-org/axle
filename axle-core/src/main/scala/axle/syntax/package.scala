@@ -8,8 +8,6 @@ package object syntax {
 
   object endofunctor extends EndofunctorSyntax
 
-  object functor extends FunctorSyntax
-
   object finite extends FiniteSyntax
 
   object aggregatable extends AggregatableSyntax

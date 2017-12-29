@@ -36,7 +36,8 @@ class DirectedGraphSpec extends FunSuite with Matchers {
         (a, c, acEdge),
         (b, d, new Edge(5.3))))
 
-    g.size should be(4)
+    g.vertexProjection.size should be(4)
+    g.edgeProjection.size should be(6)
     g.neighbors(a).size should be(3)
     g.edgesTouching(a).size should be(3)
     g.degree(a) should be(3)

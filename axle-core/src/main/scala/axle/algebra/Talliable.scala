@@ -5,28 +5,28 @@ import spire.algebra.Ring
 import spire.implicits.MapRng
 import spire.implicits.additiveSemigroupOps
 
-@implicitNotFound("Witness not found for Talliable[${F}, ${A}, ${N}]")
-trait Talliable[F, A, N] {
+@implicitNotFound("Witness not found for Talliable[${F}]")
+trait Talliable[F[_]] {
 
-  def tally(ts: F): Map[A, N]
+  def tally[A, N](ts: F[A])(implicit ring: Ring[N]): Map[A, N]
 }
 
 object Talliable {
 
-  implicit def tallySeq[A, N](implicit ring: Ring[N]) =
-    new Talliable[Seq[A], A, N] {
+  implicit val tallySeq =
+    new Talliable[Seq] {
 
-      def tally(xs: Seq[A]): Map[A, N] = {
+      def tally[A, N](xs: Seq[A])(implicit ring: Ring[N]): Map[A, N] = {
         xs.aggregate(Map.empty[A, N].withDefaultValue(ring.zero))(
           (m, x) => m + (x -> ring.plus(m(x), ring.one)),
           _ + _)
       }
     }
 
-  implicit def tallyList[A, N](implicit ring: Ring[N]) =
-    new Talliable[List[A], A, N] {
+  implicit val tallyList =
+    new Talliable[List] {
 
-      def tally(xs: List[A]): Map[A, N] = {
+      def tally[A, N](xs: List[A])(implicit ring: Ring[N]): Map[A, N] = {
         xs.aggregate(Map.empty[A, N].withDefaultValue(ring.zero))(
           (m, x) => m + (x -> ring.plus(m(x), ring.one)),
           _ + _)

@@ -2,7 +2,9 @@ package axle.ml
 
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
 import spire.random.Generator.rng
+import axle.algebra.functorIndexedSeq
 import axle.shuffle
 import axle.string
 
@@ -79,7 +81,8 @@ class KMeansSpecification
     import axle.jung._
 
     implicit val distanceConverter: DistanceConverter[Double] = {
-      import spire.implicits.DoubleAlgebra
+      import spire.algebra.Field
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
       import axle.algebra.modules.doubleRationalModule
       Distance.converterGraphK2[Double, DirectedSparseGraph]
     }
@@ -116,10 +119,10 @@ class KMeansSpecification
 
     val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-    val classifier: KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix] = {
+    val classifier: KMeans[Iris, List, DoubleMatrix] = {
 
       // import spire.algebra.MetricSpace
-      import axle.algebra.Functor
+      import cats.Functor
       import axle.algebra.Indexed
       import axle.algebra.Finite
       // implicit val eqi: Eq[Iris] = Iris.irisEq
@@ -129,7 +132,7 @@ class KMeansSpecification
       // val index: Indexed[List[Seq[Double]], Int, Seq[Double]] = Indexed[List[Seq[Double]], Int, Seq[Double]]
       // val finite: Finite[List[Iris], Int] = Finite[List[Iris], Int]
 
-      KMeans.common[Iris, List, DoubleMatrix](
+      KMeans[Iris, List, DoubleMatrix](
         irisesData.irises,
         N = 2,
         irisFeaturizer,
@@ -138,15 +141,15 @@ class KMeansSpecification
         iterations = 20)(rng)(
           Iris.irisEq,
           space,
-          Functor[List[Iris], Iris, Seq[Double], List[Seq[Double]]],
+          Functor[List],
           la,
-          Indexed[List[Seq[Double]], Int, Seq[Double]],
-          Finite[List[Iris], Int])
+          Indexed[List, Int],
+          Finite[List, Int])
     }
 
     val confusion = {
       import cats.implicits._
-      ConfusionMatrix.common[Iris, Int, String, Vector, DoubleMatrix](
+      ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
         classifier,
         irisesData.irises.toVector,
         _.species,

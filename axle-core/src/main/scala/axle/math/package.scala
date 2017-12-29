@@ -1,10 +1,10 @@
 package axle
 
+import cats.Functor
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
-import cats.implicits.catsSyntaxPartialOrder
-import cats.kernel.Order
+
 import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
@@ -19,6 +19,7 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.math.Rational
 import spire.math.ConvertableTo
+
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.AngleConverter
@@ -26,7 +27,6 @@ import axle.quanta.Distance
 import axle.algebra._
 
 import axle.syntax.finite.finiteOps
-import axle.syntax.functor.functorOps
 import axle.syntax.indexed.indexedOps
 
 package object math {
@@ -36,7 +36,7 @@ package object math {
    *
    */
   def wallisΠ(iterations: Int = 10000) =
-    2 * Π[Rational, IndexedSeq[Rational]]((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
+    2 * Π[Rational, IndexedSeq]((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
 
   /**
    * Monte Carlo approximation of pi http://en.wikipedia.org/wiki/Monte_Carlo_method
@@ -45,17 +45,16 @@ package object math {
    *
    */
 
-  def monteCarloPiEstimate[F, N, V: ConvertableTo, G](
-    trials: F,
+  def monteCarloPiEstimate[F[_], N, V: ConvertableTo](
+    trials: F[N],
     n2v:    N => V)(
     implicit
     finite:  Finite[F, N],
-    functor: Functor[F, N, V, G],
-    agg:     Aggregatable[G, V, V],
+    functor: Functor[F],
+    agg:     Aggregatable[F],
     field:   Field[V]): V = {
 
     import spire.math.random
-    //    import axle.syntax.functor.functorOps
     //    import spire.implicits.multiplicativeSemigroupOps
     //    import spire.implicits.multiplicativeGroupOps
 
@@ -67,7 +66,7 @@ package object math {
 
     val vFour = ConvertableTo[V].fromDouble(4d)
 
-    val counts: G = trials.map(i => randomPointInCircle())
+    val counts: F[V] = trials.map(i => randomPointInCircle())
 
     val s: V = Σ(counts)
 
@@ -279,17 +278,17 @@ package object math {
 
   def √[N: NRoot](x: N): N = x.sqrt
 
-  def argmax[R, K, N: Order, S](
-    ks: R,
+  def argmax[R[_], K, N: Order](
+    ks: R[K],
     f:  K => N)(
     implicit
-    functorRknS: Functor[R, K, (K, N), S],
-    redicibleS:  Reducible[S, (K, N)]): Option[K] = {
+    functor:   Functor[R],
+    redicible: Reducible[R]): Option[K] = {
 
-    val mapped = functorRknS.map(ks)(k => (k, f(k)))
+    val mapped = functor.map(ks)(k => (k, f(k)))
     // TODO: This could be extracted as Reducible.maxBy
 
-    redicibleS.reduceOption(mapped)({
+    redicible.reduceOption(mapped)({
       case (kv1, kv2) =>
         if (kv1._2 > kv2._2) kv1 else kv2
     }).map(_._1)
@@ -297,16 +296,16 @@ package object math {
 
   //.maxBy(_._2)._1
 
-  def Σ[A, F](fa: F)(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F, A, A]): A =
+  def Σ[A, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
 
-  def sum[A, F](fa: F)(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F, A, A]): A =
+  def sum[A, F[_]](fa: F[A])(implicit ev: AdditiveMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.zero)(ev.plus, ev.plus)
 
-  def Π[A, F](fa: F)(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F, A, A]): A =
+  def Π[A, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
-  def product[A, F](fa: F)(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F, A, A]): A =
+  def product[A, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
 
   /**
@@ -316,33 +315,33 @@ package object math {
    *
    */
 
-  def mean[N, F](ns: F)(
+  def mean[N, F[_]](ns: F[N])(
     implicit
     field:        Field[N],
-    aggregatable: Aggregatable[F, N, N],
+    aggregatable: Aggregatable[F],
     finite:       Finite[F, N]): N =
     arithmeticMean[N, F](ns)
 
-  def arithmeticMean[N, F](ns: F)(
+  def arithmeticMean[N, F[_]](ns: F[N])(
     implicit
     field:        Field[N],
-    aggregatable: Aggregatable[F, N, N],
+    aggregatable: Aggregatable[F],
     finite:       Finite[F, N]): N =
     Σ(ns) / ns.size
 
-  def geometricMean[N, F](ns: F)(
+  def geometricMean[N, F[N]](ns: F[N])(
     implicit
     ev:    MultiplicativeMonoid[N],
-    agg:   Aggregatable[F, N, N],
+    agg:   Aggregatable[F],
     fin:   Finite[F, Int],
     nroot: NRoot[N]): N =
     nroot.nroot(Π(ns), ns.size)
 
-  def harmonicMean[N, F](ns: F)(
+  def harmonicMean[N, F[_]](ns: F[N])(
     implicit
     field:       Field[N],
-    functorFaaF: Functor[F, N, N, F],
-    agg:         Aggregatable[F, N, N],
+    functorFaaF: Functor[F],
+    agg:         Aggregatable[F],
     fin:         Finite[F, N]): N =
     ns.size / Σ(functorFaaF.map(ns)(field.reciprocal))
 
@@ -354,13 +353,13 @@ package object math {
    * TODO could be special-cased for p = -∞ or ∞
    */
 
-  def generalizedMean[N, F](p: N, ns: F)(
+  def generalizedMean[N, F[_]](p: N, ns: F[N])(
     implicit
-    field:       Field[N],
-    functorFaaF: Functor[F, N, N, F],
-    agg:         Aggregatable[F, N, N],
-    fin:         Finite[F, N],
-    nroot:       NRoot[N]): N =
+    field:   Field[N],
+    functor: Functor[F],
+    agg:     Aggregatable[F],
+    fin:     Finite[F, N],
+    nroot:   NRoot[N]): N =
     nroot.fpow(
       field.reciprocal(ns.size) * Σ(ns.map(x => nroot.fpow(x, p))),
       field.reciprocal(p))
@@ -375,23 +374,23 @@ package object math {
    * TODO f need only be injective
    */
 
-  def generalizedFMean[N, F](f: Bijection[N, N], ns: F)(
+  def generalizedFMean[N, F[_]](f: Bijection[N, N], ns: F[N])(
     implicit
-    field:       Field[N],
-    functorFaaF: Functor[F, N, N, F],
-    agg:         Aggregatable[F, N, N],
-    fin:         Finite[F, N]): N =
+    field:   Field[N],
+    functor: Functor[F],
+    agg:     Aggregatable[F],
+    fin:     Finite[F, N]): N =
     f.unapply(field.reciprocal(ns.size) * Σ(ns.map(f)))
 
-  def movingArithmeticMean[F, I, N, G](xs: F, size: I)(
+  def movingArithmeticMean[F[_], I, N](xs: F[N], size: I)(
     implicit
     convert: I => N,
-    indexed: Indexed[F, I, N],
+    indexed: Indexed[F, I],
     fin:     Finite[F, N],
     field:   Field[N],
-    zipper:  Zipper[F, N, F, N, G],
-    agg:     Aggregatable[F, N, N],
-    scanner: Scanner[G, (N, N), N, F]): F = {
+    zipper:  Zipper[F],
+    agg:     Aggregatable[F],
+    scanner: Scanner[F]): F[N] = {
 
     val initial: N = arithmeticMean(xs.take(size))
 
@@ -402,16 +401,16 @@ package object math {
       })
   }
 
-  def movingGeometricMean[F, I, N, G](xs: F, size: I)(
+  def movingGeometricMean[F[_], I, N](xs: F[N], size: I)(
     implicit
     convert: I => Int,
-    indexed: Indexed[F, I, N],
+    indexed: Indexed[F, I],
     field:   Field[N],
-    zipper:  Zipper[F, N, F, N, G],
-    agg:     Aggregatable[F, N, N],
-    scanner: Scanner[G, (N, N), N, F],
+    zipper:  Zipper[F],
+    agg:     Aggregatable[F],
+    scanner: Scanner[F],
     fin:     Finite[F, Int],
-    nroot:   NRoot[N]): F = {
+    nroot:   NRoot[N]): F[N] = {
 
     val initial: N = geometricMean(xs.take(size))
 
@@ -421,16 +420,16 @@ package object math {
       })
   }
 
-  def movingHarmonicMean[F, I, N, G](xs: F, size: I)(
+  def movingHarmonicMean[F[_], I, N](xs: F[N], size: I)(
     implicit
     convert: I => N,
-    indexed: Indexed[F, I, N],
+    indexed: Indexed[F, I],
     field:   Field[N],
-    zipper:  Zipper[F, N, F, N, G],
-    agg:     Aggregatable[F, N, N],
-    scanner: Scanner[G, (N, N), N, F],
-    functor: Functor[F, N, N, F],
-    fin:     Finite[F, N]): F = {
+    zipper:  Zipper[F],
+    agg:     Aggregatable[F],
+    scanner: Scanner[F],
+    functor: Functor[F],
+    fin:     Finite[F, N]): F[N] = {
 
     val initial: N = harmonicMean(xs.take(size))
 
@@ -442,17 +441,17 @@ package object math {
       })
   }
 
-  def movingGeneralizedMean[F, I, N, G](p: N, xs: F, size: I)(
+  def movingGeneralizedMean[F[_], I, N](p: N, xs: F[N], size: I)(
     implicit
     convert: I => N,
-    indexed: Indexed[F, I, N],
+    indexed: Indexed[F, I],
     field:   Field[N],
-    zipper:  Zipper[F, N, F, N, G],
-    agg:     Aggregatable[F, N, N],
-    scanner: Scanner[G, (N, N), N, F],
-    functor: Functor[F, N, N, F],
+    zipper:  Zipper[F],
+    agg:     Aggregatable[F],
+    scanner: Scanner[F],
+    functor: Functor[F],
     fin:     Finite[F, N],
-    nroot:   NRoot[N]): F = {
+    nroot:   NRoot[N]): F[N] = {
 
     val initial: N = generalizedMean(p, xs.take(size))
 
@@ -464,16 +463,16 @@ package object math {
       })
   }
 
-  def movingGeneralizedFMean[F, I, N, G](f: Bijection[N, N], xs: F, size: I)(
+  def movingGeneralizedFMean[F[_], I, N](f: Bijection[N, N], xs: F[N], size: I)(
     implicit
     convert: I => N,
-    indexed: Indexed[F, I, N],
+    indexed: Indexed[F, I],
     field:   Field[N],
-    zipper:  Zipper[F, N, F, N, G],
-    agg:     Aggregatable[F, N, N],
-    scanner: Scanner[G, (N, N), N, F],
-    functor: Functor[F, N, N, F],
-    fin:     Finite[F, N]): F = {
+    zipper:  Zipper[F],
+    agg:     Aggregatable[F],
+    scanner: Scanner[F],
+    functor: Functor[F],
+    fin:     Finite[F, N]): F[N] = {
 
     val initial: N = generalizedFMean(f, xs.take(size))
 
