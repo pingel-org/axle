@@ -8,7 +8,7 @@ case class DistanceMatrix[T, F[_], M](
   space:  MetricSpace[T, Double],
   la:     LinearAlgebra[M, Int, Int, Double],
   index:  Indexed[F, Int],
-  finite: Finite[F[T], Int]) {
+  finite: Finite[F, Int]) {
 
   val n = finite.size(vectors)
 

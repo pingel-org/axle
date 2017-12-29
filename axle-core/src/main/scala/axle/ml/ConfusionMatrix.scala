@@ -26,7 +26,7 @@ case class ConfusionMatrix[T, CLASS: Order, L: Order, F[_], M](
   classes:        IndexedSeq[CLASS])(
   implicit
   val la:  LinearAlgebra[M, Int, Int, Double],
-  finite:  Finite[F[T], Int],
+  finite:  Finite[F, Int],
   functor: Functor[F],
   sf:      SetFrom[F[L], L],
   mf:      MapFrom[F[((Int, CLASS), Int)], (Int, CLASS), Int],

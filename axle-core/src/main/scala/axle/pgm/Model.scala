@@ -1,14 +1,14 @@
 package axle.pgm
 
-import axle.algebra.DirectedGraph
-import axle.stats.Variable
-import cats.kernel.Eq
-import spire.algebra.Field
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
-import axle.algebra.Finite
-import axle.syntax.directedgraph._
-import axle.syntax.finite._
+//import axle.algebra.DirectedGraph
+//import axle.stats.Variable
+//import cats.kernel.Eq
+//import spire.algebra.Field
+//import spire.implicits.IntAlgebra
+//import spire.implicits.eqOps
+//import axle.algebra.Finite
+//import axle.syntax.directedgraph._
+//import axle.syntax.finite._
 
 object Direction {
 
@@ -17,7 +17,7 @@ object Direction {
   val INWARD = 1
 
 }
-
+/*
 case class GenModel[T: Eq, N: Field, DG](
   graph: DG)(
   implicit
@@ -105,3 +105,4 @@ case class GenModel[T: Eq, N: Field, DG](
   }
 
 }
+*/

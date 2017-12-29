@@ -45,7 +45,7 @@ object RankedClassifierPerformance {
   def meanAveragePrecisionAtK[T, N: Field](
     actual:    Seq[Seq[T]],
     predicted: Seq[Seq[T]],
-    k:         Int         = 10)(implicit finite: Finite[Seq[N], N]): N =
+    k:         Int         = 10)(implicit finite: Finite[Seq, N]): N =
     mean(
       actual.zip(predicted)
         .map({ case (a: Seq[T], p: Seq[T]) => averagePrecisionAtK[T, N](a, p, k) }))

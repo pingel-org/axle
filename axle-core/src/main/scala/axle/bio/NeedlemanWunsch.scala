@@ -45,7 +45,7 @@ object NeedlemanWunsch {
     similarity: (N, N) => V,
     gapPenalty: V)(
     implicit
-    finite:  Finite[C[N], I],
+    finite:  Finite[C, I],
     zipper:  Zipper[C],
     functor: Functor[C],
     agg:     Aggregatable[C]): V =
@@ -68,7 +68,7 @@ object NeedlemanWunsch {
     similarity: (N, N) => V,
     gapPenalty: V)(
     implicit
-    finite:  Finite[S[N], I],
+    finite:  Finite[S, I],
     zipper:  Zipper[S],
     functor: Functor[S],
     agg:     Aggregatable[S]): V = {
@@ -101,7 +101,7 @@ object NeedlemanWunsch {
     implicit
     la:      LinearAlgebra[M, I, I, V],
     indexed: Indexed[S, I],
-    finite:  Finite[S[N], I],
+    finite:  Finite[S, I],
     module:  Module[V, I]): M = {
 
     val one = Ring[I].one
@@ -179,7 +179,7 @@ object NeedlemanWunsch {
     implicit
     la:      LinearAlgebra[M, I, I, V],
     indexed: Indexed[S, I],
-    finite:  Finite[S[N], I],
+    finite:  Finite[S, I],
     fs:      FromStream[S[N], N],
     module:  Module[V, I]): (S[N], S[N]) = {
 
@@ -206,7 +206,7 @@ case class NeedlemanWunschMetricSpace[S[_], N: Eq, M, I: Ring: Order, V: Additiv
   implicit
   la:      LinearAlgebra[M, I, I, V],
   indexed: Indexed[S, I],
-  finite:  Finite[S[N], I],
+  finite:  Finite[S, I],
   module:  Module[V, I])
   extends MetricSpace[S[N], V] {
 

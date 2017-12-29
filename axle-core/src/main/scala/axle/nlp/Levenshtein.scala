@@ -26,7 +26,7 @@ case class Levenshtein[S[_], E: Eq, M, I: Ring: Order]()(
   implicit
   la:     LinearAlgebra[M, I, I, I],
   idx:    Indexed[S, I],
-  finite: Finite[S[E], I])
+  finite: Finite[S, I])
   extends MetricSpace[S[E], I] {
 
   def distance(s1: S[E], s2: S[E]): I = {

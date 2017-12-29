@@ -5,72 +5,72 @@ import scala.collection.parallel.immutable.ParSeq
 import spire.math.Real
 import spire.math.Rational
 
-@implicitNotFound("Witness not found for Finite[${C}, ${S}]")
-trait Finite[C, S] {
+@implicitNotFound("Witness not found for Finite[${C}, ${N}]")
+trait Finite[C[_], N] {
 
-  def size(t: C): S
+  def size[A](t: C[A]): N
 }
 
 object Finite {
 
-  final def apply[C, S](implicit ev: Finite[C, S]): Finite[C, S] = ev
+  final def apply[C[_], N](implicit ev: Finite[C, N]): Finite[C, N] = ev
 
-  implicit def finiteCIntRational[C](implicit ev: Finite[C, Int]): Finite[C, Rational] =
+  implicit def finiteCIntRational[C[_]](implicit ev: Finite[C, Int]): Finite[C, Rational] =
     new Finite[C, Rational] {
-      def size(xs: C): Rational = ev.size(xs)
+      def size[A](as: C[A]): Rational = ev.size(as)
     }
 
-  implicit def finiteCIntLong[C](implicit ev: Finite[C, Int]): Finite[C, Long] =
+  implicit def finiteCIntLong[C[_]](implicit ev: Finite[C, Int]): Finite[C, Long] =
     new Finite[C, Long] {
-      def size(xs: C): Long = ev.size(xs).toLong
+      def size[A](as: C[A]): Long = ev.size(as).toLong
     }
 
-  implicit def finiteCIntDouble[C](implicit ev: Finite[C, Int]): Finite[C, Double] =
+  implicit def finiteCIntDouble[C[_]](implicit ev: Finite[C, Int]): Finite[C, Double] =
     new Finite[C, Double] {
-      def size(xs: C): Double = ev.size(xs).toDouble
+      def size[A](as: C[A]): Double = ev.size(as).toDouble
     }
 
-  implicit def finiteCIntReal[C](implicit ev: Finite[C, Int]): Finite[C, Real] =
+  implicit def finiteCIntReal[C[_]](implicit ev: Finite[C, Int]): Finite[C, Real] =
     new Finite[C, Real] {
-      def size(xs: C): Real = ev.size(xs)
+      def size[A](as: C[A]): Real = ev.size(as)
     }
 
-  implicit def finiteSeq[T]: Finite[Seq[T], Int] =
-    new Finite[Seq[T], Int] {
+  implicit val finiteSeq: Finite[Seq, Int] =
+    new Finite[Seq, Int] {
 
-      def size(seq: Seq[T]): Int = seq.size
+      def size[A](seq: Seq[A]): Int = seq.size
     }
 
-  implicit def finiteList[T]: Finite[List[T], Int] =
-    new Finite[List[T], Int] {
+  implicit val finiteList: Finite[List, Int] =
+    new Finite[List, Int] {
 
-      def size(list: List[T]): Int = list.length
+      def size[A](list: List[A]): Int = list.length
     }
 
-  implicit def finiteVector[T]: Finite[Vector[T], Int] =
-    new Finite[Vector[T], Int] {
+  implicit val finiteVector: Finite[Vector, Int] =
+    new Finite[Vector, Int] {
 
-      def size(vector: Vector[T]): Int =
+      def size[A](vector: Vector[A]): Int =
         vector.length
     }
 
-  implicit def finiteParSeq[T]: Finite[ParSeq[T], Int] =
-    new Finite[ParSeq[T], Int] {
+  implicit val finiteParSeq: Finite[ParSeq, Int] =
+    new Finite[ParSeq, Int] {
 
-      def size(ps: ParSeq[T]): Int =
+      def size[A](ps: ParSeq[A]): Int =
         ps.length
     }
 
-  implicit def finiteIndexedSeq[T]: Finite[IndexedSeq[T], Int] =
-    new Finite[IndexedSeq[T], Int] {
+  implicit val finiteIndexedSeq: Finite[IndexedSeq, Int] =
+    new Finite[IndexedSeq, Int] {
 
-      def size(is: IndexedSeq[T]): Int = is.length
+      def size[A](is: IndexedSeq[A]): Int = is.length
     }
 
-  implicit def finiteImmutableIndexedSeq[T]: Finite[scala.collection.immutable.IndexedSeq[T], Int] =
-    new Finite[scala.collection.immutable.IndexedSeq[T], Int] {
+  implicit val finiteImmutableIndexedSeq: Finite[scala.collection.immutable.IndexedSeq, Int] =
+    new Finite[scala.collection.immutable.IndexedSeq, Int] {
 
-      def size(is: scala.collection.immutable.IndexedSeq[T]): Int =
+      def size[A](is: scala.collection.immutable.IndexedSeq[A]): Int =
         is.length
     }
 

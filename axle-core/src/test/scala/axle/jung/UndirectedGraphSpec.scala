@@ -34,7 +34,8 @@ class UndirectedGraphSpec extends FunSuite with Matchers {
         (a, c, new Edge(8.0)),
         (b, d, new Edge(4.9))))
 
-    g.size should be(4)
+    g.vertexProjection.size should be(4)
+    g.edgeProjection.size should be(6)
     g.connects(e1, a, b) should be(true)
     g.other(e1, a) should be(b)
     g.neighbors(a).size should be(3)

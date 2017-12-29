@@ -31,13 +31,56 @@ import axle.awt.Draw
 import axle.visualize.DirectedGraphVisualization
 import axle.visualize.UndirectedGraphVisualization
 
+class DirectedSparseGraphVertices[V](val dsg: DirectedSparseGraph[V, _])
+
+class DirectedSparseGraphEdges[E](val dsg: DirectedSparseGraph[_, E])
+
+class DirectedSparseGraphProjector[V, E](val dsg: DirectedSparseGraph[V, E]) {
+
+  def vertexProjection: DirectedSparseGraphVertices[V] = new DirectedSparseGraphVertices(dsg)
+
+  def edgeProjection: DirectedSparseGraphEdges[E] = new DirectedSparseGraphEdges(dsg)
+}
+
+class UndirectedSparseGraphVertices[V](val usg: UndirectedSparseGraph[V, _])
+
+class UndirectedSparseGraphEdges[E](val usg: UndirectedSparseGraph[_, E])
+
+class UndirectedSparseGraphProjector[V, E](val usg: UndirectedSparseGraph[V, E]) {
+
+  def vertexProjection: UndirectedSparseGraphVertices[V] = new UndirectedSparseGraphVertices(usg)
+
+  def edgeProjection: UndirectedSparseGraphEdges[E] = new UndirectedSparseGraphEdges(usg)
+}
+
 package object jung {
 
-  implicit def finiteDirectedSparseGraph[V, E]: Finite[DirectedSparseGraph[V, E], Int] =
-    new Finite[DirectedSparseGraph[V, E], Int] {
+  import scala.language.implicitConversions
 
-      def size(jdsg: DirectedSparseGraph[V, E]): Int =
-        jdsg.getVertexCount
+  implicit def cdsg[V, E](dsg: DirectedSparseGraph[V, E]): DirectedSparseGraphProjector[V, E] =
+    new DirectedSparseGraphProjector(dsg)
+
+  implicit def cusg[V, E](usg: UndirectedSparseGraph[V, E]): UndirectedSparseGraphProjector[V, E] =
+    new UndirectedSparseGraphProjector(usg)
+
+  implicit val finiteDSGV: Finite[DirectedSparseGraphVertices, Int] =
+    new Finite[DirectedSparseGraphVertices, Int] {
+      def size[A](dsgv: DirectedSparseGraphVertices[A]): Int = dsgv.dsg.getVertexCount
+    }
+
+  implicit val finiteDSGE: Finite[DirectedSparseGraphEdges, Int] =
+    new Finite[DirectedSparseGraphEdges, Int] {
+      def size[A](dsge: DirectedSparseGraphEdges[A]): Int = dsge.dsg.getEdgeCount
+    }
+
+  implicit val finiteUSGV: Finite[UndirectedSparseGraphVertices, Int] =
+    new Finite[UndirectedSparseGraphVertices, Int] {
+      def size[A](usgv: UndirectedSparseGraphVertices[A]): Int = usgv.usg.getVertexCount
+    }
+
+  implicit val finiteUSGE: Finite[UndirectedSparseGraphEdges, Int] =
+    new Finite[UndirectedSparseGraphEdges, Int] {
+      def size[A](usge: UndirectedSparseGraphEdges[A]): Int = usge.usg.getEdgeCount
     }
 
   implicit def vertexFunctorDSG[E]: Functor[({ type λ[α] = DirectedSparseGraph[α, E] })#λ] =
@@ -233,10 +276,10 @@ package object jung {
 
     }
 
-  implicit def finiteUndirectedSparseGraph[V, E]: Finite[UndirectedSparseGraph[V, E], Int] =
-    new Finite[UndirectedSparseGraph[V, E], Int] {
+  implicit def finiteUndirectedSparseGraph[E]: Finite[({ type λ[α] = UndirectedSparseGraph[α, E] })#λ, Int] =
+    new Finite[({ type λ[α] = UndirectedSparseGraph[α, E] })#λ, Int] {
 
-      def size(jusg: UndirectedSparseGraph[V, E]): Int =
+      def size[V](jusg: UndirectedSparseGraph[V, E]): Int =
         jusg.getVertexCount
     }
 

@@ -8,7 +8,6 @@ import scala.collection.immutable.Stream.empty
 import cats.implicits._
 import cats.kernel.Eq
 import cats.kernel.Order
-import cats.Order.catsKernelOrderingForOrder
 import spire.algebra.MetricSpace
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
@@ -47,7 +46,7 @@ object SmithWaterman {
     implicit
     la:      LinearAlgebra[M, I, I, V],
     indexed: Indexed[S, I],
-    finite:  Finite[S[C], I]): M = {
+    finite:  Finite[S, I]): M = {
 
     val iOne = Ring[I].one
     val vZero = Ring[V].zero
@@ -121,7 +120,7 @@ object SmithWaterman {
     implicit
     la:      LinearAlgebra[M, I, I, V],
     indexed: Indexed[S, I],
-    finite:  Finite[S[C], I],
+    finite:  Finite[S, I],
     fs:      FromStream[S[C], C]): (S[C], S[C]) = {
 
     val H = computeH[S, C, M, I, V](A, B, w, mismatchPenalty)
@@ -138,7 +137,7 @@ case class SmithWatermanMetricSpace[S[_], C, M, I: Ring, V: Ring: Order](
   mismatchPenalty: V)(
   implicit
   la:      LinearAlgebra[M, I, I, V],
-  finite:  Finite[S[C], I],
+  finite:  Finite[S, I],
   indexed: Indexed[S, I]) extends MetricSpace[S[C], V] {
 
   def distance(s1: S[C], s2: S[C]): V = {
