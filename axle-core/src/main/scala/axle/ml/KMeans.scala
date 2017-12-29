@@ -49,7 +49,7 @@ case class KMeans[T: Eq, F[_], M](
   functor: Functor[F],
   val la:  LinearAlgebra[M, Int, Int, Double],
   index:   Indexed[F, Int],
-  finite:  Finite[F[T], Int])
+  finite:  Finite[F, Int])
   extends Function1[T, Int] {
 
   val features = data.map(featureExtractor)

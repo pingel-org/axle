@@ -325,9 +325,9 @@ final class TalliableOps[F[_], A, N](val as: F[A])(
   def tally = talliable.tally(as)
 }
 
-final class FiniteOps[F, S, A](val as: F)(
+final class FiniteOps[F[_], A, N](val as: F[A])(
   implicit
-  finite: Finite[F, S]) {
+  finite: Finite[F, N]) {
 
   def size = finite.size(as)
 }

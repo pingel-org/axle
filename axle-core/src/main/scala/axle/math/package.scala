@@ -49,7 +49,7 @@ package object math {
     trials: F[N],
     n2v:    N => V)(
     implicit
-    finite:  Finite[F[N], N],
+    finite:  Finite[F, N],
     functor: Functor[F],
     agg:     Aggregatable[F],
     field:   Field[V]): V = {
@@ -319,21 +319,21 @@ package object math {
     implicit
     field:        Field[N],
     aggregatable: Aggregatable[F],
-    finite:       Finite[F[N], N]): N =
+    finite:       Finite[F, N]): N =
     arithmeticMean[N, F](ns)
 
   def arithmeticMean[N, F[_]](ns: F[N])(
     implicit
     field:        Field[N],
     aggregatable: Aggregatable[F],
-    finite:       Finite[F[N], N]): N =
+    finite:       Finite[F, N]): N =
     Σ(ns) / ns.size
 
   def geometricMean[N, F[N]](ns: F[N])(
     implicit
     ev:    MultiplicativeMonoid[N],
     agg:   Aggregatable[F],
-    fin:   Finite[F[N], Int],
+    fin:   Finite[F, Int],
     nroot: NRoot[N]): N =
     nroot.nroot(Π(ns), ns.size)
 
@@ -342,7 +342,7 @@ package object math {
     field:       Field[N],
     functorFaaF: Functor[F],
     agg:         Aggregatable[F],
-    fin:         Finite[F[N], N]): N =
+    fin:         Finite[F, N]): N =
     ns.size / Σ(functorFaaF.map(ns)(field.reciprocal))
 
   /**
@@ -358,7 +358,7 @@ package object math {
     field:   Field[N],
     functor: Functor[F],
     agg:     Aggregatable[F],
-    fin:     Finite[F[N], N],
+    fin:     Finite[F, N],
     nroot:   NRoot[N]): N =
     nroot.fpow(
       field.reciprocal(ns.size) * Σ(ns.map(x => nroot.fpow(x, p))),
@@ -379,14 +379,14 @@ package object math {
     field:   Field[N],
     functor: Functor[F],
     agg:     Aggregatable[F],
-    fin:     Finite[F[N], N]): N =
+    fin:     Finite[F, N]): N =
     f.unapply(field.reciprocal(ns.size) * Σ(ns.map(f)))
 
   def movingArithmeticMean[F[_], I, N](xs: F[N], size: I)(
     implicit
     convert: I => N,
     indexed: Indexed[F, I],
-    fin:     Finite[F[N], N],
+    fin:     Finite[F, N],
     field:   Field[N],
     zipper:  Zipper[F],
     agg:     Aggregatable[F],
@@ -409,7 +409,7 @@ package object math {
     zipper:  Zipper[F],
     agg:     Aggregatable[F],
     scanner: Scanner[F],
-    fin:     Finite[F[N], Int],
+    fin:     Finite[F, Int],
     nroot:   NRoot[N]): F[N] = {
 
     val initial: N = geometricMean(xs.take(size))
@@ -429,7 +429,7 @@ package object math {
     agg:     Aggregatable[F],
     scanner: Scanner[F],
     functor: Functor[F],
-    fin:     Finite[F[N], N]): F[N] = {
+    fin:     Finite[F, N]): F[N] = {
 
     val initial: N = harmonicMean(xs.take(size))
 
@@ -450,7 +450,7 @@ package object math {
     agg:     Aggregatable[F],
     scanner: Scanner[F],
     functor: Functor[F],
-    fin:     Finite[F[N], N],
+    fin:     Finite[F, N],
     nroot:   NRoot[N]): F[N] = {
 
     val initial: N = generalizedMean(p, xs.take(size))
@@ -472,7 +472,7 @@ package object math {
     agg:     Aggregatable[F],
     scanner: Scanner[F],
     functor: Functor[F],
-    fin:     Finite[F[N], N]): F[N] = {
+    fin:     Finite[F, N]): F[N] = {
 
     val initial: N = generalizedFMean(f, xs.take(size))
 

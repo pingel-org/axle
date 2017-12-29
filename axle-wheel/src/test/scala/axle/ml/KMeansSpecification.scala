@@ -144,7 +144,7 @@ class KMeansSpecification
           Functor[List],
           la,
           Indexed[List, Int],
-          Finite[List[Iris], Int])
+          Finite[List, Int])
     }
 
     val confusion = {
