@@ -11,7 +11,7 @@ lazy val spireVersion = "0.14.1"
 lazy val shapelessVersion = "2.3.2"
 lazy val kittensVersion = "1.0.0-RC1"
 //lazy val catsVersion = "0.9.0" // match spire's algebra's catsVersion (and monix)
-lazy val catsVersion = "1.0.0-RC1"
+lazy val catsVersion = "1.0.0"
 
 lazy val disciplineVersion = "0.7.2"
 lazy val scalaCheckVersion = "1.13.4"
