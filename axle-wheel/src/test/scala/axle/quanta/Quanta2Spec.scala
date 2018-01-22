@@ -3,12 +3,13 @@ package axle.quanta
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import spire.math.Rational
-//import spire.math.Real
+import spire.math.Real
 import spire.algebra._
 import spire.implicits._
 import spire.laws.GroupLaws
 import spire.laws.VectorSpaceLaws
 
+import axle.algebra._
 import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.algebra.modules.rationalDoubleModule
@@ -22,9 +23,9 @@ import org.typelevel.discipline.scalatest.Discipline
 
 object ArbitraryUnittedQuantityStuff {
 
-  implicit val genDouble: Gen[Double] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d)
-  //  implicit val genReal: Gen[Real] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d).map(d => Real(d))
-  //  implicit val arbReal: Arbitrary[Real] = Arbitrary(genReal)
+  //implicit val genDouble: Gen[Double] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d)
+  implicit val genReal: Gen[Real] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d).map(d => Real(d))
+  implicit val arbReal: Arbitrary[Real] = Arbitrary(genReal)
 
   implicit def genUnit[Q, N](implicit uq: UnitConverter[Q, N]): Gen[UnitOfMeasurement[Q]] =
     Gen.oneOf(uq.units)
@@ -50,41 +51,34 @@ object ArbitraryUnittedQuantityStuff {
 class QuantaSpec extends FunSuite with Matchers with Discipline {
 
   {
-    implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
-    val mudd = Module[UnittedQuantity[Distance, Double], Double]
+    import axle.algebra.modules.realDoubleModule
+    import axle.algebra.modules.realRationalModule
+    implicit val dd = Distance.converterGraphK2[Real, DirectedSparseGraph]
+    val mudr = Module[UnittedQuantity[Distance, Real], Real]
 
     import ArbitraryUnittedQuantityStuff._
 
-    val uqDistanceModuleLaws = VectorSpaceLaws[UnittedQuantity[Distance, Double], Double](
-      cats.kernel.Eq[UnittedQuantity[Distance, Double]],
-      arbitraryUQ[Distance, Double](genUQ[Distance, Double]),
-      cats.kernel.Eq[Double],
-      org.scalacheck.Arbitrary.arbDouble,
-      new org.typelevel.discipline.Predicate[Double] { def apply(a: Double) = true }).module(mudd)
+    val uqDistanceModuleLaws = VectorSpaceLaws[UnittedQuantity[Distance, Real], Real](
+      cats.kernel.Eq[UnittedQuantity[Distance, Real]],
+      arbitraryUQ[Distance, Real](genUQ[Distance, Real]),
+      cats.kernel.Eq[Real],
+      arbReal,
+      new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).module(mudr)
 
-    // TODO move this to axle.algebra package object
-    import scala.language.implicitConversions
-    implicit def catsify[T](ag: algebra.ring.AdditiveGroup[T]): cats.kernel.Group[T] =
-      new cats.kernel.Group[T] {
-        def inverse(a: T): T = ag.inverse(a)
-        def empty: T = ag.empty
-        def combine(x: T, y: T): T = ag.combine(x, y)
-      }
-
-    val agudd: cats.kernel.Group[UnittedQuantity[Distance, Double]] =
-      axle.quanta.quantumAdditiveGroup[Distance, Double](
-        spire.implicits.DoubleAlgebra,
+    val agudr: cats.kernel.Group[UnittedQuantity[Distance, Real]] =
+      axle.quanta.quantumAdditiveGroup[Distance, Real](
+        spire.algebra.MultiplicativeMonoid[Real],
         dd,
-        spire.implicits.DoubleAlgebra)
+        spire.algebra.AdditiveGroup[Real](algebra.ring.AdditiveGroup[Real](realRationalModule)))
 
     val uqDistanceAdditiveGroupLaws =
-      GroupLaws[UnittedQuantity[Distance, Double]](
-        cats.kernel.Eq[UnittedQuantity[Distance, Double]],
-        arbitraryUQ[Distance, Double](genUQ[Distance, Double])).monoid(agudd)
+      GroupLaws[UnittedQuantity[Distance, Real]](
+        cats.kernel.Eq[UnittedQuantity[Distance, Real]],
+        arbitraryUQ[Distance, Real](genUQ[Distance, Real])).monoid(agudr)
 
-    checkAll("Module Laws for Module[UnittedQuantity[Distance, Double]]", uqDistanceModuleLaws)
+    checkAll("Module Laws for Module[UnittedQuantity[Distance, Real]]", uqDistanceModuleLaws)
     // checkAll("Monoid Laws for AdditiveMonoid[Int]", GroupLaws[Int].monoid(spire.implicits.IntAlgebra.additive))
-    checkAll("Additive Group Laws for AdditiveGroup[UnittedQuantity[Distance, Double]]", uqDistanceAdditiveGroupLaws)
+    checkAll("Additive Group Laws for AdditiveGroup[UnittedQuantity[Distance, Real]]", uqDistanceAdditiveGroupLaws)
   }
 
   test("Distance and Time scalar conversion") {
