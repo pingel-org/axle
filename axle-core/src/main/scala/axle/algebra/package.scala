@@ -1,5 +1,7 @@
 package axle
 
+import scala.language.implicitConversions
+
 import cats.Functor
 
 import spire.algebra.MetricSpace
@@ -12,6 +14,13 @@ import spire.math.Real
 import spire.math.Real.apply
 
 package object algebra {
+
+  implicit def catsifyAdditiveGroup[T](ag: _root_.algebra.ring.AdditiveGroup[T]): cats.kernel.Group[T] =
+    new cats.kernel.Group[T] {
+      def inverse(a: T): T = ag.inverse(a)
+      def empty: T = ag.empty
+      def combine(x: T, y: T): T = ag.combine(x, y)
+    }
 
   implicit val functorIndexedSeq: Functor[IndexedSeq] =
     new Functor[IndexedSeq] {
