@@ -1,9 +1,10 @@
 package axle.quanta
 
-import axle.algebra.Bijection
-import axle.algebra.DirectedGraph
 import cats.kernel.Eq
 import spire.algebra.Field
+import spire.math.ConvertableTo
+import axle.algebra.Bijection
+import axle.algebra.DirectedGraph
 import axle.algebra.Scale10s
 import axle.algebra.BijectiveIdentity
 
@@ -35,12 +36,12 @@ trait VolumeConverter[N] extends UnitConverter[Volume, N] with VolumeUnits {
 
 object Volume {
 
-  def converterGraphK2[N: Field: Eq, DG[_, _]](
+  def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
     evDG: DirectedGraph[DG[UnitOfMeasurement[Volume], N => N], UnitOfMeasurement[Volume], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Volume], N => N]]
 
-  def converterGraph[N: Field: Eq, DG](
+  def converterGraph[N: Field: Eq: ConvertableTo, DG](
     implicit
     evDG: DirectedGraph[DG, UnitOfMeasurement[Volume], N => N]) =
     new UnitConverterGraph[Volume, N, DG] with VolumeConverter[N] {

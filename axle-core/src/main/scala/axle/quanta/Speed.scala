@@ -40,14 +40,12 @@ object Speed {
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
     implicit
-    moduleDouble:   Module[N, Double],
     moduleRational: Module[N, Rational],
     evDG:           DirectedGraph[DG[UnitOfMeasurement[Speed], N => N], UnitOfMeasurement[Speed], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Speed], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
     implicit
-    moduleDouble:   Module[N, Double],
     moduleRational: Module[N, Rational],
     evDG:           DirectedGraph[DG, UnitOfMeasurement[Speed], N => N]) =
     new UnitConverterGraph[Speed, N, DG] with SpeedConverter[N] {

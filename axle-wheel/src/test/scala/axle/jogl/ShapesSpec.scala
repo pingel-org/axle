@@ -9,7 +9,6 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 import java.nio.file.Paths
 import spire.implicits._
 import axle.algebra.SphericalVector
-import axle.algebra.modules.floatDoubleModule
 import axle.algebra.modules.floatRationalModule
 import axle.jung.directedGraphJung
 import axle.quanta.Angle

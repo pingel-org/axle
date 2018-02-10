@@ -1,11 +1,12 @@
 package axle.quanta
 
+import cats.kernel.Eq
+import spire.algebra.Field
+import spire.math.ConvertableTo
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale10s
 import axle.algebra.BijectiveIdentity
-import cats.kernel.Eq
-import spire.algebra.Field
 
 case class Mass() extends Quantum {
 
@@ -48,12 +49,12 @@ trait MassConverter[N] extends UnitConverter[Mass, N] with MassUnits {
 
 object Mass {
 
-  def converterGraphK2[N: Field: Eq, DG[_, _]](
+  def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
     evDG: DirectedGraph[DG[UnitOfMeasurement[Mass], N => N], UnitOfMeasurement[Mass], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Mass], N => N]]
 
-  def converterGraph[N: Field: Eq, DG](
+  def converterGraph[N: Field: Eq: ConvertableTo, DG](
     implicit
     evDG: DirectedGraph[DG, UnitOfMeasurement[Mass], N => N]) =
     new UnitConverterGraph[Mass, N, DG] with MassConverter[N] {

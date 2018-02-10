@@ -6,7 +6,6 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.implicits.DoubleAlgebra
 import spire.implicits.metricSpaceOps
 import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
-import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
 import axle.math.distanceOnSphere
 import axle.jung.directedGraphJung

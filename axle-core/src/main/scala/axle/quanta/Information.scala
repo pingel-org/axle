@@ -1,10 +1,11 @@
 package axle.quanta
 
+import cats.kernel.Eq
+import spire.algebra.Field
+import spire.math.ConvertableTo
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale2s
-import cats.kernel.Eq
-import spire.algebra.Field
 
 case class Information() extends Quantum {
 
@@ -37,12 +38,12 @@ trait InformationConverter[N] extends UnitConverter[Information, N] with Informa
 
 object Information {
 
-  def converterGraphK2[N: Field: Eq, DG[_, _]](
+  def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
     evDG: DirectedGraph[DG[UnitOfMeasurement[Information], N => N], UnitOfMeasurement[Information], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Information], N => N]]
 
-  def converterGraph[N: Field: Eq, DG](
+  def converterGraph[N: Field: Eq: ConvertableTo, DG](
     implicit
     evDG: DirectedGraph[DG, UnitOfMeasurement[Information], N => N]) =
     new UnitConverterGraph[Information, N, DG] with InformationConverter[N] {

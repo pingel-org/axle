@@ -46,15 +46,14 @@ object Angle {
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
     implicit
-    module:         Module[N, Double],
     moduleRational: Module[N, Rational],
     evDG:           DirectedGraph[DG[UnitOfMeasurement[Angle], N => N], UnitOfMeasurement[Angle], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Angle], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
     implicit
-    module: Module[N, Double], moduleRational: Module[N, Rational],
-    evDG: DirectedGraph[DG, UnitOfMeasurement[Angle], N => N]) =
+    moduleRational: Module[N, Rational],
+    evDG:           DirectedGraph[DG, UnitOfMeasurement[Angle], N => N]) =
     new UnitConverterGraph[Angle, N, DG] with AngleConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])] =

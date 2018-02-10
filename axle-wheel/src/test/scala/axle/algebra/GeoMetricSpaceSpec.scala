@@ -21,7 +21,6 @@ class GeoMetricSpaceSpec
 
   implicit val angleConverter: AngleConverter[Real] = {
     import axle.algebra.modules.realRationalModule
-    import axle.algebra.modules.realDoubleModule
     Angle.converterGraphK2[Real, DirectedSparseGraph]
   }
   import angleConverter.°

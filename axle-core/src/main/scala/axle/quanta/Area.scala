@@ -1,10 +1,11 @@
 package axle.quanta
 
+import spire.algebra.Field
+import spire.math.ConvertableTo
+import cats.kernel.Eq
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale10s
-import cats.kernel.Eq
-import spire.algebra.Field
 
 case class Area() extends Quantum {
 
@@ -30,12 +31,12 @@ trait AreaConverter[N] extends UnitConverter[Area, N] with AreaUnits {
 
 object Area {
 
-  def converterGraphK2[N: Field: Eq, DG[_, _]](
+  def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
     evDG: DirectedGraph[DG[UnitOfMeasurement[Area], N => N], UnitOfMeasurement[Area], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Area], N => N]]
 
-  def converterGraph[N: Field: Eq, DG](
+  def converterGraph[N: Field: Eq: ConvertableTo, DG](
     implicit
     evDG: DirectedGraph[DG, UnitOfMeasurement[Area], N => N]) =
     new UnitConverterGraph[Area, N, DG] with AreaConverter[N] {

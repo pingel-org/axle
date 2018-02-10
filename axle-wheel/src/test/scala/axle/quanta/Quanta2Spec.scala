@@ -1,18 +1,84 @@
 package axle.quanta
 
-import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import cats.Order.catsKernelOrderingForOrder
+
 import spire.math.Rational
-import spire.algebra.Module
+import spire.math.Real
+import spire.algebra._
 import spire.implicits._
-import axle.algebra.modules.doubleDoubleModule
+import spire.laws.GroupLaws
+import spire.laws.VectorSpaceLaws
+
+import axle.algebra._
 import axle.algebra.modules.doubleRationalModule
-import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
 import axle.jung.directedGraphJung
 
-class QuantaSpec extends FunSuite with Matchers {
+import org.scalacheck.Gen
+import org.scalacheck.Arbitrary
+import org.scalatest._
+import org.typelevel.discipline.scalatest.Discipline
+
+object ArbitraryUnittedQuantityStuff {
+
+  //implicit val genDouble: Gen[Double] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d)
+  implicit val genReal: Gen[Real] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d).map(d => Real(d))
+  implicit val arbReal: Arbitrary[Real] = Arbitrary(genReal)
+
+  implicit def genUnit[Q, N](implicit uq: UnitConverter[Q, N]): Gen[UnitOfMeasurement[Q]] =
+    Gen.oneOf(uq.units)
+
+  implicit def arbUnit[Q, N](implicit uq: UnitConverter[Q, N]): Arbitrary[UnitOfMeasurement[Q]] =
+    Arbitrary(genUnit)
+
+  def genUQ[Q, N](
+    implicit
+    genN:    Gen[N],
+    genUnit: Gen[UnitOfMeasurement[Q]]): Gen[UnittedQuantity[Q, N]] =
+    for {
+      n <- genN
+      unit <- genUnit
+    } yield UnittedQuantity.apply(n, unit)
+
+  def arbitraryUQ[Q, N](
+    implicit
+    gq: Gen[UnittedQuantity[Q, N]]): Arbitrary[UnittedQuantity[Q, N]] =
+    Arbitrary(gq)
+}
+
+class QuantaSpec extends FunSuite with Matchers with Discipline {
+
+  {
+    import axle.algebra.modules.realRationalModule
+    implicit val dd = Distance.converterGraphK2[Real, DirectedSparseGraph]
+    val mudr = Module[UnittedQuantity[Distance, Real], Real]
+
+    import ArbitraryUnittedQuantityStuff._
+
+    val equq = UnittedQuantity.eqqqn[Distance, Real]
+
+    val uqDistanceModuleLaws = VectorSpaceLaws[UnittedQuantity[Distance, Real], Real](
+      equq,
+      arbitraryUQ[Distance, Real](genUQ[Distance, Real]),
+      implicitly[Eq[Real]],
+      arbReal,
+      new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).module(mudr)
+
+    val agudr: cats.kernel.Group[UnittedQuantity[Distance, Real]] =
+      axle.quanta.quantumAdditiveGroup[Distance, Real](
+        spire.algebra.MultiplicativeMonoid[Real],
+        dd,
+        spire.algebra.AdditiveGroup[Real](algebra.ring.AdditiveGroup[Real](realRationalModule)))
+
+    val uqDistanceAdditiveGroupLaws =
+      GroupLaws[UnittedQuantity[Distance, Real]](
+        equq,
+        arbitraryUQ[Distance, Real](genUQ[Distance, Real])).monoid(agudr)
+
+    checkAll("Module Laws for Module[UnittedQuantity[Distance, Real]]", uqDistanceModuleLaws)
+    // checkAll("Monoid Laws for AdditiveMonoid[Int]", GroupLaws[Int].monoid(spire.implicits.IntAlgebra.additive))
+    checkAll("Additive Group Laws for AdditiveGroup[UnittedQuantity[Distance, Real]]", uqDistanceAdditiveGroupLaws)
+  }
 
   test("Distance and Time scalar conversion") {
 
@@ -99,13 +165,20 @@ class QuantaSpec extends FunSuite with Matchers {
 
   test("order square meter and square centimeter") {
 
-    implicit val acg = Area.converterGraphK2[Double, DirectedSparseGraph]
+    import cats.Order.catsKernelOrderingForOrder
+
+    implicit val acg = {
+      // implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      Area.converterGraphK2[Double, DirectedSparseGraph]
+    }
     import acg._
 
     (1d *: m2) should be > (1d *: cm2)
   }
 
   test("order g and mpsps") {
+
+    import cats.Order.catsKernelOrderingForOrder
 
     implicit val acg = Acceleration.converterGraphK2[Double, DirectedSparseGraph]
     import acg._
@@ -115,6 +188,8 @@ class QuantaSpec extends FunSuite with Matchers {
 
   test("order newton and pound") {
 
+    import cats.Order.catsKernelOrderingForOrder
+
     implicit val fcg = Force.converterGraphK2[Double, DirectedSparseGraph]
     import fcg._
 
@@ -123,6 +198,8 @@ class QuantaSpec extends FunSuite with Matchers {
 
   test("order KHz and Hz") {
 
+    import cats.Order.catsKernelOrderingForOrder
+
     implicit val fcg = Frequency.converterGraphK2[Double, DirectedSparseGraph]
     import fcg._
 
@@ -130,6 +207,8 @@ class QuantaSpec extends FunSuite with Matchers {
   }
 
   test("order ton TNT and Joule") {
+
+    import cats.Order.catsKernelOrderingForOrder
 
     implicit val ecg = Energy.converterGraphK2[Double, DirectedSparseGraph]
     import ecg._
@@ -163,6 +242,8 @@ class QuantaSpec extends FunSuite with Matchers {
 
   test("order watt and horsepower") {
 
+    import cats.Order.catsKernelOrderingForOrder
+
     implicit val pcg = Power.converterGraphK2[Double, DirectedSparseGraph]
     import pcg._
 
@@ -170,6 +251,8 @@ class QuantaSpec extends FunSuite with Matchers {
   }
 
   test("order knot and mph") {
+
+    import cats.Order.catsKernelOrderingForOrder
 
     implicit val scg = Speed.converterGraphK2[Double, DirectedSparseGraph]
     import scg._

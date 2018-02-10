@@ -14,6 +14,8 @@ import axle.jung.directedGraphJung
 
 class UnittedTicsSpec extends FunSuite with Matchers {
 
+  implicit val mmd: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
+
   test("Tics for UnittedQuantity") {
 
     implicit val id = {
