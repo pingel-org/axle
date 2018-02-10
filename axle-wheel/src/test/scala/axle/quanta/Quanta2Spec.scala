@@ -10,9 +10,7 @@ import spire.laws.GroupLaws
 import spire.laws.VectorSpaceLaws
 
 import axle.algebra._
-import axle.algebra.modules.doubleDoubleModule
 import axle.algebra.modules.doubleRationalModule
-import axle.algebra.modules.rationalDoubleModule
 import axle.algebra.modules.rationalRationalModule
 import axle.jung.directedGraphJung
 
@@ -51,17 +49,18 @@ object ArbitraryUnittedQuantityStuff {
 class QuantaSpec extends FunSuite with Matchers with Discipline {
 
   {
-    import axle.algebra.modules.realDoubleModule
     import axle.algebra.modules.realRationalModule
     implicit val dd = Distance.converterGraphK2[Real, DirectedSparseGraph]
     val mudr = Module[UnittedQuantity[Distance, Real], Real]
 
     import ArbitraryUnittedQuantityStuff._
 
+    val equq = UnittedQuantity.eqqqn[Distance, Real]
+
     val uqDistanceModuleLaws = VectorSpaceLaws[UnittedQuantity[Distance, Real], Real](
-      cats.kernel.Eq[UnittedQuantity[Distance, Real]],
+      equq,
       arbitraryUQ[Distance, Real](genUQ[Distance, Real]),
-      cats.kernel.Eq[Real],
+      implicitly[Eq[Real]],
       arbReal,
       new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).module(mudr)
 
@@ -73,7 +72,7 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
     val uqDistanceAdditiveGroupLaws =
       GroupLaws[UnittedQuantity[Distance, Real]](
-        cats.kernel.Eq[UnittedQuantity[Distance, Real]],
+        equq,
         arbitraryUQ[Distance, Real](genUQ[Distance, Real])).monoid(agudr)
 
     checkAll("Module Laws for Module[UnittedQuantity[Distance, Real]]", uqDistanceModuleLaws)

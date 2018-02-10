@@ -18,7 +18,6 @@ package object visualize {
   implicit val angleDouble = Angle.converterGraphK2[Double, DirectedSparseGraph](
     Field[Double],
     Eq[Double],
-    axle.algebra.modules.doubleDoubleModule,
     axle.algebra.modules.doubleRationalModule,
     DirectedGraph[DirectedSparseGraph[UnitOfMeasurement[Angle], Double => Double], UnitOfMeasurement[Angle], Double => Double])
 

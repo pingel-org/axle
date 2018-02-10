@@ -17,10 +17,11 @@ object UnittedQuantity {
       def show(uq: UnittedQuantity[Q, N]): String = string(uq.magnitude) + " " + uq.unit.symbol
     }
 
-  implicit def eqqqn[Q, N: Eq]: Eq[UnittedQuantity[Q, N]] =
+  implicit def eqqqn[Q, N: Eq: MultiplicativeMonoid](implicit convert: UnitConverter[Q, N]): Eq[UnittedQuantity[Q, N]] =
     new Eq[UnittedQuantity[Q, N]] {
       def eqv(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): Boolean =
-        (x.magnitude === y.magnitude) && (x.unit == y.unit)
+        ((x.unit == y.unit) && (x.magnitude === y.magnitude)) ||
+          convert.convert(x, y.unit).magnitude === y.magnitude
     }
 
   implicit def orderUQ[Q, N: MultiplicativeMonoid: Order](implicit convert: UnitConverter[Q, N]) =

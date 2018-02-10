@@ -34,17 +34,18 @@ trait AccelerationConverter[N] extends UnitConverter[Acceleration, N] with Accel
 object Acceleration {
 
   import spire.algebra.Module
+  import spire.math._
   import spire.implicits._
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
     implicit
-    module: Module[N, Double],
+    module: Module[N, Rational],
     evDG:   DirectedGraph[DG[UnitOfMeasurement[Acceleration], N => N], UnitOfMeasurement[Acceleration], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Acceleration], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
     implicit
-    module: Module[N, Double],
+    module: Module[N, Rational],
     evDG:   DirectedGraph[DG, UnitOfMeasurement[Acceleration], N => N]) =
     new UnitConverterGraph[Acceleration, N, DG] with AccelerationConverter[N] {
 

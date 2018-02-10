@@ -1,11 +1,11 @@
 package axle.quanta
 
+import cats.kernel.Eq
+import spire.algebra.Field
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Transform
 import axle.algebra.Scale
-import cats.kernel.Eq
-import spire.algebra.Field
 
 case class Temperature() extends Quantum {
 
@@ -50,7 +50,7 @@ object Temperature {
       def links: Seq[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])] =
         List[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])](
           (celsius, kelvin, Transform[N](ConvertableTo[N].fromDouble(-273.15))(field.additive)),
-          (celsius, fahrenheit, Transform[N](-32)(field.additive).bidirectionallyAndThen(Scale[N, Rational](Rational(5, 9)))))
+          (celsius, fahrenheit, Transform[N](-32)(field.additive).bidirectionallyAndThen(Scale[N](Rational(5, 9)))))
 
     }
 

@@ -12,20 +12,17 @@ import javax.imageio.ImageIO
 
 import scala.concurrent.duration._
 
-// import cats.kernel.Eq
 import cats.implicits._
 import cats.Show
+
+import spire.algebra.MultiplicativeMonoid
+import spire.math.abs
+import spire.math.min
 
 import monix.execution.Cancelable
 import monix.execution.Scheduler
 import monix.reactive.Observable
 
-import spire.math.abs
-import spire.math.min
-//import spire.algebra.Field
-//import spire.implicits.eqOps
-
-//import axle.pgm.BayesianNetworkNode
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.visualize._
@@ -439,8 +436,8 @@ package object awt {
           val bottomUnscaled = framePoint(bottomScaled)
           g2d.setColor(Color.black)
 
-          cats.kernel.Eq[Double]
-          cats.kernel.Eq[UnittedQuantity[Angle, Double]]
+          implicit val mmd: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
+          implicit val equq = UnittedQuantity.eqqqn[Angle, Double]
 
           // TODO: angle xtics?
           angle foreach { a =>

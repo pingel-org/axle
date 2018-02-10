@@ -7,13 +7,11 @@ import java.util.Date
 import com.jogamp.opengl.GL2
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-// import cats.implicits._
 import spire.implicits.FloatAlgebra
 import spire.implicits.additiveGroupOps
 import spire.implicits.moduleOps
 import axle.algebra.GeoCoordinates
 import axle.algebra.SphericalVector
-import axle.algebra.modules.floatDoubleModule
 import axle.algebra.modules.floatRationalModule
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
