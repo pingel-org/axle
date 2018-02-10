@@ -7,7 +7,6 @@ import cats.Functor
 import spire.algebra.MetricSpace
 import spire.algebra.Module
 import spire.algebra.Rng
-import spire.implicits.multiplicativeSemigroupOps
 import spire.math.Rational
 import spire.math.Rational.apply
 import spire.math.Real
@@ -17,9 +16,9 @@ package object algebra {
 
   implicit def catsifyAdditiveGroup[T](ag: _root_.algebra.ring.AdditiveGroup[T]): cats.kernel.Group[T] =
     new cats.kernel.Group[T] {
-      def inverse(a: T): T = ag.inverse(a)
-      def empty: T = ag.empty
-      def combine(x: T, y: T): T = ag.combine(x, y)
+      def inverse(a: T): T = ag.negate(a)
+      def empty: T = ag.zero
+      def combine(x: T, y: T): T = ag.plus(x, y)
     }
 
   implicit val functorIndexedSeq: Functor[IndexedSeq] =
