@@ -15,6 +15,7 @@ case class Distance() extends Quantum {
 
 trait DistanceUnits extends QuantumUnits[Distance] {
 
+  lazy val inch = unit("inch", "in")
   lazy val foot = unit("foot", "ft")
   lazy val ft = foot
   lazy val mile = unit("mile", "m", Some("http://en.wikipedia.org/wiki/Mile"))
@@ -31,8 +32,6 @@ trait DistanceUnits extends QuantumUnits[Distance] {
   lazy val nm = nanometer
   lazy val astronomicalUnit = unit("Astronomical Unit", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
   lazy val au = astronomicalUnit
-  lazy val astronomicalUnitSI = unit("Astronomical Unit (SI)", "AU", Some("http://en.wikipedia.org/wiki/Astronomical_unit"))
-  lazy val auSI = astronomicalUnitSI
   lazy val lightyear = unit("lightyear", "ly", Some("http://en.wikipedia.org/wiki/Light-year"))
   lazy val ly = lightyear
   lazy val parsec = unit("parsec", "pc", Some("http://en.wikipedia.org/wiki/Parsec"))
@@ -41,8 +40,8 @@ trait DistanceUnits extends QuantumUnits[Distance] {
   lazy val ℓP = planck
 
   def units: List[UnitOfMeasurement[Distance]] =
-    List(foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
-      astronomicalUnit, astronomicalUnitSI, lightyear, parsec, planck)
+    List(inch, foot, mile, meter, kilometer, centimeter, millimeter, micrometer, nanometer,
+      astronomicalUnit, lightyear, parsec, planck)
 
 }
 
@@ -71,18 +70,18 @@ object Distance {
 
       def links: Seq[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])] =
         List[(UnitOfMeasurement[Distance], UnitOfMeasurement[Distance], Bijection[N, N])](
+          (inch, foot, Scale(12)),
           (foot, mile, Scale(Rational(5280))),
-          (mile, au, Scale(Rational(92955807.3))),
           (foot, meter, Scale(Rational(3.2808398950131235))), // <- metric/English boundary
           //(kilometer, mile, Scale(Rational(1.609344))),
-          (lightyear, parsec, Scale(Rational(3.26))),
           (nm, meter, Scale10s(9)),
           (μm, meter, Scale10s(6)),
           (millimeter, meter, Scale10s(3)),
           (centimeter, meter, Scale10s(2)),
           (meter, kilometer, Scale10s(3)),
-          (km, auSI, Scale(Rational(149597870.7))),
+          (km, au, Scale(Rational(149597870.7))),
           (km, ly, Scale(Rational(9460730472580.8))),
+          (lightyear, parsec, Scale(Rational(3.26))),
           (planck, nm, Scale(Rational(16.162e-27))))
 
     }
