@@ -24,7 +24,7 @@ class ScaleExp[N](base: Int, exp: Int)(
   convertableToN: ConvertableTo[N]) extends Bijection[N, N] {
 
   val growFactor = fieldN.multiplicative.combineN(convertableToN.fromInt(base), abs(exp))
-  val shrinkFactor = fieldN.multiplicative.combineN(fieldN.one / convertableToN.fromInt(base), -abs(exp))
+  val shrinkFactor = fieldN.multiplicative.combineN(fieldN.one / convertableToN.fromInt(base), abs(exp))
 
   val applyFactor = if (exp < 0) { shrinkFactor } else { growFactor }
   val unapplyFactor = if (exp < 0) { growFactor } else { shrinkFactor }
