@@ -9,14 +9,15 @@ import org.typelevel.discipline.scalatest.Discipline
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import spire.math.Real
 import spire.laws.VectorSpaceLaws
-// import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
+//import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
 import axle.jung.directedGraphJung
 import axle.quanta._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 
 class GeoMetricSpaceSpec
-  extends FunSuite with Matchers
+  extends FunSuite
+  with Matchers
   with Discipline {
 
   implicit val angleConverter: AngleConverter[Real] = {
@@ -48,9 +49,9 @@ class GeoMetricSpaceSpec
   implicit val arbCoords: Arbitrary[GeoCoordinates[Real]] =
     Arbitrary(genCoords)
 
-  implicit val ova = cats.kernel.Order[UnittedQuantity[Angle, Real]]
+  implicit val ova = axle.quanta.UnittedQuantity.orderUQ[Angle, Real]
 
-  implicit val equaqr = cats.kernel.Eq[UnittedQuantity[Angle, Real]]
+  implicit val equaqr = axle.quanta.UnittedQuantity.eqqqn[Angle, Real]
 
   implicit val arbAngle: Arbitrary[UnittedQuantity[Angle, Real]] =
     Arbitrary(genAngle)
@@ -64,18 +65,11 @@ class GeoMetricSpaceSpec
     eqgcr, arbCoords, equaqr, arbAngle, pred)
 
   implicit val msva: spire.algebra.MetricSpace[GeoCoordinates[Real], UnittedQuantity[Angle, Real]] =
-    spire.algebra.MetricSpace.apply[GeoCoordinates[Real], UnittedQuantity[Angle, Real]]
+    GeoCoordinates.geoCoordinatesMetricSpace[Real]
 
   implicit val ama: spire.algebra.AdditiveMonoid[UnittedQuantity[Angle, Real]] =
     axle.quanta.quantumAdditiveGroup[Angle, Real]
 
-  // checkAll(s"GeoCoordinates metric space", vsl.metricSpace(msva, ova, ama))
-
-  // Note: Currently failing "space.symmetric"
-  // A counter-example is:
-  // val p1 = GeoCoordinates(-45.78882683235767 *: °, 168.23386137273712 *: °)
-  // val p2 = GeoCoordinates(-20.06087425414168 *: °, -94.44662683269094 *: °)
-  // This would likely be fixed by testing Real values and using
-  // Taylor-series approximations for the trig functions
+  checkAll(s"GeoCoordinates metric space", vsl.metricSpace(msva, ova, ama))
 
 }
