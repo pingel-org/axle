@@ -35,28 +35,20 @@ package object algebra {
 
   implicit def wrappedStringSpace[N](
     implicit
-    iscSpace: MetricSpace[IndexedSeq[Char], N]) =
-    new MetricSpace[String, N] {
-      def distance(s1: String, s2: String): N = iscSpace.distance(s1, s2)
-    }
+    iscSpace: MetricSpace[IndexedSeq[Char], N]): MetricSpace[String, N] =
+      (s1: String, s2: String) => iscSpace.distance(s1, s2)
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
-    new MetricSpace[Rational, Double] {
-
-      def distance(v: Rational, w: Rational): Double = (v.toDouble - w.toDouble).abs
-    }
+    (v: Rational, w: Rational) =>
+      (v.toDouble - w.toDouble).abs
 
   implicit val realDoubleMetricSpace: MetricSpace[Real, Double] =
-    new MetricSpace[Real, Double] {
-
-      def distance(v: Real, w: Real): Double = (v.toDouble - w.toDouble).abs
-    }
+    (v: Real, w: Real) =>
+      (v.toDouble - w.toDouble).abs
 
   implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] =
-    new MetricSpace[Double, Double] {
-
-      def distance(v: Double, w: Double): Double = (v - w).abs
-    }
+    (v: Double, w: Double) =>
+      (v - w).abs
 
   //import spire.implicits._
   //import spire.math._
