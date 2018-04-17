@@ -41,22 +41,19 @@ object GeoCoordinates {
 
   implicit def showGC[N: MultiplicativeMonoid: Eq](
     implicit
-    converter: AngleConverter[N]) =
-    new Show[GeoCoordinates[N]] {
+    converter: AngleConverter[N]): Show[GeoCoordinates[N]] =
+    p => {
       import converter.°
-      def show(p: GeoCoordinates[N]): String =
-        (p.latitude in °).magnitude + "° N " + (p.longitude in °).magnitude + "° W"
+      (p.latitude in °).magnitude + "° N " + (p.longitude in °).magnitude + "° W"
     }
 
   implicit def eqgcd[N: Eq: MultiplicativeMonoid](
     implicit
     ac: AngleConverter[N]): Eq[GeoCoordinates[N]] =
-    new Eq[GeoCoordinates[N]] {
-      def eqv(x: GeoCoordinates[N], y: GeoCoordinates[N]): Boolean = {
-        val lateq: Boolean = (x.latitude.magnitude === (y.latitude in x.latitude.unit).magnitude)
-        val longeq: Boolean = (x.longitude.magnitude === (y.longitude in x.latitude.unit).magnitude)
-        lateq && longeq
-      }
+    (x, y) => {
+      val lateq: Boolean = (x.latitude.magnitude === (y.latitude in x.latitude.unit).magnitude)
+      val longeq: Boolean = (x.longitude.magnitude === (y.longitude in x.latitude.unit).magnitude)
+      lateq && longeq
     }
 
   implicit def geoCoordinatesMetricSpace[N: Field: Eq: Trig: ConvertableTo: MultiplicativeSemigroup: NRoot](

@@ -2,12 +2,11 @@
 package axle.lx
 
 import cats.Show
-import axle.algebra.DirectedGraph
-import axle.string
-import axle.syntax.directedgraph._
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
+import axle.algebra.DirectedGraph
+import axle.syntax.directedgraph._
 
 object Angluin {
 
@@ -15,17 +14,11 @@ object Angluin {
 
   object Symbol {
 
-    implicit val symbolEq = new Eq[Symbol] {
-      def eqv(x: Symbol, y: Symbol): Boolean = x equals y
-    }
+    implicit val symbolEq: Eq[Symbol] = (x, y) => x equals y
 
-    implicit def showSymbol: Show[Symbol] = new Show[Symbol] {
-      def show(s: Symbol): String = s.s
-    }
+    implicit def showSymbol: Show[Symbol] = _.s
 
-    implicit val orderSymbol: Order[Symbol] = new Order[Symbol] {
-      def compare(x: Symbol, y: Symbol): Int = string(x).compareTo(string(y))
-    }
+    implicit val orderSymbol: Order[Symbol] = (x, y) => Show[Symbol].show(x).compareTo(Show[Symbol].show(y))
 
   }
 
@@ -97,12 +90,10 @@ object Angluin {
   }
 
   object Language {
-    implicit val languageEq = new Eq[Language] {
-      def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
-    }
-    implicit def showLanguage: Show[Language] = new Show[Language] {
-      def show(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
-    }
+
+    implicit val languageEq: Eq[Language] = (x, y) => x.sequences.equals(y.sequences)
+
+    implicit def showLanguage: Show[Language] = l => "{" + l.sequences.mkString(", ") + "}"
   }
 
   trait Learner[S] {
@@ -194,9 +185,7 @@ object Angluin {
   }
 
   object Text {
-    implicit def showText: Show[Text] = new Show[Text] {
-      def show(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
-    }
+    implicit def showText: Show[Text] = t => "<" + t.expressions.mkString(", ") + ">"
   }
 
 }

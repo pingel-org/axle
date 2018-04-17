@@ -1,11 +1,9 @@
 package axle
 
-import axle.algebra.LengthSpace
-import axle.algebra.Plottable
-import axle.algebra.Tics
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
+import cats.implicits._
 import spire.algebra.AdditiveMonoid
 import spire.algebra.AdditiveGroup
 import spire.algebra.Field
@@ -18,6 +16,9 @@ import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.signedOps
 import spire.implicits._
+import axle.algebra.LengthSpace
+import axle.algebra.Plottable
+import axle.algebra.Tics
 
 package object quanta {
 
@@ -103,7 +104,7 @@ package object quanta {
         Tics[N].tics((from in base).magnitude, (to in base).magnitude) map {
           case (v, label) => {
             val vu = UnittedQuantity[Q, N](v, base)
-            (vu, string(v))
+            (vu, v.show)
           }
         }
     }

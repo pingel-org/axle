@@ -71,19 +71,14 @@ case class ClassifierPerformance[N, DATA, F[_]](
 
 object ClassifierPerformance {
 
-  implicit def showCP[N, DATA, F[_]]: Show[ClassifierPerformance[N, DATA, F]] =
-    new Show[ClassifierPerformance[N, DATA, F]] {
-
-      def show(cp: ClassifierPerformance[N, DATA, F]): String = {
-        import cp._
-        s"""Precision   $precision
+  implicit def showCP[N, DATA, F[_]]: Show[ClassifierPerformance[N, DATA, F]] = cp => {
+    import cp._
+    s"""Precision   $precision
 Recall      $recall
 Specificity $specificity
 Accuracy    $accuracy
 F1 Score    $f1Score
 """
-      }
-
-    }
+  }
 
 }

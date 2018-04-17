@@ -13,7 +13,5 @@ object Variable {
   import cats.implicits._
 
   implicit def eqVariable[T]: Eq[Variable[T]] =
-    new Eq[Variable[T]] {
-      def eqv(x: Variable[T], y: Variable[T]): Boolean = x.name === y.name
-    }
+    (x, y) => x.name === y.name
 }

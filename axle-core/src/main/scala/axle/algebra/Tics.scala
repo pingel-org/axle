@@ -1,12 +1,11 @@
 package axle.algebra
 
+import java.lang.Double.{ isInfinite, isNaN }
 import scala.annotation.implicitNotFound
 import cats.implicits._
 import spire.math._
 import spire.implicits._
-import axle.string
 import axle.showRational
-import java.lang.Double.{ isInfinite, isNaN }
 
 @implicitNotFound("Witness not found for Tics[${T}]")
 trait Tics[T] {
@@ -34,7 +33,7 @@ object Tics {
         val start = BigDecimal.valueOf(w)
         (0 to n).map(i => {
           val v = start + BigDecimal(s) * i
-          (v.toDouble, string(v))
+          (v.toDouble, v.show)
         }).filter({ case (d, _) => (d >= from && d <= to) })
       }
     }
@@ -54,7 +53,7 @@ object Tics {
       val start = (s * (from / s))
       (0L to n).map(i => {
         val v = start + s * i
-        (v, string(v))
+        (v, v.show)
       }).filter(vs => (vs._1 >= from && vs._1 <= to))
     }
   }
@@ -72,7 +71,7 @@ object Tics {
       val start = (s * (from / s))
       (0 to n).map(i => {
         val v = start + s * i
-        (v, string(v))
+        (v, v.show)
       }).filter(vs => (vs._1 >= from && vs._1 <= to))
     }
 
@@ -101,7 +100,7 @@ object Tics {
         val n = ((to - from) / s).ceil.toInt
         (0 to n).map(i => {
           val v = start + s * i
-          (v, string(v))
+          (v, v.show)
         }).filter({ case (d, _) => (d >= from && d <= to) })
       }
     }

@@ -5,11 +5,9 @@ import cats.Show
 
 object Rank {
 
-  implicit val orderRank = new Order[Rank] {
-    def compare(a: Rank, b: Rank): Int = a.asInt.compare(b.asInt)
-  }
+  implicit val orderRank: Order[Rank] = (a, b) => a.asInt.compare(b.asInt)
 
-  implicit def show[R <: Rank]: Show[R] = new Show[R] { def show(r: R) = r.serialize.toString }
+  implicit def show[R <: Rank]: Show[R] = _.serialize.toString
 
   def apply(c: Char): Rank = c match {
     case '2' => R2

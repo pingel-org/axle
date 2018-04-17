@@ -1,26 +1,21 @@
 package axle.pgm
 
-import axle.HtmlFrom
 import cats.Show
+import cats.kernel.Eq
+import cats.implicits._
+
+import spire.algebra.Field
+
 import axle.stats.Variable
 import axle.stats.Factor
-import axle.string
-import cats.kernel.Eq
-import spire.algebra.Field
+import axle.HtmlFrom
 
 case class BayesianNetworkNode[T, N](variable: Variable[T], cpt: Factor[T, N])
 
 object BayesianNetworkNode {
 
-  implicit def bnnShow[T, N]: Show[BayesianNetworkNode[T, N]] =
-    new Show[BayesianNetworkNode[T, N]] {
-
-      def show(bnn: BayesianNetworkNode[T, N]): String = {
-        import bnn._
-        variable.name + "\n\n" + cpt
-      }
-
-    }
+  implicit def bnnShow[T, N]: Show[BayesianNetworkNode[T, N]] = bnn =>
+    bnn.variable.name + "\n\n" + bnn.cpt
 
   implicit def bnnHtmlFrom[T: Show, N]: HtmlFrom[BayesianNetworkNode[T, N]] =
     new HtmlFrom[BayesianNetworkNode[T, N]] {
@@ -32,7 +27,7 @@ object BayesianNetworkNode {
             {
               bnn.cpt.cases.map(kase =>
                 <tr>
-                  { kase.map(ci => <td>{ string(ci.value) }</td>) }
+                  { kase.map(ci => <td>{ ci.value.show }</td>) }
                   <td>{ bnn.cpt(kase) }</td>
                 </tr>)
             }
@@ -40,8 +35,7 @@ object BayesianNetworkNode {
         </div>
     }
 
-  implicit def bnnEq[T: Eq, N: Field] = new Eq[BayesianNetworkNode[T, N]] {
-    def eqv(x: BayesianNetworkNode[T, N], y: BayesianNetworkNode[T, N]): Boolean =
-      x equals y
-  }
+  implicit def bnnEq[T: Eq, N: Field]: Eq[BayesianNetworkNode[T, N]] =
+    (x, y) => x equals y
+
 }

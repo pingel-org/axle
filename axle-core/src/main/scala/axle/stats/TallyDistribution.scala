@@ -16,23 +16,18 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.math.Σ
-import axle.string
 import axle.dummy
 
 object TallyDistribution0 {
 
   implicit def show[A: Order: Show, N: Show](
     implicit
-    prob: ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]): Show[TallyDistribution0[A, N]] =
-    new Show[TallyDistribution0[A, N]] {
-
-      def show(td: TallyDistribution0[A, N]): String =
-        td.values.sorted.map(a => {
-          val aString = string(a)
-          // (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
-          (aString + " " + string(prob.probabilityOf(td, a)))
-        }).mkString("\n")
-    }
+    prob: ProbabilityModel[({ type λ[T] = TallyDistribution0[T, N] })#λ, N]): Show[TallyDistribution0[A, N]] = td =>
+    td.values.sorted.map(a => {
+      val aString = Show[A].show(a)
+      // (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
+      (aString + " " + Show[N].show(prob.probabilityOf(td, a)))
+    }).mkString("\n")
 
   implicit def probability[N](
     implicit

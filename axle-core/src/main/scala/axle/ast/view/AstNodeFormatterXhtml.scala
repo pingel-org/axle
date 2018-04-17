@@ -37,10 +37,6 @@ case class XhtmlAstNodeFormatter(
 
 object XhtmlAstNodeFormatter {
 
-  implicit val showXhtmlAstNodeFormatter: Show[XhtmlAstNodeFormatter] =
-    new Show[XhtmlAstNodeFormatter] {
-
-      def show(anfx: XhtmlAstNodeFormatter): String = anfx.subState.toList.mkString("")
-    }
+  implicit val showXhtmlAstNodeFormatter: Show[XhtmlAstNodeFormatter] = _.subState.toList.mkString("")
 
 }

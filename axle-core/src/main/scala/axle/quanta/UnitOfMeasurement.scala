@@ -6,14 +6,10 @@ import cats.kernel.Eq
 object UnitOfMeasurement {
 
   implicit def eqqqn[Q]: Eq[UnitOfMeasurement[Q]] =
-    new Eq[UnitOfMeasurement[Q]] {
-      def eqv(x: UnitOfMeasurement[Q], y: UnitOfMeasurement[Q]): Boolean = x.equals(y)
-    }
+    (x, y) => x.equals(y)
 
   implicit def showUoM[T]: Show[UnitOfMeasurement[T]] =
-    new Show[UnitOfMeasurement[T]] {
-      def show(u: UnitOfMeasurement[T]): String = s"${u.name} (${u.symbol}) "
-    }
+    u => s"${u.name} (${u.symbol})"
 
 }
 

@@ -1,11 +1,9 @@
 package axle.stats
 
-import axle.IndexedCrossProduct
-import axle.algebra.LinearAlgebra
-import axle.string
 import cats.Show
 import cats.implicits.catsKernelStdOrderForString
 import cats.implicits.catsSyntaxEq
+import cats.implicits._
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
@@ -18,6 +16,9 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 
+import axle.IndexedCrossProduct
+import axle.algebra.LinearAlgebra
+
 /* Technically a "Distribution" is probably a table that sums to 1, which is not
  * always true in a Factor.  They should be siblings rather than parent/child.
  */
@@ -25,22 +26,16 @@ import spire.math.ConvertableFrom
 object Factor {
 
   implicit def showFactor[T: Show, N: Show]: Show[Factor[T, N]] =
-    new Show[Factor[T, N]] {
-
-      def show(factor: Factor[T, N]): String = {
-        import factor._
-        variables.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
-          factor.cases.map(kase =>
-            kase.map(ci => string(ci.value).padTo(ci.variable.charWidth, " ").mkString("")).mkString(" ") +
-              " " + string(factor(kase))).mkString("\n") // Note: was "%f".format() prior to spire.math
-      }
-
+    factor => {
+      import factor._
+      variables.map(d => d.name.padTo(d.charWidth, " ").mkString("")).mkString(" ") + "\n" +
+        factor.cases.map(kase =>
+          kase.map(ci => ci.value.show.padTo(ci.variable.charWidth, " ").mkString("")).mkString(" ") +
+            " " + factor(kase).show).mkString("\n") // Note: was "%f".format() prior to spire.math
     }
 
   implicit def factorEq[T: Eq, N]: Eq[Factor[T, N]] =
-    new Eq[Factor[T, N]] {
-      def eqv(x: Factor[T, N], y: Factor[T, N]): Boolean = x equals y // TODO
-    }
+    (x, y) => x equals y // TODO
 
   implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order]: MultiplicativeMonoid[Factor[T, N]] =
     new MultiplicativeMonoid[Factor[T, N]] {

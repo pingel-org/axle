@@ -1,10 +1,9 @@
 package axle.game
 
-import axle.string
+import cats.implicits._
+import spire.math.Rational
 import axle.game.cards._
 import axle.stats.ConditionalProbabilityTable0
-import spire.math.Rational
-import cats.implicits._
 
 package object poker {
 
@@ -284,20 +283,18 @@ Example moves:
         s.mover.map(mover => "To: " + mover.referenceFor(observer) + "\n").getOrElse("") +
           "Current bet: " + s.currentBet + "\n" +
           "Pot: " + s.pot + "\n" +
-          "Shared: " + s.shownShared.map({
-            card => string(card)
-          }).mkString(" ") + "\n" +
+          "Shared: " + s.shownShared.map(_.show).mkString(" ") + "\n" +
           "\n" +
           game.players.map(p => {
             p.id + ": " +
               " hand " + (
-                s.hands.get(p).map(h => h.map(c => string(c)).mkString(" ")).getOrElse("--")) + " " +
+                s.hands.get(p).map(h => h.map(_.show).mkString(" ")).getOrElse("--")) + " " +
                 (if (s.stillIn.contains(p)) {
-                  "in for $" + s.inFors.get(p).map(amt => string(amt)).getOrElse("--")
+                  "in for $" + s.inFors.get(p).map(_.show).getOrElse("--")
                 } else {
                   "out"
                 }) +
-                ", $" + s.piles.get(p).map(amt => string(amt)).getOrElse("--") + " remaining"
+                ", $" + s.piles.get(p).map(_.show).getOrElse("--") + " remaining"
           }).mkString("\n")
       }
 
@@ -306,7 +303,7 @@ Example moves:
         outcome:  PokerOutcome,
         observer: Player): String = {
         "Winner: " + outcome.winner.get.description + "\n" +
-          "Hand  : " + outcome.hand.map(h => string(h) + " " + h.description).getOrElse("not shown") + "\n"
+          "Hand  : " + outcome.hand.map(h => h.show + " " + h.description).getOrElse("not shown") + "\n"
       }
 
       def displayMoveTo(game: Poker, move: PokerMove, mover: Player, observer: Player): String =

@@ -31,7 +31,7 @@ class GraphVisSpec extends FunSuite with Matchers {
         (b, d, new Edge)))
 
     import cats.Show
-    implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
+    implicit val showEdge: Show[Edge] = _ => ""
 
     val vis = UndirectedGraphVisualization(g, width = 200, height = 200, border = 10)
 
@@ -74,7 +74,7 @@ class GraphVisSpec extends FunSuite with Matchers {
         (b, d, new Edge)))
 
     import cats.Show
-    implicit val showEdge: Show[Edge] = new Show[Edge] { def show(e: Edge): String = "" }
+    implicit val showEdge: Show[Edge] = _ => ""
 
     val vis = DirectedGraphVisualization(dg, 200, 200, 10)
 

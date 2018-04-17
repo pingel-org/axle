@@ -6,7 +6,6 @@ import cats.implicits._
 import spire.random.Generator.rng
 import axle.algebra.functorIndexedSeq
 import axle.shuffle
-import axle.string
 
 class KMeansSpecification
   extends FunSuite with Matchers {
@@ -52,9 +51,8 @@ class KMeansSpecification
       new Euclidean[DoubleMatrix, Double]()
     }
 
-    implicit val fooEq = new Eq[Foo] {
-      def eqv(x: Foo, y: Foo): Boolean = x equals y
-    }
+    implicit val fooEq: Eq[Foo] =
+      (x, y) => x equals y
 
     import spire.implicits.DoubleAlgebra
     implicit val la = axle.jblas.linearAlgebraDoubleMatrix[Double]
@@ -173,7 +171,7 @@ class KMeansSpecification
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
     confusion.rowSums.columnSums.get(0, 0) should be(irisesData.irises.size)
-    string(confusion) should include("versicolor")
+    confusion.show should include("versicolor")
   }
 
 }

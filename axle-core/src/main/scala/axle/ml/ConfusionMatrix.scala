@@ -63,16 +63,10 @@ object ConfusionMatrix {
 
   implicit def showCM[T, CLASS, L, F[_], M](
     implicit
-    la: LinearAlgebra[M, Int, Int, Double]): Show[ConfusionMatrix[T, CLASS, L, F, M]] =
-    new Show[ConfusionMatrix[T, CLASS, L, F, M]] {
-
-      def show(cm: ConfusionMatrix[T, CLASS, L, F, M]): String = {
-        (cm.labelList.zipWithIndex.map({
-          case (label, r) => ((0 until cm.counts.columns).map(c => cm.formatNumber(cm.counts.get(r, c).toInt)).mkString(" ") + " : " + cm.formatNumber(cm.rowSums.get(r, 0).toInt) + " " + label + "\n")
-        }).mkString("")) + "\n" +
-          (0 until cm.counts.columns).map(c => cm.formatNumber(cm.columnSums.get(0, c).toInt)).mkString(" ") + "\n"
-      }
-
-    }
+    la: LinearAlgebra[M, Int, Int, Double]): Show[ConfusionMatrix[T, CLASS, L, F, M]] = cm =>
+    (cm.labelList.zipWithIndex.map({
+      case (label, r) => ((0 until cm.counts.columns).map(c => cm.formatNumber(cm.counts.get(r, c).toInt)).mkString(" ") + " : " + cm.formatNumber(cm.rowSums.get(r, 0).toInt) + " " + label + "\n")
+    }).mkString("")) + "\n" +
+      (0 until cm.counts.columns).map(c => cm.formatNumber(cm.columnSums.get(0, c).toInt)).mkString(" ") + "\n"
 
 }

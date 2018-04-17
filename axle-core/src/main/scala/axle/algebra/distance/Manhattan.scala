@@ -1,9 +1,9 @@
 package axle.algebra.distance
 
-import axle.algebra.LinearAlgebra
-import axle.syntax.linearalgebra.matrixOps
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
+import axle.algebra.LinearAlgebra
+import axle.syntax.linearalgebra.matrixOps
 
 class Manhattan[M, R, C, D](
   implicit

@@ -35,31 +35,24 @@ package object axle {
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
-  def showDoubleWithPrecision(p: Int = 6): Show[Double] =
-    new Show[Double] {
-      val fmt = s"""%.${p}f"""
-      def show(d: Double): String = fmt.format(d)
-    }
+  def showDoubleWithPrecision(p: Int = 6): Show[Double] = d => {
+    val fmt = s"""%.${p}f"""
+    fmt.format(d)
+  }
 
   // missing Eq witnesses
 
   implicit def eqSeq[T](implicit eqT: Eq[T]): Eq[Seq[T]] =
-    new Eq[Seq[T]] {
-      def eqv(x: Seq[T], y: Seq[T]): Boolean =
-        x.length === y.length && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
-    }
+    (x, y) =>
+      x.length === y.length && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
 
   implicit def eqIterable[T](implicit eqT: Eq[T]): Eq[Iterable[T]] =
-    new Eq[Iterable[T]] {
-      def eqv(x: Iterable[T], y: Iterable[T]): Boolean =
-        x.size === y.size && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
-    }
+    (x, y) =>
+      x.size === y.size && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
 
   implicit def eqTreeMap[K, V](implicit eqK: Eq[K], eqV: Eq[V]): Eq[TreeMap[K, V]] =
-    new Eq[TreeMap[K, V]] {
-      def eqv(x: TreeMap[K, V], y: TreeMap[K, V]): Boolean =
-        x.keys === y.keys && x.keySet.forall(k => x.get(k) === y.get(k))
-    }
+    (x, y) =>
+      x.keys === y.keys && x.keySet.forall(k => x.get(k) === y.get(k))
 
   // basic functions
 
@@ -178,14 +171,13 @@ package object axle {
       .continually(Unit)
       .scanLeft(x0)({ case (x, _) => f(x) })
 
-  def trace[N](f: N => N, x0: N): Iterator[(N, Set[N])] = {
+  def trace[N](f: N => N, x0: N): Iterator[(N, Set[N])] =
     Iterator
       .continually(Unit)
       .scanLeft((x0, Set.empty[N]))({
         case ((x, points), _) =>
           (f(x), points + x)
       })
-  }
 
   def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] =
     trace(f, x0)
@@ -229,11 +221,7 @@ package object axle {
 
   // Typeclass-based method invocations
 
-  def string[T: Show](t: T): String = Show[T].show(t)
-
-  def show[T: Show](t: T): String = Show[T].show(t)
-
-  def print[T: Show](t: T): Unit = println(string(t))
+  def print[T: Show](t: T): Unit = println(t.show)
 
   def html[T: HtmlFrom](t: T): scala.xml.Node = HtmlFrom[T].toHtml(t)
 

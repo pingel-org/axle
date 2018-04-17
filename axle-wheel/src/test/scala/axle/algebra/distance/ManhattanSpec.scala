@@ -6,11 +6,12 @@ import org.scalatest._
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
+import spire.implicits.IntAlgebra
+//import cats.implicits._
+import spire.laws.VectorSpaceLaws
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix
-import spire.implicits.IntAlgebra
-import spire.laws.VectorSpaceLaws
 
 class ManhattanSpec
   extends FunSuite with Matchers
@@ -29,8 +30,6 @@ class ManhattanSpec
   implicit val pred: Predicate[Int] = new Predicate[Int] {
     def apply(a: Int) = true
   }
-
-  implicit val spireEqDoubleMatrix = cats.kernel.Eq[DoubleMatrix]
 
   checkAll(
     s"Manhattan space on ${m}x${n} matrix",
