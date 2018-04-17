@@ -16,10 +16,7 @@ object Independence {
 
   def variablesToString[T, N](s: Set[Variable[T]]): String = "{" + (s map { _.name }).mkString(", ") + "}"
 
-  implicit def showIndependence[T, N]: Show[Independence[T]] =
-    new Show[Independence[T]] {
-      def show(i: Independence[T]): String =
-        "I(" + variablesToString(i.X) + ", " + variablesToString(i.Z) + ", " + variablesToString(i.Y) + ")"
-    }
+  implicit def showIndependence[T, N]: Show[Independence[T]] = i =>
+    "I(" + variablesToString(i.X) + ", " + variablesToString(i.Z) + ", " + variablesToString(i.Y) + ")"
 
 }

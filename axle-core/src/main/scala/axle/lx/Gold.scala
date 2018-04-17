@@ -1,11 +1,11 @@
 
 package axle.lx
 
+import scala.language.implicitConversions
 import cats.Show
-import axle.string
 import cats.kernel.Eq
 import cats.kernel.Order
-import scala.language.implicitConversions
+import cats.implicits._
 
 object Gold {
 
@@ -13,13 +13,9 @@ object Gold {
 
   object Expression {
 
-    implicit val showExpression: Show[Expression] = new Show[Expression] {
-      def show(expr: Expression): String = expr.mkString(" ")
-    }
+    implicit val showExpression: Show[Expression] = _.mkString(" ")
 
-    implicit val orderExpression: Order[Expression] = new Order[Expression] {
-      def compare(x: Expression, y: Expression): Int = string(x).compareTo(string(y))
-    }
+    implicit val orderExpression: Order[Expression] = (x, y) => x.show.compareTo(y.show)
 
   }
 
@@ -37,13 +33,9 @@ object Gold {
 
   object Language {
 
-    implicit def showLanguage: Show[Language] = new Show[Language] {
-      def show(l: Language): String = "{" + l.sequences.mkString(", ") + "}"
-    }
+    implicit def showLanguage: Show[Language] = l => "{" + l.sequences.mkString(", ") + "}"
 
-    implicit val languageEq = new Eq[Language] {
-      def eqv(x: Language, y: Language): Boolean = x.sequences.equals(y.sequences)
-    }
+    implicit val languageEq: Eq[Language] = (x, y) => x.sequences.equals(y.sequences)
   }
 
   trait Learner[S] {
@@ -81,9 +73,7 @@ object Gold {
 
   case class Morpheme(s: String)
   object Morpheme {
-    implicit def showMorpheme: Show[Morpheme] = new Show[Morpheme] {
-      def show(m: Morpheme): String = m.s
-    }
+    implicit def showMorpheme: Show[Morpheme] = _.s
   }
 
   case class Text(expressions: List[Expression]) {
@@ -95,9 +85,7 @@ object Gold {
     def content: Language = Language(expressions.filter(_ != ♯).toSet)
   }
   object Text {
-    implicit def showText: Show[Text] = new Show[Text] {
-      def show(t: Text): String = "<" + t.expressions.mkString(", ") + ">"
-    }
+    implicit def showText: Show[Text] = t => "<" + t.expressions.mkString(", ") + ">"
   }
 
   implicit def enVocabulary(morphemes: Set[Morpheme]): Vocabulary = Vocabulary(morphemes)

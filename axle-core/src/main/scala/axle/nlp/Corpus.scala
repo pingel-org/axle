@@ -44,21 +44,18 @@ case class Corpus(val documents: GenSeq[String], language: Language) {
 
 object Corpus {
 
-  implicit val showCorpus: Show[Corpus] = new Show[Corpus] {
+  implicit val showCorpus: Show[Corpus] = corpus => {
 
-    def show(corpus: Corpus): String = {
+    import corpus._
 
-      import corpus._
+    val wordCutoff = 20L
 
-      val wordCutoff = 20L
-
-      s"""
+    s"""
 Corpus of ${documents.length} documents.
 There are ${wordsMoreFrequentThan(wordCutoff).length} unique words used more than $wordCutoff time(s).
 Top 10 words: ${topKWords(10).mkString(", ")}
 Top 10 bigrams: ${topKBigrams(10).mkString(", ")}
 """
-    }
   }
 
 }

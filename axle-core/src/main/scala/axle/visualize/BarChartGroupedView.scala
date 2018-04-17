@@ -1,14 +1,13 @@
 package axle.visualize
 
+import cats.implicits._
 import axle.algebra.Tics
-import axle.string
 import axle.visualize.Color.black
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import cats.implicits._
 
 case class BarChartGroupedView[G, S, Y, D, H](
   chart: BarChartGrouped[G, S, Y, D, H],
@@ -45,7 +44,7 @@ case class BarChartGroupedView[G, S, Y, D, H](
 
   val gTics = XTics(
     scaledArea,
-    groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, string(g)) }).toList,
+    groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, g.show) }).toList,
     normalFontName,
     normalFontSize.toDouble,
     bold = true,
@@ -74,7 +73,7 @@ case class BarChartGroupedView[G, S, Y, D, H](
 
     val hovered = hoverOf(g, s).map {
       case (hover) => {
-        val hoverString = string(hover)
+        val hoverString = hover.show
         rectBase.copy(hoverText = Some(hoverString))
       }
     } getOrElse { rectBase }

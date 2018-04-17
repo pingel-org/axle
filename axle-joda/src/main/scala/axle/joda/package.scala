@@ -16,13 +16,9 @@ import org.joda.time.{ Seconds, Minutes, Hours, Days, Weeks }
 
 package object joda {
 
-  implicit val dateTimeOrder: Order[DateTime] = new Order[DateTime] {
-    def compare(dt1: DateTime, dt2: DateTime): Int = dt1.compareTo(dt2)
-  }
+  implicit val dateTimeOrder: Order[DateTime] = (dt1, dt2) => dt1.compareTo(dt2)
 
-  implicit def dateTimeEq: Eq[DateTime] = new Eq[DateTime] {
-    def eqv(x: DateTime, y: DateTime): Boolean = x.equals(y)
-  }
+  implicit def dateTimeEq: Eq[DateTime] = (x, y) => x.equals(y)
 
   implicit val dateTimePlottable: Plottable[DateTime] = new Plottable[DateTime] {}
 

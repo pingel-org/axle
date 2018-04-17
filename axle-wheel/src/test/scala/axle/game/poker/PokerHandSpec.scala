@@ -1,9 +1,9 @@
 package axle.game.poker
 
 import org.scalatest._
-import axle.string
 import cats.kernel.Eq
 import cats.Order.catsKernelOrderingForOrder
+import cats.implicits._
 
 class PokerHandSpec extends FunSuite with Matchers {
 
@@ -30,14 +30,14 @@ class PokerHandSpec extends FunSuite with Matchers {
   test("straight > two pair") {
     val hand = PokerHand.fromString("7♡,6♠,8♡,5♠,9♢")
     hand.description should include("straight")
-    string(hand) should be("5♠ 6♠ 7♡ 8♡ 9♢")
+    hand.show should be("5♠ 6♠ 7♡ 8♡ 9♢")
     hand should be > PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
   }
 
   test("flush > two pair") {
     val hand = PokerHand.fromString("6♡,3♡,9♡,T♡,A♡")
     hand.description should include("flush")
-    string(hand) should be("3♡ 6♡ 9♡ T♡ A♡")
+    hand.show should be("3♡ 6♡ 9♡ T♡ A♡")
     hand should be > PokerHand.fromString("6♡,6♢,T♠,T♠,4♡")
   }
 

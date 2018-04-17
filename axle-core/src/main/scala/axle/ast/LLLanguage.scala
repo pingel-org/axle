@@ -1,11 +1,9 @@
 
 package axle.ast
 
-import cats.Show
-import axle.string
 import scala.Stream.cons
 import scala.Stream.empty
-
+import cats.Show
 import cats.implicits._
 
 /**
@@ -16,9 +14,7 @@ import cats.implicits._
 
 object LLLanguage {
 
-  implicit def showLLLanguage: Show[LLLanguage] = new Show[LLLanguage] {
-    def show(lll: LLLanguage): String = view.ViewString.llLanguage(lll)
-  }
+  implicit def showLLLanguage: Show[LLLanguage] = lll => view.ViewString.llLanguage(lll)
 }
 
 case class LLLanguage(
@@ -177,7 +173,7 @@ case class LLLanguage(
     parseStateStream(startState(input)).toList
       .map({
         case (action, state) =>
-          string(action) + "\n" +
+          action.show + "\n" +
             "  " + state.inputBufferWithMarker + "\n" +
             "  " + state.stack.mkString("")
       }).mkString("\n\n")

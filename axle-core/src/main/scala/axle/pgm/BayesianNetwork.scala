@@ -27,10 +27,7 @@ object Edge {
 
   import cats.Show
 
-  implicit def showPgmEdge: Show[axle.pgm.Edge] =
-    new Show[axle.pgm.Edge] {
-      def show(e: axle.pgm.Edge): String = ""
-    }
+  implicit def showPgmEdge: Show[axle.pgm.Edge] = _ => ""
 
 }
 

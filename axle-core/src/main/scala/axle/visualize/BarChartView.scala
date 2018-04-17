@@ -1,15 +1,15 @@
 package axle.visualize
 
+import cats.Order.catsKernelOrderingForOrder
+import cats.implicits._
+
 import axle.algebra.Tics
-import axle.string
 import axle.visualize.Color.black
 import axle.visualize.element.HorizontalLine
 import axle.visualize.element.Rectangle
 import axle.visualize.element.VerticalLine
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import cats.implicits._
-import cats.Order.catsKernelOrderingForOrder
 
 case class BarChartView[C, Y, D, H](
   chart: BarChart[C, Y, D, H],
@@ -45,7 +45,7 @@ case class BarChartView[C, Y, D, H](
 
   val gTics = XTics(
     scaledArea,
-    slices.toStream.zipWithIndex.map({ case (s, i) => (padding + (i + 0.5) * widthPerSlice, string(s)) }).toList,
+    slices.toStream.zipWithIndex.map({ case (c, i) => (padding + (i + 0.5) * widthPerSlice, showC.show(c)) }).toList,
     normalFontName,
     normalFontSize.toDouble,
     bold = true,
@@ -75,7 +75,7 @@ case class BarChartView[C, Y, D, H](
       val hovered =
         hoverOf(c) map {
           case (hover) =>
-            baseRect.copy(hoverText = Some(string(hover)))
+            baseRect.copy(hoverText = Some(showH.show(hover)))
         } getOrElse { baseRect }
 
       linkOf(c) map {

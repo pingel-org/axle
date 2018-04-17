@@ -470,7 +470,7 @@ package object awt {
         case ((label, d), i) =>
           val color = colorOf(label)
           g2d.setColor(cachedColor(color))
-          g2d.drawString(string(label), plot.width - width, topPadding + lineHeight * (i + 1))
+          g2d.drawString(label.show, plot.width - width, topPadding + lineHeight * (i + 1))
       }
     }
 
@@ -490,7 +490,7 @@ package object awt {
           case (s, j) =>
             val color = colorOf(s)
             g2d.setColor(cachedColor(color))
-            g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (j + 1))
+            g2d.drawString(s.show, width - keyWidth, keyTopPadding + lineHeight * (j + 1))
         }
       }
 
@@ -512,7 +512,7 @@ package object awt {
               case (g, j) =>
                 val r = i * groups.size + j
                 g2d.setColor(cachedColor(colorOf(g, s)))
-                g2d.drawString(string(s), width - keyWidth, keyTopPadding + lineHeight * (r + 1))
+                g2d.drawString(s.show, width - keyWidth, keyTopPadding + lineHeight * (r + 1))
             }
         }
       }

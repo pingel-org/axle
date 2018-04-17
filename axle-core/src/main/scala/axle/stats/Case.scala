@@ -13,12 +13,9 @@ object CaseIs {
 
   import cats.Show
 
-  implicit def showCaseIs[A]: Show[CaseIs[A]] =
-    new Show[CaseIs[A]] {
-      def show(c: CaseIs[A]): String = {
-        import c._
-        val opStr = " = "
-        variable.name + opStr + value
-      }
-    }
+  implicit def showCaseIs[A]: Show[CaseIs[A]] = c => {
+    import c._
+    val opStr = " = "
+    variable.name + opStr + value
+  }
 }

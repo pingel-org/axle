@@ -603,11 +603,11 @@ package object jung {
         }
 
         val vertexLabelTransformer = new GoogleFunction[VP, String]() {
-          def apply(vertex: VP): String = string(vertex)
+          def apply(vertex: VP): String = vertex.show
         }
 
         val edgeLabelTransformer = new GoogleFunction[EP, String]() {
-          def apply(edge: EP): String = string(edge)
+          def apply(edge: EP): String = edge.show
         }
 
         vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)
@@ -676,13 +676,13 @@ package object jung {
             val label = html(v)
             label match {
               case scala.xml.Text(text) => text
-              case _                    => string((<html>{ label }</html>).asInstanceOf[scala.xml.Node])
+              case _                    => (<html>{ label }</html>).asInstanceOf[scala.xml.Node].show
             }
           }
         }
 
         val edgeLabelTransformer = new GoogleFunction[EP, String]() {
-          def apply(e: EP): String = string(e)
+          def apply(e: EP): String = e.show
         }
 
         vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)

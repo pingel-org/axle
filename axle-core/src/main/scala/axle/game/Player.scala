@@ -16,15 +16,9 @@ case class Player(id: String, description: String) {
 
 object Player {
 
-  implicit def showPlayer: Show[Player] = new Show[Player] {
+  implicit def showPlayer: Show[Player] = _.description
 
-    def show(player: Player): String = player.description
-  }
-
-  implicit def eqPlayer: Eq[Player] = new Eq[Player] {
-
-    def eqv(left: Player, right: Player): Boolean =
-      left.==(right)
-  }
+  implicit def eqPlayer: Eq[Player] =
+    (left, right) => left.==(right)
 
 }

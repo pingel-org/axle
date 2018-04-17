@@ -1,9 +1,9 @@
 package axle.game.cards
 
 import cats.Show
+import cats.implicits._
 import spire.random.Generator.rng
 import axle.shuffle
-import axle.string
 
 case class Deck(cards: IndexedSeq[Card] = shuffle(Deck.cards)(rng))
 
@@ -17,8 +17,7 @@ object Deck {
     rank <- ranks
   } yield Card(rank, suit)
 
-  implicit def showDeck: Show[Deck] = new Show[Deck] {
-    def show(deck: Deck): String = cards.map(string(_)).mkString(" ")
-  }
+  implicit def showDeck: Show[Deck] = deck =>
+    deck.cards.map(_.show).mkString(" ")
 
 }

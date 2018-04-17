@@ -3,6 +3,7 @@ package axle.stats
 import cats.Show
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
+import cats.implicits._
 
 import spire.algebra.Field
 import spire.implicits.additiveSemigroupOps
@@ -10,20 +11,15 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.random.Dist
 import spire.random.Generator
 
-import axle.string
 import axle.dummy
 
 object ConditionalProbabilityTable0 {
 
-  implicit def showCPT[A: Show: Order, N: Show](implicit prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N]): Show[ConditionalProbabilityTable0[A, N]] =
-    new Show[ConditionalProbabilityTable0[A, N]] {
-
-      def show(cpt: ConditionalProbabilityTable0[A, N]): String =
-        cpt.values.sorted.map(a => {
-          val aString = string(a)
-          (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(prob.probabilityOf(cpt, a)))
-        }).mkString("\n")
-    }
+  implicit def showCPT[A: Show: Order, N: Show](implicit prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N]): Show[ConditionalProbabilityTable0[A, N]] = cpt =>
+    cpt.values.sorted.map(a => {
+      val aString = Show[A].show(a)
+      (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[N].show(prob.probabilityOf(cpt, a)))
+    }).mkString("\n")
 
   implicit def probability[N](implicit fieldN: Field[N], orderN: Order[N]): ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N] =
     new ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N] {
@@ -85,7 +81,7 @@ case class ConditionalProbabilityTable0[A, N: Field: Order](
   def values: IndexedSeq[A] = p.keys.toVector
 
   def charWidth(implicit sa: Show[A]): Int =
-    (values.map(a => string(a).length).toList).reduce(math.max)
+    (values.map(a => Show[A].show(a).length).toList).reduce(math.max)
 
 }
 

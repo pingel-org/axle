@@ -1,6 +1,5 @@
 package axle.game.ttt
 
-import axle.string
 import cats.implicits._
 
 case class TicTacToeMove(position: Int, boardSize: Int) {
@@ -17,7 +16,7 @@ case class TicTacToeMove(position: Int, boardSize: Int) {
       case 8 => "lower middle"
       case 9 => "lower right"
     }
-    case _ => string(position)
+    case _ => position.show
   }
 
 }

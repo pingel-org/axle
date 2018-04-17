@@ -1,7 +1,6 @@
 
 package axle.ast
 
-import axle.string
 import scala.collection.mutable.Buffer
 import cats.implicits._
 
@@ -75,13 +74,13 @@ object JsonAST {
 
     case buff: Buffer[_] => AstNodeList(buff.map(obj2ast(_, parentLineNo)).toList, parentLineNo)
 
-    case i: Int          => AstNodeValue(Some(string(i)), parentLineNo)
+    case i: Int          => AstNodeValue(Some(i.show), parentLineNo)
 
-    case d: Double       => AstNodeValue(Some(string(d)), parentLineNo)
+    case d: Double       => AstNodeValue(Some(d.show), parentLineNo)
 
     case s: String       => AstNodeValue(Some(s), parentLineNo)
 
-    case b: Boolean      => AstNodeValue(Some(string(b)), parentLineNo)
+    case b: Boolean      => AstNodeValue(Some(b.show), parentLineNo)
 
     case None            => AstNodeValue(None, parentLineNo) // verify this
 

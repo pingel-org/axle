@@ -1,34 +1,26 @@
 package axle.game.poker
 
-import axle.game.cards.Ace
-import axle.game.cards.Card
-import axle.string
 import cats.Show
 import cats.kernel.Order
 import cats.Order.catsKernelOrderingForOrder
-import spire.implicits.IntAlgebra
+import cats.implicits._
 
-import spire.implicits.SeqOrder
-import spire.implicits.eqOps
+import axle.game.cards.Ace
+import axle.game.cards.Card
 
 object PokerHand {
 
   def fromString(s: String): PokerHand =
     PokerHand(Card.fromString(s))
 
-  implicit val showPokerHand: Show[PokerHand] = new Show[PokerHand] {
-    def show(hand: PokerHand): String = hand.sortedHand.reverse.map(string(_)).mkString(" ")
-  }
+  implicit val showPokerHand: Show[PokerHand] = hand =>
+    hand.sortedHand.reverse.map(_.show).mkString(" ")
 
-  implicit val orderPokerHand: Order[PokerHand] = new Order[PokerHand] {
-
-    def compare(a: PokerHand, b: PokerHand): Int = {
-      val ac = a.category
-      val bc = b.category
-      val cmpCat = Order[PokerHandCategory].compare(ac, bc)
-      if (cmpCat === 0) ac.compareAlike(a, b) else cmpCat
-    }
-
+  implicit val orderPokerHand: Order[PokerHand] = (a, b) => {
+    val ac = a.category
+    val bc = b.category
+    val cmpCat = Order[PokerHandCategory].compare(ac, bc)
+    if (cmpCat === 0) ac.compareAlike(a, b) else cmpCat
   }
 
 }

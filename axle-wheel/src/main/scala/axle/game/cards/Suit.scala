@@ -6,11 +6,10 @@ import cats.Show
 
 object Suit {
 
-  implicit def suitEq: Eq[Suit] = new Eq[Suit] {
-    def eqv(x: Suit, y: Suit): Boolean = x.equals(y)
-  }
+  implicit def suitEq: Eq[Suit] =
+    (x, y) => x.equals(y)
 
-  implicit def show[S <: Suit]: Show[S] = new Show[S] { def show(s: S) = s.serialize.toString }
+  implicit def show[S <: Suit]: Show[S] = _.serialize.toString
 
   def apply(c: Char): Suit = c match {
     case '♠' => Spades

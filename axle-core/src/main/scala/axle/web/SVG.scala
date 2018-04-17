@@ -7,11 +7,11 @@ import scala.annotation.implicitNotFound
 
 import cats.Show
 import cats.kernel.Eq
+import cats.implicits._
 
 import spire.implicits.DoubleAlgebra
 import spire.algebra.Field
 
-import axle.string
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
 import axle.visualize.BarChartGroupedView
@@ -127,7 +127,7 @@ object SVG {
                       "x" -> s"${center.x + pointRadius}" ::
                       "y" -> s"${center.y - pointRadius}" ::
                       "visibility" -> (if (permanent) "visible" else "hidden") :: Nil,
-                    xml.Text(string(label)))
+                    xml.Text(label.show))
               }
             } else {
               List.empty
@@ -156,7 +156,7 @@ object SVG {
         val keyEntries = data.zipWithIndex map {
           case ((label, d), i) => {
             val color = colorOf(label)
-            <text x={ s"${plot.width - width}" } y={ s"${topPadding + plot.fontSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${plot.fontSize}" }>{ string(label) }</text>
+            <text x={ s"${plot.width - width}" } y={ s"${topPadding + plot.fontSize * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${plot.fontSize}" }>{ label.show }</text>
           }
         }
 
@@ -182,7 +182,7 @@ object SVG {
         val keyEntries = slices.toList.zipWithIndex map {
           case (slice, i) => {
             val color = colorOf(slice)
-            <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(slice) }</text>
+            <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (i + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ slice.show }</text>
           }
         }
 
@@ -209,7 +209,7 @@ object SVG {
         } yield {
           val color = colorOf(group, slice)
           val r = i * groups.size + j
-          <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (r + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ string(group) + " " + string(slice) }</text>
+          <text x={ s"${width - keyWidth}" } y={ s"${keyTop + lineHeight * (r + 1)}" } fill={ s"${rgb(color)}" } font-size={ s"${lineHeight}" }>{ group.show + " " + slice.show }</text>
         }
         ktto ++ keyEntries
       }

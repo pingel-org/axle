@@ -13,35 +13,25 @@ import cats.Show
 sealed trait MarkovModelState
 
 object MarkovModelState {
-  implicit val mmsEq = new Eq[MarkovModelState] {
-    def eqv(x: MarkovModelState, y: MarkovModelState): Boolean = x equals y
-  }
+  implicit val mmsEq: Eq[MarkovModelState] =
+    (x, y) => x equals y
 }
 
 case class MarkovModelStartState() extends MarkovModelState
 
 object MarkovModelStartState {
-  implicit def showStart: Show[MarkovModelStartState] =
-    new Show[MarkovModelStartState] {
-      def show(s: MarkovModelStartState): String = "start"
-    }
+  implicit def showStart: Show[MarkovModelStartState] = _ => "start"
 }
 
 case class UnobservableMarkovModelState(label: String) extends MarkovModelState
 
 object UnobservableMarkovModelState {
-  implicit def showStart: Show[UnobservableMarkovModelState] =
-    new Show[UnobservableMarkovModelState] {
-      def show(s: UnobservableMarkovModelState): String = s.label
-    }
+  implicit def showStart: Show[UnobservableMarkovModelState] = _.label
 }
 
 case class ObservableMarkovModelState(label: String) extends MarkovModelState
 object ObservableMarkovModelState {
-  implicit def showStart: Show[ObservableMarkovModelState] =
-    new Show[ObservableMarkovModelState] {
-      def show(s: ObservableMarkovModelState): String = s.label
-    }
+  implicit def showStart: Show[ObservableMarkovModelState] = _.label
 }
 
 class HMMEdge[N](p: N)
