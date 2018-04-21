@@ -29,8 +29,7 @@ package object jblas {
       }
     }
 
-  implicit def eqDoubleMatrix: Eq[DoubleMatrix] =
-    (x, y) => x.equals(y)
+  implicit def eqDoubleMatrix = Eq.fromUniversalEquals[DoubleMatrix]
 
   // TODO put column count in type and make this implicit
   def rowVectorInnerProductSpace[R: MultiplicativeMonoid, C, N: Field](n: C)(

@@ -6,8 +6,7 @@ import cats.Show
 
 object Suit {
 
-  implicit def suitEq: Eq[Suit] =
-    (x, y) => x.equals(y)
+  implicit def suitEq = Eq.fromUniversalEquals[Suit]
 
   implicit def show[S <: Suit]: Show[S] = _.serialize.toString
 

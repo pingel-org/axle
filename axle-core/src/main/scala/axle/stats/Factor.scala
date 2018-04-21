@@ -34,8 +34,7 @@ object Factor {
             " " + factor(kase).show).mkString("\n") // Note: was "%f".format() prior to spire.math
     }
 
-  implicit def factorEq[T: Eq, N]: Eq[Factor[T, N]] =
-    (x, y) => x equals y // TODO
+  implicit def factorEq[T: Eq, N] = Eq.fromUniversalEquals[Factor[T, N]] // TODO go deeper
 
   implicit def factorMultMonoid[T: Eq, N: Field: ConvertableFrom: Order]: MultiplicativeMonoid[Factor[T, N]] =
     new MultiplicativeMonoid[Factor[T, N]] {

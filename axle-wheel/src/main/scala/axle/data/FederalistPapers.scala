@@ -18,8 +18,7 @@ object FederalistPapers extends Util {
 
   case class Article(id: Int, author: String, text: String, metadata: String)
 
-  implicit val fpEq: Eq[Article] =
-    (x, y) => x equals y
+  implicit val fpEq = Eq.fromUniversalEquals[Article]
 
   val source = new URL("http://www.gutenberg.org/files/18/18.txt")
 

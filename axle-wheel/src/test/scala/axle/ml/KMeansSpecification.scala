@@ -51,8 +51,7 @@ class KMeansSpecification
       new Euclidean[DoubleMatrix, Double]()
     }
 
-    implicit val fooEq: Eq[Foo] =
-      (x, y) => x equals y
+    implicit val fooEq = Eq.fromUniversalEquals[Foo]
 
     import spire.implicits.DoubleAlgebra
     implicit val la = axle.jblas.linearAlgebraDoubleMatrix[Double]

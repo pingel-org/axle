@@ -11,8 +11,7 @@ trait Symbol {
 
 object Symbol {
 
-  implicit val symbolEq: Eq[Symbol] =
-    (x, y) => x equals y
+  implicit val symbolEq = Eq.fromUniversalEquals[Symbol]
 
   implicit def showSymbol: Show[Symbol] = _.label
 }
@@ -22,8 +21,7 @@ case class Terminal(label: String) extends Symbol
 case class NonTerminal(label: String) extends Symbol
 
 object NonTerminal {
-  implicit val eqNT: Eq[NonTerminal] =
-    (x, y) => x equals y
+  implicit val eqNT = Eq.fromUniversalEquals[NonTerminal]
 }
 
 object ⊥ extends Terminal("⊥") // also known as '$'

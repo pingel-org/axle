@@ -5,8 +5,7 @@ import cats.kernel.Eq
 
 object UnitOfMeasurement {
 
-  implicit def eqqqn[Q]: Eq[UnitOfMeasurement[Q]] =
-    (x, y) => x.equals(y)
+  implicit def eqqqn[Q] = Eq.fromUniversalEquals[UnitOfMeasurement[Q]]
 
   implicit def showUoM[T]: Show[UnitOfMeasurement[T]] =
     u => s"${u.name} (${u.symbol})"

@@ -41,7 +41,7 @@ case class Iris(
   species:     String)
 
 object Iris {
-  implicit val irisEq: Eq[Iris] = (x, y) => x equals y
+  implicit val irisEq = Eq.fromUniversalEquals[Iris]
 }
 
 class Irises(implicit converter: DistanceConverter[Double]) extends Util {
