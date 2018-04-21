@@ -7,7 +7,7 @@ object Rank {
 
   implicit val orderRank: Order[Rank] = (a, b) => a.asInt.compare(b.asInt)
 
-  implicit def show[R <: Rank]: Show[R] = _.serialize.toString
+  implicit def show[R <: Rank]: Show[R] = r => axle.showChar.show(r.serialize)
 
   def apply(c: Char): Rank = c match {
     case '2' => R2

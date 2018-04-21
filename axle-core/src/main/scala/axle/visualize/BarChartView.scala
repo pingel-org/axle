@@ -1,6 +1,7 @@
 package axle.visualize
 
 import cats.Order.catsKernelOrderingForOrder
+import cats.Show
 import cats.implicits._
 
 import axle.algebra.Tics
@@ -70,7 +71,7 @@ case class BarChartView[C, Y, D, H](
           (Point2D(leftX, y), Point2D(rightX, y0))
         }
 
-      val baseRect = Rectangle(scaledArea, ll, ur, fillColor = Some(color), id = Some(i.toString))
+      val baseRect = Rectangle(scaledArea, ll, ur, fillColor = Some(color), id = Some(Show[Int].show(i)))
 
       val hovered =
         hoverOf(c) map {

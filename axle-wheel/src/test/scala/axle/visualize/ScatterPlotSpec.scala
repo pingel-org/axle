@@ -1,6 +1,7 @@
 package axle.visualize
 
 import org.scalatest._
+import cats.implicits._
 
 class ScatterPlotSpec extends FunSuite with Matchers {
 
@@ -21,7 +22,7 @@ class ScatterPlotSpec extends FunSuite with Matchers {
 
     val colorer = (x: Int, y: Int) => colors(data((x, y)))
 
-    val labeller = (x: Int, y: Int) => data.get((x, y)).map(s => (s.toString, true))
+    val labeller = (x: Int, y: Int) => data.get((x, y)).map(s => (s.show, true))
 
     ScatterDataView.forMap[Int, Int, Map[(Int, Int), Int]]
 

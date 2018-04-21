@@ -27,7 +27,7 @@ trait Document {
   //    val html = getGrammar.ast2html(getAst)
   //    val outFile = new File(htmlFilename)
   //    val out = new FileWriter(outFile)
-  //    out.write(html.toString)
+  //    out.write(html.show)
   //    out.close()
   //  }
 

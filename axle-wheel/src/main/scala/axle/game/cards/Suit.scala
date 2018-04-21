@@ -1,14 +1,13 @@
 package axle.game.cards
 
-import spire.algebra._
-
 import cats.Show
+import cats.kernel.Eq
 
 object Suit {
 
   implicit def suitEq = Eq.fromUniversalEquals[Suit]
 
-  implicit def show[S <: Suit]: Show[S] = _.serialize.toString
+  implicit def show[S <: Suit]: Show[S] = s => axle.showChar.show(s.serialize)
 
   def apply(c: Char): Suit = c match {
     case '♠' => Spades

@@ -297,7 +297,7 @@ object SVG {
             case (url, hoverColor) =>
               elemWithAttributes(
                 withId,
-                attribute("onclick", s"window.open('${url.toString}')") ::
+                attribute("onclick", s"window.open('${url}')") ::
                   attribute("onmouseout", s"RectUnhover(evt, $id, '${rectangle.fillColor.map(fc => rgb(fc)).getOrElse("null")}')") ::
                   attribute("onmousemove", s"RectHover(evt, $id, '${rgb(hoverColor)}')") ::
                   Nil)
@@ -419,9 +419,9 @@ object SVG {
               elem("text", List(
                 "text-anchor" -> (if (angled) "start" else "middle"),
                 "alignment-baseline" -> "hanging",
-                "x" -> bottom.x.toString,
-                "y" -> (if (angled) bottom.y else bottom.y + 3).toString,
-                "font-size" -> fontSize.toString) ++
+                "x" -> bottom.x.show,
+                "y" -> (if (angled) bottom.y else bottom.y + 3).show,
+                "font-size" -> fontSize.show) ++
                 (if (angled) List("transform" -> s"rotate(${a.in(angleDouble.degree).magnitude},${bottom.x},${bottom.y})") else Nil),
                 xml.Text(label))
             }

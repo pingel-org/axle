@@ -280,6 +280,6 @@ trait AstNodeFormatter[R, S] {
       state._node2lineno),
       subState)
 
-  // def result: String = toka.toString
+  // def result: String = toka.show
 
 }
