@@ -11,8 +11,7 @@ trait Symbol {
 
 object Symbol {
 
-  implicit val symbolEq: Eq[Symbol] =
-    (x, y) => x equals y
+  implicit val symbolEq = Eq.fromUniversalEquals[Symbol]
 
   implicit def showSymbol: Show[Symbol] = _.label
 }
@@ -22,8 +21,9 @@ case class Terminal(label: String) extends Symbol
 case class NonTerminal(label: String) extends Symbol
 
 object NonTerminal {
-  implicit val eqNT: Eq[NonTerminal] =
-    (x, y) => x equals y
+  implicit val eqNT = Eq.fromUniversalEquals[NonTerminal]
+
+  implicit val showNT = Show.fromToString[NonTerminal]
 }
 
 object ⊥ extends Terminal("⊥") // also known as '$'
@@ -37,7 +37,7 @@ case class LLRule(id: Int, from: NonTerminal, rhs: List[Symbol])
 
 object LLRule {
   implicit def showLLRule: Show[LLRule] =
-    llr => llr.from.toString + " -> " + llr.rhs.mkString("", " ", "")
+    llr => llr.from.show + " -> " + llr.rhs.mkString("", " ", "")
 }
 
 sealed trait LLParserAction
@@ -47,7 +47,7 @@ case class ParseError(msg: String) extends LLParserAction
 
 object LLParserAction {
 
-  implicit def showLLParserAction: Show[LLParserAction] = _.toString
+  implicit def showLLParserAction: Show[LLParserAction] = Show.fromToString[LLParserAction]
 
 }
 

@@ -35,7 +35,6 @@ object BayesianNetworkNode {
         </div>
     }
 
-  implicit def bnnEq[T: Eq, N: Field]: Eq[BayesianNetworkNode[T, N]] =
-    (x, y) => x equals y
+  implicit def bnnEq[T: Eq, N: Field] = Eq.fromUniversalEquals[BayesianNetworkNode[T, N]]
 
 }

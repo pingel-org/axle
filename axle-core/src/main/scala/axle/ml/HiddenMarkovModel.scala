@@ -13,8 +13,7 @@ import cats.Show
 sealed trait MarkovModelState
 
 object MarkovModelState {
-  implicit val mmsEq: Eq[MarkovModelState] =
-    (x, y) => x equals y
+  implicit val mmsEq = Eq.fromUniversalEquals[MarkovModelState]
 }
 
 case class MarkovModelStartState() extends MarkovModelState

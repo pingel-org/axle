@@ -82,7 +82,6 @@ object Emission {
           formatter
         }
 
-      // TODO !!! replace toString() with the equiv of repr()
       case (Some(AstNodeRule(_, m, _)), Repr(name)) =>
         m(name).asInstanceOf[AstNodeValue].value.map(formatter.repr).getOrElse(formatter)
 

@@ -14,11 +14,12 @@ object Angluin {
 
   object Symbol {
 
-    implicit val symbolEq: Eq[Symbol] = (x, y) => x equals y
+    implicit val symbolEq = Eq.fromUniversalEquals[Symbol]
 
     implicit def showSymbol: Show[Symbol] = _.s
 
-    implicit val orderSymbol: Order[Symbol] = (x, y) => Show[Symbol].show(x).compareTo(Show[Symbol].show(y))
+    implicit val orderSymbol: Order[Symbol] =
+      (x, y) => Show[Symbol].show(x).compareTo(Show[Symbol].show(y))
 
   }
 

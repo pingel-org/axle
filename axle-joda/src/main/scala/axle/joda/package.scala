@@ -18,7 +18,7 @@ package object joda {
 
   implicit val dateTimeOrder: Order[DateTime] = (dt1, dt2) => dt1.compareTo(dt2)
 
-  implicit def dateTimeEq: Eq[DateTime] = (x, y) => x.equals(y)
+  implicit def dateTimeEq = Eq.fromUniversalEquals[DateTime]
 
   implicit val dateTimePlottable: Plottable[DateTime] = new Plottable[DateTime] {}
 

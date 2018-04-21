@@ -75,8 +75,7 @@ class DocumentVectorSpaceSpec
     def apply(a: T) = true
   }
 
-  implicit def eqMapKV[K, V]: Eq[Map[K, V]] =
-    (x, y) => x.equals(y)
+  implicit def eqMapKV[K, V] = Eq.fromUniversalEquals[Map[K, V]]
 
   val vectorizer = TermVectorizer[Real](stopwords)
 

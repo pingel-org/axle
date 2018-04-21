@@ -219,7 +219,7 @@ object FirstOrderPredicateLogic {
       (x, y) =>
         x.b === y.b
 
-    implicit def showConstant: Show[Constant] = _.toString
+     implicit def showConstant: Show[Constant] = c => Show[Boolean].show(c.b)
   }
   case class Constant(b: Boolean) extends Statement {
     def apply(symbolTable: Map[Symbol, Any]): Boolean = b

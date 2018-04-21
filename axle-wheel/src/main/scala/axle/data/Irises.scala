@@ -1,13 +1,13 @@
 package axle.data
 
+import java.net.URL
 import scala.Option.option2Iterable
 import scala.util.Try
-import java.net.URL
 
+import cats.kernel.Eq
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
-//import cats.kernel.Eq
 
 /**
  *
@@ -41,7 +41,7 @@ case class Iris(
   species:     String)
 
 object Iris {
-  implicit val irisEq = new cats.kernel.Eq[Iris] { def eqv(x: Iris, y: Iris) = x equals y }
+  implicit val irisEq = Eq.fromUniversalEquals[Iris]
 }
 
 class Irises(implicit converter: DistanceConverter[Double]) extends Util {

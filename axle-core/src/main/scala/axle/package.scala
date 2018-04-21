@@ -31,6 +31,8 @@ package object axle {
 
   // missing Show witnesses
 
+  implicit val showChar: Show[Char] = Show.fromToString[Char]
+
   implicit val showNode: Show[scala.xml.Node] = Show.fromToString[scala.xml.Node]
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
