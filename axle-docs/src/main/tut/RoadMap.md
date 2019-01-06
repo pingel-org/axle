@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (June 2018)
+## 0.5.0 (February 2018)
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
 * Redo `axle.stats`
@@ -34,43 +34,47 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * remove `axle.string` and `axle.show`.
   - replace uses with `.show` from `cats.implicits` or show string interpolation
 
-
-
-* kittens?
-  - pattern match in FirstOrderPredicateLogic
-  - subtyping for Suit and Rank
-
+* Replace Tut with MDoc
 * Fix logistic regression
-* Fix GeneticAlgorithmSpec
 * Make sure animation doc has right return value
+* Friend of spire
 * Publish site
 
-
-## 0.5.1 (August 2018)
+## 0.5.1 (April 2019)
 * Fix all "TODO monad syntax"
 * ScalaCheck tests for Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
 * Avoid these:
      implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
      val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 * Syntax for ProbabilityModel.probabilityOf, observe, etc
+
+## 0.5.2 (May 2019)
 * Functors for jung should use projections (study cats disjunction, scala Either)
-* Demo Mandelbrot with Rational
 * ScalaCheck tests for
   * Modules in axle.algebra
   * MetricSpaces axle.bio.{SmithWaterman, NeedlemanWunsch}
   * MetricSpace axle.nlp.Levenshtein
 
-## 0.6.0 (Fall 2018)
+## 0.5.3 (June 2019)
+* Fix GeneticAlgorithmSpec
+* Fix NaiveBayesSpec
+* Fix ProbabilitySpec
+* kittens 1.0.0-RC3 or magnolia
+  - pattern match in FirstOrderPredicateLogic
+  - subtyping for Suit and Rank
+
+## 0.6.0 (Summer 2019)
+* Tics should take an argument
+* Factor tics and tics-{joda,algebra,spire} into separate libs
+* Demo Mandelbrot with Rational
 * Kolmogorov's axiom's of probability
 * Finish NaiveBayesClassifier
 * What to do with TD1 and CPT2? Fix "cpt" in InformationTheorySpec
-* Fix NaiveBayesSpec
-* Fix ProbabilitySpec
 * eliminate rationalProbabilityDist usage by introducing new `Probability` (or some such) typeclass
 * ProbabilityModel.probabilityOfNot ProbabilityModel.conditionNot
 * Rename TallyDistribution0 and ConditionalProbabilityTable0 to Tally0 and ProbabilityTable0, respectively
 
-## 0.6.1 (Fall 2018)
+## 0.6.1 (Fall 2019)
 * Kind projector instead of type lambdas
 * Kind projector for projections of jung graphs for Finite
 * Machinist?
@@ -84,7 +88,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * replace some refs to {CPT0,TallyDist0} with ProbabilityModel
 
 
-## 0.7.x (Winter 2019)
+## 0.7.x (Winter 2020)
 * game theory axioms
 * axle.game: Observable[T]
 * move state dist stream
@@ -149,6 +153,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Hidden Markov Models
 * N Queens
 * Multi-armed bandit
+* Connection between dynamic programming and semiring
+* Recursive grid search
 
 ## Platform
 * Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)
