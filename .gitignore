@@ -4,6 +4,8 @@ target
 .cache
 .settings
 .worksheet
+.bloop
+.metals
 */*.iml
 .idea
 .cache-tests
