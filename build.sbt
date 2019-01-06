@@ -196,6 +196,7 @@ lazy val commonScalacOptions = Seq(
 // "-optimize",
   "-deprecation",
   "-encoding", "UTF-8",
+  "-target:jvm-1.8",
   "-feature",
 //  "-language:existentials",
   "-language:higherKinds",
