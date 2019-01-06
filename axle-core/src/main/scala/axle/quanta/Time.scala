@@ -61,7 +61,6 @@ object Time {
 
   import spire.algebra.Module
   import spire.math._
-  import spire.implicits._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
