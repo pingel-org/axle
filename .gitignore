@@ -2,6 +2,7 @@ target
 .classpath
 .project
 .cache
+.DS_Store
 .settings
 .worksheet
 .bloop
