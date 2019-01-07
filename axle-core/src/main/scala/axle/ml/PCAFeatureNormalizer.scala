@@ -10,12 +10,13 @@ case class PCAFeatureNormalizer[M](cutoff: Double, X: M)(implicit la: LinearAlge
 
   implicit val mul = la.multiplicative
   implicit val additive = la.additive
+  // import spire.implicits.DoubleAlgebra
 
   lazy val μs = X.columnMeans
   lazy val σ2s = std(X)
   val zd = zscore(X)
-  val (u, s) = pca(zd, 0.95)
-  val k = numComponentsForCutoff(s, cutoff)
+  val (u, s) = pca(zd)
+  val k = numComponentsForCutoff(s, cutoff)(la, spire.algebra.Field[Double])
   val Uk = u.slice(0 until u.rows, 0 until k)
 
   def normalizedData: M = zd * Uk

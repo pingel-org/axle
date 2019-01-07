@@ -242,7 +242,7 @@ package object jblas {
         val i = m.argmax
         (i % m.getRows, i / m.getRows)
       }
-
+      
       def min(m: DoubleMatrix): N = ctn.fromDouble(m.min)
 
       def argmin(m: DoubleMatrix): (Int, Int) = {
@@ -365,7 +365,7 @@ package object jblas {
        *
        */
 
-      def pca(Xnorm: DoubleMatrix, cutoff: Double = 0.95): (DoubleMatrix, DoubleMatrix) = {
+      def pca(Xnorm: DoubleMatrix): (DoubleMatrix, DoubleMatrix) = {
         val (u, s, v) = fullSVD(cov(Xnorm))
         (u, s)
       }

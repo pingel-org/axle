@@ -35,9 +35,9 @@ trait LinearAlgebraSyntax {
     implicit
     la: LinearAlgebra[M, RowT, ColT, T]) = la.zscore(m)
 
-  def pca[M, RowT, ColT, T](m: M, cutoff: Double = 0.95)(
+  def pca[M, RowT, ColT, T](m: M)(
     implicit
-    la: LinearAlgebra[M, RowT, ColT, T]) = la.pca(m, cutoff)
+    la: LinearAlgebra[M, RowT, ColT, T]) = la.pca(m)
 
   def numComponentsForCutoff[M, RowT, ColT, T](m: M, cutoff: Double)(
     implicit
