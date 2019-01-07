@@ -35,6 +35,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   - replace uses with `.show` from `cats.implicits` or show string interpolation
 
 * Replace Tut with MDoc
+* PCA should not ignore "cutoff"
 * Fix logistic regression
 * Make sure animation doc has right return value
 * Friend of spire
@@ -167,6 +168,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
 
 ## Deeper exploration
+* Bettings odds
+* Rainbow Tables
+* Blockchain
 * Nerod Partition
 * Motivation for Gold Paradigm, Angluin Learner
 * Stochastic Lambda Calculus
