@@ -6,13 +6,16 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
+# Planned features by version and date
+
 ## 0.5.0 (February 2018)
+
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
 * Redo `axle.stats`
-  - `ProbabilityModel` typeclass (refactored from `Distribution`)
-  - `Variable` instead of `RandomVariable`
-  - remove `Bayes`
+  * `ProbabilityModel` typeclass (refactored from `Distribution`)
+  * `Variable` instead of `RandomVariable`
+  * remove `Bayes`
 * Replace `axle.agebra.Zero` with `spire.algebra.AdditiveMonoid.zero`
 * Remove `axle-spark` (Spark "spoke") for now
 * Move `axle.ml.distance` to `axle.algebra.distance`
@@ -29,10 +32,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * MetricSpace axle.algebra.GeoMetricSpace
 * `axle.ml.GeneticAlgorithm` rewritten in terms of [kittens](https://github.com/milessabin/kittens)
 * `Show`, `Order`, `Eq` witnesses
-  - Eq.fromUniversalEquals where applicable
-  - SAM inference elsewhere
+  * Eq.fromUniversalEquals where applicable
+  * SAM inference elsewhere
 * remove `axle.string` and `axle.show`.
-  - replace uses with `.show` from `cats.implicits` or show string interpolation
+  * replace uses with `.show` from `cats.implicits` or show string interpolation
 * remove extraneous `cutoff` argument for `PCA`
 
 * Replace Tut with MDoc
@@ -42,6 +45,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Publish site
 
 ## 0.5.1 (April 2019)
+
 * cats effect for all `png`, `html`, etc functions
 * Fix all "TODO monad syntax"
 * ScalaCheck tests for Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
@@ -51,6 +55,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Syntax for ProbabilityModel.probabilityOf, observe, etc
 
 ## 0.5.2 (May 2019)
+
 * Functors for jung should use projections (study cats disjunction, scala Either)
 * ScalaCheck tests for
   * Modules in axle.algebra
@@ -58,14 +63,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * MetricSpace axle.nlp.Levenshtein
 
 ## 0.5.3 (June 2019)
+
 * Fix GeneticAlgorithmSpec
 * Fix NaiveBayesSpec
 * Fix ProbabilitySpec
 * kittens 1.0.0-RC3 or magnolia
-  - pattern match in FirstOrderPredicateLogic
-  - subtyping for Suit and Rank
+  * pattern match in FirstOrderPredicateLogic
+  * subtyping for Suit and Rank
 
 ## 0.6.0 (Summer 2019)
+
 * Tics should take an argument
 * Factor tics and tics-{joda,algebra,spire} into separate libs
 * Demo Mandelbrot with Rational
@@ -77,6 +84,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Rename TallyDistribution0 and ConditionalProbabilityTable0 to Tally0 and ProbabilityTable0, respectively
 
 ## 0.6.1 (Fall 2019)
+
 * Kind projector instead of type lambdas
 * Kind projector for projections of jung graphs for Finite
 * Machinist?
@@ -89,8 +97,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
 * replace some refs to {CPT0,TallyDist0} with ProbabilityModel
 
-
 ## 0.7.x (Winter 2020)
+
 * game theory axioms
 * axle.game: Observable[T]
 * move state dist stream
@@ -116,11 +124,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * P / Case expression DSL
 
 ## 0.8.0 (Summer 2019)
+
 * Redo Logic using Abstract Algebra
 * Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
 * Fix "unreachable" default pattern match cases
 
 ## 0.8.x (2020)
+
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 * Honor graph vis params in awt graph visualizations
 * `axle.web.Table` and `HtmlFrom[Table[T]]`
@@ -130,7 +140,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `BarChart` Variable width bars
 * Horizontal barchart
 * `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
-* SVG[H] for BarChart hover (wrap with <g> to do getBBox)
+* SVG[H] for BarChart hover (wrap with \<g\> to do getBBox)
 * Background box for `ScatterPlot` hover text?
 * Fix multi-color cube rendering
 * Bloom filter surface
@@ -141,6 +151,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 # Backlog
 
 ## Algorithm breadth
+
 * LSA
 * LDA
 * GLM
@@ -159,6 +170,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Recursive grid search
 
 ## Platform
+
 * Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)
 * Spark syntax
 * WebGL
@@ -169,6 +181,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
 
 ## Deeper exploration
+
 * Bettings odds
 * Rainbow Tables
 * Blockchain
@@ -186,6 +199,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Eigenvector
 
 ## Hygiene
+
 * axle.algorithms coverage > 80%
 * axle.core coverage > 80%
 * Rm throws from axle.quanta.UnitConverterGraph
@@ -195,6 +209,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Unchecked constraint in PlotDataView
 
 ## Visualization
+
 * Box Plot
 * Candlestick Chart
-
