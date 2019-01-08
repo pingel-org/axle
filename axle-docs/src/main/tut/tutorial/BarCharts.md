@@ -6,8 +6,7 @@ permalink: /tutorial/bar_charts/
 
 Two-dimensional bar charts.
 
-Example
--------
+## Example
 
 The dataset:
 

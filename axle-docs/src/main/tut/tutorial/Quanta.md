@@ -61,8 +61,7 @@ import axle.web._
 svg(DirectedGraphVisualization(distanceConverter.conversionGraph), "Distance.svg")
 ```
 
-Units
------
+## Units
 
 A conversion graph must be created with type parameters specifying the numeric type to
 be used in unitted quantity, as well as a directed graph type that will store the conversion

@@ -6,8 +6,7 @@ permalink: /tutorial/unitted_trigonometry/
 
 Versions of the trigonometric functions sine, cosine, and tangent, require that the arguments are Angles.
 
-Examples
---------
+## Examples
 
 Examples of the functions
 

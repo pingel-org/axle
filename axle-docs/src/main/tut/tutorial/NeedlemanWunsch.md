@@ -7,8 +7,7 @@ permalink: /tutorial/needleman_wunsch/
 See the Wikipedia page on the 
 [Needleman-Wunsch](https://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm) algorithm.
 
-Example
--------
+## Example
 
 Setup:
 

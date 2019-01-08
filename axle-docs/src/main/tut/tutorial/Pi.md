@@ -10,8 +10,7 @@ Two estimators for π
 import axle.math._
 ```
 
-Wallis
-------
+## Wallis
 
 The first is attributed to Englishman John Wallis (1616 - 1703) who published this
 function in 1655.
@@ -31,8 +30,7 @@ wallisΠ(1600).toDouble
 wallisΠ(3200).toDouble
 ```
 
-Monte Carlo
------------
+## Monte Carlo
 
 ```tut:silent
 import spire.implicits.DoubleAlgebra

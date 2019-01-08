@@ -6,8 +6,7 @@ permalink: /tutorial/poker/
 
 An N-Player, Imperfect Information, Zero-sum game
 
-Example
--------
+## Example
 
 The `axle.game.cards` package models decks, cards, ranks, suits, and ordering.
 

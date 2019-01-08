@@ -4,8 +4,7 @@ title: Machine Learning
 permalink: /tutorial/machine_learning/
 ---
 
-Algorithms
-----------
+## Algorithms
 
 * [Linear Regression](/tutorial/linear_regression/)
 * [K-Means Clustering](/tutorial/k_means_clustering/)

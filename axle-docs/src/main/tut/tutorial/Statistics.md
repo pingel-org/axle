@@ -6,8 +6,7 @@ permalink: /tutorial/statistics/
 
 Topics include: Random Variables, Distributions, Probability, and Standard Deviation.
 
-Uniform Distribution
---------------------
+## Uniform Distribution
 
 Imports
 
@@ -24,8 +23,7 @@ Example
 val dist = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), "some doubles")
 ```
 
-Standard Deviation
-------------------
+## Standard Deviation
 
 Example
 
@@ -35,8 +33,7 @@ import spire.implicits.DoubleAlgebra
 standardDeviation(dist)
 ```
 
-Random Variables
-----------------
+## Random Variables
 
 Example fiar and biased coins:
 
@@ -69,8 +66,7 @@ P((flip1 is 'HEAD) or (flip2 is 'HEAD)).apply()
 P((flip1 is 'HEAD) | (flip2 is 'TAIL)).apply()
 ```
 
-Dice examples
--------------
+## Dice examples
 
 Setup
 

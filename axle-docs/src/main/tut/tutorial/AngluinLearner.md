@@ -6,8 +6,7 @@ permalink: /tutorial/angluin_learner/
 
 Models [Dana Angluin](https://en.wikipedia.org/wiki/Dana_Angluin)'s Language Learner.
 
-Example
--------
+## Example
 
 Imports
 

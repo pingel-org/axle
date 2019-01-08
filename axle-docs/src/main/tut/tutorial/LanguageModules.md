@@ -6,8 +6,7 @@ permalink: /tutorial/language_modules/
 
 Natural-language-specific stop words, tokenization, stemming, etc. 
 
-English
--------
+## English
 
 Currently English is the only language module.  A language modules supports tokenization, stemming, and stop words.  The stemmer is from tartarus.org, which is released under a compatible BSD license.  (It is not yet available via Maven, so its source has been checked into the Axle github repo.)
 

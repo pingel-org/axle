@@ -41,4 +41,3 @@ Use it to compute the points at 10% increments from SFO to HEL
 ```
 
 ![SFO to HEL](/tutorial/images/sfo_hel.png)
-

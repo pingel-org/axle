@@ -6,8 +6,7 @@ permalink: /tutorial/graph/
 
 DirectedGraph typeclass and witnesses for the Jung package
 
-Directed Graph
---------------
+## Directed Graph
 
 Imports and implicits
 

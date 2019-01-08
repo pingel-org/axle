@@ -10,8 +10,7 @@ over a rectangular range on the `(X, Y)` plane.
 `LengthSpace[X, X, Double]` and
 `LengthSpace[Y, Y, Double]` must be implicitly in scope.
 
-Example
--------
+## Example
 
 A few imports:
 
@@ -58,8 +57,7 @@ png(pca, "roy_diagonal.png")
 
 ![ROY Diagonal](/tutorial/images/roy_diagonal.png)
 
-Second example
---------------
+## Second example
 
 More compactly:
 

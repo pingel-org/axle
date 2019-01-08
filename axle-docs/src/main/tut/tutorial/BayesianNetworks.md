@@ -6,9 +6,7 @@ permalink: /tutorial/bayesian_networks/
 
 See the Wikipedia page on [Bayesian networks](https://en.wikipedia.org/wiki/Bayesian_network)
 
-
-Alarm Example
--------------
+## Alarm Example
 
 Imports
 

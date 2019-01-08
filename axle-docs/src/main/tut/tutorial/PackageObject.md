@@ -6,8 +6,7 @@ permalink: /tutorial/axle_package_object/
 
 This page describes the axle package object.
 
-Enriched GenTraversable
------------------------
+## Enriched GenTraversable
 
 Imports
 
@@ -40,13 +39,11 @@ Set(1, 2, 3).triples
 (List(1, 2, 3) ⨯ List(4, 5, 6)).toList
 ```
 
-Enriched Boolean
-----------------
+## Enriched Boolean
 
 TODO: document `and`, `∧`, `or`, `∨`, `implies`
 
-Indexed Power Set
------------------
+## Indexed Power Set
 
 ```tut:book
 (0 until 4).℘
@@ -58,22 +55,19 @@ ps.size
 ps(7)
 ```
 
-Permutations
-------------
+## Permutations
 
 ```tut:book
 (0 until 4).permutations(2).toList
 ```
 
-Combinations
-------------
+## Combinations
 
 ```tut:book
 (0 until 4).combinations(2).toList
 ```
 
-Indexed Cross Product
----------------------
+## Indexed Cross Product
 
 ```tut:book
 val icp = IndexedCrossProduct(Vector(

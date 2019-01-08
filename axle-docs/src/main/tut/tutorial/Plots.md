@@ -6,8 +6,7 @@ permalink: /tutorial/plots/
 
 Two-dimensional plots
 
-Time-series plot example
-------------------------
+## Time-series plot example
 
 `axle.visualize.Plot`
 
@@ -95,8 +94,7 @@ svg(plot, "waves.svg")
 
 ![waves](/tutorial/images/waves.svg)
 
-Animation
----------
+## Animation
 
 This example traces two "saw" functions vs time:
 

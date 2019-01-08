@@ -6,8 +6,7 @@ permalink: /tutorial/tic_tac_toe/
 
 A Perfect Information, Zero-sum game
 
-Example
--------
+## Example
 
 ```tut
 import axle._

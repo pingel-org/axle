@@ -4,8 +4,7 @@ title: Logic
 permalink: /tutorial/logic/
 ---
 
-Conjunctive Normal Form Converter
----------------------------------
+## Conjunctive Normal Form Converter
 
 Imports
 

@@ -6,8 +6,7 @@ permalink: /tutorial/gold_paradigm/
 
 Models the Gold Paradigm.
 
-Example
--------
+## Example
 
 Imports
 

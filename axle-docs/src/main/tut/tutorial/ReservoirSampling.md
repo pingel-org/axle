@@ -22,4 +22,3 @@ val mean = arithmeticMean(sample.map(_.toDouble))
 ```
 
 The mean of the sample should be in the ballpark of the mean of the entire list -- 50.
-
