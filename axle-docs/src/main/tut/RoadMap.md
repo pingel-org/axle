@@ -6,8 +6,6 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-# Planned features by version and date
-
 ## 0.5.0 (February 2018)
 
 * Move to Scala 2.12

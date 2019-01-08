@@ -4,8 +4,7 @@ title: History
 permalink: /history/
 ---
 
-αχλε
-----
+## αχλε
 
 Axle models a set of formal subjects that the author has encountered throughout his lifetime.
 They take the form of functioning code that allows the reader to experiment with alternative examples.
@@ -24,8 +23,7 @@ It turns out that this is the Etruscan spelling of
 
 Follow [@axledsl](https://twitter.com/axledsl) on Twitter.
 
-References
-----------
+## References
 
 ### Quanta
 
