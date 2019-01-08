@@ -23,8 +23,6 @@ Many such witnesses are provided by Axle for native Scala collections.
 Witnesses are also defined for other common jars from the Java and Scala ecosystems.
 Read more about these ["spokes"](/spokes/).
 
-The code will soon compile warning-free.
-
 ## Remaining Design Issues
 
 See the [Road Map](/road_map/) for more details on the timing of upcoming changes.
