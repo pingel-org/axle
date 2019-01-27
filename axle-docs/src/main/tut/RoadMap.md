@@ -36,15 +36,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * replace uses with `.show` from `cats.implicits` or show string interpolation
 * remove extraneous `cutoff` argument for `PCA`
 
+* cats effect/io for all `png`, `html`, etc functions
 * Replace Tut with MDoc
-* Fix logistic regression
 * Make sure animation doc has right return value
-* Friend of spire
 * Publish site
 
 ## 0.5.1 (April 2019)
 
-* cats effect for all `png`, `html`, etc functions
+* Friend of spire
+* Fix logistic regression
 * Fix all "TODO monad syntax"
 * ScalaCheck tests for Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
 * Avoid these:
