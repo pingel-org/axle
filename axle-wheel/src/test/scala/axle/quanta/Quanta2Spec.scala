@@ -76,7 +76,7 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
         arbitraryUQ[Distance, Real](genUQ[Distance, Real])).monoid(agudr)
 
     checkAll("Module Laws for Module[UnittedQuantity[Distance, Real]]", uqDistanceModuleLaws)
-    // checkAll("Monoid Laws for AdditiveMonoid[Int]", GroupLaws[Int].monoid(spire.implicits.IntAlgebra.additive))
+
     checkAll("Additive Group Laws for AdditiveGroup[UnittedQuantity[Distance, Real]]", uqDistanceAdditiveGroupLaws)
   }
 
