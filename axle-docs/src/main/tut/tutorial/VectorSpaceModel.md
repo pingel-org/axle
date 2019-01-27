@@ -6,8 +6,7 @@ permalink: /tutorial/vector_space_model/
 
 See the Wikipedia page on [Vector space model](https://en.wikipedia.org/wiki/Vector_space_model)
 
-Example
--------
+## Example
 
 ```tut:book
 val corpus = Vector(

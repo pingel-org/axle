@@ -6,8 +6,7 @@ permalink: /tutorial/genetic_algorithms/
 
 See the wikipedia page on [Genetic Algorithms](https://en.wikipedia.org/wiki/Genetic_algorithm)
 
-Example
--------
+## Example
 
 Imports
 

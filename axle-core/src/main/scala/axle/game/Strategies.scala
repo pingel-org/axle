@@ -26,7 +26,6 @@ object Strategies {
     implicit
     evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
     (ttt: G, state: S) => {
-      import spire.implicits._
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
       val v = Variable[M]("ai move")
       ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)

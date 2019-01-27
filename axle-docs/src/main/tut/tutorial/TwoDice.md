@@ -6,8 +6,7 @@ permalink: /tutorial/two_dice/
 
 This page describes two ways of calculation the sum of two dice rolls.
 
-Simulation
-----------
+## Simulation
 
 Imports
 
@@ -62,8 +61,7 @@ svg(chart, "d6plusd6.svg")
 
 ![Observed d6 + d6](/tutorial/images/d6plusd6.svg)
 
-Distribution Monad
-------------------
+## Distribution Monad
 
 The distribution of two rolls combined can be produced with a for comprehension
 and charted directly.

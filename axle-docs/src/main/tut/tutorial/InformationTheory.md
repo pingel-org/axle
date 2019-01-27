@@ -4,8 +4,7 @@ title: Information Theory
 permalink: /tutorial/information_theory/
 ---
 
-Entropy
--------
+## Entropy
 
 The calculation of the entropy of a distribution is available as a function called `entropy`
 as well as the traditional `H`:

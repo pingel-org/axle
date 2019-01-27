@@ -12,7 +12,7 @@ Core
 
 (With "Spokes" for Joda and JBLAS in some cases.)
 
-```
+```sbt
 "org.axle-lang" %% "axle-core"  % "releaseVersion"
 "org.axle-lang" %% "axle-jung"  % "releaseVersion"
 "org.axle-lang" %% "axle-jblas" % "releaseVersion"
@@ -76,7 +76,7 @@ Core
 Wheel
 =====
 
-```
+```sbt
 "org.axle-lang" %% "axle-wheel" % "releaseVersion"
 ```
 

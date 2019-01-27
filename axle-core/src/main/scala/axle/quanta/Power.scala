@@ -43,7 +43,6 @@ trait PowerConverter[N] extends UnitConverter[Power, N] with PowerUnits {
 object Power {
 
   import spire.math._
-  import spire.implicits._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit

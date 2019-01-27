@@ -6,21 +6,18 @@ permalink: /tutorial/installation/
 
 Axle as a dependency of an SBT project.
 
-Install SBT
------------
+## Install SBT
 
 See [SBT](http://www.scala-sbt.org/)
 
-Create SBT Project
-------------------
+## Create SBT Project
 
 ```bash
 mkdir demo
 cd demo
 ```
 
-JBLAS
------
+## JBLAS
 
 On apt-based operating systems:
 
@@ -30,7 +27,7 @@ sudo apt-get install libgfortran3
 
 Create a `build.sbt` file
 
-```
+```sbt
 name := "demo"
 
 version := "0.1-SNAPSHOT"
@@ -61,7 +58,7 @@ file for up to date version information.
 As of version 0.4.0 the full list of dependencies is below.
 Add this section to your `build.sbt` file to pull them all in to the `demo` project:
 
-```
+```sbt
 libraryDependencies ++= Seq(
 
   // needed by axle-core
@@ -86,8 +83,7 @@ libraryDependencies ++= Seq(
 )
 ```
 
-Next Steps
-----------
+## Next Steps
 
 Run `sbt console` to launch the Scala REPL with the Axle jars in the classpath.
 Axle works well interactively -- especially during prototyping, debugging, and testing.
@@ -95,20 +91,19 @@ Any of the [Axle tutorials](/tutorial/) can be copied and pasted into the REPL.
 
 To start writing code, do `mkdir -p src/main/scala/org/acme/demo`, and add your code there.
 
-Releases
---------
+## Releases
 
 Version snapshotVersion is hosted on the [Sonatype snapshot repo](https://oss.sonatype.org/content/repositories/snapshots).
 The schedule for publishing snapshot versions is irregular.
 The full dependency is:
 
-```
+```sbt
 "org.axle-lang" %% "axle-core" % "snapshotVersion"
 ```
 
 releaseVersion is the most recent released version:
 
-```
+```sbt
 "org.axle-lang" %% "axle-core" % "releaseVersion"
 ```
 

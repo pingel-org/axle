@@ -6,8 +6,7 @@ permalink: /tutorial/edit_distance/
 
 See the Wikipedia page on [Edit distance](https://en.wikipedia.org/wiki/Edit_distance)
 
-Levenshtein
------------
+## Levenshtein
 
 See the Wikipedia page on [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance)
 

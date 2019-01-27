@@ -6,7 +6,6 @@ permalink: /tutorial/scatterplot/
 
 ScatterPlot
 
-
 ```tut:silent
 import axle.visualize._
 ```

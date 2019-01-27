@@ -40,49 +40,49 @@ The pretty-printed result in this case is:
 
 ```javascript
 {
-    "_lineno": null, 
+    "_lineno": null,
     "node": {
-        "_lineno": null, 
+        "_lineno": null,
         "spread": [
             {
-                "_lineno": 2, 
+                "_lineno": 2,
                 "expr": {
-                    "_lineno": 2, 
+                    "_lineno": 2,
                     "left": {
-                        "_lineno": 2, 
-                        "type": "Const", 
+                        "_lineno": 2,
+                        "type": "Const",
                         "value": "1"
-                    }, 
+                    },
                     "right": {
-                        "_lineno": 2, 
-                        "type": "Const", 
+                        "_lineno": 2,
+                        "type": "Const",
                         "value": "2"
-                    }, 
+                    },
                     "type": "Add"
-                }, 
+                },
                 "nodes": [
                     {
-                        "_lineno": 2, 
-                        "name": "x", 
+                        "_lineno": 2,
+                        "name": "x",
                         "type": "AssName"
                     }
                 ], 
                 "type": "Assign"
             }, 
             {
-                "_lineno": 3, 
+                "_lineno": 3,
                 "nodes": [
                     {
-                        "_lineno": 3, 
-                        "name": "x", 
+                        "_lineno": 3,
+                        "name": "x",
                         "type": "Name"
                     }
-                ], 
+                ],
                 "type": "Printnl"
             }
-        ], 
+        ],
         "type": "Stmt"
-    }, 
+    },
     "type": "Module"
 }
 ```

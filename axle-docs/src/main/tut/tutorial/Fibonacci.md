@@ -4,7 +4,6 @@ title: Fibonacci
 permalink: /tutorial/fibonacci/
 ---
 
-
 ```tut:silent
 import axle.math._
 ```

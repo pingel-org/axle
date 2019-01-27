@@ -35,7 +35,6 @@ trait ForceConverter[N] extends UnitConverter[Force, N] with ForceUnits {
 object Force {
 
   import spire.math._
-  import spire.implicits._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit

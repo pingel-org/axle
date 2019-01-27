@@ -10,7 +10,7 @@ Witnesses for 3rd party libraries: The "Spokes"
 JBLAS
 =====
 
-```
+```sbt
 "org.axle-lang" %% "axle-jblas" % "releaseVersion"
 ```
 
@@ -20,7 +20,7 @@ Includes Principal Component Analysis (PCA).
 JODA
 ====
 
-```
+```sbt
 "org.axle-lang" %% "axle-joda" % "releaseVersion"
 ```
 
@@ -29,17 +29,8 @@ Witnesses for the [Joda](http://www.joda.org/joda-time/) time library.
 JUNG
 ====
 
-```
+```sbt
 "org.axle-lang" %% "axle-jung" % "releaseVersion"
 ```
 
 [Graph](/tutorial/graph/) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
-
-Spark
-=====
-
-```
-"org.axle-lang" %% "axle-spark" % "releaseVersion"
-```
-
-* Witnesses for [Spark](https://spark.apache.org/).

@@ -4,8 +4,7 @@ title: Naïve Bayes
 permalink: /tutorial/naive_bayes/
 ---
 
-Tennis Example
---------------
+## Tennis Example
 
 ```tut:book
 case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)

@@ -8,8 +8,7 @@ permalink: /tutorial/linear_regression/
 
 See the wikipedia page on [Linear Regression](https://en.wikipedia.org/wiki/Linear_regression)
 
-Predicting Home Prices
-----------------------
+## Predicting Home Prices
 
 ```tut:book
 case class RealtyListing(size: Double, bedrooms: Int, floors: Int, age: Int, price: Double)

@@ -13,7 +13,7 @@ The package `axle.web._` contains a `svg` function for creating svg files.
 
 For example:
 
-```
+```scala
 show(plot)
 
 png(plot, "plot.png")
@@ -21,15 +21,13 @@ png(plot, "plot.png")
 svg(plot, "plot.svg")
 ```
 
-Visualizations
---------------
+## Visualizations
 
 * [Bar Charts](/tutorial/bar_charts/)
 * [Grouped Bar Charts](/tutorial/grouped_bar_charts/)
 * [Plots](/tutorial/plots/)
 
-Animation
----------
+## Animation
 
 `Plot`, `BarChart`, `BarChartGrouped`, and `ScatterPlot` support animation.
 The visualizing frame polls for updates at a rate of approximately 24 Hz (every 42 ms).

@@ -163,7 +163,7 @@ trait LinearAlgebra[M, R, C, T] {
 
   def zscore(m: M): M
 
-  def pca(Xnorm: M, cutoff: Double): (M, M)
+  def pca(Xnorm: M): (M, M)
 
   def numComponentsForCutoff(s: M, cutoff: Double)(implicit field: Field[T]): Int
 

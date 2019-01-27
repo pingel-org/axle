@@ -12,8 +12,7 @@ The default jblas matrix `toString` isn't very readable,
 so this tutorial wraps most results in the Axle `string` function,
 invoking the `cats.Show` witness for those matrices.
 
-Imports and implicits
----------------------
+## Imports and implicits
 
 Import JBLAS and Axle's `LinearAlgebra` witness for it.
 
@@ -27,8 +26,7 @@ implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 import laJblasDouble._
 ```
 
-Creating Matrices
------------------
+## Creating Matrices
 
 ```tut:book
 string(ones(2, 3))
@@ -38,8 +36,7 @@ string(ones(1, 4))
 string(ones(4, 1))
 ```
 
-Creating matrices from arrays
------------------------------
+## Creating matrices from arrays
 
 ```tut:book
 string(fromColumnMajorArray(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray))
@@ -50,8 +47,7 @@ val m = fromColumnMajorArray(4, 5, (1 to 20).map(_.toDouble).toArray)
 string(m)
 ```
 
-Random matrices
----------------
+## Random matrices
 
 ```tut:book
 val r = rand(3, 3)
@@ -59,8 +55,7 @@ val r = rand(3, 3)
 string(r)
 ```
 
-Matrices defined by functions
------------------------------
+## Matrices defined by functions
 
 ```tut:book
 string(matrix(4, 5, (r, c) => r / (c + 1d)))
@@ -71,8 +66,7 @@ string(matrix(4, 5, 1d,
   (r: Int, c: Int, diag: Double, left: Double, right: Double) => diag))
 ```
 
-Metadata
---------
+## Metadata
 
 ```tut:book
 val x = fromColumnMajorArray(3, 1, Vector(4.0, 5.1, 6.2).toArray)
@@ -98,8 +92,7 @@ x.columns
 x.length
 ```
 
-Accessing columns, rows, and elements
--------------------------------------
+## Accessing columns, rows, and elements
 
 ```tut:book
 string(x.column(0))
@@ -117,8 +110,7 @@ string(fiveByFive.slice(1 to 3, 2 to 4))
 string(fiveByFive.slice(0.until(5,2), 0.until(5,2)))
 ```
 
-Negate, Transpose, Power
-------------------------
+## Negate, Transpose, Power
 
 ```tut:book
 string(x.negate)
@@ -131,10 +123,9 @@ string(x.transpose)
 string(x.pow(2d))
 ```
 
-Mins, Maxs, Ranges, and Sorts
------------------------------
+## Mins, Maxs, Ranges, and Sorts
 
-```
+```tut:book
 r.max
 
 r.min
@@ -161,8 +152,7 @@ string(r.sortColumns)
 string(r.sortRows.sortColumns)
 ```
 
-Statistics
-----------
+## Statistics
 
 ```tut:book
 string(r.rowMeans)
@@ -184,8 +174,7 @@ string(centerColumns(r))
 string(zscore(r))
 ```
 
-Principal Component Analysis
-----------------------------
+## Principal Component Analysis
 
 ```tut:book
 val (u, s) = pca(r, 0.95)
@@ -195,8 +184,7 @@ string(u)
 string(s)
 ```
 
-Horizontal and vertical concatenation
--------------------------------------
+## Horizontal and vertical concatenation
 
 ```tut:book
 string(x aside y)
@@ -204,8 +192,7 @@ string(x aside y)
 string(x atop y)
 ```
 
-Addition and subtraction
-------------------------
+## Addition and subtraction
 
 ```tut:book
 val x = ones(2, 3)
@@ -241,8 +228,7 @@ Scalar subtraction (JBLAS method)
 string(x.subtractScalar(0.2))
 ```
 
-Multiplication and Division
----------------------------
+## Multiplication and Division
 
 Scalar multiplication
 
@@ -264,8 +250,7 @@ Scalar division (JBLAS method)
 string(x.divideScalar(100d))
 ```
 
-Map element values
-------------------
+## Map element values
 
 ```tut:book
 implicit val endo = axle.jblas.endoFunctorDoubleMatrix[Double]
@@ -276,8 +261,7 @@ val half = ones(3, 3).map(_ / 2d)
 string(half)
 ```
 
-Boolean operators
------------------
+## Boolean operators
 
 ```tut:book
 string(r lt half)
@@ -301,8 +285,7 @@ string((r lt half) xor (r gt half))
 string((r lt half) not)
 ```
 
-Higher order methods
---------------------
+## Higher order methods
 
 ```tut:book
 string(m.map(_ + 1))

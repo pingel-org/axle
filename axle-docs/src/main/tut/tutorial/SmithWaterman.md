@@ -7,8 +7,7 @@ permalink: /tutorial/smith_waterman/
 See the Wikipedia page on the
 [Smith-Waterman](https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm) algorithm.
 
-Example
--------
+## Example
 
 Imports and implicits
 

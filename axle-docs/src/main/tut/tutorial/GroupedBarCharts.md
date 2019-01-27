@@ -6,8 +6,7 @@ permalink: /tutorial/grouped_bar_charts/
 
 Two-dimensional grouped bar charts
 
-Example
--------
+## Example
 
 The following example dataset:
 
