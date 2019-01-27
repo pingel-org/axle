@@ -4,7 +4,7 @@ title: Language Modules
 permalink: /tutorial/language_modules/
 ---
 
-Natural-language-specific stop words, tokenization, stemming, etc. 
+Natural-language-specific stop words, tokenization, stemming, etc.
 
 ## English
 

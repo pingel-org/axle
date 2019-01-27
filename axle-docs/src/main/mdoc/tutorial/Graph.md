@@ -96,8 +96,7 @@ svg(vis, "SimpleDirectedGraph.svg")
 
 ![directed graph](/tutorial/images/SimpleDirectedGraph.svg)
 
-Undirected Graph
-----------------
+## Undirected Graph
 
 Imports
 

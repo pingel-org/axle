@@ -12,7 +12,7 @@ a unit conversion operator `in`,
 and a right associative value constructor `*:`
 
 The "quanta" are
-Acceleration, Area, Angle, 
+Acceleration, Area, Angle,
 [Distance](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Distance.scala),
 [Energy](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Energy.scala),
 Flow, Force, Frequency, Information, Mass, Money, MoneyFlow, MoneyPerForce, Power, Speed, Temperature,
@@ -98,8 +98,7 @@ foot
 meter
 ```
 
-Construction
-------------
+## Construction
 
 Values with units are constructed with the right-associative `*:` method on any spire `Number` type
 as long as a spire `Field` is implicitly available.
@@ -116,8 +115,7 @@ as long as a spire `Field` is implicitly available.
 200d *: watt
 ```
 
-Conversion
-----------
+## Conversion
 
 A Quantum defines a directed graph, where the UnitsOfMeasurement
 are the vertices, and the Conversions define the directed edges.
@@ -137,8 +135,7 @@ Converting between quanta is not allowed, and is caught at compile time:
 (1 *: gram) in mile
 ```
 
-Show
-----
+## Show
 
 A witness for the `cats.Show` typeclass is defined, meaning that `string` or `show` will return
 a `String` representation, and `print` will send it to stdout.
@@ -147,8 +144,7 @@ a `String` representation, and `print` will send it to stdout.
 string(10d *: gram in kilogram)
 ```
 
-Math
-----
+## Math
 
 Addition and subtraction are defined on Quantity by converting the
 right Quantity to the unit of the left.

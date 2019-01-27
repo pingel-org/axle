@@ -78,8 +78,8 @@ svg(chart, "barchart2.svg")
 
 ![barchart2](/tutorial/images/barchart2.svg)
 
-Animation
----------
+## Animation
+
 This example keeps the "bar" value steady at 1.0 while assigning a new random Double (between 0 and 1) to "foo" every second.
 
 Imports
@@ -139,4 +139,3 @@ Tear down the resources
 paintCancellable.cancel()
 cvCancellable.cancel()
 ```
-
