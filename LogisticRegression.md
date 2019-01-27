@@ -11,7 +11,7 @@ See the wikipedia page on [Logistic Regression](https://en.wikipedia.org/wiki/Lo
 Predict Test Pass Probability as a Function of Hours Studied
 ------------------------------------------------------------
 
-```tut:book
+```scala mdoc
 case class Student(hoursStudied: Double, testPassed: Boolean)
 
 val data = List(
@@ -40,7 +40,7 @@ val data = List(
 
 Create a test pass probability function using logistic regression.
 
-```tut:book
+```scala mdoc
 import axle.jblas._
 import spire.implicits.DoubleAlgebra
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
@@ -62,6 +62,6 @@ val pTestPass = LogisticRegression(
 
 Use the estimator
 
-```tut:book
+```scala mdoc
 testPassProbability(2d :: Nil)
 ```

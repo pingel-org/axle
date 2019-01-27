@@ -175,9 +175,15 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
   .settings(axleSettings)
   //.settings(noPublishSettings)
   //.settings(site.settings)
-  .enablePlugins(TutPlugin)
+  .enablePlugins(MdocPlugin)
   //.settings(site.addMappingsToSiteDir(tut, "tut"))
   .settings(
+    mdocVariables := Map(
+      "RELEASE_VERSION" -> "0.4.1",
+      "SNAPSHOT_VERSION" -> "0.4.2-SNAPSHOT"
+    ),
+    mdocIn := file("axle-docs/src/main/mdoc"),
+    mdocOut := file("axle-docs/target/site"),
     autoAPIMappings := true,
     git.remoteRepo := "git@github.com:axlelang/axle.git",
     includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
