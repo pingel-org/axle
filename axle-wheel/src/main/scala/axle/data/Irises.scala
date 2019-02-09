@@ -53,7 +53,7 @@ class Irises(implicit converter: DistanceConverter[Double]) extends Util {
 
   import converter.centimeter
 
-  val irises = io.Source.fromFile(file).getLines().toList flatMap { line =>
+  val irises = scala.io.Source.fromFile(file).getLines().toList flatMap { line =>
     Try {
       val fields = line.split(",")
       Iris(
