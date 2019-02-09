@@ -14,11 +14,11 @@ package object web {
     </html>
 
   val svgStyleStream = this.getClass.getResourceAsStream("/svgstyle.css")
-  val svgStyle = io.Source.fromInputStream(svgStyleStream).mkString
+  val svgStyle = scala.io.Source.fromInputStream(svgStyleStream).mkString
   svgStyleStream.close()
 
   val svgScriptStream = this.getClass.getResourceAsStream("/svgfunctions.js")
-  val svgScript = io.Source.fromInputStream(svgScriptStream).mkString
+  val svgScript = scala.io.Source.fromInputStream(svgScriptStream).mkString
   svgScriptStream.close()
 
   // optional svg attribute: viewBox={ s"0 0 ${width} ${height}" }
