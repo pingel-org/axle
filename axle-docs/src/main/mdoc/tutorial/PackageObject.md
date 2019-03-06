@@ -11,10 +11,17 @@ This page describes the axle package object.
 Imports
 
 ```scala mdoc:silent
-import axle._
-import spire.implicits._
+import cats.implicits._
 import spire.optional.unicode._
-import spire.implicits.eqOps
+import spire.algebra.Rng
+import spire.algebra.Ring
+import spire.algebra.Bool
+
+import axle._
+
+implicit val rngInt: Rng[Int] = spire.implicits.IntAlgebra
+implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
+implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure
 ```
 
 Common aggregators ∃, ∀, Σ, Π:

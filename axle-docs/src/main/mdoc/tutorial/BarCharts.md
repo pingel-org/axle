@@ -21,13 +21,15 @@ val sales = Map(
 Define a bar chart visualization
 
 ```scala mdoc:silent
+import spire.algebra.Field
+import cats.implicits._
 import axle.visualize.BarChart
 import axle.visualize.Color.lightGray
-import spire.implicits.DoubleAlgebra
-import cats.implicits._
 ```
 
 ```scala mdoc
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+
 val chart = BarChart[String, Double, Map[String, Double], String](
   () => sales,
   title = Some("fruit sales"),

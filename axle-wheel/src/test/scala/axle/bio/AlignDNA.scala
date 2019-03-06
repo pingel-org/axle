@@ -3,6 +3,8 @@ package axle.bio
 import org.jblas.DoubleMatrix
 import org.scalatest._
 import cats.implicits._
+import spire.algebra.Module
+import spire.algebra.Ring
 import axle.algebra.functorIndexedSeq
 
 class AlignDNA extends FunSuite with Matchers {
@@ -12,6 +14,11 @@ class AlignDNA extends FunSuite with Matchers {
     import NeedlemanWunsch.alignmentScore
     import NeedlemanWunsch.optimalAlignment
     import NeedlemanWunschDefaults._
+
+    // Evidence for optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Double]
+    implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+    // implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
+    implicit val dim: Module[Double, Int] = axle.algebra.modules.doubleIntModule
 
     implicit val laJblasDouble = {
       import spire.implicits.DoubleAlgebra

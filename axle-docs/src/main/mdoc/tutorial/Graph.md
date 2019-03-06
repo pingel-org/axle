@@ -58,7 +58,9 @@ val dg = jdg.make(List(a, b, c, d),
 ```
 
 ```scala mdoc
-dg.size
+dg.vertexProjection.size
+
+dg.edgeProjection.size
 
 dg.findVertex(_ === "a").map(v => dg.successors(v))
 
@@ -79,7 +81,7 @@ implicit val showEdge: Show[Edge] = new Show[Edge] {
   def show(e: Edge): String = e.s + " " + e.i
 }
 
-val vis = DirectedGraphVisualization(
+val dVis = DirectedGraphVisualization(
   dg,
   width = 300,
   height = 300,
@@ -91,7 +93,7 @@ val vis = DirectedGraphVisualization(
   fontSize = 12
 )
 
-svg(vis, "SimpleDirectedGraph.svg")
+svg(dVis, "SimpleDirectedGraph.svg")
 ```
 
 ![directed graph](/tutorial/images/SimpleDirectedGraph.svg)
@@ -128,7 +130,9 @@ val ug = jug.make(List(a, b, c, d),
 ```
 
 ```scala mdoc
-ug.size
+ug.vertexProjection.size
+
+ug.edgeProjection.size
 
 ug.findVertex(_ == "c").map(v => ug.neighbors(v))
 
@@ -141,9 +145,9 @@ Visualize the graph
 import axle.visualize._
 import axle.web._
 
-val vis = UndirectedGraphVisualization(ug, width=300, height=300, border=10, color=Color.yellow)
+val uVis = UndirectedGraphVisualization(ug, width=300, height=300, border=10, color=Color.yellow)
 
-svg(vis, "SimpleUndirectedGraph.svg")
+svg(uVis, "SimpleUndirectedGraph.svg")
 ```
 
 ![undirected graph](/tutorial/images/SimpleUndirectedGraph.svg)

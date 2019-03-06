@@ -28,8 +28,6 @@ This package uses the definition of "Quantum" as "something that can
 be quantified or measured".
 
 ```scala mdoc:silent
-import cats.implicits._
-import spire.implicits._
 import axle._
 import axle.quanta._
 import axle.jung._
@@ -46,9 +44,12 @@ A visualization of each Quantum (like the one for Distance shown above) is produ
 
 ```scala mdoc:silent
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
 import cats.Show
+import spire.algebra.Field
 import axle.algebra.modules.doubleRationalModule
 
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
 
 implicit val showDDAt1 = new Show[Double => Double] {
@@ -76,12 +77,12 @@ import massConverter._
 implicit val powerConverter = Power.converterGraphK2[Double, DirectedSparseGraph]
 import powerConverter._
 
-implicit val energyConverter = Energy.converterGraphK2[Double, DirectedSparseGraph]
-import energyConverter._
+//implicit val energyConverter = Energy.converterGraphK2[Double, DirectedSparseGraph]
+//import energyConverter._
 
 import axle.algebra.modules.doubleRationalModule
 
-implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
+// distanceConverter defined above
 import distanceConverter._
 
 implicit val timeConverter = Time.converterGraphK2[Double, DirectedSparseGraph]
@@ -137,11 +138,12 @@ Converting between quanta is not allowed, and is caught at compile time:
 
 ## Show
 
-A witness for the `cats.Show` typeclass is defined, meaning that `string` or `show` will return
-a `String` representation, and `print` will send it to stdout.
+A witness for the `cats.Show` typeclass is defined, `.show` will return a `String` representation.
 
 ```scala mdoc
-string(10d *: gram in kilogram)
+import cats.implicits._
+
+(10d *: gram in kilogram).show
 ```
 
 ## Math
@@ -150,9 +152,14 @@ Addition and subtraction are defined on Quantity by converting the
 right Quantity to the unit of the left.
 
 ```scala mdoc
-(1d *: kilogram) + (10d *: gram)
+import spire.implicits.additiveGroupOps
 
 (7d *: mile) - (123d *: foot)
+
+{
+  import spire.implicits._
+  (1d *: kilogram) + (10d *: gram)
+}
 ```
 
 Addition and subtraction between different quanta is rejected at compile time:
@@ -164,6 +171,8 @@ Addition and subtraction between different quanta is rejected at compile time:
 Multiplication comes from spire's Module typeclass:
 
 ```scala mdoc
+import spire.implicits.moduleOps
+
 (5.4 *: second) :* 100d
 
 (32d *: century) :* (1d/3)

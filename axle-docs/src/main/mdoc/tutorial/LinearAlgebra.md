@@ -17,10 +17,17 @@ invoking the `cats.Show` witness for those matrices.
 Import JBLAS and Axle's `LinearAlgebra` witness for it.
 
 ```scala mdoc:silent
+import cats.implicits._
+
+import spire.algebra.Field
+import spire.algebra.NRoot
+
 import axle._
 import axle.jblas._
 import axle.syntax.linearalgebra.matrixOps
-import spire.implicits.DoubleAlgebra
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 import laJblasDouble._
@@ -29,22 +36,22 @@ import laJblasDouble._
 ## Creating Matrices
 
 ```scala mdoc
-string(ones(2, 3))
+ones(2, 3).show
 
-string(ones(1, 4))
+ones(1, 4).show
 
-string(ones(4, 1))
+ones(4, 1).show
 ```
 
 ## Creating matrices from arrays
 
 ```scala mdoc
-string(fromColumnMajorArray(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray))
+fromColumnMajorArray(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray).show
 
-string(fromColumnMajorArray(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray).t)
+fromColumnMajorArray(2, 2, List(1.1, 2.2, 3.3, 4.4).toArray).t.show
 
 val m = fromColumnMajorArray(4, 5, (1 to 20).map(_.toDouble).toArray)
-string(m)
+m.show
 ```
 
 ## Random matrices
@@ -52,28 +59,28 @@ string(m)
 ```scala mdoc
 val r = rand(3, 3)
 
-string(r)
+r.show
 ```
 
 ## Matrices defined by functions
 
 ```scala mdoc
-string(matrix(4, 5, (r, c) => r / (c + 1d)))
+matrix(4, 5, (r, c) => r / (c + 1d)).show
 
-string(matrix(4, 5, 1d,
+matrix(4, 5, 1d,
   (r: Int) => r + 0.5,
   (c: Int) => c + 0.6,
-  (r: Int, c: Int, diag: Double, left: Double, right: Double) => diag))
+  (r: Int, c: Int, diag: Double, left: Double, right: Double) => diag).show
 ```
 
 ## Metadata
 
 ```scala mdoc
 val x = fromColumnMajorArray(3, 1, Vector(4.0, 5.1, 6.2).toArray)
-string(x)
+x.show
 
 val y = fromColumnMajorArray(3, 1, Vector(7.3, 8.4, 9.5).toArray)
-string(y)
+y.show
 
 x.isEmpty
 
@@ -95,32 +102,32 @@ x.length
 ## Accessing columns, rows, and elements
 
 ```scala mdoc
-string(x.column(0))
+x.column(0).show
 
-string(x.row(1))
+x.row(1).show
 
 x.get(2, 0)
 
 val fiveByFive = fromColumnMajorArray(5, 5, (1 to 25).map(_.toDouble).toArray)
 
-string(fiveByFive)
+fiveByFive.show
 
-string(fiveByFive.slice(1 to 3, 2 to 4))
+fiveByFive.slice(1 to 3, 2 to 4).show
 
-string(fiveByFive.slice(0.until(5,2), 0.until(5,2)))
+fiveByFive.slice(0.until(5,2), 0.until(5,2)).show
 ```
 
 ## Negate, Transpose, Power
 
 ```scala mdoc
-string(x.negate)
+x.negate.show
 
-string(x.transpose)
+x.transpose.show
 
 // x.log
 // x.log10
 
-string(x.pow(2d))
+x.pow(2d).show
 ```
 
 ## Mins, Maxs, Ranges, and Sorts
@@ -133,71 +140,71 @@ r.min
 // r.ceil
 // r.floor
 
-string(r.rowMaxs)
+r.rowMaxs.show
 
-string(r.rowMins)
+r.rowMins.show
 
-string(r.columnMaxs)
+r.columnMaxs.show
 
-string(r.columnMins)
+r.columnMins.show
 
-string(rowRange(r))
+rowRange(r).show
 
-string(columnRange(r))
+columnRange(r).show
 
-string(r.sortRows)
+r.sortRows.show
 
-string(r.sortColumns)
+r.sortColumns.show
 
-string(r.sortRows.sortColumns)
+r.sortRows.sortColumns.show
 ```
 
 ## Statistics
 
 ```scala mdoc
-string(r.rowMeans)
+r.rowMeans.show
 
-string(r.columnMeans)
+r.columnMeans.show
 
 // median(r)
 
-string(sumsq(r))
+sumsq(r).show
 
-string(std(r))
+std(r).show
 
-string(cov(r))
+cov(r).show
 
-string(centerRows(r))
+centerRows(r).show
 
-string(centerColumns(r))
+centerColumns(r).show
 
-string(zscore(r))
+zscore(r).show
 ```
 
 ## Principal Component Analysis
 
 ```scala mdoc
-val (u, s) = pca(r, 0.95)
+val (u, s) = pca(r)
 
-string(u)
+u.show
 
-string(s)
+s.show
 ```
 
 ## Horizontal and vertical concatenation
 
 ```scala mdoc
-string(x aside y)
+(x aside y).show
 
-string(x atop y)
+(x atop y).show
 ```
 
 ## Addition and subtraction
 
 ```scala mdoc
-val x = ones(2, 3)
+val z = ones(2, 3)
 
-string(x)
+z.show
 ```
 
 Matrix addition
@@ -205,13 +212,13 @@ Matrix addition
 ```scala mdoc
 import spire.implicits.additiveSemigroupOps
 
-string(x + x)
+(z + z).show
 ```
 
 Scalar addition (JBLAS method)
 
 ```scala mdoc
-string(x.addScalar(1.1))
+z.addScalar(1.1).show
 ```
 
 Matrix subtraction
@@ -219,13 +226,13 @@ Matrix subtraction
 ```scala mdoc
 import spire.implicits.additiveGroupOps
 
-string(x - x)
+(z - z).show
 ```
 
 Scalar subtraction (JBLAS method)
 
 ```scala mdoc
-string(x.subtractScalar(0.2))
+z.subtractScalar(0.2).show
 ```
 
 ## Multiplication and Division
@@ -233,7 +240,7 @@ string(x.subtractScalar(0.2))
 Scalar multiplication
 
 ```scala mdoc
-string(x.multiplyScalar(3d))
+z.multiplyScalar(3d).show
 ```
 
 Matrix multiplication
@@ -241,13 +248,13 @@ Matrix multiplication
 ```scala mdoc
 import spire.implicits.multiplicativeSemigroupOps
 
-string(x * x.transpose)
+(z * z.transpose).show
 ```
 
 Scalar division (JBLAS method)
 
 ```scala mdoc
-string(x.divideScalar(100d))
+z.divideScalar(100d).show
 ```
 
 ## Map element values
@@ -258,45 +265,45 @@ import axle.syntax.endofunctor.endofunctorOps
 
 val half = ones(3, 3).map(_ / 2d)
 
-string(half)
+half.show
 ```
 
 ## Boolean operators
 
 ```scala mdoc
-string(r lt half)
+(r lt half).show
 
-string(r le half)
+(r le half).show
 
-string(r gt half)
+(r gt half).show
 
-string(r ge half)
+(r ge half).show
 
-string(r eq half)
+(r eq half).show
 
-string(r ne half)
+(r ne half).show
 
-string((r lt half) or (r gt half))
+((r lt half) or (r gt half)).show
 
-string((r lt half) and (r gt half))
+((r lt half) and (r gt half)).show
 
-string((r lt half) xor (r gt half))
+((r lt half) xor (r gt half)).show
 
-string((r lt half) not)
+((r lt half) not).show
 ```
 
 ## Higher order methods
 
 ```scala mdoc
-string(m.map(_ + 1))
+(m.map(_ + 1)).show
 
-string(m.map(_ * 10))
+(m.map(_ * 10)).show
 
 // m.foldLeft(zeros(4, 1))(_ + _)
 
-string(m.foldLeft(ones(4, 1))(_ mulPointwise _))
+(m.foldLeft(ones(4, 1))(_ mulPointwise _)).show
 
 // m.foldTop(zeros(1, 5))(_ + _)
 
-string(m.foldTop(ones(1, 5))(_ mulPointwise _))
+(m.foldTop(ones(1, 5))(_ mulPointwise _)).show
 ```

@@ -56,8 +56,6 @@ implicit val rabbitSpecies = new Species[gen.Repr] {
 Run the genetic algorithm
 
 ```scala mdoc
-import spire.implicits._
-
 val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
 
 val log = ga.run()

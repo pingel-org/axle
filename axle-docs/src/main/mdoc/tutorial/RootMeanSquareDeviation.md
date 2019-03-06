@@ -8,8 +8,15 @@ See the Wikipedia page on
 [Root-mean-square deviation](https://en.wikipedia.org/wiki/Root-mean-square_deviation).
 
 ```scala mdoc:silent
-import spire.implicits.DoubleAlgebra
+import cats.implicits._
+
+import spire.algebra.Field
+import spire.algebra.NRoot
+
 import axle.stats._
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 ```
 
 Given four numbers and an estimator function, compute the RMSD:

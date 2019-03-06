@@ -25,10 +25,11 @@ Shared imports
 
 ```scala mdoc:silent
 import cats.implicits._
-import spire.implicits.DoubleAlgebra
-import spire.implicits.IntAlgebra
+import spire.algebra.Field
 import axle.visualize.BarChartGrouped
 import axle.visualize.Color._
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 ```
 
 The data can be grouped in two ways to produce bar charts:
@@ -57,7 +58,7 @@ svg(chart, "barchart1.svg")
 Or alternatively
 
 ```scala mdoc
-val chart = BarChartGrouped[Int, String, Double, Map[(Int, String), Double], String](
+val chart2 = BarChartGrouped[Int, String, Double, Map[(Int, String), Double], String](
   () => sales map { case (k, v) => (k._2, k._1) -> v},
   colorOf = (year: Int, label: String) => label match {
     case "apple" => red
@@ -73,7 +74,7 @@ Create the second SVG
 ```scala mdoc
 import axle.web._
 
-svg(chart, "barchart2.svg")
+svg(chart2, "barchart2.svg")
 ```
 
 ![barchart2](/tutorial/images/barchart2.svg)
@@ -85,17 +86,12 @@ This example keeps the "bar" value steady at 1.0 while assigning a new random Do
 Imports
 
 ```scala mdoc:silent
-import axle.visualize._
-import spire.implicits._
 import scala.util.Random.nextDouble
 import axle.jung._
 import axle.quanta.Time
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import monix.reactive._
-import monix.execution.Scheduler.Implicits.global
 import axle.reactive.intervalScan
-import axle.reactive.CurrentValueSubscriber
-import axle.awt.play
 ```
 
 Define stream of data updates
@@ -130,6 +126,9 @@ val chart = BarChart[String, Double, Map[String, Double], String](
 Animate
 
 ```scala
+import monix.execution.Scheduler.Implicits.global
+import axle.awt.play
+
 val paintCancellable = play(chart, dataUpdates)
 ```
 

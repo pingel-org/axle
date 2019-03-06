@@ -11,10 +11,13 @@ Topics include: Random Variables, Distributions, Probability, and Standard Devia
 Imports
 
 ```scala mdoc:silent
-import axle._
-import axle.stats._
 import spire.math._
 import spire.algebra._
+
+import axle._
+import axle.stats._
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 ```
 
 Example
@@ -28,8 +31,6 @@ val dist = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), "some doubl
 Example
 
 ```scala mdoc
-import spire.implicits.DoubleAlgebra
-
 standardDeviation(dist)
 ```
 

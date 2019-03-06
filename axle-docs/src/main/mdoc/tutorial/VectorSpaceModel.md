@@ -26,9 +26,16 @@ val corpus = Vector(
 The simplest application of the vector space model to documents is the unweighted space:
 
 ```scala mdoc
+import cats.implicits._
+
+import spire.algebra.Field
+import spire.algebra.NRoot
+
 import axle.nlp.language.English
 import axle.nlp.TermVectorizer
-import spire.implicits.DoubleAlgebra
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
 val vectorizer = TermVectorizer[Double](English.stopWords)
 
@@ -51,16 +58,12 @@ unweighted.distance(v1, v1)
 Compute a "distance matrix" for a given set of vectors using the metric space:
 
 ```scala mdoc
-import spire.implicits.DoubleAlgebra
-import axle.jblas.linearAlgebraDoubleMatrix
+import axle.jblas._
 import axle.algebra.DistanceMatrix
 
 val dm = DistanceMatrix(corpus.map(vectorizer))
 
-import axle.string
-import axle.jblas.showDoubleMatrix
-
-string(dm.distanceMatrix)
+dm.distanceMatrix.show
 
 dm.distanceMatrix.max
 ```

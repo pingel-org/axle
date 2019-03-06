@@ -33,7 +33,10 @@ wallisΠ(3200).toDouble
 ## Monte Carlo
 
 ```scala mdoc:silent
-import spire.implicits.DoubleAlgebra
+import cats.implicits._
+import spire.algebra.Field
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 ```
 
 See the Wikipedia page on [Monte Carlo Methods](https://en.wikipedia.org/wiki/Monte_Carlo_method)

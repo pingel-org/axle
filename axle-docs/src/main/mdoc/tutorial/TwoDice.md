@@ -27,7 +27,7 @@ Simulate 10k rolls of two dice
 val d6a = die(6)
 val d6b = die(6)
 
-import spire.implicits.IntAlgebra
+implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
 
 val histogram =
   (0 until 10000).
@@ -38,7 +38,6 @@ val histogram =
 Define visualization
 
 ```scala mdoc:silent
-import axle.visualize.Color.blue
 import axle.visualize._
 ```
 
@@ -70,12 +69,7 @@ Imports (Note: documentation resets interpreter here)
 
 ```scala mdoc:silent:reset
 import spire.math._
-import spire.algebra._
-
 import cats.implicits._
-
-import axle._
-import axle.stats._
 import axle.game.Dice.die
 ```
 
@@ -92,8 +86,6 @@ Define visualization
 
 ```scala mdoc:silent
 import axle.visualize._
-import axle.visualize.Color.blue
-import spire.implicits.IntAlgebra
 ```
 
 ```scala mdoc

@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (February 2018)
+## 0.5.0 (March 2018)
 
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
@@ -35,20 +35,24 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Remove `axle.string` and `axle.show`.
   * Replace uses with `.show` from `cats.implicits` or show string interpolation
 * Remove extraneous `cutoff` argument for `PCA`
-
 * Replace Tut with MDoc
-  * configure makeSite to preview: previewFixedPort := Some(9999)
-  * copy css using makeSite
-  * publish site using https://www.scala-sbt.org/sbt-site/publishing.html and sbt-s3
-  * figure out better way to reference images
 
-* cats effect/io for all `png`, `html`, etc functions
+* Fix all doc errors
+* Doublecheck animation on Plots.md
 * Make sure animation doc has right return value
+* configure makeSite to preview: previewFixedPort := Some(9999)
+* copy css using makeSite (not update-docs.sh)
+* publish site using https://www.scala-sbt.org/sbt-site/publishing.html and sbt-s3
+* figure out better way to reference images
+* Whither 0.95 cutoff in LinearAlgebra.md? (see ClusterIrises?)
+* LogisticMap back to 4k x 4k
+* Fix TwoDice, etc
+* get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSPecification)
+* cats effect/io for all `png`, `html`, etc functions
 * Publish site
 
 ## 0.5.1 (April 2019)
 
-* Friend of spire
 * Fix logistic regression
 * Fix all "TODO monad syntax"
 * ScalaCheck tests for Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
@@ -56,10 +60,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
      implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
      val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 * Syntax for ProbabilityModel.probabilityOf, observe, etc
+* Friend of Spire
 
 ## 0.5.2 (May 2019)
 
 * Functors for jung should use projections (study cats disjunction, scala Either)
+* Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * ScalaCheck tests for
   * Modules in axle.algebra
   * MetricSpaces axle.bio.{SmithWaterman, NeedlemanWunsch}

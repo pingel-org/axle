@@ -17,15 +17,18 @@ import org.jblas.DoubleMatrix
 
 import cats.implicits._
 
-import spire.implicits.IntAlgebra
+import spire.algebra.Ring
+import spire.algebra.NRoot
 
 import axle._
 import axle.nlp._
 import axle.nlp.Levenshtein
 import axle.jblas._
 
+implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+implicit val nrootInt: NRoot[Int] = spire.implicits.IntAlgebra
 implicit val laJblasInt = linearAlgebraDoubleMatrix[Int]
-implicit val space = Levenshtein[IndexedSeq[Char], Char, DoubleMatrix, Int]()
+implicit val space = Levenshtein[IndexedSeq, Char, DoubleMatrix, Int]()
 ```
 
 Usage

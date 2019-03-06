@@ -10,7 +10,7 @@ First a couple imports:
 
 ```scala mdoc:silent
 import cats.implicits._
-import spire.implicits.DoubleAlgebra
+import spire.algebra.Field
 import axle._
 import axle.math._
 ```
@@ -18,6 +18,8 @@ import axle.math._
 Define a function to compute the Mandelbrot velocity at point on the plane `(x, y)`
 
 ```scala mdoc
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+
 val f = (x0: Double, x1: Double, y0: Double, y1: Double) => inMandelbrotSetAt(4d, x0, y0, 1000).getOrElse(-1)
 ```
 

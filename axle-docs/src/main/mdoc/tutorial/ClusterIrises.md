@@ -13,15 +13,17 @@ A demonstration of k-Means Clustering using the [Iris flower data set](https://e
 Imports for Distance quanta
 
 ```scala mdoc:silent
+import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
+import spire.algebra._
 import axle._
 import axle.quanta.Distance
-import axle.jung.directedGraphJung
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.quanta.UnitOfMeasurement
+import axle.quanta.DistanceConverter
+import axle.jung._
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
 implicit val distanceConverter = {
-  import spire.implicits.DoubleAlgebra
   import axle.algebra.modules.doubleRationalModule
   Distance.converterGraphK2[Double, DirectedSparseGraph]
 }
@@ -41,56 +43,67 @@ val irisesData = new Irises
 Make a 2-D Euclidean space implicitly available for clustering
 
 ```scala mdoc:silent
-import axle.ml.distance.Euclidean
 import org.jblas.DoubleMatrix
+import axle.algebra.distance.Euclidean
 import axle.jblas.linearAlgebraDoubleMatrix
+import axle.jblas.rowVectorInnerProductSpace
 
-implicit val space = {
-  import spire.implicits.IntAlgebra
-  import spire.implicits.DoubleAlgebra
-  implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](2)
-  Euclidean[DoubleMatrix, Double]
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+
+implicit val space: Euclidean[DoubleMatrix, Double] = {
+  implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+  implicit val inner = rowVectorInnerProductSpace[Int, Int, Double](2)
+  new Euclidean[DoubleMatrix, Double]
 }
 ```
 
 Build a classifier of irises based on sepal length and width using the K-Means algorithm
 
 ```scala mdoc:silent
+import spire.random.Generator.rng
 import axle.ml.KMeans
 import axle.ml.PCAFeatureNormalizer
 import distanceConverter.cm
-import spire.implicits.DoubleAlgebra
 ```
 
 ```scala mdoc
-val irisFeaturizer = (iris: Iris) => List((iris.sepalLength in cm).magnitude.toDouble, (iris.sepalWidth in cm).magnitude.toDouble)
+val irisFeaturizer =
+  (iris: Iris) => List((iris.sepalLength in cm).magnitude.toDouble, (iris.sepalWidth in cm).magnitude.toDouble)
+
+implicit val la = linearAlgebraDoubleMatrix[Double]
 
 val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-val classifier = KMeans[Iris, List[Iris], List[Seq[Double]], DoubleMatrix](
+val classifier: KMeans[Iris, List, DoubleMatrix] =
+  KMeans[Iris, List, DoubleMatrix](
     irisesData.irises,
     N = 2,
     irisFeaturizer,
     normalizer,
     K = 3,
-    iterations = 20)
+    iterations = 20)(rng)(
+     Iris.irisEq,
+     space,
+     cats.Functor[List],
+     la,
+     axle.algebra.Indexed[List, Int],
+     axle.algebra.Finite[List, Int])
 ```
 
 Produce a "confusion matrix"
 
 ```scala mdoc:silent
 import axle.ml.ConfusionMatrix
-import spire.implicits.IntAlgebra
 ```
 
 ```scala mdoc
-val confusion = ConfusionMatrix[Iris, Int, String, Vector[Iris], DoubleMatrix, Vector[(String, Int)], Vector[String]](
+val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
   classifier,
   irisesData.irises.toVector,
   _.species,
   0 to 2)
 
-string(confusion)
+confusion.show
 ```
 
 Visualize the final (two dimensional) centroid positions

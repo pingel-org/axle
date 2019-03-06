@@ -12,7 +12,6 @@ Imports
 
 ```scala mdoc:silent
 import cats.implicits._
-import spire.implicits._
 import axle._
 import axle.lx._
 import Gold._

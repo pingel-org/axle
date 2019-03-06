@@ -9,7 +9,7 @@ permalink: /tutorial/logic/
 Imports
 
 ```scala mdoc:silent
-import axle.string
+import cats.implicits._
 import axle.logic._
 import FirstOrderPredicateLogic._
 ```
@@ -25,7 +25,7 @@ val (cnf, skolemMap) = conjunctiveNormalForm(s)
 ```
 
 ```scala mdoc
-string(cnf)
+cnf.show
 
 skolemMap
 ```

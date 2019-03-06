@@ -29,23 +29,24 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
       wordFeatures ++ bigramFeatures
     }
 
-    // import spire.implicits._
+    import org.jblas.DoubleMatrix
+    import spire.algebra._
     import axle.algebra.distance._
     import axle.algebra.distance.Euclidean
-    import org.jblas.DoubleMatrix
     import axle.jblas.linearAlgebraDoubleMatrix
 
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+    implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+
     implicit val space = {
-      import spire.implicits.IntAlgebra
-      import spire.implicits.DoubleAlgebra
-      // import axle.jblas.moduleDoubleMatrix
+      implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
       implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](numDimensions)
       new Euclidean[DoubleMatrix, Double]
     }
 
     import axle.ml.KMeans
     import axle.ml.PCAFeatureNormalizer
-    import spire.implicits.DoubleAlgebra
+    // import spire.implicits.DoubleAlgebra
 
     val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 

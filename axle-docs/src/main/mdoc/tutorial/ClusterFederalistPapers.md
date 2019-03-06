@@ -34,9 +34,11 @@ val topBigrams = corpus.topKBigrams(200)
 
 val numDimensions = frequentWords.size + topBigrams.size
 
+import spire.algebra.Ring
+implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
+
 def featureExtractor(fp: Article): List[Double] = {
   import axle.enrichGenSeq
-  import spire.implicits.LongAlgebra
 
   val tokens = English.tokenize(fp.text.toLowerCase)
   val wordCounts = tokens.tally[Long]
@@ -51,18 +53,21 @@ Place a `MetricSpace` implicitly in scope that defines the space in which to
 measure similarity of Articles.
 
 ```scala mdoc:silent
-import spire.implicits._
 import spire.algebra._
-import axle.ml.distance._
-import axle.ml.distance.Euclidean
+
+import axle.algebra.distance._
+import axle.algebra.distance.Euclidean
+
 import org.jblas.DoubleMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
 
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+
 implicit val space = {
-  import spire.implicits.IntAlgebra
-  import spire.implicits.DoubleAlgebra
+  implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
   implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](numDimensions)
-  Euclidean[DoubleMatrix, Double]
+  new Euclidean[DoubleMatrix, Double]
 }
 ```
 
@@ -71,36 +76,35 @@ Create 4 clusters using k-Means
 ```scala mdoc:silent
 import axle.ml.KMeans
 import axle.ml.PCAFeatureNormalizer
-import spire.implicits.DoubleAlgebra
 ```
 
 ```scala mdoc
+import cats.implicits._
+import spire.random.Generator.rng
+
 val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-val classifier = KMeans[Article, List[Article], List[Seq[Double]], DoubleMatrix](
-    articles,
-    N = numDimensions,
-    featureExtractor,
-    normalizer,
-    K = 4,
-    iterations = 100)
+val classifier = KMeans[Article, List, DoubleMatrix](
+  articles,
+  N = numDimensions,
+  featureExtractor,
+  normalizer,
+  K = 4,
+  iterations = 100)(rng)
 ```
 
 Show cluster vs author in a confusion matrix:
 
 ```scala mdoc:silent
-import cats.implicits._
 import axle.ml.ConfusionMatrix
-//import spire.implicits.IntAlgebra
-import axle.string
 ```
 
 ```scala mdoc
-val confusion = ConfusionMatrix[Article, Int, String, Vector[Article], DoubleMatrix, Vector[(String, Int)], Vector[String]](
+val confusion = ConfusionMatrix[Article, Int, String, Vector, DoubleMatrix](
   classifier,
   articles.toVector,
   _.author,
   0 to 3)
 
-string(confusion)
+confusion.show
 ```

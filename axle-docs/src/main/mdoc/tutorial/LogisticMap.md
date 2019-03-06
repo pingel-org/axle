@@ -10,13 +10,18 @@ Create data for a range of the logistic map function
 
 ```scala mdoc:silent
 import java.util.TreeSet
+
 import cats.implicits._
+
 import spire.math.abs
-import spire.implicits.DoubleAlgebra
+import spire.algebra.Field
+
 import axle.math.logisticMap
 import axle.{ orbit, applyK }
 import axle.visualize._
 import axle.awt._
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 ```
 
 ```scala mdoc
@@ -45,7 +50,8 @@ val v2c = (v: Boolean) => if (v) Color.black else Color.white
 Define a `PixelatedColoredArea` to show a range of Logistic Map.
 
 ```scala mdoc
-val pca = PixelatedColoredArea(f, v2c, 4000, 4000, 2.9, 4d, 0d, 1d)
+// TODO was 4000 x 4000
+val pca = PixelatedColoredArea(f, v2c, 40, 40, 2.9, 4d, 0d, 1d)
 ```
 
 Create the PNG

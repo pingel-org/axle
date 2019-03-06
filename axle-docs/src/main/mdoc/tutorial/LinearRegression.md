@@ -24,10 +24,14 @@ Create a price estimator using linear regression.
 
 ```scala mdoc
 import cats.implicits._
-import spire.implicits.DoubleAlgebra
+import spire.algebra.Rng
+import spire.algebra.NRoot
 import axle.jblas._
 
+implicit val rngDouble: Rng[Double] = spire.implicits.DoubleAlgebra
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
+implicit val rngInt: Rng[Int] = spire.implicits.IntAlgebra
 
 import axle.ml.LinearRegression
 
@@ -49,10 +53,8 @@ priceEstimator(RealtyListing(1416, 3, 2, 40, 0d))
 Plot the error during the training
 
 ```scala mdoc
-import spire.implicits._
 import axle.visualize._
 import axle.algebra.Plottable._
-import axle.eqTreeMap
 
 val errorPlot = Plot(
   () => List(("error" -> priceEstimator.errTree)),

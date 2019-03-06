@@ -7,7 +7,6 @@ permalink: /tutorial/earth_scene/
 Imports
 
 ```scala mdoc:silent
-import java.net.URL
 import java.util.Date
 
 import scala.Vector
@@ -17,13 +16,13 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import cats.implicits._
 
-import spire.implicits.FloatAlgebra
+import spire.algebra.Field
+import spire.algebra.Trig
 import spire.implicits.additiveGroupOps
 import spire.implicits.moduleOps
 
 import axle.algebra.GeoCoordinates
 import axle.algebra.SphericalVector
-import axle.algebra.modules.floatDoubleModule
 import axle.algebra.modules.floatRationalModule
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
@@ -39,9 +38,12 @@ Distance and Angle unit conversions
 ```scala mdoc:silent
 implicit val ddc = {
   import axle.algebra.modules.doubleRationalModule
-  import spire.implicits.DoubleAlgebra
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   Distance.converterGraphK2[Double, DirectedSparseGraph]
 }
+
+implicit val fieldFloat: Field[Float] = spire.implicits.FloatAlgebra
+implicit val trigFloat: Trig[Float] = spire.implicits.FloatAlgebra
 
 implicit val distanceConverter = Distance.converterGraphK2[Float, DirectedSparseGraph]
 import distanceConverter._

@@ -42,7 +42,6 @@ Create a test pass probability function using logistic regression.
 
 ```scala mdoc
 import axle.jblas._
-import spire.implicits.DoubleAlgebra
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 
 import axle.ml.LogisticRegression

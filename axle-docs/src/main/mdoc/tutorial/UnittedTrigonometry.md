@@ -17,16 +17,17 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import cats.implicits._
 
-import spire.implicits.DoubleAlgebra
-import spire.algebra.Module
-import spire.math.Rational
+import spire.algebra.Field
+import spire.algebra.Trig
 
 import axle.math._
 import axle.quanta.Angle
-import axle.quanta.UnittedQuantity
 import axle.quanta.UnitOfMeasurement
 import axle.algebra.modules.doubleRationalModule
 import axle.jung.directedGraphJung
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
 
 implicit val angleConverter = Angle.converterGraphK2[Double, DirectedSparseGraph]
 

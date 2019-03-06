@@ -62,7 +62,7 @@ import axle.ml.ClassifierPerformance
 
 val perf = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](events, classifier, _.play)
 
-string(perf)
+perf.show
 ```
 
 See [Precision and Recall](http://en.wikipedia.org/wiki/Precision_and_recall)

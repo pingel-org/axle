@@ -17,7 +17,9 @@ import org.joda.time.DateTime
 
 import scala.collection.immutable.TreeMap
 import scala.math.sin
-import scala.util.Random.nextDouble
+
+import spire.random.Generator
+import spire.random.Generator.rng
 
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
@@ -36,52 +38,53 @@ val now = new DateTime()
 
 val colors = Vector(red, blue, green, yellow, orange)
 
-def randomTimeSeries(i: Int) = {
-
-  val φ = nextDouble
-  val A = nextDouble
-  val ω = 0.1 / nextDouble
-  val color = colors.random
-
-  val data = new TreeMap[DateTime, Double]() ++ (0 to 100).map(t => (now.plusMinutes(2 * t) -> A * sin(ω*t + φ))).toMap
-
-  val label = "%1.2f %1.2f %1.2f".format(φ, A, ω)
-
-  (color, label) -> data
+def randomTimeSeries(i: Int, gen: Generator) = {
+  val φ = gen.nextDouble()
+  val A = gen.nextDouble()
+  val ω = 0.1 / gen.nextDouble()
+  ("series %d %1.2f %1.2f %1.2f".format(i, φ, A, ω),
+    new TreeMap[DateTime, Double]() ++
+      (0 to 100).map(t => (now.plusMinutes(2 * t) -> A * sin(ω * t + φ))).toMap)
 }
 
-val waves = (0 until 20).map(randomTimeSeries)
-
-import axle.joda.dateTimeZero
-
-implicit val zeroDT = dateTimeZero(now)
+val waves = (0 until 20).map(i => randomTimeSeries(i, rng)).toList
 ```
 
 Imports
 
 ```scala mdoc:silent
 import cats.Show
-import spire.implicits.DoubleAlgebra
+import cats.implicits._
+
+import spire.algebra.AdditiveMonoid
+
 import axle.visualize.Plot
 import axle.algebra.Plottable.doublePlottable
 import axle.joda.dateTimeOrder
 import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
+
+implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
 ```
 
 Define the visualization
 
 ```scala mdoc
-implicit val showCL: Show[(Color, String)] = new Show[(Color, String)] { def show(cl: (Color, String)): String = cl._2 }
-
-val plot = Plot(
+val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
   () => waves,
-  colorOf = (cl: (Color, String)) => cl._1,
+  connect = true,
+  colorOf = _ => Color.black,
   title = Some("Random Waves"),
-  xAxis = Some(0d),
   xAxisLabel = Some("time (t)"),
-  yAxisLabel = Some("A sin(ωt + φ)"))
+  yAxis = Some(now),
+  yAxisLabel = Some("A·sin(ω·t + φ)")).zeroXAxis
+```
+
+If instead we had supplied `(Color, String)` pairs, we would have needed something like preciding the `Plot` definition:
+
+```scala mdoc
+implicit val showCL: Show[(Color, String)] = new Show[(Color, String)] { def show(cl: (Color, String)): String = cl._2 }
 ```
 
 Create the SVG
@@ -104,17 +107,18 @@ Imports
 import org.joda.time.DateTime
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import collection.immutable.TreeMap
+
 import cats.implicits._
+
 import monix.reactive._
-import monix.execution.Scheduler.Implicits.global
-import spire.implicits.DoubleAlgebra
+
+import spire.algebra.Field
+
 import axle.joda._
 import axle.jung._
 import axle.quanta.Time
 import axle.visualize._
 import axle.reactive.intervalScan
-import axle.reactive.CurrentValueSubscriber
-import axle.awt.play
 ```
 
 Define stream of data updates refreshing every 500 milliseconds
@@ -137,6 +141,8 @@ val refreshFn = (previous: List[(String, TreeMap[DateTime, Double])]) => {
   previous.zip(fs).map({ case (old, f) => (old._1, old._2 ++ Vector(now -> f(now.getMillis))) })
 }
 
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+
 implicit val timeConverter = {
   import axle.algebra.modules.doubleRationalModule
   Time.converterGraphK2[Double, DirectedSparseGraph]
@@ -150,6 +156,9 @@ val dataUpdates: Observable[Seq[(String, TreeMap[DateTime, Double])]] =
 Create `CurrentValueSubscriber`, which will be used by the `Plot` to get the latest values
 
 ```scala
+import monix.execution.Scheduler.Implicits.global
+import axle.reactive.CurrentValueSubscriber
+
 val cvSub = new CurrentValueSubscriber[Seq[(String, TreeMap[DateTime, Double])]]()
 val cvCancellable = dataUpdates.subscribe(cvSub)
 
@@ -169,6 +178,7 @@ val plot = Plot(
 Animate
 
 ```scala
+
 val paintCancellable = play(plot, dataUpdates)
 ```
 

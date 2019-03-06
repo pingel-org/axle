@@ -45,11 +45,20 @@ fibonacciRecursivelyWithMemo(10)
 Imports
 
 ```scala mdoc:silent
-import axle._
-import axle.jblas._
-import spire.implicits._
 import org.jblas.DoubleMatrix
 
+import cats.implicits._
+
+import spire.algebra.EuclideanRing
+import spire.algebra.NRoot
+import spire.algebra.Rng
+
+import axle._
+import axle.jblas._
+
+implicit val eucRingInt: EuclideanRing[Int] = spire.implicits.IntAlgebra
+implicit val rngDouble: Rng[Double] = spire.implicits.DoubleAlgebra
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
 import laJblasDouble._
 ```

@@ -16,12 +16,15 @@ import org.jblas.DoubleMatrix
 
 import cats.implicits._
 
-import spire.implicits.IntAlgebra
+import spire.algebra.Ring
+import spire.algebra.NRoot
 
 import axle.bio._
 import SmithWatermanDefaults._
 import SmithWaterman.optimalAlignment
 
+implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+implicit val nrootInt: NRoot[Int] = spire.implicits.IntAlgebra
 implicit val laJblasInt = axle.jblas.linearAlgebraDoubleMatrix[Int]
 ```
 
@@ -35,16 +38,14 @@ val dna4 = "AGCACACA"
 Align the sequences
 
 ```scala mdoc
-val swAlignment = optimalAlignment[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](
+val swAlignment = optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Int](
   dna3, dna4, w, mismatchPenalty, gap)
 ```
 
 Compute distance of the sequences
 
 ```scala mdoc
-import spire.implicits.DoubleAlgebra
-
-val space = SmithWatermanMetricSpace[IndexedSeq[Char], Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
+val space = SmithWatermanMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
 
 space.distance(dna3, dna4)
 ```

@@ -12,9 +12,11 @@ Imports
 
 ```scala mdoc:silent
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+
 import cats.implicits._
+
 import spire.math._
-import spire.implicits._
+
 import axle._
 import axle.algebra.DirectedGraph
 import axle.stats._
@@ -95,7 +97,7 @@ The network can be used to compute the joint probability table:
 ```scala mdoc
 val jpt = bn.jointProbabilityTable
 
-string(jpt)
+jpt.show
 ```
 
 Variables can be summed out of the factor:
@@ -113,13 +115,13 @@ Multiplication of factors also works:
 ```scala mdoc
 val f = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
 
-string(f)
+f.show
 ```
 
 Markov assumptions:
 
 ```scala mdoc
-string(bn.markovAssumptionsFor(M))
+bn.markovAssumptionsFor(M).show
 ```
 
 This is read as "M is independent of E, B, and J given A".
