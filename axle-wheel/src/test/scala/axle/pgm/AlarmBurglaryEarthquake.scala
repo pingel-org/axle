@@ -2,9 +2,8 @@ package axle.stats
 
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-// import cats.implicits._
+import cats.implicits._
 import spire.math._
-import spire.implicits._
 import axle.pgm._
 import axle.jung.directedGraphJung
 
@@ -70,6 +69,7 @@ class ABE extends FunSuite with Matchers {
 
     val sansAll: Factor[Boolean, Rational] = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 
+    import spire.implicits.multiplicativeSemigroupOps
     (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E) // dropping "abe"
 
     // val Q: Set[Variable[Boolean]] = Set(E, B, A)
