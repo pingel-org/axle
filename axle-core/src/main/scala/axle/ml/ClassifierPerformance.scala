@@ -3,10 +3,14 @@ package axle.ml
 import cats.Functor
 import cats.Show
 import cats.implicits._
-import spire.algebra.Field
-import spire.implicits._
-import axle.math.Σ
-import axle.algebra.Aggregatable
+
+import spire.algebra._
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.multiplicativeGroupOps
+
+import axle.algebra.Talliable
+import axle.syntax.talliable._
 
 /**
  * ClassifierPerformance computes measures of classification performance
@@ -38,21 +42,33 @@ case class ClassifierPerformance[N, DATA, F[_]](
   relevant: DATA => Boolean)(
   implicit
   functor: Functor[F],
-  agg:     Aggregatable[F],
+  talliable: Talliable[F],
   field:   Field[N]) {
 
-  import field._
+  sealed trait Bucket
+  object TruePositive extends Bucket
+  object FalsePositive extends Bucket
+  object TrueNegative extends Bucket
+  object FalseNegative extends Bucket
 
-  val scores = data.map { d =>
-    (relevant(d), retrieve(d)) match {
-      case (true, true)   => (one, zero, zero, zero) // true positive
-      case (false, true)  => (zero, one, zero, zero) // false positive
-      case (false, false) => (zero, zero, one, zero) // true negative
-      case (true, false)  => (zero, zero, zero, one) // false negative
-    }
-  }
+  import field.one
+  val two = one + one
 
-  val (tp, fp, tn, fn): (N, N, N, N) = Σ[(N, N, N, N), F](scores)
+  val relevantRetrievedToBucket: Map[(Boolean, Boolean), Bucket] = Map(
+    (true, true)   -> TruePositive,
+    (false, true)  -> FalsePositive,
+    (false, false) -> TrueNegative,
+    (true, false)  -> FalseNegative
+  )
+
+  val buckets: F[Bucket] = data.map { d => relevantRetrievedToBucket((relevant(d), retrieve(d))) }
+
+  val bucketTally: Map[Bucket, N] = buckets.tally
+
+  val tp = bucketTally(TruePositive)
+  val fp = bucketTally(FalsePositive)
+  val tn = bucketTally(TrueNegative)
+  val fn = bucketTally(FalseNegative)  
 
   val precision: N = tp / (tp + fp)
 
@@ -62,10 +78,10 @@ case class ClassifierPerformance[N, DATA, F[_]](
 
   val accuracy: N = (tp + tn) / (tp + tn + fp + fn)
 
-  def f1Score: N = 2 * (precision * recall) / (precision + recall)
+  def f1Score: N = two * (precision * recall) / (precision + recall)
 
-  def fScore(β: Double = 1d): N =
-    (1 + (β * β)) * (precision * recall) / ((β * β * precision) + recall)
+  def fScore(β: N = one): N =
+    (one + (β * β)) * (precision * recall) / ((β * β * precision) + recall)
 
 }
 
