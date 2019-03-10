@@ -15,7 +15,7 @@ class AlignDNA extends FunSuite with Matchers {
     import NeedlemanWunschDefaults._
 
     // Evidence for optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Double]
-    implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
     implicit val dim: Module[Double, Int] = axle.algebra.modules.doubleIntModule
 
     implicit val laJblasDouble = {
@@ -54,7 +54,7 @@ class AlignDNA extends FunSuite with Matchers {
     import spire.algebra._
 
     implicit val laJblasInt = {
-      implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+      implicit val rngInt: Rng[Int] = spire.implicits.IntAlgebra
       implicit val nrootInt: NRoot[Int] = spire.implicits.IntAlgebra
       axle.jblas.linearAlgebraDoubleMatrix[Int]
     }

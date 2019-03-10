@@ -3,9 +3,12 @@ package axle.ml
 import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import org.jblas.DoubleMatrix
 
+import cats.kernel.Eq
 import cats.implicits._
 
+import spire.algebra._
 import spire.random.Generator.rng
 
 import axle.algebra.functorIndexedSeq
@@ -16,10 +19,7 @@ class KMeansSpecification
 
   test("K-Means Clustering: cluster random 2d points with small gaussian distribution around a center into 2 clusters") {
 
-    import org.jblas.DoubleMatrix
-    import cats.kernel.Eq
     import spire.math.{pi, cos, sin, sqrt}
-    import spire.algebra._
     import axle.jblas.linearAlgebraDoubleMatrix
     import axle.jblas.rowVectorInnerProductSpace
     import axle.algebra.distance.Euclidean
@@ -77,8 +77,6 @@ class KMeansSpecification
 
   test("K-Means Clustering: cluster irises, generate confusion matrix, and create SVG visualization") {
 
-    import cats.implicits._
-    import spire.algebra._
     import axle.quanta.Distance
     import axle.quanta.DistanceConverter
     import axle.jung._
@@ -95,7 +93,6 @@ class KMeansSpecification
 
     val irisesData = new Irises
 
-    import org.jblas.DoubleMatrix
     import axle.algebra.distance.Euclidean
     import axle.jblas.linearAlgebraDoubleMatrix
     import axle.jblas.rowVectorInnerProductSpace
