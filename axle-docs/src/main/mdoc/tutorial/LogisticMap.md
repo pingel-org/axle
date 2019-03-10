@@ -14,14 +14,14 @@ import java.util.TreeSet
 import cats.implicits._
 
 import spire.math.abs
-import spire.algebra.Field
+import spire.algebra._
 
 import axle.math.logisticMap
 import axle.{ orbit, applyK }
 import axle.visualize._
 import axle.awt._
 
-implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val ringDouble: Ring[Double] = spire.implicits.DoubleAlgebra
 ```
 
 ```scala mdoc
