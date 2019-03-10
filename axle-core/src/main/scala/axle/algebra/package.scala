@@ -5,6 +5,7 @@ import scala.language.implicitConversions
 import cats.Functor
 
 import spire.algebra._
+import spire.implicits.additiveGroupOps
 
 import spire.math.Rational
 import spire.math.Rational.apply
@@ -45,9 +46,13 @@ package object algebra {
     (v: Real, w: Real) =>
       (v.toDouble - w.toDouble).abs
 
-  implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] =
-    (v: Double, w: Double) =>
-      (v - w).abs
+  // implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] =
+  //   (v: Double, w: Double) =>
+  //     (v - w).abs
+
+  implicit def metricSpaceFromAdditiveGroupSigned[N: AdditiveGroup: Signed]: MetricSpace[N, N] =
+    (v: N, w: N) =>
+      spire.math.abs(v - w)
 
   //import spire.math._
 

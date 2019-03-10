@@ -3,6 +3,8 @@ package axle.jblas
 import org.scalatest._
 
 import spire.algebra._
+import spire.implicits.additiveSemigroupOps
+
 import axle.syntax.LinearAlgebraOps
 import axle.syntax.linearalgebra.matrixOps
 import axle.syntax.endofunctor.endofunctorOps

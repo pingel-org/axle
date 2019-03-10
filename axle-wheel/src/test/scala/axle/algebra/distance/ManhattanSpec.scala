@@ -11,6 +11,7 @@ import cats.implicits._
 import spire.algebra._
 import spire.laws.VectorSpaceLaws
 
+import axle.algebra.metricSpaceFromAdditiveGroupSigned
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix
@@ -19,13 +20,17 @@ class ManhattanSpec
   extends FunSuite with Matchers
   with Discipline {
 
-    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
-    implicit val mmInt: MultiplicativeMonoid[Int] = spire.implicits.IntAlgebra
-    implicit val nrootInt: NRoot[Int] = spire.implicits.IntAlgebra
+  implicit val additiveGroupInt: AdditiveGroup[Int] = spire.implicits.IntAlgebra
+  implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+  implicit val mmInt: MultiplicativeMonoid[Int] = spire.implicits.IntAlgebra
+  implicit val nrootInt: NRoot[Int] = spire.implicits.IntAlgebra
 
-    MetricSpace[Int, Int]
-
-  implicit val space = new Manhattan[DoubleMatrix, Int, Int, Int]()
+  implicit val space = {
+    implicit val signedInt: Signed[Int] = spire.implicits.IntAlgebra
+    // implicit val msDD = metricSpaceFromAdditiveGroupSigned[Int]
+    // MetricSpace[Int, Int]
+    new Manhattan[DoubleMatrix, Int, Int, Int]()
+  }
 
   val m = 1
   val n = 2

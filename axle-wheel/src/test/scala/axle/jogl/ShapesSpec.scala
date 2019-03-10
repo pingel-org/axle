@@ -3,10 +3,15 @@ package axle.jogl
 import org.scalatest._
 
 import java.util.Date
+import java.nio.file.Paths
 
 import com.jogamp.opengl.GL2
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import java.nio.file.Paths
+
+import cats.implicits._
+
+import spire.algebra._
+
 import axle.algebra.SphericalVector
 import axle.algebra.modules.floatRationalModule
 import axle.jung.directedGraphJung
@@ -14,6 +19,9 @@ import axle.quanta.Angle
 import axle.quanta.Distance
 
 class ShapesSpec extends FunSuite with Matchers {
+
+  implicit val fieldFloat: Field[Float] = spire.implicits.FloatAlgebra
+  implicit val trigFloat: Trig[Float] = spire.implicits.FloatAlgebra
 
   test("axle.jogl shapes") {
 

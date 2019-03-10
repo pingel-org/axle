@@ -436,7 +436,6 @@ package object awt {
           val bottomUnscaled = framePoint(bottomScaled)
           g2d.setColor(Color.black)
 
-          implicit val mmd: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
           implicit val equq = UnittedQuantity.eqqqn[Angle, Double]
 
           // TODO: angle xtics?
