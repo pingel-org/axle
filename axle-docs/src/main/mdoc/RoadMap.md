@@ -37,48 +37,52 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Remove extraneous `cutoff` argument for `PCA`
 * Replace Tut with MDoc
 
-* Fix all doc errors
+* Whither 0.95 cutoff in LinearAlgebra.md? (see ClusterIrises?)
+* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
+
+* Fix Plots.md
 * Doublecheck animation on Plots.md
 * Make sure animation doc has right return value
+
+* Re-enable fatal warnings (build.sbt)
+* Fix markdown lint warnings
+* LogisticMap back to 4k x 4k
+
+* Fix Statistics.md
+* Fix TwoDice.md (as much as possible, then move out of the way?)
+* Fix NaiveBayesClassifier.md (as much as possible, the move out of the way)
+* Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
+
 * configure makeSite to preview: previewFixedPort := Some(9999)
 * copy css using makeSite (not update-docs.sh)
-* publish site using https://www.scala-sbt.org/sbt-site/publishing.html and sbt-s3
+* publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 * figure out better way to reference images
-* Whither 0.95 cutoff in LinearAlgebra.md? (see ClusterIrises?)
-* LogisticMap back to 4k x 4k
-* Fix TwoDice, etc
-* get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSPecification)
-* cats effect/io for all `png`, `html`, etc functions
 * Publish site
 
-## 0.5.1 (April 2019)
-
 * Fix logistic regression
+* cats effect/io for all `png`, `html`, etc functions
 * Fix all "TODO monad syntax"
 * ScalaCheck tests for Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
 * Avoid these:
      implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
      val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
 * Syntax for ProbabilityModel.probabilityOf, observe, etc
-* Friend of Spire
-
-## 0.5.2 (May 2019)
-
 * Functors for jung should use projections (study cats disjunction, scala Either)
+* Fix GeneticAlgorithmSpec
+* Fix NaiveBayesSpec
+* Fix ProbabilitySpec
+* Move {TwoDice, GeneticAlgorthms, LogisticRegression, NaiveBayesClassifier}.md back
+* kittens 1.0.0-RC3 or magnolia
+  * pattern match in FirstOrderPredicateLogic
+  * subtyping for Suit and Rank
+
+## 0.5.1 (???)
+
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * ScalaCheck tests for
   * Modules in axle.algebra
   * MetricSpaces axle.bio.{SmithWaterman, NeedlemanWunsch}
   * MetricSpace axle.nlp.Levenshtein
-
-## 0.5.3 (June 2019)
-
-* Fix GeneticAlgorithmSpec
-* Fix NaiveBayesSpec
-* Fix ProbabilitySpec
-* kittens 1.0.0-RC3 or magnolia
-  * pattern match in FirstOrderPredicateLogic
-  * subtyping for Suit and Rank
 
 ## 0.6.0 (Summer 2019)
 
@@ -86,6 +90,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Factor tics and tics-{joda,algebra,spire} into separate libs
 * Demo Mandelbrot with Rational
 * Kolmogorov's axiom's of probability
+* Friend of Spire
 * Finish NaiveBayesClassifier
 * What to do with TD1 and CPT2? Fix "cpt" in InformationTheorySpec
 * eliminate rationalProbabilityDist usage by introducing new `Probability` (or some such) typeclass
