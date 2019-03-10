@@ -1,6 +1,9 @@
 package axle.ml
 
 import org.scalatest._
+
+import spire.algebra._
+
 import axle.jblas._
 
 class LinearRegressionSpecification
@@ -17,8 +20,9 @@ class LinearRegressionSpecification
         RealtyListing(852, 2, 1, 36, 178.0) ::
         Nil
 
-    import spire.implicits.DoubleAlgebra
-    implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+      implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
 
     val priceEstimator = LinearRegression(
       data,

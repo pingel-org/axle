@@ -4,9 +4,8 @@ import scala.language.implicitConversions
 
 import cats.Functor
 
-import spire.algebra.MetricSpace
-import spire.algebra.Module
-import spire.algebra.Rng
+import spire.algebra._
+
 import spire.math.Rational
 import spire.math.Rational.apply
 import spire.math.Real
@@ -50,7 +49,6 @@ package object algebra {
     (v: Double, w: Double) =>
       (v - w).abs
 
-  //import spire.implicits._
   //import spire.math._
 
   //  implicit val rationalRng: Rng[Rational] = new Rng[Rational] {
@@ -70,19 +68,20 @@ package object algebra {
 
     val rat = new spire.math.RationalAlgebra()
 
-    import spire.implicits.DoubleAlgebra
-    import spire.implicits.IntAlgebra
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+    implicit val fieldFloat: Field[Float] = spire.implicits.FloatAlgebra
 
     implicit val doubleIntModule: Module[Double, Int] =
       new Module[Double, Int] {
 
-        def negate(x: Double): Double = DoubleAlgebra.negate(x)
+        def negate(x: Double): Double = fieldDouble.negate(x)
 
-        def zero: Double = DoubleAlgebra.zero
+        def zero: Double = fieldDouble.zero
 
-        def plus(x: Double, y: Double): Double = DoubleAlgebra.plus(x, y)
+        def plus(x: Double, y: Double): Double = fieldDouble.plus(x, y)
 
-        implicit def scalar: Rng[Int] = IntAlgebra
+        implicit def scalar: Rng[Int] = ringInt
 
         def timesl(r: Int, v: Double): Double = r * v
 
@@ -91,13 +90,13 @@ package object algebra {
     implicit val doubleDoubleModule: Module[Double, Double] =
       new Module[Double, Double] {
 
-        def negate(x: Double): Double = DoubleAlgebra.negate(x)
+        def negate(x: Double): Double = fieldDouble.negate(x)
 
-        def zero: Double = DoubleAlgebra.zero
+        def zero: Double = fieldDouble.zero
 
-        def plus(x: Double, y: Double): Double = DoubleAlgebra.plus(x, y)
+        def plus(x: Double, y: Double): Double = fieldDouble.plus(x, y)
 
-        implicit def scalar: Rng[Double] = DoubleAlgebra
+        implicit def scalar: Rng[Double] = fieldDouble
 
         def timesl(r: Double, v: Double): Double = r * v
 
@@ -112,7 +111,7 @@ package object algebra {
 
         def plus(x: Real, y: Real): Real = x + y
 
-        implicit def scalar: Rng[Double] = DoubleAlgebra
+        implicit def scalar: Rng[Double] = fieldDouble
 
         def timesl(r: Double, v: Real): Real = r * v
       }
@@ -133,11 +132,11 @@ package object algebra {
 
     implicit val doubleRationalModule: Module[Double, Rational] = new Module[Double, Rational] {
 
-      def negate(x: Double): Double = DoubleAlgebra.negate(x)
+      def negate(x: Double): Double = fieldDouble.negate(x)
 
-      def zero: Double = DoubleAlgebra.zero
+      def zero: Double = fieldDouble.zero
 
-      def plus(x: Double, y: Double): Double = DoubleAlgebra.plus(x, y)
+      def plus(x: Double, y: Double): Double = fieldDouble.plus(x, y)
 
       implicit def scalar: Rng[Rational] = rat
 
@@ -147,13 +146,11 @@ package object algebra {
 
     implicit val floatRationalModule: Module[Float, Rational] = new Module[Float, Rational] {
 
-      import spire.implicits.FloatAlgebra
+      def negate(x: Float): Float = fieldFloat.negate(x)
 
-      def negate(x: Float): Float = FloatAlgebra.negate(x)
+      def zero: Float = fieldFloat.zero
 
-      def zero: Float = FloatAlgebra.zero
-
-      def plus(x: Float, y: Float): Float = FloatAlgebra.plus(x, y)
+      def plus(x: Float, y: Float): Float = fieldFloat.plus(x, y)
 
       implicit def scalar: Rng[Rational] = rat
 
@@ -164,15 +161,13 @@ package object algebra {
     implicit val floatDoubleModule: Module[Float, Double] =
       new Module[Float, Double] {
 
-        import spire.implicits.FloatAlgebra
+        def negate(x: Float): Float = fieldFloat.negate(x)
 
-        def negate(x: Float): Float = FloatAlgebra.negate(x)
+        def zero: Float = fieldFloat.zero
 
-        def zero: Float = FloatAlgebra.zero
+        def plus(x: Float, y: Float): Float = fieldFloat.plus(x, y)
 
-        def plus(x: Float, y: Float): Float = FloatAlgebra.plus(x, y)
-
-        implicit def scalar: Rng[Double] = DoubleAlgebra
+        implicit def scalar: Rng[Double] = fieldDouble
 
         def timesl(r: Double, v: Float): Float = (r * v).toFloat
 
@@ -186,7 +181,7 @@ package object algebra {
 
       def plus(x: Rational, y: Rational): Rational = rat.plus(x, y)
 
-      implicit def scalar: Rng[Double] = DoubleAlgebra
+      implicit def scalar: Rng[Double] = fieldDouble
 
       def timesl(r: Double, v: Rational): Rational = r * v
 

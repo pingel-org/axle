@@ -6,9 +6,11 @@ import org.scalatest._
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
-import spire.implicits.IntAlgebra
-//import cats.implicits._
+import cats.implicits._
+
+import spire.algebra._
 import spire.laws.VectorSpaceLaws
+
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix
@@ -16,6 +18,12 @@ import axle.jblas.eqDoubleMatrix
 class ManhattanSpec
   extends FunSuite with Matchers
   with Discipline {
+
+    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+    implicit val mmInt: MultiplicativeMonoid[Int] = spire.implicits.IntAlgebra
+    implicit val nrootInt: NRoot[Int] = spire.implicits.IntAlgebra
+
+    MetricSpace[Int, Int]
 
   implicit val space = new Manhattan[DoubleMatrix, Int, Int, Int]()
 

@@ -7,7 +7,6 @@ import java.util.Date
 import com.jogamp.opengl.GL2
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import java.nio.file.Paths
-import spire.implicits._
 import axle.algebra.SphericalVector
 import axle.algebra.modules.floatRationalModule
 import axle.jung.directedGraphJung

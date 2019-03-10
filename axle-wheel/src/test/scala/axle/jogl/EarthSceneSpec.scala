@@ -7,9 +7,13 @@ import java.util.Date
 import com.jogamp.opengl.GL2
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.FloatAlgebra
+
+import cats.implicits._
+
+import spire.algebra._
 import spire.implicits.additiveGroupOps
 import spire.implicits.moduleOps
+
 import axle.algebra.GeoCoordinates
 import axle.algebra.SphericalVector
 import axle.algebra.modules.floatRationalModule
@@ -24,9 +28,13 @@ class EarthSceneSpec extends FunSuite with Matchers {
 
     //    implicit val ddc = {
     //      import axle.algebra.modules.doubleRationalModule
-    //      import spire.implicits.DoubleAlgebra
+    //      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     //      Distance.converterGraphK2[Double, DirectedSparseGraph]
     //    }
+
+
+    implicit val fieldFloat: Field[Float] = spire.implicits.FloatAlgebra
+    implicit val trigFloat: Trig[Float] = spire.implicits.FloatAlgebra
 
     implicit val distanceConverter = Distance.converterGraphK2[Float, DirectedSparseGraph]
     import distanceConverter._

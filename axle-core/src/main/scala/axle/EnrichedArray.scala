@@ -1,7 +1,6 @@
 package axle
 
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
+import cats.implicits._
 
 case class EnrichedArray[T: Manifest](arr: Array[T]) {
 

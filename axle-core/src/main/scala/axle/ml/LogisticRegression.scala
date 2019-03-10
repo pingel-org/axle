@@ -2,7 +2,7 @@ package axle.ml
 
 import spire.math.exp
 import spire.math.log
-import spire.implicits._
+import spire.algebra._
 import axle.syntax.linearalgebra._
 import axle.algebra.LinearAlgebra
 
@@ -16,6 +16,8 @@ case class LogisticRegression[D, M](
   extends Function1[List[Double], Double] {
 
   implicit val mul = la.multiplicative
+
+  implicit val amInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
 
   // h is essentially P(y=1 | X;θ)
   def h(xi: M, θ: M): Double =

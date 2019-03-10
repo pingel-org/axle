@@ -8,15 +8,19 @@ import org.scalatest._
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
+import cats.implicits._
+
 import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
 import spire.implicits.SeqNormedVectorSpace
 import spire.math.Real
 import spire.laws.VectorSpaceLaws
 
+import axle._
+
 trait ScalarDoubleSpace extends MetricSpace[Double, Double] {
 
-  def distance(v: Double, w: Double): Double = math.abs(v - w)
+  def distance(v: Double, w: Double): Double = spire.math.abs(v - w)
 }
 
 trait ScalarRealSpace extends MetricSpace[Real, Real] {
@@ -64,8 +68,6 @@ object ArbitrarySpaceStuff {
 class MetricSpaceSpec() extends FunSuite with Matchers with Discipline {
 
   import ArbitrarySpaceStuff._
-
-  import spire.implicits._
 
   implicit val pred: Predicate[Real] = new Predicate[Real] {
     def apply(a: Real) = true

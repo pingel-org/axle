@@ -3,8 +3,12 @@ package axle.algebra
 import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.DoubleAlgebra
+
+import cats.implicits._
+
+import spire.algebra._
 import spire.implicits.metricSpaceOps
+
 import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
 import axle.algebra.modules.doubleRationalModule
 import axle.math.distanceOnSphere
@@ -13,6 +17,10 @@ import axle.quanta.Angle
 import axle.quanta.Distance
 
 class GeoLengthSpaceSpec extends FunSuite with Matchers {
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+  implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
 
   implicit val angleConverter = Angle.converterGraphK2[Double, DirectedSparseGraph]
   import angleConverter.°

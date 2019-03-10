@@ -1,6 +1,7 @@
 package axle.ml
 
 import org.scalatest._
+import spire.algebra._
 import axle.jblas._
 
 class FeatureNormalizerSpec extends FunSuite with Matchers {
@@ -16,7 +17,8 @@ class FeatureNormalizerSpec extends FunSuite with Matchers {
 
   test("identity normalizer leaves features alone") {
 
-    import spire.implicits.DoubleAlgebra
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+    implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
     implicit val la = linearAlgebraDoubleMatrix[Double]
 
     val X = la.fromColumnMajorArray(
@@ -33,7 +35,8 @@ class FeatureNormalizerSpec extends FunSuite with Matchers {
 
   test("z score normalizer centers features") {
 
-    import spire.implicits.DoubleAlgebra
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+    implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
     implicit val la = linearAlgebraDoubleMatrix[Double]
 
     val X = la.fromColumnMajorArray(

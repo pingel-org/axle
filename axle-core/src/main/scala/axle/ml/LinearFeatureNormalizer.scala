@@ -1,6 +1,5 @@
 package axle.ml
 
-import spire.implicits._
 import spire.implicits.additiveSemigroupOps
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._

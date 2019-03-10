@@ -1,13 +1,10 @@
 
 package axle.ast.view
 
+import cats.implicits._
 import axle.ast.AstNode
 import axle.ast.AstNodeRule
 import axle.ast.Language
-import spire.implicits.IntAlgebra
-import spire.implicits.OptionOrder
-import spire.implicits.StringOrder
-import spire.implicits.eqOps
 
 case class FormatterConfig(
   language:  Language,

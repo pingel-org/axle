@@ -6,15 +6,19 @@ import org.scalatest._
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
+import spire.algebra._
+
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.rowVectorInnerProductSpace
-import spire.implicits.DoubleAlgebra
-import spire.implicits.IntAlgebra
 
 class CosineSpec
   extends FunSuite with Matchers
   with Discipline {
+
+  implicit val mmInt: MultiplicativeMonoid[Int] = spire.implicits.IntAlgebra
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
   val n = 2
   implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](n)

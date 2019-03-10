@@ -6,6 +6,8 @@ import com.jogamp.opengl.GL2
 import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0
 import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_POSITION
 
+import spire.algebra._
+
 import axle.algebra.Position3DSpace
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
@@ -13,9 +15,10 @@ import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnitOfMeasurement
 import axle.quanta.UnittedQuantity
-import spire.implicits.FloatAlgebra
 
 package object jogl {
+
+  implicit val mmFloat: MultiplicativeMonoid[Float] = spire.implicits.FloatAlgebra
 
   def translate(
     gl:           GL2,

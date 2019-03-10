@@ -4,18 +4,13 @@ import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
-import spire.algebra.AdditiveMonoid
-import spire.algebra.AdditiveGroup
-import spire.algebra.Field
-import spire.algebra.Module
-import spire.algebra.MultiplicativeMonoid
-import spire.algebra.Rng
-import spire.algebra.Signed
+
+import spire.algebra._
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.signedOps
-import spire.implicits._
+
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics

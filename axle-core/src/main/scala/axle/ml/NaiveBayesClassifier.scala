@@ -7,10 +7,8 @@ import cats.implicits._
 
 import spire.algebra.Field
 import spire.implicits.MapInnerProductSpace
-// import spire.implicits.StringOrder
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.eqOps
 
 import axle.algebra._
 import axle.math._

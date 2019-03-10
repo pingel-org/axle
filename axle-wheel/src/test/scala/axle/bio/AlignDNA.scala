@@ -3,8 +3,7 @@ package axle.bio
 import org.jblas.DoubleMatrix
 import org.scalatest._
 import cats.implicits._
-import spire.algebra.Module
-import spire.algebra.Ring
+import spire.algebra._
 import axle.algebra.functorIndexedSeq
 
 class AlignDNA extends FunSuite with Matchers {
@@ -17,11 +16,11 @@ class AlignDNA extends FunSuite with Matchers {
 
     // Evidence for optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Double]
     implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
-    // implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
     implicit val dim: Module[Double, Int] = axle.algebra.modules.doubleIntModule
 
     implicit val laJblasDouble = {
-      import spire.implicits.DoubleAlgebra
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
       axle.jblas.linearAlgebraDoubleMatrix[Double]
     }
 
@@ -55,7 +54,8 @@ class AlignDNA extends FunSuite with Matchers {
     import spire.algebra._
 
     implicit val laJblasInt = {
-      import spire.implicits.IntAlgebra
+      implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+      implicit val nrootInt: NRoot[Int] = spire.implicits.IntAlgebra
       axle.jblas.linearAlgebraDoubleMatrix[Int]
     }
 

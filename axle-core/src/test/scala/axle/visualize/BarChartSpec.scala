@@ -2,13 +2,10 @@ package axle.visualize
 
 import org.scalatest._
 
-// import cats.implicits._
-import cats.implicits.catsStdShowForInt
-import cats.implicits.catsStdShowForString
+import cats.implicits._
 
-//import spire.implicits.DoubleAlgebra
-import spire.implicits._
 import spire.math.Rational
+import spire.algebra._
 
 import axle.game.Dice.die
 import axle.stats.ProbabilityModel
@@ -20,6 +17,8 @@ class BarChartSpec extends FunSuite with Matchers {
 
   implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
   val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
   test("BarChart render an SVG of fruit sales") {
 

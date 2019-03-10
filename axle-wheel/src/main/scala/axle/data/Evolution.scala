@@ -1,7 +1,7 @@
 package axle.data
 
+import spire.algebra._
 import axle.quanta._
-import spire.implicits._
 import axle.algebra.Vec
 
 /**
@@ -16,6 +16,7 @@ case class Evolution()(implicit tc: TimeConverter[Double]) {
 
   type V[T] = (T, T)
 
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   import tc._
 
   val commonEra = frameOfReference

@@ -1,7 +1,7 @@
 package axle.ast.language
 
+import cats.implicits._
 import axle.ast._
-import spire.implicits._
 
 object Python {
 

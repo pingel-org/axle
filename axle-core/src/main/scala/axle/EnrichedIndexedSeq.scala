@@ -2,9 +2,8 @@ package axle
 
 import scala.collection.IndexedSeq
 
+import cats.implicits._
 import spire.random.Generator
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
 
 case class EnrichedIndexedSeq[T: Manifest](is: IndexedSeq[T]) {
 

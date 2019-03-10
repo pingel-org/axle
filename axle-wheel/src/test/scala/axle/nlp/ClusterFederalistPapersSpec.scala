@@ -1,8 +1,12 @@
 package axle.nlp
 
 import org.scalatest._
+
 import cats.implicits._
+
+import spire.algebra._
 import spire.random.Generator.rng
+
 import axle.nlp.language.English
 
 class ClusterFederalistPapersSpec extends FunSuite with Matchers {
@@ -19,7 +23,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
 
     def featureExtractor(fp: Article): List[Double] = {
       import axle.enrichGenSeq
-      import spire.implicits.LongAlgebra
+      implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
 
       val tokens = English.tokenize(fp.text.toLowerCase)
       val wordCounts = tokens.tally[Long]
@@ -30,7 +34,6 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
     }
 
     import org.jblas.DoubleMatrix
-    import spire.algebra._
     import axle.algebra.distance._
     import axle.algebra.distance.Euclidean
     import axle.jblas.linearAlgebraDoubleMatrix
@@ -46,7 +49,6 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
 
     import axle.ml.KMeans
     import axle.ml.PCAFeatureNormalizer
-    // import spire.implicits.DoubleAlgebra
 
     val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
@@ -59,7 +61,6 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
       iterations = 100)(rng)
 
     import axle.ml.ConfusionMatrix
-    import cats.implicits._
 
     val confusion = ConfusionMatrix[Article, Int, String, Vector, DoubleMatrix](
       classifier,

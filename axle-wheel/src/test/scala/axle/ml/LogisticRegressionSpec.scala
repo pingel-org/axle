@@ -1,6 +1,9 @@
 package axle.ml
 
 import org.scalatest._
+
+import spire.algebra._
+
 import axle.jblas._
 
 class LogisticRegressionSpec extends FunSuite with Matchers {
@@ -31,7 +34,8 @@ class LogisticRegressionSpec extends FunSuite with Matchers {
       Student(5.00, true),
       Student(5.50, true))
 
-    import spire.implicits.DoubleAlgebra
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+    implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
     implicit val laJblasDouble = linearAlgebraDoubleMatrix[Double]
 
     val pTestPass = LogisticRegression(

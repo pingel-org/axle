@@ -3,12 +3,16 @@ package axle.algebra
 import org.scalacheck.Arbitrary.arbInt
 import org.scalatest._
 import org.typelevel.discipline.scalatest.Discipline
+
+import cats.implicits._
+
+import spire.algebra._
+
 import axle.algebra.laws.MonoidLaws
-import spire.algebra.AdditiveMonoid
-import spire.algebra.MultiplicativeMonoid
-import spire.implicits.IntAlgebra
 
 class MonoidLawsSpec() extends FunSuite with Matchers with Discipline {
+
+  implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
 
   //  lazy val genMonoid: Gen[Monoid[A]] = Gen.oneOf(monoids)
   //

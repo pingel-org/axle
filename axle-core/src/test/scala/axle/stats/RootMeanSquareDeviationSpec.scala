@@ -1,13 +1,16 @@
 package axle.stats
 
 import org.scalatest._
+
 import cats.implicits._
+import spire.algebra._
 
 class RootMeanSquareDeviationSpec extends FunSuite with Matchers {
 
-  test("RMSD") {
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
-    import spire.implicits.DoubleAlgebra
+  test("RMSD") {
 
     val rmsd = rootMeanSquareDeviation(
       (1 to 4).map(_.toDouble).toList,

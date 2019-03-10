@@ -5,10 +5,13 @@ import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
+
 import cats.implicits._
-import spire.implicits.DoubleAlgebra
+
+import spire.algebra._
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math._
+
 import axle.stats._
 import axle.jung.undirectedGraphJung
 import axle.jung.directedGraphJung
@@ -186,6 +189,8 @@ class ScalaFigures extends FunSuite with Matchers {
 
   def figure7_12 = {
 
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  
     val abc: Set[Variable[Boolean]] = Set(A, B, C)
     val bcd: Set[Variable[Boolean]] = Set(B, C, D)
     val ce: Set[Variable[Boolean]] = Set(C, E)

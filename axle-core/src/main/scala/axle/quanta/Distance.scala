@@ -1,7 +1,9 @@
 package axle.quanta
 
 import cats.kernel.Eq
+
 import spire.algebra.Field
+
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale
@@ -54,7 +56,6 @@ object Distance {
 
   import spire.algebra.Module
   import spire.math._
-  import spire.implicits._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit

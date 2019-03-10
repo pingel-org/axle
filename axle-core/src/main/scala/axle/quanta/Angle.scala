@@ -1,13 +1,14 @@
 package axle.quanta
 
+import cats.kernel.Eq
+
+import spire.algebra.Field
 import spire.math.{ pi => π }
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale
 import axle.algebra.BijectiveIdentity
-import cats.kernel.Eq
-import spire.algebra.Field
 
 case class Angle() extends Quantum {
 
@@ -42,7 +43,6 @@ object Angle {
 
   import spire.algebra.Module
   import spire.math._
-  import spire.implicits._
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
     implicit

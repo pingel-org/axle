@@ -1,7 +1,8 @@
 package axle.data
 
+import spire.algebra.Field
 import axle.quanta._
-import spire.implicits._
+import spire.implicits.moduleOps
 
 case class CelestialBody(
   name:        String,
@@ -12,6 +13,8 @@ case class CelestialBody(
 case class Astronomy()(
   implicit
   mc: MassConverter[Double], dc: DistanceConverter[Double], tc: TimeConverter[Double]) {
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
   import mc._
   import dc._

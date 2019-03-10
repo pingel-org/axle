@@ -3,15 +3,20 @@ package axle.stats
 import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import cats.Order.catsKernelOrderingForOrder
+
+import cats.implicits._
+
+import spire.algebra._
 import spire.math.Rational
-import spire.implicits.DoubleAlgebra
-import spire.implicits._
+
 import axle.jung.directedGraphJung
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 
 class EntropySpec extends FunSuite with Matchers {
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
   test("entropy of coin") {
 

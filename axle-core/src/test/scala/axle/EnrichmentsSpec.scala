@@ -1,10 +1,12 @@
 package axle
 
 import org.scalatest._
-import spire.implicits._
+import spire.algebra._
 import cats.implicits._
 
 class EnrichmentsSpec extends FunSuite with Matchers {
+
+  implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure
 
   test("x in EnrichedGenTraversable") {
 

@@ -9,7 +9,6 @@ import cats.kernel.Eq
 import cats.implicits._
 
 import spire.algebra.Field
-
 import spire.algebra.NRoot
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
@@ -127,7 +126,7 @@ package object stats {
     prob:    ProbabilityModel[M, N],
     convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
-    import spire.implicits.DoubleAlgebra
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
     val convertN = ConvertableFrom[N]
     val H = Σ[Double, IndexedSeq](prob.values(model) map { x =>

@@ -1,9 +1,13 @@
 package axle.ml
 
 import org.scalatest._
+
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+
 import cats.implicits._
+
 import spire.random.Generator.rng
+
 import axle.algebra.functorIndexedSeq
 import axle.shuffle
 
@@ -25,7 +29,7 @@ class KMeansSpecification
     def fooSimilarity(foo1: Foo, foo2: Foo) = sqrt(List(foo1.x - foo2.x, foo1.y - foo2.y).map(x => x * x).sum)
 
     def randomPoint(center: Foo, σ2: Double): Foo = {
-      import spire.implicits.DoubleAlgebra
+      implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
       val distance = rng.nextGaussian() * σ2
       val angle = 2 * pi * rng.nextDouble
       Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
@@ -37,21 +41,24 @@ class KMeansSpecification
     //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
     implicit val innerSpace = {
-      import spire.implicits.DoubleAlgebra
-      import spire.implicits.IntAlgebra
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+      implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
       rowVectorInnerProductSpace[Int, Int, Double](2)
     }
 
     implicit val space = {
-      import spire.implicits.DoubleAlgebra
+      implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
       new Euclidean[DoubleMatrix, Double]()
     }
 
     implicit val fooEq = Eq.fromUniversalEquals[Foo]
 
-    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-    implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
-    implicit val la = axle.jblas.linearAlgebraDoubleMatrix[Double]
+    implicit val la = {
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+      axle.jblas.linearAlgebraDoubleMatrix[Double]
+    }
 
     val km = KMeans(
       data,

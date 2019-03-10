@@ -3,8 +3,7 @@ package axle
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.ListBuffer
 
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
+import cats.implicits._
 
 case class EnrichedMutableBuffer[T](buffer: Buffer[T]) {
 

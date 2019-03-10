@@ -2,8 +2,11 @@ package axle.data
 
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import cats.Order.catsKernelOrderingForOrder
-import spire.implicits._
+
+import cats.implicits._
+
+import spire.algebra._
+
 import axle.quanta.Distance
 import axle.quanta.Flow
 import axle.algebra.modules.doubleRationalModule
@@ -11,11 +14,12 @@ import axle.jung.directedGraphJung
 
 class RiversSpec extends FunSuite with Matchers {
 
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+
   test("rivers data") {
 
-    implicit val dcg = {
-      Distance.converterGraphK2[Double, DirectedSparseGraph]
-    }
+    implicit val dcg = Distance.converterGraphK2[Double, DirectedSparseGraph]
     implicit val fcg = Flow.converterGraphK2[Double, DirectedSparseGraph]
 
     val rivers = Rivers()

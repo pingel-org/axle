@@ -7,19 +7,25 @@ import org.scalatest._
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
+import cats.implicits._
+
+import spire.algebra._
+import spire.laws.VectorSpaceLaws
+
 import axle.algebra.LinearAlgebra
 import axle.jblas.eqDoubleMatrix
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.rowVectorInnerProductSpace
-import spire.implicits.DoubleAlgebra
-import spire.implicits.IntAlgebra
-import spire.laws.VectorSpaceLaws
 
 class EuclideanSpec
   extends FunSuite with Matchers
   with Discipline {
 
   val n = 2
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+  implicit val mmInt: MultiplicativeMonoid[Int] = spire.implicits.IntAlgebra
 
   // TODO Double value type
   implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](n)

@@ -3,13 +3,20 @@ package axle
 import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import spire.implicits.DoubleAlgebra
+
+import cats.implicits._
+
+import spire.algebra._
+
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.algebra.modules.doubleRationalModule
 import axle.jung.directedGraphJung
 
 class TrigonometrySpec extends FunSuite with Matchers {
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
 
   implicit val amd = Angle.converterGraphK2[Double, DirectedSparseGraph]
 

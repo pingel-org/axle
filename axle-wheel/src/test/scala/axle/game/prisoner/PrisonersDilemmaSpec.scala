@@ -92,7 +92,7 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
   //      val h = (outcome: PrisonersDilemmaOutcome, p: Player) =>
   //        outcome.winner.map(wp => if (wp == p) 1d else -1d).getOrElse(0d)
   //
-  //      import spire.implicits.DoubleAlgebra
+  //      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   //      val ai4 = aiMover[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, Double](
   //        4, outcomeRingHeuristic(game, h))
   //

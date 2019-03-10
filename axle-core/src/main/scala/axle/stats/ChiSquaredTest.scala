@@ -1,14 +1,19 @@
 package axle.stats
 
+import cats.implicits._
+
+import spire.algebra._
+
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
-import spire.implicits.IntAlgebra
 
 case class ChiSquaredTest[M](
   tally:     M,
   threshold: Double = 0.004)(
   implicit
   ev: LinearAlgebra[M, Int, Int, Double]) {
+
+  implicit val amInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
 
   val rowTotals = tally.rowSums
   val columnTotals = tally.columnSums
