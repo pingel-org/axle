@@ -4,13 +4,12 @@ import scala.collection.immutable.TreeMap
 import scala.language.implicitConversions
 
 import cats.Show
-import cats.kernel.Eq
-import cats.kernel.Order
 import cats.implicits._
 
 import spire.algebra._
 import spire.math.Rational
 import spire.random.Generator
+import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
 
 /**
@@ -97,7 +96,6 @@ package object axle {
 
   def gaps[T](xs: Seq[T])(implicit ringT: Ring[T]): Seq[(T, T)] = {
     import ringT.one
-    import spire.implicits._
     xs.zip(xs.drop(1))
       .map({ case (x, y) => (x, y - x) })
       .filterNot(_._2 == one)
@@ -121,7 +119,6 @@ package object axle {
 
   def runs[T](xs: Seq[T])(implicit ringT: Ring[T], orderT: Order[T]): Seq[(T, T)] = {
     import ringT.one
-    import spire.implicits._
     val breaks = xs.zip(xs.drop(1)).filter({ case (x, y) => orderT.compare(y - x, one) == 1 }).map(_._2).toSet
     runs(xs, breaks)
   }

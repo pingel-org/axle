@@ -1,6 +1,5 @@
 package axle.ml
 
-import spire.implicits._
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 

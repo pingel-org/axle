@@ -1,16 +1,18 @@
 package axle
 
+import cats.implicits._
+import spire.algebra._
 import org.scalatest._
 
 class PackageSpec extends FunSuite with Matchers {
 
+  implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+
   test("find gaps in List[Int]") {
-    import spire.implicits._
     gaps(List(1, 2, 6, 7, 8, 9, 10, 16)) should be(List((3, 5), (11, 15)))
   }
 
   test("find runs in List[Int]") {
-    import spire.implicits._
     runs(List(1, 2, 6, 7, 8, 9, 10, 16)) should be(List((1, 2), (6, 10), (16, 16)))
   }
 

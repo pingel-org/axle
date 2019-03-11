@@ -8,6 +8,7 @@ import org.scalatest._
 import cats.implicits._
 
 import spire.math.sin
+import spire.random.Generator
 import spire.random.Generator.rng
 import spire.algebra.Trig
 
@@ -25,16 +26,16 @@ class PlotWavesSpec extends FunSuite with Matchers {
 
     val now = new DateTime()
 
-    def randomTimeSeries(i: Int) = {
-      val φ = rng.nextDouble()
-      val A = rng.nextDouble()
-      val ω = 0.1 / rng.nextDouble()
+    def randomTimeSeries(i: Int, gen: Generator) = {
+      val φ = gen.nextDouble()
+      val A = gen.nextDouble()
+      val ω = 0.1 / gen.nextDouble()
       ("series %d %1.2f %1.2f %1.2f".format(i, φ, A, ω),
         new TreeMap[DateTime, Double]() ++
         (0 to 100).map(t => (now.plusMinutes(2 * t) -> A * sin(ω * t + φ))).toMap)
     }
 
-    val waves = (0 until 20).map(randomTimeSeries).toList
+    val waves = (0 until 20).map(i => randomTimeSeries(i, rng)).toList
 
     // test implicit conjuring:
     PlotDataView[String, DateTime, Double, TreeMap[DateTime, Double]]

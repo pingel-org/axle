@@ -4,7 +4,7 @@ import java.lang.Double.{ isInfinite, isNaN }
 import scala.annotation.implicitNotFound
 import cats.implicits._
 import spire.math._
-import spire.implicits._
+import spire.implicits.literalLongOps
 import axle.showRational
 
 @implicitNotFound("Witness not found for Tics[${T}]")

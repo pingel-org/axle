@@ -1,5 +1,6 @@
 package axle.ast.view
 
+import cats.implicits._
 import axle.ast.Affix
 import axle.ast.Arglist
 import axle.ast.AstNode
@@ -31,9 +32,6 @@ import axle.ast.Statement
 import axle.ast.Sub
 import axle.ast.Var
 import axle.ast.VarN
-import spire.implicits.IntAlgebra
-import spire.implicits.StringOrder
-import spire.implicits.eqOps
 
 object Emission {
 

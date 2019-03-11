@@ -2,8 +2,7 @@ package axle
 
 import scala.collection.mutable.ListBuffer
 
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
+import cats.implicits._
 
 case class PermutationsFast[E: Manifest](pool: IndexedSeq[E], r: Int)
   extends Iterable[IndexedSeq[E]] {

@@ -2,7 +2,6 @@ package axle.lx
 
 import org.scalatest._
 import Gold._
-import spire.implicits._
 
 class GoldSpecification extends FunSuite with Matchers {
 

@@ -8,19 +8,22 @@ import org.scalatest._
 import org.typelevel.discipline.scalatest.Discipline
 import org.typelevel.discipline.Predicate
 
-import axle.algebra.DistanceMatrix
-import cats.kernel.Eq
+import cats.implicits._
+import spire.algebra._
 import spire.laws.VectorSpaceLaws
 import spire.math.Real
+import axle.algebra.DistanceMatrix
 
 class DocumentVectorSpaceSpec
   extends FunSuite with Matchers
   with Discipline {
 
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+
   test("TermVectorizer creates term vectors correctly") {
 
     val stopwords = Set("this", "the")
-    import spire.implicits.DoubleAlgebra
     val vectorizer = TermVectorizer[Double](stopwords)
 
     val lines = Vector("foo bar baz", "foo fu", "fu fu fu bar")
@@ -40,7 +43,6 @@ class DocumentVectorSpaceSpec
 
   test("DocumentVectorSpace creates a distance matrix on sample corpus") {
 
-    import spire.implicits.DoubleAlgebra
     val vectorizer = TermVectorizer[Double](stopwords)
 
     val unweightedSpace = UnweightedDocumentVectorSpace[Double]()
@@ -56,7 +58,6 @@ class DocumentVectorSpaceSpec
 
   test("tfidf creates a distance matrix on sample corpus") {
 
-    import spire.implicits.DoubleAlgebra
     val vectorizer = TermVectorizer[Double](stopwords)
 
     implicit val tfidfSpace = TFIDFDocumentVectorSpace[Double](corpus, vectorizer)

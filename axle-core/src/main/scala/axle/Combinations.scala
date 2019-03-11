@@ -4,8 +4,7 @@ import scala.Stream.cons
 import scala.Stream.empty
 import scala.annotation.tailrec
 
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
+import cats.implicits._
 
 case class Combinations[E: Manifest](pool: IndexedSeq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 

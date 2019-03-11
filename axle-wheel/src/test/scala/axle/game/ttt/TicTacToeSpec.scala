@@ -2,8 +2,11 @@ package axle.game.ttt
 
 import org.scalatest._
 
+import cats.implicits._
+
 import spire.random.Generator.rng
 import spire.math.Rational
+import spire.algebra._
 
 import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable0
@@ -120,7 +123,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
     val h = (outcome: TicTacToeOutcome, p: Player) =>
       outcome.winner.map(wp => if (wp == p) 1d else -1d).getOrElse(0d)
 
-    import spire.implicits.DoubleAlgebra
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Double](
       4, outcomeRingHeuristic(game, h))
 

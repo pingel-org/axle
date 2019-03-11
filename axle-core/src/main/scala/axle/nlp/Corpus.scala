@@ -2,11 +2,13 @@ package axle.nlp
 
 import scala.collection.GenSeq
 
-import axle.enrichGenSeq
-import spire.implicits.LongAlgebra
 import cats.Show
+import spire.algebra.Ring
+import axle.enrichGenSeq
 
 case class Corpus(val documents: GenSeq[String], language: Language) {
+
+  implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
 
   lazy val wordCountMap: Map[String, Long] =
     documents.flatMap(doc => language.tokenize(doc.toLowerCase)).tally[Long]

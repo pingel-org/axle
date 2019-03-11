@@ -1,10 +1,13 @@
 package axle.stats
 
 import org.scalatest._
+import spire.algebra._
 import spire.math._
-import spire.implicits._
 
 class Stats101 extends FunSuite with Matchers {
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
   type λ[T] = ConditionalProbabilityTable0[T, Rational]
   val prob = implicitly[ProbabilityModel[λ, Rational]]

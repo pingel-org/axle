@@ -1,7 +1,9 @@
 package axle.data
 
+import spire.algebra.Field
+import spire.implicits.moduleOps
+
 import axle.quanta._
-import spire.implicits._
 
 /**
  * http://en.wikipedia.org/wiki/Wine_bottle
@@ -9,6 +11,8 @@ import spire.implicits._
  */
 
 case class Wine()(implicit vc: VolumeConverter[Double]) {
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
   import vc._
 

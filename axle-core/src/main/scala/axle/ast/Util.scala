@@ -25,7 +25,7 @@ object Util {
       })
 
   def convertStreamToString(is: InputStream): String = {
-    val result = io.Source.fromInputStream(is, "UTF-8").getLines().mkString("\n")
+    val result = scala.io.Source.fromInputStream(is, "UTF-8").getLines().mkString("\n")
     is.close
     result
   }

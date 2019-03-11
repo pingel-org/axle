@@ -1,7 +1,6 @@
 package axle.game.ttt
 
 import axle.game._
-import spire.implicits._
 
 case class TicTacToeState(
   playerOptFn: (TicTacToeState) => Option[Player],

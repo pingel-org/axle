@@ -1,16 +1,14 @@
 package axle.web
 
-// import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 import scala.xml.NodeSeq
 import scala.xml.NodeSeq.seqToNodeSeq
 import scala.annotation.implicitNotFound
 
 import cats.Show
-import cats.kernel.Eq
+
 import cats.implicits._
 
-import spire.implicits.DoubleAlgebra
-import spire.algebra.Field
+import spire.algebra._
 
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
@@ -234,7 +232,7 @@ object SVG {
 
         if (angle.isDefined) {
           import axle.visualize.angleDouble
-          import spire.implicits._
+          implicit val mmDouble: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
           val twist = angle.get.in(angleDouble.degree).magnitude * -1d
           elemWithAttributes(textBase, attribute("transform", s"rotate($twist $x $y)") :: Nil)
         } else {
@@ -396,6 +394,8 @@ object SVG {
       svgFrame(nodes, width.toDouble, height.toDouble)
     }
   }
+
+  implicit val mmDouble: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
 
   implicit def svgXTics[X, Y]: SVG[XTics[X, Y]] =
     new SVG[XTics[X, Y]] {

@@ -38,7 +38,6 @@ scalaVersion := "2.12.8"
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
   scalaVersion := "2.12.8",
-  // scalaOrganization := "org.typelevel",
   crossScalaVersions := Seq("2.12.8")
 )
 
@@ -79,6 +78,7 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
   ))
   .settings(axleSettings)
   .settings(commonJvmSettings)
+  .enablePlugins(MdocPlugin)
 
 lazy val publishSettings = Seq(
   homepage := Some(url("http://axle-lang.org")),
@@ -170,26 +170,25 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
   axleJblas
 )
 
+
 lazy val docs = Project("axle-docs", file("axle-docs"))
+  .in(file("axle-docs/src/main/mdoc"))
   .settings(moduleName := "axle-docs")
   .settings(axleSettings)
-  //.settings(noPublishSettings)
-  //.settings(site.settings)
-  .enablePlugins(TutPlugin)
-  //.settings(site.addMappingsToSiteDir(tut, "tut"))
+  .enablePlugins(MdocPlugin)
   .settings(
+    mdocVariables := Map(
+      "RELEASE_VERSION" -> "0.4.1",
+      "SNAPSHOT_VERSION" -> "0.4.2-SNAPSHOT"
+    ),
+    mdocIn := file("axle-docs/src/main/mdoc"),
+    mdocOut := file("axle-docs/target/site"),
     autoAPIMappings := true,
     git.remoteRepo := "git@github.com:axlelang/axle.git",
     includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
   )
   .settings(commonJvmSettings)
   .dependsOn(axleWheel)
-
-//lazy val noPublishSettings = Seq(
-//  publish := (),
-//  publishLocal := (),
-//  publishArtifact := false
-//)
 
 lazy val commonScalacOptions = Seq(
 // "-optimize",
@@ -203,7 +202,7 @@ lazy val commonScalacOptions = Seq(
 //  "-language:experimental.macros",
   "-language:postfixOps",
   "-unchecked",
-  "-Xfatal-warnings",
+//  "-Xfatal-warnings",
   "-Xlint",
 //  "-Yliteral-types",
 //  "-Yinline-warnings",

@@ -4,6 +4,7 @@ import org.scalatest._
 
 import cats.implicits._
 
+import spire.algebra._
 import spire.math.Rational
 
 import axle.game.Bowling.Bowlers.goodBowler
@@ -30,8 +31,7 @@ class GameChartSpec extends FunSuite with Matchers {
       drawKey = true,
       xAxis = Some(Rational(0)))
 
-    import spire.algebra.Ring
-    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+    implicit val amInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
     implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
 
     val plot = Plot[String, Int, Rational, ConditionalProbabilityTable0[Int, Rational]](

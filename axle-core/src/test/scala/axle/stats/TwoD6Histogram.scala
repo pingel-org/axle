@@ -2,13 +2,16 @@ package axle.stats
 
 import org.scalatest._
 
+import spire.algebra._
+
 import axle.enrichGenSeq
 import axle.game.Dice.die
 
-import spire.implicits.IntAlgebra
 import spire.math.Rational
 
 class TwoD6Histogram extends FunSuite with Matchers {
+
+  implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
 
   implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
   val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]

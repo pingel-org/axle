@@ -15,7 +15,7 @@ import scala.concurrent.duration._
 import cats.implicits._
 import cats.Show
 
-import spire.algebra.MultiplicativeMonoid
+import spire.algebra._
 import spire.math.abs
 import spire.math.min
 
@@ -436,7 +436,6 @@ package object awt {
           val bottomUnscaled = framePoint(bottomScaled)
           g2d.setColor(Color.black)
 
-          implicit val mmd: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
           implicit val equq = UnittedQuantity.eqqqn[Angle, Double]
 
           // TODO: angle xtics?
@@ -564,6 +563,8 @@ package object awt {
     }
   }
 
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+
   def drawStringAtAngle[X, Y](
     g2d:         Graphics2D,
     scaledArea:  ScaledArea2D[X, Y],
@@ -571,7 +572,6 @@ package object awt {
     s:           String,
     p:           Point2D[X, Y],
     angle:       UnittedQuantity[Angle, Double]): Unit = {
-    import spire.implicits.DoubleAlgebra
     if (scaledArea.nonZeroArea) {
       val fp = scaledArea.framePoint(p)
       val a = (angle in angleDouble.radian).magnitude

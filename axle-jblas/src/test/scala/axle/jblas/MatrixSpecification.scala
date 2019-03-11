@@ -1,12 +1,18 @@
 package axle.jblas
 
 import org.scalatest._
-import spire.implicits._
+
+import spire.algebra._
+import spire.implicits.additiveSemigroupOps
+
 import axle.syntax.LinearAlgebraOps
 import axle.syntax.linearalgebra.matrixOps
 import axle.syntax.endofunctor.endofunctorOps
 
 class MatrixSpecification extends FunSuite with Matchers {
+
+  implicit val rngDouble: Rng[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
   implicit val endo = endoFunctorDoubleMatrix[Double]
   implicit val la = linearAlgebraDoubleMatrix[Double]

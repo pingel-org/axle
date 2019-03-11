@@ -24,7 +24,8 @@ class ProbabilitySpec extends FunSuite with Matchers {
     P((coin1 is 'HEAD) and (coin2 is 'HEAD)).apply() should be(Rational(1, 4))
     P((coin1 is 'HEAD) or (coin2 is 'HEAD)).apply() should be(Rational(3, 4))
   }
-
+*/
+/*
   test("two independent d6") {
 
     val d6a = die(6)

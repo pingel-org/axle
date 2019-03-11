@@ -1,6 +1,10 @@
 package axle.ml
 
-import spire.implicits._
+import cats.implicits._
+
+import spire.algebra._
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.multiplicativeSemigroupOps
 
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
@@ -10,7 +14,8 @@ case class PCAFeatureNormalizer[M](cutoff: Double, X: M)(implicit la: LinearAlge
 
   implicit val mul = la.multiplicative
   implicit val additive = la.additive
-  // import spire.implicits.DoubleAlgebra
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
   lazy val μs = X.columnMeans
   lazy val σ2s = std(X)

@@ -1,8 +1,11 @@
 package axle.ml
 
 import scala.collection.immutable.TreeMap
+
+import spire.algebra.AdditiveMonoid
 import spire.math.abs
-import spire.implicits._
+import spire.implicits.multiplicativeSemigroupOps
+
 import axle.algebra.LinearAlgebra
 import axle.syntax.linearalgebra._
 
@@ -17,6 +20,8 @@ case class LinearRegression[D, M](
 
   implicit val additive = la.additive
   implicit val mul = la.multiplicative
+
+  implicit val amInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
 
   val inputX = la.fromRowMajorArray(
     examples.length,

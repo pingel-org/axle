@@ -3,8 +3,7 @@ package axle
 import scala.Stream.cons
 import scala.Stream.empty
 
-import spire.implicits.IntAlgebra
-import spire.implicits.eqOps
+import cats.implicits._
 
 case class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]])
   extends Iterable[List[E]] {

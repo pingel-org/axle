@@ -21,7 +21,7 @@ trait Language {
 
   def trim(ast: AstNode): AstNode = trimmer(ast)
 
-  def parseFile(filename: String): Option[AstNode] = parser(io.Source.fromFile(filename).mkString)
+  def parseFile(filename: String): Option[AstNode] = parser(scala.io.Source.fromFile(filename).mkString)
 
   def parseString(code: String): Option[AstNode] = parser(code)
 

@@ -1,12 +1,10 @@
 package axle.pgm
 
+//import cats.implicits._
+//import spire.algebra._
+//import axle.algebra.Finite
 //import axle.algebra.DirectedGraph
 //import axle.stats.Variable
-//import cats.kernel.Eq
-//import spire.algebra.Field
-//import spire.implicits.IntAlgebra
-//import spire.implicits.eqOps
-//import axle.algebra.Finite
 //import axle.syntax.directedgraph._
 //import axle.syntax.finite._
 

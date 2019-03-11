@@ -1,6 +1,6 @@
 package axle
 
-import spire.implicits._
+import spire.algebra.Bool
 import axle.algebra._
 
 case class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]])
@@ -11,6 +11,8 @@ case class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]])
   val syze = mults.head
 
   val modulos = mults.tail
+
+  implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure
 
   def indexOf(objects: Seq[E]): Int = {
     val mults = lists.zip(objects).map(lo => lo._1.indexOf(lo._2)).zip(modulos).map(im => im._1 * im._2)

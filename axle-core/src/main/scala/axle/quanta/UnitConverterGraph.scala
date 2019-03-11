@@ -1,10 +1,11 @@
 package axle.quanta
 
+import cats.implicits._
+
+import spire.algebra.MultiplicativeMonoid
+
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
-import spire.algebra.MultiplicativeMonoid
-import spire.implicits.StringOrder
-import spire.implicits.eqOps
 
 abstract class UnitConverterGraph[Q, N, DG]()(
   implicit

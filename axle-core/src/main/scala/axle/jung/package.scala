@@ -14,7 +14,7 @@ import cats.Functor
 import cats.Show
 import cats.implicits._
 
-import spire.implicits._
+import spire.algebra._
 
 import axle.algebra.DirectedGraph
 import axle.algebra.Finite
@@ -450,6 +450,10 @@ package object jung {
       }
 
     }
+
+
+  implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
+  implicit val mmDouble: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
 
   implicit def svgJungDirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] =
     new SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] {

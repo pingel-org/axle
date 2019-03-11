@@ -1,9 +1,16 @@
 package axle.ml
 
 import org.scalatest._
+
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+import org.jblas.DoubleMatrix
+
+import cats.kernel.Eq
 import cats.implicits._
+
+import spire.algebra._
 import spire.random.Generator.rng
+
 import axle.algebra.functorIndexedSeq
 import axle.shuffle
 
@@ -12,24 +19,17 @@ class KMeansSpecification
 
   test("K-Means Clustering: cluster random 2d points with small gaussian distribution around a center into 2 clusters") {
 
-    import spire.math.pi
-    import spire.math.cos
-    import spire.math.sin
-    import spire.math.sqrt
-
-    import org.jblas.DoubleMatrix
+    import spire.math.{pi, cos, sin, sqrt}
     import axle.jblas.linearAlgebraDoubleMatrix
-    // import axle.jblas.additiveAbGroupDoubleMatrix
     import axle.jblas.rowVectorInnerProductSpace
     import axle.algebra.distance.Euclidean
-    import cats.kernel.Eq
 
     case class Foo(x: Double, y: Double)
 
     def fooSimilarity(foo1: Foo, foo2: Foo) = sqrt(List(foo1.x - foo2.x, foo1.y - foo2.y).map(x => x * x).sum)
 
     def randomPoint(center: Foo, σ2: Double): Foo = {
-      import spire.implicits.DoubleAlgebra
+      implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
       val distance = rng.nextGaussian() * σ2
       val angle = 2 * pi * rng.nextDouble
       Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
@@ -41,20 +41,24 @@ class KMeansSpecification
     //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
     implicit val innerSpace = {
-      import spire.implicits.DoubleAlgebra
-      import spire.implicits.IntAlgebra
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+      implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
       rowVectorInnerProductSpace[Int, Int, Double](2)
     }
 
     implicit val space = {
-      import spire.implicits.DoubleAlgebra
+      implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
       new Euclidean[DoubleMatrix, Double]()
     }
 
     implicit val fooEq = Eq.fromUniversalEquals[Foo]
 
-    import spire.implicits.DoubleAlgebra
-    implicit val la = axle.jblas.linearAlgebraDoubleMatrix[Double]
+    implicit val la = {
+      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+      implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+      axle.jblas.linearAlgebraDoubleMatrix[Double]
+    }
 
     val km = KMeans(
       data,
@@ -77,9 +81,9 @@ class KMeansSpecification
     import axle.quanta.DistanceConverter
     import axle.jung._
 
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+
     implicit val distanceConverter: DistanceConverter[Double] = {
-      import spire.algebra.Field
-      implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
       import axle.algebra.modules.doubleRationalModule
       Distance.converterGraphK2[Double, DirectedSparseGraph]
     }
@@ -89,46 +93,30 @@ class KMeansSpecification
 
     val irisesData = new Irises
 
-    import org.jblas.DoubleMatrix
-    implicit val space: axle.algebra.distance.Euclidean[DoubleMatrix, Double] = {
-      import axle.algebra.distance.Euclidean
-      import spire.implicits.IntAlgebra
-      import spire.implicits.DoubleAlgebra
-      import axle.jblas.linearAlgebraDoubleMatrix
-      implicit val inner = axle.jblas.rowVectorInnerProductSpace[Int, Int, Double](2)
+    import axle.algebra.distance.Euclidean
+    import axle.jblas.linearAlgebraDoubleMatrix
+    import axle.jblas.rowVectorInnerProductSpace
+
+    implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+
+    implicit val space: Euclidean[DoubleMatrix, Double] = {
+      implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+      implicit val inner = rowVectorInnerProductSpace[Int, Int, Double](2)
       new Euclidean[DoubleMatrix, Double]
     }
 
     import axle.ml.KMeans
     import axle.ml.PCAFeatureNormalizer
-    import axle.ml.PCAFeatureNormalizer
     import distanceConverter.cm
 
-    val irisFeaturizer = {
-      import spire.implicits.DoubleAlgebra
+    val irisFeaturizer =
       (iris: Iris) => List((iris.sepalLength in cm).magnitude.toDouble, (iris.sepalWidth in cm).magnitude.toDouble)
-    }
 
-    implicit val la = {
-      import spire.implicits.DoubleAlgebra
-      axle.jblas.linearAlgebraDoubleMatrix[Double]
-    }
+    implicit val la = linearAlgebraDoubleMatrix[Double]
 
     val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
-    val classifier: KMeans[Iris, List, DoubleMatrix] = {
-
-      // import spire.algebra.MetricSpace
-      import cats.Functor
-      import axle.algebra.Indexed
-      import axle.algebra.Finite
-      // implicit val eqi: Eq[Iris] = Iris.irisEq
-      // val space: MetricSpace[DoubleMatrix, Double] = // above
-      // val functor: Functor[List[Iris], Iris, Seq[Double], List[Seq[Double]]] = Functor[List[Iris], Iris, Seq[Double], List[Seq[Double]]]
-      // val la: LinearAlgebra[DoubleMatrix, Int, Int, Double] = // above
-      // val index: Indexed[List[Seq[Double]], Int, Seq[Double]] = Indexed[List[Seq[Double]], Int, Seq[Double]]
-      // val finite: Finite[List[Iris], Int] = Finite[List[Iris], Int]
-
+    val classifier: KMeans[Iris, List, DoubleMatrix] =
       KMeans[Iris, List, DoubleMatrix](
         irisesData.irises,
         N = 2,
@@ -138,20 +126,16 @@ class KMeansSpecification
         iterations = 20)(rng)(
           Iris.irisEq,
           space,
-          Functor[List],
+          cats.Functor[List],
           la,
-          Indexed[List, Int],
-          Finite[List, Int])
-    }
+          axle.algebra.Indexed[List, Int],
+          axle.algebra.Finite[List, Int])
 
-    val confusion = {
-      import cats.implicits._
-      ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
-        classifier,
-        irisesData.irises.toVector,
-        _.species,
-        0 to 2)
-    }
+    val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
+      classifier,
+      irisesData.irises.toVector,
+      _.species,
+      0 to 2)
 
     import axle.visualize.Color._
     val colors = Vector(red, blue, green)
@@ -167,8 +151,23 @@ class KMeansSpecification
     val pngName = "kmeans.png"
     png(vis, pngName)
 
+    val plot = axle.visualize.Plot(
+      () => classifier.distanceLogSeries,
+      connect = true,
+      drawKey = true,
+      colorOf = colors,
+      title = Some("KMeans Mean Centroid Distances"),
+      xAxis = Some(0d),
+      xAxisLabel = Some("step"),
+      yAxis = Some(0),
+      yAxisLabel = Some("average distance to centroid"))
+    
+    val plotSvgName = "kmeansvsiteration.svg"
+    svg(plot, plotSvgName)
+
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
+    new java.io.File(plotSvgName).exists should be(true)
     confusion.rowSums.columnSums.get(0, 0) should be(irisesData.irises.size)
     confusion.show should include("versicolor")
   }

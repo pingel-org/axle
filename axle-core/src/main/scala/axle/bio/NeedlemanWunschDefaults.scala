@@ -1,16 +1,6 @@
 package axle.bio
 
-import spire.algebra.AdditiveMonoid
-import spire.algebra.Module
-import spire.algebra.Ring
-
 object NeedlemanWunschDefaults {
-
-  // Default evidence for optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Double]
-
-  implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
-  implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
-  implicit val dim: Module[Double, Int] = axle.algebra.modules.doubleIntModule
 
   /**
    * similarity function for nucleotides

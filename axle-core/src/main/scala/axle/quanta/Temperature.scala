@@ -2,6 +2,7 @@ package axle.quanta
 
 import cats.kernel.Eq
 import spire.algebra.Field
+
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Transform
@@ -33,7 +34,6 @@ object Temperature {
 
   import spire.algebra.Module
   import spire.math._
-  import spire.implicits._
 
   def converterGraphK2[N: ConvertableTo: Eq, DG[_, _]](
     implicit
@@ -50,7 +50,7 @@ object Temperature {
       def links: Seq[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])] =
         List[(UnitOfMeasurement[Temperature], UnitOfMeasurement[Temperature], Bijection[N, N])](
           (celsius, kelvin, Transform[N](ConvertableTo[N].fromDouble(-273.15))(field.additive)),
-          (celsius, fahrenheit, Transform[N](-32)(field.additive).bidirectionallyAndThen(Scale[N](Rational(5, 9)))))
+          (celsius, fahrenheit, Transform[N](ConvertableTo[N].fromInt(-32))(field.additive).bidirectionallyAndThen(Scale[N](Rational(5, 9)))))
 
     }
 

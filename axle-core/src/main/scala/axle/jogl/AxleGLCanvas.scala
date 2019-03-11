@@ -1,13 +1,9 @@
 package axle.jogl
 
+import java.net.URL
+
 import scala.Vector
 
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
-import axle.quanta.Distance
-import axle.quanta.DistanceConverter
-import axle.quanta.UnitOfMeasurement
-import axle.quanta.UnittedQuantity
 import com.jogamp.opengl.GL.GL_COLOR_BUFFER_BIT
 import com.jogamp.opengl.GL.GL_DEPTH_BUFFER_BIT
 import com.jogamp.opengl.GL.GL_DEPTH_TEST
@@ -32,11 +28,16 @@ import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION
 import com.jogamp.opengl.glu.GLU
-import spire.implicits.FloatAlgebra
 
 import com.jogamp.opengl.util.texture.Texture
 import com.jogamp.opengl.util.texture.TextureIO
-import java.net.URL
+
+import axle.quanta.Angle
+import axle.quanta.AngleConverter
+import axle.quanta.Distance
+import axle.quanta.DistanceConverter
+import axle.quanta.UnitOfMeasurement
+import axle.quanta.UnittedQuantity
 
 case class AxleGLCanvas[S](
   scene:        SceneFrame[S],

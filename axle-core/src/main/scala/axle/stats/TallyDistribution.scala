@@ -1,15 +1,15 @@
 package axle.stats
 
 import cats.Show
-//import cats.implicits.catsSyntaxEq
+
 import cats.kernel.Eq
 import cats.kernel.Order
-import cats.Order.catsKernelOrderingForOrder
+import cats.implicits._
 
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 import spire.algebra.Ring
-//import spire.implicits.literalIntAdditiveGroupOps
+
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.random.Dist

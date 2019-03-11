@@ -1,10 +1,16 @@
 package axle.math
 
 import org.scalatest._
-import axle.algebra.Bijection
+
+import spire.algebra._
 import cats.implicits._
 
+import axle.algebra.Bijection
+
 class Mean extends FunSuite with Matchers {
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
   test("Arithmetic Mean") {
 
@@ -35,8 +41,6 @@ class Mean extends FunSuite with Matchers {
 
   test("Generalized Mean: Arithmetic Mean when p = 1") {
 
-    import spire.implicits.DoubleAlgebra
-
     val xs = List(1d, 2d, 3d)
 
     val am = arithmeticMean[Double, List](xs)
@@ -47,8 +51,6 @@ class Mean extends FunSuite with Matchers {
 
   test("Generalized Mean: Harmonic Mean when p = -1") {
 
-    import spire.implicits.DoubleAlgebra
-
     val xs = List(1d, 2d, 3d)
 
     val hm = harmonicMean[Double, List](xs)
@@ -58,8 +60,6 @@ class Mean extends FunSuite with Matchers {
   }
 
   test("Generalized Mean: Geometric Mean as p approaches 0") {
-
-    import spire.implicits.DoubleAlgebra
 
     val xs = List(1d, 2d, 3d)
 
@@ -72,8 +72,6 @@ class Mean extends FunSuite with Matchers {
   }
 
   test("Generalized f-Mean: Harmonic Mean when f(x) = 1/x") {
-
-    import spire.implicits.DoubleAlgebra
 
     val xs = List(1d, 2d, 3d)
 
@@ -92,8 +90,6 @@ class Mean extends FunSuite with Matchers {
   }
 
   test("movingArithmeticMean: 1 to 100 by 5") {
-
-    import spire.implicits.DoubleAlgebra
 
     val xs = (1 to 100).toList.map(_.toDouble)
     val window = 5
@@ -134,8 +130,6 @@ class Mean extends FunSuite with Matchers {
   }
 
   test("movingGeneralizedMean: 1 to 5 by 3 with p=0.2") {
-
-    import spire.implicits.DoubleAlgebra
 
     val xs: List[Double] = (1 to 5).toList.map(_.toDouble)
     val window = 3

@@ -4,8 +4,10 @@ import org.scalatest._
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
+import cats.implicits._
+
 import spire.math.Rational
-import spire.implicits._
+import spire.algebra._
 
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.ProbabilityModel
@@ -19,6 +21,8 @@ class InformationTheorySpec extends FunSuite with Matchers {
 
   implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
   implicit val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
   test("hard-coded distributions") {
 

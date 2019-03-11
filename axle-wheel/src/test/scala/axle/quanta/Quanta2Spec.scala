@@ -2,10 +2,14 @@ package axle.quanta
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
+import cats.implicits._
+
 import spire.math.Rational
 import spire.math.Real
 import spire.algebra._
-import spire.implicits._
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.additiveGroupOps
+import spire.implicits.moduleOps
 import spire.laws.GroupLaws
 import spire.laws.VectorSpaceLaws
 
@@ -47,6 +51,9 @@ object ArbitraryUnittedQuantityStuff {
 }
 
 class QuantaSpec extends FunSuite with Matchers with Discipline {
+
+  implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+  implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
   {
     import axle.algebra.modules.realRationalModule
@@ -114,7 +121,6 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
     implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
     import dd._
-    import spire.implicits.DoubleAlgebra
 
     ((1d *: parsec) + (4d *: lightyear)).magnitude should be(7.260)
     ((4d *: lightyear) + (1d *: parsec)).magnitude should be(2.226993865030675)
@@ -126,7 +132,6 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
     import md._
     implicit val dd = Distance.converterGraphK2[Double, DirectedSparseGraph]
     import dd._
-    import spire.implicits.DoubleAlgebra
 
     ((1d *: kilogram) in gram).magnitude should be(1000d)
     ((1d *: megagram) in milligram).magnitude should be(1000000000d)
@@ -165,20 +170,13 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
   test("order square meter and square centimeter") {
 
-    import cats.Order.catsKernelOrderingForOrder
-
-    implicit val acg = {
-      // implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-      Area.converterGraphK2[Double, DirectedSparseGraph]
-    }
+    implicit val acg = Area.converterGraphK2[Double, DirectedSparseGraph]
     import acg._
 
     (1d *: m2) should be > (1d *: cm2)
   }
 
   test("order g and mpsps") {
-
-    import cats.Order.catsKernelOrderingForOrder
 
     implicit val acg = Acceleration.converterGraphK2[Double, DirectedSparseGraph]
     import acg._
@@ -188,8 +186,6 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
   test("order newton and pound") {
 
-    import cats.Order.catsKernelOrderingForOrder
-
     implicit val fcg = Force.converterGraphK2[Double, DirectedSparseGraph]
     import fcg._
 
@@ -198,8 +194,6 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
   test("order KHz and Hz") {
 
-    import cats.Order.catsKernelOrderingForOrder
-
     implicit val fcg = Frequency.converterGraphK2[Double, DirectedSparseGraph]
     import fcg._
 
@@ -207,8 +201,6 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
   }
 
   test("order ton TNT and Joule") {
-
-    import cats.Order.catsKernelOrderingForOrder
 
     implicit val ecg = Energy.converterGraphK2[Double, DirectedSparseGraph]
     import ecg._
@@ -242,8 +234,6 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
   test("order watt and horsepower") {
 
-    import cats.Order.catsKernelOrderingForOrder
-
     implicit val pcg = Power.converterGraphK2[Double, DirectedSparseGraph]
     import pcg._
 
@@ -251,8 +241,6 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
   }
 
   test("order knot and mph") {
-
-    import cats.Order.catsKernelOrderingForOrder
 
     implicit val scg = Speed.converterGraphK2[Double, DirectedSparseGraph]
     import scg._
