@@ -40,7 +40,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Whither 0.95 cutoff in LinearAlgebra.md? (see ClusterIrises?)
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
 
-* Fix Plots.md
 * Doublecheck animation on Plots.md
 * Make sure animation doc has right return value
 
