@@ -202,7 +202,7 @@ lazy val commonScalacOptions = Seq(
 //  "-language:experimental.macros",
   "-language:postfixOps",
   "-unchecked",
-//  "-Xfatal-warnings",
+  "-Xfatal-warnings",
   "-Xlint",
 //  "-Yliteral-types",
 //  "-Yinline-warnings",
