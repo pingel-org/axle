@@ -56,7 +56,7 @@ Imports
 import cats.Show
 import cats.implicits._
 
-import spire.algebra.AdditiveMonoid
+import spire.algebra._
 
 import axle.visualize.Plot
 import axle.algebra.Plottable.doublePlottable
@@ -65,7 +65,7 @@ import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
 
-implicit val amd: AdditiveMonoid[Double] = spire.implicits.DoubleAlgebra
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 ```
 
 Define the visualization
@@ -140,8 +140,6 @@ val refreshFn = (previous: List[(String, TreeMap[DateTime, Double])]) => {
   val now = new DateTime()
   previous.zip(fs).map({ case (old, f) => (old._1, old._2 ++ Vector(now -> f(now.getMillis))) })
 }
-
-implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
 implicit val timeConverter = {
   import axle.algebra.modules.doubleRationalModule
