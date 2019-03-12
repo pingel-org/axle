@@ -38,15 +38,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Replace Tut with MDoc
 
 * Whither 0.95 cutoff in LinearAlgebra.md? (see ClusterIrises?)
-* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
-
-* Fix Plots.md
+* Scalacheck tests for axle.algebra modules
 * Doublecheck animation on Plots.md
 * Make sure animation doc has right return value
-
 * Re-enable fatal warnings (build.sbt)
-* Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
+
+* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
+* Fix markdown lint warnings
 
 * Fix Statistics.md
 * Fix TwoDice.md (as much as possible, then move out of the way?)
