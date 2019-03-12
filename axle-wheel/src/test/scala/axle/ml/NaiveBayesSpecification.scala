@@ -2,14 +2,13 @@ package axle.ml
 
 import org.scalatest._
 
-//import cats.implicits._
-//import spire.math.Rational
-//import axle.string
-//import axle.stats.Variable
+import cats.implicits._
+import spire.math.Rational
+import axle.stats.Variable
 // import axle.stats.rationalProbabilityDist
 
 class NaiveBayesSpecification extends FunSuite with Matchers {
-  /*
+
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 
   val data =
@@ -30,7 +29,7 @@ class NaiveBayesSpecification extends FunSuite with Matchers {
 
   test("naive bayes tennis classifier: predict play in dataset #1") {
 
-    val classifier1 = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
+    val classifier1 = NaiveBayesClassifier[Tennis, String, Boolean, List, Rational](
       data,
       List(
         (Variable[String]("Outlook") -> Vector("Sunny", "Overcast", "Rain")),
@@ -41,7 +40,7 @@ class NaiveBayesSpecification extends FunSuite with Matchers {
       (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
       (t: Tennis) => t.play)
 
-    val performance1 = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
+    val performance1 = ClassifierPerformance[Rational, Tennis, List](
       data,
       classifier1,
       _.play)
@@ -85,7 +84,7 @@ class NaiveBayesSpecification extends FunSuite with Matchers {
 
   test("naive bayes tennis classifier: predict play in dataset #2") {
 
-    val classifier2 = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
+    val classifier2 = NaiveBayesClassifier[Tennis, String, Boolean, List, Rational](
       data2,
       List(
         (Variable[String]("Outlook") -> Vector("Sunny", "Overcast", "Rain")),
@@ -96,7 +95,7 @@ class NaiveBayesSpecification extends FunSuite with Matchers {
       (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
       (t: Tennis) => t.play)
 
-    val performance2 = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](
+    val performance2 = ClassifierPerformance[Rational, Tennis, List](
       data, // Note: not the same as the training dataset
       classifier2,
       _.play)
@@ -110,7 +109,7 @@ class NaiveBayesSpecification extends FunSuite with Matchers {
     performance2.specificity should be(Rational(2, 5))
     performance2.accuracy should be(Rational(11, 14))
     performance2.f1Score should be(Rational(6, 7))
-    string(performance2) should include("F1")
+    performance2.show should include("F1")
   }
-*/
+
 }

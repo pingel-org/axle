@@ -38,17 +38,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Replace Tut with MDoc
 
 * LogisticMap back to 4k x 4k
-* Doublecheck animation on Plots.md
-* Make sure animation doc has right return value
-* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
-* Fix markdown lint warnings
-* Scalacheck tests for axle.algebra modules
-
 * Fix Statistics.md
 * Fix TwoDice.md (as much as possible, then move out of the way?)
-* Fix NaiveBayesClassifier.md (as much as possible, the move out of the way)
 * Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
+* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
+* Fix markdown lint warnings
+* Doublecheck animation on Plots.md
+* Make sure animation doc has right return value
 
+* Scalacheck tests for axle.algebra modules
+* Fix failing tests in NaiveBayesSpecification
 * configure makeSite to preview: previewFixedPort := Some(9999)
 * copy css using makeSite (not update-docs.sh)
 * publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
