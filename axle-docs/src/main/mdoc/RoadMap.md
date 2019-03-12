@@ -41,7 +41,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
 
 * Doublecheck animation on Plots.md
-* Make sure animation doc has right return value
+* Make sure Plots.md and GroupedBarCharts.md have right return value
 
 * Re-enable fatal warnings (build.sbt)
 * Fix markdown lint warnings
