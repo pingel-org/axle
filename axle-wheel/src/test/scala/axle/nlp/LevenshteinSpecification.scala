@@ -25,9 +25,7 @@ class LevenshteinSpecification
     Levenshtein[Vector, Char, DoubleMatrix, Int]()
   }
 
-  implicit val pred: Predicate[Int] = new Predicate[Int] {
-    def apply(a: Int) = true
-  }
+  implicit val pred: Predicate[Int] = Predicate.const[Int](true)
 
   implicit val additiveMonoidInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
   checkAll(
