@@ -2,6 +2,8 @@ package axle.bio
 
 import org.jblas.DoubleMatrix
 import org.scalatest._
+import org.scalacheck.Gen
+import org.scalacheck.Arbitrary
 import org.typelevel.discipline.scalatest.Discipline
 
 import cats.implicits._
@@ -51,6 +53,9 @@ class NeedlemanWunschSpec extends FunSuite with Matchers with Discipline {
     space.distance(dna1, dna2) should be(score)
   }
 
+  implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
+  implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
+
   checkAll(
     "NeedlemanWunsch as MetricSpace[IndexedSeq[Char], Double]",
     VectorSpaceLaws[IndexedSeq[Char], Double].metricSpace)
@@ -83,6 +88,9 @@ class SmithWatermanSpec extends FunSuite with Matchers with Discipline {
     swAlignment should be(bestAlignment)
     space.distance(dna3, dna4) should be(12)
   }
+
+  implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
+  implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
 
   checkAll(
     "Smith-Waterman as MetricSpace[IndexedSeq[Char], Int]",
