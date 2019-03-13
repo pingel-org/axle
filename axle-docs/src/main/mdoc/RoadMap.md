@@ -40,9 +40,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Modules in `axle.algebra`
   * Laws for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
 
-* `similarity` syntax for SimilaritySpace (see axle.bio.*)
-* Fix DNA doc (similarity, not distance)
-
 * ScalaCheck MetricSpace axle.nlp.Levenshtein
 * Lawless Modules in axle.algebra
 * Tests for axle.ast
@@ -53,13 +50,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
 * Fix GeneticAlgorithmSpec
 
-* ScalaCheck Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
-* Kolmogorov's axiom's of probability
 * Fix all "TODO monad syntax"
+* Syntax for ProbabilityModel.probabilityOf, observe, etc
+* `similarity` syntax for SimilaritySpace (see axle.bio.*)
 * Avoid these:
      implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
      val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
-* Syntax for ProbabilityModel.probabilityOf, observe, etc
+
+* ScalaCheck Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
+* Kolmogorov's axiom's of probability
+
 * Fix Statistics.md
 * Fix TwoDice.md (as much as possible, then move out of the way?)
 * Fix NaiveBayesSpec

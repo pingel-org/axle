@@ -59,7 +59,7 @@ alignmentScore(nwAlignment._1, nwAlignment._2, gap, similarity, gapPenalty)
 Compute distance
 
 ```scala mdoc
-val space = NeedlemanWunschMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
+val space = NeedlemanWunschSimilaritySpace[IndexedSeq, Char, DoubleMatrix, Int, Double](similarity, gapPenalty)
 
-space.distance(dna1, dna2)
+space.similarity(dna1, dna2)
 ```
