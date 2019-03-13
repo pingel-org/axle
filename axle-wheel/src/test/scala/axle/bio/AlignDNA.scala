@@ -112,17 +112,17 @@ class SmithWatermanSpec extends FunSuite with Matchers {
     swAlignment should be(bestAlignment)
     space.distance(dna3, dna4) should be(12)
   }
+}
 
-  class SmithWatermanLawfulSpec extends Properties("Smith-Waterman") {
+class SmithWatermanLawfulSpec extends Properties("Smith-Waterman") {
 
-    import spire.implicits._
+  import SharedSmithWaterman._
+  import spire.implicits._
 
-    implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
-    implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
+  implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
+  implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
   
-    property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
-      (a distance b) == (b distance a)
-    }
+  property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
+    (a distance b) == (b distance a)
   }
-  
 }
