@@ -4,6 +4,8 @@ import org.jblas.DoubleMatrix
 import org.scalatest._
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
+import org.scalacheck.Properties
+import org.scalacheck.Prop.forAll
 import org.typelevel.discipline.scalatest.Discipline
 
 import cats.implicits._
@@ -53,16 +55,25 @@ class NeedlemanWunschSpec extends FunSuite with Matchers with Discipline {
     space.distance(dna1, dna2) should be(score)
   }
 
-  implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
-  implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
+  class NeedlemanWunsch extends Properties("Needleman-Wunsch") {
 
-  checkAll(
-    "NeedlemanWunsch as MetricSpace[IndexedSeq[Char], Double]",
-    VectorSpaceLaws[IndexedSeq[Char], Double].metricSpace)
+    import spire.implicits._
+  
+    implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
+    implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
+
+    property("identity") = forAll { (a: IndexedSeq[Char]) =>
+      (a distance a) == 0d
+    }
+
+    property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
+      (a distance b) == (b distance a)
+    }
+  }
 
 }
 
-class SmithWatermanSpec extends FunSuite with Matchers with Discipline {
+class SmithWatermanSpec extends FunSuite with Matchers {
 
   import SmithWatermanDefaults._
   import SmithWaterman.optimalAlignment
@@ -89,11 +100,16 @@ class SmithWatermanSpec extends FunSuite with Matchers with Discipline {
     space.distance(dna3, dna4) should be(12)
   }
 
-  implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
-  implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
+  class SmithWatermanLawfulSpec extends Properties("Smith-Waterman") {
 
-  checkAll(
-    "Smith-Waterman as MetricSpace[IndexedSeq[Char], Int]",
-    VectorSpaceLaws[IndexedSeq[Char], Int].metricSpace)
+    import spire.implicits._
 
+    implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
+    implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
+  
+    property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
+      (a distance b) == (b distance a)
+    }
+  }
+  
 }
