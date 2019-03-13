@@ -11,10 +11,8 @@ import org.typelevel.discipline.scalatest.Discipline
 import cats.implicits._
 
 import spire.algebra._
-import spire.laws._
 
 import axle.algebra.functorIndexedSeq
-import axle.algebra.eqIndexedSeq
 
 class NeedlemanWunschSpec extends FunSuite with Matchers with Discipline {
 
