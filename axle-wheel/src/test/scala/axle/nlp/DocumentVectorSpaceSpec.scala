@@ -72,10 +72,6 @@ class DocumentVectorSpaceSpec
     tfidfDistanceMatrix.distanceMatrix.get(2, 2) should be(0d)
   }
 
-  def nonZeroReals: Predicate[Real] = new Predicate[Real] {
-    def apply(x: Real): Boolean = x.doubleValue != 0
-  }
-
   implicit def eqMapKV[K, V] = Eq.fromUniversalEquals[Map[K, V]]
 
   val vectorizer = TermVectorizer[Real](stopwords)
@@ -89,8 +85,8 @@ class DocumentVectorSpaceSpec
     spireEqMapStringReal,
     Arbitrary(genTermVector),
     implicitly[spire.algebra.Eq[Real]],
-    spire.laws.arb.real,
-    nonZeroReals)
+    Arbitrary(spire.laws.gen.real.filter(x => x.doubleValue != 0d)),
+    Predicate.const[Real](true))
 
   {
     implicit val unweightedSpace = UnweightedDocumentVectorSpace[Real]()
