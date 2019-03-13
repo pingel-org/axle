@@ -130,7 +130,7 @@ package object algebra {
 
         def plus(x: Real, y: Real): Real = x + y
 
-        implicit def scalar: Rng[Rational] = Rng[Rational]
+        implicit def scalar: Rng[Rational] = rat
 
         def timesl(r: Rational, v: Real): Real = r * v
       }
