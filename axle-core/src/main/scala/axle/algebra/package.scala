@@ -21,6 +21,10 @@ package object algebra {
       def combine(x: T, y: T): T = ag.plus(x, y)
     }
 
+  implicit def eqIndexedSeq[T](implicit eqT: Eq[T]): Eq[IndexedSeq[T]] =
+    (l: IndexedSeq[T], r: IndexedSeq[T]) =>
+      l.size == r.size && (0 until l.size).forall( i => eqT.eqv(l(i), r(i)))
+
   implicit val functorIndexedSeq: Functor[IndexedSeq] =
     new Functor[IndexedSeq] {
       def map[A, B](as: IndexedSeq[A])(f: A => B): IndexedSeq[B] =
