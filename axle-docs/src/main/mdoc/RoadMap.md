@@ -41,12 +41,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Laws for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
 
 * Fix DNA doc (similarity, not distance)
+* Fix Smith-Waterman test failure
 * `similarity` syntax for SimilaritySpace (see axle.bio.*)
+
 * ScalaCheck MetricSpace axle.nlp.Levenshtein
 * Lawless Modules in axle.algebra
 * Tests for axle.ast
-
-* Fix failing tests (tfidf and others should avoid zero)
 
 * Doublecheck animation on Plots.md
 * Make sure animation doc has right return value
