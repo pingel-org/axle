@@ -6,7 +6,6 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
-import org.typelevel.discipline.scalatest.Discipline
 
 import cats.implicits._
 
@@ -14,10 +13,8 @@ import spire.algebra._
 
 import axle.algebra.functorIndexedSeq
 
-class NeedlemanWunschSpec extends FunSuite with Matchers with Discipline {
+object SharedNeedlemanWunsch {
 
-  import NeedlemanWunsch.alignmentScore
-  import NeedlemanWunsch.optimalAlignment
   import NeedlemanWunschDefaults._
 
   implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
@@ -31,6 +28,15 @@ class NeedlemanWunschSpec extends FunSuite with Matchers with Discipline {
 
   implicit val space = NeedlemanWunschMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Double](
     similarity, gapPenalty)
+
+}
+
+class NeedlemanWunschSpec extends FunSuite with Matchers {
+
+  import NeedlemanWunsch.alignmentScore
+  import NeedlemanWunsch.optimalAlignment
+  import NeedlemanWunschDefaults._
+  import SharedNeedlemanWunsch._
 
   test("Needleman-Wunsch DNA alignment") {
 
@@ -53,28 +59,29 @@ class NeedlemanWunschSpec extends FunSuite with Matchers with Discipline {
     space.distance(dna1, dna2) should be(score)
   }
 
-  class NeedlemanWunsch extends Properties("Needleman-Wunsch") {
-
-    import spire.implicits._
-  
-    implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
-    implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
-
-    property("identity") = forAll { (a: IndexedSeq[Char]) =>
-      (a distance a) == 0d
-    }
-
-    property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
-      (a distance b) == (b distance a)
-    }
-  }
-
 }
 
-class SmithWatermanSpec extends FunSuite with Matchers {
+class NeedlemanWunschLawfulSpec extends Properties("Needleman-Wunsch") {
 
+  import SharedNeedlemanWunsch._
+
+  import spire.implicits._
+
+  implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
+  implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
+
+  property("identity") = forAll { (a: IndexedSeq[Char]) =>
+    (a distance a) == 0d
+  }
+
+  property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
+    (a distance b) == (b distance a)
+  }
+}
+
+object SharedSmithWaterman {
+ 
   import SmithWatermanDefaults._
-  import SmithWaterman.optimalAlignment
 
   import spire.algebra._
 
@@ -84,6 +91,14 @@ class SmithWatermanSpec extends FunSuite with Matchers {
   implicit val laJblasInt = axle.jblas.linearAlgebraDoubleMatrix[Int]
 
   implicit val space = SmithWatermanMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
+
+}
+
+class SmithWatermanSpec extends FunSuite with Matchers {
+
+  import SharedSmithWaterman._
+  import SmithWatermanDefaults._
+  import SmithWaterman.optimalAlignment
 
   test("Smith-Waterman") {
 
