@@ -40,9 +40,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Modules in `axle.algebra`
   * Laws for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
 
-* Fix DNA doc (similarity, not distance)
-* Fix Smith-Waterman test failure
 * `similarity` syntax for SimilaritySpace (see axle.bio.*)
+* Fix DNA doc (similarity, not distance)
 
 * ScalaCheck MetricSpace axle.nlp.Levenshtein
 * Lawless Modules in axle.algebra

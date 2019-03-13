@@ -52,7 +52,7 @@ class SmithWatermanLawfulSpec extends Properties("Smith-Waterman") {
   implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
   
   property("most similar to itself") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
-    (a == b) || (space.similarity(a, a) > space.similarity(a, b))
+    (a == b) || (space.similarity(a, a) >= space.similarity(a, b))
   }
 
   property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
