@@ -72,7 +72,9 @@ class DocumentVectorSpaceSpec
     tfidfDistanceMatrix.distanceMatrix.get(2, 2) should be(0d)
   }
 
-  def tautology[T]: Predicate[T] = Predicate.const[T](true)
+  def nonZeroReals: Predicate[Real] = new Predicate[Real] {
+    def apply(x: Real): Boolean = x.doubleValue != 0
+  }
 
   implicit def eqMapKV[K, V] = Eq.fromUniversalEquals[Map[K, V]]
 
@@ -88,7 +90,7 @@ class DocumentVectorSpaceSpec
     Arbitrary(genTermVector),
     implicitly[spire.algebra.Eq[Real]],
     spire.laws.arb.real,
-    tautology)
+    nonZeroReals)
 
   {
     implicit val unweightedSpace = UnweightedDocumentVectorSpace[Real]()
