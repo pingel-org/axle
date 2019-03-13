@@ -36,55 +36,61 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Replace uses with `.show` from `cats.implicits` or show string interpolation
 * Remove extraneous `cutoff` argument for `PCA`
 * Replace Tut with MDoc
+* Lawful ScalaCheck tests for
+  * Modules in `axle.algebra`
+  * Laws for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
 
-* LogisticMap back to 4k x 4k
-* Fix Statistics.md
-* Fix TwoDice.md (as much as possible, then move out of the way?)
-* Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
-* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
-* Fix markdown lint warnings
+* Fix DNA doc (similarity, not distance)
+* `similarity` syntax for SimilaritySpace (see axle.bio.*)
+* ScalaCheck MetricSpace axle.nlp.Levenshtein
+* Lawless Modules in axle.algebra
+* Tests for axle.ast
+
+* Fix failing tests (tfidf and others should avoid zero)
+
 * Doublecheck animation on Plots.md
 * Make sure animation doc has right return value
 
-* Scalacheck tests for axle.algebra modules
-* Fix failing tests in NaiveBayesSpecification
+* Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
+* Fix GeneticAlgorithmSpec
+
+* ScalaCheck Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
+* Kolmogorov's axiom's of probability
+* Fix all "TODO monad syntax"
+* Avoid these:
+     implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
+     val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+* Syntax for ProbabilityModel.probabilityOf, observe, etc
+* Fix Statistics.md
+* Fix TwoDice.md (as much as possible, then move out of the way?)
+* Fix NaiveBayesSpec
+* Fix ProbabilitySpec
+* Move {TwoDice, GeneticAlgorthms, LogisticRegression, NaiveBayesClassifier}.md back
+* Fix markdown lint warnings
+* LogisticMap back to 4k x 4k
 * configure makeSite to preview: previewFixedPort := Some(9999)
 * copy css using makeSite (not update-docs.sh)
 * publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 * figure out better way to reference images
 * Publish site
 
+## 0.5.1 (???)
+
+* Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * Fix logistic regression
-* cats effect/io for all `png`, `html`, etc functions
-* Fix all "TODO monad syntax"
-* ScalaCheck tests for Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
-* Avoid these:
-     implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-     val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
-* Syntax for ProbabilityModel.probabilityOf, observe, etc
 * Functors for jung should use projections (study cats disjunction, scala Either)
-* Fix GeneticAlgorithmSpec
-* Fix NaiveBayesSpec
-* Fix ProbabilitySpec
-* Move {TwoDice, GeneticAlgorthms, LogisticRegression, NaiveBayesClassifier}.md back
+* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
 * kittens 1.0.0-RC3 or magnolia
   * pattern match in FirstOrderPredicateLogic
   * subtyping for Suit and Rank
-
-## 0.5.1 (???)
-
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
-* ScalaCheck tests for
-  * Modules in axle.algebra
-  * MetricSpaces axle.bio.{SmithWaterman, NeedlemanWunsch}
-  * MetricSpace axle.nlp.Levenshtein
 
 ## 0.6.0 (Summer 2019)
 
+* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Tics should take an argument
 * Factor tics and tics-{joda,algebra,spire} into separate libs
 * Demo Mandelbrot with Rational
-* Kolmogorov's axiom's of probability
 * Friend of Spire
 * Finish NaiveBayesClassifier
 * What to do with TD1 and CPT2? Fix "cpt" in InformationTheorySpec

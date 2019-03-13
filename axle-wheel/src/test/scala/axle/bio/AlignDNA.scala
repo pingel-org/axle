@@ -26,7 +26,7 @@ object SharedNeedlemanWunsch {
     axle.jblas.linearAlgebraDoubleMatrix[Double]
   }
 
-  implicit val space = NeedlemanWunschMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Double](
+  implicit val space = NeedlemanWunschSimilaritySpace[IndexedSeq, Char, DoubleMatrix, Int, Double](
     similarity, gapPenalty)
 
 }
@@ -56,7 +56,7 @@ class NeedlemanWunschSpec extends FunSuite with Matchers {
   
     nwAlignment should be(("ATGCGGCC--".toIndexedSeq, "AT-C-GCCGG".toIndexedSeq))
     score should be(32d)
-    space.distance(dna1, dna2) should be(score)
+    space.similarity(dna1, dna2) should be(score)
   }
 
 }
@@ -65,17 +65,15 @@ class NeedlemanWunschLawfulSpec extends Properties("Needleman-Wunsch") {
 
   import SharedNeedlemanWunsch._
 
-  import spire.implicits._
-
   implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
   implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
 
-  property("identity") = forAll { (a: IndexedSeq[Char]) =>
-    (a distance a) == 0d
+  property("most similar to itself") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
+    (a == b) || (space.similarity(a, a) > space.similarity(a, b))
   }
 
   property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
-    (a distance b) == (b distance a)
+    space.similarity(a, b) == space.similarity(b, a)
   }
 }
 
@@ -90,7 +88,7 @@ object SharedSmithWaterman {
 
   implicit val laJblasInt = axle.jblas.linearAlgebraDoubleMatrix[Int]
 
-  implicit val space = SmithWatermanMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
+  implicit val space = SmithWatermanSimilaritySpace[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
 
 }
 
@@ -110,19 +108,22 @@ class SmithWatermanSpec extends FunSuite with Matchers {
         dna3, dna4, w, mismatchPenalty, gap)
 
     swAlignment should be(bestAlignment)
-    space.distance(dna3, dna4) should be(12)
+    space.similarity(dna3, dna4) should be(12)
   }
 }
 
 class SmithWatermanLawfulSpec extends Properties("Smith-Waterman") {
 
   import SharedSmithWaterman._
-  import spire.implicits._
 
   implicit val genChar: Gen[Char] = Gen.oneOf('A', 'T', 'G', 'C')
   implicit val arbChar: Arbitrary[Char] = Arbitrary(genChar)
   
+  property("most similar to itself") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
+    (a == b) || (space.similarity(a, a) > space.similarity(a, b))
+  }
+
   property("symmetry") = forAll { (a: IndexedSeq[Char], b: IndexedSeq[Char]) =>
-    (a distance b) == (b distance a)
+    space.similarity(a, b) == space.similarity(b, a)
   }
 }

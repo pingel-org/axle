@@ -10,7 +10,6 @@ import cats.kernel.Eq
 import cats.implicits._
 
 import spire.algebra.AdditiveMonoid
-import spire.algebra.MetricSpace
 import spire.algebra.Module
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
@@ -23,6 +22,7 @@ import axle.algebra.FromStream
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
 import axle.algebra.Zipper
+import axle.algebra.SimilaritySpace
 import axle.math._
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
@@ -200,17 +200,17 @@ object NeedlemanWunsch {
 
 }
 
-case class NeedlemanWunschMetricSpace[S[_], N: Eq, M, I: Ring: Order, V: AdditiveMonoid: Order](
-  similarity: (N, N) => V,
+case class NeedlemanWunschSimilaritySpace[S[_], N: Eq, M, I: Ring: Order, V: AdditiveMonoid: Order](
+  baseSimilarity: (N, N) => V,
   gapPenalty: V)(
   implicit
   la:      LinearAlgebra[M, I, I, V],
   indexed: Indexed[S, I],
   finite:  Finite[S, I],
   module:  Module[V, I])
-  extends MetricSpace[S[N], V] {
+  extends SimilaritySpace[S[N], V] {
 
-  def distance(s1: S[N], s2: S[N]): V =
-    computeF(s1, s2, similarity, gapPenalty).get(s1.size, s2.size)
+  def similarity(s1: S[N], s2: S[N]): V =
+    computeF(s1, s2, baseSimilarity, gapPenalty).get(s1.size, s2.size)
 
 }
