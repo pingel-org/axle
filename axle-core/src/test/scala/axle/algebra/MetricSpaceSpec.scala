@@ -69,9 +69,7 @@ class MetricSpaceSpec() extends FunSuite with Matchers with Discipline {
 
   import spire.laws.arb.real
 
-  implicit val pred: Predicate[Real] = new Predicate[Real] {
-    def apply(a: Real) = true
-  }
+  implicit val pred: Predicate[Real] = Predicate.const[Real](true)
 
   implicit val rrr = new RealTuple2Space {}
 

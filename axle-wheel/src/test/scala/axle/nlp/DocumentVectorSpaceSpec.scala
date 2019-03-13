@@ -72,9 +72,7 @@ class DocumentVectorSpaceSpec
     tfidfDistanceMatrix.distanceMatrix.get(2, 2) should be(0d)
   }
 
-  def tautology[T]: Predicate[T] = new Predicate[T] {
-    def apply(a: T) = true
-  }
+  def tautology[T]: Predicate[T] = Predicate.const[T](true)
 
   implicit def eqMapKV[K, V] = Eq.fromUniversalEquals[Map[K, V]]
 
@@ -83,16 +81,13 @@ class DocumentVectorSpaceSpec
   // TODO combine any 2 from corpus to generate longer sentence, squaring the number of possibilities
   val genTermVector = Gen.oneOf(corpus.map(vectorizer))
 
-  // TODO more possibilities for genReal
-  val genReal = Gen.oneOf[Real](1, 2, 3.9, 10)
-
   val spireEqMapStringReal = eqMapKV[String, Real]
 
   val vsl = VectorSpaceLaws[Map[String, Real], Real](
     spireEqMapStringReal,
     Arbitrary(genTermVector),
     implicitly[spire.algebra.Eq[Real]],
-    Arbitrary(genReal),
+    spire.laws.arb.real,
     tautology)
 
   {

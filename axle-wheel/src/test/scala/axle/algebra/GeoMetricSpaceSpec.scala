@@ -56,10 +56,7 @@ class GeoMetricSpaceSpec
   implicit val arbAngle: Arbitrary[UnittedQuantity[Angle, Real]] =
     Arbitrary(genAngle)
 
-  implicit val pred: Predicate[UnittedQuantity[Angle, Real]] =
-    new Predicate[UnittedQuantity[Angle, Real]] {
-      def apply(a: UnittedQuantity[Angle, Real]) = true
-    }
+  implicit val pred: Predicate[UnittedQuantity[Angle, Real]] = Predicate.const[UnittedQuantity[Angle, Real]](true)
 
   val vsl = VectorSpaceLaws[GeoCoordinates[Real], UnittedQuantity[Angle, Real]](
     eqgcr, arbCoords, equaqr, arbAngle, pred)
