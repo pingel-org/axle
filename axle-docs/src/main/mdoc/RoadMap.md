@@ -40,7 +40,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Modules in `axle.algebra`
   * Laws for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
 
-* ScalaCheck MetricSpace axle.nlp.Levenshtein
 * Lawless Modules in axle.algebra
 * Tests for axle.ast
 
