@@ -196,19 +196,5 @@ package object algebra {
 
     }
 
-    implicit val rationalRationalModule: Module[Rational, Rational] = new Module[Rational, Rational] {
-
-      def negate(x: Rational): Rational = rat.negate(x)
-
-      def zero: Rational = rat.zero
-
-      def plus(x: Rational, y: Rational): Rational = rat.plus(x, y)
-
-      implicit def scalar: Rng[Rational] = rat
-
-      def timesl(r: Rational, v: Rational): Rational = r * v
-
-    }
-
   }
 }

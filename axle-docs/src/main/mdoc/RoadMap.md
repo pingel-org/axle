@@ -37,12 +37,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Remove extraneous `cutoff` argument for `PCA`
 * Replace Tut with MDoc
 * Lawful ScalaCheck tests for
-  * Modules in `axle.algebra`
-  * Laws for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
+  * `Module`s in `axle.algebra`
+  * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
 
-* Lawless Modules in axle.algebra
 * Tests for axle.ast
-
 * Doublecheck animation on Plots.md
 * Make sure animation doc has right return value
 
