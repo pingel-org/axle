@@ -40,12 +40,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
 
+* Verify GroupedBarCharts.md
 * Tests for axle.ast
-* Doublecheck animation on Plots.md
-* Make sure animation doc has right return value
-
-* Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
-* Fix GeneticAlgorithmSpec
 
 * Fix all "TODO monad syntax"
 * Syntax for ProbabilityModel.probabilityOf, observe, etc
@@ -53,15 +49,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Avoid these:
      implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
      val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
-
 * ScalaCheck Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
 * Kolmogorov's axiom's of probability
-
 * Fix Statistics.md
-* Fix TwoDice.md (as much as possible, then move out of the way?)
-* Fix NaiveBayesSpec
+* Fix TwoDice.md
 * Fix ProbabilitySpec
-* Move {TwoDice, GeneticAlgorthms, LogisticRegression, NaiveBayesClassifier}.md back
+* Move {TwoDice, GeneticAlgorthms, NaiveBayesClassifier}.md back
+
+* Fix NaiveBayesSpec (and .md)
+* Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
+* Fix GeneticAlgorithmSpec
+
 * Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
 * configure makeSite to preview: previewFixedPort := Some(9999)
@@ -73,7 +71,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.5.1 (???)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-* Fix logistic regression
+* Fix logistic regression and move LogisticRegression.md back
 * Functors for jung should use projections (study cats disjunction, scala Either)
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
 * kittens 1.0.0-RC3 or magnolia
