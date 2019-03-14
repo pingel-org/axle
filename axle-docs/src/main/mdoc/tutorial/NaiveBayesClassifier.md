@@ -40,18 +40,21 @@ import axle.ml.NaiveBayesClassifier
 ```
 
 ```scala mdoc
-val classifier = NaiveBayesClassifier[Tennis, String, Boolean, List[Tennis], List[Boolean], Rational](
+val classifier = NaiveBayesClassifier[Tennis, String, Boolean, List, Rational](
   events,
   List(
-      UnknownDistribution0[String, Rational](Vector("Sunny", "Overcast", "Rain"), "Outlook"),
-      UnknownDistribution0[String, Rational](Vector("Hot", "Mild", "Cool"), "Temperature"),
-      UnknownDistribution0[String, Rational](Vector("High", "Normal", "Low"), "Humidity"),
-      UnknownDistribution0[String, Rational](Vector("Weak", "Strong"), "Wind")
-  ),
-  UnknownDistribution0[Boolean, Rational](Vector(true, false), "Play"),
+    (Variable[String]("Outlook") -> Vector("Sunny", "Overcast", "Rain")),
+    (Variable[String]("Temperature") -> Vector("Hot", "Mild", "Cool")),
+    (Variable[String]("Humidity") -> Vector("High", "Normal", "Low")),
+    (Variable[String]("Wind") -> Vector("Weak", "Strong"))),
+  (Variable[Boolean]("Play") -> Vector(true, false)),
   (t: Tennis) => t.outlook :: t.temperature :: t.humidity :: t.wind :: Nil,
   (t: Tennis) => t.play)
+```
 
+Use the classifier to predict:
+
+```scala mdoc
 events map { datum => datum.toString + "\t" + classifier(datum) } mkString("\n")
 ```
 
@@ -60,7 +63,7 @@ Measure the classifier's performance
 ```scala mdoc
 import axle.ml.ClassifierPerformance
 
-val perf = ClassifierPerformance[Rational, Tennis, List[Tennis], List[(Rational, Rational, Rational, Rational)]](events, classifier, _.play)
+val perf = ClassifierPerformance[Rational, Tennis, List](events, classifier, _.play)
 
 perf.show
 ```
