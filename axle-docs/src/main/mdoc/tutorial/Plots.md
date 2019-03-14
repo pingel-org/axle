@@ -184,5 +184,5 @@ Tear down resources
 ```scala
 paintCancellable.cancel()
 cvCancellable.cancel()
-frame.dipose()
+frame.dispose()
 ```
