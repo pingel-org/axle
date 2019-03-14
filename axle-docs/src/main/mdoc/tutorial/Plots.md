@@ -22,7 +22,6 @@ import spire.random.Generator
 import spire.random.Generator.rng
 
 import cats.implicits._
-import cats.Order.catsKernelOrderingForOrder
 
 import axle._
 import axle.visualize._
@@ -50,11 +49,10 @@ def randomTimeSeries(i: Int, gen: Generator) = {
 val waves = (0 until 20).map(i => randomTimeSeries(i, rng)).toList
 ```
 
-Imports
+Imports for visualization
 
 ```scala mdoc:silent
 import cats.Show
-import cats.implicits._
 
 import spire.algebra._
 
@@ -176,8 +174,9 @@ val plot = Plot(
 Animate
 
 ```scala
+import axle.awt._
 
-val paintCancellable = play(plot, dataUpdates)
+val (frame, paintCancellable) = play(plot, dataUpdates)
 ```
 
 Tear down resources
@@ -185,4 +184,5 @@ Tear down resources
 ```scala
 paintCancellable.cancel()
 cvCancellable.cancel()
+frame.dispose()
 ```

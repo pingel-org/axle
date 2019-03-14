@@ -15,7 +15,6 @@ import spire.laws.VectorSpaceLaws
 
 import axle.algebra._
 import axle.algebra.modules.doubleRationalModule
-import axle.algebra.modules.rationalRationalModule
 import axle.jung.directedGraphJung
 
 import org.scalacheck.Gen
