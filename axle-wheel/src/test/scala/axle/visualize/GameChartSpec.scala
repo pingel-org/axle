@@ -8,17 +8,18 @@ import spire.algebra._
 import spire.math.Rational
 
 import axle.game.Bowling.Bowlers.goodBowler
-import axle.game.Bowling.stateDistribution
-import axle.game.Bowling.monad
+import axle.game.Bowling._
 import axle.stats.ConditionalProbabilityTable0
 
 class GameChartSpec extends FunSuite with Matchers {
 
   test("BarChart of bowling probability distribution") {
 
-    val stateD = stateDistribution(goodBowler, 4)
+    val stateD: F[State] = stateDistribution(goodBowler, 4)
 
-    val scoreD = monad.map(stateD)(_.tallied)
+    val scoreD = for {
+      state <- stateD
+    } yield state.tallied
 
     // implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
