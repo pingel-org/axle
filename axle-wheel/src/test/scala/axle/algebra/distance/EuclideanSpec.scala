@@ -37,9 +37,7 @@ class EuclideanSpec
 
   implicit val genDouble = Gen.choose[Double](-100d, 100d)
 
-  implicit val pred: Predicate[Double] = new Predicate[Double] {
-    def apply(a: Double) = true
-  }
+  implicit val pred: Predicate[Double] = Predicate.const[Double](true)
 
   checkAll(
     s"Euclidean space on 1x${n} matrix",

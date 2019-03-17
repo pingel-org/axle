@@ -14,24 +14,19 @@ class LevenshteinSpecification
   extends FunSuite with Matchers
   with Discipline {
 
+  implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+
   implicit val laJblasInt = {
-    implicit val rngInt: Rng[Int] = spire.implicits.IntAlgebra
     implicit val nrootInt: NRoot[Int] = spire.implicits.IntAlgebra
     linearAlgebraDoubleMatrix[Int]
   }
 
-  implicit val space = {
-    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
-    Levenshtein[Vector, Char, DoubleMatrix, Int]()
-  }
+  implicit val space = Levenshtein[Vector, Char, DoubleMatrix, Int]()
 
-  implicit val pred: Predicate[Int] = new Predicate[Int] {
-    def apply(a: Int) = true
-  }
+  implicit val pred: Predicate[Int] = Predicate.const[Int](true)
 
-  implicit val additiveMonoidInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
   checkAll(
-    "Levenshtein space",
+    "Levenshtein space as MetricSpace[Vector[Char], Int]",
     VectorSpaceLaws[Vector[Char], Int].metricSpace)
 
 }

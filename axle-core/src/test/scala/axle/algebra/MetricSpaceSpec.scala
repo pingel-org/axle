@@ -14,7 +14,7 @@ import spire.algebra.AdditiveMonoid
 import spire.algebra.MetricSpace
 import spire.implicits.SeqNormedVectorSpace
 import spire.math.Real
-import spire.laws.VectorSpaceLaws
+import spire.laws._
 
 import axle._
 
@@ -46,20 +46,18 @@ trait SeqRealSpace extends MetricSpace[Seq[Real], Real] {
 
 object ArbitrarySpaceStuff {
 
-  lazy val genReal: Gen[Real] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d).map(d => Real(d))
+  implicit val gr: Gen[Real] = gen.real
 
-  implicit val arbReal: Arbitrary[Real] = Arbitrary(genReal)
-
-  lazy val genReal2: Gen[(Real, Real)] =
+  implicit def genTuple2[T0, T1](implicit gen0: Gen[T0], gen1: Gen[T1]): Gen[(T0, T1)] = 
     for {
-      lr <- genReal
-      rr <- genReal
-    } yield (lr, rr)
+      v0 <- gen0
+      v1 <- gen1
+    } yield (v0, v1)
 
-  implicit val arbReal2: Arbitrary[(Real, Real)] = Arbitrary(genReal2)
+  implicit val arbReal2: Arbitrary[(Real, Real)] = Arbitrary(genTuple2[Real, Real])
 
   def genRealSeqLengthN(n: Int): Gen[Seq[Real]] =
-    Gen.sequence((1 to n).map(i => genReal)).map(_.asScala)
+    Gen.sequence((1 to n).map(i => gen.real)).map(_.asScala)
 
   def arbitraryRealSeqLengthN(n: Int): Arbitrary[Seq[Real]] =
     Arbitrary(genRealSeqLengthN(n))
@@ -69,14 +67,14 @@ class MetricSpaceSpec() extends FunSuite with Matchers with Discipline {
 
   import ArbitrarySpaceStuff._
 
-  implicit val pred: Predicate[Real] = new Predicate[Real] {
-    def apply(a: Real) = true
-  }
+  import spire.laws.arb.real
+
+  implicit val pred: Predicate[Real] = Predicate.const[Real](true)
 
   implicit val rrr = new RealTuple2Space {}
 
   checkAll(
-    "MetricSpace[(Real, Real), Real",
+    "MetricSpace[(Real, Real), Real]",
     VectorSpaceLaws[(Real, Real), Real].metricSpace)
 
   implicit val rr = new ScalarRealSpace {}

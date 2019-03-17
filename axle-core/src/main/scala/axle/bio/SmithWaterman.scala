@@ -8,15 +8,16 @@ import scala.collection.immutable.Stream.empty
 import cats.implicits._
 import cats.kernel.Eq
 import cats.kernel.Order
-import spire.algebra.MetricSpace
+
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
-// import spire.implicits.partialOrderOps
+
 import axle.algebra.Finite
 import axle.algebra.FromStream
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
+import axle.algebra.SimilaritySpace
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
@@ -132,15 +133,15 @@ object SmithWaterman {
 
 }
 
-case class SmithWatermanMetricSpace[S[_], C, M, I: Ring, V: Ring: Order](
+case class SmithWatermanSimilaritySpace[S[_], C, M, I: Ring, V: Ring: Order](
   w:               (C, C, V) => V,
   mismatchPenalty: V)(
   implicit
   la:      LinearAlgebra[M, I, I, V],
   finite:  Finite[S, I],
-  indexed: Indexed[S, I]) extends MetricSpace[S[C], V] {
+  indexed: Indexed[S, I]) extends SimilaritySpace[S[C], V] {
 
-  def distance(s1: S[C], s2: S[C]): V = {
+  def similarity(s1: S[C], s2: S[C]): V = {
 
     val H = SmithWaterman.computeH[S, C, M, I, V](s1, s2, w, mismatchPenalty)
 

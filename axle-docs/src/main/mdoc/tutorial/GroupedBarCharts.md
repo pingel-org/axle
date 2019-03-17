@@ -114,8 +114,13 @@ val dataUpdates: Observable[Map[String, Double]] = intervalScan(initial, tick, 1
 Create `CurrentValueSubscriber`, which will be used by the `BarChart` to get the latest value
 
 ```scala
+import axle.reactive.CurrentValueSubscriber
+import monix.execution.Scheduler.Implicits.global
+
 val cvSub = new CurrentValueSubscriber[Map[String, Double]]()
 val cvCancellable = dataUpdates.subscribe(cvSub)
+
+import axle.visualize.BarChart
 
 val chart = BarChart[String, Double, Map[String, Double], String](
   () => cvSub.currentValue.getOrElse(initial),
@@ -126,10 +131,9 @@ val chart = BarChart[String, Double, Map[String, Double], String](
 Animate
 
 ```scala
-import monix.execution.Scheduler.Implicits.global
 import axle.awt.play
 
-val paintCancellable = play(chart, dataUpdates)
+val (frame, paintCancellable) = play(chart, dataUpdates)
 ```
 
 Tear down the resources
@@ -137,4 +141,5 @@ Tear down the resources
 ```scala
 paintCancellable.cancel()
 cvCancellable.cancel()
+frame.dispose()
 ```

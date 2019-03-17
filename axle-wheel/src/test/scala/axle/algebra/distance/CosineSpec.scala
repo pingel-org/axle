@@ -24,9 +24,7 @@ class CosineSpec
   implicit val innerSpace = rowVectorInnerProductSpace[Int, Int, Double](n)
   implicit val space = new Cosine[DoubleMatrix, Double]()
 
-  implicit val pred: Predicate[Double] = new Predicate[Double] {
-    def apply(a: Double) = true
-  }
+  implicit val pred: Predicate[Double] = Predicate.const[Double](true)
 
   implicit val arbMatrix: Arbitrary[DoubleMatrix] =
     Arbitrary(LinearAlgebra.genMatrix[DoubleMatrix, Double](1, n, 0d, 10d))

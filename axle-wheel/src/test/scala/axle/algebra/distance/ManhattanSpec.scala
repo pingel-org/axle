@@ -40,9 +40,7 @@ class ManhattanSpec
   implicit val arbMatrix: Arbitrary[DoubleMatrix] =
     Arbitrary(LinearAlgebra.genMatrix[DoubleMatrix, Int](m, n, -10000, 10000))
 
-  implicit val pred: Predicate[Int] = new Predicate[Int] {
-    def apply(a: Int) = true
-  }
+  implicit val pred: Predicate[Int] = Predicate.const[Int](true)
 
   checkAll(
     s"Manhattan space on ${m}x${n} matrix",

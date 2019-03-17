@@ -15,7 +15,6 @@ import spire.laws.VectorSpaceLaws
 
 import axle.algebra._
 import axle.algebra.modules.doubleRationalModule
-import axle.algebra.modules.rationalRationalModule
 import axle.jung.directedGraphJung
 
 import org.scalacheck.Gen
@@ -24,10 +23,6 @@ import org.scalatest._
 import org.typelevel.discipline.scalatest.Discipline
 
 object ArbitraryUnittedQuantityStuff {
-
-  //implicit val genDouble: Gen[Double] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d)
-  implicit val genReal: Gen[Real] = Gen.chooseNum(-1000d, 1000000d, -1d, 0d, 1d).map(d => Real(d))
-  implicit val arbReal: Arbitrary[Real] = Arbitrary(genReal)
 
   implicit def genUnit[Q, N](implicit uq: UnitConverter[Q, N]): Gen[UnitOfMeasurement[Q]] =
     Gen.oneOf(uq.units)
@@ -54,6 +49,7 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+  import spire.laws._
 
   {
     import axle.algebra.modules.realRationalModule
@@ -62,13 +58,15 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
     import ArbitraryUnittedQuantityStuff._
 
+    implicit val gr = gen.real
+
     val equq = UnittedQuantity.eqqqn[Distance, Real]
 
     val uqDistanceModuleLaws = VectorSpaceLaws[UnittedQuantity[Distance, Real], Real](
       equq,
       arbitraryUQ[Distance, Real](genUQ[Distance, Real]),
       implicitly[Eq[Real]],
-      arbReal,
+      arb.real,
       new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).module(mudr)
 
     val agudr: cats.kernel.Group[UnittedQuantity[Distance, Real]] =

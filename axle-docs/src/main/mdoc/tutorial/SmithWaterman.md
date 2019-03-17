@@ -45,7 +45,7 @@ val swAlignment = optimalAlignment[IndexedSeq, Char, DoubleMatrix, Int, Int](
 Compute distance of the sequences
 
 ```scala mdoc
-val space = SmithWatermanMetricSpace[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
+val space = SmithWatermanSimilaritySpace[IndexedSeq, Char, DoubleMatrix, Int, Int](w, mismatchPenalty)
 
-space.distance(dna3, dna4)
+space.similarity(dna3, dna4)
 ```
