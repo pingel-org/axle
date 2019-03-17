@@ -1,23 +1,28 @@
 package axle.game
 
+//import scala.language.higherKinds
+
+//import cats.syntax.functor._
+//import cats.syntax.flatMap._
+//import cats.syntax.applicative._
 import cats.implicits._
+
 import spire.math.Rational
 import axle.stats._
 
 object OldMontyHall {
 
   val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-  //implicit val monad = axle.stats.monadForProbabilityModel[ConditionalProbabilityTable0, Rational]
   implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
 
   val numDoors = 3
 
-  val prizeDoorModel = uniformDistribution(1 to numDoors, Variable[Int]("prize"))
+  val prizeDoorModel = uniformDistribution(1 to numDoors, Variable("prize"))
 
-  val chosenDoorModel = uniformDistribution(1 to numDoors, Variable[Int]("chosen"))
+  val chosenDoorModel = uniformDistribution(1 to numDoors, Variable("chosen"))
 
   def reveal(prizeDoor: Int, chosenDoor: Int) =
-    uniformDistribution((1 to numDoors).filterNot(d => d === prizeDoor || d === chosenDoor), Variable[Int]("reveal"))
+    uniformDistribution((1 to numDoors).filterNot(d => d === prizeDoor || d === chosenDoor), Variable("reveal"))
 
   def switch(probabilityOfSwitching: Rational, chosenDoor: Int, revealedDoor: Int) = {
 
@@ -31,7 +36,7 @@ object OldMontyHall {
   }
 
   // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
-  // val outcome = (probabilityOfSwitching: Rational) => for {
+  // val outcomeX = (probabilityOfSwitching: Rational) => for {
   //  prizeDoor <- prizeDoorModel
   //  chosenDoor <- chosenDoorModel
   //  revealedDoor <- reveal(prizeDoor, chosenDoor)

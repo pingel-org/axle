@@ -24,7 +24,7 @@ class GameChartSpec extends FunSuite with Matchers {
 
     // test implicit conjuring:
 
-    implicit val dvInt = DataView.probabilityDataView[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
+    implicit val dvInt = DataView.probabilityDataView[Int, Rational, ConditionalProbabilityTable0]
 
     val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
       () => scoreD,
@@ -32,7 +32,7 @@ class GameChartSpec extends FunSuite with Matchers {
       xAxis = Some(Rational(0)))
 
     implicit val amInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
-    implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
+    implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ConditionalProbabilityTable0]
 
     val plot = Plot[String, Int, Rational, ConditionalProbabilityTable0[Int, Rational]](
       () => Vector(("", scoreD)),

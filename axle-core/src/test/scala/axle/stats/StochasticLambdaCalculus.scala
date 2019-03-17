@@ -11,8 +11,8 @@ import axle.math.Σ
 
 class StochasticLambdaCalculus extends FunSuite with Matchers {
 
-  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
+  implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
 
   test("iffy (stochastic if) maps fair boolean to d6 + (d6+d6)") {
 
@@ -22,7 +22,7 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
         a + b))
 
     val distribution =
-      iffy[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
+      iffy(
         binaryDecision(Rational(1, 3)),
         die(6),
         ab)

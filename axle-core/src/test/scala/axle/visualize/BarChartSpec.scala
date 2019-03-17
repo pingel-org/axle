@@ -15,8 +15,8 @@ import axle.web._
 
 class BarChartSpec extends FunSuite with Matchers {
 
-  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
+  implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
@@ -77,8 +77,9 @@ class BarChartSpec extends FunSuite with Matchers {
 
   test("BarChart render a SVG of d6 + d6 probability distribution") {
 
-    implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-
+    // val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
+    implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
+  
     val distribution = monad.flatMap(die(6))(a =>
       monad.map(die(6))(b =>
         a + b))
@@ -89,9 +90,8 @@ class BarChartSpec extends FunSuite with Matchers {
     //      b <- die(6)
     //    } yield a + b
 
-    implicit val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
     implicit val dataViewCPT: DataView[Int, Rational, ConditionalProbabilityTable0[Int, Rational]] =
-      DataView.probabilityDataView[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]
+      DataView.probabilityDataView[Int, Rational, ConditionalProbabilityTable0]
 
     val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
       () => distribution,
