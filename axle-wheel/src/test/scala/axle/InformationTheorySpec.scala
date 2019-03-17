@@ -10,7 +10,6 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.stats.ConditionalProbabilityTable0
-import axle.stats.ProbabilityModel
 import axle.stats.Variable
 import axle.stats.coin
 import axle.stats.entropy
@@ -18,9 +17,6 @@ import axle.quanta.Information
 import axle.jung.directedGraphJung
 
 class InformationTheorySpec extends FunSuite with Matchers {
-
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-  implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 

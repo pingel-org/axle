@@ -2,24 +2,25 @@ package axle.stats
 
 import org.scalatest._
 
-import cats.implicits._
-//import cats.syntax._
+import cats.syntax.all._
+
 import spire.math.Rational
 import spire.math.sqrt
+
 import axle.game.Dice.die
 import axle.math.Σ
 
 class StochasticLambdaCalculus extends FunSuite with Matchers {
 
   val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-  implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
+  type F[T] = ConditionalProbabilityTable0[T, Rational]
 
   test("iffy (stochastic if) maps fair boolean to d6 + (d6+d6)") {
 
-    // TODO monad syntax
-    val ab = monad.flatMap(die(6))(a =>
-      monad.map(die(6))(b =>
-        a + b))
+    val ab = for {
+      a <- (die(6) : F[Int])
+      b <- (die(6) : F[Int])
+    } yield a + b
 
     val distribution =
       iffy(
@@ -45,13 +46,13 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
     // However, there should be a way to utilize the "if" statement to
     // reduce the complexity.
 
-    val xDist = uniformDistribution(0 to n, Variable[Int]("x"))
-    val yDist = uniformDistribution(0 to n, Variable[Int]("y"))
+    val xDist: F[Int] = uniformDistribution(0 to n, Variable[Int]("x"))
+    val yDist: F[Int] = uniformDistribution(0 to n, Variable[Int]("y"))
 
-    // TODO monad syntax
-    val piDist = monad.flatMap(xDist)(x =>
-      monad.map(yDist)(y =>
-        if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0))
+    val piDist = for {
+      x <- xDist
+      y <- yDist
+    } yield (if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0)
 
     4 * prob.probabilityOf(piDist, 1) should be > Rational(3)
   }

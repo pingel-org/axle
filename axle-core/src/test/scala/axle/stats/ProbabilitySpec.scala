@@ -8,7 +8,7 @@ import spire.math._
 class ProbabilitySpec extends FunSuite with Matchers {
 
   val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-  implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
+  type F[T] = ConditionalProbabilityTable0[T, Rational]
 
   /*
   test("two independent coins") {

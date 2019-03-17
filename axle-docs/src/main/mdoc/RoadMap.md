@@ -12,6 +12,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
 * Redo `axle.stats`
   * `ProbabilityModel` typeclass (refactored from `Distribution`)
+  * Implicitly conjurable `cats.Monad` from a `ProbabilityModel`, which supports for comprehensions via cats syntax support
   * `Variable` instead of `RandomVariable`
   * remove `Bayes`
 * Replace `axle.agebra.Zero` with `spire.algebra.AdditiveMonoid.zero`
@@ -42,27 +43,24 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Update docs for ProbabilityModel changes
 
-* Fix all "TODO monad syntax"
-* Avoid these:
-     implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-     val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+* Stop specifying Rational in CPT returned by axle.game.Game.strategyFor
+* Stop specifying ConditionalProbabilityTable0 in axle.game package object methods
+
+* Syntax for ProbabilityModel.probabilityOf, observe, etc
+    Remove all: val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
 
 * Axioms for ProbabilityModel should enforce that it is the *same* Ring/Field each time
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Kolmogorov's axiom's of probability
 
-* Syntax for ProbabilityModel.probabilityOf, observe, etc
 * Fix Statistics.md
 * Fix TwoDice.md
 * Fix ProbabilitySpec
 * Move {TwoDice, GeneticAlgorthms, NaiveBayesClassifier}.md back
 * Fix NaiveBayesSpec (and .md)
-
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable0[T, Rational]` ?
 * Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
 * Fix GeneticAlgorithmSpec
-
-* stop specifying Rational in CPT returned by axle.game.Game.strategyFor
-* Also stop specifying ConditionalProbabilityTable0 in axle.game package object methods
 
 * Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
