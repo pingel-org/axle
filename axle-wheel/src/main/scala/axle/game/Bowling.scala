@@ -6,12 +6,13 @@ import axle.stats._
 
 object Bowling {
 
-  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
+  //implicit val monad = axle.stats.monadForProbabilityModel[ConditionalProbabilityTable0, Rational]
+  implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
 
   case class Bowler[M[_]](firstRoll: M[Int], spare: M[Boolean])(
     implicit
-    val prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational])
+    val prob: ProbabilityModel[ConditionalProbabilityTable0])
 
   case class State(tallied: Int, twoAgoStrike: Boolean, oneAgoSpare: Boolean, oneAgoStrike: Boolean)
 

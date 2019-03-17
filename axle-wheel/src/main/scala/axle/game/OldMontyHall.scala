@@ -6,8 +6,9 @@ import axle.stats._
 
 object OldMontyHall {
 
-  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
+  //implicit val monad = axle.stats.monadForProbabilityModel[ConditionalProbabilityTable0, Rational]
+  implicit val monad = implicitly[cats.Monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ]]
 
   val numDoors = 3
 
@@ -22,7 +23,7 @@ object OldMontyHall {
 
     val availableDoors = (1 to numDoors).filterNot(d => d === revealedDoor || d === chosenDoor)
 
-    iffy[Int, Rational, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, ({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
+    iffy( // iffy[Int, Rational, ConditionalProbabilityTable0, ConditionalProbabilityTable0]
       binaryDecision(probabilityOfSwitching),
       uniformDistribution(availableDoors, Variable("switch")), // switch
       uniformDistribution(Seq(chosenDoor), Variable("switch")) // stay
@@ -30,12 +31,12 @@ object OldMontyHall {
   }
 
   // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
-  //val outcome = (probabilityOfSwitching: Rational) => for {
+  // val outcome = (probabilityOfSwitching: Rational) => for {
   //  prizeDoor <- prizeDoorModel
   //  chosenDoor <- chosenDoorModel
   //  revealedDoor <- reveal(prizeDoor, chosenDoor)
   //  finalChosenDoor <- switch(probabilityOfSwitching, chosenDoor, revealedDoor)
-  //} yield finalChosenDoor === prizeDoor
+  // } yield finalChosenDoor === prizeDoor
 
   // TODO monad syntax
   val outcome = (probabilityOfSwitching: Rational) =>
