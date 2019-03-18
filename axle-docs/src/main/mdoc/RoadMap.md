@@ -12,6 +12,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
 * Redo `axle.stats`
   * `ProbabilityModel` typeclass (refactored from `Distribution`)
+  * Implicitly conjurable `cats.Monad` from a `ProbabilityModel`, which supports for comprehensions via cats syntax support
   * `Variable` instead of `RandomVariable`
   * remove `Bayes`
 * Replace `axle.agebra.Zero` with `spire.algebra.AdditiveMonoid.zero`
@@ -38,25 +39,26 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Replace Tut with MDoc
 * Lawful ScalaCheck tests for
   * `Module`s in `axle.algebra`
-  * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`. They are *not* actually `MetricSpace`s
+  * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* Verify GroupedBarCharts.md
-* Tests for axle.ast
+* Update docs for ProbabilityModel changes
 
-* Fix all "TODO monad syntax"
+* Stop specifying Rational in CPT returned by axle.game.Game.strategyFor
+* Stop specifying ConditionalProbabilityTable0 in axle.game package object methods
+
 * Syntax for ProbabilityModel.probabilityOf, observe, etc
-* `similarity` syntax for SimilaritySpace (see axle.bio.*)
-* Avoid these:
-     implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-     val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
-* ScalaCheck Monad[ProbabilityModel] (needs axle.stats.ProbabilityModel.monad.tailRecM)
+    Remove all: val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
+
+* Axioms for ProbabilityModel should enforce that it is the *same* Ring/Field each time
+* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Kolmogorov's axiom's of probability
+
 * Fix Statistics.md
 * Fix TwoDice.md
 * Fix ProbabilitySpec
 * Move {TwoDice, GeneticAlgorthms, NaiveBayesClassifier}.md back
-
 * Fix NaiveBayesSpec (and .md)
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable0[T, Rational]` ?
 * Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
 * Fix GeneticAlgorithmSpec
 
@@ -72,6 +74,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * Fix logistic regression and move LogisticRegression.md back
+* Tests for axle.ast
+* `similarity` syntax for SimilaritySpace (see axle.bio.*)
 * Functors for jung should use projections (study cats disjunction, scala Either)
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
 * kittens 1.0.0-RC3 or magnolia
