@@ -6,20 +6,12 @@ import cats.kernel.Order
 
 import spire.algebra.Ring
 import spire.random.Generator
-import spire.math.Rational
+import spire.random.Dist
 
-import axle.stats.rationalProbabilityDist
 import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable0
 
 package object game {
-
-  implicit val orderRational: Order[Rational] = new cats.kernel.Order[Rational] {
-    implicit val doubleOrder = Order.fromOrdering[Double]
-    def compare(x: Rational, y: Rational): Int = doubleOrder.compare(x.toDouble, y.toDouble)
-  }
-
-  implicit val ringRational: Ring[Rational] = new spire.math.RationalAlgebra
 
   def moveStateStream[G, S, O, M, MS, MM, V](
     game:      G,
@@ -27,12 +19,14 @@ package object game {
     gen:       Generator)(
     implicit
     evGame: Game[G, S, O, M, MS, MM, V],
-    prob:   ProbabilityModel[ConditionalProbabilityTable0]): Stream[(S, M, S)] =
+    prob:   ProbabilityModel[ConditionalProbabilityTable0],
+    distV:  Dist[V],
+    ringV:  Ring[V],
+    orderV: Order[V]): Stream[(S, M, S)] =
     evGame.mover(game, fromState).map(mover => {
       val strategy = evGame.strategyFor(game, mover)
       val strategyCPT = strategy(game, evGame.maskState(game, fromState, mover))
-      // val move = prob.observe(strategyCPT, gen)(evGame.probabilityDist)
-      val move = prob.observe[M, Rational](strategyCPT, gen)(rationalProbabilityDist, ringRational, orderRational)
+      val move = prob.observe(strategyCPT, gen)
       val toState = evGame.applyMove(game, fromState, move)
       cons((fromState, move, toState), moveStateStream(game, toState, gen))
     }) getOrElse {
@@ -43,7 +37,10 @@ package object game {
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V],
     prob:     ProbabilityModel[ConditionalProbabilityTable0],
-    evGameIO: GameIO[G, O, M, MS, MM]): S =
+    evGameIO: GameIO[G, O, M, MS, MM],
+    distV:    Dist[V],
+    ringV:    Ring[V],
+    orderV:   Order[V]): S =
     play(game, evGame.startState(game), true, gen)
 
   def play[G, S, O, M, MS, MM, V](
@@ -54,7 +51,10 @@ package object game {
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V],
     prob:     ProbabilityModel[ConditionalProbabilityTable0],
-    evGameIO: GameIO[G, O, M, MS, MM]): S = {
+    evGameIO: GameIO[G, O, M, MS, MM],
+    distV: Dist[V],
+    ringV: Ring[V],
+    orderV: Order[V]): S = {
 
     evGame.players(game) foreach { observer =>
       val display = evGameIO.displayerFor(game, observer)
@@ -64,7 +64,9 @@ package object game {
       display(evGameIO.displayStateTo(game, evGame.maskState(game, start, observer), observer))
     }
 
-    val lastState = moveStateStream(game, start, gen) map {
+    val mss: Stream[(S, M, S)] = moveStateStream(game, start, gen)
+
+    val lastState = mss map {
       case (fromState, move, toState) => {
         val mover = evGame.mover(game, fromState)
         mover foreach { mover =>
@@ -98,7 +100,10 @@ package object game {
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V],
     prob:     ProbabilityModel[ConditionalProbabilityTable0],
-    evGameIO: GameIO[G, O, M, MS, MM]): Stream[S] = {
+    evGameIO: GameIO[G, O, M, MS, MM],
+    distV:    Dist[V],
+    ringV:    Ring[V],
+    orderV:   Order[V]): Stream[S] = {
     val end = play(game, start, intro, gen)
     cons(end, gameStream(game, evGame.startFrom(game, end).get, false, gen))
   }
@@ -110,7 +115,10 @@ package object game {
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V],
     prob:     ProbabilityModel[ConditionalProbabilityTable0],
-    evGameIO: GameIO[G, O, M, MS, MM]): S =
+    evGameIO: GameIO[G, O, M, MS, MM],
+    distV:    Dist[V],
+    ringV:    Ring[V],
+    orderV:   Order[V]): S =
     gameStream(game, start, true, gen).last
 
 }
