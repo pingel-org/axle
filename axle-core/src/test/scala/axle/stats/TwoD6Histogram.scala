@@ -18,6 +18,8 @@ class TwoD6Histogram extends FunSuite with Matchers {
 
   test("tally") {
 
+    implicit val dist = axle.stats.rationalProbabilityDist
+
     val seed = spire.random.Seed(42)
     val gen = spire.random.Random.generatorFromSeed(seed)
     val d6a = die(6)

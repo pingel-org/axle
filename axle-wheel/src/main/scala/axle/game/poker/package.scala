@@ -2,8 +2,10 @@ package axle.game
 
 import cats.implicits._
 import spire.math.Rational
+import spire.random.Dist
 import axle.game.cards._
 import axle.stats.ConditionalProbabilityTable0
+import axle.stats.rationalProbabilityDist
 
 package object poker {
 
@@ -12,8 +14,10 @@ package object poker {
   // TODO: is there a limit to the number of raises that can occur?
   // TODO: how to handle player exhausting pile during game?
 
-  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] =
-    new Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] {
+  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational] =
+    new Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational] {
+
+      def probabilityDist: Dist[Rational] = rationalProbabilityDist
 
       def startState(g: Poker): PokerState =
         PokerState(
