@@ -54,6 +54,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Move {TwoDice, GeneticAlgorthms, NaiveBayesClassifier}.md back
 * Fix NaiveBayesSpec (and .md)
 * Kind projector instead of `type F[T] = ConditionalProbabilityTable0[T, Rational]` ?
+
 * Stop specifying ConditionalProbabilityTable0 in axle.game package object methods
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Fix GeneticAlgorithms.md (as much as possible, then move out of the way)

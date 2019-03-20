@@ -45,7 +45,7 @@ val hm: D =
   new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
     (0 to 100).map({ i =>
       val r = Rational(i / 100d)
-      r -> H[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Symbol, Rational](coin(r))
+      r -> H[ConditionalProbabilityTable0, Symbol, Rational](coin(r))
     }).toMap
 ```
 

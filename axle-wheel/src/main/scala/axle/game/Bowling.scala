@@ -6,12 +6,9 @@ import axle.stats._
 
 object Bowling {
 
-  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+  type F[T] = ConditionalProbabilityTable0[T, Rational]
 
-  case class Bowler[M[_]](firstRoll: M[Int], spare: M[Boolean])(
-    implicit
-    val prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational])
+  case class Bowler(firstRoll: F[Int], spare: F[Boolean])
 
   case class State(tallied: Int, twoAgoStrike: Boolean, oneAgoSpare: Boolean, oneAgoStrike: Boolean)
 
@@ -33,13 +30,13 @@ object Bowling {
 
   object Bowlers {
     val randomBowler =
-      Bowler[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
-        firstRoll = uniformDistribution(0 to 10, Variable[Int]("firstRoll")),
+      Bowler(
+        firstRoll = uniformDistribution(0 to 10, Variable("firstRoll")),
         spare = binaryDecision(Rational(1, 2)))
 
     // bad bowler.  50% gutter-ball, even (5%) distribution of 1-10
     val badBowler =
-      Bowler[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
+      Bowler(
         firstRoll = ConditionalProbabilityTable0(Map(
           0 -> Rational(5, 10),
           1 -> Rational(1, 20),
@@ -51,12 +48,12 @@ object Bowling {
           7 -> Rational(1, 20),
           8 -> Rational(1, 20),
           9 -> Rational(1, 20),
-          10 -> Rational(1, 20)), Variable[Int]("firstRoll")),
+          10 -> Rational(1, 20)), Variable("firstRoll")),
         spare = binaryDecision(Rational(1, 10)))
 
     // decent bowler.  5%  over 0-5, 10% 6, 15% over 7-10
     val decentBowler =
-      Bowler[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
+      Bowler(
         firstRoll = ConditionalProbabilityTable0(Map(
           0 -> Rational(1, 20),
           1 -> Rational(1, 20),
@@ -72,7 +69,7 @@ object Bowling {
         spare = binaryDecision(Rational(1, 10)))
 
     // 1% over 0-6, 13% 7, 20% 8, 30% 9, 30% 10
-    val goodBowler = Bowler[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ](
+    val goodBowler = Bowler(
       firstRoll = ConditionalProbabilityTable0(Map(
         0 -> Rational(1, 100),
         1 -> Rational(1, 100),
@@ -90,26 +87,22 @@ object Bowling {
   }
 
   def stateDistribution(
-    bowler:    Bowler[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ],
+    bowler:    Bowler,
     numFrames: Int): ConditionalProbabilityTable0[State, Rational] = {
 
     import bowler._
 
-    val startState = ConditionalProbabilityTable0(
+    val startState: F[State] = ConditionalProbabilityTable0(
       Map(State(0, false, false, false) -> Rational(1)),
       Variable[State]("startState"))
 
     (1 to numFrames).foldLeft(startState)({
       case (currentState, frameNumber) =>
-        //        for {
-        //          c <- currentState
-        //          f <- firstRoll
-        //          s <- spare
-        //        } yield next(c, frameNumber === numFrames, f, s)
-        monad.flatMap(currentState)(c =>
-          monad.flatMap(firstRoll)(f =>
-            monad.map(spare)(s =>
-              next(c, frameNumber === numFrames, f, s))))
+        for {
+          c <- currentState
+          f <- firstRoll : F[Int]
+          s <- spare : F[Boolean]
+        } yield next(c, frameNumber === numFrames, f, s)
     })
   }
 

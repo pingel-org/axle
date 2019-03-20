@@ -4,6 +4,7 @@ import scala.Stream.cons
 import scala.Vector
 import scala.language.implicitConversions
 
+import cats.Monad
 import cats.Functor
 import cats.kernel.Eq
 import cats.implicits._
@@ -66,13 +67,13 @@ package object stats {
     ConditionalProbabilityTable0(dist, variable)
   }
 
-  def iffy[T, N, C[_], M[_]](
-    conditionModel:   C[Boolean],
-    trueBranchModel:  M[T],
-    falseBranchModel: M[T])(
+  def iffy[T, N: Field, C[_, _], M[_, _]](
+    conditionModel:   C[Boolean, N],
+    trueBranchModel:  M[T, N],
+    falseBranchModel: M[T, N])(
     implicit
-    pIn:  ProbabilityModel[C, N],
-    pOut: ProbabilityModel[M, N]): M[T] = {
+    pIn:  ProbabilityModel[C],
+    pOut: ProbabilityModel[M]): M[T, N] = {
 
     val pTrue: N = pIn.probabilityOf(conditionModel, true)
     val pFalse: N = pIn.probabilityOf(conditionModel, false)
@@ -106,8 +107,8 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A])(implicit prob: ProbabilityModel[M, N]): A = {
+  def standardDeviation[M[_, _], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A, N])(implicit prob: ProbabilityModel[M]): A = {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
@@ -118,24 +119,24 @@ package object stats {
     NRoot[A].sqrt(sum)
   }
 
-  def σ[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A])(implicit prob: ProbabilityModel[M, N]): A =
+  def σ[M[_, _], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A, N])(implicit prob: ProbabilityModel[M]): A =
     standardDeviation[M, A, N](model)
 
-  def stddev[M[_], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A])(implicit prob: ProbabilityModel[M, N]): A =
+  def stddev[M[_, _], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: M[A, N])(implicit prob: ProbabilityModel[M]): A =
     standardDeviation[M, A, N](model)
 
-  def entropy[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
+  def entropy[M[_, _], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A, N])(
     implicit
-    prob:    ProbabilityModel[M, N],
+    prob:    ProbabilityModel[M],
     convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
     val convertN = ConvertableFrom[N]
     val H = Σ[Double, IndexedSeq](prob.values(model) map { x =>
-      val px: N = P(model, x)(prob).apply()
+      val px: N = P(model, x).apply()
       if (px === Field[N].zero) {
         0d
       } else {
@@ -145,9 +146,9 @@ package object stats {
     UnittedQuantity(H, convert.bit)
   }
 
-  def H[M[_], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A])(
+  def H[M[_, _], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A, N])(
     implicit
-    prob:    ProbabilityModel[M, N],
+    prob:    ProbabilityModel[M],
     convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 
@@ -172,5 +173,46 @@ package object stats {
 
   def reservoirSampleK[N](k: Int, xs: Stream[N], gen: Generator) =
     _reservoirSampleK(k, 0, Nil, xs, gen)
+
+
+  implicit def monadForProbabilityModel[M[_, _], V](implicit fieldV: Field[V], prob: ProbabilityModel[M]): Monad[({ type λ[T] = M[T, V] })#λ] =
+    new Monad[({ type λ[T] = M[T, V] })#λ] {
+
+      def pure[A](a: A): M[A, V] =
+        prob.construct(Variable[A]("a"), Vector(a), (a: A) => fieldV.one)
+
+      def tailRecM[A, B](a: A)(f: A => M[Either[A, B], V]): M[B, V] =
+        ???
+
+      override def map[A, B](model: M[A, V])(f: A => B): M[B, V] = {
+
+        val b2n = prob
+          .values(model)
+          .map({ v => f(v) -> prob.probabilityOf(model, v) })
+          .groupBy(_._1)
+          .mapValues(_.map(_._2).reduce(fieldV.plus))
+
+          prob.construct(Variable[B]("b"), b2n.keys, b2n)
+      }
+
+      override def flatMap[A, B](model: M[A, V])(f: A => M[B, V]): M[B, V] = {
+
+        val foo = prob.values(model)
+          .flatMap(a => {
+            val p = prob.probabilityOf(model, a)
+            val subDistribution = f(a)
+            prob.values(subDistribution).map(b => {
+              b -> (fieldV.times(p, prob.probabilityOf(subDistribution, b)))
+            })
+          })
+
+        val b2n =
+          foo
+            .groupBy(_._1)
+            .mapValues(_.map(_._2).reduce(fieldV.plus))
+
+            prob.construct(Variable[B]("b"), b2n.keys, b2n)
+      }
+    }
 
 }

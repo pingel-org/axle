@@ -13,8 +13,7 @@ class TwoD6Histogram extends FunSuite with Matchers {
 
   implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
 
-  implicit val monad = ProbabilityModel.monad[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]
-  val prob = implicitly[ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Rational]]
+  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
 
   test("tally") {
 
@@ -32,11 +31,13 @@ class TwoD6Histogram extends FunSuite with Matchers {
 
   test("distribution monad: combine 2 D6 correctly") {
 
-    // import cats.implicits._
+    import cats.syntax.all._
+    type F[T] = ConditionalProbabilityTable0[T, Rational]
 
-    // TODO monad syntax
-    val twoDiceSummed = monad.flatMap(die(6))(a =>
-      monad.map(die(6))(b => a + b))
+    val twoDiceSummed = for {
+      a <- die(6) : F[Int]
+      b <- die(6) : F[Int]
+    } yield a + b
 
     prob.probabilityOf(twoDiceSummed, 2) should be(Rational(1, 36))
     prob.probabilityOf(twoDiceSummed, 7) should be(Rational(1, 6))
