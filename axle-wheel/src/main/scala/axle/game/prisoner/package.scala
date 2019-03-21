@@ -1,8 +1,10 @@
 package axle.game
 
 import cats.implicits._
-import axle.stats.ConditionalProbabilityTable0
 import spire.math.Rational
+import spire.random.Dist
+import axle.stats.ConditionalProbabilityTable0
+import axle.stats.rationalProbabilityDist
 
 /**
  * Prisoner's Dilemma
@@ -12,8 +14,10 @@ import spire.math.Rational
 
 package object prisoner {
 
-  implicit val evGame: Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] =
-    new Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] {
+  implicit val evGame: Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational] =
+    new Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational] {
+
+      def probabilityDist: Dist[Rational] = rationalProbabilityDist
 
       def startState(game: PrisonersDilemma): PrisonersDilemmaState =
         PrisonersDilemmaState(None, false, None)

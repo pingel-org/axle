@@ -41,11 +41,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* Update docs for ProbabilityModel changes
-
-* Stop specifying Rational in CPT returned by axle.game.Game.strategyFor
-* Stop specifying ConditionalProbabilityTable0 in axle.game package object methods
-
 * Syntax for ProbabilityModel.probabilityOf, observe, etc
     Remove all: val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
 
@@ -59,6 +54,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Move {TwoDice, GeneticAlgorthms, NaiveBayesClassifier}.md back
 * Fix NaiveBayesSpec (and .md)
 * Kind projector instead of `type F[T] = ConditionalProbabilityTable0[T, Rational]` ?
+
+* Stop specifying ConditionalProbabilityTable0 in axle.game package object methods
+* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
 * Fix GeneticAlgorithmSpec
 
@@ -85,7 +83,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.6.0 (Summer 2019)
 
-* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Tics should take an argument
 * Factor tics and tics-{joda,algebra,spire} into separate libs
 * Demo Mandelbrot with Rational

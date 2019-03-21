@@ -6,14 +6,18 @@ package axle.game
  *
  */
 
-import axle.stats.ConditionalProbabilityTable0
-import spire.math.Rational
 import cats.implicits._
+import spire.math.Rational
+import spire.random.Dist
+import axle.stats.ConditionalProbabilityTable0
+import axle.stats.rationalProbabilityDist
 
 package object montyhall {
 
-  implicit val evGame: Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] =
-    new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] {
+  implicit val evGame: Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational] =
+    new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational] {
+
+      def probabilityDist: Dist[Rational] = rationalProbabilityDist
 
       def startState(game: MontyHall): MontyHallState =
         MontyHallState(None, false, None, None, None)

@@ -3,45 +3,45 @@ package axle.game
 import scala.Stream.cons
 
 import cats.kernel.Order
-//import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 
-import spire.math.Rational
+import spire.algebra.Field
 import spire.algebra.Ring
+import spire.math.ConvertableTo
 
 import axle.stats.ConditionalProbabilityTable0
 import axle.stats.Variable
 
 object Strategies {
 
-  def outcomeRingHeuristic[G, S, O, M, MS, MM, N: Ring](game: G, f: (O, Player) => N)(
+  def outcomeRingHeuristic[G, S, O, M, MS, MM, V, N: Ring](game: G, f: (O, Player) => N)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
+    evGame: Game[G, S, O, M, MS, MM, V]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
       val score = evGame.outcome(game, state).map(o => f(o, p)).getOrElse(Ring[N].zero)
       (p, score)
     }).toMap
 
-  def aiMover[G, S, O, M, MS, MM, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
+  def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order](lookahead: Int, heuristic: S => Map[Player, N])(
     implicit
-    evGame: Game[G, S, O, M, MS, MM]): (G, S) => ConditionalProbabilityTable0[M, Rational] =
+    evGame: Game[G, S, O, M, MS, MM, V]): (G, S) => ConditionalProbabilityTable0[M, V] =
     (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
       val v = Variable[M]("ai move")
-      ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
+      ConditionalProbabilityTable0[M, V](Map(move -> Field[V].one), v)
     }
 
-  def hardCodedStringStrategy[G, S, O, M, MS, MM](
+  def hardCodedStringStrategy[G, S, O, M, MS, MM, V: Order: Field](
     input: (G, MS) => String)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
+    evGame:   Game[G, S, O, M, MS, MM, V],
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, V] =
     (game: G, state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
       val move = validated.right.toOption.get
       val v = Variable[M]("hard-coded")
-      ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
+      ConditionalProbabilityTable0[M, V](Map(move -> Field[V].one), v)
     }
 
   def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
@@ -51,10 +51,10 @@ object Strategies {
     cons(command, userInputStream(display, read))
   }
 
-  def interactiveMove[G, S, O, M, MS, MM](
+  def interactiveMove[G, S, O, M, MS, MM, V: Order: Field](
     implicit
-    evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
+    evGame:   Game[G, S, O, M, MS, MM, V],
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, V] =
     (game: G, state: MS) => {
 
       val mover = evGame.moverM(game, state).get // TODO .get
@@ -74,15 +74,16 @@ object Strategies {
 
       val move = stream.find(esm => esm.isRight).get.right.toOption.get
       val v = Variable[M]("interactive")
-      ConditionalProbabilityTable0[M, Rational](Map(move -> Rational(1)), v)
+      ConditionalProbabilityTable0[M, V](Map(move -> Field[V].one), v)
     }
 
-  def randomMove[G, S, O, M, MS, MM](implicit evGame: Game[G, S, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable0[M, Rational] =
+  def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo](
+    implicit evGame: Game[G, S, O, M, MS, MM, V]): (G, MS) => ConditionalProbabilityTable0[M, V] =
     (game: G, state: MS) => {
       val opens = evGame.moves(game, state).toVector
-      val p = Rational(1L, opens.length.toLong)
+      val p = Field[V].reciprocal(ConvertableTo[V].fromInt(opens.length))
       val v = Variable[M]("random")
-      ConditionalProbabilityTable0[M, Rational](opens.map(_ -> p).toMap, v)
+      ConditionalProbabilityTable0[M, V](opens.map(_ -> p).toMap, v)
     }
 
   /**
@@ -94,13 +95,13 @@ object Strategies {
    * The third return value is a Map of Player to estimated best value from the returned state.
    */
 
-  def minimax[G, S, O, M, MS, MM, N: Order](
+  def minimax[G, S, O, M, MS, MM, V, N: Order](
     game:      G,
     state:     S,
     depth:     Int,
     heuristic: S => Map[Player, N])(
     implicit
-    evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
+    evGame: Game[G, S, O, M, MS, MM, V]): (M, S, Map[Player, N]) = {
 
     // TODO capture as type constraint
     assert(evGame.outcome(game, state).isEmpty)
@@ -127,23 +128,23 @@ object Strategies {
    *
    */
 
-  def alphabeta[G, S, O, M, MS, MM, N: Order](
+  def alphabeta[G, S, O, M, MS, MM, V, N: Order](
     game:      G,
     state:     S,
     depth:     Int,
     heuristic: S => Map[Player, N])(
     implicit
-    evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) =
+    evGame: Game[G, S, O, M, MS, MM, V]): (M, Map[Player, N]) =
     _alphabeta(game, state, depth, Map.empty, heuristic)
 
-  def _alphabeta[G, S, O, M, MS, MM, N: Order](
+  def _alphabeta[G, S, O, M, MS, MM, V, N: Order](
     game:      G,
     state:     S,
     depth:     Int,
     cutoff:    Map[Player, N],
     heuristic: S => Map[Player, N])(
     implicit
-    evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) = {
+    evGame: Game[G, S, O, M, MS, MM, V]): (M, Map[Player, N]) = {
 
     assert(evGame.outcome(game, state).isEmpty && depth > 0) // TODO capture as type constraint
 

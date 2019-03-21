@@ -32,12 +32,17 @@ import axle.quanta.UnittedQuantity
 
 package object stats {
 
-  implicit val rationalProbabilityDist: Dist[Rational] = {
+  val rationalProbabilityDist: Dist[Rational] = {
     val denominator = Integer.MAX_VALUE - 1 // 1000000
     val x = (i: Int) => Rational(i.toLong, denominator.toLong)
     val y = Dist.intrange(0, denominator)
     Dist(x)(y)
   }
+
+  // val rationalProbabilityDist: Dist[Rational] = {
+  //   implicit val bigintDist: Dist[BigInt] = Dist.bigint(2)
+  //   Dist.rational
+  // }
 
   implicit def enrichCaseGenTraversable[R, A: Manifest, N: Field](cgt: Iterable[CaseIs[A]]): EnrichedCaseGenTraversable[R, A, N] =
     EnrichedCaseGenTraversable(cgt)

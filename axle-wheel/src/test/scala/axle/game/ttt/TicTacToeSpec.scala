@@ -2,7 +2,7 @@ package axle.game.ttt
 
 import org.scalatest._
 
-import cats.implicits._
+//import cats.implicits._
 
 import spire.random.Generator.rng
 import spire.math.Rational
@@ -10,7 +10,6 @@ import spire.algebra._
 
 import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable0
-import axle.stats.rationalProbabilityDist
 import axle.game._
 import axle.game.Strategies._
 
@@ -21,6 +20,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
 
   import axle.game.ttt.evGame._
   import axle.game.ttt.evGameIO._
+
+  implicit val dist = axle.stats.rationalProbabilityDist
 
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
@@ -109,7 +110,10 @@ class TicTacToeSpec extends FunSuite with Matchers {
 
   test("random strategy makes a move") {
 
-    val mover = randomMove(evGame)
+    implicit val rat = new spire.math.RationalAlgebra()
+    implicit val dist = axle.stats.rationalProbabilityDist
+
+    val mover = randomMove
     val moveCpt = mover(game, startState(game))
     val m = prob.observe(moveCpt, rng)
 
@@ -118,13 +122,16 @@ class TicTacToeSpec extends FunSuite with Matchers {
 
   test("A.I. strategy makes a move") {
 
+    implicit val dist = axle.stats.rationalProbabilityDist
+    import cats.implicits._ // for Order[Double]
+
     val firstMove = TicTacToeMove(2, game.boardSize)
 
     val h = (outcome: TicTacToeOutcome, p: Player) =>
       outcome.winner.map(wp => if (wp == p) 1d else -1d).getOrElse(0d)
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-    val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Double](
+    val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, Double](
       4, outcomeRingHeuristic(game, h))
 
     val secondState = applyMove(game, startState(game), firstMove)
