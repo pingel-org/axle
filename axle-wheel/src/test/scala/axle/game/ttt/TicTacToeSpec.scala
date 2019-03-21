@@ -21,6 +21,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
   import axle.game.ttt.evGame._
   import axle.game.ttt.evGameIO._
 
+  implicit val dist = axle.stats.rationalProbabilityDist
+
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
 
