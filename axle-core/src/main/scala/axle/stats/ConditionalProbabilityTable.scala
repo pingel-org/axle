@@ -6,6 +6,7 @@ import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 
 import spire.algebra.Field
+import spire.algebra.Ring
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.random.Dist
@@ -15,68 +16,65 @@ import axle.dummy
 
 object ConditionalProbabilityTable0 {
 
-  implicit def showCPT[A: Show: Order, N: Show](implicit prob: ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N]): Show[ConditionalProbabilityTable0[A, N]] = cpt =>
+  implicit def showCPT[A: Show: Order, V: Show: Field](implicit prob: ProbabilityModel[ConditionalProbabilityTable0]): Show[ConditionalProbabilityTable0[A, V]] = cpt =>
     cpt.values.sorted.map(a => {
       val aString = Show[A].show(a)
-      (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[N].show(prob.probabilityOf(cpt, a)))
+      (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[V].show(prob.probabilityOf(cpt, a)))
     }).mkString("\n")
 
-  implicit def probability[N](implicit fieldN: Field[N], orderN: Order[N]): ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N] =
-    new ProbabilityModel[({ type λ[T] = ConditionalProbabilityTable0[T, N] })#λ, N] {
+  implicit val probabilityWitness: ProbabilityModel[ConditionalProbabilityTable0] =
+    new ProbabilityModel[ConditionalProbabilityTable0] {
 
-      def construct[A](variable: Variable[A], as: Iterable[A], f: A => N): ConditionalProbabilityTable0[A, N] =
-        ConditionalProbabilityTable0(as.map(a => a -> f(a)).toMap, variable)
+      def construct[A, V](variable: Variable[A], as: Iterable[A], f: A => V)(implicit ring: Ring[V]): ConditionalProbabilityTable0[A, V] =
+        ConditionalProbabilityTable0[A, V](as.map(a => a -> f(a)).toMap, variable)
 
-      def values[A](model: ConditionalProbabilityTable0[A, N]): IndexedSeq[A] =
+      def values[A](model: ConditionalProbabilityTable0[A, _]): IndexedSeq[A] =
         model.values
 
-      def combine[A](modelsToProbabilities: Map[ConditionalProbabilityTable0[A, N], N]): ConditionalProbabilityTable0[A, N] = {
+      def combine[A, V](modelsToProbabilities: Map[ConditionalProbabilityTable0[A, V], V])(implicit fieldV: Field[V]): ConditionalProbabilityTable0[A, V] = {
 
-        val parts: IndexedSeq[(A, N)] =
+        val parts: IndexedSeq[(A, V)] =
           modelsToProbabilities.toVector flatMap {
             case (model, weight) =>
               values(model).map(v => (v, probabilityOf(model, v) * weight))
           }
 
-        val newDist: Map[A, N] =
-          parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldN.plus)).toMap
+        val newDist: Map[A, V] =
+          parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldV.plus)).toMap
 
         val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m) }).getOrElse(Variable[A]("?"))
 
-        ConditionalProbabilityTable0[A, N](newDist, v)
+        ConditionalProbabilityTable0[A, V](newDist, v)
       }
 
-      def condition[A, G](model: ConditionalProbabilityTable0[A, N], given: CaseIs[G]): ConditionalProbabilityTable0[A, N] =
+      def condition[A, V, G](model: ConditionalProbabilityTable0[A, V], given: CaseIs[G]): ConditionalProbabilityTable0[A, V] =
         model // TODO true unless G =:= A and model.variable === variable
 
-      def empty[A](variable: Variable[A]): ConditionalProbabilityTable0[A, N] =
+      def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): ConditionalProbabilityTable0[A, V] =
         ConditionalProbabilityTable0(Map.empty, variable)
 
-      def orientation[A](model: ConditionalProbabilityTable0[A, N]): Variable[A] =
+      def orientation[A, V](model: ConditionalProbabilityTable0[A, V]): Variable[A] =
         model.variable
 
-      def orient[A, B](model: ConditionalProbabilityTable0[A, N], newVariable: Variable[B]): ConditionalProbabilityTable0[B, N] =
-        empty[B](newVariable)
+      def orient[A, B, V](model: ConditionalProbabilityTable0[A, V], newVariable: Variable[B])(implicit ringV: Ring[V]): ConditionalProbabilityTable0[B, V] =
+        empty(newVariable)
 
-      def observe[A](model: ConditionalProbabilityTable0[A, N], gen: Generator)(implicit spireDist: Dist[N]): A = {
-        val r: N = gen.next[N]
-        model.bars.find({ case (_, v) => model.order.gteqv(v, r) }).get._1 // otherwise malformed distribution
+      def observe[A, V](model: ConditionalProbabilityTable0[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
+        val r: V = gen.next[V]
+        model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // otherwise malformed distribution
       }
 
-      def probabilityOf[A](model: ConditionalProbabilityTable0[A, N], a: A): N =
-        model.p.get(a).getOrElse(model.field.zero)
+      def probabilityOf[A, V](model: ConditionalProbabilityTable0[A, V], a: A)(implicit fieldV: Field[V]): V =
+        model.p.get(a).getOrElse(fieldV.zero)
     }
 
 }
 
-case class ConditionalProbabilityTable0[A, N: Field: Order](
-  p:        Map[A, N],
-  variable: Variable[A]) {
+case class ConditionalProbabilityTable0[A, V](
+  p:        Map[A, V],
+  variable: Variable[A])(implicit ringV: Ring[V]) {
 
-  val field = Field[N]
-  val order = Order[N]
-
-  val bars = p.scanLeft((dummy[A], field.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
+  val bars = p.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
   def values: IndexedSeq[A] = p.keys.toVector
 

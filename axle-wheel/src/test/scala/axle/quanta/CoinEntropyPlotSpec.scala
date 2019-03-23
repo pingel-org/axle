@@ -33,6 +33,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
       implicit val doubleOrder = Order.fromOrdering[Double]
       def compare(x: Rational, y: Rational): Int = doubleOrder.compare(x.toDouble, y.toDouble)
     }
+
     implicit val bitDouble = id.bit
     import axle.stats.ConditionalProbabilityTable0
 
@@ -40,7 +41,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map({ i =>
           val r = Rational(i / 100d)
-          r -> H[({ type λ[T] = ConditionalProbabilityTable0[T, Rational] })#λ, Symbol, Rational](coin(r))
+          r -> H[ConditionalProbabilityTable0, Symbol, Rational](coin(r))
         }).toMap
 
     // implicit val zr = Zero[Rational]

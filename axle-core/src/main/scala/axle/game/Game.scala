@@ -9,10 +9,13 @@ package axle.game
  * for all observers, moves(game, maksState(game, state,observer)) should ...
  */
 
-import axle.stats.ConditionalProbabilityTable0
-import spire.math.Rational
+import spire.random.Dist
 
-trait Game[G, S, O, M, MS, MM] {
+import axle.stats.ConditionalProbabilityTable0
+
+trait Game[G, S, O, M, MS, MM, V] {
+
+  def probabilityDist: Dist[V]
 
   def startState(game: G): S
 
@@ -31,7 +34,7 @@ trait Game[G, S, O, M, MS, MM] {
 
   def maskMove(game: G, move: M, mover: Player, observer: Player): MM
 
-  def strategyFor(game: G, player: Player): (G, MS) => ConditionalProbabilityTable0[M, Rational]
+  def strategyFor(game: G, player: Player): (G, MS) => ConditionalProbabilityTable0[M, V]
 
   def isValid(game: G, state: MS, move: M): Either[String, M]
 

@@ -3,9 +3,11 @@ package axle.visualize
 import scala.collection.immutable.TreeMap
 import scala.annotation.implicitNotFound
 
-import spire.algebra.AdditiveMonoid
 import cats.kernel.Order
 import cats.implicits._
+
+import spire.algebra.AdditiveMonoid
+import spire.algebra.Field
 
 import axle.algebra.Plottable
 import axle.stats.ProbabilityModel
@@ -138,17 +140,17 @@ object PlotDataView {
   //      }
   //    }
 
-  implicit def probabilityDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: AdditiveMonoid: Plottable, M[_]](
+  implicit def probabilityDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: Field: Plottable, M[_, _]](
     implicit
-    prob: ProbabilityModel[M, Y]): PlotDataView[S, X, Y, M[X]] =
-    new PlotDataView[S, X, Y, M[X]] {
+    prob: ProbabilityModel[M]): PlotDataView[S, X, Y, M[X, Y]] =
+    new PlotDataView[S, X, Y, M[X, Y]] {
 
-      def xsOf(model: M[X]): Traversable[X] = prob.values(model)
+      def xsOf(model: M[X, Y]): Traversable[X] = prob.values(model)
 
-      def valueOf(model: M[X], x: X): Y =
+      def valueOf(model: M[X, Y], x: X): Y =
         prob.probabilityOf(model, x)
 
-      def xRange(data: Seq[(S, M[X])], include: Option[X]): (X, X) = {
+      def xRange(data: Seq[(S, M[X, Y])], include: Option[X]): (X, X) = {
 
         val minXCandidates = include.toList ++ (data flatMap {
           case (label, model) => xsOf(model).headOption
@@ -163,7 +165,7 @@ object PlotDataView {
         (minX, maxX)
       }
 
-      def yRange(data: Seq[(S, M[X])], include: Option[Y]): (Y, Y) = {
+      def yRange(data: Seq[(S, M[X, Y])], include: Option[Y]): (Y, Y) = {
 
         val minYCandidates = include.toList ++ (data flatMap {
           case (label, model) =>
