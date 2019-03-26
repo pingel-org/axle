@@ -42,7 +42,7 @@ object ConditionalProbabilityTable0 {
         val newDist: Map[A, V] =
           parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldV.plus)).toMap
 
-        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m) }).getOrElse(Variable[A]("?"))
+        val v = modelsToProbabilities.headOption.map(_._1.variable).getOrElse(Variable[A]("?"))
 
         ConditionalProbabilityTable0[A, V](newDist, v)
       }
@@ -55,12 +55,6 @@ object ConditionalProbabilityTable0 {
 
       def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): ConditionalProbabilityTable0[A, V] =
         ConditionalProbabilityTable0(Map.empty, variable)
-
-      def orientation[A, V](model: ConditionalProbabilityTable0[A, V]): Variable[A] =
-        model.variable
-
-      def orient[A, B, V](model: ConditionalProbabilityTable0[A, V], newVariable: Variable[B])(implicit ringV: Ring[V]): ConditionalProbabilityTable0[B, V] =
-        empty(newVariable)
 
       def observe[A, V](model: ConditionalProbabilityTable0[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
         val r: V = gen.next[V]

@@ -26,10 +26,6 @@ trait ProbabilityModel[M[_, _]] {
 
   def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): M[A, V]
 
-  def orientation[A, V](model: M[A, V]): Variable[A]
-
-  def orient[A, B, V](model: M[A, V], newVariable: Variable[B])(implicit ringV: Ring[V]): M[B, V]
-
   def probabilityOf[A, V](model: M[A, V], a: A)(implicit fieldV: Field[V]): V
 
   def probabilityOfExpression[A, V](model: M[A, V], predicate: A => Boolean)(implicit fieldV: Field[V]): V

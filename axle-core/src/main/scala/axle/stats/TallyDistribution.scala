@@ -48,7 +48,7 @@ object TallyDistribution0 {
         val newDist: Map[A, V] =
           parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldV.plus)).toMap
 
-        val v = modelsToProbabilities.headOption.map({ case (m, _) => orientation(m) }).getOrElse(Variable("?"))
+        val v = modelsToProbabilities.headOption.map(_._1.variable).getOrElse(Variable[A]("?"))
 
         TallyDistribution0[A, V](newDist, v)
       }
@@ -61,12 +61,6 @@ object TallyDistribution0 {
 
       def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): TallyDistribution0[A, V] =
         TallyDistribution0(Map.empty, variable)
-
-      def orientation[A, V](model: TallyDistribution0[A, V]): Variable[A] =
-        model.variable
-
-      def orient[A, B, V](model: TallyDistribution0[A, V], newVariable: Variable[B])(implicit ringV: Ring[V]): TallyDistribution0[B, V] =
-        empty(newVariable) // TODO could check if variable == newVariable
 
       def observe[A, V](model: TallyDistribution0[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
         val r: V = model.totalCount * gen.next[V]
