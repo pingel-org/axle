@@ -47,8 +47,11 @@ object ConditionalProbabilityTable0 {
         ConditionalProbabilityTable0[A, V](newDist, v)
       }
 
-      def condition[A, V, G](model: ConditionalProbabilityTable0[A, V], given: CaseIs[G]): ConditionalProbabilityTable0[A, V] =
+      def condition[A, V](model: ConditionalProbabilityTable0[A, V], given: A): ConditionalProbabilityTable0[A, V] =
         model // TODO true unless G =:= A and model.variable === variable
+
+      def conditionExpression[A, B, V](model: ConditionalProbabilityTable0[A, V], predicate: A => Boolean, screen: A => B): ConditionalProbabilityTable0[B, V] =
+        ???
 
       def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): ConditionalProbabilityTable0[A, V] =
         ConditionalProbabilityTable0(Map.empty, variable)
@@ -66,7 +69,11 @@ object ConditionalProbabilityTable0 {
 
       def probabilityOf[A, V](model: ConditionalProbabilityTable0[A, V], a: A)(implicit fieldV: Field[V]): V =
         model.p.get(a).getOrElse(fieldV.zero)
-    }
+
+      def probabilityOfExpression[A, V](model: ConditionalProbabilityTable0[A, V], predicate: A => Boolean)(implicit fieldV: Field[V]): V =
+        ???
+  }
+
 
 }
 

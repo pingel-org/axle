@@ -53,8 +53,11 @@ object TallyDistribution0 {
         TallyDistribution0[A, V](newDist, v)
       }
 
-      def condition[A, V, G](model: TallyDistribution0[A, V], given: CaseIs[G]): TallyDistribution0[A, V] =
+      def condition[A, V](model: TallyDistribution0[A, V], given: A): TallyDistribution0[A, V] =
         model // TODO true unless G =:= A and model.variable === variable
+
+      def conditionExpression[A, B, V](model: TallyDistribution0[A, V], predicate: A => Boolean, screen: A => B): TallyDistribution0[B, V] =
+        ???
 
       def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): TallyDistribution0[A, V] =
         TallyDistribution0(Map.empty, variable)
@@ -72,6 +75,9 @@ object TallyDistribution0 {
 
       def probabilityOf[A, V](model: TallyDistribution0[A, V], a: A)(implicit fieldV: Field[V]): V =
         model.tally.get(a).getOrElse(fieldV.zero) / model.totalCount
+
+      def probabilityOfExpression[A, V](model: TallyDistribution0[A, V], f: A => Boolean)(implicit fieldV: Field[V]): V =
+        ???
 
     }
 
