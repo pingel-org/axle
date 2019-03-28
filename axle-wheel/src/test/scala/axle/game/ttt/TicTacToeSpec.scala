@@ -6,8 +6,6 @@ import spire.random.Generator.rng
 import spire.math.Rational
 import spire.algebra._
 
-import axle.stats.ProbabilityModel
-import axle.stats.ConditionalProbabilityTable0
 import axle.syntax.probabilitymodel._
 import axle.game._
 import axle.game.Strategies._
