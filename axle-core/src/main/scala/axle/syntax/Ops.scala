@@ -21,7 +21,6 @@ import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
 import axle.stats.ProbabilityModel
-import axle.stats.Variable
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
   implicit
