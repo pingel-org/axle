@@ -9,8 +9,6 @@ class Stats101 extends FunSuite with Matchers {
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-
   test("standard deviation on a list of doubles") {
 
     val model = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), Variable[Double]("x"))

@@ -3,10 +3,9 @@ package axle.stats
 import cats.syntax.all._
 import spire.math.Rational
 import org.scalatest._
+import axle.syntax.probabilitymodel._
 
 class DistributionSpec extends FunSuite with Matchers {
-
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
 
   test("Distribution map") {
 
@@ -23,7 +22,7 @@ class DistributionSpec extends FunSuite with Matchers {
       l <- listDist
     } yield l.size
 
-    prob.probabilityOf(modelSize, 3) should be(Rational(5, 6))
+    modelSize.P(3) should be(Rational(5, 6))
   }
 
 }

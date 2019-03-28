@@ -2,8 +2,9 @@ package axle.stats
 
 import org.scalatest._
 
-import axle.game.Dice._
 import spire.math._
+import axle.game.Dice._
+import axle.syntax.probabilitymodel._
 
 class ProbabilitySpec extends FunSuite with Matchers {
 
@@ -21,27 +22,25 @@ class ProbabilitySpec extends FunSuite with Matchers {
       b <- coin2: CPTR[Symbol]
     } yield (a, b)
 
-    val prob  = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-
-    prob.probabilityOfExpression(bothCoinsModel,
+    bothCoinsModel.P(
       { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) && (coins._2 === 'HEAD)}
     ) should be(Rational(1, 4))
 
-    prob.probabilityOf(bothCoinsModel, ('HEAD, 'HEAD)) should be(Rational(1, 4))
+    bothCoinsModel.P(('HEAD, 'HEAD)) should be(Rational(1, 4))
 
-    prob.probabilityOfExpression(bothCoinsModel,
+    bothCoinsModel.P(
       { coins: (Symbol, Symbol) => coins._1 === 'HEAD }
     ) should be(Rational(1, 2))
 
-    prob.probabilityOfExpression(bothCoinsModel,
+    bothCoinsModel.P(
       { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) || (coins._2 === 'HEAD)}
     ) should be(Rational(3, 4))
 
-    val coin2Conditioned = prob.conditionExpression(bothCoinsModel,
+    val coin2Conditioned = bothCoinsModel.|(
       { coins: (Symbol, Symbol) => coins._2 === 'TAIL },
       { coins: (Symbol, Symbol) => coins._1})
 
-    prob.probabilityOf(coin2Conditioned, 'HEAD) should be(Rational(1, 2))
+    coin2Conditioned.P('HEAD) should be(Rational(1, 2))
   
  }
 
@@ -57,17 +56,15 @@ class ProbabilitySpec extends FunSuite with Matchers {
       b <- d6b: CPTR[Int]
     } yield (a, b)
 
-    val prob  = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-
-    prob.probabilityOfExpression(bothDieModel,
+    bothDieModel.P(
       { rolls: (Int, Int) => (rolls._1 === 1) }
     ) should be(Rational(1, 6))
 
-    prob.probabilityOfExpression(bothDieModel,
+    bothDieModel.P(
       { rolls: (Int, Int) => (rolls._1 !== 3) }
     ) should be(Rational(5, 6))
 
-    prob.probabilityOfExpression(bothDieModel,
+    bothDieModel.P(
       { rolls: (Int, Int) => (rolls._1 === 1) && (rolls._2 === 2)}
     ) should be(Rational(1, 36))
   }

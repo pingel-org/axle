@@ -10,12 +10,11 @@ import spire.algebra._
 import axle.game.Dice.die
 import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable0
+import axle.syntax.probabilitymodel._
 import axle.visualize.Color.blue
 import axle.web._
 
 class BarChartSpec extends FunSuite with Matchers {
-
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
 
   type F[T] = ConditionalProbabilityTable0[T, Rational]
 

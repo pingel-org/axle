@@ -9,10 +9,10 @@ import spire.math.sqrt
 
 import axle.game.Dice.die
 import axle.math.Σ
+import axle.syntax.probabilitymodel._
 
 class StochasticLambdaCalculus extends FunSuite with Matchers {
 
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
   type F[T] = ConditionalProbabilityTable0[T, Rational]
 
   test("iffy (stochastic if) maps fair boolean to d6 + (d6+d6)") {
@@ -54,7 +54,7 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
       y <- yDist
     } yield (if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0)
 
-    4 * prob.probabilityOf(piDist, 1) should be > Rational(3)
+    4 * piDist.P(1) should be > Rational(3)
   }
 
 }

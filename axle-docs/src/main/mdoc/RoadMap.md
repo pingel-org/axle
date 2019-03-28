@@ -41,13 +41,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
+* `similarity` syntax for SimilaritySpace (see axle.bio.*)
+
 * Implement {TD,CPT}.{poe, ce}
 * Fix Statistics.md
 * Fix TwoDice.md
-
-* Syntax for ProbabilityModel.probabilityOf (both versions), observe, etc
-    Remove all: val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-* `similarity` syntax for SimilaritySpace (see axle.bio.*)
+* ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
 
 * KolmogorovProbabilityAxioms.combination
 * "Combination" generalizes to event sets (where antecedent is rephrased as "A intersect B == emptyset")
@@ -66,7 +65,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Prove and generalize CaseIs(heads) is equal to "not tails"
 * P / Case expression DSL
 * What to do with TD1 and CPT2? Fix "cpt" in InformationTheorySpec
-* ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
 * ProbabilityModel.probabilityOfNot ProbabilityModel.conditionNot
 
 * Rename TallyDistribution0 to Tally (Or is this really just a Map?)

@@ -4,10 +4,9 @@ import cats.implicits._
 
 import spire.math.Rational
 import axle.stats._
+import axle.syntax.probabilitymodel._
 
 object OldMontyHall {
-
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
 
   val numDoors = 3
 
@@ -42,6 +41,6 @@ object OldMontyHall {
   } yield finalChosenDoor === prizeDoor
 
   val chanceOfWinning =
-    (probabilityOfSwitching: Rational) => prob.probabilityOf(outcome(probabilityOfSwitching), true)
+    (probabilityOfSwitching: Rational) => outcome(probabilityOfSwitching).P(true)
 
 }

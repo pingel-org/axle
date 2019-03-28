@@ -1,9 +1,13 @@
 package axle.syntax
 
 import cats.kernel.Eq
+import cats.kernel.Order
 
 import spire.algebra.AdditiveMonoid
+import spire.algebra.Field
 import spire.algebra.Ring
+import spire.random.Generator
+import spire.random.Dist
 
 import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
@@ -16,6 +20,8 @@ import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
+import axle.stats.ProbabilityModel
+import axle.stats.Variable
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
   implicit
@@ -213,6 +219,29 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
 
 }
 
+final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
+  implicit
+  ev: ProbabilityModel[M]) {
+
+  // def construct[A, V](variable: Variable[A], as: Iterable[A], f: A => V)(implicit ring: Ring[V]): M[A, V]
+
+  def values: IndexedSeq[A] = ev.values(model)
+  
+  // def combine[A, V](modelsToProbabilities: Map[M[A, V], V])(implicit fieldV: Field[V]): M[A, V]
+  
+  // def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): M[A, V]
+  
+  def P(a: A)(implicit fieldV: Field[V]): V = ev.probabilityOf(model, a)
+  
+  def P(predicate: A => Boolean)(implicit fieldV: Field[V]): V = ev.probabilityOfExpression(model, predicate)
+ 
+  def |(given: A): M[A, V] = ev.condition(model, given)
+  
+  def |[B](predicate: A => Boolean, screen: A => B): M[B, V] = ev.conditionExpression(model, predicate, screen)
+  
+  def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = ev.observe(model, gen)
+
+}
 final class DirectedGraphOps[DG, V, E](val dg: DG)(
   implicit
   ev: DirectedGraph[DG, V, E]) {

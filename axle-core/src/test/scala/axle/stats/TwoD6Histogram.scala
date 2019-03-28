@@ -3,17 +3,15 @@ package axle.stats
 import org.scalatest._
 
 import spire.algebra._
+import spire.math.Rational
 
 import axle.enrichGenSeq
 import axle.game.Dice.die
-
-import spire.math.Rational
+import axle.syntax.probabilitymodel._
 
 class TwoD6Histogram extends FunSuite with Matchers {
 
   implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
-
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
 
   test("tally") {
 
@@ -23,7 +21,7 @@ class TwoD6Histogram extends FunSuite with Matchers {
     val gen = spire.random.Random.generatorFromSeed(seed)
     val d6a = die(6)
     val d6b = die(6)
-    val rolls = (0 until 1000) map { i => prob.observe(d6a, gen) + prob.observe(d6b, gen) }
+    val rolls = (0 until 1000) map { i => d6a.observe(gen) + d6b.observe(gen) }
 
     val hist = rolls.tally
     hist.size should be(11)
@@ -39,9 +37,9 @@ class TwoD6Histogram extends FunSuite with Matchers {
       b <- die(6) : F[Int]
     } yield a + b
 
-    prob.probabilityOf(twoDiceSummed, 2) should be(Rational(1, 36))
-    prob.probabilityOf(twoDiceSummed, 7) should be(Rational(1, 6))
-    prob.probabilityOf(twoDiceSummed, 12) should be(Rational(1, 36))
+    twoDiceSummed.P(2) should be(Rational(1, 36))
+    twoDiceSummed.P(7) should be(Rational(1, 6))
+    twoDiceSummed.P(12) should be(Rational(1, 36))
   }
 
 }
