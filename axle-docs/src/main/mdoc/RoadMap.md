@@ -41,7 +41,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* Implement {TD,CPT}.{condition{,Expression}}
 * Fix Statistics.md
 * Fix TwoDice.md
 * KolmogorovProbabilityAxioms.combination

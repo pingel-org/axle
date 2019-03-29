@@ -52,8 +52,11 @@ object TallyDistribution {
         TallyDistribution[A, V](newDist, v)
       }
 
-      def conditionExpression[A, B, V](model: TallyDistribution[A, V], predicate: A => Boolean, screen: A => B): TallyDistribution[B, V] =
-        ???
+      def conditionExpression[A, B, V](model: TallyDistribution[A, V], predicate: A => Boolean, screen: A => B)(implicit fieldV: Field[V]): TallyDistribution[B, V] = {
+        val newMap: Map[B, V] = model.tally.toVector.filter({ case (a, v) => predicate(a)}).map({ case (a, v) => screen(a) -> v }).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
+        val newDenominator: V = Σ(newMap.values)
+        TallyDistribution[B, V](newMap.mapValues(v => v / newDenominator), Variable[B]("B"))
+      }
 
       def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): TallyDistribution[A, V] =
         TallyDistribution(Map.empty, variable)

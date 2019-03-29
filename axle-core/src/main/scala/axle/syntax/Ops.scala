@@ -234,7 +234,7 @@ final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
   
   def P(predicate: A => Boolean)(implicit fieldV: Field[V]): V = ev.probabilityOfExpression(model, predicate)
   
-  def |[B](predicate: A => Boolean, screen: A => B): M[B, V] = ev.conditionExpression(model, predicate, screen)
+  def |[B](predicate: A => Boolean, screen: A => B)(implicit fieldV: Field[V]): M[B, V] = ev.conditionExpression(model, predicate, screen)
   
   def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = ev.observe(model, gen)
 

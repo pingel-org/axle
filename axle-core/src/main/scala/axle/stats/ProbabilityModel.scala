@@ -30,7 +30,7 @@ trait ProbabilityModel[M[_, _]] {
 
   def probabilityOfExpression[A, V](model: M[A, V], predicate: A => Boolean)(implicit fieldV: Field[V]): V
 
-  def conditionExpression[A, B, V](model: M[A, V], predicate: A => Boolean, screen: A => B): M[B, V]
+  def conditionExpression[A, B, V](model: M[A, V], predicate: A => Boolean, screen: A => B)(implicit fieldV: Field[V]): M[B, V]
 
   def observe[A, V](model: M[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
 
