@@ -13,7 +13,7 @@ import axle.syntax.probabilitymodel._
 
 class StochasticLambdaCalculus extends FunSuite with Matchers {
 
-  type F[T] = ConditionalProbabilityTable0[T, Rational]
+  type F[T] = ConditionalProbabilityTable[T, Rational]
 
   test("iffy (stochastic if) maps fair boolean to d6 + (d6+d6)") {
 

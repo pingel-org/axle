@@ -35,7 +35,7 @@ implicit val or: Order[Rational] = new cats.kernel.Order[Rational] {
   def compare(x: Rational, y: Rational): Int = doubleOrder.compare(x.toDouble, y.toDouble)
 }
 implicit val bitDouble = id.bit
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 ```
 
 Create dataset
@@ -45,7 +45,7 @@ val hm: D =
   new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
     (0 to 100).map({ i =>
       val r = Rational(i / 100d)
-      r -> H[ConditionalProbabilityTable0, Symbol, Rational](coin(r))
+      r -> H[ConditionalProbabilityTable, Symbol, Rational](coin(r))
     }).toMap
 ```
 

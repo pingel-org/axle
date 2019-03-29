@@ -13,8 +13,7 @@ import spire.implicits.multiplicativeSemigroupOps
 import axle.algebra._
 import axle.math._
 import axle.stats.Variable
-import axle.stats.TallyDistribution0
-import axle.stats.TallyDistribution1
+import axle.stats.TallyDistribution
 import axle.stats.ProbabilityModel
 import axle.syntax.aggregatable._
 import axle.syntax.talliable._
@@ -53,9 +52,9 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   val classTally: Map[CLASS, N] =
     data.map(classExtractor).tally.withDefaultValue(Field[N].zero)
 
-  val C = TallyDistribution0(classTally, Variable[CLASS]("class"))
+  val C = TallyDistribution(classTally, Variable[CLASS]("class"))
 
-  val probTally0 = implicitly[ProbabilityModel[TallyDistribution0]]
+  val probTally0 = implicitly[ProbabilityModel[TallyDistribution]]
   // TODO val probTally1 = implicitly[Probability[({ type λ[T] = TallyDistribution1[T, CLASS, N] })#λ, N]]
 
   def tallyFor(featureVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =
@@ -68,7 +67,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   // Note: The "parent" (or "given") of these feature variables is C
   val Fs = featureVariablesAndValues.map {
     case (featureVariable, _) =>
-      TallyDistribution1(tallyFor(featureVariable).withDefaultValue(Field[N].zero), featureVariable)
+      TallyDistribution[(FEATURE, CLASS), N](tallyFor(featureVariable).withDefaultValue(Field[N].zero), Variable[(FEATURE, CLASS)]("F C"))
   }
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted

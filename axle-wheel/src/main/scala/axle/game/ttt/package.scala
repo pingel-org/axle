@@ -3,7 +3,7 @@ package axle.game
 import cats.implicits._
 import spire.math.Rational
 import spire.random.Dist
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 import axle.stats.rationalProbabilityDist
 
 package object ttt {
@@ -22,7 +22,7 @@ package object ttt {
       def players(g: TicTacToe): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: TicTacToe, player: Player): (TicTacToe, TicTacToeState) => ConditionalProbabilityTable0[TicTacToeMove, Rational] =
+      def strategyFor(g: TicTacToe, player: Player): (TicTacToe, TicTacToeState) => ConditionalProbabilityTable[TicTacToeMove, Rational] =
         g.playerToStrategy(player)
 
       def isValid(g: TicTacToe, state: TicTacToeState, move: TicTacToeMove): Either[String, TicTacToeMove] =

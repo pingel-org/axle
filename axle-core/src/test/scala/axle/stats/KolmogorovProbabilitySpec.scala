@@ -52,7 +52,7 @@ class BiasedCoinIsKolmogorov extends KolmogorovProbabilitySpec("2:1 biased coin 
 class D6IsKolmogorov extends KolmogorovProbabilitySpec("d6", die(6))
   
 class TwoIndependentD6IsKolmogorov extends KolmogorovProbabilitySpec("2 independent d6", {
-  type CPTR[T] = ConditionalProbabilityTable0[T, Rational]
+  type CPTR[T] = ConditionalProbabilityTable[T, Rational]
   import cats.syntax.all._
   for { a <- die(6): CPTR[Int]; b <- die(6): CPTR[Int]} yield a + b
 })

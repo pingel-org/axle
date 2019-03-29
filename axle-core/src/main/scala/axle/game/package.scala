@@ -9,7 +9,7 @@ import spire.random.Generator
 import spire.random.Dist
 
 import axle.stats.ProbabilityModel
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 
 package object game {
 
@@ -19,7 +19,7 @@ package object game {
     gen:       Generator)(
     implicit
     evGame: Game[G, S, O, M, MS, MM, V],
-    prob:   ProbabilityModel[ConditionalProbabilityTable0],
+    prob:   ProbabilityModel[ConditionalProbabilityTable],
     distV:  Dist[V],
     ringV:  Ring[V],
     orderV: Order[V]): Stream[(S, M, S)] =
@@ -36,7 +36,7 @@ package object game {
   def play[G, S, O, M, MS, MM, V](game: G, gen: Generator)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V],
-    prob:     ProbabilityModel[ConditionalProbabilityTable0],
+    prob:     ProbabilityModel[ConditionalProbabilityTable],
     evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],
@@ -50,7 +50,7 @@ package object game {
     gen:   Generator)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V],
-    prob:     ProbabilityModel[ConditionalProbabilityTable0],
+    prob:     ProbabilityModel[ConditionalProbabilityTable],
     evGameIO: GameIO[G, O, M, MS, MM],
     distV: Dist[V],
     ringV: Ring[V],
@@ -99,7 +99,7 @@ package object game {
     gen:   Generator)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V],
-    prob:     ProbabilityModel[ConditionalProbabilityTable0],
+    prob:     ProbabilityModel[ConditionalProbabilityTable],
     evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],
@@ -114,7 +114,7 @@ package object game {
     gen:   Generator)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V],
-    prob:     ProbabilityModel[ConditionalProbabilityTable0],
+    prob:     ProbabilityModel[ConditionalProbabilityTable],
     evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],

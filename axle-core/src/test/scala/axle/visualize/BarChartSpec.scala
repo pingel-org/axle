@@ -8,13 +8,13 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.game.Dice.die
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 import axle.visualize.Color.blue
 import axle.web._
 
 class BarChartSpec extends FunSuite with Matchers {
 
-  type F[T] = ConditionalProbabilityTable0[T, Rational]
+  type F[T] = ConditionalProbabilityTable[T, Rational]
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
@@ -80,10 +80,10 @@ class BarChartSpec extends FunSuite with Matchers {
       b <- die(6) : F[Int]
     } yield a + b
 
-    implicit val dataViewCPT: DataView[Int, Rational, ConditionalProbabilityTable0[Int, Rational]] =
-      DataView.probabilityDataView[Int, Rational, ConditionalProbabilityTable0]
+    implicit val dataViewCPT: DataView[Int, Rational, ConditionalProbabilityTable[Int, Rational]] =
+      DataView.probabilityDataView[Int, Rational, ConditionalProbabilityTable]
 
-    val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
+    val chart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
       () => distribution,
       xAxis = Some(Rational(0)),
       title = Some("d6 + d6"),

@@ -6,7 +6,7 @@ import axle.stats._
 
 object Bowling {
 
-  type F[T] = ConditionalProbabilityTable0[T, Rational]
+  type F[T] = ConditionalProbabilityTable[T, Rational]
 
   case class Bowler(firstRoll: F[Int], spare: F[Boolean])
 
@@ -37,7 +37,7 @@ object Bowling {
     // bad bowler.  50% gutter-ball, even (5%) distribution of 1-10
     val badBowler =
       Bowler(
-        firstRoll = ConditionalProbabilityTable0(Map(
+        firstRoll = ConditionalProbabilityTable(Map(
           0 -> Rational(5, 10),
           1 -> Rational(1, 20),
           2 -> Rational(1, 20),
@@ -54,7 +54,7 @@ object Bowling {
     // decent bowler.  5%  over 0-5, 10% 6, 15% over 7-10
     val decentBowler =
       Bowler(
-        firstRoll = ConditionalProbabilityTable0(Map(
+        firstRoll = ConditionalProbabilityTable(Map(
           0 -> Rational(1, 20),
           1 -> Rational(1, 20),
           2 -> Rational(1, 20),
@@ -70,7 +70,7 @@ object Bowling {
 
     // 1% over 0-6, 13% 7, 20% 8, 30% 9, 30% 10
     val goodBowler = Bowler(
-      firstRoll = ConditionalProbabilityTable0(Map(
+      firstRoll = ConditionalProbabilityTable(Map(
         0 -> Rational(1, 100),
         1 -> Rational(1, 100),
         2 -> Rational(1, 100),
@@ -88,11 +88,11 @@ object Bowling {
 
   def stateDistribution(
     bowler:    Bowler,
-    numFrames: Int): ConditionalProbabilityTable0[State, Rational] = {
+    numFrames: Int): ConditionalProbabilityTable[State, Rational] = {
 
     import bowler._
 
-    val startState: F[State] = ConditionalProbabilityTable0(
+    val startState: F[State] = ConditionalProbabilityTable(
       Map(State(0, false, false, false) -> Rational(1)),
       Variable[State]("startState"))
 
@@ -106,7 +106,7 @@ object Bowling {
     })
   }
 
-  // val cpt = sd.asInstanceOf[ConditionalProbabilityTable0[Int, Rational]]
+  // val cpt = sd.asInstanceOf[ConditionalProbabilityTable[Int, Rational]]
   // cpt.p.toList.sortBy(_._1).map( vp => (vp._1, vp._2.toDouble)) foreach println
 
 }

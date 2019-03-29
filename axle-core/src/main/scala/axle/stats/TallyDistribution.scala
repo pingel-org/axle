@@ -1,7 +1,6 @@
 package axle.stats
 
 import cats.Show
-import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
 
@@ -16,9 +15,9 @@ import spire.random.Generator
 import axle.math.Σ
 import axle.dummy
 
-object TallyDistribution0 {
+object TallyDistribution {
 
-  implicit def show[A: Order: Show, V: Show: Field]: Show[TallyDistribution0[A, V]] = td =>
+  implicit def show[A: Order: Show, V: Show: Field]: Show[TallyDistribution[A, V]] = td =>
     td.values.sorted.map(a => {
       val aString = Show[A].show(a)
       // (aString + (1 to (td.charWidth - aString.length)).map(i => " ").mkString("") + " " + string(td.probabilityOf(a)))
@@ -26,16 +25,16 @@ object TallyDistribution0 {
     }).mkString("\n")
 
 
-    implicit val probabilityWitness: ProbabilityModel[TallyDistribution0] =
-    new ProbabilityModel[TallyDistribution0] {
+    implicit val probabilityWitness: ProbabilityModel[TallyDistribution] =
+    new ProbabilityModel[TallyDistribution] {
 
-      def construct[A, V](variable: Variable[A], as: Iterable[A], f: A => V)(implicit ring: Ring[V]): TallyDistribution0[A, V] =
-        TallyDistribution0[A, V](as.map(a => a -> f(a)).toMap, variable)
+      def construct[A, V](variable: Variable[A], as: Iterable[A], f: A => V)(implicit ring: Ring[V]): TallyDistribution[A, V] =
+        TallyDistribution[A, V](as.map(a => a -> f(a)).toMap, variable)
 
-      def values[A](model: TallyDistribution0[A, _]): IndexedSeq[A] =
+      def values[A](model: TallyDistribution[A, _]): IndexedSeq[A] =
         model.values
 
-      def combine[A, V](modelsToProbabilities: Map[TallyDistribution0[A, V], V])(implicit fieldV: Field[V]): TallyDistribution0[A, V] = {
+      def combine[A, V](modelsToProbabilities: Map[TallyDistribution[A, V], V])(implicit fieldV: Field[V]): TallyDistribution[A, V] = {
 
         // TODO assert that all models are oriented for same Variable[A]
 
@@ -50,34 +49,33 @@ object TallyDistribution0 {
 
         val v = modelsToProbabilities.headOption.map(_._1.variable).getOrElse(Variable[A]("?"))
 
-        TallyDistribution0[A, V](newDist, v)
+        TallyDistribution[A, V](newDist, v)
       }
 
-      def condition[A, V](model: TallyDistribution0[A, V], given: A): TallyDistribution0[A, V] =
+      def condition[A, V](model: TallyDistribution[A, V], given: A): TallyDistribution[A, V] =
         model // TODO true unless G =:= A and model.variable === variable
 
-      def conditionExpression[A, B, V](model: TallyDistribution0[A, V], predicate: A => Boolean, screen: A => B): TallyDistribution0[B, V] =
+      def conditionExpression[A, B, V](model: TallyDistribution[A, V], predicate: A => Boolean, screen: A => B): TallyDistribution[B, V] =
         ???
 
-      def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): TallyDistribution0[A, V] =
-        TallyDistribution0(Map.empty, variable)
+      def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): TallyDistribution[A, V] =
+        TallyDistribution(Map.empty, variable)
 
-      def observe[A, V](model: TallyDistribution0[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
+      def observe[A, V](model: TallyDistribution[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
         val r: V = model.totalCount * gen.next[V]
         model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // or distribution is malformed
       }
 
-      def probabilityOf[A, V](model: TallyDistribution0[A, V], a: A)(implicit fieldV: Field[V]): V =
+      def probabilityOf[A, V](model: TallyDistribution[A, V], a: A)(implicit fieldV: Field[V]): V =
         model.tally.get(a).getOrElse(fieldV.zero) / model.totalCount
 
-      def probabilityOfExpression[A, V](model: TallyDistribution0[A, V], f: A => Boolean)(implicit fieldV: Field[V]): V =
+      def probabilityOfExpression[A, V](model: TallyDistribution[A, V], f: A => Boolean)(implicit fieldV: Field[V]): V =
         ???
 
     }
 
 }
-
-case class TallyDistribution0[A, V](
+case class TallyDistribution[A, V](
   tally:    Map[A, V],
   variable: Variable[A])(implicit ring: Ring[V]) {
 
@@ -88,30 +86,4 @@ case class TallyDistribution0[A, V](
   val bars: Map[A, V] =
     tally.scanLeft((dummy[A], ring.zero))((x, y) => (y._1, ring.plus(x._2, y._2))).drop(1)
 
-}
-
-//object TallyDistribution1 {
-//
-//  def probabilityOf(a: A): N =
-//    Σ[N, Iterable[N]](gvs.map(gv => tally((a, gv)))) / totalCount
-//
-//  def probabilityOf(a: A, given: Case[G]): N = given match {
-//    case CaseIs(argGrv, gv)   => tally.get((a, gv)).getOrElse(Field[N].zero) / Σ[N, Iterable[N]](tally.filter(_._1._2 === gv).map(_._2))
-//    case CaseIsnt(argGrv, gv) => 1 - (tally.get((a, gv)).getOrElse(Field[N].zero) / Σ[N, Iterable[N]](tally.filter(_._1._2 === gv).map(_._2)))
-//    case _                    => throw new Exception("unhandled case in TallyDistributionWithInput.probabilityOf")
-//  }
-//}
-
-case class TallyDistribution1[A, G: Eq, N: Field: Order](
-  tally:    Map[(A, G), N],
-  variable: Variable[A]) {
-
-  lazy val _values: IndexedSeq[A] =
-    tally.keys.map(_._1).toSet.toVector
-
-  def values: IndexedSeq[A] = _values
-
-  val gvs = tally.keys.map(_._2).toSet
-
-  val totalCount: N = Σ[N, Iterable](tally.values)
 }

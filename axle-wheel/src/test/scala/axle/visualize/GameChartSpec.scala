@@ -9,7 +9,7 @@ import spire.math.Rational
 
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling._
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 
 class GameChartSpec extends FunSuite with Matchers {
 
@@ -25,17 +25,17 @@ class GameChartSpec extends FunSuite with Matchers {
 
     // test implicit conjuring:
 
-    implicit val dvInt = DataView.probabilityDataView[Int, Rational, ConditionalProbabilityTable0]
+    implicit val dvInt = DataView.probabilityDataView[Int, Rational, ConditionalProbabilityTable]
 
-    val chart = BarChart[Int, Rational, ConditionalProbabilityTable0[Int, Rational], String](
+    val chart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
       () => scoreD,
       drawKey = true,
       xAxis = Some(Rational(0)))
 
     implicit val amInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
-    implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ConditionalProbabilityTable0]
+    implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ConditionalProbabilityTable]
 
-    val plot = Plot[String, Int, Rational, ConditionalProbabilityTable0[Int, Rational]](
+    val plot = Plot[String, Int, Rational, ConditionalProbabilityTable[Int, Rational]](
       () => Vector(("", scoreD)),
       colorOf = _ => Color.black,
       drawKey = true).zeroXAxis

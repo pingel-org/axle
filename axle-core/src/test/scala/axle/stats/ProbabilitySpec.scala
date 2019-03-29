@@ -8,7 +8,7 @@ import axle.syntax.probabilitymodel._
 
 class ProbabilitySpec extends FunSuite with Matchers {
 
-  type CPTR[T] = ConditionalProbabilityTable0[T, Rational]
+  type CPTR[T] = ConditionalProbabilityTable[T, Rational]
 
   test("two independent coins") {
 

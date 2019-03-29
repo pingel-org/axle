@@ -30,7 +30,7 @@ class TwoD6Histogram extends FunSuite with Matchers {
   test("distribution monad: combine 2 D6 correctly") {
 
     import cats.syntax.all._
-    type F[T] = ConditionalProbabilityTable0[T, Rational]
+    type F[T] = ConditionalProbabilityTable[T, Rational]
 
     val twoDiceSummed = for {
       a <- die(6) : F[Int]

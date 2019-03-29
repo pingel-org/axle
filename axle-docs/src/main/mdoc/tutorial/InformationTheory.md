@@ -29,7 +29,7 @@ implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
 implicit val informationConverter = Information.converterGraphK2[Double, DirectedSparseGraph]
 
-implicit val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
+implicit val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable]]
 ```
 
 Usage
@@ -39,7 +39,7 @@ Entropy of fair 6-sided die
 ```scala mdoc
 val d6 = die(6)
 
-H[ConditionalProbabilityTable0, Int, Rational](d6).show
+H[ConditionalProbabilityTable, Int, Rational](d6).show
 ```
 
 Entropy of fair and biased coins
@@ -47,11 +47,11 @@ Entropy of fair and biased coins
 ```scala mdoc
 val fairCoin = coin()
 
-H[ConditionalProbabilityTable0, Symbol, Rational](fairCoin).show
+H[ConditionalProbabilityTable, Symbol, Rational](fairCoin).show
 
 val biasedCoin = coin(Rational(7, 10))
 
-entropy[ConditionalProbabilityTable0, Symbol, Rational](biasedCoin).show
+entropy[ConditionalProbabilityTable, Symbol, Rational](biasedCoin).show
 ```
 
 See also the [Coin Entropy](/tutorial/entropy_biased_coin/) example.

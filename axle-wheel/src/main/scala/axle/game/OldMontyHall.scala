@@ -10,7 +10,7 @@ object OldMontyHall {
 
   val numDoors = 3
 
-  type F[T] = ConditionalProbabilityTable0[T, Rational]
+  type F[T] = ConditionalProbabilityTable[T, Rational]
 
   val prizeDoorModel: F[Int] = uniformDistribution(1 to numDoors, Variable("prize"))
 
@@ -23,7 +23,7 @@ object OldMontyHall {
 
     val availableDoors = (1 to numDoors).filterNot(d => d === revealedDoor || d === chosenDoor)
 
-    iffy( // iffy[Int, Rational, ConditionalProbabilityTable0, ConditionalProbabilityTable0]
+    iffy( // iffy[Int, Rational, ConditionalProbabilityTable, ConditionalProbabilityTable]
       binaryDecision(probabilityOfSwitching),
       uniformDistribution(availableDoors, Variable("switch")), // switch
       uniformDistribution(Seq(chosenDoor), Variable("switch")) // stay

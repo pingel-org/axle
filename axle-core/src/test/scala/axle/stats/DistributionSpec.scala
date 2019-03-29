@@ -9,9 +9,9 @@ class DistributionSpec extends FunSuite with Matchers {
 
   test("Distribution map") {
 
-    type F[T] = ConditionalProbabilityTable0[T, Rational]
+    type F[T] = ConditionalProbabilityTable[T, Rational]
 
-    val listDist: F[List[Int]] = ConditionalProbabilityTable0[List[Int], Rational](
+    val listDist: F[List[Int]] = ConditionalProbabilityTable[List[Int], Rational](
       Map(
         List(1, 2, 3) -> Rational(1, 3),
         List(1, 2, 8) -> Rational(1, 2),
