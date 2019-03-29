@@ -233,8 +233,6 @@ final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
   def P(a: A)(implicit fieldV: Field[V]): V = ev.probabilityOf(model, a)
   
   def P(predicate: A => Boolean)(implicit fieldV: Field[V]): V = ev.probabilityOfExpression(model, predicate)
- 
-  def |(given: A): M[A, V] = ev.condition(model, given)
   
   def |[B](predicate: A => Boolean, screen: A => B): M[B, V] = ev.conditionExpression(model, predicate, screen)
   

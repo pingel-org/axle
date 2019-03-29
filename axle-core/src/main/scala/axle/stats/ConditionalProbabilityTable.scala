@@ -48,9 +48,6 @@ object ConditionalProbabilityTable {
         ConditionalProbabilityTable[A, V](newDist, v)
       }
 
-      def condition[A, V](model: ConditionalProbabilityTable[A, V], given: A): ConditionalProbabilityTable[A, V] =
-        model // TODO true unless G =:= A and model.variable === variable
-
       def conditionExpression[A, B, V](model: ConditionalProbabilityTable[A, V], predicate: A => Boolean, screen: A => B): ConditionalProbabilityTable[B, V] =
         ???
 

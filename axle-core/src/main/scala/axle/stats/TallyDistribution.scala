@@ -52,9 +52,6 @@ object TallyDistribution {
         TallyDistribution[A, V](newDist, v)
       }
 
-      def condition[A, V](model: TallyDistribution[A, V], given: A): TallyDistribution[A, V] =
-        model // TODO true unless G =:= A and model.variable === variable
-
       def conditionExpression[A, B, V](model: TallyDistribution[A, V], predicate: A => Boolean, screen: A => B): TallyDistribution[B, V] =
         ???
 
