@@ -13,6 +13,7 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.dummy
+import axle.math.Σ
 
 object ConditionalProbabilityTable {
 
@@ -65,7 +66,7 @@ object ConditionalProbabilityTable {
         model.p.get(a).getOrElse(fieldV.zero)
 
       def probabilityOfExpression[A, V](model: ConditionalProbabilityTable[A, V], predicate: A => Boolean)(implicit fieldV: Field[V]): V =
-        ???
+        Σ(model.values.filter(predicate).map(model.p))
   }
 
 

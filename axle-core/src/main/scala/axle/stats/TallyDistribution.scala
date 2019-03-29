@@ -69,8 +69,8 @@ object TallyDistribution {
       def probabilityOf[A, V](model: TallyDistribution[A, V], a: A)(implicit fieldV: Field[V]): V =
         model.tally.get(a).getOrElse(fieldV.zero) / model.totalCount
 
-      def probabilityOfExpression[A, V](model: TallyDistribution[A, V], f: A => Boolean)(implicit fieldV: Field[V]): V =
-        ???
+      def probabilityOfExpression[A, V](model: TallyDistribution[A, V], predicate: A => Boolean)(implicit fieldV: Field[V]): V =
+        Σ(model.values.filter(predicate).map(model.tally)) / model.totalCount
 
     }
 

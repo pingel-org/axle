@@ -41,7 +41,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* Implement {TD,CPT}.{poe, ce}
+* Implement {TD,CPT}.{condition{,Expression}}
 * Fix Statistics.md
 * Fix TwoDice.md
 * KolmogorovProbabilityAxioms.combination
@@ -58,15 +58,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * CaseIs replaced by T => Boolean as the Expression type?
 * Prove and generalize CaseIs(heads) is equal to "not tails"
-* P / Case expression DSL
+* P / Case expression DSL (PExpr, PMultiply, ...)
 * ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
-
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
-* Move NaiveBayesClassifier.md back
 * Fix NaiveBayesSpec (and .md)
 * Finish NaiveBayesClassifier
 * Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
-* Move GeneticAlgorthms.md back
 * Fix GeneticAlgorithmSpec
 
 * Fix markdown lint warnings
