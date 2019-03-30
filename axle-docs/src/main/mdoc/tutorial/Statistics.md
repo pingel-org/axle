@@ -23,7 +23,7 @@ implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 Example
 
 ```scala mdoc
-val dist = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), "some doubles")
+val X = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), Variable("X"))
 ```
 
 ## Standard Deviation
@@ -31,12 +31,14 @@ val dist = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), "some doubl
 Example
 
 ```scala mdoc
-standardDeviation(dist)
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+
+standardDeviation(X)
 ```
 
 ## Random Variables
 
-Example fiar and biased coins:
+Example fair and biased coins:
 
 ```scala mdoc
 val fairCoin = coin()
@@ -47,24 +49,36 @@ val biasedCoin = coin(Rational(9, 10))
 The `observe` method selects a value for the random variable based on the distribution.
 
 ```scala mdoc
-(1 to 10) map { i => fairCoin.observe }
+import spire.random.Generator.rng
+import axle.syntax.probabilitymodel._
 
-(1 to 10) map { i => biasedCoin.observe }
+implicit val dist = axle.stats.rationalProbabilityDist
+
+(1 to 10) map { i => fairCoin.observe(rng) }
+
+(1 to 10) map { i => biasedCoin.observe(rng) }
 ```
 
 Create and query distributions
 
 ```scala mdoc
 val flip1 = coin()
+
+flip1.P('HEAD)
+
 val flip2 = coin()
 
-P(flip1 is 'HEAD).apply()
+import cats.syntax.all._
+type F[T] = ConditionalProbabilityTable[T, Rational]
 
-P((flip1 is 'HEAD) and (flip2 is 'HEAD)).apply()
+val bothFlips = for {
+  a <- flip1 : F[Symbol]
+  b <- flip2 : F[Symbol]
+} yield (a, b)
 
-P((flip1 is 'HEAD) or (flip2 is 'HEAD)).apply()
+bothFlips.P(('HEAD, 'HEAD))
 
-P((flip1 is 'HEAD) | (flip2 is 'TAIL)).apply()
+bothFlips.P({ flips: (Symbol, Symbol) => (flips._1 === 'HEAD) || (flips._2 === 'HEAD) })
 ```
 
 ## Dice examples
@@ -74,22 +88,28 @@ Setup
 ```scala mdoc
 import axle.game.Dice._
 
-val d6a = utfD6
-val d6b = utfD6
+val d6a = (die(6) : F[Int]).map(numberToUtfFace)
+val d6b = (die(6) : F[Int]).map(numberToUtfFace)
+
+val bothDie = for {
+  a <- d6a : F[Symbol]
+  b <- d6b : F[Symbol]
+} yield (a, b)
+
 ```
 
 Create and query distributions
 
 ```scala mdoc
-P((d6a is '⚃) and (d6b is '⚃)).apply()
+bothDie.P({ dice: (Symbol, Symbol) => (dice._1 === '⚃) && (dice._2 === '⚃) })
 
-P((d6a isnt '⚃)).apply()
+bothDie.P({ dice: (Symbol, _) => (dice._1 =!= '⚃) })
 ```
 
 Observe rolls of a die
 
 ```scala mdoc
-(1 to 10) map { i => utfD6.observe }
+(1 to 10) map { i => d6a.observe(rng) }
 ```
 
 See also [Two Dice](/tutorial/two_dice/) examples.
