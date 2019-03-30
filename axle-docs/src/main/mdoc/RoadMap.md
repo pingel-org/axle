@@ -42,28 +42,25 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
 * Fix Statistics.md
-* Fix TwoDice.md
+
 * KolmogorovProbabilityAxioms.combination
 * "Combination" generalizes to event sets (where antecedent is rephrased as "A intersect B == emptyset")
   but the default distribution of antecedents would usually be uninteresting (evaluate to false)
-
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * KolmogorovProbabilityAxioms for Monty Hall (for some fixed P(switch))
-* Stop specifying ConditionalProbabilityTable0 in axle.game package object methods
+* Stop specifying ConditionalProbabilityTable in axle.game package object methods
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
+* Kind projector instead of type lambdas
+* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
+
+* Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
-* Kind projector instead of `type F[T] = ConditionalProbabilityTable0[T, Rational]` and `CPTR[T]` ?
-* Kind projector instead of type lambdas
-
+* P / Case expression DSL (PExpr, PMultiply, ...)
 * CaseIs replaced by T => Boolean as the Expression type?
 * Prove and generalize CaseIs(heads) is equal to "not tails"
-* P / Case expression DSL (PExpr, PMultiply, ...)
 * ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
-* Fix NaiveBayesSpec (and .md)
-* Finish NaiveBayesClassifier
-* Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
-* Fix GeneticAlgorithmSpec
 
 * Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
@@ -78,8 +75,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * Fix logistic regression and move LogisticRegression.md back
-* Tests for axle.ast
-* `similarity` syntax for SimilaritySpace (see axle.bio.*)
+* Tests for `axle.ast`
+* `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
+* Optimize `conditionExpression` implementations
 * Demo Mandelbrot with Rational
 * Friend of Spire
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
