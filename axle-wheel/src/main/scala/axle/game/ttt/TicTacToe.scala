@@ -2,7 +2,7 @@
 package axle.game.ttt
 
 import axle.game._
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 import spire.math.Rational
 import cats.implicits._
 
@@ -13,10 +13,10 @@ import cats.implicits._
 case class TicTacToe(
   boardSize:  Int                                                                                  = 3,
   x:          Player,
-  xStrategy:  (TicTacToe, TicTacToeState) => ConditionalProbabilityTable0[TicTacToeMove, Rational],
+  xStrategy:  (TicTacToe, TicTacToeState) => ConditionalProbabilityTable[TicTacToeMove, Rational],
   xDisplayer: String => Unit,
   o:          Player,
-  oStrategy:  (TicTacToe, TicTacToeState) => ConditionalProbabilityTable0[TicTacToeMove, Rational],
+  oStrategy:  (TicTacToe, TicTacToeState) => ConditionalProbabilityTable[TicTacToeMove, Rational],
   oDisplayer: String => Unit) {
 
   val players = Vector(x, o)

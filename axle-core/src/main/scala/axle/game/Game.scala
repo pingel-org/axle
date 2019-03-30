@@ -11,7 +11,7 @@ package axle.game
 
 import spire.random.Dist
 
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 
 trait Game[G, S, O, M, MS, MM, V] {
 
@@ -34,7 +34,7 @@ trait Game[G, S, O, M, MS, MM, V] {
 
   def maskMove(game: G, move: M, mover: Player, observer: Player): MM
 
-  def strategyFor(game: G, player: Player): (G, MS) => ConditionalProbabilityTable0[M, V]
+  def strategyFor(game: G, player: Player): (G, MS) => ConditionalProbabilityTable[M, V]
 
   def isValid(game: G, state: MS, move: M): Either[String, M]
 

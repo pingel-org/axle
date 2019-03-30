@@ -2,6 +2,8 @@ package axle
 
 package object syntax {
 
+  object probabilitymodel extends ProbabilityModelSyntax
+
   object directedgraph extends DirectedGraphSyntax
 
   object undirectedgraph extends UndirectedGraphSyntax

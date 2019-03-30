@@ -4,10 +4,9 @@ import org.scalatest._
 import cats.syntax.all._
 import spire.math.Rational
 import axle.stats._
+import axle.syntax.probabilitymodel._
 
 class BowlingSpec extends FunSuite with Matchers {
-
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
 
   test("bowling") {
 
@@ -21,6 +20,6 @@ class BowlingSpec extends FunSuite with Matchers {
     } yield state.tallied
 
     // TODO: make same assertion about P(300) when last frame is handled correctly
-    prob.probabilityOf(scoreD, 0) should be > Rational(0)
+    scoreD.P(0) should be > Rational(0)
   }
 }

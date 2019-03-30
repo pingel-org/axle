@@ -6,12 +6,12 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (March 2018)
+## 0.5.0 (April 2019)
 
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
 * Redo `axle.stats`
-  * `ProbabilityModel` typeclass (refactored from `Distribution`)
+  * `ProbabilityModel` typeclass (refactored from `Distribution`) including syntactic support
   * Implicitly conjurable `cats.Monad` from a `ProbabilityModel`, which supports for comprehensions via cats syntax support
   * `Variable` instead of `RandomVariable`
   * remove `Bayes`
@@ -41,24 +41,21 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* Syntax for ProbabilityModel.probabilityOf, observe, etc
-    Remove all: val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
+* KolmogorovProbabilityAxioms for Monty Hall (for some fixed P(switch))
+* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
+* Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
+* KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
+* ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
-* Axioms for ProbabilityModel should enforce that it is the *same* Ring/Field each time
+* Stop specifying `ConditionalProbabilityTable` in `axle.game` package object methods
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
+* Kind projector instead of type lambdas
+* P / Case expression DSL (PExpr, PMultiply, ...)
+* CaseIs replaced by T => Boolean as the Expression type?
+* Prove and generalize CaseIs(heads) is equal to "not tails"
+* ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
-* Kolmogorov's axiom's of probability
-
-* Fix Statistics.md
-* Fix TwoDice.md
-* Fix ProbabilitySpec
-* Move {TwoDice, GeneticAlgorthms, NaiveBayesClassifier}.md back
-* Fix NaiveBayesSpec (and .md)
-* Kind projector instead of `type F[T] = ConditionalProbabilityTable0[T, Rational]` ?
-
-* Stop specifying ConditionalProbabilityTable0 in axle.game package object methods
-* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
-* Fix GeneticAlgorithms.md (as much as possible, then move out of the way)
-* Fix GeneticAlgorithmSpec
+* Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 
 * Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
@@ -68,46 +65,41 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * figure out better way to reference images
 * Publish site
 
-## 0.5.1 (???)
+## 0.6.x (Spring 2019)
 
+* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * Fix logistic regression and move LogisticRegression.md back
-* Tests for axle.ast
-* `similarity` syntax for SimilaritySpace (see axle.bio.*)
-* Functors for jung should use projections (study cats disjunction, scala Either)
+* Tests for `axle.ast`
+* `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
+* Optimize `conditionExpression` implementations
+* Optimize `KolmogorovProbabilityAxioms.combination`
+* Demo Mandelbrot with Rational
+* Friend of Spire
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
+* Kind projector for projections of jung graphs for Finite
+* Functors for jung should use projections (study cats disjunction, scala Either)
 * kittens 1.0.0-RC3 or magnolia
   * pattern match in FirstOrderPredicateLogic
   * subtyping for Suit and Rank
+
+## 0.7.x (Summer 2019)
+
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
-
-## 0.6.0 (Summer 2019)
-
-* Tics should take an argument
-* Factor tics and tics-{joda,algebra,spire} into separate libs
-* Demo Mandelbrot with Rational
-* Friend of Spire
-* Finish NaiveBayesClassifier
-* What to do with TD1 and CPT2? Fix "cpt" in InformationTheorySpec
-* eliminate rationalProbabilityDist usage by introducing new `Probability` (or some such) typeclass
-* ProbabilityModel.probabilityOfNot ProbabilityModel.conditionNot
-* Rename TallyDistribution0 and ConditionalProbabilityTable0 to Tally0 and ProbabilityTable0, respectively
-
-## 0.6.1 (Fall 2019)
-
-* Kind projector instead of type lambdas
-* Kind projector for projections of jung graphs for Finite
 * Machinist?
 * Replace Finite with Shapeless's version
 * Delete Finite conversions for jung (replace with NaturalTransformation?)
+* replace some refs to {CPT0,TallyDist0} with ProbabilityModel
+* Tics should take an argument
+* Factor tics and tics-{joda,algebra,spire} into separate libs
+
+## 0.8.x (Fall 2020)
+
 * Update Spire (to match cats version)
 * Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
 * Sort out MapFrom, FromStream, FromSet
 * Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
-* replace some refs to {CPT0,TallyDist0} with ProbabilityModel
-
-## 0.7.x (Winter 2020)
 
 * game theory axioms
 * axle.game: Observable[T]
@@ -118,8 +110,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-* Heterogenous Model types
-* ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 * Bayes Theorem
 * Hypothesis testing
 * Describing Data
@@ -131,15 +121,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Bias, Variance
 * Cohen's Kappa
 * Normalizer axioms
-* P / Case expression DSL
 
-## 0.8.0 (Summer 2019)
+## 1.0.x (Winter 2020)
 
 * Redo Logic using Abstract Algebra
 * Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
 * Fix "unreachable" default pattern match cases
 
-## 0.8.x (2020)
+## 1.1.x (2020)
 
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 * Honor graph vis params in awt graph visualizations

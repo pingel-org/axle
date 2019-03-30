@@ -15,6 +15,7 @@ import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
+import axle.stats.ProbabilityModel
 
 trait LinearAlgebraSyntax {
 
@@ -48,6 +49,14 @@ trait LinearAlgebraSyntax {
     implicit
     la: LinearAlgebra[M, RowT, ColT, T]) =
     new LinearAlgebraOps(m)
+}
+
+trait ProbabilityModelSyntax {
+
+  implicit def probabilityModelOps[M[_, _], A, V](model: M[A, V])(
+    implicit
+    ev: ProbabilityModel[M]) =
+    new ProbabilityModelOps(model)
 }
 
 trait DirectedGraphSyntax {

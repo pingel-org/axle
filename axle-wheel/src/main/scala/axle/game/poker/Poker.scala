@@ -2,11 +2,11 @@ package axle.game.poker
 
 import axle.game._
 import axle.game.Strategies._
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 import spire.math.Rational
 
 case class Poker(
-  playersStrategiesDisplayers: IndexedSeq[(Player, (Poker, PokerStateMasked) => ConditionalProbabilityTable0[PokerMove, Rational], String => Unit)],
+  playersStrategiesDisplayers: IndexedSeq[(Player, (Poker, PokerStateMasked) => ConditionalProbabilityTable[PokerMove, Rational], String => Unit)],
   dealerDisplayer:             String => Unit)(implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational]) {
 
   implicit val rat = new spire.math.RationalAlgebra()

@@ -35,13 +35,13 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
     }
 
     implicit val bitDouble = id.bit
-    import axle.stats.ConditionalProbabilityTable0
+    import axle.stats.ConditionalProbabilityTable
 
     val hm: D =
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map({ i =>
           val r = Rational(i / 100d)
-          r -> H[ConditionalProbabilityTable0, Symbol, Rational](coin(r))
+          r -> H[ConditionalProbabilityTable, Symbol, Rational](coin(r))
         }).toMap
 
     // implicit val zr = Zero[Rational]

@@ -4,7 +4,7 @@ import cats.implicits._
 import spire.math.Rational
 import spire.random.Dist
 import axle.game.cards._
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 import axle.stats.rationalProbabilityDist
 
 package object poker {
@@ -56,7 +56,7 @@ package object poker {
       def players(g: Poker): IndexedSeq[Player] =
         g.players
 
-      def strategyFor(g: Poker, player: Player): (Poker, PokerStateMasked) => ConditionalProbabilityTable0[PokerMove, Rational] =
+      def strategyFor(g: Poker, player: Player): (Poker, PokerStateMasked) => ConditionalProbabilityTable[PokerMove, Rational] =
         g.playerToStrategy(player)
 
       // TODO: this implementation works, but ideally there is more information in the error

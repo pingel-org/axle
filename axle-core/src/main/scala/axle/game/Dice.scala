@@ -2,14 +2,14 @@ package axle.game
 
 import scala.Vector
 
-import axle.stats.ConditionalProbabilityTable0
+import axle.stats.ConditionalProbabilityTable
 import axle.stats.Variable
 import spire.math.Rational
 
 object Dice {
 
-  def die(n: Int): ConditionalProbabilityTable0[Int, Rational] =
-    ConditionalProbabilityTable0(
+  def die(n: Int): ConditionalProbabilityTable[Int, Rational] =
+    ConditionalProbabilityTable(
       (1 to n).map(i => (i, Rational(1, n.toLong))).toMap,
       Variable[Int](s"D$n"))
 

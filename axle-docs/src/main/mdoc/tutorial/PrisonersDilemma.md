@@ -26,6 +26,7 @@ val game = PrisonersDilemma(
 
 ```scala mdoc
 import spire.random.Generator.rng
+implicit val dist = axle.stats.rationalProbabilityDist
 
 play(game, startState(game), false, rng)
 ```

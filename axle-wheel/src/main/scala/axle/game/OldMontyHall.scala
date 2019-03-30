@@ -4,14 +4,13 @@ import cats.implicits._
 
 import spire.math.Rational
 import axle.stats._
+import axle.syntax.probabilitymodel._
 
 object OldMontyHall {
 
-  val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable0]]
-
   val numDoors = 3
 
-  type F[T] = ConditionalProbabilityTable0[T, Rational]
+  type F[T] = ConditionalProbabilityTable[T, Rational]
 
   val prizeDoorModel: F[Int] = uniformDistribution(1 to numDoors, Variable("prize"))
 
@@ -24,7 +23,7 @@ object OldMontyHall {
 
     val availableDoors = (1 to numDoors).filterNot(d => d === revealedDoor || d === chosenDoor)
 
-    iffy( // iffy[Int, Rational, ConditionalProbabilityTable0, ConditionalProbabilityTable0]
+    iffy( // iffy[Int, Rational, ConditionalProbabilityTable, ConditionalProbabilityTable]
       binaryDecision(probabilityOfSwitching),
       uniformDistribution(availableDoors, Variable("switch")), // switch
       uniformDistribution(Seq(chosenDoor), Variable("switch")) // stay
@@ -42,6 +41,6 @@ object OldMontyHall {
   } yield finalChosenDoor === prizeDoor
 
   val chanceOfWinning =
-    (probabilityOfSwitching: Rational) => prob.probabilityOf(outcome(probabilityOfSwitching), true)
+    (probabilityOfSwitching: Rational) => outcome(probabilityOfSwitching).P(true)
 
 }
