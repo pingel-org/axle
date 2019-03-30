@@ -9,28 +9,34 @@ import org.scalacheck.Prop.forAll
 
 import cats.implicits._
 import cats.Order
+import cats.kernel.Eq
 
-import axle.game.Dice._
 import spire.math._
 import spire.algebra.Field
+import spire.implicits.additiveSemigroupOps
+
+import axle.game.Dice._
+import axle.syntax.probabilitymodel._
 
 object KolmogorovProbabilityAxioms {
 
   def basicMeasure[M[_, _]: ProbabilityModel, E, V: Field: Order](model: M[E, V]): Prop = {
-    implicit val arbValue = Arbitrary(Gen.oneOf(ProbabilityModel[M].values(model)))
+    implicit val arbValue = Arbitrary(Gen.oneOf(model.values))
     forAll { (event: E) =>
-      ProbabilityModel[M].probabilityOf(model, event) >= Field[V].zero
+      model.P(event) >= Field[V].zero
     }
   }
   
   def unitMeasure[M[_, _]: ProbabilityModel, E, V: Field: Order](model: M[E, V]): Prop =
-    ProbabilityModel[M].values(model).map({ e: E => ProbabilityModel[M].probabilityOf(model, e) }).reduce(Field[V].plus) == Field[V].one
+    model.values.map({ e: E => model.P(e) }).reduce(Field[V].plus) == Field[V].one
    
-  def combination[M[_, _]: ProbabilityModel, E, V: Field: Order](model: M[E, V]): Prop = {
-    implicit val arbValue = Arbitrary(Gen.oneOf(ProbabilityModel[M].values(model)))
-    forAll { (a: E, b: E) =>
-      // ??? // (a != b) => P(A or B) == P(A) + P(B)
-      true
+  def combination[M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](model: M[E, V]): Prop = {
+
+    implicit val arbitraryExpression: Arbitrary[E => Boolean] =
+      Arbitrary(Gen.oneOf(ProbabilityModel[M].values(model)).map( e => (v: E) => v === e) )
+
+    forAll { (f: E => Boolean, g: E => Boolean) =>
+      (!(model.values.filter(e => f(e) && g(e)).size === 0)) || (model.P( e => f(e) || g(e) ) === model.P(f) + model.P(g))
     }
   }
 }

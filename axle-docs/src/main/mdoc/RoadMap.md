@@ -41,9 +41,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* KolmogorovProbabilityAxioms.combination
-* "Combination" generalizes to event sets (where antecedent is rephrased as "A intersect B == emptyset")
-  but the default distribution of antecedents would usually be uninteresting (evaluate to false)
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * KolmogorovProbabilityAxioms for Monty Hall (for some fixed P(switch))
 * Stop specifying ConditionalProbabilityTable in axle.game package object methods
