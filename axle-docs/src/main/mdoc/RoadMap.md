@@ -41,20 +41,20 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * KolmogorovProbabilityAxioms for Monty Hall (for some fixed P(switch))
-* Stop specifying ConditionalProbabilityTable in axle.game package object methods
-* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
-* Kind projector instead of type lambdas
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
-
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
+
+* Stop specifying `ConditionalProbabilityTable` in `axle.game` package object methods
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
+* Kind projector instead of type lambdas
 * P / Case expression DSL (PExpr, PMultiply, ...)
 * CaseIs replaced by T => Boolean as the Expression type?
 * Prove and generalize CaseIs(heads) is equal to "not tails"
 * ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
+* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 
 * Fix markdown lint warnings
@@ -73,6 +73,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Tests for `axle.ast`
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
 * Optimize `conditionExpression` implementations
+* Optimize `KolmogorovProbabilityAxioms.combination`
 * Demo Mandelbrot with Rational
 * Friend of Spire
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
