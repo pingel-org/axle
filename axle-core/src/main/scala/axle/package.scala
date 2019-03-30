@@ -30,6 +30,8 @@ package object axle {
 
   // missing Show witnesses
 
+  implicit def showSymbol: Show[Symbol] = Show.fromToString[Symbol]
+
   implicit val showChar: Show[Char] = Show.fromToString[Char]
 
   implicit val showNode: Show[scala.xml.Node] = Show.fromToString[scala.xml.Node]
@@ -42,6 +44,8 @@ package object axle {
   }
 
   // missing Eq witnesses
+
+  implicit val eqSymbol = Eq.fromUniversalEquals[Symbol]
 
   implicit def eqSeq[T](implicit eqT: Eq[T]): Eq[Seq[T]] =
     (x, y) =>
