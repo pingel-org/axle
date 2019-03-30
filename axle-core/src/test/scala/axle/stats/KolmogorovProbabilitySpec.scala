@@ -41,7 +41,7 @@ object KolmogorovProbabilityAxioms {
   }
 }
   
-abstract class KolmogorovProbabilitySpec[M[_, _]: ProbabilityModel, E, V: Field: Order](name: String, model: M[E, V])
+abstract class KolmogorovProbabilitySpec[M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](name: String, model: M[E, V])
   extends Properties("Probability Model (Kolmogorov's Axioms)") {
   
   property(s"$name Basic measure: probabilities are non-negative") = KolmogorovProbabilityAxioms.basicMeasure(model)
