@@ -41,7 +41,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* KolmogorovProbabilityAxioms for Monty Hall (for some fixed P(switch))
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
@@ -56,6 +55,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
+* All KolmogorovProbabilitySpec should be applied to more models than the specific points currently
 
 * Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
