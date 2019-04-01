@@ -35,6 +35,8 @@ lazy val scoverageSettings = Seq(
 
 scalaVersion := "2.12.8"
 
+autoCompilerPlugins := true
+
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
   scalaVersion := "2.12.8",
@@ -115,6 +117,8 @@ lazy val commonSettings = Seq(
     // TODO simulacrum, machinist, etc
   ),
   parallelExecution in Test := false
+  //autoCompilerPlugins := true,
+  //addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
 //  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 )
 
