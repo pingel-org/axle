@@ -41,21 +41,21 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* KolmogorovProbabilityAxioms for Monty Hall (for some fixed P(switch))
+* Stop specifying `ConditionalProbabilityTable` in `axle.game` package object methods
+* Riffle Shuffle
+  * implement
+  * create "guess riffle shuffle" game
+  * optimal strategy
+  * naive strategy (use no informatoin other than than cards don't repeat)
+  * measure P(all correct) for each strategy
+  * also measure entropy of each strategy
+
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
+* Kind projector instead of type lambdas
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
-
-* Stop specifying `ConditionalProbabilityTable` in `axle.game` package object methods
-* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
-* Kind projector instead of type lambdas
-* P / Case expression DSL (PExpr, PMultiply, ...)
-* CaseIs replaced by T => Boolean as the Expression type?
-* Prove and generalize CaseIs(heads) is equal to "not tails"
-* ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
-* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
-* Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 
 * Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
@@ -65,41 +65,56 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * figure out better way to reference images
 * Publish site
 
-## 0.6.x (Spring 2019)
+## 0.6.1 (May 2019)
 
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
+
+## 0.6.2 (June 2019)
+
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-* Fix logistic regression and move LogisticRegression.md back
+* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
+* Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 * Tests for `axle.ast`
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
+
+## 0.6.3 (July 2019)
+
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Optimize `conditionExpression` implementations
 * Optimize `KolmogorovProbabilityAxioms.combination`
+* P / Case expression DSL (PExpr, PMultiply, ...)
+* CaseIs replaced by T => Boolean as the Expression type?
+* Prove and generalize forall E : P(E) + P(not E) = 1 (somewhat redundant with 'combination', but this tests that 'not' on expressions works properly)
+* ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
+
+## 0.6.4 (August 2019)
+
+* Fix logistic regression and move LogisticRegression.md back
 * Demo Mandelbrot with Rational
 * Friend of Spire
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
+
+## 0.7.x (Fall 2019)
+
+* Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * Kind projector for projections of jung graphs for Finite
 * Functors for jung should use projections (study cats disjunction, scala Either)
 * kittens 1.0.0-RC3 or magnolia
   * pattern match in FirstOrderPredicateLogic
   * subtyping for Suit and Rank
-
-## 0.7.x (Summer 2019)
-
-* Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * Machinist?
 * Replace Finite with Shapeless's version
 * Delete Finite conversions for jung (replace with NaturalTransformation?)
 * replace some refs to {CPT0,TallyDist0} with ProbabilityModel
 * Tics should take an argument
 * Factor tics and tics-{joda,algebra,spire} into separate libs
-
-## 0.8.x (Fall 2020)
-
 * Update Spire (to match cats version)
 * Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
 * Sort out MapFrom, FromStream, FromSet
 * Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
+
+## 0.8.x (Winter 2020)
 
 * game theory axioms
 * axle.game: Observable[T]
@@ -107,12 +122,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * redo original monty hall spec
 * Max bet for Poker
 * Game.strategyFor should return a M[underscore] type upon which the ProbabilityModel[M, Rational] can act
+
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
+
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
-* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Bayes Theorem
-* Hypothesis testing
-* Describing Data
 * P-values
 * z & t scores
 * Correlation
