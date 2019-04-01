@@ -10,11 +10,11 @@ class FairCoinIsKolmogorov
     "Fair coin",
     Arbitrary(Gen.oneOf(List(coin()))))
 
-import spire.laws.gen.{ rational => genRational }
+import spire.math.Rational
 class BiasedCoinIsKolmogorov
   extends KolmogorovProbabilityProperties(
     "Arbitrarily biased coins",
-    Arbitrary(genRational.map(coin)))
+    Arbitrary(Gen.choose(0d,1d).map(Rational.apply).map(coin)))
 
 import spire.implicits.IntAlgebra
 import axle.game.Dice._
@@ -25,8 +25,6 @@ class D6IsKolmogorov
     Arbitrary(Gen.oneOf(List(4,6,8,10,12,20).map(die))))
 
 import spire.math.Rational
-
-// import spire.laws.gen.{ uint => genUInt }
 
 class TwoIndependentD6IsKolmogorov
   extends KolmogorovProbabilityProperties(
