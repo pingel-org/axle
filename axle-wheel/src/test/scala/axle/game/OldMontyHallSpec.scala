@@ -1,20 +1,18 @@
 package axle.game
 
 import org.scalatest._
+import org.scalacheck.Arbitrary
 import cats.implicits._
 import spire.math._
 import axle.stats._
 
 class OldMontyHallHalfIsKolmogorov
-  extends KolmogorovProbabilitySpec(
-    "Monty Hall outcome(1/2)",
-    { import OldMontyHall._; outcome(Rational(1, 2))}
-  )
-
-class OldMontyHallQuarterIsKolmogorov
-  extends KolmogorovProbabilitySpec(
-    "Monty Hall outcome(1/4)",
-    { import OldMontyHall._; outcome(Rational(1, 4))}
+  extends KolmogorovProbabilityProperties(
+    "Monty Hall with arbitrary switch probability",
+    Arbitrary({ import OldMontyHall._
+      import spire.laws.gen.{ rational => genRational }
+      genRational.map(outcome)
+    })
   )
 
 class OldMontyHallSpec extends FunSuite with Matchers {
