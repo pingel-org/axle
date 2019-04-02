@@ -15,7 +15,7 @@ class PokerHandChartSpec extends FunSuite with Matchers {
     import axle.game.poker.PokerHandCategory
 
     def winnerFromHandSize(handSize: Int) =
-      Deck().cards.take(handSize).combinations(5).map(PokerHand(_)).toList.max
+      Deck().cards.take(handSize).toVector.combinations(5).map(PokerHand(_)).toList.max
 
     val data: IndexedSeq[(PokerHandCategory, Int)] =
       for {
