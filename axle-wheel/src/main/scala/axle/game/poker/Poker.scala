@@ -7,7 +7,7 @@ import spire.math.Rational
 
 case class Poker(
   playersStrategiesDisplayers: IndexedSeq[(Player, (Poker, PokerStateMasked) => ConditionalProbabilityTable[PokerMove, Rational], String => Unit)],
-  dealerDisplayer:             String => Unit)(implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational]) {
+  dealerDisplayer:             String => Unit)(implicit evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable]) {
 
   implicit val rat = new spire.math.RationalAlgebra()
 

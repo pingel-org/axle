@@ -41,21 +41,22 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
-* Stop specifying `ConditionalProbabilityTable` in `axle.game` package object methods
 * Riffle Shuffle
-  * implement
-  * create "guess riffle shuffle" game
+  * GuessRiffleShuffle game
   * optimal strategy
-  * naive strategy (use no informatoin other than than cards don't repeat)
+  * naive strategy (use no information other than than cards don't repeat)
   * measure P(all correct) for each strategy
   * also measure entropy of each strategy
 
-* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
-* Kind projector instead of type lambdas
+* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
+
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
+
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
+* Kind projector instead of type lambdas
 
 * Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
@@ -65,30 +66,27 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * figure out better way to reference images
 * Publish site
 
-## 0.6.1 (May 2019)
-
-* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
-
-## 0.6.2 (June 2019)
+## 0.6.1 (June 2019)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 * Tests for `axle.ast`
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
+* syntax for `Game` typeclass
 
-## 0.6.3 (July 2019)
+## 0.6.2 (July 2019)
 
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-* Optimize `conditionExpression` implementations
-* Optimize `KolmogorovProbabilityAxioms.combination`
 * P / Case expression DSL (PExpr, PMultiply, ...)
 * CaseIs replaced by T => Boolean as the Expression type?
 * Prove and generalize forall E : P(E) + P(not E) = 1 (somewhat redundant with 'combination', but this tests that 'not' on expressions works properly)
 * ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
 
-## 0.6.4 (August 2019)
+## 0.6.3 (August 2019)
 
+* Optimize `conditionExpression` implementations
+* Optimize `KolmogorovProbabilityAxioms.combination`
 * Fix logistic regression and move LogisticRegression.md back
 * Demo Mandelbrot with Rational
 * Friend of Spire

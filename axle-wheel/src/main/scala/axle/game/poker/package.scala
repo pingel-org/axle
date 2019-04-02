@@ -3,7 +3,9 @@ package axle.game
 import cats.implicits._
 import spire.math.Rational
 import spire.random.Dist
+
 import axle.game.cards._
+import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable
 import axle.stats.rationalProbabilityDist
 
@@ -14,8 +16,8 @@ package object poker {
   // TODO: is there a limit to the number of raises that can occur?
   // TODO: how to handle player exhausting pile during game?
 
-  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational] =
-    new Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational] {
+  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable] =
+    new Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable] {
 
       def probabilityDist: Dist[Rational] = rationalProbabilityDist
 
@@ -82,7 +84,7 @@ package object poker {
             val cards = Vector() ++ deck.cards
             val hands = game.players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
             val shared = cards(game.players.size * 2 to game.players.size * 2 + 4)
-            val unused = cards((game.players.size * 2 + 5) until cards.length)
+            val unused = cards((game.players.size * 2 + 5) until cards.length).toList
 
             // TODO: should blinds be a part of the "deal" or are they minimums during first round of betting?
             val orderedStillIn = game.players.filter(stillIn.contains)
@@ -259,6 +261,8 @@ package object poker {
         move
 
       def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
+
+      implicit val probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] = ProbabilityModel[ConditionalProbabilityTable]
 
     }
 

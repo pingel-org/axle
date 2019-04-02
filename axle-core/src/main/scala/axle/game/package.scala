@@ -9,48 +9,48 @@ import spire.random.Generator
 import spire.random.Dist
 
 import axle.stats.ProbabilityModel
-import axle.stats.ConditionalProbabilityTable
+import axle.syntax.probabilitymodel._
 
 package object game {
 
-  def moveStateStream[G, S, O, M, MS, MM, V](
+  def moveStateStream[G, S, O, M, MS, MM, V, PM[_, _]](
     game:      G,
     fromState: S,
     gen:       Generator)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V],
-    prob:   ProbabilityModel[ConditionalProbabilityTable],
+    evGame: Game[G, S, O, M, MS, MM, V, PM],
+    prob:   ProbabilityModel[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
     orderV: Order[V]): Stream[(S, M, S)] =
     evGame.mover(game, fromState).map(mover => {
-      val strategy = evGame.strategyFor(game, mover)
-      val strategyCPT = strategy(game, evGame.maskState(game, fromState, mover))
-      val move = prob.observe(strategyCPT, gen)
+      val strategyFn = evGame.strategyFor(game, mover)
+      val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
+      val move = strategy.observe(gen)
       val toState = evGame.applyMove(game, fromState, move)
       cons((fromState, move, toState), moveStateStream(game, toState, gen))
     }) getOrElse {
       Stream.empty
     }
 
-  def play[G, S, O, M, MS, MM, V](game: G, gen: Generator)(
+  def play[G, S, O, M, MS, MM, V, PM[_, _]](game: G, gen: Generator)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V],
-    prob:     ProbabilityModel[ConditionalProbabilityTable],
+    evGame:   Game[G, S, O, M, MS, MM, V, PM],
+    prob:     ProbabilityModel[PM],
     evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],
     orderV:   Order[V]): S =
     play(game, evGame.startState(game), true, gen)
 
-  def play[G, S, O, M, MS, MM, V](
+  def play[G, S, O, M, MS, MM, V, PM[_, _]](
     game:  G,
     start: S,
     intro: Boolean   = true,
     gen:   Generator)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V],
-    prob:     ProbabilityModel[ConditionalProbabilityTable],
+    evGame:   Game[G, S, O, M, MS, MM, V, PM],
+    prob:     ProbabilityModel[PM],
     evGameIO: GameIO[G, O, M, MS, MM],
     distV: Dist[V],
     ringV: Ring[V],
@@ -92,14 +92,14 @@ package object game {
     lastState
   }
 
-  def gameStream[G, S, O, M, MS, MM, V](
+  def gameStream[G, S, O, M, MS, MM, V, PM[_, _]](
     game:  G,
     start: S,
     intro: Boolean   = true,
     gen:   Generator)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V],
-    prob:     ProbabilityModel[ConditionalProbabilityTable],
+    evGame:   Game[G, S, O, M, MS, MM, V, PM],
+    prob:     ProbabilityModel[PM],
     evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],
@@ -108,13 +108,13 @@ package object game {
     cons(end, gameStream(game, evGame.startFrom(game, end).get, false, gen))
   }
 
-  def playContinuously[G, S, O, M, MS, MM, V](
+  def playContinuously[G, S, O, M, MS, MM, V, PM[_, _]](
     game:  G,
     start: S,
     gen:   Generator)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V],
-    prob:     ProbabilityModel[ConditionalProbabilityTable],
+    evGame:   Game[G, S, O, M, MS, MM, V, PM],
+    prob:     ProbabilityModel[PM],
     evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],
