@@ -262,7 +262,8 @@ package object poker {
 
       def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
 
-      implicit val probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] = ProbabilityModel[ConditionalProbabilityTable]
+      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
+        ConditionalProbabilityTable.probabilityWitness
 
     }
 

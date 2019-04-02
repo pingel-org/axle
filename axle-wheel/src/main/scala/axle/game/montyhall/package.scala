@@ -126,7 +126,8 @@ package object montyhall {
         }
       }
 
-      implicit val probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] = ProbabilityModel[ConditionalProbabilityTable]
+      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
+        ConditionalProbabilityTable.probabilityWitness
 
     }
 

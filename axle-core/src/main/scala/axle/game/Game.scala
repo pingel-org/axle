@@ -41,5 +41,5 @@ trait Game[G, S, O, M, MS, MM, V, PM[_, _]] {
 
   def outcome(game: G, state: S): Option[O]
 
-  implicit val probabilityModelPM: ProbabilityModel[PM]
+  implicit def probabilityModelPM: ProbabilityModel[PM]
 }
