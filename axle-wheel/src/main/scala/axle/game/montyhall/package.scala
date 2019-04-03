@@ -157,7 +157,7 @@ package object montyhall {
           case _          => Left(input + " is not a valid move.  Please select again")
         }
 
-      def introMessage(ttt: MontyHall) =
+      def introMessage(mh: MontyHall) =
         "Monty Hall Game"
 
       def displayStateTo(game: MontyHall, s: MontyHallState, observer: Player): String = {
