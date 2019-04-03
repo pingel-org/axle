@@ -71,7 +71,8 @@ package object ttt {
         }
       }
 
-      implicit val probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] = ProbabilityModel[ConditionalProbabilityTable]
+      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
+        ConditionalProbabilityTable.probabilityWitness
 
     }
 
