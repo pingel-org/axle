@@ -14,6 +14,10 @@ object Suit {
     case '♢' => Diamonds
     case '♣' => Clubs
     case '♡' => Hearts
+    case 'S' => Spades
+    case 'D' => Diamonds
+    case 'C' => Clubs
+    case 'H' => Hearts
   }
 
 }
