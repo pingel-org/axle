@@ -42,7 +42,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
 * Riffle Shuffle
-  * GuessRiffleShuffle game
+  * dealer strategy (deal then tally correct guesses)
   * optimal strategy
   * naive strategy (use no information other than than cards don't repeat)
   * measure P(all correct) for each strategy
@@ -69,6 +69,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.6.1 (June 2019)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
+* Eliminate entropy consumption of `rng` side-effect
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 * Tests for `axle.ast`
