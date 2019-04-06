@@ -7,6 +7,7 @@ import cats.implicits._
 
 import spire.math.Rational
 import spire.random.Dist
+import spire.random.Generator.rng
 
 import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable
@@ -22,7 +23,7 @@ package object guessriffle {
       def probabilityDist: Dist[Rational] = rationalProbabilityDist
 
       def startState(game: GuessRiffle): GuessRiffleState =
-        GuessRiffleState(Deck(), None, List.empty, 0, None)
+        GuessRiffleState(Deck(), None, None, List.empty, 0, None)
 
       def startFrom(game: GuessRiffle, s: GuessRiffleState): Option[GuessRiffleState] =
         Some(startState(game))
@@ -49,10 +50,16 @@ package object guessriffle {
         game:  GuessRiffle,
         state: GuessRiffleState,
         move:  GuessRiffleMove): GuessRiffleState =
-        if( state.remaining.head === move.card ) {
-          state.copy(remaining = state.remaining.tail, numCorrect = state.numCorrect + 1)
-        } else {
-          state.copy(remaining = state.remaining.tail)
+        move match {
+          case Riffle() => state.copy(riffledDeck = Some(Deck.riffleShuffle(state.initialDeck, rng)))
+          case GuessCard(card) => state.copy(guess = Some(card))
+          case RevealAndScore() => {
+            if( state.remaining.head === state.guess.get ) { // Note the "non-empty" assumptions on both sides
+              state.copy(guess = None, remaining = state.remaining.tail, numCorrect = state.numCorrect + 1)
+            } else {
+              state.copy(guess = None, remaining = state.remaining.tail)
+            }
+          }
         }
 
       def mover(
@@ -60,8 +67,10 @@ package object guessriffle {
         s:    GuessRiffleState): Option[Player] =
         if (s.riffledDeck.isEmpty) {
           Some(game.dealer)
-        } else {
+        } else if ( s.guess.isEmpty ) {
           Some(game.player)
+        } else {
+          Some(game.dealer)
         }
 
       def moverM(
@@ -72,7 +81,13 @@ package object guessriffle {
       def moves(
         game: GuessRiffle,
         s:    GuessRiffleState): Seq[GuessRiffleMove] =
-        s.remaining.map(GuessRiffleMove)
+        if ( s.remaining.isEmpty ) {
+          List(Riffle())
+        } else if ( s.guess.isEmpty ) {
+          s.remaining.map(GuessCard)
+        } else {
+          List(RevealAndScore())
+        }
  
       def maskState(game: GuessRiffle, state: GuessRiffleState, observer: Player): GuessRiffleState =
         if (observer === game.player) {
@@ -105,7 +120,13 @@ package object guessriffle {
         }
 
       def parseMove(g: GuessRiffle, input: String): Either[String, GuessRiffleMove] =
-        Try(GuessRiffleMove(Card(Rank(input(0)), Suit(input(1))))).toEither.left.map(throwable => input + " is not a valid move.  Please select again")
+        if(input == "riffle") {
+          Right(Riffle())
+        } else if (input == "reveal" ) {
+          Right(RevealAndScore())
+        } else {
+          Try(GuessCard(Card(Rank(input(0)), Suit(input(1))))).toEither.left.map(throwable => input + " is not a valid move.  Please select again")
+        }
 
       def introMessage(ttt: GuessRiffle) =
         "Guess Riffle Shuffle"
@@ -123,7 +144,12 @@ package object guessriffle {
         move:     Option[GuessRiffleMove],
         mover:    Player,
         observer: Player): String =
-        mover.referenceFor(observer) + " " + move.map("guessed " + _.card.show).getOrElse("???")
+        move.map { m => m match {
+            case GuessCard(card) => mover.referenceFor(observer) + " guessed " + card.show
+            case Riffle() => "riffle"
+            case RevealAndScore() => "revealed top card"
+          }
+        } getOrElse("undefined")
 
       def displayOutcomeTo(
         game:     GuessRiffle,

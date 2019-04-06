@@ -12,5 +12,15 @@ case class GuessRiffle(
 
   val dealer = Player("D", "Dealer")
 
-  val dealerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] = 42
+  val dealerMoveVariable = Variable[GuessRiffleMove]("dealer move")
+
+  val dealerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
+    (game: GuessRiffle, state: GuessRiffleState) => {
+      if ( state.remaining.isEmpty ) {
+        ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(Riffle() -> Rational(1)), dealerMoveVariable)
+      } else {
+        assert(! state.guess.isEmpty)
+        ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(RevealAndScore() -> Rational(1)), dealerMoveVariable)
+      }
+    }
 }

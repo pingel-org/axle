@@ -42,7 +42,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
 * Riffle Shuffle
-  * dealer strategy (deal then tally correct guesses)
   * optimal strategy
   * naive strategy (use no information other than than cards don't repeat)
   * measure P(all correct) for each strategy
