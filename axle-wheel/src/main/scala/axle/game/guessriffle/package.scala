@@ -29,14 +29,14 @@ package object guessriffle {
         Some(startState(game))
 
       def players(game: GuessRiffle): IndexedSeq[Player] =
-        Vector(game.dealer, game.player)
+        Vector(GuessRiffle.dealer, game.player)
 
       def strategyFor(
         game:   GuessRiffle,
         player: Player): (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
         player match {
           case game.player => game.strategy
-          case game.dealer => game.dealerStrategy
+          case GuessRiffle.dealer => GuessRiffle.dealerStrategy
           case _           => game.strategy // TODO unreachable
         }
 
@@ -66,11 +66,11 @@ package object guessriffle {
         game: GuessRiffle,
         s:    GuessRiffleState): Option[Player] =
         if (s.riffledDeck.isEmpty) {
-          Some(game.dealer)
+          Some(GuessRiffle.dealer)
         } else if ( s.guess.isEmpty ) {
           Some(game.player)
         } else {
-          Some(game.dealer)
+          Some(GuessRiffle.dealer)
         }
 
       def moverM(
@@ -115,7 +115,7 @@ package object guessriffle {
       def displayerFor(g: GuessRiffle, player: Player): String => Unit =
         player match {
           case g.player => g.displayer
-          case g.dealer => g.dealerDisplayer
+          case GuessRiffle.dealer => g.dealerDisplayer
           case _        => g.displayer
         }
 

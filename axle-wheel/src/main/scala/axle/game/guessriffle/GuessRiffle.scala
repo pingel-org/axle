@@ -8,7 +8,9 @@ case class GuessRiffle(
   player: Player,
   strategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational],
   displayer: String => Unit,
-  dealerDisplayer: String => Unit) {
+  dealerDisplayer: String => Unit)
+  
+object GuessRiffle {
 
   val dealer = Player("D", "Dealer")
 

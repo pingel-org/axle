@@ -43,9 +43,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Riffle Shuffle
   * optimal strategy
-  * naive strategy (use no information other than than cards don't repeat)
   * measure P(all correct) for each strategy
-  * also measure entropy of each strategy
+  * measure entropy of each strategy
 
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 
