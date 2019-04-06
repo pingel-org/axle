@@ -42,6 +42,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
 * Riffle Shuffle
+  * revisit maskState
   * optimal strategy
   * measure P(all correct) for each strategy
   * measure entropy of each strategy

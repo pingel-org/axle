@@ -51,7 +51,10 @@ package object guessriffle {
         state: GuessRiffleState,
         move:  GuessRiffleMove): GuessRiffleState =
         move match {
-          case Riffle() => state.copy(riffledDeck = Some(Deck.riffleShuffle(state.initialDeck, rng)))
+          case Riffle() => {
+            val riffled = Deck.riffleShuffle(state.initialDeck, rng)
+            state.copy(riffledDeck = Some(riffled), remaining = riffled.cards)
+          }
           case GuessCard(card) => state.copy(guess = Some(card))
           case RevealAndScore() => {
             if( state.remaining.head === state.guess.get ) { // Note the "non-empty" assumptions on both sides
@@ -68,7 +71,11 @@ package object guessriffle {
         if (s.riffledDeck.isEmpty) {
           Some(GuessRiffle.dealer)
         } else if ( s.guess.isEmpty ) {
-          Some(game.player)
+          if( s.remaining.size == 0) {
+            None
+          } else {
+            Some(game.player)
+          }
         } else {
           Some(GuessRiffle.dealer)
         }
@@ -81,7 +88,7 @@ package object guessriffle {
       def moves(
         game: GuessRiffle,
         s:    GuessRiffleState): Seq[GuessRiffleMove] =
-        if ( s.remaining.isEmpty ) {
+        if ( s.riffledDeck.isEmpty ) {
           List(Riffle())
         } else if ( s.guess.isEmpty ) {
           s.remaining.map(GuessCard)
@@ -91,7 +98,7 @@ package object guessriffle {
  
       def maskState(game: GuessRiffle, state: GuessRiffleState, observer: Player): GuessRiffleState =
         if (observer === game.player) {
-          state.copy(remaining = List.empty)
+          state // .copy(remaining = List.empty)
         } else {
           state
         }
@@ -102,7 +109,11 @@ package object guessriffle {
       def outcome(
         game:  GuessRiffle,
         state: GuessRiffleState): Option[GuessRiffleOutcome] =
-        Some(GuessRiffleOutcome(state.numCorrect))
+        if( state.riffledDeck.isEmpty || state.remaining.size > 0) {
+          None
+        } else {
+          Some(GuessRiffleOutcome(state.numCorrect))
+        }
  
       implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
         ConditionalProbabilityTable.probabilityWitness
