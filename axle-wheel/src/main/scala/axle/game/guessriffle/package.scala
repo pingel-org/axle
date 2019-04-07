@@ -23,7 +23,7 @@ package object guessriffle {
       def probabilityDist: Dist[Rational] = rationalProbabilityDist
 
       def startState(game: GuessRiffle): GuessRiffleState =
-        GuessRiffleState(Deck(), None, None, List.empty, 0, None)
+        GuessRiffleState(Deck(), None, None, List.empty, List.empty, 0, None)
 
       def startFrom(game: GuessRiffle, s: GuessRiffleState): Option[GuessRiffleState] =
         Some(startState(game))
@@ -58,9 +58,9 @@ package object guessriffle {
           case GuessCard(card) => state.copy(guess = Some(card))
           case RevealAndScore() => {
             if( state.remaining.head === state.guess.get ) { // Note the "non-empty" assumptions on both sides
-              state.copy(guess = None, remaining = state.remaining.tail, numCorrect = state.numCorrect + 1)
+              state.copy(guess = None, revealed = state.remaining.head :: state.revealed, remaining = state.remaining.tail, numCorrect = state.numCorrect + 1)
             } else {
-              state.copy(guess = None, remaining = state.remaining.tail)
+              state.copy(guess = None, revealed = state.remaining.head :: state.revealed, remaining = state.remaining.tail)
             }
           }
         }
@@ -91,14 +91,14 @@ package object guessriffle {
         if ( s.riffledDeck.isEmpty ) {
           List(Riffle())
         } else if ( s.guess.isEmpty ) {
-          s.remaining.map(GuessCard)
+          (s.initialDeck.cards.toSet -- s.revealed).toList.map(GuessCard)
         } else {
           List(RevealAndScore())
         }
  
       def maskState(game: GuessRiffle, state: GuessRiffleState, observer: Player): GuessRiffleState =
         if (observer === game.player) {
-          state // .copy(remaining = List.empty)
+          state.copy(remaining = List.empty)
         } else {
           state
         }

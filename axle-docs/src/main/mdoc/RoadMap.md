@@ -42,7 +42,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
 * Riffle Shuffle
-  * revisit maskState (may need a "revealed" list that generates the "moves" for player)
   * optimal strategy
   * measure P(all correct) for each strategy
   * measure entropy of each strategy
@@ -54,24 +53,23 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
-* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
-* Kind projector instead of type lambdas
-
 * Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
-* configure makeSite to preview: previewFixedPort := Some(9999)
-* copy css using makeSite (not update-docs.sh)
-* publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
-* figure out better way to reference images
+* Configure makeSite to preview: previewFixedPort := Some(9999)
+* Copy css using makeSite (not update-docs.sh)
+* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
+* Figure out better way to reference images
 * Publish site
 
 ## 0.6.1 (June 2019)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
+* Tests for `axle.ast`
 * Eliminate entropy consumption of `rng` side-effect
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
-* Tests for `axle.ast`
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
+* Kind projector instead of type lambdas
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
 * syntax for `Game` typeclass
 
