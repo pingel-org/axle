@@ -42,9 +42,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 
 * Riffle Shuffle
-  * optimal strategy
-  * measure P(all correct) for each strategy
-  * measure entropy of each strategy
+  * test if strategy always at least has non-zero chance of guessing correctly
+  * measure P(all correct) for each player strategy
+  * measure entropy of each player strategy
 
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 
