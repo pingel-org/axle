@@ -32,33 +32,27 @@ object GuessRiffle {
 
     val optimalPlayerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
     (game: GuessRiffle, state: GuessRiffleState) => {
-      // Note that if the Game API allowed for customizing the State, we could avoid re-computing these
+      // If the Game API allowed for customizing the State, we could avoid re-computing the
       // "pointers" each time
       val (topPointer, bottomPointerOpt) =
-        state.revealed.reverse.foldLeft((state.initialDeck.cards, Option.empty[List[Card]]))({
-          case ((tp, bpo), c) => 
+        state.history.reverse.foldLeft((state.initialDeck.cards, Option.empty[List[Card]]))({
+          case ((tp, bpo), c) => {
             if(tp.head === c) {
               (tp.tail, bpo)
             } else {
               bpo.map { bp => 
                 assert(bp.head === c)
                 (tp, Some(bp.tail))
-              }.getOrElse(
+              }.getOrElse({
                 (tp, Some(tp.dropWhile(_ =!= c).tail))
-              )
+              })
             }
+          }
         })
       if(bottomPointerOpt.isEmpty) {
         uniformDistribution[GuessRiffleMove](topPointer.map(GuessCard), playerMoveVariable)
       } else {
-        uniformDistribution[GuessRiffleMove](List(topPointer.head, bottomPointerOpt.get.head).map(GuessCard), playerMoveVariable)
-      }
-
-      if ( state.remaining.isEmpty ) {
-        ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(Riffle() -> Rational(1)), dealerMoveVariable)
-      } else {
-        assert(! state.guess.isEmpty)
-        ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(RevealAndScore() -> Rational(1)), dealerMoveVariable)
+        uniformDistribution[GuessRiffleMove]((List(topPointer.headOption, bottomPointerOpt.get.headOption).flatten).map(GuessCard), playerMoveVariable)
       }
     }
 
