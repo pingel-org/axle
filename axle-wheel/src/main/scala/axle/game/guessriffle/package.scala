@@ -57,10 +57,13 @@ package object guessriffle {
           }
           case GuessCard(card) => state.copy(guess = Some(card))
           case RevealAndScore() => {
-            if( state.remaining.head === state.guess.get ) { // Note the "non-empty" assumptions on both sides
-              state.copy(guess = None, revealed = state.remaining.head :: state.revealed, remaining = state.remaining.tail, numCorrect = state.numCorrect + 1)
+            val guessedCard = state.guess.get // "non-empty" assumption
+            val revealedCard = state.remaining.head // "non-empty" assumption
+            val newHistory = revealedCard :: state.history
+            if( revealedCard === guessedCard ) {
+              state.copy(guess = None, history = newHistory, remaining = state.remaining.tail, numCorrect = state.numCorrect + 1)
             } else {
-              state.copy(guess = None, revealed = state.remaining.head :: state.revealed, remaining = state.remaining.tail)
+              state.copy(guess = None, history = newHistory, remaining = state.remaining.tail)
             }
           }
         }
@@ -91,7 +94,7 @@ package object guessriffle {
         if ( s.riffledDeck.isEmpty ) {
           List(Riffle())
         } else if ( s.guess.isEmpty ) {
-          (s.initialDeck.cards.toSet -- s.revealed).toList.map(GuessCard)
+          (s.initialDeck.cards.toSet -- s.history).toList.map(GuessCard)
         } else {
           List(RevealAndScore())
         }

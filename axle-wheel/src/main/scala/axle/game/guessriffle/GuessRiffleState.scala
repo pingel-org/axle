@@ -6,7 +6,7 @@ case class GuessRiffleState(
   initialDeck: Deck,
   riffledDeck: Option[Deck],
   guess: Option[Card],
-  revealed: List[Card], // will store in reverse order
+  history: List[Card], // history of revealed cards in reverse order
   remaining: List[Card],
   numCorrect: Int,
   currentGuess: Option[Card]
