@@ -40,14 +40,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Lawful ScalaCheck tests for
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
-
-* Riffle Shuffle
-  * test if strategy always at least has non-zero chance of guessing correctly
-  * measure P(all correct) for each player strategy
-  * measure entropy of each player strategy
+* Fix Order[Card]
+* Deck.riffleShuffle
+* GuessRiffle game
 
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
-
+* Simpsons Paradox
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
