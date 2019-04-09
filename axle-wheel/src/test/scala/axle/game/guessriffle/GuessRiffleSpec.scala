@@ -90,4 +90,22 @@ class GuessRiffleSpec extends FunSuite with Matchers {
   }
 
   // TODO interactive player produces messages
+
+  test("perfect strategy always has non-zero chance of guessing correctly") {
+
+    todo
+  }
+
+  test("") {
+    // Measure P(all correct) for each player strategy
+    
+    todo
+  }
+
+  test("") {
+    // Measure entropy of each player strategy
+    
+    todo
+  }
+
 }
