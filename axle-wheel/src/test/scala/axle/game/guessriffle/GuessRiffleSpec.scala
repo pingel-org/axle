@@ -48,11 +48,11 @@ class GuessRiffleSpec extends FunSuite with Matchers {
 
   test("optimal player strategy gets better score") {
 
-    val optimalGame = GuessRiffle(player, GuessRiffle.optimalPlayerStrategy, axle.ignore, axle.ignore)
-    val endState = play(optimalGame, startState(optimalGame), false, rng)
+    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
+    val endState = play(pGame, startState(pGame), false, rng)
 
     // Note non-zero (but astronomically small) chance of this failing despite correct implementation
-    outcome(optimalGame, endState).get.numCorrect should be >(10)
+    outcome(pGame, endState).get.numCorrect should be >(10)
   }
 
   test("random game produce game stream") {

@@ -30,7 +30,7 @@ object GuessRiffle {
       }
     }
 
-    val optimalPlayerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
+    val perfectOptionsPlayerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
     (game: GuessRiffle, state: GuessRiffleState) => {
       // If the Game API allowed for customizing the State, we could avoid re-computing the
       // "pointers" each time
