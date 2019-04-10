@@ -155,6 +155,7 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
  .settings(axleSettings)
  .settings(
   name := "axle-wheel",
+  testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "3"),
   libraryDependencies ++= Seq(
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
     "org.jblas"                    %  "jblas"                % jblasVersion,
