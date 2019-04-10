@@ -4,7 +4,6 @@ import cats.Show
 import cats.implicits._
 import spire.random.Generator
 import spire.random.Generator.rng
-import spire.math.abs
 
 case class Deck(cards: List[Card] = axle.shuffle(Deck.cards)(rng))
 
