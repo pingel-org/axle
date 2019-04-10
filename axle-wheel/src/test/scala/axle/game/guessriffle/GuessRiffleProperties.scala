@@ -52,28 +52,32 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       }
     ) getOrElse None
 
-  property("perfectOptionsPlayerStrategy's P(all correct) >> that of random mover") = {
+  property("perfectOptionsPlayerStrategy's P(all correct) >> that of random mover (except when unshuffled)") = {
 
     val player = Player("P", "Player")
     val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
+    import spire.implicits._
     val rGame = GuessRiffle(player, randomMove, axle.ignore, axle.ignore)
 
     // // leverages the fact that s0 will be the same for both games. Not generally true
     val s0 = startState(rGame)
+    val s1 = applyMove(rGame, s0, Riffle())
 
     forAllNoShrink { (seed: Int) =>
-        val probsP = stateStreamMap(pGame, s0, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2)
-        val probsR = stateStreamMap(rGame, s0, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2)
-        Π(probsP.toList) > Π(probsR.toList)
+
+      val probsP = stateStreamMap(pGame, s1, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
+      val pp = Π(probsP)
+      val probsR = stateStreamMap(rGame, s1, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
+      val pr = Π(probsR)
+      // TODO also calculate entropy
+
+      (s1.initialDeck === s1.riffledDeck.get && pp === pr) || (pp > pr)
     }
   }
 
-//   property("perfectOptionsPlayerStrategy's Entropy >> that of random mover") = {
-//     ???
-//   }
-
 //   property("Successively invest resources from initial state until all states have no movers") = {
 //     // build upon basic PM[State, V] => PM[State, V] function
+//     // will require a better rational probability distribution as probabilities become smaller
 //     ???
 //   }
 
