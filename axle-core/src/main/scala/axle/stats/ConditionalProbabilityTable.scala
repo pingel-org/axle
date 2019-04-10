@@ -60,7 +60,11 @@ object ConditionalProbabilityTable {
 
       def observe[A, V](model: ConditionalProbabilityTable[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
         val r: V = gen.next[V]
-        model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // otherwise malformed distribution
+        if( r === ringV.zero ) {
+          model.bars.head._1
+        } else {
+          model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // otherwise malformed distribution
+        }
       }
 
       def probabilityOf[A, V](model: ConditionalProbabilityTable[A, V], a: A)(implicit fieldV: Field[V]): V =
