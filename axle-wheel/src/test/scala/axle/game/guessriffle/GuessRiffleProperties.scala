@@ -1,25 +1,24 @@
 package axle.game.guessriffle
 
-// import org.scalatest._
-
-//import org.scalacheck.Arbitrary
 import org.scalacheck.Properties
-import org.scalacheck.Prop
 import org.scalacheck.Prop.forAllNoShrink
 
+import cats.syntax.all._
+
 import spire.math._
-
+import spire.random.Random
+import spire.random.Seed
 import spire.math.Rational
-import axle.stats._
 
+import axle.math.Π
+import axle.game.Strategies._
+import axle.game.guessriffle.evGame._
+//import axle.game.guessriffle.evGameIO._
+import axle.stats._
 import axle.game._
-// import axle.game.Strategies._
+import axle.syntax.probabilitymodel._
 
 class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
-
-  import cats.syntax.all._
-  import axle.game.guessriffle.evGame._
-  //import axle.game.guessriffle.evGameIO._
 
   implicit val dist = axle.stats.rationalProbabilityDist
 
@@ -28,7 +27,7 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       if( mover === game.player ) {
         val guessableCards = moveDist.values.flatMap { m => m match {
            case GuessCard(card) => Some(card)
-           case _ => { println(s"!!! non-GuessCard move: $m"); None }
+           case _ => None
         }}
         val correctCard = fromState.remaining.head
         guessableCards contains correctCard
@@ -37,42 +36,49 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       }
     ) getOrElse true
 
+  property(s"perfectOptionsPlayerStrategy always has non-zero chance of guessing correctly") = {
 
-  import spire.random.Random
-  import spire.random.Seed
+    val player = Player("P", "Player")
+    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
 
-  def alwaysHasChanceOfCorrectGuess(gr: GuessRiffle): Prop =
     forAllNoShrink { (seed: Int) =>
-      stateStreamMap(gr, startState(gr), containsCorrectGuess _, Random.generatorFromSeed(Seed(seed % 1000000)).sync ) forall { _._2 }
+      stateStreamMap(pGame, startState(pGame), containsCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ) forall { _._2 }
     }
+  }
 
-   property(s"perfectOptionsPlayerStrategy always has non-zero chance of guessing correctly") = {
-     val player = Player("P", "Player")
-     val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
-     alwaysHasChanceOfCorrectGuess(pGame)
-   }
+  def probabilityOfCorrectGuess(game: GuessRiffle, fromState: GuessRiffleState, moveDist: ConditionalProbabilityTable[GuessRiffleMove, Rational]): Option[Rational] =
+    mover(game, fromState).map( mover =>
+      if( mover === game.player ) {
+        val correctCard = fromState.remaining.head
+        Some(moveDist.P(GuessCard(correctCard)))
+      } else {
+        None
+      }
+    ) getOrElse None
 
+  property("perfectOptionsPlayerStrategy's P(all correct) >> that of random mover") = {
 
-   property("perfectOptionsPlayerStrategy's P(all correct) >> that of random mover") = {
-
-    // val rGame = GuessRiffle(player, randomMove, axle.ignore, axle.ignore)
-    // val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
+    val player = Player("P", "Player")
+    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
+    val rGame = GuessRiffle(player, randomMove, axle.ignore, axle.ignore)
 
     // // leverages the fact that s0 will be the same for both games. Not generally true
-    // val s0 = startState(randomGame)
+    val s0 = startState(rGame)
 
-    ???
+    forAllNoShrink { (seed: Int) =>
+        val probsP = stateStreamMap(pGame, s0, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2)
+        val probsR = stateStreamMap(rGame, s0, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2)
+        Π(probsP.toList) > Π(probsR.toList)
+    }
   }
 
-  property("perfectOptionsPlayerStrategy's Entropy >> that of random mover") = {
+//   property("perfectOptionsPlayerStrategy's Entropy >> that of random mover") = {
+//     ???
+//   }
 
-    ???
-  }
-
-  property("Successively invest resources from initial state until all states have no movers") = {
-    // build upon basic PM[State, V] => PM[State, V] function
-
-    ???
-  }
+//   property("Successively invest resources from initial state until all states have no movers") = {
+//     // build upon basic PM[State, V] => PM[State, V] function
+//     ???
+//   }
 
 }
