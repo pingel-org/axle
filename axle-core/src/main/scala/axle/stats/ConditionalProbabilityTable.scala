@@ -77,7 +77,7 @@ case class ConditionalProbabilityTable[A, V](
   p:        Map[A, V],
   variable: Variable[A])(implicit ringV: Ring[V]) {
 
-  val bars = p.iterator.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
+  val bars = p.toVector.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
   def values: IndexedSeq[A] = p.keys.toVector
 
