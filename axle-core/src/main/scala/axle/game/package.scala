@@ -33,6 +33,27 @@ package object game {
       Stream.empty
     }
 
+    def stateStreamMap[G, S, O, M, MS, MM, V, PM[_, _], T](
+      game:        G,
+      fromState:   S,
+      strategyToT: (G, S, PM[M, V]) => T,
+      gen:         Generator)(
+      implicit
+      evGame: Game[G, S, O, M, MS, MM, V, PM],
+      prob:   ProbabilityModel[PM],
+      distV:  Dist[V],
+      ringV:  Ring[V],
+      orderV: Order[V]): Stream[(S, T, S)] =
+      evGame.mover(game, fromState).map(mover => {
+        val strategyFn = evGame.strategyFor(game, mover)
+        val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
+        val move = strategy.observe(gen)
+        val toState = evGame.applyMove(game, fromState, move)
+        cons((fromState, strategyToT(game, fromState, strategy), toState), stateStreamMap(game, toState, strategyToT, gen))
+      }) getOrElse {
+        Stream.empty
+      }
+
   def play[G, S, O, M, MS, MM, V, PM[_, _]](game: G, gen: Generator)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V, PM],

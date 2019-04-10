@@ -2,8 +2,16 @@ package axle.game.guessriffle
 
 import org.scalatest._
 
+import org.scalacheck.Gen
+import org.scalacheck.Arbitrary
+
+import org.scalacheck.Prop
+import org.scalacheck.Prop.forAll
+
+import spire.math._
 import spire.random.Generator.rng
 
+import axle.stats._
 import axle.game._
 import axle.game.Strategies._
 
@@ -91,21 +99,52 @@ class GuessRiffleSpec extends FunSuite with Matchers {
 
   // TODO interactive player produces messages
 
-  test("perfect strategy always has non-zero chance of guessing correctly") {
+  def containsCorrectGuess(game: GuessRiffle, fromState: GuessRiffleState, moveDist: ConditionalProbabilityTable[GuessRiffleMove, Rational]): Boolean =
+    mover(game, fromState).map( mover =>
+      if( mover === player ) {
+        moveDist.values.map { m => m match { case GuessCard(card) => card } } contains ( fromState.remaining.head )
+      } else {
+        true
+      }
+    ) getOrElse true
 
-    todo
+
+  import spire.random.Random
+  import spire.random.Seed
+
+  def alwaysHasChanceOfCorrectGuess(gr: GuessRiffle): Prop =
+    forAll { (seed: Int) =>
+      stateStreamMap(gr, startState(gr), containsCorrectGuess _, Random.generatorFromSeed(Seed(seed))) forall { _._2 }
+    }
+
+  test("perfectOptionsPlayerStrategy always has non-zero chance of guessing correctly") {
+
+    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
+
+    alwaysHasChanceOfCorrectGuess(pGame)
   }
 
-  test("") {
-    // Measure P(all correct) for each player strategy
-    
-    todo
+  test("perfectOptionsPlayerStrategy's P(all correct) >> that of random mover") {
+
+    // val rGame = GuessRiffle(player, randomMove, axle.ignore, axle.ignore)
+    // val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
+
+    // // leverages the fact that s0 will be the same for both games. Not generally true
+    // val s0 = startState(randomGame)
+
+    1 should be(2)
   }
 
-  test("") {
-    // Measure entropy of each player strategy
-    
-    todo
+  test("perfectOptionsPlayerStrategy's Entropy >> that of random mover") {
+
+    1 should be(2)
+  }
+
+  test("Successively invest resources from initial state until all states have no movers") {
+
+    // build upon basic PM[State, V] => PM[State, V] function
+
+    1 should be(2)
   }
 
 }
