@@ -25,12 +25,8 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
   def containsCorrectGuess(game: GuessRiffle, fromState: GuessRiffleState, moveDist: ConditionalProbabilityTable[GuessRiffleMove, Rational]): Boolean =
     mover(game, fromState).map( mover =>
       if( mover === game.player ) {
-        val guessableCards = moveDist.values.flatMap { m => m match {
-           case GuessCard(card) => Some(card)
-           case _ => None
-        }}
         val correctCard = fromState.remaining.head
-        guessableCards contains correctCard
+        moveDist.p(GuessCard(correctCard)) > Rational(0)
       } else {
         true
       }
