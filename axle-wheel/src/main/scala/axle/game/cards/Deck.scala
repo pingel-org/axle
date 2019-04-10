@@ -33,7 +33,7 @@ object Deck {
 
   def riffleShuffle(deck: Deck, rng: Generator): Deck = {
 
-    val splitAt = rng.nextInt(0, deck.cards.size)
+    val splitAt = rng.nextInt(1, deck.cards.size -1)
     val booleanStream = Stream.continually(spire.random.Generator.rng.nextBoolean)
 
     val left = deck.cards.take(splitAt)
