@@ -1,6 +1,7 @@
 package axle.game.cards
 
 import cats.Show
+import cats.kernel.Eq
 import cats.implicits._
 import spire.random.Generator
 import spire.random.Generator.rng
@@ -8,6 +9,10 @@ import spire.random.Generator.rng
 case class Deck(cards: List[Card] = axle.shuffle(Deck.cards)(rng))
 
 object Deck {
+
+  implicit val eqDeck: Eq[Deck] = (l: Deck, r: Deck) => {
+    l.cards === r.cards
+  }
 
   val ranks = Vector(R2, R3, R4, R5, R6, R7, R8, R9, R10, Jack, Queen, King, Ace)
   val suits = Vector(Spades, Diamonds, Clubs, Hearts)
