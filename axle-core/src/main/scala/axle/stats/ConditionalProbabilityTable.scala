@@ -60,11 +60,7 @@ object ConditionalProbabilityTable {
 
       def observe[A, V](model: ConditionalProbabilityTable[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
         val r: V = gen.next[V]
-        if( r === ringV.zero ) {
-          model.bars.head._1
-        } else {
-          model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // otherwise malformed distribution
-        }
+        model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // otherwise malformed distribution
       }
 
       def probabilityOf[A, V](model: ConditionalProbabilityTable[A, V], a: A)(implicit fieldV: Field[V]): V =
@@ -81,7 +77,7 @@ case class ConditionalProbabilityTable[A, V](
   p:        Map[A, V],
   variable: Variable[A])(implicit ringV: Ring[V]) {
 
-  val bars = p.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
+  val bars = p.iterator.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
   def values: IndexedSeq[A] = p.keys.toVector
 
