@@ -51,19 +51,24 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
-* Fix markdown lint warnings
 * LogisticMap back to 4k x 4k
-* Configure makeSite to preview: previewFixedPort := Some(9999)
-* Copy css using makeSite (not update-docs.sh)
-* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
-* Figure out better way to reference images
-* Publish site
+* Release and publish site
 
-## 0.6.1 (June 2019)
+## 0.6.0 (June 2019)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-* Tests for `axle.ast`
 * Eliminate entropy consumption of `rng` side-effect
+* … (aka "etc") as Stream.from(Int)
+
+## 0.7.x (Summer 2019)
+
+* Fix logistic regression and move LogisticRegression.md back
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
+* P / Case expression DSL (PExpr, PMultiply, ...)
+* CaseIs replaced by T => Boolean as the Expression type?
+* Prove and generalize forall E : P(E) + P(not E) = 1 (somewhat redundant with 'combination', but this tests that 'not' on expressions works properly)
+* ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
+* Tests for `axle.ast`
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 * Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
@@ -71,24 +76,21 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
 * syntax for `Game` typeclass
 
-## 0.6.2 (July 2019)
-
-* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-* P / Case expression DSL (PExpr, PMultiply, ...)
-* CaseIs replaced by T => Boolean as the Expression type?
-* Prove and generalize forall E : P(E) + P(not E) = 1 (somewhat redundant with 'combination', but this tests that 'not' on expressions works properly)
-* ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
-
-## 0.6.3 (August 2019)
-
 * Optimize `conditionExpression` implementations
 * Optimize `KolmogorovProbabilityAxioms.combination`
-* Fix logistic regression and move LogisticRegression.md back
+
 * Demo Mandelbrot with Rational
 * Friend of Spire
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
+* Fix sbt-release plugin (use sbt-sonatype?)
+* Site
+  * Fix markdown lint warnings
+  * Configure makeSite to preview: previewFixedPort := Some(9999)
+  * Copy css using makeSite (not update-docs.sh)
+  * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
+  * Figure out better way to reference images
 
-## 0.7.x (Fall 2019)
+## 0.8.x (Fall 2019)
 
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * Kind projector for projections of jung graphs for Finite
@@ -107,8 +109,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Sort out MapFrom, FromStream, FromSet
 * Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
+* Fix `axle.algebra.GeoMetricSpaceSpec`
 
-## 0.8.x (Winter 2020)
+## 0.9.x (Winter 2020)
 
 * game theory axioms
 * axle.game: Observable[T]
@@ -117,47 +120,20 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Max bet for Poker
 * Game.strategyFor should return a M[underscore] type upon which the ProbabilityModel[M, Rational] can act
 
+## 0.10.x (Spring 2020)
+
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
-
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
-* Bayes Theorem
-* P-values
-* z & t scores
-* Correlation
-* Regression
-* Accuracy, Precision
-* Bias, Variance
-* Cohen's Kappa
-* Normalizer axioms
 
-## 1.0.x (Winter 2020)
+## 1.0.x (Late 2020)
 
 * Redo Logic using Abstract Algebra
 * Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
 * Fix "unreachable" default pattern match cases
 
-## 1.1.x (2020)
-
-* Fix `axle.algebra.GeoMetricSpaceSpec`
-* Honor graph vis params in awt graph visualizations
-* `axle.web.Table` and `HtmlFrom[Table[T]]`
-* Clean up GA doc
-* Log scale
-* SVG[Matrix]
-* `BarChart` Variable width bars
-* Horizontal barchart
-* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
-* SVG[H] for BarChart hover (wrap with \<g\> to do getBBox)
-* Background box for `ScatterPlot` hover text?
-* Fix multi-color cube rendering
-* Bloom filter surface
-* Fix sbt-release plugin (use sbt-sonatype?)
-* … as Stream.from(Int)
-* Factor similarity between SVG and Draw?
-
 # Backlog
 
-## Algorithm breadth
+## Algorithm / Concept breadth
 
 * LSA
 * LDA
@@ -175,6 +151,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Multi-armed bandit
 * Connection between dynamic programming and semiring
 * Recursive grid search
+* Bayes Theorem
+* P-values
+* z & t scores
+* Correlation
+* Regression
+* Accuracy, Precision
+* Bias, Variance
+* Cohen's Kappa
+* Normalizer axioms
 
 ## Platform
 
@@ -186,6 +171,21 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * netlib-java Matrix
 * GPU/CUDA support
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
+
+## Visualization
+
+* Honor graph vis params in awt graph visualizations
+* `axle.web.Table` and `HtmlFrom[Table[T]]`
+* Log scale
+* SVG[Matrix]
+* `BarChart` Variable width bars
+* Horizontal barchart
+* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
+* SVG[H] for BarChart hover (wrap with \<g\> to do getBBox)
+* Background box for `ScatterPlot` hover text?
+* Fix multi-color cube rendering
+* Bloom filter surface
+* Factor similarity between SVG and Draw?
 
 ## Deeper exploration
 
