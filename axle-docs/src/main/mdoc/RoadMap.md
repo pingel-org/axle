@@ -20,10 +20,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Move `axle.ml.distance` to `axle.algebra.distance`
 * `axle.dummy` for a handful of scanLeft calls
 * Remove Spark impacts on typeclasses in `axle.algebra`. Eg: Spark's `ClassTag` requirement `map` created the difficulty:
-  * Functor: removed and replaced with `cats.Functor`
-  * Scanner, Aggregator, Zipper, Indexed, Talliable, Finite: Refactored as Kind-1 typeclasses
+  * `Functor`: removed and replaced with `cats.Functor`
+  * `Scanner`, `Aggregator`, `Zipper`, `Indexed`, `Talliable`, `Finite`: Refactored as Kind-1 typeclasses
 * Vertex and Edge projections for jung graphs
-* Fix axle.joda.TicsSpec handling of timezones
+* Fix `axle.joda.TicsSpec` handling of timezones
 * Update Monix, Kittens, Cats
 * ScaleExp works with negative exponent
 * ScalaCheck tests for

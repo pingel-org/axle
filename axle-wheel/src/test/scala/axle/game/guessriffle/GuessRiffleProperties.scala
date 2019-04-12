@@ -57,7 +57,7 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
 
   type CPTR[T] = ConditionalProbabilityTable[T, Rational]
 
-  def entropyOfCorrectGuess(
+  def entropyOfGuess(
     game: GuessRiffle,
     fromState: GuessRiffleState,
     moveDist: ConditionalProbabilityTable[GuessRiffleMove, Rational])(
@@ -65,9 +65,9 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
     infoConverterDouble: InformationConverter[Double]): Option[UnittedQuantity[Information, Double]] =
     mover(game, fromState).map( mover =>
       if( mover === game.player ) {
-        val correctCard = fromState.remaining.head
-        val isCorrectDist = (moveDist : CPTR[GuessRiffleMove]).map({ move => move === GuessCard(correctCard) })
-        Some(entropy[ConditionalProbabilityTable, Boolean, Rational](isCorrectDist))
+        // val correctCard = fromState.remaining.head
+        // val isCorrectDist = (moveDist : CPTR[GuessRiffleMove]).map({ move => move === GuessCard(correctCard) })
+        Some(entropy[ConditionalProbabilityTable, GuessRiffleMove, Rational](moveDist))
       } else {
         None
       }
@@ -93,24 +93,24 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
     forAllNoShrink { (seed: Int) =>
 
       val probsP = stateStreamMap(pGame, s1, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
-      val entropiesP = stateStreamMap(pGame, s1, entropyOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
+      val entropiesP = stateStreamMap(pGame, s1, entropyOfGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
       val pp = Π(probsP)
       val ep = Σ(entropiesP)
 
       val probsR = stateStreamMap(rGame, s1, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
-      val entropiesR = stateStreamMap(rGame, s1, entropyOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
+      val entropiesR = stateStreamMap(rGame, s1, entropyOfGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
       val pr = Π(probsR)
       val er = Σ(entropiesR)
 
       // TODO accumulate single CPT during traversal rather than having combine them here
-      // TODO factor common stuff out of axiom
-      // TODO entropy-based assertion
+      // TODO factor common stuff out of property test
       // TODO exepected outcome
-      // TODO visualization
+      // TODO markdown document
+      // TODO visualization: plot distribution of sum(entropy) for both strategies
+      // TODO visualization: plot entropy by turn # for each strategy
 
       (s1.initialDeck === s1.riffledDeck.get && pp === pr && ep === er) || {
-        // println(s"pp = $pp, pr = $pr, ep = $ep, er = $er")
-        (pp > pr) // && (ep > er)
+        (pp > pr) && (ep < er)
       }
     }
   }
