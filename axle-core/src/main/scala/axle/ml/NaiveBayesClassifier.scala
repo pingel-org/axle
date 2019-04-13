@@ -10,7 +10,9 @@ import spire.implicits.MapInnerProductSpace
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
-import axle.algebra._
+import axle.algebra.Aggregatable
+import axle.algebra.Talliable
+import axle.algebra.functorIndexedSeq
 import axle.math._
 import axle.stats.Variable
 import axle.stats.TallyDistribution
@@ -25,9 +27,9 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   featureExtractor:          DATA => List[FEATURE],
   classExtractor:            DATA => CLASS)(
   implicit
-  agg:     Aggregatable[F],
-  functor: Functor[F],
-  tal:     Talliable[F])
+  aggregatableF: Aggregatable[F],
+  functorF:      Functor[F],
+  talliableF:    Talliable[F])
   extends Function1[DATA, CLASS] {
 
   val featureVariables = featureVariablesAndValues map { _._1 }

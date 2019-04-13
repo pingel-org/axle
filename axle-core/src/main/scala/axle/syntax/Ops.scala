@@ -222,13 +222,7 @@ final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
   implicit
   ev: ProbabilityModel[M]) {
 
-  // def construct[A, V](variable: Variable[A], as: Iterable[A], f: A => V)(implicit ring: Ring[V]): M[A, V]
-
   def values: IndexedSeq[A] = ev.values(model)
-  
-  // def combine[A, V](modelsToProbabilities: Map[M[A, V], V])(implicit fieldV: Field[V]): M[A, V]
-  
-  // def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): M[A, V]
   
   def P(a: A)(implicit fieldV: Field[V]): V = ev.probabilityOf(model, a)
   

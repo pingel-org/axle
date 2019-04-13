@@ -92,6 +92,8 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
 
     forAllNoShrink { (seed: Int) =>
 
+      // Use moveStateStream.selectMoveDists.map(isCorrect).reduce( (a, b) => a.product(b).map(and)) to build up CPT for Properties test
+
       val probsP = stateStreamMap(pGame, s1, probabilityOfCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
       val entropiesP = stateStreamMap(pGame, s1, entropyOfGuess _, Random.generatorFromSeed(Seed(seed)).sync ).flatMap(_._2).toList
       val pp = Π(probsP)
@@ -102,22 +104,12 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       val pr = Π(probsR)
       val er = Σ(entropiesR)
 
-      // TODO accumulate single CPT during traversal rather than having combine them here
       // TODO factor common stuff out of property test
-      // TODO exepected outcome
-      // TODO markdown document
-      // TODO visualization: plot distribution of sum(entropy) for both strategies
-      // TODO visualization: plot entropy by turn # for each strategy
 
       (s1.initialDeck === s1.riffledDeck.get && pp === pr && ep === er) || {
         (pp > pr) && (ep < er)
       }
     }
   }
-
-//   property("Successively invest resources from initial state until all states have no movers") = {
-//     // build upon basic PM[State, V] => PM[State, V] function
-//     // will require a better rational probability distribution as probabilities become smaller
-//   }
 
 }

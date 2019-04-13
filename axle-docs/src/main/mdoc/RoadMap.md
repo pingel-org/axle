@@ -41,9 +41,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
 * Fix Order[Card]
-* Deck.riffleShuffle
-* GuessRiffle game
+* `Deck.riffleShuffle`
+* `GuessRiffle` game
+* `ProbabilityModel` `sum` and `product`
 
+* GuessRiffle: Successively invest resources from initial state until all states have no movers (aka "are terminal")
+  * Build upon basic PM[State, V] => PM[State, V] function
+  * Will require a better rational probability distribution as probabilities become smaller
+
+* Are `sum` and `product` the right names?  Consider also `minus`, `divide`, `zero`, `one`, `empty`, `condition`
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Simpsons Paradox
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
@@ -51,6 +57,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
+* GuessRiffle.md
+  * Walk through game
+  * plot distribution of sum(entropy) for both strategies
+  * plot entropy by turn # for each strategy
+  * plot simulated score distribution for each strategy
 * LogisticMap back to 4k x 4k
 * Release and publish site
 
@@ -59,25 +70,24 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * Eliminate entropy consumption of `rng` side-effect
 * … (aka "etc") as Stream.from(Int)
+* Fix logistic regression and move LogisticRegression.md back
+* Tests for `axle.ast`
+* Is `ConditionalProbabilityTable.variable` necessary?
 
 ## 0.7.x (Summer 2019)
 
-* Fix logistic regression and move LogisticRegression.md back
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * P / Case expression DSL (PExpr, PMultiply, ...)
 * CaseIs replaced by T => Boolean as the Expression type?
 * Prove and generalize forall E : P(E) + P(not E) = 1 (somewhat redundant with 'combination', but this tests that 'not' on expressions works properly)
 * ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
-* Tests for `axle.ast`
+* Optimize `conditionExpression` implementations
+* Optimize `KolmogorovProbabilityAxioms.combination`
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 * Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
 * Kind projector instead of type lambdas
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
-* syntax for `Game` typeclass
-
-* Optimize `conditionExpression` implementations
-* Optimize `KolmogorovProbabilityAxioms.combination`
 
 * Demo Mandelbrot with Rational
 * Friend of Spire
@@ -116,9 +126,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * game theory axioms
 * axle.game: Observable[T]
 * move state dist stream
-* redo original monty hall spec
+* Redo original monty hall spec
 * Max bet for Poker
-* Game.strategyFor should return a M[underscore] type upon which the ProbabilityModel[M, Rational] can act
+* syntax for `Game` typeclass
 
 ## 0.10.x (Spring 2020)
 
@@ -172,21 +182,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * GPU/CUDA support
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
 
-## Visualization
-
-* Honor graph vis params in awt graph visualizations
-* `axle.web.Table` and `HtmlFrom[Table[T]]`
-* Log scale
-* SVG[Matrix]
-* `BarChart` Variable width bars
-* Horizontal barchart
-* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
-* SVG[H] for BarChart hover (wrap with \<g\> to do getBBox)
-* Background box for `ScatterPlot` hover text?
-* Fix multi-color cube rendering
-* Bloom filter surface
-* Factor similarity between SVG and Draw?
-
 ## Deeper exploration
 
 * Bettings odds
@@ -219,3 +214,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Box Plot
 * Candlestick Chart
+* Honor graph vis params in awt graph visualizations
+* `axle.web.Table` and `HtmlFrom[Table[T]]`
+* Log scale
+* SVG[Matrix]
+* `BarChart` Variable width bars
+* Horizontal barchart
+* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
+* SVG[H] for BarChart hover (wrap with \<g\> to do getBBox)
+* Background box for `ScatterPlot` hover text?
+* Fix multi-color cube rendering
+* Bloom filter surface
+* Factor similarity between SVG and Draw?

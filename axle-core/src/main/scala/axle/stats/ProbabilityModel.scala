@@ -22,7 +22,11 @@ trait ProbabilityModel[M[_, _]] {
 
   def values[A](model: M[A, _]): IndexedSeq[A]
 
-  def combine[A, V](modelsToProbabilities: Map[M[A, V], V])(implicit fieldV: Field[V]): M[A, V]
+  def sum[A, V1, V2](model: M[A, V1])(other: M[A, V2])(implicit fieldV1: Field[V1], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V1], eqV2: cats.kernel.Eq[V2]): M[A, (V1, V2)]
+
+  def product[A, B, V](model: M[A, V])(other: M[B, V])(implicit fieldV: Field[V]): M[(A, B), V]
+
+  def mapValues[A, V, V2](model: M[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): M[A, V2]
 
   def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): M[A, V]
 
