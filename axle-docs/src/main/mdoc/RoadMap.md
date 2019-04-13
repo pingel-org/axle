@@ -43,7 +43,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix Order[Card]
 * `Deck.riffleShuffle`
 * `GuessRiffle` game
-* `ProbabilityModel` `sum` and `product`
+* `ProbabilityModel` `sum`, `product`, and `mapValues`
 
 * GuessRiffle: Successively invest resources from initial state until all states have no movers (aka "are terminal")
   * Build upon basic PM[State, V] => PM[State, V] function
