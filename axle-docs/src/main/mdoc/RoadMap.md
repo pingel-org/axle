@@ -125,6 +125,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.9.x (Winter 2020)
 
+## 0.8.x (Winter 2020)
+
 * game theory axioms
 * axle.game: Observable[T]
 * move state dist stream
@@ -135,6 +137,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.10.x (Spring 2020)
 
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
+
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
 
 ## 1.0.x (Late 2020)
