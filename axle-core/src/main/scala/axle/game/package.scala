@@ -45,6 +45,7 @@ package object game {
     implicit
     evGame: Game[G, S, O, M, MS, MM, V, PM],
     prob:   ProbabilityModel[PM],
+    eqS:    cats.kernel.Eq[S],
     distV:  Dist[V],
     fieldV: Field[V],
     orderV: Order[V]): (Option[(S, M)], PM[S, V]) = {
@@ -61,16 +62,20 @@ package object game {
       val probabilityOfMove: V = prob.probabilityOf(strategy, move)
       val toState = evGame.applyMove(game, fromState, move)
 
-      val updateM = Map(fromState -> (fieldV.one - probabilityOfMove), toState -> probabilityOfMove)
-      val updatingModel = prob.construct(Variable[S]("S"), updateM.keys, updateM)
-      // Note that updatingModel violates probability axioms
-
-      val summed = prob.sum(stateModel)(updatingModel)
-      import axle.algebra.tuple2Field
-      val mapped = prob.mapValues[S, (V, V), V](summed)({ case (v1, v2) => 
-        v1 + (probabilityOfFromState * v2)
-      })
-      (Some((fromState, move)), mapped)
+      import cats.syntax.all._
+      if( fromState === toState ) {
+        (Some((fromState, move)), stateModel)
+      } else {
+        val updateM = Map(fromState -> (fieldV.one - probabilityOfMove), toState -> probabilityOfMove)
+        val updatingModel = prob.construct(Variable[S]("S"), updateM.keys, updateM)
+        // Note that updatingModel violates probability axioms
+        val summed = prob.sum(stateModel)(updatingModel)
+        import axle.algebra.tuple2Field
+        val mapped = prob.mapValues[S, (V, V), V](summed)({ case (v1, v2) => 
+          v1 + (probabilityOfFromState * v2)
+        })
+        (Some((fromState, move)), mapped)
+      }
     }) getOrElse {
       (None, stateModel)
     }
