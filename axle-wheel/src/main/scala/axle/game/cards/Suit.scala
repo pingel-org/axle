@@ -1,11 +1,13 @@
 package axle.game.cards
 
 import cats.Show
-import cats.kernel.Eq
+import cats.kernel.Order
+import cats.implicits._
 
 object Suit {
 
-  implicit def suitEq = Eq.fromUniversalEquals[Suit]
+  implicit val orderSuit: Order[Suit] =
+    (a, b) => Order[Char].compare(a.serialize, b.serialize)
 
   implicit def show[S <: Suit]: Show[S] = s => axle.showChar.show(s.serialize)
 
@@ -14,6 +16,10 @@ object Suit {
     case '♢' => Diamonds
     case '♣' => Clubs
     case '♡' => Hearts
+    case 'S' => Spades
+    case 'D' => Diamonds
+    case 'C' => Clubs
+    case 'H' => Hearts
   }
 
 }

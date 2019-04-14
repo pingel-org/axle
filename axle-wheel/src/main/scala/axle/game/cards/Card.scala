@@ -9,7 +9,17 @@ object Card {
   def fromString(s: String): IndexedSeq[Card] =
     s.split(",").map(Card(_))
 
-  implicit val orderCard: Order[Card] = (a, b) => Order[Rank].compare(a.rank, b.rank)
+  val orderRank = Order[Rank]
+  val orderSuit = Order[Suit]
+
+  implicit val orderCard: Order[Card] = (a, b) => {
+    val rankCompare = orderRank.compare(a.rank, b.rank)
+    if( rankCompare === 0 ) {
+      orderSuit.compare(a.suit, b.suit)
+    } else {
+      rankCompare
+    }
+  }
 
   implicit def showCard: Show[Card] = card => "" + card.rank.serialize + card.suit.serialize
 

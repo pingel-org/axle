@@ -132,7 +132,7 @@ package object axle {
    * shuffle
    */
 
-  def shuffle[T](xs: IndexedSeq[T])(gen: Generator): IndexedSeq[T] =
+  def shuffle[T](xs: List[T])(gen: Generator): List[T] =
     xs.map(x => (x, gen.nextInt)).sortBy(_._2).map(_._1)
 
   // List methods

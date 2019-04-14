@@ -7,6 +7,7 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.syntax.probabilitymodel._
+import axle.stats.ConditionalProbabilityTable
 import axle.game._
 import axle.game.Strategies._
 
@@ -125,7 +126,7 @@ class TicTacToeSpec extends FunSuite with Matchers {
       outcome.winner.map(wp => if (wp == p) 1d else -1d).getOrElse(0d)
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-    val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, Double](
+    val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, Double, ConditionalProbabilityTable](
       4, outcomeRingHeuristic(game, h))
 
     val secondState = applyMove(game, startState(game), firstMove)

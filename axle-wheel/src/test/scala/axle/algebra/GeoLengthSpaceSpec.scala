@@ -58,7 +58,7 @@ class GeoLengthSpaceSpec extends FunSuite with Matchers {
 
     import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
 
-    val waypoint = geoCoordinatesLengthSpace.onPath(lax, jfk, 0.4)
+    val waypoint = geoCoordinatesLengthSpace[Double].onPath(lax, jfk, 0.4)
 
     (waypoint.latitude in °).magnitude should be(38.66945192546367)
     (waypoint.longitude in °).magnitude should be(101.6261713931811)

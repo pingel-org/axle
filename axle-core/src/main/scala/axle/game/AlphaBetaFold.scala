@@ -3,18 +3,18 @@ package axle.game
 import cats.kernel.Order
 import cats.implicits._
 
-case class AlphaBetaFold[G, S, O, M, MS, MM, V, N: Order](
+case class AlphaBetaFold[G, S, O, M, MS, MM, V, N: Order, PM[_, _]](
   game:   G,
   move:   M,
   cutoff: Map[Player, N],
   done:   Boolean)(
   implicit
-  evGame: Game[G, S, O, M, MS, MM, V]) {
+  evGame: Game[G, S, O, M, MS, MM, V, PM]) {
 
   def process(
     move:      M,
     state:     S,
-    heuristic: S => Map[Player, N]): AlphaBetaFold[G, S, O, M, MS, MM, V, N] =
+    heuristic: S => Map[Player, N]): AlphaBetaFold[G, S, O, M, MS, MM, V, N, PM] =
     if (done) {
       this
     } else {

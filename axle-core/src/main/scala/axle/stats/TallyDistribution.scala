@@ -34,24 +34,26 @@ object TallyDistribution {
       def values[A](model: TallyDistribution[A, _]): IndexedSeq[A] =
         model.values
 
-      def combine[A, V](modelsToProbabilities: Map[TallyDistribution[A, V], V])(implicit fieldV: Field[V]): TallyDistribution[A, V] = {
+      def sum[A, V1, V2](model: TallyDistribution[A, V1])(other: TallyDistribution[A, V2])(implicit fieldV1: Field[V1], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V1], eqV2: cats.kernel.Eq[V2]): TallyDistribution[A, (V1, V2)] = {
 
-        // TODO assert that all models are oriented for same Variable[A]
-
-        val parts: IndexedSeq[(A, V)] =
-          modelsToProbabilities.toVector flatMap {
-            case (model, weight) =>
-              values(model).map(v => (v, model.tally.get(v).getOrElse(fieldV.zero) * weight))
-          }
-
-        val newDist: Map[A, V] =
-          parts.groupBy(_._1).mapValues(xs => xs.map(_._2).reduce(fieldV.plus)).toMap
-
-        val v = modelsToProbabilities.headOption.map(_._1.variable).getOrElse(Variable[A]("?"))
-
-        TallyDistribution[A, V](newDist, v)
+        val newValues = (model.tally.keySet ++ other.tally.keySet).toVector // TODO should unique by Eq[A], not universal equality
+  
+        implicit val fieldV12: Field[(V1, V2)] = axle.algebra.tuple2Field[V1, V2](fieldV1, fieldV2, eqV1, eqV2)
+  
+        construct[A, (V1, V2)](model.variable, newValues, a => (probabilityOf(model, a), probabilityOf(other, a)))
       }
-
+  
+      def product[A, B, V](model: TallyDistribution[A, V])(other: TallyDistribution[B, V])(implicit fieldV: Field[V]): TallyDistribution[(A, B), V] = {
+        val abvMap: Map[(A, B), V] = (for {
+          a <- values(model)
+          b <- values(other)
+        } yield ((a, b) -> (probabilityOf(model, a) * probabilityOf(other, b)))).toMap
+        construct[(A, B), V](Variable[(A, B)](model.variable.name + " " + other.variable.name), abvMap.keys, abvMap)
+      }
+  
+      def mapValues[A, V, V2](model: TallyDistribution[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): TallyDistribution[A, V2] =
+        construct[A, V2](model.variable, model.tally.keys, (a: A) => f(model.tally(a)))
+  
       def conditionExpression[A, B, V](model: TallyDistribution[A, V], predicate: A => Boolean, screen: A => B)(implicit fieldV: Field[V]): TallyDistribution[B, V] = {
         val newMap: Map[B, V] = model.tally.toVector.filter({ case (a, v) => predicate(a)}).map({ case (a, v) => screen(a) -> v }).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
         val newDenominator: V = Σ(newMap.values)

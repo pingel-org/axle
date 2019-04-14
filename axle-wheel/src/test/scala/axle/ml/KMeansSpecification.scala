@@ -11,7 +11,6 @@ import cats.implicits._
 import spire.algebra._
 import spire.random.Generator.rng
 
-import axle.algebra.functorIndexedSeq
 import axle.shuffle
 
 class KMeansSpecification
@@ -36,8 +35,8 @@ class KMeansSpecification
     }
 
     val data = shuffle(
-      (0 until 20).map(i => randomPoint(Foo(100, 100), 0.1)) ++
-        (0 until 30).map(i => randomPoint(Foo(1, 1), 0.1)))(rng)
+      (0 until 20).toList.map(i => randomPoint(Foo(100, 100), 0.1)) ++
+        (0 until 30).toList.map(i => randomPoint(Foo(1, 1), 0.1)))(rng)
     //    ++ (0 until 25).map(i => randomPoint(Foo(1, 100), 0.1)))
 
     implicit val innerSpace = {

@@ -10,10 +10,9 @@ package axle.game
  */
 
 import spire.random.Dist
+import axle.stats.ProbabilityModel
 
-import axle.stats.ConditionalProbabilityTable
-
-trait Game[G, S, O, M, MS, MM, V] {
+trait Game[G, S, O, M, MS, MM, V, PM[_, _]] {
 
   def probabilityDist: Dist[V]
 
@@ -34,7 +33,7 @@ trait Game[G, S, O, M, MS, MM, V] {
 
   def maskMove(game: G, move: M, mover: Player, observer: Player): MM
 
-  def strategyFor(game: G, player: Player): (G, MS) => ConditionalProbabilityTable[M, V]
+  def strategyFor(game: G, player: Player): (G, MS) => PM[M, V]
 
   def isValid(game: G, state: MS, move: M): Either[String, M]
 
@@ -42,4 +41,5 @@ trait Game[G, S, O, M, MS, MM, V] {
 
   def outcome(game: G, state: S): Option[O]
 
+  implicit def probabilityModelPM: ProbabilityModel[PM]
 }

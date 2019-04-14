@@ -7,7 +7,7 @@ import scala.language.implicitConversions
 import cats.Monad
 import cats.Functor
 import cats.kernel.Eq
-import cats.implicits._
+//import cats.implicits._
 
 import spire.algebra.Field
 import spire.algebra.NRoot
@@ -15,6 +15,7 @@ import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.additiveSemigroupOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 import spire.math.log
@@ -26,6 +27,7 @@ import spire.random.Generator
 
 import axle.math.Σ
 import axle.algebra.Aggregatable
+import axle.algebra.tuple2Field
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
@@ -67,20 +69,20 @@ package object stats {
     ConditionalProbabilityTable(dist, variable)
   }
 
-  def iffy[T, N: Field, C[_, _], M[_, _]](
+  def iffy[T, N, C[_, _], M[_, _]](
     conditionModel:   C[Boolean, N],
     trueBranchModel:  M[T, N],
     falseBranchModel: M[T, N])(
     implicit
+    fieldN: Field[N],
+    eqN: cats.kernel.Eq[N],
     pIn:  ProbabilityModel[C],
     pOut: ProbabilityModel[M]): M[T, N] = {
 
     val pTrue: N = pIn.probabilityOf(conditionModel, true)
     val pFalse: N = pIn.probabilityOf(conditionModel, false)
 
-    pOut.combine(Map(
-      trueBranchModel -> pTrue,
-      falseBranchModel -> pFalse))
+    pOut.mapValues(pOut.sum(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double =
@@ -100,8 +102,10 @@ package object stats {
     functor: Functor[C],
     agg:     Aggregatable[C],
     field:   Field[X],
-    nroot:   NRoot[X]): X =
+    nroot:   NRoot[X]): X = {
+    import cats.syntax.all._
     nroot.sqrt(Σ[X, C](data.map(x => square(x - estimator(x)))))
+  }
 
   /**
    * http://en.wikipedia.org/wiki/Standard_deviation
@@ -137,6 +141,7 @@ package object stats {
     val convertN = ConvertableFrom[N]
     val H = Σ[Double, IndexedSeq](prob.values(model) map { x =>
       val px: N = P(model, x).apply()
+      import cats.syntax.all._
       if (px === Field[N].zero) {
         0d
       } else {

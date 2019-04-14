@@ -20,10 +20,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Move `axle.ml.distance` to `axle.algebra.distance`
 * `axle.dummy` for a handful of scanLeft calls
 * Remove Spark impacts on typeclasses in `axle.algebra`. Eg: Spark's `ClassTag` requirement `map` created the difficulty:
-  * Functor: removed and replaced with `cats.Functor`
-  * Scanner, Aggregator, Zipper, Indexed, Talliable, Finite: Refactored as Kind-1 typeclasses
+  * `Functor`: removed and replaced with `cats.Functor`
+  * `Scanner`, `Aggregator`, `Zipper`, `Indexed`, `Talliable`, `Finite`: Refactored as Kind-1 typeclasses
 * Vertex and Edge projections for jung graphs
-* Fix axle.joda.TicsSpec handling of timezones
+* Fix `axle.joda.TicsSpec` handling of timezones
 * Update Monix, Kittens, Cats
 * ScaleExp works with negative exponent
 * ScalaCheck tests for
@@ -40,61 +40,69 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Lawful ScalaCheck tests for
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
+* Fix Order[Card]
+* `Deck.riffleShuffle`
+* `GuessRiffle` game
+* `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* Stop specifying `ConditionalProbabilityTable` in `axle.game` package object methods
-* Riffle Shuffle
-  * implement
-  * create "guess riffle shuffle" game
-  * optimal strategy
-  * naive strategy (use no informatoin other than than cards don't repeat)
-  * measure P(all correct) for each strategy
-  * also measure entropy of each strategy
+* Eliminate entropy consumption of `rng` side-effect
+  * eg: applyMove(Riffle())
 
-* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
-* Kind projector instead of type lambdas
+* GuessRiffle: Successively invest resources from initial state until all states have no movers (aka "are terminal")
+  * Build upon basic PM[State, V] => PM[State, V] function
+  * Will require a better rational probability distribution as probabilities become smaller
+
+* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
+* Simpsons Paradox
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
-* Fix markdown lint warnings
+* Are `sum` and `product` the right names?  Consider also `minus`, `divide`, `zero`, `one`, `empty`, `condition`
+* GuessRiffle.md
+  * Walk through game
+  * plot distribution of sum(entropy) for both strategies
+  * plot entropy by turn # for each strategy
+  * plot simulated score distribution for each strategy
 * LogisticMap back to 4k x 4k
-* configure makeSite to preview: previewFixedPort := Some(9999)
-* copy css using makeSite (not update-docs.sh)
-* publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
-* figure out better way to reference images
-* Publish site
+* Release and publish site
 
-## 0.6.1 (May 2019)
-
-* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
-
-## 0.6.2 (June 2019)
+## 0.6.0 (June 2019)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
-* Move KolmogorovProbabilityAxioms to `axle.stats.laws`
+* … (aka "etc") as Stream.from(Int)
+* Fix logistic regression and move LogisticRegression.md back
 * Tests for `axle.ast`
-* `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
+* Is `ConditionalProbabilityTable.variable` necessary?
 
-## 0.6.3 (July 2019)
+## 0.7.x (Summer 2019)
 
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-* Optimize `conditionExpression` implementations
-* Optimize `KolmogorovProbabilityAxioms.combination`
 * P / Case expression DSL (PExpr, PMultiply, ...)
 * CaseIs replaced by T => Boolean as the Expression type?
 * Prove and generalize forall E : P(E) + P(not E) = 1 (somewhat redundant with 'combination', but this tests that 'not' on expressions works properly)
 * ProbabilityModel.conditionExpression should enforce that `predicate` tests subset of `A` that does not appear in `B` of `screen` function
+* Optimize `conditionExpression` implementations
+* Optimize `KolmogorovProbabilityAxioms.combination`
+* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
+* Move KolmogorovProbabilityAxioms to `axle.stats.laws`
+* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
+* Kind projector instead of type lambdas
+* `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
 
-## 0.6.4 (August 2019)
-
-* Fix logistic regression and move LogisticRegression.md back
 * Demo Mandelbrot with Rational
 * Friend of Spire
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
+* Fix sbt-release plugin (use sbt-sonatype?)
+* Site
+  * Fix markdown lint warnings
+  * Configure makeSite to preview: previewFixedPort := Some(9999)
+  * Copy css using makeSite (not update-docs.sh)
+  * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
+  * Figure out better way to reference images
 
-## 0.7.x (Fall 2019)
+## 0.8.x (Fall 2019)
 
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * Kind projector for projections of jung graphs for Finite
@@ -113,57 +121,34 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Sort out MapFrom, FromStream, FromSet
 * Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
+* Fix `axle.algebra.GeoMetricSpaceSpec`
+
+## 0.9.x (Winter 2020)
 
 ## 0.8.x (Winter 2020)
 
 * game theory axioms
 * axle.game: Observable[T]
 * move state dist stream
-* redo original monty hall spec
+* Redo original monty hall spec
 * Max bet for Poker
-* Game.strategyFor should return a M[underscore] type upon which the ProbabilityModel[M, Rational] can act
+* syntax for `Game` typeclass
+
+## 0.10.x (Spring 2020)
 
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
-* Bayes Theorem
-* P-values
-* z & t scores
-* Correlation
-* Regression
-* Accuracy, Precision
-* Bias, Variance
-* Cohen's Kappa
-* Normalizer axioms
 
-## 1.0.x (Winter 2020)
+## 1.0.x (Late 2020)
 
 * Redo Logic using Abstract Algebra
 * Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
 * Fix "unreachable" default pattern match cases
 
-## 1.1.x (2020)
-
-* Fix `axle.algebra.GeoMetricSpaceSpec`
-* Honor graph vis params in awt graph visualizations
-* `axle.web.Table` and `HtmlFrom[Table[T]]`
-* Clean up GA doc
-* Log scale
-* SVG[Matrix]
-* `BarChart` Variable width bars
-* Horizontal barchart
-* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
-* SVG[H] for BarChart hover (wrap with \<g\> to do getBBox)
-* Background box for `ScatterPlot` hover text?
-* Fix multi-color cube rendering
-* Bloom filter surface
-* Fix sbt-release plugin (use sbt-sonatype?)
-* … as Stream.from(Int)
-* Factor similarity between SVG and Draw?
-
 # Backlog
 
-## Algorithm breadth
+## Algorithm / Concept breadth
 
 * LSA
 * LDA
@@ -181,6 +166,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Multi-armed bandit
 * Connection between dynamic programming and semiring
 * Recursive grid search
+* Bayes Theorem
+* P-values
+* z & t scores
+* Correlation
+* Regression
+* Accuracy, Precision
+* Bias, Variance
+* Cohen's Kappa
+* Normalizer axioms
+* Fourier transformations
 
 ## Platform
 
@@ -225,3 +220,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Box Plot
 * Candlestick Chart
+* Honor graph vis params in awt graph visualizations
+* `axle.web.Table` and `HtmlFrom[Table[T]]`
+* Log scale
+* SVG[Matrix]
+* `BarChart` Variable width bars
+* Horizontal barchart
+* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
+* SVG[H] for BarChart hover (wrap with \<g\> to do getBBox)
+* Background box for `ScatterPlot` hover text?
+* Fix multi-color cube rendering
+* Bloom filter surface
+* Factor similarity between SVG and Draw?

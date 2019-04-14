@@ -3,13 +3,15 @@ package axle.game
 import cats.implicits._
 import spire.math.Rational
 import spire.random.Dist
+
+import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable
 import axle.stats.rationalProbabilityDist
 
 package object ttt {
 
-  implicit val evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational] =
-    new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational] {
+  implicit val evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable] =
+    new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable] {
 
       def probabilityDist: Dist[Rational] = rationalProbabilityDist
 
@@ -68,6 +70,9 @@ package object ttt {
           None
         }
       }
+
+      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
+        ConditionalProbabilityTable.probabilityWitness
 
     }
 
