@@ -9,6 +9,7 @@ import spire.algebra.Ring
 import spire.random.Generator
 import spire.random.Dist
 import spire.implicits.additiveGroupOps
+import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
 import axle.stats.Variable
@@ -62,17 +63,12 @@ package object game {
 
       val updateM = Map(fromState -> (fieldV.one - probabilityOfMove), toState -> probabilityOfMove)
       val updatingModel = prob.construct(Variable[S]("S"), updateM.keys, updateM)
+      // Note that updatingModel violates probability axioms
+
       val summed = prob.sum(stateModel)(updatingModel)
       import axle.algebra.tuple2Field
-      import cats.syntax.all._
       val mapped = prob.mapValues[S, (V, V), V](summed)({ case (v1, v2) => 
-        if( v1 === fieldV.zero) {
-          probabilityOfFromState * v2
-        } else if ( v2 === fieldV.zero) {
-          v1
-        } else {
-          v1 - (probabilityOfFromState * v2)
-        }
+        v1 + (probabilityOfFromState * v2)
       })
       (Some((fromState, move)), mapped)
     }) getOrElse {

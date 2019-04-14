@@ -45,21 +45,28 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* Factor moveFromRandomState into something less game-specific
-
 * Test for moveFromRandomState directly
   * Original {Sa -> 1/3, Sb -> 2/3}
   * Randomly select Sa
-  * Move from Sa are {Mac -> 1/4, Mab -> 3/4}
+  * Move from Sa are {Mac -> 1/4, Mab -> 1/4, Maa -> 1/2}
   * Randomly select Mac, which goes to Sc
   * Expected result: {Sa -> 1/4, Sb -> 2/3, Sc -> 1/12}
   * Show the work:
-    * {Sa -> 1/3, Sb -> 2/3} sum {Sa -> 1/4, Sc -> 1/4}
-    * = {Sa -> (1/3, 3/4), Sb -> (2/3, 0), Sc -> (0, 1/4)}
-    * Then map through
-      * (x, 0) => x           (eg Sb: (2/3, 0  ) => 2/3             = 2/3 )
-      * (0, y) => Sa . y      (eg Sc: (0  , 1/4) => 1/4 . 1/3       = 1/12)
-      * (x, y) => x - Sa . y  (eg Sa: (1/3, 1/4) => 1/3 - 1/3 . 1/4 = 1/4 )
+    * {Sa -> 1/3, Sb -> 2/3} sum {Sa -> -1/4, Sc -> 1/4}
+    * = {Sa -> (1/3, -1/4), Sb -> (2/3, 0), Sc -> (0, 1/4)}
+    * Then map through (x, y) => x + Sa . y
+      * Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
+      * Sb: (2/3,  0  ) => 2/3 + (1/3 .  0  ) = 2/3
+      * Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
+
+  * If instead we randomly select Mab (leading to Sb which already has non-zero probability)
+  * Expected result: {Sa -> 1/4, Sb -> 3/4}
+  * Show the work:
+    * {Sa -> 1/3, Sb -> 2/3} sum {Sa -> -1/4, Sb -> 1/4}
+    * = {Sa -> (1/3, -1/4), Sb -> (2/3, 1/4)}
+    * Then map through (x, y) => x + Sa . y
+      * Sa -> (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
+      * Sb -> (2/3,  1/4) => 2/3 + (1/3 . -1/4) = 3/4
 
 * GuessRiffleSpec: use moveFromRandomState
 
@@ -84,6 +91,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * plot entropy by turn # for each strategy
   * plot simulated score distribution for each strategy
 * LogisticMap back to 4k x 4k
+* Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph. Provide some axoms.
 * Release and publish site
 
 ## 0.6.0 (June 2019)
