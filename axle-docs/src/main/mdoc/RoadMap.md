@@ -49,7 +49,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Build upon basic PM[State, V] => PM[State, V] function
   * Will require a better rational probability distribution as probabilities become smaller
 
-* Are `sum` and `product` the right names?  Consider also `minus`, `divide`, `zero`, `one`, `empty`, `condition`
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Simpsons Paradox
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
@@ -57,6 +56,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
+* Are `sum` and `product` the right names?  Consider also `minus`, `divide`, `zero`, `one`, `empty`, `condition`
 * GuessRiffle.md
   * Walk through game
   * plot distribution of sum(entropy) for both strategies
@@ -170,6 +170,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Bias, Variance
 * Cohen's Kappa
 * Normalizer axioms
+* Fourier transformations
 
 ## Platform
 
