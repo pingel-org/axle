@@ -45,11 +45,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
+* Eliminate entropy consumption of `rng` side-effect
+  * eg: applyMove(Riffle())
+
 * GuessRiffle: Successively invest resources from initial state until all states have no movers (aka "are terminal")
   * Build upon basic PM[State, V] => PM[State, V] function
   * Will require a better rational probability distribution as probabilities become smaller
 
-* Are `sum` and `product` the right names?  Consider also `minus`, `divide`, `zero`, `one`, `empty`, `condition`
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 * Simpsons Paradox
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
@@ -57,6 +59,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
 * ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
+
+* Are `sum` and `product` the right names?  Consider also `minus`, `divide`, `zero`, `one`, `empty`, `condition`
 * GuessRiffle.md
   * Walk through game
   * plot distribution of sum(entropy) for both strategies
@@ -68,7 +72,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.6.0 (June 2019)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-* Eliminate entropy consumption of `rng` side-effect
 * … (aka "etc") as Stream.from(Int)
 * Fix logistic regression and move LogisticRegression.md back
 * Tests for `axle.ast`
