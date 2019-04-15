@@ -79,8 +79,8 @@ package object stats {
     pIn:  ProbabilityModel[C],
     pOut: ProbabilityModel[M]): M[T, N] = {
 
-    val pTrue: N = pIn.probabilityOf(conditionModel, true)
-    val pFalse: N = pIn.probabilityOf(conditionModel, false)
+    val pTrue: N = pIn.probabilityOf(conditionModel)(true)
+    val pFalse: N = pIn.probabilityOf(conditionModel)(false)
 
     pOut.mapValues(pOut.sum(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
   }
@@ -116,9 +116,9 @@ package object stats {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ[A, IndexedSeq](prob.values(model).map({ x => n2a(prob.probabilityOf(model, x)) * x }))
+    val μ: A = Σ[A, IndexedSeq](prob.values(model).map({ x => n2a(prob.probabilityOf(model)(x)) * x }))
 
-    val sum: A = Σ[A, IndexedSeq](prob.values(model) map { x => n2a(prob.probabilityOf(model, x)) * square(x - μ) })
+    val sum: A = Σ[A, IndexedSeq](prob.values(model) map { x => n2a(prob.probabilityOf(model)(x)) * square(x - μ) })
 
     NRoot[A].sqrt(sum)
   }
@@ -193,7 +193,7 @@ package object stats {
 
         val b2n = prob
           .values(model)
-          .map({ v => f(v) -> prob.probabilityOf(model, v) })
+          .map({ v => f(v) -> prob.probabilityOf(model)(v) })
           .groupBy(_._1)
           .mapValues(_.map(_._2).reduce(fieldV.plus))
 
@@ -204,10 +204,10 @@ package object stats {
 
         val foo = prob.values(model)
           .flatMap(a => {
-            val p = prob.probabilityOf(model, a)
+            val p = prob.probabilityOf(model)(a)
             val subDistribution = f(a)
             prob.values(subDistribution).map(b => {
-              b -> (fieldV.times(p, prob.probabilityOf(subDistribution, b)))
+              b -> (fieldV.times(p, prob.probabilityOf(subDistribution)(b)))
             })
           })
 

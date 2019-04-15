@@ -30,13 +30,13 @@ trait ProbabilityModel[M[_, _]] {
 
   def empty[A, V](variable: Variable[A])(implicit ringV: Ring[V]): M[A, V]
 
-  def probabilityOf[A, V](model: M[A, V], a: A)(implicit fieldV: Field[V]): V
+  def probabilityOf[A, V](model: M[A, V])(a: A)(implicit fieldV: Field[V]): V
 
-  def probabilityOfExpression[A, V](model: M[A, V], predicate: A => Boolean)(implicit fieldV: Field[V]): V
+  def probabilityOfExpression[A, V](model: M[A, V])(predicate: A => Boolean)(implicit fieldV: Field[V]): V
 
-  def conditionExpression[A, B, V](model: M[A, V], predicate: A => Boolean, screen: A => B)(implicit fieldV: Field[V]): M[B, V]
+  def filter[A, V](model: M[A, V])(predicate: A => Boolean)(implicit fieldV: Field[V]): M[A, V]
 
-  def observe[A, V](model: M[A, V], gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
+  def observe[A, V](model: M[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
 
 }
 

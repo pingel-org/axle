@@ -224,13 +224,15 @@ final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
 
   def values: IndexedSeq[A] = ev.values(model)
   
-  def P(a: A)(implicit fieldV: Field[V]): V = ev.probabilityOf(model, a)
+  def P(a: A)(implicit fieldV: Field[V]): V = ev.probabilityOf(model)(a)
   
-  def P(predicate: A => Boolean)(implicit fieldV: Field[V]): V = ev.probabilityOfExpression(model, predicate)
+  def P(predicate: A => Boolean)(implicit fieldV: Field[V]): V = ev.probabilityOfExpression(model)(predicate)
+
+  def filter(predicate: A => Boolean)(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
   
-  def |[B](predicate: A => Boolean, screen: A => B)(implicit fieldV: Field[V]): M[B, V] = ev.conditionExpression(model, predicate, screen)
+  def |(predicate: A => Boolean)(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
   
-  def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = ev.observe(model, gen)
+  def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = ev.observe(model)(gen)
 
 }
 final class DirectedGraphOps[DG, V, E](val dg: DG)(

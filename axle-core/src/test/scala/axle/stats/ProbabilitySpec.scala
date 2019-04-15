@@ -36,9 +36,11 @@ class ProbabilitySpec extends FunSuite with Matchers {
       { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) || (coins._2 === 'HEAD)}
     ) should be(Rational(3, 4))
 
-    val coin2Conditioned = bothCoinsModel.|(
-      { coins: (Symbol, Symbol) => coins._2 === 'TAIL },
-      { coins: (Symbol, Symbol) => coins._1})
+    import cats.syntax.all._
+    import axle.stats._
+    val coin2Conditioned = (bothCoinsModel
+      .filter({ coins: (Symbol, Symbol) => coins._2 === 'TAIL }): CPTR[(Symbol, Symbol)])
+      .map({ coins: (Symbol, Symbol) => coins._1})
 
     coin2Conditioned.P('HEAD) should be(Rational(1, 2))
   

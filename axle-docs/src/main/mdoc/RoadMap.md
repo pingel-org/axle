@@ -45,53 +45,27 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* Test for moveFromRandomState directly
-  * Original {Sa -> 1/3, Sb -> 2/3}
-  * Randomly select Sa
-  * Move from Sa are {Mac -> 1/4, Mab -> 1/4, Maa -> 1/2}
-  * Randomly select Mac, which goes to Sc
-  * Expected result: {Sa -> 1/4, Sb -> 2/3, Sc -> 1/12}
-  * Show the work:
-    * {Sa -> 1/3, Sb -> 2/3} sum {Sa -> -1/4, Sc -> 1/4}
-    * = {Sa -> (1/3, -1/4), Sb -> (2/3, 0), Sc -> (0, 1/4)}
-    * Then map through (x, y) => x + Sa . y
-      * Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
-      * Sb: (2/3,  0  ) => 2/3 + (1/3 .  0  ) = 2/3
-      * Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
-
-  * If instead we randomly select Mab (leading to Sb which already has non-zero probability)
-  * Expected result: {Sa -> 1/4, Sb -> 3/4}
-  * Show the work:
-    * {Sa -> 1/3, Sb -> 2/3} sum {Sa -> -1/4, Sb -> 1/4}
-    * = {Sa -> (1/3, -1/4), Sb -> (2/3, 1/4)}
-    * Then map through (x, y) => x + Sa . y
-      * Sa -> (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
-      * Sb -> (2/3,  1/4) => 2/3 + (1/3 . -1/4) = 3/4
+* MoveFromRandomStateSpec
+* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 
 * GuessRiffleSpec: use moveFromRandomState
-
-* `ProbabilityModel.conditionExpression` is really `filter` then `map`?
 * Eliminate entropy consumption of `rng` side-effect
   * eg: applyMove(Riffle())
   * Perhaps "chance" should be its own player
   * Perhaps each bit consumed during Riffle() is its own move
   * In any case, Riffles() need to be distinct as moves if they observe different entropy
-
-* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
-* SimpsonsParadox.md
-
-* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
-* ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
+  * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
+* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
+* SimpsonsParadox.md
 * GuessRiffle.md
   * Walk through game
   * plot distribution of sum(entropy) for both strategies
   * plot entropy by turn # for each strategy
   * plot simulated score distribution for each strategy
 * LogisticMap back to 4k x 4k
-* Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph. Provide some axoms.
 * Release and publish site
 
 ## 0.6.0 (June 2019)
@@ -101,8 +75,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix logistic regression and move LogisticRegression.md back
 * Is `ConditionalProbabilityTable.variable` necessary?
 * Are `ProbabilityModel`'s `sum` and `product` the right names? Consider also `minus`, `divide`, `zero`, `one`, `empty`
-* Improve axle.stats.rationalProbabilityDist as probabilities become smaller
-* Test axle.algebra.tuple2Field
+* Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
+* Test `axle.algebra.tuple2Field`
+* Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
+  * Brownian motion, Random walk, Ito process, ...
+  * Provide some axoms
+    * no outgoing with path in from non-zero mass monotonically increases
+    * no incoming with path out monotonically decreases
+  * possibly provide a version for acyclic graphs
 
 ## 0.7.x (Summer 2019)
 
