@@ -60,7 +60,7 @@ object DataView {
 
       def keys(d: M[X, Y]): Traversable[X] = prob.values(d)
 
-      def valueOf(d: M[X, Y], x: X): Y = prob.probabilityOf(d, x)
+      def valueOf(d: M[X, Y], x: X): Y = prob.probabilityOf(d)(x)
 
       def yRange(d: M[X, Y]): (Y, Y) = {
 

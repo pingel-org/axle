@@ -87,7 +87,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
         }
       }))
 
-    def g(c: CLASS): N = probTally0.probabilityOf(C, c) * f(c)
+    def g(c: CLASS): N = probTally0.probabilityOf(C)(c) * f(c)
 
     argmax(C.values, g).get // TODO: will be None if C.values is empty
   }

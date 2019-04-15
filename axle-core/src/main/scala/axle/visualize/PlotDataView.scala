@@ -148,7 +148,7 @@ object PlotDataView {
       def xsOf(model: M[X, Y]): Traversable[X] = prob.values(model)
 
       def valueOf(model: M[X, Y], x: X): Y =
-        prob.probabilityOf(model, x)
+        prob.probabilityOf(model)(x)
 
       def xRange(data: Seq[(S, M[X, Y])], include: Option[X]): (X, X) = {
 

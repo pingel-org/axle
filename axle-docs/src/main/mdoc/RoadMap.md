@@ -45,21 +45,27 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
+* MoveFromRandomStateSpec
+* GuessRiffleSpec: use moveFromRandomState
+* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
+
 * Eliminate entropy consumption of `rng` side-effect
   * eg: applyMove(Riffle())
+  * Perhaps "chance" should be its own player
+  * Perhaps each bit consumed during Riffle() is its own move
+  * In any case, Riffles() need to be distinct as moves if they observe different entropy
 
 * GuessRiffle: Successively invest resources from initial state until all states have no movers (aka "are terminal")
   * Build upon basic PM[State, V] => PM[State, V] function
   * Will require a better rational probability distribution as probabilities become smaller
 
-* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
-* Simpsons Paradox
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
-* ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
+  * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
-* Are `sum` and `product` the right names?  Consider also `minus`, `divide`, `zero`, `one`, `empty`, `condition`
+* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
+* SimpsonsParadox.md
 * GuessRiffle.md
   * Walk through game
   * plot distribution of sum(entropy) for both strategies
@@ -73,8 +79,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * … (aka "etc") as Stream.from(Int)
 * Fix logistic regression and move LogisticRegression.md back
-* Tests for `axle.ast`
 * Is `ConditionalProbabilityTable.variable` necessary?
+* Are `ProbabilityModel`'s `sum` and `product` the right names? Consider also `minus`, `divide`, `zero`, `one`, `empty`
+* Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
+* Test `axle.algebra.tuple2Field`
+* Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
+  * Brownian motion, Random walk, Ito process, ...
+  * Provide some axoms
+    * no outgoing with path in from non-zero mass monotonically increases
+    * no incoming with path out monotonically decreases
+  * possibly provide a version for acyclic graphs
 
 ## 0.7.x (Summer 2019)
 
@@ -91,6 +105,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Kind projector instead of type lambdas
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
 
+* Tests for `axle.ast`
 * Demo Mandelbrot with Rational
 * Friend of Spire
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
