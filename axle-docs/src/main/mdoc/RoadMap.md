@@ -45,8 +45,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* MoveFromRandomStateSpec
-* GuessRiffleSpec: use moveFromRandomState
 * Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
 
 * Eliminate entropy consumption of `rng` side-effect
@@ -55,9 +53,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Perhaps each bit consumed during Riffle() is its own move
   * In any case, Riffles() need to be distinct as moves if they observe different entropy
 
-* GuessRiffle: Successively invest resources from initial state until all states have no movers (aka "are terminal")
-  * Build upon basic PM[State, V] => PM[State, V] function
-  * Will require a better rational probability distribution as probabilities become smaller
+* GuessRiffleSpec: use moveFromRandomState
 
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md

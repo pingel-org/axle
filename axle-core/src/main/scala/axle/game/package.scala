@@ -8,7 +8,6 @@ import spire.algebra.Field
 import spire.algebra.Ring
 import spire.random.Generator
 import spire.random.Dist
-import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
@@ -66,7 +65,7 @@ package object game {
       if( fromState === toState ) {
         (Some((fromState, move)), stateModel)
       } else {
-        val updateM = Map(fromState -> (fieldV.zero - probabilityOfMove), toState -> probabilityOfMove)
+        val updateM = Map(fromState -> fieldV.negate(probabilityOfMove), toState -> probabilityOfMove)
         val updatingModel = prob.construct(Variable[S]("S"), updateM.keys, updateM)
         // Note that updatingModel violates probability axioms
         val summed = prob.sum(stateModel)(updatingModel)
