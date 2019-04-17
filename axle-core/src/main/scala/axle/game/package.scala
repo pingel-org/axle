@@ -66,7 +66,7 @@ package object game {
       if( fromState === toState ) {
         (Some((fromState, move)), stateModel)
       } else {
-        val updateM = Map(fromState -> (fieldV.one - probabilityOfMove), toState -> probabilityOfMove)
+        val updateM = Map(fromState -> (fieldV.zero - probabilityOfMove), toState -> probabilityOfMove)
         val updatingModel = prob.construct(Variable[S]("S"), updateM.keys, updateM)
         // Note that updatingModel violates probability axioms
         val summed = prob.sum(stateModel)(updatingModel)
