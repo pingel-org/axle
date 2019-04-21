@@ -32,4 +32,18 @@ object CBit {
       CBit1
     }
 
+  // Four operations on 1 bit
+  def identity(cbit: CBit): CBit = cbit
+  def negate(cbit: CBit): CBit = CBit(cbit.a.negate, cbit.b.negate)
+  def constant0(cbit: CBit): CBit = CBit0
+  def constant1(cbit: CBit): CBit = CBit1
+
+  // CNOT
+  def cnot(control: CBit, target: CBit): (CBit, CBit) =
+    if(control === CBit1) {
+      (control, target.negate)
+    } else {
+      (control, target)
+    }
+
 }

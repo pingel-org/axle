@@ -46,8 +46,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
 * CBitSpec
+* Matrix versions
+* Vector versions
+* CCNot
 * QBitSpec
 * "X" as "CNOT"
+* Property test reversibility (own inverse)
+* Typeclass for "negate" (etc), Binary, CBit
+* Typeclass for unindex
 * Vis
 * Hadamard
 * DeutschOracle
