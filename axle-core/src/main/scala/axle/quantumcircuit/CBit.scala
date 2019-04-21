@@ -9,7 +9,7 @@ case class CBit(a: Binary, b: Binary) {
 
   def negate: CBit = CBit(a.negate, b.negate)
 
-  def reverseIndex: Vector[Binary] = Vector(a, b)
+  def unindex: Vector[Binary] = Vector(a, b)
 
 }
 

@@ -7,10 +7,10 @@ case class DiracVector(s: String, parser: String => Vector[Binary]) {
 
   def cbits: Vector[CBit] = parser(s).map(CBit.fromBinary)
 
-  def reverseIndex: Vector[Binary] =
+  def unindex: Vector[Binary] =
     parser(s)
      .map(CBit.fromBinary)
-     .map(_.reverseIndex)
+     .map(_.unindex)
      .reduce({ (xs, ys) => tensorProduct(xs, ys) })
 
 }

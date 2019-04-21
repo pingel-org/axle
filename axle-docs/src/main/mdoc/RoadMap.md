@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (April 2019)
+## 0.5.0 (May 2019)
 
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
@@ -45,32 +45,39 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* Qubit, Hadamard, CNot, etc (quantum "is constant" circuit)
+* CBitSpec
+* QBitSpec
+* "X" as "CNOT"
+* Vis
+* Hadamard
+* DeutschOracle
 
-* Eliminate entropy consumption of `rng` side-effect
-  * eg: applyMove(Riffle())
-  * Perhaps "chance" should be its own player
-  * Perhaps each bit consumed during Riffle() is its own move
-  * In any case, Riffles() need to be distinct as moves if they observe different entropy
-
-* GuessRiffleSpec: use moveFromRandomState
+* Eliminate entropy consumption of `rng` side-effect (eg applyMove(Riffle()))
+  * "Chance" should be its own player
+  * Each bit consumed during Riffle() is its own move
 
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
-* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
+* LogisticMap back to 4k x 4k
+* Release and publish site
+
+## 0.5.1 (June 2019)
+
+* GuessRiffleSpec: use `moveFromRandomState`
+* `Monad[ProbabilityModel]` -- factor `flatMap` in terms of `product`
 * SimpsonsParadox.md
 * GuessRiffle.md
   * Walk through game
   * plot distribution of sum(entropy) for both strategies
   * plot entropy by turn # for each strategy
   * plot simulated score distribution for each strategy
-* LogisticMap back to 4k x 4k
-* Release and publish site
+* "You split, I choose" as game
+* Gerrymandering sensitivity
 
-## 0.6.0 (June 2019)
+## 0.6.0 (July 2019)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * … (aka "etc") as Stream.from(Int)
@@ -80,7 +87,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
 * Test `axle.algebra.tuple2Field`
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
-  * Brownian motion, Random walk, Ito process, ...
+  * Compare to Brownian motion, Random walk, Ito process, ...
   * Provide some axoms
     * no outgoing with path in from non-zero mass monotonically increases
     * no incoming with path out monotonically decreases
