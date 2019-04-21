@@ -14,6 +14,12 @@ import spire.math.Real.apply
 
 package object algebra {
 
+  def tensorProduct[T](xs: Vector[T], ys: Vector[T])(implicit multT: MultiplicativeSemigroup[T]): Vector[T] = 
+    for {
+      x <- xs
+      y <- ys
+    } yield multT.times(x, y)
+
   implicit def catsifyAdditiveGroup[T](ag: _root_.algebra.ring.AdditiveGroup[T]): cats.kernel.Group[T] =
     new cats.kernel.Group[T] {
       def inverse(a: T): T = ag.negate(a)
