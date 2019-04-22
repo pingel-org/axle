@@ -42,12 +42,32 @@ class QBitSpec extends FunSuite with Matchers {
     distribution.P(|("11").>.unindex) should be(Real(1 / 4d))
   }
 
-  test("1-bit functions") {
+  import axle.quantumcircuit.QBit._
+  import spire.algebra.Field
+  implicit val fieldReal: Field[Real] = new spire.math.RealAlgebra()
+  val QBit0 = constant0[Real]
+  val QBit1 = constant1[Real]
 
-    // All the 1-bit functions (id, negate, constant-0, and constant-1) work the same
-    // TODO
+  test("functions of 1 QBit: identity") {
+    identity(QBit0) should be(QBit0)
+    identity(QBit1) should be(QBit1)
   }
 
+  // test("functions of 1 QBit: negate") {
+  //   negate(QBit0) should be(QBit1)
+  //   negate(QBit1) should be(QBit0)
+  // }
+
+  test("functions of 1 QBit: constant0") {
+    constant0(QBit0) should be(QBit0)
+    constant0(QBit1) should be(QBit0)
+  }
+
+  test("functions of 1 QBit: constant1") {
+    constant1(QBit0) should be(QBit1)
+    constant1(QBit1) should be(QBit1)
+  }
+  
   test("CNOT") {
 
     // CNOT still works, too

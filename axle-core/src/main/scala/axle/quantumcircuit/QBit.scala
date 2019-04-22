@@ -2,7 +2,6 @@ package axle.quantumcircuit
 
 import spire.math.Complex
 import spire.algebra.Field
-// import spire.implicits.multiplicativeSemigroupOps
 
 import axle.algebra.Binary
 import axle.algebra.{B0, B1}
@@ -27,4 +26,36 @@ case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
     ConditionalProbabilityTable.apply(m, Variable("Q"))
   }
     
+}
+
+object QBit {
+
+  // Two operations on no bits
+
+  def constant0[T](implicit fieldT: Field[T]): QBit[T] =
+    QBit[T](Complex(fieldT.one), Complex(fieldT.zero))
+
+  def constant1[T](implicit fieldT: Field[T]): QBit[T] =
+    QBit[T](Complex(fieldT.zero), Complex(fieldT.one))
+
+  // Four operations on 1 bit
+  def identity[T](qbit: QBit[T]): QBit[T] = qbit
+
+  def negate[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
+    QBit[T](- qbit.a, - qbit.b)
+
+  def constant0[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
+    QBit[T](Complex(fieldT.one), Complex(fieldT.zero))
+
+  def constant1[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
+    QBit[T](Complex(fieldT.zero), Complex(fieldT.one))
+
+  // CNOT
+  // def cnot(control: CBit, target: CBit): (CBit, CBit) =
+  //   if(control === CBit1) {
+  //     (control, target.negate)
+  //   } else {
+  //     (control, target)
+  //   }
+
 }
