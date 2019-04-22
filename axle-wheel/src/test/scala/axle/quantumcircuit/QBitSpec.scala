@@ -53,10 +53,10 @@ class QBitSpec extends FunSuite with Matchers {
     identity(QBit1) should be(QBit1)
   }
 
-  // test("functions of 1 QBit: negate") {
-  //   negate(QBit0) should be(QBit1)
-  //   negate(QBit1) should be(QBit0)
-  // }
+  test("functions of 1 QBit: negate") {
+    negate(QBit0) should be(QBit1)
+    negate(QBit1) should be(QBit0)
+  }
 
   test("functions of 1 QBit: constant0") {
     constant0(QBit0) should be(QBit0)
@@ -70,8 +70,10 @@ class QBitSpec extends FunSuite with Matchers {
   
   test("CNOT") {
 
-    // CNOT still works, too
-    // TODO
+    cnot(QBit0, QBit0) should be((QBit0, QBit0))
+    cnot(QBit0, QBit1) should be((QBit0, QBit1))
+    cnot(QBit1, QBit0) should be((QBit1, QBit1))
+    cnot(QBit1, QBit1) should be((QBit1, QBit0))
   }
 
 }
