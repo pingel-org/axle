@@ -45,18 +45,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* CBitSpec
+* QBitSpec
+* Hadamard
+* DeutschOracle
 * Matrix versions
 * Vector versions
 * CCNot
-* QBitSpec
 * "X" as "CNOT"
 * Property test reversibility (own inverse)
 * Typeclass for "negate" (etc), Binary, CBit
 * Typeclass for unindex
 * Vis
-* Hadamard
-* DeutschOracle
 
 * Eliminate entropy consumption of `rng` side-effect (eg applyMove(Riffle()))
   * "Chance" should be its own player
