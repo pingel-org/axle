@@ -48,7 +48,7 @@ object QBit {
   def identity[T](qbit: QBit[T]): QBit[T] = qbit
 
   def negate[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
-    QBit[T](- qbit.a, - qbit.b)
+    QBit[T](qbit.b, qbit.a)
 
   def constant0[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
     QBit[T](Complex(fieldT.one), Complex(fieldT.zero))
