@@ -45,8 +45,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* QBitSpec
-* Hadamard
 * DeutschOracle
 * Matrix versions
 * Vector versions

@@ -64,4 +64,25 @@ object QBit {
       (control, target)
     }
 
+  import spire.math._
+  //import spire.implicits.multiplicativeSemigroupOps
+  import spire.implicits._
+  import spire.algebra._
+
+  // Hadamard
+  //
+  // can be implemented with a 2x2 matrix
+  // [1/sqrt(2) 1/sqrt(2); 1/sqrt(2) -1/sqrt(2)]
+
+  def hadamard[T](qbit: QBit[T])(implicit fieldT: Field[T], nrootT: NRoot[T]): QBit[T] = {
+
+    val two = fieldT.one + fieldT.one
+    val sqrtHalf = Complex[T](fieldT.one / sqrt(two), fieldT.zero)
+
+    QBit(
+     sqrtHalf * qbit.a + sqrtHalf * qbit.b,
+     sqrtHalf * qbit.a - sqrtHalf * qbit.b)
+  }
+
+
 }
