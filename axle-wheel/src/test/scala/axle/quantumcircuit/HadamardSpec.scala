@@ -17,10 +17,10 @@ class HadamardSpec extends FunSuite with Matchers {
     // Takes a 1 or 0 and puts them into exactly equal superposition
 
     // H|0> = (1/sqrt(2)  1/sqrt(2))
-    hadamard[Real](constant0[Real]) should be(QBit[Real](sqrtHalf, sqrtHalf))
+    hadamard(constant0[Real]) should be(QBit[Real](sqrtHalf, sqrtHalf))
 
     // H|1> = (1/sqrt(2) -1/sqrt(2))
-    hadamard[Real](constant1[Real]) should be(QBit[Real](sqrtHalf, -sqrtHalf))
+    hadamard(constant1[Real]) should be(QBit[Real](sqrtHalf, -sqrtHalf))
   }
 
   test("Hadamard is its own inverse") {
