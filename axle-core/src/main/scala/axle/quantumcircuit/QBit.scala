@@ -1,10 +1,12 @@
 package axle.quantumcircuit
 
 import cats.kernel.Eq
-import cats.syntax.all._
+//import cats.syntax.all._
 
-import spire.math.Complex
+import spire.math._
+// import spire.implicits._
 import spire.algebra.Field
+import spire.algebra.NRoot
 
 import axle.algebra.Binary
 import axle.algebra.{B0, B1}
@@ -56,18 +58,18 @@ object QBit {
   def constant1[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
     QBit[T](Complex(fieldT.zero), Complex(fieldT.one))
 
+  def X[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
+    negate(qbit)
+
   // CNOT
-  def cnot[T](control: QBit[T], target: QBit[T])(implicit fieldT: Field[T]): (QBit[T], QBit[T]) =
+  def cnot[T](control: QBit[T], target: QBit[T])(implicit fieldT: Field[T]): (QBit[T], QBit[T]) = {
+    import cats.syntax.all._
     if(control === constant1[T]) {
       (control, negate(target))
     } else {
       (control, target)
     }
-
-  import spire.math._
-  //import spire.implicits.multiplicativeSemigroupOps
-  import spire.implicits._
-  import spire.algebra._
+  }
 
   // Hadamard
   //
@@ -75,6 +77,8 @@ object QBit {
   // [1/sqrt(2) 1/sqrt(2); 1/sqrt(2) -1/sqrt(2)]
 
   def hadamard[T](qbit: QBit[T])(implicit fieldT: Field[T], nrootT: NRoot[T]): QBit[T] = {
+
+    import spire.implicits._
 
     val two = fieldT.one + fieldT.one
     val sqrtHalf = Complex[T](fieldT.one / sqrt(two), fieldT.zero)
@@ -84,5 +88,51 @@ object QBit {
      sqrtHalf * qbit.a - sqrtHalf * qbit.b)
   }
 
+  def H[T](qbit: QBit[T])(implicit fieldT: Field[T], nrootT: NRoot[T]): QBit[T] =
+    hadamard(qbit)
+
+ /**
+  * Encodings of 1-Qbit functions for Deutsch Oracle
+  */
+
+  def identityForDeutsch[T: Field](x: QBit[T], spare: QBit[T]) =
+    cnot(x, spare)
+
+  def constant0ForDeutsch[T](x: QBit[T], spare: QBit[T]) =
+    (x, spare)
+
+  def negateForDeutsch[T: Field](x: QBit[T], spare: QBit[T]) = {
+    val intermediate = cnot(x, spare)
+    (intermediate._1, X(intermediate._2))
+  }
+
+  def constant1ForDeutsch[T: Field](x: QBit[T], spare: QBit[T]) =
+    (x, X(spare))
+
+  /**
+   * for `f`
+   * the `input` qbit is the most significant (left hand side or first) bit
+   * the second qbit is the 'spare'
+   */
+
+  def isConstantDeutschOracle[T: Field: NRoot: Eq](
+    f: (QBit[T], QBit[T]) => (QBit[T], QBit[T])
+  ): Boolean = {
+
+    val unprocessedOutput = f(H(X(constant0[T])), H(X(constant0[T])))
+
+    val output = (H(unprocessedOutput._1), H(unprocessedOutput._2))
+
+    // |11> => f is constant
+    // |01> => f is variable
+
+    val constantPattern = |("11").>.unindex.map({ b => b match {
+      case B0 => Complex(Field[T].zero)
+      case B1 => Complex(Field[T].one)
+    }})
+
+    import cats.implicits._
+    (output._1.unindex ++ output._2.unindex) === constantPattern
+  }
 
 }
