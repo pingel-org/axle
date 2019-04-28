@@ -28,6 +28,7 @@ import axle.web.svgFrame
 import axle.visualize.angleDouble
 import axle.visualize.Color.black
 import axle.awt.Draw
+import axle.visualize.GraphVertexLayout
 import axle.visualize.DirectedGraphVisualization
 import axle.visualize.UndirectedGraphVisualization
 
@@ -455,38 +456,45 @@ package object jung {
   implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
   implicit val mmDouble: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
 
-  implicit def svgJungDirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] =
-    new SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] {
+  implicit def svgJungDirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] =
+    new SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] {
 
-      def svg(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]): NodeSeq = {
+      def svg(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]): NodeSeq = {
 
         import vis._
 
-        val layout = new FRLayout(dg)
-        layout.setSize(new Dimension(width, height))
+        val layout: GraphVertexLayout[Double, VP] =
+          vis.layoutOpt.getOrElse {
+             val fr = new FRLayout(dg)
+             fr.setSize(new Dimension(width, height))
+             new GraphVertexLayout[Double, VP] {
+               def x(v: VP): Double = fr.getX(v)
+               def y(v: VP): Double = fr.getY(v)
+             }
+          }
 
         val lines: List[Node] = dg.getEdges.asScala.map { edge =>
-          <line x1={ s"${layout.getX(dg.getSource(edge))}" } y1={ s"${layout.getY(dg.getSource(edge))}" } x2={ s"${layout.getX(dg.getDest(edge))}" } y2={ s"${layout.getY(dg.getDest(edge))}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
+          <line x1={ s"${layout.x(dg.getSource(edge))}" } y1={ s"${layout.y(dg.getSource(edge))}" } x2={ s"${layout.x(dg.getDest(edge))}" } y2={ s"${layout.y(dg.getDest(edge))}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
         } toList
 
         val arrows: List[Node] = dg.getEdges.asScala.map { edge =>
-          val height = layout.getY(dg.getSource(edge)) - layout.getY(dg.getDest(edge))
-          val width = layout.getX(dg.getDest(edge)) - layout.getX(dg.getSource(edge))
+          val height = layout.y(dg.getSource(edge)) - layout.y(dg.getDest(edge))
+          val width = layout.x(dg.getDest(edge)) - layout.x(dg.getSource(edge))
           val svgRotationAngle = 180d - (arcTangent2(height, width) in angleDouble.degree).magnitude
-          <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.getX(dg.getDest(edge))},${layout.getY(dg.getDest(edge))}) rotate($svgRotationAngle)" }/>
+          <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.x(dg.getDest(edge))},${layout.y(dg.getDest(edge))}) rotate($svgRotationAngle)" }/>
         } toList
 
         val circles: List[Node] = dg.getVertices.asScala.map { vertex =>
-          <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
+          <circle cx={ s"${layout.x(vertex)}" } cy={ s"${layout.y(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
         } toList
 
         val labels: List[Node] = dg.getVertices.asScala.map { vertex =>
           val node = HtmlFrom[VP].toHtml(vertex)
           node match {
             case scala.xml.Text(text) =>
-              <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
+              <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.x(vertex)}" } y={ s"${layout.y(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
             case _ =>
-              <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
+              <foreignObject x={ s"${layout.x(vertex)}" } y={ s"${layout.y(vertex)}" } width="100%" height="100%">
                 <html xmlns="http://www.w3.org/1999/xhtml">
                   { node }
                 </html>
@@ -496,8 +504,8 @@ package object jung {
 
         val edgeLabels: List[Node] = dg.getEdges.asScala.map { edge =>
           val node = HtmlFrom[EP].toHtml(edge)
-          val cx = (layout.getX(dg.getDest(edge)) - layout.getX(dg.getSource(edge))) * 0.6 + layout.getX(dg.getSource(edge))
-          val cy = (layout.getY(dg.getDest(edge)) - layout.getY(dg.getSource(edge))) * 0.6 + layout.getY(dg.getSource(edge))
+          val cx = (layout.x(dg.getDest(edge)) - layout.x(dg.getSource(edge))) * 0.6 + layout.x(dg.getSource(edge))
+          val cy = (layout.y(dg.getDest(edge)) - layout.y(dg.getSource(edge))) * 0.6 + layout.y(dg.getSource(edge))
           node match {
             case Text(text) =>
               <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
@@ -630,8 +638,8 @@ package object jung {
 
     }
 
-  implicit def drawJungDirectedSparseGraphVisualization[VP: HtmlFrom, EP: Show]: Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] =
-    new Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]] {
+  implicit def drawJungDirectedSparseGraphVisualization[VP: HtmlFrom, EP: Show]: Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] =
+    new Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] {
 
       import java.awt.BasicStroke
       import java.awt.Color
@@ -649,7 +657,7 @@ package object jung {
 
       import com.google.common.base.{ Function => GoogleFunction }
 
-      def component(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP]]) = {
+      def component(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]) = {
         // see
         // http://www.grotto-networking.com/JUNG/
         // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf

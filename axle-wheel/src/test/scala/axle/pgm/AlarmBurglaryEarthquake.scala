@@ -96,7 +96,7 @@ class ABE extends FunSuite with Matchers {
 
     val pngGName = "gnGraph.png"
     val svgGName = "gnGraph.svg"
-    val graphVis = DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
+    val graphVis = DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge], BayesianNetworkNode[Boolean, Rational] ](
       bn.graph, 200, 200, 10)
     png(graphVis, pngGName)
     svg(graphVis, svgGName)

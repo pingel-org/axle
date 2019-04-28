@@ -5,11 +5,11 @@ import scala.xml.NodeSeq.seqToNodeSeq
 import scala.annotation.implicitNotFound
 
 import cats.Show
-
 import cats.implicits._
 
 import spire.algebra._
 
+import axle.pgm.BayesianNetworkNode
 import axle.visualize.BarChart
 import axle.visualize.BarChartGrouped
 import axle.visualize.BarChartGroupedView
@@ -562,11 +562,11 @@ object SVG {
 
   implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
     implicit
-    svgDGVis: SVG[DirectedGraphVisualization[DG]]): SVG[BayesianNetworkVisualization[T, N, DG]] = {
+    svgDGVis: SVG[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N]]]): SVG[BayesianNetworkVisualization[T, N, DG]] = {
     new SVG[BayesianNetworkVisualization[T, N, DG]] {
       def svg(vis: BayesianNetworkVisualization[T, N, DG]): NodeSeq = {
         import vis._
-        val subVis = DirectedGraphVisualization(vis.bn.graph, width, height, border)
+        val subVis = DirectedGraphVisualization[DG, BayesianNetworkNode[T, N]](vis.bn.graph, width, height, border)
         svgDGVis.svg(subVis)
       }
     }
