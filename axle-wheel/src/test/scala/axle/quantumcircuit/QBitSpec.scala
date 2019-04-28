@@ -2,7 +2,6 @@ package axle.quantumcircuit
 
 import spire.math._
 
-import axle.algebra._
 import axle.syntax.probabilitymodel._
 
 import org.scalatest._
@@ -17,8 +16,8 @@ class QBitSpec extends FunSuite with Matchers {
 
     val distribution = qEven.probabilityModel
 
-    distribution.P(B0) should be(Real(1 / 2d))
-    distribution.P(B1) should be(Real(1 / 2d))
+    distribution.P(CBit0) should be(Real(1 / 2d))
+    distribution.P(CBit1) should be(Real(1 / 2d))
   }
 
   test("multiple QBit distribution") {

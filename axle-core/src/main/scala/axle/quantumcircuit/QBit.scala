@@ -8,7 +8,6 @@ import spire.math._
 import spire.algebra.Field
 import spire.algebra.NRoot
 
-import axle.algebra.Binary
 import axle.algebra.{B0, B1}
 import axle.stats.Variable
 import axle.stats.ConditionalProbabilityTable
@@ -19,14 +18,14 @@ case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
 
   def unindex: Vector[Complex[T]] = Vector(a, b)
 
-  // A QBit (a b) collapses to an actual value of 0 or 1
-  //  0 with probability a^2
-  //  1 with probability b^2
+  // A QBit (a b) collapses to
+  // |0> with probability a^2
+  // |1> with probability b^2
 
-  def probabilityModel: ConditionalProbabilityTable[Binary, T] = {
-    val m = Map[Binary, T](
-      B0 -> (a * a).real,
-      B1 -> (b * b).real
+  def probabilityModel: ConditionalProbabilityTable[CBit, T] = {
+    val m = Map[CBit, T](
+      CBit0 -> (a * a).real,
+      CBit1 -> (b * b).real
     )
     ConditionalProbabilityTable.apply(m, Variable("Q"))
   }
