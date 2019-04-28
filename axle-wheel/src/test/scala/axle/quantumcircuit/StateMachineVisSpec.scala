@@ -54,11 +54,24 @@ class StateMachineVisSpec extends FunSuite with Matchers {
     import cats.Show
     implicit val showEdge: Show[Edge] = _.label
 
-    val vis = DirectedGraphVisualization(dg, 800, 800, 10)
+    val width = 800
+    val height = 800
+    val border = 100
+
+    val centerX = (width - 2*border) / 2 + border
+    val centerY = (height - 2*border) / 2 + border
+    val radius = (min(width, height) - 2*border) / 2
+
+    val layout = new GraphVertexLayout[Double, QBit[Real]] {
+      def x(q: QBit[Real]): Double = centerX + radius*(q.a.real.toDouble)
+      def y(q: QBit[Real]): Double = height - (centerY + radius*(q.b.real.toDouble))
+    }
+
+    val vis = DirectedGraphVisualization[DirectedSparseGraph[QBit[Real],Edge], QBit[Real]](
+      dg, width, height, border, layoutOpt = Some(layout))
 
     val svgName = "qc_hx_state_machine.svg"
-    axle.jung.svgJungDirectedGraphVisualization[QBit[Real], Edge]
-    SVG[DirectedGraphVisualization[DirectedSparseGraph[QBit[Real],Edge]]]
+    // SVG[DirectedGraphVisualization[DirectedSparseGraph[QBit[Real],Edge], QBit[Real]] ]
     svg(vis, svgName)
 
     new java.io.File(svgName).exists should be(true)
