@@ -15,6 +15,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Implicitly conjurable `cats.Monad` from a `ProbabilityModel`, which supports for comprehensions via cats syntax support
   * `Variable` instead of `RandomVariable`
   * remove `Bayes`
+* `axle.quantumcircuit` package for modelling computing with quantum circuits
 * Replace `axle.agebra.Zero` with `spire.algebra.AdditiveMonoid.zero`
 * Remove `axle-spark` (Spark "spoke") for now
 * Move `axle.ml.distance` to `axle.algebra.distance`
@@ -45,15 +46,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* DeutschOracle
-* Matrix versions
-* Vector versions
-* CCNot
-* "X" as "CNOT"
-* Property test reversibility (own inverse)
-* Typeclass for "negate" (etc), Binary, CBit
-* Typeclass for unindex
-* Vis
+* QBit2.factor
 
 * Eliminate entropy consumption of `rng` side-effect (eg applyMove(Riffle()))
   * "Chance" should be its own player
@@ -66,17 +59,22 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * LogisticMap back to 4k x 4k
 * Release and publish site
-
-## 0.5.1 (June 2019)
-
-* GuessRiffleSpec: use `moveFromRandomState`
-* `Monad[ProbabilityModel]` -- factor `flatMap` in terms of `product`
-* SimpsonsParadox.md
 * GuessRiffle.md
   * Walk through game
   * plot distribution of sum(entropy) for both strategies
   * plot entropy by turn # for each strategy
   * plot simulated score distribution for each strategy
+* QuantumCircuit.md
+
+## 0.5.1 (June 2019)
+
+* GuessRiffleSpec: use `moveFromRandomState`
+* `Monad[ProbabilityModel]` -- factor `flatMap` in terms of `product`
+* QBit CCNot
+* Property test reversibility (& own inverse)
+* Typeclass for "negate" (etc), Binary, CBit
+* Typeclass for unindex
+* SimpsonsParadox.md
 * "You split, I choose" as game
 * Gerrymandering sensitivity
 
@@ -197,6 +195,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Cohen's Kappa
 * Normalizer axioms
 * Fourier transformations
+
+## Quantum Circuits
+
+* Deutsch-Jozsa algorithm (D.O. for n-bits) (Oracle separation between EQP and P)
+* Simon's periodicity problem (oracle separation between BQP and BPP)
+* Shor's algorithm
+* Grover's algorithm
+* Quantum cryptographic key exchange
 
 ## Platform
 

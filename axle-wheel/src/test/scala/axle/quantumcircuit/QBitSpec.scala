@@ -66,13 +66,13 @@ class QBitSpec extends FunSuite with Matchers {
     constant1(QBit0) should be(QBit1)
     constant1(QBit1) should be(QBit1)
   }
-  
+
   test("CNOT") {
 
-    cnot(QBit0, QBit0) should be((QBit0, QBit0))
-    cnot(QBit0, QBit1) should be((QBit0, QBit1))
-    cnot(QBit1, QBit0) should be((QBit1, QBit1))
-    cnot(QBit1, QBit1) should be((QBit1, QBit0))
+    QBit2.cnot(QBit2(QBit0.unindex ⊗ QBit0.unindex)).unindex should be((QBit0.unindex ⊗ QBit0.unindex))
+    QBit2.cnot(QBit2(QBit0.unindex ⊗ QBit1.unindex)).unindex should be((QBit0.unindex ⊗ QBit1.unindex))
+    QBit2.cnot(QBit2(QBit1.unindex ⊗ QBit0.unindex)).unindex should be((QBit1.unindex ⊗ QBit1.unindex))
+    QBit2.cnot(QBit2(QBit1.unindex ⊗ QBit1.unindex)).unindex should be((QBit1.unindex ⊗ QBit0.unindex))
   }
 
 }
