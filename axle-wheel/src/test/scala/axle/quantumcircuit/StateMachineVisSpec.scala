@@ -17,30 +17,13 @@ import org.scalatest._
 
 class StateMachineVisSpec extends FunSuite with Matchers {
 
-  implicit val fieldReal = new spire.math.RealAlgebra
-
-  val cZero = Complex(Real(0), Real(0))
-  val cOne = Complex(Real(1), Real(0))
-  val cSqrtHalf = Complex(Real(1) / sqrt(Real(2)), Real(0))
-
-  val points = List(
-    QBit(cOne, cZero),
-    QBit(cSqrtHalf, cSqrtHalf),
-    QBit(cZero, cOne),
-    QBit(-cSqrtHalf, cSqrtHalf),
-    QBit(-cOne, cZero),
-    QBit(-cSqrtHalf, -cSqrtHalf),
-    QBit(cZero, -cOne),
-    QBit(cSqrtHalf, -cSqrtHalf)
-  )
-
   test("State Machine for X and H as DirectedGraph") {
 
     class Edge(val label: String)
 
     val fromToEdges =
-      (points map { input => (input, H(input), new Edge("H"))}) ++
-      (points map { input => (input, X(input), new Edge("X"))})
+      (commonQBits[Real] map { input => (input, H(input), new Edge("H"))}) ++
+      (commonQBits[Real] map { input => (input, X(input), new Edge("X"))})
 
     implicit val htmlFromQbit: HtmlFrom[QBit[Real]] =
       new HtmlFrom[QBit[Real]] {
@@ -49,7 +32,7 @@ class StateMachineVisSpec extends FunSuite with Matchers {
 
     implicit val jdg = DirectedGraph.k2[DirectedSparseGraph, QBit[Real], Edge]
 
-    val dg = jdg.make(points, fromToEdges)
+    val dg = jdg.make(commonQBits[Real], fromToEdges)
 
     import cats.Show
     implicit val showEdge: Show[Edge] = _.label

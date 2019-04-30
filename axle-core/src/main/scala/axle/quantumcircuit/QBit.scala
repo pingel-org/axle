@@ -4,9 +4,10 @@ import cats.kernel.Eq
 
 import spire.algebra._
 import spire.math._
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.multiplicativeGroupOps
 
 import axle.stats._
-
 
 case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
 
@@ -82,5 +83,26 @@ object QBit {
 
   def H[T](qbit: QBit[T])(implicit fieldT: Field[T], nrootT: NRoot[T]): QBit[T] =
     hadamard(qbit)
+
+  def commonQBits[T: Field: NRoot]: List[QBit[T]] = {
+
+    val zero = Field[T].zero
+    val one = Field[T].one
+    val two = one + one
+
+    val cZero = Complex(zero, zero)
+    val cOne = Complex(one, zero)
+    val cSqrtHalf = Complex(one / sqrt(two), zero)
+        
+    List(
+      QBit(cOne, cZero),
+      QBit(cSqrtHalf, cSqrtHalf),
+      QBit(cZero, cOne),
+      QBit(-cSqrtHalf, cSqrtHalf),
+      QBit(-cOne, cZero),
+      QBit(-cSqrtHalf, -cSqrtHalf),
+      QBit(cZero, -cOne),
+      QBit(cSqrtHalf, -cSqrtHalf)
+    )}
 
 }

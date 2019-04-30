@@ -44,18 +44,18 @@ package object quantumcircuit {
 
   def constant1ForDeutsch[T: Field](qbits: QBit2[T]): QBit2[T] = {
     import qbits._
-    QBit2(a, b, d, c)
+    QBit2(b, a, c, d)
   }
 
   def identityForDeutsch[T: Field](qbits: QBit2[T]): QBit2[T] =
-    QBit2.cnot(qbits)
+    QBit2.cnot(qbits) // a b d c
 
   def negateForDeutsch[T: Field](qbits: QBit2[T]): QBit2[T] = {
     import qbits._
-    QBit2(a, b, c, d)
+    QBit2(b, a, d, c)
   }
 
-  def wrapDeutsched[T: Field](f: QBit2[T] => QBit2[T])(implicit ev: MultiplicativeSemigroup[Complex[T]]): QBit[T] => QBit[T] =
+  def wrapDeutsched[T: Field: NRoot](f: QBit2[T] => QBit2[T])(implicit ev: MultiplicativeSemigroup[Complex[T]]): QBit[T] => QBit[T] =
     (x: QBit[T]) => f(QBit2(x.unindex ⊗ QBit.constant0[T].unindex)).factor.get._1
 
   private[this] implicit val cptPM = ProbabilityModel[ConditionalProbabilityTable]
