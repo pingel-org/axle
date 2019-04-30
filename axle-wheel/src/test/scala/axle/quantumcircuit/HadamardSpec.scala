@@ -1,5 +1,6 @@
 package axle.quantumcircuit
 
+import spire.algebra._
 import spire.math._
 
 import QBit._
@@ -8,7 +9,7 @@ import org.scalatest._
 
 class HadamardSpec extends FunSuite with Matchers {
 
-  implicit val fieldReal = new spire.math.RealAlgebra
+  implicit val fieldReal: Field[Real] = new spire.math.RealAlgebra
 
   val sqrtHalf = Complex(Real(1) / sqrt(Real(2)), Real(0))
 
