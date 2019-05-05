@@ -44,7 +44,7 @@ package object quantumcircuit {
 
   def constant1ForDeutsch[T: Field](qbits: QBit2[T]): QBit2[T] = {
     import qbits._
-    QBit2(b, a, c, d)
+    QBit2(a, b, d, c)
   }
 
   def identityForDeutsch[T: Field](qbits: QBit2[T]): QBit2[T] =
