@@ -21,51 +21,51 @@ class DeutschOracleSpec extends FunSuite with Matchers {
 
   test("constant0ForDeutsch works") {
 
-    val f = wrapDeutsched(constant0ForDeutsch[Real])
+    val f = wrapDeutsched[Real](constant0ForDeutsch)
 
     f(constant0) should be(constant0)
-    f(constant1) should be(constant0)
-  }
-
-  test("constant1ForDeutsch works") {
-
-    val f = wrapDeutsched(constant1ForDeutsch[Real])
-
-    f(constant0) should be(constant1)
-    f(constant1) should be(constant1)
-  }
-
-  test("identityForDeutsch works") {
-
-    val f = wrapDeutsched(identityForDeutsch[Real])
-
-    f(constant0) should be(constant0)
-    f(constant1) should be(constant1)
-  }
-
-  test("negateForDeutsch works") {
-
-    val f = wrapDeutsched(negateForDeutsch[Real])
-
-    f(constant0) should be(constant1)
     f(constant1) should be(constant0)
   }
 
   test("Deutsch Oracle of constant0") {
 
-    isConstantDeutschOracle(constant0ForDeutsch[Real]) should be(true)
+    isConstantDeutschOracle[Real](constant0ForDeutsch) should be(true)
+  }
+
+  test("constant1ForDeutsch works") {
+
+    val f = wrapDeutsched[Real](constant1ForDeutsch)
+
+    f(constant0) should be(constant1)
+    f(constant1) should be(constant1)
   }
 
   test("Deutsch Oracle of constant1") {
-    isConstantDeutschOracle(constant1ForDeutsch[Real]) should be(true)
+    isConstantDeutschOracle[Real](constant1ForDeutsch) should be(true)
+  }
+
+  test("identityForDeutsch works") {
+
+    val f = wrapDeutsched[Real](identityForDeutsch)
+
+    f(constant0) should be(identity(constant0))
+    f(constant1) should be(identity(constant1))
   }
 
   test("Deutsch Oracle of identity") {
-    isConstantDeutschOracle(identityForDeutsch[Real]) should be(false)
+    isConstantDeutschOracle[Real](identityForDeutsch) should be(false)
+  }
+
+  test("negateForDeutsch works") {
+
+    val f = wrapDeutsched[Real](negateForDeutsch)
+
+    f(constant0) should be(negate(constant0))
+    f(constant1) should be(negate(constant1))
   }
 
   test("Deutsch Oracle of negate") {
-    isConstantDeutschOracle(negateForDeutsch[Real]) should be(false)
+    isConstantDeutschOracle[Real](negateForDeutsch) should be(false)
   }
 
 }
