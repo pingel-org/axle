@@ -46,18 +46,28 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* QBit2.factor
-
-* Eliminate entropy consumption of `rng` side-effect (eg applyMove(Riffle()))
+* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * "Chance" should be its own player
-  * Each bit consumed during Riffle() is its own move
+  * Each N bits consumed during `Riffle()` is its own move
+  * Chance moves consume `UnittedQuantity[Information, N]`
+
+* QBit2.factor
 
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
+
+* Fix third Kolmogorov law
+* Axiom? pm.filter(X=x).P(X=x) == 1
+* "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
+* Fix stuff like the "a" in monadForProbabilityModel Monad.pure
+* Iterative game playing algorithm is intractible, but shares intent with sequential monte carlo
+* Think about Information Theory's "Omega" vis-a-vis Sequential Monte Carlo
+* alias `uniform` as `Bernoulli`
+
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 
-* LogisticMap back to 4k x 4k
+* LogisticMap md back to 4k x 4k
 * Release and publish site
 * GuessRiffle.md
   * Walk through game
@@ -172,6 +182,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * LSA
 * LDA
 * GLM
+* MCMC
+* Metropolis Hastings
+* Sequential Monte Carlo (SMC)
+* Hamiltonian Monte Carlo (HMC)
 * Neural Networks
 * t-distributed stochastic neighbor embedding (t-SNE)
 * Support Vector Machines
@@ -195,6 +209,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Cohen's Kappa
 * Normalizer axioms
 * Fourier transformations
+* Abadi Plotkin pathology
+* JVP: Jacobian
 
 ## Quantum Circuits
 
@@ -223,8 +239,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Nerod Partition
 * Motivation for Gold Paradigm, Angluin Learner
 * Stochastic Lambda Calculus
-* MCMC
-* Metropolis Hastings
 * Game Theory: information sets, equilibria
 * Redo axle.ast.* (rm throws, more typesafe)
 * Shapeless for compound Quanta and Bayesian Networks
