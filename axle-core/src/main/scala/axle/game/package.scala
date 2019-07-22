@@ -68,9 +68,9 @@ package object game {
         val updateM = Map(fromState -> fieldV.negate(probabilityOfMove), toState -> probabilityOfMove)
         val updatingModel = prob.construct(Variable[S]("S"), updateM.keys, updateM)
         // Note that updatingModel violates probability axioms
-        val summed = prob.sum(stateModel)(updatingModel)
+        val adjoined = prob.adjoin(stateModel)(updatingModel)
         import axle.algebra.tuple2Field
-        val mapped = prob.mapValues[S, (V, V), V](summed)({ case (v1, v2) => 
+        val mapped = prob.mapValues[S, (V, V), V](adjoined)({ case (v1, v2) => 
           v1 + (probabilityOfFromState * v2)
         })
         (Some((fromState, move)), mapped)

@@ -22,9 +22,9 @@ trait ProbabilityModel[M[_, _]] {
 
   def values[A](model: M[A, _]): IndexedSeq[A]
 
-  def sum[A, V1, V2](model: M[A, V1])(other: M[A, V2])(implicit fieldV1: Field[V1], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V1], eqV2: cats.kernel.Eq[V2]): M[A, (V1, V2)]
+  def adjoin[A, V1, V2](model: M[A, V1])(other: M[A, V2])(implicit fieldV1: Field[V1], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V1], eqV2: cats.kernel.Eq[V2]): M[A, (V1, V2)]
 
-  def product[A, B, V](model: M[A, V])(other: M[B, V])(implicit fieldV: Field[V]): M[(A, B), V]
+  def chain[A, B, V](model: M[A, V])(other: M[B, V])(implicit fieldV: Field[V]): M[(A, B), V]
 
   def mapValues[A, V, V2](model: M[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): M[A, V2]
 
@@ -36,7 +36,9 @@ trait ProbabilityModel[M[_, _]] {
 
   def filter[A, V](model: M[A, V])(predicate: A => Boolean)(implicit fieldV: Field[V]): M[A, V]
 
-  def observe[A, V](model: M[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
+//  def observe[A, V](model: M[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
+
+  def observe[A, V: Dist: Ring: Order](model: M[A, V])(gen: Generator): A
 
 }
 

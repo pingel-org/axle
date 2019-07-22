@@ -33,7 +33,7 @@ object ConditionalProbabilityTable {
       def values[A](model: ConditionalProbabilityTable[A, _]): IndexedSeq[A] =
         model.values
 
-      def sum[A, V1, V2](model: ConditionalProbabilityTable[A, V1])(other: ConditionalProbabilityTable[A, V2])(implicit fieldV1: Field[V1], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V1], eqV2: cats.kernel.Eq[V2]): ConditionalProbabilityTable[A, (V1, V2)] = {
+      def adjoin[A, V1, V2](model: ConditionalProbabilityTable[A, V1])(other: ConditionalProbabilityTable[A, V2])(implicit fieldV1: Field[V1], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V1], eqV2: cats.kernel.Eq[V2]): ConditionalProbabilityTable[A, (V1, V2)] = {
 
         val newValues = (model.p.keySet ++ other.p.keySet).toVector // TODO should unique by Eq[A], not universal equality
 
@@ -42,7 +42,7 @@ object ConditionalProbabilityTable {
         construct[A, (V1, V2)](model.variable, newValues, a => (probabilityOf(model)(a), probabilityOf(other)(a)))
       }
 
-      def product[A, B, V](model: ConditionalProbabilityTable[A, V])(other: ConditionalProbabilityTable[B, V])(implicit fieldV: Field[V]): ConditionalProbabilityTable[(A, B), V] = {
+      def chain[A, B, V](model: ConditionalProbabilityTable[A, V])(other: ConditionalProbabilityTable[B, V])(implicit fieldV: Field[V]): ConditionalProbabilityTable[(A, B), V] = {
         val abvMap: Map[(A, B), V] = (for {
           a <- values(model)
           b <- values(other)

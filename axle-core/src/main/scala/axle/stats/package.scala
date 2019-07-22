@@ -82,7 +82,7 @@ package object stats {
     val pTrue: N = pIn.probabilityOf(conditionModel)(true)
     val pFalse: N = pIn.probabilityOf(conditionModel)(false)
 
-    pOut.mapValues(pOut.sum(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
+    pOut.mapValues(pOut.adjoin(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double =
