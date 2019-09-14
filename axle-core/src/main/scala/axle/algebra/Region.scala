@@ -13,15 +13,15 @@ object Region {
 
   // TODO HList instead of Tuple2
   def combine[A, B](left: Region[A], right: Region[B]): Region[(A, B)] =
-    RegionCombo[A, B](left, right)
+    RegionAnd[A, B](left, right)
 
   def showRegion[A: Show]: Show[Region[A]] = new Show[Region[A]] {
 
     def show(ra: Region[A]): String = ra match {
       case re @ RegionEq(x) => show"_ === ${x}"
       case rs @ RegionSet(xs) => show"_ in ${xs}"
-      case ro @ RegionOrder(min, max) => show"${min} <= _ <= ${max}"
-      case rc @ RegionCombo(left, right) => left.toString + " && (" + right.toString + ")" // TODO
+      case rr @ RegionRange(min, max) => show"${min} <= _ < ${max}"
+      case ra @ RegionAnd(left, right) => left.toString + " && (" + right.toString + ")" // TODO
     }
   }
 
@@ -46,12 +46,12 @@ case class RegionSet[A](xs: Set[A]) extends Region[A] {
   def apply(x: A): Boolean = xs(x)
 }
 
-case class RegionOrder[A](min: A, max: A)(implicit ordA: Order[A]) extends Region[A] {
+case class RegionRange[A](min: A, max: A)(implicit ordA: Order[A]) extends Region[A] {
 
-  def apply(x: A): Boolean = ordA.gteqv(x, min) && ordA.lteqv(x, max)
+  def apply(x: A): Boolean = ordA.gteqv(x, min) && ordA.lt(x, max)
 }
 
-case class RegionCombo[A, B](left: Region[A], right: Region[B]) extends Region[(A, B)] {
+case class RegionAnd[A, B](left: Region[A], right: Region[B]) extends Region[(A, B)] {
 
   def apply(xy: (A, B)): Boolean = left(xy._1) && right(xy._2)
 }

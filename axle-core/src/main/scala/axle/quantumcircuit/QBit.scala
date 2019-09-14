@@ -8,6 +8,7 @@ import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeGroupOps
 
 import axle.stats._
+import axle.algebra.RegionEq
 
 case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
 
@@ -20,9 +21,9 @@ case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
   // |1> with probability b^2
 
   def probabilityModel: ConditionalProbabilityTable[CBit, T] = {
-    val m = Map[CBit, T](
-      CBit0 -> (a * a).real,
-      CBit1 -> (b * b).real
+    val m = Map[RegionEq[CBit], T](
+      RegionEq[CBit](CBit0) -> (a * a).real,
+      RegionEq[CBit](CBit1) -> (b * b).real
     )
     ConditionalProbabilityTable.apply(m, Variable("Q"))
   }

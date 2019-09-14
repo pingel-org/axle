@@ -53,8 +53,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix `axle.stats.standardDeviation`
 * Fix `axle.stats.entropy`
 * Fix `axle.game.moveFromRandomState`
-* Fix `CPT.probabilityOfExpression` (it's incomplete)
-* Laws for `Region`
+* Fix `CPT.probabilityOf` (it's incomplete)
+* Perhaps input Map to CPT should not require the RegionEq wrapper on the keys
+* Laws for `Region` (rename as a "Sigma Algebra"? See https://www.youtube.com/watch?v=21a85f1YS5Q)
 * `Show[Region]` TODOs
 * `Show[Factor]` should include `Show[A => Boolean]`
 * Axiom for observe: val a = observe(gen) => ProbabilityOf(a) > 0

@@ -55,13 +55,13 @@ package object game {
     val openStateModel: PM[S, V] = prob.filter(stateModel)((s: S) => evGame.mover(game, s).isDefined)
 
     val fromState: S = prob.observe(openStateModel)(gen)
-    val probabilityOfFromState: V = prob.probabilityOfExpression(stateModel)(eqS.eqv(_, fromState))
+    val probabilityOfFromState: V = prob.probabilityOf(stateModel)(eqS.eqv(_, fromState))
 
     evGame.mover(game, fromState).map(mover => {
       val strategyFn = evGame.strategyFor(game, mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.observe(gen)
-      val probabilityOfMove: V = prob.probabilityOfExpression(strategy)(eqM.eqv(_, move))
+      val probabilityOfMove: V = prob.probabilityOf(strategy)(eqM.eqv(_, move))
       val toState = evGame.applyMove(game, fromState, move)
 
       import cats.syntax.all._

@@ -6,10 +6,10 @@ import cats.kernel.Order
 import cats.implicits._
 
 import spire.algebra.AdditiveMonoid
-import spire.algebra.Field
+//import spire.algebra.Field
 
 import axle.algebra.Plottable
-import axle.stats.ProbabilityModel
+//import axle.stats.ProbabilityModel
 
 /**
  * implicits for Plot and BarChart
@@ -50,28 +50,28 @@ object DataView {
 
     }
 
-  implicit def probabilityDataView[X: Order, Y: Plottable: Field: Order, M[_, _]](
-    implicit
-    prob: ProbabilityModel[M]): DataView[X, Y, M[X, Y]] =
-    new DataView[X, Y, M[X, Y]] {
+  // implicit def probabilityDataView[X: Order, Y: Plottable: Field: Order, M[_, _]](
+  //   implicit
+  //   prob: ProbabilityModel[M]): DataView[X, Y, M[X, Y]] =
+  //   new DataView[X, Y, M[X, Y]] {
 
-      val yPlottable = Plottable[Y]
-      val fieldY = Field[Y]
+  //     val yPlottable = Plottable[Y]
+  //     val fieldY = Field[Y]
 
-      def keys(d: M[X, Y]): Traversable[X] = prob.values(d)
+  //     def keys(d: M[X, Y]): Traversable[X] = prob.regions(d)
 
-      def valueOf(d: M[X, Y], x: X): Y = prob.probabilityOf(d)(x)
+  //     def valueOf(d: M[X, Y], x: X): Y = prob.probabilityOf(d)(x)
 
-      def yRange(d: M[X, Y]): (Y, Y) = {
+  //     def yRange(d: M[X, Y]): (Y, Y) = {
 
-        val ks = keys(d)
+  //       val ks = keys(d)
 
-        val yMin = (ks.map { x => valueOf(d, x) } ++ List(fieldY.zero)).filter(yPlottable.isPlottable _).min
-        val yMax = (ks.map { x => valueOf(d, x) } ++ List(fieldY.zero)).filter(yPlottable.isPlottable _).max
+  //       val yMin = (ks.map { x => valueOf(d, x) } ++ List(fieldY.zero)).filter(yPlottable.isPlottable _).min
+  //       val yMax = (ks.map { x => valueOf(d, x) } ++ List(fieldY.zero)).filter(yPlottable.isPlottable _).max
 
-        (yMin, yMax)
-      }
+  //       (yMin, yMax)
+  //     }
 
-    }
+  //   }
 
 }

@@ -24,20 +24,21 @@ object ConditionalProbabilityTable {
   implicit def showCPT[A: Show: Order, V: Show: Field](implicit prob: ProbabilityModel[ConditionalProbabilityTable], showRA: Show[Region[A]]): Show[ConditionalProbabilityTable[A, V]] = cpt =>
     cpt.regions.map { regionA => { // TODO regions.sorted
       val aString = showRA.show(regionA)
-      (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[V].show(prob.probabilityOfExpression(cpt)(regionA)))
+      (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[V].show(prob.probabilityOf(cpt)(regionA)))
     }}.mkString("\n")
 
   // ({ type λ[V] = ConditionalProbabilityTable[A, V] })#λ
   implicit val probabilityWitness: ProbabilityModel[ConditionalProbabilityTable] =
     new ProbabilityModel[ConditionalProbabilityTable] {
 
-      // def construct[A, V](variable: Variable[A], universe: Region[A], f: Region[A] => V)(implicit ring: Ring[V], eqA: cats.kernel.Eq[A]): ConditionalProbabilityTable[A, V] =
-      //   ConditionalProbabilityTable[A, V](partition.map(ra => ra -> f(ra)).toMap, variable)
-
-      // def regions[A](model: ConditionalProbabilityTable[A, _]): Iterable[Region[A]] =
-      //   model.regions // .map(regionA => (w: A) => (model.eqA.eqv(w, regionA)))
-
-      def adjoin[A, V1, V2](model: ConditionalProbabilityTable[A, V1])(other: ConditionalProbabilityTable[A, V2])(implicit eqA: cats.kernel.Eq[A], fieldV1: Field[V1], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V1], eqV2: cats.kernel.Eq[V2]): ConditionalProbabilityTable[A, (V1, V2)] = {
+      def adjoin[A, V1, V2](
+        model: ConditionalProbabilityTable[A, V1])(
+        other: ConditionalProbabilityTable[A, V2])(
+        implicit
+        eqA: cats.kernel.Eq[A],
+        fieldV1: Field[V1], fieldV2: Field[V2],
+        eqV1: cats.kernel.Eq[V1],
+        eqV2: cats.kernel.Eq[V2]): ConditionalProbabilityTable[A, (V1, V2)] = {
 
         val newValues = (model.p.keySet ++ other.p.keySet) // TODO should unique by Eq[A], not universal equality
 
@@ -45,7 +46,7 @@ object ConditionalProbabilityTable {
 
         ConditionalProbabilityTable[A, (V1, V2)](
           newValues.map( key => {
-            val valuePair = (probabilityOfExpression(model)(key), probabilityOfExpression(other)(key))
+            val valuePair = (probabilityOf(model)(key), probabilityOf(other)(key))
             key -> valuePair
           }).toMap,
           //  RegionSet(newValues),
@@ -64,7 +65,7 @@ object ConditionalProbabilityTable {
             regionB <- other.regions
           } yield {
             val partitionAB: RegionEq[(A, B)] = RegionEq((regionA.x, regionB.x)) // .combine(regionA, regionB)
-            val v: V = probabilityOfExpression(model)(regionA) * probabilityOfExpression(other)(regionB)
+            val v: V = probabilityOf(model)(regionA) * probabilityOf(other)(regionB)
             partitionAB -> v
           }
         ).toMap
@@ -88,8 +89,8 @@ object ConditionalProbabilityTable {
         ConditionalProbabilityTable[A, V](newMap.mapValues(v => v / newDenominator), model.variable)
       }
 
-      def empty[A, V](variable: Variable[A])(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): ConditionalProbabilityTable[A, V] = {
-        ConditionalProbabilityTable(Map.empty, variable)
+      def unit[A, V](a: A, variable: Variable[A])(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): ConditionalProbabilityTable[A, V] = {
+        ConditionalProbabilityTable(Map(RegionEq(a) -> ringV.one), variable)
       }
 
       def observe[A, V](model: ConditionalProbabilityTable[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
@@ -97,10 +98,7 @@ object ConditionalProbabilityTable {
         model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // otherwise malformed distribution
       }
 
-      // def probabilityOf[A, V](model: ConditionalProbabilityTable[A, V])(a: A)(implicit fieldV: Field[V]): V =
-      //   model.p.get(a).getOrElse(fieldV.zero)
-
-      def probabilityOfExpression[A, V](model: ConditionalProbabilityTable[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): V =
+      def probabilityOf[A, V](model: ConditionalProbabilityTable[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): V =
         predicate match {
           case RegionEq(b) =>
             Σ(model.regions.map( r => r match {

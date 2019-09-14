@@ -1,7 +1,7 @@
 package axle
 
 import cats.kernel.Eq
-import cats.syntax.all._
+//import cats.syntax.all._
 
 import spire.algebra._
 import spire.math._
@@ -17,8 +17,9 @@ package object quantumcircuit {
   implicit val eqInt: Eq[Int] = spire.implicits.IntAlgebra
 
   def unindexToDistribution[T: Ring](xs: Vector[Complex[T]]): ConditionalProbabilityTable[Vector[Binary], T] = {
-    val m: Map[Vector[Binary], T] = xs.zipWithIndex.map({ case (x, i) =>
-       (0 until xs.size).map({ j => if(i === j) B1 else B0 }).toVector -> (x*x).real
+    import cats.implicits._
+    val m: Map[RegionEq[Vector[Binary]], T] = xs.zipWithIndex.map({ case (x, i) =>
+       RegionEq((0 until xs.size).map({ j => if(i === j) B1 else B0 }).toVector) -> (x*x).real
     }).toMap
     ConditionalProbabilityTable(m, Variable("Q"))
   }

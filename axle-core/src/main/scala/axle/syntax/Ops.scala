@@ -17,6 +17,8 @@ import axle.algebra.Indexed
 import axle.algebra.MapFrom
 import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
+import axle.algebra.Region
+import axle.algebra.RegionEq
 import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
@@ -221,12 +223,10 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
 final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
   implicit
   ev: ProbabilityModel[M]) {
-
-  def values: IndexedSeq[A] = ev.values(model)
   
-  def P(a: A)(implicit fieldV: Field[V]): V = ev.probabilityOf(model)(a)
+  def P(a: A)(implicit fieldV: Field[V], eqA: Eq[A]): V = ev.probabilityOf(model)(RegionEq(a))
   
-  def P(predicate: A => Boolean)(implicit fieldV: Field[V]): V = ev.probabilityOfExpression(model)(predicate)
+  def P(predicate: Region[A])(implicit fieldV: Field[V]): V = ev.probabilityOf(model)(predicate)
 
   def filter(predicate: A => Boolean)(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
   
