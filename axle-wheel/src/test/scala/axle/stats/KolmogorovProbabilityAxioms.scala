@@ -32,7 +32,8 @@ object KolmogorovProbabilityAxioms {
       model.values.map({ e: E => model.P(e) }).reduce(Field[V].plus) == Field[V].one
     }
 
-  def combination[M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](implicit arbModel: Arbitrary[M[E, V]]): Prop =
+  def combination[M[_, _]: ProbabilityModel, E: Eq, V: Field: Order]
+  (implicit arbModel: Arbitrary[M[E, V]]): Prop =
     forAll { (model: M[E, V]) =>
 
       implicit val arbitraryExpression: Arbitrary[E => Boolean] =

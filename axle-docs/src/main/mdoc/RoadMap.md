@@ -46,23 +46,34 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
+* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
+* Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
+
+* `ProbabilityModel.construct` shouldn't take a Variable
+* Fix `axle.stats.standardDeviation`
+* Fix `axle.stats.entropy`
+* Fix `axle.game.moveFromRandomState`
+* Fix `CPT.probabilityOfExpression` (it's incomplete)
+* Laws for `Region`
+* `Show[Region]` TODOs
+* `Show[Factor]` should include `Show[A => Boolean]`
+* Axiom for observe: val a = observe(gen) => ProbabilityOf(a) > 0
+* Fix third Kolmogorov law
+* Review groupBy uses -- they use university equality.  Replace with Eq
+* Axiom? pm.filter(X=x).P(X=x) == 1
+* Fix stuff like the "a" in monadForProbabilityModel Monad.pure
+
+* "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
+* Iterative game playing algorithm is intractible, but shares intent with sequential monte carlo
+* Think about Information Theory's "Omega" vis-a-vis Sequential Monte Carlo
+* alias `uniform` as `Bernoulli`
+
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * "Chance" should be its own player
   * Each N bits consumed during `Riffle()` is its own move
   * Chance moves consume `UnittedQuantity[Information, N]`
 
 * QBit2.factor
-
-* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
-* Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
-
-* Fix third Kolmogorov law
-* Axiom? pm.filter(X=x).P(X=x) == 1
-* "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
-* Fix stuff like the "a" in monadForProbabilityModel Monad.pure
-* Iterative game playing algorithm is intractible, but shares intent with sequential monte carlo
-* Think about Information Theory's "Omega" vis-a-vis Sequential Monte Carlo
-* alias `uniform` as `Bernoulli`
 
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
