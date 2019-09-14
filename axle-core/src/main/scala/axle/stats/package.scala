@@ -57,21 +57,21 @@ package object stats {
   def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
     ConditionalProbabilityTable[Symbol, Rational](
       Map(
-        RegionEq('HEAD) -> pHead,
-        RegionEq('TAIL) -> (1 - pHead)),
+        'HEAD -> pHead,
+        'TAIL -> (1 - pHead)),
 
       Variable(s"coin $pHead"))
 
   def binaryDecision(yes: Rational): ConditionalProbabilityTable[Boolean, Rational] = {
     import cats.implicits._
-    ConditionalProbabilityTable(Map(RegionEq(true) -> yes, RegionEq(false) -> (1 - yes)), Variable("binary"))
+    ConditionalProbabilityTable(Map(true -> yes, false -> (1 - yes)), Variable("binary"))
   }
 
   def uniformDistribution[T: Eq](values: Seq[T], variable: Variable[T]): ConditionalProbabilityTable[T, Rational] = {
 
     val grouped = values.groupBy(identity)
-    val dist: Map[RegionEq[T], Rational] = grouped.map({ kvs =>
-       val rk = RegionEq(kvs._1)
+    val dist: Map[T, Rational] = grouped.map({ kvs =>
+       val rk = kvs._1
        val v = Rational(kvs._2.size.toLong, values.size.toLong)
        rk -> v
     })

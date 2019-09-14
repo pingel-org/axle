@@ -6,14 +6,13 @@ import spire.math.Rational
 
 import axle.stats.ConditionalProbabilityTable
 import axle.stats.Variable
-import axle.algebra.RegionEq
 
 object Dice {
 
   def die(n: Int): ConditionalProbabilityTable[Int, Rational] = {
     import cats.implicits._
     ConditionalProbabilityTable(
-      (1 to n).map(i => (RegionEq(i), Rational(1, n.toLong))).toMap,
+      (1 to n).map(i => (i, Rational(1, n.toLong))).toMap,
       Variable[Int](s"D$n"))
   }
 

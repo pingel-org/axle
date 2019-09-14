@@ -22,9 +22,10 @@ import axle.algebra.RegionEq
 object ConditionalProbabilityTable {
 
   implicit def showCPT[A: Show: Order, V: Show: Field](implicit prob: ProbabilityModel[ConditionalProbabilityTable], showRA: Show[Region[A]]): Show[ConditionalProbabilityTable[A, V]] = cpt =>
-    cpt.regions.map { regionA => { // TODO regions.sorted
-      val aString = showRA.show(regionA)
-      (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[V].show(prob.probabilityOf(cpt)(regionA)))
+    cpt.regions.toVector.sorted.map { a => {
+      val ra = RegionEq(a)
+      val aString = showRA.show(ra)
+      (aString + (1 to (cpt.charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[V].show(prob.probabilityOf(cpt)(ra)))
     }}.mkString("\n")
 
   // ({ type λ[V] = ConditionalProbabilityTable[A, V] })#λ
@@ -46,7 +47,7 @@ object ConditionalProbabilityTable {
 
         ConditionalProbabilityTable[A, (V1, V2)](
           newValues.map( key => {
-            val valuePair = (probabilityOf(model)(key), probabilityOf(other)(key))
+            val valuePair = (probabilityOf(model)(RegionEq(key)), probabilityOf(other)(RegionEq(key)))
             key -> valuePair
           }).toMap,
           //  RegionSet(newValues),
@@ -59,14 +60,13 @@ object ConditionalProbabilityTable {
         (other: ConditionalProbabilityTable[B, V])
         (implicit fieldV: Field[V], eqA: cats.kernel.Eq[A], eqB: cats.kernel.Eq[B]): ConditionalProbabilityTable[(A, B), V] = {
 
-        val abvMap: Map[RegionEq[(A, B)], V] = (
+        val abvMap: Map[(A, B), V] = (
           for {
-            regionA <- model.regions
-            regionB <- other.regions
+            a <- model.regions
+            b <- other.regions
           } yield {
-            val partitionAB: RegionEq[(A, B)] = RegionEq((regionA.x, regionB.x)) // .combine(regionA, regionB)
-            val v: V = probabilityOf(model)(regionA) * probabilityOf(other)(regionB)
-            partitionAB -> v
+            val v: V = probabilityOf(model)(RegionEq(a)) * probabilityOf(other)(RegionEq(b))
+            (a, b) -> v
           }
         ).toMap
 
@@ -83,14 +83,14 @@ object ConditionalProbabilityTable {
       }
 
       def filter[A, V](model: ConditionalProbabilityTable[A, V])(predicate: A => Boolean)(implicit fieldV: Field[V]): ConditionalProbabilityTable[A, V] = {
-        val newMap: Map[RegionEq[A], V] = model.p.toVector.filter({ case (req, v) => predicate(req.x)}).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
+        val newMap: Map[A, V] = model.p.toVector.filter({ case (a, v) => predicate(a)}).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
         val newDenominator: V = Σ(newMap.values)
         import model.eqA
         ConditionalProbabilityTable[A, V](newMap.mapValues(v => v / newDenominator), model.variable)
       }
 
       def unit[A, V](a: A, variable: Variable[A])(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): ConditionalProbabilityTable[A, V] = {
-        ConditionalProbabilityTable(Map(RegionEq(a) -> ringV.one), variable)
+        ConditionalProbabilityTable(Map(a -> ringV.one), variable)
       }
 
       def observe[A, V](model: ConditionalProbabilityTable[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
@@ -101,10 +101,7 @@ object ConditionalProbabilityTable {
       def probabilityOf[A, V](model: ConditionalProbabilityTable[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): V =
         predicate match {
           case RegionEq(b) =>
-            Σ(model.regions.map( r => r match {
-              case re @ RegionEq(a) => if (model.eqA.eqv(a, b)) { model.p(re) } else { fieldV.zero }
-              case _ => ???
-            }))
+            Σ(model.regions.map( a =>  if (model.eqA.eqv(a, b)) { model.p(a) } else { fieldV.zero } ))
           case _ => ???
         }
   }
@@ -112,14 +109,14 @@ object ConditionalProbabilityTable {
 }
 
 case class ConditionalProbabilityTable[A, V](
-  p:        Map[RegionEq[A], V],
+  p:        Map[A, V],
   variable: Variable[A])(implicit ringV: Ring[V], val eqA: cats.kernel.Eq[A]) {
 
-  val bars = p.toVector.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1.x, x._2 + y._2)).drop(1)
+  val bars = p.toVector.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
 
-  def regions: Iterable[RegionEq[A]] = p.keys.toVector
+  def regions: Iterable[A] = p.keys.toVector
 
   def charWidth(implicit showRA: Show[Region[A]]): Int =
-    (regions.map(ra => showRA.show(ra).length).toList).reduce(math.max)
+    (regions.map(ra => showRA.show(RegionEq(ra)).length).toList).reduce(math.max)
 
 }

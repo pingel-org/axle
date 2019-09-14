@@ -144,10 +144,10 @@ object PlotDataView {
   implicit def cptDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: Field: Plottable]: PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] =
     new PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] {
 
-      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Traversable[X] = cpt.regions.map(_.x)
+      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Traversable[X] = cpt.regions
 
       def valueOf(cpt: ConditionalProbabilityTable[X, Y], x: X): Y =
-        cpt.p.get(RegionEq(x)).getOrElse(Field[Y].zero)
+        cpt.p.get(x).getOrElse(Field[Y].zero)
 
       def xRange(data: Seq[(S, ConditionalProbabilityTable[X, Y])], include: Option[X]): (X, X) = {
 

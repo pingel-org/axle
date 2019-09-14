@@ -45,7 +45,7 @@ object Strategies {
       val validated = evGame.isValid(game, state, parsed)
       val move = validated.right.toOption.get
       val v = Variable[M]("hard-coded")
-      ConditionalProbabilityTable[M, V](Map(RegionEq(move) -> Field[V].one), v)
+      ConditionalProbabilityTable[M, V](Map(move -> Field[V].one), v)
     }
 
   def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
@@ -79,7 +79,7 @@ object Strategies {
 
       val move = stream.find(esm => esm.isRight).get.right.toOption.get
       val v = Variable[M]("interactive")
-      ConditionalProbabilityTable[M, V](Map(RegionEq(move) -> Field[V].one), v)
+      ConditionalProbabilityTable[M, V](Map(move -> Field[V].one), v)
     }
 
   def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
@@ -90,7 +90,7 @@ object Strategies {
       val opens = evGame.moves(game, state).toVector
       val p = Field[V].reciprocal(ConvertableTo[V].fromInt(opens.length))
       val v = Variable[M]("random")
-      ConditionalProbabilityTable[M, V](opens.map(open => RegionEq(open) -> p).toMap, v)
+      ConditionalProbabilityTable[M, V](opens.map(open => open -> p).toMap, v)
     }
 
   /**

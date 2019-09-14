@@ -18,8 +18,8 @@ package object quantumcircuit {
 
   def unindexToDistribution[T: Ring](xs: Vector[Complex[T]]): ConditionalProbabilityTable[Vector[Binary], T] = {
     import cats.implicits._
-    val m: Map[RegionEq[Vector[Binary]], T] = xs.zipWithIndex.map({ case (x, i) =>
-       RegionEq((0 until xs.size).map({ j => if(i === j) B1 else B0 }).toVector) -> (x*x).real
+    val m: Map[Vector[Binary], T] = xs.zipWithIndex.map({ case (x, i) =>
+       (0 until xs.size).map({ j => if(i === j) B1 else B0 }).toVector -> (x*x).real
     }).toMap
     ConditionalProbabilityTable(m, Variable("Q"))
   }
