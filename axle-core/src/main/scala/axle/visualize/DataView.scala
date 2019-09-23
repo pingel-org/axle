@@ -6,10 +6,12 @@ import cats.kernel.Order
 import cats.implicits._
 
 import spire.algebra.AdditiveMonoid
-//import spire.algebra.Field
+import spire.algebra.Field
 
+import axle.algebra.RegionEq
 import axle.algebra.Plottable
-//import axle.stats.ProbabilityModel
+import axle.stats.ConditionalProbabilityTable
+import axle.stats.ProbabilityModel
 
 /**
  * implicits for Plot and BarChart
@@ -50,28 +52,28 @@ object DataView {
 
     }
 
-  // implicit def probabilityDataView[X: Order, Y: Plottable: Field: Order, M[_, _]](
-  //   implicit
-  //   prob: ProbabilityModel[M]): DataView[X, Y, M[X, Y]] =
-  //   new DataView[X, Y, M[X, Y]] {
+  implicit def cptDataView[X: Order, Y: Plottable: Field: Order]: DataView[X, Y, ConditionalProbabilityTable[X, Y]] =
+    new DataView[X, Y, ConditionalProbabilityTable[X, Y]] {
 
-  //     val yPlottable = Plottable[Y]
-  //     val fieldY = Field[Y]
+      val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-  //     def keys(d: M[X, Y]): Traversable[X] = prob.regions(d)
+      val yPlottable = Plottable[Y]
+      val fieldY = Field[Y]
 
-  //     def valueOf(d: M[X, Y], x: X): Y = prob.probabilityOf(d)(x)
+      def keys(d: ConditionalProbabilityTable[X, Y]): Traversable[X] = d.values
 
-  //     def yRange(d: M[X, Y]): (Y, Y) = {
+      def valueOf(d: ConditionalProbabilityTable[X, Y], x: X): Y = prob.probabilityOf(d)(RegionEq(x))
 
-  //       val ks = keys(d)
+      def yRange(d: ConditionalProbabilityTable[X, Y]): (Y, Y) = {
 
-  //       val yMin = (ks.map { x => valueOf(d, x) } ++ List(fieldY.zero)).filter(yPlottable.isPlottable _).min
-  //       val yMax = (ks.map { x => valueOf(d, x) } ++ List(fieldY.zero)).filter(yPlottable.isPlottable _).max
+        val ks = keys(d)
 
-  //       (yMin, yMax)
-  //     }
+        val yMin = (ks.map { x => valueOf(d, x) } ++ List(fieldY.zero)).filter(yPlottable.isPlottable _).min
+        val yMax = (ks.map { x => valueOf(d, x) } ++ List(fieldY.zero)).filter(yPlottable.isPlottable _).max
 
-  //   }
+        (yMin, yMax)
+      }
+
+    }
 
 }

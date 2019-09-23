@@ -9,23 +9,24 @@ import spire.math.Rational
 
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling._
+import axle.stats.ProbabilityModel
 import axle.stats.ConditionalProbabilityTable
 
 class GameChartSpec extends FunSuite with Matchers {
 
+  implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+
   test("BarChart of bowling probability distribution") {
 
-    val stateD: F[State] = stateDistribution(goodBowler, 4)
+    val stateD= stateDistribution(goodBowler, 4)
 
-    val scoreD = for {
-      state <- stateD
-    } yield state.tallied
+    val scoreD = prob.map(stateD)(_.tallied)
 
     // implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
     // test implicit conjuring:
 
-    implicit val dvInt = DataView.probabilityDataView[Int, Rational, ConditionalProbabilityTable]
+    implicit val dvInt = DataView.cptDataView[Int, Rational]
 
     val chart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
       () => scoreD,
@@ -33,7 +34,7 @@ class GameChartSpec extends FunSuite with Matchers {
       xAxis = Some(Rational(0)))
 
     implicit val amInt: AdditiveMonoid[Int] = spire.implicits.IntAlgebra
-    implicit val dvString = PlotDataView.probabilityDataView[String, Int, Rational, ConditionalProbabilityTable]
+    implicit val dvString = PlotDataView.cptDataView[String, Int, Rational]
 
     val plot = Plot[String, Int, Rational, ConditionalProbabilityTable[Int, Rational]](
       () => Vector(("", scoreD)),

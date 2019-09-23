@@ -8,7 +8,7 @@ import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeGroupOps
 
 import axle.stats._
-import axle.algebra.RegionEq
+//import axle.algebra.RegionEq
 
 case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
 

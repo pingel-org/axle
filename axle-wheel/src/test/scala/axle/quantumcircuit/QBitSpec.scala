@@ -1,8 +1,10 @@
 package axle.quantumcircuit
 
+import cats.implicits._
 import spire.math._
 
 import axle.syntax.probabilitymodel._
+import axle.algebra.RegionEq
 
 import org.scalatest._
 
@@ -16,8 +18,8 @@ class QBitSpec extends FunSuite with Matchers {
 
     val distribution = qEven.probabilityModel
 
-    distribution.P(CBit0) should be(Real(1 / 2d))
-    distribution.P(CBit1) should be(Real(1 / 2d))
+    distribution.P(RegionEq(CBit0)) should be(Real(1 / 2d))
+    distribution.P(RegionEq(CBit1)) should be(Real(1 / 2d))
   }
 
   test("multiple QBit distribution") {
@@ -35,10 +37,10 @@ class QBitSpec extends FunSuite with Matchers {
 
     tensored.zip(tensored).map({ case (x, y) => x * y}).reduce(_+_).real should be(Real(1))
     tensored should be(Vector[Complex[Real]](half, half, half, half))
-    distribution.P(|("00").>.unindex) should be(Real(1 / 4d))
-    distribution.P(|("01").>.unindex) should be(Real(1 / 4d))
-    distribution.P(|("10").>.unindex) should be(Real(1 / 4d))
-    distribution.P(|("11").>.unindex) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("00").>.unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("01").>.unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("10").>.unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("11").>.unindex)) should be(Real(1 / 4d))
   }
 
   import axle.quantumcircuit.QBit._

@@ -12,6 +12,7 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
   import axle.game.prisoner.evGameIO._
 
   implicit val dist = axle.stats.rationalProbabilityDist
+  implicit val rat = new spire.math.RationalAlgebra()
 
   val p1 = Player("P1", "Prisoner 1")
   val p2 = Player("P2", "Prisoner 2")

@@ -5,28 +5,33 @@ import org.scalatest._
 import spire.math._
 import axle.game.Dice._
 import axle.syntax.probabilitymodel._
+import axle.algebra.RegionEq
+import axle.algebra.RegionEqTuple2of2
 
 class ProbabilitySpec extends FunSuite with Matchers {
 
-  type CPTR[T] = ConditionalProbabilityTable[T, Rational]
+  //type CPTR[T] = ConditionalProbabilityTable[T, Rational]
+
+  implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
   test("two independent coins") {
 
     val coin1 = coin()
     val coin2 = coin()
 
+    import cats.implicits._
     import cats.syntax.all._
 
-    val bothCoinsModel: CPTR[(Symbol, Symbol)] = for {
-      a <- coin1: CPTR[Symbol]
-      b <- coin2: CPTR[Symbol]
-    } yield (a, b)
+    val bothCoinsModel = prob.chain(coin1)(coin2)
 
     bothCoinsModel.P(
       { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) && (coins._2 === 'HEAD)}
     ) should be(Rational(1, 4))
 
-    bothCoinsModel.P(('HEAD, 'HEAD)) should be(Rational(1, 4))
+    // import cats.implicits._
+    // implicit val rat = new spire.math.RationalAlgebra()
+
+    bothCoinsModel.P(RegionEq(('HEAD, 'HEAD))) should be(Rational(1, 4))
 
     bothCoinsModel.P(
       { coins: (Symbol, Symbol) => coins._1 === 'HEAD }
@@ -36,11 +41,11 @@ class ProbabilitySpec extends FunSuite with Matchers {
       { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) || (coins._2 === 'HEAD)}
     ) should be(Rational(3, 4))
 
-    import cats.syntax.all._
-    import axle.stats._
-    val coin2Conditioned = (bothCoinsModel
-      .filter({ coins: (Symbol, Symbol) => coins._2 === 'TAIL }): CPTR[(Symbol, Symbol)])
-      .map({ coins: (Symbol, Symbol) => coins._1})
+    //import cats.syntax.all._
+    //import axle.stats._
+    val coin2Conditioned = bothCoinsModel
+      .filter(RegionEqTuple2of2('TAIL))
+      .mapValues(_._1)
 
     coin2Conditioned.P('HEAD) should be(Rational(1, 2))
   
@@ -48,15 +53,9 @@ class ProbabilitySpec extends FunSuite with Matchers {
 
   test("two independent d6") {
 
-    val d6a = die(6)
-    val d6b = die(6)
+    implicit val eqInt: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
 
-    import cats.syntax.all._
-
-    val bothDieModel: CPTR[(Int, Int)] = for {
-      a <- d6a: CPTR[Int]
-      b <- d6b: CPTR[Int]
-    } yield (a, b)
+    val bothDieModel = prob.chain(die(6))(die(6))
 
     bothDieModel.P(
       { rolls: (Int, Int) => (rolls._1 === 1) }

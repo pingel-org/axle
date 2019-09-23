@@ -50,7 +50,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 
 * PM.filter's predicate should also be a Region
+* get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * PM.unit should become PM.construct (again)
+* scrutinize remaining `CPTR`
+* Is PM.mapValues really needed?
 * `ProbabilityModel.construct` shouldn't take a Variable
 * Fix `axle.stats.standardDeviation`
 * Fix `axle.stats.entropy`

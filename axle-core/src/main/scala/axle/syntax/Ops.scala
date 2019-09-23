@@ -18,7 +18,7 @@ import axle.algebra.MapFrom
 import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.Region
-import axle.algebra.RegionEq
+//import axle.algebra.RegionEq
 import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
@@ -223,14 +223,29 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
 final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
   implicit
   ev: ProbabilityModel[M]) {
-  
-  def P(a: A)(implicit fieldV: Field[V], eqA: Eq[A]): V = ev.probabilityOf(model)(RegionEq(a))
-  
+
+  def adjoin[V2](model: M[A, V])(other: M[A, V2])(implicit eqA: cats.kernel.Eq[A], fieldV1: Field[V], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V], eqV2: cats.kernel.Eq[V2]): M[A, (V, V2)] =
+    ev.adjoin(model)(other)
+
+  def chain[B](model: M[A, V])
+      (other: M[B, V])
+      (implicit fieldV: Field[V], eqA: cats.kernel.Eq[A], eqB: cats.kernel.Eq[B]): M[(A, B), V] =
+    ev.chain(model)(other)
+
+  def map[B](model: M[A, V])(f: A => B)(implicit eqB: cats.kernel.Eq[B]): M[B, V] =
+    ev.map(model)(f)
+
+  def mapValues[V2](model: M[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): M[A, V2] =
+    ev.mapValues(model)(f)
+
+  def flatMap[B](model: M[A, V])(f: A => M[B, V])(implicit eqB: cats.kernel.Eq[B]): M[B, V] =
+    ev.flatMap(model)(f)
+
   def P(predicate: Region[A])(implicit fieldV: Field[V]): V = ev.probabilityOf(model)(predicate)
 
-  def filter(predicate: A => Boolean)(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
+  def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
   
-  def |(predicate: A => Boolean)(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
+  def |(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
   
   def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = ev.observe(model)(gen)
 

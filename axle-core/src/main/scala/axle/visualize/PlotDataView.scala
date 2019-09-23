@@ -10,7 +10,6 @@ import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 
 import axle.algebra.Plottable
-import axle.algebra.RegionEq
 import axle.stats.ConditionalProbabilityTable
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
@@ -144,7 +143,7 @@ object PlotDataView {
   implicit def cptDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: Field: Plottable]: PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] =
     new PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] {
 
-      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Traversable[X] = cpt.regions
+      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Traversable[X] = cpt.values
 
       def valueOf(cpt: ConditionalProbabilityTable[X, Y], x: X): Y =
         cpt.p.get(x).getOrElse(Field[Y].zero)

@@ -10,7 +10,7 @@ import spire.algebra.Field
 import spire.algebra.Ring
 import spire.math.ConvertableTo
 
-import axle.algebra.RegionEq
+//import axle.algebra.RegionEq
 import axle.stats.ConditionalProbabilityTable
 import axle.stats.Variable
 

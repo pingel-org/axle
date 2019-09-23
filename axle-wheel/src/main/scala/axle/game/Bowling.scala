@@ -92,17 +92,23 @@ object Bowling {
 
     import bowler._
 
+    implicit val eqBS = cats.kernel.Eq.fromUniversalEquals[Bowling.State]
+
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+
     val startState: F[State] = ConditionalProbabilityTable(
       Map(State(0, false, false, false) -> Rational(1)),
       Variable[State]("startState"))
 
     (1 to numFrames).foldLeft(startState)({
       case (currentState, frameNumber) =>
-        for {
-          c <- currentState
-          f <- firstRoll : F[Int]
-          s <- spare : F[Boolean]
-        } yield next(c, frameNumber === numFrames, f, s)
+        prob.flatMap(currentState) { c =>
+          prob.flatMap(firstRoll) { f =>
+            prob.map(spare) { s =>
+              next(c, frameNumber === numFrames, f, s)
+            }
+          }
+        }
     })
   }
 

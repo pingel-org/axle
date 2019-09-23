@@ -62,7 +62,7 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       if( mover === game.player ) {
         // val correctCard = fromState.remaining.head
         // val isCorrectDist = (moveDist : CPTR[GuessRiffleMove]).map({ move => move === GuessCard(correctCard) })
-        Some(entropy[ConditionalProbabilityTable, GuessRiffleMove, Rational](moveDist))
+        Some(entropy[GuessRiffleMove, Rational](moveDist))
       } else {
         None
       }

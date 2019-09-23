@@ -122,53 +122,50 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[M[_, _], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A, N])(implicit prob: ProbabilityModel[M]): A = {
+  def standardDeviation[A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: ConditionalProbabilityTable[A, N]): A = {
 
-    // def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-    // val μ: A = Σ[A, IndexedSeq](prob.values(model).map({ x => n2a(prob.probabilityOfExpression(model)(x)) * x }))
+    def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    // val sum: A = Σ[A, IndexedSeq](prob.values(model) map { x => n2a(prob.probabilityOfExpression(model)(x)) * square(x - μ) })
+    val μ: A = Σ[A, IndexedSeq](model.values.toVector.map({ x => n2a(prob.probabilityOf(model)(RegionEq(x))) * x }))
 
-    // NRoot[A].sqrt(sum)
-    Field[A].zero
+    val sum: A = Σ[A, IndexedSeq](model.values.toVector map { x => n2a(prob.probabilityOf(model)(RegionEq(x))) * square(x - μ) })
+
+    NRoot[A].sqrt(sum)
   }
 
-  def σ[M[_, _], A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A, N])(implicit prob: ProbabilityModel[M]): A =
-    standardDeviation[M, A, N](model)
+  def σ[A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: ConditionalProbabilityTable[A, N]): A =
+    standardDeviation[A, N](model)
 
-  def stddev[M[_, _], A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A, N])(implicit prob: ProbabilityModel[M]): A =
-    standardDeviation[M, A, N](model)
+  def stddev[ A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: ConditionalProbabilityTable[A, N]): A =
+    standardDeviation[A, N](model)
 
-  def entropy[M[_, _], A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: M[A, N])(
-    implicit
-    prob:    ProbabilityModel[M],
-    convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
+  def entropy[A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
+    implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
-    // val convertN = ConvertableFrom[N]
-    // val H = Σ[Double, Iterable](prob.partitions(model) map { e: Partition[A] =>
-    //   val px: N = prob.probabilityOfExpression(model)(e)
-    //   import cats.syntax.all._
-    //   if (px === Field[N].zero) {
-    //     0d
-    //   } else {
-    //     -convertN.toDouble(px) * log2(px)
-    //   }
-    // })
-    // UnittedQuantity(H, convert.bit)
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-    UnittedQuantity(0d, convert.bit)
+    val convertN = ConvertableFrom[N]
+    val H = Σ[Double, Iterable](model.values map { a: A =>
+      val px: N = prob.probabilityOf(model)(RegionEq(a))
+      import cats.syntax.all._
+      if (px === Field[N].zero) {
+        0d
+      } else {
+        -convertN.toDouble(px) * log2(px)
+      }
+    })
+    UnittedQuantity(H, convert.bit)
   }
 
-  def H[M[_, _], A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: M[A, N])(
-    implicit
-    prob:    ProbabilityModel[M],
-    convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
+  def H[A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
+    implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 
   def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N], gen: Generator): Stream[List[N]] =

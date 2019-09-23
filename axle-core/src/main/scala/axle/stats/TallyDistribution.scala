@@ -52,9 +52,28 @@ object TallyDistribution {
         } yield ((a, b) -> (probabilityOf(model)(RegionEq(a)) * probabilityOf(other)(RegionEq(b))))).toMap
         TallyDistribution[(A, B), V](abvMap, Variable[(A, B)](model.variable.name + " " + other.variable.name))
       }
-  
+
+      def map[A, B, V](model: TallyDistribution[A, V])(f: A => B)(implicit eqB: cats.kernel.Eq[B]): TallyDistribution[B, V] = {
+        import model.ringV
+        TallyDistribution[B, V](
+          model.tally.map({ case (a, v) => f(a) -> v }), // TODO use eqA to unique
+          Variable[B](model.variable.name + "'"))
+      }
+      
       def mapValues[A, V, V2](model: TallyDistribution[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): TallyDistribution[A, V2] =
-      TallyDistribution[A, V2](model.tally.mapValues(f), model.variable)
+        TallyDistribution[A, V2](model.tally.mapValues(f), model.variable)
+  
+      def flatMap[A, B, V](model: TallyDistribution[A, V])(f: A => TallyDistribution[B, V])(implicit eqB: cats.kernel.Eq[B]): TallyDistribution[B, V] = {
+        val p = model.values.toVector.flatMap { a =>
+          val tallyA = model.tally.apply(a)
+          val inner = f(a)
+          inner.values.toVector.map { b =>
+            b -> model.ringV.times(tallyA, inner.tally.apply(b))
+          }
+        }.groupBy(_._1).map({ case (b, bvs) => b -> bvs.map(_._2).reduce(model.ringV.plus)})
+        import model.ringV
+        TallyDistribution(p, Variable[B]("?"))
+      }
   
       def filter[A, V](model: TallyDistribution[A, V])(predicate: A => Boolean)(implicit fieldV: Field[V]): TallyDistribution[A, V] = {
         val newMap: Map[A, V] = model.tally.toVector.filter({ case (a, v) => predicate(a)}).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
@@ -78,13 +97,13 @@ object TallyDistribution {
 }
 case class TallyDistribution[A, V](
   tally:    Map[A, V],
-  variable: Variable[A])(implicit ring: Ring[V]) {
+  variable: Variable[A])(implicit val ringV: Ring[V]) {
 
   val values: IndexedSeq[A] = tally.keys.toVector
 
   val totalCount: V = Σ[V, Iterable](tally.values)
 
   val bars: Map[A, V] =
-    tally.scanLeft((dummy[A], ring.zero))((x, y) => (y._1, ring.plus(x._2, y._2))).drop(1)
+    tally.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, ringV.plus(x._2, y._2))).drop(1)
 
 }
