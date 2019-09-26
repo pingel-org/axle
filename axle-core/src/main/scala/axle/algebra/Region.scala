@@ -16,10 +16,10 @@ trait Region[A] extends Function1[A, Boolean] {
 
 object Region {
 
-  implicit def eqRegion[A](implicit eqA: cats.kernel.Eq[A]): cats.kernel.Eq[Region[A]] =
+  def eqRegionIterable[A](itA: Iterable[A]): cats.kernel.Eq[Region[A]] =
     new cats.kernel.Eq[Region[A]] {
       def eqv(left: Region[A], right: Region[A]): Boolean = 
-        42
+        itA.forall(a => left(a) === right(a))
     }
 
   implicit def showRegion[A: Show]: Show[Region[A]] = new Show[Region[A]] {

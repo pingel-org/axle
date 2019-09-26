@@ -5,13 +5,14 @@ import org.scalacheck.Prop.forAllNoShrink
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
-import cats.syntax.all._
+import cats.implicits._
 
 import spire.math._
 import spire.random.Random
 import spire.random.Seed
 import spire.math.Rational
 
+import axle.algebra.RegionEq
 import axle.math.Σ
 import axle.game.Strategies._
 import axle.game.guessriffle.evGame._
@@ -50,8 +51,6 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       case _ => true
     }
 
-  type CPTR[T] = ConditionalProbabilityTable[T, Rational]
-
   def entropyOfGuess(
     game: GuessRiffle,
     fromState: GuessRiffleState,
@@ -68,13 +67,18 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       }
     ) getOrElse None
 
+  val prob = ProbabilityModel[ConditionalProbabilityTable]
 
   def probabilityAllCorrect(game: GuessRiffle, fromState: GuessRiffleState, seed: Int): Rational =
     stateStrategyMoveStream(game, fromState, Random.generatorFromSeed(Seed(seed)).sync)
     .filter(args => mover(game, args._1).map( _ === game.player).getOrElse(false))
-    .map({ case (stateIn, strategy, _, _) => (strategy : CPTR[GuessRiffleMove] ).map(isCorrectMoveForState(game, stateIn)) })
-    .reduce({ (incoming: CPTR[Boolean], current: CPTR[Boolean]) => incoming.product(current).map({ case (a, b) => a && b }) })
-    .P(true)
+    .map({ case (stateIn, strategy, _, _) =>
+      prob.map(strategy)(isCorrectMoveForState(game, stateIn))
+    })
+    .reduce({ (incoming, current) =>
+      prob.map(prob.chain(incoming)(current))({ case (a, b) => a && b })
+    })
+    .P(RegionEq(true))
 
   implicit val doubleField: spire.algebra.Field[Double] = spire.implicits.DoubleAlgebra
   implicit val doubleOrder: cats.kernel.Order[Double] = spire.implicits.DoubleAlgebra

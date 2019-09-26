@@ -10,8 +10,6 @@ import axle.algebra.RegionEqTuple2of2
 
 class ProbabilitySpec extends FunSuite with Matchers {
 
-  //type CPTR[T] = ConditionalProbabilityTable[T, Rational]
-
   implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
   test("two independent coins") {

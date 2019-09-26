@@ -6,13 +6,16 @@ import org.scalacheck.Gen
 import cats.implicits._
 import spire.math._
 import axle.stats._
+import axle.algebra.Region
+import axle.algebra.RegionEq
 
 class OldMontyHallHalfIsKolmogorov
-  extends KolmogorovProbabilityProperties(
+  extends KolmogorovProbabilityProperties[Rational, ConditionalProbabilityTable, Boolean, Rational](
     "Monty Hall with arbitrary switch probability",
-    Arbitrary({ import OldMontyHall._
-      Gen.choose(0d,1d).map(Rational.apply).map(outcome)
-    })
+    Arbitrary({ Gen.choose(0d,1d).map(Rational.apply) }),
+    { import OldMontyHall._; switchProb => outcome(switchProb) },
+    switchProb => Arbitrary(Gen.oneOf(List(true, false).map(RegionEq(_)))), // TODO full range of Regions (not just RegionEq)
+    switchProb => Region.eqRegionIterable(List(true, false))
   )
 
 class OldMontyHallSpec extends FunSuite with Matchers {

@@ -52,7 +52,7 @@ package object stats {
   implicit def enrichCaseGenTraversable[R, A: Manifest, N: Field](cgt: Iterable[CaseIs[A]]): EnrichedCaseGenTraversable[R, A, N] =
     EnrichedCaseGenTraversable(cgt)
 
-  val sides = Vector('HEAD, 'TAIL)
+  def coinSides = Vector('HEAD, 'TAIL)
 
   def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
     ConditionalProbabilityTable[Symbol, Rational](

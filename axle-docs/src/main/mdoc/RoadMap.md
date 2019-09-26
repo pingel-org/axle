@@ -49,16 +49,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
 * Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
 
+* `ProbabilityModel.construct` shouldn't take a Variable
+* Fix `axle.game.moveFromRandomState`
+
+* Actually provide random Region (vs just a RegionEq) to all KolmogorovProbabilityProperties
 * PM.filter's predicate should also be a Region
 * get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * PM.unit should become PM.construct (again)
 * scrutinize remaining `CPTR`
-* Is PM.mapValues really needed?
-* `ProbabilityModel.construct` shouldn't take a Variable
-* Fix `axle.stats.standardDeviation`
-* Fix `axle.stats.entropy`
-* Fix `axle.game.moveFromRandomState`
 * Fix `CPT.probabilityOf` (it's incomplete)
+
+* Is PM.mapValues really needed?
 * Laws for `Region` (rename as a "Sigma Algebra"? See https://www.youtube.com/watch?v=21a85f1YS5Q)
 * `Show[Region]` TODOs
 * `Show[Factor]` should include `Show[A => Boolean]`
