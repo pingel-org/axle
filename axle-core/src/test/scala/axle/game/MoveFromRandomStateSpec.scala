@@ -23,6 +23,7 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
   val Sc = TestGameState("c")
 
   implicit val eqS: Eq[TestGameState] = Eq.fromUniversalEquals[TestGameState]
+  implicit val eqM: Eq[TestGameMove] = Eq.fromUniversalEquals[TestGameMove]
 
   case class TestGameMove(name: String)
   val Maa = TestGameMove("aa")
@@ -84,8 +85,8 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
 
       def strategyFor(game: TestGame, player: Player): (TestGame, TestGameState) => ConditionalProbabilityTable[TestGameMove, Rational] =
         (game: TestGame, state: TestGameState) => {
-          val mm = movesMap(state)
-          pm.construct(Variable("S"), mm.keys, s => mm(s)._2)
+          val mm = movesMap(state).mapValues(_._2)
+          ConditionalProbabilityTable(mm, Variable("S"))
         }
 
       def isValid(game: TestGame, state: TestGameState, move: TestGameMove): Either[String, TestGameMove] =
@@ -108,7 +109,7 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
   val pm = ConditionalProbabilityTable.probabilityWitness
 
   val currentStateModelMap = Map(Sa -> Rational(1, 3), Sb -> Rational(2, 3))
-  val currentStateModel = pm.construct(Variable("S"), currentStateModelMap.keys, currentStateModelMap)
+  val currentStateModel = ConditionalProbabilityTable(currentStateModelMap, Variable("S"))
 
   test("moveFromRandomState on hard-coded graph from start state") {
 
@@ -127,13 +128,13 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
 
     val expectedResult = Set(
       (Some((Sa, Maa)), currentStateModel),
-      (Some((Sa, Mab)), pm.construct(Variable("S"), List(Sa, Sb), Map(
+      (Some((Sa, Mab)), ConditionalProbabilityTable(Map(
         Sa -> Rational(1, 4),
-        Sb -> Rational(3, 4)))),
-      (Some((Sa, Mac)), pm.construct(Variable("S"), List(Sa, Sb, Sc), Map(
+        Sb -> Rational(3, 4)), Variable("S"))),
+      (Some((Sa, Mac)), ConditionalProbabilityTable(Map(
         Sa -> Rational(1, 4),
         Sb -> Rational(2, 3),
-        Sc -> Rational(1, 12)))),
+        Sc -> Rational(1, 12)), Variable("S"))),
       (Some((Sb, Mbb)), currentStateModel)
     )
 
