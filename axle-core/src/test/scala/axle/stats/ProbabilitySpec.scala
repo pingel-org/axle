@@ -18,7 +18,7 @@ class ProbabilitySpec extends FunSuite with Matchers {
     val coin2 = coin()
 
     import cats.implicits._
-    import cats.syntax.all._
+    //import cats.syntax.all._
 
     val bothCoinsModel = prob.chain(coin1)(coin2)
 
@@ -26,7 +26,6 @@ class ProbabilitySpec extends FunSuite with Matchers {
       { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) && (coins._2 === 'HEAD)}
     ) should be(Rational(1, 4))
 
-    // import cats.implicits._
     // implicit val rat = new spire.math.RationalAlgebra()
 
     bothCoinsModel.P(RegionEq(('HEAD, 'HEAD))) should be(Rational(1, 4))
@@ -39,11 +38,7 @@ class ProbabilitySpec extends FunSuite with Matchers {
       { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) || (coins._2 === 'HEAD)}
     ) should be(Rational(3, 4))
 
-    //import cats.syntax.all._
-    //import axle.stats._
-    val coin2Conditioned = bothCoinsModel
-      .filter(RegionEqTuple2of2('TAIL))
-      .mapValues(_._1)
+    val coin2Conditioned = bothCoinsModel.filter(RegionEqTuple2of2('TAIL)).map(_._1)
 
     coin2Conditioned.P('HEAD) should be(Rational(1, 2))
   
