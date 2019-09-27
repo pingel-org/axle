@@ -46,28 +46,40 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
-* Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
-
-* `ProbabilityModel.construct` shouldn't take a Variable
 * Fix `axle.game.moveFromRandomState`
 
-* Actually provide random Region (vs just a RegionEq) to all KolmogorovProbabilityProperties
-* PM.filter's predicate should also be a Region
-* get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
-* PM.unit should become PM.construct (again)
-* scrutinize remaining `CPTR`
-* Fix `CPT.probabilityOf` (it's incomplete)
+* `ProbabilityModel.construct` shouldn't take a `Variable`
+* `PM.unit` should become `PM.construct` (again)
 
-* Is PM.mapValues really needed?
-* Laws for `Region` (rename as a "Sigma Algebra"? See https://www.youtube.com/watch?v=21a85f1YS5Q)
+* Fix `CPT.probabilityOf` (it's incomplete)
+* Actually provide random `Region` (vs just a `RegionEq`) to all `KolmogorovProbabilityProperties`
+* `PM.filter`'s predicate should also be a `Region`
+
 * `Show[Region]` TODOs
 * `Show[Factor]` should include `Show[A => Boolean]`
+
+* Is PM.mapValues really needed?
+* Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
+* Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
 * Axiom for observe: val a = observe(gen) => ProbabilityOf(a) > 0
 * Fix third Kolmogorov law
 * Review groupBy uses -- they use university equality.  Replace with Eq
 * Axiom? pm.filter(X=x).P(X=x) == 1
-* Fix stuff like the "a" in monadForProbabilityModel Monad.pure
+
+* KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
+  * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
+* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
+* Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
+
+* LogisticMap md back to 4k x 4k
+* Release and publish site
+* GuessRiffle.md
+  * Walk through game
+  * Plot distribution of sum(entropy) for both strategies
+  * Plot entropy by turn # for each strategy
+  * Plot simulated score distribution for each strategy
+
+## 0.5.1 (December 2019)
 
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
 * Iterative game playing algorithm is intractible, but shares intent with sequential monte carlo
@@ -79,33 +91,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Each N bits consumed during `Riffle()` is its own move
   * Chance moves consume `UnittedQuantity[Information, N]`
 
-* QBit2.factor
-
-* KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
-  * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
-
-* LogisticMap md back to 4k x 4k
-* Release and publish site
-* GuessRiffle.md
-  * Walk through game
-  * plot distribution of sum(entropy) for both strategies
-  * plot entropy by turn # for each strategy
-  * plot simulated score distribution for each strategy
-* QuantumCircuit.md
-
-## 0.5.1 (June 2019)
-
 * GuessRiffleSpec: use `moveFromRandomState`
 * `Monad[ProbabilityModel]` -- factor `flatMap` in terms of `product`
-* QBit CCNot
-* Property test reversibility (& own inverse)
-* Typeclass for "negate" (etc), Binary, CBit
-* Typeclass for unindex
 * SimpsonsParadox.md
 * "You split, I choose" as game
 * Gerrymandering sensitivity
 
-## 0.6.0 (July 2019)
+## 0.5.2 (February 2020)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * … (aka "etc") as Stream.from(Int)
@@ -121,7 +113,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     * no incoming with path out monotonically decreases
   * possibly provide a version for acyclic graphs
 
-## 0.7.x (Summer 2019)
+## 0.6.0 (March 2020)
+
+* QuantumCircuit.md
+* QBit2.factor
+* QBit CCNot
+* Property test reversibility (& own inverse)
+* Typeclass for "negate" (etc), Binary, CBit
+* Typeclass for unindex
+
+## 0.7.x (Summer 2020)
 
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * P / Case expression DSL (PExpr, PMultiply, ...)
@@ -148,7 +149,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
   * Figure out better way to reference images
 
-## 0.8.x (Fall 2019)
+## 0.8.x (Fall 2020)
 
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * Kind projector for projections of jung graphs for Finite
@@ -169,9 +170,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 
-## 0.9.x (Winter 2020)
-
-## 0.8.x (Winter 2020)
+## 0.9.x (Winter 2021)
 
 * game theory axioms
 * axle.game: Observable[T]
@@ -180,19 +179,19 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Max bet for Poker
 * syntax for `Game` typeclass
 
-## 0.10.x (Spring 2020)
+## 0.10.x (Spring 2021)
 
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 
 * Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
 
-## 1.0.x (Late 2020)
+## 1.0.x (Late 2021)
 
 * Redo Logic using Abstract Algebra
 * Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
 * Fix "unreachable" default pattern match cases
 
-# Backlog
+Far future backlog ideas:
 
 ## Algorithm / Concept breadth
 
