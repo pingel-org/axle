@@ -113,14 +113,25 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
 
   test("moveFromRandomState on hard-coded graph from start state") {
 
-    // Randomly select Sa then Mab
-    //   Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
-    //   Sb: (2/3,  1/4) => 2/3 + (1/3 . -1/4) = 3/4
+    // Original non-zero transitions:
+    // from \ to
+    //   a    b    c
+    // a 1/2  1/4  1/4
+    // b 0    1    0
+    // c 0    0    1
 
-    // (Sa, Mac) yields
-    //   Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
-    //   Sb: (2/3,  0  ) => 2/3 + (1/3 .  0  ) = 2/3
-    //   Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
+    // Current state distribution
+    // a 1/3
+    // b 2/3
+
+    // Randomly select Sa then Mab
+    //  Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
+    //  Sb: (2/3,  1/4) => 2/3 + (1/3 . -1/4) = 3/4
+
+    // Randomly select Sa then Mac
+    //  Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
+    //  Sb: (2/3,  0  ) => 2/3 + (1/3 .  0  ) = 2/3
+    //  Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
 
     val actualResult = ((1 to 1000) map { i =>
       moveFromRandomState(game, currentStateModel, rng)

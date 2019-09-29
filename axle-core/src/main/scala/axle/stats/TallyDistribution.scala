@@ -7,6 +7,8 @@ import cats.implicits._
 import spire.algebra.Field
 import spire.algebra.Ring
 
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.random.Dist
@@ -59,6 +61,18 @@ object TallyDistribution {
           model.tally.map({ case (a, v) => f(a) -> v }), // TODO use eqA to unique
           Variable[B](model.variable.name + "'"))
       }
+
+      def redistribute[A: cats.kernel.Eq, V: Ring](model: TallyDistribution[A, V])(
+        from: A, to: A, mass: V): TallyDistribution[A, V] =
+        TallyDistribution(model.tally.map({ case (a, v) =>
+          if(a === from) {
+            a -> (v - mass)
+          } else if (a === to) {
+            a -> (v + mass)
+          } else {
+            a -> v
+          }
+        }), model.variable)
       
       def mapValues[A, V, V2](model: TallyDistribution[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): TallyDistribution[A, V2] =
         TallyDistribution[A, V2](model.tally.mapValues(f), model.variable)

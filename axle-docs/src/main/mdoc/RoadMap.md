@@ -46,9 +46,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `sum`, `product`, and `mapValues`
 
-* Fix `axle.game.moveFromRandomState`
-
 * `ProbabilityModel.construct` shouldn't take a `Variable`
+* rename `CPT`
 * `PM.unit` should become `PM.construct` (again)
 
 * Fix `CPT.probabilityOf` (it's incomplete)
