@@ -28,7 +28,7 @@ install:
 sudo: false
 
 jdk:
-  - oraclejdk8
+  - oraclejdk11
 
 before_script:
   - "export DISPLAY=:99.0"
