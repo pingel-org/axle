@@ -16,9 +16,7 @@ import spire.random.Generator
 
 import axle.dummy
 import axle.math.Σ
-import axle.algebra.Region
-import axle.algebra.RegionEq
-//import axle.algebra.RegionSet
+import axle.algebra._
 
 object ConditionalProbabilityTable {
 
@@ -136,9 +134,14 @@ object ConditionalProbabilityTable {
 
       def probabilityOf[A, V](model: ConditionalProbabilityTable[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): V =
         predicate match {
-          case RegionEq(b) =>
-            Σ(model.values.map( a =>  if (model.eqA.eqv(a, b)) { model.p(a) } else { fieldV.zero } ))
-          case _ => ???
+          case RegionEmpty() =>
+            fieldV.zero
+          case RegionAll() =>
+            fieldV.one
+          case _ => 
+            Σ(model.values.map { a =>
+              if (predicate(a)) { model.p(a) } else { fieldV.zero }
+            })
         }
   }
 

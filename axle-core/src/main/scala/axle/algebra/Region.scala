@@ -2,6 +2,8 @@
 package axle.algebra
 
 import cats.Show
+import cats.kernel.Eq
+import cats.kernel.Order
 import cats.implicits._
 
 trait Region[A] extends Function1[A, Boolean] {
@@ -16,8 +18,8 @@ trait Region[A] extends Function1[A, Boolean] {
 
 object Region {
 
-  def eqRegionIterable[A](itA: Iterable[A]): cats.kernel.Eq[Region[A]] =
-    new cats.kernel.Eq[Region[A]] {
+  def eqRegionIterable[A](itA: Iterable[A]): Eq[Region[A]] =
+    new Eq[Region[A]] {
       def eqv(left: Region[A], right: Region[A]): Boolean = 
         itA.forall(a => left(a) === right(a))
     }
@@ -38,8 +40,6 @@ object Region {
   }
 
 }
-import cats.kernel.Eq
-import cats.kernel.Order
 
 case class RegionEmpty[A]() extends Region[A] {
   def apply(x: A): Boolean = false
@@ -55,7 +55,7 @@ case class RegionEq[A](x: A)(implicit val eqA: Eq[A]) extends Region[A] {
 
 object RegionEq {
 
-  implicit def reqEq[A]: cats.kernel.Eq[RegionEq[A]] = new cats.kernel.Eq[RegionEq[A]] {
+  implicit def reqEq[A]: Eq[RegionEq[A]] = new Eq[RegionEq[A]] {
     def eqv(left: RegionEq[A], right: RegionEq[A]): Boolean = left.eqA.eqv(left.x, right.x)
   }
 }
